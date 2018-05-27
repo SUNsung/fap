@@ -1,347 +1,353 @@
 
         
-          // Check for input iterator errors
-  if (!iter->status().ok()) {
-    s = iter->status();
+          DebuggerClient(ASTContext &C) : Ctx(C) { }
+  virtual ~DebuggerClient() = default;
+  
+  // DebuggerClient is consulted at the beginning of the parsing
+  // of various DeclKinds to see whether the decl should be parsed
+  // in the global context rather than the current context.
+  // This question will only be asked if the decl's current context
+  // is a function marked with the LLDBDebuggerFunction attribute.
+  virtual bool shouldGlobalize(Identifier Name, DeclKind kind) = 0;
+  
+  virtual void didGlobalize (Decl *Decl) = 0;
+    
+    
+    {  /// Return a hash code of any components from these options that should
+  /// contribute to a Swift Bridging PCH hash.
+  llvm::hash_code getPCHHashComponents() const {
+    // Nothing here that contributes anything significant when emitting the PCH.
+    return llvm::hash_value(0);
   }
-    
-    const char* InternalFilterPolicy::Name() const {
-  return user_policy_->Name();
-}
-    
-    
-    {  delete iter;
-  delete table;
-  delete file;
-  return Status::OK();
-}
-    
-    std::string CurrentFileName(const std::string& dbname) {
-  return dbname + '/CURRENT';
-}
-    
-    
-    {  std::vector< std::pair<int, InternalKey> > compact_pointers_;
-  DeletedFileSet deleted_files_;
-  std::vector< std::pair<int, FileMetaData> > new_files_;
 };
     
-    TEST(WriteBatchTest, Append) {
-  WriteBatch b1, b2;
-  WriteBatchInternal::SetSequence(&b1, 200);
-  WriteBatchInternal::SetSequence(&b2, 300);
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('',
-            PrintContents(&b1));
-  b2.Put('a', 'va');
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('Put(a, va)@200',
-            PrintContents(&b1));
-  b2.Clear();
-  b2.Put('b', 'vb');
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('Put(a, va)@200'
-            'Put(b, vb)@201',
-            PrintContents(&b1));
-  b2.Delete('foo');
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('Put(a, va)@200'
-            'Put(b, vb)@202'
-            'Put(b, vb)@201'
-            'Delete(foo)@203',
-            PrintContents(&b1));
+    #endif
+
+    
+    // The compiler generates the swift_once_t values as word-sized zero-initialized
+// variables, so we want to make sure swift_once_t isn't larger than the
+// platform word or the function below might overwrite something it shouldn't.
+static_assert(sizeof(swift_once_t) <= sizeof(void*),
+              'swift_once_t must be no larger than the platform word');
+    
+    /// The class for building result plans.
+struct ResultPlanBuilder {
+  SILGenFunction &SGF;
+  SILLocation loc;
+  const CalleeTypeInfo &calleeTypeInfo;
+    }
+    
+        for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
+    {
+        g_driverType = driverTypes[driverTypeIndex];
+        hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+                D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
+        if (SUCCEEDED(hr))
+            break;
+    }
+    if (FAILED(hr))
+        return hr;
+    
+        f2coeff[1] = - 2*D[1][3] + 2*D[1][7] - 2*D[3][1] - 2*D[3][5] - 2*D[3][9] - 2*D[5][3] + 2*D[5][7] + 2*D[7][1] + 2*D[7][5] + 2*D[7][9] - 2*D[9][3] + 2*D[9][7]; // constant term
+    f2coeff[2] = 4*D[1][5] - 4*D[1][1] + 8*D[2][2] + 8*D[2][4] + 8*D[4][2] + 8*D[4][4] + 4*D[5][1] - 4*D[5][5] + 4*D[9][9]; // s1^2  * s2
+    f2coeff[3] = 4*D[1][8] - 4*D[1][6] - 8*D[2][3] + 8*D[2][7] - 8*D[3][2] - 8*D[3][4] - 8*D[4][3] + 8*D[4][7] + 4*D[5][6] - 4*D[5][8] - 4*D[6][1] + 4*D[6][5] - 4*D[6][9] + 8*D[7][2] + 8*D[7][4] + 4*D[8][1] - 4*D[8][5] + 4*D[8][9] - 4*D[9][6] + 4*D[9][8]; // s1 * s2
+    f2coeff[4] = 8*D[2][2] - 8*D[3][3] - 8*D[4][4] + 8*D[6][6] + 8*D[7][7] - 8*D[8][8]; // s1 * s3
+    f2coeff[5] = 4*D[1][4] - 4*D[1][2] - 4*D[2][1] + 4*D[2][5] - 4*D[2][9] - 8*D[3][6] - 8*D[3][8] + 4*D[4][1] - 4*D[4][5] + 4*D[4][9] + 4*D[5][2] - 4*D[5][4] - 8*D[6][3] + 8*D[6][7] + 8*D[7][6] + 8*D[7][8] - 8*D[8][3] + 8*D[8][7] - 4*D[9][2] + 4*D[9][4]; // s2 * s3
+    f2coeff[6] = 6*D[5][6] - 6*D[1][8] - 6*D[1][6] + 6*D[5][8] - 6*D[6][1] + 6*D[6][5] - 6*D[6][9] - 6*D[8][1] + 6*D[8][5] - 6*D[8][9] - 6*D[9][6] - 6*D[9][8]; // s2^2 * s3
+    f2coeff[7] = 4*D[1][1] - 4*D[1][5] + 4*D[1][9] - 4*D[5][1] + 4*D[5][5] - 4*D[5][9] + 4*D[9][1] - 4*D[9][5] + 4*D[9][9]; // s2^3
+    f2coeff[8] = 2*D[2][9] - 2*D[1][4] - 2*D[2][1] - 2*D[2][5] - 2*D[1][2] + 4*D[3][6] + 4*D[3][8] - 2*D[4][1] - 2*D[4][5] + 2*D[4][9] - 2*D[5][2] - 2*D[5][4] + 4*D[6][3] + 4*D[6][7] + 4*D[7][6] + 4*D[7][8] + 4*D[8][3] + 4*D[8][7] + 2*D[9][2] + 2*D[9][4]; // s1 * s3^2
+    f2coeff[9] = 2*D[1][2] + 2*D[1][4] + 2*D[2][1] + 2*D[2][5] + 2*D[2][9] - 4*D[3][6] + 4*D[3][8] + 2*D[4][1] + 2*D[4][5] + 2*D[4][9] + 2*D[5][2] + 2*D[5][4] - 4*D[6][3] + 4*D[6][7] + 4*D[7][6] - 4*D[7][8] + 4*D[8][3] - 4*D[8][7] + 2*D[9][2] + 2*D[9][4]; // s1
+    f2coeff[10] = 2*D[1][6] + 2*D[1][8] - 4*D[2][3] + 4*D[2][7] - 4*D[3][2] + 4*D[3][4] + 4*D[4][3] - 4*D[4][7] + 2*D[5][6] + 2*D[5][8] + 2*D[6][1] + 2*D[6][5] + 2*D[6][9] + 4*D[7][2] - 4*D[7][4] + 2*D[8][1] + 2*D[8][5] + 2*D[8][9] + 2*D[9][6] + 2*D[9][8]; // s3
+    f2coeff[11] = 8*D[3][3] - 4*D[1][9] - 4*D[1][1] - 8*D[3][7] + 4*D[5][5] - 8*D[7][3] + 8*D[7][7] - 4*D[9][1] - 4*D[9][9]; // s2
+    f2coeff[12] = 4*D[1][1] - 4*D[5][5] + 4*D[5][9] + 8*D[6][6] + 8*D[6][8] + 8*D[8][6] + 8*D[8][8] + 4*D[9][5] - 4*D[9][9]; // s2 * s3^2
+    f2coeff[13] = 2*D[1][7] - 2*D[1][3] + 4*D[2][6] - 4*D[2][8] - 2*D[3][1] + 2*D[3][5] + 2*D[3][9] + 4*D[4][6] - 4*D[4][8] + 2*D[5][3] - 2*D[5][7] + 4*D[6][2] + 4*D[6][4] + 2*D[7][1] - 2*D[7][5] - 2*D[7][9] - 4*D[8][2] - 4*D[8][4] + 2*D[9][3] - 2*D[9][7]; // s1^2
+    f2coeff[14] = 2*D[1][3] - 2*D[1][7] + 4*D[2][6] + 4*D[2][8] + 2*D[3][1] + 2*D[3][5] - 2*D[3][9] - 4*D[4][6] - 4*D[4][8] + 2*D[5][3] - 2*D[5][7] + 4*D[6][2] - 4*D[6][4] - 2*D[7][1] - 2*D[7][5] + 2*D[7][9] + 4*D[8][2] - 4*D[8][4] - 2*D[9][3] + 2*D[9][7]; // s3^2
+    f2coeff[15] = 6*D[1][3] - 6*D[1][7] + 6*D[3][1] - 6*D[3][5] + 6*D[3][9] - 6*D[5][3] + 6*D[5][7] - 6*D[7][1] + 6*D[7][5] - 6*D[7][9] + 6*D[9][3] - 6*D[9][7]; // s2^2
+    f2coeff[16] = 2*D[6][9] - 2*D[1][8] - 2*D[5][6] - 2*D[5][8] - 2*D[6][1] - 2*D[6][5] - 2*D[1][6] - 2*D[8][1] - 2*D[8][5] + 2*D[8][9] + 2*D[9][6] + 2*D[9][8]; // s3^3
+    f2coeff[17] = 8*D[2][6] - 4*D[1][7] - 4*D[1][3] + 8*D[2][8] - 4*D[3][1] + 4*D[3][5] - 4*D[3][9] + 8*D[4][6] + 8*D[4][8] + 4*D[5][3] + 4*D[5][7] + 8*D[6][2] + 8*D[6][4] - 4*D[7][1] + 4*D[7][5] - 4*D[7][9] + 8*D[8][2] + 8*D[8][4] - 4*D[9][3] - 4*D[9][7]; // s1 * s2 * s3
+    f2coeff[18] = 6*D[2][5] - 6*D[1][4] - 6*D[2][1] - 6*D[1][2] - 6*D[2][9] - 6*D[4][1] + 6*D[4][5] - 6*D[4][9] + 6*D[5][2] + 6*D[5][4] - 6*D[9][2] - 6*D[9][4]; // s1 * s2^2
+    f2coeff[19] = 2*D[1][6] + 2*D[1][8] + 4*D[2][3] + 4*D[2][7] + 4*D[3][2] + 4*D[3][4] + 4*D[4][3] + 4*D[4][7] - 2*D[5][6] - 2*D[5][8] + 2*D[6][1] - 2*D[6][5] - 2*D[6][9] + 4*D[7][2] + 4*D[7][4] + 2*D[8][1] - 2*D[8][5] - 2*D[8][9] - 2*D[9][6] - 2*D[9][8]; // s1^2 * s3
+    f2coeff[20] = 2*D[1][2] + 2*D[1][4] + 2*D[2][1] - 2*D[2][5] - 2*D[2][9] + 2*D[4][1] - 2*D[4][5] - 2*D[4][9] - 2*D[5][2] - 2*D[5][4] - 2*D[9][2] - 2*D[9][4]; // s1^3
+    
+    
+    {
+    {
+    {
+    {                        const float eps = 1e-4f;
+                        //TODO: perhaps it is better to normalize the cross product by norms of the tangent vectors
+                        if (fabs(tangentVector_1.cross(tangentVector_2)) < eps)
+                        {
+                            isGeneralPosition = false;
+                        }
+                    }
+                }
+            }
+        }
+        while(!isGeneralPosition);
+    }
+    else
+    {
+        //create points in a degenerate position (there are at least 3 points belonging to the same line)
+    
+    #if defined(_WIN32)
+#include <windows.h>
+    
+                    // loop over sub-ranges of the dot product (full dot product will exceed the L1 cache)
+                float patchbuffer[rowstripehM * colstripewV + 3]; // note: don't forget column rounding
+                // 128 * 16 -> 8 KB
+                ssematrixbase patch(patchbuffer, i1 - i0, j1 - j0);
+    
+        InvalidateCompiledNetwork();
+    
+    PrefetchGPUDataTransferer::PrefetchGPUDataTransferer(int deviceId) : GranularGPUDataTransferer(deviceId, nullptr, nullptr, true)
+{
+     cudaStreamCreateWithFlags(&m_stream, cudaStreamNonBlocking) || 'cudaStreamCreateWithFlags failed (PrefetchGPUDataTransferer ctor)';
 }
     
-        // Preparing sqlite3 statements
-    status = sqlite3_prepare_v2(db_, begin_trans_str.c_str(), -1,
-                                &begin_trans_stmt, NULL);
-    ErrorCheck(status);
-    status = sqlite3_prepare_v2(db_, end_trans_str.c_str(), -1,
-                                &end_trans_stmt, NULL);
-    ErrorCheck(status);
-    status = sqlite3_prepare_v2(db_, read_str.c_str(), -1, &read_stmt, NULL);
-    ErrorCheck(status);
+    // -----------------------------------------------------------------------
+// functions exposed by this module
+// -----------------------------------------------------------------------
+    
+    // The following ifdef block is the standard way of creating macros which make exporting
+// from a DLL simpler. All files within this DLL are compiled with the DATAWRITER_EXPORTS
+// symbol defined on the command line. This symbol should not be defined on any project
+// that uses this DLL. This way any other project whose source files include this file see
+// DATAWRITER_API functions as being imported from a DLL, whereas this DLL sees symbols
+// defined with this macro as being exported.
+#ifdef _WIN32
+#if defined(DATAWRITER_EXPORTS)
+#define DATAWRITER_API __declspec(dllexport)
+#elif defined(DATAWRITER_LOCAL)
+#define DATAWRITER_API
+#else
+#define DATAWRITER_API __declspec(dllimport)
+#endif
+#else
+#define DATAWRITER_API
+#endif
+    
+      /// Accept a new connection and obtain the endpoint of the peer
+  /**
+   * This function is used to accept a new connection from a peer into the
+   * given socket, and additionally provide the endpoint of the remote peer.
+   * The function call will block until a new connection has been accepted
+   * successfully or an error occurs.
+   *
+   * @param peer The socket into which the new connection will be accepted.
+   *
+   * @param peer_endpoint An endpoint object which will receive the endpoint of
+   * the remote peer.
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   *
+   * @par Example
+   * @code
+   * boost::asio::ip::tcp::acceptor acceptor(io_service);
+   * ...
+   * boost::asio::ip::tcp::socket socket(io_service);
+   * boost::asio::ip::tcp::endpoint endpoint;
+   * boost::system::error_code ec;
+   * acceptor.accept(socket, endpoint, ec);
+   * if (ec)
+   * {
+   *   // An error occurred.
+   * }
+   * @endcode
+   */
+  template <typename SocketService>
+  boost::system::error_code accept(
+      basic_socket<protocol_type, SocketService>& peer,
+      endpoint_type& peer_endpoint, boost::system::error_code& ec)
+  {
+    return this->get_service().accept(
+        this->get_implementation(), peer, &peer_endpoint, ec);
+  }
+    
+    #if defined(GENERATING_DOCUMENTATION)
+  /// The default buffer size.
+  static const std::size_t default_buffer_size = implementation_defined;
+#else
+  BOOST_ASIO_STATIC_CONSTANT(std::size_t, default_buffer_size = 1024);
+#endif
     
     
-    {    done_++;
-    if (done_ >= next_report_) {
-      if      (next_report_ < 1000)   next_report_ += 100;
-      else if (next_report_ < 5000)   next_report_ += 500;
-      else if (next_report_ < 10000)  next_report_ += 1000;
-      else if (next_report_ < 50000)  next_report_ += 5000;
-      else if (next_report_ < 100000) next_report_ += 10000;
-      else if (next_report_ < 500000) next_report_ += 50000;
-      else                            next_report_ += 100000;
-      fprintf(stderr, '... finished %d ops%30s\r', done_, '');
-      fflush(stderr);
+    {
+    {} // namespace asio
+} // namespace boost
+    
+    #include <boost/asio/detail/config.hpp>
+    
+    template <typename Buffer, typename Elem>
+class buffer_sequence_adapter<Buffer, boost::array<Elem, 2> >
+  : buffer_sequence_adapter_base
+{
+public:
+  explicit buffer_sequence_adapter(
+      const boost::array<Elem, 2>& buffer_sequence)
+  {
+    init_native_buffer(buffers_[0], Buffer(buffer_sequence[0]));
+    init_native_buffer(buffers_[1], Buffer(buffer_sequence[1]));
+    total_buffer_size_ = boost::asio::buffer_size(buffer_sequence[0])
+      + boost::asio::buffer_size(buffer_sequence[1]);
+  }
     }
+    
+      static void do_complete(io_service_impl* owner, operation* base,
+      const boost::system::error_code& /*ec*/,
+      std::size_t /*bytes_transferred*/)
+  {
+    // Take ownership of the handler object.
+    descriptor_read_op* o(static_cast<descriptor_read_op*>(base));
+    ptr p = { boost::asio::detail::addressof(o->handler_), o, o };
+    }
+    
+    
+    {private:
+  byte* bytes_;
+  UINT32 length_;
+  UINT32 capacity_;
+};
+    
+    std::size_t sync_write(int d, state_type state, const buf* bufs,
+    std::size_t count, bool all_empty, boost::system::error_code& ec)
+{
+  if (d == -1)
+  {
+    ec = boost::asio::error::bad_descriptor;
+    return 0;
   }
+    }
     
-    // Return a new filter policy that uses a bloom filter with approximately
-// the specified number of bits per key.  A good value for bits_per_key
-// is 10, which yields a filter with ~ 1% false positive rate.
+    #include <string>
+#include <vector>
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+        void Lock(int64_t _timelock);  // ms
+    void Lock();
+    void Unlock();
+    bool IsLocking();
+    
+        if (st.url_length + st.head_length > st.total_length) return __LINE__;
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    //
+//  comm_frequency_limit.cc
+//  comm
 //
-// Callers must delete the result after any database that is using the
-// result has been closed.
+//  Created by liucan on 13-11-23.
 //
-// Note: if you are using a custom comparator that ignores some parts
-// of the keys being compared, you must not use NewBloomFilterPolicy()
-// and must provide your own FilterPolicy that also ignores the
-// corresponding parts of the keys.  For example, if the comparator
-// ignores trailing spaces, it would be incorrect to use a
-// FilterPolicy (like NewBloomFilterPolicy) that does not ignore
-// trailing spaces in keys.
-extern const FilterPolicy* NewBloomFilterPolicy(int bits_per_key);
     
     
-    {  if (argc != 4) {
-    printf('This script converts the CIFAR dataset to the leveldb format used\n'
-           'by caffe to perform classification.\n'
-           'Usage:\n'
-           '    convert_cifar_data input_folder output_folder db_type\n'
-           'Where the input folder should contain the binary batch files.\n'
-           'The CIFAR dataset could be downloaded at\n'
-           '    http://www.cs.toronto.edu/~kriz/cifar.html\n'
-           'You should gunzip them after downloading.\n');
-  } else {
-    google::InitGoogleLogging(argv[0]);
-    convert_dataset(string(argv[1]), string(argv[2]), string(argv[3]));
-  }
+    {  private:
+    TServicesMap m_services;
+    TServicesMap m_publicservices;
+    std::vector<ServiceBase*> m_releasevec;
+};
+    
+    //============================================================================
+// Name        : has_member.h
+// Author      :
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+    
+    
+    {
+    {        if (JNI_OK == status_) {
+            we_attach_ = true;
+            pthread_setspecific(g_env_key, env_);
+        } else {
+            ASSERT2(false, 'vm:%p, env:%p, status:%d', vm_, env_, status_);
+            env_ = NULL;
+            return;
+        }
+    } while (false);
+    
+    jint ret = env_->PushLocalFrame(_capacity);
+    ASSERT2(0 == ret, 'ret:%d', ret);
+}
+    
+    int RunOneTest(Fuzzer *F, const char *InputFilePath, size_t MaxLen) {
+  Unit U = FileToVector(InputFilePath);
+  if (MaxLen && MaxLen < U.size())
+    U.resize(MaxLen);
+  F->RunOne(U.data(), U.size());
+  F->TryDetectingAMemoryLeak(U.data(), U.size(), true);
   return 0;
 }
-
     
-    /* Wrap the input layer of the network in separate cv::Mat objects
- * (one per channel). This way we save one memcpy operation and we
- * don't need to rely on cudaMemcpy2D. The last preprocessing
- * operation will write the separate channels directly to the input
- * layer. */
-void Classifier::WrapInputLayer(std::vector<cv::Mat>* input_channels) {
-  Blob<float>* input_layer = net_->input_blobs()[0];
+    
+    {#undef EXT_FUNC
+}
+    
+    long GetEpoch(const std::string &Path) {
+  struct stat St;
+  if (stat(Path.c_str(), &St))
+    return 0;  // Can't stat, be conservative.
+  return St.st_mtime;
+}
+    
+    std::string FileToString(const std::string &Path);
+    
+    typedef struct sha1nfo {
+	uint32_t buffer[BLOCK_LENGTH/4];
+	uint32_t state[HASH_LENGTH/4];
+	uint32_t byteCount;
+	uint8_t bufferOffset;
+	uint8_t keyBuffer[BLOCK_LENGTH];
+	uint8_t innerHash[HASH_LENGTH];
+} sha1nfo;
+    
+      static const size_t kTORCSize = 1 << 5;
+  TableOfRecentCompares<uint32_t, kTORCSize> TORC4;
+  TableOfRecentCompares<uint64_t, kTORCSize> TORC8;
+    
+    void TraceState::TraceSwitchCallback(uintptr_t PC, size_t ValSizeInBits,
+                                     uint64_t Val, size_t NumCases,
+                                     uint64_t *Cases) {
+  if (F->InFuzzingThread()) return;
+  size_t ValSize = ValSizeInBits / 8;
+  bool TryShort = IsTwoByteData(Val);
+  for (size_t i = 0; i < NumCases; i++)
+    TryShort &= IsTwoByteData(Cases[i]);
     }
     
-    using namespace caffe;  // NOLINT(build/namespaces)
-using boost::scoped_ptr;
-using std::string;
-    
-      caffe::Datum datum;
-  datum.set_channels(2);  // one channel for each image in the pair
-  datum.set_height(rows);
-  datum.set_width(cols);
-  LOG(INFO) << 'A total of ' << num_items << ' items.';
-  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
-  for (int itemid = 0; itemid < num_items; ++itemid) {
-    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
-    int j = caffe::caffe_rng_rand() % num_items;
-    read_image(&image_file, &label_file, i, rows, cols,
-        pixels, &label_i);
-    read_image(&image_file, &label_file, j, rows, cols,
-        pixels + (rows * cols), &label_j);
-    datum.set_data(pixels, 2*rows*cols);
-    if (label_i  == label_j) {
-      datum.set_label(1);
+    bool ParseDictionaryFile(const std::string &Text, std::vector<Unit> *Units) {
+  if (Text.empty()) {
+    Printf('ParseDictionaryFile: file does not exist or is empty\n');
+    return false;
+  }
+  std::istringstream ISS(Text);
+  Units->clear();
+  Unit U;
+  int LineNo = 0;
+  std::string S;
+  while (std::getline(ISS, S, '\n')) {
+    LineNo++;
+    size_t Pos = 0;
+    while (Pos < S.size() && isspace(S[Pos])) Pos++;  // Skip spaces.
+    if (Pos == S.size()) continue;  // Empty line.
+    if (S[Pos] == '#') continue;  // Comment line.
+    if (ParseOneDictionaryEntry(S, &U)) {
+      Units->push_back(U);
     } else {
-      datum.set_label(0);
+      Printf('ParseDictionaryFile: error in line %d\n\t\t%s\n', LineNo,
+             S.c_str());
+      return false;
     }
-    datum.SerializeToString(&value);
-    std::string key_str = caffe::format_int(itemid, 8);
-    db->Put(leveldb::WriteOptions(), key_str, value);
   }
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
- */
-template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
- public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
-    }
-    
-    
-    {  /// when divided by UINT_MAX, the randomly generated values @f$u\sim U(0,1)@f$
-  Blob<unsigned int> rand_vec_;
-  /// the probability @f$ p @f$ of dropping any input
-  Dtype threshold_;
-  /// the scale for undropped inputs at train time @f$ 1 / (1 - p) @f$
-  Dtype scale_;
-  unsigned int uint_thres_;
-};
-    
-    /**
- * @brief A layer for learning 'embeddings' of one-hot vector input.
- *        Equivalent to an InnerProductLayer with one-hot vectors as input, but
- *        for efficiency the input is the 'hot' index of each column itself.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class EmbedLayer : public Layer<Dtype> {
- public:
-  explicit EmbedLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    /**
- * @brief Computes @f$ y = \gamma ^ {\alpha x + \beta} @f$,
- *        as specified by the scale @f$ \alpha @f$, shift @f$ \beta @f$,
- *        and base @f$ \gamma @f$.
- */
-template <typename Dtype>
-class ExpLayer : public NeuronLayer<Dtype> {
- public:
-  /**
-   * @param param provides ExpParameter exp_param,
-   *     with ExpLayer options:
-   *   - scale (\b optional, default 1) the scale @f$ \alpha @f$
-   *   - shift (\b optional, default 0) the shift @f$ \beta @f$
-   *   - base (\b optional, default -1 for a value of @f$ e \approx 2.718 @f$)
-   *         the base @f$ \gamma @f$
-   */
-  explicit ExpLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    static PyObject* recursive_to_list(
-    char* data, IntList sizes, IntList strides, int64_t dim,
-    ScalarType scalarType, int64_t elementSize)
-{
-  int64_t ndim = sizes.size();
-  if (dim == ndim) {
-    return torch::utils::load_scalar(data, scalarType);
-  }
-  auto n = sizes[dim];
-  auto list = THPObjectPtr(PyList_New(n));
-  if (!list) throw python_error();
-  for (int64_t i = 0; i < n; i++) {
-    PyObject* obj = recursive_to_list(data, sizes, strides, dim + 1, scalarType, elementSize);
-    if (!obj) throw python_error();
-    PyList_SET_ITEM(list.get(), i, obj);
-    data += strides[dim] * elementSize;
-  }
-  return list.release();
+  return true;
 }
     
-    #define THDPStorage TH_CONCAT_3(THDP,Real,Storage)
-#define THDPStorageStr TH_CONCAT_STRING_3(torch.cuda.,Real,Storage)
-#define THDPStorageClass TH_CONCAT_3(THDP,Real,StorageClass)
-#define THDPStorage_(NAME) TH_CONCAT_4(THDP,Real,Storage_,NAME)
-    
-    #undef THStoragePtr
-#undef THPStoragePtr
-#undef THTensorPtr
-#undef THPTensorPtr
-    
-    ByteArray::ByteArray(const char* arr, std::size_t size)
-  : _data(arr, arr + size)
-{}
-    
-    /*
- * Timing execution of block of codes.
- */
-struct Timer {
-  enum Type {
-    WallTime,
-    SystemCPU,
-    UserCPU,
-    TotalCPU,
-  };
-  enum ReportType {
-    Log,
-    Stderr,
-    Trace,
-  };
-  enum Who {
-    Self = RUSAGE_SELF,
-    Children = RUSAGE_CHILDREN,
-#ifdef RUSAGE_THREAD
-    Thread = RUSAGE_THREAD,
-#endif
-  };
-    }
-    
-      const timespec& getStartTimer() const;
-  int getTimeoutSeconds() const;
-    
-    extern 'C' {
-HHVM_ATTRIBUTE_WEAK extern void numa_init();
-}
-    
-      switch (file_fsmagic(ms, inname, &sb, stream)) {
-  case -1:    /* error */
-    goto done;
-  case 0:      /* nothing found */
-    break;
-  default:    /* matched it and printed type */
-    rv = 0;
-    goto done;
-  }
-    
-      void clear() {
-    setFrontier(m_base);
-  }
-    
-    #include 'power_iphone.h'
-    
-    	if (vorbis_p) {
-		vorbis_synthesis_init(&vd, &vi);
-		vorbis_block_init(&vd, &vb);
-		//_setup(vi.channels, vi.rate);
-	} else {
-		/* tear down the partial vorbis setup */
-		vorbis_info_clear(&vi);
-		vorbis_comment_clear(&vc);
-	}
-    
-    
-    {	available = true;
-}
-    
-    
-    {	StreamPeerMbedTLS();
-	~StreamPeerMbedTLS();
-};
-    
-    
-    {	WebSocketClient();
-	~WebSocketClient();
-};
-    
-    		Vector3 r0 = frictionPosWorld - body1->get_global_transform().origin;
-		Vector3 c0 = (r0).cross(frictionDirectionWorld);
-		Vector3 vec = s->get_inverse_inertia_tensor().xform_inv(c0).cross(r0);
-		//denom1= body1->get_inverse_mass() + frictionDirectionWorld.dot(vec);
-    
-    Ref<Texture> VideoPlayer::get_video_texture() {
-    }
-    
-        Value(void)
-    : unit(YGUnitUndefined)
-    , value(0.0)
-    {
-    }
-    
-    
-    {
-    {
-    {  static void OnLoad();
- private:
-  bool attachedWithThisScope_;
-};
-}
-}
-
-    
-    #define FBASSERT(expr) FBASSERTMSGF(expr, '%s', #expr)
+      // NOTE: Do not introduce any new `return` statements past this
+  // point. It is important that `ActiveThreadCount` always be decremented
+  // when leaving this function.
