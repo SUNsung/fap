@@ -1,126 +1,105 @@
 
         
-            # Separating the 'table of contents' from the contents (blocks)
-    table_of_contents = ''.join(read_me.split('- - -')[0])
-    blocks = ''.join(read_me.split('- - -')[1]).split('\n# ')
-    for i in range(len(blocks)):
-        if i == 0:
-            blocks[i] = blocks[i] + '\n'
-        else:
-            blocks[i] = '# ' + blocks[i] + '\n'
+        from sklearn.cluster import AgglomerativeClustering
     
-    containers = (('thefuck/python3-tcsh',
-               u'''FROM python:3
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'),
-              ('thefuck/python2-tcsh',
-               u'''FROM python:2
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'))
-    
-        # To avoid having to always use the '|safe' filter in flatpage templates,
-    # mark the title and content as already safe (since they are raw HTML
-    # content in the first place).
-    f.title = mark_safe(f.title)
-    f.content = mark_safe(f.content)
-    
-    # Scrapy version
-import pkgutil
-__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
-version_info = tuple(int(v) if v.isdigit() else v
-                     for v in __version__.split('.'))
-del pkgutil
-    
-                raise ContractFail('Returned %s %s, expected %s' % \
-                (occurrences, self.obj_name, expected))
-    
-    class TestPyDecode(TestDecode, PyTest): pass
-class TestCDecode(TestDecode, CTest): pass
-
-    
-            # Callbacks are invoked in LIFO order to match the behaviour of
-        # nested context managers
-        suppressed_exc = False
-        pending_raise = False
-        while self._exit_callbacks:
-            is_sync, cb = self._exit_callbacks.pop()
-            try:
-                if is_sync:
-                    cb_suppress = cb(*exc_details)
-                else:
-                    cb_suppress = await cb(*exc_details)
-    
-        def test_hash(self):
-        for x in range(-30, 30):
-            self.assertEqual(hash(x), hash(complex(x, 0)))
-            x /= 3.0    # now check against floating point
-            self.assertEqual(hash(x), hash(complex(x, 0.)))
+        selected_algorithm = opts.selected_algorithm.split(',')
+    for key in selected_algorithm:
+        if key not in default_algorithms.split(','):
+            raise ValueError('Unknown sampling algorithm \'%s\' not in (%s).'
+                             % (key, default_algorithms))
     
     
-def main():
-    tornado.options.parse_command_line()
-    application = tornado.web.Application([
-        (r'/', MainHandler),
-    ])
-    http_server = tornado.httpserver.HTTPServer(application)
-    http_server.listen(options.port)
-    tornado.ioloop.IOLoop.current().start()
+if __name__ == '__main__':
     
-        @gen_test
-    def test_get_clears_timed_out_getters(self):
-        q = queues.Queue()
-        getters = [q.get(timedelta(seconds=0.01)) for _ in range(10)]
-        get = q.get()
-        self.assertEqual(11, len(q._getters))
-        yield gen.sleep(0.02)
-        self.assertEqual(11, len(q._getters))
-        self.assertFalse(get.done())  # Final waiter is still active.
-        q.get()  # get() clears the waiters.
-        self.assertEqual(2, len(q._getters))
-        for getter in getters:
-            self.assertRaises(TimeoutError, getter.result)
+        if not os.path.exists(ARCHIVE_NAME):
+        print('Downloading dataset from %s (3 MB)' % URL)
+        opener = urlopen(URL)
+        with open(ARCHIVE_NAME, 'wb') as archive:
+            archive.write(opener.read())
     
+        if not os.path.exists(ARCHIVE_NAME):
+        print('Downloading dataset from %s (14 MB)' % URL)
+        opener = urlopen(URL)
+        with open(ARCHIVE_NAME, 'wb') as archive:
+            archive.write(opener.read())
     
-class FacebookGraphMixin(OAuth2Mixin):
-    '''Facebook authentication using the new Graph API and OAuth2.'''
-    _OAUTH_ACCESS_TOKEN_URL = 'https://graph.facebook.com/oauth/access_token?'
-    _OAUTH_AUTHORIZE_URL = 'https://www.facebook.com/dialog/oauth?'
-    _OAUTH_NO_CALLBACKS = False
-    _FACEBOOK_BASE_URL = 'https://graph.facebook.com'
+        # Print and plot the confusion matrix
+    cm = metrics.confusion_matrix(y_test, y_predicted)
+    print(cm)
     
+    exercise_dir = os.path.dirname(__file__)
+if exercise_dir == '':
+    exercise_dir = '.'
     
-class QueueFull(Exception):
-    '''Raised by `.Queue.put_nowait` when a queue is at its maximum size.'''
-    pass
+    Adjusted for chance measure such as ARI display some random variations
+centered around a mean score of 0.0 for any number of samples and
+clusters.
     
-            Note that multiple processes are not compatible with the autoreload
-        module (or the ``autoreload=True`` option to `tornado.web.Application`
-        which defaults to True when ``debug=True``).
-        When using multiple processes, no IOLoops can be created or
-        referenced until after the call to ``TCPServer.start(n)``.
-        '''
-        assert not self._started
-        self._started = True
-        if num_processes != 1:
-            process.fork_processes(num_processes)
-        sockets = self._pending_sockets
-        self._pending_sockets = []
-        self.add_sockets(sockets)
+    A Parser needs a TokenStream as input (which in turn is usually fed by a
+Lexer):
     
-        # support the same options as unittest's command-line interface
-    define('verbose', type=bool)
-    define('quiet', type=bool)
-    define('failfast', type=bool)
-    define('catch', type=bool)
-    define('buffer', type=bool)
+                ret += [v] * n
     
-            To use client certificates, the HTTPServer's
-        `ssl.SSLContext.verify_mode` field must be set, e.g.::
+            # and some (genuinely) random tests
+        for _ in range(10000):
+            a_bits = random.randrange(1000)
+            b_bits = random.randrange(1, 1000)
+            x = random.randrange(2**a_bits)
+            y = random.randrange(1, 2**b_bits)
+            self.check_truediv(x, y)
+            self.check_truediv(x, -y)
+            self.check_truediv(-x, y)
+            self.check_truediv(-x, -y)
     
-        It is also possible to create a non-global reactor by calling
-    ``tornado.platform.twisted.TornadoReactor()``.  However, if
-    the `.IOLoop` and reactor are to be short-lived (such as those used in
-    unit tests), additional cleanup may be required.  Specifically, it is
-    recommended to call::
+        def test_pickle(self):
+        for d in deque(range(200)), deque(range(200), 100):
+            for i in range(pickle.HIGHEST_PROTOCOL + 1):
+                s = pickle.dumps(d, i)
+                e = pickle.loads(s)
+                self.assertNotEqual(id(e), id(d))
+                self.assertEqual(list(e), list(d))
+                self.assertEqual(e.maxlen, d.maxlen)
+    
+    import re
+    
+        def get_sequences(self):
+        '''Return a name-to-key-list dictionary to define each sequence.'''
+        results = {}
+        with open(os.path.join(self._path, '.mh_sequences'), 'r', encoding='ASCII') as f:
+            all_keys = set(self.keys())
+            for line in f:
+                try:
+                    name, contents = line.split(':')
+                    keys = set()
+                    for spec in contents.split():
+                        if spec.isdigit():
+                            keys.add(int(spec))
+                        else:
+                            start, stop = (int(x) for x in spec.split('-'))
+                            keys.update(range(start, stop + 1))
+                    results[name] = [key for key in sorted(keys) \
+                                         if key in all_keys]
+                    if len(results[name]) == 0:
+                        del results[name]
+                except ValueError:
+                    raise FormatError('Invalid sequence specification: %s' %
+                                      line.rstrip())
+        return results
+    
+        objects = []
+    libs = ['shell32.lib', 'comdlg32.lib', 'wsock32.lib', 'user32.lib', 'oleaut32.lib']
+    for moddefn in moddefns:
+        print('# Module', moddefn.name)
+        for file in moddefn.sourceFiles:
+            base = os.path.basename(file)
+            base, ext = os.path.splitext(base)
+            objects.append(base + '.obj')
+            print(r'$(temp_dir)\%s.obj: '%s'' % (base, file))
+            print('\t@$(CC) -c -nologo /Fo$* $(cdl) $(c_debug) /D BUILD_FREEZE', end=' ')
+            print(''-I$(pythonhome)/Include'  '-I$(pythonhome)/PC' \\')
+            print('\t\t$(cflags) $(cdebug) $(cinclude) \\')
+            extra = moddefn.GetCompilerOptions()
+            if extra:
+                print('\t\t%s \\' % (' '.join(extra),))
+            print('\t\t'%s'' % file)
+            print()
