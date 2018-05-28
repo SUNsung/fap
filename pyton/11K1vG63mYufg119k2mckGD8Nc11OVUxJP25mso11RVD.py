@@ -1,106 +1,80 @@
 
         
         
-def print_debug_info(env):
-    env.stderr.writelines([
-        'HTTPie %s\n' % httpie_version,
-        'Requests %s\n' % requests_version,
-        'Pygments %s\n' % pygments_version,
-        'Python %s\n%s\n' % (sys.version, sys.executable),
-        '%s %s' % (platform.system(), platform.release()),
-    ])
-    env.stderr.write('\n\n')
-    env.stderr.write(repr(env))
-    env.stderr.write('\n')
+PACKAGES = [
+    'httpie',
+    'requests',
+    'pygments',
+]
     
-                    self._status_line = PROGRESS.format(
-                    percentage=percentage,
-                    downloaded=humanize_bytes(downloaded),
-                    speed=humanize_bytes(speed),
-                    eta=eta,
-                )
+            :param response: Initiated response object with headers already fetched
+        :type response: requests.models.Response
     
-        def __init__(self, **kwargs):
+        def test_self_signed_server_cert_by_default_raises_ssl_error(
+            self,
+            httpbin_secure_untrusted):
+        with pytest.raises(SSLError):
+            http(httpbin_secure_untrusted.url + '/get')
+    
+        @cookies.setter
+    def cookies(self, jar):
         '''
-        :param env: an class:`Environment` instance
-        :param kwargs: additional keyword argument that some
-                       processor might require.
+        :type jar: CookieJar
+        '''
+        # http://docs.python.org/2/library/cookielib.html#cookie-objects
+        stored_attrs = ['value', 'path', 'secure', 'expires']
+        self['cookies'] = {}
+        for cookie in jar:
+            self['cookies'][cookie.name] = {
+                attname: getattr(cookie, attname)
+                for attname in stored_attrs
+            }
     
+            Additional subclass init must be done before calling this
+        unless  _utest=True is passed to suppress wait_window().
     
-def humanize_bytes(n, precision=2):
-    # Author: Doug Latornell
-    # Licence: MIT
-    # URL: http://code.activestate.com/recipes/577081/
-    '''Return a humanized string representation of a number of bytes.
+        Fractions and Decimals are also supported:
     
+        def ihave(self, message_id, data):
+        '''Process an IHAVE command.  Arguments:
+        - message_id: message-id of the article
+        - data: file containing the article
+        Returns:
+        - resp: server response if successful
+        Note that if the server refuses the article an exception is raised.'''
+        return self._post('IHAVE {0}'.format(message_id), data)
     
-class Session(BaseConfigDict):
-    helpurl = 'https://httpie.org/docs#sessions'
-    about = 'HTTPie session file'
+        print('# The following line assumes you have built Python using the standard instructions')
+    print('# Otherwise fix the following line to point to the library.')
+    print('pythonlib = '$(pythonhome)/pcbuild/python%s$(debug_suffix).lib'' % version_suffix)
+    print()
     
+                        # args=NULL, nargs=0, kwargs={}
+                    result = _testcapi.pyobject_fastcalldict(func, None, {})
+                    self.check_result(result, expected)
     
-def main():
-    options = parse_args(sys.argv[1:])
-    if options.report == 'regression':
-        command = regression_report
-    elif options.report == 'junit':
-        command = junit_report
-    elif options.report == 'report':
-        command = human_report
-    assert_tools_available()
-    sys.exit(command(options))
+    from r2.config.extensions import set_extension
+from r2.controllers.reddit_base import RedditController, generate_modhash
+from r2.controllers.login import handle_login, handle_register
+from r2.lib.csrf import csrf_exempt
+from r2.lib.validator import (
+    json_validate,
+    ValidEmail,
+    VPasswordChange,
+    VRatelimit,
+    VSigned,
+    VThrottledLogin,
+    VUname,
+)
     
-    def api_type(subtype = ''):
-    return 'api-' + subtype if subtype else 'api'
-    
-    
-class LimitUploadSize(object):
-    '''
-    Middleware for restricting the size of uploaded files (such as
-    image files for the CSS editing capability).
-    '''
-    def __init__(self, app, max_size=1024*500):
-        self.app = app
-        self.max_size = max_size
-    
-    # class specific overrides
-api('link',          LinkJsonTemplate)
-api('promotedlink',  PromotedLinkJsonTemplate)
-api('message',       MessageJsonTemplate)
-api('subreddit',     SubredditJsonTemplate)
-api('labeledmulti',  LabeledMultiJsonTemplate)
-api('reddit',        RedditJsonTemplate)
-api('panestack',     PanestackJsonTemplate)
-api('htmlpanestack', NullJsonTemplate)
-api('listing',       ListingJsonTemplate)
-api('searchlisting', SearchListingJsonTemplate)
-api('userlisting',   UserListingJsonTemplate)
-api('usertableitem', UserTableItemJsonTemplate)
-api('account',       AccountJsonTemplate)
-    
-            res = AdminPage(content = AdminAwardGive(award, recipient, desc,
-                                                 url, hours),
-                        title='give an award').render()
-        return res
-    
-    class ButtonsController(RedditController):
-    def get_wrapped_link(self, url, link = None, wrapper = None):
-        try:
-            links = []
-            if link:
-                links = [link]
-            else:
-                sr = None if isinstance(c.site, FakeSubreddit) else c.site
-                try:
-                    links = Link._by_url(url, sr)
-                except NotFound:
-                    pass
+            # See if the target is already an existing friend.
+        # If not, create the friend relationship.
+        friend_rel = Account.get_friend(c.user, friend)
+        rel_exists = bool(friend_rel)
+        if not friend_rel:
+            friend_rel = c.user.add_friend(friend)
+            response.status = 201
     
             An iden is given as the `captcha` field with a `BAD_CAPTCHA`
         error, you should use this endpoint if you get a
         `BAD_CAPTCHA` error response.
-    
-            # Replace all links to '/wiki/help/...' with '/help/...'
-        for link in output.findAll('a'):
-            if link.has_key('href') and link['href'].startswith('/wiki/help'):
-                link['href'] = link['href'][5:]
