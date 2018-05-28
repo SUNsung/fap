@@ -1,312 +1,236 @@
 
         
-        #if defined(OS_LINUX) || defined(OS_WIN)
-#include 'content/nw/src/browser/menubar_view.h'
-#include 'content/nw/src/browser/browser_view_layout.h'
-using nw::BrowserViewLayout;
-#endif
+          fname = LockFileName('foo');
+  ASSERT_EQ('foo/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(0, number);
+  ASSERT_EQ(kDBLockFile, type);
     
-      virtual void Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh = nullptr);
-  virtual void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result);
-    
-    
-    {  gfx::Image originImage;
-  nw::Package* package = nw::InitNWPackage();
-  if (nw::GetImage(package, base::FilePath::FromUTF8Unsafe(icon), &originImage)) {
-    const gfx::ImageSkia* originImageSkia = originImage.ToImageSkia();
-    gfx::ImageSkia resizedImageSkia = gfx::ImageSkiaOperations::CreateResizedImage(*originImageSkia,
-                                                                                   skia::ImageOperations::RESIZE_GOOD,
-                                                                                   gfx::Size(kIconWidth, kIconHeight));
-    icon_ = gfx::Image(resizedImageSkia);
+      // Delete the specified 'file' from the specified 'level'.
+  void DeleteFile(int level, uint64_t file) {
+    deleted_files_.insert(std::make_pair(level, file));
   }
+    
+    
+TEST(FindFileTest, Multiple) {
+  Add('150', '200');
+  Add('200', '250');
+  Add('300', '350');
+  Add('400', '450');
+  ASSERT_EQ(0, Find('100'));
+  ASSERT_EQ(0, Find('150'));
+  ASSERT_EQ(0, Find('151'));
+  ASSERT_EQ(0, Find('199'));
+  ASSERT_EQ(0, Find('200'));
+  ASSERT_EQ(1, Find('201'));
+  ASSERT_EQ(1, Find('249'));
+  ASSERT_EQ(1, Find('250'));
+  ASSERT_EQ(2, Find('251'));
+  ASSERT_EQ(2, Find('299'));
+  ASSERT_EQ(2, Find('300'));
+  ASSERT_EQ(2, Find('349'));
+  ASSERT_EQ(2, Find('350'));
+  ASSERT_EQ(3, Find('351'));
+  ASSERT_EQ(3, Find('400'));
+  ASSERT_EQ(3, Find('450'));
+  ASSERT_EQ(4, Find('451'));
+    }
+    
+    TEST(WriteBatchTest, Empty) {
+  WriteBatch batch;
+  ASSERT_EQ('', PrintContents(&batch));
+  ASSERT_EQ(0, WriteBatchInternal::Count(&batch));
 }
     
+    #include <string>
+#include 'leveldb/env.h'
+#include 'leveldb/status.h'
     
-    {  remover->AddObserver(this);
-  remover->RemoveAndReply(base::Time(), base::Time::Max(),
-                          content::BrowsingDataRemover::DATA_TYPE_CACHE,
-                          content::BrowsingDataRemover::ORIGIN_TYPE_UNPROTECTED_WEB,
-                          this);
-  // BrowsingDataRemover deletes itself.
-  base::MessageLoop::ScopedNestableTaskAllower allow(
-        base::MessageLoop::current());
-  run_loop_.Run();
-  remover->RemoveObserver(this);
-  return true;
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    /**
+ * @brief Abstract base class that factors out the BLAS code common to
+ *        ConvolutionLayer and DeconvolutionLayer.
+ */
+template <typename Dtype>
+class BaseConvolutionLayer : public Layer<Dtype> {
+ public:
+  explicit BaseConvolutionLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+      /**
+   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
+   *
+   * Computes the gradients with respect to the two input vectors (bottom[0] and
+   * bottom[1]), but not the similarity label (bottom[2]).
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
+   *      as @f$ \lambda @f$ is the coefficient of this layer's output
+   *      @f$\ell_i@f$ in the overall Net loss
+   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
+   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
+   *      (*Assuming that this top Blob is not used as a bottom (input) by any
+   *      other layer of the Net.)
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$a@f$; Backward fills their diff with
+   *      gradients if propagate_down[0]
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$b@f$; Backward fills their diff with gradients if
+   *      propagate_down[1]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of ReLULayer.
+ */
+template <typename Dtype>
+class CuDNNReLULayer : public ReLULayer<Dtype> {
+ public:
+  explicit CuDNNReLULayer(const LayerParameter& param)
+      : ReLULayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNReLULayer();
+    }
+    
+    /**
+ * @brief Computes @f$ y = \gamma ^ {\alpha x + \beta} @f$,
+ *        as specified by the scale @f$ \alpha @f$, shift @f$ \beta @f$,
+ *        and base @f$ \gamma @f$.
+ */
+template <typename Dtype>
+class ExpLayer : public NeuronLayer<Dtype> {
+ public:
+  /**
+   * @param param provides ExpParameter exp_param,
+   *     with ExpLayer options:
+   *   - scale (\b optional, default 1) the scale @f$ \alpha @f$
+   *   - shift (\b optional, default 0) the shift @f$ \beta @f$
+   *   - base (\b optional, default -1 for a value of @f$ e \approx 2.718 @f$)
+   *         the base @f$ \gamma @f$
+   */
+  explicit ExpLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    
+    {}
+    
+    Timer::Timer(Type type, const char *name /* = NULL */, ReportType r)
+  : m_type(type), m_report(r) {
+  if (name) {
+    m_name = name;
+    PRINT_MSG('%s...', name);
+  }
+  m_start = measure();
 }
     
-     protected:
-  ~NwAppClearCacheFunction() override;
-    
-    #include 'chrome/browser/devtools/devtools_window.h'
-#include 'chrome/browser/extensions/devtools_util.h'
-#include 'chrome/browser/extensions/extension_service.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/public/browser/render_view_host.h'
-#include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/extension_system.h'
-#include 'extensions/common/error_utils.h'
-    
-     protected:
-  ~NwObjDestroyFunction() override;
-    
-    namespace oneof_descriptor {
-PyObject* NewOneofFieldsSeq(const OneofDescriptor* descriptor);
-}  // namespace oneof_descriptor
+    namespace HPHP { namespace jit {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    }
     
     
-    {  ASSERT_TRUE(message.ParseFromString(data));
-  EXPECT_TRUE(message.has_any_value());
-  ASSERT_TRUE(message.any_value().UnpackTo(&any));
-  ASSERT_TRUE(any.UnpackTo(&submessage));
-  EXPECT_EQ(12345, submessage.int32_value());
-}
+    {    raise_warning(cs_GMP_INVALID_VALUE_MUST_NOT_BE_ZERO, 'gmp_div_q');
+    return false;
+  }
+    
+    private void close_and_restore(const struct magic_set *, const char *, int,
+    const struct stat *);
+private int unreadable_info(struct magic_set *, mode_t, const char *);
+#if 0
+private const char* get_default_magic(void);
+#endif
+private const char *file_or_stream(struct magic_set *, const char *, php_stream *);
     
     
+    {}  // namespace guetzli
     
+    #include 'guetzli/gamma_correct.h'
     
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
     
+    namespace guetzli {
+    }
     
-    {}  // namespace google
-#endif  // GOOGLE_PROTOBUF_COMPILER_JAVA_EXTENSION_LITE_H__
+    #endif  // GUETZLI_JPEG_DATA_READER_H_
 
     
-      // Builder addAllRepeatedField(Iterable<Field> values)
-  WriteFieldDocComment(printer, descriptor_);
-  PrintNestedBuilderFunction(printer,
-    '$deprecation$public Builder addAll$capitalized_name$(\n'
-    '    java.lang.Iterable<? extends $type$> values)',
-    
-    
-    {}  // namespace testing
-    
-    
-    {  // The name of the source file where the test part took place, or
-  // '' if the source file is unknown.
-  std::string file_name_;
-  // The line in the source file where the test part took place, or -1
-  // if the line number is unknown.
-  int line_number_;
-  std::string summary_;  // The test failure summary.
-  std::string message_;  // The test failure message.
-};
-    
-    // If *pstr starts with the given prefix, modifies *pstr to be right
-// past the prefix and returns true; otherwise leaves *pstr unchanged
-// and returns false.  None of pstr, *pstr, and prefix can be NULL.
-GTEST_API_ bool SkipPrefix(const char* prefix, const char** pstr);
-    
-      // Compares two wide C strings, ignoring case.  Returns true iff they
-  // have the same content.
-  //
-  // Unlike wcscasecmp(), this function can handle NULL argument(s).
-  // A NULL C string is considered different to any non-NULL wide C string,
-  // including the empty string.
-  // NB: The implementations on different platforms slightly differ.
-  // On windows, this method uses _wcsicmp which compares according to LC_CTYPE
-  // environment variable. On GNU platform this method uses wcscasecmp
-  // which compares according to LC_CTYPE category of the current locale.
-  // On MacOS X, it uses towlower, which also uses LC_CTYPE category of the
-  // current locale.
-  static bool CaseInsensitiveWideCStringEquals(const wchar_t* lhs,
-                                               const wchar_t* rhs);
-    
-    // Implementation #2 pre-calculates the primes and stores the result
-// in an array.
-class PreCalculatedPrimeTable : public PrimeTable {
- public:
-  // 'max' specifies the maximum number the prime table holds.
-  explicit PreCalculatedPrimeTable(int max)
-      : is_prime_size_(max + 1), is_prime_(new bool[max + 1]) {
-    CalculatePrimesUpTo(max);
+      // Make a local copy of the input bit length histogram.
+  int count[kJpegHuffmanMaxBitLength + 1] = { 0 };
+  int total_count = 0;
+  for (len = 1; len <= kJpegHuffmanMaxBitLength; ++len) {
+    count[len] = count_in[len];
+    total_count += count[len];
   }
-  virtual ~PreCalculatedPrimeTable() { delete[] is_prime_; }
+    
+    namespace guetzli {
     }
     
-    int main(int argc, char **argv) {
-  InitGoogleTest(&argc, argv);
-    }
+    #endif // D_ABSTRACT_COMMAND_H
+
     
-        // Attempts to compute the error signal for the whole utterance, which will
-    // be fed to the neural network as features. Currently it is a workaround
-    // for the two-forward-pass sequence and ctc training, which allows
-    // processing more utterances at the same time. Only used in Kaldi2Reader.
-    // TODO: move the two-forward-pass support out of the reader.
-    void AttemptUtteranceDerivativeFeatures(ComputationNetworkPtr net,
-                                            IDataReader* trainSetDataReader,
-                                            const std::vector<ComputationNodeBasePtr>& featureNodes,
-                                            StreamMinibatchInputs* inputMatrices);
+      // File must be opened before calling this function.
+  virtual void allocate(int64_t offset, int64_t length,
+                        bool sparse) CXX11_OVERRIDE;
     
-        OperatorSchemaSetter& OperatorSchemaSetter::FillUsing(std::function<void(OperatorSchemaSetter&)> populator)
-    {
-        if (populator) {
-            populator(*this);
-        }
-        return *this;
-    }
-    
-    namespace ONNXIR
+    void AnnounceTier::nextEvent()
 {
-    namespace Common
-    {
-        Status::Status(StatusCategory p_category, int p_code, const std::string& p_msg)
-        {
-            m_state.reset(new State());
-            m_state->m_category = p_category;
-            m_state->m_code = p_code;
-            m_state->m_msg = p_msg;
-        }
-    }
-    }
-    
-                    if (IsLittleEndianOrder())
-                {
-                    memcpy((void*)p_data, (void*)buff, raw_data.size() * sizeof(char));
-                }
-                else
-                {
-                    for (size_t i = 0; i < raw_data.size(); i += typeSize, buff += typeSize)
-                    {
-                        T result;
-                        const char* tempBytes = reinterpret_cast<char*>(&result);
-                        for (size_t j = 0; j < typeSize; ++j)
-                        {
-                            memcpy((void*)&tempBytes[j], (void*)&buff[typeSize - 1 - i], sizeof(char));
-                        }
-                        p_data[i] = result;
-                    }
-                }
-    
-    
-    {        const size_t ts = m_firstFrames[index];
-        const size_t n = m_utterances[index].GetNumberOfFrames();
-        return msra::dbn::matrixstripe(m_frames, ts, n);
-    }
-    
-    
-// Represents a chunk data in memory. Given up to the randomizer.
-// It is up to the randomizer to decide when to release a particular chunk.
-class HTKDeserializer::HTKChunk : public Chunk, boost::noncopyable
-{
-public:
-    HTKChunk(HTKDeserializer* parent, ChunkIdType chunkId) : m_parent(parent), m_chunkId(chunkId)
-    {
-        auto& chunkInfo = m_parent->m_chunks[chunkId];
-    }
-    }
-    
-        // regular matrix product
-    // Avoid this, not efficient either way.
-    void matprod(const ssematrixbase &A, const ssematrixbase &B)
-    {
-        // ... TODO: put a resize() here and all matmul, so we don't need to set size upfront
-        auto &us = *this;
-        assert(us.rows() == A.rows() && B.cols() == us.cols());
-        size_t K = A.cols();
-        assert(K == B.rows());
-        foreach_coord (i, j, us)
-        {
-            float sum = 0.0;
-            for (size_t k = 0; k < K; k++)
-                sum += A(i, k) * B(k, j);
-            us(i, j) = sum;
-        }
-    }
-    
-    
-    {    // copy mD to dense and compare
-    Matrix<float> mE = Matrix<float>::Zeros(dim1, dim1, c_deviceIdZero);
-    Matrix<float>::ScaleAndAdd(1, mD, mE);
-    BOOST_CHECK(mE.IsEqualTo(mC, c_epsilonFloatE4));
+  switch (event) {
+  case STARTED:
+    event = DOWNLOADING;
+    break;
+  case STARTED_AFTER_COMPLETION:
+    event = SEEDING;
+    break;
+  case STOPPED:
+    event = HALTED;
+    break;
+  case COMPLETED:
+    event = SEEDING;
+    break;
+  default:
+    break;
+  }
 }
     
-        bnNodes = m_net->SortByGlobalEvalOrder(bnNodes);
-    for (auto& node : bnNodes)
-    {
-        let bnNode = static_pointer_cast<BatchNormalizationNode<ElemType>>(node);
-        size_t actualMBSize = 0;
+    namespace aria2 {
     }
     
-    #include <algorithm>
-#include <cmath>
     
-          // The sentinel node becomes the parent node.
-      size_t j_end = 2 * n - k;
-      tree[j_end].total_count_ =
-          tree[left].total_count_ + tree[right].total_count_;
-      tree[j_end].index_left_ = static_cast<int16_t>(left);
-      tree[j_end].index_right_or_value_ = static_cast<int16_t>(right);
+    {} // namespace aria2
     
-    #include <stddef.h>
-#include <stdint.h>
+      // private key `keyfile' must be decrypted.
+  virtual bool addCredentialFile(const std::string& certfile,
+                                 const std::string& keyfile) CXX11_OVERRIDE;
     
-    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
-// quantization table must have 3 * kDCTBlockSize values.
-bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     const int* quant, JPEGData* jpg);
-    
-    enum JPEGReadError {
-  JPEG_OK = 0,
-  JPEG_SOI_NOT_FOUND,
-  JPEG_SOF_NOT_FOUND,
-  JPEG_UNEXPECTED_EOF,
-  JPEG_MARKER_BYTE_NOT_FOUND,
-  JPEG_UNSUPPORTED_MARKER,
-  JPEG_WRONG_MARKER_SIZE,
-  JPEG_INVALID_PRECISION,
-  JPEG_INVALID_WIDTH,
-  JPEG_INVALID_HEIGHT,
-  JPEG_INVALID_NUMCOMP,
-  JPEG_INVALID_SAMP_FACTOR,
-  JPEG_INVALID_START_OF_SCAN,
-  JPEG_INVALID_END_OF_SCAN,
-  JPEG_INVALID_SCAN_BIT_POSITION,
-  JPEG_INVALID_COMPS_IN_SCAN,
-  JPEG_INVALID_HUFFMAN_INDEX,
-  JPEG_INVALID_QUANT_TBL_INDEX,
-  JPEG_INVALID_QUANT_VAL,
-  JPEG_INVALID_MARKER_LEN,
-  JPEG_INVALID_SAMPLING_FACTORS,
-  JPEG_INVALID_HUFFMAN_CODE,
-  JPEG_INVALID_SYMBOL,
-  JPEG_NON_REPRESENTABLE_DC_COEFF,
-  JPEG_NON_REPRESENTABLE_AC_COEFF,
-  JPEG_INVALID_SCAN,
-  JPEG_OVERLAPPING_SCANS,
-  JPEG_INVALID_SCAN_ORDER,
-  JPEG_EXTRA_ZERO_RUN,
-  JPEG_DUPLICATE_DRI,
-  JPEG_DUPLICATE_SOF,
-  JPEG_WRONG_RESTART_MARKER,
-  JPEG_DUPLICATE_COMPONENT_ID,
-  JPEG_COMPONENT_NOT_FOUND,
-  JPEG_HUFFMAN_TABLE_NOT_FOUND,
-  JPEG_HUFFMAN_TABLE_ERROR,
-  JPEG_QUANT_TABLE_NOT_FOUND,
-  JPEG_EMPTY_DHT,
-  JPEG_EMPTY_DQT,
-  JPEG_OUT_OF_BAND_COEFF,
-  JPEG_EOB_RUN_TOO_LONG,
-  JPEG_IMAGE_TOO_LARGE,
-};
-    
-    double ButteraugliScoreForQuality(double quality) {
-  if (quality < kLowestQuality) quality = kLowestQuality;
-  if (quality > kHighestQuality) quality = kHighestQuality;
-  int index = static_cast<int>(quality);
-  double mix = quality - index;
-  return kScoreForQuality[index - kLowestQuality] * (1 - mix) +
-      kScoreForQuality[index - kLowestQuality + 1] * mix;
-}
+    #include 'a2functional.h'
