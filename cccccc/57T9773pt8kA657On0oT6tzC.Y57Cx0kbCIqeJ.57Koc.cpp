@@ -1,368 +1,228 @@
 
         
-         private:
-  // The following methods are implemented by platform-specific implementations
-  // of this class.
-  //
-  // Start/StopListening are called when transitioning between zero and nonzero
-  // registered accelerators. StartListening will be called after
-  // RegisterAcceleratorImpl and StopListening will be called after
-  // UnregisterAcceleratorImpl.
-  //
-  // For RegisterAcceleratorImpl, implementations return false if registration
-  // did not complete successfully.
-  virtual void StartListening() = 0;
-  virtual void StopListening() = 0;
-  virtual bool RegisterAcceleratorImpl(const ui::Accelerator& accelerator) = 0;
-  virtual void UnregisterAcceleratorImpl(
-      const ui::Accelerator& accelerator) = 0;
-    
-    // filenames
-const base::FilePath::CharType kCacheDirname[] = FPL('Cache');
-const base::FilePath::CharType kChannelIDFilename[] = FPL('Origin Bound Certs');
-const base::FilePath::CharType kCookieFilename[] = FPL('Cookies');
-const base::FilePath::CharType kCRLSetFilename[] =
-    FPL('Certificate Revocation Lists');
-const base::FilePath::CharType kCustomDictionaryFileName[] =
-    FPL('Custom Dictionary.txt');
-const base::FilePath::CharType kExtensionActivityLogFilename[] =
-    FPL('Extension Activity');
-const base::FilePath::CharType kExtensionsCookieFilename[] =
-    FPL('Extension Cookies');
-const base::FilePath::CharType kFirstRunSentinel[] = FPL('First Run');
-const base::FilePath::CharType kGCMStoreDirname[] = FPL('GCM Store');
-const base::FilePath::CharType kLocalStateFilename[] = FPL('Local State');
-const base::FilePath::CharType kLocalStorePoolName[] = FPL('LocalStorePool');
-const base::FilePath::CharType kMediaCacheDirname[] = FPL('Media Cache');
-const base::FilePath::CharType kNetworkPersistentStateFilename[] =
-    FPL('Network Persistent State');
-const base::FilePath::CharType kOfflinePageArchviesDirname[] =
-    FPL('Offline Pages/archives');
-const base::FilePath::CharType kOfflinePageMetadataDirname[] =
-    FPL('Offline Pages/metadata');
-const base::FilePath::CharType kPreferencesFilename[] = FPL('Preferences');
-const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[] =
-    FPL('Protected Preferences');
-const base::FilePath::CharType kReadmeFilename[] = FPL('README');
-const base::FilePath::CharType kResetPromptMementoFilename[] =
-    FPL('Reset Prompt Memento');
-const base::FilePath::CharType kSafeBrowsingBaseFilename[] =
-    FPL('Safe Browsing');
-const base::FilePath::CharType kSecurePreferencesFilename[] =
-    FPL('Secure Preferences');
-const base::FilePath::CharType kServiceStateFileName[] = FPL('Service State');
-const base::FilePath::CharType kSingletonCookieFilename[] =
-    FPL('SingletonCookie');
-const base::FilePath::CharType kSingletonLockFilename[] = FPL('SingletonLock');
-const base::FilePath::CharType kSingletonSocketFilename[] =
-    FPL('SingletonSocket');
-const base::FilePath::CharType kSupervisedUserSettingsFilename[] =
-    FPL('Managed Mode Settings');
-const base::FilePath::CharType kThemePackFilename[] = FPL('Cached Theme.pak');
-const base::FilePath::CharType kThemePackMaterialDesignFilename[] =
-    FPL('Cached Theme Material Design.pak');
-const base::FilePath::CharType kWebAppDirname[] = FPL('Web Applications');
-    
-    bool TessUnlvRenderer::AddImageHandler(TessBaseAPI* api) {
-  const std::unique_ptr<const char[]> unlv(api->GetUNLVText());
-  if (unlv == nullptr) return false;
+        namespace testing {
     }
     
-      // Compute the number of unichars in the label.
-  GenericVector<UNICHAR_ID> encoding;
-  if (!unicharset.encode_string(label, true, &encoding, nullptr, nullptr)) {
-    tprintf('Not outputting illegal unichar %s\n', label);
-    return;
+     private:
+  // Sets parameter value. The caller is responsible for making sure the value
+  // remains alive and unchanged throughout the current test.
+  static void SetParam(const ParamType* parameter) {
+    parameter_ = parameter;
   }
     
-      // Counts here are of blobs in the rebuild_word / unichars in best_choice.
-  *leading_pos = *trailing_pos = SP_NORMAL;
-  int leading_outliers = 0;
-  int trailing_outliers = 0;
-  int num_normal = 0;
-  float normal_certainty_total = 0.0f;
-  float worst_normal_certainty = 0.0f;
-  ScriptPos last_pos = SP_NORMAL;
-  int num_blobs = word->rebuild_word->NumBlobs();
-  for (int b = 0; b < num_blobs; ++b) {
-    TBOX box = word->rebuild_word->blobs[b]->bounding_box();
-    ScriptPos pos = SP_NORMAL;
-    if (box.bottom() >= super_y_bottom) {
-      pos = SP_SUPERSCRIPT;
-    } else if (box.top() <= sub_y_top) {
-      pos = SP_SUBSCRIPT;
-    }
-    if (pos == SP_NORMAL) {
-      if (word->best_choice->unichar_id(b) != 0) {
-        float char_certainty = word->best_choice->certainty(b);
-        if (char_certainty < worst_normal_certainty) {
-          worst_normal_certainty = char_certainty;
-        }
-        num_normal++;
-        normal_certainty_total += char_certainty;
-      }
-      if (trailing_outliers == b) {
-        leading_outliers = trailing_outliers;
-        *leading_pos = last_pos;
-      }
-      trailing_outliers = 0;
-    } else {
-      if (last_pos == pos) {
-        trailing_outliers++;
-      } else {
-        trailing_outliers = 1;
-      }
-    }
-    last_pos = pos;
+    // This is used internally by all instances of linked_ptr<>.  It needs to be
+// a non-template class because different types of linked_ptr<> can refer to
+// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
+// So, it needs to be possible for different types of linked_ptr to participate
+// in the same circular linked list, so we need a single class type here.
+//
+// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
+class linked_ptr_internal {
+ public:
+  // Create a new circle that includes only this instance.
+  void join_new() {
+    next_ = this;
   }
-  *trailing_pos = last_pos;
-  if (num_normal >= 3) {  // throw out the worst as an outlier.
-    num_normal--;
-    normal_certainty_total -= worst_normal_certainty;
-  }
-  if (num_normal > 0) {
-    *avg_certainty = normal_certainty_total / num_normal;
-    *unlikely_threshold = superscript_worse_certainty * (*avg_certainty);
-  }
-  if (num_normal == 0 ||
-      (leading_outliers == 0 && trailing_outliers == 0)) {
-    return;
-  }
-    
-    
-// Returns the median value of the vector, given that the values are
-// circular, with the given modulus. Values may be signed or unsigned,
-// eg range from -pi to pi (modulus 2pi) or from 0 to 2pi (modulus 2pi).
-// NOTE that the array is shuffled, but the time taken is linear.
-// An assumption is made that most of the values are spread over no more than
-// half the range, but wrap-around is accounted for if the median is near
-// the wrap-around point.
-// Cannot be a member of GenericVector, as it makes heavy used of LLSQ.
-// T must be an integer or float/double type.
-template<typename T> T MedianOfCircularValues(T modulus, GenericVector<T>* v) {
-  LLSQ stats;
-  T halfrange = static_cast<T>(modulus / 2);
-  int num_elements = v->size();
-  for (int i = 0; i < num_elements; ++i) {
-    stats.add((*v)[i], (*v)[i] + halfrange);
-  }
-  bool offset_needed = stats.y_variance() < stats.x_variance();
-  if (offset_needed) {
-    for (int i = 0; i < num_elements; ++i) {
-      (*v)[i] += halfrange;
-    }
-  }
-  int median_index = v->choose_nth_item(num_elements / 2);
-  if (offset_needed) {
-    for (int i = 0; i < num_elements; ++i) {
-      (*v)[i] -= halfrange;
-    }
-  }
-  return (*v)[median_index];
-}
-    
-    const int16_t idirtab[] = {
-  1000, 0, 998, 49, 995, 98, 989, 146,
-  980, 195, 970, 242, 956, 290, 941, 336,
-  923, 382, 903, 427, 881, 471, 857, 514,
-  831, 555, 803, 595, 773, 634, 740, 671,
-  707, 707, 671, 740, 634, 773, 595, 803,
-  555, 831, 514, 857, 471, 881, 427, 903,
-  382, 923, 336, 941, 290, 956, 242, 970,
-  195, 980, 146, 989, 98, 995, 49, 998,
-  0, 1000, -49, 998, -98, 995, -146, 989,
-  -195, 980, -242, 970, -290, 956, -336, 941,
-  -382, 923, -427, 903, -471, 881, -514, 857,
-  -555, 831, -595, 803, -634, 773, -671, 740,
-  -707, 707, -740, 671, -773, 634, -803, 595,
-  -831, 555, -857, 514, -881, 471, -903, 427,
-  -923, 382, -941, 336, -956, 290, -970, 242,
-  -980, 195, -989, 146, -995, 98, -998, 49,
-  -1000, 0, -998, -49, -995, -98, -989, -146,
-  -980, -195, -970, -242, -956, -290, -941, -336,
-  -923, -382, -903, -427, -881, -471, -857, -514,
-  -831, -555, -803, -595, -773, -634, -740, -671,
-  -707, -707, -671, -740, -634, -773, -595, -803,
-  -555, -831, -514, -857, -471, -881, -427, -903,
-  -382, -923, -336, -941, -290, -956, -242, -970,
-  -195, -980, -146, -989, -98, -995, -49, -998,
-  0, -1000, 49, -998, 98, -995, 146, -989,
-  195, -980, 242, -970, 290, -956, 336, -941,
-  382, -923, 427, -903, 471, -881, 514, -857,
-  555, -831, 595, -803, 634, -773, 671, -740,
-  707, -707, 740, -671, 773, -634, 803, -595,
-  831, -555, 857, -514, 881, -471, 903, -427,
-  923, -382, 941, -336, 956, -290, 970, -242,
-  980, -195, 989, -146, 995, -98, 998, -49
-};
-    
-      r['sycall_addr_modified'] = syscall_addr_modified;
-  r['text_segment_hash'] = text_segment_hash;
-  results.push_back(r);
-    
-      /**
-   * @brief Return all events added by this EventSubscriber within start, stop.
-   *
-   * This is used internally (for the most part) by EventSubscriber::genTable.
-   *
-   * @param yield The Row yield method.
-   * @param start Inclusive lower bound time limit.
-   * @param stop Inclusive upper bound time limit.
-   * @return Set of event rows matching time limits.
-   */
-  virtual void get(RowYield& yield, EventTime start, EventTime stop) final;
-    
-      /**
-   * @brief A constructor which can be used to concisely express the status of
-   * an operation.
-   *
-   * @param c a status code. The idiom is that a zero status code indicates a
-   * successful operation and a non-zero status code indicates a failed
-   * operation.
-   * @param m a message indicating some extra detail regarding the operation.
-   * If all operations were successful, this message should be 'OK'.
-   * Otherwise, it doesn't matter what the string is, as long as both the
-   * setter and caller agree.
-   */
-  Status(int c, std::string m) : code_(c), message_(std::move(m)) {}
-    
-      char* buffer = (char*)malloc(range.length + 1);
-  if (buffer == nullptr) {
-    return '';
-  }
-  memset(buffer, 0, range.length + 1);
-    
-    #include <gtest/gtest.h>
-    
-      auto status = ::strerror_s(buffer.data(), buffer.size(), errnum);
-  if (status != 0) {
-    return '';
-  }
-    
-    extern JSClass  *jsb_cocos2d_Physics3DHingeConstraint_class;
-extern JSObject *jsb_cocos2d_Physics3DHingeConstraint_prototype;
-    
-    bool js_cocos2dx_studio_ProcessBase_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_ProcessBase_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_ProcessBase(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_ProcessBase_play(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_pause(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_getRawDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_resume(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_setIsComplete(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_stop(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_update(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_getCurrentFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_isComplete(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_getCurrentPercent(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_setIsPause(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_getProcessScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_isPause(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_isPlaying(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_setProcessScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_setIsPlaying(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ProcessBase_ProcessBase(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    
-#endif // __cocos2dx_experimental_h__
-
-    
-        cobj = (cocos2d::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
-    
-    
-#endif
-
-    
-    	AddPair()
-	{
-		m_world->SetGravity(b2Vec2(0.0f,0.0f));
-		{
-			b2CircleShape shape;
-			shape.m_p.SetZero();
-			shape.m_radius = 0.1f;
-    }
     }
     
     
     {
-    {		case 'd':
-			{
-				m_body->ApplyTorque(-50.0f, true);
-			}
-			break;
-		}
-	}
+    {
+    {        int i = 0;
+        for (typename ParamGenerator<ParamType>::iterator param_it =
+                 generator.begin();
+             param_it != generator.end(); ++param_it, ++i) {
+          Message test_name_stream;
+          test_name_stream << test_info->test_base_name << '/' << i;
+          MakeAndRegisterTestInfo(
+              test_case_name.c_str(),
+              test_name_stream.GetString().c_str(),
+              NULL,  // No type parameter.
+              PrintToString(*param_it).c_str(),
+              GetTestCaseTypeId(),
+              TestCase::SetUpTestCase,
+              TestCase::TearDownTestCase,
+              test_info->test_meta_factory->CreateTestFactory(*param_it));
+        }  // for param_it
+      }  // for gen_it
+    }  // for test_it
+  }  // RegisterTests
+    
+      // Compares two wide C strings.  Returns true iff they have the same
+  // content.
+  //
+  // Unlike wcscmp(), this function can handle NULL argument(s).  A
+  // NULL C string is considered different to any non-NULL C string,
+  // including the empty string.
+  static bool WideCStringEquals(const wchar_t* lhs, const wchar_t* rhs);
     
     
-    {		Test::Step(settings);
-		m_debugDraw.DrawString(5, m_textLine, 'Keys: (d) dynamic, (s) static, (k) kinematic');
-		m_textLine += DRAW_STRING_NEW_LINE;
-	}
-    
-    			b2PolygonShape shape;
-			shape.Set(vertices, 3);
-    
-    TEST(IOBuf, QueueAppenderInsertClone) {
-  IOBuf buf{IOBuf::CREATE, 100};
-  folly::IOBufQueue queue;
-  QueueAppender appender{&queue, 100};
-  // Buffer is shared, so we create a new buffer to write to
-  appender.insert(buf);
-  uint8_t x = 42;
-  appender.pushAtMost(&x, 1);
-  EXPECT_EQ(2, queue.front()->countChainElements());
-  EXPECT_EQ(0, queue.front()->length());
-  EXPECT_LT(0, queue.front()->tailroom());
-  EXPECT_EQ(1, queue.front()->next()->length());
-  EXPECT_EQ(x, queue.front()->next()->data()[0]);
-}
-    
-      EXPECT_EQ(hash(*empty), hash(empty));
-  EXPECT_NE(0, hash(empty));
-    
-    TEST_F(OrderingTest, ordering) {
-  EXPECT_EQ(-1, int(ordering::lt));
-  EXPECT_EQ(0, int(ordering::eq));
-  EXPECT_EQ(+1, int(ordering::gt));
-}
-    
-    
-    {} // namespace folly
-
-    
-      folly::Optional<T> try_take_for(std::chrono::milliseconds time) override {
-    T item;
-    while (!queue_.try_dequeue(item)) {
-      if (!sem_.try_wait_for(time)) {
-        return folly::none;
-      }
-    }
-    return std::move(item);
+    {    return true;
   }
     
-      struct Node : public hazptr_obj_base<Node, Atom> {
-    T value_;
-    Node* next_;
+    // Tests factorial of negative numbers.
+TEST(FactorialTest, Negative) {
+  // This test is named 'Negative', and belongs to the 'FactorialTest'
+  // test case.
+  EXPECT_EQ(1, Factorial(-5));
+  EXPECT_EQ(1, Factorial(-1));
+  EXPECT_GT(Factorial(-10), 0);
     }
     
-    /** Set implemented as an ordered singly-linked list.
+      /// The string-formatted status message.
+  std::string message;
+    
+    /**
+ * @brief Create an osquery extension 'module'.
  *
- *  A single writer thread may add or remove elements. Multiple reader
- *  threads may search the set concurrently with each other and with
- *  the writer's operations.
+ * This helper macro creates a constructor to declare an osquery module is
+ * loading. The osquery registry is set up when modules (shared objects) are
+ * discovered via search paths and opened. At that phase the registry is locked
+ * meaning no additional plugins can be registered. To unlock the registry
+ * for modifications a module must call Registry::declareModule. This declares
+ * and any plugins added will use the metadata in the declare to determine:
+ *  - The name of the module adding the plugin
+ *  - The SDK version the module was built with, to determine compatibility
+ *  - The minimum SDK the module requires from osquery core
+ *
+ * The registry is again locked when the module load is complete and a well
+ * known module-exported symbol is called.
  */
-template <typename T, template <typename> class Atom = std::atomic>
-class HazptrSWMRSet {
-  template <typename Node>
-  struct Reclaimer {
-    void operator()(Node* p) {
-      delete p;
-    }
-  };
+#define CREATE_MODULE(name, version, min_sdk_version)                          \
+  extern 'C' EXPORT_FUNCTION void initModule(void);                            \
+  struct osquery_InternalStructCreateModule {                                  \
+    osquery_InternalStructCreateModule(void) {                                 \
+      Registry::get().declareModule(                                           \
+          name, version, min_sdk_version, OSQUERY_SDK_VERSION);                \
+    }                                                                          \
+  };                                                                           \
+  static osquery_InternalStructCreateModule osquery_internal_module_instance_;
+    
+    class TLSConfigPlugin : public ConfigPlugin,
+                        public std::enable_shared_from_this<TLSConfigPlugin> {
+ public:
+  Status setUp() override;
+  Status genConfig(std::map<std::string, std::string>& config) override;
     }
     
-    #include <folly/Utility.h>
-#include <folly/portability/GTest.h>
+    #include <osquery/core.h>
+#include <osquery/dispatcher.h>
+#include <osquery/filesystem.h>
+#include <osquery/logger.h>
+#include <osquery/system.h>
+    
+    #ifdef WIN32
+  pid = (int)::GetCurrentProcessId();
+#else
+  pid = getpid();
+#endif
+    
+    TEST_F(StatusTests, test_constructor_2) {
+  Status s;
+  EXPECT_EQ(s.getCode(), 0);
+  EXPECT_EQ(s.getMessage(), 'OK');
+}
+    
+    
+    {  for (const auto& key : keys) {
+    db_[domain].erase(key);
+  }
+  return Status(0);
+}
+    
+    //****************************
+// Deprecated function names
+//****************************
+// The following translations are provided to ease code transition
+// You are encouraged to no longer this function names
+#define XXH32_feed   XXH32_update
+#define XXH32_result XXH32_digest
+#define XXH32_getIntermediateResult XXH32_intermediateDigest
+    
+     private:
+  char delim_;         // The delimiter is inserted between elements
+    
+      virtual bool PartialMergeMulti(const Slice& key,
+                                 const std::deque<Slice>& operand_list,
+                                 std::string* new_value, Logger* logger) const
+      override;
+    
+    
+// --------------------
+// --- EnvLibrados ----
+// --------------------
+/**
+ * @brief EnvLibrados ctor
+ * @details [long description]
+ *
+ * @param db_name unique database name
+ * @param config_path the configure file path for rados
+ */
+EnvLibrados::EnvLibrados(const std::string& db_name,
+                         const std::string& config_path,
+                         const std::string& db_pool)
+  : EnvLibrados('client.admin',
+                'ceph',
+                0,
+                db_name,
+                config_path,
+                db_pool,
+                '/wal',
+                db_pool,
+                1 << 20) {}
+    
+    
+    {// This factory creates a cuckoo-hashing based mem-table representation.
+// Cuckoo-hash is a closed-hash strategy, in which all key/value pairs
+// are stored in the bucket array itself instead of in some data structures
+// external to the bucket array.  In addition, each key in cuckoo hash
+// has a constant number of possible buckets in the bucket array.  These
+// two properties together makes cuckoo hash more memory efficient and
+// a constant worst-case read time.  Cuckoo hash is best suitable for
+// point-lookup workload.
+//
+// When inserting a key / value, it first checks whether one of its possible
+// buckets is empty.  If so, the key / value will be inserted to that vacant
+// bucket.  Otherwise, one of the keys originally stored in one of these
+// possible buckets will be 'kicked out' and move to one of its possible
+// buckets (and possibly kicks out another victim.)  In the current
+// implementation, such 'kick-out' path is bounded.  If it cannot find a
+// 'kick-out' path for a specific key, this key will be stored in a backup
+// structure, and the current memtable to be forced to immutable.
+//
+// Note that currently this mem-table representation does not support
+// snapshot (i.e., it only queries latest state) and iterators.  In addition,
+// MultiGet operation might also lose its atomicity due to the lack of
+// snapshot support.
+//
+// Parameters:
+//   write_buffer_size: the write buffer size in bytes.
+//   average_data_size: the average size of key + value in bytes.  This value
+//     together with write_buffer_size will be used to compute the number
+//     of buckets.
+//   hash_function_count: the number of hash functions that will be used by
+//     the cuckoo-hash.  The number also equals to the number of possible
+//     buckets each key will have.
+extern MemTableRepFactory* NewHashCuckooRepFactory(
+    size_t write_buffer_size, size_t average_data_size = 64,
+    unsigned int hash_function_count = 4);
+#endif  // ROCKSDB_LITE
+}  // namespace rocksdb
+
+    
+      // disable sync point processing
+  void DisableProcessing();
+    
+      auto marker_iter = markers_.find(point);
+  if (marker_iter != markers_.end()) {
+    for (auto& marked_point : marker_iter->second) {
+      marked_thread_id_.emplace(marked_point, thread_id);
+    }
+  }
+    
+    class MergingIterator;
+    
+      jlong addr_compaction_filter = env->CallLongMethod(m_jcallback_obj,
+      m_jcreate_compaction_filter_methodid,
+      static_cast<jboolean>(context.is_full_compaction),
+      static_cast<jboolean>(context.is_manual_compaction));
