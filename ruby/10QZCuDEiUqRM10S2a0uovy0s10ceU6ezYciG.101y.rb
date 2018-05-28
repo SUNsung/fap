@@ -1,85 +1,104 @@
 
         
-          def present(payload)
-    if payload.is_a?(Hash)
-      payload = ActiveSupport::HashWithIndifferentAccess.new(payload)
-      MAIN_KEYS.each do |key|
-        return { :title => payload[key].to_s, :entries => present_hash(payload, key) } if payload.has_key?(key)
-      end
+            # Returns a representation of the query as an array of strings and
+    # potentially {Sass::Script::Tree::Node}s (if there's interpolation in it).
+    # When the interpolation is resolved and the strings are joined together,
+    # this will be the string representation of this query.
+    #
+    # @return [Array<String, Sass::Script::Tree::Node>]
+    def to_a
+      Sass::Util.intersperse(queries.map {|q| q.to_a}, ', ').flatten
+    end
     
-      def complete_option(method)
-    if self.respond_to? 'complete_#{method}'.to_sym
-      self.send('complete_#{method}'.to_sym)
+            p environment.var(name)
+      else
+        p Script::Parser.parse(text, @line, 0).perform(environment)
+      end
+    rescue Sass::SyntaxError => e
+      puts 'SyntaxError: #{e.message}'
+      if @options[:trace]
+        e.backtrace.each do |line|
+          puts '\tfrom #{line}'
+        end
+      end
+    end
+  end
+end
+
+    
+      %w(GET HEAD POST PUT DELETE).each do |method|
+    it 'accepts #{method} requests when allow_if is true' do
+      mock_app do
+        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
+        run DummyApp
+      end
+      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
     end
   end
     
-      class Worker < LongRunnable::Worker
-    # Optional
-    #   Called after initialization of the Worker class, use this method as an initializer.
-    def setup; end
+      # Many RSpec users commonly either run the entire suite or an individual
+  # file, and it's useful to allow more verbose output when running an
+  # individual spec file.
+  if config.files_to_run.one?
+    # Use the documentation formatter for detailed output,
+    # unless a formatter has already been configured
+    # (e.g. via a command-line flag).
+    config.default_formatter = 'doc'
+  end
     
-            def log_level(name, options = {})
-          if options[:prepend]
-            level = log_levels.values.min
-            level = level.nil? ? 0 : level - 1
-          else
-            level = log_levels.values.max
-            level = level.nil? ? 0 : level + 1
-          end
-          log_levels.update(name => level)
-          define_logger(name)
+            def operator_assignment_node
+          return nil unless node.parent
+          return nil unless OPERATOR_ASSIGNMENT_TYPES.include?(node.parent.type)
+          return nil unless node.sibling_index.zero?
+          node.parent
         end
     
-        # Returns a deep copy of this query and all its children.
+    module RuboCop
+  module RSpec
+    # Mixin for `expect_offense` and `expect_no_offenses`
     #
-    # @return [Query]
-    def deep_copy
-      Query.new(
-        modifier.map {|c| c.is_a?(Sass::Script::Tree::Node) ? c.deep_copy : c},
-        type.map {|c| c.is_a?(Sass::Script::Tree::Node) ? c.deep_copy : c},
-        expressions.map {|e| e.map {|c| c.is_a?(Sass::Script::Tree::Node) ? c.deep_copy : c}})
-    end
-  end
-    
-      Sass::Plugin.options.merge!(config)
-    
-        # Returns an `unquote()` expression that will evaluate to the same value as
-    # this interpolation.
+    # This mixin makes it easier to specify strict offense expectations
+    # and a declarative and visual fashion. Just type out the code that
+    # should generate a offense, annotate code by writing '^'s
+    # underneath each character that should be highlighted, and follow
+    # the carets with a string (separated by a space) that is the
+    # message of the offense. You can include multiple offenses in
+    # one code snippet.
     #
-    # @return [Sass::Script::Tree::Node]
-    def to_quoted_equivalent
-      Funcall.new(
-        'unquote',
-        [to_string_interpolation(self)],
-        Sass::Util::NormalizedMap.new,
-        nil,
-        nil)
-    end
+    # @example Usage
+    #
+    #     expect_offense(<<-RUBY.strip_indent)
+    #       a do
+    #         b
+    #       end.c
+    #       ^^^^^ Avoid chaining a method call on a do...end block.
+    #     RUBY
+    #
+    # @example Equivalent assertion without `expect_offense`
+    #
+    #     inspect_source(<<-RUBY.strip_indent)
+    #       a do
+    #         b
+    #       end.c
+    #     RUBY
+    #
+    #     expect(cop.offenses.size).to be(1)
+    #
+    #     offense = cop.offenses.first
+    #     expect(offense.line).to be(3)
+    #     expect(offense.column_range).to be(0...5)
+    #     expect(offense.message).to eql(
+    #       'Avoid chaining a method call on a do...end block.'
+    #     )
+    #
+    # If you do not want to specify an offense then use the
+    # companion method `expect_no_offenses`. This method is a much
+    # simpler assertion since it just inspects the source and checks
+    # that there were no offenses. The `expect_offenses` method has
+    # to do more work by parsing out lines that contain carets.
+    module ExpectOffense
+      def expect_offense(source, file = nil)
+        expected_annotations = AnnotatedSource.parse(source)
     
-    namespace :gem do
-  def version
-    require 'spree/core/version'
-    Spree.version
-  end
-    
-      # PATCH/PUT /books/1
-  # PATCH/PUT /books/1.json
-  def update
-    respond_to do |format|
-      if @book.update(book_params)
-        format.html { redirect_to @book, notice: 'Book was successfully updated.' }
-        format.json { render :show, status: :ok, location: @book }
-      else
-        format.html { render :edit }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-    
-            private
-    
-          def expect_no_offenses(source, file = nil)
-        inspect_source(source, file)
-    
-      it 'registers an offense' do
-    inspect_source(source)
+      let(:source) { ''something'.intern' }
+  let(:corrected) { autocorrect_source(source) }
