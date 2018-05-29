@@ -1,262 +1,225 @@
 
         
-            url = 'https://api.shippable.com/projects/%s/newBuild' % project_id
-    response = requests.post(url, data, headers=headers)
+            # The large learning rate should trigger check_numerics.
+    with self.assertRaisesRegexp(tf.errors.InvalidArgumentError,
+                                 'Cost is not finite'):
+      self.RunFullTrainingAndInference(
+          'tagger-parser',
+          'tagger_parser_master_spec.textproto',
+          hyperparam_config=hyperparam_config,
+          component_weights=[0., 1., 1.],
+          unroll_using_oracle=[False, True, True],
+          expected_num_actions=12,
+          expected=_TAGGER_PARSER_EXPECTED_SENTENCES)
     
-        terminal_stderr_re = [
-        re.compile(r'% ?Error: '),
-        re.compile(r'^% \w+', re.M),
-        re.compile(r'% ?Bad secret'),
-        re.compile(r'invalid input', re.I),
-        re.compile(r'(?:incomplete|ambiguous) command', re.I),
-        re.compile(r'connection timed out', re.I),
-        re.compile(r'[^\r\n]+ not found', re.I),
-        re.compile(r''[^']' +returned error code: ?\d+'),
-        re.compile(r'syntax error'),
-        re.compile(r'unknown command'),
-        re.compile(r'Error\[\d+\]: ', re.I),
-        re.compile(r'Error:', re.I)
-    ]
+            self.assertAlmostEqual(tf.exp(log_partition_functions[0]).eval(), 1.0)
+        self.assertAlmostEqual(tf.exp(log_partition_functions[1]).eval(), 1.0)
+        self.assertAlmostEqual(tf.exp(log_partition_functions[2]).eval(), 1.0)
     
-        n_iter = 40
+        return [lengths_b, scores_bxnxn, scores_bnxn, arcs_bnxn]
     
-                X /= np.sqrt(np.sum(X ** 2, axis=0))  # Normalize data
+    py_binary(
+    name = 'build_pip_package',
+    srcs = ['build_pip_package.py'],
+    data = ['oss_setup.py'],
+    deps = [
+        ':all_in_one_components',
+    ],
+)
     
-        if args.metrics is None:
-        args.metrics = sorted(METRICS)
-    if args.formats is None:
-        args.formats = sorted(FORMATS)
+      # Read in serialized protos from training data.
+  train_corpus = sentence_io.ConllSentenceReader(
+      train_corpus_path, projectivize=projectivize_train_corpus).corpus()
+  tune_corpus = sentence_io.ConllSentenceReader(
+      tune_corpus_path, projectivize=False).corpus()
+  gold_tune_corpus = tune_corpus
     
+      # Convert word-based docs to char-based documents for segmentation training
+  # and evaluation.
+  with tf.Session(graph=tf.Graph()) as tmp_session:
+    char_training_set_op = gen_parser_ops.segmenter_training_data_constructor(
+        training_set)
+    char_dev_set_op = gen_parser_ops.char_token_generator(dev_set)
+    char_training_set = tmp_session.run(char_training_set_op)
+    char_dev_set = tmp_session.run(char_dev_set_op)
     
-def plot_feature_errors(all_errors, batch_size, all_components, data):
-    plt.figure()
-    plot_results(all_components, all_errors['pca'], label='PCA')
-    plot_results(all_components, all_errors['ipca'],
-                 label='IncrementalPCA, bsize=%i' % batch_size)
-    plot_results(all_components, all_errors['rpca'], label='RandomizedPCA')
-    plt.legend(loc='lower left')
-    plt.suptitle('Algorithm error vs. n_components\n'
-                 'LFW, size %i x %i' % data.shape)
-    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
-    plt.ylabel('Mean absolute error')
+            if isinstance(headers, bytes):
+            # Python < 3
+            headers = headers.decode('utf8')
+        return headers
     
-            plt.text(1.01, 0.5, title_string,
-                 transform=ax.transAxes, rotation=-90,
-                 ha='left', va='center', fontsize=20)
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
     
-            start = time.time()
-        func(X, n_jobs=1)
-        one_core.append(time.time() - start)
+        # The name of the plugin, eg. 'My auth'.
+    name = None
     
-        This is called by sphinx.ext.linkcode
+    # FIXME:
+# We test against a local httpbin instance which uses a self-signed cert.
+# Requests without --verify=<CA_BUNDLE> will fail with a verification error.
+# See: https://github.com/kevin1024/pytest-httpbin#https-support
+CA_BUNDLE = pytest_httpbin.certs.where()
     
-    import codecs
+    '''
+__version__ = '1.0.0-dev'
+__author__ = 'Jakub Roztocil'
+__licence__ = 'BSD'
     
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (3 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
+        # Stem block: 35 x 35 x 192
+    x = conv2d_bn(img_input, 32, 3, strides=2, padding='valid')
+    x = conv2d_bn(x, 32, 3, padding='valid')
+    x = conv2d_bn(x, 64, 3)
+    x = MaxPooling2D(3, strides=2)(x)
+    x = conv2d_bn(x, 80, 1, padding='valid')
+    x = conv2d_bn(x, 192, 3, padding='valid')
+    x = MaxPooling2D(3, strides=2)(x)
     
-        # add non-discriminative features
-    if n_features > 1:
-        X = np.hstack([X, np.random.randn(n_samples, n_features - 1)])
-    return X, y
+        # Returns
+        A Keras model instance.
     
-    # Plot the ground-truth labelling
-plt.figure()
-plt.axes([0, 0, 1, 1])
-for l, c, n in zip(range(n_clusters), 'rgb',
-                   labels):
-    lines = plt.plot(X[y == l].T, c=c, alpha=.5)
-    lines[0].set_label(n)
+            def antirectifier_output_shape(input_shape):
+            shape = list(input_shape)
+            assert len(shape) == 2  # only valid for 2D tensors
+            shape[-1] *= 2
+            return tuple(shape)
     
-            self.dialog.default_command = None
-        self.dialog.create_widgets()
+        out = model.predict(x)
+    _, fname = tempfile.mkstemp('.h5')
+    with h5py.File(fname, mode='r+') as h5file:
+        save_model(model, h5file)
+        loaded_model = load_model(h5file)
+        out2 = loaded_model.predict(x)
+    assert_allclose(out, out2, atol=1e-05)
     
-            for proto in range(pickle.HIGHEST_PROTOCOL + 1):
-            s = pickle.dumps(d, proto)
-            e = pickle.loads(s)
-            self.assertNotEqual(id(d), id(e))
-            self.assertEqual(type(d), type(e))
-            self.assertEqual(list(d), list(e))
+        for i, yi in enumerate(grid_y):
+        for j, xi in enumerate(grid_x):
+            z_sample = np.array([[xi, yi]])
+            x_decoded = decoder.predict(z_sample)
+            digit = x_decoded[0].reshape(digit_size, digit_size)
+            figure[i * digit_size: (i + 1) * digit_size,
+                   j * digit_size: (j + 1) * digit_size] = digit
     
-            if self.closed:
-            raise ValueError('I/O operation on closed file')
-        if self.size_read >= self.chunksize:
-            return b''
-        if size < 0:
-            size = self.chunksize - self.size_read
-        if size > self.chunksize - self.size_read:
-            size = self.chunksize - self.size_read
-        data = self.file.read(size)
-        self.size_read = self.size_read + len(data)
-        if self.size_read == self.chunksize and \
-           self.align and \
-           (self.chunksize & 1):
-            dummy = self.file.read(1)
-            self.size_read = self.size_read + len(dummy)
-        return data
-    
-    make_scanner = c_make_scanner or py_make_scanner
-
-    
-    
-class DOMBuilderFilter:
-    '''Element filter which can be used to tailor construction of
-    a DOM instance.
+        # Arguments:
+        models (tuple): encoder and decoder models
+        data (tuple): test data and label
+        batch_size (int): prediction batch size
+        model_name (string): which model is using this function
     '''
     
-    int main( int argc, char **argv)
-{
-    PyImport_FrozenModules = _PyImport_FrozenModules;
-    return PythonService_main(argc, argv);
-}
-'''
+            x = np.random.random((1,) + shape)
     
-            # Callbacks are invoked in LIFO order to match the behaviour of
-        # nested context managers
-        suppressed_exc = False
-        pending_raise = False
-        while self._exit_callbacks:
-            is_sync, cb = self._exit_callbacks.pop()
-            assert is_sync
-            try:
-                if cb(*exc_details):
-                    suppressed_exc = True
-                    pending_raise = False
-                    exc_details = (None, None, None)
-            except:
-                new_exc_details = sys.exc_info()
-                # simulate the stack of exceptions by setting the context
-                _fix_exception_context(new_exc_details[1], exc_details[1])
-                pending_raise = True
-                exc_details = new_exc_details
-        if pending_raise:
-            try:
-                # bare 'raise exc_details[1]' replaces our carefully
-                # set-up context
-                fixed_ctx = exc_details[1].__context__
-                raise exc_details[1]
-            except BaseException:
-                exc_details[1].__context__ = fixed_ctx
-                raise
-        return received_exc and suppressed_exc
-    
-        def test_infile_outfile(self):
-        infile = self._create_infile()
-        outfile = support.TESTFN + '.out'
-        rc, out, err = assert_python_ok('-m', 'json.tool', infile, outfile)
-        self.addCleanup(os.remove, outfile)
-        with open(outfile, 'r') as fp:
-            self.assertEqual(fp.read(), self.expect)
-        self.assertEqual(rc, 0)
-        self.assertEqual(out, b'')
-        self.assertEqual(err, b'')
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
     
     
-class LifoQueueJoinTest(QueueJoinTest):
-    queue_class = queues.LifoQueue
+class RecognitionException(Exception):
+    '''@brief The root of the ANTLR exception hierarchy.
     
-    from tornado.escape import json_decode
-from tornado.test.httpserver_test import TypeCheckHandler
-from tornado.test.util import ignore_deprecation
-from tornado.testing import AsyncHTTPTestCase
-from tornado.web import RequestHandler, Application
-from tornado.wsgi import WSGIApplication, WSGIContainer, WSGIAdapter
+        unexpectedType = property(getUnexpectedType)
+    
+        def test_wildcard(self):
+        self.assertFalse(self.addr.is_wildcard())
+        self.assertTrue(self.addr1.is_wildcard())
+        self.assertTrue(self.addr2.is_wildcard())
+    
+        def test_sequential_undo(self):
+        self.command_stack = list(reversed(self.command_stack))
+        self.command_stack[0].undo()
+        output_after_first_undo = os.listdir(self.test_dir)
+        self.assertEqual(output_after_first_undo[0], 'bar.txt')
+        self.command_stack[1].undo()
+        output_after_second_undo = os.listdir(self.test_dir)
+        self.assertEqual(output_after_second_undo[0], 'foo.txt')
+    
+        def test_c_observers_shall_be_detachable(cls):
+        cls.s.detach(cls.dec_obs)
+        # hex viewer shall be remaining if dec viewer is detached first
+        cls.assertEqual(isinstance(cls.s._observers[0], HexViewer), True)
+        cls.assertEqual(len(cls.s._observers), 1)
+        cls.s.detach(cls.hex_obs)
+        cls.assertEqual(len(cls.s._observers), 0)
+    
+        def subscribe(self, msg):
+        self.provider.subscribe(msg, self)
+    
+    '''
+Port of the Java example of 'Constructor Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050)
+    
+        def setProblem(self, value):
+        self._bProblem = value
+    
+            for i in range(3):
+            num_obj.increment()
+            print(num_obj)
+        num_obj.value += 'x'  # will fail
+        print(num_obj)
+    except Exception as e:
+        a_transaction.rollback()
+        print('-- rolled back')
+    print(num_obj)
+    
+        # set up the templating system
+    config['pylons.app_globals'].mako_lookup = TemplateLookup(
+        directories=paths['templates'],
+        error_handler=handle_mako_error,
+        module_directory=module_directory,
+        input_encoding='utf-8',
+        default_filters=['conditional_websafe'],
+        filesystem_checks=getattr(g, 'reload_templates', False),
+        imports=[
+            'from r2.lib.filters import websafe, unsafe, conditional_websafe',
+            'from pylons import request',
+            'from pylons import tmpl_context as c',
+            'from pylons import app_globals as g',
+            'from pylons.i18n import _, ungettext',
+        ],
+        modulename_callable=mako_module_path,
+    )
+    
+            hooks.register_hooks()
+        self._hooks_registered = True
+    
+    # class specific overrides
+api('link',          LinkJsonTemplate)
+api('promotedlink',  PromotedLinkJsonTemplate)
+api('message',       MessageJsonTemplate)
+api('subreddit',     SubredditJsonTemplate)
+api('labeledmulti',  LabeledMultiJsonTemplate)
+api('reddit',        RedditJsonTemplate)
+api('panestack',     PanestackJsonTemplate)
+api('htmlpanestack', NullJsonTemplate)
+api('listing',       ListingJsonTemplate)
+api('searchlisting', SearchListingJsonTemplate)
+api('userlisting',   UserListingJsonTemplate)
+api('usertableitem', UserTableItemJsonTemplate)
+api('account',       AccountJsonTemplate)
+    
+            # See if the target is already an existing friend.
+        # If not, create the friend relationship.
+        friend_rel = Account.get_friend(c.user, friend)
+        rel_exists = bool(friend_rel)
+        if not friend_rel:
+            friend_rel = c.user.add_friend(friend)
+            response.status = 201
+    
+            Responds with a 120x50 `image/png` which should be displayed
+        to the user.
     
     
-_NO_RESULT = object()
-    
-            The request may be either a string URL or an `HTTPRequest` object.
-        If it is a string, we construct an `HTTPRequest` using any additional
-        kwargs: ``HTTPRequest(request, **kwargs)``
-    
-        Example::
-    
-        def write_headers(self, start_line, headers, chunk=None, callback=None):
-        '''Implements `.HTTPConnection.write_headers`.'''
-        lines = []
-        if self.is_client:
-            self._request_start_line = start_line
-            lines.append(utf8('%s %s HTTP/1.1' % (start_line[0], start_line[1])))
-            # Client requests with a non-empty body must have either a
-            # Content-Length or a Transfer-Encoding.
-            self._chunking_output = (
-                start_line.method in ('POST', 'PUT', 'PATCH') and
-                'Content-Length' not in headers and
-                'Transfer-Encoding' not in headers)
-        else:
-            self._response_start_line = start_line
-            lines.append(utf8('HTTP/1.1 %d %s' % (start_line[1], start_line[2])))
-            self._chunking_output = (
-                # TODO: should this use
-                # self._request_start_line.version or
-                # start_line.version?
-                self._request_start_line.version == 'HTTP/1.1' and
-                # 1xx, 204 and 304 responses have no body (not even a zero-length
-                # body), and so should not have either Content-Length or
-                # Transfer-Encoding headers.
-                start_line.code not in (204, 304) and
-                (start_line.code < 100 or start_line.code >= 200) and
-                # No need to chunk the output if a Content-Length is specified.
-                'Content-Length' not in headers and
-                # Applications are discouraged from touching Transfer-Encoding,
-                # but if they do, leave it alone.
-                'Transfer-Encoding' not in headers)
-            # If connection to a 1.1 client will be closed, inform client
-            if (self._request_start_line.version == 'HTTP/1.1' and self._disconnect_on_finish):
-                headers['Connection'] = 'close'
-            # If a 1.0 client asked for keep-alive, add the header.
-            if (self._request_start_line.version == 'HTTP/1.0' and
-                    self._request_headers.get('Connection', '').lower() == 'keep-alive'):
-                headers['Connection'] = 'Keep-Alive'
-        if self._chunking_output:
-            headers['Transfer-Encoding'] = 'chunked'
-        if (not self.is_client and
-            (self._request_start_line.method == 'HEAD' or
-             start_line.code == 304)):
-            self._expected_content_remaining = 0
-        elif 'Content-Length' in headers:
-            self._expected_content_remaining = int(headers['Content-Length'])
-        else:
-            self._expected_content_remaining = None
-        # TODO: headers are supposed to be of type str, but we still have some
-        # cases that let bytes slip through. Remove these native_str calls when those
-        # are fixed.
-        header_lines = (native_str(n) + ': ' + native_str(v) for n, v in headers.get_all())
-        if PY3:
-            lines.extend(l.encode('latin1') for l in header_lines)
-        else:
-            lines.extend(header_lines)
-        for line in lines:
-            if b'\n' in line:
-                raise ValueError('Newline in header: ' + repr(line))
-        future = None
-        if self.stream.closed():
-            future = self._write_future = Future()
-            future.set_exception(iostream.StreamClosedError())
-            future.exception()
-        else:
-            if callback is not None:
-                warnings.warn('callback argument is deprecated, use returned Future instead',
-                              DeprecationWarning)
-                self._write_callback = stack_context.wrap(callback)
-            else:
-                future = self._write_future = Future()
-            data = b'\r\n'.join(lines) + b'\r\n\r\n'
-            if chunk:
-                data += self._format_chunk(chunk)
-            self._pending_write = self.stream.write(data)
-            self._pending_write.add_done_callback(self._on_write_complete)
-        return future
-    
-    if PY3:
-    import http.cookies as Cookie
-    from http.client import responses
-    from urllib.parse import urlencode, urlparse, urlunparse, parse_qsl
-else:
-    import Cookie
-    from httplib import responses
-    from urllib import urlencode
-    from urlparse import urlparse, urlunparse, parse_qsl
+class GoogleTagManagerController(MinimalController):
+    def pre(self):
+        if request.host != g.media_domain:
+            # don't serve up untrusted content except on our
+            # specifically untrusted domain
+            self.abort404()
