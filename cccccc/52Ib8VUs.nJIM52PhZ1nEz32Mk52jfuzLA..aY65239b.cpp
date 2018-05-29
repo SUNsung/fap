@@ -1,365 +1,240 @@
 
         
-        #include <vector>
-    
-      window->menu_ = menu;
-  
-#if defined(OS_MACOSX)
-  response->Append(NWChangeAppMenu(menu));
-#endif
-    
-    IPC_SYNC_MESSAGE_ROUTED4_1(ShellViewHostMsg_Call_Object_Method_Sync,
-                           int /* object id */,
-                           std::string /* type name */,
-                           std::string /* method name */,
-                           base::ListValue /* arguments */,
-                           base::ListValue /* result */)
-    
-    
-    {  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method(
-      routing_id,
-      object_id,
-      type,
-      method,
-      *static_cast<base::ListValue*>(value_args.get())));
-  return v8::Undefined(isolate);
+        
+    {  std::unique_ptr<PartialRunState> partial_run = MakeUnique<PartialRunState>();
+  partial_run->cancellation_manager = MakeUnique<CancellationManager>();
+  *cancellation_manager = partial_run->cancellation_manager.get();
+  step_id_to_partial_run_[step_id] = std::move(partial_run);
+  return true;
 }
     
-    
-    {} // namespace nwapi
-
-    
-    void Menu::OnMenuClosed() {
-  CHECK(!message_loop_quit_.is_null());
-  message_loop_quit_.Run();
-  
-#if !defined(OS_WIN)
-  // Ask PlatformEventSource to stop dispatching
-  // events in this message loop
-  // iteration. We want our menu's loop to return
-  // before the next event.
-  if (ui::PlatformEventSource::GetInstance())
-    ui::PlatformEventSource::GetInstance()->StopCurrentEventStream();
-#endif
-}
-    
-    void MenuItem::SetSubmenu(Menu* sub_menu) {
-  submenu_ = sub_menu;
-  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    sub_menu->UpdateKeys(gtk_accel_group);
-  }
-  if (sub_menu == NULL)
-    gtk_menu_item_remove_submenu(GTK_MENU_ITEM(menu_item_));
-  else
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_item_), sub_menu->menu_);
-}
-    
-    using namespace extensions::nwapi::nw__app;
-    
-      tensor->resize({1, 2, 3});
-  assert(tensor->nDim() == 3);
-  int i = 0;
-  for (auto s: tensor->sizes())
-    assert(s == ++i);
-    
-      struct RequestGloo : DataChannel::Request {
-    RequestGloo(QueueWorker::Request&& request);
-    virtual ~RequestGloo();
+    namespace tensorflow {
     }
     
-    PyObject* tensor_to_list(const Tensor& tensor) {
-  Tensor data = tensor;
-  if (data.type().backend() != kCPU) {
-    with_no_gil([&]() {
-      data = data.toBackend(kCPU);
-    });
-  }
-  auto& type = data.type();
-  return recursive_to_list(
-      (char*)data.data_ptr(), data.sizes(), data.strides(), 0,
-      type.scalarType(), type.elementSizeInBytes());
-}
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    #define THCPDoubleStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPDoubleStorageClass)
-#define THCPFloatStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPFloatStorageClass)
-#define THCPHalfStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPHalfStorageClass)
-#define THCPLongStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPLongStorageClass)
-#define THCPIntStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPIntStorageClass)
-#define THCPShortStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPShortStorageClass)
-#define THCPCharStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPCharStorageClass)
-#define THCPByteStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPByteStorageClass)
-    
-    ByteArray::ByteArray(const char* arr, std::size_t size)
-  : _data(arr, arr + size)
-{}
-    
-        template<class ElemType>
-    static size_t GetNumSubminibatchesNeeded(IDataReader* dataReader,
-                                           size_t maxSamplesInRAM,
-                                           size_t numSubminibatches,
-                                           size_t tunedMBSize)
-    {
-        if (numSubminibatches > 1) // user-specified maximum number of samples
-            return numSubminibatches;
+    namespace tensorflow {
+namespace io {
+    }
     }
     
-                // Get attribute type.
-            AttrType GetType() const;
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+extern Iterator* NewDBIterator(
+    DBImpl* db,
+    const Comparator* user_key_comparator,
+    Iterator* internal_iter,
+    SequenceNumber sequence,
+    uint32_t seed);
     
-                if (StatusCategory::SYSTEM == m_state->m_category)
-            {
-                result += 'SystemError';
-                result += ' : ';
-                result += std::to_string(errno);
-            }
-            else if (StatusCategory::ONNX == m_state->m_category)
-            {
-                result += '[ONNXError]';
-                result += ' : ';
-                result += std::to_string(static_cast<int>(Code()));
-                std::string msg;
-                switch (static_cast<StatusCode>(Code()))
-                {
-                case INVALID_ARGUMENT:
-                    msg = 'INVALID_ARGUMENT';
-                    break;
-                case NO_SUCHFILE:
-                    msg = 'NO_SUCHFILE';
-                    break;
-                case NO_MODEL:
-                    msg = 'NO_MODEL';
-                    break;
-                case ENGINE_ERROR:
-                    msg = 'ENGINE_ERROR';
-                    break;
-                case RUNTIME_EXCEPTION:
-                    msg = 'RUNTIME_EXCEPTION';
-                    break;
-                case INVALID_PROTOBUF:
-                    msg = 'INVALID_PROTOBUF';
-                    break;
-                case MODEL_LOADED:
-                    msg = 'MODEL_LOADED';
-                    break;
-                case ONNX_NOT_IMPLEMENTED:
-                    msg = 'NOT_IMPLEMENTED';
-                    break;
-                default:
-                    msg = 'GENERAL ERROR';
-                    break;
-                }
-                result += ' : ';
-                result += msg;
-                result += ' : ';
-                result += m_state->m_msg;
-            }
+    struct ParsedInternalKey {
+  Slice user_key;
+  SequenceNumber sequence;
+  ValueType type;
+    }
     
-        // Taken from RS4
-    REGISTER_OPERATOR_SCHEMA(Softsign)
-        .Description('Softsign takes one input data (Tensor<T>) and produces one output '
-            'data (Tensor<T>) where the function, y = x / (1 + abs(x)), is applied to the '
-            'tensor elementwise.')
-        .Input('input', 'Input tensor, typically 1-D.', 'T')
-        .Output('output', 'Output tensor of same shape and type as input X.', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.');
+    class Env;
     
-            REGISTER_OPERATOR_SCHEMA(Not)
-        .Description('Performs element-wise negation.')
-        .Input('X', 'Input tensor of type bool.', 'T')
-        .Output('Y', '  Output tensor of type bool.', 'T')
-        .TypeConstraint('T', { 'tensor(bool)' }, 'Constrain input and output types to bool tensor.');
+      // Evict any entry for the specified file number
+  void Evict(uint64_t file_number);
     
-        const auto* chunk = m_chunks[chunkId];
-    const auto& sequence = chunk->Sequences()[sequenceIndexInChunk];
-    result.m_indexInChunk = sequenceIndexInChunk;
-    result.m_numberOfSamples = sequence.m_numberOfSamples;
+    #include 'db/version_set.h'
+#include 'util/logging.h'
+#include 'util/testharness.h'
+#include 'util/testutil.h'
     
-    enum {
-    LSTMPeepholeCountCiIndex = 0,
-    LSTMPeepholeCountCoIndex = 1,
-    LSTMPeepholeCountCfIndex = 2,
-    LSTMPeepholeCount = 3
+    // Number of read operations to do.  If negative, do FLAGS_num reads.
+static int FLAGS_reads = -1;
+    
+    
+    {  // 'filter' contains the data appended by a preceding call to
+  // CreateFilter() on this class.  This method must return true if
+  // the key was in the list of keys passed to CreateFilter().
+  // This method may return true or false if the key was not on the
+  // list, but it should aim to return false with a high probability.
+  virtual bool KeyMayMatch(const Slice& key, const Slice& filter) const = 0;
 };
     
-      void CheckOffsetPastEndReturnsNoRecords(uint64_t offset_past_end) {
-    WriteInitialOffsetLog();
-    reading_ = true;
-    source_.contents_ = Slice(dest_.contents_);
-    Reader* offset_reader = new Reader(&source_, &report_, true/*checksum*/,
-                                       WrittenBytes() + offset_past_end);
-    Slice record;
-    std::string scratch;
-    ASSERT_TRUE(!offset_reader->ReadRecord(&record, &scratch));
-    delete offset_reader;
+      // Drop the first 'n' bytes from this slice.
+  void remove_prefix(size_t n) {
+    assert(n <= size());
+    data_ += n;
+    size_ -= n;
   }
     
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
-
-    
-      switch (data[n]) {
-    case kNoCompression:
-      if (data != buf) {
-        // File implementation gave us pointer to some other data.
-        // Use it directly under the assumption that it will be live
-        // while the file is open.
-        delete[] buf;
-        result->data = Slice(data, n);
-        result->heap_allocated = false;
-        result->cachable = false;  // Do not double-cache
-      } else {
-        result->data = Slice(buf, n);
-        result->heap_allocated = true;
-        result->cachable = true;
-      }
-    }
-    
-    
-    {  ASSERT_EQ(Hash(0, 0, 0xbc9f1d34), 0xbc9f1d34);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data1), sizeof(data1), 0xbc9f1d34),
-      0xef1345c4);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data2), sizeof(data2), 0xbc9f1d34),
-      0x5b663814);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data3), sizeof(data3), 0xbc9f1d34),
-      0x323c078f);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data4), sizeof(data4), 0xbc9f1d34),
-      0xed21633a);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data5), sizeof(data5), 0x12345678),
-      0xf333dabb);
-}
-    
-    double Histogram::Percentile(double p) const {
-  double threshold = num_ * (p / 100.0);
-  double sum = 0;
-  for (int b = 0; b < kNumBuckets; b++) {
-    sum += buckets_[b];
-    if (sum >= threshold) {
-      // Scale linearly within this bucket
-      double left_point = (b == 0) ? 0 : kBucketLimit[b-1];
-      double right_point = kBucketLimit[b];
-      double left_sum = sum - buckets_[b];
-      double right_sum = sum;
-      double pos = (threshold - left_sum) / (right_sum - left_sum);
-      double r = left_point + (right_point - left_point) * pos;
-      if (r < min_) r = min_;
-      if (r > max_) r = max_;
-      return r;
-    }
-  }
-  return max_;
-}
-    
-    
-    {    // Compute (product % M) using the fact that ((x << 31) % M) == x.
-    seed_ = static_cast<uint32_t>((product >> 31) + (product & M));
-    // The first reduction may overflow by 1 bit, so we may need to
-    // repeat.  mod == M is not possible; using > allows the faster
-    // sign-bit-based test.
-    if (seed_ > M) {
-      seed_ -= M;
-    }
-    return seed_;
-  }
-  // Returns a uniformly distributed value in the range [0..n-1]
-  // REQUIRES: n > 0
-  uint32_t Uniform(int n) { return Next() % n; }
-    
-    static void Usage() {
-  fprintf(
-      stderr,
-      'Usage: leveldbutil command...\n'
-      '   dump files...         -- dump contents of specified files\n'
-      );
-}
-    
-    #include <stdint.h>
-#include 'db/log_format.h'
-#include 'leveldb/slice.h'
-#include 'leveldb/status.h'
-    
-    namespace leveldb {
-    }
-    
-    /**
- * \fn  std::shared_ptr<xgboost::DMatrix> CreateDMatrix(int rows, int columns, float sparsity, int seed);
- *
- * \brief Creates dmatrix with uniform random data between 0-1.
- *
- * \param rows      The rows.
- * \param columns   The columns.
- * \param sparsity  The sparsity.
- * \param seed      The seed.
- *
- * \return  The new d matrix.
+    /** @file
+ * @deprecated Use @ref cudev instead.
  */
     
-    // objectives
-#include '../src/objective/objective.cc'
-#include '../src/objective/regression_obj.cc'
-#include '../src/objective/multiclass_obj.cc'
-#include '../src/objective/rank_obj.cc'
-    
-    
-    {    // lock-free parallel updates of weights
-    selector_->Setup(*model, in_gpair->HostVector(), p_fmat,
-                     param_.reg_alpha_denorm, param_.reg_lambda_denorm, 0);
-    dmlc::DataIter<ColBatch> *iter = p_fmat->ColIterator();
-    while (iter->Next()) {
-      const ColBatch &batch = iter->Value();
-      const auto nfeat = static_cast<bst_omp_uint>(batch.size);
-#pragma omp parallel for schedule(static)
-      for (bst_omp_uint i = 0; i < nfeat; ++i) {
-        int ii = selector_->NextFeature(i, *model, 0, in_gpair->HostVector(), p_fmat,
-                                       param_.reg_alpha_denorm, param_.reg_lambda_denorm);
-        if (ii < 0) continue;
-        const bst_uint fid = batch.col_index[ii];
-        ColBatch::Inst col = batch[ii];
-        for (int gid = 0; gid < ngroup; ++gid) {
-          double sum_grad = 0.0, sum_hess = 0.0;
-          for (bst_uint j = 0; j < col.length; ++j) {
-            GradientPair &p = gpair[col[j].index * ngroup + gid];
-            if (p.GetHess() < 0.0f) continue;
-            const bst_float v = col[j].fvalue;
-            sum_grad += p.GetGrad() * v;
-            sum_hess += p.GetHess() * v * v;
-          }
-          bst_float &w = (*model)[fid][gid];
-          auto dw = static_cast<bst_float>(
-              param_.learning_rate *
-              CoordinateDelta(sum_grad, sum_hess, w, param_.reg_alpha_denorm,
-                              param_.reg_lambda_denorm));
-          if (dw == 0.f) continue;
-          w += dw;
-          // update grad values
-          for (bst_uint j = 0; j < col.length; ++j) {
-            GradientPair &p = gpair[col[j].index * ngroup + gid];
-            if (p.GetHess() < 0.0f) continue;
-            p += GradientPair(p.GetHess() * col[j].fvalue * dw, 0);
-          }
-        }
-      }
+    namespace cv
+{
     }
+    
+    /* End of file. */
+
+    
+      vector<int64_t> sizes = {2, 2};
+  tensor2->resize(sizes);
+  tensor2->fill(4);
+  tensor->add(*tensor2, 1);
+  assert(tensor->nDim() == 2);
+    
+      std::unique_ptr<ManagerServerSocket> srv_socket;
+  try {
+    char tmpfile[L_tmpnam];
+    if (std::tmpnam(tmpfile) == NULL)
+      throw std::runtime_error('could not generate a random filename for manager socket');
+    // TODO: better strategy for generating tmp names
+    // TODO: retry on collisions - this can easily fail
+    srv_socket.reset(new ManagerServerSocket(std::string(tmpfile)));
+    register_fd(srv_socket->socket_fd);
+    print_init_message(tmpfile);
+    DEBUG('opened socket %s', tmpfile);
+  } catch(...) {
+    print_init_message('ERROR');
+    throw;
   }
     
-      XGBOOST_DEVICE GradientPairInternal<T> operator-(
-      const GradientPairInternal<T> &rhs) const {
-    GradientPairInternal<T> g;
-    g.grad_ = grad_ - rhs.grad_;
-    g.hess_ = hess_ - rhs.hess_;
-    return g;
+    /**
+ * Delays sending request headers until bidirectional_stream_flush()
+ * is called. This flag is currently only respected when QUIC is negotiated.
+ * When true, QUIC will send request header frame along with data frame(s)
+ * as a single packet when possible.
+ */
+GRPC_SUPPORT_EXPORT
+void bidirectional_stream_delay_request_headers_until_flush(
+    bidirectional_stream* stream,
+    bool delay_headers_until_flush);
+    
+    #include 'src/proto/grpc/testing/control.pb.h'
+#include 'test/cpp/qps/histogram.h'
+    
+    #include <gtest/gtest.h>
+    
+    #include <initializer_list>
+#include <string>
+#include <vector>
+    
+        // Append, Flush, Get
+    slists.Append('c', 'asdasd');
+    db->Flush(rocksdb::FlushOptions());
+    success = slists.Get('c', &c);
+    ASSERT_TRUE(success);
+    ASSERT_EQ(c, 'asdasd');
+    
+      /// Remove the first (or last) num occurrences of value from the list (key)
+  /// Return the number of elements removed.
+  /// May throw RedisListException
+  int Remove(const std::string& key, int32_t num,
+             const std::string& value);
+  int RemoveFirst(const std::string& key, int32_t num,
+                  const std::string& value);
+  int RemoveLast(const std::string& key, int32_t num,
+                 const std::string& value);
+    
+    // We leave eight bits empty at the bottom so a type and sequence#
+// can be packed together into 64-bits.
+static const SequenceNumber kMaxSequenceNumber =
+    ((0x1ull << 56) - 1);
+    
+    inline
+void BlockFetcher::GetBlockContents() {
+  if (slice_.data() != used_buf_) {
+    // the slice content is not the buffer provided
+    *contents_ = BlockContents(Slice(slice_.data(), block_size_), false,
+                               compression_type);
+  } else {
+    // page is uncompressed, the buffer either stack or heap provided
+    if (got_from_prefetch_buffer_ || used_buf_ == &stack_buf_[0]) {
+      heap_buf_.reset(new char[block_size_]);
+      memcpy(heap_buf_.get(), used_buf_, block_size_);
+    }
+    *contents_ = BlockContents(std::move(heap_buf_), block_size_, true,
+                               compression_type);
   }
+}
+    
+    
+void SyncPoint::Data::LoadDependency(const std::vector<SyncPointPair>& dependencies) {
+  std::lock_guard<std::mutex> lock(mutex_);
+  successors_.clear();
+  predecessors_.clear();
+  cleared_points_.clear();
+  for (const auto& dependency : dependencies) {
+    successors_[dependency.predecessor].push_back(dependency.successor);
+    predecessors_[dependency.successor].push_back(dependency.predecessor);
+  }
+  cv_.notify_all();
+}
+    
+      // REQUIRES: No concurrent calls to WriteStep or ConcurrentWriteStep
+  void WriteStep(Random* rnd) {
+    const uint32_t k = rnd->Next() % K;
+    const int g = current_.Get(k) + 1;
+    const Key new_key = MakeKey(k, g);
+    char* buf = list_.AllocateKey(sizeof(Key));
+    memcpy(buf, &new_key, sizeof(Key));
+    list_.Insert(buf);
+    current_.Set(k, g);
+  }
+    
+    class Comparator;
+class InternalIterator;
+class Env;
+class Arena;
+    
+    
+    {  m_jcreate_compaction_filter_methodid =
+      AbstractCompactionFilterFactoryJni::getCreateCompactionFilterMethodId(env);
+  if(m_jcreate_compaction_filter_methodid == nullptr) {
+    // exception thrown: NoSuchMethodException or OutOfMemoryError
+    return;
+  }
+}
+    
+    class CompactionFilterFactoryJniCallback : public JniCallback, public CompactionFilterFactory {
+ public:
+    CompactionFilterFactoryJniCallback(
+        JNIEnv* env, jobject jcompaction_filter_factory);
+    virtual std::unique_ptr<CompactionFilter> CreateCompactionFilter(
+      const CompactionFilter::Context& context);
+    virtual const char* Name() const;
+    }
+    
+    TEST_F(YogaTest_HadOverflowTests, children_overflow_no_wrap_and_no_flex_children) {
+  const YGNodeRef child0 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child0, 80);
+  YGNodeStyleSetHeight(child0, 40);
+  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
+  YGNodeStyleSetMargin(child0, YGEdgeBottom, 15);
+  YGNodeInsertChild(root, child0, 0);
+  const YGNodeRef child1 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child1, 80);
+  YGNodeStyleSetHeight(child1, 40);
+  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
+  YGNodeInsertChild(root, child1, 1);
+    }
+    
+    void Config::setPointScaleFactor(float pixelsInPoint)
+{
+    YGConfigSetPointScaleFactor(m_config, pixelsInPoint);
+}
+    
+    void Node::setFlexBasis(double flexBasis)
+{
+    YGNodeStyleSetFlexBasis(m_node, flexBasis);
+}
+    
+    #pragma once
+#include <functional>
+#include <string>
+#include <jni.h>
+    
+      T* release() {
+    T* obj = get();
+    pthread_setspecific(m_key, NULL);
+    return obj;
+  }
+    
+    #include 'CoreClasses.h'
