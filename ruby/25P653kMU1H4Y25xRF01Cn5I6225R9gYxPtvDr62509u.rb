@@ -1,101 +1,57 @@
 
         
-        require 'abstract_unit'
-    
-        test 'the middleware stack is exposed as 'middleware' in the controller' do
-      result = @app.call(env_for('/'))
-      assert_equal 'First!', result[1]['Middleware-Order']
+            def weeks
+      number * 604_800
     end
+    alias :week :weeks
     
-          add_delivery_method :file, Mail::FileDelivery,
-        location: defined?(Rails.root) ? '#{Rails.root}/tmp/mails' : '#{Dir.tmpdir}/mails'
-    
-    class AssertSelectEmailTest < ActionMailer::TestCase
-  class AssertSelectMailer < ActionMailer::Base
-    def test(html)
-      mail body: html, content_type: 'text/html',
-        subject: 'Test e-mail', from: 'test@test.host', to: 'test <test@test.host>'
-    end
-  end
-    
-      def use_message
-    mail_with_defaults do |format|
-      format.html { render(inline: '<%= message.subject %>') }
-    end
-  end
-    
-    unless invalids.empty?
-  puts '\n\nFailed links:'
-  invalids.each do |link|
-    puts '- #{link}'
-  end
-  puts 'Done with errors.'
-  exit(1)
-end
-    
-          class << self
-        # Mark a given block of code as a 'busy' block of code, which will
-        # register a SIGINT handler for the duration of the block. When a
-        # SIGINT occurs, the `sig_callback` proc will be called. It is up
-        # to the callback to behave properly and exit the application.
-        def busy(sig_callback)
-          register(sig_callback)
-          return yield
-        ensure
-          unregister(sig_callback)
-        end
-    
-          def [](key)
-        super(convert_key(key))
+      test 'command when standard output is set to nil' do
+    output = Whenever.cron \
+    <<-file
+      set :job_template, nil
+      every 2.hours do
+        command 'blahblah', :output => {:standard => nil}
       end
+    file
     
-      # Creates a delayed logger wrapping `inner`.
-  #
-  # @param inner [Sass::Logger::Base] The wrapped logger.
-  def initialize(inner)
-    self.log_level = inner.log_level
-    @inner = inner
-    @messages = []
+      should 'escape single quotes' do
+    job = new_job(:template => 'before ':task' after', :task => 'quote -> ' <- quote', :job_template => 'left ':job' right')
+    assert_equal %q(left 'before '\''quote -> '\\''\\'\\'''\\'' <- quote'\'' after' right), job.output
   end
     
-        # Evaluates the interpolation.
-    #
-    # @param environment [Sass::Environment] The environment in which to evaluate the SassScript
-    # @return [Sass::Script::Value::String]
-    #   The SassScript string that is the value of the interpolation
-    def _perform(environment)
-      res = ''
-      res << @before.perform(environment).to_s if @before
-      res << ' ' if @before && @whitespace_before
+    # Begin Whenever generated tasks for: My identifier at: 2017-01-03 08:02:22 +0500
+My whenever job that was already here
+# End Whenever generated tasks for: My identifier at: 2017-01-03 08:22:22 +0500
     
-          private
+    # Example:
+#
+# set :output, '/path/to/my/cron_log.log'
+#
+# every 2.hours do
+#   command '/usr/bin/some_great_command'
+#   runner 'MyModel.some_method'
+#   rake 'some:great:rake:task'
+# end
+#
+# every 4.days do
+#   runner 'AnotherModel.prune_old_records'
+# end
     
-      def command_line(*options)
-    options.each { |opt| ARGV << opt }
-    subject.define_singleton_method(:exit) do |*_args|
-      throw(:system_exit, :exit)
+        def assert_months_and_days_and_hours_and_minutes_equals(expected, time, options = {})
+      cron = parse_time(Whenever.seconds(1, :year), 'some task', time, options)
+      minutes, hours, days, months = cron.split(' ')
+      assert_equal expected, [months, days, hours, minutes]
     end
-    subject.run
-    subject.options
-  end
     
-    __END__
-    
-          it 'should remain unchanged as ASCII-8BIT' do
-        body = @app.call({ 'PATH_INFO' => '/'.encode('ASCII-8BIT') })[2][0]
-        expect(body).to eq('ASCII-8BIT')
-      end
+        # Catch all for the method
+    def liquid_method_missing(method)
+      return nil unless @context && @context.strict_variables
+      raise Liquid::UndefinedDropMethod, 'undefined method #{method}'
     end
-  end
-end
-
     
-      # rspec-expectations config goes here. You can use an alternate
-  # assertion/expectation library such as wrong or the stdlib/minitest
-  # assertions if you prefer.
-  config.expect_with :rspec do |expectations|
-    # Enable only the newer, non-monkey-patching expect syntax.
-    # For more details, see:
-    #   - http://myronmars.to/n/dev-blog/2012/06/rspecs-new-expectation-syntax
-    expectations.syntax = :expect
-  end
+          str << expression
+      str
+    end
+    
+        # Require libraries only when activated
+    # require 'necessary/library'
