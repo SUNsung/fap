@@ -1,270 +1,244 @@
 
         
-        bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
+        // Called on every item found in a WriteBatch.
+class WriteBatchItemPrinter : public WriteBatch::Handler {
+ public:
+  WritableFile* dst_;
+  virtual void Put(const Slice& key, const Slice& value) {
+    std::string r = '  put '';
+    AppendEscapedStringTo(&r, key);
+    r += '' '';
+    AppendEscapedStringTo(&r, value);
+    r += ''\n';
+    dst_->Append(r);
+  }
+  virtual void Delete(const Slice& key) {
+    std::string r = '  del '';
+    AppendEscapedStringTo(&r, key);
+    r += ''\n';
+    dst_->Append(r);
+  }
+};
     
-    bool js_cocos2dx_studio_Frame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_Frame_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_Frame(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_Frame_clone(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_setTweenType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_setNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_setTimeline(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_isEnterWhenPassed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_getTweenType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_getFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_apply(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_isTween(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_setFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_setTween(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_getTimeline(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_getNode(JSContext *cx, uint32_t argc, jsval *vp);
+      // Return an iterator for the specified file number (the corresponding
+  // file length must be exactly 'file_size' bytes).  If 'tableptr' is
+  // non-NULL, also sets '*tableptr' to point to the Table object
+  // underlying the returned iterator, or NULL if no Table object underlies
+  // the returned iterator.  The returned '*tableptr' object is owned by
+  // the cache and should not be deleted, and is valid for as long as the
+  // returned iterator is live.
+  Iterator* NewIterator(const ReadOptions& options,
+                        uint64_t file_number,
+                        uint64_t file_size,
+                        Table** tableptr = NULL);
     
     
-    
-    #endif // __cocos2dx_experimental_video_h__
-#endif //#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && !defined(CC_TARGET_OS_TVOS)
-
-    
-        GLESDebugDraw( float32 ratio );
-    
-    #endif
-
-    
-    		{
-			b2PolygonShape shape;
-			shape.SetAsBox(0.5f, 0.5f);
-    }
+    {  std::vector< std::pair<int, InternalKey> > compact_pointers_;
+  DeletedFileSet deleted_files_;
+  std::vector< std::pair<int, FileMetaData> > new_files_;
+};
     
     
-    {				if (i == (e_count >> 1))
-				{
-					m_middle = body;
-				}
-				prevBody = body;
-			}
-    
-    			b2PolygonShape shape;
-			shape.Set(vertices, 3);
-    
-    		// Car
-		{
-			b2PolygonShape chassis;
-			b2Vec2 vertices[8];
-			vertices[0].Set(-1.5f, -0.5f);
-			vertices[1].Set(1.5f, -0.5f);
-			vertices[2].Set(1.5f, 0.0f);
-			vertices[3].Set(0.0f, 0.9f);
-			vertices[4].Set(-1.15f, 0.9f);
-			vertices[5].Set(-1.5f, 0.2f);
-			chassis.Set(vertices, 6);
-    }
-    
-        // stop short of the end so we don't scan off the end doing
-    // the hashing; this means we won't compress the last few bytes
-    // unless they were part of something longer
-    while (q < start+length && q+12 < end) {
-        int m;
-        stb_uint h1,h2,h3,h4, h;
-        stb_uchar *t;
-        int best = 2, dist=0;
-    }
-    
-            if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text('counter = %d', counter);
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_Marmalade_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_Marmalade_CreateDeviceObjects();
-    
-    static void ImGui_ImplDX12_CreateFontsTexture()
-{
-    // Build texture atlas
-    ImGuiIO& io = ImGui::GetIO();
-    unsigned char* pixels;
-    int width, height;
-    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
-    }
-    
-        // Create custom vertex declaration.
-    // Unfortunately Allegro doesn't support 32-bits packed colors so we have to convert them to 4 floats.
-    // We still use a custom declaration to use 'ALLEGRO_PRIM_TEX_COORD' instead of 'ALLEGRO_PRIM_TEX_COORD_PIXEL' else we can't do a reliable conversion.
-    ALLEGRO_VERTEX_ELEMENT elems[] =
-    {
-        { ALLEGRO_PRIM_POSITION, ALLEGRO_PRIM_FLOAT_2, IM_OFFSETOF(ImDrawVertAllegro, pos) },
-        { ALLEGRO_PRIM_TEX_COORD, ALLEGRO_PRIM_FLOAT_2, IM_OFFSETOF(ImDrawVertAllegro, uv) },
-        { ALLEGRO_PRIM_COLOR_ATTR, 0, IM_OFFSETOF(ImDrawVertAllegro, col) },
-        { 0, 0, 0 }
-    };
-    g_VertexDecl = al_create_vertex_decl(elems, sizeof(ImDrawVertAllegro));
-    
-    
-    {    printf('DestroyContext()\n');
-    ImGui::DestroyContext();
-    return 0;
+    {  edit.SetComparatorName('foo');
+  edit.SetLogNumber(kBig + 100);
+  edit.SetNextFile(kBig + 200);
+  edit.SetLastSequence(kBig + 1000);
+  TestEncodeDecode(edit);
 }
+    
+      // Change this slice to refer to an empty array
+  void clear() { data_ = ''; size_ = 0; }
+    
+    void DebugHUD_DoInterface(DebugHUD *hud)
+{
+    // 1. Show a simple window.
+    // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+    {
+        static float f = 0.0f;
+        static int counter = 0;
+        ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+        ImGui::ColorEdit3('clear color', hud->clearColor);      // Edit 3 floats representing a color
+    }
+    }
+    
+    // Handler for Win32 messages, update mouse/keyboard data.
+// You may or not need this for your implementation, but it can serve as reference for handling inputs.
+// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
+/*
+IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+*/
 
+    
+    struct IDirect3DDevice9;
+    
+    // Render function.
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
+void ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data)
+{
+    // Handle cases of screen coordinates != from framebuffer coordinates (e.g. retina displays)
+    ImGuiIO& io = ImGui::GetIO();
+    draw_data->ScaleClipRects(io.DisplayFramebufferScale);
+    }
+    
+    IMGUI_API bool        ImGui_ImplGlfwGL3_Init(GLFWwindow* window, bool install_callbacks, const char* glsl_version = NULL);
+IMGUI_API void        ImGui_ImplGlfwGL3_Shutdown();
+IMGUI_API void        ImGui_ImplGlfwGL3_NewFrame();
+IMGUI_API void        ImGui_ImplGlfwGL3_RenderDrawData(ImDrawData* draw_data);
+    
+        // Create and grow vertex/index buffers if needed
+    if (!g_pVB || g_VertexBufferSize < draw_data->TotalVtxCount)
+    {
+        if (g_pVB) { g_pVB->Release(); g_pVB = NULL; }
+        g_VertexBufferSize = draw_data->TotalVtxCount + 5000;
+        D3D11_BUFFER_DESC desc;
+        memset(&desc, 0, sizeof(D3D11_BUFFER_DESC));
+        desc.Usage = D3D11_USAGE_DYNAMIC;
+        desc.ByteWidth = g_VertexBufferSize * sizeof(ImDrawVert);
+        desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+        desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+        desc.MiscFlags = 0;
+        if (g_pd3dDevice->CreateBuffer(&desc, NULL, &g_pVB) < 0)
+            return;
+    }
+    if (!g_pIB || g_IndexBufferSize < draw_data->TotalIdxCount)
+    {
+        if (g_pIB) { g_pIB->Release(); g_pIB = NULL; }
+        g_IndexBufferSize = draw_data->TotalIdxCount + 10000;
+        D3D11_BUFFER_DESC desc;
+        memset(&desc, 0, sizeof(D3D11_BUFFER_DESC));
+        desc.Usage = D3D11_USAGE_DYNAMIC;
+        desc.ByteWidth = g_IndexBufferSize * sizeof(ImDrawIdx);
+        desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+        desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+        if (g_pd3dDevice->CreateBuffer(&desc, NULL, &g_pIB) < 0)
+            return;
+    }
     
                 if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
                 counter++;
             ImGui::SameLine();
             ImGui::Text('counter = %d', counter);
     
-        // Create Vulkan Instance
-    {
-        uint32_t extensions_count;
-        const char** glfw_extensions = glfwGetRequiredInstanceExtensions(&extensions_count);
-    }
-    
-        // Setup display size (every frame to accommodate for window resizing)
-    int w, h;
-    int display_w, display_h;
-    SDL_GetWindowSize(window, &w, &h);
-    SDL_GL_GetDrawableSize(window, &display_w, &display_h);
-    io.DisplaySize = ImVec2((float)w, (float)h);
-    io.DisplayFramebufferScale = ImVec2(w > 0 ? ((float)display_w / w) : 0, h > 0 ? ((float)display_h / h) : 0);
-    
-    // Transient per-window flags, reset at the beginning of the frame. For child window, inherited from parent on first Begin().
-// This is going to be exposed in imgui.h when stabilized enough.
-enum ImGuiItemFlags_
+    int main(int, char**)
 {
-    ImGuiItemFlags_AllowKeyboardFocus           = 1 << 0,  // true
-    ImGuiItemFlags_ButtonRepeat                 = 1 << 1,  // false    // Button() will return true multiple times based on io.KeyRepeatDelay and io.KeyRepeatRate settings.
-    ImGuiItemFlags_Disabled                     = 1 << 2,  // false    // FIXME-WIP: Disable interactions but doesn't affect visuals. Should be: grey out and disable interactions with widgets that affect data + view widgets (WIP)
-    ImGuiItemFlags_NoNav                        = 1 << 3,  // false
-    ImGuiItemFlags_NoNavDefaultFocus            = 1 << 4,  // false
-    ImGuiItemFlags_SelectableDontClosePopup     = 1 << 5,  // false    // MenuItem/Selectable() automatically closes current Popup window
-    ImGuiItemFlags_Default_                     = ImGuiItemFlags_AllowKeyboardFocus
+    // Setup window
+    glfwSetErrorCallback(glfw_error_callback);
+    if (!glfwInit())
+        return 1;
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#if __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+    GLFWwindow* window = glfwCreateWindow(1280, 720, 'ImGui GLFW+OpenGL3 example', NULL, NULL);
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1); // Enable vsync
+    gl3wInit();
+    }
+    
+      virtual const char* Name() const override;
+    
+    
+    {};
+    
+      if(m_jcallback_obj != nullptr) {    
+    env->DeleteGlobalRef(m_jcallback_obj);
+  }
+    
+    inline
+void BlockFetcher::GetBlockContents() {
+  if (slice_.data() != used_buf_) {
+    // the slice content is not the buffer provided
+    *contents_ = BlockContents(Slice(slice_.data(), block_size_), false,
+                               compression_type);
+  } else {
+    // page is uncompressed, the buffer either stack or heap provided
+    if (got_from_prefetch_buffer_ || used_buf_ == &stack_buf_[0]) {
+      heap_buf_.reset(new char[block_size_]);
+      memcpy(heap_buf_.get(), used_buf_, block_size_);
+    }
+    *contents_ = BlockContents(std::move(heap_buf_), block_size_, true,
+                               compression_type);
+  }
+}
+    
+    
+    {#define TEST_KILL_RANDOM(kill_point, rocksdb_kill_odds)                  \
+  {                                                                      \
+    if (rocksdb_kill_odds > 0) {                                         \
+      TestKillRandom(kill_point, rocksdb_kill_odds, __FILE__, __LINE__); \
+    }                                                                    \
+  }
+}  // namespace rocksdb
+#endif
+    
+    
+    {  assert(odds > 0);
+  if (odds % 7 == 0) {
+    // class Random uses multiplier 16807, which is 7^5. If odds are
+    // multiplier of 7, there might be limited values generated.
+    odds++;
+  }
+  auto* r = Random::GetTLSInstance();
+  bool crash = r->OneIn(odds);
+  if (crash) {
+    port::Crash(srcfile, srcline);
+  }
+}
+    
+    
+    {
+    {  void ClearCallBack(const std::string& point);
+  void ClearAllCallBacks();
+  void EnableProcessing() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    enabled_ = true;
+  }
+  void DisableProcessing() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    enabled_ = false;
+  }
+  void ClearTrace() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    cleared_points_.clear();
+  }
+  bool DisabledByMarker(const std::string& point,
+                        std::thread::id thread_id) {
+    auto marked_point_iter = marked_thread_id_.find(point);
+    return marked_point_iter != marked_thread_id_.end() &&
+           thread_id != marked_point_iter->second;
+  }
+  void Process(const std::string& point, void* cb_arg);
 };
-    
-      const size_t kMaxSaneLen = 1 << 20;
-  const size_t kMinDefaultLen = 64;
-  FuzzingOptions Options;
-  Options.Verbosity = Flags.verbosity;
-  Options.MaxLen = Flags.max_len;
-  Options.UnitTimeoutSec = Flags.timeout;
-  Options.ErrorExitCode = Flags.error_exitcode;
-  Options.TimeoutExitCode = Flags.timeout_exitcode;
-  Options.MaxTotalTimeSec = Flags.max_total_time;
-  Options.DoCrossOver = Flags.cross_over;
-  Options.MutateDepth = Flags.mutate_depth;
-  Options.UseCounters = Flags.use_counters;
-  Options.UseIndirCalls = Flags.use_indir_calls;
-  Options.UseMemcmp = Flags.use_memcmp;
-  Options.UseMemmem = Flags.use_memmem;
-  Options.UseCmp = Flags.use_cmp;
-  Options.UseValueProfile = Flags.use_value_profile;
-  Options.Shrink = Flags.shrink;
-  Options.ShuffleAtStartUp = Flags.shuffle;
-  Options.PreferSmall = Flags.prefer_small;
-  Options.ReloadIntervalSec = Flags.reload;
-  Options.OnlyASCII = Flags.only_ascii;
-  Options.OutputCSV = Flags.output_csv;
-  Options.DetectLeaks = Flags.detect_leaks;
-  Options.TraceMalloc = Flags.trace_malloc;
-  Options.RssLimitMb = Flags.rss_limit_mb;
-  if (Flags.runs >= 0)
-    Options.MaxNumberOfRuns = Flags.runs;
-  if (!Inputs->empty() && !Flags.minimize_crash_internal_step)
-    Options.OutputCorpus = (*Inputs)[0];
-  Options.ReportSlowUnits = Flags.report_slow_units;
-  if (Flags.artifact_prefix)
-    Options.ArtifactPrefix = Flags.artifact_prefix;
-  if (Flags.exact_artifact_path)
-    Options.ExactArtifactPath = Flags.exact_artifact_path;
-  std::vector<Unit> Dictionary;
-  if (Flags.dict)
-    if (!ParseDictionaryFile(FileToString(Flags.dict), &Dictionary))
-      return 1;
-  if (Flags.verbosity > 0 && !Dictionary.empty())
-    Printf('Dictionary: %zd entries\n', Dictionary.size());
-  bool DoPlainRun = AllInputsAreFiles();
-  Options.SaveArtifacts =
-      !DoPlainRun || Flags.minimize_crash_internal_step;
-  Options.PrintNewCovPcs = Flags.print_pcs;
-  Options.PrintFinalStats = Flags.print_final_stats;
-  Options.PrintCorpusStats = Flags.print_corpus_stats;
-  Options.PrintCoverage = Flags.print_coverage;
-  Options.DumpCoverage = Flags.dump_coverage;
-  if (Flags.exit_on_src_pos)
-    Options.ExitOnSrcPos = Flags.exit_on_src_pos;
-  if (Flags.exit_on_item)
-    Options.ExitOnItem = Flags.exit_on_item;
-    
-    void CloseStdout() {
-  CloseFile(1);
 }
+#endif // NDEBUG
+
     
-      /// Mutates data by adding a word from the TORC.
-  size_t Mutate_AddWordFromTORC(uint8_t *Data, size_t Size, size_t MaxSize);
+      // Notify the underlying storage that no more items will be added.
+  // REQUIRES: external synchronization to prevent simultaneous
+  // operations on the same MemTable.
+  // After MarkImmutable() is called, you should not attempt to
+  // write anything to this MemTable().  (Ie. do not call Add() or Update()).
+  void MarkImmutable() {
+    table_->MarkReadOnly();
+    mem_tracker_.DoneAllocating();
+  }
     
-    namespace fuzzer {
-    }
+      auto* cff = reinterpret_cast<CompactionFilter*>(addr_compaction_filter);
     
-    ATTRIBUTE_NO_SANITIZE_MEMORY
-void TracePC::AddValueForMemcmp(void *caller_pc, const void *s1, const void *s2,
-                              size_t n) {
-  if (!n) return;
-  size_t Len = std::min(n, (size_t)32);
-  const uint8_t *A1 = reinterpret_cast<const uint8_t *>(s1);
-  const uint8_t *A2 = reinterpret_cast<const uint8_t *>(s2);
-  size_t I = 0;
-  for (; I < Len; I++)
-    if (A1[I] != A2[I])
-      break;
-  size_t PC = reinterpret_cast<size_t>(caller_pc);
-  size_t Idx = I;
-  // if (I < Len)
-  //  Idx += __builtin_popcountl((A1[I] ^ A2[I])) - 1;
-  TPC.HandleValueProfile((PC & 4095) | (Idx << 12));
-}
     
-    std::string DescribePC(const char *SymbolizedFMT, uintptr_t PC);
+    {} // namespace fuzzer
     
-    // This is a reimplementation of Libc's `system()`. On Darwin the Libc
-// implementation contains a mutex which prevents it from being used
-// concurrently. This implementation **can** be used concurrently. It sets the
-// signal handlers when the first thread enters and restores them when the last
-// thread finishes execution of the function and ensures this is not racey by
-// using a mutex.
-int ExecuteCommand(const std::string &Command) {
-  posix_spawnattr_t SpawnAttributes;
-  if (posix_spawnattr_init(&SpawnAttributes))
-    return -1;
-  // Block and ignore signals of the current process when the first thread
-  // enters.
-  {
-    std::lock_guard<std::mutex> Lock(SignalMutex);
-    if (ActiveThreadCount == 0) {
-      static struct sigaction IgnoreSignalAction;
-      sigset_t BlockedSignalsSet;
-      memset(&IgnoreSignalAction, 0, sizeof(IgnoreSignalAction));
-      IgnoreSignalAction.sa_handler = SIG_IGN;
-    }
-    }
+    std::string Hash(const Unit &U);
+    
+    void TraceState::TraceSwitchCallback(uintptr_t PC, size_t ValSizeInBits,
+                                     uint64_t Val, size_t NumCases,
+                                     uint64_t *Cases) {
+  if (F->InFuzzingThread()) return;
+  size_t ValSize = ValSizeInBits / 8;
+  bool TryShort = IsTwoByteData(Val);
+  for (size_t i = 0; i < NumCases; i++)
+    TryShort &= IsTwoByteData(Cases[i]);
     }
