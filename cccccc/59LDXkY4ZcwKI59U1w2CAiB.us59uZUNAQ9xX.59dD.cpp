@@ -1,245 +1,277 @@
 
         
-        #include <string>
-    
-    
-    {} // namespace nwapi
-
-    
-       bool IsItemForCommandIdDynamic(int command_id) const override;
-   base::string16 GetLabelForCommandId(int command_id) const override;
-   bool GetIconForCommandId(int command_id,
-                                   gfx::Image* icon) const override;
-    
-    namespace extensions {
-NwAppQuitFunction::NwAppQuitFunction() {
-    }
-    }
-    
-        D3D_FEATURE_LEVEL featureLevels[] =
+        
     {
-        D3D_FEATURE_LEVEL_11_0,
-        D3D_FEATURE_LEVEL_10_1,
-        D3D_FEATURE_LEVEL_10_0,
-    };
-    UINT numFeatureLevels = ARRAYSIZE(featureLevels);
-    
-    CV_EXPORTS void  EstimateUncertainties(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
-                           const IntrinsicParams& params, InputArray omc, InputArray Tc,
-                           IntrinsicParams& errors, Vec2d& std_err, double thresh_cond, int check_cond, double& rms);
-    
-    
-    {}
-    
-    #define CUSTOM_FUNCTION_ID 1000
-    
-      vector<int64_t> sizes = {2, 2};
-  tensor2->resize(sizes);
-  tensor2->fill(4);
-  tensor->add(*tensor2, 1);
-  assert(tensor->nDim() == 2);
-    
-        for (int fd: to_add)
-      register_fd(fd);
-    to_add.clear();
-    
-      void ForceError() {
-    source_.force_error_ = true;
+    {      auto h = handle_.AccessTensor(context)->template flat<string>();
+      h(0) = cinfo_.container();
+      h(1) = cinfo_.name();
+      resource_ = resource;
+    }
+    if (context->expected_output_dtype(0) == DT_RESOURCE) {
+      OP_REQUIRES_OK(context, MakeResourceHandleToOutput(
+                                  context, 0, cinfo_.container(), cinfo_.name(),
+                                  MakeTypeIndex<T>()));
+    } else {
+      context->set_output_ref(0, &mu_, handle_.AccessTensor(context));
+    }
   }
     
-    #include 'db/dbformat.h'
-#include 'leveldb/write_batch.h'
     
-    static int NextLength(int length) {
-  if (length < 10) {
-    length += 1;
-  } else if (length < 100) {
-    length += 10;
-  } else if (length < 1000) {
-    length += 100;
-  } else {
-    length += 1000;
-  }
-  return length;
-}
+    {}  // namespace xla
     
-    #include 'util/crc32c.h'
-#include 'util/testharness.h'
-    
-    // The FALLTHROUGH_INTENDED macro can be used to annotate implicit fall-through
-// between switch labels. The real definition should be provided externally.
-// This one is a fallback version for unsupported compilers.
-#ifndef FALLTHROUGH_INTENDED
-#define FALLTHROUGH_INTENDED do { } while (0)
-#endif
-    
-    
-    {  ASSERT_EQ(Hash(0, 0, 0xbc9f1d34), 0xbc9f1d34);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data1), sizeof(data1), 0xbc9f1d34),
-      0xef1345c4);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data2), sizeof(data2), 0xbc9f1d34),
-      0x5b663814);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data3), sizeof(data3), 0xbc9f1d34),
-      0x323c078f);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data4), sizeof(data4), 0xbc9f1d34),
-      0xed21633a);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data5), sizeof(data5), 0x12345678),
-      0xf333dabb);
-}
-    
-    class AutoCompactTest {
+    class SessionFactory {
  public:
-  std::string dbname_;
-  Cache* tiny_cache_;
-  Options options_;
-  DB* db_;
+  virtual Session* NewSession(const SessionOptions& options) = 0;
+  virtual bool AcceptsOptions(const SessionOptions& options) = 0;
     }
     
-     private:
-  WritableFile* dest_;
-  int block_offset_;       // Current offset in block
+    #include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
+#include 'tensorflow/core/framework/tensor_types.h'
+#include 'tensorflow/core/framework/types.h'
+#include 'tensorflow/core/kernels/scatter_functor.h'
     
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    template <typename MutableBufferSequence>
-class descriptor_read_op_base : public reactor_op
-{
-public:
-  descriptor_read_op_base(int descriptor,
-      const MutableBufferSequence& buffers, func_type complete_func)
-    : reactor_op(&descriptor_read_op_base::do_perform, complete_func),
-      descriptor_(descriptor),
-      buffers_(buffers)
-  {
+    /** scalar_sigmoid_fast_derivative_op
+  * \ingroup CXX11_NeuralNetworks_Module
+  * \brief Template functor to compute the fast derivative of a sigmoid
+  *
+  * Input should be the backpropagated gradient.
+  *
+  * \sa class CwiseUnaryOp, Cwise::sigmoid_fast_derivative()
+  */
+template <typename T>
+struct scalar_sigmoid_fast_derivative_op {
+  EIGEN_EMPTY_STRUCT_CTOR(scalar_sigmoid_fast_derivative_op)
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
+    const T one = T(1);
+    return (one - y) * y;
   }
     }
     
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    namespace xgboost {
-namespace tree {
-// List of files that will be force linked in static links.
-DMLC_REGISTRY_LINK_TAG(updater_colmaker);
-DMLC_REGISTRY_LINK_TAG(updater_skmaker);
-DMLC_REGISTRY_LINK_TAG(updater_refresh);
-DMLC_REGISTRY_LINK_TAG(updater_prune);
-DMLC_REGISTRY_LINK_TAG(updater_fast_hist);
-DMLC_REGISTRY_LINK_TAG(updater_histmaker);
-DMLC_REGISTRY_LINK_TAG(updater_sync);
-#ifdef XGBOOST_USE_CUDA
-DMLC_REGISTRY_LINK_TAG(updater_gpu);
-DMLC_REGISTRY_LINK_TAG(updater_gpu_hist);
-#endif
-}  // namespace tree
-}  // namespace xgboost
+    
+    {  DynamicStitchKernel<T>
+      <<<config.block_count, config.thread_per_block, 0, gpu_device.stream()>>>(
+          slice_size, output_size, input_indices, input_ptrs, output);
+}
+    
+    #endif  // TENSORFLOW_FRAMEWORK_TENSOR_SLICE_H_
 
     
-    #ifndef GUETZLI_DCT_DOUBLE_H_
-#define GUETZLI_DCT_DOUBLE_H_
+    using caffe::Datum;
+using boost::scoped_ptr;
+using std::string;
+namespace db = caffe::db;
     
-    #ifndef GUETZLI_FDCT_H_
-#define GUETZLI_FDCT_H_
-    
-    void AddApp0Data(JPEGData* jpg) {
-  const unsigned char kApp0Data[] = {
-      0xe0, 0x00, 0x10,              // APP0
-      0x4a, 0x46, 0x49, 0x46, 0x00,  // 'JFIF'
-      0x01, 0x01,                    // v1.01
-      0x00, 0x00, 0x01, 0x00, 0x01,  // aspect ratio = 1:1
-      0x00, 0x00                     // thumbnail width/height
-  };
-  jpg->app_data.push_back(
-      std::string(reinterpret_cast<const char*>(kApp0Data),
-                                 sizeof(kApp0Data)));
-}
-    
-    namespace guetzli {
+    namespace caffe {
     }
     
-      // Fills in out[] array with the 8-bit pixel view of this component cropped
-  // to the specified window. The window's upper-left corner, (xmin, ymin) must
-  // be within the image, but the window may extend past the image. In that
-  // case the edge pixels are duplicated.
-  void ToPixels(int xmin, int ymin, int xsize, int ysize,
-                uint8_t* out, int stride) const;
+    namespace caffe {
+    }
     
-    public:
-  AbstractBtMessage(uint8_t id, const char* name);
+     protected:
+  // Helper functions that abstract away the column buffer and gemm arguments.
+  // The last argument in forward_cpu_gemm is so that we can skip the im2col if
+  // we just called weight_cpu_gemm with the same input.
+  void forward_cpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* output, bool skip_im2col = false);
+  void forward_cpu_bias(Dtype* output, const Dtype* bias);
+  void backward_cpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* output);
+  void weight_cpu_gemm(const Dtype* input, const Dtype* output, Dtype*
+      weights);
+  void backward_cpu_bias(Dtype* bias, const Dtype* input);
     
-    #include 'DiskWriter.h'
-#include <string>
+    /**
+ * @brief Takes at least two Blob%s and concatenates them along either the num
+ *        or channel dimension, outputting the result.
+ */
+template <typename Dtype>
+class ConcatLayer : public Layer<Dtype> {
+ public:
+  explicit ConcatLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
-    void AdaptiveFileAllocationIterator::allocateChunk()
-{
-  if (!allocator_) {
-#ifdef HAVE_FALLOCATE
-    try {
-      A2_LOG_DEBUG('Testing file system supports fallocate.');
-      if (offset_ < totalLength_) {
-        int64_t len =
-            std::min(totalLength_ - offset_, static_cast<int64_t>(4_k));
-        stream_->allocate(offset_, len, false);
-        offset_ += len;
+    
+    {  Blob<Dtype> diff_;  // cached for backward pass
+  Blob<Dtype> dist_sq_;  // cached for backward pass
+  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
+  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
+};
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    
+    {}  // namespace caffe
+    
+    
+    {  WorkloadStats (const WorkloadStats&) = delete;
+  WorkloadStats& operator=(const WorkloadStats&) = delete;
+};
+    
+    /////////////////////////////////////////////////////////////////////////////
+    
+    void initNuma() {
+  if (getenv('HHVM_DISABLE_NUMA')) {
+    return;
+  }
+  // When linked dynamically numa_init() is called before JEMallocInitializer()
+  // numa_init is not exported by libnuma.so so it will be NULL
+  // however when linked statically numa_init() is not guaranteed to be called
+  // before JEMallocInitializer(), so call it here.
+  if (&numa_init) {
+    numa_init();
+  }
+  if (numa_available() < 0) return;
+    }
+    
+    struct DataBlockFull : std::runtime_error {
+  std::string name;
+    }
+    
+    bool CurlShareResource::setOption(int option, const Variant& value) {
+  if (m_share == nullptr) {
+    raise_warning('curl_share_setopt():'
+                  ' curl share not created or is already closed');
+    return false;
+  }
+    }
+    
+    #ifndef incl_HPHP_CURL_SHARE_RESOURCE_H
+#define incl_HPHP_CURL_SHARE_RESOURCE_H
+    
+    /**
+ * A Synchronizable object that has multiple conditional variables. The benefit
+ * is, notify() can choose to wake up a thread that is more favorable (e.g.,
+ * one with stack/heap mapped on huge pages, or one that is recently active).
+ */
+struct SynchronizableMulti {
+  explicit SynchronizableMulti(int size);
+  virtual ~SynchronizableMulti() {}
+    }
+    
+    TCA genFuncPrologue(TransID transID, TransKind kind, Func* func, int argc,
+                    CodeCache::View code, CGMeta& fixups) {
+  auto context = prologue_context(transID, kind, func,
+                                  func->getEntryForNumArgs(argc));
+  IRUnit unit{context};
+  irgen::IRGS env{unit, nullptr};
+    }
+    
+      /**
+   * @brief A getter for the message property
+   *
+   * @return a string representing arbitrary additional information about the
+   * success or failure of an operation. On successful operations, the idiom
+   * is for the message to be 'OK'
+   */
+  std::string getMessage() const { return message_; }
+    
+    class PermissionsPollRunnable : public PermissionsRunnable {
+ public:
+  PermissionsPollRunnable() : PermissionsRunnable('PermissionsPollRunnable') {}
+    }
+    
+    
+    {
+    {  // Set the time at now to 2.
+  TablePlugin::kCacheStep = 2;
+  test.testSetCache(TablePlugin::kCacheStep, TablePlugin::kCacheInterval);
+  EXPECT_TRUE(test.testIsCached(5));
+  // Now 6 is within the freshness of 2 + 5.
+  EXPECT_TRUE(test.testIsCached(6));
+  EXPECT_FALSE(test.testIsCached(7));
+}
+}
+
+    
+    namespace osquery {
+    }
+    
+    SEXP XGBoosterDumpModel_R(SEXP handle, SEXP fmap, SEXP with_stats, SEXP dump_format) {
+  SEXP out;
+  R_API_BEGIN();
+  bst_ulong olen;
+  const char **res;
+  const char *fmt = CHAR(asChar(dump_format));
+  CHECK_CALL(XGBoosterDumpModelEx(R_ExternalPtrAddr(handle),
+                                CHAR(asChar(fmap)),
+                                asInteger(with_stats),
+                                fmt,
+                                &olen, &res));
+  out = PROTECT(allocVector(STRSXP, olen));
+  if (!strcmp('json', fmt)) {
+    std::stringstream stream;
+    stream <<  '[\n';
+    for (size_t i = 0; i < olen; ++i) {
+      stream << res[i];
+      if (i < olen - 1) {
+        stream << ',\n';
+      } else {
+        stream << '\n';
       }
-      A2_LOG_DEBUG('File system supports fallocate.');
-      allocator_ = make_unique<FallocFileAllocationIterator>(stream_, offset_,
-                                                             totalLength_);
     }
-    catch (RecoverableException& e) {
-      A2_LOG_DEBUG('File system does not support fallocate.');
-      auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
-                                                              totalLength_);
-      salloc->init();
-      allocator_ = std::move(salloc);
+    stream <<  ']';
+    SET_STRING_ELT(out, 0, mkChar(stream.str().c_str()));
+  } else {
+    for (size_t i = 0; i < olen; ++i) {
+      std::stringstream stream;
+      stream <<  'booster[' << i <<']\n' << res[i];
+      SET_STRING_ELT(out, i, mkChar(stream.str().c_str()));
     }
-#else  // !HAVE_FALLOCATE
-    auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
-                                                            totalLength_);
-    salloc->init();
-    allocator_ = std::move(salloc);
-#endif // !HAVE_FALLOCATE
-    allocator_->allocateChunk();
   }
-  else {
-    allocator_->allocateChunk();
-  }
+  R_API_END();
+  UNPROTECT(1);
+  return out;
 }
     
-    void AnnounceTier::nextEvent()
-{
-  switch (event) {
-  case STARTED:
-    event = DOWNLOADING;
-    break;
-  case STARTED_AFTER_COMPLETION:
-    event = SEEDING;
-    break;
-  case STOPPED:
-    event = HALTED;
-    break;
-  case COMPLETED:
-    event = SEEDING;
-    break;
-  default:
-    break;
-  }
-}
+          ASSERT_TRUE(input == output);
     
-    static inline std::string stripWhitespace(std::string str)
-{
-  str.erase(std::remove_if(std::begin(str), std::end(str), isWhitespace),
-            std::end(str));
-  return str;
-}
+    // logistic loss, but predict un-transformed margin
+struct LogisticRaw : public LogisticRegression {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    predt = common::Sigmoid(predt);
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    const float eps = 1e-16f;
+    predt = common::Sigmoid(predt);
+    return fmaxf(predt * (1.0f - predt), eps);
+  }
+  template <typename T>
+    static T PredTransform(T x) { return x; }
+  template <typename T>
+    static T FirstOrderGradient(T predt, T label) {
+    predt = common::Sigmoid(predt);
+    return predt - label;
+  }
+  template <typename T>
+    static T SecondOrderGradient(T predt, T label) {
+    const T eps = T(1e-16f);
+    predt = common::Sigmoid(predt);
+    return std::max(predt * (T(1.0f) - predt), eps);
+  }
+  static const char* DefaultEvalMetric() { return 'auc'; }
+};
+    
+    
+    {
+    {XGBOOST_REGISTER_LINEAR_UPDATER(ShotgunUpdater, 'shotgun')
+    .describe(
+        'Update linear model according to shotgun coordinate descent '
+        'algorithm.')
+    .set_body([]() { return new ShotgunUpdater(); });
+}  // namespace linear
+}  // namespace xgboost
