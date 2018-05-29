@@ -1,60 +1,130 @@
 
         
-            You can read more about this change at:
-      https://www.playframework.com/documentation/2.3.x/Migration23
-      https://www.playframework.com/documentation/2.3.x/Highlights23
-    EOS
-  when 'haskell-platform' then <<-EOS.undent
-    We no longer package haskell-platform. Consider installing ghc
-    and cabal-install instead:
-      brew install ghc cabal-install
+        module Jobs
     
-      # True if a {Formula} is being built with a specific option.
-  # <pre>args << '--i-want-spam' if build.with? 'spam'
-  #
-  # args << '--qt-gui' if build.with? 'qt' # '--with-qt' ==> build.with? 'qt'
-  #
-  # # If a formula presents a user with a choice, but the choice must be fulfilled:
-  # if build.with? 'example2'
-  #   args << '--with-example2'
-  # else
-  #   args << '--with-example1'
-  # end</pre>
-  def with?(val)
-    option_names = val.respond_to?(:option_names) ? val.option_names : [val]
-    
-            file_is_stale = if PkgVersion === version
-          f.pkg_version > version
+            if Devise.activerecord51?
+          def postpone_email_change_until_confirmation_and_regenerate_confirmation_token
+            @reconfirmation_required = true
+            self.unconfirmed_email = self.email
+            self.email = self.email_in_database
+            self.confirmation_token = nil
+            generate_confirmation_token
+          end
         else
-          f.version > version
+          def postpone_email_change_until_confirmation_and_regenerate_confirmation_token
+            @reconfirmation_required = true
+            self.unconfirmed_email = self.email
+            self.email = self.email_was
+            self.confirmation_token = nil
+            generate_confirmation_token
+          end
         end
     
-    module Homebrew
-  def config
-    dump_verbose_config
-  end
+    module Devise
+  module Controllers
+    # Create url helpers to be used with resource/scope configuration. Acts as
+    # proxies to the generated routes created by devise.
+    # Resource param can be a string or symbol, a class, or an instance object.
+    # Example using a :user resource:
+    #
+    #   new_session_path(:user)      => new_user_session_path
+    #   session_path(:user)          => user_session_path
+    #   destroy_session_path(:user)  => destroy_user_session_path
+    #
+    #   new_password_path(:user)     => new_user_password_path
+    #   password_path(:user)         => user_password_path
+    #   edit_password_path(:user)    => edit_user_password_path
+    #
+    #   new_confirmation_path(:user) => new_user_confirmation_path
+    #   confirmation_path(:user)     => user_confirmation_path
+    #
+    # Those helpers are included by default to ActionController::Base.
+    #
+    # In case you want to add such helpers to another class, you can do
+    # that as long as this new class includes both url_helpers and
+    # mounted_helpers. Example:
+    #
+    #     include Rails.application.routes.url_helpers
+    #     include Rails.application.routes.mounted_helpers
+    #
+    module UrlHelpers
+      def self.remove_helpers!
+        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
+          remove_method method
+        end
+      end
     
-        puts 'Your system is ready to brew.' unless Homebrew.failed?
+            private
+    
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
+        end
+      end
+    end
   end
 end
 
     
-      def patches
-    {}
+            def initialize(argv)
+          @name = argv.shift_argument
+          @template_url = argv.option('template-url', TEMPLATE_REPO)
+          super
+          @additional_args = argv.remainder!
+        end
+    
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
+      end
+    end
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
   end
+  output += '></#{tag}>'
+end
     
-        let(:key) { Spaceship::Portal::Key.new(key_attributes) }
+          if File.symlink?(includes_dir)
+        return 'Includes directory '#{includes_dir}' cannot be a symlink'
+      end
     
-      def all_groups(current_user)
-    groups = []
+          if File.symlink?(code_path)
+        return 'Code directory '#{code_path}' cannot be a symlink'
+      end
     
-    require 'open-uri'
-require 'json'
-require 'strscan'
-require 'forwardable'
-require 'term/ansicolor'
-require 'fileutils'
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
+      end
+      super
+    end
     
-        def puts(*args)
-      STDERR.puts *args unless @silence
+        def poster
+      'poster='#{@poster}'' if @poster
     end
