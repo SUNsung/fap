@@ -1,101 +1,95 @@
 
         
-            :copyright: © 2010 by the Pallets team.
-    :license: BSD, see LICENSE for more details.
+                if any([s_line.startswith(s) for s in ['* [', '- [']]):
+            if indent == last_indent:
+                blocks[-1].append(line)
+            else:
+                blocks.append([line])
+            last_indent = indent
+        else:
+            blocks.append([line])
+            last_indent = None
+    
+    versions_info = json.load(open('update/versions.json'))
+if 'signature' in versions_info:
+    del versions_info['signature']
+    
+    import itertools
+import json
+import os
+import re
+import sys
+    
+    
+def _mkdir(d):
+    if not os.path.exists(d):
+        os.mkdir(d)
+    
+            raw_payload = self._search_regex([
+            r'class='amtv-embed'[^>]+id='([^']+)'',
+            r'class=\\'amtv-embed\\'[^>]+id=\\'([^']+)\\'',
+        ], webpage, 'raw payload')
+        _, stage_mode, video_id, lang = raw_payload.split('-')
+    
+            return {
+            'id': audio_id,
+            'title': title,
+            'description': description,
+            'duration': duration,
+            'timestamp': timestamp,
+            'formats': formats,
+        }
+
+    
+    DOCUMENTATION = '''
+---
+inventory: openshift
+short_description: Openshift gears external inventory script
+description:
+  - Generates inventory of Openshift gears using the REST interface
+  - this permit to reuse playbook to setup an Openshift gear
+version_added: None
+author: Michael Scherer
 '''
     
-        class Loader(object):
-        def find_module(self, name, path=None):
-            return self
+        # This matches a hostname or host pattern including [x:y(:z)] ranges.
+    #
+    # We roughly follow DNS rules here, but also allow ranges (and underscores).
+    # In the past, no systematic rules were enforced about inventory hostnames,
+    # but the parsing context (e.g. shlex.split(), fnmatch.fnmatch()) excluded
+    # various metacharacters anyway.
+    #
+    # We don't enforce DNS length restrictions here (63 characters per label,
+    # 253 characters total) or make any attempt to process IDNs.
     
-      The D&M parser uses two MLPs to create two activation vectors for each token,
-  which represent the token when it it used as the source or target of an arc.
-  Arcs are scored using a 'biaffine' function that includes a bilinear and
-  linear term:
-    
-          with tf.variable_scope(component.name, reuse=True):
-        self.assertEqual(len(component.network.derived_params), 2)
-    
-        Does nothing if master.build_runtime_graph is False.  Subclasses should call
-    this at the end of build_*_inference().  For details on the runtime hooks,
-    see runtime_support.py.
-    '''
-    if self.master.build_runtime_graph:
-      with tf.variable_scope(self.name, reuse=True):
-        runtime_support.add_hooks(self, self._cell_subgraph_spec)
-      self._cell_subgraph_spec = None  # prevent further exports
-    
-      def testSigmoidCrossEntropyLoss(self):
-    indices = tf.constant([0, 0, 1])
-    gold_labels = tf.constant([0, 1, 2])
-    probs = tf.constant([0.6, 0.7, 0.2])
-    logits = tf.constant([[0.9, -0.3, 0.1], [-0.5, 0.4, 2.0]])
-    cost, correct, total, gold_labels = (
-        component.build_sigmoid_cross_entropy_loss(logits, gold_labels, indices,
-                                                   probs))
-    
-        with tf.Session(graph=restored_graph, config=restoration_config) as sess:
-      tf.saved_model.loader.load(sess, [tf.saved_model.tag_constants.SERVING],
-                                 export_path)
-    
+        def on_open_shell(self):
         try:
-      with open(FLAGS.expected_file) as expected:
-        content_expected = expected.read()
-    except IOError as e:
-      self.fail('Error opening '%s': %s' % (FLAGS.expected_file, e.strerror))
+            self._exec_cli_command('screen-length 0 temporary')
+        except AnsibleConnectionFailure:
+            raise AnsibleConnectionFailure('unable to set terminal parameters')
+
     
+        terminal_length = os.getenv('ANSIBLE_VYOS_TERMINAL_LENGTH', 10000)
     
-class Professor(AbstractExpert):
+        terminal_stderr_re = [
+        re.compile(br'Error:'),
+    ]
     
-        def on_switchover(self):
-        raise UnsupportedTransition
+        def test_max_delay(self):
+        strategy = _exponential_backoff(retries=7, delay=1, backoff=2, max_delay=60)
+        result = list(strategy())
+        self.assertEquals(result, [1, 2, 4, 8, 16, 32, 60])
     
-        def test_human_adapter_shall_make_noise(self):
-        human = Human()
-        human_adapter = Adapter(human, make_noise=human.speak)
-        noise = human_adapter.make_noise()
-        expected_noise = ''hello''
-        self.assertEqual(noise, expected_noise)
+        def run(self, args, opts):
+        # load contracts
+        contracts = build_component_list(self.settings.getwithbase('SPIDER_CONTRACTS'))
+        conman = ContractsManager(load_object(c) for c in contracts)
+        runner = TextTestRunner(verbosity=2 if opts.verbose else 1)
+        result = TextTestResult(runner.stream, runner.descriptions, runner.verbosity)
     
-        def test_sequential_undo(self):
-        self.command_stack = list(reversed(self.command_stack))
-        self.command_stack[0].undo()
-        output_after_first_undo = os.listdir(self.test_dir)
-        self.assertEqual(output_after_first_undo[0], 'bar.txt')
-        self.command_stack[1].undo()
-        output_after_second_undo = os.listdir(self.test_dir)
-        self.assertEqual(output_after_second_undo[0], 'foo.txt')
-    
-        def test_parrot_eng_localization(self):
-        self.assertEqual(self.e.get('parrot'), 'parrot')
-    
-        def test_am_station_overflow_after_scan(self):
-        self.radio.scan()
-        station = self.radio.state.stations[self.radio.state.pos]
-        expected_station = '1250'
-        self.assertEqual(station, expected_station)
-    
-    class TimeDisplay(object):
-    
-            depending on self.param value
-        '''
-        self._static_method_choices[self.param].__get__(None, self.__class__)()
-    
-        def undo(self):
-        self.rename(self.dest, self.src)
-    
-        print(u'Setting Data 1 = 10')
-    data1.data = 10
-    print(u'Setting Data 2 = 15')
-    data2.data = 15
-    print(u'Setting Data 1 = 3')
-    data1.data = 3
-    print(u'Setting Data 2 = 5')
-    data2.data = 5
-    print(u'Detach HexViewer from data1 and data2.')
-    data1.detach(view2)
-    data2.detach(view2)
-    print(u'Setting Data 1 = 10')
-    data1.data = 10
-    print(u'Setting Data 2 = 15')
-    data2.data = 15
+        def run(self, args, opts):
+        if len(args) < 1:
+            raise UsageError()
+        elif len(args) > 1:
+            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
+        spname = args[0]
