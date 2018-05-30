@@ -1,252 +1,151 @@
 
         
-        TESS_API void TESS_CALL TessBaseGetBlockTextOrientations(TessBaseAPI* handle, int** block_orientation, bool** vertical_writing)
-{
-    handle->GetBlockTextOrientations(block_orientation, vertical_writing);
-}
+        struct RepoAuthType;
+struct StringData;
     
-    TessTsvRenderer::TessTsvRenderer(const char* outputbase, bool font_info)
-    : TessResultRenderer(outputbase, 'tsv') {
-  font_info_ = font_info;
-}
     
-      /**
-   * Returns true if the iterator is at the start of an object at the given
-   * level.
-   *
-   * For instance, suppose an iterator it is pointed to the first symbol of the
-   * first word of the third line of the second paragraph of the first block in
-   * a page, then:
-   *   it.IsAtBeginningOf(RIL_BLOCK) = false
-   *   it.IsAtBeginningOf(RIL_PARA) = false
-   *   it.IsAtBeginningOf(RIL_TEXTLINE) = true
-   *   it.IsAtBeginningOf(RIL_WORD) = true
-   *   it.IsAtBeginningOf(RIL_SYMBOL) = true
-   */
-  virtual bool IsAtBeginningOf(PageIteratorLevel level) const;
-    
-    // Copies the bounding box from page_res_it->word() to the given TBOX.
-bool read_t(PAGE_RES_IT *page_res_it, TBOX *tbox) {
-  while (page_res_it->block() != nullptr && page_res_it->word() == nullptr)
-    page_res_it->forward();
+static Variant HHVM_FUNCTION(gmp_sub,
+                             const Variant& dataA,
+                             const Variant& dataB) {
+  mpz_t gmpDataA, gmpDataB, gmpReturn;
     }
     
-      // Now paste the results together into core.
-  if (suffix) {
-    suffix->SetAllScriptPositions(trailing_pos);
-    join_words(core, suffix, bb1);
-  }
-  if (prefix) {
-    prefix->SetAllScriptPositions(leading_pos);
-    join_words(prefix, core, bb0);
-    core = prefix;
-    prefix = nullptr;
-  }
-    
-    double LLSQ::m() const {  // get gradient
-  double covar = covariance();
-  double x_var = x_variance();
-  if (x_var != 0.0)
-    return covar / x_var;
-  else
-    return 0.0;                    // too little
-}
-    
-      /// Sets the non-blocking mode of the acceptor.
-  /**
-   * @param mode If @c true, the acceptor's synchronous operations will fail
-   * with boost::asio::error::would_block if they are unable to perform the
-   * requested operation immediately. If @c false, synchronous operations will
-   * block until complete.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   *
-   * @note The non-blocking mode has no effect on the behaviour of asynchronous
-   * operations. Asynchronous operations will never fail with the error
-   * boost::asio::error::would_block.
-   */
-  void non_blocking(bool mode)
-  {
-    boost::system::error_code ec;
-    this->get_service().non_blocking(this->get_implementation(), mode, ec);
-    boost::asio::detail::throw_error(ec, 'non_blocking');
-  }
-    
-    template <typename Key, typename Value>
-tss_ptr<typename call_stack<Key, Value>::context>
-call_stack<Key, Value>::top_;
-    
-    #ifndef BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
-#define BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
-    
-    #if defined(BOOST_ASIO_HAS_STD_FUNCTION)
-using std::function;
-#else // defined(BOOST_ASIO_HAS_STD_FUNCTION)
-using boost::function;
-#endif // defined(BOOST_ASIO_HAS_STD_FUNCTION)
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    template <typename Handler>
-inline void* allocate(std::size_t s, Handler& h)
-{
-#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  return ::operator new(s);
+    #ifndef PIPE_BUF
+/* Get the PIPE_BUF from pathconf */
+#ifdef _PC_PIPE_BUF
+#define PIPE_BUF pathconf('.', _PC_PIPE_BUF)
 #else
-  using boost::asio::asio_handler_allocate;
-  return asio_handler_allocate(s, boost::asio::detail::addressof(h));
+#define PIPE_BUF 512
 #endif
+#endif
+    
+    
+    {  return env.irb->makeBlock(sk, curProfCount(env));
 }
     
     
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
+    {}
     
-      errno = 0;
-  int result = error_wrapper(::ioctl(d, cmd, arg), ec);
     
-      // Start looping through starting at the first options
-  // (so skip the exports)
-  for (auto iter = line.begin() + options_index; iter != line.end(); ++iter) {
-    if (iter->compare('-ro') == 0 || iter->compare('-o') == 0) {
-      readonly = 1;
-    }
+    {  // Finished copying the file; now load it.
+  auto const handle = dlopen(tmp_filename, RTLD_NOW);
+  if (!handle) {
+    Logger::Error('dlopen_embedded_data: dlopen failed: %s', dlerror());
+    return nullptr;
   }
+  return handle;
+}
     
-      // Get the hash value for the kernel's .text memory segment
-  auto f2 = osquery::readFile(kKernelTextHashPath, content);
-  if (f2.ok()) {
-    boost::trim(content);
-    text_segment_hash = content;
+    std::string read_embedded_data(const embedded_data& desc);
+    
+      static pid_t pcntl_waitpid(pid_t pid, int *stat_loc, int options);
+    
+    
+    {  bool ret;
+  if (isLongOption(option)) {
+    ret = setLongOption(option, value.toInt64());
   } else {
-    VLOG(1) << 'Cannot read file: ' << kKernelTextHashPath;
-    return results;
+    raise_warning('curl_share_setopt():'
+                  'Invalid curl share configuration option');
+    ret = false;
   }
-    
-    /**
- * @brief A utility class which is used to express the state of operations.
- *
- * @code{.cpp}
- *   osquery::Status foobar() {
- *     auto na = doSomeWork();
- *     if (na->itWorked()) {
- *       return osquery::Status(0, 'OK');
- *     } else {
- *       return osquery::Status(1, na->getErrorString());
- *     }
- *   }
- * @endcode
- */
-class Status {
- public:
-  /**
-   * @brief Default constructor
-   *
-   * Note that the default constructor initialized an osquery::Status instance
-   * to a state such that a successful operation is indicated.
-   */
-  explicit Status(int c = 0) : code_(c), message_('OK') {}
-    }
-    
-    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
-    }
-    
-    class FilesystemConfigPlugin : public ConfigPlugin {
- public:
-  Status genConfig(std::map<std::string, std::string>& config);
-  Status genPack(const std::string& name,
-                 const std::string& value,
-                 std::string& pack);
-};
-    
-        auto process = PlatformProcess::launchWorker(
-        kProcessTestExecPath.c_str(),
-        static_cast<int>(kExpectedWorkerArgsCount),
-        &argv[0]);
-    for (size_t i = 0; i < argv.size(); i++) {
-      delete[] argv[i];
-    }
-    
-    namespace osquery {
-    }
-    
-    
-    {
-    {  // Set the time at now to 2.
-  TablePlugin::kCacheStep = 2;
-  test.testSetCache(TablePlugin::kCacheStep, TablePlugin::kCacheInterval);
-  EXPECT_TRUE(test.testIsCached(5));
-  // Now 6 is within the freshness of 2 + 5.
-  EXPECT_TRUE(test.testIsCached(6));
-  EXPECT_FALSE(test.testIsCached(7));
+  return ret;
 }
+    
+    struct CurlShareResource : SweepableResourceData {
+  DECLARE_RESOURCE_ALLOCATION(CurlShareResource)
+  CLASSNAME_IS('curl_share')
+  const String& o_getClassNameHook() const override { return classnameof(); }
+  bool isInvalid() const override { return !m_share; }
+    }
+    
+      struct alignas(64) CondVarNode {
+    pthread_cond_t m_cond;
+    folly::IntrusiveListHook m_listHook;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+    template<> inline
+dnnError_t dnnPrimitiveGetAttributes<double>(dnnPrimitive_t primitive, dnnPrimitiveAttributes_t* attributes)
+{
+    return dnnPrimitiveGetAttributes_F64(primitive, attributes);
 }
-
+    
+    /// PrefetchGPUDataTransferer
+    
+    class latticesource
+{
+    const msra::lattices::archive numlattices, denlattices;
+    int verbosity;
+    }
     
     
     { private:
-  FRIEND_TEST(WatcherTests, test_watcher);
+  /*! \brief the underlying stream */
+  dmlc::Stream *stream_;
+  /*! \brief buffer to hold data */
+  std::string buffer_;
+  /*! \brief length of valid data in buffer */
+  size_t read_len_;
+  /*! \brief pointer in the buffer */
+  size_t read_ptr_;
 };
     
-    #include <string>
+          // Test write entire array
+      std::vector<unsigned char> buffer(
+        CompressedBufferWriter::CalculateBufferSize(input.size(),
+          alphabet_size));
+    
+    bool js_cocos2dx_physics3d_Physics3DObject_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DObject_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DObject(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DObject_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getUserData(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getObjType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_setPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getWorldTransform(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_setMask(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getMask(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_needCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
     
     
-    {  return std::string(buffer.data());
-}
     
     
-    {            _state = EXPECTS_CRASH_DUMP_CONTENT;
-        } else if (EXPECTS_CRASH_DUMP == _state) {
-            continue;
-        }
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
     
-    class Spy {
-  public:
-    Spy(void* _this): m_this(_this) {}
-    virtual ~Spy() {}
+    
+    
+    
+    
+    
+    mShaderProgram->setUniformLocationWith4f(mColorLocation, color.r, color.g, color.b, 1);
+    glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
+    
+    // This class implements debug drawing callbacks that are invoked
+// inside b2World::Step.
+class GLESDebugDraw : public b2Draw
+{
+    float32 mRatio;
+    cocos2d::GLProgram* mShaderProgram;
+    GLint        mColorLocation;
     }
     
-    #include 'comm/debugger/test_spy_sample.h'
-#include 'comm/xlogger/xlogger.h'
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+    		b2Body* body2 = m_world->CreateBody(&bd);
+		m_piece2 = body2->CreateFixture(&m_shape2, 1.0f);
     
     
-/*
- * scop_jenv.h
- *
- *  Created on: 2012-8-21
- *      Author: yanguoyue
- */
+    {
+    {			jd.Initialize(m_car, m_wheel2, m_wheel2->GetPosition(), axis);
+			jd.motorSpeed = 0.0f;
+			jd.maxMotorTorque = 10.0f;
+			jd.enableMotor = false;
+			jd.frequencyHz = m_hz;
+			jd.dampingRatio = m_zeta;
+			m_spring2 = (b2WheelJoint*)m_world->CreateJoint(&jd);
+		}
+	}
