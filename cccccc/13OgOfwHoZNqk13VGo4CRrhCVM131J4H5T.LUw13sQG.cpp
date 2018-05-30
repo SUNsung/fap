@@ -1,151 +1,183 @@
 
         
-        struct RepoAuthType;
-struct StringData;
+        // reader.h
+class Reader;
     
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
     
-static Variant HHVM_FUNCTION(gmp_sub,
-                             const Variant& dataA,
-                             const Variant& dataB) {
-  mpz_t gmpDataA, gmpDataB, gmpReturn;
-    }
-    
-    #ifndef PIPE_BUF
-/* Get the PIPE_BUF from pathconf */
-#ifdef _PC_PIPE_BUF
-#define PIPE_BUF pathconf('.', _PC_PIPE_BUF)
-#else
-#define PIPE_BUF 512
-#endif
-#endif
-    
-    
-    {  return env.irb->makeBlock(sk, curProfCount(env));
+    RepeatedPrimitiveFieldGenerator::RepeatedPrimitiveFieldGenerator(
+    const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options)
+    : FieldGeneratorBase(descriptor, fieldOrdinal, options) {
 }
     
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
     
-    {}
+    TEST(JavaDocCommentTest, Escaping) {
+  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
+  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
+  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
+  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
+  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
+  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
+}
+    
+    // Author: liujisi@google.com (Pherl Liu)
     
     
-    {  // Finished copying the file; now load it.
-  auto const handle = dlopen(tmp_filename, RTLD_NOW);
-  if (!handle) {
-    Logger::Error('dlopen_embedded_data: dlopen failed: %s', dlerror());
-    return nullptr;
+    {  static string LayerTypeListString() {
+    vector<string> layer_types = LayerTypeList();
+    string layer_types_str;
+    for (vector<string>::iterator iter = layer_types.begin();
+         iter != layer_types.end(); ++iter) {
+      if (iter != layer_types.begin()) {
+        layer_types_str += ', ';
+      }
+      layer_types_str += *iter;
+    }
+    return layer_types_str;
   }
-  return handle;
-}
-    
-    std::string read_embedded_data(const embedded_data& desc);
-    
-      static pid_t pcntl_waitpid(pid_t pid, int *stat_loc, int options);
-    
-    
-    {  bool ret;
-  if (isLongOption(option)) {
-    ret = setLongOption(option, value.toInt64());
-  } else {
-    raise_warning('curl_share_setopt():'
-                  'Invalid curl share configuration option');
-    ret = false;
-  }
-  return ret;
-}
-    
-    struct CurlShareResource : SweepableResourceData {
-  DECLARE_RESOURCE_ALLOCATION(CurlShareResource)
-  CLASSNAME_IS('curl_share')
-  const String& o_getClassNameHook() const override { return classnameof(); }
-  bool isInvalid() const override { return !m_share; }
-    }
-    
-      struct alignas(64) CondVarNode {
-    pthread_cond_t m_cond;
-    folly::IntrusiveListHook m_listHook;
-    }
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    
-    template<> inline
-dnnError_t dnnPrimitiveGetAttributes<double>(dnnPrimitive_t primitive, dnnPrimitiveAttributes_t* attributes)
-{
-    return dnnPrimitiveGetAttributes_F64(primitive, attributes);
-}
-    
-    /// PrefetchGPUDataTransferer
-    
-    class latticesource
-{
-    const msra::lattices::archive numlattices, denlattices;
-    int verbosity;
-    }
-    
-    
-    { private:
-  /*! \brief the underlying stream */
-  dmlc::Stream *stream_;
-  /*! \brief buffer to hold data */
-  std::string buffer_;
-  /*! \brief length of valid data in buffer */
-  size_t read_len_;
-  /*! \brief pointer in the buffer */
-  size_t read_ptr_;
 };
     
-          // Test write entire array
-      std::vector<unsigned char> buffer(
-        CompressedBufferWriter::CalculateBufferSize(input.size(),
-          alphabet_size));
-    
-    bool js_cocos2dx_physics3d_Physics3DObject_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DObject_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DObject(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DObject_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getObjType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_setPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getWorldTransform(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_setMask(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getMask(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_needCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    mShaderProgram->setUniformLocationWith4f(mColorLocation, color.r, color.g, color.b, 1);
-    glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
-    
-    // This class implements debug drawing callbacks that are invoked
-// inside b2World::Step.
-class GLESDebugDraw : public b2Draw
-{
-    float32 mRatio;
-    cocos2d::GLProgram* mShaderProgram;
-    GLint        mColorLocation;
+    /**
+ * @brief Index into the input blob along its first axis.
+ *
+ * This layer can be used to select, reorder, and even replicate examples in a
+ * batch.  The second blob is cast to int and treated as an index into the
+ * first axis of the first blob.
+ */
+template <typename Dtype>
+class BatchReindexLayer : public Layer<Dtype> {
+ public:
+  explicit BatchReindexLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    		b2Body* body2 = m_world->CreateBody(&bd);
-		m_piece2 = body2->CreateFixture(&m_shape2, 1.0f);
+      /**
+   * @brief Computes the error gradient w.r.t. the concatenate inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *        respect to the outputs
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length K), into which the top gradient
+   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
+   *        inputs @f$
+   *        \left[ \begin{array}{cccc}
+   *          \frac{\partial E}{\partial x_1} &
+   *          \frac{\partial E}{\partial x_2} &
+   *          ... &
+   *          \frac{\partial E}{\partial x_K}
+   *        \end{array} \right] =
+   *        \frac{\partial E}{\partial y}
+   *        @f$
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
+     protected:
+  /// @copydoc ContrastiveLossLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-    {
-    {			jd.Initialize(m_car, m_wheel2, m_wheel2->GetPosition(), axis);
-			jd.motorSpeed = 0.0f;
-			jd.maxMotorTorque = 10.0f;
-			jd.enableMotor = false;
-			jd.frequencyHz = m_hz;
-			jd.dampingRatio = m_zeta;
-			m_spring2 = (b2WheelJoint*)m_world->CreateJoint(&jd);
-		}
-	}
+    #include 'caffe/layers/lrn_layer.hpp'
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #endif  // CAFFE_FILTER_LAYER_HPP_
+
+    
+      const auto result =
+      RunScenario(client_config, 1, server_config, 1, WARMUP, BENCHMARK, -2, '',
+                  kInsecureCredentialsType, true);
+    
+    #ifndef GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
+#define GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
+    
+      bool Generate(const grpc::protobuf::FileDescriptor* file,
+                const grpc::string& parameter,
+                grpc::protobuf::compiler::GeneratorContext* context,
+                grpc::string* error) const;
+    
+      bool generate_in_pb2_grpc;
+    
+    class CodegenTestMinimal : public ::testing::Test {};
+    
+    #include 'test/cpp/qps/histogram.h'
+    
+    static void get_cpu_usage(unsigned long long* total_cpu_time,
+                          unsigned long long* idle_cpu_time) {
+#ifdef __linux__
+  std::ifstream proc_stat('/proc/stat');
+  proc_stat.ignore(5);
+  std::string cpu_time_str;
+  std::string first_line;
+  std::getline(proc_stat, first_line);
+  std::stringstream first_line_s(first_line);
+  for (int i = 0; i < 10; ++i) {
+    std::getline(first_line_s, cpu_time_str, ' ');
+    *total_cpu_time += std::stol(cpu_time_str);
+    if (i == 3) {
+      *idle_cpu_time = std::stol(cpu_time_str);
+    }
+  }
+#else
+  gpr_log(GPR_INFO, 'get_cpu_usage(): Non-linux platform is not supported.');
+#endif
+}
+    
+    enum RecordType {
+  // Zero is reserved for preallocated files
+  kZeroType = 0,
+    }
+    
+      WriteOptions write_options;
+  ASSERT_OK(db->Put(write_options, '1', 'b'));
+  ASSERT_OK(db->Put(write_options, '2', 'c'));
+  ASSERT_OK(db->Put(write_options, '3', 'd'));
+  ASSERT_OK(db->Put(write_options, '4', 'e'));
+  ASSERT_OK(db->Put(write_options, '5', 'f'));
+    
+      // Add string delta to buffer_ followed by value
+  buffer_.append(key.data() + shared, non_shared);
+  buffer_.append(value.data(), value.size());
+    
+      size_t FilterSize() const {
+    return filter_.size();
+  }
+    
+    class CRC { };
+    
+    #include <ios>
+#include <memory>
+#include <vector>
+    
+        double top;
+    double bottom;
+    
+        Node(Node const &) = delete;
+    
+    #define FBCRASH(msg, ...) facebook::assertInternal('Fatal error (%s:%d): ' msg, __FILE__, __LINE__, ##__VA_ARGS__)
+#define FBUNREACHABLE() facebook::assertInternal('This code should be unreachable (%s:%d)', __FILE__, __LINE__)
