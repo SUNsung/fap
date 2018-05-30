@@ -1,70 +1,141 @@
 
         
-        require 'open3'
+            To install Clojure you should install Leiningen:
+      brew install leiningen
+    and then follow the tutorial:
+      https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
+    EOS
+  when 'osmium' then <<-EOS.undent
+    The creator of Osmium requests that it not be packaged and that people
+    use the GitHub master branch instead.
+    EOS
+  when 'gfortran' then <<-EOS.undent
+    GNU Fortran is now provided as part of GCC, and can be installed with:
+      brew install gcc
+    EOS
+  when 'play' then <<-EOS.undent
+    Play 2.3 replaces the play command with activator:
+      brew install typesafe-activator
     
-    def load_apps
-  out, err, status = Open3.capture3('/usr/bin/osascript', '-e', 'tell application 'System Events' to get (name, bundle identifier, unix id) of every process')
-  if status.exitstatus > 0
-    puts err
-    exit status.exitstatus
-  end
-  out = out.split(', ')
-  one_third   = out.length / 3
-  @app_names  = out.shift(one_third)
-  @bundle_ids = out.shift(one_third)
-  @unix_ids   = out.shift(one_third)
-end
-    
-    msfenv_real_pathname = Pathname.new(__FILE__).realpath
-root = msfenv_real_pathname.parent.parent
-    
-            when :err
-          case s[:last]
-            when :pass
-              # Oops got a -ERR after a pass so its crap ignore the pass
-              # But report it, might be helpfull for guessing :-)
-    
-    clsJavaCompile 	= Rjb::import('javaCompile.CompileSourceInMemory')
-clsCreateJar	= Rjb::import('javaCompile.CreateJarFile')
-clsFile			= Rjb::import('java.io.File')
-system			= Rjb::import('java.lang.System')
-#clsString	= Rjb::import('java.lang.String')
-    
-          respond_with do |format|
-        format.html { redirect_to admin_pods_path }
-        format.json { render json: PodPresenter.new(pod).as_json }
+        keys.find do |key|
+      if key.to_s.end_with?('_or_later')
+        later_tag = key.to_s[/(\w+)_or_later$/, 1].to_sym
+        MacOS::Version.from_symbol(later_tag) <= tag_version
       end
     end
   end
 end
 
     
-        # Returns the Sass/SCSS code for the media query list.
-    #
-    # @param options [{Symbol => Object}] An options hash (see {Sass::CSS#initialize}).
-    # @return [String]
-    def to_src(options)
-      queries.map {|q| q.to_src(options)}.join(', ')
+        # Get rid of any info 'dir' files, so they don't conflict at the link stage
+    info_dir_file = @f.info + 'dir'
+    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
+      observe_file_removal info_dir_file
     end
     
-    get '/stream', :provides => 'text/event-stream' do
-  stream :keep_open do |out|
-    connections << out
-    out.callback { connections.delete(out) }
+            next unless path.file?
+        file = path
+    
+      def internal_development_commands
+    find_internal_commands HOMEBREW_LIBRARY_PATH/'dev-cmd'
   end
+    
+        if ARGV.include?('--pinned') || ARGV.include?('--versions')
+      filtered_list
+    elsif ARGV.named.empty?
+      if ARGV.include? '--full-name'
+        full_names = Formula.installed.map(&:full_name).sort do |a, b|
+          if a.include?('/') && !b.include?('/')
+            1
+          elsif !a.include?('/') && b.include?('/')
+            -1
+          else
+            a <=> b
+          end
+        end
+        puts_columns full_names
+      else
+        ENV['CLICOLOR'] = nil
+        exec 'ls', *ARGV.options_only << HOMEBREW_CELLAR
+      end
+    elsif ARGV.verbose? || !$stdout.tty?
+      exec 'find', *ARGV.kegs.map(&:to_s) + %w[-not -type d -print]
+    else
+      ARGV.kegs.each { |keg| PrettyListing.new keg }
+    end
+  end
+    
+        if $stdout.tty?
+      metacharacters = %w[\\ | ( ) [ ] { } ^ $ * + ? .]
+      bad_regex = metacharacters.any? do |char|
+        ARGV.any? do |arg|
+          arg.include?(char) && !arg.start_with?('/')
+        end
+      end
+      if ARGV.any? && bad_regex
+        ohai 'Did you mean to perform a regular expression search?'
+        ohai 'Surround your query with /slashes/ to search by regex.'
+      end
+    end
+    
+              @registered.each do |plugin|
+            plugin.components.provider_capabilities.each do |provider, caps|
+              results[provider].merge!(caps)
+            end
+          end
+    
+      puts 'bundle_id\tapp_name\n'
+  puts '--------------------------------------\n'
+  puts running.to_a.sort
 end
     
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
+            def multiple_assignment_node
+          grandparent_node = node.parent ? node.parent.parent : nil
+          return nil unless grandparent_node
+          return nil unless grandparent_node.type == MULTIPLE_ASSIGNMENT_TYPE
+          return nil unless node.parent.type == MULTIPLE_LEFT_HAND_SIDE_TYPE
+          grandparent_node
+        end
       end
-    
-        it 'denies requests with duplicate session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
-      expect(last_response).not_to be_ok
     end
-    
-      it 'should set the X-XSS-Protection for XHTML' do
-    expect(get('/', {}, 'wants' => 'application/xhtml+xml').headers['X-XSS-Protection']).to eq('1; mode=block')
   end
+end
+
+    
+            def parent_block_node(node)
+          node.each_ancestor(:block).first
+        end
+      end
+    end
+  end
+end
+
+    
+            def immutable_literal?(node)
+          return true if node.immutable_literal?
+    
+            # Construct annotated source string (like what we parse)
+        #
+        # Reconstruct a deterministic annotated source string. This is
+        # useful for eliminating semantically irrelevant annotation
+        # ordering differences.
+        #
+        # @example standardization
+        #
+        #     source1 = AnnotatedSource.parse(<<-RUBY)
+        #     line1
+        #     ^ Annotation 1
+        #      ^^ Annotation 2
+        #     RUBY
+        #
+        #     source2 = AnnotatedSource.parse(<<-RUBY)
+        #     line1
+        #      ^^ Annotation 2
+        #     ^ Annotation 1
+        #     RUBY
+        #
+        #     source1.to_s == source2.to_s # => true
+        #
+        # @return [String]
+        def to_s
+          reconstructed = lines.dup
