@@ -1,270 +1,430 @@
 
         
-            // Adds the module variable 'api_version'.
-    if (PyModule_AddIntConstant(
-        module,
-        const_cast<char*>(kImplVersionName),
-        kImplVersion))
-#if PY_MAJOR_VERSION < 3
-      return;
-#else
-      { Py_DECREF(module); return NULL; }
+        #ifndef ATOM_BROWSER_UI_DRAG_UTIL_H_
+#define ATOM_BROWSER_UI_DRAG_UTIL_H_
+    
+    #include 'base/macros.h'
+#include 'v8/include/v8.h'
     
     
-    {  ASSERT_TRUE(message.ParseFromString(data));
-  EXPECT_TRUE(message.has_any_value());
-  ASSERT_TRUE(message.any_value().UnpackTo(&any));
-  ASSERT_TRUE(any.UnpackTo(&submessage));
-  EXPECT_EQ(12345, submessage.int32_value());
+    {  DISALLOW_COPY_AND_ASSIGN(RemoteCallbackFreer);
+};
+    
+    
+    {}  // namespace chrome
+    
+      // The map of accelerators that have been successfully registered as global
+  // shortcuts and their observer.
+  typedef std::map<ui::Accelerator, Observer*> AcceleratorMap;
+  AcceleratorMap accelerator_map_;
+    
+    
+    {}  // namespace printing
+    
+    class PepperIsolatedFileSystemMessageFilter
+    : public ppapi::host::ResourceMessageFilter {
+ public:
+  static PepperIsolatedFileSystemMessageFilter* Create(
+      PP_Instance instance,
+      content::BrowserPpapiHost* host);
+    }
+    
+    namespace views {
+class ColorChooserListener;
 }
+    
+    #endif //CONTENT_NW_SRC_API_EVENT_EVENT_H_
+
     
     
     {
-}  // namespace google
-#endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
-
-    
-    void RepeatedEnumFieldGenerator::GenerateMembers(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
-    '    = pb::FieldCodec.ForEnum($tag$, x => (int) x, x => ($type_name$) x);\n');
-  printer->Print(variables_,
-    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
-  WritePropertyDocComment(printer, descriptor_);
-  AddPublicMemberAttributes(printer);
-  printer->Print(
-    variables_,
-    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
-    '  get { return $name$_; }\n'
-    '}\n');
-}
-    
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_MESSAGE_FIELD_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_MESSAGE_FIELD_H__
-    
-    // ===================================================================
-    
-      virtual ServiceGenerator* NewServiceGenerator(
-      const ServiceDescriptor* descriptor) const = 0;
-    
-      printer->Print(variables_,
-    // If this builder is non-null, it is used and the other fields are
-    // ignored.
-    'private com.google.protobuf.SingleFieldBuilder$ver$<\n'
-    '    $type$, $type$.Builder, $type$OrBuilder> $name$Builder_;'
-    '\n');
-    
-      uint16_t fid = unpackFunctionId(msg);
-  assert(fid == 1);
-    
-    using namespace std;
-    
-    namespace at {
+    {    if (zoom_controller) {
+      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
+      if (zoom_factor > content::kMaximumZoomFactor) {
+        zoom_factor = content::kMaximumZoomFactor;
+      }
+      if (zoom_factor < content::kMinimumZoomFactor) {
+        zoom_factor = content::kMinimumZoomFactor;
+      }
+      x *= zoom_factor;
+      y *= zoom_factor;
     }
     
-      template<typename T>
-  void allGatherT(std::vector<at::Tensor>& output,
-                  at::Tensor& input, THDGroup group_id);
+    Popup(x, y, rvh);
+  } else if (method == 'EnableShowEvent') {
+    arguments.GetBoolean(0, &enable_show_event_);
+  } else {
+    NOTREACHED() << 'Invalid call to Menu method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
     
-    using key_type = std::tuple<
-  CollectiveType, // operation
-  THDGroup,       // group
-  DeviceType,     // tensors device type
-  int,            // CUDA stream id used in the algorithm
-  std::size_t,    // input buffer bytes
-  std::size_t,    // output buffer bytes
-  THDReduceOp,    // reduce op
-  rank_type       // src/dest rank
->;
+    bool NwAppGetArgvSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
+    }
     
-    #undef THPStorage_
-#undef THPStorage
-#undef THPStorageBaseStr
-#undef THPStorageStr
-#undef THPStorageClass
-#undef THPStorageType
+    bool NwClipboardClearSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  clipboard->Clear(ui::CLIPBOARD_TYPE_COPY_PASTE);
+  return true;
+}
+    
+    namespace extensions {
+    }
+    
+    TessHOcrRenderer::TessHOcrRenderer(const char *outputbase, bool font_info)
+    : TessResultRenderer(outputbase, 'hocr') {
+    font_info_ = font_info;
+}
+    
+      // Compute the number of unichars in the label.
+  GenericVector<UNICHAR_ID> encoding;
+  if (!unicharset.encode_string(label, true, &encoding, nullptr, nullptr)) {
+    tprintf('Not outputting illegal unichar %s\n', label);
+    return;
+  }
+    
+      // Calculate Histogram on GPU
+  OpenclDevice od;
+  if (od.selectedDeviceIsOpenCL() && (num_channels == 1 || num_channels == 4) &&
+      top == 0 && left == 0) {
+    od.HistogramRectOCL((unsigned char*)pixGetData(src_pix), num_channels,
+                        pixGetWpl(src_pix) * 4, left, top, width, height,
+                        kHistogramSize, histogramAllChannels);
+    }
+    
+      edgept = start;
+  do {
+                                 /*single fixed step */
+    if (edgept->flags[FLAGS] & FIXED && edgept->flags[RUNLENGTH] == 1
+                                 /*and neighours free */
+      && edgept->next->flags[FLAGS] & FIXED && (edgept->prev->flags[FLAGS] & FIXED) == 0
+                                 /*same pair of dirs */
+      && (edgept->next->next->flags[FLAGS] & FIXED) == 0 && edgept->prev->flags[DIR] == edgept->next->flags[DIR] && edgept->prev->prev->flags[DIR] == edgept->next->next->flags[DIR]
+    && ((edgept->prev->flags[DIR] - edgept->flags[DIR] + 1) & 7) < 3) {
+                                 /*unfix it */
+      edgept->flags[FLAGS] &= ~FIXED;
+      edgept->next->flags[FLAGS] &= ~FIXED;
+    }
+    edgept = edgept->next;       /*do all points */
+  }
+  while (edgept != start);       /*until finished */
+    
+    static void RunSynchronousUnaryPingPong() {
+  gpr_log(GPR_INFO, 'Running Synchronous Unary Ping Pong');
+    }
+    
+    #include 'test/core/util/test_config.h'
+#include 'test/cpp/qps/benchmark_config.h'
+#include 'test/cpp/qps/driver.h'
+#include 'test/cpp/qps/report.h'
+#include 'test/cpp/qps/server.h'
+#include 'test/cpp/util/test_config.h'
+#include 'test/cpp/util/test_credentials_provider.h'
+    
+    std::string GetDbFileContent(int argc, char** argv) {
+  std::string db_path;
+  std::string arg_str('--db_path');
+  if (argc > 1) {
+    std::string argv_1 = argv[1];
+    size_t start_position = argv_1.find(arg_str);
+    if (start_position != std::string::npos) {
+      start_position += arg_str.size();
+      if (argv_1[start_position] == ' ' ||
+          argv_1[start_position] == '=') {
+        db_path = argv_1.substr(start_position + 1);
+      }
+    }
+  } else {
+    db_path = 'route_guide_db.json';
+  }
+  std::ifstream db_file(db_path);
+  if (!db_file.is_open()) {
+    std::cout << 'Failed to open ' << db_path << std::endl;
+    return '';
+  }
+  std::stringstream db;
+  db << db_file.rdbuf();
+  return db.str();
+}
+    
+    #include <string>
+#include <vector>
+    
+    inline grpc::string GetJSServiceFilename(const grpc::string& filename) {
+  return grpc_generator::StripProto(filename) + '_grpc_pb.js';
+}
+    
+    TEST_F(CodegenTestMinimal, Build) {}
+    
+    UsageTimer::Result UsageTimer::Sample() {
+  Result r;
+  r.wall = Now();
+  get_resource_usage(&r.user, &r.system);
+  r.total_cpu_time = 0;
+  r.idle_cpu_time = 0;
+  get_cpu_usage(&r.total_cpu_time, &r.idle_cpu_time);
+  return r;
+}
+    
+    TEST(LogTest, AlignedEof) {
+  const int n = kBlockSize - 2*kHeaderSize + 4;
+  Write(BigString('foo', n));
+  ASSERT_EQ(kBlockSize - kHeaderSize + 4, WrittenBytes());
+  ASSERT_EQ(BigString('foo', n), Read());
+  ASSERT_EQ('EOF', Read());
+}
+    
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
+}
+    
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
+}
+
+    
+    void BlockBuilder::Add(const Slice& key, const Slice& value) {
+  Slice last_key_piece(last_key_);
+  assert(!finished_);
+  assert(counter_ <= options_->block_restart_interval);
+  assert(buffer_.empty() // No values yet?
+         || options_->comparator->Compare(key, last_key_piece) > 0);
+  size_t shared = 0;
+  if (counter_ < options_->block_restart_interval) {
+    // See how much sharing to do with previous string
+    const size_t min_length = std::min(last_key_piece.size(), key.size());
+    while ((shared < min_length) && (last_key_piece[shared] == key[shared])) {
+      shared++;
+    }
+  } else {
+    // Restart compression
+    restarts_.push_back(buffer_.size());
+    counter_ = 0;
+  }
+  const size_t non_shared = key.size() - shared;
+    }
     
     namespace leveldb {
     }
     
-    BlockBuilder::BlockBuilder(const Options* options)
-    : options_(options),
-      restarts_(),
-      counter_(0),
-      finished_(false) {
-  assert(options->block_restart_interval >= 1);
-  restarts_.push_back(0);       // First restart point is at offset 0
+      // Check third filter (empty)
+  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'foo'));
+  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'bar'));
+  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'box'));
+  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'hello'));
+    
+    static int NextLength(int length) {
+  if (length < 10) {
+    length += 1;
+  } else if (length < 100) {
+    length += 10;
+  } else if (length < 1000) {
+    length += 100;
+  } else {
+    length += 1000;
+  }
+  return length;
 }
     
-      // Read the block contents as well as the type/crc footer.
-  // See table_builder.cc for the code that built this structure.
-  size_t n = static_cast<size_t>(handle.size());
-  char* buf = new char[n + kBlockTrailerSize];
-  Slice contents;
-  Status s = file->Read(handle.offset(), n + kBlockTrailerSize, &contents, buf);
-  if (!s.ok()) {
-    delete[] buf;
-    return s;
+    void Histogram::Add(double value) {
+  // Linear search is fast enough for our usage in db_bench
+  int b = 0;
+  while (b < kNumBuckets - 1 && kBucketLimit[b] <= value) {
+    b++;
   }
-  if (contents.size() != n + kBlockTrailerSize) {
-    delete[] buf;
-    return Status::Corruption('truncated block read');
-  }
-    
-    
-    {
-}  // namespace leveldb
-
-    
-    class HASH { };
-    
-    #ifndef STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
-#define STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
-    
-    
-    {  // Skewed: pick 'base' uniformly from range [0,max_log] and then
-  // return 'base' random bits.  The effect is to pick a number in the
-  // range [0,2^max_log-1] with exponential bias towards smaller numbers.
-  uint32_t Skewed(int max_log) {
-    return Uniform(1 << Uniform(max_log + 1));
-  }
-};
-    
-    class StdoutPrinter : public WritableFile {
- public:
-  virtual Status Append(const Slice& data) {
-    fwrite(data.data(), 1, data.size(), stdout);
-    return Status::OK();
-  }
-  virtual Status Close() { return Status::OK(); }
-  virtual Status Flush() { return Status::OK(); }
-  virtual Status Sync() { return Status::OK(); }
-};
-    
-    namespace log {
-    }
-    
-    extern JSClass  *jsb_cocosbuilder_CCBAnimationManager_class;
-extern JSObject *jsb_cocosbuilder_CCBAnimationManager_prototype;
-    
-    #if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-    
-    
-    
-    #if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_physics_PhysicsWorld_setGravity'', nullptr);
-        return 0;
-    }
-#endif
-    
-    
-    
-    	void Step(Settings* settings)
-	{
-		// Drive the kinematic body.
-		if (m_platform->GetType() == b2_kinematicBody)
-		{
-			b2Vec2 p = m_platform->GetTransform().p;
-			b2Vec2 v = m_platform->GetLinearVelocity();
-    }
-    }
-    
-    Range<AsyncIO::Op**> AsyncIO::cancel() {
-  CHECK(ctx_);
-  auto p = pending_.load(std::memory_order_acquire);
-  return doWait(WaitType::CANCEL, p, p, canceled_);
+  buckets_[b] += 1.0;
+  if (min_ > value) min_ = value;
+  if (max_ < value) max_ = value;
+  num_++;
+  sum_ += value;
+  sum_squares_ += (value * value);
 }
     
-    namespace {
-    }
+    #include <string>
     
-    // Get raw huge page sizes (without mount points, they'll be filled later)
-HugePageSizeVec readRawHugePageSizes() {
-  // We need to parse file names from /sys/kernel/mm/hugepages
-  static const boost::regex regex(R'!(hugepages-(\d+)kB)!');
-  boost::smatch match;
-  HugePageSizeVec vec;
-  fs::path path('/sys/kernel/mm/hugepages');
-  for (fs::directory_iterator it(path); it != fs::directory_iterator(); ++it) {
-    std::string filename(it->path().filename().string());
-    if (boost::regex_match(filename, match, regex)) {
-      StringPiece numStr(
-          filename.data() + match.position(1), size_t(match.length(1)));
-      vec.emplace_back(to<size_t>(numStr) * 1024);
+      if (direction_ == kForward) {  // Switch directions?
+    // iter_ is pointing at the current entry.  Scan backwards until
+    // the key changes so we can use the normal reverse scanning code.
+    assert(iter_->Valid());  // Otherwise valid_ would have been false
+    SaveKey(ExtractUserKey(iter_->key()), &saved_key_);
+    while (true) {
+      iter_->Prev();
+      if (!iter_->Valid()) {
+        valid_ = false;
+        saved_key_.clear();
+        ClearSavedValue();
+        return;
+      }
+      if (user_comparator_->Compare(ExtractUserKey(iter_->key()),
+                                    saved_key_) < 0) {
+        break;
+      }
+    }
+    direction_ = kReverse;
+  }
+    
+    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
+  // Order by:
+  //    increasing user key (according to user-supplied comparator)
+  //    decreasing sequence number
+  //    decreasing type (though sequence# should be enough to disambiguate)
+  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
+  if (r == 0) {
+    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
+    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
+    if (anum > bnum) {
+      r = -1;
+    } else if (anum < bnum) {
+      r = +1;
     }
   }
-  return vec;
+  return r;
 }
     
-     private:
-  class Context;
-    
-    
-    {
-    {template <typename T>
-Observer<T> SimpleObservable<T>::getObserver() {
-  std::call_once(observerInit_, [&]() {
-    SimpleObservable<T>::Wrapper wrapper;
-    wrapper.context = context_;
-    ObserverCreator<SimpleObservable<T>::Wrapper> creator(std::move(wrapper));
-    observer_ = std::move(creator).getObserver();
-  });
-  return *observer_;
-}
-} // namespace observer
-} // namespace folly
-
-    
-     private:
-  struct Context {
-    folly::Synchronized<std::shared_ptr<const T>> value_;
-    folly::Synchronized<folly::Function<void()>> callback_;
+    TEST(FormatTest, InternalKey_EncodeDecode) {
+  const char* keys[] = { '', 'k', 'hello', 'longggggggggggggggggggggg' };
+  const uint64_t seq[] = {
+    1, 2, 3,
+    (1ull << 8) - 1, 1ull << 8, (1ull << 8) + 1,
+    (1ull << 16) - 1, 1ull << 16, (1ull << 16) + 1,
+    (1ull << 32) - 1, 1ull << 32, (1ull << 32) + 1
   };
-  struct Wrapper;
-  std::shared_ptr<Context> context_;
-    
-    namespace folly {
-namespace observer_detail {
+  for (int k = 0; k < sizeof(keys) / sizeof(keys[0]); k++) {
+    for (int s = 0; s < sizeof(seq) / sizeof(seq[0]); s++) {
+      TestKey(keys[k], seq[s], kTypeValue);
+      TestKey('hello', 1, kTypeDeletion);
     }
-    }
-    
-    template <typename NodeId>
-class GraphCycleDetector {
-  using NodeSet = std::unordered_set<NodeId>;
-    }
-    
-    AbstractProxyRequestCommand::AbstractProxyRequestCommand(
-    cuid_t cuid, const std::shared_ptr<Request>& req,
-    const std::shared_ptr<FileEntry>& fileEntry, RequestGroup* requestGroup,
-    DownloadEngine* e, const std::shared_ptr<Request>& proxyRequest,
-    const std::shared_ptr<SocketCore>& s)
-    : AbstractCommand(cuid, req, fileEntry, requestGroup, e, s),
-      proxyRequest_(proxyRequest),
-      httpConnection_(std::make_shared<HttpConnection>(
-          cuid, s, std::make_shared<SocketRecvBuffer>(s)))
-{
-  setTimeout(std::chrono::seconds(getOption()->getAsInt(PREF_CONNECT_TIMEOUT)));
-  disableReadCheckSocket();
-  setWriteCheckSocket(getSocket());
+  }
 }
     
-    namespace aria2 {
+    namespace leveldb {
     }
     
-    // DiskwriterFactory class template to create DiskWriter derived
-// object, ignoring filename.
-template <class DiskWriterType>
-class AnonDiskWriterFactory : public DiskWriterFactory {
-public:
-  AnonDiskWriterFactory() = default;
-  virtual ~AnonDiskWriterFactory() = default;
+    /**
+ * \fn  std::shared_ptr<xgboost::DMatrix> CreateDMatrix(int rows, int columns, float sparsity, int seed);
+ *
+ * \brief Creates dmatrix with uniform random data between 0-1.
+ *
+ * \param rows      The rows.
+ * \param columns   The columns.
+ * \param sparsity  The sparsity.
+ * \param seed      The seed.
+ *
+ * \return  The new d matrix.
+ */
+    
+      std::vector<T>& HostVector();
+  void Reshard(GPUSet devices);
+  void Resize(size_t new_size, T v = T());
+    
+    /*! \brief training parameters */
+struct GBTreeTrainParam : public dmlc::Parameter<GBTreeTrainParam> {
+  /*!
+   * \brief number of parallel trees constructed each iteration
+   *  use this option to support boosted random forest
+   */
+  int num_parallel_tree;
+  /*! \brief tree updater sequence */
+  std::string updater_seq;
+  /*! \brief type of boosting process to run */
+  int process_type;
+  // flag to print out detailed breakdown of runtime
+  int debug_verbose;
+  std::string predictor;
+  // declare parameters
+  DMLC_DECLARE_PARAMETER(GBTreeTrainParam) {
+    DMLC_DECLARE_FIELD(num_parallel_tree)
+        .set_default(1)
+        .set_lower_bound(1)
+        .describe('Number of parallel trees constructed during each iteration.'\
+                  ' This option is used to support boosted random forest');
+    DMLC_DECLARE_FIELD(updater_seq)
+        .set_default('grow_colmaker,prune')
+        .describe('Tree updater sequence.');
+    DMLC_DECLARE_FIELD(process_type)
+        .set_default(kDefault)
+        .add_enum('default', kDefault)
+        .add_enum('update', kUpdate)
+        .describe('Whether to run the normal boosting process that creates new trees,'\
+                  ' or to update the trees in an existing model.');
+    DMLC_DECLARE_FIELD(debug_verbose)
+        .set_lower_bound(0)
+        .set_default(0)
+        .describe('flag to print out detailed breakdown of runtime');
+    // add alias
+    DMLC_DECLARE_ALIAS(updater_seq, updater);
+    DMLC_DECLARE_FIELD(predictor)
+      .set_default('cpu_predictor')
+      .describe('Predictor algorithm type');
+  }
+};
+    
+    
+    {}  // namespace xgboost
+    
+    namespace xgboost {
+namespace obj {
+    }
     }
     
-    #include 'Notifier.h'
+    TEST(Metric, AMS) {
+  EXPECT_ANY_THROW(xgboost::Metric::Create('ams'));
+  xgboost::Metric * metric = xgboost::Metric::Create('ams@0.5f');
+  ASSERT_STREQ(metric->Name(), 'ams@0.5');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0.311f, 0.001f);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              0.29710f, 0.001f);
+    }
     
-      bool tryAsFingerprint(const std::string& fingerprint);
+    
+    {
+    {XGBOOST_REGISTER_GBM(GBLinear, 'gblinear')
+    .describe('Linear booster, implement generalized linear model.')
+    .set_body([](const std::vector<std::shared_ptr<DMatrix> > &cache,
+                 bst_float base_margin) {
+      return new GBLinear(cache, base_margin);
+    });
+}  // namespace gbm
+}  // namespace xgboost
+
+    
+    // convert return from global_ref<T>
+template <typename T>
+struct Convert<global_ref<T>> {
+  typedef JniType<T> jniType;
+  // No automatic synthesis of global_ref
+  static jniType toJniRet(global_ref<jniType> t) {
+    return t.get();
+  }
+  static jniType toCall(global_ref<jniType> t) {
+    return t.get();
+  }
+};
+    
+    #include <fb/visibility.h>
+    
+    void Config::setPointScaleFactor(float pixelsInPoint)
+{
+    YGConfigSetPointScaleFactor(m_config, pixelsInPoint);
+}
+    
+    void setAssertHandler(AssertHandler assertHandler) {
+    gAssertHandler = assertHandler;
+}
+    
+    #else
+# define ALOGV(...) ((void)0)
+# define ALOGD(...) ((void)0)
+# define ALOGI(...) ((void)0)
+# define ALOGW(...) ((void)0)
+# define ALOGE(...) ((void)0)
+# define ALOGF(...) ((void)0)
+#endif
