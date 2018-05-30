@@ -1,115 +1,171 @@
 
         
-              class_attribute :delivery_methods, default: {}.freeze
-      class_attribute :delivery_method, default: :smtp
-    
-      # Skips the current run on Rubinius using Minitest::Assertions#skip
-  private def rubinius_skip(message = '')
-    skip message if RUBY_ENGINE == 'rbx'
+            # The stdlib recorded in the install receipt is used during dependency
+    # compatibility checks, so we only care about the stdlib that libraries
+    # link against.
+    keg.detect_cxx_stdlibs(:skip_executables => true)
   end
-  # Skips the current run on JRuby using Minitest::Assertions#skip
-  private def jruby_skip(message = '')
-    skip message if defined?(JRUBY_VERSION)
+    
+      # True if a {Formula} is being built with a specific option.
+  # <pre>args << '--i-want-spam' if build.with? 'spam'
+  #
+  # args << '--qt-gui' if build.with? 'qt' # '--with-qt' ==> build.with? 'qt'
+  #
+  # # If a formula presents a user with a choice, but the choice must be fulfilled:
+  # if build.with? 'example2'
+  #   args << '--with-example2'
+  # else
+  #   args << '--with-example1'
+  # end</pre>
+  def with?(val)
+    option_names = val.respond_to?(:option_names) ? val.option_names : [val]
+    
+        if $stdout.tty?
+      metacharacters = %w[\\ | ( ) [ ] { } ^ $ * + ? .]
+      bad_regex = metacharacters.any? do |char|
+        ARGV.any? do |arg|
+          arg.include?(char) && !arg.start_with?('/')
+        end
+      end
+      if ARGV.any? && bad_regex
+        ohai 'Did you mean to perform a regular expression search?'
+        ohai 'Surround your query with /slashes/ to search by regex.'
+      end
+    end
+    
+    # See chcase for an example
+class ScriptFileFormula < Formula
+  def install
+    bin.install Dir['*']
   end
 end
-
     
-      def test_deliver_is_notified
-    BaseMailer.welcome.deliver_now
-    wait
+      test 'permit parameters for new actions' do
+    sanitizer = sanitizer('user' => { 'email' => 'jose@omglol', 'name' => 'Jose' })
+    sanitizer.permit(:invite_user, keys: [:email, :name])
     
-      before do
-    Spaceship::Portal::Key.client = mock_client
-  end
+        # Check if proper Lockable module methods are present & unlock strategy
+    # allows to unlock resource on password reset
+    def unlockable?(resource)
+      resource.respond_to?(:unlock_access!) &&
+        resource.respond_to?(:unlock_strategy_enabled?) &&
+        resource.unlock_strategy_enabled?(:email)
+    end
     
-            expect(result).to eq('/usr/local/bin/cloc  --by-file  --out=build/cloc.txt')
-      end
+        def password_change(record, opts={})
+      devise_mail(record, :password_change, opts)
     end
   end
 end
 
     
-    require 'open3'
-    
-            def run
-          if @pod_name.nil?
-            # Note: at that point, @wipe_all is always true (thanks to `validate!`)
-            # Remove all
-            clear_cache
-          else
-            # Remove only cache for this pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            elsif cache_descriptors.count > 1 && !@wipe_all
-              # Ask which to remove
-              choices = cache_descriptors.map { |c| '#{@pod_name} v#{c[:version]} (#{pod_type(c)})' }
-              index = UI.choose_from_array(choices, 'Which pod cache do you want to remove?')
-              remove_caches([cache_descriptors[index]])
-            else
-              # Remove all found cache of this pod
-              remove_caches(cache_descriptors)
-            end
-          end
-        end
-    
-            def find_order
-          @order = Spree::Order.find_by!(number: order_id)
-        end
-    
-    module RuboCop
-  module Cop
-    class VariableForce
-      # A Variable represents existence of a local variable.
-      # This holds a variable declaration node,
-      # and some states of the variable.
-      class Variable
-        VARIABLE_DECLARATION_TYPES =
-          (VARIABLE_ASSIGNMENT_TYPES + ARGUMENT_DECLARATION_TYPES).freeze
-    
-            def on_case(case_node)
-          case_node.when_branches.each_with_object([]) do |when_node, previous|
-            when_node.each_condition do |condition|
-              next unless repeated_condition?(previous, condition)
-    
-            def nested_comparison?(node)
-          if node.or_type?
-            node.node_parts.all? { |node_part| comparison? node_part }
-          else
-            false
-          end
-        end
-    
-                  include Something
-              def do_something; end
-    
-          def extract_metrics(path, *keys)
-        snapshot.metric_store.extract_metrics(path, *keys)
+      if /(bcc|ms|cyg)win|mingw|emx/ =~ RUBY_PLATFORM
+    def test_long_unc
+      feature3399 = '[ruby-core:30623]'
+      path = File.expand_path(__FILE__)
+      path.sub!(%r'\A//', 'UNC/')
+      assert_nothing_raised(Errno::ENOENT, feature3399) do
+        File.stat('//?/#{path}')
       end
     end
   end
+    
+      def test_fetch_error
+    assert_raise(KeyError) { @cls[].fetch(1) }
+    assert_raise(KeyError) { @h.fetch('gumby') }
+    e = assert_raise(KeyError) { @h.fetch('gumby'*20) }
+    assert_match(/key not found: 'gumbygumby/, e.message)
+    assert_match(/\.\.\.\z/, e.message)
+    assert_same(@h, e.receiver)
+    assert_equal('gumby'*20, e.key)
+  end
+    
+        [Set, Set2].each { |klass|
+      assert_equal(true, set.subset?(klass[1,2,3,4]), klass.name)
+      assert_equal(true, set.subset?(klass[1,2,3]), klass.name)
+      assert_equal(false, set.subset?(klass[1,2]), klass.name)
+      assert_equal(false, set.subset?(klass[]), klass.name)
+    }
+    
+      it 'decodes past whitespace bytes when passed the '*' modifier' do
+    [ ['a b c',    ['a b c']],
+      ['a\fb c',   ['a\fb c']],
+      ['a\nb c',   ['a\nb c']],
+      ['a\rb c',   ['a\rb c']],
+      ['a\tb c',   ['a\tb c']],
+      ['a\vb c',   ['a\vb c']],
+    ].should be_computed_by(:unpack, unpack_format('*'))
+  end
 end
+    
+      class Honda < Car
+    def initialize(*args)
+      self.make = 'Honda'
+      super(*args)
+    end
+  end
+    
+      def self.status_of_blocked_thread
+    m = Mutex.new
+    m.lock
+    t = Thread.new { m.lock }
+    Thread.pass while t.status and t.status != 'sleep'
+    status = Status.new t
+    m.unlock
+    t.join
+    status
+  end
+    
+      # Hangs on 1.8.6.114 OS X, possibly also on Linux
+  quarantine! do
+    it 'is deferred if ensure clause sleeps' do
+      ThreadSpecs.wakeup_dying_sleeping_thread(@method) { sleep; ScratchPad.record :after_sleep }
+      ScratchPad.recorded.should == :after_sleep
+    end
+  end
+    
+        t.join
+  end
+    
+          sleep
+      after_sleep1 = true
+    
+      it 'handles bad leap seconds by carrying values forward' do
+    with_timezone 'UTC' do
+      time = Time.send(@method, 2017, 7, 5, 23, 59, 60)
+      time.sec.should == 0
+      time.min.should == 0
+      time.hour.should == 0
+      time.day.should == 6
+      time.month.should == 7
+    end
+  end
+    
+    # Copyright (C) 2008 Rapid7, Inc.
+    
+    class Template
+  attr_accessor :template, :result
+    
+          def stage_set?
+        !!fetch(:stage, false)
+      end
+    
+      desc 'Started'
+  task :started do
+  end
+    
+      not_found do
+    send_file(File.join(File.dirname(__FILE__), 'public', '404.html'), {:status => 404})
+  end
+    
+    end
 
     
-          def define_deprecated_writer_for(option, opts, &block)
-        define_method(option.write_method) do |value|
-          self.class.logger.warn 'DEPRECATION WARNING: The flag #{option.switches} has been deprecated, please use \'--#{opts[:new_flag]}=#{opts[:new_value]}\' instead.'
-          LogStash::SETTINGS.set(opts[:new_flag], opts[:new_value])
-        end
-      end
+          cache(gist, file, data.body) unless @cache_disabled
+      data.body
     end
     
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'margin-top: 11px; ' +
-                'margin-right: 12px; ' +
-                'margin-left: 13px;'
-      bad_rule = 'margin-bottom: null;'
+    Liquid::Template.register_tag('render_partial', Jekyll::RenderPartialTag)
+
     
-      context 'called with three sizes' do
-    it 'applies second width to left and right' do
-      ruleset = 'position: relative; ' +
-                'top: 4px; ' +
-                'right: 5px; ' +
-                'bottom: 6px; ' +
-                'left: 5px;'
+    module Jekyll
