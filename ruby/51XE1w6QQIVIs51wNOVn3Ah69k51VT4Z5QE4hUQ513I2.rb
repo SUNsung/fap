@@ -1,102 +1,64 @@
 
         
-        Then(%r!^I should get a non-zero exit(?:\-| )status$!) do
-  step %(I should not see 'EXIT STATUS: 0' in the build output)
-end
-
-    
-    require 'json'
-require 'open-uri'
-    
-        def self.git_log_between(pretty_format, from, to, merge_commit_filtering, date_format = nil, ancestry_path)
-      command = ['git log']
-      command << '--pretty=\'#{pretty_format}\''
-      command << '--date=\'#{date_format}\'' if date_format
-      command << '--ancestry-path' if ancestry_path
-      command << '#{from.shellescape}...#{to.shellescape}'
-      command << git_log_merge_commit_filtering_option(merge_commit_filtering)
-      Actions.sh(command.compact.join(' '), log: false).chomp
-    rescue
-      nil
-    end
-    
-          # Run a certain action
-      def trigger(task: nil, flags: nil, serial: nil, print_command: true, print_command_output: true)
-        android_serial = (serial != '') ? 'ANDROID_SERIAL=#{serial}' : nil
-        command = [android_serial, escaped_gradle_path, task, flags].compact.join(' ')
-        Action.sh(command, print_command: print_command, print_command_output: print_command_output)
-      end
-    
-            expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=build/cloc.xml MyCoolApp')
-      end
-    
-        # Check if proper Lockable module methods are present & unlock strategy
-    # allows to unlock resource on password reset
-    def unlockable?(resource)
-      resource.respond_to?(:unlock_access!) &&
-        resource.respond_to?(:unlock_strategy_enabled?) &&
-        resource.unlock_strategy_enabled?(:email)
-    end
-    
-        def reset_password_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :reset_password_instructions, opts)
-    end
-    
-          # Remembers the given resource by setting up a cookie
-      def remember_me(resource)
-        return if request.env['devise.skip_storage']
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.remember_me!
-        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
-      end
-    
-          generate_helpers!(Devise::URL_HELPERS)
-    
-          def headers_for(action, opts)
-        headers = {
-          subject: subject_for(action),
-          to: resource.email,
-          from: mailer_sender(devise_mapping),
-          reply_to: mailer_reply_to(devise_mapping),
-          template_path: template_paths,
-          template_name: action
-        }.merge(opts)
-    
-            %w(modals dropdowns scrollspy tabs tooltips popovers alerts buttons collapse carousel affix).each do |dom_id|
-          css('##{dom_id}-options + p + div tbody td:first-child').each do |node|
-            name = node.content.strip
-            id = node.parent['id'] = '#{dom_id}-#{name.parameterize}-option'
-            name.prepend '#{dom_id.singularize.titleize}: '
-            name << ' (option)'
-            entries << [name, id]
-          end
-    
-    class StringPatch < EmbeddedPatch
-  def initialize(strip, str)
-    super(strip)
-    @str = str
+          def validate_type
+    errors.add(:type, 'cannot be changed once an instance has been created') if type_changed? && !new_record?
+    errors.add(:type, 'is not a valid type') unless self.class.valid_type?(type)
   end
     
-      class Satisfier
-    def initialize(options, &block)
-      case options
-      when Hash
-        @options = { build_env: true }
-        @options.merge!(options)
-      else
-        @satisfied = options
-      end
-      @proc = block
+        # Optional
+    #   Use this method the gracefully stop your agent but make sure the run method return, or
+    #   terminate the thread.
+    def stop; end
+  end
+end
+=end
+module LongRunnable
+  extend ActiveSupport::Concern
+    
+      def destroy
+    @job = Delayed::Job.find(params[:id])
+    
+      def destroy
+    @services = current_user.services.find(params[:id])
+    @services.destroy
+    
+        t = Time.at(-0x3fff_ffff_ffff_ffff)
+    assert_equal(-146138510344, t.year)
+    t = Time.at(-0x4000_0000_0000_0000)
+    assert_equal(-146138510344, t.year)
+    t = Time.at(-0x4000_0000_0000_0001)
+    assert_equal(-146138510344, t.year)
+    t = Time.at(-0x5000_0000_0000_0001)
+    assert_equal(-182673138422, t.year)
+    t = Time.at(-0x6000_0000_0000_0000)
+    assert_equal(-219207766501, t.year)
+    
+      def self.critical_thread2(is_thread_stop)
+    Thread.current[:thread_specs].should == 101
+    Thread.critical.should == !is_thread_stop
+    unless is_thread_stop
+      Thread.critical = false
     end
+  end
     
-      def prefixes
-    prefixes = ['/bin', '/usr/bin', '/usr/libexec', xcode_app_path]
-    prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
+      it 'interprets Julian-Gregorian gap dates using Gregorian proleptic calendar' do
+    Time.send(@method, 1582, 10, 14, 12).to_i.should == -12219336000 # 2299160j
+  end
     
-    ```
-#{plugins_string}
-```
-#{markdown_podfile}
-EOS
-      end
+    lib_path = root.join('lib').to_path
+    
+        self.sigs.each_key do |k|
+      # There is only one pattern per run to test
+      matched = nil
+      matches = nil
+    
+    	if ln =~ /\(jmp\)/
+		parts = ln.split(' ')
+		if (parts[0][0,1] == 'j' and parts[2][0,2] == ';j' and parts[4] == '(jmp)')
+			old = parts[1]
+			func = parts[3]
+			new = addrs[func]
+			#puts '%32s: %s -> %x' % [func, old, new]
+			replaces << [func, old, new.to_s(16)]
+		end
+	end
