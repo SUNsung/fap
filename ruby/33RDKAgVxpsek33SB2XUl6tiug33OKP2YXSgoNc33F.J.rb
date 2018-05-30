@@ -1,50 +1,30 @@
-output = File.new(OUTPUT_FILENAME, 'wb')
-output.write(xml.target!)
-output.close
-    
-        # change Microsoft filters to Sass calling convention
-    def replace_ms_filters(file)
-      log_transform
-      file.gsub(
-          /filter: e\(%\('progid:DXImageTransform.Microsoft.gradient\(startColorstr='%d', endColorstr='%d', GradientType=(\d)\)',argb\(([\-$\w]+)\),argb\(([\-$\w]+)\)\)\);/,
-          %Q(filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='\#{ie-hex-str(\\2)}', endColorstr='\#{ie-hex-str(\\3)}', GradientType=\\1);)
-      )
-    end
-    
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
+
+        
+              # Override `Kernel#puts` to prepend four spaces to each line.
+      def puts(string=nil)
+        $stdout.puts(string.to_s.gsub(/^/, '    '))
       end
-    end
     
-        # first we unlink the currently active keg for this formula otherwise it is
-    # possible for the existing build to interfere with the build we are about to
-    # do! Seriously, it happens!
-    outdated_kegs.each(&:unlink)
+      desc 'Started'
+  task :started do
+  end
     
-          common_options(opts)
-      style(opts)
-      input_and_output(opts)
-      miscellaneous(opts)
-    end
+          it 'filters by roles from the :filter variable' do
+        hosts = dsl.roles(:web)
+        all = dsl.roles(:all)
+        SSHKit::Coordinator.expects(:new).with(hosts).returns(@coordinator)
+        dsl.set :filter, roles: 'web'
+        dsl.on(all)
+      end
     
-          module ClassMethods
-        def inherited(subclass)
-          subclass.log_levels = subclass.superclass.log_levels.dup
-        end
+      subject { described_class.new(lambda {}) }
     
-    module Sass
-  # Runs a SassScript read-eval-print loop.
-  # It presents a prompt on the terminal,
-  # reads in SassScript expressions,
-  # evaluates them,
-  # and prints the result.
-  class Repl
-    # @param options [{Symbol => Object}] An options hash.
-    def initialize(options = {})
-      @options = options
-    end
+      # Many RSpec users commonly either run the entire suite or an individual
+  # file, and it's useful to allow more verbose output when running an
+  # individual spec file.
+  if config.files_to_run.one?
+    # Use the documentation formatter for detailed output,
+    # unless a formatter has already been configured
+    # (e.g. via a command-line flag).
+    config.default_formatter = 'doc'
+  end
