@@ -1,91 +1,130 @@
 
         
-          def option_defined?(name)
-    @options.include? name
-  end
-end
-
-    
-        puts 'Your system is ready to brew.' unless Homebrew.failed?
-  end
-end
-
-    
-              # Method
-          name = node.at_css('.header').content.split.first
-    
-        ret = set - [2,4,6]
-    assert_not_same(set, ret)
-    assert_equal(Set[1,3], ret)
-  end
-    
-      it 'adds nil for each element requested beyond the end of the String' do
-    [ ['',          [nil, nil, nil]],
-      ['abcde',     [1684234849, nil, nil]],
-      ['abcdefg',   [1684234849, nil, nil]],
-      ['abcdefgh',  [1684234849, 1751606885, nil]]
-    ].should be_computed_by(:unpack, unpack_format(3))
-  end
-    
-      it 'ignores spaces between directives' do
-    '\x01\x02'.unpack('U U').should == [1, 2]
-  end
-end
-
-    
-        def fonts_path
-      File.join assets_path, 'fonts'
-    end
-    
-        process_font_assets
-    process_stylesheet_assets
-    process_javascript_assets
-    store_version
-  end
-    
-        # replace in the top-level selector
-    # replace_in_selector('a {a: {a: a} } a {}', /a/, 'b') => 'b {a: {a: a} } b {}'
-    def replace_in_selector(css, pattern, sub)
-      # scan for selector positions in css
-      s        = CharStringScanner.new(css)
-      prev_pos = 0
-      sel_pos  = []
-      while (brace = s.scan_next(RULE_OPEN_BRACE_RE))
-        pos = s.pos
-        sel_pos << (prev_pos .. pos - 1)
-        s.pos    = close_brace_pos(css, s.pos - 1) + 1
-        prev_pos = pos
-      end
-      replace_substrings_at(css, sel_pos) { |s| s.gsub(pattern, sub) }
-    end
-    
-      def setup
-    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
-    success = Dir.chdir DUMMY_PATH do
-      silence_stdout_if !ENV['VERBOSE'] do
-        system 'node', 'manifest.js', tmp_dir
-      end
-    end
-    assert success, 'Node.js Mincer compilation failed'
-    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
-    css_name = manifest['assets']['application.css']
-    @css = File.read('#{tmp_dir}/#{css_name}')
-  end
-end
-
-    
-          spec['version'] = Bootstrap::VERSION
-    
-        def ensure_stage
-      Rake::Task.define_task(:ensure_stage) do
-        unless stage_set?
-          puts t(:stage_not_set)
-          exit 1
+                if entries.empty?
+          css('.quickindex[id]').each do |node|
+            name = node['id'].remove(/quickindex\.?/)
+            next if name.empty? || name =~ /\.\d+\z/ || name =~ /\A([^\.]+)\.\1\z/
+            entries << ['#{self.name}.#{name}', name]
+          end
         end
-      end
+    
+          html_filters.push 'coffeescript/clean_html_v1', 'coffeescript/entries_v1', 'title'
+    
+        version '1.5' do
+      self.release = '1.5.3'
+      self.base_urls = [
+        'https://hexdocs.pm/elixir/#{release}/',
+        'https://hexdocs.pm/eex/#{release}/',
+        'https://hexdocs.pm/ex_unit/#{release}/',
+        'https://hexdocs.pm/iex/#{release}/',
+        'https://hexdocs.pm/logger/#{release}/',
+        'https://hexdocs.pm/mix/#{release}/',
+        'https://elixir-lang.org/getting-started/'
+      ]
     end
     
-        it 'retrieves properties for multiple roles as a set' do
-      rps = dsl.role_properties(:app, :web)
-      expect(rps).to eq(Set[{ hostname: 'example3.com', role: :app }, { hostname: 'example1.com', role: :web, port: 80 }, { hostname: 'example2.com', role: :web, port: 81 }])
+        version do
+      self.release = '10.1.0'
+      self.base_url = 'https://nodejs.org/dist/latest-v10.x/docs/api/'
+    end
+    
+    module Docs
+  class Tensorflow < UrlScraper
+    self.name = 'TensorFlow'
+    self.type = 'tensorflow'
+    self.release = '1.8'
+    self.root_path = 'index.html'
+    self.links = {
+      home: 'https://www.tensorflow.org/',
+      code: 'https://github.com/tensorflow/tensorflow'
+    }
+    
+            if b_length > a_length
+          (b_length - a_length).times { a_split.insert(-2, 0) }
+        elsif a_length > b_length
+          (a_length - b_length).times { b_split.insert(-2, 0) }
+        end
+    
+        def initialize
+      @pages = {}
+    end
+    
+      # Equivalent to Set#flatten, but replaces the receiver with the
+  # result in place.  Returns nil if no modifications were made.
+  def flatten!
+    replace(flatten()) if any? { |e| e.is_a?(Set) }
+  end
+    
+        base = @cls[ 1 => 'one', '2' => false, true => 'true', 'cat' => 99 ]
+    h1   = @cls[ '2' => false, 'cat' => 99 ]
+    h2   = @cls[ 1 => 'one', true => 'true' ]
+    h3   = @cls[ 1 => 'one', true => 'true', 'cat' => 99 ]
+    
+      class SubclassX
+    attr_reader :key
+    def initialize(*)
+      @key = :value
+      super
+    end
+  end
+end
+
+    
+      def self.running_thread
+    Thread.new do
+      begin
+        ThreadSpecs.state = :running
+        loop { Thread.pass }
+        ScratchPad.record :woken
+      rescue Object => e
+        ScratchPad.record e
+      end
+    end
+  end
+    
+      # This case occurred in JRuby where native threads are used to provide
+  # the same behavior as MRI green threads. Key to this issue was the fact
+  # that the thread which called #exit in its block was also being explicitly
+  # sent #join from outside the thread. The 100.times provides a certain
+  # probability that the deadlock will occur. It was sufficient to reliably
+  # reproduce the deadlock in JRuby.
+  it 'does not deadlock when called from within the thread while being joined from without' do
+    100.times do
+      t = Thread.new { Thread.stop; Thread.current.send(@method) }
+      Thread.pass while t.status and t.status != 'sleep'
+      t.wakeup.should == t
+      t.join.should == t
+    end
+  end
+end
+
+    
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+  end
+    
+    module Jekyll
+    
+          unless file.file?
+        return 'File #{file} could not be found'
+      end
+    
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        end
+        video += '</video>'
+      else
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+      end
     end
