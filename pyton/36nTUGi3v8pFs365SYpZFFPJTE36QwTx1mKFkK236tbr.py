@@ -1,75 +1,160 @@
 
         
-        class CancelledError(Error):
-    '''The Future was cancelled.'''
-    pass
+            #: :meth:`make_null_session` will look here for the class that should
+    #: be created when a null session is requested.  Likewise the
+    #: :meth:`is_null_session` method will perform a typecheck against
+    #: this type.
+    null_session_class = NullSession
     
-        def submit(self, fn, *args, **kwargs):
-        with self._shutdown_lock:
-            if self._shutdown:
-                raise RuntimeError('cannot schedule new futures after shutdown')
+        #: Setting this disables or force-enables the automatic options handling.
+    provide_automatic_options = None
     
+        sys.meta_path.append(Loader())
+    request.addfinalizer(sys.meta_path.pop)
     
-def KeywordsFromSyntaxListOutput_CppSyntax_test():
-  expected_keywords = (
-    'int_fast32_t', 'FILE', 'size_t', 'bitor', 'typedef', 'const', 'struct',
-    'uint8_t', 'fpos_t', 'thread_local', 'unsigned', 'uint_least16_t', 'do',
-    'intptr_t', 'uint_least64_t', 'return', 'auto', 'void', '_Complex',
-    'break', '_Alignof', 'not', 'using', '_Static_assert', '_Thread_local',
-    'public', 'uint_fast16_t', 'this', 'continue', 'char32_t', 'int16_t',
-    'intmax_t', 'static', 'clock_t', 'sizeof', 'int_fast64_t', 'mbstate_t',
-    'try', 'xor', 'uint_fast32_t', 'int_least8_t', 'div_t', 'volatile',
-    'template', 'char16_t', 'new', 'ldiv_t', 'int_least16_t', 'va_list',
-    'uint_least8_t', 'goto', 'noreturn', 'enum', 'static_assert', 'bitand',
-    'compl', 'imaginary', 'jmp_buf', 'throw', 'asm', 'ptrdiff_t', 'uint16_t',
-    'or', 'uint_fast8_t', '_Bool', 'int32_t', 'float', 'private', 'restrict',
-    'wint_t', 'operator', 'not_eq', '_Imaginary', 'alignas', 'union', 'long',
-    'uint_least32_t', 'int_least64_t', 'friend', 'uintptr_t', 'int8_t', 'else',
-    'export', 'int_fast8_t', 'catch', 'true', 'case', 'default', 'double',
-    '_Noreturn', 'signed', 'typename', 'while', 'protected', 'wchar_t',
-    'wctrans_t', 'uint64_t', 'delete', 'and', 'register', 'false', 'int',
-    'uintmax_t', 'off_t', 'char', 'int64_t', 'int_fast16_t', 'DIR', '_Atomic',
-    'time_t', 'xor_eq', 'namespace', 'virtual', 'complex', 'bool', 'mutable',
-    'if', 'int_least32_t', 'sig_atomic_t', 'and_eq', 'ssize_t', 'alignof',
-    '_Alignas', '_Generic', 'extern', 'class', 'typeid', 'short', 'for',
-    'uint_fast64_t', 'wctype_t', 'explicit', 'or_eq', 'switch', 'uint32_t',
-    'inline' )
+    containers = (('thefuck/python3-fish',
+               u'''FROM python:3
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'),
+              ('thefuck/python2-fish',
+               u'''FROM python:2
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'))
     
     
-def OverlapLength_BasicWithUnicode_test():
-  eq_( 3, base.OverlapLength( u'bar fäö', u'fäö bar' ) )
-  eq_( 3, base.OverlapLength( u'zoofäö', u'fäözoo' ) )
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'tcsh')
+    proc.sendline(u'setenv PYTHONIOENCODING utf8')
+    proc.sendline(u'eval `thefuck --alias`')
+    return proc
+    
+            layer = layer_class(units, return_sequences=False,
+                            input_shape=(timesteps, input_size),
+                            activity_regularizer='l2')
+        assert layer.activity_regularizer
+        x = keras.backend.variable(np.ones((num_samples,
+                                            timesteps,
+                                            input_size)))
+        layer(x)
+        assert len(layer.get_losses_for(x)) == 1
+    
+    # VAE model = encoder + decoder
+# build encoder model
+inputs = Input(shape=input_shape, name='encoder_input')
+x = Dense(intermediate_dim, activation='relu')(inputs)
+z_mean = Dense(latent_dim, name='z_mean')(x)
+z_log_var = Dense(latent_dim, name='z_log_var')(x)
+    
+        reconstruction_loss *= image_size * image_size
+    kl_loss = 1 + z_log_var - K.square(z_mean) - K.exp(z_log_var)
+    kl_loss = K.sum(kl_loss, axis=-1)
+    kl_loss *= -0.5
+    vae_loss = K.mean(reconstruction_loss + kl_loss)
+    vae.add_loss(vae_loss)
+    vae.compile(optimizer='rmsprop')
+    vae.summary()
+    plot_model(vae, to_file='vae_cnn.png', show_shapes=True)
     
     
-  def tearDown( self ):
-    self._request = None
+def get_test_values():
+    return [0.1, 0.5, 3, 8, 1e-7]
     
     
-class UnsupportedTransition(BaseException):
-    pass
-    
-        class ClassRegistree(BaseRegisteredClass):
-    
-        def get_current_time_as_html_fragment(self, time_provider):
-        current_time = time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-    
+@keras_test
+def test_stacked_lstm_char_prediction():
     '''
-Port of the Java example of 'Parameter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
+    Learn alphabetical char sequence with stacked LSTM.
+    Predict the whole alphabet based on the first two letters ('ab' -> 'ab...z')
+    See non-toy example in examples/lstm_text_generation.py
+    '''
+    # generate alphabet: http://stackoverflow.com/questions/16060899/alphabet-range-python
+    alphabet = string.ascii_lowercase
+    number_of_chars = len(alphabet)
     
-        def main_method(self):
-        '''will execute either _static_method_1 or _static_method_2
+            ## What character index in the stream did the current token start at?
+        # Needed, for example, to get the text for current token.  Set at
+        # the start of nextToken.
+        self.tokenStartCharIndex = -1
     
-        def __init__(self):
-        self._tm = None
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
     
-        def attach(self, observer):
-        if observer not in self._observers:
-            self._observers.append(observer)
+            try:
+            result = self.fn(*self.args, **self.kwargs)
+        except BaseException:
+            e = sys.exc_info()[1]
+            self.future.set_exception(e)
+        else:
+            self.future.set_result(result)
     
-        def and_specification(self, candidate):
-        return AndSpecification(self, candidate)
+    def download_urls_with_executor(urls, executor, timeout=60):
+    try:
+        url_to_content = {}
+        future_to_url = dict((executor.submit(load_url, url, timeout), url)
+                             for url in urls)
+    
+    from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+    
+        def test_done(self):
+        self.assertFalse(PENDING_FUTURE.done())
+        self.assertFalse(RUNNING_FUTURE.done())
+        self.assertTrue(CANCELLED_FUTURE.done())
+        self.assertTrue(CANCELLED_AND_NOTIFIED_FUTURE.done())
+        self.assertTrue(EXCEPTION_FUTURE.done())
+        self.assertTrue(SUCCESSFUL_FUTURE.done())
+    
+        if compiler is not None:
+      for filter_config in _ListOf( config[ filter_type ] ):
+        compiledFilter = compiler( filter_config )
+        filters.append( compiledFilter )
+    
+    
+def LastEnteredCharIsIdentifierChar_NotIdentChar_test():
+  with MockCurrentFiletypes():
+    with MockCurrentColumnAndLineContents( 3, 'ab;' ):
+      ok_( not base.LastEnteredCharIsIdentifierChar() )
+    
+      if parsed_args.coverage:
+    nosetests_args += [ '--with-coverage',
+                        '--cover-erase',
+                        '--cover-package=ycm',
+                        '--cover-html' ]
