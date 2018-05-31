@@ -1,171 +1,291 @@
 
         
-        TEST(PartialRunMgrFindOrCreate, Create) {
-  // Basic test of PartialRunMgr CancellationManager creation.
-  PartialRunMgr partial_run_mgr;
-  int step_id = 1;
-  CancellationManager* cancellation_manager;
-  partial_run_mgr.FindOrCreate(step_id, &cancellation_manager);
-  EXPECT_TRUE(cancellation_manager != nullptr);
+        // Find the file that declares the given fully-qualified symbol name.
+bool PyDescriptorDatabase::FindFileContainingSymbol(
+    const string& symbol_name, FileDescriptorProto* output) {
+  ScopedPyObjectPtr py_descriptor(
+      PyObject_CallMethod(py_database_, 'FindFileContainingSymbol', 's#',
+                          symbol_name.c_str(), symbol_name.size()));
+  return GetFileDescriptorProto(py_descriptor.get(), output);
 }
     
+      // Find the file which defines an extension extending the given message type
+  // with the given field number.
+  // Containing_type must be a fully-qualified type name.
+  // Python objects are not required to implement this method.
+  bool FindFileContainingExtension(const string& containing_type,
+                                   int field_number,
+                                   FileDescriptorProto* output);
     
-    {}  // namespace xla
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CPP_GENERATOR_H__
+#define GOOGLE_PROTOBUF_COMPILER_CPP_GENERATOR_H__
     
-    namespace tensorflow {
+    // Generator options (used by csharp_generator.cc):
+struct Options {
+  Options() :
+      file_extension('.cs'),
+      base_namespace(''),
+      base_namespace_specified(false),
+      internal_access(false) {
+  }
+  // Extension of the generated file. Defaults to '.cs'
+  string file_extension;
+  // Base namespace to use to create directory hierarchy. Defaults to ''.
+  // This option allows the simple creation of a conventional C# file layout,
+  // where directories are created relative to a project-specific base
+  // namespace. For example, in a project with a base namespace of PetShop, a
+  // proto of user.proto with a C# namespace of PetShop.Model.Shared would
+  // generate Model/Shared/User.cs underneath the specified --csharp_out
+  // directory.
+  //
+  // If no base namespace is specified, all files are generated in the
+  // --csharp_out directory, with no subdirectories created automatically.
+  string base_namespace;
+  // Whether the base namespace has been explicitly specified by the user.
+  // This is required as the base namespace can be explicitly set to the empty
+  // string, meaning 'create a full directory hierarchy, starting from the first
+  // segment of the namespace.'
+  bool base_namespace_specified;
+  // Whether the generated classes should have accessibility level of 'internal'.
+  // Defaults to false that generates 'public' classes.
+  bool internal_access;
+};
+    
+      void WriteIntroduction(io::Printer* printer);
+  void WriteDescriptor(io::Printer* printer);
+  void WriteGeneratedCodeInfo(const Descriptor* descriptor,
+                              io::Printer* printer,
+                              bool last);
+    
+    #include <gtest/gtest.h>
+    
+    // Generates code for a lite extension, which may be within the scope of some
+// message or may be at file scope.  This is much simpler than FieldGenerator
+// since extensions are just simple identifiers with interesting types.
+class ImmutableExtensionLiteGenerator : public ExtensionGenerator {
+ public:
+  explicit ImmutableExtensionLiteGenerator(const FieldDescriptor* descriptor,
+                                           Context* context);
+  virtual ~ImmutableExtensionLiteGenerator();
     }
     
+      // implements CodeGenerator ----------------------------------------
+  bool Generate(const FileDescriptor* file,
+                const string& parameter,
+                GeneratorContext* context,
+                string* error) const;
     
-    {  template <typename Packet>
-  inline Packet packetOp(const Packet& y) const {
-    const Packet one = internal::pset1<Packet>(1);
-    return internal::psub(one, internal::pmul(y, y));
-  }
-};
-    
-      ~SYCLDeviceContext() override {}
-    
-    REGISTER_KERNEL_BUILDER(Name('TFRecordReader').Device(DEVICE_CPU),
-                        TFRecordReaderOp);
-REGISTER_KERNEL_BUILDER(Name('TFRecordReaderV2').Device(DEVICE_CPU),
-                        TFRecordReaderOp);
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #ifdef TENSORFLOW_USE_MPI
-    
-    Status RealGrad(const AttrSlice& attrs, FunctionDef* g) {
-  // clang-format off
-  return GradForUnaryCwise(g, {
-      FDH::Const('zero', 0.f),
-      {{'dx'}, 'Complex', {'dy', 'zero'}},
-  });
-  // clang-format on
-}
-REGISTER_OP_GRADIENT('Real', RealGrad);
-    
-      ::grpc::Status SendEvents(
-      ::grpc::ServerContext* context,
-      ::grpc::ServerReaderWriter< ::tensorflow::EventReply,
-                                  ::tensorflow::Event>* stream);
-    
-    #include 'db/filename.h'
-#include 'db/dbformat.h'
-#include 'db/table_cache.h'
-#include 'db/version_edit.h'
-#include 'leveldb/db.h'
-#include 'leveldb/env.h'
-#include 'leveldb/iterator.h'
-    
-    #include <stdlib.h>
-#include <unistd.h>
-#include 'leveldb/cache.h'
-#include 'leveldb/comparator.h'
-#include 'leveldb/db.h'
-#include 'leveldb/env.h'
-#include 'leveldb/filter_policy.h'
-#include 'leveldb/iterator.h'
-#include 'leveldb/options.h'
-#include 'leveldb/status.h'
-#include 'leveldb/write_batch.h'
-    
-    Iterator* TableCache::NewIterator(const ReadOptions& options,
-                                  uint64_t file_number,
-                                  uint64_t file_size,
-                                  Table** tableptr) {
-  if (tableptr != NULL) {
-    *tableptr = NULL;
-  }
-    }
-    
-      // If a seek to internal key 'k' in specified file finds an entry,
-  // call (*handle_result)(arg, found_key, found_value).
-  Status Get(const ReadOptions& options,
-             uint64_t file_number,
-             uint64_t file_size,
-             const Slice& k,
-             void* arg,
-             void (*handle_result)(void*, const Slice&, const Slice&));
-    
-    
-    {  // Changes *key to a short string >= *key.
-  // Simple comparator implementations may return with *key unchanged,
-  // i.e., an implementation of this method that does nothing is correct.
-  virtual void FindShortSuccessor(std::string* key) const = 0;
-};
-    
-    // Dump the contents of the file named by fname in text format to
-// *dst.  Makes a sequence of dst->Append() calls; each call is passed
-// the newline-terminated text corresponding to a single item found
-// in the file.
-//
-// Returns a non-OK result if fname does not name a leveldb storage
-// file, or if the file cannot be read.
-Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
-    
-    
-    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(SingleFailureChecker);
-};
-    
-    // The 'Types' template argument below must have spaces around it
-// since some compilers may choke on '>>' when passing a template
-// instance (e.g. Types<int>)
-# define INSTANTIATE_TYPED_TEST_CASE_P(Prefix, CaseName, Types) \
-  bool gtest_##Prefix##_##CaseName GTEST_ATTRIBUTE_UNUSED_ = \
-      ::testing::internal::TypeParameterizedTestCase<CaseName, \
-          GTEST_CASE_NAMESPACE_(CaseName)::gtest_AllTests_, \
-          ::testing::internal::TypeList< Types >::type>::Register(\
-              #Prefix, #CaseName, GTEST_REGISTERED_TEST_NAMES_(CaseName))
-    
-    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_LINKED_PTR_H_
+    #endif  // CAFFE_LAYER_FACTORY_H_
 
     
-    // Gets the content of the stringstream's buffer as an std::string.  Each '\0'
-// character in the buffer is replaced with '\\0'.
-GTEST_API_ std::string StringStreamToString(::std::stringstream* stream);
-    
-      // Trivial case 2: even numbers
-  if (n % 2 == 0) return n == 2;
+    #include <utility>
+#include <vector>
     
     
-    {  EXPECT_FALSE(IsPrime(-1));
-  EXPECT_FALSE(IsPrime(-2));
-  EXPECT_FALSE(IsPrime(INT_MIN));
-}
+    {  Blob<Dtype> diff_;  // cached for backward pass
+  Blob<Dtype> dist_sq_;  // cached for backward pass
+  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
+  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
+};
     
-    enum RecordType {
-  // Zero is reserved for preallocated files
-  kZeroType = 0,
+    /**
+ * @brief Convolves the input image with a bank of learned filters,
+ *        and (optionally) adds biases.
+ *
+ *   Caffe convolves by reduction to matrix multiplication. This achieves
+ *   high-throughput and generality of input and filter dimensions but comes at
+ *   the cost of memory for matrices. This makes use of efficiency in BLAS.
+ *
+ *   The input is 'im2col' transformed to a channel K' x H x W data matrix
+ *   for multiplication with the N x K' x H x W filter matrix to yield a
+ *   N' x H x W output matrix that is then 'col2im' restored. K' is the
+ *   input channel * kernel height * kernel width dimension of the unrolled
+ *   inputs so that the im2col matrix has a column for each input region to
+ *   be filtered. col2im restores the output spatial structure by rolling up
+ *   the output channel N' columns of the output matrix.
+ */
+template <typename Dtype>
+class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
+ public:
+  /**
+   * @param param provides ConvolutionParameter convolution_param,
+   *    with ConvolutionLayer options:
+   *  - num_output. The number of filters.
+   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
+   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
+   *  filters.
+   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
+   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
+   *  for different strides. By default the convolution is dense with stride 1.
+   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
+   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
+   *  different padding. Input padding is computed implicitly instead of
+   *  actually padding.
+   *  - dilation (\b optional, default 1). The filter
+   *  dilation, given by dilation_size for equal dimensions for different
+   *  dilation. By default the convolution has dilation 1.
+   *  - group (\b optional, default 1). The number of filter groups. Group
+   *  convolution is a method for reducing parameterization by selectively
+   *  connecting input and output channels. The input and output channel dimensions must be divisible
+   *  by the number of groups. For group @f$ \geq 1 @f$, the
+   *  convolutional filters' input and output channels are separated s.t. each
+   *  group takes 1 / group of the input channels and makes 1 / group of the
+   *  output channels. Concretely 4 input channels, 8 output channels, and
+   *  2 groups separate input channels 1-2 and output channels 1-4 into the
+   *  first group and input channels 3-4 and output channels 5-8 into the second
+   *  group.
+   *  - bias_term (\b optional, default true). Whether to have a bias.
+   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
+   *    kernels + stream parallelism) engines.
+   */
+  explicit ConvolutionLayer(const LayerParameter& param)
+      : BaseConvolutionLayer<Dtype>(param) {}
     }
     
+      virtual inline const char* type() const { return 'Dropout'; }
     
-    {}  // namespace leveldb
+    /**
+ * @brief Compute elementwise operations, such as product and sum,
+ *        along multiple input Blobs.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class EltwiseLayer : public Layer<Dtype> {
+ public:
+  explicit EltwiseLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
-    void InternalKeyComparator::FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const {
-  // Attempt to shorten the user portion of the key
-  Slice user_start = ExtractUserKey(*start);
-  Slice user_limit = ExtractUserKey(limit);
-  std::string tmp(user_start.data(), user_start.size());
-  user_comparator_->FindShortestSeparator(&tmp, user_limit);
-  if (tmp.size() < user_start.size() &&
-      user_comparator_->Compare(user_start, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*start, tmp) < 0);
-    assert(this->Compare(tmp, limit) < 0);
-    start->swap(tmp);
+    namespace caffe {
+    }
+    
+      grpc::testing::RunSynchronousUnaryPingPong();
+    
+      grpc::testing::RunSynchronousUnaryPingPong();
+    
+    std::string GetDbFileContent(int argc, char** argv);
+    
+    class PythonGrpcGenerator : public grpc::protobuf::compiler::CodeGenerator {
+ public:
+  PythonGrpcGenerator(const GeneratorConfiguration& config);
+  ~PythonGrpcGenerator();
+    }
+    
+    AuthPropertyIterator SecureAuthContext::begin() const {
+  if (ctx_) {
+    grpc_auth_property_iterator iter =
+        grpc_auth_context_property_iterator(ctx_);
+    const grpc_auth_property* property =
+        grpc_auth_property_iterator_next(&iter);
+    return AuthPropertyIterator(property, &iter);
+  } else {
+    return end();
   }
 }
     
-      // When user keys are different, but correctly ordered
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('hello', 200, kTypeValue)));
+    #include 'test/cpp/interop/server_helper.h'
+#include 'test/cpp/util/test_config.h'
+    
+      std::unique_ptr<grpc::Server> StartServer(int port);
+    
+    grpc::string DescribeMethod(const grpc::protobuf::MethodDescriptor* method) {
+  std::stringstream result;
+  result << '  rpc ' << method->name()
+         << (method->client_streaming() ? '(stream ' : '(')
+         << method->input_type()->full_name() << ') returns '
+         << (method->server_streaming() ? '(stream ' : '(')
+         << method->output_type()->full_name() << ') {}\n';
+  if (method->options().deprecated()) {
+    result << ' DEPRECATED';
+  }
+  return result.str();
+}
+    
+    
+    {  int64_t measure() const;
+};
+    
+    private:
+  std::atomic<int> m_refCount;
+  int m_timeoutSeconds;
+    
+    int next_numa_node(std::atomic_int& curr_node) {
+  if (!use_numa) return 0;
+  int node;
+  do {
+    node = curr_node.fetch_add(1, std::memory_order_relaxed);
+    node &= numa_node_mask;
+  } while (!((numa_node_set >> node) & 1));
+  return node;
+}
+    
+    
+    {private:
+  CodeBlock& m_cb;
+  CodeAddress m_oldFrontier;
+};
+    
+    #include 'hphp/util/hfsort.h'
+    
+    /**
+ * A Synchronizable object that has multiple conditional variables. The benefit
+ * is, notify() can choose to wake up a thread that is more favorable (e.g.,
+ * one with stack/heap mapped on huge pages, or one that is recently active).
+ */
+struct SynchronizableMulti {
+  explicit SynchronizableMulti(int size);
+  virtual ~SynchronizableMulti() {}
+    }
+    
+      switch (inst.op) {
+#define O(name, ...)    \
+    case Vinstr::name:  \
+      return simplify(env, inst.name##_, b, i); \
+    }
+    
+    
+    {  template <typename A, typename B>
+  constexpr bool operator()(A&& a, B&& b) const {
+    return ne ^ (C::operator()(static_cast<A&&>(a), static_cast<B&&>(b)) == o);
+  }
+};
+    
+      struct Node : public hazptr_obj_base<Node, Atom, Reclaimer<Node>> {
+    T elem_;
+    Atom<Node*> next_;
+    }
+    
+      NontrivialType::ctored = 0;
+  for (int i = 0; i < 120; ++i) {
+    vec.emplace_back(i);
+  }
+  EXPECT_EQ(NontrivialType::ctored, 120);
+  EXPECT_EQ(vec[0].a, 12);
+  EXPECT_EQ(vec[1].a, 13);
+  EXPECT_EQ(vec.back().a, 119);
+    
+      folly::Optional<T> try_take_for(std::chrono::milliseconds time) override {
+    T item;
+    while (!queue_.try_dequeue(item)) {
+      if (!sem_.try_wait_for(time)) {
+        return folly::none;
+      }
+    }
+    return std::move(item);
+  }
+    
+    #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+    
+    
+    {
+    {} // namespace futures
+} // namespace folly
