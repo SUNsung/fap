@@ -1,226 +1,132 @@
 
         
-              T* resource;
-      OP_REQUIRES_OK(
-          context,
-          mgr->LookupOrCreate<T>(cinfo_.container(), cinfo_.name(), &resource,
-                                 [this](T** ret) EXCLUSIVE_LOCKS_REQUIRED(mu_) {
-                                   Status s = CreateResource(ret);
-                                   if (!s.ok() && *ret != nullptr) {
-                                     CHECK((*ret)->Unref());
-                                   }
-                                   return s;
-                                 }));
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    /** scalar_sigmoid_fast_derivative_op
-  * \ingroup CXX11_NeuralNetworks_Module
-  * \brief Template functor to compute the fast derivative of a sigmoid
-  *
-  * Input should be the backpropagated gradient.
-  *
-  * \sa class CwiseUnaryOp, Cwise::sigmoid_fast_derivative()
-  */
-template <typename T>
-struct scalar_sigmoid_fast_derivative_op {
-  EIGEN_EMPTY_STRUCT_CTOR(scalar_sigmoid_fast_derivative_op)
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
-    const T one = T(1);
-    return (one - y) * y;
-  }
-    }
+        #include <vector>
     
     
-    {
-    {}  // namespace port
-}  // namespace tensorflow
+    {}  // namespace atom
     
-      void CopyCPUTensorToDevice(const Tensor *cpu_tensor, Device *device,
-                             Tensor *device_tensor,
-                             StatusCallback done) const override;
+     private:
+  void* operator new(size_t size);
+  void operator delete(void*, size_t);
     
-    #include 'tensorflow/compiler/xla/service/versioned_computation_handle.h'
     
-    #include <memory>
-#include 'tensorflow/core/framework/reader_base.h'
-#include 'tensorflow/core/framework/reader_op_kernel.h'
-#include 'tensorflow/core/lib/core/errors.h'
-#include 'tensorflow/core/lib/io/inputbuffer.h'
-#include 'tensorflow/core/lib/strings/strcat.h'
-#include 'tensorflow/core/platform/env.h'
+    {  DISALLOW_COPY_AND_ASSIGN(RemoteCallbackFreer);
+};
     
-      Status ResetLocked() override {
-    offset_ = 0;
-    reader_.reset(nullptr);
-    file_.reset(nullptr);
-    return ReaderBase::ResetLocked();
+      AutoCompactTest() {
+    dbname_ = test::TmpDir() + '/autocompact_test';
+    tiny_cache_ = NewLRUCache(100);
+    options_.block_cache = tiny_cache_;
+    DestroyDB(dbname_, options_);
+    options_.create_if_missing = true;
+    options_.compression = kNoCompression;
+    ASSERT_OK(DB::Open(options_, dbname_, &db_));
   }
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    namespace tensorflow {
-namespace functor {
-DEFINE_UNARY2(get_angle, complex64, complex128);
-}  // namespace functor
-}  // namespace tensorflow
-    
-    namespace ONNXIR
-{
-    namespace Utils
-    {
-        class TensorUtils
-        {
-        public:
-#define DEFINE_UNPACK_TENSOR(T, Type, fieldName, fieldSize)                                                                    \
-    static Common::Status UnpackTensor(const onnx::TensorProto& p_tensor, /*out*/T* p_data, int64_t p_expected_size)           \
-    {                                                                                                                          \
-        if (Type != p_tensor.data_type()                                                                                       \
-            || nullptr == p_data)                                                                                              \
-        {                                                                                                                      \
-            return Common::Status(Common::StatusCategory::ONNX, Common::StatusCode::INVALID_ARGUMENT);                        \
-        }                                                                                                                      \
-        if (p_tensor.has_raw_data())                                                                                           \
-        {                                                                                                                      \
-            if (p_tensor.raw_data().size() != (p_expected_size) * sizeof(T))                                                   \
-                return Common::Status(Common::StatusCategory::ONNX, Common::StatusCode::FAIL,                                 \
-                                               'UnpackTensor: the pre-allocate size does not match the raw data size');        \
-            UnpackTensorWithRawData(p_tensor, p_data);                                                                         \
-            return Common::Status::OK();                                                                                       \
-        }                                                                                                                      \
-        if (p_tensor.fieldSize() != p_expected_size)                                                                           \
-            return Common::Status(Common::StatusCategory::ONNX, Common::StatusCode::FAIL,                                     \
-                                            'UnpackTensor: the pre-allocate size does not match the size in proto');           \
-        for (auto elem : p_tensor.fieldName())                                                                                 \
-        {                                                                                                                      \
-            *p_data++ = static_cast<T>(elem);                                                                                  \
-        }                                                                                                                      \
-        return Common::Status::OK();                                                                                           \
-    }
-    }
-    }
-    }
-    
-    namespace ONNXIR {
-    // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(Sigmoid)
-        .Description('Sigmoid takes one input data (Tensor<T>) and produces one output data '
-            '(Tensor<T>) where the sigmoid function, y = 1 / (1 + exp(-x)), is applied to the '
-            'tensor elementwise.')
-        .Input('X', 'input tensor', 'T')
-        .Output('Y', 'The sigmoid value of the input tensor computed element-wise', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.');
-    }
-    
-        REGISTER_OPERATOR_SCHEMA(Dropout)
-        .Description('Dropout takes one input data (Tensor<float>) and produces two Tensor outputs, '
-            'output (Tensor<float>) and mask (Tensor<bool>). Depending on whether it is in '
-            'test mode or not, the output Y will either be a random dropout, or a simple '
-            'copy of the input. Note that our implementation of Dropout does scaling in '
-            'the training phase, so during testing nothing needs to be done.')
-        .Input('data', 'The input data as Tensor.', 'T')
-        .Output('output', 'The output.', 'T')
-        .Output('mask',
-            'The output mask. If is_test is nonzero, this output is not filled.', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('ratio',
-            '(float, default 0.5) the ratio of random dropout',
-            AttrType::AttributeProto_AttributeType_FLOAT, float(0.5))
-        .Attr('is_test',
-            '(int, default 0) if nonzero, run dropout in test mode where '
-            'the output is simply Y = X.',
-            AttrType::AttributeProto_AttributeType_INT, int64_t(0));
-    
-        // TODO: We should be able to configure IO chunks based on size.
-    // distribute utterances over chunks
-    // We simply count off frames until we reach the chunk size.
-    // Note that we first randomize the chunks, i.e. when used, chunks are non-consecutive and thus cause the disk head to seek for each chunk.
+    // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+extern Status BuildTable(const std::string& dbname,
+                         Env* env,
+                         const Options& options,
+                         TableCache* table_cache,
+                         Iterator* iter,
+                         FileMetaData* meta);
     
     
-    {    auto status = stub_->SayHello(&context, request_msg, &response_msg);
-    if (status.ok()) {
-      const HelloReply *response = response_msg.GetRoot();
-      return response->message()->str();
-    } else {
-      std::cerr << status.error_code() << ': ' << status.error_message()
-                << std::endl;
-      return 'RPC failed';
-    }
-  }
+    {  int Compare(const InternalKey& a, const InternalKey& b) const;
+};
     
-    static void Error(const flatbuffers::FlatCompiler *flatc,
-                  const std::string &err, bool usage, bool show_exe_name) {
-  if (show_exe_name) { printf('%s: ', g_program_name); }
-  printf('error: %s\n', err.c_str());
-  if (usage) { printf('%s', flatc->GetUsageString(g_program_name).c_str()); }
-  exit(1);
+    static std::string MakeFileName(const std::string& name, uint64_t number,
+                                const char* suffix) {
+  char buf[100];
+  snprintf(buf, sizeof(buf), '/%06llu.%s',
+           static_cast<unsigned long long>(number),
+           suffix);
+  return name + buf;
 }
     
-    std::string GenType(const Type &type) {
-  if (type.enum_def != nullptr && !type.enum_def->is_union) {
-    // it is a reference to an enum type
-    return GenTypeRef(type.enum_def);
-  }
-  switch (type.base_type) {
-    case BASE_TYPE_VECTOR: {
-      std::string typeline;
-      typeline.append('\'type\' : \'array\', \'items\' : { ');
-      if (type.element == BASE_TYPE_STRUCT) {
-        typeline.append(GenTypeRef(type.struct_def));
-      } else {
-        typeline.append(GenType(GenNativeType(type.element)));
-      }
-      typeline.append(' }');
-      return typeline;
-    }
-    case BASE_TYPE_STRUCT: {
-      return GenTypeRef(type.struct_def);
-    }
-    case BASE_TYPE_UNION: {
-      std::string union_type_string('\'anyOf\': [');
-      const auto &union_types = type.enum_def->vals.vec;
-      for (auto ut = union_types.cbegin(); ut < union_types.cend(); ++ut) {
-        auto &union_type = *ut;
-        if (union_type->union_type.base_type == BASE_TYPE_NONE) { continue; }
-        if (union_type->union_type.base_type == BASE_TYPE_STRUCT) {
-          union_type_string.append(
-              '{ ' + GenTypeRef(union_type->union_type.struct_def) + ' }');
-        }
-        if (union_type != *type.enum_def->vals.vec.rbegin()) {
-          union_type_string.append(',');
-        }
-      }
-      union_type_string.append(']');
-      return union_type_string;
-    }
-    case BASE_TYPE_UTYPE: return GenTypeRef(type.enum_def);
-    default: return GenType(GenNativeType(type.base_type));
+    TableCache::~TableCache() {
+  delete cache_;
+}
+    
+    
+    {  for (size_t i = 0; i < new_files_.size(); i++) {
+    const FileMetaData& f = new_files_[i].second;
+    PutVarint32(dst, kNewFile);
+    PutVarint32(dst, new_files_[i].first);  // level
+    PutVarint64(dst, f.number);
+    PutVarint64(dst, f.file_size);
+    PutLengthPrefixedSlice(dst, f.smallest.Encode());
+    PutLengthPrefixedSlice(dst, f.largest.Encode());
   }
 }
     
-          ss << '\n';
+    namespace leveldb {
+    }
     
-    #include 'flatbuffers/flatbuffers.h'
+    TEST(LogTest, Empty) {
+  ASSERT_EQ('EOF', Read());
+}
+    
+      // Open database.  Disable compression since it affects the creation
+  // of layers and the code below is trying to test against a very
+  // specific scenario.
+  leveldb::DB* db;
+  leveldb::Options db_options;
+  db_options.create_if_missing = true;
+  db_options.compression = leveldb::kNoCompression;
+  ASSERT_OK(leveldb::DB::Open(db_options, dbpath, &db));
+    
+    Status Footer::DecodeFrom(Slice* input) {
+  const char* magic_ptr = input->data() + kEncodedLength - 8;
+  const uint32_t magic_lo = DecodeFixed32(magic_ptr);
+  const uint32_t magic_hi = DecodeFixed32(magic_ptr + 4);
+  const uint64_t magic = ((static_cast<uint64_t>(magic_hi) << 32) |
+                          (static_cast<uint64_t>(magic_lo)));
+  if (magic != kTableMagicNumber) {
+    return Status::Corruption('not an sstable (bad magic number)');
+  }
+    }
+    
+    void Histogram::Merge(const Histogram& other) {
+  if (other.min_ < min_) min_ = other.min_;
+  if (other.max_ > max_) max_ = other.max_;
+  num_ += other.num_;
+  sum_ += other.sum_;
+  sum_squares_ += other.sum_squares_;
+  for (int b = 0; b < kNumBuckets; b++) {
+    buckets_[b] += other.buckets_[b];
+  }
+}
+    
+    bool HandleDumpCommand(Env* env, char** files, int num) {
+  StdoutPrinter printer;
+  bool ok = true;
+  for (int i = 0; i < num; i++) {
+    Status s = DumpFile(env, files[i], &printer);
+    if (!s.ok()) {
+      fprintf(stderr, '%s\n', s.ToString().c_str());
+      ok = false;
+    }
+  }
+  return ok;
+}
+    
+        char processname[256];
+    NDK_CRASH_PARSER_STATE state = EXPECTS_CRASH_DUMP;
+    char  strcache[2048];
+    
+        template<typename T>
+    T* _Service() {
+        if (m_dependservices.end() != m_dependservices.find(T::ServiceName()))
+            return (T*)m_dependservices[T::ServiceName()];
+    }
+    
+            JavaVMAttachArgs args;
+        args.group = NULL;
+        args.name = 'default';
+        args.version = JNI_VERSION_1_6;
+        status_ = vm_->AttachCurrentThread(&env_, &args);
