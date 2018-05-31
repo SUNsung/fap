@@ -1,130 +1,79 @@
 
         
-        module Jobs
+        # For this pull request, which changes Page#dir
+# https://github.com/jekyll/jekyll/pull/4403
     
-            if Devise.activerecord51?
-          def postpone_email_change_until_confirmation_and_regenerate_confirmation_token
-            @reconfirmation_required = true
-            self.unconfirmed_email = self.email
-            self.email = self.email_in_database
-            self.confirmation_token = nil
-            generate_confirmation_token
-          end
-        else
-          def postpone_email_change_until_confirmation_and_regenerate_confirmation_token
-            @reconfirmation_required = true
-            self.unconfirmed_email = self.email
-            self.email = self.email_was
-            self.confirmation_token = nil
-            generate_confirmation_token
-          end
-        end
+      def self.theme_gem_dir; source_dir.join('tmp', 'jekyll', 'my-cool-theme'); end
     
-    module Devise
-  module Controllers
-    # Create url helpers to be used with resource/scope configuration. Acts as
-    # proxies to the generated routes created by devise.
-    # Resource param can be a string or symbol, a class, or an instance object.
-    # Example using a :user resource:
-    #
-    #   new_session_path(:user)      => new_user_session_path
-    #   session_path(:user)          => user_session_path
-    #   destroy_session_path(:user)  => destroy_user_session_path
-    #
-    #   new_password_path(:user)     => new_user_password_path
-    #   password_path(:user)         => user_password_path
-    #   edit_password_path(:user)    => edit_user_password_path
-    #
-    #   new_confirmation_path(:user) => new_user_confirmation_path
-    #   confirmation_path(:user)     => user_confirmation_path
-    #
-    # Those helpers are included by default to ActionController::Base.
-    #
-    # In case you want to add such helpers to another class, you can do
-    # that as long as this new class includes both url_helpers and
-    # mounted_helpers. Example:
-    #
-    #     include Rails.application.routes.url_helpers
-    #     include Rails.application.routes.mounted_helpers
-    #
-    module UrlHelpers
-      def self.remove_helpers!
-        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
-          remove_method method
-        end
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
+    end
+  end
+end
+
+    
+              # Parse the options
+          argv = parse_options(opts)
+          return if !argv
+          raise Vagrant::Errors::CLIInvalidUsage, help: opts.help.chomp if argv.length != 3
+    
+      #forward some requests to status message, because a poll is just attached to a status message and is not sharable itself
+  delegate :author_id, :diaspora_handle, :public?, :subscribers, to: :status_message
+    
+        def index
+      pods_json = PodPresenter.as_collection(Pod.all)
+    
+          rescue_from Rack::OAuth2::Server::Authorize::BadRequest,
+                  JSON::JWT::InvalidFormat, JSON::JWK::UnknownAlgorithm do |e|
+        logger.info e.backtrace[0, 10].join('\n')
+        render json: {error: :invalid_request, error_description: e.message, status: 400}
       end
-    
-            private
-    
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
-        end
+      rescue_from JSON::JWT::VerificationFailed do |e|
+        logger.info e.backtrace[0, 10].join('\n')
+        render json: {error: :invalid_grant, error_description: e.message, status: 400}
       end
     end
   end
 end
 
     
-            def initialize(argv)
-          @name = argv.shift_argument
-          @template_url = argv.option('template-url', TEMPLATE_REPO)
-          super
-          @additional_args = argv.remainder!
+        def self.run
+      # Apparently there's no better way than this to add Sass
+      # to Merb's Rack stack.
+      Merb::Config[:app] = Sass::Plugin::Rack.new(Merb::Config[:app])
+    end
+  end
+end
+
+    
+        def parse_input(environment, text)
+      case text
+      when Script::MATCH
+        name = $1
+        guarded = !!$3
+        val = Script::Parser.parse($2, @line, text.size - ($3 || '').size - $2.size)
+    
+      # POST /books
+  # POST /books.json
+  def create
+    @book = Book.new(book_params)
+    
+            MSG = 'Use only a single space inside array percent literal.'.freeze
+        MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX =
+          /(?:[\S&&[^\\]](?:\\ )*)( {2,})(?=\S)/
+    
+            # @param lines [Array<String>]
+        # @param annotations [Array<(Integer, String)>]
+        #   each entry is the annotated line number and the annotation text
+        #
+        # @note annotations are sorted so that reconstructing the annotation
+        #   text via {#to_s} is deterministic
+        def initialize(lines, annotations)
+          @lines       = lines.freeze
+          @annotations = annotations.sort.freeze
         end
     
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
-    end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
-  end
-  output += '></#{tag}>'
-end
-    
-          if File.symlink?(includes_dir)
-        return 'Includes directory '#{includes_dir}' cannot be a symlink'
-      end
-    
-          if File.symlink?(code_path)
-        return 'Code directory '#{code_path}' cannot be a symlink'
-      end
-    
-      class RenderPartialTag < Liquid::Tag
-    include OctopressFilters
-    def initialize(tag_name, markup, tokens)
-      @file = nil
-      @raw = false
-      if markup =~ /^(\S+)\s?(\w+)?/
-        @file = $1.strip
-        @raw = $2 == 'raw'
-      end
-      super
-    end
-    
-        def poster
-      'poster='#{@poster}'' if @poster
-    end
+      it 'registers an offense' do
+    inspect_source(source)
