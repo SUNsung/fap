@@ -1,223 +1,345 @@
 
         
-        #include 'mbedtls/config.h'
-#include 'mbedtls/ctr_drbg.h'
-#include 'mbedtls/debug.h'
-#include 'mbedtls/entropy.h'
-#include 'mbedtls/net.h'
-#include 'mbedtls/ssl.h'
+        class Session;
+struct SessionOptions;
     
-    			if (delta == 0)
-				return;
+    namespace tensorflow {
+namespace functor {
+    }
+    }
     
-    	inline static GDNativeCallRegistry *get_singleton() {
-		return singleton;
-	}
-    
-        const int z1 = MULTIPLY(z2 + z3, FIX_0_541196100);
-    const int tmp2 = z1 + MULTIPLY(z3, - FIX_1_847759065);
-    const int tmp3 = z1 + MULTIPLY(z2, FIX_0_765366865);
-    
-    
-    
-      /// Place the acceptor into the state where it will listen for new
-  /// connections.
-  /**
-   * This function puts the socket acceptor into the state where it may accept
-   * new connections.
-   *
-   * @param backlog The maximum length of the queue of pending connections.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   */
-  void listen(int backlog = socket_base::max_connections)
-  {
-    boost::system::error_code ec;
-    this->get_service().listen(this->get_implementation(), backlog, ec);
-    boost::asio::detail::throw_error(ec, 'listen');
+    /**
+ * \ingroup CXX11_NeuralNetworks_Module
+ * \brief Template functor to clip the magnitude of the first scalar.
+ *
+ * \sa class CwiseBinaryOp, MatrixBase::Clip
+ */
+template <typename Scalar>
+struct scalar_clip_op {
+  EIGEN_EMPTY_STRUCT_CTOR(scalar_clip_op)
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Scalar
+  operator()(const Scalar& a, const Scalar& b) const {
+    return numext::mini(numext::maxi(a, -b), b);
   }
+  template <typename Packet>
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Packet
+  packetOp(const Packet& a, const Packet& b) const {
+    return internal::pmin(internal::pmax(a, internal::pnegate(b)), b);
+  }
+};
     
-    template <typename Stream>
-class buffered_stream;
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    // Helper class to determine whether or not the current thread is inside an
-// invocation of io_service::run() for a specified io_service object.
-template <typename Key, typename Value = unsigned char>
-class call_stack
-{
-public:
-  // Context class automatically pushes the key/value pair on to the stack.
-  class context
-    : private noncopyable
-  {
-  public:
-    // Push the key on to the stack.
-    explicit context(Key* k)
-      : key_(k),
-        next_(call_stack<Key, Value>::top_)
-    {
-      value_ = reinterpret_cast<unsigned char*>(this);
-      call_stack<Key, Value>::top_ = this;
-    }
-    }
-    }
     
-    } // namespace date_time
-namespace posix_time {
-    
-    #endif // BOOST_ASIO_DETAIL_EVENT_HPP
+    {}  // namespace tensorflow
+#endif  // GOOGLE_CUDA
 
     
-    #include <boost/asio/detail/push_options.hpp>
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    void buffer_sequence_adapter_base::init_native_buffer(
-    buffer_sequence_adapter_base::native_buffer_type& buf,
-    const boost::asio::const_buffer& buffer)
-{
-  std::memset(&buf, 0, sizeof(native_buffer_type));
-  Microsoft::WRL::ComPtr<IInspectable> insp
-    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
-  Platform::Object^ buf_obj = reinterpret_cast<Platform::Object^>(insp.Get());
-  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
-}
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-      void Write(const SparsePage& page, dmlc::Stream* fo) override {
-    CHECK(page.offset.size() != 0 && page.offset[0] == 0);
-    CHECK_EQ(page.offset.back(), page.data.size());
-    fo->Write(page.offset);
-    min_index_ = page.min_index;
-    fo->Write(&min_index_, sizeof(min_index_));
-    index_.data.resize(page.data.size());
-    value_.data.resize(page.data.size());
-    }
+      virtual bool lookupAdditions(DeclBaseName Name, DeclContext *DC,
+                               SourceLoc Loc, bool IsTypeLookup,
+                               ResultVector &RV) = 0;
     
-    TEST(Metric, LogLoss) {
-  xgboost::Metric * metric = xgboost::Metric::Create('logloss');
-  ASSERT_STREQ(metric->Name(), 'logloss');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              1.2039f, 0.001f);
-}
-    
-    #include <algorithm>
-#include <cstdlib>
-#include <initializer_list>
-#include <vector>
-    
-      void Configure(const std::vector<std::pair<std::string, std::string> >& cfg) override {
-    this->cfg_ = cfg;
-    model_.Configure(cfg);
-    // initialize the updaters only when needed.
-    std::string updater_seq = tparam_.updater_seq;
-    tparam_.InitAllowUnknown(cfg);
-    if (updater_seq != tparam_.updater_seq) updaters_.clear();
-    for (const auto& up : updaters_) {
-      up->Init(cfg);
-    }
-    // for the 'update' process_type, move trees into trees_to_update
-    if (tparam_.process_type == kUpdate) {
-      model_.InitTreesToUpdate();
-    }
-    }
-    
-    // objectives
-#include '../src/objective/objective.cc'
-#include '../src/objective/regression_obj.cc'
-#include '../src/objective/multiclass_obj.cc'
-#include '../src/objective/rank_obj.cc'
-    
-    DMLC_REGISTRY_FILE_TAG(updater_shotgun);
-    
-    TEST(WriteChainAsyncTransportWrapperTest, TestSimpleBuf) {
-  TestWriteChainAsyncTransportWrapper transport;
-  auto buf = folly::IOBuf::copyBuffer('foobar');
-    }
-    
-    struct ExceptionInfo {
-  const std::type_info* type{nullptr};
-  // The values in frames are IP (instruction pointer) addresses.
-  // They are only filled if the low-level exception tracer library is
-  // linked in or LD_PRELOADed.
-  std::vector<uintptr_t> frames; // front() is top of stack
+    /// A SyntaxRewriter for applying a set of formatting rules to a Syntax tree.
+struct FormatSyntaxRewriter : public SyntaxRewriter {
+  virtual StructDeclSyntax
+  rewriteStructDecl(StructDeclSyntax Struct) override;
 };
+    
+    
+    {} // end namespace swift
+    
+    #endif
+    
+    namespace nwapi {
+    }
+    
+    Base::Base(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+	   const std::string& extension_id)
+    : extension_id_(extension_id),
+      id_(id),
+      delay_destruction_(false),
+      pending_destruction_(false),
+      object_manager_(object_manager) {
+}
+    
+    v8::Handle<v8::Value> AllocateObject(int routing_id,
+                                     int object_id,
+                                     const std::string& type,
+                                     v8::Handle<v8::Value> options) {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  v8::EscapableHandleScope handle_scope(isolate);
+    }
+    
+    // Tell browser to allocate a new object.
+// function AllocateObject(id, name, options);
+v8::Handle<v8::Value> AllocateObject(int routing_id,
+                                     int object_id,
+                                     const std::string& type,
+                                     v8::Handle<v8::Value> options);
+    
+    std::string Clipboard::GetText() {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  base::string16 text;
+  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+  return base::UTF16ToUTF8(text);
+}
+    
+    
+    {  gtk_widget_show(menu_);
+  g_object_ref_sink(G_OBJECT(menu_));
+}
+    
+    NwAppQuitFunction::~NwAppQuitFunction() {
+}
+    
+      base::RunLoop run_loop_;
+    
+    namespace extensions {
+    }
+    
+    NwObjAllocateIdFunction::NwObjAllocateIdFunction() {
+}
+    
+     protected:
+  ~NwObjAllocateIdFunction() override;
+    
+      NwScreenInitEventListenersFunction::NwScreenInitEventListenersFunction() {}
+    
+    int main(int /*argc*/, char** /*argv*/)
+{
+    InitDevice();
+    return 0;
+}
+
+    
+        CV_Assert( state != 0 );
+    
+        f2coeff[1] = - 2*D[1][3] + 2*D[1][7] - 2*D[3][1] - 2*D[3][5] - 2*D[3][9] - 2*D[5][3] + 2*D[5][7] + 2*D[7][1] + 2*D[7][5] + 2*D[7][9] - 2*D[9][3] + 2*D[9][7]; // constant term
+    f2coeff[2] = 4*D[1][5] - 4*D[1][1] + 8*D[2][2] + 8*D[2][4] + 8*D[4][2] + 8*D[4][4] + 4*D[5][1] - 4*D[5][5] + 4*D[9][9]; // s1^2  * s2
+    f2coeff[3] = 4*D[1][8] - 4*D[1][6] - 8*D[2][3] + 8*D[2][7] - 8*D[3][2] - 8*D[3][4] - 8*D[4][3] + 8*D[4][7] + 4*D[5][6] - 4*D[5][8] - 4*D[6][1] + 4*D[6][5] - 4*D[6][9] + 8*D[7][2] + 8*D[7][4] + 4*D[8][1] - 4*D[8][5] + 4*D[8][9] - 4*D[9][6] + 4*D[9][8]; // s1 * s2
+    f2coeff[4] = 8*D[2][2] - 8*D[3][3] - 8*D[4][4] + 8*D[6][6] + 8*D[7][7] - 8*D[8][8]; // s1 * s3
+    f2coeff[5] = 4*D[1][4] - 4*D[1][2] - 4*D[2][1] + 4*D[2][5] - 4*D[2][9] - 8*D[3][6] - 8*D[3][8] + 4*D[4][1] - 4*D[4][5] + 4*D[4][9] + 4*D[5][2] - 4*D[5][4] - 8*D[6][3] + 8*D[6][7] + 8*D[7][6] + 8*D[7][8] - 8*D[8][3] + 8*D[8][7] - 4*D[9][2] + 4*D[9][4]; // s2 * s3
+    f2coeff[6] = 6*D[5][6] - 6*D[1][8] - 6*D[1][6] + 6*D[5][8] - 6*D[6][1] + 6*D[6][5] - 6*D[6][9] - 6*D[8][1] + 6*D[8][5] - 6*D[8][9] - 6*D[9][6] - 6*D[9][8]; // s2^2 * s3
+    f2coeff[7] = 4*D[1][1] - 4*D[1][5] + 4*D[1][9] - 4*D[5][1] + 4*D[5][5] - 4*D[5][9] + 4*D[9][1] - 4*D[9][5] + 4*D[9][9]; // s2^3
+    f2coeff[8] = 2*D[2][9] - 2*D[1][4] - 2*D[2][1] - 2*D[2][5] - 2*D[1][2] + 4*D[3][6] + 4*D[3][8] - 2*D[4][1] - 2*D[4][5] + 2*D[4][9] - 2*D[5][2] - 2*D[5][4] + 4*D[6][3] + 4*D[6][7] + 4*D[7][6] + 4*D[7][8] + 4*D[8][3] + 4*D[8][7] + 2*D[9][2] + 2*D[9][4]; // s1 * s3^2
+    f2coeff[9] = 2*D[1][2] + 2*D[1][4] + 2*D[2][1] + 2*D[2][5] + 2*D[2][9] - 4*D[3][6] + 4*D[3][8] + 2*D[4][1] + 2*D[4][5] + 2*D[4][9] + 2*D[5][2] + 2*D[5][4] - 4*D[6][3] + 4*D[6][7] + 4*D[7][6] - 4*D[7][8] + 4*D[8][3] - 4*D[8][7] + 2*D[9][2] + 2*D[9][4]; // s1
+    f2coeff[10] = 2*D[1][6] + 2*D[1][8] - 4*D[2][3] + 4*D[2][7] - 4*D[3][2] + 4*D[3][4] + 4*D[4][3] - 4*D[4][7] + 2*D[5][6] + 2*D[5][8] + 2*D[6][1] + 2*D[6][5] + 2*D[6][9] + 4*D[7][2] - 4*D[7][4] + 2*D[8][1] + 2*D[8][5] + 2*D[8][9] + 2*D[9][6] + 2*D[9][8]; // s3
+    f2coeff[11] = 8*D[3][3] - 4*D[1][9] - 4*D[1][1] - 8*D[3][7] + 4*D[5][5] - 8*D[7][3] + 8*D[7][7] - 4*D[9][1] - 4*D[9][9]; // s2
+    f2coeff[12] = 4*D[1][1] - 4*D[5][5] + 4*D[5][9] + 8*D[6][6] + 8*D[6][8] + 8*D[8][6] + 8*D[8][8] + 4*D[9][5] - 4*D[9][9]; // s2 * s3^2
+    f2coeff[13] = 2*D[1][7] - 2*D[1][3] + 4*D[2][6] - 4*D[2][8] - 2*D[3][1] + 2*D[3][5] + 2*D[3][9] + 4*D[4][6] - 4*D[4][8] + 2*D[5][3] - 2*D[5][7] + 4*D[6][2] + 4*D[6][4] + 2*D[7][1] - 2*D[7][5] - 2*D[7][9] - 4*D[8][2] - 4*D[8][4] + 2*D[9][3] - 2*D[9][7]; // s1^2
+    f2coeff[14] = 2*D[1][3] - 2*D[1][7] + 4*D[2][6] + 4*D[2][8] + 2*D[3][1] + 2*D[3][5] - 2*D[3][9] - 4*D[4][6] - 4*D[4][8] + 2*D[5][3] - 2*D[5][7] + 4*D[6][2] - 4*D[6][4] - 2*D[7][1] - 2*D[7][5] + 2*D[7][9] + 4*D[8][2] - 4*D[8][4] - 2*D[9][3] + 2*D[9][7]; // s3^2
+    f2coeff[15] = 6*D[1][3] - 6*D[1][7] + 6*D[3][1] - 6*D[3][5] + 6*D[3][9] - 6*D[5][3] + 6*D[5][7] - 6*D[7][1] + 6*D[7][5] - 6*D[7][9] + 6*D[9][3] - 6*D[9][7]; // s2^2
+    f2coeff[16] = 2*D[6][9] - 2*D[1][8] - 2*D[5][6] - 2*D[5][8] - 2*D[6][1] - 2*D[6][5] - 2*D[1][6] - 2*D[8][1] - 2*D[8][5] + 2*D[8][9] + 2*D[9][6] + 2*D[9][8]; // s3^3
+    f2coeff[17] = 8*D[2][6] - 4*D[1][7] - 4*D[1][3] + 8*D[2][8] - 4*D[3][1] + 4*D[3][5] - 4*D[3][9] + 8*D[4][6] + 8*D[4][8] + 4*D[5][3] + 4*D[5][7] + 8*D[6][2] + 8*D[6][4] - 4*D[7][1] + 4*D[7][5] - 4*D[7][9] + 8*D[8][2] + 8*D[8][4] - 4*D[9][3] - 4*D[9][7]; // s1 * s2 * s3
+    f2coeff[18] = 6*D[2][5] - 6*D[1][4] - 6*D[2][1] - 6*D[1][2] - 6*D[2][9] - 6*D[4][1] + 6*D[4][5] - 6*D[4][9] + 6*D[5][2] + 6*D[5][4] - 6*D[9][2] - 6*D[9][4]; // s1 * s2^2
+    f2coeff[19] = 2*D[1][6] + 2*D[1][8] + 4*D[2][3] + 4*D[2][7] + 4*D[3][2] + 4*D[3][4] + 4*D[4][3] + 4*D[4][7] - 2*D[5][6] - 2*D[5][8] + 2*D[6][1] - 2*D[6][5] - 2*D[6][9] + 4*D[7][2] + 4*D[7][4] + 2*D[8][1] - 2*D[8][5] - 2*D[8][9] - 2*D[9][6] - 2*D[9][8]; // s1^2 * s3
+    f2coeff[20] = 2*D[1][2] + 2*D[1][4] + 2*D[2][1] - 2*D[2][5] - 2*D[2][9] + 2*D[4][1] - 2*D[4][5] - 2*D[4][9] - 2*D[5][2] - 2*D[5][4] - 2*D[9][2] - 2*D[9][4]; // s1^3
+    
+    //! @cond IGNORED
+    
+    static void* openclamdblas_check_fn(int ID)
+{
+    assert(ID >= 0 && ID < (int)(sizeof(openclamdblas_fn)/sizeof(openclamdblas_fn[0])));
+    const struct DynamicFnEntry* e = openclamdblas_fn[ID];
+    void* func = CV_CL_GET_PROC_ADDRESS(e->fnName);
+    if (!func)
+    {
+        throw cv::Exception(cv::Error::OpenCLApiCallError,
+                cv::format('OpenCL AMD BLAS function is not available: [%s]', e->fnName),
+                CV_Func, __FILE__, __LINE__);
+    }
+    *(e->ppFn) = func;
+    return func;
+}
+    
+    namespace cv { namespace ocl { namespace runtime {
+    }
+    }
+    }
+    
+    #include 'core/error_list.h'
+#include 'websocket_multiplayer.h'
+#include 'websocket_peer.h'
+    
+      // Loads JPEG file from a jpeg_decoder_stream.
+  unsigned char *decompress_jpeg_image_from_stream(jpeg_decoder_stream *pStream, int *width, int *height, int *actual_comps, int req_comps);
+    
+    # if defined(CLZ64)
+/**
+ * OC_ILOGNZ_64 - Integer binary logarithm of a non-zero 64-bit value.
+ * @_v: A non-zero 64-bit value.
+ * Returns floor(log2(_v))+1.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * If _v is zero, the return value is undefined; use OC_ILOG_64() instead.
+ */
+#  define OC_ILOGNZ_64(_v) (CLZ64_OFFS-CLZ64(_v))
+/**
+ * OC_ILOG_64 - Integer binary logarithm of a 64-bit value.
+ * @_v: A 64-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ */
+#  define OC_ILOG_64(_v)   (OC_ILOGNZ_64(_v)&-!!(_v))
+# else
+#  define OC_ILOGNZ_64(_v) (oc_ilog64(_v))
+#  define OC_ILOG_64(_v)   (oc_ilog64(_v))
+# endif
+    
+    /*All of these macros should expect floats as arguments.*/
+#define OC_MAXF(_a,_b)      ((_a)<(_b)?(_b):(_a))
+#define OC_MINF(_a,_b)      ((_a)>(_b)?(_b):(_a))
+#define OC_CLAMPF(_a,_b,_c) (OC_MINF(_a,OC_MAXF(_b,_c)))
+#define OC_FABSF(_f)        ((float)fabs(_f))
+#define OC_SQRTF(_f)        ((float)sqrt(_f))
+#define OC_POWF(_b,_e)      ((float)pow(_b,_e))
+#define OC_LOGF(_f)         ((float)log(_f))
+#define OC_IFLOORF(_f)      ((int)floor(_f))
+#define OC_ICEILF(_f)       ((int)ceil(_f))
+    
+    #include <vector>
+#include <string>
+    
+    
+class ServiceBase;
+typedef std::map<std::string, ServiceBase*> TServicesMap;
+    
+    class Test_Spy_Sample {
+  public:
+    Test_Spy_Sample();
+    ~Test_Spy_Sample();
+    }
+    
+    jvalue JNU_CallMethodByMethodInfo(JNIEnv* _env, jobject _obj, JniMethodInfo _method_info, ...);
+    
+        Value(int unit, double value)
+    : unit(unit)
+    , value(value)
+    {
+    }
+    
+    
+    {  out << ' build-id=' << hex << setw(8) << 0
+      << '}';
+    
+     private:
+    
+    template<typename... ARGS>
+inline void logf(const char* tag, const char* msg, ARGS... args) noexcept {
+  log(ANDROID_LOG_FATAL, tag, msg, args...);
+}
+    
+    private:
+  void ref() {
+    ++m_refcount;
+  }
+    
+      template <typename U>
+  RefPtr<T>& operator=(RefPtr<U>&& ref) {
+    unrefIfNecessary(m_ptr);
+    m_ptr = ref.m_ptr;
+    ref.m_ptr = nullptr;
+    return *this;
+  }
+    
+    namespace facebook {
+    }
+    
+    
+    {  pthread_key_t m_key;
+  CleanupFunction m_cleanup;
+};
+    
+    
+    {} // namespace aria2
+    
+      void updateReadWriteCheck();
+    
+    void AbstractOptionHandler::updateFlags(int flag, bool val)
+{
+  if (val) {
+    flags_ |= flag;
+  }
+  else {
+    flags_ &= ~flag;
+  }
+}
+    
+    void AdaptiveFileAllocationIterator::allocateChunk()
+{
+  if (!allocator_) {
+#ifdef HAVE_FALLOCATE
+    try {
+      A2_LOG_DEBUG('Testing file system supports fallocate.');
+      if (offset_ < totalLength_) {
+        int64_t len =
+            std::min(totalLength_ - offset_, static_cast<int64_t>(4_k));
+        stream_->allocate(offset_, len, false);
+        offset_ += len;
+      }
+      A2_LOG_DEBUG('File system supports fallocate.');
+      allocator_ = make_unique<FallocFileAllocationIterator>(stream_, offset_,
+                                                             totalLength_);
+    }
+    catch (RecoverableException& e) {
+      A2_LOG_DEBUG('File system does not support fallocate.');
+      auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
+                                                              totalLength_);
+      salloc->init();
+      allocator_ = std::move(salloc);
+    }
+#else  // !HAVE_FALLOCATE
+    auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
+                                                            totalLength_);
+    salloc->init();
+    allocator_ = std::move(salloc);
+#endif // !HAVE_FALLOCATE
+    allocator_->allocateChunk();
+  }
+  else {
+    allocator_->allocateChunk();
+  }
+}
     
       /**
-   * Finds the first occurrence of the character sequence `that` in this string.
-   * \note Equivalent to `find(that.data(), 0, strlen(that))`
+   * Removes current announce URL from its group and inserts it before the
+   * first element of the group.
+   * The internal announce group pointer points to the first element of the
+   * first group after this call.
    */
-  constexpr std::size_t find(const Char* that) const noexcept {
-    return find(that, 0u, folly::constexpr_strlen(that));
-  }
+  void announceSuccess();
     
-      {
-    auto copy = *buf;
-    EXPECT_TRUE(buf->isShared());
-    EXPECT_TRUE(copy.isShared());
-    EXPECT_EQ((void*)buf->data(), (void*)copy.data());
-    EXPECT_NE(buf->next(), copy.next());  // actually different buffers
+    namespace aria2 {
     }
     
-    template <typename C>
-struct compare_less : detail::cmp_pred<C, ordering::lt, 0> {
-  using detail::cmp_pred<C, ordering::lt, 0>::cmp_pred;
-};
-    
-      template <class... Args>
-  iterator emplace_hint(const_iterator /*hint*/, Args&&... args) {
-    return emplace(std::forward<Args>(args)...).first;
-  }
-    
-      for (size_t i = 0; i < ps.size(); i++) {
-    ts[i].join();
-  }
-    
-      // Loop until:
-  // - a read attempt would block
-  // - readCallback_ is uninstalled
-  // - the number of loop iterations exceeds the optional maximum
-  // - this AsyncSocket is moved to another EventBase
-  //
-  // When we invoke readDataAvailable() it may uninstall the readCallback_,
-  // which is why need to check for it here.
-  //
-  // The last bullet point is slightly subtle.  readDataAvailable() may also
-  // detach this socket from this EventBase.  However, before
-  // readDataAvailable() returns another thread may pick it up, attach it to
-  // a different EventBase, and install another readCallback_.  We need to
-  // exit immediately after readDataAvailable() returns if the eventBase_ has
-  // changed.  (The caller must perform some sort of locking to transfer the
-  // AsyncSocket between threads properly.  This will be sufficient to ensure
-  // that this thread sees the updated eventBase_ variable after
-  // readDataAvailable() returns.)
-  uint16_t numReads = 0;
-  EventBase* originalEventBase = eventBase_;
-  while (readCallback_ && eventBase_ == originalEventBase) {
-    // Get the buffer to read into.
-    void* buf = nullptr;
-    size_t buflen = 0, offset = 0;
-    try {
-      prepareReadBuffer(&buf, &buflen);
-      VLOG(5) << 'prepareReadBuffer() buf=' << buf << ', buflen=' << buflen;
-    } catch (const AsyncSocketException& ex) {
-      return failRead(__func__, ex);
-    } catch (const std::exception& ex) {
-      AsyncSocketException tex(AsyncSocketException::BAD_ARGS,
-                              string('ReadCallback::getReadBuffer() '
-                                     'threw exception: ') +
-                              ex.what());
-      return failRead(__func__, tex);
-    } catch (...) {
-      AsyncSocketException ex(AsyncSocketException::BAD_ARGS,
-                             'ReadCallback::getReadBuffer() threw '
-                             'non-exception type');
-      return failRead(__func__, ex);
-    }
-    if (!isBufferMovable_ && (buf == nullptr || buflen == 0)) {
-      AsyncSocketException ex(AsyncSocketException::BAD_ARGS,
-                             'ReadCallback::getReadBuffer() returned '
-                             'empty buffer');
-      return failRead(__func__, ex);
-    }
+    class ApiCallbackDownloadEventListener : public DownloadEventListener {
+public:
+  ApiCallbackDownloadEventListener(Session* session,
+                                   DownloadEventCallback callback,
+                                   void* userData);
+  virtual ~ApiCallbackDownloadEventListener();
+  virtual void onEvent(DownloadEvent event,
+                       const RequestGroup* group) CXX11_OVERRIDE;
     }
