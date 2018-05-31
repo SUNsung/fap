@@ -1,293 +1,168 @@
 
         
         
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+@csrf_protect
+def render_flatpage(request, f):
+    '''
+    Internal interface to the flat page view.
+    '''
+    # If registration is required for accessing this page, and the user isn't
+    # logged in, redirect to the login page.
+    if f.registration_required and not request.user.is_authenticated:
+        from django.contrib.auth.views import redirect_to_login
+        return redirect_to_login(request.path)
+    if f.template_name:
+        template = loader.select_template((f.template_name, DEFAULT_TEMPLATE))
+    else:
+        template = loader.get_template(DEFAULT_TEMPLATE)
     
+        def test_conflicts(self):
+        from certbot_apache.obj import Addr
+        from certbot_apache.obj import VirtualHost
     
-total_bytes = 0
+        def tearDown(self):
+        logging.disable(logging.NOTSET)
     
-            def report_warning(self, message):
-            if re.match(regex, message):
-                return
-            old_report_warning(message)
-        self.report_warning = types.MethodType(report_warning, self)
+        @mock.patch('certbot.notify.smtplib.LMTP')
+    @mock.patch('certbot.notify.subprocess.Popen')
+    def test_smtp_failure(self, mock_popen, mock_lmtp):
+        from certbot.notify import notify
+        lmtp_obj = mock.MagicMock()
+        mock_lmtp.return_value = lmtp_obj
+        lmtp_obj.sendmail.side_effect = socket.error(17)
+        proc = mock.MagicMock()
+        mock_popen.return_value = proc
+        self.assertTrue(notify('Goose', 'auntrhody@example.com',
+                               'The old grey goose is dead.'))
+        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
+        self.assertEqual(proc.communicate.call_count, 1)
     
-        params = {
-        'age_limit': age,
-        'skip_download': True,
-        'writeinfojson': True,
-        'outtmpl': '%(id)s.%(ext)s',
-    }
-    ydl = YoutubeDL(params)
-    ydl.add_default_info_extractors()
-    json_filename = os.path.splitext(filename)[0] + '.info.json'
-    try_rm(json_filename)
-    ydl.download([url])
-    res = os.path.exists(json_filename)
-    try_rm(json_filename)
-    return res
+        description = proj_info['description'],
+    keywords = proj_info['keywords'],
     
-                    if ''' not in code and ''' not in code:
-                    continue
-                assertRegexpMatches(
-                    self,
-                    code,
-                    r'(?:(?:#.*?|\s*)\n)*from __future__ import (?:[a-z_]+,\s*)*unicode_literals',
-                    'unicode_literals import  missing in %s' % fn)
+            # cookie handler
+        ssl_context = request.HTTPSHandler(
+            context=ssl.SSLContext(ssl.PROTOCOL_TLSv1))
+        cookie_handler = request.HTTPCookieProcessor()
+        opener = request.build_opener(ssl_context, cookie_handler)
+        opener.addheaders = [
+            ('Referer', self.url),
+            ('Cookie',
+             'CloudFront-Policy=%s;CloudFront-Signature=%s;CloudFront-Key-Pair-Id=%s' % (scp, scs, sck))
+        ]
+        request.install_opener(opener)
     
-            return {
-            'id': video_id,
-            'url': video_url,
-            'ext': 'mp4',
-            'title': title,
-            'description': description,
-            'thumbnail': thumbnail,
-            'categories': categories,
-            'duration': duration,
-            'view_count': view_count,
-            'age_limit': 18,
-        }
-
+    from ..common import *
+import urllib.error
+from json import loads
+from time import time, sleep
     
-            # Video URL construction algorithm is reverse-engineered from cwhplayer.swf
-        rtmp_url = 'rtmp://camwithher.tv/clipshare/%s' % (
-            ('mp4:%s.mp4' % flv_id) if int(flv_id) > 2010 else flv_id)
-    
-    import sys
-    
-    
-def test_config_missing():
-    app = flask.Flask(__name__)
-    with pytest.raises(IOError) as e:
-        app.config.from_pyfile('missing.cfg')
-    msg = str(e.value)
-    assert msg.startswith('[Errno 2] Unable to load configuration '
-                          'file (No such file or directory):')
-    assert msg.endswith('missing.cfg'')
-    assert not app.config.from_pyfile('missing.cfg', silent=True)
-    
-    
-def test_wsgi_errors_stream(app, client):
-    @app.route('/')
-    def index():
-        app.logger.error('test')
-        return ''
-    
-    
-def test_context_test(app):
-    assert not flask.request
-    assert not flask.has_request_context()
-    ctx = app.test_request_context()
-    ctx.push()
-    try:
-        assert flask.request
-        assert flask.has_request_context()
-    finally:
-        ctx.pop()
-    
-        # now do a benchmark where the number of points is fixed
-    # and the variable is the number of features
-    
-        plt.figure('scikit-learn LASSO benchmark results')
-    plt.subplot(211)
-    plt.plot(list_n_samples, lasso_results, 'b-',
-                            label='Lasso')
-    plt.plot(list_n_samples, lars_lasso_results, 'r-',
-                            label='LassoLars')
-    plt.title('precomputed Gram matrix, %d features, alpha=%s' % (n_features,
-                            alpha))
-    plt.legend(loc='upper left')
-    plt.xlabel('number of samples')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
-    
-            title_string = 'Varying %s' % quantity
-    
-    ward = AgglomerativeClustering(n_clusters=3, linkage='ward')
-    
-    import matplotlib.pyplot as plt
-import numpy as np
-import random
-    
-                short_text_filename = os.path.join(short_text_lang_folder,
-                                               '%s_%04d.txt' % (lang, j))
-            print('Writing %s' % short_text_filename)
-            open(short_text_filename, 'wb').write(
-                small_content.encode('utf-8', 'ignore'))
-            j += 1
-            if j >= 1000:
-                break
-    
-        for line in input_file:
-        linestrip = line.strip()
-        if len(linestrip) == 0:
-            in_exercise_region = False
-        elif linestrip.startswith('# TASK:'):
-            in_exercise_region = True
-    
-        @support.requires_IEEE_754
-    def test_correctly_rounded_true_division(self):
-        # more stringent tests than those above, checking that the
-        # result of true division of ints is always correctly rounded.
-        # This test should probably be considered CPython-specific.
-    
-    int WINAPI WinMain(
-    HINSTANCE hInstance,      // handle to current instance
-    HINSTANCE hPrevInstance,  // handle to previous instance
-    LPSTR lpCmdLine,          // pointer to command line
-    int nCmdShow              // show state of window
-    )
-{
-    extern int Py_FrozenMain(int, char **);
-    PyImport_FrozenModules = _PyImport_FrozenModules;
-    return Py_FrozenMain(__argc, __argv);
-}
-'''
-    
-        def find_byname(self, name):
-        '''Return (red, green, blue) for name'''
-        name = name.lower()
-        try:
-            return self.__byname[name]
-        except KeyError:
-            raise BadColor(name) from None
-    
-    
-@contextlib.contextmanager
-def start_threads(threads, unlock=None):
-    threads = list(threads)
-    started = []
-    try:
-        try:
-            for t in threads:
-                t.start()
-                started.append(t)
-        except:
-            if verbose:
-                print('Can't start %d threads, only %d threads started' %
-                      (len(threads), len(started)))
-            raise
-        yield
-    finally:
-        try:
-            if unlock:
-                unlock()
-            endtime = starttime = time.time()
-            for timeout in range(1, 16):
-                endtime += 60
-                for t in started:
-                    t.join(max(endtime - time.time(), 0.01))
-                started = [t for t in started if t.isAlive()]
-                if not started:
-                    break
-                if verbose:
-                    print('Unable to join %d threads during a period of '
-                          '%d minutes' % (len(started), timeout))
-        finally:
-            started = [t for t in started if t.isAlive()]
-            if started:
-                faulthandler.dump_traceback(sys.stdout)
-                raise AssertionError('Unable to join %d threads' % len(started))
-    
-            # modify unknown file obj
-        self.assertRaises(KeyError, s.modify, 999999, selectors.EVENT_READ)
-    
-        def test_libc_ver(self):
-        import os
-        if os.path.isdir(sys.executable) and \
-           os.path.exists(sys.executable+'.exe'):
-            # Cygwin horror
-            executable = sys.executable + '.exe'
+        def _format_chunk(self, chunk):
+        if self._expected_content_remaining is not None:
+            self._expected_content_remaining -= len(chunk)
+            if self._expected_content_remaining < 0:
+                # Close the stream now to stop further framing errors.
+                self.stream.close()
+                raise httputil.HTTPOutputError(
+                    'Tried to write more data than Content-Length')
+        if self._chunking_output and chunk:
+            # Don't write out empty chunks because that means END-OF-STREAM
+            # with chunked encoding
+            return utf8('%x' % len(chunk)) + b'\r\n' + chunk + b'\r\n'
         else:
-            executable = sys.executable
-        res = platform.libc_ver(executable)
+            return chunk
     
-        def _create_fragment_test_nodes(self):
-        dom = parseString('<doc/>')
-        orig = dom.createTextNode('original')
-        c1 = dom.createTextNode('foo')
-        c2 = dom.createTextNode('bar')
-        c3 = dom.createTextNode('bat')
-        dom.documentElement.appendChild(orig)
-        frag = dom.createDocumentFragment()
-        frag.appendChild(c1)
-        frag.appendChild(c2)
-        frag.appendChild(c3)
-        return dom, orig, c1, c2, c3, frag
+        def __exit__(self, type, value, traceback):
+        _state.contexts = self.old_contexts
     
-        def __init__(self):
-        self.byteStream = None
-        self.characterStream = None
-        self.stringData = None
-        self.encoding = None
-        self.publicId = None
-        self.systemId = None
-        self.baseURI = None
-    
-                if TESTFN in sys.modules:
-                del sys.modules[TESTFN]
-            importlib.invalidate_caches()
-            try:
-                try:
-                    mod = __import__(TESTFN)
-                except ImportError as err:
-                    self.fail('import from %s failed: %s' % (ext, err))
+        @unittest.skipIf(os.name == 'nt', 'flaky on windows')
+    def test_large_body_streaming_chunked(self):
+        with ExpectLog(gen_log, '.*chunked body too large'):
+            response = self.fetch('/streaming', method='PUT',
+                                  body_producer=lambda write: write(b'a' * 10240))
+        self.assertEqual(response.code, 400)
     
     
-# This file provides an UnsafeThreadPoolExecutor, which operates exactly like
-# the upstream Python version of ThreadPoolExecutor with one exception: it
-# doesn't wait for worker threads to finish before shutting down the Python
-# interpreter.
-#
-# This is dangerous for many workloads, but fine for some (like when threads
-# only send network requests). The YCM workload is one of those workloads where
-# it's safe (the aforementioned network requests case).
+def try_close(f):
+    # Avoid issue #875 (race condition when using the file in another
+    # thread).
+    for i in range(10):
+        try:
+            f.close()
+        except IOError:
+            # Yield to another thread
+            time.sleep(1e-3)
+        else:
+            break
+    # Try a last time and let raise
+    f.close()
     
-                self._state = CANCELLED
-            self._condition.notify_all()
+            future = c.wait()
+        self.assertEqual(102, len(c._waiters))
     
-        >>> Point = namedtuple('Point', 'x y')
-    >>> Point.__doc__                   # docstring for the new class
-    'Point(x, y)'
-    >>> p = Point(11, y=22)             # instantiate with positional args or keywords
-    >>> p[0] + p[1]                     # indexable like a plain tuple
-    33
-    >>> x, y = p                        # unpack like a regular tuple
-    >>> x, y
-    (11, 22)
-    >>> p.x + p.y                       # fields also accessable by name
-    33
-    >>> d = p._asdict()                 # convert to a dictionary
-    >>> d['x']
-    11
-    >>> Point(**d)                      # convert from a dictionary
-    Point(x=11, y=22)
-    >>> p._replace(x=100)               # _replace() is like str.replace() but targets named fields
-    Point(x=100, y=22)
-    
-      return [ config_entry ]
-    
-        with MockCurrentColumnAndLineContents( 3, 'føo(' ):
-      ok_( base.LastEnteredCharIsIdentifierChar() )
-    
-      This function changes candidates to resolve that issue.
-    
-    
-def BuildYcmdLibs( args ):
-  if not args.skip_build:
-    subprocess.check_call( [
-      sys.executable,
-      p.join( DIR_OF_THIS_SCRIPT, 'third_party', 'ycmd', 'build.py' )
-    ] )
+        IoU_lo_thresh = 0.5
+    IoU_hi_thresh = 0.95
+    ind_lo = _get_thr_ind(coco_eval, IoU_lo_thresh)
+    ind_hi = _get_thr_ind(coco_eval, IoU_hi_thresh)
+    # precision has dims (iou, recall, cls, area range, max dets)
+    # area range index 0: all area ranges
+    # max dets index 2: 100 per image
+    precision = coco_eval.eval['precision'][ind_lo:(ind_hi + 1), :, :, 0, 2]
+    ap_default = np.mean(precision[precision > -1])
+    logger.info(
+        '~~~~ Mean and per-category AP @ IoU=[{:.2f},{:.2f}] ~~~~'.format(
+            IoU_lo_thresh, IoU_hi_thresh))
+    logger.info('{:.1f}'.format(100 * ap_default))
+    for cls_ind, cls in enumerate(json_dataset.classes):
+        if cls == '__background__':
+            continue
+        # minus 1 because of __background__
+        precision = coco_eval.eval['precision'][
+            ind_lo:(ind_hi + 1), :, cls_ind - 1, 0, 2]
+        ap = np.mean(precision[precision > -1])
+        logger.info('{:.1f}'.format(100 * ap))
+    logger.info('~~~~ Summary metrics ~~~~')
+    coco_eval.summarize()
     
     
-@patch( 'ycm.client.messages_request.PostVimMessage',
-        new_callable = ExtendedMock )
-def HandlePollResponse_SingleMessage_test( post_vim_message ):
-  assert_that( _HandlePollResponse( [ { 'message': 'this is a message' } ] ,
-                                    None ),
-               equal_to( True ) )
+# ---------------------------------------------------------------------------- #
+# RPN and Faster R-CNN outputs and losses
+# ---------------------------------------------------------------------------- #
+    
+        # subsample negative labels if we have too many
+    # (samples with replacement, but since the set of bg inds is large most
+    # samples will not have repeats)
+    num_bg = cfg.TRAIN.RPN_BATCH_SIZE_PER_IM - np.sum(labels == 1)
+    bg_inds = np.where(anchor_to_gt_max < cfg.TRAIN.RPN_NEGATIVE_OVERLAP)[0]
+    if len(bg_inds) > num_bg:
+        enable_inds = bg_inds[npr.randint(len(bg_inds), size=num_bg)]
+        labels[enable_inds] = 0
+    bg_inds = np.where(labels == 0)[0]
+    
+        def test_bbox_dataset_to_prediction_roundtrip(self):
+        '''Simulate the process of reading a ground-truth box from a dataset,
+        make predictions from proposals, convert the predictions back to the
+        dataset format, and then use the COCO API to compute IoU overlap between
+        the gt box and the predictions. These should have IoU of 1.
+        '''
+        weights = (5, 5, 10, 10)
+        # 1/ 'read' a box from a dataset in the default (x1, y1, w, h) format
+        gt_xywh_box = [10, 20, 100, 150]
+        # 2/ convert it to our internal (x1, y1, x2, y2) format
+        gt_xyxy_box = box_utils.xywh_to_xyxy(gt_xywh_box)
+        # 3/ consider nearby proposal boxes
+        prop_xyxy_boxes = random_boxes(gt_xyxy_box, 10, 10)
+        # 4/ compute proposal-to-gt transformation deltas
+        deltas = box_utils.bbox_transform_inv(
+            prop_xyxy_boxes, np.array([gt_xyxy_box]), weights=weights
+        )
+        # 5/ use deltas to transform proposals to xyxy predicted box
+        pred_xyxy_boxes = box_utils.bbox_transform(
+            prop_xyxy_boxes, deltas, weights=weights
+        )
+        # 6/ convert xyxy predicted box to xywh predicted box
+        pred_xywh_boxes = box_utils.xyxy_to_xywh(pred_xyxy_boxes)
+        # 7/ use COCO API to compute IoU
+        not_crowd = [int(False)] * pred_xywh_boxes.shape[0]
+        ious = COCOmask.iou(pred_xywh_boxes, np.array([gt_xywh_box]), not_crowd)
+        np.testing.assert_array_almost_equal(ious, np.ones(ious.shape))
