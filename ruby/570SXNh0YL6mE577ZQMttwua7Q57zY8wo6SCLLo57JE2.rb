@@ -1,109 +1,133 @@
 
         
-          test 'helpers' do
-    assert_response_code_range 200..299, :successful?
-    assert_response_code_range [404],    :not_found?
-    assert_response_code_range 300..399, :redirection?
-    assert_response_code_range 500..599, :server_error?
-    assert_response_code_range 400..499, :client_error?
+          def notification_setting_params
+    allowed_fields = NotificationSetting::EMAIL_EVENTS.dup
+    allowed_fields << :level
+    params.require(:notification_setting).permit(allowed_fields)
   end
-    
-      class BareEmptyTest < ActiveSupport::TestCase
-    test 'response body is nil' do
-      controller = BareEmptyController.new
-      controller.set_request!(ActionDispatch::Request.empty)
-      controller.set_response!(BareController.make_response!(controller.request))
-      controller.index
-      assert_nil controller.response_body
-    end
-  end
-    
-      def test_parsing_json_doesnot_rescue_exception
-    req = Class.new(ActionDispatch::Request) do
-      def params_parsers
-        { json: Proc.new { |data| raise Interrupt } }
-      end
-    
-      class AssertMultipartSelectMailer < ActionMailer::Base
-    def test(options)
-      mail subject: 'Test e-mail', from: 'test@test.host', to: 'test <test@test.host>' do |format|
-        format.text { render plain: options[:text] }
-        format.html { render plain: options[:html] }
-      end
-    end
-  end
-    
-    module AccountFinderConcern
-  extend ActiveSupport::Concern
-    
-    require_relative '../mastodon/snowflake'
-    
-    class ActivityPub::EmojiSerializer < ActiveModel::Serializer
-  include RoutingHelper
-    
-      def perform(user_id)
-    @user = User.find(user_id)
-    deliver_digest if @user.allows_digest_emails?
-  end
-    
-          it 'regenerates feed when sign in is older than two weeks' do
-        get :show
-    
-      def test_font_helper_with_suffix_question
-    assert_match %r(url\(['']?/assets/.*eot\?.*['']?\)), @css
-  end
-    
-    unless $LOAD_PATH.include? lib_path
-  $LOAD_PATH.unshift lib_path
 end
 
     
+      # Finds the groups of the source user, optionally limited to those visible to
+  # the current user.
+  def execute(current_user = nil)
+    segments = all_groups(current_user)
     
-  ['', 'www.'].each do |prefix|
-    begin
-      Timeout.timeout(10) do
-        doc = Hpricot(URI.parse('http://#{prefix}#{site}/').open)
-        doc.search('//form').each do |form|
+      def self.authenticate(user, app_id, json_response, challenges)
+    response = U2F::SignResponse.load_from_json(json_response)
+    registration = user.u2f_registrations.find_by_key_handle(response.key_handle)
+    u2f = U2F::U2F.new(app_id)
     
-        end # end of each_key
-  end # end of parse
-end
+      # GET /resource/unlock/new
+  def new
+    self.resource = resource_class.new
+  end
     
-          case matched
-        when :ok
-          # Last command was successful, in addition most servers transmit a banner with the first +OK
-          case s[:last]
-            when nil
-              # Its the first +OK must include the banner, worst case its just +OK
-              s[:info]  = matches
-              s[:proto] = 'tcp'
-              s[:name]  = 'pop3'
-              report_service(s)
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
+      end
     
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
+    end
     
-    {	if ln =~ /;(read|write)_(handle|filename)=/
-		parts = ln.split(' ')
-		if (parts[0] == 'mov')
-			parts2 = parts[2].split('=')
-			label = parts2[0]
-			label.slice!(0,1)
-			old = parts2[1]
-			new = addrs[label]
-			#puts '%32s: %s -> %x' % [label, old, new]
-			replaces << [label, old, new.to_s(16)]
-		end
-	end
-}
+          attr_reader :scope_name, :resource
     
-    module Capistrano
-  module Doctor
-    # Prints table of all Capistrano-related gems and their version numbers. If
-    # there is a newer version of a gem available, call attention to it.
-    class GemsDoctor
-      include Capistrano::Doctor::OutputHelpers
+      def test_recursive_hash_value_array
+    h = @cls[]
+    h[[[1]]] = 1
+    assert_equal(1, h.size)
+    h[[[2]]] = 1
+    assert_equal(2, h.size)
     
-      %w(quiet silent verbose).each do |switch|
-    it 'doesn't include --#{switch} in help' do
-      expect(help_output).not_to match(/--#{switch}/)
+      it 'does not decode a float when fewer bytes than a float remain and the '*' modifier is passed' do
+    [ ['\xff', []],
+      ['\xff\x00', []],
+      ['\xff\x00\xff', []]
+    ].should be_computed_by(:unpack, unpack_format('*'))
+  end
+    
+      Ruby = Struct.new(:version, :platform)
+    
+      # This spec is a mess. It fails randomly, it hangs on MRI, it needs to be removed
+  quarantine! do
+  it 'killing dying running does nothing' do
+    in_ensure_clause = false
+    exit_loop = true
+    t = ThreadSpecs.dying_thread_ensures do
+      in_ensure_clause = true
+      loop { if exit_loop then break end }
+      ScratchPad.record :after_stop
+    end
+    
+      def icon
+    object.image
+  end
+    
+            def clear_cache
+          UI.message('Removing the whole cache dir #{@cache.root}') do
+            FileUtils.rm_rf(@cache.root)
+          end
+        end
+      end
     end
   end
+end
+
+    
+            It is possible to specify a list of dependencies which will be used by
+        the template in the `Podfile.default` (normal targets) `Podfile.test`
+        (test targets) files which should be stored in the
+        `~/.cocoapods/templates` folder.
+      DESC
+      self.arguments = [
+        CLAide::Argument.new('XCODEPROJ', :false),
+      ]
+    
+          #-----------------------------------------------------------------------#
+    end
+  end
+end
+
+    
+    # The project root directory
+$root = ::File.dirname(__FILE__)
+    
+          super
+    end
+    
+        def initialize(tag_name, markup, tokens)
+      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
+      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
+      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
+      super
+    end
+    
+        def each_definition
+      @attachments.each do |klass, attachments|
+        attachments.each do |name, options|
+          yield klass, name, options
+        end
+      end
+    end
+    
+      class Railtie < Rails::Railtie
+    initializer 'paperclip.insert_into_active_record' do |app|
+      ActiveSupport.on_load :active_record do
+        Paperclip::Railtie.insert
+      end
+    
+        module CommandRecorder
+      def add_attachment(*args)
+        record(:add_attachment, args)
+      end
+    
+    module Paperclip
+  module Validators
+    extend ActiveSupport::Concern
