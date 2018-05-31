@@ -1,104 +1,105 @@
 
         
-            # Returns a representation of the query as an array of strings and
-    # potentially {Sass::Script::Tree::Node}s (if there's interpolation in it).
-    # When the interpolation is resolved and the strings are joined together,
-    # this will be the string representation of this query.
-    #
-    # @return [Array<String, Sass::Script::Tree::Node>]
-    def to_a
-      Sass::Util.intersperse(queries.map {|q| q.to_a}, ', ').flatten
+          end
+    
+      def revoke_admin!
+    set_permission('admin', false)
+  end
+    
+        version '1.6' do
+      self.release = '1.6.5'
+      self.base_urls = [
+        'https://hexdocs.pm/elixir/#{release}/',
+        'https://hexdocs.pm/eex/#{release}/',
+        'https://hexdocs.pm/ex_unit/#{release}/',
+        'https://hexdocs.pm/iex/#{release}/',
+        'https://hexdocs.pm/logger/#{release}/',
+        'https://hexdocs.pm/mix/#{release}/',
+        'https://elixir-lang.org/getting-started/'
+      ]
     end
     
-            p environment.var(name)
-      else
-        p Script::Parser.parse(text, @line, 0).perform(environment)
+        options[:title] = 'Sinon.JS'
+    options[:container] = '.content .container'
+    
+        version 'Guide' do
+      self.base_url = 'https://www.tensorflow.org/'
+      self.root_path = 'get_started/get_started'
+      self.initial_paths = %w(
+        programmers_guide/reading_data
+        tutorials/mandelbrot
+        performance/performance_guide
+        deploy/hadoop
+        extend/architecture)
+    
+        def insert_after(index, *names)
+      insert assert_index(index) + 1, *names
+    end
+    
+    module Docs
+  class PageDb
+    attr_reader :pages
+    
+          # This deletes the block with the given key if it exists.
+      def delete(key)
+        key    = Regexp.quote(key)
+        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$.*^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
+        @value.gsub!(regexp, '')
       end
-    rescue Sass::SyntaxError => e
-      puts 'SyntaxError: #{e.message}'
-      if @options[:trace]
-        e.backtrace.each do |line|
-          puts '\tfrom #{line}'
+    
+              # Verify the box exists that we want to repackage
+          box = @env.boxes.find(box_name, box_provider, '= #{box_version}')
+          if !box
+            raise Vagrant::Errors::BoxNotFoundWithProviderAndVersion,
+              name: box_name,
+              provider: box_provider.to_s,
+              version: box_version
+          end
+    
+      def parse(pkt)
+    # We want to return immediatly if we do not have a packet which is handled by us
+    return unless pkt.is_tcp?
+    return if (pkt.tcp_sport != 110 and pkt.tcp_dport != 110)
+    s = find_session((pkt.tcp_sport == 110) ? get_session_src(pkt) : get_session_dst(pkt))
+    
+          case matched
+      when :webhost
+        sessions[s[:session]].merge!({k => matches})
+        if(s[:get])
+          print_status('HTTP GET: #{s[:session]} http://#{s[:webhost]}#{s[:get]}')
+          sessions.delete(s[:session])
+          return
         end
+      when nil
+        # No matches, no saved state
+      end # end case matched
+    end # end of each_key
+  end # end of parse
+end # end of URL sniffer
+    
+    
+    {	if ln =~ /;(read|write)_(handle|filename)=/
+		parts = ln.split(' ')
+		if (parts[0] == 'mov')
+			parts2 = parts[2].split('=')
+			label = parts2[0]
+			label.slice!(0,1)
+			old = parts2[1]
+			new = addrs[label]
+			#puts '%32s: %s -> %x' % [label, old, new]
+			replaces << [label, old, new.to_s(16)]
+		end
+	end
+}
+    
+    
+    
+    if Encoding.default_external != Encoding::UTF_8
+    
+          def markdown_podfile
+        UI::ErrorReport.markdown_podfile
       end
-    end
-  end
-end
-
     
-      %w(GET HEAD POST PUT DELETE).each do |method|
-    it 'accepts #{method} requests when allow_if is true' do
-      mock_app do
-        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
-        run DummyApp
-      end
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
-    end
-  end
-    
-      # Many RSpec users commonly either run the entire suite or an individual
-  # file, and it's useful to allow more verbose output when running an
-  # individual spec file.
-  if config.files_to_run.one?
-    # Use the documentation formatter for detailed output,
-    # unless a formatter has already been configured
-    # (e.g. via a command-line flag).
-    config.default_formatter = 'doc'
-  end
-    
-            def operator_assignment_node
-          return nil unless node.parent
-          return nil unless OPERATOR_ASSIGNMENT_TYPES.include?(node.parent.type)
-          return nil unless node.sibling_index.zero?
-          node.parent
-        end
-    
-    module RuboCop
-  module RSpec
-    # Mixin for `expect_offense` and `expect_no_offenses`
-    #
-    # This mixin makes it easier to specify strict offense expectations
-    # and a declarative and visual fashion. Just type out the code that
-    # should generate a offense, annotate code by writing '^'s
-    # underneath each character that should be highlighted, and follow
-    # the carets with a string (separated by a space) that is the
-    # message of the offense. You can include multiple offenses in
-    # one code snippet.
-    #
-    # @example Usage
-    #
-    #     expect_offense(<<-RUBY.strip_indent)
-    #       a do
-    #         b
-    #       end.c
-    #       ^^^^^ Avoid chaining a method call on a do...end block.
-    #     RUBY
-    #
-    # @example Equivalent assertion without `expect_offense`
-    #
-    #     inspect_source(<<-RUBY.strip_indent)
-    #       a do
-    #         b
-    #       end.c
-    #     RUBY
-    #
-    #     expect(cop.offenses.size).to be(1)
-    #
-    #     offense = cop.offenses.first
-    #     expect(offense.line).to be(3)
-    #     expect(offense.column_range).to be(0...5)
-    #     expect(offense.message).to eql(
-    #       'Avoid chaining a method call on a do...end block.'
-    #     )
-    #
-    # If you do not want to specify an offense then use the
-    # companion method `expect_no_offenses`. This method is a much
-    # simpler assertion since it just inspects the source and checks
-    # that there were no offenses. The `expect_offenses` method has
-    # to do more work by parsing out lines that contain carets.
-    module ExpectOffense
-      def expect_offense(source, file = nil)
-        expected_annotations = AnnotatedSource.parse(source)
-    
-      let(:source) { ''something'.intern' }
-  let(:corrected) { autocorrect_source(source) }
+            TEMPLATE_REPO = 'https://github.com/CocoaPods/pod-template.git'.freeze
+        TEMPLATE_INFO_URL = 'https://github.com/CocoaPods/pod-template'.freeze
+        CREATE_NEW_POD_INFO_URL = 'http://guides.cocoapods.org/making/making-a-cocoapod'.freeze
