@@ -1,96 +1,85 @@
-    # The stdlib recorded in the install receipt is used during dependency
-    # compatibility checks, so we only care about the stdlib that libraries
-    # link against.
-    keg.detect_cxx_stdlibs(:skip_executables => true)
-  end
+
+        
+          next if extensions.empty?
+  mimes[mime] = [] if mimes[mime].nil?
+  mimes[mime].concat extensions
+end
     
-      def <<(o)
-    @settings << o
-    self
-  end
+        To install Clojure you should install Leiningen:
+      brew install leiningen
+    and then follow the tutorial:
+      https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
+    EOS
+  when 'osmium' then <<-EOS.undent
+    The creator of Osmium requests that it not be packaged and that people
+    use the GitHub master branch instead.
+    EOS
+  when 'gfortran' then <<-EOS.undent
+    GNU Fortran is now provided as part of GCC, and can be installed with:
+      brew install gcc
+    EOS
+  when 'play' then <<-EOS.undent
+    Play 2.3 replaces the play command with activator:
+      brew install typesafe-activator
     
-      def fish_completion_caveats
-    if keg && keg.completion_installed?(:fish) && which('fish') then <<-EOS.undent
-      fish completion has been installed to:
-        #{HOMEBREW_PREFIX}/share/fish/vendor_completions.d
-      EOS
+          # Find commands in the path
+      unless (exts = external_commands).empty?
+        puts
+        puts 'External commands'
+        puts_columns exts
+      end
     end
   end
     
-      def observe_file_removal(path)
-    path.extend(ObserverPathnameExtension).unlink if path.exist?
-  end
+      def describe_system_ruby
+    s = ''
+    case RUBY_VERSION
+    when /^1\.[89]/, /^2\.0/
+      s << '#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}'
+    else
+      s << RUBY_VERSION
+    end
     
-          html_filters.push 'bootstrap/entries_v4', 'bootstrap/clean_html_v4'
-    
-        options[:attribution] = <<-HTML
-      &copy; 2010&ndash;2018 Michael Bostock<br>
-      Licensed under the BSD License.
-    HTML
-    
-        html_filters.push 'haxe/clean_html', 'haxe/entries'
-    
-          ([self.root_path] + self.initial_paths).each do |path|
-        stub(path) do
-          capybara = load_capybara_selenium
-          capybara.app_host = self.base_url.origin
-          capybara.visit('#{self.base_url}#{path}')
-          capybara.execute_script('return document.body.innerHTML')
+        if $stdout.tty?
+      metacharacters = %w[\\ | ( ) [ ] { } ^ $ * + ? .]
+      bad_regex = metacharacters.any? do |char|
+        ARGV.any? do |arg|
+          arg.include?(char) && !arg.start_with?('/')
         end
+      end
+      if ARGV.any? && bad_regex
+        ohai 'Did you mean to perform a regular expression search?'
+        ohai 'Surround your query with /slashes/ to search by regex.'
       end
     end
     
-        def empty?
-      @entries.empty?
-    end
+      def initialize(tap)
+    @tap = tap
     
-      # Uninstalls this logger from \{Sass.logger\}. This should only be called if
-  # the logger was installed using \{#install!}
-  def uninstall!
-    if Sass.logger != self
-      throw Exception.new('Can't uninstall a logger that's not currently installed.')
-    end
+      def vlength
+    Math.sqrt(@x * @x + @y * @y + @z * @z)
+  end
     
-        def parse_input(environment, text)
-      case text
-      when Script::MATCH
-        name = $1
-        guarded = !!$3
-        val = Script::Parser.parse($2, @line, text.size - ($3 || '').size - $2.size)
+    def kikaku(a)
+  a.collect {|x| x - a[0]}
+end
+def ud(a)
+  kikaku(a.collect {|x| ((x+NP)%ROW)-ROW*((x+NP)/ROW) }.sort)
+end
+def rl(a)
+  kikaku(a.collect {|x| ROW*((x+NP)/ROW)+ROW-((x+NP)%ROW)}.sort)
+end
+def xy(a)
+  kikaku(a.collect {|x| ROW*((x+NP)%ROW) + (x+NP)/ROW }.sort)
+end
     
-            def run
-          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
-          if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
-              print_pod_cache_infos(pod_name, cache_descriptors)
-            end
-          else # Print only for the requested pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            else
-              print_pod_cache_infos(@pod_name, cache_descriptors)
-            end
-          end
-        end
-    
-          # @param  [[Xcodeproj::PBXTarget]] targets
-      #         An array which always has a target as its first item
-      #         and may optionally contain related test targets
-      #
-      # @return [String] the text for the target module
-      #
-      def target_module(app, tests)
-        target_module = '\ntarget '#{app.name.gsub(/'/, '\\\\\'')}' do\n'
-    
-            def execute_repl_command(repl_command)
-          unless repl_command == '\n'
-            repl_commands = repl_command.split
-            subcommand = repl_commands.shift.capitalize
-            arguments = repl_commands
-            subcommand_class = Pod::Command::IPC.const_get(subcommand)
-            subcommand_class.new(CLAide::ARGV.new(arguments)).run
-            signal_end_of_output
+            def find_address
+          if @order.bill_address_id == params[:id].to_i
+            @order.bill_address
+          elsif @order.ship_address_id == params[:id].to_i
+            @order.ship_address
+          else
+            raise CanCan::AccessDenied
           end
         end
       end
@@ -100,3 +89,14 @@ end
 
     
             private
+    
+      def _nt_double_quoted_string
+    start_index = index
+    if node_cache[:double_quoted_string].has_key?(index)
+      cached = node_cache[:double_quoted_string][index]
+      if cached
+        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
