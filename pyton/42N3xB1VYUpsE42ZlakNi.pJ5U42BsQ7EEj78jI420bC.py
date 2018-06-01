@@ -1,155 +1,106 @@
 
         
-        
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
+        if __name__ == '__main__':
+    main()
+
     
     
-def filename_from_content_disposition(content_disposition):
-    '''
-    Extract and validate filename from a Content-Disposition header.
-    
-            '''
-        self.enabled = True
-        self.kwargs = kwargs
-    
-        '''
-    abbrevs = [
-        (1 << 50, 'PB'),
-        (1 << 40, 'TB'),
-        (1 << 30, 'GB'),
-        (1 << 20, 'MB'),
-        (1 << 10, 'kB'),
-        (1, 'B')
-    ]
-    
-        return RequestItems(headers_class(headers),
-                        data_class(data),
-                        files_class(files),
-                        params_class(params))
-    
-        def load_installed_plugins(self):
-        for entry_point_name in ENTRY_POINT_NAMES:
-            for entry_point in iter_entry_points(entry_point_name):
-                plugin = entry_point.load()
-                plugin.package_name = entry_point.dist.key
-                self.register(entry_point.load())
-    
-        branch_pool = AveragePooling2D((3, 3), strides=(1, 1), padding='same')(x)
-    branch_pool = conv2d_bn(branch_pool, 192, 1, 1)
-    x = layers.concatenate(
-        [branch1x1, branch7x7, branch7x7dbl, branch_pool],
-        axis=channel_axis,
-        name='mixed7')
-    
-        def call(self, inputs):
-        return K.reshape(inputs, (K.shape(inputs)[0],) + self.target_shape)
+def assertGreaterEqual(self, got, expected, msg=None):
+    if not (got >= expected):
+        if msg is None:
+            msg = '%r not greater than or equal to %r' % (got, expected)
+        self.assertTrue(got >= expected, msg)
     
     
-def get(identifier):
-    '''Retrieves a Keras Optimizer instance.
+class RtspFD(FileDownloader):
+    def real_download(self, filename, info_dict):
+        url = info_dict['url']
+        self.report_destination(filename)
+        tmpfilename = self.temp_name(filename)
     
-        # Arguments
-        model: Keras model instance.
-        f: Keras function returning a list of tensors.
-        ins: list of tensors to be fed to `f`.
-        batch_size: integer batch size.
-        verbose: verbosity mode.
-        steps: Total number of steps (batches of samples)
-            before declaring `predict_loop` finished.
-            Ignored with the default value of `None`.
+        return sorted(
+        filter(lambda ie: ie.is_suitable(age_limit), gen_extractors()),
+        key=lambda ie: ie.IE_NAME.lower())
     
-        first_block_filters = _make_divisible(32 * alpha, 8)
-    x = Conv2D(first_block_filters,
-               kernel_size=3,
-               strides=(2, 2), padding='same',
-               use_bias=False, name='Conv1')(img_input)
-    x = BatchNormalization(epsilon=1e-3, momentum=0.999, name='bn_Conv1')(x)
-    x = Activation(relu6, name='Conv1_relu')(x)
+            webpage = self._download_webpage(url, playlist_id)
+        title = self._html_search_regex(
+            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
+        description = self._html_search_regex(
+            r'<p class='excerpt'[^>]*?>(.*?)</p>',
+            webpage, 'description', fatal=False)
+        urls = re.findall(
+            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
+            webpage)
+        entries = [self.url_result(u) for u in urls]
     
-    # build decoder model
-latent_inputs = Input(shape=(latent_dim,), name='z_sampling')
-x = Dense(shape[1] * shape[2] * shape[3], activation='relu')(latent_inputs)
-x = Reshape((shape[1], shape[2], shape[3]))(x)
+        _TEST = {
+        'url': 'http://www.anitube.se/video/36621',
+        'md5': '59d0eeae28ea0bc8c05e7af429998d43',
+        'info_dict': {
+            'id': '36621',
+            'ext': 'mp4',
+            'title': 'Recorder to Randoseru 01',
+            'duration': 180.19,
+        },
+        'skip': 'Blocked in the US',
+    }
     
-        if address_family == socket.AF_INET:
-        if len(packed_ip) != ctypes.sizeof(addr.ipv4_addr):
-            raise socket.error('packed IP wrong length for inet_ntoa')
-        ctypes.memmove(addr.ipv4_addr, packed_ip, 4)
-    elif address_family == socket.AF_INET6:
-        if len(packed_ip) != ctypes.sizeof(addr.ipv6_addr):
-            raise socket.error('packed IP wrong length for inet_ntoa')
-        ctypes.memmove(addr.ipv6_addr, packed_ip, 16)
-    else:
-        raise socket.error('unknown address family')
+            if args.test_results:
+            path = os.path.join(output_dir, '%s/test.json' % job_number)
+            url = 'https://api.shippable.com/jobs/%s/jobTestReports' % job_id
+            download(args, headers, path, url)
+            extract_contents(args, path, os.path.join(output_dir, '%s/test' % job_number))
     
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
+        'hostport': re.compile(
+        r'''^
+            ((?:                        # We want to match:
+                [^:\[\]]                # (a non-range character
+                |                       # ...or...
+                \[[^\]]*\]              # a complete bracketed expression)
+            )*)                         # repeated as many times as possible
+            :([0-9]+)                   # followed by a port number
+            $
+        ''', re.X
+    ),
+    
+        @mock.patch('pkg_resources.get_distribution', side_effect=build_distribution)
+    def test_check_minimum_pkg_version(self, mockobj):
+        self.assertTrue(check_min_pkg_version('foobar', '0.4.0'))
+        self.assertTrue(check_min_pkg_version('foobar', '0.5.0'))
+        self.assertFalse(check_min_pkg_version('foobar', '0.6.0'))
+    
+    import os
+import re
+    
+    #############################################
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
     
     
-class RecognitionException(Exception):
-    '''@brief The root of the ANTLR exception hierarchy.
+class TextTestResult(_TextTestResult):
+    def printSummary(self, start, stop):
+        write = self.stream.write
+        writeln = self.stream.writeln
     
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
-    
-            ret = []
-        for i in range(len(string) / 2):
-            (n, v) = ord(string[i*2]), ord(string[i*2+1])
+        def process_options(self, args, opts):
+        ScrapyCommand.process_options(self, args, opts)
+        try:
+            opts.spargs = arglist_to_dict(opts.spargs)
+        except ValueError:
+            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
+        if opts.output:
+            if opts.output == '-':
+                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
+            else:
+                self.settings.set('FEED_URI', opts.output, priority='cmdline')
+            feed_exporters = without_none_values(
+                self.settings.getwithbase('FEED_EXPORTERS'))
+            valid_output_formats = feed_exporters.keys()
+            if not opts.output_format:
+                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
+            if opts.output_format not in valid_output_formats:
+                raise UsageError('Unrecognized output format '%s', set one'
+                                 ' using the '-t' switch or as a file extension'
+                                 ' from the supported list %s' % (opts.output_format,
+                                                                  tuple(valid_output_formats)))
+            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
