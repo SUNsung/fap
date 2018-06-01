@@ -1,184 +1,161 @@
 
         
         
-    
-    TEST(AnyTest, TestIs) {
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  google::protobuf::Any any;
-  any.PackFrom(submessage);
-  ASSERT_TRUE(any.ParseFromString(any.SerializeAsString()));
-  EXPECT_TRUE(any.Is<protobuf_unittest::TestAny>());
-  EXPECT_FALSE(any.Is<google::protobuf::Any>());
-    }
-    
-    
     {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-    #include <memory>
-    
-    
-    {
-}  // namespace google
-#endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
+    {}  // namespace
+}  // namespace tesseract
 
     
-    
-    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ReflectionClassGenerator);
-};
-    
-    
+    class IntSimdMatrixTest : public ::testing::Test {
+ protected:
+  // Makes a random weights matrix of the given size.
+  GENERIC_2D_ARRAY<int8_t> InitRandom(int no, int ni) {
+    GENERIC_2D_ARRAY<int8_t> a(no, ni, 0);
+    for (int i = 0; i < no; ++i) {
+      for (int j = 0; j < ni; ++j) {
+        a(i, j) = static_cast<int8_t>(random_.SignedRand(INT8_MAX));
+      }
+    }
+    return a;
+  }
+  // Makes a random input vector of the given size, with rounding up.
+  std::vector<int8_t> RandomVector(int size, const IntSimdMatrix& matrix) {
+    int rounded_size = matrix.RoundInputs(size);
+    std::vector<int8_t> v(rounded_size, 0);
+    for (int i = 0; i < size; ++i) {
+      v[i] = static_cast<int8_t>(random_.SignedRand(INT8_MAX));
+    }
+    return v;
+  }
+  // Makes a random scales vector of the given size.
+  GenericVector<double> RandomScales(int size) {
+    GenericVector<double> v(size, 0.0);
+    for (int i = 0; i < size; ++i) {
+      v[i] = 1.0 + random_.SignedRand(1.0);
+    }
+    return v;
+  }
+  // Tests a range of sizes and compares the results against the base_ version.
+  void ExpectEqualResults(IntSimdMatrix* matrix) {
+    for (int num_out = 1; num_out < 130; ++num_out) {
+      for (int num_in = 1; num_in < 130; ++num_in) {
+        GENERIC_2D_ARRAY<int8_t> w = InitRandom(num_out, num_in + 1);
+        matrix->Init(w);
+        std::vector<int8_t> u = RandomVector(num_in, *matrix);
+        GenericVector<double> scales = RandomScales(num_out);
+        std::vector<double> base_result(num_out);
+        base_.MatrixDotVector(w, scales, u.data(), base_result.data());
+        std::vector<double> test_result(num_out);
+        matrix->MatrixDotVector(w, scales, u.data(), test_result.data());
+        for (int i = 0; i < num_out; ++i)
+          EXPECT_FLOAT_EQ(base_result[i], test_result[i]) << 'i=' << i;
+      }
+    }
+  }
+    }
     
      private:
-  const FieldDescriptor* descriptor_;
-  Context* context_;
-  ClassNameResolver* name_resolver_;
-  string scope_;
+  // Resizes forward data to cope with an input image of the given width.
+  void ResizeForward(const NetworkIO& input);
     
-    // CodeGenerator implementation which generates Java code.  If you create your
-// own protocol compiler binary and you want it to support Java output, you
-// can do so by registering an instance of this CodeGenerator with the
-// CommandLineInterface in your main() function.
-class LIBPROTOC_EXPORT JavaGenerator : public CodeGenerator {
- public:
-  JavaGenerator();
-  ~JavaGenerator();
-    }
+     private:
+  // Saves the given Pix as a PNG-encoded string and destroys it.
+  static void SetPixInternal(Pix* pix, GenericVector<char>* image_data);
+  // Returns the Pix image for the image_data. Must be pixDestroyed after use.
+  static Pix* GetPixInternal(const GenericVector<char>& image_data);
+  // Parses the text string as a box file and adds any discovered boxes that
+  // match the page number. Returns false on error.
+  bool AddBoxes(const char* box_text);
     
-    #if GTEST_HAS_DEATH_TEST
+      // Returns the average sum of squared perpendicular error from a line
+  // through mean_point() in the direction dir.
+  double rms_orth(const FCOORD &dir) const;
     
-      // Since the basic IO manipulators are overloaded for both narrow
-  // and wide streams, we have to provide this specialized definition
-  // of operator <<, even though its body is the same as the
-  // templatized version above.  Without this definition, streaming
-  // endl or other basic IO manipulators to Message will confuse the
-  // compiler.
-  Message& operator <<(BasicNarrowIoManip val) {
-    *ss_ << val;
-    return *this;
-  }
+    /* Cancels the stream. Can be called at any time after
+ * bidirectional_stream_start(). The on_canceled() method of
+ * bidirectional_stream_callback will be invoked when cancelation
+ * is complete and no further callback methods will be invoked. If the
+ * stream has completed or has not started, calling
+ * bidirectional_stream_cancel() has no effect and on_canceled() will not
+ * be invoked. At most one callback method may be invoked after
+ * bidirectional_stream_cancel() has completed.
+ */
+GRPC_SUPPORT_EXPORT
+void bidirectional_stream_cancel(bidirectional_stream* stream);
     
-    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE DIRECTLY.
-//
-// Expands to the name of the variable used to remember the names of
-// the registered tests in the given test case.
-# define GTEST_REGISTERED_TEST_NAMES_(TestCaseName) \
-  gtest_registered_test_names_##TestCaseName##_
-    
-      // Stores result of the assertion predicate.
-  bool success_;
-  // Stores the message describing the condition in case the expectation
-  // construct is not satisfied with the predicate's outcome.
-  // Referenced via a pointer to avoid taking too much stack frame space
-  // with test assertions.
-  internal::scoped_ptr< ::std::string> message_;
-    
-    
-    
-      FilePath& operator=(const FilePath& rhs) {
-    Set(rhs);
-    return *this;
-  }
-    
-    // The base case for the compile time recursion.
-template <GTEST_TEMPLATE_ Fixture, typename Types>
-class TypeParameterizedTestCase<Fixture, Templates0, Types> {
- public:
-  static bool Register(const char* /*prefix*/, const char* /*case_name*/,
-                       const char* /*test_names*/) {
-    return true;
-  }
-};
-    
-      // Smart pointer members.
-  void reset(T* ptr = NULL) {
-    depart();
-    capture(ptr);
-  }
-  T* get() const { return value_; }
-  T* operator->() const { return value_; }
-  T& operator*() const { return *value_; }
-    
-    // A handy wrapper for AddRef.
-#define GTEST_ADD_REF_(T) typename ::std::tr1::gtest_internal::AddRef<T>::type
-    
-    
-    {    // Now, we have i <= n/i < n.
-    // If n is divisible by i, n is not prime.
-    if (n % i == 0) return false;
-  }
-    
-    
-    {    return net;
-}
-    
-    
-    {
-    {
-    {}}} // end namespaces
+    #endif  // GRPC_INTERNAL_COMPILER_NODE_GENERATOR_HELPERS_H
 
     
-            // Process any outstanding NDL Scripts
-        bool crossNetwork = netNdlTo->cn != netNdlFrom->cn;
-        ProcessNDLScript(netNdlFrom, ndlPassAll);
-        if (crossNetwork)
-        {
-            ProcessNDLScript(netNdlTo, ndlPassAll);
-        }
+    #include <grpc/grpc_security.h>
     
-    // GetWriter - get a reader type from the DLL
-// The F version gets the 'float' version, and D gets 'double'.
-extern 'C' DATAWRITER_API void GetWriterF(IDataWriter** pwriter);
-extern 'C' DATAWRITER_API void GetWriterD(IDataWriter** pwriter);
+    class CodegenTestMinimal : public ::testing::Test {};
     
-    // ---------------------------------------------------------------------------
-// ProgressTracing -- static helper class for logging a progress indicator
-//
-// This is for use by the cluster management tools for indicating global progress to the user.
-//
-// This logs to stdout (not stderr) in a specific format, e.g. understood by the Philly cluster. The format is:
-//  PROGRESS xx.xx%
-//  EVALERR xx.xx%
-//
-// Specifically, this class handles a two-level progress computation:
-//  - outer level: loop over multiple training phases, each running multiple steps (epochs)
-//  - inner level in one training phase: loop over multiple steps, *without* knowledge about the other training phases
-//
-// In order for the inner level to log correctly in the global context, the outer loop
-// must inform this class about the total number of steps and the current offset to apply in the inner level.
-// ---------------------------------------------------------------------------
+      static double Now();
     
-    class latticepair : public std::pair<msra::lattices::lattice, msra::lattices::lattice>
-{
-public:
-    // NOTE: we don't check numerator lattice now
-    size_t getnumframes() const
-    {
-        return second.getnumframes();
-    }
-    size_t getnumnodes() const
-    {
-        return second.getnumnodes();
-    }
-    size_t getnumedges() const
-    {
-        return second.getnumedges();
-    }
-    std::wstring getkey() const
-    {
-        return second.getkey();
-    }
-};
+      // Initialize the internal timer and reset the query count to 0
+  void Reset();
     
-        // save a float to RAM bypassing the cache ('without polluting the cache')
-    void storewithoutcache (float & r) const
-    {
-        _mm_stream_ss (&r, v);
+    namespace grpc {
+namespace testing {
     }
-#endif
+    }
+    
+    
+    {  EXPECT_FALSE(buf->isShared());
+}
+    
+      static_assert(
+      !std::is_reference<Value>::value,
+      'Expected may not be used with reference types');
+  static_assert(
+      !std::is_abstract<Value>::value,
+      'Expected may not be used with abstract types');
+    
+      auto p = promises(block);
+  uint32_t i = 0;
+  try {
+    for (i = 0; i < size_; ++i) {
+      new (p + i) BoolPromise();
+    }
+  } catch (...) {
+    for (; i != 0; --i) {
+      p[i - 1].~BoolPromise();
+    }
+    throw;
+  }
+    
+      // Log a bunch of messages to the writer
+  size_t numMessages = 100;
+  {
+    AsyncFileWriter writer{folly::File{fds[1], true}};
+    for (size_t n = 0; n < numMessages; ++n) {
+      writer.writeMessage(folly::to<std::string>('message ', n, '\n'));
+      sched_yield();
+    }
+  }
+    
+    
+    
+      virtual const char* Name() const override;
+    
+      typedef std::shared_ptr<DB> (* OpenFuncPtr)(char);
+    
+     public: // Delete / Remove / Pop / Trim
+  /// Trim (list: key) so that it will only contain the indices from start..stop
+  /// Returns true on success
+  /// May throw RedisListException
+  bool Trim(const std::string& key, int32_t start, int32_t stop);
+    
+    // @lint-ignore TXT4 T25377293 Grandfathered in
+#endif  // JAVA_ROCKSJNI_STATISTICSJNI_H_
+    
+      // Returns the sequence number that is guaranteed to be smaller than or equal
+  // to the sequence number of any key that could be inserted into this
+  // memtable. It can then be assumed that any write with a larger(or equal)
+  // sequence number will be present in this memtable or a later memtable.
+  //
+  // If the earliest sequence number could not be determined,
+  // kMaxSequenceNumber will be returned.
+  SequenceNumber GetEarliestSequenceNumber() {
+    return earliest_seqno_.load(std::memory_order_relaxed);
+  }
