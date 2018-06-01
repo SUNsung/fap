@@ -1,130 +1,152 @@
 
         
-                if entries.empty?
-          css('.quickindex[id]').each do |node|
-            name = node['id'].remove(/quickindex\.?/)
-            next if name.empty? || name =~ /\.\d+\z/ || name =~ /\A([^\.]+)\.\1\z/
-            entries << ['#{self.name}.#{name}', name]
-          end
-        end
-    
-          html_filters.push 'coffeescript/clean_html_v1', 'coffeescript/entries_v1', 'title'
-    
-        version '1.5' do
-      self.release = '1.5.3'
-      self.base_urls = [
-        'https://hexdocs.pm/elixir/#{release}/',
-        'https://hexdocs.pm/eex/#{release}/',
-        'https://hexdocs.pm/ex_unit/#{release}/',
-        'https://hexdocs.pm/iex/#{release}/',
-        'https://hexdocs.pm/logger/#{release}/',
-        'https://hexdocs.pm/mix/#{release}/',
-        'https://elixir-lang.org/getting-started/'
-      ]
+          def fixopt(f)
+    path = if f.linked_keg.directory? && f.linked_keg.symlink?
+      f.linked_keg.resolved_path
+    elsif f.prefix.directory?
+      f.prefix
+    elsif (kids = f.rack.children).size == 1 && kids.first.directory?
+      kids.first
+    else
+      raise
     end
-    
-        version do
-      self.release = '10.1.0'
-      self.base_url = 'https://nodejs.org/dist/latest-v10.x/docs/api/'
-    end
-    
-    module Docs
-  class Tensorflow < UrlScraper
-    self.name = 'TensorFlow'
-    self.type = 'tensorflow'
-    self.release = '1.8'
-    self.root_path = 'index.html'
-    self.links = {
-      home: 'https://www.tensorflow.org/',
-      code: 'https://github.com/tensorflow/tensorflow'
-    }
-    
-            if b_length > a_length
-          (b_length - a_length).times { a_split.insert(-2, 0) }
-        elsif a_length > b_length
-          (a_length - b_length).times { b_split.insert(-2, 0) }
-        end
-    
-        def initialize
-      @pages = {}
-    end
-    
-      # Equivalent to Set#flatten, but replaces the receiver with the
-  # result in place.  Returns nil if no modifications were made.
-  def flatten!
-    replace(flatten()) if any? { |e| e.is_a?(Set) }
-  end
-    
-        base = @cls[ 1 => 'one', '2' => false, true => 'true', 'cat' => 99 ]
-    h1   = @cls[ '2' => false, 'cat' => 99 ]
-    h2   = @cls[ 1 => 'one', true => 'true' ]
-    h3   = @cls[ 1 => 'one', true => 'true', 'cat' => 99 ]
-    
-      class SubclassX
-    attr_reader :key
-    def initialize(*)
-      @key = :value
-      super
-    end
+    Keg.new(path).optlink
+  rescue StandardError
+    raise '#{f.opt_prefix} not present or broken\nPlease reinstall #{f.full_name}. Sorry :('
   end
 end
-
     
-      def self.running_thread
-    Thread.new do
-      begin
-        ThreadSpecs.state = :running
-        loop { Thread.pass }
-        ScratchPad.record :woken
-      rescue Object => e
-        ScratchPad.record e
+        if !updated
+      puts 'Already up-to-date.'
+    elsif hub.empty?
+      puts 'No changes to formulae.'
+    else
+      hub.dump
+      hub.reporters.each(&:migrate_tap_migration)
+      hub.reporters.each(&:migrate_formula_rename)
+      Descriptions.update_cache(hub)
+    end
+    
+            # Registers a SIGINT handler. This typically is called from {busy}.
+        # Callbacks are only registered once, so calling this multiple times
+        # with the same callback has no consequence.
+        def register(sig_callback)
+          @@mutex.synchronize do
+            registered << sig_callback
+            registered.uniq!
+    
+            while true
+          begin
+            if Platform.windows?
+              # Windows doesn't support non-blocking reads on
+              # file descriptors or pipes so we have to get
+              # a bit more creative.
+    
+          def initialize(string)
+        @value = string
+      end
+    
+    module VagrantPlugins
+  module CommandBox
+    module Command
+      class Repackage < Vagrant.plugin('2', :command)
+        def execute
+          opts = OptionParser.new do |o|
+            o.banner = 'Usage: vagrant box repackage <name> <provider> <version>'
+          end
+    
+          respond_with do |format|
+        format.html { redirect_to admin_pods_path }
+        format.json { render json: PodPresenter.new(pod).as_json }
       end
     end
   end
-    
-      # This case occurred in JRuby where native threads are used to provide
-  # the same behavior as MRI green threads. Key to this issue was the fact
-  # that the thread which called #exit in its block was also being explicitly
-  # sent #join from outside the thread. The 100.times provides a certain
-  # probability that the deadlock will occur. It was sufficient to reliably
-  # reproduce the deadlock in JRuby.
-  it 'does not deadlock when called from within the thread while being joined from without' do
-    100.times do
-      t = Thread.new { Thread.stop; Thread.current.send(@method) }
-      Thread.pass while t.status and t.status != 'sleep'
-      t.wakeup.should == t
-      t.join.should == t
-    end
-  end
 end
 
     
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
-  end
+      Sass::Plugin.options.merge!(config)
     
-    module Jekyll
+    # usage rake isolate[my-post]
+desc 'Move all other posts than the one currently being worked on to a temporary stash location (stash) so regenerating the site happens much more quickly.'
+task :isolate, :filename do |t, args|
+  stash_dir = '#{source_dir}/#{stash_dir}'
+  FileUtils.mkdir(stash_dir) unless File.exist?(stash_dir)
+  Dir.glob('#{source_dir}/#{posts_dir}/*.*') do |post|
+    FileUtils.mv post, stash_dir unless post.include?(args.filename)
+  end
+end
+    
+          locations = Array.new
+      while (data.code.to_i == 301 || data.code.to_i == 302)
+        data = handle_gist_redirecting(data)
+        break if locations.include? data.header['Location']
+        locations << data.header['Location']
+      end
     
           unless file.file?
         return 'File #{file} could not be found'
       end
     
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+            def multiple_assignment_node
+          grandparent_node = node.parent ? node.parent.parent : nil
+          return nil unless grandparent_node
+          return nil unless grandparent_node.type == MULTIPLE_ASSIGNMENT_TYPE
+          return nil unless node.parent.type == MULTIPLE_LEFT_HAND_SIDE_TYPE
+          grandparent_node
         end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
       end
     end
+  end
+end
+
+    
+              new_source =
+            node.receiver.source + ' =~ ' + node.first_argument.source
+    
+            def autocorrect(node)
+          lambda do |corrector|
+            corrector.remove(node.loc.dot)
+            corrector.remove(node.loc.selector)
+          end
+        end
+    
+            # @param annotated_source [String] string passed to the matchers
+        #
+        # Separates annotation lines from source lines. Tracks the real
+        # source line number that each annotation corresponds to.
+        #
+        # @return [AnnotatedSource]
+        def self.parse(annotated_source)
+          source      = []
+          annotations = []
+    
+                end
+          RUBY
+        end
+      end
+    
+        # Swaps the height and width if necessary
+    def auto_orient
+      if EXIF_ROTATED_ORIENTATION_VALUES.include?(@orientation)
+        @height, @width = @width, @height
+        @orientation -= 4
+      end
+    end
+    
+        # You can add your own processor via the Paperclip configuration. Normally
+    # Paperclip will load all processors from the
+    # Rails.root/lib/paperclip_processors directory, but here you can add any
+    # existing class using this mechanism.
+    #
+    #   Paperclip.configure do |c|
+    #     c.register_processor :watermarker, WatermarkingProcessor.new
+    #   end
+    def register_processor(name, processor)
+      @known_processors ||= {}
+      @known_processors[name.to_s] = processor
+    end
+  end
+end
+
+    
+          private
