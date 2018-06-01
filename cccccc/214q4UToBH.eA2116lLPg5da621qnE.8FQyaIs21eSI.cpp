@@ -1,9 +1,26 @@
 
         
-        
-    {
-    {}  // namespace functor
-}  // namespace tensorflow
+          // The resource is deleted from the resource manager only when it is private
+  // to kernel. Ideally the resource should be deleted when it is no longer held
+  // by anyone, but it would break backward compatibility.
+  ~ResourceOpKernel() override {
+    if (resource_ != nullptr) {
+      resource_->Unref();
+      if (cinfo_.resource_is_private_to_kernel()) {
+        if (!cinfo_.resource_manager()
+                 ->template Delete<T>(cinfo_.container(), cinfo_.name())
+                 .ok()) {
+          // Do nothing; the resource can have been deleted by session resets.
+        }
+      }
+    }
+  }
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+        http://www.apache.org/licenses/LICENSE-2.0
     
     Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
@@ -19,377 +36,253 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
-    #include 'tensorflow/core/framework/register_types.h'
-#include 'tensorflow/core/framework/tensor_types.h'
-#include 'tensorflow/core/kernels/cuda_device_array_gpu.h'
-#include 'tensorflow/core/util/cuda_kernel_helper.h'
-    
-      // From the zlib manual (http://www.zlib.net/manual.html):
-  // The compression level must be Z_DEFAULT_COMPRESSION, or between 0 and 9:
-  // 1 gives best speed, 9 gives best compression, 0 gives no compression at all
-  // (the input data is simply copied a block at a time). Z_DEFAULT_COMPRESSION
-  // requests a default compromise between speed and compression (currently
-  // equivalent to level 6).
-  int8 compression_level = Z_DEFAULT_COMPRESSION;
-    
-    int main(int argc, char** argv) {
-  FLAGS_alsologtostderr = 1;
-    }
-    
-      caffe::Datum datum;
-  datum.set_channels(2);  // one channel for each image in the pair
-  datum.set_height(rows);
-  datum.set_width(cols);
-  LOG(INFO) << 'A total of ' << num_items << ' items.';
-  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
-  for (int itemid = 0; itemid < num_items; ++itemid) {
-    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
-    int j = caffe::caffe_rng_rand() % num_items;
-    read_image(&image_file, &label_file, i, rows, cols,
-        pixels, &label_i);
-    read_image(&image_file, &label_file, j, rows, cols,
-        pixels + (rows * cols), &label_j);
-    datum.set_data(pixels, 2*rows*cols);
-    if (label_i  == label_j) {
-      datum.set_label(1);
-    } else {
-      datum.set_label(0);
-    }
-    datum.SerializeToString(&value);
-    std::string key_str = caffe::format_int(itemid, 8);
-    db->Put(leveldb::WriteOptions(), key_str, value);
-  }
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2+)
-   *   -# @f$ (N \times ...) @f$
-   *      the inputs @f$ x_1 @f$
-   *   -# @f$ (M) @f$
-   *      the inputs @f$ x_2 @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (M \times ...) @f$:
-   *      the reindexed array @f$
-   *        y = x_1[x_2]
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    #include 'caffe/layers/base_conv_layer.hpp'
-    
-    #include 'caffe/layers/base_conv_layer.hpp'
-    
-    #endif  // CAFFE_FILTER_LAYER_HPP_
-
-    
-    #ifndef BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-#define BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-    
-    #endif // BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
-
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-      native_buffer_type* buffers()
-  {
-    return buffers_;
-  }
-    
-    #ifndef BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
-#define BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
-    
-    #endif // BOOST_ASIO_DETAIL_FUNCTION_HPP
-
-    
-    #endif  // STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-
-    
-      // Returns OK iff recorded error message contains 'msg'
-  std::string MatchError(const std::string& msg) const {
-    if (report_.message_.find(msg) == std::string::npos) {
-      return report_.message_;
-    } else {
-      return 'OK';
-    }
-  }
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
-
-    
-      // create first key range
-  leveldb::WriteBatch batch;
-  for (size_t i = 0; i < kNumKeys; i++) {
-    batch.Put(Key1(i), 'value for range 1 key');
-  }
-  ASSERT_OK(db->Write(leveldb::WriteOptions(), &batch));
-    
-    size_t BlockBuilder::CurrentSizeEstimate() const {
-  return (buffer_.size() +                        // Raw data buffer
-          restarts_.size() * sizeof(uint32_t) +   // Restart array
-          sizeof(uint32_t));                      // Restart array length
-}
-    
-    
-    {      // Ok
-      break;
-    case kSnappyCompression: {
-      size_t ulength = 0;
-      if (!port::Snappy_GetUncompressedLength(data, n, &ulength)) {
-        delete[] buf;
-        return Status::Corruption('corrupted compressed block contents');
-      }
-      char* ubuf = new char[ulength];
-      if (!port::Snappy_Uncompress(data, n, ubuf)) {
-        delete[] buf;
-        delete[] ubuf;
-        return Status::Corruption('corrupted compressed block contents');
-      }
-      delete[] buf;
-      result->data = Slice(ubuf, ulength);
-      result->heap_allocated = true;
-      result->cachable = true;
-      break;
-    }
-    default:
-      delete[] buf;
-      return Status::Corruption('bad block type');
-  }
-    
-    // The FALLTHROUGH_INTENDED macro can be used to annotate implicit fall-through
-// between switch labels. The real definition should be provided externally.
-// This one is a fallback version for unsupported compilers.
-#ifndef FALLTHROUGH_INTENDED
-#define FALLTHROUGH_INTENDED do { } while (0)
+    // TODO: Enable GPU support for angle op after resolving
+// build failures on GPU (See #10643 for context).
+#if 0 && GOOGLE_CUDA
+REGISTER_COMPLEX(GPU, float, complex64);
+REGISTER_COMPLEX(GPU, double, complex128);
 #endif
     
+    Status SinhGrad(const AttrSlice& attrs, FunctionDef* g) {
+  // clang-format off
+  return GradForUnaryCwise(g, {
+      {{'cosh'}, 'Cosh', {'x'}, {}, {'dy'}},
+      {{'dx'}, 'Mul', {'dy', 'cosh'}},  // dy * cosh(x)
+  });
+  // clang-format on
+}
+REGISTER_OP_GRADIENT('Sinh', SinhGrad);
     
-    {}  // namespace leveldb
-    
-      // Compute the crc of the record type and the payload.
-  uint32_t crc = crc32c::Extend(type_crc_[t], ptr, n);
-  crc = crc32c::Mask(crc);                 // Adjust for storage
-  EncodeFixed32(buf, crc);
-    
-    bool js_cocos2dx_builder_CCBAnimationManager_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBAnimationManager_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBAnimationManager(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBAnimationManager_moveAnimationsFromNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_actionForSoundChannel(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setBaseValue(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getLastCompletedSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setRootNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamedTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_actionForCallbackChannel(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getKeyframeCallbacks(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceIdTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRunningSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRootNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setDelegate(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getSequenceDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getSequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setSequences(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_debug(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_CCBAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    bool js_cocos2dx_physics3d_Physics3DSliderConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DSliderConstraint_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DSliderConstraint(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredAngMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getLinearPos(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredLinMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getAngularPos(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredAngMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredLinMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_Physics3DSliderConstraint(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-        cobj = (CocosDenshion::SimpleAudioEngine*)tolua_tousertype(tolua_S,1,0);
-    
-    
-    
-        argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsWorld_getSubsteps'', nullptr);
-            return 0;
-        }
-        int ret = cobj->getSubsteps();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.PhysicsWorld:getSubsteps',argc, 0);
-    return 0;
-    
-    
-    
-    	b2WorldManifold worldManifold;
-	contact->GetWorldManifold(&worldManifold);
-    
-    	b2Body* m_groundBody;
-	b2AABB m_worldAABB;
-	ContactPoint m_points[k_maxContactPoints];
-	int32 m_pointCount;
-	DestructionListener m_destructionListener;
-	GLESDebugDraw m_debugDraw;
-	int32 m_textLine;
-	b2World* m_world;
-	b2Body* m_bomb;
-	b2MouseJoint* m_mouseJoint;
-	b2Vec2 m_bombSpawnPoint;
-	bool m_bombSpawning;
-	b2Vec2 m_mouseWorld;
-	int32 m_stepCount;
-    
-    	static Test* Create()
-	{
-		return new Breakable;
-	}
-    
-    			b2Body* prevBody = ground;
-			for (int32 i = 0; i < e_count; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position.Set(-14.5f + 1.0f * i, 5.0f);
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&fd);
+    namespace internal {
     }
     
+      // Sent when a CrxInstaller finishes. Source is the CrxInstaller that
+  // finished. The details are the extension which was installed.
+  NOTIFICATION_CRX_INSTALLER_DONE,
     
-    {		if (m_stepCount % 60 == 0)
-		{
-			Launch();
-		}
-	}
+    // Changes the notification timeout to |new_timeout|, returns the old timeout.
+base::TimeDelta SetNotificationTimeoutForTesting(base::TimeDelta new_timeout);
     
-    void AbstractAuthResolver::setUserDefinedCred(std::string user,
-                                              std::string password)
-{
-  userDefinedUser_ = std::move(user);
-  userDefinedPassword_ = std::move(password);
-}
-    
-    private:
-  std::string userDefinedUser_;
-  std::string userDefinedPassword_;
-    
-    void AbstractBtMessage::setPeer(const std::shared_ptr<Peer>& peer)
-{
-  peer_ = peer;
-}
-    
-    void AbstractOptionHandler::setInitialOption(bool f)
-{
-  updateFlags(FLAG_INITIAL_OPTION, f);
-}
-    
-      // bitwise OR of Flag values.
-  uint8_t flags_;
-    
-    namespace aria2 {
-    }
+      std::unique_ptr<gfx::SingletonHwndObserver> singleton_hwnd_observer_;
     
     
-    {} // namespace aria2
+    { protected:
+  virtual ~PrintViewManagerObserver() {}
+};
+    
+    #endif  // GRPC_TEST_CPP_UTIL_BENCHMARK_CONFIG_H
 
     
-      // Don't allow copying
-  AnnounceTier(const AnnounceTier&) = delete;
-  AnnounceTier& operator=(const AnnounceTier&) = delete;
+    std::vector<grpc::string_ref> SecureAuthContext::GetPeerIdentity() const {
+  if (!ctx_) {
+    return std::vector<grpc::string_ref>();
+  }
+  grpc_auth_property_iterator iter = grpc_auth_context_peer_identity(ctx_);
+  std::vector<grpc::string_ref> identity;
+  const grpc_auth_property* property = nullptr;
+  while ((property = grpc_auth_property_iterator_next(&iter))) {
+    identity.push_back(
+        grpc::string_ref(property->value, property->value_length));
+  }
+  return identity;
+}
     
-      SecIdentityRef getCredentials();
+    
+    {	if (_is_multiplayer) {
+		emit_signal('connection_failed');
+	} else {
+		emit_signal('connection_error');
+	}
+}
+    
+    	void set_verify_ssl_enabled(bool p_verify_ssl);
+	bool is_verify_ssl_enabled() const;
+    
+    
+    {	Vector<StringName> get_native_call_types();
+};
+    
+    /**
+ * oc_ilog32 - Integer binary logarithm of a 32-bit value.
+ * @_v: A 32-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * The OC_ILOG_32() or OC_ILOGNZ_32() macros may be able to use a builtin
+ *  function instead, which should be faster.
+ */
+int oc_ilog32(ogg_uint32_t _v);
+/**
+ * oc_ilog64 - Integer binary logarithm of a 64-bit value.
+ * @_v: A 64-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * The OC_ILOG_64() or OC_ILOGNZ_64() macros may be able to use a builtin
+ *  function instead, which should be faster.
+ */
+int oc_ilog64(ogg_int64_t _v);
+    
+    # if defined(OC_COLLECT_METRICS)
+struct oc_mode_metrics{
+  double fragw;
+  double satd;
+  double rate;
+  double rmse;
+  double satd2;
+  double satdrate;
+  double rate2;
+  double satdrmse;
+  double rmse2;
+};
+    
+    #endif
+
+    
+    
+    {
+    {            assert(index != sampleSize);
+            dest[destIndex++] = static_cast<DestType>(index);
+        }
+        assert(currentp == lastp);
+    }
+    
+    void GranularGPUDataTransferer::CopyCPUToGPUAsync(const void* cpuBuffer, size_t numElements, size_t elementSize, void* gpuBuffer)
+{
+    PrepareDevice(m_deviceId);
+    cudaMemcpyAsync(gpuBuffer, cpuBuffer, numElements * elementSize, cudaMemcpyHostToDevice, GetAssignStream()) || 'cudaMemcpyAsync failed';
+}
+    
+            // set the include paths to all paths that configs were read from; no additional configurable include paths are supported by BrainScriptNetworkBuilder
+        auto includePaths = ConfigParameters::GetBrainScriptNetworkBuilderIncludePaths();
+    
+        CopyNodeFlags GetOptionalCopyNodeFlags(const ConfigParamList& params, const size_t numFixedParams)
+    {
+        CopyNodeFlags copyFlags = CopyNodeFlags::copyNodeAll; // by default copy both values and link structure
+    }
+    
+    template void FindConfigNames<ConfigParameters>(const ConfigParameters&, std::string key, std::vector<std::wstring>& names);
+template void FindConfigNames<ScriptableObjects::IConfigRecord>(const ScriptableObjects::IConfigRecord&, std::string key, std::vector<std::wstring>& names);
+    
+    class latticepair : public std::pair<msra::lattices::lattice, msra::lattices::lattice>
+{
+public:
+    // NOTE: we don't check numerator lattice now
+    size_t getnumframes() const
+    {
+        return second.getnumframes();
+    }
+    size_t getnumnodes() const
+    {
+        return second.getnumnodes();
+    }
+    size_t getnumedges() const
+    {
+        return second.getnumedges();
+    }
+    std::wstring getkey() const
+    {
+        return second.getkey();
+    }
+};
+    
+        // construct from a single float, copy to all components
+    float4(float f)
+        : v(_mm_load1_ps(&f))
+    {
+    }
+    // float4 (float f) : v (_mm_set_ss (f)) {}  // code seems more complex than _mm_load1_ps()
+    
+    	PathCombine(configDirPath, exeDir, L'config');
+	if (wcscmp(userConfigDirPath, L'') == 0)
+	{
+		PathCombine(userConfigDirPath, exeDir, L'config');
+	}
+	else
+	{
+		PathCombine(userBinDirPath, userConfigDirPath, L'bin');
+		SHCreateDirectoryEx(0, userBinDirPath, 0);
+    }
+    
+    // explicit instantiations are required, as HostDeviceVector isn't header-only
+template class HostDeviceVector<bst_float>;
+template class HostDeviceVector<GradientPair>;
+template class HostDeviceVector<unsigned int>;
+    
+    
+    {  delete metric;
+  metric = xgboost::Metric::Create('map@2');
+  ASSERT_STREQ(metric->Name(), 'map@2');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 1, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              0.25f, 0.001f);
+}
+
+    
+    class ShotgunUpdater : public LinearUpdater {
+ public:
+  // set training parameter
+  void Init(const std::vector<std::pair<std::string, std::string> > &args) override {
+    param_.InitAllowUnknown(args);
+    selector_.reset(FeatureSelector::Create(param_.feature_selector));
+  }
+  void Update(HostDeviceVector<GradientPair> *in_gpair, DMatrix *p_fmat,
+              gbm::GBLinearModel *model, double sum_instance_weight) override {
+    std::vector<GradientPair> &gpair = in_gpair->HostVector();
+    param_.DenormalizePenalties(sum_instance_weight);
+    const int ngroup = model->param.num_output_group;
+    }
+    }
+    
+    TEST(IOBuf, positionTracking) {
+  unique_ptr<IOBuf> iobuf1(IOBuf::create(6));
+  iobuf1->append(6);
+  unique_ptr<IOBuf> iobuf2(IOBuf::create(24));
+  iobuf2->append(24);
+  iobuf1->prependChain(std::move(iobuf2));
+    }
+    
+    template <typename T>
+struct constexpr_abs_helper<
+    T,
+    typename std::enable_if<std::is_floating_point<T>::value>::type> {
+  static constexpr T go(T t) {
+    return t < static_cast<T>(0) ? -t : t;
+  }
+};
+    
+      BlockingQueueAddResult addWithPriority(T item, int8_t priority) override {
+    int mid = getNumPriorities() / 2;
+    size_t queue = priority < 0
+        ? std::max(0, mid + priority)
+        : std::min(getNumPriorities() - 1, mid + priority);
+    CHECK_LT(queue, queues_.size());
+    switch (kBehavior) { // static
+      case QueueBehaviorIfFull::THROW:
+        if (!queues_[queue].write(std::move(item))) {
+          throw QueueFullException('LifoSemMPMCQueue full, can't add item');
+        }
+        break;
+      case QueueBehaviorIfFull::BLOCK:
+        queues_[queue].blockingWrite(std::move(item));
+        break;
+    }
+    return sem_.post();
+  }
+    
+    
+    {  auto const slack = currentCapacity - currentSize;
+  if (slack * 2 > currentSize) {
+    // Too much slack, malloc-copy-free cycle:
+    auto const result = checkedMalloc(newCapacity);
+    std::memcpy(result, p, currentSize);
+    free(p);
+    return result;
+  }
+  // If there's not too much slack, we realloc in hope of coalescing
+  return checkedRealloc(p, newCapacity);
+}
+    
+    #include <folly/logging/example/lib.h>
