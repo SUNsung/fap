@@ -1,422 +1,383 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {  TF_DISALLOW_COPY_AND_ASSIGN(RecordWriter);
-};
-    
-    /** scalar_tanh_fast_derivative_op
-  * \ingroup CXX11_NeuralNetworks_Module
-  * \brief Template functor to compute the fast derivative of a tanh
-  *
-  * Input should be the backpropagated gradient.
-  *
-  * \sa class CwiseUnaryOp, Cwise::tanh_fast_derivative()
-  */
-template <typename T>
-struct scalar_tanh_fast_derivative_op {
-  EIGEN_EMPTY_STRUCT_CTOR(scalar_tanh_fast_derivative_op)
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
-    const T one = T(1);
-    return one - (y * y);
-  }
-    }
-    
-    void SYCLDeviceContext::CopyCPUTensorToDevice(const Tensor *cpu_tensor,
-                                              Device *device,
-                                              Tensor *device_tensor,
-                                              StatusCallback done) const {
-  const int64 total_bytes = cpu_tensor->TotalBytes();
-  if (total_bytes > 0) {
-    const void *src_ptr = DMAHelper::base(cpu_tensor);
-    void *dst_ptr = DMAHelper::base(device_tensor);
-    switch (cpu_tensor->dtype()) {
-      case DT_FLOAT:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_DOUBLE:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<double *>(dst_ptr),
-            static_cast<const double *>(src_ptr), total_bytes);
-        break;
-      case DT_INT32:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT64:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_HALF:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<Eigen::half *>(dst_ptr),
-            static_cast<const Eigen::half *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX64:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<std::complex<float> *>(dst_ptr),
-            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX128:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<std::complex<double> *>(dst_ptr),
-            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
-        break;
-      case DT_INT8:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT16:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT8:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT16:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<uint16 *>(dst_ptr),
-            static_cast<const uint16 *>(src_ptr), total_bytes);
-        break;
-      case DT_BOOL:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
-            total_bytes);
-        break;
-      default:
-        assert(false && 'unsupported type');
-    }
-  }
-  device->eigen_sycl_device()->synchronize();
-  done(Status::OK());
-}
-    
-    class TextLineReader : public ReaderBase {
- public:
-  TextLineReader(const string& node_name, int skip_header_lines, Env* env)
-      : ReaderBase(strings::StrCat('TextLineReader '', node_name, ''')),
-        skip_header_lines_(skip_header_lines),
-        env_(env),
-        line_number_(0) {}
+        
+    {
+    {
+    {                // assign patch back
+                // TODO: do that inside the loop to avoid copying, but one thing at a time
+                assignpatch(patch, i0, i1, j0, j1);
+            }
+        }
     }
     
     
     {
-    {}  // namespace ffmpeg
-}  // namespace tensorflow
+    {
+    {// utility function to round an integer up to a multiple of size
+size_t RoundUp(size_t value, size_t size);
+// HIGH and LOW DWORD functions
+DWORD HIDWORD(size_t size);
+DWORD LODWORD(size_t size);
+} } }
 
     
-        EXPECT_EQ(a_1_1.get(), a_1_2.get());
-    EXPECT_EQ(d_4_1.get(), d_4_2.get());
-    EXPECT_EQ(e_5_1.get(), e_5_2.get());
+        Matrix<float>::MultiplyAndWeightedAdd(alpha, mAdense, transposeA, mBdense, transposeB, beta, mCdense);
+    Matrix<float>::MultiplyAndWeightedAdd(alpha, mAsparse, transposeA, mBsparse, transposeB, beta, mCsparse);
+    mCsparse.SwitchToMatrixType(MatrixType::DENSE, matrixFormatDense, true);
+    BOOST_CHECK(mCsparse.IsEqualTo(mCdense, c_epsilonFloatE4));
     
-    void MPIUtils::InitMPI() {
-  // Initialize the MPI environment if that hasn't been done
-  int flag = 0;
-  MPI_CHECK(MPI_Initialized(&flag));
-  if (!flag) {
-    int proc_id = 0, number_of_procs = 1, len = -1;
-    char my_host_name[max_worker_name_length];
-    // MPI_CHECK(MPI_Init_thread(0, 0, MPI_THREAD_MULTIPLE, &flag));
-    MPI_CHECK(MPI_Init(0, 0));
-    MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &proc_id));
-    MPI_CHECK(MPI_Comm_size(MPI_COMM_WORLD, &number_of_procs));
-    MPI_CHECK(MPI_Get_processor_name(my_host_name, &len));
-    fprintf(stderr,
-            'MPI Environment initialized. Process id: %d Total processes: %d '
-            '|| Hostname: %s \n',
-            proc_id, number_of_procs, my_host_name);
+    GPUDataTransferer::GPUDataTransferer(int deviceId, bool useConcurrentStreams) 
+{
+#pragma warning(disable : 4127)
+    if (useConcurrentStreams && (s_fetchStream == NULL))
+    {
+        cudaStreamCreateWithFlags(&s_fetchStream, cudaStreamNonBlocking) || 'cudaStreamCreateWithFlags failed';
+        cudaStreamCreateWithFlags(&s_assignStream, cudaStreamNonBlocking) || 'cudaStreamCreateWithFlags failed';
+    }
+    }
+    
+    function<ComputationNetworkPtr(DEVICEID_TYPE)> GetCreateNetworkFn(const ScriptableObjects::IConfigRecord& config)
+{
+    // createNetwork() is a BrainScript lambda that creates the model
+    // We create a C++ wrapper around it, which we then pass to Train().
+    auto createNetworkConfigLambda = config[L'createNetwork'].AsPtr<ScriptableObjects::ConfigLambda>();
+    return [createNetworkConfigLambda](DEVICEID_TYPE /*deviceId*/)
+    {
+        // execute the lambda
+        vector<ScriptableObjects::ConfigValuePtr> args; // this lambda has no arguments
+        ScriptableObjects::ConfigLambda::NamedParams namedArgs;
+        let netValue = createNetworkConfigLambda->Apply(move(args), move(namedArgs), L'BuildNetworkFromDescription');
+        // typecast the result to the desired type
+        return netValue.AsPtr<ComputationNetwork>();
+    };
+}
+    
+        static void SetTracingFlag()
+    {
+        auto& us = GetStaticInstance();
+        us.m_tracingFlag = true;
+    }
+    
+    template<class TString>
+inline bool AreEqualIgnoreCase(
+    const typename TString::value_type* s1pointer,
+    const TString& s2)
+{
+    return AreEqualIgnoreCase(TString(s1pointer), s2);
+}
+    
+    void ShowErrorAndExit(DWORD ec, const wchar_t * func, int line)
+{
+	wchar_t * buffer;
+	if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+		NULL, ec, 0, (LPWSTR)&buffer, 0, NULL) == 0)
+	{
+		buffer = L'Unknown error. FormatMessage failed.';
+	}
+    }
+    
+    SEXP XGBoosterModelToRaw_R(SEXP handle) {
+  SEXP ret;
+  R_API_BEGIN();
+  bst_ulong olen;
+  const char *raw;
+  CHECK_CALL(XGBoosterGetModelRaw(R_ExternalPtrAddr(handle), &olen, &raw));
+  ret = PROTECT(allocVector(RAWSXP, olen));
+  if (olen != 0) {
+    memcpy(RAW(ret), raw, olen);
   }
+  R_API_END();
+  UNPROTECT(1);
+  return ret;
 }
     
-      // Slices a shape and stores the result into *result_shape.
-  // Requires that the shape and *this have the same rank.
-  // For example, given a tensor shape of {3, 4, 5}, and a slice of
-  // 1,2:-:0,2, the result shape is {2, 4, 2}.
-  Status SliceTensorShape(const TensorShape& shape,
-                          TensorShape* result_shape) const;
-    
-    #ifndef ATOM_BROWSER_API_ATOM_API_GLOBAL_SHORTCUT_H_
-#define ATOM_BROWSER_API_ATOM_API_GLOBAL_SHORTCUT_H_
-    
-    #endif  // ATOM_COMMON_API_REMOTE_CALLBACK_FREER_H_
-
-    
-    #endif  // ATOM_COMMON_DRAGGABLE_REGION_H_
-
-    
-      std::unique_ptr<base::ListValue> preferences_;
-    
-    // An interface the PrintViewManager uses to notify an observer when the print
-// dialog is shown. Register the observer via PrintViewManager::set_observer.
-class PrintViewManagerObserver {
- public:
-  // Notifies the observer that the print dialog was shown.
-  virtual void OnPrintDialogShown() = 0;
+    /*
+ * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
+ * Method:    XGBoosterDumpModelEx
+ * Signature: (JLjava/lang/String;I)[Ljava/lang/String;
+ */
+JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGBoosterDumpModelEx
+  (JNIEnv *jenv, jclass jcls, jlong jhandle, jstring jfmap, jint jwith_stats, jstring jformat, jobjectArray jout) {
+  BoosterHandle handle = (BoosterHandle) jhandle;
+  const char *fmap = jenv->GetStringUTFChars(jfmap, 0);
+  const char *format = jenv->GetStringUTFChars(jformat, 0);
+  bst_ulong len = 0;
+  char **result;
     }
     
-      base::WeakPtrFactory<PepperFlashDRMHost> weak_factory_;
+    // prediction
+#include '../src/predictor/predictor.cc'
+#include '../src/predictor/cpu_predictor.cc'
     
-      // Called on the dialog thread to show the actual color chooser.  This is
-  // shown modal to |params.owner|.  Once it's closed, calls back to
-  // DidCloseDialog() on the UI thread.
-  void ExecuteOpen(const ExecuteOpenParams& params);
-    
-    // filenames
-const base::FilePath::CharType kCacheDirname[] = FPL('Cache');
-const base::FilePath::CharType kChannelIDFilename[] = FPL('Origin Bound Certs');
-const base::FilePath::CharType kCookieFilename[] = FPL('Cookies');
-const base::FilePath::CharType kCRLSetFilename[] =
-    FPL('Certificate Revocation Lists');
-const base::FilePath::CharType kCustomDictionaryFileName[] =
-    FPL('Custom Dictionary.txt');
-const base::FilePath::CharType kExtensionActivityLogFilename[] =
-    FPL('Extension Activity');
-const base::FilePath::CharType kExtensionsCookieFilename[] =
-    FPL('Extension Cookies');
-const base::FilePath::CharType kFirstRunSentinel[] = FPL('First Run');
-const base::FilePath::CharType kGCMStoreDirname[] = FPL('GCM Store');
-const base::FilePath::CharType kLocalStateFilename[] = FPL('Local State');
-const base::FilePath::CharType kLocalStorePoolName[] = FPL('LocalStorePool');
-const base::FilePath::CharType kMediaCacheDirname[] = FPL('Media Cache');
-const base::FilePath::CharType kNetworkPersistentStateFilename[] =
-    FPL('Network Persistent State');
-const base::FilePath::CharType kOfflinePageArchviesDirname[] =
-    FPL('Offline Pages/archives');
-const base::FilePath::CharType kOfflinePageMetadataDirname[] =
-    FPL('Offline Pages/metadata');
-const base::FilePath::CharType kPreferencesFilename[] = FPL('Preferences');
-const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[] =
-    FPL('Protected Preferences');
-const base::FilePath::CharType kReadmeFilename[] = FPL('README');
-const base::FilePath::CharType kResetPromptMementoFilename[] =
-    FPL('Reset Prompt Memento');
-const base::FilePath::CharType kSafeBrowsingBaseFilename[] =
-    FPL('Safe Browsing');
-const base::FilePath::CharType kSecurePreferencesFilename[] =
-    FPL('Secure Preferences');
-const base::FilePath::CharType kServiceStateFileName[] = FPL('Service State');
-const base::FilePath::CharType kSingletonCookieFilename[] =
-    FPL('SingletonCookie');
-const base::FilePath::CharType kSingletonLockFilename[] = FPL('SingletonLock');
-const base::FilePath::CharType kSingletonSocketFilename[] =
-    FPL('SingletonSocket');
-const base::FilePath::CharType kSupervisedUserSettingsFilename[] =
-    FPL('Managed Mode Settings');
-const base::FilePath::CharType kThemePackFilename[] = FPL('Cached Theme.pak');
-const base::FilePath::CharType kThemePackMaterialDesignFilename[] =
-    FPL('Cached Theme Material Design.pak');
-const base::FilePath::CharType kWebAppDirname[] = FPL('Web Applications');
-    
-        // pass address (value interface)
-    iterator find(const K& key)                     { return m.find(&key); }
-    const_iterator find(const K& key) const         { return m.find(&key); }
-    iterator lower_bound(const K& key)              { return m.lower_bound(&key); }
-    const_iterator lower_bound(const K& key) const  { return m.lower_bound(&key); }
-    size_type erase(const K& key)                   { return m.erase(&key); }
-    size_type count(const K& key) const             { return m.count(&key); }
-    
-    void AppendInternalKey(std::string* result, const ParsedInternalKey& key) {
-  result->append(key.user_key.data(), key.user_key.size());
-  PutFixed64(result, PackSequenceAndType(key.sequence, key.type));
-}
-    
-      // Return an iterator for the specified file number (the corresponding
-  // file length must be exactly 'file_size' bytes).  If 'tableptr' is
-  // non-NULL, also sets '*tableptr' to point to the Table object
-  // underlying the returned iterator, or NULL if no Table object underlies
-  // the returned iterator.  The returned '*tableptr' object is owned by
-  // the cache and should not be deleted, and is valid for as long as the
-  // returned iterator is live.
-  Iterator* NewIterator(const ReadOptions& options,
-                        uint64_t file_number,
-                        uint64_t file_size,
-                        Table** tableptr = NULL);
-    
-    #endif  // STORAGE_LEVELDB_INCLUDE_DUMPFILE_H_
-
-    
-      bool TryParseOne(Feature* feature) {
-    if (failed_ || Finished() || !Match('{')) {
-      return SetFailedAndReturnFalse();
+    TEST(Metric, Precision) {
+  // When the limit for precision is not given, it takes the limit at
+  // std::numeric_limits<unsigned>::max(); hence all values are very small
+  // NOTE(AbdealiJK): Maybe this should be fixed to be num_row by default.
+  xgboost::Metric * metric = xgboost::Metric::Create('pre');
+  ASSERT_STREQ(metric->Name(), 'pre');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-7);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              0, 1e-7);
     }
-    if (!Match(location_) || !Match('{') || !Match(latitude_)) {
-      return SetFailedAndReturnFalse();
-    }
-    long temp = 0;
-    ReadLong(&temp);
-    feature->mutable_location()->set_latitude(temp);
-    if (!Match(',') || !Match(longitude_)) {
-      return SetFailedAndReturnFalse();
-    }
-    ReadLong(&temp);
-    feature->mutable_location()->set_longitude(temp);
-    if (!Match('},') || !Match(name_) || !Match('\'')) {
-      return SetFailedAndReturnFalse();
-    }
-    size_t name_start = current_;
-    while (current_ != db_.size() && db_[current_++] != ''') {
-    }
-    if (current_ == db_.size()) {
-      return SetFailedAndReturnFalse();
-    }
-    feature->set_name(db_.substr(name_start, current_-name_start-1));
-    if (!Match('},')) {
-      if (db_[current_ - 1] == ']' && current_ == db_.size()) {
-        return true;
+    
+    
+    {  std::unique_ptr<FeatureSelector> selector_;
+};
+    
+      XGBOOST_DEVICE GradientPairInternal<T> operator-(
+      const GradientPairInternal<T> &rhs) const {
+    GradientPairInternal<T> g;
+    g.grad_ = grad_ - rhs.grad_;
+    g.hess_ = hess_ - rhs.hess_;
+    return g;
+  }
+    
+    // This function will create a Huffman tree.
+//
+// The catch here is that the tree cannot be arbitrarily deep.
+// Brotli specifies a maximum depth of 15 bits for 'code trees'
+// and 7 bits for 'code length code trees.'
+//
+// count_limit is the value that is to be faked as the minimum value
+// and this minimum value is raised until the tree matches the
+// maximum length requirement.
+//
+// This algorithm is not of excellent performance for very long data blocks,
+// especially when population counts are longer than 2**tree_limit, but
+// we are not planning to use this with extremely long blocks.
+//
+// See http://en.wikipedia.org/wiki/Huffman_coding
+void CreateHuffmanTree(const uint32_t *data,
+                       const size_t length,
+                       const int tree_limit,
+                       HuffmanTree* tree,
+                       uint8_t *depth) {
+  // For block sizes below 64 kB, we never need to do a second iteration
+  // of this loop. Probably all of our block sizes will be smaller than
+  // that, so this loop is mostly of academic interest. If we actually
+  // would need this, we would be better off with the Katajainen algorithm.
+  for (uint32_t count_limit = 1; ; count_limit *= 2) {
+    size_t n = 0;
+    for (size_t i = length; i != 0;) {
+      --i;
+      if (data[i]) {
+        const uint32_t count = std::max<uint32_t>(data[i], count_limit);
+        tree[n++] = HuffmanTree(count, -1, static_cast<int16_t>(i));
       }
-      return SetFailedAndReturnFalse();
     }
-    return true;
-  }
-    
-    namespace grpc_node_generator {
+    }
     }
     
-    // Tucks all generator state in an anonymous namespace away from
-// PythonGrpcGenerator and the header file, mostly to encourage future changes
-// to not require updates to the grpcio-tools C++ code part. Assumes that it is
-// only ever used from a single thread.
-struct PrivateGenerator {
-  const GeneratorConfiguration& config;
-  const grpc_generator::File* file;
-    }
-    
-    class CodegenTestMinimal : public ::testing::Test {};
-    
-    
-    {  return 0;
-}
+    #endif  // GUETZLI_FDCT_H_
 
     
-    grpc::string DescribeServiceList(std::vector<grpc::string> service_list,
-                                 grpc::protobuf::DescriptorPool& desc_pool) {
-  std::stringstream result;
-  for (auto it = service_list.begin(); it != service_list.end(); it++) {
-    auto const& service = *it;
-    const grpc::protobuf::ServiceDescriptor* service_desc =
-        desc_pool.FindServiceByName(service);
-    if (service_desc != nullptr) {
-      result << DescribeService(service_desc);
-    }
-  }
-  return result.str();
+    
+    {}  // namespace guetzli
+    
+    bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     JPEGData* jpg) {
+  static const int quant[3 * kDCTBlockSize] = {
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  };
+  return EncodeRGBToJpeg(rgb, w, h, quant, jpg);
 }
     
-        if (EXPECTS_CRASH_DUMP_HEADER == _state) {
-        _state = EXPECTS_CRASH_DUMP_CONTENT;
-        strout += _strcache;
+    #include <stddef.h>
+#include <stdint.h>
+    
+    class TestWriteChainAsyncTransportWrapper :
+  public WriteChainAsyncTransportWrapper<folly::AsyncTransportWrapper> {
+ public:
+  TestWriteChainAsyncTransportWrapper() :
+    WriteChainAsyncTransportWrapper<folly::AsyncTransportWrapper>(nullptr) {}
     }
     
-    #ifdef ANDROID
+    namespace folly {
+    }
+    
+     private:
+  Node* head() {
+    return head_.load(std::memory_order_acquire);
+  }
+    
+    /** Set implemented as an ordered singly-linked list.
+ *
+ *  A single writer thread may add or remove elements. Multiple reader
+ *  threads may search the set concurrently with each other and with
+ *  the writer's operations.
+ */
+template <typename T, template <typename> class Atom = std::atomic>
+class HazptrSWMRSet {
+  template <typename Node>
+  struct Reclaimer {
+    void operator()(Node* p) {
+      delete p;
+    }
+  };
+    }
+    
+    #include <string>
+    
+      template <typename K>
+  if_is_transparent<K, iterator> upper_bound(const K& key) {
+    return upper_bound(*this, key);
+  }
     
     
-    {    void throw_exception( std::exception const & e ) {
-        xfatal2(TSF'boost exception:%_', e.what());
-        
-#ifdef ANDROID
-        char stack[4096] = {0};
-        android_callstack(stack, sizeof(stack));
-        xfatal2(TSF'%_', stack);
+    {// Older versions of libstdc++ do not provide std::is_trivially_copyable
+#if defined(__clang__) && !defined(_LIBCPP_VERSION)
+template <class T>
+struct is_trivially_copyable
+    : std::integral_constant<bool, __is_trivially_copyable(T)> {};
+#elif defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 5
+template <class T>
+struct is_trivially_copyable : std::is_trivial<T> {};
+#else
+template <class T>
+using is_trivially_copyable = std::is_trivially_copyable<T>;
 #endif
+} // namespace traits_detail
+    
+      EXPECT_TRUE((std::is_same<remove_cvref_t<int&&>, int>::value));
+  EXPECT_TRUE((std::is_same<remove_cvref<int&&>::type, int>::value));
+    
+    
+    {// Instantiate the most common Future types to save compile time
+template class SemiFuture<Unit>;
+template class SemiFuture<bool>;
+template class SemiFuture<int>;
+template class SemiFuture<int64_t>;
+template class SemiFuture<std::string>;
+template class SemiFuture<double>;
+template class Future<Unit>;
+template class Future<bool>;
+template class Future<int>;
+template class Future<int64_t>;
+template class Future<std::string>;
+template class Future<double>;
+} // namespace folly
+    
+      // Only allow creation by this factory, to ensure heap allocation.
+  static std::shared_ptr<WTCallback> create(EventBase* base) {
+    // optimization opportunity: memory pool
+    auto cob = std::make_shared<WTCallback>(PrivateConstructorTag{}, base);
+    // Capture shared_ptr of cob in lambda so that Core inside Promise will
+    // hold a ref count to it. The ref count will be released when Core goes
+    // away which happens when both Promise and Future go away
+    cob->promise_.setInterruptHandler(
+        [cob](exception_wrapper ew) { cob->interruptHandler(std::move(ew)); });
+    return cob;
+  }
+    
+      // Sync + corrupt => no change
+  ASSERT_OK(writable_file->Fsync());
+  ASSERT_OK(dynamic_cast<MockEnv*>(env_)->CorruptBuffer(kFileName));
+  result.clear();
+  ASSERT_OK(rand_file->Read(0, kGood.size(), &result, &(scratch[0])));
+  ASSERT_EQ(result.compare(kGood), 0);
+    
+    
+    
+    
+    {}  // namespace rocksdb
+    
+      /**
+   * @brief flush file,
+   * @details initiate an aio write and not wait
+   *
+   * @return [description]
+   */
+  Status Flush() {
+    librados::AioCompletion *write_completion = librados::Rados::aio_create_completion();
+    int r = 0;
     }
+    
+        {
+      PERF_TIMER_GUARD(block_read_time);
+      // Actual file read
+      status_ = file_->Read(handle_.offset(), block_size_ + kBlockTrailerSize,
+                            &slice_, used_buf_);
+    }
+    PERF_COUNTER_ADD(block_read_count, 1);
+    PERF_COUNTER_ADD(block_read_byte, block_size_ + kBlockTrailerSize);
+    if (!status_.ok()) {
+      return status_;
+    }
+    
+    SyncPoint* SyncPoint::GetInstance() {
+  static SyncPoint sync_point;
+  return &sync_point;
 }
+    
+    
+    {
+    {  auto callback_pair = callbacks_.find(point);
+  if (callback_pair != callbacks_.end()) {
+    num_callbacks_running_++;
+    mutex_.unlock();
+    callback_pair->second(cb_arg);
+    mutex_.lock();
+    num_callbacks_running_--;
+  }
+  cleared_points_.insert(point);
+  cv_.notify_all();
+}
+} // rocksdb
+#endif
 
     
-    class Spy {
-  public:
-    Spy(void* _this): m_this(_this) {}
-    virtual ~Spy() {}
+      bool pending_exception =
+      AbstractSliceJni::setHandle(env, m_jSliceLimit, &limit, JNI_FALSE);
+  if(pending_exception) {
+    if(env->ExceptionCheck()) {
+      // exception thrown from setHandle or descendant
+      env->ExceptionDescribe(); // print out exception to stderr
     }
+    if(jsStart != nullptr) {
+      env->DeleteLocalRef(jsStart);
+    }
+    releaseJniEnv(attached_thread);
+    return;
+  }
     
-    
-#define SPY_DEF_CLASS_NAME TSpy
-#define SPY_DEF_XLOGGER_HOOK TSpy::SpyHookLogFunc
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
     
     #endif
 
     
-    #include <cassert>
-#include <cstddef>
-#include <cstdint>
-#include <cstring>
-#include <string>
-#include <vector>
+        if (_packlen > _rawlen) return SIMPLE_CONTINUE_DATA;
     
-    // Parses one dictionary entry.
-// If successfull, write the enty to Unit and returns true,
-// otherwise returns false.
-bool ParseOneDictionaryEntry(const std::string &Str, Unit *U);
-// Parses the dictionary file, fills Units, returns true iff all lines
-// were parsed succesfully.
-bool ParseDictionaryFile(const std::string &Text, std::vector<Unit> *Units);
+      private:
+    SpyCore() {}
+    ~SpyCore() {}
     
-    template <typename T>
-static T *GetFnPtr(T *Fun, T *FunDef, const char *FnName, bool WarnIfMissing) {
-  if (Fun == FunDef) {
-    if (WarnIfMissing)
-      Printf('WARNING: Failed to find function \'%s\'.\n', FnName);
-    return nullptr;
-  }
-  return Fun;
+    
+bool TSpy::SpyHookLogFunc(XLoggerInfo_t& _info, std::string& _log)
+{
+    __attribute__((unused)) int i = 0;
+    return true;
 }
     
-      /// Tries to find an ASCII integer in Data, changes it to another ASCII int.
-  size_t Mutate_ChangeASCIIInteger(uint8_t *Data, size_t Size, size_t MaxSize);
-  /// Change a 1-, 2-, 4-, or 8-byte integer in interesting ways.
-  size_t Mutate_ChangeBinaryInteger(uint8_t *Data, size_t Size, size_t MaxSize);
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
     
-    
-    {	a=s->state[0];
-	b=s->state[1];
-	c=s->state[2];
-	d=s->state[3];
-	e=s->state[4];
-	for (i=0; i<80; i++) {
-		if (i>=16) {
-			t = s->buffer[(i+13)&15] ^ s->buffer[(i+8)&15] ^ s->buffer[(i+2)&15] ^ s->buffer[i&15];
-			s->buffer[i&15] = sha1_rol32(t,1);
-		}
-		if (i<20) {
-			t = (d ^ (b & (c ^ d))) + SHA1_K0;
-		} else if (i<40) {
-			t = (b ^ c ^ d) + SHA1_K20;
-		} else if (i<60) {
-			t = ((b & c) | (d & (b | c))) + SHA1_K40;
-		} else {
-			t = (b ^ c ^ d) + SHA1_K60;
-		}
-		t+=sha1_rol32(a,5) + e + s->buffer[i&15];
-		e=d;
-		d=c;
-		c=sha1_rol32(b,30);
-		b=a;
-		a=t;
-	}
-	s->state[0] += a;
-	s->state[1] += b;
-	s->state[2] += c;
-	s->state[3] += d;
-	s->state[4] += e;
-}
-    
-    void TracePC::HandleTrace(uint32_t *Guard, uintptr_t PC) {
-  uint32_t Idx = *Guard;
-  if (!Idx) return;
-  PCs[Idx % kNumPCs] = PC;
-  Counters[Idx % kNumCounters]++;
-}
+        JNIEnv* GetEnv();
+    int Status();
