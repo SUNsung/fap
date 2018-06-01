@@ -1,94 +1,104 @@
-class TestPageWithoutAFile < JekyllUnitTest
-  def setup_page(*args, base: source_dir, klass: PageWithoutAFile)
-    dir, file = args
-    if file.nil?
-      file = dir
-      dir = ''
-    end
-    klass.new(@site, base, dir, file)
-  end
+
+        
+              def initialize(gradle_path: nil)
+        self.gradle_path = gradle_path
+      end
     
-    def fixture_site(overrides = {})
-  Jekyll::Site.new(site_configuration(overrides))
-end
+          it 'automatically removes new lines from the version number' do
+        Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number(version_number: '1.77.3\n', bump_type: 'major')
+        end').runner.execute(:test)
     
-      protected
-    
-        it 'tracks when sign in is older than one day' do
-      user.update(current_sign_in_at: 2.days.ago)
-      sign_in user, scope: :user
-      get :show
-    
-      def display
-    'standalone'
-  end
-    
-    desc 'Dumps output to a CSS file for testing'
-task :debug do
-  require 'sass'
-  path = Bootstrap.stylesheets_path
-  %w(bootstrap).each do |file|
-    engine = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
-    File.open('./#{file}.css', 'w') { |f| f.write(engine.render) }
-  end
-end
-    
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
-    end
-  end
-    
-        def get_cache_file_for(gist, file)
-      bad_chars = /[^a-zA-Z0-9\-_.]/
-      gist      = gist.gsub bad_chars, ''
-      file      = file.gsub bad_chars, ''
-      md5       = Digest::MD5.hexdigest '#{gist}-#{file}'
-      File.join @cache_folder, '#{gist}-#{file}-#{md5}.cache'
-    end
-    
-    require './plugins/pygments_code'
-require './plugins/raw'
-require 'pathname'
-    
-    module Jekyll
-    
-            def reference!(node)
-          @references << node
-          @referenced = true
+          if valid_type?(type)
+        type.constantize.new(attributes).tap do |instance|
+          instance.user = user if instance.respond_to?(:user=)
         end
+      else
+        const_get(:BASE_CLASS_NAME).constantize.new(attributes).tap do |instance|
+          instance.type = type
+          instance.user = user if instance.respond_to?(:user=)
+        end
+      end
+    end
+  end
+end
     
-            # @param annotated_source [String] string passed to the matchers
-        #
-        # Separates annotation lines from source lines. Tracks the real
-        # source line number that each annotation corresponds to.
-        #
-        # @return [AnnotatedSource]
-        def self.parse(annotated_source)
-          source      = []
-          annotations = []
+      # Optional
+  #   Override this method if you need to group multiple agents based on an API key,
+  #   or server they connect to.
+  #   Have a look at the TwitterStreamAgent for an example.
+  def self.setup_worker; end
     
-        expect(corrected).to eq(''something'.to_sym')
+      def reemit
+    @event.reemit!
+    respond_to do |format|
+      format.html { redirect_back event_path(@event), notice: 'Event re-emitted.' }
+    end
+  end
+    
+        uninstall login_item: 'login item name'
+    
+    module Patch
+  def self.create(strip, src, &block)
+    case strip
+    when :DATA
+      DATAPatch.new(:p1)
+    when String
+      StringPatch.new(:p1, strip)
+    when Symbol
+      case src
+      when :DATA
+        DATAPatch.new(strip)
+      when String
+        StringPatch.new(strip, src)
+      else
+        ExternalPatch.new(strip, &block)
+      end
+    when nil
+      raise ArgumentError, 'nil value for strip'
+    else
+      raise ArgumentError, 'unexpected value #{strip.inspect} for strip'
+    end
+  end
+    
+        formulae_maybe_with_kegs = [f] + f.old_installed_formulae
+    outdated_kegs = formulae_maybe_with_kegs
+                    .map(&:linked_keg)
+                    .select(&:directory?)
+                    .map { |k| Keg.new(k.resolved_path) }
+    linked_kegs = outdated_kegs.select(&:linked?)
+    
+    class GitRequirement < Requirement
+  fatal true
+  satisfy do
+    odisabled('GitRequirement', ''depends_on \'git\''')
+  end
+end
+    
+          rescue_from Rack::OAuth2::Server::Authorize::BadRequest,
+                  JSON::JWT::InvalidFormat, JSON::JWK::UnknownAlgorithm do |e|
+        logger.info e.backtrace[0, 10].join('\n')
+        render json: {error: :invalid_request, error_description: e.message, status: 400}
+      end
+      rescue_from JSON::JWT::VerificationFailed do |e|
+        logger.info e.backtrace[0, 10].join('\n')
+        render json: {error: :invalid_grant, error_description: e.message, status: 400}
+      end
+    end
   end
 end
 
     
-            context 'source with constants' do
-          let(:source) do
-            <<-RUBY.strip_indent
-              #{type} Parent
-                #{type} SomeObject
-                  URL = %q(http://example.com)
-                  def do_something
-                  end
-                end
-              end
-            RUBY
-          end
+          def installed_gem_version(gem_name)
+        Gem.loaded_specs[gem_name].version
+      end
+    
+      tasks_dir = Pathname.new('lib/capistrano/tasks')
+  config_dir = Pathname.new('config')
+  deploy_dir = config_dir.join('deploy')
+    
+          it 'doesn't select when a host filter is present that doesn't match' do
+        dsl.set :filter, host: 'ruby.local'
+        SSHKit::Coordinator.expects(:new).with([]).returns(@coordinator)
+        dsl.on('server.local')
+      end
