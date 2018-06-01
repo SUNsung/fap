@@ -1,25 +1,132 @@
 
         
-        # If false, no index is generated.
-#html_use_index = True
+            app = flask.Flask(__name__)
+    with pytest.raises(TypeError):
+        app.config.from_mapping(
+            {}, {}
+        )
     
-        def _prime_executor(self):
-        # Make sure that the executor is ready to do work before running the
-        # tests. This should reduce the probability of timeouts in the tests.
-        futures = [self.executor.submit(time.sleep, 0.1)
-                   for _ in range(self.worker_count)]
+        @app.teardown_request
+    def end_of_request(exception):
+        buffer.append(exception)
+    
+        for n_components in [i.astype(int) for i in
+                         np.linspace(data.shape[1] // 10,
+                                     data.shape[1], num=4)]:
+        all_times = defaultdict(list)
+        all_errors = defaultdict(list)
+        pca = PCA(n_components=n_components)
+        rpca = RandomizedPCA(n_components=n_components, random_state=1999)
+        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
+                                                               ('rpca', rpca)]}
+    
+        # start time
+    tstart = datetime.now()
+    clf = DecisionTreeClassifier()
+    clf.fit(X, Y).predict(X)
+    delta = (datetime.now() - tstart)
+    # stop time
+    
+        # split the dataset in training and test set:
+    docs_train, docs_test, y_train, y_test = train_test_split(
+        dataset.data, dataset.target, test_size=0.25, random_state=None)
+    
+        # TASK: Build a grid search to find out whether unigrams or bigrams are
+    # more useful.
+    # Fit the pipeline on the training set using grid search for the parameters
+    parameters = {
+        'vect__ngram_range': [(1, 1), (1, 2)],
+    }
+    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)
+    grid_search.fit(docs_train, y_train)
+    
+            controller.gamma = Tk.StringVar()
+        controller.gamma.set('0.01')
+        g = Tk.Frame(valbox)
+        Tk.Label(g, text='gamma:', anchor='e', width=7).pack(side=Tk.LEFT)
+        Tk.Entry(g, width=6, textvariable=controller.gamma).pack(side=Tk.LEFT)
+        g.pack()
+    
+    print('consensus score: {:.1f}'.format(score))
+    
+    calibrated_classifier = sig_clf.calibrated_classifiers_[0]
+prediction = np.vstack([calibrator.predict(this_p)
+                        for calibrator, this_p in
+                        zip(calibrated_classifier.calibrators_, p.T)]).T
+prediction /= prediction.sum(axis=1)[:, None]
+    
+    # 2 independent random clusterings with equal cluster number
+    
+    from concurrent.futures import (as_completed, ThreadPoolExecutor,
+                                ProcessPoolExecutor)
+    
+    if __name__ == '__main__':
+    main()
+
     
     
-def _ListOf( config_entry ):
-  if isinstance( config_entry, list ):
-    return config_entry
+GENERIC_RESPONSE = {
+  'clang': {
+    'has_support': True,
+    'version': 'Clang version'
+  },
+  'completer': {
+    'items': [
+      {
+        'key': 'key',
+        'value': 'value'
+      }
+    ],
+    'name': 'Completer name',
+    'servers': [
+      {
+        'address': '127.0.0.1',
+        'executable': '/path/to/executable',
+        'extras': [
+          {
+            'key': 'key',
+            'value': 'value'
+          }
+        ],
+        'is_running': True,
+        'logfiles': [
+          '/path/to/stdout/logfile',
+          '/path/to/stderr/logfile'
+        ],
+        'name': 'Server name',
+        'pid': 12345,
+        'port': 1234
+      }
+    ]
+  },
+  'extra_conf': {
+    'is_loaded': False,
+    'path': '/path/to/extra/conf'
+  },
+  'python': {
+    'executable': '/path/to/python/interpreter',
+    'version': 'Python version'
+  }
+}
     
     
-def FormatDebugInfoResponse_NoResponse_test():
-  assert_that(
-    FormatDebugInfoResponse( None ),
-    equal_to( 'Server errored, no debug info from server\n' )
-  )
+def RegexSingleList_test():
+  opts = _JavaFilter( { 'regex' : [ 'taco' ] }  )
+  f = _CreateFilterForTypes( opts, [ 'java' ] )
+    
+    
+def AdjustCandidateInsertionText_MultipleStrings_test():
+  with MockTextAfterCursor( 'bar' ):
+    eq_( [ { 'abbr': 'foobar', 'word': 'foo' },
+           { 'abbr': 'zobar', 'word': 'zo' },
+           { 'abbr': 'qbar', 'word': 'q' },
+           { 'abbr': 'bar', 'word': '' }, ],
+         base.AdjustCandidateInsertionText( [ 'foobar',
+                                              'zobar',
+                                              'qbar',
+                                              'bar' ] ) )
+    
+    YCM_VAR_PREFIX = 'ycm_'
     
     from __future__ import unicode_literals
 from __future__ import print_function
@@ -28,60 +135,5 @@ from __future__ import absolute_import
 # Not installing aliases from python-future; it's unreliable and slow.
 from builtins import *  # noqa
     
-    
-def OverlapLength_SameStrings_test():
-  eq_( 6, base.OverlapLength( 'foobar', 'foobar' ) )
-    
-      python_interpreter = vim.eval( 'g:ycm_server_python_interpreter' )
-  if python_interpreter:
-    python_interpreter = utils.FindExecutable( python_interpreter )
-    if python_interpreter:
-      return python_interpreter
-    
-    
-def EndsWithPython_BadPaths_test():
-  not_python_paths = [
-    None,
-    '',
-    '/opt/local/bin/vim',
-    r'C:\Program Files\Vim\vim74\gvim.exe',
-    '/usr/bin/python2.5',
-    '/home/user/.pyenv/shims/python3.2',
-  ]
-    
-    from r2.lib.translation import I18N_PATH
-from r2.lib.plugin import PluginLoader
-from r2.lib import js
-    
-        @require_oauth2_scope('creddits')
-    @validate(
-        VUser(),
-        user=VAccountByName('username'),
-        months=VInt('months', min=1, max=36),
-        timeout=VNotInTimeout(),
-    )
-    @api_doc(
-        api_section.gold,
-        uri='/api/v1/gold/give/{username}',
-    )
-    def POST_give(self, user, months, timeout):
-        self._gift_using_creddits(
-            recipient=user,
-            months=months,
-            proxying_for=request.POST.get('proxying_for'),
-        )
-
-    
-        @require_oauth2_scope('identity')
-    @validate(
-        VUser(),
-    )
-    @api_doc(
-        section=api_section.account,
-        uri='/api/v1/me/trophies',
-    )
-    def GET_trophies(self):
-        '''Return a list of trophies for the current user.'''
-        return self.api_wrapper(get_usertrophies(c.oauth_user))
-    
-    class AwardsController(RedditController):
+    from nose.tools import ok_
+from ycm.paths import _EndsWithPython
