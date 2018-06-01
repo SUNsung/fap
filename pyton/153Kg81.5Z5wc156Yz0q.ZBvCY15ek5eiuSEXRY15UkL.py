@@ -1,102 +1,154 @@
 
         
-            digest = hash_func()
-    data = to_bytes(data, errors='surrogate_or_strict')
-    digest.update(data)
-    return digest.hexdigest()
+            def reduce_priority_link_to_crawl(self, url):
+        '''Reduce the priority of a link in `links_to_crawl` to avoid cycles.'''
+        pass
     
-            if not args.test:
-            with open(path, 'w') as metadata_fd:
-                metadata_fd.write(contents)
-    
-        data = dict(
-        globalEnv=['%s=%s' % (kp[0], kp[1]) for kp in args.env or []]
-    )
-    
-            # test exceptions
-        no_projects_input_url = 'https://www.googleapis.com/compute/v1/not-projects/myproject/global/backendServices/mybackendservice/getHealth'
-        no_resource_input_url = 'https://www.googleapis.com/compute/v1/not-projects/myproject/global'
-    
-        terminal_length = os.getenv('ANSIBLE_VYOS_TERMINAL_LENGTH', 10000)
-    
-        def on_open_shell(self):
-        try:
-            self._exec_cli_command(b'environment no more')
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
-
-    
-        # test flat list inputs
-    with CustomObjectScope(custom_objects):
-        layer = wrappers.Bidirectional.from_config(copy.deepcopy(config))
-    y = layer([x, c])
-    model = Model([x, c], y)
-    model.set_weights(weights)
-    y_np_3 = model.predict([x_np, c_np])
-    assert_allclose(y_np, y_np_3, atol=1e-4)
-    
-        # Test single image
-    x = np.random.uniform(0, 255, (10, 10, 3))
-    inputs = Input(shape=x.shape)
-    outputs = Lambda(utils.preprocess_input, output_shape=x.shape)(inputs)
-    model = Model(inputs, outputs)
-    assert model.predict(x[np.newaxis])[0].shape == x.shape
+        def process_query(self, query):
+        query = self.parse_query(query)
+        results = self.memory_cache.get(query)
+        if results is None:
+            results = self.reverse_index_cluster.process_search(query)
+            self.memory_cache.set(query, results)
+        return results
     
     
-def get_test_values():
-    return [0.1, 0.5, 3, 8, 1e-7]
+class SalesRanker(MRJob):
     
+        def reject_friend_request(self, from_user_id, to_user_id):
+        pass
+    
+    
+def inet_ntop(address_family, packed_ip):
+    addr = sockaddr()
+    addr.sa_family = address_family
+    addr_size = ctypes.c_int(ctypes.sizeof(addr))
+    ip_string = ctypes.create_string_buffer(128)
+    ip_string_size = ctypes.c_int(ctypes.sizeof(ip_string))
+    
+            Python does not have any size restrictions, but the compilation of
+        such large source files seems to be pretty memory hungry. The memory
+        consumption of the python process grew to >1.5GB when importing a
+        15MB lexer, eating all my swap space and I was to impacient to see,
+        if it could finish at all. With packed initializers that are unpacked
+        at import time of the lexer module, everything works like a charm.
+        
         '''
-    model = Sequential()
-    model.add(layers.Embedding(10, 10, mask_zero=True))
-    model.add(layers.Activation('softmax'))
-    model.compile(loss='categorical_crossentropy',
-                  optimizer='adam')
+        
+        ret = []
+        for i in range(len(string) / 2):
+            (n, v) = ord(string[i*2]), ord(string[i*2+1])
     
-        # 4. Anything else is not a valid argument
-    with pytest.raises(ValueError):
-        a = activations.get(6)
+        def test_str(self):
+        self.assertTrue('FOO' in str(self.error))
+        self.assertTrue('{}' in str(self.error))
     
-                # train once so that the states change
-            model.train_on_batch(np.ones_like(inputs),
-                                 np.random.random(out1.shape))
-            out2 = model.predict(np.ones_like(inputs))
+        def test_extendleft(self):
+        d = deque('a')
+        self.assertRaises(TypeError, d.extendleft, 1)
+        d.extendleft('bcd')
+        self.assertEqual(list(d), list(reversed('abcd')))
+        d.extendleft(d)
+        self.assertEqual(list(d), list('abcddcba'))
+        d = deque()
+        d.extendleft(range(1000))
+        self.assertEqual(list(d), list(reversed(range(1000))))
+        self.assertRaises(SyntaxError, d.extendleft, fail())
     
+        def isatty(self):
+        if self.closed:
+            raise ValueError('I/O operation on closed file')
+        return False
     
-class AdapterTest(unittest.TestCase):
+        tokens = {}
+    prev_val = None
+    for line in lines:
+        match = prog.match(line)
+        if match:
+            name, val = match.group(1, 2)
+            val = int(val)
+            tokens[val] = {'token': name}          # reverse so we can sort them...
+            prev_val = val
+        else:
+            comment_match = comment_regex.match(line)
+            if comment_match and prev_val is not None:
+                comment = comment_match.group(1)
+                tokens[prev_val]['comment'] = comment
+    keys = sorted(tokens.keys())
+    # load the output skeleton from the target:
+    try:
+        fp = open(outFileName)
+    except OSError as err:
+        sys.stderr.write('I/O error: %s\n' % str(err))
+        sys.exit(2)
+    with fp:
+        format = fp.read().split('\n')
+    try:
+        start = format.index('#--start constants--') + 1
+        end = format.index('#--end constants--')
+    except ValueError:
+        sys.stderr.write('target does not contain format markers')
+        sys.exit(3)
+    lines = []
+    for key in keys:
+        lines.append('%s = %d' % (tokens[key]['token'], key))
+        if 'comment' in tokens[key]:
+            lines.append('# %s' % tokens[key]['comment'])
+    format[start:end] = lines
+    try:
+        fp = open(outFileName, 'w')
+    except OSError as err:
+        sys.stderr.write('I/O error: %s\n' % str(err))
+        sys.exit(4)
+    with fp:
+        fp.write('\n'.join(format))
     
+                # In previous versions of SimpleXMLRPCServer, _dispatch
+            # could be overridden in this class, instead of in
+            # SimpleXMLRPCDispatcher. To maintain backwards compatibility,
+            # check to see if a subclass implements _dispatch and dispatch
+            # using that method if present.
+            response = self.server._marshaled_dispatch(
+                    data, getattr(self, '_dispatch', None), self.path
+                )
+        except Exception as e: # This should only happen if the module is buggy
+            # internal error, report as HTTP server error
+            self.send_response(500)
     
-class RadioTest(unittest.TestCase):
-    '''
-    Attention: Test case results depend on test case execution. The test cases
-    in this integration test class should be executed in an explicit order:
-    http://stackoverflow.com/questions/5387299/python-unittest-testcase-execution-order
-    '''
+    >>> def f():
+...     try:
+...         yield
+...     except:
+...         raise
+>>> g = f()
+>>> try:
+...     1/0
+... except ZeroDivisionError as v:
+...     try:
+...         g.throw(v)
+...     except Exception as w:
+...         tb = w.__traceback__
+>>> levels = 0
+>>> while tb:
+...     levels += 1
+...     tb = tb.tb_next
+>>> levels
+3
     
         def setUp(self):
-        self.tc1 = TC1()
-        self.tc2 = TC2()
-        self.tc3 = TC3()
-        self.average_result_tc1 = '###### In Test 1 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.average_result_tc2 = '###### In Test 2 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.average_result_tc3 = '###### In Test 3 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.runner = TestRunner()
-        self.out = StringIO()
-        self.saved_stdout = sys.stdout
-        sys.stdout = self.out
+        lines = io.StringIO(self.robots_txt).readlines()
+        self.parser = urllib.robotparser.RobotFileParser()
+        self.parser.parse(lines)
     
-    class TimeDisplay(object):
+        def __str__(self):
+        entries = self.entries
+        if self.default_entry is not None:
+            entries = entries + [self.default_entry]
+        return '\n\n'.join(map(str, entries))
     
-    
+            @dataclass
+        class C:
+            x: int
+            def __repr__(self):
+                return 'x'
+        self.assertEqual(repr(C(0)), 'x')
