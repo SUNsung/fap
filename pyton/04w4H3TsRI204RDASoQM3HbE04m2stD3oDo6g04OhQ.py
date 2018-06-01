@@ -1,115 +1,130 @@
 
         
-                def get_auth(self, username=None, password=None):
-            assert self.raw_auth is None
-            assert username is None
-            assert password is None
-            return basic_auth()
+                self.assertEquals(result, expected)
+
+    
+        plt.figure('scikit-learn GLM benchmark results')
+    plt.xlabel('Dimensions')
+    plt.ylabel('Time (s)')
+    plt.plot(dimensions, time_ridge, color='r')
+    plt.plot(dimensions, time_ols, color='g')
+    plt.plot(dimensions, time_lasso, color='b')
+    
+    from sklearn import clone
+from sklearn.externals.six.moves import xrange
+from sklearn.random_projection import (SparseRandomProjection,
+                                       GaussianRandomProjection,
+                                       johnson_lindenstrauss_min_dim)
+    
+            # split the paragraph into fake smaller paragraphs to make the
+        # problem harder e.g. more similar to tweets
+        if lang in ('zh', 'ja'):
+        # FIXME: whitespace tokenizing does not work on chinese and japanese
+            continue
+        words = content.split()
+        n_groups = len(words) / n_words_per_short_text
+        if n_groups < 1:
+            continue
+        groups = np.array_split(words, n_groups)
+    
+    # Split the dataset in training and test set:
+docs_train, docs_test, y_train, y_test = train_test_split(
+    dataset.data, dataset.target, test_size=0.5)
+    
+    # Define 'classifiers' to be used
+classifiers = {
+    'Empirical Covariance': EllipticEnvelope(support_fraction=1.,
+                                             contamination=0.261),
+    'Robust Covariance (Minimum Covariance Determinant)':
+    EllipticEnvelope(contamination=0.261),
+    'OCSVM': OneClassSVM(nu=0.261, gamma=0.05)}
+colors = ['m', 'g', 'b']
+legend1 = {}
+legend2 = {}
+    
+    np.random.seed(0)
+###############################################################################
+n_features = 100
+# simulation covariance matrix (AR(1) process)
+r = 0.1
+real_cov = toeplitz(r ** np.arange(n_features))
+coloring_matrix = cholesky(real_cov)
     
     
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
+collect_ignore = [
+    # deprecated or moved modules
+    'scrapy/conf.py',
+    'scrapy/stats.py',
+    'scrapy/project.py',
+    'scrapy/utils/decorator.py',
+    'scrapy/statscol.py',
+    'scrapy/squeue.py',
+    'scrapy/log.py',
+    'scrapy/dupefilter.py',
+    'scrapy/command.py',
+    'scrapy/linkextractor.py',
+    'scrapy/spider.py',
     
-        def get_formatters_grouped(self):
-        groups = {}
-        for group_name, group in groupby(
-                self.get_formatters(),
-                key=lambda p: getattr(p, 'group_name', 'format')):
-            groups[group_name] = list(group)
-        return groups
+        def __init__(self):
+        Resource.__init__(self)
+        self.concurrent = 0
+        self.tail = deque(maxlen=100)
+        self._reset_stats()
     
-    class QueryApi(object):
+            if opts.logfile:
+            self.settings.set('LOG_ENABLED', True, priority='cmdline')
+            self.settings.set('LOG_FILE', opts.logfile, priority='cmdline')
     
-        def bfs(self, source, dest):
-        if source is None:
-            return False
-        queue = deque()
-        queue.append(source)
-        source.visit_state = State.visited
-        while queue:
-            node = queue.popleft()
-            print(node)
-            if dest is node:
-                return True
-            for adjacent_node in node.adj_nodes.values():
-                if adjacent_node.visit_state == State.unvisited:
-                    queue.append(adjacent_node)
-                    adjacent_node.visit_state = State.visited
-        return False
+    from scrapy.commands import ScrapyCommand
+from scrapy.contracts import ContractsManager
+from scrapy.utils.misc import load_object
+from scrapy.utils.conf import build_component_list
     
-            Transform key and value to the form:
+                @wraps(cb)
+            def wrapper(response):
+                output = list(iterate_spider_output(cb(response)))
+                try:
+                    results.startTest(self.testcase_post)
+                    self.post_process(output)
+                    results.stopTest(self.testcase_post)
+                except AssertionError:
+                    results.addFailure(self.testcase_post, sys.exc_info())
+                except Exception:
+                    results.addError(self.testcase_post, sys.exc_info())
+                else:
+                    results.addSuccess(self.testcase_post)
+                finally:
+                    return output
     
-        MOTORCYCLE = 0
-    COMPACT = 1
-    LARGE = 2
     
-        def __init__(self, template_categories_to_budget_map):
-        self.categories_to_budget_map = template_categories_to_budget_map
+class Scientist(AbstractExpert):
     
-        parser = argparse.ArgumentParser(description = 'Download all the PDF/HTML links into README.md')
-    parser.add_argument('-d', action='store', dest='directory')
-    parser.add_argument('--no-html', action='store_true', dest='nohtml', default = False)
-    parser.add_argument('--overwrite', action='store_true', default = False)    
-    results = parser.parse_args()
+        def test_sequential_execution(self):
+        self.command_stack[0].execute()
+        output_after_first_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_first_execution[0], 'bar.txt')
+        self.command_stack[1].execute()
+        output_after_second_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_second_execution[0], 'baz.txt')
     
-        def unsubscribe(self, msg):
-        self.provider.unsubscribe(msg, self)
+        def tearDown(cls):
+        ''' Function/test case scope teardown. '''
+        cls.output.close()
+        sys.stdout = cls.saved_stdout
     
-        def test_items_recoil(self):
-        with ObjectPool(self.sample_queue, True) as pool:
-            self.assertEqual(pool, 'first')
-        self.assertTrue(self.sample_queue.get() == 'second')
-        self.assertFalse(self.sample_queue.empty())
-        self.assertTrue(self.sample_queue.get() == 'first')
-        self.assertTrue(self.sample_queue.empty())
+        def test_pool_behavior_with_single_object_inside(self):
+        sample_queue = queue.Queue()
+        sample_queue.put('yam')
+        with ObjectPool(sample_queue) as obj:
+            # print('Inside with: {}'.format(obj))
+            self.assertEqual(obj, 'yam')
+        self.assertFalse(sample_queue.empty())
+        self.assertTrue(sample_queue.get() == 'yam')
+        self.assertTrue(sample_queue.empty())
+        
     
-        def setUp(self):
-        self.tc1 = TC1()
-        self.tc2 = TC2()
-        self.tc3 = TC3()
-        self.average_result_tc1 = '###### In Test 1 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.average_result_tc2 = '###### In Test 2 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.average_result_tc3 = '###### In Test 3 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.runner = TestRunner()
-        self.out = StringIO()
-        self.saved_stdout = sys.stdout
-        sys.stdout = self.out
-    
-    print()
-    
-    ### OUTPUT ###
-# Setting Data 1 = 10
-# DecimalViewer: Subject Data 1 has data 10
-# HexViewer: Subject Data 1 has data 0xa
-# Setting Data 2 = 15
-# HexViewer: Subject Data 2 has data 0xf
-# DecimalViewer: Subject Data 2 has data 15
-# Setting Data 1 = 3
-# DecimalViewer: Subject Data 1 has data 3
-# HexViewer: Subject Data 1 has data 0x3
-# Setting Data 2 = 5
-# HexViewer: Subject Data 2 has data 0x5
-# DecimalViewer: Subject Data 2 has data 5
-# Detach HexViewer from data1 and data2.
-# Setting Data 1 = 10
-# DecimalViewer: Subject Data 1 has data 10
-# Setting Data 2 = 15
-# DecimalViewer: Subject Data 2 has data 15
+            # dictionary that will be used to determine which static method is
+        # to be executed but that will be also used to store possible param
+        # value
+        self._static_method_choices = {'param_value_1': self._static_method_1,
+                                       'param_value_2': self._static_method_2}
