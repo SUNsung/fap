@@ -1,79 +1,63 @@
 
         
-        # For this pull request, which changes Page#dir
-# https://github.com/jekyll/jekyll/pull/4403
+              # Topic may be hard deleted due to spam, no point complaining
+      # we would have to look at the topics table id sequence to find cases
+      # where this was called with an invalid id, no point really
+      return unless topic.present?
     
-      def self.theme_gem_dir; source_dir.join('tmp', 'jekyll', 'my-cool-theme'); end
-    
-        def defaults_deprecate_type(old, current)
-      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
-      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
-                        'type: #{current}'.'
-    end
+      def set_permission(permission_name, value)
+    self.send('#{permission_name}=', value)
+    save_and_refresh_staff_groups!
   end
-end
-
     
-              # Parse the options
-          argv = parse_options(opts)
-          return if !argv
-          raise Vagrant::Errors::CLIInvalidUsage, help: opts.help.chomp if argv.length != 3
+          html_filters.push 'coffeescript/clean_html_v1', 'coffeescript/entries_v1', 'title'
     
-      #forward some requests to status message, because a poll is just attached to a status message and is not sharable itself
-  delegate :author_id, :diaspora_handle, :public?, :subscribers, to: :status_message
+        html_filters.push 'sinon/clean_html', 'sinon/entries'
     
-        def index
-      pods_json = PodPresenter.as_collection(Pod.all)
-    
-          rescue_from Rack::OAuth2::Server::Authorize::BadRequest,
-                  JSON::JWT::InvalidFormat, JSON::JWK::UnknownAlgorithm do |e|
-        logger.info e.backtrace[0, 10].join('\n')
-        render json: {error: :invalid_request, error_description: e.message, status: 400}
+        def parse(response)
+      unless response.url == root_url || self.class.version == 'Guide'
+        response.body.sub!(/<nav class='devsite-nav-responsive-sidebar.+?<\/nav>/m, '')
+        response.body.gsub!(/<li class='devsite-nav-item'>.+?<\/li>/m, '')
       end
-      rescue_from JSON::JWT::VerificationFailed do |e|
-        logger.info e.backtrace[0, 10].join('\n')
-        render json: {error: :invalid_grant, error_description: e.message, status: 400}
+    
+            a_split <=> b_split
+      else
+        a.casecmp(b)
       end
     end
   end
 end
 
     
-        def self.run
-      # Apparently there's no better way than this to add Sass
-      # to Merb's Rack stack.
-      Merb::Config[:app] = Sass::Plugin::Rack.new(Merb::Config[:app])
-    end
+      # Returns true if the set and the given set have no element in
+  # common.  This method is the opposite of +intersect?+.
+  #
+  #   Set[1, 2, 3].disjoint? Set[3, 4]   #=> false
+  #   Set[1, 2, 3].disjoint? Set[4, 5]   #=> true
+  def disjoint?(set)
+    !intersect?(set)
   end
-end
-
     
-        def parse_input(environment, text)
-      case text
-      when Script::MATCH
-        name = $1
-        guarded = !!$3
-        val = Script::Parser.parse($2, @line, text.size - ($3 || '').size - $2.size)
+      def self.main_thread2(critical_thread)
+    Thread.pass # The join below seems to cause a deadlock with CRuby unless Thread.pass is called first
+    critical_thread.join
+    Thread.critical.should == false
+  end
     
-      # POST /books
-  # POST /books.json
-  def create
-    @book = Book.new(book_params)
+        run.should be_true
+  end
     
-            MSG = 'Use only a single space inside array percent literal.'.freeze
-        MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX =
-          /(?:[\S&&[^\\]](?:\\ )*)( {2,})(?=\S)/
+          if tags.include?(:run)
+        odeprecated ''depends_on ... => :run''
+      end
     
-            # @param lines [Array<String>]
-        # @param annotations [Array<(Integer, String)>]
-        #   each entry is the annotated line number and the annotation text
-        #
-        # @note annotations are sorted so that reconstructing the annotation
-        #   text via {#to_s} is deterministic
-        def initialize(lines, annotations)
-          @lines       = lines.freeze
-          @annotations = annotations.sort.freeze
+            def_node_matcher :multiple_compare?, <<-PATTERN
+          (send (send _ {:< :> :<= :>=} $_) {:< :> :<= :>=} _)
+        PATTERN
+    
+            def_node_matcher :on_body_of_reduce, <<-PATTERN
+          (block (send _recv {:reduce :inject} !sym) _blockargs $(begin ...))
+        PATTERN
+    
+              reconstructed.join
         end
-    
-      it 'registers an offense' do
-    inspect_source(source)
