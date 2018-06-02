@@ -1,38 +1,30 @@
 
         
-        TEST_DIR = File.expand_path('../test', __dir__)
+        Print a list of currently running Applications and associated
+Bundle IDs, which may be useful in a Cask uninstall stanza, eg
     
-    require 'jekyll'
-require 'mercenary'
+            private
     
-            self
+             RUBY
+        end
+    
+    # Multi-line step scoper
+When /^(.*) within (.*[^:]):$/ do |step, parent, table_or_string|
+  with_scope(parent) { When '#{step}:', table_or_string }
+end
+    
+        def definitions_for(klass)
+      parent_classes = klass.ancestors.reverse
+      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
+        inherited_definitions.deep_merge! @attachments[ancestor]
       end
-    
-        log = StringIO.new
-    @dry_run_started_at = Time.zone.now
-    @dry_run_logger = Logger.new(log).tap { |logger|
-      logger.formatter = proc { |severity, datetime, progname, message|
-        elapsed_time = '%02d:%02d:%02d' % 2.times.inject([datetime - @dry_run_started_at]) { |(x, *xs)|
-          [*x.divmod(60), *xs]
-        }
-    }
-    }
-    
-      def validate_evernote_options
-    unless evernote_consumer_key.present? &&
-      evernote_consumer_secret.present? &&
-      evernote_oauth_token.present?
-      errors.add(:base, 'Evernote ENV variables and a Service are required')
     end
   end
+end
+
     
-      def reemit
-    @event.reemit!
-    respond_to do |format|
-      format.html { redirect_back event_path(@event), notice: 'Event re-emitted.' }
-    end
-  end
-    
-      it 'decodes two shorts for two format characters' do
-    'badc'.unpack(unpack_format(nil, 2)).should == [25185, 25699]
-  end
+      class Railtie < Rails::Railtie
+    initializer 'paperclip.insert_into_active_record' do |app|
+      ActiveSupport.on_load :active_record do
+        Paperclip::Railtie.insert
+      end
