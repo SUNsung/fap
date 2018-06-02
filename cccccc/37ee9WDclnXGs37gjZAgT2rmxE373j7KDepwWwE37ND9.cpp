@@ -1,383 +1,261 @@
 
         
-        
-    {
-    {
-    {                // assign patch back
-                // TODO: do that inside the loop to avoid copying, but one thing at a time
-                assignpatch(patch, i0, i1, j0, j1);
-            }
-        }
-    }
+          const Decl *getDecl() const { return D; }
     
+      /// \brief The buffer ID where a hashbang line #! is allowed.
+  unsigned HashbangBufferID = 0U;
     
-    {
-    {
-    {// utility function to round an integer up to a multiple of size
-size_t RoundUp(size_t value, size_t size);
-// HIGH and LOW DWORD functions
-DWORD HIDWORD(size_t size);
-DWORD LODWORD(size_t size);
-} } }
-
-    
-        Matrix<float>::MultiplyAndWeightedAdd(alpha, mAdense, transposeA, mBdense, transposeB, beta, mCdense);
-    Matrix<float>::MultiplyAndWeightedAdd(alpha, mAsparse, transposeA, mBsparse, transposeB, beta, mCsparse);
-    mCsparse.SwitchToMatrixType(MatrixType::DENSE, matrixFormatDense, true);
-    BOOST_CHECK(mCsparse.IsEqualTo(mCdense, c_epsilonFloatE4));
-    
-    GPUDataTransferer::GPUDataTransferer(int deviceId, bool useConcurrentStreams) 
-{
-#pragma warning(disable : 4127)
-    if (useConcurrentStreams && (s_fetchStream == NULL))
-    {
-        cudaStreamCreateWithFlags(&s_fetchStream, cudaStreamNonBlocking) || 'cudaStreamCreateWithFlags failed';
-        cudaStreamCreateWithFlags(&s_assignStream, cudaStreamNonBlocking) || 'cudaStreamCreateWithFlags failed';
-    }
-    }
-    
-    function<ComputationNetworkPtr(DEVICEID_TYPE)> GetCreateNetworkFn(const ScriptableObjects::IConfigRecord& config)
-{
-    // createNetwork() is a BrainScript lambda that creates the model
-    // We create a C++ wrapper around it, which we then pass to Train().
-    auto createNetworkConfigLambda = config[L'createNetwork'].AsPtr<ScriptableObjects::ConfigLambda>();
-    return [createNetworkConfigLambda](DEVICEID_TYPE /*deviceId*/)
-    {
-        // execute the lambda
-        vector<ScriptableObjects::ConfigValuePtr> args; // this lambda has no arguments
-        ScriptableObjects::ConfigLambda::NamedParams namedArgs;
-        let netValue = createNetworkConfigLambda->Apply(move(args), move(namedArgs), L'BuildNetworkFromDescription');
-        // typecast the result to the desired type
-        return netValue.AsPtr<ComputationNetwork>();
-    };
-}
-    
-        static void SetTracingFlag()
-    {
-        auto& us = GetStaticInstance();
-        us.m_tracingFlag = true;
-    }
-    
-    template<class TString>
-inline bool AreEqualIgnoreCase(
-    const typename TString::value_type* s1pointer,
-    const TString& s2)
-{
-    return AreEqualIgnoreCase(TString(s1pointer), s2);
-}
-    
-    void ShowErrorAndExit(DWORD ec, const wchar_t * func, int line)
-{
-	wchar_t * buffer;
-	if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-		NULL, ec, 0, (LPWSTR)&buffer, 0, NULL) == 0)
-	{
-		buffer = L'Unknown error. FormatMessage failed.';
-	}
-    }
-    
-    SEXP XGBoosterModelToRaw_R(SEXP handle) {
-  SEXP ret;
-  R_API_BEGIN();
-  bst_ulong olen;
-  const char *raw;
-  CHECK_CALL(XGBoosterGetModelRaw(R_ExternalPtrAddr(handle), &olen, &raw));
-  ret = PROTECT(allocVector(RAWSXP, olen));
-  if (olen != 0) {
-    memcpy(RAW(ret), raw, olen);
-  }
-  R_API_END();
-  UNPROTECT(1);
-  return ret;
-}
-    
-    /*
- * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
- * Method:    XGBoosterDumpModelEx
- * Signature: (JLjava/lang/String;I)[Ljava/lang/String;
- */
-JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGBoosterDumpModelEx
-  (JNIEnv *jenv, jclass jcls, jlong jhandle, jstring jfmap, jint jwith_stats, jstring jformat, jobjectArray jout) {
-  BoosterHandle handle = (BoosterHandle) jhandle;
-  const char *fmap = jenv->GetStringUTFChars(jfmap, 0);
-  const char *format = jenv->GetStringUTFChars(jformat, 0);
-  bst_ulong len = 0;
-  char **result;
-    }
-    
-    // prediction
-#include '../src/predictor/predictor.cc'
-#include '../src/predictor/cpu_predictor.cc'
-    
-    TEST(Metric, Precision) {
-  // When the limit for precision is not given, it takes the limit at
-  // std::numeric_limits<unsigned>::max(); hence all values are very small
-  // NOTE(AbdealiJK): Maybe this should be fixed to be num_row by default.
-  xgboost::Metric * metric = xgboost::Metric::Create('pre');
-  ASSERT_STREQ(metric->Name(), 'pre');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-7);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0, 1e-7);
-    }
-    
-    
-    {  std::unique_ptr<FeatureSelector> selector_;
-};
-    
-      XGBOOST_DEVICE GradientPairInternal<T> operator-(
-      const GradientPairInternal<T> &rhs) const {
-    GradientPairInternal<T> g;
-    g.grad_ = grad_ - rhs.grad_;
-    g.hess_ = hess_ - rhs.hess_;
-    return g;
-  }
-    
-    // This function will create a Huffman tree.
-//
-// The catch here is that the tree cannot be arbitrarily deep.
-// Brotli specifies a maximum depth of 15 bits for 'code trees'
-// and 7 bits for 'code length code trees.'
-//
-// count_limit is the value that is to be faked as the minimum value
-// and this minimum value is raised until the tree matches the
-// maximum length requirement.
-//
-// This algorithm is not of excellent performance for very long data blocks,
-// especially when population counts are longer than 2**tree_limit, but
-// we are not planning to use this with extremely long blocks.
-//
-// See http://en.wikipedia.org/wiki/Huffman_coding
-void CreateHuffmanTree(const uint32_t *data,
-                       const size_t length,
-                       const int tree_limit,
-                       HuffmanTree* tree,
-                       uint8_t *depth) {
-  // For block sizes below 64 kB, we never need to do a second iteration
-  // of this loop. Probably all of our block sizes will be smaller than
-  // that, so this loop is mostly of academic interest. If we actually
-  // would need this, we would be better off with the Katajainen algorithm.
-  for (uint32_t count_limit = 1; ; count_limit *= 2) {
-    size_t n = 0;
-    for (size_t i = length; i != 0;) {
-      --i;
-      if (data[i]) {
-        const uint32_t count = std::max<uint32_t>(data[i], count_limit);
-        tree[n++] = HuffmanTree(count, -1, static_cast<int16_t>(i));
-      }
-    }
-    }
-    }
-    
-    #endif  // GUETZLI_FDCT_H_
-
-    
-    
-    {}  // namespace guetzli
-    
-    bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     JPEGData* jpg) {
-  static const int quant[3 * kDCTBlockSize] = {
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  };
-  return EncodeRGBToJpeg(rgb, w, h, quant, jpg);
-}
-    
-    #include <stddef.h>
-#include <stdint.h>
-    
-    class TestWriteChainAsyncTransportWrapper :
-  public WriteChainAsyncTransportWrapper<folly::AsyncTransportWrapper> {
- public:
-  TestWriteChainAsyncTransportWrapper() :
-    WriteChainAsyncTransportWrapper<folly::AsyncTransportWrapper>(nullptr) {}
-    }
-    
-    namespace folly {
-    }
-    
-     private:
-  Node* head() {
-    return head_.load(std::memory_order_acquire);
-  }
-    
-    /** Set implemented as an ordered singly-linked list.
- *
- *  A single writer thread may add or remove elements. Multiple reader
- *  threads may search the set concurrently with each other and with
- *  the writer's operations.
- */
-template <typename T, template <typename> class Atom = std::atomic>
-class HazptrSWMRSet {
-  template <typename Node>
-  struct Reclaimer {
-    void operator()(Node* p) {
-      delete p;
-    }
-  };
-    }
-    
-    #include <string>
-    
-      template <typename K>
-  if_is_transparent<K, iterator> upper_bound(const K& key) {
-    return upper_bound(*this, key);
-  }
-    
-    
-    {// Older versions of libstdc++ do not provide std::is_trivially_copyable
-#if defined(__clang__) && !defined(_LIBCPP_VERSION)
-template <class T>
-struct is_trivially_copyable
-    : std::integral_constant<bool, __is_trivially_copyable(T)> {};
-#elif defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 5
-template <class T>
-struct is_trivially_copyable : std::is_trivial<T> {};
+    // On Cygwin, std::once_flag can not be used because it is larger than the
+// platform word.
+typedef uintptr_t swift_once_t;
 #else
-template <class T>
-using is_trivially_copyable = std::is_trivially_copyable<T>;
-#endif
-} // namespace traits_detail
-    
-      EXPECT_TRUE((std::is_same<remove_cvref_t<int&&>, int>::value));
-  EXPECT_TRUE((std::is_same<remove_cvref<int&&>::type, int>::value));
-    
-    
-    {// Instantiate the most common Future types to save compile time
-template class SemiFuture<Unit>;
-template class SemiFuture<bool>;
-template class SemiFuture<int>;
-template class SemiFuture<int64_t>;
-template class SemiFuture<std::string>;
-template class SemiFuture<double>;
-template class Future<Unit>;
-template class Future<bool>;
-template class Future<int>;
-template class Future<int64_t>;
-template class Future<std::string>;
-template class Future<double>;
-} // namespace folly
-    
-      // Only allow creation by this factory, to ensure heap allocation.
-  static std::shared_ptr<WTCallback> create(EventBase* base) {
-    // optimization opportunity: memory pool
-    auto cob = std::make_shared<WTCallback>(PrivateConstructorTag{}, base);
-    // Capture shared_ptr of cob in lambda so that Core inside Promise will
-    // hold a ref count to it. The ref count will be released when Core goes
-    // away which happens when both Promise and Future go away
-    cob->promise_.setInterruptHandler(
-        [cob](exception_wrapper ew) { cob->interruptHandler(std::move(ew)); });
-    return cob;
-  }
-    
-      // Sync + corrupt => no change
-  ASSERT_OK(writable_file->Fsync());
-  ASSERT_OK(dynamic_cast<MockEnv*>(env_)->CorruptBuffer(kFileName));
-  result.clear();
-  ASSERT_OK(rand_file->Read(0, kGood.size(), &result, &(scratch[0])));
-  ASSERT_EQ(result.compare(kGood), 0);
-    
-    
-    
-    
-    {}  // namespace rocksdb
-    
-      /**
-   * @brief flush file,
-   * @details initiate an aio write and not wait
-   *
-   * @return [description]
-   */
-  Status Flush() {
-    librados::AioCompletion *write_completion = librados::Rados::aio_create_completion();
-    int r = 0;
-    }
-    
-        {
-      PERF_TIMER_GUARD(block_read_time);
-      // Actual file read
-      status_ = file_->Read(handle_.offset(), block_size_ + kBlockTrailerSize,
-                            &slice_, used_buf_);
-    }
-    PERF_COUNTER_ADD(block_read_count, 1);
-    PERF_COUNTER_ADD(block_read_byte, block_size_ + kBlockTrailerSize);
-    if (!status_.ok()) {
-      return status_;
-    }
-    
-    SyncPoint* SyncPoint::GetInstance() {
-  static SyncPoint sync_point;
-  return &sync_point;
-}
     
     
     {
-    {  auto callback_pair = callbacks_.find(point);
-  if (callback_pair != callbacks_.end()) {
-    num_callbacks_running_++;
-    mutex_.unlock();
-    callback_pair->second(cb_arg);
-    mutex_.lock();
-    num_callbacks_running_--;
-  }
-  cleared_points_.insert(point);
-  cv_.notify_all();
-}
-} // rocksdb
-#endif
+    {} // end namespace index
+} // end namespace swift
+    
+    #endif // SWIFT_INDEX_INDEXDATACONSUMER_H
 
     
-      bool pending_exception =
-      AbstractSliceJni::setHandle(env, m_jSliceLimit, &limit, JNI_FALSE);
-  if(pending_exception) {
-    if(env->ExceptionCheck()) {
-      // exception thrown from setHandle or descendant
-      env->ExceptionDescribe(); // print out exception to stderr
-    }
-    if(jsStart != nullptr) {
-      env->DeleteLocalRef(jsStart);
-    }
-    releaseJniEnv(attached_thread);
-    return;
-  }
+      static ResultPlanPtr computeResultPlan(SILGenFunction &SGF,
+                                         const CalleeTypeInfo &calleeTypeInfo,
+                                         SILLocation loc,
+                                         SGFContext evalContext);
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    #include 'swift/SIL/InstructionUtils.h'
+#include 'swift/SIL/Projection.h'
+#include 'swift/SILOptimizer/Analysis/AliasAnalysis.h'
+#include 'swift/SILOptimizer/Analysis/EscapeAnalysis.h'
+#include 'swift/SILOptimizer/Analysis/TypeExpansionAnalysis.h'
+#include 'swift/SILOptimizer/Analysis/ValueTracking.h'
+#include 'swift/SILOptimizer/Utils/Local.h'
+#include 'llvm/ADT/DenseMap.h'
+#include 'llvm/ADT/DenseSet.h'
+#include 'llvm/ADT/Hashing.h'
+#include 'llvm/ADT/SmallVector.h'
+#include 'llvm/Support/Debug.h'
+#include <utility> 
+    
+    
+    {                return (count & TAG_MASK) - 1;
+#else
+                return ::atomicInc(address, val);
+#endif
+            }
+    
+    #ifndef OPENCV_CUDA_WARP_REDUCE_HPP__
+#define OPENCV_CUDA_WARP_REDUCE_HPP__
+    
+    #include 'runtime_common.hpp'
+    
+    #include '../../precomp.hpp'
+    
+    #if defined(MBEDTLS_SSL_DTLS_ANTI_REPLAY) &&                              \
+    ( !defined(MBEDTLS_SSL_TLS_C) || !defined(MBEDTLS_SSL_PROTO_DTLS) )
+#error 'MBEDTLS_SSL_DTLS_ANTI_REPLAY  defined, but not all prerequisites'
+#endif
+    
+        struct mem_block
+    {
+      mem_block *m_pNext;
+      size_t m_used_count;
+      size_t m_size;
+      char m_data[1];
+    };
     
     #endif
 
     
-        if (_packlen > _rawlen) return SIMPLE_CONTINUE_DATA;
+    	// Set path to vendored ConEmu config file
+	PathCombine(cfgPath, exeDir, L'vendor\\conemu-maximus5\\ConEmu.xml');
     
-      private:
-    SpyCore() {}
-    ~SpyCore() {}
+      /// Construct an acceptor without opening it.
+  /**
+   * This constructor creates an acceptor without opening it to listen for new
+   * connections. The open() function must be called before the acceptor can
+   * accept new socket connections.
+   *
+   * @param io_service The io_service object that the acceptor will use to
+   * dispatch handlers for any asynchronous operations performed on the
+   * acceptor.
+   */
+  explicit basic_socket_acceptor(boost::asio::io_service& io_service)
+    : basic_io_object<SocketAcceptorService>(io_service)
+  {
+  }
+    
+      /// Construct, passing the specified argument to initialise the next layer.
+  template <typename Arg>
+  explicit buffered_read_stream(Arg& a)
+    : next_layer_(a),
+      storage_(default_buffer_size)
+  {
+  }
+    
+    #endif // BOOST_ASIO_DETAIL_ATOMIC_COUNT_HPP
+
+    
+      // The type used for offsets into the buffer.
+  typedef std::size_t size_type;
     
     
-bool TSpy::SpyHookLogFunc(XLoggerInfo_t& _info, std::string& _log)
-{
-    __attribute__((unused)) int i = 0;
-    return true;
+    {
+    {} // namespace posix_time
+} // namespace boost
+    
+    #endif // defined(__GNUC__) && defined(__arm__)
+    
+      // Insert a new entry into the map.
+  std::pair<iterator, bool> insert(const value_type& v)
+  {
+    if (size_ + 1 >= num_buckets_)
+      rehash(hash_size(size_ + 1));
+    size_t bucket = calculate_hash_value(v.first) % num_buckets_;
+    iterator it = buckets_[bucket].first;
+    if (it == values_.end())
+    {
+      buckets_[bucket].first = buckets_[bucket].last =
+        values_insert(values_.end(), v);
+      ++size_;
+      return std::pair<iterator, bool>(buckets_[bucket].last, true);
+    }
+    iterator end_it = buckets_[bucket].last;
+    ++end_it;
+    while (it != end_it)
+    {
+      if (it->first == v.first)
+        return std::pair<iterator, bool>(it, false);
+      ++it;
+    }
+    buckets_[bucket].last = values_insert(end_it, v);
+    ++size_;
+    return std::pair<iterator, bool>(buckets_[bucket].last, true);
+  }
+    
+    
+    {  bool earliest = queue.enqueue_timer(time, timer, op);
+  io_service_.work_started();
+  if (earliest)
+    interrupter_.interrupt();
 }
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    void dev_poll_reactor::run(bool block, op_queue<operation>& ops)
+{
+  boost::asio::detail::mutex::scoped_lock lock(mutex_);
+    }
     
-        JNIEnv* GetEnv();
-    int Status();
+    void DebugHUD_InitDefaults( DebugHUD *hud )
+{
+    hud->show_demo_window = true;
+    hud->show_another_window = true;
+    hud->rotation_speed = 15.0f;
+    
+    hud->cubeColor1[0] = 0.4f;
+    hud->cubeColor1[1] = 0.4f;
+    hud->cubeColor1[2] = 1.0f;
+    hud->cubeColor1[3] = 1.0f;
+    
+    hud->cubeColor2[0] = 1.0f;
+    hud->cubeColor2[1] = 0.4f;
+    hud->cubeColor2[2] = 0.4f;
+    hud->cubeColor2[3] = 1.0f;
+    
+    hud->clearColor[0] = 0.45f;
+    hud->clearColor[1] = 0.55f;
+    hud->clearColor[2] = 0.60f;
+    hud->clearColor[3] = 1.00f;
+}
+    
+        if (install_callbacks)
+    {
+        s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, ImGui_Marmalade_PointerButtonEventCallback, 0);
+        s3eKeyboardRegister(S3E_KEYBOARD_KEY_EVENT, ImGui_Marmalade_KeyCallback, 0);
+        s3eKeyboardRegister(S3E_KEYBOARD_CHAR_EVENT, ImGui_Marmalade_CharCallback, 0);
+    }
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_API void        ImGui_ImplGlfwGL2_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_ImplGlfwGL2_CreateDeviceObjects();
+    
+        // Setup time step
+    INT64 current_time;
+    QueryPerformanceCounter((LARGE_INTEGER *)&current_time);
+    io.DeltaTime = (float)(current_time - g_Time) / g_TicksPerSecond;
+    g_Time = current_time;
+    
+    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+bool ImGui_ImplA5_ProcessEvent(ALLEGRO_EVENT *ev)
+{
+    ImGuiIO &io = ImGui::GetIO();
+    }
+    
+    
+    {        if (!cfg.GlyphRanges)
+            cfg.GlyphRanges = atlas->GetGlyphRangesDefault();
+        for (const ImWchar* in_range = cfg.GlyphRanges; in_range[0] && in_range[ 1 ]; in_range += 2, total_ranges_count++) 
+            total_glyphs_count += (in_range[1] - in_range[0]) + 1;
+    }
+    
+        {
+        D3D12_DESCRIPTOR_HEAP_DESC desc = {};
+        desc.Type           = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+        desc.NumDescriptors = NUM_BACK_BUFFERS;
+        desc.Flags          = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+        desc.NodeMask       = 1;
+        if (g_pd3dDevice->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&g_pd3dRtvDescHeap)) != S_OK)
+            return E_FAIL;
+    }
+    
+    int main(int, char**)
+{
+    // Create application window
+    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
+    RegisterClassEx(&wc);
+    HWND hwnd = CreateWindow(_T('ImGui Example'), _T('ImGui DirectX9 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+    }
+    
+    int main(int, char**)
+{
+    // Setup window
+    glfwSetErrorCallback(glfw_error_callback);
+    if (!glfwInit())
+        return 1;
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#if __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+    GLFWwindow* window = glfwCreateWindow(1280, 720, 'ImGui GLFW+OpenGL3 example', NULL, NULL);
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1); // Enable vsync
+    gl3wInit();
+    }
+    
+    
+    {        memcpy(&g_ClearValue.color.float32[0], &clear_color, 4 * sizeof(float));
+        frame_begin();
+        ImGui_ImplGlfwVulkan_Render(g_CommandBuffer[g_FrameIndex]);
+        frame_end();
+        frame_present();
+    }
+    
+                // Simple selection popup
+            // (If you want to show the current selection inside the Button itself, you may want to build a string using the '###' operator to preserve a constant ID with a variable label)
+            if (ImGui::Button('Select..'))
+                ImGui::OpenPopup('select');
+            ImGui::SameLine();
+            ImGui::TextUnformatted(selected_fish == -1 ? '<None>' : names[selected_fish]);
+            if (ImGui::BeginPopup('select'))
+            {
+                ImGui::Text('Aquarium');
+                ImGui::Separator();
+                for (int i = 0; i < IM_ARRAYSIZE(names); i++)
+                    if (ImGui::Selectable(names[i]))
+                        selected_fish = i;
+                ImGui::EndPopup();
+            }
