@@ -1,192 +1,123 @@
 
         
-          test 'helpers' do
-    assert_response_code_range 200..299, :successful?
-    assert_response_code_range [404],    :not_found?
-    assert_response_code_range 300..399, :redirection?
-    assert_response_code_range 500..599, :server_error?
-    assert_response_code_range 400..499, :client_error?
+            To install Clojure you should install Leiningen:
+      brew install leiningen
+    and then follow the tutorial:
+      https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
+    EOS
+  when 'osmium' then <<-EOS.undent
+    The creator of Osmium requests that it not be packaged and that people
+    use the GitHub master branch instead.
+    EOS
+  when 'gfortran' then <<-EOS.undent
+    GNU Fortran is now provided as part of GCC, and can be installed with:
+      brew install gcc
+    EOS
+  when 'play' then <<-EOS.undent
+    Play 2.3 replaces the play command with activator:
+      brew install typesafe-activator
+    
+    def bottle_resolve_formula_names(bottle_file)
+  receipt_file_path = bottle_receipt_path bottle_file
+  receipt_file = Utils.popen_read('tar', '-xOzf', bottle_file, receipt_file_path)
+  name = receipt_file_path.split('/').first
+  tap = Tab.from_file_content(receipt_file, '#{bottle_file}/#{receipt_file_path}').tap
+    
+    # This formula serves as the base class for several very similar
+# formulae for Amazon Web Services related tools.
+class AmazonWebServicesFormula < Formula
+  # Use this method to peform a standard install for Java-based tools,
+  # keeping the .jars out of HOMEBREW_PREFIX/lib
+  def install
+    rm Dir['bin/*.cmd'] # Remove Windows versions
+    libexec.install Dir['*']
+    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
+  end
+  alias_method :standard_install, :install
+    
+      def failure_message
+    exception = request.respond_to?(:get_header) ? request.get_header('omniauth.error') : request.env['omniauth.error']
+    error   = exception.error_reason if exception.respond_to?(:error_reason)
+    error ||= exception.error        if exception.respond_to?(:error)
+    error ||= (request.respond_to?(:get_header) ? request.get_header('omniauth.error.type') : request.env['omniauth.error.type']).to_s
+    error.to_s.humanize if error
   end
     
-      test 'token_and_options returns correct token with slashes' do
-    token = 'rcHu+\\\\'/896A'
-    actual = ActionController::HttpAuthentication::Token.token_and_options(sample_request(token)).first
-    expected = token
-    assert_equal(expected, actual)
-  end
-    
-        test 'head :no_content (204) does not return a content-type header' do
-      headers = HeadController.action(:no_content).call(Rack::MockRequest.env_for('/')).second
-      assert_nil headers['Content-Type']
-      assert_nil headers['Content-Length']
-    end
-    
-    class WebServiceTest < ActionDispatch::IntegrationTest
-  class TestController < ActionController::Base
-    def assign_parameters
-      if params[:full]
-        render plain: dump_params_keys
+        if resource.errors.empty?
+      resource.unlock_access! if unlockable?(resource)
+      if Devise.sign_in_after_reset_password
+        flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
+        set_flash_message!(:notice, flash_message)
+        sign_in(resource_name, resource)
       else
-        render plain: (params.keys - ['controller', 'action']).sort.join(', ')
+        set_flash_message!(:notice, :updated_not_active)
       end
-    end
-    
-          add_delivery_method :test, Mail::TestMailer
-    end
-    
-      def all_projects(current_user)
-    projects = []
-    
-      yield
-end
-    
-    res = ''
-doc = Hpricot(File.open(input))
-doc.search('//form').each do |form|
-    
-        # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 143 and pkt.tcp_dport != 143)
-    s = find_session((pkt.tcp_sport == 143) ? get_session_src(pkt) : get_session_dst(pkt))
-    s[:sname] ||= 'imap4'
-    
-                when :user
-              # When the last command was a username login
-              # We might keep track on this one in future
-            when :pass
-              # Perfect we get an +OK after a PASS command this means right password given :-)
-    
-    classNames.each { |name|
-	codez << %Q^
-public class #{name} {
-	public static void main(String args[]) {
-		System.out.println('This is from #{name}.');
-	}
-}^}
-    
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
-          end
-        end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
-      end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
-      else
-        '#{quote}<footer>#{author}</footer>'
-      end
-      '<blockquote>#{blockquote}</blockquote>'
-    end
-    
-      class GistTagNoCache < GistTag
-    def initialize(tag_name, text, token)
-      super
-      @cache_disabled = true
+      respond_with resource, location: after_resetting_password_path_for(resource)
+    else
+      set_minimum_password_length
+      respond_with resource
     end
   end
-end
     
-    module Jekyll
-    
-            def_node_matcher :only_truthiness_matters?, <<-PATTERN
-          ^({if while until case while_post until_post} equal?(%0) ...)
-        PATTERN
-    
-        # Returns the scaling and cropping geometries (in string-based ImageMagick format)
-    # neccessary to transform this Geometry into the Geometry given. If crop is true,
-    # then it is assumed the destination Geometry will be the exact final resolution.
-    # In this case, the source Geometry is scaled so that an image containing the
-    # destination Geometry would be completely filled by the source image, and any
-    # overhanging image would be cropped. Useful for square thumbnail images. The cropping
-    # is weighted at the center of the Geometry.
-    def transformation_to dst, crop = false
-      if crop
-        ratio = Geometry.new( dst.width / self.width, dst.height / self.height )
-        scale_geometry, scale = scaling(dst, ratio)
-        crop_geometry         = cropping(dst, ratio, scale)
-      else
-        scale_geometry        = dst.to_s
-      end
-    
-            def no_error_when_valid?
-          @file = StringIO.new('.')
-          @subject.send(@attachment_name).assign(@file)
-          @subject.valid?
-          expected_message = [
-            @attachment_name.to_s.titleize,
-            I18n.t(:blank, scope: [:errors, :messages])
-          ].join(' ')
-          @subject.errors.full_messages.exclude?(expected_message)
-        end
-      end
-    end
+      # POST /resource/sign_in
+  def create
+    self.resource = warden.authenticate!(auth_options)
+    set_flash_message!(:notice, :signed_in)
+    sign_in(resource_name, resource)
+    yield resource if block_given?
+    respond_with resource, location: after_sign_in_path_for(resource)
   end
-end
-
     
-            def greater_than size
-          @low = size
-          self
-        end
+    if defined?(ActionMailer)
+  class Devise::Mailer < Devise.parent_mailer.constantize
+    include Devise::Mailers::Helpers
     
-    
-    {
-    {  # Returns hash with styles for all classes using Paperclip.
-  # Unfortunately current version does not work with lambda styles:(
-  #   {
-  #     :User => {:avatar => [:small, :big]},
-  #     :Book => {
-  #       :cover => [:thumb, :croppable]},
-  #       :sample => [:thumb, :big]},
-  #     }
-  #   }
-  def self.current_attachments_styles
-    Hash.new.tap do |current_styles|
-      Paperclip::AttachmentRegistry.each_definition do |klass, attachment_name, attachment_attributes|
-        # TODO: is it even possible to take into account Procs?
-        next if attachment_attributes[:styles].kind_of?(Proc)
-        attachment_attributes[:styles].try(:keys).try(:each) do |style_name|
-          klass_sym = klass.to_s.to_sym
-          current_styles[klass_sym] ||= Hash.new
-          current_styles[klass_sym][attachment_name.to_sym] ||= Array.new
-          current_styles[klass_sym][attachment_name.to_sym] << style_name.to_sym
-          current_styles[klass_sym][attachment_name.to_sym].map!(&:to_s).sort!.map!(&:to_sym).uniq!
-        end
-      end
-    end
-  end
-  private_class_method :current_attachments_styles
-    
-        # You can add your own processor via the Paperclip configuration. Normally
-    # Paperclip will load all processors from the
-    # Rails.root/lib/paperclip_processors directory, but here you can add any
-    # existing class using this mechanism.
+    module Devise
+  module Controllers
+    # Create url helpers to be used with resource/scope configuration. Acts as
+    # proxies to the generated routes created by devise.
+    # Resource param can be a string or symbol, a class, or an instance object.
+    # Example using a :user resource:
     #
-    #   Paperclip.configure do |c|
-    #     c.register_processor :watermarker, WatermarkingProcessor.new
-    #   end
-    def register_processor(name, processor)
-      @known_processors ||= {}
-      @known_processors[name.to_s] = processor
-    end
+    #   new_session_path(:user)      => new_user_session_path
+    #   session_path(:user)          => user_session_path
+    #   destroy_session_path(:user)  => destroy_user_session_path
+    #
+    #   new_password_path(:user)     => new_user_password_path
+    #   password_path(:user)         => user_password_path
+    #   edit_password_path(:user)    => edit_user_password_path
+    #
+    #   new_confirmation_path(:user) => new_user_confirmation_path
+    #   confirmation_path(:user)     => user_confirmation_path
+    #
+    # Those helpers are included by default to ActionController::Base.
+    #
+    # In case you want to add such helpers to another class, you can do
+    # that as long as this new class includes both url_helpers and
+    # mounted_helpers. Example:
+    #
+    #     include Rails.application.routes.url_helpers
+    #     include Rails.application.routes.mounted_helpers
+    #
+    module UrlHelpers
+      def self.remove_helpers!
+        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
+          remove_method method
+        end
+      end
+    
+    # Each time a record is set we check whether its session has already timed out
+# or not, based on last request time. If so, the record is logged out and
+# redirected to the sign in page. Also, each time the request comes and the
+# record is set, we set the last request time inside its scoped session to
+# verify timeout in the following request.
+Warden::Manager.after_set_user do |record, warden, options|
+  scope = options[:scope]
+  env   = warden.request.env
+    
+        uninstall login_item: 'login item name'
+    
+      def human?
+    params.has_key?('human') && (params['human'].nil? || as_boolean(params['human']) == true)
   end
 end
-
-    
-        rake_tasks { load 'tasks/paperclip.rake' }
-  end
