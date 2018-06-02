@@ -1,343 +1,423 @@
 
         
-          double ComputeDualLoss(const double current_dual, const double example_label,
-                         const double example_weight) const final {
-    // For binary classification, there are 2 conjugate functions, one per
-    // label value (-1 and 1).
-    const double y_alpha = current_dual * example_label;  // y \alpha
-    if (y_alpha < 0 || y_alpha > 1.0) {
-      return std::numeric_limits<double>::max();
-    }
-    return (-y_alpha + 0.5 * gamma * current_dual * current_dual) *
-           example_weight;
-  }
+        /** @file
+ * @deprecated Use @ref cudev instead.
+ */
     
-    // TODO(zongheng): this should be a general functor that powers SparseAdd and
-// ScatterNd ops.  It should be moved to its own head file, once the other ops
-// are implemented.
-template <typename Device, typename T, typename Index, int NDIMS,
-          scatter_op::UpdateOp op>
-struct ScatterNdFunctor {
-  // Returns -1 on success or a nonnegative i s.t. indices[i] is a bad index.
-  Index operator()(const Device& d, typename TTypes<Index>::ConstMatrix indices,
-                   typename TTypes<T>::ConstFlat updates,
-                   typename TTypes<T, NDIMS>::Tensor out);
-};
+    #undef cv_hal_QR32f
+#define cv_hal_QR32f lapack_QR32f
+#undef cv_hal_QR64f
+#define cv_hal_QR64f lapack_QR64f
     
-    #include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/lib/core/stringpiece.h'
-#if !defined(IS_SLIM_BUILD)
-#include 'tensorflow/core/lib/io/zlib_compression_options.h'
-#include 'tensorflow/core/lib/io/zlib_outputbuffer.h'
-#endif  // IS_SLIM_BUILD
-#include 'tensorflow/core/platform/macros.h'
-#include 'tensorflow/core/platform/types.h'
-    
-    #if TENSORFLOW_USE_SYCL
-    
-    bool HloReachabilityMap::SetReachabilityToUnion(
-    tensorflow::gtl::ArraySlice<const HloInstruction*> inputs,
-    const HloInstruction* instruction) {
-  BitVector& bit_vector = GetBitVector(instruction);
-  tmp_bit_vector_ = bit_vector;
-    }
-    
-      {
-    // NOTE(mrry): The gRPC channel doesn't expose the target, so we
-    // can't compare it for equality.
-    auto a_1_1 = cc->FindWorkerChannel('/job:mnist/replica:0/task:0');
-    auto a_1_2 = cc->FindWorkerChannel('/job:mnist/replica:0/task:0');
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // TODO: Enable GPU support for angle op after resolving
-// build failures on GPU (See #10643 for context).
-#if 0 && GOOGLE_CUDA
-    
-    // Poll a gRPC debug server by sending a small tensor repeatedly till success.
+    // EXPECT_DEBUG_DEATH asserts that the given statements die in debug mode.
+// The death testing framework causes this to have interesting semantics,
+// since the sideeffects of the call are only visible in opt mode, and not
+// in debug mode.
 //
-// Args:
-//   server_url: gRPC URL of the server to poll, e.g., 'grpc://foo:3333'.
-//   max_attempts: Maximum number of attempts.
+// In practice, this can be used to test functions that utilize the
+// LOG(DFATAL) macro using the following style:
 //
-// Returns:
-//   Whether the polling succeeded within max_attempts.
-bool PollTillFirstRequestSucceeds(const string& server_url,
-                                  const size_t max_attempts);
+// int DieInDebugOr12(int* sideeffect) {
+//   if (sideeffect) {
+//     *sideeffect = 12;
+//   }
+//   LOG(DFATAL) << 'death';
+//   return 12;
+// }
+//
+// TEST(TestCase, TestDieOr12WorksInDgbAndOpt) {
+//   int sideeffect = 0;
+//   // Only asserts in dbg.
+//   EXPECT_DEBUG_DEATH(DieInDebugOr12(&sideeffect), 'death');
+//
+// #ifdef NDEBUG
+//   // opt-mode has sideeffect visible.
+//   EXPECT_EQ(12, sideeffect);
+// #else
+//   // dbg-mode no visible sideeffect.
+//   EXPECT_EQ(0, sideeffect);
+// #endif
+// }
+//
+// This will assert that DieInDebugReturn12InOpt() crashes in debug
+// mode, usually due to a DCHECK or LOG(DFATAL), but returns the
+// appropriate fallback value (12 in this case) in opt mode. If you
+// need to test that a function has appropriate side-effects in opt
+// mode, include assertions against the side-effects.  A general
+// pattern for this is:
+//
+// EXPECT_DEBUG_DEATH({
+//   // Side-effects here will have an effect after this statement in
+//   // opt mode, but none in debug mode.
+//   EXPECT_EQ(12, DieInDebugOr12(&sideeffect));
+// }, 'death');
+//
+# ifdef NDEBUG
     
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-    #ifndef ATOM_BROWSER_UI_DRAG_UTIL_H_
-#define ATOM_BROWSER_UI_DRAG_UTIL_H_
-    
-    
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(UnresponsiveSuppressor);
-};
-    
-    
-    {}  // namespace atom
-    
-      // content::WebContentsObserver:
-  void RenderViewDeleted(content::RenderViewHost*) override;
-    
-      // Called by platform specific implementations of this class whenever a key
-  // is struck. Only called for keys that have an observer registered.
-  void NotifyKeyPressed(const ui::Accelerator& accelerator);
-    
-    // Wrapper used to keep track of the lifetime of a WebContents.
-// Lives on the UI thread.
-class PrintingUIWebContentsObserver : public content::WebContentsObserver {
- public:
-  explicit PrintingUIWebContentsObserver(content::WebContents* web_contents);
+    #if GTEST_OS_SYMBIAN
+  // These are needed as the Nokia Symbian Compiler cannot decide between
+  // const T& and const T* in a function template. The Nokia compiler _can_
+  // decide between class template specializations for T and T*, so a
+  // tr1::type_traits-like is_pointer works, and we can overload on that.
+  template <typename T>
+  inline void StreamHelper(internal::true_type /*is_pointer*/, T* pointer) {
+    if (pointer == NULL) {
+      *ss_ << '(null)';
+    } else {
+      *ss_ << pointer;
     }
-    
-    
-    {
-    {} // end namespace index
-} // end namespace swift
-    
-    #define MARKUP_SIMPLE_FIELD(Id, Keyword, XMLKind) \
-class Id final : public PrivateExtension, \
-    private llvm::TrailingObjects<Id, MarkupASTNode *> { \
-  friend TrailingObjects; \
-\
-  size_t NumChildren; \
-\
-  Id(ArrayRef<MarkupASTNode *> Children);\
-\
-public: \
-  static Id *create(MarkupContext &MC, ArrayRef<MarkupASTNode *> Children); \
-\
-  ArrayRef<MarkupASTNode *> getChildren() { \
-    return {getTrailingObjects<MarkupASTNode *>(), NumChildren}; \
-  } \
-\
-  ArrayRef<const MarkupASTNode *> getChildren() const { \
-    return {getTrailingObjects<MarkupASTNode *>(), NumChildren}; \
-  } \
-\
-  static bool classof(const MarkupASTNode *N) { \
-    return N->getKind() == ASTNodeKind::Id; \
-  } \
-};
-#include 'swift/Markup/SimpleFields.def'
-    
-      void setHashbangBufferID(unsigned BufferID) {
-    assert(HashbangBufferID == 0U && 'Hashbang buffer ID already set');
-    HashbangBufferID = BufferID;
   }
-    
-    
-    {  if (s.ok() && meta->file_size > 0) {
-    // Keep it
-  } else {
-    env->DeleteFile(fname);
+  template <typename T>
+  inline void StreamHelper(internal::false_type /*is_pointer*/,
+                           const T& value) {
+    // See the comments in Message& operator <<(const T&) above for why
+    // we need this using statement.
+    using ::operator <<;
+    *ss_ << value;
   }
-  return s;
+#endif  // GTEST_OS_SYMBIAN
+    
+      // Assumes one of the above roles.
+  virtual TestRole AssumeRole() = 0;
+    
+    template<typename T> inline
+bool operator==(T* ptr, const linked_ptr<T>& x) {
+  return ptr == x.get();
 }
     
-      // If *start < limit, changes *start to a short string in [start,limit).
-  // Simple comparator implementations may return with *start unchanged,
-  // i.e., an implementation of this method that does nothing is correct.
-  virtual void FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const = 0;
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24>
+class ValueArray24 {
+ public:
+  ValueArray24(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
+      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24) : v1_(v1),
+      v2_(v2), v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7), v8_(v8), v9_(v9),
+      v10_(v10), v11_(v11), v12_(v12), v13_(v13), v14_(v14), v15_(v15),
+      v16_(v16), v17_(v17), v18_(v18), v19_(v19), v20_(v20), v21_(v21),
+      v22_(v22), v23_(v23), v24_(v24) {}
+    }
     
-        state->preFilterType = CV_STEREO_BM_XSOBEL; //CV_STEREO_BM_NORMALIZED_RESPONSE;
-    state->preFilterSize = 9;
-    state->preFilterCap = 31;
-    state->SADWindowSize = 15;
-    state->minDisparity = 0;
-    state->numberOfDisparities = numberOfDisparities > 0 ? numberOfDisparities : 64;
-    state->textureThreshold = 10;
-    state->uniquenessRatio = 15;
-    state->speckleRange = state->speckleWindowSize = 0;
-    state->trySmallerWindows = 0;
-    state->roi1 = state->roi2 = cvRect(0,0,0,0);
-    state->disp12MaxDiff = -1;
+     private:
+  void CalculatePrimesUpTo(int max) {
+    ::std::fill(is_prime_, is_prime_ + is_prime_size_, true);
+    is_prime_[0] = is_prime_[1] = false;
+    }
     
-    static void orderContours(const std::vector<std::vector<Point> >& contours, Point2f point, std::vector<std::pair<int, float> >& order)
+      // Sets up the network for training. Initializes weights using weights of
+  // scale `range` picked according to the random number generator `randomizer`.
+  int InitWeights(float range, TRand* randomizer) override;
+  // Recursively searches the network for softmaxes with old_no outputs,
+  // and remaps their outputs according to code_map. See network.h for details.
+  int RemapOutputs(int old_no, const std::vector<int>& code_map) override;
+    
+      /**
+   * Moves the iterator to point to the start of the page to begin an
+   * iteration.
+   */
+  virtual void Begin();
+    
+    /**********************************************************************
+ * read_unlv_file
+ *
+ * Read a whole unlv zone file to make a list of blocks.
+ **********************************************************************/
+    
+    // Computes the Otsu threshold(s) for the given image rectangle, making one
+// for each channel. Each channel is always one byte per pixel.
+// Returns an array of threshold values and an array of hi_values, such
+// that a pixel value >threshold[channel] is considered foreground if
+// hi_values[channel] is 0 or background if 1. A hi_value of -1 indicates
+// that there is no apparent foreground. At least one hi_value will not be -1.
+// Delete thresholds and hi_values with delete [] after use.
+// The return value is the number of channels in the input image, being
+// the size of the output thresholds and hi_values arrays.
+int OtsuThreshold(Pix* src_pix, int left, int top, int width, int height,
+                  int** thresholds, int** hi_values) {
+  int num_channels = pixGetDepth(src_pix) / 8;
+  // Of all channels with no good hi_value, keep the best so we can always
+  // produce at least one answer.
+  PERF_COUNT_START('OtsuThreshold')
+  int best_hi_value = 1;
+  int best_hi_index = 0;
+  bool any_good_hivalue = false;
+  double best_hi_dist = 0.0;
+  *thresholds = new int[num_channels];
+  *hi_values = new int[num_channels];
+    }
+    
+    
+    {  pos = c_outline->start_pos (); //start of loop
+  length = c_outline->pathlength ();
+  stepindex = 0;
+  epindex = 0;
+  prevdir = -1;
+  count = 0;
+  int prev_stepindex = 0;
+  do {
+    dir = c_outline->step_dir (stepindex);
+    vec = c_outline->step (stepindex);
+    if (stepindex < length - 1
+    && c_outline->step_dir (stepindex + 1) - dir == -32) {
+      dir += 128 - 16;
+      vec += c_outline->step (stepindex + 1);
+      stepinc = 2;
+    }
+    else
+      stepinc = 1;
+    if (count == 0) {
+      prevdir = dir;
+      prev_vec = vec;
+    }
+    if (prevdir.get_dir () != dir.get_dir ()) {
+      edgepts[epindex].pos.x = pos.x ();
+      edgepts[epindex].pos.y = pos.y ();
+      prev_vec *= count;
+      edgepts[epindex].vec.x = prev_vec.x ();
+      edgepts[epindex].vec.y = prev_vec.y ();
+      pos += prev_vec;
+      edgepts[epindex].flags[RUNLENGTH] = count;
+      edgepts[epindex].prev = &edgepts[epindex - 1];
+      edgepts[epindex].flags[FLAGS] = 0;
+      edgepts[epindex].next = &edgepts[epindex + 1];
+      prevdir += 64;
+      epdir = (DIR128) 0 - prevdir;
+      epdir >>= 4;
+      epdir &= 7;
+      edgepts[epindex].flags[DIR] = epdir;
+      edgepts[epindex].src_outline = c_outline;
+      edgepts[epindex].start_step = prev_stepindex;
+      edgepts[epindex].step_count = stepindex - prev_stepindex;
+      epindex++;
+      prevdir = dir;
+      prev_vec = vec;
+      count = 1;
+      prev_stepindex = stepindex;
+    }
+    else
+      count++;
+    stepindex += stepinc;
+  }
+  while (stepindex < length);
+  edgepts[epindex].pos.x = pos.x ();
+  edgepts[epindex].pos.y = pos.y ();
+  prev_vec *= count;
+  edgepts[epindex].vec.x = prev_vec.x ();
+  edgepts[epindex].vec.y = prev_vec.y ();
+  pos += prev_vec;
+  edgepts[epindex].flags[RUNLENGTH] = count;
+  edgepts[epindex].flags[FLAGS] = 0;
+  edgepts[epindex].src_outline = c_outline;
+  edgepts[epindex].start_step = prev_stepindex;
+  edgepts[epindex].step_count = stepindex - prev_stepindex;
+  edgepts[epindex].prev = &edgepts[epindex - 1];
+  edgepts[epindex].next = &edgepts[0];
+  prevdir += 64;
+  epdir = (DIR128) 0 - prevdir;
+  epdir >>= 4;
+  epdir &= 7;
+  edgepts[epindex].flags[DIR] = epdir;
+  edgepts[0].prev = &edgepts[epindex];
+  ASSERT_HOST (pos.x () == c_outline->start_pos ().x ()
+    && pos.y () == c_outline->start_pos ().y ());
+  return &edgepts[0];
+}
+    
+    
+    {  WorkloadStats (const WorkloadStats&) = delete;
+  WorkloadStats& operator=(const WorkloadStats&) = delete;
+};
+    
+    namespace {
+    }
+    
+      /*
+   * Allocate a block of data to hold n objects of type T.
+   *
+   * Any instructions with VdataPtr members that point inside the buffer
+   * returned by allocData() will automatically be fixed up during a relocation
+   * pass immediately before final code emission.
+   */
+  template<typename T>
+  T* allocData(size_t n = 1) {
+    auto const size = sizeof(T) * n;
+    dataBlocks.emplace_back();
+    }
+    
+      mpz_init(gmpReturn);
+  if (!mpz_invert(gmpReturn, gmpDataA, gmpDataB)) {
+    mpz_clear(gmpDataA);
+    mpz_clear(gmpDataB);
+    mpz_clear(gmpReturn);
+    return false;
+  }
+    
+    struct CurlShareResource : SweepableResourceData {
+  DECLARE_RESOURCE_ALLOCATION(CurlShareResource)
+  CLASSNAME_IS('curl_share')
+  const String& o_getClassNameHook() const override { return classnameof(); }
+  bool isInvalid() const override { return !m_share; }
+    }
+    
+    struct SGDParams : public ScriptableObjects::Object
 {
-    order.clear();
-    size_t i, j, n = contours.size();
-    for(i = 0; i < n; i++)
+    template <class ConfigRecord> // (needed for default value of m_gradientBits)
+    SGDParams(const ConfigRecord& configSGD, size_t sizeofElemType);
+    }
+    
+        InvalidateCompiledNetwork();
+    
+    BOOST_FIXTURE_TEST_CASE(CPUMatrixDenseTimesSparse, RandomSeedFixture)
+{
+    Matrix<float> mAdense(CPUDEVICE);
+    mAdense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim1, dim2, c_deviceIdZero, -3.0f, 0.1f, IncrementCounter()), 0);
+    }
+    
+    // understand and execute from the syntactic expression tree
+ConfigValuePtr Evaluate(ExpressionPtr);                               // evaluate the expression tree
+void Do(ExpressionPtr e);                                             // evaluate e.do
+shared_ptr<Object> EvaluateField(ExpressionPtr e, const wstring& id); // for experimental CNTK integration
+    
+    // Compares two ASCII strings ignoring the case.
+// TODO: Should switch to boost, boost::iequal should be used instead.
+// TODO: we already have EqualCI() in Basics.h which does the same thing.
+template<class TElement>
+inline bool AreEqualIgnoreCase(
+    const std::basic_string<TElement, char_traits<TElement>, allocator<TElement>>& s1,
+    const std::basic_string<TElement, char_traits<TElement>, allocator<TElement> >& s2)
+{
+    if (s1.size() != s2.size())
     {
-        size_t ni = contours[i].size();
-        double min_dist = std::numeric_limits<double>::max();
-        for(j = 0; j < ni; j++)
-        {
-            double dist = norm(Point2f((float)contours[i][j].x, (float)contours[i][j].y) - point);
-            min_dist = MIN(min_dist, dist);
-        }
-        order.push_back(std::pair<int, float>((int)i, (float)min_dist));
+        return false;
     }
     }
     
-    #ifndef STREAM_PEER_OPEN_SSL_H
-#define STREAM_PEER_OPEN_SSL_H
     
-    	template <class N, class M>
-	static MethodBind *bind_method(N p_method_name, M p_method, const Variant &p_def1, const Variant &p_def2, const Variant &p_def3) {
+    {public:
+    inline hardcoded_array() throw()
+    {
     }
-    
-    
-    {	VisualScriptEditorVariableEdit() { undo_redo = NULL; }
+    inline hardcoded_array(size_t n) throw()
+    {
+        check_size(n);
+    } // we can instantiate with a size parameter--just checks the size
+    inline hardcoded_array(size_t n, const _T& val) throw()
+    {
+        check_size(n);
+        for (size_t i = 0; i < n; i++)
+            data[i] = val;
+    }
+    inline _T& operator[](size_t i) throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline const _T& operator[](size_t i) const throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline size_t size() const throw()
+    {
+        return _N;
+    }
 };
+
     
-    # if defined(OC_COLLECT_METRICS)
-struct oc_mode_metrics{
-  double fragw;
-  double satd;
-  double rate;
-  double rmse;
-  double satd2;
-  double satdrate;
-  double rate2;
-  double satdrmse;
-  double rmse2;
-};
-    
-    #include <map>
-#include <functional>
-    
-    class FilesystemConfigPlugin : public ConfigPlugin {
- public:
-  Status genConfig(std::map<std::string, std::string>& config);
-  Status genPack(const std::string& name,
-                 const std::string& value,
-                 std::string& pack);
-};
-    
-    std::string stringFromCFString(const CFStringRef& cf_string) {
-  // Access, then convert the CFString. CFStringGetCStringPtr is less-safe.
-  CFIndex length = CFStringGetLength(cf_string);
-  char* buffer = (char*)malloc(length + 1);
-  if (buffer == nullptr) {
-    return '';
-  }
-    }
-    
-    Status platformStrncpy(char* dst, size_t nelms, const char* src, size_t count) {
-  auto status = ::strncpy_s(dst, nelms, src, count);
-  if (status != 0) {
-    return Status(1, 'Failed to strncpy_s: ' + status);
-  }
-    }
-    
-    void WmiResultItem::PrintType(const std::string& name) const {
-  std::wstring property_name = stringToWstring(name);
-  VARIANT value;
-  HRESULT hr = result_->Get(property_name.c_str(), 0, &value, nullptr, nullptr);
-  if (hr != S_OK) {
-    std::cerr << 'Failed: ' << name << '\n';
-  } else {
-    std::cout << 'Name=' << name << ', Type=' << value.vt << '\n';
-    if (value.vt == VT_I4) {
-      std::cout << '  Value=' << value.lVal << '\n';
-    } else if (value.vt == VT_BSTR) {
-      std::wcout << '  Value=' << value.bstrVal << '\n';
-    }
-  }
-  VariantClear(&value);
-}
-    
-    TEST(Metric, Error) {
-  xgboost::Metric * metric = xgboost::Metric::Create('error');
-  ASSERT_STREQ(metric->Name(), 'error');
+    TEST(Metric, RMSE) {
+  xgboost::Metric * metric = xgboost::Metric::Create('rmse');
+  ASSERT_STREQ(metric->Name(), 'rmse');
   EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
   EXPECT_NEAR(GetMetricEval(metric,
                             {0.1f, 0.9f, 0.1f, 0.9f},
                             {  0,   0,   1,   1}),
-              0.5f, 0.001f);
-    }
-    
-    
-    {
-    {
-    {      // Test write Symbol
-      std::vector<unsigned char> buffer2(
-        CompressedBufferWriter::CalculateBufferSize(input.size(),
-          alphabet_size));
-      for (int i = 0; i < input.size(); i++) {
-        cbw.WriteSymbol(buffer2.data(), input[i], i);
-      }
-      CompressedIterator<int> ci2(buffer.data(), alphabet_size);
-      std::vector<int> output2(input.size());
-      for (int i = 0; i < input.size(); i++) {
-        output2[i] = ci2[i];
-      }
-      ASSERT_TRUE(input == output2);
-    }
-  }
+              0.6403f, 0.001f);
 }
     
-    /*
- * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
- * Method:    XGDMatrixSaveBinary
- * Signature: (JLjava/lang/String;I)V
- */
-JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGDMatrixSaveBinary
-  (JNIEnv *jenv, jclass jcls, jlong jhandle, jstring jfname, jint jsilent) {
-  DMatrixHandle handle = (DMatrixHandle) jhandle;
-  const char* fname = jenv->GetStringUTFChars(jfname, 0);
-  int ret = XGDMatrixSaveBinary(handle, fname, jsilent);
-  if (fname) jenv->ReleaseStringUTFChars(jfname, (const char *)fname);
-  return ret;
+    SEXP XGBoosterGetAttr_R(SEXP handle, SEXP name) {
+  SEXP out;
+  R_API_BEGIN();
+  int success;
+  const char *val;
+  CHECK_CALL(XGBoosterGetAttr(R_ExternalPtrAddr(handle),
+                              CHAR(asChar(name)),
+                              &val,
+                              &success));
+  if (success) {
+    out = PROTECT(allocVector(STRSXP, 1));
+    SET_STRING_ELT(out, 0, mkChar(val));
+  } else {
+    out = PROTECT(R_NilValue);
+  }
+  R_API_END();
+  UNPROTECT(1);
+  return out;
 }
     
-    // common regressions
-// linear regression
-struct LinearSquareLoss {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    return predt - label;
+    #if DMLC_ENABLE_STD_THREAD
+#include '../src/data/sparse_page_source.cc'
+#include '../src/data/sparse_page_dmatrix.cc'
+#include '../src/data/sparse_page_writer.cc'
+#endif
+    
+      void PredictLeaf(DMatrix *p_fmat,
+                   std::vector<bst_float> *out_preds,
+                   unsigned ntree_limit) override {
+    LOG(FATAL) << 'gblinear does not support prediction of leaf index';
   }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    return 1.0f;
-  }
-  template <typename T>
-  static T PredTransform(T x) { return x; }
-  template <typename T>
-  static T FirstOrderGradient(T predt, T label) { return predt - label; }
-  template <typename T>
-  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
-  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
-  static const char* LabelErrorMsg() { return ''; }
-  static const char* DefaultEvalMetric() { return 'rmse'; }
-};
     
-      bool CheckConvergence() {
-    if (param_.tolerance == 0.0f) return false;
-    if (is_converged_) return true;
-    if (previous_model_.weight.size() != model_.weight.size()) {
-      previous_model_ = model_;
-      return false;
-    }
-    float largest_dw = 0.0;
-    for (size_t i = 0; i < model_.weight.size(); i++) {
-      largest_dw = std::max(
-          largest_dw, std::abs(model_.weight[i] - previous_model_.weight[i]));
-    }
-    previous_model_ = model_;
+    #include <string>
+    
+    namespace aria2 {
     }
     
+    AbstractProxyRequestCommand::~AbstractProxyRequestCommand() = default;
     
-    {
-    {XGBOOST_REGISTER_LINEAR_UPDATER(ShotgunUpdater, 'shotgun')
-    .describe(
-        'Update linear model according to shotgun coordinate descent '
-        'algorithm.')
-    .set_body([]() { return new ShotgunUpdater(); });
-}  // namespace linear
-}  // namespace xgboost
+    namespace aria2 {
+    }
+    
+    AdaptiveFileAllocationIterator::~AdaptiveFileAllocationIterator() = default;
+    
+      virtual ~AdaptiveFileAllocationIterator();
+    
+    AnnounceTier::~AnnounceTier() = default;
+    
+      virtual ~AppleTLSContext();
+    
+    void configureAsyncNameResolverMan(AsyncNameResolverMan* asyncNameResolverMan,
+                                   Option* option);
+    
+    #endif
+
+    
+    using namespace fuzzer;
+    
+    namespace fuzzer {
+    }
+    
+    size_t MutationDispatcher::Mutate_InsertRepeatedBytes(uint8_t *Data,
+                                                      size_t Size,
+                                                      size_t MaxSize) {
+  const size_t kMinBytesToInsert = 3;
+  if (Size + kMinBytesToInsert >= MaxSize) return 0;
+  size_t MaxBytesToInsert = std::min(MaxSize - Size, (size_t)128);
+  size_t N = Rand(MaxBytesToInsert - kMinBytesToInsert + 1) + kMinBytesToInsert;
+  assert(Size + N <= MaxSize && N);
+  size_t Idx = Rand(Size + 1);
+  // Insert new values at Data[Idx].
+  memmove(Data + Idx + N, Data + Idx, Size - Idx);
+  // Give preference to 0x00 and 0xff.
+  uint8_t Byte = Rand.RandBool() ? Rand(256) : (Rand.RandBool() ? 0 : 255);
+  for (size_t i = 0; i < N; i++)
+    Data[Idx + i] = Byte;
+  return Size + N;
+}
+    
+    namespace fuzzer {
+    }
+    
+    
+/* header */
