@@ -1,89 +1,98 @@
 
-def check_entry(line_num, segments):
-    # START Title
-    title = segments[index_title].upper()
-    if title.endswith(' API'):
-        add_error(line_num, 'Title should not contain 'API'')
-    # END Title
-    # START Description
-    # first character should be capitalized
-    char = segments[index_desc][0]
-    if char.upper() != char:
-        add_error(line_num, 'first character of description is not capitalized')
-    # last character should not punctuation
-    char = segments[index_desc][-1]
-    if char in punctuation:
-        add_error(line_num, 'description should not end with {}'.format(char))
-    desc_length = len(segments[index_desc])
-    if desc_length > 100:
-        add_error(line_num, 'description should not exceed 100 characters (currently {})'.format(desc_length))
-    # END Description
-    # START Auth
-    # values should conform to valid options only
-    auth = segments[index_auth]
-    if auth != 'No' and (not auth.startswith('`') or not auth.endswith('`')):
-        add_error(line_num, 'auth value is not enclosed with `backticks`')
-    if auth.replace('`', '') not in auth_keys:
-        add_error(line_num, '{} is not a valid Auth option'.format(auth))
-    # END Auth
-    # START HTTPS
-    # values should conform to valid options only
-    https = segments[index_https]
-    if https not in https_keys:
-        add_error(line_num, '{} is not a valid HTTPS option'.format(https))
-    # END HTTPS
-    # START CORS
-    # values should conform to valid options only
-    cors = segments[index_cors]
-    if cors not in cors_keys:
-        add_error(line_num, '{} is not a valid CORS option'.format(cors))
-    # END CORS
-    # START Link
-    # url should be wrapped in '[Go!]()' Markdown syntax
-    link = segments[index_link]
-    if not link.startswith('[Go!](http') or not link.endswith(')'):
-        add_error(line_num, 'link syntax should be '[Go!](LINK)'')
-    if link in previous_links:
-        add_error(line_num, 'duplicate link - entries should only be included in one section')
-    else:
-        previous_links.append(link)
-    # END Link
+        
+                The arguments passed to :meth:`as_view` are forwarded to the
+        constructor of the class.
+        '''
+        def view(*args, **kwargs):
+            self = view.view_class(*class_args, **class_kwargs)
+            return self.dispatch_request(*args, **kwargs)
     
-        print('Classifier Training')
-    print('===================')
-    accuracy, train_time, test_time = {}, {}, {}
-    for name in sorted(args['estimators']):
-        clf = ESTIMATORS[name]
-        try:
-            clf.set_params(random_state=0)
-        except (TypeError, ValueError):
-            pass
+        :copyright: © 2010 by the Pallets team.
+    :license: BSD, see LICENSE for more details.
+'''
     
-    def plot(func):
-    random_state = check_random_state(0)
-    one_core = []
-    multi_core = []
-    sample_sizes = range(1000, 6000, 1000)
+        if logging_plugin:
+        pytestconfig.pluginmanager.register(logging_plugin, 'logging-plugin')
     
-        An example with a long-untouched module that everyone has
-    >>> _linkcode_resolve('py', {'module': 'tty',
-    ...                          'fullname': 'setraw'},
-    ...                   package='tty',
-    ...                   url_fmt='http://hg.python.org/cpython/file/'
-    ...                           '{revision}/Lib/{package}/{path}#L{lineno}',
-    ...                   revision='xxxx')
-    'http://hg.python.org/cpython/file/xxxx/Lib/tty/tty.py#L18'
+        flask.appcontext_tearing_down.connect(record_teardown, app)
+    try:
+        with app.test_client() as c:
+            rv = c.get('/')
+            assert rv.status_code == 500
+            assert recorded == []
+        assert recorded == [('tear_down', {'exc': None})]
+    finally:
+        flask.appcontext_tearing_down.disconnect(record_teardown, app)
+
+    
+    def test_templates_auto_reload_debug_run(app, monkeypatch):
+    def run_simple_mock(*args, **kwargs):
+        pass
+    
+            Keyword:                   'bold #004461',   # class: 'k'
+        Keyword.Constant:          'bold #004461',   # class: 'kc'
+        Keyword.Declaration:       'bold #004461',   # class: 'kd'
+        Keyword.Namespace:         'bold #004461',   # class: 'kn'
+        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
+        Keyword.Reserved:          'bold #004461',   # class: 'kr'
+        Keyword.Type:              'bold #004461',   # class: 'kt'
+    
     '''
+requests.hooks
+~~~~~~~~~~~~~~
     
-    # Create different classifiers. The logistic regression cannot do
-# multiclass out of the box.
-classifiers = {'L1 logistic': LogisticRegression(C=C, penalty='l1'),
-               'L2 logistic (OvR)': LogisticRegression(C=C, penalty='l2'),
-               'Linear SVC': SVC(kernel='linear', C=C, probability=True,
-                                 random_state=0),
-               'L2 logistic (Multinomial)': LogisticRegression(
-                C=C, solver='lbfgs', multi_class='multinomial'),
-               'GPC': GaussianProcessClassifier(kernel)
-               }
+    from .compat import OrderedDict
     
-      This function does not consider single-line nor multi-line comments.
+    
+@pytest.mark.skipif(sys.version_info < (2,7), reason='Only run on Python 2.7+')
+def test_system_ssl():
+    '''Verify we're actually setting system_ssl when it should be available.'''
+    assert info()['system_ssl']['version'] != ''
+    
+    
+def test_redirect_rfc1808_to_non_ascii_location():
+    path = u'š'
+    expected_path = b'%C5%A1'
+    redirect_request = []  # stores the second request to the server
+    
+    if __name__ == '__main__':
+    main()
+
+    
+    from .theplatform import theplatform_download_by_pid
+    
+    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
+    
+	from xml.dom.minidom import parseString
+	doc = parseString(xml)
+	tab = doc.getElementsByTagName('related')[0].firstChild
+    
+    from ..common import *
+from hashlib import md5
+from urllib.parse import urlparse
+import re
+    
+        def prepare(self, **kwargs):
+        content = get_content(self.url)
+        self.title = match1(content, r'<title>([^<]+)</title>')
+        s = match1(content, r'P\.s\s*=\s*\'([^\']+)\'')
+        scp = match1(content, r'InfoQConstants\.scp\s*=\s*\'([^\']+)\'')
+        scs = match1(content, r'InfoQConstants\.scs\s*=\s*\'([^\']+)\'')
+        sck = match1(content, r'InfoQConstants\.sck\s*=\s*\'([^\']+)\'')
+    
+    from ..common import *
+import re
+    
+    from html.parser import HTMLParser
+    
+    import homeassistant.config as config_util
+    
+    
+def convert(value: float, unit_1: str, unit_2: str) -> float:
+    '''Convert one unit of measurement to another.'''
+    if unit_1 not in VALID_UNITS:
+        raise ValueError(
+            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_1, LENGTH))
+    if unit_2 not in VALID_UNITS:
+        raise ValueError(
+            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_2, LENGTH))
