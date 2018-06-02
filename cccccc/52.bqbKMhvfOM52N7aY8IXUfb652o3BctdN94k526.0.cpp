@@ -1,238 +1,250 @@
 
         
-        #endif  // ATOM_BROWSER_UI_VIEWS_WIN_FRAME_VIEW_H_
-
+        #include 'tensorflow/core/distributed_runtime/partial_run_mgr.h'
     
-    #include 'atom/browser/unresponsive_suppressor.h'
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    #endif  // ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
-
-    
-      // Called immediately after a window is removed from the list.
-  virtual void OnWindowRemoved(NativeWindow* window) {}
-    
-    namespace atom {
-    }
-    
-      // ppapi::host::ResourceMessageFilter implementation.
-  scoped_refptr<base::TaskRunner> OverrideTaskRunnerForMessage(
-      const IPC::Message& msg) override;
-  int32_t OnResourceMessageReceived(
-      const IPC::Message& msg,
-      ppapi::host::HostMessageContext* context) override;
-    
-    void TtsPlatformImpl::clear_error() {
-  error_ = std::string();
-}
-    
-      class MatchGroundTruth : public QuickTest ,
-      public ::testing::WithParamInterface<const char*> {
-  };
-  
-  TEST_P(MatchGroundTruth, FastPhototestOCR) {
-    OCRTester(TESTING_DIR '/phototest.tif',
-              TESTING_DIR '/phototest.txt',
-              TESSDATA_DIR '_fast', GetParam());
-  }
-  
-  INSTANTIATE_TEST_CASE_P( EngLatinDevaArabLang, MatchGroundTruth, 
-                        ::testing::Values('eng', 'script/Latin', 'script/Devanagari', 'script/Arabic') );
-    
-    #endif  // ANDROID_BUILD
-
-    
-    void EquationDetect::ExpandSeedHorizontal(
-    const bool search_left,
-    ColPartition* seed,
-    GenericVector<ColPartition*>* parts_to_merge) {
-  ASSERT_HOST(seed != nullptr && parts_to_merge != nullptr);
-  const float kYOverlapTh = 0.6;
-  const int kXGapTh = static_cast<int>(roundf(0.2 * resolution_));
-    }
-    
-      // Estimate the line spacing between two text partitions. Returns -1 if not
-  // enough data.
-  int EstimateTextPartLineSpacing();
-    
-      uint16_t fid = unpackFunctionId(msg);
-  assert(fid == 1);
-    
-    template<typename To, typename From> To convert(From f) {
-  return static_cast<To>(f);
-}
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
     
-    {    std::shared_ptr<store_type> _store;
-  };
-    
-    
-  // NOTE: this function needs to be thread safe
-  std::shared_ptr<context_type> createContext(
-    const DataChannelGloo::Group& group,
-    const std::string& prefix
-  ) {
-    /**
-     * We currently only supports a single Infiniband interface. In other words,
-     * if there are multiple Infiniband devices in the system, Gloo will detect
-     * all of them and use the first device.
-     *
-     * TODO: This can be extended later to utilize multiple Infiniband devices
-     *
-     * For ethernet, _deviceList[0] will always have the default ethernet
-     * device that is detected from the user's provided IP address and there
-     * won't be multiple one device in _deviceList
-     *
-     * For Infiniband, _deviceList[0], which is the first found IB interfance,
-     * will be used by all Gloo operations.
-     */
-    size_t curDevice = 0;
-    auto context = std::make_shared<context_type>(
-        group.mustGetGroupRank(_rank), group.size());
-    prefix_store_type prefix_store(prefix, *group._store);
-    context->connectFullMesh(prefix_store, _deviceList[curDevice]);
-    return context;
+    {    EXPECT_NE(a_1_1.get(), d_4_2.get());
+    EXPECT_NE(a_1_1.get(), e_5_2.get());
+    EXPECT_NE(d_4_1.get(), e_5_2.get());
   }
     
-      int timeout = -1;
-  std::vector<int> to_add;
-  std::vector<int> to_remove;
-  for (;;) {
-    int nevents;
-    if (client_sessions.size() == 0)
-      timeout = SHUTDOWN_TIMEOUT;
-    SYSCHECK(nevents = poll(pollfds.data(), pollfds.size(), timeout));
-    timeout = -1;
-    if (nevents == 0 && client_sessions.size() == 0)
-      break;
+    Status TanGrad(const AttrSlice& attrs, FunctionDef* g) {
+  // clang-format off
+  return GradForUnaryCwise(g, {
+    {{'cosx'}, 'Cos', {'x'}},
+    {{'secx'}, 'Reciprocal', {'cosx'}},
+    {{'secx2'}, 'Square', {'secx'}},
+    {{'dx'}, 'Mul', {'dy', 'secx2'}}
+  });
+  // clang-format on
+}
+REGISTER_OP_GRADIENT('Tan', TanGrad);
+    
+    TEST_F(GrpcDebugTest, SendSingleDebugTensorViaGrpcTest) {
+  Tensor tensor(DT_FLOAT, TensorShape({1, 1}));
+  tensor.flat<float>()(0) = 42.0;
+  const DebugNodeKey kDebugNodeKey('/job:localhost/replica:0/task:0/cpu:0',
+                                   'foo_tensor', 0, 'DebugIdentity');
+  TF_ASSERT_OK(DebugIO::PublishDebugTensor(
+      kDebugNodeKey, tensor, Env::Default()->NowMicros(), {server_data_.url}));
+  TF_ASSERT_OK(DebugIO::CloseDebugURL(server_data_.url));
     }
     
-    using THDGeneratorPtrTypes = map_to_ptr<std::add_const, THDGeneratorTypes>::type;
-using THDTensorPtrTypes = map_to_ptr<std::add_const, THDTensorTypes>::type;
-using THDStoragePtrTypes = map_to_ptr<std::add_const, THDStorageTypes>::type;
+    // Poll a gRPC debug server by sending a small tensor repeatedly till success.
+//
+// Args:
+//   server_url: gRPC URL of the server to poll, e.g., 'grpc://foo:3333'.
+//   max_attempts: Maximum number of attempts.
+//
+// Returns:
+//   Whether the polling succeeded within max_attempts.
+bool PollTillFirstRequestSucceeds(const string& server_url,
+                                  const size_t max_attempts);
     
     
     {
-    {  c.reset();
-}
+    {    if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Decl *>()) {
+      SemanticNode.get<Decl *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else {
+      llvm_unreachable('ASTNode has pointer to unknown thing!');
+    }
+    llvm::errs() << '\n=====================================================\n';
+  }
 }
 
     
-    class TLSConfigPlugin;
+    #ifdef __APPLE__
     
-    TEST_F(PermissionsTests, test_multi_thread_permissions) {
-  if (getuid() != 0) {
-    LOG(WARNING) << 'Not root, skipping multi-thread deprivilege testing';
-    return;
+      ResultPlanBuilder(SILGenFunction &SGF, SILLocation loc,
+                    const CalleeTypeInfo &calleeTypeInfo)
+      : SGF(SGF), loc(loc), calleeTypeInfo(calleeTypeInfo),
+        // We reverse the order so we can pop values off the back.
+        allResults(reversed(calleeTypeInfo.substFnType->getResults())) {}
+    
+      vector<int64_t> sizes = {2, 2};
+  tensor2->resize(sizes);
+  tensor2->fill(4);
+  tensor->add(*tensor2, 1);
+  assert(tensor->nDim() == 2);
+    
+    static PyObject* recursive_to_list(
+    char* data, IntList sizes, IntList strides, int64_t dim,
+    ScalarType scalarType, int64_t elementSize)
+{
+  int64_t ndim = sizes.size();
+  if (dim == ndim) {
+    return torch::utils::load_scalar(data, scalarType);
   }
-    }
+  auto n = sizes[dim];
+  auto list = THPObjectPtr(PyList_New(n));
+  if (!list) throw python_error();
+  for (int64_t i = 0; i < n; i++) {
+    PyObject* obj = recursive_to_list(data, sizes, strides, dim + 1, scalarType, elementSize);
+    if (!obj) throw python_error();
+    PyList_SET_ITEM(list.get(), i, obj);
+    data += strides[dim] * elementSize;
+  }
+  return list.release();
+}
     
-    #ifdef WIN32
-  DWORD code = 0;
-  DWORD ret = 0;
+    #undef THPTensorStatelessType
+#undef THPTensorStateless
+#undef THPTensorType
     
-    class StatusTests : public testing::Test {};
+    #define THPDoubleStorage_CData(obj)  (obj)->cdata
+#define THPFloatStorage_CData(obj)   (obj)->cdata
+#define THPHalfStorage_CData(obj)    (obj)->cdata
+#define THPLongStorage_CData(obj)    (obj)->cdata
+#define THPIntStorage_CData(obj)     (obj)->cdata
+#define THPShortStorage_CData(obj)   (obj)->cdata
+#define THPCharStorage_CData(obj)    (obj)->cdata
+#define THPByteStorage_CData(obj)    (obj)->cdata
     
-      Status removeRange(const std::string& domain,
-                     const std::string& low,
-                     const std::string& high) override;
+    ByteArray::~ByteArray() {}
     
-    
-    
-    
-    
-    
-    
-    	b2Body* m_groundBody;
-	b2AABB m_worldAABB;
-	ContactPoint m_points[k_maxContactPoints];
-	int32 m_pointCount;
-	DestructionListener m_destructionListener;
-	GLESDebugDraw m_debugDraw;
-	int32 m_textLine;
-	b2World* m_world;
-	b2Body* m_bomb;
-	b2MouseJoint* m_mouseJoint;
-	b2Vec2 m_bombSpawnPoint;
-	bool m_bombSpawning;
-	b2Vec2 m_mouseWorld;
-	int32 m_stepCount;
-    
-    		// Car
-		{
-			b2PolygonShape chassis;
-			b2Vec2 vertices[8];
-			vertices[0].Set(-1.5f, -0.5f);
-			vertices[1].Set(1.5f, -0.5f);
-			vertices[2].Set(1.5f, 0.0f);
-			vertices[3].Set(0.0f, 0.9f);
-			vertices[4].Set(-1.15f, 0.9f);
-			vertices[5].Set(-1.5f, 0.2f);
-			chassis.Set(vertices, 6);
-    }
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    IMGUI_API bool        ImGui_ImplSdlGL2_Init(SDL_Window* window);
-IMGUI_API void        ImGui_ImplSdlGL2_Shutdown();
-IMGUI_API void        ImGui_ImplSdlGL2_NewFrame(SDL_Window* window);
-IMGUI_API void        ImGui_ImplSdlGL2_RenderDrawData(ImDrawData* draw_data);
-IMGUI_API bool        ImGui_ImplSdlGL2_ProcessEvent(SDL_Event* event);
-    
-            D3D12_TEXTURE_COPY_LOCATION srcLocation = {};
-        srcLocation.pResource = uploadBuffer;
-        srcLocation.Type = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
-        srcLocation.PlacedFootprint.Footprint.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        srcLocation.PlacedFootprint.Footprint.Width = width;
-        srcLocation.PlacedFootprint.Footprint.Height = height;
-        srcLocation.PlacedFootprint.Footprint.Depth = 1;
-        srcLocation.PlacedFootprint.Footprint.RowPitch = uploadPitch;
-    
-    // CHANGELOG
-// (minor and older changes stripped away, please see git history for details)
-//  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors flag + honor ImGuiConfigFlags_NoMouseCursorChange flag.
-//  2018-02-20: Inputs: Added support for mouse cursors (ImGui::GetMouseCursor() value and WM_SETCURSOR message handling).
-//  2018-02-20: Inputs: Renamed GLFW callbacks exposed in .h to not include Vulkan in their name.
-//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback, ImGui_ImplGlfwVulkan_Render() calls ImGui_ImplGlfwVulkan_RenderDrawData() itself.
-//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
-//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
-//  2018-01-20: Inputs: Added Horizontal Mouse Wheel support.
-//  2018-01-18: Inputs: Added mapping for ImGuiKey_Insert.
-//  2017-08-25: Inputs: MousePos set to -FLT_MAX,-FLT_MAX when mouse is unavailable/missing (instead of -1,-1).
-//  2017-05-15: Vulkan: Fix scissor offset being negative. Fix new Vulkan validation warnings. Set required depth member for buffer image copy.
-//  2016-11-13: Vulkan: Fix validation layer warnings and errors and redeclare gl_PerVertex.
-//  2016-10-18: Vulkan: Add location decorators & change to use structs as in/out in glsl, update embedded spv (produced with glslangValidator -x). Null the released resources.
-//  2016-10-15: Misc: Added a void* user_data parameter to Clipboard function handlers.
-//  2016-08-27: Vulkan: Fix Vulkan example for use when a depth buffer is active.
-    
-        UINT createDeviceFlags = 0;
-    //createDeviceFlags |= D3D10_CREATE_DEVICE_DEBUG;
-    if (D3D10CreateDeviceAndSwapChain(NULL, D3D10_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, D3D10_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice) != S_OK)
-        return E_FAIL;
+    template<typename T>
+struct or_trait<T> : T {};
     
     
-    {        // Handle loss of D3D9 device
-        if (result == D3DERR_DEVICELOST && g_pd3dDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET)
-        {
-            ImGui_ImplDX9_InvalidateDeviceObjects();
-            g_pd3dDevice->Reset(&g_d3dpp);
-            ImGui_ImplDX9_CreateDeviceObjects();
-        }
+    {  // For fragments
+  kFirstType = 2,
+  kMiddleType = 3,
+  kLastType = 4
+};
+static const int kMaxRecordType = kLastType;
+    
+    TEST(LogTest, ShortTrailer) {
+  const int n = kBlockSize - 2*kHeaderSize + 4;
+  Write(BigString('foo', n));
+  ASSERT_EQ(kBlockSize - kHeaderSize + 4, WrittenBytes());
+  Write('');
+  Write('bar');
+  ASSERT_EQ(BigString('foo', n), Read());
+  ASSERT_EQ('', Read());
+  ASSERT_EQ('bar', Read());
+  ASSERT_EQ('EOF', Read());
+}
+    
+      const FilterPolicy* policy_;
+  std::string keys_;              // Flattened key contents
+  std::vector<size_t> start_;     // Starting index in keys_ of each key
+  std::string result_;            // Filter data computed so far
+  std::vector<Slice> tmp_keys_;   // policy_->CreateFilter() argument
+  std::vector<uint32_t> filter_offsets_;
+    
+      // Check first filter
+  ASSERT_TRUE(reader.KeyMayMatch(0, 'foo'));
+  ASSERT_TRUE(reader.KeyMayMatch(2000, 'bar'));
+  ASSERT_TRUE(! reader.KeyMayMatch(0, 'box'));
+  ASSERT_TRUE(! reader.KeyMayMatch(0, 'hello'));
+    
+    TEST(CRC, Mask) {
+  uint32_t crc = Value('foo', 3);
+  ASSERT_NE(crc, Mask(crc));
+  ASSERT_NE(crc, Mask(Mask(crc)));
+  ASSERT_EQ(crc, Unmask(Mask(crc)));
+  ASSERT_EQ(crc, Unmask(Unmask(Mask(Mask(crc)))));
+}
+    
+    class Histogram {
+ public:
+  Histogram() { }
+  ~Histogram() { }
     }
     
     
-    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-        }
+    {  // Skewed: pick 'base' uniformly from range [0,max_log] and then
+  // return 'base' random bits.  The effect is to pick a number in the
+  // range [0,2^max_log-1] with exponential bias towards smaller numbers.
+  uint32_t Skewed(int max_log) {
+    return Uniform(1 << Uniform(max_log + 1));
+  }
+};
     
-            static float f = 0.0f;
-        ImGui::Text('Hello, world!');
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
-        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
-        ImGui::ShowDemoWindow(NULL);
+      if (direction_ == kForward) {  // Switch directions?
+    // iter_ is pointing at the current entry.  Scan backwards until
+    // the key changes so we can use the normal reverse scanning code.
+    assert(iter_->Valid());  // Otherwise valid_ would have been false
+    SaveKey(ExtractUserKey(iter_->key()), &saved_key_);
+    while (true) {
+      iter_->Prev();
+      if (!iter_->Valid()) {
+        valid_ = false;
+        saved_key_.clear();
+        ClearSavedValue();
+        return;
+      }
+      if (user_comparator_->Compare(ExtractUserKey(iter_->key()),
+                                    saved_key_) < 0) {
+        break;
+      }
+    }
+    direction_ = kReverse;
+  }
+    
+      // When user keys are misordered
+  ASSERT_EQ(IKey('foo', 100, kTypeValue),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('bar', 99, kTypeValue)));
+    
+     private:
+  const Options*        options_;
+  std::string           buffer_;      // Destination buffer
+  std::vector<uint32_t> restarts_;    // Restart points
+  int                   counter_;     // Number of entries emitted since restart
+  bool                  finished_;    // Has Finish() been called?
+  std::string           last_key_;
+    
+    #include <dlfcn.h>
+#include <unwind.h>
+    
+        double getComputedMargin(int edge) const;
+    double getComputedBorder(int edge) const;
+    double getComputedPadding(int edge) const;
+    
+    #pragma once
+    
+    private:
+  void ref() {
+    ++m_refcount;
+  }
+    
+    
+    {  pthread_key_t m_key;
+  CleanupFunction m_cleanup;
+};
+    
+    
+#define DEFINE_BOXED_PRIMITIVE(LITTLE, BIG)                          \
+  struct J ## BIG : detail::JPrimitive<J ## BIG, j ## LITTLE> {      \
+    static auto constexpr kJavaDescriptor = 'Ljava/lang/' #BIG ';';  \
+    static auto constexpr kValueMethod = #LITTLE 'Value';            \
+    j ## LITTLE LITTLE ## Value() const {                            \
+      return value();                                                \
+    }                                                                \
+  };                                                                 \
+  inline local_ref<jobject> autobox(j ## LITTLE val) {               \
+    return J ## BIG::valueOf(val);                                   \
+  }
+    
+    // JNI's NIO support has some awkward preconditions and error reporting. This
+// class provides much more user-friendly access.
+class FBEXPORT JByteBuffer : public JavaClass<JByteBuffer> {
+ public:
+  static constexpr const char* kJavaDescriptor = 'Ljava/nio/ByteBuffer;';
+    }
