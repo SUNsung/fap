@@ -1,132 +1,142 @@
 
         
-        #include <vector>
+        #include 'base/command_line.h'
     
+    #endif  // ATOM_BROWSER_UI_DRAG_UTIL_H_
+
     
-    {}  // namespace atom
+    bool IsUnresponsiveEventSuppressed() {
+  return g_suppress_level > 0;
+}
+    
+    namespace atom {
+    }
+    
+    // Only lock when lockers are used in current thread.
+class Locker {
+ public:
+  explicit Locker(v8::Isolate* isolate);
+  ~Locker();
+    }
+    
+    struct DraggableRegion {
+  bool draggable;
+  gfx::Rect bounds;
+    }
+    
+      // Sent after a Profile has been created. This notification is sent both for
+  // normal and OTR profiles.
+  // The details are none and the source is the new profile.
+  NOTIFICATION_PROFILE_CREATED,
+    
+    #include 'base/macros.h'
+#include 'ppapi/host/host_factory.h'
     
      private:
-  void* operator new(size_t size);
-  void operator delete(void*, size_t);
+  friend class base::RefCountedThreadSafe<MonitorFinder>;
+  ~MonitorFinder();
+    
+    #include 'base/memory/ref_counted.h'
+#include 'chrome/browser/ui/views/color_chooser_dialog.h'
+#include 'third_party/skia/include/core/SkColor.h'
+#include 'ui/shell_dialogs/base_shell_dialog.h'
+#include 'ui/shell_dialogs/base_shell_dialog_win.h'
     
     
-    {  DISALLOW_COPY_AND_ASSIGN(RemoteCallbackFreer);
+    {  /// Return a hash code of any components from these options that should
+  /// contribute to a Swift Bridging PCH hash.
+  llvm::hash_code getPCHHashComponents() const {
+    // Nothing here that contributes anything significant when emitting the PCH.
+    return llvm::hash_value(0);
+  }
 };
     
-      AutoCompactTest() {
-    dbname_ = test::TmpDir() + '/autocompact_test';
-    tiny_cache_ = NewLRUCache(100);
-    options_.block_cache = tiny_cache_;
-    DestroyDB(dbname_, options_);
-    options_.create_if_missing = true;
-    options_.compression = kNoCompression;
-    ASSERT_OK(DB::Open(options_, dbname_, &db_));
+    
+    {  StringRef getReceiverUSR() const {
+    for (auto Relation: Relations) {
+      if (Relation.roles & (SymbolRoleSet) SymbolRole::RelationReceivedBy)
+        return Relation.USR;
+    }
+    return StringRef();
   }
-    
-    // Build a Table file from the contents of *iter.  The generated file
-// will be named according to meta->number.  On success, the rest of
-// *meta will be filled with metadata about the generated table.
-// If no data is present in *iter, meta->file_size will be set to
-// zero, and no Table file will be produced.
-extern Status BuildTable(const std::string& dbname,
-                         Env* env,
-                         const Options& options,
-                         TableCache* table_cache,
-                         Iterator* iter,
-                         FileMetaData* meta);
-    
-    
-    {  int Compare(const InternalKey& a, const InternalKey& b) const;
 };
     
-    static std::string MakeFileName(const std::string& name, uint64_t number,
-                                const char* suffix) {
-  char buf[100];
-  snprintf(buf, sizeof(buf), '/%06llu.%s',
-           static_cast<unsigned long long>(number),
-           suffix);
-  return name + buf;
-}
+    // On macOS and iOS, swift_once is implemented using GCD.
+// The compiler emits an inline check matching the barrier-free inline fast
+// path of dispatch_once(). See SwiftTargetInfo.OnceDonePredicateValue.
     
-    TableCache::~TableCache() {
-  delete cache_;
-}
+    #ifndef SWIFT_INDEX_INDEX_H
+#define SWIFT_INDEX_INDEX_H
     
+      virtual void failed(StringRef error) = 0;
+  virtual void warning(StringRef warning) {}
     
-    {  for (size_t i = 0; i < new_files_.size(); i++) {
-    const FileMetaData& f = new_files_[i].second;
-    PutVarint32(dst, kNewFile);
-    PutVarint32(dst, new_files_[i].first);  // level
-    PutVarint64(dst, f.number);
-    PutVarint64(dst, f.file_size);
-    PutLengthPrefixedSlice(dst, f.smallest.Encode());
-    PutLengthPrefixedSlice(dst, f.largest.Encode());
-  }
-}
+    #endif
+
     
-    namespace leveldb {
+      // Gets the text streamed to this object so far as an std::string.
+  // Each '\0' character in the buffer is replaced with '\\0'.
+  //
+  // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
+  std::string GetString() const;
+    
+        TestPartResult::Type const type;
+    const char* const file;
+    int const line;
+    std::string const message;
+    
+      // Returns true if FilePath ends with a path separator, which indicates that
+  // it is intended to represent a directory. Returns false otherwise.
+  // This does NOT check that a directory (or file) actually exists.
+  bool IsDirectory() const;
+    
+    ]]
+    
+    #if defined(MBEDTLS_X509_CSR_PARSE_C) && ( !defined(MBEDTLS_X509_USE_C) )
+#error 'MBEDTLS_X509_CSR_PARSE_C defined, but not all prerequisites'
+#endif
+    
+    #endif
+    
+    	void set_roll_influence(float p_value);
+	float get_roll_influence() const;
+    
+    void VideoPlayer::_bind_methods() {
     }
     
-    TEST(LogTest, Empty) {
-  ASSERT_EQ('EOF', Read());
-}
+        const int tmp10 = tmp0 + tmp3, tmp13 = tmp0 - tmp3, tmp11 = tmp1 + tmp2, tmp12 = tmp1 - tmp2;
     
-      // Open database.  Disable compression since it affects the creation
-  // of layers and the code below is trying to test against a very
-  // specific scenario.
-  leveldb::DB* db;
-  leveldb::Options db_options;
-  db_options.create_if_missing = true;
-  db_options.compression = leveldb::kNoCompression;
-  ASSERT_OK(leveldb::DB::Open(db_options, dbpath, &db));
-    
-    Status Footer::DecodeFrom(Slice* input) {
-  const char* magic_ptr = input->data() + kEncodedLength - 8;
-  const uint32_t magic_lo = DecodeFixed32(magic_ptr);
-  const uint32_t magic_hi = DecodeFixed32(magic_ptr + 4);
-  const uint64_t magic = ((static_cast<uint64_t>(magic_hi) << 32) |
-                          (static_cast<uint64_t>(magic_lo)));
-  if (magic != kTableMagicNumber) {
-    return Status::Corruption('not an sstable (bad magic number)');
-  }
-    }
-    
-    void Histogram::Merge(const Histogram& other) {
-  if (other.min_ < min_) min_ = other.min_;
-  if (other.max_ > max_) max_ = other.max_;
-  num_ += other.num_;
-  sum_ += other.sum_;
-  sum_squares_ += other.sum_squares_;
-  for (int b = 0; b < kNumBuckets; b++) {
-    buckets_[b] += other.buckets_[b];
-  }
-}
-    
-    bool HandleDumpCommand(Env* env, char** files, int num) {
-  StdoutPrinter printer;
-  bool ok = true;
-  for (int i = 0; i < num; i++) {
-    Status s = DumpFile(env, files[i], &printer);
-    if (!s.ok()) {
-      fprintf(stderr, '%s\n', s.ToString().c_str());
-      ok = false;
-    }
-  }
-  return ok;
-}
-    
-        char processname[256];
-    NDK_CRASH_PARSER_STATE state = EXPECTS_CRASH_DUMP;
-    char  strcache[2048];
-    
-        template<typename T>
-    T* _Service() {
-        if (m_dependservices.end() != m_dependservices.find(T::ServiceName()))
-            return (T*)m_dependservices[T::ServiceName()];
-    }
-    
-            JavaVMAttachArgs args;
-        args.group = NULL;
-        args.name = 'default';
-        args.version = JNI_VERSION_1_6;
-        status_ = vm_->AttachCurrentThread(&env_, &args);
+    # define OC_STATIC_ILOG0(_v) (!!(_v))
+# define OC_STATIC_ILOG1(_v) (((_v)&0x2)?2:OC_STATIC_ILOG0(_v))
+# define OC_STATIC_ILOG2(_v) \
+ (((_v)&0xC)?2+OC_STATIC_ILOG1((_v)>>2):OC_STATIC_ILOG1(_v))
+# define OC_STATIC_ILOG3(_v) \
+ (((_v)&0xF0)?4+OC_STATIC_ILOG2((_v)>>4):OC_STATIC_ILOG2(_v))
+# define OC_STATIC_ILOG4(_v) \
+ (((_v)&0xFF00)?8+OC_STATIC_ILOG3((_v)>>8):OC_STATIC_ILOG3(_v))
+# define OC_STATIC_ILOG5(_v) \
+ (((_v)&0xFFFF0000)?16+OC_STATIC_ILOG4((_v)>>16):OC_STATIC_ILOG4(_v))
+# define OC_STATIC_ILOG6(_v) \
+ (((_v)&0xFFFFFFFF00000000ULL)?32+OC_STATIC_ILOG5((_v)>>32):OC_STATIC_ILOG5(_v))
+/**
+ * OC_STATIC_ILOG_32 - The integer logarithm of an (unsigned, 32-bit) constant.
+ * @_v: A non-negative 32-bit constant.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * This macro is suitable for evaluation at compile time, but it should not be
+ *  used on values that can change at runtime, as it operates via exhaustive
+ *  search.
+ */
+# define OC_STATIC_ILOG_32(_v) (OC_STATIC_ILOG5((ogg_uint32_t)(_v)))
+/**
+ * OC_STATIC_ILOG_64 - The integer logarithm of an (unsigned, 64-bit) constant.
+ * @_v: A non-negative 64-bit constant.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * This macro is suitable for evaluation at compile time, but it should not be
+ *  used on values that can change at runtime, as it operates via exhaustive
+ *  search.
+ */
+# define OC_STATIC_ILOG_64(_v) (OC_STATIC_ILOG6((ogg_int64_t)(_v)))
