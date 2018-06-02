@@ -1,178 +1,153 @@
 
         
-            def __get__(self, obj, type=None):
-        if obj is None:
-            return self
-        rv = obj.config[self.__name__]
-        if self.get_converter is not None:
-            rv = self.get_converter(rv)
-        return rv
+        entry_template = textwrap.dedent('''
+    <entry>
+        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
+        <title>New version @VERSION@</title>
+        <link href='http://rg3.github.io/youtube-dl' />
+        <content type='xhtml'>
+            <div xmlns='http://www.w3.org/1999/xhtml'>
+                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
+            </div>
+        </content>
+        <author>
+            <name>The youtube-dl maintainers</name>
+        </author>
+        <updated>@TIMESTAMP@</updated>
+    </entry>
+    ''')
+    
+        with io.open(infile, encoding='utf-8') as inf:
+        issue_template_tmpl = inf.read()
+    
+    from youtube_dl.compat import (
+    compat_print,
+    compat_urllib_request,
+)
+from youtube_dl.utils import format_bytes
     
     
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
-
+class TestAgeRestriction(unittest.TestCase):
+    def _assert_restricted(self, url, filename, age, old_age=None):
+        self.assertTrue(_download_restricted(url, filename, old_age))
+        self.assertFalse(_download_restricted(url, filename, age))
+    
+        def test_facebook_matching(self):
+        self.assertTrue(FacebookIE.suitable('https://www.facebook.com/Shiniknoh#!/photo.php?v=10153317450565268'))
+        self.assertTrue(FacebookIE.suitable('https://www.facebook.com/cindyweather?fref=ts#!/photo.php?v=10152183998945793'))
+    
+        def tearDown(self):
+        if os.path.exists(self.test_dir):
+            shutil.rmtree(self.test_dir)
+    
+            select = self._search_regex(
+            r'(?s)<select[^>]+id='select-version'[^>]*>(.+?)</select>',
+            webpage, 'select version', default=None)
+        if select:
+            entry_ids = set()
+            entries = []
+            for mobj in re.finditer(
+                    r'<option[^>]+value=(['\'])(?P<id>[0-9a-z_]+)(?:#.+?)?\1[^>]*>(?P<title>[^<]+)',
+                    webpage):
+                entry_id = mobj.group('id')
+                if entry_id in entry_ids:
+                    continue
+                entry_ids.add(entry_id)
+                entries.append({
+                    '_type': 'url_transparent',
+                    'url': 'kaltura:%s:%s' % (partner_id, entry_id),
+                    'ie_key': 'Kaltura',
+                    'title': mobj.group('title'),
+                })
+            if entries:
+                return self.playlist_result(entries, display_id, title)
+    
+            title = metadata['Title']
+        description = metadata.get('Description')
+        duration = float_or_none(metadata.get('Duration'))
+        timestamp = parse_iso8601(metadata.get('DateCreated'))
+    
+    cc_test(
+    name = 'spanning_tree_iterator_test',
+    size = 'small',
+    srcs = ['spanning_tree_iterator_test.cc'],
+    deps = [
+        ':spanning_tree_iterator',
+        '//syntaxnet:test_main',
+        '@org_tensorflow//tensorflow/core:lib',
+        '@org_tensorflow//tensorflow/core:test',
+    ],
+)
+    
+    py_library(
+    name = 'dragnn_ops',
+    srcs = ['dragnn_ops.py'],
+    deps = [
+        ':load_dragnn_cc_impl_py',
+        '//dragnn/core:dragnn_bulk_ops',
+        '//dragnn/core:dragnn_ops',
+        '//syntaxnet:load_parser_ops_py',
+    ],
+)
+    
+      def testSoftmaxCrossEntropyLoss(self):
+    logits = tf.constant([[0.0, 2.0, -1.0],
+                          [-5.0, 1.0, -1.0],
+                          [3.0, 1.0, -2.0]])  # pyformat: disable
+    gold_labels = tf.constant([1, -1, 1])
+    cost, correct, total, logits, gold_labels = (
+        component.build_softmax_cross_entropy_loss(logits, gold_labels))
+    
+      def testLabelPotentialsFromTokens(self):
+    with self.test_session():
+      tokens = tf.constant([[[1, 2],
+                             [3, 4],
+                             [5, 6]],
+                            [[6, 5],
+                             [4, 3],
+                             [2, 1]]], tf.float32)  # pyformat: disable
     
     
-    {        Generic:                   '#000000',        # class: 'g'
-        Generic.Deleted:           '#a40000',        # class: 'gd'
-        Generic.Emph:              'italic #000000', # class: 'ge'
-        Generic.Error:             '#ef2929',        # class: 'gr'
-        Generic.Heading:           'bold #000080',   # class: 'gh'
-        Generic.Inserted:          '#00A000',        # class: 'gi'
-        Generic.Output:            '#888',           # class: 'go'
-        Generic.Prompt:            '#745334',        # class: 'gp'
-        Generic.Strong:            'bold #000000',   # class: 'gs'
-        Generic.Subheading:        'bold #800080',   # class: 'gu'
-        Generic.Traceback:         'bold #a40000',   # class: 'gt'
-    }
-
+def main(unused_argv):
+  # Run the exporter.
+  export(FLAGS.master_spec, FLAGS.params_path, FLAGS.export_path,
+         FLAGS.export_moving_averages, FLAGS.build_runtime_graph)
+  tf.logging.info('Export complete.')
     
-        def inner(*suffix):
-        return urljoin(httpbin_url, '/'.join(suffix))
+        try:
+      with open(FLAGS.actual_file) as actual:
+        content_actual = actual.read()
+    except IOError as e:
+      self.fail('Error opening '%s': %s' % (FLAGS.actual_file, e.strerror))
+    
+            print('Iteration %s of %s' % (i, n_iter))
     
     
-@pytest.mark.skipif(sys.version_info < (2,7), reason='Only run on Python 2.7+')
-def test_system_ssl():
-    '''Verify we're actually setting system_ssl when it should be available.'''
-    assert info()['system_ssl']['version'] != ''
+def variable_batch_size_comparison(data):
+    batch_sizes = [i.astype(int) for i in np.linspace(data.shape[0] // 10,
+                                                      data.shape[0], num=10)]
     
+    for i, n in enumerate(n_samples):
+    for j, p in enumerate(n_features):
+        X = np.random.normal(size=(n, p))
+        t0 = time.time()
+        ward.fit(X)
+        scikits_time[j, i] = time.time() - t0
+        t0 = time.time()
+        hierarchy.ward(X)
+        scipy_time[j, i] = time.time() - t0
     
-def _check_cryptography(cryptography_version):
-    # cryptography < 1.3.4
-    try:
-        cryptography_version = list(map(int, cryptography_version.split('.')))
-    except ValueError:
-        return
+    import gc
+import sys
+import optparse
+from datetime import datetime
+import operator
     
+    acc_clf1, acc_clf2 = [], []
+n_features_range = range(1, n_features_max + 1, step)
+for n_features in n_features_range:
+    score_clf1, score_clf2 = 0, 0
+    for _ in range(n_averages):
+        X, y = generate_data(n_train, n_features)
     
-@pytest.mark.parametrize(
-    'value, expected', (
-        ('T', 'T'),
-        (b'T', 'T'),
-        (u'T', 'T'),
-    ))
-def test_to_native_string(value, expected):
-    assert to_native_string(value) == expected
-    
-        :rtype: str
-    '''
-    return '%s/%s' % (name, __version__)
-    
-    site_info = 'Mixcloud.com'
-download = mixcloud_download
-download_playlist = playlist_not_supported('mixcloud')
-
-    
-    __all__ = ['showroom_download']
-    
-        '''
-    var = pvariance(data, mu)
-    try:
-        return var.sqrt()
-    except AttributeError:
-        return math.sqrt(var)
-
-    
-        def test_add(self):
-        d = deque()
-        e = deque('abc')
-        f = deque('def')
-        self.assertEqual(d + d, deque())
-        self.assertEqual(e + f, deque('abcdef'))
-        self.assertEqual(e + e, deque('abcabc'))
-        self.assertEqual(e + d, deque('abc'))
-        self.assertEqual(d + e, deque('abc'))
-        self.assertIsNot(d + d, deque())
-        self.assertIsNot(e + d, deque('abc'))
-        self.assertIsNot(d + e, deque('abc'))
-    
-            decl = title + argspec + (note and self.grey(
-               '<font face='helvetica, arial'>%s</font>' % note))
-    
-        def test_parts(self):
-        P = self.cls
-        p = P('c:a/b')
-        parts = p.parts
-        self.assertEqual(parts, ('c:', 'a', 'b'))
-        p = P('c:/a/b')
-        parts = p.parts
-        self.assertEqual(parts, ('c:\\', 'a', 'b'))
-        p = P('//a/b/c/d')
-        parts = p.parts
-        self.assertEqual(parts, ('\\\\a\\b\\', 'c', 'd'))
-    
-    
-class ImportTracebackTests(unittest.TestCase):
-    
-    @dataclasses.dataclass
-class CV:
-    T_CV4 = typing.ClassVar
-    cv0: typing.ClassVar[int] = 20
-    cv1: typing.ClassVar = 30
-    cv2: T_CV2
-    cv3: T_CV3
-    not_cv4: T_CV4  # When using string annotations, this field is not recognized as a ClassVar.
-    
-    from concurrent.futures import (as_completed, ThreadPoolExecutor,
-                                ProcessPoolExecutor)
-    
-    
-def KeywordsFromSyntaxListOutput_ContainedArgAllowed_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
-phpFunctions   xxx contained gzclose yaz_syntax html_entity_decode fbsql_read_blob png2wbmp mssql_init cpdf_set_title gztell fbsql_insert_id empty cpdf_restore mysql_field_type closelog swftext ldap_search curl_errno gmp_div_r mssql_data_seek getmyinode printer_draw_pie mcve_initconn ncurses_getmaxyx defined
-                   contained replace_child has_attributes specified insertdocument assign node_name hwstat addshape get_attribute_node html_dump_mem userlist
-                   links to Function''' ), # noqa
-              has_items( 'gzclose', 'userlist', 'ldap_search' ) )
-    
-      eq_( request.Response(), {
-    'completions': results,
-    'completion_start_column': 1
-  } )
-    
-    
-def BuildYcmdLibs( args ):
-  if not args.skip_build:
-    subprocess.check_call( [
-      sys.executable,
-      p.join( DIR_OF_THIS_SCRIPT, 'third_party', 'ycmd', 'build.py' )
-    ] )
-    
-        exception = RuntimeError( 'Check client handles exception' )
-    with patch.object( ycm._message_poll_request,
-                       '_response_future',
-                       new = MockAsyncServerResponseException( exception ) ):
-      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
-  '''
-  return mock.MagicMock( wraps = FakeFuture( True, None, exception ) )
-    
-    def api_type(subtype = ''):
-    return 'api-' + subtype if subtype else 'api'
-    
-        @require_oauth2_scope('read')
-    @validate(
-        user=VAccountByName('username'),
-    )
-    @api_doc(
-        section=api_section.users,
-        uri='/api/v1/user/{username}/trophies',
-    )
-    def GET_usertrophies(self, user):
-        '''Return a list of trophies for the a given user.'''
-        return self.api_wrapper(get_usertrophies(user))
-    
-        @validate(
-        container_id=VGTMContainerId('id')
-    )
-    def GET_gtm(self, container_id):
-        return GoogleTagManager(container_id=container_id).render()
+    plt.show()
