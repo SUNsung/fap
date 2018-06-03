@@ -1,104 +1,156 @@
 
         
-        
-    {  if (argc != 4) {
-    printf('This script converts the CIFAR dataset to the leveldb format used\n'
-           'by caffe to perform classification.\n'
-           'Usage:\n'
-           '    convert_cifar_data input_folder output_folder db_type\n'
-           'Where the input folder should contain the binary batch files.\n'
-           'The CIFAR dataset could be downloaded at\n'
-           '    http://www.cs.toronto.edu/~kriz/cifar.html\n'
-           'You should gunzip them after downloading.\n');
-  } else {
-    google::InitGoogleLogging(argv[0]);
-    convert_dataset(string(argv[1]), string(argv[2]), string(argv[3]));
-  }
-  return 0;
-}
+                    // second, get data from reader, stored it in cache
+            // 1. for each key, allocate the specific matrix on device
+            for (auto& pa : inputMatrices)
+            {
+                const wstring& name = pa.first;
+                const auto& input = pa.second;
+                auto& M = input.GetMatrix<ElemType>();
+                if (m_inputMatricesCache.find(name) == m_inputMatricesCache.end())
+                    m_inputMatricesCache.AddInput(name, make_shared<Matrix<ElemType>>(M, M.GetDeviceId()), input.pMBLayout, input.sampleLayout); // deep copy from M
+                else
+                    m_inputMatricesCache.GetInputMatrix<ElemType>(name).SetValue(M);
+            }
+            // 2. MBlayout
+            m_MBLayoutCache->CopyFrom(net.GetMBLayoutPtrOfNetwork());
+            size_t nParallelSequences = m_MBLayoutCache->GetNumParallelSequences();
+    
+        // fetch entire object into the cache
+    // Does this really make sense?? Should be rather done during computation.
+    void prefetch() const
+    {
+        const msra::math::float4 *p2 = (msra::math::float4 *) this->p;
+        size_t numfloat4s = cols() * colstride / 4;
+        const msra::math::float4 *q = p2 + numfloat4s;
+        const size_t cacherowbytes = 64; // or what?
+        const size_t cacherowfloat4s = cacherowbytes / sizeof(*p2);
+        for (; p2 < q; p2 += cacherowfloat4s)
+            msra::math::float4::prefetch(p2);
+    }
+    
+            ComputationNodeBasePtr toNode = CopyNode(fromNet, fromNodeName,
+                                                 toNodeName,
+                                                 CopyNodeFlags::copyNodeValue);
+    
+    BOOST_FIXTURE_TEST_CASE(MatrixSparseElementWisePower, RandomSeedFixture)
+{
+    Matrix<float> mAdense(c_deviceIdZero);
+    mAdense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim1, dim2, c_deviceIdZero, -3.0f, 0.1f, IncrementCounter()), 0);
+    Matrix<float> mAsparse(mAdense.DeepClone());
+    mAsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
+    }
+    
+        // find all the  BN nodes by evalOrder
+    std::vector<ComputationNodeBasePtr> bnNodes;
+    std::set<ComputationNodeBasePtr> bnNodesLogged; // (avoid double record of batch normalization nodes)
+    for (auto& evalNode : evalNodes)
+    {
+        for (auto& node : m_net->GetEvalOrder(evalNode))
+        {
+            let bnNode = dynamic_pointer_cast<BatchNormalizationNode<ElemType>>(node);
+            if (bnNode)
+            {
+                if (bnNodesLogged.insert(node).second)
+                {
+                    // reset the statistics states of bn nodes
+                    bnNode->ResetStatisticsState();
+                    bnNode->SetNormalizationTimeConstants(-1, bnNode->NormalizationTimeConstant(),
+                        0, bnNode->BlendTimeConstant());
+                    bnNodes.push_back(node);
+                    // add BN nodes into the evaluation group, then they will be added into root nodes when
+                    // the network re-compile
+                    m_net->AddToNodeGroup(L'evaluation', bnNode);
+                }
+            }
+        }
+    }
+    
+        // ProcessNDLScript - Process the NDL script
+    // script - NDL Script to process
+    // ndlPassUntil - complete processing through this pass, all passes if ndlPassAll
+    // skipThrough - [in/out] for iterative processing, a pointer to an array of NDLNode*, one for each pass
+    //               the pointer will be updated to last node processed for that pass, can be NULL if all node processing is desired
+    // fullValidate - validate as a complete network? (false if this might be a snippet of a full network)
+    void ProcessNDLScript(NDLScript<ElemType>* script, NDLPass ndlPassUntil = ndlPassAll, NDLNode<ElemType>** skipThrough = nullptr, bool fullValidate = false, const std::wstring& dumpFileName = L'')
+    {
+        // if we don't have a script yet, don't bother
+        if (script == nullptr)
+            return;
+    }
+    
+    template void DoConvertFromDbn<float>(const ConfigParameters& config);
+template void DoConvertFromDbn<double>(const ConfigParameters& config);
+template void DoExportToDbn<float>(const ConfigParameters& config);
+template void DoExportToDbn<double>(const ConfigParameters& config);
 
     
-      // Open leveldb
-  leveldb::DB* db;
-  leveldb::Options options;
-  options.create_if_missing = true;
-  options.error_if_exists = true;
-  leveldb::Status status = leveldb::DB::Open(
-      options, db_filename, &db);
-  CHECK(status.ok()) << 'Failed to open leveldb ' << db_filename
-      << '. Is it already existing?';
     
-     private:
-  // wrap im2col/col2im so we don't have to remember the (long) argument lists
-  inline void conv_im2col_cpu(const Dtype* data, Dtype* col_buff) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      im2col_cpu(data, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
-    } else {
-      im2col_nd_cpu(data, num_spatial_axes_, conv_input_shape_.cpu_data(),
-          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
-          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), col_buff);
+    {private:
+    size_t sourceFileAsIndex; // source file is remembered in the value struct as an index into the static sourceFileMap[]
+    // the meaning of the 'sourceFile' index is global, stored in this static map
+    static vector<SourceFile> sourceFileMap;
+};
+    
+    
+    {
+    {
+    {}}}
+
+    
+        bool haslattice(std::wstring key) const
+    {
+#ifdef NONUMLATTICEMMI
+        return denlattices.haslattice(key);
+#else
+        return numlattices.haslattice(key) && denlattices.haslattice(key);
+#endif
     }
-  }
-  inline void conv_col2im_cpu(const Dtype* col_buff, Dtype* data) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      col2im_cpu(col_buff, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
-    } else {
-      col2im_nd_cpu(col_buff, num_spatial_axes_, conv_input_shape_.cpu_data(),
-          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
-          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), data);
+    
+    // ---------------------------------------------------------------------------
+// hardcoded_array -- wraps a fixed-size C array together with its size.
+//
+// operator[] checks index bounds in Debug builds. size() is provided such
+// that this class can be substituted for STL vector in many cases.
+// Can be constructed with a size parameter--it will be checked against the
+// hard-coded size.
+// Can also be constructed with an initialization parameter (typ. 0).
+// ---------------------------------------------------------------------------
+    
+        // return the horizontal sum of all 4 components
+    // ... return float4, use another mechanism to store the low word
+    float sum() const
+    {
+        float4 hsum = _mm_hadd_ps(v, v);
+        hsum = _mm_hadd_ps(hsum, hsum);
+        return hsum.f0();
     }
-  }
-#ifndef CPU_ONLY
-  inline void conv_im2col_gpu(const Dtype* data, Dtype* col_buff) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      im2col_gpu(data, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
-    } else {
-      im2col_nd_gpu(data, num_spatial_axes_, num_kernels_im2col_,
-          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
-          kernel_shape_.gpu_data(), pad_.gpu_data(),
-          stride_.gpu_data(), dilation_.gpu_data(), col_buff);
+    
+    #if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_playEffect'', nullptr);
+        return 0;
     }
-  }
-  inline void conv_col2im_gpu(const Dtype* col_buff, Dtype* data) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      col2im_gpu(col_buff, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
-    } else {
-      col2im_nd_gpu(col_buff, num_spatial_axes_, num_kernels_col2im_,
-          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
-          kernel_shape_.gpu_data(), pad_.gpu_data(), stride_.gpu_data(),
-          dilation_.gpu_data(), data);
-    }
-  }
 #endif
     
     
-    {  Blob<Dtype> diff_;  // cached for backward pass
-  Blob<Dtype> dist_sq_;  // cached for backward pass
-  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
-  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
-};
     
-      bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnLRNDescriptor_t norm_desc_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
+    
+    
+    
+    
+    	enum
+	{
+		e_count = 30
+	};
+    
+    			b2Body* prevBody = ground;
+			for (int32 i = 0; i < e_count; ++i)
+			{
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
+				bd.position.Set(-4.5f + 1.0f * i, 5.0f);
+				b2Body* body = m_world->CreateBody(&bd);
+				body->CreateFixture(&fd);
+    }
