@@ -1,148 +1,104 @@
 
         
-          </body>
-</html>
-HTML
-CONTENT_NOT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+            s = nil
+    homebrew_site_packages = Language::Python.homebrew_site_packages
+    user_site_packages = Language::Python.user_site_packages 'python'
+    pth_file = user_site_packages/'homebrew.pth'
+    instructions = <<-EOS.undent.gsub(/^/, '  ')
+      mkdir -p #{user_site_packages}
+      echo 'import site; site.addsitedir('#{homebrew_site_packages}')' >> #{pth_file}
+    EOS
     
-        # Gets the path to this layout.
-    attr_reader :path
-    
-        # Get or set the priority of this plugin. When called without an
-    # argument it returns the priority. When an argument is given, it will
-    # set the priority.
-    #
-    # priority - The Symbol priority (default: nil). Valid options are:
-    #            :lowest, :low, :normal, :high, :highest
-    #
-    # Returns the Symbol priority.
-    def self.priority(priority = nil)
-      @priority ||= nil
-      if priority && PRIORITIES.key?(priority)
-        @priority = priority
-      end
-      @priority || :normal
+        def self.disk_cleanup_size
+      @@disk_cleanup_size
     end
     
-      # GET /resource/confirmation?confirmation_token=abcdef
-  def show
-    self.resource = resource_class.confirm_by_token(params[:confirmation_token])
-    yield resource if block_given?
-    
-        # Check if a reset_password_token is provided in the request
-    def assert_reset_token_passed
-      if params[:reset_password_token].blank?
-        set_flash_message(:alert, :no_token)
-        redirect_to new_session_path(resource_name)
-      end
+      def dump_verbose_config(f = $stdout)
+    f.puts 'HOMEBREW_VERSION: #{HOMEBREW_VERSION}'
+    f.puts 'ORIGIN: #{origin}'
+    f.puts 'HEAD: #{head}'
+    f.puts 'Last commit: #{last_commit}'
+    if CoreTap.instance.installed?
+      f.puts 'Core tap ORIGIN: #{core_tap_origin}'
+      f.puts 'Core tap HEAD: #{core_tap_head}'
+      f.puts 'Core tap last commit: #{core_tap_last_commit}'
+    else
+      f.puts 'Core tap: N/A'
     end
-    
-      # Check if there is no signed in user before doing the sign out.
-  #
-  # If there is no signed in user, it will set the flash message and redirect
-  # to the after_sign_out path.
-  def verify_signed_out_user
-    if all_signed_out?
-      set_flash_message! :notice, :already_signed_out
-    
-    module Devise
-  module Controllers
-    # Create url helpers to be used with resource/scope configuration. Acts as
-    # proxies to the generated routes created by devise.
-    # Resource param can be a string or symbol, a class, or an instance object.
-    # Example using a :user resource:
-    #
-    #   new_session_path(:user)      => new_user_session_path
-    #   session_path(:user)          => user_session_path
-    #   destroy_session_path(:user)  => destroy_user_session_path
-    #
-    #   new_password_path(:user)     => new_user_password_path
-    #   password_path(:user)         => user_password_path
-    #   edit_password_path(:user)    => edit_user_password_path
-    #
-    #   new_confirmation_path(:user) => new_user_confirmation_path
-    #   confirmation_path(:user)     => user_confirmation_path
-    #
-    # Those helpers are included by default to ActionController::Base.
-    #
-    # In case you want to add such helpers to another class, you can do
-    # that as long as this new class includes both url_helpers and
-    # mounted_helpers. Example:
-    #
-    #     include Rails.application.routes.url_helpers
-    #     include Rails.application.routes.mounted_helpers
-    #
-    module UrlHelpers
-      def self.remove_helpers!
-        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
-          remove_method method
-        end
-      end
-    
-    def usage
-  <<-EOS
-list_running_app_ids [ -t <bundle-id> ]
-    
-        private
-    
-        # next matching brace for brace at from
-    def close_brace_pos(css, from, depth = 0)
-      s = CharStringScanner.new(css[from..-1])
-      while (b = s.scan_next(BRACE_RE))
-        depth += (b == '}' ? -1 : +1)
-        break if depth.zero?
-      end
-      raise 'match not found for {' unless depth.zero?
-      from + s.pos - 1
-    end
-    
-            {
-          :always_update     => false,
-          :template_location => root + '/public/stylesheets/sass',
-          :css_location      => root + '/public/stylesheets',
-          :cache_location    => root + '/tmp/sass-cache',
-          :always_check      => env != 'production',
-          :quiet             => env != 'production',
-          :full_exception    => env != 'production'
-        }.freeze
-      end
-    end
-  end
-    
-          def markdown_podfile
-        UI::ErrorReport.markdown_podfile
-      end
-    
-            It is possible to specify a list of dependencies which will be used by
-        the template in the `Podfile.default` (normal targets) `Podfile.test`
-        (test targets) files which should be stored in the
-        `~/.cocoapods/templates` folder.
-      DESC
-      self.arguments = [
-        CLAide::Argument.new('XCODEPROJ', :false),
-      ]
-    
-            def find_address
-          if @order.bill_address_id == params[:id].to_i
-            @order.bill_address
-          elsif @order.ship_address_id == params[:id].to_i
-            @order.ship_address
-          else
-            raise CanCan::AccessDenied
-          end
-        end
-      end
-    end
+    f.puts 'HOMEBREW_PREFIX: #{HOMEBREW_PREFIX}'
+    f.puts 'HOMEBREW_REPOSITORY: #{HOMEBREW_REPOSITORY}'
+    f.puts 'HOMEBREW_CELLAR: #{HOMEBREW_CELLAR}'
+    f.puts 'HOMEBREW_BOTTLE_DOMAIN: #{BottleSpecification::DEFAULT_DOMAIN}'
+    f.puts hardware
+    f.puts 'OS X: #{MacOS.full_version}-#{kernel}'
+    f.puts 'Xcode: #{xcode ? xcode : 'N/A'}'
+    f.puts 'CLT: #{clt ? clt : 'N/A'}'
+    f.puts 'GCC-4.0: build #{gcc_40}' if gcc_40
+    f.puts 'GCC-4.2: build #{gcc_42}' if gcc_42
+    f.puts 'LLVM-GCC: build #{llvm}'  if llvm
+    f.puts 'Clang: #{clang ? '#{clang} build #{clang_build}' : 'N/A'}'
+    f.puts 'MacPorts/Fink: #{macports_or_fink}' if macports_or_fink
+    f.puts 'X11: #{describe_x11}'
+    f.puts 'System Ruby: #{describe_system_ruby}'
+    f.puts 'Perl: #{describe_perl}'
+    f.puts 'Python: #{describe_python}'
+    f.puts 'Ruby: #{describe_ruby}'
+    f.puts 'Java: #{describe_java}'
   end
 end
+
+    
+    class PrettyListing
+  def initialize(path)
+    Pathname.new(path).children.sort_by { |p| p.to_s.downcase }.each do |pn|
+      case pn.basename.to_s
+      when 'bin', 'sbin'
+        pn.find { |pnn| puts pnn unless pnn.directory? }
+      when 'lib'
+        print_dir pn do |pnn|
+          # dylibs have multiple symlinks and we don't care about them
+          (pnn.extname == '.dylib' || pnn.extname == '.pc') && !pnn.symlink?
+        end
+      else
+        if pn.directory?
+          if pn.symlink?
+            puts '#{pn} -> #{pn.readlink}'
+          else
+            print_dir pn
+          end
+        elsif Metafiles.list?(pn.basename.to_s)
+          puts pn
+        end
+      end
+    end
+  end
+    
+      def self.bottle_sha1(*)
+  end
+    
+      def url
+    if object.needs_redownload?
+      media_proxy_url(object.id, :original)
+    else
+      full_asset_url(object.file.url(:original))
+    end
+  end
+    
+          it 'sets a regeneration marker while regenerating' do
+        allow(RegenerationWorker).to receive(:perform_async)
+        get :show
+    
+            def on_case(case_node)
+          case_node.when_branches.each_with_object([]) do |when_node, previous|
+            when_node.each_condition do |condition|
+              next unless repeated_condition?(previous, condition)
+    
+            def autocorrect(node)
+          lambda do |corrector|
+            corrector.remove(node.loc.dot)
+            corrector.remove(node.loc.selector)
+          end
+        end
+    
+      let(:source) { ''something'.intern' }
+  let(:corrected) { autocorrect_source(source) }
