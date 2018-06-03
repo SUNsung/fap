@@ -1,69 +1,81 @@
 
         
-        
-def test_unicode_raw_json_item(httpbin):
-    r = http('--json', 'POST', httpbin.url + '/post',
-             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
-    assert HTTP_OK in r
-    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
+            for ns in n_samples:
+        for nf in n_features:
+            it += 1
+            print('==================')
+            print('Iteration %s of %s' % (it, max(len(n_samples),
+                                          len(n_features))))
+            print('==================')
+            n_informative = nf // 10
+            X, Y, coef_ = make_regression(n_samples=ns, n_features=nf,
+                                          n_informative=n_informative,
+                                          noise=0.1, coef=True)
     
-        :param content_range: the value of a Content-Range response header
-                          eg. 'bytes 21010-47021/47022'
-    :param resumed_from: first byte pos. from the Range request header
-    :return: total size of the response body when fully downloaded.
+        for (sbplt, vals, quantity,
+         build_time, query_time) in [(311, Nrange, 'N',
+                                      N_results_build,
+                                      N_results_query),
+                                     (312, Drange, 'D',
+                                      D_results_build,
+                                      D_results_query),
+                                     (313, krange, 'k',
+                                      k_results_build,
+                                      k_results_query)]:
+        ax = plt.subplot(sbplt, yscale='log')
+        plt.grid(True)
     
-            '''
-        raise NotImplementedError()
+        default_algorithms = 'custom-tracking-selection,custom-auto,' \
+                         'custom-reservoir-sampling,custom-pool,'\
+                         'python-core-sample,numpy-permutation'
+    
+    Does two benchmarks
     
     
-def humanize_bytes(n, precision=2):
-    # Author: Doug Latornell
-    # Licence: MIT
-    # URL: http://code.activestate.com/recipes/577081/
-    '''Return a humanized string representation of a number of bytes.
+def make_linkcode_resolve(package, url_fmt):
+    '''Returns a linkcode_resolve function for the given URL format
     
-        temporal_sample_weight = np.reshape(sample_weight, (len(sample_weight), 1))
-    temporal_sample_weight = np.repeat(temporal_sample_weight, timesteps, axis=1)
+        opener = build_opener()
+    html_filename = os.path.join(html_folder, lang + '.html')
+    if not os.path.exists(html_filename):
+        print('Downloading %s' % page)
+        request = Request(page)
+        # change the User Agent to avoid being blocked by Wikipedia
+        # downloading a couple of articles should not be considered abusive
+        request.add_header('User-Agent', 'OpenAnything/1.0')
+        html_content = opener.open(request).read()
+        open(html_filename, 'wb').write(html_content)
     
-        # with constructor argument, in Model
-    x = Input(shape=(1,))
-    y = Dense(2, trainable=False)(x)
-    model = Model(x, y)
-    assert model.trainable_weights == []
+        # TASK: Build a vectorizer / classifier pipeline that filters out tokens
+    # that are too rare or too frequent
     
-        Consider a Numpy data array `x` of shape `(samples, timesteps, features)`,
-    to be fed to an LSTM layer.
-    You want to mask timestep #3 and #5 because you lack data for
-    these timesteps. You can:
+        if f == os.path.basename(__file__):
+        continue
     
-        x = np.random.random((1, 3))
-    y = np.random.random((1, 3))
-    model.train_on_batch(x, y)
+    # Plot changes in predicted probabilities via arrows
+plt.figure(0)
+colors = ['r', 'g', 'b']
+for i in range(clf_probs.shape[0]):
+    plt.arrow(clf_probs[i, 0], clf_probs[i, 1],
+              sig_clf_probs[i, 0] - clf_probs[i, 0],
+              sig_clf_probs[i, 1] - clf_probs[i, 1],
+              color=colors[y_test[i]], head_width=1e-2)
     
-    print('Pad sequences (samples x time)')
-x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
-x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
+    # Create different classifiers. The logistic regression cannot do
+# multiclass out of the box.
+classifiers = {'L1 logistic': LogisticRegression(C=C, penalty='l1'),
+               'L2 logistic (OvR)': LogisticRegression(C=C, penalty='l2'),
+               'Linear SVC': SVC(kernel='linear', C=C, probability=True,
+                                 random_state=0),
+               'L2 logistic (Multinomial)': LogisticRegression(
+                C=C, solver='lbfgs', multi_class='multinomial'),
+               'GPC': GaussianProcessClassifier(kernel)
+               }
     
-    from keras import backend as K
-from keras.models import Sequential, Model
-from keras.layers import convolutional_recurrent, Input
-from keras.utils.test_utils import layer_test
-from keras import regularizers
-    
-    seq = Sequential()
-seq.add(ConvLSTM2D(filters=40, kernel_size=(3, 3),
-                   input_shape=(None, 40, 40, 1),
-                   padding='same', return_sequences=True))
-seq.add(BatchNormalization())
-    
-        def test_repr(self):
-        self.assertEqual('PollError(exhausted=%s, updated={sentinel.AR: '
-                         'sentinel.AR2})' % repr(set()), repr(self.invalid))
-    
-            # Self test
-        self.assertTrue(self.addr.conflicts(self.addr))
-        self.assertTrue(self.addr1.conflicts(self.addr1))
-        # This is a tricky one...
-        self.assertTrue(self.addr1.conflicts(self.addr2))
+    # Plot the ground-truth labelling
+plt.figure()
+plt.axes([0, 0, 1, 1])
+for l, c, n in zip(range(n_clusters), 'rgb',
+                   labels):
+    lines = plt.plot(X[y == l].T, c=c, alpha=.5)
+    lines[0].set_label(n)
