@@ -1,272 +1,365 @@
 
         
-            http://www.apache.org/licenses/LICENSE-2.0
+          // Called when a window close is cancelled by beforeunload handler.
+  virtual void OnWindowCloseCancelled(NativeWindow* window) {}
     
-    namespace tensorflow {
-namespace port {
-    }
-    }
     
-    #include 'tensorflow/core/lib/strings/strcat.h'
+    {}  // namespace mate
     
-    bool HloReachabilityMap::IsReachable(const HloInstruction* a,
-                                     const HloInstruction* b) const {
-  return GetBitVector(b).Get(GetIndex(a));
-}
+    #include 'ui/gfx/geometry/rect.h'
     
-        NodeDef* const_node3 = graph_def.add_node();
-    const_node3->set_name('const_node3');
-    const_node3->set_op('Const');
+      std::unique_ptr<base::ListValue> preferences_;
     
-    // TODO: Enable GPU support for angle op after resolving
-// build failures on GPU (See #10643 for context).
-#if 0 && GOOGLE_CUDA
-REGISTER_COMPLEX(GPU, float, complex64);
-REGISTER_COMPLEX(GPU, double, complex128);
-#endif
-    
-    TEST_F(GrpcDebugTest, SendSingleDebugTensorViaGrpcTest) {
-  Tensor tensor(DT_FLOAT, TensorShape({1, 1}));
-  tensor.flat<float>()(0) = 42.0;
-  const DebugNodeKey kDebugNodeKey('/job:localhost/replica:0/task:0/cpu:0',
-                                   'foo_tensor', 0, 'DebugIdentity');
-  TF_ASSERT_OK(DebugIO::PublishDebugTensor(
-      kDebugNodeKey, tensor, Env::Default()->NowMicros(), {server_data_.url}));
-  TF_ASSERT_OK(DebugIO::CloseDebugURL(server_data_.url));
-    }
-    
-      // Clear debug data (e.g., Tensors) received so far.
-  void ClearReceivedDebugData();
-    
-    #include <zlib.h>
-    
-    template<typename T> // unused
-struct algorithm_spec<CollectiveType::BARRIER, T> {
-  static GlooCache::key_type key(THDGroup group_id) {
-    return std::make_tuple(CollectiveType::BARRIER, group_id, UNUSED_DEVICE, UNUSED_STREAM,
-                           UNUSED_BYTES, UNUSED_BYTES, UNUSED_OP, UNUSED_RANK);
-  }
-    }
-    
-    #define THDPDoubleStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPDoubleStorageClass)
-#define THDPFloatStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPFloatStorageClass)
-#define THDPHalfStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPHalfStorageClass)
-#define THDPLongStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPLongStorageClass)
-#define THDPIntStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPIntStorageClass)
-#define THDPShortStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPShortStorageClass)
-#define THDPCharStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPCharStorageClass)
-#define THDPByteStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPByteStorageClass)
-    
-    #undef THHostTensor
-#undef THHostTensor_
-#undef THHostStorage
-#undef THHostStorage_
+    #endif  // CHROME_BROWSER_EXTENSIONS_GLOBAL_SHORTCUT_LISTENER_H_
 
     
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
+      // Sets time interval between updates. By default list of sources and their
+  // thumbnail are updated once per second. If called after StartUpdating() then
+  // it will take effect only after the next update.
+  virtual void SetUpdatePeriod(base::TimeDelta period) = 0;
+    
+    #endif  // CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
 
     
-      WriteOptions write_options;
-  ASSERT_OK(db->Put(write_options, '1', 'b'));
-  ASSERT_OK(db->Put(write_options, '2', 'c'));
-  ASSERT_OK(db->Put(write_options, '3', 'd'));
-  ASSERT_OK(db->Put(write_options, '4', 'e'));
-  ASSERT_OK(db->Put(write_options, '5', 'f'));
+     private:
+  // IPC message handler.
+  int32_t OnHostMsgGetDeviceID(ppapi::host::HostMessageContext* context);
+  int32_t OnHostMsgGetHmonitor(ppapi::host::HostMessageContext* context);
+  int32_t OnHostMsgMonitorIsExternal(ppapi::host::HostMessageContext* context);
     
-    class FilterPolicy;
+    #include 'chrome/browser/speech/tts_platform.h'
     
-    #include <math.h>
-#include <stdio.h>
-#include 'port/port.h'
-#include 'util/histogram.h'
+    // filenames
+const base::FilePath::CharType kCacheDirname[] = FPL('Cache');
+const base::FilePath::CharType kChannelIDFilename[] = FPL('Origin Bound Certs');
+const base::FilePath::CharType kCookieFilename[] = FPL('Cookies');
+const base::FilePath::CharType kCRLSetFilename[] =
+    FPL('Certificate Revocation Lists');
+const base::FilePath::CharType kCustomDictionaryFileName[] =
+    FPL('Custom Dictionary.txt');
+const base::FilePath::CharType kExtensionActivityLogFilename[] =
+    FPL('Extension Activity');
+const base::FilePath::CharType kExtensionsCookieFilename[] =
+    FPL('Extension Cookies');
+const base::FilePath::CharType kFirstRunSentinel[] = FPL('First Run');
+const base::FilePath::CharType kGCMStoreDirname[] = FPL('GCM Store');
+const base::FilePath::CharType kLocalStateFilename[] = FPL('Local State');
+const base::FilePath::CharType kLocalStorePoolName[] = FPL('LocalStorePool');
+const base::FilePath::CharType kMediaCacheDirname[] = FPL('Media Cache');
+const base::FilePath::CharType kNetworkPersistentStateFilename[] =
+    FPL('Network Persistent State');
+const base::FilePath::CharType kOfflinePageArchviesDirname[] =
+    FPL('Offline Pages/archives');
+const base::FilePath::CharType kOfflinePageMetadataDirname[] =
+    FPL('Offline Pages/metadata');
+const base::FilePath::CharType kPreferencesFilename[] = FPL('Preferences');
+const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[] =
+    FPL('Protected Preferences');
+const base::FilePath::CharType kReadmeFilename[] = FPL('README');
+const base::FilePath::CharType kResetPromptMementoFilename[] =
+    FPL('Reset Prompt Memento');
+const base::FilePath::CharType kSafeBrowsingBaseFilename[] =
+    FPL('Safe Browsing');
+const base::FilePath::CharType kSecurePreferencesFilename[] =
+    FPL('Secure Preferences');
+const base::FilePath::CharType kServiceStateFileName[] = FPL('Service State');
+const base::FilePath::CharType kSingletonCookieFilename[] =
+    FPL('SingletonCookie');
+const base::FilePath::CharType kSingletonLockFilename[] = FPL('SingletonLock');
+const base::FilePath::CharType kSingletonSocketFilename[] =
+    FPL('SingletonSocket');
+const base::FilePath::CharType kSupervisedUserSettingsFilename[] =
+    FPL('Managed Mode Settings');
+const base::FilePath::CharType kThemePackFilename[] = FPL('Cached Theme.pak');
+const base::FilePath::CharType kThemePackMaterialDesignFilename[] =
+    FPL('Cached Theme Material Design.pak');
+const base::FilePath::CharType kWebAppDirname[] = FPL('Web Applications');
     
-    // A very simple random number generator.  Not especially good at
-// generating truly random bits, but good enough for our needs in this
-// package.
-class Random {
- private:
-  uint32_t seed_;
+    // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
+    
+    class App {
  public:
-  explicit Random(uint32_t s) : seed_(s & 0x7fffffffu) {
-    // Avoid bad seeds.
-    if (seed_ == 0 || seed_ == 2147483647L) {
-      seed_ = 1;
+  static void Call(const std::string& method,
+                   const base::ListValue& arguments);
     }
+    
+      virtual void Call(const std::string& method,
+                    const base::ListValue& arguments,
+                    content::RenderFrameHost* rvh = nullptr);
+  virtual void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result);
+    
+    
+    {} // namespace ui
+    
+    void MenuItem::Call(const std::string& method,
+                    const base::ListValue& arguments,
+                    content::RenderFrameHost* rvh) {
+  if (method == 'SetLabel') {
+    std::string label;
+    arguments.GetString(0, &label);
+    SetLabel(label);
+  } else if (method == 'SetIcon') {
+    std::string icon;
+    arguments.GetString(0, &icon);
+    SetIcon(icon);
+  } else if (method == 'SetIconIsTemplate') {
+    bool isTemplate;
+    arguments.GetBoolean(0, &isTemplate);
+    SetIconIsTemplate(isTemplate);
+  } else if (method == 'SetTooltip') {
+    std::string tooltip;
+    arguments.GetString(0, &tooltip);
+    SetTooltip(tooltip);
+  } else if (method == 'SetEnabled') {
+    bool enabled = true;
+    arguments.GetBoolean(0, &enabled);
+    SetEnabled(enabled);
+  } else if (method == 'SetChecked') {
+    bool checked = false;
+    arguments.GetBoolean(0, &checked);
+    SetChecked(checked);
+  } else if (method == 'SetSubmenu') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    SetSubmenu(object_manager()->GetApiObject<Menu>(object_id));
+#if defined(OS_MACOSX)
+  } else if (method == 'SetKey') {
+    std::string key;
+    arguments.GetString(0, &key);
+    SetKey(key);
+  } else if (method == 'SetModifiers') {
+    std::string mod;
+    arguments.GetString(0, &mod);
+    SetModifiers(mod);
+#endif
+  } else {
+    NOTREACHED() << 'Invalid call to MenuItem method:' << method
+                 << ' arguments:' << arguments;
   }
-  uint32_t Next() {
-    static const uint32_t M = 2147483647L;   // 2^31-1
-    static const uint64_t A = 16807;  // bits 14, 8, 7, 5, 2, 1, 0
-    // We are computing
-    //       seed_ = (seed_ * A) % M,    where M = 2^31-1
-    //
-    // seed_ must not be zero or M, or else all subsequent computed values
-    // will be zero or M respectively.  For all other values, seed_ will end
-    // up cycling through every number in [1,M-1]
-    uint64_t product = seed_ * A;
-    }
-    }
-    
-      Status AddRecord(const Slice& slice);
-    
-    
-    {}  // namespace leveldb
-    
-    // redirect the messages to R's console.
-namespace dmlc {
-void CustomLogMessage::Log(const std::string& msg) {
-  Rprintf('%s\n', msg.c_str());
 }
-}  // namespace dmlc
     
-    /*! \brief training parameters */
-struct GBTreeTrainParam : public dmlc::Parameter<GBTreeTrainParam> {
-  /*!
-   * \brief number of parallel trees constructed each iteration
-   *  use this option to support boosted random forest
-   */
-  int num_parallel_tree;
-  /*! \brief tree updater sequence */
-  std::string updater_seq;
-  /*! \brief type of boosting process to run */
-  int process_type;
-  // flag to print out detailed breakdown of runtime
-  int debug_verbose;
-  std::string predictor;
-  // declare parameters
-  DMLC_DECLARE_PARAMETER(GBTreeTrainParam) {
-    DMLC_DECLARE_FIELD(num_parallel_tree)
-        .set_default(1)
-        .set_lower_bound(1)
-        .describe('Number of parallel trees constructed during each iteration.'\
-                  ' This option is used to support boosted random forest');
-    DMLC_DECLARE_FIELD(updater_seq)
-        .set_default('grow_colmaker,prune')
-        .describe('Tree updater sequence.');
-    DMLC_DECLARE_FIELD(process_type)
-        .set_default(kDefault)
-        .add_enum('default', kDefault)
-        .add_enum('update', kUpdate)
-        .describe('Whether to run the normal boosting process that creates new trees,'\
-                  ' or to update the trees in an existing model.');
-    DMLC_DECLARE_FIELD(debug_verbose)
-        .set_lower_bound(0)
-        .set_default(0)
-        .describe('flag to print out detailed breakdown of runtime');
-    // add alias
-    DMLC_DECLARE_ALIAS(updater_seq, updater);
-    DMLC_DECLARE_FIELD(predictor)
-      .set_default('cpu_predictor')
-      .describe('Predictor algorithm type');
-  }
+    void MenuItem::OnClick(GtkWidget* widget) {
+  if (block_active_)
+    return;
+    }
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.App.clearCache', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwAppClearCacheFunction);
 };
     
-    #if DMLC_ENABLE_STD_THREAD
-#include '../src/data/sparse_page_source.cc'
-#include '../src/data/sparse_page_dmatrix.cc'
-#include '../src/data/sparse_page_writer.cc'
+    bool NwClipboardReadAvailableTypesFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  bool contains_filenames;
+  std::vector<base::string16> types;
+  clipboard->ReadAvailableTypes(ui::CLIPBOARD_TYPE_COPY_PASTE, &types, &contains_filenames);
+  for(std::vector<base::string16>::iterator it = types.begin(); it != types.end(); it++) {
+    if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypeText)) {
+      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_TEXT))));
+    } else if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypeHTML)) {
+      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_HTML))));
+    } else if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypeRTF)) {
+      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_RTF))));
+    } else if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypePNG)) {
+      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_PNG))));
+      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_JPEG))));
+    }
+  }
+  return true;
+}
+    
+    PyDescriptorDatabase::~PyDescriptorDatabase() { Py_DECREF(py_database_); }
+    
+      // Find the file that declares the given fully-qualified symbol name.
+  bool FindFileContainingSymbol(const string& symbol_name,
+                                FileDescriptorProto* output);
+    
+      void WriteIntroduction(io::Printer* printer);
+  void WriteDescriptor(io::Printer* printer);
+  void WriteGeneratedCodeInfo(const Descriptor* descriptor,
+                              io::Printer* printer,
+                              bool last);
+    
+    // TODO(jonskeet): Refactor repeated field support; all the implementations are *really* similar. We
+// should probably have a RepeatedFieldGeneratorBase.
+class RepeatedEnumFieldGenerator : public FieldGeneratorBase {
+ public:
+  RepeatedEnumFieldGenerator(const FieldDescriptor* descriptor,
+                             int fieldOrdinal,
+                             const Options *options);
+  ~RepeatedEnumFieldGenerator();
+    }
+    
+    
+    { private:
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RepeatedMessageFieldGenerator);
+};
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+    MessageGenerator* ImmutableGeneratorFactory::NewMessageGenerator(
+    const Descriptor* descriptor) const {
+  if (HasDescriptorMethods(descriptor, context_->EnforceLite())) {
+    return new ImmutableMessageGenerator(descriptor, context_);
+  } else {
+    return new ImmutableMessageLiteGenerator(descriptor, context_);
+  }
+}
+    
+    int PowerIphone::get_power_percent_left() {
+	if (UpdatePowerInfo()) {
+		return percent_left;
+	} else {
+		return -1;
+	}
+}
+    
+    		case LWS_CALLBACK_CLIENT_ESTABLISHED:
+			peer->set_wsi(wsi);
+			peer_data->peer_id = 0;
+			peer_data->in_size = 0;
+			peer_data->in_count = 0;
+			peer_data->out_count = 0;
+			peer_data->rbw.resize(16);
+			peer_data->rbr.resize(16);
+			peer_data->force_close = false;
+			_on_connect(lws_get_protocol(wsi)->name);
+			break;
+    
+    
+    {	return false;
+}
+    
+    	static void _bind_methods();
+    
+    /// This class is required to implement custom collision behaviour in the broadphase
+struct GodotFilterCallback : public btOverlapFilterCallback {
+	static bool test_collision_filters(uint32_t body0_collision_layer, uint32_t body0_collision_mask, uint32_t body1_collision_layer, uint32_t body1_collision_mask);
+    }
+    
+      public:
+    jpeg_decoder_mem_stream() : m_pSrc_data(NULL), m_ofs(0), m_size(0) { }
+    jpeg_decoder_mem_stream(const uint8 *pSrc_data, uint size) : m_pSrc_data(pSrc_data), m_ofs(0), m_size(size) { }
+    
+    void opus_ifft_neon(const kiss_fft_state *st,
+                    const kiss_fft_cpx *fin,
+                    kiss_fft_cpx *fout);
+    
+        private:
+        void EnumerateStatefulNodesForRoot(ComputationNetwork& net, ComputationNodeBasePtr root, std::map<wstring, shared_ptr<IStatefulNode>>& statefulNodes)
+        {
+            for (const auto& node : net.GetAllNodesForRoot(root))
+            {
+                const auto& name = node->GetName();
+                if (statefulNodes.find(name) != statefulNodes.end())
+                    continue; // already in the list  --TODO: use insert()
+                shared_ptr<IStatefulNode> pNode = dynamic_pointer_cast<IStatefulNode>(node);
+                if (pNode) // if it is an IStatefulNode then report it
+                    statefulNodes[name] = pNode;
+            }
+        }
+    
+        Matrix<float>::MultiplyAndWeightedAdd(alpha, mAdense, transposeA, mBdense, transposeB, beta, mCdense);
+    Matrix<float>::MultiplyAndWeightedAdd(alpha, mAsparse, transposeA, mBsparse, transposeB, beta, mCsparse);
+    mCsparse.SwitchToMatrixType(MatrixType::DENSE, matrixFormatDense, true);
+    BOOST_CHECK(mCsparse.IsEqualTo(mCdense, c_epsilonFloatE4));
+    
+    #include 'PostComputingActions.h'
+    
+    // -----------------------------------------------------------------------
+// functions exposed by this module
+// -----------------------------------------------------------------------
+    
+    #ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
 #endif
     
-    void OutputImage::SaveToJpegData(JPEGData* jpg) const {
-  assert(components_[0].factor_x() == 1);
-  assert(components_[0].factor_y() == 1);
-  jpg->width = width_;
-  jpg->height = height_;
-  jpg->max_h_samp_factor = 1;
-  jpg->max_v_samp_factor = 1;
-  jpg->MCU_cols = components_[0].width_in_blocks();
-  jpg->MCU_rows = components_[0].height_in_blocks();
-  int ncomp = components_[1].IsAllZero() && components_[2].IsAllZero() ? 1 : 3;
-  for (int i = 1; i < ncomp; ++i) {
-    jpg->max_h_samp_factor = std::max(jpg->max_h_samp_factor,
-                                      components_[i].factor_x());
-    jpg->max_v_samp_factor = std::max(jpg->max_h_samp_factor,
-                                      components_[i].factor_y());
-    jpg->MCU_cols = std::min(jpg->MCU_cols, components_[i].width_in_blocks());
-    jpg->MCU_rows = std::min(jpg->MCU_rows, components_[i].height_in_blocks());
-  }
-  jpg->components.resize(ncomp);
-  int q[3][kDCTBlockSize];
-  for (int c = 0; c < 3; ++c) {
-    memcpy(&q[c][0], components_[c].quant(), kDCTBlockSize * sizeof(q[0][0]));
-  }
-  for (int c = 0; c < ncomp; ++c) {
-    JPEGComponent* comp = &jpg->components[c];
-    assert(jpg->max_h_samp_factor % components_[c].factor_x() == 0);
-    assert(jpg->max_v_samp_factor % components_[c].factor_y() == 0);
-    comp->id = c;
-    comp->h_samp_factor = jpg->max_h_samp_factor / components_[c].factor_x();
-    comp->v_samp_factor = jpg->max_v_samp_factor / components_[c].factor_y();
-    comp->width_in_blocks = jpg->MCU_cols * comp->h_samp_factor;
-    comp->height_in_blocks = jpg->MCU_rows * comp->v_samp_factor;
-    comp->num_blocks = comp->width_in_blocks * comp->height_in_blocks;
-    comp->coeffs.resize(kDCTBlockSize * comp->num_blocks);
-    }
+    // GetWriter - get a reader type from the DLL
+// The F version gets the 'float' version, and D gets 'double'.
+extern 'C' DATAWRITER_API void GetWriterF(IDataWriter** pwriter);
+extern 'C' DATAWRITER_API void GetWriterD(IDataWriter** pwriter);
+    
+        // call SetStepOffset() at start of a multi-epoch training to set the index of the first epoch in that training
+    // This value is added to the local epoch index in TraceProgress().
+    static void SetStepOffset(size_t currentStepOffset)
+    {
+        GetStaticInstance().m_currentStepOffset = currentStepOffset;
     }
     
-    static const int kCrToGreenTable[256] = {
-  5990656,  5943854,  5897052,  5850250,  5803448,  5756646,  5709844,  5663042,
-  5616240,  5569438,  5522636,  5475834,  5429032,  5382230,  5335428,  5288626,
-  5241824,  5195022,  5148220,  5101418,  5054616,  5007814,  4961012,  4914210,
-  4867408,  4820606,  4773804,  4727002,  4680200,  4633398,  4586596,  4539794,
-  4492992,  4446190,  4399388,  4352586,  4305784,  4258982,  4212180,  4165378,
-  4118576,  4071774,  4024972,  3978170,  3931368,  3884566,  3837764,  3790962,
-  3744160,  3697358,  3650556,  3603754,  3556952,  3510150,  3463348,  3416546,
-  3369744,  3322942,  3276140,  3229338,  3182536,  3135734,  3088932,  3042130,
-  2995328,  2948526,  2901724,  2854922,  2808120,  2761318,  2714516,  2667714,
-  2620912,  2574110,  2527308,  2480506,  2433704,  2386902,  2340100,  2293298,
-  2246496,  2199694,  2152892,  2106090,  2059288,  2012486,  1965684,  1918882,
-  1872080,  1825278,  1778476,  1731674,  1684872,  1638070,  1591268,  1544466,
-  1497664,  1450862,  1404060,  1357258,  1310456,  1263654,  1216852,  1170050,
-  1123248,  1076446,  1029644,   982842,   936040,   889238,   842436,   795634,
-   748832,   702030,   655228,   608426,   561624,   514822,   468020,   421218,
-   374416,   327614,   280812,   234010,   187208,   140406,    93604,    46802,
-        0,   -46802,   -93604,  -140406,  -187208,  -234010,  -280812,  -327614,
-  -374416,  -421218,  -468020,  -514822,  -561624,  -608426,  -655228,  -702030,
-  -748832,  -795634,  -842436,  -889238,  -936040,  -982842, -1029644, -1076446,
- -1123248, -1170050, -1216852, -1263654, -1310456, -1357258, -1404060, -1450862,
- -1497664, -1544466, -1591268, -1638070, -1684872, -1731674, -1778476, -1825278,
- -1872080, -1918882, -1965684, -2012486, -2059288, -2106090, -2152892, -2199694,
- -2246496, -2293298, -2340100, -2386902, -2433704, -2480506, -2527308, -2574110,
- -2620912, -2667714, -2714516, -2761318, -2808120, -2854922, -2901724, -2948526,
- -2995328, -3042130, -3088932, -3135734, -3182536, -3229338, -3276140, -3322942,
- -3369744, -3416546, -3463348, -3510150, -3556952, -3603754, -3650556, -3697358,
- -3744160, -3790962, -3837764, -3884566, -3931368, -3978170, -4024972, -4071774,
- -4118576, -4165378, -4212180, -4258982, -4305784, -4352586, -4399388, -4446190,
- -4492992, -4539794, -4586596, -4633398, -4680200, -4727002, -4773804, -4820606,
- -4867408, -4914210, -4961012, -5007814, -5054616, -5101418, -5148220, -5195022,
- -5241824, -5288626, -5335428, -5382230, -5429032, -5475834, -5522636, -5569438,
- -5616240, -5663042, -5709844, -5756646, -5803448, -5850250, -5897052, -5943854,
+    
+    {    for (size_t i = 0; i < sorted_index_set.size(); ++i) {
+      bst_uint cid = sorted_index_set[i];
+      size_t dst_begin = page->offset[i];
+      size_t src_begin = disk_offset_[cid];
+      size_t num = disk_offset_[cid + 1] - disk_offset_[cid];
+      for (size_t j = 0; j < num; ++j) {
+        page->data[dst_begin + j] = SparseBatch::Entry(
+            index_.data[src_begin + j] + min_index_, value_.data[src_begin + j]);
+      }
+    }
+    return true;
+  }
+    
+    // logistic loss for binary classification task
+struct LogisticClassification : public LogisticRegression {
+  static const char* DefaultEvalMetric() { return 'error'; }
 };
     
-    void ComputeBlockDCTDouble(double block[64]) {
-  TransformBlock(block, DCT1d);
+        // update bias
+    for (int gid = 0; gid < ngroup; ++gid) {
+      auto grad = GetBiasGradientParallel(gid, ngroup, in_gpair->HostVector(), p_fmat);
+      auto dbias = static_cast<bst_float>(param_.learning_rate *
+                               CoordinateDeltaBias(grad.first, grad.second));
+      model->bias()[gid] += dbias;
+      UpdateBiasResidualParallel(gid, ngroup, dbias, &in_gpair->HostVector(), p_fmat);
+    }
+    
+      virtual int64_t size() CXX11_OVERRIDE;
+    
+    bool AbstractOptionHandler::getChangeOption() const
+{
+  return flags_ & FLAG_CHANGE_OPTION;
 }
     
-          // The sentinel node becomes the parent node.
-      size_t j_end = 2 * n - k;
-      tree[j_end].total_count_ =
-          tree[left].total_count_ + tree[right].total_count_;
-      tree[j_end].index_left_ = static_cast<int16_t>(left);
-      tree[j_end].index_right_or_value_ = static_cast<int16_t>(right);
-    
-    namespace guetzli {
+    namespace aria2 {
     }
     
-    #include <stddef.h>
-#include <stdint.h>
+    void AnnounceList::moveToStoppedAllowedTier()
+{
+  auto itr = find_wrap_if(std::begin(tiers_), std::end(tiers_), currentTier_,
+                          FindStoppedAllowedTier());
+  setCurrentTier(std::move(itr));
+}
     
-    struct HuffmanTableEntry {
-  // Initialize the value to an invalid symbol so that we can recognize it
-  // when reading the bit stream using a Huffman code with space > 0.
-  HuffmanTableEntry() : bits(0), value(0xffff) {}
+      CFRef(T ref) : ref_(ref) {}
+    
+    class AppleTLSContext : public TLSContext {
+public:
+  AppleTLSContext(TLSSessionSide side, TLSVersion ver)
+      : side_(side), minTLSVer_(ver), verifyPeer_(true), credentials_(nullptr)
+  {
+  }
     }
+    
+    std::unique_ptr<AuthConfig> AuthConfig::create(std::string user,
+                                               std::string password)
+{
+  if (user.empty()) {
+    return nullptr;
+  }
+  else {
+    return make_unique<AuthConfig>(std::move(user), std::move(password));
+  }
+}
