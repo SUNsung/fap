@@ -1,284 +1,345 @@
 
         
-        #endif  // STORAGE_LEVELDB_DB_BUILDER_H_
-
-    
-    Status DumpFile(Env* env, const std::string& fname, WritableFile* dst) {
-  FileType ftype;
-  if (!GuessType(fname, &ftype)) {
-    return Status::InvalidArgument(fname + ': unknown file type');
-  }
-  switch (ftype) {
-    case kLogFile:         return DumpLog(env, fname, dst);
-    case kDescriptorFile:  return DumpDescriptor(env, fname, dst);
-    case kTableFile:       return DumpTable(env, fname, dst);
-    default:
-      break;
-  }
-  return Status::InvalidArgument(fname + ': not a dump-able file type');
+        leveldb_env_t* leveldb_create_default_env() {
+  leveldb_env_t* result = new leveldb_env_t;
+  result->rep = Env::Default();
+  result->is_default = true;
+  return result;
 }
     
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+extern Iterator* NewDBIterator(
+    DBImpl* db,
+    const Comparator* user_key_comparator,
+    Iterator* internal_iter,
+    SequenceNumber sequence,
+    uint32_t seed);
     
-    {}  // namespace leveldb
-    
-    namespace leveldb {
+    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
+  // Order by:
+  //    increasing user key (according to user-supplied comparator)
+  //    decreasing sequence number
+  //    decreasing type (though sequence# should be enough to disambiguate)
+  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
+  if (r == 0) {
+    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
+    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
+    if (anum > bnum) {
+      r = -1;
+    } else if (anum < bnum) {
+      r = +1;
     }
+  }
+  return r;
+}
     
-    const Int Value::minInt = Int(~(UInt(-1) / 2));
-const Int Value::maxInt = Int(UInt(-1) / 2);
-const UInt Value::maxUInt = UInt(-1);
-#if defined(JSON_HAS_INT64)
-const Int64 Value::minInt64 = Int64(~(UInt64(-1) / 2));
-const Int64 Value::maxInt64 = Int64(UInt64(-1) / 2);
-const UInt64 Value::maxUInt64 = UInt64(-1);
-// The constant is hard-coded because some compiler have trouble
-// converting Value::maxUInt64 to a double correctly (AIX/xlC).
-// Assumes that UInt64 is a 64 bits integer.
-static const double maxUInt64AsDouble = 18446744073709551615.0;
-#endif // defined(JSON_HAS_INT64)
-const LargestInt Value::minLargestInt = LargestInt(~(LargestUInt(-1) / 2));
-const LargestInt Value::maxLargestInt = LargestInt(LargestUInt(-1) / 2);
-const LargestUInt Value::maxLargestUInt = LargestUInt(-1);
+      // Return a key suitable for lookup in a MemTable.
+  Slice memtable_key() const { return Slice(start_, end_ - start_); }
     
     
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-    #include <string>
-    
-    // Author: kenton@google.com (Kenton Varda)
-    
-      // Returns an estimate of the number of bytes the printed code will compile to
-  virtual int GenerateNonNestedInitializationCode(io::Printer* printer);
-    
-      virtual MessageGenerator* NewMessageGenerator(
-      const Descriptor* descriptor) const;
-    
-      new_tensor->storage = nullptr;
-  new_tensor->storageOffset = 0;
-    
-    
-    {  private:
-    QueueWorker::Request _request;
+    {  // Errors
+  static const char* errors[] = {
+    '',
+    'foo',
+    'foo-dx-100.log',
+    '.log',
+    '',
+    'manifest',
+    'CURREN',
+    'CURRENTX',
+    'MANIFES',
+    'MANIFEST',
+    'MANIFEST-',
+    'XMANIFEST-3',
+    'MANIFEST-3x',
+    'LOC',
+    'LOCKx',
+    'LO',
+    'LOGx',
+    '18446744073709551616.log',
+    '184467440737095516150.log',
+    '100',
+    '100.',
+    '100.lop'
   };
+  for (int i = 0; i < sizeof(errors) / sizeof(errors[0]); i++) {
+    std::string f = errors[i];
+    ASSERT_TRUE(!ParseFileName(f, &number, &type)) << f;
+  }
+}
     
-    #define THC_GENERIC_FILE 'torch/csrc/generic/Storage.h'
-#include <THC/THCGenerateAllTypes.h>
+          case kPrevLogNumber:
+        if (GetVarint64(&input, &prev_log_number_)) {
+          has_prev_log_number_ = true;
+        } else {
+          msg = 'previous log number';
+        }
+        break;
     
-    #ifdef DEBUG_LOG
-#define COLOR '\033[31;1m'
-#define RESET '\033[0m'
-#define __DEBUG(msg, ...) fprintf(stderr, COLOR msg '%c' RESET, __VA_ARGS__);
-#define DEBUG(...) __DEBUG(__VA_ARGS__, '\n')
-#else
-#define DEBUG(...) (void)0
-#endif
+     private:
+  friend class VersionSet;
     
-    ByteArray::ByteArray(const ByteArray& arr)
-  : _data(arr._data)
-{}
+      void Add(const char* smallest, const char* largest,
+           SequenceNumber smallest_seq = 100,
+           SequenceNumber largest_seq = 100) {
+    FileMetaData* f = new FileMetaData;
+    f->number = files_.size() + 1;
+    f->smallest = InternalKey(smallest, smallest_seq, kTypeValue);
+    f->largest = InternalKey(largest, largest_seq, kTypeValue);
+    files_.push_back(f);
+  }
     
-    namespace thd { namespace rpc {
-    }
-    }
-    
-    template <typename T, typename... Ts>
-struct or_trait<T, Ts...>
-  : std::conditional<T::value, T, or_trait<Ts...>>::type {};
-    
-      // Start looping through starting at the first options
-  // (so skip the exports)
-  for (auto iter = line.begin() + options_index; iter != line.end(); ++iter) {
-    if (iter->compare('-ro') == 0 || iter->compare('-o') == 0) {
-      readonly = 1;
+      ~Benchmark() {
+    if (!db_->close()) {
+      fprintf(stderr, 'close error: %s\n', db_->error().name());
     }
   }
     
-     private:
-  /*
-   * @brief When `get`ing event results, return EventID%s from time indexes.
-   *
-   * Used by EventSubscriber::get to retrieve EventID, EventTime indexes. This
-   * applies the lookup-efficiency checks for time list appropriate bins.
-   * If the time range in 24 hours and there is a 24-hour list bin it will
-   * be queried using a single backing store `Get` followed by two `Get`s of
-   * the most-specific boundary lists.
-   *
-   * @param index the set of index to scan.
-   * @param optimize if true apply optimization checks.
-   *
-   * @return List of EventID, EventTime%s
-   */
-  std::vector<EventRecord> getRecords(const std::vector<std::string>& indexes,
-                                      bool optimize = true);
+    // A Comparator object provides a total order across slices that are
+// used as keys in an sstable or a database.  A Comparator implementation
+// must be thread-safe since leveldb may invoke its methods concurrently
+// from multiple threads.
+class Comparator {
+ public:
+  virtual ~Comparator();
+    }
+    
+      // Return the name of this policy.  Note that if the filter encoding
+  // changes in an incompatible way, the name returned by this method
+  // must be changed.  Otherwise, old incompatible filters may be
+  // passed to methods of this type.
+  virtual const char* Name() const = 0;
+    
+    #endif  // GTEST_INCLUDE_GTEST_GTEST_MESSAGE_H_
+
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37, typename T38, typename T39, typename T40>
+internal::ValueArray40<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+    T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40> Values(T1 v1,
+    T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11,
+    T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19,
+    T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25, T26 v26, T27 v27,
+    T28 v28, T29 v29, T30 v30, T31 v31, T32 v32, T33 v33, T34 v34, T35 v35,
+    T36 v36, T37 v37, T38 v38, T39 v39, T40 v40) {
+  return internal::ValueArray40<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
+      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39,
+      T40>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15,
+      v16, v17, v18, v19, v20, v21, v22, v23, v24, v25, v26, v27, v28, v29,
+      v30, v31, v32, v33, v34, v35, v36, v37, v38, v39, v40);
+}
+    
+    #ifndef GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
+#define GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
+    
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED2.  Don't use
+// this in your code.
+#define GTEST_PRED2_(pred, v1, v2, on_failure)\
+  GTEST_ASSERT_(::testing::AssertPred2Helper(#pred, \
+                                             #v1, \
+                                             #v2, \
+                                             pred, \
+                                             v1, \
+                                             v2), on_failure)
+    
+      // If input name has a trailing separator character, removes it and returns
+  // the name, otherwise return the name string unmodified.
+  // On Windows platform, uses \ as the separator, other platforms use /.
+  FilePath RemoveTrailingPathSeparator() const;
+    
+    
+template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9>
+class CartesianProductGenerator9
+    : public ParamGeneratorInterface< ::std::tr1::tuple<T1, T2, T3, T4, T5, T6,
+        T7, T8, T9> > {
+ public:
+  typedef ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> ParamType;
+    }
+    
+    
+    {        static_cast<ParamGenerator<T$j> >(g$(j)_)
+]]));
+  }
+    
+      // Creates an ANSI string from the given wide string, allocating
+  // memory using new. The caller is responsible for deleting the return
+  // value using delete[]. Returns the ANSI string, or NULL if the
+  // input is NULL.
+  //
+  // The returned string is created using the ANSI codepage (CP_ACP) to
+  // match the behaviour of the ANSI versions of Win32 calls and the
+  // C runtime.
+  static const char* Utf16ToAnsi(LPCWSTR utf16_str);
+#endif
+    
+    template <GTEST_9_TYPENAMES_(T)>
+struct tuple_size<GTEST_9_TUPLE_(T) > {
+  static const int value = 9;
+};
+    
+    // 6.1.4 Pairs.
+// Unimplemented.
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29>
+struct Types29 {
+  typedef T1 Head;
+  typedef Types28<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+      T29> Tail;
+};
+    
+    #define THPDoubleStorage_CData(obj)  (obj)->cdata
+#define THPFloatStorage_CData(obj)   (obj)->cdata
+#define THPHalfStorage_CData(obj)    (obj)->cdata
+#define THPLongStorage_CData(obj)    (obj)->cdata
+#define THPIntStorage_CData(obj)     (obj)->cdata
+#define THPShortStorage_CData(obj)   (obj)->cdata
+#define THPCharStorage_CData(obj)    (obj)->cdata
+#define THPByteStorage_CData(obj)    (obj)->cdata
+    
+      std::unique_ptr<ManagerServerSocket> srv_socket;
+  try {
+    char tmpfile[L_tmpnam];
+    if (std::tmpnam(tmpfile) == NULL)
+      throw std::runtime_error('could not generate a random filename for manager socket');
+    // TODO: better strategy for generating tmp names
+    // TODO: retry on collisions - this can easily fail
+    srv_socket.reset(new ManagerServerSocket(std::string(tmpfile)));
+    register_fd(srv_socket->socket_fd);
+    print_init_message(tmpfile);
+    DEBUG('opened socket %s', tmpfile);
+  } catch(...) {
+    print_init_message('ERROR');
+    throw;
+  }
+    
+    void THDTensor_(gesvd)(THDTensor *ru, THDTensor *rs, THDTensor *rv, THDTensor *a,
+                       const char *jobu) {
+  THDTensor *ra = THDTensor_(new)();
+  THDTensor_(gesvd2)(ru, rs, rv,  ra, a, jobu);
+  THDTensor_(free)(ra);
+}
+    
+    // Data pertaining to configuration of the generator with respect to anything
+// that may be used internally at Google.
+struct GeneratorConfiguration {
+  GeneratorConfiguration();
+  grpc::string grpc_package_root;
+  // TODO(https://github.com/grpc/grpc/issues/8622): Drop this.
+  grpc::string beta_package_root;
+  // TODO(https://github.com/google/protobuf/issues/888): Drop this.
+  grpc::string import_prefix;
+};
+    
+    std::vector<grpc::string_ref> SecureAuthContext::FindPropertyValues(
+    const grpc::string& name) const {
+  if (!ctx_) {
+    return std::vector<grpc::string_ref>();
+  }
+  grpc_auth_property_iterator iter =
+      grpc_auth_context_find_properties_by_name(ctx_, name.c_str());
+  const grpc_auth_property* property = nullptr;
+  std::vector<grpc::string_ref> values;
+  while ((property = grpc_auth_property_iterator_next(&iter))) {
+    values.push_back(grpc::string_ref(property->value, property->value_length));
+  }
+  return values;
+}
     
     #include <gtest/gtest.h>
     
-    SHELL_FLAG(bool, shell_only, true, 'TEST SHELL DESCRIPTION');
-EXTENSION_FLAG(bool, extension_only, true, 'TEST EXTENSION DESCRIPTION');
+    gpr_atm grpc::testing::interop::g_got_sigint;
     
-    /// Unlike checkChildProcessStatus, this will block until process exits.
-static bool getProcessExitCode(osquery::PlatformProcess& process,
-                               int& exitCode) {
-  if (!process.isValid()) {
-    return false;
-  }
-    }
     
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_ImplDX9_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_ImplDX9_CreateDeviceObjects();
+    {  return r;
+}
+
     
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_ImplGlfwGL2_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_ImplGlfwGL2_CreateDeviceObjects();
+    #include 'test/cpp/util/service_describer.h'
     
-            D3DCompile(vertexShader, strlen(vertexShader), NULL, NULL, NULL, 'main', 'vs_4_0', 0, 0, &g_pVertexShaderBlob, NULL);
-        if (g_pVertexShaderBlob == NULL) // NB: Pass ID3D10Blob* pErrorBlob to D3DCompile() to get error showing in (const char*)pErrorBlob->GetBufferPointer(). Make sure to Release() the blob!
+    IMGUI_API bool        ImGui_Marmalade_Init(bool install_callbacks);
+IMGUI_API void        ImGui_Marmalade_Shutdown();
+IMGUI_API void        ImGui_Marmalade_NewFrame();
+IMGUI_API void        ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
+    
+    // Implemented features:
+//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+//  [X] Gamepad navigation mapping. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
+    
+        VkVertexInputAttributeDescription attribute_desc[3] = {};
+    attribute_desc[0].location = 0;
+    attribute_desc[0].binding = binding_desc[0].binding;
+    attribute_desc[0].format = VK_FORMAT_R32G32_SFLOAT;
+    attribute_desc[0].offset = (size_t)(&((ImDrawVert*)0)->pos);
+    attribute_desc[1].location = 1;
+    attribute_desc[1].binding = binding_desc[0].binding;
+    attribute_desc[1].format = VK_FORMAT_R32G32_SFLOAT;
+    attribute_desc[1].offset = (size_t)(&((ImDrawVert*)0)->uv);
+    attribute_desc[2].location = 2;
+    attribute_desc[2].binding = binding_desc[0].binding;
+    attribute_desc[2].format = VK_FORMAT_R8G8B8A8_UNORM;
+    attribute_desc[2].offset = (size_t)(&((ImDrawVert*)0)->col);
+    
+            // Create the input layout
+        D3D11_INPUT_ELEMENT_DESC local_layout[] = {
+            { 'POSITION', 0, DXGI_FORMAT_R32G32_FLOAT,   0, (size_t)(&((ImDrawVert*)0)->pos), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            { 'TEXCOORD', 0, DXGI_FORMAT_R32G32_FLOAT,   0, (size_t)(&((ImDrawVert*)0)->uv),  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            { 'COLOR',    0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, (size_t)(&((ImDrawVert*)0)->col), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        };
+        if (g_pd3dDevice->CreateInputLayout(local_layout, 3, g_pVertexShaderBlob->GetBufferPointer(), g_pVertexShaderBlob->GetBufferSize(), &g_pInputLayout) != S_OK)
             return false;
-        if (g_pd3dDevice->CreateVertexShader((DWORD*)g_pVertexShaderBlob->GetBufferPointer(), g_pVertexShaderBlob->GetBufferSize(), &g_pVertexShader) != S_OK)
-            return false;
     
-        g_pd3dCommandList = command_list;
+            ID3D12Resource* uploadBuffer = NULL;
+        HRESULT hr = g_pd3dDevice->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc,
+            D3D12_RESOURCE_STATE_GENERIC_READ, NULL, IID_PPV_ARGS(&uploadBuffer));
+        IM_ASSERT(SUCCEEDED(hr));
     
-    
-    {    ImGuiIO& io = ImGui::GetIO();
-    switch (msg)
-    {
-    case WM_LBUTTONDOWN: case WM_LBUTTONDBLCLK:
-    case WM_RBUTTONDOWN: case WM_RBUTTONDBLCLK:
-    case WM_MBUTTONDOWN: case WM_MBUTTONDBLCLK:
-    {
-        int button = 0;
-        if (msg == WM_LBUTTONDOWN || msg == WM_LBUTTONDBLCLK) button = 0;
-        if (msg == WM_RBUTTONDOWN || msg == WM_RBUTTONDBLCLK) button = 1;
-        if (msg == WM_MBUTTONDOWN || msg == WM_MBUTTONDBLCLK) button = 2;
-        if (!ImGui::IsAnyMouseDown() && ::GetCapture() == NULL)
-            ::SetCapture(hwnd);
-        io.MouseDown[button] = true;
-        return 0;
-    }
-    case WM_LBUTTONUP:
-    case WM_RBUTTONUP:
-    case WM_MBUTTONUP:
-    {
-        int button = 0;
-        if (msg == WM_LBUTTONUP) button = 0;
-        if (msg == WM_RBUTTONUP) button = 1;
-        if (msg == WM_MBUTTONUP) button = 2;
-        io.MouseDown[button] = false;
-        if (!ImGui::IsAnyMouseDown() && ::GetCapture() == hwnd)
-            ::ReleaseCapture();
-        return 0;
-    }
-    case WM_MOUSEWHEEL:
-        io.MouseWheel += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
-        return 0;
-    case WM_MOUSEHWHEEL:
-        io.MouseWheelH += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
-        return 0;
-    case WM_MOUSEMOVE:
-        io.MousePos.x = (signed short)(lParam);
-        io.MousePos.y = (signed short)(lParam >> 16);
-        return 0;
-    case WM_KEYDOWN:
-    case WM_SYSKEYDOWN:
-        if (wParam < 256)
-            io.KeysDown[wParam] = 1;
-        return 0;
-    case WM_KEYUP:
-    case WM_SYSKEYUP:
-        if (wParam < 256)
-            io.KeysDown[wParam] = 0;
-        return 0;
-    case WM_CHAR:
-        // You can also use ToAscii()+GetKeyboardState() to retrieve characters.
-        if (wParam > 0 && wParam < 0x10000)
-            io.AddInputCharacter((unsigned short)wParam);
-        return 0;
-    case WM_SETCURSOR:
-        if (LOWORD(lParam) == HTCLIENT && ImGui_ImplWin32_UpdateMouseCursor())
-            return 1;
-        return 0;
-    }
-    return 0;
+    void CleanupDeviceD3D()
+{
+    CleanupRenderTarget();
+    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = NULL; }
+    if (g_hSwapChainWaitableObject != NULL) { CloseHandle(g_hSwapChainWaitableObject); }
+    for (UINT i = 0; i < NUM_FRAMES_IN_FLIGHT; i++)
+        if (g_frameContext[i].CommandAllocator) { g_frameContext[i].CommandAllocator->Release(); g_frameContext[i].CommandAllocator = NULL; }
+    if (g_pd3dCommandQueue) { g_pd3dCommandQueue->Release(); g_pd3dCommandQueue = NULL; }
+    if (g_pd3dCommandList) { g_pd3dCommandList->Release(); g_pd3dCommandList = NULL; }
+    if (g_pd3dRtvDescHeap) { g_pd3dRtvDescHeap->Release(); g_pd3dRtvDescHeap = NULL; }
+    if (g_pd3dSrvDescHeap) { g_pd3dSrvDescHeap->Release(); g_pd3dSrvDescHeap = NULL; }
+    if (g_fence) { g_fence->Release(); g_fence = NULL; }
+    if (g_fenceEvent) { CloseHandle(g_fenceEvent); g_fenceEvent = NULL; }
+    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
 }
     
-            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
-    
-    #include 'imgui.h'
-#include 'imgui_impl_glfw_gl3.h'
-#include <stdio.h>
-#include <GL/gl3w.h>    // This example is using gl3w to access OpenGL functions (because it is small). You may use glew/glad/glLoadGen/etc. whatever already works for you.
-#include <GLFW/glfw3.h>
-    
-        // Setup Dear ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    ImGui_ImplSdlGL2_Init(window);
-    
-        // Setup window
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-    SDL_DisplayMode current;
-    SDL_GetCurrentDisplayMode(0, &current);
-    SDL_Window* window = SDL_CreateWindow('ImGui SDL2+OpenGL3 example', SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
-    SDL_GLContext gl_context = SDL_GL_CreateContext(window);
-    SDL_GL_SetSwapInterval(1); // Enable vsync
-    gl3wInit();
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-    // Helper: Simple Key->value storage
-// Typically you don't have to worry about this since a storage is held within each Window.
-// We use it to e.g. store collapse state for a tree (Int 0/1)
-// This is optimized for efficient lookup (dichotomy into a contiguous buffer) and rare insertion (typically tied to user interactions aka max once a frame)
-// You can use it as custom user storage for temporary values. Declare your own storage if, for example:
-// - You want to manipulate the open/close state of a particular sub-tree in your interface (tree node uses Int 0/1 to store their state).
-// - You want to store custom debug data easily without adding or editing structures in your code (probably not efficient, but convenient)
-// Types are NOT stored, so it is up to you to make sure your Key don't collide with different types.
-struct ImGuiStorage
-{
-    struct Pair
+        // Main loop
+    bool done = false;
+    while (!done)
     {
-        ImGuiID key;
-        union { int val_i; float val_f; void* val_p; };
-        Pair(ImGuiID _key, int _val_i)   { key = _key; val_i = _val_i; }
-        Pair(ImGuiID _key, float _val_f) { key = _key; val_f = _val_f; }
-        Pair(ImGuiID _key, void* _val_p) { key = _key; val_p = _val_p; }
-    };
-    ImVector<Pair>      Data;
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            ImGui_ImplSdlGL2_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                done = true;
+        }
+        ImGui_ImplSdlGL2_NewFrame(window);
     }
