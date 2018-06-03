@@ -1,133 +1,88 @@
 
         
-          def notification_setting_params
-    allowed_fields = NotificationSetting::EMAIL_EVENTS.dup
-    allowed_fields << :level
-    params.require(:notification_setting).permit(allowed_fields)
-  end
-end
-
-    
-      # Finds the groups of the source user, optionally limited to those visible to
-  # the current user.
-  def execute(current_user = nil)
-    segments = all_groups(current_user)
-    
-      def self.authenticate(user, app_id, json_response, challenges)
-    response = U2F::SignResponse.load_from_json(json_response)
-    registration = user.u2f_registrations.find_by_key_handle(response.key_handle)
-    u2f = U2F::U2F.new(app_id)
-    
-      # GET /resource/unlock/new
-  def new
-    self.resource = resource_class.new
+          def teardown
+    ActiveSupport.escape_html_entities_in_json = @old_escape_html_entities_in_json
   end
     
-          def remember_me_is_active?(resource)
-        return false unless resource.respond_to?(:remember_me)
-        scope = Devise::Mapping.find_scope!(resource)
-        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
-        resource.remember_me?(token, generated_at)
+          delegate :lookup_context, to: :controller
+      attr_accessor :controller, :output_buffer, :rendered
+    
+      test 'response parsing' do
+    response = ActionDispatch::TestResponse.create(200, {}, '')
+    assert_equal response.body, response.parsed_body
+    
+    class WebServiceTest < ActionDispatch::IntegrationTest
+  class TestController < ActionController::Base
+    def assign_parameters
+      if params[:full]
+        render plain: dump_params_keys
+      else
+        render plain: (params.keys - ['controller', 'action']).sort.join(', ')
       end
-    
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
     end
     
-          attr_reader :scope_name, :resource
-    
-      def test_recursive_hash_value_array
-    h = @cls[]
-    h[[[1]]] = 1
-    assert_equal(1, h.size)
-    h[[[2]]] = 1
-    assert_equal(2, h.size)
-    
-      it 'does not decode a float when fewer bytes than a float remain and the '*' modifier is passed' do
-    [ ['\xff', []],
-      ['\xff\x00', []],
-      ['\xff\x00\xff', []]
-    ].should be_computed_by(:unpack, unpack_format('*'))
-  end
-    
-      Ruby = Struct.new(:version, :platform)
-    
-      # This spec is a mess. It fails randomly, it hangs on MRI, it needs to be removed
-  quarantine! do
-  it 'killing dying running does nothing' do
-    in_ensure_clause = false
-    exit_loop = true
-    t = ThreadSpecs.dying_thread_ensures do
-      in_ensure_clause = true
-      loop { if exit_loop then break end }
-      ScratchPad.record :after_stop
-    end
-    
-      def icon
-    object.image
-  end
-    
-            def clear_cache
-          UI.message('Removing the whole cache dir #{@cache.root}') do
-            FileUtils.rm_rf(@cache.root)
-          end
+        private
+      # 'Deserialize' the mailer class name by hand in case another argument
+      # (like a Global ID reference) raised DeserializationError.
+      def mailer_class
+        if mailer = Array(@serialized_arguments).first || Array(arguments).first
+          mailer.constantize
         end
       end
+    
+          add_delivery_method :file, Mail::FileDelivery,
+        location: defined?(Rails.root) ? '#{Rails.root}/tmp/mails' : '#{Dir.tmpdir}/mails'
+    
+    module ActionMailer
+  # Implements the ActiveSupport::LogSubscriber for logging notifications when
+  # email is delivered or received.
+  class LogSubscriber < ActiveSupport::LogSubscriber
+    # An email was delivered.
+    def deliver(event)
+      info do
+        recipients = Array(event.payload[:to]).join(', ')
+        'Sent mail to #{recipients} (#{event.duration.round(1)}ms)'
+      end
+    
+      def test_assert_select_email
+    assert_raise ActiveSupport::TestCase::Assertion do
+      assert_select_email {}
+    end
+    
+          # Topic may be hard deleted due to spam, no point complaining
+      # we would have to look at the topics table id sequence to find cases
+      # where this was called with an invalid id, no point really
+      return unless topic.present?
+    
+        sidekiq_options queue: 'critical'
+    
+      def self.fragment_cache
+    @cache ||= DistributedCache.new('am_serializer_fragment_cache')
+  end
+    
+          it 'does set the source directory' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            cloc(source_directory: 'MyCoolApp')
+          end').runner.execute(:test)
+    
+      belongs_to :status_message
+  has_many :poll_answers, -> { order 'id ASC' }, dependent: :destroy
+  has_many :poll_participations, dependent: :destroy
+  has_one :author, through: :status_message
+    
+          rescue_from OpenIDConnect::HttpError do |e|
+        http_error_page_as_json(e)
+      end
+    
+          rescue_from Rack::OAuth2::Server::Authorize::BadRequest,
+                  JSON::JWT::InvalidFormat, JSON::JWK::UnknownAlgorithm do |e|
+        logger.info e.backtrace[0, 10].join('\n')
+        render json: {error: :invalid_request, error_description: e.message, status: 400}
+      end
+      rescue_from JSON::JWT::VerificationFailed do |e|
+        logger.info e.backtrace[0, 10].join('\n')
+        render json: {error: :invalid_grant, error_description: e.message, status: 400}
+      end
     end
   end
 end
-
-    
-            It is possible to specify a list of dependencies which will be used by
-        the template in the `Podfile.default` (normal targets) `Podfile.test`
-        (test targets) files which should be stored in the
-        `~/.cocoapods/templates` folder.
-      DESC
-      self.arguments = [
-        CLAide::Argument.new('XCODEPROJ', :false),
-      ]
-    
-          #-----------------------------------------------------------------------#
-    end
-  end
-end
-
-    
-    # The project root directory
-$root = ::File.dirname(__FILE__)
-    
-          super
-    end
-    
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
-    end
-    
-        def each_definition
-      @attachments.each do |klass, attachments|
-        attachments.each do |name, options|
-          yield klass, name, options
-        end
-      end
-    end
-    
-      class Railtie < Rails::Railtie
-    initializer 'paperclip.insert_into_active_record' do |app|
-      ActiveSupport.on_load :active_record do
-        Paperclip::Railtie.insert
-      end
-    
-        module CommandRecorder
-      def add_attachment(*args)
-        record(:add_attachment, args)
-      end
-    
-    module Paperclip
-  module Validators
-    extend ActiveSupport::Concern
