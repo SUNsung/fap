@@ -1,93 +1,93 @@
 
         
         
-def get_new_command(command):
-    dir = shell.quote(_tar_file(command.script_parts)[1])
-    return shell.and_('mkdir -p {dir}', '{cmd} -C {dir}') \
-        .format(dir=dir, cmd=command.script)
+def benchmark(estimator, data):
+    gc.collect()
+    print('Benching %s' % estimator)
+    t0 = time()
+    estimator.fit(data)
+    training_time = time() - t0
+    data_t = estimator.transform(data)
+    data_r = estimator.inverse_transform(data_t)
+    reconstruction_error = np.mean(np.abs(data - data_r))
+    return {'time': training_time, 'error': reconstruction_error}
     
-    containers = (('thefuck/python3-tcsh',
-               u'''FROM python:3
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'),
-              ('thefuck/python2-tcsh',
-               u'''FROM python:2
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'))
+    def plot(func):
+    random_state = check_random_state(0)
+    one_core = []
+    multi_core = []
+    sample_sizes = range(1000, 6000, 1000)
     
-        def set(self, key, value):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                item.value = value
-                return
-        self.table[hash_index].append(Item(key, value))
+        ###########################################################################
+    # Set SparseRandomProjection input
+    sparse_matrix_params = {
+        'n_components': opts.n_components,
+        'random_state': opts.random_seed,
+        'density': opts.density,
+        'eps': opts.eps,
+    }
     
-        def __init__(self, id, name):
-        self.id = id
-        self.name = name
-        self.friend_ids = []
+        fn = os.path.relpath(fn,
+                         start=os.path.dirname(__import__(package).__file__))
+    try:
+        lineno = inspect.getsourcelines(obj)[1]
+    except Exception:
+        lineno = ''
+    return url_fmt.format(revision=revision, package=package,
+                          path=fn, lineno=lineno)
     
-        def within_past_week(self, timestamp):
-        '''Return True if timestamp is within past week, False otherwise.'''
-        ...
+    # Print the classification report
+print(metrics.classification_report(y_test, y_predicted,
+                                    target_names=dataset.target_names))
     
-        def close(self):
-        '''Flush and close the mailbox.'''
-        return
+        # split the dataset in training and test set:
+    docs_train, docs_test, y_train, y_test = train_test_split(
+        dataset.data, dataset.target, test_size=0.25, random_state=None)
     
-    # Imports
-import re
-import socket
-import collections
-import datetime
-import warnings
+    In this examples we will use a movie review dataset.
     
-        @classmethod
-    def __subclasshook__(cls, C):
-        if cls is AbstractAsyncContextManager:
-            return _collections_abc._check_methods(C, '__aenter__',
-                                                   '__aexit__')
-        return NotImplemented
+    The dataset is generated using the ``make_biclusters`` function, which
+creates a matrix of small values and implants bicluster with large
+values. The rows and columns are then shuffled and passed to the
+Spectral Co-Clustering algorithm. Rearranging the shuffled matrix to
+make biclusters contiguous shows how accurately the algorithm found
+the biclusters.
     
-        def get_dispatcher(self, path):
-        return self.dispatchers[path]
+    plt.plot(features_samples_ratio, acc_clf1, linewidth=2,
+         label='Linear Discriminant Analysis with shrinkage', color='navy')
+plt.plot(features_samples_ratio, acc_clf2, linewidth=2,
+         label='Linear Discriminant Analysis', color='gold')
     
-        def test_basic(self):
-        self.assertFalse(self.parser.disallow_all)
-        self.assertFalse(self.parser.allow_all)
-        self.assertGreater(self.parser.mtime(), 0)
-        self.assertFalse(self.parser.crawl_delay('*'))
-        self.assertFalse(self.parser.request_rate('*'))
+        def run(self, args, opts):
+        if len(args) < 1:
+            raise UsageError()
+        elif len(args) > 1:
+            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
+        spname = args[0]
     
-        def removeCerts(self):
-        if config.keep_ssl_cert:
-            return False
-        for file_name in ['cert-rsa.pem', 'key-rsa.pem']:
-            file_path = '%s/%s' % (config.data_dir, file_name)
-            if os.path.isfile(file_path):
-                os.unlink(file_path)
+        def add_pre_hook(self, request, results):
+        if hasattr(self, 'pre_process'):
+            cb = request.callback
     
+        # Get options and arguments.
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], _short_options, _options)
+    except getopt.GetoptError as e:
+        log.wtf('''
+    [Fatal] {}.
+    Try '{} --help' for more options.'''.format(e, script_name))
     
-def toOpensslPublickey(publickey):
-    publickey_bin = btctools.encode_pubkey(publickey, 'bin')
-    publickey_bin = publickey_bin[1:]
-    publickey_openssl = '\x02\xca\x00 ' + publickey_bin[:32] + '\x00 ' + publickey_bin[32:]
-    return publickey_openssl
-
+        while pin_count > 0:
+        json_data = extract_json_data(url, max=pin_list[-1]['pin_id'],
+                                      limit=LIMIT)
+        pins = json_data['pins']
+        pin_list += pins
+        pin_count -= len(pins)
     
-        def testAesUtf8(self, ui_websocket):
-        utf8_text = u'\xc1rv\xedzt\xfbr\xf5t\xfck\xf6rf\xfar\xf3g\xe9'
-        ui_websocket.actionAesEncrypt(0, utf8_text)
-        key, iv, encrypted = ui_websocket.ws.result
+    import json
     
-    
-if __name__ == '__main__':
-	import os
-	print get(STARTUP)
-	open(get(STARTUP)+'\\zeronet.cmd', 'w').write('cd /D %s\r\nzeronet.py' % os.getcwd())
-    
-        if should_publish:
-        publish()
+            # extract raw urls
+        orig_img = match1(content,
+                         r'<meta itemprop='image' content='([^']+/originals/[^']+)'')
+        twit_img = match1(content,
+                          r'<meta property='twitter:image:src' name='twitter:image:src' content='([^']+)'')
