@@ -1,365 +1,170 @@
 
         
-          // Called when a window close is cancelled by beforeunload handler.
-  virtual void OnWindowCloseCancelled(NativeWindow* window) {}
-    
-    
-    {}  // namespace mate
-    
-    #include 'ui/gfx/geometry/rect.h'
-    
-      std::unique_ptr<base::ListValue> preferences_;
-    
-    #endif  // CHROME_BROWSER_EXTENSIONS_GLOBAL_SHORTCUT_LISTENER_H_
-
-    
-      // Sets time interval between updates. By default list of sources and their
-  // thumbnail are updated once per second. If called after StartUpdating() then
-  // it will take effect only after the next update.
-  virtual void SetUpdatePeriod(base::TimeDelta period) = 0;
-    
-    #endif  // CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
-
-    
-     private:
-  // IPC message handler.
-  int32_t OnHostMsgGetDeviceID(ppapi::host::HostMessageContext* context);
-  int32_t OnHostMsgGetHmonitor(ppapi::host::HostMessageContext* context);
-  int32_t OnHostMsgMonitorIsExternal(ppapi::host::HostMessageContext* context);
-    
-    #include 'chrome/browser/speech/tts_platform.h'
-    
-    // filenames
-const base::FilePath::CharType kCacheDirname[] = FPL('Cache');
-const base::FilePath::CharType kChannelIDFilename[] = FPL('Origin Bound Certs');
-const base::FilePath::CharType kCookieFilename[] = FPL('Cookies');
-const base::FilePath::CharType kCRLSetFilename[] =
-    FPL('Certificate Revocation Lists');
-const base::FilePath::CharType kCustomDictionaryFileName[] =
-    FPL('Custom Dictionary.txt');
-const base::FilePath::CharType kExtensionActivityLogFilename[] =
-    FPL('Extension Activity');
-const base::FilePath::CharType kExtensionsCookieFilename[] =
-    FPL('Extension Cookies');
-const base::FilePath::CharType kFirstRunSentinel[] = FPL('First Run');
-const base::FilePath::CharType kGCMStoreDirname[] = FPL('GCM Store');
-const base::FilePath::CharType kLocalStateFilename[] = FPL('Local State');
-const base::FilePath::CharType kLocalStorePoolName[] = FPL('LocalStorePool');
-const base::FilePath::CharType kMediaCacheDirname[] = FPL('Media Cache');
-const base::FilePath::CharType kNetworkPersistentStateFilename[] =
-    FPL('Network Persistent State');
-const base::FilePath::CharType kOfflinePageArchviesDirname[] =
-    FPL('Offline Pages/archives');
-const base::FilePath::CharType kOfflinePageMetadataDirname[] =
-    FPL('Offline Pages/metadata');
-const base::FilePath::CharType kPreferencesFilename[] = FPL('Preferences');
-const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[] =
-    FPL('Protected Preferences');
-const base::FilePath::CharType kReadmeFilename[] = FPL('README');
-const base::FilePath::CharType kResetPromptMementoFilename[] =
-    FPL('Reset Prompt Memento');
-const base::FilePath::CharType kSafeBrowsingBaseFilename[] =
-    FPL('Safe Browsing');
-const base::FilePath::CharType kSecurePreferencesFilename[] =
-    FPL('Secure Preferences');
-const base::FilePath::CharType kServiceStateFileName[] = FPL('Service State');
-const base::FilePath::CharType kSingletonCookieFilename[] =
-    FPL('SingletonCookie');
-const base::FilePath::CharType kSingletonLockFilename[] = FPL('SingletonLock');
-const base::FilePath::CharType kSingletonSocketFilename[] =
-    FPL('SingletonSocket');
-const base::FilePath::CharType kSupervisedUserSettingsFilename[] =
-    FPL('Managed Mode Settings');
-const base::FilePath::CharType kThemePackFilename[] = FPL('Cached Theme.pak');
-const base::FilePath::CharType kThemePackMaterialDesignFilename[] =
-    FPL('Cached Theme Material Design.pak');
-const base::FilePath::CharType kWebAppDirname[] = FPL('Web Applications');
-    
-    // Generate destructors.
-#include 'ipc/struct_destructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    class App {
- public:
-  static void Call(const std::string& method,
-                   const base::ListValue& arguments);
-    }
-    
-      virtual void Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh = nullptr);
-  virtual void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result);
-    
-    
-    {} // namespace ui
-    
-    void MenuItem::Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh) {
-  if (method == 'SetLabel') {
-    std::string label;
-    arguments.GetString(0, &label);
-    SetLabel(label);
-  } else if (method == 'SetIcon') {
-    std::string icon;
-    arguments.GetString(0, &icon);
-    SetIcon(icon);
-  } else if (method == 'SetIconIsTemplate') {
-    bool isTemplate;
-    arguments.GetBoolean(0, &isTemplate);
-    SetIconIsTemplate(isTemplate);
-  } else if (method == 'SetTooltip') {
-    std::string tooltip;
-    arguments.GetString(0, &tooltip);
-    SetTooltip(tooltip);
-  } else if (method == 'SetEnabled') {
-    bool enabled = true;
-    arguments.GetBoolean(0, &enabled);
-    SetEnabled(enabled);
-  } else if (method == 'SetChecked') {
-    bool checked = false;
-    arguments.GetBoolean(0, &checked);
-    SetChecked(checked);
-  } else if (method == 'SetSubmenu') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    SetSubmenu(object_manager()->GetApiObject<Menu>(object_id));
-#if defined(OS_MACOSX)
-  } else if (method == 'SetKey') {
-    std::string key;
-    arguments.GetString(0, &key);
-    SetKey(key);
-  } else if (method == 'SetModifiers') {
-    std::string mod;
-    arguments.GetString(0, &mod);
-    SetModifiers(mod);
-#endif
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    void MenuItem::OnClick(GtkWidget* widget) {
-  if (block_active_)
-    return;
-    }
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.App.clearCache', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwAppClearCacheFunction);
-};
-    
-    bool NwClipboardReadAvailableTypesFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  bool contains_filenames;
-  std::vector<base::string16> types;
-  clipboard->ReadAvailableTypes(ui::CLIPBOARD_TYPE_COPY_PASTE, &types, &contains_filenames);
-  for(std::vector<base::string16>::iterator it = types.begin(); it != types.end(); it++) {
-    if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypeText)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_TEXT))));
-    } else if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypeHTML)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_HTML))));
-    } else if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypeRTF)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_RTF))));
-    } else if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypePNG)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_PNG))));
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_JPEG))));
-    }
-  }
-  return true;
-}
-    
-    PyDescriptorDatabase::~PyDescriptorDatabase() { Py_DECREF(py_database_); }
-    
-      // Find the file that declares the given fully-qualified symbol name.
-  bool FindFileContainingSymbol(const string& symbol_name,
-                                FileDescriptorProto* output);
-    
-      void WriteIntroduction(io::Printer* printer);
-  void WriteDescriptor(io::Printer* printer);
-  void WriteGeneratedCodeInfo(const Descriptor* descriptor,
-                              io::Printer* printer,
-                              bool last);
-    
-    // TODO(jonskeet): Refactor repeated field support; all the implementations are *really* similar. We
-// should probably have a RepeatedFieldGeneratorBase.
-class RepeatedEnumFieldGenerator : public FieldGeneratorBase {
- public:
-  RepeatedEnumFieldGenerator(const FieldDescriptor* descriptor,
-                             int fieldOrdinal,
-                             const Options *options);
-  ~RepeatedEnumFieldGenerator();
-    }
-    
-    
-    { private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RepeatedMessageFieldGenerator);
-};
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    MessageGenerator* ImmutableGeneratorFactory::NewMessageGenerator(
-    const Descriptor* descriptor) const {
-  if (HasDescriptorMethods(descriptor, context_->EnforceLite())) {
-    return new ImmutableMessageGenerator(descriptor, context_);
-  } else {
-    return new ImmutableMessageLiteGenerator(descriptor, context_);
-  }
-}
-    
-    int PowerIphone::get_power_percent_left() {
-	if (UpdatePowerInfo()) {
-		return percent_left;
-	} else {
-		return -1;
-	}
-}
-    
-    		case LWS_CALLBACK_CLIENT_ESTABLISHED:
-			peer->set_wsi(wsi);
-			peer_data->peer_id = 0;
-			peer_data->in_size = 0;
-			peer_data->in_count = 0;
-			peer_data->out_count = 0;
-			peer_data->rbw.resize(16);
-			peer_data->rbr.resize(16);
-			peer_data->force_close = false;
-			_on_connect(lws_get_protocol(wsi)->name);
-			break;
-    
-    
-    {	return false;
-}
-    
-    	static void _bind_methods();
-    
-    /// This class is required to implement custom collision behaviour in the broadphase
-struct GodotFilterCallback : public btOverlapFilterCallback {
-	static bool test_collision_filters(uint32_t body0_collision_layer, uint32_t body0_collision_mask, uint32_t body1_collision_layer, uint32_t body1_collision_mask);
-    }
-    
-      public:
-    jpeg_decoder_mem_stream() : m_pSrc_data(NULL), m_ofs(0), m_size(0) { }
-    jpeg_decoder_mem_stream(const uint8 *pSrc_data, uint size) : m_pSrc_data(pSrc_data), m_ofs(0), m_size(size) { }
-    
-    void opus_ifft_neon(const kiss_fft_state *st,
-                    const kiss_fft_cpx *fin,
-                    kiss_fft_cpx *fout);
-    
-        private:
-        void EnumerateStatefulNodesForRoot(ComputationNetwork& net, ComputationNodeBasePtr root, std::map<wstring, shared_ptr<IStatefulNode>>& statefulNodes)
-        {
-            for (const auto& node : net.GetAllNodesForRoot(root))
-            {
-                const auto& name = node->GetName();
-                if (statefulNodes.find(name) != statefulNodes.end())
-                    continue; // already in the list  --TODO: use insert()
-                shared_ptr<IStatefulNode> pNode = dynamic_pointer_cast<IStatefulNode>(node);
-                if (pNode) // if it is an IStatefulNode then report it
-                    statefulNodes[name] = pNode;
-            }
-        }
-    
-        Matrix<float>::MultiplyAndWeightedAdd(alpha, mAdense, transposeA, mBdense, transposeB, beta, mCdense);
-    Matrix<float>::MultiplyAndWeightedAdd(alpha, mAsparse, transposeA, mBsparse, transposeB, beta, mCsparse);
-    mCsparse.SwitchToMatrixType(MatrixType::DENSE, matrixFormatDense, true);
-    BOOST_CHECK(mCsparse.IsEqualTo(mCdense, c_epsilonFloatE4));
-    
-    #include 'PostComputingActions.h'
-    
-    // -----------------------------------------------------------------------
-// functions exposed by this module
-// -----------------------------------------------------------------------
-    
-    #ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
-#endif
-    
-    // GetWriter - get a reader type from the DLL
-// The F version gets the 'float' version, and D gets 'double'.
-extern 'C' DATAWRITER_API void GetWriterF(IDataWriter** pwriter);
-extern 'C' DATAWRITER_API void GetWriterD(IDataWriter** pwriter);
-    
-        // call SetStepOffset() at start of a multi-epoch training to set the index of the first epoch in that training
-    // This value is added to the local epoch index in TraceProgress().
-    static void SetStepOffset(size_t currentStepOffset)
-    {
-        GetStaticInstance().m_currentStepOffset = currentStepOffset;
-    }
-    
-    
-    {    for (size_t i = 0; i < sorted_index_set.size(); ++i) {
-      bst_uint cid = sorted_index_set[i];
-      size_t dst_begin = page->offset[i];
-      size_t src_begin = disk_offset_[cid];
-      size_t num = disk_offset_[cid + 1] - disk_offset_[cid];
-      for (size_t j = 0; j < num; ++j) {
-        page->data[dst_begin + j] = SparseBatch::Entry(
-            index_.data[src_begin + j] + min_index_, value_.data[src_begin + j]);
-      }
-    }
-    return true;
-  }
-    
-    // logistic loss for binary classification task
-struct LogisticClassification : public LogisticRegression {
-  static const char* DefaultEvalMetric() { return 'error'; }
-};
-    
-        // update bias
-    for (int gid = 0; gid < ngroup; ++gid) {
-      auto grad = GetBiasGradientParallel(gid, ngroup, in_gpair->HostVector(), p_fmat);
-      auto dbias = static_cast<bst_float>(param_.learning_rate *
-                               CoordinateDeltaBias(grad.first, grad.second));
-      model->bias()[gid] += dbias;
-      UpdateBiasResidualParallel(gid, ngroup, dbias, &in_gpair->HostVector(), p_fmat);
-    }
-    
-      virtual int64_t size() CXX11_OVERRIDE;
-    
-    bool AbstractOptionHandler::getChangeOption() const
-{
-  return flags_ & FLAG_CHANGE_OPTION;
-}
-    
-    namespace aria2 {
-    }
-    
-    void AnnounceList::moveToStoppedAllowedTier()
-{
-  auto itr = find_wrap_if(std::begin(tiers_), std::end(tiers_), currentTier_,
-                          FindStoppedAllowedTier());
-  setCurrentTier(std::move(itr));
-}
-    
-      CFRef(T ref) : ref_(ref) {}
-    
-    class AppleTLSContext : public TLSContext {
-public:
-  AppleTLSContext(TLSSessionSide side, TLSVersion ver)
-      : side_(side), minTLSVer_(ver), verifyPeer_(true), credentials_(nullptr)
+          /// Gets the non-blocking mode of the acceptor.
+  /**
+   * @returns @c true if the acceptor's synchronous operations will fail with
+   * boost::asio::error::would_block if they are unable to perform the requested
+   * operation immediately. If @c false, synchronous operations will block
+   * until complete.
+   *
+   * @note The non-blocking mode has no effect on the behaviour of asynchronous
+   * operations. Asynchronous operations will never fail with the error
+   * boost::asio::error::would_block.
+   */
+  bool non_blocking() const
   {
+    return this->get_service().non_blocking(this->get_implementation());
   }
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    #include <boost/asio/detail/config.hpp>
+#include <boost/asio/buffer.hpp>
+#include <boost/asio/detail/array_fwd.hpp>
+#include <boost/asio/detail/socket_types.hpp>
+    
+    #include <boost/asio/detail/addressof.hpp>
+#include <boost/asio/detail/bind_handler.hpp>
+#include <boost/asio/detail/buffer_sequence_adapter.hpp>
+#include <boost/asio/detail/descriptor_ops.hpp>
+#include <boost/asio/detail/fenced_block.hpp>
+#include <boost/asio/detail/reactor_op.hpp>
+    
+    #ifndef BOOST_ASIO_DETAIL_FUNCTION_HPP
+#define BOOST_ASIO_DETAIL_FUNCTION_HPP
+    
+    // Calls to asio_handler_allocate and asio_handler_deallocate must be made from
+// a namespace that does not contain any overloads of these functions. The
+// boost_asio_handler_alloc_helpers namespace is defined here for that purpose.
+namespace boost_asio_handler_alloc_helpers {
     }
     
-    std::unique_ptr<AuthConfig> AuthConfig::create(std::string user,
-                                               std::string password)
-{
-  if (user.empty()) {
-    return nullptr;
-  }
-  else {
-    return make_unique<AuthConfig>(std::move(user), std::move(password));
-  }
+      // Remove the descriptor from /dev/poll. Since this function is only called
+  // during a fork, we can apply the change immediately.
+  ::pollfd ev = { 0, 0, 0 };
+  ev.fd = descriptor;
+  ev.events = POLLREMOVE;
+  ev.revents = 0;
+  ::write(dev_poll_fd_, &ev, sizeof(ev));
+    
+    
+    {    // Restore modified DX state
+    ctx->RSSetScissorRects(old.ScissorRectsCount, old.ScissorRects);
+    ctx->RSSetViewports(old.ViewportsCount, old.Viewports);
+    ctx->RSSetState(old.RS); if (old.RS) old.RS->Release();
+    ctx->OMSetBlendState(old.BlendState, old.BlendFactor, old.SampleMask); if (old.BlendState) old.BlendState->Release();
+    ctx->OMSetDepthStencilState(old.DepthStencilState, old.StencilRef); if (old.DepthStencilState) old.DepthStencilState->Release();
+    ctx->PSSetShaderResources(0, 1, &old.PSShaderResource); if (old.PSShaderResource) old.PSShaderResource->Release();
+    ctx->PSSetSamplers(0, 1, &old.PSSampler); if (old.PSSampler) old.PSSampler->Release();
+    ctx->PSSetShader(old.PS); if (old.PS) old.PS->Release();
+    ctx->VSSetShader(old.VS); if (old.VS) old.VS->Release();
+    ctx->VSSetConstantBuffers(0, 1, &old.VSConstantBuffer); if (old.VSConstantBuffer) old.VSConstantBuffer->Release();
+    ctx->IASetPrimitiveTopology(old.PrimitiveTopology);
+    ctx->IASetIndexBuffer(old.IndexBuffer, old.IndexBufferFormat, old.IndexBufferOffset); if (old.IndexBuffer) old.IndexBuffer->Release();
+    ctx->IASetVertexBuffers(0, 1, &old.VertexBuffer, &old.VertexBufferStride, &old.VertexBufferOffset); if (old.VertexBuffer) old.VertexBuffer->Release();
+    ctx->IASetInputLayout(old.InputLayout); if (old.InputLayout) old.InputLayout->Release();
 }
+    
+                ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our windows open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
+    
+            // 1. Show a simple window.
+        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    }
+    
+    struct Value
+{
+    static Value fromYGValue(YGValue const & ygValue)
+    {
+        return Value(static_cast<int>(ygValue.unit), ygValue.value);
+    }
+    }
+    
+    /* static */ void Config::destroy(Config * node)
+{
+    delete node;
+}
+    
+        friend class Node;
+    
+    
+#ifdef LOG_TAG
+# define ALOGV(...) ::facebook::alog::logv(LOG_TAG, __VA_ARGS__)
+# define ALOGD(...) ::facebook::alog::logd(LOG_TAG, __VA_ARGS__)
+# define ALOGI(...) ::facebook::alog::logi(LOG_TAG, __VA_ARGS__)
+# define ALOGW(...) ::facebook::alog::logw(LOG_TAG, __VA_ARGS__)
+# define ALOGE(...) ::facebook::alog::loge(LOG_TAG, __VA_ARGS__)
+# define ALOGF(...) ::facebook::alog::logf(LOG_TAG, __VA_ARGS__)
+#endif
+    
+    // Reference counting smart pointer. This is designed to work with the
+// Countable class or other implementations in the future. It is designed in a
+// way to be both efficient and difficult to misuse. Typical usage is very
+// simple once you learn the patterns (and the compiler will help!):
+//
+// By default, the internal pointer is null.
+//   RefPtr<Foo> ref;
+//
+// Object creation requires explicit construction:
+//   RefPtr<Foo> ref = createNew<Foo>(...);
+//
+// Or if the constructor is not public:
+//   RefPtr<Foo> ref = adoptRef(new Foo(...));
+//
+// But you can implicitly create from nullptr:
+//   RefPtr<Foo> maybeRef = cond ? ref : nullptr;
+//
+// Move/Copy Construction/Assignment are straightforward:
+//   RefPtr<Foo> ref2 = ref;
+//   ref = std::move(ref2);
+//
+// Destruction automatically drops the RefPtr's reference as expected.
+//
+// Upcasting is implicit but downcasting requires an explicit cast:
+//   struct Bar : public Foo {};
+//   RefPtr<Bar> barRef = static_cast<RefPtr<Bar>>(ref);
+//   ref = barRef;
+//
+template <class T>
+class RefPtr {
+public:
+  constexpr RefPtr() :
+    m_ptr(nullptr)
+  {}
+    }
+    
+    
+    {    /* Try all next moves from the current coordinate x, y */
+    for (k = 0; k < 8; k++)
+    {
+        next_x = x + xMove[k];
+        next_y = y + yMove[k];
+        if (isSafe(next_x, next_y, sol))
+        {
+            sol[next_x][next_y] = movei;
+            if (solveKTUtil(next_x, next_y, movei + 1, sol,
+                            xMove, yMove) == true)
+                return true;
+            else
+                sol[next_x][next_y] = -1; // backtracking
+        }
+    }
+    return false;
+}
+    
+        //check that left diagonal to the current cell should not have queen
+    int p = row, q = column;
+    while (p >= 0 && q >= 0)
+    {
+        if (board[p][q] == 'Q')
+            return false;
+        p--; q--;
+    }
