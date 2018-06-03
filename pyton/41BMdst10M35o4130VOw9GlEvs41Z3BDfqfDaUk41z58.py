@@ -1,209 +1,53 @@
 
         
-        # Allow direct execution
-import os
-import sys
-import unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            def __str__(self):
+        #return 'MismatchedTokenException('+self.expecting+')'
+        return 'MismatchedTokenException(%r!=%r)' % (
+            self.getUnexpectedType(), self.expecting
+            )
+    __repr__ = __str__
     
+    from antlr3 import runtime_version, runtime_version_str
+from antlr3.constants import DEFAULT_CHANNEL, HIDDEN_CHANNEL, EOF, \
+     EOR_TOKEN_TYPE, INVALID_TOKEN_TYPE
+from antlr3.exceptions import RecognitionException, MismatchedTokenException, \
+     MismatchedRangeException, MismatchedTreeNodeException, \
+     NoViableAltException, EarlyExitException, MismatchedSetException, \
+     MismatchedNotSetException, FailedPredicateException, \
+     BacktrackingFailed, UnwantedTokenException, MissingTokenException
+from antlr3.tokens import CommonToken, EOF_TOKEN, SKIP_TOKEN
+from antlr3.compat import set, frozenset, reversed
     
-class TestSWFInterpreter(unittest.TestCase):
-    pass
+        You can insert stuff, replace, and delete chunks.  Note that the
+    operations are done lazily--only if you convert the buffer to a
+    String.  This is very efficient because you are not moving data around
+    all the time.  As the buffer of tokens is converted to strings, the
+    toString() method(s) check to see if there is an operation at the
+    current index.  If so, the operation is done and then normal String
+    rendering continues on the buffer.  This is like having multiple Turing
+    machine instruction streams (programs) operating on a single input tape. :)
     
-            retval = subprocess.call(args)
-        if retval == 0:
-            fsize = os.path.getsize(encodeFilename(tmpfilename))
-            self.to_screen('\r[%s] %s bytes' % (args[0], fsize))
-            self.try_rename(tmpfilename, filename)
-            self._hook_progress({
-                'downloaded_bytes': fsize,
-                'total_bytes': fsize,
-                'filename': filename,
-                'status': 'finished',
-            })
-            return True
-        else:
-            self.to_stderr('\n')
-            self.report_error('%s exited with code %d' % (args[0], retval))
-            return False
+    site_info = 'ehow.com'
+download = ehow_download
+download_playlist = playlist_not_supported('ehow')
 
     
-            info = page['info']
+        title = match1(html, r'&title=([^&]+)')
     
-            uploader = self._search_regex(
-            r'Added by\s*:\s*<a[^>]+>([^<]+)</a>', webpage, 'uploader', default=None)
-        upload_date = unified_strdate(self._search_regex(
-            r'Added on\s*:\s*([\d-]+)', webpage, 'upload date', default=None))
+    def kuwo_download_by_rid(rid, output_dir = '.', merge = True, info_only = False):
+    html=get_content('http://player.kuwo.cn/webmusic/st/getNewMuiseByRid?rid=MUSIC_%s'%rid)
+    title=match1(html,r'<name>(.*)</name>')
+    #to get title
+    #format =aac|mp3 ->to get aac format=mp3 ->to get mp3
+    url=get_content('http://antiserver.kuwo.cn/anti.s?format=mp3&rid=MUSIC_%s&type=convert_url&response=url'%rid)
+    songtype, ext, size = url_info(url)
+    print_info(site_info, title, songtype, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir)
     
-            webpage = self._download_webpage(url, display_id)
+    from ..common import *
     
-    
-def with_metaclass(meta, *bases):
-    '''Create a base class with a metaclass.'''
-    # This requires a bit of explanation: the basic idea is to make a
-    # dummy metaclass for one level of class instantiation that replaces
-    # itself with the actual metaclass.
-    class metaclass(type):
-        def __new__(cls, name, this_bases, d):
-            return meta(name, bases, d)
-    return type.__new__(metaclass, 'temporary_class', (), {})
-    
-        def __init__(self, request, key):
-        form_matches = request.form.getlist(key)
-        buf = ['You tried to access the file '%s' in the request.files '
-               'dictionary but it does not exist.  The mimetype for the request '
-               'is '%s' instead of 'multipart/form-data' which means that no '
-               'file contents were transmitted.  To fix this error you should '
-               'provide enctype='multipart/form-data' in your form.' %
-               (key, request.mimetype)]
-        if form_matches:
-            buf.append('\n\nThe browser instead transmitted some file names. '
-                       'This was submitted: %s' % ', '.join(''%s'' % x
-                            for x in form_matches))
-        self.msg = ''.join(buf)
-    
-        with pytest.raises(AttributeError):
-        import unimportable
-
-    
-    
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
-
-    
-            self.status = Status()
-        self._progress_reporter = ProgressReporterThread(
-            status=self.status,
-            output=progress_file
-        )
-    
-        '''
-    
-        def __call__(self, value):
-        # Session name can be a path or just a name.
-        if (os.path.sep not in value and
-                not VALID_SESSION_NAME_PATTERN.search(value)):
-            raise ArgumentError(None, self.error_message)
-        return value
-    
-        return inner
-    
-    
-def to_native_string(string, encoding='ascii'):
-    '''Given a string object, regardless of type, returns a representation of
-    that string in the native string type, encoding and decoding where
-    necessary. This assumes ASCII unless told otherwise.
-    '''
-    if isinstance(string, builtin_str):
-        out = string
-    else:
-        if is_py2:
-            out = string.encode(encoding)
-        else:
-            out = string.decode(encoding)
-    
-        def __eq__(self, other):
-        if isinstance(other, collections.Mapping):
-            other = CaseInsensitiveDict(other)
-        else:
-            return NotImplemented
-        # Compare insensitively
-        return dict(self.lower_items()) == dict(other.lower_items())
-    
-    from . import utils
-from . import packages
-from .models import Request, Response, PreparedRequest
-from .api import request, get, head, post, patch, put, delete, options
-from .sessions import session, Session
-from .status_codes import codes
-from .exceptions import (
-    RequestException, Timeout, URLRequired,
-    TooManyRedirects, HTTPError, ConnectionError,
-    FileModeWarning, ConnectTimeout, ReadTimeout
-)
-    
-        def __init__(self, *args, **kwargs):
-        '''Initialize RequestException with `request` and `response` objects.'''
-        response = kwargs.pop('response', None)
-        self.response = response
-        self.request = kwargs.pop('request', None)
-        if (response is not None and not self.request and
-                hasattr(response, 'request')):
-            self.request = self.response.request
-        super(RequestException, self).__init__(*args, **kwargs)
-    
-    here = os.path.abspath(os.path.dirname(__file__))
-    
-        print()
-    print('Classification performance:')
-    print('===========================')
-    print()
-    print('%s %s %s %s' % ('Classifier  ', 'train-time', 'test-time',
-                           'Accuracy'))
-    print('-' * 44)
-    for name in sorted(accuracy, key=accuracy.get):
-        print('%s %s %s %s' % (name.ljust(16),
-                               ('%.4fs' % train_time[name]).center(10),
-                               ('%.4fs' % test_time[name]).center(10),
-                               ('%.4f' % accuracy[name]).center(10)))
-    
-    import numpy as np
-import gc
-from time import time
-from collections import defaultdict
-import matplotlib.pyplot as plt
-from sklearn.datasets import fetch_lfw_people
-from sklearn.decomposition import IncrementalPCA, RandomizedPCA, PCA
-    
-            ax.xaxis.set_major_locator(ticker.FixedLocator(tick_vals))
-        ax.xaxis.set_major_formatter(ticker.FixedFormatter(tick_labels))
-    
-    plot(euclidean_distances)
-plot(rbf_kernels)
-plt.show()
-
-    
-        output_file.close()
-
-    
-    data, row_idx, col_idx = sg._shuffle(data, random_state=0)
-plt.matshow(data, cmap=plt.cm.Blues)
-plt.title('Shuffled dataset')
-    
-    # Create different classifiers. The logistic regression cannot do
-# multiclass out of the box.
-classifiers = {'L1 logistic': LogisticRegression(C=C, penalty='l1'),
-               'L2 logistic (OvR)': LogisticRegression(C=C, penalty='l2'),
-               'Linear SVC': SVC(kernel='linear', C=C, probability=True,
-                                 random_state=0),
-               'L2 logistic (Multinomial)': LogisticRegression(
-                C=C, solver='lbfgs', multi_class='multinomial'),
-               'GPC': GaussianProcessClassifier(kernel)
-               }
-    
-    # plot MSE
-plt.subplot(2, 1, 1)
-plt.errorbar(n_samples_range, lw_mse.mean(1), yerr=lw_mse.std(1),
-             label='Ledoit-Wolf', color='navy', lw=2)
-plt.errorbar(n_samples_range, oa_mse.mean(1), yerr=oa_mse.std(1),
-             label='OAS', color='darkorange', lw=2)
-plt.ylabel('Squared error')
-plt.legend(loc='upper right')
-plt.title('Comparison of covariance estimators')
-plt.xlim(5, 31)
-    
-    
-@click.command()
-@click.argument('catalog_file', type=click.Path())
-def cli(catalog_file):
-    # Read the old ones back.  Once we are in, we will never go.
-    with open(catalog_file) as f:
-        rv = json.load(f)['supported_locales']
+        type_, ext, size = url_info(stream_url)
+    print_info(site_info, title, type_, size)
+    if not info_only:
+        download_url_ffmpeg(url=stream_url, title=title, ext= 'mp4', output_dir=output_dir)
