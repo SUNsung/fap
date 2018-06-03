@@ -1,146 +1,122 @@
 
         
-        #endif  // TENSORFLOW_DEBUGGER_STATE_IMPL_H_
-
+        
+    {  if (data_channel->getRank() == 0) {
+    auto float_tensor = buildTensor<float>({1, 2, 3}, 4.2);
+    data_channel->send(*float_tensor, 1);
+  } else if (data_channel->getRank() == 1) {
+    auto float_tensor = buildTensor<float>({1, 2, 3}, -1.0);
+    data_channel->receive(*float_tensor, 0);
+    ASSERT_TENSOR_VALUE(float, *float_tensor, 4.2);
+  }
+}
+    
+    #include 'gloo/rendezvous/store.h'
+#include 'gloo/transport/device.h'
+    
+    #define THDPStorage TH_CONCAT_3(THDP,Real,Storage)
+#define THDPStorageStr TH_CONCAT_STRING_3(torch.cuda.,Real,Storage)
+#define THDPStorageClass TH_CONCAT_3(THDP,Real,StorageClass)
+#define THDPStorage_(NAME) TH_CONCAT_4(THDP,Real,Storage_,NAME)
     
     
-    {}  // namespace tensorflow
-
+void unregister_fd(int fd) {
+  pollfds.erase(
+    std::remove_if(pollfds.begin(), pollfds.end(),
+        [fd](const struct pollfd &pfd) { return pfd.fd == fd; }),
+    pollfds.end());
+  client_sessions.erase(fd);
+}
     
-    namespace tensorflow {
-    }
+      constexpr uint64_t sec_to_ns = 1000000000;
+    
+    struct SSATmp;
+struct Type;
+    
+    void numa_bind_to(void* start, size_t size, int node) {
+  if (!use_numa) return;
+  numa_tonode_memory(start, size, node);
+}
     
     
     {
-    {    SetReaderFactory([this, compression_type, env]() {
-      return new TFRecordReader(name(), compression_type, env);
-    });
+    {    (void)memset(&utbuf, 0, sizeof(utbuf));
+    utbuf.actime = sb->st_atime;
+    utbuf.modtime = sb->st_mtime;
+    (void) utime(name, &utbuf); /* don't care if loses */
+#endif
   }
-};
-    
-    bool HloReachabilityMap::IsReachable(const HloInstruction* a,
-                                     const HloInstruction* b) const {
-  return GetBitVector(b).Get(GetIndex(a));
 }
     
-    The input audio has one row of the tensor for each channel in the audio file.
-Each channel contains audio samples starting at the beginning of the audio and
-having `1/samples_per_second` time between them. The output file will contain
-all of the audio channels contained in the tensor.
-    
-    // Cwise binary ops
-Status GradForUnaryCwise(FunctionDef* g, std::vector<FDH::Node> nodes) {
-  for (auto& n : nodes) {
-    if (n.attr.empty()) {
-      n.attr = {{'T', '$T'}};
+    void OfflineCode::disasm(FILE* file,
+                         TCA fileStartAddr,
+                         TCA codeStartAddr,
+                         uint64_t codeLen,
+                         const PerfEventsMap<TCA>& perfEvents,
+                         BCMappingInfo bcMappingInfo,
+                         bool printAddr,
+                         bool printBinary) {
     }
-  }
-  *g = FDH::Define(
-      // Arg defs
-      {'x: T', 'dy: T'},
-      // Ret val defs
-      {'dx: T'},
-      // Attr defs
-      {{'T: {half, float, double}'}},
-      // Nodes
-      nodes);
-  return Status::OK();
+    
+    template<> inline
+dnnError_t dnnLayoutCreateFromPrimitive<double>(
+    dnnLayout_t* pLayout,
+    const dnnPrimitive_t primitive,
+    dnnResourceType_t type)
+{
+    return dnnLayoutCreateFromPrimitive_F64(pLayout, primitive, type);
 }
     
-    bool FileExists(const std::string name);
-    
-    SEXP XGDMatrixCreateFromMat_R(SEXP mat,
-                              SEXP missing) {
-  SEXP ret;
-  R_API_BEGIN();
-  SEXP dim = getAttrib(mat, R_DimSymbol);
-  size_t nrow = static_cast<size_t>(INTEGER(dim)[0]);
-  size_t ncol = static_cast<size_t>(INTEGER(dim)[1]);
-  const bool is_int = TYPEOF(mat) == INTSXP;
-  double *din;
-  int *iin;
-  if (is_int) {
-    iin = INTEGER(mat);
-  } else {
-    din = REAL(mat);
-  }
-  std::vector<float> data(nrow * ncol);
-  #pragma omp parallel for schedule(static)
-  for (omp_ulong i = 0; i < nrow; ++i) {
-    for (size_t j = 0; j < ncol; ++j) {
-      data[i * ncol +j] = is_int ? static_cast<float>(iin[i + nrow * j]) : din[i + nrow * j];
+        /*virtual*/ NDArrayViewPtr Value::Data() const
+    {
+        if (!m_data)
+        {
+            RuntimeError('This Value object is invalid and can no longer be accessed. This usually happens when a temporary Value object returned by the CNTK library'
+                          ' is not cloned and accessed later after it has been erased by the library. The Value objects created inside and returned by the library from APIs '
+                          'like Forward, Backward etc. are temporary and are only guaranteed to be valid until the next Forward/Backward call. If you want to access the Values '
+                          'later, you must explicitly clone them.');
+        }
     }
-  }
-  DMatrixHandle handle;
-  CHECK_CALL(XGDMatrixCreateFromMat(BeginPtr(data), nrow, ncol, asReal(missing), &handle));
-  ret = PROTECT(R_MakeExternalPtr(handle, R_NilValue, R_NilValue));
-  R_RegisterCFinalizerEx(ret, _DMatrixFinalizer, TRUE);
-  R_API_END();
-  UNPROTECT(1);
-  return ret;
-}
     
-          cbw.Write(buffer.data(), input.begin(), input.end());
+        mAsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
+    Matrix<float>::ScaleAndAdd(alpha, mAsparse, Bd1);
     
-    // tress
-#include '../src/tree/tree_model.cc'
-#include '../src/tree/tree_updater.cc'
-#include '../src/tree/updater_colmaker.cc'
-#include '../src/tree/updater_fast_hist.cc'
-#include '../src/tree/updater_prune.cc'
-#include '../src/tree/updater_refresh.cc'
-#include '../src/tree/updater_sync.cc'
-#include '../src/tree/updater_histmaker.cc'
-#include '../src/tree/updater_skmaker.cc'
+        // ProcessNDLScript - Process the NDL script
+    // netNdl - netNDL structure
+    // ndlPassUntil - complete processing through this pass, all passes if ndlPassAll
+    // fullValidate - validate as a complete network? (false if this might be a snippet of a full network)
+    void ProcessNDLScript(NetNdl<ElemType>* netNdl, NDLPass ndlPassUntil = ndlPassAll, bool fullValidate = false)
+    {
+        ProcessNDLScript(netNdl->ndl, ndlPassUntil, netNdl->lastNode, fullValidate);
+    }
     
-    TEST(Metric, AUCPR) {
-  xgboost::Metric *metric = xgboost::Metric::Create('aucpr');
-  ASSERT_STREQ(metric->Name(), 'aucpr');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 0, 1, 1}, {0, 0, 1, 1}), 1, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric, {0.1f, 0.9f, 0.1f, 0.9f}, {0, 0, 1, 1}),
-              0.5f, 0.001f);
-  EXPECT_NEAR(
-      GetMetricEval(metric,
-                    {0.4f, 0.2f, 0.9f, 0.1f, 0.2f, 0.4f, 0.1f, 0.1f, 0.2f, 0.1f},
-                    {0, 0, 0, 0, 0, 1, 0, 0, 1, 1}),
-      0.2908445f, 0.001f);
-  EXPECT_NEAR(GetMetricEval(
-                  metric, {0.87f, 0.31f, 0.40f, 0.42f, 0.25f, 0.66f, 0.95f,
-                           0.09f, 0.10f, 0.97f, 0.76f, 0.69f, 0.15f, 0.20f,
-                           0.30f, 0.14f, 0.07f, 0.58f, 0.61f, 0.08f},
-                  {0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1}),
-              0.2769199f, 0.001f);
-  EXPECT_ANY_THROW(GetMetricEval(metric, {0, 1}, {}));
-  EXPECT_ANY_THROW(GetMetricEval(metric, {0, 0}, {0, 0}));
-}
+    #include 'Basics.h'
+#include 'ScriptableObjects.h'
+#include 'BrainScriptParser.h'
     
-    // Data
-static double       g_Time = 0.0f;
-static bool         g_MousePressed[3] = { false, false, false };
-static CIwTexture*  g_FontTexture = NULL;
-static char*        g_ClipboardText = NULL;
-static bool         g_osdKeyboardEnabled = false;
+    // ---------------------------------------------------------------------------
+// ConfigException -- all errors from processing the config files are reported as ConfigException
+// ---------------------------------------------------------------------------
     
-    IMGUI_API bool        ImGui_ImplSdlGL2_Init(SDL_Window* window);
-IMGUI_API void        ImGui_ImplSdlGL2_Shutdown();
-IMGUI_API void        ImGui_ImplSdlGL2_NewFrame(SDL_Window* window);
-IMGUI_API void        ImGui_ImplSdlGL2_RenderDrawData(ImDrawData* draw_data);
-IMGUI_API bool        ImGui_ImplSdlGL2_ProcessEvent(SDL_Event* event);
+    // TODO: make this proper C++ functions with variadic templates and a name that reflects their difference to fprintf(stderr) which already implies printing to log
+// Print out a log message.  If the Tracing flag is set, prepend with a timestamp
+#define LOGPRINTF(stream, ...) \
+    do \
+    { \
+        PREPENDTS(stream); \
+        fprintf(stream, __VA_ARGS__); \
+    } while(0)
     
-        // Setup viewport
-    D3D11_VIEWPORT vp;
-    memset(&vp, 0, sizeof(D3D11_VIEWPORT));
-    vp.Width = ImGui::GetIO().DisplaySize.x;
-    vp.Height = ImGui::GetIO().DisplaySize.y;
-    vp.MinDepth = 0.0f;
-    vp.MaxDepth = 1.0f;
-    vp.TopLeftX = vp.TopLeftY = 0.0f;
-    ctx->RSSetViewports(1, &vp);
-    
-    // OpenGL data
-static GLuint       g_FontTexture = 0;
-    
-        VkPipelineViewportStateCreateInfo viewport_info = {};
-    viewport_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-    viewport_info.viewportCount = 1;
-    viewport_info.scissorCount = 1;
+    // Compares two ASCII strings ignoring the case.
+// TODO: Should switch to boost, boost::iequal should be used instead.
+// TODO: we already have EqualCI() in Basics.h which does the same thing.
+template<class TElement>
+inline bool AreEqualIgnoreCase(
+    const std::basic_string<TElement, char_traits<TElement>, allocator<TElement>>& s1,
+    const std::basic_string<TElement, char_traits<TElement>, allocator<TElement> >& s2)
+{
+    if (s1.size() != s2.size())
+    {
+        return false;
+    }
+    }
