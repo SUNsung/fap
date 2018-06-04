@@ -1,164 +1,186 @@
 
         
-        from .common import FileDownloader
-from ..utils import (
-    check_executable,
-    encodeFilename,
-)
-    
-    from .nuevo import NuevoBaseIE
-    
-            formats = [
-            {
-                'format_id': f['type'],
-                'filesize': int(f['filesize']),
-                'url': f['url']
-            } for f in info['rfiles']
-        ]
-        self._sort_formats(formats)
+        
+class Conversion(object):
     
     
-class CNNArticleIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:(?:edition|www)\.)?cnn\.com/(?!videos?/)'
-    _TEST = {
-        'url': 'http://www.cnn.com/2014/12/21/politics/obama-north-koreas-hack-not-war-but-cyber-vandalism/',
-        'md5': '689034c2a3d9c6dc4aa72d65a81efd01',
-        'info_dict': {
-            'id': 'bestoftv/2014/12/21/ip-north-korea-obama.cnn',
-            'ext': 'mp4',
-            'title': 'Obama: Cyberattack not an act of war',
-            'description': 'md5:0a802a40d2376f60e6b04c8d5bcebc4b',
-            'upload_date': '20141221',
-        },
-        'expected_warnings': ['Failed to download m3u8 information'],
-        'add_ie': ['CNN'],
-    }
+@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
+def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
+    r = http(follow_flag, httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 1
+    assert HTTP_OK in r
     
-    ] + _py_files('scrapy/contrib') + _py_files('scrapy/contrib_exp')
+        package_name = '(builtin)'
     
-        def start_requests(self):
-        qargs = {'total': self.total, 'show': self.show}
-        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
-        return [scrapy.Request(url, dont_filter=True)]
+        def load(self):
+        try:
+            with open(self.path, 'rt') as f:
+                try:
+                    data = json.load(f)
+                except ValueError as e:
+                    raise ValueError(
+                        'Invalid %s JSON: %s [%s]' %
+                        (type(self).__name__, str(e), self.path)
+                    )
+                self.update(data)
+        except IOError as e:
+            if e.errno != errno.ENOENT:
+                raise
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
+        >>> humanize_bytes(1)
+    '1 B'
+    >>> humanize_bytes(1024, precision=1)
+    '1.0 kB'
+    >>> humanize_bytes(1024 * 123, precision=1)
+    '123.0 kB'
+    >>> humanize_bytes(1024 * 12342, precision=1)
+    '12.1 MB'
+    >>> humanize_bytes(1024 * 12342, precision=2)
+    '12.05 MB'
+    >>> humanize_bytes(1024 * 1234, precision=2)
+    '1.21 MB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
+    '1.31 GB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
+    '1.3 GB'
     
-        @mock.patch(
-        'certbot_compatibility_test.validator.crypto_util.probe_sni')
-    def test_certificate_error(self, mock_probe_sni):
-        cert = OpenSSL.crypto.X509()
-        mock_probe_sni.side_effect = [acme_errors.Error]
-        self.assertFalse(self.validator.certificate(
-            cert, 'test.com', '127.0.0.1'))
+        fn = K.function(recreated_model.inputs, recreated_model.outputs)
+    fn_outputs = fn([np.random.random((10, 32)), np.random.random((10, 32)),
+                     np.random.random((10, 32)), np.random.random((10, 32))])
+    # note that the output of the K.function will still be a 1-elem list
+    assert [x.shape for x in fn_outputs] == [(10, 69)]
     
-    # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.viewcode',
-    'repoze.sphinx.autointerface',
-]
+            lr = self.lr
+        if self.initial_decay > 0:
+            lr = lr * (1. / (1. + self.decay * K.cast(self.iterations,
+                                                      K.dtype(self.decay))))
+        # momentum
+        shapes = [K.int_shape(p) for p in params]
+        moments = [K.zeros(shape) for shape in shapes]
+        self.weights = [self.iterations] + moments
+        for p, g, m in zip(params, grads, moments):
+            v = self.momentum * m - lr * g  # velocity
+            self.updates.append(K.update(m, v))
     
-          # These things do not look like template argument list:
-      #   class Suspect {
-      #   class Suspect x; }
-      if token in ('{', '}', ';'): return False
-    
-        base = 'src/sentry/locale'
-    for locale in os.listdir(base):
-        fn = os.path.join(base, locale, 'LC_MESSAGES', 'django.po')
-        if not os.path.isfile(fn):
-            continue
-    
-        # For pickling to work, the __module__ variable needs to be set to the frame
-    # where the named tuple is created.  Bypass this step in enviroments where
-    # sys._getframe is not defined (Jython for example).
-    if hasattr(_sys, '_getframe'):
-        result.__module__ = _sys._getframe(1).f_globals.get('__name__', '__main__')
-    
-    def _python_exit():
-    global _shutdown
-    _shutdown = True
-    items = list(_threads_queues.items())
-    for t, q in items:
-        q.put(None)
-    for t, q in items:
-        t.join()
-    
-      def FilterLevel( diagnostic ):
-    return diagnostic[ 'kind' ] == expected_kind
-    
-      It could be argued that the user actually wants the final buffer state to be
-  'foo.zoobar|' (the cursor at the end), but that would be much more difficult
-  to implement and is probably not worth doing.
-  '''
+        reconstruction_loss *= original_dim
+    kl_loss = 1 + z_log_var - K.square(z_mean) - K.exp(z_log_var)
+    kl_loss = K.sum(kl_loss, axis=-1)
+    kl_loss *= -0.5
+    vae_loss = K.mean(reconstruction_loss + kl_loss)
+    vae.add_loss(vae_loss)
+    vae.compile(optimizer='adam')
+    vae.summary()
+    plot_model(vae,
+               to_file='vae_mlp.png',
+               show_shapes=True)
     
     
-  def _HandleDetailedInfoResponse( self ):
-    vimsupport.WriteToPreviewWindow( self._response[ 'detailed_info' ] )
+# reparameterization trick
+# instead of sampling from Q(z|X), sample eps = N(0,I)
+# then z = z_mean + sqrt(var)*eps
+def sampling(args):
+    '''Reparameterization trick by sampling fr an isotropic unit Gaussian.
     
-        def __init__(self, msg_center):
-        self.provider = msg_center
+    from keras.utils.test_utils import layer_test
+from keras.utils.test_utils import keras_test
+from keras.layers import local
     
-        def setUp(self):
-        self.tc1 = TC1()
-        self.tc2 = TC2()
-        self.tc3 = TC3()
-        self.average_result_tc1 = '###### In Test 1 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.average_result_tc2 = '###### In Test 2 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.average_result_tc3 = '###### In Test 3 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.runner = TestRunner()
-        self.out = StringIO()
-        self.saved_stdout = sys.stdout
-        sys.stdout = self.out
-    
-        def test_display_current_time_at_current_time(self):
-        '''
-        Just as justification for working example with the time provider used in
-        production. (Will always pass.)
-        '''
-        production_code_time_provider = ProductionCodeTimeProvider()
-        class_under_test = TimeDisplay()
-        class_under_test.set_time_provider(production_code_time_provider)
-        current_time = datetime.datetime.now()
-        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
-
-    
-    '''
-Port of the Java example of 'Constructor Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050)
-    
-    '''
-A class that uses different static function depending of a parameter passed in
-init. Note the use of a single dictionary instead of multiple conditions
-'''
+    print('Building model...')
+model = Sequential()
+model.add(Dense(512, input_shape=(max_words,)))
+model.add(Activation('relu'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes))
+model.add(Activation('softmax'))
     
     
-class OrSpecification(CompositeSpecification):
-    _one = Specification()
-    _other = Specification()
+def get_example_array():
+    np.random.seed(3537)
+    example_array = np.random.random((100, 100)) * 100. - 50.
+    example_array[0, 0] = 0.  # 0 could possibly cause trouble
+    return example_array
+    
+        model = Sequential()
+    model.add(layers.GRU(8,
+                         input_shape=(x_train.shape[1], x_train.shape[2])))
+    model.add(layers.Dense(y_train.shape[-1], activation='softmax'))
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='rmsprop',
+                  metrics=['accuracy'])
+    model.summary()
+    history = model.fit(x_train, y_train, epochs=4, batch_size=10,
+                        validation_data=(x_test, y_test),
+                        verbose=0)
+    assert(history.history['acc'][-1] >= 0.8)
+    config = model.get_config()
+    model = Sequential.from_config(config)
+    
+    
+def test_selu():
+    x = K.placeholder(ndim=2)
+    f = K.function([x], [activations.selu(x)])
+    alpha = 1.6732632423543772848170429916717
+    scale = 1.0507009873554804934193349852946
+    
+    # The suffix(es) of source filenames.
+# You can specify multiple suffix as a list of string:
+# source_suffix = ['.rst', '.md']
+source_suffix = '.rst'
+    
+    class Bigthink(VideoExtractor):
+    name = 'Bigthink'
+    
+    from ..common import *
+    
+    	type, ext, size = url_info(url)
+	print_info(site_info, title, type, size)
+	
+	if not info_only:
+		download_urls([url], title, ext, size, output_dir, merge = merge)
+    
+        def extract(self, **kwargs):
+        for i in self.streams:
+            s = self.streams[i]
+            _, s['container'], s['size'] = url_info(s['url'])
+            s['src'] = [s['url']]
+    
+            self.title = match1(content,
+                            r'setup\[\'title\'\] = '([^']+)';')
+    
+        # ordered list of supported stream types / qualities on this site
+    # order: high quality -> low quality
+    stream_types = [
+        {'id': 'original'}, # contains an 'id' or 'itag' field at minimum
+        {'id': 'small'},
+    ]
+    
+    define('port', default=8888, help='run on the given port', type=int)
+    
+        def finish(self):
+        '''Implements `.HTTPConnection.finish`.'''
+        if (self._expected_content_remaining is not None and
+                self._expected_content_remaining != 0 and
+                not self.stream.closed()):
+            self.stream.close()
+            raise httputil.HTTPOutputError(
+                'Tried to write %d bytes less than Content-Length' %
+                self._expected_content_remaining)
+        if self._chunking_output:
+            if not self.stream.closed():
+                self._pending_write = self.stream.write(b'0\r\n\r\n')
+                self._pending_write.add_done_callback(self._on_write_complete)
+        self._write_finished = True
+        # If the app finished the request while we're still reading,
+        # divert any remaining data away from the delegate and
+        # close the connection when we're done sending our response.
+        # Closing the connection is the only way to avoid reading the
+        # whole input body.
+        if not self._read_finished:
+            self._disconnect_on_finish = True
+        # No more data is coming, so instruct TCP to send any remaining
+        # data immediately instead of waiting for a full packet or ack.
+        self.stream.set_nodelay(True)
+        if self._pending_write is None:
+            self._finish_request(None)
+        else:
+            future_add_done_callback(self._pending_write, self._finish_request)
