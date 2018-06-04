@@ -1,54 +1,64 @@
-cc_test(
-    name = 'mst_solver_test',
-    size = 'small',
-    srcs = ['mst_solver_test.cc'],
-    deps = [
-        ':mst_solver',
-        '//dragnn/core/test:generic',
-        '//syntaxnet:base',
-        '//syntaxnet:test_main',
-        '@org_tensorflow//tensorflow/core:test',
-    ],
-)
+
+        
+            with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
-    import tensorflow as tf
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
     
 if __name__ == '__main__':
-    ap = argparse.ArgumentParser()
-    ap.add_argument('metrics', nargs='*', default=sorted(METRICS),
-                    help='Specifies metrics to benchmark, defaults to all. '
-                         'Choices are: {}'.format(sorted(METRICS)))
-    ap.add_argument('--formats', nargs='+', choices=sorted(FORMATS),
-                    help='Specifies multilabel formats to benchmark '
-                         '(defaults to all).')
-    ap.add_argument('--samples', type=int, default=1000,
-                    help='The number of samples to generate')
-    ap.add_argument('--classes', type=int, default=10,
-                    help='The number of classes')
-    ap.add_argument('--density', type=float, default=.2,
-                    help='The average density of labels per sample')
-    ap.add_argument('--plot', choices=['classes', 'density', 'samples'],
-                    default=None,
-                    help='Plot time with respect to this parameter varying '
-                         'up to the specified value')
-    ap.add_argument('--n-steps', default=10, type=int,
-                    help='Plot this many points for each metric')
-    ap.add_argument('--n-times',
-                    default=5, type=int,
-                    help='Time performance over n_times trials')
-    args = ap.parse_args()
+    unittest.main()
+
     
-        ###########################################################################
-    # Numpy permutation based
-    sampling_algorithm['numpy-permutation'] = \
-        lambda n_population, n_sample: \
-            np.random.permutation(n_population)[:n_sample]
+        def test_pbs(self):
+        # https://github.com/rg3/youtube-dl/issues/2350
+        self.assertMatch('http://video.pbs.org/viralplayer/2365173446/', ['pbs'])
+        self.assertMatch('http://video.pbs.org/widget/partnerplayer/980042464/', ['pbs'])
     
-        gc.collect()
+        def test_func(self):
+        as_file = os.path.join(TEST_DIR, testfile)
+        swf_file = os.path.join(TEST_DIR, test_id + '.swf')
+        if ((not os.path.exists(swf_file)) or
+                os.path.getmtime(swf_file) < os.path.getmtime(as_file)):
+            # Recompile
+            try:
+                subprocess.check_call([
+                    'mxmlc', '-output', swf_file,
+                    '-static-link-runtime-shared-libraries', as_file])
+            except OSError as ose:
+                if ose.errno == errno.ENOENT:
+                    print('mxmlc not found! Skipping test.')
+                    return
+                raise
     
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (3 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
+    
+class RtspFD(FileDownloader):
+    def real_download(self, filename, info_dict):
+        url = info_dict['url']
+        self.report_destination(filename)
+        tmpfilename = self.temp_name(filename)
+    
+            mvp_id = self._search_mvp_id(webpage)
+    
+    import os, json, imp
+here = os.path.abspath(os.path.dirname(__file__))
+proj_info = json.loads(open(os.path.join(here, PROJ_METADATA), encoding='utf-8').read())
+try:
+    README = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
+except:
+    README = ''
+CHANGELOG = open(os.path.join(here, 'CHANGELOG.rst'), encoding='utf-8').read()
+VERSION = imp.load_source('version', os.path.join(here, 'src/%s/version.py' % PACKAGE_NAME)).__version__
+    
+            for s in self.stream_types:
+            quality = s['id']
+            src = match1(content,
+                         r'src: '([^']+)', 'data-res': '%s'' % quality)
+            if src is not None:
+                url = 'http://en.musicplayon.com%s' % src
+                self.streams[quality] = {'url': url}
+    
+        type_, ext, size = url_info(stream_url)
+    print_info(site_info, title, type_, size)
+    if not info_only:
+        download_url_ffmpeg(url=stream_url, title=title, ext= 'mp4', output_dir=output_dir)
