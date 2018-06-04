@@ -1,180 +1,145 @@
 
         
-            def test_youtube(self):
-        self._assert_restricted('07FYdnEawAQ', '07FYdnEawAQ.mp4', 10)
-    
-        def test_tumblr(self):
-        self.assertMatch('http://tatianamaslanydaily.tumblr.com/post/54196191430/orphan-black-dvd-extra-behind-the-scenes', ['Tumblr'])
-        self.assertMatch('http://tatianamaslanydaily.tumblr.com/post/54196191430', ['Tumblr'])
-    
-        def test_cache(self):
-        ydl = FakeYDL({
-            'cachedir': self.test_dir,
-        })
-        c = Cache(ydl)
-        obj = {'x': 1, 'y': ['ä', '\\a', True]}
-        self.assertEqual(c.load('test_cache', 'k.'), None)
-        c.store('test_cache', 'k.', obj)
-        self.assertEqual(c.load('test_cache', 'k2'), None)
-        self.assertFalse(_is_empty(self.test_dir))
-        self.assertEqual(c.load('test_cache', 'k.'), obj)
-        self.assertEqual(c.load('test_cache', 'y'), None)
-        self.assertEqual(c.load('test_cache2', 'k.'), None)
-        c.remove()
-        self.assertFalse(os.path.exists(self.test_dir))
-        self.assertEqual(c.load('test_cache', 'k.'), None)
+            # Sorting the libraries
+    inner_blocks = sorted(blocks[0].split('##'))
+    for i in range(1 , len(inner_blocks)):
+        if inner_blocks[i][0] != '#':
+            inner_blocks[i] = '##' + inner_blocks[i]
+    inner_blocks=''.join(inner_blocks)
     
     
-import errno
-import io
-import json
-import re
-import subprocess
-    
-            webpage = self._download_webpage(url, video_id)
-        key = self._search_regex(
-            r'src=['\']https?://[^/]+/embed/([A-Za-z0-9_-]+)', webpage, 'key')
-    
-    
-class AudiomackIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?audiomack\.com/song/(?P<id>[\w/-]+)'
-    IE_NAME = 'audiomack'
-    _TESTS = [
-        # hosted on audiomack
-        {
-            'url': 'http://www.audiomack.com/song/roosh-williams/extraordinary',
-            'info_dict':
-            {
-                'id': '310086',
-                'ext': 'mp3',
-                'uploader': 'Roosh Williams',
-                'title': 'Extraordinary'
-            }
-        },
-        # audiomack wrapper around soundcloud song
-        {
-            'add_ie': ['Soundcloud'],
-            'url': 'http://www.audiomack.com/song/hip-hop-daily/black-mamba-freestyle',
-            'info_dict': {
-                'id': '258901379',
-                'ext': 'mp3',
-                'description': 'mamba day freestyle for the legend Kobe Bryant ',
-                'title': 'Black Mamba Freestyle [Prod. By Danny Wolf]',
-                'uploader': 'ILOVEMAKONNEN',
-                'upload_date': '20160414',
-            }
-        },
-    ]
-    
-            webpage = self._download_webpage(url, display_id)
-    
-    signals_available = False
-try:
-    from blinker import Namespace
-    signals_available = True
-except ImportError:
-    class Namespace(object):
-        def signal(self, name, doc=None):
-            return _FakeSignal(name, doc)
-    
-    import os
-import re
-import sys
-from datetime import date, datetime
-from subprocess import PIPE, Popen
-    
-    
-def test_appcontext_signals():
+def test_config_missing_json():
     app = flask.Flask(__name__)
-    recorded = []
+    with pytest.raises(IOError) as e:
+        app.config.from_json('missing.json')
+    msg = str(e.value)
+    assert msg.startswith('[Errno 2] Unable to load configuration '
+                          'file (No such file or directory):')
+    assert msg.endswith('missing.json'')
+    assert not app.config.from_json('missing.json', silent=True)
     
-        if i < len(seq) - 1:
-      # Encoder
-      ts.set_token(seq[i].token)
-    elif i == len(seq) - 1:
-      # Transition step
-      ts.set_token(seq[i].token)
-      ts.set_label(seq[0].token)
-      ts.set_weight(1.0)
-    else:
-      # Decoder
-      ts.set_token(seq[i % len(seq)].token)
-      ts.set_label(seq[(i + 1) % len(seq)].token)
-      ts.set_weight(1.0)
-    
-    flags = tf.app.flags
-    
-      def testPtbRawData(self):
-    tmpdir = tf.test.get_temp_dir()
-    for suffix in 'train', 'valid', 'test':
-      filename = os.path.join(tmpdir, 'ptb.%s.txt' % suffix)
-      with tf.gfile.GFile(filename, 'w') as fh:
-        fh.write(self._string_data)
-    # Smoke test
-    output = reader.ptb_raw_data(tmpdir)
-    self.assertEqual(len(output), 4)
-    
-      def add_stone(self, color, c):
-    assert self.group_index[c] == MISSING_GROUP_ID
-    captured_stones = set()
-    opponent_neighboring_group_ids = set()
-    friendly_neighboring_group_ids = set()
-    empty_neighbors = set()
+        return len(cmd) > 1 and 'x' in cmd[1]
     
     
-def parse_message(message):
-  message = gtp.pre_engine(message).strip()
-  first, rest = (message.split(' ', 1) + [None])[:2]
-  if first.isdigit():
-    message_id = int(first)
-    if rest is not None:
-      command, arguments = (rest.split(' ', 1) + [None])[:2]
-    else:
-      command, arguments = None, None
-  else:
-    message_id = None
-    command, arguments = first, rest
+@pytest.mark.functional
+def test_refuse_with_confirmation(proc, TIMEOUT):
+    refuse_with_confirmation(proc, TIMEOUT)
     
-      def test_add_child_idempotency(self):
-    root = MCTSNode(utils_test.BOARD_SIZE, go.Position(utils_test.BOARD_SIZE))
-    child = root.maybe_add_child(17)
-    current_children = copy.copy(root.children)
-    child2 = root.maybe_add_child(17)
-    self.assertEqual(child, child2)
-    self.assertEqual(current_children, root.children)
+        history = model.fit(x_train, y_train, batch_size=batch_size,
+                        epochs=epochs // 3, verbose=0)
     
-          for _ in batches:
-        preprocessing.write_tf_examples(
-            rewritten_file.name, all_batches, serialize=False)
+        old_layer = keras.layers.LSTM(input_shape=[3, 5], output_dim=2, name='d', consume_less='mem')
+    new_layer = keras.layers.LSTM(2, input_shape=[3, 5], name='d', implementation=1)
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
     
-      # The strategy is to spend the maximum time possible using seconds_per_move,
-  # and then switch to an exponentially decaying time usage, calibrated so that
-  # we have enough time for an infinite number of moves.
+        a_2 = Dense(16, name='dense_1')(a)
+    dp = Dropout(0.5, name='dropout')
+    b_2 = dp(b)
     
-    # Fetch and store Training and Test dataset files
-PATH_DATASET = PATH + os.sep + 'dataset'
-FILE_TRAIN = PATH_DATASET + os.sep + 'iris_training.csv'
-FILE_TEST = PATH_DATASET + os.sep + 'iris_test.csv'
-URL_TRAIN = 'http://download.tensorflow.org/data/iris_training.csv'
-URL_TEST = 'http://download.tensorflow.org/data/iris_test.csv'
+        _, fname = tempfile.mkstemp('.h5')
+    model.save(fname)
     
-    # This view is called from FlatpageFallbackMiddleware.process_response
-# when a 404 is raised, which often means CsrfViewMiddleware.process_view
-# has not been called even if CsrfViewMiddleware is installed. So we need
-# to use @csrf_protect, in case the template needs {% csrf_token %}.
-# However, we can't just wrap this view; if no matching flatpage exists,
-# or a redirect is required for authentication, the 404 needs to be returned
-# without any CSRF checks. Therefore, we only
-# CSRF protect the internal implementation.
+        for data_format in ['channels_first', 'channels_last']:
+        if data_format == 'channels_first':
+            shape = (3, 5, 5)
+            target_shape = (5, 5, 3)
+            prev_shape = (2, 3, 2)
+            flip = lambda x: np.flip(np.flip(x, axis=2), axis=3)
+            transpose = lambda x: np.transpose(x, (0, 2, 3, 1))
+            target_data_format = 'channels_last'
+        elif data_format == 'channels_last':
+            shape = (5, 5, 3)
+            target_shape = (3, 5, 5)
+            prev_shape = (2, 2, 3)
+            flip = lambda x: np.flip(np.flip(x, axis=1), axis=2)
+            transpose = lambda x: np.transpose(x, (0, 3, 1, 2))
+            target_data_format = 'channels_first'
     
-        def set_crawler(self, crawler):
-        assert not hasattr(self, '_crawler'), 'crawler already set'
-        self._crawler = crawler
+    - The task does not traditionally parse the question separately. This likely
+improves accuracy and is a good example of merging two RNNs.
     
-    def get_extension(link):
-    extension = os.path.splitext(link)[1][1:]
-    if extension in ['pdf', 'html']:
-        return extension
-    if 'pdf' in extension:
-        return 'pdf'    
-    return 'pdf'    
+    
+for seq_index in range(100):
+    # Take one sequence (part of the training set)
+    # for trying out decoding.
+    input_seq = encoder_input_data[seq_index: seq_index + 1]
+    decoded_sentence = decode_sequence(input_seq)
+    print('-')
+    print('Input sentence:', input_texts[seq_index])
+    print('Decoded sentence:', decoded_sentence)
+
+    
+    input_token_index = dict(
+    [(char, i) for i, char in enumerate(input_characters)])
+target_token_index = dict(
+    [(char, i) for i, char in enumerate(target_characters)])
+    
+        # Note: you have to use shuffle='batch' or False with HDF5Matrix
+    model.fit(X_train, y_train, batch_size=32, shuffle='batch', verbose=False)
+    # test that evalutation and prediction don't crash and return reasonable results
+    out_pred = model.predict(X_test, batch_size=32, verbose=False)
+    out_eval = model.evaluate(X_test, y_test, batch_size=32, verbose=False)
+    
+    The one public-facing part of this module is the `Configurable` class
+and its `~Configurable.configure` method, which becomes a part of the
+interface of its subclasses, including `.AsyncHTTPClient`, `.IOLoop`,
+and `.Resolver`.
+'''
+    
+        @gen_test
+    def test_nonblocking_put_with_getters(self):
+        q = queues.Queue()
+        get0 = q.get()
+        get1 = q.get()
+        q.put_nowait(0)
+        # put_nowait does *not* immediately unblock getters.
+        yield gen.moment
+        self.assertEqual(0, (yield get0))
+        q.put_nowait(1)
+        yield gen.moment
+        self.assertEqual(1, (yield get1))
+    
+        def shutdown(self, wait=True):
+        pass
+    
+    .. testoutput::
+   :hide:
+    
+            ``timeout`` may be a number denoting a time (on the same
+        scale as `tornado.ioloop.IOLoop.time`, normally `time.time`), or a
+        `datetime.timedelta` object for a deadline relative to the
+        current time.
+        '''
+        future = Future()
+        try:
+            self.put_nowait(item)
+        except QueueFull:
+            self._putters.append((item, future))
+            _set_timeout(future, timeout)
+        else:
+            future.set_result(None)
+        return future
+    
+        def test_none_callback_pos(self):
+        future = self.sync_future(None)
+        self.assertEqual(future.result(), 42)
+    
+        @unittest.skipIf(futures is None, 'futures module not present')
+    @gen_test
+    def test_normal_concurrent_future(self):
+        # A conccurrent future that resolves while waiting for the timeout.
+        with futures.ThreadPoolExecutor(1) as executor:
+            yield gen.with_timeout(datetime.timedelta(seconds=3600),
+                                   executor.submit(lambda: time.sleep(0.01)))
+    
+               `stop` and `wait` are deprecated; use ``@gen_test`` instead.
+        '''
+        assert _arg is None or not kwargs
+        self.__stop_args = kwargs or _arg
+        if self.__running:
+            self.io_loop.stop()
+            self.__running = False
+        self.__stopped = True
+    
+        `TwistedIOLoop` implements the Tornado IOLoop interface on top of
+    the Twisted reactor. Recommended usage::
