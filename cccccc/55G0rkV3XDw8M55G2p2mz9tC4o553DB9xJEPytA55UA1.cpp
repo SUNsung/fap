@@ -1,157 +1,359 @@
 
         
-        #include 'atom/browser/api/trackable_object.h'
-#include 'base/callback.h'
-#include 'chrome/browser/extensions/global_shortcut_listener.h'
-#include 'native_mate/handle.h'
-#include 'ui/base/accelerators/accelerator.h'
+        struct Options;
+struct FileMetaData;
     
-    // Like URLRequestAsarJob, but asks the JavaScript handler for file path.
-class URLRequestAsyncAsarJob : public JsAsker<asar::URLRequestAsarJob> {
+    static std::string MakeFileName(const std::string& name, uint64_t number,
+                                const char* suffix) {
+  char buf[100];
+  snprintf(buf, sizeof(buf), '/%06llu.%s',
+           static_cast<unsigned long long>(number),
+           suffix);
+  return name + buf;
+}
+    
+    static void UnrefEntry(void* arg1, void* arg2) {
+  Cache* cache = reinterpret_cast<Cache*>(arg1);
+  Cache::Handle* h = reinterpret_cast<Cache::Handle*>(arg2);
+  cache->Release(h);
+}
+    
+    
+    {}  // namespace leveldb
+    
+    TEST(WriteBatchTest, Multiple) {
+  WriteBatch batch;
+  batch.Put(Slice('foo'), Slice('bar'));
+  batch.Delete(Slice('box'));
+  batch.Put(Slice('baz'), Slice('boo'));
+  WriteBatchInternal::SetSequence(&batch, 100);
+  ASSERT_EQ(100, WriteBatchInternal::Sequence(&batch));
+  ASSERT_EQ(3, WriteBatchInternal::Count(&batch));
+  ASSERT_EQ('Put(baz, boo)@102'
+            'Delete(box)@101'
+            'Put(foo, bar)@100',
+            PrintContents(&batch));
+}
+    
+      // Open leveldb
+  leveldb::DB* db;
+  leveldb::Options options;
+  options.create_if_missing = true;
+  options.error_if_exists = true;
+  leveldb::Status status = leveldb::DB::Open(
+      options, db_filename, &db);
+  CHECK(status.ok()) << 'Failed to open leveldb ' << db_filename
+      << '. Is it already existing?';
+    
+    /**
+ * @brief Computes @f$ y = |x| @f$
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
+ */
+template <typename Dtype>
+class AbsValLayer : public NeuronLayer<Dtype> {
  public:
-  URLRequestAsyncAsarJob(net::URLRequest*, net::NetworkDelegate*);
+  explicit AbsValLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-      // content::WebContentsObserver:
-  void RenderViewDeleted(content::RenderViewHost*) override;
+      /// @brief The spatial dimensions of a filter kernel.
+  Blob<int> kernel_shape_;
+  /// @brief The spatial dimensions of the stride.
+  Blob<int> stride_;
+  /// @brief The spatial dimensions of the padding.
+  Blob<int> pad_;
+  /// @brief The spatial dimensions of the dilation.
+  Blob<int> dilation_;
+  /// @brief The spatial dimensions of the convolution input.
+  Blob<int> conv_input_shape_;
+  /// @brief The spatial dimensions of the col_buffer.
+  vector<int> col_buffer_shape_;
+  /// @brief The spatial dimensions of the output.
+  vector<int> output_shape_;
+  const vector<int>* bottom_shape_;
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the reordered input.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
     
-    {}  // namespace atom
-    
-    // An interface the PrintViewManager uses to notify an observer when the print
-// dialog is shown. Register the observer via PrintViewManager::set_observer.
-class PrintViewManagerObserver {
- public:
-  // Notifies the observer that the print dialog was shown.
-  virtual void OnPrintDialogShown() = 0;
-    }
-    
-    namespace views {
-class ColorChooserListener;
-}
-    
-        GetRenderProcessHosts(rphs);
-    for (it = rphs.begin(); it != rphs.end(); it++) {
-      RenderProcessHost* rph = *it;
-      DCHECK(rph != NULL);
-    }
-    
-      static void ClearCache(content::RenderProcessHost* render_view_host);
-  static void SetProxyConfig(content::RenderProcessHost* render_process_host,
-                             const std::string& proxy_config);
-    
-    v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
-                                           int object_id,
-                                           const std::string& type,
-                                           const std::string& method,
-                                           v8::Handle<v8::Value> args) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
-    }
-    
-    // Call method of an object in browser and return the result.
-// function CallObjectMethod(id, type, method, args);
-v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
-                                           int object_id,
-                                           const std::string& type,
-                                           const std::string& method,
-                                           v8::Handle<v8::Value> args);
-    
-    EventListener::~EventListener() {
-  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
-    delete i->second;
-  }
-}
-    
-    
-    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  return item->is_checked_;
-}
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.App.clearCache', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwAppClearCacheFunction);
+    {  Blob<Dtype> diff_;  // cached for backward pass
+  Blob<Dtype> dist_sq_;  // cached for backward pass
+  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
+  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
 };
     
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    {} // namespace extensions
-#endif
+    namespace caffe {
+    }
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of TanHLayer.
+ */
+template <typename Dtype>
+class CuDNNTanHLayer : public TanHLayer<Dtype> {
+ public:
+  explicit CuDNNTanHLayer(const LayerParameter& param)
+      : TanHLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNTanHLayer();
+    }
+    
+    #endif  // CAFFE_EXP_LAYER_HPP_
 
     
-    TEST(AnyTest, TestPackAndUnpack) {
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  protobuf_unittest::TestAny message;
-  message.mutable_any_value()->PackFrom(submessage);
+    
+    {
+    {}  // namespace testing
+}  // namespace grpc
+    
+    namespace grpc {
+namespace testing {
+    }
     }
     
-    // CodeGenerator implementation which generates a C++ source file and
-// header.  If you create your own protocol compiler binary and you want
-// it to support C++ output, you can do so by registering an instance of this
-// CodeGenerator with the CommandLineInterface in your main() function.
-class LIBPROTOC_EXPORT CppGenerator : public CodeGenerator {
- public:
-  CppGenerator();
-  ~CppGenerator();
+    gpr_atm grpc::testing::interop::g_got_sigint;
+    
+    grpc::string DescribeMethod(const grpc::protobuf::MethodDescriptor* method) {
+  std::stringstream result;
+  result << '  rpc ' << method->name()
+         << (method->client_streaming() ? '(stream ' : '(')
+         << method->input_type()->full_name() << ') returns '
+         << (method->server_streaming() ? '(stream ' : '(')
+         << method->output_type()->full_name() << ') {}\n';
+  if (method->options().deprecated()) {
+    result << ' DEPRECATED';
+  }
+  return result.str();
+}
+    
+    void jpeg_decoder::decode_start()
+{
+  init_frame();
     }
     
-      virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateFreezingCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+# if defined(OC_CLZ32)
+/**
+ * OC_ILOGNZ_32 - Integer binary logarithm of a non-zero 32-bit value.
+ * @_v: A non-zero 32-bit value.
+ * Returns floor(log2(_v))+1.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * If _v is zero, the return value is undefined; use OC_ILOG_32() instead.
+ */
+#  define OC_ILOGNZ_32(_v) (OC_CLZ32_OFFS-OC_CLZ32(_v))
+/**
+ * OC_ILOG_32 - Integer binary logarithm of a 32-bit value.
+ * @_v: A 32-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ */
+#  define OC_ILOG_32(_v)   (OC_ILOGNZ_32(_v)&-!!(_v))
+# else
+#  define OC_ILOGNZ_32(_v) (oc_ilog32(_v))
+#  define OC_ILOG_32(_v)   (oc_ilog32(_v))
+# endif
+    
+    # if defined(OC_COLLECT_METRICS)
+typedef struct oc_mode_metrics oc_mode_metrics;
+# endif
+typedef struct oc_mode_rd      oc_mode_rd;
+    
+     ********************************************************************/
+    
+    #undef MULT16_16_Q15_ADD
+static inline int MULT16_16_Q15_ADD(int a, int b, int c, int d) {
+    int m;
+    asm volatile('MULT $ac1, %0, %1' : : 'r' ((int)a), 'r' ((int)b));
+    asm volatile('madd $ac1, %0, %1' : : 'r' ((int)c), 'r' ((int)d));
+    asm volatile('EXTR.W %0,$ac1, %1' : '=r' (m): 'i' (15));
+    return m;
+}
+    
+    # if !defined(__OPTIMIZE__)
+#  define OP_CVTEPI16_EPI32_M64(x) \
+ (_mm_cvtepi16_epi32(_mm_loadl_epi64((__m128i *)(x))))
+# else
+#  define OP_CVTEPI16_EPI32_M64(x) \
+ (_mm_cvtepi16_epi32(*(__m128i *)(x)))
+# endif
+    
+    #undef    silk_LSHIFT_uint
+static OPUS_INLINE opus_uint32 silk_LSHIFT_uint(opus_uint32 a, opus_int32 shift){
+    opus_uint32 ret;
+    ops_count += 1;
+    ret = a << shift;
+    return ret;
+}
+    
+    /* Variable order MA prediction error filter. */
+void silk_LPC_analysis_filter(
+    opus_int16                  *out,               /* O    Output signal                                               */
+    const opus_int16            *in,                /* I    Input signal                                                */
+    const opus_int16            *B,                 /* I    MA prediction coefficients, Q12 [order]                     */
+    const opus_int32            len,                /* I    Signal length                                               */
+    const opus_int32            d,                  /* I    Filter order                                                */
+    int                         arch                /* I    Run-time architecture                                       */
+);
     
     
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
+    {}
+
     
-    void RepeatedPrimitiveFieldGenerator::GenerateMembers(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
-    '    = pb::FieldCodec.For$capitalized_type_name$($tag$);\n');
-  printer->Print(variables_,
-    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
-  WritePropertyDocComment(printer, descriptor_);
-  AddPublicMemberAttributes(printer);
-  printer->Print(
-    variables_,
-    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
-    '  get { return $name$_; }\n'
-    '}\n');
+    template<> inline
+dnnError_t dnnBatchNormalizationCreateForward_v2<float>(
+    dnnPrimitive_t* pBatchNormalization,
+    dnnPrimitiveAttributes_t attributes,
+    const dnnLayout_t dataLayout,
+    float eps,
+    unsigned int flags)
+{
+    return dnnBatchNormalizationCreateForward_v2_F32(
+        pBatchNormalization, attributes, dataLayout, eps, flags);
 }
     
     
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
+    {        if (source.Mask() != nullptr)
+            Mask()->CopyFrom(*source.Mask());
+        else
+        {
+            if (Mask() != nullptr)
+            {
+                // Clear the mask
+                Mask()->Clear();
+            }
+        }
+    }
     
+        // replace children
+    // This looks for nodes in the network that have the same name as its current inputs, and then relinks its inputs to those.
+    // I.e. this allows to move a node from network to another and reconnect by the names if its inputs.
+    for (int i = 0; i < newNode->GetNumInputs(); ++i)
+    {
+        if (m_nameToNodeMap.find(newNode->GetInputs()[i]->NodeName()) == m_nameToNodeMap.end())
+            RuntimeError('Child node %ls is not part of the network.', newNode->GetInputs()[i]->NodeName().c_str());
+        newNode->SetInput(i, m_nameToNodeMap[newNode->GetInputs()[i]->NodeName()]);
+    }
     
-    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(SourceGeneratorBase);
+    public:
+    template <class ConfigRecordType>
+    void InitFromConfig(const ConfigRecordType&);
+    virtual void Init(const ConfigParameters& config) override
+    {
+        InitFromConfig(config);
+    }
+    virtual void Init(const ScriptableObjects::IConfigRecord& config) override
+    {
+        InitFromConfig(config);
+    }
+    virtual void Destroy();
+    BinaryReader()
+        : m_pMBLayout(make_shared<MBLayout>())
+    {
+        m_pMBLayout->SetUniqueAxisName(L'BinaryReader');
+    }
+    virtual ~BinaryReader();
+    virtual void StartMinibatchLoop(size_t mbSize, size_t epoch, size_t requestedEpochSamples = requestDataSize);
+    virtual bool TryGetMinibatch(StreamMinibatchInputs& matrices);
+    
+    cudaStream_t GPUDataTransferer::s_assignStream = NULL;
+    
+    namespace Microsoft { namespace MSR { namespace BS {
+    }
+    }
+    }
+    
+    struct SourceFile // content of one source file  (only in this header because TextLocation's private member uses it)
+{
+    /*const*/ wstring path;                     // where it came from
+    /*const*/ vector<wstring> lines;            // source code lines
+    SourceFile(wstring location, wstring text); // from string, e.g. command line
+    SourceFile(wstring path);                   // from file
 };
     
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
+        float4& operator&=(const float4& other)
+    {
+        v = _mm_and_ps(v, other);
+        return *this;
+    }
+    float4& operator|=(const float4& other)
+    {
+        v = _mm_or_ps(v, other);
+        return *this;
+    }
+    float4& operator+=(const float4& other)
+    {
+        v = _mm_add_ps(v, other);
+        return *this;
+    }
+    float4& operator-=(const float4& other)
+    {
+        v = _mm_sub_ps(v, other);
+        return *this;
+    }
+    float4& operator*=(const float4& other)
+    {
+        v = _mm_mul_ps(v, other);
+        return *this;
+    }
+    float4& operator/=(const float4& other)
+    {
+        v = _mm_div_ps(v, other);
+        return *this;
+    }
     
-      new_tensor->storage = nullptr;
-  new_tensor->storageOffset = 0;
     
-    #include 'override_macros.h'
+#endif  // STORAGE_LEVELDB_DB_WRITE_BATCH_INTERNAL_H_
+
+    
+    namespace leveldb {
+    }
+    
+    
+    {}  // namespace leveldb
+    
+    // Read through the first n keys repeatedly and check that they get
+// compacted (verified by checking the size of the key space).
+void AutoCompactTest::DoReads(int n) {
+  std::string value(kValueSize, 'x');
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+    }
