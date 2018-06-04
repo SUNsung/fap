@@ -1,251 +1,296 @@
 
         
-        #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
-    
-    void RepeatedEnumFieldGenerator::GenerateFreezingCode(io::Printer* printer) {
-}
-    
-    #include <string>
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-    
-    
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-    void InitExtrinsics(const Mat& _imagePoints, const Mat& _objectPoints, const IntrinsicParams& param, Mat& omckk, Mat& Tckk);
-    
-    protected:
-    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types );
-    void fill_array( int test_case_idx, int i, int j, Mat& arr );
-    double get_success_error_level( int test_case_idx, int i, int j );
-    void run_func();
-    void prepare_to_validation( int test_case_idx );
-    
-    
-    {                return (count & TAG_MASK) - val;
-#else
-                return ::atomicAdd(address, val);
-#endif
-            }
-    
-            // Core Extension: ARB_copy_buffer
-        COPY_READ_BUFFER                 = 0x8F36,
-        COPY_WRITE_BUFFER                = 0x8F37,
-        COPY_READ_BUFFER_BINDING         = 0x8F36,
-        COPY_WRITE_BUFFER_BINDING        = 0x8F37,
-    
-      assert(peekType(msg) == thpp::Type::LONG_LONG);
-  int64_t arg4 = unpackInteger(msg);
-  assert(arg4 == LLONG_MAX);
-    
-    PyObject* tensor_to_list(const Tensor& tensor) {
-  Tensor data = tensor;
-  if (data.type().backend() != kCPU) {
-    with_no_gil([&]() {
-      data = data.toBackend(kCPU);
-    });
-  }
-  auto& type = data.type();
-  return recursive_to_list(
-      (char*)data.data_ptr(), data.sizes(), data.strides(), 0,
-      type.scalarType(), type.elementSizeInBytes());
-}
-    
-    
-    {
-    {}} // namespace rpc, thd
-    
-      /**
-   * Invoked if the stream failed for any reason after
-   * bidirectional_stream_start(). HTTP/2 error codes are
-   * mapped to chrome net error codes. Once invoked, no further callback methods
-   * will be invoked.
-   */
-  void (*on_failed)(bidirectional_stream* stream, int net_error);
-    
-      ClientConfig client_config;
-  client_config.set_client_type(ASYNC_CLIENT);
-  client_config.set_outstanding_rpcs_per_channel(1000);
-  client_config.set_client_channels(8);
-  client_config.set_async_client_threads(8);
-  client_config.set_rpc_type(STREAMING);
-  client_config.mutable_load_params()->mutable_poisson()->set_offered_load(
-      1000.0 / grpc_test_slowdown_factor());
-    
-    #include <chrono>
-#include <thread>
-#include <vector>
-    
-      bool Generate(const grpc::protobuf::FileDescriptor* file,
-                const grpc::string& parameter,
-                grpc::protobuf::compiler::GeneratorContext* context,
-                grpc::string* error) const;
-    
-    std::string stringFromCFString(const CFStringRef& cf_string) {
-  // Access, then convert the CFString. CFStringGetCStringPtr is less-safe.
-  CFIndex length = CFStringGetLength(cf_string);
-  char* buffer = (char*)malloc(length + 1);
-  if (buffer == nullptr) {
-    return '';
-  }
-    }
-    
-    
-    {  // Check the default value accessor.
-  std::string default_value;
-  auto status = Flag::getDefaultValue('test_mistake', default_value);
-  EXPECT_FALSE(status.ok());
-  status = Flag::getDefaultValue('test_string_flag', default_value);
-  EXPECT_TRUE(status.ok());
-  EXPECT_EQ(default_value, 'TEST STRING');
-}
-    
-    
-    {  if (handle) {
-    ::CloseHandle(handle);
-  }
-}
-#else
-TEST_F(ProcessTests, test_constructorPosix) {
-  auto p = PlatformProcess(getpid());
-  EXPECT_TRUE(p.isValid());
-  EXPECT_EQ(p.nativeHandle(), getpid());
-}
-#endif
-    
-      // If a constraint list exists for a map key, normal constraints apply.
-  EXPECT_TRUE(cm['path'].matches('some'));
-  EXPECT_FALSE(cm['path'].matches('not_some'));
-    
-    
-    {  runner.start();
-}
-    
-    
-    {  return std::string(buffer.data());
-}
-    
-    Status WmiResultItem::GetLong(const std::string& name, long& ret) const {
-  std::wstring property_name = stringToWstring(name);
-  VARIANT value;
-  HRESULT hr = result_->Get(property_name.c_str(), 0, &value, nullptr, nullptr);
-  if (hr != S_OK) {
-    return Status(-1, 'Error retrieving data from WMI query.');
-  }
-  if (value.vt != VT_I4) {
-    VariantClear(&value);
-    return Status(-1, 'Invalid data type returned.');
-  }
-  ret = value.lVal;
-  VariantClear(&value);
-  return Status(0);
-}
-    
-    #include <map>
-#include <string>
-#include <vector>
-    
-    void DistributedRunner::start() {
-  auto dist = Distributed();
-  while (!interrupted()) {
-    dist.pullUpdates();
-    if (dist.getPendingQueryCount() > 0) {
-      dist.runQueries();
-    }
-    }
-    }
-    
-    class InputCorpus {
- public:
-  static const size_t kFeatureSetSize = 1 << 16;
-  InputCorpus(const std::string &OutputCorpus) : OutputCorpus(OutputCorpus) {
-    memset(InputSizesPerFeature, 0, sizeof(InputSizesPerFeature));
-    memset(SmallestElementPerFeature, 0, sizeof(SmallestElementPerFeature));
-  }
-  ~InputCorpus() {
-    for (auto II : Inputs)
-      delete II;
-  }
-  size_t size() const { return Inputs.size(); }
-  size_t SizeInBytes() const {
-    size_t Res = 0;
-    for (auto II : Inputs)
-      Res += II->U.size();
-    return Res;
-  }
-  size_t NumActiveUnits() const {
-    size_t Res = 0;
-    for (auto II : Inputs)
-      Res += !II->U.empty();
-    return Res;
-  }
-  bool empty() const { return Inputs.empty(); }
-  const Unit &operator[] (size_t Idx) const { return Inputs[Idx]->U; }
-  void AddToCorpus(const Unit &U, size_t NumFeatures, bool MayDeleteFile = false) {
-    assert(!U.empty());
-    uint8_t Hash[kSHA1NumBytes];
-    if (FeatureDebug)
-      Printf('ADD_TO_CORPUS %zd NF %zd\n', Inputs.size(), NumFeatures);
-    ComputeSHA1(U.data(), U.size(), Hash);
-    Hashes.insert(Sha1ToString(Hash));
-    Inputs.push_back(new InputInfo());
-    InputInfo &II = *Inputs.back();
-    II.U = U;
-    II.NumFeatures = NumFeatures;
-    II.MayDeleteFile = MayDeleteFile;
-    memcpy(II.Sha1, Hash, kSHA1NumBytes);
-    UpdateCorpusDistribution();
-    ValidateFeatureSet();
-  }
-    }
-    
-    #include 'FuzzerExtFunctions.def'
-    
-    using namespace fuzzer;
-    
-    
-    {}  // namespace fuzzer
+        
+    {}  // namespace leveldb
 
     
+    #if 0
+static void DumpInternalIter(Iterator* iter) {
+  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+    ParsedInternalKey k;
+    if (!ParseInternalKey(iter->key(), &k)) {
+      fprintf(stderr, 'Corrupt '%s'\n', EscapeString(iter->key()).c_str());
+    } else {
+      fprintf(stderr, '@ '%s'\n', k.DebugString().c_str());
+    }
+  }
+}
+#endif
     
-    {  if (Options.Verbosity)
-    TPC.PrintModuleInfo();
-  if (!Options.OutputCorpus.empty() && Options.ReloadIntervalSec)
-    EpochOfLastReadOfOutputCorpus = GetEpoch(Options.OutputCorpus);
-  MaxInputLen = MaxMutationLen = Options.MaxLen;
-  AllocateCurrentUnitData();
-  CurrentUnitSize = 0;
-  memset(BaseSha1, 0, sizeof(BaseSha1));
+    static bool GetLevel(Slice* input, int* level) {
+  uint32_t v;
+  if (GetVarint32(input, &v) &&
+      v < config::kNumLevels) {
+    *level = v;
+    return true;
+  } else {
+    return false;
+  }
 }
     
+      void EncodeTo(std::string* dst) const;
+  Status DecodeFrom(const Slice& src);
     
-    {  bool Parse(std::istream &IS, bool ParseCoverage);
-  bool Parse(const std::string &Str, bool ParseCoverage);
-  void ParseOrExit(std::istream &IS, bool ParseCoverage);
-  size_t Merge(std::vector<std::string> *NewFiles);
+    TEST(FindFileTest, OverlapSequenceChecks) {
+  Add('200', '200', 5000, 3000);
+  ASSERT_TRUE(! Overlaps('199', '199'));
+  ASSERT_TRUE(! Overlaps('201', '300'));
+  ASSERT_TRUE(Overlaps('200', '200'));
+  ASSERT_TRUE(Overlaps('190', '200'));
+  ASSERT_TRUE(Overlaps('200', '210'));
+}
+    
+    // Return a builtin comparator that uses lexicographic byte-wise
+// ordering.  The result remains the property of this module and
+// must not be deleted.
+extern const Comparator* BytewiseComparator();
+    
+            const float max_dist = 10.0f;
+        if(black_order[0].second > max_dist || black_order[1].second > max_dist ||
+           white_order[0].second > max_dist || white_order[1].second > max_dist)
+        {
+            continue; // there will be no improvement in this corner position
+        }
+    
+            RNG &rng = ts->get_rng();
+        int startPointIndex, endPointIndex, modifiedPointIndex;
+        do
+        {
+            startPointIndex = cvtest::randInt(rng) % usedPointsCount;
+            endPointIndex = cvtest::randInt(rng) % usedPointsCount;
+            modifiedPointIndex = checkPartialSubsets ? usedPointsCount - 1 : cvtest::randInt(rng) % usedPointsCount;
+        }
+        while (startPointIndex == endPointIndex || startPointIndex == modifiedPointIndex || endPointIndex == modifiedPointIndex);
+    
+    CV_EXPORTS_W void subtract(InputArray src1, Scalar src2, OutputArray dst, InputArray mask=noArray(), int dtype=-1);
+    
+      // Since the basic IO manipulators are overloaded for both narrow
+  // and wide streams, we have to provide this specialized definition
+  // of operator <<, even though its body is the same as the
+  // templatized version above.  Without this definition, streaming
+  // endl or other basic IO manipulators to Message will confuse the
+  // compiler.
+  Message& operator <<(BasicNarrowIoManip val) {
+    *ss_ << val;
+    return *this;
+  }
+    
+    #include 'gtest/internal/gtest-port.h'
+    
+    #include <iosfwd>
+#include <vector>
+#include 'gtest/internal/gtest-internal.h'
+#include 'gtest/internal/gtest-string.h'
+    
+    // This macro is for implementing ASSERT/EXPECT_DEBUG_DEATH when compiled in
+// NDEBUG mode. In this case we need the statements to be executed, the regex is
+// ignored, and the macro must accept a streamed message even though the message
+// is never printed.
+# define GTEST_EXECUTE_STATEMENT_(statement, regex) \
+  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
+  if (::testing::internal::AlwaysTrue()) { \
+     GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
+  } else \
+    ::testing::Message()
+    
+      // Given directory = 'dir', relative_path = 'test.xml',
+  // returns 'dir/test.xml'.
+  // On Windows, uses \ as the separator rather than /.
+  static FilePath ConcatPaths(const FilePath& directory,
+                              const FilePath& relative_path);
+    
+      // Converts a wide C string to a String using the UTF-8 encoding.
+  // NULL will be converted to '(null)'.  If an error occurred during
+  // the conversion, '(failed to convert from wide string)' is
+  // returned.
+  static std::string ShowWideCString(const wchar_t* wide_c_str);
+    
+    #include <utility>  // For ::std::pair.
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
+    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27>
+struct Templates27 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates26<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27> Tail;
 };
     
-    size_t GetPeakRSSMb();
     
-      // Make sure the child process uses the default handlers for the
-  // following signals rather than inheriting what the parent has.
-  sigset_t DefaultSigSet;
-  (void)sigemptyset(&DefaultSigSet);
-  (void)sigaddset(&DefaultSigSet, SIGQUIT);
-  (void)sigaddset(&DefaultSigSet, SIGINT);
-  (void)posix_spawnattr_setsigdefault(&SpawnAttributes, &DefaultSigSet);
-  // Make sure the child process doesn't block SIGCHLD
-  (void)posix_spawnattr_setsigmask(&SpawnAttributes, &OldBlockedSignalsSet);
-  short SpawnFlags = POSIX_SPAWN_SETSIGDEF | POSIX_SPAWN_SETSIGMASK;
-  (void)posix_spawnattr_setflags(&SpawnAttributes, SpawnFlags);
+    {
+    {    return -1;
+  }
+};
+    
+    #include 'ifaddrs_android.h'
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/utsname.h>
+#include <sys/ioctl.h>
+#include <netinet/in.h>
+#include <net/if.h>
+#include <unistd.h>
+#include <errno.h>
+#include <linux/netlink.h>
+#include <linux/rtnetlink.h>
+    
+    			memdelete(f);
+    
+    WebSocketClient::WebSocketClient() {
+    }
+    
+    #if defined(MBEDTLS_RSA_C) && ( !defined(MBEDTLS_BIGNUM_C) ||         \
+    !defined(MBEDTLS_OID_C) )
+#error 'MBEDTLS_RSA_C defined, but not all prerequisites'
+#endif
+    
+    		Map<int, Ref<VisualScriptNode> > nodes;
+		Map<int, Vector2> nodes_positions;
+    
+    class GDNativeLibraryResourceSaver : public ResourceFormatSaver {
+public:
+	virtual Error save(const String &p_path, const RES &p_resource, uint32_t p_flags);
+	virtual bool recognize(const RES &p_resource) const;
+	virtual void get_recognized_extensions(const RES &p_resource, List<String> *p_extensions) const;
+};
+    
+        struct huff_tables
+    {
+      bool ac_table;
+      uint  look_up[256];
+      uint  look_up2[256];
+      uint8 code_size[256];
+      uint  tree[512];
+    };
+    
+    
+    {
+    {    std::ostringstream oss;
+    std::copy(line.begin() + options_index,
+              line.end(),
+              std::ostream_iterator<std::string>(oss, ' '));
+    r['options'] = oss.str();
+    results.push_back(r);
+  }
+}
+    
+    namespace osquery {
+/**
+ * @brief Create the external SQLite implementation wrapper.
+ *
+ * Anything built with only libosquery and not the 'additional' library will
+ * not include a native SQL implementation. This applies to extensions and
+ * separate applications built with the osquery SDK.
+ *
+ * The ExternalSQLPlugin is a wrapper around the SQLite API, which forwards
+ * calls to an osquery extension manager (core).
+ */
+REGISTER_INTERNAL(ExternalSQLPlugin, 'sql', 'sql');
+    }
+    
+      // Tear down device node data.
+  if (!(osquery.major_number < 0)) {
+    if (cdevsw_remove(osquery.major_number, &osquery_cdevsw) < 0) {
+      panic('osquery kext: Cannot remove osquery from cdevsw');
+    }
+  }
+    
+    #include <osquery/config.h>
+#include <osquery/database.h>
+    
+    
+    {  // And of the column has constraints:
+  EXPECT_TRUE(cm['path'].notExistsOrMatches('some'));
+  EXPECT_FALSE(cm['path'].notExistsOrMatches('not_some'));
+  EXPECT_TRUE(cm['path'].exists());
+  EXPECT_TRUE(cm['path'].existsAndMatches('some'));
+}
+    
+    #include 'osquery/core/utils.h'
+#include 'osquery/tests/test_util.h'
+    
+     private:
+  ProcessState state_{PROCESS_STILL_ALIVE};
+  int status_{0};
+    
+    #include <string.h>
+#include <time.h>
+#include <vector>
+    
+      /// Key/index lookup method.
+  Status scan(const std::string& domain,
+              std::vector<std::string>& results,
+              const std::string& prefix,
+              size_t max) const override;
+    
+    template <class T, QueueBehaviorIfFull kBehavior = QueueBehaviorIfFull::THROW>
+class LifoSemMPMCQueue : public BlockingQueue<T> {
+ public:
+  // Note: The queue pre-allocates all memory for max_capacity
+  explicit LifoSemMPMCQueue(size_t max_capacity) : queue_(max_capacity) {}
+    }
+    
+      bool remove(const T& v) {
+    auto prev = &head_;
+    locate_lower_bound(v, prev);
+    auto curr = prev->load(std::memory_order_relaxed);
+    if (!curr || curr->elem_ != v) {
+      return false;
+    }
+    Node* curr_next = curr->next_.load();
+    // Patch up the actual list...
+    prev->store(curr_next, std::memory_order_release);
+    // ...and only then null out the removed node.
+    curr->next_.store(nullptr, std::memory_order_release);
+    curr->retire();
+    return true;
+  }
+    
+    #include <cstdint>
+#include <limits>
+#include <type_traits>
+#include <utility>
+    
+    
+    {  if (loopKeepAliveActive_ && keepAliveCount == 0) {
+    // Restore the notification queue internal flag
+    fnRunner_->stopConsuming();
+    fnRunner_->startConsumingInternal(this, queue_.get());
+    loopKeepAliveActive_ = false;
+  } else if (!loopKeepAliveActive_ && keepAliveCount > 0) {
+    // Update the notification queue event to treat it as a normal
+    // (non-internal) event.  The notification queue event always remains
+    // installed, and the main loop won't exit with it installed.
+    fnRunner_->stopConsuming();
+    fnRunner_->startConsuming(this, queue_.get());
+    loopKeepAliveActive_ = true;
+  }
+}
+    
+    unsigned Node::getChildCount(void) const
+{
+    return YGNodeGetChildCount(m_node);
+}
+    
+    private:
+  void ref() {
+    ++m_refcount;
+  }
+    
+    
+    {  // There are subtle issues with calling the next functions directly. It is
+  // much better to always use a ThreadScope to manage attaching/detaching for
+  // you.
+  FBEXPORT static JNIEnv* ensureCurrentThreadIsAttached();
+  FBEXPORT static void detachCurrentThread();
+};
+    
+    #define FBASSERT(expr) FBASSERTMSGF(expr, '%s', #expr)
