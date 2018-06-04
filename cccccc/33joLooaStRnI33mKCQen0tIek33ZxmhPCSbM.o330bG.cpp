@@ -1,184 +1,155 @@
 
         
-        void cvValidateDisparity( CvArr* _disp, const CvArr* _cost, int minDisparity,
-                         int numberOfDisparities, int disp12MaxDiff )
-{
-    cv::Mat disp = cv::cvarrToMat(_disp), cost = cv::cvarrToMat(_cost);
-    cv::validateDisparity( disp, cost, minDisparity, numberOfDisparities, disp12MaxDiff );
-}
-
+        #ifndef STORAGE_LEVELDB_DB_BUILDER_H_
+#define STORAGE_LEVELDB_DB_BUILDER_H_
     
-        // deriv of m w.r.t. s2
-    //Hs2 = [0 ; s(1)^2 ; s(1) ; 0 ; s(3) ; 2 * s(2) * s(3) ; 3 * s(2)^2 ; ...
-    //         0 ; 0 ; 0 ; 1 ; s(3)^2 ; 0 ; 0 ; 2 * s(2) ; 0 ; ...
-    //         s(1) * s(3) ; s(1) * 2 * s(2) ; 0 ; 0];
+    namespace leveldb {
+    }
     
-    CV_EXPORTS_W void compare(InputArray src1, Scalar src2, OutputArray dst, int cmpop);
+    TEST(VersionEditTest, EncodeDecode) {
+  static const uint64_t kBig = 1ull << 50;
+    }
     
-    #ifndef __OPENCV_CORE_OCL_RUNTIME_COMMON_HPP__
-#define __OPENCV_CORE_OCL_RUNTIME_COMMON_HPP__
+        // Open database
+    std::string tmp_dir;
+    Env::Default()->GetTestDirectory(&tmp_dir);
+    snprintf(file_name, sizeof(file_name),
+             '%s/dbbench_sqlite3-%d.db',
+             tmp_dir.c_str(),
+             db_num_);
+    status = sqlite3_open(file_name, &db_);
+    if (status) {
+      fprintf(stderr, 'open error: %s\n', sqlite3_errmsg(db_));
+      exit(1);
+    }
     
-    /* ////////////////////////////////////////////////////////////////////
+    
+    {}  // namespace leveldb
+    
+    // Dump the contents of the file named by fname in text format to
+// *dst.  Makes a sequence of dst->Append() calls; each call is passed
+// the newline-terminated text corresponding to a single item found
+// in the file.
 //
-//  CvMat helper tables
-//
-// */
+// Returns a non-OK result if fname does not name a leveldb storage
+// file, or if the file cannot be read.
+Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
     
-    template<class T, std::size_t N>
-class array;
+      // Return a pointer to the beginning of the referenced data
+  const char* data() const { return data_; }
     
-      // Consume multiple bytes from the beginning of the buffer.
-  void consume(size_type count)
-  {
-    BOOST_ASIO_ASSERT(begin_offset_ + count <= end_offset_);
-    begin_offset_ += count;
-    if (empty())
-      clear();
-  }
+    namespace oneof_descriptor {
+PyObject* NewOneofFieldsSeq(const OneofDescriptor* descriptor);
+}  // namespace oneof_descriptor
     
-    #include <boost/asio/detail/push_options.hpp>
-    
-    int open(const char* path, int flags, boost::system::error_code& ec)
-{
-  errno = 0;
-  int result = error_wrapper(::open(path, flags), ec);
-  if (result >= 0)
-    ec = boost::system::error_code();
-  return result;
-}
-    
-    #include <boost/asio/detail/push_options.hpp>
-    
-      // We can return immediately if there's no work to do and the reactor is
-  // not supposed to block.
-  if (!block && op_queue_[read_op].empty() && op_queue_[write_op].empty()
-      && op_queue_[except_op].empty() && timer_queues_.all_empty())
-    return;
+    #include <string>
+#include <google/protobuf/compiler/code_generator.h>
     
     
     {
     {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
     
-    namespace xgboost {
-namespace common {
-/*! \brief buffer reader of the stream that allows you to get */
-class StreamBufferReader {
- public:
-  explicit StreamBufferReader(size_t buffer_size)
-      :stream_(NULL),
-       read_len_(1), read_ptr_(1) {
-    buffer_.resize(buffer_size);
-  }
-  /*!
-   * \brief set input stream
-   */
-  inline void set_stream(dmlc::Stream *stream) {
-    stream_ = stream;
-    read_len_ = read_ptr_ = 1;
-  }
-  /*!
-   * \brief allows quick read using get char
-   */
-  inline char GetChar(void) {
-    while (true) {
-      if (read_ptr_ < read_len_) {
-        return buffer_[read_ptr_++];
-      } else {
-        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
-        if (read_len_ == 0) return EOF;
-        read_ptr_ = 0;
-      }
-    }
-  }
-  /*! \brief whether we are reaching the end of file */
-  inline bool AtEnd(void) const {
-    return read_len_ == 0;
-  }
-    }
-    }
-    }
     
-    namespace xgboost {
-namespace common {
-TEST(CompressedIterator, Test) {
-  ASSERT_TRUE(detail::SymbolBits(256) == 8);
-  ASSERT_TRUE(detail::SymbolBits(150) == 8);
-  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
-  int num_elements = 1000;
-  int repetitions = 1000;
-  srand(9);
-    }
-    }
-    }
     
-    // logistic loss for binary classification task
-struct LogisticClassification : public LogisticRegression {
-  static const char* DefaultEvalMetric() { return 'error'; }
-};
     
-    // linear
-#include '../src/linear/linear_updater.cc'
-#include '../src/linear/updater_coordinate.cc'
-#include '../src/linear/updater_shotgun.cc'
+    {
+    {
+    {}  // namespace java
+}  // namespace compiler
+}  // namespace protobuf
     
-    /*! \brief High precision gradient statistics pair with integer backed
- * storage. Operators are associative where floating point versions are not
- * associative. */
-using GradientPairInteger = detail::GradientPairInternal<int64_t>;
+        jint        (*Throw)(JNIEnv*, jthrowable);
+    jint        (*ThrowNew)(JNIEnv *, jclass, const char *);
+    jthrowable  (*ExceptionOccurred)(JNIEnv*);
+    void        (*ExceptionDescribe)(JNIEnv*);
+    void        (*ExceptionClear)(JNIEnv*);
+    void        (*FatalError)(JNIEnv*, const char*);
     
-    inline void RowSet::PushBack(bst_uint i) {
-  if (rows_.size() == 0) {
-    if (i == size_) {
-      ++size_; return;
-    } else {
-      rows_.resize(size_);
-      for (size_t i = 0; i < size_; ++i) {
-        rows_[i] = static_cast<bst_uint>(i);
-      }
-    }
-  }
-  rows_.push_back(i);
-  ++size_;
+    /* static */ Config * Config::create(void)
+{
+    return new Config();
 }
     
-    namespace guetzli {
+    class Config {
     }
     
-    #ifndef GUETZLI_FDCT_H_
-#define GUETZLI_FDCT_H_
-    
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg) {
-  bool has_Adobe_marker = false;
-  uint8_t Adobe_transform = 0;
-  for (const std::string& app : jpg.app_data) {
-    if (static_cast<uint8_t>(app[0]) == 0xe0) {
-      return true;
-    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
-      has_Adobe_marker = true;
-      Adobe_transform = app[14];
+        Size(double width, double height)
+    : width(width)
+    , height(height)
+    {
     }
-  }
-  if (has_Adobe_marker) {
-    return (Adobe_transform != 0);
-  }
-  const int cid0 = jpg.components[0].id;
-  const int cid1 = jpg.components[1].id;
-  const int cid2 = jpg.components[2].id;
-  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
-}
     
+        method(getOverflow);
+    method(getDisplay);
     
-    {}  // namespace guetzli
+      const char* functionName() const { return m_functionName; }
+  const char* fileName() const { return m_fileName; }
+  int lineNumber() const { return m_lineNumber; }
+    
+    struct ExternalFunctions {
+  // Initialize function pointers. Functions that are not available will be set
+  // to nullptr.  Do not call this constructor  before ``main()`` has been
+  // entered.
+  ExternalFunctions();
+    }
+    
+      // Remove all features that we already know from all other inputs.
+  for (size_t i = NumFilesInFirstCorpus; i < Files.size(); i++) {
+    auto &Cur = Files[i].Features;
+    std::vector<uint32_t> Tmp;
+    std::set_difference(Cur.begin(), Cur.end(), AllFeatures.begin(),
+                        AllFeatures.end(), std::inserter(Tmp, Tmp.begin()));
+    Cur.swap(Tmp);
+  }
+    
+    size_t MutationDispatcher::Mutate_ChangeASCIIInteger(uint8_t *Data, size_t Size,
+                                                     size_t MaxSize) {
+  if (Size > MaxSize) return 0;
+  size_t B = Rand(Size);
+  while (B < Size && !isdigit(Data[B])) B++;
+  if (B == Size) return 0;
+  size_t E = B;
+  while (E < Size && isdigit(Data[E])) E++;
+  assert(B < E);
+  // now we have digits in [B, E).
+  // strtol and friends don't accept non-zero-teminated data, parse it manually.
+  uint64_t Val = Data[B] - '0';
+  for (size_t i = B + 1; i < E; i++)
+    Val = Val * 10 + Data[i] - '0';
+    }
+    
+    #endif  // LLVM_FUZZER_MUTATE_H
 
     
-    #include <stdint.h>
+    #ifndef SHA_BIG_ENDIAN
+	// Swap byte order back
+	int i;
+	for (i=0; i<5; i++) {
+		s->state[i]=
+			  (((s->state[i])<<24)& 0xff000000)
+			| (((s->state[i])<<8) & 0x00ff0000)
+			| (((s->state[i])>>8) & 0x0000ff00)
+			| (((s->state[i])>>24)& 0x000000ff);
+	}
+#endif
     
-    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
-std::vector<std::vector<float>> PreProcessChannel(
-    int w, int h, int channel, float sigma, float amount, bool blur,
-    bool sharpen, const std::vector<std::vector<float>>& image);
+    void __sanitizer_weak_hook_strcmp(void *caller_pc, const char *s1,
+                                   const char *s2, int result) {
+  fuzzer::TPC.AddValueForStrcmp(caller_pc, s1, s2, 64);
+  if (!RecordingMemcmp) return;
+  if (result == 0) return;  // No reason to mutate.
+  size_t Len1 = strlen(s1);
+  size_t Len2 = strlen(s2);
+  size_t N = std::min(Len1, Len2);
+  if (N <= 1) return;  // Not interesting.
+  TS->TraceMemcmpCallback(N, reinterpret_cast<const uint8_t *>(s1),
+                          reinterpret_cast<const uint8_t *>(s2));
+}
+    
+    
+    {} // namespace fuzzer
