@@ -1,81 +1,53 @@
 
         
-            for ns in n_samples:
-        for nf in n_features:
-            it += 1
-            print('==================')
-            print('Iteration %s of %s' % (it, max(len(n_samples),
-                                          len(n_features))))
-            print('==================')
-            n_informative = nf // 10
-            X, Y, coef_ = make_regression(n_samples=ns, n_features=nf,
-                                          n_informative=n_informative,
-                                          noise=0.1, coef=True)
+        PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
+    vol.Required(CONF_API_KEY): cv.string,
+    vol.Required(CONF_SYSTEM_ID): cv.string,
+    vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
+})
     
-        for (sbplt, vals, quantity,
-         build_time, query_time) in [(311, Nrange, 'N',
-                                      N_results_build,
-                                      N_results_query),
-                                     (312, Drange, 'D',
-                                      D_results_build,
-                                      D_results_query),
-                                     (313, krange, 'k',
-                                      k_results_build,
-                                      k_results_query)]:
-        ax = plt.subplot(sbplt, yscale='log')
-        plt.grid(True)
+        def _setup(self, mock_requests):
+        '''Test the setup.'''
+        self.mock_post = mock_requests.post
+        self.mock_request_exception = Exception
+        mock_requests.exceptions.RequestException = self.mock_request_exception
+        config = {
+            'splunk': {
+                'host': 'host',
+                'token': 'secret',
+                'port': 8088,
+            }
+        }
     
-        default_algorithms = 'custom-tracking-selection,custom-auto,' \
-                         'custom-reservoir-sampling,custom-pool,'\
-                         'python-core-sample,numpy-permutation'
+        hass.services.register(DOMAIN, SERVICE_VOLUME_MUTE,
+                           lambda service:
+                           keyboard.tap_key(keyboard.volume_mute_key),
+                           schema=TAP_KEY_SCHEMA)
     
-    Does two benchmarks
+    DEFAULT_ON_STATE = 'high'
+DEPENDENCIES = ['zigbee']
+    
+        # Test if configuration directory exists
+    if not os.path.isdir(config_dir):
+        print('Creating directory', config_dir)
+        os.makedirs(config_dir)
+    
+        if unit_2 == LENGTH_MILES:
+        result = __meters_to_miles(meters)
+    elif unit_2 == LENGTH_FEET:
+        result = __meters_to_feet(meters)
+    elif unit_2 == LENGTH_KILOMETERS:
+        result = __meters_to_kilometers(meters)
     
     
-def make_linkcode_resolve(package, url_fmt):
-    '''Returns a linkcode_resolve function for the given URL format
+class TestBTHomeHub5DeviceTracker(unittest.TestCase):
+    '''Test BT Home Hub 5 device tracker platform.'''
     
-        opener = build_opener()
-    html_filename = os.path.join(html_folder, lang + '.html')
-    if not os.path.exists(html_filename):
-        print('Downloading %s' % page)
-        request = Request(page)
-        # change the User Agent to avoid being blocked by Wikipedia
-        # downloading a couple of articles should not be considered abusive
-        request.add_header('User-Agent', 'OpenAnything/1.0')
-        html_content = opener.open(request).read()
-        open(html_filename, 'wb').write(html_content)
+    if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5001, debug=True)
+
     
-        # TASK: Build a vectorizer / classifier pipeline that filters out tokens
-    # that are too rare or too frequent
+    2. Then, call the 'train' function with the appropriate parameters. Make sure to pass in the 'model_save_path' if you
+   want to save the model to disk so you can re-use the model without having to re-train it.
     
-        if f == os.path.basename(__file__):
-        continue
-    
-    # Plot changes in predicted probabilities via arrows
-plt.figure(0)
-colors = ['r', 'g', 'b']
-for i in range(clf_probs.shape[0]):
-    plt.arrow(clf_probs[i, 0], clf_probs[i, 1],
-              sig_clf_probs[i, 0] - clf_probs[i, 0],
-              sig_clf_probs[i, 1] - clf_probs[i, 1],
-              color=colors[y_test[i]], head_width=1e-2)
-    
-    # Create different classifiers. The logistic regression cannot do
-# multiclass out of the box.
-classifiers = {'L1 logistic': LogisticRegression(C=C, penalty='l1'),
-               'L2 logistic (OvR)': LogisticRegression(C=C, penalty='l2'),
-               'Linear SVC': SVC(kernel='linear', C=C, probability=True,
-                                 random_state=0),
-               'L2 logistic (Multinomial)': LogisticRegression(
-                C=C, solver='lbfgs', multi_class='multinomial'),
-               'GPC': GaussianProcessClassifier(kernel)
-               }
-    
-    # Plot the ground-truth labelling
-plt.figure()
-plt.axes([0, 0, 1, 1])
-for l, c, n in zip(range(n_clusters), 'rgb',
-                   labels):
-    lines = plt.plot(X[y == l].T, c=c, alpha=.5)
-    lines[0].set_label(n)
+    for face_landmarks in face_landmarks_list:
