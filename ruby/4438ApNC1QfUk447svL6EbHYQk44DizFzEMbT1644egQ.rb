@@ -1,102 +1,99 @@
 
         
-          next if extensions.empty?
-  mimes[mime] = [] if mimes[mime].nil?
-  mimes[mime].concat extensions
-end
+          delegate :form_configurable_attributes, to: :class
+  delegate :form_configurable_fields, to: :class
     
-        To install Clojure you should install Leiningen:
-      brew install leiningen
-    and then follow the tutorial:
-      https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
-    EOS
-  when 'osmium' then <<-EOS.undent
-    The creator of Osmium requests that it not be packaged and that people
-    use the GitHub master branch instead.
-    EOS
-  when 'gfortran' then <<-EOS.undent
-    GNU Fortran is now provided as part of GCC, and can be installed with:
-      brew install gcc
-    EOS
-  when 'play' then <<-EOS.undent
-    Play 2.3 replaces the play command with activator:
-      brew install typesafe-activator
+        @table_sort_info = {
+      order: { attribute.to_sym => direction.to_sym },
+      attribute: attribute,
+      direction: direction
+    }
+  end
     
-          # Find commands in the path
-      unless (exts = external_commands).empty?
-        puts
-        puts 'External commands'
-        puts_columns exts
+      def destroy_all
+    Delayed::Job.where(locked_at: nil).delete_all
+    
+            name
       end
+    
+        version '4' do
+      self.release = '4.1.1'
+      self.base_url = 'https://getbootstrap.com/docs/4.1/'
+      self.root_path = 'getting-started/introduction/'
+    
+        def initial_urls
+      [ 'https://hexdocs.pm/elixir/#{self.class.release}/api-reference.html',
+        'https://hexdocs.pm/eex/#{self.class.release}/EEx.html',
+        'https://hexdocs.pm/ex_unit/#{self.class.release}/ExUnit.html',
+        'https://hexdocs.pm/iex/#{self.class.release}/IEx.html',
+        'https://hexdocs.pm/logger/#{self.class.release}/Logger.html',
+        'https://hexdocs.pm/mix/#{self.class.release}/Mix.html',
+        'https://elixir-lang.org/getting-started/introduction.html' ]
+    end
+    
+        version '8 LTS' do
+      self.release = '8.11.1'
+      self.base_url = 'https://nodejs.org/dist/latest-v8.x/docs/api/'
+    end
+    
+        options[:attribution] = <<-HTML
+      &copy; 2010 The Rust Project Developers<br>
+      Licensed under the Apache License, Version 2.0 or the MIT license, at your option.
+    HTML
+    
+        version do
+      self.release = '4.8.3'
+      self.base_url = 'https://webpack.js.org/'
+      self.root_path = 'guides/'
+      self.initial_paths = %w(
+        concepts/
+        guides/
+        api/
+        configuration/
+        loaders/
+        plugins/
+      )
+      self.links = {
+        home: 'https://webpack.js.org/',
+        code: 'https://github.com/webpack/webpack'
+      }
+    
+        def insert_after(index, *names)
+      insert assert_index(index) + 1, *names
+    end
+    
+        def type=(value)
+      @type = value.try :strip
+    end
+    
+    module Docs
+  class PageDb
+    attr_reader :pages
+    
+        if test_conf['database']&.present?
+      ActiveRecord::Base.establish_connection(:test)
+      yield
+      ActiveRecord::Base.establish_connection(Rails.env.to_sym)
     end
   end
     
-      def describe_system_ruby
-    s = ''
-    case RUBY_VERSION
-    when /^1\.[89]/, /^2\.0/
-      s << '#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}'
-    else
-      s << RUBY_VERSION
-    end
+      attributes :id, :type, :url, :preview_url,
+             :remote_url, :text_url, :meta,
+             :description
     
-        if $stdout.tty?
-      metacharacters = %w[\\ | ( ) [ ] { } ^ $ * + ? .]
-      bad_regex = metacharacters.any? do |char|
-        ARGV.any? do |arg|
-          arg.include?(char) && !arg.start_with?('/')
-        end
-      end
-      if ARGV.any? && bad_regex
-        ohai 'Did you mean to perform a regular expression search?'
-        ohai 'Surround your query with /slashes/ to search by regex.'
-      end
-    end
-    
-      def initialize(tap)
-    @tap = tap
-    
-      def vlength
-    Math.sqrt(@x * @x + @y * @y + @z * @z)
+      def icon
+    object.image
   end
     
-    def kikaku(a)
-  a.collect {|x| x - a[0]}
-end
-def ud(a)
-  kikaku(a.collect {|x| ((x+NP)%ROW)-ROW*((x+NP)/ROW) }.sort)
-end
-def rl(a)
-  kikaku(a.collect {|x| ROW*((x+NP)/ROW)+ROW-((x+NP)%ROW)}.sort)
-end
-def xy(a)
-  kikaku(a.collect {|x| ROW*((x+NP)%ROW) + (x+NP)/ROW }.sort)
-end
-    
-            def find_address
-          if @order.bill_address_id == params[:id].to_i
-            @order.bill_address
-          elsif @order.ship_address_id == params[:id].to_i
-            @order.ship_address
-          else
-            raise CanCan::AccessDenied
-          end
-        end
-      end
-    end
+    def list_login_items_for_app(app_path)
+  out, err, status = Open3.capture3(
+    '/usr/bin/osascript', '-e',
+    'tell application \'System Events\' to get the name of every login item ' \
+    'whose path contains \'#{File.basename(app_path)}\''
+  )
+  if status.exitstatus > 0
+    $stderr.puts err
+    exit status.exitstatus
   end
+  puts out.gsub(', ', '\n')
 end
-
-    
-            private
-    
-      def _nt_double_quoted_string
-    start_index = index
-    if node_cache[:double_quoted_string].has_key?(index)
-      cached = node_cache[:double_quoted_string][index]
-      if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
-        @index = cached.interval.end
-      end
-      return cached
-    end
