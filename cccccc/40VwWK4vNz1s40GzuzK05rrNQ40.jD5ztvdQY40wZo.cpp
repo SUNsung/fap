@@ -1,273 +1,261 @@
 
         
-        // Sent by the renderer when the draggable regions are updated.
-IPC_MESSAGE_ROUTED1(ShellViewHostMsg_UpdateDraggableRegions,
-                    std::vector<extensions::DraggableRegion> /* regions */)
-    
-    #include 'content/nw/src/api/base/base.h'
-    
-    
-    {  *y = CalculateMenuYPosition(&screen_rect, &menu_req, NULL, *y);
-}
-    
-      if (menu_item->submenu_)
-    menu_model_->InsertSubMenuAt(pos, menu_item->id(), menu_item->label_,
-                                 menu_item->submenu_->menu_model_.get());
-  else if (menu_item->type_ == 'normal')
-    menu_model_->InsertItemAt(pos, menu_item->id(), menu_item->label_);
-  else if (menu_item->type_ == 'checkbox')
-    menu_model_->InsertCheckItemAt(pos, menu_item->id(), menu_item->label_);
-  else if (menu_item->type_ == 'separator')
-    menu_model_->InsertSeparatorAt(pos, ui::NORMAL_SEPARATOR);
-    
-    namespace extensions {
-    }
-    
-    NwObjCallObjectMethodSyncFunction::~NwObjCallObjectMethodSyncFunction() {
-}
-    
-    bool IsUserOnly(std::wstring opt)
-{
-	bool userOnly;
-    }
-    
-      /// Set an option on the acceptor.
-  /**
-   * This function is used to set an option on the acceptor.
-   *
-   * @param option The new option value to be set on the acceptor.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   *
-   * @sa SettableSocketOption @n
-   * boost::asio::socket_base::reuse_address
-   * boost::asio::socket_base::enable_connection_aborted
-   *
-   * @par Example
-   * Setting the SOL_SOCKET/SO_REUSEADDR option:
-   * @code
-   * boost::asio::ip::tcp::acceptor acceptor(io_service);
-   * ...
-   * boost::asio::ip::tcp::acceptor::reuse_address option(true);
-   * acceptor.set_option(option);
-   * @endcode
-   */
-  template <typename SettableSocketOption>
-  void set_option(const SettableSocketOption& option)
-  {
-    boost::system::error_code ec;
-    this->get_service().set_option(this->get_implementation(), option, ec);
-    boost::asio::detail::throw_error(ec, 'set_option');
+        
+    {  class EuroText : public QuickTest {
+  };
+  
+  TEST_F(EuroText, FastOCR) {
+    OCRTester(TESTING_DIR '/eurotext.tif',
+              TESTING_DIR '/eurotext.txt',
+              TESSDATA_DIR '_fast', 'script/Latin');
   }
-    
-    #endif // BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
+  
+}  // namespace
 
     
-    namespace boost {
-namespace date_time {
+    class UnicharcompressTest : public ::testing::Test {
+ protected:
+  // Loads and compresses the given unicharset.
+  void LoadUnicharset(const string& unicharset_name) {
+    string radical_stroke_file =
+        file::JoinPath(FLAGS_test_srcdir,
+                       'langdata/radical-stroke.txt');
+    string unicharset_file = file::JoinPath(
+        FLAGS_test_srcdir, 'testdata',
+        unicharset_name);
+    string uni_data;
+    CHECK_OK(file::GetContents(unicharset_file, &uni_data, file::Defaults()));
+    string radical_data;
+    CHECK_OK(file::GetContents(radical_stroke_file, &radical_data,
+                               file::Defaults()));
+    CHECK(
+        unicharset_.load_from_inmemory_file(uni_data.data(), uni_data.size()));
+    STRING radical_str(radical_data.c_str());
+    null_char_ =
+        unicharset_.has_special_codes() ? UNICHAR_BROKEN : unicharset_.size();
+    compressed_.ComputeEncoding(unicharset_, null_char_, &radical_str);
+    // Get the encoding of the null char.
+    RecodedCharID code;
+    compressed_.EncodeUnichar(null_char_, &code);
+    encoded_null_char_ = code(0);
+    string output_name = file::JoinPath(
+        FLAGS_test_tmpdir, absl::StrCat(unicharset_name, '.encoding.txt'));
+    STRING encoding = compressed_.GetEncodingAsString(unicharset_);
+    string encoding_str(&encoding[0], encoding.size());
+    CHECK_OK(file::SetContents(output_name, encoding_str, file::Defaults()));
+    LOG(INFO) << 'Wrote encoding to:' << output_name;
+  }
+  // Serializes and de-serializes compressed_ over itself.
+  void SerializeAndUndo() {
+    GenericVector<char> data;
+    TFile wfp;
+    wfp.OpenWrite(&data);
+    EXPECT_TRUE(compressed_.Serialize(&wfp));
+    TFile rfp;
+    rfp.Open(&data[0], data.size());
+    EXPECT_TRUE(compressed_.DeSerialize(&rfp));
+  }
+  // Returns true if the lang is in CJK.
+  bool IsCJKLang(const string& lang) {
+    return lang == 'chi_sim' || lang == 'chi_tra' || lang == 'kor' ||
+           lang == 'jpn';
+  }
+  // Returns true if the lang is Indic.
+  bool IsIndicLang(const string& lang) {
+    return lang == 'asm' || lang == 'ben' || lang == 'bih' || lang == 'hin' ||
+           lang == 'mar' || lang == 'nep' || lang == 'san' || lang == 'bod' ||
+           lang == 'dzo' || lang == 'guj' || lang == 'kan' || lang == 'mal' ||
+           lang == 'ori' || lang == 'pan' || lang == 'sin' || lang == 'tam' ||
+           lang == 'tel';
+  }
     }
+    
+    class MatrixTest : public ::testing::Test {
+ protected:
+  // Fills src_ with data so it can pretend to be a tensor thus:
+  //  dims_=[5, 4, 3, 2]
+  //  array_=[0, 1, 2, ....119]
+  //  tensor=[[[[0, 1][2, 3][4, 5]]
+  //           [[6, 7][8, 9][10, 11]]
+  //           [[12, 13][14, 15][16, 17]]
+  //           [[18, 19][20, 21][22, 23]]]
+  //          [[[24, 25]...
+  MatrixTest() {
+    src_.Resize(1, kInputSize_, 0);
+    for (int i = 0; i < kInputSize_; ++i) {
+      src_.put(0, i, i);
     }
+    for (int i = 0; i < kNumDims_; ++i) dims_[i] = 5 - i;
+  }
+  // Number of dimensions in src_.
+  static const int kNumDims_ = 4;
+  // Number of elements in src_.
+  static const int kInputSize_ = 120;
+  // Size of each dimension in src_;
+  int dims_[kNumDims_];
+  // Input array filled with [0,kInputSize).
+  GENERIC_2D_ARRAY<int> src_;
+};
     
-    namespace boost {
-namespace asio {
-namespace detail {
+    // Computes matrix.vector v = Wu.
+// u is of size W.dim2() - 1 and the output v is of size W.dim1().
+// u is imagined to have an extra element at the end with value 1, to
+// implement the bias, but it doesn't actually have it.
+void IntSimdMatrix::MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
+                                    const GenericVector<double>& scales,
+                                    const int8_t* u, double* v) const {
+  int num_out = w.dim1();
+  int num_in = w.dim2() - 1;
+  if (partial_funcs_.empty()) {
+    // Base implementation.
+    for (int i = 0; i < num_out; ++i) {
+      const int8_t* wi = w[i];
+      int total = 0;
+      for (int j = 0; j < num_in; ++j) total += wi[j] * u[j];
+      // Add in the bias and correct for integer values.
+      v[i] = (static_cast<double>(total) / INT8_MAX + wi[num_in]) * scales[i];
     }
+  } else {
+    const int8_t* w_data = shaped_w_.data();
+    const double* scales_data = &scales[0];
+    // Each call to a partial_func_ produces group_size outputs, except the
+    // last one, which can produce less.
+    int group_size = num_outputs_per_register_ * max_output_registers_;
+    int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
+    int rounded_num_out = RoundOutputs(num_out);
+    int output = 0;
+    for (auto fn : partial_funcs_) {
+      // The amount of w_data consumed by each call to fn.
+      int w_step = (rounded_num_in + 1) * group_size;
+      // Run with this group size, until it would produce too much output, then
+      // switch to a smaller size.
+      for (; output + group_size <= rounded_num_out; output += group_size) {
+        (*fn)(w_data, scales_data, u, rounded_num_in, num_out - output, v);
+        w_data += w_step;
+        scales_data += group_size;
+        v += group_size;
+      }
+      group_size /= 2;
     }
-    }
-    
-    #define BOOST_ASIO_WAIT_HANDLER_CHECK( \
-    handler_type, handler) \
-  \
-  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
-      void(boost::system::error_code)) \
-    asio_true_handler_type; \
-  \
-  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
-      sizeof(boost::asio::detail::one_arg_handler_test( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>(), \
-          static_cast<const boost::system::error_code*>(0))) == 1, \
-      'WaitHandler type requirements not met') \
-  \
-  typedef boost::asio::detail::handler_type_requirements< \
-      sizeof( \
-        boost::asio::detail::argbyv( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>())) + \
-      sizeof( \
-        boost::asio::detail::lvref< \
-          asio_true_handler_type>()( \
-            boost::asio::detail::lvref<const boost::system::error_code>()), \
-        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    bool js_cocos2dx_builder_CCBAnimationManager_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBAnimationManager_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBAnimationManager(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBAnimationManager_moveAnimationsFromNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_actionForSoundChannel(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setBaseValue(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getLastCompletedSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setRootNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamedTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_actionForCallbackChannel(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getKeyframeCallbacks(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceIdTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRunningSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRootNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setDelegate(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getSequenceDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getSequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setSequences(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_debug(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_CCBAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-    
-        cobj = (CocosDenshion::SimpleAudioEngine*)tolua_tousertype(tolua_S,1,0);
-    
-    #ifdef __cplusplus
-extern 'C' {
-#endif
-#include 'tolua++.h'
-#ifdef __cplusplus
+  }
 }
+    
+      tesseract::ParagraphJustification justification() const {
+    return justification_;
+  }
+  int margin() const { return margin_; }
+  int first_indent() const { return first_indent_; }
+  int body_indent() const { return body_indent_; }
+  int tolerance() const { return tolerance_; }
+  bool is_flush() const {
+    return (justification_ == tesseract::JUSTIFICATION_LEFT ||
+            justification_ == tesseract::JUSTIFICATION_RIGHT) &&
+        abs(first_indent_ - body_indent_) <= tolerance_;
+  }
+    
+    			cmderOptions.cmderCfgRoot = cmderCfgRoot;
+    
+    namespace rabit {
+namespace utils {
+extern 'C' {
+  void (*Printf)(const char *fmt, ...) = Rprintf;
+  void (*Assert)(int exp, const char *fmt, ...) = XGBoostAssert_R;
+  void (*Check)(int exp, const char *fmt, ...) = XGBoostCheck_R;
+  void (*Error)(const char *fmt, ...) = error;
+}
+}
+}
+    
+    
+    {    page->data.resize(page->offset.back());
+    CHECK_EQ(index_.data.size(), value_.data.size());
+    CHECK_EQ(index_.data.size(), page->data.size());
+    for (size_t i = 0; i < page->data.size(); ++i) {
+      page->data[i] = SparseBatch::Entry(index_.data[i] + min_index_, value_.data[i]);
+    }
+    return true;
+  }
+    
+    void CheckObjFunction(xgboost::ObjFunction * obj,
+                      std::vector<xgboost::bst_float> preds,
+                      std::vector<xgboost::bst_float> labels,
+                      std::vector<xgboost::bst_float> weights,
+                      std::vector<xgboost::bst_float> out_grad,
+                      std::vector<xgboost::bst_float> out_hess);
+    
+    namespace xgboost {
+namespace tree {
+// List of files that will be force linked in static links.
+DMLC_REGISTRY_LINK_TAG(updater_colmaker);
+DMLC_REGISTRY_LINK_TAG(updater_skmaker);
+DMLC_REGISTRY_LINK_TAG(updater_refresh);
+DMLC_REGISTRY_LINK_TAG(updater_prune);
+DMLC_REGISTRY_LINK_TAG(updater_fast_hist);
+DMLC_REGISTRY_LINK_TAG(updater_histmaker);
+DMLC_REGISTRY_LINK_TAG(updater_sync);
+#ifdef XGBOOST_USE_CUDA
+DMLC_REGISTRY_LINK_TAG(updater_gpu);
+DMLC_REGISTRY_LINK_TAG(updater_gpu_hist);
 #endif
+}  // namespace tree
+}  // namespace xgboost
+
     
+    /*!
+ * \brief Macro to register linear updater.
+ */
+#define XGBOOST_REGISTER_LINEAR_UPDATER(UniqueId, Name)                        \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::LinearUpdaterReg&                    \
+      __make_##LinearUpdaterReg##_##UniqueId##__ =                             \
+          ::dmlc::Registry< ::xgboost::LinearUpdaterReg>::Get()->__REGISTER__( \
+              Name)
     
-    
-    
-    
-        GLfloat                glVertices[] = {
-        aabb->lowerBound.x * mRatio, aabb->lowerBound.y * mRatio,
-        aabb->upperBound.x * mRatio, aabb->lowerBound.y * mRatio,
-        aabb->upperBound.x * mRatio, aabb->upperBound.y * mRatio,
-        aabb->lowerBound.x * mRatio, aabb->upperBound.y * mRatio
-    };
-    
-    			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.angularDamping = 2.0f;
-			bd.linearDamping = 0.5f;
-    
-    	void Break()
-	{
-		// Create two bodies from one.
-		b2Body* body1 = m_piece1->GetBody();
-		b2Vec2 center = body1->GetWorldCenter();
+    class ShotgunUpdater : public LinearUpdater {
+ public:
+  // set training parameter
+  void Init(const std::vector<std::pair<std::string, std::string> > &args) override {
+    param_.InitAllowUnknown(args);
+    selector_.reset(FeatureSelector::Create(param_.feature_selector));
+  }
+  void Update(HostDeviceVector<GradientPair> *in_gpair, DMatrix *p_fmat,
+              gbm::GBLinearModel *model, double sum_instance_weight) override {
+    std::vector<GradientPair> &gpair = in_gpair->HostVector();
+    param_.DenormalizePenalties(sum_instance_weight);
+    const int ngroup = model->param.num_output_group;
+    }
     }
     
-    			b2Body* prevBody = ground;
-			for (int32 i = 0; i < e_count; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position.Set(-14.5f + 1.0f * i, 5.0f);
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&fd);
-    }
-    
-    			edge.Set(b2Vec2(-10.0f, 0.0f), b2Vec2(10.0f, 0.0f));
-			body->CreateFixture(&edge, 0.0f);
+      /// Search the list for the (index)'th item (0-based) in (list:key)
+  /// A negative index indicates: 'from end-of-list'
+  /// If index is within range: return true, and return the value in *result.
+  /// If (index < -length OR index>=length), then index is out of range:
+  ///   return false (and *result is left unchanged)
+  /// May throw RedisListException
+  bool Index(const std::string& key, int32_t index,
+             std::string* result);
     
     
-    {
-    {				prevBody = body;
-			}
-		}
+    {  // Note: we may want to access the Java callback object instance
+  // across multiple method calls, so we create a global ref
+  assert(jcallback_obj != nullptr);
+  m_jcallback_obj = env->NewGlobalRef(jcallback_obj);
+  if(jcallback_obj == nullptr) {
+    // exception thrown: OutOfMemoryError
+    return;
+  }
+}
     
-    IMGUI_API bool        ImGui_ImplDX10_Init(void* hwnd, ID3D10Device* device);
-IMGUI_API void        ImGui_ImplDX10_Shutdown();
-IMGUI_API void        ImGui_ImplDX10_NewFrame();
-IMGUI_API void        ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
+    #include 'rocksjni/statisticsjni.h'
     
-    struct IDirect3DDevice9;
     
-        if (pEvent->m_Pressed == 1)
-    {
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_LEFTMOUSE)
-            g_MousePressed[0] = true;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_RIGHTMOUSE)
-            g_MousePressed[1] = true;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_MIDDLEMOUSE)
-            g_MousePressed[2] = true;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELUP)
-            io.MouseWheel += pEvent->m_y;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELDOWN)
-            io.MouseWheel += pEvent->m_y;
-    }
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    IMGUI_API bool        ImGui_ImplSdlGL2_Init(SDL_Window* window);
-IMGUI_API void        ImGui_ImplSdlGL2_Shutdown();
-IMGUI_API void        ImGui_ImplSdlGL2_NewFrame(SDL_Window* window);
-IMGUI_API void        ImGui_ImplSdlGL2_RenderDrawData(ImDrawData* draw_data);
-IMGUI_API bool        ImGui_ImplSdlGL2_ProcessEvent(SDL_Event* event);
-    
-        // Store our identifier
-    io.Fonts->TexID = (void *)g_pFontTextureView;
-    
-            const float ascent = font_face.Info.Ascender;
-        const float descent = font_face.Info.Descender;
-        ImFontAtlasBuildSetupFont(atlas, dst_font, &cfg, ascent, descent);
-        const float off_x = cfg.GlyphOffset.x;
-        const float off_y = cfg.GlyphOffset.y + (float)(int)(dst_font->Ascent + 0.5f);
-    
-        // Build atlas
-    unsigned char* tex_pixels = NULL;
-    int tex_w, tex_h;
-    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
-    
-            // 1. Show a simple window.
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    }
-    
-    #ifdef IMGUI_VULKAN_DEBUG_REPORT
-        // enabling multiple validation layers grouped as lunarg standard validation
-        const char* layers[] = {'VK_LAYER_LUNARG_standard_validation'};
-        create_info.enabledLayerCount = 1;
-        create_info.ppEnabledLayerNames = layers;
-    
-        ImColor()                                                       { Value.x = Value.y = Value.z = Value.w = 0.0f; }
-    ImColor(int r, int g, int b, int a = 255)                       { float sc = 1.0f/255.0f; Value.x = (float)r * sc; Value.y = (float)g * sc; Value.z = (float)b * sc; Value.w = (float)a * sc; }
-    ImColor(ImU32 rgba)                                             { float sc = 1.0f/255.0f; Value.x = (float)((rgba>>IM_COL32_R_SHIFT)&0xFF) * sc; Value.y = (float)((rgba>>IM_COL32_G_SHIFT)&0xFF) * sc; Value.z = (float)((rgba>>IM_COL32_B_SHIFT)&0xFF) * sc; Value.w = (float)((rgba>>IM_COL32_A_SHIFT)&0xFF) * sc; }
-    ImColor(float r, float g, float b, float a = 1.0f)              { Value.x = r; Value.y = g; Value.z = b; Value.w = a; }
-    ImColor(const ImVec4& col)                                      { Value = col; }
-    inline operator ImU32() const                                   { return ImGui::ColorConvertFloat4ToU32(Value); }
-    inline operator ImVec4() const                                  { return Value; }
+void SyncPoint::Data::LoadDependency(const std::vector<SyncPointPair>& dependencies) {
+  std::lock_guard<std::mutex> lock(mutex_);
+  successors_.clear();
+  predecessors_.clear();
+  cleared_points_.clear();
+  for (const auto& dependency : dependencies) {
+    successors_[dependency.predecessor].push_back(dependency.successor);
+    predecessors_[dependency.successor].push_back(dependency.predecessor);
+  }
+  cv_.notify_all();
+}
