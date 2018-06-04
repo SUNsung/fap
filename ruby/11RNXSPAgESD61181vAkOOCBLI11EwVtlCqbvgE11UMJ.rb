@@ -1,54 +1,31 @@
 
         
-                  def add_channel(channel, on_success)
-            @subscription_lock.synchronize do
-              ensure_listener_running
-              @subscribe_callbacks[channel] << on_success
-              when_connected { send_command('subscribe', channel) }
-            end
-          end
+        html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
+readme_doctree = REXML::Document.new(html_readme)
+links = REXML::XPath.match(readme_doctree, '//a')
     
-          debug { event.payload[:mail] }
+        # Returns whether `string` is a valid IP address or IP address range.
+    #
+    # @return [true] if valid IP address or IP address range.
+    # @return [false] otherwise.
+    def valid_ip_or_range?(string)
+      range = Rex::Socket::RangeWalker.new(string)
+      range && range.ranges && range.ranges.any?
     end
     
-          included do
-        setup :clear_test_deliveries
-        teardown :clear_test_deliveries
-      end
-    
-      def test_deliver_is_notified
-    BaseMailer.welcome.deliver_now
-    wait
-    
-            expect(result).to eq('hg parent --template {rev}')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template {rev}')
-      end
-    end
-  end
+    unless $LOAD_PATH.include? lib_path
+  $LOAD_PATH.unshift lib_path
 end
 
     
-    class Devise::SessionsController < DeviseController
-  prepend_before_action :require_no_authentication, only: [:new, :create]
-  prepend_before_action :allow_params_authentication!, only: :create
-  prepend_before_action :verify_signed_out_user, only: :destroy
-  prepend_before_action(only: [:create, :destroy]) { request.env['devise.skip_timeout'] = true }
+      def parse(pkt)
+    # We want to return immediatly if we do not have a packet which is handled by us
+    return unless pkt.is_tcp?
+    return if (pkt.tcp_sport != 21 and pkt.tcp_dport != 21)
+    s = find_session((pkt.tcp_sport == 21) ? get_session_src(pkt) : get_session_dst(pkt))
+    s[:sname] ||= 'ftp'
     
-    if defined?(ActionMailer)
-  class Devise::Mailer < Devise.parent_mailer.constantize
-    include Devise::Mailers::Helpers
+    puts '* System info:'
     
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-          html_filters.push 'd3/clean_html', 'd3/entries_v4'
-    
-        def root?
-      path == 'index'
-    end
+    #Rjb::load('.', jvmargs=[])
+Rjb::load('#{ENV['JAVA_HOME']}/lib/tools.jar:.',jvmargs=[])
