@@ -1,47 +1,31 @@
 
         
-            @services = current_user.services.reorder(table_sort).page(params[:page])
-    
-        options[:trailing_slash] = true
-    
-          options[:container] = '.container'
+            def self.rm_DS_Store
+      paths = Queue.new
+      %w[Cellar Frameworks Library bin etc include lib opt sbin share var].
+        map { |p| HOMEBREW_PREFIX/p }.each { |p| paths << p if p.exist? }
+      workers = (0...Hardware::CPU.cores).map do
+        Thread.new do
+          begin
+            while p = paths.pop(true)
+              quiet_system 'find', p, '-name', '.DS_Store', '-delete'
+            end
+          rescue ThreadError # ignore empty queue error
+          end
+        end
+      end
+      workers.map(&:join)
     end
+    
+      def cxxstdlib_check(check_type)
+    self.class.cxxstdlib_check check_type
   end
-end
-
     
-        self.name = 'PHP'
-    self.type = 'php'
-    self.release = '7.2.5'
-    self.base_url = 'https://secure.php.net/manual/en/'
-    self.root_path = 'index.html'
-    self.initial_paths = %w(
-      funcref.html
-      langref.html
-      refs.database.html
-      set.mysqlinfo.html
-      language.control-structures.html
-      reference.pcre.pattern.syntax.html
-      reserved.exceptions.html
-      reserved.interfaces.html
-      reserved.variables.html)
+      config.active_support.test_order = :random
     
-        options[:only_patterns] = [
-      /\Abook\/first-edition\//,
-      /\Areference\//,
-      /\Acollections\//,
-      /\Astd\// ]
-    
-        alias_method :blank?, :empty?
-    
-    module Docs
-  class PageDb
-    attr_reader :pages
-    
-      # Update version.rb file with BOOTSTRAP_SHA
-  def store_version
-    path    = 'lib/bootstrap-sass/version.rb'
-    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
-    File.open(path, 'w') { |f| f.write(content) }
-  end
-end
+          def initialize(pairs = {})
+        @pairs = pairs
+        pairs.each do |key, value|
+          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
+          send(:'#{key}=', value)
+        end
