@@ -1,133 +1,56 @@
 
         
-        
-if __name__ == '__main__':
-  tf.test.main()
+                if is_json:
+            content = json.dumps(response.json(), sort_keys=True, indent=4)
+        else:
+            content = response.content
+    
+        parser.add_argument('--key',
+                        metavar='KEY',
+                        default=api_key,
+                        required=not api_key,
+                        help='Shippable API key')
+    
+        if result is None:
+        return '{}'
+    
+        terminal_stdout_re = [
+        re.compile(br'[\r\n]?[\w+\-\.:\/\[\]]+(?:\([^\)]+\)){,3}(?:>|#) ?$'),
+        re.compile(br'\@[\w\-\.]+:\S+?[>#\$] ?$')
+    ]
+    
+    
+def sort_groups(groups):
+    return sorted(groups, key=lambda g: (g.depth, g.priority, g.name))
+    
+        def construct_yaml_seq(self, node):
+        data = AnsibleSequence()
+        yield data
+        data.extend(self.construct_sequence(node))
+        data.ansible_pos = self._node_position_info(node)
+    
+    '''
+@author: Eugene Duboviy <eugene.dubovoy@gmail.com> | github.com/duboviy
+    
+        def test_sequential_execution(self):
+        self.command_stack[0].execute()
+        output_after_first_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_first_execution[0], 'bar.txt')
+        self.command_stack[1].execute()
+        output_after_second_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_second_execution[0], 'baz.txt')
+    
+    ### OUTPUT ###
+# Jack move 5m then stop
 
     
-        if FLAGS.output_file:
-      with gfile.GFile(FLAGS.output_file, 'w') as f:
-        for serialized_sentence in processed:
-          sentence = sentence_pb2.Sentence()
-          sentence.ParseFromString(serialized_sentence)
-          f.write(text_format.MessageToString(sentence) + '\n\n')
+        def test_initial_state(self):
+        state = self.radio.state.name
+        expected_state_name = 'AM'
+        self.assertEqual(state, expected_state_name)
     
-    containers = (('thefuck/python3-tcsh',
-               u'''FROM python:3
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'),
-              ('thefuck/python2-tcsh',
-               u'''FROM python:2
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'))
+    production code which is untestable:
     
-    
-class _BenchSpider(scrapy.Spider):
-    '''A spider that follows all links'''
-    name = 'follow'
-    total = 10000
-    show = 20
-    baseurl = 'http://localhost:8998'
-    link_extractor = LinkExtractor()
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-l', '--list', dest='list', action='store_true',
-                          help='only list contracts, without checking them')
-        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
-                          help='print contract tests for all spiders')
-    
-        def _genspider(self, module, name, domain, template_name, template_file):
-        '''Generate the spider module, based on the given template'''
-        tvars = {
-            'project_name': self.settings.get('BOT_NAME'),
-            'ProjectName': string_camelcase(self.settings.get('BOT_NAME')),
-            'module': module,
-            'name': name,
-            'domain': domain,
-            'classname': '%sSpider' % ''.join(s.capitalize() \
-                for s in module.split('_'))
-        }
-        if self.settings.get('NEWSPIDER_MODULE'):
-            spiders_module = import_module(self.settings['NEWSPIDER_MODULE'])
-            spiders_dir = abspath(dirname(spiders_module.__file__))
-        else:
-            spiders_module = None
-            spiders_dir = '.'
-        spider_file = '%s.py' % join(spiders_dir, module)
-        shutil.copyfile(template_file, spider_file)
-        render_templatefile(spider_file, **tvars)
-        print('Created spider %r using template %r ' % (name, \
-            template_name), end=('' if spiders_module else '\n'))
-        if spiders_module:
-            print('in module:\n  %s.%s' % (spiders_module.__name__, module))
-    
-            return methods
-    
-        # verify reference counting
-    if verbose and hasattr(sys, 'gettotalrefcount'):
-        import gc
-        counts = [None] * 5
-        for i in range(len(counts)):
-            support.run_unittest(*test_classes)
-            gc.collect()
-            counts[i] = sys.gettotalrefcount()
-        print(counts)
-    
-    def escape(m):
-    all, tail = m.group(0, 1)
-    assert all.startswith('\\')
-    esc = simple_escapes.get(tail)
-    if esc is not None:
-        return esc
-    if tail.startswith('x'):
-        hexes = tail[1:]
-        if len(hexes) < 2:
-            raise ValueError('invalid hex string escape ('\\%s')' % tail)
-        try:
-            i = int(hexes, 16)
-        except ValueError:
-            raise ValueError('invalid hex string escape ('\\%s')' % tail) from None
-    else:
-        try:
-            i = int(tail, 8)
-        except ValueError:
-            raise ValueError('invalid octal string escape ('\\%s')' % tail) from None
-    return chr(i)
-    
-        def _lookup(self, key):
-        '''Use TOC to return subpath for given key, or raise a KeyError.'''
-        try:
-            if os.path.exists(os.path.join(self._path, self._toc[key])):
-                return self._toc[key]
-        except KeyError:
-            pass
-        self._refresh()
-        try:
-            return self._toc[key]
-        except KeyError:
-            raise KeyError('No message with key: %s' % key) from None
-    
-                    if m.USING_STRINGS:
-                    # iv4 is interpreted as a normal field.
-                    self.assertIn('not_iv4', c.__dict__)
-                    self.assertEqual(c.not_iv4, 4)
-                else:
-                    # iv4 is interpreted as an InitVar, so it
-                    # won't exist on the instance.
-                    self.assertNotIn('not_iv4', c.__dict__)
-    
-    def python_implementation():
-    
-            if mswindows:
-            command = ''{}' -c 'print(\'Hello\')''.format(sys.executable)
-        else:
-            command = ''{}' -c 'print(\'Hello\')''.format(sys.executable)
-        with warnings.catch_warnings():
-            warnings.simplefilter('ignore', DeprecationWarning)
-            with platform.popen(command) as stdout:
-                hello = stdout.read().strip()
-                stdout.close()
-                self.assertEqual(hello, 'Hello')
+        def publishReport(self):
+        self._db.update()
+        self._reporter.report()
