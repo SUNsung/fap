@@ -1,128 +1,228 @@
 
         
-        from httpie.compat import str
-from httpie.context import Environment
-from httpie.models import HTTPRequest, HTTPResponse
-from httpie.input import (OUT_REQ_BODY, OUT_REQ_HEAD,
-                          OUT_RESP_HEAD, OUT_RESP_BODY)
-from httpie.output.processing import Formatting, Conversion
+            def __init__(self, groups, env=Environment(), **kwargs):
+        '''
+        :param groups: names of processor groups to be applied
+        :param env: Environment
+        :param kwargs: additional keyword arguments for processors
+    
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
     
     
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
-
+def test_unicode_json_item_verbose(httpbin):
+    r = http('--verbose', '--json',
+             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
+    assert HTTP_OK in r
+    assert UNICODE in r
     
-    
-def test_unicode_basic_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--verbose', '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/basic-auth/test/' + UNICODE)
-    
-            if downloader and exit_status == ExitStatus.OK:
-            # Last response body download.
-            download_stream, download_to = downloader.start(final_response)
-            write_stream(
-                stream=download_stream,
-                outfile=download_to,
-                flush=False,
-            )
-            downloader.finish()
-            if downloader.interrupted:
-                exit_status = ExitStatus.ERROR
-                log_error('Incomplete download: size=%d; downloaded=%d' % (
-                    downloader.status.total_size,
-                    downloader.status.downloaded
-                ))
-        return exit_status
-    
-    content_type = parser.add_argument_group(
-    title='Predefined Content Types',
-    description=None
+        ''',
 )
     
-    - Preprocessing
-    Sequence Preprocessing
-    Text Preprocessing
-    Image Preprocessing
+        def __getattr__(self, item):
+        return self[item]
+    
+                if self.args.auth is None or not plugin.auth_parse:
+                self.args.auth = plugin.get_auth()
+            else:
+                if already_parsed:
+                    # from the URL
+                    credentials = self.args.auth
+                else:
+                    credentials = parse_auth(self.args.auth)
+    
+        def __init__(self):
+        self._plugins = []
     
     
 @keras_test
-def test_min_max_norm():
-    array = get_example_array()
-    for m in get_test_values():
-        norm_instance = constraints.min_max_norm(min_value=m, max_value=m * 2)
-        normed = norm_instance(K.variable(array))
-        value = K.eval(normed)
-        l2 = np.sqrt(np.sum(np.square(value), axis=0))
-        assert not l2[l2 < m]
-        assert not l2[l2 > m * 2 + 1e-5]
+def test_model_trainability_switch():
+    # a non-trainable model has no trainable weights
+    x = Input(shape=(1,))
+    y = Dense(2)(x)
+    model = Model(x, y)
+    model.trainable = False
+    assert model.trainable_weights == []
     
-        # learn the alphabet with stacked LSTM
-    model = Sequential([
-        layers.LSTM(16, return_sequences=True, input_shape=(sequence_length, number_of_chars)),
-        layers.LSTM(16, return_sequences=False),
-        layers.Dense(number_of_chars, activation='softmax')
-    ])
-    model.compile(loss='categorical_crossentropy', optimizer='adam')
-    model.fit(x, y, batch_size=1, epochs=60, verbose=1)
+        indices = np.arange(len(x_test))
+    np.random.shuffle(indices)
+    x_test = x_test[indices]
+    labels_test = labels_test[indices]
     
-    print('Build model...')
-model = Sequential()
-model.add(Embedding(max_features, 128))
-model.add(LSTM(128, dropout=0.2, recurrent_dropout=0.2))
-model.add(Dense(1, activation='sigmoid'))
+        # Likewise for the test set
+    X_test = HDF5Matrix(h5_path, 'my_data', start=150, end=200)
+    y_test = HDF5Matrix(h5_path, 'my_labels', start=150, end=200)
     
-    - Klambauer, G., Unterthiner, T., Mayr, A., & Hochreiter, S. (2017).
-  Self-Normalizing Neural Networks. arXiv preprint arXiv:1706.02515.
-  https://arxiv.org/abs/1706.02515
+    import six
+from . import backend as K
+from .losses import mean_squared_error
+from .losses import mean_absolute_error
+from .losses import mean_absolute_percentage_error
+from .losses import mean_squared_logarithmic_error
+from .losses import hinge
+from .losses import logcosh
+from .losses import squared_hinge
+from .losses import categorical_crossentropy
+from .losses import sparse_categorical_crossentropy
+from .losses import binary_crossentropy
+from .losses import kullback_leibler_divergence
+from .losses import poisson
+from .losses import cosine_proximity
+from .utils.generic_utils import deserialize_keras_object
+from .utils.generic_utils import serialize_keras_object
+    
+            # Returns
+            preds: array-like, shape `(n_samples,)`
+                Predictions.
+        '''
+        kwargs = self.filter_sk_params(Sequential.predict, kwargs)
+        return np.squeeze(self.model.predict(x, **kwargs))
+    
+    
+# knowledge transfer algorithms
+def wider2net_conv2d(teacher_w1, teacher_b1, teacher_w2, new_width, init):
+    '''Get initial weights for a wider conv2d layer with a bigger filters,
+    by 'random-padding' or 'net2wider'.
+    
+    
+def bench(factory, X, Y, X_test, Y_test, ref_coef):
+    gc.collect()
+    
+        plt.figlegend((c_bar, q_bar), ('construction', 'N-point query'),
+                  'upper right')
+    
+        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
+    plt.plot(sample_sizes, one_core, label='one core')
+    plt.plot(sample_sizes, multi_core, label='multi core')
+    plt.xlabel('n_samples')
+    plt.ylabel('Time (s)')
+    plt.title('Parallel %s' % func.__name__)
+    plt.legend()
+    
+        ###########################################################################
+    # List sampling algorithm
+    ###########################################################################
+    # We assume that sampling algorithm has the following signature:
+    #   sample(n_population, n_sample)
+    #
+    sampling_algorithm = {}
+    
+        xx = np.arange(start_dim, start_dim + n * step, step)
+    plt.subplot(212)
+    plt.title('Learning in high dimensional spaces')
+    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
+    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
+    plt.legend(loc='upper left')
+    plt.xlabel('number of dimensions')
+    plt.ylabel('Time (s)')
+    plt.axis('tight')
+    plt.show()
+
+    
+            train_button = Tk.Button(fm, text='Fit', width=5,
+                                 command=controller.fit)
+        train_button.pack()
+        fm.pack(side=Tk.LEFT)
+        Tk.Button(fm, text='Clear', width=5,
+                  command=controller.clear_data).pack(side=Tk.LEFT)
+    
+            clf1 = LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto').fit(X, y)
+        clf2 = LinearDiscriminantAnalysis(solver='lsqr', shrinkage=None).fit(X, y)
+    
+    
+    def getType(self):
+        return self.type 
+    
+    \note Please be warned that the line numbers in the API documentation do not
+match the real locations in the source code of the package. This is an
+unintended artifact of doxygen, which I could only convince to use the
+correct module names by concatenating all files from the package into a single
+module file...
+    
+            Returns:
+            A Future representing the given call.
+        '''
+        raise NotImplementedError()
+    
+    def is_prime(n):
+    if n % 2 == 0:
+        return False
+    
+    
+def FormatDebugInfoResponse_Completer_ServerNotRunningWithNoLogfiles_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'is_running': False,
+    'logfiles': []
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name not running\n'
+      '  Server name executable: /path/to/executable\n'
+      '  No logfiles available\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
+
+    
+    
+def ExtractKeywordsFromGroup_KeywordStarts_test():
+  assert_that( syntax_parse._ExtractKeywordsFromGroup(
+                 syntax_parse.SyntaxGroup( '', [
+                   'foo bar',
+                   'contained boo baa',
+                   'zoo goo',
+                 ] ) ),
+               contains_inanyorder( 'foo', 'bar', 'boo', 'baa', 'zoo', 'goo' ) )
+    
+      # On UNIX platforms, we use sys.executable as the Python interpreter path.
+  # We cannot use sys.executable on Windows because for unknown reasons, it
+  # returns the Vim executable. Instead, we use sys.exec_prefix to deduce the
+  # interpreter path.
+  python_interpreter = ( WIN_PYTHON_PATH if utils.OnWindows() else
+                         sys.executable )
+  if _EndsWithPython( python_interpreter ):
+    return python_interpreter
+    
+    
+def BuildYcmdLibs( args ):
+  if not args.skip_build:
+    subprocess.check_call( [
+      sys.executable,
+      p.join( DIR_OF_THIS_SCRIPT, 'third_party', 'ycmd', 'build.py' )
+    ] )
+    
+        with patch.object( ycm._message_poll_request,
+                       '_response_future',
+                       new = MockAsyncServerResponseDone( [] ) ) as mock_future:
+      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
+  '''
+  return mock.MagicMock( wraps = FakeFuture( True, response ) )
+    
+        # If not a dictionary or a list, the response is necessarily a
+    # scalar: boolean, number, string, etc. In this case, we print
+    # it to the user.
+    if not isinstance( self._response, ( dict, list ) ):
+      return self._HandleBasicResponse()
+    
+    Loosely based on https://github.com/astropy/astropy/pull/347
 '''
-from __future__ import print_function
     
-            # Inference
-        start_time = time.time()
-        parallel_model.predict(x, batch_size=batch_size)
-        total_time = time.time() - start_time
-        print('%d gpus inference:' % i, total_time)
+        hass.services.register(DOMAIN, SERVICE_MEDIA_PREVIOUS_TRACK,
+                           lambda service:
+                           keyboard.tap_key(keyboard.media_prev_track_key),
+                           schema=TAP_KEY_SCHEMA)
+    return True
+
     
-    
-def timedelta_to_seconds(td):
-    # type: (datetime.timedelta) -> float
-    '''Equivalent to td.total_seconds() (introduced in python 2.7).'''
-    return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10 ** 6) / float(10 ** 6)
-    
-    
-class QueueBasicTest(AsyncTestCase):
-    def test_repr_and_str(self):
-        q = queues.Queue(maxsize=1)
-        self.assertIn(hex(id(q)), repr(q))
-        self.assertNotIn(hex(id(q)), str(q))
-        q.get()
-    
-    '''`StackContext` allows applications to maintain threadlocal-like state
-that follows execution as it moves to other execution contexts.
-    
-        @skipOnTravis
-    def test_hello_world(self):
-        response = self.fetch('/hello')
-        self.assertEqual(response.code, 200)
-        self.assertEqual(response.headers['Content-Type'], 'text/plain')
-        self.assertEqual(response.body, b'Hello world!')
-        self.assertEqual(int(response.request_time), 0)
-    
-            # The tokens are cross-compatible.
-        for cookie_token, body_token in ((v1_token, v2_token),
-                                         (v2_token, v1_token)):
-            response = self.fetch(
-                '/', method='POST',
-                body=urllib_parse.urlencode(dict(_xsrf=body_token)),
-                headers=self.cookie_headers(cookie_token))
-            self.assertEqual(response.code, 200)
+        config_dir = os.path.join(os.getcwd(), args.config)
