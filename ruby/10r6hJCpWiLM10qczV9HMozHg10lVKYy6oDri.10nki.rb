@@ -1,24 +1,21 @@
 
         
-              # Returns constant of subscription adapter specified in config/cable.yml.
-      # If the adapter cannot be found, this will default to the Redis adapter.
-      # Also makes sure proper dependencies are required.
-      def pubsub_adapter
-        adapter = (cable.fetch('adapter') { 'redis' })
-    
-                Thread.pass while @thread.alive?
-          end
-    
-            def test_url_port
-          spec = resolve 'abstract://foo:123?encoding=utf8'
-          assert_equal({
-            'adapter'  => 'abstract',
-            'port'     => 123,
-            'host'     => 'foo',
-            'encoding' => 'utf8' }, spec)
+              # Need to experiment if this priority is the best one: rendered => output_buffer
+      class RenderedViewsCollection
+        def initialize
+          @rendered_views ||= Hash.new { |hash, key| hash[key] = [] }
         end
     
-      class InheritedController < MyController
+          def initialize
+        @log_tags = []
+    
+      test 'response parsing' do
+    response = ActionDispatch::TestResponse.create(200, {}, '')
+    assert_equal response.body, response.parsed_body
+    
+        assert_response :unauthorized
+    assert_equal 'Authentication Failed\n', @response.body
+    assert_equal 'Token realm='SuperSecret'', @response.headers['WWW-Authenticate']
   end
     
         # Helpers for creating and wrapping delivery behavior, used by DeliveryMethods.
@@ -26,7 +23,8 @@
       # Provides a list of emails that have been delivered by Mail::TestMailer
       delegate :deliveries, :deliveries=, to: Mail::TestMailer
     
-        AssertSelectMailer.test('<div><p>foo</p><p>bar</p></div>').deliver_now
+      def test_assert_select_email_multipart
+    AssertMultipartSelectMailer.test(html: '<div><p>foo</p><p>bar</p></div>', text: 'foo bar').deliver_now
     assert_select_email do
       assert_select 'div:root' do
         assert_select 'p:first-child', 'foo'
@@ -34,72 +32,35 @@
       end
     end
   end
-    
-      teardown do
-    ActionMailer::Base.delivery_method = @old_delivery_method
-    new = ActionMailer::Base.delivery_methods.dup
-    new.delete(:custom)
-    ActionMailer::Base.delivery_methods = new
-  end
-    
-    class HelperMailer < ActionMailer::Base
-  def use_mail_helper
-    @text = 'But soft! What light through yonder window breaks? It is the east, ' \
-            'and Juliet is the sun. Arise, fair sun, and kill the envious moon, ' \
-            'which is sick and pale with grief that thou, her maid, art far more ' \
-            'fair than she. Be not her maid, for she is envious! Her vestal ' \
-            'livery is but sick and green, and none but fools do wear it. Cast ' \
-            'it off!'
-    
-    def usage
-  <<-EOS
-Usage: list_login_items_for_app <path.app>
-    
-        def silence_log
-      @silence = true
-      yield
-    ensure
-      @silence = false
-    end
-  end
 end
 
     
-      find_files = ->(path) {
-    Find.find(Pathname.new(path).relative_path_from(Pathname.new Dir.pwd).to_s).map do |path|
-      path if File.file?(path)
-    end.compact
-  }
+      test 'delivery method options can be overridden per mail instance' do
+    default_options = { a: 'b' }
+    ActionMailer::Base.add_delivery_method :optioned, MyOptionedDelivery, default_options
+    overridden_options = { a: 'a' }
+    mail_instance = DeliveryMailer.welcome(delivery_method: :optioned, delivery_method_options: overridden_options)
+    assert_equal overridden_options, mail_instance.delivery_method.options
+  end
     
-      private
+    module Jekyll
+  class Layout
+    include Convertible
     
-        case list
-    when Hash
-      list
-    when Array, String, :DATA
-      { p1: list }
-    else
-      {}
-    end.each_pair do |strip, urls|
-      Array(urls).each do |url|
-        case url
-        when :DATA
-          patch = DATAPatch.new(strip)
-        else
-          patch = LegacyPatch.new(strip, url)
-        end
-        patches << patch
-      end
+        # The path used after resending confirmation instructions.
+    def after_resending_confirmation_instructions_path_for(resource_name)
+      is_navigational_format? ? new_session_path(resource_name) : '/'
     end
     
-          def fetch_public_key(o_auth_app, jwt)
-        public_key = fetch_public_key_from_json(o_auth_app.jwks, jwt)
-        if public_key.empty? && o_auth_app.jwks_uri
-          response = Faraday.get(o_auth_app.jwks_uri)
-          public_key = fetch_public_key_from_json(response.body, jwt)
-        end
-        raise Rack::OAuth2::Server::Authorize::BadRequest(:unauthorized_client) if public_key.empty?
-        public_key
-      end
+      # GET /resource/sign_in
+  def new
+    self.resource = resource_class.new(sign_in_params)
+    clean_up_passwords(resource)
+    yield resource if block_given?
+    respond_with(resource, serialize_options(resource))
+  end
     
-          mid_string_or_interp = to_string_interpolation(interp.mid)
+      # POST /resource/unlock
+  def create
+    self.resource = resource_class.send_unlock_instructions(resource_params)
+    yield resource if block_given?
