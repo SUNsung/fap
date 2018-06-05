@@ -1,70 +1,47 @@
 
         
-        #
+            @services = current_user.services.reorder(table_sort).page(params[:page])
     
-    require 'erb'
+        options[:trailing_slash] = true
     
-        @status
-  end
-    
-        def initialize(username, domain)
-      @username = username
-      @domain = domain
+          options[:container] = '.container'
     end
-    
-        def minor
-      3
-    end
-    
-      def meta
-    object.file.meta
   end
 end
 
     
-      describe 'for a silence with reject media' do
-    before do
-      subject.call(DomainBlock.create!(domain: 'evil.org', severity: :silence, reject_media: true))
-    end
+        self.name = 'PHP'
+    self.type = 'php'
+    self.release = '7.2.5'
+    self.base_url = 'https://secure.php.net/manual/en/'
+    self.root_path = 'index.html'
+    self.initial_paths = %w(
+      funcref.html
+      langref.html
+      refs.database.html
+      set.mysqlinfo.html
+      language.control-structures.html
+      reference.pcre.pattern.syntax.html
+      reserved.exceptions.html
+      reserved.interfaces.html
+      reserved.variables.html)
     
-    ###
-### methods
-###
+        options[:only_patterns] = [
+      /\Abook\/first-edition\//,
+      /\Areference\//,
+      /\Acollections\//,
+      /\Astd\// ]
     
-          def call(env)
-        request  = Request.new(env)
-        get_was  = handle(request.GET)
-        post_was = handle(request.POST) rescue nil
-        app.call env
-      ensure
-        request.GET.replace  get_was  if get_was
-        request.POST.replace post_was if post_was
-      end
+        alias_method :blank?, :empty?
     
-        { # yes, this is ugly, feel free to change that
-      '/..' => '/', '/a/../b' => '/b', '/a/../b/' => '/b/', '/a/.' => '/a/',
-      '/%2e.' => '/', '/a/%2E%2e/b' => '/b', '/a%2f%2E%2e%2Fb/' => '/b/',
-      '//' => '/', '/%2fetc%2Fpasswd' => '/etc/passwd'
-    }.each do |a, b|
-      it('replaces #{a.inspect} with #{b.inspect}') { expect(get(a).body).to eq(b) }
-    end
+    module Docs
+  class PageDb
+    attr_reader :pages
     
-      # Run specs in random order to surface order dependencies. If you find an
-  # order dependency and want to debug it, you can fix the order by providing
-  # the seed, which is printed after each run.
-  #     --seed 1234
-  config.order = :random
-    
-      it 'should not leak changes to env' do
-    klass    = described_class
-    detector = Struct.new(:app) do
-      def call(env)
-        was = env.dup
-        res = app.call(env)
-        was.each do |k,v|
-          next if env[k] == v
-          fail 'env[#{k.inspect}] changed from #{v.inspect} to #{env[k].inspect}'
-        end
-        res
-      end
-    end
+      # Update version.rb file with BOOTSTRAP_SHA
+  def store_version
+    path    = 'lib/bootstrap-sass/version.rb'
+    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
+    File.open(path, 'w') { |f| f.write(content) }
+  end
+end
