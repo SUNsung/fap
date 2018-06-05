@@ -1,142 +1,75 @@
 
         
-            By default, it represents the actual environment.
-    All of the attributes can be overwritten though, which
-    is used by the test suite to simulate various scenarios.
+            # Get the version from youtube_dl/version.py without importing the package
+    exec(compile(open('youtube_dl/version.py').read(),
+                 'youtube_dl/version.py', 'exec'))
+    
+        def test_secondary_proxy_https(self):
+        params = self._check_params(['secondary_proxy', 'secondary_server_ip'])
+        if params is None:
+            return
+        ydl = FakeYDL()
+        req = compat_urllib_request.Request('https://yt-dl.org/ip')
+        req.add_header('Ytdl-request-proxy', params['secondary_proxy'])
+        self.assertEqual(
+            ydl.urlopen(req).read().decode('utf-8'),
+            params['secondary_server_ip'])
+    
+        _CONFIG = {
+        # http://edition.cnn.com/.element/apps/cvp/3.0/cfg/spider/cnn/expansion/config.xml
+        'edition': {
+            'data_src': 'http://edition.cnn.com/video/data/3.0/video/%s/index.xml',
+            'media_src': 'http://pmd.cdn.turner.com/cnn/big',
+        },
+        # http://money.cnn.com/.element/apps/cvp2/cfg/config.xml
+        'money': {
+            'data_src': 'http://money.cnn.com/video/data/4.0/video/%s.xml',
+            'media_src': 'http://ht3.cdn.turner.com/money/big',
+        },
+    }
+    
+            def __call__(self, hidden_dims):
+            return build_fn_clf(hidden_dims)
+    
+            layer = layer_class(units, return_sequences=False,
+                            input_shape=(timesteps, input_size),
+                            activity_regularizer='l2')
+        assert layer.activity_regularizer
+        x = keras.backend.variable(np.ones((num_samples,
+                                            timesteps,
+                                            input_size)))
+        layer(x)
+        assert len(layer.get_losses_for(x)) == 1
+    
+        reconstruction_loss *= image_size * image_size
+    kl_loss = 1 + z_log_var - K.square(z_mean) - K.exp(z_log_var)
+    kl_loss = K.sum(kl_loss, axis=-1)
+    kl_loss *= -0.5
+    vae_loss = K.mean(reconstruction_loss + kl_loss)
+    vae.add_loss(vae_loss)
+    vae.compile(optimizer='rmsprop')
+    vae.summary()
+    plot_model(vae, to_file='vae_cnn.png', show_shapes=True)
     
     
-FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
-FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
-JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
-BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
+def test_relu():
+    x = K.placeholder(ndim=2)
+    f = K.function([x], [activations.relu(x)])
     
+    # we add a Convolution1D, which will learn filters
+# word group filters of size filter_length:
+model.add(Conv1D(filters,
+                 kernel_size,
+                 padding='valid',
+                 activation='relu',
+                 strides=1))
+# we use max pooling:
+model.add(GlobalMaxPooling1D())
     
-def test_max_redirects(httpbin):
-    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
-             error_exit_ok=True)
-    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
-
+    ATTR_ENERGY_GENERATION = 'energy_generation'
+ATTR_POWER_GENERATION = 'power_generation'
+ATTR_ENERGY_CONSUMPTION = 'energy_consumption'
+ATTR_POWER_CONSUMPTION = 'power_consumption'
+ATTR_EFFICIENCY = 'efficiency'
     
-    
-def create_temporal_sequential_model():
-    model = Sequential()
-    model.add(GRU(32, input_shape=(timesteps, input_dim), return_sequences=True))
-    model.add(TimeDistributed(Dense(num_classes)))
-    model.add(Activation('softmax'))
-    return model
-    
-    
-@keras_test
-def test_cropping2d_legacy_interface():
-    old_layer = keras.layers.Cropping2D(dim_ordering='tf', name='c2d')
-    new_layer = keras.layers.Cropping2D(data_format='channels_last', name='c2d')
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
-    
-        # a Model inside a Sequential
-    x = Input(shape=(1,))
-    y = Dense(2)(x)
-    inner_model = Model(x, y)
-    outer_model = Sequential()
-    outer_model.add(inner_model)
-    assert outer_model.trainable_weights == inner_model.trainable_weights
-    inner_model.trainable = False
-    assert outer_model.trainable_weights == []
-    inner_model.trainable = True
-    inner_model.layers[-1].trainable = False
-    assert outer_model.trainable_weights == []
-    
-    print('Starting autogeneration.')
-for page_data in PAGES:
-    blocks = []
-    classes = page_data.get('classes', [])
-    for module in page_data.get('all_module_classes', []):
-        module_classes = []
-        for name in dir(module):
-            if name[0] == '_' or name in EXCLUDE:
-                continue
-            module_member = getattr(module, name)
-            if inspect.isclass(module_member):
-                cls = module_member
-                if cls.__module__ == module.__name__:
-                    if cls not in module_classes:
-                        module_classes.append(cls)
-        module_classes.sort(key=lambda x: id(x))
-        classes += module_classes
-    
-            # Test equivalence of convert_dense_weights_data_format
-        out1 = model1.predict(x)
-        layer_utils.convert_dense_weights_data_format(model1.layers[2], prev_shape, target_data_format)
-        for (src, dst) in zip(model1.layers, model2.layers):
-            dst.set_weights(src.get_weights())
-        out2 = model2.predict(transpose(x))
-    
-            # Exit condition: either hit max length
-        # or find stop character.
-        if (sampled_char == '\n' or
-           len(decoded_sentence) > max_decoder_seq_length):
-            stop_condition = True
-    
-        # test __getitem__
-    with pytest.raises(IndexError):
-        X_train[1000]
-    with pytest.raises(IndexError):
-        X_train[1000:1001]
-    with pytest.raises(IndexError):
-        X_train[[1000, 1001]]
-    with pytest.raises(IndexError):
-        X_train[np.array([1000])]
-    with pytest.raises(IndexError):
-        X_train[None]
-    assert (X_train[0] == X_train[:1][0]).all()
-    assert (X_train[[0, 1]] == X_train[:2]).all()
-    assert (X_train[np.array([0, 1])] == X_train[:2]).all()
-    
-    
-def copy_weights(teacher_model, student_model, layer_names):
-    '''Copy weights from teacher_model to student_model,
-     for layers with names listed in layer_names
-    '''
-    for name in layer_names:
-        weights = teacher_model.get_layer(name=name).get_weights()
-        student_model.get_layer(name=name).set_weights(weights)
-    
-    
-def test_serialization():
-    all_activations = ['max_norm', 'non_neg',
-                       'unit_norm', 'min_max_norm']
-    for name in all_activations:
-        fn = constraints.get(name)
-        ref_fn = getattr(constraints, name)()
-        assert fn.__class__ == ref_fn.__class__
-        config = constraints.serialize(fn)
-        fn = constraints.deserialize(config)
-        assert fn.__class__ == ref_fn.__class__
-    
-    
-    
-        stream_types = [  #this is just a sample. Will make it in prepare()
-        # {'id': '1080'},
-        # {'id': '720'},
-        # {'id': '360'},
-        # {'id': '288'},
-        # {'id': '190'},
-        # {'id': '180'},
-        
-    ]
-    
-    from ..common import *
-from ..extractor import VideoExtractor
-    
-    def kuwo_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    if 'www.kuwo.cn/yinyue' in url:
-        rid=match1(url,'yinyue/(\d+)')
-        kuwo_download_by_rid(rid,output_dir, merge, info_only)
-    else:
-        kuwo_playlist_download(url,output_dir,merge,info_only)
-    
-        # ordered list of supported stream types / qualities on this site
-    # order: high quality -> low quality
-    stream_types = [
-        {'id': 'original'}, # contains an 'id' or 'itag' field at minimum
-        {'id': 'small'},
-    ]
+    patch_file = 'homeassistant.components.device_tracker.bt_home_hub_5'
