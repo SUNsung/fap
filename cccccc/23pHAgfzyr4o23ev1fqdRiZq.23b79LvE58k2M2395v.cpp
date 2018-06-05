@@ -1,228 +1,261 @@
 
         
-        using GPUDevice = Eigen::GpuDevice;
-    
-    
-    {}  // namespace tensorflow
-
-    
-    Status SqrtGrad(const AttrSlice& attrs, FunctionDef* g) {
-  // clang-format off
-  return GradForUnaryCwise(g, {
-      {{'y'}, 'Sqrt', {'x'}},
-      {{'y_inv'}, 'Reciprocal', {'y'}, {}, {'dy'}},
-      FDH::Const('const', 0.5f),
-      {{'half'}, 'Cast', {'const'}, {{'SrcT', DT_FLOAT}, {'DstT', '$T'}}},
-      {{'a'}, 'Mul', {'half', 'y_inv'}},  // .5 * 1/y
-      {{'dx'}, 'Mul', {'dy', 'a'}},  // dy * (.5 * 1/y)
-  });
-  // clang-format on
-}
-REGISTER_OP_GRADIENT('Sqrt', SqrtGrad);
-    
-    struct Options;
-struct FileMetaData;
-    
-    // Maximum level to which a new compacted memtable is pushed if it
-// does not create overlap.  We try to push to level 2 to avoid the
-// relatively expensive level 0=>1 compactions and to avoid some
-// expensive manifest file operations.  We do not push all the way to
-// the largest level since that can generate a lot of wasted disk
-// space if the same key space is being repeatedly overwritten.
-static const int kMaxMemCompactLevel = 2;
-    
-    
-    {  // When limit user key is prefix of start user key
-  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
-            Shorten(IKey('foobar', 100, kTypeValue),
-                    IKey('foo', 200, kTypeValue)));
-}
-    
-    // Return the name of the log file with the specified number
-// in the db named by 'dbname'.  The result will be prefixed with
-// 'dbname'.
-extern std::string LogFileName(const std::string& dbname, uint64_t number);
-    
-    #include 'db/dbformat.h'
-#include 'port/port.h'
-#include 'util/logging.h'
-#include 'util/testharness.h'
-    
-      if (msg == NULL && !input.empty()) {
-    msg = 'invalid tag';
-  }
-    
-    
-    {}  // namespace leveldb
-    
-    TEST(WriteBatchTest, Append) {
-  WriteBatch b1, b2;
-  WriteBatchInternal::SetSequence(&b1, 200);
-  WriteBatchInternal::SetSequence(&b2, 300);
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('',
-            PrintContents(&b1));
-  b2.Put('a', 'va');
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('Put(a, va)@200',
-            PrintContents(&b1));
-  b2.Clear();
-  b2.Put('b', 'vb');
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('Put(a, va)@200'
-            'Put(b, vb)@201',
-            PrintContents(&b1));
-  b2.Delete('foo');
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('Put(a, va)@200'
-            'Put(b, vb)@202'
-            'Put(b, vb)@201'
-            'Delete(foo)@203',
-            PrintContents(&b1));
-}
-    
-      void PrintEnvironment() {
-    fprintf(stderr, 'SQLite:     version %s\n', SQLITE_VERSION);
+        std::vector<float> Classifier::Predict(const cv::Mat& img) {
+  Blob<float>* input_layer = net_->input_blobs()[0];
+  input_layer->Reshape(1, num_channels_,
+                       input_geometry_.height, input_geometry_.width);
+  /* Forward dimension change to all layers. */
+  net_->Reshape();
     }
     
-    // Dump the contents of the file named by fname in text format to
-// *dst.  Makes a sequence of dst->Append() calls; each call is passed
-// the newline-terminated text corresponding to a single item found
-// in the file.
-//
-// Returns a non-OK result if fname does not name a leveldb storage
-// file, or if the file cannot be read.
-Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
     
-      /**
-   * @brief A convenience method to check if the return code is 0
-   *
-   * @code{.cpp}
-   *   auto s = doSomething();
-   *   if (s.ok()) {
-   *     LOG(INFO) << 'doing work';
-   *   } else {
-   *     LOG(ERROR) << s.toString();
-   *   }
-   * @endcode
-   *
-   * @return a boolean which is true if the status code is 0, false otherwise.
+    {}  // namespace caffe
+    
+    /**
+ * @brief Computes the contrastive loss @f$
+ *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
+ *              \left(1-y\right) \max \left(margin-d, 0\right)^2
+ *          @f$ where @f$
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
+ *          used to train siamese networks.
+ *
+ * @param bottom input Blob vector (length 3)
+ *   -# @f$ (N \times C \times 1 \times 1) @f$
+ *      the features @f$ a \in [-\infty, +\infty]@f$
+ *   -# @f$ (N \times C \times 1 \times 1) @f$
+ *      the features @f$ b \in [-\infty, +\infty]@f$
+ *   -# @f$ (N \times 1 \times 1 \times 1) @f$
+ *      the binary similarity @f$ s \in [0, 1]@f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+ *      the computed contrastive loss: @f$ E =
+ *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
+ *          \left(1-y\right) \max \left(margin-d, 0\right)^2
+ *          @f$ where @f$
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
+ * This can be used to train siamese networks.
+ */
+template <typename Dtype>
+class ContrastiveLossLayer : public LossLayer<Dtype> {
+ public:
+  explicit ContrastiveLossLayer(const LayerParameter& param)
+      : LossLayer<Dtype>(param), diff_() {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_;
+  cudnnTensorDescriptor_t top_desc_;
+  cudnnActivationDescriptor_t activ_desc_;
+};
+#endif
+    
+    #endif  // CAFFE_ELTWISE_LAYER_HPP_
+
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the computed outputs @f$
+   *        y = \gamma ^ {\alpha x + \beta}
+   *      @f$
    */
-  bool ok() const { return getCode() == 0; }
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
-    }
+    extern __thread int64_t s_extra_request_nanoseconds;
+    
+      bool isPipelineEmpty();
     
     
-    {  return Status(0, 'OK');
-}
-    
-    
-    {  // And of the column has constraints:
-  EXPECT_TRUE(cm['path'].notExistsOrMatches('some'));
-  EXPECT_FALSE(cm['path'].notExistsOrMatches('not_some'));
-  EXPECT_TRUE(cm['path'].exists());
-  EXPECT_TRUE(cm['path'].existsAndMatches('some'));
-}
-    
-    TEST_F(WatcherTests, test_watcherrunner_loop_failure) {
-  MockWithWatchWatcherRunner runner(0, nullptr, true);
-  runner.runOnce();
-    }
-    
-    
-    {/// Copies src string into the dst string buffer with error checks
-Status platformStrncpy(char* dst, size_t nelms, const char* src, size_t count);
-}
+    {
+    {///////////////////////////////////////////////////////////////////////////////
+}}
 
     
-    Status EphemeralDatabasePlugin::removeRange(const std::string& domain,
-                                            const std::string& low,
-                                            const std::string& high) {
-  std::vector<std::string> keys;
-  for (const auto& it : db_[domain]) {
-    if (it.first >= low && it.first <= high) {
-      keys.push_back(it.first);
-    }
+    ///////////////////////////////////////////////////////////////////////////////
+    
+      if (mpz_sgn(gmpData) < 0) {
+    raise_warning(cs_GMP_INVALID_NUMBER_IS_NEGATIVE, 'gmp_sqrt');
+    return false;
   }
+    
+    inline void initNuma() {}
+inline constexpr int next_numa_node(std::atomic_int& curr_node) { return 0; }
+inline constexpr int num_numa_nodes() { return 1; }
+inline void numa_interleave(void* start, size_t size) {}
+inline void numa_bind_to(void* start, size_t size, int node) {}
+inline constexpr bool numa_node_allowed(int node) { return true; }
+    
+    struct LightProcess {
+  LightProcess();
+  ~LightProcess();
     }
     
-    #endif // D_A2_STR_H
+    #endif // incl_HPHP_SYNCHRONIZABLE_MULTI_H_
 
     
-      std::unique_ptr<AuthConfig> getUserDefinedAuthConfig() const;
-    
-      virtual ssize_t readData(unsigned char* data, size_t len,
-                           int64_t offset) CXX11_OVERRIDE;
-    
-    AbstractHttpServerResponseCommand::~AbstractHttpServerResponseCommand()
-{
-  if (readCheck_) {
-    e_->deleteSocketForReadCheck(socket_, this);
+    // Reduce use of immediate one possibly removing def as dead code.
+// Specific to ARM using hard-coded zero register.
+template <typename Out, typename Inst>
+bool cmov_fold_one(Env& env, const Inst& inst, Vlabel b, size_t i) {
+  if (operand_one(env, inst.f)) {
+    return simplify_impl(env, b, i, [&] (Vout& v) {
+      v << Out{inst.cc, inst.sf, PhysReg(vixl::wzr), inst.t, inst.d};
+      return 1;
+    });
   }
-  if (writeCheck_) {
-    e_->deleteSocketForWriteCheck(socket_, this);
+  if (operand_one(env, inst.t)) {
+    return simplify_impl(env, b, i, [&] (Vout& v) {
+      v << Out{ccNegate(inst.cc), inst.sf, PhysReg(vixl::wzr), inst.f, inst.d};
+      return 1;
+    });
+  }
+  return false;
+}
+    
+                // base on the seqRange, we do the decimation for lattices and related variables
+            if (m_hasLattices)
+            {
+                DecimateLattices(
+                    /*output */
+                    m_netLatticePtr, m_netBoundariesPtr, m_netExtrauttMapPtr, m_netUidPtr,
+                    /*input to be decimated */
+                    m_LatticeCache, m_BoundariesCache, m_extrauttmapCache, m_uidCache,
+                    /* what range we want ? */
+                    seqRange);
+            }
+    
+        // remove links to this node
+    for (auto nodeIter = m_nameToNodeMap.begin(); nodeIter != m_nameToNodeMap.end(); ++nodeIter)
+    {
+        ComputationNodeBasePtr node = nodeIter->second;
+        for (size_t i = 0; i < node->GetNumInputs(); ++i)
+        {
+            ComputationNodeBasePtr child = node->GetInputs()[i];
+            if (child == featureNode)
+            {
+                node->SetInput(i, NULL);
+                break;
+            }
+        }
+    }
+    
+        // make sure (dense * sparse -> dense) == (dense * dense -> dense)
+    mD.Resize(dim1, dim1);
+    mD.SetValue(0.0f);
+    Matrix<float>::MultiplyAndAdd(mAdense, transposeA, mA1sparseCSC, transposeB, mD);
+    Matrix<float>::MultiplyAndWeightedAdd(alpha, mAdense, transposeA, mA2sparseCSC, transposeB, beta, mD);
+    
+        bool useParallelTrain = (m_mpi != nullptr);
+    bool useDistributedMBReading = useParallelTrain && m_enableDistributedMBReading && dataReader->SupportsDistributedMBRead();
+    size_t totalEpochSize = bnNodes.size() * mbSize * iters;
+    
+    #include 'Basics.h'
+#include 'ScriptableObjects.h'
+#include 'BrainScriptParser.h'
+    
+    
+    {public:
+    inline hardcoded_array() throw()
+    {
+    }
+    inline hardcoded_array(size_t n) throw()
+    {
+        check_size(n);
+    } // we can instantiate with a size parameter--just checks the size
+    inline hardcoded_array(size_t n, const _T& val) throw()
+    {
+        check_size(n);
+        for (size_t i = 0; i < n; i++)
+            data[i] = val;
+    }
+    inline _T& operator[](size_t i) throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline const _T& operator[](size_t i) const throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline size_t size() const throw()
+    {
+        return _N;
+    }
+};
+
+    
+    TEST(WriteChainAsyncTransportWrapperTest, TestChainedIov) {
+  TestWriteChainAsyncTransportWrapper transport;
+  auto buf = folly::IOBuf::copyBuffer('hello');
+  buf->prependChain(folly::IOBuf::copyBuffer('world'));
+    }
+    
+    TEST_F(OrderingTest, compare_greater) {
+  compare_greater<OddCompare<int>> op;
+  EXPECT_TRUE(op(3, 4));
+  EXPECT_FALSE(op(3, 3));
+  EXPECT_FALSE(op(4, 3));
+}
+    
+      // This has to be the last step, because once state is Living other threads
+  // may access instance and instance_weak w/o synchronization.
+  state_.store(SingletonHolderState::Living, std::memory_order_release);
+    
+    
+    {
+    {  } else if (
+      std::is_unsigned<Src>::value && std::is_signed<Dst>::value &&
+      sizeof(Src) == sizeof(Dst)) {
+    // uint -> int, same size
+    EXPECT_EQ(kDstMax, folly::constexpr_clamp_cast<Dst>(kSrcMax));
   }
 }
     
-    #include 'Command.h'
+    template <class T>
+class UnboundedBlockingQueue : public BlockingQueue<T> {
+ public:
+  virtual ~UnboundedBlockingQueue() {}
+    }
     
-    bool AbstractOptionHandler::getInitialOption() const
-{
-  return flags_ & FLAG_INITIAL_OPTION;
+      // All XLOG() statements in this file will log to the category
+  // folly.logging.example.main
+  XLOG(INFO, 'now the normal log settings have been applied');
+    
+    inline internal::Benchmark* RegisterBenchmark(const char* name,
+                                              internal::Function* fn) {
+  return internal::RegisterBenchmarkInternal(
+      ::new internal::FunctionBenchmark(name, fn));
 }
     
-    class AbstractProxyResponseCommand : public AbstractCommand {
-private:
-  std::shared_ptr<HttpConnection> httpConnection_;
-    }
+    // Parses a string for a string flag, in the form of
+// '--flag=value'.
+//
+// On success, stores the value of the flag in *value, and returns
+// true.  On failure, returns false without changing *value.
+bool ParseStringFlag(const char* str, const char* flag, std::string* value);
     
-    bool AnnounceList::currentTierAcceptsStoppedEvent() const
-{
-  if (currentTrackerInitialized_) {
-    return FindStoppedAllowedTier()(*currentTier_);
-  }
-    }
-    
-    void AnnounceTier::nextEvent()
-{
-  switch (event) {
-  case STARTED:
-    event = DOWNLOADING;
-    break;
-  case STARTED_AFTER_COMPLETION:
-    event = SEEDING;
-    break;
-  case STOPPED:
-    event = HALTED;
-    break;
-  case COMPLETED:
-    event = SEEDING;
-    break;
-  default:
-    break;
-  }
+    double StatisticsMedian(const std::vector<double>& v) {
+  if (v.size() < 3) return StatisticsMean(v);
+  std::vector<double> partial;
+  // we need roundDown(count/2)+1 slots
+  partial.resize(1 + (v.size() / 2));
+  std::partial_sort_copy(v.begin(), v.end(), partial.begin(), partial.end());
+  // did we have odd number of samples?
+  // if yes, then the last element of partially-sorted vector is the median
+  // it no, then the average of the last two elements is the median
+  if(v.size() % 2 == 1)
+    return partial.back();
+  return (partial[partial.size() - 2] + partial[partial.size() - 1]) / 2.0;
 }
-    
-      AnnounceTier(std::deque<std::string> urls);
-    
-    namespace aria2 {
-    }
-    
-    #include 'LogFactory.h'
-#include 'BufferedFile.h'
-#include 'Logger.h'
-#include 'MessageDigest.h'
-#include 'fmt.h'
-#include 'message.h'
-#include 'util.h'
