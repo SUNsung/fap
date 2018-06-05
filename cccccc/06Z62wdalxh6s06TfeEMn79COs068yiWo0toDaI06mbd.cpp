@@ -1,307 +1,402 @@
 
         
-          /// Set an option on the acceptor.
-  /**
-   * This function is used to set an option on the acceptor.
-   *
-   * @param option The new option value to be set on the acceptor.
-   *
-   * @param ec Set to indicate what error occurred, if any.
-   *
-   * @sa SettableSocketOption @n
-   * boost::asio::socket_base::reuse_address
-   * boost::asio::socket_base::enable_connection_aborted
-   *
-   * @par Example
-   * Setting the SOL_SOCKET/SO_REUSEADDR option:
-   * @code
-   * boost::asio::ip::tcp::acceptor acceptor(io_service);
-   * ...
-   * boost::asio::ip::tcp::acceptor::reuse_address option(true);
-   * boost::system::error_code ec;
-   * acceptor.set_option(option, ec);
-   * if (ec)
-   * {
-   *   // An error occurred.
-   * }
-   * @endcode
-   */
-  template <typename SettableSocketOption>
-  boost::system::error_code set_option(const SettableSocketOption& option,
-      boost::system::error_code& ec)
-  {
-    return this->get_service().set_option(
-        this->get_implementation(), option, ec);
-  }
-    
-    #ifndef BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-#define BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-    
-    template <typename Stream>
-class buffered_write_stream;
-    
-    
-    {private:
-  // The top of the stack of calls for the current thread.
-  static tss_ptr<context> top_;
-};
-    
-      static void do_complete(io_service_impl* owner, operation* base,
-      const boost::system::error_code& /*ec*/,
-      std::size_t /*bytes_transferred*/)
-  {
-    // Take ownership of the handler object.
-    descriptor_read_op* o(static_cast<descriptor_read_op*>(base));
-    ptr p = { boost::asio::detail::addressof(o->handler_), o, o };
-    }
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-# include <boost/asio/detail/null_event.hpp>
-#elif defined(BOOST_ASIO_WINDOWS)
-# include <boost/asio/detail/win_event.hpp>
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-# include <boost/asio/detail/posix_event.hpp>
-#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-# include <boost/asio/detail/std_event.hpp>
-#else
-# error Only Windows, POSIX and std::condition_variable are supported!
-#endif
-    
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    template <typename Handler>
-inline void* allocate(std::size_t s, Handler& h)
-{
-#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  return ::operator new(s);
-#else
-  using boost::asio::asio_handler_allocate;
-  return asio_handler_allocate(s, boost::asio::detail::addressof(h));
-#endif
+        uint32_t swap_endian(uint32_t val) {
+    val = ((val << 8) & 0xFF00FF00) | ((val >> 8) & 0xFF00FF);
+    return (val << 16) | (val >> 16);
 }
     
+      // Get a layer using a LayerParameter.
+  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
+    if (Caffe::root_solver()) {
+      LOG(INFO) << 'Creating layer ' << param.name();
+    }
+    const string& type = param.type();
+    CreatorRegistry& registry = Registry();
+    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
+        << ' (known types: ' << LayerTypeListString() << ')';
+    return registry[type](param);
+  }
     
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
+    #include 'caffe/layers/neuron_layer.hpp'
     
+      /**
+   * @brief Computes the error gradient w.r.t. the reordered input.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
+    #include 'caffe/layers/conv_layer.hpp'
     
+    #include <vector>
     
-    
-    
-    
-    
-    {		m_debugDraw.DrawString(5, m_textLine, 'step [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.step, aveProfile.step, m_maxProfile.step);
-		m_textLine += DRAW_STRING_NEW_LINE;
-		m_debugDraw.DrawString(5, m_textLine, 'collide [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.collide, aveProfile.collide, m_maxProfile.collide);
-		m_textLine += DRAW_STRING_NEW_LINE;
-		m_debugDraw.DrawString(5, m_textLine, 'solve [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solve, aveProfile.solve, m_maxProfile.solve);
-		m_textLine += DRAW_STRING_NEW_LINE;
-		m_debugDraw.DrawString(5, m_textLine, 'solve init [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solveInit, aveProfile.solveInit, m_maxProfile.solveInit);
-		m_textLine += DRAW_STRING_NEW_LINE;
-		m_debugDraw.DrawString(5, m_textLine, 'solve velocity [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solveVelocity, aveProfile.solveVelocity, m_maxProfile.solveVelocity);
-		m_textLine += DRAW_STRING_NEW_LINE;
-		m_debugDraw.DrawString(5, m_textLine, 'solve position [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solvePosition, aveProfile.solvePosition, m_maxProfile.solvePosition);
-		m_textLine += DRAW_STRING_NEW_LINE;
-		m_debugDraw.DrawString(5, m_textLine, 'solveTOI [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solveTOI, aveProfile.solveTOI, m_maxProfile.solveTOI);
-		m_textLine += DRAW_STRING_NEW_LINE;
-		m_debugDraw.DrawString(5, m_textLine, 'broad-phase [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.broadphase, aveProfile.broadphase, m_maxProfile.broadphase);
-		m_textLine += DRAW_STRING_NEW_LINE;
-	}
-    
-    		for (int32 i = 0; i < 2; ++i)
-		{
-			b2Vec2 vertices[3];
-			vertices[0].Set(-0.5f, 0.0f);
-			vertices[1].Set(0.5f, 0.0f);
-			vertices[2].Set(0.0f, 1.5f);
+     protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the computed outputs. At training time, we have @f$
+   *      y_{\mbox{train}} = \left\{
+   *         \begin{array}{ll}
+   *            \frac{x}{1 - p} & \mbox{if } u > p \\
+   *            0 & \mbox{otherwise}
+   *         \end{array} \right.
+   *      @f$, where @f$ u \sim U(0, 1)@f$ is generated independently for each
+   *      input at each iteration. At test time, we simply have
+   *      @f$ y_{\mbox{test}} = \mathbb{E}[y_{\mbox{train}}] = x @f$.
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     }
     
-    	void Launch()
-	{
-		m_body->SetTransform(b2Vec2(0.0f, 4.0f), 0.0f);
-		m_body->SetLinearVelocity(b2Vec2_zero);
-		m_body->SetAngularVelocity(0.0f);
+    /**
+ * @brief A layer for learning 'embeddings' of one-hot vector input.
+ *        Equivalent to an InnerProductLayer with one-hot vectors as input, but
+ *        for efficiency the input is the 'hot' index of each column itself.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class EmbedLayer : public Layer<Dtype> {
+ public:
+  explicit EmbedLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    // Handler for Win32 messages, update mouse/keyboard data.
-// You may or not need this for your implementation, but it can serve as reference for handling inputs.
-// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
-/*
-IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-*/
+      // Runs backward propagation of errors on the deltas line.
+  // See Network for a detailed discussion of the arguments.
+  bool Backward(bool debug, const NetworkIO& fwd_deltas,
+                NetworkScratch* scratch, NetworkIO* back_deltas) override;
+  // Updates the weights using the given learning rate, momentum and adam_beta.
+  // num_samples is used in the adam computation iff use_adam_ is true.
+  void Update(float learning_rate, float momentum, float adam_beta,
+              int num_samples) override;
+  // Sums the products of weight updates in *this and other, splitting into
+  // positive (same direction) in *same and negative (different direction) in
+  // *changed.
+  void CountAlternators(const Network& other, double* same,
+                        double* changed) const override;
+  // Prints the weights for debug purposes.
+  void PrintW();
+  // Prints the weight deltas for debug purposes.
+  void PrintDW();
+    
+    // There are some really awkward PDF viewers in the wild, such as
+// 'Preview' which ships with the Mac. They do a better job with text
+// selection and highlighting when given perfectly flat baseline
+// instead of very slightly tilted. We clip small tilts to appease
+// these viewers. I chose this threshold large enough to absorb noise,
+// but small enough that lines probably won't cross each other if the
+// whole page is tilted at almost exactly the clipping threshold.
+void ClipBaseline(int ppi, int x1, int y1, int x2, int y2,
+                  int *line_x1, int *line_y1,
+                  int *line_x2, int *line_y2) {
+  *line_x1 = x1;
+  *line_y1 = y1;
+  *line_x2 = x2;
+  *line_y2 = y2;
+  double rise = abs(y2 - y1) * 72 / ppi;
+  double run = abs(x2 - x1) * 72 / ppi;
+  if (rise < 2.0 && 2.0 < run)
+    *line_y1 = *line_y2 = (y1 + y2) / 2;
+}
+    
+    #include 'strngs.h'
+#include 'unicharset.h'
+    
+      // ============= Moving around within the page ============.
+    
+    const int16_t kMaxBoxEdgeDiff = 2;
+    
+    void FullPageBlock(int width, int height, BLOCK_LIST *blocks) {
+  BLOCK_IT block_it(blocks);
+  BLOCK* block = new BLOCK('', TRUE, 0, 0, 0, 0, width, height);
+  block_it.add_to_end(block);
+}
 
     
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_Marmalade_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_Marmalade_CreateDeviceObjects();
     
-    // Render function.
-// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
-void ImGui_ImplA5_RenderDrawData(ImDrawData* draw_data)
-{
-    int op, src, dst;
-    al_get_blender(&op, &src, &dst);
-    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
-    }
-    
-    
-    {    switch (msg)
-    {
-    case WM_SIZE:
-        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
-        {
-            ImGui_ImplDX10_InvalidateDeviceObjects();
-            CleanupRenderTarget();
-            g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
-            CreateRenderTarget();
-            ImGui_ImplDX10_CreateDeviceObjects();
-        }
-        return 0;
-    case WM_SYSCOMMAND:
-        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
-            return 0;
-        break;
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        return 0;
-    }
-    return DefWindowProc(hWnd, msg, wParam, lParam);
+    {  assert(msg.isEmpty());
+  try {
+    double arg6 = unpackFloat(msg);
+    assert(false);
+  } catch (exception &e) {}
+  std::cout << 'OK' << std::endl;
+  return 0;
 }
+
     
-    void WaitForLastSubmittedFrame()
-{
-    FrameContext* frameCtxt = &g_frameContext[g_frameIndex % NUM_FRAMES_IN_FLIGHT];
-    }
+    using namespace std;
     
-            // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        s3eKeyboardUpdate();
-        s3ePointerUpdate();
-        ImGui_Marmalade_NewFrame();
+    #undef THPTensor_
+#undef THPTensor_stateless_
+#undef THPTensor
+#undef THPTensorStr
+#undef THPTensorBaseStr
+#undef THPTensorClass
     
-    int main(int, char**)
-{
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    }
+    #ifdef _THP_CORE
+#define THPStorageType TH_CONCAT_3(THP,Real,StorageType)
+#define THPStorageBaseStr TH_CONCAT_STRING_2(Real,StorageBase)
+#endif
     
-    // CHANGELOG 
-// (minor and older changes stripped away, please see git history for details)
-//  2018-05-07: Render: Saving/restoring Transform because they don't seem to be included in the StateBlock. Setting shading mode to Gouraud.
-//  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors and ImGuiBackendFlags_HasSetMousePos flags + honor ImGuiConfigFlags_NoMouseCursorChange flag.
-//  2018-02-20: Inputs: Added support for mouse cursors (ImGui::GetMouseCursor() value and WM_SETCURSOR message handling).
-//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplDX9_RenderDrawData() in the .h file so you can call it yourself.
-//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
-//  2018-02-06: Inputs: Honoring the io.WantSetMousePos by repositioning the mouse (when using navigation and ImGuiConfigFlags_NavEnableSetMousePos is set).
-//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
-    
-      InstructionPointer libraryBase() const noexcept { return libraryBase_; }
-    
-    TEST_F(YogaTest_HadOverflowTests, children_overflow_no_wrap_and_no_flex_children) {
-  const YGNodeRef child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child0, 80);
-  YGNodeStyleSetHeight(child0, 40);
-  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
-  YGNodeStyleSetMargin(child0, YGEdgeBottom, 15);
-  YGNodeInsertChild(root, child0, 0);
-  const YGNodeRef child1 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child1, 80);
-  YGNodeStyleSetHeight(child1, 40);
-  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
-  YGNodeInsertChild(root, child1, 1);
-    }
-    
-    struct Layout
-{
-    double left;
-    double right;
-    }
-    
-    void Node::setAspectRatio(double aspectRatio)
-{
-    YGNodeStyleSetAspectRatio(m_node, aspectRatio);
-}
-    
-    NBIND_CLASS(Size)
-{
-    construct<>();
-    construct<double, double>();
-}
-    
-    class Countable : public noncopyable, public nonmovable {
-public:
-  // RefPtr expects refcount to start at 0
-  Countable() : m_refcount(0) {}
-  virtual ~Countable()
-  {
-    FBASSERT(m_refcount == 0);
+    bool object_exists(const char *name) {
+  int fd = shm_open(name, O_RDONLY, 0);
+  if (fd >= 0) {
+    close(fd);
+    return true;
+  } else {
+    return false;
   }
-    }
-    
-    #pragma once
-#include <fb/assert.h>
-#include <utility>
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    
-      // Return a C++ type for any type (scalar/pointer) specifically for
-  // building a flatbuffer.
-  std::string GenTypeWire(const Type &type, const char *postfix,
-                          bool user_facing_type) const {
-    if (IsScalar(type.base_type)) {
-      return GenTypeBasic(type, user_facing_type) + postfix;
-    } else if (IsStruct(type)) {
-      return 'const ' + GenTypePointer(type) + ' *';
-    } else {
-      return 'flatbuffers::Offset<' + GenTypePointer(type) + '>' + postfix;
-    }
-  }
-    
-      // Similar to Parse(), but now only accepts JSON to be parsed into a
-  // FlexBuffer.
-  bool ParseFlexBuffer(const char *source, const char *source_filename,
-                       flexbuffers::Builder *builder);
-    
-    // Iterate through all definitions we haven't generate code for (enums, structs,
-// and tables) and output them to a single file.
-class DartGenerator : public BaseGenerator {
- public:
-  typedef std::unordered_map<std::string, std::string> namespace_code_map;
-    }
-    
-    #ifndef GRPC_INTERNAL_COMPILER_GO_GENERATOR_H
-#define GRPC_INTERNAL_COMPILER_GO_GENERATOR_H
-    
-    #include <iostream>
-#include <memory>
-#include <string>
-    
-      if (!file->package().empty()) {
-    std::vector<grpc::string> parts = file->package_parts();
-    }
-    
-    
-    {  std::cout << 'Server listening on ' << server_address << std::endl;
-  // This will block the thread and serve requests.
-  server_instance->Wait();
 }
     
+      THArgCheck(n_sample > 0, 2, 'cannot sample n_sample < 0 samples');
     
-    { private:
-  std::map<std::string, std::string> value_map_;
-  std::stringstream stream_;
+    #include 'power_iphone.h'
+    
+    	ret = mbedtls_ctr_drbg_seed(&ctr_drbg, mbedtls_entropy_func, &entropy, NULL, 0);
+	if (ret != 0) {
+		ERR_PRINTS(' failed\n  ! mbedtls_ctr_drbg_seed returned an error' + itos(ret));
+		return FAILED;
+	}
+    
+    
+    {	verify_ssl = true;
+}
+    
+    	virtual void poll() = 0;
+	virtual Error connect_to_host(String p_host, String p_path, uint16_t p_port, bool p_ssl, PoolVector<String> p_protocol = PoolVector<String>()) = 0;
+	virtual void disconnect_from_host() = 0;
+	virtual IP_Address get_connected_host() const = 0;
+	virtual uint16_t get_connected_port() const = 0;
+    
+    # if defined(OC_COLLECT_METRICS)
+struct oc_mode_metrics{
+  double fragw;
+  double satd;
+  double rate;
+  double rmse;
+  double satd2;
+  double satdrate;
+  double rate2;
+  double satdrmse;
+  double rmse2;
 };
+    
+    void opus_fft_neon(const kiss_fft_state *st,
+                   const kiss_fft_cpx *fin,
+                   kiss_fft_cpx *fout);
+    
+    #pragma warning(push)
+#pragma warning(disable : 4200) // warning C4200: nonstandard extension used : zero-sized array in struct/union
+// Section Header on Disk
+struct SectionHeader
+{
+    WORD wMagic;            // magic number ACE9
+    WORD version;           // version number ##.## in hex
+    WORD sizeHeader;        // size of this header (rounded up to mappable boundary)
+    WORD dataSections;      // number of data sub-sections (for nesting)
+    WORD sectionType;       // what is the type of the data in this section
+    WORD sectionData;       // type of section (SectionData enum)
+    WORD bytesPerElement;   // number of bytes per element, (0 means variable)
+    WORD customStructureID; // ID for custom structure
+    WORD elementsPerRecord; // number of elements per Record
+    WORD flags;             // bit flags, dependent on sectionType
+    WORD writtenID;         // unique ID so files written at the same time can be identified
+    WORD unusedWords[5];
+    size_t elementsCount; // number of total elements stored
+    // * section specific data goes below here * //
+    WORD labelKind;                                                    // kind of label (LabelKind type)
+    WORD labelDim;                                                     // number of possible states for labels (category type)
+    char unused[descriptionSize - 18 * sizeof(WORD) - sizeof(size_t)]; // space for future expansion (zero out in current versions)
+    char nameDescription[descriptionSize];                             // name and description of section contents in this format (name: description) (string, with extra bytes zeroed out, at least one null terminator required)
+    size_t size;                                                       // size of this section (including header)
+    size_t sizeAll;                                                    // size of this section (including header and all sub-sections)
+    size_t sectionFilePosition[];                                      // sub-section file offsets (if needed), assumed to be in File Position order
+};
+#pragma warning(pop)
+    
+    template <class ConfigRecordType, typename ElemType>
+bool TryGetNetworkFactory(const ConfigRecordType& config, function<ComputationNetworkPtr(DEVICEID_TYPE)>& createNetworkFn)
+{
+    DEVICEID_TYPE deviceId = DeviceFromConfig(config);
+    }
+    
+    template<class TString>
+inline bool AreEqualIgnoreCase(
+    const typename TString::value_type* s1pointer,
+    const TString& s2)
+{
+    return AreEqualIgnoreCase(TString(s1pointer), s2);
+}
+    
+    TEST_F(StatusTests, test_constructor) {
+  auto s = Status(5, 'message');
+  EXPECT_EQ(s.getCode(), 5);
+  EXPECT_EQ(s.getMessage(), 'message');
+}
+    
+    #include <osquery/database.h>
+#include <osquery/distributed.h>
+#include <osquery/flags.h>
+#include <osquery/system.h>
+    
+            for (; i < blocklen; ++i)
+            s1 += *buffer++, s2 += s1;
+    
+    IMGUI_API bool        ImGui_Marmalade_Init(bool install_callbacks);
+IMGUI_API void        ImGui_Marmalade_Shutdown();
+IMGUI_API void        ImGui_Marmalade_NewFrame();
+IMGUI_API void        ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
+    
+    struct GLFWwindow;
+    
+    IMGUI_API bool        ImGui_ImplSdlGL2_Init(SDL_Window* window);
+IMGUI_API void        ImGui_ImplSdlGL2_Shutdown();
+IMGUI_API void        ImGui_ImplSdlGL2_NewFrame(SDL_Window* window);
+IMGUI_API void        ImGui_ImplSdlGL2_RenderDrawData(ImDrawData* draw_data);
+IMGUI_API bool        ImGui_ImplSdlGL2_ProcessEvent(SDL_Event* event);
+    
+        // Setup viewport
+    D3D12_VIEWPORT vp;
+    memset(&vp, 0, sizeof(D3D12_VIEWPORT));
+    vp.Width = ImGui::GetIO().DisplaySize.x;
+    vp.Height = ImGui::GetIO().DisplaySize.y;
+    vp.MinDepth = 0.0f;
+    vp.MaxDepth = 1.0f;
+    vp.TopLeftX = vp.TopLeftY = 0.0f;
+    ctx->RSSetViewports(1, &vp);
+    
+        // Create an invisible mouse cursor
+    // Because al_hide_mouse_cursor() seems to mess up with the actual inputs..
+    ALLEGRO_BITMAP* mouse_cursor = al_create_bitmap(8,8);
+    g_MouseCursorInvisible = al_create_mouse_cursor(mouse_cursor, 0, 0);
+    al_destroy_bitmap(mouse_cursor);
+    
+        {
+        D3D12_DESCRIPTOR_HEAP_DESC desc = {};
+        desc.Type           = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+        desc.NumDescriptors = NUM_BACK_BUFFERS;
+        desc.Flags          = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+        desc.NodeMask       = 1;
+        if (g_pd3dDevice->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&g_pd3dRtvDescHeap)) != S_OK)
+            return E_FAIL;
+    }
+    
+            static float f = 0.0f;
+        ImGui::Text('Hello, world!');
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
+        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
+        ImGui::ShowDemoWindow(NULL);
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+    // Implemented features:
+//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+//  [X] Gamepad navigation mapping. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
+    
+    void*         XXH32_init   (unsigned int seed);
+XXH_errorcode XXH32_update (void* state, const void* input, int len);
+unsigned int  XXH32_digest (void* state);
+    
+      virtual bool Merge(const Slice& key,
+                     const Slice* existing_value,
+                     const Slice& value,
+                     std::string* new_value,
+                     Logger* logger) const override;
+    
+     public: // Insert/Update
+  /// Insert value before/after pivot in (list: key). Return the length.
+  /// May throw RedisListException
+  int InsertBefore(const std::string& key, const std::string& pivot,
+                   const std::string& value);
+  int InsertAfter(const std::string& key, const std::string& pivot,
+                  const std::string& value);
+    
+    namespace rocksdb {
+    }
+    
+    SyncPoint:: ~SyncPoint() {
+  delete impl_;
+}
+    
+    
+    {
+    {  void ClearCallBack(const std::string& point);
+  void ClearAllCallBacks();
+  void EnableProcessing() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    enabled_ = true;
+  }
+  void DisableProcessing() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    enabled_ = false;
+  }
+  void ClearTrace() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    cleared_points_.clear();
+  }
+  bool DisabledByMarker(const std::string& point,
+                        std::thread::id thread_id) {
+    auto marked_point_iter = marked_thread_id_.find(point);
+    return marked_point_iter != marked_thread_id_.end() &&
+           thread_id != marked_point_iter->second;
+  }
+  void Process(const std::string& point, void* cb_arg);
+};
+}
+#endif // NDEBUG
+
+    
+      // the earliest log containing a prepared section
+  // which has been inserted into this memtable.
+  std::atomic<uint64_t> min_prep_log_referenced_;
+    
+    // This class contains a fixed array of buckets, each
+// pointing to a skiplist (null if the bucket is empty).
+// bucket_count: number of fixed array buckets
+// skiplist_height: the max height of the skiplist
+// skiplist_branching_factor: probabilistic size ratio between adjacent
+//                            link lists in the skiplist
+extern MemTableRepFactory* NewHashSkipListRepFactory(
+    size_t bucket_count = 1000000, int32_t skiplist_height = 4,
+    int32_t skiplist_branching_factor = 4
+);
