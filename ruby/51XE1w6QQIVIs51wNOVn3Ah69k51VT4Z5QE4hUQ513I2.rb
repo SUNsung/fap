@@ -1,64 +1,69 @@
 
         
-          def validate_type
-    errors.add(:type, 'cannot be changed once an instance has been created') if type_changed? && !new_record?
-    errors.add(:type, 'is not a valid type') unless self.class.valid_type?(type)
+          def process_bootstrap
+    log_status 'Convert Bootstrap LESS to Sass'
+    puts ' repo   : #@repo_url'
+    puts ' branch : #@branch_sha #@repo_url/tree/#@branch'
+    puts ' save to: #{@save_to.to_json}'
+    puts ' twbs cache: #{@cache_path}'
+    puts '-' * 60
+    
+      # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  # config.force_ssl = true
+    
+      # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
+  # permissions and removing .la files, unless the files (or parent
+  # directories) are protected by skip_clean.
+  #
+  # bin and sbin should not have any subdirectories; if either do that is
+  # caught as an audit warning
+  #
+  # lib may have a large directory tree (see Erlang for instance), and
+  # clean_dir applies cleaning rules to the entire tree
+  def clean_dir(d)
+    d.find do |path|
+      path.extend(ObserverPathnameExtension)
+    
+      def satisfied_result_parent
+    return unless @satisfied_result.is_a?(Pathname)
+    parent = @satisfied_result.resolved_path.parent
+    if parent.to_s =~ %r{^#{Regexp.escape(HOMEBREW_CELLAR)}/([\w+-.@]+)/[^/]+/(s?bin)/?$}
+      parent = HOMEBREW_PREFIX/'opt/#{Regexp.last_match(1)}/#{Regexp.last_match(2)}'
+    end
+    parent
   end
     
-        # Optional
-    #   Use this method the gracefully stop your agent but make sure the run method return, or
-    #   terminate the thread.
-    def stop; end
-  end
-end
-=end
-module LongRunnable
-  extend ActiveSupport::Concern
-    
-      def destroy
-    @job = Delayed::Job.find(params[:id])
-    
-      def destroy
-    @services = current_user.services.find(params[:id])
-    @services.destroy
-    
-        t = Time.at(-0x3fff_ffff_ffff_ffff)
-    assert_equal(-146138510344, t.year)
-    t = Time.at(-0x4000_0000_0000_0000)
-    assert_equal(-146138510344, t.year)
-    t = Time.at(-0x4000_0000_0000_0001)
-    assert_equal(-146138510344, t.year)
-    t = Time.at(-0x5000_0000_0000_0001)
-    assert_equal(-182673138422, t.year)
-    t = Time.at(-0x6000_0000_0000_0000)
-    assert_equal(-219207766501, t.year)
-    
-      def self.critical_thread2(is_thread_stop)
-    Thread.current[:thread_specs].should == 101
-    Thread.critical.should == !is_thread_stop
-    unless is_thread_stop
-      Thread.critical = false
+    class ConfigTag < Liquid::Tag
+  def initialize(tag_name, options, tokens)
+    super
+    options = options.split(' ').map {|i| i.strip }
+    @key = options.slice!(0)
+    @tag = nil
+    @classname = nil
+    options.each do |option|
+      @tag = $1 if option =~ /tag:(\S+)/ 
+      @classname = $1 if option =~ /classname:(\S+)/
     end
   end
     
-      it 'interprets Julian-Gregorian gap dates using Gregorian proleptic calendar' do
-    Time.send(@method, 1582, 10, 14, 12).to_i.should == -12219336000 # 2299160j
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
+    end
+    
+      # Extracts raw content DIV from template, used for page description as {{ content }}
+  # contains complete sub-template code on main page level
+  def raw_content(input)
+    /<div class='entry-content'>(?<content>[\s\S]*?)<\/div>\s*<(footer|\/article)>/ =~ input
+    return (content.nil?) ? input : content
   end
-    
-    lib_path = root.join('lib').to_path
-    
-        self.sigs.each_key do |k|
-      # There is only one pattern per run to test
-      matched = nil
-      matches = nil
-    
-    	if ln =~ /\(jmp\)/
-		parts = ln.split(' ')
-		if (parts[0][0,1] == 'j' and parts[2][0,2] == ';j' and parts[4] == '(jmp)')
-			old = parts[1]
-			func = parts[3]
-			new = addrs[func]
-			#puts '%32s: %s -> %x' % [func, old, new]
-			replaces << [func, old, new.to_s(16)]
-		end
-	end
