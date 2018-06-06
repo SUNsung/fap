@@ -1,37 +1,40 @@
 
         
-            def test_sequential_undo(self):
-        self.command_stack = list(reversed(self.command_stack))
-        self.command_stack[0].undo()
-        output_after_first_undo = os.listdir(self.test_dir)
-        self.assertEqual(output_after_first_undo[0], 'bar.txt')
-        self.command_stack[1].undo()
-        output_after_second_undo = os.listdir(self.test_dir)
-        self.assertEqual(output_after_second_undo[0], 'foo.txt')
+            assert len(dense._inbound_nodes) == 2
+    assert len(dense._outbound_nodes) == 0
+    assert dense._inbound_nodes[0].inbound_layers == [a_layer]
+    assert dense._inbound_nodes[0].outbound_layer == dense
+    assert dense._inbound_nodes[1].inbound_layers == [b_layer]
+    assert dense._inbound_nodes[1].outbound_layer == dense
     
-        def test_c_observers_shall_be_detachable(cls):
-        cls.s.detach(cls.dec_obs)
-        # hex viewer shall be remaining if dec viewer is detached first
-        cls.assertEqual(isinstance(cls.s._observers[0], HexViewer), True)
-        cls.assertEqual(len(cls.s._observers), 1)
-        cls.s.detach(cls.hex_obs)
-        cls.assertEqual(len(cls.s._observers), 0)
     
-    if __name__ == '__main__':
+@keras_test
+def test_locallyconnected_1d():
+    num_samples = 2
+    num_steps = 8
+    input_dim = 5
+    filter_length = 3
+    filters = 4
+    padding = 'valid'
+    strides = 1
     
-        def test_display_current_time_at_current_time(self):
-        '''
-        Just as justification for working example. (Will always pass.)
-        '''
-        production_code_time_provider = ProductionCodeTimeProvider()
-        class_under_test = TimeDisplay(production_code_time_provider)
-        current_time = datetime.datetime.now()
-        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+    print('Loading data...')
+(x_train, y_train), (x_test, y_test) = reuters.load_data(num_words=max_words,
+                                                         test_split=0.2)
+print(len(x_train), 'train sequences')
+print(len(x_test), 'test sequences')
     
-            # they can be executed later on
-        for cmd in command_stack:
-            cmd.execute()
+        cnn.add(Dense(3 * 3 * 384, input_dim=latent_size, activation='relu'))
+    cnn.add(Reshape((3, 3, 384)))
     
-        def setProblem(self, value):
-        self._bProblem = value
+    
+def test_serialization():
+    all_activations = ['max_norm', 'non_neg',
+                       'unit_norm', 'min_max_norm']
+    for name in all_activations:
+        fn = constraints.get(name)
+        ref_fn = getattr(constraints, name)()
+        assert fn.__class__ == ref_fn.__class__
+        config = constraints.serialize(fn)
+        fn = constraints.deserialize(config)
+        assert fn.__class__ == ref_fn.__class__
