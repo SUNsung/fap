@@ -1,39 +1,78 @@
 
         
-            def get_cookie_httponly(self, app):
-        '''Returns True if the session cookie should be httponly.  This
-        currently just returns the value of the ``SESSION_COOKIE_HTTPONLY``
-        config var.
-        '''
-        return app.config['SESSION_COOKIE_HTTPONLY']
+              with tf.variable_scope(component.name, reuse=None):
+        component.network = biaffine_units.BiaffineDigraphNetwork(component)
     
-                    if change_info:
-                    break
+      def testGraphConstructionWithSigmoidLoss(self):
+    component_spec = spec_pb2.ComponentSpec()
+    text_format.Parse('''
+        name: 'test'
+        network_unit {
+          registered_name: 'IdentityNetwork'
+        }
+        fixed_feature {
+          name: 'fixed' embedding_dim: 32 size: 1
+        }
+        component_builder {
+          registered_name: 'component.DynamicComponentBuilder'
+          parameters {
+            key: 'loss_function'
+            value: 'sigmoid_cross_entropy'
+          }
+        }
+        ''', component_spec)
+    comp = component.DynamicComponentBuilder(self.master, component_spec)
+    comp.build_greedy_training(self.master_state, self.network_states)
     
-    containers = (('thefuck/python3-tcsh',
-               u'''FROM python:3
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'),
-              ('thefuck/python2-tcsh',
-               u'''FROM python:2
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'))
+      max_scores_bm1 = tf.unsorted_segment_max(scores_bxmxm, target_ids_bxmxm,
+                                           total_nodes + 1)
+  max_scores_bm = max_scores_bm1[1:]  # ID 0 corresponds to padding
+    
+        def test_timeout(self):
+        self.assertTrue(self.timeout.timeout)
+        self.assertFalse(self.invalid.timeout)
+    
+            self.addr1 = Addr.fromstring('127.0.0.1')
+        self.addr2 = Addr.fromstring('127.0.0.1:*')
+    
+        @mock.patch('certbot_compatibility_test.validator.requests.get')
+    def test_hsts(self, mock_get_request):
+        mock_get_request.return_value = create_response(
+            headers={'strict-transport-security': 'max-age=31536000'})
+        self.assertTrue(self.validator.hsts('test.com'))
+    
+    autodoc_member_order = 'bysource'
+autodoc_default_flags = ['show-inheritance', 'private-members']
+    
+        @classmethod
+    def setUpClass(cls):
+        cls.dec_obs = DecimalViewer()
+        cls.hex_obs = HexViewer()
+        cls.sub = Data('Data')
+        # inherited behavior already tested with TestSubject
+        cls.sub.attach(cls.dec_obs)
+        cls.sub.attach(cls.hex_obs)
     
     
-class CallState(Enum):
+class BaseRegisteredClass(object):
+    __metaclass__ = RegistryHolder
+    '''
+        Any class that will inherits from BaseRegisteredClass will be included
+        inside the dict RegistryHolder.REGISTRY, the key being the name of the
+        class and the associated value, the class itself.
+    '''
+    pass
     
-        def __init__(self):
-        self.lookup = {}  # key: person_id, value: person_server
+    class TimeDisplay(object):
     
-            The shuffle/sort step of MapReduce will then do a
-        distributed sort on the keys, resulting in:
+            # they can be executed later on
+        for cmd in command_stack:
+            cmd.execute()
     
-        def __init__(self, level, row, spot_number, spot_size, vehicle_size):
-        self.level = level
-        self.row = row
-        self.spot_number = spot_number
-        self.spot_size = spot_size
-        self.vehicle_size = vehicle_size
-        self.vehicle = None
+        a_transaction = Transaction(True, num_obj)
+    try:
+        for i in range(3):
+            num_obj.increment()
+            print(num_obj)
+        a_transaction.commit()
+        print('-- committed')
