@@ -1,195 +1,186 @@
 
         
-        
-private:
-    
-    #undef THPStorage_
-#undef THPStorage
-#undef THPStorageBaseStr
-#undef THPStorageStr
-#undef THPStorageClass
-#undef THPStorageType
-    
-                if (EXPECTS_CRASH_DUMP_CONTENT == _state) {
-                _state = EXPECTS_CRASH_DUMP_HEADER;
-                return 0;
-            }
-    
-        if (st.url_length + st.head_length > _rawlen) return LONGLINKPACK_CONTINUE_HEAD;
-    
-    int TSpy::__TestFun1(int i)
-{
-    return reinterpret_cast<Test_Spy_Sample*>(This())->__TestFun1(i);
+        Base::Base(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+	   const std::string& extension_id)
+    : extension_id_(extension_id),
+      id_(id),
+      delay_destruction_(false),
+      pending_destruction_(false),
+      object_manager_(object_manager) {
 }
     
-    #ifndef COMM_HAS_MEMBER_H_
-#define COMM_HAS_MEMBER_H_
+      bool delay_destruction() { return delay_destruction_; }
+  void set_delay_destruction(bool val) { delay_destruction_ = val; }
+  bool pending_destruction() { return pending_destruction_; }
+  void set_pending_destruction (bool val) { pending_destruction_ = val; }
+ protected:
+  int id_;
+  bool delay_destruction_;
+  bool pending_destruction_;
+  base::WeakPtr<ObjectManager> object_manager_;
     
-      if (!(args[0]->IsString() &&
-       (args[1]->IsUndefined() || args[1]->IsArray()))) {
-    return scope.Close(Boolean::New(false));
-  }
     
-    class SequentialFileReader;
-class Logger;
-using std::unique_ptr;
-    
-      // MemTables are reference counted.  The initial reference count
-  // is zero and the caller must call Ref() at least once.
-  //
-  // earliest_seq should be the current SequenceNumber in the db such that any
-  // key inserted into this memtable will have an equal or larger seq number.
-  // (When a db is first created, the earliest sequence number will be 0).
-  // If the earliest sequence number is not known, kMaxSequenceNumber may be
-  // used, but this may prevent some transactions from succeeding until the
-  // first key is inserted into the memtable.
-  explicit MemTable(const InternalKeyComparator& comparator,
-                    const ImmutableCFOptions& ioptions,
-                    const MutableCFOptions& mutable_cf_options,
-                    WriteBufferManager* write_buffer_manager,
-                    SequenceNumber earliest_seq, uint32_t column_family_id);
-    
-    TEST_F(InlineSkipTest, InsertWithHint_MultipleHintsRandom) {
-  const int N = 100000;
-  const int S = 100;
-  Random rnd(534);
-  Arena arena;
-  TestComparator cmp;
-  TestInlineSkipList list(cmp, &arena);
-  void* hints[S];
-  for (int i = 0; i < S; i++) {
-    hints[i] = nullptr;
-  }
-  for (int i = 0; i < N; i++) {
-    Key s = rnd.Uniform(S);
-    Key key = (s << 32) + rnd.Next();
-    InsertWithHint(&list, key, &hints[s]);
-  }
-  Validate(&list);
+    {  int result = 0;
+  RenderThread::Get()->Send(new ShellViewHostMsg_AllocateId(
+      routing_id,
+      &result));
+  return scope.Escape(v8::Integer::New(isolate, result));
 }
     
-    SyncPoint::SyncPoint() : 
-  impl_(new Data) {
-}
     
-    inline bool ParseInternalKey(const Slice& internal_key,
-                             ParsedInternalKey* result) {
-  const size_t n = internal_key.size();
-  if (n < 8) return false;
-  uint64_t num = DecodeFixed64(internal_key.data() + n - 8);
-  unsigned char c = num & 0xff;
-  result->sequence = num >> 8;
-  result->type = static_cast<ValueType>(c);
-  assert(result->type <= ValueType::kMaxValue);
-  result->user_key = Slice(internal_key.data(), n - 8);
-  return IsExtendedValueType(result->type);
-}
-    
-    // Return an iterator that provided the union of the data in
-// children[0,n-1].  Takes ownership of the child iterators and
-// will delete them when the result iterator is deleted.
-//
-// The result does no duplicate suppression.  I.e., if a particular
-// key is present in K child iterators, it will be yielded K times.
-//
-// REQUIRES: n >= 0
-extern InternalIterator* NewMergingIterator(
-    const InternalKeyComparator* comparator, InternalIterator** children, int n,
-    Arena* arena = nullptr, bool prefix_seek_mode = false);
-    
-    #include <fb/visibility.h>
-    
-    
-    {  ~IosFlagsSaver() {
-    ios_.flags(flags_);
-  }
-};
-    
-        double top;
-    double bottom;
-    
-    double Node::getBorder(int edge) const
-{
-    return YGNodeStyleGetBorder(m_node, static_cast<YGEdge>(edge));
-}
-    
-        Value getMinWidth(void) const;
-    Value getMinHeight(void) const;
-    
-    NBIND_CLASS(Layout)
-{
-    construct<>();
-}
-    
-    #include <cstdarg>
-#include <stdio.h>
-    
-      void setUserDefinedCred(std::string user, std::string password);
-    
-      void setInvalidate(bool invalidate) { invalidate_ = invalidate; }
-    
-    bool AbstractHttpServerResponseCommand::execute()
-{
-  if (e_->getRequestGroupMan()->downloadFinished() || e_->isHaltRequested()) {
-    return true;
-  }
-  try {
-    ssize_t len = httpServer_->sendResponse();
-    if (len > 0) {
-      timeoutTimer_ = global::wallclock();
+    {
+    {    if (zoom_controller) {
+      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
+      if (zoom_factor > content::kMaximumZoomFactor) {
+        zoom_factor = content::kMaximumZoomFactor;
+      }
+      if (zoom_factor < content::kMinimumZoomFactor) {
+        zoom_factor = content::kMinimumZoomFactor;
+      }
+      x *= zoom_factor;
+      y *= zoom_factor;
     }
-  }
-  catch (RecoverableException& e) {
-    A2_LOG_INFO_EX(fmt('CUID#%' PRId64
-                       ' - Error occurred while transmitting response body.',
-                       getCuid()),
-                   e);
-    return true;
-  }
-  if (httpServer_->sendBufferIsEmpty()) {
-    A2_LOG_INFO(fmt('CUID#%' PRId64 ' - HttpServer: all response transmitted.',
-                    getCuid()));
-    afterSend(httpServer_, e_);
-    return true;
-  }
-  else {
-    if (timeoutTimer_.difference(global::wallclock()) >= 30_s) {
-      A2_LOG_INFO(fmt('CUID#%' PRId64
-                      ' - HttpServer: Timeout while trasmitting response.',
-                      getCuid()));
-      return true;
-    }
-    else {
-      updateReadWriteCheck();
-      e_->addCommand(std::unique_ptr<Command>(this));
-      return false;
-    }
+    
+    Popup(x, y, rvh);
+  } else if (method == 'EnableShowEvent') {
+    arguments.GetBoolean(0, &enable_show_event_);
+  } else {
+    NOTREACHED() << 'Invalid call to Menu method:' << method
+                 << ' arguments:' << arguments;
   }
 }
     
+    #include 'base/logging.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/nw/src/nw_shell.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/browser/render_widget_host_view.h'
+#include 'ui/gfx/point.h'
+#include 'vector'
+#include 'gtk/gtk.h'
     
-    {} // namespace aria2
+      // Map point from document to screen.
+  gfx::Point screen_point(x, y);
     
-    #endif // D_ADAPTIVE_FILE_ALLOCATION_ITERATOR_H
+    NwClipboardReadAvailableTypesFunction::NwClipboardReadAvailableTypesFunction() {
+    }
+    
+    bool NwObjCallObjectMethodSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::ListValue* arguments = nullptr;
+  int id = 0;
+  std::string type, method;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
+    }
+    
+        // Render command lists
+    for(int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        const ImDrawIdx* idx_buffer = cmd_list->IdxBuffer.Data;
+        const int nVert = cmd_list->VtxBuffer.Size;
+        CIwFVec2* pVertStream = IW_GX_ALLOC(CIwFVec2, nVert);
+        CIwFVec2* pUVStream = IW_GX_ALLOC(CIwFVec2, nVert);
+        CIwColour* pColStream = IW_GX_ALLOC(CIwColour, nVert);
+    }
+    
+    // callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_API int32       ImGui_Marmalade_PointerButtonEventCallback(void* SystemData, void* pUserData);
+IMGUI_API int32       ImGui_Marmalade_KeyCallback(void* SystemData, void* userData);
+IMGUI_API int32       ImGui_Marmalade_CharCallback(void* SystemData, void* userData);
 
     
-    namespace {
-class FindCompletedAllowedTier {
-public:
-  bool operator()(const std::shared_ptr<AnnounceTier>& tier) const
-  {
-    switch (tier->event) {
-    case AnnounceTier::DOWNLOADING:
-    case AnnounceTier::COMPLETED:
-      return true;
-    default:
-      return false;
+        // Build atlas, retrieve pixel data.
+    // User is in charge of copying the pixels into graphics memory (e.g. create a texture with your engine). Then store your texture handle with SetTexID().
+    // RGBA32 format is provided for convenience and compatibility, but note that unless you use CustomRect to draw color data, the RGB pixels emitted from Fonts will all be white (~75% of waste).
+    // Pitch = Width * BytesPerPixels
+    IMGUI_API bool              Build();                    // Build pixels data. This is called automatically for you by the GetTexData*** functions.
+    IMGUI_API void              GetTexDataAsAlpha8(unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel = NULL);  // 1 byte per-pixel
+    IMGUI_API void              GetTexDataAsRGBA32(unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel = NULL);  // 4 bytes-per-pixel
+    void                        SetTexID(ImTextureID id)    { TexID = id; }
+    
+    struct GLFWwindow;
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    
+    {    (void)mods; // Modifiers are not reliable across systems
+    io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
+    io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
+    io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
+    io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+}
+    
+    HRESULT CreateDeviceD3D(HWND hWnd)
+{
+    // Setup swap chain
+    DXGI_SWAP_CHAIN_DESC sd;
+    ZeroMemory(&sd, sizeof(sd));
+    sd.BufferCount = 2;
+    sd.BufferDesc.Width = 0;
+    sd.BufferDesc.Height = 0;
+    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    sd.BufferDesc.RefreshRate.Numerator = 60;
+    sd.BufferDesc.RefreshRate.Denominator = 1;
+    sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    sd.OutputWindow = hWnd;
+    sd.SampleDesc.Count = 1;
+    sd.SampleDesc.Quality = 0;
+    sd.Windowed = TRUE;
+    sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
     }
-  }
+    
+    
+    {  virtual void dropCache(int64_t len, int64_t offset) CXX11_OVERRIDE;
 };
-} // namespace
     
-    namespace aria2 {
+    AbstractHttpServerResponseCommand::~AbstractHttpServerResponseCommand()
+{
+  if (readCheck_) {
+    e_->deleteSocketForReadCheck(socket_, this);
+  }
+  if (writeCheck_) {
+    e_->deleteSocketForWriteCheck(socket_, this);
+  }
+}
+    
+    #endif // D_ABSTRACT_PROXY_RESPONSE_COMMAND_H
+
+    
+    // DiskwriterFactory class template to create DiskWriter derived
+// object, ignoring filename.
+template <class DiskWriterType>
+class AnonDiskWriterFactory : public DiskWriterFactory {
+public:
+  AnonDiskWriterFactory() = default;
+  virtual ~AnonDiskWriterFactory() = default;
     }
     
-    AuthConfig::~AuthConfig() = default;
+      SecIdentityRef id;
+  while (SecIdentitySearchCopyNext(search, &id) == errSecSuccess) {
+    if (!checkIdentity(id, fp, ht)) {
+      continue;
+    }
+    A2_LOG_INFO('Found cert with matching fingerprint');
+    credentials_ = id;
+    return true;
+  }
+    
+    AuthConfig::AuthConfig() {}
+    
+    #define REQUIRES_SHARED(...) \
+  THREAD_ANNOTATION_ATTRIBUTE__(requires_shared_capability(__VA_ARGS__))
+    
+    
+    {      delete[] errbuf;
+    }
