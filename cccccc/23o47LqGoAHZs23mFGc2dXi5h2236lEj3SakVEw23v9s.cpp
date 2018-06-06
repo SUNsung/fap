@@ -1,317 +1,285 @@
 
         
-        // Relaunches the application using the helper application associated with the
-// currently running instance of Chrome in the parent browser process as the
-// executable for the relauncher process. |args| is an argv-style vector of
-// command line arguments of the form normally passed to execv. args[0] is
-// also the path to the relaunched process. Because the relauncher process
-// will ultimately launch the relaunched process via Launch Services, args[0]
-// may be either a pathname to an executable file or a pathname to an .app
-// bundle directory. The caller should exit soon after RelaunchApp returns
-// successfully. Returns true on success, although some failures can occur
-// after this function returns true if, for example, they occur within the
-// relauncher process. Returns false when the relaunch definitely failed.
-bool RelaunchApp(const StringVector& argv);
+        #ifndef TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
+#define TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
     
-    UnresponsiveSuppressor::~UnresponsiveSuppressor() {
-  g_suppress_level--;
-}
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    #ifndef CHROME_BROWSER_EXTENSIONS_GLOBAL_SHORTCUT_LISTENER_H_
-#define CHROME_BROWSER_EXTENSIONS_GLOBAL_SHORTCUT_LISTENER_H_
+    #define max_worker_name_length 128
     
-    namespace content {
-class BrowserPpapiHost;
-}
+    #include 'tensorflow/core/kernels/cwise_ops_gpu_common.cu.h'
+    
+    TEST_F(GrpcDebugTest, TestGateDebugNodeOnEmptyEnabledSet) {
+  ASSERT_FALSE(DebugIO::IsDebugNodeGateOpen('foo:0:DebugIdentity',
+                                            {'grpc://localhost:3333'}));
+    }
+    
+    namespace test {
+    }
+    
+    #include 'tensorflow/core/platform/types.h'
+    
+    #include 'atom/browser/net/asar/url_request_asar_job.h'
+#include 'atom/browser/net/js_asker.h'
+    
+    
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(UnresponsiveSuppressor);
+};
+    
+    #ifndef ATOM_COMMON_API_REMOTE_CALLBACK_FREER_H_
+#define ATOM_COMMON_API_REMOTE_CALLBACK_FREER_H_
+#include 'atom/common/api/object_life_monitor.h'
+#include 'content/public/browser/web_contents_observer.h'
+    
+    #endif  // CHROME_BROWSER_CHROME_PROCESS_FINDER_WIN_H_
+
+    
+      // Sets size to which the thumbnails should be scaled. If called after
+  // StartUpdating() then some thumbnails may be still scaled to the old size
+  // until they are updated.
+  virtual void SetThumbnailSize(const gfx::Size& thumbnail_size) = 0;
+    
+      // Checks if the given |monitor_id| represents a built-in display.
+  static bool IsMonitorBuiltIn(int64_t monitor_id);
     
     
     {}  // namespace chrome
     
-    void SyntaxASTMap::dumpSyntaxMap() const {
-  for (const auto &SyntaxAndSemaNode : SyntaxMap) {
-    auto SyntaxNode = SyntaxAndSemaNode.getFirst();
-    auto SemanticNode = SyntaxAndSemaNode.getSecond();
-    }
-    }
+      const int render_process_id_;
+  // Keep a copy from original thread.
+  const base::FilePath profile_directory_;
+  const GURL document_url_;
     
-    #pragma mark - NSData verification
+    public:
+  FastWriter();
+  ~FastWriter() override {}
     
-      /// \brief Returns the distance in bytes between the given valid source
-  /// locations.
-  unsigned getByteDistance(SourceLoc Start, SourceLoc End) const;
-    
-    void indexDeclContext(DeclContext *DC, IndexDataConsumer &consumer);
-void indexSourceFile(SourceFile *SF, StringRef hash,
-                     IndexDataConsumer &consumer);
-void indexModule(ModuleDecl *module, StringRef hash,
-                 IndexDataConsumer &consumer);
-    
-    // Computes a reshaped copy of the weight matrix w. If there are no
-// partial_funcs_, it does nothing.
-void IntSimdMatrix::Init(const GENERIC_2D_ARRAY<int8_t>& w) {
-  if (partial_funcs_.empty()) return;
-  int num_out = w.dim1();
-  int num_in = w.dim2() - 1;
-  // The rounded-up sizes of the reshaped weight matrix, excluding biases.
-  int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
-  int rounded_num_out = RoundOutputs(num_out);
-  // Add the bias and compute the required size.
-  shaped_w_.resize((rounded_num_in + 1) * rounded_num_out, 0);
-  int shaped_index = 0;
-  int output = 0;
-  // Each number of registers needs a different format! Iterates over the
-  // different numbers of registers (each a power of 2).
-  for (int num_registers = max_output_registers_; num_registers >= 1;
-       num_registers /= 2) {
-    // The number of outputs that we will generate with this many registers.
-    int num_outputs_per_register_set =
-        num_registers * num_outputs_per_register_;
-    // Use the max number of registers until we have to go fewer.
-    while (output + num_outputs_per_register_set <= rounded_num_out) {
-      // Accumulating outputs in registers saves iterating over the inputs, so
-      // we only have to do it once per output register set.
-      for (int input = 0; input < num_in; input += num_inputs_per_group_) {
-        // Iterate over the number of outputs in a register set.
-        for (int j = 0; j < num_outputs_per_register_set; ++j) {
-          // Inner-most loop corresponds to the number of inputs in an input
-          // group.
-          for (int i = 0; i < num_inputs_per_group_; ++i) {
-            int8_t weight = 0;
-            if (output + j < num_out && input + i < num_in)
-              weight = w(output + j, input + i);
-            shaped_w_[shaped_index++] = weight;
-          }
-        }
-      }
-      // Append the bias weights for the register set.
-      for (int j = 0; j < num_outputs_per_register_set; ++j) {
-        int8_t weight = 0;
-        if (output + j < num_out) weight = w(output + j, num_in);
-        shaped_w_[shaped_index++] = weight;
-      }
-      output += num_outputs_per_register_set;
+    bool OurReader::readCppStyleComment() {
+  while (current_ != end_) {
+    Char c = getNextChar();
+    if (c == '\n')
+      break;
+    if (c == '\r') {
+      // Consume DOS EOL. It will be normalized in addComment.
+      if (current_ != end_ && *current_ == '\n')
+        getNextChar();
+      // Break on Moc OS 9 EOL.
+      break;
     }
   }
+  return true;
 }
     
-    void ResultIterator::CalculateTextlineOrder(
-    bool paragraph_is_ltr,
-    const GenericVector<StrongScriptDirection> &word_dirs,
-    GenericVectorEqEq<int> *reading_order) {
-  reading_order->truncate(0);
-  if (word_dirs.size() == 0) return;
+    class PyDescriptorDatabase : public DescriptorDatabase {
+ public:
+  explicit PyDescriptorDatabase(PyObject* py_database);
+  ~PyDescriptorDatabase();
     }
     
-    // Returns the bounding box including the desired combination of upper and
-// lower noise/diacritic elements.
-TBOX ROW::restricted_bounding_box(bool upper_dots, bool lower_dots) const {
-  TBOX box;
-  // This is a read-only iteration of the words in the row.
-  WERD_IT it(const_cast<WERD_LIST *>(&words));
-  for (it.mark_cycle_pt(); !it.cycled_list(); it.forward()) {
-    box += it.data()->restricted_bounding_box(upper_dots, lower_dots);
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
+}
+    
+    void RepeatedEnumFieldGenerator::GenerateParsingCode(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    '$name$_.AddEntriesFrom(input, _repeated_$name$_codec);\n');
+}
+    
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+     private:
+  const FileDescriptor* descriptor_;
+  const Options *options_;
+    
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Generates Java code for a given .proto file.
+    
+      // The c'tor sets this object as the test part result reporter used
+  // by Google Test.  The 'result' parameter specifies where to report the
+  // results. This reporter will only catch failures generated in the current
+  // thread. DEPRECATED
+  explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
+    
+    #else  // GTEST_USES_SIMPLE_RE
+    
+    $if k == 2 [[
+  template <typename U0, typename U1>
+  tuple(const ::std::pair<U0, U1>& p) : f0_(p.first), f1_(p.second) {}
+    
+    // Returns n! (the factorial of n).  For negative n, n! is defined to be 1.
+int Factorial(int n) {
+  int result = 1;
+  for (int i = 1; i <= n; i++) {
+    result *= i;
   }
-  return box;
-}
+    }
     
-    #ifndef GRPC_TEST_CPP_UTIL_BENCHMARK_CONFIG_H
-#define GRPC_TEST_CPP_UTIL_BENCHMARK_CONFIG_H
+    /*
+ * baseevent.h
+ *
+ *  Created on: 2016年3月24日
+ *      Author: caoshaokun
+ */
     
-      const auto result =
-      RunScenario(client_config, 1, server_config, 1, WARMUP, BENCHMARK, -2, '',
-                  kInsecureCredentialsType, true);
-    
-      bool TryParseOne(Feature* feature) {
-    if (failed_ || Finished() || !Match('{')) {
-      return SetFailedAndReturnFalse();
-    }
-    if (!Match(location_) || !Match('{') || !Match(latitude_)) {
-      return SetFailedAndReturnFalse();
-    }
-    long temp = 0;
-    ReadLong(&temp);
-    feature->mutable_location()->set_latitude(temp);
-    if (!Match(',') || !Match(longitude_)) {
-      return SetFailedAndReturnFalse();
-    }
-    ReadLong(&temp);
-    feature->mutable_location()->set_longitude(temp);
-    if (!Match('},') || !Match(name_) || !Match('\'')) {
-      return SetFailedAndReturnFalse();
-    }
-    size_t name_start = current_;
-    while (current_ != db_.size() && db_[current_++] != ''') {
-    }
-    if (current_ == db_.size()) {
-      return SetFailedAndReturnFalse();
-    }
-    feature->set_name(db_.substr(name_start, current_-name_start-1));
-    if (!Match('},')) {
-      if (db_[current_ - 1] == ']' && current_ == db_.size()) {
+        if (touch_times_.size() <= count_) {
+        touch_times_.push_back(now);
         return true;
+    }
+    
+    #include 'boost/any.hpp'
+    
+    
+/**
+ * created on : 2012-07-16
+ * author    : yanguoyue
+ */
+    
+    void AdaptiveFileAllocationIterator::allocateChunk()
+{
+  if (!allocator_) {
+#ifdef HAVE_FALLOCATE
+    try {
+      A2_LOG_DEBUG('Testing file system supports fallocate.');
+      if (offset_ < totalLength_) {
+        int64_t len =
+            std::min(totalLength_ - offset_, static_cast<int64_t>(4_k));
+        stream_->allocate(offset_, len, false);
+        offset_ += len;
       }
-      return SetFailedAndReturnFalse();
+      A2_LOG_DEBUG('File system supports fallocate.');
+      allocator_ = make_unique<FallocFileAllocationIterator>(stream_, offset_,
+                                                             totalLength_);
     }
-    return true;
+    catch (RecoverableException& e) {
+      A2_LOG_DEBUG('File system does not support fallocate.');
+      auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
+                                                              totalLength_);
+      salloc->init();
+      allocator_ = std::move(salloc);
+    }
+#else  // !HAVE_FALLOCATE
+    auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
+                                                            totalLength_);
+    salloc->init();
+    allocator_ = std::move(salloc);
+#endif // !HAVE_FALLOCATE
+    allocator_->allocateChunk();
   }
-    
-    
-    {}  // namespace routeguide
-    
-    #endif  // GRPC_TEST_CPP_METRICS_SERVER_H
-
-    
-    
-    { private:
-  const InstructionPointer absoluteProgramCounter_;
-  const InstructionPointer libraryBase_;
-  const InstructionPointer functionAddress_;
-  const std::string libraryName_;
-  const std::string functionName_;
-};
-    
-    #include <yoga/Yoga.h>
-    
-        ~Config(void);
-    
-    int Node::getDisplay(void) const
-{
-    return YGNodeStyleGetDisplay(m_node);
+  else {
+    allocator_->allocateChunk();
+  }
 }
-    
-    struct Size
-{
-    double width;
-    double height;
-    }
-    
-    
-    {
-    {
-    {  static void OnLoad();
- private:
-  bool attachedWithThisScope_;
-};
-}
-}
-
-    
-    #pragma once
-#include <fb/assert.h>
-#include <utility>
     
       /**
-   * Access object's member or method through this operator overload.
+   * The internal announce URL pointer points to next URL.
+   * If the current URL is the last element of its group, then the first
+   * element of the next group is pointed.
    */
-  T *operator->() const {
-    return get();
-  }
+  void announceFailure();
     
-    class InputCorpus {
- public:
-  static const size_t kFeatureSetSize = 1 << 16;
-  InputCorpus(const std::string &OutputCorpus) : OutputCorpus(OutputCorpus) {
-    memset(InputSizesPerFeature, 0, sizeof(InputSizesPerFeature));
-    memset(SmallestElementPerFeature, 0, sizeof(SmallestElementPerFeature));
-  }
-  ~InputCorpus() {
-    for (auto II : Inputs)
-      delete II;
-  }
-  size_t size() const { return Inputs.size(); }
-  size_t SizeInBytes() const {
-    size_t Res = 0;
-    for (auto II : Inputs)
-      Res += II->U.size();
-    return Res;
-  }
-  size_t NumActiveUnits() const {
-    size_t Res = 0;
-    for (auto II : Inputs)
-      Res += !II->U.empty();
-    return Res;
-  }
-  bool empty() const { return Inputs.empty(); }
-  const Unit &operator[] (size_t Idx) const { return Inputs[Idx]->U; }
-  void AddToCorpus(const Unit &U, size_t NumFeatures, bool MayDeleteFile = false) {
-    assert(!U.empty());
-    uint8_t Hash[kSHA1NumBytes];
-    if (FeatureDebug)
-      Printf('ADD_TO_CORPUS %zd NF %zd\n', Inputs.size(), NumFeatures);
-    ComputeSHA1(U.data(), U.size(), Hash);
-    Hashes.insert(Sha1ToString(Hash));
-    Inputs.push_back(new InputInfo());
-    InputInfo &II = *Inputs.back();
-    II.U = U;
-    II.NumFeatures = NumFeatures;
-    II.MayDeleteFile = MayDeleteFile;
-    memcpy(II.Sha1, Hash, kSHA1NumBytes);
-    UpdateCorpusDistribution();
-    ValidateFeatureSet();
-  }
+    AuthConfig::AuthConfig() {}
+    
+    /**
+ * Symbolicates a stack trace into a new vector
+ *
+ * @param stackTrace The input stack trace
+ */
+FBEXPORT inline std::vector<StackTraceElement> getStackTraceSymbols(
+    const std::vector<InstructionPointer>& trace) {
+  auto symbols = std::vector<StackTraceElement>{};
+  getStackTraceSymbols(symbols, trace);
+  return symbols;
+}
+    
+        double top;
+    double bottom;
+    
+        method(copyStyle);
+    
+    #include <cstdarg>
+#include <stdio.h>
+    
+    template<typename... ARGS>
+inline void log(int level, const char* tag, const char* msg) noexcept {
+  __android_log_write(level, tag, msg);
+}
+    
+    
+    {
+    {}}
+
+    
+    #include 'benchmark/benchmark.h'
+#include 'benchmark_api_internal.h'
+#include 'internal_macros.h'
+    
+    bool IsColorTerminal() {
+#if BENCHMARK_OS_WINDOWS
+  // On Windows the TERM variable is usually not set, but the
+  // console there does support colors.
+  return 0 != _isatty(_fileno(stdout));
+#else
+  // On non-Windows platforms, we rely on the TERM variable. This list of
+  // supported TERM values is copied from Google Test:
+  // <https://github.com/google/googletest/blob/master/googletest/src/gtest.cc#L2925>.
+  const char* const SUPPORTED_TERM_VALUES[] = {
+      'xterm',         'xterm-color',     'xterm-256color',
+      'screen',        'screen-256color', 'tmux',
+      'tmux-256color', 'rxvt-unicode',    'rxvt-unicode-256color',
+      'linux',         'cygwin',
+  };
     }
     
-      const size_t kMaxSaneLen = 1 << 20;
-  const size_t kMinDefaultLen = 64;
-  FuzzingOptions Options;
-  Options.Verbosity = Flags.verbosity;
-  Options.MaxLen = Flags.max_len;
-  Options.UnitTimeoutSec = Flags.timeout;
-  Options.ErrorExitCode = Flags.error_exitcode;
-  Options.TimeoutExitCode = Flags.timeout_exitcode;
-  Options.MaxTotalTimeSec = Flags.max_total_time;
-  Options.DoCrossOver = Flags.cross_over;
-  Options.MutateDepth = Flags.mutate_depth;
-  Options.UseCounters = Flags.use_counters;
-  Options.UseIndirCalls = Flags.use_indir_calls;
-  Options.UseMemcmp = Flags.use_memcmp;
-  Options.UseMemmem = Flags.use_memmem;
-  Options.UseCmp = Flags.use_cmp;
-  Options.UseValueProfile = Flags.use_value_profile;
-  Options.Shrink = Flags.shrink;
-  Options.ShuffleAtStartUp = Flags.shuffle;
-  Options.PreferSmall = Flags.prefer_small;
-  Options.ReloadIntervalSec = Flags.reload;
-  Options.OnlyASCII = Flags.only_ascii;
-  Options.OutputCSV = Flags.output_csv;
-  Options.DetectLeaks = Flags.detect_leaks;
-  Options.TraceMalloc = Flags.trace_malloc;
-  Options.RssLimitMb = Flags.rss_limit_mb;
-  if (Flags.runs >= 0)
-    Options.MaxNumberOfRuns = Flags.runs;
-  if (!Inputs->empty() && !Flags.minimize_crash_internal_step)
-    Options.OutputCorpus = (*Inputs)[0];
-  Options.ReportSlowUnits = Flags.report_slow_units;
-  if (Flags.artifact_prefix)
-    Options.ArtifactPrefix = Flags.artifact_prefix;
-  if (Flags.exact_artifact_path)
-    Options.ExactArtifactPath = Flags.exact_artifact_path;
-  std::vector<Unit> Dictionary;
-  if (Flags.dict)
-    if (!ParseDictionaryFile(FileToString(Flags.dict), &Dictionary))
-      return 1;
-  if (Flags.verbosity > 0 && !Dictionary.empty())
-    Printf('Dictionary: %zd entries\n', Dictionary.size());
-  bool DoPlainRun = AllInputsAreFiles();
-  Options.SaveArtifacts =
-      !DoPlainRun || Flags.minimize_crash_internal_step;
-  Options.PrintNewCovPcs = Flags.print_pcs;
-  Options.PrintFinalStats = Flags.print_final_stats;
-  Options.PrintCorpusStats = Flags.print_corpus_stats;
-  Options.PrintCoverage = Flags.print_coverage;
-  Options.DumpCoverage = Flags.dump_coverage;
-  if (Flags.exit_on_src_pos)
-    Options.ExitOnSrcPos = Flags.exit_on_src_pos;
-  if (Flags.exit_on_item)
-    Options.ExitOnItem = Flags.exit_on_item;
+    #include <cstdarg>
+#include <iostream>
+#include <string>
     
-    namespace fuzzer {
+    // Source project : https://github.com/ismaelJimenez/cpp.leastsq
+// Adapted to be used with google benchmark
+    
+    namespace benchmark {
+#ifdef BENCHMARK_OS_WINDOWS
+// Window's Sleep takes milliseconds argument.
+void SleepForMilliseconds(int milliseconds) { Sleep(milliseconds); }
+void SleepForSeconds(double seconds) {
+  SleepForMilliseconds(static_cast<int>(kNumMillisPerSecond * seconds));
+}
+#else   // BENCHMARK_OS_WINDOWS
+void SleepForMicroseconds(int microseconds) {
+  struct timespec sleep_time;
+  sleep_time.tv_sec = microseconds / kNumMicrosPerSecond;
+  sleep_time.tv_nsec = (microseconds % kNumMicrosPerSecond) * kNumNanosPerMicro;
+  while (nanosleep(&sleep_time, &sleep_time) != 0 && errno == EINTR)
+    ;  // Ignore signals and wait for the full interval to elapse.
+}
     }
-    
-      std::string CoveredDirsStr;
-  for (auto &Dir : CoveredDirs) {
-    if (!CoveredDirsStr.empty())
-      CoveredDirsStr += ',';
-    CoveredDirsStr += Dir;
-  }
-  Printf('COVERED_DIRS: %s\n', CoveredDirsStr.c_str());
