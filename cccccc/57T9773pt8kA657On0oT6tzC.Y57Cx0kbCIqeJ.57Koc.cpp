@@ -1,256 +1,230 @@
 
         
-        
-    {
-    {}  // namespace functor
-}  // namespace tensorflow
-    
-    #endif  // TENSORFLOW_PLATFORM_PREFETCH_H_
-
-    
-    
-    {
-    {    Encode(context, contents, file_format, bits_per_second, samples_per_second);
-  }
-};
-    
-    #include 'tensorflow/core/framework/register_types.h'
-#include 'tensorflow/core/framework/tensor_types.h'
-#include 'tensorflow/core/kernels/cuda_device_array_gpu.h'
-#include 'tensorflow/core/util/cuda_kernel_helper.h'
-    
-    
-    {  // Invalid names.
-  EXPECT_FALSE(IsSameAddrSp('random_invalid_target', 'random_invalid_target'));
-  EXPECT_FALSE(IsSameAddrSp('/job:/replica:10/task:10/cpu:0',
-                            '/job:/replica:10/task:10/cpu:1'));
-  EXPECT_FALSE(IsSameAddrSp('/job:mnist/replica:xx/task:10/cpu:0',
-                            '/job:mnist/replica:xx/task:10/cpu:1'));
-  EXPECT_FALSE(IsSameAddrSp('/job:mnist/replica:10/task:yy/cpu:0',
-                            '/job:mnist/replica:10/task:yy/cpu:1'));
-}
-    
-        NodeDef* const_node2 = graph_def.add_node();
-    const_node2->set_name('const_node2');
-    const_node2->set_op('Const');
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-      // Given slice 'sub' where 'sub' is fully contained in *this,
-  // (meaning that the intersection of 'sub' and *this equals 'sub'), computes
-  // the 'relative' slice of 'sub' with respect to *this.
-  //
-  // In other words, if we use A>S to denote slicing a shape S with a slice A,
-  // then the function is computing a slice X such that:
-  //   X > (this > S) = sub > S
-  // for any shape S.
-  //
-  // In general, along every dimension, the start of the relative slice is the
-  // start of the 'sub' slice minus the start of *this; the length of the
-  // relative slice is the length of the 'sub' slice.
-  //
-  // For example, say we have a shape of {3, 4, 5}, 'this' is 0,2:-:1,2, and
-  // 'sub' is 1,1:2:2,1,2, then the related slice is 1,1:2,2:0,2.
-  //
-  // The caller needs to make sure that 'sub' is indeed a sub-slice of *this;
-  // otherwise the result is undefined.
-  void ComputeRelative(const TensorSlice& sub, TensorSlice* relative) const;
-    
-    Unless required by applicable law or agreed to in writing, software
+        Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
-    typedef FunctionDefHelper FDH;
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-        http://www.apache.org/licenses/LICENSE-2.0
     
-    // Memtables and sstables that make the DB representation contain
-// (userkey,seq,type) => uservalue entries.  DBIter
-// combines multiple entries for the same userkey found in the DB
-// representation into a single entry while accounting for sequence
-// numbers, deletion markers, overwrites, etc.
-class DBIter: public Iterator {
- public:
-  // Which direction is the iterator currently moving?
-  // (1) When moving forward, the internal iterator is positioned at
-  //     the exact entry that yields this->key(), this->value()
-  // (2) When moving backwards, the internal iterator is positioned
-  //     just before all entries whose user key == this->key().
-  enum Direction {
-    kForward,
-    kReverse
-  };
+    {}  // end namespace Eigen
+    
+    namespace tensorflow {
     }
     
     
-    {}  // namespace config
+    {  std::vector<string> workers;
+  cc->ListWorkers(&workers);
+  EXPECT_EQ(std::vector<string>(
+                {'/job:mnist/replica:0/task:0', '/job:mnist/replica:0/task:1',
+                 '/job:mnist/replica:0/task:2', '/job:mnist/replica:0/task:3',
+                 '/job:mnist/replica:0/task:4', '/job:mnist/replica:0/task:5'}),
+            workers);
+}
     
-    Status DumpTable(Env* env, const std::string& fname, WritableFile* dst) {
-  uint64_t file_size;
-  RandomAccessFile* file = NULL;
-  Table* table = NULL;
-  Status s = env->GetFileSize(fname, &file_size);
-  if (s.ok()) {
-    s = env->NewRandomAccessFile(fname, &file);
-  }
-  if (s.ok()) {
-    // We use the default comparator, which may or may not match the
-    // comparator used in this database. However this should not cause
-    // problems since we only use Table operations that do not require
-    // any comparisons.  In particular, we do not call Seek or Prev.
-    s = Table::Open(Options(), file, file_size, &table);
-  }
-  if (!s.ok()) {
-    delete table;
-    delete file;
-    return s;
-  }
+    #include 'tensorflow/contrib/mpi/mpi_utils.h'
+namespace tensorflow {
     }
     
+      /// DebuggerClient is consulted at two times during name
+  /// lookup.  This is the first time: after all names in a
+  /// source file have been checked but before external
+  /// Modules are checked.  The results in the ResultVector will
+  /// be consulted first.  Return true if results have been added
+  /// to RV.
+  /// FIXME: I don't think this ever does anything useful.
+  virtual bool lookupOverrides(DeclBaseName Name, DeclContext *DC,
+                               SourceLoc Loc, bool IsTypeLookup,
+                               ResultVector &RV) = 0;
     
-    {}  // namespace leveldb
-    
-     public:
-  RandomGenerator() {
-    // We use a limited amount of data over and over again and ensure
-    // that it is larger than the compression window (32KB), and also
-    // large enough to serve all typical value sizes we want to write.
-    Random rnd(301);
-    std::string piece;
-    while (data_.size() < 1048576) {
-      // Add a short fragment that is as compressible as specified
-      // by FLAGS_compression_ratio.
-      test::CompressibleString(&rnd, FLAGS_compression_ratio, 100, &piece);
-      data_.append(piece);
-    }
-    pos_ = 0;
+      ConvertUTF8toUTF32(&SourceNext, SourceStart + S.size(), &TargetStart,
+                     TargetStart + 1, llvm::lenientConversion);
+  if (TargetStart == &C) {
+    // The source string contains an ill-formed subsequence at the end.
+    return false;
   }
+    
+      // In the case where inputs are swift modules, like in the merge-module step,
+  // ignore the inputs; associated unit files for the modules' source inputs
+  // should have been generated at swift module creation time.
     
     namespace leveldb {
     }
     
-    #ifndef STORAGE_LEVELDB_INCLUDE_FILTER_POLICY_H_
-#define STORAGE_LEVELDB_INCLUDE_FILTER_POLICY_H_
-    
-    inline int Slice::compare(const Slice& b) const {
-  const size_t min_len = (size_ < b.size_) ? size_ : b.size_;
-  int r = memcmp(data_, b.data_, min_len);
-  if (r == 0) {
-    if (size_ < b.size_) r = -1;
-    else if (size_ > b.size_) r = +1;
-  }
-  return r;
-}
-    
-                cv::Mat eigenvalues, eigenvectors;
-            cv::eigen(H, eigenvalues, eigenvectors);
-    
-                template<typename T>
-            static __device__ __forceinline__ T atomicInc(T* address, T val)
-            {
-#if defined (__CUDA_ARCH__) && (__CUDA_ARCH__ < 120)
-                T count;
-                unsigned int tag = threadIdx.x << ( (sizeof(unsigned int) << 3) - 5U);
-                do
-                {
-                    count = *address & TAG_MASK;
-                    count = tag | (count + 1);
-                    *address = count;
-                } while (*address != count);
+    struct FileMetaData {
+  int refs;
+  int allowed_seeks;          // Seeks allowed until compaction
+  uint64_t number;
+  uint64_t file_size;         // File size in bytes
+  InternalKey smallest;       // Smallest internal key served by table
+  InternalKey largest;        // Largest internal key served by table
     }
     
-    
-    {}
-#endif //0
-
-    
-    #include 'runtime_common.hpp'
-    
-    #include '../../precomp.hpp'
-    
-      std::string comparator_;
-  uint64_t log_number_;
-  uint64_t prev_log_number_;
-  uint64_t next_file_number_;
-  SequenceNumber last_sequence_;
-  bool has_comparator_;
-  bool has_log_number_;
-  bool has_prev_log_number_;
-  bool has_next_file_number_;
-  bool has_last_sequence_;
-    
-      iter->Seek('5');
-  ASSERT_EQ(iter->key().ToString(), '5');
-  iter->Prev();
-  ASSERT_EQ(iter->key().ToString(), '4');
-  iter->Prev();
-  ASSERT_EQ(iter->key().ToString(), '3');
-  iter->Next();
-  ASSERT_EQ(iter->key().ToString(), '4');
-  iter->Next();
-  ASSERT_EQ(iter->key().ToString(), '5');
-    
-      switch (data[n]) {
-    case kNoCompression:
-      if (data != buf) {
-        // File implementation gave us pointer to some other data.
-        // Use it directly under the assumption that it will be live
-        // while the file is open.
-        delete[] buf;
-        result->data = Slice(data, n);
-        result->heap_allocated = false;
-        result->cachable = false;  // Do not double-cache
-      } else {
-        result->data = Slice(buf, n);
-        result->heap_allocated = true;
-        result->cachable = true;
-      }
-    }
-    
-      ~AutoCompactTest() {
-    delete db_;
-    DestroyDB(dbname_, Options());
-    delete tiny_cache_;
+      VersionEdit edit;
+  for (int i = 0; i < 4; i++) {
+    TestEncodeDecode(edit);
+    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
+                 InternalKey('foo', kBig + 500 + i, kTypeValue),
+                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
+    edit.DeleteFile(4, kBig + 700 + i);
+    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
   }
     
-    void DBIter::FindNextUserEntry(bool skipping, std::string* skip) {
-  // Loop until we hit an acceptable entry to yield
-  assert(iter_->Valid());
-  assert(direction_ == kForward);
-  do {
-    ParsedInternalKey ikey;
-    if (ParseKey(&ikey) && ikey.sequence <= sequence_) {
-      switch (ikey.type) {
-        case kTypeDeletion:
-          // Arrange to skip all upcoming entries for this key since
-          // they are hidden by this deletion.
-          SaveKey(ikey.user_key, skip);
-          skipping = true;
-          break;
-        case kTypeValue:
-          if (skipping &&
-              user_comparator_->Compare(ikey.user_key, *skip) <= 0) {
-            // Entry hidden
-          } else {
-            valid_ = true;
-            saved_key_.clear();
-            return;
-          }
-          break;
-      }
+    // Comma-separated list of operations to run in the specified order
+//   Actual benchmarks:
+//
+//   fillseq       -- write N values in sequential key order in async mode
+//   fillrandom    -- write N values in random key order in async mode
+//   overwrite     -- overwrite N values in random key order in async mode
+//   fillseqsync   -- write N/100 values in sequential key order in sync mode
+//   fillrandsync  -- write N/100 values in random key order in sync mode
+//   fillrand100K  -- write N/1000 100K values in random order in async mode
+//   fillseq100K   -- write N/1000 100K values in seq order in async mode
+//   readseq       -- read N times sequentially
+//   readseq100K   -- read N/1000 100K values in sequential order in async mode
+//   readrand100K  -- read N/1000 100K values in sequential order in async mode
+//   readrandom    -- read N times in random order
+static const char* FLAGS_benchmarks =
+    'fillseq,'
+    'fillseqsync,'
+    'fillrandsync,'
+    'fillrandom,'
+    'overwrite,'
+    'readrandom,'
+    'readseq,'
+    'fillrand100K,'
+    'fillseq100K,'
+    'readseq100K,'
+    'readrand100K,'
+    ;
+    
+    class Slice {
+ public:
+  // Create an empty slice.
+  Slice() : data_(''), size_(0) { }
     }
-    iter_->Next();
-  } while (iter_->Valid());
-  saved_key_.clear();
-  valid_ = false;
+    
+    
+    {
+    {    if (++count % 1000 == 0) {
+      txn->Commit();
+    }
+  }
+  // write the last batch
+  if (count % 1000 != 0) {
+      txn->Commit();
+  }
+  LOG(INFO) << 'Processed ' << count << ' files.';
+  delete[] pixels;
+  db->Close();
 }
     
-      // Finish building the block and return a slice that refers to the
-  // block contents.  The returned slice will remain valid for the
-  // lifetime of this builder or until Reset() is called.
-  Slice Finish();
+    
+template <typename Dtype>
+class LayerRegisterer {
+ public:
+  LayerRegisterer(const string& type,
+                  shared_ptr<Layer<Dtype> > (*creator)(const LayerParameter&)) {
+    // LOG(INFO) << 'Registering layer type: ' << type;
+    LayerRegistry<Dtype>::AddCreator(type, creator);
+  }
+};
+    
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of ConvolutionLayer.
+ *        Fallback to ConvolutionLayer for CPU mode.
+ *
+ * cuDNN accelerates convolution through forward kernels for filtering and bias
+ * plus backward kernels for the gradient w.r.t. the filters, biases, and
+ * inputs. Caffe + cuDNN further speeds up the computation through forward
+ * parallelism across groups and backward parallelism across gradients.
+ *
+ * The CUDNN engine does not have memory overhead for matrix buffers. For many
+ * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
+ * but for fully-convolutional models and large inputs the CAFFE engine can be
+ * faster as long as it fits in memory.
+*/
+template <typename Dtype>
+class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
+ public:
+  explicit CuDNNConvolutionLayer(const LayerParameter& param)
+      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNConvolutionLayer();
+    }
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    namespace caffe {
+    }
+    
+    
+    { protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual inline bool reverse_dimensions() { return true; }
+  virtual void compute_output_shape();
+};
+    
+    
+    {}  // namespace caffe
+    
+      // We'll hold the text streamed to this object here.
+  const internal::scoped_ptr< ::std::stringstream> ss_;
+    
+    #include <iosfwd>
+#include <vector>
+#include 'gtest/internal/gtest-internal.h'
+#include 'gtest/internal/gtest-string.h'
+    
+      // Given directory = 'dir', base_name = 'test', number = 0,
+  // extension = 'xml', returns 'dir/test.xml'. If number is greater
+  // than zero (e.g., 12), returns 'dir/test_12.xml'.
+  // On Windows platform, uses \ as the separator rather than /.
+  static FilePath MakeFileName(const FilePath& directory,
+                               const FilePath& base_name,
+                               int number,
+                               const char* extension);
+    
+    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
+//
+// Helper classes providing Combine() with polymorphic features. They allow
+// casting CartesianProductGeneratorN<T> to ParamGenerator<U> if T is
+// convertible to U.
+//
+$range i 2..maxtuple
+$for i [[
+$range j 1..i
+    
+    // Macros for defining flags.
+#define GTEST_DEFINE_bool_(name, default_val, doc) \
+    GTEST_API_ bool GTEST_FLAG(name) = (default_val)
+#define GTEST_DEFINE_int32_(name, default_val, doc) \
+    GTEST_API_ ::testing::internal::Int32 GTEST_FLAG(name) = (default_val)
+#define GTEST_DEFINE_string_(name, default_val, doc) \
+    GTEST_API_ ::std::string GTEST_FLAG(name) = (default_val)
+    
+     private:
+  void CalculatePrimesUpTo(int max) {
+    ::std::fill(is_prime_, is_prime_ + is_prime_size_, true);
+    is_prime_[0] = is_prime_[1] = false;
+    }
