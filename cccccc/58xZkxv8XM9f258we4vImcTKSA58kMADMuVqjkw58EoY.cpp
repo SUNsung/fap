@@ -1,130 +1,236 @@
-#ifndef SWIFT_SIL_DEADENDBLOCKS_H
-#define SWIFT_SIL_DEADENDBLOCKS_H
-    
-    private:
-  StringRef findGroupForSymbol(const IndexSymbol &sym);
-    
-      // Only allow allocation using the allocator in MarkupContext or by
-  // placement new.
-  void *operator new(size_t Bytes, swift::markup::MarkupContext &MC,
-                     unsigned Alignment = alignof(DocComment));
-  void *operator new(size_t Bytes, void *Mem) {
-    assert(Mem);
-    return Mem;
-  }
-    
-    #include 'swift/Syntax/Rewriter.h'
-    
-      /// Suppress all warnings
-  bool SuppressWarnings = false;
-    
-      virtual void handleDiagnostic(SourceManager &SM, SourceLoc Loc,
-                                DiagnosticKind Kind,
-                                StringRef FormatString,
-                                ArrayRef<DiagnosticArgument> FormatArgs,
-                                const DiagnosticInfo &Info) override;
-    
-      /// Add a #line-defined virtual file region.
-  ///
-  /// By default, this region continues to the end of the buffer.
-  ///
-  /// \returns True if the new file was added, false if the file already exists.
-  /// The name and line offset must match exactly in that case.
-  ///
-  /// \sa closeVirtualFile.
-  bool openVirtualFile(SourceLoc loc, StringRef name, int lineOffset);
-    
-    namespace swift {
+
+        
+        namespace xla {
     }
     
-    // The compiler generates the swift_once_t values as word-sized zero-initialized
-// variables, so we want to make sure swift_once_t isn't larger than the
-// platform word or the function below might overwrite something it shouldn't.
-static_assert(sizeof(swift_once_t) <= sizeof(void*),
-              'swift_once_t must be no larger than the platform word');
+      double ComputeDualLoss(const double current_dual, const double example_label,
+                         const double example_weight) const final {
+    // For binary classification, there are 2 conjugate functions, one per
+    // label value (-1 and 1).
+    const double y_alpha = current_dual * example_label;  // y \alpha
+    if (y_alpha < 0 || y_alpha > 1.0) {
+      return std::numeric_limits<double>::max();
+    }
+    return (-y_alpha + 0.5 * gamma * current_dual * current_dual) *
+           example_weight;
+  }
     
-    namespace tesseract  {
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    
+    {
+    {}  // namespace port
+}  // namespace tensorflow
+    
+    namespace tensorflow {
     }
     
-    // Returns the x,y means as an FCOORD.
-FCOORD LLSQ::mean_point() const {
-  if (total_weight > 0.0) {
-    return FCOORD(sigx / total_weight, sigy / total_weight);
-  } else {
-    return FCOORD(0.0f, 0.0f);
-  }
-}
+      // TODO(josh11b): Implement serializing and restoring the state.  Need
+  // to create TextLineReaderState proto to store ReaderBaseState,
+  // line_number_, and input_buffer_->Tell().
     
-    // Vector of IntKDPair.
-class KDVector : public GenericVector<IntKDPair> {
-  // TODO(rays) Add some code to manipulate a KDVector. For now there
-  // is nothing and this class is effectively a specialization typedef.
+    The input audio has one row of the tensor for each channel in the audio file.
+Each channel contains audio samples starting at the beginning of the audio and
+having `1/samples_per_second` time between them. The output file will contain
+all of the audio channels contained in the tensor.
+    
+    TEST(GrpcChannelTest, HostPorts) {
+  GrpcChannelSpec spec;
+  TF_EXPECT_OK(spec.AddHostPortsJob(
+      'mnist', {'a:1', 'b:2', 'c:3', 'd:4', 'e:5', 'f:6'}));
+  ChannelCreationFunction channel_func =
+      ConvertToChannelCreationFunction(NewHostPortGrpcChannel);
+  std::unique_ptr<GrpcChannelCache> cc(NewGrpcChannelCache(spec, channel_func));
+    }
+    
+    
+    {
+    {    std::map<string, const NodeDef*> node_lookup;
+    MapNamesToNodes(result, &node_lookup);
+    EXPECT_EQ('', node_lookup.at('mul_node1')->device());
+    EXPECT_EQ('', node_lookup.at('add_node2')->device());
+  }
 };
     
+    namespace tensorflow {
+    }
     
-    {  clock_t start = clock();
-  int total_samples = 0;
-  double unscaled_error = 0.0;
-  // Set a number of samples on which to run the classify debug mode.
-  int error_samples = report_level > 3 ? report_level * report_level : 0;
-  // Iterate over all the samples, accumulating errors.
-  for (it->Begin(); !it->AtEnd(); it->Next()) {
-    TrainingSample* mutable_sample = it->MutableSample();
-    int page_index = mutable_sample->page_num();
-    Pix* page_pix = 0 <= page_index && page_index < page_images.size()
-                  ? page_images[page_index] : NULL;
-    // No debug, no keep this.
-    classifier->UnicharClassifySample(*mutable_sample, page_pix, 0,
-                                      INVALID_UNICHAR_ID, &results);
-    bool debug_it = false;
-    int correct_id = mutable_sample->class_id();
-    if (counter.unicharset_.has_special_codes() &&
-        (correct_id == UNICHAR_SPACE || correct_id == UNICHAR_JOINED ||
-         correct_id == UNICHAR_BROKEN)) {
-      // This is junk so use the special counter.
-      debug_it = counter.AccumulateJunk(report_level > 3,
-                                        results,
-                                        mutable_sample);
-    } else {
-      debug_it = counter.AccumulateErrors(report_level > 3, boosting_mode,
-                                          fontinfo_table,
-                                          results, mutable_sample);
+    // Cwise binary ops
+//
+// TODO(zhifengc): This can be arrange as a function in the standard
+// library.
+Status GradForBinaryCwise(FunctionDef* g, std::vector<FDH::Node> body) {
+  // clang-format off
+  std::vector<FDH::Node> nodes = {
+    {{'sx'}, 'Shape', {'x'}},
+    {{'sy'}, 'Shape', {'y'}},
+  };
+  nodes.insert(nodes.end(), body.begin(), body.end());
+  std::vector<FDH::Node> reshapes = {
+    {{'rx', 'ry'}, 'BroadcastGradientArgs', {'sx', 'sy'}},
+    {{'sum_gx'}, 'Sum', {'gx', 'rx'}},
+    {{'dx'}, 'Reshape', {'sum_gx', 'sx'}},
+    {{'sum_gy'}, 'Sum', {'gy', 'ry'}},
+    {{'dy'}, 'Reshape', {'sum_gy', 'sy'}},
+  };
+  nodes.insert(nodes.end(), reshapes.begin(), reshapes.end());
     }
-    if (debug_it && error_samples > 0) {
-      // Running debug, keep the correct answer, and debug the classifier.
-      tprintf('Error on sample %d: %s Classifier debug output:\n',
-              it->GlobalSampleIndex(),
-              it->sample_set()->SampleToString(*mutable_sample).string());
-      classifier->DebugDisplay(*mutable_sample, page_pix, correct_id);
-      --error_samples;
+    
+        // On the 1st send (i == 0), gating is disabled, so data should be sent.
+    // On the 2nd send (i == 1), gating is enabled, and the server has enabled
+    //   the watch key in the previous send (READ_WRITE), so data should be
+    //   sent. In this iteration, the server response with a EventReply proto to
+    //   unblock the debug node.
+    // On the 3rd send (i == 2), gating is enabled, but the server has disabled
+    //   the watch key in the previous send, so data should not be sent.
+    const bool enable_gated_grpc = (i != 0);
+    TF_ASSERT_OK(DebugIO::PublishDebugTensor(kDebugNodeKey, tensor, wall_time,
+                                             urls, enable_gated_grpc));
+    
+    #endif  // TENSORFLOW_DEBUG_GRPC_TESTLIB_H_
+
+    
+    #include 'tensorflow/core/platform/types.h'
+    
+    #endif  // ATOM_BROWSER_NET_URL_REQUEST_ASYNC_ASAR_JOB_H_
+
+    
+      // ui::EventRewriter:
+  ui::EventRewriteStatus RewriteEvent(
+      const ui::Event& event,
+      std::unique_ptr<ui::Event>* rewritten_event) override;
+  ui::EventRewriteStatus NextDispatchEvent(
+      const ui::Event& last_event,
+      std::unique_ptr<ui::Event>* new_event) override;
+    
+    #endif  // CHROME_BROWSER_EXTENSIONS_GLOBAL_SHORTCUT_LISTENER_WIN_H_
+
+    
+    // MonitorFinder maps a RenderFrameHost to the display ID on which the widget
+// is painting. This class operates on the IO thread while the RenderFrameHost
+// is on the UI thread, so the value returned by GetMonitor() may be 0 until
+// the information can be retrieved asynchronously.
+class MonitorFinder : public base::RefCountedThreadSafe<MonitorFinder> {
+ public:
+  MonitorFinder(int process_id, int render_frame_id);
     }
-    ++total_samples;
+    
+      /// Close the acceptor.
+  /**
+   * This function is used to close the acceptor. Any asynchronous accept
+   * operations will be cancelled immediately.
+   *
+   * A subsequent call to open() is required before the acceptor can again be
+   * used to again perform socket accept operations.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   */
+  void close()
+  {
+    boost::system::error_code ec;
+    this->get_service().close(this->get_implementation(), ec);
+    boost::asio::detail::throw_error(ec, 'close');
   }
-  double total_time = 1.0 * (clock() - start) / CLOCKS_PER_SEC;
-  // Create the appropriate error report.
-  unscaled_error = counter.ReportErrors(report_level, boosting_mode,
-                                        fontinfo_table,
-                                        *it, unichar_error, fonts_report);
-  if (scaled_error != NULL) *scaled_error = counter.scaled_error_;
-  if (report_level > 1) {
-    // It is useful to know the time in microseconds/char.
-    tprintf('Errors computed in %.2fs at %.1f μs/char\n',
-            total_time, 1000000.0 * total_time / total_samples);
-  }
-  return unscaled_error;
+    
+    /// Copies bytes from a source buffer to a target buffer.
+/**
+ * @param target A modifiable buffer representing the memory region to which
+ * the bytes will be copied.
+ *
+ * @param source A modifiable buffer representing the memory region from which
+ * the bytes will be copied. The contents of the source buffer will not be
+ * modified.
+ *
+ * @returns The number of bytes copied.
+ *
+ * @note The number of bytes copied is the lesser of:
+ *
+ * @li @c buffer_size(target)
+ *
+ * @li @c buffer_size(source)
+ *
+ * This function is implemented in terms of @c memcpy, and consequently it
+ * cannot be used to copy between overlapping memory regions.
+ */
+inline std::size_t buffer_copy(const mutable_buffer& target,
+    const mutable_buffers_1& source)
+{
+  return buffer_copy(target, const_buffer(source));
 }
     
-    /**----------------------------------------------------------------------------
-            Macros
-----------------------------------------------------------------------------**/
-/* macros for computing miscellaneous functions of 2 points */
-#define XDelta(A,B)   ( (B).x - (A).x )
-#define YDelta(A,B)   ( (B).y - (A).y )
-#define SlopeFrom(A,B)    ( YDelta(A,B) / XDelta(A,B) )
-#define AngleFrom(A,B)		( atan2((double) YDelta(A,B),		\
-					(double) XDelta(A,B) ) )
+      /// Copy data from the internal buffer to the specified target buffer, without
+  /// removing the data from the internal buffer. Returns the number of bytes
+  /// copied.
+  template <typename MutableBufferSequence>
+  std::size_t peek_copy(const MutableBufferSequence& buffers)
+  {
+    return boost::asio::buffer_copy(buffers, storage_.data(), storage_.size());
+  }
     
-      // Initialize the bool array to the given size of feature space.
-  // The feature_map is just borrowed, and must exist for the entire
-  // lifetime of the IntFeatureDist.
-  void Init(const IntFeatureMap* feature_map);
+    template <typename Buffer>
+class buffer_sequence_adapter<Buffer, boost::asio::const_buffers_1>
+  : buffer_sequence_adapter_base
+{
+public:
+  explicit buffer_sequence_adapter(
+      const boost::asio::const_buffers_1& buffer_sequence)
+  {
+    init_native_buffer(buffer_, Buffer(buffer_sequence));
+    total_buffer_size_ = boost::asio::buffer_size(buffer_sequence);
+  }
+    }
+    
+    #include <boost/asio/detail/config.hpp>
+#include <boost/asio/detail/noncopyable.hpp>
+#include <boost/asio/detail/tss_ptr.hpp>
+    
+    template <typename Handler>
+inline void deallocate(void* p, std::size_t s, Handler& h)
+{
+#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
+  ::operator delete(p);
+#else
+  using boost::asio::asio_handler_deallocate;
+  asio_handler_deallocate(p, s, boost::asio::detail::addressof(h));
+#endif
+}
+    
+    class winrt_buffer_impl :
+  public Microsoft::WRL::RuntimeClass<
+    Microsoft::WRL::RuntimeClassFlags<
+      Microsoft::WRL::RuntimeClassType::WinRtClassicComMix>,
+    ABI::Windows::Storage::Streams::IBuffer,
+    Windows::Storage::Streams::IBufferByteAccess>
+{
+public:
+  explicit winrt_buffer_impl(const boost::asio::const_buffer& b)
+  {
+    bytes_ = const_cast<byte*>(boost::asio::buffer_cast<const byte*>(b));
+    length_ = boost::asio::buffer_size(b);
+    capacity_ = boost::asio::buffer_size(b);
+  }
+    }
+    
+      if (result >= 0)
+  {
+    ec = boost::system::error_code();
+    if (value)
+      state |= user_set_non_blocking;
+    else
+    {
+      // Clearing the user-set non-blocking mode always overrides any
+      // internally-set non-blocking flag. Any subsequent asynchronous
+      // operations will need to re-enable non-blocking I/O.
+      state &= ~(user_set_non_blocking | internal_non_blocking);
+    }
+    return true;
+  }
+    
+    #include <boost/asio/detail/push_options.hpp>
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
