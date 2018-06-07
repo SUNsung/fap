@@ -1,85 +1,68 @@
 
         
-          path = 'assets/stylesheets'
-  css_path = args.with_defaults(css_path: 'tmp')[:css_path]
-  puts Term::ANSIColor.bold 'Compiling SCSS in #{path}'
-  Dir.mkdir(css_path) unless File.directory?(css_path)
-  %w(_bootstrap bootstrap/_theme).each do |file|
-    save_path = '#{css_path}/#{file.sub(/(^|\/)?_+/, '\1').sub('/', '-')}.css'
-    puts Term::ANSIColor.cyan('  #{save_path}') + '...'
-    engine    = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
-    css       = engine.render
-    File.open(save_path, 'w') { |f| f.write css }
-  end
-end
+          </body>
+</html>
+HTML
     
-    module RuboCop
-  module Cop
-    class VariableForce
-      # A Variable represents existence of a local variable.
-      # This holds a variable declaration node,
-      # and some states of the variable.
-      class Variable
-        VARIABLE_DECLARATION_TYPES =
-          (VARIABLE_ASSIGNMENT_TYPES + ARGUMENT_DECLARATION_TYPES).freeze
+    module Jekyll
+  module Commands
+    class New < Command
+      class << self
+        def init_with_program(prog)
+          prog.command(:new) do |c|
+            c.syntax 'new PATH'
+            c.description 'Creates a new Jekyll site scaffold in PATH'
     
-            def each_unnecessary_space_match(node, &blk)
-          each_match_range(
-            contents_range(node),
-            MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX,
-            &blk
+          def third_party_processors
+        self.class.constants - \
+          %w(KramdownParser PRIORITIES).map(
+            &:to_sym
           )
-        end
       end
+    
+    describe Deliver::HtmlGenerator do
+  let(:generator) { Deliver::HtmlGenerator.new }
+    
+      def present(payload)
+    if payload.is_a?(Hash)
+      payload = ActiveSupport::HashWithIndifferentAccess.new(payload)
+      MAIN_KEYS.each do |key|
+        return { :title => payload[key].to_s, :entries => present_hash(payload, key) } if payload.has_key?(key)
+      end
+    
+      included do
+    include Oauthable
+    
+      def test_at3
+    t2000 = get_t2000
+    assert_equal(t2000, Time.at(t2000))
+#    assert_raise(RangeError) do
+#      Time.at(2**31-1, 1_000_000)
+#      Time.at(2**63-1, 1_000_000)
+#    end
+#    assert_raise(RangeError) do
+#      Time.at(-2**31, -1_000_000)
+#      Time.at(-2**63, -1_000_000)
+#    end
+  end
+    
+      # This case occurred in JRuby where native threads are used to provide
+  # the same behavior as MRI green threads. Key to this issue was the fact
+  # that the thread which called #exit in its block was also being explicitly
+  # sent #join from outside the thread. The 100.times provides a certain
+  # probability that the deadlock will occur. It was sufficient to reliably
+  # reproduce the deadlock in JRuby.
+  it 'does not deadlock when called from within the thread while being joined from without' do
+    100.times do
+      t = Thread.new { Thread.stop; Thread.current.send(@method) }
+      Thread.pass while t.status and t.status != 'sleep'
+      t.wakeup.should == t
+      t.join.should == t
     end
   end
 end
 
     
-            def autocorrect(node)
-          # Regexp#match can take a second argument, but this cop doesn't
-          # register an offense in that case
-          return unless node.first_argument.regexp_type?
-    
-            private
-    
-      let(:source) { ''something'.intern' }
-  let(:corrected) { autocorrect_source(source) }
-    
-              end
-        RUBY
-      end
-    end
-    
-        def self.each_definition(&block)
-      instance.each_definition(&block)
-    end
-    
-        def define_query
-      name = @name
-      @klass.send :define_method, '#{@name}?' do
-        send(name).file?
-      end
-    end
-    
-          def invert_add_attachment(args)
-        [:remove_attachment, args]
-      end
-    end
-  end
-end
-
-    
-          def create_validating_before_filter(attribute, validator_class, options)
-        if_clause = options.delete(:if)
-        unless_clause = options.delete(:unless)
-        send(:'before_#{attribute}_post_process', :if => if_clause, :unless => unless_clause) do |*args|
-          validator_class.new(options.dup).validate(self)
-        end
-      end
-    
-          def validate_blacklist(record, attribute, value)
-        if forbidden_types.present? && forbidden_types.any? { |type| type === value }
-          mark_invalid record, attribute, forbidden_types
-        end
-      end
+      it 'handles a value of 60 for seconds by carrying values forward in zone 'UTC'' do
+    with_timezone 'UTC' do
+      time = Time.send(@method, 1972, 6, 30, 23, 59, 60)
