@@ -1,147 +1,99 @@
-  def test_javascript_cdata_section
-    assert_dom_equal '\n//<![CDATA[\nalert('hello')\n//]]>\n', javascript_cdata_section('alert('hello')')
+
+        
+        module Homebrew
+  def build_env_keys(env)
+    %w[
+      CC CXX LD OBJC OBJCXX
+      HOMEBREW_CC HOMEBREW_CXX
+      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
+      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
+      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
+      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
+      HOMEBREW_SVN HOMEBREW_GIT
+      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
+      MAKE GIT CPP
+      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
+  end
+    
+      def query_regexp(query)
+    case query
+    when %r{^/(.*)/$} then Regexp.new($1)
+    else /.*#{Regexp.escape(query)}.*/i
+    end
+  rescue RegexpError
+    odie '#{query} is not a valid regex'
+  end
+    
+        options[:attribution] = <<-HTML
+      &copy; 1997&ndash;2018 The PHP Documentation Group<br>
+      Licensed under the Creative Commons Attribution License v3.0 or later.
+    HTML
   end
 end
 
     
-          get :redirect_to_new_record
-      assert_equal 'http://test.host/workshops', redirect_to_url
-      assert_redirected_to Workshop.new(nil)
-    end
-  end
+        options[:attribution] = <<-HTML
+      &copy; 2010&ndash;2018 Christian Johansen<br>
+      Licensed under the BSD License.
+    HTML
     
-      class PdfController < ActionController::Base
-    def test
-      render inline: 'test: <%= foobar %>'
-    end
-  end
-end
-    
-    class WebServiceTest < ActionDispatch::IntegrationTest
-  class TestController < ActionController::Base
-    def assign_parameters
-      if params[:full]
-        render plain: dump_params_keys
-      else
-        render plain: (params.keys - ['controller', 'action']).sort.join(', ')
-      end
+        def to_a
+      @filters.dup
     end
     
-        # An email was received.
-    def receive(event)
-      info { 'Received mail (#{event.duration.round(1)}ms)' }
-      debug { event.payload[:mail] }
-    end
+          def initialize(pairs = {})
+        @pairs = pairs
+        pairs.each do |key, value|
+          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
+          send(:'#{key}=', value)
+        end
     
-      def test_receive_is_notified
-    fixture = File.read(File.expand_path('fixtures/raw_email', __dir__))
-    TestMailer.receive(fixture)
-    wait
-    assert_equal(1, @logger.logged(:info).size)
-    assert_match(/Received mail/, @logger.logged(:info).first)
-    assert_equal(1, @logger.logged(:debug).size)
-    assert_match(/Jamis/, @logger.logged(:debug).first)
-  end
-end
-
+            def log_level(name, options = {})
+          if options[:prepend]
+            level = log_levels.values.min
+            level = level.nil? ? 0 : level - 1
+          else
+            level = log_levels.values.max
+            level = level.nil? ? 0 : level + 1
+          end
+          log_levels.update(name => level)
+          define_logger(name)
+        end
     
-      def use_block_format
-    @text = <<-TEXT
-This is the
-first     paragraph.
-    
-          super
-      input = @options[:input]
-      if File.directory?(input)
-        raise 'Error: '#{input.path}' is a directory (did you mean to use --recursive?)'
-      end
-      output = @options[:output]
-      output = input if @options[:in_place]
-      process_file(input, output)
-    end
-    
-      # Creates a delayed logger wrapping `inner`.
-  #
-  # @param inner [Sass::Logger::Base] The wrapped logger.
-  def initialize(inner)
-    self.log_level = inner.log_level
-    @inner = inner
-    @messages = []
-  end
-    
-        # Returns the Sass/SCSS code for the media query list.
+        # The type of the query (e.g. `'screen'` or `'print'`).
     #
-    # @param options [{Symbol => Object}] An options hash (see {Sass::CSS#initialize}).
-    # @return [String]
-    def to_src(options)
-      queries.map {|q| q.to_src(options)}.join(', ')
-    end
+    # When parsed as Sass code, this contains strings and SassScript nodes. When
+    # parsed as CSS, it contains a single string (accessible via
+    # \{#resolved_type}).
+    #
+    # @return [Array<String, Sass::Script::Tree::Node>]
+    attr_accessor :type
     
-            {
-          :always_update     => false,
-          :template_location => root + '/public/stylesheets/sass',
-          :css_location      => root + '/public/stylesheets',
-          :cache_location    => root + '/tmp/sass-cache',
-          :always_check      => env != 'production',
-          :quiet             => env != 'production',
-          :full_exception    => env != 'production'
-        }.freeze
-      end
-    end
-  end
+          # Prints a table for a given array of records. For each record, the block
+      # is yielded two arguments: the record and a Row object. To print values
+      # for that record, add values using `row << 'some value'`. A row can
+      # optionally be highlighted in yellow using `row.yellow`.
+      def table(records, &block)
+        return if records.empty?
+        rows = collect_rows(records, &block)
+        col_widths = calculate_column_widths(rows)
     
-        it 'redirects requests with sneaky encoded session cookies' do
-      get '/path', {}, 'HTTP_COOKIE' => 'rack.%73ession=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
-      expect(last_response).to be_redirect
-      expect(last_response.location).to eq('/path')
-    end
-  end
+      # Implemented by subclasses to hook into Capistrano's deployment flow using
+  # using the `before` and `after` DSL methods. Note that `register_hooks` will
+  # not be called if the user has opted-out of hooks when installing the plugin.
+  #
+  # Example:
+  #
+  #   def register_hooks
+  #     after 'deploy:updated', 'my_plugin:do_something'
+  #   end
+  #
+  def register_hooks; end
     
-        expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('DENY')
-  end
-    
-      %w(POST PUT DELETE).each do |method|
-    it 'denies #{method} requests with non-whitelisted Origin' do
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).not_to be_ok
-    end
-    
-            MSG = 'Use only a single space inside array percent literal.'.freeze
-        MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX =
-          /(?:[\S&&[^\\]](?:\\ )*)( {2,})(?=\S)/
-    
-    module RuboCop
-  module Cop
-    module Performance
-      # This cop identifies the use of `Regexp#match` or `String#match`, which
-      # returns `#<MatchData>`/`nil`. The return value of `=~` is an integral
-      # index/`nil` and is more performant.
-      #
-      # @example
-      #   # bad
-      #   do_something if str.match(/regex/)
-      #   while regex.match('str')
-      #     do_something
-      #   end
-      #
-      #   # good
-      #   method(str =~ /regex/)
-      #   return value unless regex =~ 'str'
-      class RedundantMatch < Cop
-        MSG = 'Use `=~` in places where the `MatchData` returned by ' \
-              '`#match` will not be used.'.freeze
-    
-            private
-    
-            def_node_matcher :multiple_compare?, <<-PATTERN
-          (send (send _ {:< :> :<= :>=} $_) {:< :> :<= :>=} _)
-        PATTERN
-    
-        module Statements
-      def add_attachment(table_name, *attachment_names)
-        raise ArgumentError, 'Please specify attachment name in your add_attachment call in your migration.' if attachment_names.empty?
-    
-          def validate_whitelist(record, attribute, value)
-        if allowed_types.present? && allowed_types.none? { |type| type === value }
-          mark_invalid record, attribute, allowed_types
+            def stock_movement_params
+          params.require(:stock_movement).permit(permitted_stock_movement_attributes)
         end
       end
+    end
+  end
+end
