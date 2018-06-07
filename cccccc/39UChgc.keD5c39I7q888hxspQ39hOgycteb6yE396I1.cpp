@@ -1,345 +1,268 @@
 
         
-        leveldb_env_t* leveldb_create_default_env() {
-  leveldb_env_t* result = new leveldb_env_t;
-  result->rep = Env::Default();
-  result->is_default = true;
-  return result;
-}
+        // Sent by the renderer when the draggable regions are updated.
+IPC_MESSAGE_ROUTED1(ShellViewHostMsg_UpdateDraggableRegions,
+                    std::vector<extensions::DraggableRegion> /* regions */)
     
-    // Return a new iterator that converts internal keys (yielded by
-// '*internal_iter') that were live at the specified 'sequence' number
-// into appropriate user keys.
-extern Iterator* NewDBIterator(
-    DBImpl* db,
-    const Comparator* user_key_comparator,
-    Iterator* internal_iter,
-    SequenceNumber sequence,
-    uint32_t seed);
+    #include 'base/logging.h'
+#include 'base/values.h'
     
-    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
-  // Order by:
-  //    increasing user key (according to user-supplied comparator)
-  //    decreasing sequence number
-  //    decreasing type (though sequence# should be enough to disambiguate)
-  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
-  if (r == 0) {
-    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
-    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
-    if (anum > bnum) {
-      r = -1;
-    } else if (anum < bnum) {
-      r = +1;
-    }
-  }
-  return r;
-}
-    
-      // Return a key suitable for lookup in a MemTable.
-  Slice memtable_key() const { return Slice(start_, end_ - start_); }
-    
-    
-    {  // Errors
-  static const char* errors[] = {
-    '',
-    'foo',
-    'foo-dx-100.log',
-    '.log',
-    '',
-    'manifest',
-    'CURREN',
-    'CURRENTX',
-    'MANIFES',
-    'MANIFEST',
-    'MANIFEST-',
-    'XMANIFEST-3',
-    'MANIFEST-3x',
-    'LOC',
-    'LOCKx',
-    'LO',
-    'LOGx',
-    '18446744073709551616.log',
-    '184467440737095516150.log',
-    '100',
-    '100.',
-    '100.lop'
-  };
-  for (int i = 0; i < sizeof(errors) / sizeof(errors[0]); i++) {
-    std::string f = errors[i];
-    ASSERT_TRUE(!ParseFileName(f, &number, &type)) << f;
-  }
-}
-    
-          case kPrevLogNumber:
-        if (GetVarint64(&input, &prev_log_number_)) {
-          has_prev_log_number_ = true;
-        } else {
-          msg = 'previous log number';
-        }
-        break;
-    
-     private:
-  friend class VersionSet;
-    
-      void Add(const char* smallest, const char* largest,
-           SequenceNumber smallest_seq = 100,
-           SequenceNumber largest_seq = 100) {
-    FileMetaData* f = new FileMetaData;
-    f->number = files_.size() + 1;
-    f->smallest = InternalKey(smallest, smallest_seq, kTypeValue);
-    f->largest = InternalKey(largest, largest_seq, kTypeValue);
-    files_.push_back(f);
-  }
-    
-      ~Benchmark() {
-    if (!db_->close()) {
-      fprintf(stderr, 'close error: %s\n', db_->error().name());
-    }
-  }
-    
-    // A Comparator object provides a total order across slices that are
-// used as keys in an sstable or a database.  A Comparator implementation
-// must be thread-safe since leveldb may invoke its methods concurrently
-// from multiple threads.
-class Comparator {
- public:
-  virtual ~Comparator();
-    }
-    
-      // Return the name of this policy.  Note that if the filter encoding
-  // changes in an incompatible way, the name returned by this method
-  // must be changed.  Otherwise, old incompatible filters may be
-  // passed to methods of this type.
-  virtual const char* Name() const = 0;
-    
-    #endif  // GTEST_INCLUDE_GTEST_GTEST_MESSAGE_H_
+    #endif  // CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
 
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40>
-internal::ValueArray40<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40> Values(T1 v1,
-    T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11,
-    T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19,
-    T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25, T26 v26, T27 v27,
-    T28 v28, T29 v29, T30 v30, T31 v31, T32 v32, T33 v33, T34 v34, T35 v35,
-    T36 v36, T37 v37, T38 v38, T39 v39, T40 v40) {
-  return internal::ValueArray40<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39,
-      T40>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15,
-      v16, v17, v18, v19, v20, v21, v22, v23, v24, v25, v26, v27, v28, v29,
-      v30, v31, v32, v33, v34, v35, v36, v37, v38, v39, v40);
-}
-    
-    #ifndef GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
-#define GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
-    
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED2.  Don't use
-// this in your code.
-#define GTEST_PRED2_(pred, v1, v2, on_failure)\
-  GTEST_ASSERT_(::testing::AssertPred2Helper(#pred, \
-                                             #v1, \
-                                             #v2, \
-                                             pred, \
-                                             v1, \
-                                             v2), on_failure)
-    
-      // If input name has a trailing separator character, removes it and returns
-  // the name, otherwise return the name string unmodified.
-  // On Windows platform, uses \ as the separator, other platforms use /.
-  FilePath RemoveTrailingPathSeparator() const;
-    
-    
-template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9>
-class CartesianProductGenerator9
-    : public ParamGeneratorInterface< ::std::tr1::tuple<T1, T2, T3, T4, T5, T6,
-        T7, T8, T9> > {
- public:
-  typedef ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> ParamType;
+    void Menu::Popup(int x, int y, content::Shell* shell) {
+  GdkEventButton* event = NULL; //FIXME: shell->web_contents()->GetRenderWidgetHostView()->GetLastMouseDown();
+  uint32_t triggering_event_time = event ? event->time : GDK_CURRENT_TIME;
+  gfx::Point point;
+  if (!event) {
+    // gfx::Rect bounds = shell->web_contents()->GetRenderWidgetHostView()->GetViewBounds();
+    // point = gfx::Point(x + bounds.x(), y + bounds.y());
+    DVLOG(1) << 'no last mouse down event';
+    point = gfx::Point(x, y);
+  }else
+    point = gfx::Point(event->x_root, event->y_root);
     }
     
-    
-    {        static_cast<ParamGenerator<T$j> >(g$(j)_)
-]]));
+      for(auto* item: menu_items_) {
+    item->RemoveKeys();
   }
     
-      // Creates an ANSI string from the given wide string, allocating
-  // memory using new. The caller is responsible for deleting the return
-  // value using delete[]. Returns the ANSI string, or NULL if the
-  // input is NULL.
-  //
-  // The returned string is created using the ANSI codepage (CP_ACP) to
-  // match the behaviour of the ANSI versions of Win32 calls and the
-  // C runtime.
-  static const char* Utf16ToAnsi(LPCWSTR utf16_str);
+    
+    {  gtk_widget_show(menu_item_);
+  g_object_ref_sink(G_OBJECT(menu_item_));
+} 
+    
+    ExtensionFunction::ResponseAction
+NwAppQuitFunction::Run() {
+  ExtensionService* service =
+    ExtensionSystem::Get(browser_context())->extension_service();
+  base::MessageLoop::current()->task_runner()->PostTask(
+        FROM_HERE,
+        base::Bind(&ExtensionService::TerminateExtension,
+                   service->AsWeakPtr(),
+                   extension_id()));
+  return RespondNow(NoArguments());
+}
+    
+    class NwClipboardSetListSyncFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardSetListSyncFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    #include 'extensions/browser/extension_function.h'
+    
+      /// Open the acceptor using the specified protocol.
+  /**
+   * This function opens the socket acceptor so that it will use the specified
+   * protocol.
+   *
+   * @param protocol An object specifying which protocol is to be used.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   *
+   * @par Example
+   * @code
+   * boost::asio::ip::tcp::acceptor acceptor(io_service);
+   * acceptor.open(boost::asio::ip::tcp::v4());
+   * @endcode
+   */
+  void open(const protocol_type& protocol = protocol_type())
+  {
+    boost::system::error_code ec;
+    this->get_service().open(this->get_implementation(), protocol, ec);
+    boost::asio::detail::throw_error(ec, 'open');
+  }
+    
+      /// Perform a blocking wait on the timer.
+  /**
+   * This function is used to wait for the timer to expire. This function
+   * blocks and does not return until the timer has expired.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   */
+  void wait()
+  {
+    boost::system::error_code ec;
+    this->service.wait(this->implementation, ec);
+    boost::asio::detail::throw_error(ec, 'wait');
+  }
+    
+      static bool all_empty(const boost::asio::mutable_buffers_1& buffer_sequence)
+  {
+    return boost::asio::buffer_size(buffer_sequence) == 0;
+  }
+    
+    #endif // BOOST_ASIO_DETAIL_BUFFERED_STREAM_STORAGE_HPP
+
+    
+    
+    {private:
+  // The top of the stack of calls for the current thread.
+  static tss_ptr<context> top_;
+};
+    
+    template<class T, class TimeSystem>
+class base_time;
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS) \
+  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
+# include <boost/asio/detail/null_fenced_block.hpp>
+#elif defined(__MACH__) && defined(__APPLE__)
+# include <boost/asio/detail/macos_fenced_block.hpp>
+#elif defined(__sun)
+# include <boost/asio/detail/solaris_fenced_block.hpp>
+#elif defined(__GNUC__) && defined(__arm__) \
+  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
+# include <boost/asio/detail/gcc_arm_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
+# include <boost/asio/detail/gcc_hppa_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+# include <boost/asio/detail/gcc_x86_fenced_block.hpp>
+#elif defined(__GNUC__) \
+  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
+# include <boost/asio/detail/gcc_sync_fenced_block.hpp>
+#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+# include <boost/asio/detail/win_fenced_block.hpp>
+#else
+# include <boost/asio/detail/null_fenced_block.hpp>
 #endif
     
-    template <GTEST_9_TYPENAMES_(T)>
-struct tuple_size<GTEST_9_TUPLE_(T) > {
-  static const int value = 9;
-};
-    
-    // 6.1.4 Pairs.
-// Unimplemented.
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29>
-struct Types29 {
-  typedef T1 Head;
-  typedef Types28<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-      T29> Tail;
-};
-    
-    #define THPDoubleStorage_CData(obj)  (obj)->cdata
-#define THPFloatStorage_CData(obj)   (obj)->cdata
-#define THPHalfStorage_CData(obj)    (obj)->cdata
-#define THPLongStorage_CData(obj)    (obj)->cdata
-#define THPIntStorage_CData(obj)     (obj)->cdata
-#define THPShortStorage_CData(obj)   (obj)->cdata
-#define THPCharStorage_CData(obj)    (obj)->cdata
-#define THPByteStorage_CData(obj)    (obj)->cdata
-    
-      std::unique_ptr<ManagerServerSocket> srv_socket;
-  try {
-    char tmpfile[L_tmpnam];
-    if (std::tmpnam(tmpfile) == NULL)
-      throw std::runtime_error('could not generate a random filename for manager socket');
-    // TODO: better strategy for generating tmp names
-    // TODO: retry on collisions - this can easily fail
-    srv_socket.reset(new ManagerServerSocket(std::string(tmpfile)));
-    register_fd(srv_socket->socket_fd);
-    print_init_message(tmpfile);
-    DEBUG('opened socket %s', tmpfile);
-  } catch(...) {
-    print_init_message('ERROR');
-    throw;
-  }
-    
-    void THDTensor_(gesvd)(THDTensor *ru, THDTensor *rs, THDTensor *rv, THDTensor *a,
-                       const char *jobu) {
-  THDTensor *ra = THDTensor_(new)();
-  THDTensor_(gesvd2)(ru, rs, rv,  ra, a, jobu);
-  THDTensor_(free)(ra);
-}
-    
-    // Data pertaining to configuration of the generator with respect to anything
-// that may be used internally at Google.
-struct GeneratorConfiguration {
-  GeneratorConfiguration();
-  grpc::string grpc_package_root;
-  // TODO(https://github.com/grpc/grpc/issues/8622): Drop this.
-  grpc::string beta_package_root;
-  // TODO(https://github.com/google/protobuf/issues/888): Drop this.
-  grpc::string import_prefix;
-};
-    
-    std::vector<grpc::string_ref> SecureAuthContext::FindPropertyValues(
-    const grpc::string& name) const {
-  if (!ctx_) {
-    return std::vector<grpc::string_ref>();
-  }
-  grpc_auth_property_iterator iter =
-      grpc_auth_context_find_properties_by_name(ctx_, name.c_str());
-  const grpc_auth_property* property = nullptr;
-  std::vector<grpc::string_ref> values;
-  while ((property = grpc_auth_property_iterator_next(&iter))) {
-    values.push_back(grpc::string_ref(property->value, property->value_length));
-  }
-  return values;
-}
-    
-    #include <gtest/gtest.h>
-    
-    gpr_atm grpc::testing::interop::g_got_sigint;
-    
-    
-    {  return r;
-}
-
-    
-    #include 'test/cpp/util/service_describer.h'
-    
-    IMGUI_API bool        ImGui_Marmalade_Init(bool install_callbacks);
-IMGUI_API void        ImGui_Marmalade_Shutdown();
-IMGUI_API void        ImGui_Marmalade_NewFrame();
-IMGUI_API void        ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
-    
-    // Implemented features:
-//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-//  [X] Gamepad navigation mapping. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
-    
-        VkVertexInputAttributeDescription attribute_desc[3] = {};
-    attribute_desc[0].location = 0;
-    attribute_desc[0].binding = binding_desc[0].binding;
-    attribute_desc[0].format = VK_FORMAT_R32G32_SFLOAT;
-    attribute_desc[0].offset = (size_t)(&((ImDrawVert*)0)->pos);
-    attribute_desc[1].location = 1;
-    attribute_desc[1].binding = binding_desc[0].binding;
-    attribute_desc[1].format = VK_FORMAT_R32G32_SFLOAT;
-    attribute_desc[1].offset = (size_t)(&((ImDrawVert*)0)->uv);
-    attribute_desc[2].location = 2;
-    attribute_desc[2].binding = binding_desc[0].binding;
-    attribute_desc[2].format = VK_FORMAT_R8G8B8A8_UNORM;
-    attribute_desc[2].offset = (size_t)(&((ImDrawVert*)0)->col);
-    
-            // Create the input layout
-        D3D11_INPUT_ELEMENT_DESC local_layout[] = {
-            { 'POSITION', 0, DXGI_FORMAT_R32G32_FLOAT,   0, (size_t)(&((ImDrawVert*)0)->pos), D3D11_INPUT_PER_VERTEX_DATA, 0 },
-            { 'TEXCOORD', 0, DXGI_FORMAT_R32G32_FLOAT,   0, (size_t)(&((ImDrawVert*)0)->uv),  D3D11_INPUT_PER_VERTEX_DATA, 0 },
-            { 'COLOR',    0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, (size_t)(&((ImDrawVert*)0)->col), D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        };
-        if (g_pd3dDevice->CreateInputLayout(local_layout, 3, g_pVertexShaderBlob->GetBufferPointer(), g_pVertexShaderBlob->GetBufferSize(), &g_pInputLayout) != S_OK)
-            return false;
-    
-            ID3D12Resource* uploadBuffer = NULL;
-        HRESULT hr = g_pd3dDevice->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc,
-            D3D12_RESOURCE_STATE_GENERIC_READ, NULL, IID_PPV_ARGS(&uploadBuffer));
-        IM_ASSERT(SUCCEEDED(hr));
-    
-    void CleanupDeviceD3D()
-{
-    CleanupRenderTarget();
-    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = NULL; }
-    if (g_hSwapChainWaitableObject != NULL) { CloseHandle(g_hSwapChainWaitableObject); }
-    for (UINT i = 0; i < NUM_FRAMES_IN_FLIGHT; i++)
-        if (g_frameContext[i].CommandAllocator) { g_frameContext[i].CommandAllocator->Release(); g_frameContext[i].CommandAllocator = NULL; }
-    if (g_pd3dCommandQueue) { g_pd3dCommandQueue->Release(); g_pd3dCommandQueue = NULL; }
-    if (g_pd3dCommandList) { g_pd3dCommandList->Release(); g_pd3dCommandList = NULL; }
-    if (g_pd3dRtvDescHeap) { g_pd3dRtvDescHeap->Release(); g_pd3dRtvDescHeap = NULL; }
-    if (g_pd3dSrvDescHeap) { g_pd3dSrvDescHeap->Release(); g_pd3dSrvDescHeap = NULL; }
-    if (g_fence) { g_fence->Release(); g_fence = NULL; }
-    if (g_fenceEvent) { CloseHandle(g_fenceEvent); g_fenceEvent = NULL; }
-    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
-}
-    
-        // Main loop
-    bool done = false;
-    while (!done)
-    {
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-            ImGui_ImplSdlGL2_ProcessEvent(&event);
-            if (event.type == SDL_QUIT)
-                done = true;
-        }
-        ImGui_ImplSdlGL2_NewFrame(window);
+    namespace boost {
+namespace asio {
+namespace detail {
     }
+    }
+    }
+    
+    #define BOOST_ASIO_COMPOSED_CONNECT_HANDLER_CHECK( \
+    handler_type, handler, iter_type) \
+  \
+  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
+      void(boost::system::error_code, iter_type)) \
+    asio_true_handler_type; \
+  \
+  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
+      sizeof(boost::asio::detail::two_arg_handler_test( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>(), \
+          static_cast<const boost::system::error_code*>(0), \
+          static_cast<const iter_type*>(0))) == 1, \
+      'ComposedConnectHandler type requirements not met') \
+  \
+  typedef boost::asio::detail::handler_type_requirements< \
+      sizeof( \
+        boost::asio::detail::argbyv( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>())) + \
+      sizeof( \
+        boost::asio::detail::lvref< \
+          asio_true_handler_type>()( \
+            boost::asio::detail::lvref<const boost::system::error_code>(), \
+            boost::asio::detail::lvref<const iter_type>()), \
+        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
+    
+      // The list of spare nodes waiting to be recycled. Assumes that POD types only
+  // are stored in the hash map.
+  std::list<value_type> spares_;
+    
+      if (shutdown_)
+  {
+    io_service_.post_immediate_completion(op, false);
+    return;
+  }
+    
+    #ifndef BOOST_ASIO_DETAIL_IMPL_EPOLL_REACTOR_HPP
+#define BOOST_ASIO_DETAIL_IMPL_EPOLL_REACTOR_HPP
+    
+    // Used to encapsulate a particular instance of an opened database.
+//
+// This object should not be used directly in C++; it exists solely to provide
+// a mapping from a JavaScript object to a C++ code that can use the RocksDB
+// API.
+class DBWrapper : public node::ObjectWrap {
+  public:
+    static void Init(Handle<Object> exports);
+    }
+    
+    namespace rocksdb {
+    }
+    
+      class StatisticsJni : public StatisticsImpl {
+   public:
+     StatisticsJni(std::shared_ptr<Statistics> stats);
+     StatisticsJni(std::shared_ptr<Statistics> stats,
+         const std::set<uint32_t> ignore_histograms);
+     virtual bool HistEnabledForType(uint32_t type) const override;
+    }
+    
+    #pragma once
+    
+    #include 'rocksdb/compaction_filter.h'
+#include 'rocksjni/jnicallback.h'
+    
+    PlatformColorCode GetPlatformColorCode(LogColor color) {
+#ifdef BENCHMARK_OS_WINDOWS
+  switch (color) {
+    case COLOR_RED:
+      return FOREGROUND_RED;
+    case COLOR_GREEN:
+      return FOREGROUND_GREEN;
+    case COLOR_YELLOW:
+      return FOREGROUND_RED | FOREGROUND_GREEN;
+    case COLOR_BLUE:
+      return FOREGROUND_BLUE;
+    case COLOR_MAGENTA:
+      return FOREGROUND_BLUE | FOREGROUND_RED;
+    case COLOR_CYAN:
+      return FOREGROUND_BLUE | FOREGROUND_GREEN;
+    case COLOR_WHITE:  // fall through to default
+    default:
+      return 0;
+  }
+#else
+  switch (color) {
+    case COLOR_RED:
+      return '1';
+    case COLOR_GREEN:
+      return '2';
+    case COLOR_YELLOW:
+      return '3';
+    case COLOR_BLUE:
+      return '4';
+    case COLOR_MAGENTA:
+      return '5';
+    case COLOR_CYAN:
+      return '6';
+    case COLOR_WHITE:
+      return '7';
+    default:
+      return nullptr;
+  };
+#endif
+}
+    
+    std::string FormatString(const char* msg, va_list args);
+std::string FormatString(const char* msg, ...);
+    
+    bool SameNames(UserCounters const& l, UserCounters const& r) {
+  if (&l == &r) return true;
+  if (l.size() != r.size()) {
+    return false;
+  }
+  for (auto const& c : l) {
+    if (r.find(c.first) == r.end()) {
+      return false;
+    }
+  }
+  return true;
+}
+    
+    
+    {#ifndef NDEBUG
+  Out << '***WARNING*** Library was built as DEBUG. Timings may be '
+         'affected.\n';
+#endif
+}
