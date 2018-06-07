@@ -1,130 +1,122 @@
 
         
-          def redirect_to_nil
-    redirect_to nil
-  end
-    
-    module ActionCable
-  module Server
-    # An instance of this configuration object is available via ActionCable.server.config, which allows you to tweak Action Cable configuration
-    # in a Rails config initializer.
-    class Configuration
-      attr_accessor :logger, :log_tags
-      attr_accessor :connection_class, :worker_pool_size
-      attr_accessor :disable_request_forgery_protection, :allowed_request_origins, :allow_same_origin_as_host
-      attr_accessor :cable, :url, :mount_path
-    
-      test 'response parsing' do
-    response = ActionDispatch::TestResponse.create(200, {}, '')
-    assert_equal response.body, response.parsed_body
-    
-          def authenticate_long_credentials
-        authenticate_or_request_with_http_token do |token, options|
-          token == '1234567890123456789012345678901234567890' && options[:algorithm] == 'test'
-        end
-      end
-  end
-    
-            case method
-        when NilClass
-          raise 'Delivery method cannot be nil'
-        when Symbol
-          if klass = delivery_methods[method]
-            mail.delivery_method(klass, (send(:'#{method}_settings') || {}).merge(options || {}))
-          else
-            raise 'Invalid delivery method #{method.inspect}'
-          end
-        else
-          mail.delivery_method(method)
-        end
-    
-        module Behavior
-      extend ActiveSupport::Concern
-    
-    class ActiveSupport::TestCase
-  include ActiveSupport::Testing::MethodCallAssertions
-    
-        def add(path, content)
-      @pages[path] = content
-    end
-    
-              if %w(Events Sync).include?(type)
-            name.prepend 'Backbone.'
-          elsif type == 'History'
-            name.prepend 'Backbone.history.'
-          elsif name == 'extend'
-            name.prepend '#{type}.'
-          elsif name.start_with? 'constructor'
-            name = type
-          elsif type != 'Utility'
-            name.prepend '#{type.downcase}.'
-          end
-    
-            css('.method-name', '.property-name').each do |node|
-          source = node.at_css('a')
-          source.before(%(<span class='name'>#{source.content}</span>))
-          source.content = 'source'
-          source['class'] = 'source'
-        end
-    
-          case Rails.env
-      when 'development'
-        config.eager_load = false
-      when 'test'
-        config.eager_load = false
-      when 'production'
-        config.eager_load = true
-      end
-    end
-  end
-end
-    
-    begin
-  require 'bundler/setup'
-rescue LoadError
-  $stderr.puts '[*] Metasploit requires the Bundler gem to be installed'
-  $stderr.puts '    $ gem install bundler'
-  exit(1)
-end
-    
-      # Extract the form
-  res = '<form'
-  form.attributes.each do |attr|
-    res << ' #{attr[0]}='#{attr[1].gsub(''', '')}''
-  end
-  res << '> '
-    
-              fd.write(res)
-        end
-      end
-      break
-    rescue ::Timeout::Error
-      $stderr.puts '#{prefix}#{site} timed out'
-    rescue ::Interrupt
-      raise $!
-    rescue ::Exception => e
-      $stderr.puts '#{prefix}#{site} #{e.class} #{e}'
-    end
-  end
-    
-    
-# replace the stuff
-replaces.uniq!
-replaces.each { |arr|
-	#puts '%32s: %s -> %s' % arr
-	asm.gsub!(arr[1], arr[2])
-}
-    
-    require 'rubygems'
-require 'rjb'
-    
-    	attr_accessor :file, :block, :block_size
-    
+                # Require the adapter itself and give useful feedback about
+        #   1. Missing adapter gems and
+        #   2. Adapter gems' missing dependencies.
+        path_to_adapter = 'action_cable/subscription_adapter/#{adapter}'
         begin
-      create_scaffold(source, @target_path)
-    rescue Errno::EACCES => exception
-      report_exception('Permission denied when executing the plugin manager', exception)
-    rescue => exception
-      report_exception('Plugin creation Aborted', exception)
+          require path_to_adapter
+        rescue LoadError => e
+          # We couldn't require the adapter itself. Raise an exception that
+          # points out config typos and missing gems.
+          if e.path == path_to_adapter
+            # We can assume that a non-builtin adapter was specified, so it's
+            # either misspelled or missing from Gemfile.
+            raise e.class, 'Could not load the '#{adapter}' Action Cable pubsub adapter. Ensure that the adapter is spelled correctly in config/cable.yml and that you've added the necessary adapter gem to your Gemfile.', e.backtrace
+    
+            def test_url_sub_key_for_sqlite3
+          spec = resolve :production, 'production' => { 'url' => 'sqlite3:foo?encoding=utf8' }
+          assert_equal({
+            'adapter'  => 'sqlite3',
+            'database' => 'foo',
+            'encoding' => 'utf8',
+            'name'     => 'production' }, spec)
+        end
+    
+          def reset_all # :nodoc:
+        current_instances.each_value(&:reset)
+      end
+    
+          assert_response :unauthorized
+      assert_equal 'HTTP Token: Access denied.\n', @response.body, 'Authentication didn't fail for request header #{header}'
+    end
+    test 'unsuccessful authentication with #{header.downcase} and long credentials' do
+      @request.env[header] = encode_credentials('h4x0rh4x0rh4x0rh4x0rh4x0rh4x0rh4x0rh4x0r')
+      get :show
+    
+    class WebServiceTest < ActionDispatch::IntegrationTest
+  class TestController < ActionController::Base
+    def assign_parameters
+      if params[:full]
+        render plain: dump_params_keys
+      else
+        render plain: (params.keys - ['controller', 'action']).sort.join(', ')
+      end
+    end
+    
+          def handle_exception_with_mailer_class(exception)
+        if klass = mailer_class
+          klass.handle_exception exception
+        else
+          raise exception
+        end
+      end
+  end
+end
+
+    
+      def test_send_mail
+    stub_any_instance(Mail::SMTP, instance: Mail::SMTP.new({})) do |instance|
+      assert_called(instance, :deliver!) do
+        with_translation 'de', email_subject: '[Anmeldung] Willkommen' do
+          get '/test/send_mail'
+          assert_equal 'Mail sent - Subject: [Anmeldung] Willkommen', @response.body
+        end
+      end
     end
   end
+    
+    # No trailing slash
+Benchmark.ips do |x|
+  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
+  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
+  x.compare!
+end
+
+    
+                  Jekyll.logger.info 'LiveReload address:',
+                                 'http://#{opts['host']}:#{opts['livereload_port']}'
+            end
+          end
+          @thread.abort_on_exception = true
+        end
+    
+          def extname_list
+        @extname_list ||= @config['markdown_ext'].split(',').map do |e|
+          '.#{e.downcase}'
+        end
+      end
+    
+    module Jekyll
+  module Deprecator
+    extend self
+    
+      def enough_poll_answers
+    errors.add(:poll_answers, I18n.t('activerecord.errors.models.poll.attributes.poll_answers.not_enough_poll_answers')) if poll_answers.size < 2
+  end
+    
+          def escape_hash(hash)
+        hash = hash.dup
+        hash.each { |k,v| hash[k] = escape(v) }
+        hash
+      end
+    
+    
+  it 'should allow changing the protection mode to a string' do
+    # I have no clue what other modes are available
+    mock_app do
+      use Rack::Protection::FrameOptions, :frame_options => 'ALLOW-FROM foo'
+      run DummyApp
+    end
+    
+      it 'accepts requests with a changing Version header'do
+    session = {:foo => :bar}
+    get '/', {}, 'rack.session' => session, 'HTTP_VERSION' => '1.0'
+    get '/', {}, 'rack.session' => session, 'HTTP_VERSION' => '1.1'
+    expect(session[:foo]).to eq(:bar)
+  end
+end
+
+    
+                end
+            #{type} Dad
