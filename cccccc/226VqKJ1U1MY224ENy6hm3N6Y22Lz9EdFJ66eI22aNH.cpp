@@ -1,225 +1,216 @@
 
         
-        // Read through the first n keys repeatedly and check that they get
-// compacted (verified by checking the size of the key space).
-void AutoCompactTest::DoReads(int n) {
-  std::string value(kValueSize, 'x');
-  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+        // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+extern Status BuildTable(const std::string& dbname,
+                         Env* env,
+                         const Options& options,
+                         TableCache* table_cache,
+                         Iterator* iter,
+                         FileMetaData* meta);
+    
+      virtual void CreateFilter(const Slice* keys, int n, std::string* dst) const {
+    std::vector<const char*> key_pointers(n);
+    std::vector<size_t> key_sizes(n);
+    for (int i = 0; i < n; i++) {
+      key_pointers[i] = keys[i].data();
+      key_sizes[i] = keys[i].size();
     }
+    size_t len;
+    char* filter = (*create_)(state_, &key_pointers[0], &key_sizes[0], n, &len);
+    dst->append(filter, len);
+    free(filter);
+  }
     
-      fname = CurrentFileName('foo');
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(0, number);
-  ASSERT_EQ(kCurrentFile, type);
+      std::string comparator_;
+  uint64_t log_number_;
+  uint64_t prev_log_number_;
+  uint64_t next_file_number_;
+  SequenceNumber last_sequence_;
+  bool has_comparator_;
+  bool has_log_number_;
+  bool has_prev_log_number_;
+  bool has_next_file_number_;
+  bool has_last_sequence_;
     
-    #include 'db/version_edit.h'
-    
-    void WriteBatchInternal::SetCount(WriteBatch* b, int n) {
-  EncodeFixed32(&b->rep_[8], n);
+    TEST(FindFileTest, OverlapSequenceChecks) {
+  Add('200', '200', 5000, 3000);
+  ASSERT_TRUE(! Overlaps('199', '199'));
+  ASSERT_TRUE(! Overlaps('201', '300'));
+  ASSERT_TRUE(Overlaps('200', '200'));
+  ASSERT_TRUE(Overlaps('190', '200'));
+  ASSERT_TRUE(Overlaps('200', '210'));
 }
     
-      // Advanced functions: these are used to reduce the space requirements
-  // for internal data structures like index blocks.
+            // Bind KV values into replace_stmt
+        status = sqlite3_bind_blob(replace_stmt, 1, key, 16, SQLITE_STATIC);
+        ErrorCheck(status);
+        status = sqlite3_bind_blob(replace_stmt, 2, value,
+                                   value_size, SQLITE_STATIC);
+        ErrorCheck(status);
     
-      // Return the name of this policy.  Note that if the filter encoding
-  // changes in an incompatible way, the name returned by this method
-  // must be changed.  Otherwise, old incompatible filters may be
-  // passed to methods of this type.
-  virtual const char* Name() const = 0;
     
-    // Computes a reshaped copy of the weight matrix w. If there are no
-// partial_funcs_, it does nothing.
-void IntSimdMatrix::Init(const GENERIC_2D_ARRAY<int8_t>& w) {
-  if (partial_funcs_.empty()) return;
-  int num_out = w.dim1();
-  int num_in = w.dim2() - 1;
-  // The rounded-up sizes of the reshaped weight matrix, excluding biases.
-  int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
-  int rounded_num_out = RoundOutputs(num_out);
-  // Add the bias and compute the required size.
-  shaped_w_.resize((rounded_num_in + 1) * rounded_num_out, 0);
-  int shaped_index = 0;
-  int output = 0;
-  // Each number of registers needs a different format! Iterates over the
-  // different numbers of registers (each a power of 2).
-  for (int num_registers = max_output_registers_; num_registers >= 1;
-       num_registers /= 2) {
-    // The number of outputs that we will generate with this many registers.
-    int num_outputs_per_register_set =
-        num_registers * num_outputs_per_register_;
-    // Use the max number of registers until we have to go fewer.
-    while (output + num_outputs_per_register_set <= rounded_num_out) {
-      // Accumulating outputs in registers saves iterating over the inputs, so
-      // we only have to do it once per output register set.
-      for (int input = 0; input < num_in; input += num_inputs_per_group_) {
-        // Iterate over the number of outputs in a register set.
-        for (int j = 0; j < num_outputs_per_register_set; ++j) {
-          // Inner-most loop corresponds to the number of inputs in an input
-          // group.
-          for (int i = 0; i < num_inputs_per_group_; ++i) {
-            int8_t weight = 0;
-            if (output + j < num_out && input + i < num_in)
-              weight = w(output + j, input + i);
-            shaped_w_[shaped_index++] = weight;
-          }
-        }
+    {}
+    
+    StreamPeerSSL *(*StreamPeerSSL::_create)() = NULL;
+    
+    #if defined(MBEDTLS_PEM_PARSE_C) && !defined(MBEDTLS_BASE64_C)
+#error 'MBEDTLS_PEM_PARSE_C defined, but not all prerequisites'
+#endif
+    
+    
+#include <ft2build.h>
+    
+      std::string comparator_;
+  uint64_t log_number_;
+  uint64_t prev_log_number_;
+  uint64_t next_file_number_;
+  SequenceNumber last_sequence_;
+  bool has_comparator_;
+  bool has_log_number_;
+  bool has_prev_log_number_;
+  bool has_next_file_number_;
+  bool has_last_sequence_;
+    
+    #include 'db/dbformat.h'
+#include 'leveldb/write_batch.h'
+    
+      // compact database
+  std::string start_key = Key1(0);
+  std::string end_key = Key1(kNumKeys - 1);
+  leveldb::Slice least(start_key.data(), start_key.size());
+  leveldb::Slice greatest(end_key.data(), end_key.size());
+    
+    #include 'leveldb/filter_policy.h'
+#include 'util/coding.h'
+#include 'util/hash.h'
+#include 'util/logging.h'
+#include 'util/testharness.h'
+#include 'util/testutil.h'
+    
+      switch (data[n]) {
+    case kNoCompression:
+      if (data != buf) {
+        // File implementation gave us pointer to some other data.
+        // Use it directly under the assumption that it will be live
+        // while the file is open.
+        delete[] buf;
+        result->data = Slice(data, n);
+        result->heap_allocated = false;
+        result->cachable = false;  // Do not double-cache
+      } else {
+        result->data = Slice(buf, n);
+        result->heap_allocated = true;
+        result->cachable = true;
       }
-      // Append the bias weights for the register set.
-      for (int j = 0; j < num_outputs_per_register_set; ++j) {
-        int8_t weight = 0;
-        if (output + j < num_out) weight = w(output + j, num_in);
-        shaped_w_[shaped_index++] = weight;
-      }
-      output += num_outputs_per_register_set;
-    }
-  }
-}
-    
-    
-    {  // Dump all paths through the ratings matrix (which is normally small).
-  int dim = werd_res->ratings->dimension();
-  const BLOB_CHOICE** blob_choices = new const BLOB_CHOICE*[dim];
-  PrintMatrixPaths(0, dim, *werd_res->ratings, 0, blob_choices,
-                   unicharset, label, output_file);
-  delete [] blob_choices;
-}
-    
-    bool read_unlv_file(                    //print list of sides
-                     STRING name,        //basename of file
-                     int32_t xsize,        //image size
-                     int32_t ysize,        //image size
-                     BLOCK_LIST *blocks  //output list
-                    ) {
-  FILE *pdfp;                    //file pointer
-  BLOCK *block;                  //current block
-  int x;                         //current top-down coords
-  int y;
-  int width;                     //of current block
-  int height;
-  BLOCK_IT block_it = blocks;    //block iterator
     }
     
-      // Accessors.
-  int total_cost() const {
-    return total_cost_;
-  }
-  int Pathlength() const {
-    return total_steps_;
-  }
-  const DPPoint* best_prev() const {
-    return best_prev_;
-  }
-  void AddLocalCost(int new_cost) {
-    local_cost_ += new_cost;
-  }
     
-      // Helper counts the number of adjacent cached neighbour documents_ of index
-  // looking in direction dir, ie index+dir, index+2*dir etc.
-  int CountNeighbourDocs(int index, int dir);
-    
-    /**********************************************************************
- * ROW::recalc_bounding_box
- *
- * Set the bounding box correctly
- **********************************************************************/
-    
-    #include 'otsuthr.h'
-    
-    /**
- * enum of the elements of the page hierarchy, used in ResultIterator
- * to provide functions that operate on each level without having to
- * have 5x as many functions.
-*/
-enum PageIteratorLevel {
-  RIL_BLOCK,     // Block of text/image/separator line.
-  RIL_PARA,      // Paragraph within a block.
-  RIL_TEXTLINE,  // Line within a paragraph.
-  RIL_WORD,      // Word within a textline.
-  RIL_SYMBOL     // Symbol/character within a word.
+    {  void DoReads(int n);
 };
     
-            void DoneWithCurrentMinibatch()
-        {
-            for (auto& x : m_cachedGradient)
-            {
-                const wstring& name  = x.first;
-                auto& accumulategrad = m_cachedGradient.GetInputMatrix<ElemType>(name);
-    }
-    }
-    
-    template<> inline
-dnnError_t dnnPoolingCreateBackward<double>(
-    dnnPrimitive_t* pPooling,
-    dnnPrimitiveAttributes_t attributes,
-    dnnAlgorithm_t op,
-    const dnnLayout_t srcLayout,
-    const size_t kernelSize[],
-    const size_t kernelStride[],
-    const int inputOffset[],
-    const dnnBorder_t border_type)
-{
-    return dnnPoolingCreateBackward_F64(
-        pPooling,
-        attributes,
-        op,
-        srcLayout,
-        kernelSize,
-        kernelStride,
-        inputOffset,
-        border_type);
+    std::string ParsedInternalKey::DebugString() const {
+  char buf[50];
+  snprintf(buf, sizeof(buf), '' @ %llu : %d',
+           (unsigned long long) sequence,
+           int(type));
+  std::string result = ''';
+  result += EscapeString(user_key.ToString());
+  result += buf;
+  return result;
 }
     
-        InvalidateCompiledNetwork();
+      Status AddRecord(const Slice& slice);
     
-                SimpleDistGradAggregator<ElemType> distGradAgg(m_mpi, false /*useAsyncAggregation*/, m_net->GetDeviceId(), 0 /*syncStatsTrace*/);
+      /// Get the timer's expiry time relative to now.
+  /**
+   * This function may be used to obtain the timer's current expiry time.
+   * Whether the timer has expired or not does not affect this value.
+   */
+  duration expires_from_now() const
+  {
+    return this->service.expires_from_now(this->implementation);
+  }
     
-    // ===========================================================================
-// DoExportToDbn() - implements CNTK 'exportdbn' command
-// ===========================================================================
+      // Is there no unread data in the buffer.
+  bool empty() const
+  {
+    return begin_offset_ == end_offset_;
+  }
     
-    // understand and execute from the syntactic expression tree
-ConfigValuePtr Evaluate(ExpressionPtr);                               // evaluate the expression tree
-void Do(ExpressionPtr e);                                             // evaluate e.do
-shared_ptr<Object> EvaluateField(ExpressionPtr e, const wstring& id); // for experimental CNTK integration
-    
-        void SetExistingModelAsDefault(string modelName)
+      // Determine whether the specified owner is on the stack. Returns address of
+  // key if present, 0 otherwise.
+  static Value* contains(Key* k)
+  {
+    context* elem = top_;
+    while (elem)
     {
-        auto found = m_mapNameToNetNdl.find(modelName);
-        if (found == m_mapNameToNetNdl.end())
-            RuntimeError('Model %s does not exist. Cannot set it to default.', modelName.c_str());
-        else
-            m_netNdlDefault = &found->second;
+      if (elem->key_ == k)
+        return elem->value_;
+      elem = elem->next_;
+    }
+    return 0;
+  }
+    
+    
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+    #define BOOST_ASIO_HANDSHAKE_HANDLER_CHECK( \
+    handler_type, handler) \
+  typedef int BOOST_ASIO_UNUSED_TYPEDEF
+    
+    template <typename T>
+using jni_sig_from_cxx = typename jni_sig_from_cxx_t<T>::JniSig;
+    
+    TEST_F(YogaTest_HadOverflowTests, no_overflow_no_wrap_and_flex_children) {
+  const YGNodeRef child0 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child0, 80);
+  YGNodeStyleSetHeight(child0, 40);
+  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
+  YGNodeStyleSetMargin(child0, YGEdgeBottom, 10);
+  YGNodeInsertChild(root, child0, 0);
+  const YGNodeRef child1 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child1, 80);
+  YGNodeStyleSetHeight(child1, 40);
+  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
+  YGNodeStyleSetFlexShrink(child1, 1);
+  YGNodeInsertChild(root, child1, 1);
     }
     
-    // If the Tracing flag is set, print out a timestamp with no new line at the end
-#define PREPENDTS(stream) \
-    do \
-    { \
-        if (ProgressTracing::GetTimestampingFlag()) \
-        { \
-            char mbstr[30]; \
-            fprintf(stream, '%s: ', ProgressTracing::Timestamp(mbstr));  \
-        } \
-    } while(0)
+        if (nodePtr == nullptr)
+        return nullptr;
     
+        double getComputedTop(void) const;
+    double getComputedBottom(void) const;
     
+        Size(double width, double height)
+    : width(width)
+    , height(height)
+    {
+    }
     
+        method(getAlignContent);
+    method(getAlignItems);
+    method(getAlignSelf);
+    method(getFlexDirection);
+    method(getFlexWrap);
+    method(getJustifyContent);
     
+    template<typename... ARGS>
+inline void logd(const char* tag, const char* msg, ARGS... args) noexcept {
+  log(ANDROID_LOG_DEBUG, tag, msg, args...);
+}
     
-    
-    
-    
-    {				if (i == (e_count >> 1))
-				{
-					m_middle = body;
-				}
-				prevBody = body;
-			}
-    
-    
-    {		if (m_stepCount % 60 == 0)
-		{
-			Launch();
-		}
-	}
+    #pragma once
+#include <atomic>
+#include <fb/assert.h>
+#include <fb/noncopyable.h>
+#include <fb/nonmovable.h>
+#include <fb/RefPtr.h>
