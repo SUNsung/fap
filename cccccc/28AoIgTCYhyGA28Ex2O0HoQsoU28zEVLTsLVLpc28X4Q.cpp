@@ -1,196 +1,246 @@
 
         
-        
-    
-    Menu::Menu(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-           const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
-  Create(option);
-}
-    
-     protected:
-  ~NwClipboardSetListSyncFunction() override;
-    
-    
-    {} // namespace extensions
-#endif
+        #endif  // TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
 
     
-      image_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
-  label_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
-  image_file.read(reinterpret_cast<char*>(&num_items), 4);
-  num_items = swap_endian(num_items);
-  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
-  num_labels = swap_endian(num_labels);
-  CHECK_EQ(num_items, num_labels);
-  image_file.read(reinterpret_cast<char*>(&rows), 4);
-  rows = swap_endian(rows);
-  image_file.read(reinterpret_cast<char*>(&cols), 4);
-  cols = swap_endian(cols);
     
-    #include 'glog/logging.h'
-#include 'google/protobuf/text_format.h'
-#include 'stdint.h'
+    {
+    {}  // namespace io
+}  // namespace tensorflow
+    
+    /**
+ * \ingroup CXX11_NeuralNetworks_Module
+ * \brief Template functor to clip the magnitude of the first scalar.
+ *
+ * \sa class CwiseBinaryOp, MatrixBase::Clip
+ */
+template <typename Scalar>
+struct scalar_clip_op {
+  EIGEN_EMPTY_STRUCT_CTOR(scalar_clip_op)
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Scalar
+  operator()(const Scalar& a, const Scalar& b) const {
+    return numext::mini(numext::maxi(a, -b), b);
+  }
+  template <typename Packet>
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Packet
+  packetOp(const Packet& a, const Packet& b) const {
+    return internal::pmin(internal::pmax(a, internal::pnegate(b)), b);
+  }
+};
+    
+    void SYCLDeviceContext::CopyCPUTensorToDevice(const Tensor *cpu_tensor,
+                                              Device *device,
+                                              Tensor *device_tensor,
+                                              StatusCallback done) const {
+  const int64 total_bytes = cpu_tensor->TotalBytes();
+  if (total_bytes > 0) {
+    const void *src_ptr = DMAHelper::base(cpu_tensor);
+    void *dst_ptr = DMAHelper::base(device_tensor);
+    switch (cpu_tensor->dtype()) {
+      case DT_FLOAT:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_DOUBLE:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<double *>(dst_ptr),
+            static_cast<const double *>(src_ptr), total_bytes);
+        break;
+      case DT_INT32:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_INT64:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_HALF:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<Eigen::half *>(dst_ptr),
+            static_cast<const Eigen::half *>(src_ptr), total_bytes);
+        break;
+      case DT_COMPLEX64:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<std::complex<float> *>(dst_ptr),
+            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
+        break;
+      case DT_COMPLEX128:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<std::complex<double> *>(dst_ptr),
+            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
+        break;
+      case DT_INT8:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_INT16:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_UINT8:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_UINT16:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<uint16 *>(dst_ptr),
+            static_cast<const uint16 *>(src_ptr), total_bytes);
+        break;
+      case DT_BOOL:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
+            total_bytes);
+        break;
+      default:
+        assert(false && 'unsupported type');
+    }
+  }
+  device->eigen_sycl_device()->synchronize();
+  done(Status::OK());
+}
     
     
-template <typename Dtype>
-class LayerRegisterer {
+    {}  // namespace xla
+
+    
+    // See docs in ../ops/io_ops.cc.
+    
+    class TensorSlice {
  public:
-  LayerRegisterer(const string& type,
-                  shared_ptr<Layer<Dtype> > (*creator)(const LayerParameter&)) {
-    // LOG(INFO) << 'Registering layer type: ' << type;
-    LayerRegistry<Dtype>::AddCreator(type, creator);
+  // Construct a tensor slice: you have a number of ways:
+  // -- creating an empty slice
+  // -- from just a dimension (in this case it will create a full slice)
+  // -- from an array of pairs of integers.
+  // -- from a TensorSliceProto protocol buffer
+  // -- from a string format of 'start,length:start,length...' where each
+  //    'start,length' pair represents the slice on one dimension. We allow a
+  //    special '-' that means 'everything for this dimension'. One such example
+  //    is:  0,10:-:14,1:-:-
+  TensorSlice() {}
+  explicit TensorSlice(int dim);
+  explicit TensorSlice(const TensorSliceProto& proto);
+  explicit TensorSlice(std::initializer_list<std::pair<int64, int64>> extents);
+    }
+    
+    namespace tensorflow {
+namespace functor {
+DEFINE_UNARY2(get_angle, complex64, complex128);
+}  // namespace functor
+}  // namespace tensorflow
+    
+    // //////////////////////////////////////////////////////////////////////
+// End of content of file: include/json/value.h
+// //////////////////////////////////////////////////////////////////////
+    
+        // Adds the module variable 'api_version'.
+    if (PyModule_AddIntConstant(
+        module,
+        const_cast<char*>(kImplVersionName),
+        kImplVersion))
+#if PY_MAJOR_VERSION < 3
+      return;
+#else
+      { Py_DECREF(module); return NULL; }
+    
+    
+    {  ASSERT_TRUE(message.ParseFromString(data));
+  EXPECT_TRUE(message.has_any_value());
+  ASSERT_TRUE(message.any_value().UnpackTo(&any));
+  ASSERT_TRUE(any.UnpackTo(&submessage));
+  EXPECT_EQ(12345, submessage.int32_value());
+}
+    
+      // implements CodeGenerator ----------------------------------------
+  bool Generate(const FileDescriptor* file,
+                const string& parameter,
+                GeneratorContext* generator_context,
+                string* error) const;
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
+    
+      // Returns an estimate of the number of bytes the printed code will compile to
+  virtual int GenerateRegistrationCode(io::Printer* printer);
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+    }
+    }
+    }
+    }
+    
+      grpc::testing::RunSynchronousUnaryPingPong();
+    
+     private:
+    
+    void ParseDb(const std::string& db, std::vector<Feature>* feature_list);
+    
+    #endif  // TEST_QPS_TIMER_H
+
+    
+    
+    {
+    {}  // namespace testing
+}  // namespace grpc
+    
+      // gRPC Python
+  grpc_python_generator::GeneratorConfiguration grpc_py_config;
+  grpc_python_generator::PythonGrpcGenerator grpc_py_generator(grpc_py_config);
+  cli.RegisterGenerator('--grpc_python_out', &grpc_py_generator,
+                        'Generate Python source file.');
+    
+    /* static */ void Config::destroy(Config * node)
+{
+    delete node;
+}
+    
+        Size(void)
+    : width(0.0)
+    , height(0.0)
+    {
+    }
+    
+      // Only allow implicit upcasts. A downcast will result in a compile error
+  // unless you use static_cast (which will end up invoking the explicit
+  // operator below).
+  template <typename U>
+  RefPtr(RefPtr<U>&& ref, typename std::enable_if<std::is_base_of<T,U>::value, U>::type* = nullptr) :
+    m_ptr(nullptr)
+  {
+    *this = std::move(ref);
   }
-};
     
-    #include 'caffe/layers/neuron_layer.hpp'
-    
-    
-    { protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
-   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
-   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
-   *      the computed outputs @f$
-   *       y_n = \arg\max\limits_i x_{ni}
-   *      @f$ (for @f$ K = 1 @f$).
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  /// @brief Not implemented (non-differentiable function)
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    NOT_IMPLEMENTED;
+      T* release() {
+    T* obj = get();
+    pthread_setspecific(m_key, NULL);
+    return obj;
   }
-  bool out_max_val_;
-  size_t top_k_;
-  bool has_axis_;
-  int axis_;
-};
     
-      virtual inline const char* type() const { return 'BNLL'; }
-    
-    
-    {  /// when divided by UINT_MAX, the randomly generated values @f$u\sim U(0,1)@f$
-  Blob<unsigned int> rand_vec_;
-  /// the probability @f$ p @f$ of dropping any input
-  Dtype threshold_;
-  /// the scale for undropped inputs at train time @f$ 1 / (1 - p) @f$
-  Dtype scale_;
-  unsigned int uint_thres_;
-};
-    
-    class MatrixTest : public ::testing::Test {
- protected:
-  // Fills src_ with data so it can pretend to be a tensor thus:
-  //  dims_=[5, 4, 3, 2]
-  //  array_=[0, 1, 2, ....119]
-  //  tensor=[[[[0, 1][2, 3][4, 5]]
-  //           [[6, 7][8, 9][10, 11]]
-  //           [[12, 13][14, 15][16, 17]]
-  //           [[18, 19][20, 21][22, 23]]]
-  //          [[[24, 25]...
-  MatrixTest() {
-    src_.Resize(1, kInputSize_, 0);
-    for (int i = 0; i < kInputSize_; ++i) {
-      src_.put(0, i, i);
-    }
-    for (int i = 0; i < kNumDims_; ++i) dims_[i] = 5 - i;
-  }
-  // Number of dimensions in src_.
-  static const int kNumDims_ = 4;
-  // Number of elements in src_.
-  static const int kInputSize_ = 120;
-  // Size of each dimension in src_;
-  int dims_[kNumDims_];
-  // Input array filled with [0,kInputSize).
-  GENERIC_2D_ARRAY<int> src_;
-};
-    
-    namespace tesseract {
-    }
-    
-      // A LTRResultIterator goes strictly left-to-right word order.
-  LTRResultIterator ltr_it(resit);
-  ltr_it.RestartRow();
-  if (ltr_it.Empty(RIL_WORD)) return;
-  do {
-    directions->push_back(ltr_it.WordDirection());
-  } while (ltr_it.Next(RIL_WORD) && !ltr_it.IsAtBeginningOf(RIL_TEXTLINE));
-    
-    
-    { private:
-  // A name for this document.
-  STRING document_name_;
-  // A group of pages that corresponds in some loose way to a document.
-  PointerVector<ImageData> pages_;
-  // Page number of the first index in pages_.
-  int pages_offset_;
-  // Total number of pages in document (may exceed size of pages_.)
-  int total_pages_;
-  // Total of all pix sizes in the document.
-  int64_t memory_used_;
-  // Max memory to use at any time.
-  int64_t max_memory_;
-  // Saved reader from LoadDocument to allow re-caching.
-  FileReader reader_;
-  // Mutex that protects pages_ and pages_offset_ against multiple parallel
-  // loads, and provides a wait for page.
-  SVMutex pages_mutex_;
-  // Mutex that protects other data members that callers want to access without
-  // waiting for a load operation.
-  mutable SVMutex general_mutex_;
-};
-    
-    #else // USE_GCC_FAST_TLS
-    
-    constexpr int Vframe::Top;
-    
-    /*
- * Vasm constant.
- *
- * Either a 1, 4, or 8 byte unsigned value, 8 byte double, or the disp32 part
- * of a thread-local address of an immutable constant that varies by thread.
- * Constants may also represent an undefined value, indicated by the isUndef
- * member.
- *
- * Also contains convenience constructors for various pointer and enum types.
- */
-struct Vconst {
-  enum Kind { Quad, Long, Byte, Double };
-    }
-    
-    #ifdef PHP_WIN32
-#include <shlwapi.h>
-#endif
-    
-    void OfflineCode::disasm(FILE* file,
-                         TCA fileStartAddr,
-                         TCA codeStartAddr,
-                         uint64_t codeLen,
-                         const PerfEventsMap<TCA>& perfEvents,
-                         BCMappingInfo bcMappingInfo,
-                         bool printAddr,
-                         bool printBinary) {
-    }
-    
-    /*
- * Clean up any /tmp files that we created at process shutdown time.
- */
-void embedded_data_cleanup();
-    
-      typedef std::function<void(pid_t)> LostChildHandler;
-  static void SetLostChildHandler(const LostChildHandler& handler);
-    
-    namespace HPHP {
-    }
+    inline local_ref<jobject> autobox(alias_ref<jobject> val) {
+  return make_local(val);
+}
