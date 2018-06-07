@@ -1,117 +1,89 @@
 
         
-            # Returns +text+ wrapped at +len+ columns and indented +indent+ spaces.
-    # By default column length +len+ equals 72 characters and indent
-    # +indent+ equal two spaces.
-    #
-    #   my_text = 'Here is a sample text with more than 40 characters'
-    #
-    #   format_paragraph(my_text, 25, 4)
-    #   # => '    Here is a sample text with\n    more than 40 characters'
-    def format_paragraph(text, len = 72, indent = 2)
-      sentences = [[]]
-    
-      def set_logger(logger)
-    ActionMailer::Base.logger = logger
-  end
-    
-    The second
-   paragraph.
-    
-    puts 'DONE: #{blogs.count} written to #{OUTPUT_FILENAME}'
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   Cookie Tossing
-    # Supported browsers:: all
-    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
-    #
-    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
-    # session cookie. This does not protect against a cookie overflow attack.
-    #
-    # Options:
-    #
-    # session_key:: The name of the session cookie (default: 'rack.session')
-    class CookieTossing < Base
-      default_reaction :deny
-    
-            if @javascript and not @escaper.respond_to? :escape_javascript
-          fail('Use EscapeUtils for JavaScript escaping.')
-        end
-      end
-    
-      it 'denies requests with a changing User-Agent header' do
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session, 'HTTP_USER_AGENT' => 'a'
-    get '/', {}, 'rack.session' => session, 'HTTP_USER_AGENT' => 'b'
-    expect(session).to be_empty
-  end
-    
-        respond_to do |format|
-      if @book.save
-        format.html { redirect_to @book, notice: 'Book was successfully created.' }
-        format.json { render :show, status: :created, location: @book }
-      else
-        format.html { render :new }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
-      end
+            if registration
+      u2f.authenticate!(challenges, response, Base64.decode64(registration.public_key), registration.counter)
+      registration.update(counter: response.counter)
+      true
     end
+  rescue JSON::ParserError, NoMethodError, ArgumentError, U2F::Error
+    false
+  end
+end
+
+    
+      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
+    @logger     = Logger.new
+    @repo       = repo
+    @branch     = branch || 'master'
+    @branch_sha = get_branch_sha
+    @cache_path = cache_path
+    @repo_url   = 'https://github.com/#@repo'
+    @save_to    = {
+        js:    'assets/javascripts/bootstrap',
+        scss:  'assets/stylesheets/bootstrap',
+        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
   end
     
-            def_node_matcher :multiple_compare?, <<-PATTERN
-          (send (send _ {:< :> :<= :>=} $_) {:< :> :<= :>=} _)
-        PATTERN
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
     
-            def_node_matcher :on_body_of_reduce, <<-PATTERN
-          (block (send _recv {:reduce :inject} !sym) _blockargs $(begin ...))
-        PATTERN
+              # If mounting without agreeing to EULA succeeded, there is none.
+          plist = if without_eula.success?
+            without_eula.plist
+          else
+            @command.run!('/usr/bin/hdiutil', args: ['convert', '-quiet', '-format', 'UDTO', '-o', cdr_path, path])
     
-                      def do_something
-                  end
-    
-        def each_definition
-      @attachments.each do |klass, attachments|
-        attachments.each do |name, options|
-          yield klass, name, options
-        end
-      end
-    end
-    
-            def responds?
-          methods = @subject.instance_methods.map(&:to_s)
-          methods.include?('#{@attachment_name}') &&
-            methods.include?('#{@attachment_name}=') &&
-            methods.include?('#{@attachment_name}?')
+          def import_key
+        if @cask.gpg.nil?
+          raise CaskError, 'Expected to find gpg public key in formula. Cask '#{@cask}' must add: 'gpg :embedded, key_id: [Public Key ID]' or 'gpg :embedded, key_url: [Public Key URL]''
         end
     
-            def type_allowed?(type)
-          @subject.send('#{@attachment_name}_content_type=', type)
-          @subject.valid?
-          @subject.errors[:'#{@attachment_name}_content_type'].blank?
-        end
-    
-                if options.has_key?(validator_kind)
-              validator_options = options.delete(validator_kind)
-              validator_options = {} if validator_options == true
-              conditional_options = options.slice(:if, :unless)
-              Array.wrap(validator_options).each do |local_options|
-                method_name = Paperclip::Validators.const_get(constant.to_s).helper_method_name
-                send(method_name, attributes, local_options.merge(conditional_options))
-              end
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
             end
           end
         end
+    
+            self.summary = 'The repl listens to commands on standard input'
+        self.description = <<-DESC
+          The repl listens to commands on standard input and prints their
+          result to standard output.
+          It accepts all the other ipc subcommands. The repl will signal the
+          end of output with the the ASCII CR+LF `\\n\\r`.
+        DESC
+    
+    module Jekyll
+    
+        def get_web_content(url)
+      raw_uri           = URI.parse url
+      proxy             = ENV['http_proxy']
+      if proxy
+        proxy_uri       = URI.parse(proxy)
+        https           = Net::HTTP::Proxy(proxy_uri.host, proxy_uri.port).new raw_uri.host, raw_uri.port
+      else
+        https           = Net::HTTP.new raw_uri.host, raw_uri.port
       end
+      https.use_ssl     = true
+      https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request           = Net::HTTP::Get.new raw_uri.request_uri
+      data              = https.request request
+    end
+  end
     
-      # for now
-  worker_count = 1
-    
-          check_class_collision suffix: 'Worker'
-    
-        class Entry
-      attr_reader :klass
-    
-      puts '== Installing dependencies =='
-  system 'gem install bundler --conservative'
-  system 'bundle check || bundle install'
+        def render(context)
+      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
+      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
+      file = code_path + @file
