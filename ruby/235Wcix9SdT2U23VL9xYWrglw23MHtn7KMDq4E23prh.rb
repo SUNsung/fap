@@ -1,104 +1,151 @@
 
         
-        class ApplicationSerializer < ActiveModel::Serializer
-  embed :ids, include: true
+                  if options.fetch('skip_initial_build', false)
+            Jekyll.logger.warn 'Build Warning:', 'Skipping the initial build.' \
+                               ' This may result in an out-of-date site.'
+          else
+            build(site, options)
+          end
     
-            expect(result).to eq('hg parent --template {rev}')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template {rev}')
+            # Add SSL to the stack if the user triggers --enable-ssl and they
+        # provide both types of certificates commonly needed.  Raise if they
+        # forget to add one of the certificates.
+        def enable_ssl(opts)
+          cert, key, src =
+            opts[:JekyllOptions].values_at('ssl_cert', 'ssl_key', 'source')
+    
+          begin
+        self.content = File.read(@path || site.in_source_dir(base, name),
+                                 Utils.merged_file_read_opts(site, opts))
+        if content =~ Document::YAML_FRONT_MATTER_REGEXP
+          self.content = $POSTMATCH
+          self.data = SafeYAML.load(Regexp.last_match(1))
+        end
+      rescue Psych::SyntaxError => e
+        Jekyll.logger.warn 'YAML Exception reading #{filename}: #{e.message}'
+        raise e if site.config['strict_front_matter']
+      rescue StandardError => e
+        Jekyll.logger.warn 'Error reading file #{filename}: #{e.message}'
+        raise e if site.config['strict_front_matter']
+      end
+    
+              # Repackage the box
+          output_name = @env.vagrantfile.config.package.name || 'package.box'
+          output_path = Pathname.new(File.expand_path(output_name, FileUtils.pwd))
+          box.repackage(output_path)
+    
+            # Get the proper capability host to check
+        cap_host = nil
+        if type == :host
+          cap_host = @env.host
+        else
+          with_target_vms([]) do |vm|
+            cap_host = case type
+                       when :provider
+                         vm.provider
+                       when :guest
+                         vm.guest
+                       else
+                         raise Vagrant::Errors::CLIInvalidUsage,
+                           help: opts.help.chomp
+                       end
+          end
+        end
+    
+    def report_apps
+  running = Set.new
+  @app_names.zip(@bundle_ids, @unix_ids).each do |app_name, bundle_id, _unix_id|
+    next if excluded_bundle_id bundle_id
+    next if excluded_app_name app_name
+    bundle_id.gsub!(%r{^(missing value)$}, '<\1>')
+    running.add '#{bundle_id}\t#{app_name}'
+  end
+    
+          def to_s
+        @pairs.inspect
       end
     end
   end
 end
 
     
-            expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER]).to match(/cd .* && agvtool next-version -all/)
-      end
-    
-        attr_reader :filters
-    
-            css('> h6').each do |node|
-          node.name = 'h2'
-        end
-    
-          # A string representation of the importer.
-      # Should be overridden by subclasses.
-      #
-      # This is used to help debugging,
-      # and should usually just show the load path encapsulated by this importer.
-      #
-      # @return [String]
-      def to_s
-        Sass::Util.abstract(self)
-      end
-    
-      if defined? config.symbolize_keys!
-    config.symbolize_keys!
-  end
-    
-        private
-    
-          def all_gem_names
-        core_gem_names + plugin_gem_names
-      end
-    
-          def assert_valid_stage_names(names)
-        invalid = names.find { |n| RESERVED_NAMES.include?(n) }
-        return if invalid.nil?
-    
-    module Capistrano
-  module TaskEnhancements
-    def before(task, prerequisite, *args, &block)
-      prerequisite = Rake::Task.define_task(prerequisite, *args, &block) if block_given?
-      Rake::Task[task].enhance [prerequisite]
-    end
-    
-          it 'selects nothing when a roles filter is present' do
-        dsl.set :filter, roles: 'web'
-        SSHKit::Coordinator.expects(:new).with([]).returns(@coordinator)
-        dsl.on('my.server')
-      end
-    
-      # PATCH/PUT /books/1
-  # PATCH/PUT /books/1.json
-  def update
-    respond_to do |format|
-      if @book.update(book_params)
-        format.html { redirect_to @book, notice: 'Book was successfully updated.' }
-        format.json { render :show, status: :ok, location: @book }
+          if path.extname == '.la'
+        path.unlink
+      elsif path.basename.to_s == 'perllocal.pod'
+        # Both this file & the .packlist one below are completely unnecessary
+        # to package & causes pointless conflict with other formulae. They are
+        # removed by Debian, Arch & MacPorts amongst other packagers as well.
+        # The files are created as part of installing any Perl module.
+        path.unlink
+      elsif path.basename.to_s == '.packlist' # Hidden file, not file extension!
+        path.unlink
       else
-        format.html { render :edit }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
+        # Set permissions for executables and non-executables
+        perms = if executable_path?(path)
+          0555
+        else
+          0444
+        end
+        if ARGV.debug?
+          old_perms = path.stat.mode & 0777
+          if perms != old_perms
+            puts 'Fixing #{path} permissions from #{old_perms.to_s(8)} to #{perms.to_s(8)}'
+          end
+        end
+        path.chmod perms
       end
     end
   end
+end
     
-            private
+    class HeadSoftwareSpec < SoftwareSpec
+  def initialize
+    super
+    @resource.version = Version.create('HEAD')
+  end
     
-    module RuboCop
-  module Cop
-    module Lint
-      # Don't omit the accumulator when calling `next` in a `reduce` block.
-      #
-      # @example
-      #
-      #   # bad
-      #
-      #   result = (1..4).reduce(0) do |acc, i|
-      #     next if i.odd?
-      #     acc + i
-      #   end
-      #
-      # @example
-      #
-      #   # good
-      #
-      #   result = (1..4).reduce(0) do |acc, i|
-      #     next acc if i.odd?
-      #     acc + i
-      #   end
-      class NextWithoutAccumulator < Cop
-        MSG = 'Use `next` with an accumulator argument in a `reduce`.'.freeze
+    module Sinatra
+  class Application < Base
     
-    Dir.chdir APP_ROOT do
-  # This script is a starting point to setup your application.
-  # Add necessary setup steps to this file:
+          def initialize(*)
+        super
+    
+        it 'copes with nested arrays' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']['bar']]]
+      end
+      get '/', :foo => {:bar => '<bar>'}
+      expect(body).to eq('&lt;bar&gt;')
+    end
+    
+      it 'should set the X-Frame-Options' do
+    expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('SAMEORIGIN')
+  end
+    
+        expect_any_instance_of(detector).to receive(:call).with(
+      hash_including('foo.bar' => 42)
+    ).and_call_original
+    
+    module LogStash
+  module Api
+    module Commands
+      module System
+        class Plugins < Commands::Base
+          def run
+            { :total => plugins.count, :plugins => plugins }
+          end
+    
+      def file_fetch(url, sha1, target)
+    filename = File.basename( URI(url).path )
+    output = '#{target}/#{filename}'
+    begin
+      actual_sha1 = file_sha1(output)
+      if actual_sha1 != sha1
+        fetch(url, sha1, output)
+      end
+    rescue Errno::ENOENT
+      fetch(url, sha1, output)
+    end
+    return output
+  end
