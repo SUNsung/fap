@@ -1,206 +1,154 @@
 
         
-            // construct the multiplication matrix via schur compliment of the Macaulay
-    // matrix
-    Mtilde = M2_1 - M2_5.t()*M2_4;
-    
-    
-    {            ptr[tid] = partial = partial + ptr[tid + 16];
-            ptr[tid] = partial = partial + ptr[tid + 8];
-            ptr[tid] = partial = partial + ptr[tid + 4];
-            ptr[tid] = partial = partial + ptr[tid + 2];
-            ptr[tid] = partial = partial + ptr[tid + 1];
-        }
-    
-    #define CUSTOM_FUNCTION_ID 1000
-    
-    
-    {  template <typename Tuple>
-  static void TersePrintPrefixToStrings(const Tuple& t, Strings* strings) {
-    ::std::stringstream ss;
-    UniversalTersePrint(::std::tr1::get<0>(t), &ss);
-    strings->push_back(ss.str());
+        
+llvm::Optional<ASTNode>
+SyntaxASTMap::getNodeForSyntax(syntax::Syntax SyntaxNode) const {
+  auto Found = SyntaxMap.find(SyntaxNode.Root);
+  if (Found == SyntaxMap.end()) {
+    return None;
   }
+  return Found->getSecond();
+}
+    
+      ArrayRef<const MarkupASTNode *> getChildren() const {
+    return {};
+  }
+    
+      /// Indicates whether to allow diagnostics for \c <unknown> locations if
+  /// \c VerifyMode is not \c NoVerify.
+  bool VerifyIgnoreUnknown = false;
+    
+      // #line directive handling.
+  struct VirtualFile {
+    CharSourceRange Range;
+    std::string Name;
+    int LineOffset;
+  };
+  std::map<const char *, VirtualFile> VirtualFiles;
+  mutable std::pair<const char *, const VirtualFile*> CachedVFile = {nullptr, nullptr};
+    
+    #include 'swift/Runtime/HeapObject.h'
+#include <mutex>
+    
+    #ifndef BITCOIN_INDIRECTMAP_H
+#define BITCOIN_INDIRECTMAP_H
+    
+    #include 'leveldb/db.h'
+#include 'db/db_impl.h'
+#include 'leveldb/cache.h'
+#include 'util/testharness.h'
+#include 'util/testutil.h'
+    
+    #include 'db/filename.h'
+#include 'db/dbformat.h'
+#include 'db/table_cache.h'
+#include 'db/version_edit.h'
+#include 'leveldb/db.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
+    
+    using leveldb::Cache;
+using leveldb::Comparator;
+using leveldb::CompressionType;
+using leveldb::DB;
+using leveldb::Env;
+using leveldb::FileLock;
+using leveldb::FilterPolicy;
+using leveldb::Iterator;
+using leveldb::kMajorVersion;
+using leveldb::kMinorVersion;
+using leveldb::Logger;
+using leveldb::NewBloomFilterPolicy;
+using leveldb::NewLRUCache;
+using leveldb::Options;
+using leveldb::RandomAccessFile;
+using leveldb::Range;
+using leveldb::ReadOptions;
+using leveldb::SequentialFile;
+using leveldb::Slice;
+using leveldb::Snapshot;
+using leveldb::Status;
+using leveldb::WritableFile;
+using leveldb::WriteBatch;
+using leveldb::WriteOptions;
+    
+    namespace leveldb {
+    }
+    
+    // If filename is a leveldb file, store the type of the file in *type.
+// The number encoded in the filename is stored in *number.  If the
+// filename was successfully parsed, returns true.  Else return false.
+extern bool ParseFileName(const std::string& filename,
+                          uint64_t* number,
+                          FileType* type);
+    
+    
+    {    fprintf(stdout, '%-12s : %11.3f micros/op;%s%s\n',
+            name.ToString().c_str(),
+            (finish - start_) * 1e6 / done_,
+            (message_.empty() ? '' : ' '),
+            message_.c_str());
+    if (FLAGS_histogram) {
+      fprintf(stdout, 'Microseconds per op:\n%s\n', hist_.ToString().c_str());
+    }
+    fflush(stdout);
+  }
+    
+    // If true, do not destroy the existing database.  If you set this
+// flag and also specify a benchmark that wants a fresh database, that
+// benchmark will fail.
+static bool FLAGS_use_existing_db = false;
+    
+    
+    {}  // namespace leveldb
+    
+      // If *start < limit, changes *start to a short string in [start,limit).
+  // Simple comparator implementations may return with *start unchanged,
+  // i.e., an implementation of this method that does nothing is correct.
+  virtual void FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const = 0;
+    
+    /// Helper replacement for REGISTER, used within extension modules.
+#define REGISTER_MODULE(t, r, n)                                               \
+  auto t##Module = Registry::get().registry(r)->add(n, std::make_shared<t>());
+    
+    /**
+ * @brief Iterate the discovered decorators for a given point type.
+ *
+ * The configuration maintains various sources, each may contain a set of
+ * decorators. The source tracking is abstracted for the decorator iterator.
+ *
+ * @param point request execution of decorators for this given point.
+ * @param time an optional time for points using intervals.
+ * @param source restrict run to a specific config source.
+ */
+void runDecorators(DecorationPoint point,
+                   size_t time = 0,
+                   const std::string& source = '');
+    
+    
+    {  void SetUp() {}
 };
     
     
-    {}  // namespace testing
-    
-    // Makes sure this header is not included before gtest.h.
-#ifndef GTEST_INCLUDE_GTEST_GTEST_H_
-# error Do not include gtest_pred_impl.h directly.  Include gtest.h instead.
-#endif  // GTEST_INCLUDE_GTEST_GTEST_H_
-    
-    // This generic version is used when k is 0.
-template <typename T, typename U>
-inline void CopyArray(const T& from, U* to) { *to = from; }
-    
-    // scripts/fuse_gtest.py depends on gtest's own header being #included
-// *unconditionally*.  Therefore these #includes cannot be moved
-// inside #if GTEST_HAS_PARAM_TEST.
-#include 'gtest/internal/gtest-internal.h'
-#include 'gtest/internal/gtest-linked_ptr.h'
-#include 'gtest/internal/gtest-port.h'
-#include 'gtest/gtest-printers.h'
-    
-    
-]]
-    
-    
-    {  EXPECT_FALSE(IsPrime(-1));
-  EXPECT_FALSE(IsPrime(-2));
-  EXPECT_FALSE(IsPrime(INT_MIN));
-}
-    
-    	GetModuleFileName(NULL, exePath, sizeof(exePath));
-    
-    
     {
-    {// use R's PRNG to replacd
-CustomGlobalRandomEngine::result_type
-CustomGlobalRandomEngine::operator()() {
-  return static_cast<result_type>(
-      std::floor(unif_rand() * CustomGlobalRandomEngine::max()));
+    {  EXPECT_EQ(expected, toAsciiTimeUTC(&result));
 }
-}  // namespace common
-}  // namespace xgboost
+}
 
     
     
-    { private:
-  /*! \brief the underlying stream */
-  dmlc::Stream *stream_;
-  /*! \brief buffer to hold data */
-  std::string buffer_;
-  /*! \brief length of valid data in buffer */
-  size_t read_len_;
-  /*! \brief pointer in the buffer */
-  size_t read_ptr_;
-};
-    
-    SEXP XGDMatrixCreateFromCSC_R(SEXP indptr,
-                              SEXP indices,
-                              SEXP data,
-                              SEXP num_row) {
-  SEXP ret;
-  R_API_BEGIN();
-  const int *p_indptr = INTEGER(indptr);
-  const int *p_indices = INTEGER(indices);
-  const double *p_data = REAL(data);
-  size_t nindptr = static_cast<size_t>(length(indptr));
-  size_t ndata = static_cast<size_t>(length(data));
-  size_t nrow = static_cast<size_t>(INTEGER(num_row)[0]);
-  std::vector<size_t> col_ptr_(nindptr);
-  std::vector<unsigned> indices_(ndata);
-  std::vector<float> data_(ndata);
-    }
-    
-    
-    {
-    {
-    {      CHECK_EQ(jenv->GetArrayLength(jindex), max_elem)
-          << 'batch.index.length must equal batch.offset.back()';
-      CHECK_EQ(jenv->GetArrayLength(jvalue), max_elem)
-          << 'batch.index.length must equal batch.offset.back()';
-      // cbatch is ready
-      CHECK_EQ((*set_function)(set_function_handle, cbatch), 0)
-          << XGBGetLastError();
-      // release the elements.
-      jenv->ReleaseLongArrayElements(
-          joffset, reinterpret_cast<jlong *>(cbatch.offset), 0);
-      jenv->DeleteLocalRef(joffset);
-      if (jlabel != nullptr) {
-        jenv->ReleaseFloatArrayElements(jlabel, cbatch.label, 0);
-        jenv->DeleteLocalRef(jlabel);
-      }
-      if (jweight != nullptr) {
-        jenv->ReleaseFloatArrayElements(jweight, cbatch.weight, 0);
-        jenv->DeleteLocalRef(jweight);
-      }
-      jenv->ReleaseIntArrayElements(jindex, (jint*) cbatch.index, 0);
-      jenv->DeleteLocalRef(jindex);
-      jenv->ReleaseFloatArrayElements(jvalue, cbatch.value, 0);
-      jenv->DeleteLocalRef(jvalue);
-      jenv->DeleteLocalRef(batch);
-      jenv->DeleteLocalRef(batchClass);
-      ret_value = 1;
-    } else {
-      ret_value = 0;
-    }
-    jenv->DeleteLocalRef(iterClass);
-    // only detach if it is a async call.
-    if (jni_status == JNI_EDETACHED) {
-      global_jvm->DetachCurrentThread();
-    }
-    return ret_value;
-  } catch(dmlc::Error e) {
-    // only detach if it is a async call.
-    if (jni_status == JNI_EDETACHED) {
-      global_jvm->DetachCurrentThread();
-    }
-    LOG(FATAL) << e.what();
-    return -1;
-  }
+    {  // Make sure no log file is created.
+  // RocksDB logs are intercepted and forwarded to the GLog sink.
+  auto details = SQL::selectAllFrom('file', 'path', EQUALS, path_ + '/LOG');
+  ASSERT_EQ(details.size(), 0U);
 }
     
-    struct GLFWwindow;
+    /// The shell may request execution of all queries in a pack immediately.
+DECLARE_string(pack);
     
-            ID3D10Texture2D *pTexture = NULL;
-        D3D10_SUBRESOURCE_DATA subResource;
-        subResource.pSysMem = pixels;
-        subResource.SysMemPitch = desc.Width * 4;
-        subResource.SysMemSlicePitch = 0;
-        g_pd3dDevice->CreateTexture2D(&desc, &subResource, &pTexture);
+    #include 'osquery/core/conversions.h'
+#include 'osquery/dispatcher/distributed.h'
     
-        // Destroy old Framebuffer:
-    for (uint32_t i = 0; i < g_BackBufferCount; i++)
-        if (g_BackBufferView[i])
-            vkDestroyImageView(g_Device, g_BackBufferView[i], g_Allocator);
-    for (uint32_t i = 0; i < g_BackBufferCount; i++)
-        if (g_Framebuffer[i])
-            vkDestroyFramebuffer(g_Device, g_Framebuffer[i], g_Allocator);
-    if (g_RenderPass)
-        vkDestroyRenderPass(g_Device, g_RenderPass, g_Allocator);
-    
-    // Implemented features:
-//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-//  [X] Gamepad navigation mapping. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
-    
-    MATCHER_P(BufMatches, expected, '') {
-  folly::IOBufEqualTo eq;
-  return eq(*arg, *expected);
-}
-    
-    #include <folly/ConstexprMath.h>
-#include <folly/Portability.h>
-#include <folly/Range.h>
-#include <folly/Utility.h>
-#include <folly/lang/Exception.h>
-#include <folly/lang/Ordering.h>
-#include <folly/portability/Constexpr.h>
-    
-    TEST_F(OrderingTest, ordering) {
-  EXPECT_EQ(-1, int(ordering::lt));
-  EXPECT_EQ(0, int(ordering::eq));
-  EXPECT_EQ(+1, int(ordering::gt));
-}
-    
-    namespace folly {
-    }
-    
-      T take() override {
-    T item;
-    while (!queue_.try_dequeue(item)) {
-      sem_.wait();
-    }
-    return item;
-  }
-    
-    namespace folly {
-    }
-    
-    // Configure folly to enable INFO+ messages, and everything else to
-// enable WARNING+.
-//
-// Set the default log handler to log asynchronously by default.
-FOLLY_INIT_LOGGING_CONFIG('.=WARNING,folly=INFO; default:async=true');
+    #pragma once
