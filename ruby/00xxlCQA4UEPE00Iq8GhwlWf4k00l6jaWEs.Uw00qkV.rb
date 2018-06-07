@@ -1,14 +1,31 @@
 
         
-              def initialize(*)
-        super
-        @listener = nil
-        @redis_connection_for_broadcasts = nil
+          describe :render do
+    let(:screenshots) { [] }
+    
+            expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::VERSION_NUMBER]).to match(/cd .* && agvtool new-marketing-version 1.1.0/)
       end
     
-            def test_spec_name_with_inline_config
-          spec = spec('adapter' => 'sqlite3')
-          assert_equal 'primary', spec.name, 'should default to primary id'
+        # Returns the Sass/SCSS code for the media query.
+    #
+    # @param options [{Symbol => Object}] An options hash (see {Sass::CSS#initialize}).
+    # @return [String]
+    def to_src(options)
+      src = ''
+      src << Sass::Media._interp_to_src(modifier, options)
+      src << ' ' unless modifier.empty?
+      src << Sass::Media._interp_to_src(type, options)
+      src << ' and ' unless type.empty? || expressions.empty?
+      src << expressions.map do |e|
+        Sass::Media._interp_to_src(e, options)
+      end.join(' and ')
+      src
+    end
+    
+            def clear_cache
+          UI.message('Removing the whole cache dir #{@cache.root}') do
+            FileUtils.rm_rf(@cache.root)
+          end
         end
       end
     end
@@ -16,167 +33,81 @@
 end
 
     
-    module ActiveSupport
-  # Abstract super class that provides a thread-isolated attributes singleton, which resets automatically
-  # before and after each request. This allows you to keep all the per-request attributes easily
-  # available to the whole system.
-  #
-  # The following full app-like example demonstrates how to use a Current class to
-  # facilitate easy access to the global, per-request attributes without passing them deeply
-  # around everywhere:
-  #
-  #   # app/models/current.rb
-  #   class Current < ActiveSupport::CurrentAttributes
-  #     attribute :account, :user
-  #     attribute :request_id, :user_agent, :ip_address
-  #
-  #     resets { Time.zone = nil }
-  #
-  #     def user=(user)
-  #       super
-  #       self.account = user.account
-  #       Time.zone    = user.time_zone
-  #     end
-  #   end
-  #
-  #   # app/controllers/concerns/authentication.rb
-  #   module Authentication
-  #     extend ActiveSupport::Concern
-  #
-  #     included do
-  #       before_action :authenticate
-  #     end
-  #
-  #     private
-  #       def authenticate
-  #         if authenticated_user = User.find_by(id: cookies.encrypted[:user_id])
-  #           Current.user = authenticated_user
-  #         else
-  #           redirect_to new_session_url
-  #         end
-  #       end
-  #   end
-  #
-  #   # app/controllers/concerns/set_current_request_details.rb
-  #   module SetCurrentRequestDetails
-  #     extend ActiveSupport::Concern
-  #
-  #     included do
-  #       before_action do
-  #         Current.request_id = request.uuid
-  #         Current.user_agent = request.user_agent
-  #         Current.ip_address = request.ip
-  #       end
-  #     end
-  #   end
-  #
-  #   class ApplicationController < ActionController::Base
-  #     include Authentication
-  #     include SetCurrentRequestDetails
-  #   end
-  #
-  #   class MessagesController < ApplicationController
-  #     def create
-  #       Current.account.messages.create(message_params)
-  #     end
-  #   end
-  #
-  #   class Message < ApplicationRecord
-  #     belongs_to :creator, default: -> { Current.user }
-  #     after_create { |message| Event.create(record: message) }
-  #   end
-  #
-  #   class Event < ApplicationRecord
-  #     before_create do
-  #       self.request_id = Current.request_id
-  #       self.user_agent = Current.user_agent
-  #       self.ip_address = Current.ip_address
-  #     end
-  #   end
-  #
-  # A word of caution: It's easy to overdo a global singleton like Current and tangle your model as a result.
-  # Current should only be used for a few, top-level globals, like account, user, and request details.
-  # The attributes stuck in Current should be used by more or less all actions on all requests. If you start
-  # sticking controller-specific attributes in there, you're going to create a mess.
-  class CurrentAttributes
-    include ActiveSupport::Callbacks
-    define_callbacks :reset
-    
-        # Access the message attachments list.
-    def attachments
-      mailer.attachments
-    end
-    
-        class MessageDelivery < ActionMailer::MessageDelivery # :nodoc:
-      def initialize(mailer_class, action, params, *args)
-        super(mailer_class, action, *args)
-        @params = params
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
+        end
       end
-    
-        groups
+    end
   end
 end
 
     
-        def types
-      const_get(:TYPES).map(&:constantize)
+            def self.options
+          [
+            ['--template-url=URL', 'The URL of the git repo containing a ' \
+                                  'compatible template'],
+          ].concat(super)
+        end
+    
+          def run
+        update_if_necessary!
+    
     end
     
-        begin
-      raise '#{short_type} does not support dry-run' unless can_dry_run?
-      readonly!
-      @dry_run_started_at = Time.zone.now
-      @dry_run_logger.info('Dry Run started')
-      if event
-        raise 'This agent cannot receive an event!' unless can_receive_events?
-        receive([event])
-      else
-        check
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
       end
-      @dry_run_logger.info('Dry Run finished')
-    rescue => e
-      @dry_run_logger.info('Dry Run failed')
-      error 'Exception during dry-run. #{e.message}: #{e.backtrace.join('\n')}'
-    end
-    
-        if options['recipients'].present?
-      emails = options['recipients']
-      emails = [emails] if emails.is_a?(String)
-      unless emails.all? { |email| email =~ Devise.email_regexp || email =~ /\{/ }
-        errors.add(:base, ''when provided, 'recipients' should be an email address or an array of email addresses')
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
       end
-    end
-  end
-    }
-    
-      def tumblr_consumer_key
-    ENV['TUMBLR_OAUTH_KEY']
-  end
-    
-      private
-    
-        def entries_as_json
-      @entries.sort! { |a, b| sort_fn(a.name, b.name) }.map(&:as_json)
+      super
     end
     
-        def to_a
-      @filters.dup
+      # Summary is used on the Archive pages to return the first block of content from a post.
+  def summary(input)
+    if input.index(/\n\n/)
+      input.split(/\n\n/)[0]
+    else
+      input
+    end
+  end
+    
+        def render(context)
+      file_dir = (context.registers[:site].source || 'source')
+      file_path = Pathname.new(file_dir).expand_path
+      file = file_path + @file
+    
+        # True if the dimensions represent a vertical rectangle
+    def vertical?
+      height > width
     end
     
-            css('.bs-docs-sidenav > li').each do |node|
-          link = node.at_css('a')
-          name = link.content
-          next if IGNORE_ENTRIES.include?(name)
-    
-          next if path.symlink? || path.directory?
-    
-        previous_tag = ARGV.named.first
-    previous_tag ||= Utils.popen_read(
-      'git', '-C', HOMEBREW_REPOSITORY, 'tag', '--list', '--sort=-version:refname'
-    ).lines.first.chomp
-    odie 'Could not find any previous tags!' unless previous_tag
-    
-      def merge(*args)
-    @settings.merge(*args)
-    self
-  end
+            def responds?
+          methods = @subject.instance_methods.map(&:to_s)
+          methods.include?('#{@attachment_name}') &&
+            methods.include?('#{@attachment_name}=') &&
+            methods.include?('#{@attachment_name}?')
+        end
