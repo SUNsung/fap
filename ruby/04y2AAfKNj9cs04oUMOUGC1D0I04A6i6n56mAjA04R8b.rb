@@ -1,89 +1,82 @@
 
         
-          def regular?
-    !staff?
-  end
+            options[:attribution] = <<-HTML
+      &copy; Joyent, Inc. and other Node contributors<br>
+      Licensed under the MIT License.<br>
+      Node.js is a trademark of Joyent, Inc. and is used with its permission.<br>
+      We are not endorsed by or affiliated with Joyent.
+    HTML
     
-      # Finds the projects belonging to the user in '@user', limited to either
-  # public projects or projects visible to the given user.
-  #
-  # current_user - When given the list of projects is limited to those only
-  #                visible by this user.
-  #
-  # Returns an ActiveRecord::Relation.
-  def execute(current_user = nil)
-    segments = all_projects(current_user)
+        options[:only_patterns] = [
+      /\Abook\/first-edition\//,
+      /\Areference\//,
+      /\Acollections\//,
+      /\Astd\// ]
     
-        def root?
-      path == 'index'
+        html_filters.push 'sinon/clean_html', 'sinon/entries'
+    
+        version 'Python' do
+      include MultipleBaseUrls
+      self.base_urls = ['https://www.tensorflow.org/api_docs/python/', 'https://www.tensorflow.org/api_guides/python/']
     end
+    
+            return a.casecmp(b) if a_length == 1 && b_length == 1
+        return 1 if a_length == 1
+        return -1 if b_length == 1
     
         def add(path, content)
       @pages[path] = content
     end
     
-              if %w(Events Sync).include?(type)
-            name.prepend 'Backbone.'
-          elsif type == 'History'
-            name.prepend 'Backbone.history.'
-          elsif name == 'extend'
-            name.prepend '#{type}.'
-          elsif name.start_with? 'constructor'
-            name = type
-          elsif type != 'Utility'
-            name.prepend '#{type.downcase}.'
-          end
-    
-              css('##{dom_id}-methods ~ h4 code').each do |node|
-            next unless name = node.content[/\('(\w+)'\)/, 1]
-            id = node.parent['id'] = '#{dom_id}-#{name.parameterize}-method'
-            name.prepend '#{dom_id.singularize.titleize}: '
-            name << ' (method)'
-            entries << [name, id]
-          end
-        end
-    
-          def get_type
-        case slug
-        when 'api'
-          'Reference'
-        when 'configuration'
-          'Reference: Configuration'
-        when 'stpl'
-          'Reference: SimpleTemplate'
-        when 'plugindev'
-          'Reference: Plugin'
-        else
-          'Manual'
-        end
-      end
-    
-      def remote_url
-    object.remote_url.presence
-  end
-    
-        def sass_fn_exists(fn)
-      %Q{(#{fn}('') != unquote('#{fn}('')'))}
+        # From asking people, it seems MacPorts does not have a `prefix` command, like
+    # Homebrew does, so make an educated guess:
+    if port_prefix = prefix_from_bin('port')
+      prefixes << port_prefix
     end
     
-      # Prepend all log lines with the following tags.
-  # config.log_tags = [ :subdomain, :uuid ]
+          def run
+        UI.puts report
+      end
     
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
+            def print_version
+          output_pipe.puts 'version: '#{Pod::VERSION}''
+        end
     
-      def test_font_helper_with_suffix_question
-    assert_match %r(url\(['']?/assets/.*eot\?.*['']?\)), @css
+      # PATCH/PUT /books/1
+  # PATCH/PUT /books/1.json
+  def update
+    respond_to do |format|
+      if @book.update(book_params)
+        format.html { redirect_to @book, notice: 'Book was successfully updated.' }
+        format.json { render :show, status: :ok, location: @book }
+      else
+        format.html { render :edit }
+        format.json { render json: @book.errors, status: :unprocessable_entity }
+      end
+    end
   end
     
-    desc 'Dumps output to a CSS file for testing'
-task :debug do
-  require 'sass'
-  path = Bootstrap.stylesheets_path
-  %w(bootstrap).each do |file|
-    engine = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
-    File.open('./#{file}.css', 'w') { |f| f.write(engine.render) }
-  end
-end
+        context 'when first child is NOT a method' do
+      it 'does not require blank line at the beginning of #{type} body '\
+        'but requires blank line before first def definition '\
+        'and requires blank line at the end of #{type} body' do
+        inspect_source(<<-RUBY.strip_indent)
+          #{type} SomeObject
+            include Something
+    
+        # Extracts the Geometry from a 'WxH,O' string
+    # Where W is the width, H is the height,
+    # and O is the EXIF orientation
+    def self.parse(string)
+      GeometryParser.new(string).make
+    end
+    
+            protected
+    
+          def create_validating_before_filter(attribute, validator_class, options)
+        if_clause = options.delete(:if)
+        unless_clause = options.delete(:unless)
+        send(:'before_#{attribute}_post_process', :if => if_clause, :unless => unless_clause) do |*args|
+          validator_class.new(options.dup).validate(self)
+        end
+      end
