@@ -1,240 +1,223 @@
 
         
-        
-    {  std::unique_ptr<PartialRunState> partial_run = MakeUnique<PartialRunState>();
-  partial_run->cancellation_manager = MakeUnique<CancellationManager>();
-  *cancellation_manager = partial_run->cancellation_manager.get();
-  step_id_to_partial_run_[step_id] = std::move(partial_run);
-  return true;
-}
-    
-    namespace tensorflow {
+        // Read through the first n keys repeatedly and check that they get
+// compacted (verified by checking the size of the key space).
+void AutoCompactTest::DoReads(int n) {
+  std::string value(kValueSize, 'x');
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
     }
     
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    namespace tensorflow {
-namespace io {
-    }
-    }
-    
-    // Return a new iterator that converts internal keys (yielded by
-// '*internal_iter') that were live at the specified 'sequence' number
-// into appropriate user keys.
-extern Iterator* NewDBIterator(
-    DBImpl* db,
-    const Comparator* user_key_comparator,
-    Iterator* internal_iter,
-    SequenceNumber sequence,
-    uint32_t seed);
-    
-    struct ParsedInternalKey {
-  Slice user_key;
-  SequenceNumber sequence;
-  ValueType type;
+    Status BuildTable(const std::string& dbname,
+                  Env* env,
+                  const Options& options,
+                  TableCache* table_cache,
+                  Iterator* iter,
+                  FileMetaData* meta) {
+  Status s;
+  meta->file_size = 0;
+  iter->SeekToFirst();
     }
     
-    class Env;
+    namespace leveldb {
+    }
     
-      // Evict any entry for the specified file number
-  void Evict(uint64_t file_number);
+    // Return the legacy file name for an sstable with the specified number
+// in the db named by 'dbname'. The result will be prefixed with
+// 'dbname'.
+extern std::string SSTTableFileName(const std::string& dbname, uint64_t number);
     
-    #include 'db/version_set.h'
-#include 'util/logging.h'
-#include 'util/testharness.h'
-#include 'util/testutil.h'
+    namespace leveldb {
+    }
     
-    // Number of read operations to do.  If negative, do FLAGS_num reads.
-static int FLAGS_reads = -1;
+    struct FileMetaData {
+  int refs;
+  int allowed_seeks;          // Seeks allowed until compaction
+  uint64_t number;
+  uint64_t file_size;         // File size in bytes
+  InternalKey smallest;       // Smallest internal key served by table
+  InternalKey largest;        // Largest internal key served by table
+    }
     
+    class VersionEditTest { };
     
-    {  // 'filter' contains the data appended by a preceding call to
-  // CreateFilter() on this class.  This method must return true if
-  // the key was in the list of keys passed to CreateFilter().
-  // This method may return true or false if the key was not on the
-  // list, but it should aim to return false with a high probability.
-  virtual bool KeyMayMatch(const Slice& key, const Slice& filter) const = 0;
-};
+      ASSERT_TRUE(! Overlaps('100', '149'));
+  ASSERT_TRUE(! Overlaps('251', '299'));
+  ASSERT_TRUE(! Overlaps('451', '500'));
+  ASSERT_TRUE(! Overlaps('351', '399'));
     
-      // Drop the first 'n' bytes from this slice.
-  void remove_prefix(size_t n) {
-    assert(n <= size());
-    data_ += n;
-    size_ -= n;
+      void PrintWarnings() {
+#if defined(__GNUC__) && !defined(__OPTIMIZE__)
+    fprintf(stdout,
+            'WARNING: Optimization is disabled: benchmarks unnecessarily slow\n'
+            );
+#endif
+#ifndef NDEBUG
+    fprintf(stdout,
+            'WARNING: Assertions are enabled; benchmarks unnecessarily slow\n');
+#endif
   }
     
-    /** @file
- * @deprecated Use @ref cudev instead.
- */
+    // Number of key/values to place in database
+static int FLAGS_num = 1000000;
     
-    namespace cv
-{
-    }
+      void OCRTester(const char* imgname, const char* groundtruth, const char* tessdatadir, const char* lang) {
+    //log.info() << tessdatadir << ' for language: ' << lang << std::endl;
+    char *outText;
+    std::locale loc('C'); // You can also use '' for the default system locale
+    std::ifstream file(groundtruth);
+    file.imbue(loc); // Use it for file input
+    std::string gtText((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
+    ASSERT_FALSE(api->Init(tessdatadir, lang)) << 'Could not initialize tesseract.';
+    Pix *image = pixRead(imgname);
+    ASSERT_TRUE(image != nullptr) << 'Failed to read test image.';
+    api->SetImage(image);
+    outText = api->GetUTF8Text();
+    EXPECT_EQ(gtText,outText) << 'Phototest.tif OCR does not match ground truth for ' << ::testing::PrintToString(lang);
+    api->End();
+    delete [] outText;
+    pixDestroy(&image);
+  }
     
-    /* End of file. */
+    
+    {
+    {}  // namespace
+}  // namespace tesseract
 
     
-      vector<int64_t> sizes = {2, 2};
-  tensor2->resize(sizes);
-  tensor2->fill(4);
-  tensor->add(*tensor2, 1);
-  assert(tensor->nDim() == 2);
-    
-      std::unique_ptr<ManagerServerSocket> srv_socket;
-  try {
-    char tmpfile[L_tmpnam];
-    if (std::tmpnam(tmpfile) == NULL)
-      throw std::runtime_error('could not generate a random filename for manager socket');
-    // TODO: better strategy for generating tmp names
-    // TODO: retry on collisions - this can easily fail
-    srv_socket.reset(new ManagerServerSocket(std::string(tmpfile)));
-    register_fd(srv_socket->socket_fd);
-    print_init_message(tmpfile);
-    DEBUG('opened socket %s', tmpfile);
-  } catch(...) {
-    print_init_message('ERROR');
-    throw;
-  }
-    
-    /**
- * Delays sending request headers until bidirectional_stream_flush()
- * is called. This flag is currently only respected when QUIC is negotiated.
- * When true, QUIC will send request header frame along with data frame(s)
- * as a single packet when possible.
- */
-GRPC_SUPPORT_EXPORT
-void bidirectional_stream_delay_request_headers_until_flush(
-    bidirectional_stream* stream,
-    bool delay_headers_until_flush);
-    
-    #include 'src/proto/grpc/testing/control.pb.h'
-#include 'test/cpp/qps/histogram.h'
-    
-    #include <gtest/gtest.h>
-    
-    #include <initializer_list>
-#include <string>
-#include <vector>
-    
-        // Append, Flush, Get
-    slists.Append('c', 'asdasd');
-    db->Flush(rocksdb::FlushOptions());
-    success = slists.Get('c', &c);
-    ASSERT_TRUE(success);
-    ASSERT_EQ(c, 'asdasd');
-    
-      /// Remove the first (or last) num occurrences of value from the list (key)
-  /// Return the number of elements removed.
-  /// May throw RedisListException
-  int Remove(const std::string& key, int32_t num,
-             const std::string& value);
-  int RemoveFirst(const std::string& key, int32_t num,
-                  const std::string& value);
-  int RemoveLast(const std::string& key, int32_t num,
-                 const std::string& value);
-    
-    // We leave eight bits empty at the bottom so a type and sequence#
-// can be packed together into 64-bits.
-static const SequenceNumber kMaxSequenceNumber =
-    ((0x1ull << 56) - 1);
-    
-    inline
-void BlockFetcher::GetBlockContents() {
-  if (slice_.data() != used_buf_) {
-    // the slice content is not the buffer provided
-    *contents_ = BlockContents(Slice(slice_.data(), block_size_), false,
-                               compression_type);
+    // Factory makes and returns an IntSimdMatrix (sub)class of the best
+// available type for the current architecture.
+/* static */
+IntSimdMatrix* IntSimdMatrix::GetFastestMultiplier() {
+  IntSimdMatrix* multiplier = nullptr;
+  if (SIMDDetect::IsAVX2Available()) {
+    multiplier = new IntSimdMatrixAVX2();
+  } else if (SIMDDetect::IsSSEAvailable()) {
+    multiplier = new IntSimdMatrixSSE();
   } else {
-    // page is uncompressed, the buffer either stack or heap provided
-    if (got_from_prefetch_buffer_ || used_buf_ == &stack_buf_[0]) {
-      heap_buf_.reset(new char[block_size_]);
-      memcpy(heap_buf_.get(), used_buf_, block_size_);
-    }
-    *contents_ = BlockContents(std::move(heap_buf_), block_size_, true,
-                               compression_type);
+    // Default c++ implementation.
+    multiplier = new IntSimdMatrix();
   }
+  return multiplier;
 }
     
+    struct OSBestResult {
+  OSBestResult() : orientation_id(0), script_id(0), sconfidence(0.0),
+                   oconfidence(0.0) {}
+  int orientation_id;
+  int script_id;
+  float sconfidence;
+  float oconfidence;
+};
     
-void SyncPoint::Data::LoadDependency(const std::vector<SyncPointPair>& dependencies) {
-  std::lock_guard<std::mutex> lock(mutex_);
-  successors_.clear();
-  predecessors_.clear();
-  cleared_points_.clear();
-  for (const auto& dependency : dependencies) {
-    successors_[dependency.predecessor].push_back(dependency.successor);
-    predecessors_[dependency.successor].push_back(dependency.predecessor);
-  }
-  cv_.notify_all();
-}
+    #endif  // TESSERACT_CCMAIN_PAGEITERATOR_H_
+
     
-      // REQUIRES: No concurrent calls to WriteStep or ConcurrentWriteStep
-  void WriteStep(Random* rnd) {
-    const uint32_t k = rnd->Next() % K;
-    const int g = current_.Get(k) + 1;
-    const Key new_key = MakeKey(k, g);
-    char* buf = list_.AllocateKey(sizeof(Key));
-    memcpy(buf, &new_key, sizeof(Key));
-    list_.Insert(buf);
-    current_.Set(k, g);
-  }
-    
-    class Comparator;
-class InternalIterator;
-class Env;
-class Arena;
-    
-    
-    {  m_jcreate_compaction_filter_methodid =
-      AbstractCompactionFilterFactoryJni::getCreateCompactionFilterMethodId(env);
-  if(m_jcreate_compaction_filter_methodid == nullptr) {
-    // exception thrown: NoSuchMethodException or OutOfMemoryError
+      // Compute the number of unichars in the label.
+  GenericVector<UNICHAR_ID> encoding;
+  if (!unicharset.encode_string(label, true, &encoding, nullptr, nullptr)) {
+    tprintf('Not outputting illegal unichar %s\n', label);
     return;
   }
+    
+      // Returns the x,y means as an FCOORD.
+  FCOORD mean_point() const;
+    
+    
+    {  if (!any_good_hivalue) {
+    // Use the best of the ones that were not good enough.
+    (*hi_values)[best_hi_index] = best_hi_value;
+  }
+  PERF_COUNT_END
+  return num_channels;
 }
     
-    class CompactionFilterFactoryJniCallback : public JniCallback, public CompactionFilterFactory {
+      /* Invoked when initial response headers are received.
+   * Consumer must call bidirectional_stream_read() to start reading.
+   * Consumer may call bidirectional_stream_write() to start writing or
+   * close the stream. Contents of |headers| is valid for duration of the call.
+   */
+  void (*on_response_headers_received)(
+      bidirectional_stream* stream,
+      const bidirectional_stream_header_array* headers,
+      const char* negotiated_protocol);
+    
+    void ParseDb(const std::string& db, std::vector<Feature>* feature_list);
+    
+    #include <signal.h>
+    
+    #endif
+
+    
+    static double time_double(struct timeval* tv) {
+  return tv->tv_sec + 1e-6 * tv->tv_usec;
+}
+#endif
+    
+      static double Now();
+    
+    class QpsGauge {
  public:
-    CompactionFilterFactoryJniCallback(
-        JNIEnv* env, jobject jcompaction_filter_factory);
-    virtual std::unique_ptr<CompactionFilter> CreateCompactionFilter(
-      const CompactionFilter::Context& context);
-    virtual const char* Name() const;
+  QpsGauge();
     }
     
-    TEST_F(YogaTest_HadOverflowTests, children_overflow_no_wrap_and_no_flex_children) {
-  const YGNodeRef child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child0, 80);
-  YGNodeStyleSetHeight(child0, 40);
-  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
-  YGNodeStyleSetMargin(child0, YGEdgeBottom, 15);
-  YGNodeInsertChild(root, child0, 0);
-  const YGNodeRef child1 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child1, 80);
-  YGNodeStyleSetHeight(child1, 40);
-  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
-  YGNodeInsertChild(root, child1, 1);
+    class BaseLogger {
+ public:
+  BaseLogger() {
+#if XGBOOST_LOG_WITH_TIME
+    log_stream_ << '[' << dmlc::DateLogger().HumanDate() << '] ';
+#endif
+  }
+  std::ostream& stream() { return log_stream_; }  // NOLINT
     }
     
-    void Config::setPointScaleFactor(float pixelsInPoint)
-{
-    YGConfigSetPointScaleFactor(m_config, pixelsInPoint);
+    
+    {}  // namespace xgboost
+#endif  // XGBOOST_TREE_UPDATER_H_
+
+    
+    bool WakeUpLock::IsLocking() {
+    return ::wakeupLock_IsLocking(object_);
 }
     
-    void Node::setFlexBasis(double flexBasis)
-{
-    YGNodeStyleSetFlexBasis(m_node, flexBasis);
-}
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
     
-    #pragma once
-#include <functional>
-#include <string>
-#include <jni.h>
+        JNIEnv* GetEnv();
+    int Status();
     
-      T* release() {
-    T* obj = get();
-    pthread_setspecific(m_key, NULL);
-    return obj;
+      // REQUIRES: timer is not running and 'SkipWithError(...)' has not been called
+  //           by the current thread.
+  // Start the benchmark timer.  The timer is NOT running on entrance to the
+  // benchmark function. It begins running after control flow enters the
+  // benchmark loop.
+  //
+  // NOTE: PauseTiming()/ResumeTiming() are relatively
+  // heavyweight, and so their use should generally be avoided
+  // within each benchmark iteration, if possible.
+  void ResumeTiming();
+    
+    #endif  // BENCHMARK_COLORPRINT_H_
+
+    
+    // Macros for defining flags.
+#define DEFINE_bool(name, default_val, doc) bool FLAG(name) = (default_val)
+#define DEFINE_int32(name, default_val, doc) int32_t FLAG(name) = (default_val)
+#define DEFINE_int64(name, default_val, doc) int64_t FLAG(name) = (default_val)
+#define DEFINE_double(name, default_val, doc) double FLAG(name) = (default_val)
+#define DEFINE_string(name, default_val, doc) \
+  std::string FLAG(name) = (default_val)
+    
+      if (!rate.empty()) {
+    printer(Out, COLOR_DEFAULT, ' %*s', 13, rate.c_str());
   }
     
-    #include 'CoreClasses.h'
+    #include <cstdint>
+    
+    
+    {#ifndef NDEBUG
+  Out << '***WARNING*** Library was built as DEBUG. Timings may be '
+         'affected.\n';
+#endif
+}
