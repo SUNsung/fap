@@ -1,30 +1,71 @@
 
         
-        TEST_DIR = File.expand_path('../test', __dir__)
+        puts 'Deduping #{links.size} links...'
     
-    # You can also do other things. Examples:
-# https://github.com/tmm1/stackprof/blob/master/bin/stackprof
-report = StackProf::Report.new(Marshal.load(IO.binread(PROF_OUTPUT_FILE)))
-report.print_text(
-  options[:sort],
-  options[:limit],
-  options[:select_files],
-  options[:reject_files],
-  options[:select_names],
-  options[:reject_names]
-)
+      %w(GET HEAD POST PUT DELETE).each do |method|
+    it 'accepts #{method} requests when allow_if is true' do
+      mock_app do
+        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
+        run DummyApp
+      end
+      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
+    end
+  end
     
-    html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
-readme_doctree = REXML::Document.new(html_readme)
-links = REXML::XPath.match(readme_doctree, '//a')
+      it 'accepts a session without changes to tracked parameters' do
+    session = {:foo => :bar}
+    get '/', {}, 'rack.session' => session
+    get '/', {}, 'rack.session' => session
+    expect(session[:foo]).to eq(:bar)
+  end
     
-    ###
-### dependencies
-###
+      config.include Rack::Test::Methods
+  config.include SpecHelpers
+end
     
-    ###
-### dependencies
-###
+        expect_any_instance_of(detector).to receive(:call).with(
+      hash_including('foo.bar' => 42)
+    ).and_call_original
     
-      # Set to :debug to see everything in the log.
-  config.log_level = :info
+      private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_book
+      @book = Book.find(params[:id])
+    end
+    
+            def initialize(name, declaration_node, scope)
+          unless VARIABLE_DECLARATION_TYPES.include?(declaration_node.type)
+            raise ArgumentError,
+                  'Node type must be any of #{VARIABLE_DECLARATION_TYPES}, ' \
+                  'passed #{declaration_node.type}'
+          end
+    
+    module RuboCop
+  module Cop
+    module Lint
+      # This cop checks that there are no repeated conditions
+      # used in case 'when' expressions.
+      #
+      # @example
+      #
+      #   # bad
+      #
+      #   case x
+      #   when 'first'
+      #     do_something
+      #   when 'first'
+      #     do_something_else
+      #   end
+      #
+      # @example
+      #
+      #   # good
+      #
+      #   case x
+      #   when 'first'
+      #     do_something
+      #   when 'second'
+      #     do_something_else
+      #   end
+      class DuplicateCaseCondition < Cop
+        MSG = 'Duplicate `when` condition detected.'.freeze
