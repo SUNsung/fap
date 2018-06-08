@@ -1,156 +1,329 @@
 
         
-                    // second, get data from reader, stored it in cache
-            // 1. for each key, allocate the specific matrix on device
-            for (auto& pa : inputMatrices)
-            {
-                const wstring& name = pa.first;
-                const auto& input = pa.second;
-                auto& M = input.GetMatrix<ElemType>();
-                if (m_inputMatricesCache.find(name) == m_inputMatricesCache.end())
-                    m_inputMatricesCache.AddInput(name, make_shared<Matrix<ElemType>>(M, M.GetDeviceId()), input.pMBLayout, input.sampleLayout); // deep copy from M
-                else
-                    m_inputMatricesCache.GetInputMatrix<ElemType>(name).SetValue(M);
-            }
-            // 2. MBlayout
-            m_MBLayoutCache->CopyFrom(net.GetMBLayoutPtrOfNetwork());
-            size_t nParallelSequences = m_MBLayoutCache->GetNumParallelSequences();
+        IPC_MESSAGE_ROUTED3(ShellViewMsg_Object_On_Event,
+                    int /* object id */,
+                    std::string /* event name */,
+                    base::ListValue /* arguments */)
     
-        // fetch entire object into the cache
-    // Does this really make sense?? Should be rather done during computation.
-    void prefetch() const
-    {
-        const msra::math::float4 *p2 = (msra::math::float4 *) this->p;
-        size_t numfloat4s = cols() * colstride / 4;
-        const msra::math::float4 *q = p2 + numfloat4s;
-        const size_t cacherowbytes = 64; // or what?
-        const size_t cacherowfloat4s = cacherowbytes / sizeof(*p2);
-        for (; p2 < q; p2 += cacherowfloat4s)
-            msra::math::float4::prefetch(p2);
+    std::string Clipboard::GetText() {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  base::string16 text;
+  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+  return base::UTF16ToUTF8(text);
+}
+    
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
+    }
     }
     
-            ComputationNodeBasePtr toNode = CopyNode(fromNet, fromNodeName,
-                                                 toNodeName,
-                                                 CopyNodeFlags::copyNodeValue);
     
-    BOOST_FIXTURE_TEST_CASE(MatrixSparseElementWisePower, RandomSeedFixture)
-{
-    Matrix<float> mAdense(c_deviceIdZero);
-    mAdense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim1, dim2, c_deviceIdZero, -3.0f, 0.1f, IncrementCounter()), 0);
-    Matrix<float> mAsparse(mAdense.DeepClone());
-    mAsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
-    }
+    {  if (menu_)
+    menu_->UpdateStates();
+}
     
-        // find all the  BN nodes by evalOrder
-    std::vector<ComputationNodeBasePtr> bnNodes;
-    std::set<ComputationNodeBasePtr> bnNodesLogged; // (avoid double record of batch normalization nodes)
-    for (auto& evalNode : evalNodes)
-    {
-        for (auto& node : m_net->GetEvalOrder(evalNode))
-        {
-            let bnNode = dynamic_pointer_cast<BatchNormalizationNode<ElemType>>(node);
-            if (bnNode)
+                    // cost(i) = CbarVec' * D * CbarVec;
+                cv::Mat cost_mat =  Cbarvec.t() * D * Cbarvec;
+                cost.push_back( cost_mat.at<double>(0) );
+    
+                template<typename T>
+            static __device__ __forceinline__ T atomicMin(T* address, T val)
             {
-                if (bnNodesLogged.insert(node).second)
+#if defined (__CUDA_ARCH__) && (__CUDA_ARCH__ < 120)
+                T count = ::min(*address, val);
+                do
                 {
-                    // reset the statistics states of bn nodes
-                    bnNode->ResetStatisticsState();
-                    bnNode->SetNormalizationTimeConstants(-1, bnNode->NormalizationTimeConstant(),
-                        0, bnNode->BlendTimeConstant());
-                    bnNodes.push_back(node);
-                    // add BN nodes into the evaluation group, then they will be added into root nodes when
-                    // the network re-compile
-                    m_net->AddToNodeGroup(L'evaluation', bnNode);
-                }
-            }
-        }
+                    *address = count;
+                } while (*address > count);
     }
     
-        // ProcessNDLScript - Process the NDL script
-    // script - NDL Script to process
-    // ndlPassUntil - complete processing through this pass, all passes if ndlPassAll
-    // skipThrough - [in/out] for iterative processing, a pointer to an array of NDLNode*, one for each pass
-    //               the pointer will be updated to last node processed for that pass, can be NULL if all node processing is desired
-    // fullValidate - validate as a complete network? (false if this might be a snippet of a full network)
-    void ProcessNDLScript(NDLScript<ElemType>* script, NDLPass ndlPassUntil = ndlPassAll, NDLNode<ElemType>** skipThrough = nullptr, bool fullValidate = false, const std::wstring& dumpFileName = L'')
-    {
-        // if we don't have a script yet, don't bother
-        if (script == nullptr)
-            return;
-    }
-    
-    template void DoConvertFromDbn<float>(const ConfigParameters& config);
-template void DoConvertFromDbn<double>(const ConfigParameters& config);
-template void DoExportToDbn<float>(const ConfigParameters& config);
-template void DoExportToDbn<double>(const ConfigParameters& config);
-
+    CV_EXPORTS_W void compare(InputArray src1, Scalar src2, OutputArray dst, int cmpop);
     
     
-    {private:
-    size_t sourceFileAsIndex; // source file is remembered in the value struct as an index into the static sourceFileMap[]
-    // the meaning of the 'sourceFile' index is global, stored in this static map
-    static vector<SourceFile> sourceFileMap;
+    {}  // namespace caffe
+    
+    
+    {  /**
+   * @brief Computes the error gradient w.r.t. the BNLL inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 };
     
     
-    {
-    {
-    {}}}
+    {  int count_;
+  int num_concats_;
+  int concat_input_size_;
+  int concat_axis_;
+};
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the ELU inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x} = \left\{
+   *        \begin{array}{lr}
+   *            1           & \mathrm{if} \; x > 0 \\
+   *            y + \alpha  & \mathrm{if} \; x \le 0
+   *        \end{array} \right.
+   *      @f$ if propagate_down[0].
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
+    
+      class MatchGroundTruth : public QuickTest ,
+      public ::testing::WithParamInterface<const char*> {
+  };
+  
+  TEST_P(MatchGroundTruth, FastPhototestOCR) {
+    OCRTester(TESTING_DIR '/phototest.tif',
+              TESTING_DIR '/phototest.txt',
+              TESSDATA_DIR '_fast', GetParam());
+  }
+  
+  INSTANTIATE_TEST_CASE_P( EngLatinDevaArabLang, MatchGroundTruth, 
+                        ::testing::Values('eng', 'script/Latin', 'script/Devanagari', 'script/Arabic') );
+    
+    // If true, then AVX has been detected.
+bool SIMDDetect::avx_available_;
+bool SIMDDetect::avx2_available_;
+bool SIMDDetect::avx512F_available_;
+bool SIMDDetect::avx512BW_available_;
+// If true, then SSe4.1 has been detected.
+bool SIMDDetect::sse_available_;
+    
+    // A small event handler class to process incoming events to
+// this window.
+class PGEventHandler : public SVEventHandler {
+  public:
+   PGEventHandler(tesseract::Tesseract* tess) : tess_(tess) {
+   }
+   void Notify(const SVEvent* sve);
+  private:
+    tesseract::Tesseract* tess_;
+};
+    
+    #include 'allheaders.h'
+    
+    /**----------------------------------------------------------------------------
+          Include Files and Type Defines
+----------------------------------------------------------------------------**/
+#include 'strngs.h'
+    
+    
+/**----------------------------------------------------------------------------
+        Global Data Definitions and Declarations
+----------------------------------------------------------------------------**/
+    
+    
+    {  delete tensor;
+  delete tensor2;
+  cout << 'OK' << endl;
+  return 0;
+}
 
     
-        bool haslattice(std::wstring key) const
+    static PyObject* recursive_to_list(
+    char* data, IntList sizes, IntList strides, int64_t dim,
+    ScalarType scalarType, int64_t elementSize)
+{
+  int64_t ndim = sizes.size();
+  if (dim == ndim) {
+    return torch::utils::load_scalar(data, scalarType);
+  }
+  auto n = sizes[dim];
+  auto list = THPObjectPtr(PyList_New(n));
+  if (!list) throw python_error();
+  for (int64_t i = 0; i < n; i++) {
+    PyObject* obj = recursive_to_list(data, sizes, strides, dim + 1, scalarType, elementSize);
+    if (!obj) throw python_error();
+    PyList_SET_ITEM(list.get(), i, obj);
+    data += strides[dim] * elementSize;
+  }
+  return list.release();
+}
+    
+      masterCommandChannel->sendMessage(
+    packMessage(Functions::tensorGeev, re, rv, a, jobvr[0]),
+    THDState::s_current_worker
+  );
+    
+    void THP_decodeInt16Buffer(int16_t* dst, const uint8_t* src, THPByteOrder order, size_t len)
+{
+  for (size_t i = 0; i < len; i++) {
+    dst[i] = (int16_t) (order == THP_BIG_ENDIAN ? decodeUInt16BE(src) : decodeUInt16LE(src));
+    src += sizeof(int16_t);
+  }
+}
+    
+        argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
     {
-#ifdef NONUMLATTICEMMI
-        return denlattices.haslattice(key);
+        const char* arg0;
+    }
+    
+    
+    
+    
+    
+    
+    {        ok &= luaval_to_number(tolua_S, 2,&arg0, 'cc.PhysicsJointGear:setRatio');
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsJointGear_setRatio'', nullptr);
+            return 0;
+        }
+        cobj->setRatio(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.PhysicsJointGear:setRatio',argc, 1);
+    return 0;
+    
+    	b2Fixture* fixtureA = contact->GetFixtureA();
+	b2Fixture* fixtureB = contact->GetFixtureB();
+    
+    	Test();
+	virtual ~Test();
+    
+    #ifndef AddPair_H
+#define AddPair_H
+    
+    namespace A2STR {
+    }
+    
+      bool checkSocketIsReadable_;
+  bool checkSocketIsWritable_;
+    
+    std::string AbstractOptionHandler::toTagString() const
+{
+  std::string s;
+  for (int i = 0; i < MAX_HELP_TAG; ++i) {
+    if (tags_ & (1 << i)) {
+      s += strHelpTag(i);
+      s += ', ';
+    }
+  }
+  if (!s.empty()) {
+    s.resize(s.size() - 2);
+  }
+  return s;
+}
+    
+    
+    {} // namespace aria2
+    
+    class ActivePeerConnectionCommand : public Command {
+private:
+  RequestGroup* requestGroup_;
+  std::shared_ptr<BtRuntime> btRuntime_;
+  std::shared_ptr<PieceStorage> pieceStorage_;
+  std::shared_ptr<PeerStorage> peerStorage_;
+  std::shared_ptr<BtAnnounce> btAnnounce_;
+    }
+    
+    
+    {} // namespace aria2
+
+    
+    AuthConfig::AuthConfig(std::string user, std::string password)
+    : user_(std::move(user)), password_(std::move(password))
+{
+}
+    
+    namespace benchmark {
+namespace {
+#ifdef BENCHMARK_OS_WINDOWS
+typedef WORD PlatformColorCode;
 #else
-        return numlattices.haslattice(key) && denlattices.haslattice(key);
+typedef const char* PlatformColorCode;
 #endif
     }
-    
-    // ---------------------------------------------------------------------------
-// hardcoded_array -- wraps a fixed-size C array together with its size.
-//
-// operator[] checks index bounds in Debug builds. size() is provided such
-// that this class can be substituted for STL vector in many cases.
-// Can be constructed with a size parameter--it will be checked against the
-// hard-coded size.
-// Can also be constructed with an initialization parameter (typ. 0).
-// ---------------------------------------------------------------------------
-    
-        // return the horizontal sum of all 4 components
-    // ... return float4, use another mechanism to store the low word
-    float sum() const
-    {
-        float4 hsum = _mm_hadd_ps(v, v);
-        hsum = _mm_hadd_ps(hsum, hsum);
-        return hsum.f0();
     }
     
-    #if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_playEffect'', nullptr);
-        return 0;
-    }
-#endif
+      // Aborts if the parsing failed.
+  if (value_str == nullptr) return false;
+    
+    // Function to return an string for the calculated complexity
+std::string GetBigOString(BigO complexity);
+    
+    double Finish(Counter const& c, double cpu_time, double num_threads) {
+  double v = c.value;
+  if (c.flags & Counter::kIsRate) {
+    v /= cpu_time;
+  }
+  if (c.flags & Counter::kAvgThreads) {
+    v /= num_threads;
+  }
+  return v;
+}
+    
+      // Do not print iteration on bigO and RMS report
+  if (!run.report_big_o && !run.report_rms) {
+    Out << run.iterations;
+  }
+  Out << ',';
     
     
+    {}  // end namespace
     
+      // FIXME: Add locking to output.
+  template <class Tp>
+  friend LogType& operator<<(LogType&, Tp const&);
+  friend LogType& operator<<(LogType&, EndLType*);
     
+    typedef std::condition_variable Condition;
     
-    
-    
-    	enum
-	{
-		e_count = 30
-	};
-    
-    			b2Body* prevBody = ground;
-			for (int32 i = 0; i < e_count; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position.Set(-4.5f + 1.0f * i, 5.0f);
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&fd);
-    }
+    #include 'sleep.h'
