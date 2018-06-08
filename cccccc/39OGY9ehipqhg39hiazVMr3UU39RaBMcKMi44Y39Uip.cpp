@@ -1,343 +1,454 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+        #if GTEST_HAS_GLOBAL_WSTRING
+  // Converts the given wide string to a narrow string using the UTF-8
+  // encoding, and streams the result to this Message object.
+  Message& operator <<(const ::wstring& wstr);
+#endif  // GTEST_HAS_GLOBAL_WSTRING
     
-    
-    {  std::unique_ptr<PartialRunState> partial_run = MakeUnique<PartialRunState>();
-  partial_run->cancellation_manager = MakeUnique<CancellationManager>();
-  *cancellation_manager = partial_run->cancellation_manager.get();
-  step_id_to_partial_run_[step_id] = std::move(partial_run);
-  return true;
-}
-    
-    #endif  // TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
-
-    
-    
-    {}  // namespace tensorflow
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    namespace internal {
-template <typename T>
-struct functor_traits<scalar_tanh_fast_derivative_op<T> > {
-  enum {
-    Cost = NumTraits<T>::AddCost * 2 + NumTraits<T>::MulCost * 1,
-    PacketAccess = packet_traits<T>::HasAdd && packet_traits<T>::HasMul &&
-                   packet_traits<T>::HasNegate
-  };
-};
-}  // namespace internal
-    
-    void SYCLDeviceContext::CopyDeviceTensorToCPU(const Tensor *device_tensor,
-                                              StringPiece edge_name,
-                                              Device *device,
-                                              Tensor *cpu_tensor,
-                                              StatusCallback done) {
-  const int64 total_bytes = device_tensor->TotalBytes();
-  if (total_bytes > 0) {
-    const void *src_ptr = DMAHelper::base(device_tensor);
-    void *dst_ptr = DMAHelper::base(cpu_tensor);
-    switch (device_tensor->dtype()) {
-      case DT_FLOAT:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_DOUBLE:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<double *>(dst_ptr),
-            static_cast<const double *>(src_ptr), total_bytes);
-        break;
-      case DT_INT32:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT64:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_HALF:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<Eigen::half *>(dst_ptr),
-            static_cast<const Eigen::half *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX64:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<std::complex<float> *>(dst_ptr),
-            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX128:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<std::complex<double> *>(dst_ptr),
-            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
-        break;
-      case DT_INT8:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT16:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT8:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT16:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<uint16 *>(dst_ptr),
-            static_cast<const uint16 *>(src_ptr), total_bytes);
-        break;
-      case DT_BOOL:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
-            total_bytes);
-        break;
-      default:
-        assert(false && 'unsupported type');
-    }
+      // Gets the name of the source file where the test part took place, or
+  // NULL if it's unknown.
+  const char* file_name() const {
+    return file_name_.empty() ? NULL : file_name_.c_str();
   }
-  device->eigen_sycl_device()->synchronize();
-  done(Status::OK());
-}
+    
+    // Define this macro to 1 to omit the definition of SUCCEED(), which
+// is a generic name and clashes with some other libraries.
+#if !GTEST_DONT_DEFINE_SUCCEED
+# define SUCCEED() GTEST_SUCCEED()
+#endif
+    
+      // Returns a copy of the FilePath with the directory part removed.
+  // Example: FilePath('path/to/file').RemoveDirectoryName() returns
+  // FilePath('file'). If there is no directory part ('just_a_file'), it returns
+  // the FilePath unmodified. If there is no file part ('just_a_dir/') it
+  // returns an empty FilePath ('').
+  // On Windows platform, '\' is the path separator, otherwise it is '/'.
+  FilePath RemoveDirectoryName() const;
     
     
-    {
-    {}  // namespace tpu
-}  // namespace tensorflow
-
-    
-      ASSERT_FALSE(DebugIO::IsCopyNodeGateOpen(
-      {DebugWatchAndURLSpec(kWatch2, kGrpcUrl1, true)}));
-  ASSERT_TRUE(DebugIO::IsCopyNodeGateOpen(
-      {DebugWatchAndURLSpec(kWatch2, kGrpcUrl1, false)}));
-    
-    #ifndef TENSORFLOW_DEBUG_GRPC_TESTLIB_H_
-#define TENSORFLOW_DEBUG_GRPC_TESTLIB_H_
-    
-    
-    {  GetReporter()->ReportQPS(*result);
-  GetReporter()->ReportLatency(*result);
-}
-    
-    #include <signal.h>
-    
-    int main(int argc, char** argv) {
-  grpc::testing::InitTest(&argc, &argv, true);
-  signal(SIGINT, sigint_handler);
-    }
-    
-    #include <string>
-    
-    
-    {  const Result start_;
+    {  template <typename U> void copy(linked_ptr<U> const* ptr) {
+    value_ = ptr->get();
+    if (value_)
+      link_.join(&ptr->link_);
+    else
+      link_.join_new();
+  }
 };
     
+        virtual const ParamGeneratorInterface<ParamType>* BaseGenerator() const {
+      return base_;
+    }
+    // Advance should not be called on beyond-of-range iterators
+    // so no component iterators must be beyond end of range, either.
+    virtual void Advance() {
+      assert(!AtEnd());
+      ++current$(i)_;
+    }
     
-    {        // loop through the different passes, processing as we go
-        // skipThrough (when not null) is a pointer to the following structure in the NetNdl class:
-        //     NDLNode<ElemType>* lastNode[ndlPassMax]; // last node we evaluated for each pass
-        NDLNode<ElemType>* lastNode = nullptr;
-        for (NDLPass ndlPass = ndlPassInitial; ndlPass <= ndlPassUntil; ++ndlPass)
-        {
-            NDLNode<ElemType>* skipThroughNode = skipThrough ? *skipThrough : nullptr;
-            lastNode = ProcessPassNDLScript(script, ndlPass, skipThroughNode, fullValidate, dumpFileName);
-            if (skipThrough)
-            {
-                *skipThrough = lastNode;
-                skipThrough++;
-            }
+     private:
+  const UserThreadFunc func_;  // User-supplied thread function.
+  const T param_;  // User-supplied parameter to the thread function.
+  // When non-NULL, used to block execution until the controller thread
+  // notifies.
+  Notification* const thread_can_start_;
+  bool finished_;  // true iff we know that the thread function has finished.
+  pthread_t thread_;  // The native thread object.
+    
+    
+    {  // <TechnicalDetails>
+  //
+  // EXPECT_EQ(expected, actual) is the same as
+  //
+  //   EXPECT_TRUE((expected) == (actual))
+  //
+  // except that it will print both the expected value and the actual
+  // value when the assertion fails.  This is very helpful for
+  // debugging.  Therefore in this case EXPECT_EQ is preferred.
+  //
+  // On the other hand, EXPECT_TRUE accepts any Boolean expression,
+  // and is thus more general.
+  //
+  // </TechnicalDetails>
+}
+    
+    bool TessPDFRenderer::BeginDocumentHandler() {
+  char buf[kBasicBufSize];
+  size_t n;
+    }
+    
+    // Computes a reshaped copy of the weight matrix w. If there are no
+// partial_funcs_, it does nothing.
+void IntSimdMatrix::Init(const GENERIC_2D_ARRAY<int8_t>& w) {
+  if (partial_funcs_.empty()) return;
+  int num_out = w.dim1();
+  int num_in = w.dim2() - 1;
+  // The rounded-up sizes of the reshaped weight matrix, excluding biases.
+  int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
+  int rounded_num_out = RoundOutputs(num_out);
+  // Add the bias and compute the required size.
+  shaped_w_.resize((rounded_num_in + 1) * rounded_num_out, 0);
+  int shaped_index = 0;
+  int output = 0;
+  // Each number of registers needs a different format! Iterates over the
+  // different numbers of registers (each a power of 2).
+  for (int num_registers = max_output_registers_; num_registers >= 1;
+       num_registers /= 2) {
+    // The number of outputs that we will generate with this many registers.
+    int num_outputs_per_register_set =
+        num_registers * num_outputs_per_register_;
+    // Use the max number of registers until we have to go fewer.
+    while (output + num_outputs_per_register_set <= rounded_num_out) {
+      // Accumulating outputs in registers saves iterating over the inputs, so
+      // we only have to do it once per output register set.
+      for (int input = 0; input < num_in; input += num_inputs_per_group_) {
+        // Iterate over the number of outputs in a register set.
+        for (int j = 0; j < num_outputs_per_register_set; ++j) {
+          // Inner-most loop corresponds to the number of inputs in an input
+          // group.
+          for (int i = 0; i < num_inputs_per_group_; ++i) {
+            int8_t weight = 0;
+            if (output + j < num_out && input + i < num_in)
+              weight = w(output + j, input + i);
+            shaped_w_[shaped_index++] = weight;
+          }
         }
-    }
-    
-    // The following ifdef block is the standard way of creating macros which make exporting
-// from a DLL simpler. All files within this DLL are compiled with the DATAWRITER_EXPORTS
-// symbol defined on the command line. This symbol should not be defined on any project
-// that uses this DLL. This way any other project whose source files include this file see
-// DATAWRITER_API functions as being imported from a DLL, whereas this DLL sees symbols
-// defined with this macro as being exported.
-#ifdef _WIN32
-#if defined(DATAWRITER_EXPORTS)
-#define DATAWRITER_API __declspec(dllexport)
-#elif defined(DATAWRITER_LOCAL)
-#define DATAWRITER_API
-#else
-#define DATAWRITER_API __declspec(dllimport)
-#endif
-#else
-#define DATAWRITER_API
-#endif
-    
-    
-    {public:
-    inline hardcoded_array() throw()
-    {
-    }
-    inline hardcoded_array(size_t n) throw()
-    {
-        check_size(n);
-    } // we can instantiate with a size parameter--just checks the size
-    inline hardcoded_array(size_t n, const _T& val) throw()
-    {
-        check_size(n);
-        for (size_t i = 0; i < n; i++)
-            data[i] = val;
-    }
-    inline _T& operator[](size_t i) throw()
-    {
-        check_index(i);
-        return data[i];
-    }
-    inline const _T& operator[](size_t i) const throw()
-    {
-        check_index(i);
-        return data[i];
-    }
-    inline size_t size() const throw()
-    {
-        return _N;
-    }
-};
-
-    
-    bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    #endif // __cocos2dx_cocosdenshion_h__
-
-    
-    
-    
-    			b2PolygonShape shape;
-			shape.Set(vertices, 3);
-    
-    #include <cstdint>
-#include <iosfwd>
-#include <typeinfo>
-#include <vector>
-    
-    TEST_F(OrderingTest, to_ordering) {
-  EXPECT_EQ(ordering::lt, to_ordering(int(ordering::lt)));
-  EXPECT_EQ(ordering::eq, to_ordering(int(ordering::eq)));
-  EXPECT_EQ(ordering::gt, to_ordering(int(ordering::gt)));
-    }
-    
-    #include <folly/CPortability.h>
-#include <folly/Optional.h>
-    
-      folly::Optional<T> try_take_for(std::chrono::milliseconds time) override {
-    T item;
-    while (!queue_.try_dequeue(item)) {
-      if (!sem_.try_wait_for(time)) {
-        return folly::none;
       }
+      // Append the bias weights for the register set.
+      for (int j = 0; j < num_outputs_per_register_set; ++j) {
+        int8_t weight = 0;
+        if (output + j < num_out) weight = w(output + j, num_in);
+        shaped_w_[shaped_index++] = weight;
+      }
+      output += num_outputs_per_register_set;
     }
-    return std::move(item);
-  }
-    
-    /** Set implemented as an ordered singly-linked list.
- *
- *  A single writer thread may add or remove elements. Multiple reader
- *  threads may search the set concurrently with each other and with
- *  the writer's operations.
- */
-template <typename T, template <typename> class Atom = std::atomic>
-class HazptrSWMRSet {
-  template <typename Node>
-  struct Reclaimer {
-    void operator()(Node* p) {
-      delete p;
-    }
-  };
-    }
-    
-     public:
-  HazptrWideCAS() : node_(new Node()) {}
-    
-    
-    {  // equal_range
-  for (auto value : {buddy, hello, stake, world, zebra}) {
-    EXPECT_TRUE(
-        std::make_pair(s.lower_bound(value), s.upper_bound(value)) ==
-        s.equal_range(value))
-        << value;
   }
 }
     
-    #ifndef __APPLE__ // TODO #7372389
-/// Simple executor that does work in another thread
-class ThreadExecutor : public Executor {
-  folly::MPMCQueue<Func> funcs;
-  std::atomic<bool> done {false};
-  std::thread worker;
-  folly::Baton<> baton;
+    struct OSResults {
+  OSResults() : unicharset(nullptr) {
+    for (int i = 0; i < 4; ++i) {
+      for (int j = 0; j < kMaxNumberOfScripts; ++j)
+        scripts_na[i][j] = 0;
+      orientations[i] = 0;
+    }
+  }
+  void update_best_orientation();
+  // Set the estimate of the orientation to the given id.
+  void set_best_orientation(int orientation_id);
+  // Update/Compute the best estimate of the script assuming the given
+  // orientation id.
+  void update_best_script(int orientation_id);
+  // Return the index of the script with the highest score for this orientation.
+  TESS_API int get_best_script(int orientation_id) const;
+  // Accumulate scores with given OSResults instance and update the best script.
+  void accumulate(const OSResults& osr);
     }
     
-      virtual bool Merge(const Slice& key,
-                     const Slice* existing_value,
-                     const Slice& value,
-                     std::string* new_value,
-                     Logger* logger) const override;
-    
-      /// Set (list: key)[idx] = val. Return true on success, false on fail
-  /// May throw RedisListException
-  bool Set(const std::string& key, int32_t index, const std::string& value);
-    
-      StatisticsJni::StatisticsJni(std::shared_ptr<Statistics> stats,
-      const std::set<uint32_t> ignore_histograms) : StatisticsImpl(stats, false),
-      m_ignore_histograms(ignore_histograms) {
+      // Compute the number of unichars in the label.
+  GenericVector<UNICHAR_ID> encoding;
+  if (!unicharset.encode_string(label, true, &encoding, nullptr, nullptr)) {
+    tprintf('Not outputting illegal unichar %s\n', label);
+    return;
   }
     
-      if(m_jSliceB != nullptr) {
-    env->DeleteGlobalRef(m_jSliceB);
-  }
+    #define UNLV_EXT  '.uzn'  // unlv zone file
     
+    #endif  // TESSERACT_CCSTRUCT_DPPOINT_H_
+
     
-    {} // namespace aria2
+    const int16_t idirtab[] = {
+  1000, 0, 998, 49, 995, 98, 989, 146,
+  980, 195, 970, 242, 956, 290, 941, 336,
+  923, 382, 903, 427, 881, 471, 857, 514,
+  831, 555, 803, 595, 773, 634, 740, 671,
+  707, 707, 671, 740, 634, 773, 595, 803,
+  555, 831, 514, 857, 471, 881, 427, 903,
+  382, 923, 336, 941, 290, 956, 242, 970,
+  195, 980, 146, 989, 98, 995, 49, 998,
+  0, 1000, -49, 998, -98, 995, -146, 989,
+  -195, 980, -242, 970, -290, 956, -336, 941,
+  -382, 923, -427, 903, -471, 881, -514, 857,
+  -555, 831, -595, 803, -634, 773, -671, 740,
+  -707, 707, -740, 671, -773, 634, -803, 595,
+  -831, 555, -857, 514, -881, 471, -903, 427,
+  -923, 382, -941, 336, -956, 290, -970, 242,
+  -980, 195, -989, 146, -995, 98, -998, 49,
+  -1000, 0, -998, -49, -995, -98, -989, -146,
+  -980, -195, -970, -242, -956, -290, -941, -336,
+  -923, -382, -903, -427, -881, -471, -857, -514,
+  -831, -555, -803, -595, -773, -634, -740, -671,
+  -707, -707, -671, -740, -634, -773, -595, -803,
+  -555, -831, -514, -857, -471, -881, -427, -903,
+  -382, -923, -336, -941, -290, -956, -242, -970,
+  -195, -980, -146, -989, -98, -995, -49, -998,
+  0, -1000, 49, -998, 98, -995, 146, -989,
+  195, -980, 242, -970, 290, -956, 336, -941,
+  382, -923, 427, -903, 471, -881, 514, -857,
+  555, -831, 595, -803, 634, -773, 671, -740,
+  707, -707, 740, -671, 773, -634, 803, -595,
+  831, -555, 857, -514, 881, -471, 903, -427,
+  923, -382, 941, -336, 956, -290, 970, -242,
+  980, -195, 989, -146, 995, -98, 998, -49
+};
     
-    #include 'AbstractCommand.h'
+    #include 'otsuthr.h'
     
-    // DiskwriterFactory class template to create DiskWriter derived
-// object, ignoring filename.
-template <class DiskWriterType>
-class AnonDiskWriterFactory : public DiskWriterFactory {
-public:
-  AnonDiskWriterFactory() = default;
-  virtual ~AnonDiskWriterFactory() = default;
+        void add(           //add element
+             double x,  //coords to add
+             double y);
+    void remove(           //delete element
+                double x,  //coords to delete
+                double y);
+    int32_t count() {  //no of elements
+      return n;
     }
     
-    #include 'Notifier.h'
+    #include 'test/cpp/qps/report.h'
     
-      virtual bool good() const CXX11_OVERRIDE { return true; }
+    #if defined(WIN32)
+#define GRPC_SUPPORT_EXPORT
+#else
+#define GRPC_SUPPORT_EXPORT __attribute__((visibility('default')))
+#endif
+    
+      bool Match(const std::string& prefix) {
+    bool eq = db_.substr(current_, prefix.size()) == prefix;
+    current_ += prefix.size();
+    return eq;
+  }
+    
+    gpr_atm grpc::testing::interop::g_got_sigint;
+    
+    void freeifaddrs(struct ifaddrs* addrs) {
+	struct ifaddrs* last = NULL;
+	struct ifaddrs* cursor = addrs;
+	while (cursor) {
+		delete[] cursor->ifa_name;
+		delete cursor->ifa_addr;
+		delete cursor->ifa_netmask;
+		last = cursor;
+		cursor = cursor->ifa_next;
+		delete last;
+	}
+}
+
+    
+    
+    {	StreamPeerMbedTLS();
+	~StreamPeerMbedTLS();
+};
+    
+    
+    {		} break;
+    
+    /// It performs an additional check allow exclusions.
+struct GodotClosestRayResultCallback : public btCollisionWorld::ClosestRayResultCallback {
+	const Set<RID> *m_exclude;
+	bool m_pickRay;
+	int m_shapeId;
+    }
+    
+    #endif
+
+    
+    
+/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q15
+static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4(opus_val16 a, opus_val32 b)
+{
+  unsigned rd_lo;
+  int rd_hi;
+  __asm__(
+      '#MULT16_32_Q15\n\t'
+      'smull %0, %1, %2, %3\n\t'
+      : '=&r'(rd_lo), '=&r'(rd_hi)
+      : '%r'(b), 'r'(a<<16)
+  );
+  /*We intentionally don't OR in the high bit of rd_lo for speed.*/
+  return rd_hi<<1;
+}
+#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv4(a, b))
+    
+      static void validate(const Buffers& buffer_sequence)
+  {
+    typename Buffers::const_iterator iter = buffer_sequence.begin();
+    typename Buffers::const_iterator end = buffer_sequence.end();
+    for (; iter != end; ++iter)
+    {
+      Buffer buffer(*iter);
+      boost::asio::buffer_cast<const void*>(buffer);
+    }
+  }
+    
+    } // namespace date_time
+namespace posix_time {
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+# include <boost/asio/detail/null_event.hpp>
+#elif defined(BOOST_ASIO_WINDOWS)
+# include <boost/asio/detail/win_event.hpp>
+#elif defined(BOOST_ASIO_HAS_PTHREADS)
+# include <boost/asio/detail/posix_event.hpp>
+#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
+# include <boost/asio/detail/std_event.hpp>
+#else
+# error Only Windows, POSIX and std::condition_variable are supported!
+#endif
+    
+    #endif // BOOST_ASIO_DETAIL_FUNCTION_HPP
+
+    
+    #include <boost/asio/detail/config.hpp>
+#include <boost/asio/detail/addressof.hpp>
+#include <boost/asio/handler_invoke_hook.hpp>
+    
+    #include <boost/asio/detail/pop_options.hpp>
+    
+    // Handler for Win32 messages, update mouse/keyboard data.
+// You may or not need this for your implementation, but it can serve as reference for handling inputs.
+// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
+/*
+IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+*/
+
+    
+    
+    {    ImGuiIO& io = ImGui::GetIO();
+    switch (msg)
+    {
+    case WM_LBUTTONDOWN: case WM_LBUTTONDBLCLK:
+    case WM_RBUTTONDOWN: case WM_RBUTTONDBLCLK:
+    case WM_MBUTTONDOWN: case WM_MBUTTONDBLCLK:
+    {
+        int button = 0;
+        if (msg == WM_LBUTTONDOWN || msg == WM_LBUTTONDBLCLK) button = 0;
+        if (msg == WM_RBUTTONDOWN || msg == WM_RBUTTONDBLCLK) button = 1;
+        if (msg == WM_MBUTTONDOWN || msg == WM_MBUTTONDBLCLK) button = 2;
+        if (!ImGui::IsAnyMouseDown() && ::GetCapture() == NULL)
+            ::SetCapture(hwnd);
+        io.MouseDown[button] = true;
+        return 0;
+    }
+    case WM_LBUTTONUP:
+    case WM_RBUTTONUP:
+    case WM_MBUTTONUP:
+    {
+        int button = 0;
+        if (msg == WM_LBUTTONUP) button = 0;
+        if (msg == WM_RBUTTONUP) button = 1;
+        if (msg == WM_MBUTTONUP) button = 2;
+        io.MouseDown[button] = false;
+        if (!ImGui::IsAnyMouseDown() && ::GetCapture() == hwnd)
+            ::ReleaseCapture();
+        return 0;
+    }
+    case WM_MOUSEWHEEL:
+        io.MouseWheel += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
+        return 0;
+    case WM_MOUSEHWHEEL:
+        io.MouseWheelH += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
+        return 0;
+    case WM_MOUSEMOVE:
+        io.MousePos.x = (signed short)(lParam);
+        io.MousePos.y = (signed short)(lParam >> 16);
+        return 0;
+    case WM_KEYDOWN:
+    case WM_SYSKEYDOWN:
+        if (wParam < 256)
+            io.KeysDown[wParam] = 1;
+        return 0;
+    case WM_KEYUP:
+    case WM_SYSKEYUP:
+        if (wParam < 256)
+            io.KeysDown[wParam] = 0;
+        return 0;
+    case WM_CHAR:
+        // You can also use ToAscii()+GetKeyboardState() to retrieve characters.
+        if (wParam > 0 && wParam < 0x10000)
+            io.AddInputCharacter((unsigned short)wParam);
+        return 0;
+    case WM_SETCURSOR:
+        if (LOWORD(lParam) == HTCLIENT && ImGui_ImplWin32_UpdateMouseCursor())
+            return 1;
+        return 0;
+    }
+    return 0;
+}
+    
+            // 1. Show a simple window.
+        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    }
+    
+            // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        s3eKeyboardUpdate();
+        s3ePointerUpdate();
+        ImGui_Marmalade_NewFrame();
+    
+            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
+        if (show_demo_window)
+        {
+            ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
+            ImGui::ShowDemoWindow(&show_demo_window);
+        }
+    
+        void ReleaseBooleanArrayElements(jbooleanArray array, jboolean* elems,
+        jint mode)
+    { functions->ReleaseBooleanArrayElements(this, array, elems, mode); }
+    void ReleaseByteArrayElements(jbyteArray array, jbyte* elems,
+        jint mode)
+    { functions->ReleaseByteArrayElements(this, array, elems, mode); }
+    void ReleaseCharArrayElements(jcharArray array, jchar* elems,
+        jint mode)
+    { functions->ReleaseCharArrayElements(this, array, elems, mode); }
+    void ReleaseShortArrayElements(jshortArray array, jshort* elems,
+        jint mode)
+    { functions->ReleaseShortArrayElements(this, array, elems, mode); }
+    void ReleaseIntArrayElements(jintArray array, jint* elems,
+        jint mode)
+    { functions->ReleaseIntArrayElements(this, array, elems, mode); }
+    void ReleaseLongArrayElements(jlongArray array, jlong* elems,
+        jint mode)
+    { functions->ReleaseLongArrayElements(this, array, elems, mode); }
+    void ReleaseFloatArrayElements(jfloatArray array, jfloat* elems,
+        jint mode)
+    { functions->ReleaseFloatArrayElements(this, array, elems, mode); }
+    void ReleaseDoubleArrayElements(jdoubleArray array, jdouble* elems,
+        jint mode)
+    { functions->ReleaseDoubleArrayElements(this, array, elems, mode); }
+    
+    #include './Config.hh'
+    
+    
+    {    YGNodeSetMeasureFunc(m_node, &globalMeasureFunc);
+}
+    
+        void insertChild(Node * child, unsigned index);
+    void removeChild(Node * child);
+    
+    
+    {  // There are subtle issues with calling the next functions directly. It is
+  // much better to always use a ThreadScope to manage attaching/detaching for
+  // you.
+  FBEXPORT static JNIEnv* ensureCurrentThreadIsAttached();
+  FBEXPORT static void detachCurrentThread();
+};
+    
+      ProgramLocation(const char* functionName, const char* fileName, int line) :
+      m_functionName(functionName),
+      m_fileName(fileName),
+      m_lineNumber(line)
+    {}
+    
+    // This allows storing the assert message before the current process terminates due to a crash
+typedef void (*AssertHandler)(const char* message);
+void setAssertHandler(AssertHandler assertHandler);
