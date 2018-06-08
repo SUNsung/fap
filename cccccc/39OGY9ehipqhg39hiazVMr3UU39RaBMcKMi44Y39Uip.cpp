@@ -1,454 +1,375 @@
 
         
-        #if GTEST_HAS_GLOBAL_WSTRING
-  // Converts the given wide string to a narrow string using the UTF-8
-  // encoding, and streams the result to this Message object.
-  Message& operator <<(const ::wstring& wstr);
-#endif  // GTEST_HAS_GLOBAL_WSTRING
-    
-      // Gets the name of the source file where the test part took place, or
-  // NULL if it's unknown.
-  const char* file_name() const {
-    return file_name_.empty() ? NULL : file_name_.c_str();
-  }
-    
-    // Define this macro to 1 to omit the definition of SUCCEED(), which
-// is a generic name and clashes with some other libraries.
-#if !GTEST_DONT_DEFINE_SUCCEED
-# define SUCCEED() GTEST_SUCCEED()
+        
+    {        return dlsym(h, name);
+    }
+    #define CV_CL_GET_PROC_ADDRESS(name) GetProcAddress(name)
 #endif
     
-      // Returns a copy of the FilePath with the directory part removed.
-  // Example: FilePath('path/to/file').RemoveDirectoryName() returns
-  // FilePath('file'). If there is no directory part ('just_a_file'), it returns
-  // the FilePath unmodified. If there is no file part ('just_a_dir/') it
-  // returns an empty FilePath ('').
-  // On Windows platform, '\' is the path separator, otherwise it is '/'.
-  FilePath RemoveDirectoryName() const;
+    TEST_F(UnicharcompressTest, DoesMarathi) {
+  LOG(INFO) << 'Testing mar';
+  LoadUnicharset('mar.unicharset');
+  ExpectCorrect('mar');
+}
+    
+    // dims=[5, 4, 3, 2]->[4, 3, 5, 2]
+TEST_F(MatrixTest, RotatingTranspose_0_2) {
+  GENERIC_2D_ARRAY<int> m;
+  src_.RotatingTranspose(dims_, kNumDims_, 0, 2, &m);
+  m.ResizeNoInit(kInputSize_ / 2, 2);
+  // Verify that the result is:
+  // output tensor=[[[[0, 1][24, 25][48, 49][72, 73][96, 97]]
+  //                 [[2, 3][26, 27][50, 51][74, 75][98, 99]]
+  //                 [[4, 5][28, 29][52, 53][76, 77][100, 101]]]
+  //                [[[6, 7]...
+  EXPECT_EQ(0, m(0, 0));
+  EXPECT_EQ(1, m(0, 1));
+  EXPECT_EQ(24, m(1, 0));
+  EXPECT_EQ(25, m(1, 1));
+  EXPECT_EQ(96, m(4, 0));
+  EXPECT_EQ(97, m(4, 1));
+  EXPECT_EQ(2, m(5, 0));
+  EXPECT_EQ(6, m(15, 0));
+}
+    
+    ResultIterator::ResultIterator(const LTRResultIterator &resit)
+    : LTRResultIterator(resit) {
+  in_minor_direction_ = false;
+  at_beginning_of_minor_run_ = false;
+  preserve_interword_spaces_ = false;
+    }
     
     
-    {  template <typename U> void copy(linked_ptr<U> const* ptr) {
-    value_ = ptr->get();
-    if (value_)
-      link_.join(&ptr->link_);
-    else
-      link_.join_new();
-  }
+    {  int32_t local_cost_;    // Cost of this point on its own.
+  int32_t total_cost_;    // Sum of all costs in best path to here.
+                        // During cost calculations local_cost is excluded.
+  int32_t total_steps_;   // Number of steps in best path to here.
+  const DPPoint* best_prev_;  // Pointer to prev point in best path from here.
+  // Information for computing the variance part of the cost.
+  int32_t n_;             // Number of steps in best path to here for variance.
+  int32_t sig_x_;         // Sum of step sizes for computing variance.
+  int64_t sig_xsq_;       // Sum of squares of steps for computing variance.
 };
     
-        virtual const ParamGeneratorInterface<ParamType>* BaseGenerator() const {
-      return base_;
-    }
-    // Advance should not be called on beyond-of-range iterators
-    // so no component iterators must be beyond end of range, either.
-    virtual void Advance() {
-      assert(!AtEnd());
-      ++current$(i)_;
-    }
     
-     private:
-  const UserThreadFunc func_;  // User-supplied thread function.
-  const T param_;  // User-supplied parameter to the thread function.
-  // When non-NULL, used to block execution until the controller thread
-  // notifies.
-  Notification* const thread_can_start_;
-  bool finished_;  // true iff we know that the thread function has finished.
-  pthread_t thread_;  // The native thread object.
+    { private:
+  double total_weight;         // no of elements or sum of weights.
+  double sigx;                 // sum of x
+  double sigy;                 // sum of y
+  double sigxx;                // sum x squared
+  double sigxy;                // sum of xy
+  double sigyy;                // sum y squared
+};
     
     
-    {  // <TechnicalDetails>
-  //
-  // EXPECT_EQ(expected, actual) is the same as
-  //
-  //   EXPECT_TRUE((expected) == (actual))
-  //
-  // except that it will print both the expected value and the actual
-  // value when the assertion fails.  This is very helpful for
-  // debugging.  Therefore in this case EXPECT_EQ is preferred.
-  //
-  // On the other hand, EXPECT_TRUE accepts any Boolean expression,
-  // and is thus more general.
-  //
-  // </TechnicalDetails>
-}
-    
-    bool TessPDFRenderer::BeginDocumentHandler() {
-  char buf[kBasicBufSize];
-  size_t n;
-    }
-    
-    // Computes a reshaped copy of the weight matrix w. If there are no
-// partial_funcs_, it does nothing.
-void IntSimdMatrix::Init(const GENERIC_2D_ARRAY<int8_t>& w) {
-  if (partial_funcs_.empty()) return;
-  int num_out = w.dim1();
-  int num_in = w.dim2() - 1;
-  // The rounded-up sizes of the reshaped weight matrix, excluding biases.
-  int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
-  int rounded_num_out = RoundOutputs(num_out);
-  // Add the bias and compute the required size.
-  shaped_w_.resize((rounded_num_in + 1) * rounded_num_out, 0);
-  int shaped_index = 0;
-  int output = 0;
-  // Each number of registers needs a different format! Iterates over the
-  // different numbers of registers (each a power of 2).
-  for (int num_registers = max_output_registers_; num_registers >= 1;
-       num_registers /= 2) {
-    // The number of outputs that we will generate with this many registers.
-    int num_outputs_per_register_set =
-        num_registers * num_outputs_per_register_;
-    // Use the max number of registers until we have to go fewer.
-    while (output + num_outputs_per_register_set <= rounded_num_out) {
-      // Accumulating outputs in registers saves iterating over the inputs, so
-      // we only have to do it once per output register set.
-      for (int input = 0; input < num_in; input += num_inputs_per_group_) {
-        // Iterate over the number of outputs in a register set.
-        for (int j = 0; j < num_outputs_per_register_set; ++j) {
-          // Inner-most loop corresponds to the number of inputs in an input
-          // group.
-          for (int i = 0; i < num_inputs_per_group_; ++i) {
-            int8_t weight = 0;
-            if (output + j < num_out && input + i < num_in)
-              weight = w(output + j, input + i);
-            shaped_w_[shaped_index++] = weight;
-          }
-        }
-      }
-      // Append the bias weights for the register set.
-      for (int j = 0; j < num_outputs_per_register_set; ++j) {
-        int8_t weight = 0;
-        if (output + j < num_out) weight = w(output + j, num_in);
-        shaped_w_[shaped_index++] = weight;
-      }
-      output += num_outputs_per_register_set;
-    }
-  }
-}
-    
-    struct OSResults {
-  OSResults() : unicharset(nullptr) {
-    for (int i = 0; i < 4; ++i) {
-      for (int j = 0; j < kMaxNumberOfScripts; ++j)
-        scripts_na[i][j] = 0;
-      orientations[i] = 0;
-    }
-  }
-  void update_best_orientation();
-  // Set the estimate of the orientation to the given id.
-  void set_best_orientation(int orientation_id);
-  // Update/Compute the best estimate of the script assuming the given
-  // orientation id.
-  void update_best_script(int orientation_id);
-  // Return the index of the script with the highest score for this orientation.
-  TESS_API int get_best_script(int orientation_id) const;
-  // Accumulate scores with given OSResults instance and update the best script.
-  void accumulate(const OSResults& osr);
-    }
-    
-      // Compute the number of unichars in the label.
-  GenericVector<UNICHAR_ID> encoding;
-  if (!unicharset.encode_string(label, true, &encoding, nullptr, nullptr)) {
-    tprintf('Not outputting illegal unichar %s\n', label);
+    {  low = 0;
+  if (fc.y () == 0) {
+    if (fc.x () >= 0)
+      dir = 0;
+    else
+      dir = MODULUS / 2;
     return;
   }
-    
-    #define UNLV_EXT  '.uzn'  // unlv zone file
-    
-    #endif  // TESSERACT_CCSTRUCT_DPPOINT_H_
-
-    
-    const int16_t idirtab[] = {
-  1000, 0, 998, 49, 995, 98, 989, 146,
-  980, 195, 970, 242, 956, 290, 941, 336,
-  923, 382, 903, 427, 881, 471, 857, 514,
-  831, 555, 803, 595, 773, 634, 740, 671,
-  707, 707, 671, 740, 634, 773, 595, 803,
-  555, 831, 514, 857, 471, 881, 427, 903,
-  382, 923, 336, 941, 290, 956, 242, 970,
-  195, 980, 146, 989, 98, 995, 49, 998,
-  0, 1000, -49, 998, -98, 995, -146, 989,
-  -195, 980, -242, 970, -290, 956, -336, 941,
-  -382, 923, -427, 903, -471, 881, -514, 857,
-  -555, 831, -595, 803, -634, 773, -671, 740,
-  -707, 707, -740, 671, -773, 634, -803, 595,
-  -831, 555, -857, 514, -881, 471, -903, 427,
-  -923, 382, -941, 336, -956, 290, -970, 242,
-  -980, 195, -989, 146, -995, 98, -998, 49,
-  -1000, 0, -998, -49, -995, -98, -989, -146,
-  -980, -195, -970, -242, -956, -290, -941, -336,
-  -923, -382, -903, -427, -881, -471, -857, -514,
-  -831, -555, -803, -595, -773, -634, -740, -671,
-  -707, -707, -671, -740, -634, -773, -595, -803,
-  -555, -831, -514, -857, -471, -881, -427, -903,
-  -382, -923, -336, -941, -290, -956, -242, -970,
-  -195, -980, -146, -989, -98, -995, -49, -998,
-  0, -1000, 49, -998, 98, -995, 146, -989,
-  195, -980, 242, -970, 290, -956, 336, -941,
-  382, -923, 427, -903, 471, -881, 514, -857,
-  555, -831, 595, -803, 634, -773, 671, -740,
-  707, -707, 740, -671, 773, -634, 803, -595,
-  831, -555, 857, -514, 881, -471, 903, -427,
-  923, -382, 941, -336, 956, -290, 970, -242,
-  980, -195, 989, -146, 995, -98, 998, -49
-};
-    
-    #include 'otsuthr.h'
-    
-        void add(           //add element
-             double x,  //coords to add
-             double y);
-    void remove(           //delete element
-                double x,  //coords to delete
-                double y);
-    int32_t count() {  //no of elements
-      return n;
-    }
-    
-    #include 'test/cpp/qps/report.h'
-    
-    #if defined(WIN32)
-#define GRPC_SUPPORT_EXPORT
-#else
-#define GRPC_SUPPORT_EXPORT __attribute__((visibility('default')))
-#endif
-    
-      bool Match(const std::string& prefix) {
-    bool eq = db_.substr(current_, prefix.size()) == prefix;
-    current_ += prefix.size();
-    return eq;
+  high = MODULUS;
+  do {
+    current = (high + low) / 2;
+    if (dirtab[current] * fc >= 0)
+      low = current;
+    else
+      high = current;
   }
-    
-    gpr_atm grpc::testing::interop::g_got_sigint;
-    
-    void freeifaddrs(struct ifaddrs* addrs) {
-	struct ifaddrs* last = NULL;
-	struct ifaddrs* cursor = addrs;
-	while (cursor) {
-		delete[] cursor->ifa_name;
-		delete cursor->ifa_addr;
-		delete cursor->ifa_netmask;
-		last = cursor;
-		cursor = cursor->ifa_next;
-		delete last;
-	}
+  while (high - low > 1);
+  dir = low;
 }
 
     
     
-    {	StreamPeerMbedTLS();
-	~StreamPeerMbedTLS();
-};
+/**********************************************************************
+ * ROW::move
+ *
+ * Reposition row by vector
+ **********************************************************************/
     
-    
-    {		} break;
-    
-    /// It performs an additional check allow exclusions.
-struct GodotClosestRayResultCallback : public btCollisionWorld::ClosestRayResultCallback {
-	const Set<RID> *m_exclude;
-	bool m_pickRay;
-	int m_shapeId;
-    }
-    
-    #endif
-
-    
-    
-/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q15
-static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4(opus_val16 a, opus_val32 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      '#MULT16_32_Q15\n\t'
-      'smull %0, %1, %2, %3\n\t'
-      : '=&r'(rd_lo), '=&r'(rd_hi)
-      : '%r'(b), 'r'(a<<16)
-  );
-  /*We intentionally don't OR in the high bit of rd_lo for speed.*/
-  return rd_hi<<1;
-}
-#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv4(a, b))
-    
-      static void validate(const Buffers& buffer_sequence)
-  {
-    typename Buffers::const_iterator iter = buffer_sequence.begin();
-    typename Buffers::const_iterator end = buffer_sequence.end();
-    for (; iter != end; ++iter)
-    {
-      Buffer buffer(*iter);
-      boost::asio::buffer_cast<const void*>(buffer);
-    }
-  }
-    
-    } // namespace date_time
-namespace posix_time {
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-# include <boost/asio/detail/null_event.hpp>
-#elif defined(BOOST_ASIO_WINDOWS)
-# include <boost/asio/detail/win_event.hpp>
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-# include <boost/asio/detail/posix_event.hpp>
-#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-# include <boost/asio/detail/std_event.hpp>
-#else
-# error Only Windows, POSIX and std::condition_variable are supported!
-#endif
-    
-    #endif // BOOST_ASIO_DETAIL_FUNCTION_HPP
-
-    
-    #include <boost/asio/detail/config.hpp>
-#include <boost/asio/detail/addressof.hpp>
-#include <boost/asio/handler_invoke_hook.hpp>
-    
-    #include <boost/asio/detail/pop_options.hpp>
-    
-    // Handler for Win32 messages, update mouse/keyboard data.
-// You may or not need this for your implementation, but it can serve as reference for handling inputs.
-// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
-/*
-IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    /**
+ * Possible types for a POLY_BLOCK or ColPartition.
+ * Must be kept in sync with kPBColors in polyblk.cpp and PTIs*Type functions
+ * below, as well as kPolyBlockNames in publictypes.cpp.
+ * Used extensively by ColPartition, and POLY_BLOCK.
 */
-
-    
-    
-    {    ImGuiIO& io = ImGui::GetIO();
-    switch (msg)
-    {
-    case WM_LBUTTONDOWN: case WM_LBUTTONDBLCLK:
-    case WM_RBUTTONDOWN: case WM_RBUTTONDBLCLK:
-    case WM_MBUTTONDOWN: case WM_MBUTTONDBLCLK:
-    {
-        int button = 0;
-        if (msg == WM_LBUTTONDOWN || msg == WM_LBUTTONDBLCLK) button = 0;
-        if (msg == WM_RBUTTONDOWN || msg == WM_RBUTTONDBLCLK) button = 1;
-        if (msg == WM_MBUTTONDOWN || msg == WM_MBUTTONDBLCLK) button = 2;
-        if (!ImGui::IsAnyMouseDown() && ::GetCapture() == NULL)
-            ::SetCapture(hwnd);
-        io.MouseDown[button] = true;
-        return 0;
-    }
-    case WM_LBUTTONUP:
-    case WM_RBUTTONUP:
-    case WM_MBUTTONUP:
-    {
-        int button = 0;
-        if (msg == WM_LBUTTONUP) button = 0;
-        if (msg == WM_RBUTTONUP) button = 1;
-        if (msg == WM_MBUTTONUP) button = 2;
-        io.MouseDown[button] = false;
-        if (!ImGui::IsAnyMouseDown() && ::GetCapture() == hwnd)
-            ::ReleaseCapture();
-        return 0;
-    }
-    case WM_MOUSEWHEEL:
-        io.MouseWheel += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
-        return 0;
-    case WM_MOUSEHWHEEL:
-        io.MouseWheelH += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
-        return 0;
-    case WM_MOUSEMOVE:
-        io.MousePos.x = (signed short)(lParam);
-        io.MousePos.y = (signed short)(lParam >> 16);
-        return 0;
-    case WM_KEYDOWN:
-    case WM_SYSKEYDOWN:
-        if (wParam < 256)
-            io.KeysDown[wParam] = 1;
-        return 0;
-    case WM_KEYUP:
-    case WM_SYSKEYUP:
-        if (wParam < 256)
-            io.KeysDown[wParam] = 0;
-        return 0;
-    case WM_CHAR:
-        // You can also use ToAscii()+GetKeyboardState() to retrieve characters.
-        if (wParam > 0 && wParam < 0x10000)
-            io.AddInputCharacter((unsigned short)wParam);
-        return 0;
-    case WM_SETCURSOR:
-        if (LOWORD(lParam) == HTCLIENT && ImGui_ImplWin32_UpdateMouseCursor())
-            return 1;
-        return 0;
-    }
-    return 0;
-}
-    
-            // 1. Show a simple window.
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    }
-    
-            // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        s3eKeyboardUpdate();
-        s3ePointerUpdate();
-        ImGui_Marmalade_NewFrame();
-    
-            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-        if (show_demo_window)
-        {
-            ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-            ImGui::ShowDemoWindow(&show_demo_window);
-        }
-    
-        void ReleaseBooleanArrayElements(jbooleanArray array, jboolean* elems,
-        jint mode)
-    { functions->ReleaseBooleanArrayElements(this, array, elems, mode); }
-    void ReleaseByteArrayElements(jbyteArray array, jbyte* elems,
-        jint mode)
-    { functions->ReleaseByteArrayElements(this, array, elems, mode); }
-    void ReleaseCharArrayElements(jcharArray array, jchar* elems,
-        jint mode)
-    { functions->ReleaseCharArrayElements(this, array, elems, mode); }
-    void ReleaseShortArrayElements(jshortArray array, jshort* elems,
-        jint mode)
-    { functions->ReleaseShortArrayElements(this, array, elems, mode); }
-    void ReleaseIntArrayElements(jintArray array, jint* elems,
-        jint mode)
-    { functions->ReleaseIntArrayElements(this, array, elems, mode); }
-    void ReleaseLongArrayElements(jlongArray array, jlong* elems,
-        jint mode)
-    { functions->ReleaseLongArrayElements(this, array, elems, mode); }
-    void ReleaseFloatArrayElements(jfloatArray array, jfloat* elems,
-        jint mode)
-    { functions->ReleaseFloatArrayElements(this, array, elems, mode); }
-    void ReleaseDoubleArrayElements(jdoubleArray array, jdouble* elems,
-        jint mode)
-    { functions->ReleaseDoubleArrayElements(this, array, elems, mode); }
-    
-    #include './Config.hh'
-    
-    
-    {    YGNodeSetMeasureFunc(m_node, &globalMeasureFunc);
-}
-    
-        void insertChild(Node * child, unsigned index);
-    void removeChild(Node * child);
-    
-    
-    {  // There are subtle issues with calling the next functions directly. It is
-  // much better to always use a ThreadScope to manage attaching/detaching for
-  // you.
-  FBEXPORT static JNIEnv* ensureCurrentThreadIsAttached();
-  FBEXPORT static void detachCurrentThread();
+enum PolyBlockType {
+  PT_UNKNOWN,        // Type is not yet known. Keep as the first element.
+  PT_FLOWING_TEXT,   // Text that lives inside a column.
+  PT_HEADING_TEXT,   // Text that spans more than one column.
+  PT_PULLOUT_TEXT,   // Text that is in a cross-column pull-out region.
+  PT_EQUATION,       // Partition belonging to an equation region.
+  PT_INLINE_EQUATION,  // Partition has inline equation.
+  PT_TABLE,          // Partition belonging to a table region.
+  PT_VERTICAL_TEXT,  // Text-line runs vertically.
+  PT_CAPTION_TEXT,   // Text that belongs to an image.
+  PT_FLOWING_IMAGE,  // Image that lives inside a column.
+  PT_HEADING_IMAGE,  // Image that spans more than one column.
+  PT_PULLOUT_IMAGE,  // Image that is in a cross-column pull-out region.
+  PT_HORZ_LINE,      // Horizontal Line.
+  PT_VERT_LINE,      // Vertical Line.
+  PT_NOISE,          // Lies outside of any column.
+  PT_COUNT
 };
     
-      ProgramLocation(const char* functionName, const char* fileName, int line) :
-      m_functionName(functionName),
-      m_fileName(fileName),
-      m_lineNumber(line)
-    {}
+      /// Set the timer's expiry time relative to now.
+  /**
+   * This function sets the expiry time. Any pending asynchronous wait
+   * operations will be cancelled. The handler for each cancelled operation will
+   * be invoked with the boost::asio::error::operation_aborted error code.
+   *
+   * @param expiry_time The expiry time to be used for the timer.
+   *
+   * @return The number of asynchronous operations that were cancelled.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   *
+   * @note If the timer has already expired when expires_from_now() is called,
+   * then the handlers for asynchronous wait operations will:
+   *
+   * @li have already been invoked; or
+   *
+   * @li have been queued for invocation in the near future.
+   *
+   * These handlers can no longer be cancelled, and therefore are passed an
+   * error code that indicates the successful completion of the wait operation.
+   */
+  std::size_t expires_from_now(const duration& expiry_time)
+  {
+    boost::system::error_code ec;
+    std::size_t s = this->service.expires_from_now(
+        this->implementation, expiry_time, ec);
+    boost::asio::detail::throw_error(ec, 'expires_from_now');
+    return s;
+  }
     
-    // This allows storing the assert message before the current process terminates due to a crash
-typedef void (*AssertHandler)(const char* message);
-void setAssertHandler(AssertHandler assertHandler);
+      /// Construct to represent a single non-modifiable buffer.
+  explicit const_buffers_1(const const_buffer& b)
+    : const_buffer(b)
+  {
+  }
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+      // Return a pointer to the beginning of the unread data.
+  mutable_buffer data()
+  {
+    return boost::asio::buffer(buffer_) + begin_offset_;
+  }
+    
+        // Find the next context with the same key.
+    Value* next_by_key() const
+    {
+      context* elem = next_;
+      while (elem)
+      {
+        if (elem->key_ == key_)
+          return elem->value_;
+        elem = elem->next_;
+      }
+      return 0;
+    }
+    
+    #endif // BOOST_ASIO_DETAIL_EVENT_HPP
+
+    
+    #if !defined(BOOST_ASIO_WINDOWS_RUNTIME)
+    
+    #ifndef BOOST_ASIO_DETAIL_FUNCTION_HPP
+#define BOOST_ASIO_DETAIL_FUNCTION_HPP
+    
+      // Constructor for a half fenced block.
+  explicit gcc_arm_fenced_block(half_t)
+  {
+  }
+    
+    class winrt_buffer_impl :
+  public Microsoft::WRL::RuntimeClass<
+    Microsoft::WRL::RuntimeClassFlags<
+      Microsoft::WRL::RuntimeClassType::WinRtClassicComMix>,
+    ABI::Windows::Storage::Streams::IBuffer,
+    Windows::Storage::Streams::IBufferByteAccess>
+{
+public:
+  explicit winrt_buffer_impl(const boost::asio::const_buffer& b)
+  {
+    bytes_ = const_cast<byte*>(boost::asio::buffer_cast<const byte*>(b));
+    length_ = boost::asio::buffer_size(b);
+    capacity_ = boost::asio::buffer_size(b);
+  }
+    }
+    
+    // Decodes one 8x8 block of DCT coefficients from the bit stream.
+bool DecodeDCTBlock(const HuffmanTableEntry* dc_huff,
+                    const HuffmanTableEntry* ac_huff,
+                    int Ss, int Se, int Al,
+                    int* eobrun,
+                    BitReaderState* br,
+                    JPEGData* jpg,
+                    coeff_t* last_dc_coeff,
+                    coeff_t* coeffs) {
+  int s;
+  int r;
+  bool eobrun_allowed = Ss > 0;
+  if (Ss == 0) {
+    s = ReadSymbol(dc_huff, br);
+    if (s >= kJpegDCAlphabetSize) {
+      fprintf(stderr, 'Invalid Huffman symbol %d for DC coefficient.\n', s);
+      jpg->error = JPEG_INVALID_SYMBOL;
+      return false;
+    }
+    if (s > 0) {
+      r = br->ReadBits(s);
+      s = HuffExtend(r, s);
+    }
+    s += *last_dc_coeff;
+    const int dc_coeff = SignedLeftshift(s, Al);
+    coeffs[0] = dc_coeff;
+    if (dc_coeff != coeffs[0]) {
+      fprintf(stderr, 'Invalid DC coefficient %d\n', dc_coeff);
+      jpg->error = JPEG_NON_REPRESENTABLE_DC_COEFF;
+      return false;
+    }
+    *last_dc_coeff = s;
+    ++Ss;
+  }
+  if (Ss > Se) {
+    return true;
+  }
+  if (*eobrun > 0) {
+    --(*eobrun);
+    return true;
+  }
+  for (int k = Ss; k <= Se; k++) {
+    s = ReadSymbol(ac_huff, br);
+    if (s >= kJpegHuffmanAlphabetSize) {
+      fprintf(stderr, 'Invalid Huffman symbol %d for AC coefficient %d\n',
+              s, k);
+      jpg->error = JPEG_INVALID_SYMBOL;
+      return false;
+    }
+    r = s >> 4;
+    s &= 15;
+    if (s > 0) {
+      k += r;
+      if (k > Se) {
+        fprintf(stderr, 'Out-of-band coefficient %d band was %d-%d\n',
+                k, Ss, Se);
+        jpg->error = JPEG_OUT_OF_BAND_COEFF;
+        return false;
+      }
+      if (s + Al >= kJpegDCAlphabetSize) {
+        fprintf(stderr, 'Out of range AC coefficient value: s=%d Al=%d k=%d\n',
+                s, Al, k);
+        jpg->error = JPEG_NON_REPRESENTABLE_AC_COEFF;
+        return false;
+      }
+      r = br->ReadBits(s);
+      s = HuffExtend(r, s);
+      coeffs[kJPEGNaturalOrder[k]] = SignedLeftshift(s, Al);
+    } else if (r == 15) {
+      k += 15;
+    } else {
+      *eobrun = 1 << r;
+      if (r > 0) {
+        if (!eobrun_allowed) {
+          fprintf(stderr, 'End-of-block run crossing DC coeff.\n');
+          jpg->error = JPEG_EOB_RUN_TOO_LONG;
+          return false;
+        }
+        *eobrun += br->ReadBits(r);
+      }
+      break;
+    }
+  }
+  --(*eobrun);
+  return true;
+}
+    
+    namespace guetzli {
+    }
+    
+    const double* NewSrgb8ToLinearTable() {
+  double* table = new double[256];
+  int i = 0;
+  for (; i < 11; ++i) {
+    table[i] = i / 12.92;
+  }
+  for (; i < 256; ++i) {
+    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
+  }
+  return table;
+}
+    
+      tmp0 = in[4 * stride];
+  tmp1 = kIDCTMatrix[ 4] * tmp0;
+  out[0] += tmp1;
+  out[1] -= tmp1;
+  out[2] -= tmp1;
+  out[3] += tmp1;
+  out[4] += tmp1;
+  out[5] -= tmp1;
+  out[6] -= tmp1;
+  out[7] += tmp1;
+    
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
+    
+    
+    {}  // namespace guetzli
+    
+      std::vector<uint8_t> ToSRGB(int xmin, int ymin, int xsize, int ysize) const;
+    
+    void AbstractAuthResolver::setDefaultCred(std::string user,
+                                          std::string password)
+{
+  defaultUser_ = std::move(user);
+  defaultPassword_ = std::move(password);
+}
+    
+      PeerConnection* peerConnection_;
+    
+    AbstractHttpServerResponseCommand::~AbstractHttpServerResponseCommand()
+{
+  if (readCheck_) {
+    e_->deleteSocketForReadCheck(socket_, this);
+  }
+  if (writeCheck_) {
+    e_->deleteSocketForWriteCheck(socket_, this);
+  }
+}
+    
+    bool AbstractOptionHandler::isHidden() const { return flags_ & FLAG_HIDDEN; }
+    
+      virtual void setCumulative(bool f) CXX11_OVERRIDE;
+    
+    AnnounceList::AnnounceList(
+    const std::deque<std::shared_ptr<AnnounceTier>>& announceTiers)
+    : tiers_(announceTiers), currentTrackerInitialized_(false)
+{
+  resetIterator();
+}
+    
+    class AnnounceList {
+public:
+private:
+  std::deque<std::shared_ptr<AnnounceTier>> tiers_;
+  std::deque<std::shared_ptr<AnnounceTier>>::iterator currentTier_;
+  std::deque<std::string>::iterator currentTracker_;
+  bool currentTrackerInitialized_;
+    }
+    
+    namespace aria2 {
+    }
+    
+    namespace aria2 {
+    }
