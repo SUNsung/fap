@@ -1,293 +1,176 @@
 
         
         
-    { private:
-  DebugOptions debug_options_;
-};
+    {}  // namespace google
+#endif  // GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_CONTAINERS_H__
+
     
-        NodeDef* const_node3 = graph_def.add_node();
-    const_node3->set_name('const_node3');
-    const_node3->set_op('Const');
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    {
+    {}  // namespace
+}  // namespace protobuf
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+      std::string namespace_;
+  std::string reflectionClassname_;
     
-      std::vector<string> debug_metadata_strings;
-  std::vector<string> encoded_graph_defs;
-  std::vector<string> device_names;
-  std::vector<string> node_names;
-  std::vector<int32> output_slots;
-  std::vector<string> debug_ops;
-  std::vector<Tensor> debug_tensors;
+    // TODO(jonskeet): Refactor repeated field support; all the implementations are *really* similar. We
+// should probably have a RepeatedFieldGeneratorBase.
+class RepeatedEnumFieldGenerator : public FieldGeneratorBase {
+ public:
+  RepeatedEnumFieldGenerator(const FieldDescriptor* descriptor,
+                             int fieldOrdinal,
+                             const Options *options);
+  ~RepeatedEnumFieldGenerator();
+    }
     
-      // From the zlib manual (http://www.zlib.net/manual.html):
-  // The mem_level parameter specifies how much memory should be allocated for
-  // the internal compression state. mem_level=1 uses minimum memory but is slow
-  // and reduces compression ratio; mem_level=9 uses maximum memory for optimal
-  // speed. The default value is 8.
-  int8 mem_level = 9;
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+    }
+    }
+    }
+    }
     
-    void CalculateAccuracyStats(
-    const std::vector<std::pair<string, int64>>& ground_truth_list,
-    const std::vector<std::pair<string, int64>>& found_words,
-    int64 up_to_time_ms, int64 time_tolerance_ms,
-    StreamingAccuracyStats* stats) {
-  int64 latest_possible_time;
-  if (up_to_time_ms == -1) {
-    latest_possible_time = std::numeric_limits<int64>::max();
-  } else {
-    latest_possible_time = up_to_time_ms + time_tolerance_ms;
+        'return this;\n');
+    
+      // Returns true if FilePath describes something in the file-system,
+  // either a file, directory, or whatever, and that something exists.
+  bool FileOrDirectoryExists() const;
+    
+      template <typename T>
+  operator ParamGenerator<T>() const { return ValuesIn(&v1_, &v1_ + 1); }
+    
+    
+    {    // You can generate a failure in any event handler except
+    // OnTestPartResult. Just use an appropriate Google Test assertion to do
+    // it.
+    EXPECT_LE(difference, 0) << 'Leaked ' << difference << ' unit(s) of Water!';
   }
-  stats->how_many_ground_truth_words = 0;
-  for (const std::pair<string, int64>& ground_truth : ground_truth_list) {
-    const int64 ground_truth_time = ground_truth.second;
-    if (ground_truth_time > latest_possible_time) {
+    
+        // Determine area to update.
+    int xmin = std::max(block_x * 16 - 1, 0);
+    int xmax = std::min(block_x * 16 + 16, width_ - 1);
+    int ymin = std::max(block_y * 16 - 1, 0);
+    int ymax = std::min(block_y * 16 + 16, height_ - 1);
+    
+    
+    {
+    {
+    {      // Add back the last sentinel node.
+      tree[j_end + 1] = sentinel;
+    }
+    if (SetDepth(static_cast<int>(2 * n - 1), &tree[0], depth, tree_limit)) {
+      /* We need to pack the Huffman tree in tree_limit bits. If this was not
+         successful, add fake entities to the lowest values and retry. */
       break;
     }
-    ++stats->how_many_ground_truth_words;
   }
+}
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg) {
+  bool has_Adobe_marker = false;
+  uint8_t Adobe_transform = 0;
+  for (const std::string& app : jpg.app_data) {
+    if (static_cast<uint8_t>(app[0]) == 0xe0) {
+      return true;
+    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
+      has_Adobe_marker = true;
+      Adobe_transform = app[14];
     }
+  }
+  if (has_Adobe_marker) {
+    return (Adobe_transform != 0);
+  }
+  const int cid0 = jpg.components[0].id;
+  const int cid1 = jpg.components[1].id;
+  const int cid2 = jpg.components[2].id;
+  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
+}
     
-    @interface TimeZoneBridgingTester : NSObject
-- (NSTimeZone *)autoupdatingCurrentTimeZone;
-- (BOOL)verifyAutoupdatingTimeZone:(NSTimeZone *)tz;
-@end
+    // Functions for reading a jpeg byte stream into a JPEGData object.
     
-    /// Index the given module and store the results to \p indexStorePath.
-///
-/// \param module The module to index.
-///
-/// \param indexUnitTokens A list of unique identifiers for the index units to
-/// be written. This may either be one unit per source file of \p module, or it
-/// may be a single unit, in which case all the index information will be
-/// combined into a single unit.
-///
-/// \param moduleUnitToken A unique identifier for this module unit in the form
-/// of a file path. Only used if \p indexUnitTokens are specified for each
-/// source file, otherwise the single \p indexUnitTokens value is used instead.
-///
-/// \param indexStorePath The location to write the indexing data to.
-///
-/// \param indexSystemModules If true, emit index data for imported serialized
-/// swift system modules.
-///
-/// \param isDebugCompilation true for non-optimized compiler invocation.
-///
-/// \param targetTriple The target for this compilation.
-///
-/// \param dependencyTracker The set of dependencies seen while building.
-bool indexAndRecord(ModuleDecl *module, ArrayRef<std::string> indexUnitTokens,
-                    StringRef moduleUnitToken, StringRef indexStorePath,
-                    bool indexSystemModules, bool isDebugCompilation,
-                    StringRef targetTriple,
-                    const DependencyTracker &dependencyTracker);
-// FIXME: indexUnitTokens could be StringRef, but that creates an impedance
-// mismatch in the caller.
+    #include 'guetzli/jpeg_huffman_decode.h'
     
-    class Emphasis final : public InlineContent,
-    private llvm::TrailingObjects<Emphasis, MarkupASTNode *> {
-  friend TrailingObjects;
-    }
+      // Fills in out[] array with the floating-point precision pixel view of the
+  // component.
+  // REQUIRES: factor_x() == 1 and factor_y() == 1.
+  void ToFloatPixels(float* out, int stride) const;
     
-      virtual void handleDiagnostic(SourceManager &SM, SourceLoc Loc,
-                                DiagnosticKind Kind,
-                                StringRef FormatString,
-                                ArrayRef<DiagnosticArgument> FormatArgs,
-                                const DiagnosticInfo &Info) override;
+    // Ensure that the standard streams are properly initialized in every TU.
+int InitializeStreams();
+BENCHMARK_UNUSED static int stream_init_anchor = InitializeStreams();
     
-    #endif // SWIFT_INDEX_INDEX_H
-
+    std::string FormatString(const char* msg, va_list args);
+std::string FormatString(const char* msg, ...);
     
-        state->preFilterType = CV_STEREO_BM_XSOBEL; //CV_STEREO_BM_NORMALIZED_RESPONSE;
-    state->preFilterSize = 9;
-    state->preFilterCap = 31;
-    state->SADWindowSize = 15;
-    state->minDisparity = 0;
-    state->numberOfDisparities = numberOfDisparities > 0 ? numberOfDisparities : 64;
-    state->textureThreshold = 10;
-    state->uniquenessRatio = 15;
-    state->speckleRange = state->speckleWindowSize = 0;
-    state->trySmallerWindows = 0;
-    state->roi1 = state->roi2 = cvRect(0,0,0,0);
-    state->disp12MaxDiff = -1;
+    double Finish(Counter const& c, double cpu_time, double num_threads) {
+  double v = c.value;
+  if (c.flags & Counter::kIsRate) {
+    v /= cpu_time;
+  }
+  if (c.flags & Counter::kAvgThreads) {
+    v /= num_threads;
+  }
+  return v;
+}
     
-    CV_EXPORTS void  EstimateUncertainties(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
-                           const IntrinsicParams& params, InputArray omc, InputArray Tc,
-                           IntrinsicParams& errors, Vec2d& std_err, double thresh_cond, int check_cond, double& rms);
     
-    namespace cv { namespace cuda { namespace device
-{
-    struct Emulation
     {
+    {
+    {  // Native Client does not provide any API to access cycle counter.
+  // Use clock_gettime(CLOCK_MONOTONIC, ...) instead of gettimeofday
+  // because is provides nanosecond resolution (which is noticable at
+  // least for PNaCl modules running on x86 Mac & Linux).
+  // Initialize to always return 0 if clock_gettime fails.
+  struct timespec ts = { 0, 0 };
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  return static_cast<int64_t>(ts.tv_sec) * 1000000000 + ts.tv_nsec;
+#elif defined(__aarch64__)
+  // System timer of ARMv8 runs at a different frequency than the CPU's.
+  // The frequency is fixed, typically in the range 1-50MHz.  It can be
+  // read at CNTFRQ special register.  We assume the OS has set up
+  // the virtual timer properly.
+  int64_t virtual_timer_value;
+  asm volatile('mrs %0, cntvct_el0' : '=r'(virtual_timer_value));
+  return virtual_timer_value;
+#elif defined(__ARM_ARCH)
+  // V6 is the earliest arch that has a standard cyclecount
+  // Native Client validator doesn't allow MRC instructions.
+#if (__ARM_ARCH >= 6)
+  uint32_t pmccntr;
+  uint32_t pmuseren;
+  uint32_t pmcntenset;
+  // Read the user mode perf monitor counter access permissions.
+  asm volatile('mrc p15, 0, %0, c9, c14, 0' : '=r'(pmuseren));
+  if (pmuseren & 1) {  // Allows reading perfmon counters for user mode code.
+    asm volatile('mrc p15, 0, %0, c9, c12, 1' : '=r'(pmcntenset));
+    if (pmcntenset & 0x80000000ul) {  // Is it counting?
+      asm volatile('mrc p15, 0, %0, c9, c13, 0' : '=r'(pmccntr));
+      // The counter is set up to count every 64th cycle
+      return static_cast<int64_t>(pmccntr) * 64;  // Should optimize to << 6
     }
-    }
-    }
-    }
-    
-    #undef cv_hal_LU32f
-#define cv_hal_LU32f lapack_LU32f
-#undef cv_hal_LU64f
-#define cv_hal_LU64f lapack_LU64f
-    
-    #include 'boost/scoped_ptr.hpp'
-#include 'glog/logging.h'
-#include 'google/protobuf/text_format.h'
-#include 'stdint.h'
-    
-      caffe::Datum datum;
-  datum.set_channels(2);  // one channel for each image in the pair
-  datum.set_height(rows);
-  datum.set_width(cols);
-  LOG(INFO) << 'A total of ' << num_items << ' items.';
-  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
-  for (int itemid = 0; itemid < num_items; ++itemid) {
-    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
-    int j = caffe::caffe_rng_rand() % num_items;
-    read_image(&image_file, &label_file, i, rows, cols,
-        pixels, &label_i);
-    read_image(&image_file, &label_file, j, rows, cols,
-        pixels + (rows * cols), &label_j);
-    datum.set_data(pixels, 2*rows*cols);
-    if (label_i  == label_j) {
-      datum.set_label(1);
-    } else {
-      datum.set_label(0);
-    }
-    datum.SerializeToString(&value);
-    std::string key_str = caffe::format_int(itemid, 8);
-    db->Put(leveldb::WriteOptions(), key_str, value);
   }
-    
-    
-    {  Blob<Dtype> col_buffer_;
-  Blob<Dtype> bias_multiplier_;
-};
-    
-      virtual inline const char* type() const { return 'BatchReindex'; }
-  virtual inline int ExactNumBottomBlobs() const { return 2; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-    /**
- * @brief Takes at least two Blob%s and concatenates them along either the num
- *        or channel dimension, outputting the result.
- */
-template <typename Dtype>
-class ConcatLayer : public Layer<Dtype> {
- public:
-  explicit ConcatLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    #include 'caffe/layers/pooling_layer.hpp'
-    
-    #include 'caffe/layers/base_conv_layer.hpp'
-    
-    /**
- * @brief During training only, sets a random portion of @f$x@f$ to 0, adjusting
- *        the rest of the vector magnitude accordingly.
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class DropoutLayer : public NeuronLayer<Dtype> {
- public:
-  /**
-   * @param param provides DropoutParameter dropout_param,
-   *     with DropoutLayer options:
-   *   - dropout_ratio (\b optional, default 0.5).
-   *     Sets the probability @f$ p @f$ that any given unit is dropped.
-   */
-  explicit DropoutLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
-
-    
-      // Third filter is empty
-    
-    // The FALLTHROUGH_INTENDED macro can be used to annotate implicit fall-through
-// between switch labels. The real definition should be provided externally.
-// This one is a fallback version for unsupported compilers.
-#ifndef FALLTHROUGH_INTENDED
-#define FALLTHROUGH_INTENDED do { } while (0)
 #endif
-    
-    
-    {  ASSERT_EQ(Hash(0, 0, 0xbc9f1d34), 0xbc9f1d34);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data1), sizeof(data1), 0xbc9f1d34),
-      0xef1345c4);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data2), sizeof(data2), 0xbc9f1d34),
-      0x5b663814);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data3), sizeof(data3), 0xbc9f1d34),
-      0x323c078f);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data4), sizeof(data4), 0xbc9f1d34),
-      0xed21633a);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data5), sizeof(data5), 0x12345678),
-      0xf333dabb);
+  struct timeval tv;
+  gettimeofday(&tv, nullptr);
+  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
+#elif defined(__mips__)
+  // mips apparently only allows rdtsc for superusers, so we fall
+  // back to gettimeofday.  It's possible clock_gettime would be better.
+  struct timeval tv;
+  gettimeofday(&tv, nullptr);
+  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
+#else
+// The soft failover to a generic implementation is automatic only for ARM.
+// For other platforms the developer is expected to make an attempt to create
+// a fast implementation and use generic version if nothing better is available.
+#error You need to define CycleTimer for your OS and CPU
+#endif
 }
-    
-    bool HandleDumpCommand(Env* env, char** files, int num) {
-  StdoutPrinter printer;
-  bool ok = true;
-  for (int i = 0; i < num; i++) {
-    Status s = DumpFile(env, files[i], &printer);
-    if (!s.ok()) {
-      fprintf(stderr, '%s\n', s.ToString().c_str());
-      ok = false;
-    }
-  }
-  return ok;
-}
-    
-    #include <vector>
-    
-    void GLESDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color)
-{
-    mShaderProgram->use();
-    mShaderProgram->setUniformsForBuiltins();
-    }
-    
-    
-    {    virtual void DrawAABB(b2AABB* aabb, const b2Color& color);
-};
-    
-    		// Breakable dynamic body
-		{
-			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(0.0f, 40.0f);
-			bd.angle = 0.25f * b2_pi;
-			m_body1 = m_world->CreateBody(&bd);
-    }
+}  // end namespace cycleclock
+}  // end namespace benchmark
