@@ -1,399 +1,212 @@
 
         
-        namespace tensorflow {
-namespace port {
-    }
-    }
+        #include 'matrix.h'
+#include 'include_gunit.h'
+#include 'genericvector.h'
+#include 'tprintf.h'
     
     
-    {  // Invalid names.
-  EXPECT_FALSE(IsSameAddrSp('random_invalid_target', 'random_invalid_target'));
-  EXPECT_FALSE(IsSameAddrSp('/job:/replica:10/task:10/cpu:0',
-                            '/job:/replica:10/task:10/cpu:1'));
-  EXPECT_FALSE(IsSameAddrSp('/job:mnist/replica:xx/task:10/cpu:0',
-                            '/job:mnist/replica:xx/task:10/cpu:1'));
-  EXPECT_FALSE(IsSameAddrSp('/job:mnist/replica:10/task:yy/cpu:0',
-                            '/job:mnist/replica:10/task:yy/cpu:1'));
+    {  TessResultRenderer* remainder = next_;
+  next_ = next;
+  if (remainder) {
+    while (next->next_ != nullptr) {
+      next = next->next_;
+    }
+    next->next_ = remainder;
+  }
 }
     
-    int main(int argc, char** argv) {
-  FLAGS_alsologtostderr = 1;
+      // Draws the data in a new window.
+  void Display() const;
+    
+    
+    {  // Now maximize sig_sq_B over t.
+  // http://www.ctie.monash.edu.au/hargreave/Cornall_Terry_328.pdf
+  int best_t = -1;
+  int omega_0, omega_1;
+  int best_omega_0 = 0;
+  double best_sig_sq_B = 0.0;
+  double mu_0, mu_1, mu_t;
+  omega_0 = 0;
+  mu_t = 0.0;
+  for (int t = 0; t < kHistogramSize - 1; ++t) {
+    omega_0 += histogram[t];
+    mu_t += t * static_cast<double>(histogram[t]);
+    if (omega_0 == 0)
+      continue;
+    omega_1 = H - omega_0;
+    if (omega_1 == 0)
+      break;
+    mu_0 = mu_t / omega_0;
+    mu_1 = (mu_T - mu_t) / omega_1;
+    double sig_sq_B = mu_1 - mu_0;
+    sig_sq_B *= sig_sq_B * omega_0 * omega_1;
+    if (best_t < 0 || sig_sq_B > best_sig_sq_B) {
+      best_sig_sq_B = sig_sq_B;
+      best_t = t;
+      best_omega_0 = omega_0;
     }
-    
-      FLAGS_alsologtostderr = 1;
-    
-    void read_image(std::ifstream* image_file, std::ifstream* label_file,
-        uint32_t index, uint32_t rows, uint32_t cols,
-        char* pixels, char* label) {
-  image_file->seekg(index * rows * cols + 16);
-  image_file->read(pixels, rows * cols);
-  label_file->seekg(index + 8);
-  label_file->read(label, 1);
+  }
+  if (H_out != nullptr) *H_out = H;
+  if (omega0_out != nullptr) *omega0_out = best_omega_0;
+  return best_t;
 }
-    
-    #include <vector>
-    
-    #endif  // CAFFE_ARGMAX_LAYER_HPP_
-
     
     /**
- * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
- *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$
- *      y = \left\{
- *         \begin{array}{ll}
- *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
- *            \log(1 + \exp(x)) & \mbox{otherwise}
- *         \end{array} \right.
- *      @f$
- */
-template <typename Dtype>
-class BNLLLayer : public NeuronLayer<Dtype> {
- public:
-  explicit BNLLLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-    }
-    }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    namespace caffe {
+ * Possible modes for page layout analysis. These *must* be kept in order
+ * of decreasing amount of layout analysis to be done, except for OSD_ONLY,
+ * so that the inequality test macros below work.
+*/
+enum PageSegMode {
+  PSM_OSD_ONLY,       ///< Orientation and script detection only.
+  PSM_AUTO_OSD,       ///< Automatic page segmentation with orientation and
+                      ///< script detection. (OSD)
+  PSM_AUTO_ONLY,      ///< Automatic page segmentation, but no OSD, or OCR.
+  PSM_AUTO,           ///< Fully automatic page segmentation, but no OSD.
+  PSM_SINGLE_COLUMN,  ///< Assume a single column of text of variable sizes.
+  PSM_SINGLE_BLOCK_VERT_TEXT,  ///< Assume a single uniform block of vertically
+                               ///< aligned text.
+  PSM_SINGLE_BLOCK,   ///< Assume a single uniform block of text. (Default.)
+  PSM_SINGLE_LINE,    ///< Treat the image as a single text line.
+  PSM_SINGLE_WORD,    ///< Treat the image as a single word.
+  PSM_CIRCLE_WORD,    ///< Treat the image as a single word in a circle.
+  PSM_SINGLE_CHAR,    ///< Treat the image as a single character.
+  PSM_SPARSE_TEXT,    ///< Find as much text as possible in no particular order.
+  PSM_SPARSE_TEXT_OSD,  ///< Sparse text with orientation and script det.
+  PSM_RAW_LINE,       ///< Treat the image as a single text line, bypassing
+                      ///< hacks that are Tesseract-specific.
     }
     
-      /// Get the native acceptor representation.
-  /**
-   * This function may be used to obtain the underlying representation of the
-   * acceptor. This is intended to allow access to native acceptor functionality
-   * that is not otherwise provided.
-   */
-  native_handle_type native_handle()
-  {
-    return this->get_service().native_handle(this->get_implementation());
+      // Create a reader that will return log records from '*file'.
+  // '*file' must remain live while this Reader is in use.
+  //
+  // If 'reporter' is non-nullptr, it is notified whenever some data is
+  // dropped due to a detected corruption.  '*reporter' must remain
+  // live while this Reader is in use.
+  //
+  // If 'checksum' is true, verify checksums if available.
+  //
+  // The Reader will start reading at the first record located at physical
+  // position >= initial_offset within the file.
+  Reader(std::shared_ptr<Logger> info_log,
+  // @lint-ignore TXT2 T25377293 Grandfathered in
+	 unique_ptr<SequentialFileReader>&& file,
+         Reporter* reporter, bool checksum, uint64_t initial_offset,
+         uint64_t log_num);
+    
+      // Return true if the current MemTableRep supports snapshot
+  // Default: true
+  virtual bool IsSnapshotSupported() const { return true; }
+    
+    namespace rocksdb {
+CompactionFilterFactoryJniCallback::CompactionFilterFactoryJniCallback(
+    JNIEnv* env, jobject jcompaction_filter_factory)
+    : JniCallback(env, jcompaction_filter_factory) {
+  
+  // Note: The name of a CompactionFilterFactory will not change during
+  // it's lifetime, so we cache it in a global var
+  jmethodID jname_method_id =
+      AbstractCompactionFilterFactoryJni::getNameMethodId(env);
+  if(jname_method_id == nullptr) {
+    // exception thrown: NoSuchMethodException or OutOfMemoryError
+    return;
   }
-    
-    /// Create a new modifiable buffer that is offset from the start of another.
-/**
- * @relates mutable_buffer
- */
-inline mutable_buffer operator+(const mutable_buffer& b, std::size_t start)
-{
-  if (start > buffer_size(b))
-    return mutable_buffer();
-  char* new_data = buffer_cast<char*>(b) + start;
-  std::size_t new_size = buffer_size(b) - start;
-  return mutable_buffer(new_data, new_size
-#if defined(BOOST_ASIO_ENABLE_BUFFER_DEBUGGING)
-      , b.get_debug_check()
-#endif // BOOST_ASIO_ENABLE_BUFFER_DEBUGGING
-      );
-}
-    
-      /// Start an asynchronous read. The buffer into which the data will be read
-  /// must be valid for the lifetime of the asynchronous operation.
-  template <typename MutableBufferSequence, typename ReadHandler>
-  BOOST_ASIO_INITFN_RESULT_TYPE(ReadHandler,
-      void (boost::system::error_code, std::size_t))
-  async_read_some(const MutableBufferSequence& buffers,
-      BOOST_ASIO_MOVE_ARG(ReadHandler) handler);
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-      STDMETHODIMP Buffer(byte** value)
-  {
-    *value = bytes_;
-    return S_OK;
-  }
-    
-        // Check if we need to run the operation again.
-    if (ec == boost::asio::error::would_block
-        || ec == boost::asio::error::try_again)
-      return false;
-    
-      // Block on the /dev/poll descriptor.
-  ::pollfd events[128] = { { 0, 0, 0 } };
-  ::dvpoll dp = { 0, 0, 0 };
-  dp.dp_fds = events;
-  dp.dp_nfds = 128;
-  dp.dp_timeout = timeout;
-  int num_events = ::ioctl(dev_poll_fd_, DP_POLL, &dp);
-    
-      // Read sequentially.
-  ASSERT_OK(env_->NewSequentialFile('/dir/f', &seq_file));
-  ASSERT_OK(seq_file->Read(5, &result, scratch)); // Read 'hello'.
-  ASSERT_EQ(0, result.compare('hello'));
-  ASSERT_OK(seq_file->Skip(1));
-  ASSERT_OK(seq_file->Read(1000, &result, scratch)); // Read 'world'.
-  ASSERT_EQ(0, result.compare('world'));
-  ASSERT_OK(seq_file->Read(1000, &result, scratch)); // Try reading past EOF.
-  ASSERT_EQ(0, result.size());
-  ASSERT_OK(seq_file->Skip(100)); // Try to skip past end of file.
-  ASSERT_OK(seq_file->Read(1000, &result, scratch));
-  ASSERT_EQ(0, result.size());
-  delete seq_file;
-    
-      ReadOptions read_options;
-  Iterator *iter = db->NewIterator(read_options);
-    
-      // Pick up four bytes at a time
-  while (data + 4 <= limit) {
-    uint32_t w = DecodeFixed32(data);
-    data += 4;
-    h += w;
-    h *= m;
-    h ^= (h >> 16);
-  }
-    
-    
-    {    // Compute (product % M) using the fact that ((x << 31) % M) == x.
-    seed_ = static_cast<uint32_t>((product >> 31) + (product & M));
-    // The first reduction may overflow by 1 bit, so we may need to
-    // repeat.  mod == M is not possible; using > allows the faster
-    // sign-bit-based test.
-    if (seed_ > M) {
-      seed_ -= M;
     }
-    return seed_;
-  }
-  // Returns a uniformly distributed value in the range [0..n-1]
-  // REQUIRES: n > 0
-  uint32_t Uniform(int n) { return Next() % n; }
-    
-      uint64_t Size(const Slice& start, const Slice& limit) {
-    Range r(start, limit);
-    uint64_t size;
-    db_->GetApproximateSizes(&r, 1, &size);
-    return size;
-  }
-    
-    void DBIter::SeekToFirst() {
-  direction_ = kForward;
-  ClearSavedValue();
-  iter_->SeekToFirst();
-  if (iter_->Valid()) {
-    FindNextUserEntry(false, &saved_key_ /* temporary storage */);
-  } else {
-    valid_ = false;
-  }
-}
-    
-    class StdoutPrinter : public WritableFile {
- public:
-  virtual Status Append(const Slice& data) {
-    fwrite(data.data(), 1, data.size(), stdout);
-    return Status::OK();
-  }
-  virtual Status Close() { return Status::OK(); }
-  virtual Status Flush() { return Status::OK(); }
-  virtual Status Sync() { return Status::OK(); }
-};
-    
-    extern JSClass  *jsb_cocos2d_Physics3DRigidBody_class;
-extern JSObject *jsb_cocos2d_Physics3DRigidBody_prototype;
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    #if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_physics_PhysicsJoint_setTag'', nullptr);
-        return 0;
-    }
-#endif
-    
-    
-    
-        void DrawTitle(const char *string);
-	virtual void Step(Settings* settings);
-	virtual void Keyboard(unsigned char key) { B2_NOT_USED(key); }
-	virtual void KeyboardUp(unsigned char key) { B2_NOT_USED(key); }
-	void ShiftMouseDown(const b2Vec2& p);
-	virtual bool MouseDown(const b2Vec2& p);
-	virtual void MouseUp(const b2Vec2& p);
-	void MouseMove(const b2Vec2& p);
-	void LaunchBomb();
-	void LaunchBomb(const b2Vec2& position, const b2Vec2& velocity);
-	
-	void SpawnBomb(const b2Vec2& worldPt);
-	void CompleteBombSpawn(const b2Vec2& p);
-    
-    			m_shape1.SetAsBox(0.5f, 0.5f, b2Vec2(-0.5f, 0.0f), 0.0f);
-			m_piece1 = m_body1->CreateFixture(&m_shape1, 1.0f);
-    
-    			m_body = m_world->CreateBody(&bd);
-			m_body->CreateFixture(&box, 1.0f);
-    
-    static const uint8_t* kRangeLimit = kRangeLimitLut + 384;
-    
-    namespace guetzli {
     }
     
-    
-    {}  // namespace guetzli
-    
-    namespace guetzli {
-    }
-    
-    namespace guetzli {
-    }
-    
-    
-    {}  // namespace guetzli
-    
-    enum JPEGReadError {
-  JPEG_OK = 0,
-  JPEG_SOI_NOT_FOUND,
-  JPEG_SOF_NOT_FOUND,
-  JPEG_UNEXPECTED_EOF,
-  JPEG_MARKER_BYTE_NOT_FOUND,
-  JPEG_UNSUPPORTED_MARKER,
-  JPEG_WRONG_MARKER_SIZE,
-  JPEG_INVALID_PRECISION,
-  JPEG_INVALID_WIDTH,
-  JPEG_INVALID_HEIGHT,
-  JPEG_INVALID_NUMCOMP,
-  JPEG_INVALID_SAMP_FACTOR,
-  JPEG_INVALID_START_OF_SCAN,
-  JPEG_INVALID_END_OF_SCAN,
-  JPEG_INVALID_SCAN_BIT_POSITION,
-  JPEG_INVALID_COMPS_IN_SCAN,
-  JPEG_INVALID_HUFFMAN_INDEX,
-  JPEG_INVALID_QUANT_TBL_INDEX,
-  JPEG_INVALID_QUANT_VAL,
-  JPEG_INVALID_MARKER_LEN,
-  JPEG_INVALID_SAMPLING_FACTORS,
-  JPEG_INVALID_HUFFMAN_CODE,
-  JPEG_INVALID_SYMBOL,
-  JPEG_NON_REPRESENTABLE_DC_COEFF,
-  JPEG_NON_REPRESENTABLE_AC_COEFF,
-  JPEG_INVALID_SCAN,
-  JPEG_OVERLAPPING_SCANS,
-  JPEG_INVALID_SCAN_ORDER,
-  JPEG_EXTRA_ZERO_RUN,
-  JPEG_DUPLICATE_DRI,
-  JPEG_DUPLICATE_SOF,
-  JPEG_WRONG_RESTART_MARKER,
-  JPEG_DUPLICATE_COMPONENT_ID,
-  JPEG_COMPONENT_NOT_FOUND,
-  JPEG_HUFFMAN_TABLE_NOT_FOUND,
-  JPEG_HUFFMAN_TABLE_ERROR,
-  JPEG_QUANT_TABLE_NOT_FOUND,
-  JPEG_EMPTY_DHT,
-  JPEG_EMPTY_DQT,
-  JPEG_OUT_OF_BAND_COEFF,
-  JPEG_EOB_RUN_TOO_LONG,
-  JPEG_IMAGE_TOO_LARGE,
-};
-    
-    #endif  // GUETZLI_JPEG_HUFFMAN_DECODE_H_
+    #endif  // JAVA_ROCKSJNI_LOGGERJNICALLBACK_H_
 
     
-    double ButteraugliScoreForQuality(double quality) {
-  if (quality < kLowestQuality) quality = kLowestQuality;
-  if (quality > kHighestQuality) quality = kHighestQuality;
-  int index = static_cast<int>(quality);
-  double mix = quality - index;
-  return kScoreForQuality[index - kLowestQuality] * (1 - mix) +
-      kScoreForQuality[index - kLowestQuality + 1] * mix;
+      static void AddRange(std::vector<int>* dst, int lo, int hi, int mult);
+    
+    bool IsZero(double n);
+    
+    // Reads and returns the string environment variable corresponding to
+// the given flag; if it's not set, returns default_value.
+const char* StringFromEnv(const char* flag, const char* default_value) {
+  const std::string env_var = FlagToEnvVar(flag);
+  const char* const value = getenv(env_var.c_str());
+  return value == nullptr ? default_value : value;
 }
     
+    // Returns true if the string matches the flag.
+bool IsFlag(const char* str, const char* flag);
     
-    {} // namespace rocksdb
-
-    
-      SequentialFileReader* file() { return file_.get(); }
-    
-      if (!s.ok()) {
-    ROCKS_LOG_ERROR(info_log_, 'Failed to mark %s as trash', file_path.c_str());
-    s = env_->DeleteFile(file_path);
-    if (s.ok()) {
-      sst_file_manager_->OnDeleteFile(file_path);
+    namespace benchmark {
+namespace internal {
     }
-    return s;
-  }
-    
-      // enable sync point processing (disabled on startup)
-  void EnableProcessing();
-    
-      bool HasPositionHint() const { return PositionHint != std::numeric_limits<size_t>::max(); }
-  size_t GetPositionHint() const {
-    assert(HasPositionHint());
-    return PositionHint;
-  }
-  void IncUseCount() { UseCount++; }
-  void IncSuccessCount() { SuccessCount++; }
-  size_t GetUseCount() const { return UseCount; }
-  size_t GetSuccessCount() const {return SuccessCount; }
-    
-      if (Options.MaxLen == 0) {
-    size_t MaxLen = 0;
-    for (auto &U : InitialCorpus)
-      MaxLen = std::max(U.size(), MaxLen);
-    F->SetMaxInputLen(std::min(std::max(kMinDefaultLen, MaxLen), kMaxSaneLen));
-  }
-    
-    #if defined(__has_include)
-#if __has_include(<sanitizer / coverage_interface.h>)
-#include <sanitizer/coverage_interface.h>
-#endif
-#if __has_include(<sanitizer / lsan_interface.h>)
-#include <sanitizer/lsan_interface.h>
-#endif
-#endif
-    
-    struct Merger {
-  std::vector<MergeFileInfo> Files;
-  size_t NumFilesInFirstCorpus = 0;
-  size_t FirstNotProcessedFile = 0;
-  std::string LastFailure;
     }
     
-    size_t MutationDispatcher::ApplyDictionaryEntry(uint8_t *Data, size_t Size,
-                                                size_t MaxSize,
-                                                DictionaryEntry &DE) {
-  const Word &W = DE.GetW();
-  bool UsePositionHint = DE.HasPositionHint() &&
-                         DE.GetPositionHint() + W.size() < Size &&
-                         Rand.RandBool();
-  if (Rand.RandBool()) {  // Insert W.
-    if (Size + W.size() > MaxSize) return 0;
-    size_t Idx = UsePositionHint ? DE.GetPositionHint() : Rand(Size + 1);
-    memmove(Data + Idx + W.size(), Data + Idx, Size - Idx);
-    memcpy(Data + Idx, W.data(), W.size());
-    Size += W.size();
-  } else {  // Overwrite some bytes with W.
-    if (W.size() > Size) return 0;
-    size_t Idx = UsePositionHint ? DE.GetPositionHint() : Rand(Size - W.size());
-    memcpy(Data + Idx, W.data(), W.size());
-  }
-  return Size;
-}
+    // File format reference: http://edoceo.com/utilitas/csv-file-format.
     
-      struct Mutator {
-    size_t (MutationDispatcher::*Fn)(uint8_t *Data, size_t Size, size_t Max);
-    const char *Name;
-  };
+    namespace benchmark {
+// NOTE: only i386 and x86_64 have been well tested.
+// PPC, sparc, alpha, and ia64 are based on
+//    http://peter.kuscsik.com/wordpress/?p=14
+// with modifications by m3b.  See also
+//    https://setisvn.ssl.berkeley.edu/svn/lib/fftw-3.0.1/kernel/cycle.h
+namespace cycleclock {
+// This should return the number of cycles since power-on.  Thread-safe.
+inline BENCHMARK_ALWAYS_INLINE int64_t Now() {
+#if defined(BENCHMARK_OS_MACOSX)
+  // this goes at the top because we need ALL Macs, regardless of
+  // architecture, to return the number of 'mach time units' that
+  // have passed since startup.  See sysinfo.cc where
+  // InitializeSystemInfo() sets the supposed cpu clock frequency of
+  // macs to the number of mach time units per second, not actual
+  // CPU clock frequency (which can change in the face of CPU
+  // frequency scaling).  Also note that when the Mac sleeps, this
+  // counter pauses; it does not continue counting, nor does it
+  // reset to zero.
+  return mach_absolute_time();
+#elif defined(BENCHMARK_OS_EMSCRIPTEN)
+  // this goes above x86-specific code because old versions of Emscripten
+  // define __x86_64__, although they have nothing to do with it.
+  return static_cast<int64_t>(emscripten_get_now() * 1e+6);
+#elif defined(__i386__)
+  int64_t ret;
+  __asm__ volatile('rdtsc' : '=A'(ret));
+  return ret;
+#elif defined(__x86_64__) || defined(__amd64__)
+  uint64_t low, high;
+  __asm__ volatile('rdtsc' : '=a'(low), '=d'(high));
+  return (high << 32) | low;
+#elif defined(__powerpc__) || defined(__ppc__)
+  // This returns a time-base, which is not always precisely a cycle-count.
+  int64_t tbl, tbu0, tbu1;
+  asm('mftbu %0' : '=r'(tbu0));
+  asm('mftb  %0' : '=r'(tbl));
+  asm('mftbu %0' : '=r'(tbu1));
+  tbl &= -static_cast<int64_t>(tbu0 == tbu1);
+  // high 32 bits in tbu1; low 32 bits in tbl  (tbu0 is garbage)
+  return (tbu1 << 32) | tbl;
+#elif defined(__sparc__)
+  int64_t tick;
+  asm('.byte 0x83, 0x41, 0x00, 0x00');
+  asm('mov   %%g1, %0' : '=r'(tick));
+  return tick;
+#elif defined(__ia64__)
+  int64_t itc;
+  asm('mov %0 = ar.itc' : '=r'(itc));
+  return itc;
+#elif defined(COMPILER_MSVC) && defined(_M_IX86)
+  // Older MSVC compilers (like 7.x) don't seem to support the
+  // __rdtsc intrinsic properly, so I prefer to use _asm instead
+  // when I know it will work.  Otherwise, I'll use __rdtsc and hope
+  // the code is being compiled with a non-ancient compiler.
+  _asm rdtsc
+#elif defined(COMPILER_MSVC)
+  return __rdtsc();
+#elif defined(BENCHMARK_OS_NACL)
+  // Native Client validator on x86/x86-64 allows RDTSC instructions,
+  // and this case is handled above. Native Client validator on ARM
+  // rejects MRC instructions (used in the ARM-specific sequence below),
+  // so we handle it here. Portable Native Client compiles to
+  // architecture-agnostic bytecode, which doesn't provide any
+  // cycle counter access mnemonics.
+    }
+    }
+    }
+    
+    
+    {}  // end namespace benchmark
