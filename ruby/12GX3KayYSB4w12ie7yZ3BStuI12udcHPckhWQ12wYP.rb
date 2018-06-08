@@ -1,116 +1,155 @@
 
         
-                a_split.each_with_index { |s, i| a_split[i] = s.to_i unless i == a_length - 1 }
-        b_split.each_with_index { |s, i| b_split[i] = s.to_i unless i == b_length - 1 }
+              # Returns constant of subscription adapter specified in config/cable.yml.
+      # If the adapter cannot be found, this will default to the Redis adapter.
+      # Also makes sure proper dependencies are required.
+      def pubsub_adapter
+        adapter = (cable.fetch('adapter') { 'redis' })
     
-              # Underscore methods
-          if name.start_with?('Underscore')
-            node.at_css('~ ul').css('li').each do |li|
-              name = [type.downcase, li.at_css('a').content.split.first].join('.')
-              id = name.parameterize
-              li['id'] = id
-              entries << [name, id, type]
-            end
-            next
+      class MyController < ActionController::Metal
+    use BlockMiddleware do |config|
+      config.configurable_message = 'Configured by block.'
+    end
+    use MyMiddleware
+    middleware.insert_before MyMiddleware, ExclaimerMiddleware
+    
+            def enqueue_delivery(delivery_method, options = {})
+          if processed?
+            super
+          else
+            args = @mailer_class.name, @action.to_s, delivery_method.to_s, @params, *@args
+            ActionMailer::Parameterized::DeliveryJob.set(options).perform_later(*args)
           end
-    
-            css('.bs-docs-sidenav > li').each do |node|
-          link = node.at_css('a')
-          name = link.content
-          next if IGNORE_ENTRIES.include?(name)
-    
-          def get_type
-        case slug
-        when 'api'
-          'Reference'
-        when 'configuration'
-          'Reference: Configuration'
-        when 'stpl'
-          'Reference: SimpleTemplate'
-        when 'plugindev'
-          'Reference: Plugin'
-        else
-          'Manual'
         end
-      end
-    
-      def save_file(path, content, mode='w')
-    dir = File.dirname(path)
-    FileUtils.mkdir_p(dir) unless File.directory?(dir)
-    File.open(path, mode) { |file| file.write(content) }
-  end
-    
-        def log_http_get_file(url, cached = false)
-      s = '  #{'CACHED ' if cached}GET #{url}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
     end
     
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
-    
-    require 'metasploit/framework/common_engine'
-require 'metasploit/framework/database'
-    
-    require 'rubygems'  # install rubygems
-require 'hpricot'   # gem install hpricot
-require 'uri'
-require 'timeout'
-    
-            # Remove it form the session objects so freeup
-        sessions.delete(s[:session])
-    
-    # Sniffer class for GET URL's
-class SnifferURL < BaseProtocolParser
-  def register_sigs
-    self.sigs = {
-      :get		=> /^GET\s+([^\n]+)\s+HTTP\/\d\.\d/i,
-      :webhost	=> /^HOST\:\s+([^\n\r]+)/i,
-    }
+    class DefaultsDeliveryMethodsTest < ActiveSupport::TestCase
+  test 'default smtp settings' do
+    settings = { address:              'localhost',
+                 port:                 25,
+                 domain:               'localhost.localdomain',
+                 user_name:            nil,
+                 password:             nil,
+                 authentication:       nil,
+                 enable_starttls_auto: true }
+    assert_equal settings, ActionMailer::Base.smtp_settings
   end
     
-          # @param  [[Xcodeproj::PBXTarget]] targets
-      #         An array which always has a target as its first item
-      #         and may optionally contain a second target as its test target
-      #
-      # @return [String] the text for the target module
-      #
-      def template_contents(path, prefix, fallback)
-        if path.exist?
-          path.read.chomp.lines.map { |line| '#{prefix}#{line}' }.join('\n')
-        else
-          '#{prefix}# #{fallback}'
-        end
-      end
+    class ActionMailerI18nWithControllerTest < ActionDispatch::IntegrationTest
+  Routes = ActionDispatch::Routing::RouteSet.new
+  Routes.draw do
+    ActiveSupport::Deprecation.silence do
+      get ':controller(/:action(/:id))'
+    end
+  end
+    
+      def revoke_moderation!
+    set_permission('moderator', false)
+  end
+    
+        find_union(segments, Project).includes(:namespace).order_id_desc
+  end
+    
+          html_filters.push 'd3/clean_html', 'd3/entries_v3', 'title'
+    
+        self.name = 'PHP'
+    self.type = 'php'
+    self.release = '7.2.5'
+    self.base_url = 'https://secure.php.net/manual/en/'
+    self.root_path = 'index.html'
+    self.initial_paths = %w(
+      funcref.html
+      langref.html
+      refs.database.html
+      set.mysqlinfo.html
+      language.control-structures.html
+      reference.pcre.pattern.syntax.html
+      reserved.exceptions.html
+      reserved.interfaces.html
+      reserved.variables.html)
+    
+        options[:attribution] = <<-HTML
+      &copy; 2010 The Rust Project Developers<br>
+      Licensed under the Apache License, Version 2.0 or the MIT license, at your option.
+    HTML
+    
+        options[:attribution] = <<-HTML
+      &copy; 2010&ndash;2018 Christian Johansen<br>
+      Licensed under the BSD License.
+    HTML
+    
+        def as_json
+      { name: name, path: path, type: type }
     end
   end
 end
 
     
-            def validate!
-          super
-          help! 'A name for the Pod is required.' unless @name
-          help! 'The Pod name cannot contain spaces.' if @name =~ /\s/
-          help! 'The Pod name cannot contain plusses.' if @name =~ /\+/
-          help! 'The Pod name cannot begin with a '.'' if @name[0, 1] == '.'
+    module Docs
+  class PageDb
+    attr_reader :pages
+    
+        def self.join(*args)
+      PARSER.join(*args)
+    end
+    
+        existence_maps.each do |group|
+      existing_one = group.key(true)
+    
+      def icons
+    [
+      {
+        src: '/android-chrome-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+    ]
+  end
+    
+    def load_apps
+  out, err, status = Open3.capture3('/usr/bin/osascript', '-e', 'tell application 'System Events' to get (name, bundle identifier, unix id) of every process')
+  if status.exitstatus > 0
+    puts err
+    exit status.exitstatus
+  end
+  out = out.split(', ')
+  one_third   = out.length / 3
+  @app_names  = out.shift(one_third)
+  @bundle_ids = out.shift(one_third)
+  @unix_ids   = out.shift(one_third)
+end
+    
+          spec['version'] = Bootstrap::VERSION
+    
+          opts.on('--unix-newlines', 'Use Unix-style newlines in written files.',
+                                 ('Always true on Unix.' unless Sass::Util.windows?)) do
+        @options[:unix_newlines] = true if Sass::Util.windows?
+      end
+    end
+    
+          module ClassMethods
+        def inherited(subclass)
+          subclass.log_levels = subclass.superclass.log_levels.dup
         end
     
-            def used?
-          @variable.captured_by_block? || @referenced
-        end
+          res << val.to_s(:quote => :none)
+      res << ' ' if @after && @whitespace_after
+      res << @after.perform(environment).to_s if @after
+      str = Sass::Script::Value::String.new(
+        res, :identifier,
+        (to_quoted_equivalent.to_sass if deprecation == :potential))
+      str.source_range = source_range
+      opts(str)
+    end
     
-            # @param lines [Array<String>]
-        # @param annotations [Array<(Integer, String)>]
-        #   each entry is the annotated line number and the annotation text
-        #
-        # @note annotations are sorted so that reconstructing the annotation
-        #   text via {#to_s} is deterministic
-        def initialize(lines, annotations)
-          @lines       = lines.freeze
-          @annotations = annotations.sort.freeze
-        end
+      # Read and eval a .rake file in such a way that `self` within the .rake file
+  # refers to this plugin instance. This gives the tasks in the file access to
+  # helper methods defined by the plugin.
+  def eval_rakefile(path)
+    contents = IO.read(path)
+    instance_eval(contents, path, 1)
+  end
+    
+      desc 'Reverted'
+  task :reverted do
+  end
