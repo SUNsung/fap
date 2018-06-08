@@ -1,239 +1,167 @@
 
-def get_new_command(command):
-    dir = shell.quote(_tar_file(command.script_parts)[1])
-    return shell.and_('mkdir -p {dir}', '{cmd} -C {dir}') \
-        .format(dir=dir, cmd=command.script)
+        
+            entry = entry_template.replace('@TIMESTAMP@', timestamp)
+    entry = entry.replace('@VERSION@', v)
+    entries.append(entry)
     
     
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'thefuck --alias > ~/.config/fish/config.fish')
-    proc.sendline(u'fish')
-    return proc
+total_bytes = 0
     
-        return content
+        def download(self, x):
+        self.result.append(x)
     
-    '''
-requests._internal_utils
-~~~~~~~~~~~~~~
+        def test_youtube_channel_matching(self):
+        assertChannel = lambda url: self.assertMatch(url, ['youtube:channel'])
+        assertChannel('https://www.youtube.com/channel/HCtnHdj3df7iM')
+        assertChannel('https://www.youtube.com/channel/HCtnHdj3df7iM?feature=gb_ch_rec')
+        assertChannel('https://www.youtube.com/channel/HCtnHdj3df7iM/videos')
     
-    # Attempt to enable urllib3's SNI support, if possible
-try:
-    from urllib3.contrib import pyopenssl
-    pyopenssl.inject_into_urllib3()
+    from .common import FileDownloader
+from ..utils import (
+    check_executable,
+    encodeFilename,
+)
     
     
-    {    # Server Error.
-    500: ('internal_server_error', 'server_error', '/o\\', '✗'),
-    501: ('not_implemented',),
-    502: ('bad_gateway',),
-    503: ('service_unavailable', 'unavailable'),
-    504: ('gateway_timeout',),
-    505: ('http_version_not_supported', 'http_version'),
-    506: ('variant_also_negotiates',),
-    507: ('insufficient_storage',),
-    509: ('bandwidth_limit_exceeded', 'bandwidth'),
-    510: ('not_extended',),
-    511: ('network_authentication_required', 'network_auth', 'network_authentication'),
-}
+    {        webpage = self._download_webpage(url, text_id)
+        sohu_video_info_str = self._search_regex(
+            r'var\s+sohuVideoInfo\s*=\s*({[^}]+});', webpage, 'Sohu video info', default=None)
+        if sohu_video_info_str:
+            sohu_video_info = self._parse_json(
+                sohu_video_info_str, text_id, transform_source=js_to_json)
+            return self.url_result(sohu_video_info['url'], 'Sohu')
     
-    This module contains the transport adapters that Requests uses to define
-and maintain connections.
-'''
+            uploader = self._search_regex(
+            r'Added by\s*:\s*<a[^>]+>([^<]+)</a>', webpage, 'uploader', default=None)
+        upload_date = unified_strdate(self._search_regex(
+            r'Added on\s*:\s*([\d-]+)', webpage, 'upload date', default=None))
     
-    # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.viewcode',
-]
-    
-    
-def patch(url, data=None, **kwargs):
-    r'''Sends a PATCH request.
-    
-        :rtype: bool
-    '''
-    # Prioritize lowercase environment variables over uppercase
-    # to keep a consistent behaviour with other http projects (curl, wget).
-    get_proxy = lambda k: os.environ.get(k) or os.environ.get(k.upper())
-    
-        print()
-    print('Classification performance:')
-    print('===========================')
-    print()
-    print('%s %s %s %s' % ('Classifier  ', 'train-time', 'test-time',
-                           'Accuracy'))
-    print('-' * 44)
-    for name in sorted(accuracy, key=accuracy.get):
-        print('%s %s %s %s' % (name.ljust(16),
-                               ('%.4fs' % train_time[name]).center(10),
-                               ('%.4fs' % test_time[name]).center(10),
-                               ('%.4f' % accuracy[name]).center(10)))
-    
-                c_bar = plt.bar(xvals, build_time[alg] - bottom,
-                            width, bottom, color='r')
-            q_bar = plt.bar(xvals, query_time[alg],
-                            width, build_time[alg], color='b')
-    
-    from sklearn.utils import check_random_state
-from sklearn.metrics.pairwise import pairwise_distances
-from sklearn.metrics.pairwise import pairwise_kernels
-    
-        ###########################################################################
-    # Set GaussianRandomProjection input
-    gaussian_matrix_params = {
-        'n_components': opts.n_components,
-        'random_state': opts.random_seed
-    }
-    transformers['GaussianRandomProjection'] = \
-        GaussianRandomProjection(**gaussian_matrix_params)
-    
-        # import matplotlib.pyplot as plt
-    # plt.matshow(cm)
-    # plt.show()
+            return info_dict
 
     
-        in_exercise_region = False
     
-            # update decision surface if already fitted.
-        self.refit()
-    
-    from __future__ import division
-    
-    The usual covariance maximum likelihood estimate can be regularized
-using shrinkage. Ledoit and Wolf proposed a close formula to compute
-the asymptotically optimal shrinkage parameter (minimizing a MSE
-criterion), yielding the Ledoit-Wolf covariance estimate.
-    
-    import tornado.httpserver
-import tornado.ioloop
-import tornado.options
-import tornado.web
+# Core signals.  For usage examples grep the source code or consult
+# the API documentation in docs/api.rst as well as docs/signals.rst
+template_rendered = _signals.signal('template-rendered')
+before_render_template = _signals.signal('before-render-template')
+request_started = _signals.signal('request-started')
+request_finished = _signals.signal('request-finished')
+request_tearing_down = _signals.signal('request-tearing-down')
+got_request_exception = _signals.signal('got-request-exception')
+appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
+appcontext_pushed = _signals.signal('appcontext-pushed')
+appcontext_popped = _signals.signal('appcontext-popped')
+message_flashed = _signals.signal('message-flashed')
+
     
     
-def wrap_web_tests_adapter():
-    result = {}
-    for cls in web_test.wsgi_safe_tests:
-        class WSGIAdapterWrappedTest(cls):  # type: ignore
-            def get_app(self):
-                self.app = Application(self.get_handlers(),
-                                       **self.get_app_kwargs())
-                with ignore_deprecation():
-                    return WSGIContainer(validator(WSGIAdapter(self.app)))
-        result['WSGIAdapter_' + cls.__name__] = WSGIAdapterWrappedTest
-    return result
+def test_config_missing():
+    app = flask.Flask(__name__)
+    with pytest.raises(IOError) as e:
+        app.config.from_pyfile('missing.cfg')
+    msg = str(e.value)
+    assert msg.startswith('[Errno 2] Unable to load configuration '
+                          'file (No such file or directory):')
+    assert msg.endswith('missing.cfg'')
+    assert not app.config.from_pyfile('missing.cfg', silent=True)
     
-            class MainHandler(tornado.web.RequestHandler):
-            def get(self):
-                self.write('Hello, world')
+    import pytest
+import flask
+from flask._compat import PY2
     
-            .. deprecated:: 5.1
+    # Scrapy version
+import pkgutil
+__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
+version_info = tuple(int(v) if v.isdigit() else v
+                     for v in __version__.split('.'))
+del pkgutil
     
-        This interface is provided to make it easier to share code between
-    synchronous and asynchronous applications. Applications that are
-    running an `.IOLoop` must use `AsyncHTTPClient` instead.
-    
-            from tornado.queues import LifoQueue
-    
-        # Process chain
-    ctx = head
-    while ctx is not None:
-        parent = ctx.old_contexts[1]
+        def process_options(self, args, opts):
+        try:
+            self.settings.setdict(arglist_to_dict(opts.set),
+                                  priority='cmdline')
+        except ValueError:
+            raise UsageError('Invalid -s value, use -s NAME=VALUE', print_help=False)
     
     
-class OAuth1ClientLoginCoroutineHandler(OAuth1ClientLoginHandler):
-    '''Replaces OAuth1ClientLoginCoroutineHandler's get() with a coroutine.'''
-    @gen.coroutine
-    def get(self):
-        if self.get_argument('oauth_token', None):
-            # Ensure that any exceptions are set on the returned Future,
-            # not simply thrown into the surrounding StackContext.
-            try:
-                yield self.get_authenticated_user()
-            except Exception as e:
-                self.set_status(503)
-                self.write('got exception: %s' % e)
+class Command(ScrapyCommand):
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+                          help='set spider argument (may be repeated)')
+        parser.add_option('-o', '--output', metavar='FILE',
+                          help='dump scraped items into FILE (use - for stdout)')
+        parser.add_option('-t', '--output-format', metavar='FORMAT',
+                          help='format to use for dumping items with -o')
+    
+        def finish(self):
+        '''Implements `.HTTPConnection.finish`.'''
+        if (self._expected_content_remaining is not None and
+                self._expected_content_remaining != 0 and
+                not self.stream.closed()):
+            self.stream.close()
+            raise httputil.HTTPOutputError(
+                'Tried to write %d bytes less than Content-Length' %
+                self._expected_content_remaining)
+        if self._chunking_output:
+            if not self.stream.closed():
+                self._pending_write = self.stream.write(b'0\r\n\r\n')
+                self._pending_write.add_done_callback(self._on_write_complete)
+        self._write_finished = True
+        # If the app finished the request while we're still reading,
+        # divert any remaining data away from the delegate and
+        # close the connection when we're done sending our response.
+        # Closing the connection is the only way to avoid reading the
+        # whole input body.
+        if not self._read_finished:
+            self._disconnect_on_finish = True
+        # No more data is coming, so instruct TCP to send any remaining
+        # data immediately instead of waiting for a full packet or ack.
+        self.stream.set_nodelay(True)
+        if self._pending_write is None:
+            self._finish_request(None)
         else:
-            yield self.authorize_redirect()
+            future_add_done_callback(self._pending_write, self._finish_request)
     
-        def test_human_shall_speak(self):
-        noise = self.human.speak()
-        expected_noise = ''hello''
-        self.assertEqual(noise, expected_noise)
+        This is a non-blocking and non-threaded resolver.  It is
+    recommended only when threads cannot be used, since it has
+    limitations compared to the standard ``getaddrinfo``-based
+    `~tornado.netutil.Resolver` and
+    `~tornado.netutil.DefaultExecutorResolver`.  Specifically, it returns at
+    most one result, and arguments other than ``host`` and ``family``
+    are ignored.  It may fail to resolve when ``family`` is not
+    ``socket.AF_UNSPEC``.
     
-        def test_sequential_undo(self):
-        self.command_stack = list(reversed(self.command_stack))
-        self.command_stack[0].undo()
-        output_after_first_undo = os.listdir(self.test_dir)
-        self.assertEqual(output_after_first_undo[0], 'bar.txt')
-        self.command_stack[1].undo()
-        output_after_second_undo = os.listdir(self.test_dir)
-        self.assertEqual(output_after_second_undo[0], 'foo.txt')
+        def part2(self):
+        logging.debug('in part2()')
+        # Go through a third layer to make sure that contexts once restored
+        # are again passed on to future callbacks
+        IOLoop.current().add_callback(self.part3)
     
-        def test_c_observers_shall_be_detachable(cls):
-        cls.s.detach(cls.dec_obs)
-        # hex viewer shall be remaining if dec viewer is detached first
-        cls.assertEqual(isinstance(cls.s._observers[0], HexViewer), True)
-        cls.assertEqual(len(cls.s._observers), 1)
-        cls.s.detach(cls.hex_obs)
-        cls.assertEqual(len(cls.s._observers), 0)
+            test_with_kwargs(self, test='test')
+        self.finished = True
     
-        def test_sales_manager_shall_talk_through_proxy_with_delay(cls):
-        cls.p.busy = 'No'
-        start_time = time()
-        cls.p.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-Sales Manager ready to talk\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
+        def consume(self):
+        try:
+            while True:
+                result = self.reader.recv(1024)
+                if not result:
+                    break
+        except (IOError, socket.error):
+            pass
     
     
-class RadioTest(unittest.TestCase):
-    '''
-    Attention: Test case results depend on test case execution. The test cases
-    in this integration test class should be executed in an explicit order:
-    http://stackoverflow.com/questions/5387299/python-unittest-testcase-execution-order
-    '''
-    
-        def test_tc2_output(self):
-        self.tc2.run()
-        output = self.out.getvalue().strip()
-        self.assertEqual(output, self.average_result_tc2)
-    
-    from dft.constructor_injection import TimeDisplay, MidnightTimeProvider, ProductionCodeTimeProvider, datetime
-    
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-'''
-    
-    
-class ConcreteHandler2(Handler):
-    
-    print('Counting to two...')
-for number in count_to_two():
-    print(number, end=' ')
-    
-    
-# Example usage...
-def main():
-    data1 = Data('Data 1')
-    data2 = Data('Data 2')
-    view1 = DecimalViewer()
-    view2 = HexViewer()
-    data1.attach(view1)
-    data1.attach(view2)
-    data2.attach(view2)
-    data2.attach(view1)
+def run(args):
+    '''Handle ensure config commandline script.'''
+    parser = argparse.ArgumentParser(
+        description=('Ensure a Home Assistant config exists, '
+                     'creates one if necessary.'))
+    parser.add_argument(
+        '-c', '--config',
+        metavar='path_to_config_dir',
+        default=config_util.get_default_config_dir(),
+        help='Directory that contains the Home Assistant configuration')
+    parser.add_argument(
+        '--script',
+        choices=['ensure_config'])
