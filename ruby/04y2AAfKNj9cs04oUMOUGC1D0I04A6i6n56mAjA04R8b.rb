@@ -1,82 +1,71 @@
 
         
-            options[:attribution] = <<-HTML
-      &copy; Joyent, Inc. and other Node contributors<br>
-      Licensed under the MIT License.<br>
-      Node.js is a trademark of Joyent, Inc. and is used with its permission.<br>
-      We are not endorsed by or affiliated with Joyent.
-    HTML
-    
-        options[:only_patterns] = [
-      /\Abook\/first-edition\//,
-      /\Areference\//,
-      /\Acollections\//,
-      /\Astd\// ]
-    
-        html_filters.push 'sinon/clean_html', 'sinon/entries'
-    
-        version 'Python' do
-      include MultipleBaseUrls
-      self.base_urls = ['https://www.tensorflow.org/api_docs/python/', 'https://www.tensorflow.org/api_guides/python/']
-    end
-    
-            return a.casecmp(b) if a_length == 1 && b_length == 1
-        return 1 if a_length == 1
-        return -1 if b_length == 1
-    
-        def add(path, content)
-      @pages[path] = content
-    end
-    
-        # From asking people, it seems MacPorts does not have a `prefix` command, like
-    # Homebrew does, so make an educated guess:
-    if port_prefix = prefix_from_bin('port')
-      prefixes << port_prefix
-    end
-    
-          def run
-        UI.puts report
+              if options[:type] == :array && (options[:values].blank? || !options[:values].is_a?(Array))
+        raise ArgumentError.new('When using :array as :type you need to provide the :values as an Array')
       end
     
-            def print_version
-          output_pipe.puts 'version: '#{Pod::VERSION}''
+      def tumblr_consumer_secret
+    ENV['TUMBLR_OAUTH_SECRET']
+  end
+    
+    require 'open3'
+    
+    class AdminsController < Admin::AdminController
+  include ApplicationHelper
+    
+      # Implemented by subclasses to hook into Capistrano's deployment flow using
+  # using the `before` and `after` DSL methods. Note that `register_hooks` will
+  # not be called if the user has opted-out of hooks when installing the plugin.
+  #
+  # Example:
+  #
+  #   def register_hooks
+  #     after 'deploy:updated', 'my_plugin:do_something'
+  #   end
+  #
+  def register_hooks; end
+    
+              it 'returns all release servers' do
+            expect(subject.map(&:hostname)).to eq %w{example1.com example2.com example3.com example4.com}
+          end
         end
     
-      # PATCH/PUT /books/1
-  # PATCH/PUT /books/1.json
-  def update
-    respond_to do |format|
-      if @book.update(book_params)
-        format.html { redirect_to @book, notice: 'Book was successfully updated.' }
-        format.json { render :show, status: :ok, location: @book }
-      else
-        format.html { render :edit }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
+    When /^(?:|I )fill in '([^']*)' with '([^']*)'$/ do |field, value|
+  fill_in(field, :with => value)
+end
+    
+        def definitions_for(klass)
+      parent_classes = klass.ancestors.reverse
+      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
+        inherited_definitions.deep_merge! @attachments[ancestor]
       end
     end
   end
+end
+
     
-        context 'when first child is NOT a method' do
-      it 'does not require blank line at the beginning of #{type} body '\
-        'but requires blank line before first def definition '\
-        'and requires blank line at the end of #{type} body' do
-        inspect_source(<<-RUBY.strip_indent)
-          #{type} SomeObject
-            include Something
-    
-        # Extracts the Geometry from a 'WxH,O' string
-    # Where W is the width, H is the height,
-    # and O is the EXIF orientation
-    def self.parse(string)
-      GeometryParser.new(string).make
-    end
-    
-            protected
-    
-          def create_validating_before_filter(attribute, validator_class, options)
-        if_clause = options.delete(:if)
-        unless_clause = options.delete(:unless)
-        send(:'before_#{attribute}_post_process', :if => if_clause, :unless => unless_clause) do |*args|
-          validator_class.new(options.dup).validate(self)
+            def rejected_types_rejected?
+          @missing_rejected_types ||= @rejected_types.select { |type| type_allowed?(type) }
+          @missing_rejected_types.none?
         end
       end
+    end
+  end
+end
+
+    
+            def failure_message_when_negated
+          'Attachment #{@attachment_name} cannot be between #{@low} and #{@high} bytes'
+        end
+        alias negative_failure_message failure_message_when_negated
+    
+            raise LoadError, 'Could not find the '#{name}' processor in any of these paths: #{directories.join(', ')}' unless required.any?
+      end
+    end
+    
+          def check_validity!
+        unless options.has_key?(:content_type) || options.has_key?(:not)
+          raise ArgumentError, 'You must pass in either :content_type or :not to the validator'
+        end
+      end
+    end
