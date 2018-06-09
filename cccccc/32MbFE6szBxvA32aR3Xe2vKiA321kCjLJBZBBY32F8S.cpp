@@ -1,347 +1,216 @@
 
         
-        namespace grpc {
-namespace testing {
-    }
+        template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36>
+internal::ValueArray36<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+    T29, T30, T31, T32, T33, T34, T35, T36> Values(T1 v1, T2 v2, T3 v3, T4 v4,
+    T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13,
+    T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21,
+    T22 v22, T23 v23, T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29,
+    T30 v30, T31 v31, T32 v32, T33 v33, T34 v34, T35 v35, T36 v36) {
+  return internal::ValueArray36<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
+      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36>(v1, v2, v3, v4,
+      v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19,
+      v20, v21, v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32, v33,
+      v34, v35, v36);
+}
+    
+    
+    {}  // namespace testing
+    
+    // Next, associate a list of types with the test case, which will be
+// repeated for each type in the list.  The typedef is necessary for
+// the macro to parse correctly.
+typedef testing::Types<char, int, unsigned int> MyTypes;
+TYPED_TEST_CASE(FooTest, MyTypes);
+    
+    #if GTEST_OS_WINDOWS
+# define GTEST_PATH_SEP_ '\\'
+# define GTEST_HAS_ALT_PATH_SEP_ 1
+// The biggest signed integer type the compiler supports.
+typedef __int64 BiggestInt;
+#else
+# define GTEST_PATH_SEP_ '/'
+# define GTEST_HAS_ALT_PATH_SEP_ 0
+typedef long long BiggestInt;  // NOLINT
+#endif  // GTEST_OS_WINDOWS
+    
+    // Anything in namespace gtest_internal is Google Test's INTERNAL
+// IMPLEMENTATION DETAIL and MUST NOT BE USED DIRECTLY in user code.
+namespace gtest_internal {
     }
     
-      bool TryParseOne(Feature* feature) {
-    if (failed_ || Finished() || !Match('{')) {
-      return SetFailedAndReturnFalse();
-    }
-    if (!Match(location_) || !Match('{') || !Match(latitude_)) {
-      return SetFailedAndReturnFalse();
-    }
-    long temp = 0;
-    ReadLong(&temp);
-    feature->mutable_location()->set_latitude(temp);
-    if (!Match(',') || !Match(longitude_)) {
-      return SetFailedAndReturnFalse();
-    }
-    ReadLong(&temp);
-    feature->mutable_location()->set_longitude(temp);
-    if (!Match('},') || !Match(name_) || !Match('\'')) {
-      return SetFailedAndReturnFalse();
-    }
-    size_t name_start = current_;
-    while (current_ != db_.size() && db_[current_++] != ''') {
-    }
-    if (current_ == db_.size()) {
-      return SetFailedAndReturnFalse();
-    }
-    feature->set_name(db_.substr(name_start, current_-name_start-1));
-    if (!Match('},')) {
-      if (db_[current_ - 1] == ']' && current_ == db_.size()) {
-        return true;
-      }
-      return SetFailedAndReturnFalse();
-    }
-    return true;
-  }
-    
-    // Data pertaining to configuration of the generator with respect to anything
-// that may be used internally at Google.
-struct GeneratorConfiguration {
-  GeneratorConfiguration();
-  grpc::string grpc_package_root;
-  // TODO(https://github.com/grpc/grpc/issues/8622): Drop this.
-  grpc::string beta_package_root;
-  // TODO(https://github.com/google/protobuf/issues/888): Drop this.
-  grpc::string import_prefix;
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30>
+struct Types30 {
+  typedef T1 Head;
+  typedef Types29<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
+      T30> Tail;
 };
     
-    static void sigint_handler(int x) {
-  gpr_atm_no_barrier_store(&grpc::testing::interop::g_got_sigint, true);
-}
-    
-    #endif
-
-    
-      struct Result {
-    double wall;
-    double user;
-    double system;
-    unsigned long long total_cpu_time;
-    unsigned long long idle_cpu_time;
-  };
-    
-      // Initialize the internal timer and reset the query count to 0
-  void Reset();
-    
-      // Return the sequence number for the start of this batch.
-  static SequenceNumber Sequence(const WriteBatch* batch);
-    
-    void BlockHandle::EncodeTo(std::string* dst) const {
-  // Sanity check that all fields have been set
-  assert(offset_ != ~static_cast<uint64_t>(0));
-  assert(size_ != ~static_cast<uint64_t>(0));
-  PutVarint64(dst, offset_);
-  PutVarint64(dst, size_);
-}
-    
-    #include <string.h>
-#include 'util/coding.h'
-#include 'util/hash.h'
-    
-    // Helper class that locks a mutex on construction and unlocks the mutex when
-// the destructor of the MutexLock object is invoked.
+    // Type utilities needed for implementing typed and type-parameterized
+// tests.  This file is generated by a SCRIPT.  DO NOT EDIT BY HAND!
 //
-// Typical usage:
-//
-//   void MyClass::MyMethod() {
-//     MutexLock l(&mu_);       // mu_ is an instance variable
-//     ... some complex code, possibly with multiple return paths ...
-//   }
+// Currently we support at most $n types in a list, and at most $n
+// type-parameterized tests in one type-parameterized test case.
+// Please contact googletestframework@googlegroups.com if you need
+// more.
     
-      // Delete everything
-  for (int i = 0; i < kCount; i++) {
-    ASSERT_OK(db_->Delete(WriteOptions(), Key(i)));
-  }
-  ASSERT_OK(dbi->TEST_CompactMemTable());
-    
-    void DBIter::FindNextUserEntry(bool skipping, std::string* skip) {
-  // Loop until we hit an acceptable entry to yield
-  assert(iter_->Valid());
-  assert(direction_ == kForward);
-  do {
-    ParsedInternalKey ikey;
-    if (ParseKey(&ikey) && ikey.sequence <= sequence_) {
-      switch (ikey.type) {
-        case kTypeDeletion:
-          // Arrange to skip all upcoming entries for this key since
-          // they are hidden by this deletion.
-          SaveKey(ikey.user_key, skip);
-          skipping = true;
-          break;
-        case kTypeValue:
-          if (skipping &&
-              user_comparator_->Compare(ikey.user_key, *skip) <= 0) {
-            // Entry hidden
-          } else {
-            valid_ = true;
-            saved_key_.clear();
-            return;
-          }
-          break;
-      }
+    // Implementation #1 calculates the primes on-the-fly.
+class OnTheFlyPrimeTable : public PrimeTable {
+ public:
+  virtual bool IsPrime(int n) const {
+    if (n <= 1) return false;
     }
-    iter_->Next();
-  } while (iter_->Valid());
-  saved_key_.clear();
-  valid_ = false;
+    }
+    
+    
+    {  return result;
 }
     
-    
-    {  // When limit user key is prefix of start user key
-  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
-            Shorten(IKey('foobar', 100, kTypeValue),
-                    IKey('foo', 200, kTypeValue)));
-}
-    
-      // Reset the contents as if the BlockBuilder was just constructed.
-  void Reset();
-    
-    template <typename Stream>
-class buffered_read_stream;
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    #ifndef BOOST_ASIO_DETAIL_CALL_STACK_HPP
-#define BOOST_ASIO_DETAIL_CALL_STACK_HPP
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-typedef null_event event;
-#elif defined(BOOST_ASIO_WINDOWS)
-typedef win_event event;
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-typedef posix_event event;
-#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-typedef std_event event;
-#endif
-    
-    #ifndef BOOST_ASIO_DETAIL_FUNCTION_HPP
-#define BOOST_ASIO_DETAIL_FUNCTION_HPP
-    
-    template <typename Handler, typename Arg1, typename Arg2>
-auto two_arg_handler_test(Handler h, Arg1* a1, Arg2* a2)
-  -> decltype(
-    sizeof(Handler(static_cast<const Handler&>(h))),
-    ((h)(*a1, *a2)),
-    char(0));
-    
-    class winrt_buffer_impl :
-  public Microsoft::WRL::RuntimeClass<
-    Microsoft::WRL::RuntimeClassFlags<
-      Microsoft::WRL::RuntimeClassType::WinRtClassicComMix>,
-    ABI::Windows::Storage::Streams::IBuffer,
-    Windows::Storage::Streams::IBufferByteAccess>
-{
-public:
-  explicit winrt_buffer_impl(const boost::asio::const_buffer& b)
-  {
-    bytes_ = const_cast<byte*>(boost::asio::buffer_cast<const byte*>(b));
-    length_ = boost::asio::buffer_size(b);
-    capacity_ = boost::asio::buffer_size(b);
+    // This event listener monitors how many Water objects are created and
+// destroyed by each test, and reports a failure if a test leaks some Water
+// objects. It does this by comparing the number of live Water objects at
+// the beginning of a test and at the end of a test.
+class LeakChecker : public EmptyTestEventListener {
+ private:
+  // Called before a test starts.
+  virtual void OnTestStart(const TestInfo& /* test_info */) {
+    initially_allocated_ = Water::allocated();
   }
     }
     
-    int close(int d, state_type& state, boost::system::error_code& ec)
-{
-  int result = 0;
-  if (d != -1)
-  {
-    errno = 0;
-    result = error_wrapper(::close(d), ec);
+      ts->tv_sec += s_extra_request_nanoseconds / sec_to_ns;
+  auto res = ts->tv_nsec + s_extra_request_nanoseconds % sec_to_ns;
+  if (res > sec_to_ns) {
+    res -= sec_to_ns;
+    ts->tv_sec += 1;
+  }
+  ts->tv_nsec = res;
+    
+    #include 'hphp/runtime/vm/hhbc.h'
+    
+      // An integer is constructed from the n, imm_s and imm_r bits according to
+  // the following table:
+  //
+  //  N   imms    immr    size        S             R
+  //  1  ssssss  rrrrrr    64    UInt(ssssss)  UInt(rrrrrr)
+  //  0  0sssss  xrrrrr    32    UInt(sssss)   UInt(rrrrr)
+  //  0  10ssss  xxrrrr    16    UInt(ssss)    UInt(rrrr)
+  //  0  110sss  xxxrrr     8    UInt(sss)     UInt(rrr)
+  //  0  1110ss  xxxxrr     4    UInt(ss)      UInt(rr)
+  //  0  11110s  xxxxxr     2    UInt(s)       UInt(r)
+  // (s bits must not be all set)
+  //
+  // A pattern is constructed of size bits, where the least significant S+1
+  // bits are set. The pattern is rotated right by R, and repeated across a
+  // 32 or 64-bit value, depending on destination register width.
+  //
+    
+      static FILE *LightPopenImpl(const char *cmd, const char *type,
+                              const char *cwd);
+  static FILE *HeavyPopenImpl(const char *cmd, const char *type,
+                              const char *cwd);
+    
+        memcpy(p, 'free_hugepages', 15);
+    assert(strlen('free_hugepages') == 14); // extra \0 byte
+    free_huge = readNumFrom(fileName);
+    
+    #include <osquery/core.h>
+#include <osquery/filesystem.h>
+#include <osquery/logger.h>
+#include <osquery/tables.h>
+    
+    /**
+ * @brief Create an osquery extension 'module', if an expression is true.
+ *
+ * This is a helper testing wrapper around CREATE_MODULE and DECLARE_MODULE.
+ * It allows unit and integration tests to generate global construction code
+ * that depends on data/variables available during global construction.
+ *
+ * And example use includes checking if a process environment variable is
+ * defined. If defined the module is declared.
+ */
+#define CREATE_MODULE_IF(expr, name, version, min_sdk_version)                 \
+  extern 'C' EXPORT_FUNCTION void initModule(void);                            \
+  struct osquery_InternalStructCreateModule {                                  \
+    osquery_InternalStructCreateModule(void) {                                 \
+      if ((expr)) {                                                            \
+        Registry::get().declareModule(                                         \
+            name, version, min_sdk_version, OSQUERY_SDK_VERSION);              \
+      }                                                                        \
+    }                                                                          \
+  };                                                                           \
+  static osquery_InternalStructCreateModule osquery_internal_module_instance_;
+    
+    static int update_user_kernel_buffer(int options,
+                                     size_t read_offset,
+                                     size_t *max_read_offset,
+                                     int *drops) {
+  if (osquery_cqueue_advance_read(
+          &osquery.cqueue, read_offset, max_read_offset)) {
+    return -EINVAL;
+  }
+  if (!(options & OSQUERY_OPTIONS_NO_BLOCK)) {
+    ssize_t offset = 0;
+    if ((offset = osquery_cqueue_wait_for_data(&osquery.cqueue)) < 0) {
+      return -EINVAL;
+    }
     }
     }
     
-    
-    {  // Destroy all operations associated with the descriptor.
-  op_queue<operation> ops;
-  boost::system::error_code ec;
-  for (int i = 0; i < max_ops; ++i)
-    op_queue_[i].cancel_operations(descriptor, ops, ec);
+    TEST_F(StatusTests, test_constructor) {
+  auto s = Status(5, 'message');
+  EXPECT_EQ(s.getCode(), 5);
+  EXPECT_EQ(s.getMessage(), 'message');
 }
     
-    namespace folly {
-namespace exception_tracer {
-    }
-    }
-    
-    namespace folly {
-    }
-    
-    template <typename C>
-struct compare_greater_equal : detail::cmp_pred<C, ordering::lt, 1> {
-  using detail::cmp_pred<C, ordering::lt, 1>::cmp_pred;
-};
-    
-      bool add(T v) {
-    auto prev = &head_;
-    locate_lower_bound(v, prev);
-    auto curr = prev->load(std::memory_order_relaxed);
-    if (curr && curr->elem_ == v) {
-      return false;
-    }
-    prev->store(new Node(std::move(v), curr));
-    return true;
+      ProcessState checkStatus(int& _status) const {
+    _status = status_;
+    return state_;
   }
     
-    // I have no idea what the normal values for these are,
-// and really don't care what they are. They're only used
-// within fcntl, so it's not an issue.
-#define FD_CLOEXEC HANDLE_FLAG_INHERIT
-#define O_NONBLOCK 1
-#define F_GETFD 1
-#define F_SETFD 2
-#define F_GETFL 3
-#define F_SETFL 4
+    /// The shell may request execution of all queries in a pack immediately.
+DECLARE_string(pack);
     
-    // TLDR: Prefer using operator< for ordering. And when
-// a and b are equivalent objects, we return b to make
-// sorting stable.
-// See http://stepanovpapers.com/notes.pdf for details.
-template <typename T>
-constexpr T constexpr_max(T a) {
-  return a;
-}
-template <typename T, typename... Ts>
-constexpr T constexpr_max(T a, T b, Ts... ts) {
-  return b < a ? constexpr_max(a, ts...) : constexpr_max(b, ts...);
-}
+      /// Set of paths to monitor, determined by a configure step.
+  std::set<std::string> paths_;
     
-      folly::Optional<T> try_take_for(std::chrono::milliseconds time) override {
-    T item;
-    while (!queue_.try_dequeue(item)) {
-      if (!sem_.try_wait_for(time)) {
-        return folly::none;
-      }
-    }
-    return std::move(item);
-  }
     
-    int main(int argc, char* argv[]) {
-  // Using log macros before calling folly::initLogging() will use the default
-  // log settings defined by folly::initializeLoggerDB().  The default behavior
-  // is to log WARNING+ messages to stderr.
-  XLOG(INFO) << 'log messages less than WARNING will be ignored';
-  XLOG(ERR) << 'error messages before initLogging() will be logged to stderr';
+    {}
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    class ServiceBase {
+  public:
+    virtual ~ServiceBase() {}
+    void DependServices(const TServicesMap& _dependservices) { m_dependservices = _dependservices;}
+    const char* ServiceName() const { return m_servicename.c_str();}
     }
     
-       private:
-    friend class SerialExecutor;
-    explicit Deleter(std::shared_ptr<Executor> parent)
-        : parent_(std::move(parent)) {}
-    
-    int Node::getPositionType(void) const
-{
-    return YGNodeStyleGetPositionType(m_node);
-}
-    
-    void assertInternal(const char* formatstr ...) {
-    va_list va_args;
-    va_start(va_args, formatstr);
-    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
-    va_end(va_args);
-    if (gAssertHandler != NULL) {
-        gAssertHandler(sAssertBuf);
-    }
-    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
-    // crash at this specific address so that we can find our crashes easier
-    *(int*)0xdeadb00c = 0;
-    // let the compiler know we won't reach the end of the function
-     __builtin_unreachable();
-}
-    
-    namespace facebook {
+        void Detach(const char* _key) {
+        __OnDetach(_key);
+        m_variablemap.erase(_key);
     }
     
-    #pragma once
-#include <cstring>
-#include <string>
-#include <sstream>
+      private:
+    int __TestFun1(int i);
     
-    
-    {  T* operator->() const {
-    return m_instance;
-  }
-private:
-  T* m_instance;
-};
-    
-    #endif  // BENCHMARK_API_INTERNAL_H
-
-    
-    namespace benchmark {
-enum LogColor {
-  COLOR_DEFAULT,
-  COLOR_RED,
-  COLOR_GREEN,
-  COLOR_YELLOW,
-  COLOR_BLUE,
-  COLOR_MAGENTA,
-  COLOR_CYAN,
-  COLOR_WHITE
-};
-    }
-    
-      // Calculate least square fitting parameter
-  for (size_t i = 0; i < n.size(); ++i) {
-    double gn_i = fitting_curve(n[i]);
-    sigma_gn += gn_i;
-    sigma_gn_squared += gn_i * gn_i;
-    sigma_time += time[i];
-    sigma_time_gn += time[i] * gn_i;
-  }
-    
-      Out << run.GetAdjustedRealTime() << ',';
-  Out << run.GetAdjustedCPUTime() << ',';
-    
-    namespace benchmark {
-    }
-    
-    #include <cerrno>
-#include <cstdlib>
-#include <ctime>
+    jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const AutoBuffer& ab);
+jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const void* _buffer, size_t _length);
+void JNU_FreeJbyteArray(JNIEnv* _env, jbyteArray bytes);
