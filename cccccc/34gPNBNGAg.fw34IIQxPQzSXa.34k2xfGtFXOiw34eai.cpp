@@ -1,143 +1,327 @@
 
         
-        #include 'matrix.h'
-#include 'include_gunit.h'
-#include 'genericvector.h'
-#include 'tprintf.h'
-    
-    
-    {  TessResultRenderer* remainder = next_;
-  next_ = next;
-  if (remainder) {
-    while (next->next_ != nullptr) {
-      next = next->next_;
+          Datum datum;
+  datum.set_channels(1);
+  datum.set_height(rows);
+  datum.set_width(cols);
+  LOG(INFO) << 'A total of ' << num_items << ' items.';
+  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
+  for (int item_id = 0; item_id < num_items; ++item_id) {
+    image_file.read(pixels, rows * cols);
+    label_file.read(&label, 1);
+    datum.set_data(pixels, rows*cols);
+    datum.set_label(label);
+    string key_str = caffe::format_int(item_id, 8);
+    datum.SerializeToString(&value);
     }
-    next->next_ = remainder;
-  }
-}
     
-      // Draws the data in a new window.
-  void Display() const;
-    
-    
-    {  // Now maximize sig_sq_B over t.
-  // http://www.ctie.monash.edu.au/hargreave/Cornall_Terry_328.pdf
-  int best_t = -1;
-  int omega_0, omega_1;
-  int best_omega_0 = 0;
-  double best_sig_sq_B = 0.0;
-  double mu_0, mu_1, mu_t;
-  omega_0 = 0;
-  mu_t = 0.0;
-  for (int t = 0; t < kHistogramSize - 1; ++t) {
-    omega_0 += histogram[t];
-    mu_t += t * static_cast<double>(histogram[t]);
-    if (omega_0 == 0)
-      continue;
-    omega_1 = H - omega_0;
-    if (omega_1 == 0)
-      break;
-    mu_0 = mu_t / omega_0;
-    mu_1 = (mu_T - mu_t) / omega_1;
-    double sig_sq_B = mu_1 - mu_0;
-    sig_sq_B *= sig_sq_B * omega_0 * omega_1;
-    if (best_t < 0 || sig_sq_B > best_sig_sq_B) {
-      best_sig_sq_B = sig_sq_B;
-      best_t = t;
-      best_omega_0 = omega_0;
-    }
-  }
-  if (H_out != nullptr) *H_out = H;
-  if (omega0_out != nullptr) *omega0_out = best_omega_0;
-  return best_t;
-}
+      /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *
+   * @param datum
+   *    Datum containing the data to be transformed.
+   */
+  vector<int> InferBlobShape(const Datum& datum);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *    It uses the first element to infer the shape of the blob.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   */
+  vector<int> InferBlobShape(const vector<Datum> & datum_vector);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *    It uses the first element to infer the shape of the blob.
+   *
+   * @param mat_vector
+   *    A vector of Mat containing the data to be transformed.
+   */
+#ifdef USE_OPENCV
+  vector<int> InferBlobShape(const vector<cv::Mat> & mat_vector);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *
+   * @param cv_img
+   *    cv::Mat containing the data to be transformed.
+   */
+  vector<int> InferBlobShape(const cv::Mat& cv_img);
+#endif  // USE_OPENCV
     
     /**
- * Possible modes for page layout analysis. These *must* be kept in order
- * of decreasing amount of layout analysis to be done, except for OSD_ONLY,
- * so that the inequality test macros below work.
-*/
-enum PageSegMode {
-  PSM_OSD_ONLY,       ///< Orientation and script detection only.
-  PSM_AUTO_OSD,       ///< Automatic page segmentation with orientation and
-                      ///< script detection. (OSD)
-  PSM_AUTO_ONLY,      ///< Automatic page segmentation, but no OSD, or OCR.
-  PSM_AUTO,           ///< Fully automatic page segmentation, but no OSD.
-  PSM_SINGLE_COLUMN,  ///< Assume a single column of text of variable sizes.
-  PSM_SINGLE_BLOCK_VERT_TEXT,  ///< Assume a single uniform block of vertically
-                               ///< aligned text.
-  PSM_SINGLE_BLOCK,   ///< Assume a single uniform block of text. (Default.)
-  PSM_SINGLE_LINE,    ///< Treat the image as a single text line.
-  PSM_SINGLE_WORD,    ///< Treat the image as a single word.
-  PSM_CIRCLE_WORD,    ///< Treat the image as a single word in a circle.
-  PSM_SINGLE_CHAR,    ///< Treat the image as a single character.
-  PSM_SPARSE_TEXT,    ///< Find as much text as possible in no particular order.
-  PSM_SPARSE_TEXT_OSD,  ///< Sparse text with orientation and script det.
-  PSM_RAW_LINE,       ///< Treat the image as a single text line, bypassing
-                      ///< hacks that are Tesseract-specific.
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
+ */
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-      // Create a reader that will return log records from '*file'.
-  // '*file' must remain live while this Reader is in use.
-  //
-  // If 'reporter' is non-nullptr, it is notified whenever some data is
-  // dropped due to a detected corruption.  '*reporter' must remain
-  // live while this Reader is in use.
-  //
-  // If 'checksum' is true, verify checksums if available.
-  //
-  // The Reader will start reading at the first record located at physical
-  // position >= initial_offset within the file.
-  Reader(std::shared_ptr<Logger> info_log,
-  // @lint-ignore TXT2 T25377293 Grandfathered in
-	 unique_ptr<SequentialFileReader>&& file,
-         Reporter* reporter, bool checksum, uint64_t initial_offset,
-         uint64_t log_num);
-    
-      // Return true if the current MemTableRep supports snapshot
-  // Default: true
-  virtual bool IsSnapshotSupported() const { return true; }
-    
-    namespace rocksdb {
-CompactionFilterFactoryJniCallback::CompactionFilterFactoryJniCallback(
-    JNIEnv* env, jobject jcompaction_filter_factory)
-    : JniCallback(env, jcompaction_filter_factory) {
-  
-  // Note: The name of a CompactionFilterFactory will not change during
-  // it's lifetime, so we cache it in a global var
-  jmethodID jname_method_id =
-      AbstractCompactionFilterFactoryJni::getNameMethodId(env);
-  if(jname_method_id == nullptr) {
-    // exception thrown: NoSuchMethodException or OutOfMemoryError
-    return;
+      /// @brief The spatial dimensions of the input.
+  inline int input_shape(int i) {
+    return (*bottom_shape_)[channel_axis_ + i];
   }
-    }
+  // reverse_dimensions should return true iff we are implementing deconv, so
+  // that conv helpers know which dimensions are which.
+  virtual bool reverse_dimensions() = 0;
+  // Compute height_out_ and width_out_ from other parameters.
+  virtual void compute_output_shape() = 0;
+    
+    
+    {}  // namespace caffe
+    
+    /**
+ * @brief Convolves the input image with a bank of learned filters,
+ *        and (optionally) adds biases.
+ *
+ *   Caffe convolves by reduction to matrix multiplication. This achieves
+ *   high-throughput and generality of input and filter dimensions but comes at
+ *   the cost of memory for matrices. This makes use of efficiency in BLAS.
+ *
+ *   The input is 'im2col' transformed to a channel K' x H x W data matrix
+ *   for multiplication with the N x K' x H x W filter matrix to yield a
+ *   N' x H x W output matrix that is then 'col2im' restored. K' is the
+ *   input channel * kernel height * kernel width dimension of the unrolled
+ *   inputs so that the im2col matrix has a column for each input region to
+ *   be filtered. col2im restores the output spatial structure by rolling up
+ *   the output channel N' columns of the output matrix.
+ */
+template <typename Dtype>
+class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
+ public:
+  /**
+   * @param param provides ConvolutionParameter convolution_param,
+   *    with ConvolutionLayer options:
+   *  - num_output. The number of filters.
+   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
+   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
+   *  filters.
+   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
+   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
+   *  for different strides. By default the convolution is dense with stride 1.
+   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
+   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
+   *  different padding. Input padding is computed implicitly instead of
+   *  actually padding.
+   *  - dilation (\b optional, default 1). The filter
+   *  dilation, given by dilation_size for equal dimensions for different
+   *  dilation. By default the convolution has dilation 1.
+   *  - group (\b optional, default 1). The number of filter groups. Group
+   *  convolution is a method for reducing parameterization by selectively
+   *  connecting input and output channels. The input and output channel dimensions must be divisible
+   *  by the number of groups. For group @f$ \geq 1 @f$, the
+   *  convolutional filters' input and output channels are separated s.t. each
+   *  group takes 1 / group of the input channels and makes 1 / group of the
+   *  output channels. Concretely 4 input channels, 8 output channels, and
+   *  2 groups separate input channels 1-2 and output channels 1-4 into the
+   *  first group and input channels 3-4 and output channels 5-8 into the second
+   *  group.
+   *  - bias_term (\b optional, default true). Whether to have a bias.
+   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
+   *    kernels + stream parallelism) engines.
+   */
+  explicit ConvolutionLayer(const LayerParameter& param)
+      : BaseConvolutionLayer<Dtype>(param) {}
     }
     
-    #endif  // JAVA_ROCKSJNI_LOGGERJNICALLBACK_H_
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #endif  // CAFFE_CUDNN_TANH_LAYER_HPP_
 
     
-      static void AddRange(std::vector<int>* dst, int lo, int hi, int mult);
+    /**
+ * @brief Convolve the input with a bank of learned filters, and (optionally)
+ *        add biases, treating filters and convolution parameters in the
+ *        opposite sense as ConvolutionLayer.
+ *
+ *   ConvolutionLayer computes each output value by dotting an input window with
+ *   a filter; DeconvolutionLayer multiplies each input value by a filter
+ *   elementwise, and sums over the resulting output windows. In other words,
+ *   DeconvolutionLayer is ConvolutionLayer with the forward and backward passes
+ *   reversed. DeconvolutionLayer reuses ConvolutionParameter for its
+ *   parameters, but they take the opposite sense as in ConvolutionLayer (so
+ *   padding is removed from the output rather than added to the input, and
+ *   stride results in upsampling rather than downsampling).
+ */
+template <typename Dtype>
+class DeconvolutionLayer : public BaseConvolutionLayer<Dtype> {
+ public:
+  explicit DeconvolutionLayer(const LayerParameter& param)
+      : BaseConvolutionLayer<Dtype>(param) {}
+    }
     
-    bool IsZero(double n);
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    // Reads and returns the string environment variable corresponding to
-// the given flag; if it's not set, returns default_value.
-const char* StringFromEnv(const char* flag, const char* default_value) {
-  const std::string env_var = FlagToEnvVar(flag);
-  const char* const value = getenv(env_var.c_str());
-  return value == nullptr ? default_value : value;
+      // Instead of 1/0, we want to see true/false for bool values.
+  Message& operator <<(bool b) {
+    return *this << (b ? 'true' : 'false');
+  }
+    
+    #include 'gtest/gtest.h'
+    
+      // Returns a pathname for a file that does not currently exist. The pathname
+  // will be directory/base_name.extension or
+  // directory/base_name_<number>.extension if directory/base_name.extension
+  // already exists. The number will be incremented until a pathname is found
+  // that does not already exist.
+  // Examples: 'dir/foo_test.xml' or 'dir/foo_test_1.xml'.
+  // There could be a race condition if two or more processes are calling this
+  // function at the same time -- they could both pick the same filename.
+  static FilePath GenerateUniqueFileName(const FilePath& directory,
+                                         const FilePath& base_name,
+                                         const char* extension);
+    
+      // Verifies that registered_tests match the test names in
+  // defined_test_names_; returns registered_tests if successful, or
+  // aborts the program otherwise.
+  const char* VerifyRegisteredTestNames(
+      const char* file, int line, const char* registered_tests);
+    
+      template <typename T>
+  operator ParamGenerator<T>() const {
+    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
+        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
+        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
+        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
+        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
+        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
+        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
+        static_cast<T>(v21_), static_cast<T>(v22_), static_cast<T>(v23_),
+        static_cast<T>(v24_), static_cast<T>(v25_), static_cast<T>(v26_),
+        static_cast<T>(v27_), static_cast<T>(v28_), static_cast<T>(v29_),
+        static_cast<T>(v30_)};
+    return ValuesIn(array);
+  }
+    
+    #include 'guetzli/idct.h'
+#include 'guetzli/color_transform.h'
+#include 'guetzli/dct_double.h'
+#include 'guetzli/gamma_correct.h'
+#include 'guetzli/preprocess_downsample.h'
+#include 'guetzli/quantize.h'
+    
+    static const int kCbToBlueTable[256] = {
+  -227, -225, -223, -222, -220, -218, -216, -214, -213, -211, -209, -207,
+  -206, -204, -202, -200, -198, -197, -195, -193, -191, -190, -188, -186,
+  -184, -183, -181, -179, -177, -175, -174, -172, -170, -168, -167, -165,
+  -163, -161, -159, -158, -156, -154, -152, -151, -149, -147, -145, -144,
+  -142, -140, -138, -136, -135, -133, -131, -129, -128, -126, -124, -122,
+  -120, -119, -117, -115, -113, -112, -110, -108, -106, -105, -103, -101,
+   -99,  -97,  -96,  -94,  -92,  -90,  -89,  -87,  -85,  -83,  -82,  -80,
+   -78,  -76,  -74,  -73,  -71,  -69,  -67,  -66,  -64,  -62,  -60,  -58,
+   -57,  -55,  -53,  -51,  -50,  -48,  -46,  -44,  -43,  -41,  -39,  -37,
+   -35,  -34,  -32,  -30,  -28,  -27,  -25,  -23,  -21,  -19,  -18,  -16,
+   -14,  -12,  -11,   -9,   -7,   -5,   -4,   -2,    0,    2,    4,    5,
+     7,    9,   11,   12,   14,   16,   18,   19,   21,   23,   25,   27,
+    28,   30,   32,   34,   35,   37,   39,   41,   43,   44,   46,   48,
+    50,   51,   53,   55,   57,   58,   60,   62,   64,   66,   67,   69,
+    71,   73,   74,   76,   78,   80,   82,   83,   85,   87,   89,   90,
+    92,   94,   96,   97,   99,  101,  103,  105,  106,  108,  110,  112,
+   113,  115,  117,  119,  120,  122,  124,  126,  128,  129,  131,  133,
+   135,  136,  138,  140,  142,  144,  145,  147,  149,  151,  152,  154,
+   156,  158,  159,  161,  163,  165,  167,  168,  170,  172,  174,  175,
+   177,  179,  181,  183,  184,  186,  188,  190,  191,  193,  195,  197,
+   198,  200,  202,  204,  206,  207,  209,  211,  213,  214,  216,  218,
+   220,  222,  223,  225,
+};
+    
+    // A node of a Huffman tree.
+struct HuffmanTree {
+  HuffmanTree() {}
+  HuffmanTree(uint32_t count, int16_t left, int16_t right)
+      : total_count_(count),
+        index_left_(left),
+        index_right_or_value_(right) {
+  }
+  uint32_t total_count_;
+  int16_t index_left_;
+  int16_t index_right_or_value_;
+};
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    namespace guetzli {
+    }
+    
+    // Parses the jpeg stream contained in data[*pos ... len) and fills in *jpg with
+// the parsed information.
+// If mode is JPEG_READ_HEADER, it fills in only the image dimensions in *jpg.
+// Returns false if the data is not valid jpeg, or if it contains an unsupported
+// jpeg feature.
+bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
+              JPEGData* jpg);
+// string variant
+bool ReadJpeg(const std::string& data, JpegReadMode mode,
+              JPEGData* jpg);
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    double ButteraugliScoreForQuality(double quality) {
+  if (quality < kLowestQuality) quality = kLowestQuality;
+  if (quality > kHighestQuality) quality = kHighestQuality;
+  int index = static_cast<int>(quality);
+  double mix = quality - index;
+  return kScoreForQuality[index - kLowestQuality] * (1 - mix) +
+      kScoreForQuality[index - kLowestQuality + 1] * mix;
 }
     
-    // Returns true if the string matches the flag.
-bool IsFlag(const char* str, const char* flag);
+      // Accumulators.
+  std::vector<int> n;
+  std::vector<double> real_time;
+  std::vector<double> cpu_time;
     
-    namespace benchmark {
-namespace internal {
-    }
-    }
-    
-    // File format reference: http://edoceo.com/utilitas/csv-file-format.
+      if (result.error_occurred) {
+    printer(Out, COLOR_RED, 'ERROR OCCURRED: \'%s\'',
+            result.error_message.c_str());
+    printer(Out, COLOR_DEFAULT, '\n');
+    return;
+  }
+  // Format bytes per second
+  std::string rate;
+  if (result.bytes_per_second > 0) {
+    rate = StrCat(' ', HumanReadableNumber(result.bytes_per_second), 'B/s');
+  }
     
     namespace benchmark {
 // NOTE: only i386 and x86_64 have been well tested.
@@ -207,6 +391,3 @@ inline BENCHMARK_ALWAYS_INLINE int64_t Now() {
     }
     }
     }
-    
-    
-    {}  // end namespace benchmark
