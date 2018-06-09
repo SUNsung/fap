@@ -1,195 +1,186 @@
 
         
-        
-class PassList(JSONTag):
-    __slots__ = ()
+            # Get the version from youtube_dl/version.py without importing the package
+    exec(compile(open('youtube_dl/version.py').read(),
+                 'youtube_dl/version.py', 'exec'))
     
-        If :meth:`open_session` returns ``None`` Flask will call into
-    :meth:`make_null_session` to create a session that acts as replacement
-    if the session support cannot work because some requirement is not
-    fulfilled.  The default :class:`NullSession` class that is created
-    will complain that the secret key was not set.
+            self.assertTrue(
+            isinstance(got, compat_str),
+            'Expected a %s object, but got %s for field %s' % (
+                compat_str.__name__, type(got).__name__, field))
+        self.assertTrue(
+            match_rex.match(got),
+            'field %s (value: %r) should match %r' % (field, got, match_str))
+    elif isinstance(expected, compat_str) and expected.startswith('startswith:'):
+        start_str = expected[len('startswith:'):]
+        self.assertTrue(
+            isinstance(got, compat_str),
+            'Expected a %s object, but got %s for field %s' % (
+                compat_str.__name__, type(got).__name__, field))
+        self.assertTrue(
+            got.startswith(start_str),
+            'field %s (value: %r) should start with %r' % (field, got, start_str))
+    elif isinstance(expected, compat_str) and expected.startswith('contains:'):
+        contains_str = expected[len('contains:'):]
+        self.assertTrue(
+            isinstance(got, compat_str),
+            'Expected a %s object, but got %s for field %s' % (
+                compat_str.__name__, type(got).__name__, field))
+        self.assertTrue(
+            contains_str in got,
+            'field %s (value: %r) should contain %r' % (field, got, contains_str))
+    elif isinstance(expected, type):
+        self.assertTrue(
+            isinstance(got, expected),
+            'Expected type %r for field %s, but got value %r of type %r' % (expected, field, got, type(got)))
+    elif isinstance(expected, dict) and isinstance(got, dict):
+        expect_dict(self, got, expected)
+    elif isinstance(expected, list) and isinstance(got, list):
+        self.assertEqual(
+            len(expected), len(got),
+            'Expect a list of length %d, but got a list of length %d for field %s' % (
+                len(expected), len(got), field))
+        for index, (item_got, item_expected) in enumerate(zip(got, expected)):
+            type_got = type(item_got)
+            type_expected = type(item_expected)
+            self.assertEqual(
+                type_expected, type_got,
+                'Type mismatch for list item at index %d for field %s, expected %r, got %r' % (
+                    index, field, type_expected, type_got))
+            expect_value(self, item_got, item_expected, field)
+    else:
+        if isinstance(expected, compat_str) and expected.startswith('md5:'):
+            self.assertTrue(
+                isinstance(got, compat_str),
+                'Expected field %s to be a unicode object, but got value %r of type %r' % (field, got, type(got)))
+            got = 'md5:' + md5(got)
+        elif isinstance(expected, compat_str) and expected.startswith('mincount:'):
+            self.assertTrue(
+                isinstance(got, (list, dict)),
+                'Expected field %s to be a list or a dict, but it is of type %s' % (
+                    field, type(got).__name__))
+            expected_num = int(expected.partition(':')[2])
+            assertGreaterEqual(
+                self, len(got), expected_num,
+                'Expected %d items in field %s, but only got %d' % (expected_num, field, len(got)))
+            return
+        self.assertEqual(
+            expected, got,
+            'Invalid value for field %s, expected %r, got %r' % (field, expected, got))
     
-    from datetime import timedelta
-import os
-import textwrap
+            input_args = _find_spec('input')
+        output = _find_spec('output')
     
-            gc.collect()
-        self.old_objects = len(gc.get_objects())
-    
-        port = None
-    for matching in ['bracketed_hostport', 'hostport']:
-        m = patterns[matching].match(address)
-        if m:
-            (address, port) = m.groups()
-            port = int(port)
-            continue
-    
-    
-def get_group_vars(groups):
-    
-            clipnorm: float >= 0. Gradients will be clipped
-            when their L2 norm exceeds this value.
-        clipvalue: float >= 0. Gradients will be clipped
-            when their absolute value exceeds this value.
-    '''
-    
-        if mode == 'tf':
-        x /= 127.5
-        x -= 1.
-        return x
-    
-        num_samples = check_num_samples(ins,
-                                    batch_size=batch_size,
-                                    steps=steps,
-                                    steps_name='steps')
-    outs = []
-    if verbose == 1:
-        if steps is not None:
-            progbar = Progbar(target=steps)
-        else:
-            progbar = Progbar(target=num_samples)
-    
-    if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    help_ = 'Load h5 model trained weights'
-    parser.add_argument('-w', '--weights', help=help_)
-    help_ = 'Use mse loss instead of binary cross entropy (default)'
-    parser.add_argument('-m',
-                        '--mse',
-                        help=help_, action='store_true')
-    args = parser.parse_args()
-    models = (encoder, decoder)
-    data = (x_test, y_test)
-    
-            layer_test(local.LocallyConnected2D,
-                   kwargs={'filters': filters,
-                           'kernel_size': (3, 3),
-                           'padding': padding,
-                           'kernel_regularizer': 'l2',
-                           'bias_regularizer': 'l2',
-                           'activity_regularizer': 'l2',
-                           'strides': strides,
-                           'data_format': 'channels_first'},
-                   input_shape=(num_samples, stack_size, num_row, num_col))
-    
-    import numpy as np
-import keras
-from keras.datasets import reuters
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation
-from keras.preprocessing.text import Tokenizer
-    
-    
-@keras_test
-def test_non_neg():
-    non_neg_instance = constraints.non_neg()
-    normed = non_neg_instance(K.variable(get_example_array()))
-    assert(np.all(np.min(K.eval(normed), axis=1) == 0.))
-    
-        print('Classifier Training')
-    print('===================')
-    accuracy, train_time, test_time = {}, {}, {}
-    for name in sorted(args['estimators']):
-        clf = ESTIMATORS[name]
         try:
-            clf.set_params(random_state=0)
-        except (TypeError, ValueError):
-            pass
+        if args.download:
+            args.follow = True  # --download implies --follow.
+            downloader = Downloader(
+                output_file=args.output_file,
+                progress_file=env.stderr,
+                resume=args.download_resume
+            )
+            downloader.pre_request(args.headers)
     
-        plt.clf()
-    xx = range(0, n * step, step)
-    plt.title('Lasso regression on sample dataset (%d features)' % n_features)
-    plt.plot(xx, scikit_results, 'b-', label='scikit-learn')
-    plt.plot(xx, glmnet_results, 'r-', label='glmnet')
-    plt.legend()
-    plt.xlabel('number of samples to classify')
-    plt.ylabel('Time (s)')
-    plt.show()
+        def __init__(self, mime):
+        self.mime = mime
     
-        plt.figure('scikit-learn LASSO benchmark results')
-    plt.subplot(211)
-    plt.plot(list_n_samples, lasso_results, 'b-',
-                            label='Lasso')
-    plt.plot(list_n_samples, lars_lasso_results, 'r-',
-                            label='LassoLars')
-    plt.title('precomputed Gram matrix, %d features, alpha=%s' % (n_features,
-                            alpha))
-    plt.legend(loc='upper left')
-    plt.xlabel('number of samples')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
+        @staticmethod
+    def make_header(username, password):
+        credentials = u'%s:%s' % (username, password)
+        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
+        return 'Basic %s' % token
+    
+        def test_verify_custom_ca_bundle_invalid_path(self, httpbin_secure):
+        # since 2.14.0 requests raises IOError
+        with pytest.raises((SSLError, IOError)):
+            http(httpbin_secure.url + '/get', '--verify', '/__not_found__')
+    
+        def _get_path(self):
+        '''Return the config file path without side-effects.'''
+        raise NotImplementedError()
     
     
-@ignore_warnings
-def benchmark(metrics=tuple(v for k, v in sorted(METRICS.items())),
-              formats=tuple(v for k, v in sorted(FORMATS.items())),
-              samples=1000, classes=4, density=.2,
-              n_times=5):
-    '''Times metric calculations for a number of inputs
+def repr_dict_nice(d):
+    def prepare_dict(d):
+        for k, v in d.items():
+            if isinstance(v, dict):
+                v = dict(prepare_dict(v))
+            elif isinstance(v, bytes):
+                v = v.decode('utf8')
+            elif not isinstance(v, (int, str)):
+                v = repr(v)
+            yield k, v
+    return json.dumps(
+        dict(prepare_dict(d)),
+        indent=4, sort_keys=True,
+    )
     
-        for name in sorted(selected_transformers):
-        print_row(name,
-                  np.mean(time_fit[name]),
-                  np.mean(time_transform[name]))
+            if self.args.files and not self.args.form:
+            # `http url @/path/to/file`
+            file_fields = list(self.args.files.keys())
+            if file_fields != ['']:
+                self.error(
+                    'Invalid file fields (perhaps you meant --form?): %s'
+                    % ','.join(file_fields))
     
-        ###########################################################################
-    # Set custom reservoir based method
-    sampling_algorithm['custom-pool'] = \
-        lambda n_population, n_samples, random_state=None: \
-            sample_without_replacement(n_population,
-                                       n_samples,
-                                       method='pool',
-                                       random_state=random_state)
+        print('duration: %0.3fs' % delta)
+    print('rmse: %f' % rmse(Y_test, clf.predict(X_test)))
+    print('mean coef abs diff: %f' % abs(ref_coef - clf.coef_.ravel()).mean())
+    return delta
     
-            text_filename = os.path.join(text_lang_folder,
-                                     '%s_%04d.txt' % (lang, i))
-        print('Writing %s' % text_filename)
-        open(text_filename, 'wb').write(content.encode('utf-8', 'ignore'))
-        i += 1
+            # Create flat baselines to compare the variation over batch size
+        all_times['pca'].extend([results_dict['pca']['time']] *
+                                len(batch_sizes))
+        all_errors['pca'].extend([results_dict['pca']['error']] *
+                                 len(batch_sizes))
+        all_times['rpca'].extend([results_dict['rpca']['time']] *
+                                 len(batch_sizes))
+        all_errors['rpca'].extend([results_dict['rpca']['error']] *
+                                  len(batch_sizes))
+        for batch_size in batch_sizes:
+            ipca = IncrementalPCA(n_components=n_components,
+                                  batch_size=batch_size)
+            results_dict = {k: benchmark(est, data) for k, est in [('ipca',
+                                                                   ipca)]}
+            all_times['ipca'].append(results_dict['ipca']['time'])
+            all_errors['ipca'].append(results_dict['ipca']['error'])
+    
+        print('Transformer performance:')
+    print('===========================')
+    print('Results are averaged over %s repetition(s).' % opts.n_times)
+    print('')
+    print('%s | %s | %s' % ('Transformer'.ljust(30),
+                            'fit'.center(12),
+                            'transform'.center(12)))
+    print(31 * '-' + ('|' + '-' * 14) * 2)
+    
+        op.add_option('--algorithm',
+                  dest='selected_algorithm',
+                  default=default_algorithms,
+                  type=str,
+                  help='Comma-separated list of transformer to benchmark. '
+                       'Default: %default. \nAvailable: %default')
+    
+    First, we fix a training set, increase the number of
+samples to classify and plot number of classified samples as a
+function of time.
     
     import sys
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.svm import LinearSVC
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.datasets import load_files
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
     
-    Sentiment analysis can be casted as a binary text classification problem,
-that is fitting a linear classifier on features extracted from the text
-of the user messages so as to guess wether the opinion of the author is
-positive or negative.
+    plt.xlabel('n_features / n_samples')
+plt.ylabel('Classification accuracy')
     
-        # the training data folder must be passed as first argument
-    movie_reviews_data_folder = sys.argv[1]
-    dataset = load_files(movie_reviews_data_folder, shuffle=False)
-    print('n_samples: %d' % len(dataset.data))
+    # 2 independent random clusterings with equal cluster number
     
-    # Plot changes in predicted probabilities via arrows
-plt.figure(0)
-colors = ['r', 'g', 'b']
-for i in range(clf_probs.shape[0]):
-    plt.arrow(clf_probs[i, 0], clf_probs[i, 1],
-              sig_clf_probs[i, 0] - clf_probs[i, 0],
-              sig_clf_probs[i, 1] - clf_probs[i, 1],
-              color=colors[y_test[i]], head_width=1e-2)
-    
-    plt.legend(loc=1, prop={'size': 12})
-plt.suptitle('Linear Discriminant Analysis vs. \
-shrinkage Linear Discriminant Analysis (1 discriminative feature)')
-plt.show()
+    plt.show()
 
     
     
-# Plot clustering results
-for index, metric in enumerate(['cosine', 'euclidean', 'cityblock']):
-    model = AgglomerativeClustering(n_clusters=n_clusters,
-                                    linkage='average', affinity=metric)
-    model.fit(X)
-    plt.figure()
-    plt.axes([0, 0, 1, 1])
-    for l, c in zip(np.arange(model.n_clusters), 'rgbk'):
-        plt.plot(X[model.labels_ == l].T, c=c, alpha=.5)
-    plt.axis('tight')
-    plt.axis('off')
-    plt.suptitle('AgglomerativeClustering(affinity=%s)' % metric, size=20)
-    
-        return True
-
-    
-    STATES = ['high', 'low']
+class Command(ScrapyCommand):
