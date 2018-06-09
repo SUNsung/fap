@@ -1,27 +1,64 @@
 
         
-                if entries.empty?
-          css('.quickindex[id]').each do |node|
-            name = node['id'].remove(/quickindex\.?/)
-            next if name.empty? || name =~ /\.\d+\z/ || name =~ /\A([^\.]+)\.\1\z/
-            entries << ['#{self.name}.#{name}', name]
-          end
+            brew cask install mactex
+    EOS
+  when 'pip' then <<-EOS.undent
+    Homebrew provides pip via: `brew install python`. However you will then
+    have two Pythons installed on your Mac, so alternatively you can install
+    pip via the instructions at:
+    
+      formula = ARGV.formulae.first
+  options = Options.create(ARGV.flags_only)
+  build   = Build.new(formula, options)
+  build.install
+rescue Exception => e
+  Marshal.dump(e, error_pipe)
+  error_pipe.close
+  exit! 1
+end
+
+    
+            if Pathname::BOTTLE_EXTNAME_RX === file.to_s
+          version = bottle_resolve_version(file) rescue file.version
+        else
+          version = file.version
         end
+        next unless version
+        next unless (name = file.basename.to_s[/(.*)-(?:#{Regexp.escape(version)})/, 1])
     
-        options[:attribution] = <<-HTML
-      &copy; 2011&ndash;2018 Twitter, Inc.<br>
-      &copy; 2011&ndash;2018 The Bootstrap Authors<br>
-      Code licensed under the MIT License.<br>
-      Documentation licensed under the Creative Commons Attribution License v3.0.
-    HTML
+      def internal_commands
+    find_internal_commands HOMEBREW_LIBRARY_PATH/'cmd'
+  end
     
-        version '1.9' do
-      self.release = '1.9.13'
-      self.dir = '/Users/Thibaut/DevDocs/Docs/Django19'
-      self.base_url = 'https://docs.djangoproject.com/en/1.9/'
+    # This formula serves as the base class for several very similar
+# formulae for Amazon Web Services related tools.
+class AmazonWebServicesFormula < Formula
+  # Use this method to peform a standard install for Java-based tools,
+  # keeping the .jars out of HOMEBREW_PREFIX/lib
+  def install
+    rm Dir['bin/*.cmd'] # Remove Windows versions
+    libexec.install Dir['*']
+    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
+  end
+  alias_method :standard_install, :install
+    
+      def is_form_configurable?
+    true
+  end
+    
+      included do
+    include Oauthable
+    
+      def new
+    @user_credential = current_user.user_credentials.build
+    
+    class SinatraStaticServer < Sinatra::Base
+    
+      end
+    
+      # Returns a url without the protocol (http://)
+  def shorthand_url(input)
+    input.gsub /(https?:\/\/)(\S+)/ do
+      $2
     end
-    
-            a_length = a_split.length
-        b_length = b_split.length
-    
-    end
+  end
