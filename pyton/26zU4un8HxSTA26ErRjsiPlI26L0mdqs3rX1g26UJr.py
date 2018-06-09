@@ -1,80 +1,108 @@
 
         
-        from jinja2 import Markup
-from werkzeug.http import http_date, parse_date
+            parser = argparse.ArgumentParser(description='Start a new Shippable run.')
+    
+        indent = None
+    if format:
+        indent = 4
+    
+            input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/targetHttpProxies'
+        actual = GCPUtils.parse_gcp_url(input_url)
+        self.assertEquals('compute', actual['service'])
+        self.assertEquals('v1', actual['api_version'])
+        self.assertEquals('myproject', actual['project'])
+        self.assertFalse('global' in actual)
+        self.assertEquals('targetHttpProxies', actual['resource_name'])
+    
+            if now - self.lastmark >= 3:
+            self.lastmark = now
+            qps = len(self.tail) / sum(self.tail)
+            print('samplesize={0} concurrent={1} qps={2:0.2f}'.format(len(self.tail), self.concurrent, qps))
+    
+        def long_desc(self):
+        '''A long description of the command. Return short description when not
+        available. It cannot contain newlines, since contents will be formatted
+        by optparser which removes newlines and wraps text.
+        '''
+        return self.short_desc()
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-l', '--list', dest='list', action='store_true',
+            help='List available templates')
+        parser.add_option('-e', '--edit', dest='edit', action='store_true',
+            help='Edit spider after creating it')
+        parser.add_option('-d', '--dump', dest='dump', metavar='TEMPLATE',
+            help='Dump template to standard output')
+        parser.add_option('-t', '--template', dest='template', default='basic',
+            help='Uses a custom template.')
+        parser.add_option('--force', dest='force', action='store_true',
+            help='If the spider already exists, overwrite it with the template')
     
     
-def test_tag_interface():
-    t = JSONTag(None)
-    pytest.raises(NotImplementedError, t.check, None)
-    pytest.raises(NotImplementedError, t.to_json, None)
-    pytest.raises(NotImplementedError, t.to_python, None)
-    
-        def implements_to_string(cls):
-        cls.__unicode__ = cls.__str__
-        cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
-        return cls
-    
-    signals_available = False
-try:
-    from blinker import Namespace
-    signals_available = True
-except ImportError:
-    class Namespace(object):
-        def signal(self, name, doc=None):
-            return _FakeSignal(name, doc)
+class Contract(object):
+    ''' Abstract class for contracts '''
     
     
-def test_uninstalled_module_paths(modules_tmpdir, purge_module):
-    app = modules_tmpdir.join('config_module_app.py').write(
-        'import os\n'
-        'import flask\n'
-        'here = os.path.abspath(os.path.dirname(__file__))\n'
-        'app = flask.Flask(__name__)\n'
-    )
-    purge_module('config_module_app')
+def main():
+    tornado.options.parse_command_line()
+    application = tornado.web.Application([
+        (r'/', MainHandler),
+    ])
+    http_server = tornado.httpserver.HTTPServer(application)
+    http_server.listen(options.port)
+    tornado.ioloop.IOLoop.current().start()
     
+        * ``_OPENID_ENDPOINT``: the identity provider's URI.
+    '''
+    @_non_deprecated_return_future
+    def authenticate_redirect(self, callback_uri=None,
+                              ax_attrs=['name', 'email', 'language', 'username'],
+                              callback=None):
+        '''Redirects to the authentication URL for this service.
     
-if __name__ == '__main__':
-    HitCounts.run()
-
+        @classmethod
+    def _async_clients(cls):
+        attr_name = '_async_client_dict_' + cls.__name__
+        if not hasattr(cls, attr_name):
+            setattr(cls, attr_name, weakref.WeakKeyDictionary())
+        return getattr(cls, attr_name)
     
-        def remove_from_tail(self):
-        pass
+        3. `add_sockets`: advanced multi-process::
     
-            add_accept_handler(listener, accept_callback)
-        self.client_stream = IOStream(socket.socket())
-        self.addCleanup(self.client_stream.close)
-        yield [self.client_stream.connect(('127.0.0.1', port)),
-               event.wait()]
-        self.io_loop.remove_handler(listener)
-        listener.close()
+            By default includes a self-signed testing certificate.
+        '''
+        # Testing keys were generated with:
+        # openssl req -new -keyout tornado/test/test.key \
+        #                     -out tornado/test/test.crt -nodes -days 3650 -x509
+        module_dir = os.path.dirname(__file__)
+        return dict(
+            certfile=os.path.join(module_dir, 'test', 'test.crt'),
+            keyfile=os.path.join(module_dir, 'test', 'test.key'))
     
-            yield q.put(2)
-        put = q.put(3)
-        self.assertFalse(put.done())
-        self.assertEqual(1, (yield q.get()))
-        yield put
-        self.assertTrue(q.full())
+                try:
+                content_length = int(headers['Content-Length'])
+            except ValueError:
+                # Handles non-integer Content-Length value.
+                raise httputil.HTTPInputError(
+                    'Only integer Content-Length is allowed: %s' % headers['Content-Length'])
     
-            valid_ipv4_list = {'X-Forwarded-For': '127.0.0.1, 4.4.4.4'}
-        self.assertEqual(
-            self.fetch_json('/', headers=valid_ipv4_list)['remote_ip'],
-            '4.4.4.4')
+        # The following functions are mainly used in twisted-style test cases;
+    # it is expected that most users of the TornadoReactor will call
+    # IOLoop.start() instead of Reactor.run().
+    def stop(self):
+        PosixReactorBase.stop(self)
+        fire_shutdown = functools.partial(self.fireSystemEvent, 'shutdown')
+        self._io_loop.add_callback(fire_shutdown)
     
-        @gen_test
-    def test_run_with_stack_context(self):
         @gen.coroutine
-        def f1():
-            self.assertEqual(self.active_contexts, ['c1'])
-            yield run_with_stack_context(
-                StackContext(functools.partial(self.context, 'c2')),
-                f2)
-            self.assertEqual(self.active_contexts, ['c1'])
+    def _oauth_get_user_future(self, access_token):
+        if self.get_argument('fail_in_get_user', None):
+            raise Exception('failing in get_user')
+        if access_token != dict(key='uiop', secret='5678'):
+            raise Exception('incorrect access token %r' % access_token)
+        return dict(email='foo@example.com')
     
-            namespace = exec_test(globals(), locals(), '''
-        class TestServer(TCPServer):
-            async def handle_stream(self, stream, address):
-                stream.write(b'data')
-                stream.close()
-        ''')
+        def tearDown(self):
+        self.resolver.close()
+        super(ThreadedResolverTest, self).tearDown()
