@@ -1,49 +1,84 @@
 
         
-              alias_method :_view, :view
+          def test_escape_javascript_with_safebuffer
+    given = %('quoted' 'double-quoted' new-line:\n </closed>)
+    expect = %(\\'quoted\\' \\'double-quoted\\' new-line:\\n <\\/closed>)
+    assert_equal expect, escape_javascript(given)
+    assert_equal expect, escape_javascript(ActiveSupport::SafeBuffer.new(given))
+    assert_instance_of String, escape_javascript(given)
+    assert_instance_of ActiveSupport::SafeBuffer, escape_javascript(ActiveSupport::SafeBuffer.new(given))
+  end
     
-            # The abstract adapter is used simply to bypass the bit of code that
-        # checks that the adapter file can be required in.
-    
-        def with_test_route_set
-      with_routing do |set|
-        set.draw do
-          match '/', to: 'web_service_test/test#assign_parameters', via: :all
+            def test_url_host_no_db
+          spec = resolve 'abstract://foo?encoding=utf8'
+          assert_equal({
+            'adapter'  => 'abstract',
+            'host'     => 'foo',
+            'encoding' => 'utf8' }, spec)
         end
-        yield
-      end
+    
+      def test_helper_attr
+    assert_nothing_raised { @controller_class.helper_attr :delegate_attr }
+    assert_includes master_helper_methods, :delegate_attr
+    assert_includes master_helper_methods, :delegate_attr=
+  end
+    
+        def index
+      self.response_body = 'Hello World'
     end
+  end
+    
+        def dump_params_keys(hash = params)
+      hash.keys.sort.inject('') do |s, k|
+        value = hash[k]
+    
+    class AssertSelectEmailTest < ActionMailer::TestCase
+  class AssertSelectMailer < ActionMailer::Base
+    def test(html)
+      mail body: html, content_type: 'text/html',
+        subject: 'Test e-mail', from: 'test@test.host', to: 'test <test@test.host>'
+    end
+  end
+    
+      def test_receive_is_notified
+    fixture = File.read(File.expand_path('fixtures/raw_email', __dir__))
+    TestMailer.receive(fixture)
+    wait
+    assert_equal(1, @logger.logged(:info).size)
+    assert_match(/Received mail/, @logger.logged(:info).first)
+    assert_equal(1, @logger.logged(:debug).size)
+    assert_match(/Jamis/, @logger.logged(:debug).first)
+  end
 end
 
     
-    module ActionMailer
-  # The <tt>ActionMailer::DeliveryJob</tt> class is used when you
-  # want to send emails outside of the request-response cycle.
-  #
-  # Exceptions are rescued and handled by the mailer class.
-  class DeliveryJob < ActiveJob::Base # :nodoc:
-    queue_as { ActionMailer::Base.deliver_later_queue_name }
+        version '1' do
+      self.release = '1.12.6'
+      self.base_url = 'http://coffeescript.org/v1/'
     
-    require 'abstract_unit'
-require 'mailers/base_mailer'
-require 'active_support/log_subscriber/test_helper'
-require 'action_mailer/log_subscriber'
+        version '1.3' do
+      self.release = '1.3.4'
+      self.base_urls = [
+        'https://hexdocs.pm/elixir/#{release}/',
+        'https://hexdocs.pm/eex/#{release}/',
+        'https://hexdocs.pm/ex_unit/#{release}/',
+        'https://hexdocs.pm/iex/#{release}/',
+        'https://hexdocs.pm/logger/#{release}/',
+        'https://hexdocs.pm/mix/#{release}/',
+        'https://elixir-lang.org/getting-started/'
+      ]
+    end
+  end
+end
+
     
-          html_filters.push 'bootstrap/entries_v3', 'bootstrap/clean_html_v3'
+        version 'Lua' do
+      self.base_url = 'https://api.haxe.org/lua/'
+    end
     
-        options[:only_patterns] = [
-      /\Abook\/first-edition\//,
-      /\Areference\//,
-      /\Acollections\//,
-      /\Astd\// ]
-    
-          html_filters.push 'webpack/clean_html', 'webpack/entries'
-    
-            if b_length > a_length
-          (b_length - a_length).times { a_split.insert(-2, 0) }
-        elsif a_length > b_length
-          (a_length - b_length).times { b_split.insert(-2, 0) }
-        end
+        def insert(index, *names)
+      @filters.insert assert_index(index), *filter_const(names)
+    end
     
           unless root?
         raise Invalid, 'missing name' if !name || name.empty?
@@ -52,13 +87,15 @@ require 'action_mailer/log_subscriber'
       end
     end
     
-        delegate :empty?, :blank?, to: :pages
-    
-                # Register the handler if this is our first callback.
-            Signal.trap('INT') { fire_callbacks } if registered.length == 1
-          end
+          if dest.end_with? '/'
+        dest_dir.relative_path_from(base_dir).to_s.tap do |result|
+          result << '/' if result != '.'
         end
-    
-          def values_at(*indices)
-        indices.collect { |key| self[convert_key(key)] }
+      else
+        dest_dir.parent.relative_path_from(base_dir).join(dest.split('/').last).to_s
       end
+    end
+    
+    		self.block[-1] << ';'
+		self.block[-1] << ''
+	end
