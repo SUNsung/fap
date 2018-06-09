@@ -1,167 +1,264 @@
 
         
-            entry = entry_template.replace('@TIMESTAMP@', timestamp)
-    entry = entry.replace('@VERSION@', v)
-    entries.append(entry)
+        
+def ismount(path):
+    '''Test whether a path is a mount point
+    clone of os.path.ismount (from cpython Lib/posixpath.py)
+    fixed to solve https://github.com/ansible/ansible-modules-core/issues/2186
+    and workaround non-fixed http://bugs.python.org/issue2466
+    this should be rewritten as soon as python issue 2466 is fixed
+    probably check for python version and use os.path.ismount if fixed
+    
+        'ipv6': re.compile(
+        r'''^
+            (?:{0}:){{7}}{0}|           # uncompressed: 1:2:3:4:5:6:7:8
+            (?:{0}:){{1,6}}:|           # compressed variants, which are all
+            (?:{0}:)(?::{0}){{1,6}}|    # a::b for various lengths of a,b
+            (?:{0}:){{2}}(?::{0}){{1,5}}|
+            (?:{0}:){{3}}(?::{0}){{1,4}}|
+            (?:{0}:){{4}}(?::{0}){{1,3}}|
+            (?:{0}:){{5}}(?::{0}){{1,2}}|
+            (?:{0}:){{6}}(?::{0})|      # ...all with 2 <= a+b <= 7
+            :(?::{0}){{1,6}}|           # ::ffff(:ffff...)
+            {0}?::|                     # ffff::, ::
+                                        # ipv4-in-ipv6 variants
+            (?:0:){{6}}(?:{0}\.){{3}}{0}|
+            ::(?:ffff:)?(?:{0}\.){{3}}{0}|
+            (?:0:){{5}}ffff:(?:{0}\.){{3}}{0}
+            $
+        '''.format(ipv6_component), re.X | re.I
+    ),
     
     
-total_bytes = 0
+@keras_test
+def test_sequential_temporal_sample_weights():
+    (x_train, y_train), (x_test, y_test), (sample_weight, class_weight, test_ids) = _get_test_data()
     
-        def download(self, x):
-        self.result.append(x)
+            inputs = np.random.random((num_samples, timesteps, input_size))
+        state = model.predict(inputs)
+        np.testing.assert_allclose(
+            keras.backend.eval(layer.states[0]), state, atol=1e-4)
     
-        def test_youtube_channel_matching(self):
-        assertChannel = lambda url: self.assertMatch(url, ['youtube:channel'])
-        assertChannel('https://www.youtube.com/channel/HCtnHdj3df7iM')
-        assertChannel('https://www.youtube.com/channel/HCtnHdj3df7iM?feature=gb_ch_rec')
-        assertChannel('https://www.youtube.com/channel/HCtnHdj3df7iM/videos')
-    
-    from .common import FileDownloader
-from ..utils import (
-    check_executable,
-    encodeFilename,
-)
+    # instantiate decoder model
+decoder = Model(latent_inputs, outputs, name='decoder')
+decoder.summary()
+plot_model(decoder, to_file='vae_cnn_decoder.png', show_shapes=True)
     
     
-    {        webpage = self._download_webpage(url, text_id)
-        sohu_video_info_str = self._search_regex(
-            r'var\s+sohuVideoInfo\s*=\s*({[^}]+});', webpage, 'Sohu video info', default=None)
-        if sohu_video_info_str:
-            sohu_video_info = self._parse_json(
-                sohu_video_info_str, text_id, transform_source=js_to_json)
-            return self.url_result(sohu_video_info['url'], 'Sohu')
+@keras_test
+def test_unit_norm():
+    unit_norm_instance = constraints.unit_norm()
+    normalized = unit_norm_instance(K.variable(get_example_array()))
+    norm_of_normalized = np.sqrt(np.sum(K.eval(normalized) ** 2, axis=0))
+    # In the unit norm constraint, it should be equal to 1.
+    difference = norm_of_normalized - 1.
+    largest_difference = np.max(np.abs(difference))
+    assert(np.abs(largest_difference) < 10e-5)
     
-            uploader = self._search_regex(
-            r'Added by\s*:\s*<a[^>]+>([^<]+)</a>', webpage, 'uploader', default=None)
-        upload_date = unified_strdate(self._search_regex(
-            r'Added on\s*:\s*([\d-]+)', webpage, 'upload date', default=None))
-    
-            return info_dict
-
-    
-    
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
-
+    print('Build model...')
+model = Sequential()
+model.add(Embedding(max_features, 128))
+model.add(LSTM(128, dropout=0.2, recurrent_dropout=0.2))
+model.add(Dense(1, activation='sigmoid'))
     
     
-def test_config_missing():
-    app = flask.Flask(__name__)
-    with pytest.raises(IOError) as e:
-        app.config.from_pyfile('missing.cfg')
-    msg = str(e.value)
-    assert msg.startswith('[Errno 2] Unable to load configuration '
-                          'file (No such file or directory):')
-    assert msg.endswith('missing.cfg'')
-    assert not app.config.from_pyfile('missing.cfg', silent=True)
+def _plot(results, metrics, formats, title, x_ticks, x_label,
+          format_markers=('x', '|', 'o', '+'),
+          metric_colors=('c', 'm', 'y', 'k', 'g', 'r', 'b')):
+    '''
+    Plot the results by metric, format and some other variable given by
+    x_label
+    '''
+    fig = plt.figure('scikit-learn multilabel metrics benchmarks')
+    plt.title(title)
+    ax = fig.add_subplot(111)
+    for i, metric in enumerate(metrics):
+        for j, format in enumerate(formats):
+            ax.plot(x_ticks, results[i, j].flat,
+                    label='{}, {}'.format(metric, format),
+                    marker=format_markers[j],
+                    color=metric_colors[i % len(metric_colors)])
+    ax.set_xlabel(x_label)
+    ax.set_ylabel('Time (s)')
+    ax.legend()
+    plt.show()
     
-    import pytest
-import flask
-from flask._compat import PY2
+        ###########################################################################
+    # Set Python core input
+    sampling_algorithm['python-core-sample'] = \
+        lambda n_population, n_sample: \
+            random.sample(xrange(n_population), n_sample)
     
-    # Scrapy version
-import pkgutil
-__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
-version_info = tuple(int(v) if v.isdigit() else v
-                     for v in __version__.split('.'))
-del pkgutil
+        print('Generating skeleton for %s' % f)
     
-        def process_options(self, args, opts):
-        try:
-            self.settings.setdict(arglist_to_dict(opts.set),
-                                  priority='cmdline')
-        except ValueError:
-            raise UsageError('Invalid -s value, use -s NAME=VALUE', print_help=False)
+        def __init__(self):
+        self.observers = []
+        self.surface = None
+        self.data = []
+        self.cls = None
+        self.surface_type = 0
+    
+        Only one feature contains discriminative information, the other features
+    contain only noise.
+    '''
+    X, y = make_blobs(n_samples=n_samples, n_features=1, centers=[[-2], [2]])
+    
+    The usual covariance maximum likelihood estimate can be regularized
+using shrinkage. Ledoit and Wolf proposed a close formula to compute
+the asymptotically optimal shrinkage parameter (minimizing a MSE
+criterion), yielding the Ledoit-Wolf covariance estimate.
+    
+        def test_create_option_buttons(self):
+        e = self.engine
+        for state in (0, 1):
+            for var in (e.revar, e.casevar, e.wordvar, e.wrapvar):
+                var.set(state)
+            frame, options = self.btn_test_setup(
+                    self.dialog.create_option_buttons)
+            for spec, button in zip (options, frame.pack_slaves()):
+                var, label = spec
+                self.assertEqual(button['text'], label)
+                self.assertEqual(var.get(), state)
+    
+            def _close(self):
+            try:
+                _NNTPBase._close(self)
+            finally:
+                self.sock.close()
+    
+            nbytes, ancdata, flags, addr = self.serv_sock.recvmsg_into([buf], 0, 0)
+        self.assertEqual(nbytes, len(MSG))
+        self.assertEqual(buf, bytearray(MSG))
+        self.checkRecvmsgAddress(addr, self.cli_addr)
+        self.assertEqual(ancdata, [])
+        self.checkFlags(flags, eor=True)
     
     
-class Command(ScrapyCommand):
+class ExceptionTest(unittest.TestCase):
+    # Tests for the issue #23353: check that the currently handled exception
+    # is correctly saved/restored in PyEval_EvalFrameEx().
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
+        '''
+    return uname().processor
     
-        def finish(self):
-        '''Implements `.HTTPConnection.finish`.'''
-        if (self._expected_content_remaining is not None and
-                self._expected_content_remaining != 0 and
-                not self.stream.closed()):
-            self.stream.close()
-            raise httputil.HTTPOutputError(
-                'Tried to write %d bytes less than Content-Length' %
-                self._expected_content_remaining)
-        if self._chunking_output:
-            if not self.stream.closed():
-                self._pending_write = self.stream.write(b'0\r\n\r\n')
-                self._pending_write.add_done_callback(self._on_write_complete)
-        self._write_finished = True
-        # If the app finished the request while we're still reading,
-        # divert any remaining data away from the delegate and
-        # close the connection when we're done sending our response.
-        # Closing the connection is the only way to avoid reading the
-        # whole input body.
-        if not self._read_finished:
-            self._disconnect_on_finish = True
-        # No more data is coming, so instruct TCP to send any remaining
-        # data immediately instead of waiting for a full packet or ack.
-        self.stream.set_nodelay(True)
-        if self._pending_write is None:
-            self._finish_request(None)
+            # determine the base URI is we can
+        import posixpath, urllib.parse
+        parts = urllib.parse.urlparse(systemId)
+        scheme, netloc, path, params, query, fragment = parts
+        # XXX should we check the scheme here as well?
+        if path and not path.endswith('/'):
+            path = posixpath.dirname(path) + '/'
+            parts = scheme, netloc, path, params, query, fragment
+            source.baseURI = urllib.parse.urlunparse(parts)
+    
+    def _enumerate():
+    # Same as enumerate(), but without the lock. Internal use only.
+    return list(_active.values()) + list(_limbo.values())
+    
+    
+class ManagingFounder(Manager, Founder):
+    pass
+    
+            Args:
+            max_workers: The maximum number of processes that can be used to
+                execute the given calls. If None or not given then as many
+                worker processes will be created as the machine has processors.
+        '''
+        _check_system_limits()
+    
+    @reap_threads
+def test_main():
+    try:
+        test_support.run_unittest(ProcessPoolExecutorTest,
+                                  ThreadPoolExecutorTest,
+                                  ProcessPoolWaitTests,
+                                  ThreadPoolWaitTests,
+                                  ProcessPoolAsCompletedTests,
+                                  ThreadPoolAsCompletedTests,
+                                  FutureTests,
+                                  ProcessPoolShutdownTest,
+                                  ThreadPoolShutdownTest)
+    finally:
+        test_support.reap_children()
+    
+    
+def EndsWithPython_Python3Paths_test():
+  python_paths = [
+    'python3',
+    '/usr/bin/python3.4',
+    '/home/user/.pyenv/shims/python3.4',
+    r'C:\Python34\python.exe'
+  ]
+    
+        if not done:
+      self._result = None
+    else:
+      self._result = FakeResponse( response, exception )
+    
+        self._response_future = self.PostDataToHandlerAsync( request_data,
+                                                         'event_notification' )
+    
+        def on_message(self, message_type):  # message ignored
+        if message_type in self.message_types.keys():
+            self.message_types[message_type]()
         else:
-            future_add_done_callback(self._pending_write, self._finish_request)
+            raise UnsupportedMessageType
     
-        This is a non-blocking and non-threaded resolver.  It is
-    recommended only when threads cannot be used, since it has
-    limitations compared to the standard ``getaddrinfo``-based
-    `~tornado.netutil.Resolver` and
-    `~tornado.netutil.DefaultExecutorResolver`.  Specifically, it returns at
-    most one result, and arguments other than ``host`` and ``family``
-    are ignored.  It may fail to resolve when ``family`` is not
-    ``socket.AF_UNSPEC``.
+        @classmethod
+    def setUpClass(cls):
+        cls.dec_obs = DecimalViewer()
+        cls.hex_obs = HexViewer()
+        cls.sub = Data('Data')
+        # inherited behavior already tested with TestSubject
+        cls.sub.attach(cls.dec_obs)
+        cls.sub.attach(cls.hex_obs)
     
-        def part2(self):
-        logging.debug('in part2()')
-        # Go through a third layer to make sure that contexts once restored
-        # are again passed on to future callbacks
-        IOLoop.current().add_callback(self.part3)
+        def tearDown(cls):
+        ''' Function/test case scope teardown. '''
+        cls.output.close()
+        sys.stdout = cls.saved_stdout
     
-            test_with_kwargs(self, test='test')
-        self.finished = True
+        def test_am_station_overflow_after_scan(self):
+        self.radio.scan()
+        station = self.radio.state.stations[self.radio.state.pos]
+        expected_station = '1250'
+        self.assertEqual(station, expected_station)
     
-        def consume(self):
-        try:
-            while True:
-                result = self.reader.recv(1024)
-                if not result:
-                    break
-        except (IOError, socket.error):
-            pass
+        # commands are just pushed into the command stack
+    command_stack.append(MoveFileCommand('foo.txt', 'bar.txt'))
+    command_stack.append(MoveFileCommand('bar.txt', 'baz.txt'))
     
     
-def run(args):
-    '''Handle ensure config commandline script.'''
-    parser = argparse.ArgumentParser(
-        description=('Ensure a Home Assistant config exists, '
-                     'creates one if necessary.'))
-    parser.add_argument(
-        '-c', '--config',
-        metavar='path_to_config_dir',
-        default=config_util.get_default_config_dir(),
-        help='Directory that contains the Home Assistant configuration')
-    parser.add_argument(
-        '--script',
-        choices=['ensure_config'])
+def count_to(count):
+    '''Counts by word numbers, up to a maximum of five'''
+    numbers = ['one', 'two', 'three', 'four', 'five']
+    for number in numbers[:count]:
+        yield number
+    
+    
+### OUTPUT ###
+# <NumObj: -1>
+# <NumObj: 0>
+# <NumObj: 1>
+# <NumObj: 2>
+# -- committed
+# <NumObj: 3>
+# <NumObj: 4>
+# <NumObj: 5>
+# -- rolled back
+# <NumObj: 2>
+# -- now doing stuff ...
+# -> doing stuff failed!
+# Traceback (most recent call last):
+# File 'memento.py', line 97, in <module>
+#     num_obj.do_stuff()
+#   File 'memento.py', line 52, in transaction
+#     raise e
+#   File 'memento.py', line 49, in transaction
+#     return self.method(obj, *args, **kwargs)
+#   File 'memento.py', line 70, in do_stuff
+#     self.increment()     # <- will fail and rollback
+#   File 'memento.py', line 65, in increment
+#     self.value += 1
+# TypeError: Can't convert 'int' object to str implicitly
+# <NumObj: 2>
