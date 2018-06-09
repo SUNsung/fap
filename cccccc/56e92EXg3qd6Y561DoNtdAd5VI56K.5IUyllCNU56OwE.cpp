@@ -1,352 +1,182 @@
 
         
-        /**
-    
-    #endif  // PYTHON_PROTO2_PYTHON_IMPL
-#endif  // PYTHON_PROTO2_CPP_IMPL_V2
-#endif  // PYTHON_PROTO2_CPP_IMPL_V1
-    
-    namespace google {
-namespace protobuf {
-    }
-    }
-    
-    
-    {}  // namespace google
-
-    
-    void RepeatedEnumFieldGenerator::WriteEquals(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'if(!$name$_.Equals(other.$name$_)) return false;\n');
-}
-    
-    
-    { private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(JavaGenerator);
-};
-    
-    
-    {    IntrinsicParams();
-    IntrinsicParams(Vec2d f, Vec2d c, Vec4d k, double alpha = 0);
-    IntrinsicParams operator+(const Mat& a);
-    IntrinsicParams& operator =(const Mat& a);
-    void Init(const cv::Vec2d& f, const cv::Vec2d& c, const cv::Vec4d& k = Vec4d(0,0,0,0), const double& alpha = 0);
-};
-    
-        // Extension: ARB_map_buffer_range
-    extern GLvoid* (CODEGEN_FUNCPTR *MapBufferRange)(GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access);
-    extern void (CODEGEN_FUNCPTR *FlushMappedBufferRange)(GLenum target, GLintptr offset, GLsizeiptr length);
-    
-    #undef cv_hal_gemm32f
-#define cv_hal_gemm32f lapack_gemm32f
-#undef cv_hal_gemm64f
-#define cv_hal_gemm64f lapack_gemm64f
-#undef cv_hal_gemm32fc
-#define cv_hal_gemm32fc lapack_gemm32fc
-#undef cv_hal_gemm64fc
-#define cv_hal_gemm64fc lapack_gemm64fc
-    
-    void StreamPeerSSL::_bind_methods() {
-    }
-    
-    	mbedtls_ssl_conf_authmode(&conf, authmode);
-	mbedtls_ssl_conf_ca_chain(&conf, &cacert, NULL);
-	mbedtls_ssl_conf_rng(&conf, mbedtls_ctr_drbg_random, &ctr_drbg);
-	mbedtls_ssl_conf_dbg(&conf, my_debug, stdout);
-	mbedtls_ssl_setup(&ssl, &conf);
-	mbedtls_ssl_set_hostname(&ssl, p_for_hostname.utf8().get_data());
-    
-    	virtual bool is_server() const;
-	virtual ConnectionStatus get_connection_status() const = 0;
-    
-    	template <class N, class M>
-	static MethodBind *bind_method(N p_method_name, M p_method, const Variant &p_def1, const Variant &p_def2, const Variant &p_def3) {
-    }
-    
-    	void set_brake(float p_brake);
-	float get_brake() const;
-    
-    
-    {	if (stream.is_null())
-		return '<No Stream>';
-	return stream->get_name();
-};
-    
-    	virtual bool needsCollision(btBroadphaseProxy *proxy0) const;
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    
-    {} // namespace boost
-    
-    #ifndef BOOST_ASIO_DETAIL_BASE_FROM_COMPLETION_COND_HPP
-#define BOOST_ASIO_DETAIL_BASE_FROM_COMPLETION_COND_HPP
-    
-      static void validate(const Buffers& buffer_sequence)
-  {
-    typename Buffers::const_iterator iter = buffer_sequence.begin();
-    typename Buffers::const_iterator end = buffer_sequence.end();
-    for (; iter != end; ++iter)
-    {
-      Buffer buffer(*iter);
-      boost::asio::buffer_cast<const void*>(buffer);
-    }
-  }
-    
-    #include <boost/asio/detail/push_options.hpp>
-    
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-    template <typename Handler>
-inline void deallocate(void* p, std::size_t s, Handler& h)
-{
-#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  ::operator delete(p);
-#else
-  using boost::asio::asio_handler_deallocate;
-  asio_handler_deallocate(p, s, boost::asio::detail::addressof(h));
-#endif
-}
-    
-    #include <boost/asio/detail/push_options.hpp>
-    
-    #include <boost/asio/detail/config.hpp>
-#include <cerrno>
-#include <boost/asio/detail/descriptor_ops.hpp>
-#include <boost/asio/error.hpp>
-    
-    void dev_poll_reactor::shutdown_service()
-{
-  boost::asio::detail::mutex::scoped_lock lock(mutex_);
-  shutdown_ = true;
-  lock.unlock();
-    }
-    
-     private:
-  /// For testing only, reset the stopping status for unittests.
-  void resetStopping() {
-    stopping_ = false;
-  }
-    
-    /**
- * @brief An EventPublisher will define a SubscriptionContext for
- * EventSubscriber%s to use.
- *
- * Most EventPublisher%s will require specific information for interacting with
- * an OS to receive events. The SubscriptionContext contains information the
- * EventPublisher will use to register OS API callbacks, create
- * subscriptioning/listening handles, etc.
- *
- * Linux `inotify` should implement a SubscriptionContext that subscribes
- * filesystem events based on a filesystem path. `libpcap` will subscribe on
- * networking protocols at various stacks. Process creation may subscribe on
- * process name, parent pid, etc.
- */
-struct SubscriptionContext : private boost::noncopyable {};
-    
-    /// Start an ExtensionWatcher thread.
-Status startExtensionWatcher(const std::string& manager_path,
-                             size_t interval,
-                             bool fatal);
-    
-    /*
- * @brief Replace gflags' `DEFINE_type` macros to track osquery flags.
- *
- * Do not use this macro within the codebase directly! Use the subsequent macros
- * that abstract the tail of boolean arguments into meaningful statements.
- *
- * @param type(t) The `_type` symbol portion of the gflags define.
- * @param name(n) The name symbol passed to gflags' `DEFINE_type`.
- * @param value(v) The default value, use a C++ literal.
- * @param desc(d) A string literal used for help display.
- * @param shell(s) Boolean, true if this is only supported in osqueryi.
- * @param extension(e) Boolean, true if this is only supported in an extension.
- * @param cli(c) Boolean, true if this can only be set on the CLI (or flagfile).
- *   This helps documentation since flags can also be set within configuration
- *   as 'options'.
- * @param hidden(h) Boolean, true if this is hidden from help displays.
- */
-#define OSQUERY_FLAG(t, n, v, d, s, e, c, h)                                   \
-  DEFINE_##t(n, v, d);                                                         \
-  namespace flags {                                                            \
-  const int flag_##n = Flag::create(#n, {d, s, e, c, h});                      \
-  }
-    
-      /**
-   * @brief Set the process name.
-   */
-  void setProcessName(const std::string& name) {
-    process_name_ = name;
-  }
-    
-      /**
-   * @brief Before ending, tear down any platform specific setup
-   *
-   * On windows, we require the COM libraries be initialized just once
-   */
-  static void platformTeardown();
-    
-    
-    {
-    {  return '0';
-}
-}
-
-    
-    std::shared_ptr<PlatformProcess> PlatformProcess::launchTestPythonScript(
-    const std::string& args) {
-  std::string osquery_path;
-  auto osquery_path_option = getEnvVar('OSQUERY_DEPS');
-  if (osquery_path_option) {
-    osquery_path = *osquery_path_option;
-  } else {
-    if (!isPlatform(PlatformType::TYPE_FREEBSD)) {
-      osquery_path = '/usr/local/osquery';
-    } else {
-      osquery_path = '/usr/local';
-    }
-  }
-    }
-    
-    std::string platformStrerr(int errnum) {
-  return ::strerror(errnum);
-}
-    
-    static unsigned int stb_matchlen(stb_uchar *m1, stb_uchar *m2, stb_uint maxlen)
-{
-    stb_uint i;
-    for (i=0; i < maxlen; ++i)
-        if (m1[i] != m2[i]) return i;
-    return i;
-}
-    
-    
-    {    printf('DestroyContext()\n');
-    ImGui::DestroyContext();
-    return 0;
-}
-
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_ImplGlfwGL2_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_ImplGlfwGL2_CreateDeviceObjects();
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-        if (show_demo_window)
+                if(is_empty(&cam_points_k))
         {
-            ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-            ImGui::ShowDemoWindow(&show_demo_window);
-        }
+            cv::Mat C_valid = C_est[k], t_valid = t_est[k];
+            double cost_valid = cost[k];
+    }
     
-    // Implemented features:
-//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-// Missing features:
-//  [ ] SDL2 handling of IME under Windows appears to be broken and it explicitly disable the regular Windows IME. You can restore Windows IME by compiling SDL with SDL_DISABLE_WINDOWS_IME.
+            // Version: 1.3
+        TEXTURE0                         = 0x84C0,
+        TEXTURE1                         = 0x84C1,
+        TEXTURE2                         = 0x84C2,
+        TEXTURE3                         = 0x84C3,
+        TEXTURE4                         = 0x84C4,
+        TEXTURE5                         = 0x84C5,
+        TEXTURE6                         = 0x84C6,
+        TEXTURE7                         = 0x84C7,
+        TEXTURE8                         = 0x84C8,
+        TEXTURE9                         = 0x84C9,
+        TEXTURE10                        = 0x84CA,
+        TEXTURE11                        = 0x84CB,
+        TEXTURE12                        = 0x84CC,
+        TEXTURE13                        = 0x84CD,
+        TEXTURE14                        = 0x84CE,
+        TEXTURE15                        = 0x84CF,
+        TEXTURE16                        = 0x84D0,
+        TEXTURE17                        = 0x84D1,
+        TEXTURE18                        = 0x84D2,
+        TEXTURE19                        = 0x84D3,
+        TEXTURE20                        = 0x84D4,
+        TEXTURE21                        = 0x84D5,
+        TEXTURE22                        = 0x84D6,
+        TEXTURE23                        = 0x84D7,
+        TEXTURE24                        = 0x84D8,
+        TEXTURE25                        = 0x84D9,
+        TEXTURE26                        = 0x84DA,
+        TEXTURE27                        = 0x84DB,
+        TEXTURE28                        = 0x84DC,
+        TEXTURE29                        = 0x84DD,
+        TEXTURE30                        = 0x84DE,
+        TEXTURE31                        = 0x84DF,
+        ACTIVE_TEXTURE                   = 0x84E0,
+        MULTISAMPLE                      = 0x809D,
+        SAMPLE_ALPHA_TO_COVERAGE         = 0x809E,
+        SAMPLE_ALPHA_TO_ONE              = 0x809F,
+        SAMPLE_COVERAGE                  = 0x80A0,
+        SAMPLE_BUFFERS                   = 0x80A8,
+        SAMPLES                          = 0x80A9,
+        SAMPLE_COVERAGE_VALUE            = 0x80AA,
+        SAMPLE_COVERAGE_INVERT           = 0x80AB,
+        TEXTURE_CUBE_MAP                 = 0x8513,
+        TEXTURE_BINDING_CUBE_MAP         = 0x8514,
+        TEXTURE_CUBE_MAP_POSITIVE_X      = 0x8515,
+        TEXTURE_CUBE_MAP_NEGATIVE_X      = 0x8516,
+        TEXTURE_CUBE_MAP_POSITIVE_Y      = 0x8517,
+        TEXTURE_CUBE_MAP_NEGATIVE_Y      = 0x8518,
+        TEXTURE_CUBE_MAP_POSITIVE_Z      = 0x8519,
+        TEXTURE_CUBE_MAP_NEGATIVE_Z      = 0x851A,
+        PROXY_TEXTURE_CUBE_MAP           = 0x851B,
+        MAX_CUBE_MAP_TEXTURE_SIZE        = 0x851C,
+        COMPRESSED_RGB                   = 0x84ED,
+        COMPRESSED_RGBA                  = 0x84EE,
+        TEXTURE_COMPRESSION_HINT         = 0x84EF,
+        TEXTURE_COMPRESSED_IMAGE_SIZE    = 0x86A0,
+        TEXTURE_COMPRESSED               = 0x86A1,
+        NUM_COMPRESSED_TEXTURE_FORMATS   = 0x86A2,
+        COMPRESSED_TEXTURE_FORMATS       = 0x86A3,
+        CLAMP_TO_BORDER                  = 0x812D,
     
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
+    #ifdef HAVE_LAPACK
     
-    
+        static void* WinGetProcAddress(const char* name)
     {
-    {        err = vkEndCommandBuffer(g_CommandBuffer[g_FrameIndex]);
-        check_vk_result(err);
-        err = vkResetFences(g_Device, 1, &g_Fence[g_FrameIndex]);
-        check_vk_result(err);
-        err = vkQueueSubmit(g_Queue, 1, &info, g_Fence[g_FrameIndex]);
-        check_vk_result(err);
+        static HMODULE opencl_module = NULL;
+        if (!opencl_module)
+        {
+            opencl_module = GetModuleHandleA('clAmdBlas.dll');
+            if (!opencl_module)
+            {
+                opencl_module = LoadLibraryA('clAmdBlas.dll');
+                if (!opencl_module)
+                    return NULL;
+            }
+        }
+        return (void*)GetProcAddress(opencl_module, name);
     }
-}
-    
-    // Win32 Data
-static HWND                     g_hWnd = 0;
-static INT64                    g_Time = 0;
-static INT64                    g_TicksPerSecond = 0;
-static ImGuiMouseCursor         g_LastMouseCursor = ImGuiMouseCursor_COUNT;
-    
-    
-    {        g_pd3dDevice->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&g_pRootSignature));
-        blob->Release();
-    }
-    
-        // Store our identifier
-    io.Fonts->TexID = (void *)(intptr_t)g_FontTexture;
-    
-    
-    {#ifndef FOLLY_TLD_USE_FOLLY_TLS
-    delete tmp;
-#endif
-  }
+    #define CV_CL_GET_PROC_ADDRESS(name) WinGetProcAddress(name)
+#endif // _WIN32
     
     template <typename T>
-constexpr T constexpr_ceil(T t, T round) {
-  return round == T(0)
-      ? t
-      : ((t + (t < T(0) ? T(0) : round - T(1))) / round) * round;
-}
-    
-    TEST(IOBuf, CreateCombined) {
-  // Create a combined IOBuf, then destroy it.
-  // The data buffer and IOBuf both become unused as part of the destruction
-  {
-    auto buf = IOBuf::createCombined(256);
-    EXPECT_FALSE(buf->isShared());
+class TypeWithoutFormatter<T, kConvertibleToInteger> {
+ public:
+  // Since T has no << operator or PrintTo() but can be implicitly
+  // converted to BiggestInt, we print it as a BiggestInt.
+  //
+  // Most likely T is an enum type (either named or unnamed), in which
+  // case printing it as an integer is the desired behavior.  In case
+  // T is not an enum, printing it as an integer is the best we can do
+  // given that it has no user-defined printer.
+  static void PrintValue(const T& value, ::std::ostream* os) {
+    const internal::BiggestInt kBigInt = value;
+    *os << kBigInt;
   }
-    }
-    
-    template <typename C>
-struct compare_equal_to : detail::cmp_pred<C, ordering::eq, 0> {
-  using detail::cmp_pred<C, ordering::eq, 0>::cmp_pred;
 };
     
-      /**
-   * If POLLABLE, return a file descriptor that can be passed to poll / epoll
-   * and will become readable when any async IO operations have completed.
-   * If NOT_POLLABLE, return -1.
-   */
-  int pollFd() const {
-    return pollFd_;
+      // Returns the TestInfo object for the test that's currently running,
+  // or NULL if no test is running.
+  const TestInfo* current_test_info() const
+      GTEST_LOCK_EXCLUDED_(mutex_);
+    
+    // This macro is for implementing ASSERT/EXPECT_DEBUG_DEATH when compiled in
+// NDEBUG mode. In this case we need the statements to be executed, the regex is
+// ignored, and the macro must accept a streamed message even though the message
+// is never printed.
+# define GTEST_EXECUTE_STATEMENT_(statement, regex) \
+  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
+  if (::testing::internal::AlwaysTrue()) { \
+     GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
+  } else \
+    ::testing::Message()
+    
+    // In order to catch the mistake of putting tests that use different
+// test fixture classes in the same test case, we need to assign
+// unique IDs to fixture classes and compare them.  The TypeId type is
+// used to hold such IDs.  The user should treat TypeId as an opaque
+// type: the only operation allowed on TypeId values is to compare
+// them for equality using the == operator.
+typedef const void* TypeId;
+    
+      bool check_for_leaks = false;
+  if (argc > 1 && strcmp(argv[1], '--check_for_leaks') == 0 )
+    check_for_leaks = true;
+  else
+    printf('%s\n', 'Run this program with --check_for_leaks to enable '
+           'custom leak checking in the tests.');
+    
+    
+    {    dbg_printf(
+        'IOCTL alloc: size %lu, location %p\n', alloc->size, alloc->buffer);
+    break;
+  default:
+    err = -ENOTTY;
+    goto error_exit;
+    break;
   }
     
-    void AsyncFileWriter::writeMessage(StringPiece buffer, uint32_t flags) {
-  return writeMessage(buffer.str(), flags);
-}
-    
-    /**
- * A helper class for creating an AsyncFileWriter or ImmediateFileWriter based
- * on log handler options settings.
- *
- * This is used by StreamHandlerFactory and FileHandlerFactory.
- */
-class FileWriterFactory {
- public:
-  bool processOption(StringPiece name, StringPiece value);
-  std::shared_ptr<LogWriter> createWriter(File file);
+    TEST_F(ViewsConfigParserPluginTests, test_add_view) {
+  Config c;
+  auto s = c.update(getTestConfigMap());
+  EXPECT_TRUE(s.ok());
     }
     
-    ImmediateFileWriter::ImmediateFileWriter(folly::File&& file)
-    : file_{std::move(file)} {}
+        uid_t expected_user = 0U;
+    EXPECT_EQ(dropper->to_user_, expected_user);
+    
+      // If a constraint list does not exist, then all checks will match.
+  // If there is no predicate clause then all results will match.
+  EXPECT_TRUE(cm['not_path'].matches('some'));
+  EXPECT_TRUE(cm['not_path'].notExistsOrMatches('some'));
+  EXPECT_FALSE(cm['not_path'].exists());
+  EXPECT_FALSE(cm['not_path'].existsAndMatches('some'));
+    
+      // Check that all value lengths were maxed.
+  std::map<std::string, size_t> expected = {
+      {'name', 10}, {'age', 4}, {'food', 23}, {'number', 2}};
+  EXPECT_EQ(lengths, expected);
+    
+        int64_t iterations;
+    TimeUnit time_unit;
+    double real_accumulated_time;
+    double cpu_accumulated_time;
+    
+    #if defined(HAVE_STD_REGEX)
+#include <regex>
+#elif defined(HAVE_GNU_POSIX_REGEX)
+#include <gnuregex.h>
+#elif defined(HAVE_POSIX_REGEX)
+#include <regex.h>
+#else
+#error No regular expression backend was found!
+#endif
+#include <string>
