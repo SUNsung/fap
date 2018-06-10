@@ -1,236 +1,174 @@
 
         
-        #endif
-
+        #include <string>
     
-    @interface TimeZoneBridgingTester : NSObject
-- (NSTimeZone *)autoupdatingCurrentTimeZone;
-- (BOOL)verifyAutoupdatingTimeZone:(NSTimeZone *)tz;
-@end
+    #ifndef TENSORFLOW_KERNELS_SMOOTH_HINGE_LOSS_H_
+#define TENSORFLOW_KERNELS_SMOOTH_HINGE_LOSS_H_
     
-      // In the case where inputs are swift modules, like in the merge-module step,
-  // ignore the inputs; associated unit files for the modules' source inputs
-  // should have been generated at swift module creation time.
     
-    /// A SyntaxRewriter for applying a set of formatting rules to a Syntax tree.
-struct FormatSyntaxRewriter : public SyntaxRewriter {
-  virtual StructDeclSyntax
-  rewriteStructDecl(StructDeclSyntax Struct) override;
+    {// Options specific to zlib compression.
+#if !defined(IS_SLIM_BUILD)
+  ZlibCompressionOptions zlib_options;
+#endif  // IS_SLIM_BUILD
 };
     
-    #endif // SWIFT_INDEX_INDEXSYMBOL_H
-
+    namespace internal {
+template <typename Scalar>
+struct functor_traits<scalar_clip_op<Scalar> > {
+  enum {
+    Cost = NumTraits<Scalar>::AddCost * 3,
+    PacketAccess = packet_traits<Scalar>::HasMax &&
+                   packet_traits<Scalar>::HasMin &&
+                   packet_traits<Scalar>::HasNegate
+  };
+};
+}  // namespace internal
     
-      /// Returns the real line number for a source location.
-  ///
-  /// If \p BufferID is provided, \p Loc must come from that source buffer.
-  ///
-  /// This does not respect #line directives.
-  unsigned getLineNumber(SourceLoc Loc, unsigned BufferID = 0) const {
-    assert(Loc.isValid());
-    return LLVMSourceMgr.FindLineNumber(Loc.Value, BufferID);
-  }
+    #if !TENSORFLOW_USE_SYCL
+#error This file must only be included when building TensorFlow with SYCL support
+#endif
     
-    #endif // SWIFT_INDEX_INDEX_H
-
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    #include 'ATen/ATenGeneral.h'
     
-    #ifndef TEST_QPS_DRIVER_H
-#define TEST_QPS_DRIVER_H
-    
-    #include <set>
-    
-    #include <chrono>
-#include <thread>
-#include <vector>
-    
-    bool SecureAuthContext::SetPeerIdentityPropertyName(const grpc::string& name) {
-  if (!ctx_) return false;
-  return grpc_auth_context_set_peer_identity_property_name(ctx_,
-                                                           name.c_str()) != 0;
+    {  GetReporter()->ReportQPS(*result);
+  GetReporter()->ReportLatency(*result);
 }
     
-    #include <signal.h>
+    void ParseDb(const std::string& db, std::vector<Feature>* feature_list) {
+  feature_list->clear();
+  std::string db_content(db);
+  db_content.erase(
+      std::remove_if(db_content.begin(), db_content.end(), isspace),
+      db_content.end());
+    }
     
-    #include <string>
+    void TargetGraph::setSamples(TargetId id, uint32_t samples) {
+  assertx(id < targets.size());
+  targets[id].samples = samples;
+}
     
-    UsageTimer::UsageTimer() : start_(Sample()) {}
+      auto const dest_file = ::mkstemp(tmp_filename);
+  if (dest_file < 0) {
+    Logger::Error('dlopen_embedded_data: Unable to create temporary file: %s',
+                  folly::errnoStr(errno).c_str());
+    return nullptr;
+  }
     
-      /// Accept a new connection and obtain the endpoint of the peer
-  /**
-   * This function is used to accept a new connection from a peer into the
-   * given socket, and additionally provide the endpoint of the remote peer.
-   * The function call will block until a new connection has been accepted
-   * successfully or an error occurs.
-   *
-   * @param peer The socket into which the new connection will be accepted.
-   *
-   * @param peer_endpoint An endpoint object which will receive the endpoint of
-   * the remote peer.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   *
-   * @par Example
-   * @code
-   * boost::asio::ip::tcp::acceptor acceptor(io_service);
-   * ...
-   * boost::asio::ip::tcp::socket socket(io_service);
-   * boost::asio::ip::tcp::endpoint endpoint;
-   * acceptor.accept(socket, endpoint);
-   * @endcode
+    struct CurlShareResource : SweepableResourceData {
+  DECLARE_RESOURCE_ALLOCATION(CurlShareResource)
+  CLASSNAME_IS('curl_share')
+  const String& o_getClassNameHook() const override { return classnameof(); }
+  bool isInvalid() const override { return !m_share; }
+    }
+    
+    void SynchronizableMulti::notifyAll() {
+  for (auto& cond_list : m_cond_list_vec) {
+    while (!cond_list.empty()) {
+      pthread_cond_signal(cond_list.front());
+      cond_list.pop_front();
+    }
+  }
+}
+    
+    bool simplify(Env& env, const cmovb& inst, Vlabel b, size_t i) {
+  return cmov_fold_one<csincb>(env, inst, b, i);
+}
+    
+      /** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **
+   * Finds the first occurrence of any character not in `that` in this string.
+   * \note Equivalent to `find_first_not_of(that.data(), 0, that.size())`
    */
-  template <typename SocketService>
-  void accept(basic_socket<protocol_type, SocketService>& peer,
-      endpoint_type& peer_endpoint)
-  {
-    boost::system::error_code ec;
-    this->get_service().accept(this->get_implementation(),
-        peer, &peer_endpoint, ec);
-    boost::asio::detail::throw_error(ec, 'accept');
+  template <std::size_t M>
+  constexpr std::size_t find_first_not_of(
+      const BasicFixedString<Char, M>& that) const noexcept {
+    return find_first_not_of(that, 0u);
   }
     
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    template <>
-class base_from_completion_cond<transfer_all_t>
-{
-protected:
-  explicit base_from_completion_cond(transfer_all_t)
-  {
-  }
+      {
+    auto copy = *buf;
+    EXPECT_TRUE(buf->isShared());
+    EXPECT_TRUE(copy.isShared());
+    EXPECT_EQ((void*)buf->data(), (void*)copy.data());
+    EXPECT_NE(buf->next(), copy.next());  // actually different buffers
     }
     
-    #endif // BOOST_ASIO_DETAIL_DESCRIPTOR_WRITE_OP_HPP
-
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-# include <boost/asio/detail/null_event.hpp>
-#elif defined(BOOST_ASIO_WINDOWS)
-# include <boost/asio/detail/win_event.hpp>
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-# include <boost/asio/detail/posix_event.hpp>
-#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-# include <boost/asio/detail/std_event.hpp>
-#else
-# error Only Windows, POSIX and std::condition_variable are supported!
-#endif
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS) \
-  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
-typedef null_fenced_block fenced_block;
-#elif defined(__MACH__) && defined(__APPLE__)
-typedef macos_fenced_block fenced_block;
-#elif defined(__sun)
-typedef solaris_fenced_block fenced_block;
-#elif defined(__GNUC__) && defined(__arm__) \
-  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
-typedef gcc_arm_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
-typedef gcc_hppa_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-typedef gcc_x86_fenced_block fenced_block;
-#elif defined(__GNUC__) \
-  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
-  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
-typedef gcc_sync_fenced_block fenced_block;
-#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
-typedef win_fenced_block fenced_block;
-#else
-typedef null_fenced_block fenced_block;
-#endif
-    
-    // Newer gcc, clang need special treatment to suppress unused typedef warnings.
-#if defined(__clang__)
-# if defined(__apple_build_version__)
-#  if (__clang_major__ >= 7)
-#   define BOOST_ASIO_UNUSED_TYPEDEF __attribute__((__unused__))
-#  endif // (__clang_major__ >= 7)
-# elif ((__clang_major__ == 3) && (__clang_minor__ >= 6)) \
-    || (__clang_major__ > 3)
-#  define BOOST_ASIO_UNUSED_TYPEDEF __attribute__((__unused__))
-# endif // ((__clang_major__ == 3) && (__clang_minor__ >= 6))
-        //   || (__clang_major__ > 3)
-#elif defined(__GNUC__)
-# if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4)
-#  define BOOST_ASIO_UNUSED_TYPEDEF __attribute__((__unused__))
-# endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4)
-#endif // defined(__GNUC__)
-#if !defined(BOOST_ASIO_UNUSED_TYPEDEF)
-# define BOOST_ASIO_UNUSED_TYPEDEF
-#endif // !defined(BOOST_ASIO_UNUSED_TYPEDEF)
-    
-    SEXP XGBoosterUpdateOneIter_R(SEXP handle, SEXP iter, SEXP dtrain) {
-  R_API_BEGIN();
-  CHECK_CALL(XGBoosterUpdateOneIter(R_ExternalPtrAddr(handle),
-                                  asInteger(iter),
-                                  R_ExternalPtrAddr(dtrain)));
-  R_API_END();
-  return R_NilValue;
+    TEST_F(OrderingTest, compare_equal_to) {
+  compare_equal_to<OddCompare<int>> op;
+  EXPECT_FALSE(op(3, 4));
+  EXPECT_TRUE(op(3, 3));
+  EXPECT_FALSE(op(4, 3));
 }
     
-      for (auto alphabet_size : test_cases) {
-    for (int i = 0; i < repetitions; i++) {
-      std::vector<int> input(num_elements);
-      std::generate(input.begin(), input.end(),
-        [=]() { return rand() % alphabet_size; });
-      CompressedBufferWriter cbw(alphabet_size);
+    // Some queue implementations (for example, LifoSemMPMCQueue or
+// PriorityLifoSemMPMCQueue) support both blocking (BLOCK) and
+// non-blocking (THROW) behaviors.
+enum class QueueBehaviorIfFull { THROW, BLOCK };
+    
+    
+    { private:
+  folly::LifoSem sem_;
+  std::vector<folly::MPMCQueue<T>> queues_;
+};
+    
+      bool add(T v) {
+    auto prev = &head_;
+    locate_lower_bound(v, prev);
+    auto curr = prev->load(std::memory_order_relaxed);
+    if (curr && curr->elem_ == v) {
+      return false;
     }
+    prev->store(new Node(std::move(v), curr));
+    return true;
+  }
+    
+    #include <folly/futures/Future.h>
+#include <folly/Likely.h>
+#include <folly/SingletonThreadLocal.h>
+#include <folly/futures/ThreadWheelTimekeeper.h>
+    
+    TEST(ViaFunc, liftsVoid) {
+  ManualExecutor x;
+  int count = 0;
+  Future<Unit> f = via(&x, [&]{ count++; });
     }
     
-    /*!
- * \brief Macro to register linear updater.
+    /**
+ * A Thread Pool for IO bound tasks
+ *
+ * @note Uses event_fd for notification, and waking an epoll loop.
+ * There is one queue (NotificationQueue specifically) per thread/epoll.
+ * If the thread is already running and not waiting on epoll,
+ * we don't make any additional syscalls to wake up the loop,
+ * just put the new task in the queue.
+ * If any thread has been waiting for more than a few seconds,
+ * its stack is madvised away. Currently however tasks are scheduled round
+ * robin on the queues, so unless there is no work going on,
+ * this isn't very effective.
+ * Since there is one queue per thread, there is hardly any contention
+ * on the queues - so a simple spinlock around an std::deque is used for
+ * the tasks. There is no max queue size.
+ * By default, there is one thread per core - it usually doesn't make sense to
+ * have more IO threads than this, assuming they don't block.
+ *
+ * @note ::getEventBase() will return an EventBase you can schedule IO work on
+ * directly, chosen round-robin.
+ *
+ * @note N.B. For this thread pool, stop() behaves like join() because
+ * outstanding tasks belong to the event base and will be executed upon its
+ * destruction.
  */
-#define XGBOOST_REGISTER_LINEAR_UPDATER(UniqueId, Name)                        \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::LinearUpdaterReg&                    \
-      __make_##LinearUpdaterReg##_##UniqueId##__ =                             \
-          ::dmlc::Registry< ::xgboost::LinearUpdaterReg>::Get()->__REGISTER__( \
-              Name)
-    
-    class FBEXPORT StackTraceElement {
+class IOThreadPoolExecutor : public ThreadPoolExecutor, public IOExecutor {
  public:
-  StackTraceElement(InstructionPointer absoluteProgramCounter,
-                    InstructionPointer libraryBase,
-                    InstructionPointer functionAddress, std::string libraryName,
-                    std::string functionName)
-      : absoluteProgramCounter_{absoluteProgramCounter},
-        libraryBase_{libraryBase},
-        functionAddress_{functionAddress},
-        libraryName_{std::move(libraryName)},
-        functionName_{std::move(functionName)} {}
-    }
-    
-        Config const & operator=(Config const &) = delete;
-    
-    void assertInternal(const char* formatstr ...) {
-    va_list va_args;
-    va_start(va_args, formatstr);
-    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
-    va_end(va_args);
-    if (gAssertHandler != NULL) {
-        gAssertHandler(sAssertBuf);
-    }
-    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
-    // crash at this specific address so that we can find our crashes easier
-    *(int*)0xdeadb00c = 0;
-    // let the compiler know we won't reach the end of the function
-     __builtin_unreachable();
-}
-    
-    template<typename... ARGS>
-inline void log(int level, const char* tag, const char* msg, ARGS... args) noexcept {
-  __android_log_print(level, tag, msg, args...);
-}
-    
-    
-    {}
-
-    
-    #pragma once
-    
-    namespace facebook {
-#define ENABLE_FBASSERT 1
+  explicit IOThreadPoolExecutor(
+      size_t numThreads,
+      std::shared_ptr<ThreadFactory> threadFactory =
+          std::make_shared<NamedThreadFactory>('IOThreadPool'),
+      folly::EventBaseManager* ebm = folly::EventBaseManager::get(),
+      bool waitForAll = false);
     }
