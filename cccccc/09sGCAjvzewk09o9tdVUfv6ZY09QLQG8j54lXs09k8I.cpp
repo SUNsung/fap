@@ -1,368 +1,443 @@
 
         
-          /// \deprecated Always pass len.
-  JSONCPP_DEPRECATED('Use setComment(std::string const&) instead.')
-  void setComment(const char* comment, CommentPlacement placement);
-  /// Comments must be //... or /* ... */
-  void setComment(const char* comment, size_t len, CommentPlacement placement);
-  /// Comments must be //... or /* ... */
-  void setComment(const std::string& comment, CommentPlacement placement);
-  bool hasComment(CommentPlacement placement) const;
-  /// Include delimiters and embedded newlines.
-  std::string getComment(CommentPlacement placement) const;
+        #include 'atom/browser/api/trackable_object.h'
+#include 'base/callback.h'
+#include 'chrome/browser/extensions/global_shortcut_listener.h'
+#include 'native_mate/handle.h'
+#include 'ui/base/accelerators/accelerator.h'
     
-    TEST(AnyTest, TestIs) {
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  google::protobuf::Any any;
-  any.PackFrom(submessage);
-  ASSERT_TRUE(any.ParseFromString(any.SerializeAsString()));
-  EXPECT_TRUE(any.Is<protobuf_unittest::TestAny>());
-  EXPECT_FALSE(any.Is<google::protobuf::Any>());
-    }
-    
-    class MapFieldGenerator : public FieldGeneratorBase {
- public:
-  MapFieldGenerator(const FieldDescriptor* descriptor,
-                    int fieldOrdinal,
-                    const Options* options);
-  ~MapFieldGenerator();
-    }
-    
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-    namespace cv { namespace cuda { namespace device
-{
-    template <class T>
-    __device__ __forceinline__ T warp_reduce(volatile T *ptr , const unsigned int tid = threadIdx.x)
-    {
-        const unsigned int lane = tid & 31; // index of thread in warp (0..31)
-    }
-    }
-    }
-    }
-    
-      caffe::Datum datum;
-  datum.set_channels(2);  // one channel for each image in the pair
-  datum.set_height(rows);
-  datum.set_width(cols);
-  LOG(INFO) << 'A total of ' << num_items << ' items.';
-  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
-  for (int itemid = 0; itemid < num_items; ++itemid) {
-    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
-    int j = caffe::caffe_rng_rand() % num_items;
-    read_image(&image_file, &label_file, i, rows, cols,
-        pixels, &label_i);
-    read_image(&image_file, &label_file, j, rows, cols,
-        pixels + (rows * cols), &label_j);
-    datum.set_data(pixels, 2*rows*cols);
-    if (label_i  == label_j) {
-      datum.set_label(1);
-    } else {
-      datum.set_label(0);
-    }
-    datum.SerializeToString(&value);
-    std::string key_str = caffe::format_int(itemid, 8);
-    db->Put(leveldb::WriteOptions(), key_str, value);
-  }
-    
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to the data.
-   *
-   * @param datum
-   *    Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See data_layer.cpp for an example.
-   */
-  void Transform(const Datum& datum, Blob<Dtype>* transformed_blob);
-    
-     protected:
-  // Helper functions that abstract away the column buffer and gemm arguments.
-  // The last argument in forward_cpu_gemm is so that we can skip the im2col if
-  // we just called weight_cpu_gemm with the same input.
-  void forward_cpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* output, bool skip_im2col = false);
-  void forward_cpu_bias(Dtype* output, const Dtype* bias);
-  void backward_cpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* output);
-  void weight_cpu_gemm(const Dtype* input, const Dtype* output, Dtype*
-      weights);
-  void backward_cpu_bias(Dtype* bias, const Dtype* input);
-    
-    #include <utility>
-#include <vector>
-    
-     protected:
-  /// @copydoc BNLLLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    
-    {  Blob<Dtype> diff_;  // cached for backward pass
-  Blob<Dtype> dist_sq_;  // cached for backward pass
-  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
-  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
-};
-    
-    /**
- * @brief Convolves the input image with a bank of learned filters,
- *        and (optionally) adds biases.
- *
- *   Caffe convolves by reduction to matrix multiplication. This achieves
- *   high-throughput and generality of input and filter dimensions but comes at
- *   the cost of memory for matrices. This makes use of efficiency in BLAS.
- *
- *   The input is 'im2col' transformed to a channel K' x H x W data matrix
- *   for multiplication with the N x K' x H x W filter matrix to yield a
- *   N' x H x W output matrix that is then 'col2im' restored. K' is the
- *   input channel * kernel height * kernel width dimension of the unrolled
- *   inputs so that the im2col matrix has a column for each input region to
- *   be filtered. col2im restores the output spatial structure by rolling up
- *   the output channel N' columns of the output matrix.
- */
-template <typename Dtype>
-class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
- public:
-  /**
-   * @param param provides ConvolutionParameter convolution_param,
-   *    with ConvolutionLayer options:
-   *  - num_output. The number of filters.
-   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
-   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
-   *  filters.
-   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
-   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
-   *  for different strides. By default the convolution is dense with stride 1.
-   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
-   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
-   *  different padding. Input padding is computed implicitly instead of
-   *  actually padding.
-   *  - dilation (\b optional, default 1). The filter
-   *  dilation, given by dilation_size for equal dimensions for different
-   *  dilation. By default the convolution has dilation 1.
-   *  - group (\b optional, default 1). The number of filter groups. Group
-   *  convolution is a method for reducing parameterization by selectively
-   *  connecting input and output channels. The input and output channel dimensions must be divisible
-   *  by the number of groups. For group @f$ \geq 1 @f$, the
-   *  convolutional filters' input and output channels are separated s.t. each
-   *  group takes 1 / group of the input channels and makes 1 / group of the
-   *  output channels. Concretely 4 input channels, 8 output channels, and
-   *  2 groups separate input channels 1-2 and output channels 1-4 into the
-   *  first group and input channels 3-4 and output channels 5-8 into the second
-   *  group.
-   *  - bias_term (\b optional, default true). Whether to have a bias.
-   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
-   *    kernels + stream parallelism) engines.
-   */
-  explicit ConvolutionLayer(const LayerParameter& param)
-      : BaseConvolutionLayer<Dtype>(param) {}
-    }
-    
-    #endif  // CAFFE_CUDNN_LRN_LAYER_HPP_
+    #endif  // ATOM_BROWSER_WINDOW_LIST_OBSERVER_H_
 
     
     
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-  cudnnPoolingDescriptor_t  pooling_desc_;
-  cudnnPoolingMode_t        mode_;
+    {  DISALLOW_COPY_AND_ASSIGN(Locker);
 };
+    
+    // DesktopMediaList provides the list of desktop media source (screens, windows,
+// tabs), and their thumbnails, to the desktop media picker dialog. It
+// transparently updates the list in the background, and notifies the desktop
+// media picker when something changes.
+class DesktopMediaList {
+ public:
+  // Struct used to represent each entry in the list.
+  struct Source {
+    // Id of the source.
+    content::DesktopMediaID id;
+    }
+    }
+    
+    namespace content {
+class BrowserPpapiHost;
+}
+    
+    // Here's what happens when an ASSERT_DEATH* or EXPECT_DEATH* is
+// executed:
+//
+//   1. It generates a warning if there is more than one active
+//   thread.  This is because it's safe to fork() or clone() only
+//   when there is a single thread.
+//
+//   2. The parent process clone()s a sub-process and runs the death
+//   test in it; the sub-process exits with code 0 at the end of the
+//   death test, if it hasn't exited already.
+//
+//   3. The parent process waits for the sub-process to terminate.
+//
+//   4. The parent process checks the exit code and error message of
+//   the sub-process.
+//
+// Examples:
+//
+//   ASSERT_DEATH(server.SendMessage(56, 'Hello'), 'Invalid port number');
+//   for (int i = 0; i < 5; i++) {
+//     EXPECT_DEATH(server.ProcessRequest(i),
+//                  'Invalid request .* in ProcessRequest()')
+//                  << 'Failed to die on request ' << i;
+//   }
+//
+//   ASSERT_EXIT(server.ExitNow(), ::testing::ExitedWithCode(0), 'Exiting');
+//
+//   bool KilledBySIGHUP(int exit_code) {
+//     return WIFSIGNALED(exit_code) && WTERMSIG(exit_code) == SIGHUP;
+//   }
+//
+//   ASSERT_EXIT(client.HangUpServer(), KilledBySIGHUP, 'Hanging up!');
+//
+// On the regular expressions used in death tests:
+//
+//   On POSIX-compliant systems (*nix), we use the <regex.h> library,
+//   which uses the POSIX extended regex syntax.
+//
+//   On other platforms (e.g. Windows), we only support a simple regex
+//   syntax implemented as part of Google Test.  This limited
+//   implementation should be enough most of the time when writing
+//   death tests; though it lacks many features you can find in PCRE
+//   or POSIX extended regex syntax.  For example, we don't support
+//   union ('x|y'), grouping ('(xy)'), brackets ('[xy]'), and
+//   repetition count ('x{5,7}'), among others.
+//
+//   Below is the syntax that we do support.  We chose it to be a
+//   subset of both PCRE and POSIX extended regex, so it's easy to
+//   learn wherever you come from.  In the following: 'A' denotes a
+//   literal character, period (.), or a single \\ escape sequence;
+//   'x' and 'y' denote regular expressions; 'm' and 'n' are for
+//   natural numbers.
+//
+//     c     matches any literal character c
+//     \\d   matches any decimal digit
+//     \\D   matches any character that's not a decimal digit
+//     \\f   matches \f
+//     \\n   matches \n
+//     \\r   matches \r
+//     \\s   matches any ASCII whitespace, including \n
+//     \\S   matches any character that's not a whitespace
+//     \\t   matches \t
+//     \\v   matches \v
+//     \\w   matches any letter, _, or decimal digit
+//     \\W   matches any character that \\w doesn't match
+//     \\c   matches any literal character c, which must be a punctuation
+//     .     matches any single character except \n
+//     A?    matches 0 or 1 occurrences of A
+//     A*    matches 0 or many occurrences of A
+//     A+    matches 1 or many occurrences of A
+//     ^     matches the beginning of a string (not that of each line)
+//     $     matches the end of a string (not that of each line)
+//     xy    matches x followed by y
+//
+//   If you accidentally use PCRE or POSIX extended regex features
+//   not implemented by us, you will get a run-time failure.  In that
+//   case, please try to rewrite your regular expression within the
+//   above syntax.
+//
+//   This implementation is *not* meant to be as highly tuned or robust
+//   as a compiled regex library, but should perform well enough for a
+//   death test, which already incurs significant overhead by launching
+//   a child process.
+//
+// Known caveats:
+//
+//   A 'threadsafe' style death test obtains the path to the test
+//   program from argv[0] and re-executes it in the sub-process.  For
+//   simplicity, the current implementation doesn't search the PATH
+//   when launching the sub-process.  This means that the user must
+//   invoke the test program via a path that contains at least one
+//   path separator (e.g. path/to/foo_test and
+//   /absolute/path/to/bar_test are fine, but foo_test is not).  This
+//   is rarely a problem as people usually don't put the test binary
+//   directory in PATH.
+//
+// TODO(wan@google.com): make thread-safe death tests search the PATH.
+    
+    // To write value-parameterized tests, first you should define a fixture
+// class. It is usually derived from testing::TestWithParam<T> (see below for
+// another inheritance scheme that's sometimes useful in more complicated
+// class hierarchies), where the type of your parameter values.
+// TestWithParam<T> is itself derived from testing::Test. T can be any
+// copyable type. If it's a raw pointer, you are responsible for managing the
+// lifespan of the pointed values.
+    
+    // To write value-parameterized tests, first you should define a fixture
+// class. It is usually derived from testing::TestWithParam<T> (see below for
+// another inheritance scheme that's sometimes useful in more complicated
+// class hierarchies), where the type of your parameter values.
+// TestWithParam<T> is itself derived from testing::Test. T can be any
+// copyable type. If it's a raw pointer, you are responsible for managing the
+// lifespan of the pointed values.
+    
+    // A copyable object representing the result of a test part (i.e. an
+// assertion or an explicit FAIL(), ADD_FAILURE(), or SUCCESS()).
+//
+// Don't inherit from TestPartResult as its destructor is not virtual.
+class GTEST_API_ TestPartResult {
+ public:
+  // The possible outcomes of a test part (i.e. an assertion or an
+  // explicit SUCCEED(), FAIL(), or ADD_FAILURE()).
+  enum Type {
+    kSuccess,          // Succeeded.
+    kNonFatalFailure,  // Failed but the test can continue.
+    kFatalFailure      // Failed and the test should be terminated.
+  };
+    }
+    
+      // Returns true if FilePath ends with a path separator, which indicates that
+  // it is intended to represent a directory. Returns false otherwise.
+  // This does NOT check that a directory (or file) actually exists.
+  bool IsDirectory() const;
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
+    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
+    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
+    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32, GTEST_TEMPLATE_ T33,
+    GTEST_TEMPLATE_ T34, GTEST_TEMPLATE_ T35, GTEST_TEMPLATE_ T36,
+    GTEST_TEMPLATE_ T37, GTEST_TEMPLATE_ T38, GTEST_TEMPLATE_ T39,
+    GTEST_TEMPLATE_ T40, GTEST_TEMPLATE_ T41, GTEST_TEMPLATE_ T42,
+    GTEST_TEMPLATE_ T43, GTEST_TEMPLATE_ T44, GTEST_TEMPLATE_ T45,
+    GTEST_TEMPLATE_ T46, GTEST_TEMPLATE_ T47, GTEST_TEMPLATE_ T48,
+    GTEST_TEMPLATE_ T49, GTEST_TEMPLATE_ T50>
+struct Templates50 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates49<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+      T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42,
+      T43, T44, T45, T46, T47, T48, T49, T50> Tail;
+};
+    
+    template <typename T1, typename T2>
+struct AssertTypeEq;
+    
+    
+    {  // n has no integer factor in the range (1, n), and thus is prime.
+  return true;
+}
+
+    
+      // Converts a float network to an int network.
+  void ConvertToInt() override;
+    
+    /**********************************************************************
+ * HOcr Text Renderer interface implementation
+ **********************************************************************/
+TessHOcrRenderer::TessHOcrRenderer(const char *outputbase)
+    : TessResultRenderer(outputbase, 'hocr') {
+    font_info_ = false;
+}
+    
+    bool read_unlv_file(                    //print list of sides
+                     STRING name,        //basename of file
+                     int32_t xsize,        //image size
+                     int32_t ysize,        //image size
+                     BLOCK_LIST *blocks  //output list
+                    ) {
+  FILE *pdfp;                    //file pointer
+  BLOCK *block;                  //current block
+  int x;                         //current top-down coords
+  int y;
+  int width;                     //of current block
+  int height;
+  BLOCK_IT block_it = blocks;    //block iterator
+    }
+    
+      // Adds the supplied boxes and transcriptions that correspond to the correct
+  // page number.
+  void AddBoxes(const GenericVector<TBOX>& boxes,
+                const GenericVector<STRING>& texts,
+                const GenericVector<int>& box_pages);
+    
+    
+// Returns the median value of the vector, given that the values are
+// circular, with the given modulus. Values may be signed or unsigned,
+// eg range from -pi to pi (modulus 2pi) or from 0 to 2pi (modulus 2pi).
+// NOTE that the array is shuffled, but the time taken is linear.
+// An assumption is made that most of the values are spread over no more than
+// half the range, but wrap-around is accounted for if the median is near
+// the wrap-around point.
+// Cannot be a member of GenericVector, as it makes heavy used of LLSQ.
+// T must be an integer or float/double type.
+template<typename T> T MedianOfCircularValues(T modulus, GenericVector<T>* v) {
+  LLSQ stats;
+  T halfrange = static_cast<T>(modulus / 2);
+  int num_elements = v->size();
+  for (int i = 0; i < num_elements; ++i) {
+    stats.add((*v)[i], (*v)[i] + halfrange);
+  }
+  bool offset_needed = stats.y_variance() < stats.x_variance();
+  if (offset_needed) {
+    for (int i = 0; i < num_elements; ++i) {
+      (*v)[i] += halfrange;
+    }
+  }
+  int median_index = v->choose_nth_item(num_elements / 2);
+  if (offset_needed) {
+    for (int i = 0; i < num_elements; ++i) {
+      (*v)[i] -= halfrange;
+    }
+  }
+  return (*v)[median_index];
+}
+    
+    /**********************************************************************
+ * DIR128::DIR128
+ *
+ * Quantize the direction of an FCOORD to make a DIR128.
+ **********************************************************************/
+    
+        AdaptationRegType m_adaptationRegType;
+    double m_adaptationRegWeight;
+    bool m_needAdaptRegularization;
+    
+    #ifdef _WIN32
+#define _SCL_SECURE_NO_WARNINGS
 #endif
     
-    #endif  // CAFFE_CUDNN_TANH_LAYER_HPP_
-
+    #pragma warning(disable : 4267) // conversion from 'size_t' to 'unsigned int'; happens in CUDA <<<a,b>>> syntax if a and b are size_t
+#pragma warning(disable : 4127) // conditional expression is constant; 'if (sizeof(ElemType)==sizeof(float))' triggers this
+#pragma warning(disable : 4702) // unreachable code; triggered for unknown reasons
     
-    TEST_F(UnicharcompressTest, DoesChinese) {
-  LOG(INFO) << 'Testing chi_tra';
-  LoadUnicharset('chi_tra.unicharset');
-  ExpectCorrect('chi_tra');
-  LOG(INFO) << 'Testing chi_sim';
-  LoadUnicharset('chi_sim.unicharset');
-  ExpectCorrect('chi_sim');
+    // If the Tracing flag is set, print out a timestamp with no new line at the end
+#define PREPENDTS(stream) \
+    do \
+    { \
+        if (ProgressTracing::GetTimestampingFlag()) \
+        { \
+            char mbstr[30]; \
+            fprintf(stream, '%s: ', ProgressTracing::Timestamp(mbstr));  \
+        } \
+    } while(0)
+    
+    template<class TString>
+inline bool AreEqualIgnoreCase(
+    const TString& s1,
+    const typename TString::value_type* s2pointer)
+{
+    return AreEqualIgnoreCase(s1, TString(s2pointer));
 }
     
-      // Sets the destination filename and enables images to be written to a PDF
-  // on destruction.
-  void WritePDF(const char* filename) {
-    if (pixaGetCount(pixa_) > 0) {
-      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
-      pixaClear(pixa_);
-    }
-  }
-    
-    /**----------------------------------------------------------------------------
-          Public Function Prototypes
-----------------------------------------------------------------------------**/
-void ComputeBlobCenter(TBLOB *Blob, TPOINT *BlobCenter);
-    
-      AddFeature(feature_set, feature);
-    
-    /**----------------------------------------------------------------------------
-          Include Files and Type Defines
-----------------------------------------------------------------------------**/
-#include 'host.h'
-#include 'callcpp.h'
-    
-      // If we manage the given dawg, decrement its count,
-  // and possibly delete it if the count reaches zero.
-  // If dawg is unknown to us, return false.
-  bool FreeDawg(Dawg *dawg) {
-    return dawgs_.Free(dawg);
-  }
-    
-    bool js_cocos2dx_builder_CCBAnimationManager_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBAnimationManager_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBAnimationManager(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBAnimationManager_moveAnimationsFromNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_actionForSoundChannel(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setBaseValue(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getLastCompletedSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setRootNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamedTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_actionForCallbackChannel(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getKeyframeCallbacks(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceIdTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRunningSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRootNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setDelegate(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getSequenceDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getSequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setSequences(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_debug(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_CCBAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    template <class _T>
+class const_array_ref
+{
+    const _T* data;
+    size_t n;
+    inline void check_index(size_t i) const
     {
-    {			float minX = -6.0f;
-			float maxX = 0.0f;
-			float minY = 4.0f;
-			float maxY = 6.0f;
-			
-			for (int32 i = 0; i < 400; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position = b2Vec2(RandomFloat(minX,maxX),RandomFloat(minY,maxY));
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&shape, 0.01f);
-			}
-		}
-		
+        i;
+        assert(i < n);
+    }
+    inline void check_ptr() const
+    {
+        n;
+        data;
+        assert(n == 0 || data != NULL);
+    }
+    }
+    
+        // construct from a single float, copy to all components
+    float4(float f)
+        : v(_mm_load1_ps(&f))
+    {
+    }
+    // float4 (float f) : v (_mm_set_ss (f)) {}  // code seems more complex than _mm_load1_ps()
+    
+    bool js_cocos2dx_studio_Frame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_Frame_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_Frame(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_Frame_clone(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_setTweenType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_setNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_setTimeline(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_isEnterWhenPassed(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_getTweenType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_getFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_apply(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_isTween(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_setFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_setTween(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_getTimeline(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_getNode(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    #if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_playEffect'', nullptr);
+        return 0;
+    }
+#endif
+    
+    
+    
+    
+    
+    #if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+    
+        CHECK_GL_ERROR_DEBUG();
+    
+    // This class implements debug drawing callbacks that are invoked
+// inside b2World::Step.
+class GLESDebugDraw : public b2Draw
+{
+    float32 mRatio;
+    cocos2d::GLProgram* mShaderProgram;
+    GLint        mColorLocation;
+    }
+    
+    	if (settings->drawProfile)
+	{
+		const b2Profile& p = m_world->GetProfile();
+    }
+    
+    #include <Box2D/Box2D.h>
+#include 'GLES-Render.h'
+    
+    class AddPair : public Test
+{
+public:
+    }
+    
+    			// Right vertical
+			shape.Set(b2Vec2(20.0f, -20.0f), b2Vec2(20.0f, 20.0f));
+			ground->CreateFixture(&sd);
+    
+    // This is used to test sensor shapes.
+class Breakable : public Test
+{
+public:
+    }
+    
+    		for (int32 i = 0; i < 3; ++i)
 		{
-			b2PolygonShape shape;
-			shape.SetAsBox(1.5f, 1.5f);
-			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(-40.0f,5.0f);
-			bd.bullet = true;
-			b2Body* body = m_world->CreateBody(&bd);
-			body->CreateFixture(&shape, 1.0f);
-			body->SetLinearVelocity(b2Vec2(150.0f, 0.0f));
-		}
-	}
+			b2CircleShape shape;
+			shape.m_radius = 0.5f;
+    }
     
-    		m_x = RandomFloat(-1.0f, 1.0f);
-		m_bullet->SetTransform(b2Vec2(m_x, 10.0f), 0.0f);
-		m_bullet->SetLinearVelocity(b2Vec2(0.0f, -50.0f));
-		m_bullet->SetAngularVelocity(0.0f);
+    			b2RevoluteJointDef jd;
     
-    			float32 hs[10] = {0.25f, 1.0f, 4.0f, 0.0f, 0.0f, -1.0f, -2.0f, -2.0f, -1.25f, 0.0f};
+    DEFINE_bool(benchmark_counters_tabular, false,
+            'Whether to use tabular format when printing user counters to '
+            'the console.  Valid values: 'true'/'yes'/1, 'false'/'no'/0.'
+            'Defaults to false.');
     
-      /**
-   * Finds the first occurrence of any character other than `ch` in this string,
-   *   starting at offset `pos`.
-   * \note Equivalent to `find_first_not_of(&ch, pos, 1)`
-   */
-  constexpr std::size_t find_first_not_of(Char ch, std::size_t pos) const
-      noexcept(false) {
-    using A = const Char[1u];
-    return 1u <= size_ - detail::fixedstring::checkOverflow(pos, size_)
-        ? detail::fixedstring::find_first_not_of_(data_, size_, A{ch}, pos, 1u)
-        : npos;
-  }
-    
-    void IOBuf::decrementRefcount() {
-  // Externally owned buffers don't have a SharedInfo object and aren't managed
-  // by the reference count
-  SharedInfo* info = sharedInfo();
-  if (!info) {
-    return;
-  }
+    namespace benchmark {
+namespace internal {
+    }
     }
     
     
-void testAllocSize(uint32_t requestedCapacity) {
-  unique_ptr<IOBuf> iobuf(IOBuf::create(requestedCapacity));
-  EXPECT_GE(iobuf->capacity(), requestedCapacity);
+    {  // Now space out the benchmarks in multiples of 'mult'
+  for (int32_t i = 1; i < kint32max / mult; i *= mult) {
+    if (i >= hi) break;
+    if (i > lo) {
+      dst->push_back(i);
+    }
+  }
+  // Add 'hi' (if different from 'lo')
+  if (hi != lo) {
+    dst->push_back(hi);
+  }
 }
     
-    #include <glog/logging.h>
+    // Parses a bool/Int32/string from the environment variable
+// corresponding to the given Google Test flag.
+bool BoolFromEnv(const char* flag, bool default_val);
+int32_t Int32FromEnv(const char* flag, int32_t default_val);
+double DoubleFromEnv(const char* flag, double default_val);
+const char* StringFromEnv(const char* flag, const char* default_val);
     
+    #ifdef BENCHMARK_OS_EMSCRIPTEN
+#include <emscripten.h>
+#endif
     
-    { private:
-  LifoSem sem_;
-  UMPMCQueue<T, false, 6> queue_;
-};
-    
-    // This is a test of compilation - the behavior has already been tested
-// extensively above.
-TEST(SortedVectorTypes, TestBulkInsertionUncopyableTypes) {
-  std::vector<std::pair<int, std::unique_ptr<int>>> s;
-  s.emplace_back(1, std::make_unique<int>(0));
+    class LogType {
+  friend LogType& GetNullLogInstance();
+  friend LogType& GetErrorLogInstance();
     }
     
-    namespace moveonly_ { // Protection from unintended ADL.
-    }
-    
-    namespace folly {
-template <>
-struct IsRelocatable<T1> : std::true_type {};
-template <>
-FOLLY_ASSUME_RELOCATABLE(T2);
-} // namespace folly
+    #define EXCLUDES(...) THREAD_ANNOTATION_ATTRIBUTE__(locks_excluded(__VA_ARGS__))
