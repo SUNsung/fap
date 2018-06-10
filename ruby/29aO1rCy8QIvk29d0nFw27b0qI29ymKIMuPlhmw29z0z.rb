@@ -1,39 +1,34 @@
 
         
-            find_union(segments, Project).includes(:namespace).order_id_desc
+          def test_time_add()
+    assert_equal(Time.utc(2000, 3, 21, 3, 30) + 3 * 3600,
+                 Time.utc(2000, 3, 21, 6, 30))
+    assert_equal(Time.utc(2000, 3, 21, 3, 30) + (-3 * 3600),
+                 Time.utc(2000, 3, 21, 0, 30))
+    assert_equal(0, (Time.at(1.1) + 0.9).usec)
+    
+      Ruby = Struct.new(:version, :platform)
+    
+      # DELETE /books/1
+  # DELETE /books/1.json
+  def destroy
+    @book.destroy
+    respond_to do |format|
+      format.html { redirect_to books_url, notice: 'Book was successfully destroyed.' }
+      format.json { head :no_content }
+    end
   end
     
-    puts '\nDone.'
-
+            def name
+          @node.children.first
+        end
     
-      def dry_run!(event = nil)
-    @dry_run = true
-    
-        # Optional
-    #   Use this method the gracefully stop your agent but make sure the run method return, or
-    #   terminate the thread.
-    def stop; end
-  end
-end
-=end
-module LongRunnable
-  extend ActiveSupport::Concern
-    
-    describe ApplicationController, type: :controller do
-  controller do
-    include UserTrackingConcern
-    
-        export LANG=en_US.UTF-8
-    DOC
-  else
-    STDERR.puts <<-DOC
-    \e[33mWARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
-    Consider adding the following to ~/.profile:
-    
-            def clear_cache
-          UI.message('Removing the whole cache dir #{@cache.root}') do
-            FileUtils.rm_rf(@cache.root)
-          end
+            def each_unnecessary_space_match(node, &blk)
+          each_match_range(
+            contents_range(node),
+            MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX,
+            &blk
+          )
         end
       end
     end
@@ -41,15 +36,17 @@ module LongRunnable
 end
 
     
-            private
+            MSG = 'Do not freeze immutable objects, as freezing them has no ' \
+              'effect.'.freeze
     
-          def self.options
-        options = []
-        options.concat(super.reject { |option, _| option == '--silent' })
+          origin = caller[1]
+      if origin =~ /rubygems\/custom_require/
+        origin = caller[3]
+        if origin.nil?
+          STDERR.puts 'Unknown origin'
+          STDERR.puts caller.join('\n')
+        end
       end
+      origin = origin.gsub(/:[0-9]+:in .*/, '') if origin
     
-          def initialize(argv)
-        @update = argv.flag?('update')
-        @stats  = argv.flag?('stats')
-        super
-      end
+        FileUtils.mkdir_p(target) unless File.directory?(target)
