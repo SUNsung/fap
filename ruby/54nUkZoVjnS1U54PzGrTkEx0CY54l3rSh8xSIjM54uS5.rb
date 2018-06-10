@@ -1,110 +1,112 @@
 
         
-          setup do
-    @old_escape_html_entities_in_json = ActiveSupport.escape_html_entities_in_json
-    ActiveSupport.escape_html_entities_in_json = true
-    @template = self
-    @request = Class.new do
-      def send_early_hints(links) end
-    end.new
-  end
-    
-          include ActionDispatch::Routing::PolymorphicRoutes
-    
-        test 'head :no_content (204) does not return any content' do
-      content = body(HeadController.action(:no_content).call(Rack::MockRequest.env_for('/')))
-      assert_empty content
-    end
-    
-      class TestMiddleware < ActiveSupport::TestCase
-    def setup
-      @app = MyController.action(:index)
-    end
-    
-          def handle_exception_with_mailer_class(exception)
-        if klass = mailer_class
-          klass.handle_exception exception
-        else
-          raise exception
-        end
+                expect(result).to eq('hg parent --template '{node|short}'')
+        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template '{node|short}'')
       end
+    
+        options[:attribution] = <<-HTML
+      &copy; 2009&ndash;2018 Jeremy Ashkenas<br>
+      Licensed under the MIT License.
+    HTML
+    
+        options[:attribution] = <<-HTML
+      &copy; 2010 The Rust Project Developers<br>
+      Licensed under the Apache License, Version 2.0 or the MIT license, at your option.
+    HTML
+    
+    module Docs
+  class Tensorflow < UrlScraper
+    self.name = 'TensorFlow'
+    self.type = 'tensorflow'
+    self.release = '1.8'
+    self.root_path = 'index.html'
+    self.links = {
+      home: 'https://www.tensorflow.org/',
+      code: 'https://github.com/tensorflow/tensorflow'
+    }
+    
+        def relative_path_from(url)
+      self.class.parse(url).relative_path_to(self)
+    end
   end
 end
 
     
-        assert_equal(2, @logger.logged(:debug).size)
-    assert_match(/BaseMailer#welcome: processed outbound mail in [\d.]+ms/, @logger.logged(:debug).first)
-    assert_match(/Welcome/, @logger.logged(:debug).second)
-  ensure
-    BaseMailer.deliveries.clear
+      it 'decodes two doubles for two format characters' do
+    '@\x07333333?\xf6ffffff'.unpack(unpack_format(nil, 2)).should == [2.9, 1.4]
   end
     
-    unless invalids.empty?
-  puts '\n\nFailed links:'
-  invalids.each do |link|
-    puts '- #{link}'
-  end
-  puts 'Done with errors.'
-  exit(1)
-end
-    
-      def taint     # :nodoc:
-    @hash.taint
-    super
+      it 'raises an ArgumentError if not passed a block' do
+    lambda {
+      Thread.send(@method)
+    }.should raise_error(ArgumentError)
   end
     
-      it 'does not result in a deadlock' do
-    t = Thread.new do
-      100.times { Thread.stop }
+        # apply general less to scss conversion
+    def convert_to_scss(file)
+      # get local mixin names before converting the definitions
+      mixins = shared_mixins + read_mixins(file)
+      file   = replace_vars(file)
+      file   = replace_mixin_definitions(file)
+      file   = replace_mixins(file, mixins)
+      file   = extract_mixins_from_selectors(file, CLASSES_TO_MIXINS.inject({}) { |h, cl| h.update('.#{cl}' => cl) })
+      file   = replace_spin(file)
+      file   = replace_fadein(file)
+      file   = replace_image_urls(file)
+      file   = replace_escaping(file)
+      file   = convert_less_ampersand(file)
+      file   = deinterpolate_vararg_mixins(file)
+      file   = replace_calculation_semantics(file)
+      file   = replace_file_imports(file)
+      file   = wrap_at_groups_with_at_root(file)
+      file
     end
     
-        File.write(dest, Oj.dump(map))
-    puts 'Wrote emojo to destination! (#{dest})'
-  end
-end
-
+        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
+      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
+    end
     
-          def empty_cookie(host, path)
-        {:value => '', :domain => host, :path => path, :expires => Time.at(0)}
+      # Specifies the header that your server uses for sending files.
+  # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for apache
+  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
+    
+          default_options :escape => :html,
+        :escaper => defined?(EscapeUtils) ? EscapeUtils : self
+    
+        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      subject.options[:allow_empty_referrer] = false
+      expect(subject.referrer(env)).to be_nil
+    end
+    
+        it 'copes with nested arrays' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']['bar']]]
       end
+      get '/', :foo => {:bar => '<bar>'}
+      expect(body).to eq('&lt;bar&gt;')
+    end
     
-      it 'comparison of Accept-Language header is not case sensitive' do
+      it 'accepts requests with a changing Version header'do
     session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'A'
-    expect(session).not_to be_empty
+    get '/', {}, 'rack.session' => session, 'HTTP_VERSION' => '1.0'
+    get '/', {}, 'rack.session' => session, 'HTTP_VERSION' => '1.1'
+    expect(session[:foo]).to eq(:bar)
   end
+end
+
     
-    # This file was generated by the `rspec --init` command. Conventionally, all
-# specs live under a `spec` directory, which RSpec adds to the `$LOAD_PATH`.
-# The generated `.rspec` file contains `--require spec_helper` which will cause this
-# file to always be loaded, without a need to explicitly require it in any files.
-#
-# Given that it is always loaded, you are encouraged to keep this file as
-# light-weight as possible. Requiring heavyweight dependencies from this file
-# will add to the boot time of your test suite on EVERY test run, even for an
-# individual file that may not need all of that loaded. Instead, make a
-# separate helper file that requires this one and then use it only in the specs
-# that actually need it.
-#
-# The `.rspec` file also contains a few flags that are not defaults but that
-# users commonly want.
-#
-# See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-RSpec.configure do |config|
-# The settings below are suggested to provide a good initial experience
-# with RSpec, but feel free to customize to your heart's content.
+      it 'should not override the header if already set X-Content-Type-Options' do
+    mock_app with_headers('X-Content-Type-Options' => 'sniff')
+    expect(get('/', {}, 'wants' => 'text/html').headers['X-Content-Type-Options']).to eq('sniff')
+  end
+end
+
     
-      it 'should not leak changes to env' do
-    klass    = described_class
-    detector = Struct.new(:app) do
-      def call(env)
-        was = env.dup
-        res = app.call(env)
-        was.each do |k,v|
-          next if env[k] == v
-          fail 'env[#{k.inspect}] changed from #{v.inspect} to #{env[k].inspect}'
-        end
-        res
-      end
-    end
+      # These two settings work together to allow you to limit a spec run
+  # to individual examples or groups you care about by tagging them with
+  # `:focus` metadata. When nothing is tagged with `:focus`, all examples
+  # get run.
+  config.filter_run :focus
+  config.run_all_when_everything_filtered = true
