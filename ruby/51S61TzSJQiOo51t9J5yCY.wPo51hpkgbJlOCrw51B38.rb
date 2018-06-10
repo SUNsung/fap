@@ -1,148 +1,64 @@
-  # any user that is either a moderator or an admin
-  def staff?
-    admin || moderator
-  end
-    
-        version '2' do
-      self.release = '2.3.0'
-      self.base_url = 'http://coffeescript.org/'
-    
-          html_filters.push 'd3/clean_html', 'd3/entries_v4'
-    
-        def initialize(filters = nil)
-      @filters = filters ? filters.dup : []
+
+        
+            def javascripts_path
+      File.join assets_path, 'javascripts'
     end
     
-      def test_getc_extended_file
-    [nil, {:textmode=>true}, {:binmode=>true}].each do |mode|
-      Tempfile.create('test-extended-file', mode) {|f|
-        assert_nil(f.getc)
-        f.print 'a'
-        f.rewind
-        assert_equal(?a, f.getc, 'mode = <#{mode}>')
-      }
+          # generate variables template
+      save_file 'templates/project/_bootstrap-variables.sass',
+                '// Override Bootstrap variables here (defaults from bootstrap-sass v#{Bootstrap::VERSION}):\n\n' +
+                    File.read('#{save_to}/_variables.scss').lines[1..-1].join.gsub(/^(?=\$)/, '// ').gsub(/ !default;/, '')
     end
-  end
     
-      Ruby = Struct.new(:version, :platform)
+      # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
     
-    module Patch
-  def self.create(strip, src, &block)
-    case strip
-    when :DATA
-      DATAPatch.new(:p1)
-    when String
-      StringPatch.new(:p1, strip)
-    when Symbol
-      case src
-      when :DATA
-        DATAPatch.new(strip)
-      when String
-        StringPatch.new(strip, src)
-      else
-        ExternalPatch.new(strip, &block)
+    desc 'Test all Gemfiles from test/*.gemfile'
+task :test_all_gemfiles do
+  require 'term/ansicolor'
+  require 'pty'
+  require 'shellwords'
+  cmd      = 'bundle install --quiet && bundle exec rake --trace'
+  statuses = Dir.glob('./test/gemfiles/*{[!.lock]}').map do |gemfile|
+    env = {'BUNDLE_GEMFILE' => gemfile}
+    cmd_with_env = '  (#{env.map { |k, v| 'export #{k}=#{Shellwords.escape v}' } * ' '}; #{cmd})'
+    $stderr.puts Term::ANSIColor.cyan('Testing\n#{cmd_with_env}')
+    PTY.spawn(env, cmd) do |r, _w, pid|
+      begin
+        r.each_line { |l| puts l }
+      rescue Errno::EIO
+        # Errno:EIO error means that the process has finished giving output.
+      ensure
+        ::Process.wait pid
       end
-    when nil
-      raise ArgumentError, 'nil value for strip'
-    else
-      raise ArgumentError, 'unexpected value #{strip.inspect} for strip'
     end
+    [$? && $?.exitstatus == 0, cmd_with_env]
   end
-    
-        def output_disabled(dependency, new_dependency = dependency)
-      odisabled ''depends_on :#{dependency}'',
-                ''depends_on \'#{new_dependency}\'''
-    end
-  end
-    
-    class PostgresqlRequirement < Requirement
-  fatal true
-  satisfy do
-    odisabled('PostgresqlRequirement', ''depends_on \'postgresql\''')
+  failed_cmds = statuses.reject(&:first).map { |(_status, cmd_with_env)| cmd_with_env }
+  if failed_cmds.empty?
+    $stderr.puts Term::ANSIColor.green('Tests pass with all gemfiles')
+  else
+    $stderr.puts Term::ANSIColor.red('Failing (#{failed_cmds.size} / #{statuses.size})\n#{failed_cmds * '\n'}')
+    exit 1
   end
 end
     
-      # The message to show when the requirement is not met.
-  def message
-    _, _, class_name = self.class.to_s.rpartition '::'
-    s = '#{class_name} unsatisfied!\n'
-    if cask
-      s += <<~EOS
-        You can install with Homebrew-Cask:
-         brew cask install #{cask}
-      EOS
-    end
-    
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
-    
-    end
-    
-          Dir.chdir(file_path) do
-        contents = file.read
-        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
-          contents = $1.lstrip
+          def initialize(pairs = {})
+        @pairs = pairs
+        pairs.each do |key, value|
+          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
+          send(:'#{key}=', value)
         end
-        contents = pre_filter(contents)
-        if @raw
-          contents
-        else
-          partial = Liquid::Template.parse(contents)
-          context.stack do
-            partial.render(context)
-          end
-        end
-      end
-    end
+    
+      def inspect
+    '#<#{self.class.name}: #{name.inspect} #{tags.inspect}>'
   end
-end
     
-          # Skip this file if the output file is the same size
-      if entry.directory?
-        FileUtils.mkdir_p(path) unless File.directory?(path)
-      else
-        entry_mode = entry.instance_eval { @mode } & 0777
-        if File.exists?(path)
-          stat = File.stat(path)
-          # TODO(sissel): Submit a patch to archive-tar-minitar upstream to
-          # expose headers in the entry.
-          entry_size = entry.instance_eval { @size }
-          # If file sizes are same, skip writing.
-          next if stat.size == entry_size && (stat.mode & 0777) == entry_mode
-        end
-        puts 'Extracting #{entry.full_name} from #{tarball} #{entry_mode.to_s(8)}'
-        File.open(path, 'w') do |fd|
-          # eof? check lets us skip empty files. Necessary because the API provided by
-          # Archive::Tar::Minitar::Reader::EntryStream only mostly acts like an
-          # IO object. Something about empty files in this EntryStream causes
-          # IO.copy_stream to throw 'can't convert nil into String' on JRuby
-          # TODO(sissel): File a bug about this.
-          while !entry.eof?
-            chunk = entry.read(16384)
-            fd.write(chunk)
+              if @address.update_attributes(address_params)
+            respond_with(@address, default_template: :show)
+          else
+            invalid_resource!(@address)
           end
-            #IO.copy_stream(entry, fd)
         end
-        File.chmod(entry_mode, path)
-      end
-    end
-    tar.close
-    File.unlink(tarball) if File.file?(tarball)
-  end # def untar
