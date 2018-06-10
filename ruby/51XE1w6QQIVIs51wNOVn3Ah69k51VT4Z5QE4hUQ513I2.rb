@@ -1,69 +1,60 @@
 
         
-          def process_bootstrap
-    log_status 'Convert Bootstrap LESS to Sass'
-    puts ' repo   : #@repo_url'
-    puts ' branch : #@branch_sha #@repo_url/tree/#@branch'
-    puts ' save to: #{@save_to.to_json}'
-    puts ' twbs cache: #{@cache_path}'
-    puts '-' * 60
+        module ActionCable
+  module Server
+    # An instance of this configuration object is available via ActionCable.server.config, which allows you to tweak Action Cable configuration
+    # in a Rails config initializer.
+    class Configuration
+      attr_accessor :logger, :log_tags
+      attr_accessor :connection_class, :worker_pool_size
+      attr_accessor :disable_request_forgery_protection, :allowed_request_origins, :allow_same_origin_as_host
+      attr_accessor :cable, :url, :mount_path
     
-      # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
-    
-      # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
-  # permissions and removing .la files, unless the files (or parent
-  # directories) are protected by skip_clean.
-  #
-  # bin and sbin should not have any subdirectories; if either do that is
-  # caught as an audit warning
-  #
-  # lib may have a large directory tree (see Erlang for instance), and
-  # clean_dir applies cleaning rules to the entire tree
-  def clean_dir(d)
-    d.find do |path|
-      path.extend(ObserverPathnameExtension)
-    
-      def satisfied_result_parent
-    return unless @satisfied_result.is_a?(Pathname)
-    parent = @satisfied_result.resolved_path.parent
-    if parent.to_s =~ %r{^#{Regexp.escape(HOMEBREW_CELLAR)}/([\w+-.@]+)/[^/]+/(s?bin)/?$}
-      parent = HOMEBREW_PREFIX/'opt/#{Regexp.last_match(1)}/#{Regexp.last_match(2)}'
-    end
-    parent
-  end
-    
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
-    end
-  end
-    
-      class IncludeCodeTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      @title = nil
-      @file = nil
-      if markup.strip =~ /\s*lang:(\S+)/i
-        @filetype = $1
-        markup = markup.strip.sub(/lang:\S+/i,'')
+            def test_spec_name_with_inline_config
+          spec = spec('adapter' => 'sqlite3')
+          assert_equal 'primary', spec.name, 'should default to primary id'
+        end
       end
-      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
-        @title = $1 || nil
-        @file = $3
+    end
+  end
+end
+
+    
+            def current_instances
+          Thread.current[:current_attributes_instances] ||= {}
+        end
+    
+          def authenticate_long_credentials
+        authenticate_or_request_with_http_token do |token, options|
+          token == '1234567890123456789012345678901234567890' && options[:algorithm] == 'test'
+        end
       end
-      super
+  end
+    
+    module MiddlewareTest
+  class MyMiddleware
+    def initialize(app)
+      @app = app
     end
     
-      # Extracts raw content DIV from template, used for page description as {{ content }}
-  # contains complete sub-template code on main page level
-  def raw_content(input)
-    /<div class='entry-content'>(?<content>[\s\S]*?)<\/div>\s*<(footer|\/article)>/ =~ input
-    return (content.nil?) ? input : content
+      def test_register_and_use_json_simple
+    with_test_route_set do
+      with_params_parsers Mime[:json] => Proc.new { |data| ActiveSupport::JSON.decode(data)['request'].with_indifferent_access } do
+        post '/',
+          params: '{'request':{'summary':'content...','title':'JSON'}}',
+          headers: { 'CONTENT_TYPE' => 'application/json' }
+    
+        def perform(mailer, mail_method, delivery_method, *args) #:nodoc:
+      mailer.constantize.public_send(mail_method, *args).send(delivery_method)
+    end
+    
+      # GET /books/1/edit
+  def edit
   end
+    
+            def autocorrect(node)
+          center = multiple_compare?(node)
+          new_center = '#{center.source} && #{center.source}'
+    
+    module LogStash::Util::FileTools
+  extend self
