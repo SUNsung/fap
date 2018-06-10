@@ -1,230 +1,251 @@
 
         
-            D3D_DRIVER_TYPE driverTypes[] =
+            state->preFilterType = CV_STEREO_BM_XSOBEL; //CV_STEREO_BM_NORMALIZED_RESPONSE;
+    state->preFilterSize = 9;
+    state->preFilterCap = 31;
+    state->SADWindowSize = 15;
+    state->minDisparity = 0;
+    state->numberOfDisparities = numberOfDisparities > 0 ? numberOfDisparities : 64;
+    state->textureThreshold = 10;
+    state->uniquenessRatio = 15;
+    state->speckleRange = state->speckleWindowSize = 0;
+    state->trySmallerWindows = 0;
+    state->roi1 = state->roi2 = cvRect(0,0,0,0);
+    state->disp12MaxDiff = -1;
+    
+        // A\B
+    cv::solve(H, A, A, cv::DECOMP_NORMAL);
+    H.release();
+    
+    
     {
-        D3D_DRIVER_TYPE_HARDWARE,
-        D3D_DRIVER_TYPE_WARP,
-        D3D_DRIVER_TYPE_REFERENCE,
-    };
-    UINT numDriverTypes = ARRAYSIZE(driverTypes);
+    {                return count;
+#else
+                return ::atomicMin(address, val);
+#endif
+            }
+        }; // struct cmem
     
-        // construct the multiplication matrix via schur compliment of the Macaulay
-    // matrix
-    Mtilde = M2_1 - M2_5.t()*M2_4;
+    namespace at {
+    }
     
-    CV_EXPORTS void  EstimateUncertainties(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
-                           const IntrinsicParams& params, InputArray omc, InputArray Tc,
-                           IntrinsicParams& errors, Vec2d& std_err, double thresh_cond, int check_cond, double& rms);
+    void THDTensor_(uniform)(THDTensor *self, THDGenerator *_generator, double a,
+                         double b) {
+  masterCommandChannel->sendMessage(
+    packMessage(Functions::tensorUniform, self, _generator, a, b),
+    THDState::s_current_worker
+  );
+}
     
-    void CV_ModelEstimator2_Test::fill_array( int test_case_idx, int i, int j, Mat& arr )
+    void THP_encodeInt32Buffer(uint8_t* dst, const int32_t* src, THPByteOrder order, size_t len)
 {
-    if( i != INPUT )
-    {
-        cvtest::ArrayTest::fill_array( test_case_idx, i, j, arr );
-        return;
+  memcpy(dst, src, sizeof(int32_t) * len);
+  if (order != THP_nativeByteOrder()) {
+    for (size_t i = 0; i < len; i++) {
+      swapBytes<sizeof(int32_t)>(dst);
+      dst += sizeof(int32_t);
     }
-    }
-    
-            struct smem
-        {
-            enum { TAG_MASK = (1U << ( (sizeof(unsigned int) << 3) - 5U)) - 1U };
-    }
-    
-            if (lane < 16)
-        {
-            T partial = ptr[tid];
-    }
-    
-    // taken from TH (generic/THTensor.c)
-// with a little fixes done so as to allocate
-// and free memory the way it is done in THDTensor
-static void THDTensor_(_resize)(THDTensor *self, int nDimension, int64_t *size, int64_t *stride) {
-  int nDimension_;
-  ptrdiff_t totalSize;
-  bool hasRequiredSize = true;
-    }
-    
-    void test_allReduce(std::shared_ptr<thd::DataChannel> data_channel, int workers) {
-  _test_allReduce_helper(data_channel, THDReduceOp::THDReduceSUM,
-                         2, 2 + (workers * (workers + 1) / 2));
-  _test_allReduce_helper(data_channel, THDReduceOp::THDReducePRODUCT,
-                         2, 2 * factorial(workers));
-  _test_allReduce_helper(data_channel, THDReduceOp::THDReduceMIN, 10010, 1);
-  _test_allReduce_helper(data_channel, THDReduceOp::THDReduceMAX,
-                         -1, data_channel->getNumProcesses() - 1);
+  }
 }
     
-    using namespace at;
+    #endif  // GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
     
-    #undef THHostTensor
-#undef THHostTensor_
-#undef THHostStorage
-#undef THHostStorage_
-
+      std::unique_ptr<grpc::Server> StartServer(int port);
     
-    #endif
-
+      // FUTURE: use constexpr_log2 to fold instantiations of BasicFixedString
+  // together. All BasicFixedString<C, N> instantiations could share the
+  // implementation of BasicFixedString<C, M>, where M is the next highest power
+  // of 2 after N.
+  //
+  // Also, because of alignment of the data_ and size_ members, N should never
+  // be smaller than `(alignof(std::size_t)/sizeof(C))-1` (-1 because of the
+  // null terminator). OR, create a specialization for BasicFixedString<C, 0u>
+  // that does not have a size_ member, since it is unnecessary.
+  Char data_[N + 1u]; // +1 for the null terminator
+  std::size_t size_; // Nbr of chars, not incl. null terminator. size_ <= N.
     
-    ByteArray::ByteArray()
-  : _data()
-{}
-    
-    template<template<typename> class Trait, typename U>
-struct map_to_ptr {};
-    
-    
-    {
-    {// use R's PRNG to replacd
-CustomGlobalRandomEngine::result_type
-CustomGlobalRandomEngine::operator()() {
-  return static_cast<result_type>(
-      std::floor(unif_rand() * CustomGlobalRandomEngine::max()));
+    TEST(TypedIOBuf, Simple) {
+  auto buf = IOBuf::create(0);
+  TypedIOBuf<uint64_t> typed(buf.get());
+  const uint64_t n = 10000;
+  typed.reserve(0, n);
+  EXPECT_LE(n, typed.capacity());
+  for (uint64_t i = 0; i < n; i++) {
+    *typed.writableTail() = i;
+    typed.append(1);
+  }
+  EXPECT_EQ(n, typed.length());
+  for (uint64_t i = 0; i < n; i++) {
+    EXPECT_EQ(i, typed.data()[i]);
+  }
 }
-}  // namespace common
-}  // namespace xgboost
-
-    
-    XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(lz4hc)
-.describe('Apply LZ4 binary data compression(high compression ratio) for ext memory.')
-.set_body([]() {
-    return new SparsePageLZ4Format<bst_uint>(true);
-  });
-    
-    /*! \brief namespace of base64 decoding and encoding table */
-namespace base64 {
-const char DecodeTable[] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  62,  // '+'
-  0, 0, 0,
-  63,  // '/'
-  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
-  0, 0, 0, 0, 0, 0, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
-  0, 0, 0, 0, 0, 0,
-  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
+enum BufType {
+  CREATE,
+  TAKE_OWNERSHIP_MALLOC,
+  TAKE_OWNERSHIP_CUSTOM,
+  USER_OWNED,
 };
-static const char EncodeTable[] =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-}  // namespace base64
-/*! \brief the stream that reads from base64, note we take from file pointers */
-class Base64InStream: public dmlc::Stream {
- public:
-  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
-    reader_.set_stream(fs);
-    num_prev = 0; tmp_ch = 0;
-  }
-  /*!
-   * \brief initialize the stream position to beginning of next base64 stream
-   * call this function before actually start read
+    
+    TEST_F(OrderingTest, to_ordering) {
+  EXPECT_EQ(ordering::lt, to_ordering(int(ordering::lt)));
+  EXPECT_EQ(ordering::eq, to_ordering(int(ordering::eq)));
+  EXPECT_EQ(ordering::gt, to_ordering(int(ordering::gt)));
+    }
+    
+    
+    {} // namespace folly
+
+    
+    #include <folly/CPortability.h>
+#include <folly/Optional.h>
+    
+      // folly::Init() will automatically initialize the logging settings based on
+  // the FOLLY_INIT_LOGGING_CONFIG declaration above and the --logging command
+  // line flag.
+  auto init = folly::Init(&argc, &argv);
+    
+      /**
+   * How long the reader thread should sleep between each read event.
+   *
+   * This is initially set to a non-zero value (read from the
+   * FLAGS_async_discard_read_sleep_usec flag) so that the reader thread reads
+   * slowly, which will fill up the pipe buffer and cause discard events.
+   *
+   * Once we have produce enough discards and are ready to finish the test the
+   * main thread reduces readSleepUS_ to 0, so the reader will finish the
+   * remaining message backlog quickly.
    */
-  inline void InitPosition(void) {
-    // get a character
-    do {
-      tmp_ch = reader_.GetChar();
-    } while (isspace(tmp_ch));
-  }
-  /*! \brief whether current position is end of a base64 stream */
-  inline bool IsEOF(void) const {
-    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    using base64::DecodeTable;
-    if (size == 0) return 0;
-    // use tlen to record left size
-    size_t tlen = size;
-    unsigned char *cptr = static_cast<unsigned char*>(ptr);
-    // if anything left, load from previous buffered result
-    if (num_prev != 0) {
-      if (num_prev == 2) {
-        if (tlen >= 2) {
-          *cptr++ = buf_prev[0];
-          *cptr++ = buf_prev[1];
-          tlen -= 2;
-          num_prev = 0;
-        } else {
-          // assert tlen == 1
-          *cptr++ = buf_prev[0]; --tlen;
-          buf_prev[0] = buf_prev[1];
-          num_prev = 1;
-        }
-      } else {
-        // assert num_prev == 1
-        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
-      }
-    }
-    if (tlen == 0) return size;
-    int nvalue;
-    // note: everything goes with 4 bytes in Base64
-    // so we process 4 bytes a unit
-    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
-      // first byte
-      nvalue = DecodeTable[tmp_ch] << 18;
-      {
-        // second byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        nvalue |= DecodeTable[tmp_ch] << 12;
-        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
-        }
-      {
-        // third byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        // handle termination
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == '=') << 'invalid base64 format';
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch] << 6;
-        if (tlen) {
-          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
-        }
-      }
-      {
-        // fourth byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
-            << 'invalid base64 format';
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch];
-        if (tlen) {
-          *cptr++ = nvalue & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev ++] = nvalue & 0xFF;
-        }
-      }
-      // get next char
-      tmp_ch = reader_.GetChar();
-    }
-    if (kStrictCheck) {
-      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
-    }
-    return size - tlen;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64InStream do not support write';
+  std::atomic<uint64_t> readSleepUS_{0};
+    
+    
+    {static InitChecker initChecker;
+} // namespace
+    
+    TEST_F(MockEnvTest, FakeSleeping) {
+  int64_t now = 0;
+  auto s = env_->GetCurrentTime(&now);
+  ASSERT_OK(s);
+  env_->FakeSleepForMicroseconds(3 * 1000 * 1000);
+  int64_t after_sleep = 0;
+  s = env_->GetCurrentTime(&after_sleep);
+  ASSERT_OK(s);
+  auto delta = after_sleep - now;
+  // this will be true unless test runs for 2 seconds
+  ASSERT_TRUE(delta == 3 || delta == 4);
+}
+    
+    #include <map>
+#include <node.h>
+    
+      virtual bool PartialMergeMulti(const Slice& key,
+                                 const std::deque<Slice>& operand_list,
+                                 std::string* new_value, Logger* logger) const
+      override;
+    
+    int main(int argc, char** argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  // Run with regular database
+  int result;
+  {
+    fprintf(stderr, 'Running tests with regular db and operator.\n');
+    StringAppendOperatorTest::SetOpenDbFunction(&OpenNormalDb);
+    result = RUN_ALL_TESTS();
   }
     }
     
-      delete metric;
-  metric = xgboost::Metric::Create('ndcg@2');
-  ASSERT_STREQ(metric->Name(), 'ndcg@2');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 1, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0.3868f, 0.001f);
+      // Skips all blocks that are completely before 'initial_offset_'.
+  //
+  // Returns true on success. Handles reporting.
+  bool SkipToInitialBlock();
+    
+    namespace rocksdb {
+JniCallback::JniCallback(JNIEnv* env, jobject jcallback_obj) {
+  // Note: jcallback_obj may be accessed by multiple threads,
+  // so we ref the jvm not the env
+  const jint rs = env->GetJavaVM(&m_jvm);
+  if(rs != JNI_OK) {
+    // exception thrown
+    return;
+  }
+    }
+    }
+    
+    
+    {
+    {    return true;
+  }
+// @lint-ignore TXT4 T25377293 Grandfathered in
+};
+    
+    
+    {  assert(odds > 0);
+  if (odds % 7 == 0) {
+    // class Random uses multiplier 16807, which is 7^5. If odds are
+    // multiplier of 7, there might be limited values generated.
+    odds++;
+  }
+  auto* r = Random::GetTLSInstance();
+  bool crash = r->OneIn(odds);
+  if (crash) {
+    port::Crash(srcfile, srcline);
+  }
+}
+    
+      // Return an iterator over the keys in this representation.
+  // arena: If not null, the arena needs to be used to allocate the Iterator.
+  //        When destroying the iterator, the caller will not call 'delete'
+  //        but Iterator::~Iterator() directly. The destructor needs to destroy
+  //        all the states but those allocated in arena.
+  virtual Iterator* GetIterator(Arena* arena = nullptr) = 0;
+    
+      if(env->ExceptionCheck()) {
+    // exception thrown from CallLongMethod
+    env->ExceptionDescribe();  // print out exception to stderr
+    releaseJniEnv(attached_thread);
+    return nullptr;
+  }
+    
+    class AbstractDiskWriter : public DiskWriter {
+private:
+  std::string filename_;
+    }
+    
+    AbstractHttpServerResponseCommand::AbstractHttpServerResponseCommand(
+    cuid_t cuid, const std::shared_ptr<HttpServer>& httpServer,
+    DownloadEngine* e, const std::shared_ptr<SocketCore>& socket)
+    : Command(cuid),
+      e_(e),
+      socket_(socket),
+      httpServer_(httpServer),
+      readCheck_(false),
+      writeCheck_(true)
+{
+  setStatus(Command::STATUS_ONESHOT_REALTIME);
+  e_->addSocketForWriteCheck(socket_, this);
+}
+    
+      virtual void parse(Option& option,
+                     const std::string& arg) const CXX11_OVERRIDE;
+    
+    protected:
+  virtual bool executeInternal() CXX11_OVERRIDE;
+    
+    namespace aria2 {
+    }
+    
+    AnnounceTier::AnnounceTier(std::deque<std::string> urls)
+    : event(STARTED), urls(std::move(urls))
+{
+}
+    
+    class ApiCallbackDownloadEventListener : public DownloadEventListener {
+public:
+  ApiCallbackDownloadEventListener(Session* session,
+                                   DownloadEventCallback callback,
+                                   void* userData);
+  virtual ~ApiCallbackDownloadEventListener();
+  virtual void onEvent(DownloadEvent event,
+                       const RequestGroup* group) CXX11_OVERRIDE;
+    }
+    
+    #endif // D_AUTH_CONFIG_H
