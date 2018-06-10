@@ -1,336 +1,252 @@
 
         
-        
-// //////////////////////////////////////////////////////////////////////
-// Beginning of content of file: include/json/reader.h
-// //////////////////////////////////////////////////////////////////////
+        // Generate param traits write methods.
+#include 'ipc/param_traits_write_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
     
-    PyDescriptorDatabase::PyDescriptorDatabase(PyObject* py_database)
-    : py_database_(py_database) {
-  Py_INCREF(py_database_);
+    #define IPC_MESSAGE_START ShellMsgStart
+    
+    namespace nwapi {
+    }
+    
+    #include 'content/nw/src/api/menu/menu.h'
+    
+      GdkRectangle screen_rect;
+  gdk_screen_get_monitor_geometry(screen, monitor, &screen_rect);
+    
+    ui::KeyboardCode GetKeycodeFromText(std::string text){
+  ui::KeyboardCode retval = ui::VKEY_UNKNOWN;
+  if (text.size() != 0){
+    std::string upperText = base::ToUpperASCII(text);
+    std::string keyName = text;
+    bool found = false;
+    if (upperText.size() == 1){
+      char key = upperText[0];
+      if (key>='0' && key<='9'){//handle digital
+        keyName = 'Digit' + upperText;
+        found = true;
+      } else if (key>='A'&&key<='Z'){//handle alphabet
+        keyName = 'Key' + upperText;
+        found = true;
+      }
+    }
+    }
+    }
+    
+    
+    {  for (AppWindow* window : windows) {
+    if (window->NWCanClose())
+      window->GetBaseWindow()->Close();
+  }
+  return RespondNow(NoArguments());
 }
     
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
+        bool ReadHTML(ClipboardData& data) {
+      DCHECK(data.type == TYPE_HTML);
+      base::string16 text;
+      std::string src_url;
+      uint32_t fragment_start, fragment_end;
+      clipboard_->ReadHTML(ui::CLIPBOARD_TYPE_COPY_PASTE, &text, &src_url, &fragment_start, &fragment_end);
+      data.data.reset(new std::string(base::UTF16ToUTF8(text)));
+      return true;
+    }
     
-    // Generator options (used by csharp_generator.cc):
-struct Options {
-  Options() :
-      file_extension('.cs'),
-      base_namespace(''),
-      base_namespace_specified(false),
-      internal_access(false) {
-  }
-  // Extension of the generated file. Defaults to '.cs'
-  string file_extension;
-  // Base namespace to use to create directory hierarchy. Defaults to ''.
-  // This option allows the simple creation of a conventional C# file layout,
-  // where directories are created relative to a project-specific base
-  // namespace. For example, in a project with a base namespace of PetShop, a
-  // proto of user.proto with a C# namespace of PetShop.Model.Shared would
-  // generate Model/Shared/User.cs underneath the specified --csharp_out
-  // directory.
-  //
-  // If no base namespace is specified, all files are generated in the
-  // --csharp_out directory, with no subdirectories created automatically.
-  string base_namespace;
-  // Whether the base namespace has been explicitly specified by the user.
-  // This is required as the base namespace can be explicitly set to the empty
-  // string, meaning 'create a full directory hierarchy, starting from the first
-  // segment of the namespace.'
-  bool base_namespace_specified;
-  // Whether the generated classes should have accessibility level of 'internal'.
-  // Defaults to false that generates 'public' classes.
-  bool internal_access;
-};
+        if (windows) {
+      std::unique_ptr<DesktopMediaList> window_media_list =
+        std::make_unique<NativeDesktopMediaList>(
+          content::DesktopMediaID::TYPE_WINDOW,
+          webrtc::DesktopCapturer::CreateWindowCapturer(options));
+      media_list_.push_back(std::move(window_media_list));
+    }
     
-      virtual void WriteHash(io::Printer* printer);
-  virtual void WriteEquals(io::Printer* printer);
-  virtual void WriteToString(io::Printer* printer);
+    #ifdef __clang__
+#elif defined __GNUC__ // not clang (gcc comes later since clang emulates gcc)
+#  if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5))
+#    define JSONCPP_DEPRECATED(message)  __attribute__ ((deprecated(message)))
+#  elif (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
+#    define JSONCPP_DEPRECATED(message)  __attribute__((__deprecated__))
+#  endif  // GNUC version
+#endif // __clang__ || __GNUC__
+    
+    bool OurReader::readValue() {
+  if (stackDepth_ >= features_.stackLimit_) throwRuntimeError('Exceeded stackLimit in readValue().');
+  ++stackDepth_;
+  Token token;
+  skipCommentTokens(token);
+  bool successful = true;
+    }
+    
+    // Find a file by file name.
+bool PyDescriptorDatabase::FindFileByName(const string& filename,
+                                          FileDescriptorProto* output) {
+  ScopedPyObjectPtr py_descriptor(PyObject_CallMethod(
+      py_database_, 'FindFileByName', 's#', filename.c_str(), filename.size()));
+  return GetFileDescriptorProto(py_descriptor.get(), output);
+}
+    
+     private:
+  const FileDescriptor* file_;
     
     #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/wire_format.h>
     
-    #ifndef GOOGLE_PROTOBUF_COMPILER_JAVA_DOC_COMMENT_H__
-#define GOOGLE_PROTOBUF_COMPILER_JAVA_DOC_COMMENT_H__
-    
-    #include <google/protobuf/compiler/java/java_context.h>
-#include <google/protobuf/compiler/java/java_enum_field.h>
-#include <google/protobuf/compiler/java/java_extension.h>
-#include <google/protobuf/compiler/java/java_extension_lite.h>
-#include <google/protobuf/compiler/java/java_field.h>
-#include <google/protobuf/compiler/java/java_helpers.h>
-#include <google/protobuf/compiler/java/java_message.h>
-#include <google/protobuf/compiler/java/java_message_lite.h>
-#include <google/protobuf/compiler/java/java_service.h>
-    
-    #ifdef USE_OPENCV
-  /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a vector of Mat.
-   *
-   * @param mat_vector
-   *    A vector of Mat containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See memory_layer.cpp for an example.
-   */
-  void Transform(const vector<cv::Mat> & mat_vector,
-                Blob<Dtype>* transformed_blob);
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-      virtual inline const char* type() const { return 'BNLL'; }
-    
-    #endif  // CAFFE_CUDNN_TANH_LAYER_HPP_
-
-    
-    /**
- * @brief Computes @f$ y = \gamma ^ {\alpha x + \beta} @f$,
- *        as specified by the scale @f$ \alpha @f$, shift @f$ \beta @f$,
- *        and base @f$ \gamma @f$.
- */
-template <typename Dtype>
-class ExpLayer : public NeuronLayer<Dtype> {
- public:
-  /**
-   * @param param provides ExpParameter exp_param,
-   *     with ExpLayer options:
-   *   - scale (\b optional, default 1) the scale @f$ \alpha @f$
-   *   - shift (\b optional, default 0) the shift @f$ \beta @f$
-   *   - base (\b optional, default -1 for a value of @f$ e \approx 2.718 @f$)
-   *         the base @f$ \gamma @f$
-   */
-  explicit ExpLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    /**
- * @brief Takes two+ Blobs, interprets last Blob as a selector and
- *  filter remaining Blobs accordingly with selector data (0 means that
- * the corresponding item has to be filtered, non-zero means that corresponding
- * item needs to stay).
- */
-template <typename Dtype>
-class FilterLayer : public Layer<Dtype> {
- public:
-  explicit FilterLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42>
-internal::ValueArray42<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41,
-    T42> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
-    T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
-    T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
-    T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31, T32 v32, T33 v33,
-    T34 v34, T35 v35, T36 v36, T37 v37, T38 v38, T39 v39, T40 v40, T41 v41,
-    T42 v42) {
-  return internal::ValueArray42<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39,
-      T40, T41, T42>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13,
-      v14, v15, v16, v17, v18, v19, v20, v21, v22, v23, v24, v25, v26, v27,
-      v28, v29, v30, v31, v32, v33, v34, v35, v36, v37, v38, v39, v40, v41,
-      v42);
+    void RepeatedPrimitiveFieldGenerator::GenerateMembers(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
+    '    = pb::FieldCodec.For$capitalized_type_name$($tag$);\n');
+  printer->Print(variables_,
+    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
+  WritePropertyDocComment(printer, descriptor_);
+  AddPublicMemberAttributes(printer);
+  printer->Print(
+    variables_,
+    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
+    '  get { return $name$_; }\n'
+    '}\n');
 }
     
-      // Note: we deliberately don't call this PrintTo(), as that name
-  // conflicts with ::testing::internal::PrintTo in the body of the
-  // function.
-  static void Print(const T& value, ::std::ostream* os) {
-    // By default, ::testing::internal::PrintTo() is used for printing
-    // the value.
-    //
-    // Thanks to Koenig look-up, if T is a class and has its own
-    // PrintTo() function defined in its namespace, that function will
-    // be visible here.  Since it is more specific than the generic ones
-    // in ::testing::internal, it will be picked by the compiler in the
-    // following statement - exactly what we want.
-    PrintTo(value, os);
-  }
-    
-    // This helper class is used by {ASSERT|EXPECT}_NO_FATAL_FAILURE to check if a
-// statement generates new fatal failures. To do so it registers itself as the
-// current test part result reporter. Besides checking if fatal failures were
-// reported, it only delegates the reporting to the former result reporter.
-// The original result reporter is restored in the destructor.
-// INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-class GTEST_API_ HasNewFatalFailureHelper
-    : public TestPartResultReporterInterface {
- public:
-  HasNewFatalFailureHelper();
-  virtual ~HasNewFatalFailureHelper();
-  virtual void ReportTestPartResult(const TestPartResult& result);
-  bool has_new_fatal_failure() const { return has_new_fatal_failure_; }
- private:
-  bool has_new_fatal_failure_;
-  TestPartResultReporterInterface* original_reporter_;
-    }
-    
-    #if 0
-    
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED4.  Don't use
-// this in your code.
-#define GTEST_PRED4_(pred, v1, v2, v3, v4, on_failure)\
-  GTEST_ASSERT_(::testing::AssertPred4Helper(#pred, \
-                                             #v1, \
-                                             #v2, \
-                                             #v3, \
-                                             #v4, \
-                                             pred, \
-                                             v1, \
-                                             v2, \
-                                             v3, \
-                                             v4), on_failure)
-    
-      // No implementation - assignment is unsupported.
-  void operator=(const RangeGenerator& other);
-    
-    // A helper for implementing get<k>().
-template <int k> class Get;
-    
-    #include <utility>  // For ::std::pair.
-    
-    template <GTEST_TEMPLATE_ T1>
-struct Templates1 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates0 Tail;
-};
-template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2>
-struct Templates2 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates1<T2> Tail;
-};
-    
-      // operator new and operator delete help us control water allocation.
-  void* operator new(size_t allocation_size) {
-    allocated_++;
-    return malloc(allocation_size);
-  }
-    
-      /// Open the acceptor using the specified protocol.
-  /**
-   * This function opens the socket acceptor so that it will use the specified
-   * protocol.
-   *
-   * @param protocol An object specifying which protocol is to be used.
-   *
-   * @param ec Set to indicate what error occurred, if any.
-   *
-   * @par Example
-   * @code
-   * boost::asio::ip::tcp::acceptor acceptor(io_service);
-   * boost::system::error_code ec;
-   * acceptor.open(boost::asio::ip::tcp::v4(), ec);
-   * if (ec)
-   * {
-   *   // An error occurred.
-   * }
-   * @endcode
-   */
-  boost::system::error_code open(const protocol_type& protocol,
-      boost::system::error_code& ec)
-  {
-    return this->get_service().open(this->get_implementation(), protocol, ec);
-  }
-    
-      static void init_native_buffer(WSABUF& buf,
-      const boost::asio::const_buffer& buffer)
-  {
-    buf.buf = const_cast<char*>(boost::asio::buffer_cast<const char*>(buffer));
-    buf.len = static_cast<ULONG>(boost::asio::buffer_size(buffer));
-  }
-#else // defined(BOOST_ASIO_WINDOWS) || defined(__CYGWIN__)
-  // The maximum number of buffers to support in a single operation.
-  enum { max_buffers = 64 < max_iov_len ? 64 : max_iov_len };
-    
-        BOOST_ASIO_HANDLER_COMPLETION((o));
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS) \
-  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
-typedef null_fenced_block fenced_block;
-#elif defined(__MACH__) && defined(__APPLE__)
-typedef macos_fenced_block fenced_block;
-#elif defined(__sun)
-typedef solaris_fenced_block fenced_block;
-#elif defined(__GNUC__) && defined(__arm__) \
-  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
-typedef gcc_arm_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
-typedef gcc_hppa_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-typedef gcc_x86_fenced_block fenced_block;
-#elif defined(__GNUC__) \
-  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
-  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
-typedef gcc_sync_fenced_block fenced_block;
-#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
-typedef win_fenced_block fenced_block;
-#else
-typedef null_fenced_block fenced_block;
-#endif
-    
-    template <typename Function, typename Context>
-inline void invoke(Function& function, Context& context)
-{
-#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  Function tmp(function);
-  tmp();
-#else
-  using boost::asio::asio_handler_invoke;
-  asio_handler_invoke(function, boost::asio::detail::addressof(context));
-#endif
+    SourceGeneratorBase::SourceGeneratorBase(const FileDescriptor* descriptor,
+                                         const Options *options)
+    : descriptor_(descriptor), options_(options) {
 }
     
-    #define BOOST_ASIO_SIGNAL_HANDLER_CHECK( \
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
+    
+     private:
+  const FieldDescriptor* descriptor_;
+  Context* context_;
+  ClassNameResolver* name_resolver_;
+  string scope_;
+    
+    // CodeGenerator implementation which generates Java code.  If you create your
+// own protocol compiler binary and you want it to support Java output, you
+// can do so by registering an instance of this CodeGenerator with the
+// CommandLineInterface in your main() function.
+class LIBPROTOC_EXPORT JavaGenerator : public CodeGenerator {
+ public:
+  JavaGenerator();
+  ~JavaGenerator();
+    }
+    
+    namespace google {
+namespace protobuf {
+  class FieldDescriptor;         // descriptor.h
+  class Descriptor;              // descriptor.h
+  class ServiceDescriptor;       // descriptor.h
+  namespace compiler {
+    namespace java {
+      class MessageGenerator;    // message.h
+      class ExtensionGenerator;  // extension.h
+      class ServiceGenerator;    // service.h
+      class Context;             // context.h
+    }
+  }
+}
+    }
+    
+    void ImmutableLazyMessageOneofFieldGenerator::
+GenerateMergingCode(io::Printer* printer) const {
+  printer->Print(variables_,
+    'if (!($has_oneof_case_message$)) {\n'
+    '  $oneof_name$_ = new $lazy_type$();\n'
+    '}\n'
+    '(($lazy_type$) $oneof_name$_).merge(\n'
+    '    ($lazy_type$) other.$oneof_name$_);\n'
+    '$set_oneof_case_message$;\n');
+}
+    
+    #include 'override_macros.h'
+    
+    void THDTensor_(potrs)(THDTensor *rb, THDTensor *b, THDTensor *a,  const char *uplo) {
+  bool free_b = false;
+  if (b == NULL) b = rb;
+    }
+    
+    	static int bio_recv(void *ctx, unsigned char *buf, size_t len);
+	static int bio_send(void *ctx, const unsigned char *buf, size_t len);
+    
+        if (!m_huff_val[index])
+      m_huff_val[index] = (uint8 *)alloc(256);
+    
+    # if defined(OC_COLLECT_METRICS)
+struct oc_mode_metrics{
+  double fragw;
+  double satd;
+  double rate;
+  double rmse;
+  double satd2;
+  double satdrate;
+  double rate2;
+  double satdrmse;
+  double rmse2;
+};
+    
+    /*Some common macros for potential platform-specific optimization.*/
+#include <math.h>
+#if !defined(_ocintrin_H)
+# define _ocintrin_H (1)
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+    	// Now set the registry keys
+	HKEY root = GetRootKey(opt);
+    
+    #include <boost/asio/detail/pop_options.hpp>
+    
+    #ifndef BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+#define BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+    
+    #ifndef BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
+#define BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
+    
+    #ifndef BOOST_ASIO_DETAIL_DESCRIPTOR_READ_OP_HPP
+#define BOOST_ASIO_DETAIL_DESCRIPTOR_READ_OP_HPP
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    #define BOOST_ASIO_ACCEPT_HANDLER_CHECK( \
     handler_type, handler) \
   \
   typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
-      void(boost::system::error_code, int)) \
+      void(boost::system::error_code)) \
     asio_true_handler_type; \
   \
   BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
-      sizeof(boost::asio::detail::two_arg_handler_test( \
+      sizeof(boost::asio::detail::one_arg_handler_test( \
           boost::asio::detail::clvref< \
             asio_true_handler_type>(), \
-          static_cast<const boost::system::error_code*>(0), \
-          static_cast<const int*>(0))) == 1, \
-      'SignalHandler type requirements not met') \
+          static_cast<const boost::system::error_code*>(0))) == 1, \
+      'AcceptHandler type requirements not met') \
   \
   typedef boost::asio::detail::handler_type_requirements< \
       sizeof( \
@@ -340,30 +256,162 @@ inline void invoke(Function& function, Context& context)
       sizeof( \
         boost::asio::detail::lvref< \
           asio_true_handler_type>()( \
-            boost::asio::detail::lvref<const boost::system::error_code>(), \
-            boost::asio::detail::lvref<const int>()), \
+            boost::asio::detail::lvref<const boost::system::error_code>()), \
         char(0))> BOOST_ASIO_UNUSED_TYPEDEF
     
-      // The type for a bucket in the hash table.
-  struct bucket_type
-  {
-    iterator first;
-    iterator last;
-  };
     
-    void buffer_sequence_adapter_base::init_native_buffer(
-    buffer_sequence_adapter_base::native_buffer_type& buf,
-    const boost::asio::const_buffer& buffer)
-{
-  std::memset(&buf, 0, sizeof(native_buffer_type));
-  Microsoft::WRL::ComPtr<IInspectable> insp
-    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
-  Platform::Object^ buf_obj = reinterpret_cast<Platform::Object^>(insp.Get());
-  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+        auto startPoint = high_resolution_clock::now();
+    vector<thread *> threads;
+    for (int i = 0; i < THREADS; i++) {
+        threads.push_back(new thread([i] {
+            while(nextConnection(i));
+        }));
+    }
+    
+    
+    {    // Connect to echo server
+    newConnection();
+    return uv_run(loop, UV_RUN_DEFAULT);
 }
     
-    template <typename Time_Traits>
-void dev_poll_reactor::remove_timer_queue(timer_queue<Time_Traits>& queue)
+    void echo()
 {
-  do_remove_timer_queue(queue);
+    for (int i = 0; i < connections; i++) {
+        // Write message on random socket
+        uv_write(new uv_write_t, sockets[rand() % connections], &framePack, 1, [](uv_write_t *write_t, int status) {
+            if (status < 0) {
+                cout << 'Write error' << endl;
+                exit(0);
+            }
+            delete write_t;
+        });
+    }
+    }
+    
+    
+    {}
+
+    
+    #include 'Networking.h'
+    
+    Node::Node(int recvLength, int prePadding, int postPadding, bool useDefaultLoop) {
+    nodeData = new NodeData;
+    nodeData->recvBufferMemoryBlock = new char[recvLength];
+    nodeData->recvBuffer = nodeData->recvBufferMemoryBlock + prePadding;
+    nodeData->recvLength = recvLength - prePadding - postPadding;
+    }
+    
+    
+    {        httpSocket->sendTransformed<NoopTransformer>(message, length, callback, callbackData, 0);
+        hasHead = true;
+    }
+    
+        Hub(int extensionOptions = 0, bool useDefaultLoop = false, unsigned int maxPayload = 16777216) : uS::Node(LARGE_BUFFER_SIZE, WebSocketProtocol<SERVER, WebSocket<SERVER>>::CONSUME_PRE_PADDING, WebSocketProtocol<SERVER, WebSocket<SERVER>>::CONSUME_POST_PADDING, useDefaultLoop),
+                                             Group<SERVER>(extensionOptions, maxPayload, this, nodeData), Group<CLIENT>(0, maxPayload, this, nodeData) {
+        inflateInit2(&inflationStream, -15);
+        zlibBuffer = new char[LARGE_BUFFER_SIZE];
+    }
+    
+    // Creates an action that invokes the given method on the given object
+// with the mock function's arguments.
+template <class Class, typename MethodPtr>
+PolymorphicAction<internal::InvokeMethodAction<Class, MethodPtr> > Invoke(
+    Class* obj_ptr, MethodPtr method_ptr) {
+  return MakePolymorphicAction(
+      internal::InvokeMethodAction<Class, MethodPtr>(obj_ptr, method_ptr));
 }
+    
+    class MockFoo {
+ public:
+  // A mock method that returns a user-defined type.  Google Mock
+  // doesn't know what the default value for this type is.
+  MOCK_METHOD0(GetNonDefaultConstructible, NonDefaultConstructible());
+};
+    
+    $for k [[
+$range m 0..k-1
+    
+    // Sets the 0-terminated C string this MyString object
+// represents.
+void MyString::Set(const char* a_c_string) {
+  // Makes sure this works when c_string == c_string_
+  const char* const temp = MyString::CloneCString(a_c_string);
+  delete[] c_string_;
+  c_string_ = temp;
+}
+
+    
+        E* element = new E(old_head->element());
+    delete old_head;
+    
+    // A group of value-parameterized tests.
+    
+      h1 = fmix64(h1);
+  h2 = fmix64(h2);
+    
+    
+    {
+    { protected:
+  float momentum_{0.9};
+  float weight_decay_{0.0};
+  bool nesterov_;
+  bool fp32_update_;
+  INPUT_TAGS(GRAD, MOMENTUM, LR, PARAM);
+  OUTPUT_TAGS(OUTPUT_GRAD, OUTPUT_MOMENTUM, OUTPUT_PARAM);
+};
+}
+
+    
+    #include 'caffe2/core/operator.h'
+#include 'caffe2/core/timer.h'
+    
+    #include 'caffe2/core/context.h'
+#include 'caffe2/core/operator.h'
+    
+      // Executes the closure F on the CuDNNState associated with state_idx
+  template <typename F>
+  void with_cudnn_state(size_t state_idx, F&& f) {
+    CAFFE_ENFORCE(
+        state_idx < CAFFE2_COMPILE_TIME_MAX_CUDNN_STATES, 'Invalid state_idx');
+    auto& sync_state = cudnn_states()[context_->cuda_gpu_id()][state_idx];
+    }
+    
+    #define MAKE_OPENGL_OPERATOR(_op)                                              \
+  _op->mutable_device_option()->set_device_type(OPENGL);
+    
+      NetBase* net = ws->CreateNet(predict_net_def);
+  LOG(INFO) << '[C2DEBUG] Benchmarking OpenGL Net';
+  net->TEST_Benchmark(caffe2::FLAGS_warmup, caffe2::FLAGS_iter, caffe2::FLAGS_run_individual);
+  // Test CPU
+  for (auto i = 0; i < predict_net_def.op().size(); ++i) {
+    auto op = predict_net_def.mutable_op(i);
+    if (std::find(cpu_ops.begin(), cpu_ops.end(), op->type()) == cpu_ops.end()) {
+      op->mutable_device_option()->set_device_type(CPU);
+    }
+  }
+  predict_net_def.set_type('simple');
+  predict_net_def.set_name('cpu_net');
+  net = ws->CreateNet(predict_net_def);
+  LOG(INFO) << '[C2DEBUG] Benchmarking CPU Net';
+  net->TEST_Benchmark(caffe2::FLAGS_warmup, caffe2::FLAGS_iter, caffe2::FLAGS_run_individual);
+    
+      TIndex output_offset = 0;
+  // Sort preserving indices
+  for (TIndex i = 0; i < linear_shape[0]; ++i) {
+    // Build a min-heap, the heap element is pair of (value, idx)
+    // the top of the heap is the smallest value
+    std::priority_queue<
+        std::pair<T, TIndex>,
+        std::vector<std::pair<T, TIndex>>,
+        ValueCmp<T>>
+        PQ;
+    }
+    
+    namespace caffe2 {
+    }
