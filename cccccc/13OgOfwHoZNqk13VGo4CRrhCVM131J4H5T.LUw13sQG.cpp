@@ -1,183 +1,216 @@
 
         
-        // reader.h
-class Reader;
+        	// Ensure EnvironmentVariables are propagated.
     
-      virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateFreezingCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
-    
-    RepeatedPrimitiveFieldGenerator::RepeatedPrimitiveFieldGenerator(
-    const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options)
-    : FieldGeneratorBase(descriptor, fieldOrdinal, options) {
+    // redirect the nath functions.
+bool CheckNAN(double v) {
+  return ISNAN(v);
+}
+double LogGamma(double v) {
+  return lgammafn(v);
 }
     
-      virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateFreezingCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
     
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
-    
-    // Author: liujisi@google.com (Pherl Liu)
-    
-    
-    {  static string LayerTypeListString() {
-    vector<string> layer_types = LayerTypeList();
-    string layer_types_str;
-    for (vector<string>::iterator iter = layer_types.begin();
-         iter != layer_types.end(); ++iter) {
-      if (iter != layer_types.begin()) {
-        layer_types_str += ', ';
-      }
-      layer_types_str += *iter;
-    }
-    return layer_types_str;
-  }
+    { private:
+  /*! \brief the underlying stream */
+  dmlc::Stream *stream_;
+  /*! \brief buffer to hold data */
+  std::string buffer_;
+  /*! \brief length of valid data in buffer */
+  size_t read_len_;
+  /*! \brief pointer in the buffer */
+  size_t read_ptr_;
 };
     
-    /**
- * @brief Index into the input blob along its first axis.
- *
- * This layer can be used to select, reorder, and even replicate examples in a
- * batch.  The second blob is cast to int and treated as an index into the
- * first axis of the first blob.
- */
-template <typename Dtype>
-class BatchReindexLayer : public Layer<Dtype> {
- public:
-  explicit BatchReindexLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the concatenate inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *        respect to the outputs
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length K), into which the top gradient
-   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
-   *        inputs @f$
-   *        \left[ \begin{array}{cccc}
-   *          \frac{\partial E}{\partial x_1} &
-   *          \frac{\partial E}{\partial x_2} &
-   *          ... &
-   *          \frac{\partial E}{\partial x_K}
-   *        \end{array} \right] =
-   *        \frac{\partial E}{\partial y}
-   *        @f$
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  /// @copydoc ContrastiveLossLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    #include 'caffe/layers/lrn_layer.hpp'
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #endif  // CAFFE_FILTER_LAYER_HPP_
+    TEST(Metric, PoissionNegLogLik) {
+  xgboost::Metric * metric = xgboost::Metric::Create('poisson-nloglik');
+  ASSERT_STREQ(metric->Name(), 'poisson-nloglik');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0.5f, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.2f, 0.1f, 0.2f},
+                            {  0,   0,   1,   1}),
+              1.1280f, 0.001f);
+}
 
     
-      const auto result =
-      RunScenario(client_config, 1, server_config, 1, WARMUP, BENCHMARK, -2, '',
-                  kInsecureCredentialsType, true);
+          // Test write entire array
+      std::vector<unsigned char> buffer(
+        CompressedBufferWriter::CalculateBufferSize(input.size(),
+          alphabet_size));
     
-    #ifndef GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
-#define GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
     
-      bool Generate(const grpc::protobuf::FileDescriptor* file,
-                const grpc::string& parameter,
-                grpc::protobuf::compiler::GeneratorContext* context,
-                grpc::string* error) const;
+    {  /*!
+   * \brief Create a linear updater given name
+   * \param name Name of the linear updater.
+   */
+  static LinearUpdater* Create(const std::string& name);
+};
     
-      bool generate_in_pb2_grpc;
+      /**
+   * Finds the last occurrence of any character in the first `count` characters
+   *   in the buffer pointed to by `that` in this string, starting at offset
+   *  `pos`.
+   * \pre `pos <= size()`
+   * \pre `that` points to a buffer containing at least `count` contiguous
+   *   characters.
+   * \return The largest offset `i` such that `i <= pos` and
+   *   `i < size()` and `std::find(that, that+count, at(i)) != that+count`; or
+   *   `npos` if there is no such offset `i`.
+   * \throw std::out_of_range when `pos > size()`
+   */
+  constexpr std::size_t find_last_of(
+      const Char* that,
+      std::size_t pos,
+      std::size_t count) const noexcept(false) {
+    return 0u == size_
+        ? npos
+        : detail::fixedstring::find_last_of_(
+              data_,
+              that,
+              folly::constexpr_min(
+                  detail::fixedstring::checkOverflow(pos, size_), size_ - 1u),
+              count);
+  }
     
-    class CodegenTestMinimal : public ::testing::Test {};
+    enum : uint16_t {
+  kHeapMagic = 0xa5a5,
+  // This memory segment contains an IOBuf that is still in use
+  kIOBufInUse = 0x01,
+  // This memory segment contains buffer data that is still in use
+  kDataInUse = 0x02,
+};
     
-    #include 'test/cpp/qps/histogram.h'
+     public:
+  HazptrLockFreeLIFO() : head_(nullptr) {}
     
-    static void get_cpu_usage(unsigned long long* total_cpu_time,
-                          unsigned long long* idle_cpu_time) {
-#ifdef __linux__
-  std::ifstream proc_stat('/proc/stat');
-  proc_stat.ignore(5);
-  std::string cpu_time_str;
-  std::string first_line;
-  std::getline(proc_stat, first_line);
-  std::stringstream first_line_s(first_line);
-  for (int i = 0; i < 10; ++i) {
-    std::getline(first_line_s, cpu_time_str, ' ');
-    *total_cpu_time += std::stol(cpu_time_str);
-    if (i == 3) {
-      *idle_cpu_time = std::stol(cpu_time_str);
+    
+    {} // namespace folly
+
+    
+      size_t size() override {
+    size_t size = 0;
+    for (auto& q : queues_) {
+      size += q.size();
+    }
+    return size;
+  }
+    
+    folly::Future<bool> Barrier::wait() {
+  // Load the current control block first. As we know there is at least
+  // one thread in the current epoch (us), this means that the value is
+  // < size_, so controlBlock_ can't change until we bump the value below.
+  auto block = controlBlock_.load(std::memory_order_acquire);
+  auto p = promises(block);
+    }
+    
+    void init(int* argc, char*** argv, bool removeFlags) {
+#if FOLLY_USE_SYMBOLIZER
+  // Install the handler now, to trap errors received during startup.
+  // The callbacks, if any, can be installed later
+  folly::symbolizer::installFatalSignalHandler();
+#elif !defined(_WIN32)
+  google::InstallFailureSignalHandler();
+#endif
+    }
+    
+    // Configure folly to enable INFO+ messages, and everything else to
+// enable WARNING+.
+//
+// Set the default log handler to log asynchronously by default.
+FOLLY_INIT_LOGGING_CONFIG('.=WARNING,folly=INFO; default:async=true');
+    
+        auto pid = fork();
+    folly::checkUnixError(pid, 'failed to fork');
+    if (pid == 0) {
+      writer.writeMessage(folly::to<std::string>('child pid=', getpid(), '\n'));
+      for (size_t n = 0; n < numMessages; ++n) {
+        writer.writeMessage(folly::to<std::string>('child', n, '\n'));
+        std::this_thread::sleep_for(sleepDuration);
+      }
+    }
+    
+    std::string AbstractOptionHandler::toTagString() const
+{
+  std::string s;
+  for (int i = 0; i < MAX_HELP_TAG; ++i) {
+    if (tags_ & (1 << i)) {
+      s += strHelpTag(i);
+      s += ', ';
     }
   }
-#else
-  gpr_log(GPR_INFO, 'get_cpu_usage(): Non-linux platform is not supported.');
-#endif
+  if (!s.empty()) {
+    s.resize(s.size() - 2);
+  }
+  return s;
 }
     
-    enum RecordType {
-  // Zero is reserved for preallocated files
-  kZeroType = 0,
+      enum Flag {
+    FLAG_HIDDEN = 1,
+    FLAG_ERASE_AFTER_PARSE = 1 << 1,
+    FLAG_INITIAL_OPTION = 1 << 2,
+    FLAG_CHANGE_OPTION = 1 << 3,
+    FLAG_CHANGE_OPTION_FOR_RESERVED = 1 << 4,
+    FLAG_CHANGE_GLOBAL_OPTION = 1 << 5,
+    FLAG_CUMULATIVE = 1 << 6
+  };
+    
+    
+    {} // namespace aria2
+
+    
+      void nextEvent();
+    
+    namespace aria2 {
     }
     
-      WriteOptions write_options;
-  ASSERT_OK(db->Put(write_options, '1', 'b'));
-  ASSERT_OK(db->Put(write_options, '2', 'c'));
-  ASSERT_OK(db->Put(write_options, '3', 'd'));
-  ASSERT_OK(db->Put(write_options, '4', 'e'));
-  ASSERT_OK(db->Put(write_options, '5', 'f'));
+    #endif  // BENCHMARK_API_INTERNAL_H
+
     
-      // Add string delta to buffer_ followed by value
-  buffer_.append(key.data() + shared, non_shared);
-  buffer_.append(value.data(), value.size());
+    namespace benchmark {
+namespace internal {
+    }
+    }
     
-      size_t FilterSize() const {
-    return filter_.size();
+    
+    {}  // end namespace benchmark
+    
+    void ConsoleReporter::PrintRunData(const Run& result) {
+  typedef void(PrinterFn)(std::ostream&, LogColor, const char*, ...);
+  auto& Out = GetOutputStream();
+  PrinterFn* printer = (output_options_ & OO_Color) ?
+                         (PrinterFn*)ColorPrintf : IgnoreColorPrint;
+  auto name_color =
+      (result.report_big_o || result.report_rms) ? COLOR_BLUE : COLOR_GREEN;
+  printer(Out, name_color, '%-*s ', name_field_width_,
+          result.benchmark_name.c_str());
+    }
+    
+    void Increment(UserCounters *l, UserCounters const& r) {
+  // add counters present in both or just in *l
+  for (auto &c : *l) {
+    auto it = r.find(c.first);
+    if (it != r.end()) {
+      c.second.value = c.second + it->second;
+    }
   }
+  // add counters present in r, but not in *l
+  for (auto const &tc : r) {
+    auto it = l->find(tc.first);
+    if (it == l->end()) {
+      (*l)[tc.first] = tc.second;
+    }
+  }
+}
     
-    class CRC { };
+      if (!printed_header_) {
+    // save the names of all the user counters
+    for (const auto& run : reports) {
+      for (const auto& cnt : run.counters) {
+        user_counter_names_.insert(cnt.first);
+      }
+    }
+    }
     
-    #include <ios>
-#include <memory>
-#include <vector>
     
-        double top;
-    double bottom;
-    
-        Node(Node const &) = delete;
-    
-    #define FBCRASH(msg, ...) facebook::assertInternal('Fatal error (%s:%d): ' msg, __FILE__, __LINE__, ##__VA_ARGS__)
-#define FBUNREACHABLE() facebook::assertInternal('This code should be unreachable (%s:%d)', __FILE__, __LINE__)
+    {      delete[] errbuf;
+    }
