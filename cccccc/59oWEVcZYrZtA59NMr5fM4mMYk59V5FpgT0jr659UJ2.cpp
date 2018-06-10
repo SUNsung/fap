@@ -1,244 +1,394 @@
 
         
-        using namespace swift;
-using namespace swift::syntax;
+        // Here's what happens when an ASSERT_DEATH* or EXPECT_DEATH* is
+// executed:
+//
+//   1. It generates a warning if there is more than one active
+//   thread.  This is because it's safe to fork() or clone() only
+//   when there is a single thread.
+//
+//   2. The parent process clone()s a sub-process and runs the death
+//   test in it; the sub-process exits with code 0 at the end of the
+//   death test, if it hasn't exited already.
+//
+//   3. The parent process waits for the sub-process to terminate.
+//
+//   4. The parent process checks the exit code and error message of
+//   the sub-process.
+//
+// Examples:
+//
+//   ASSERT_DEATH(server.SendMessage(56, 'Hello'), 'Invalid port number');
+//   for (int i = 0; i < 5; i++) {
+//     EXPECT_DEATH(server.ProcessRequest(i),
+//                  'Invalid request .* in ProcessRequest()')
+//                  << 'Failed to die on request ' << i;
+//   }
+//
+//   ASSERT_EXIT(server.ExitNow(), ::testing::ExitedWithCode(0), 'Exiting');
+//
+//   bool KilledBySIGHUP(int exit_code) {
+//     return WIFSIGNALED(exit_code) && WTERMSIG(exit_code) == SIGHUP;
+//   }
+//
+//   ASSERT_EXIT(client.HangUpServer(), KilledBySIGHUP, 'Hanging up!');
+//
+// On the regular expressions used in death tests:
+//
+//   On POSIX-compliant systems (*nix), we use the <regex.h> library,
+//   which uses the POSIX extended regex syntax.
+//
+//   On other platforms (e.g. Windows), we only support a simple regex
+//   syntax implemented as part of Google Test.  This limited
+//   implementation should be enough most of the time when writing
+//   death tests; though it lacks many features you can find in PCRE
+//   or POSIX extended regex syntax.  For example, we don't support
+//   union ('x|y'), grouping ('(xy)'), brackets ('[xy]'), and
+//   repetition count ('x{5,7}'), among others.
+//
+//   Below is the syntax that we do support.  We chose it to be a
+//   subset of both PCRE and POSIX extended regex, so it's easy to
+//   learn wherever you come from.  In the following: 'A' denotes a
+//   literal character, period (.), or a single \\ escape sequence;
+//   'x' and 'y' denote regular expressions; 'm' and 'n' are for
+//   natural numbers.
+//
+//     c     matches any literal character c
+//     \\d   matches any decimal digit
+//     \\D   matches any character that's not a decimal digit
+//     \\f   matches \f
+//     \\n   matches \n
+//     \\r   matches \r
+//     \\s   matches any ASCII whitespace, including \n
+//     \\S   matches any character that's not a whitespace
+//     \\t   matches \t
+//     \\v   matches \v
+//     \\w   matches any letter, _, or decimal digit
+//     \\W   matches any character that \\w doesn't match
+//     \\c   matches any literal character c, which must be a punctuation
+//     .     matches any single character except \n
+//     A?    matches 0 or 1 occurrences of A
+//     A*    matches 0 or many occurrences of A
+//     A+    matches 1 or many occurrences of A
+//     ^     matches the beginning of a string (not that of each line)
+//     $     matches the end of a string (not that of each line)
+//     xy    matches x followed by y
+//
+//   If you accidentally use PCRE or POSIX extended regex features
+//   not implemented by us, you will get a run-time failure.  In that
+//   case, please try to rewrite your regular expression within the
+//   above syntax.
+//
+//   This implementation is *not* meant to be as highly tuned or robust
+//   as a compiled regex library, but should perform well enough for a
+//   death test, which already incurs significant overhead by launching
+//   a child process.
+//
+// Known caveats:
+//
+//   A 'threadsafe' style death test obtains the path to the test
+//   program from argv[0] and re-executes it in the sub-process.  For
+//   simplicity, the current implementation doesn't search the PATH
+//   when launching the sub-process.  This means that the user must
+//   invoke the test program via a path that contains at least one
+//   path separator (e.g. path/to/foo_test and
+//   /absolute/path/to/bar_test are fine, but foo_test is not).  This
+//   is rarely a problem as people usually don't put the test binary
+//   directory in PATH.
+//
+// TODO(wan@google.com): make thread-safe death tests search the PATH.
     
-    class StdlibGroupsIndexRecordingConsumer : public IndexDataConsumer {
-  llvm::StringMap<std::unique_ptr<SymbolTracker>> TrackerByGroup;
-  // Keep a USR map to uniquely identify Decls.
-  // FIXME: if we just passed the original Decl * through we could use that,
-  // which would also let us avoid producing the USR/Name/etc. for decls unless
-  // we actually need it (once per Decl instead of once per occurrence).
-  std::vector<IndexSymbol> symbolStack;
+    #if GTEST_OS_SYMBIAN
+  // Streams a value (either a pointer or not) to this object.
+  template <typename T>
+  inline Message& operator <<(const T& value) {
+    StreamHelper(typename internal::is_pointer<T>::type(), value);
+    return *this;
+  }
+#else
+  // Streams a non-pointer value to this object.
+  template <typename T>
+  inline Message& operator <<(const T& val) {
+    // Some libraries overload << for STL containers.  These
+    // overloads are defined in the global namespace instead of ::std.
+    //
+    // C++'s symbol lookup rule (i.e. Koenig lookup) says that these
+    // overloads are visible in either the std namespace or the global
+    // namespace, but not other namespaces, including the testing
+    // namespace which Google Test's Message class is in.
+    //
+    // To allow STL containers (and other types that has a << operator
+    // defined in the global namespace) to be used in Google Test
+    // assertions, testing::Message must access the custom << operator
+    // from the global namespace.  With this using declaration,
+    // overloads of << defined in the global namespace and those
+    // visible via Koenig lookup are both exposed in this function.
+    using ::operator <<;
+    *ss_ << val;
+    return *this;
+  }
+    
+    namespace testing {
     }
     
-    SILFunction *SILDebugScope::getInlinedFunction() const {
-  if (Parent.isNull())
-    return nullptr;
-    }
+    # if GTEST_HAS_COMBINE
+// INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
+//
+// Generates values from the Cartesian product of values produced
+// by the argument generators.
+//
+$range i 2..maxtuple
+$for i [[
+$range j 1..i
+$range k 2..i
     
-      /// Indicates whether diagnostic passes should be skipped.
-  bool SkipDiagnosticPasses = false;
+    // SameSizeTuplePrefixComparator<k, k>::Eq(t1, t2) returns true if the
+// first k fields of t1 equals the first k fields of t2.
+// SameSizeTuplePrefixComparator(k1, k2) would be a compiler error if
+// k1 != k2.
+template <int kSize1, int kSize2>
+struct SameSizeTuplePrefixComparator;
     
-    #endif
+    
+    {  // n has no integer factor in the range (1, n), and thus is prime.
+  return true;
+}
 
     
-      // #line directive handling.
-  struct VirtualFile {
-    CharSourceRange Range;
-    std::string Name;
-    int LineOffset;
-  };
-  std::map<const char *, VirtualFile> VirtualFiles;
-  mutable std::pair<const char *, const VirtualFile*> CachedVFile = {nullptr, nullptr};
     
-    // Tests that the RotatingTranspose function does the right thing for various
-// transformations.
-// dims=[5, 4, 3, 2]->[5, 2, 4, 3]
-TEST_F(MatrixTest, RotatingTranspose_3_1) {
-  GENERIC_2D_ARRAY<int> m;
-  src_.RotatingTranspose(dims_, kNumDims_, 3, 1, &m);
-  m.ResizeNoInit(kInputSize_ / 3, 3);
-  // Verify that the result is:
-  // output tensor=[[[[0, 2, 4][6, 8, 10][12, 14, 16][18, 20, 22]]
-  //                 [[1, 3, 5][7, 9, 11][13, 15, 17][19, 21, 23]]]
-  //                [[[24, 26, 28]...
-  EXPECT_EQ(0, m(0, 0));
-  EXPECT_EQ(2, m(0, 1));
-  EXPECT_EQ(4, m(0, 2));
-  EXPECT_EQ(6, m(1, 0));
-  EXPECT_EQ(1, m(4, 0));
-  EXPECT_EQ(24, m(8, 0));
-  EXPECT_EQ(26, m(8, 1));
-  EXPECT_EQ(25, m(12, 0));
+    {  // <TechnicalDetails>
+  //
+  // EXPECT_EQ(expected, actual) is the same as
+  //
+  //   EXPECT_TRUE((expected) == (actual))
+  //
+  // except that it will print both the expected value and the actual
+  // value when the assertion fails.  This is very helpful for
+  // debugging.  Therefore in this case EXPECT_EQ is preferred.
+  //
+  // On the other hand, EXPECT_TRUE accepts any Boolean expression,
+  // and is thus more general.
+  //
+  // </TechnicalDetails>
 }
     
-      // Returns true if the given type is derived from Plumbing, and thus contains
-  // multiple sub-networks that can have their own learning rate.
-  bool IsPlumbingType() const override { return true; }
-    
-      // Returns an integer reduction factor that the network applies to the
-  // time sequence. Assumes that any 2-d is already eliminated. Used for
-  // scaling bounding boxes of truth data.
-  // WARNING: if GlobalMinimax is used to vary the scale, this will return
-  // the last used scale factor. Call it before any forward, and it will return
-  // the minimum scale factor of the paths through the GlobalMinimax.
-  int XScaleFactor() const override;
-    
-      /**
-   * Read a 'config' file containing a set of param, value pairs.
-   * Searches the standard places: tessdata/configs, tessdata/tessconfigs
-   * and also accepts a relative or absolute path name.
-   * Note: only non-init params will be set (init params are set by Init()).
-   */
-  void ReadConfigFile(const char* filename);
-  /** Same as above, but only set debug params from the given config file. */
-  void ReadDebugConfigFile(const char* filename);
-    
-    TessHOcrRenderer::TessHOcrRenderer(const char *outputbase, bool font_info)
-    : TessResultRenderer(outputbase, 'hocr') {
-    font_info_ = font_info;
+    TEST_F(UnicharcompressTest, DoesChinese) {
+  LOG(INFO) << 'Testing chi_tra';
+  LoadUnicharset('chi_tra.unicharset');
+  ExpectCorrect('chi_tra');
+  LOG(INFO) << 'Testing chi_sim';
+  LoadUnicharset('chi_sim.unicharset');
+  ExpectCorrect('chi_sim');
 }
     
-    // Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel AVX intrinsics to access the SIMD instruction set.
-double DotProductAVX(const double* u, const double* v, int n) {
-  int max_offset = n - 4;
-  int offset = 0;
-  // Accumulate a set of 4 sums in sum, by loading pairs of 4 values from u and
-  // v, and multiplying them together in parallel.
-  __m256d sum = _mm256_setzero_pd();
-  if (offset <= max_offset) {
-    offset = 4;
-    // Aligned load is reputedly faster but requires 32 byte aligned input.
-    if ((reinterpret_cast<uintptr_t>(u) & 31) == 0 &&
-        (reinterpret_cast<uintptr_t>(v) & 31) == 0) {
-      // Use aligned load.
-      __m256d floats1 = _mm256_load_pd(u);
-      __m256d floats2 = _mm256_load_pd(v);
-      // Multiply.
-      sum = _mm256_mul_pd(floats1, floats2);
-      while (offset <= max_offset) {
-        floats1 = _mm256_load_pd(u + offset);
-        floats2 = _mm256_load_pd(v + offset);
-        offset += 4;
-        __m256d product = _mm256_mul_pd(floats1, floats2);
-        sum = _mm256_add_pd(sum, product);
-      }
-    } else {
-      // Use unaligned load.
-      __m256d floats1 = _mm256_loadu_pd(u);
-      __m256d floats2 = _mm256_loadu_pd(v);
-      // Multiply.
-      sum = _mm256_mul_pd(floats1, floats2);
-      while (offset <= max_offset) {
-        floats1 = _mm256_loadu_pd(u + offset);
-        floats2 = _mm256_loadu_pd(v + offset);
-        offset += 4;
-        __m256d product = _mm256_mul_pd(floats1, floats2);
-        sum = _mm256_add_pd(sum, product);
-      }
+    // Given a MutableIterator to the start of a block, run DetectParagraphs on
+// that block and commit the results to the underlying ROW and BLOCK structs,
+// saving the ParagraphModels in models.  Caller owns the models.
+// We use unicharset during the function to answer questions such as 'is the
+// first letter of this word upper case?'
+void DetectParagraphs(int debug_level,
+                      bool after_text_recognition,
+                      const MutableIterator *block_start,
+                      GenericVector<ParagraphModel *> *models);
+    
+    // Computes the Otsu threshold(s) for the given image rectangle, making one
+// for each channel. Each channel is always one byte per pixel.
+// Returns an array of threshold values and an array of hi_values, such
+// that a pixel value >threshold[channel] is considered foreground if
+// hi_values[channel] is 0 or background if 1. A hi_value of -1 indicates
+// that there is no apparent foreground. At least one hi_value will not be -1.
+// Delete thresholds and hi_values with delete [] after use.
+// The return value is the number of channels in the input image, being
+// the size of the output thresholds and hi_values arrays.
+int OtsuThreshold(Pix* src_pix, int left, int top, int width, int height,
+                  int** thresholds, int** hi_values);
+    
+    
+    {  // Size of the indexed feature space.
+  int size_;
+  // Total weight of features currently stored in the maps.
+  double total_feature_weight_;
+  // Pointer to IntFeatureMap given at Init to find offset features.
+  const IntFeatureMap* feature_map_;
+  // Array of bools indicating presence of a feature.
+  bool* features_;
+  // Array indicating the presence of a feature offset by one unit.
+  bool* features_delta_one_;
+  // Array indicating the presence of a feature offset by two units.
+  bool* features_delta_two_;
+};
+    
+    /**----------------------------------------------------------------------------
+          Include Files and Type Defines
+----------------------------------------------------------------------------**/
+#include 'host.h'
+#include 'callcpp.h'
+    
+    
+    { private:
+  ObjectCache<Dawg> dawgs_;
+};
+    
+    // configuration parameters associated with RMSProp learning algorithm
+struct RMSPropInfo
+{
+    double gamma;
+    double inc;
+    double dec;
+    double max;
+    double min;
     }
-  }
-  // Add the 4 product sums together horizontally. Not so easy as with sse, as
-  // there is no add across the upper/lower 128 bit boundary, so permute to
-  // move the upper 128 bits to lower in another register.
-  __m256d sum2 = _mm256_permute2f128_pd(sum, sum, 1);
-  sum = _mm256_hadd_pd(sum, sum2);
-  sum = _mm256_hadd_pd(sum, sum);
-  double result;
-  // _mm256_extract_f64 doesn't exist, but resist the temptation to use an sse
-  // instruction, as that introduces a 70 cycle delay. All this casting is to
-  // fool the intrinsics into thinking we are extracting the bottom int64.
-  auto cast_sum = _mm256_castpd_si256(sum);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored '-Wstrict-aliasing'
-  *(reinterpret_cast<int64_t*>(&result)) =
-#if defined(_WIN32) || defined(__i386__)
-      // This is a very simple workaround that is activated
-      // for all platforms that do not have _mm256_extract_epi64.
-      // _mm256_extract_epi64(X, Y) == ((uint64_t*)&X)[Y]
-      ((uint64_t*)&cast_sum)[0]
-#else
-      _mm256_extract_epi64(cast_sum, 0)
+    
+        // ProcessNDLScript - Process the NDL script
+    // script - NDL Script to process
+    // ndlPassUntil - complete processing through this pass, all passes if ndlPassAll
+    // skipThrough - [in/out] for iterative processing, a pointer to an array of NDLNode*, one for each pass
+    //               the pointer will be updated to last node processed for that pass, can be NULL if all node processing is desired
+    // fullValidate - validate as a complete network? (false if this might be a snippet of a full network)
+    void ProcessNDLScript(NDLScript<ElemType>* script, NDLPass ndlPassUntil = ndlPassAll, NDLNode<ElemType>** skipThrough = nullptr, bool fullValidate = false, const std::wstring& dumpFileName = L'')
+    {
+        // if we don't have a script yet, don't bother
+        if (script == nullptr)
+            return;
+    }
+    
+    class ConfigException : public Microsoft::MSR::ScriptableObjects::ScriptingException
+{
+    vector<TextLocation> locations; // error location (front()) and evaluation parents (upper)
+public:
+    // Note: All our Error objects use wide strings, which we round-trip through runtime_error as utf8.
+    ConfigException(const wstring& msg, TextLocation where)
+        : Microsoft::MSR::ScriptableObjects::ScriptingException(msra::strfun::utf8(msg))
+    {
+        locations.push_back(where);
+    }
+    }
+    
+    bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+    
+    
+    {	b2Body* m_middle;
+};
+    
+    // Include OpenGL header (without an OpenGL loader) requires a bit of fiddling
+#if defined(_WIN32) && !defined(APIENTRY)
+#define APIENTRY __stdcall                  // It is customary to use APIENTRY for OpenGL function pointer declarations on all platforms.  Additionally, the Windows OpenGL header needs APIENTRY.
 #endif
-      ;
-#pragma GCC diagnostic pop
-  while (offset < n) {
-    result += u[offset] * v[offset];
-    ++offset;
-  }
-  return result;
-}
+#if defined(_WIN32) && !defined(WINGDIAPI)
+#define WINGDIAPI __declspec(dllimport)     // Some Windows OpenGL headers need this
+#endif
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
     
-      // Factory makes and returns an IntSimdMatrix (sub)class of the best
-  // available type for the current architecture.
-  static IntSimdMatrix* GetFastestMultiplier();
+        VkMemoryRequirements req;
+    vkGetBufferMemoryRequirements(g_Device, buffer, &req);
+    g_BufferMemoryAlignment = (g_BufferMemoryAlignment > req.alignment) ? g_BufferMemoryAlignment : req.alignment;
+    VkMemoryAllocateInfo alloc_info = {};
+    alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    alloc_info.allocationSize = req.size;
+    alloc_info.memoryTypeIndex = ImGui_ImplVulkan_MemoryType(VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, req.memoryTypeBits);
+    err = vkAllocateMemory(g_Device, &alloc_info, g_Allocator, &buffer_memory);
+    check_vk_result(err);
     
-    namespace osquery {
+        jobject     (*CallNonvirtualObjectMethod)(JNIEnv*, jobject, jclass,
+                        jmethodID, ...);
+    jobject     (*CallNonvirtualObjectMethodV)(JNIEnv*, jobject, jclass,
+                        jmethodID, va_list);
+    jobject     (*CallNonvirtualObjectMethodA)(JNIEnv*, jobject, jclass,
+                        jmethodID, jvalue*);
+    jboolean    (*CallNonvirtualBooleanMethod)(JNIEnv*, jobject, jclass,
+                        jmethodID, ...);
+    jboolean    (*CallNonvirtualBooleanMethodV)(JNIEnv*, jobject, jclass,
+                         jmethodID, va_list);
+    jboolean    (*CallNonvirtualBooleanMethodA)(JNIEnv*, jobject, jclass,
+                         jmethodID, jvalue*);
+    jbyte       (*CallNonvirtualByteMethod)(JNIEnv*, jobject, jclass,
+                        jmethodID, ...);
+    jbyte       (*CallNonvirtualByteMethodV)(JNIEnv*, jobject, jclass,
+                        jmethodID, va_list);
+    jbyte       (*CallNonvirtualByteMethodA)(JNIEnv*, jobject, jclass,
+                        jmethodID, jvalue*);
+    jchar       (*CallNonvirtualCharMethod)(JNIEnv*, jobject, jclass,
+                        jmethodID, ...);
+    jchar       (*CallNonvirtualCharMethodV)(JNIEnv*, jobject, jclass,
+                        jmethodID, va_list);
+    jchar       (*CallNonvirtualCharMethodA)(JNIEnv*, jobject, jclass,
+                        jmethodID, jvalue*);
+    jshort      (*CallNonvirtualShortMethod)(JNIEnv*, jobject, jclass,
+                        jmethodID, ...);
+    jshort      (*CallNonvirtualShortMethodV)(JNIEnv*, jobject, jclass,
+                        jmethodID, va_list);
+    jshort      (*CallNonvirtualShortMethodA)(JNIEnv*, jobject, jclass,
+                        jmethodID, jvalue*);
+    jint        (*CallNonvirtualIntMethod)(JNIEnv*, jobject, jclass,
+                        jmethodID, ...);
+    jint        (*CallNonvirtualIntMethodV)(JNIEnv*, jobject, jclass,
+                        jmethodID, va_list);
+    jint        (*CallNonvirtualIntMethodA)(JNIEnv*, jobject, jclass,
+                        jmethodID, jvalue*);
+    jlong       (*CallNonvirtualLongMethod)(JNIEnv*, jobject, jclass,
+                        jmethodID, ...);
+    jlong       (*CallNonvirtualLongMethodV)(JNIEnv*, jobject, jclass,
+                        jmethodID, va_list);
+    jlong       (*CallNonvirtualLongMethodA)(JNIEnv*, jobject, jclass,
+                        jmethodID, jvalue*);
+    jfloat      (*CallNonvirtualFloatMethod)(JNIEnv*, jobject, jclass,
+                        jmethodID, ...);
+    jfloat      (*CallNonvirtualFloatMethodV)(JNIEnv*, jobject, jclass,
+                        jmethodID, va_list);
+    jfloat      (*CallNonvirtualFloatMethodA)(JNIEnv*, jobject, jclass,
+                        jmethodID, jvalue*);
+    jdouble     (*CallNonvirtualDoubleMethod)(JNIEnv*, jobject, jclass,
+                        jmethodID, ...);
+    jdouble     (*CallNonvirtualDoubleMethodV)(JNIEnv*, jobject, jclass,
+                        jmethodID, va_list);
+    jdouble     (*CallNonvirtualDoubleMethodA)(JNIEnv*, jobject, jclass,
+                        jmethodID, jvalue*);
+    void        (*CallNonvirtualVoidMethod)(JNIEnv*, jobject, jclass,
+                        jmethodID, ...);
+    void        (*CallNonvirtualVoidMethodV)(JNIEnv*, jobject, jclass,
+                        jmethodID, va_list);
+    void        (*CallNonvirtualVoidMethodA)(JNIEnv*, jobject, jclass,
+                        jmethodID, jvalue*);
+    
+        Value(int unit, double value)
+    : unit(unit)
+    , value(value)
+    {
     }
     
-    #pragma once
     
-    TEST_F(FlagsTests, test_details) {
-  // Make sure flag details are tracked correctly.
-  auto all_flags = Flag::flags();
-  auto flag_info = all_flags['test_string_flag'];
-    }
-    
-      auto status = ::asctime_s(buffer.data(), buffer.size(), timeptr);
-  if (status != 0) {
-    return '';
-  }
-    
-    template <typename T>
-static T GetFnPtr(const char *FnName, bool WarnIfMissing) {
-  dlerror(); // Clear any previous errors.
-  void *Fn = dlsym(RTLD_DEFAULT, FnName);
-  if (Fn == nullptr) {
-    if (WarnIfMissing) {
-      const char *ErrorMsg = dlerror();
-      Printf('WARNING: Failed to find function \'%s\'.', FnName);
-      if (ErrorMsg)
-        Printf(' Reason %s.', ErrorMsg);
-      Printf('\n');
-    }
-  }
-  return reinterpret_cast<T>(Fn);
+    {  return out;
 }
     
-    
-    {#undef EXT_FUNC
-}
-    
-    #ifndef LLVM_FUZZER_IO_H
-#define LLVM_FUZZER_IO_H
-    
-    
-    {  DIR *D = opendir(Dir.c_str());
-  if (!D) {
-    Printf('No such directory: %s; exiting\n', Dir.c_str());
-    exit(1);
-  }
-  while (auto E = readdir(D)) {
-    std::string Path = DirPlusFile(Dir, E->d_name);
-    if (E->d_type == DT_REG || E->d_type == DT_LNK)
-      V->push_back(Path);
-    else if (E->d_type == DT_DIR && *E->d_name != '.')
-      ListFilesInDirRecursive(Path, Epoch, V, false);
-  }
-  closedir(D);
-  if (Epoch && TopDir)
-    *Epoch = E;
-}
-    
-    std::string Sha1ToString(const uint8_t Sha1[kSHA1NumBytes]) {
-  std::stringstream SS;
-  for (int i = 0; i < kSHA1NumBytes; i++)
-    SS << std::hex << std::setfill('0') << std::setw(2) << (unsigned)Sha1[i];
-  return SS.str();
-}
-    
-      void HandleTrace(uint32_t *guard, uintptr_t PC);
-  void HandleInit(uint32_t *start, uint32_t *stop);
-  void HandleCallerCallee(uintptr_t Caller, uintptr_t Callee);
-  void HandleValueProfile(size_t Value) { ValueProfileMap.AddValue(Value); }
-  template <class T> void HandleCmp(void *PC, T Arg1, T Arg2);
-  size_t GetTotalPCCoverage();
-  void SetUseCounters(bool UC) { UseCounters = UC; }
-  void SetUseValueProfile(bool VP) { UseValueProfile = VP; }
-  void SetPrintNewPCs(bool P) { DoPrintNewPCs = P; }
-  template <class Callback> size_t CollectFeatures(Callback CB);
-  bool UpdateValueProfileMap(ValueBitMap *MaxValueProfileMap) {
-    return UseValueProfile && MaxValueProfileMap->MergeFrom(ValueProfileMap);
-  }
-    
-    unsigned NumberOfCpuCores() {
-  unsigned N = std::thread::hardware_concurrency();
-  if (!N) {
-    Printf('WARNING: std::thread::hardware_concurrency not well defined for '
-           'your platform. Assuming CPU count of 1.\n');
-    N = 1;
-  }
-  return N;
-}
+      bool isDirect() const;
