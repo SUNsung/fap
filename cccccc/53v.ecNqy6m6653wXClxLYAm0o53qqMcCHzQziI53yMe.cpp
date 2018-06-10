@@ -1,357 +1,185 @@
 
         
-        
-llvm::Optional<ASTNode>
-SyntaxASTMap::getNodeForSyntax(syntax::Syntax SyntaxNode) const {
-  auto Found = SyntaxMap.find(SyntaxNode.Root);
-  if (Found == SyntaxMap.end()) {
-    return None;
-  }
-  return Found->getSecond();
-}
-    
-    NS_ASSUME_NONNULL_END
-
-    
-      void addOccurrence(const IndexSymbol &indexOccur) {
-    sorted = false;
-    }
-    
-    #include 'swift/Syntax/Rewriter.h'
-    
-    /// \brief Diagnostic consumer that displays diagnostics to standard error.
-class PrintingDiagnosticConsumer : public DiagnosticConsumer {
-  llvm::raw_ostream &Stream;
-  bool ForceColors = false;
-  bool DidErrorOccur = false;
-public:
-  PrintingDiagnosticConsumer(llvm::raw_ostream &stream = llvm::errs()) :
-    Stream(stream) { }
-    }
-    
-      /// Creates a copy of a \c MemoryBuffer and adds it to the \c SourceManager,
-  /// taking ownership of the copy.
-  unsigned addMemBufferCopy(llvm::MemoryBuffer *Buffer);
-    
-    TEST(AnyTest, TestIs) {
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  google::protobuf::Any any;
-  any.PackFrom(submessage);
-  ASSERT_TRUE(any.ParseFromString(any.SerializeAsString()));
-  EXPECT_TRUE(any.Is<protobuf_unittest::TestAny>());
-  EXPECT_FALSE(any.Is<google::protobuf::Any>());
-    }
-    
-    // TODO(jonskeet): Refactor repeated field support; all the implementations are *really* similar. We
-// should probably have a RepeatedFieldGeneratorBase.
-class RepeatedEnumFieldGenerator : public FieldGeneratorBase {
- public:
-  RepeatedEnumFieldGenerator(const FieldDescriptor* descriptor,
-                             int fieldOrdinal,
-                             const Options *options);
-  ~RepeatedEnumFieldGenerator();
+        namespace api {
     }
     
     
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-    #include <google/protobuf/descriptor.h>
-    
-    // CodeGenerator implementation which generates Java code.  If you create your
-// own protocol compiler binary and you want it to support Java output, you
-// can do so by registering an instance of this CodeGenerator with the
-// CommandLineInterface in your main() function.
-class LIBPROTOC_EXPORT JavaGenerator : public CodeGenerator {
- public:
-  JavaGenerator();
-  ~JavaGenerator();
-    }
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
-    }
-    }
-    }
-    }
-    
-    namespace protobuf {
-namespace compiler {
-namespace java {
-    }
-    }
-    }
-    
-    void cvValidateDisparity( CvArr* _disp, const CvArr* _cost, int minDisparity,
-                         int numberOfDisparities, int disp12MaxDiff )
-{
-    cv::Mat disp = cv::cvarrToMat(_disp), cost = cv::cvarrToMat(_cost);
-    cv::validateDisparity( disp, cost, minDisparity, numberOfDisparities, disp12MaxDiff );
-}
-
-    
-            const std::vector<Point>* quads[4] = {&black_contours[black_order[0].first], &black_contours[black_order[1].first],
-                                         &white_contours[white_order[0].first], &white_contours[white_order[1].first]};
-        std::vector<Point2f> quads_approx[4];
-        Point2f quad_corners[4];
-        for(int k = 0; k < 4; k++)
-        {
-            std::vector<Point2f> temp;
-            for(size_t j = 0; j < quads[k]->size(); j++) temp.push_back((*quads[k])[j]);
-            approxPolyDP(Mat(temp), quads_approx[k], 0.5, true);
-    }
-    
-    CV_EXPORTS_W void subtract(InputArray src1, Scalar src2, OutputArray dst, InputArray mask=noArray(), int dtype=-1);
-    
-        // Extension: 3.1
-    extern void (CODEGEN_FUNCPTR *DrawArraysInstanced)(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
-    extern void (CODEGEN_FUNCPTR *DrawElementsInstanced)(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei instancecount);
-    extern void (CODEGEN_FUNCPTR *TexBuffer)(GLenum target, GLenum internalformat, GLuint buffer);
-    extern void (CODEGEN_FUNCPTR *PrimitiveRestartIndex)(GLuint index);
-    
-    int lapack_LU32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, int* info);
-int lapack_LU64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, int* info);
-int lapack_Cholesky32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, bool* info);
-int lapack_Cholesky64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, bool* info);
-int lapack_SVD32f(float* a, size_t a_step, float* w, float* u, size_t u_step, float* vt, size_t v_step, int m, int n, int flags);
-int lapack_SVD64f(double* a, size_t a_step, double* w, double* u, size_t u_step, double* vt, size_t v_step, int m, int n, int flags);
-int lapack_QR32f(float* src1, size_t src1_step, int m, int n, int k, float* src2, size_t src2_step, float* dst, int* info);
-int lapack_QR64f(double* src1, size_t src1_step, int m, int n, int k, double* src2, size_t src2_step, double* dst, int* info);
-int lapack_gemm32f(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
-                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm64f(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
-                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm32fc(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
-                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm64fc(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
-                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-    
-    namespace cv { namespace ocl { namespace runtime {
-    }
-    }
-    }
-    
-    /* End of file. */
-
-    
-    using caffe::Datum;
-using boost::scoped_ptr;
-using std::string;
-namespace db = caffe::db;
-    
-    #include 'caffe/layers/neuron_layer.hpp'
-    
-    /**
- * @brief Abstract base class that factors out the BLAS code common to
- *        ConvolutionLayer and DeconvolutionLayer.
- */
-template <typename Dtype>
-class BaseConvolutionLayer : public Layer<Dtype> {
- public:
-  explicit BaseConvolutionLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    /**
- * @brief Index into the input blob along its first axis.
- *
- * This layer can be used to select, reorder, and even replicate examples in a
- * batch.  The second blob is cast to int and treated as an index into the
- * first axis of the first blob.
- */
-template <typename Dtype>
-class BatchReindexLayer : public Layer<Dtype> {
- public:
-  explicit BatchReindexLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    
-    {}  // namespace caffe
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    namespace caffe {
-    }
-    
-      STRING lword_text;   // the UTF-8 text of the leftmost werd
-  STRING rword_text;   // the UTF-8 text of the rightmost werd
-    
-    #include 'allheaders.h'
-    
-    namespace tesseract {
-    }
-    
-    /**----------------------------------------------------------------------------
-          Include Files and Type Defines
-----------------------------------------------------------------------------**/
-#include 'strngs.h'
-    
-    /**----------------------------------------------------------------------------
-          Public Function Prototypes
-----------------------------------------------------------------------------**/
-void *Emalloc(int Size);
-    
-    #define THPDoubleStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPDoubleStorageClass)
-#define THPFloatStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPFloatStorageClass)
-#define THPHalfStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPFloatStorageClass)
-#define THPLongStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPLongStorageClass)
-#define THPIntStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPIntStorageClass)
-#define THPShortStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPShortStorageClass)
-#define THPCharStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPCharStorageClass)
-#define THPByteStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPByteStorageClass)
-    
-      // Start looping through starting at the first options
-  // (so skip the exports)
-  for (auto iter = line.begin() + options_index; iter != line.end(); ++iter) {
-    if (iter->compare('-ro') == 0 || iter->compare('-o') == 0) {
-      readonly = 1;
-    }
-  }
-    
-      // Daemon is requesting a synchronization of readable queue space.
-  case OSQUERY_IOCTL_BUF_SYNC:
-    // The queue buffer cannot be synchronized if it has not been allocated.
-    if (osquery.buffer == NULL) {
-      err = -EINVAL;
-      goto error_exit;
-    }
-    
-    #include <gtest/gtest.h>
-    
-      // Hold the process and process state externally.
-  // Normally the WatcherRunner's entry point will persist these and use them
-  // as input to the next testable method to compare changes.
-  auto test_process = PlatformProcess::getCurrentProcess();
-  PerformanceState state;
-  // The inputs are sane.
-  EXPECT_TRUE(runner.isWatcherHealthy(*test_process, state));
-  // Calling the method again should internally detect no change, this means
-  // the state is still normal.
-  EXPECT_TRUE(runner.isWatcherHealthy(*test_process, state));
-    
-    Status WmiResultItem::GetLong(const std::string& name, long& ret) const {
-  std::wstring property_name = stringToWstring(name);
-  VARIANT value;
-  HRESULT hr = result_->Get(property_name.c_str(), 0, &value, nullptr, nullptr);
-  if (hr != S_OK) {
-    return Status(-1, 'Error retrieving data from WMI query.');
-  }
-  if (value.vt != VT_I4) {
-    VariantClear(&value);
-    return Status(-1, 'Invalid data type returned.');
-  }
-  ret = value.lVal;
-  VariantClear(&value);
-  return Status(0);
-}
-    
-    struct FSEventsEventContext : public EventContext {
- public:
-  ConstFSEventStreamRef fsevent_stream{nullptr};
-  FSEventStreamEventFlags fsevent_flags{0};
-  FSEventStreamEventId transaction_id{0};
-    }
-    
-    #include 'db/_wrapper.h'
-#include 'rocksdb/db.h'
-#include 'rocksdb/options.h'
-#include 'rocksdb/slice.h'
-    
-    #include <memory>
-#include <string>
-#include <vector>
-#include <algorithm>
-    
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    
-    
-    {} // namespace rocksdb
-
-    
-        if (!s.ok() || DIR_ID_VALUE != fid) {
-      s = Status::IOError(name, strerror(-ENOENT));
-      break;
-    }
-    
-      std::atomic<FlushStateEnum> flush_state_;
-    
-    #pragma once
-    
-    class MergingIterator;
-    
-      if(m_jSliceA != nullptr) {
-    env->DeleteGlobalRef(m_jSliceA);
-  }
-    
-    #include <jni.h>
-#include <memory>
-#include <string>
-#include 'rocksjni/jnicallback.h'
-#include 'rocksdb/comparator.h'
-#include 'rocksdb/slice.h'
-#include 'port/port.h'
-    
-    bool IsZero(double n);
-    
-    double Finish(Counter const& c, double cpu_time, double num_threads) {
-  double v = c.value;
-  if (c.flags & Counter::kIsRate) {
-    v /= cpu_time;
-  }
-  if (c.flags & Counter::kAvgThreads) {
-    v /= num_threads;
-  }
-  return v;
-}
-    
-    auto Sqr = [](const double dat) { return dat * dat; };
-auto Sqrt = [](const double dat) {
-  // Avoid NaN due to imprecision in the calculations
-  if (dat < 0.0) return 0.0;
-  return std::sqrt(dat);
+    {  DraggableRegion();
 };
+    
+      // Called by platform specific implementations of this class whenever a key
+  // is struck. Only called for keys that have an observer registered.
+  void NotifyKeyPressed(const ui::Accelerator& accelerator);
+    
+    
+    {}  // namespace chrome
+    
+      const int render_process_id_;
+  // Keep a copy from original thread.
+  const base::FilePath profile_directory_;
+  const GURL document_url_;
+    
+    // filenames
+const base::FilePath::CharType kCacheDirname[] = FPL('Cache');
+const base::FilePath::CharType kChannelIDFilename[] = FPL('Origin Bound Certs');
+const base::FilePath::CharType kCookieFilename[] = FPL('Cookies');
+const base::FilePath::CharType kCRLSetFilename[] =
+    FPL('Certificate Revocation Lists');
+const base::FilePath::CharType kCustomDictionaryFileName[] =
+    FPL('Custom Dictionary.txt');
+const base::FilePath::CharType kExtensionActivityLogFilename[] =
+    FPL('Extension Activity');
+const base::FilePath::CharType kExtensionsCookieFilename[] =
+    FPL('Extension Cookies');
+const base::FilePath::CharType kFirstRunSentinel[] = FPL('First Run');
+const base::FilePath::CharType kGCMStoreDirname[] = FPL('GCM Store');
+const base::FilePath::CharType kLocalStateFilename[] = FPL('Local State');
+const base::FilePath::CharType kLocalStorePoolName[] = FPL('LocalStorePool');
+const base::FilePath::CharType kMediaCacheDirname[] = FPL('Media Cache');
+const base::FilePath::CharType kNetworkPersistentStateFilename[] =
+    FPL('Network Persistent State');
+const base::FilePath::CharType kOfflinePageArchviesDirname[] =
+    FPL('Offline Pages/archives');
+const base::FilePath::CharType kOfflinePageMetadataDirname[] =
+    FPL('Offline Pages/metadata');
+const base::FilePath::CharType kPreferencesFilename[] = FPL('Preferences');
+const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[] =
+    FPL('Protected Preferences');
+const base::FilePath::CharType kReadmeFilename[] = FPL('README');
+const base::FilePath::CharType kResetPromptMementoFilename[] =
+    FPL('Reset Prompt Memento');
+const base::FilePath::CharType kSafeBrowsingBaseFilename[] =
+    FPL('Safe Browsing');
+const base::FilePath::CharType kSecurePreferencesFilename[] =
+    FPL('Secure Preferences');
+const base::FilePath::CharType kServiceStateFileName[] = FPL('Service State');
+const base::FilePath::CharType kSingletonCookieFilename[] =
+    FPL('SingletonCookie');
+const base::FilePath::CharType kSingletonLockFilename[] = FPL('SingletonLock');
+const base::FilePath::CharType kSingletonSocketFilename[] =
+    FPL('SingletonSocket');
+const base::FilePath::CharType kSupervisedUserSettingsFilename[] =
+    FPL('Managed Mode Settings');
+const base::FilePath::CharType kThemePackFilename[] = FPL('Cached Theme.pak');
+const base::FilePath::CharType kThemePackMaterialDesignFilename[] =
+    FPL('Cached Theme Material Design.pak');
+const base::FilePath::CharType kWebAppDirname[] = FPL('Web Applications');
+    
+    #include 'hphp/util/logger.h'
+#include 'hphp/util/trace.h'
+    
+      struct Hash {
+    size_t operator()(Vconst c) const {
+      return
+        std::hash<uint64_t>()(c.val) ^ std::hash<int>()(c.kind) ^ c.isUndef;
+    }
+  };
+    
+    inline void initNuma() {}
+inline constexpr int next_numa_node(std::atomic_int& curr_node) { return 0; }
+inline constexpr int num_numa_nodes() { return 1; }
+inline void numa_interleave(void* start, size_t size) {}
+inline void numa_bind_to(void* start, size_t size, int node) {}
+inline constexpr bool numa_node_allowed(int node) { return true; }
+    
+      if ((ms->flags & MAGIC_PRESERVE_ATIME) != 0) {
+    /*
+     * Try to restore access, modification times if read it.
+     * This is really *bad* because it will modify the status
+     * time of the file... And of course this will affect
+     * backup programs
+     */
+#ifdef HAVE_UTIMES
+    struct timeval  utsbuf[2];
+    (void)memset(utsbuf, 0, sizeof(utsbuf));
+    utsbuf[0].tv_sec = sb->st_atime;
+    utsbuf[1].tv_sec = sb->st_mtime;
+    }
+    
+    namespace HPHP { namespace hfsort {
+namespace {
+    }
+    }
+    }
+    
+      // An integer is constructed from the n, imm_s and imm_r bits according to
+  // the following table:
+  //
+  //  N   imms    immr    size        S             R
+  //  1  ssssss  rrrrrr    64    UInt(ssssss)  UInt(rrrrrr)
+  //  0  0sssss  xrrrrr    32    UInt(sssss)   UInt(rrrrr)
+  //  0  10ssss  xxrrrr    16    UInt(ssss)    UInt(rrrr)
+  //  0  110sss  xxxrrr     8    UInt(sss)     UInt(rrr)
+  //  0  1110ss  xxxxrr     4    UInt(ss)      UInt(rr)
+  //  0  11110s  xxxxxr     2    UInt(s)       UInt(r)
+  // (s bits must not be all set)
+  //
+  // A pattern is constructed of size bits, where the least significant S+1
+  // bits are set. The pattern is rotated right by R, and repeated across a
+  // 32 or 64-bit value, depending on destination register width.
+  //
+    
+    ssize_t hphp_read_embedded_data(const char* section, char* buf, size_t len) {
+  embedded_data data;
+  if (get_embedded_data(section, &data)) {
+    auto str = read_embedded_data(data);
+    auto data_len = str.length();
+    auto real_len = data_len < len ? data_len : len;
+    memcpy(buf, str.data(), real_len * sizeof(char));
+    return real_len;
+  } else {
+    return -1;
+  }
+}
+    
+    #include 'hphp/util/process.h'
+#include 'hphp/util/lock.h'
+    
+    bool CurlShareResource::setLongOption(long option, long value) {
+  CURLSHcode error = CURLSHE_OK;
+  error = curl_share_setopt(m_share,
+                            (CURLSHoption)option,
+                            value);
+  return error == CURLSHE_OK;
+}
+    
+    // For 2M pages, we want more control over protection and mapping flags.  Note
+// that MAP_FIXED can overwrite the existing mapping without checking/failing.
+void* mmap_2m(void* addr, int prot, int node = -1,
+              bool map_shared = false, bool map_fixed = false);
+    
+    extern JSClass  *jsb_cocos2d_NavMesh_class;
+extern JSObject *jsb_cocos2d_NavMesh_prototype;
+    
+    extern JSClass  *jsb_cocostudio_Tween_class;
+extern JSObject *jsb_cocostudio_Tween_prototype;
+    
+    
+    
+    			b2EdgeShape shape;
+    
+    			b2Body* prevBody = ground;
+			for (int32 i = 0; i < e_count; ++i)
+			{
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
+				bd.position.Set(-14.5f + 1.0f * i, 5.0f);
+				b2Body* body = m_world->CreateBody(&bd);
+				body->CreateFixture(&fd);
+    }
+    
+    	XLoggerInfo xlog_info;
+	gettimeofday(&xlog_info.timeval, NULL);
+	xlog_info.level = (TLogLevel)_level;
+	xlog_info.line = (int)_line;
+	xlog_info.pid = (int)_pid;
+	xlog_info.tid = LONGTHREADID2INT(_tid);
+	xlog_info.maintid = LONGTHREADID2INT(_maintid);
+    
+    int Packer_Unpack(const void* _rawbuf, size_t _rawlen, std::string& _url, unsigned int& _sequence, size_t& _packlen, AutoBuffer& _data) {
+    if (_rawlen < sizeof(LongLinkPack)) return LONGLINKPACK_CONTINUE;
+    }
+    
+        void __DelOlderTouchTime(uint64_t _time);
+    
+    #include 'comm/debugger/testspy.h'
