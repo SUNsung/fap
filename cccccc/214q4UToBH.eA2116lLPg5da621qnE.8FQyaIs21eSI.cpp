@@ -1,288 +1,409 @@
 
         
-          // The resource is deleted from the resource manager only when it is private
-  // to kernel. Ideally the resource should be deleted when it is no longer held
-  // by anyone, but it would break backward compatibility.
-  ~ResourceOpKernel() override {
-    if (resource_ != nullptr) {
-      resource_->Unref();
-      if (cinfo_.resource_is_private_to_kernel()) {
-        if (!cinfo_.resource_manager()
-                 ->template Delete<T>(cinfo_.container(), cinfo_.name())
-                 .ok()) {
-          // Do nothing; the resource can have been deleted by session resets.
-        }
-      }
-    }
-  }
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    Unless required by applicable law or agreed to in writing, software
+        Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+      // Calls Close() and logs if an error occurs.
+  //
+  // TODO(jhseu): Require that callers explicitly call Close() and remove the
+  // implicit Close() call in the destructor.
+  ~RecordWriter();
     
-    // TODO: Enable GPU support for angle op after resolving
-// build failures on GPU (See #10643 for context).
-#if 0 && GOOGLE_CUDA
-REGISTER_COMPLEX(GPU, float, complex64);
-REGISTER_COMPLEX(GPU, double, complex128);
+    // ---------------------------------------------------------------------------
+// Inline implementation
+// ---------------------------------------------------------------------------
+template <PrefetchHint hint>
+inline void prefetch(const void* x) {
+// Check of COMPILER_GCC macro below is kept only for backward-compatibility
+// reasons. COMPILER_GCC3 is the macro that actually enables prefetch.
+#if defined(__llvm__) || defined(COMPILER_GCC) || defined(COMPILER_GCC3)
+  __builtin_prefetch(x, 0, hint);
+#else
+// You get no effect.  Feel free to add more sections above.
 #endif
-    
-    Status SinhGrad(const AttrSlice& attrs, FunctionDef* g) {
-  // clang-format off
-  return GradForUnaryCwise(g, {
-      {{'cosh'}, 'Cosh', {'x'}, {}, {'dy'}},
-      {{'dx'}, 'Mul', {'dy', 'cosh'}},  // dy * cosh(x)
-  });
-  // clang-format on
-}
-REGISTER_OP_GRADIENT('Sinh', SinhGrad);
-    
-    namespace internal {
-    }
-    
-      // Sent when a CrxInstaller finishes. Source is the CrxInstaller that
-  // finished. The details are the extension which was installed.
-  NOTIFICATION_CRX_INSTALLER_DONE,
-    
-    // Changes the notification timeout to |new_timeout|, returns the old timeout.
-base::TimeDelta SetNotificationTimeoutForTesting(base::TimeDelta new_timeout);
-    
-      std::unique_ptr<gfx::SingletonHwndObserver> singleton_hwnd_observer_;
-    
-    
-    { protected:
-  virtual ~PrintViewManagerObserver() {}
-};
-    
-    #endif  // GRPC_TEST_CPP_UTIL_BENCHMARK_CONFIG_H
-
-    
-    std::vector<grpc::string_ref> SecureAuthContext::GetPeerIdentity() const {
-  if (!ctx_) {
-    return std::vector<grpc::string_ref>();
-  }
-  grpc_auth_property_iterator iter = grpc_auth_context_peer_identity(ctx_);
-  std::vector<grpc::string_ref> identity;
-  const grpc_auth_property* property = nullptr;
-  while ((property = grpc_auth_property_iterator_next(&iter))) {
-    identity.push_back(
-        grpc::string_ref(property->value, property->value_length));
-  }
-  return identity;
 }
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    {	if (_is_multiplayer) {
-		emit_signal('connection_failed');
-	} else {
-		emit_signal('connection_error');
-	}
-}
+    // See docs in ../ops/io_ops.cc.
     
-    	void set_verify_ssl_enabled(bool p_verify_ssl);
-	bool is_verify_ssl_enabled() const;
-    
-    
-    {	Vector<StringName> get_native_call_types();
-};
-    
-    /**
- * oc_ilog32 - Integer binary logarithm of a 32-bit value.
- * @_v: A 32-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * The OC_ILOG_32() or OC_ILOGNZ_32() macros may be able to use a builtin
- *  function instead, which should be faster.
+    /*
+ * Deprecated in favor of EncodeAudioOpV2.
  */
-int oc_ilog32(ogg_uint32_t _v);
-/**
- * oc_ilog64 - Integer binary logarithm of a 64-bit value.
- * @_v: A 64-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * The OC_ILOG_64() or OC_ILOGNZ_64() macros may be able to use a builtin
- *  function instead, which should be faster.
- */
-int oc_ilog64(ogg_int64_t _v);
-    
-    # if defined(OC_COLLECT_METRICS)
-struct oc_mode_metrics{
-  double fragw;
-  double satd;
-  double rate;
-  double rmse;
-  double satd2;
-  double satdrate;
-  double rate2;
-  double satdrmse;
-  double rmse2;
-};
-    
-    #endif
-
-    
-    
-    {
-    {            assert(index != sampleSize);
-            dest[destIndex++] = static_cast<DestType>(index);
-        }
-        assert(currentp == lastp);
-    }
-    
-    void GranularGPUDataTransferer::CopyCPUToGPUAsync(const void* cpuBuffer, size_t numElements, size_t elementSize, void* gpuBuffer)
-{
-    PrepareDevice(m_deviceId);
-    cudaMemcpyAsync(gpuBuffer, cpuBuffer, numElements * elementSize, cudaMemcpyHostToDevice, GetAssignStream()) || 'cudaMemcpyAsync failed';
-}
-    
-            // set the include paths to all paths that configs were read from; no additional configurable include paths are supported by BrainScriptNetworkBuilder
-        auto includePaths = ConfigParameters::GetBrainScriptNetworkBuilderIncludePaths();
-    
-        CopyNodeFlags GetOptionalCopyNodeFlags(const ConfigParamList& params, const size_t numFixedParams)
-    {
-        CopyNodeFlags copyFlags = CopyNodeFlags::copyNodeAll; // by default copy both values and link structure
-    }
-    
-    template void FindConfigNames<ConfigParameters>(const ConfigParameters&, std::string key, std::vector<std::wstring>& names);
-template void FindConfigNames<ScriptableObjects::IConfigRecord>(const ScriptableObjects::IConfigRecord&, std::string key, std::vector<std::wstring>& names);
-    
-    class latticepair : public std::pair<msra::lattices::lattice, msra::lattices::lattice>
-{
-public:
-    // NOTE: we don't check numerator lattice now
-    size_t getnumframes() const
-    {
-        return second.getnumframes();
-    }
-    size_t getnumnodes() const
-    {
-        return second.getnumnodes();
-    }
-    size_t getnumedges() const
-    {
-        return second.getnumedges();
-    }
-    std::wstring getkey() const
-    {
-        return second.getkey();
-    }
-};
-    
-        // construct from a single float, copy to all components
-    float4(float f)
-        : v(_mm_load1_ps(&f))
-    {
-    }
-    // float4 (float f) : v (_mm_set_ss (f)) {}  // code seems more complex than _mm_load1_ps()
-    
-    	PathCombine(configDirPath, exeDir, L'config');
-	if (wcscmp(userConfigDirPath, L'') == 0)
-	{
-		PathCombine(userConfigDirPath, exeDir, L'config');
-	}
-	else
-	{
-		PathCombine(userBinDirPath, userConfigDirPath, L'bin');
-		SHCreateDirectoryEx(0, userBinDirPath, 0);
-    }
-    
-    // explicit instantiations are required, as HostDeviceVector isn't header-only
-template class HostDeviceVector<bst_float>;
-template class HostDeviceVector<GradientPair>;
-template class HostDeviceVector<unsigned int>;
-    
-    
-    {  delete metric;
-  metric = xgboost::Metric::Create('map@2');
-  ASSERT_STREQ(metric->Name(), 'map@2');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 1, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0.25f, 0.001f);
-}
-
-    
-    class ShotgunUpdater : public LinearUpdater {
+class EncodeAudioOp : public OpKernel {
  public:
-  // set training parameter
-  void Init(const std::vector<std::pair<std::string, std::string> > &args) override {
-    param_.InitAllowUnknown(args);
-    selector_.reset(FeatureSelector::Create(param_.feature_selector));
-  }
-  void Update(HostDeviceVector<GradientPair> *in_gpair, DMatrix *p_fmat,
-              gbm::GBLinearModel *model, double sum_instance_weight) override {
-    std::vector<GradientPair> &gpair = in_gpair->HostVector();
-    param_.DenormalizePenalties(sum_instance_weight);
-    const int ngroup = model->param.num_output_group;
+  explicit EncodeAudioOp(OpKernelConstruction* context) : OpKernel(context) {
+    OP_REQUIRES_OK(context, context->GetAttr('file_format', &file_format_));
+    file_format_ = str_util::Lowercase(file_format_);
+    OP_REQUIRES(context, file_format_ == 'wav',
+                errors::InvalidArgument('file_format arg must be \'wav\'.'));
     }
     }
     
-    TEST(IOBuf, positionTracking) {
-  unique_ptr<IOBuf> iobuf1(IOBuf::create(6));
-  iobuf1->append(6);
-  unique_ptr<IOBuf> iobuf2(IOBuf::create(24));
-  iobuf2->append(24);
-  iobuf1->prependChain(std::move(iobuf2));
-    }
+    #ifdef TENSORFLOW_USE_MPI
     
-    template <typename T>
-struct constexpr_abs_helper<
-    T,
-    typename std::enable_if<std::is_floating_point<T>::value>::type> {
-  static constexpr T go(T t) {
-    return t < static_cast<T>(0) ? -t : t;
-  }
-};
+      base::DictionaryValue* result = new base::DictionaryValue;
+  result->Set('frameId', std::make_unique<base::Value>(frame_id));
+  result->Set('id', std::make_unique<base::Value>(app_window->window_key()));
+  app_window->GetSerializedState(result);
     
-      BlockingQueueAddResult addWithPriority(T item, int8_t priority) override {
-    int mid = getNumPriorities() / 2;
-    size_t queue = priority < 0
-        ? std::max(0, mid + priority)
-        : std::min(getNumPriorities() - 1, mid + priority);
-    CHECK_LT(queue, queues_.size());
-    switch (kBehavior) { // static
-      case QueueBehaviorIfFull::THROW:
-        if (!queues_[queue].write(std::move(item))) {
-          throw QueueFullException('LifoSemMPMCQueue full, can't add item');
-        }
-        break;
-      case QueueBehaviorIfFull::BLOCK:
-        queues_[queue].blockingWrite(std::move(item));
-        break;
-    }
-    return sem_.post();
-  }
+    #include 'base/values.h'
+#include 'extensions/common/draggable_region.h'
+#include 'content/public/common/common_param_traits.h'
+#include 'ipc/ipc_message_macros.h'
+#include 'ui/gfx/ipc/gfx_param_traits.h'
+    
+    #include 'base/logging.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/api_messages.h'
+#include 'content/public/renderer/render_view.h'
+#include 'content/public/renderer/render_thread.h'
+#include 'content/public/renderer/v8_value_converter.h'
+#include 'third_party/WebKit/public/web/WebView.h'
+#include 'third_party/WebKit/public/web/WebLocalFrame.h'
+#include 'ui/base/resource/resource_bundle.h'
     
     
-    {  auto const slack = currentCapacity - currentSize;
-  if (slack * 2 > currentSize) {
-    // Too much slack, malloc-copy-free cycle:
-    auto const result = checkedMalloc(newCapacity);
-    std::memcpy(result, p, currentSize);
-    free(p);
-    return result;
-  }
-  // If there's not too much slack, we realloc in hope of coalescing
-  return checkedRealloc(p, newCapacity);
+    {}  // namespace nwapi
+    
+    
+    {}
+    
+    #include 'extensions/browser/extension_function.h'
+    
+    NwObjCallObjectMethodFunction::NwObjCallObjectMethodFunction() {
 }
     
-    #include <folly/logging/example/lib.h>
+    # define JSON_ASSERT(condition) assert(condition)
+    
+    // Generator options (used by csharp_generator.cc):
+struct Options {
+  Options() :
+      file_extension('.cs'),
+      base_namespace(''),
+      base_namespace_specified(false),
+      internal_access(false) {
+  }
+  // Extension of the generated file. Defaults to '.cs'
+  string file_extension;
+  // Base namespace to use to create directory hierarchy. Defaults to ''.
+  // This option allows the simple creation of a conventional C# file layout,
+  // where directories are created relative to a project-specific base
+  // namespace. For example, in a project with a base namespace of PetShop, a
+  // proto of user.proto with a C# namespace of PetShop.Model.Shared would
+  // generate Model/Shared/User.cs underneath the specified --csharp_out
+  // directory.
+  //
+  // If no base namespace is specified, all files are generated in the
+  // --csharp_out directory, with no subdirectories created automatically.
+  string base_namespace;
+  // Whether the base namespace has been explicitly specified by the user.
+  // This is required as the base namespace can be explicitly set to the empty
+  // string, meaning 'create a full directory hierarchy, starting from the first
+  // segment of the namespace.'
+  bool base_namespace_specified;
+  // Whether the generated classes should have accessibility level of 'internal'.
+  // Defaults to false that generates 'public' classes.
+  bool internal_access;
+};
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+    
+    {
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+    
+    // Author: kenton@google.com (Kenton Varda)
+    
+    // Tests that GetEncodingAsString returns the right result for a trivial
+// unicharset.
+TEST_F(UnicharcompressTest, GetEncodingAsString) {
+  LoadUnicharset('trivial.unicharset');
+  ExpectCorrect('trivial');
+  STRING encoding = compressed_.GetEncodingAsString(unicharset_);
+  string encoding_str(&encoding[0], encoding.length());
+  std::vector<string> lines =
+      strings::Split(encoding_str, '\n', strings::SkipEmpty());
+  EXPECT_EQ(5, lines.size());
+  // The first line is always space.
+  EXPECT_EQ('0\t ', lines[0]);
+  // Next we have i.
+  EXPECT_EQ('1\ti', lines[1]);
+  // Next we have f.
+  EXPECT_EQ('2\tf', lines[2]);
+  // Next we have the fi ligature: ﬁ. There are no nulls in it, as there are no
+  // repeated letter ligatures in this unicharset, unlike por.unicharset above.
+  EXPECT_EQ('2,1\tﬁ', lines[3]);
+  // Finally the null character.
+  EXPECT_EQ('3\t<nul>', lines[4]);
+}
+    
+      // Sets the destination filename and enables images to be written to a PDF
+  // on destruction.
+  void WritePDF(const char* filename) {
+    if (pixaGetCount(pixa_) > 0) {
+      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
+      pixaClear(pixa_);
+    }
+  }
+    
+    const int kHistogramSize = 256;  // The size of a histogram of pixel values.
+    
+    void signal_exit(int signal_code);
+    
+      // Add the specified file at the specified number.
+  // REQUIRES: This version has not been saved (see VersionSet::SaveTo)
+  // REQUIRES: 'smallest' and 'largest' are smallest and largest keys in file
+  void AddFile(int level, uint64_t file,
+               uint64_t file_size,
+               const InternalKey& smallest,
+               const InternalKey& largest) {
+    FileMetaData f;
+    f.number = file;
+    f.file_size = file_size;
+    f.smallest = smallest;
+    f.largest = largest;
+    new_files_.push_back(std::make_pair(level, f));
+  }
+    
+    class VersionEditTest { };
+    
+      // Store the specified number as the sequence number for the start of
+  // this batch.
+  static void SetSequence(WriteBatch* batch, SequenceNumber seq);
+    
+      // Check first filter
+  ASSERT_TRUE(reader.KeyMayMatch(0, 'foo'));
+  ASSERT_TRUE(reader.KeyMayMatch(2000, 'bar'));
+  ASSERT_TRUE(! reader.KeyMayMatch(0, 'box'));
+  ASSERT_TRUE(! reader.KeyMayMatch(0, 'hello'));
+    
+    Status BlockHandle::DecodeFrom(Slice* input) {
+  if (GetVarint64(input, &offset_) &&
+      GetVarint64(input, &size_)) {
+    return Status::OK();
+  } else {
+    return Status::Corruption('bad block handle');
+  }
+}
+    
+    uint32_t Hash(const char* data, size_t n, uint32_t seed) {
+  // Similar to murmur hash
+  const uint32_t m = 0xc6a4a793;
+  const uint32_t r = 24;
+  const char* limit = data + n;
+  uint32_t h = seed ^ (n * m);
+    }
+    
+    
+    {}  // namespace leveldb
+
+    
+      inline void ClearSavedValue() {
+    if (saved_value_.capacity() > 1048576) {
+      std::string empty;
+      swap(empty, saved_value_);
+    } else {
+      saved_value_.clear();
+    }
+  }
+    
+    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
+  size_t usize = user_key.size();
+  size_t needed = usize + 13;  // A conservative estimate
+  char* dst;
+  if (needed <= sizeof(space_)) {
+    dst = space_;
+  } else {
+    dst = new char[needed];
+  }
+  start_ = dst;
+  dst = EncodeVarint32(dst, usize + 8);
+  kstart_ = dst;
+  memcpy(dst, user_key.data(), usize);
+  dst += usize;
+  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
+  dst += 8;
+  end_ = dst;
+}
+    
+    bool HandleDumpCommand(Env* env, char** files, int num) {
+  StdoutPrinter printer;
+  bool ok = true;
+  for (int i = 0; i < num; i++) {
+    Status s = DumpFile(env, files[i], &printer);
+    if (!s.ok()) {
+      fprintf(stderr, '%s\n', s.ToString().c_str());
+      ok = false;
+    }
+  }
+  return ok;
+}
+    
+    class Block {
+ public:
+  // Initialize the block with the specified contents.
+  explicit Block(const BlockContents& contents);
+    }
+    
+    bool js_cocos2dx_studio_ScaleFrame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_ScaleFrame_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_ScaleFrame(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_ScaleFrame_setScaleY(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ScaleFrame_setScaleX(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ScaleFrame_getScaleY(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ScaleFrame_getScaleX(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ScaleFrame_setScale(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ScaleFrame_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ScaleFrame_ScaleFrame(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+    
+    
+    
+        b2Vec2* vertices = new b2Vec2[vertexCount];
+    for( int i=0;i<vertexCount;i++) {
+        vertices[i] = old_vertices[i];
+        vertices[i] *= mRatio;
+    }
+    
+    mShaderProgram->setUniformLocationWith4f(mColorLocation, color.r*0.5f, color.g*0.5f, color.b*0.5f, 0.5f);
+    
+    void Test::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
+{
+	const b2Manifold* manifold = contact->GetManifold();
+    }
+    
+    		{
+			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.position.Set(0.0f, 4.0f);
+    }
+    
+    			x += 80.0f;
+			shape.Set(b2Vec2(x, 0.0f), b2Vec2(x + 40.0f, 0.0f));
+			ground->CreateFixture(&fd);
+    
+    // Intentionally NOT constexpr. See note above for assertOutOfBounds
+[[noreturn]] inline void assertNotNullTerminated() noexcept {
+  assert(!'Non-null terminated string used to initialize a BasicFixedString');
+  std::terminate(); // Fail hard, fail fast.
+}
+    
+    TEST_F(OrderingTest, compare_less_equal) {
+  compare_less_equal<OddCompare<int>> op;
+  EXPECT_FALSE(op(3, 4));
+  EXPECT_TRUE(op(3, 3));
+  EXPECT_TRUE(op(4, 3));
+}
+    
+     private:
+  Node* head() {
+    return head_.load(std::memory_order_acquire);
+  }
+    
+    Barrier::~Barrier() {
+  auto block = controlBlock_.load(std::memory_order_relaxed);
+  auto prev = block->valueAndReaderCount.load(std::memory_order_relaxed);
+  DCHECK_EQ(prev >> kReaderShift, 0u);
+  auto val = prev & kValueMask;
+  auto p = promises(block);
+    }
+    
+    
+    {  // Do most of the work in a separate helper function.
+  //
+  // The main reason for putting this in a helper function is to ensure that
+  // the compiler does not warn about missing return statements on XLOG(FATAL)
+  // code paths.  Unfortunately it appears like some compilers always suppress
+  // this warning for main().
+  return runHelper();
+}
+
+    
+    SerialExecutor::~SerialExecutor() {
+  DCHECK(!keepAliveCounter_);
+}
+    
+    #include <folly/executors/GlobalExecutor.h>
+#include <folly/executors/SequencedExecutor.h>
+    
+    namespace aria2 {
+    }
+    
+    private:
+  std::string userDefinedUser_;
+  std::string userDefinedPassword_;
+    
+    bool AbstractHttpServerResponseCommand::execute()
+{
+  if (e_->getRequestGroupMan()->downloadFinished() || e_->isHaltRequested()) {
+    return true;
+  }
+  try {
+    ssize_t len = httpServer_->sendResponse();
+    if (len > 0) {
+      timeoutTimer_ = global::wallclock();
+    }
+  }
+  catch (RecoverableException& e) {
+    A2_LOG_INFO_EX(fmt('CUID#%' PRId64
+                       ' - Error occurred while transmitting response body.',
+                       getCuid()),
+                   e);
+    return true;
+  }
+  if (httpServer_->sendBufferIsEmpty()) {
+    A2_LOG_INFO(fmt('CUID#%' PRId64 ' - HttpServer: all response transmitted.',
+                    getCuid()));
+    afterSend(httpServer_, e_);
+    return true;
+  }
+  else {
+    if (timeoutTimer_.difference(global::wallclock()) >= 30_s) {
+      A2_LOG_INFO(fmt('CUID#%' PRId64
+                      ' - HttpServer: Timeout while trasmitting response.',
+                      getCuid()));
+      return true;
+    }
+    else {
+      updateReadWriteCheck();
+      e_->addCommand(std::unique_ptr<Command>(this));
+      return false;
+    }
+  }
+}
+    
+    bool AnnounceList::currentTierAcceptsCompletedEvent() const
+{
+  if (currentTrackerInitialized_) {
+    return FindCompletedAllowedTier()(*currentTier_);
+  }
+    }
