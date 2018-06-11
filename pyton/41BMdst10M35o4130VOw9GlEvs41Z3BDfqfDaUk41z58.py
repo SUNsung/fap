@@ -1,53 +1,58 @@
 
         
-            def __str__(self):
-        #return 'MismatchedTokenException('+self.expecting+')'
-        return 'MismatchedTokenException(%r!=%r)' % (
-            self.getUnexpectedType(), self.expecting
-            )
-    __repr__ = __str__
+                if triple is None:
+            detail = 'no match'
+        else:
+            detail = 'found (%r)' % (triple[1] or '<string>')
+            total_found += 1
+        info.append('       -> %s' % detail)
     
-    from antlr3 import runtime_version, runtime_version_str
-from antlr3.constants import DEFAULT_CHANNEL, HIDDEN_CHANNEL, EOF, \
-     EOR_TOKEN_TYPE, INVALID_TOKEN_TYPE
-from antlr3.exceptions import RecognitionException, MismatchedTokenException, \
-     MismatchedRangeException, MismatchedTreeNodeException, \
-     NoViableAltException, EarlyExitException, MismatchedSetException, \
-     MismatchedNotSetException, FailedPredicateException, \
-     BacktrackingFailed, UnwantedTokenException, MissingTokenException
-from antlr3.tokens import CommonToken, EOF_TOKEN, SKIP_TOKEN
-from antlr3.compat import set, frozenset, reversed
     
-        You can insert stuff, replace, and delete chunks.  Note that the
-    operations are done lazily--only if you convert the buffer to a
-    String.  This is very efficient because you are not moving data around
-    all the time.  As the buffer of tokens is converted to strings, the
-    toString() method(s) check to see if there is an operation at the
-    current index.  If so, the operation is done and then normal String
-    rendering continues on the buffer.  This is like having multiple Turing
-    machine instruction streams (programs) operating on a single input tape. :)
+def test_egg_installed_paths(install_egg, modules_tmpdir,
+                             modules_tmpdir_prefix):
+    modules_tmpdir.mkdir('site_egg').join('__init__.py').write(
+        'import flask\n\napp = flask.Flask(__name__)'
+    )
+    install_egg('site_egg')
+    try:
+        import site_egg
+        assert site_egg.app.instance_path == \
+            str(modules_tmpdir.join('var/').join('site_egg-instance'))
+    finally:
+        if 'site_egg' in sys.modules:
+            del sys.modules['site_egg']
     
-    site_info = 'ehow.com'
-download = ehow_download
-download_playlist = playlist_not_supported('ehow')
-
+        flask.request_started.connect(before_request_signal, app)
+    flask.request_finished.connect(after_request_signal, app)
     
-        title = match1(html, r'&title=([^&]+)')
     
-    def kuwo_download_by_rid(rid, output_dir = '.', merge = True, info_only = False):
-    html=get_content('http://player.kuwo.cn/webmusic/st/getNewMuiseByRid?rid=MUSIC_%s'%rid)
-    title=match1(html,r'<name>(.*)</name>')
-    #to get title
-    #format =aac|mp3 ->to get aac format=mp3 ->to get mp3
-    url=get_content('http://antiserver.kuwo.cn/anti.s?format=mp3&rid=MUSIC_%s&type=convert_url&response=url'%rid)
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir)
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
     
-    from ..common import *
+        if key:
+        return key
     
-        type_, ext, size = url_info(stream_url)
-    print_info(site_info, title, type_, size)
-    if not info_only:
-        download_url_ffmpeg(url=stream_url, title=title, ext= 'mp4', output_dir=output_dir)
+    
+def jsonify(result, format=False):
+    ''' format JSON output (uncompressed or uncompressed) '''
+    
+    
+class TerminalModule(TerminalBase):
+    
+        terminal_stdout_re = [
+        re.compile(br'[\r\n]?[\w+\-\.:\/\[\]]+(?:\([^\)]+\)){,3}(?:>|#) ?$'),
+        re.compile(br'\@[\w\-\.]+:\S+?[>#\$] ?$')
+    ]
+    
+    
+class _BenchSpider(scrapy.Spider):
+    '''A spider that follows all links'''
+    name = 'follow'
+    total = 10000
+    show = 20
+    baseurl = 'http://localhost:8998'
+    link_extractor = LinkExtractor()
+    
+        def syntax(self):
+        return '[options] <spider>'
