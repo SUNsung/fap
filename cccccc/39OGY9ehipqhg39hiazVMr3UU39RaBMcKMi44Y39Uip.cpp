@@ -1,119 +1,207 @@
 
         
         
-    {        return dlsym(h, name);
+    {  DISALLOW_COPY_AND_ASSIGN(Locker);
+};
+    
+    namespace atom {
     }
-    #define CV_CL_GET_PROC_ADDRESS(name) GetProcAddress(name)
+    
+    // MonitorFinder maps a RenderFrameHost to the display ID on which the widget
+// is painting. This class operates on the IO thread while the RenderFrameHost
+// is on the UI thread, so the value returned by GetMonitor() may be 0 until
+// the information can be retrieved asynchronously.
+class MonitorFinder : public base::RefCountedThreadSafe<MonitorFinder> {
+ public:
+  MonitorFinder(int process_id, int render_frame_id);
+    }
+    
+    #include 'chrome/browser/speech/tts_platform.h'
+    
+    #if GTEST_HAS_PARAM_TEST
+    
+    // Factory interface for death tests.  May be mocked out for testing.
+class DeathTestFactory {
+ public:
+  virtual ~DeathTestFactory() { }
+  virtual bool Create(const char* statement, const RE* regex,
+                      const char* file, int line, DeathTest** test) = 0;
+};
+    
+      // Copy an existing linked_ptr<>, adding ourselves to the list of references.
+  template <typename U> linked_ptr(linked_ptr<U> const& ptr) { copy(&ptr); }
+  linked_ptr(linked_ptr const& ptr) {  // NOLINT
+    assert(&ptr != this);
+    copy(&ptr);
+  }
+    
+      // Creates an ANSI string from the given wide string, allocating
+  // memory using new. The caller is responsible for deleting the return
+  // value using delete[]. Returns the ANSI string, or NULL if the
+  // input is NULL.
+  //
+  // The returned string is created using the ANSI codepage (CP_ACP) to
+  // match the behaviour of the ANSI versions of Win32 calls and the
+  // C runtime.
+  static const char* Utf16ToAnsi(LPCWSTR utf16_str);
 #endif
     
-    TEST_F(UnicharcompressTest, DoesMarathi) {
-  LOG(INFO) << 'Testing mar';
-  LoadUnicharset('mar.unicharset');
-  ExpectCorrect('mar');
-}
+      GTEST_DECLARE_TUPLE_AS_FRIEND_
     
-    // dims=[5, 4, 3, 2]->[4, 3, 5, 2]
-TEST_F(MatrixTest, RotatingTranspose_0_2) {
-  GENERIC_2D_ARRAY<int> m;
-  src_.RotatingTranspose(dims_, kNumDims_, 0, 2, &m);
-  m.ResizeNoInit(kInputSize_ / 2, 2);
-  // Verify that the result is:
-  // output tensor=[[[[0, 1][24, 25][48, 49][72, 73][96, 97]]
-  //                 [[2, 3][26, 27][50, 51][74, 75][98, 99]]
-  //                 [[4, 5][28, 29][52, 53][76, 77][100, 101]]]
-  //                [[[6, 7]...
-  EXPECT_EQ(0, m(0, 0));
-  EXPECT_EQ(1, m(0, 1));
-  EXPECT_EQ(24, m(1, 0));
-  EXPECT_EQ(25, m(1, 1));
-  EXPECT_EQ(96, m(4, 0));
-  EXPECT_EQ(97, m(4, 1));
-  EXPECT_EQ(2, m(5, 0));
-  EXPECT_EQ(6, m(15, 0));
-}
+    // #ifdef __GNUC__ is too general here.  It is possible to use gcc without using
+// libstdc++ (which is where cxxabi.h comes from).
+# if GTEST_HAS_CXXABI_H_
+#  include <cxxabi.h>
+# elif defined(__HP_aCC)
+#  include <acxx_demangle.h>
+# endif  // GTEST_HASH_CXXABI_H_
     
-    ResultIterator::ResultIterator(const LTRResultIterator &resit)
-    : LTRResultIterator(resit) {
-  in_minor_direction_ = false;
-  at_beginning_of_minor_run_ = false;
-  preserve_interword_spaces_ = false;
+    
+    {
+    {}  // namespace testing
+}  // namespace grpc
+    
+    // A simple parser for the json db file. It requires the db file to have the
+// exact form of [{'location': { 'latitude': 123, 'longitude': 456}, 'name':
+// 'the name can be empty' }, { ... } ... The spaces will be stripped.
+class Parser {
+ public:
+  explicit Parser(const std::string& db) : db_(db) {
+    // Remove all spaces.
+    db_.erase(
+        std::remove_if(db_.begin(), db_.end(), isspace),
+        db_.end());
+    if (!Match('[')) {
+      SetFailedAndReturnFalse();
+    }
+  }
     }
     
-    
-    {  int32_t local_cost_;    // Cost of this point on its own.
-  int32_t total_cost_;    // Sum of all costs in best path to here.
-                        // During cost calculations local_cost is excluded.
-  int32_t total_steps_;   // Number of steps in best path to here.
-  const DPPoint* best_prev_;  // Pointer to prev point in best path from here.
-  // Information for computing the variance part of the cost.
-  int32_t n_;             // Number of steps in best path to here for variance.
-  int32_t sig_x_;         // Sum of step sizes for computing variance.
-  int64_t sig_xsq_;       // Sum of squares of steps for computing variance.
-};
-    
-    
-    { private:
-  double total_weight;         // no of elements or sum of weights.
-  double sigx;                 // sum of x
-  double sigy;                 // sum of y
-  double sigxx;                // sum x squared
-  double sigxy;                // sum of xy
-  double sigyy;                // sum y squared
-};
-    
-    
-    {  low = 0;
-  if (fc.y () == 0) {
-    if (fc.x () >= 0)
-      dir = 0;
-    else
-      dir = MODULUS / 2;
-    return;
+    std::vector<grpc::string_ref> SecureAuthContext::GetPeerIdentity() const {
+  if (!ctx_) {
+    return std::vector<grpc::string_ref>();
   }
-  high = MODULUS;
-  do {
-    current = (high + low) / 2;
-    if (dirtab[current] * fc >= 0)
-      low = current;
-    else
-      high = current;
+  grpc_auth_property_iterator iter = grpc_auth_context_peer_identity(ctx_);
+  std::vector<grpc::string_ref> identity;
+  const grpc_auth_property* property = nullptr;
+  while ((property = grpc_auth_property_iterator_next(&iter))) {
+    identity.push_back(
+        grpc::string_ref(property->value, property->value_length));
   }
-  while (high - low > 1);
-  dir = low;
+  return identity;
 }
+    
+    static void get_cpu_usage(unsigned long long* total_cpu_time,
+                          unsigned long long* idle_cpu_time) {
+#ifdef __linux__
+  std::ifstream proc_stat('/proc/stat');
+  proc_stat.ignore(5);
+  std::string cpu_time_str;
+  std::string first_line;
+  std::getline(proc_stat, first_line);
+  std::stringstream first_line_s(first_line);
+  for (int i = 0; i < 10; ++i) {
+    std::getline(first_line_s, cpu_time_str, ' ');
+    *total_cpu_time += std::stol(cpu_time_str);
+    if (i == 3) {
+      *idle_cpu_time = std::stol(cpu_time_str);
+    }
+  }
+#else
+  gpr_log(GPR_INFO, 'get_cpu_usage(): Non-linux platform is not supported.');
+#endif
+}
+    
+    grpc::string DescribeService(const grpc::protobuf::ServiceDescriptor* service) {
+  grpc::string result;
+  if (service->options().deprecated()) {
+    result.append('DEPRECATED\n');
+  }
+  result.append('filename: ' + service->file()->name() + '\n');
+    }
+    
+    template<typename T> inline
+dnnError_t dnnPoolingCreateBackward(
+    dnnPrimitive_t* pPooling,
+    dnnPrimitiveAttributes_t attributes,
+    dnnAlgorithm_t op,
+    const dnnLayout_t srcLayout,
+    const size_t kernelSize[],
+    const size_t kernelStride[],
+    const int inputOffset[],
+    const dnnBorder_t border_type);
+    
+        // add it to the network
+    AddNodeToNetIfNotYet(newNode);
+    
+    PrefetchGPUDataTransferer::PrefetchGPUDataTransferer(int deviceId) : GranularGPUDataTransferer(deviceId, nullptr, nullptr, true)
+{
+     cudaStreamCreateWithFlags(&m_stream, cudaStreamNonBlocking) || 'cudaStreamCreateWithFlags failed (PrefetchGPUDataTransferer ctor)';
+}
+    
+                shared_ptr<ComputationNode<ElemType>> runMeanNode = static_pointer_cast<ComputationNode<ElemType>>(runMeanParameterPtr);
+            shared_ptr<ComputationNode<ElemType>> runStdNode  = static_pointer_cast<ComputationNode<ElemType>>(runStdParameterPtr);
+    
+    template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ScriptableObjects::IConfigRecord, float>(const ScriptableObjects::IConfigRecord& config);
+template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ScriptableObjects::IConfigRecord, double>(const ScriptableObjects::IConfigRecord& config);
+template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ConfigParameters, float>(const ConfigParameters& config);
+template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ConfigParameters, double>(const ConfigParameters& config);
+template ComputationNetworkPtr GetModelFromConfig<ConfigParameters, float> (const ConfigParameters& config, const wstring&, vector<wstring>& outputNodeNamesVector);
+template ComputationNetworkPtr GetModelFromConfig<ConfigParameters, double>(const ConfigParameters& config, const wstring&, vector<wstring>& outputNodeNamesVector);
 
     
+    /*static*/ class ProgressTracing
+{
+    bool m_enabled;
+    bool m_tracingFlag;
+    bool m_timestampFlag;        // TODO: What does this do? TODO: camelCase
+    size_t m_totalNumberOfSteps; // total number of epochs in entire training run
+    size_t m_currentStepOffset;  // current offset
+    Timer m_progressTracingTimer;
+    }
     
-/**********************************************************************
- * ROW::move
- *
- * Reposition row by vector
- **********************************************************************/
+    // Compares two ASCII strings ignoring the case.
+// TODO: Should switch to boost, boost::iequal should be used instead.
+// TODO: we already have EqualCI() in Basics.h which does the same thing.
+template<class TElement>
+inline bool AreEqualIgnoreCase(
+    const std::basic_string<TElement, char_traits<TElement>, allocator<TElement>>& s1,
+    const std::basic_string<TElement, char_traits<TElement>, allocator<TElement> >& s2)
+{
+    if (s1.size() != s2.size())
+    {
+        return false;
+    }
+    }
     
-    /**
- * Possible types for a POLY_BLOCK or ColPartition.
- * Must be kept in sync with kPBColors in polyblk.cpp and PTIs*Type functions
- * below, as well as kPolyBlockNames in publictypes.cpp.
- * Used extensively by ColPartition, and POLY_BLOCK.
-*/
-enum PolyBlockType {
-  PT_UNKNOWN,        // Type is not yet known. Keep as the first element.
-  PT_FLOWING_TEXT,   // Text that lives inside a column.
-  PT_HEADING_TEXT,   // Text that spans more than one column.
-  PT_PULLOUT_TEXT,   // Text that is in a cross-column pull-out region.
-  PT_EQUATION,       // Partition belonging to an equation region.
-  PT_INLINE_EQUATION,  // Partition has inline equation.
-  PT_TABLE,          // Partition belonging to a table region.
-  PT_VERTICAL_TEXT,  // Text-line runs vertically.
-  PT_CAPTION_TEXT,   // Text that belongs to an image.
-  PT_FLOWING_IMAGE,  // Image that lives inside a column.
-  PT_HEADING_IMAGE,  // Image that spans more than one column.
-  PT_PULLOUT_IMAGE,  // Image that is in a cross-column pull-out region.
-  PT_HORZ_LINE,      // Horizontal Line.
-  PT_VERT_LINE,      // Vertical Line.
-  PT_NOISE,          // Lies outside of any column.
-  PT_COUNT
-};
+    // ---------------------------------------------------------------------------
+// const_array_ref -- same as array_ref for 'const' (read-only) pointers
+// ---------------------------------------------------------------------------
+    
+        float4 operator&(const float4& other) const
+    {
+        return _mm_and_ps(v, other);
+    }
+    float4 operator|(const float4& other) const
+    {
+        return _mm_or_ps(v, other);
+    }
+    float4 operator+(const float4& other) const
+    {
+        return _mm_add_ps(v, other);
+    }
+    float4 operator-(const float4& other) const
+    {
+        return _mm_sub_ps(v, other);
+    }
+    float4 operator*(const float4& other) const
+    {
+        return _mm_mul_ps(v, other);
+    }
+    float4 operator/(const float4& other) const
+    {
+        return _mm_div_ps(v, other);
+    }
     
       /// Set the timer's expiry time relative to now.
   /**
@@ -146,230 +234,42 @@ enum PolyBlockType {
     return s;
   }
     
-      /// Construct to represent a single non-modifiable buffer.
-  explicit const_buffers_1(const const_buffer& b)
-    : const_buffer(b)
+    namespace boost {
+namespace asio {
+    }
+    }
+    
+    template <typename CompletionCondition>
+class base_from_completion_cond
+{
+protected:
+  explicit base_from_completion_cond(CompletionCondition completion_condition)
+    : completion_condition_(completion_condition)
   {
   }
+    }
     
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    #include <boost/asio/detail/config.hpp>
     
-      // Return a pointer to the beginning of the unread data.
-  mutable_buffer data()
+      // Constructor for a full fenced block.
+  explicit gcc_arm_fenced_block(full_t)
   {
-    return boost::asio::buffer(buffer_) + begin_offset_;
+    barrier();
   }
     
-        // Find the next context with the same key.
-    Value* next_by_key() const
-    {
-      context* elem = next_;
-      while (elem)
-      {
-        if (elem->key_ == key_)
-          return elem->value_;
-        elem = elem->next_;
-      }
-      return 0;
-    }
+    #ifndef BOOST_ASIO_DETAIL_IMPL_BUFFER_SEQUENCE_ADAPTER_IPP
+#define BOOST_ASIO_DETAIL_IMPL_BUFFER_SEQUENCE_ADAPTER_IPP
     
-    #endif // BOOST_ASIO_DETAIL_EVENT_HPP
-
-    
-    #if !defined(BOOST_ASIO_WINDOWS_RUNTIME)
-    
-    #ifndef BOOST_ASIO_DETAIL_FUNCTION_HPP
-#define BOOST_ASIO_DETAIL_FUNCTION_HPP
-    
-      // Constructor for a half fenced block.
-  explicit gcc_arm_fenced_block(half_t)
+    int poll_read(int d, state_type state, boost::system::error_code& ec)
+{
+  if (d == -1)
   {
+    ec = boost::asio::error::bad_descriptor;
+    return -1;
   }
+    }
     
-    class winrt_buffer_impl :
-  public Microsoft::WRL::RuntimeClass<
-    Microsoft::WRL::RuntimeClassFlags<
-      Microsoft::WRL::RuntimeClassType::WinRtClassicComMix>,
-    ABI::Windows::Storage::Streams::IBuffer,
-    Windows::Storage::Streams::IBufferByteAccess>
+    void dev_poll_reactor::interrupt()
 {
-public:
-  explicit winrt_buffer_impl(const boost::asio::const_buffer& b)
-  {
-    bytes_ = const_cast<byte*>(boost::asio::buffer_cast<const byte*>(b));
-    length_ = boost::asio::buffer_size(b);
-    capacity_ = boost::asio::buffer_size(b);
-  }
-    }
-    
-    // Decodes one 8x8 block of DCT coefficients from the bit stream.
-bool DecodeDCTBlock(const HuffmanTableEntry* dc_huff,
-                    const HuffmanTableEntry* ac_huff,
-                    int Ss, int Se, int Al,
-                    int* eobrun,
-                    BitReaderState* br,
-                    JPEGData* jpg,
-                    coeff_t* last_dc_coeff,
-                    coeff_t* coeffs) {
-  int s;
-  int r;
-  bool eobrun_allowed = Ss > 0;
-  if (Ss == 0) {
-    s = ReadSymbol(dc_huff, br);
-    if (s >= kJpegDCAlphabetSize) {
-      fprintf(stderr, 'Invalid Huffman symbol %d for DC coefficient.\n', s);
-      jpg->error = JPEG_INVALID_SYMBOL;
-      return false;
-    }
-    if (s > 0) {
-      r = br->ReadBits(s);
-      s = HuffExtend(r, s);
-    }
-    s += *last_dc_coeff;
-    const int dc_coeff = SignedLeftshift(s, Al);
-    coeffs[0] = dc_coeff;
-    if (dc_coeff != coeffs[0]) {
-      fprintf(stderr, 'Invalid DC coefficient %d\n', dc_coeff);
-      jpg->error = JPEG_NON_REPRESENTABLE_DC_COEFF;
-      return false;
-    }
-    *last_dc_coeff = s;
-    ++Ss;
-  }
-  if (Ss > Se) {
-    return true;
-  }
-  if (*eobrun > 0) {
-    --(*eobrun);
-    return true;
-  }
-  for (int k = Ss; k <= Se; k++) {
-    s = ReadSymbol(ac_huff, br);
-    if (s >= kJpegHuffmanAlphabetSize) {
-      fprintf(stderr, 'Invalid Huffman symbol %d for AC coefficient %d\n',
-              s, k);
-      jpg->error = JPEG_INVALID_SYMBOL;
-      return false;
-    }
-    r = s >> 4;
-    s &= 15;
-    if (s > 0) {
-      k += r;
-      if (k > Se) {
-        fprintf(stderr, 'Out-of-band coefficient %d band was %d-%d\n',
-                k, Ss, Se);
-        jpg->error = JPEG_OUT_OF_BAND_COEFF;
-        return false;
-      }
-      if (s + Al >= kJpegDCAlphabetSize) {
-        fprintf(stderr, 'Out of range AC coefficient value: s=%d Al=%d k=%d\n',
-                s, Al, k);
-        jpg->error = JPEG_NON_REPRESENTABLE_AC_COEFF;
-        return false;
-      }
-      r = br->ReadBits(s);
-      s = HuffExtend(r, s);
-      coeffs[kJPEGNaturalOrder[k]] = SignedLeftshift(s, Al);
-    } else if (r == 15) {
-      k += 15;
-    } else {
-      *eobrun = 1 << r;
-      if (r > 0) {
-        if (!eobrun_allowed) {
-          fprintf(stderr, 'End-of-block run crossing DC coeff.\n');
-          jpg->error = JPEG_EOB_RUN_TOO_LONG;
-          return false;
-        }
-        *eobrun += br->ReadBits(r);
-      }
-      break;
-    }
-  }
-  --(*eobrun);
-  return true;
+  interrupter_.interrupt();
 }
-    
-    namespace guetzli {
-    }
-    
-    const double* NewSrgb8ToLinearTable() {
-  double* table = new double[256];
-  int i = 0;
-  for (; i < 11; ++i) {
-    table[i] = i / 12.92;
-  }
-  for (; i < 256; ++i) {
-    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
-  }
-  return table;
-}
-    
-      tmp0 = in[4 * stride];
-  tmp1 = kIDCTMatrix[ 4] * tmp0;
-  out[0] += tmp1;
-  out[1] -= tmp1;
-  out[2] -= tmp1;
-  out[3] += tmp1;
-  out[4] += tmp1;
-  out[5] -= tmp1;
-  out[6] -= tmp1;
-  out[7] += tmp1;
-    
-    // Decodes the parsed jpeg coefficients into an RGB image.
-// There can be only either 1 or 3 image components, in either case, an RGB
-// output image will be generated.
-// Only YUV420 and YUV444 sampling factors are supported.
-// Vector will be empty if a decoding error occurred.
-std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
-    
-    
-    {}  // namespace guetzli
-    
-      std::vector<uint8_t> ToSRGB(int xmin, int ymin, int xsize, int ysize) const;
-    
-    void AbstractAuthResolver::setDefaultCred(std::string user,
-                                          std::string password)
-{
-  defaultUser_ = std::move(user);
-  defaultPassword_ = std::move(password);
-}
-    
-      PeerConnection* peerConnection_;
-    
-    AbstractHttpServerResponseCommand::~AbstractHttpServerResponseCommand()
-{
-  if (readCheck_) {
-    e_->deleteSocketForReadCheck(socket_, this);
-  }
-  if (writeCheck_) {
-    e_->deleteSocketForWriteCheck(socket_, this);
-  }
-}
-    
-    bool AbstractOptionHandler::isHidden() const { return flags_ & FLAG_HIDDEN; }
-    
-      virtual void setCumulative(bool f) CXX11_OVERRIDE;
-    
-    AnnounceList::AnnounceList(
-    const std::deque<std::shared_ptr<AnnounceTier>>& announceTiers)
-    : tiers_(announceTiers), currentTrackerInitialized_(false)
-{
-  resetIterator();
-}
-    
-    class AnnounceList {
-public:
-private:
-  std::deque<std::shared_ptr<AnnounceTier>> tiers_;
-  std::deque<std::shared_ptr<AnnounceTier>>::iterator currentTier_;
-  std::deque<std::string>::iterator currentTracker_;
-  bool currentTrackerInitialized_;
-    }
-    
-    namespace aria2 {
-    }
-    
-    namespace aria2 {
-    }
