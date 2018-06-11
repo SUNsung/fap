@@ -1,94 +1,136 @@
 
         
-            def check_division(self, x, y):
-        eq = self.assertEqual
-        with self.subTest(x=x, y=y):
-            q, r = divmod(x, y)
-            q2, r2 = x//y, x%y
-            pab, pba = x*y, y*x
-            eq(pab, pba, 'multiplication does not commute')
-            eq(q, q2, 'divmod returns different quotient than /')
-            eq(r, r2, 'divmod returns different mod than %')
-            eq(x, q*y + r, 'x != q*y + r after divmod')
-            if y > 0:
-                self.assertTrue(0 <= r < y, 'bad mod from divmod')
-            else:
-                self.assertTrue(y < r <= 0, 'bad mod from divmod')
+        
+with open(BIN_FILE_PATH, 'rb') as f:
+    BIN_FILE_CONTENT = f.read()
     
-            Otherwise leave dialog open for user to correct entry or cancel.
-        '''
-        entry = self.entry_ok()
-        if entry is not None:
-            self.result = entry
-            self.destroy()
-        else:
-            # [Ok] moves focus.  (<Return> does not.)  Move it back.
-            self.entry.focus_set()
+        def __init__(self, directory=DEFAULT_CONFIG_DIR):
+        super(Config, self).__init__()
+        self.update(self.DEFAULTS)
+        self.directory = directory
     
-        Use this function to calculate the variance from the entire population.
-    To estimate the variance from a sample, the ``variance`` function is
-    usually a better choice.
+        # Used only when requested with --check-status:
+    ERROR_HTTP_3XX = 3
+    ERROR_HTTP_4XX = 4
+    ERROR_HTTP_5XX = 5
     
-        def lock(self):
-        '''Lock the mailbox.'''
-        if not self._locked:
-            self._file = open(os.path.join(self._path, '.mh_sequences'), 'rb+')
-            _lock_file(self._file)
-            self._locked = True
     
-        def test_oldargs0_0_ext(self):
-        {}.keys(*())
+def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
+    '''When credentials are passed in URL and via -a at the same time,
+     then the ones from -a are used.'''
+    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
+                   auth='user:wrong')
+    r = http('--auth=user:password', 'GET', url)
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-    3. Install an instance with custom dispatch method:
+            project_id = response.json()[0]['id']
     
-        *************************************************************************
+        if argcomplete:
+        argcomplete.autocomplete(parser)
     
-        def test_cwd(self):
-        p = self.cls.cwd()
-        self._test_cwd(p)
     
-    T_CV2 = typing.ClassVar[int]
-T_CV3 = typing.ClassVar
+def jsonify(result, format=False):
+    ''' format JSON output (uncompressed or uncompressed) '''
     
-    @dataclasses.dataclass
-class IV:
-    T_IV4 = dataclasses.InitVar
-    iv0: dataclasses.InitVar[int]
-    iv1: dataclasses.InitVar
-    iv2: T_IV2
-    iv3: T_IV3
-    not_iv4: T_IV4  # When using string annotations, this field is not recognized as an InitVar.
-
+        # Execute the template string in a temporary namespace and
+    # support tracing utilities by setting a value for frame.f_globals['__name__']
+    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
+                     _property=property, _tuple=tuple)
+    try:
+        exec(template, namespace)
+    except SyntaxError:
+        e = _sys.exc_info()[1]
+        raise SyntaxError(e.message + ':\n' + template)
+    result = namespace[typename]
+    
+    # Add any paths that contain custom static files (such as style sheets) here,
+# relative to this directory. They are copied after the builtin static files,
+# so a file named 'default.css' will overwrite the builtin 'default.css'.
+html_static_path = ['_static']
+    
+            self.assertEqual(set([CANCELLED_AND_NOTIFIED_FUTURE,
+                              EXCEPTION_FUTURE,
+                              SUCCESSFUL_FUTURE]),
+                         completed_futures)
+    
+    from future.utils import iterkeys, iteritems
+from ycm import vimsupport
+import re
+    
+    
+  def Extra_Info_No_Doc_String_With_Detailed_Info_test( self ):
+    self._Check( '0', {
+      'insertion_text':  'INSERTION TEXT',
+      'menu_text':       'MENU TEXT',
+      'extra_menu_info': 'EXTRA MENU INFO',
+      'kind':            'K',
+      'detailed_info':   'DETAILED INFO',
+      'extra_data': {
+      },
+    }, {
+      'word'     : 'INSERTION TEXT',
+      'abbr'     : 'MENU TEXT',
+      'menu'     : 'EXTRA MENU INFO',
+      'kind'     : 'k',
+      'info'     : 'DETAILED INFO',
+      'dup'      : 1,
+      'empty'    : 1,
+      'user_data': '0',
+    } )
+    
+    
+  def Start( self ):
+    request_data = BuildRequestData()
+    if self._extra_data:
+      request_data.update( self._extra_data )
+    request_data.update( {
+      'completer_target': self._completer_target,
+      'command_arguments': self._arguments
+    } )
+    self._response = self.PostDataToHandler( request_data,
+                                             'run_completer_command' )
+    
+    
+  def Response( self ):
+    if self._cached_response:
+      return self._cached_response
     
     import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
     
-            Returns the underlying `.IOStream` object and stops all further
-        HTTP processing.  May only be called during
-        `.HTTPMessageDelegate.headers_received`.  Intended for implementing
-        protocols like websockets that tunnel over an HTTP handshake.
-        '''
+            for q_str in repr(q), str(q):
+            self.assertTrue(q_str.startswith('<Queue'))
+            self.assertIn('maxsize=1', q_str)
+            self.assertIn('getters[1]', q_str)
+            self.assertNotIn('putters', q_str)
+            self.assertNotIn('tasks', q_str)
+    
+        def close(self):
+        if self.stream is not None:
+            self.stream.close()
         self._clear_callbacks()
-        stream = self.stream
-        self.stream = None
         if not self._finish_future.done():
             future_set_result_unless_cancelled(self._finish_future, None)
-        return stream
     
-    from tornado.auth import (
-    AuthError, OpenIdMixin, OAuthMixin, OAuth2Mixin,
-    GoogleOAuth2Mixin, FacebookGraphMixin, TwitterMixin,
-)
-from tornado.concurrent import Future
-from tornado.escape import json_decode
-from tornado import gen
-from tornado.httputil import url_concat
-from tornado.log import gen_log
-from tornado.testing import AsyncHTTPTestCase, ExpectLog
-from tornado.test.util import ignore_deprecation
-from tornado.web import RequestHandler, Application, asynchronous, HTTPError
+                    # simulated servers
+                ('/openid/server/authenticate', OpenIdServerAuthenticateHandler),
+                ('/oauth1/server/request_token', OAuth1ServerRequestTokenHandler),
+                ('/oauth1/server/access_token', OAuth1ServerAccessTokenHandler),
     
-        def start_tree(self, tree, filename):
-        self.found_future_import = False
+        def test_event_set_multiple(self):
+        e = locks.Event()
+        e.set()
+        e.set()
+        self.assertTrue(e.is_set())
+    
+        config_dir = os.path.join(os.getcwd(), args.config)
+    
+            self.assertIsNotNone(result)
+
+    
+    
+class TestEvents(unittest.TestCase):
+    '''Test Events model.'''
