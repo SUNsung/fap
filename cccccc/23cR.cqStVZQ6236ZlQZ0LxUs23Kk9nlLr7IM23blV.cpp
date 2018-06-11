@@ -1,56 +1,57 @@
 
         
-        typedef FixedWord<27> Word; // 28 bytes.
+        
+    {  virtual SILDebuggerClient *getAsSILDebuggerClient() = 0;
+private:
+  virtual void anchor();
+};
     
-    extern 'C' {
-// Declare these symbols as weak to allow them to be optionally defined.
-#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
-  RETURN_TYPE NAME##Def FUNC_SIG {                                             \
-    Printf('ERROR: Function \'%s\' not defined.\n', #NAME);                    \
-    exit(1);                                                                   \
-  }                                                                            \
-  RETURN_TYPE NAME FUNC_SIG __attribute__((weak, alias(#NAME 'Def')));
+    #endif
+
+    
+    /// \brief Diagnostic consumer that displays diagnostics to standard error.
+class PrintingDiagnosticConsumer : public DiagnosticConsumer {
+  llvm::raw_ostream &Stream;
+  bool ForceColors = false;
+  bool DidErrorOccur = false;
+public:
+  PrintingDiagnosticConsumer(llvm::raw_ostream &stream = llvm::errs()) :
+    Stream(stream) { }
     }
     
-    void RemoveFile(const std::string &Path);
-    
-      // Get the first directory entry.
-  WIN32_FIND_DATAA FindInfo;
-  HANDLE FindHandle(FindFirstFileA(Path.c_str(), &FindInfo));
-  if (FindHandle == INVALID_HANDLE_VALUE)
-  {
-    Printf('No file found in: %s.\n', Dir.c_str());
-    return;
-  }
-    
-    struct Merger {
-  std::vector<MergeFileInfo> Files;
-  size_t NumFilesInFirstCorpus = 0;
-  size_t FirstNotProcessedFile = 0;
-  std::string LastFailure;
+    struct IndexRelation {
+  const Decl *decl;
+  SymbolInfo symInfo;
+  SymbolRoleSet roles = SymbolRoleSet(0);
     }
     
-      Random &Rand;
-  const FuzzingOptions &Options;
+      static ResultPlanPtr computeResultPlan(SILGenFunction &SGF,
+                                         const CalleeTypeInfo &calleeTypeInfo,
+                                         SILLocation loc,
+                                         SGFContext evalContext);
     
-      // We don't want to create too many trace-based mutations as it is both
-  // expensive and useless. So after some number of mutations is collected,
-  // start rejecting some of them. The more there are mutations the more we
-  // reject.
-  bool WantToHandleOneMoreMutation() {
-    const size_t FirstN = 64;
-    // Gladly handle first N mutations.
-    if (NumMutations <= FirstN) return true;
-    size_t Diff = NumMutations - FirstN;
-    size_t DiffLog = sizeof(long) * 8 - __builtin_clzl((long)Diff);
-    assert(DiffLog > 0 && DiffLog < 64);
-    bool WantThisOne = MD.GetRand()(1 << DiffLog) == 0;  // 1 out of DiffLog.
-    return WantThisOne;
-  }
-    
-    void PrintHexArray(const uint8_t *Data, size_t Size,
-                   const char *PrintAfter) {
-  for (size_t i = 0; i < Size; i++)
-    Printf('0x%x,', (unsigned)Data[i]);
-  Printf('%s', PrintAfter);
+    template <typename T>
+void HostDeviceVector<T>::Copy(const std::vector<T>& other) {
+  CHECK_EQ(Size(), other.size());
+  std::copy(other.begin(), other.end(), HostVector().begin());
 }
+    
+      for (auto alphabet_size : test_cases) {
+    for (int i = 0; i < repetitions; i++) {
+      std::vector<int> input(num_elements);
+      std::generate(input.begin(), input.end(),
+        [=]() { return rand() % alphabet_size; });
+      CompressedBufferWriter cbw(alphabet_size);
+    }
+    }
+    
+    // metrics
+#include '../src/metric/metric.cc'
+#include '../src/metric/elementwise_metric.cc'
+#include '../src/metric/multiclass_metric.cc'
+#include '../src/metric/rank_metric.cc'
+    
+    // redefines the logging macro if not existed
+#ifndef LOG
+#define LOG(severity) LOG_##severity.stream()
+#endif
