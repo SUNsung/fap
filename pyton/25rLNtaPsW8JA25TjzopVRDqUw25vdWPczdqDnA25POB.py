@@ -1,52 +1,88 @@
-    def crawled_similar(self, signature):
-        '''Determine if we've already crawled a page matching the given signature'''
-        pass
-    
-        def bfs(self, source, dest):
-        # Use self.visited_ids to track visited nodes
-        # Use self.lookup to translate a person_id to a Person
-        pass
 
+        
+            for release in releases:
+        compat_print(release['name'])
+        for asset in release['assets']:
+            asset_name = asset['name']
+            total_bytes += asset['download_count'] * asset['size']
+            if all(not re.match(p, asset_name) for p in (
+                    r'^youtube-dl$',
+                    r'^youtube-dl-\d{4}\.\d{2}\.\d{2}(?:\.\d+)?\.tar\.gz$',
+                    r'^youtube-dl\.exe$')):
+                continue
+            compat_print(
+                ' %s size: %s downloads: %d'
+                % (asset_name, format_size(asset['size']), asset['download_count']))
     
-        def reducer_identity(self, key, value):
-        yield key, value
-    
-        def receive_friend_request(self, friend_id):
-        pass
-    
-    
-print('\n# ======================================================================')
-print('#                   Calculating pi, 10000 iterations')
-print('# ======================================================================\n')
-    
-        if _have_ssl:
-        def starttls(self, context=None):
-            '''Process a STARTTLS command. Arguments:
-            - context: SSL context to use for the encrypted connection
-            '''
-            # Per RFC 4642, STARTTLS MUST NOT be sent after authentication or if
-            # a TLS session already exists.
-            if self.tls_on:
-                raise ValueError('TLS is already enabled.')
-            if self.authenticated:
-                raise ValueError('TLS cannot be started after authentication.')
-            resp = self._shortcmd('STARTTLS')
-            if resp.startswith('382'):
-                self.file.close()
-                self.sock = _encrypt_on(self.sock, context, self.host)
-                self.file = self.sock.makefile('rwb')
-                self.tls_on = True
-                # Capabilities may change after TLS starts up, so ask for them
-                # again.
-                self._caps = None
-                self.getcapabilities()
+        # Are checkable fields missing from the test case definition?
+    test_info_dict = dict((key, value if not isinstance(value, compat_str) or len(value) < 250 else 'md5:' + md5(value))
+                          for key, value in got_dict.items()
+                          if value and key in ('id', 'title', 'description', 'uploader', 'upload_date', 'timestamp', 'uploader_id', 'location', 'age_limit'))
+    missing_keys = set(test_info_dict.keys()) - set(expected_dict.keys())
+    if missing_keys:
+        def _repr(v):
+            if isinstance(v, compat_str):
+                return ''%s'' % v.replace('\\', '\\\\').replace(''', '\\'').replace('\n', '\\n')
             else:
-                raise NNTPError('TLS failed to start.')
+                return repr(v)
+        info_dict_str = ''
+        if len(missing_keys) != len(expected_dict):
+            info_dict_str += ''.join(
+                '    %s: %s,\n' % (_repr(k), _repr(v))
+                for k, v in test_info_dict.items() if k not in missing_keys)
     
-    subsystem_details = {
-    # -s flag        : (C entry point template), (is it __main__?), (is it a DLL?)
-    'console'        : (None,                    1,                 0),
-    'windows'        : (WINMAINTEMPLATE,         1,                 0),
-    'service'        : (SERVICETEMPLATE,         0,                 0),
-    'com_dll'        : ('',                      0,                 1),
-}
+    import os
+import subprocess
+    
+        def process_options(self, args, opts):
+        ScrapyCommand.process_options(self, args, opts)
+        try:
+            opts.spargs = arglist_to_dict(opts.spargs)
+        except ValueError:
+            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
+        if opts.output:
+            if opts.output == '-':
+                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
+            else:
+                self.settings.set('FEED_URI', opts.output, priority='cmdline')
+            feed_exporters = without_none_values(
+                self.settings.getwithbase('FEED_EXPORTERS'))
+            valid_output_formats = feed_exporters.keys()
+            if not opts.output_format:
+                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
+            if opts.output_format not in valid_output_formats:
+                raise UsageError('Unrecognized output format '%s', set one'
+                                 ' using the '-t' switch or as a file extension'
+                                 ' from the supported list %s' % (opts.output_format,
+                                                                  tuple(valid_output_formats)))
+            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
+    
+                raise ContractFail('Returned %s %s, expected %s' % \
+                (occurrences, self.obj_name, expected))
+    
+    # If false, no index is generated.
+#html_use_index = True
+    
+        @classmethod
+    def add_parser_arguments(cls, parser):
+        '''Adds command line arguments needed by the plugin'''
+    
+    # Add any paths that contain templates here, relative to this directory.
+templates_path = ['_templates']
+    
+        @mock.patch('certbot.display.enhancements.util')
+    def test_redirect(self, mock_util):
+        mock_util().menu.return_value = (display_util.OK, 1)
+        self.assertTrue(self._call('redirect'))
+    
+    DOMAIN = 'keyboard'
+    
+        @patch('{}._get_homehub_data'.format(patch_file), new=_get_homehub_data)
+    def test_config_minimal(self):
+        '''Test the setup with minimal configuration.'''
+        config = {
+            'device_tracker': {
+                CONF_HOST: 'foo'
+            }
+        }
+        result = bt_home_hub_5.get_scanner(None, config)
