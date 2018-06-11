@@ -1,98 +1,155 @@
 
         
-              options[:only_patterns] = [/\Ad3[\-\w]+\z/, /\Ad3\/blob\/master\/changes\.md\z/i]
-      options[:skip_patterns] = [/3\.x-api-reference/]
+        # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
     
-        html_filters.push 'haxe/clean_html', 'haxe/entries'
+        # The entry filter for this collection.
+    # Creates an instance of Jekyll::EntryFilter.
+    #
+    # Returns the instance of Jekyll::EntryFilter for this collection.
+    def entry_filter
+      @entry_filter ||= Jekyll::EntryFilter.new(site, relative_directory)
+    end
     
-        options[:skip_patterns] = [/mysqlnd/, /xdevapi/i]
+                c.option 'force', '--force', 'Force creation even if PATH already exists'
+            c.option 'blank', '--blank', 'Creates scaffolding but with empty files'
+            c.option 'skip-bundle', '--skip-bundle', 'Skip 'bundle install''
+    
+    module Jekyll
+  module Commands
+    class NewTheme < Jekyll::Command
+      class << self
+        def init_with_program(prog)
+          prog.command(:'new-theme') do |c|
+            c.syntax 'new-theme NAME'
+            c.description 'Creates a new Jekyll theme scaffold'
+            c.option 'code_of_conduct', \
+                     '-c', '--code-of-conduct', \
+                     'Include a Code of Conduct. (defaults to false)'
+    
+        # Public: Read configuration and return merged Hash
+    #
+    # file - the path to the YAML file to be read in
+    #
+    # Returns this configuration, overridden by the values in the file
+    def read_config_file(file)
+      next_config = safe_load_file(file)
+      check_config_is_hash!(next_config, file)
+      Jekyll.logger.info 'Configuration file:', file
+      next_config
+    rescue SystemCallError
+      if @default_config_file ||= nil
+        Jekyll.logger.warn 'Configuration file:', 'none'
+        {}
+      else
+        Jekyll.logger.error 'Fatal:', 'The configuration file '#{file}'
+          could not be found.'
+        raise LoadError, 'The Configuration file '#{file}' could not be found.'
+      end
+    end
+    
+        # Determine whether this document should be written.
+    # Based on the Collection to which it belongs.
+    #
+    # True if the document has a collection and if that collection's #write?
+    # method returns true, and if the site's Publisher will publish the document.
+    # False otherwise.
+    def write?
+      collection&.write? && site.publisher.publish?(self)
+    end
+    
+          NON_CONTENT_METHODS = [:fallback_data, :collapse_document].freeze
+    
+        def paragraphize(input)
+      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
+    end
+  end
+end
+    
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
+    end
+    
+      # Improved version of Liquid's truncatewords:
+  # - Uses typographically correct ellipsis (…) insted of '...'
+  def truncatewords(input, length)
+    truncate = input.split(' ')
+    if truncate.length > length
+      truncate[0..length-1].join(' ').strip + ' &hellip;'
+    else
+      input
+    end
+  end
+    
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
+      end
+      super
+    end
+    
+        def blank_name?
+      @filepath.nil? || @filepath.empty?
+    end
     
         private
     
-        version '3' do
-      self.release = '3.3.0'
-      self.base_url = 'http://sinonjs.org/releases/v#{release}/'
-    end
+            def responds?
+          methods = @subject.instance_methods.map(&:to_s)
+          methods.include?('#{@attachment_name}') &&
+            methods.include?('#{@attachment_name}=') &&
+            methods.include?('#{@attachment_name}?')
+        end
     
-            # Helper method to get access to the class variable. This is mostly
-        # exposed for tests. This shouldn't be mucked with directly, since it's
-        # structure may change at any time.
-        def registered; @@registered; end
+            def rejected_types_rejected?
+          @missing_rejected_types ||= @rejected_types.select { |type| type_allowed?(type) }
+          @missing_rejected_types.none?
+        end
       end
     end
   end
 end
 
     
-              # Verify the box exists that we want to repackage
-          box = @env.boxes.find(box_name, box_provider, '= #{box_version}')
-          if !box
-            raise Vagrant::Errors::BoxNotFoundWithProviderAndVersion,
-              name: box_name,
-              provider: box_provider.to_s,
-              version: box_version
-          end
-    
-        t = Time.utc(2016, 1, 1, 1, 0, 0).getlocal('-05:00')
-    assert_equal('365', t.strftime('%j'))
-    t = Time.utc(2017, 1, 1, 1, 0, 0).getlocal('-05:00')
-    assert_equal('366', t.strftime('%j'))
+      # Get list of styles saved on previous deploy (running rake paperclip:refresh:missing_styles)
+  def self.get_registered_attachments_styles
+    YAML.load_file(Paperclip.registered_attachments_styles_path)
+  rescue Errno::ENOENT
+    nil
   end
+  private_class_method :get_registered_attachments_styles
     
-        def alive?
-      @alive
+        # You can add your own processor via the Paperclip configuration. Normally
+    # Paperclip will load all processors from the
+    # Rails.root/lib/paperclip_processors directory, but here you can add any
+    # existing class using this mechanism.
+    #
+    #   Paperclip.configure do |c|
+    #     c.register_processor :watermarker, WatermarkingProcessor.new
+    #   end
+    def register_processor(name, processor)
+      @known_processors ||= {}
+      @known_processors[name.to_s] = processor
     end
-    
-      it 'creates a time based on given C-style gmtime arguments, interpreted as UTC (GMT)' do
-    time = Time.send(@method, 1, 15, 20, 1, 1, 2000, :ignored, :ignored, :ignored, :ignored)
-    time.inspect.should == '2000-01-01 20:15:01 UTC'
   end
-    
-      # Set to :debug to see everything in the log.
-  config.log_level = :info
-    
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
-  end
-  config.static_cache_control = 'public, max-age=3600'
-    
-    namespace :bower do
-    
-      # Clean the keg of formula @f
-  def clean
-    ObserverPathnameExtension.reset_counts!
-    
-      def brief_build_info(f)
-    build_time_str = f.logs.ctime.strftime('%Y-%m-%d %H:%M:%S')
-    s = <<~EOS
-      Homebrew build logs for #{f.full_name} on #{OS_VERSION}
-    EOS
-    if ARGV.include?('--with-hostname')
-      hostname = Socket.gethostname
-      s << 'Host: #{hostname}\n'
-    end
-    s << 'Build date: #{build_time_str}\n'
-    s
-  end
-    
-      def which_all(cmd)
-    super(cmd, PATH.new(ORIGINAL_PATHS))
-  end
-    
-        @user_count = User.count
-    
-    module Api
-  module OpenidConnect
-    class ClientsController < ApplicationController
-      skip_before_action :verify_authenticity_token
-    
-            def index
-          authorize! :read, StockMovement
-          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          respond_with(@stock_movements)
-        end
+end
