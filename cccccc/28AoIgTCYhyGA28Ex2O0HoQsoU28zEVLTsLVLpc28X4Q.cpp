@@ -1,246 +1,392 @@
 
         
-        #endif  // TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
-
+        
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
+    
+    namespace base {
+class DictionaryValue;
+class ListValue;
+}
     
     
-    {
-    {}  // namespace io
-}  // namespace tensorflow
+    {}  // namespace remote
     
-    /**
- * \ingroup CXX11_NeuralNetworks_Module
- * \brief Template functor to clip the magnitude of the first scalar.
- *
- * \sa class CwiseBinaryOp, MatrixBase::Clip
- */
-template <typename Scalar>
-struct scalar_clip_op {
-  EIGEN_EMPTY_STRUCT_CTOR(scalar_clip_op)
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Scalar
-  operator()(const Scalar& a, const Scalar& b) const {
-    return numext::mini(numext::maxi(a, -b), b);
+    #include 'content/nw/src/api/clipboard/clipboard.h'
+    
+      template<typename T> T* AddListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i==listerners_.end()) {
+      T* listener_object = new T(this);
+      listerners_[T::id] = listener_object;
+      return listener_object;
+    }
+    return NULL;
   }
-  template <typename Packet>
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Packet
-  packetOp(const Packet& a, const Packet& b) const {
-    return internal::pmin(internal::pmax(a, internal::pnegate(b)), b);
-  }
+    
+    void MenuItem::SetSubmenu(Menu* menu) {
+  if (submenu_) submenu_->RemoveKeys();
+    }
+    
+        bool ReadImage(ClipboardData& data) {
+      DCHECK(data.type == TYPE_PNG || data.type == TYPE_JPEG);
+      std::vector<unsigned char> encoded_image;
+      SkBitmap bitmap = clipboard_->ReadImage(ui::CLIPBOARD_TYPE_COPY_PASTE);
+    }
+    
+    #include <stdlib.h>
+#include <unistd.h>
+#include 'leveldb/cache.h'
+#include 'leveldb/comparator.h'
+#include 'leveldb/db.h'
+#include 'leveldb/env.h'
+#include 'leveldb/filter_policy.h'
+#include 'leveldb/iterator.h'
+#include 'leveldb/options.h'
+#include 'leveldb/status.h'
+#include 'leveldb/write_batch.h'
+    
+    TEST(FormatTest, InternalKeyShortestSuccessor) {
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            ShortSuccessor(IKey('foo', 100, kTypeValue)));
+  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
+            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
+}
+    
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
+}
+    
+    void WriteBatchInternal::Append(WriteBatch* dst, const WriteBatch* src) {
+  SetCount(dst, Count(dst) + Count(src));
+  assert(src->rep_.size() >= kHeader);
+  dst->rep_.append(src->rep_.data() + kHeader, src->rep_.size() - kHeader);
+}
+    
+    // Dump the contents of the file named by fname in text format to
+// *dst.  Makes a sequence of dst->Append() calls; each call is passed
+// the newline-terminated text corresponding to a single item found
+// in the file.
+//
+// Returns a non-OK result if fname does not name a leveldb storage
+// file, or if the file cannot be read.
+Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
+    
+    
+    {  // Intentionally copyable
 };
     
-    void SYCLDeviceContext::CopyCPUTensorToDevice(const Tensor *cpu_tensor,
-                                              Device *device,
-                                              Tensor *device_tensor,
-                                              StatusCallback done) const {
-  const int64 total_bytes = cpu_tensor->TotalBytes();
-  if (total_bytes > 0) {
-    const void *src_ptr = DMAHelper::base(cpu_tensor);
-    void *dst_ptr = DMAHelper::base(device_tensor);
-    switch (cpu_tensor->dtype()) {
-      case DT_FLOAT:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_DOUBLE:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<double *>(dst_ptr),
-            static_cast<const double *>(src_ptr), total_bytes);
-        break;
-      case DT_INT32:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT64:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_HALF:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<Eigen::half *>(dst_ptr),
-            static_cast<const Eigen::half *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX64:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<std::complex<float> *>(dst_ptr),
-            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX128:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<std::complex<double> *>(dst_ptr),
-            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
-        break;
-      case DT_INT8:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT16:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT8:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT16:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<uint16 *>(dst_ptr),
-            static_cast<const uint16 *>(src_ptr), total_bytes);
-        break;
-      case DT_BOOL:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
-            total_bytes);
-        break;
-      default:
-        assert(false && 'unsupported type');
+    #include <fstream>  // NOLINT(readability/streams)
+#include <string>
+    
+      // Get a layer using a LayerParameter.
+  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
+    if (Caffe::root_solver()) {
+      LOG(INFO) << 'Creating layer ' << param.name();
     }
+    const string& type = param.type();
+    CreatorRegistry& registry = Registry();
+    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
+        << ' (known types: ' << LayerTypeListString() << ')';
+    return registry[type](param);
   }
-  device->eigen_sycl_device()->synchronize();
-  done(Status::OK());
-}
     
+    namespace caffe {
+    }
     
-    {}  // namespace xla
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include <vector>
+    
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    // EXPECT_DEBUG_DEATH asserts that the given statements die in debug mode.
+// The death testing framework causes this to have interesting semantics,
+// since the sideeffects of the call are only visible in opt mode, and not
+// in debug mode.
+//
+// In practice, this can be used to test functions that utilize the
+// LOG(DFATAL) macro using the following style:
+//
+// int DieInDebugOr12(int* sideeffect) {
+//   if (sideeffect) {
+//     *sideeffect = 12;
+//   }
+//   LOG(DFATAL) << 'death';
+//   return 12;
+// }
+//
+// TEST(TestCase, TestDieOr12WorksInDgbAndOpt) {
+//   int sideeffect = 0;
+//   // Only asserts in dbg.
+//   EXPECT_DEBUG_DEATH(DieInDebugOr12(&sideeffect), 'death');
+//
+// #ifdef NDEBUG
+//   // opt-mode has sideeffect visible.
+//   EXPECT_EQ(12, sideeffect);
+// #else
+//   // dbg-mode no visible sideeffect.
+//   EXPECT_EQ(0, sideeffect);
+// #endif
+// }
+//
+// This will assert that DieInDebugReturn12InOpt() crashes in debug
+// mode, usually due to a DCHECK or LOG(DFATAL), but returns the
+// appropriate fallback value (12 in this case) in opt mode. If you
+// need to test that a function has appropriate side-effects in opt
+// mode, include assertions against the side-effects.  A general
+// pattern for this is:
+//
+// EXPECT_DEBUG_DEATH({
+//   // Side-effects here will have an effect after this statement in
+//   // opt mode, but none in debug mode.
+//   EXPECT_EQ(12, DieInDebugOr12(&sideeffect));
+// }, 'death');
+//
+# ifdef NDEBUG
+    
+    #endif  // GTEST_INCLUDE_GTEST_GTEST_PRINTERS_H_
 
     
-    // See docs in ../ops/io_ops.cc.
-    
-    class TensorSlice {
- public:
-  // Construct a tensor slice: you have a number of ways:
-  // -- creating an empty slice
-  // -- from just a dimension (in this case it will create a full slice)
-  // -- from an array of pairs of integers.
-  // -- from a TensorSliceProto protocol buffer
-  // -- from a string format of 'start,length:start,length...' where each
-  //    'start,length' pair represents the slice on one dimension. We allow a
-  //    special '-' that means 'everything for this dimension'. One such example
-  //    is:  0,10:-:14,1:-:-
-  TensorSlice() {}
-  explicit TensorSlice(int dim);
-  explicit TensorSlice(const TensorSliceProto& proto);
-  explicit TensorSlice(std::initializer_list<std::pair<int64, int64>> extents);
+      // Adds the given test name to defined_test_names_ and return true
+  // if the test case hasn't been registered; otherwise aborts the
+  // program.
+  bool AddTestName(const char* file, int line, const char* case_name,
+                   const char* test_name) {
+    if (registered_) {
+      fprintf(stderr, '%s Test %s must be defined before '
+              'REGISTER_TYPED_TEST_CASE_P(%s, ...).\n',
+              FormatFileLocation(file, line).c_str(), test_name, case_name);
+      fflush(stderr);
+      posix::Abort();
     }
+    defined_test_names_.insert(test_name);
+    return true;
+  }
     
-    namespace tensorflow {
-namespace functor {
-DEFINE_UNARY2(get_angle, complex64, complex128);
-}  // namespace functor
-}  // namespace tensorflow
+    // Protects copying of all linked_ptr objects.
+GTEST_API_ GTEST_DECLARE_STATIC_MUTEX_(g_linked_ptr_mutex);
     
-    // //////////////////////////////////////////////////////////////////////
-// End of content of file: include/json/value.h
-// //////////////////////////////////////////////////////////////////////
+    typedef bool_constant<false> false_type;
+typedef bool_constant<true> true_type;
     
-        // Adds the module variable 'api_version'.
-    if (PyModule_AddIntConstant(
-        module,
-        const_cast<char*>(kImplVersionName),
-        kImplVersion))
-#if PY_MAJOR_VERSION < 3
-      return;
-#else
-      { Py_DECREF(module); return NULL; }
-    
-    
-    {  ASSERT_TRUE(message.ParseFromString(data));
-  EXPECT_TRUE(message.has_any_value());
-  ASSERT_TRUE(message.any_value().UnpackTo(&any));
-  ASSERT_TRUE(any.UnpackTo(&submessage));
-  EXPECT_EQ(12345, submessage.int32_value());
+    template <GTEST_2_TYPENAMES_(T)>
+inline GTEST_2_TUPLE_(T) make_tuple(const T0& f0, const T1& f1) {
+  return GTEST_2_TUPLE_(T)(f0, f1);
 }
     
-      // implements CodeGenerator ----------------------------------------
-  bool Generate(const FileDescriptor* file,
-                const string& parameter,
-                GeneratorContext* generator_context,
-                string* error) const;
+    // Computes a reshaped copy of the weight matrix w. If there are no
+// partial_funcs_, it does nothing.
+void IntSimdMatrix::Init(const GENERIC_2D_ARRAY<int8_t>& w) {
+  if (partial_funcs_.empty()) return;
+  int num_out = w.dim1();
+  int num_in = w.dim2() - 1;
+  // The rounded-up sizes of the reshaped weight matrix, excluding biases.
+  int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
+  int rounded_num_out = RoundOutputs(num_out);
+  // Add the bias and compute the required size.
+  shaped_w_.resize((rounded_num_in + 1) * rounded_num_out, 0);
+  int shaped_index = 0;
+  int output = 0;
+  // Each number of registers needs a different format! Iterates over the
+  // different numbers of registers (each a power of 2).
+  for (int num_registers = max_output_registers_; num_registers >= 1;
+       num_registers /= 2) {
+    // The number of outputs that we will generate with this many registers.
+    int num_outputs_per_register_set =
+        num_registers * num_outputs_per_register_;
+    // Use the max number of registers until we have to go fewer.
+    while (output + num_outputs_per_register_set <= rounded_num_out) {
+      // Accumulating outputs in registers saves iterating over the inputs, so
+      // we only have to do it once per output register set.
+      for (int input = 0; input < num_in; input += num_inputs_per_group_) {
+        // Iterate over the number of outputs in a register set.
+        for (int j = 0; j < num_outputs_per_register_set; ++j) {
+          // Inner-most loop corresponds to the number of inputs in an input
+          // group.
+          for (int i = 0; i < num_inputs_per_group_; ++i) {
+            int8_t weight = 0;
+            if (output + j < num_out && input + i < num_in)
+              weight = w(output + j, input + i);
+            shaped_w_[shaped_index++] = weight;
+          }
+        }
+      }
+      // Append the bias weights for the register set.
+      for (int j = 0; j < num_outputs_per_register_set; ++j) {
+        int8_t weight = 0;
+        if (output + j < num_out) weight = w(output + j, num_in);
+        shaped_w_[shaped_index++] = weight;
+      }
+      output += num_outputs_per_register_set;
+    }
+  }
+}
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
+    	if (cmderOptions.registerApp == true) {
+		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_BACKGROUND);
+		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_LISTITEM);
+	}
+	else if (cmderOptions.unRegisterApp == true)
+	{
+		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_BACKGROUND);
+		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_LISTITEM);
+	}
+	else if (cmderOptions.error == true)
+	{
+		return 1;
+	}
+	else
+	{
+		StartCmder(cmderOptions.cmderStart, cmderOptions.cmderSingle, cmderOptions.cmderTask, cmderOptions.cmderCfgRoot);
+	}
     
-      virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateFreezingCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+      /// Open the acceptor using the specified protocol.
+  /**
+   * This function opens the socket acceptor so that it will use the specified
+   * protocol.
+   *
+   * @param protocol An object specifying which protocol is to be used.
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   *
+   * @par Example
+   * @code
+   * boost::asio::ip::tcp::acceptor acceptor(io_service);
+   * boost::system::error_code ec;
+   * acceptor.open(boost::asio::ip::tcp::v4(), ec);
+   * if (ec)
+   * {
+   *   // An error occurred.
+   * }
+   * @endcode
+   */
+  boost::system::error_code open(const protocol_type& protocol,
+      boost::system::error_code& ec)
+  {
+    return this->get_service().open(this->get_implementation(), protocol, ec);
+  }
     
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
+    #ifndef BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
+#define BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
     
-      // Returns an estimate of the number of bytes the printed code will compile to
-  virtual int GenerateRegistrationCode(io::Printer* printer);
+      BOOST_ASIO_DECL static void init_native_buffer(
+      native_buffer_type& buf,
+      const boost::asio::mutable_buffer& buffer);
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
-    }
-    }
-    }
-    }
+    #endif // BOOST_ASIO_DETAIL_FUNCTION_HPP
+
     
-      grpc::testing::RunSynchronousUnaryPingPong();
+    void buffer_sequence_adapter_base::init_native_buffer(
+    buffer_sequence_adapter_base::native_buffer_type& buf,
+    const boost::asio::mutable_buffer& buffer)
+{
+  std::memset(&buf, 0, sizeof(native_buffer_type));
+  Microsoft::WRL::ComPtr<IInspectable> insp
+    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
+  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
+}
+    
+      // Start looping through starting at the first options
+  // (so skip the exports)
+  for (auto iter = line.begin() + options_index; iter != line.end(); ++iter) {
+    if (iter->compare('-ro') == 0 || iter->compare('-o') == 0) {
+      readonly = 1;
+    }
+  }
+    
+    extern 'C' {
+extern kern_return_t _start(kmod_info_t *ki, void *data);
+extern kern_return_t _stop(kmod_info_t *ki, void *data);
+}
+    
+    
+    {
+    {  FLAGS_watchdog_delay = delay;
+}
+} // namespace osquery
+
     
      private:
+  /// Apply normal subscription to event matching logic.
+  bool shouldFire(const EventTappingSubscriptionContextRef& mc,
+                  const EventTappingEventContextRef& ec) const override;
     
-    void ParseDb(const std::string& db, std::vector<Feature>* feature_list);
-    
-    #endif  // TEST_QPS_TIMER_H
-
-    
-    
-    {
-    {}  // namespace testing
-}  // namespace grpc
-    
-      // gRPC Python
-  grpc_python_generator::GeneratorConfiguration grpc_py_config;
-  grpc_python_generator::PythonGrpcGenerator grpc_py_generator(grpc_py_config);
-  cli.RegisterGenerator('--grpc_python_out', &grpc_py_generator,
-                        'Generate Python source file.');
-    
-    /* static */ void Config::destroy(Config * node)
-{
-    delete node;
+    namespace rabit {
+namespace utils {
+extern 'C' {
+  void (*Printf)(const char *fmt, ...) = Rprintf;
+  void (*Assert)(int exp, const char *fmt, ...) = XGBoostAssert_R;
+  void (*Check)(int exp, const char *fmt, ...) = XGBoostCheck_R;
+  void (*Error)(const char *fmt, ...) = error;
+}
+}
 }
     
-        Size(void)
-    : width(0.0)
-    , height(0.0)
-    {
+    template <typename T>
+T* HostDeviceVector<T>::DevicePointer(int device) { return nullptr; }
+    
+    namespace xgboost {
     }
     
-      // Only allow implicit upcasts. A downcast will result in a compile error
-  // unless you use static_cast (which will end up invoking the explicit
-  // operator below).
-  template <typename U>
-  RefPtr(RefPtr<U>&& ref, typename std::enable_if<std::is_base_of<T,U>::value, U>::type* = nullptr) :
-    m_ptr(nullptr)
-  {
-    *this = std::move(ref);
-  }
     
-      T* release() {
-    T* obj = get();
-    pthread_setspecific(m_key, NULL);
-    return obj;
-  }
-    
-    inline local_ref<jobject> autobox(alias_ref<jobject> val) {
-  return make_local(val);
+    {  delete metric;
+  metric = xgboost::Metric::Create('ndcg@2-');
+  ASSERT_STREQ(metric->Name(), 'ndcg@2-');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 1, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              0.3868f, 0.001f);
 }
+    
+    #include <dmlc/registry.h>
+#include <xgboost/base.h>
+#include <xgboost/data.h>
+#include <functional>
+#include <string>
+#include <utility>
+#include <vector>
+#include '../../src/gbm/gblinear_model.h'
+#include '../../src/common/host_device_vector.h'
+    
+    #endif
+
+    
+    Test_Spy_Sample::~Test_Spy_Sample()
+{
+    SPY_DETACH_CLASS();
+}
+    
+    //============================================================================
+// Name        : has_member.h
+// Author      :
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
