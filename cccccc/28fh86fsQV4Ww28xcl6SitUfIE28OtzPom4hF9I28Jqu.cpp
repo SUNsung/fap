@@ -1,184 +1,74 @@
 
         
-        #include <algorithm>
-#include <cassert>
-#include <chrono>
-#include <cmath>
-#include <condition_variable>
-#include <limits>
-#include <memory>
-#include <mutex>
-#include <vector>
-    
-      for (auto s: tensor->sizes())
-    assert(s == 2);
-  for (int i = 0; i < 2; i++)
-    assert(reinterpret_cast<float*>(tensor->data())[i] == 5);
-    
-    #define THC_GENERIC_FILE 'torch/csrc/generic/Storage.h'
-#include <THC/THCGenerateAllTypes.h>
-    
-    #include <cstddef>
-#include <string>
-    
-      EXPECT_THROW({Cursor(iobuf1.get()).pull(buf, 20);},
-               std::out_of_range);
-    
-    TEST_F(OrderingTest, to_ordering) {
-  EXPECT_EQ(ordering::lt, to_ordering(int(ordering::lt)));
-  EXPECT_EQ(ordering::eq, to_ordering(int(ordering::eq)));
-  EXPECT_EQ(ordering::gt, to_ordering(int(ordering::gt)));
+        int BuildJpegHuffmanTable(const int* count_in, const int* symbols,
+                          HuffmanTableEntry* lut) {
+  HuffmanTableEntry code;    // current table entry
+  HuffmanTableEntry* table;  // next available space in table
+  int len;         // current code length
+  int idx;         // symbol index
+  int key;         // prefix code
+  int reps;        // number of replicate key values in current table
+  int low;         // low bits for current root entry
+  int table_bits;  // key length of current table
+  int table_size;  // size of current table
+  int total_size;  // sum of root table size and 2nd level table sizes
     }
     
-      size_t size() override {
-    return queue_.size();
-  }
-    
-        Node* next() {
-      return next_;
+    namespace guetzli {
     }
     
-    TEST_F(UtilityTest, to_signed) {
-  {
-    constexpr auto actual = folly::to_signed(int32_t(-12));
-    EXPECT_TRUE(std::is_signed<decltype(actual)>::value);
-    EXPECT_EQ(-12, actual);
-  }
-  {
-    constexpr auto actual = folly::to_signed(uint32_t(-12));
-    EXPECT_TRUE(std::is_signed<decltype(actual)>::value);
-    EXPECT_EQ(-12, actual);
-  }
-}
+      std::vector<uint8_t> ToSRGB(int xmin, int ymin, int xsize, int ysize) const;
     
     
-    {// Instantiate the most common Future types to save compile time
-template class SemiFuture<Unit>;
-template class SemiFuture<bool>;
-template class SemiFuture<int>;
-template class SemiFuture<int64_t>;
-template class SemiFuture<std::string>;
-template class SemiFuture<double>;
-template class Future<Unit>;
-template class Future<bool>;
-template class Future<int>;
-template class Future<int64_t>;
-template class Future<std::string>;
-template class Future<double>;
-} // namespace folly
+    {}  // namespace
     
-    #pragma once
+    //---- Define constructor and implicit cast operators to convert back<>forth from your math types and ImVec2/ImVec4.
+// This will be inlined as part of ImVec2 and ImVec4 class declarations.
+/*
+#define IM_VEC2_CLASS_EXTRA                                                 \
+        ImVec2(const MyVec2& f) { x = f.x; y = f.y; }                       \
+        operator MyVec2() const { return MyVec2(x,y); }
     
-    
-    {  std::shared_ptr<ManualExecutor> westExecutor;
-  std::shared_ptr<ManualExecutor> eastExecutor;
-  std::shared_ptr<ManualWaiter> waiter;
-  InlineExecutor inlineExecutor;
-  std::atomic<bool> done;
-  std::thread th;
-};
-    
-    
-void DBWrapper::Init(Handle<Object> exports) {
-  Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-  tpl->SetClassName(String::NewSymbol('DBWrapper'));
-  tpl->InstanceTemplate()->SetInternalFieldCount(8);
-  tpl->PrototypeTemplate()->Set(String::NewSymbol('open'),
-      FunctionTemplate::New(Open)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol('get'),
-      FunctionTemplate::New(Get)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol('put'),
-      FunctionTemplate::New(Put)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol('delete'),
-      FunctionTemplate::New(Delete)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol('dump'),
-      FunctionTemplate::New(Dump)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol('createColumnFamily'),
-      FunctionTemplate::New(CreateColumnFamily)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol('writeBatch'),
-      FunctionTemplate::New(WriteBatch)->GetFunction());
-  tpl->PrototypeTemplate()->Set(String::NewSymbol('compactRange'),
-      FunctionTemplate::New(CompactRange)->GetFunction());
+            // 1. Show a simple window.
+        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
     }
     
-      // folder with contents returns relative path to test dir
-  ASSERT_OK(env_->CreateDirIfMissing(test_dir_ + '/niu'));
-  ASSERT_OK(env_->CreateDirIfMissing(test_dir_ + '/you'));
-  ASSERT_OK(env_->CreateDirIfMissing(test_dir_ + '/guo'));
-  ASSERT_OK(env_->GetChildren(test_dir_, &children));
-  ASSERT_OK(env_->GetChildrenFileAttributes(test_dir_, &childAttr));
-  ASSERT_EQ(3U, children.size());
-  ASSERT_EQ(3U, childAttr.size());
-  for (auto each : children) {
-    env_->DeleteDir(test_dir_ + '/' + each);
-  }  // necessary for default POSIX env
-    
-    #include 'rocksdb/merge_operator.h'
-#include 'rocksdb/slice.h'
-    
-      StatisticsJni::StatisticsJni(std::shared_ptr<Statistics> stats,
-      const std::set<uint32_t> ignore_histograms) : StatisticsImpl(stats, false),
-      m_ignore_histograms(ignore_histograms) {
-  }
-    
-      if(m_jSliceB != nullptr) {
-    env->DeleteGlobalRef(m_jSliceB);
-  }
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    static const char gs_crash_dump_header[] =
-    '*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***';
-    
-    #endif /* DUMPCRASHSTACK_H_ */
-
-    
-    
-    {}
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    class ScopeJEnv {
-  public:
-    ScopeJEnv(JavaVM* jvm, jint _capacity = 16);
-    ~ScopeJEnv();
-    }
-    
-        Value(int unit, double value)
-    : unit(unit)
-    , value(value)
+    void CreateRenderTarget()
+{
+    ID3D12Resource* pBackBuffer;
+    for (UINT i = 0; i < NUM_BACK_BUFFERS; i++)
     {
+        g_pSwapChain->GetBuffer(i, IID_PPV_ARGS(&pBackBuffer));
+        g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, g_mainRenderTargetDescriptor[i]);
+        g_mainRenderTargetResource[i] = pBackBuffer;
     }
-    
-    void Config::setExperimentalFeatureEnabled(int feature, bool enabled)
-{
-    YGConfigSetExperimentalFeatureEnabled(m_config, static_cast<YGExperimentalFeature>(feature), enabled);
 }
     
-    struct Size
-{
-    double width;
-    double height;
-    }
     
-        method(getOverflow);
-    method(getDisplay);
+    {    // Restore modified DX state
+    ctx->RSSetScissorRects(old.ScissorRectsCount, old.ScissorRects);
+    ctx->RSSetViewports(old.ViewportsCount, old.Viewports);
+    ctx->RSSetState(old.RS); if (old.RS) old.RS->Release();
+    ctx->OMSetBlendState(old.BlendState, old.BlendFactor, old.SampleMask); if (old.BlendState) old.BlendState->Release();
+    ctx->OMSetDepthStencilState(old.DepthStencilState, old.StencilRef); if (old.DepthStencilState) old.DepthStencilState->Release();
+    ctx->PSSetShaderResources(0, 1, &old.PSShaderResource); if (old.PSShaderResource) old.PSShaderResource->Release();
+    ctx->PSSetSamplers(0, 1, &old.PSSampler); if (old.PSSampler) old.PSSampler->Release();
+    ctx->PSSetShader(old.PS); if (old.PS) old.PS->Release();
+    ctx->VSSetShader(old.VS); if (old.VS) old.VS->Release();
+    ctx->VSSetConstantBuffers(0, 1, &old.VSConstantBuffer); if (old.VSConstantBuffer) old.VSConstantBuffer->Release();
+    ctx->IASetPrimitiveTopology(old.PrimitiveTopology);
+    ctx->IASetIndexBuffer(old.IndexBuffer, old.IndexBufferFormat, old.IndexBufferOffset); if (old.IndexBuffer) old.IndexBuffer->Release();
+    ctx->IASetVertexBuffers(0, 1, &old.VertexBuffer, &old.VertexBufferStride, &old.VertexBufferOffset); if (old.VertexBuffer) old.VertexBuffer->Release();
+    ctx->IASetInputLayout(old.InputLayout); if (old.InputLayout) old.InputLayout->Release();
+}
     
-    #ifdef __ANDROID__
-    
-      std::string asFormattedString() const {
-    std::stringstream str;
-    str << 'Function ' << m_functionName << ' in file ' << m_fileName << ':' << m_lineNumber;
-    return str.str();
-  }
-    
-      RefPtr(RefPtr<T>&& ref) :
-    m_ptr(nullptr)
-  {
-    *this = std::move(ref);
-  }
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
