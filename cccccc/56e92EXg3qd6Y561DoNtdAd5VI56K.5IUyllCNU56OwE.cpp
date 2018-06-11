@@ -1,126 +1,208 @@
 
         
-        
-    {	verify_ssl = p_verify_ssl;
+        PyDescriptorDatabase::~PyDescriptorDatabase() { Py_DECREF(py_database_); }
+    
+    
+    {  ASSERT_TRUE(message.ParseFromString(data));
+  EXPECT_TRUE(message.has_any_value());
+  ASSERT_TRUE(message.any_value().UnpackTo(&submessage));
+  EXPECT_EQ(12345, submessage.int32_value());
 }
     
-    #if defined(MBEDTLS_RSA_C) && ( !defined(MBEDTLS_BIGNUM_C) ||         \
-    !defined(MBEDTLS_OID_C) )
-#error 'MBEDTLS_RSA_C defined, but not all prerequisites'
-#endif
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
     
-    // Singleton
-class _VisualScriptEditor : public Object {
-	GDCLASS(_VisualScriptEditor, Object);
-    }
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
     
     
-    {  return symbol;
+    
+    std::string SourceGeneratorBase::class_access_level() {
+  return (IsDescriptorProto(descriptor_) || this->options()->internal_access) ? 'internal' : 'public';
 }
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-    
-      // Open database.  Disable compression since it affects the creation
-  // of layers and the code below is trying to test against a very
-  // specific scenario.
-  leveldb::DB* db;
-  leveldb::Options db_options;
-  db_options.create_if_missing = true;
-  db_options.compression = leveldb::kNoCompression;
-  ASSERT_OK(leveldb::DB::Open(db_options, dbpath, &db));
-    
-    
-    {}
+      // Returns an estimate of the number of bytes the printed code will compile to
+  virtual int GenerateRegistrationCode(io::Printer* printer);
     
     
     {
-    {    // Add hash marks based on percentage; 20 marks for 100%.
-    int marks = static_cast<int>(20*(buckets_[b] / num_) + 0.5);
-    r.append(marks, '#');
-    r.push_back('\n');
-  }
-  return r;
-}
+    {}  // namespace internal
+}  // namespace testing
     
-    // Helper class that locks a mutex on construction and unlocks the mutex when
-// the destructor of the MutexLock object is invoked.
-//
-// Typical usage:
-//
-//   void MyClass::MyMethod() {
-//     MutexLock l(&mu_);       // mu_ is an instance variable
-//     ... some complex code, possibly with multiple return paths ...
-//   }
+    // The 'Types' template argument below must have spaces around it
+// since some compilers may choke on '>>' when passing a template
+// instance (e.g. Types<int>)
+# define TYPED_TEST_CASE(CaseName, Types) \
+  typedef ::testing::internal::TypeList< Types >::type \
+      GTEST_TYPE_PARAMS_(CaseName)
     
-    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
-  size_t usize = user_key.size();
-  size_t needed = usize + 13;  // A conservative estimate
-  char* dst;
-  if (needed <= sizeof(space_)) {
-    dst = space_;
-  } else {
-    dst = new char[needed];
-  }
-  start_ = dst;
-  dst = EncodeVarint32(dst, usize + 8);
-  kstart_ = dst;
-  memcpy(dst, user_key.data(), usize);
-  dst += usize;
-  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
-  dst += 8;
-  end_ = dst;
-}
+    #else  // GTEST_HAS_DEATH_TEST
     
-    TEST(FormatTest, InternalKeyShortestSuccessor) {
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            ShortSuccessor(IKey('foo', 100, kTypeValue)));
-  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
-            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
-}
+      // These two functions are overloaded.  Given an expression
+  // Helper(x), the compiler will pick the first version if x can be
+  // implicitly converted to type To; otherwise it will pick the
+  // second version.
+  //
+  // The first version returns a value of size 1, and the second
+  // version returns a value of size 2.  Therefore, by checking the
+  // size of Helper(x), which can be done at compile time, we can tell
+  // which version of Helper() is used, and hence whether x can be
+  // implicitly converted to type To.
+  static char Helper(To);
+  static char (&Helper(...))[2];  // NOLINT
     
-    struct BlockContents;
-class Comparator;
-    
-      FOLLY_CPP14_CONSTEXPR BasicFixedString& operator=(
-      const BasicFixedString&) noexcept = default;
-    
-      // Test reserve from internal buffer, this used to segfault
-  {
-    unique_ptr<IOBuf> iob(IOBuf::create(0));
-    iob->reserve(0, 2000);
-    EXPECT_EQ(0, iob->headroom());
-    EXPECT_LE(2000, iob->tailroom());
+      void depart() {
+    if (link_.depart()) delete value_;
   }
     
+    #endif  //  GTEST_HAS_PARAM_TEST
     
-    {} // namespace folly
-
+    inline void LogToStderr() {}
+inline void FlushInfoLog() { fflush(NULL); }
     
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+    // This provides interface PrimeTable that determines whether a number is a
+// prime and determines a next prime number. This interface is used
+// in Google Test samples demonstrating use of parameterized tests.
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    // Returns true iff n is a prime number.
+bool IsPrime(int n) {
+  // Trivial case 1: small numbers
+  if (n <= 1) return false;
+    }
+    
+        private:
+        void EnumerateStatefulNodesForRoot(ComputationNetwork& net, ComputationNodeBasePtr root, std::map<wstring, shared_ptr<IStatefulNode>>& statefulNodes)
+        {
+            for (const auto& node : net.GetAllNodesForRoot(root))
+            {
+                const auto& name = node->GetName();
+                if (statefulNodes.find(name) != statefulNodes.end())
+                    continue; // already in the list  --TODO: use insert()
+                shared_ptr<IStatefulNode> pNode = dynamic_pointer_cast<IStatefulNode>(node);
+                if (pNode) // if it is an IStatefulNode then report it
+                    statefulNodes[name] = pNode;
+            }
+        }
+    
+    
+    {    m_inner = make_unique<GranularGPUDataTransferer>(deviceId, s_fetchStream, s_assignStream);
+}
+    
+        // ProcessNDLScript - Process the NDL script
+    // netNdl - netNDL structure
+    // ndlPassUntil - complete processing through this pass, all passes if ndlPassAll
+    // fullValidate - validate as a complete network? (false if this might be a snippet of a full network)
+    void ProcessNDLScript(NetNdl<ElemType>* netNdl, NDLPass ndlPassUntil = ndlPassAll, bool fullValidate = false)
+    {
+        ProcessNDLScript(netNdl->ndl, ndlPassUntil, netNdl->lastNode, fullValidate);
+    }
+    
+    template <typename ElemType>
+void DoConvertFromDbn(const ConfigParameters& config)
+{
+    wstring modelPath = config(L'modelPath');
+    wstring dbnModelPath = config(L'dbnModelPath');
+    }
+    
+    #include <memory> // for shared_ptr
+    
+    using namespace std;
+    
+    namespace Microsoft { namespace MSR { namespace CNTK {
+    }
+    }
+    }
+    
+        bool haslattice(std::wstring key) const
+    {
+#ifdef NONUMLATTICEMMI
+        return denlattices.haslattice(key);
+#else
+        return numlattices.haslattice(key) && denlattices.haslattice(key);
+#endif
+    }
+    
+    #include <boost/asio/detail/config.hpp>
+#include <boost/asio/completion_condition.hpp>
+    
+    #include <boost/asio/detail/config.hpp>
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    // Calls to asio_handler_allocate and asio_handler_deallocate must be made from
+// a namespace that does not contain any overloads of these functions. The
+// boost_asio_handler_alloc_helpers namespace is defined here for that purpose.
+namespace boost_asio_handler_alloc_helpers {
+    }
+    
+    template <typename T> T& lvref();
+template <typename T> T& lvref(T);
+template <typename T> const T& clvref();
+template <typename T> const T& clvref(T);
+template <typename T> char argbyv(T);
+    
+    int dev_poll_reactor::register_internal_descriptor(int op_type,
+    socket_type descriptor, per_descriptor_data&, reactor_op* op)
+{
+  boost::asio::detail::mutex::scoped_lock lock(mutex_);
+    }
+    
+    
+    {}  // namespace guetzli
+    
+    // Creates a JPEG from the rgb pixel data. Returns true on success.
+bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     JPEGData* jpg);
+    
+    // Parses the jpeg stream contained in data[*pos ... len) and fills in *jpg with
+// the parsed information.
+// If mode is JPEG_READ_HEADER, it fills in only the image dimensions in *jpg.
+// Returns false if the data is not valid jpeg, or if it contains an unsupported
+// jpeg feature.
+bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
+              JPEGData* jpg);
+// string variant
+bool ReadJpeg(const std::string& data, JpegReadMode mode,
+              JPEGData* jpg);
+    
+    // Output callback function with associated data.
+struct JPEGOutput {
+  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
+  bool Write(const uint8_t* buf, size_t len) const {
+    return (len == 0) || (cb(data, buf, len) == len);
+  }
+ private:
+  JPEGOutputHook cb;
+  void* data;
+};
+    
+      // Fill in root table.
+  key = 0;
+  idx = 0;
+  for (len = 1; len <= kJpegHuffmanRootTableBits; ++len) {
+    for (; count[len] > 0; --count[len]) {
+      code.bits = len;
+      code.value = symbols[idx++];
+      reps = 1 << (kJpegHuffmanRootTableBits - len);
+      while (reps--) {
+        table[key++] = code;
+      }
+    }
+  }
+    
+    #include <stdint.h>
+#include <vector>
