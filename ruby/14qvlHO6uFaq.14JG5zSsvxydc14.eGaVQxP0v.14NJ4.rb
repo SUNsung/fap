@@ -1,113 +1,115 @@
 
         
-          included do
-    include Oauthable
-    
-        def run
-      raise StandardError, 'Override LongRunnable::Worker#run in your agent Worker subclass.'
-    end
-    
-      included do
-    include Oauthable
-    
-    module SortableTable
-  extend ActiveSupport::Concern
-    
-    end
-    
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
-        end
+              def inspect
+        Kernel.instance_method(:inspect).bind(self).call
       end
+    
+      def test_serialized_attribute_in_base_class
+    Topic.serialize('content', Hash)
+    
+      include AutosaveAssociationOnACollectionAssociationTests
+end
+    
+      def check_author_name_is_secret
+    errors[:author_name] << 'Invalid' unless author_name == 'secret'
+  end
+end
+    
+      scope 'approved_as_string', -> { where(approved: true) }
+  scope :anonymous_extension, -> {} do
+    def one
+      1
     end
+  end
+    
+          data = { 'action' => :speak, 'content' => 'hello' }
+      @channel.perform_action data
+    
+        assert subscriptions.verify
+  end
+    
+      private
+    def open_connection
+      env = Rack::MockRequest.env_for '/test',
+        'HTTP_CONNECTION' => 'upgrade', 'HTTP_UPGRADE' => 'websocket',
+        'HTTP_HOST' => 'localhost', 'HTTP_ORIGIN' => 'http://rubyonrails.com'
+      io, client_io = \
+        begin
+          Socket.pair(Socket::AF_UNIX, Socket::SOCK_STREAM, 0)
+        rescue
+          StringIO.new
+        end
+      env['rack.hijack'] = -> { env['rack.hijack_io'] = io }
+    
+      def resource
+    @resource ||=
+      if params[:project_id].present?
+        Project.find(params[:project_id])
+      elsif params[:namespace_id].present?
+        Group.find(params[:namespace_id])
+      end
+  end
+    
+        projects
   end
 end
 
     
-            def print_version
-          output_pipe.puts 'version: '#{Pod::VERSION}''
-        end
-    
-      desc 'Release all gems to rubygems'
-  task release: :build do
-    sh 'git tag -a -m \'Version #{version}\' v#{version}'
-    
-            def find_address
-          if @order.bill_address_id == params[:id].to_i
-            @order.bill_address
-          elsif @order.ship_address_id == params[:id].to_i
-            @order.ship_address
-          else
-            raise CanCan::AccessDenied
-          end
-        end
-      end
+        # The path used after sending reset password instructions
+    def after_sending_reset_password_instructions_path_for(resource_name)
+      new_session_path(resource_name) if is_navigational_format?
     end
-  end
-end
-
     
-            def create
-          authorize! :create, StockLocation
-          @stock_location = StockLocation.new(stock_location_params)
-          if @stock_location.save
-            respond_with(@stock_location, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_location)
-          end
-        end
+      # POST /resource/unlock
+  def create
+    self.resource = resource_class.send_unlock_instructions(resource_params)
+    yield resource if block_given?
     
-            def stock_location
-          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
-          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
-        end
+        def unlock_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :unlock_instructions, opts)
+    end
     
-        def define_flush_errors
-      @klass.send(:validates_each, @name) do |record, attr, value|
-        attachment = record.send(@name)
-        attachment.send(:flush_errors)
+        def default_failure_app(options)
+      @failure_app = options[:failure_app] || Devise::FailureApp
+      if @failure_app.is_a?(String)
+        ref = Devise.ref(@failure_app)
+        @failure_app = lambda { |env| ref.get.call(env) }
       end
     end
     
-            def failure_message
-          'Should have an attachment named #{@attachment_name}'
-        end
+        options[:attribution] = <<-HTML
+      &copy; 2011&ndash;2018 Twitter, Inc.<br>
+      &copy; 2011&ndash;2018 The Bootstrap Authors<br>
+      Code licensed under the MIT License.<br>
+      Documentation licensed under the Creative Commons Attribution License v3.0.
+    HTML
     
-            def no_error_when_valid?
-          @file = StringIO.new('.')
-          @subject.send(@attachment_name).assign(@file)
-          @subject.valid?
-          expected_message = [
-            @attachment_name.to_s.titleize,
-            I18n.t(:blank, scope: [:errors, :messages])
-          ].join(' ')
-          @subject.errors.full_messages.exclude?(expected_message)
-        end
+        def initialize
+      @entries = []
+      @index = Set.new
+      @types = Hash.new { |hash, key| hash[key] = Type.new key }
+    end
+    
+        def filter_const(name)
+      if name.is_a? Array
+        name.map &method(:filter_const)
+      else
+        Docs.const_get '#{name}_filter'.camelize
       end
     end
-  end
-end
-
     
-          def drop_attached_file(*args)
-        ActiveSupport::Deprecation.warn 'Method `drop_attached_file` in the migration has been deprecated and will be replaced by `remove_attachment`.'
-        remove_attachment(*args)
+          unless root?
+        raise Invalid, 'missing name' if !name || name.empty?
+        raise Invalid, 'missing path' if !path || path.empty?
+        raise Invalid, 'missing type' if !type || type.empty?
       end
     end
+    
+        delegate :empty?, :blank?, to: :pages
+    
+    SPREE_GEMS = %w(core api cmd backend frontend sample).freeze
+    
+            def show
+          respond_with(stock_location)
+        end
