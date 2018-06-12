@@ -1,104 +1,72 @@
 
         
-        new_version = {}
+            # noinspection PyProtectedMember
+    @property
+    def headers(self):
+        original = self._orig.raw._original_response
     
-    from test.helper import try_rm
+            '''
+        available_plugins = plugin_manager.get_formatters_grouped()
+        self.enabled_plugins = []
+        for group in groups:
+            for cls in available_plugins[group]:
+                p = cls(env=env, **kwargs)
+                if p.enabled:
+                    self.enabled_plugins.append(p)
+    
+        def __call__(self, r):
+        '''
+        Override username/password serialization to allow unicode.
+    
+    # FIXME:
+# We test against a local httpbin instance which uses a self-signed cert.
+# Requests without --verify=<CA_BUNDLE> will fail with a verification error.
+# See: https://github.com/kevin1024/pytest-httpbin#https-support
+CA_BUNDLE = pytest_httpbin.certs.where()
     
     
-if __name__ == '__main__':
-    unittest.main()
+@pytest.mark.parametrize('argument_name', ['--auth-type', '-A'])
+def test_digest_auth(httpbin_both, argument_name):
+    r = http(argument_name + '=digest', '--auth=user:password',
+             'GET', httpbin_both.url + '/digest-auth/auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
+    
+        def test_make_entry(self):
+        equal = self.assertEqual
+        self.dialog.row = 0
+        self.dialog.top = self.root
+        entry, label = self.dialog.make_entry('Test:', 'hello')
+        equal(label['text'], 'Test:')
+    
+            User enters a name for the Help resource and a web url or file
+        name. The user can browse for the file.
+        '''
+        self.filepath = filepath
+        message = 'Name for item on Help menu:'
+        super().__init__(
+                parent, title, message, text0=menuitem,
+                used_names=used_names, _htest=_htest, _utest=_utest)
+    
+    server = SimpleXMLRPCServer(('localhost', 8000))
+server.register_introspection_functions()
+server.register_instance(Math())
+server.serve_forever()
+    
+        def test_badfuture6(self):
+        with self.assertRaises(SyntaxError) as cm:
+            from test import badsyntax_future6
+        self.check_syntax_error(cm.exception, 'badsyntax_future6', 3)
+    
+            rd, wr = self.make_socketpair()
+    
+    if __name__ == '__main__':
+    # Default is to print the aliased verbose platform string
+    terse = ('terse' in sys.argv or '--terse' in sys.argv)
+    aliased = (not 'nonaliased' in sys.argv and not '--nonaliased' in sys.argv)
+    print(platform(aliased, terse))
+    sys.exit(0)
 
     
-                    if ''' not in code and ''' not in code:
-                    continue
-                assertRegexpMatches(
-                    self,
-                    code,
-                    r'(?:(?:#.*?|\s*)\n)*from __future__ import (?:[a-z_]+,\s*)*unicode_literals',
-                    'unicode_literals import  missing in %s' % fn)
-    
-            if check_executable('mplayer', ['-h']):
-            args = [
-                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
-                '-dumpstream', '-dumpfile', tmpfilename, url]
-        elif check_executable('mpv', ['-h']):
-            args = [
-                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
-        else:
-            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
-            return False
-    
-        gold_doc = sentence_pb2.Sentence()
-    text_format.Parse(_DUMMY_GOLD_SENTENCE, gold_doc)
-    gold_doc_2 = sentence_pb2.Sentence()
-    text_format.Parse(_DUMMY_GOLD_SENTENCE_2, gold_doc_2)
-    gold_reader_strings = [
-        gold_doc.SerializeToString(),
-        gold_doc_2.SerializeToString()
-    ]
-    
-    
-@csrf_protect
-def render_flatpage(request, f):
-    '''
-    Internal interface to the flat page view.
-    '''
-    # If registration is required for accessing this page, and the user isn't
-    # logged in, redirect to the login page.
-    if f.registration_required and not request.user.is_authenticated:
-        from django.contrib.auth.views import redirect_to_login
-        return redirect_to_login(request.path)
-    if f.template_name:
-        template = loader.select_template((f.template_name, DEFAULT_TEMPLATE))
-    else:
-        template = loader.get_template(DEFAULT_TEMPLATE)
-    
-        config = PylonsConfig()
-    
-        def user_has_beta_enabled(self, user):
-        if not user:
-            return False
-        return user.pref_beta
-    
-    api('reltableitem', RelTableItemJsonTemplate)
-api('bannedtableitem', BannedTableItemJsonTemplate)
-api('mutedtableitem', MutedTableItemJsonTemplate)
-api('invitedmodtableitem', InvitedModTableItemJsonTemplate)
-api('friendtableitem', FriendTableItemJsonTemplate)
-    
-                send_gift(
-                buyer=buyer,
-                recipient=recipient,
-                months=months,
-                days=months * 31,
-                signed=False,
-                giftmessage=None,
-                thing_fullname=thing_fullname,
-                note=note,
-            )
-    
-        @validate(VAdmin(),
-              award = VAwardByCodename('awardcn'),
-              recipient = nop('recipient'),
-              desc = nop('desc'),
-              url = nop('url'),
-              hours = nop('hours'))
-    def GET_give(self, award, recipient, desc, url, hours):
-        if award is None:
-            abort(404, 'page not found')
-    
-            if not url:
-            url = request.referer
-    
-    class CaptchaController(RedditController):
-    @allow_oauth2_access
-    @api_doc(api_section.captcha, uri='/captcha/{iden}')
-    def GET_captchaimg(self, iden):
-        '''
-        Request a CAPTCHA image given an `iden`.
-    
-        def GET_faq(self):
-        if c.default_sr:
-            return self.redirect('/help/faq')
-        else:
-            return self.renderurl('/help/faqs/' + c.site.name)
+    from dataclasses import dataclass, InitVar
+from typing import ClassVar
