@@ -1,87 +1,221 @@
-cc_test(
-    name = 'syntaxnet_transition_state_test',
-    srcs = ['syntaxnet_transition_state_test.cc'],
-    data = [':testdata'],
+
+        
+            with open('README.md', 'w+') as sorted_file:
+        sorted_file.write(final_README)
+    
+    import rsa
+import json
+from binascii import hexlify
+    
+    if isinstance(helptext, bytes):
+    helptext = helptext.decode('utf-8')
+    
+    
+from youtube_dl import YoutubeDL
+    
+    
+from test.helper import FakeYDL
+from youtube_dl.cache import Cache
+    
+        def test_func(self):
+        as_file = os.path.join(TEST_DIR, testfile)
+        swf_file = os.path.join(TEST_DIR, test_id + '.swf')
+        if ((not os.path.exists(swf_file)) or
+                os.path.getmtime(swf_file) < os.path.getmtime(as_file)):
+            # Recompile
+            try:
+                subprocess.check_call([
+                    'mxmlc', '-output', swf_file,
+                    '-static-link-runtime-shared-libraries', as_file])
+            except OSError as ose:
+                if ose.errno == errno.ENOENT:
+                    print('mxmlc not found! Skipping test.')
+                    return
+                raise
+    
+            if check_executable('mplayer', ['-h']):
+            args = [
+                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
+                '-dumpstream', '-dumpfile', tmpfilename, url]
+        elif check_executable('mpv', ['-h']):
+            args = [
+                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
+        else:
+            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
+            return False
+    
+        def _real_extract(self, url):
+        video_id = self._match_id(url)
+    
+        _TESTS = [{
+        'url': 'http://camwithher.tv/view_video.php?viewkey=6e9a24e2c0e842e1f177&page=&viewtype=&category=',
+        'info_dict': {
+            'id': '5644',
+            'ext': 'flv',
+            'title': 'Periscope Tease',
+            'description': 'In the clouds teasing on periscope to my favorite song',
+            'duration': 240,
+            'view_count': int,
+            'comment_count': int,
+            'uploader': 'MileenaK',
+            'upload_date': '20160322',
+        },
+        'params': {
+            'skip_download': True,
+        }
+    }, {
+        'url': 'http://camwithher.tv/view_video.php?viewkey=6dfd8b7c97531a459937',
+        'only_matching': True,
+    }, {
+        'url': 'http://camwithher.tv/view_video.php?page=&viewkey=6e9a24e2c0e842e1f177&viewtype=&category=',
+        'only_matching': True,
+    }, {
+        'url': 'http://camwithher.tv/view_video.php?viewkey=b6c3b5bea9515d1a1fc4&page=&viewtype=&category=mv',
+        'only_matching': True,
+    }]
+    
+    cc_library(
+    name = 'syntaxnet_transition_state',
+    srcs = ['syntaxnet_transition_state.cc'],
+    hdrs = ['syntaxnet_transition_state.h'],
     deps = [
-        ':syntaxnet_component',
-        ':syntaxnet_transition_state',
-        '//dragnn/core:input_batch_cache',
-        '//dragnn/core/test:generic',
-        '//dragnn/core/test:mock_transition_state',
-        '//dragnn/io:sentence_input_batch',
-        '//dragnn/protos:spec_proto_cc',
+        '//dragnn/core/interfaces:cloneable_transition_state',
+        '//dragnn/core/interfaces:transition_state',
+        '//dragnn/io:syntaxnet_sentence',
+        '//dragnn/protos:trace_proto_cc',
         '//syntaxnet:base',
-        '//syntaxnet:sentence_proto_cc',
-        '//syntaxnet:test_main',
+        '//syntaxnet:parser_transitions',
     ],
 )
-
-    
-        # Compute the arc, source, and root potentials.
-    arcs_bxnxn = digraph_ops.ArcPotentialsFromTokens(
-        source_tokens_bxnxs, target_tokens_bxnxt, weights_arc)
-    sources_bxnxn = digraph_ops.ArcSourcePotentialsFromTokens(
-        source_tokens_bxnxs, weights_source)
-    roots_bxn = digraph_ops.RootPotentialsFromTokens(
-        root, target_tokens_bxnxt, weights_arc, weights_source)
-    
-        Args:
-      state: MasterState from the 'AdvanceMaster' op that advances the
-        underlying master to this component.
-      network_states: NetworkState object containing component TensorArrays.
-      during_training: whether the graph is being constructed during training
     
     
 def main(unused_argv):
-  # Run the exporter.
-  export(FLAGS.master_spec, FLAGS.params_path, FLAGS.export_path,
-         FLAGS.export_moving_averages, FLAGS.build_runtime_graph)
-  tf.logging.info('Export complete.')
+  # Left-to-right, character-based LSTM.
+  char2word = spec_builder.ComponentSpecBuilder('char_lstm')
+  char2word.set_network_unit(
+      name='wrapped_units.LayerNormBasicLSTMNetwork',
+      hidden_layer_sizes='256')
+  char2word.set_transition_system(name='char-shift-only', left_to_right='true')
+  char2word.add_fixed_feature(name='chars', fml='char-input.text-char',
+                              embedding_dim=16)
     
-      # Then, copy all the asset files.
-  for component_spec in master_spec.component:
-    for resource_spec in component_spec.resource:
-      tf.logging.info('Copying assets for resource %s/%s.' %
-                      (component_spec.name, resource_spec.name))
-      for part in resource_spec.part:
-        original_file = shortened_to_original[part.file_pattern]
-        new_file = os.path.join(asset_dir, part.file_pattern)
-        tf.logging.info('Asset %s was renamed to %s.' % (original_file,
-                                                         new_file))
-        if tf.gfile.Exists(new_file):
-          tf.logging.info('%s already exists, skipping copy.' % (new_file))
-        else:
-          new_dir = os.path.dirname(new_file)
-          tf.gfile.MakeDirs(new_dir)
-          tf.logging.info('Copying %s to %s' % (original_file, new_dir))
-          tf.gfile.Copy(original_file, new_file, overwrite=True)
-  tf.logging.info('Asset export complete.')
+    cc_test(
+    name = 'beam_test',
+    srcs = ['beam_test.cc'],
+    deps = [
+        ':beam',
+        '//dragnn/core/interfaces:cloneable_transition_state',
+        '//dragnn/core/interfaces:transition_state',
+        '//dragnn/core/test:mock_transition_state',
+        '//syntaxnet:base',
+        '//syntaxnet:test_main',
+    ],
+)
     
-            # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
+    cc_test(
+    name = 'disjoint_set_forest_test',
+    size = 'small',
+    srcs = ['disjoint_set_forest_test.cc'],
+    deps = [
+        ':disjoint_set_forest',
+        '//syntaxnet:base',
+        '//syntaxnet:test_main',
+        '@org_tensorflow//tensorflow/core:test',
+    ],
+)
     
-        def get_testable_domain_names(self):
-        '''Returns the set of domain names that can be tested against'''
-        if self._test_names:
-            return self._test_names
-        else:
-            return {'example.com'}
+      For each batch of source and target token activations, computes a scalar
+  potential for each arc as the 3-way product between the activation vectors of
+  the source and target of the arc and the |weights|.  Specifically,
     
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    def test_smtp_success(self, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        self.assertTrue(notify('Goose', 'auntrhody@example.com',
-                               'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.connect.call_count, 1)
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
+      short_to_original = saver_lib.shorten_resource_paths(master_spec)
+  saver_lib.export_master_spec(master_spec, graph)
+  saver_lib.export_to_graph(master_spec, params_path, stripped_path, graph,
+                            export_moving_averages, build_runtime_graph)
+  saver_lib.export_assets(master_spec, short_to_original, stripped_path)
+    
+      tf.logging.info('Building the graph')
+  with external_graph.as_default(), tf.device('/device:CPU:0'):
+    hyperparam_config = spec_pb2.GridPoint()
+    hyperparam_config.use_moving_average = export_moving_averages
+    builder = graph_builder.MasterBuilder(master_spec, hyperparam_config)
+    post_restore_hook = builder.build_post_restore_hook()
+    annotation = builder.add_annotation(build_runtime_graph=build_runtime_graph)
+    builder.add_saver()
+    
+    # Imported for FLAGS.tf_master, which is used in the lexicon module.
+    
+    from httpie.plugins import plugin_manager
+from httpie.context import Environment
+    
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
+    
+    
+class HTTPBasicAuth(requests.auth.HTTPBasicAuth):
+    
+        def test_verify_custom_ca_bundle_invalid_path(self, httpbin_secure):
+        # since 2.14.0 requests raises IOError
+        with pytest.raises((SSLError, IOError)):
+            http(httpbin_secure.url + '/get', '--verify', '/__not_found__')
+    
+    
+def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
+    '''When credentials are passed in URL and via -a at the same time,
+     then the ones from -a are used.'''
+    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
+                   auth='user:wrong')
+    r = http('--auth=user:password', 'GET', url)
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
+    
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
+    
+            '''
+    
+    from .theplatform import theplatform_download_by_pid
+    
+    
+def huaban_download_board(url, output_dir, **kwargs):
+    kwargs['merge'] = False
+    board = extract_board_data(url)
+    output_dir = os.path.join(output_dir, board.title)
+    print_info(site_info, board.title, 'jpg', float('Inf'))
+    for pin in board.pins:
+        download_urls([pin.url], pin.id, pin.ext, float('Inf'),
+                      output_dir=output_dir, faker=True, **kwargs)
