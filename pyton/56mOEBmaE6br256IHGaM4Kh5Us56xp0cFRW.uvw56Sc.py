@@ -1,168 +1,178 @@
-  The partition function is caluclated via application of the Matrix-Tree
-  theorem; see the following for details:
-    https://en.wikipedia.org/wiki/Kirchhoff%27s_theorem
-    http://www.aclweb.org/anthology/D/D07/D07-1015.pdf
-    
-          # The num_nodes input is non-differentiable.
-      self.assertTrue(d_loss_d_num_nodes is None)
-      tf.logging.info('\nd_loss_d_scores=\n%s', d_loss_d_scores.eval())
-    
-    _MASTER_SPEC = r'''
-  component {
-    name: 'test'
-    linked_feature {
-      name: 'lengths'
-      size: 1
-      embedding_dim: -1
-      fml: 'input.focus'
-      source_translator: 'identity'
-      source_component: 'previous'
-      source_layer: 'lengths'
-    }
-    linked_feature {
-      name: 'scores'
-      size: 1
-      embedding_dim: -1
-      fml: 'input.focus'
-      source_translator: 'identity'
-      source_component: 'previous'
-      source_layer: 'scores'
-    }
-  }
-'''
-    
-    
-def fixed_feature_lookup(component, state, channel_id, stride, during_training):
-  '''Looks up fixed features and passes them through embeddings.
-    
-      def setUp(self):
-    # This dataset contains 54 sentences.
-    self.filepath = os.path.join(
-        test_flags.source_root(),
-        'syntaxnet/testdata/mini-training-set')
-    self.batch_size = 20
-    
-    from dragnn.protos import spec_pb2
-from dragnn.python import lexicon
-from syntaxnet.ops import gen_parser_ops
-from syntaxnet.util import check
-    
-      # Reads master spec.
-  master_spec = spec_pb2.MasterSpec()
-  with gfile.FastGFile(FLAGS.master_spec) as fin:
-    text_format.Parse(fin.read(), master_spec)
-    
-          # Process.
-      tf.logging.info('Processing examples %d to %d' % (start, end))
-      if timeline_output_file and end == len(input_data):
-        serialized_annotations = sess.run(
-            output_node,
-            feed_dict=feed_dict,
-            options=tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE),
-            run_metadata=run_metadata)
-        trace = timeline.Timeline(step_stats=run_metadata.step_stats)
-        with open(timeline_output_file, 'w') as trace_file:
-          trace_file.write(trace.generate_chrome_trace_format())
-      else:
-        serialized_annotations = sess.run(output_node, feed_dict=feed_dict)
-    
-      tf.logging.info('Read ckpt stats: %s', str(stats))
-  do_restore = True
-  if stats[0] < FLAGS.job_id:
-    do_restore = False
-    tf.logging.info('Deleting last job: %d', stats[0])
+
+        
+        print('Enter the PKCS1 private key, followed by a blank line:')
+privkey = b''
+while True:
     try:
-      gfile.DeleteRecursively(FLAGS.tensorboard_dir)
-      gfile.Remove(FLAGS.checkpoint_filename)
-    except errors.OpError as err:
-      tf.logging.error('Unable to delete prior files: %s', err)
-    stats = [FLAGS.job_id, 0, 0]
-    
-        def process_options(self, args, opts):
-        ScrapyCommand.process_options(self, args, opts)
-        try:
-            opts.spargs = arglist_to_dict(opts.spargs)
-        except ValueError:
-            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
-        if opts.output:
-            if opts.output == '-':
-                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
-            else:
-                self.settings.set('FEED_URI', opts.output, priority='cmdline')
-            feed_exporters = without_none_values(
-                self.settings.getwithbase('FEED_EXPORTERS'))
-            valid_output_formats = feed_exporters.keys()
-            if not opts.output_format:
-                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
-            if opts.output_format not in valid_output_formats:
-                raise UsageError('Unrecognized output format '%s', set one'
-                                 ' using the '-t' switch or as a file extension'
-                                 ' from the supported list %s' % (opts.output_format,
-                                                                  tuple(valid_output_formats)))
-            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
-    
-        def short_desc(self):
-        return 'Generate new spider using pre-defined templates'
-    
-                # create and prepare request
-            args.remove('self')
-            if set(args).issubset(set(kwargs)):
-                request = Request(**kwargs)
+        line = input()
+    except EOFError:
+        break
+    if line == '':
+        break
+    privkey += line.encode('ascii') + b'\n'
+privkey = rsa.PrivateKey.load_pkcs1(privkey)
     
     
-class Active(Inservice):
+class AcademicEarthCourseIE(InfoExtractor):
+    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
+    IE_NAME = 'AcademicEarth:Course'
+    _TEST = {
+        'url': 'http://academicearth.org/playlists/laws-of-nature/',
+        'info_dict': {
+            'id': 'laws-of-nature',
+            'title': 'Laws of Nature',
+            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
+        },
+        'playlist_count': 3,
+    }
     
-        def test_initial_am_station(self):
-        station = self.radio.state.stations[self.radio.state.pos]
-        expected_station = '1250'
-        self.assertEqual(station, expected_station)
+            return {
+            'id': flv_id,
+            'url': rtmp_url,
+            'ext': 'flv',
+            'no_resume': True,
+            'title': title,
+            'description': description,
+            'duration': duration,
+            'view_count': view_count,
+            'comment_count': comment_count,
+            'uploader': uploader,
+            'upload_date': upload_date,
+        }
+
     
-    '''
-Port of the Java example of 'Parameter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
+            formats = []
+        for secure in ('', 'Secure'):
+            for ext in ('Ogg', 'Mp3'):
+                format_id = '%s%s' % (secure, ext)
+                format_url = metadata.get('%sUrl' % format_id)
+                if format_url:
+                    formats.append({
+                        'url': format_url,
+                        'format_id': format_id,
+                        'vcodec': 'none',
+                    })
+        self._sort_formats(formats)
     
-        def _instance_method_2(self):
-        print('Value {}'.format(self.x2))
+    py_test(
+    name = 'transformer_units_test',
+    size = 'small',
+    srcs = ['transformer_units_test.py'],
+    deps = [
+        ':network_units',
+        ':transformer_units',
+        '//dragnn/core:dragnn_bulk_ops',
+        '//dragnn/core:dragnn_ops',
+        '//dragnn/protos:spec_pb2_py',
+        '//syntaxnet:load_parser_ops_py',
+        '@org_tensorflow//tensorflow:tensorflow_py',
+        '@org_tensorflow//tensorflow/core:protos_all_py',
+    ],
+)
     
-    print()
+          with tf.variable_scope(component.name, reuse=None):
+        component.network = biaffine_units.BiaffineDigraphNetwork(component)
+    
+        # Should not raise errors.
+    self.network_states[component_spec.name] = component.NetworkState()
+    comp.build_greedy_training(self.master_state, self.network_states)
+    self.network_states[component_spec.name] = component.NetworkState()
+    comp.build_greedy_inference(self.master_state, self.network_states)
+    
+    from absl import app
+from absl import flags
+import tensorflow as tf
     
     
-# Example usage...
+if __name__ == '__main__':
+  tf.test.main()
+
+    
+    # Imported for FLAGS.tf_master, which is used in the lexicon module.
+    
+    num_classes = 10
+batch_size = 128
+epochs = 15
+weighted_class = 5
+high_weight = 10
+train_samples = 5000
+test_samples = 1000
+timesteps = 3
+input_dim = 10
+loss = 'mse'
+loss_full_name = 'mean_squared_error'
+standard_weight = 1
+standard_score_sequential = 0.5
+    
+        x = np.ones((3, 5))
+    y = np.ones((3, 5))
+    model1.fit(x, y, verbose=0, epochs=1)
+    model2.fit(x, y, verbose=0, epochs=1)
+    
+    - Teacher model: a basic CNN model trained on MNIST for 3 epochs.
+- Net2WiderNet experiment:
+  + Student model has a wider Conv2D layer and a wider FC layer.
+  + Comparison of 'random-padding' vs 'net2wider' weight initialization.
+  + With both methods, after 1 epoch, student model should perform as well as
+    teacher model, but 'net2wider' is slightly better.
+- Net2DeeperNet experiment:
+  + Student model has an extra Conv2D layer and an extra FC layer.
+  + Comparison of 'random-init' vs 'net2deeper' weight initialization.
+  + After 1 epoch, performance of 'net2deeper' is better than 'random-init'.
+- Hyper-parameters:
+  + SGD with momentum=0.9 is used for training teacher and student models.
+  + Learning rate adjustment: it's suggested to reduce learning rate
+    to 1/10 for student model.
+  + Addition of noise in 'net2wider' is used to break weight symmetry
+    and thus enable full capacity of student models. It is optional
+    when a Dropout layer is used.
+    
+            parser.add_option_group(group)
+    
+        def syntax(self):
+        return '[options] <spider>'
+    
+        name = 'returns'
+    objects = {
+        'request': Request,
+        'requests': Request,
+        'item': (BaseItem, dict),
+        'items': (BaseItem, dict),
+    }
+    
+    
 def main():
-    data1 = Data('Data 1')
-    data2 = Data('Data 2')
-    view1 = DecimalViewer()
-    view2 = HexViewer()
-    data1.attach(view1)
-    data1.attach(view2)
-    data2.attach(view2)
-    data2.attach(view1)
+    tornado.options.parse_command_line()
+    application = tornado.web.Application([
+        (r'/', MainHandler),
+    ])
+    http_server = tornado.httpserver.HTTPServer(application)
+    http_server.listen(options.port)
+    tornado.ioloop.IOLoop.current().start()
     
-        @property
-    def name(self):
-        '''Return the name of the sensor.'''
-        return self._name
+        def get_compression_options(self):
+        return self.compression_options
     
-        if not app.config.edit_on_github_project:
-        warnings.warn('edit_on_github_project not specified')
-        return
-    if not doctree:
-        warnings.warn('doctree is None')
-        return
-    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
-    show_url = get_github_url(app, 'blob', path)
-    edit_url = get_github_url(app, 'edit', path)
+        def start_pinging(self):
+        '''Start sending periodic pings to keep the connection alive'''
+        if self.ping_interval > 0:
+            self.last_ping = self.last_pong = IOLoop.current().time()
+            self.ping_callback = PeriodicCallback(
+                self.periodic_ping, self.ping_interval * 1000)
+            self.ping_callback.start()
     
-    CONF_ON_STATE = 'on_state'
-    
-        def test_from_event(self):
-        '''Test converting event to db state.'''
-        state = ha.State('sensor.temperature', '18')
-        event = ha.Event(EVENT_STATE_CHANGED, {
-            'entity_id': 'sensor.temperature',
-            'old_state': None,
-            'new_state': state,
-        })
-        assert state == States.from_event(event).to_native()
+            .. versionchanged:: 3.2.2
+           Added support for cookie version 2.  Both versions 1 and 2 are
+           supported.
+        '''
+        token = (self.get_argument('_xsrf', None) or
+                 self.request.headers.get('X-Xsrftoken') or
+                 self.request.headers.get('X-Csrftoken'))
+        if not token:
+            raise HTTPError(403, ''_xsrf' argument missing from POST')
+        _, token, _ = self._decode_xsrf_token(token)
+        _, expected_token, _ = self._get_raw_xsrf_token()
+        if not token:
+            raise HTTPError(403, ''_xsrf' argument has invalid format')
+        if not _time_independent_equals(utf8(token), utf8(expected_token)):
+            raise HTTPError(403, 'XSRF cookie does not match POST argument')
