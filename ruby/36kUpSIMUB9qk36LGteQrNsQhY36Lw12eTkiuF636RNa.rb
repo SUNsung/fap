@@ -1,76 +1,63 @@
-# For this pull request, which changes Page#dir
-# https://github.com/jekyll/jekyll/pull/4403
+
+        
+          </body>
+</html>
+HTML
     
-    config = File.expand_path '../lib/jekyll/mime.types', __dir__
+            def init_with_program(prog)
+          prog.command(:serve) do |cmd|
+            cmd.description 'Serve your site locally'
+            cmd.syntax 'serve [options]'
+            cmd.alias :server
+            cmd.alias :s
     
-      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
-  p.option 'destination', '-d', '--destination [DIR]',
-    'Destination directory (defaults to ./_site)'
-  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
-  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
-    'Plugins directory (defaults to ./_plugins)'
-  p.option 'layouts_dir', '--layouts DIR', String,
-    'Layouts directory (defaults to ./_layouts)'
-  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
-    
-          private
-    
-        options[:attribution] = <<-HTML
-      &copy; 2011&ndash;2018 Twitter, Inc.<br>
-      &copy; 2011&ndash;2018 The Bootstrap Authors<br>
-      Code licensed under the MIT License.<br>
-      Documentation licensed under the Creative Commons Attribution License v3.0.
-    HTML
-    
-        options[:attribution] = <<-HTML
-      &copy; 2010&ndash;2018 Christian Johansen<br>
-      Licensed under the BSD License.
-    HTML
-    
-        def subpath_from(url, options = nil)
-      self.class.parse(url).subpath_to(self, options)
+        # Checks if the layout specified in the document actually exists
+    #
+    # layout - the layout to check
+    #
+    # Returns true if the layout is invalid, false if otherwise
+    def invalid_layout?(layout)
+      !data['layout'].nil? && layout.nil? && !(is_a? Jekyll::Excerpt)
     end
     
-        # replace in the top-level selector
-    # replace_in_selector('a {a: {a: a} } a {}', /a/, 'b') => 'b {a: {a: a} } b {}'
-    def replace_in_selector(css, pattern, sub)
-      # scan for selector positions in css
-      s        = CharStringScanner.new(css)
-      prev_pos = 0
-      sel_pos  = []
-      while (brace = s.scan_next(RULE_OPEN_BRACE_RE))
-        pos = s.pos
-        sel_pos << (prev_pos .. pos - 1)
-        s.pos    = close_brace_pos(css, s.pos - 1) + 1
-        prev_pos = pos
+        # Returns whether the document is a draft. This is only the case if
+    # the document is in the 'posts' collection but in a different
+    # directory than '_posts'.
+    #
+    # Returns whether the document is a draft.
+    def draft?
+      data['draft'] ||= relative_path.index(collection.relative_directory).nil? &&
+        collection.label == 'posts'
+    end
+    
+      describe '.create' do
+    it 'creates a key with the client' do
+      expected_service_configs = {
+        'U27F4V844T' => [],
+        'DQ8HTZ7739' => [],
+        '6A7HVUVQ3M' => ['some-music-id']
+      }
+      mock_client_response(:create_key!, with: { name: 'New Key', service_configs: expected_service_configs }) do
+        {
+          keyId: 'a-new-key-id'
+        }
       end
-      replace_substrings_at(css, sel_pos) { |s| s.gsub(pattern, sub) }
-    end
     
-      def setup
-    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
-    success = Dir.chdir DUMMY_PATH do
-      silence_stdout_if !ENV['VERBOSE'] do
-        system 'node', 'manifest.js', tmp_dir
+            expect(result).to eq(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::VERSION_NUMBER])
       end
-    end
-    assert success, 'Node.js Mincer compilation failed'
-    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
-    css_name = manifest['assets']['application.css']
-    @css = File.read('#{tmp_dir}/#{css_name}')
+    
+        expect(corrected).to eq(''something'.to_sym')
   end
 end
 
     
-    require 'rake/testtask'
-Rake::TestTask.new do |t|
-  t.libs << 'test'
-  t.test_files = FileList['test/**/*_test.rb']
-  t.verbose = true
-end
+        status data.respond_to?(:status_code) ? data.status_code : 200
     
-      desc 'update main and version in bower.json'
-  task :generate do
-    require 'bootstrap-sass'
-    Dir.chdir Bootstrap.gem_path do
-      spec       = JSON.parse(File.read 'bower.json')
+            #target = $LOADED_FEATURES.grep(/#{path}/).first
+        #puts path
+        #puts caller.map { |c| '  #{c}' }.join('\n')
+        #fontsize = [10, duration * 48].max
+        puts '#{duration},#{path},#{source}'
+      end
+      #puts caller.map { |c| ' => #{c}' }.join('\n')
+    end
