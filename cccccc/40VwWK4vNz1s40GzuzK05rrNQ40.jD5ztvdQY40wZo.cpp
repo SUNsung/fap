@@ -1,261 +1,317 @@
 
         
-        
-    {  class EuroText : public QuickTest {
-  };
-  
-  TEST_F(EuroText, FastOCR) {
-    OCRTester(TESTING_DIR '/eurotext.tif',
-              TESTING_DIR '/eurotext.txt',
-              TESSDATA_DIR '_fast', 'script/Latin');
-  }
-  
-}  // namespace
+          // drawing the text
+  gfx::PlatformFont *platform_font = gfx::PlatformFont::CreateDefault();
+  const int fontSize = sizeY * 0.65f;
+  gfx::Font font(platform_font->GetFontName(), fontSize);
+  platform_font->Release();
+  platform_font = NULL;
+  const int yMargin = (sizeY - fontSize) / 2;
+  canvas.DrawStringRectWithFlags(value, gfx::FontList(font), SK_ColorWHITE, gfx::Rect(sizeX, fontSize + yMargin + 1), gfx::Canvas::TEXT_ALIGN_CENTER);
+    
+    // Multiply-included file, no traditional include guard.
+#include <string>
+    
+        base::FilePath processPath;
+    PathService::Get(base::FILE_EXE, &processPath);
+    props.set_target(processPath);
+    
+    void Base::CallSync(const std::string& method,
+                    const base::ListValue& arguments,
+                    base::ListValue* result) {
+  NOTREACHED() << 'Uncatched callAsync in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
+    
+    // Get RenderView from current js context (only works under window context).
+content::RenderView* GetCurrentRenderView();
+content::RenderView* GetEnteredRenderView();
+    
+    
+namespace nwapi {
+    }
+    
+    
+    {}  // namespace nwapi
 
     
-    class UnicharcompressTest : public ::testing::Test {
- protected:
-  // Loads and compresses the given unicharset.
-  void LoadUnicharset(const string& unicharset_name) {
-    string radical_stroke_file =
-        file::JoinPath(FLAGS_test_srcdir,
-                       'langdata/radical-stroke.txt');
-    string unicharset_file = file::JoinPath(
-        FLAGS_test_srcdir, 'testdata',
-        unicharset_name);
-    string uni_data;
-    CHECK_OK(file::GetContents(unicharset_file, &uni_data, file::Defaults()));
-    string radical_data;
-    CHECK_OK(file::GetContents(radical_stroke_file, &radical_data,
-                               file::Defaults()));
-    CHECK(
-        unicharset_.load_from_inmemory_file(uni_data.data(), uni_data.size()));
-    STRING radical_str(radical_data.c_str());
-    null_char_ =
-        unicharset_.has_special_codes() ? UNICHAR_BROKEN : unicharset_.size();
-    compressed_.ComputeEncoding(unicharset_, null_char_, &radical_str);
-    // Get the encoding of the null char.
-    RecodedCharID code;
-    compressed_.EncodeUnichar(null_char_, &code);
-    encoded_null_char_ = code(0);
-    string output_name = file::JoinPath(
-        FLAGS_test_tmpdir, absl::StrCat(unicharset_name, '.encoding.txt'));
-    STRING encoding = compressed_.GetEncodingAsString(unicharset_);
-    string encoding_str(&encoding[0], encoding.size());
-    CHECK_OK(file::SetContents(output_name, encoding_str, file::Defaults()));
-    LOG(INFO) << 'Wrote encoding to:' << output_name;
-  }
-  // Serializes and de-serializes compressed_ over itself.
-  void SerializeAndUndo() {
-    GenericVector<char> data;
-    TFile wfp;
-    wfp.OpenWrite(&data);
-    EXPECT_TRUE(compressed_.Serialize(&wfp));
-    TFile rfp;
-    rfp.Open(&data[0], data.size());
-    EXPECT_TRUE(compressed_.DeSerialize(&rfp));
-  }
-  // Returns true if the lang is in CJK.
-  bool IsCJKLang(const string& lang) {
-    return lang == 'chi_sim' || lang == 'chi_tra' || lang == 'kor' ||
-           lang == 'jpn';
-  }
-  // Returns true if the lang is Indic.
-  bool IsIndicLang(const string& lang) {
-    return lang == 'asm' || lang == 'ben' || lang == 'bih' || lang == 'hin' ||
-           lang == 'mar' || lang == 'nep' || lang == 'san' || lang == 'bod' ||
-           lang == 'dzo' || lang == 'guj' || lang == 'kan' || lang == 'mal' ||
-           lang == 'ori' || lang == 'pan' || lang == 'sin' || lang == 'tam' ||
-           lang == 'tel';
-  }
+    namespace nw {
     }
     
-    class MatrixTest : public ::testing::Test {
- protected:
-  // Fills src_ with data so it can pretend to be a tensor thus:
-  //  dims_=[5, 4, 3, 2]
-  //  array_=[0, 1, 2, ....119]
-  //  tensor=[[[[0, 1][2, 3][4, 5]]
-  //           [[6, 7][8, 9][10, 11]]
-  //           [[12, 13][14, 15][16, 17]]
-  //           [[18, 19][20, 21][22, 23]]]
-  //          [[[24, 25]...
-  MatrixTest() {
-    src_.Resize(1, kInputSize_, 0);
-    for (int i = 0; i < kInputSize_; ++i) {
-      src_.put(0, i, i);
+    void MenuItem::SetChecked(bool checked) {
+  // Set active will cause 'activate' to be emitted, so block here
+  block_active_ = true;
+  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_item_), checked);
+  block_active_ = false;
+}
+    
+    
+    {  helper->DeleteAppCacheGroup(manifest_url);
+  return true;
+}
+    
+    #include 'extensions/browser/extension_function.h'
+    
+    bool NwObjCreateFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::DictionaryValue* options = nullptr;
+  int id = 0;
+  std::string type;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetDictionary(2, &options));
     }
-    for (int i = 0; i < kNumDims_; ++i) dims_[i] = 5 - i;
+    
+        if (screens) {
+      std::unique_ptr<DesktopMediaList> screen_media_list =
+        std::make_unique<NativeDesktopMediaList>(
+          content::DesktopMediaID::TYPE_SCREEN,
+          webrtc::DesktopCapturer::CreateScreenCapturer(options));
+      media_list_.push_back(std::move(screen_media_list));
+    }
+    
+    #ifndef GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_CONTAINERS_H__
+#define GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_CONTAINERS_H__
+    
+    // Find the file that declares the given fully-qualified symbol name.
+bool PyDescriptorDatabase::FindFileContainingSymbol(
+    const string& symbol_name, FileDescriptorProto* output) {
+  ScopedPyObjectPtr py_descriptor(
+      PyObject_CallMethod(py_database_, 'FindFileContainingSymbol', 's#',
+                          symbol_name.c_str(), symbol_name.size()));
+  return GetFileDescriptorProto(py_descriptor.get(), output);
+}
+    
+    
+    {  protobuf_unittest::TestAny message;
+  message.mutable_any_value()->PackFrom(any);
+  ASSERT_TRUE(message.ParseFromString(message.SerializeAsString()));
+  EXPECT_FALSE(message.any_value().Is<protobuf_unittest::TestAny>());
+  EXPECT_TRUE(message.any_value().Is<google::protobuf::Any>());
+}
+    
+    class EnumGenerator : public SourceGeneratorBase {
+ public:
+  EnumGenerator(const EnumDescriptor* descriptor, const Options* options);
+  ~EnumGenerator();
+    }
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/wire_format.h>
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+namespace {
+    }
+    }
+    }
+    }
+    }
+    
+    #include <google/protobuf/compiler/java/java_context.h>
+#include <google/protobuf/compiler/java/java_enum_field.h>
+#include <google/protobuf/compiler/java/java_extension.h>
+#include <google/protobuf/compiler/java/java_extension_lite.h>
+#include <google/protobuf/compiler/java/java_field.h>
+#include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_message.h>
+#include <google/protobuf/compiler/java/java_message_lite.h>
+#include <google/protobuf/compiler/java/java_service.h>
+    
+    namespace google {
+namespace protobuf {
+  class FieldDescriptor;         // descriptor.h
+  class Descriptor;              // descriptor.h
+  class ServiceDescriptor;       // descriptor.h
+  namespace compiler {
+    namespace java {
+      class MessageGenerator;    // message.h
+      class ExtensionGenerator;  // extension.h
+      class ServiceGenerator;    // service.h
+      class Context;             // context.h
+    }
   }
-  // Number of dimensions in src_.
-  static const int kNumDims_ = 4;
-  // Number of elements in src_.
-  static const int kInputSize_ = 120;
-  // Size of each dimension in src_;
-  int dims_[kNumDims_];
-  // Input array filled with [0,kInputSize).
-  GENERIC_2D_ARRAY<int> src_;
+}
+    }
+    
+    // The tests from the instantiation above will have these names:
+//
+//    * AnotherInstantiationName/FooTest.DoesBlah/0 for 'cat'
+//    * AnotherInstantiationName/FooTest.DoesBlah/1 for 'dog'
+//    * AnotherInstantiationName/FooTest.HasBlahBlah/0 for 'cat'
+//    * AnotherInstantiationName/FooTest.HasBlahBlah/1 for 'dog'
+//
+// Please note that INSTANTIATE_TEST_CASE_P will instantiate all tests
+// in the given test case, whether their definitions come before or
+// AFTER the INSTANTIATE_TEST_CASE_P statement.
+//
+// Please also note that generator expressions (including parameters to the
+// generators) are evaluated in InitGoogleTest(), after main() has started.
+// This allows the user on one hand, to adjust generator parameters in order
+// to dynamically determine a set of tests to run and on the other hand,
+// give the user a chance to inspect the generated tests with Google Test
+// reflection API before RUN_ALL_TESTS() is executed.
+//
+// You can see samples/sample7_unittest.cc and samples/sample8_unittest.cc
+// for more examples.
+//
+// In the future, we plan to publish the API for defining new parameter
+// generators. But for now this interface remains part of the internal
+// implementation and is subject to change.
+//
+//
+// A parameterized test fixture must be derived from testing::Test and from
+// testing::WithParamInterface<T>, where T is the type of the parameter
+// values. Inheriting from TestWithParam<T> satisfies that requirement because
+// TestWithParam<T> inherits from both Test and WithParamInterface. In more
+// complicated hierarchies, however, it is occasionally useful to inherit
+// separately from Test and WithParamInterface. For example:
+    
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED1.  Don't use
+// this in your code.
+#define GTEST_PRED1_(pred, v1, on_failure)\
+  GTEST_ASSERT_(::testing::AssertPred1Helper(#pred, \
+                                             #v1, \
+                                             pred, \
+                                             v1), on_failure)
+    
+    #include 'gtest/internal/gtest-internal.h'
+    
+      void depart() {
+    if (link_.depart()) delete value_;
+  }
+    
+    ]]
+    
+      // Looks up or creates and returns a structure containing information about
+  // tests and instantiations of a particular test case.
+  template <class TestCase>
+  ParameterizedTestCaseInfo<TestCase>* GetTestCasePatternHolder(
+      const char* test_case_name,
+      const char* file,
+      int line) {
+    ParameterizedTestCaseInfo<TestCase>* typed_test_info = NULL;
+    for (TestCaseInfoContainer::iterator it = test_case_infos_.begin();
+         it != test_case_infos_.end(); ++it) {
+      if ((*it)->GetTestCaseName() == test_case_name) {
+        if ((*it)->GetTestCaseTypeId() != GetTypeId<TestCase>()) {
+          // Complain about incorrect usage of Google Test facilities
+          // and terminate the program since we cannot guaranty correct
+          // test case setup and tear-down in this case.
+          ReportInvalidTestCaseType(test_case_name,  file, line);
+          posix::Abort();
+        } else {
+          // At this point we are sure that the object we found is of the same
+          // type we are looking for, so we downcast it to that type
+          // without further checks.
+          typed_test_info = CheckedDowncastToActualType<
+              ParameterizedTestCaseInfo<TestCase> >(*it);
+        }
+        break;
+      }
+    }
+    if (typed_test_info == NULL) {
+      typed_test_info = new ParameterizedTestCaseInfo<TestCase>(test_case_name);
+      test_case_infos_.push_back(typed_test_info);
+    }
+    return typed_test_info;
+  }
+  void RegisterTests() {
+    for (TestCaseInfoContainer::iterator it = test_case_infos_.begin();
+         it != test_case_infos_.end(); ++it) {
+      (*it)->RegisterTests();
+    }
+  }
+    
+    
+    {  // n has no integer factor in the range (1, n), and thus is prime.
+  return true;
+}
+
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+    
+    unsigned char *decompress_jpeg_image_from_memory(const unsigned char *pSrc_data, int src_data_size, int *width, int *height, int *actual_comps, int req_comps)
+{
+  jpgd::jpeg_decoder_mem_stream mem_stream(pSrc_data, src_data_size);
+  return decompress_jpeg_image_from_stream(&mem_stream, width, height, actual_comps, req_comps);
+}
+    
+    # if defined(OC_COLLECT_METRICS)
+struct oc_mode_metrics{
+  double fragw;
+  double satd;
+  double rate;
+  double rmse;
+  double satd2;
+  double satdrate;
+  double rate2;
+  double satdrmse;
+  double rmse2;
 };
     
-    // Computes matrix.vector v = Wu.
-// u is of size W.dim2() - 1 and the output v is of size W.dim1().
-// u is imagined to have an extra element at the end with value 1, to
-// implement the bias, but it doesn't actually have it.
-void IntSimdMatrix::MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
-                                    const GenericVector<double>& scales,
-                                    const int8_t* u, double* v) const {
-  int num_out = w.dim1();
-  int num_in = w.dim2() - 1;
-  if (partial_funcs_.empty()) {
-    // Base implementation.
-    for (int i = 0; i < num_out; ++i) {
-      const int8_t* wi = w[i];
-      int total = 0;
-      for (int j = 0; j < num_in; ++j) total += wi[j] * u[j];
-      // Add in the bias and correct for integer values.
-      v[i] = (static_cast<double>(total) / INT8_MAX + wi[num_in]) * scales[i];
-    }
-  } else {
-    const int8_t* w_data = shaped_w_.data();
-    const double* scales_data = &scales[0];
-    // Each call to a partial_func_ produces group_size outputs, except the
-    // last one, which can produce less.
-    int group_size = num_outputs_per_register_ * max_output_registers_;
-    int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
-    int rounded_num_out = RoundOutputs(num_out);
-    int output = 0;
-    for (auto fn : partial_funcs_) {
-      // The amount of w_data consumed by each call to fn.
-      int w_step = (rounded_num_in + 1) * group_size;
-      // Run with this group size, until it would produce too much output, then
-      // switch to a smaller size.
-      for (; output + group_size <= rounded_num_out; output += group_size) {
-        (*fn)(w_data, scales_data, u, rounded_num_in, num_out - output, v);
-        w_data += w_step;
-        scales_data += group_size;
-        v += group_size;
-      }
-      group_size /= 2;
-    }
-  }
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+    #undef    silk_SMLAWW
+static OPUS_INLINE opus_int32 silk_SMLAWW(opus_int32 a32, opus_int32 b32, opus_int32 c32){
+    opus_int32 ret;
+    /* Nb will be counted in sub-macros*/
+    ret = silk_MLA(silk_SMLAWB((a32), (b32), (c32)), (b32), silk_RSHIFT_ROUND((c32), 16));
+    return ret;
 }
     
-      tesseract::ParagraphJustification justification() const {
-    return justification_;
-  }
-  int margin() const { return margin_; }
-  int first_indent() const { return first_indent_; }
-  int body_indent() const { return body_indent_; }
-  int tolerance() const { return tolerance_; }
-  bool is_flush() const {
-    return (justification_ == tesseract::JUSTIFICATION_LEFT ||
-            justification_ == tesseract::JUSTIFICATION_RIGHT) &&
-        abs(first_indent_ - body_indent_) <= tolerance_;
-  }
-    
-    			cmderOptions.cmderCfgRoot = cmderCfgRoot;
-    
-    namespace rabit {
-namespace utils {
-extern 'C' {
-  void (*Printf)(const char *fmt, ...) = Rprintf;
-  void (*Assert)(int exp, const char *fmt, ...) = XGBoostAssert_R;
-  void (*Check)(int exp, const char *fmt, ...) = XGBoostCheck_R;
-  void (*Error)(const char *fmt, ...) = error;
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
 }
-}
-}
-    
-    
-    {    page->data.resize(page->offset.back());
-    CHECK_EQ(index_.data.size(), value_.data.size());
-    CHECK_EQ(index_.data.size(), page->data.size());
-    for (size_t i = 0; i < page->data.size(); ++i) {
-      page->data[i] = SparseBatch::Entry(index_.data[i] + min_index_, value_.data[i]);
-    }
-    return true;
-  }
-    
-    void CheckObjFunction(xgboost::ObjFunction * obj,
-                      std::vector<xgboost::bst_float> preds,
-                      std::vector<xgboost::bst_float> labels,
-                      std::vector<xgboost::bst_float> weights,
-                      std::vector<xgboost::bst_float> out_grad,
-                      std::vector<xgboost::bst_float> out_hess);
-    
-    namespace xgboost {
-namespace tree {
-// List of files that will be force linked in static links.
-DMLC_REGISTRY_LINK_TAG(updater_colmaker);
-DMLC_REGISTRY_LINK_TAG(updater_skmaker);
-DMLC_REGISTRY_LINK_TAG(updater_refresh);
-DMLC_REGISTRY_LINK_TAG(updater_prune);
-DMLC_REGISTRY_LINK_TAG(updater_fast_hist);
-DMLC_REGISTRY_LINK_TAG(updater_histmaker);
-DMLC_REGISTRY_LINK_TAG(updater_sync);
-#ifdef XGBOOST_USE_CUDA
-DMLC_REGISTRY_LINK_TAG(updater_gpu);
-DMLC_REGISTRY_LINK_TAG(updater_gpu_hist);
-#endif
-}  // namespace tree
-}  // namespace xgboost
 
     
-    /*!
- * \brief Macro to register linear updater.
- */
-#define XGBOOST_REGISTER_LINEAR_UPDATER(UniqueId, Name)                        \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::LinearUpdaterReg&                    \
-      __make_##LinearUpdaterReg##_##UniqueId##__ =                             \
-          ::dmlc::Registry< ::xgboost::LinearUpdaterReg>::Get()->__REGISTER__( \
-              Name)
+    class FilterPolicy;
     
-    class ShotgunUpdater : public LinearUpdater {
- public:
-  // set training parameter
-  void Init(const std::vector<std::pair<std::string, std::string> > &args) override {
-    param_.InitAllowUnknown(args);
-    selector_.reset(FeatureSelector::Create(param_.feature_selector));
-  }
-  void Update(HostDeviceVector<GradientPair> *in_gpair, DMatrix *p_fmat,
-              gbm::GBLinearModel *model, double sum_instance_weight) override {
-    std::vector<GradientPair> &gpair = in_gpair->HostVector();
-    param_.DenormalizePenalties(sum_instance_weight);
-    const int ngroup = model->param.num_output_group;
-    }
+    namespace leveldb {
     }
     
-      /// Search the list for the (index)'th item (0-based) in (list:key)
-  /// A negative index indicates: 'from end-of-list'
-  /// If index is within range: return true, and return the value in *result.
-  /// If (index < -length OR index>=length), then index is out of range:
-  ///   return false (and *result is left unchanged)
-  /// May throw RedisListException
-  bool Index(const std::string& key, int32_t index,
-             std::string* result);
+    namespace leveldb {
+    }
     
+    struct BlockContents;
+class Comparator;
     
-    {  // Note: we may want to access the Java callback object instance
-  // across multiple method calls, so we create a global ref
-  assert(jcallback_obj != nullptr);
-  m_jcallback_obj = env->NewGlobalRef(jcallback_obj);
-  if(jcallback_obj == nullptr) {
-    // exception thrown: OutOfMemoryError
-    return;
+    TreeUpdater* TreeUpdater::Create(const std::string& name) {
+  auto *e = ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->Find(name);
+  if (e == nullptr) {
+    LOG(FATAL) << 'Unknown tree updater ' << name;
   }
+  return (e->body)();
 }
     
-    #include 'rocksjni/statisticsjni.h'
+    // tress
+#include '../src/tree/tree_model.cc'
+#include '../src/tree/tree_updater.cc'
+#include '../src/tree/updater_colmaker.cc'
+#include '../src/tree/updater_fast_hist.cc'
+#include '../src/tree/updater_prune.cc'
+#include '../src/tree/updater_refresh.cc'
+#include '../src/tree/updater_sync.cc'
+#include '../src/tree/updater_histmaker.cc'
+#include '../src/tree/updater_skmaker.cc'
     
-    
-void SyncPoint::Data::LoadDependency(const std::vector<SyncPointPair>& dependencies) {
-  std::lock_guard<std::mutex> lock(mutex_);
-  successors_.clear();
-  predecessors_.clear();
-  cleared_points_.clear();
-  for (const auto& dependency : dependencies) {
-    successors_[dependency.predecessor].push_back(dependency.successor);
-    predecessors_[dependency.successor].push_back(dependency.predecessor);
-  }
-  cv_.notify_all();
-}
+    namespace xgboost {
+namespace obj {
+    }
+    }
