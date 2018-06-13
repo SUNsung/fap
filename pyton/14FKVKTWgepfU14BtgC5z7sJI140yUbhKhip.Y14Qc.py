@@ -1,96 +1,127 @@
 
         
-        with open('update/LATEST_VERSION', 'w') as f:
-    f.write(version)
+        Available hooks:
     
-    now = datetime.datetime.now()
-now_iso = now.isoformat() + 'Z'
+        def __exit__(self, exc_type, exc_value, traceback):
+        if exc_type is None:
+            self.stop_event.wait(self.WAIT_EVENT_TIMEOUT)
+        else:
+            if self.wait_to_close_event:
+                # avoid server from waiting for event timeouts
+                # if an exception is found in the main thread
+                self.wait_to_close_event.set()
     
-        infile, outfile = args
+        @pytest.fixture(autouse=True)
+    def setup(self):
+        '''CaseInsensitiveDict instance with 'Accept' header.'''
+        self.case_insensitive_dict = CaseInsensitiveDict()
+        self.case_insensitive_dict['Accept'] = 'application/json'
     
-        def test_youporn(self):
-        self._assert_restricted(
-            'http://www.youporn.com/watch/505835/sex-ed-is-it-safe-to-masturbate-daily/',
-            '505835.mp4', 2, old_age=25)
-    
-    
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
-    
-        def test_secondary_proxy_http(self):
-        params = self._check_params(['secondary_proxy', 'secondary_server_ip'])
-        if params is None:
-            return
-        ydl = FakeYDL()
-        req = compat_urllib_request.Request('http://yt-dl.org/ip')
-        req.add_header('Ytdl-request-proxy', params['secondary_proxy'])
-        self.assertEqual(
-            ydl.urlopen(req).read().decode('utf-8'),
-            params['secondary_server_ip'])
+        def test_server_closes(self):
+        '''the server closes when leaving the context manager'''
+        with Server.basic_response_server() as (host, port):
+            sock = socket.socket()
+            sock.connect((host, port))
     
     
-TEST_DIR = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 'swftests')
+class ProxyError(ConnectionError):
+    '''A proxy error occurred.'''
     
-    from .common import FileDownloader
-from ..utils import (
-    check_executable,
-    encodeFilename,
-)
+    codes = LookupDict(name='status_codes')
     
-            select = self._search_regex(
-            r'(?s)<select[^>]+id='select-version'[^>]*>(.+?)</select>',
-            webpage, 'select version', default=None)
-        if select:
-            entry_ids = set()
-            entries = []
-            for mobj in re.finditer(
-                    r'<option[^>]+value=(['\'])(?P<id>[0-9a-z_]+)(?:#.+?)?\1[^>]*>(?P<title>[^<]+)',
-                    webpage):
-                entry_id = mobj.group('id')
-                if entry_id in entry_ids:
-                    continue
-                entry_ids.add(entry_id)
-                entries.append({
-                    '_type': 'url_transparent',
-                    'url': 'kaltura:%s:%s' % (partner_id, entry_id),
-                    'ie_key': 'Kaltura',
-                    'title': mobj.group('title'),
-                })
-            if entries:
-                return self.playlist_result(entries, display_id, title)
+        def __getstate__(self):
+        '''Unlike a normal CookieJar, this class is pickleable.'''
+        state = self.__dict__.copy()
+        # remove the unpickleable RLock object
+        state.pop('_cookies_lock')
+        return state
+    
+            try:
+            length = super_len(data)
+        except (TypeError, AttributeError, UnsupportedOperation):
+            length = None
+    
+        All keys are expected to be strings. The structure remembers the
+    case of the last key to be set, and ``iter(instance)``,
+    ``keys()``, ``items()``, ``iterkeys()``, and ``iteritems()``
+    will contain case-sensitive keys. However, querying and contains
+    testing is case insensitive::
+    
+        def set(self, key, value):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                item.value = value
+                return
+        self.table[hash_index].append(Item(key, value))
+    
+        def __init__(self, query, results):
+        self.query = query
+        self.results = results
+    
+            Accessing a node updates its position to the front of the LRU list.
+        '''
+        node = self.lookup.get(query)
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
+    
+    # The name for this set of Sphinx documents.  If None, it defaults to
+# '<project> v<release> documentation'.
+#html_title = None
     
     
-@keras_test
-def test_sequential_sample_weights():
-    model = create_sequential_model()
-    model.compile(loss=loss, optimizer='rmsprop')
+def is_translated(msg):
+    if isinstance(msg.string, basestring):
+        return bool(msg.string)
+    for item in msg.string:
+        if not item:
+            return False
+    return True
     
-        # Returns
-        Preprocessed array.
+        @property
+    def is_eager_to_contribute(self):
+        return True if self.blackboard.common_state['problems'] > 100 else False
+    
+        def test_parrot_greek_localization(self):
+        self.assertEqual(self.g.get('parrot'), 'parrot')
+    
+        def setUp(self):
+        self.tc1 = TC1()
+        self.tc2 = TC2()
+        self.tc3 = TC3()
+        self.average_result_tc1 = '###### In Test 1 ######\n' + \
+                                  'Setting up\n' + \
+                                  'Running test\n' + \
+                                  'Tearing down\n' + \
+                                  'Test Finished'
+        self.average_result_tc2 = '###### In Test 2 ######\n' + \
+                                  'Setting up\n' + \
+                                  'Running test\n' + \
+                                  'Tearing down\n' + \
+                                  'Test Finished'
+        self.average_result_tc3 = '###### In Test 3 ######\n' + \
+                                  'Setting up\n' + \
+                                  'Running test\n' + \
+                                  'Tearing down\n' + \
+                                  'Test Finished'
+        self.runner = TestRunner()
+        self.out = StringIO()
+        self.saved_stdout = sys.stdout
+        sys.stdout = self.out
+    
     '''
-    return imagenet_utils.preprocess_input(x, mode='tf')
+Port of the Java example of 'Setter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
     
-        # Arguments
-        input_tensor: input tensor
-        kernel_size: default 3, the kernel size of middle conv layer at main path
-        filters: list of integers, the filters of 3 conv layer at main path
-        stage: integer, current stage label, used for generating layer names
-        block: 'a','b'..., current block label, used for generating layer names
+        def undo(self):
+        self.rename(self.dest, self.src)
     
-    from ..utils.data_utils import get_file
-from .. import backend as K
-    
-        indices_for_conversion_to_dense = []
-    for i in range(len(model._feed_inputs)):
-        if issparse(ins[i]) and not K.is_sparse(model._feed_inputs[i]):
-            indices_for_conversion_to_dense.append(i)
-    
-        :param filepath: Optional filepath the the blns.txt file
-    :returns: The list of naughty strings
-    '''
+        def detach(self, observer):
+        try:
+            self._observers.remove(observer)
+        except ValueError:
+            pass
