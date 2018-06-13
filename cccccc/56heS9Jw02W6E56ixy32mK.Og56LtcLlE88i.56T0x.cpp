@@ -1,176 +1,146 @@
 
         
-        
-    {}  // namespace google
-#endif  // GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_CONTAINERS_H__
-
+        @interface LocaleBridgingTester : NSObject
+- (NSLocale *)autoupdatingCurrentLocale;
+- (BOOL)verifyAutoupdatingLocale:(NSLocale *)locale;
+@end
     
+      llvm::SMDiagnostic GetMessage(SourceLoc Loc, llvm::SourceMgr::DiagKind Kind,
+                                const Twine &Msg,
+                                ArrayRef<llvm::SMRange> Ranges,
+                                ArrayRef<llvm::SMFixIt> FixIts) const;
     
-    {
-    {}  // namespace
-}  // namespace protobuf
+    using namespace swift;
     
-      std::string namespace_;
-  std::string reflectionClassname_;
+    #ifndef SWIFT_INDEX_INDEX_H
+#define SWIFT_INDEX_INDEX_H
     
-    // TODO(jonskeet): Refactor repeated field support; all the implementations are *really* similar. We
-// should probably have a RepeatedFieldGeneratorBase.
-class RepeatedEnumFieldGenerator : public FieldGeneratorBase {
- public:
-  RepeatedEnumFieldGenerator(const FieldDescriptor* descriptor,
-                             int fieldOrdinal,
-                             const Options *options);
-  ~RepeatedEnumFieldGenerator();
+      auto iov = buf->getIov();
+  EXPECT_EQ(count, iov.size());
+    
+    template <typename C>
+struct compare_greater : detail::cmp_pred<C, ordering::gt, 0> {
+  using detail::cmp_pred<C, ordering::gt, 0>::cmp_pred;
+};
+    
+     public:
+  HazptrLockFreeLIFO() : head_(nullptr) {}
+    
+    namespace folly {
     }
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
+    /**
+ * Declare *allocx() and mallctl*() as weak symbols. These will be provided by
+ * jemalloc if we are using jemalloc, or will be nullptr if we are using another
+ * malloc implementation.
+ */
+extern 'C' void* mallocx(size_t, int)
+__attribute__((__weak__));
+extern 'C' void* rallocx(void*, size_t, int)
+__attribute__((__weak__));
+extern 'C' size_t xallocx(void*, size_t, size_t, int)
+__attribute__((__weak__));
+extern 'C' size_t sallocx(const void*, int)
+__attribute__((__weak__));
+extern 'C' void dallocx(void*, int)
+__attribute__((__weak__));
+extern 'C' void sdallocx(void*, size_t, int)
+__attribute__((__weak__));
+extern 'C' size_t nallocx(size_t, int)
+__attribute__((__weak__));
+extern 'C' int mallctl(const char*, void*, size_t*, void*, size_t)
+__attribute__((__weak__));
+extern 'C' int mallctlnametomib(const char*, size_t*, size_t*)
+__attribute__((__weak__));
+extern 'C' int mallctlbymib(const size_t*, size_t, void*, size_t*, void*,
+                            size_t)
+__attribute__((__weak__));
+    
+    int main(int argc, char* argv[]) {
+  // Using log macros before calling folly::initLogging() will use the default
+  // log settings defined by folly::initializeLoggerDB().  The default behavior
+  // is to log WARNING+ messages to stderr.
+  XLOG(INFO) << 'log messages less than WARNING will be ignored';
+  XLOG(ERR) << 'error messages before initLogging() will be logged to stderr';
     }
+    
+        size_t threadID = 0;
+    size_t messageIndex = 0;
+    try {
+      parseMessage(msg, &threadID, &messageIndex);
+    } catch (const std::exception& ex) {
+      ++numUnableToParse_;
+      XLOG(ERR, 'unable to parse log message: ', msg);
+      return;
     }
+    
+    #include <folly/executors/SerialExecutor.h>
+    
+      KeepAlive<Executor> parent_;
+  std::mutex mutex_;
+  std::size_t scheduled_{0};
+  std::queue<Func> queue_;
+    
+    void Benchmark::SetName(const char* name) { name_ = name; }
+    
+    #include <cstdarg>
+#include <iostream>
+#include <string>
+    
+      std::string env_var;
+  for (size_t i = 0; i != flag_str.length(); ++i)
+    env_var += static_cast<char>(::toupper(flag_str.c_str()[i]));
+    
+    // Find the coefficient for the high-order term in the running time, by
+// minimizing the sum of squares of relative error, for the fitting curve
+// given by the lambda expresion.
+//   - n             : Vector containing the size of the benchmark tests.
+//   - time          : Vector containing the times for the benchmark tests.
+//   - fitting_curve : lambda expresion (e.g. [](int n) {return n; };).
+    
+      PrintBasicContext(&GetErrorStream(), context);
+    
+    void Increment(UserCounters *l, UserCounters const& r) {
+  // add counters present in both or just in *l
+  for (auto &c : *l) {
+    auto it = r.find(c.first);
+    if (it != r.end()) {
+      c.second.value = c.second + it->second;
     }
-    }
-    
-        'return this;\n');
-    
-      // Returns true if FilePath describes something in the file-system,
-  // either a file, directory, or whatever, and that something exists.
-  bool FileOrDirectoryExists() const;
-    
-      template <typename T>
-  operator ParamGenerator<T>() const { return ValuesIn(&v1_, &v1_ + 1); }
-    
-    
-    {    // You can generate a failure in any event handler except
-    // OnTestPartResult. Just use an appropriate Google Test assertion to do
-    // it.
-    EXPECT_LE(difference, 0) << 'Leaked ' << difference << ' unit(s) of Water!';
   }
-    
-        // Determine area to update.
-    int xmin = std::max(block_x * 16 - 1, 0);
-    int xmax = std::min(block_x * 16 + 16, width_ - 1);
-    int ymin = std::max(block_y * 16 - 1, 0);
-    int ymax = std::min(block_y * 16 + 16, height_ - 1);
-    
-    
-    {
-    {
-    {      // Add back the last sentinel node.
-      tree[j_end + 1] = sentinel;
-    }
-    if (SetDepth(static_cast<int>(2 * n - 1), &tree[0], depth, tree_limit)) {
-      /* We need to pack the Huffman tree in tree_limit bits. If this was not
-         successful, add fake entities to the lowest values and retry. */
-      break;
+  // add counters present in r, but not in *l
+  for (auto const &tc : r) {
+    auto it = l->find(tc.first);
+    if (it == l->end()) {
+      (*l)[tc.first] = tc.second;
     }
   }
 }
     
-    #include 'guetzli/jpeg_data.h'
     
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg) {
-  bool has_Adobe_marker = false;
-  uint8_t Adobe_transform = 0;
-  for (const std::string& app : jpg.app_data) {
-    if (static_cast<uint8_t>(app[0]) == 0xe0) {
-      return true;
-    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
-      has_Adobe_marker = true;
-      Adobe_transform = app[14];
-    }
-  }
-  if (has_Adobe_marker) {
-    return (Adobe_transform != 0);
-  }
-  const int cid0 = jpg.components[0].id;
-  const int cid1 = jpg.components[1].id;
-  const int cid2 = jpg.components[2].id;
-  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
+    {  ss << std::scientific << std::setprecision(max_fractional_digits10) << value;
+  return ss.str();
 }
     
-    // Functions for reading a jpeg byte stream into a JPEGData object.
+          // regerror returns the number of bytes necessary to null terminate
+      // the string, so we move that when assigning to error.
+      CHECK_NE(needed, 0);
+      error->assign(errbuf, needed - 1);
     
-    #include 'guetzli/jpeg_huffman_decode.h'
-    
-      // Fills in out[] array with the floating-point precision pixel view of the
-  // component.
-  // REQUIRES: factor_x() == 1 and factor_y() == 1.
-  void ToFloatPixels(float* out, int stride) const;
-    
-    // Ensure that the standard streams are properly initialized in every TU.
-int InitializeStreams();
-BENCHMARK_UNUSED static int stream_init_anchor = InitializeStreams();
-    
-    std::string FormatString(const char* msg, va_list args);
-std::string FormatString(const char* msg, ...);
-    
-    double Finish(Counter const& c, double cpu_time, double num_threads) {
-  double v = c.value;
-  if (c.flags & Counter::kIsRate) {
-    v /= cpu_time;
-  }
-  if (c.flags & Counter::kAvgThreads) {
-    v /= num_threads;
-  }
-  return v;
+    void SleepForMilliseconds(int milliseconds) {
+  SleepForMicroseconds(milliseconds * kNumMicrosPerMilli);
 }
     
-    
-    {
-    {
-    {  // Native Client does not provide any API to access cycle counter.
-  // Use clock_gettime(CLOCK_MONOTONIC, ...) instead of gettimeofday
-  // because is provides nanosecond resolution (which is noticable at
-  // least for PNaCl modules running on x86 Mac & Linux).
-  // Initialize to always return 0 if clock_gettime fails.
-  struct timespec ts = { 0, 0 };
-  clock_gettime(CLOCK_MONOTONIC, &ts);
-  return static_cast<int64_t>(ts.tv_sec) * 1000000000 + ts.tv_nsec;
-#elif defined(__aarch64__)
-  // System timer of ARMv8 runs at a different frequency than the CPU's.
-  // The frequency is fixed, typically in the range 1-50MHz.  It can be
-  // read at CNTFRQ special register.  We assume the OS has set up
-  // the virtual timer properly.
-  int64_t virtual_timer_value;
-  asm volatile('mrs %0, cntvct_el0' : '=r'(virtual_timer_value));
-  return virtual_timer_value;
-#elif defined(__ARM_ARCH)
-  // V6 is the earliest arch that has a standard cyclecount
-  // Native Client validator doesn't allow MRC instructions.
-#if (__ARM_ARCH >= 6)
-  uint32_t pmccntr;
-  uint32_t pmuseren;
-  uint32_t pmcntenset;
-  // Read the user mode perf monitor counter access permissions.
-  asm volatile('mrc p15, 0, %0, c9, c14, 0' : '=r'(pmuseren));
-  if (pmuseren & 1) {  // Allows reading perfmon counters for user mode code.
-    asm volatile('mrc p15, 0, %0, c9, c12, 1' : '=r'(pmcntenset));
-    if (pmcntenset & 0x80000000ul) {  // Is it counting?
-      asm volatile('mrc p15, 0, %0, c9, c13, 0' : '=r'(pmccntr));
-      // The counter is set up to count every 64th cycle
-      return static_cast<int64_t>(pmccntr) * 64;  // Should optimize to << 6
-    }
-  }
-#endif
-  struct timeval tv;
-  gettimeofday(&tv, nullptr);
-  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
-#elif defined(__mips__)
-  // mips apparently only allows rdtsc for superusers, so we fall
-  // back to gettimeofday.  It's possible clock_gettime would be better.
-  struct timeval tv;
-  gettimeofday(&tv, nullptr);
-  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
-#else
-// The soft failover to a generic implementation is automatic only for ARM.
-// For other platforms the developer is expected to make an attempt to create
-// a fast implementation and use generic version if nothing better is available.
-#error You need to define CycleTimer for your OS and CPU
-#endif
+    double StatisticsMedian(const std::vector<double>& v) {
+  if (v.size() < 3) return StatisticsMean(v);
+  std::vector<double> partial;
+  // we need roundDown(count/2)+1 slots
+  partial.resize(1 + (v.size() / 2));
+  std::partial_sort_copy(v.begin(), v.end(), partial.begin(), partial.end());
+  // did we have odd number of samples?
+  // if yes, then the last element of partially-sorted vector is the median
+  // it no, then the average of the last two elements is the median
+  if(v.size() % 2 == 1)
+    return partial.back();
+  return (partial[partial.size() - 2] + partial[partial.size() - 1]) / 2.0;
 }
-}  // end namespace cycleclock
-}  // end namespace benchmark
