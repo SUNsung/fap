@@ -1,54 +1,76 @@
 
         
-        import rsa
-import json
-from binascii import hexlify
+            Test that certain behavior of flask can be customized by
+    subclasses.
     
     
-def format_size(bytes):
-    return '%s (%d bytes)' % (format_bytes(bytes), bytes)
-    
-        params = {
-        'age_limit': age,
-        'skip_download': True,
-        'writeinfojson': True,
-        'outtmpl': '%(id)s.%(ext)s',
+    {        Generic:                   '#000000',        # class: 'g'
+        Generic.Deleted:           '#a40000',        # class: 'gd'
+        Generic.Emph:              'italic #000000', # class: 'ge'
+        Generic.Error:             '#ef2929',        # class: 'gr'
+        Generic.Heading:           'bold #000080',   # class: 'gh'
+        Generic.Inserted:          '#00A000',        # class: 'gi'
+        Generic.Output:            '#888',           # class: 'go'
+        Generic.Prompt:            '#745334',        # class: 'gp'
+        Generic.Strong:            'bold #000000',   # class: 'gs'
+        Generic.Subheading:        'bold #800080',   # class: 'gu'
+        Generic.Traceback:         'bold #a40000',   # class: 'gt'
     }
-    ydl = YoutubeDL(params)
-    ydl.add_default_info_extractors()
-    json_filename = os.path.splitext(filename)[0] + '.info.json'
-    try_rm(json_filename)
-    ydl.download([url])
-    res = os.path.exists(json_filename)
-    try_rm(json_filename)
-    return res
+
     
-                    if ''' not in code and ''' not in code:
-                    continue
-                assertRegexpMatches(
-                    self,
-                    code,
-                    r'(?:(?:#.*?|\s*)\n)*from __future__ import (?:[a-z_]+,\s*)*unicode_literals',
-                    'unicode_literals import  missing in %s' % fn)
+        :param str u_string: unicode string to check. Must be unicode
+        and not Python 2 `str`.
+    :rtype: bool
+    '''
+    assert isinstance(u_string, str)
+    try:
+        u_string.encode('ascii')
+        return True
+    except UnicodeEncodeError:
+        return False
+
     
-        _ALL_CLASSES = [
-        klass
-        for name, klass in globals().items()
-        if name.endswith('IE') and name != 'GenericIE'
-    ]
-    _ALL_CLASSES.append(GenericIE)
     
-            formats = [
-            {
-                'format_id': f['type'],
-                'filesize': int(f['filesize']),
-                'url': f['url']
-            } for f in info['rfiles']
-        ]
-        self._sort_formats(formats)
+@pytest.mark.skipif(sys.version_info < (2,7), reason='Only run on Python 2.7+')
+def test_system_ssl():
+    '''Verify we're actually setting system_ssl when it should be available.'''
+    assert info()['system_ssl']['version'] != ''
     
-        base = 'src/sentry/locale'
-    for locale in os.listdir(base):
-        fn = os.path.join(base, locale, 'LC_MESSAGES', 'django.po')
-        if not os.path.isfile(fn):
-            continue
+    
+    {# Latex figure (float) alignment
+#'figure_align': 'htbp',
+}
+    
+    from . import sessions
+    
+                # Extract any cookies sent on the response to the cookiejar
+            # in the new request. Because we've mutated our copied prepared
+            # request, use the old one that we haven't yet touched.
+            extract_cookies_to_jar(prepared_request._cookies, req, resp.raw)
+            merge_cookies(prepared_request._cookies, self.cookies)
+            prepared_request.prepare_cookies(prepared_request._cookies)
+    
+    class TZInfo:
+    def __init__(self, transitions, type_indices, ttis, abbrs):
+        self.transitions = transitions
+        self.type_indices = type_indices
+        self.ttis = ttis
+        self.abbrs = abbrs
+    
+        def _extractname(self, mo):
+        return mo.group('name')
+    
+                # In previous versions of SimpleXMLRPCServer, _dispatch
+            # could be overridden in this class, instead of in
+            # SimpleXMLRPCDispatcher. To maintain backwards compatibility,
+            # check to see if a subclass implements _dispatch and dispatch
+            # using that method if present.
+            response = self.server._marshaled_dispatch(
+                    data, getattr(self, '_dispatch', None), self.path
+                )
+        except Exception as e: # This should only happen if the module is buggy
+            # internal error, report as HTTP server error
+            self.send_response(500)
+    
+    
+class NetworkTestCase(unittest.TestCase):
