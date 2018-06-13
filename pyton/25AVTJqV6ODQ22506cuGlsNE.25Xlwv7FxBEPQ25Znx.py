@@ -1,100 +1,114 @@
-    # Arguments
-        model: Keras model instance.
-        f: Keras function returning a list of tensors
-        ins: List of tensors to be fed to `f`
-        out_labels: List of strings, display names of
-            the outputs of `f`
-        batch_size: Integer batch size or None if unknown.
-        epochs: Number of times to iterate over the data
-        verbose: Verbosity mode, 0, 1 or 2
-        callbacks: List of callbacks to be called during training
-        val_f: Keras function to call for validation
-        val_ins: List of tensors to be fed to `val_f`
-        shuffle: Whether to shuffle the data at the beginning of each epoch
-        callback_metrics: List of strings, the display names of the metrics
-            passed to the callbacks. They should be the
-            concatenation of list the display names of the outputs of
-             `f` and the list of display names of the outputs of `f_val`.
-        initial_epoch: Epoch at which to start training
-            (useful for resuming a previous training run)
-        steps_per_epoch: Total number of steps (batches of samples)
-            before declaring one epoch finished and starting the
-            next epoch. Ignored with the default value of `None`.
-        validation_steps: Number of steps to run validation for
-            (only if doing validation from data tensors).
-            Ignored with the default value of `None`.
-    
-    
-# reparameterization trick
-# instead of sampling from Q(z|X), sample eps = N(0,I)
-# z = z_mean + sqrt(var)*eps
-def sampling(args):
-    '''Reparameterization trick by sampling fr an isotropic unit Gaussian.
-    
-    model = Sequential()
-model.add(Embedding(max_features, embedding_size, input_length=maxlen))
-model.add(Dropout(0.25))
-model.add(Conv1D(filters,
-                 kernel_size,
-                 padding='valid',
-                 activation='relu',
-                 strides=1))
-model.add(MaxPooling1D(pool_size=pool_size))
-model.add(LSTM(lstm_output_size))
-model.add(Dense(1))
-model.add(Activation('sigmoid'))
-    
-    
-@keras_test
-def test_convert_weights():
-    def get_model(shape, data_format):
-        model = Sequential()
-        model.add(Conv2D(filters=2,
-                         kernel_size=(4, 3),
-                         input_shape=shape,
-                         data_format=data_format))
-        model.add(Flatten())
-        model.add(Dense(5))
-        return model
-    
-        model.compile(loss='hinge', optimizer='adagrad')
-    history = model.fit(x_train, y_train, epochs=20, batch_size=16,
-                        validation_data=(x_test, y_test), verbose=0)
-    assert (history.history['val_loss'][-1] < 0.9)
-    
-    print('Train...')
-model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=4,
-          validation_data=[x_test, y_test])
 
+        
+            def get(self, key):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                return item.value
+        raise KeyError('Key not found')
     
-    from ..common import *
+        def append_to_front(self, node):
+        ...
     
     
-def huaban_download(url, output_dir='.', **kwargs):
-    if re.match(r'http://huaban\.com/boards/\d+/', url):
-        huaban_download_board(url, output_dir, **kwargs)
-    else:
-        print('Only board (画板) pages are supported currently')
-        print('ex: http://huaban.com/boards/12345678/')
+class sockaddr(ctypes.Structure):
+    _fields_ = [('sa_family', ctypes.c_short),
+                ('__pad1', ctypes.c_ushort),
+                ('ipv4_addr', ctypes.c_byte * 4),
+                ('ipv6_addr', ctypes.c_byte * 16),
+                ('__pad2', ctypes.c_ulong)]
     
-    class Infoq(VideoExtractor):
-    name = 'InfoQ'
+    A Lexer emits Token objects which are usually buffered by a TokenStream. A
+Parser can build a Tree, if the output=AST option has been set in the grammar.
     
-    def kugou_download_playlist(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    html=get_html(url)
-    pattern=re.compile('title='(.*?)'.* data='(\w*)\|.*?'')
-    pairs=pattern.findall(html)
-    for title,hash_val in pairs:
-        kugou_download_by_hash(title,hash_val,output_dir,merge,info_only)
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licensc]
     
-        for i in range(10, 30):
-        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
-            i = i,
-            p = preview
-        )
-        try:
-            mime, ext, size = url_info(url)
-            break
-        except: continue
+    
+############################################################################
+#
+# token implementations
+#
+# Token
+# +- CommonToken
+# \- ClassicToken
+#
+############################################################################
+    
+    A tree.RewriteCardinalityException is raised, when the parsers hits a
+cardinality mismatch during AST construction. Although this is basically a
+bug in your grammar, it can only be detected at runtime.
+    
+        >>> Point = namedtuple('Point', 'x y')
+    >>> Point.__doc__                   # docstring for the new class
+    'Point(x, y)'
+    >>> p = Point(11, y=22)             # instantiate with positional args or keywords
+    >>> p[0] + p[1]                     # indexable like a plain tuple
+    33
+    >>> x, y = p                        # unpack like a regular tuple
+    >>> x, y
+    (11, 22)
+    >>> p.x + p.y                       # fields also accessable by name
+    33
+    >>> d = p._asdict()                 # convert to a dictionary
+    >>> d['x']
+    11
+    >>> Point(**d)                      # convert from a dictionary
+    Point(x=11, y=22)
+    >>> p._replace(x=100)               # _replace() is like str.replace() but targets named fields
+    Point(x=100, y=22)
+    
+        def test_result_with_success(self):
+        # TODO(brian@sweetapp.com): This test is timing dependant.
+        def notification():
+            # Wait until the main thread is waiting for the result.
+            time.sleep(1)
+            f1.set_result(42)
+    
+    
+def FormatDebugInfoResponse_ExtraConfFoundButNotLoaded_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'extra_conf' ].update( {
+    'is_loaded': False,
+    'path': '/path/to/extra/conf'
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Extra configuration file found but not loaded\n'
+      'Extra configuration path: /path/to/extra/conf\n'
+    )
+  )
+    
+      subprocess.check_call( [ sys.executable, '-m', 'nose' ] + nosetests_args )
+    
+    
+  def Response( self ):
+    return self._response
