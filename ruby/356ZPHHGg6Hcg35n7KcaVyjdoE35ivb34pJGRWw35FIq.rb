@@ -1,104 +1,202 @@
 
         
-              def initialize(gradle_path: nil)
-        self.gradle_path = gradle_path
+        module ActionCable
+  module Server
+    # An instance of this configuration object is available via ActionCable.server.config, which allows you to tweak Action Cable configuration
+    # in a Rails config initializer.
+    class Configuration
+      attr_accessor :logger, :log_tags
+      attr_accessor :connection_class, :worker_pool_size
+      attr_accessor :disable_request_forgery_protection, :allowed_request_origins, :allow_same_origin_as_host
+      attr_accessor :cable, :url, :mount_path
+    
+      test 'overriding has_many_attached methods works' do
+    # attach blobs before messing with getter, which breaks `#attach`
+    @user.highlights.attach create_blob(filename: 'funky.jpg'), create_blob(filename: 'wonky.jpg')
+    
+          def initialize(name, temporary = false, options = nil, as = nil, comment: nil)
+        @columns_hash = {}
+        @indexes = []
+        @foreign_keys = []
+        @primary_keys = nil
+        @temporary = temporary
+        @options = options
+        @as = as
+        @name = name
+        @comment = comment
       end
     
-          it 'automatically removes new lines from the version number' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(version_number: '1.77.3\n', bump_type: 'major')
-        end').runner.execute(:test)
+        assert_match(/dang it.\nExpected increment/, error.message)
+  end
     
-          if valid_type?(type)
-        type.constantize.new(attributes).tap do |instance|
-          instance.user = user if instance.respond_to?(:user=)
+        app_file 'config/routes.rb', <<-RUBY
+      Rails.application.routes.draw do
+        resources :customers, only: :index
+      end
+    RUBY
+    
+      test 'on subscribe callbacks' do
+    @channel.subscribe_to_channel
+    assert @channel.subscribed
+  end
+    
+    class ActionCable::Channel::BroadcastingTest < ActionCable::TestCase
+  class ChatChannel < ActionCable::Channel::Base
+  end
+    
+        def send_message(message)
+      @ws.send(JSON.generate(message))
+    end
+    
+      test 'rack response' do
+    run_in_eventmachine do
+      connection = open_connection
+      response = connection.process
+    
+        def connect
+      @connected = true
+    end
+    
+        # Produce a sanitized label name
+    # Label names may not contain anything but alphanumeric characters,
+    #   underscores, and hyphens.
+    #
+    # label - the possibly-unsafe label
+    #
+    # Returns a sanitized version of the label.
+    def sanitize_label(label)
+      label.gsub(%r![^a-z0-9_\-\.]!i, '')
+    end
+    
+        def check_auto(config)
+      if config.key?('auto') || config.key?('watch')
+        Jekyll::Deprecator.deprecation_message 'Auto-regeneration can no longer' \
+                            ' be set from your configuration file(s). Use the' \
+                            ' --[no-]watch/-w command-line option instead.'
+        config.delete('auto')
+        config.delete('watch')
+      end
+    end
+    
+          # Rubocop does not allow reader methods to have names starting with `get_`
+      # To ensure compatibility, this check has been disabled on this method
+      #
+      # rubocop:disable Naming/AccessorMethodName
+      def get_processor
+        case @config['markdown'].downcase
+        when 'kramdown' then KramdownParser.new(@config)
+        else
+          custom_processor
         end
-      else
-        const_get(:BASE_CLASS_NAME).constantize.new(attributes).tap do |instance|
-          instance.type = type
-          instance.user = user if instance.respond_to?(:user=)
+      end
+      # rubocop:enable Naming/AccessorMethodName
+    
+          def initialize(config)
+        Jekyll::External.require_with_graceful_fail 'kramdown' unless defined?(Kramdown)
+        @config = config['kramdown'].dup || {}
+        @config[:input] = :SmartyPants
+      end
+    
+        # Returns whether `string` is a valid IP address or IP address range.
+    #
+    # @return [true] if valid IP address or IP address range.
+    # @return [false] otherwise.
+    def valid_ip_or_range?(string)
+      range = Rex::Socket::RangeWalker.new(string)
+      range && range.ranges && range.ranges.any?
+    end
+    
+          if(inp.attributes[ikey] =~ /^http/i)
+        inp[ikey] = ''
+        next
+      end
+    
+      def register_sigs
+    self.sigs = {
+      :banner		=> /^(220\s*[^\r\n]+)/i,
+      :user		=> /^USER\s+([^\s]+)/i,
+      :pass		=> /^PASS\s+([^\s]+)/i,
+      :login_pass => /^(230\s*[^\n]+)/i,
+      :login_fail => /^(5\d\d\s*[^\n]+)/i,
+      :bye      => /^221/
+    }
+  end
+    
+          # There is only one pattern per run to test
+      matched = nil
+      matches = nil
+    
+    	def block_end
+		# Insert the block size
+		self.block[-1][0] = block[-1][0].ljust(SIZE1)
+		self.block[-1][0] << '/*  '
+		self.block[-1][0] << '#{block_size} bytes'
+		self.block[-1][0] = block[-1][0].ljust(SIZE2)
+		self.block[-1][0] << '  */'
+    
+        @inner.log_level = log_level
+    Sass.logger = @inner
+  end
+    
+        # @see Node#deep_copy
+    def deep_copy
+      node = dup
+      node.instance_variable_set('@before', @before.deep_copy) if @before
+      node.instance_variable_set('@mid', @mid.deep_copy)
+      node.instance_variable_set('@after', @after.deep_copy) if @after
+      node
+    end
+    
+            # Checks if a template URL is given else returns the TEMPLATE_REPO URL
+        #
+        # @return String
+        #
+        def template_repo_url
+          @template_url || TEMPLATE_REPO
         end
-      end
-    end
-  end
-end
-    
-      # Optional
-  #   Override this method if you need to group multiple agents based on an API key,
-  #   or server they connect to.
-  #   Have a look at the TwitterStreamAgent for an example.
-  def self.setup_worker; end
-    
-      def reemit
-    @event.reemit!
-    respond_to do |format|
-      format.html { redirect_back event_path(@event), notice: 'Event re-emitted.' }
-    end
-  end
-    
-        uninstall login_item: 'login item name'
-    
-    module Patch
-  def self.create(strip, src, &block)
-    case strip
-    when :DATA
-      DATAPatch.new(:p1)
-    when String
-      StringPatch.new(:p1, strip)
-    when Symbol
-      case src
-      when :DATA
-        DATAPatch.new(strip)
-      when String
-        StringPatch.new(strip, src)
-      else
-        ExternalPatch.new(strip, &block)
-      end
-    when nil
-      raise ArgumentError, 'nil value for strip'
-    else
-      raise ArgumentError, 'unexpected value #{strip.inspect} for strip'
-    end
-  end
-    
-        formulae_maybe_with_kegs = [f] + f.old_installed_formulae
-    outdated_kegs = formulae_maybe_with_kegs
-                    .map(&:linked_keg)
-                    .select(&:directory?)
-                    .map { |k| Keg.new(k.resolved_path) }
-    linked_kegs = outdated_kegs.select(&:linked?)
-    
-    class GitRequirement < Requirement
-  fatal true
-  satisfy do
-    odisabled('GitRequirement', ''depends_on \'git\''')
-  end
-end
-    
-          rescue_from Rack::OAuth2::Server::Authorize::BadRequest,
-                  JSON::JWT::InvalidFormat, JSON::JWK::UnknownAlgorithm do |e|
-        logger.info e.backtrace[0, 10].join('\n')
-        render json: {error: :invalid_request, error_description: e.message, status: 400}
-      end
-      rescue_from JSON::JWT::VerificationFailed do |e|
-        logger.info e.backtrace[0, 10].join('\n')
-        render json: {error: :invalid_grant, error_description: e.message, status: 400}
       end
     end
   end
 end
 
     
-          def installed_gem_version(gem_name)
-        Gem.loaded_specs[gem_name].version
-      end
+        if run? && ARGV.any?
+      require 'optparse'
+      OptionParser.new { |op|
+        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
+        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
+        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
+        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
+        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
+        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
+      }.parse!(ARGV.dup)
+    end
+  end
     
-      tasks_dir = Pathname.new('lib/capistrano/tasks')
-  config_dir = Pathname.new('config')
-  deploy_dir = config_dir.join('deploy')
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   Cookie Tossing
+    # Supported browsers:: all
+    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
+    #
+    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
+    # session cookie. This does not protect against a cookie overflow attack.
+    #
+    # Options:
+    #
+    # session_key:: The name of the session cookie (default: 'rack.session')
+    class CookieTossing < Base
+      default_reaction :deny
     
-          it 'doesn't select when a host filter is present that doesn't match' do
-        dsl.set :filter, host: 'ruby.local'
-        SSHKit::Coordinator.expects(:new).with([]).returns(@coordinator)
-        dsl.on('server.local')
-      end
+        it 'Reads referrer from Host header when Referer header is relative' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
+      expect(subject.referrer(env)).to eq('foo.com')
+    end
+    
+      it 'denies requests with a changing Accept-Language header' do
+    session = {:foo => :bar}
+    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
+    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'b'
+    expect(session).to be_empty
+  end
