@@ -1,55 +1,73 @@
 
         
-        enum CommentPlacement {
-  commentBefore = 0,      ///< a comment placed on the line before a value
-  commentAfterOnSameLine, ///< a comment just after a value on the same line
-  commentAfter, ///< a comment on the line after a value (only make sense for
-  /// root value)
-  numberOfCommentPlacement
-};
+        // Create a Shell and returns its routing id.
+IPC_SYNC_MESSAGE_ROUTED2_1(ShellViewHostMsg_CreateShell,
+                           std::string /* url */,
+                           base::DictionaryValue /* manifest */,
+                           int /* result */)
     
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/csharp/csharp_field_base.h>
+      static void ClearCache(content::RenderProcessHost* render_view_host);
+  static void SetProxyConfig(content::RenderProcessHost* render_process_host,
+                             const std::string& proxy_config);
     
-      virtual void WriteHash(io::Printer* printer);
-  virtual void WriteEquals(io::Printer* printer);
-  virtual void WriteToString(io::Printer* printer);
+     private:
+  void SetText(std::string& text);
+  std::string GetText();
+  void Clear();
     
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
     
-    #include 'override_macros.h'
+#include 'base/basictypes.h'
     
-    #include 'override_macros.h'
-    
-    static inline uint64_t decodeUInt64BE(const uint8_t *data) {
-  return (((uint64_t)data[7])<< 0) | (((uint64_t)data[6])<< 8) |
-         (((uint64_t)data[5])<<16) | (((uint64_t)data[4])<<24) |
-         (((uint64_t)data[3])<<32) | (((uint64_t)data[2])<<40) |
-         (((uint64_t)data[1])<<48) | (((uint64_t)data[0])<<56);
+    void Menu::Append(MenuItem* menu_item) {
+  menu_items.push_back(menu_item);
+  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
+    menu_item->UpdateKeys(gtk_accel_group);
+  }
+  gtk_menu_shell_append(GTK_MENU_SHELL(menu_), menu_item->menu_item_);
 }
     
-      explicit WorkloadStats(State guardedState);
-  ~WorkloadStats();
     
-    template<typename T>
-inline void
-emitTLSLoad(Vout& v, TLSDatum<ThreadLocalNoCheck<T>> datum, Vreg d) {
-  // We don't know for sure what's live.
-  PhysRegSaver(v, abi().gpUnreserved - abi().calleeSaved);
+    {  // Send event.
+  base::ListValue args;
+  object_manager()->SendEvent(this, 'click', args);
+}
+    
+    NwObjCallObjectMethodAsyncFunction::NwObjCallObjectMethodAsyncFunction() {
+}
+    
+    class NwObjCreateFunction : public NWSyncExtensionFunction {
+ public:
+  NwObjCreateFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     }
     
-      ArrayInit returnArray(3, ArrayInit::Map{});
-  returnArray.set(s_GMP_g, mpzToGMPObject(gmpReturnG));
-  returnArray.set(s_GMP_s, mpzToGMPObject(gmpReturnS));
-  returnArray.set(s_GMP_t, mpzToGMPObject(gmpReturnT));
+        void InitMPI(const MPIWrapperPtr& mpi)
+    {
+        m_mpi = mpi;
+    }
     
+        bool useParallelTrain = (m_mpi != nullptr);
+    bool useDistributedMBReading = useParallelTrain && m_enableDistributedMBReading && dataReader->SupportsDistributedMBRead();
+    size_t totalEpochSize = bnNodes.size() * mbSize * iters;
     
-    {}
+        // SaveData - save data in the file/files
+    // recordStart - Starting record number
+    // matricies - a map of section name (section:subsection) to data pointer. Data sepcifications from config file will be used to determine where and how to save data
+    // numRecords - number of records we are saving, can be zero if not applicable
+    // datasetSize - size of the dataset (in records)
+    // byteVariableSized - for variable sized data, size of current block to be written, zero when not used, or ignored if not variable sized data
+    virtual bool SaveData(size_t recordStart, const std::map<std::wstring, void*, nocase_compare>& matrices, size_t numRecords, size_t datasetSize, size_t byteVariableSized = 0);
     
-    #include <signal.h>
-#include <unistd.h>
+        // call SetStepOffset() at start of a multi-epoch training to set the index of the first epoch in that training
+    // This value is added to the local epoch index in TraceProgress().
+    static void SetStepOffset(size_t currentStepOffset)
+    {
+        GetStaticInstance().m_currentStepOffset = currentStepOffset;
+    }
     
-      if (ret) {
-    cond.unlink();
-  }
+        // construct from a single float, copy to all components
+    float4(float f)
+        : v(_mm_load1_ps(&f))
+    {
+    }
+    // float4 (float f) : v (_mm_set_ss (f)) {}  // code seems more complex than _mm_load1_ps()
