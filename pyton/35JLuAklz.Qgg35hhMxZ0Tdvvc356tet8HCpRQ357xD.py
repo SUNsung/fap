@@ -1,198 +1,195 @@
 
         
-        with open('update/LATEST_VERSION', 'w') as f:
-    f.write(version)
-    
-    with io.open(README_FILE, encoding='utf-8') as f:
-    oldreadme = f.read()
+        atom_template = atom_template.replace('@TIMESTAMP@', now_iso)
     
     
-def get_params(override=None):
-    PARAMETERS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                   'parameters.json')
-    LOCAL_PARAMETERS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                         'local_parameters.json')
-    with io.open(PARAMETERS_FILE, encoding='utf-8') as pf:
-        parameters = json.load(pf)
-    if os.path.exists(LOCAL_PARAMETERS_FILE):
-        with io.open(LOCAL_PARAMETERS_FILE, encoding='utf-8') as pf:
-            parameters.update(json.load(pf))
-    if override:
-        parameters.update(override)
-    return parameters
+md5 = lambda s: hashlib.md5(s.encode('utf-8')).hexdigest()
     
-        def test_cache(self):
-        ydl = FakeYDL({
-            'cachedir': self.test_dir,
-        })
-        c = Cache(ydl)
-        obj = {'x': 1, 'y': ['ä', '\\a', True]}
-        self.assertEqual(c.load('test_cache', 'k.'), None)
-        c.store('test_cache', 'k.', obj)
-        self.assertEqual(c.load('test_cache', 'k2'), None)
-        self.assertFalse(_is_empty(self.test_dir))
-        self.assertEqual(c.load('test_cache', 'k.'), obj)
-        self.assertEqual(c.load('test_cache', 'y'), None)
-        self.assertEqual(c.load('test_cache2', 'k.'), None)
-        c.remove()
-        self.assertFalse(os.path.exists(self.test_dir))
-        self.assertEqual(c.load('test_cache', 'k.'), None)
+            self.port = random.randint(20000, 30000)
+        self.server_process = subprocess.Popen([
+            'srelay', '-f', '-i', '127.0.0.1:%d' % self.port],
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
-    from test.helper import assertRegexpMatches
+    IGNORED_DIRS = [
+    '.git',
+    '.tox',
+]
     
-            webpage = self._download_webpage(url, playlist_id)
-        title = self._html_search_regex(
-            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<p class='excerpt'[^>]*?>(.*?)</p>',
-            webpage, 'description', fatal=False)
-        urls = re.findall(
-            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
-            webpage)
-        entries = [self.url_result(u) for u in urls]
     
-            webpage = self._download_webpage(url, video_id)
-        key = self._search_regex(
-            r'src=['\']https?://[^/]+/embed/([A-Za-z0-9_-]+)', webpage, 'key')
+def gen_extractor_classes():
+    ''' Return a list of supported extractors.
+    The order does matter; the first extractor matched is the one handling the URL.
+    '''
+    return _ALL_CLASSES
     
-    import re
     
-            title = self._html_search_regex(
-            r'<div[^>]+style='float:left'[^>]*>\s*<h2>(.+?)</h2>', webpage, 'title')
-        description = self._html_search_regex(
-            r'>Description:</span>(.+?)</div>', webpage, 'description', default=None)
+class C56IE(InfoExtractor):
+    _VALID_URL = r'https?://(?:(?:www|player)\.)?56\.com/(?:.+?/)?(?:v_|(?:play_album.+-))(?P<textid>.+?)\.(?:html|swf)'
+    IE_NAME = '56.com'
+    _TESTS = [{
+        'url': 'http://www.56.com/u39/v_OTM0NDA3MTY.html',
+        'md5': 'e59995ac63d0457783ea05f93f12a866',
+        'info_dict': {
+            'id': '93440716',
+            'ext': 'flv',
+            'title': '网事知多少 第32期：车怒',
+            'duration': 283.813,
+        },
+    }, {
+        'url': 'http://www.56.com/u47/v_MTM5NjQ5ODc2.html',
+        'md5': '',
+        'info_dict': {
+            'id': '82247482',
+            'title': '爱的诅咒之杜鹃花开',
+        },
+        'playlist_count': 7,
+        'add_ie': ['Sohu'],
+    }]
     
-            return info_dict
+            # Video URL construction algorithm is reverse-engineered from cwhplayer.swf
+        rtmp_url = 'rtmp://camwithher.tv/clipshare/%s' % (
+            ('mp4:%s.mp4' % flv_id) if int(flv_id) > 2010 else flv_id)
+    
+        def _real_extract(self, url):
+        display_id = self._match_id(url)
+    
+    USERNAME = 'user'
+PASSWORD = 'password'
+# Basic auth encoded `USERNAME` and `PASSWORD`
+# noinspection SpellCheckingInspection
+BASIC_AUTH_HEADER_VALUE = 'Basic dXNlcjpwYXNzd29yZA=='
+BASIC_AUTH_URL = '/basic-auth/{0}/{1}'.format(USERNAME, PASSWORD)
+AUTH_OK = {'authenticated': True, 'user': USERNAME}
+    
+    https://github.com/Homebrew/homebrew-core/blob/master/Formula/httpie.rb
+    
+            return '\r\n'.join(headers)
+    
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
+    
+    '''
+import sys
+import errno
+import platform
+    
+    
+class TransportPlugin(BasePlugin):
+    '''
+    
+    
+# noinspection PyAbstractClass
+class BuiltinAuthPlugin(AuthPlugin):
+    
+        def _get_path(self):
+        '''Return the config file path without side-effects.'''
+        raise NotImplementedError()
+    
+        >>> humanize_bytes(1)
+    '1 B'
+    >>> humanize_bytes(1024, precision=1)
+    '1.0 kB'
+    >>> humanize_bytes(1024 * 123, precision=1)
+    '123.0 kB'
+    >>> humanize_bytes(1024 * 12342, precision=1)
+    '12.1 MB'
+    >>> humanize_bytes(1024 * 12342, precision=2)
+    '12.05 MB'
+    >>> humanize_bytes(1024 * 1234, precision=2)
+    '1.21 MB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
+    '1.31 GB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
+    '1.3 GB'
+    
+    import os, json, imp
+here = os.path.abspath(os.path.dirname(__file__))
+proj_info = json.loads(open(os.path.join(here, PROJ_METADATA), encoding='utf-8').read())
+try:
+    README = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
+except:
+    README = ''
+CHANGELOG = open(os.path.join(here, 'CHANGELOG.rst'), encoding='utf-8').read()
+VERSION = imp.load_source('version', os.path.join(here, 'src/%s/version.py' % PACKAGE_NAME)).__version__
+    
+            for i in html_json['sources']:
+            if 'src' in i:  #to avoid KeyError
+                if i['src'].startswith('https'):
+                    link_list.append((str(i['height']), i['src']))
+    
+    def kuwo_download_by_rid(rid, output_dir = '.', merge = True, info_only = False):
+    html=get_content('http://player.kuwo.cn/webmusic/st/getNewMuiseByRid?rid=MUSIC_%s'%rid)
+    title=match1(html,r'<name>(.*)</name>')
+    #to get title
+    #format =aac|mp3 ->to get aac format=mp3 ->to get mp3
+    url=get_content('http://antiserver.kuwo.cn/anti.s?format=mp3&rid=MUSIC_%s&type=convert_url&response=url'%rid)
+    songtype, ext, size = url_info(url)
+    print_info(site_info, title, songtype, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir)
+    
+            if self.closed:
+            raise ValueError('I/O operation on closed file')
+        if not self.seekable:
+            raise OSError('cannot seek')
+        if whence == 1:
+            pos = pos + self.size_read
+        elif whence == 2:
+            pos = pos + self.chunksize
+        if pos < 0 or pos > self.chunksize:
+            raise RuntimeError
+        self.file.seek(self.offset + pos, 0)
+        self.size_read = pos
+    
+    '''Safely evaluate Python string literals without using eval().'''
+    
+    def get_colordb(file, filetype=None):
+    colordb = None
+    fp = open(file)
+    try:
+        line = fp.readline()
+        if not line:
+            return None
+        # try to determine the type of RGB file it is
+        if filetype is None:
+            filetypes = FILETYPES
+        else:
+            filetypes = [filetype]
+        for typere, class_ in filetypes:
+            mo = typere.search(line)
+            if mo:
+                break
+        else:
+            # no matching type
+            return None
+        # we know the type and the class to grok the type, so suck it in
+        colordb = class_(fp)
+    finally:
+        fp.close()
+    # save a global copy
+    global DEFAULT_DB
+    DEFAULT_DB = colordb
+    return colordb
+    
+        def test_oldargs0_1(self):
+        self.assertRaises(TypeError, {}.keys, 0)
+    
+    
+class DOMInputSource(object):
+    __slots__ = ('byteStream', 'characterStream', 'stringData',
+                 'encoding', 'publicId', 'systemId', 'baseURI')
+    
+    T_IV2 = dataclasses.InitVar[int]
+T_IV3 = dataclasses.InitVar
+    
+        return True
 
     
-            # check that the call to `predict` updated the states
-        out5 = model.predict(np.ones((num_samples, timesteps)))
-        assert(out4.max() != out5.max())
-    
-    
-@keras_test
-def test_sequential_model_saving():
-    model = Sequential()
-    model.add(Dense(2, input_shape=(3,)))
-    model.add(RepeatVector(3))
-    model.add(TimeDistributed(Dense(3)))
-    model.compile(loss=losses.MSE,
-                  optimizer=optimizers.RMSprop(lr=0.0001),
-                  metrics=[metrics.categorical_accuracy],
-                  sample_weight_mode='temporal')
-    x = np.random.random((1, 3))
-    y = np.random.random((1, 3, 3))
-    model.train_on_batch(x, y)
-    
-        def __init__(self, lr=0.001, beta_1=0.9, beta_2=0.999,
-                 epsilon=None, decay=0., amsgrad=False, **kwargs):
-        super(Adam, self).__init__(**kwargs)
-        with K.name_scope(self.__class__.__name__):
-            self.iterations = K.variable(0, dtype='int64', name='iterations')
-            self.lr = K.variable(lr, name='lr')
-            self.beta_1 = K.variable(beta_1, name='beta_1')
-            self.beta_2 = K.variable(beta_2, name='beta_2')
-            self.decay = K.variable(decay, name='decay')
-        if epsilon is None:
-            epsilon = K.epsilon()
-        self.epsilon = epsilon
-        self.initial_decay = decay
-        self.amsgrad = amsgrad
-    
-        # Returns
-        Preprocessed tensor.
-    '''
-    global _IMAGENET_MEAN
-    
-    import numpy as np
-import keras
-from keras.datasets import reuters
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation
-from keras.preprocessing.text import Tokenizer
-    
-            # Test equivalence of convert_dense_weights_data_format
-        out1 = model1.predict(x)
-        layer_utils.convert_dense_weights_data_format(model1.layers[2], prev_shape, target_data_format)
-        for (src, dst) in zip(model1.layers, model2.layers):
-            dst.set_weights(src.get_weights())
-        out2 = model2.predict(transpose(x))
-    
-    
-@keras_test
-def test_unit_norm():
-    unit_norm_instance = constraints.unit_norm()
-    normalized = unit_norm_instance(K.variable(get_example_array()))
-    norm_of_normalized = np.sqrt(np.sum(K.eval(normalized) ** 2, axis=0))
-    # In the unit norm constraint, it should be equal to 1.
-    difference = norm_of_normalized - 1.
-    largest_difference = np.max(np.abs(difference))
-    assert(np.abs(largest_difference) < 10e-5)
-    
-    num_classes = 2
-    
-        def add_link_to_crawl(self, url):
-        '''Add the given link to `links_to_crawl`.'''
-        pass
-    
-            Accessing a node updates its position to the front of the LRU list.
-        '''
-        node = self.lookup[query]
-        if node is None:
-            return None
-        self.linked_list.move_to_front(node)
-        return node.results
-    
-            (foo, p1), 2
-        (bar, p1), 2
-        (bar, p1), 1
-        (foo, p2), 3
-        (bar, p3), 10
-        (foo, p4), 1
-        '''
-        timestamp, product_id, category, quantity = line.split('\t')
-        if self.within_past_week(timestamp):
-            yield (category, product_id), quantity
-    
-            tail = tail.old_contexts[1]
-    
-                server = TCPServer()
-            server.listen(0, address='127.0.0.1')
-            IOLoop.current().run_sync(lambda: None)
-            print('012', end='')
-        ''')
-        out = self.run_subproc(code)
-        self.assertEqual(''.join(sorted(out)), '012')
-    
-        move = Action('move')
-    person = Person('Jack', move)
-    person.do_action().amount('5m').stop()
-    
-        def test_display_current_time_at_midnight(self):
-        '''
-        Will almost always fail (despite of right at/after midnight).
-        '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay(time_provider_stub)
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
-    
-        a_transaction = Transaction(True, num_obj)
-    try:
-        for i in range(3):
-            num_obj.increment()
-            print(num_obj)
-        a_transaction.commit()
-        print('-- committed')
-    
-    
-# Example usage...
-def main():
-    data1 = Data('Data 1')
-    data2 = Data('Data 2')
-    view1 = DecimalViewer()
-    view2 = HexViewer()
-    data1.attach(view1)
-    data1.attach(view2)
-    data2.attach(view2)
-    data2.attach(view1)
+            self.assertIsNotNone(result)
