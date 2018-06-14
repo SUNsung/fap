@@ -1,136 +1,137 @@
 
         
-        
-with open(BIN_FILE_PATH, 'rb') as f:
-    BIN_FILE_CONTENT = f.read()
+            def test_request_recovery_with_bigger_timeout(self):
+        '''a biggest timeout can be specified'''
+        server = Server.basic_response_server(request_timeout=3)
+        data = b'bananadine'
     
-        def __init__(self, directory=DEFAULT_CONFIG_DIR):
-        super(Config, self).__init__()
-        self.update(self.DEFAULTS)
-        self.directory = directory
+        return {
+        'platform': platform_info,
+        'implementation': implementation_info,
+        'system_ssl': system_ssl_info,
+        'using_pyopenssl': pyopenssl is not None,
+        'pyOpenSSL': pyopenssl_info,
+        'urllib3': urllib3_info,
+        'chardet': chardet_info,
+        'cryptography': cryptography_info,
+        'idna': idna_info,
+        'requests': {
+            'version': requests_version,
+        },
+    }
     
-        # Used only when requested with --check-status:
-    ERROR_HTTP_3XX = 3
-    ERROR_HTTP_4XX = 4
-    ERROR_HTTP_5XX = 5
+        :param url: URL for the new :class:`Request` object.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
+    '''
     
+        return d
     
-def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
-    '''When credentials are passed in URL and via -a at the same time,
-     then the ones from -a are used.'''
-    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
-                   auth='user:wrong')
-    r = http('--auth=user:password', 'GET', url)
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-            project_id = response.json()[0]['id']
-    
-        if argcomplete:
-        argcomplete.autocomplete(parser)
-    
-    
-def jsonify(result, format=False):
-    ''' format JSON output (uncompressed or uncompressed) '''
-    
-        # Execute the template string in a temporary namespace and
-    # support tracing utilities by setting a value for frame.f_globals['__name__']
-    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
-                     _property=property, _tuple=tuple)
-    try:
-        exec(template, namespace)
-    except SyntaxError:
-        e = _sys.exc_info()[1]
-        raise SyntaxError(e.message + ':\n' + template)
-    result = namespace[typename]
-    
-    # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = ['_static']
-    
-            self.assertEqual(set([CANCELLED_AND_NOTIFIED_FUTURE,
-                              EXCEPTION_FUTURE,
-                              SUCCESSFUL_FUTURE]),
-                         completed_futures)
-    
-    from future.utils import iterkeys, iteritems
-from ycm import vimsupport
-import re
+                gc.collect()
+            print('- benchmarking LassoLars')
+            clf = LassoLars(alpha=alpha, fit_intercept=False,
+                            normalize=False, precompute=precompute)
+            tstart = time()
+            clf.fit(X, Y)
+            lars_lasso_results.append(time() - tstart)
     
     
-  def Extra_Info_No_Doc_String_With_Detailed_Info_test( self ):
-    self._Check( '0', {
-      'insertion_text':  'INSERTION TEXT',
-      'menu_text':       'MENU TEXT',
-      'extra_menu_info': 'EXTRA MENU INFO',
-      'kind':            'K',
-      'detailed_info':   'DETAILED INFO',
-      'extra_data': {
-      },
-    }, {
-      'word'     : 'INSERTION TEXT',
-      'abbr'     : 'MENU TEXT',
-      'menu'     : 'EXTRA MENU INFO',
-      'kind'     : 'k',
-      'info'     : 'DETAILED INFO',
-      'dup'      : 1,
-      'empty'    : 1,
-      'user_data': '0',
-    } )
+def plot_feature_errors(all_errors, batch_size, all_components, data):
+    plt.figure()
+    plot_results(all_components, all_errors['pca'], label='PCA')
+    plot_results(all_components, all_errors['ipca'],
+                 label='IncrementalPCA, bsize=%i' % batch_size)
+    plot_results(all_components, all_errors['rpca'], label='RandomizedPCA')
+    plt.legend(loc='lower left')
+    plt.suptitle('Algorithm error vs. n_components\n'
+                 'LFW, size %i x %i' % data.shape)
+    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
+    plt.ylabel('Mean absolute error')
+    
+        #------------------------------------------------------------
+    # varying D
+    D_results_build = dict([(alg, np.zeros(len(Drange)))
+                            for alg in algorithms])
+    D_results_query = dict([(alg, np.zeros(len(Drange)))
+                            for alg in algorithms])
+    
+            start = time.time()
+        func(X, n_jobs=1)
+        one_core.append(time.time() - start)
+    
+        ###########################################################################
+    # List sampling algorithm
+    ###########################################################################
+    # We assume that sampling algorithm has the following signature:
+    #   sample(n_population, n_sample)
+    #
+    sampling_algorithm = {}
     
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    if self._extra_data:
-      request_data.update( self._extra_data )
-    request_data.update( {
-      'completer_target': self._completer_target,
-      'command_arguments': self._arguments
-    } )
-    self._response = self.PostDataToHandler( request_data,
-                                             'run_completer_command' )
+if not os.path.exists(DATA_FOLDER):
     
     
-  def Response( self ):
-    if self._cached_response:
-      return self._cached_response
+if not os.path.exists(TRAIN_FOLDER) or not os.path.exists(TEST_FOLDER):
     
-    import tornado.httpserver
-import tornado.ioloop
-import tornado.options
-import tornado.web
+            self.canvas.draw()
     
-            for q_str in repr(q), str(q):
-            self.assertTrue(q_str.startswith('<Queue'))
-            self.assertIn('maxsize=1', q_str)
-            self.assertIn('getters[1]', q_str)
-            self.assertNotIn('putters', q_str)
-            self.assertNotIn('tasks', q_str)
+    print('Log-loss of')
+print(' * uncalibrated classifier trained on 800 datapoints: %.3f '
+      % score)
+print(' * classifier trained on 600 datapoints and calibrated on '
+      '200 datapoint: %.3f' % sig_score)
     
-        def close(self):
-        if self.stream is not None:
-            self.stream.close()
-        self._clear_callbacks()
-        if not self._finish_future.done():
-            future_set_result_unless_cancelled(self._finish_future, None)
+    [1] 'Shrinkage Algorithms for MMSE Covariance Estimation'
+Chen et al., IEEE Trans. on Sign. Proc., Volume 58, Issue 10, October 2010.
     
-                    # simulated servers
-                ('/openid/server/authenticate', OpenIdServerAuthenticateHandler),
-                ('/oauth1/server/request_token', OAuth1ServerRequestTokenHandler),
-                ('/oauth1/server/access_token', OAuth1ServerAccessTokenHandler),
+        def discard(self, key):
+        '''If the keyed message exists, remove it.'''
+        try:
+            self.remove(key)
+        except KeyError:
+            pass
     
-        def test_event_set_multiple(self):
-        e = locks.Event()
-        e.set()
-        e.set()
-        self.assertTrue(e.is_set())
+    subsystem_details = {
+    # -s flag        : (C entry point template), (is it __main__?), (is it a DLL?)
+    'console'        : (None,                    1,                 0),
+    'windows'        : (WINMAINTEMPLATE,         1,                 0),
+    'service'        : (SERVICETEMPLATE,         0,                 0),
+    'com_dll'        : ('',                      0,                 1),
+}
     
-        config_dir = os.path.join(os.getcwd(), args.config)
+        def test_varargs11_kw(self):
+        msg = r'^pack\(\) takes no keyword arguments$'
+        self.assertRaisesRegex(TypeError, msg, struct.Struct.pack, struct.Struct(''), x=2)
     
-            self.assertIsNotNone(result)
-
+        allow_reuse_address = True
     
+        def test_release(self):
+        res = platform.release()
     
-class TestEvents(unittest.TestCase):
-    '''Test Events model.'''
+        'modules':  A dictionary mapping module names to their source code as a
+                string. The dictionary MUST include one module named
+                'test_module' with a main() function.
+    'set_list': A list of set_type tuples to be run on the module.
+    
+    import homeassistant.helpers.config_validation as cv
+from homeassistant.helpers.entity import Entity
+from homeassistant.components.sensor import PLATFORM_SCHEMA
+from homeassistant.components.sensor.rest import RestData
+from homeassistant.const import (
+    ATTR_TEMPERATURE, CONF_API_KEY, CONF_NAME, ATTR_DATE, ATTR_TIME,
+    ATTR_VOLTAGE)
+    
+    import os
+import warnings
+    
+    DEFAULT_ON_STATE = 'high'
+DEPENDENCIES = ['zigbee']
+    
+        # pylint: disable=no-self-use
+    def test_from_event(self):
+        '''Test converting event to db event.'''
+        event = ha.Event('test_event', {
+            'some_data': 15
+        })
+        assert event == Events.from_event(event).to_native()
