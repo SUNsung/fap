@@ -1,261 +1,203 @@
 
         
-        std::vector<float> Classifier::Predict(const cv::Mat& img) {
-  Blob<float>* input_layer = net_->input_blobs()[0];
-  input_layer->Reshape(1, num_channels_,
-                       input_geometry_.height, input_geometry_.width);
-  /* Forward dimension change to all layers. */
-  net_->Reshape();
+        #endif  // ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
+
+    
+      // Returns whether current process is browser process, currently we detect it
+  // by checking whether current has used V8 Lock, but it might be a bad idea.
+  static inline bool IsBrowserProcess() { return v8::Locker::IsActive(); }
+    
+    #ifndef ATOM_COMMON_API_REMOTE_CALLBACK_FREER_H_
+#define ATOM_COMMON_API_REMOTE_CALLBACK_FREER_H_
+#include 'atom/common/api/object_life_monitor.h'
+#include 'content/public/browser/web_contents_observer.h'
+    
+    #ifndef ATOM_COMMON_DRAGGABLE_REGION_H_
+#define ATOM_COMMON_DRAGGABLE_REGION_H_
+    
+      // A new background contents was opened by script. The source is the parent
+  // profile and the details are BackgroundContentsOpenedDetails.
+  NOTIFICATION_BACKGROUND_CONTENTS_OPENED,
+    
+     private:
+  // The following methods are implemented by platform-specific implementations
+  // of this class.
+  //
+  // Start/StopListening are called when transitioning between zero and nonzero
+  // registered accelerators. StartListening will be called after
+  // RegisterAcceleratorImpl and StopListening will be called after
+  // UnregisterAcceleratorImpl.
+  //
+  // For RegisterAcceleratorImpl, implementations return false if registration
+  // did not complete successfully.
+  virtual void StartListening() = 0;
+  virtual void StopListening() = 0;
+  virtual bool RegisterAcceleratorImpl(const ui::Accelerator& accelerator) = 0;
+  virtual void UnregisterAcceleratorImpl(
+      const ui::Accelerator& accelerator) = 0;
+    
+    using namespace std;
+    
+    static PyObject* recursive_to_list(
+    char* data, IntList sizes, IntList strides, int64_t dim,
+    ScalarType scalarType, int64_t elementSize)
+{
+  int64_t ndim = sizes.size();
+  if (dim == ndim) {
+    return torch::utils::load_scalar(data, scalarType);
+  }
+  auto n = sizes[dim];
+  auto list = THPObjectPtr(PyList_New(n));
+  if (!list) throw python_error();
+  for (int64_t i = 0; i < n; i++) {
+    PyObject* obj = recursive_to_list(data, sizes, strides, dim + 1, scalarType, elementSize);
+    if (!obj) throw python_error();
+    PyList_SET_ITEM(list.get(), i, obj);
+    data += strides[dim] * elementSize;
+  }
+  return list.release();
+}
+    
+    #define THCPDoubleStorage_CData(obj)  (obj)->cdata
+#define THCPFloatStorage_CData(obj)   (obj)->cdata
+#define THCPLongStorage_CData(obj)    (obj)->cdata
+#define THCPIntStorage_CData(obj)     (obj)->cdata
+#define THCPShortStorage_CData(obj)   (obj)->cdata
+#define THCPCharStorage_CData(obj)    (obj)->cdata
+#define THCPByteStorage_CData(obj)    (obj)->cdata
+    
+    #endif
+    
+    #endif
+
+    
+      std::unique_ptr<ManagerServerSocket> srv_socket;
+  try {
+    char tmpfile[L_tmpnam];
+    if (std::tmpnam(tmpfile) == NULL)
+      throw std::runtime_error('could not generate a random filename for manager socket');
+    // TODO: better strategy for generating tmp names
+    // TODO: retry on collisions - this can easily fail
+    srv_socket.reset(new ManagerServerSocket(std::string(tmpfile)));
+    register_fd(srv_socket->socket_fd);
+    print_init_message(tmpfile);
+    DEBUG('opened socket %s', tmpfile);
+  } catch(...) {
+    print_init_message('ERROR');
+    throw;
+  }
+    
+    
+    {  THDTensor_(free)(ra_);
+}
+    
+    #endif  // COMPONENTS_GRPC_SUPPORT_INCLUDE_BIDIRECTIONAL_STREAM_H_
+
+    
+      ClientConfig client_config;
+  client_config.set_client_type(SYNC_CLIENT);
+  client_config.set_outstanding_rpcs_per_channel(1);
+  client_config.set_client_channels(1);
+  client_config.set_rpc_type(UNARY);
+  client_config.mutable_load_params()->mutable_closed_loop();
+    
+    namespace routeguide {
     }
     
+    #include <utility>
     
-    {}  // namespace caffe
+    void SecureAuthContext::AddProperty(const grpc::string& key,
+                                    const grpc::string_ref& value) {
+  if (!ctx_) return;
+  grpc_auth_context_add_property(ctx_, key.c_str(), value.data(), value.size());
+}
     
-    /**
- * @brief Computes the contrastive loss @f$
- *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *              \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
- *          used to train siamese networks.
- *
- * @param bottom input Blob vector (length 3)
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ a \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ b \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times 1 \times 1 \times 1) @f$
- *      the binary similarity @f$ s \in [0, 1]@f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
- *      the computed contrastive loss: @f$ E =
- *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *          \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
- * This can be used to train siamese networks.
- */
-template <typename Dtype>
-class ContrastiveLossLayer : public LossLayer<Dtype> {
- public:
-  explicit ContrastiveLossLayer(const LayerParameter& param)
-      : LossLayer<Dtype>(param), diff_() {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_;
-  cudnnTensorDescriptor_t top_desc_;
-  cudnnActivationDescriptor_t activ_desc_;
-};
+    static void get_resource_usage(double* utime, double* stime) {
+#ifdef __linux__
+  struct rusage usage;
+  getrusage(RUSAGE_SELF, &usage);
+  *utime = time_double(&usage.ru_utime);
+  *stime = time_double(&usage.ru_stime);
+#else
+  *utime = 0;
+  *stime = 0;
 #endif
-    
-    #endif  // CAFFE_ELTWISE_LAYER_HPP_
-
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the computed outputs @f$
-   *        y = \gamma ^ {\alpha x + \beta}
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    extern __thread int64_t s_extra_request_nanoseconds;
-    
-      bool isPipelineEmpty();
-    
-    
-    {
-    {///////////////////////////////////////////////////////////////////////////////
-}}
-
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    
-      if (mpz_sgn(gmpData) < 0) {
-    raise_warning(cs_GMP_INVALID_NUMBER_IS_NEGATIVE, 'gmp_sqrt');
-    return false;
-  }
-    
-    inline void initNuma() {}
-inline constexpr int next_numa_node(std::atomic_int& curr_node) { return 0; }
-inline constexpr int num_numa_nodes() { return 1; }
-inline void numa_interleave(void* start, size_t size) {}
-inline void numa_bind_to(void* start, size_t size, int node) {}
-inline constexpr bool numa_node_allowed(int node) { return true; }
-    
-    struct LightProcess {
-  LightProcess();
-  ~LightProcess();
-    }
-    
-    #endif // incl_HPHP_SYNCHRONIZABLE_MULTI_H_
-
-    
-    // Reduce use of immediate one possibly removing def as dead code.
-// Specific to ARM using hard-coded zero register.
-template <typename Out, typename Inst>
-bool cmov_fold_one(Env& env, const Inst& inst, Vlabel b, size_t i) {
-  if (operand_one(env, inst.f)) {
-    return simplify_impl(env, b, i, [&] (Vout& v) {
-      v << Out{inst.cc, inst.sf, PhysReg(vixl::wzr), inst.t, inst.d};
-      return 1;
-    });
-  }
-  if (operand_one(env, inst.t)) {
-    return simplify_impl(env, b, i, [&] (Vout& v) {
-      v << Out{ccNegate(inst.cc), inst.sf, PhysReg(vixl::wzr), inst.f, inst.d};
-      return 1;
-    });
-  }
-  return false;
 }
     
-                // base on the seqRange, we do the decimation for lattices and related variables
-            if (m_hasLattices)
-            {
-                DecimateLattices(
-                    /*output */
-                    m_netLatticePtr, m_netBoundariesPtr, m_netExtrauttMapPtr, m_netUidPtr,
-                    /*input to be decimated */
-                    m_LatticeCache, m_BoundariesCache, m_extrauttmapCache, m_uidCache,
-                    /* what range we want ? */
-                    seqRange);
-            }
+    #include <map>
+#include <mutex>
     
-        // remove links to this node
-    for (auto nodeIter = m_nameToNodeMap.begin(); nodeIter != m_nameToNodeMap.end(); ++nodeIter)
-    {
-        ComputationNodeBasePtr node = nodeIter->second;
-        for (size_t i = 0; i < node->GetNumInputs(); ++i)
-        {
-            ComputationNodeBasePtr child = node->GetInputs()[i];
-            if (child == featureNode)
-            {
-                node->SetInput(i, NULL);
-                break;
-            }
-        }
-    }
+    struct gpr_subprocess;
     
-        // make sure (dense * sparse -> dense) == (dense * dense -> dense)
-    mD.Resize(dim1, dim1);
-    mD.SetValue(0.0f);
-    Matrix<float>::MultiplyAndAdd(mAdense, transposeA, mA1sparseCSC, transposeB, mD);
-    Matrix<float>::MultiplyAndWeightedAdd(alpha, mAdense, transposeA, mA2sparseCSC, transposeB, beta, mD);
-    
-        bool useParallelTrain = (m_mpi != nullptr);
-    bool useDistributedMBReading = useParallelTrain && m_enableDistributedMBReading && dataReader->SupportsDistributedMBRead();
-    size_t totalEpochSize = bnNodes.size() * mbSize * iters;
-    
-    #include 'Basics.h'
-#include 'ScriptableObjects.h'
-#include 'BrainScriptParser.h'
+    #include <yoga/Yoga.h>
     
     
-    {public:
-    inline hardcoded_array() throw()
     {
-    }
-    inline hardcoded_array(size_t n) throw()
     {
-        check_size(n);
-    } // we can instantiate with a size parameter--just checks the size
-    inline hardcoded_array(size_t n, const _T& val) throw()
-    {
-        check_size(n);
-        for (size_t i = 0; i < n; i++)
-            data[i] = val;
-    }
-    inline _T& operator[](size_t i) throw()
-    {
-        check_index(i);
-        return data[i];
-    }
-    inline const _T& operator[](size_t i) const throw()
-    {
-        check_index(i);
-        return data[i];
-    }
-    inline size_t size() const throw()
-    {
-        return _N;
-    }
+    {  return out;
+}
+}
+}
+
+    
+    #pragma once
+    
+    
+    {} // namespace facebook
+
+    
+    private:
+  void ref() {
+    ++m_refcount;
+  }
+    
+    #include <fb/visibility.h>
+    
+    template <typename T>
+inline bool operator!=(std::nullptr_t ptr, const RefPtr<T>& ref) {
+  return ref.get() != ptr;
+}
+    
+    
+    {  pthread_key_t m_key;
+  CleanupFunction m_cleanup;
 };
-
     
-    TEST(WriteChainAsyncTransportWrapperTest, TestChainedIov) {
-  TestWriteChainAsyncTransportWrapper transport;
-  auto buf = folly::IOBuf::copyBuffer('hello');
-  buf->prependChain(folly::IOBuf::copyBuffer('world'));
+    namespace benchmark {
+namespace internal {
+// The arraysize(arr) macro returns the # of elements in an array arr.
+// The expression is a compile-time constant, and therefore can be
+// used in defining new arrays, for example.  If you use arraysize on
+// a pointer by mistake, you will get a compile-time error.
+//
+    }
     }
     
-    TEST_F(OrderingTest, compare_greater) {
-  compare_greater<OddCompare<int>> op;
-  EXPECT_TRUE(op(3, 4));
-  EXPECT_FALSE(op(3, 3));
-  EXPECT_FALSE(op(4, 3));
+      // REQUIRES: timer is not running
+  double manual_time_used() {
+    CHECK(!running_);
+    return manual_time_used_;
+  }
+    
+    Benchmark* Benchmark::ThreadPerCpu() {
+  thread_counts_.push_back(CPUInfo::Get().num_cpus);
+  return this;
 }
     
-      // This has to be the last step, because once state is Living other threads
-  // may access instance and instance_weak w/o synchronization.
-  state_.store(SingletonHolderState::Living, std::memory_order_release);
+    // Return a vector containing the bigO and RMS information for the specified
+// list of reports. If 'reports.size() < 2' an empty vector is returned.
+std::vector<BenchmarkReporter::Run> ComputeBigO(
+    const std::vector<BenchmarkReporter::Run>& reports);
     
-    
-    {
-    {  } else if (
-      std::is_unsigned<Src>::value && std::is_signed<Dst>::value &&
-      sizeof(Src) == sizeof(Dst)) {
-    // uint -> int, same size
-    EXPECT_EQ(kDstMax, folly::constexpr_clamp_cast<Dst>(kSrcMax));
+    void Finish(UserCounters *l, double cpu_time, double num_threads) {
+  for (auto &c : *l) {
+    c.second.value = Finish(c.second, cpu_time, num_threads);
   }
 }
     
-    template <class T>
-class UnboundedBlockingQueue : public BlockingQueue<T> {
- public:
-  virtual ~UnboundedBlockingQueue() {}
-    }
+    #define VLOG(x)                                                               \
+  (::benchmark::internal::GetLogInstanceForLevel(x) << '-- LOG(' << x << '):' \
+                                                                         ' ')
     
-      // All XLOG() statements in this file will log to the category
-  // folly.logging.example.main
-  XLOG(INFO, 'now the normal log settings have been applied');
-    
-    inline internal::Benchmark* RegisterBenchmark(const char* name,
-                                              internal::Function* fn) {
-  return internal::RegisterBenchmarkInternal(
-      ::new internal::FunctionBenchmark(name, fn));
-}
-    
-    // Parses a string for a string flag, in the form of
-// '--flag=value'.
-//
-// On success, stores the value of the flag in *value, and returns
-// true.  On failure, returns false without changing *value.
-bool ParseStringFlag(const char* str, const char* flag, std::string* value);
-    
-    double StatisticsMedian(const std::vector<double>& v) {
-  if (v.size() < 3) return StatisticsMean(v);
-  std::vector<double> partial;
-  // we need roundDown(count/2)+1 slots
-  partial.resize(1 + (v.size() / 2));
-  std::partial_sort_copy(v.begin(), v.end(), partial.begin(), partial.end());
-  // did we have odd number of samples?
-  // if yes, then the last element of partially-sorted vector is the median
-  // it no, then the average of the last two elements is the median
-  if(v.size() % 2 == 1)
-    return partial.back();
-  return (partial[partial.size() - 2] + partial[partial.size() - 1]) / 2.0;
-}
+    #define RELEASE(...) \
+  THREAD_ANNOTATION_ATTRIBUTE__(release_capability(__VA_ARGS__))
