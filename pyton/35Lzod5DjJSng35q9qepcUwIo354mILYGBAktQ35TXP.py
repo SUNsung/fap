@@ -1,46 +1,60 @@
 
         
-                if any([s_line.startswith(s) for s in ['* [', '- [']]):
-            if indent == last_indent:
-                blocks[-1].append(line)
-            else:
-                blocks.append([line])
-            last_indent = indent
-        else:
-            blocks.append([line])
-            last_indent = None
+        
+if __name__ == '__main__':
+    from glmnet.elastic_net import Lasso as GlmnetLasso
+    from sklearn.linear_model import Lasso as ScikitLasso
+    # Delayed import of matplotlib.pyplot
+    import matplotlib.pyplot as plt
     
-        infile, outfile = args
+        plot_feature_times(all_times, batch_size, all_features, data)
+    plot_feature_errors(all_errors, batch_size, all_features, data)
     
-    header = oldreadme[:oldreadme.index('# OPTIONS')]
-footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
+        # import matplotlib.pyplot as plt
+    # plt.matshow(cm)
+    # plt.show()
+
     
-            with io.open(as_file, 'r', encoding='utf-8') as as_f:
-            as_content = as_f.read()
+    skeleton_dir = os.path.abspath(os.path.join(exercise_dir, '..', 'skeletons'))
+if not os.path.exists(skeleton_dir):
+    os.makedirs(skeleton_dir)
     
-    from .common import FileDownloader
-from ..utils import (
-    check_executable,
-    encodeFilename,
-)
+    from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.backends.backend_tkagg import NavigationToolbar2TkAgg
+from matplotlib.figure import Figure
+from matplotlib.contour import ContourSet
+    
+        # View probabilities=
+    probas = classifier.predict_proba(Xfull)
+    n_classes = np.unique(y_pred).size
+    for k in range(n_classes):
+        plt.subplot(n_classifiers, n_classes, index * n_classes + k + 1)
+        plt.title('Class %d' % k)
+        if k == 0:
+            plt.ylabel(name)
+        imshow_handle = plt.imshow(probas[:, k].reshape((100, 100)),
+                                   extent=(3, 9, 1, 5), origin='lower')
+        plt.xticks(())
+        plt.yticks(())
+        idx = (y_pred == k)
+        if idx.any():
+            plt.scatter(X[idx, 0], X[idx, 1], marker='o', c='k')
+    
+        def _reset_stats(self):
+        self.tail.clear()
+        self.start = self.lastmark = self.lasttime = time()
+    
+            # contract requests
+        contract_reqs = defaultdict(list)
     
     
-class CamWithHerIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?camwithher\.tv/view_video\.php\?.*\bviewkey=(?P<id>\w+)'
+class Contract(object):
+    ''' Abstract class for contracts '''
     
-            partner_id = self._search_regex(
-            r'<script[^>]+src=['\'].*?\b(?:partner_id|p)/(\d+)',
-            webpage, 'kaltura partner_id')
+        def extract_year_month(self, line):
+        '''Return the year and month portions of the timestamp.'''
+        pass
     
-            formats = []
-        for secure in ('', 'Secure'):
-            for ext in ('Ogg', 'Mp3'):
-                format_id = '%s%s' % (secure, ext)
-                format_url = metadata.get('%sUrl' % format_id)
-                if format_url:
-                    formats.append({
-                        'url': format_url,
-                        'format_id': format_id,
-                        'vcodec': 'none',
-                    })
-        self._sort_formats(formats)
+        def extract_year_month(self, timestamp):
+        '''Return the year and month portions of the timestamp.'''
+        ...
