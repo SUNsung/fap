@@ -1,93 +1,116 @@
-def test_dir(*subdirs)
-  File.join(TEST_DIR, *subdirs)
-end
-    
-    STDOUT.sync = true
-    
-          new_theme_name = args.join('_')
-      theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-      if theme.path.exist?
-        Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.'
+
+        
+              def accessor
+        ActiveRecord::Store::IndifferentHashAccessor
       end
     
-        def process(args)
-      arg_is_present? args, '--server', 'The --server command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
-                          use the 'build' subcommand.'
-      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
-                          '--watch'.'
-      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
-                          the '--watch' switch.'
-      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
-                          favour of 'highlighter'.'
-      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
-                          your config files.'
-      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
-                          config files.'
-      no_subcommand(args)
+      def test_pick_two
+    assert_equal ['David', 'david@loudthinking.com'], Topic.order(:id).pick(:author_name, :author_email_address)
+    assert_nil Topic.none.pick(:author_name, :author_email_address)
+    assert_nil Topic.where('1=0').pick(:author_name, :author_email_address)
+  end
+    
+      def test_calling_one_should_count_instead_of_loading_association
+    firm = companies(:first_firm)
+    assert_queries(1) do
+      firm.clients.one?  # use count query
+    end
+    assert_not_predicate firm.clients, :loaded?
+  end
+    
+      def check_content_mismatch
+    if attribute_present?('title') && attribute_present?('content') && content == 'Mismatch'
+      errors[:title] << 'is Content Mismatch'
+    end
+  end
+    
+          @channel.perform_action 'action' => :get_latest
+      expected_data = { data: 'latest' }
+    
+      setup do
+    @connection = TestConnection.new
+  end
+    
+        @connection.stub(:subscriptions, subscriptions) do
+      @channel = SecretChannel.new @connection, '{id: 1}', id: 1
+      @channel.subscribe_to_channel
+    
+          client = connection.websocket.send(:websocket)
+      event = Concurrent::Event.new
+      client.instance_variable_get('@stream')
+        .instance_variable_get('@rack_hijack_io')
+        .define_singleton_method(:close) { event.set }
+      connection.close
+      event.wait
+    end
+  end
+    
+    def check_link(uri)
+  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
+    if (400..422).include?(status)
+      if status != 403 && !uri.exclude?('udemy.com')
+        raise 'Request had status #{status}'
+      else
+        putc('S')
+      end
+    end
+  end
+end
+    
+        options[:skip] = %w(
+      contents.html
+      genindex.html
+      py-modindex.html
+      glossary.html
+      search.html
+      intro/whatsnext.html)
+    
+    module Jekyll
+    
+        def render(context)
+      includes_dir = File.join(context.registers[:site].source, '_includes')
+    
+    Liquid::Template.register_tag('render_partial', Jekyll::RenderPartialTag)
+
+    
+      def render(source)
+    template = File.read(source)
+    renderer = ERB.new(template)
+    context  = LogStash::PluginManager::RenderContext.new(options)
+    renderer.result(context.get_binding)
+  end
+    
+      def as_boolean(string)
+    return true   if string == true   || string =~ (/(true|t|yes|y|1)$/i)
+    return false  if string == false  || string.blank? || string =~ (/(false|f|no|n|0)$/i)
+    raise ArgumentError.new('invalid value for Boolean: \'#{string}\'')
+  end
+    
+              def logstash_plugin_gem_spec?(spec)
+            spec.metadata && spec.metadata['logstash_plugin'] == 'true'
+          end
+    
+        def add_required_validations
+      options = Paperclip::Attachment.default_options.deep_merge(@options)
+      if options[:validate_media_type] != false
+        name = @name
+        @klass.validates_media_type_spoof_detection name,
+          :if => ->(instance){ instance.send(name).dirty? }
+      end
     end
     
-          def parse(content)
-        measure_time do
-          @template = Liquid::Template.parse(content, :line_numbers => true)
+            def has_column?
+          @subject.column_names.include?('#{@attachment_name}_file_name')
         end
-    
-        end
+      end
+    end
   end
 end
 
     
-          # This gets the value of the block with the given key.
-      def get(key)
-        key    = Regexp.quote(key)
-        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$\r?\n?(.*?)\r?\n?^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
-        match  = regexp.match(@value)
-        return nil if !match
-        match[1]
-      end
-    
-                o.on('--provider PROVIDER', String,
-                 'The specific provider type for the box to remove') do |p|
-              options[:provider] = p
-            end
-    
-            type = argv.shift.to_sym
-        name = argv.shift.to_sym
-    
-          def collect_rows(records)
-        records.map do |rec|
-          Row.new.tap { |row| yield(rec, row) }
+            required = directories.map do |directory|
+          pathname = File.expand_path(Rails.root.join(directory, filename))
+          file_exists = File.exist?(pathname)
+          require pathname if file_exists
+          file_exists
         end
-      end
-    
-    desc 'preview the site in a web browser'
-task :preview do
-  raise '### You haven't set anything up yet. First run `rake install` to set up an Octopress theme.' unless File.directory?(source_dir)
-  puts 'Starting to watch source with Jekyll and Compass. Starting Rack on port #{server_port}'
-  system 'compass compile --css-dir #{source_dir}/stylesheets' unless File.exist?('#{source_dir}/stylesheets/screen.css')
-  jekyllPid = Process.spawn({'OCTOPRESS_ENV'=>'preview'}, 'jekyll build --watch')
-  compassPid = Process.spawn('compass watch')
-  rackupPid = Process.spawn('rackup --port #{server_port}')
-    
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
