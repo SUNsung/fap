@@ -1,98 +1,163 @@
 
         
-              get :redirect_to_new_record
-      assert_equal 'http://test.host/workshops', redirect_to_url
-      assert_redirected_to Workshop.new(nil)
+          setup do
+    @old_escape_html_entities_in_json = ActiveSupport.escape_html_entities_in_json
+    ActiveSupport.escape_html_entities_in_json = true
+    @template = self
+    @request = Class.new do
+      def send_early_hints(links) end
+    end.new
+  end
+    
+                        if callbacks = @subscribe_callbacks[chan]
+                      next_callback = callbacks.shift
+                      @event_loop.post(&next_callback) if next_callback
+                      @subscribe_callbacks.delete(chan) if callbacks.empty?
+                    end
+                  end
+                end
+    
+            def test_url_sub_key
+          spec = resolve :production, 'production' => { 'url' => 'abstract://foo?encoding=utf8' }
+          assert_equal({
+            'adapter'  => 'abstract',
+            'host'     => 'foo',
+            'encoding' => 'utf8',
+            'name'     => 'production' }, spec)
+        end
+    
+          def associated_predicate_builder(association_name)
+        self.class.new(table.associated_table(association_name))
+      end
+    
+        begin
+      User.class_eval do
+        def highlights
+          super.reverse
+        end
+      end
+    
+        def leave
+      @last_action = [ :leave ]
     end
+    
+    require 'test_helper'
+require 'stubs/test_connection'
+require 'stubs/room'
+    
+        assert subscriptions.verify
   end
     
-          # Returns constant of subscription adapter specified in config/cable.yml.
-      # If the adapter cannot be found, this will default to the Redis adapter.
-      # Also makes sure proper dependencies are required.
-      def pubsub_adapter
-        adapter = (cable.fetch('adapter') { 'redis' })
+      attributes :id, :type, :name, :updated
     
-      test 'helpers' do
-    assert_response_code_range 200..299, :successful?
-    assert_response_code_range [404],    :not_found?
-    assert_response_code_range 300..399, :redirection?
-    assert_response_code_range 500..599, :server_error?
-    assert_response_code_range 400..499, :client_error?
-  end
+      private
     
-      def call_controller(klass, action)
-    klass.action(action).call(ActionController::TestRequest::DEFAULT_ENV.dup)
-  end
+    module Capistrano
+  module Doctor
+    # Prints table of all Capistrano-related gems and their version numbers. If
+    # there is a newer version of a gem available, call attention to it.
+    class GemsDoctor
+      include Capistrano::Doctor::OutputHelpers
     
-      class MyController < ActionController::Metal
-    use BlockMiddleware do |config|
-      config.configurable_message = 'Configured by block.'
+          # Prints a table for a given array of records. For each record, the block
+      # is yielded two arguments: the record and a Row object. To print values
+      # for that record, add values using `row << 'some value'`. A row can
+      # optionally be highlighted in yellow using `row.yellow`.
+      def table(records, &block)
+        return if records.empty?
+        rows = collect_rows(records, &block)
+        col_widths = calculate_column_widths(rows)
+    
+        # Provide a wrapper for the SCM that loads a strategy for the user.
+    #
+    # @param [Rake] context     The context in which the strategy should run
+    # @param [Module] strategy  A module to include into the SCM instance. The
+    #    module should provide the abstract methods of Capistrano::SCM
+    #
+    def initialize(context, strategy)
+      @context = context
+      singleton = class << self; self; end
+      singleton.send(:include, strategy)
     end
-    use MyMiddleware
-    middleware.insert_before MyMiddleware, ExclaimerMiddleware
     
-        # Helpers for creating and wrapping delivery behavior, used by DeliveryMethods.
-    module ClassMethods
-      # Provides a list of emails that have been delivered by Mail::TestMailer
-      delegate :deliveries, :deliveries=, to: Mail::TestMailer
-    
-        # Returns +text+ wrapped at +len+ columns and indented +indent+ spaces.
-    # By default column length +len+ equals 72 characters and indent
-    # +indent+ equal two spaces.
-    #
-    #   my_text = 'Here is a sample text with more than 40 characters'
-    #
-    #   format_paragraph(my_text, 25, 4)
-    #   # => '    Here is a sample text with\n    more than 40 characters'
-    def format_paragraph(text, len = 72, indent = 2)
-      sentences = [[]]
-    
-      teardown do
-    I18n.locale = I18n.default_locale
+    desc 'Deploy a new release.'
+task :deploy do
+  set(:deploying, true)
+  %w{ starting started
+      updating updated
+      publishing published
+      finishing finished }.each do |task|
+    invoke 'deploy:#{task}'
   end
-    
-    Benchmark.ips do |x|
-  x.report('no body include?') { CONTENT_NOT_CONTAINING.include?('<body') }
-  x.report('no body regexp')   { CONTENT_NOT_CONTAINING =~ /<\s*body/ }
-  x.compare!
 end
+task default: :deploy
+
     
-        def defaults_deprecate_type(old, current)
-      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
-      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
-                        'type: #{current}'.'
-    end
+        return captured_stdout.string, captured_stderr.string
+  ensure
+    $stdout = orig_stdout
+    $stderr = orig_stderr
   end
 end
 
     
-    module Jekyll
-  class Layout
-    include Convertible
+        # we assume that the first file that requires 'sinatra' is the
+    # app_file. all other path related options are calculated based
+    # on this path by default.
+    set :app_file, caller_files.first || $0
     
-            Bundler.setup
-        required_gems = Bundler.require(:jekyll_plugins)
-        message = 'Required #{required_gems.map(&:name).join(', ')}'
-        Jekyll.logger.debug('PluginManager:', message)
-        ENV['JEKYLL_NO_BUNDLER_REQUIRE'] = 'true'
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
+          end
+        end
+        bad_cookies.empty?
+      end
     
-        @inner.log_level = log_level
-    Sass.logger = @inner
+      %w(GET HEAD POST PUT DELETE).each do |method|
+    it 'accepts #{method} requests when allow_if is true' do
+      mock_app do
+        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
+        run DummyApp
+      end
+      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
+    end
   end
     
-        # Starts the read-eval-print loop.
-    def run
-      environment = Environment.new
-      @line = 0
-      loop do
-        @line += 1
-        unless (text = Readline.readline('>> '))
-          puts
-          return
-        end
+      # The CategoryIndex class creates a single category page for the specified category.
+  class CategoryIndex < Page
     
-            def matches? subject
-          @subject = subject
-          @subject = subject.new if subject.class == Class
-          error_when_not_valid? && no_error_when_valid?
-        end
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
+      end
+    end
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
+  end
+  output += '></#{tag}>'
+end
+    
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+      end
+    end
+  end
+end
+    
+          if File.symlink?(includes_dir)
+        return 'Includes directory '#{includes_dir}' cannot be a symlink'
+      end
