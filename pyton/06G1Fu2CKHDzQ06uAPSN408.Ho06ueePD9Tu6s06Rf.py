@@ -1,106 +1,214 @@
 
         
-            response = HttpResponse(template.render({'flatpage': f}, request))
-    return response
+        cc_test(
+    name = 'syntaxnet_transition_state_test',
+    srcs = ['syntaxnet_transition_state_test.cc'],
+    data = [':testdata'],
+    deps = [
+        ':syntaxnet_component',
+        ':syntaxnet_transition_state',
+        '//dragnn/core:input_batch_cache',
+        '//dragnn/core/test:generic',
+        '//dragnn/core/test:mock_transition_state',
+        '//dragnn/io:sentence_input_batch',
+        '//dragnn/protos:spec_proto_cc',
+        '//syntaxnet:base',
+        '//syntaxnet:sentence_proto_cc',
+        '//syntaxnet:test_main',
+    ],
+)
 
     
-    # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+    cc_library(
+    name = 'index_translator',
+    srcs = ['index_translator.cc'],
+    hdrs = ['index_translator.h'],
+    deps = [
+        '//dragnn/core/interfaces:component',
+        '//dragnn/core/interfaces:transition_state',
+        '//syntaxnet:base',
+    ],
+)
     
-    # A list of ignored prefixes for module index sorting.
-#modindex_common_prefix = []
+    cc_test(
+    name = 'mst_solver_test',
+    size = 'small',
+    srcs = ['mst_solver_test.cc'],
+    deps = [
+        ':mst_solver',
+        '//dragnn/core/test:generic',
+        '//syntaxnet:base',
+        '//syntaxnet:test_main',
+        '@org_tensorflow//tensorflow/core:test',
+    ],
+)
     
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    @mock.patch('certbot.notify.subprocess.Popen')
-    def test_everything_fails(self, mock_popen, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        lmtp_obj.sendmail.side_effect = socket.error(17)
-        proc = mock.MagicMock()
-        mock_popen.return_value = proc
-        proc.communicate.side_effect = OSError('What we have here is a '
-                                               'failure to communicate.')
-        self.assertFalse(notify('Goose', 'auntrhody@example.com',
-                                'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
-        self.assertEqual(proc.communicate.call_count, 1)
+    cc_binary(
+    name = 'dragnn_cc_impl.so',
+    linkopts = select({
+        '//conditions:default': ['-lm'],
+        '@org_tensorflow//tensorflow:darwin': [],
+    }),
+    linkshared = 1,
+    linkstatic = 1,
+    deps = [
+        '//dragnn/components/stateless:stateless_component',
+        '//dragnn/components/syntaxnet:syntaxnet_component',
+        '//dragnn/core:dragnn_bulk_ops_cc',
+        '//dragnn/core:dragnn_ops_cc',
+    ],
+)
     
-            new_file = _create_temporary(self._path)
-        try:
-            new_toc = {}
-            self._pre_mailbox_hook(new_file)
-            for key in sorted(self._toc.keys()):
-                start, stop = self._toc[key]
-                self._file.seek(start)
-                self._pre_message_hook(new_file)
-                new_start = new_file.tell()
-                while True:
-                    buffer = self._file.read(min(4096,
-                                                 stop - self._file.tell()))
-                    if not buffer:
-                        break
-                    new_file.write(buffer)
-                new_toc[key] = (new_start, new_file.tell())
-                self._post_message_hook(new_file)
-            self._file_length = new_file.tell()
-        except:
-            new_file.close()
-            os.remove(new_file.name)
-            raise
-        _sync_close(new_file)
-        # self._file is about to get replaced, so no need to sync.
-        self._file.close()
-        # Make sure the new file's mode is the same as the old file's
-        mode = os.stat(self._path).st_mode
-        os.chmod(new_file.name, mode)
-        try:
-            os.rename(new_file.name, self._path)
-        except FileExistsError:
-            os.remove(self._path)
-            os.rename(new_file.name, self._path)
-        self._file = open(self._path, 'rb+')
-        self._toc = new_toc
-        self._pending = False
-        self._pending_sync = False
-        if self._locked:
-            _lock_file(self._file, dotlock=False)
+        with tf.variable_scope(self.name, reuse=True):
+      tensors = self.network.create(
+          ids, [], None, None, during_training, stride=stride)
+    update_network_states(self, tensors, network_states, stride)
+    return state.handle
     
-    # Workers are created as daemon threads. This is done to allow the interpreter
-# to exit when there are still idle threads in a ThreadPoolExecutor's thread
-# pool (i.e. shutdown() was not called). However, allowing workers to die with
-# the interpreter has two undesirable properties:
-#   - The workers would still be running during interpretor shutdown,
-#     meaning that they would fail in unpredictable ways.
-#   - The workers could be killed while evaluating a work item, which could
-#     be bad if the callable being evaluated has external side-effects e.g.
-#     writing to a file.
-#
-# To work around this problem, an exit handler is installed which tells the
-# workers to exit when their work queues are empty and then waits until the
-# threads finish.
+        # For feature extraction:
+    comp = bulk_component.BulkFeatureExtractorComponentBuilder(
+        self.master, component_spec)
     
-            self.assertFalse(f6.cancel())
-        self.assertEqual(f6._state, FINISHED)
+    import tensorflow as tf
+    
+      graph = tf.Graph()
+  master_spec = spec_pb2.MasterSpec()
+  with tf.gfile.FastGFile(master_spec_path) as fin:
+    text_format.Parse(fin.read(), master_spec)
+    
+          saved_model_builder.save()
+
+    
+      def LoadSpec(self, spec_path):
+    master_spec = spec_pb2.MasterSpec()
+    testdata = os.path.join(test_flags.source_root(),
+                            'dragnn/core/testdata')
+    with open(os.path.join(testdata, spec_path), 'r') as fin:
+      text_format.Parse(fin.read().replace('TESTDATA', testdata), master_spec)
+      return master_spec
     
     
-def ExtractKeywordsFromGroup_Commas_test():
-  assert_that( syntax_parse._ExtractKeywordsFromGroup(
-                 syntax_parse.SyntaxGroup( '', [
-                   'foo, bar,',
-                   'zoo goo',
-                 ] ) ),
-               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
+_EXPECTED_CONTEXT = r'''
+input { name: 'word-map' Part { file_pattern: '/tmp/word-map' } }
+input { name: 'tag-map' Part { file_pattern: '/tmp/tag-map' } }
+input { name: 'tag-to-category' Part { file_pattern: '/tmp/tag-to-category' } }
+input { name: 'lcword-map' Part { file_pattern: '/tmp/lcword-map' } }
+input { name: 'category-map' Part { file_pattern: '/tmp/category-map' } }
+input { name: 'char-map' Part { file_pattern: '/tmp/char-map' } }
+input { name: 'char-ngram-map' Part { file_pattern: '/tmp/char-ngram-map' } }
+input { name: 'label-map' Part { file_pattern: '/tmp/label-map' } }
+input { name: 'prefix-table' Part { file_pattern: '/tmp/prefix-table' } }
+input { name: 'suffix-table' Part { file_pattern: '/tmp/suffix-table' } }
+input { name: 'known-word-map' Part { file_pattern: '/tmp/known-word-map' } }
+'''
     
-            vimsupport.ReplaceChunks(
-          self._response[ 'fixits' ][ fixit_index ][ 'chunks' ],
-          silent = self._command == 'Format' )
-      except RuntimeError as e:
-        vimsupport.PostVimMessage( str( e ) )
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+def _is_tar_extract(cmd):
+    if '--extract' in cmd:
+        return True
+    
+        def __enter__(self):
+        from scrapy.utils.test import get_testenv
+        pargs = [sys.executable, '-u', '-m', 'scrapy.utils.benchserver']
+        self.proc = subprocess.Popen(pargs, stdout=subprocess.PIPE,
+                                     env=get_testenv())
+        self.proc.stdout.readline()
+    
+            # Set the request method through curl's irritating interface which makes
+        # up names for almost every single method
+        curl_options = {
+            'GET': pycurl.HTTPGET,
+            'POST': pycurl.POST,
+            'PUT': pycurl.UPLOAD,
+            'HEAD': pycurl.NOBODY,
+        }
+        custom_methods = set(['DELETE', 'OPTIONS', 'PATCH'])
+        for o in curl_options.values():
+            curl.setopt(o, False)
+        if request.method in curl_options:
+            curl.unsetopt(pycurl.CUSTOMREQUEST)
+            curl.setopt(curl_options[request.method], True)
+        elif request.allow_nonstandard_methods or request.method in custom_methods:
+            curl.setopt(pycurl.CUSTOMREQUEST, request.method)
+        else:
+            raise KeyError('unknown method ' + request.method)
+    
+        def __str__(self):
+        return self.message
+    
+        _TIMEDELTA_PATTERN = re.compile(
+        r'\s*(%s)\s*(\w*)\s*' % _FLOAT_PATTERN, re.IGNORECASE)
+    
+        @gen_test
+    def asyncSetUp(self):
+        listener, port = bind_unused_port()
+        event = Event()
+    
+    from tornado.escape import json_decode
+from tornado.test.httpserver_test import TypeCheckHandler
+from tornado.test.util import ignore_deprecation
+from tornado.testing import AsyncHTTPTestCase
+from tornado.web import RequestHandler, Application
+from tornado.wsgi import WSGIApplication, WSGIContainer, WSGIAdapter
+    
+    
+def future_set_result_unless_cancelled(future, value):
+    '''Set the given ``value`` as the `Future`'s result, if not cancelled.
+    
+        @gen_test
+    def test_swallow_context_exception(self):
+        with ignore_deprecation():
+            # Test exception handling: exceptions thrown into the stack context
+            # can be caught and ignored.
+            @gen.coroutine
+            def f2():
+                (yield gen.Callback(1))()
+                yield gen.Wait(1)
+                self.io_loop.add_callback(lambda: 1 / 0)
+                try:
+                    yield gen.Task(self.io_loop.add_timeout,
+                                   self.io_loop.time() + 10)
+                except ZeroDivisionError:
+                    raise gen.Return(42)
+    
+    
+class Suspect(OutOfService):
+    
+        def setUp(cls):
+        ''' Function/test case scope setup. '''
+        cls.output = StringIO()
+        cls.saved_stdout = sys.stdout
+        sys.stdout = cls.output
+    
+        def test_dog_greek_localization(self):
+        self.assertEqual(self.g.get('dog'), 'σκύλος')
+    
+        def test_shall_toggle_from_fm_to_am(self):
+        self.radio.toggle_amfm()
+        state = self.radio.state.name
+        expected_state_name = 'AM'
+        self.assertEqual(state, expected_state_name)
+
+    
+        def test_display_current_time_at_current_time(self):
+        '''
+        Just as justification for working example with the time provider used in
+        production. (Will always pass.)
+        '''
+        production_code_time_provider = ProductionCodeTimeProvider()
+        class_under_test = TimeDisplay()
+        class_under_test.set_time_provider(production_code_time_provider)
+        current_time = datetime.datetime.now()
+        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+
+    
+        @classmethod
+    def _class_method_1(cls):
+        print('Value {}'.format(cls.x1))
+    
+    if __name__ == '__main__':
+    main()
+    
+        def __init__(self, value):
+        self.value = value
