@@ -1,112 +1,90 @@
 
         
-        versions_info['versions'][version] = new_version
-versions_info['latest'] = version
-    
-    entry_template = textwrap.dedent('''
-    <entry>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
-        <title>New version @VERSION@</title>
-        <link href='http://rg3.github.io/youtube-dl' />
-        <content type='xhtml'>
-            <div xmlns='http://www.w3.org/1999/xhtml'>
-                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
-            </div>
-        </content>
-        <author>
-            <name>The youtube-dl maintainers</name>
-        </author>
-        <updated>@TIMESTAMP@</updated>
-    </entry>
-    ''')
-    
-        @pytest.mark.parametrize(
-        'content', (
-            # HTML5 meta charset attribute
-            '<meta charset='UTF-8'>',
-            # HTML4 pragma directive
-            '<meta http-equiv='Content-type' content='text/html;charset=UTF-8'>',
-            # XHTML 1.x served with text/html MIME type
-            '<meta http-equiv='Content-type' content='text/html;charset=UTF-8' />',
-            # XHTML 1.x served as XML
-            '<?xml version='1.0' encoding='UTF-8'?>',
-        ))
-    def test_pragmas(self, content):
-        encodings = get_encodings_from_content(content)
-        assert len(encodings) == 1
-        assert encodings[0] == 'UTF-8'
-    
-            extract_cookies_to_jar(self.cookies, request, r.raw)
-    
-    # Language to be used for generating the HTML full-text search index.
-# Sphinx supports the following languages:
-#   'da', 'de', 'en', 'es', 'fi', 'fr', 'hu', 'it', 'ja'
-#   'nl', 'no', 'pt', 'ro', 'ru', 'sv', 'tr'
-#html_search_language = 'en'
-    
-    import codecs
-import collections
-import contextlib
-import io
-import os
-import re
-import socket
-import struct
-import sys
-import tempfile
-import warnings
-import zipfile
-    
-            # put all lines in the file into a Python list
-        strings = f.readlines()
         
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
+def unicode_is_ascii(u_string):
+    '''Determine if unicode string only contains ASCII characters.
     
-            for i in link_list:
-            self.stream_types.append({'id': str(i[0])})
-            self.streams[i[0]] = {'url': i[1]}
     
-        print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([video_url], title, ext, size, output_dir, merge=merge, headers = fake_headers)
+@pytest.mark.skipif(sys.version_info < (2,7), reason='Only run on Python 2.7+')
+def test_system_ssl():
+    '''Verify we're actually setting system_ssl when it should be available.'''
+    assert info()['system_ssl']['version'] != ''
     
-    from ..common import *
-from json import loads
-from base64 import b64decode
-import re
-import hashlib
     
-    from ..common import *
+class TestIsValidCIDR:
     
-        # mgid%3Auma%3Avideo%3Amtv81.com%3A897974
-    vid = match1(html, r'getTheVideo\('(.*?)'')
-    xml = parseString(
-        get_content('http://intl.esperanto.mtvi.com/www/xml/media/mediaGen.jhtml?uri={}&flashPlayer=LNX%2013,0,0,206&geo=CN&sid=123456'.format(vid)))
+        def proxy_headers(self, proxy):
+        '''Returns a dictionary of the headers to add to any request sent
+        through a proxy. This works with urllib3 magic to ensure that they are
+        correctly sent to the proxy, rather than in a tunnelled request if
+        CONNECT is being used.
     
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/sensor.pvoutput/
+    This module handles import compatibility issues between Python 2 and
+Python 3.
 '''
-import logging
-from collections import namedtuple
-from datetime import timedelta
+    
+            (2016-01, url0), 2
+        (2016-01, url1), 1
+        '''
+        yield key, sum(values)
     
     
-def __feet_to_meters(feet: float) -> float:
-    '''Convert feet to meters.'''
-    return feet * 0.3048
+class DefaultCategories(Enum):
     
-        def test_from_event_to_delete_state(self):
-        '''Test converting deleting state event to db state.'''
-        event = ha.Event(EVENT_STATE_CHANGED, {
-            'entity_id': 'sensor.temperature',
-            'old_state': ha.State('sensor.temperature', '18'),
-            'new_state': None,
-        })
-        db_state = States.from_event(event)
+        This will typically be run on the result of the communicate() method
+    of a subprocess.Popen object.
+    '''
+    stderr = re.sub(r'\[\d+ refs\]\r?\n?$'.encode(), ''.encode(), stderr).strip()
+    return stderr
+    
+    
+class FakeFuture( object ):
+  '''A fake version of a future response object, just about suitable for
+  mocking a server response as generated by PostDataToHandlerAsync.
+  Not usually used directly. See MockAsyncServerResponse* methods'''
+  def __init__( self, done, response = None, exception = None ):
+    self._done = done
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+    
+def SendEventNotificationAsync( event_name,
+                                buffer_number = None,
+                                extra_data = None ):
+  event = EventNotification( event_name, buffer_number, extra_data )
+  event.Start()
+
+    
+            This will normally return the class in which it is defined.
+        (which is *not* necessarily the same as the cls classmethod parameter).
+        '''
+        raise NotImplementedError()
+    
+    This module integrates Tornado with the ``asyncio`` module introduced
+in Python 3.4. This makes it possible to combine the two libraries on
+the same event loop.
+    
+        def test_overrun(self):
+        # If a call runs for too long, we skip entire cycles to get
+        # back on schedule.
+        call_durations = [9, 9, 10, 11, 20, 20, 35, 35, 0, 0, 0]
+        expected = [
+            1010, 1020, 1030,  # first 3 calls on schedule
+            1050, 1070,  # next 2 delayed one cycle
+            1100, 1130,  # next 2 delayed 2 cycles
+            1170, 1210,  # next 2 delayed 3 cycles
+            1220, 1230,  # then back on schedule.
+        ]
+    
+        # Data above this size will be appended separately instead
+    # of extending an existing bytearray
+    _large_buf_threshold = 2048
+    
+            event = Event()
+        test = self
+        body = []
