@@ -1,98 +1,92 @@
 
         
-                The arguments passed to :meth:`as_view` are forwarded to the
-        constructor of the class.
-        '''
-        def view(*args, **kwargs):
-            self = view.view_class(*class_args, **class_kwargs)
-            return self.dispatch_request(*args, **kwargs)
+        
+packages = {
+    package_name: get_info(package_name) for package_name in PACKAGES
+}
     
-        :copyright: © 2010 by the Pallets team.
-    :license: BSD, see LICENSE for more details.
+            headers = dict(self._orig.headers)
+        if 'Host' not in self._orig.headers:
+            headers['Host'] = url.netloc.split('@')[-1]
+    
+        CHUNK_SIZE = 1
+    
+    
+def has_docutils():
+    try:
+        # noinspection PyUnresolvedReferences
+        import docutils
+        return True
+    except ImportError:
+        return False
+    
+    
+def test_unicode_headers_verbose(httpbin):
+    # httpbin doesn't interpret utf8 headers
+    r = http('--verbose', httpbin.url + '/headers', u'Test:%s' % UNICODE)
+    assert HTTP_OK in r
+    assert UNICODE in r
+    
+        See <https://github.com/httpie/httpie-ntlm> for an example auth plugin.
+    
+        def __iter__(self):
+        return iter(self._plugins)
+    
+            '''
+        for name, value in request_headers.items():
+    
+    # Apply monkey patches to fix issues in external libraries
+from . import _monkeypatches
+del _monkeypatches
+    
+            assert len(self.args) in [1, 2, 3]
+        self.obj_name = self.args[0] or None
+        self.obj_type = self.objects[self.obj_name]
+    
+    # -- General configuration ------------------------------------------------
+    
+        for url in urls:
+        if not url.startswith('http'):
+            print('markdown file name: ' + url)
+            continue
+        if check_live_url(url):
+            print(url)
+        else:
+            print(url, file=sys.stderr)
+    
+    
+class Scientist(AbstractExpert):
+    
+        def __init__(self):
+        self._active_state = Active(self)  # Unit.Inservice.Active()
+        self._standby_state = Standby(self)  # Unit.Inservice.Standby()
+        self._suspect_state = Suspect(self)  # Unit.OutOfService.Suspect()
+        self._failed_state = Failed(self)  # Unit.OutOfService.Failed()
+        self._current_state = self._standby_state
+        self.states = {'active': self._active_state,
+                       'standby': self._standby_state,
+                       'suspect': self._suspect_state,
+                       'failed': self._failed_state}
+        self.message_types = {'fault trigger': self._current_state.on_fault_trigger,
+                              'switchover': self._current_state.on_switchover,
+                              'diagnostics passed': self._current_state.on_diagnostics_passed,
+                              'diagnostics failed': self._current_state.on_diagnostics_failed,
+                              'operator inservice': self._current_state.on_operator_inservice}
+    
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
 '''
     
-        if logging_plugin:
-        pytestconfig.pluginmanager.register(logging_plugin, 'logging-plugin')
+        @staticmethod
+    def _static_method_2():
+        print('executed method 2!')
     
-        flask.appcontext_tearing_down.connect(record_teardown, app)
-    try:
-        with app.test_client() as c:
-            rv = c.get('/')
-            assert rv.status_code == 500
-            assert recorded == []
-        assert recorded == [('tear_down', {'exc': None})]
-    finally:
-        flask.appcontext_tearing_down.disconnect(record_teardown, app)
-
-    
-    def test_templates_auto_reload_debug_run(app, monkeypatch):
-    def run_simple_mock(*args, **kwargs):
-        pass
-    
-            Keyword:                   'bold #004461',   # class: 'k'
-        Keyword.Constant:          'bold #004461',   # class: 'kc'
-        Keyword.Declaration:       'bold #004461',   # class: 'kd'
-        Keyword.Namespace:         'bold #004461',   # class: 'kn'
-        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
-        Keyword.Reserved:          'bold #004461',   # class: 'kr'
-        Keyword.Type:              'bold #004461',   # class: 'kt'
-    
-    '''
-requests.hooks
-~~~~~~~~~~~~~~
-    
-    from .compat import OrderedDict
+    *TL;DR80
+Traverses a container and accesses the container's elements.
+'''
     
     
-@pytest.mark.skipif(sys.version_info < (2,7), reason='Only run on Python 2.7+')
-def test_system_ssl():
-    '''Verify we're actually setting system_ssl when it should be available.'''
-    assert info()['system_ssl']['version'] != ''
-    
-    
-def test_redirect_rfc1808_to_non_ascii_location():
-    path = u'š'
-    expected_path = b'%C5%A1'
-    redirect_request = []  # stores the second request to the server
-    
-    if __name__ == '__main__':
-    main()
-
-    
-    from .theplatform import theplatform_download_by_pid
-    
-    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
-    
-	from xml.dom.minidom import parseString
-	doc = parseString(xml)
-	tab = doc.getElementsByTagName('related')[0].firstChild
-    
-    from ..common import *
-from hashlib import md5
-from urllib.parse import urlparse
-import re
-    
-        def prepare(self, **kwargs):
-        content = get_content(self.url)
-        self.title = match1(content, r'<title>([^<]+)</title>')
-        s = match1(content, r'P\.s\s*=\s*\'([^\']+)\'')
-        scp = match1(content, r'InfoQConstants\.scp\s*=\s*\'([^\']+)\'')
-        scs = match1(content, r'InfoQConstants\.scs\s*=\s*\'([^\']+)\'')
-        sck = match1(content, r'InfoQConstants\.sck\s*=\s*\'([^\']+)\'')
-    
-    from ..common import *
-import re
-    
-    from html.parser import HTMLParser
-    
-    import homeassistant.config as config_util
-    
-    
-def convert(value: float, unit_1: str, unit_2: str) -> float:
-    '''Convert one unit of measurement to another.'''
-    if unit_1 not in VALID_UNITS:
-        raise ValueError(
-            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_1, LENGTH))
-    if unit_2 not in VALID_UNITS:
-        raise ValueError(
-            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_2, LENGTH))
+class NotSpecification(CompositeSpecification):
+    _wrapped = Specification()
