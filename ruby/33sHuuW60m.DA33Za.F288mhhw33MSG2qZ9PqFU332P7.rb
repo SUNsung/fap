@@ -1,148 +1,139 @@
 
         
-          def test_escape_javascript_with_safebuffer
-    given = %('quoted' 'double-quoted' new-line:\n </closed>)
-    expect = %(\\'quoted\\' \\'double-quoted\\' new-line:\\n <\\/closed>)
-    assert_equal expect, escape_javascript(given)
-    assert_equal expect, escape_javascript(ActiveSupport::SafeBuffer.new(given))
-    assert_instance_of String, escape_javascript(given)
-    assert_instance_of ActiveSupport::SafeBuffer, escape_javascript(ActiveSupport::SafeBuffer.new(given))
+              # Need to experiment if this priority is the best one: rendered => output_buffer
+      def document_root_element
+        Nokogiri::HTML::Document.parse(@rendered.blank? ? @output_buffer : @rendered).root
+      end
+    
+          def cast(value)
+        raise value unless value == 'value from user'
+        'cast value'
+      end
+    
+      has_many :clients, -> { order 'id' }, dependent: :destroy, before_remove: :log_before_remove, after_remove: :log_after_remove
+  has_many :unsorted_clients, class_name: 'Client'
+  has_many :unsorted_clients_with_symbol, class_name: :Client
+  has_many :clients_sorted_desc, -> { order 'id DESC' }, class_name: 'Client'
+  has_many :clients_of_firm, -> { order 'id' }, foreign_key: 'client_of', class_name: 'Client', inverse_of: :firm
+  has_many :clients_ordered_by_name, -> { order 'name' }, class_name: 'Client'
+  has_many :unvalidated_clients_of_firm, foreign_key: 'client_of', class_name: 'Client', validate: false
+  has_many :dependent_clients_of_firm, -> { order 'id' }, foreign_key: 'client_of', class_name: 'Client', dependent: :destroy
+  has_many :exclusively_dependent_clients_of_firm, -> { order 'id' }, foreign_key: 'client_of', class_name: 'Client', dependent: :delete_all
+  has_many :limited_clients, -> { limit 1 }, class_name: 'Client'
+  has_many :clients_with_interpolated_conditions, ->(firm) { where 'rating > #{firm.rating}' }, class_name: 'Client'
+  has_many :clients_like_ms, -> { where('name = 'Microsoft'').order('id') }, class_name: 'Client'
+  has_many :clients_like_ms_with_hash_conditions, -> { where(name: 'Microsoft').order('id') }, class_name: 'Client'
+  has_many :plain_clients, class_name: 'Client'
+  has_many :clients_using_primary_key, class_name: 'Client',
+           primary_key: 'name', foreign_key: 'firm_name'
+  has_many :clients_using_primary_key_with_delete_all, class_name: 'Client',
+           primary_key: 'name', foreign_key: 'firm_name', dependent: :delete_all
+  has_many :clients_grouped_by_firm_id, -> { group('firm_id').select('firm_id') }, class_name: 'Client'
+  has_many :clients_grouped_by_name, -> { group('name').select('name') }, class_name: 'Client'
+    
+        server.config.cable = ActiveSupport::HashWithIndifferentAccess.new(adapter: 'async')
+    
+      # any user that is either a moderator or an admin
+  def staff?
+    admin || moderator
   end
     
-              # Bubbled up from the adapter require. Prefix the exception message
-          # with some guidance about how to address it and reraise.
-          else
-            raise e.class, 'Error loading the '#{adapter}' Action Cable pubsub adapter. Missing a gem it depends on? #{e.message}', e.backtrace
-          end
-        end
+    def load_apps
+  out, err, status = Open3.capture3('/usr/bin/osascript', '-e', 'tell application 'System Events' to get (name, bundle identifier, unix id) of every process')
+  if status.exitstatus > 0
+    puts err
+    exit status.exitstatus
+  end
+  out = out.split(', ')
+  one_third   = out.length / 3
+  @app_names  = out.shift(one_third)
+  @bundle_ids = out.shift(one_third)
+  @unix_ids   = out.shift(one_third)
+end
     
-                        if callbacks = @subscribe_callbacks[chan]
-                      next_callback = callbacks.shift
-                      @event_loop.post(&next_callback) if next_callback
-                      @subscribe_callbacks.delete(chan) if callbacks.empty?
-                    end
-                  end
+          config.paths['log']             = '#{Msf::Config.log_directory}/#{Rails.env}.log'
+      config.paths['config/database'] = [Metasploit::Framework::Database.configurations_pathname.try(:to_path)]
+    
                 end
     
-    class TestResponseTest < ActiveSupport::TestCase
-  def assert_response_code_range(range, predicate)
-    response = ActionDispatch::TestResponse.new
-    (0..599).each do |status|
-      response.status = status
-      assert_equal range.include?(status), response.send(predicate),
-                   'ActionDispatch::TestResponse.new(#{status}).#{predicate}'
-    end
-  end
+    class SnifferFTP < BaseProtocolParser
     
-        test 'middleware that is 'use'd is called as part of the Rack application' do
-      result = @app.call(env_for('/'))
-      assert_equal ['Hello World'], [].tap { |a| result[2].each { |x| a << x } }
-      assert_equal 'Success', result[1]['Middleware-Test']
-    end
+          when :login_fail
     
-      def test_dasherized_keys_as_json
-    with_test_route_set do
-      post '/?full=1',
-        params: '{'first-key':{'sub-key':'...'}}',
-        headers: { 'CONTENT_TYPE' => 'application/json' }
-      assert_equal 'action, controller, first-key(sub-key), full', @controller.response.body
-      assert_equal '...', @controller.params['first-key']['sub-key']
-    end
-  end
-    
-    require 'active_support/log_subscriber'
-    
-          text.split.each do |word|
-        if sentences.first.present? && (sentences.last + [word]).join(' ').length > len
-          sentences << [word]
-        else
-          sentences.last << word
-        end
-      end
-    
-            def determine_default_mailer(name)
-          mailer = determine_constant_from_test_name(name) do |constant|
-            Class === constant && constant < ActionMailer::Base
+                  s[:proto]='pop3'
+              s[:extra]='Failed Login. Banner: #{s[:banner]}'
+              report_auth_info(s)
+              print_status('Invalid POP3 Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]} (#{s[:banner].strip})')
+              s[:pass]=''
           end
-          raise NonInferrableMailerError.new(name) if mailer.nil?
-          mailer
-        end
-      end
-    
-    # Show backtraces for deprecated behavior for quicker cleanup.
-ActiveSupport::Deprecation.debug = true
-    
-      test 'undefined delivery methods raises errors' do
-    DeliveryMailer.delivery_method = nil
-    error = assert_raise RuntimeError do
-      DeliveryMailer.welcome.deliver_now
-    end
-    assert_equal 'Delivery method cannot be nil', error.message
-  end
-    
-    The second
-   paragraph.
-    
-          def self.authors
-        ['gin0606']
-      end
-    
-    # grab name/url pairings from README.md
-contents = File.read INPUT_FILENAME
-matches = contents.scan(/\* (.*) (http.*)/)
-# All blogs that do not respond
-unavailable = []
-temp_ignores = [
-  'AdRoll',
-  'Buzzfeed',
-  'SourceClear',
-  'TaskRabbit',
-  'theScore',
-  'Trivago',
-  'Xmartlabs',
-  'WyeWorks',
-  'Zoosk',
-  'Rudolf Olah'
-]
-    
-      def parse(pkt)
-    
-    classNames = [ 'HelloWorld1', 'HelloWorld2' ]
-    
-          # A string representation of the importer.
-      # Should be overridden by subclasses.
-      #
-      # This is used to help debugging,
-      # and should usually just show the load path encapsulated by this importer.
-      #
-      # @return [String]
-      def to_s
-        Sass::Util.abstract(self)
-      end
-    
-        it 'Returns nil when Referer header is invalid' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
-      expect(subject.referrer(env)).to be_nil
-    end
-  end
+        when nil
+          # No matches, no saved state
+        else
+          s[:last]=matched
+          sessions[s[:session]].merge!({k => matches})
+      end # end case matched
+    end # end of each_key
+  end # end of parse
 end
+    
+    # Sniffer class for GET URL's
+class SnifferURL < BaseProtocolParser
+  def register_sigs
+    self.sigs = {
+      :get		=> /^GET\s+([^\n]+)\s+HTTP\/\d\.\d/i,
+      :webhost	=> /^HOST\:\s+([^\n\r]+)/i,
+    }
+  end
+    
+    print asm
 
     
-      if ''.respond_to?(:encoding)  # Ruby 1.9+ M17N
-    context 'PATH_INFO's encoding' do
-      before do
-        @app = Rack::Protection::PathTraversal.new(proc { |e| [200, {'Content-Type' => 'text/plain'}, [e['PATH_INFO'].encoding.to_s]] })
+    require 'rex/post/meterpreter'
+    
+          def call
+        title('Gems')
+        table(all_gem_names) do |gem, row|
+          row.yellow if update_available?(gem)
+          row << gem
+          row << installed_gem_version(gem)
+          row << '(update available)' if update_available?(gem)
+        end
       end
     
-      # rspec-expectations config goes here. You can use an alternate
-  # assertion/expectation library such as wrong or the stdlib/minitest
-  # assertions if you prefer.
-  config.expect_with :rspec do |expectations|
-    # Enable only the newer, non-monkey-patching expect syntax.
-    # For more details, see:
-    #   - http://myronmars.to/n/dev-blog/2012/06/rspecs-new-expectation-syntax
-    expectations.syntax = :expect
+          private
+    
+          def stage_set?
+        !!fetch(:stage, false)
+      end
+    
+      # Read and eval a .rake file in such a way that `self` within the .rake file
+  # refers to this plugin instance. This gives the tasks in the file access to
+  # helper methods defined by the plugin.
+  def eval_rakefile(path)
+    contents = IO.read(path)
+    instance_eval(contents, path, 1)
   end
     
-        expect(get('/..', :foo => '<bar>')).to be_ok
+        # @abstract
+    #
+    # Your implementation should check if the specified remote-repository is
+    # available.
+    #
+    # @return [Boolean]
+    #
+    def check
+      raise NotImplementedError, 'Your SCM strategy module should provide a #check method'
+    end
+    
+      entries = [{ template: deploy_rb, file: config_dir.join('deploy.rb') }]
+  entries += envs.split(',').map { |stage| { template: stage_rb, file: deploy_dir.join('#{stage}.rb') } }
+    
+              add_offense(node)
+        end
+    
+      module Comment0
   end
+    
+            def description
+          'validate the content types allowed on attachment #{@attachment_name}'
+        end
