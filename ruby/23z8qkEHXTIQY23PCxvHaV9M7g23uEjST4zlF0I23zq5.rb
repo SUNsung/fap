@@ -1,83 +1,62 @@
 
         
-            # Require each of the runtime_dependencies specified by the theme's gemspec.
-    #
-    # Returns false only if no dependencies have been specified, otherwise nothing.
-    def require_theme_deps
-      return false unless site.theme.runtime_dependencies
-      site.theme.runtime_dependencies.each do |dep|
-        next if dep.name == 'jekyll'
-        External.require_with_graceful_fail(dep.name) if plugin_allowed?(dep.name)
-      end
-    end
-    
-          def self.available_options
-        [
-          FastlaneCore::ConfigItem.new(key: :name,
-                                       env_name: 'KEYCHAIN_NAME',
-                                       description: 'Keychain name',
-                                       conflicting_options: [:path],
-                                       is_string: true,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :path,
-                                       env_name: 'KEYCHAIN_PATH',
-                                       description: 'Path to keychain',
-                                       is_string: true,
-                                       conflicting_options: [:name],
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :password,
-                                       env_name: 'KEYCHAIN_PASSWORD',
-                                       description: 'Password for the keychain',
-                                       sensitive: true,
-                                       optional: false),
-          FastlaneCore::ConfigItem.new(key: :default_keychain,
-                                       description: 'Should the newly created Keychain be the new system default keychain',
-                                       is_string: false,
-                                       default_value: false),
-          FastlaneCore::ConfigItem.new(key: :unlock,
-                                       description: 'Unlock keychain after create',
-                                       is_string: false,
-                                       default_value: false),
-          FastlaneCore::ConfigItem.new(key: :timeout,
-                                       description: 'timeout interval in seconds. Set `false` if you want to specify 'no time-out'',
-                                       is_string: false,
-                                       default_value: 300),
-          FastlaneCore::ConfigItem.new(key: :lock_when_sleeps,
-                                       description: 'Lock keychain when the system sleeps',
-                                       is_string: false,
-                                       default_value: false),
-          FastlaneCore::ConfigItem.new(key: :lock_after_timeout,
-                                       description: 'Lock keychain after timeout interval',
-                                       is_string: false,
-                                       default_value: false),
-          FastlaneCore::ConfigItem.new(key: :add_to_search_list,
-                                       description: 'Add keychain to search list',
-                                       is_string: false,
-                                       default_value: true)
-        ]
+                if name.start_with?('etc') || name.start_with?('core.stdc.')
+          name.split('.')[0..2].join('.')
+        elsif name.start_with?('ddmd')
+          'ddmd'
+        elsif name.start_with?('rt')
+          'rt'
+        else
+          name.split('.')[0..1].join('.')
+        end
       end
     
-            self.tasks
-      end
+        version '4' do
+      self.release = '4.1.1'
+      self.base_url = 'https://getbootstrap.com/docs/4.1/'
+      self.root_path = 'getting-started/introduction/'
+    
+        def as_json
+      { name: name, path: path, type: type }
     end
   end
 end
 
     
-        def initialize(username, domain)
-      @username = username
-      @domain = domain
+        def join(*args)
+      self.class.join self, *args
     end
     
-      task :ensure_id_sequences_exist do
-    each_schema_load_environment do
-      Mastodon::Snowflake.ensure_id_sequences_exist
-    end
-  end
+        end # end of each_key
+  end # end of parse
 end
-
     
-      def perform(user_id)
-    @user = User.find(user_id)
-    deliver_digest if @user.allows_digest_emails?
-  end
+    		self.block[-1] << '    ''
+    
+          def initialize(pairs = {})
+        @pairs = pairs
+        pairs.each do |key, value|
+          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
+          send(:'#{key}=', value)
+        end
+    
+      private
+    
+            if args.length > 0
+          attachment.to_s(args.first)
+        else
+          attachment
+        end
+      end
+    end
+    
+          class HaveAttachedFileMatcher
+        def initialize attachment_name
+          @attachment_name = attachment_name
+        end
+    
+          def drop_attached_file(*args)
+        ActiveSupport::Deprecation.warn 'Method `drop_attached_file` in the migration has been deprecated and will be replaced by `remove_attachment`.'
+        remove_attachment(*args)
+      end
+    end
