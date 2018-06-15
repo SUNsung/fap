@@ -1,75 +1,63 @@
 
         
-            def _create_socket_and_bind(self):
-        sock = socket.socket()
-        sock.bind((self.host, self.port))
-        sock.listen(0)
-        return sock
+        filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
     
-            assert len(server.handler_results) == 0
     
-        from urllib3.packages.ordered_dict import OrderedDict
-    
-    
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
-    '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
-    
-    from . import utils
-from . import packages
-from .models import Request, Response, PreparedRequest
-from .api import request, get, head, post, patch, put, delete, options
-from .sessions import session, Session
-from .status_codes import codes
-from .exceptions import (
-    RequestException, Timeout, URLRequired,
-    TooManyRedirects, HTTPError, ConnectionError,
-    FileModeWarning, ConnectTimeout, ReadTimeout
-)
-    
-    This module contains the set of Requests' exceptions.
-'''
-from urllib3.exceptions import HTTPError as BaseHTTPError
-    
-    codes = LookupDict(name='status_codes')
-    
-        @pytest.mark.parametrize('value', ('8.8.8.8.8', 'localhost.localdomain'))
-    def test_invalid(self, value):
-        assert not is_ipv4_address(value)
-    
-        merged_setting = dict_class(to_key_val_list(session_setting))
-    merged_setting.update(to_key_val_list(request_setting))
-    
-            close_server.set()
+if __name__ == '__main__':
+    unittest.main()
 
     
-        def setUp(self):
-        from acme.errors import PollError
-        self.timeout = PollError(
-            exhausted=set([mock.sentinel.AR]),
-            updated={})
-        self.invalid = PollError(exhausted=set(), updated={
-            mock.sentinel.AR: mock.sentinel.AR2})
+        def __exit__(self, exc_type, exc_value, traceback):
+        if exc_type is None:
+            self.stop_event.wait(self.WAIT_EVENT_TIMEOUT)
+        else:
+            if self.wait_to_close_event:
+                # avoid server from waiting for event timeouts
+                # if an exception is found in the main thread
+                self.wait_to_close_event.set()
     
-        def has_more_configs(self):
-        '''Returns true if there are more configs to test'''
-        return bool(self._configs)
     
-    # There are two options for replacing |today|: either, you set today to some
-# non-false value, then it is used:
-#today = ''
-# Else, today_fmt is used as the format for a strftime call.
-#today_fmt = '%B %d, %Y'
+def test_idna_with_version_attribute(mocker):
+    '''Verify we're actually setting idna version when it should be available.'''
+    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
+    assert info()['idna'] == {'version': '2.6'}
+
     
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    def test_smtp_success(self, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        self.assertTrue(notify('Goose', 'auntrhody@example.com',
-                               'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.connect.call_count, 1)
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
+    This module handles import compatibility issues between Python 2 and
+Python 3.
+'''
+    
+        @skipPypy3V58
+    @gen_test
+    def test_async_read_error_logging(self):
+        # Socket errors on asynchronous reads should be logged (but only
+        # once).
+        server, client = yield self.make_iostream_pair()
+        closed = Event()
+        server.set_close_callback(closed.set)
+        try:
+            # Start a read that will be fulfilled asynchronously.
+            server.read_bytes(1)
+            client.write(b'a')
+            # Stub out read_from_fd to make it fail.
+    
+    This module is inspired by Google's `gflags
+<https://github.com/google/python-gflags>`_. The primary difference
+with libraries such as `argparse` is that a global registry is used so
+that options may be defined in any module (it also enables
+`tornado.log` by default). The rest of Tornado does not depend on this
+module, so feel free to use `argparse` or other configuration
+libraries if you prefer them.
