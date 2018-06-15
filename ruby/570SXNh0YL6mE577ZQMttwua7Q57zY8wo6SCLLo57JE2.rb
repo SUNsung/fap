@@ -1,88 +1,114 @@
 
         
-          def teardown
-    ActiveSupport.escape_html_entities_in_json = @old_escape_html_entities_in_json
-  end
-    
-          delegate :lookup_context, to: :controller
-      attr_accessor :controller, :output_buffer, :rendered
-    
-      test 'response parsing' do
-    response = ActionDispatch::TestResponse.create(200, {}, '')
-    assert_equal response.body, response.parsed_body
-    
-    class WebServiceTest < ActionDispatch::IntegrationTest
-  class TestController < ActionController::Base
-    def assign_parameters
-      if params[:full]
-        render plain: dump_params_keys
+            if resource.errors.empty?
+      resource.unlock_access! if unlockable?(resource)
+      if Devise.sign_in_after_reset_password
+        flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
+        set_flash_message!(:notice, flash_message)
+        sign_in(resource_name, resource)
       else
-        render plain: (params.keys - ['controller', 'action']).sort.join(', ')
+        set_flash_message!(:notice, :updated_not_active)
       end
+      respond_with resource, location: after_resetting_password_path_for(resource)
+    else
+      set_minimum_password_length
+      respond_with resource
     end
-    
-        private
-      # 'Deserialize' the mailer class name by hand in case another argument
-      # (like a Global ID reference) raised DeserializationError.
-      def mailer_class
-        if mailer = Array(@serialized_arguments).first || Array(arguments).first
-          mailer.constantize
-        end
-      end
-    
-          add_delivery_method :file, Mail::FileDelivery,
-        location: defined?(Rails.root) ? '#{Rails.root}/tmp/mails' : '#{Dir.tmpdir}/mails'
-    
-    module ActionMailer
-  # Implements the ActiveSupport::LogSubscriber for logging notifications when
-  # email is delivered or received.
-  class LogSubscriber < ActiveSupport::LogSubscriber
-    # An email was delivered.
-    def deliver(event)
-      info do
-        recipients = Array(event.payload[:to]).join(', ')
-        'Sent mail to #{recipients} (#{event.duration.round(1)}ms)'
-      end
-    
-      def test_assert_select_email
-    assert_raise ActiveSupport::TestCase::Assertion do
-      assert_select_email {}
-    end
-    
-          # Topic may be hard deleted due to spam, no point complaining
-      # we would have to look at the topics table id sequence to find cases
-      # where this was called with an invalid id, no point really
-      return unless topic.present?
-    
-        sidekiq_options queue: 'critical'
-    
-      def self.fragment_cache
-    @cache ||= DistributedCache.new('am_serializer_fragment_cache')
   end
     
-          it 'does set the source directory' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            cloc(source_directory: 'MyCoolApp')
-          end').runner.execute(:test)
+    if defined?(ActionMailer)
+  class Devise::Mailer < Devise.parent_mailer.constantize
+    include Devise::Mailers::Helpers
     
-      belongs_to :status_message
-  has_many :poll_answers, -> { order 'id ASC' }, dependent: :destroy
-  has_many :poll_participations, dependent: :destroy
-  has_one :author, through: :status_message
+          protected
     
-          rescue_from OpenIDConnect::HttpError do |e|
-        http_error_page_as_json(e)
+      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
+    
+            name
       end
     
-          rescue_from Rack::OAuth2::Server::Authorize::BadRequest,
-                  JSON::JWT::InvalidFormat, JSON::JWK::UnknownAlgorithm do |e|
-        logger.info e.backtrace[0, 10].join('\n')
-        render json: {error: :invalid_request, error_description: e.message, status: 400}
-      end
-      rescue_from JSON::JWT::VerificationFailed do |e|
-        logger.info e.backtrace[0, 10].join('\n')
-        render json: {error: :invalid_grant, error_description: e.message, status: 400}
+        options[:fix_urls] = ->(url) do
+      url.sub! %r{(#{Rust.base_url}.+/)\z}, '\1index.html'
+      url.sub! '/unicode/u_str', '/unicode/str/'
+      url
+    end
+    
+        version 'C++' do
+      include MultipleBaseUrls
+      self.base_urls = ['https://www.tensorflow.org/api_docs/cc/', 'https://www.tensorflow.org/api_guides/cc/']
+    end
+    
+            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
+          next if node.previous.try(:content).present? || node.next.try(:content).present?
+          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
+          node.content = node.content.strip
+          node.name = 'pre' if node.content =~ /\s/
+          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
+        end
+    
+        def paragraphize(input)
+      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
+    end
+  end
+end
+    
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
       end
     end
+  end
+end
+    
+      public(:input)
+end # class FPM::Package::NPM
+
+    
+      # Returns path of a processed template PackageInfo given to 'pkgbuild --info'
+  # note: '--info' is undocumented:
+  # http://managingosx.wordpress.com/2012/07/05/stupid-tricks-with-pkgbuild
+  def pkginfo_template_path
+    pkginfo_template = Tempfile.open('fpm-PackageInfo')
+    pkginfo_data = template('osxpkg.erb').result(binding)
+    pkginfo_template.write(pkginfo_data)
+    pkginfo_template.close
+    pkginfo_template.path
+  end # def write_pkginfo_template
+    
+      option '--zonetype', 'ZONETYPE',
+    'Set the allowed zone types (global, nonglobal, both)',
+    :default => 'value=global value=nonglobal' do |value|
+      case @value
+      when 'both'
+        value = 'value=global value=nonglobal'
+      else
+        value = 'value=#{value}'
+      end
+    end # value
+    
+      # Helper for group lookup
+  def gid2group(gid)
+    begin
+      grent = Etc.getgrgid(gid)
+      return grent.name
+    rescue ArgumentError => e
+      # Invalid user id? No user? Return the uid.
+      logger.warn('Failed to find group for gid #{gid}')
+      return gid.to_s
+    end
+  end # def uid2user
+end # class FPM::Target::Puppet
+    
+      # Where we keep metadata and post install scripts and such
+  def fpm_meta_path
+    @fpm_meta_path ||= begin
+                         path = File.join(staging_path, '.fpm')
+                         FileUtils.mkdir_p(path)
+                         path
+                       end
   end
 end
