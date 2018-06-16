@@ -1,475 +1,524 @@
 
         
-        
-    {
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
+        // Get basic type definitions.
+#define IPC_MESSAGE_IMPL
+#include 'content/nw/src/common/common_message_generator.h'
     
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
-    
-    void RepeatedEnumFieldGenerator::GenerateMembers(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
-    '    = pb::FieldCodec.ForEnum($tag$, x => (int) x, x => ($type_name$) x);\n');
-  printer->Print(variables_,
-    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
-  WritePropertyDocComment(printer, descriptor_);
-  AddPublicMemberAttributes(printer);
-  printer->Print(
-    variables_,
-    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
-    '  get { return $name$_; }\n'
-    '}\n');
+    Base::Base(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+	   const std::string& extension_id)
+    : extension_id_(extension_id),
+      id_(id),
+      delay_destruction_(false),
+      pending_destruction_(false),
+      object_manager_(object_manager) {
 }
     
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_ENUM_FIELD_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_ENUM_FIELD_H__
+    #include 'base/logging.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/api_messages.h'
+#include 'content/public/renderer/render_view.h'
+#include 'content/public/renderer/render_thread.h'
+#include 'content/public/renderer/v8_value_converter.h'
+#include 'third_party/WebKit/public/web/WebView.h'
+#include 'third_party/WebKit/public/web/WebLocalFrame.h'
+#include 'ui/base/resource/resource_bundle.h'
     
-    struct Options;
+    // Tell browser to allocate a new object.
+// function AllocateObject(id, name, options);
+v8::Handle<v8::Value> AllocateObject(int routing_id,
+                                     int object_id,
+                                     const std::string& type,
+                                     v8::Handle<v8::Value> options);
     
-      virtual MessageGenerator* NewMessageGenerator(
-      const Descriptor* descriptor) const;
-    
-      LOG(INFO) << 'Writing Training data';
-  for (int fileid = 0; fileid < kCIFARTrainBatches; ++fileid) {
-    // Open files
-    LOG(INFO) << 'Training Batch ' << fileid + 1;
-    string batchFileName = input_folder + '/data_batch_'
-      + caffe::format_int(fileid+1) + '.bin';
-    std::ifstream data_file(batchFileName.c_str(),
-        std::ios::in | std::ios::binary);
-    CHECK(data_file) << 'Unable to open train file #' << fileid + 1;
-    for (int itemid = 0; itemid < kCIFARBatchSize; ++itemid) {
-      read_image(&data_file, &label, str_buffer);
-      datum.set_label(label);
-      datum.set_data(str_buffer, kCIFARImageNBytes);
-      string out;
-      CHECK(datum.SerializeToString(&out));
-      txn->Put(caffe::format_int(fileid * kCIFARBatchSize + itemid, 5), out);
+    class Clipboard : public Base {
+ public:
+  Clipboard(int id,
+            const base::WeakPtr<DispatcherHost>& dispatcher_host,
+            const base::DictionaryValue& option);
+  ~Clipboard() override;
     }
-  }
-  txn->Commit();
-  train_db->Close();
+    
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
+    }
+    }
+    
+    void Menu::Create(const base::DictionaryValue& option) {
+  gtk_accel_group = NULL;
+  std::string type;
+  if (option.GetString('type', &type) && type == 'menubar')
+    menu_ = gtk_menu_bar_new();
+  else
+    menu_ = gtk_menu_new();
+    }
+    
+    void Menu::Destroy() {
+}
+    
+        if (!found) {
+      KeyMap::iterator it = keymap.find(upperText);
+      if (it != keymap.end()) {
+        keyName = it->second;
+        found = true;
+      }
+    }
+    
+    #include 'content/nw/src/api/menuitem/menuitem.h'
     
      protected:
-   /**
-   * @brief Generates a random integer from Uniform({0, 1, ..., n-1}).
-   *
-   * @param n
-   *    The upperbound (exclusive) value of the random number.
-   * @return
-   *    A uniformly random integer value from ({0, 1, ..., n-1}).
-   */
-  virtual int Rand(int n);
+  ~NwClipboardReadAvailableTypesFunction() override;
     
-    /**
- * @brief Computes @f$ y = |x| @f$
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class AbsValLayer : public NeuronLayer<Dtype> {
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
  public:
-  explicit AbsValLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     
-      /// @brief The spatial dimensions of the input.
-  inline int input_shape(int i) {
-    return (*bottom_shape_)[channel_axis_ + i];
-  }
-  // reverse_dimensions should return true iff we are implementing deconv, so
-  // that conv helpers know which dimensions are which.
-  virtual bool reverse_dimensions() = 0;
-  // Compute height_out_ and width_out_ from other parameters.
-  virtual void compute_output_shape() = 0;
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
     
-    #include 'caffe/layers/neuron_layer.hpp'
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+};
     
-    #include 'caffe/layers/pooling_layer.hpp'
+      private:
+    ~NwScreenDisplayObserver() override;
+    // gfx::DisplayObserver implementation.
+    void OnDisplayMetricsChanged(const display::Display& display, uint32_t changed_metrics) override;
+    void OnDisplayAdded(const display::Display& new_display) override;
+    void OnDisplayRemoved(const display::Display& old_display) override;
+    
+      Blob<float>* input_layer = net_->input_blobs()[0];
+  num_channels_ = input_layer->channels();
+  CHECK(num_channels_ == 3 || num_channels_ == 1)
+    << 'Input layer should have 1 or 3 channels.';
+  input_geometry_ = cv::Size(input_layer->width(), input_layer->height());
+    
+    #include <vector>
+    
+    
+    {  /**
+   * @brief Computes the error gradient w.r.t. the absolute value inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x} =
+   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the reordered input.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    
+    {  /**
+   * @brief Computes the error gradient w.r.t. the BNLL inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
     
     #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of SigmoidLayer.
- */
+/*
+ * @brief cuDNN implementation of PoolingLayer.
+ *        Fallback to PoolingLayer for CPU mode.
+*/
 template <typename Dtype>
-class CuDNNSigmoidLayer : public SigmoidLayer<Dtype> {
+class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
  public:
-  explicit CuDNNSigmoidLayer(const LayerParameter& param)
-      : SigmoidLayer<Dtype>(param), handles_setup_(false) {}
+  explicit CuDNNPoolingLayer(const LayerParameter& param)
+      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
   virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
   virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSigmoidLayer();
+  virtual ~CuDNNPoolingLayer();
+  // Currently, cuDNN does not support the extra top blob.
+  virtual inline int MinTopBlobs() const { return -1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     }
+    
+    #endif  // CAFFE_CUDNN_SIGMOID_LAYER_HPP_
+
+    
+    
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_;
+  cudnnTensorDescriptor_t top_desc_;
+};
+#endif
     
     
     {}  // namespace caffe
     
-      void finish() {
-    markAsFinished();
+    #include 'caffe/layers/neuron_layer.hpp'
+    
+    /**
+ * @brief A layer for learning 'embeddings' of one-hot vector input.
+ *        Equivalent to an InnerProductLayer with one-hot vectors as input, but
+ *        for efficiency the input is the 'hot' index of each column itself.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class EmbedLayer : public Layer<Dtype> {
+ public:
+  explicit EmbedLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    
+    {  Dtype inner_scale_, outer_scale_;
+};
+    
+      virtual inline const char* type() const { return 'Filter'; }
+  virtual inline int MinBottomBlobs() const { return 2; }
+  virtual inline int MinTopBlobs() const { return 1; }
+    
+    
+    {}  // namespace tesseract
+
+    
+      /**
+   * Returns whether the iterator is positioned at the last element in a
+   * given level. (e.g. the last word in a line, the last line in a block)
+   *
+   *     Here's some two-paragraph example
+   *   text.  It starts off innocuously
+   *   enough but quickly turns bizarre.
+   *     The author inserts a cornucopia
+   *   of words to guard against confused
+   *   references.
+   *
+   * Now take an iterator it pointed to the start of 'bizarre.'
+   *  it.IsAtFinalElement(RIL_PARA, RIL_SYMBOL) = false
+   *  it.IsAtFinalElement(RIL_PARA, RIL_WORD) = true
+   *  it.IsAtFinalElement(RIL_BLOCK, RIL_WORD) = false
+   */
+  virtual bool IsAtFinalElement(PageIteratorLevel level,
+                                PageIteratorLevel element) const;
+    
+      // Returns the covariance.
+  double covariance() const {
+    if (total_weight > 0.0)
+      return (sigxy - sigx * sigy / total_weight) / total_weight;
+    else
+      return 0.0;
+  }
+  double x_variance() const {
+    if (total_weight > 0.0)
+      return (sigxx - sigx * sigx / total_weight) / total_weight;
+    else
+      return 0.0;
+  }
+  double y_variance() const {
+    if (total_weight > 0.0)
+      return (sigyy - sigy * sigy / total_weight) / total_weight;
+    else
+      return 0.0;
   }
     
     
-    {
-    {///////////////////////////////////////////////////////////////////////////////
-}}
-
-    
-    
-    {  AreaIndex area_idx;
-  int frame{-1};
-  uint64_t weight;
-  jit::vector<Vinstr> code;
-};
-    
-    
-    {  auto const dest = gen(env,
-                        fastPath ? LdSSwitchDestFast
-                                 : LdSSwitchDestSlow,
-                        data,
-                        testVal);
-  decRef(env, testVal);
-  gen(
-    env,
-    JmpSSwitchDest,
-    IRSPRelOffsetData { spOffBCFromIRSP(env) },
-    dest,
-    sp(env),
-    fp(env)
-  );
+    {  if (!it.empty ()) {
+    word = it.data ();
+    prev_left = word->bounding_box ().left ();
+    it.forward ();
+    while (!it.at_first ()) {
+      word = it.data ();
+      left = word->bounding_box ().left ();
+      if (left < prev_left) {
+        it.move_to_first ();
+                                 //words in BB order
+        it.sort (word_comparator);
+        break;
+      }
+      prev_left = left;
+      it.forward ();
+    }
+  }
+  for (it.mark_cycle_pt (); !it.cycled_list (); it.forward ()) {
+    word = it.data ();
+    if (it.at_first ())
+      word->set_flag (W_BOL, TRUE);
+    else
+                                 //not start of line
+      word->set_flag (W_BOL, FALSE);
+    if (it.at_last ())
+      word->set_flag (W_EOL, TRUE);
+    else
+                                 //not end of line
+      word->set_flag (W_EOL, FALSE);
+                                 //extend BB as reqd
+    bound_box += word->bounding_box ();
+  }
 }
     
-    TRACE_SET_MOD(hfsort);
+      do {
+                                 /*current point fixed */
+    if (edgept->flags[FLAGS] & FIXED
+                                 /*and next not */
+    && (edgept->next->flags[FLAGS] & FIXED) == 0) {
+      loopstart = edgept;        /*start of repoly */
+      break;
+    }
+    edgept = edgept->next;       /*next point */
+  }
+  while (edgept != startpt);     /*until found or finished */
     
-    namespace HPHP {
-/////////////////////////////////////////////////////////////////////////////
+    
+    {
+    {} // namespace asio
+} // namespace boost
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+// Nothing to include.
+#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
+# include <atomic>
+#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+# include <boost/detail/atomic_count.hpp>
+#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+    
+      // Return a pointer to the beginning of the unread data.
+  mutable_buffer data()
+  {
+    return boost::asio::buffer(buffer_) + begin_offset_;
+  }
+    
+        // Push the key/value pair on to the stack.
+    context(Key* k, Value& v)
+      : key_(k),
+        value_(&v),
+        next_(call_stack<Key, Value>::top_)
+    {
+      call_stack<Key, Value>::top_ = this;
     }
     
-    struct CurlShareResource : SweepableResourceData {
-  DECLARE_RESOURCE_ALLOCATION(CurlShareResource)
-  CLASSNAME_IS('curl_share')
-  const String& o_getClassNameHook() const override { return classnameof(); }
-  bool isInvalid() const override { return !m_share; }
+    namespace boost {
+namespace date_time {
+    }
+    }
+    
+    #endif // BOOST_ASIO_DETAIL_FUNCTION_HPP
+
+    
+    #include <boost/asio/detail/pop_options.hpp>
+    
+      // Re-initialise the hash from the values already contained in the list.
+  void rehash(std::size_t num_buckets)
+  {
+    if (num_buckets == num_buckets_)
+      return;
+    num_buckets_ = num_buckets;
+    BOOST_ASIO_ASSERT(num_buckets_ != 0);
     }
     
     #include <boost/asio/detail/config.hpp>
-#include <cstddef>
-#include <boost/asio/basic_io_object.hpp>
-#include <boost/asio/detail/handler_type_requirements.hpp>
-#include <boost/asio/detail/throw_error.hpp>
-#include <boost/asio/error.hpp>
-#include <boost/asio/wait_traits.hpp>
-#include <boost/asio/waitable_timer_service.hpp>
     
-    /// Copies a limited number of bytes from a source buffer to a target buffer.
-/**
- * @param target A modifiable buffer representing the memory region to which
- * the bytes will be copied.
- *
- * @param source A non-modifiable buffer representing the memory region from
- * which the bytes will be copied.
- *
- * @param max_bytes_to_copy The maximum number of bytes to be copied.
- *
- * @returns The number of bytes copied.
- *
- * @note The number of bytes copied is the lesser of:
- *
- * @li @c buffer_size(target)
- *
- * @li @c buffer_size(source)
- *
- * @li @c max_bytes_to_copy
- *
- * This function is implemented in terms of @c memcpy, and consequently it
- * cannot be used to copy between overlapping memory regions.
- */
-inline std::size_t buffer_copy(const mutable_buffer& target,
-    const const_buffer& source, std::size_t max_bytes_to_copy)
+    
+    {  // Destroy all operations associated with the descriptor.
+  op_queue<operation> ops;
+  boost::system::error_code ec;
+  for (int i = 0; i < max_ops; ++i)
+    op_queue_[i].cancel_operations(descriptor, ops, ec);
+}
+    
+    #endif  // GUETZLI_FDCT_H_
+
+    
+    struct HuffmanTableEntry {
+  // Initialize the value to an invalid symbol so that we can recognize it
+  // when reading the bit stream using a Huffman code with space > 0.
+  HuffmanTableEntry() : bits(0), value(0xffff) {}
+    }
+    
+        int unit;
+    double value;
+    
+    TEST_F(YogaTest_HadOverflowTests, hadOverflow_gets_reset_if_not_logger_valid) {
+  const YGNodeRef child0 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child0, 80);
+  YGNodeStyleSetHeight(child0, 40);
+  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
+  YGNodeStyleSetMargin(child0, YGEdgeBottom, 10);
+  YGNodeInsertChild(root, child0, 0);
+  const YGNodeRef child1 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child1, 80);
+  YGNodeStyleSetHeight(child1, 40);
+  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
+  YGNodeInsertChild(root, child1, 1);
+    }
+    
+    void Config::setExperimentalFeatureEnabled(int feature, bool enabled)
 {
-  return buffer_copy(buffer(target, max_bytes_to_copy), source);
+    YGConfigSetExperimentalFeatureEnabled(m_config, static_cast<YGExperimentalFeature>(feature), enabled);
 }
     
-    #endif // BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+        Value getMinWidth(void) const;
+    Value getMinHeight(void) const;
+    
+    template<typename... ARGS>
+inline void log(int level, const char* tag, const char* msg, ARGS... args) noexcept {
+  __android_log_print(level, tag, msg, args...);
+}
+    
+    
+    {}
 
     
-    namespace boost {
-namespace asio {
-    }
-    }
+    // That gcc wants both of these prototypes seems mysterious. VC, for
+// its part, can't decide which to use (another mystery). Matching of
+// template overloads: the final frontier.
+#ifndef COMPILER_MSVC
+template <typename T, size_t N>
+char (&ArraySizeHelper(const T (&array)[N]))[N];
+#endif
     
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-      static Buffer first(const std::array<Elem, 2>& buffer_sequence)
-  {
-    return Buffer(boost::asio::buffer_size(buffer_sequence[0]) != 0
-        ? buffer_sequence[0] : buffer_sequence[1]);
-  }
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    #ifndef BOOST_ASIO_DETAIL_CALL_STACK_HPP
-#define BOOST_ASIO_DETAIL_CALL_STACK_HPP
-    
-    
-    {private:
-  int descriptor_;
-  MutableBufferSequence buffers_;
+    // Information kept per benchmark we may want to run
+struct Benchmark::Instance {
+  std::string name;
+  Benchmark* benchmark;
+  ReportMode report_mode;
+  std::vector<int> arg;
+  TimeUnit time_unit;
+  int range_multiplier;
+  bool use_real_time;
+  bool use_manual_time;
+  BigO complexity;
+  BigOFunc* complexity_lambda;
+  UserCounters counters;
+  const std::vector<Statistics>* statistics;
+  bool last_benchmark_instance;
+  int repetitions;
+  double min_time;
+  size_t iterations;
+  int threads;  // Number of concurrent threads to us
 };
-    
-    #endif // BOOST_ASIO_DETAIL_EVENT_HPP
-
-    
-    /**
- * @brief Create an osquery extension 'module'.
- *
- * This helper macro creates a constructor to declare an osquery module is
- * loading. The osquery registry is set up when modules (shared objects) are
- * discovered via search paths and opened. At that phase the registry is locked
- * meaning no additional plugins can be registered. To unlock the registry
- * for modifications a module must call Registry::declareModule. This declares
- * and any plugins added will use the metadata in the declare to determine:
- *  - The name of the module adding the plugin
- *  - The SDK version the module was built with, to determine compatibility
- *  - The minimum SDK the module requires from osquery core
- *
- * The registry is again locked when the module load is complete and a well
- * known module-exported symbol is called.
- */
-#define CREATE_MODULE(name, version, min_sdk_version)                          \
-  extern 'C' EXPORT_FUNCTION void initModule(void);                            \
-  struct osquery_InternalStructCreateModule {                                  \
-    osquery_InternalStructCreateModule(void) {                                 \
-      Registry::get().declareModule(                                           \
-          name, version, min_sdk_version, OSQUERY_SDK_VERSION);                \
-    }                                                                          \
-  };                                                                           \
-  static osquery_InternalStructCreateModule osquery_internal_module_instance_;
-    
-    TEST_F(ViewsConfigParserPluginTests, test_update_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test2.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  std::string query;
-  getDatabaseValue(kQueries, 'config_views.kernel_hashes_new', query);
-  EXPECT_EQ(query,
-            'select hash.path as binary, version, hash.sha256 as SHA256, '
-            'hash.sha1 as SHA1, hash.md5 as MD5 from (select path || '
-            ''/Contents/MacOS/' as directory, name, version from '
-            'kernel_extensions) join hash using (directory)');
-    }
-    
-        uid_t expected_user = 0U;
-    EXPECT_EQ(dropper->to_user_, expected_user);
-    
-    
-    {TEST_F(StatusTests, test_to_string) {
-  auto s = Status(0, 'foobar');
-  EXPECT_EQ(s.toString(), 'foobar');
-}
-}
-
-    
-    TEST_F(RocksDBDatabasePluginTests, test_corruption) {
-  ASSERT_TRUE(pathExists(path_));
-  ASSERT_FALSE(pathExists(path_ + '.backup'));
-    }
-    
-     protected:
-  /// Path to testing database.
-  std::string path_;
-    
-      // Sets *pos to the next stream position where parsing should continue.
-  // Returns false if the stream ended too early.
-  bool FinishStream(size_t* pos) {
-    // Give back some bytes that we did not use.
-    int unused_bytes_left = bits_left_ >> 3;
-    while (unused_bytes_left-- > 0) {
-      --pos_;
-      // If we give back a 0 byte, we need to check if it was a 0xff/0x00 escape
-      // sequence, and if yes, we need to give back one more byte.
-      if (pos_ < next_marker_pos_ &&
-          data_[pos_] == 0 && data_[pos_ - 1] == 0xff) {
-        --pos_;
-      }
-    }
-    if (pos_ > next_marker_pos_) {
-      // Data ran out before the scan was complete.
-      fprintf(stderr, 'Unexpected end of scan.\n');
-      return false;
-    }
-    *pos = pos_;
-    return true;
-  }
-    
-    void OutputImageComponent::ToPixels(int xmin, int ymin, int xsize, int ysize,
-                                    uint8_t* out, int stride) const {
-  assert(xmin >= 0);
-  assert(ymin >= 0);
-  assert(xmin < width_);
-  assert(ymin < height_);
-  const int yend1 = ymin + ysize;
-  const int yend0 = std::min(yend1, height_);
-  int y = ymin;
-  for (; y < yend0; ++y) {
-    const int xend1 = xmin + xsize;
-    const int xend0 = std::min(xend1, width_);
-    int x = xmin;
-    int px = y * width_ + xmin;
-    for (; x < xend0; ++x, ++px, out += stride) {
-      *out = static_cast<uint8_t>((pixels_[px] + 8 - (x & 1)) >> 4);
-    }
-    const int offset = -stride;
-    for (; x < xend1; ++x) {
-      *out = out[offset];
-      out += stride;
-    }
-  }
-  for (; y < yend1; ++y) {
-    const int offset = -stride * xsize;
-    for (int x = 0; x < xsize; ++x) {
-      *out = out[offset];
-      out += stride;
-    }
-  }
-}
-    
-    namespace guetzli {
-    }
-    
-    // This function will create a Huffman tree.
-//
-// The (data,length) contains the population counts.
-// The tree_limit is the maximum bit depth of the Huffman codes.
-//
-// The depth contains the tree, i.e., how many bits are used for
-// the symbol.
-//
-// The actual Huffman tree is constructed in the tree[] array, which has to
-// be at least 2 * length + 1 long.
-//
-// See http://en.wikipedia.org/wiki/Huffman_coding
-void CreateHuffmanTree(const uint32_t *data,
-                       const size_t length,
-                       const int tree_limit,
-                       HuffmanTree* tree,
-                       uint8_t *depth);
-    
-    #include 'guetzli/jpeg_data.h'
-    
-      //write 20 bytes to the buffer chain
-  RWPrivateCursor wcursor(iobuf1.get());
-  EXPECT_FALSE(wcursor.isAtEnd());
-  wcursor.writeBE<uint64_t>(1);
-  wcursor.writeBE<uint64_t>(10);
-  wcursor.writeBE<uint32_t>(20);
-  EXPECT_TRUE(wcursor.isAtEnd());
-    
-    
-    {// TODO:
-// // numeric conversions:
-// template <std::size_t N>
-// constexpr int stoi(const FixedString<N>& str, int base = 10);
-// template <std::size_t N>
-// constexpr unsigned stou(const FixedString<N>& str, int base = 10);
-// template <std::size_t N>
-// constexpr long stol(const FixedString<N>& str, int base = 10);
-// template <std::size_t N>
-// constexpr unsigned long stoul(const FixedString<N>& str, int base = 10;
-// template <std::size_t N>
-// constexpr long long stoll(const FixedString<N>& str, int base = 10);
-// template <std::size_t N>
-// constexpr unsigned long long stoull(const FixedString<N>& str,
-// int base = 10);
-// template <std::size_t N>
-// constexpr float stof(const FixedString<N>& str);
-// template <std::size_t N>
-// constexpr double stod(const FixedString<N>& str);
-// template <std::size_t N>
-// constexpr long double stold(const FixedString<N>& str);
-// template <int val>
-// constexpr FixedString</*...*/> to_fixed_string_i() noexcept;
-// template <unsigned val>
-// constexpr FixedString</*...*/> to_fixed_string_u() noexcept;
-// template <long val>
-// constexpr FixedString</*...*/> to_fixed_string_l() noexcept;
-// template <unsigned long val>
-// constexpr FixedString</*...*/> to_fixed_string_ul() noexcept;
-// template <long long val>
-// constexpr FixedString</*...*/> to_fixed_string_ll() noexcept
-// template <unsigned long long val>
-// constexpr FixedString</*...*/> to_fixed_string_ull() noexcept;
-} // namespace folly
-
-    
-      // None of the previous reallocation strategies worked (or we're using
-  // an internal buffer).  malloc/copy/free.
-  if (newBuffer == nullptr) {
-    newAllocatedCapacity = goodExtBufferSize(newCapacity);
-    void* p = malloc(newAllocatedCapacity);
-    if (UNLIKELY(p == nullptr)) {
-      throw std::bad_alloc();
-    }
-    newBuffer = static_cast<uint8_t*>(p);
-    if (length_ > 0) {
-      assert(data_ != nullptr);
-      memcpy(newBuffer + minHeadroom, data_, length_);
-    }
-    if (sharedInfo()) {
-      freeExtBuffer();
-    }
-    newHeadroom = minHeadroom;
-  }
-    
-    #include <folly/CPortability.h>
-#include <folly/Optional.h>
-    
-      folly::Optional<T> try_take_for(std::chrono::milliseconds time) override {
-    T item;
-    while (!queue_.readIfNotEmpty(item)) {
-      if (!sem_.try_wait_for(time)) {
-        return folly::none;
-      }
-    }
-    return std::move(item);
-  }
-    
-    #include <string>
-    
-    #pragma once
     
     
     {
-    {} // namespace detail
-} // namespace folly
+    {
+    {
+    {        if (re.Match(instance.name)) {
+          instance.last_benchmark_instance = (&args == &family->args_.back());
+          benchmarks->push_back(std::move(instance));
+        }
+      }
+    }
+  }
+  return true;
+}
+    
+      out << indent << '\'caches\': [\n';
+  indent = std::string(6, ' ');
+  std::string cache_indent(8, ' ');
+  for (size_t i = 0; i < info.caches.size(); ++i) {
+    auto& CI = info.caches[i];
+    out << indent << '{\n';
+    out << cache_indent << FormatKV('type', CI.type) << ',\n';
+    out << cache_indent << FormatKV('level', static_cast<int64_t>(CI.level))
+        << ',\n';
+    out << cache_indent
+        << FormatKV('size', static_cast<int64_t>(CI.size) * 1000u) << ',\n';
+    out << cache_indent
+        << FormatKV('num_sharing', static_cast<int64_t>(CI.num_sharing))
+        << '\n';
+    out << indent << '}';
+    if (i != info.caches.size() - 1) out << ',';
+    out << '\n';
+  }
+  indent = std::string(4, ' ');
+  out << indent << '],\n';
+    
+    namespace benchmark {
+#ifdef BENCHMARK_OS_WINDOWS
+// Window's Sleep takes milliseconds argument.
+void SleepForMilliseconds(int milliseconds) { Sleep(milliseconds); }
+void SleepForSeconds(double seconds) {
+  SleepForMilliseconds(static_cast<int>(kNumMillisPerSecond * seconds));
+}
+#else   // BENCHMARK_OS_WINDOWS
+void SleepForMicroseconds(int microseconds) {
+  struct timespec sleep_time;
+  sleep_time.tv_sec = microseconds / kNumMicrosPerSecond;
+  sleep_time.tv_nsec = (microseconds % kNumMicrosPerSecond) * kNumNanosPerMicro;
+  while (nanosleep(&sleep_time, &sleep_time) != 0 && errno == EINTR)
+    ;  // Ignore signals and wait for the full interval to elapse.
+}
+    }
