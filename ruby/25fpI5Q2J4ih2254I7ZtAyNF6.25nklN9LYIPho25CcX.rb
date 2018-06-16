@@ -1,55 +1,46 @@
 
         
-            private
+            formula.brew do
+      formula.patch
     
-        groups << @user.authorized_groups.visible_to_user(current_user) if current_user
-    groups << @user.authorized_groups.public_to_user(current_user)
+      # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
+  # permissions and removing .la files, unless the files (or parent
+  # directories) are protected by skip_clean.
+  #
+  # bin and sbin should not have any subdirectories; if either do that is
+  # caught as an audit warning
+  #
+  # lib may have a large directory tree (see Erlang for instance), and
+  # clean_dir applies cleaning rules to the entire tree
+  def clean_dir(d)
+    d.find do |path|
+      path.extend(ObserverPathnameExtension)
     
-        begin
-      response = U2F::RegisterResponse.load_from_json(params[:device_response])
-      registration_data = u2f.register!(challenges, response)
-      registration.update(certificate: registration_data.certificate,
-                          key_handle: registration_data.key_handle,
-                          public_key: registration_data.public_key,
-                          counter: registration_data.counter,
-                          user: user,
-                          name: params[:name])
-    rescue JSON::ParserError, NoMethodError, ArgumentError
-      registration.errors.add(:base, 'Your U2F device did not send a valid JSON response.')
-    rescue U2F::Error => e
-      registration.errors.add(:base, e.message)
+            $stderr.puts
+        opoo out
+        Homebrew.failed = true
+        first_warning = false
+      end
     end
     
-            # Checks if the user confirmation happens before the token becomes invalid
-        # Examples:
-        #
-        #   # confirm_within = 3.days and confirmation_sent_at = 2.days.ago
-        #   confirmation_period_expired?  # returns false
-        #
-        #   # confirm_within = 3.days and confirmation_sent_at = 4.days.ago
-        #   confirmation_period_expired?  # returns true
-        #
-        #   # confirm_within = nil
-        #   confirmation_period_expired?  # will always return false
-        #
-        def confirmation_period_expired?
-          self.class.confirm_within && self.confirmation_sent_at && (Time.now.utc > self.confirmation_sent_at.utc + self.class.confirm_within)
-        end
+      def python(_options = {}, &block)
+    opoo 'Formula#python is deprecated and will go away shortly.'
+    block.call if block_given?
+    PythonRequirement.new
+  end
+  alias_method :python2, :python
+  alias_method :python3, :python
+end
+
     
-        private
+      # Use this method to generate standard caveats.
+  def standard_instructions(home_name, home_value = libexec)
+    <<-EOS.undent
+      Before you can use these tools you must export some variables to your $SHELL.
     
-          def run
-        UI.puts report
       end
     
-            def responds?
-          methods = @subject.instance_methods.map(&:to_s)
-          methods.include?('#{@attachment_name}') &&
-            methods.include?('#{@attachment_name}=') &&
-            methods.include?('#{@attachment_name}?')
-        end
-    
-        rake_tasks { load 'tasks/paperclip.rake' }
-  end
-    
-            return if (value.nil? && options[:allow_nil]) || (value.blank? && options[:allow_blank])
+          it 'does switch to plain text when xml is toggled off' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            cloc(xml: false)
+          end').runner.execute(:test)
