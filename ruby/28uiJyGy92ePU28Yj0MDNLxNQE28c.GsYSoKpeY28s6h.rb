@@ -1,90 +1,87 @@
 
         
-              module Locals
-        attr_accessor :rendered_views
+        class JavaScriptHelperTest < ActionView::TestCase
+  tests ActionView::Helpers::JavaScriptHelper
     
-          # Returns constant of subscription adapter specified in config/cable.yml.
-      # If the adapter cannot be found, this will default to the Redis adapter.
-      # Also makes sure proper dependencies are required.
-      def pubsub_adapter
-        adapter = (cable.fetch('adapter') { 'redis' })
+              # Bubbled up from the adapter require. Prefix the exception message
+          # with some guidance about how to address it and reraise.
+          else
+            raise e.class, 'Error loading the '#{adapter}' Action Cable pubsub adapter. Missing a gem it depends on? #{e.message}', e.backtrace
+          end
+        end
     
-    require 'cases/helper'
-    
-        private
-      attr_reader :table
-    
-          def inspect
-        Kernel.instance_method(:inspect).bind(self).call
-      end
-    
-        bulb = car.bulbs.build
-    assert_equal 'defaulty', bulb.name
-    
-        assert_raise(RuntimeError) { assert_not @pirate.save }
-    assert_equal before, [@pirate.reload.catchphrase, @pirate.ship.name]
-  end
-    
-      validates_presence_of :name
-    
-      test 'subscription rejection' do
-    subscriptions = Minitest::Mock.new
-    subscriptions.expect(:remove_subscription, SecretChannel, [SecretChannel])
-    
-    class ActionCable::Connection::ClientSocketTest < ActionCable::TestCase
-  class Connection < ActionCable::Connection::Base
-    attr_reader :connected, :websocket, :errors
-    
-        Jekyll::Commands::Build.process({'source' => 'docs'})
-    
-          def warnings
-        @template.warnings
-      end
-    
-        # Require all the plugins which are allowed.
+        # Define how a class is converted to Arel nodes when passed to +where+.
+    # The handler can be any object that responds to +call+, and will be used
+    # for any value that +===+ the class given. For example:
     #
-    # Returns nothing
-    def conscientious_require
-      require_theme_deps if site.theme
-      require_plugin_files
-      require_gems
-      deprecation_checks
+    #     MyCustomDateRange = Struct.new(:start, :end)
+    #     handler = proc do |column, range|
+    #       Arel::Nodes::Between.new(column,
+    #         Arel::Nodes::And.new([range.start, range.end])
+    #       )
+    #     end
+    #     ActiveRecord::PredicateBuilder.new('users').register_handler(MyCustomDateRange, handler)
+    def register_handler(klass, handler)
+      @handlers.unshift([klass, handler])
     end
     
-              # Parse the options
-          argv = parse_options(opts)
-          return if !argv
-          if argv.empty? || argv.length > 2
-            raise Vagrant::Errors::CLIInvalidUsage,
-              help: opts.help.chomp
-          end
+    require 'test_helper'
+require 'stubs/test_server'
     
-    module LogStash
-  module Api
-    module Commands
-      module System
-        class Plugins < Commands::Base
+    require 'cocoapods'
+    
+    profile = Profile.new
+# puts profile.generate
+command = ['/usr/bin/sandbox-exec', '-p', profile.generate, profile.pod_bin, *ARGV]
+exec(*command)
+
+    
+            def initialize(argv)
+          @pod_name = argv.shift_argument
+          @short_output = argv.flag?('short')
+          super
+        end
+    
           def run
-            { :total => plugins.count, :plugins => plugins }
+        UI.puts report
+      end
+    
+            def execute_repl_command(repl_command)
+          unless repl_command == '\n'
+            repl_commands = repl_command.split
+            subcommand = repl_commands.shift.capitalize
+            arguments = repl_commands
+            subcommand_class = Pod::Command::IPC.const_get(subcommand)
+            subcommand_class.new(CLAide::ARGV.new(arguments)).run
+            signal_end_of_output
           end
-    
-        FileUtils.mkdir_p(target) unless File.directory?(target)
-    
-          def store_dir
-        ':rails_root/public/system/:attachment/:id'
+        end
       end
+    end
+  end
+end
+
     
-          ##
-      # Read the content type of the file
-      #
-      # === Returns
-      #
-      # [String] content type of the file
-      #
-      def content_type
-        file.try(:content_type)
+      def download(url, output)
+    uri = URI(url)
+    digest = Digest::SHA1.new
+    tmp = '#{output}.tmp'
+    Net::HTTP.start(uri.host, uri.port, :use_ssl => (uri.scheme == 'https')) do |http|
+      request = Net::HTTP::Get.new(uri.path)
+      http.request(request) do |response|
+        fail 'HTTP fetch failed for #{url}. #{response}' if [200, 301].include?(response.code)
+        size = (response['content-length'].to_i || -1).to_f
+        count = 0
+        File.open(tmp, 'w') do |fd|
+          response.read_body do |chunk|
+            fd.write(chunk)
+            digest << chunk
+            if size > 0 && $stdout.tty?
+              count += chunk.bytesize
+              $stdout.write(sprintf('\r%0.2f%%', count/size * 100))
+            end
+          end
+        end
+        $stdout.write('\r      \r') if $stdout.tty?
       end
-    
-          def serializable_hash(options = nil)
-        {'url' => url}.merge Hash[versions.map { |name, version| [name, { 'url' => version.url }] }]
-      end
+    end
