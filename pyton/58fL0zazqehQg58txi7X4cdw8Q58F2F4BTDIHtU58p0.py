@@ -1,121 +1,89 @@
 
         
-            assert_regression_works(reg)
+            if args.plot is not None:
+        max_val = getattr(args, args.plot)
+        if args.plot in ('classes', 'samples'):
+            min_val = 2
+        else:
+            min_val = 0
+        steps = np.linspace(min_val, max_val, num=args.n_steps + 1)[1:]
+        if args.plot in ('classes', 'samples'):
+            steps = np.unique(np.round(steps).astype(int))
+        setattr(args, args.plot, steps)
     
-        if input_tensor is None:
-        img_input = Input(shape=input_shape)
+            plot_batch_times(all_times, n_components, batch_sizes, data)
+        # RandomizedPCA error is always worse (approx 100x) than other PCA
+        # tests
+        plot_batch_errors(all_errors, n_components, batch_sizes, data)
+    
+    
+def rbf_kernels(X, n_jobs):
+    return pairwise_kernels(X, metric='rbf', n_jobs=n_jobs, gamma=0.1)
+    
+    Sentiment analysis can be casted as a binary text classification problem,
+that is fitting a linear classifier on features extracted from the text
+of the user messages so as to guess wether the opinion of the author is
+positive or negative.
+    
+    solutions = os.listdir(exercise_dir)
+    
+    # Learn a frontier for outlier detection with several classifiers
+xx1, yy1 = np.meshgrid(np.linspace(-8, 28, 500), np.linspace(3, 40, 500))
+xx2, yy2 = np.meshgrid(np.linspace(3, 10, 500), np.linspace(-5, 45, 500))
+for i, (clf_name, clf) in enumerate(classifiers.items()):
+    plt.figure(1)
+    clf.fit(X1)
+    Z1 = clf.decision_function(np.c_[xx1.ravel(), yy1.ravel()])
+    Z1 = Z1.reshape(xx1.shape)
+    legend1[clf_name] = plt.contour(
+        xx1, yy1, Z1, levels=[0], linewidths=2, colors=colors[i])
+    plt.figure(2)
+    clf.fit(X2)
+    Z2 = clf.decision_function(np.c_[xx2.ravel(), yy2.ravel()])
+    Z2 = Z2.reshape(xx2.shape)
+    legend2[clf_name] = plt.contour(
+        xx2, yy2, Z2, levels=[0], linewidths=2, colors=colors[i])
+    
+        stream_types = [  #this is just a sample. Will make it in prepare()
+        # {'id': '1080'},
+        # {'id': '720'},
+        # {'id': '360'},
+        # {'id': '288'},
+        # {'id': '190'},
+        # {'id': '180'},
+        
+    ]
+    
+    def kugou_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    if url.lower().find('5sing')!=-1:
+        #for 5sing.kugou.com
+        html=get_html(url)
+        ticket=r1(r''ticket':\s*'(.*)'',html)
+        j=loads(str(b64decode(ticket),encoding='utf-8'))
+        url=j['file']
+        title=j['songName']
+        songtype, ext, size = url_info(url)
+        print_info(site_info, title, songtype, size)
+        if not info_only:
+            download_urls([url], title, ext, size, output_dir, merge=merge)
     else:
-        if not K.is_keras_tensor(input_tensor):
-            img_input = Input(tensor=input_tensor, shape=input_shape)
-        else:
-            img_input = input_tensor
+        #for the www.kugou.com/
+        return kugou_download_playlist(url, output_dir=output_dir, merge=merge, info_only=info_only)
+        # raise NotImplementedError(url)       
     
-        branch3x3dbl = conv2d_bn(x, 64, 1, 1)
-    branch3x3dbl = conv2d_bn(branch3x3dbl, 96, 3, 3)
-    branch3x3dbl = conv2d_bn(branch3x3dbl, 96, 3, 3)
+    from .tudou import tudou_download_by_id
+from .youku import youku_download_by_vid
+from xml.dom.minidom import parseString
     
-        # load weights
-    if weights == 'imagenet':
-        if include_top:
-            weights_path = get_file(
-                'resnet50_weights_tf_dim_ordering_tf_kernels.h5',
-                WEIGHTS_PATH,
-                cache_subdir='models',
-                md5_hash='a7b3fe01876f51b976af0dea6bc144eb')
-        else:
-            weights_path = get_file(
-                'resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5',
-                WEIGHTS_PATH_NO_TOP,
-                cache_subdir='models',
-                md5_hash='a268eb855778b3df3c7506639542a6af')
-        model.load_weights(weights_path)
-        if K.backend() == 'theano':
-            layer_utils.convert_all_kernels_in_model(model)
-    elif weights is not None:
-        model.load_weights(weights)
-    
-            original = np.prod(input_shape, dtype=int)
-        if unknown is not None:
-            if known == 0 or original % known != 0:
-                raise ValueError(msg)
-            output_shape[unknown] = original // known
-        elif original != known:
-            raise ValueError(msg)
-    
-        for layer_class in [keras.layers.CuDNNGRU, keras.layers.CuDNNLSTM]:
-        model = keras.models.Sequential()
-        model.add(keras.layers.Embedding(10, input_size,
-                                         input_length=timesteps,
-                                         batch_input_shape=(num_samples,
-                                                            timesteps)))
-        layer = layer_class(units,
-                            return_sequences=False,
-                            stateful=True,
-                            weights=None)
-        model.add(layer)
-        model.compile(optimizer='sgd', loss='mse')
-        out1 = model.predict(np.ones((num_samples, timesteps)))
-        assert(out1.shape == (num_samples, units))
-    
-        def get_initial_state(self, inputs):
-        # (samples, timesteps, rows, cols, filters)
-        initial_state = K.zeros_like(inputs)
-        # (samples, rows, cols, filters)
-        initial_state = K.sum(initial_state, axis=1)
-        shape = list(self.cell.kernel_shape)
-        shape[-1] = self.cell.filters
-        initial_state = self.cell.input_conv(initial_state,
-                                             K.zeros(tuple(shape)),
-                                             padding=self.cell.padding)
-        # Fix for Theano because it needs
-        # K.int_shape to work in call() with initial_state.
-        keras_shape = list(K.int_shape(inputs))
-        keras_shape.pop(1)
-        if K.image_data_format() == 'channels_first':
-            indices = 2, 3
-        else:
-            indices = 1, 2
-        for i, j in enumerate(indices):
-            keras_shape[j] = conv_utils.conv_output_length(
-                keras_shape[j],
-                shape[i],
-                padding=self.cell.padding,
-                stride=self.cell.strides[i],
-                dilation=self.cell.dilation_rate[i])
-        initial_state._keras_shape = keras_shape
-    
-        # test include top
-    assert utils._obtain_input_shape(
-        input_shape=(3, 200, 200),
-        default_size=None,
-        min_size=139,
-        data_format='channels_first',
-        require_flatten=True) == (3, 200, 200)
-    
-        filename = os.path.join(model_name, 'vae_mean.png')
-    # display a 2D plot of the digit classes in the latent space
-    z_mean, _, _ = encoder.predict(x_test,
-                                   batch_size=batch_size)
-    plt.figure(figsize=(12, 10))
-    plt.scatter(z_mean[:, 0], z_mean[:, 1], c=y_test)
-    plt.colorbar()
-    plt.xlabel('z[0]')
-    plt.ylabel('z[1]')
-    plt.savefig(filename)
-    plt.show()
-    
-        for i, yi in enumerate(grid_y):
-        for j, xi in enumerate(grid_x):
-            z_sample = np.array([[xi, yi]])
-            x_decoded = decoder.predict(z_sample)
-            digit = x_decoded[0].reshape(digit_size, digit_size)
-            figure[i * digit_size: (i + 1) * digit_size,
-                   j * digit_size: (j + 1) * digit_size] = digit
-    
-    from keras.preprocessing import sequence
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation
-from keras.layers import Embedding
-from keras.layers import LSTM
-from keras.layers import Conv1D, MaxPooling1D
-from keras.datasets import imdb
+    def showroom_download_by_room_id(room_id, output_dir = '.', merge = False, info_only = False, **kwargs):
+    '''Source: Android mobile'''
+    while True:
+        timestamp = str(int(time() * 1000))
+        api_endpoint = 'https://www.showroom-live.com/api/live/streaming_url?room_id={room_id}&_={timestamp}'.format(room_id = room_id, timestamp = timestamp)
+        html = get_content(api_endpoint)
+        html = json.loads(html)
+        #{'streaming_url_list': [{'url': 'rtmp://52.197.69.198:1935/liveedge', 'id': 1, 'label': 'original spec(low latency)', 'is_default': True, 'type': 'rtmp', 'stream_name': '7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed'}, {'url': 'http://52.197.69.198:1935/liveedge/7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed/playlist.m3u8', 'is_default': True, 'id': 2, 'type': 'hls', 'label': 'original spec'}, {'url': 'rtmp://52.197.69.198:1935/liveedge', 'id': 3, 'label': 'low spec(low latency)', 'is_default': False, 'type': 'rtmp', 'stream_name': '7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed_low'}, {'url': 'http://52.197.69.198:1935/liveedge/7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed_low/playlist.m3u8', 'is_default': False, 'id': 4, 'type': 'hls', 'label': 'low spec'}]}
+        if len(html) >= 1:
+            break
+        log.w('The live show is currently offline.')
+        sleep(1)
