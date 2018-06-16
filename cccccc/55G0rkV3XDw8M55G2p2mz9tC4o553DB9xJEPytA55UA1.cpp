@@ -1,253 +1,177 @@
 
         
-            // passthrough (pointer interface)
-    std::pair<iterator, bool> insert(const value_type& value) { return m.insert(value); }
+        
+    {}  // namespace atom
     
-      // Get initial measurement of the space we will be reading.
-  const int64_t initial_size = Size(Key(0), Key(n));
-  const int64_t initial_other_size = Size(Key(n), Key(kCount));
-    
-    #include 'db/filename.h'
-#include 'db/dbformat.h'
-#include 'db/table_cache.h'
-#include 'db/version_edit.h'
-#include 'leveldb/db.h'
-#include 'leveldb/env.h'
-#include 'leveldb/iterator.h'
-    
-    #include <stdint.h>
-#include 'leveldb/db.h'
-#include 'db/dbformat.h'
-    
-      // Successful parses
-  static struct {
-    const char* fname;
-    uint64_t number;
-    FileType type;
-  } cases[] = {
-    { '100.log',            100,   kLogFile },
-    { '0.log',              0,     kLogFile },
-    { '0.sst',              0,     kTableFile },
-    { '0.ldb',              0,     kTableFile },
-    { 'CURRENT',            0,     kCurrentFile },
-    { 'LOCK',               0,     kDBLockFile },
-    { 'MANIFEST-2',         2,     kDescriptorFile },
-    { 'MANIFEST-7',         7,     kDescriptorFile },
-    { 'LOG',                0,     kInfoLogFile },
-    { 'LOG.old',            0,     kInfoLogFile },
-    { '18446744073709551615.log', 18446744073709551615ull, kLogFile },
-  };
-  for (int i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
-    std::string f = cases[i].fname;
-    ASSERT_TRUE(ParseFileName(f, &number, &type)) << f;
-    ASSERT_EQ(cases[i].type, type) << f;
-    ASSERT_EQ(cases[i].number, number) << f;
-  }
-    
-    
-    {}
-    
-    	STARTUPINFO si = { 0 };
-    
-    
-    {
-    {
-    {  for (const auto& share_line : osquery::split(content, '\n')) {
-    genNFSShare(share_line, results);
-  }
-  return results;
-}
-}
-}
-
-    
-    /**
- * @brief Access the internal storage of the Decorator parser.
- *
- * The decoration set is a map of column name to value. It contains the opaque
- * set of decoration point results.
- *
- * Decorations are applied to log items before they are sent to the downstream
- * logging APIs: logString, logSnapshot, etc.
- *
- * @param results the output parameter to write decorations.
- */
-void getDecorations(std::map<std::string, std::string>& results);
-    
-    
-    {  // Support a signed 64, a double, and treat everything else as a signed int.
-  if (type == kCFNumberSInt64Type) {
-    long long int value;
-    if (CFNumberGetValue((CFNumberRef)cf_number, type, &value)) {
-      return boost::lexical_cast<std::string>(value);
-    }
-  } else if (type == kCFNumberDoubleType) {
-    double value;
-    if (CFNumberGetValue((CFNumberRef)cf_number, type, &value)) {
-      return boost::lexical_cast<std::string>(value);
-    }
-  } else {
-    unsigned int value;
-    if (CFNumberGetValue((CFNumberRef)cf_number, type, &value)) {
-      return boost::lexical_cast<std::string>(value);
-    }
-  }
-  // Cast as a string.
-  return '0';
+    namespace base {
+class FilePath;
 }
     
-      auto status = ::strerror_s(buffer.data(), buffer.size(), errnum);
-  if (status != 0) {
-    return '';
-  }
-    
-      // Write to the file.
-  ASSERT_OK(
-      env_->NewWritableFile(test_dir_ + '/f1', &writable_file, soptions_));
-  ASSERT_OK(writable_file->Append('abc'));
-  ASSERT_OK(writable_file->Close());
-  writable_file.reset();
-  ASSERT_OK(
-      env_->NewWritableFile(test_dir_ + '/f2', &writable_file, soptions_));
-  ASSERT_OK(writable_file->Close());
-  writable_file.reset();
-    
-        // Helper methods
-    static bool HasFamilyNamed(std::string& name, DBWrapper* db);
-    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
-        Handle<Array> array);
-    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
-        Handle<Array> array, DBWrapper* db_wrapper, std::string cf);
-    static Handle<Value> CompactRangeDefault(const v8::Arguments& args);
-    static Handle<Value> CompactColumnFamily(const Arguments& args);
-    static Handle<Value> CompactOptions(const Arguments& args);
-    static Handle<Value> CompactAll(const Arguments& args);
-    
-      it.reset(db_->NewIterator(ReadOptions()));
-  first = true;
-  std::string k3('k3');
-  for(it->Seek(k2); it->Valid(); it->Next()) {
-    res = it->value().ToString();
-    if (first) {
-      ASSERT_EQ(res, 'a1,a2,a3,a4');
-      first = false;
-    } else {
-      ASSERT_EQ(res, 'g1');
-    }
-  }
-  for(it->Seek(k3); it->Valid(); it->Next()) {
-    res = it->value().ToString();
-    if (first) {
-      // should not be hit
-      ASSERT_EQ(res, 'a1,a2,a3,a4');
-      first = false;
-    } else {
-      ASSERT_EQ(res, 'g1');
-    }
-  }
-    
-    JniCallback::~JniCallback() {
-  jboolean attached_thread = JNI_FALSE;
-  JNIEnv* env = getJniEnv(&attached_thread);
-  assert(env != nullptr);
+    namespace chrome {
+class MonitorFinder;
     }
     
-    #include <memory>
-#include <set>
+    #include <set>
 #include <string>
-#include 'rocksdb/statistics.h'
-#include 'monitoring/statistics.h'
     
      protected:
-  // When *key is an internal key concatenated with the value, returns the
-  // user key.
-  virtual Slice UserKey(const char* key) const;
+  /// @copydoc AbsValLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-    // Return an iterator that provided the union of the data in
-// children[0,n-1].  Takes ownership of the child iterators and
-// will delete them when the result iterator is deleted.
-//
-// The result does no duplicate suppression.  I.e., if a particular
-// key is present in K child iterators, it will be yielded K times.
-//
-// REQUIRES: n >= 0
-extern InternalIterator* NewMergingIterator(
-    const InternalKeyComparator* comparator, InternalIterator** children, int n,
-    Arena* arena = nullptr, bool prefix_seek_mode = false);
     
-    std::unique_ptr<CompactionFilter> CompactionFilterFactoryJniCallback::CreateCompactionFilter(
-    const CompactionFilter::Context& context) {
-  jboolean attached_thread = JNI_FALSE;
-  JNIEnv* env = getJniEnv(&attached_thread);
-  assert(env != nullptr);
+    {  /**
+   * @brief Computes the error gradient w.r.t. the BNLL inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of ReLULayer.
+ */
+template <typename Dtype>
+class CuDNNReLULayer : public ReLULayer<Dtype> {
+ public:
+  explicit CuDNNReLULayer(const LayerParameter& param)
+      : ReLULayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNReLULayer();
     }
     
-    #ifndef DUMPCRASHSTACK_H_
-#define DUMPCRASHSTACK_H_
+      /**
+   * @brief Computes the error gradient w.r.t. the ELU inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x} = \left\{
+   *        \begin{array}{lr}
+   *            1           & \mathrm{if} \; x > 0 \\
+   *            y + \alpha  & \mathrm{if} \; x \le 0
+   *        \end{array} \right.
+   *      @f$ if propagate_down[0].
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
     
-    #ifdef ANDROID
-#include 'comm/android/callstack.h'
-#endif
+    /**
+ * @brief Takes two+ Blobs, interprets last Blob as a selector and
+ *  filter remaining Blobs accordingly with selector data (0 means that
+ * the corresponding item has to be filtered, non-zero means that corresponding
+ * item needs to stay).
+ */
+template <typename Dtype>
+class FilterLayer : public Layer<Dtype> {
+ public:
+  explicit FilterLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    //============================================================================
-// Name        : has_member.h
-// Author      :
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
-    
-      void setDefaultCred(std::string user, std::string password);
-    
-      void setWriteCheckSocket(const std::shared_ptr<SocketCore>& socket);
-    
-    AbstractHttpServerResponseCommand::~AbstractHttpServerResponseCommand()
-{
-  if (readCheck_) {
-    e_->deleteSocketForReadCheck(socket_, this);
-  }
-  if (writeCheck_) {
-    e_->deleteSocketForWriteCheck(socket_, this);
-  }
+    static int make_prefixes(struct ifaddrs* ifaddr, int family, int prefixlen) {
+	char* prefix = NULL;
+	if (family == AF_INET) {
+		sockaddr_in* mask = new sockaddr_in;
+		mask->sin_family = AF_INET;
+		memset(&mask->sin_addr, 0, sizeof(in_addr));
+		ifaddr->ifa_netmask = reinterpret_cast<sockaddr*>(mask);
+		if (prefixlen > 32) {
+			prefixlen = 32;
+		}
+		prefix = reinterpret_cast<char*>(&mask->sin_addr);
+	} else if (family == AF_INET6) {
+		sockaddr_in6* mask = new sockaddr_in6;
+		mask->sin6_family = AF_INET6;
+		memset(&mask->sin6_addr, 0, sizeof(in6_addr));
+		ifaddr->ifa_netmask = reinterpret_cast<sockaddr*>(mask);
+		if (prefixlen > 128) {
+			prefixlen = 128;
+		}
+		prefix = reinterpret_cast<char*>(&mask->sin6_addr);
+	} else {
+		return -1;
+	}
+	for (int i = 0; i < (prefixlen / 8); i++) {
+		*prefix++ = 0xFF;
+	}
+	char remainder = 0xff;
+	remainder <<= (8 - prefixlen % 8);
+	*prefix = remainder;
+	return 0;
 }
     
-    public:
-  AbstractHttpServerResponseCommand(
-      cuid_t cuid, const std::shared_ptr<HttpServer>& httpServer,
-      DownloadEngine* e, const std::shared_ptr<SocketCore>& socket);
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
     
-      enum Flag {
-    FLAG_HIDDEN = 1,
-    FLAG_ERASE_AFTER_PARSE = 1 << 1,
-    FLAG_INITIAL_OPTION = 1 << 2,
-    FLAG_CHANGE_OPTION = 1 << 3,
-    FLAG_CHANGE_OPTION_FOR_RESERVED = 1 << 4,
-    FLAG_CHANGE_GLOBAL_OPTION = 1 << 5,
-    FLAG_CUMULATIVE = 1 << 6
-  };
     
-    #include <memory>
-#include <deque>
-#include <vector>
-#include <string>
     
-    class AnnounceTier {
-public:
-  enum AnnounceEvent {
-    STARTED,
-    STARTED_AFTER_COMPLETION,
-    DOWNLOADING,
-    STOPPED,
-    COMPLETED,
-    SEEDING,
-    HALTED
-  };
-    }
+    void opus_ifft_neon(const kiss_fft_state *st,
+                    const kiss_fft_cpx *fin,
+                    kiss_fft_cpx *fout);
     
-    namespace aria2 {
-    }
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
