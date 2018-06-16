@@ -1,31 +1,13 @@
 
         
-        # Just a slash
-Benchmark.ips do |x|
-  path = '/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-    
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
-    
-    class BuildEnvironment
-  def initialize(*settings)
-    @settings = Set.new(*settings)
-  end
+            A binary installer is available:
+      https://www.haskell.org/platform/mac.html
+    EOS
+  when 'mysqldump-secure' then <<-EOS.undent
+    The creator of mysqldump-secure tried to game our popularity metrics.
+    EOS
+  when 'ngrok' then <<-EOS.undent
+    Upstream sunsetted 1.x in March 2016 and 2.x is not open-source.
     
       # True if a {Formula} is being built with {Formula.head} instead of {Formula.stable}.
   # <pre>args << '--some-new-stuff' if build.head?</pre>
@@ -38,63 +20,80 @@ end
     include? 'HEAD'
   end
     
-        # Exclude cache, logs, and repository, if they are located under the prefix.
-    [HOMEBREW_CACHE, HOMEBREW_LOGS, HOMEBREW_REPOSITORY].each do |dir|
-      dirs.delete dir.relative_path_from(HOMEBREW_PREFIX).to_s
+        # Get rid of any info 'dir' files, so they don't conflict at the link stage
+    info_dir_file = @f.info + 'dir'
+    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
+      observe_file_removal info_dir_file
     end
-    dirs.delete 'etc'
-    dirs.delete 'var'
     
-      def self.bottle_sha1(*)
-  end
+        if ARGV.include? '--list-checks'
+      puts checks.all.sort
+      exit
+    end
     
-      def notification_setting_params
-    allowed_fields = NotificationSetting::EMAIL_EVENTS.dup
-    allowed_fields << :level
-    params.require(:notification_setting).permit(allowed_fields)
-  end
-end
-
-    
-      private
-    
-            def show
-          @stock_movement = scope.find(params[:id])
-          respond_with(@stock_movement)
-        end
-    
-            private
-    
-              lambda do |corrector|
-            corrector.replace(center.source_range, new_center)
+        if ARGV.include?('--pinned') || ARGV.include?('--versions')
+      filtered_list
+    elsif ARGV.named.empty?
+      if ARGV.include? '--full-name'
+        full_names = Formula.installed.map(&:full_name).sort do |a, b|
+          if a.include?('/') && !b.include?('/')
+            1
+          elsif !a.include?('/') && b.include?('/')
+            -1
+          else
+            a <=> b
           end
         end
+        puts_columns full_names
+      else
+        ENV['CLICOLOR'] = nil
+        exec 'ls', *ARGV.options_only << HOMEBREW_CELLAR
       end
+    elsif ARGV.verbose? || !$stdout.tty?
+      exec 'find', *ARGV.kegs.map(&:to_s) + %w[-not -type d -print]
+    else
+      ARGV.kegs.each { |keg| PrettyListing.new keg }
     end
   end
-end
-
     
-            def_node_matcher :on_body_of_reduce, <<-PATTERN
-          (block (send _recv {:reduce :inject} !sym) _blockargs $(begin ...))
-        PATTERN
+        def exit_deploy_because_of_exception(ex)
+      warn t(:deploy_failed, ex: ex.message)
+      invoke 'deploy:failed'
+      exit(false)
+    end
     
-            def_node_matcher :simple_double_comparison?, '(send $lvar :== $lvar)'
-        def_node_matcher :simple_comparison?, <<-PATTERN
-          {(send $lvar :== _)
-           (send _ :== $lvar)}
-        PATTERN
+      # Implemented by subclasses to provide default values for settings needed by
+  # this plugin. Typically done using the `set_if_empty` Capistrano DSL method.
+  #
+  # Example:
+  #
+  #   def set_defaults
+  #     set_if_empty :my_plugin_option, true
+  #   end
+  #
+  def set_defaults; end
     
-    module RuboCop
-  module Cop
-    module Style
-      # This cop check for uses of Object#freeze on immutable objects.
-      #
-      # @example
-      #   # bad
-      #   CONST = 1.freeze
-      #
-      #   # good
-      #   CONST = 1
-      class RedundantFreeze < Cop
-        include FrozenStringLiteral
+        # @abstract
+    #
+    # Create a (new) clone of the remote-repository on the deployment target
+    #
+    # @return void
+    #
+    def clone
+      raise NotImplementedError, 'Your SCM strategy module should provide a #clone method'
+    end
+    
+      if File.exist?('Capfile')
+    warn '[skip] Capfile already exists'
+  else
+    FileUtils.cp(capfile, 'Capfile')
+    puts I18n.t(:written_file, scope: :capistrano, file: 'Capfile')
+  end
+    
+          describe 'setting an internal host and role filter' do
+        subject { dsl.roles(:app) }
+        it 'ignores it' do
+          dsl.set :filter, role: :web, host: 'example1.com'
+          expect(subject.map(&:hostname)).to eq(['example3.com', 'example4.com'])
+        end
+      end
