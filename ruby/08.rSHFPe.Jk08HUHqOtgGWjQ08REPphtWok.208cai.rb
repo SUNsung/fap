@@ -1,95 +1,105 @@
 
         
-              class Aliases # :nodoc:
-        def initialize(tables)
-          @tables = tables
-          @alias_cache = tables.each_with_object({}) { |table, h|
-            h[table.node] = table.columns.each_with_object({}) { |column, i|
-              i[column.name] = column.alias
-            }
-          }
-          @name_and_alias_cache = tables.each_with_object({}) { |table, h|
-            h[table.node] = table.columns.map { |column|
-              [column.name, column.alias]
-            }
-          }
-        end
+          end
     
-        def test_relation_merging_with_merged_joins_as_strings
-      join_string = 'LEFT OUTER JOIN #{Rating.quoted_table_name} ON #{SpecialComment.quoted_table_name}.id = #{Rating.quoted_table_name}.comment_id'
-      special_comments_with_ratings = SpecialComment.joins join_string
-      posts_with_special_comments_with_ratings = Post.group('posts.id').joins(:special_comments).merge(special_comments_with_ratings)
-      assert_equal({ 2 => 1, 4 => 3, 5 => 1 }, authors(:david).posts.merge(posts_with_special_comments_with_ratings).count)
-    end
-    
-        assert_equal 3, timers.size
-    
-          connection = Connection.new(server, env)
-      assert_called(connection.websocket, :close) do
-        connection.process
+            @value << new_block
       end
     end
   end
 end
 
     
-    puts 'Validating #{links.size} links...'
+    ; TODO make this stricter if possible
+(allow network-outbound)
     
-    msfenv_real_pathname = Pathname.new(__FILE__).realpath
-root = msfenv_real_pathname.parent.parent
+            def run
+          if @pod_name.nil?
+            # Note: at that point, @wipe_all is always true (thanks to `validate!`)
+            # Remove all
+            clear_cache
+          else
+            # Remove only cache for this pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            elsif cache_descriptors.count > 1 && !@wipe_all
+              # Ask which to remove
+              choices = cache_descriptors.map { |c| '#{@pod_name} v#{c[:version]} (#{pod_type(c)})' }
+              index = UI.choose_from_array(choices, 'Which pod cache do you want to remove?')
+              remove_caches([cache_descriptors[index]])
+            else
+              # Remove all found cache of this pod
+              remove_caches(cache_descriptors)
+            end
+          end
+        end
     
-          if(pkt.payload =~ self.sigs[k])
-        matched = k
-        matches = $1
+            def execute_repl_command(repl_command)
+          unless repl_command == '\n'
+            repl_commands = repl_command.split
+            subcommand = repl_commands.shift.capitalize
+            arguments = repl_commands
+            subcommand_class = Pod::Command::IPC.const_get(subcommand)
+            subcommand_class.new(CLAide::ARGV.new(arguments)).run
+            signal_end_of_output
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+            TEMPLATE_REPO = 'https://github.com/CocoaPods/pod-template.git'.freeze
+        TEMPLATE_INFO_URL = 'https://github.com/CocoaPods/pod-template'.freeze
+        CREATE_NEW_POD_INFO_URL = 'http://guides.cocoapods.org/making/making-a-cocoapod'.freeze
+    
+            sets = config.sources_manager.aggregate.all_sets
+        sets.each { |set| UI.pod(set, :name_and_version) }
+        UI.puts '\n#{sets.count} pods were found'
       end
     
-    
-class SnifferIMAP < BaseProtocolParser
-    
-    clsJavaCompile 	= Rjb::import('javaCompile.CompileSourceInMemory')
-clsCreateJar	= Rjb::import('javaCompile.CreateJarFile')
-clsFile			= Rjb::import('java.io.File')
-system			= Rjb::import('java.lang.System')
-#clsString	= Rjb::import('java.lang.String')
-    
-      # Clean the keg of formula @f
-  def clean
-    ObserverPathnameExtension.reset_counts!
-    
-        case list
-    when Hash
-      list
-    when Array, String, :DATA
-      { p1: list }
-    else
-      {}
-    end.each_pair do |strip, urls|
-      Array(urls).each do |url|
-        case url
-        when :DATA
-          patch = DATAPatch.new(strip)
-        else
-          patch = LegacyPatch.new(strip, url)
+            rows.each do |row|
+          line = row.values.each_with_index.map do |value, col|
+            value.to_s.ljust(col_widths[col])
+          end.join(' ').rstrip
+          line = color.colorize(line, row.color) if row.color
+          puts line
         end
-        patches << patch
+      end
+    
+            on roles(target_roles) do
+          unless test '[ -f #{file.to_s.shellescape} ]'
+            info 'Uploading #{prerequisite_file} to #{file}'
+            upload! File.open(prerequisite_file), file
+          end
+        end
       end
     end
     
-    class GPG2Requirement < Requirement
-  fatal true
-  satisfy do
-    odisabled('GPG2Requirement', ''depends_on \'gnupg\''')
+      not_found do
+    send_file(File.join(File.dirname(__FILE__), 'public', '404.html'), {:status => 404})
+  end
+    
+        def paragraphize(input)
+      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
+    end
   end
 end
     
-      PREDEFINED_OPTIONS = {
-    universal: Option.new('universal', 'Build a universal binary'),
-    cxx11:     Option.new('c++11',     'Build using C++11 mode'),
-  }.freeze
+    class ConfigTag < Liquid::Tag
+  def initialize(tag_name, options, tokens)
+    super
+    options = options.split(' ').map {|i| i.strip }
+    @key = options.slice!(0)
+    @tag = nil
+    @classname = nil
+    options.each do |option|
+      @tag = $1 if option =~ /tag:(\S+)/ 
+      @classname = $1 if option =~ /classname:(\S+)/
+    end
+  end
     
-          respond_with do |format|
-        format.html do
-          gon.preloads[:pods] = pods_json
-          gon.unchecked_count = Pod.unchecked.count
-          gon.version_failed_count = Pod.version_failed.count
-          gon.error_count = Pod.check_failed.count
+          if File.symlink?(code_path)
+        return 'Code directory '#{code_path}' cannot be a symlink'
+      end
