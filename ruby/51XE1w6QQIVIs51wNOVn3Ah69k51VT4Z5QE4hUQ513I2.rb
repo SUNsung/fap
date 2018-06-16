@@ -1,60 +1,52 @@
 
         
-        module ActionCable
-  module Server
-    # An instance of this configuration object is available via ActionCable.server.config, which allows you to tweak Action Cable configuration
-    # in a Rails config initializer.
-    class Configuration
-      attr_accessor :logger, :log_tags
-      attr_accessor :connection_class, :worker_pool_size
-      attr_accessor :disable_request_forgery_protection, :allowed_request_origins, :allow_same_origin_as_host
-      attr_accessor :cable, :url, :mount_path
+          def test_hash2
+    assert_kind_of(Integer, @cls[].hash)
+    h = @cls[1=>2]
+    h.shift
+    assert_equal({}.hash, h.hash, '[ruby-core:38650]')
+    bug9231 = '[ruby-core:58993] [Bug #9231]'
+    assert_not_equal(0, @cls[].hash, bug9231)
+  end
     
-            def test_spec_name_with_inline_config
-          spec = spec('adapter' => 'sqlite3')
-          assert_equal 'primary', spec.name, 'should default to primary id'
+            time.sec.should == 60
+        time.min.should == 59
+        time.hour.should == 23
+        time.day.should == 30
+        time.month.should == 6
+      end
+    end
+  end
+    
+        uninstall login_item: 'login item name'
+    
+            def <<(value)
+          values << value
         end
+    
+      tasks_dir = Pathname.new('lib/capistrano/tasks')
+  config_dir = Pathname.new('config')
+  deploy_dir = config_dir.join('deploy')
+    
+            context 'with filter options' do
+          subject { dsl.release_roles(:all, filter: :active) }
+    
+        module ClassMethods
+      def attachment_definitions
+        Paperclip::AttachmentRegistry.definitions_for(self)
       end
     end
   end
 end
 
     
-            def current_instances
-          Thread.current[:current_attributes_instances] ||= {}
-        end
-    
-          def authenticate_long_credentials
-        authenticate_or_request_with_http_token do |token, options|
-          token == '1234567890123456789012345678901234567890' && options[:algorithm] == 'test'
-        end
+          if app.config.respond_to?(:paperclip_defaults)
+        Paperclip::Attachment.default_options.merge!(app.config.paperclip_defaults)
       end
-  end
-    
-    module MiddlewareTest
-  class MyMiddleware
-    def initialize(app)
-      @app = app
     end
     
-      def test_register_and_use_json_simple
-    with_test_route_set do
-      with_params_parsers Mime[:json] => Proc.new { |data| ActiveSupport::JSON.decode(data)['request'].with_indifferent_access } do
-        post '/',
-          params: '{'request':{'summary':'content...','title':'JSON'}}',
-          headers: { 'CONTENT_TYPE' => 'application/json' }
-    
-        def perform(mailer, mail_method, delivery_method, *args) #:nodoc:
-      mailer.constantize.public_send(mail_method, *args).send(delivery_method)
+          def has_attached_file(*attachment_names)
+        ActiveSupport::Deprecation.warn 'Method `t.has_attached_file` in the migration has been deprecated and will be replaced by `t.attachment`.'
+        attachment(*attachment_names)
+      end
     end
-    
-      # GET /books/1/edit
-  def edit
-  end
-    
-            def autocorrect(node)
-          center = multiple_compare?(node)
-          new_center = '#{center.source} && #{center.source}'
-    
-    module LogStash::Util::FileTools
-  extend self
