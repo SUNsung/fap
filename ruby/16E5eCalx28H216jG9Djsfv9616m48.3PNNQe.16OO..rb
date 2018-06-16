@@ -1,95 +1,192 @@
 
         
-          # True if a {Formula} is being built with {Formula.head} instead of {Formula.stable}.
-  # <pre>args << '--some-new-stuff' if build.head?</pre>
-  # <pre># If there are multiple conditional arguments use a block instead of lines.
-  #  if build.head?
-  #    args << '--i-want-pizza'
-  #    args << '--and-a-cold-beer' if build.with? 'cold-beer'
-  #  end</pre>
-  def head?
-    include? 'HEAD'
-  end
+        require 'abstract_unit'
     
-        def self.cleanup_lockfiles
-      return unless HOMEBREW_CACHE_FORMULA.directory?
-      candidates = HOMEBREW_CACHE_FORMULA.children
-      lockfiles  = candidates.select { |f| f.file? && f.extname == '.brewing' }
-      lockfiles.each do |file|
-        next unless file.readable?
-        file.open.flock(File::LOCK_EX | File::LOCK_NB) && file.unlink
-      end
-    end
+          attr_reader :subtype, :coder
     
-          out = checks.send(method)
-      unless out.nil? || out.empty?
-        if first_warning
-          $stderr.puts <<-EOS.undent
-            #{Tty.white}Please note that these warnings are just used to help the Homebrew maintainers
-            with debugging if you file an issue. If everything you use Homebrew for is
-            working fine: please don't worry and just ignore them. Thanks!#{Tty.reset}
-          EOS
-        end
-    
-        if ARGV.include?('--pinned') || ARGV.include?('--versions')
-      filtered_list
-    elsif ARGV.named.empty?
-      if ARGV.include? '--full-name'
-        full_names = Formula.installed.map(&:full_name).sort do |a, b|
-          if a.include?('/') && !b.include?('/')
-            1
-          elsif !a.include?('/') && b.include?('/')
-            -1
-          else
-            a <=> b
-          end
-        end
-        puts_columns full_names
-      else
-        ENV['CLICOLOR'] = nil
-        exec 'ls', *ARGV.options_only << HOMEBREW_CELLAR
-      end
-    elsif ARGV.verbose? || !$stdout.tty?
-      exec 'find', *ARGV.kegs.map(&:to_s) + %w[-not -type d -print]
-    else
-      ARGV.kegs.each { |keg| PrettyListing.new keg }
+          wait_for_async
+      assert_predicate connection.websocket, :alive?
     end
   end
     
-          puts_columns Array(result)
-    else
-      query = ARGV.first
-      rx = query_regexp(query)
-      local_results = search_formulae(rx)
-      puts_columns(local_results)
-      tap_results = search_taps(rx)
-      puts_columns(tap_results)
+        Or via the Cask:
+      brew cask install ngrok
+    EOS
+  end
+end
+
     
-    invalids = []
-Parallel.each(links, in_threads: 4) do |link|
-  href = link.attribute('href').to_s
-  begin
-    case check_link(URI.join(BASE_URI, href))
-    when (200...300)
-      putc('.')
-    when (300..302)
-      putc('w')
+    def bottle_tag
+  if MacOS.version >= :lion
+    MacOS.cat
+  elsif MacOS.version == :snow_leopard
+    Hardware::CPU.is_64_bit? ? :snow_leopard : :snow_leopard_32
+  else
+    # Return, e.g., :tiger_g3, :leopard_g5_64, :leopard_64 (which is Intel)
+    if Hardware::CPU.type == :ppc
+      tag = '#{MacOS.cat}_#{Hardware::CPU.family}'.to_sym
+    else
+      tag = MacOS.cat
     end
-  rescue => e
-    putc('F')
-    invalids << '#{href} (reason: #{e.message})'
+    MacOS.prefer_64_bit? ? '#{tag}_64'.to_sym : tag
   end
 end
     
-        # Environment detection helpers
-    def sprockets?
-      defined?(::Sprockets)
+      def userpaths?
+    @settings.include? :userpaths
+  end
+end
+    
+      def bash_completion_caveats
+    if keg && keg.completion_installed?(:bash) then <<-EOS.undent
+      Bash completion has been installed to:
+        #{HOMEBREW_PREFIX}/etc/bash_completion.d
+      EOS
+    end
+  end
+    
+        # Remove directories opposite from traversal, so that a subtree with no
+    # actual files gets removed correctly.
+    dirs.reverse_each do |d|
+      if d.children.empty?
+        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
+        d.rmdir
+      end
     end
     
-    require_relative 'converter/fonts_conversion'
-require_relative 'converter/less_conversion'
-require_relative 'converter/js_conversion'
-require_relative 'converter/logger'
-require_relative 'converter/network'
+          # Find commands in Homebrew/dev-cmd
+      if ARGV.homebrew_developer?
+        puts
+        puts 'Built-in development commands'
+        puts_columns internal_development_commands
+      end
     
-          spec['version'] = Bootstrap::VERSION
+      def gcc_42
+    @gcc_42 ||= MacOS.gcc_42_build_version if MacOS.has_apple_developer_tools?
+  end
+    
+      def self.canonical_name(name)
+    Formulary.canonical_name(name)
+  end
+    
+          export JAVA_HOME='$(/usr/libexec/java_home)'
+      export AWS_ACCESS_KEY='<Your AWS Access ID>'
+      export AWS_SECRET_KEY='<Your AWS Secret Key>'
+      export #{home_name}='#{home_value}'
+    EOS
+  end
+end
+
+    
+      protected
+    
+        def teardown
+      begin
+        if @test_pid
+          Timeout.timeout(2) do
+            Process.waitpid(@test_pid)
+          end
+        end
+      rescue Timeout::Error
+        Process.kill(:KILL, @test_pid) if @test_pid
+      ensure
+        @test_out&.close
+      end
+    end
+    
+        def gen_random_openssl(n)
+      @pid = 0 unless defined?(@pid)
+      pid = $$
+      unless @pid == pid
+        now = Process.clock_gettime(Process::CLOCK_REALTIME, :nanosecond)
+        OpenSSL::Random.random_add([now, @pid, pid].join(''), 0.0)
+        seed = Random.urandom(16)
+        if (seed)
+          OpenSSL::Random.random_add(seed, 16)
+        end
+        @pid = pid
+      end
+      return OpenSSL::Random.random_bytes(n)
+    end
+    
+      def test_open_without_block
+    ret = PTY.open
+  rescue RuntimeError
+    skip $!
+  else
+    assert_kind_of(Array, ret)
+    assert_equal(2, ret.length)
+    assert_equal(IO, ret[0].class)
+    assert_equal(File, ret[1].class)
+    _, slave = ret
+    assert(slave.tty?)
+    assert(File.chardev?(slave.path))
+  ensure
+    if ret
+      ret[0].close
+      ret[1].close
+    end
+  end
+    
+      it 'only binds the eval to the receiver' do
+    f = Object.new
+    f.instance_eval do
+      def foo
+        1
+      end
+    end
+    f.foo.should == 1
+    lambda { Object.new.foo }.should raise_error(NoMethodError)
+  end
+    
+        platform_is_not :windows do
+      @block  = `find /dev /devices -type b 2>/dev/null`.split('\n').first
+      @char   = `{ tty || find /dev /devices -type c; } 2>/dev/null`.split('\n').last
+    end
+    
+      it 'can read in a block when call open with RDONLY mode' do
+    File.open(@file, File::RDONLY) do |f|
+      f.gets.should == nil
+    end
+  end
+    
+          File.pipe?(filename).should == true
+    
+          it 'updates string metadata' do
+        downcased = '\u{212A}ING'
+        downcased.downcase!
+    
+      ruby_version_is '2.4' do
+    describe 'full Unicode case mapping' do
+      it 'modifies self in place for all of Unicode with no option' do
+        a = 'äÖü'
+        a.swapcase!
+        a.should == 'ÄöÜ'
+      end
+    
+      describe 'rb_str_resize' do
+    it 'reduces the size of the string' do
+      str = @s.rb_str_resize('test', 2)
+      str.size.should == 2
+      @s.RSTRING_LEN(str).should == 2
+      str.should == 'te'
+    end
+    
+      def perform(user_id)
+    @user = User.find(user_id)
+    deliver_digest if @user.allows_digest_emails?
+  end
+    
+            Fabricate(:status, account: alice, text: 'hello world')
+        Fabricate(:status, account: bob, text: 'yes hello')
+        Fabricate(:status, account: user.account, text: 'test')
+    
+      def background_color
+    '#191b22'
+  end
+    
+    #
+# Project
+#
+    
+          when :login_pass
