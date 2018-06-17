@@ -1,61 +1,113 @@
 
-def flatpage(request, url):
-    '''
-    Public interface to the flat page view.
+        
+            def __init__(self, rank):
+        self.state = CallState.READY
+        self.rank = rank
+        self.employee = None
     
-        def test_from_bytes(self):
-        def check(tests, byteorder, signed=False):
-            for test, expected in tests.items():
-                try:
-                    self.assertEqual(
-                        int.from_bytes(test, byteorder, signed=signed),
-                        expected)
-                except Exception as err:
-                    raise AssertionError(
-                        'failed to convert {0} with byteorder={1!r} and signed={2}'
-                        .format(test, byteorder, signed)) from err
+        def bfs(self, source, dest):
+        if source is None:
+            return False
+        queue = deque()
+        queue.append(source)
+        source.visit_state = State.visited
+        while queue:
+            node = queue.popleft()
+            print(node)
+            if dest is node:
+                return True
+            for adjacent_node in node.adj_nodes.values():
+                if adjacent_node.visit_state == State.unvisited:
+                    queue.append(adjacent_node)
+                    adjacent_node.visit_state = State.visited
+        return False
     
-    #
-# NOTE: This is the pi function from the decimal documentation, modified
-# for benchmarking purposes. Since floats do not have a context, the higher
-# intermediate precision from the original is NOT used, so the modified
-# algorithm only gives an approximation to the correctly rounded result.
-# For serious use, refer to the documentation or the appropriate literature.
-#
-def pi_float():
-    '''native float'''
-    lasts, t, s, n, na, d, da = 0, 3.0, 3, 1, 0, 0, 24
-    while s != lasts:
-        lasts = s
-        n, na = n+na, na+8
-        d, da = d+da, da+32
-        t = (t * n) / d
-        s += t
-    return s
+        def __init__(self, MAX_SIZE):
+        self.MAX_SIZE = MAX_SIZE
+        self.size = 0
+        self.lookup = {}  # key: query, value: node
+        self.linked_list = LinkedList()
     
-        def clean(self):
-        '''Delete old files in 'tmp'.'''
-        now = time.time()
-        for entry in os.listdir(os.path.join(self._path, 'tmp')):
-            path = os.path.join(self._path, 'tmp', entry)
-            if now - os.path.getatime(path) > 129600:   # 60 * 60 * 36
-                os.remove(path)
+        def spot_freed(self):
+        self.available_spots += 1
     
-                    # kwnames=()
-                result = _testcapi.pyobject_fastcallkeywords(func, args, ())
-                self.check_result(result, expected)
+        def __init__(self, template_categories_to_budget_map):
+        self.categories_to_budget_map = template_categories_to_budget_map
     
-        def parseWithContext(self, input, cnode, action):
-        if action not in self._legal_actions:
-            raise ValueError('not a legal action')
-        raise NotImplementedError('Haven't written this yet...')
+        To avoid English-only error messages and to generally make things
+    as flexible as possible, these exceptions are not created with strings,
+    but rather the information necessary to generate an error.  Then
+    the various reporting methods in Parser and Lexer can be overridden
+    to generate a localized error message.  For example, MismatchedToken
+    exceptions are built with the expected token type.
+    So, don't expect getMessage() to return anything.
     
-        def test_message(self):
-        with original_warnings.catch_warnings(record=True,
-                module=self.module) as w:
-            self.module.simplefilter('once')
-            for i in range(4):
-                text = 'multi %d' %i  # Different text on each call.
-                self.module.warn(text)
-                self.assertEqual(str(w[-1].message), text)
-                self.assertIs(w[-1].category, UserWarning)
+              stat -> expr -> atom
+    
+        def test_sequential_undo(self):
+        self.command_stack = list(reversed(self.command_stack))
+        self.command_stack[0].undo()
+        output_after_first_undo = os.listdir(self.test_dir)
+        self.assertEqual(output_after_first_undo[0], 'bar.txt')
+        self.command_stack[1].undo()
+        output_after_second_undo = os.listdir(self.test_dir)
+        self.assertEqual(output_after_second_undo[0], 'foo.txt')
+    
+        def test_c_observers_shall_be_detachable(cls):
+        cls.s.detach(cls.dec_obs)
+        # hex viewer shall be remaining if dec viewer is detached first
+        cls.assertEqual(isinstance(cls.s._observers[0], HexViewer), True)
+        cls.assertEqual(len(cls.s._observers), 1)
+        cls.s.detach(cls.hex_obs)
+        cls.assertEqual(len(cls.s._observers), 0)
+    
+        def test_sales_manager_shall_not_talk_through_proxy_with_delay(cls):
+        cls.ntp.busy = 'No'
+        start_time = time()
+        cls.ntp.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+This Sales Manager will not talk to you whether he/she is busy or not\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    
+        jim = Subscriber('jim', message_center)
+    jim.subscribe('cartoon')
+    jack = Subscriber('jack', message_center)
+    jack.subscribe('music')
+    gee = Subscriber('gee', message_center)
+    gee.subscribe('movie')
+    vani = Subscriber('vani', message_center)
+    vani.subscribe('movie')
+    vani.unsubscribe('movie')
+    
+        def is_satisfied_by(self, candidate):
+        return getattr(candidate, 'super_user', False)
+    
+    
+class State(object):
+    
+    STATES = ['high', 'low']
+    
+        if unit_1 == LENGTH_MILES:
+        meters = __miles_to_meters(value)
+    elif unit_1 == LENGTH_FEET:
+        meters = __feet_to_meters(value)
+    elif unit_1 == LENGTH_KILOMETERS:
+        meters = __kilometers_to_meters(value)
+    
+            self.session.add(States(
+            entity_id='sensor.temperature',
+            state='20',
+            last_changed=before_run,
+            last_updated=before_run,
+        ))
+        self.session.add(States(
+            entity_id='sensor.sound',
+            state='10',
+            last_changed=after_run,
+            last_updated=after_run,
+        ))
