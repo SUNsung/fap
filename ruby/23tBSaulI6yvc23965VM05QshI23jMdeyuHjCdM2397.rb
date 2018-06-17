@@ -1,150 +1,141 @@
 
         
-            find_union(segments, Group).order_id_desc
-  end
-    
-        def name=(value)
-      @name = value.try :strip
-    end
-    
-            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
-          next if node.previous.try(:content).present? || node.next.try(:content).present?
-          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
-          node.content = node.content.strip
-          node.name = 'pre' if node.content =~ /\s/
-          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
+                def test_url_missing_scheme
+          spec = resolve 'foo'
+          assert_equal({
+            'database' => 'foo' }, spec)
         end
     
-    puts '\nUnable to find an RSS feed for the following blogs:'
-puts '==================================================='
-unavailable.each do |b|
-  puts '#{b.name} | #{b.web_url}'
+        # This isn't strictly necessary for the test, but a little bit of
+    # knowledge of internals allows us to make failures far more likely.
+    model.define_singleton_method(:define_attribute) do |*args|
+      Thread.pass
+      super(*args)
+    end
+    
+      def test_distinct_count_with_group_by_and_order_and_limit
+    assert_equal({ 6 => 2 }, Account.group(:firm_id).distinct.order('1 DESC').limit(1).count)
+  end
+    
+      test 'broadcasting_for with an array' do
+    assert_equal 'Room#1-Campfire:Room#2-Campfire', ChatChannel.broadcasting_for([ Room.new(1), Room.new(2) ])
+  end
+    
+          msg
+    end
+    
+      def deliver_digest
+    NotificationMailer.digest(user.account).deliver_now!
+    user.touch(:last_emailed_at)
+  end
 end
-puts '==================================================='
 
     
-      # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
-  # permissions and removing .la files, unless the files (or parent
-  # directories) are protected by skip_clean.
-  #
-  # bin and sbin should not have any subdirectories; if either do that is
-  # caught as an audit warning
-  #
-  # lib may have a large directory tree (see Erlang for instance), and
-  # clean_dir applies cleaning rules to the entire tree
-  def clean_dir(d)
-    d.find do |path|
-      path.extend(ObserverPathnameExtension)
+      private
     
-        token, username = api_credentials
-    case api_credentials_type
-    when :keychain
-      args += %W[--user #{username}:#{token}]
-    when :environment
-      args += ['--header', 'Authorization: token #{token}']
-    end
-    
-          def escape_hash(hash)
-        hash = hash.dup
-        hash.each { |k,v| hash[k] = escape(v) }
-        hash
+        keys.each do |key|
+      value = env[key]
+      s = '#{key}: #{value}'
+      case key
+      when 'CC', 'CXX', 'LD'
+        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
       end
-    
-        it 'leaves TempFiles untouched' do
-      mock_app do |env|
-        request = Rack::Request.new(env)
-        [200, {'Content-Type' => 'text/plain'}, [request.params['file'][:filename] + '\n' + \
-                                                 request.params['file'][:tempfile].read + '\n' + \
-                                                 request.params['other']]]
-      end
-    
-        it 'should be able to deal with PATH_INFO = nil (fcgi?)' do
-      app = Rack::Protection::PathTraversal.new(proc { 42 })
-      expect(app.call({})).to eq(42)
+      f.puts s
     end
   end
+end
+
     
-      it 'accepts a session without changes to tracked parameters' do
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session
-    get '/', {}, 'rack.session' => session
-    expect(session[:foo]).to eq(:bar)
-  end
+      def execute
+    validate_params
+    source = File.join(File.dirname(__FILE__), 'templates', '#{type}-plugin')
+    @target_path = File.join(path, full_plugin_name)
+    FileUtils.mkdir(@target_path)
+    puts ' Creating #{@target_path}'
     
-    module RuboCop
-  module Cop
-    module Lint
-      # This cop checks that there are no repeated conditions
-      # used in case 'when' expressions.
-      #
-      # @example
-      #
-      #   # bad
-      #
-      #   case x
-      #   when 'first'
-      #     do_something
-      #   when 'first'
-      #     do_something_else
-      #   end
-      #
-      # @example
-      #
-      #   # good
-      #
-      #   case x
-      #   when 'first'
-      #     do_something
-      #   when 'second'
-      #     do_something_else
-      #   end
-      class DuplicateCaseCondition < Cop
-        MSG = 'Duplicate `when` condition detected.'.freeze
-    
-            # Annotate the source code with the RuboCop offenses provided
-        #
-        # @param offenses [Array<RuboCop::Cop::Offense>]
-        #
-        # @return [self]
-        def with_offense_annotations(offenses)
-          offense_annotations =
-            offenses.map do |offense|
-              indent     = ' ' * offense.column
-              carets     = '^' * offense.column_length
-    
-        # Returns a unique hash suitable for obfuscating the URL of an otherwise
-    # publicly viewable attachment.
-    def hash_key(style_name = default_style)
-      raise ArgumentError, 'Unable to generate hash without :hash_secret' unless @options[:hash_secret]
-      require 'openssl' unless defined?(OpenSSL)
-      data = interpolate(@options[:hash_data], style_name)
-      OpenSSL::HMAC.hexdigest(OpenSSL::Digest.const_get(@options[:hash_digest]).new, @options[:hash_secret], data)
+        i0, s0 = index, []
+    if has_terminal?('-', false, index)
+      r2 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      @index += 1
+    else
+      terminal_parse_failure('-')
+      r2 = nil
     end
-    
-        # True if the dimensions represent a vertical rectangle
-    def vertical?
-      height > width
+    if r2
+      r1 = r2
+    else
+      r1 = instantiate_node(SyntaxNode,input, index...index)
     end
-    
-            def matches? subject
-          @subject = subject
-          @subject = subject.new if subject.class == Class
-          error_when_not_valid? && no_error_when_valid?
+    s0 << r1
+    if r1
+      s3, i3 = [], index
+      loop do
+        if has_terminal?('\G[0-9]', true, index)
+          r4 = true
+          @index += 1
+        else
+          r4 = nil
         end
-    
-          class ValidateAttachmentSizeMatcher
-        def initialize attachment_name
-          @attachment_name = attachment_name
+        if r4
+          s3 << r4
+        else
+          break
         end
-    
-    
-    {  # Returns hash with styles missing from recent run of rake paperclip:refresh:missing_styles
-  #   {
-  #     :User => {:avatar => [:big]},
-  #     :Book => {
-  #       :cover => [:croppable]},
-  #     }
-  #   }
-  def self.missing_attachments_styles
-    current_styles = current_attachments_styles
-    registered_styles = get_registered_attachments_styles
+      end
+      if s3.empty?
+        @index = i3
+        r3 = nil
+      else
+        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+      end
+      s0 << r3
+      if r3
+        i6, s6 = index, []
+        if has_terminal?('.', false, index)
+          r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          @index += 1
+        else
+          terminal_parse_failure('.')
+          r7 = nil
+        end
+        s6 << r7
+        if r7
+          s8, i8 = [], index
+          loop do
+            if has_terminal?('\G[0-9]', true, index)
+              r9 = true
+              @index += 1
+            else
+              r9 = nil
+            end
+            if r9
+              s8 << r9
+            else
+              break
+            end
+          end
+          r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
+          s6 << r8
+        end
+        if s6.last
+          r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
+          r6.extend(Number0)
+        else
+          @index = i6
+          r6 = nil
+        end
+        if r6
+          r5 = r6
+        else
+          r5 = instantiate_node(SyntaxNode,input, index...index)
+        end
+        s0 << r5
+      end
+    end
+    if s0.last
+      r0 = instantiate_node(LogStash::Config::AST::Number,input, i0...index, s0)
+      r0.extend(Number1)
+    else
+      @index = i0
+      r0 = nil
+    end
