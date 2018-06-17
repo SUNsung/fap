@@ -1,185 +1,228 @@
 
         
-        namespace api {
-    }
+          // Pick next gap with average value of config::kReadBytesPeriod.
+  ssize_t RandomPeriod() {
+    return rnd_.Uniform(2*config::kReadBytesPeriod);
+  }
     
-    
-    {  DraggableRegion();
-};
-    
-      // Called by platform specific implementations of this class whenever a key
-  // is struck. Only called for keys that have an observer registered.
-  void NotifyKeyPressed(const ui::Accelerator& accelerator);
-    
-    
-    {}  // namespace chrome
-    
-      const int render_process_id_;
-  // Keep a copy from original thread.
-  const base::FilePath profile_directory_;
-  const GURL document_url_;
-    
-    // filenames
-const base::FilePath::CharType kCacheDirname[] = FPL('Cache');
-const base::FilePath::CharType kChannelIDFilename[] = FPL('Origin Bound Certs');
-const base::FilePath::CharType kCookieFilename[] = FPL('Cookies');
-const base::FilePath::CharType kCRLSetFilename[] =
-    FPL('Certificate Revocation Lists');
-const base::FilePath::CharType kCustomDictionaryFileName[] =
-    FPL('Custom Dictionary.txt');
-const base::FilePath::CharType kExtensionActivityLogFilename[] =
-    FPL('Extension Activity');
-const base::FilePath::CharType kExtensionsCookieFilename[] =
-    FPL('Extension Cookies');
-const base::FilePath::CharType kFirstRunSentinel[] = FPL('First Run');
-const base::FilePath::CharType kGCMStoreDirname[] = FPL('GCM Store');
-const base::FilePath::CharType kLocalStateFilename[] = FPL('Local State');
-const base::FilePath::CharType kLocalStorePoolName[] = FPL('LocalStorePool');
-const base::FilePath::CharType kMediaCacheDirname[] = FPL('Media Cache');
-const base::FilePath::CharType kNetworkPersistentStateFilename[] =
-    FPL('Network Persistent State');
-const base::FilePath::CharType kOfflinePageArchviesDirname[] =
-    FPL('Offline Pages/archives');
-const base::FilePath::CharType kOfflinePageMetadataDirname[] =
-    FPL('Offline Pages/metadata');
-const base::FilePath::CharType kPreferencesFilename[] = FPL('Preferences');
-const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[] =
-    FPL('Protected Preferences');
-const base::FilePath::CharType kReadmeFilename[] = FPL('README');
-const base::FilePath::CharType kResetPromptMementoFilename[] =
-    FPL('Reset Prompt Memento');
-const base::FilePath::CharType kSafeBrowsingBaseFilename[] =
-    FPL('Safe Browsing');
-const base::FilePath::CharType kSecurePreferencesFilename[] =
-    FPL('Secure Preferences');
-const base::FilePath::CharType kServiceStateFileName[] = FPL('Service State');
-const base::FilePath::CharType kSingletonCookieFilename[] =
-    FPL('SingletonCookie');
-const base::FilePath::CharType kSingletonLockFilename[] = FPL('SingletonLock');
-const base::FilePath::CharType kSingletonSocketFilename[] =
-    FPL('SingletonSocket');
-const base::FilePath::CharType kSupervisedUserSettingsFilename[] =
-    FPL('Managed Mode Settings');
-const base::FilePath::CharType kThemePackFilename[] = FPL('Cached Theme.pak');
-const base::FilePath::CharType kThemePackMaterialDesignFilename[] =
-    FPL('Cached Theme Material Design.pak');
-const base::FilePath::CharType kWebAppDirname[] = FPL('Web Applications');
-    
-    #include 'hphp/util/logger.h'
-#include 'hphp/util/trace.h'
-    
-      struct Hash {
-    size_t operator()(Vconst c) const {
-      return
-        std::hash<uint64_t>()(c.val) ^ std::hash<int>()(c.kind) ^ c.isUndef;
-    }
-  };
-    
-    inline void initNuma() {}
-inline constexpr int next_numa_node(std::atomic_int& curr_node) { return 0; }
-inline constexpr int num_numa_nodes() { return 1; }
-inline void numa_interleave(void* start, size_t size) {}
-inline void numa_bind_to(void* start, size_t size, int node) {}
-inline constexpr bool numa_node_allowed(int node) { return true; }
-    
-      if ((ms->flags & MAGIC_PRESERVE_ATIME) != 0) {
-    /*
-     * Try to restore access, modification times if read it.
-     * This is really *bad* because it will modify the status
-     * time of the file... And of course this will affect
-     * backup programs
-     */
-#ifdef HAVE_UTIMES
-    struct timeval  utsbuf[2];
-    (void)memset(utsbuf, 0, sizeof(utsbuf));
-    utsbuf[0].tv_sec = sb->st_atime;
-    utsbuf[1].tv_sec = sb->st_mtime;
-    }
-    
-    namespace HPHP { namespace hfsort {
-namespace {
-    }
-    }
-    }
-    
-      // An integer is constructed from the n, imm_s and imm_r bits according to
-  // the following table:
-  //
-  //  N   imms    immr    size        S             R
-  //  1  ssssss  rrrrrr    64    UInt(ssssss)  UInt(rrrrrr)
-  //  0  0sssss  xrrrrr    32    UInt(sssss)   UInt(rrrrr)
-  //  0  10ssss  xxrrrr    16    UInt(ssss)    UInt(rrrr)
-  //  0  110sss  xxxrrr     8    UInt(sss)     UInt(rrr)
-  //  0  1110ss  xxxxrr     4    UInt(ss)      UInt(rr)
-  //  0  11110s  xxxxxr     2    UInt(s)       UInt(r)
-  // (s bits must not be all set)
-  //
-  // A pattern is constructed of size bits, where the least significant S+1
-  // bits are set. The pattern is rotated right by R, and repeated across a
-  // 32 or 64-bit value, depending on destination register width.
-  //
-    
-    ssize_t hphp_read_embedded_data(const char* section, char* buf, size_t len) {
-  embedded_data data;
-  if (get_embedded_data(section, &data)) {
-    auto str = read_embedded_data(data);
-    auto data_len = str.length();
-    auto real_len = data_len < len ? data_len : len;
-    memcpy(buf, str.data(), real_len * sizeof(char));
-    return real_len;
-  } else {
-    return -1;
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
   }
 }
     
-    #include 'hphp/util/process.h'
-#include 'hphp/util/lock.h'
     
-    bool CurlShareResource::setLongOption(long option, long value) {
-  CURLSHcode error = CURLSHE_OK;
-  error = curl_share_setopt(m_share,
-                            (CURLSHoption)option,
-                            value);
-  return error == CURLSHE_OK;
+    {  ASSERT_TRUE(! Overlaps(NULL, 'j'));
+  ASSERT_TRUE(! Overlaps('r', NULL));
+  ASSERT_TRUE(Overlaps(NULL, 'p'));
+  ASSERT_TRUE(Overlaps(NULL, 'p1'));
+  ASSERT_TRUE(Overlaps('q', NULL));
+  ASSERT_TRUE(Overlaps(NULL, NULL));
 }
     
-    // For 2M pages, we want more control over protection and mapping flags.  Note
-// that MAP_FIXED can overwrite the existing mapping without checking/failing.
-void* mmap_2m(void* addr, int prot, int node = -1,
-              bool map_shared = false, bool map_fixed = false);
     
-    extern JSClass  *jsb_cocos2d_NavMesh_class;
-extern JSObject *jsb_cocos2d_NavMesh_prototype;
+    {  input.remove_prefix(kHeader);
+  Slice key, value;
+  int found = 0;
+  while (!input.empty()) {
+    found++;
+    char tag = input[0];
+    input.remove_prefix(1);
+    switch (tag) {
+      case kTypeValue:
+        if (GetLengthPrefixedSlice(&input, &key) &&
+            GetLengthPrefixedSlice(&input, &value)) {
+          handler->Put(key, value);
+        } else {
+          return Status::Corruption('bad WriteBatch Put');
+        }
+        break;
+      case kTypeDeletion:
+        if (GetLengthPrefixedSlice(&input, &key)) {
+          handler->Delete(key);
+        } else {
+          return Status::Corruption('bad WriteBatch Delete');
+        }
+        break;
+      default:
+        return Status::Corruption('unknown WriteBatch tag');
+    }
+  }
+  if (found != WriteBatchInternal::Count(this)) {
+    return Status::Corruption('WriteBatch has wrong count');
+  } else {
+    return Status::OK();
+  }
+}
     
-    extern JSClass  *jsb_cocostudio_Tween_class;
-extern JSObject *jsb_cocostudio_Tween_prototype;
+    class Env;
+    
+    // Return a new filter policy that uses a bloom filter with approximately
+// the specified number of bits per key.  A good value for bits_per_key
+// is 10, which yields a filter with ~ 1% false positive rate.
+//
+// Callers must delete the result after any database that is using the
+// result has been closed.
+//
+// Note: if you are using a custom comparator that ignores some parts
+// of the keys being compared, you must not use NewBloomFilterPolicy()
+// and must provide your own FilterPolicy that also ignores the
+// corresponding parts of the keys.  For example, if the comparator
+// ignores trailing spaces, it would be incorrect to use a
+// FilterPolicy (like NewBloomFilterPolicy) that does not ignore
+// trailing spaces in keys.
+extern const FilterPolicy* NewBloomFilterPolicy(int bits_per_key);
     
     
+    {  return 0;
+}
+
     
-    			b2EdgeShape shape;
-    
-    			b2Body* prevBody = ground;
-			for (int32 i = 0; i < e_count; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position.Set(-14.5f + 1.0f * i, 5.0f);
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&fd);
+    namespace grpc_python_generator {
     }
     
-    	XLoggerInfo xlog_info;
-	gettimeofday(&xlog_info.timeval, NULL);
-	xlog_info.level = (TLogLevel)_level;
-	xlog_info.line = (int)_line;
-	xlog_info.pid = (int)_pid;
-	xlog_info.tid = LONGTHREADID2INT(_tid);
-	xlog_info.maintid = LONGTHREADID2INT(_maintid);
+    SecureAuthContext::SecureAuthContext(grpc_auth_context* ctx,
+                                     bool take_ownership)
+    : ctx_(ctx), take_ownership_(take_ownership) {}
     
-    int Packer_Unpack(const void* _rawbuf, size_t _rawlen, std::string& _url, unsigned int& _sequence, size_t& _packlen, AutoBuffer& _data) {
-    if (_rawlen < sizeof(LongLinkPack)) return LONGLINKPACK_CONTINUE;
+     private:
+  static Result Sample();
+    
+    #include 'hphp/runtime/vm/jit/abi.h'
+#include 'hphp/runtime/vm/jit/arg-group.h'
+#include 'hphp/runtime/vm/jit/fixup.h'
+#include 'hphp/runtime/vm/jit/phys-reg-saver.h'
+#include 'hphp/runtime/vm/jit/vasm-gen.h'
+#include 'hphp/runtime/vm/jit/vasm-instr.h'
+#include 'hphp/runtime/vm/jit/vasm-reg.h'
+    
+      Array getAsyncResults(bool allow_empty);
+    
+    bool get_embedded_data(const char* section, embedded_data* desc,
+                       const std::string& filename /*= '' */) {
+  auto const fname = filename.empty() ? current_executable_path() : filename;
     }
     
-        void __DelOlderTouchTime(uint64_t _time);
+    #include 'hphp/runtime/ext/extension.h'
+#include 'hphp/util/type-scan.h'
+#include <curl/curl.h>
     
-    #include 'comm/debugger/testspy.h'
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+        struct pollfd fds[1];
+    while (!interrupted()) {
+      std::memset(fds, 0, sizeof(fds));
+      fds[0].fd = file_fd;
+    }
+    
+    TEST_F(ProcessTests, test_launchWorker) {
+  {
+    std::vector<char*> argv;
+    for (size_t i = 0; i < kExpectedWorkerArgsCount; i++) {
+      char* entry = new char[strlen(kExpectedWorkerArgs[i]) + 1];
+      EXPECT_NE(entry, nullptr);
+      memset(entry, '\0', strlen(kExpectedWorkerArgs[i]) + 1);
+      memcpy(entry, kExpectedWorkerArgs[i], strlen(kExpectedWorkerArgs[i]));
+      argv.push_back(entry);
+    }
+    argv.push_back(nullptr);
+    }
+    }
+    
+    #include <gtest/gtest.h>
+    
+    #include <locale>
+#include <string>
+    
+      EXPECT_TRUE(pathExists(path_ + '.backup'));
+    
+    /**
+ * @brief Generate the separator string for query results
+ *
+ * @param lengths The data returned from computeQueryDataLengths
+ * @param columns The order of the keys (since maps are unordered)
+ *
+ * @return A string, with a newline, representing your separator
+ */
+std::string generateToken(const std::map<std::string, size_t>& lengths,
+                          const std::vector<std::string>& columns);
+    
+    struct EventTappingSubscriptionContext : public SubscriptionContext {};
+struct EventTappingEventContext : public EventContext {};
+    
+    #include 'Common.h'
+#include 'References.h'
+    
+    /**
+ * Populate the vector with the current stack trace
+ *
+ * Note that this trace needs to be symbolicated to get the library offset even
+ * if it is to be symbolicated off-line.
+ *
+ * Beware of a bug on some platforms, which makes the trace loop until the
+ * buffer is full when it reaches a noexpr function. It seems to be fixed in
+ * newer versions of gcc. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56846
+ *
+ * @param stackTrace The vector that will receive the stack trace. Before
+ * filling the vector it will be cleared. The vector will never grow so the
+ * number of frames captured is limited by the capacity of it.
+ *
+ * @param skip The number of frames to skip before capturing the trace
+ */
+FBEXPORT void getStackTrace(std::vector<InstructionPointer>& stackTrace,
+                            size_t skip = 0);
+    
+      auto i = 0;
+  out << 'Backtrace:\n';
+  for (auto& elm : trace) {
+    out << '    #' << dec << setfill('0') << setw(2) << i++ << ' ' << elm << '\n';
+  }
+    
+    class YogaTest_HadOverflowTests : public Test {
+protected:
+  YogaTest_HadOverflowTests() {
+    config = YGConfigNew();
+    root = YGNodeNewWithConfig(config);
+    YGNodeStyleSetWidth(root, 200);
+    YGNodeStyleSetHeight(root, 100);
+    YGNodeStyleSetFlexDirection(root, YGFlexDirectionColumn);
+    YGNodeStyleSetFlexWrap(root, YGWrapNoWrap);
+  }
+    }
+    
+        method(insertChild);
+    method(removeChild);
+    
+      void unref() {
+    if (0 == --m_refcount) {
+      delete this;
+    }
+  }
+    
+    namespace facebook {
+namespace jni {
+    }
+    }
+    
+    
+    {  T* operator->() const {
+    return m_instance;
+  }
+private:
+  T* m_instance;
+};
