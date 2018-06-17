@@ -1,118 +1,108 @@
 
         
         
-atom_template = textwrap.dedent('''\
-    <?xml version='1.0' encoding='utf-8'?>
-    <feed xmlns='http://www.w3.org/2005/Atom'>
-        <link rel='self' href='http://rg3.github.io/youtube-dl/update/releases.atom' />
-        <title>youtube-dl releases</title>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed</id>
-        <updated>@TIMESTAMP@</updated>
-        @ENTRIES@
-    </feed>''')
+TEST_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), 'swftests')
     
-    if __name__ == '__main__':
-    main()
-
+    try:
+    from .lazy_extractors import *
+    from .lazy_extractors import _ALL_CLASSES
+    _LAZY_LOADER = True
+except ImportError:
+    _LAZY_LOADER = False
+    from .extractors import *
     
-    header = oldreadme[:oldreadme.index('# OPTIONS')]
-footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
+            uploader = self._search_regex(
+            r'Added by\s*:\s*<a[^>]+>([^<]+)</a>', webpage, 'uploader', default=None)
+        upload_date = unified_strdate(self._search_regex(
+            r'Added on\s*:\s*([\d-]+)', webpage, 'upload date', default=None))
     
-            title = self._html_search_regex(
-            r'<div[^>]+style='float:left'[^>]*>\s*<h2>(.+?)</h2>', webpage, 'title')
-        description = self._html_search_regex(
-            r'>Description:</span>(.+?)</div>', webpage, 'description', default=None)
+            mvp_id = self._search_mvp_id(webpage)
     
-            select = self._search_regex(
-            r'(?s)<select[^>]+id='select-version'[^>]*>(.+?)</select>',
-            webpage, 'select version', default=None)
-        if select:
-            entry_ids = set()
-            entries = []
-            for mobj in re.finditer(
-                    r'<option[^>]+value=(['\'])(?P<id>[0-9a-z_]+)(?:#.+?)?\1[^>]*>(?P<title>[^<]+)',
-                    webpage):
-                entry_id = mobj.group('id')
-                if entry_id in entry_ids:
-                    continue
-                entry_ids.add(entry_id)
-                entries.append({
-                    '_type': 'url_transparent',
-                    'url': 'kaltura:%s:%s' % (partner_id, entry_id),
-                    'ie_key': 'Kaltura',
-                    'title': mobj.group('title'),
-                })
-            if entries:
-                return self.playlist_result(entries, display_id, title)
-    
-        s = TaggedJSONSerializer()
-    
-        iterkeys = lambda d: d.iterkeys()
-    itervalues = lambda d: d.itervalues()
-    iteritems = lambda d: d.iteritems()
+        def test_threads_terminate(self):
+        self.executor.submit(mul, 21, 2)
+        self.executor.submit(mul, 6, 7)
+        self.executor.submit(mul, 3, 14)
+        self.assertEqual(len(self.executor._threads), 3)
+        self.executor.shutdown()
+        for t in self.executor._threads:
+            t.join()
     
     
-#: Log messages to :func:`~flask.logging.wsgi_errors_stream` with the format
-#: ``[%(asctime)s] %(levelname)s in %(module)s: %(message)s``.
-default_handler = logging.StreamHandler(wsgi_errors_stream)
-default_handler.setFormatter(logging.Formatter(
-    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
-))
+def FormatDebugInfoResponse_Completer_ServerRunningWithoutHost_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'address': None,
+    'port': None
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name running\n'
+      '  Server name process ID: 12345\n'
+      '  Server name executable: /path/to/executable\n'
+      '  Server name logfiles:\n'
+      '    /path/to/stdout/logfile\n'
+      '    /path/to/stderr/logfile\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
     
-        def _fail(self, *args, **kwargs):
-        raise RuntimeError('The session is unavailable because no secret '
-                           'key was set.  Set the secret_key on the '
-                           'application to something unique and secret.')
-    __setitem__ = __delitem__ = clear = pop = popitem = \
-        update = setdefault = _fail
-    del _fail
-    
-            for blueprint in self.app.iter_blueprints():
-            loader = blueprint.jinja_loader
-            if loader is not None:
-                yield blueprint, loader
-    
-    
-def test_get_namespace():
-    app = flask.Flask(__name__)
-    app.config['FOO_OPTION_1'] = 'foo option 1'
-    app.config['FOO_OPTION_2'] = 'foo option 2'
-    app.config['BAR_STUFF_1'] = 'bar stuff 1'
-    app.config['BAR_STUFF_2'] = 'bar stuff 2'
-    foo_options = app.config.get_namespace('FOO_')
-    assert 2 == len(foo_options)
-    assert 'foo option 1' == foo_options['option_1']
-    assert 'foo option 2' == foo_options['option_2']
-    bar_options = app.config.get_namespace('BAR_', lowercase=False)
-    assert 2 == len(bar_options)
-    assert 'bar stuff 1' == bar_options['STUFF_1']
-    assert 'bar stuff 2' == bar_options['STUFF_2']
-    foo_options = app.config.get_namespace('FOO_', trim_namespace=False)
-    assert 2 == len(foo_options)
-    assert 'foo option 1' == foo_options['foo_option_1']
-    assert 'foo option 2' == foo_options['foo_option_2']
-    bar_options = app.config.get_namespace('BAR_', lowercase=False, trim_namespace=False)
-    assert 2 == len(bar_options)
-    assert 'bar stuff 1' == bar_options['BAR_STUFF_1']
-    assert 'bar stuff 2' == bar_options['BAR_STUFF_2']
-    
-        stream = StringIO()
-    client.get('/', errors_stream=stream)
-    assert 'ERROR in test_logging: test' in stream.getvalue()
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
     
-def setup(app):
-    app.add_config_value('edit_on_github_project', '', True)
-    app.add_config_value('edit_on_github_branch', 'master', True)
-    app.add_config_value('edit_on_github_src_path', '', True)  # 'eg' 'docs/'
-    app.connect('html-page-context', html_page_context)
-
+def _PathToPythonUsedDuringBuild():
+  from ycmd import utils
     
-        if unit_1 == LENGTH_MILES:
-        meters = __miles_to_meters(value)
-    elif unit_1 == LENGTH_FEET:
-        meters = __feet_to_meters(value)
-    elif unit_1 == LENGTH_KILOMETERS:
-        meters = __kilometers_to_meters(value)
     
-    patch_file = 'homeassistant.components.device_tracker.bt_home_hub_5'
+  def Extra_Info_No_Doc_String_test( self ):
+    self._Check( 0, {
+      'insertion_text':  'INSERTION TEXT',
+      'menu_text':       'MENU TEXT',
+      'extra_menu_info': 'EXTRA MENU INFO',
+      'kind':            'K',
+      'extra_data': {
+      },
+    }, {
+      'word'     : 'INSERTION TEXT',
+      'abbr'     : 'MENU TEXT',
+      'menu'     : 'EXTRA MENU INFO',
+      'kind'     : 'k',
+      'dup'      : 1,
+      'empty'    : 1,
+      'user_data': '0',
+    } )
+    
+        if 'fixits' in self._response:
+      return self._HandleFixitResponse()
+    
+    
+  def Start( self ):
+    request_data = BuildRequestData()
+    request_data.update( { 'filetypes': self.filetypes } )
+    self._response = self.PostDataToHandler( request_data,
+                                             'semantic_completion_available' )
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+        context['show_on_github_url'] = show_url
+    context['edit_on_github_url'] = edit_url
+    
+    
+def setup_platform(hass, config, add_devices, discovery_info=None):
+    '''Create and add an entity based on the configuration.'''
+    add_devices([ZigBeeLight(hass, ZigBeeDigitalOutConfig(config))])
+    
+            self.assertIsNotNone(result)
