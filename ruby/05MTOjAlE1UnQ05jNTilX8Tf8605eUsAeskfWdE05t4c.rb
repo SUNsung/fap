@@ -1,42 +1,53 @@
-class REST::MediaAttachmentSerializer < ActiveModel::Serializer
-  include RoutingHelper
+
+        
+        module Rack
+  module Protection
+    ##
+    # Prevented attack::   Cookie Tossing
+    # Supported browsers:: all
+    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
+    #
+    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
+    # session cookie. This does not protect against a cookie overflow attack.
+    #
+    # Options:
+    #
+    # session_key:: The name of the session cookie (default: 'rack.session')
+    class CookieTossing < Base
+      default_reaction :deny
     
-            user.update(last_sign_in_at: 'Tue, 04 Jul 2017 14:45:56 UTC +00:00', current_sign_in_at: 'Wed, 05 Jul 2017 22:10:52 UTC +00:00')
+        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      subject.options[:allow_empty_referrer] = false
+      expect(subject.referrer(env)).to be_nil
+    end
     
-      def background_color
-    '#191b22'
-  end
-    
-      # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/reblog
-  def reblog
-    r = Status.where.not(reblog_of_id: nil).first
-    NotificationMailer.reblog(r.reblog.account, Notification.find_by(activity: r))
-  end
-    
-          def stage_set?
-        !!fetch(:stage, false)
+          it 'should remain unchanged as ASCII-8BIT' do
+        body = @app.call({ 'PATH_INFO' => '/'.encode('ASCII-8BIT') })[2][0]
+        expect(body).to eq('ASCII-8BIT')
       end
+    end
+  end
+end
+
     
-      # Implemented by subclasses to define Rake tasks. Typically a plugin will call
-  # `eval_rakefile` to load Rake tasks from a separate .rake file.
-  #
-  # Example:
-  #
-  #   def define_tasks
-  #     eval_rakefile File.expand_path('../tasks.rake', __FILE__)
-  #   end
-  #
-  # For simple tasks, you can define them inline. No need for a separate file.
-  #
-  #   def define_tasks
-  #     desc 'Do something fantastic.'
-  #     task 'my_plugin:fantastic' do
-  #       ...
-  #     end
-  #   end
-  #
-  def define_tasks; end
+      it 'accepts requests with a changing Accept-Encoding header' do
+    # this is tested because previously it led to clearing the session
+    session = {:foo => :bar}
+    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_ENCODING' => 'a'
+    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_ENCODING' => 'b'
+    expect(session).not_to be_empty
+  end
     
-      deploy_rb = File.expand_path('../../templates/deploy.rb.erb', __FILE__)
-  stage_rb = File.expand_path('../../templates/stage.rb.erb', __FILE__)
-  capfile = File.expand_path('../../templates/Capfile', __FILE__)
+      it 'should set the X-XSS-Protection for XHTML' do
+    expect(get('/', {}, 'wants' => 'application/xhtml+xml').headers['X-XSS-Protection']).to eq('1; mode=block')
+  end
+    
+        mock_app do
+      use Rack::Head
+      use(Rack::Config) { |e| e['rack.session'] ||= {}}
+      use changer
+      use klass
+      use detector
+      run DummyApp
+    end
