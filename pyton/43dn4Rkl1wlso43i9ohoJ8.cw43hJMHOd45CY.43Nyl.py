@@ -1,83 +1,94 @@
 
         
-            return strings
-
-    
-    def kuwo_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    if 'www.kuwo.cn/yinyue' in url:
-        rid=match1(url,'yinyue/(\d+)')
-        kuwo_download_by_rid(rid,output_dir, merge, info_only)
-    else:
-        kuwo_playlist_download(url,output_dir,merge,info_only)
-    
-            print_info(site_info, title, type_, size_full)
-        if not info_only:
-            download_urls(url_list, title, ext, total_size=size_full, output_dir=output_dir, merge=merge, headers=fake_headers)
-    else:
-        raise NotImplementedError(flashvars)
-    
-                if point.name == 'p':
-                link = point.find('a')
-                if link is not None:
-                    link = clean_pdf_link(link.attrs['href'])
-                    ext = get_extension(link)
-                    print(ext)
-                    if not ext in forbidden_extensions:
-                        print(shorten_title(point.text) + ' (' + link + ')')
-                        try:
-                            name = clean_text(point.text.split('[' + ext + ']')[0])
-                            fullname = '.'.join((name, ext))
-                            if not os.path.exists('/'.join((current_directory, fullname)) ):
-                                download_pdf(link, current_directory, '.'.join((name, ext)))
-                        except KeyboardInterrupt:
-                            try:
-                                print('Press Ctrl-C in 1 second to quit')
-                                time.sleep(1)
-                            except KeyboardInterrupt:
-                                print('Cancelling..')
-                                break
-                        except:
-                            failures.append(point.text)
-                        
-        point = point.next_sibling          
-    
-    import os
-import json
-import click
+            @pytest.mark.skip(reason='this fails non-deterministically under pytest-xdist')
+    def test_request_recovery(self):
+        '''can check the requests content'''
+        # TODO: figure out why this sometimes fails when using pytest-xdist.
+        server = Server.basic_response_server(requests_to_handle=2)
+        first_request = b'put your hands up in the air'
+        second_request = b'put your hand down in the floor'
     
     
-def setup_platform(hass, config, add_devices, discovery_info=None):
-    '''Set up the PVOutput sensor.'''
-    name = config.get(CONF_NAME)
-    api_key = config.get(CONF_API_KEY)
-    system_id = config.get(CONF_SYSTEM_ID)
-    method = 'GET'
-    payload = auth = None
-    verify_ssl = DEFAULT_VERIFY_SSL
-    headers = {
-        'X-Pvoutput-Apikey': api_key,
-        'X-Pvoutput-SystemId': system_id,
-    }
-    
-                payload = {'host': 'http://host:8088/services/collector/event',
-                       'event': body}
-            self.handler_method(event)
-            self.assertEqual(self.mock_post.call_count, 1)
-            self.assertEqual(
-                self.mock_post.call_args,
-                mock.call(
-                    payload['host'], data=json.dumps(payload),
-                    headers={'Authorization': 'Splunk secret'},
-                    timeout=10
-                )
-            )
-            self.mock_post.reset_mock()
-
+@pytest.mark.skipif(sys.version_info < (2,7), reason='Only run on Python 2.7+')
+def test_system_ssl():
+    '''Verify we're actually setting system_ssl when it should be available.'''
+    assert info()['system_ssl']['version'] != ''
     
     
-def get_github_url(app, view, path):
-    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
-    return (
-        github_fmt.format(app.config.edit_on_github_project, view,
-                          app.config.edit_on_github_branch,
-                          app.config.edit_on_github_src_path, path))
+def info():
+    '''Generate information for a bug report.'''
+    try:
+        platform_info = {
+            'system': platform.system(),
+            'release': platform.release(),
+        }
+    except IOError:
+        platform_info = {
+            'system': 'Unknown',
+            'release': 'Unknown',
+        }
+    
+    # The scheme of the identifier. Typical schemes are ISBN or URL.
+#epub_scheme = ''
+    
+    '''
+requests.compat
+~~~~~~~~~~~~~~~
+    
+            if http_error_msg:
+            raise HTTPError(http_error_msg, response=self)
+    
+            # http://tools.ietf.org/html/rfc7231#section-6.4.4
+        if response.status_code == codes.see_other and method != 'HEAD':
+            method = 'GET'
+    
+        python_requires = '>= 2.7, !=3.0.*, !=3.1.*, !=3.2.*, != 3.3.*'
+    kwargs['python_requires'] = python_requires
+    
+            for k, v in self.body_arguments.items():
+            self.arguments.setdefault(k, []).extend(v)
+    
+    
+def wrap_web_tests_application():
+    result = {}
+    for cls in web_test.wsgi_safe_tests:
+        def class_factory():
+            class WSGIApplicationWrappedTest(cls):  # type: ignore
+                def setUp(self):
+                    self.warning_catcher = ignore_deprecation()
+                    self.warning_catcher.__enter__()
+                    super(WSGIApplicationWrappedTest, self).setUp()
+    
+           This class is deprecated and will be removed in Tornado 6.0.
+       Use Tornado's `.HTTPServer` instead of a WSGI container.
+    '''
+    def __init__(self, application):
+        warnings.warn('WSGIAdapter is deprecated, use Tornado's HTTPServer instead',
+                      DeprecationWarning)
+        if isinstance(application, WSGIApplication):
+            self.application = lambda request: web.Application.__call__(
+                application, request)
+        else:
+            self.application = application
+    
+        .. testoutput::
+    
+            The ``sockets`` parameter is a list of socket objects such as
+        those returned by `~tornado.netutil.bind_sockets`.
+        `add_sockets` is typically used in combination with that
+        method and `tornado.process.fork_processes` to provide greater
+        control over the initialization of a multi-process server.
+        '''
+        for sock in sockets:
+            self._sockets[sock.fileno()] = sock
+            self._handlers[sock.fileno()] = add_accept_handler(
+                sock, self._handle_connection)
+    
+        def test_delayed_failure(self):
+        future = self.delayed_failure()
+        with ignore_deprecation():
+            self.io_loop.add_future(future, self.stop)
+            future2 = self.wait()
+        self.assertIs(future, future2)
+        with self.assertRaises(ZeroDivisionError):
+            future.result()
