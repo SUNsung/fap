@@ -1,122 +1,108 @@
 
         
-                # Require the adapter itself and give useful feedback about
-        #   1. Missing adapter gems and
-        #   2. Adapter gems' missing dependencies.
-        path_to_adapter = 'action_cable/subscription_adapter/#{adapter}'
-        begin
-          require path_to_adapter
-        rescue LoadError => e
-          # We couldn't require the adapter itself. Raise an exception that
-          # points out config typos and missing gems.
-          if e.path == path_to_adapter
-            # We can assume that a non-builtin adapter was specified, so it's
-            # either misspelled or missing from Gemfile.
-            raise e.class, 'Could not load the '#{adapter}' Action Cable pubsub adapter. Ensure that the adapter is spelled correctly in config/cable.yml and that you've added the necessary adapter gem to your Gemfile.', e.backtrace
-    
-            def test_url_sub_key_for_sqlite3
-          spec = resolve :production, 'production' => { 'url' => 'sqlite3:foo?encoding=utf8' }
-          assert_equal({
-            'adapter'  => 'sqlite3',
-            'database' => 'foo',
-            'encoding' => 'utf8',
-            'name'     => 'production' }, spec)
-        end
-    
-          def reset_all # :nodoc:
-        current_instances.each_value(&:reset)
-      end
-    
-          assert_response :unauthorized
-      assert_equal 'HTTP Token: Access denied.\n', @response.body, 'Authentication didn't fail for request header #{header}'
-    end
-    test 'unsuccessful authentication with #{header.downcase} and long credentials' do
-      @request.env[header] = encode_credentials('h4x0rh4x0rh4x0rh4x0rh4x0rh4x0rh4x0rh4x0r')
-      get :show
-    
-    class WebServiceTest < ActionDispatch::IntegrationTest
-  class TestController < ActionController::Base
-    def assign_parameters
-      if params[:full]
-        render plain: dump_params_keys
-      else
-        render plain: (params.keys - ['controller', 'action']).sort.join(', ')
-      end
-    end
-    
-          def handle_exception_with_mailer_class(exception)
-        if klass = mailer_class
-          klass.handle_exception exception
-        else
-          raise exception
-        end
-      end
-  end
-end
-
-    
-      def test_send_mail
-    stub_any_instance(Mail::SMTP, instance: Mail::SMTP.new({})) do |instance|
-      assert_called(instance, :deliver!) do
-        with_translation 'de', email_subject: '[Anmeldung] Willkommen' do
-          get '/test/send_mail'
-          assert_equal 'Mail sent - Subject: [Anmeldung] Willkommen', @response.body
-        end
-      end
-    end
-  end
-    
-    # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-
-    
-                  Jekyll.logger.info 'LiveReload address:',
-                                 'http://#{opts['host']}:#{opts['livereload_port']}'
-            end
+                # rubocop:disable Metrics/AbcSize
+        def process(args, opts)
+          if !args || args.empty?
+            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
           end
-          @thread.abort_on_exception = true
+    
+              start_up_webrick(opts, destination)
         end
     
-          def extname_list
-        @extname_list ||= @config['markdown_ext'].split(',').map do |e|
-          '.#{e.downcase}'
+    require_relative 'websockets'
+    
+              unless typ =~ %r!;\s*charset=!
+            res.header[key] = '#{typ}; charset=#{@jekyll_opts['encoding']}'
+          end
         end
+    
+          # Private: Determine whether a class name is an allowed custom
+      #   markdown class name.
+      #
+      # parser_name - the name of the parser class
+      #
+      # Returns true if the parser name contains only alphanumeric
+      # characters and is defined within Jekyll::Converters::Markdown
+      def custom_class_allowed?(parser_name)
+        parser_name !~ %r![^A-Za-z0-9_]! && self.class.constants.include?(
+          parser_name.to_sym
+        )
       end
-    
-    module Jekyll
-  module Deprecator
-    extend self
-    
-      def enough_poll_answers
-    errors.add(:poll_answers, I18n.t('activerecord.errors.models.poll.attributes.poll_answers.not_enough_poll_answers')) if poll_answers.size < 2
-  end
-    
-          def escape_hash(hash)
-        hash = hash.dup
-        hash.each { |k,v| hash[k] = escape(v) }
-        hash
-      end
-    
-    
-  it 'should allow changing the protection mode to a string' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::FrameOptions, :frame_options => 'ALLOW-FROM foo'
-      run DummyApp
     end
-    
-      it 'accepts requests with a changing Version header'do
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session, 'HTTP_VERSION' => '1.0'
-    get '/', {}, 'rack.session' => session, 'HTTP_VERSION' => '1.1'
-    expect(session[:foo]).to eq(:bar)
   end
 end
 
     
-                end
-            #{type} Dad
+          # Set a field in the Drop. If mutable, sets in the mutations and
+      # returns. If not mutable, checks first if it's trying to override a
+      # Drop method and raises a DropMutationException if so. If not
+      # mutable and the key is not a method on the Drop, then it sets the
+      # key to the value in the underlying hash (e.g. document front
+      # matter)
+      #
+      # key - the String key whose value to set
+      # val - the Object to set the key's value to
+      #
+      # Returns the value the key was set to unless the Drop is not mutable
+      # and the key matches a method in which case it raises a
+      # DropMutationException.
+      def []=(key, val)
+        if respond_to?('#{key}=')
+          public_send('#{key}=', val)
+        elsif respond_to?(key.to_s)
+          if self.class.mutable?
+            @mutations[key] = val
+          else
+            raise Errors::DropMutationException, 'Key #{key} cannot be set in the drop.'
+          end
+        else
+          fallback_data[key] = val
+        end
+      end
+    
+      # Creates a delayed logger wrapping `inner`.
+  #
+  # @param inner [Sass::Logger::Base] The wrapped logger.
+  def initialize(inner)
+    self.log_level = inner.log_level
+    @inner = inner
+    @messages = []
+  end
+    
+        # Returns the CSS for the media query list.
+    #
+    # @return [String]
+    def to_css
+      queries.map {|q| q.to_css}.join(', ')
+    end
+    
+    desc 'copy dot files for deployment'
+task :copydot, :source, :dest do |t, args|
+  FileList['#{args.source}/**/.*'].exclude('**/.', '**/..', '**/.DS_Store', '**/._*').each do |file|
+    cp_r file, file.gsub(/#{args.source}/, '#{args.dest}') unless File.directory?(file)
+  end
+end
+    
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
+    
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        end
+        video += '</video>'
+      else
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+      end
+    end
