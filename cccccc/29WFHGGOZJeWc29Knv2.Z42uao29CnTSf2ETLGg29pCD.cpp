@@ -1,371 +1,349 @@
 
         
-        #if PY_MAJOR_VERSION >= 3
-static struct PyModuleDef _module = {
-  PyModuleDef_HEAD_INIT,
-  kModuleName,
-  kModuleDocstring,
-  -1,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
-  NULL
-};
-#define INITFUNC PyInit__api_implementation
-#define INITFUNC_ERRORVAL NULL
-#else
-#define INITFUNC init_api_implementation
-#define INITFUNC_ERRORVAL
-#endif
-    
-    TEST(AnyTest, TestPackAndUnpack) {
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  protobuf_unittest::TestAny message;
-  message.mutable_any_value()->PackFrom(submessage);
-    }
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
-    
-    #include <google/protobuf/testing/googletest.h>
-#include <gtest/gtest.h>
-#include <google/protobuf/testing/file.h>
-    
-      virtual void WriteHash(io::Printer* printer);
-  virtual void WriteEquals(io::Printer* printer);
-  virtual void WriteToString(io::Printer* printer);
-    
-      // Write any attributes used to decorate generated function members (methods and properties).
-  // Should not be used to decorate types.
-  void WriteGeneratedCodeAttributes(io::Printer* printer);
-    
-    // Author: kenton@google.com (Kenton Varda)
-    
-    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
-    const FieldDescriptor* descriptor) const {
-  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
-    return new ImmutableExtensionGenerator(descriptor, context_);
-  } else {
-    return new ImmutableExtensionLiteGenerator(descriptor, context_);
-  }
-}
-    
-      // boolean hasField()
-  WriteFieldDocComment(printer, descriptor_);
-  printer->Print(variables_,
-    '$deprecation$public boolean has$capitalized_name$() {\n'
-    '  return $get_has_field_bit_builder$;\n'
-    '}\n');
-    
-    #endif  // GRPC_TEST_CPP_UTIL_BENCHMARK_CONFIG_H
-
-    
-    
-    {  /* Invoked when data is read into the buffer passed to
-   * bidirectional_stream_read(). Only part of the buffer may be
-   * populated. To continue reading, call bidirectional_stream_read().
-   * It may be invoked after on_response_trailers_received()}, if there was
-   * pending read data before trailers were received.
-   *
-   * If |bytes_read| is 0, it means the remote side has signaled that it will
-   * send no more data; future calls to bidirectional_stream_read()
-   * will result in the on_data_read() callback or on_succeded() callback if
-   * bidirectional_stream_write() was invoked with end_of_stream set to
-   * true.
-   */
-  void (*on_read_completed)(bidirectional_stream* stream,
-                            char* data,
-                            int bytes_read);
-    
-      ClientConfig client_config;
-  client_config.set_client_type(ASYNC_CLIENT);
-  client_config.set_outstanding_rpcs_per_channel(1000);
-  client_config.set_client_channels(8);
-  client_config.set_async_client_threads(8);
-  client_config.set_rpc_type(STREAMING);
-  client_config.mutable_load_params()->mutable_poisson()->set_offered_load(
-      1000.0 / grpc_test_slowdown_factor());
-    
-    #include 'test/cpp/qps/benchmark_config.h'
-#include 'test/cpp/qps/driver.h'
-#include 'test/cpp/qps/report.h'
-#include 'test/cpp/qps/server.h'
-#include 'test/cpp/util/test_config.h'
-#include 'test/cpp/util/test_credentials_provider.h'
-    
-    void SecureAuthContext::AddProperty(const grpc::string& key,
-                                    const grpc::string_ref& value) {
-  if (!ctx_) return;
-  grpc_auth_context_add_property(ctx_, key.c_str(), value.data(), value.size());
-}
-    
-    static void get_resource_usage(double* utime, double* stime) {
-#ifdef __linux__
-  struct rusage usage;
-  getrusage(RUSAGE_SELF, &usage);
-  *utime = time_double(&usage.ru_utime);
-  *stime = time_double(&usage.ru_stime);
-#else
-  *utime = 0;
-  *stime = 0;
-#endif
-}
-    
-      // Initialize the internal timer and reset the query count to 0
-  void Reset();
-    
-    grpc::string DescribeServiceList(std::vector<grpc::string> service_list,
-                                 grpc::protobuf::DescriptorPool& desc_pool) {
-  std::stringstream result;
-  for (auto it = service_list.begin(); it != service_list.end(); it++) {
-    auto const& service = *it;
-    const grpc::protobuf::ServiceDescriptor* service_desc =
-        desc_pool.FindServiceByName(service);
-    if (service_desc != nullptr) {
-      result << DescribeService(service_desc);
-    }
-  }
-  return result.str();
-}
-    
-    PoolByteArray StreamPeerSSL::get_project_cert_array() {
-    }
-    
-    	mbedtls_ssl_free(&ssl);
-	mbedtls_ssl_config_free(&conf);
-	mbedtls_ctr_drbg_free(&ctr_drbg);
-	mbedtls_entropy_free(&entropy);
-    
-    	real_t m_steering;
-	real_t m_rotation;
-	real_t m_deltaRotation;
-	real_t m_rollInfluence;
-	//real_t	m_engineForce;
-	real_t m_brake;
-    
-    
-    {	virtual btScalar addSingleResult(btCollisionWorld::LocalRayResult &rayResult, bool normalInWorldSpace) {
-		m_shapeId = rayResult.m_localShapeInfo->m_triangleIndex; // 'm_triangleIndex' Is a odd name but contains the compound shape ID
-		return btCollisionWorld::ClosestRayResultCallback::addSingleResult(rayResult, normalInWorldSpace);
-	}
+        
+    { protected:
+  virtual ~WindowListObserver() {}
 };
     
-    	enum PortAction {
-    }
+      // Returns whether current process is browser process, currently we detect it
+  // by checking whether current has used V8 Lock, but it might be a bad idea.
+  static inline bool IsBrowserProcess() { return v8::Locker::IsActive(); }
     
-    	static Map<String, Vector<Ref<GDNative> > > *loaded_libraries;
-    
-      FT_LOCAL( PCF_Property )
-  pcf_find_property( PCF_Face          face,
-                     const FT_String*  prop );
-    
-    namespace jpgd
-{
-  typedef unsigned char  uint8;
-  typedef   signed short int16;
-  typedef unsigned short uint16;
-  typedef unsigned int   uint;
-  typedef   signed int   int32;
-    }
-    
-    # if defined(OC_COLLECT_METRICS)
-typedef struct oc_mode_metrics oc_mode_metrics;
-# endif
-typedef struct oc_mode_rd      oc_mode_rd;
-    
-    /*Accesses one of four (signed) bytes given an index.
-  This can be used to avoid small lookup tables.*/
-#define OC_BYTE_TABLE32(_a,_b,_c,_d,_i) \
-  ((signed char) \
-   (((_a)&0xFF|((_b)&0xFF)<<8|((_c)&0xFF)<<16|((_d)&0xFF)<<24)>>(_i)*8))
-/*Accesses one of eight (unsigned) nibbles given an index.
-  This can be used to avoid small lookup tables.*/
-#define OC_UNIBBLE_TABLE32(_a,_b,_c,_d,_e,_f,_g,_h,_i) \
-  ((((_a)&0xF|((_b)&0xF)<<4|((_c)&0xF)<<8|((_d)&0xF)<<12| \
-   ((_e)&0xF)<<16|((_f)&0xF)<<20|((_g)&0xF)<<24|((_h)&0xF)<<28)>>(_i)*4)&0xF)
-    
-    #include 'Basics.h'
-#include 'DataReader.h'
-#include 'ComputationNetwork.h'
-#include 'MPIWrapper.h'
-#include 'SpecialPurposeNodes.h'        // for SequenceWithSoftmaxNode
-#include <string>
-#include <map>
-#include <set>
+    namespace ui {
+class Accelerator;
+}
     
     
-    {        // We don't use CreateFromFile() here since the user might specify OutputNodeNames in the config.
-        // By not compiling the network before patching, we avoid double log output for validation.
-        net = make_shared<ComputationNetwork>(deviceId);
-        net->SetTraceLevel(config(L'traceLevel', 0));
-        net->Read<ElemType>(modelPath);
-        if (outputNodeNames.size() > 0)
-            PatchOutputNodes(net, outputNodeNames, outputNodeNamesVector);
-        net->CompileNetwork();
-    }
+    {}  // namespace chrome
     
-    using namespace std;
-using namespace Microsoft::MSR;
-using namespace Microsoft::MSR::CNTK;
-    
-    template <class _T, int _N>
-class hardcoded_array
-{
-    _T data[_N];
-    inline void check_index(size_t i) const
-    {
-        i;
-        assert(i < _N);
-    }
-    inline void check_size(size_t n) const
-    {
-        n;
-        assert(n == _N);
-    }
-    }
-    
-    void ShowErrorAndExit(DWORD ec, const wchar_t * func, int line)
-{
-	wchar_t * buffer;
-	if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-		NULL, ec, 0, (LPWSTR)&buffer, 0, NULL) == 0)
-	{
-		buffer = L'Unknown error. FormatMessage failed.';
-	}
-    }
-    
-      for (const auto& iter : line) {
-    options_index++;
-    if (iter[0] == '/') {
-      line_exports.push_back(iter);
-    } else {
-      break;
-    }
+    SILDebugScope::SILDebugScope(SILLocation Loc, SILFunction *SILFn,
+                             const SILDebugScope *ParentScope ,
+                             const SILDebugScope *InlinedCallSite)
+    : Loc(Loc), InlinedCallSite(InlinedCallSite) {
+  if (ParentScope)
+    Parent = ParentScope;
+  else {
+    assert(SILFn && 'no parent provided');
+    Parent = SILFn;
   }
+}
     
-    #pragma once
+    namespace content {
+class RenderFrameHost;
+}
     
-        auto process = PlatformProcess::launchWorker(
-        kProcessTestExecPath.c_str(),
-        static_cast<int>(kExpectedWorkerArgsCount),
-        &argv[0]);
-    for (size_t i = 0; i < argv.size(); i++) {
-      delete[] argv[i];
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
     }
-    
-    #include <gtest/gtest.h>
-    
-    namespace osquery {
     }
     
      private:
-  void setName(const std::string& name) {
-    name_ = name;
+  ObjectManager* object_manager_;
+    
+    void Menu::Insert(MenuItem* menu_item, int pos) {
+  std::vector<MenuItem*>::iterator begin = menu_items.begin();
+  menu_items.insert(begin+pos,menu_item);
+  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
+    menu_item->UpdateKeys(gtk_accel_group);
   }
-    
-        g_MouseCursors[ImGuiMouseCursor_Arrow] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
-    g_MouseCursors[ImGuiMouseCursor_TextInput] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_IBEAM);
-    g_MouseCursors[ImGuiMouseCursor_ResizeAll] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
-    g_MouseCursors[ImGuiMouseCursor_ResizeNS] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENS);
-    g_MouseCursors[ImGuiMouseCursor_ResizeEW] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEWE);
-    g_MouseCursors[ImGuiMouseCursor_ResizeNESW] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENESW);
-    g_MouseCursors[ImGuiMouseCursor_ResizeNWSE] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENWSE);
-    
-    
-    {    // Restore modified state
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glBindTexture(GL_TEXTURE_2D, (GLuint)last_texture);
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glPopAttrib();
-    glPolygonMode(GL_FRONT, (GLenum)last_polygon_mode[0]); glPolygonMode(GL_BACK, (GLenum)last_polygon_mode[1]);
-    glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
-    glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
+  gtk_menu_shell_insert(GTK_MENU_SHELL(menu_), menu_item->menu_item_, pos);
 }
     
-    IMGUI_API bool        ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks);
-IMGUI_API bool        ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks);
-IMGUI_API void        ImGui_ImplGlfw_Shutdown();
-IMGUI_API void        ImGui_ImplGlfw_NewFrame();
     
-    void DebugHUD_DoInterface(DebugHUD *hud)
-{
-    // 1. Show a simple window.
-    // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-    {
-        static float f = 0.0f;
-        static int counter = 0;
-        ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-        ImGui::ColorEdit3('clear color', hud->clearColor);      // Edit 3 floats representing a color
-    }
-    }
-    
-    // Normalizes trivial differences across Envs such that these test cases can
-// run on all Envs.
-class NormalizingEnvWrapper : public EnvWrapper {
- public:
-  explicit NormalizingEnvWrapper(Env* base) : EnvWrapper(base) {}
-    }
-    
-    namespace rocksdb {
-    }
-    
-      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
-    if (type >= HISTOGRAM_ENUM_MAX) {
-      return false;
-    }
-    
-    if (m_ignore_histograms.count(type) > 0) {
-        return false;
-    }
-    }
-    
-      /**
-   * @brief append data to file
-   * @details
-   *  Append will save all written data in buffer util buffer size
-   *  reaches buffer max size. Then, it will write buffer into rados
-   *
-   * @param data [description]
-   * @return [description]
-   */
-  Status Append(const Slice& data) {
-    // append buffer
-    LOG_DEBUG('[IN] %i | %s\n', (int)data.size(), data.data());
-    int r = 0;
-    }
-    
-      Slice user_key() const { return ExtractUserKey(rep_); }
-  size_t size() { return rep_.size(); }
-    
-    #endif  // JAVA_ROCKSJNI_COMPACTION_FILTER_FACTORY_JNICALLBACK_H_
+    {}  // namespace nw
 
     
+      std::string icon;
+  if (option.GetString('icon', &icon) && !icon.empty())
+    SetIcon(icon);
     
+    using namespace std;
+using namespace thd;
+using namespace thd::rpc;
+    
+    #endif
+    
+    
+    {  DEBUG('manager done');
+  return 0;
+}
+
+    
+    template <typename T, typename... Ts>
+struct or_trait<T, Ts...>
+  : std::conditional<T::value, T, or_trait<Ts...>>::type {};
+    
+    
+    {	return _create();
+}
+    
+    	static StreamPeerSSL *create();
+    
+    #ifndef STREAM_PEER_OPEN_SSL_H
+#define STREAM_PEER_OPEN_SSL_H
+    
+    #if defined(MBEDTLS_PLATFORM_TIME_TYPE_MACRO) &&\
+    ( !defined(MBEDTLS_PLATFORM_C) ||\
+        !defined(MBEDTLS_HAVE_TIME) )
+#error 'MBEDTLS_PLATFORM_TIME_TYPE_MACRO defined, but not all prerequisites'
+#endif
+    
+    	VisualScriptEditorSignalEdit *signal_editor;
+    
+       - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+    
+        // Determine the MB size used for mapping a given learning-rate or momentum parameter to a per-sample value.
+    // MB size is the number of samples across all time steps and parallel sequences.
+    // This function exists to post-fix a design bug in SGD:
+    // In the case of BPTT, the 'minibatchSize' parameter given to the SGD module really means the truncation size,
+    // while the MB size to be used is (truncation size * number of parallel sequences).
+    // SGD also does not know #parallel sequences upfront.
+    size_t FixUpEffectiveMBSize(size_t specifiedMBSize, size_t numParallelSequences) const
     {
-    {   private:
-     jmethodID m_jLogMethodId;
-     jobject m_jdebug_level;
-     jobject m_jinfo_level;
-     jobject m_jwarn_level;
-     jobject m_jerror_level;
-     jobject m_jfatal_level;
-     jobject m_jheader_level;
-     std::unique_ptr<char[]> format_str(const char* format, va_list ap) const;
-  };
-}  // namespace rocksdb
-    
-    static WriteThread::AdaptationContext eabgl_ctx('ExitAsBatchGroupLeader');
-void WriteThread::ExitAsBatchGroupLeader(WriteGroup& write_group,
-                                         Status status) {
-  Writer* leader = write_group.leader;
-  Writer* last_writer = write_group.last_writer;
-  assert(leader->link_older == nullptr);
+        // remedy the bug that truncation size is incorrectly passed as MB size
+        if (m_truncated && specifiedMBSize > 1)      // currently only happens in this mode
+        {
+            if (numParallelSequences == 0)
+            {
+                RuntimeError('Learning rate and momentum are not supported per minibatch, please specify them per sample.');
+            }
     }
+    }
+    
+        static void dotprod(const_array_ref<float> a, const_array_ref<float> b, float &result,
+                        bool addtoresult, const float thisscale, const float weight)
+    {
+        assert(a.size() == b.size());
+        assert((15 & reinterpret_cast<uintptr_t>(&a[0])) == 0);
+        assert((15 & reinterpret_cast<uintptr_t>(&b[0])) == 0); // enforce SSE alignment
+    }
+    
+        // GetSections - Get the sections of the file
+    // sections - a map of section name to section. Data sepcifications from config file will be used to determine where and how to save data
+    virtual void GetSections(std::map<std::wstring, SectionType, nocase_compare>& sections);
+    
+        // ProcessNDLConfig - Process the NDL script from a configuration string value
+    // config - configuration string containing script
+    void ProcessNDLConfig(const ConfigValue& config, bool fullValidate = false)
+    {
+        NDLScript<ElemType> script(config);
+        ProcessNDLScript(&script, ndlPassAll, nullptr, fullValidate);
+    }
+    
+    // ===========================================================================
+// DoConvertFromDbn() - implements CNTK 'convertdbn' command
+// ===========================================================================
+    
+    #pragma once
+    
+        std::string GetOptionalSnippetSection(const ConfigParamList& params, const size_t numFixedParams)
+    {
+        // process optional parameter if it exists
+        std::string propName, value;
+        for (size_t paramNumber = params.size(); paramNumber > numFixedParams; paramNumber--)
+        {
+            if (OptionalParameter(params[paramNumber - 1], propName, value))
+            {
+                if (EqualInsensitive(propName, 'section'))
+                {
+                    if (value.empty())
+                    {
+                        RuntimeError('Invalid optional parameter value <empty>, a section name must be specified: section=(sectionName)');
+                    }
+                }
+                else
+                {
+                    RuntimeError('Invalid optional parameter %s, valid optional parameters: section=(sectionName)', propName.c_str());
+                }
+            }
+        }
+    }
+    
+    // ===========================================================================
+// float4 -- wrapper around the rather ugly SSE intrinsics for float[4]
+//
+// Do not use the intrinsics outside anymore; instead add all you need into this class.
+//
+// MSDN links:
+// basic: http://msdn.microsoft.com/en-us/library/x5c07e2a%28v=VS.80%29.aspx
+// load/store: (add this)
+// newer ones: (seems no single list available)
+// ===========================================================================
+    
+    
+    {    return this->get_service().async_accept(this->get_implementation(),
+        peer, static_cast<endpoint_type*>(0),
+        BOOST_ASIO_MOVE_CAST(AcceptHandler)(handler));
+  }
+    
+      /// Cancel any asynchronous operations that are waiting on the timer.
+  /**
+   * This function forces the completion of any pending asynchronous wait
+   * operations against the timer. The handler for each cancelled operation will
+   * be invoked with the boost::asio::error::operation_aborted error code.
+   *
+   * Cancelling the timer does not change the expiry time.
+   *
+   * @return The number of asynchronous operations that were cancelled.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   *
+   * @note If the timer has already expired when cancel() is called, then the
+   * handlers for asynchronous wait operations will:
+   *
+   * @li have already been invoked; or
+   *
+   * @li have been queued for invocation in the near future.
+   *
+   * These handlers can no longer be cancelled, and therefore are passed an
+   * error code that indicates the successful completion of the wait operation.
+   */
+  std::size_t cancel()
+  {
+    boost::system::error_code ec;
+    std::size_t s = this->service.cancel(this->implementation, ec);
+    boost::asio::detail::throw_error(ec, 'cancel');
+    return s;
+  }
+    
+    #include <boost/asio/detail/config.hpp>
+#include <cstddef>
+#include <boost/asio/async_result.hpp>
+#include <boost/asio/buffered_read_stream_fwd.hpp>
+#include <boost/asio/buffer.hpp>
+#include <boost/asio/detail/bind_handler.hpp>
+#include <boost/asio/detail/buffer_resize_guard.hpp>
+#include <boost/asio/detail/buffered_stream_storage.hpp>
+#include <boost/asio/detail/noncopyable.hpp>
+#include <boost/asio/detail/type_traits.hpp>
+#include <boost/asio/error.hpp>
+#include <boost/asio/io_service.hpp>
+    
+    template <typename Stream>
+class buffered_read_stream;
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+typedef long atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef std::atomic<long> atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef boost::detail::atomic_count atomic_count;
+inline void increment(atomic_count& a, long b) { while (b > 0) ++a, --b; }
+#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+    
+      std::size_t count() const
+  {
+    return 2;
+  }
+    
+    #include <boost/asio/detail/pop_options.hpp>
+    
+    
+    {  pollfd fds;
+  fds.fd = d;
+  fds.events = POLLOUT;
+  fds.revents = 0;
+  int timeout = (state & user_set_non_blocking) ? 0 : -1;
+  errno = 0;
+  int result = error_wrapper(::poll(&fds, 1, timeout), ec);
+  if (result == 0)
+    ec = (state & user_set_non_blocking)
+      ? boost::asio::error::would_block : boost::system::error_code();
+  else if (result > 0)
+    ec = boost::system::error_code();
+  return result;
+}
+    
+    template <typename Time_Traits>
+void epoll_reactor::add_timer_queue(timer_queue<Time_Traits>& queue)
+{
+  do_add_timer_queue(queue);
+}
+    
+    #endif
+    
+    
+    {    ::wakeupLock_delete(object_);
+}
+    
+    #endif /* defined(COMM_COMM_FREQUENCY_LIMIT_H_) */
+
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+      private:
+    int __TestFun1(int i);
+    
+    Benchmark* Benchmark::UseManualTime() {
+  CHECK(!use_real_time_)
+      << 'Cannot set UseRealTime and UseManualTime simultaneously.';
+  use_manual_time_ = true;
+  return this;
+}
+    
+    
+    {  fflush(stdout);
+  // Restores the text color.
+  SetConsoleTextAttribute(stdout_handle, old_color_attrs);
+#else
+  const char* color_code = GetPlatformColorCode(color);
+  if (color_code) out << FormatString('\033[0;3%sm', color_code);
+  out << FormatString(fmt, args) << '\033[m';
+#endif
+}
+    
+    // Returns true if stdout appears to be a terminal that supports colored
+// output, false otherwise.
+bool IsColorTerminal();
+    
+    void ConsoleReporter::PrintRunData(const Run& result) {
+  typedef void(PrinterFn)(std::ostream&, LogColor, const char*, ...);
+  auto& Out = GetOutputStream();
+  PrinterFn* printer = (output_options_ & OO_Color) ?
+                         (PrinterFn*)ColorPrintf : IgnoreColorPrint;
+  auto name_color =
+      (result.report_big_o || result.report_rms) ? COLOR_BLUE : COLOR_GREEN;
+  printer(Out, name_color, '%-*s ', name_field_width_,
+          result.benchmark_name.c_str());
+    }
+    
+    #include 'string_util.h'
+#include 'timers.h'
+#include 'check.h'
+    
+    
+    {void SleepForSeconds(double seconds) {
+  SleepForMicroseconds(static_cast<int>(seconds * kNumMicrosPerSecond));
+}
+#endif  // BENCHMARK_OS_WINDOWS
+}  // end namespace benchmark
