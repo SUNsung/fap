@@ -1,155 +1,188 @@
 
         
-        // Build a Table file from the contents of *iter.  The generated file
-// will be named according to meta->number.  On success, the rest of
-// *meta will be filled with metadata about the generated table.
-// If no data is present in *iter, meta->file_size will be set to
-// zero, and no Table file will be produced.
-extern Status BuildTable(const std::string& dbname,
-                         Env* env,
-                         const Options& options,
-                         TableCache* table_cache,
-                         Iterator* iter,
-                         FileMetaData* meta);
-    
-    #include 'db/filename.h'
-#include 'db/db_impl.h'
-#include 'db/dbformat.h'
-#include 'leveldb/env.h'
-#include 'leveldb/iterator.h'
-#include 'port/port.h'
-#include 'util/logging.h'
-#include 'util/mutexlock.h'
-#include 'util/random.h'
-    
-    void InternalKeyComparator::FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const {
-  // Attempt to shorten the user portion of the key
-  Slice user_start = ExtractUserKey(*start);
-  Slice user_limit = ExtractUserKey(limit);
-  std::string tmp(user_start.data(), user_start.size());
-  user_comparator_->FindShortestSeparator(&tmp, user_limit);
-  if (tmp.size() < user_start.size() &&
-      user_comparator_->Compare(user_start, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*start, tmp) < 0);
-    assert(this->Compare(tmp, limit) < 0);
-    start->swap(tmp);
-  }
+        namespace base {
+class FilePath;
 }
     
-    #include 'db/filename.h'
     
-      // Temporary storage for parsing
-  int level;
-  uint64_t number;
-  FileMetaData f;
-  Slice str;
-  InternalKey key;
+    {}  // namespace
     
-    static std::string PrintContents(WriteBatch* b) {
-  InternalKeyComparator cmp(BytewiseComparator());
-  MemTable* mem = new MemTable(cmp);
-  mem->Ref();
-  std::string state;
-  Status s = WriteBatchInternal::InsertInto(b, mem);
-  int count = 0;
-  Iterator* iter = mem->NewIterator();
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    ParsedInternalKey ikey;
-    ASSERT_TRUE(ParseInternalKey(iter->key(), &ikey));
-    switch (ikey.type) {
-      case kTypeValue:
-        state.append('Put(');
-        state.append(ikey.user_key.ToString());
-        state.append(', ');
-        state.append(iter->value().ToString());
-        state.append(')');
-        count++;
-        break;
-      case kTypeDeletion:
-        state.append('Delete(');
-        state.append(ikey.user_key.ToString());
-        state.append(')');
-        count++;
-        break;
-    }
-    state.append('@');
-    state.append(NumberToString(ikey.sequence));
-  }
-  delete iter;
-  if (!s.ok()) {
-    state.append('ParseError()');
-  } else if (count != WriteBatchInternal::Count(b)) {
-    state.append('CountMismatch()');
-  }
-  mem->Unref();
-  return state;
-}
-    
-    #define THPDoubleStorage_CData(obj)  (obj)->cdata
-#define THPFloatStorage_CData(obj)   (obj)->cdata
-#define THPHalfStorage_CData(obj)    (obj)->cdata
-#define THPLongStorage_CData(obj)    (obj)->cdata
-#define THPIntStorage_CData(obj)     (obj)->cdata
-#define THPShortStorage_CData(obj)   (obj)->cdata
-#define THPCharStorage_CData(obj)    (obj)->cdata
-#define THPByteStorage_CData(obj)    (obj)->cdata
-    
-    template<template <typename> class Trait, typename... Types>
-struct map_to_ptr<Trait, std::tuple<Types...>> {
-  using type = std::tuple<
-    typename std::add_pointer<Types>::type...,
-    typename std::add_pointer<typename Trait<Types>::type>::type...
-  >;
-};
-    
-    void THDTensor_(logNormal)(THDTensor *self, THDGenerator *_generator, double mean,
-                           double stdv) {
-  masterCommandChannel->sendMessage(
-    packMessage(Functions::tensorLogNormal, self, _generator, mean, stdv),
-    THDState::s_current_worker
-  );
-}
-    
-    #include <gtest/gtest.h>
-    
-    FLAG(double, test_double, 4.2, 'none');
-FLAG_ALIAS(double, test_double_alias, test_double);
-    
-    
-    {  bool testIsCached(size_t interval) {
-    QueryContext ctx;
-    ctx.useCache(true);
-    return isCached(interval, ctx);
-  }
-};
-    
-      static CGEventRef eventCallback(CGEventTapProxy proxy,
-                                  CGEventType type,
-                                  CGEventRef event,
-                                  void* refcon);
-    
-    /*
- * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
- * Method:    RabitAllreduce
- * Signature: (Ljava/nio/ByteBuffer;III)I
- */
-JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_RabitAllreduce
-  (JNIEnv *jenv, jclass jcls, jobject jsendrecvbuf, jint jcount, jint jenum_dtype, jint jenum_op) {
-  void *ptr_sendrecvbuf = jenv->GetDirectBufferAddress(jsendrecvbuf);
-  RabitAllreduce(ptr_sendrecvbuf, (size_t) jcount, jenum_dtype, jenum_op, NULL, NULL);
+    namespace mate {
     }
     
-    class BaseLogger {
- public:
-  BaseLogger() {
-#if XGBOOST_LOG_WITH_TIME
-    log_stream_ << '[' << dmlc::DateLogger().HumanDate() << '] ';
+    namespace atom {
+    }
+    
+    
+    {  DraggableRegion();
+};
+    
+    #endif  // CHROME_BROWSER_CHROME_PROCESS_FINDER_WIN_H_
+
+    
+     private:
+  // The following methods are implemented by platform-specific implementations
+  // of this class.
+  //
+  // Start/StopListening are called when transitioning between zero and nonzero
+  // registered accelerators. StartListening will be called after
+  // RegisterAcceleratorImpl and StopListening will be called after
+  // UnregisterAcceleratorImpl.
+  //
+  // For RegisterAcceleratorImpl, implementations return false if registration
+  // did not complete successfully.
+  virtual void StartListening() = 0;
+  virtual void StopListening() = 0;
+  virtual bool RegisterAcceleratorImpl(const ui::Accelerator& accelerator) = 0;
+  virtual void UnregisterAcceleratorImpl(
+      const ui::Accelerator& accelerator) = 0;
+    
+     private:
+  // The implementation of our Window Proc, called by SingletonHwndObserver.
+  void OnWndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
+    
+    
+    {}  // namespace printing
+    
+     private:
+  PepperIsolatedFileSystemMessageFilter(int render_process_id,
+                                        const base::FilePath& profile_directory,
+                                        const GURL& document_url,
+                                        ppapi::host::PpapiHost* ppapi_host_);
+    
+        // Setup viewport, orthographic projection matrix
+    // Our visible imgui space lies from draw_data->DisplayPps (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right). DisplayMin is typically (0,0) for single viewport apps.
+    glViewport(0, 0, (GLsizei)fb_width, (GLsizei)fb_height);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(draw_data->DisplayPos.x, draw_data->DisplayPos.x + draw_data->DisplaySize.x, draw_data->DisplayPos.y + draw_data->DisplaySize.y, draw_data->DisplayPos.y, -1.0f, +1.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    
+        // Upload texture to graphics system
+    GLint last_texture;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
+    glGenTextures(1, &g_FontTexture);
+    glBindTexture(GL_TEXTURE_2D, g_FontTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    
+    
+    {    if (g_pBlendState) { g_pBlendState->Release(); g_pBlendState = NULL; }
+    if (g_pDepthStencilState) { g_pDepthStencilState->Release(); g_pDepthStencilState = NULL; }
+    if (g_pRasterizerState) { g_pRasterizerState->Release(); g_pRasterizerState = NULL; }
+    if (g_pPixelShader) { g_pPixelShader->Release(); g_pPixelShader = NULL; }
+    if (g_pPixelShaderBlob) { g_pPixelShaderBlob->Release(); g_pPixelShaderBlob = NULL; }
+    if (g_pVertexConstantBuffer) { g_pVertexConstantBuffer->Release(); g_pVertexConstantBuffer = NULL; }
+    if (g_pInputLayout) { g_pInputLayout->Release(); g_pInputLayout = NULL; }
+    if (g_pVertexShader) { g_pVertexShader->Release(); g_pVertexShader = NULL; }
+    if (g_pVertexShaderBlob) { g_pVertexShaderBlob->Release(); g_pVertexShaderBlob = NULL; }
+}
+    
+    // Implemented features:
+//  [X] Platform: Clipboard support.
+//  [X] Platform: Gamepad navigation mapping. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
+//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
+    
+    // GLFW callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// Provided here if you want to chain callbacks.
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_API void        ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_API void        ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+      iterator->SeekToFirst();
+    
+    
+    {  // Add new data and corrupt it
+  ASSERT_OK(writable_file->Append(kCorrupted));
+  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size() + kCorrupted.size());
+  result.clear();
+  ASSERT_OK(rand_file->Read(kGood.size(), kCorrupted.size(),
+            &result, &(scratch[0])));
+  ASSERT_EQ(result.compare(kCorrupted), 0);
+  // Corrupted
+  ASSERT_OK(dynamic_cast<MockEnv*>(env_)->CorruptBuffer(kFileName));
+  result.clear();
+  ASSERT_OK(rand_file->Read(kGood.size(), kCorrupted.size(),
+            &result, &(scratch[0])));
+  ASSERT_NE(result.compare(kCorrupted), 0);
+}
+    
+    This pointer must be provided as 'void* state' parameter for XXH32_update().
+XXH32_update() can be called as many times as necessary.
+The user must provide a valid (allocated) input.
+The function returns an error code, with 0 meaning OK, and any other value meaning there is an error.
+Note that 'len' is type 'int', which means it is limited to 2^31-1.
+If your data is larger, it is recommended to chunk your data into blocks
+of size for example 2^30 (1GB) to avoid any 'int' overflow issue.
+    
+      // 3. we actually connect to the cluster
+  ret = _rados.connect();
+  if (ret < 0) {
+    std::cerr << 'couldn't connect to cluster! error ' << ret << std::endl;
+    ret = EXIT_FAILURE;
+    goto out;
+  }
+    
+    // Checks whether a type is from user operation
+// kTypeRangeDeletion is in meta block so this API is separated from above
+inline bool IsExtendedValueType(ValueType t) {
+  return IsValueType(t) || t == kTypeRangeDeletion;
+}
+    
+    
+    { private:
+  MergingIterator* merge_iter;
+  InternalIterator* first_iter;
+  bool use_merging_iter;
+  Arena* arena;
+};
+    
+      // Writes can be processed by requesting thread or by the thread at the
+  // head of the writers queue.
+  WRITE_DONE_BY_SELF,
+  WRITE_DONE_BY_OTHER,  // Equivalent to writes done for others
+  WRITE_TIMEDOUT,       // Number of writes ending up with timed-out.
+  WRITE_WITH_WAL,       // Number of Write calls that request WAL
+  COMPACT_READ_BYTES,   // Bytes read during compaction
+  COMPACT_WRITE_BYTES,  // Bytes written during compaction
+  FLUSH_WRITE_BYTES,    // Bytes written during flush
+    
+    #if defined(__GNUC__)
+#define BENCHMARK_BUILTIN_EXPECT(x, y) __builtin_expect(x, y)
+#define BENCHMARK_DEPRECATED_MSG(msg) __attribute__((deprecated(msg)))
+#else
+#define BENCHMARK_BUILTIN_EXPECT(x, y) x
+#define BENCHMARK_DEPRECATED_MSG(msg)
+#define BENCHMARK_WARNING_MSG(msg) __pragma(message(__FILE__ '(' BENCHMARK_INTERNAL_TOSTRING(__LINE__) ') : warning note: ' msg))
 #endif
-  }
-  std::ostream& stream() { return log_stream_; }  // NOLINT
-    }
+    
+    // For a deeper explanation on the algorithm logic, look the README file at
+// http://github.com/ismaelJimenez/Minimal-Cpp-Least-Squared-Fit
+    
+    #include 'benchmark/benchmark.h'
+    
+    
+    {
+    {} // end namespace internal
+} // end namespace benchmark
+
+    
+    
+    {void SleepForSeconds(double seconds) {
+  SleepForMicroseconds(static_cast<int>(seconds * kNumMicrosPerSecond));
+}
+#endif  // BENCHMARK_OS_WINDOWS
+}  // end namespace benchmark
