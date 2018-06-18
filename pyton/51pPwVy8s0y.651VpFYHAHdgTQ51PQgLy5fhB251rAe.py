@@ -1,110 +1,93 @@
-    # Replacing the non-sorted libraries by the sorted ones and gathering all at the final_README file
-    blocks[0] = inner_blocks
-    final_README = table_of_contents + '- - -' + ''.join(blocks)
-    
-    DOCUMENTATION = '''
----
-inventory: openshift
-short_description: Openshift gears external inventory script
-description:
-  - Generates inventory of Openshift gears using the REST interface
-  - this permit to reuse playbook to setup an Openshift gear
-version_added: None
-author: Michael Scherer
-'''
-    
-        if args.branch:
-        data['branch'] = args.branch
-    elif args.run:
-        data['runId'] = args.run
-    
-    try:
-    import json
-except ImportError:
-    import simplejson as json
-    
-            actual = GCPUtils.filter_gcp_fields(input_data)
-        self.assertEquals(expected, actual)
 
+        
+        
+def get_info(package_name):
+    api_url = 'https://pypi.python.org/pypi/{}/json'.format(package_name)
+    resp = requests.get(api_url).json()
+    hasher = hashlib.sha256()
+    for release in resp['urls']:
+        download_url = release['url']
+        if download_url.endswith('.tar.gz'):
+            hasher.update(requests.get(download_url).content)
+            return {
+                'name': package_name,
+                'url': download_url,
+                'sha256': hasher.hexdigest(),
+            }
+    else:
+        raise RuntimeError(
+            '{}: download not found: {}'.format(package_name, resp))
+    
+        def get_converter(self, mime):
+        if is_valid_mime(mime):
+            for converter_class in plugin_manager.get_converters():
+                if converter_class.supports(mime):
+                    return converter_class(mime)
+    
+            for chunk in self.msg.iter_body(self.CHUNK_SIZE):
+            if not converter and b'\0' in chunk:
+                converter = self.conversion.get_converter(self.mime)
+                if not converter:
+                    raise BinarySuppressedError()
+            body.extend(chunk)
     
     
-class TerminalModule(TerminalBase):
+def test_unicode_json_item_verbose(httpbin):
+    r = http('--verbose', '--json',
+             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
+    assert HTTP_OK in r
+    assert UNICODE in r
     
-            # in some cases, we may have pre-read the data and then
-        # passed it to the load() call for YAML, in which case we
-        # want to override the default datasource (which would be
-        # '<string>') to the actual filename we read in
-        datasource = self._ansible_file_name or node.start_mark.name
+    import requests.auth
     
-        @gen_test
-    def test_set_default_executor(self):
-        count = [0]
+        # 128+2 SIGINT <http://www.tldp.org/LDP/abs/html/exitcodes.html>
+    ERROR_CTRL_C = 130
+    
+                plugin.raw_auth = self.args.auth
+            self.args.auth_plugin = plugin
+            already_parsed = isinstance(self.args.auth, AuthCredentials)
+    
+    +----------+     +----------+       +--------+     +-----------+    +---------+
+|          |  => | Work Ids |    => |        |  => | Call Q    | => |         |
+|          |     +----------+       |        |     +-----------+    |         |
+|          |     | ...      |       |        |     | ...       |    |         |
+|          |     | 6        |       |        |     | 5, call() |    |         |
+|          |     | 7        |       |        |     | ...       |    |         |
+| Process  |     | ...      |       | Local  |     +-----------+    | Process |
+|  Pool    |     +----------+       | Worker |                      |  #1..n  |
+| Executor |                        | Thread |                      |         |
+|          |     +----------- +     |        |     +-----------+    |         |
+|          | <=> | Work Items | <=> |        | <=  | Result Q  | <= |         |
+|          |     +------------+     |        |     +-----------+    |         |
+|          |     | 6: call()  |     |        |     | ...       |    |         |
+|          |     |    future  |     |        |     | 4, result |    |         |
+|          |     | ...        |     |        |     | 3, except |    |         |
++----------+     +------------+     +--------+     +-----------+    +---------+
+    
+    # If true, sectionauthor and moduleauthor directives will be shown in the
+# output. They are ignored by default.
+#show_authors = False
     
     
-def bind_sockets(port, address=None, family=socket.AF_UNSPEC,
-                 backlog=_DEFAULT_BACKLOG, flags=None, reuse_port=False):
-    '''Creates listening sockets bound to the given port and address.
+def BuildServerConf():
+  '''Builds a dictionary mapping YCM Vim user options to values. Option names
+  don't have the 'ycm_' prefix.'''
+  # We only evaluate the keys of the vim globals and not the whole dictionary
+  # to avoid unicode issues.
+  # See https://github.com/Valloric/YouCompleteMe/pull/2151 for details.
+  keys = vimsupport.GetVimGlobalsKeys()
+  server_conf = {}
+  for key in keys:
+    if not key.startswith( YCM_VAR_PREFIX ):
+      continue
+    new_key = key[ len( YCM_VAR_PREFIX ): ]
+    new_value = vimsupport.VimExpressionToPythonType( 'g:' + key )
+    server_conf[ new_key ] = new_value
     
-        def get_cookie(self, name, default=None):
-        '''Returns the value of the request cookie with the given name.
     
-        def test_trusted_downstream(self):
-        valid_ipv4_list = {'X-Forwarded-For': '127.0.0.1, 4.4.4.4, 5.5.5.5'}
-        resp = self.fetch('/', headers=valid_ipv4_list)
-        if resp.headers['request-version'].startswith('HTTP/2'):
-            # This is a hack - there's nothing that fundamentally requires http/1
-            # here but tornado_http2 doesn't support it yet.
-            self.skipTest('requires HTTP/1.x')
-        result = json_decode(resp.body)
-        self.assertEqual(result['remote_ip'], '4.4.4.4')
-    
-        @gen_test
-    def test_close_buffered_data(self):
-        # Similar to the previous test, but with data stored in the OS's
-        # socket buffers instead of the IOStream's read buffer.  Out-of-band
-        # close notifications must be delayed until all data has been
-        # drained into the IOStream buffer. (epoll used to use out-of-band
-        # close events with EPOLLRDHUP, but no longer)
-        #
-        # This depends on the read_chunk_size being smaller than the
-        # OS socket buffer, so make it small.
-        rs, ws = yield self.make_iostream_pair(read_chunk_size=256)
-        try:
-            ws.write(b'A' * 512)
-            data = yield rs.read_bytes(256)
-            self.assertEqual(b'A' * 256, data)
-            ws.close()
-            # Allow the close to propagate to the `rs` side of the
-            # connection.  Using add_callback instead of add_timeout
-            # doesn't seem to work, even with multiple iterations
-            yield gen.sleep(0.01)
-            data = yield rs.read_bytes(256)
-            self.assertEqual(b'A' * 256, data)
-        finally:
-            ws.close()
-            rs.close()
-    
-        @skipBefore35
-    def test_native_coroutine_timeout(self):
-        # Set a short timeout and exceed it.
-        namespace = exec_test(globals(), locals(), '''
-        @gen_test(timeout=0.1)
-        async def test(self):
-            await gen.sleep(1)
-        ''')
-    
-        if not app.config.edit_on_github_project:
-        warnings.warn('edit_on_github_project not specified')
-        return
-    if not doctree:
-        warnings.warn('doctree is None')
-        return
-    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
-    show_url = get_github_url(app, 'blob', path)
-    edit_url = get_github_url(app, 'edit', path)
-    
-        hass.services.register(DOMAIN, SERVICE_MEDIA_PREVIOUS_TRACK,
-                           lambda service:
-                           keyboard.tap_key(keyboard.media_prev_track_key),
-                           schema=TAP_KEY_SCHEMA)
-    return True
+def Main():
+  ( parsed_args, nosetests_args ) = ParseArguments()
+  if not parsed_args.no_flake8:
+    RunFlake8()
+  BuildYcmdLibs( parsed_args )
+  NoseTests( parsed_args, nosetests_args )
