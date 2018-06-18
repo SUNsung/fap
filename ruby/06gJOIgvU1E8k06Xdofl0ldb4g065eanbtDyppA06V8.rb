@@ -1,89 +1,165 @@
 
         
-            if registration
-      u2f.authenticate!(challenges, response, Base64.decode64(registration.public_key), registration.counter)
-      registration.update(counter: response.counter)
-      true
+          def test_javascript_tag_with_options
+    assert_dom_equal '<script id=\'the_js_tag\'>\n//<![CDATA[\nalert('hello')\n//]]>\n</script>',
+      javascript_tag('alert('hello')', id: 'the_js_tag')
+  end
+    
+          # Returns constant of subscription adapter specified in config/cable.yml.
+      # If the adapter cannot be found, this will default to the Redis adapter.
+      # Also makes sure proper dependencies are required.
+      def pubsub_adapter
+        adapter = (cable.fetch('adapter') { 'redis' })
+    
+          def redis_connection_for_subscriptions
+        redis_connection
+      end
+    
+        # Find the last record (or last N records if a parameter is supplied).
+    # If no order is defined it will order by primary key.
+    #
+    #   Person.last # returns the last object fetched by SELECT * FROM people
+    #   Person.where(['user_name = ?', user_name]).last
+    #   Person.order('created_on DESC').offset(5).last
+    #   Person.last(3) # returns the last three objects fetched by SELECT * FROM people.
+    #
+    # Take note that in that last case, the results are sorted in ascending order:
+    #
+    #   [#<Person id:2>, #<Person id:3>, #<Person id:4>]
+    #
+    # and not:
+    #
+    #   [#<Person id:4>, #<Person id:3>, #<Person id:2>]
+    def last(limit = nil)
+      return find_last(limit) if loaded? || has_limit_or_offset?
+    
+      def test_should_not_perform_joined_include_by_default
+    assert_equal Account.count, Account.includes(:firm).count
+    queries = assert_sql { Account.includes(:firm).count }
+    assert_no_match(/join/i, queries.last)
+  end
+    
+    class RestrictedWithExceptionFirm < Company
+  has_one :account, -> { order('id') }, foreign_key: 'firm_id', dependent: :restrict_with_exception
+  has_many :companies, -> { order('id') }, foreign_key: 'client_of', dependent: :restrict_with_exception
+end
+    
+        def change_approved_callback
+      self.approved = change_approved_before_save unless change_approved_before_save.nil?
     end
-  rescue JSON::ParserError, NoMethodError, ArgumentError, U2F::Error
-    false
+end
+    
+          assert_equal 1, events.length
+      assert_equal 'transmit.action_cable', events[0].name
+      assert_equal 'ActionCable::Channel::BaseTest::ChatChannel', events[0].payload[:channel_class]
+      assert_equal expected_data, events[0].payload[:data]
+      assert_nil events[0].payload[:via]
+    ensure
+      ActiveSupport::Notifications.unsubscribe 'transmit.action_cable'
+    end
+  end
+    
+        assert mock.verify
   end
 end
 
     
-      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
-    @logger     = Logger.new
-    @repo       = repo
-    @branch     = branch || 'master'
-    @branch_sha = get_branch_sha
-    @cache_path = cache_path
-    @repo_url   = 'https://github.com/#@repo'
-    @save_to    = {
-        js:    'assets/javascripts/bootstrap',
-        scss:  'assets/stylesheets/bootstrap',
-        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
+        ensure
+      server.stop
+    
+      test 'rejecting a connection causes a 404' do
+    run_in_eventmachine do
+      class CallMeMaybe
+        def call(*)
+          raise 'Do not call me!'
+        end
+      end
+    
+        A binary installer is available:
+      https://www.haskell.org/platform/mac.html
+    EOS
+  when 'mysqldump-secure' then <<-EOS.undent
+    The creator of mysqldump-secure tried to game our popularity metrics.
+    EOS
+  when 'ngrok' then <<-EOS.undent
+    Upstream sunsetted 1.x in March 2016 and 2.x is not open-source.
+    
+      # True if a {Formula} is being built with {Formula.head} instead of {Formula.stable}.
+  # <pre>args << '--some-new-stuff' if build.head?</pre>
+  # <pre># If there are multiple conditional arguments use a block instead of lines.
+  #  if build.head?
+  #    args << '--i-want-pizza'
+  #    args << '--and-a-cold-beer' if build.with? 'cold-beer'
+  #  end</pre>
+  def head?
+    include? 'HEAD'
   end
     
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
+        first_warning = true
+    methods.each do |method|
+      unless checks.respond_to?(method)
+        Homebrew.failed = true
+        puts 'No check available by the name: #{method}'
+        next
+      end
     
-              # If mounting without agreeing to EULA succeeded, there is none.
-          plist = if without_eula.success?
-            without_eula.plist
+        if ARGV.include?('--pinned') || ARGV.include?('--versions')
+      filtered_list
+    elsif ARGV.named.empty?
+      if ARGV.include? '--full-name'
+        full_names = Formula.installed.map(&:full_name).sort do |a, b|
+          if a.include?('/') && !b.include?('/')
+            1
+          elsif !a.include?('/') && b.include?('/')
+            -1
           else
-            @command.run!('/usr/bin/hdiutil', args: ['convert', '-quiet', '-format', 'UDTO', '-o', cdr_path, path])
-    
-          def import_key
-        if @cask.gpg.nil?
-          raise CaskError, 'Expected to find gpg public key in formula. Cask '#{@cask}' must add: 'gpg :embedded, key_id: [Public Key ID]' or 'gpg :embedded, key_url: [Public Key URL]''
-        end
-    
-            def run
-          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
-          if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
-              print_pod_cache_infos(pod_name, cache_descriptors)
-            end
-          else # Print only for the requested pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            else
-              print_pod_cache_infos(@pod_name, cache_descriptors)
-            end
+            a <=> b
           end
         end
-    
-            self.summary = 'The repl listens to commands on standard input'
-        self.description = <<-DESC
-          The repl listens to commands on standard input and prints their
-          result to standard output.
-          It accepts all the other ipc subcommands. The repl will signal the
-          end of output with the the ASCII CR+LF `\\n\\r`.
-        DESC
-    
-    module Jekyll
-    
-        def get_web_content(url)
-      raw_uri           = URI.parse url
-      proxy             = ENV['http_proxy']
-      if proxy
-        proxy_uri       = URI.parse(proxy)
-        https           = Net::HTTP::Proxy(proxy_uri.host, proxy_uri.port).new raw_uri.host, raw_uri.port
+        puts_columns full_names
       else
-        https           = Net::HTTP.new raw_uri.host, raw_uri.port
+        ENV['CLICOLOR'] = nil
+        exec 'ls', *ARGV.options_only << HOMEBREW_CELLAR
       end
-      https.use_ssl     = true
-      https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      request           = Net::HTTP::Get.new raw_uri.request_uri
-      data              = https.request request
+    elsif ARGV.verbose? || !$stdout.tty?
+      exec 'find', *ARGV.kegs.map(&:to_s) + %w[-not -type d -print]
+    else
+      ARGV.kegs.each { |keg| PrettyListing.new keg }
     end
   end
     
-        def render(context)
-      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
-      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
-      file = code_path + @file
+      SEARCHABLE_TAPS = OFFICIAL_TAPS.map { |tap| ['Homebrew', tap] } + [
+    %w[Caskroom cask],
+    %w[Caskroom versions]
+  ]
+    
+        @report = Hash.new { |h, k| h[k] = [] }
+    return @report unless updated?
+    
+    ###
+### globals
+###
+    
+            modes       = Array options[:escape]
+        @escaper    = options[:escaper]
+        @html       = modes.include? :html
+        @javascript = modes.include? :javascript
+        @url        = modes.include? :url
+    
+        expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('DENY')
+  end
+    
+      %w(GET HEAD POST PUT DELETE).each do |method|
+    it 'accepts #{method} requests when allow_if is true' do
+      mock_app do
+        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
+        run DummyApp
+      end
+      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
+    end
+  end
+    
+      <h3>Messages</h3>
+  <% @messages.each do |msg| %>
+    <p><%= msg %></p>
+  <% end %>
