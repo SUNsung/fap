@@ -1,114 +1,85 @@
 
         
-            def defaults_deprecate_type(old, current)
-      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
-      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
-                        'type: #{current}'.'
+          setup do
+    @old_escape_html_entities_in_json = ActiveSupport.escape_html_entities_in_json
+    ActiveSupport.escape_html_entities_in_json = true
+    @template = self
+    @request = Class.new do
+      def send_early_hints(links) end
+    end.new
+  end
+    
+        module Behavior
+      extend ActiveSupport::Concern
+    
+          get :redirect_to_with_block_and_options
+    
+            if result.size == ids.size
+          pk_type = @klass.type_for_attribute(primary_key)
+    
+      def check_content_mismatch
+    if attribute_present?('title') && attribute_present?('content') && content == 'Mismatch'
+      errors[:title] << 'is Content Mismatch'
+    end
+  end
+    
+      scope :scope_with_lambda, lambda { all }
+    
+        def initialize(*)
+      @subscribed = false
+      super
+    end
+    
+          env = Rack::MockRequest.env_for '/test', 'HTTP_CONNECTION' => 'upgrade', 'HTTP_UPGRADE' => 'websocket',
+        'HTTP_HOST' => 'localhost', 'HTTP_ORIGIN' => 'http://rubyonrails.com'
+    
+        find_union(segments, Project).includes(:namespace).order_id_desc
+  end
+    
+    INPUT_FILENAME = 'README.md'.freeze
+OUTPUT_FILENAME = 'engineering_blogs.opml'.freeze
+TITLE = 'Engineering Blogs'.freeze
+    
+          def to_s
+        @pairs.inspect
+      end
     end
   end
 end
 
     
-        # Require all .rb files if safe mode is off
-    #
-    # Returns nothing.
-    def require_plugin_files
-      unless site.safe
-        plugins_path.each do |plugin_search_path|
-          plugin_files = Utils.safe_glob(plugin_search_path, File.join('**', '*.rb'))
-          Jekyll::External.require_with_graceful_fail(plugin_files)
-        end
-      end
-    end
-    
-      def merge(*args)
-    @settings.merge(*args)
-    self
-  end
-    
-      # True if a {Formula} is being built with a specific option.
-  # <pre>args << '--i-want-spam' if build.with? 'spam'
+      # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
+  # permissions and removing .la files, unless the files (or parent
+  # directories) are protected by skip_clean.
   #
-  # args << '--qt-gui' if build.with? 'qt' # '--with-qt' ==> build.with? 'qt'
+  # bin and sbin should not have any subdirectories; if either do that is
+  # caught as an audit warning
   #
-  # # If a formula presents a user with a choice, but the choice must be fulfilled:
-  # if build.with? 'example2'
-  #   args << '--with-example2'
-  # else
-  #   args << '--with-example1'
-  # end</pre>
-  def with?(val)
-    option_names = val.respond_to?(:option_names) ? val.option_names : [val]
+  # lib may have a large directory tree (see Erlang for instance), and
+  # clean_dir applies cleaning rules to the entire tree
+  def clean_dir(d)
+    d.find do |path|
+      path.extend(ObserverPathnameExtension)
     
-        def self.rm_DS_Store
-      paths = Queue.new
-      %w[Cellar Frameworks Library bin etc include lib opt sbin share var].
-        map { |p| HOMEBREW_PREFIX/p }.each { |p| paths << p if p.exist? }
-      workers = (0...Hardware::CPU.cores).map do
-        Thread.new do
-          begin
-            while p = paths.pop(true)
-              quiet_system 'find', p, '-name', '.DS_Store', '-delete'
-            end
-          rescue ThreadError # ignore empty queue error
-          end
-        end
+      def contents; end
+    
+    class DependencyCollector
+  module Compat
+    # Define the languages that we can handle as external dependencies.
+    LANGUAGE_MODULES = Set[
+      :lua, :lua51, :perl, :python, :python3, :ruby
+    ].freeze
+    
+          case entity
+      when DiasporaFederation::Entities::AccountDeletion
+        Diaspora::Federation::Receive.account_deletion(entity)
+      when DiasporaFederation::Entities::Retraction
+        Diaspora::Federation::Receive.retraction(entity, recipient_id)
+      else
+        persisted = Diaspora::Federation::Receive.perform(entity)
+        Workers::ReceiveLocal.perform_async(persisted.class.to_s, persisted.id, [recipient_id].compact) if persisted
       end
-      workers.map(&:join)
     end
     
-      def describe_java
-    java_xml = Utils.popen_read('/usr/libexec/java_home', '--xml', '--failfast')
-    return 'N/A' unless $?.success?
-    javas = []
-    REXML::XPath.each(REXML::Document.new(java_xml), '//key[text()='JVMVersion']/following-sibling::string') do |item|
-      javas << item.text
-    end
-    javas.uniq.join(', ')
-  end
-    
-        first_warning = true
-    methods.each do |method|
-      unless checks.respond_to?(method)
-        Homebrew.failed = true
-        puts 'No check available by the name: #{method}'
-        next
-      end
-    
-      def as_json(options={})
-    {
-      poll_id:             id,
-      post_id:             status_message.id,
-      question:            question,
-      poll_answers:        poll_answers,
-      participation_count: participation_count
-    }
-  end
-    
-    
-  class UserSearch
-    include ActiveModel::Model
-    include ActiveModel::Conversion
-    include ActiveModel::Validations
-    
-          def create
-        req = Rack::Request.new(request.env)
-        if req['client_assertion_type'] == 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
-          handle_jwt_bearer(req)
-        end
-        self.status, headers, self.response_body = Api::OpenidConnect::TokenEndpoint.new.call(request.env)
-        headers.each {|name, value| response.headers[name] = value }
-        nil
-      end
-    
-            def nested_variable_comparison?(node)
-          return false unless nested_comparison?(node)
-          variables_in_node(node).count == 1
-        end
-    
-              def logstash_plugin_gem_spec?(spec)
-            spec.metadata && spec.metadata['logstash_plugin'] == 'true'
-          end
-    
-        puts 'Downloading #{url}'
-    actual_sha1 = download(url, output)
+        it 'sets :http_failed if it has an unsuccessful http status code' do
+      pod = FactoryGirl.create(:pod)
