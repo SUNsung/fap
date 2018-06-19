@@ -1,131 +1,115 @@
 
         
-            version '1' do
-      self.release = '1.12.6'
-      self.base_url = 'http://coffeescript.org/v1/'
+                def gemfile_contents
+          <<~RUBY
+            source 'https://rubygems.org'
+            # Hello! This is where you manage which Jekyll version is used to run.
+            # When you want to use a different version, change it below, save the
+            # file and run `bundle install`. Run Jekyll with `bundle exec`, like so:
+            #
+            #     bundle exec jekyll serve
+            #
+            # This will help ensure the proper Jekyll version is running.
+            # Happy Jekylling!
+            gem 'jekyll', '~> #{Jekyll::VERSION}'
+            # This is the default theme for new Jekyll sites. You may change this to anything you like.
+            gem 'minima', '~> 2.0'
+            # If you want to use GitHub Pages, remove the 'gem 'jekyll'' above and
+            # uncomment the line below. To upgrade, run `bundle update github-pages`.
+            # gem 'github-pages', group: :jekyll_plugins
+            # If you have any plugins, put them here!
+            group :jekyll_plugins do
+              gem 'jekyll-feed', '~> 0.6'
+            end
+            # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+            gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+            # Performance-booster for watching directories on Windows
+            gem 'wdm', '~> 0.1.0' if Gem.win_platform?
     
-        version '3' do
-      self.release = '3.5.17'
-      self.base_url = 'https://github.com/d3/d3-3.x-api-reference/blob/master/'
-      self.root_path = 'API-Reference.md'
-    
-        version '2.0' do
-      self.release = '2.0.5'
-      self.dir = '/Users/Thibaut/DevDocs/Docs/Django20'
-      self.base_url = 'https://docs.djangoproject.com/en/2.0/'
-    end
-    
-        version '1.4' do
-      self.release = '1.4.5'
-      self.base_urls = [
-        'https://hexdocs.pm/elixir/#{release}/',
-        'https://hexdocs.pm/eex/#{release}/',
-        'https://hexdocs.pm/ex_unit/#{release}/',
-        'https://hexdocs.pm/iex/#{release}/',
-        'https://hexdocs.pm/logger/#{release}/',
-        'https://hexdocs.pm/mix/#{release}/',
-        'https://elixir-lang.org/getting-started/'
-      ]
-    end
-    
-        options[:only_patterns] = [
-      /\Abook\/first-edition\//,
-      /\Areference\//,
-      /\Acollections\//,
-      /\Astd\// ]
-    
-        def initialize(name = nil, path = nil, type = nil)
-      self.name = name
-      self.path = path
-      self.type = type
-    
-        def as_json
-      @pages
-    end
-    
-        def merge!(hash)
-      return super unless hash.is_a? Hash
-      hash.assert_valid_keys URI::Generic::COMPONENT
-      hash.each_pair do |key, value|
-        send '#{key}=', value
-      end
-      self
-    end
-    
-          args.last.is_a?(Hash) ? args.push(options.merge(args.pop)) : args.push(options)
-      use middleware, *args, &block
-    end
-    
-        # Tells you if this is considered to be a valid
-    # OmniAuth AuthHash. The requirements for that
-    # are that it has a provider name, a uid, and a
-    # valid info hash. See InfoHash#valid? for
-    # more details there.
-    def valid?
-      uid? && provider? && info? && info.valid?
-    end
-    
-      def request_phase
-    options[:mutate_on_request].call(options) if options[:mutate_on_request]
-    @fail = fail!(options[:failure]) if options[:failure]
-    @last_env = env
-    return @fail if @fail
-    raise('Request Phase')
-  end
-    
-        it 'displays the nickname if no name, first, or last is available' do
-      subject.info.name = nil
-      %w[first_name last_name].each { |k| subject.info[k] = nil }
-      expect(subject.info.name).to eq('meatbag')
-    end
-    
-    namespace :perf do
-  task :setup do
-    require 'omniauth'
-    require 'rack/test'
-    app = Rack::Builder.new do |b|
-      b.use Rack::Session::Cookie, :secret => 'abc123'
-      b.use OmniAuth::Strategies::Developer
-      b.run lambda { |_env| [200, {}, ['Not Found']] }
-    end.to_app
-    @app = Rack::MockRequest.new(app)
-    
-          it 'has the right filename and line number in the backtrace' do
-        expect(subject.backtrace.first.filename).to eq('foo.rb')
-        expect(subject.backtrace.first.line).to eq(123)
-      end
-    end
-    
-    module BetterErrors
-  # @private
-  class StackFrame
-    def self.from_exception(exception)
-      RaisedException.new(exception).backtrace
-    end
-    
-              it 'returns a JSON error' do
-            expect(error_page).to receive(:do_variables).and_return(html: '<content>')
-            expect(json_body).to match(
-              'html' => '<content>',
-            )
+            def validate_options(opts)
+          if opts['livereload']
+            if opts['detach']
+              Jekyll.logger.warn 'Warning:', '--detach and --livereload are mutually exclusive.' \
+                                 ' Choosing --livereload'
+              opts['detach'] = false
+            end
+            if opts['ssl_cert'] || opts['ssl_key']
+              # This is not technically true.  LiveReload works fine over SSL, but
+              # EventMachine's SSL support in Windows requires building the gem's
+              # native extensions against OpenSSL and that proved to be a process
+              # so tedious that expecting users to do it is a non-starter.
+              Jekyll.logger.abort_with 'Error:', 'LiveReload does not support SSL'
+            end
+            unless opts['watch']
+              # Using livereload logically implies you want to watch the files
+              opts['watch'] = true
+            end
+          elsif %w(livereload_min_delay
+                   livereload_max_delay
+                   livereload_ignore
+                   livereload_port).any? { |o| opts[o] }
+            Jekyll.logger.abort_with '--livereload-min-delay, '\
+               '--livereload-max-delay, --livereload-ignore, and '\
+               '--livereload-port require the --livereload option.'
           end
         end
+    
+          def initialize(config)
+        Jekyll::External.require_with_graceful_fail 'kramdown' unless defined?(Kramdown)
+        @config = config['kramdown'].dup || {}
+        @config[:input] = :SmartyPants
       end
-    end
+    
+    # Convertible provides methods for converting a pagelike item
+# from a certain type of markup into actual content
+#
+# Requires
+#   self.site -> Jekyll::Site
+#   self.content
+#   self.content=
+#   self.data=
+#   self.ext=
+#   self.output=
+#   self.name
+#   self.path
+#   self.type -> :page, :post or :draft
+    
+        YAML_FRONT_MATTER_REGEXP = %r!\A(---\s*\n.*?\n?)^((---|\.\.\.)\s*$\n?)!m
+    DATELESS_FILENAME_MATCHER = %r!^(?:.+/)*(.*)(\.[^.]+)$!
+    DATE_FILENAME_MATCHER = %r!^(?:.+/)*(\d{2,4}-\d{1,2}-\d{1,2})-(.*)(\.[^.]+)$!
+    
+          # Generate a Hash for use in generating JSON.
+      # This is useful if fields need to be cleared before the JSON can generate.
+      #
+      # Returns a Hash ready for JSON generation.
+      def hash_for_json(*)
+        to_h
+      end
+    
+            commands << Fastlane::Actions.sh(command, log: false)
+    
+          it 'does set the exclude directories' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            cloc(exclude_dir: 'test1,test2,build')
+          end').runner.execute(:test)
+    
+            expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::VERSION_NUMBER]).to match(/cd .* && agvtool new-marketing-version 2.0.0/)
+      end
+    
+      it 'should not override the header if already set' do
+    mock_app with_headers('X-Frame-Options' => 'allow')
+    expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('allow')
   end
 end
 
     
-    def gemfiles
-  @gemfiles ||= Dir[File.dirname(__FILE__) + '/gemfiles/*.gemfile']
-end
-    
-          output, prompt, filled = repl.send_input 'end'
-      if RUBY_VERSION >= '2.1.0'
-        expect(output).to eq('=> :f\n')
-      else
-        expect(output).to eq('=> nil\n')
-      end
-      expect(prompt).to eq('>>')
-      expect(filled).to eq('')
+      before(:each) do
+    mock_app do
+      use Rack::Protection::HttpOrigin
+      run DummyApp
     end
+  end
+    
+      it 'should set the X-XSS-Protection for XHTML' do
+    expect(get('/', {}, 'wants' => 'application/xhtml+xml').headers['X-XSS-Protection']).to eq('1; mode=block')
+  end
