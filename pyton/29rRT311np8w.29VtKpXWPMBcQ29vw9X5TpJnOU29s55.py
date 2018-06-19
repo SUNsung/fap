@@ -1,74 +1,101 @@
 
-class TerminalModule(TerminalBase):
+        
+        
+def _py_files(folder):
+    return glob.glob(folder + '/*.py') + glob.glob(folder + '/*/*.py')
     
-        results = {}
-    for group in sort_groups(groups):
-        results = combine_vars(results, group.get_vars())
+    # Check minimum required Python version
+import sys
+if sys.version_info < (2, 7):
+    print('Scrapy %s requires Python 2.7' % __version__)
+    sys.exit(1)
     
-        if WSAStringToAddressA(
-            ip_string,
-            address_family,
-            None,
-            ctypes.byref(addr),
-            ctypes.byref(addr_size)
-    ) != 0:
-        raise socket.error(ctypes.FormatError())
+    from scrapy.utils.conf import arglist_to_dict
+from scrapy.exceptions import UsageError
     
-            self.grammarDecisionDescription = grammarDecisionDescription
-        self.decisionNumber = decisionNumber
-        self.stateNumber = stateNumber
+        name = '%s_%s' % (spider, method.__name__)
+    setattr(ContractTestCase, name, lambda x: x)
+    return ContractTestCase(name)
+
     
-                    if c >= self.min[s] and c <= self.max[s]:
-                    # move to next state
-                    snext = self.transition[s][c-self.min[s]]
-                    #print 'in range, next state = %d' % snext
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
     
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
     
-    def __str__(self):
-        if self.inserted is not None and self.token is not None:
-            return 'MissingTokenException(inserted %r at %r)' % (
-                self.inserted, self.token.text)
+    site_info = 'Mixcloud.com'
+download = mixcloud_download
+download_playlist = playlist_not_supported('mixcloud')
+
     
+    from concurrent.futures import _base
     
-def variance(data, xbar=None):
-    '''Return the sample variance of data.
+    import logging
     
+        def __init__(self, rest, name):
+        '''Initialize a PVOutput sensor.'''
+        self.rest = rest
+        self._name = name
+        self.pvcoutput = None
+        self.status = namedtuple(
+            'status', [ATTR_DATE, ATTR_TIME, ATTR_ENERGY_GENERATION,
+                       ATTR_POWER_GENERATION, ATTR_ENERGY_CONSUMPTION,
+                       ATTR_POWER_CONSUMPTION, ATTR_EFFICIENCY,
+                       ATTR_TEMPERATURE, ATTR_VOLTAGE])
     
-print('\n# ======================================================================')
-print('#                               Factorial')
-print('# ======================================================================\n')
+                payload = {'host': 'http://host:8088/services/collector/event',
+                       'event': body}
+            self.handler_method(event)
+            self.assertEqual(self.mock_post.call_count, 1)
+            self.assertEqual(
+                self.mock_post.call_args,
+                mock.call(
+                    payload['host'], data=json.dumps(payload),
+                    headers={'Authorization': 'Splunk secret'},
+                    timeout=10
+                )
+            )
+            self.mock_post.reset_mock()
+
     
-    Usually an IFF-type file consists of one or more chunks.  The proposed
-usage of the Chunk class defined here is to instantiate an instance at
-the start of each chunk and read from the instance until it reaches
-the end, after which a new instance can be instantiated.  At the end
-of the file, creating a new instance will fail with an EOFError
-exception.
+    SERVICE_BROWSE_URL_SCHEMA = vol.Schema({
+    # pylint: disable=no-value-for-parameter
+    vol.Required(ATTR_URL, default=ATTR_URL_DEFAULT): vol.Url(),
+})
     
-        # We only ever write one 'entry point' symbol - either
-    # 'main' or 'WinMain'.  Therefore, there is no need to
-    # pass a subsystem switch to the linker as it works it
-    # out all by itself.  However, the subsystem _does_ determine
-    # the file extension and additional linker flags.
-    target_link_flags = ''
-    target_ext = '.exe'
-    if subsystem_details[vars['subsystem']][2]:
-        target_link_flags = '-dll'
-        target_ext = '.dll'
-    
-        def test_fastcall(self):
-        # Test _PyObject_FastCall()
-    
-        # Fold '--'s and remove trailing '-'
-    while 1:
-        cleaned = platform.replace('--', '-')
-        if cleaned == platform:
-            break
-        platform = cleaned
-    while platform[-1] == '-':
-        platform = platform[:-1]
-    
-        def test_java_ver(self):
-        res = platform.java_ver()
-        if sys.platform == 'java':
-            self.assertTrue(all(res))
+        if unit_2 == LENGTH_MILES:
+        result = __meters_to_miles(meters)
+    elif unit_2 == LENGTH_FEET:
+        result = __meters_to_feet(meters)
+    elif unit_2 == LENGTH_KILOMETERS:
+        result = __meters_to_kilometers(meters)
