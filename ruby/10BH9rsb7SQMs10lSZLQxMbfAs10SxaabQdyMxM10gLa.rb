@@ -1,33 +1,43 @@
 
         
-          def dump_build_env(env, f = $stdout)
-    keys = build_env_keys(env)
-    keys -= %w[CC CXX OBJC OBJCXX] if env['CC'] == env['HOMEBREW_CC']
-    
-      # True if a {Formula} is being built with a specific option.
-  # <pre>args << '--i-want-spam' if build.with? 'spam'
-  #
-  # args << '--qt-gui' if build.with? 'qt' # '--with-qt' ==> build.with? 'qt'
-  #
-  # # If a formula presents a user with a choice, but the choice must be fulfilled:
-  # if build.with? 'example2'
-  #   args << '--with-example2'
-  # else
-  #   args << '--with-example1'
-  # end</pre>
-  def with?(val)
-    option_names = val.respond_to?(:option_names) ? val.option_names : [val]
-    
-        # Remove directories opposite from traversal, so that a subtree with no
-    # actual files gets removed correctly.
-    dirs.reverse_each do |d|
-      if d.children.empty?
-        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
-        d.rmdir
+            def create_event(event)
+      return super unless dry_run?
+      if can_create_events?
+        event = build_event(event)
+        @dry_run_results[:events] << event.payload
+        event
+      else
+        error 'This Agent cannot create events!'
       end
     end
+  end
+end
+
     
-    module Homebrew
-  def config
-    dump_verbose_config
+      included do
+    self.validate :validate_email_options
+  end
+    
+        # we assume that the first file that requires 'sinatra' is the
+    # app_file. all other path related options are calculated based
+    # on this path by default.
+    set :app_file, caller_files.first || $0
+    
+        it 'copes with nested arrays' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']['bar']]]
+      end
+      get '/', :foo => {:bar => '<bar>'}
+      expect(body).to eq('&lt;bar&gt;')
+    end
+    
+      %w(GET HEAD POST PUT DELETE).each do |method|
+    it 'accepts #{method} requests when allow_if is true' do
+      mock_app do
+        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
+        run DummyApp
+      end
+      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
+    end
   end
