@@ -1,179 +1,173 @@
 
         
-        flags.DEFINE_string('spec_file', 'parser_spec.textproto',
-                    'Filename to save the spec to.')
-    
-    cc_test(
-    name = 'mst_solver_test',
-    size = 'small',
-    srcs = ['mst_solver_test.cc'],
-    deps = [
-        ':mst_solver',
-        '//dragnn/core/test:generic',
-        '//syntaxnet:base',
-        '//syntaxnet:test_main',
-        '@org_tensorflow//tensorflow/core:test',
-    ],
-)
-    
-    py_library(
-    name = 'mst_units',
-    srcs = ['mst_units.py'],
-    deps = [
-        ':mst_ops',
-        ':network_units',
-        '//syntaxnet/util:check',
-        '@org_tensorflow//tensorflow:tensorflow_py',
-    ],
-)
-    
-        # Get embedding matrix variables.
-    with tf.variable_scope(comp.name, reuse=True):
-      fixed_embedding_matrix = tf.get_variable(
-          network_units.fixed_embeddings_name(0))
-    
-          # Raises ValueError if not found.
-      comp = component.ComponentBuilderBase.Create(component_type, self,
-                                                   component_spec)
-    
-    import dragnn.python.load_mst_cc_impl
-from dragnn.mst.ops import gen_mst_ops
-from dragnn.python import digraph_ops
-from syntaxnet.util import check
+                def check(self, value):
+            return isinstance(value, Foo)
     
     
-def ismount(path):
-    '''Test whether a path is a mount point
-    clone of os.path.ismount (from cpython Lib/posixpath.py)
-    fixed to solve https://github.com/ansible/ansible-modules-core/issues/2186
-    and workaround non-fixed http://bugs.python.org/issue2466
-    this should be rewritten as soon as python issue 2466 is fixed
-    probably check for python version and use os.path.ismount if fixed
+# Core signals.  For usage examples grep the source code or consult
+# the API documentation in docs/api.rst as well as docs/signals.rst
+template_rendered = _signals.signal('template-rendered')
+before_render_template = _signals.signal('before-render-template')
+request_started = _signals.signal('request-started')
+request_finished = _signals.signal('request-finished')
+request_tearing_down = _signals.signal('request-tearing-down')
+got_request_exception = _signals.signal('got-request-exception')
+appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
+appcontext_pushed = _signals.signal('appcontext-pushed')
+appcontext_popped = _signals.signal('appcontext-popped')
+message_flashed = _signals.signal('message-flashed')
+
     
-        'bracketed_hostport': re.compile(
-        r'''^
-            \[(.+)\]                    # [host identifier]
-            :([0-9]+)                   # :port number
-            $
-        ''', re.X
-    ),
+        @app.route('/')
+    def index():
+        return None
     
-        terminal_stdout_re = [
-        re.compile(r'[\r\n]?<.+>(?:\s*)$'),
-        re.compile(r'[\r\n]?\[.+\](?:\s*)$'),
-    ]
+        flask.message_flashed.connect(record, app)
+    try:
+        client = app.test_client()
+        with client.session_transaction():
+            client.get('/')
+            assert len(recorded) == 1
+            message, category = recorded[0]
+            assert message == 'This is a flash message'
+            assert category == 'notice'
+    finally:
+        flask.message_flashed.disconnect(record, app)
     
-            print('benchmarking scikit-learn: ')
-        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
-        print('benchmarking glmnet: ')
-        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
+        def crawl(self):
+        while True:
+            page = self.data_store.extract_max_priority_page()
+            if page is None:
+                break
+            if self.data_store.crawled_similar(page.signature):
+                self.data_store.reduce_priority_link_to_crawl(page.url)
+            else:
+                self.crawl_page(page)
+            page = self.data_store.extract_max_priority_page()
+
     
-        for i, NN in enumerate(Nrange):
-        print('N = %i (%i out of %i)' % (NN, i + 1, len(Nrange)))
-        X = get_data(NN, D, dataset)
-        for algorithm in algorithms:
-            nbrs = neighbors.NearestNeighbors(n_neighbors=min(NN, k),
-                                              algorithm=algorithm,
-                                              leaf_size=leaf_size)
-            t0 = time()
-            nbrs.fit(X)
-            t1 = time()
-            nbrs.kneighbors(X)
-            t2 = time()
+        def extract_year_month(self, timestamp):
+        '''Return the year and month portions of the timestamp.'''
+        ...
     
-    from sklearn.cluster import AgglomerativeClustering
+    # The ## imports above & following could help make some tests gui-free.
+# However, they currently make radiobutton tests fail.
+##def setUpModule():
+##    # Replace tk objects used to initialize se.SearchEngine.
+##    se.BooleanVar = Var
+##    se.StringVar = Var
+##
+##def tearDownModule():
+##    se.BooleanVar = BooleanVar
+##    se.StringVar = StringVar
     
-        op.add_option('--eps',
-                  dest='eps', default=0.5, type=float,
-                  help='See the documentation of the underlying transformers.')
+    simple_escapes = {'a': '\a',
+                  'b': '\b',
+                  'f': '\f',
+                  'n': '\n',
+                  'r': '\r',
+                  't': '\t',
+                  'v': '\v',
+                  ''': ''',
+                  ''': ''',
+                  '\\': '\\'}
     
-    Does two benchmarks
+            # Add .lib files this module needs
+        for modlib in moddefn.GetLinkerLibs():
+            if modlib not in libs:
+                libs.append(modlib)
+    
+            try:
+            # call the matching registered function
+            func = self.funcs[method]
+        except KeyError:
+            pass
+        else:
+            if func is not None:
+                return func(*params)
+            raise Exception('method '%s' is not supported' % method)
     
     
-if not os.path.exists(DATA_FOLDER):
+def open_binary(package: Package, resource: Resource) -> BinaryIO:
+    '''Return a file-like object opened for binary reading of the resource.'''
+    resource = _normalize_path(resource)
+    package = _get_package(package)
+    reader = _get_resource_reader(package)
+    if reader is not None:
+        return reader.open_resource(resource)
+    _check_location(package)
+    absolute_package_path = os.path.abspath(package.__spec__.origin)
+    package_path = os.path.dirname(absolute_package_path)
+    full_path = os.path.join(package_path, resource)
+    try:
+        return open(full_path, mode='rb')
+    except OSError:
+        # Just assume the loader is a resource loader; all the relevant
+        # importlib.machinery loaders are and an AttributeError for
+        # get_data() will make it clear what is needed from the loader.
+        loader = cast(ResourceLoader, package.__spec__.loader)
+        data = None
+        if hasattr(package.__spec__.loader, 'get_data'):
+            with suppress(OSError):
+                data = loader.get_data(full_path)
+        if data is None:
+            package_name = package.__spec__.name
+            message = '{!r} resource not found in {!r}'.format(
+                resource, package_name)
+            raise FileNotFoundError(message)
+        else:
+            return BytesIO(data)
     
-    # Define 'classifiers' to be used
-classifiers = {
-    'Empirical Covariance': EllipticEnvelope(support_fraction=1.,
-                                             contamination=0.261),
-    'Robust Covariance (Minimum Covariance Determinant)':
-    EllipticEnvelope(contamination=0.261),
-    'OCSVM': OneClassSVM(nu=0.261, gamma=0.05)}
-colors = ['m', 'g', 'b']
-legend1 = {}
-legend2 = {}
+    try:
+    # compatible for python2
+    from urllib2 import urlopen
+    from urllib2 import HTTPError
+    from urllib2 import URLError
+except ImportError:
+    # compatible for python3
+    from urllib.request import urlopen
+    from urllib.error import HTTPError
+    from urllib.error import URLError
     
-    The dataset is generated using the ``make_biclusters`` function, which
-creates a matrix of small values and implants bicluster with large
-values. The rows and columns are then shuffled and passed to the
-Spectral Co-Clustering algorithm. Rearranging the shuffled matrix to
-make biclusters contiguous shows how accurately the algorithm found
-the biclusters.
+    class _AcquireFutures(object):
+    '''A context manager that does an ordered acquire of Future conditions.'''
     
-    np.random.seed(0)
-###############################################################################
-n_features = 100
-# simulation covariance matrix (AR(1) process)
-r = 0.1
-real_cov = toeplitz(r ** np.arange(n_features))
-coloring_matrix = cholesky(real_cov)
+    Local worker thread:
+- reads work ids from the 'Work Ids' queue and looks up the corresponding
+  WorkItem from the 'Work Items' dict: if the work item has been cancelled then
+  it is simply removed from the dict, otherwise it is repackaged as a
+  _CallItem and put in the 'Call Q'. New _CallItems are put in the 'Call Q'
+  until 'Call Q' is full. NOTE: the size of the 'Call Q' is kept small because
+  calls placed in the 'Call Q' can no longer be cancelled with Future.cancel().
+- reads _ResultItems from 'Result Q', updates the future stored in the
+  'Work Items' dict and deletes the dict entry
     
-    # If true, show URL addresses after external links.
-#man_show_urls = False
+        sqrt_n = int(math.floor(math.sqrt(n)))
+    for i in range(3, sqrt_n + 1, 2):
+        if n % i == 0:
+            return False
+    return True
     
-        def url_features(self):
-        return set(request.GET.getall('feature'))
     
-    from r2.controllers.api_docs import api_doc, api_section
-from r2.controllers.oauth2 import require_oauth2_scope
-from r2.controllers.reddit_base import OAuth2OnlyController
-from r2.lib.jsontemplates import (
-    FriendTableItemJsonTemplate,
-    get_usertrophies,
-    IdentityJsonTemplate,
-    KarmaListJsonTemplate,
-    PrefsJsonTemplate,
-)
-from r2.lib.pages import FriendTableItem
-from r2.lib.validator import (
-    validate,
-    VAccountByName,
-    VFriendOfMine,
-    VLength,
-    VList,
-    VUser,
-    VValidatedJSON,
-)
-from r2.models import Account, Trophy
-import r2.lib.errors as errors
-import r2.lib.validator.preferences as vprefs
+FILTER_COMPILERS = { 'regex' : CompileRegex,
+                     'level' : CompileLevel }
     
-                if links:
-                kw = {}
-                if wrapper:
-                    links = wrap_links(links, wrapper = wrapper)
-                else:
-                    links = wrap_links(links)
-                links = list(links)
-                links = max(links, key = lambda x: x._score) if links else None
-            if not links and wrapper:
-                return wrapper(None)
-            return links
-            # note: even if _by_url successed or a link was passed in,
-            # it is possible link_listing.things is empty if the
-            # link(s) is/are members of a private reddit
-            # return the link with the highest score (if more than 1)
-        except:
-            #we don't want to return 500s in other people's pages.
-            import traceback
-            g.log.debug('FULLPATH: get_link error in buttons code')
-            g.log.debug(traceback.format_exc())
-            if wrapper:
-                return wrapper(None)
     
-    class CaptchaController(RedditController):
-    @allow_oauth2_access
-    @api_doc(api_section.captcha, uri='/captcha/{iden}')
-    def GET_captchaimg(self, iden):
-        '''
-        Request a CAPTCHA image given an `iden`.
+def ExtractKeywordsFromGroup_KeywordMiddle_test():
+  assert_that( syntax_parse._ExtractKeywordsFromGroup(
+                 syntax_parse.SyntaxGroup( '', [
+                   'foo contained bar',
+                   'zoo goo'
+                 ] ) ),
+               contains_inanyorder( 'foo', 'contained', 'bar', 'zoo', 'goo' ) )
+    
+      if 'word' in vim_data:
+    completion_data[ 'insertion_text' ] = vim_data[ 'word' ]
+  if 'abbr' in vim_data:
+    completion_data[ 'menu_text' ] = vim_data[ 'abbr' ]
+  if 'menu' in vim_data:
+    completion_data[ 'extra_menu_info' ] = vim_data[ 'menu' ]
+  if 'kind' in vim_data:
+    completion_data[ 'kind' ] = [ vim_data[ 'kind' ] ]
+  if 'info' in vim_data:
+    completion_data[ 'detailed_info' ] = vim_data[ 'info' ]
