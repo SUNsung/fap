@@ -1,52 +1,77 @@
 
         
-          def test_time_add()
-    assert_equal(Time.utc(2000, 3, 21, 3, 30) + 3 * 3600,
-                 Time.utc(2000, 3, 21, 6, 30))
-    assert_equal(Time.utc(2000, 3, 21, 3, 30) + (-3 * 3600),
-                 Time.utc(2000, 3, 21, 0, 30))
-    assert_equal(0, (Time.at(1.1) + 0.9).usec)
-    
-      Ruby = Struct.new(:version, :platform)
-    
-      # DELETE /books/1
-  # DELETE /books/1.json
-  def destroy
-    @book.destroy
-    respond_to do |format|
-      format.html { redirect_to books_url, notice: 'Book was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
-    
-            def name
-          @node.children.first
-        end
-    
-            def each_unnecessary_space_match(node, &blk)
-          each_match_range(
-            contents_range(node),
-            MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX,
-            &blk
-          )
+                if name.start_with?('etc') || name.start_with?('core.stdc.')
+          name.split('.')[0..2].join('.')
+        elsif name.start_with?('ddmd')
+          'ddmd'
+        elsif name.start_with?('rt')
+          'rt'
+        else
+          name.split('.')[0..1].join('.')
         end
       end
+    
+        options[:attribution] = <<-HTML
+      &copy; 2011&ndash;2018 Twitter, Inc.<br>
+      &copy; 2011&ndash;2018 The Bootstrap Authors<br>
+      Code licensed under the MIT License.<br>
+      Documentation licensed under the Creative Commons Attribution License v3.0.
+    HTML
+    
+        version '2' do
+      self.release = '2.3.0'
+      self.base_url = 'http://coffeescript.org/'
+    
+          options[:fix_urls] = ->(url) do
+        url.sub! %r{/blob/master/readme.md}i, ''
+        url
+      end
+    end
+    
+        def ==(other)
+      other.name == name && other.path == path && other.type == type
+    end
+    
+        def contains?(url, options = nil)
+      !!subpath_to(url, options)
+    end
+    
+        platform_is_not :windows do
+      it 'expands a path when the default external encoding is ASCII-8BIT' do
+        Encoding.default_external = Encoding::ASCII_8BIT
+        path_8bit = [222, 173, 190, 175].pack('C*')
+        File.expand_path( path_8bit, @rootdir).should == '#{@rootdir}' + path_8bit
+      end
+    end
+    
+      after :each do
+    @file.close
+    @readonly_file.close
+    rm_r @filename
+  end
+    
+    ruby_version_is '2.4' do
+  describe 'String#casecmp? independent of case' do
+    it 'returns true when equal to other' do
+      'abc'.casecmp?('abc').should == true
+      'abc'.casecmp?('ABC').should == true
+    end
+    
+      it 'returns nil if no modifications were made' do
+    a = '+++---111222???'
+    a.swapcase!.should == nil
+    a.should == '+++---111222???'
+    
+      ruby_version_is '2.4' do
+    describe 'full Unicode case mapping' do
+      it 'modifies self in place for all of Unicode with no option' do
+        a = 'äöü'
+        a.upcase!
+        a.should == 'ÄÖÜ'
+      end
+    
+      describe 'RSTRING_LEN' do
+    it 'returns the size of the string' do
+      @s.RSTRING_LEN('gumdrops').should == 8
     end
   end
-end
-
-    
-            MSG = 'Do not freeze immutable objects, as freezing them has no ' \
-              'effect.'.freeze
-    
-          origin = caller[1]
-      if origin =~ /rubygems\/custom_require/
-        origin = caller[3]
-        if origin.nil?
-          STDERR.puts 'Unknown origin'
-          STDERR.puts caller.join('\n')
-        end
-      end
-      origin = origin.gsub(/:[0-9]+:in .*/, '') if origin
-    
-        FileUtils.mkdir_p(target) unless File.directory?(target)
