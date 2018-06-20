@@ -1,51 +1,115 @@
 
         
-        
-    {
-    {}
+        struct Vframe {
+  Vframe(const Func* func, int parent, int cost, uint64_t entry_weight)
+    : func(func)
+    , parent(parent)
+    , entry_weight(entry_weight)
+    , inclusive_cost(cost)
+    , exclusive_cost(cost)
+  {}
+    }
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    const char* OfflineCode::getArchName() { return 'PPC64'; }
+    
+    
+    {  if (n == 1) {
+    if (imm_s == 0x3F) {
+      return 0;
+    }
+    uint64_t bits = (1UL << (imm_s + 1)) - 1;
+    return RotateRight(bits, imm_r, 64);
+  } else {
+    if ((imm_s >> 1) == 0x1F) {
+      return 0;
+    }
+    for (int width = 0x20; width >= 0x2; width >>= 1) {
+      if ((imm_s & width) == 0) {
+        int mask = width - 1;
+        if ((imm_s & mask) == mask) {
+          return 0;
+        }
+        uint64_t bits = (1UL << ((imm_s & mask) + 1)) - 1;
+        return RepeatBitsAcrossReg(reg_size,
+                                   RotateRight(bits, imm_r & mask, width),
+                                   width);
+      }
+    }
+  }
+  not_reached();
+  return 0;
 }
-#endif
+    
+    #else //__cplusplus
+    
+    private:
+  static void SigChldHandler(int sig, siginfo_t* info, void* ctx);
+    
+        char fileName[256];
+    memcpy(fileName, '/sys/devices/system/node/node', 29);
+    assert(strlen('/sys/devices/system/node/node') == 29);
+    char* p = fileName + 29;
+    // We support at most 32 NUMA node, so at most two bytes.
+    if (node >= 10) *p++ = '0' + node / 10;
+    *p++ = '0' + node % 10;
+    if (pagesize == size2m) {
+      memcpy(p, '/hugepages/hugepages-2048kB/', 28);
+      assert(strlen('/hugepages/hugepages-2048kB/') == 28);
+      p += 28;
+    } else {
+      memcpy(p, '/hugepages/hugepages-1048576kB/', 31);
+      assert(strlen('/hugepages/hugepages-1048576kB/') == 31);
+      p += 31;
+    }
+    
+    #include 'db/db_impl.h'
+#include 'leveldb/db.h'
+#include 'leveldb/env.h'
+#include 'util/testharness.h'
+#include <string>
+#include <vector>
+    
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
+}
 
     
-    // On macOS and iOS, swift_once is implemented using GCD.
-// The compiler emits an inline check matching the barrier-free inline fast
-// path of dispatch_once(). See SwiftTargetInfo.OnceDonePredicateValue.
+    class FilterPolicy;
     
-      /// Set the timer's expiry time as an absolute time.
-  /**
-   * This function sets the expiry time. Any pending asynchronous wait
-   * operations will be cancelled. The handler for each cancelled operation will
-   * be invoked with the boost::asio::error::operation_aborted error code.
-   *
-   * @param expiry_time The expiry time to be used for the timer.
-   *
-   * @return The number of asynchronous operations that were cancelled.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   *
-   * @note If the timer has already expired when expires_at() is called, then
-   * the handlers for asynchronous wait operations will:
-   *
-   * @li have already been invoked; or
-   *
-   * @li have been queued for invocation in the near future.
-   *
-   * These handlers can no longer be cancelled, and therefore are passed an
-   * error code that indicates the successful completion of the wait operation.
-   */
-  std::size_t expires_at(const time_point& expiry_time)
-  {
-    boost::system::error_code ec;
-    std::size_t s = this->service.expires_at(
-        this->implementation, expiry_time, ec);
-    boost::asio::detail::throw_error(ec, 'expires_at');
-    return s;
+      void Clear();
+  void Add(double value);
+  void Merge(const Histogram& other);
+    
+    #ifndef STORAGE_LEVELDB_UTIL_MUTEXLOCK_H_
+#define STORAGE_LEVELDB_UTIL_MUTEXLOCK_H_
+    
+    inline bool DBIter::ParseKey(ParsedInternalKey* ikey) {
+  Slice k = iter_->key();
+  ssize_t n = k.size() + iter_->value().size();
+  bytes_counter_ -= n;
+  while (bytes_counter_ < 0) {
+    bytes_counter_ += RandomPeriod();
+    db_->RecordReadSample(k);
   }
+  if (!ParseInternalKey(k, ikey)) {
+    status_ = Status::Corruption('corrupted internal key in DBIter');
+    return false;
+  } else {
+    return true;
+  }
+}
     
-    #ifndef BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-#define BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
     
-      typedef WSABUF native_buffer_type;
+    #include <boost/asio/detail/config.hpp>
+    
+    #include <boost/asio/detail/push_options.hpp>
+    
+    #include <boost/asio/detail/config.hpp>
     
     namespace boost {
 namespace asio {
@@ -54,213 +118,104 @@ namespace detail {
     }
     }
     
-    #ifndef BOOST_ASIO_DETAIL_GCC_ARM_FENCED_BLOCK_HPP
-#define BOOST_ASIO_DETAIL_GCC_ARM_FENCED_BLOCK_HPP
+    #include <boost/asio/detail/push_options.hpp>
     
-    #include <boost/asio/detail/pop_options.hpp>
+    extern JSClass  *jsb_cocos2d_NavMeshObstacle_class;
+extern JSObject *jsb_cocos2d_NavMeshObstacle_prototype;
     
-    # endif // defined(BOOST_ASIO_ENABLE_HANDLER_TYPE_REQUIREMENTS_ASSERT)
     
-    #include <boost/asio/detail/pop_options.hpp>
-    
-    #include <boost/asio/detail/pop_options.hpp>
-    
-    bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DConeTwistConstraint_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DConeTwistConstraint(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getBFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistAngle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistSpan(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setDamping(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getAFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_enableMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_Physics3DConeTwistConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+    {        ok &= luaval_to_uint32(tolua_S, 2,&arg0, 'cc.SimpleAudioEngine:pauseEffect');
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_pauseEffect'', nullptr);
+            return 0;
+        }
+        cobj->pauseEffect(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:pauseEffect',argc, 1);
+    return 0;
     
     
     
-        return 0;
+    
+    {	b2Body* m_body;
+};
+    
+    
+    {    // SDL_CaptureMouse() let the OS know e.g. that our imgui drag outside the SDL window boundaries shouldn't e.g. trigger the OS window resize cursor. 
+    // The function is only supported from SDL 2.0.4 (released Jan 2016)
+    bool any_mouse_button_down = ImGui::IsAnyMouseDown();
+    SDL_CaptureMouse(any_mouse_button_down ? SDL_TRUE : SDL_FALSE);
+#else
+    if (SDL_GetWindowFlags(g_Window) & SDL_WINDOW_INPUT_FOCUS)
+        io.MousePos = ImVec2((float)mx, (float)my);
+#endif
 }
-int lua_cocos2dx_cocosdenshion_SimpleAudioEngine_isBackgroundMusicPlaying(lua_State* tolua_S)
+    
+    static void CreateOrResizeBuffer(VkBuffer& buffer, VkDeviceMemory& buffer_memory, VkDeviceSize& p_buffer_size, size_t new_size, VkBufferUsageFlagBits usage)
 {
-    int argc = 0;
-    CocosDenshion::SimpleAudioEngine* cobj = nullptr;
-    bool ok  = true;
-    
-    
-    
-        virtual void DrawTransform(const b2Transform& xf);
-    
-        void DrawTitle(const char *string);
-	virtual void Step(Settings* settings);
-	virtual void Keyboard(unsigned char key) { B2_NOT_USED(key); }
-	virtual void KeyboardUp(unsigned char key) { B2_NOT_USED(key); }
-	void ShiftMouseDown(const b2Vec2& p);
-	virtual bool MouseDown(const b2Vec2& p);
-	virtual void MouseUp(const b2Vec2& p);
-	void MouseMove(const b2Vec2& p);
-	void LaunchBomb();
-	void LaunchBomb(const b2Vec2& position, const b2Vec2& velocity);
-	
-	void SpawnBomb(const b2Vec2& worldPt);
-	void CompleteBombSpawn(const b2Vec2& p);
+    VkResult err;
+    if (buffer != NULL)
+        vkDestroyBuffer(g_Device, buffer, g_Allocator);
+    if (buffer_memory)
+        vkFreeMemory(g_Device, buffer_memory, g_Allocator);
+    }
     
     
     {
-    {			float minX = -6.0f;
-			float maxX = 0.0f;
-			float minY = 4.0f;
-			float maxY = 6.0f;
-			
-			for (int32 i = 0; i < 400; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position = b2Vec2(RandomFloat(minX,maxX),RandomFloat(minY,maxY));
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&shape, 0.01f);
-			}
-		}
-		
-		{
-			b2PolygonShape shape;
-			shape.SetAsBox(1.5f, 1.5f);
-			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(-40.0f,5.0f);
-			bd.bullet = true;
-			b2Body* body = m_world->CreateBody(&bd);
-			body->CreateFixture(&shape, 1.0f);
-			body->SetLinearVelocity(b2Vec2(150.0f, 0.0f));
-		}
-	}
-    
-    			//m_x = RandomFloat(-1.0f, 1.0f);
-			m_x = 0.20352793f;
-			bd.position.Set(m_x, 10.0f);
-			bd.bullet = true;
-    
-          manager.reset(new internal::ThreadManager(b.threads));
-      for (std::size_t ti = 0; ti < pool.size(); ++ti) {
-        pool[ti] = std::thread(&RunInThread, &b, iters,
-                               static_cast<int>(ti + 1), manager.get());
-      }
-      RunInThread(&b, iters, 0, manager.get());
-      manager->WaitForAllThreads();
-      for (std::thread& thread : pool) thread.join();
-      internal::ThreadManager::Result results;
-      {
-        MutexLock l(manager->GetBenchmarkMutex());
-        results = manager->results;
-      }
-      manager.reset();
-      // Adjust real/manual time stats since they were reported per thread.
-      results.real_time_used /= b.threads;
-      results.manual_time_used /= b.threads;
-    
-    #if defined(HAVE_STD_REGEX)
-#include <regex>
-#elif defined(HAVE_GNU_POSIX_REGEX)
-#include <gnuregex.h>
-#elif defined(HAVE_POSIX_REGEX)
-#include <regex.h>
-#else
-#error No regular expression backend was found!
-#endif
-#include <string>
-    
-    
-    {void SleepForSeconds(double seconds) {
-  SleepForMicroseconds(static_cast<int>(seconds * kNumMicrosPerSecond));
-}
-#endif  // BENCHMARK_OS_WINDOWS
-}  // end namespace benchmark
-
-    
-    // Generates Client method signature source
-void GenerateClientMethodSignature(const grpc_generator::Method *method, grpc_generator::Printer *printer,
-                                   std::map<grpc::string, grpc::string> vars) {
-	vars['Method'] = exportName(method->name());
-	vars['Request'] = ', in *' + ((vars['CustomMethodIO'] == '') ? method->get_input_type_name() : vars['CustomMethodIO']);
-	if (ClientOnlyStreaming(method) || method->BidiStreaming()) {
-		vars['Request'] = '';
-	}
-	vars['Response'] = '* ' + method->get_output_type_name();
-	if (ClientOnlyStreaming(method) || method->BidiStreaming() || ServerOnlyStreaming(method)) {
-		vars['Response'] = vars['Service'] + '_' + vars['Method'] + 'Client' ;
-	}
-	printer->Print(vars, '$Method$(ctx $context$.Context$Request$, \n\topts... $grpc$.CallOption) ($Response$, error)');
+    {
+    {            _IdxWritePtr[0] = (ImDrawIdx)(_VtxCurrentIdx); _IdxWritePtr[1] = (ImDrawIdx)(_VtxCurrentIdx+1); _IdxWritePtr[2] = (ImDrawIdx)(_VtxCurrentIdx+2);
+            _IdxWritePtr[3] = (ImDrawIdx)(_VtxCurrentIdx); _IdxWritePtr[4] = (ImDrawIdx)(_VtxCurrentIdx+2); _IdxWritePtr[5] = (ImDrawIdx)(_VtxCurrentIdx+3);
+            _IdxWritePtr += 6;
+            _VtxCurrentIdx += 4;
+        }
+    }
 }
     
-    #include <grpc++/grpc++.h>
+        bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     
-    class GreeterServiceImpl final : public Greeter::Service {
-  virtual grpc::Status SayHello(
-      grpc::ServerContext *context,
-      const flatbuffers::grpc::Message<HelloRequest> *request_msg,
-      flatbuffers::grpc::Message<HelloReply> *response_msg) override {
-    // flatbuffers::grpc::MessageBuilder mb_;
-    // We call GetRoot to 'parse' the message. Verification is already
-    // performed by default. See the notes below for more details.
-    const HelloRequest *request = request_msg->GetRoot();
+    #ifdef IMGUI_VULKAN_DEBUG_REPORT
+    // Remove the debug report callback
+    auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, 'vkDestroyDebugReportCallbackEXT');
+    vkDestroyDebugReportCallbackEXT(g_Instance, g_DebugReport, g_Allocator);
+#endif // IMGUI_VULKAN_DEBUG_REPORT
+    
+    
+    {        ImGui::Render();
     }
+    
+            // 1. Show a simple window.
+        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
     }
     
-    namespace grpc {
-class CompletionQueue;
-class Channel;
-class ServerCompletionQueue;
-class ServerContext;
-}  // namespace grpc
+        Value(int unit, double value)
+    : unit(unit)
+    , value(value)
+    {
+    }
     
-      // Appends the given text to the generated code as well as a newline
-  // character.  Any text within {{ and }} delimeters is replaced by values
-  // previously stored in the CodeWriter by calling SetValue above.  The newline
-  // will be suppressed if the text ends with the \\ character.
-  void operator+=(std::string text);
+        Size(double width, double height)
+    : width(width)
+    , height(height)
+    {
+    }
     
-    bool GenerateFBS(const Parser &parser, const std::string &path,
-                 const std::string &file_name) {
-  return SaveFile((path + file_name + '.fbs').c_str(),
-                  GenerateFBS(parser, file_name), false);
+    template<typename... ARGS>
+inline void log(int level, const char* tag, const char* msg) noexcept {
+  __android_log_write(level, tag, msg);
 }
     
-    namespace NamespaceA {
-    }
+    private:
+  void ref() {
+    ++m_refcount;
+  }
