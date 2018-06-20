@@ -1,51 +1,92 @@
 
         
-            brew cask install mactex
-    EOS
-  when 'pip' then <<-EOS.undent
-    Homebrew provides pip via: `brew install python`. However you will then
-    have two Pythons installed on your Mac, so alternatively you can install
-    pip via the instructions at:
-    
-      def []=(key, value)
-    @checksums[key] = value
-  end
-    
-      # True if a {Formula} is being built with a specific option.
-  # <pre>args << '--i-want-spam' if build.with? 'spam'
-  #
-  # args << '--qt-gui' if build.with? 'qt' # '--with-qt' ==> build.with? 'qt'
-  #
-  # # If a formula presents a user with a choice, but the choice must be fulfilled:
-  # if build.with? 'example2'
-  #   args << '--with-example2'
-  # else
-  #   args << '--with-example1'
-  # end</pre>
-  def with?(val)
-    option_names = val.respond_to?(:option_names) ? val.option_names : [val]
-    
-      def find_internal_commands(directory)
-    directory.children.reduce([]) do |cmds, f|
-      cmds << f.basename.to_s.sub(/\.(?:rb|sh)$/, '') if f.file?
-      cmds
+        def bottle_tag
+  if MacOS.version >= :lion
+    MacOS.cat
+  elsif MacOS.version == :snow_leopard
+    Hardware::CPU.is_64_bit? ? :snow_leopard : :snow_leopard_32
+  else
+    # Return, e.g., :tiger_g3, :leopard_g5_64, :leopard_64 (which is Intel)
+    if Hardware::CPU.type == :ppc
+      tag = '#{MacOS.cat}_#{Hardware::CPU.family}'.to_sym
+    else
+      tag = MacOS.cat
     end
+    MacOS.prefer_64_bit? ? '#{tag}_64'.to_sym : tag
   end
 end
-
     
-    module Homebrew
-  def doctor
-    checks = Diagnostic::Checks.new
+      def <<(o)
+    @settings << o
+    self
+  end
     
-          when :login_fail
-        if(s[:user] and s[:pass])
-          report_auth_info(s.merge({:active => false}))
-          print_status('Failed FTP Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]}')
+      def describe_path(path)
+    return 'N/A' if path.nil?
+    realpath = path.realpath
+    if realpath == path
+      path
+    else
+      '#{path} => #{realpath}'
+    end
+  end
     
+        if !updated
+      puts 'Already up-to-date.'
+    elsif hub.empty?
+      puts 'No changes to formulae.'
+    else
+      hub.dump
+      hub.reporters.each(&:migrate_tap_migration)
+      hub.reporters.each(&:migrate_formula_rename)
+      Descriptions.update_cache(hub)
+    end
     
-class SnifferIMAP < BaseProtocolParser
+      def self.canonical_name(name)
+    Formulary.canonical_name(name)
+  end
     
-            unless guarded && environment.var(name)
-          environment.set_var(name, val.perform(environment))
+        options[:container] = ->(filter) {
+      filter.current_url.path.start_with?('/getting-started') ? '#main' : '#content'
+    }
+    options[:title] = false
+    options[:root_title] = 'Elixir'
+    
+        def parse(response)
+      unless response.url == root_url || self.class.version == 'Guide'
+        response.body.sub!(/<nav class='devsite-nav-responsive-sidebar.+?<\/nav>/m, '')
+        response.body.gsub!(/<li class='devsite-nav-item'>.+?<\/li>/m, '')
+      end
+    
+        def as_json
+      @pages
+    end
+    
+            ORDERED_DIRECTIVES.each do |directive_sym|
+          next unless directives.key?(directive_sym)
+          args = directives[directive_sym]
+          send('uninstall_#{directive_sym}', *(args.is_a?(Hash) ? [args] : args), **options)
         end
+      end
+    
+      def dashboard
+    gon.push(pod_version: pod_version)
+  end
+    
+          def stages
+        names = Dir[stage_definitions].map { |f| File.basename(f, '.rb') }
+        assert_valid_stage_names(names)
+        names
+      end
+    
+      if ''.respond_to?(:encoding)  # Ruby 1.9+ M17N
+    context 'PATH_INFO's encoding' do
+      before do
+        @app = Rack::Protection::PathTraversal.new(proc { |e| [200, {'Content-Type' => 'text/plain'}, [e['PATH_INFO'].encoding.to_s]] })
+      end
+    
+        expect(get('/..', :foo => '<bar>')).to be_ok
+  end
+    
+                  add_offense(condition)
+            end
