@@ -1,62 +1,90 @@
 
         
-                if name.start_with?('etc') || name.start_with?('core.stdc.')
-          name.split('.')[0..2].join('.')
-        elsif name.start_with?('ddmd')
-          'ddmd'
-        elsif name.start_with?('rt')
-          'rt'
-        else
-          name.split('.')[0..1].join('.')
+              # Generate a Hash which breaks the recursive chain.
+      # Certain fields which are normally available are omitted.
+      #
+      # Returns a Hash with only non-recursive fields present.
+      def collapse_document(doc)
+        doc.keys.each_with_object({}) do |(key, _), result|
+          result[key] = doc[key] unless NESTED_OBJECT_FIELD_BLACKLIST.include?(key)
         end
       end
-    
-        version '4' do
-      self.release = '4.1.1'
-      self.base_url = 'https://getbootstrap.com/docs/4.1/'
-      self.root_path = 'getting-started/introduction/'
-    
-        def as_json
-      { name: name, path: path, type: type }
     end
   end
 end
 
     
-        def join(*args)
-      self.class.join self, *args
-    end
-    
-        end # end of each_key
-  end # end of parse
+        Or via the Cask:
+      brew cask install ngrok
+    EOS
+  end
 end
+
     
-    		self.block[-1] << '    ''
+      def keys
+    @checksums.keys
+  end
     
-          def initialize(pairs = {})
-        @pairs = pairs
-        pairs.each do |key, value|
-          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
-          send(:'#{key}=', value)
+    class BuildEnvironment
+  def initialize(*settings)
+    @settings = Set.new(*settings)
+  end
+    
+      # True if a {Formula} is being built with {Formula.devel} instead of {Formula.stable}.
+  # <pre>args << '--some-beta' if build.devel?</pre>
+  def devel?
+    include? 'devel'
+  end
+    
+          if f.plist_manual
+        s << 'Or, if you don't want/need launchctl, you can just run:'
+        s << '  #{f.plist_manual}'
+      end
+    
+      def self.canonical_name(name)
+    Formulary.canonical_name(name)
+  end
+    
+      def index
+    return redirect_to path('/login') if SiteSetting.login_required? && current_user.nil?
+    
+      def create
+    color_scheme = ColorScheme.create(color_scheme_params)
+    if color_scheme.valid?
+      render json: color_scheme, root: false
+    else
+      render_json_error(color_scheme)
+    end
+  end
+    
+      def index
+    url = params[:filter]
+    permalinks = Permalink.filter_by(url)
+    render_serialized(permalinks, PermalinkSerializer)
+  end
+    
+          def to_h
+        directives.to_h
+      end
+    
+          def run_installer(command: nil, verbose: false, **_options)
+        ohai 'Running installer for #{cask}; your password may be necessary.'
+        ohai 'Package installers may write to any location; options such as --appdir are ignored.'
+        unless path.exist?
+          raise CaskError, 'pkg source file not found: '#{path.relative_path_from(cask.staged_path)}''
         end
-    
-      private
-    
-            if args.length > 0
-          attachment.to_s(args.first)
-        else
-          attachment
+        args = [
+          '-pkg',    path,
+          '-target', '/'
+        ]
+        args << '-verboseR' if verbose
+        if stanza_options.fetch(:allow_untrusted, false)
+          args << '-allowUntrusted'
+        end
+        with_choices_file do |choices_path|
+          args << '-applyChoiceChangesXML' << choices_path if choices_path
+          command.run!('/usr/sbin/installer', sudo: true, args: args, print_stdout: true)
         end
       end
-    end
     
-          class HaveAttachedFileMatcher
-        def initialize attachment_name
-          @attachment_name = attachment_name
-        end
-    
-          def drop_attached_file(*args)
-        ActiveSupport::Deprecation.warn 'Method `drop_attached_file` in the migration has been deprecated and will be replaced by `remove_attachment`.'
-        remove_attachment(*args)
-      end
-    end
+          private
