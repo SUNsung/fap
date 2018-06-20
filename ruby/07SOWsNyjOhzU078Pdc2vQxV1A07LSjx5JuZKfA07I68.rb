@@ -1,126 +1,126 @@
 
         
-        WITH_LIQUID = <<-LIQUID.freeze
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor libero at
-pharetra tempus. {{ author }} et metus fermentum, eu cursus lorem
-mattis. Curabitur vel dui et lacus rutrum suscipit et eget neque.
+          # Finds the projects '@user' contributed to, limited to either public projects
+  # or projects visible to the given user.
+  #
+  # current_user - When given the list of the projects is limited to those only
+  #                visible by this user.
+  #
+  # Returns an ActiveRecord::Relation.
+  def execute(current_user = nil)
+    segments = all_projects(current_user)
     
-    def local_require
-  require 'json'
-  JSON.pretty_generate(DATA)
-end
+        groups << @user.authorized_groups.visible_to_user(current_user) if current_user
+    groups << @user.authorized_groups.public_to_user(current_user)
     
-    #
+        version '3' do
+      self.release = '3.3.7'
+      self.base_url = 'https://getbootstrap.com/docs/3.3/'
+      self.root_path = 'getting-started/'
     
-    module Jekyll
-  # internal requires
-  autoload :Cleaner,             'jekyll/cleaner'
-  autoload :Collection,          'jekyll/collection'
-  autoload :Configuration,       'jekyll/configuration'
-  autoload :Convertible,         'jekyll/convertible'
-  autoload :Deprecator,          'jekyll/deprecator'
-  autoload :Document,            'jekyll/document'
-  autoload :EntryFilter,         'jekyll/entry_filter'
-  autoload :Errors,              'jekyll/errors'
-  autoload :Excerpt,             'jekyll/excerpt'
-  autoload :External,            'jekyll/external'
-  autoload :FrontmatterDefaults, 'jekyll/frontmatter_defaults'
-  autoload :Hooks,               'jekyll/hooks'
-  autoload :Layout,              'jekyll/layout'
-  autoload :CollectionReader,    'jekyll/readers/collection_reader'
-  autoload :DataReader,          'jekyll/readers/data_reader'
-  autoload :LayoutReader,        'jekyll/readers/layout_reader'
-  autoload :PostReader,          'jekyll/readers/post_reader'
-  autoload :PageReader,          'jekyll/readers/page_reader'
-  autoload :StaticFileReader,    'jekyll/readers/static_file_reader'
-  autoload :ThemeAssetsReader,   'jekyll/readers/theme_assets_reader'
-  autoload :LogAdapter,          'jekyll/log_adapter'
-  autoload :Page,                'jekyll/page'
-  autoload :PageWithoutAFile,    'jekyll/page_without_a_file'
-  autoload :PluginManager,       'jekyll/plugin_manager'
-  autoload :Publisher,           'jekyll/publisher'
-  autoload :Reader,              'jekyll/reader'
-  autoload :Regenerator,         'jekyll/regenerator'
-  autoload :RelatedPosts,        'jekyll/related_posts'
-  autoload :Renderer,            'jekyll/renderer'
-  autoload :LiquidRenderer,      'jekyll/liquid_renderer'
-  autoload :Site,                'jekyll/site'
-  autoload :StaticFile,          'jekyll/static_file'
-  autoload :Stevenson,           'jekyll/stevenson'
-  autoload :Theme,               'jekyll/theme'
-  autoload :ThemeBuilder,        'jekyll/theme_builder'
-  autoload :URL,                 'jekyll/url'
-  autoload :Utils,               'jekyll/utils'
-  autoload :VERSION,             'jekyll/version'
+        version '2' do
+      self.release = '2.3.0'
+      self.base_url = 'http://coffeescript.org/'
     
-        # Private: The metadata file storing dependency tree and build history
-    #
-    # Returns an Array with the metdata file as the only item
-    def metadata_file
-      [site.regenerator.metadata_file]
+          options[:fix_urls] = ->(url) do
+        url.sub! %r{/blob/master/readme.md}i, ''
+        url
+      end
     end
     
-              # This is too noisy even for --verbose, but uncomment if you need it for
-          # a specific WebSockets issue.  Adding ?LR-verbose=true onto the URL will
-          # enable logging on the client side.
-          # em_opts[:debug] = true
+        options[:max_image_size] = 300_000
+    options[:container] = '.devsite-main-content'
     
-          # Replaces the given middlware object or index with the new
-      # middleware.
-      def replace(index, middleware, *args, &block)
-        if index.is_a?(Integer)
-          delete(index)
-          insert(index, middleware, *args, &block)
-        else
-          insert_before(index, middleware, *args, &block)
-          delete(index)
+        def ==(other)
+      other.is_a?(self.class) && filters == other.filters
+    end
+    
+    module Docs
+  class Entry
+    class Invalid < StandardError; end
+    
+            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
+          next if node.previous.try(:content).present? || node.next.try(:content).present?
+          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
+          node.content = node.content.strip
+          node.name = 'pre' if node.content =~ /\s/
+          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
+        end
+    
+        # Initializes a new CategoryFeed.
+    #
+    #  +base+         is the String path to the <source>.
+    #  +category_dir+ is the String path between <source> and the category folder.
+    #  +category+     is the category currently being processed.
+    def initialize(site, base, category_dir, category)
+      @site = site
+      @base = base
+      @dir  = category_dir
+      @name = 'atom.xml'
+      self.process(@name)
+      # Read the YAML data from the layout page.
+      self.read_yaml(File.join(base, '_includes/custom'), 'category_feed.xml')
+      self.data['category']    = category
+      # Set the title for this page.
+      title_prefix             = site.config['category_title_prefix'] || 'Category: '
+      self.data['title']       = '#{title_prefix}#{category}'
+      # Set the meta-description for this page.
+      meta_description_prefix  = site.config['category_meta_description_prefix'] || 'Category: '
+      self.data['description'] = '#{meta_description_prefix}#{category}'
+    
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
+            end
+          else
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+          end
         end
       end
+      rtn
+    end
+  end
     
-              @app.call(env)
+      # Extracts raw content DIV from template, used for page description as {{ content }}
+  # contains complete sub-template code on main page level
+  def raw_content(input)
+    /<div class='entry-content'>(?<content>[\s\S]*?)<\/div>\s*<(footer|\/article)>/ =~ input
+    return (content.nil?) ? input : content
+  end
+    
+    # Multi-line step scoper
+When /^(.*) within (.*[^:]):$/ do |step, parent, table_or_string|
+  with_scope(parent) { When '#{step}:', table_or_string }
+end
+    
+        def type_from_mime_magic
+      @type_from_mime_magic ||= File.open(@filepath) do |file|
+        MimeMagic.by_magic(file).try(:type)
+      end
+    end
+    
+          class HaveAttachedFileMatcher
+        def initialize attachment_name
+          @attachment_name = attachment_name
+        end
+    
+            protected
+    
+            def no_error_when_valid?
+          @file = StringIO.new('.')
+          @subject.send(@attachment_name).assign(@file)
+          @subject.valid?
+          expected_message = [
+            @attachment_name.to_s.titleize,
+            I18n.t(:blank, scope: [:errors, :messages])
+          ].join(' ')
+          @subject.errors.full_messages.exclude?(expected_message)
         end
       end
     end
   end
-end
-
-    
-                # The result of this matters on whether we reached our
-            # proper target state or not.
-            env[:result] = env[:machine].state.id == @target_state
-    
-    module Vagrant
-  module Action
-    module Builtin
-      # This middleware class will detect and handle collisions with
-      # forwarded ports, whether that means raising an error or repairing
-      # them automatically.
-      #
-      # Parameters it takes from the environment hash:
-      #
-      #   * `:port_collision_repair` - If true, it will attempt to repair
-      #     port collisions. If false, it will raise an exception when
-      #     there is a collision.
-      #
-      #   * `:port_collision_extra_in_use` - An array of ports that are
-      #     considered in use.
-      #
-      #   * `:port_collision_remap` - A hash remapping certain host ports
-      #     to other host ports.
-      #
-      class HandleForwardedPortCollisions
-        include Util::IsPortOpen
-    
-              # Get all the configured provisioners
-          @_provisioner_instances = env[:machine].config.vm.provisioners.map do |provisioner|
-            # Instantiate the provisioner
-            klass  = Vagrant.plugin('2').manager.provisioners[provisioner.type]
-    
-            def call(env)
-          # Grab the SSH info from the machine or the environment
-          info = env[:ssh_info]
-          info ||= env[:machine].ssh_info
-    
-    answer = to_array(solution).map do |p|
-  to_string(p)
 end
