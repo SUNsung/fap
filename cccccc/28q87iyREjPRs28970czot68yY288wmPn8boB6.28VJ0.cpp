@@ -1,92 +1,95 @@
 
         
-        // redirect the nath functions.
-bool CheckNAN(double v) {
-  return ISNAN(v);
-}
-double LogGamma(double v) {
-  return lgammafn(v);
+        /// Index the given source file and store the results to \p indexStorePath.
+///
+/// \param primarySourceFile The source file to index.
+///
+/// \param indexUnitToken A unique identifier for this translation unit in the
+/// form of a file path.
+///
+/// \param indexStorePath The location to write the indexing data to.
+///
+/// \param indexSystemModules If true, emit index data for imported serialized
+/// swift system modules.
+///
+/// \param isDebugCompilation true for non-optimized compiler invocation.
+///
+/// \param targetTriple The target for this compilation.
+///
+/// \param dependencyTracker The set of dependencies seen while building.
+bool indexAndRecord(SourceFile *primarySourceFile, StringRef indexUnitToken,
+                    StringRef indexStorePath, bool indexSystemModules,
+                    bool isDebugCompilation, StringRef targetTriple,
+                    const DependencyTracker &dependencyTracker);
+    
+    #endif // SWIFT_INDEX_INDEXSYMBOL_H
+
+    
+      /// Returns the line and column represented by the given source location.
+  ///
+  /// If \p BufferID is provided, \p Loc must come from that source buffer.
+  ///
+  /// This respects #line directives.
+  std::pair<unsigned, unsigned>
+  getLineAndColumn(SourceLoc Loc, unsigned BufferID = 0) const {
+    assert(Loc.isValid());
+    int LineOffset = getLineOffset(Loc);
+    int l, c;
+    std::tie(l, c) = LLVMSourceMgr.getLineAndColumn(Loc.Value, BufferID);
+    assert(LineOffset+l > 0 && 'bogus line offset');
+    return { LineOffset + l, c };
+  }
+    
+    #ifndef SWIFT_INDEX_INDEX_H
+#define SWIFT_INDEX_INDEX_H
+    
+    TEST(LogTest, ReadThirdOneOff) {
+  CheckInitialOffsetRecord(10008, 2);
 }
     
-    class ShotgunUpdater : public LinearUpdater {
- public:
-  // set training parameter
-  void Init(const std::vector<std::pair<std::string, std::string> > &args) override {
-    param_.InitAllowUnknown(args);
-    selector_.reset(FeatureSelector::Create(param_.feature_selector));
-  }
-  void Update(HostDeviceVector<GradientPair> *in_gpair, DMatrix *p_fmat,
-              gbm::GBLinearModel *model, double sum_instance_weight) override {
-    std::vector<GradientPair> &gpair = in_gpair->HostVector();
-    param_.DenormalizePenalties(sum_instance_weight);
-    const int ngroup = model->param.num_output_group;
+    namespace leveldb {
     }
+    
+      // Check second filter
+  ASSERT_TRUE(reader.KeyMayMatch(3100, 'box'));
+  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'foo'));
+  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'bar'));
+  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'hello'));
+    
+    
+    {}  // namespace leveldb
+    
+    std::string ParsedInternalKey::DebugString() const {
+  char buf[50];
+  snprintf(buf, sizeof(buf), '' @ %llu : %d',
+           (unsigned long long) sequence,
+           int(type));
+  std::string result = ''';
+  result += EscapeString(user_key.ToString());
+  result += buf;
+  return result;
+}
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    
+    {}  // namespace guetzli
+
+    
+      // Make a local copy of the input bit length histogram.
+  int count[kJpegHuffmanMaxBitLength + 1] = { 0 };
+  int total_count = 0;
+  for (len = 1; len <= kJpegHuffmanMaxBitLength; ++len) {
+    count[len] = count_in[len];
+    total_count += count[len];
+  }
+    
+    // Builds jpeg-style Huffman lookup table from the given symbols.
+// The symbols are in order of increasing bit lengths. The number of symbols
+// with bit length n is given in counts[n] for each n >= 1.
+// Returns the size of the lookup table.
+int BuildJpegHuffmanTable(const int* counts, const int* symbols,
+                          HuffmanTableEntry* lut);
+    
+    namespace guetzli {
     }
-    
-      std::string scratch;
-  scratch.resize(kGood.size() + kCorrupted.size() + 16);
-  Slice result;
-  unique_ptr<RandomAccessFile> rand_file;
-  ASSERT_OK(env_->NewRandomAccessFile(kFileName, &rand_file, soptions_));
-  ASSERT_OK(rand_file->Read(0, kGood.size(), &result, &(scratch[0])));
-  ASSERT_EQ(result.compare(kGood), 0);
-    
-      virtual const char* Name() const override;
-    
-    
-    {#ifndef ROCKSDB_LITE  // TtlDb is not supported in Lite
-// Open a TtlDB with a non-associative StringAppendTESTOperator
-std::shared_ptr<DB> OpenTtlDb(char delim_char) {
-  DBWithTTL* db;
-  Options options;
-  options.create_if_missing = true;
-  options.merge_operator.reset(new StringAppendTESTOperator(delim_char));
-  EXPECT_OK(DBWithTTL::Open(options, kDbName, &db, 123456));
-  return std::shared_ptr<DB>(db);
-}
-#endif  // !ROCKSDB_LITE
-}  // namespace
-    
-     private: // Private Functions
-  /// Calls InsertBefore or InsertAfter
-  int Insert(const std::string& key, const std::string& pivot,
-             const std::string& value, bool insert_after);
- private:
-  std::string db_name_;       // The actual database name/path
-  WriteOptions put_option_;
-  ReadOptions get_option_;
-    
-    // Simple test that does single-threaded testing of the ConcurrentTest
-// scaffolding.
-TEST_F(InlineSkipTest, ConcurrentReadWithoutThreads) {
-  ConcurrentTest test;
-  Random rnd(test::RandomSeed());
-  for (int i = 0; i < 10000; i++) {
-    test.ReadStep(&rnd);
-    test.WriteStep(&rnd);
-  }
-}
-    
-    void SyncPoint::Data::LoadDependencyAndMarkers(
-  const std::vector<SyncPointPair>& dependencies,
-  const std::vector<SyncPointPair>& markers) {
-  std::lock_guard<std::mutex> lock(mutex_);
-  successors_.clear();
-  predecessors_.clear();
-  cleared_points_.clear();
-  markers_.clear();
-  marked_thread_id_.clear();
-  for (const auto& dependency : dependencies) {
-    successors_[dependency.predecessor].push_back(dependency.successor);
-    predecessors_[dependency.successor].push_back(dependency.predecessor);
-  }
-  for (const auto& marker : markers) {
-    successors_[marker.predecessor].push_back(marker.successor);
-    predecessors_[marker.successor].push_back(marker.predecessor);
-    markers_[marker.predecessor].push_back(marker.successor);
-  }
-  cv_.notify_all();
-}
-    
-    #include 'port/port.h'
-#include 'util/random.h'
