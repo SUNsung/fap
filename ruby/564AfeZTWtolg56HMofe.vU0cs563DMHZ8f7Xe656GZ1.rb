@@ -1,56 +1,89 @@
 
         
-              def convert_key(key)
-        key.is_a?(Symbol) ? key.to_s : key
-      end
-    end
-  end
-end
-
+            private
+      attr_reader :table
     
-                  # Check if data is actually ready on this IO device.
-              # We have to do this since `readpartial` will actually block
-              # until data is available, which can cause blocking forever
-              # in some cases.
-              results = ::IO.select([io], nil, nil, 1.0)
-              break if !results || results[0].empty?
+      def test_nil_is_not_changed_when_serialized_with_a_class
+    Topic.serialize(:content, Array)
     
-          # This returns the keys (or ids) that are in the string.
+      test 'in memory replacement executes no queries' do
+    bulb = Bulb.create!
+    car = Car.create!(bulbs: [bulb])
+    
+          # Create a full Jekyll configuration with the options passed in as overrides
       #
-      # @return [<Array<String>]
-      def keys
-        regexp = /^#\s*VAGRANT-BEGIN:\s*(.+?)$\r?\n?(.*)$\r?\n?^#\s*VAGRANT-END:\s(\1)$/m
-        @value.scan(regexp).map do |match|
-          match[0]
-        end
+      # options - the configuration overrides
+      #
+      # Returns a full Jekyll configuration
+      def configuration_from_options(options)
+        return options if options.is_a?(Jekyll::Configuration)
+        Jekyll.configuration(options)
       end
     
-      option '--registry', 'NPM_REGISTRY',
-    'The npm registry to use instead of the default.'
+    require 'erb'
     
-        # Combine template and filelist; allow user to edit before proceeding
-    File.open(manifest_fn, 'w') do |manifest|
-      manifest.write metadata_template
-      manifest.write pkg_generate
-    end
-    edit_file(manifest_fn) if attributes[:edit?]
+            # Perform logical validation of CLI options
     
-        it 'should include the dist when specified' do
-      subject.name = 'name'
-      subject.version = '123'
-      subject.architecture = 'all'
-      subject.iteration = '100'
-      subject.epoch = '5'
+            def start(opts)
+          @thread = Thread.new do
+            # Use epoll if the kernel supports it
+            EM.epoll
+            EM.run do
+              EM.error_handler { |e| log_error(e) }
     
-      it 'should list provides matching the gem_package_name_prefix (#585)' do
-    insist { subject.provides }.include?('rubygem19(whatever) = 1.0')
+          def initialize(config)
+        Jekyll::External.require_with_graceful_fail 'kramdown' unless defined?(Kramdown)
+        @config = config['kramdown'].dup || {}
+        @config[:input] = :SmartyPants
+      end
+    
+        # Read the YAML frontmatter.
+    #
+    # base - The String path to the dir containing the file.
+    # name - The String filename of the file.
+    # opts - optional parameter to File.read, default at site configs
+    #
+    # Returns nothing.
+    # rubocop:disable Metrics/AbcSize
+    def read_yaml(base, name, opts = {})
+      filename = File.join(base, name)
+    
+      def std?
+    @settings.include? :std
   end
-end
-
     
-      shared_examples_for :Mutator do |item|
-    context 'when set' do
-      let(:value) { 'whatever' }
-      it 'should return the set value' do
-        expect(subject.send('#{item}=', value)).to(be == value)
+        option_names.any? do |name|
+      if option_defined? 'with-#{name}'
+        include? 'with-#{name}'
+      elsif option_defined? 'without-#{name}'
+        !include? 'without-#{name}'
+      else
+        false
       end
+    end
+  end
+    
+      private
+    
+    class Formula
+  include FormulaCompat
+  extend FormulaCompat
+    
+    Given an Application (app) bundle directory on disk, find all
+login items associated with that app, which you can use in a
+Cask uninstall stanza, eg
+    
+      def eval_file(entry, files, prefix)
+    return false if entry.full_name =~ /PaxHeaders/
+    if !files.nil?
+      if files.is_a?(Array)
+        return false unless files.include?(entry.full_name.gsub(prefix, ''))
+        entry.full_name.split('/').last
+      elsif files.is_a?(String)
+        return false unless entry.full_name =~ Regexp.new(files)
+        entry.full_name.split('/').last
+      end
+    else
+      entry.full_name.gsub(prefix, '')
+    end
+  end
