@@ -1,261 +1,185 @@
 
         
-          const Decl *getDecl() const { return D; }
-    
-      /// \brief The buffer ID where a hashbang line #! is allowed.
-  unsigned HashbangBufferID = 0U;
-    
-    // On Cygwin, std::once_flag can not be used because it is larger than the
-// platform word.
-typedef uintptr_t swift_once_t;
-#else
-    
-    
-    {
-    {} // end namespace index
-} // end namespace swift
-    
-    #endif // SWIFT_INDEX_INDEXDATACONSUMER_H
+        #endif  // TENSORFLOW_DEBUGGER_STATE_IMPL_H_
 
     
-      static ResultPlanPtr computeResultPlan(SILGenFunction &SGF,
-                                         const CalleeTypeInfo &calleeTypeInfo,
-                                         SILLocation loc,
-                                         SGFContext evalContext);
+      static RecordWriterOptions CreateRecordWriterOptions(
+      const string& compression_type);
     
-    #include 'swift/SIL/InstructionUtils.h'
-#include 'swift/SIL/Projection.h'
-#include 'swift/SILOptimizer/Analysis/AliasAnalysis.h'
-#include 'swift/SILOptimizer/Analysis/EscapeAnalysis.h'
-#include 'swift/SILOptimizer/Analysis/TypeExpansionAnalysis.h'
-#include 'swift/SILOptimizer/Analysis/ValueTracking.h'
-#include 'swift/SILOptimizer/Utils/Local.h'
-#include 'llvm/ADT/DenseMap.h'
-#include 'llvm/ADT/DenseSet.h'
-#include 'llvm/ADT/Hashing.h'
-#include 'llvm/ADT/SmallVector.h'
-#include 'llvm/Support/Debug.h'
-#include <utility> 
-    
-    
-    {                return (count & TAG_MASK) - 1;
-#else
-                return ::atomicInc(address, val);
-#endif
-            }
-    
-    #ifndef OPENCV_CUDA_WARP_REDUCE_HPP__
-#define OPENCV_CUDA_WARP_REDUCE_HPP__
-    
-    #include 'runtime_common.hpp'
-    
-    #include '../../precomp.hpp'
-    
-    #if defined(MBEDTLS_SSL_DTLS_ANTI_REPLAY) &&                              \
-    ( !defined(MBEDTLS_SSL_TLS_C) || !defined(MBEDTLS_SSL_PROTO_DTLS) )
-#error 'MBEDTLS_SSL_DTLS_ANTI_REPLAY  defined, but not all prerequisites'
-#endif
-    
-        struct mem_block
-    {
-      mem_block *m_pNext;
-      size_t m_used_count;
-      size_t m_size;
-      char m_data[1];
-    };
-    
-    #endif
-
-    
-    	// Set path to vendored ConEmu config file
-	PathCombine(cfgPath, exeDir, L'vendor\\conemu-maximus5\\ConEmu.xml');
-    
-      /// Construct an acceptor without opening it.
-  /**
-   * This constructor creates an acceptor without opening it to listen for new
-   * connections. The open() function must be called before the acceptor can
-   * accept new socket connections.
-   *
-   * @param io_service The io_service object that the acceptor will use to
-   * dispatch handlers for any asynchronous operations performed on the
-   * acceptor.
-   */
-  explicit basic_socket_acceptor(boost::asio::io_service& io_service)
-    : basic_io_object<SocketAcceptorService>(io_service)
-  {
-  }
-    
-      /// Construct, passing the specified argument to initialise the next layer.
-  template <typename Arg>
-  explicit buffered_read_stream(Arg& a)
-    : next_layer_(a),
-      storage_(default_buffer_size)
-  {
-  }
-    
-    #endif // BOOST_ASIO_DETAIL_ATOMIC_COUNT_HPP
-
-    
-      // The type used for offsets into the buffer.
-  typedef std::size_t size_type;
-    
-    
-    {
-    {} // namespace posix_time
-} // namespace boost
-    
-    #endif // defined(__GNUC__) && defined(__arm__)
-    
-      // Insert a new entry into the map.
-  std::pair<iterator, bool> insert(const value_type& v)
-  {
-    if (size_ + 1 >= num_buckets_)
-      rehash(hash_size(size_ + 1));
-    size_t bucket = calculate_hash_value(v.first) % num_buckets_;
-    iterator it = buckets_[bucket].first;
-    if (it == values_.end())
-    {
-      buckets_[bucket].first = buckets_[bucket].last =
-        values_insert(values_.end(), v);
-      ++size_;
-      return std::pair<iterator, bool>(buckets_[bucket].last, true);
+      Status ReadLocked(string* key, string* value, bool* produced,
+                    bool* at_end) override {
+    Status status = input_buffer_->ReadLine(value);
+    ++line_number_;
+    if (status.ok()) {
+      *key = strings::StrCat(current_work(), ':', line_number_);
+      *produced = true;
+      return status;
     }
-    iterator end_it = buckets_[bucket].last;
-    ++end_it;
-    while (it != end_it)
-    {
-      if (it->first == v.first)
-        return std::pair<iterator, bool>(it, false);
-      ++it;
+    if (errors::IsOutOfRange(status)) {  // End of file, advance to the next.
+      *at_end = true;
+      return Status::OK();
+    } else {  // Some other reading error
+      return status;
     }
-    buckets_[bucket].last = values_insert(end_it, v);
-    ++size_;
-    return std::pair<iterator, bool>(buckets_[bucket].last, true);
   }
     
-    
-    {  bool earliest = queue.enqueue_timer(time, timer, op);
-  io_service_.work_started();
-  if (earliest)
-    interrupter_.interrupt();
+    inline ZlibCompressionOptions ZlibCompressionOptions::GZIP() {
+  ZlibCompressionOptions options = ZlibCompressionOptions();
+  options.window_bits = options.window_bits + 16;
+  return options;
 }
     
-    void dev_poll_reactor::run(bool block, op_queue<operation>& ops)
-{
-  boost::asio::detail::mutex::scoped_lock lock(mutex_);
+    void PrintAccuracyStats(const StreamingAccuracyStats& stats) {
+  if (stats.how_many_ground_truth_words == 0) {
+    LOG(INFO) << 'No ground truth yet, ' << stats.how_many_false_positives
+              << ' false positives';
+  } else {
+    float any_match_percentage =
+        (stats.how_many_ground_truth_matched * 100.0f) /
+        stats.how_many_ground_truth_words;
+    float correct_match_percentage = (stats.how_many_correct_words * 100.0f) /
+                                     stats.how_many_ground_truth_words;
+    float wrong_match_percentage = (stats.how_many_wrong_words * 100.0f) /
+                                   stats.how_many_ground_truth_words;
+    float false_positive_percentage =
+        (stats.how_many_false_positives * 100.0f) /
+        stats.how_many_ground_truth_words;
+    }
     }
     
-    void DebugHUD_InitDefaults( DebugHUD *hud )
-{
-    hud->show_demo_window = true;
-    hud->show_another_window = true;
-    hud->rotation_speed = 15.0f;
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    hud->cubeColor1[0] = 0.4f;
-    hud->cubeColor1[1] = 0.4f;
-    hud->cubeColor1[2] = 1.0f;
-    hud->cubeColor1[3] = 1.0f;
+    // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+extern Status BuildTable(const std::string& dbname,
+                         Env* env,
+                         const Options& options,
+                         TableCache* table_cache,
+                         Iterator* iter,
+                         FileMetaData* meta);
     
-    hud->cubeColor2[0] = 1.0f;
-    hud->cubeColor2[1] = 0.4f;
-    hud->cubeColor2[2] = 0.4f;
-    hud->cubeColor2[3] = 1.0f;
+      // Successful parses
+  static struct {
+    const char* fname;
+    uint64_t number;
+    FileType type;
+  } cases[] = {
+    { '100.log',            100,   kLogFile },
+    { '0.log',              0,     kLogFile },
+    { '0.sst',              0,     kTableFile },
+    { '0.ldb',              0,     kTableFile },
+    { 'CURRENT',            0,     kCurrentFile },
+    { 'LOCK',               0,     kDBLockFile },
+    { 'MANIFEST-2',         2,     kDescriptorFile },
+    { 'MANIFEST-7',         7,     kDescriptorFile },
+    { 'LOG',                0,     kInfoLogFile },
+    { 'LOG.old',            0,     kInfoLogFile },
+    { '18446744073709551615.log', 18446744073709551615ull, kLogFile },
+  };
+  for (int i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
+    std::string f = cases[i].fname;
+    ASSERT_TRUE(ParseFileName(f, &number, &type)) << f;
+    ASSERT_EQ(cases[i].type, type) << f;
+    ASSERT_EQ(cases[i].number, number) << f;
+  }
     
-    hud->clearColor[0] = 0.45f;
-    hud->clearColor[1] = 0.55f;
-    hud->clearColor[2] = 0.60f;
-    hud->clearColor[3] = 1.00f;
-}
+    class VersionEditTest { };
     
-        if (install_callbacks)
-    {
-        s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, ImGui_Marmalade_PointerButtonEventCallback, 0);
-        s3eKeyboardRegister(S3E_KEYBOARD_KEY_EVENT, ImGui_Marmalade_KeyCallback, 0);
-        s3eKeyboardRegister(S3E_KEYBOARD_CHAR_EVENT, ImGui_Marmalade_CharCallback, 0);
-    }
+      void PrintWarnings() {
+#if defined(__GNUC__) && !defined(__OPTIMIZE__)
+    fprintf(stdout,
+            'WARNING: Optimization is disabled: benchmarks unnecessarily slow\n'
+            );
+#endif
+#ifndef NDEBUG
+    fprintf(stdout,
+            'WARNING: Assertions are enabled; benchmarks unnecessarily slow\n');
+#endif
+  }
     
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_ImplGlfwGL2_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_ImplGlfwGL2_CreateDeviceObjects();
+        // Parallel training
+    MPIWrapperPtr m_mpi;
     
-        // Setup time step
-    INT64 current_time;
-    QueryPerformanceCounter((LARGE_INTEGER *)&current_time);
-    io.DeltaTime = (float)(current_time - g_Time) / g_TicksPerSecond;
-    g_Time = current_time;
-    
-    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-bool ImGui_ImplA5_ProcessEvent(ALLEGRO_EVENT *ev)
-{
-    ImGuiIO &io = ImGui::GetIO();
-    }
-    
-    
-    {        if (!cfg.GlyphRanges)
-            cfg.GlyphRanges = atlas->GetGlyphRangesDefault();
-        for (const ImWchar* in_range = cfg.GlyphRanges; in_range[0] && in_range[ 1 ]; in_range += 2, total_ranges_count++) 
-            total_glyphs_count += (in_range[1] - in_range[0]) + 1;
-    }
-    
+            std::vector<size_t> sequenceLengths(numSequences);
+        size_t maxSequenceLength = 0;
+        auto dataType = sequences[0]->GetDataType();
+        auto storageFormat = sequences[0]->GetStorageFormat();
+        NDShape fullyDefinedSampleShape = sampleShape;
+        for (size_t i = 0; i < numSequences; ++i)
         {
-        D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-        desc.Type           = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-        desc.NumDescriptors = NUM_BACK_BUFFERS;
-        desc.Flags          = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-        desc.NodeMask       = 1;
-        if (g_pd3dDevice->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&g_pd3dRtvDescHeap)) != S_OK)
-            return E_FAIL;
+            auto currentSequenceData = sequences[i];
+            if (currentSequenceData->GetDataType() != dataType)
+                InvalidArgument('Value::Create: The data for all sequences/samples must have the same data type');
     }
     
-    int main(int, char**)
-{
-    // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
-    RegisterClassEx(&wc);
-    HWND hwnd = CreateWindow(_T('ImGui Example'), _T('ImGui DirectX9 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
-    }
+    // ===========================================================================
+// ssematrixbase -- matrix with SSE-based parallel arithmetic but no memory management
+// This can be passed around for computation, but not instantiated directly.
+// ===========================================================================
     
-    int main(int, char**)
-{
-    // Setup window
-    glfwSetErrorCallback(glfw_error_callback);
-    if (!glfwInit())
-        return 1;
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#if __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        ComputationNetworkPtr net = make_shared<ComputationNetwork>(deviceID);
+    net->Load<ElemType>(modelPath);
+    
+    
+    {
+    {
+    {}}} // end namespaces
+
+    
+        bool haslattice(std::wstring key) const
+    {
+#ifdef NONUMLATTICEMMI
+        return denlattices.haslattice(key);
+#else
+        return numlattices.haslattice(key) && denlattices.haslattice(key);
 #endif
-    GLFWwindow* window = glfwCreateWindow(1280, 720, 'ImGui GLFW+OpenGL3 example', NULL, NULL);
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
-    gl3wInit();
     }
     
     
-    {        memcpy(&g_ClearValue.color.float32[0], &clear_color, 4 * sizeof(float));
-        frame_begin();
-        ImGui_ImplGlfwVulkan_Render(g_CommandBuffer[g_FrameIndex]);
-        frame_end();
-        frame_present();
+    {
+    {
+    {      --(*argc);
+      --i;
+    } else if (IsFlag(argv[i], 'help')) {
+      PrintUsageAndExit();
     }
+  }
+  for (auto const* flag :
+       {&FLAGS_benchmark_format, &FLAGS_benchmark_out_format})
+    if (*flag != 'console' && *flag != 'json' && *flag != 'csv') {
+      PrintUsageAndExit();
+    }
+  if (FLAGS_benchmark_color.empty()) {
+    PrintUsageAndExit();
+  }
+}
     
-                // Simple selection popup
-            // (If you want to show the current selection inside the Button itself, you may want to build a string using the '###' operator to preserve a constant ID with a variable label)
-            if (ImGui::Button('Select..'))
-                ImGui::OpenPopup('select');
-            ImGui::SameLine();
-            ImGui::TextUnformatted(selected_fish == -1 ? '<None>' : names[selected_fish]);
-            if (ImGui::BeginPopup('select'))
-            {
-                ImGui::Text('Aquarium');
-                ImGui::Separator();
-                for (int i = 0; i < IM_ARRAYSIZE(names); i++)
-                    if (ImGui::Selectable(names[i]))
-                        selected_fish = i;
-                ImGui::EndPopup();
-            }
+    #endif  // CHECK_H_
+
+    
+      // Is the parsed value in the range of an Int32?
+  const int32_t result = static_cast<int32_t>(long_value);
+  if (long_value == std::numeric_limits<long>::max() ||
+      long_value == std::numeric_limits<long>::min() ||
+      // The parsed value overflows as a long.  (strtol() returns
+      // LONG_MAX or LONG_MIN when the input overflows.)
+      result != long_value
+      // The parsed value overflows as an Int32.
+      ) {
+    std::cerr << src_text << ' is expected to be a 32-bit integer, '
+              << 'but actually has value \'' << str << '\', '
+              << 'which overflows.\n';
+    return false;
+  }
+    
+    #ifdef BENCHMARK_OS_WINDOWS
+#include <Windows.h>
+#endif
