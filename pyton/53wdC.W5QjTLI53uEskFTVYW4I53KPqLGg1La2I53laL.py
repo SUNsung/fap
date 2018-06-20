@@ -1,117 +1,121 @@
 
         
-            from inspect import getargspec
-    from cStringIO import StringIO
+        
+@keras_test
+def test_nested_model_trainability():
+    # a Sequential inside a Model
+    inner_model = Sequential()
+    inner_model.add(Dense(2, input_dim=1))
     
-                app.config['IMAGE_STORE_TYPE'] = 'fs'
-            app.config['IMAGE_STORE_PATH'] = '/var/app/images'
-            app.config['IMAGE_STORE_BASE_URL'] = 'http://img.website.com'
-            image_store_config = app.config.get_namespace('IMAGE_STORE_')
-    
-        if not changed:
-        fail('Could not find %s in %s', pattern, filename)
-    
-        import site_package
-    assert site_package.app.instance_path == \
-        modules_tmpdir.join('var').join('site_package-instance')
-    
-    
-def test_logger(app):
-    assert app.logger.name == 'flask.app'
-    assert app.logger.level == logging.NOTSET
-    assert app.logger.handlers == [default_handler]
-    
-        with app.test_client() as c:
-        rv = c.get('/')
-        assert rv.headers['Location'] == 'http://localhost/test'
-        rv = c.get('/test')
-        assert rv.data == b'42'
-
-    
-        @app.route('/')
-    def index():
-        1 // 0
-    
-        rv = client.get('/')
-    assert rv.data == b'dcba'
-    
-    
-@pytest.mark.functional
-def test_select_command_with_arrows(proc, TIMEOUT):
-    select_command_with_arrows(proc, TIMEOUT)
-    
-    num_classes = 10
-batch_size = 128
-epochs = 15
-weighted_class = 5
-high_weight = 10
-train_samples = 5000
-test_samples = 1000
-timesteps = 3
-input_dim = 10
-loss = 'mse'
-loss_full_name = 'mean_squared_error'
-standard_weight = 1
-standard_score_sequential = 0.5
-    
-        old_layer = keras.layers.Deconvolution2D(5, nb_row=3, nb_col=3, output_shape=(6, 7, 5), name='deconv')
-    new_layer = keras.layers.Conv2DTranspose(5, (3, 3), name='deconv')
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
-    
-        # Create model
-    model = Model(inputs, x, name='inception_resnet_v2')
-    
-        if input_tensor is None:
-        img_input = Input(shape=input_shape)
+        if K.backend() == 'tensorflow' or K.backend() == 'cntk':
+        inputs = Input(shape=(10, 20, 20, 1))
     else:
-        if not K.is_keras_tensor(input_tensor):
-            img_input = Input(tensor=input_tensor, shape=input_shape)
-        else:
-            img_input = input_tensor
-    # Block 1
-    x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block1_conv1')(img_input)
-    x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block1_conv2')(x)
-    x = MaxPooling2D((2, 2), strides=(2, 2), name='block1_pool')(x)
+        inputs = Input(shape=(10, 1, 20, 20))
+    td_conv = TimeDistributed(Conv2D(15, (5, 5)))(inputs)
+    bi_convlstm2d = Bidirectional(ConvLSTM2D(10, (3, 3)), merge_mode='concat')(td_conv)
+    model = Model(inputs=inputs, outputs=bi_convlstm2d)
     
-        ```python
-        model = Sequential()
-        model.add(Conv2D(64, 3, 3,
-                         border_mode='same',
-                         input_shape=(3, 32, 32)))
-        # now: model.output_shape == (None, 64, 32, 32)
+        # Arguments
+        x: Input array, 3D or 4D.
+        data_format: Data format of the image array.
+        mode: One of 'caffe', 'tf' or 'torch'.
+            - caffe: will convert the images from RGB to BGR,
+                then will zero-center each color channel with
+                respect to the ImageNet dataset,
+                without scaling.
+            - tf: will scale pixels between -1 and 1,
+                sample-wise.
+            - torch: will scale pixels between 0 and 1 and then
+                will normalize each channel with respect to the
+                ImageNet dataset.
     
-        output_val = M.predict(x_val)
+    model = Sequential()
+model.add(Embedding(max_features, embedding_size, input_length=maxlen))
+model.add(Dropout(0.25))
+model.add(Conv1D(filters,
+                 kernel_size,
+                 padding='valid',
+                 activation='relu',
+                 strides=1))
+model.add(MaxPooling1D(pool_size=pool_size))
+model.add(LSTM(lstm_output_size))
+model.add(Dense(1))
+model.add(Activation('sigmoid'))
     
     
 @keras_test
-def test_saving_recurrent_layer_with_init_state():
-    vector_size = 8
-    input_length = 20
+def test_unit_norm():
+    unit_norm_instance = constraints.unit_norm()
+    normalized = unit_norm_instance(K.variable(get_example_array()))
+    norm_of_normalized = np.sqrt(np.sum(K.eval(normalized) ** 2, axis=0))
+    # In the unit norm constraint, it should be equal to 1.
+    difference = norm_of_normalized - 1.
+    largest_difference = np.max(np.abs(difference))
+    assert(np.abs(largest_difference) < 10e-5)
     
-        outputs1 = Lambda(lambda x: utils.preprocess_input(x, 'channels_last'),
-                      output_shape=x.shape)(inputs)
-    model1 = Model(inputs, outputs1)
-    out1 = model1.predict(x[np.newaxis])[0]
-    x2 = np.transpose(x, (2, 0, 1))
-    inputs2 = Input(shape=x2.shape)
-    outputs2 = Lambda(lambda x: utils.preprocess_input(x, 'channels_first'),
-                      output_shape=x2.shape)(inputs2)
-    model2 = Model(inputs2, outputs2)
-    out2 = model2.predict(x2[np.newaxis])[0]
-    assert_allclose(out1, out2.transpose(1, 2, 0))
+        In this task, there are variable length inputs of integers from 1-9, and a random
+    subset of unmasked outputs. Each of these outputs has a 50% probability of being
+    the input number unchanged, and a 50% probability of being 2*input%10.
     
-        reconstruction_loss *= original_dim
-    kl_loss = 1 + z_log_var - K.square(z_mean) - K.exp(z_log_var)
-    kl_loss = K.sum(kl_loss, axis=-1)
-    kl_loss *= -0.5
-    vae_loss = K.mean(reconstruction_loss + kl_loss)
-    vae.add_loss(vae_loss)
-    vae.compile(optimizer='adam')
-    vae.summary()
-    plot_model(vae,
-               to_file='vae_mlp.png',
-               show_shapes=True)
+                for t in range(n_frames):
+                x_shift = xstart + directionx * t
+                y_shift = ystart + directiony * t
+                noisy_movies[i, t, x_shift - w: x_shift + w,
+                             y_shift - w: y_shift + w, 0] += 1
     
-        def test_timeout(self):
-        self.assertTrue(self.timeout.timeout)
-        self.assertFalse(self.invalid.timeout)
+    print('Pad sequences (samples x time)')
+x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
+x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
+    
+        def start_requests(self):
+        qargs = {'total': self.total, 'show': self.show}
+        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
+        return [scrapy.Request(url, dont_filter=True)]
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-l', '--list', dest='list', action='store_true',
+            help='List available templates')
+        parser.add_option('-e', '--edit', dest='edit', action='store_true',
+            help='Edit spider after creating it')
+        parser.add_option('-d', '--dump', dest='dump', metavar='TEMPLATE',
+            help='Dump template to standard output')
+        parser.add_option('-t', '--template', dest='template', default='basic',
+            help='Uses a custom template.')
+        parser.add_option('--force', dest='force', action='store_true',
+            help='If the spider already exists, overwrite it with the template')
+    
+                    # execute pre and post hooks in order
+                for contract in reversed(contracts):
+                    request = contract.add_pre_hook(request, results)
+                for contract in contracts:
+                    request = contract.add_post_hook(request, results)
+    
+    # If true, '()' will be appended to :func: etc. cross-reference text.
+#add_function_parentheses = True
+    
+        # Implement all methods from IAuthenticator, remembering to add
+    # 'self' as first argument, e.g. def prepare(self)...
+    
+        # Execute the template string in a temporary namespace and
+    # support tracing utilities by setting a value for frame.f_globals['__name__']
+    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
+                     _property=property, _tuple=tuple)
+    try:
+        exec(template, namespace)
+    except SyntaxError:
+        e = _sys.exc_info()[1]
+        raise SyntaxError(e.message + ':\n' + template)
+    result = namespace[typename]
+    
+      if config_entry is None:
+    return []
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
