@@ -1,86 +1,150 @@
 
         
-            # Override of method_missing to check in @data for the key.
-    def method_missing(method, *args, &blck)
-      if docs.respond_to?(method.to_sym)
-        Jekyll.logger.warn 'Deprecation:',
-                           '#{label}.#{method} should be changed to #{label}.docs.#{method}.'
-        Jekyll.logger.warn '', 'Called by #{caller(0..0)}.'
-        docs.public_send(method.to_sym, *args, &blck)
-      else
-        super
+              prune = ARGV.value 'prune'
+    
+          # Find commands in the path
+      unless (exts = external_commands).empty?
+        puts
+        puts 'External commands'
+        puts_columns exts
+      end
+    end
+  end
+    
+      def clang_build
+    @clang_build ||= MacOS.clang_build_version if MacOS.has_apple_developer_tools?
+  end
+    
+            $stderr.puts
+        opoo out
+        Homebrew.failed = true
+        first_warning = false
       end
     end
     
-            msg = ' Please append `--trace` to the `#{cmd.name}` command '
-        dashes = '-' * msg.length
-        Jekyll.logger.error '', dashes
-        Jekyll.logger.error 'Jekyll #{Jekyll::VERSION} ', msg
-        Jekyll.logger.error '', ' for any additional information or backtrace. '
-        Jekyll.logger.abort_with '', dashes
-      end
-      # rubocop: enable RescueException
+      def self.path(name)
+    Formulary.core_path(name)
+  end
+    
+    # This formula serves as the base class for several very similar
+# formulae for Amazon Web Services related tools.
+class AmazonWebServicesFormula < Formula
+  # Use this method to peform a standard install for Java-based tools,
+  # keeping the .jars out of HOMEBREW_PREFIX/lib
+  def install
+    rm Dir['bin/*.cmd'] # Remove Windows versions
+    libexec.install Dir['*']
+    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
+  end
+  alias_method :standard_install, :install
+    
+      def test_compile_insn_adjuststack
+    assert_compile_once('#{<<~'begin;'}\n#{<<~'end;'}', result_inspect: 'true', insns: %i[adjuststack])
+    begin;
+      x = [true]
+      x[0] ||= nil
+      x[0]
+    end;
+  end
+    
+      def test_duplicated_rest_post
+    assert_syntax_error('def foo(*a, a) end', /duplicated argument name/)
+    assert_valid_syntax('def foo(*_, _) end')
+    (obj = Object.new).instance_eval('def foo(*_, x, _) x end')
+    assert_equal(2, obj.foo(1, 2, 3))
+    assert_equal(2, obj.foo(2, 3))
+    (obj = Object.new).instance_eval('def foo(*_, _, x) x end')
+    assert_equal(3, obj.foo(1, 2, 3))
+    assert_equal(3, obj.foo(2, 3))
+  end
+    
+      def test_gets_para_extended_file
+    [nil, {:textmode=>true}, {:binmode=>true}].each do |mode|
+      Tempfile.create('test-extended-file', mode) {|f|
+        assert_nil(f.getc)
+        f.print '\na'
+        f.rewind
+        assert_equal('a', f.gets(''), 'mode = <#{mode}>')
+      }
+    end
+  end
+    
+        def setup
+      @cls = SubHash
+      super
     end
   end
 end
 
     
-            def html?
-          @response['Content-Type'] =~ %r!text/html!
+        def replace_vars(less)
+      less = less.dup
+      # skip header comment
+      less =~ %r(\A/\*(.*?)\*/)m
+      from           = $~ ? $~.to_s.length : 0
+      less[from..-1] = less[from..-1].
+          gsub(/(?!@mixin|@media|@page|@keyframes|@font-face|@-\w)@/, '$').
+          # variables that would be ignored by gsub above: e.g. @page-header-border-color
+          gsub(/@(page[\w-]+)/, '$\1')
+      less
+    end
+    
+        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
+      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
+    end
+    
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
+    
+    desc 'Convert bootstrap to bootstrap-sass'
+task :convert, :branch do |t, args|
+  require './tasks/converter'
+  Converter.new(branch: args[:branch]).process_bootstrap
+end
+    
+          private
+    
+    if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
+  ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
+  require 'rubygems'
+  require 'bundler/setup'
+  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+elsif ENV['COCOAPODS_NO_BUNDLER']
+  require 'rubygems'
+  gem 'cocoapods'
+end
+    
+            self.description = <<-DESC
+          Shows the content of the pods cache as a YAML tree output, organized by pod.
+          If `NAME` is given, only the caches for that pod will be included in the output.
+        DESC
+    
+    #{stack}
+#{executable_path}
+### Plugins
+    
+          def validate!
+        super
+        raise Informative, 'Existing Podfile found in directory' unless config.podfile_path_in_dir(Pathname.pwd).nil?
+        if @project_path
+          help! 'Xcode project at #{@project_path} does not exist' unless File.exist? @project_path
+          project_path = @project_path
+        else
+          raise Informative, 'No Xcode project found, please specify one' unless @project_paths.length > 0
+          raise Informative, 'Multiple Xcode projects found, please specify one' unless @project_paths.length == 1
+          project_path = @project_paths.first
         end
+        @xcode_project = Xcodeproj::Project.open(project_path)
       end
     
-          def matches(ext)
-        extname_list.include?(ext.downcase)
-      end
+            #----------------------------------------#
     
-        # Read the YAML frontmatter.
-    #
-    # base - The String path to the dir containing the file.
-    # name - The String filename of the file.
-    # opts - optional parameter to File.read, default at site configs
-    #
-    # Returns nothing.
-    # rubocop:disable Metrics/AbcSize
-    def read_yaml(base, name, opts = {})
-      filename = File.join(base, name)
-    
-            expect(result).to eq('hg parent --template '{node|short}'')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template '{node|short}'')
-      end
-    
-        if successfully_sent?(resource)
-      respond_with({}, location: after_sending_unlock_instructions_path_for(resource))
-    else
-      respond_with(resource)
+        it 'Returns nil when Referer header is invalid' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
+      expect(subject.referrer(env)).to be_nil
     end
   end
-    
-            # This returns all synced folder implementations.
-        #
-        # @return [Registry]
-        def synced_folders
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.synced_folders)
-            end
-          end
-        end
-    
-                  # An IO::WaitReadable means there may be more IO but this
-              # IO object is not ready to be read from yet. No problem,
-              # we read as much as we can, so we break.
-              breakable = true
-            elsif e.is_a?(Errno::EAGAIN)
-              # Otherwise, we just look for the EAGAIN error which should be
-              # all that IO::WaitReadable does in Ruby 1.9.
-              breakable = true
-            end
-    
-            # If we're just checking, then just return exit codes
-        if options[:check]
-          return 0 if cap_host.capability?(name)
-          return 1
-        end
-    
-          ::Sass.load_paths << stylesheets_path
+end
