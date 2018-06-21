@@ -1,128 +1,112 @@
 
         
-        def bottle_resolve_formula_names(bottle_file)
-  receipt_file_path = bottle_receipt_path bottle_file
-  receipt_file = Utils.popen_read('tar', '-xOzf', bottle_file, receipt_file_path)
-  name = receipt_file_path.split('/').first
-  tap = Tab.from_file_content(receipt_file, '#{bottle_file}/#{receipt_file_path}').tap
+              # Run ::process method in a given set of Jekyll::Command subclasses and suggest
+      # re-running the associated command with --trace switch to obtain any additional
+      # information or backtrace regarding the encountered Exception.
+      #
+      # cmd     - the Jekyll::Command to be handled
+      # options - configuration overrides
+      # klass   - an array of Jekyll::Command subclasses associated with the command
+      #
+      # Note that all exceptions are rescued..
+      # rubocop: disable RescueException
+      def process_with_graceful_fail(cmd, options, *klass)
+        klass.each { |k| k.process(options) if k.respond_to?(:process) }
+      rescue Exception => e
+        raise e if cmd.trace
     
-          if f.plist_manual
-        s << 'Or, if you don't want/need launchctl, you can just run:'
-        s << '  #{f.plist_manual}'
+            def fsnotify_buggy?(_site)
+          return true unless Utils::Platforms.osx?
+          if Dir.pwd != `pwd`.strip
+            Jekyll.logger.error '  ' + <<-STR.strip.gsub(%r!\n\s+!, '\n  ')
+              We have detected that there might be trouble using fsevent on your
+              operating system, you can read https://github.com/thibaudgg/rb-fsevent/wiki/no-fsevents-fired-(OSX-bug)
+              for possible work arounds or you can work around it immediately
+              with `--force-polling`.
+            STR
+    
+            private
+    
+          # Generate a Hash for use in generating JSON.
+      # This is useful if fields need to be cleared before the JSON can generate.
+      #
+      # Returns a Hash ready for JSON generation.
+      def hash_for_json(*)
+        to_h
       end
     
-      def observe_file_removal(path)
-    path.extend(ObserverPathnameExtension).unlink if path.exist?
-  end
+      describe '.all' do
+    it 'uses the client to fetch all keys' do
+      mock_client_response(:list_keys, with: no_args) do
+        [
+          {
+            canDownload: false,
+            canRevoke: true,
+            keyId: 'some-key-id',
+            keyName: 'Test Key via fastlane',
+            servicesCount: 2
+          },
+          {
+            canDownload: true,
+            canRevoke: true,
+            keyId: 'B92NE4F7RG',
+            keyName: 'Test Key via browser',
+            servicesCount: 2
+          }
+        ]
+      end
     
-      def dump_verbose_config(f = $stdout)
-    f.puts 'HOMEBREW_VERSION: #{HOMEBREW_VERSION}'
-    f.puts 'ORIGIN: #{origin}'
-    f.puts 'HEAD: #{head}'
-    f.puts 'Last commit: #{last_commit}'
-    if CoreTap.instance.installed?
-      f.puts 'Core tap ORIGIN: #{core_tap_origin}'
-      f.puts 'Core tap HEAD: #{core_tap_head}'
-      f.puts 'Core tap last commit: #{core_tap_last_commit}'
-    else
-      f.puts 'Core tap: N/A'
+            self.tasks
+      end
     end
-    f.puts 'HOMEBREW_PREFIX: #{HOMEBREW_PREFIX}'
-    f.puts 'HOMEBREW_REPOSITORY: #{HOMEBREW_REPOSITORY}'
-    f.puts 'HOMEBREW_CELLAR: #{HOMEBREW_CELLAR}'
-    f.puts 'HOMEBREW_BOTTLE_DOMAIN: #{BottleSpecification::DEFAULT_DOMAIN}'
-    f.puts hardware
-    f.puts 'OS X: #{MacOS.full_version}-#{kernel}'
-    f.puts 'Xcode: #{xcode ? xcode : 'N/A'}'
-    f.puts 'CLT: #{clt ? clt : 'N/A'}'
-    f.puts 'GCC-4.0: build #{gcc_40}' if gcc_40
-    f.puts 'GCC-4.2: build #{gcc_42}' if gcc_42
-    f.puts 'LLVM-GCC: build #{llvm}'  if llvm
-    f.puts 'Clang: #{clang ? '#{clang} build #{clang_build}' : 'N/A'}'
-    f.puts 'MacPorts/Fink: #{macports_or_fink}' if macports_or_fink
-    f.puts 'X11: #{describe_x11}'
-    f.puts 'System Ruby: #{describe_system_ruby}'
-    f.puts 'Perl: #{describe_perl}'
-    f.puts 'Python: #{describe_python}'
-    f.puts 'Ruby: #{describe_ruby}'
-    f.puts 'Java: #{describe_java}'
   end
 end
 
     
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
-  end
-  alias_method :standard_install, :install
-    
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
-    
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
+        def shared_mixins
+      @shared_mixins ||= begin
+        log_status '  Reading shared mixins from mixins.less'
+        CLASSES_TO_MIXINS + read_mixins(read_files('less', bootstrap_less_files.grep(/mixins\//)).values.join('\n'),
+                                        nested: NESTED_MIXINS)
       end
     end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
+    
+      def test_font_helper_without_suffix
+    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
   end
-  output += '></#{tag}>'
+    
+      desc 'update main and version in bower.json'
+  task :generate do
+    require 'bootstrap-sass'
+    Dir.chdir Bootstrap.gem_path do
+      spec       = JSON.parse(File.read 'bower.json')
+    
+            def address_params
+          params.require(:address).permit(permitted_address_attributes)
+        end
+    
+      private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_book
+      @book = Book.find(params[:id])
+    end
+    
+              [optarg_positions, arg_positions]
+        end
+      end
+    end
+  end
 end
-    
-        def get_web_content(url)
-      raw_uri           = URI.parse url
-      proxy             = ENV['http_proxy']
-      if proxy
-        proxy_uri       = URI.parse(proxy)
-        https           = Net::HTTP::Proxy(proxy_uri.host, proxy_uri.port).new raw_uri.host, raw_uri.port
-      else
-        https           = Net::HTTP.new raw_uri.host, raw_uri.port
-      end
-      https.use_ssl     = true
-      https.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      request           = Net::HTTP::Get.new raw_uri.request_uri
-      data              = https.request request
-    end
-  end
-    
-    Liquid::Template.register_tag('img', Jekyll::ImageTag)
 
     
-    module Jekyll
+      def default_metadata
+    @factory.build(:default_metadata).all
+  end
     
-            def on_send(node)
-          return unless match_call?(node) &&
-                        (!node.value_used? || only_truthiness_matters?(node)) &&
-                        !(node.parent && node.parent.block_type?)
+        r0
+  end
     
-    RSpec.describe RuboCop::Cop::Style::StringMethods, :config do
-  subject(:cop) { described_class.new(config) }
+        alias_method :load_debug, :load
+    
+        files.each do |file|
+      download = file_fetch(file['url'], file['sha1'],target)
