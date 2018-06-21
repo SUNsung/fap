@@ -1,42 +1,49 @@
 
         
-          def merge(*args)
-    @settings.merge(*args)
-    self
+          def self.fragment_cache
+    @cache ||= DistributedCache.new('am_serializer_fragment_cache')
   end
     
-      def elisp_caveats
-    return if f.keg_only?
-    if keg && keg.elisp_installed?
-      <<-EOS.undent
-        Emacs Lisp files have been installed to:
-          #{HOMEBREW_PREFIX}/share/emacs/site-lisp/#{f.name}
-      EOS
+    def grammar(f, out)
+  while line = f.gets
+    case line
+    when %r</\*% *ripper(?:\[(.*?)\])?: *(.*?) *%\*/>
+      out << DSL.new($2, ($1 || '').split(',')).generate << $/
+    when %r</\*%%%\*/>
+      out << '#if 0' << $/
+    when %r</\*%>
+      out << '#endif' << $/
+    when %r<%\*/>
+      out << $/
+    when /\A%%/
+      out << '%%' << $/
+      return
+    else
+      out << line
+    end
+  end
+end
+    
+      it 'uses '-e' as file' do
+    ruby_exe('puts __FILE__', escape: false).chomp.should == '-e'
+  end
+    
+      it 'wraps and unwraps data' do
+    a = @s.typed_wrap_struct(1024)
+    @s.typed_get_struct(a).should == 1024
+  end
+    
+            @@setup = true
+      end
     end
   end
     
-      def external_commands
-    paths.reduce([]) do |cmds, path|
-      Dir['#{path}/brew-*'].each do |file|
-        next unless File.executable?(file)
-        cmd = File.basename(file, '.rb')[5..-1]
-        cmds << cmd unless cmd.include?('.')
-      end
-      cmds
-    end.sort
+      it 'decodes the remaining doubles when passed the '*' modifier after another directive' do
+    array = '333333\x15@ffffff\x22@'.unpack(unpack_format()+unpack_format('*'))
+    array.should == [5.3, 9.2]
   end
     
-      def python(_options = {}, &block)
-    opoo 'Formula#python is deprecated and will go away shortly.'
-    block.call if block_given?
-    PythonRequirement.new
+      it 'decodes past NULL bytes when passed the '*' modifier' do
+    'a\x00b c'.unpack(unpack_format('*')).should == ['a\x00b c']
   end
-  alias_method :python2, :python
-  alias_method :python3, :python
 end
-
-    
-      mkdir_p tasks_dir
-    
-          describe 'fetching all servers' do
-        subject { dsl.roles(:all) }
