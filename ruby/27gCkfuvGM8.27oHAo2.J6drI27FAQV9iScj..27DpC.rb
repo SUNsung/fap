@@ -1,89 +1,44 @@
 
         
-              {
-          author: last_git_commit_formatted_with('%an'),
-          message: last_git_commit_formatted_with('%B'),
-          commit_hash: last_git_commit_formatted_with('%H'),
-          abbreviated_commit_hash: last_git_commit_formatted_with('%h')
-      }
-    end
-    
-        context 'mixed' do
-      let(:keywords) { 'One,Two, Three, Four Token,Or\nNewlines\r\nEverywhere' }
-    
-        gem_dependency_check { defined?(EvernoteOAuth) && Devise.omniauth_providers.include?(:evernote) }
-  end
-    
-          if respond_to?(:stop)
-        stop
-      else
-        terminate_thread!
-      end
-    end
-    
-        respond_to do |format|
-      format.html { redirect_to jobs_path, notice: 'Failed jobs removed.' }
-      format.json { head :no_content }
-    end
-  end
-    
-          respond_to do |format|
-        if new_credentials.map(&:save).all?
-          format.html { redirect_to user_credentials_path, notice: 'The file was successfully uploaded.'}
-        else
-          format.html { redirect_to user_credentials_path, notice: 'One or more of the uploaded credentials was not imported due to an error. Perhaps an existing credential had the same name?'}
+                    raise SystemExit unless process.success?
+          end
         end
       end
-    else
-      redirect_to user_credentials_path, notice: 'No file was chosen to be uploaded.' 
     end
-  end
-    
-        occlusion = (ntheta.to_f * nphi.to_f - occlusion) / (ntheta.to_f * nphi.to_f)
-    
-      until to_boolean(IS_EMPTY[proc])
-    array.push(FIRST[proc])
-    proc = REST[proc]
-  end
-    
-          Find.prune if @f.skip_clean? path
-    
-      def inspect
-    '#<#{self.class.name}: #{strip.inspect} #{url.inspect}>'
   end
 end
+
     
-            message = 'You have external commands with conflicting names.\n'
-        cmd_map.each do |cmd_name, cmd_paths|
-          message += inject_file_list cmd_paths, <<~EOS
-            Found command `#{cmd_name}` in following places:
-          EOS
-        end
+          # Run a certain action
+      def trigger(task: nil, flags: nil, serial: nil, print_command: true, print_command_output: true)
+        android_serial = (serial != '') ? 'ANDROID_SERIAL=#{serial}' : nil
+        command = [android_serial, escaped_gradle_path, task, flags].compact.join(' ')
+        Action.sh(command, print_command: print_command, print_command_output: print_command_output)
+      end
     
-        expect(subject.check_user_path_1).to be nil
-    expect(subject.check_user_path_2)
-      .to match('Homebrew's bin was not found in your PATH.')
+            expect(result).to eq('hg parent --template '{node|short}'')
+        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template '{node|short}'')
+      end
+    
+      def validate_email_options
+    errors.add(:base, 'subject and expected_receive_period_in_days are required') unless options['subject'].present? && options['expected_receive_period_in_days'].present?
+    
+          _form_configurable_fields[name] = options
+    end
+    
+      def tumblr_consumer_secret
+    ENV['TUMBLR_OAUTH_SECRET']
   end
     
-      # Uninstalls this logger from \{Sass.logger\}. This should only be called if
-  # the logger was installed using \{#install!}
-  def uninstall!
-    if Sass.logger != self
-      throw Exception.new('Can't uninstall a logger that's not currently installed.')
-    end
+      def new
+    @user_credential = current_user.user_credentials.build
     
-            def on_case(case_node)
-          case_node.when_branches.each_with_object([]) do |when_node, previous|
-            when_node.each_condition do |condition|
-              next unless repeated_condition?(previous, condition)
-    
-      def _nt_regexp_operator
-    start_index = index
-    if node_cache[:regexp_operator].has_key?(index)
-      cached = node_cache[:regexp_operator][index]
-      if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
-        @index = cached.interval.end
+          origin = caller[1]
+      if origin =~ /rubygems\/custom_require/
+        origin = caller[3]
+        if origin.nil?
+          STDERR.puts 'Unknown origin'
+          STDERR.puts caller.join('\n')
+        end
       end
-      return cached
-    end
+      origin = origin.gsub(/:[0-9]+:in .*/, '') if origin
