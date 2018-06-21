@@ -1,152 +1,161 @@
 
         
-          def fixopt(f)
-    path = if f.linked_keg.directory? && f.linked_keg.symlink?
-      f.linked_keg.resolved_path
-    elsif f.prefix.directory?
-      f.prefix
-    elsif (kids = f.rack.children).size == 1 && kids.first.directory?
-      kids.first
-    else
-      raise
+            def parse_symbol_spec(spec, tags)
+      case spec
+      when :clt
+        odisabled ''depends_on :clt''
+      when :tex
+        odisabled ''depends_on :tex''
+      when :libltdl
+        output_disabled(spec, 'libtool')
+      when :apr
+        output_disabled(spec, 'apr-util')
+      when :fortran
+        output_disabled(spec, 'gcc')
+      when :gpg
+        output_disabled(spec, 'gnupg')
+      when :hg
+        output_disabled(spec, 'mercurial')
+      when :mpi
+        output_disabled(spec, 'open-mpi')
+      when :python, :python2
+        output_disabled(spec, 'python@2')
+      when :python3
+        output_disabled(spec, 'python')
+      when :ant, :autoconf, :automake, :bsdmake, :cairo, :emacs, :expat,
+           :fontconfig, :freetype, :libtool, :libpng, :mysql, :perl, :pixman,
+           :postgresql, :rbenv, :ruby
+        output_disabled(spec)
+      else
+        super
+      end
     end
-    Keg.new(path).optlink
-  rescue StandardError
-    raise '#{f.opt_prefix} not present or broken\nPlease reinstall #{f.full_name}. Sorry :('
+    
+      def resource(name, klass = Resource, &block)
+    if block_given?
+      raise DuplicateResourceError, name if resource_defined?(name)
+      res = klass.new(name, &block)
+      resources[name] = res
+      dependency_collector.add(res)
+    else
+      resources.fetch(name) { raise ResourceMissingError.new(owner, name) }
+    end
+  end
+    
+    Bundler.require(
+    *Rails.groups(
+        coverage: [:test],
+        db: all_environments,
+        pcap: all_environments
+    )
+)
+    
+        if extension_pathname.readable?
+      ENV['BUNDLE_GEMFILE'] = extension_pathname.to_path
+      break
+    end
   end
 end
     
-        if !updated
-      puts 'Already up-to-date.'
-    elsif hub.empty?
-      puts 'No changes to formulae.'
-    else
-      hub.dump
-      hub.reporters.each(&:migrate_tap_migration)
-      hub.reporters.each(&:migrate_formula_rename)
-      Descriptions.update_cache(hub)
-    end
     
-            # Registers a SIGINT handler. This typically is called from {busy}.
-        # Callbacks are only registered once, so calling this multiple times
-        # with the same callback has no consequence.
-        def register(sig_callback)
-          @@mutex.synchronize do
-            registered << sig_callback
-            registered.uniq!
+    {	if ln =~ /;(read|write)_(handle|filename)=/
+		parts = ln.split(' ')
+		if (parts[0] == 'mov')
+			parts2 = parts[2].split('=')
+			label = parts2[0]
+			label.slice!(0,1)
+			old = parts2[1]
+			new = addrs[label]
+			#puts '%32s: %s -> %x' % [label, old, new]
+			replaces << [label, old, new.to_s(16)]
+		end
+	end
+}
     
-            while true
-          begin
-            if Platform.windows?
-              # Windows doesn't support non-blocking reads on
-              # file descriptors or pipes so we have to get
-              # a bit more creative.
+    require 'rex/post/meterpreter'
     
-          def initialize(string)
-        @value = string
-      end
+    #certCN cannot contain commas
+certCN 		= 'Metasploit Inc.'
+#keytoolOpts 	= '-genkey -alias signFiles -keystore msfkeystore ' +
+#		  '-storepass msfstorepass -dname \'cn=#{certCN}\' ' +
+#		  '-keypass msfkeypass'
     
-    module VagrantPlugins
-  module CommandBox
-    module Command
-      class Repackage < Vagrant.plugin('2', :command)
-        def execute
-          opts = OptionParser.new do |o|
-            o.banner = 'Usage: vagrant box repackage <name> <provider> <version>'
-          end
+    	def parse_file(file)
+		while (line = file.gets)
+			parse_line(line)
+		end
     
           respond_with do |format|
-        format.html { redirect_to admin_pods_path }
-        format.json { render json: PodPresenter.new(pod).as_json }
-      end
-    end
+        format.html do
+          gon.preloads[:pods] = pods_json
+          gon.unchecked_count = Pod.unchecked.count
+          gon.version_failed_count = Pod.version_failed.count
+          gon.error_count = Pod.check_failed.count
+    
+        @search ||= UserSearch.new
+    @users ||= []
   end
-end
-
     
-      Sass::Plugin.options.merge!(config)
-    
-    # usage rake isolate[my-post]
-desc 'Move all other posts than the one currently being worked on to a temporary stash location (stash) so regenerating the site happens much more quickly.'
-task :isolate, :filename do |t, args|
-  stash_dir = '#{source_dir}/#{stash_dir}'
-  FileUtils.mkdir(stash_dir) unless File.exist?(stash_dir)
-  Dir.glob('#{source_dir}/#{posts_dir}/*.*') do |post|
-    FileUtils.mv post, stash_dir unless post.include?(args.filename)
-  end
-end
-    
-          locations = Array.new
-      while (data.code.to_i == 301 || data.code.to_i == 302)
-        data = handle_gist_redirecting(data)
-        break if locations.include? data.header['Location']
-        locations << data.header['Location']
+          def redirect_prompt_error_display(error, error_description)
+        redirect_params_hash = {error: error, error_description: error_description, state: params[:state]}
+        redirect_fragment = redirect_params_hash.compact.map {|key, value| key.to_s + '=' + value }.join('&')
+        redirect_to params[:redirect_uri] + '?' + redirect_fragment
       end
     
-          unless file.file?
-        return 'File #{file} could not be found'
+          # Get the cache key pair for the given Sass URI.
+      # The URI need not be checked for validity.
+      #
+      # The only strict requirement is that the returned pair of strings
+      # uniquely identify the file at the given URI.
+      # However, the first component generally corresponds roughly to the directory,
+      # and the second to the basename, of the URI.
+      #
+      # Note that keys must be unique *across importers*.
+      # Thus it's probably a good idea to include the importer name
+      # at the beginning of the first component.
+      #
+      # @param uri [String] A URI known to be valid for this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [(String, String)] The key pair which uniquely identifies
+      #   the file at the given URI.
+      def key(uri, options)
+        Sass::Util.abstract(self)
       end
     
-            def multiple_assignment_node
-          grandparent_node = node.parent ? node.parent.parent : nil
-          return nil unless grandparent_node
-          return nil unless grandparent_node.type == MULTIPLE_ASSIGNMENT_TYPE
-          return nil unless node.parent.type == MULTIPLE_LEFT_HAND_SIDE_TYPE
-          grandparent_node
-        end
-      end
-    end
-  end
-end
-
-    
-              new_source =
-            node.receiver.source + ' =~ ' + node.first_argument.source
-    
-            def autocorrect(node)
-          lambda do |corrector|
-            corrector.remove(node.loc.dot)
-            corrector.remove(node.loc.selector)
+            def log_level(name, options = {})
+          if options[:prepend]
+            level = log_levels.values.min
+            level = level.nil? ? 0 : level - 1
+          else
+            level = log_levels.values.max
+            level = level.nil? ? 0 : level + 1
           end
+          log_levels.update(name => level)
+          define_logger(name)
         end
     
-            # @param annotated_source [String] string passed to the matchers
-        #
-        # Separates annotation lines from source lines. Tracks the real
-        # source line number that each annotation corresponds to.
-        #
-        # @return [AnnotatedSource]
-        def self.parse(annotated_source)
-          source      = []
-          annotations = []
-    
-                end
-          RUBY
-        end
-      end
-    
-        # Swaps the height and width if necessary
-    def auto_orient
-      if EXIF_ROTATED_ORIENTATION_VALUES.include?(@orientation)
-        @height, @width = @width, @height
-        @orientation -= 4
-      end
-    end
-    
-        # You can add your own processor via the Paperclip configuration. Normally
-    # Paperclip will load all processors from the
-    # Rails.root/lib/paperclip_processors directory, but here you can add any
-    # existing class using this mechanism.
+        # Returns the Sass/SCSS code for the media query list.
     #
-    #   Paperclip.configure do |c|
-    #     c.register_processor :watermarker, WatermarkingProcessor.new
-    #   end
-    def register_processor(name, processor)
-      @known_processors ||= {}
-      @known_processors[name.to_s] = processor
+    # @param options [{Symbol => Object}] An options hash (see {Sass::CSS#initialize}).
+    # @return [String]
+    def to_src(options)
+      queries.map {|q| q.to_src(options)}.join(', ')
     end
-  end
-end
-
     
-          private
+      require 'sass/plugin/rack'
+  class Sass::Plugin::MerbBootLoader < Merb::BootLoader
+    after Merb::BootLoader::RackUpApplication
+    
+        def self.each_definition(&block)
+      instance.each_definition(&block)
+    end
+    
+            def failure_message_when_negated
+          'Should not have an attachment named #{@attachment_name}'
+        end
+        alias negative_failure_message failure_message_when_negated
+    
+            def expected_attachment
+          'Expected #{@attachment_name}:\n'
+        end
