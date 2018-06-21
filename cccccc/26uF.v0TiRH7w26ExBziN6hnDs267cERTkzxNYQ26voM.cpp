@@ -1,296 +1,182 @@
 
         
-        
-    {}  // namespace leveldb
+        /// Index the given source file and store the results to \p indexStorePath.
+///
+/// \param primarySourceFile The source file to index.
+///
+/// \param indexUnitToken A unique identifier for this translation unit in the
+/// form of a file path.
+///
+/// \param indexStorePath The location to write the indexing data to.
+///
+/// \param indexSystemModules If true, emit index data for imported serialized
+/// swift system modules.
+///
+/// \param isDebugCompilation true for non-optimized compiler invocation.
+///
+/// \param targetTriple The target for this compilation.
+///
+/// \param dependencyTracker The set of dependencies seen while building.
+bool indexAndRecord(SourceFile *primarySourceFile, StringRef indexUnitToken,
+                    StringRef indexStorePath, bool indexSystemModules,
+                    bool isDebugCompilation, StringRef targetTriple,
+                    const DependencyTracker &dependencyTracker);
+    
+    
+    {  const SILDebugScope *Scope = this;
+  while (Scope->Parent.is<const SILDebugScope *>())
+    Scope = Scope->Parent.get<const SILDebugScope *>();
+  assert(Scope->Parent.is<SILFunction *>() && 'orphaned scope');
+  return Scope->Parent.get<SILFunction *>();
+}
+    
+    
+    {
+    {}
+}
+#endif
 
     
-    #if 0
-static void DumpInternalIter(Iterator* iter) {
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    ParsedInternalKey k;
-    if (!ParseInternalKey(iter->key(), &k)) {
-      fprintf(stderr, 'Corrupt '%s'\n', EscapeString(iter->key()).c_str());
-    } else {
-      fprintf(stderr, '@ '%s'\n', k.DebugString().c_str());
-    }
-  }
-}
-#endif
+    // On non-Darwin platforms we do not assume any barrier-free inline path
+// and SwiftTargetInfo.OnceDonePredicateValue is unset in the compiler.
     
-    static bool GetLevel(Slice* input, int* level) {
-  uint32_t v;
-  if (GetVarint32(input, &v) &&
-      v < config::kNumLevels) {
-    *level = v;
-    return true;
-  } else {
-    return false;
-  }
-}
+      static ResultPlanPtr computeResultPlan(SILGenFunction &SGF,
+                                         const CalleeTypeInfo &calleeTypeInfo,
+                                         SILLocation loc,
+                                         SGFContext evalContext);
     
-      void EncodeTo(std::string* dst) const;
-  Status DecodeFrom(const Slice& src);
-    
-    TEST(FindFileTest, OverlapSequenceChecks) {
-  Add('200', '200', 5000, 3000);
-  ASSERT_TRUE(! Overlaps('199', '199'));
-  ASSERT_TRUE(! Overlaps('201', '300'));
-  ASSERT_TRUE(Overlaps('200', '200'));
-  ASSERT_TRUE(Overlaps('190', '200'));
-  ASSERT_TRUE(Overlaps('200', '210'));
-}
-    
-    // Return a builtin comparator that uses lexicographic byte-wise
-// ordering.  The result remains the property of this module and
-// must not be deleted.
-extern const Comparator* BytewiseComparator();
-    
-            const float max_dist = 10.0f;
-        if(black_order[0].second > max_dist || black_order[1].second > max_dist ||
-           white_order[0].second > max_dist || white_order[1].second > max_dist)
-        {
-            continue; // there will be no improvement in this corner position
-        }
-    
-            RNG &rng = ts->get_rng();
-        int startPointIndex, endPointIndex, modifiedPointIndex;
-        do
-        {
-            startPointIndex = cvtest::randInt(rng) % usedPointsCount;
-            endPointIndex = cvtest::randInt(rng) % usedPointsCount;
-            modifiedPointIndex = checkPartialSubsets ? usedPointsCount - 1 : cvtest::randInt(rng) % usedPointsCount;
-        }
-        while (startPointIndex == endPointIndex || startPointIndex == modifiedPointIndex || endPointIndex == modifiedPointIndex);
-    
-    CV_EXPORTS_W void subtract(InputArray src1, Scalar src2, OutputArray dst, InputArray mask=noArray(), int dtype=-1);
-    
-      // Since the basic IO manipulators are overloaded for both narrow
-  // and wide streams, we have to provide this specialized definition
-  // of operator <<, even though its body is the same as the
-  // templatized version above.  Without this definition, streaming
-  // endl or other basic IO manipulators to Message will confuse the
-  // compiler.
-  Message& operator <<(BasicNarrowIoManip val) {
-    *ss_ << val;
-    return *this;
-  }
-    
-    #include 'gtest/internal/gtest-port.h'
-    
-    #include <iosfwd>
-#include <vector>
-#include 'gtest/internal/gtest-internal.h'
-#include 'gtest/internal/gtest-string.h'
-    
-    // This macro is for implementing ASSERT/EXPECT_DEBUG_DEATH when compiled in
-// NDEBUG mode. In this case we need the statements to be executed, the regex is
-// ignored, and the macro must accept a streamed message even though the message
-// is never printed.
-# define GTEST_EXECUTE_STATEMENT_(statement, regex) \
-  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
-  if (::testing::internal::AlwaysTrue()) { \
-     GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
-  } else \
-    ::testing::Message()
-    
-      // Given directory = 'dir', relative_path = 'test.xml',
-  // returns 'dir/test.xml'.
-  // On Windows, uses \ as the separator rather than /.
-  static FilePath ConcatPaths(const FilePath& directory,
-                              const FilePath& relative_path);
-    
-      // Converts a wide C string to a String using the UTF-8 encoding.
-  // NULL will be converted to '(null)'.  If an error occurred during
-  // the conversion, '(failed to convert from wide string)' is
-  // returned.
-  static std::string ShowWideCString(const wchar_t* wide_c_str);
-    
-    #include <utility>  // For ::std::pair.
-    
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
-    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27>
-struct Templates27 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates26<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27> Tail;
-};
-    
-    
-    {
-    {    return -1;
-  }
-};
-    
-    #include 'ifaddrs_android.h'
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/utsname.h>
-#include <sys/ioctl.h>
-#include <netinet/in.h>
-#include <net/if.h>
-#include <unistd.h>
-#include <errno.h>
-#include <linux/netlink.h>
-#include <linux/rtnetlink.h>
-    
-    			memdelete(f);
-    
-    WebSocketClient::WebSocketClient() {
+    namespace swift {
     }
     
-    #if defined(MBEDTLS_RSA_C) && ( !defined(MBEDTLS_BIGNUM_C) ||         \
-    !defined(MBEDTLS_OID_C) )
-#error 'MBEDTLS_RSA_C defined, but not all prerequisites'
-#endif
+      // Returns true iff the test part passed.
+  bool passed() const { return type_ == kSuccess; }
     
-    		Map<int, Ref<VisualScriptNode> > nodes;
-		Map<int, Vector2> nodes_positions;
+    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
+//
+// Expands to the name of the variable used to remember the names of
+// the defined tests in the given test case.
+# define GTEST_TYPED_TEST_CASE_P_STATE_(TestCaseName) \
+  gtest_typed_test_case_p_state_##TestCaseName##_
     
-    class GDNativeLibraryResourceSaver : public ResourceFormatSaver {
-public:
-	virtual Error save(const String &p_path, const RES &p_resource, uint32_t p_flags);
-	virtual bool recognize(const RES &p_resource) const;
-	virtual void get_recognized_extensions(const RES &p_resource, List<String> *p_extensions) const;
-};
+      // Returns true if the death test passed; that is, the test process
+  // exited during the test, its exit status matches a user-supplied
+  // predicate, and its stderr output matches a user-supplied regular
+  // expression.
+  // The user-supplied predicate may be a macro expression rather
+  // than a function pointer or functor, or else Wait and Passed could
+  // be combined.
+  virtual bool Passed(bool exit_status_ok) = 0;
     
-        struct huff_tables
-    {
-      bool ac_table;
-      uint  look_up[256];
-      uint  look_up2[256];
-      uint8 code_size[256];
-      uint  tree[512];
-    };
-    
-    
-    {
-    {    std::ostringstream oss;
-    std::copy(line.begin() + options_index,
-              line.end(),
-              std::ostream_iterator<std::string>(oss, ' '));
-    r['options'] = oss.str();
-    results.push_back(r);
-  }
-}
-    
-    namespace osquery {
-/**
- * @brief Create the external SQLite implementation wrapper.
- *
- * Anything built with only libosquery and not the 'additional' library will
- * not include a native SQL implementation. This applies to extensions and
- * separate applications built with the osquery SDK.
- *
- * The ExternalSQLPlugin is a wrapper around the SQLite API, which forwards
- * calls to an osquery extension manager (core).
- */
-REGISTER_INTERNAL(ExternalSQLPlugin, 'sql', 'sql');
-    }
-    
-      // Tear down device node data.
-  if (!(osquery.major_number < 0)) {
-    if (cdevsw_remove(osquery.major_number, &osquery_cdevsw) < 0) {
-      panic('osquery kext: Cannot remove osquery from cdevsw');
-    }
-  }
-    
-    #include <osquery/config.h>
-#include <osquery/database.h>
-    
-    
-    {  // And of the column has constraints:
-  EXPECT_TRUE(cm['path'].notExistsOrMatches('some'));
-  EXPECT_FALSE(cm['path'].notExistsOrMatches('not_some'));
-  EXPECT_TRUE(cm['path'].exists());
-  EXPECT_TRUE(cm['path'].existsAndMatches('some'));
-}
-    
-    #include 'osquery/core/utils.h'
-#include 'osquery/tests/test_util.h'
-    
-     private:
-  ProcessState state_{PROCESS_STILL_ALIVE};
-  int status_{0};
-    
-    #include <string.h>
-#include <time.h>
-#include <vector>
-    
-      /// Key/index lookup method.
-  Status scan(const std::string& domain,
-              std::vector<std::string>& results,
-              const std::string& prefix,
-              size_t max) const override;
-    
-    template <class T, QueueBehaviorIfFull kBehavior = QueueBehaviorIfFull::THROW>
-class LifoSemMPMCQueue : public BlockingQueue<T> {
+    // Allows a controller thread to pause execution of newly created
+// threads until notified.  Instances of this class must be created
+// and destroyed in the controller thread.
+//
+// This class is only for testing Google Test's own constructs. Do not
+// use it in user tests, either directly or indirectly.
+class Notification {
  public:
-  // Note: The queue pre-allocates all memory for max_capacity
-  explicit LifoSemMPMCQueue(size_t max_capacity) : queue_(max_capacity) {}
+  Notification() : notified_(false) {
+    GTEST_CHECK_POSIX_SUCCESS_(pthread_mutex_init(&mutex_, NULL));
+  }
+  ~Notification() {
+    pthread_mutex_destroy(&mutex_);
+  }
     }
     
-      bool remove(const T& v) {
-    auto prev = &head_;
-    locate_lower_bound(v, prev);
-    auto curr = prev->load(std::memory_order_relaxed);
-    if (!curr || curr->elem_ != v) {
-      return false;
-    }
-    Node* curr_next = curr->next_.load();
-    // Patch up the actual list...
-    prev->store(curr_next, std::memory_order_release);
-    // ...and only then null out the removed node.
-    curr->next_.store(nullptr, std::memory_order_release);
-    curr->retire();
-    return true;
+      // Compares two C strings, ignoring case.  Returns true iff they
+  // have the same content.
+  //
+  // Unlike strcasecmp(), this function can handle NULL argument(s).
+  // A NULL C string is considered different to any non-NULL C string,
+  // including the empty string.
+  static bool CaseInsensitiveCStringEquals(const char* lhs,
+                                           const char* rhs);
+    
+      template <GTEST_7_TYPENAMES_(U)>
+  tuple& operator=(const GTEST_7_TUPLE_(U)& t) {
+    return CopyFrom(t);
   }
     
-    #include <cstdint>
-#include <limits>
-#include <type_traits>
-#include <utility>
-    
-    
-    {  if (loopKeepAliveActive_ && keepAliveCount == 0) {
-    // Restore the notification queue internal flag
-    fnRunner_->stopConsuming();
-    fnRunner_->startConsumingInternal(this, queue_.get());
-    loopKeepAliveActive_ = false;
-  } else if (!loopKeepAliveActive_ && keepAliveCount > 0) {
-    // Update the notification queue event to treat it as a normal
-    // (non-internal) event.  The notification queue event always remains
-    // installed, and the main loop won't exit with it installed.
-    fnRunner_->stopConsuming();
-    fnRunner_->startConsuming(this, queue_.get());
-    loopKeepAliveActive_ = true;
-  }
-}
-    
-    unsigned Node::getChildCount(void) const
-{
-    return YGNodeGetChildCount(m_node);
-}
-    
-    private:
-  void ref() {
-    ++m_refcount;
-  }
-    
-    
-    {  // There are subtle issues with calling the next functions directly. It is
-  // much better to always use a ThreadScope to manage attaching/detaching for
-  // you.
-  FBEXPORT static JNIEnv* ensureCurrentThreadIsAttached();
-  FBEXPORT static void detachCurrentThread();
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37>
+struct Types37 {
+  typedef T1 Head;
+  typedef Types36<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
+      T30, T31, T32, T33, T34, T35, T36, T37> Tail;
 };
     
-    #define FBASSERT(expr) FBASSERTMSGF(expr, '%s', #expr)
+    namespace xgboost {
+namespace common {
+    }
+    }
+    
+    SEXP XGDMatrixSetInfo_R(SEXP handle, SEXP field, SEXP array) {
+  R_API_BEGIN();
+  int len = length(array);
+  const char *name = CHAR(asChar(field));
+  if (!strcmp('group', name)) {
+    std::vector<unsigned> vec(len);
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < len; ++i) {
+      vec[i] = static_cast<unsigned>(INTEGER(array)[i]);
+    }
+    CHECK_CALL(XGDMatrixSetGroup(R_ExternalPtrAddr(handle), BeginPtr(vec), len));
+  } else {
+    std::vector<float> vec(len);
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < len; ++i) {
+      vec[i] = REAL(array)[i];
+    }
+    CHECK_CALL(XGDMatrixSetFloatInfo(R_ExternalPtrAddr(handle),
+                                   CHAR(asChar(field)),
+                                   BeginPtr(vec), len));
+  }
+  R_API_END();
+  return R_NilValue;
+}
+    
+    /*
+ * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
+ * Method:    RabitInit
+ * Signature: ([Ljava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_RabitInit
+  (JNIEnv *jenv, jclass jcls, jobjectArray jargs) {
+  std::vector<std::string> args;
+  std::vector<char*> argv;
+  bst_ulong len = (bst_ulong)jenv->GetArrayLength(jargs);
+  for (bst_ulong i = 0; i < len; ++i) {
+    jstring arg = (jstring)jenv->GetObjectArrayElement(jargs, i);
+    const char *s = jenv->GetStringUTFChars(arg, 0);
+    args.push_back(std::string(s, jenv->GetStringLength(arg)));
+    if (s != nullptr) jenv->ReleaseStringUTFChars(arg, s);
+    if (args.back().length() == 0) args.pop_back();
+  }
+    }
+    
+    TEST(Metric, AMS) {
+  EXPECT_ANY_THROW(xgboost::Metric::Create('ams'));
+  xgboost::Metric * metric = xgboost::Metric::Create('ams@0.5f');
+  ASSERT_STREQ(metric->Name(), 'ams@0.5');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0.311f, 0.001f);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              0.29710f, 0.001f);
+    }
+    
+      /**
+   * \brief Updates linear model given gradients.
+   *
+   * \param in_gpair            The gradient pair statistics of the data.
+   * \param data                Input data matrix.
+   * \param model               Model to be updated.
+   * \param sum_instance_weight The sum instance weights, used to normalise l1/l2 penalty.
+   */
