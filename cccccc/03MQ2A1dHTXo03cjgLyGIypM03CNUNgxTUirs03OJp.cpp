@@ -1,343 +1,312 @@
 
         
-          /// When evaluating an expression in the context of an existing source file,
-  /// we may want to prefer declarations from that source file.
-  /// The DebuggerClient can return a private-discriminator to tell lookup to
-  /// prefer these certain decls.
-  virtual Identifier getPreferredPrivateDiscriminator() = 0;
+          bool delay_destruction() { return delay_destruction_; }
+  void set_delay_destruction(bool val) { delay_destruction_ = val; }
+  bool pending_destruction() { return pending_destruction_; }
+  void set_pending_destruction (bool val) { pending_destruction_ = val; }
+ protected:
+  int id_;
+  bool delay_destruction_;
+  bool pending_destruction_;
+  base::WeakPtr<ObjectManager> object_manager_;
+    
+      scoped_ptr<base::Value> value_args(
+      converter->FromV8Value(args, isolate->GetCurrentContext()));
+  if (!value_args.get() ||
+      !value_args->IsType(base::Value::TYPE_LIST))
+    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
+        'Unable to convert 'args' passed to CallObjectMethod')));
+    
+     private:
+  ObjectManager* object_manager_;
     
     
-    {
-    {    if (SemanticNode.is<Expr *>()) {
-      SemanticNode.get<Expr *>()->dump(llvm::errs());
-    } else if (SemanticNode.is<Decl *>()) {
-      SemanticNode.get<Decl *>()->dump(llvm::errs());
-    } else if (SemanticNode.is<Expr *>()) {
-      SemanticNode.get<Expr *>()->dump(llvm::errs());
-    } else {
-      llvm_unreachable('ASTNode has pointer to unknown thing!');
-    }
-    llvm::errs() << '\n=====================================================\n';
+    {  gfx::Image originImage;
+  nw::Package* package = nw::InitNWPackage();
+  if (nw::GetImage(package, base::FilePath::FromUTF8Unsafe(icon), &originImage)) {
+    const gfx::ImageSkia* originImageSkia = originImage.ToImageSkia();
+    gfx::ImageSkia resizedImageSkia = gfx::ImageSkiaOperations::CreateResizedImage(*originImageSkia,
+                                                                                   skia::ImageOperations::RESIZE_GOOD,
+                                                                                   gfx::Size(kIconWidth, kIconHeight));
+    icon_ = gfx::Image(resizedImageSkia);
   }
 }
-
     
-    namespace swift {
-namespace syntax {
-    }
-    }
+          std::unique_ptr<SkBitmap> bitmap(new SkBitmap());
+      if (data.type == TYPE_PNG &&
+        !gfx::PNGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size(), bitmap.get())) {
+        error_ = 'Failed to decode as PNG';
+        return false;
+      } else if (data.type == TYPE_JPEG) {
+        std::unique_ptr<SkBitmap> tmp_bitmap = gfx::JPEGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size());
+        if (tmp_bitmap == NULL) {
+          error_ = 'Failed to decode as JPEG';
+          return false;
+        }
+        bitmap = std::move(tmp_bitmap);
+      }
     
-      /// Indicates whether the diagnostics produced during compilation should be
-  /// checked against expected diagnostics, indicated by markers in the
-  /// input source file.
-  enum {
-    NoVerify,
-    Verify,
-    VerifyAndApplyFixes
-  } VerifyMode = NoVerify;
+          gfx::Rect rect = gfx_display.bounds();
+      DisplayGeometry& bounds = displayResult->bounds;
+      bounds.x = rect.x();
+      bounds.y = rect.y();
+      bounds.width = rect.width();
+      bounds.height = rect.height();
     
+    #include 'chrome/browser/devtools/devtools_window.h'
+#include 'chrome/browser/extensions/devtools_util.h'
+#include 'chrome/browser/extensions/extension_service.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/public/browser/render_frame_host.h'
+#include 'content/public/browser/web_contents.h'
+#include 'extensions/browser/extension_system.h'
+#include 'extensions/common/error_utils.h'
     
-    {} // end namespace swift
+      void Set(const FilePath& rhs) {
+    pathname_ = rhs.pathname_;
+  }
     
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    v8::Handle<v8::Value> AllocateObject(int routing_id,
-                                     int object_id,
-                                     const std::string& type,
-                                     v8::Handle<v8::Value> options) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  v8::EscapableHandleScope handle_scope(isolate);
-    }
-    
-    class BaseEvent {
-  friend class EventListener;
-  DISALLOW_COPY_AND_ASSIGN(BaseEvent);
-    }
-    
-    #include 'content/nw/src/api/menu/menu.h'
-    
-    MenuItem::~MenuItem() {
-  Destroy();
-}
-    
-    class NwAppClearCacheFunction : public NWSyncExtensionFunction, public content::BrowsingDataRemover::Observer {
+    template <typename T>
+class linked_ptr {
  public:
-  NwAppClearCacheFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-  void OnBrowsingDataRemoverDone() override;
+  typedef T element_type;
     }
     
-    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringFWithFixupFunction() {}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    # if GTEST_OS_LINUX && !defined(__ia64__)
+#  if GTEST_OS_LINUX_ANDROID
+// On Android, clone() is only available on ARM starting with Gingerbread.
+#    if defined(__arm__) && __ANDROID_API__ >= 9
+#     define GTEST_HAS_CLONE 1
+#    else
+#     define GTEST_HAS_CLONE 0
+#    endif
+#  else
+#   define GTEST_HAS_CLONE 1
+#  endif
+# else
+#  define GTEST_HAS_CLONE 0
+# endif  // GTEST_OS_LINUX && !defined(__ia64__)
     
- protected:
-  ~NwMenuGetNSStringFWithFixupFunction() override {}
+    // The following family of struct and struct templates are used to
+// represent template lists.  In particular, TemplatesN<T1, T2, ...,
+// TN> represents a list of N templates (T1, T2, ..., and TN).  Except
+// for Templates0, every struct in the family has two member types:
+// Head for the selector of the first template in the list, and Tail
+// for the rest of the list.
     
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
-};
+      // Now, we have that n is odd and n >= 3.
     
-    #if defined(JSON_HAS_INT64)
-    
-    namespace google {
-namespace protobuf {
-namespace {
-    }
-    }
-    }
-    
-    RepeatedEnumFieldGenerator::RepeatedEnumFieldGenerator(
-    const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options)
-    : FieldGeneratorBase(descriptor, fieldOrdinal, options) {
-}
-    
-    
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20>
-internal::ValueArray20<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20> Values(T1 v1, T2 v2, T3 v3, T4 v4,
-    T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13,
-    T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20) {
-  return internal::ValueArray20<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20>(v1, v2, v3, v4, v5, v6, v7,
-      v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20);
-}
-    
-    // A compile-time bool constant that is true if and only if x is a
-// null pointer literal (i.e. NULL or any 0-valued compile-time
-// integral constant).
-#ifdef GTEST_ELLIPSIS_NEEDS_POD_
-// We lose support for NULL detection where the compiler doesn't like
-// passing non-POD classes through ellipsis (...).
-# define GTEST_IS_NULL_LITERAL_(x) false
-#else
-# define GTEST_IS_NULL_LITERAL_(x) \
-    (sizeof(::testing::internal::IsNullLiteralHelper(x)) == 1)
-#endif  // GTEST_ELLIPSIS_NEEDS_POD_
-    
-    // This provides interface PrimeTable that determines whether a number is a
-// prime and determines a next prime number. This interface is used
-// in Google Test samples demonstrating use of parameterized tests.
-    
-    // Returns true iff n is a prime number.
-bool IsPrime(int n) {
-  // Trivial case 1: small numbers
-  if (n <= 1) return false;
-    }
-    
-    // Tests positive input.
-TEST(IsPrimeTest, Positive) {
-  EXPECT_FALSE(IsPrime(4));
-  EXPECT_TRUE(IsPrime(5));
-  EXPECT_FALSE(IsPrime(6));
-  EXPECT_TRUE(IsPrime(23));
-}
-    
-    #include 'gloo/rendezvous/store.h'
-#include 'gloo/transport/device.h'
-    
-    void THDTensor_(geometric)(THDTensor *self, THDGenerator *_generator, double p) {
-  masterCommandChannel->sendMessage(
-    packMessage(Functions::tensorGeometric, self, _generator, p),
-    THDState::s_current_worker
+      /**
+   * Create a task. This returns a task handle, or null object
+   * if there are no worker threads.
+   */
+  static Resource TaskStart(
+    const String& url, const Array& headers,
+    const String& remote_host,
+    const String& post_data = null_string,
+    const Array& files = null_array,
+    int timeoutSeconds = -1,
+    PageletServerTaskEvent *event = nullptr
   );
-}
     
+    SSATmp* implInstanceOfD(IRGS& env, SSATmp* src, const StringData* className);
     
-    {private:
-  Timer m_timer;
-  int64_t m_msThreshold;
-  std::string m_location;
-  std::string m_info;
-};
-    
-    #include 'hphp/util/arch.h'
-#include 'hphp/util/safe-cast.h'
-#include 'hphp/util/thread-local.h'
-    
-      /////////////////////////////////////////////////////////////////////////////
-    
-      mpz_clear(gmpDataA);
-  mpz_clear(gmpDataB);
-  mpz_clear(gmpReturn);
+      for (auto& block : blocks) {
+    for (auto& inst : block.code) {
+      if (inst.op == Vinstr::copyargs) return true;
+    }
+  }
     
     /*
- * dlopen() the embedded shared object given by `desc'.
+ * Block of Vinstrs, managed by Vunit.
  *
- * Unfortunately, there's no way to do the equivalent of dlopen() on data
- * within another file, or even in memory.  This means we have to copy the
- * section into a temporary file and then dlopen() that.
- *
- * Returns the result of dlopen() on success, else nullptr.  Also logs the
- * failure condition with Logger on failure.
+ * A Vblock, in addition to containing a Vinstr stream, also specifies where it
+ * should be emitted to.
  */
-void* dlopen_embedded_data(const embedded_data& desc, char* tmp_filename);
-    
-      struct alignas(64) CondVarNode {
-    pthread_cond_t m_cond;
-    folly::IntrusiveListHook m_listHook;
+struct Vblock {
+  explicit Vblock(AreaIndex area_idx, uint64_t w)
+    : area_idx(area_idx)
+    , weight(w) {}
     }
     
-    #endif // STREAM_PEER_SSL_H
-
+    using Address          = uint8_t*;
+using CodeAddress      = uint8_t*;
+using ConstCodeAddress = const uint8_t*;
     
-    	while (p_bytes > 0) {
-		err = put_partial_data(p_data, p_bytes, sent);
-    }
+      char buffer[64*1024];
+  std::size_t to_read = desc.m_len;
     
-    int LWSClient::_handle_cb(struct lws *wsi, enum lws_callback_reasons reason, void *user, void *in, size_t len) {
-    }
-    
-    Error WebSocketClient::connect_to_url(String p_url, PoolVector<String> p_protocols, bool gd_mp_api) {
-	_is_multiplayer = gd_mp_api;
-    }
-    
-    		case NOTIFICATION_DRAW: {
-    }
-    
-    /// Returns the list of contacts pairs in this order: Local contact, other body contact
-struct GodotContactPairContactResultCallback : public btCollisionWorld::ContactResultCallback {
-public:
-	const btCollisionObject *m_self_object;
-	Vector3 *m_results;
-	int m_resultMax;
-	int m_count;
-	const Set<RID> *m_exclude;
-    }
-    
-    	static void free_clipboard();
-    
-    // redirect the nath functions.
-bool CheckNAN(double v) {
-  return ISNAN(v);
-}
-double LogGamma(double v) {
-  return lgammafn(v);
-}
-    
-    
-    {  for (size_t i = 0; i < nindptr; ++i) {
-    col_ptr_[i] = static_cast<size_t>(p_indptr[i]);
+    void* mmap_2m(void* addr, int prot, int node /* = -1 */,
+              bool map_shared /* = false */, bool map_fixed /* = false */) {
+#ifdef __linux__
+  if (get_huge2m_info(node).free_hugepages <= 0) return nullptr;
+  if (node >= 0 && !numa_node_allowed(node)) return nullptr;
+#ifdef HAVE_NUMA
+  SavedNumaPolicy numaPolicy;
+  if (node >= 0 && numa_num_nodes > 1) {
+    numaPolicy.save();
+    unsigned long singleNodeMask = 1ul << node;
+    set_mempolicy(MPOL_BIND, &singleNodeMask, sizeof(singleNodeMask));
   }
-  #pragma omp parallel for schedule(static)
-  for (int64_t i = 0; i < static_cast<int64_t>(ndata); ++i) {
-    indices_[i] = static_cast<unsigned>(p_indices[i]);
-    data_[i] = static_cast<float>(p_data[i]);
-  }
-  DMatrixHandle handle;
-  CHECK_CALL(XGDMatrixCreateFromCSCEx(BeginPtr(col_ptr_), BeginPtr(indices_),
-                                      BeginPtr(data_), nindptr, ndata,
-                                      nrow, &handle));
-  ret = PROTECT(R_MakeExternalPtr(handle, R_NilValue, R_NilValue));
-  R_RegisterCFinalizerEx(ret, _DMatrixFinalizer, TRUE);
-  R_API_END();
-  UNPROTECT(1);
+#endif
+  void* ret = mmap_2m_impl(addr, prot, map_shared, map_fixed);
+  s_num2MPages += !!ret;
   return ret;
+#else  // not linux
+  return nullptr;
+#endif
 }
     
-    bool js_cocos2dx_studio_SkewFrame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_SkewFrame_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_SkewFrame(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_SkewFrame_getSkewY(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_SkewFrame_setSkewX(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_SkewFrame_setSkewY(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_SkewFrame_getSkewX(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_SkewFrame_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_SkewFrame_SkewFrame(JSContext *cx, uint32_t argc, jsval *vp);
+      /// Get the native acceptor representation.
+  /**
+   * This function may be used to obtain the underlying representation of the
+   * acceptor. This is intended to allow access to native acceptor functionality
+   * that is not otherwise provided.
+   */
+  native_handle_type native_handle()
+  {
+    return this->get_service().native_handle(this->get_implementation());
+  }
     
+      friend class context;
     
-    
-    #ifdef __cplusplus
-extern 'C' {
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+# include <boost/asio/detail/null_event.hpp>
+#elif defined(BOOST_ASIO_WINDOWS)
+# include <boost/asio/detail/win_event.hpp>
+#elif defined(BOOST_ASIO_HAS_PTHREADS)
+# include <boost/asio/detail/posix_event.hpp>
+#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
+# include <boost/asio/detail/std_event.hpp>
+#else
+# error Only Windows, POSIX and std::condition_variable are supported!
 #endif
-#include 'tolua++.h'
-#ifdef __cplusplus
-}
-#endif
-    
-    
     
     
     {
-    {			float minX = -6.0f;
-			float maxX = 0.0f;
-			float minY = 4.0f;
-			float maxY = 6.0f;
-			
-			for (int32 i = 0; i < 400; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position = b2Vec2(RandomFloat(minX,maxX),RandomFloat(minY,maxY));
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&shape, 0.01f);
-			}
-		}
-		
-		{
-			b2PolygonShape shape;
-			shape.SetAsBox(1.5f, 1.5f);
-			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(-40.0f,5.0f);
-			bd.bullet = true;
-			b2Body* body = m_world->CreateBody(&bd);
-			body->CreateFixture(&shape, 1.0f);
-			body->SetLinearVelocity(b2Vec2(150.0f, 0.0f));
-		}
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+    
+    {} // namespace boost_asio_handler_alloc_helpers
+    
+    #define BOOST_ASIO_COMPLETION_HANDLER_CHECK( \
+    handler_type, handler) \
+  \
+  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
+      void()) asio_true_handler_type; \
+  \
+  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
+      sizeof(boost::asio::detail::zero_arg_handler_test( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>(), 0)) == 1, \
+      'CompletionHandler type requirements not met') \
+  \
+  typedef boost::asio::detail::handler_type_requirements< \
+      sizeof( \
+        boost::asio::detail::argbyv( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>())) + \
+      sizeof( \
+        boost::asio::detail::lvref< \
+          asio_true_handler_type>()(), \
+        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
+    
+    extern JSClass  *jsb_cocosbuilder_CCBReader_class;
+extern JSObject *jsb_cocosbuilder_CCBReader_prototype;
+    
+        argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_pauseBackgroundMusic'', nullptr);
+            return 0;
+        }
+        cobj->pauseBackgroundMusic();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:pauseBackgroundMusic',argc, 0);
+    return 0;
+    
+    
+    
+    int register_all_cocos2dx_csloader(lua_State* tolua_S);
+    
+        virtual void DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color);
+    
+    
+    {	if (callback.m_fixture)
+	{
+		b2Body* body = callback.m_fixture->GetBody();
+		b2MouseJointDef md;
+		md.bodyA = m_groundBody;
+		md.bodyB = body;
+		md.target = p;
+		md.maxForce = 1000.0f * body->GetMass();
+		m_mouseJoint = (b2MouseJoint*)m_world->CreateJoint(&md);
+		body->SetAwake(true);
+        return true;
 	}
     
+    return false;
+}
     
-    {	b2Body* m_attachment;
-	b2Body* m_platform;
-	float32 m_speed;
+    
+    {	b2Body* m_body;
+	b2Body* m_bullet;
+	float32 m_x;
 };
     
-    		// Cache velocities to improve movement on breakage.
-		if (m_broke == false)
-		{
-			m_velocity = m_body1->GetLinearVelocity();
-			m_angularVelocity = m_body1->GetAngularVelocity();
-		}
     
-    	enum
-	{
-		e_count = 30
-	};
+    {		settings->viewCenter.x = m_car->GetPosition().x;
+		Test::Step(settings);
+	}
     
-        // Setup render state
-    const float blend_factor[4] = { 0.f, 0.f, 0.f, 0.f };
-    ctx->OMSetBlendState(g_pBlendState, blend_factor, 0xffffffff);
-    ctx->OMSetDepthStencilState(g_pDepthStencilState, 0);
-    ctx->RSSetState(g_pRasterizerState);
+        // We are using the OpenGL fixed pipeline to make the example code simpler to read!
+    // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, vertex/texcoord/color pointers, polygon fill.
+    GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
+    GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
+    GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
+    GLint last_scissor_box[4]; glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box); 
+    glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_SCISSOR_TEST);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    glEnable(GL_TEXTURE_2D);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
     
-        // Create texture
-    int flags = al_get_new_bitmap_flags();
-    int fmt = al_get_new_bitmap_format();
-    al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP|ALLEGRO_MIN_LINEAR|ALLEGRO_MAG_LINEAR);
-    al_set_new_bitmap_format(ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE);
-    ALLEGRO_BITMAP* img = al_create_bitmap(width, height);
-    al_set_new_bitmap_flags(flags);
-    al_set_new_bitmap_format(fmt);
-    if (!img)
-        return false;
+    //-----------------------------------------------------------------------------
+// Context
+//-----------------------------------------------------------------------------
     
+    static void ImGui_ImplDX10_CreateFontsTexture()
+{
+    // Build texture atlas
+    ImGuiIO& io = ImGui::GetIO();
+    unsigned char* pixels;
+    int width, height;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+    }
     
-    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-        }
+            // 1. Show a simple window.
+        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    }
     
         // Load Fonts
     // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
@@ -354,18 +323,132 @@ extern 'C' {
     //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != NULL);
     
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
     
-    {    // Restore modified state
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glBindTexture(GL_TEXTURE_2D, (GLuint)last_texture);
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glPopAttrib();
-    glPolygonMode(GL_FRONT, (GLenum)last_polygon_mode[0]); glPolygonMode(GL_BACK, (GLenum)last_polygon_mode[1]);
-    glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
-    glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
+    bool IsZero(double n);
+    
+    bool IsColorTerminal() {
+#if BENCHMARK_OS_WINDOWS
+  // On Windows the TERM variable is usually not set, but the
+  // console there does support colors.
+  return 0 != _isatty(_fileno(stdout));
+#else
+  // On non-Windows platforms, we rely on the TERM variable. This list of
+  // supported TERM values is copied from Google Test:
+  // <https://github.com/google/googletest/blob/master/googletest/src/gtest.cc#L2925>.
+  const char* const SUPPORTED_TERM_VALUES[] = {
+      'xterm',         'xterm-color',     'xterm-256color',
+      'screen',        'screen-256color', 'tmux',
+      'tmux-256color', 'rxvt-unicode',    'rxvt-unicode-256color',
+      'linux',         'cygwin',
+  };
+    }
+    
+    // Parses a string for a string flag, in the form of
+// '--flag=value'.
+//
+// On success, stores the value of the flag in *value, and returns
+// true.  On failure, returns false without changing *value.
+bool ParseStringFlag(const char* str, const char* flag, std::string* value);
+    
+    // Source project : https://github.com/ismaelJimenez/cpp.leastsq
+// Adapted to be used with google benchmark
+    
+    void ConsoleReporter::PrintRunData(const Run& result) {
+  typedef void(PrinterFn)(std::ostream&, LogColor, const char*, ...);
+  auto& Out = GetOutputStream();
+  PrinterFn* printer = (output_options_ & OO_Color) ?
+                         (PrinterFn*)ColorPrintf : IgnoreColorPrint;
+  auto name_color =
+      (result.report_big_o || result.report_rms) ? COLOR_BLUE : COLOR_GREEN;
+  printer(Out, name_color, '%-*s ', name_field_width_,
+          result.benchmark_name.c_str());
+    }
+    
+    bool SameNames(UserCounters const& l, UserCounters const& r) {
+  if (&l == &r) return true;
+  if (l.size() != r.size()) {
+    return false;
+  }
+  for (auto const& c : l) {
+    if (r.find(c.first) == r.end()) {
+      return false;
+    }
+  }
+  return true;
 }
+    
+    namespace benchmark {
+// NOTE: only i386 and x86_64 have been well tested.
+// PPC, sparc, alpha, and ia64 are based on
+//    http://peter.kuscsik.com/wordpress/?p=14
+// with modifications by m3b.  See also
+//    https://setisvn.ssl.berkeley.edu/svn/lib/fftw-3.0.1/kernel/cycle.h
+namespace cycleclock {
+// This should return the number of cycles since power-on.  Thread-safe.
+inline BENCHMARK_ALWAYS_INLINE int64_t Now() {
+#if defined(BENCHMARK_OS_MACOSX)
+  // this goes at the top because we need ALL Macs, regardless of
+  // architecture, to return the number of 'mach time units' that
+  // have passed since startup.  See sysinfo.cc where
+  // InitializeSystemInfo() sets the supposed cpu clock frequency of
+  // macs to the number of mach time units per second, not actual
+  // CPU clock frequency (which can change in the face of CPU
+  // frequency scaling).  Also note that when the Mac sleeps, this
+  // counter pauses; it does not continue counting, nor does it
+  // reset to zero.
+  return mach_absolute_time();
+#elif defined(BENCHMARK_OS_EMSCRIPTEN)
+  // this goes above x86-specific code because old versions of Emscripten
+  // define __x86_64__, although they have nothing to do with it.
+  return static_cast<int64_t>(emscripten_get_now() * 1e+6);
+#elif defined(__i386__)
+  int64_t ret;
+  __asm__ volatile('rdtsc' : '=A'(ret));
+  return ret;
+#elif defined(__x86_64__) || defined(__amd64__)
+  uint64_t low, high;
+  __asm__ volatile('rdtsc' : '=a'(low), '=d'(high));
+  return (high << 32) | low;
+#elif defined(__powerpc__) || defined(__ppc__)
+  // This returns a time-base, which is not always precisely a cycle-count.
+  int64_t tbl, tbu0, tbu1;
+  asm('mftbu %0' : '=r'(tbu0));
+  asm('mftb  %0' : '=r'(tbl));
+  asm('mftbu %0' : '=r'(tbu1));
+  tbl &= -static_cast<int64_t>(tbu0 == tbu1);
+  // high 32 bits in tbu1; low 32 bits in tbl  (tbu0 is garbage)
+  return (tbu1 << 32) | tbl;
+#elif defined(__sparc__)
+  int64_t tick;
+  asm('.byte 0x83, 0x41, 0x00, 0x00');
+  asm('mov   %%g1, %0' : '=r'(tick));
+  return tick;
+#elif defined(__ia64__)
+  int64_t itc;
+  asm('mov %0 = ar.itc' : '=r'(itc));
+  return itc;
+#elif defined(COMPILER_MSVC) && defined(_M_IX86)
+  // Older MSVC compilers (like 7.x) don't seem to support the
+  // __rdtsc intrinsic properly, so I prefer to use _asm instead
+  // when I know it will work.  Otherwise, I'll use __rdtsc and hope
+  // the code is being compiled with a non-ancient compiler.
+  _asm rdtsc
+#elif defined(COMPILER_MSVC)
+  return __rdtsc();
+#elif defined(BENCHMARK_OS_NACL)
+  // Native Client validator on x86/x86-64 allows RDTSC instructions,
+  // and this case is handled above. Native Client validator on ARM
+  // rejects MRC instructions (used in the ARM-specific sequence below),
+  // so we handle it here. Portable Native Client compiles to
+  // architecture-agnostic bytecode, which doesn't provide any
+  // cycle counter access mnemonics.
+    }
+    }
+    }
+    
+    
+    {}  // end namespace benchmark
