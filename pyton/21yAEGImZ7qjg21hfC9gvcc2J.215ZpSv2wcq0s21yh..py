@@ -1,141 +1,117 @@
 
         
-        
-if __name__ == '__main__':
-    main()
-
+          def testConvertNetworkStateTensorarray(self):
+    with self.test_session() as session:
+      ta = tf.TensorArray(
+          dtype=tf.float32,
+          size=0,
+          dynamic_size=True,
+          clear_after_read=False,
+          infer_shape=False)
+      # Create a 3-step x 2-stride x 2-feature-dim source array.
+      ta = ta.write(0, [[0., 0.]] * 2)  # The zeroth step will be removed.
+      ta = ta.write(1, [[1., 10.]] * 2)
+      ta = ta.write(2, [[2., 20.]] * 2)
+      ta = ta.write(3, [[3., 30.]] * 2)
+      tensor = network_units.convert_network_state_tensorarray(ta)
+      actual = session.run(tensor)
+      self.assertEqual(actual.shape, (6, 2))
     
-    if hasattr(ctypes, 'windll'):
-    WSAStringToAddressA = ctypes.windll.ws2_32.WSAStringToAddressA
-    WSAAddressToStringA = ctypes.windll.ws2_32.WSAAddressToStringA
-else:
-    def not_windows():
-        raise SystemError(
-            'Invalid platform. ctypes.windll must be available.'
+      def get_variable(self, var_name=None, var_params=None):
+    if var_name:
+      return tf.get_variable(var_name)
+    else:
+      return var_params
+    
+    import os.path
+import tempfile
+    
+      def testImmutabilityOfArguments(self):
+    '''Tests that training schedule generation does not change its arguments.'''
+    pretrain_steps = [1, 2, 3]
+    train_steps = [5, 5, 5]
+    trainer_lib.generate_target_per_step_schedule(pretrain_steps, train_steps)
+    self.assertEqual(pretrain_steps, [1, 2, 3])
+    self.assertEqual(train_steps, [5, 5, 5])
+    
+      # Parse the flags containing lists, using regular expressions.
+  # This matches and extracts key=value pairs.
+  component_beam_sizes = re.findall(r'([^=,]+)=(\d+)',
+                                    FLAGS.inference_beam_size)
+  # This matches strings separated by a comma. Does not return any empty
+  # strings.
+  components_to_locally_normalize = re.findall(r'[^,]+',
+                                               FLAGS.locally_normalize)
+    
+    flags.DEFINE_string('input_file', '',
+                    'File of CoNLL-formatted sentences to read from.')
+flags.DEFINE_string('output_file', '',
+                    'File path to write annotated sentences to.')
+flags.DEFINE_bool('text_format', False, '')
+    
+      pretrain_steps = [0]
+  train_steps = [FLAGS.num_epochs * len(training_set)]
+    
+        plugin_manager.register(Plugin)
+    try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+            '--auth',
+            USERNAME + SEP_CREDENTIALS + PASSWORD,
         )
-    WSAStringToAddressA = not_windows
-    WSAAddressToStringA = not_windows
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
     
-    class MismatchedSetException(RecognitionException):
-    '''@brief The next token does not match a set of expected types.'''
-    
-    class Token(object):
-    '''@brief Abstract token baseclass.'''
-    
-        def test_car_shall_make_very_loud_noise(self):
-        noise = self.car.make_noise(10)
-        expected_noise = 'vroom!!!!!!!!!!'
-        self.assertEqual(noise, expected_noise)
-    
-        @classmethod
-    def tearDownClass(self):
-        '''
-        Remove the temporary directory /test_command and its content.
-        '''
-        shutil.rmtree('tests/test_command')
-
-    
-        '''def test_object(queue):
-           queue_object = QueueObject(queue, True)
-           print('Inside func: {}'.format(queue_object.object))'''
-    
-        def test_cat_eng_localization(self):
-        self.assertEqual(self.e.get('cat'), 'cat')
+            # Keyword arguments > stream.encoding > default utf8
+        if self.stdin_encoding is None:
+            self.stdin_encoding = getattr(
+                self.stdin, 'encoding', None) or 'utf8'
+        if self.stdout_encoding is None:
+            actual_stdout = self.stdout
+            if is_windows:
+                # noinspection PyUnresolvedReferences
+                from colorama import AnsiToWin32
+                if isinstance(self.stdout, AnsiToWin32):
+                    actual_stdout = self.stdout.wrapped
+            self.stdout_encoding = getattr(
+                actual_stdout, 'encoding', None) or 'utf8'
     
     
-class TestRunnerFacilities(unittest.TestCase):
+class FormatterPlugin(object):
     
-        def test_display_current_time_at_midnight(self):
-        '''
-        Would almost always fail (despite of right at/after midnight) if
-        untestable production code would have been used.
-        '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay()
-        class_under_test.set_time_provider(time_provider_stub)
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+        @property
+    def is_eager_to_contribute(self):
+        return random.randint(0, 1)
     
-        def update(self, subject):
-        print(u'DecimalViewer: Subject %s has data %d' %
-              (subject.name, subject.data))
+        def on_switchover(self):
+        super(Standby, self).on_switchover() #message ignored
+        self._hsm._next_state('active')
     
-    from tornado.options import define, options
+        def test_sales_manager_shall_not_talk_through_proxy_with_delay(cls):
+        cls.ntp.busy = 'No'
+        start_time = time()
+        cls.ntp.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+This Sales Manager will not talk to you whether he/she is busy or not\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
     
-        @classmethod
-    def _restore_configuration(cls, saved):
-        # type: (Tuple[type, Dict[str, Any]]) -> None
-        base = cls.configurable_base()
-        base.__impl_class = saved[0]
-        base.__impl_kwargs = saved[1]
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
+'''
     
-        def __init__(self, client, request, release_callback,
-                 final_callback, max_buffer_size, tcp_client,
-                 max_header_size, max_body_size):
-        self.io_loop = IOLoop.current()
-        self.start_time = self.io_loop.time()
-        self.start_wall_time = time.time()
-        self.client = client
-        self.request = request
-        self.release_callback = release_callback
-        self.final_callback = final_callback
-        self.max_buffer_size = max_buffer_size
-        self.tcp_client = tcp_client
-        self.max_header_size = max_header_size
-        self.max_body_size = max_body_size
-        self.code = None
-        self.headers = None
-        self.chunks = []
-        self._decompressor = None
-        # Timeout handle returned by IOLoop.add_timeout
-        self._timeout = None
-        self._sockaddr = None
-        IOLoop.current().add_callback(self.run)
-    
-        def __delitem__(self, name):
-        norm_name = _normalized_headers[name]
-        del self._dict[norm_name]
-        del self._as_list[norm_name]
-    
-        @gen_test
-    def asyncSetUp(self):
-        listener, port = bind_unused_port()
-        event = Event()
-    
-        @gen_test
-    def test_put_clears_timed_out_getters(self):
-        q = queues.Queue()
-        getters = [q.get(timedelta(seconds=0.01)) for _ in range(10)]
-        get = q.get()
-        q.get()
-        self.assertEqual(12, len(q._getters))
-        yield gen.sleep(0.02)
-        self.assertEqual(12, len(q._getters))
-        self.assertFalse(get.done())  # Final waiters still active.
-        q.put(0)  # put() clears the waiters.
-        self.assertEqual(1, len(q._getters))
-        self.assertEqual(0, (yield get))
-        for getter in getters:
-            self.assertRaises(TimeoutError, getter.result)
-    
-        Understands both `asyncio.Future` and Tornado's extensions to
-    enable better tracebacks on Python 2.
-    
-        def start(self):
-        if self._running:
-            raise RuntimeError('IOLoop is already running')
-        if os.getpid() != self._pid:
-            raise RuntimeError('Cannot share PollIOLoops across processes')
-        self._setup_logging()
-        if self._stopped:
-            self._stopped = False
-            return
-        old_current = IOLoop.current(instance=False)
-        if old_current is not self:
-            self.make_current()
-        self._thread_ident = thread.get_ident()
-        self._running = True
-    
-        def test_coroutine_unfinished_sequence_handler(self):
-        response = self.fetch('/coroutine_unfinished_sequence')
-        self.assertEqual(response.body, b'123')
+    '''
+Port of the Java example of 'Parameter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
