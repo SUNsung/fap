@@ -1,36 +1,35 @@
 
         
-            @notification_setting = current_user.notification_settings_for(resource)
-    @saved = @notification_setting.update_attributes(notification_setting_params)
-    
-        groups
+                self.tasks
+      end
+    end
   end
 end
 
     
-        i0, s0 = index, []
-    r1 = _nt_rvalue
-    s0 << r1
-    if r1
-      r2 = _nt__
-      s0 << r2
-      if r2
-        r3 = _nt_not_in_operator
-        s0 << r3
-        if r3
-          r4 = _nt__
-          s0 << r4
-          if r4
-            r5 = _nt_rvalue
-            s0 << r5
-          end
-        end
+            expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=/tmp/cloc.xml')
       end
+    
+        context 'GIT-SVN repository' do
+      before do
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_svn?).and_return(false)
+        expect(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git_svn?).and_return(true)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git?).and_return(false)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_hg?).and_return(false)
+      end
+    
+        # The path used after resending confirmation instructions.
+    def after_resending_confirmation_instructions_path_for(resource_name)
+      is_navigational_format? ? new_session_path(resource_name) : '/'
     end
-    if s0.last
-      r0 = instantiate_node(LogStash::Config::AST::NotInExpression,input, i0...index, s0)
-      r0.extend(NotInExpression0)
-    else
-      @index = i0
-      r0 = nil
-    end
+    
+    module Devise
+  module Controllers
+    # A module that may be optionally included in a controller in order
+    # to provide remember me behavior. Useful when signing in is done
+    # through a callback, like in OmniAuth.
+    module Rememberable
+      # Return default cookie values retrieved from session options.
+      def self.cookie_values
+        Rails.configuration.session_options.slice(:path, :domain, :secure)
+      end
