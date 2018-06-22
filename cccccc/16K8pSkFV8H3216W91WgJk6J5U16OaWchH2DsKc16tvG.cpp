@@ -1,192 +1,254 @@
 
         
-        
-    { private:
-  String();  // Not meant to be instantiated.
-};  // class String
+        // Get basic type definitions.
+#define IPC_MESSAGE_IMPL
+#include 'content/nw/src/common/common_message_generator.h'
     
-      explicit tuple(GTEST_BY_REF_(T0) f0, GTEST_BY_REF_(T1) f1,
-      GTEST_BY_REF_(T2) f2, GTEST_BY_REF_(T3) f3) : f0_(f0), f1_(f1), f2_(f2),
-      f3_(f3) {}
-    
-      template <GTEST_$(k)_TYPENAMES_(U)>
-  tuple& operator=(const GTEST_$(k)_TUPLE_(U)& t) {
-    return CopyFrom(t);
+    // static
+void App::Call(const std::string& method,
+               const base::ListValue& arguments) {
+  if (method == 'Quit') {
+    Quit();
+  } else if (method == 'CloseAllWindows') {
+    CloseAllWindows();
+  } else if (method == 'CrashBrowser') {
+    int* ptr = NULL;
+    *ptr = 1;
+  } else {
+    NOTREACHED() << 'Calling unknown method ' << method << ' of App.';
   }
+}
+    
+      virtual void Call(const std::string& method,
+                    const base::ListValue& arguments,
+                    content::RenderFrameHost* rvh = nullptr);
+  virtual void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result);
+    
+    Clipboard::Clipboard(int id,
+           const base::WeakPtr<DispatcherHost>& dispatcher_host,
+           const base::DictionaryValue& option)
+    : Base(id, dispatcher_host, option) {
+}
     
     
-]]
+    {}  // namespace nw
     
-    #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-    
-      // Set the count for the number of entries in the batch.
-  static void SetCount(WriteBatch* batch, int n);
-    
-      // compact database
-  std::string start_key = Key1(0);
-  std::string end_key = Key1(kNumKeys - 1);
-  leveldb::Slice least(start_key.data(), start_key.size());
-  leveldb::Slice greatest(end_key.data(), end_key.size());
-    
-    class FilterBlockReader {
- public:
- // REQUIRES: 'contents' and *policy must stay live while *this is live.
-  FilterBlockReader(const FilterPolicy* policy, const Slice& contents);
-  bool KeyMayMatch(uint64_t block_offset, const Slice& key);
+    void Menu::Popup(int x, int y, content::Shell* shell) {
+  GdkEventButton* event = NULL; //FIXME: shell->web_contents()->GetRenderWidgetHostView()->GetLastMouseDown();
+  uint32_t triggering_event_time = event ? event->time : GDK_CURRENT_TIME;
+  gfx::Point point;
+  if (!event) {
+    // gfx::Rect bounds = shell->web_contents()->GetRenderWidgetHostView()->GetViewBounds();
+    // point = gfx::Point(x + bounds.x(), y + bounds.y());
+    DVLOG(1) << 'no last mouse down event';
+    point = gfx::Point(x, y);
+  }else
+    point = gfx::Point(event->x_root, event->y_root);
     }
     
-      // Check first filter
-  ASSERT_TRUE(reader.KeyMayMatch(0, 'foo'));
-  ASSERT_TRUE(reader.KeyMayMatch(2000, 'bar'));
-  ASSERT_TRUE(! reader.KeyMayMatch(0, 'box'));
-  ASSERT_TRUE(! reader.KeyMayMatch(0, 'hello'));
-    
-      memset(buf, 0, sizeof(buf));
-  ASSERT_EQ(0x8a9136aa, Value(buf, sizeof(buf)));
-    
-      // Randomly returns true ~'1/n' of the time, and false otherwise.
-  // REQUIRES: n > 0
-  bool OneIn(int n) { return (Next() % n) == 0; }
-    
-    namespace boost {
-namespace asio {
+    namespace google {
+namespace protobuf {
+namespace python {
+    }
     }
     }
     
-    #endif // BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
+    #include <google/protobuf/stubs/common.h>
+namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/wire_format.h>
+    
+      virtual void WriteHash(io::Printer* printer);
+  virtual void WriteEquals(io::Printer* printer);
+  virtual void WriteToString(io::Printer* printer);
+    
+    #include <string>
+    
+    #include <map>
+#include <string>
+    
+      // implements CodeGenerator ----------------------------------------
+  bool Generate(const FileDescriptor* file,
+                const string& parameter,
+                GeneratorContext* context,
+                string* error) const;
+    
+    MessageGenerator* ImmutableGeneratorFactory::NewMessageGenerator(
+    const Descriptor* descriptor) const {
+  if (HasDescriptorMethods(descriptor, context_->EnforceLite())) {
+    return new ImmutableMessageGenerator(descriptor, context_);
+  } else {
+    return new ImmutableMessageLiteGenerator(descriptor, context_);
+  }
+}
+    
+    #include <THPP/Type.hpp>
+    
+      void allGather(std::vector<at::Tensor>& output,
+                 std::vector<at::Tensor>& input,
+                 THDGroup group_id = THDGroupWORLD) override;
+  void allGather(std::vector<at::Tensor>& output, at::Tensor& input,
+                 THDGroup group_id = THDGroupWORLD) override;
+  void gather(std::vector<at::Tensor>& output, at::Tensor& input,
+              rank_type dst_rank, THDGroup group_id = THDGroupWORLD) override;
+  void scatter(std::vector<at::Tensor>& input, at::Tensor& output,
+               rank_type src_rank, THDGroup group_id = THDGroupWORLD) override;
+  void allReduce(std::vector<at::Tensor>& data,
+                 THDReduceOp operation,
+                 THDGroup group_id = THDGroupWORLD) override;
+  void allReduce(at::Tensor& data, THDReduceOp operation,
+                 THDGroup group_id = THDGroupWORLD) override;
+  void reduce(std::vector<at::Tensor>& data,
+              THDReduceOp operation,
+              rank_type dstRank,
+              THDGroup group_id = THDGroupWORLD) override;
+  void reduce(at::Tensor& data, THDReduceOp operation, rank_type dst_rank,
+              THDGroup group_id = THDGroupWORLD) override;
+  void broadcast(std::vector<at::Tensor>& data,
+                 rank_type srcRank,
+                 THDGroup group_id = THDGroupWORLD) override;
+  void broadcast(at::Tensor& data, rank_type src_id,
+                 THDGroup group_id = THDGroupWORLD) override;
+  void send(Scalar& data, rank_type dst_id) override;
+  void send(at::Tensor& data, rank_type dst_id) override;
+  void receive(Scalar& data, rank_type src_id) override;
+  rank_type receive(at::Tensor& data) override;
+  void receive(at::Tensor& data, rank_type src_id) override;
+  RequestGloo* isend(at::Tensor& data, rank_type dst_rank) override;
+  RequestGloo* ireceive(at::Tensor& data, rank_type src_rank) override;
+    
+    #endif
 
     
-    template <typename Buffer, typename Elem>
-class buffer_sequence_adapter<Buffer, std::array<Elem, 2> >
-  : buffer_sequence_adapter_base
-{
-public:
-  explicit buffer_sequence_adapter(
-      const std::array<Elem, 2>& buffer_sequence)
+    
+    
+      masterCommandChannel->sendMessage(
+    packMessage(Functions::tensorPstrf, ra, rpiv, a, uplo[0], tol),
+    THDState::s_current_worker
+  );
+    
+    namespace leveldb {
+    }
+    
+    static void Usage() {
+  fprintf(
+      stderr,
+      'Usage: leveldbutil command...\n'
+      '   dump files...         -- dump contents of specified files\n'
+      );
+}
+    
+    #endif  // STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_
+
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    #ifndef BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
+#define BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
+    
+    #endif // BOOST_ASIO_DETAIL_ATOMIC_COUNT_HPP
+
+    
+    #if defined(BOOST_ASIO_HAS_STD_FUNCTION)
+using std::function;
+#else // defined(BOOST_ASIO_HAS_STD_FUNCTION)
+using boost::function;
+#endif // defined(BOOST_ASIO_HAS_STD_FUNCTION)
+    
+    
+    {private:
+  static void barrier()
   {
-    init_native_buffer(buffers_[0], Buffer(buffer_sequence[0]));
-    init_native_buffer(buffers_[1], Buffer(buffer_sequence[1]));
-    total_buffer_size_ = boost::asio::buffer_size(buffer_sequence[0])
-      + boost::asio::buffer_size(buffer_sequence[1]);
+#if defined(__ARM_ARCH_4__) \
+    || defined(__ARM_ARCH_4T__) \
+    || defined(__ARM_ARCH_5__) \
+    || defined(__ARM_ARCH_5E__) \
+    || defined(__ARM_ARCH_5T__) \
+    || defined(__ARM_ARCH_5TE__) \
+    || defined(__ARM_ARCH_5TEJ__) \
+    || defined(__ARM_ARCH_6__) \
+    || defined(__ARM_ARCH_6J__) \
+    || defined(__ARM_ARCH_6K__) \
+    || defined(__ARM_ARCH_6Z__) \
+    || defined(__ARM_ARCH_6ZK__) \
+    || defined(__ARM_ARCH_6T2__)
+# if defined(__thumb__)
+    // This is just a placeholder and almost certainly not sufficient.
+    __asm__ __volatile__ ('' : : : 'memory');
+# else // defined(__thumb__)
+    int a = 0, b = 0;
+    __asm__ __volatile__ ('swp %0, %1, [%2]'
+        : '=&r'(a) : 'r'(1), 'r'(&b) : 'memory', 'cc');
+# endif // defined(__thumb__)
+#else
+    // ARMv7 and later.
+    __asm__ __volatile__ ('dmb' : : : 'memory');
+#endif
   }
+};
+    
+    template <typename Function, typename Context>
+inline void invoke(const Function& function, Context& context)
+{
+#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
+  Function tmp(function);
+  tmp();
+#else
+  using boost::asio::asio_handler_invoke;
+  asio_handler_invoke(function, boost::asio::detail::addressof(context));
+#endif
+}
+    
+    #define YG_NODE_STYLE_EDGE_PROPERTY(type, name, paramName)    \
+  WIN_EXPORT void YGNodeStyleSet##name(const YGNodeRef node,  \
+                                       const YGEdge edge,     \
+                                       const type paramName); \
+  WIN_EXPORT type YGNodeStyleGet##name(const YGNodeRef node, const YGEdge edge);
+    
+    struct Value
+{
+    static Value fromYGValue(YGValue const & ygValue)
+    {
+        return Value(static_cast<int>(ygValue.unit), ygValue.value);
+    }
     }
     
-    #endif // BOOST_ASIO_DETAIL_FUNCTION_HPP
+    void Node::setJustifyContent(int justifyContent)
+{
+    YGNodeStyleSetJustifyContent(m_node, static_cast<YGJustify>(justifyContent));
+}
+    
+    struct Size
+{
+    double width;
+    double height;
+    }
+    
+    
+    {} // namespace facebook
 
     
-    #include <boost/asio/detail/push_options.hpp>
     
+    {}
+
     
-    {} // namespace boost_asio_handler_invoke_helpers
-    
-    #define BOOST_ASIO_ACCEPT_HANDLER_CHECK( \
-    handler_type, handler) \
-  typedef int BOOST_ASIO_UNUSED_TYPEDEF
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-    #include 'guetzli/output_image.h'
-#include 'guetzli/stats.h'
-    
-    void OutputImageComponent::UpdatePixelsForBlock(
-    int block_x, int block_y, const uint8_t idct[kDCTBlockSize]) {
-  if (factor_x_ == 1 && factor_y_ == 1) {
-    for (int iy = 0; iy < 8; ++iy) {
-      for (int ix = 0; ix < 8; ++ix) {
-        int x = 8 * block_x + ix;
-        int y = 8 * block_y + iy;
-        if (x >= width_ || y >= height_) continue;
-        int p = y * width_ + x;
-        pixels_[p] = idct[8 * iy + ix] << 4;
-      }
-    }
-  } else if (factor_x_ == 2 && factor_y_ == 2) {
-    // Fill in the 10x10 pixel area in the subsampled image that will be the
-    // basis of the upsampling. This area is enough to hold the 3x3 kernel of
-    // the fancy upsampler around each pixel.
-    static const int kSubsampledEdgeSize = 10;
-    uint16_t subsampled[kSubsampledEdgeSize * kSubsampledEdgeSize];
-    for (int j = 0; j < kSubsampledEdgeSize; ++j) {
-      // The order we fill in the rows is:
-      //   8 rows intersecting the block, row below, row above
-      const int y0 = block_y * 16 + (j < 9 ? j * 2 : -2);
-      for (int i = 0; i < kSubsampledEdgeSize; ++i) {
-        // The order we fill in each row is:
-        //   8 pixels within the block, left edge, right edge
-        const int ix = ((j < 9 ? (j + 1) * kSubsampledEdgeSize : 0) +
-                        (i < 9 ? i + 1 : 0));
-        const int x0 = block_x * 16 + (i < 9 ? i * 2 : -2);
-        if (x0 < 0) {
-          subsampled[ix] = subsampled[ix + 1];
-        } else if (y0 < 0) {
-          subsampled[ix] = subsampled[ix + kSubsampledEdgeSize];
-        } else if (x0 >= width_) {
-          subsampled[ix] = subsampled[ix - 1];
-        } else if (y0 >= height_) {
-          subsampled[ix] = subsampled[ix - kSubsampledEdgeSize];
-        } else if (i < 8 && j < 8) {
-          subsampled[ix] = idct[j * 8 + i] << 4;
-        } else {
-          // Reconstruct the subsampled pixels around the edge of the current
-          // block by computing the inverse of the fancy upsampler.
-          const int y1 = std::max(y0 - 1, 0);
-          const int x1 = std::max(x0 - 1, 0);
-          subsampled[ix] = (pixels_[y0 * width_ + x0] * 9 +
-                            pixels_[y1 * width_ + x1] +
-                            pixels_[y0 * width_ + x1] * -3 +
-                            pixels_[y1 * width_ + x0] * -3) >> 2;
-        }
-      }
-    }
-    }
-    }
-    
-    
-    {
-    {      // Parameters tuned to avoid sharpening in too bright areas, where the
-      // effect makes it worse instead of better.
-      if (channel == 2 && g < 0.85 && b < 0.85 && r < 0.9) {
-        darkmap[index] = true;
-      }
-      if (channel == 1 && r < 0.85 && g < 0.85 && b < 0.9) {
-        darkmap[index] = true;
-      }
-    }
-  }
-    
-    // Entropy encoding (Huffman) utilities.
-    
-    
-    {}  // namespace guetzli
-    
-      int iquant[3 * kDCTBlockSize];
-  int idx = 0;
-  for (int i = 0; i < 3; ++i) {
-    for (int j = 0; j < kDCTBlockSize; ++j) {
-      int v = quant[idx];
-      jpg->quant[i].values[j] = v;
-      iquant[idx++] = ((1 << kIQuantBits) + 1) / v;
-    }
-  }
-    
-    int BuildJpegHuffmanTable(const int* count_in, const int* symbols,
-                          HuffmanTableEntry* lut) {
-  HuffmanTableEntry code;    // current table entry
-  HuffmanTableEntry* table;  // next available space in table
-  int len;         // current code length
-  int idx;         // symbol index
-  int key;         // prefix code
-  int reps;        // number of replicate key values in current table
-  int low;         // low bits for current root entry
-  int table_bits;  // key length of current table
-  int table_size;  // size of current table
-  int total_size;  // sum of root table size and 2nd level table sizes
-    }
+    #pragma once
+#include <fb/assert.h>
+#include <utility>
