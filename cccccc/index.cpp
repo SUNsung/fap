@@ -1,64 +1,108 @@
 
         
-        bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
+          if (b->nDimension == 1) {
+    b = THDTensor_(newWithStorage2d)(b->storage, b->storageOffset, b->size[0],
+            b->stride[0], 1, 0);
+    free_b = true;
+  }
     
+    void THDTensor_(bernoulli_DoubleTensor)(THDTensor *self, THDGenerator *_generator,
+                                        THDDoubleTensor *p) {
+  masterCommandChannel->sendMessage(
+    packMessage(Functions::tensorBernoulli_DoubleTensor, self, _generator, p),
+    THDState::s_current_worker
+  );
+}
     
-    
-    int register_all_cocos2dx_cocosdenshion(lua_State* tolua_S);
-    
-    #endif // __cocos2dx_csloader_h__
+    #endif
 
     
     
+    {  return socket;
+}
+    
+    #endif // __cocos2dx_cocosdenshion_h__
+
+    
+    #ifdef __cplusplus
+extern 'C' {
+#endif
+#include 'tolua++.h'
+#ifdef __cplusplus
+}
+#endif
     
     
-    {        ok &= luaval_to_number(tolua_S, 2,&arg0, 'cc.PhysicsShape:setFriction');
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsShape_setFriction'', nullptr);
-            return 0;
-        }
-        cobj->setFriction(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
+    
+    	m_pointCount = 0;
+    
+    const int32 k_maxContactPoints = 2048;
+    
+    			b2FixtureDef sd2;
+			sd2.shape = &poly2;
+			sd2.density = 2.0f;
+    
+    			b2Body* prevBody = ground;
+			for (int32 i = 0; i < e_count; ++i)
+			{
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
+				bd.position.Set(-14.5f + 1.0f * i, 5.0f);
+				b2Body* body = m_world->CreateBody(&bd);
+				body->CreateFixture(&fd);
     }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.PhysicsShape:setFriction',argc, 1);
-    return 0;
     
-    	static Test* Create()
-	{
-		return new Bridge;
-	}
+    			bd.position.Set(1.0f, 0.4f);
+			m_wheel2 = m_world->CreateBody(&bd);
+			m_wheel2->CreateFixture(&fd);
     
-    			edge.Set(b2Vec2(-10.0f, 0.0f), b2Vec2(10.0f, 0.0f));
-			body->CreateFixture(&edge, 0.0f);
+    void AbstractAuthResolver::setUserDefinedCred(std::string user,
+                                              std::string password)
+{
+  userDefinedUser_ = std::move(user);
+  userDefinedPassword_ = std::move(password);
+}
     
-    				if (i > 0)
-				{
-					b2Vec2 anchor(-5.0f + 1.0f * i, 5.0f);
-					jd.Initialize(prevBody, body, anchor);
-					m_world->CreateJoint(&jd);
-				}
+    namespace aria2 {
+    }
+    
+    public:
+  AbstractBtMessage(uint8_t id, const char* name);
+    
+    
+    {  virtual void dropCache(int64_t len, int64_t offset) CXX11_OVERRIDE;
+};
+    
+      virtual const std::string& getDefaultValue() const CXX11_OVERRIDE
+  {
+    return defaultValue_;
+  }
+    
+    
+    {} // namespace aria2
+
+    
+    #include 'AbstractCommand.h'
+    
+    class RequestGroup;
+class DownloadEngine;
+class Peer;
+class BtRuntime;
+class PieceStorage;
+class PeerStorage;
+class BtAnnounce;
+    
+    AnnounceList::AnnounceList(
+    const std::deque<std::shared_ptr<AnnounceTier>>& announceTiers)
+    : tiers_(announceTiers), currentTrackerInitialized_(false)
+{
+  resetIterator();
+}
+    
+    private:
+  TLSSessionSide side_;
+  TLSVersion minTLSVer_;
+  bool verifyPeer_;
+  SecIdentityRef credentials_;
+    
+      std::string getAuthText() const;
