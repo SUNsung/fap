@@ -1,65 +1,119 @@
 
         
-            if include_debug_info:
-        print_debug_info(env)
-        if args == ['--debug']:
-            return ExitStatus.OK
+        
+def main(unused_argv):
+  # Run the exporter.
+  export(FLAGS.master_spec, FLAGS.params_path, FLAGS.export_path,
+         FLAGS.export_moving_averages, FLAGS.build_runtime_graph)
+  tf.logging.info('Export complete.')
     
-            See https://github.com/jakubroztocil/httpie/issues/212
+      Returns:
+    Dict mapping from shortened resource path to original resource path.
+  '''
+  for component_spec in master_spec.component:
+    for feature_spec in component_spec.fixed_feature:
+      feature_spec.ClearField('pretrained_embedding_matrix')
+      feature_spec.ClearField('vocab')
     
-            if self.args.auth is not None or auth_type_set:
-            if not self.args.auth_type:
-                self.args.auth_type = default_auth_plugin.auth_type
-            plugin = plugin_manager.get_auth_plugin(self.args.auth_type)()
+        for ns in n_samples:
+        for nf in n_features:
+            it += 1
+            print('==================')
+            print('Iteration %s of %s' % (it, max(len(n_samples),
+                                          len(n_features))))
+            print('==================')
+            n_informative = nf // 10
+            X, Y, coef_ = make_regression(n_samples=ns, n_features=nf,
+                                          n_informative=n_informative,
+                                          noise=0.1, coef=True)
     
-        if args.auth_plugin:
-        session.auth = {
-            'type': args.auth_plugin.auth_type,
-            'raw_auth': args.auth_plugin.raw_auth,
-        }
-    elif session.auth:
-        kwargs['auth'] = session.auth
-    
-    import os, json, imp
-here = os.path.abspath(os.path.dirname(__file__))
-proj_info = json.loads(open(os.path.join(here, PROJ_METADATA), encoding='utf-8').read())
-try:
-    README = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
-except:
-    README = ''
-CHANGELOG = open(os.path.join(here, 'CHANGELOG.rst'), encoding='utf-8').read()
-VERSION = imp.load_source('version', os.path.join(here, 'src/%s/version.py' % PACKAGE_NAME)).__version__
-    
-            if args:
-            if 'gui' in conf and conf['gui']:
-                # Enter GUI mode.
-                from .gui import gui_main
-                gui_main(*args, **conf)
-            else:
-                # Enter console mode.
-                from .console import console_main
-                console_main(*args, **conf)
-    
-            html = get_content(self.url)
-    
-    site_info = 'ehow.com'
-download = ehow_download
-download_playlist = playlist_not_supported('ehow')
+    plot(euclidean_distances)
+plot(rbf_kernels)
+plt.show()
 
     
-    def kugou_download_playlist(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    html=get_html(url)
-    pattern=re.compile('title='(.*?)'.* data='(\w*)\|.*?'')
-    pairs=pattern.findall(html)
-    for title,hash_val in pairs:
-        kugou_download_by_hash(title,hash_val,output_dir,merge,info_only)
+            text_filename = os.path.join(text_lang_folder,
+                                     '%s_%04d.txt' % (lang, i))
+        print('Writing %s' % text_filename)
+        open(text_filename, 'wb').write(content.encode('utf-8', 'ignore'))
+        i += 1
     
-    def kuwo_playlist_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    html=get_content(url)
-    matched=set(re.compile('yinyue/(\d+)').findall(html))#reduce duplicated
-    for rid in matched:
-        kuwo_download_by_rid(rid,output_dir,merge,info_only)
+    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
+                             random_state=0)
+model.fit(data)
+score = consensus_score(model.biclusters_,
+                        (rows[:, row_idx], columns[:, col_idx]))
     
-            # extract title
-        self.title = match1(content,
-                            r'<meta property='og:description' name='og:description' content='([^']+)'')
+        # not a test, but looks like a test
+    'scrapy/utils/testsite.py',
+    
+        def test_sequential_execution(self):
+        self.command_stack[0].execute()
+        output_after_first_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_first_execution[0], 'bar.txt')
+        self.command_stack[1].execute()
+        output_after_second_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_second_execution[0], 'baz.txt')
+    
+        def test_sales_manager_shall_respond_through_proxy_with_delay(cls):
+        cls.p.busy = 'Yes'
+        start_time = time()
+        cls.p.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+Sales Manager is busy\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    
+    
+class TestNaitivePool(unittest.TestCase):
+    
+        def test_dog_eng_localization(self):
+        self.assertEqual(self.e.get('dog'), 'dog')
+    
+        def now(self):
+        current_time = datetime.datetime.now()
+        current_time_formatted = '{}:{}'.format(current_time.hour, current_time.minute)
+        return current_time_formatted
+    
+    
+class AndSpecification(CompositeSpecification):
+    _one = Specification()
+    _other = Specification()
+    
+    PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
+    vol.Required(CONF_API_KEY): cv.string,
+    vol.Required(CONF_SYSTEM_ID): cv.string,
+    vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
+})
+    
+        if not app.config.edit_on_github_project:
+        warnings.warn('edit_on_github_project not specified')
+        return
+    if not doctree:
+        warnings.warn('doctree is None')
+        return
+    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
+    show_url = get_github_url(app, 'blob', path)
+    edit_url = get_github_url(app, 'edit', path)
+    
+        return True
+
+    
+    
+def run(args):
+    '''Handle ensure config commandline script.'''
+    parser = argparse.ArgumentParser(
+        description=('Ensure a Home Assistant config exists, '
+                     'creates one if necessary.'))
+    parser.add_argument(
+        '-c', '--config',
+        metavar='path_to_config_dir',
+        default=config_util.get_default_config_dir(),
+        help='Directory that contains the Home Assistant configuration')
+    parser.add_argument(
+        '--script',
+        choices=['ensure_config'])
