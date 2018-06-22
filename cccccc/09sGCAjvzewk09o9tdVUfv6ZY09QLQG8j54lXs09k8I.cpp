@@ -1,333 +1,125 @@
 
         
-        bool NwCurrentWindowInternalGetTitleInternalFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  AppWindow* window = getAppWindow(this);
-  response->AppendString(window->title_override());
-  return true;
-}
+        
+    {} // namespace thd
     
-    // Multiply-included file, no traditional include guard.
-#include <string>
+    void THDTensor_(gesvd2)(THDTensor *ru, THDTensor *rs, THDTensor *rv, THDTensor *ra,
+                        THDTensor *a, const char *jobu) {
+  if (a == NULL) a = ra;
+  THArgCheck(a->nDimension == 2, 1, 'A should be 2 dimensional');
+    }
     
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    #endif //CONTENT_NW_SRC_API_EVENT_EVENT_H_
+    #endif // TH_GENERIC_FILE
 
     
-      gfx::Point* point = reinterpret_cast<gfx::Point*>(userdata);
-  *x = point->x();
-  *y = point->y();
+      // Use the cross-platform abstractions to inspect the current test process.
+  auto test_process = PlatformProcess::getCurrentProcess();
+  // Initialize a scoped (fake) process abstraction.
+  auto fake_test_process = FakePlatformProcess(test_process->nativeHandle());
     
-    bool MenuItem::CanHandleAccelerators() const {
-  return enable_shortcut_ && is_enabled_;
+    
+    {  // Make sure no log file is created.
+  // RocksDB logs are intercepted and forwarded to the GLog sink.
+  auto details = SQL::selectAllFrom('file', 'path', EQUALS, path_ + '/LOG');
+  ASSERT_EQ(details.size(), 0U);
 }
     
-          std::unique_ptr<SkBitmap> bitmap(new SkBitmap());
-      if (data.type == TYPE_PNG &&
-        !gfx::PNGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size(), bitmap.get())) {
-        error_ = 'Failed to decode as PNG';
-        return false;
-      } else if (data.type == TYPE_JPEG) {
-        std::unique_ptr<SkBitmap> tmp_bitmap = gfx::JPEGCodec::Decode(reinterpret_cast<const unsigned char*>(decoded_str.c_str()), decoded_str.size());
-        if (tmp_bitmap == NULL) {
-          error_ = 'Failed to decode as JPEG';
-          return false;
-        }
-        bitmap = std::move(tmp_bitmap);
-      }
+    /**
+ * @brief Generate the header string for query results
+ *
+ * @param lengths The data returned from computeQueryDataLengths
+ * @param columns The order of the keys (since maps are unordered)
+ *
+ * @return A string, with a newline, representing your header
+ */
+std::string generateHeader(const std::map<std::string, size_t>& lengths,
+                           const std::vector<std::string>& columns);
     
-     protected:
-  ~NwClipboardClearSyncFunction() override;
+      /// Limit the FSEvents actions to the subscriptioned mask (if not 0).
+  FSEventStreamEventFlags mask{0};
     
-    NwObjCallObjectMethodAsyncFunction::~NwObjCallObjectMethodAsyncFunction() {
-}
+    /// This is a dispatched service that handles published audit replies.
+class OpenBSMConsumerRunner;
     
     
     {
-    {  private:
-    DISALLOW_COPY_AND_ASSIGN(NwScreenRegisterStreamFunction);
+    {      // Each event type may use a specific event type structure.
+      KernelEventContextRef ec = nullptr;
+      switch (event_type) {
+      case OSQUERY_PROCESS_EVENT:
+        ec = createEventContextFrom<osquery_process_event_t>(event_type, event);
+        fire(ec);
+        break;
+      case OSQUERY_FILE_EVENT:
+        ec = createEventContextFrom<osquery_file_event_t>(event_type, event);
+        fire(ec);
+        break;
+      default:
+        LOG(WARNING) << 'Unknown kernel event received: ' << event_type;
+        break;
+      }
+      max_before_lock--;
+    }
+    return true;
   };
-} // extensions
     
-    bool NwShellOpenExternalFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
-  manager->OnCallStaticMethod(render_frame_host(), 'Shell', 'OpenExternal', *args_);
-  return true;
-}
+     public:
+  YGNode();
+  ~YGNode();
+  explicit YGNode(const YGConfigRef newConfig);
+  YGNode(const YGNode& node);
+  YGNode& operator=(const YGNode& node);
+  YGNode(
+      void* context,
+      YGPrintFunc print,
+      bool hasNewLayout,
+      YGNodeType nodeType,
+      YGMeasureFunc measure,
+      YGBaselineFunc baseline,
+      YGDirtiedFunc dirtied,
+      YGStyle style,
+      const YGLayout& layout,
+      uint32_t lineIndex,
+      YGNodeRef owner,
+      const YGVector& children,
+      YGNodeRef nextChild,
+      YGConfigRef config,
+      bool isDirty,
+      std::array<YGValue, 2> resolvedDimensions);
     
-        // Finish and check for builder errors
-    if (s.ok()) {
-      s = builder->Finish();
-      if (s.ok()) {
-        meta->file_size = builder->FileSize();
-        assert(meta->file_size > 0);
-      }
-    } else {
-      builder->Abandon();
-    }
-    delete builder;
+    // This function marks the current node and all its descendants as dirty. This function is added to test yoga benchmarks.
+// This function is not expected to be used in production as calling `YGCalculateLayout` will cause the recalculation of each and every node.
+WIN_EXPORT void YGNodeMarkDirtyAndPropogateToDescendants(const YGNodeRef node);
     
-    #include <stdint.h>
-#include 'leveldb/db.h'
-#include 'db/dbformat.h'
+    /**
+ * Symbolicates a stack trace into a given vector
+ *
+ * @param symbols The vector to receive the output. The vector is cleared and
+ * enough room to keep the frames are reserved.
+ *
+ * @param stackTrace The input stack trace
+ */
+FBEXPORT void getStackTraceSymbols(std::vector<StackTraceElement>& symbols,
+                                   const std::vector<InstructionPointer>& trace);
     
-    std::string ParsedInternalKey::DebugString() const {
-  char buf[50];
-  snprintf(buf, sizeof(buf), '' @ %llu : %d',
-           (unsigned long long) sequence,
-           int(type));
-  std::string result = ''';
-  result += EscapeString(user_key.ToString());
-  result += buf;
-  return result;
-}
-    
-    #endif  // STORAGE_LEVELDB_DB_DBFORMAT_H_
-
-    
-      ReadOptions ro;
-  ro.fill_cache = false;
-  Iterator* iter = table->NewIterator(ro);
-  std::string r;
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    r.clear();
-    ParsedInternalKey key;
-    if (!ParseInternalKey(iter->key(), &key)) {
-      r = 'badkey '';
-      AppendEscapedStringTo(&r, iter->key());
-      r += '' => '';
-      AppendEscapedStringTo(&r, iter->value());
-      r += ''\n';
-      dst->Append(r);
-    } else {
-      r = ''';
-      AppendEscapedStringTo(&r, key.user_key);
-      r += '' @ ';
-      AppendNumberTo(&r, key.sequence);
-      r += ' : ';
-      if (key.type == kTypeDeletion) {
-        r += 'del';
-      } else if (key.type == kTypeValue) {
-        r += 'val';
-      } else {
-        AppendNumberTo(&r, key.type);
-      }
-      r += ' => '';
-      AppendEscapedStringTo(&r, iter->value());
-      r += ''\n';
-      dst->Append(r);
-    }
-  }
-  s = iter->status();
-  if (!s.ok()) {
-    dst->Append('iterator error: ' + s.ToString() + '\n');
-  }
+     public: // Prevent accidental copy
     
     
-    {  fname = TempFileName('tmp', 999);
-  ASSERT_EQ('tmp/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(999, number);
-  ASSERT_EQ(kTempFile, type);
-}
-    
-    #ifndef STORAGE_LEVELDB_DB_TABLE_CACHE_H_
-#define STORAGE_LEVELDB_DB_TABLE_CACHE_H_
-    
-    class VersionEdit {
- public:
-  VersionEdit() { Clear(); }
-  ~VersionEdit() { }
-    }
-    
-    void WriteBatchInternal::SetSequence(WriteBatch* b, SequenceNumber seq) {
-  EncodeFixed64(&b->rep_[0], seq);
-}
-    
-    namespace leveldb {
-    }
-    
-      // Constructs a Message from a C-string.
-  explicit Message(const char* str) : ss_(new ::std::stringstream) {
-    *ss_ << str;
-  }
-    
-    
-    
-      // Signals that the death test did not die as expected.
-  virtual void Abort(AbortReason reason) = 0;
-    
-      // Compares two wide C strings.  Returns true iff they have the same
-  // content.
-  //
-  // Unlike wcscmp(), this function can handle NULL argument(s).  A
-  // NULL C string is considered different to any non-NULL C string,
-  // including the empty string.
-  static bool WideCStringEquals(const wchar_t* lhs, const wchar_t* rhs);
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17>
-struct Types17 {
-  typedef T1 Head;
-  typedef Types16<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17> Tail;
-};
-    
-    
-// This sample shows how to write a simple unit test for a function,
-// using Google C++ testing framework.
-//
-// Writing a unit test using Google C++ testing framework is easy as 1-2-3:
-    
-    namespace grpc {
-namespace testing {
-    }
-    }
-    
-    
-    {  return 0;
-}
-
-    
-    namespace routeguide {
-class Feature;
-    }
-    
-    namespace grpc {
-    }
-    
-    
+    {    void toJS(nbind::cbOutput expose) const
     {
-    { private:
-  friend class TLSConfigTests;
+        expose(left, right, top, bottom, width, height);
+    }
 };
-}
 
     
-    #include <gtest/gtest.h>
+    void Node::setMinWidth(double minWidth)
+{
+    YGNodeStyleSetMinWidth(m_node, minWidth);
+}
     
-    Status platformStrncpy(char* dst, size_t nelms, const char* src, size_t count) {
-  auto status = ::strncpy_s(dst, nelms, src, count);
-  if (status != 0) {
-    return Status(1, 'Failed to strncpy_s: ' + status);
-  }
+    
+    {    void toJS(nbind::cbOutput expose) const
+    {
+        expose(width, height);
     }
-    
-    #include 'osquery/devtools/devtools.h'
-    
-    using DiskArbitrationEventContextRef =
-    std::shared_ptr<DiskArbitrationEventContext>;
-using DiskArbitrationSubscriptionContextRef =
-    std::shared_ptr<DiskArbitrationSubscriptionContext>;
-    
-      // gmock doesn't work with the IOBuf&& so we have to wrap this.
-  void writeChain(WriteCallback* callback,
-                  std::unique_ptr<folly::IOBuf>&& iob,
-                  folly::WriteFlags flags = folly::WriteFlags::NONE) override {
-    writeChain(callback, std::shared_ptr<folly::IOBuf>(iob.release()), flags);
-  }
-    
-    
-    {  // Now try gather again on the chain head
-  cursor = RWPrivateCursor(iobuf1.get());
-  cursor.gather(5);
-  // Since gather() doesn't split buffers, everything should be collapsed into
-  // a single buffer now.
-  EXPECT_EQ(1, iobuf1->countChainElements());
-  EXPECT_EQ(11, iobuf1->computeChainDataLength());
-  EXPECT_EQ(11, cursor.length());
-  EXPECT_EQ(11, cursor.totalLength());
-}
-    
-    enum : uint64_t {
-  // When create() is called for buffers less than kDefaultCombinedBufSize,
-  // we allocate a single combined memory segment for the IOBuf and the data
-  // together.  See the comments for createCombined()/createSeparate() for more
-  // details.
-  //
-  // (The size of 1k is largely just a guess here.  We could could probably do
-  // benchmarks of real applications to see if adjusting this number makes a
-  // difference.  Callers that know their exact use case can also explicitly
-  // call createCombined() or createSeparate().)
-  kDefaultCombinedBufSize = 1024
 };
-    
-    
-    {  EXPECT_EQ(ordering::eq, op(n, n));
-  EXPECT_EQ(ordering::lt, op(n, e));
-  EXPECT_EQ(ordering::gt, op(e, n));
-  EXPECT_EQ(ordering::lt, op(e, hello1));
-  EXPECT_EQ(ordering::gt, op(hello1, e));
-  EXPECT_EQ(ordering::eq, op(hello1, hello1));
-  EXPECT_EQ(ordering::eq, op(hello1, hello2));
-  EXPECT_EQ(ordering::eq, op(hello1, hello3));
-  EXPECT_EQ(ordering::lt, op(hello1, hellow));
-  EXPECT_EQ(ordering::gt, op(hellow, hello1));
-  EXPECT_EQ(ordering::lt, op(hellow, hellox));
-  EXPECT_EQ(ordering::gt, op(hellox, hellow));
-}
-    
-    // Some queue implementations (for example, LifoSemMPMCQueue or
-// PriorityLifoSemMPMCQueue) support both blocking (BLOCK) and
-// non-blocking (THROW) behaviors.
-enum class QueueBehaviorIfFull { THROW, BLOCK };
-    
-    template <class T, QueueBehaviorIfFull kBehavior = QueueBehaviorIfFull::THROW>
-class LifoSemMPMCQueue : public BlockingQueue<T> {
- public:
-  // Note: The queue pre-allocates all memory for max_capacity
-  explicit LifoSemMPMCQueue(size_t max_capacity) : queue_(max_capacity) {}
-    }
-    
-    
-    {} // namespace folly
-
-    
-      if (UNLIKELY(!tk)) {
-    return makeFuture<Unit>(FutureNoTimekeeper());
-  }
-    
-      folly::EventBaseManager* getEventBaseManager();
-    
-    template <typename DigestT, typename ClockT>
-std::unique_lock<SharedMutex> BufferedStat<DigestT, ClockT>::updateIfExpired(
-    TimePoint now) {
-  std::unique_lock<SharedMutex> g(mutex_);
-  doUpdate(now, g);
-  return g;
-}
-    
-    // Returns true if stdout appears to be a terminal that supports colored
-// output, false otherwise.
-bool IsColorTerminal();
-    
-      // Do not print timeLabel on bigO and RMS report
-  if (run.report_big_o) {
-    Out << GetBigOString(run.complexity);
-  } else if (!run.report_rms) {
-    Out << GetTimeUnitString(run.time_unit);
-  }
-  Out << ',';
-    
-    
-    { private:
-  LogType(std::ostream* out) : out_(out) {}
-  std::ostream* out_;
-  BENCHMARK_DISALLOW_COPY_AND_ASSIGN(LogType);
-};
-    
-    #include <algorithm>
-#include <cmath>
-#include <string>
-#include <vector>
-#include <numeric>
-#include 'check.h'
-#include 'statistics.h'
