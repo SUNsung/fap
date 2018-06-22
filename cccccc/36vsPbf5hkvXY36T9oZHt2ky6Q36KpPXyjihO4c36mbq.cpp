@@ -1,157 +1,319 @@
 
         
-        IPC_MESSAGE_ROUTED3(ShellViewHostMsg_Call_Static_Method,
-                    std::string /* type name */,
-                    std::string /* method name */,
-                    base::ListValue /* arguments */)
-    
-      virtual void Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh = nullptr);
-  virtual void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result);
-    
-    // Tell browser to allocate a new object.
-// function AllocateObject(id, name, options);
-v8::Handle<v8::Value> AllocateObject(int routing_id,
-                                     int object_id,
-                                     const std::string& type,
-                                     v8::Handle<v8::Value> options);
-    
-    void Clipboard::Call(const std::string& method,
-                     const base::ListValue& arguments) {
-  if (method == 'Set') {
-    std::string text, type;
-    arguments.GetString(0, &text);
-    arguments.GetString(1, &type);
-    SetText(text);
-  } else if (method == 'Clear') {
-    Clear();
-  } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
+        
+    {  TRand random_;
+  IntSimdMatrix base_;
+};
     
     
-    {} // namespace nwapi
+class WERD;
+class UNICHARSET;
+    
+      // Return the id associated with the given unichar representation,
+  // this representation MUST exist within the UNICHARMAP. The first
+  // length characters (maximum) from unichar_repr are used. The length
+  // MUST be non-zero.
+  UNICHAR_ID unichar_to_id(const char* const unichar_repr, int length) const;
+    
+    #endif  // TESSERACT_CCUTIL_UNICODES_H_
 
     
-    class EventListener : public Base {
-  std::map<int, BaseEvent*> listerners_;
-    }
-    
-    void Menu::Remove(MenuItem* menu_item, int pos) {
-  std::vector<MenuItem*>::iterator begin = menu_items.begin();
-  menu_items.erase(begin+pos);
-  gtk_container_remove(GTK_CONTAINER(menu_), menu_item->menu_item_);
+    Dawg *DawgLoader::Load() {
+  TFile fp;
+  if (!data_file_->GetComponent(tessdata_dawg_type_, &fp)) return nullptr;
+  DawgType dawg_type;
+  PermuterType perm_type;
+  switch (tessdata_dawg_type_) {
+    case TESSDATA_PUNC_DAWG:
+    case TESSDATA_LSTM_PUNC_DAWG:
+      dawg_type = DAWG_TYPE_PUNCTUATION;
+      perm_type = PUNC_PERM;
+      break;
+    case TESSDATA_SYSTEM_DAWG:
+    case TESSDATA_LSTM_SYSTEM_DAWG:
+      dawg_type = DAWG_TYPE_WORD;
+      perm_type = SYSTEM_DAWG_PERM;
+      break;
+    case TESSDATA_NUMBER_DAWG:
+    case TESSDATA_LSTM_NUMBER_DAWG:
+      dawg_type = DAWG_TYPE_NUMBER;
+      perm_type = NUMBER_PERM;
+      break;
+    case TESSDATA_BIGRAM_DAWG:
+      dawg_type = DAWG_TYPE_WORD;  // doesn't actually matter
+      perm_type = COMPOUND_PERM;   // doesn't actually matter
+      break;
+    case TESSDATA_UNAMBIG_DAWG:
+      dawg_type = DAWG_TYPE_WORD;
+      perm_type = SYSTEM_DAWG_PERM;
+      break;
+    case TESSDATA_FREQ_DAWG:
+      dawg_type = DAWG_TYPE_WORD;
+      perm_type = FREQ_DAWG_PERM;
+      break;
+    default:
+      return nullptr;
+  }
+  SquishedDawg *retval =
+      new SquishedDawg(dawg_type, lang_, perm_type, dawg_debug_level_);
+  if (retval->Load(&fp)) return retval;
+  delete retval;
+  return nullptr;
 }
     
-    class NwShellOpenExternalFunction : public NWSyncExtensionFunction {
- public:
-  NwShellOpenExternalFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
+      // If we manage the given dawg, decrement its count,
+  // and possibly delete it if the count reaches zero.
+  // If dawg is unknown to us, return false.
+  bool FreeDawg(Dawg *dawg) {
+    return dawgs_.Free(dawg);
+  }
+    
+     private:
+  // Constructor is private as the instance only holds information specific to
+  // the current labels, outputs etc, and is built by the static function.
+  CTC(const GenericVector<int>& labels, int null_char,
+      const GENERIC_2D_ARRAY<float>& outputs);
+    
+    // Non-linearity (sigmoid) functions and their derivatives.
+struct FFunc {
+  inline double operator()(double x) const { return Logistic(x); }
+};
+struct FPrime {
+  inline double operator()(double y) const { return y * (1.0 - y); }
+};
+struct ClipFFunc {
+  inline double operator()(double x) const {
+    if (x <= 0.0) return 0.0;
+    if (x >= 1.0) return 1.0;
+    return x;
+  }
+};
+struct ClipFPrime {
+  inline double operator()(double y) const {
+    return 0.0 < y && y < 1.0 ? 1.0 : 0.0;
+  }
+};
+struct Relu {
+  inline double operator()(double x) const {
+    if (x <= 0.0) return 0.0;
+    return x;
+  }
+};
+struct ReluPrime {
+  inline double operator()(double y) const { return 0.0 < y ? 1.0 : 0.0; }
+};
+struct GFunc {
+  inline double operator()(double x) const { return Tanh(x); }
+};
+struct GPrime {
+  inline double operator()(double y) const { return 1.0 - y * y; }
+};
+struct ClipGFunc {
+  inline double operator()(double x) const {
+    if (x <= -1.0) return -1.0;
+    if (x >= 1.0) return 1.0;
+    return x;
+  }
+};
+struct ClipGPrime {
+  inline double operator()(double y) const {
+    return -1.0 < y && y < 1.0 ? 1.0 : 0.0;
+  }
+};
+struct HFunc {
+  inline double operator()(double x) const { return Tanh(x); }
+};
+struct HPrime {
+  inline double operator()(double y) const {
+    double u = Tanh(y);
+    return 1.0 - u * u;
+  }
+};
+struct UnityFunc {
+  inline double operator()(double x) const { return 1.0; }
+};
+struct IdentityFunc {
+  inline double operator()(double x) const { return x; }
+};
+    
+    
+using namespace dmlc;
+    
+    
+    {  delete metric;
+  metric = xgboost::Metric::Create('ndcg@2-');
+  ASSERT_STREQ(metric->Name(), 'ndcg@2-');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 1, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              0.3868f, 0.001f);
+}
+    
+    #include <dmlc/registry.h>
+#include <xgboost/base.h>
+#include <xgboost/data.h>
+#include <functional>
+#include <string>
+#include <utility>
+#include <vector>
+#include '../../src/gbm/gblinear_model.h'
+#include '../../src/common/host_device_vector.h'
+    
+      XGBOOST_DEVICE explicit GradientPairInternal(int value) {
+    *this = GradientPairInternal<T>(static_cast<float>(value),
+                                  static_cast<float>(value));
+  }
+    
+    /*!
+ * \brief Registry entry for tree updater.
+ */
+struct TreeUpdaterReg
+    : public dmlc::FunctionRegEntryBase<TreeUpdaterReg,
+                                        std::function<TreeUpdater* ()> > {
+};
+    
+    #include <cstdint>
+#include <iosfwd>
+#include <typeinfo>
+#include <vector>
+    
+    
+    {  bool cas(T& u, T& v) {
+    Node* n = new Node(v);
+    hazptr_holder<Atom> hptr;
+    Node* p;
+    while (true) {
+      p = hptr.get_protected(node_);
+      if (p->val_ != u) {
+        delete n;
+        return false;
+      }
+      if (node_.compare_exchange_weak(
+              p, n, std::memory_order_relaxed, std::memory_order_release)) {
+        break;
+      }
+    }
+    hptr.reset();
+    p->retire();
+    return true;
+  }
+};
+    
+    
+    {  // Test that inheriting from MoveOnly doesn't prevent the move
+  // constructor from being noexcept.
+  static_assert(
+      std::is_nothrow_move_constructible<FooBar>::value,
+      'Should have noexcept move constructor');
+}
+    
+    #include <thread>
+    
+      folly::EventBase* getEventBase() override;
+    
+      auto barrier = std::make_shared<boost::barrier>(nThreads + 1);
+    
+    DEFINE_FIND_STATIC_METHOD(KXlog_appenderOpenWithMultipathWithLevel, KXlog, 'appenderOpen', '(IILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V')
+JNIEXPORT void JNICALL Java_com_tencent_mars_xlog_Xlog_appenderOpen
+	(JNIEnv *env, jclass, jint level, jint mode, jstring _cache_dir, jstring _log_dir, jstring _nameprefix, jstring _pubkey) {
+	if (NULL == _log_dir || NULL == _nameprefix) {
+		return;
+	}
     }
     
-    
-    {
-    {
-    {// utility function to round an integer up to a multiple of size
-size_t RoundUp(size_t value, size_t size);
-// HIGH and LOW DWORD functions
-DWORD HIDWORD(size_t size);
-DWORD LODWORD(size_t size);
-} } }
+    #endif
 
     
-            // allow to change current directory, for easier debugging
-        wstring cdDescriptor = L'currentDirectory=';
-        if (_wcsnicmp(cdDescriptor.c_str(), str.c_str(), cdDescriptor.length()) == 0)
-        {
-            wstring dir = str.substr(cdDescriptor.length());
-            if (_wchdir(dir.c_str()) != 0)
-                InvalidArgument('Failed to set the current directory to '%ls'', dir.c_str());
-            fprintf(stderr, 'Changed current directory to %ls\n', dir.c_str());
-        }
-    
-        // helper to return a time-stamp prefix if time-stamping enabled, complete with ': ' at its end
-    static std::wstring GetTimeStampPrefix()
-    {
-        char mbstr[30];
-        return GetTimestampingFlag() ? msra::strfun::wstrprintf(L'%s: ', Timestamp(mbstr)) : L'';
-    }
-    
-    namespace Microsoft { namespace MSR { namespace CNTK {
-    }
-    }
-    }
-    
-      /**
-   * \fn  virtual void Predictor::PredictLeaf(DMatrix* dmat,
-   * std::vector<bst_float>* out_preds, const gbm::GBTreeModel& model, unsigned
-   * ntree_limit = 0) = 0;
-   *
-   * \brief predict the leaf index of each tree, the output will be nsample *
-   * ntree vector this is only valid in gbtree predictor.
-   *
-   * \param [in,out]  dmat        The input feature matrix.
-   * \param [in,out]  out_preds   The output preds.
-   * \param           model       Model to make predictions from.
-   * \param           ntree_limit (Optional) The ntree limit.
-   */
-    
-      bool Read(SparsePage* page,
-            dmlc::SeekStream* fi,
-            const std::vector<bst_uint>& sorted_index_set) override {
-    if (!fi->Read(&disk_offset_)) return false;
-    // setup the offset
-    page->offset.clear();
-    page->offset.push_back(0);
-    for (unsigned int fid : sorted_index_set) {
-      CHECK_LT(fid + 1, disk_offset_.size());
-      size_t size = disk_offset_[fid + 1] - disk_offset_[fid];
-      page->offset.push_back(page->offset.back() + size);
-    }
-    page->data.resize(page->offset.back());
-    // read in the data
-    size_t begin = fi->Tell();
-    size_t curr_offset = 0;
-    for (size_t i = 0; i < sorted_index_set.size();) {
-      bst_uint fid = sorted_index_set[i];
-      if (disk_offset_[fid] != curr_offset) {
-        CHECK_GT(disk_offset_[fid], curr_offset);
-        fi->Seek(begin + disk_offset_[fid] * sizeof(Entry));
-        curr_offset = disk_offset_[fid];
-      }
-      size_t j, size_to_read = 0;
-      for (j = i; j < sorted_index_set.size(); ++j) {
-        if (disk_offset_[sorted_index_set[j]] == disk_offset_[fid] + size_to_read) {
-          size_to_read += page->offset[j + 1] - page->offset[j];
-        } else {
-          break;
-        }
-      }
-    }
-    }
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
     
     
-    {  // read in the cache files.
-  for (size_t i = 0; i < cache_shards.size(); ++i) {
-    std::string name_row = cache_shards[i] + '.row.page';
-    files_[i].reset(dmlc::SeekStream::CreateForRead(name_row.c_str()));
-    dmlc::SeekStream* fi = files_[i].get();
-    std::string format;
-    CHECK(fi->Read(&format)) << 'Invalid page format';
-    formats_[i].reset(SparsePageFormat::Create(format));
-    SparsePageFormat* fmt = formats_[i].get();
-    size_t fbegin = fi->Tell();
-    prefetchers_[i].reset(new dmlc::ThreadedIter<SparsePage>(4));
-    prefetchers_[i]->Init([fi, fmt] (SparsePage** dptr) {
-        if (*dptr == nullptr) {
-          *dptr = new SparsePage();
-        }
-        return fmt->Read(*dptr, fi);
-      }, [fi, fbegin] () { fi->Seek(fbegin); });
-  }
+    {        return NULL;
+    }
+    
+        const jchar* GetStringCritical(jstring string, jboolean* isCopy)
+    { return functions->GetStringCritical(this, string, isCopy); }
+    
+    void YGNode::setStyleFlexDirection(YGFlexDirection direction) {
+  style_.flexDirection = direction;
 }
+    
+    YG_NODE_STYLE_PROPERTY(YGDirection, Direction, direction);
+YG_NODE_STYLE_PROPERTY(YGFlexDirection, FlexDirection, flexDirection);
+YG_NODE_STYLE_PROPERTY(YGJustify, JustifyContent, justifyContent);
+YG_NODE_STYLE_PROPERTY(YGAlign, AlignContent, alignContent);
+YG_NODE_STYLE_PROPERTY(YGAlign, AlignItems, alignItems);
+YG_NODE_STYLE_PROPERTY(YGAlign, AlignSelf, alignSelf);
+YG_NODE_STYLE_PROPERTY(YGPositionType, PositionType, positionType);
+YG_NODE_STYLE_PROPERTY(YGWrap, FlexWrap, flexWrap);
+YG_NODE_STYLE_PROPERTY(YGOverflow, Overflow, overflow);
+YG_NODE_STYLE_PROPERTY(YGDisplay, Display, display);
+YG_NODE_STYLE_PROPERTY(float, Flex, flex);
+YG_NODE_STYLE_PROPERTY(float, FlexGrow, flexGrow);
+YG_NODE_STYLE_PROPERTY(float, FlexShrink, flexShrink);
+YG_NODE_STYLE_PROPERTY_UNIT_AUTO(YGValue, FlexBasis, flexBasis);
+    
+    #include <nbind/api.h>
+#include <nbind/BindDefiner.h>
+    
+    void Node::setAlignItems(int alignItems)
+{
+    YGNodeStyleSetAlignItems(m_node, static_cast<YGAlign>(alignItems));
+}
+    
+        double getBorder(int edge) const;
+    
+    #pragma once
+#include <atomic>
+#include <fb/assert.h>
+#include <fb/noncopyable.h>
+#include <fb/nonmovable.h>
+#include <fb/RefPtr.h>
+    
+    // Keeps a thread-local reference to the current thread's JNIEnv.
+struct Environment {
+  // May be null if this thread isn't attached to the JVM
+  FBEXPORT static JNIEnv* current();
+  static void initialize(JavaVM* vm);
+    }
+    
+      bool operator==(const ProgramLocation& other) const {
+    // Assumes that the strings are static
+    return (m_functionName == other.m_functionName) && (m_fileName == other.m_fileName) && m_lineNumber == other.m_lineNumber;
+  }
+    
+    // This template function declaration is used in defining arraysize.
+// Note that the function doesn't need an implementation, as we only
+// use its type.
+template <typename T, size_t N>
+char (&ArraySizeHelper(T (&array)[N]))[N];
+    
+    #include <cstdlib>
+#include <ostream>
+#include <cmath>
+    
+      // All the time results are reported after being multiplied by the
+  // time unit multiplier. But since RMS is a relative quantity it
+  // should not be multiplied at all. So, here, we _divide_ it by the
+  // multiplier so that when it is multiplied later the result is the
+  // correct one.
+  double multiplier = GetTimeUnitMultiplier(reports[0].time_unit);
+    
+      // Format items per second
+  std::string items;
+  if (result.items_per_second > 0) {
+    items =
+        StrCat(' ', HumanReadableNumber(result.items_per_second), ' items/s');
+  }
+    
+      // Compile a regular expression matcher from spec.  Returns true on success.
+  //
+  // On failure (and if error is not nullptr), error is populated with a human
+  // readable error message if an error occurs.
+  bool Init(const std::string& spec, std::string* error);
+    
+    #include 'benchmark/benchmark.h'
+#include 'timers.h'
