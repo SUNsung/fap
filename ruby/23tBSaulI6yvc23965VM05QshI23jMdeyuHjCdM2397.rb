@@ -1,141 +1,171 @@
 
         
-                def test_url_missing_scheme
-          spec = resolve 'foo'
-          assert_equal({
-            'database' => 'foo' }, spec)
-        end
-    
-        # This isn't strictly necessary for the test, but a little bit of
-    # knowledge of internals allows us to make failures far more likely.
-    model.define_singleton_method(:define_attribute) do |*args|
-      Thread.pass
-      super(*args)
-    end
-    
-      def test_distinct_count_with_group_by_and_order_and_limit
-    assert_equal({ 6 => 2 }, Account.group(:firm_id).distinct.order('1 DESC').limit(1).count)
-  end
-    
-      test 'broadcasting_for with an array' do
-    assert_equal 'Room#1-Campfire:Room#2-Campfire', ChatChannel.broadcasting_for([ Room.new(1), Room.new(2) ])
-  end
-    
-          msg
-    end
-    
-      def deliver_digest
-    NotificationMailer.digest(user.account).deliver_now!
-    user.touch(:last_emailed_at)
-  end
-end
-
-    
-      private
-    
-        keys.each do |key|
-      value = env[key]
-      s = '#{key}: #{value}'
-      case key
-      when 'CC', 'CXX', 'LD'
-        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
-      end
-      f.puts s
-    end
-  end
-end
-
-    
-      def execute
-    validate_params
-    source = File.join(File.dirname(__FILE__), 'templates', '#{type}-plugin')
-    @target_path = File.join(path, full_plugin_name)
-    FileUtils.mkdir(@target_path)
-    puts ' Creating #{@target_path}'
-    
-        i0, s0 = index, []
-    if has_terminal?('-', false, index)
-      r2 = instantiate_node(SyntaxNode,input, index...(index + 1))
-      @index += 1
-    else
-      terminal_parse_failure('-')
-      r2 = nil
-    end
-    if r2
-      r1 = r2
-    else
-      r1 = instantiate_node(SyntaxNode,input, index...index)
-    end
-    s0 << r1
-    if r1
-      s3, i3 = [], index
-      loop do
-        if has_terminal?('\G[0-9]', true, index)
-          r4 = true
-          @index += 1
-        else
-          r4 = nil
-        end
-        if r4
-          s3 << r4
-        else
-          break
-        end
-      end
-      if s3.empty?
-        @index = i3
-        r3 = nil
-      else
-        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
-      end
-      s0 << r3
-      if r3
-        i6, s6 = index, []
-        if has_terminal?('.', false, index)
-          r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
-          @index += 1
-        else
-          terminal_parse_failure('.')
-          r7 = nil
-        end
-        s6 << r7
-        if r7
-          s8, i8 = [], index
-          loop do
-            if has_terminal?('\G[0-9]', true, index)
-              r9 = true
-              @index += 1
-            else
-              r9 = nil
-            end
-            if r9
-              s8 << r9
-            else
-              break
-            end
+              def say_no_to_protect_against_forgery!
+        _helpers.module_eval do
+          silence_redefinition_of_method :protect_against_forgery?
+          def protect_against_forgery?
+            false
           end
-          r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
-          s6 << r8
         end
-        if s6.last
-          r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
-          r6.extend(Number0)
-        else
-          @index = i6
-          r6 = nil
-        end
-        if r6
-          r5 = r6
-        else
-          r5 = instantiate_node(SyntaxNode,input, index...index)
-        end
-        s0 << r5
       end
+    
+    require 'cases/helper'
+    
+      has_many :developers_with_select, -> { select('id, name, first_name') }, class_name: 'Developer'
+    
+        def connect
+      reject_unauthorized_connection
     end
-    if s0.last
-      r0 = instantiate_node(LogStash::Config::AST::Number,input, i0...index, s0)
-      r0.extend(Number1)
+    
+        def send_async(method, *args)
+      send method, *args
+    end
+    
+        # Fetch the Documents in this collection.
+    # Defaults to an empty array if no documents have been read in.
+    #
+    # Returns an array of Jekyll::Document objects.
+    def docs
+      @docs ||= []
+    end
+    
+    module Jekyll
+  module Commands
+    class NewTheme < Jekyll::Command
+      class << self
+        def init_with_program(prog)
+          prog.command(:'new-theme') do |c|
+            c.syntax 'new-theme NAME'
+            c.description 'Creates a new Jekyll theme scaffold'
+            c.option 'code_of_conduct', \
+                     '-c', '--code-of-conduct', \
+                     'Include a Code of Conduct. (defaults to false)'
+    
+              opts[:DirectoryIndex] = [] if opts[:JekyllOptions]['show_dir_listing']
+    
+          # Filtering Content
+      'show_drafts'         => nil,
+      'limit_posts'         => 0,
+      'future'              => false,
+      'unpublished'         => false,
+    
+    module Kramdown
+  module Parser
+    class SmartyPants < Kramdown::Parser::Kramdown
+      def initialize(source, options)
+        super
+        @block_parsers = [:block_html, :content]
+        @span_parsers =  [:smart_quotes, :html_entity, :typographic_syms, :span_html]
+      end
+    
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
+    end
+  end
+end
+
+    
+          # Create a new Drop
+      #
+      # obj - the Jekyll Site, Collection, or Document required by the
+      # drop.
+      #
+      # Returns nothing
+      def initialize(obj)
+        @obj = obj
+        @mutations = {} # only if mutable: true
+      end
+    
+        # Gets the last git commit information formatted into a String by the provided
+    # pretty format String. See the git-log documentation for valid format placeholders
+    def self.last_git_commit_formatted_with(pretty_format, date_format = nil)
+      command = ['git log -1']
+      command << '--pretty=\'#{pretty_format}\''
+      command << '--date=\'#{date_format}\'' if date_format
+      Actions.sh(command.compact.join(' '), log: false).chomp
+    rescue
+      nil
+    end
+    
+            commands = []
+        commands << Fastlane::Actions.sh('security create-keychain -p #{escaped_password} #{keychain_path}', log: false)
+    
+        context 'with keywords' do
+      let(:options) do
+        {
+          name: { 'en-US' => 'Fastlane Demo' },
+          description: { 'en-US' => 'Demo description' },
+          keywords: { 'en-US' => 'Some, key, words' }
+        }
+      end
+    
+            command = [escaped_gradle_path, 'tasks', '--console=plain'].join(' ')
+        output = Action.sh(command, print_command: false, print_command_output: false)
+        output.split('\n').each do |line|
+          if (result = line.match(/(\w+)\s\-\s([\w\s]+)/))
+            self.tasks << GradleTask.new(title: result[1], description: result[2])
+          end
+        end
+    
+        if registration
+      u2f.authenticate!(challenges, response, Base64.decode64(registration.public_key), registration.counter)
+      registration.update(counter: response.counter)
+      true
+    end
+  rescue JSON::ParserError, NoMethodError, ArgumentError, U2F::Error
+    false
+  end
+end
+
+    
+      def dry_run!(event = nil)
+    @dry_run = true
+    
+      def recipients(payload = {})
+    emails = interpolated(payload)['recipients']
+    if emails.present?
+      if emails.is_a?(String)
+        [emails]
+      else
+        emails
+      end
     else
-      @index = i0
-      r0 = nil
+      [user.email]
     end
+  end
+    
+    
+# replace calls, jmps, and read/write handle/filename references
+replaces = []
+asm.each_line { |ln|
+	if ln =~ /call /
+		parts = ln.split(' ')
+		if (parts[0] == 'call' and parts[2] == ';call')
+			old = parts[1]
+			func = parts[3]
+			new = addrs[func]
+			#puts '%32s: %s -> %x' % [func, old, new]
+			replaces << [func, old, new.to_s(16)]
+		end
+	end
+    }
+    
+    meterp.core.use('Stdapi')
+    
+    classNames = [ 'HelloWorld1', 'HelloWorld2' ]
+    
+    Rjb::load(ENV['JAVA_HOME'] + '/lib/tools.jar:.',jvmargs=[])
+    
+      # TODO: raise SAFE level (0) to 4 if possible.
+  def generate
+    ERB.new(PROFILE_ERB_TEMPLATE, 0, '>').result(binding)
+  end
+end
+    
+    module Pod
+  class Command
+    class Env < Command
+      self.summary = 'Display pod environment'
+      self.description = 'Display pod environment.'
