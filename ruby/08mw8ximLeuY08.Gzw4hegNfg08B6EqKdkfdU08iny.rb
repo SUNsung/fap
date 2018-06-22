@@ -1,109 +1,140 @@
 
         
-            on :fetch_related_entity do |entity_type, guid|
-      entity = Diaspora::Federation::Mappings.model_class_for(entity_type).find_by(guid: guid)
-      Diaspora::Federation::Entities.related_entity(entity) if entity
+            # Create a new Document.
+    #
+    # path - the path to the file
+    # relations - a hash with keys :site and :collection, the values of which
+    #             are the Jekyll::Site and Jekyll::Collection to which this
+    #             Document belong.
+    #
+    # Returns nothing.
+    def initialize(path, relations = {})
+      @site = relations[:site]
+      @path = path
+      @extname = File.extname(path)
+      @collection = relations[:collection]
+      @has_yaml_header = nil
+    
+      def test_freeze
+    m = Module.new do
+      def self.baz; end
+      def bar; end
     end
-    
-    desc 'copy dot files for deployment'
-task :copydot, :source, :dest do |t, args|
-  FileList['#{args.source}/**/.*'].exclude('**/.', '**/..', '**/.DS_Store', '**/._*').each do |file|
-    cp_r file, file.gsub(/#{args.source}/, '#{args.dest}') unless File.directory?(file)
-  end
-end
-    
-        # Outputs a single category as an <a> link.
-    #
-    #  +category+ is a category string to format as an <a> link
-    #
-    # Returns string
-    #
-    def category_link(category)
-      dir = @context.registers[:site].config['category_dir']
-      '<a class='category' href='/#{dir}/#{category.to_url}/'>#{category}</a>'
-    end
-    
-      # Checks for excerpts (helpful for template conditionals)
-  def has_excerpt(input)
-    input =~ /<!--\s*more\s*-->/i ? true : false
-  end
-    
-          Dir.chdir(file_path) do
-        contents = file.read
-        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
-          contents = $1.lstrip
-        end
-        contents = pre_filter(contents)
-        if @raw
-          contents
-        else
-          partial = Liquid::Template.parse(contents)
-          context.stack do
-            partial.render(context)
-          end
-        end
+    m.freeze
+    assert_raise(FrozenError) do
+      m.module_eval do
+        def foo; end
       end
     end
+    assert_raise(FrozenError) do
+      m.__send__ :private, :bar
+    end
+    assert_raise(FrozenError) do
+      m.private_class_method :baz
+    end
   end
-end
     
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
-    end
+      def test_shared_eval
+    bug7671 = '[ruby-core:51296]'
+    vs = (1..9).to_a
+    eval('vs.select {|n| if n==2..n==16 then 1 end}')
+    v = eval('vs.select {|n| if n==3..n==6 then 1 end}')
+    assert_equal([*3..6], v, bug7671)
+  end
     
-              private
-    
-            #target = $LOADED_FEATURES.grep(/#{path}/).first
-        #puts path
-        #puts caller.map { |c| '  #{c}' }.join('\n')
-        #fontsize = [10, duration * 48].max
-        puts '#{duration},#{path},#{source}'
-      end
-      #puts caller.map { |c| ' => #{c}' }.join('\n')
-    end
-    
-    When /^(?:|I )choose '([^']*)'$/ do |field|
-  choose(field)
-end
-    
-        def definitions_for(klass)
-      parent_classes = klass.ancestors.reverse
-      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
-        inherited_definitions.deep_merge! @attachments[ancestor]
-      end
-    end
+      def caller_lineno(*)
+    caller_locations(1, 1)[0].lineno
   end
 end
 
     
-        def empty_file?
-      File.exist?(@filepath) && File.size(@filepath) == 0
-    end
+    describe 'CApiAllocTypedSpecs (a class with an alloc func defined)' do
+  it 'calls the alloc func' do
+    @s = CApiAllocTypedSpecs.new
+    @s.typed_wrapped_data.should == 42 # not defined in initialize
+  end
+end
     
-        def define_flush_errors
-      @klass.send(:validates_each, @name) do |record, attr, value|
-        attachment = record.send(@name)
-        attachment.send(:flush_errors)
-      end
+      def test_gets_para_extended_file
+    [nil, {:textmode=>true}, {:binmode=>true}].each do |mode|
+      Tempfile.create('test-extended-file', mode) {|f|
+        assert_nil(f.getc)
+        f.print '\na'
+        f.rewind
+        assert_equal('a', f.gets(''), 'mode = <#{mode}>')
+      }
     end
+  end
     
-        def processor(name) #:nodoc:
-      @known_processors ||= {}
-      if @known_processors[name.to_s]
-        @known_processors[name.to_s]
+        ret = set.collect! { |i|
+      case i
+      when Numeric
+        i * 2
+      when String
+        i.upcase
       else
-        name = name.to_s.camelize
-        load_processor(name) unless Paperclip.const_defined?(name)
-        processor = Paperclip.const_get(name)
-        @known_processors[name.to_s] = processor
+        nil
       end
-    end
+    }
     
-          def drop_attached_file(*args)
-        ActiveSupport::Deprecation.warn 'Method `drop_attached_file` in the migration has been deprecated and will be replaced by `remove_attachment`.'
-        remove_attachment(*args)
+      it 'decodes two doubles for two format characters' do
+    '333333\x07@ffffff\xf6?'.unpack(unpack_format(nil, 2)).should == [2.9, 1.4]
+  end
+    
+      it 'ignores spaces between directives' do
+    array = 'abcdefghabghefcd'.unpack(unpack_format(' ', 2))
+    array.should == [7523094288207667809, 7233738012216484449]
+  end
+end
+    
+          def call
+        title('Gems')
+        table(all_gem_names) do |gem, row|
+          row.yellow if update_available?(gem)
+          row << gem
+          row << installed_gem_version(gem)
+          row << '(update available)' if update_available?(gem)
+        end
       end
-    end
+    
+            it 'returns all servers' do
+          expect(subject.map(&:hostname)).to eq %w{example1.com example2.com example3.com example4.com example5.com}
+        end
+      end
+    
+      it 'displays documentation URL as help banner' do
+    expect(help_output.lines.first).to match(/capistranorb.com/)
+  end
+    
+    class SinatraStaticServer < Sinatra::Base
+    
+    Liquid::Template.register_tag('config_tag', ConfigTag)
+    
+    require './plugins/pygments_code'
+require './plugins/raw'
+require 'pathname'
+    
+      desc 'Build all spree gems'
+  task :build do
+    pkgdir = File.expand_path('../pkg', __FILE__)
+    FileUtils.mkdir_p pkgdir
+    
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
+        end
+    
+      def as_boolean(string)
+    return true   if string == true   || string =~ (/(true|t|yes|y|1)$/i)
+    return false  if string == false  || string.blank? || string =~ (/(false|f|no|n|0)$/i)
+    raise ArgumentError.new('invalid value for Boolean: \'#{string}\'')
+  end
+    
+              def plugins
+            @plugins ||= find_plugins_gem_specs.map do |spec|
+              { :name => spec.name, :version => spec.version.to_s }
+            end.sort_by do |spec|
+              spec[:name]
+            end
+          end
