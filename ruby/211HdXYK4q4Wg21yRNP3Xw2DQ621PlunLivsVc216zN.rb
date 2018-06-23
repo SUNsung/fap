@@ -1,23 +1,29 @@
 
         
-            groups << @user.authorized_groups.visible_to_user(current_user) if current_user
-    groups << @user.authorized_groups.public_to_user(current_user)
+        module RuboCop
+  module Cop
+    module Lint
+      # Don't omit the accumulator when calling `next` in a `reduce` block.
+      #
+      # @example
+      #
+      #   # bad
+      #
+      #   result = (1..4).reduce(0) do |acc, i|
+      #     next if i.odd?
+      #     acc + i
+      #   end
+      #
+      # @example
+      #
+      #   # good
+      #
+      #   result = (1..4).reduce(0) do |acc, i|
+      #     next acc if i.odd?
+      #     acc + i
+      #   end
+      class NextWithoutAccumulator < Cop
+        MSG = 'Use `next` with an accumulator argument in a `reduce`.'.freeze
     
-        def log_processing(name)
-      puts yellow '  #{File.basename(name)}'
-    end
-    
-        s = StringIO.new
-    SystemConfig.dump_verbose_config s
-    # Dummy summary file, asciibetically first, to control display title of gist
-    files['# #{f.name} - #{timestamp}.txt'] = { content: brief_build_info(f) }
-    files['00.config.out'] = { content: s.string }
-    files['00.doctor.out'] = { content: Utils.popen_read('#{HOMEBREW_PREFIX}/bin/brew', 'doctor', err: :out) }
-    unless f.core_formula?
-      tap = <<~EOS
-        Formula: #{f.name}
-        Tap: #{f.tap}
-        Path: #{f.path}
-      EOS
-      files['00.tap.out'] = { content: tap }
-    end
+            def immutable_literal?(node)
+          return true if node.immutable_literal?
