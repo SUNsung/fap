@@ -1,69 +1,115 @@
 
         
-        CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+          class FeatureTopicUsers < Jobs::Base
     
-              opts[:SSLCertificate] = OpenSSL::X509::Certificate.new(read_file(src, cert))
-          opts[:SSLPrivateKey]  = OpenSSL::PKey::RSA.new(read_file(src, key))
-          opts[:SSLEnable] = true
-        end
-    
-        options[:attribution] = <<-HTML
-      &copy; 2009&ndash;2018 Jeremy Ashkenas<br>
-      Licensed under the MIT License.
-    HTML
-    
-            a_split <=> b_split
-      else
-        a.casecmp(b)
-      end
+      def save_and_refresh_staff_groups!
+    transaction do
+      self.save!
+      Group.refresh_automatic_groups!(:admins, :moderators, :staff)
     end
   end
-end
-
     
-        alias_method :insert_before, :insert
-    
-    module Docs
-  class PageDb
-    attr_reader :pages
-    
-      # Disable Rails's static asset server (Apache or nginx will already do this).
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
+      def validate_type
+    errors.add(:type, 'cannot be changed once an instance has been created') if type_changed? && !new_record?
+    errors.add(:type, 'is not a valid type') unless self.class.valid_type?(type)
   end
     
-    desc 'Start a dummy (test) Rails app server'
-task :dummy_rails do
-  require 'rack'
-  require 'term/ansicolor'
-  port = ENV['PORT'] || 9292
-  puts %Q(Starting on #{Term::ANSIColor.cyan 'http://localhost:#{port}'})
-  Rack::Server.start(
-    config: 'test/dummy_rails/config.ru',
-    Port: port)
-end
+        if params[:sort].present?
+      attribute, direction = params[:sort].downcase.split('.')
+      unless valid_sorts.include?(attribute)
+        attribute, direction = default.to_a.first
+      end
+    else
+      attribute, direction = default.to_a.first
+    end
     
-            def self.options
-          [[
-            '--all', 'Remove all the cached pods without asking'
-          ]].concat(super)
+      before_action :upgrade_warning, only: :index
+    
+            def initialize(argv)
+          @pod_name = argv.shift_argument
+          @short_output = argv.flag?('short')
+          super
         end
     
-            self.arguments = [
-          CLAide::Argument.new('NAME', true),
-        ]
+            END_OF_OUTPUT_SIGNAL = '\n\r'.freeze
+    
+            def validate!
+          super
+          help! 'A name for the Pod is required.' unless @name
+          help! 'The Pod name cannot contain spaces.' if @name =~ /\s/
+          help! 'The Pod name cannot contain plusses.' if @name =~ /\+/
+          help! 'The Pod name cannot begin with a '.'' if @name[0, 1] == '.'
+        end
+    
+        if run? && ARGV.any?
+      require 'optparse'
+      OptionParser.new { |op|
+        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
+        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
+        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
+        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
+        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
+        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
+      }.parse!(ARGV.dup)
+    end
+  end
+    
+      it 'should allow changing the protection mode' do
+    # I have no clue what other modes are available
+    mock_app do
+      use Rack::Protection::FrameOptions, :frame_options => :deny
+      run DummyApp
+    end
+    
+      it 'accepts requests with the same Accept-Language header' do
+    session = {:foo => :bar}
+    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
+    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
+    expect(session).not_to be_empty
+  end
+    
+      it 'should set the X-XSS-Protection for XHTML' do
+    expect(get('/', {}, 'wants' => 'application/xhtml+xml').headers['X-XSS-Protection']).to eq('1; mode=block')
+  end
+    
+        mock_app do
+      use Rack::Head
+      use(Rack::Config) { |e| e['rack.session'] ||= {}}
+      use detector
+      use klass
+      run DummyApp
+    end
+    
+          locations = Array.new
+      while (data.code.to_i == 301 || data.code.to_i == 302)
+        data = handle_gist_redirecting(data)
+        break if locations.include? data.header['Location']
+        locations << data.header['Location']
+      end
+    
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
+    end
+    
+    require 'pathname'
+require './plugins/octopress_filters'
+    
+      def as_boolean(string)
+    return true   if string == true   || string =~ (/(true|t|yes|y|1)$/i)
+    return false  if string == false  || string.blank? || string =~ (/(false|f|no|n|0)$/i)
+    raise ArgumentError.new('invalid value for Boolean: \'#{string}\'')
+  end
+    
+        def require(path)
+      start = Time.now
+      result = require_debug(path)
+      duration = Time.now - start
