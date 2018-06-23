@@ -1,114 +1,115 @@
-cc_test(
-    name = 'dragnn_bulk_op_kernels_test',
-    srcs = ['ops/dragnn_bulk_op_kernels_test.cc'],
+
+        
+        py_library(
+    name = 'trainer_lib',
+    srcs = ['trainer_lib.py'],
     deps = [
-        ':compute_session_pool',
-        ':dragnn_bulk_op_kernels',
-        ':resource_container',
-        '//dragnn/components/util:bulk_feature_extractor',
-        '//dragnn/core/test:mock_compute_session',
-        '//dragnn/core/util:label',
-        '//syntaxnet:base',
-        '//syntaxnet:test_main',
-        '@org_tensorflow//tensorflow/core/kernels:ops_testutil',
-        '@org_tensorflow//tensorflow/core/kernels:quantized_ops',
+        '//dragnn/protos:spec_pb2_py',
+        '//syntaxnet:parser_ops',
+        '//syntaxnet:sentence_pb2_py',
+        '//syntaxnet:task_spec_pb2_py',
+        '//syntaxnet/util:check',
+        '@org_tensorflow//tensorflow:tensorflow_py',
+        '@org_tensorflow//tensorflow/core:protos_all_py',
     ],
 )
-
     
-      The D&M parser uses two MLPs to create two activation vectors for each token,
-  which represent the token when it it used as the source or target of an arc.
-  Arcs are scored using a 'biaffine' function that includes a bilinear and
-  linear term:
+        # Incorporate the source activations.  In this case, we perform a batched
+    # matmul() between the trailing [L,S] matrices of the current result and the
+    # trailing [S] vectors of the tokens.
+    sources_bxnx1xs = tf.expand_dims(sources, 2)
+    labels_bxnxlx1 = tf.matmul(weights_targets_bxnxlxs, sources_bxnx1xs,
+                               transpose_b=True)
+    labels_bxnxl = tf.squeeze(labels_bxnxlx1, [3])
+    return labels_bxnxl
     
-      def __init__(self):
-    self.name = 'mock'
-    self.network = MockNetworkUnit()
+      Args:
+    master_spec_path: Path to a proto-text master spec.
+    params_path: Path to the parameters file to export.
+    export_path: Path to export the SavedModel to.
+    export_moving_averages: Whether to export the moving average parameters.
+    build_runtime_graph: Whether to build a graph for use by the runtime.
+  '''
     
-      num_labels = weights.get_shape().as_list()[0]
-  num_source_activations = weights.get_shape().as_list()[1]
-  num_target_activations = weights.get_shape().as_list()[2]
-  check.NotNone(num_labels, 'unknown number of labels')
-  check.NotNone(num_source_activations, 'unknown source activation dimension')
-  check.NotNone(num_target_activations, 'unknown target activation dimension')
-  check.Eq(sources.get_shape().as_list()[2], num_source_activations,
-           'activation mismatch between weights and source tokens')
-  check.Eq(targets.get_shape().as_list()[2], num_target_activations,
-           'activation mismatch between weights and target tokens')
+    from google.protobuf import text_format
+from dragnn.protos import spec_pb2
+from dragnn.python import graph_builder
     
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+    from google.protobuf import text_format
     
-    FLAGS = flags.FLAGS
+    from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import MultinomialNB
     
-          # A similar contract applies to the annotations.
-      self.checkOpOrder('annotations', anno['annotations'],
-                        ['GetSession', 'ReleaseSession'])
+            for k in sorted(results_dict.keys()):
+            all_times[k].append(results_dict[k]['time'])
+            all_errors[k].append(results_dict[k]['error'])
     
-    
-intersphinx_mapping = {
-    'python': ('https://docs.python.org/', None),
-    'acme': ('https://acme-python.readthedocs.org/en/latest/', None),
-    'certbot': ('https://certbot.eff.org/docs/', None),
-}
-
-    
-    from tornado.options import define, options
-    
-    PY3 = sys.version_info >= (3,)
-    
-                try:
-                content_length = int(headers['Content-Length'])
-            except ValueError:
-                # Handles non-integer Content-Length value.
-                raise httputil.HTTPInputError(
-                    'Only integer Content-Length is allowed: %s' % headers['Content-Length'])
+            plt.gcf().suptitle('%s data set' % dataset.capitalize(), fontsize=16)
     
     
-@implementer(IDelayedCall)
-class TornadoDelayedCall(object):
-    '''DelayedCall object for Tornado.'''
-    def __init__(self, reactor, seconds, f, *args, **kw):
-        self._reactor = reactor
-        self._func = functools.partial(f, *args, **kw)
-        self._time = self._reactor.seconds() + seconds
-        self._timeout = self._reactor._io_loop.add_timeout(self._time,
-                                                           self._called)
-        self._active = True
+def euclidean_distances(X, n_jobs):
+    return pairwise_distances(X, metric='euclidean', n_jobs=n_jobs)
     
+        for line in input_file:
+        linestrip = line.strip()
+        if len(linestrip) == 0:
+            in_exercise_region = False
+        elif linestrip.startswith('# TASK:'):
+            in_exercise_region = True
     
-class GoogleOAuth2TokenHandler(RequestHandler):
-    def post(self):
-        assert self.get_argument('code') == 'fake-authorization-code'
-        # issue a fake token
-        self.finish({
-            'access_token': 'fake-access-token',
-            'expires_in': 'never-expires'
-        })
+    # Author: Kemal Eren <kemal@kemaleren.com>
+# License: BSD 3 clause
     
-            with self.assertRaises(StackContextInconsistentError):
-            f()
-            self.wait()
-        # Cleanup: to avoid GC warnings (which for some reason only seem
-        # to show up on py33-asyncio), invoke the callback (which will do
-        # nothing since the gen.Runner is already finished) and delete it.
-        self.callback()
-        del self.callback
+    import numpy as np
     
+    np.random.seed(0)
+###############################################################################
+n_features = 100
+# simulation covariance matrix (AR(1) process)
+r = 0.1
+real_cov = toeplitz(r ** np.arange(n_features))
+coloring_matrix = cholesky(real_cov)
     
-def run(args):
-    '''Handle ensure config commandline script.'''
-    parser = argparse.ArgumentParser(
-        description=('Ensure a Home Assistant config exists, '
-                     'creates one if necessary.'))
-    parser.add_argument(
-        '-c', '--config',
-        metavar='path_to_config_dir',
-        default=config_util.get_default_config_dir(),
-        help='Directory that contains the Home Assistant configuration')
-    parser.add_argument(
-        '--script',
-        choices=['ensure_config'])
+    # http://docs.readthedocs.org/en/latest/theme.html#how-do-i-use-this-locally-and-on-read-the-docs
+# on_rtd is whether we are on readthedocs.org
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+if not on_rtd:  # only import and set the theme if we're building docs locally
+    import sphinx_rtd_theme
+    html_theme = 'sphinx_rtd_theme'
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+# otherwise, readthedocs.org uses their theme by default, so no need to specify it
     
-            self.assertIsNotNone(result)
+        def __init__(self, args):
+        '''Initializes the plugin with the given command line args'''
+        self._temp_dir = tempfile.mkdtemp()
+        self.le_config = util.create_le_config(self._temp_dir)
+        config_dir = util.extract_configs(args.configs, self._temp_dir)
+        self._configs = [
+            os.path.join(config_dir, config)
+            for config in os.listdir(config_dir)]
+    
+    # Documents to append as an appendix to all manuals.
+#latex_appendices = []
+    
+            # Schedule several callbacks and wait for them all to come due at once.
+        # t2 should be cancelled by t1, even though it is already scheduled to
+        # be run before the ioloop even looks at it.
+        now = self.io_loop.time()
+    
+                response = self.fetch('/default?status=435')
+            self.assertEqual(response.code, 435)
+            self.assertTrue(b'435: Unknown' in response.body)
+    
+        def run(self):
+        try:
+            build_ext.run(self)
+        except Exception:
+            e = sys.exc_info()[1]
+            sys.stdout.write('%s\n' % str(e))
+            warnings.warn(self.warning_message % ('Extension modules',
+                                                  'There was an issue with '
+                                                  'your platform configuration'
+                                                  ' - see above.'))
