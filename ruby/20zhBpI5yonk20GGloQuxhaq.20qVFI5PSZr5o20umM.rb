@@ -1,112 +1,47 @@
 
         
-              # Run ::process method in a given set of Jekyll::Command subclasses and suggest
-      # re-running the associated command with --trace switch to obtain any additional
-      # information or backtrace regarding the encountered Exception.
-      #
-      # cmd     - the Jekyll::Command to be handled
-      # options - configuration overrides
-      # klass   - an array of Jekyll::Command subclasses associated with the command
-      #
-      # Note that all exceptions are rescued..
-      # rubocop: disable RescueException
-      def process_with_graceful_fail(cmd, options, *klass)
-        klass.each { |k| k.process(options) if k.respond_to?(:process) }
-      rescue Exception => e
-        raise e if cmd.trace
+          def test_pipeline_r
+    Open3.pipeline_r([RUBY, '-e', 'print '1''],
+                     [RUBY, '-e', 'print STDIN.read + '2'']) {|o,ts|
+      assert_kind_of(IO, o)
+      assert_kind_of(Array, ts)
+      assert_equal(2, ts.length)
+      ts.each {|t| assert_kind_of(Thread, t) }
+      assert_equal('12', o.read)
+      ts.each {|t|
+        assert(t.value.success?)
+      }
+    }
+  end
     
-            def fsnotify_buggy?(_site)
-          return true unless Utils::Platforms.osx?
-          if Dir.pwd != `pwd`.strip
-            Jekyll.logger.error '  ' + <<-STR.strip.gsub(%r!\n\s+!, '\n  ')
-              We have detected that there might be trouble using fsevent on your
-              operating system, you can read https://github.com/thibaudgg/rb-fsevent/wiki/no-fsevents-fired-(OSX-bug)
-              for possible work arounds or you can work around it immediately
-              with `--force-polling`.
-            STR
+      it 'returns nil if then-body is empty, expression is true and else part is present' do
+    if true
+    else
+      456
+    end.should == nil
+  end
     
-            private
+        it 'allows changing the wrapped struct' do
+      a = @s.wrap_struct(1024)
+      @s.change_struct(a, 100)
+      @s.get_struct(a).should == 100
+    end
+  end
     
-          # Generate a Hash for use in generating JSON.
-      # This is useful if fields need to be cleared before the JSON can generate.
-      #
-      # Returns a Hash ready for JSON generation.
-      def hash_for_json(*)
-        to_h
-      end
+      it 'decodes past whitespace bytes when passed the '*' modifier' do
+    [ ['a b c',    ['a b c']],
+      ['a\fb c',   ['a\fb c']],
+      ['a\nb c',   ['a\nb c']],
+      ['a\rb c',   ['a\rb c']],
+      ['a\tb c',   ['a\tb c']],
+      ['a\vb c',   ['a\vb c']],
+    ].should be_computed_by(:unpack, unpack_format('*'))
+  end
+end
     
-      describe '.all' do
-    it 'uses the client to fetch all keys' do
-      mock_client_response(:list_keys, with: no_args) do
-        [
-          {
-            canDownload: false,
-            canRevoke: true,
-            keyId: 'some-key-id',
-            keyName: 'Test Key via fastlane',
-            servicesCount: 2
-          },
-          {
-            canDownload: true,
-            canRevoke: true,
-            keyId: 'B92NE4F7RG',
-            keyName: 'Test Key via browser',
-            servicesCount: 2
-          }
-        ]
-      end
-    
-            self.tasks
+          def to_s
+        @pairs.inspect
       end
     end
   end
 end
-
-    
-        def shared_mixins
-      @shared_mixins ||= begin
-        log_status '  Reading shared mixins from mixins.less'
-        CLASSES_TO_MIXINS + read_mixins(read_files('less', bootstrap_less_files.grep(/mixins\//)).values.join('\n'),
-                                        nested: NESTED_MIXINS)
-      end
-    end
-    
-      def test_font_helper_without_suffix
-    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
-  end
-    
-      desc 'update main and version in bower.json'
-  task :generate do
-    require 'bootstrap-sass'
-    Dir.chdir Bootstrap.gem_path do
-      spec       = JSON.parse(File.read 'bower.json')
-    
-            def address_params
-          params.require(:address).permit(permitted_address_attributes)
-        end
-    
-      private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_book
-      @book = Book.find(params[:id])
-    end
-    
-              [optarg_positions, arg_positions]
-        end
-      end
-    end
-  end
-end
-
-    
-      def default_metadata
-    @factory.build(:default_metadata).all
-  end
-    
-        r0
-  end
-    
-        alias_method :load_debug, :load
-    
-        files.each do |file|
-      download = file_fetch(file['url'], file['sha1'],target)
