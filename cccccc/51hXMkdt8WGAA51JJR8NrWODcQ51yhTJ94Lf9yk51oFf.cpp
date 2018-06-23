@@ -1,325 +1,529 @@
 
         
-        class DebugGraphDecorator : public DebugGraphDecoratorInterface {
+        #endif  // ATOM_BROWSER_UI_X_EVENT_DISABLER_H_
+
+    
+    #include 'ui/gfx/geometry/rect.h'
+    
+    #ifndef CHROME_BROWSER_EXTENSIONS_GLOBAL_SHORTCUT_LISTENER_H_
+#define CHROME_BROWSER_EXTENSIONS_GLOBAL_SHORTCUT_LISTENER_H_
+    
+    // Wrapper used to keep track of the lifetime of a WebContents.
+// Lives on the UI thread.
+class PrintingUIWebContentsObserver : public content::WebContentsObserver {
  public:
-  DebugGraphDecorator(const DebugOptions& debug_options)
-      : debug_options_(debug_options) {}
-  virtual ~DebugGraphDecorator() {}
+  explicit PrintingUIWebContentsObserver(content::WebContents* web_contents);
     }
     
-    void PartialRunMgr::PartialRunDone(int step_id, StatusCallback done,
-                                   const Status& status) {
-  Status callback_status;
+    #include 'ifaddrs_android.h'
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/utsname.h>
+#include <sys/ioctl.h>
+#include <netinet/in.h>
+#include <net/if.h>
+#include <unistd.h>
+#include <errno.h>
+#include <linux/netlink.h>
+#include <linux/rtnetlink.h>
+    
+    int PowerIphone::get_power_percent_left() {
+	if (UpdatePowerInfo()) {
+		return percent_left;
+	} else {
+		return -1;
+	}
+}
+    
+    #ifndef STREAM_PEER_SSL_H
+#define STREAM_PEER_SSL_H
+    
+    	ERR_FAIL_COND_V(!connected, ERR_UNCONFIGURED);
+    
+    	virtual Error put_data(const uint8_t *p_data, int p_bytes);
+	virtual Error put_partial_data(const uint8_t *p_data, int p_bytes, int &r_sent);
+    
+    /// Returns the list of contacts pairs in this order: Local contact, other body contact
+struct GodotContactPairContactResultCallback : public btCollisionWorld::ContactResultCallback {
+public:
+	const btCollisionObject *m_self_object;
+	Vector3 *m_results;
+	int m_resultMax;
+	int m_count;
+	const Set<RID> *m_exclude;
+    }
+    
+      // Success/failure error codes.
+  enum jpgd_status
   {
-    mutex_lock l(mu_);
-    auto run_it = step_id_to_partial_run_.find(step_id);
-    if (run_it == step_id_to_partial_run_.end()) {
-      return;
-    }
-    run_it->second->final_status.Update(status);
-    if (!run_it->second->executor_done) {
-      // If we found the partial_run, we set the final callback to call only
-      // when the executor is completely done.
-      run_it->second->final_callback = std::move(done);
-      return;
-    }
-    callback_status = run_it->second->final_status;
-  }
-  // Otherwise we call the callback immediately.
-  done(callback_status);
-  mutex_lock l(mu_);
-  step_id_to_partial_run_.erase(step_id);
-}
-    
-     private:
-  // Must return a T descendant allocated with new that ResourceOpKernel will
-  // take ownership of.
-  virtual Status CreateResource(T** resource) EXCLUSIVE_LOCKS_REQUIRED(mu_) = 0;
-    
-    #include 'tensorflow/core/common_runtime/device.h'
-#include 'tensorflow/core/framework/device_base.h'
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-      void Clear();
-    
-    // TODO: Enable GPU support for angle op after resolving
-// build failures on GPU (See #10643 for context).
-#if 0 && GOOGLE_CUDA
-    
-    
-    {  // clang-format off
-  std::vector<FDH::Node> nodes = {
-   {{'x_shape'}, 'Shape', {'x'}},
-   {{'x_rank'}, 'Rank', {'x'}},
-   {{'i_shape'}, 'Shape', {'i'}, {{'T', DT_INT32}}},
-   FDH::Const('zero', 0),
-   FDH::Const('one', 1),
-   // stitch_idx0 = Range(0, x_rank, 1)
-   {{'stitch_val1'}, 'Fill', {'i_shape:output:0', 'one:output:0'},
-    {{'T', DT_INT32}}},
-   {{'y_shape'}, 'DynamicStitch',
-    {'stitch_idx0:output:0', 'i',
-     'x_shape:output:0', 'stitch_val1:output:0'},
-    {{'N', 2}, {'T', DT_INT32}}},
-   {{'tile_scaling'}, 'Div', {'x_shape:output:0', 'y_shape:merged:0'},
-    {{'T', DT_INT32}}},
-   {{'di'}, 'ZerosLike', {'i'}, {{'T', DT_INT32}}}
+    JPGD_SUCCESS = 0, JPGD_FAILED = -1, JPGD_DONE = 1,
+    JPGD_BAD_DHT_COUNTS = -256, JPGD_BAD_DHT_INDEX, JPGD_BAD_DHT_MARKER, JPGD_BAD_DQT_MARKER, JPGD_BAD_DQT_TABLE, 
+    JPGD_BAD_PRECISION, JPGD_BAD_HEIGHT, JPGD_BAD_WIDTH, JPGD_TOO_MANY_COMPONENTS, 
+    JPGD_BAD_SOF_LENGTH, JPGD_BAD_VARIABLE_MARKER, JPGD_BAD_DRI_LENGTH, JPGD_BAD_SOS_LENGTH,
+    JPGD_BAD_SOS_COMP_ID, JPGD_W_EXTRA_BYTES_BEFORE_MARKER, JPGD_NO_ARITHMITIC_SUPPORT, JPGD_UNEXPECTED_MARKER,
+    JPGD_NOT_JPEG, JPGD_UNSUPPORTED_MARKER, JPGD_BAD_DQT_LENGTH, JPGD_TOO_MANY_BLOCKS,
+    JPGD_UNDEFINED_QUANT_TABLE, JPGD_UNDEFINED_HUFF_TABLE, JPGD_NOT_SINGLE_SCAN, JPGD_UNSUPPORTED_COLORSPACE,
+    JPGD_UNSUPPORTED_SAMP_FACTORS, JPGD_DECODE_ERROR, JPGD_BAD_RESTART_MARKER, JPGD_ASSERTION_ERROR,
+    JPGD_BAD_SOS_SPECTRAL, JPGD_BAD_SOS_SUCCESSIVE, JPGD_STREAM_READ, JPGD_NOTENOUGHMEM
   };
-  // clang-format on
-  nodes.insert(nodes.end(), body.begin(), body.end());
-  for (auto& n : nodes) {
-    if (n.attr.empty()) {
-      n.attr = {{'T', '$T'}};
+    
+  // Input stream interface.
+  // Derive from this class to read input data from sources other than files or memory. Set m_eof_flag to true when no more data is available.
+  // The decoder is rather greedy: it will keep on calling this method until its internal input buffer is full, or until the EOF flag is set.
+  // It the input stream contains data after the JPEG stream's EOI (end of image) marker it will probably be pulled into the internal buffer.
+  // Call the get_total_bytes_read() method to determine the actual size of the JPEG stream after successful decoding.
+  class jpeg_decoder_stream
+  {
+  public:
+    jpeg_decoder_stream() { }
+    virtual ~jpeg_decoder_stream() { }
     }
+    
+    /*All of these macros should expect floats as arguments.*/
+#define OC_MAXF(_a,_b)      ((_a)<(_b)?(_b):(_a))
+#define OC_MINF(_a,_b)      ((_a)>(_b)?(_b):(_a))
+#define OC_CLAMPF(_a,_b,_c) (OC_MINF(_a,OC_MAXF(_b,_c)))
+#define OC_FABSF(_f)        ((float)fabs(_f))
+#define OC_SQRTF(_f)        ((float)sqrt(_f))
+#define OC_POWF(_b,_e)      ((float)pow(_b,_e))
+#define OC_LOGF(_f)         ((float)log(_f))
+#define OC_IFLOORF(_f)      ((int)floor(_f))
+#define OC_ICEILF(_f)       ((int)ceil(_f))
+    
+    int opus_fft_alloc_arm_neon(kiss_fft_state *st);
+void opus_fft_free_arm_neon(kiss_fft_state *st);
+    
+    // WorkloadStats is used to track per request timing for different states
+// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
+// should be made to guard the state change with appropriate timers and
+// counters.
+//
+// The states tracked are:
+//  - In a request (this is a superset of the interpreter state)
+//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
+//  - In the JIT (currently tracks time inside the translate routine)
+//
+// Note the time in the TC is not tracked.  This is roughly:
+//   Time in request - Time in interp
+//
+// This gives us the relative interp time formula of:
+//   Relative interp time = Time in interp / Time in request
+struct WorkloadStats final {
+  enum State {
+    InRequest,
+    // -> InInterp   Okay (entering Dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InInterp,
+    // -> InRequest  Okay (leaving the dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InTrans,
+    // -> InRequest  Okay (leaving translate)
+    // -> InInterp   Okay (leaving translate)
+  };
+    }
+    
+      uint64_t entry_weight;
+  int inclusive_cost;
+  int exclusive_cost;
+    
+      mpz_init(gmpReturn);
+  mpz_abs(gmpReturn, gmpData);
+    
+    
+    {   private:
+    using CondVarIList =
+      folly::IntrusiveList<CondVarNode, &CondVarNode::m_listHook>;
+    CondVarIList m_highPriList;
+    CondVarIList m_midLowPriList;
+  };
+  std::vector<CondVarList> m_cond_list_vec;
+    
+    // When you already have the memory mapped in, remap them it to use huge pages,
+// and try to interleave across all enabled numa nodes (no guarantee).  Return
+// the number of pages that are actually backed by huge pages.
+//
+// Beware this function wipes out data on existing pages, and yep, that is what
+// it is designed to do.
+size_t remap_interleaved_2m_pages(void* addr, size_t pages, int prot,
+                                  bool map_shared = false);
+    
+      bool isStatic = false;
+  bool isExact = false;
+  switch (pushOp) {
+    case Op::FPushClsMethodD:
+      isExact = true;
+      isStatic = true;
+      if (!funcName && !clsName) {
+        decode_iva(pc);
+        funcName = decode_litstr();
+        clsName = decode_litstr();
+      }
+      break;
+    case Op::FPushClsMethod:
+      isStatic = true;
+      break;
+    case Op::FPushClsMethodS:
+    case Op::FPushClsMethodSD: {
+      decode_iva(pc);
+      auto const ref = decode_oa<SpecialClsRef>(pc);
+      isExact = (ref == SpecialClsRef::Self) || (ref == SpecialClsRef::Parent);
+      isStatic = true;
+      break;
+    }
+    case Op::FPushFuncD:
+      if (!funcName && !clsName) {
+        decode_iva(pc);
+        funcName = decode_litstr();
+        clsName = nullptr;
+      }
+      break;
+    case Op::FPushCtorD:
+      if (!clsName) {
+        decode_iva(pc);
+        clsName = decode_litstr();
+      }
+      break;
+    default:
+      if (!funcName && !clsName) return;
+      break;
   }
-  // 'Range' doesn't need any attr.
-  nodes.push_back({{'stitch_idx0'},
-                   'Range',
-                   {'zero:output:0', 'x_rank:output:0', 'one:output:0'},
-                   {}});
-  *g = FDH::Create('_',
-                   // Input defs
-                   {'x:T', 'i:int32', 'dy:T'},
-                   // Ret val defs
-                   {'dx:T', 'di:int32'},
-                   // Attr defs
-                   {{'T: {half, float, double}'}},
-                   // Nodes
-                   nodes,
-                   // Return values
-                   {{'dx', 'dx:output:0'}, {'di', 'di:y:0'}});
-  return Status::OK();
-}
     
-    
-    {  if (argc != 4) {
-    printf('This script converts the CIFAR dataset to the leveldb format used\n'
-           'by caffe to perform classification.\n'
-           'Usage:\n'
-           '    convert_cifar_data input_folder output_folder db_type\n'
-           'Where the input folder should contain the binary batch files.\n'
-           'The CIFAR dataset could be downloaded at\n'
-           '    http://www.cs.toronto.edu/~kriz/cifar.html\n'
-           'You should gunzip them after downloading.\n');
-  } else {
-    google::InitGoogleLogging(argv[0]);
-    convert_dataset(string(argv[1]), string(argv[2]), string(argv[3]));
-  }
-  return 0;
-}
-
-    
-    #include <vector>
-    
-    #include <vector>
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the concatenate inputs.
+      /// Bind the acceptor to the given local endpoint.
+  /**
+   * This function binds the socket acceptor to the specified endpoint on the
+   * local machine.
    *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *        respect to the outputs
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length K), into which the top gradient
-   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
-   *        inputs @f$
-   *        \left[ \begin{array}{cccc}
-   *          \frac{\partial E}{\partial x_1} &
-   *          \frac{\partial E}{\partial x_2} &
-   *          ... &
-   *          \frac{\partial E}{\partial x_K}
-   *        \end{array} \right] =
-   *        \frac{\partial E}{\partial y}
-   *        @f$
+   * @param endpoint An endpoint on the local machine to which the socket
+   * acceptor will be bound.
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   *
+   * @par Example
+   * @code
+   * boost::asio::ip::tcp::acceptor acceptor(io_service);
+   * boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::tcp::v4(), 12345);
+   * acceptor.open(endpoint.protocol());
+   * boost::system::error_code ec;
+   * acceptor.bind(endpoint, ec);
+   * if (ec)
+   * {
+   *   // An error occurred.
+   * }
+   * @endcode
    */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  boost::system::error_code bind(const endpoint_type& endpoint,
+      boost::system::error_code& ec)
+  {
+    return this->get_service().bind(this->get_implementation(), endpoint, ec);
+  }
     
-    namespace caffe {
+    /** @defgroup buffer boost::asio::buffer
+ *
+ * @brief The boost::asio::buffer function is used to create a buffer object to
+ * represent raw memory, an array of POD elements, a vector of POD elements,
+ * or a std::string.
+ *
+ * A buffer object represents a contiguous region of memory as a 2-tuple
+ * consisting of a pointer and size in bytes. A tuple of the form <tt>{void*,
+ * size_t}</tt> specifies a mutable (modifiable) region of memory. Similarly, a
+ * tuple of the form <tt>{const void*, size_t}</tt> specifies a const
+ * (non-modifiable) region of memory. These two forms correspond to the classes
+ * mutable_buffer and const_buffer, respectively. To mirror C++'s conversion
+ * rules, a mutable_buffer is implicitly convertible to a const_buffer, and the
+ * opposite conversion is not permitted.
+ *
+ * The simplest use case involves reading or writing a single buffer of a
+ * specified size:
+ *
+ * @code sock.send(boost::asio::buffer(data, size)); @endcode
+ *
+ * In the above example, the return value of boost::asio::buffer meets the
+ * requirements of the ConstBufferSequence concept so that it may be directly
+ * passed to the socket's write function. A buffer created for modifiable
+ * memory also meets the requirements of the MutableBufferSequence concept.
+ *
+ * An individual buffer may be created from a builtin array, std::vector,
+ * std::array or boost::array of POD elements. This helps prevent buffer
+ * overruns by automatically determining the size of the buffer:
+ *
+ * @code char d1[128];
+ * size_t bytes_transferred = sock.receive(boost::asio::buffer(d1));
+ *
+ * std::vector<char> d2(128);
+ * bytes_transferred = sock.receive(boost::asio::buffer(d2));
+ *
+ * std::array<char, 128> d3;
+ * bytes_transferred = sock.receive(boost::asio::buffer(d3));
+ *
+ * boost::array<char, 128> d4;
+ * bytes_transferred = sock.receive(boost::asio::buffer(d4)); @endcode
+ *
+ * In all three cases above, the buffers created are exactly 128 bytes long.
+ * Note that a vector is @e never automatically resized when creating or using
+ * a buffer. The buffer size is determined using the vector's <tt>size()</tt>
+ * member function, and not its capacity.
+ *
+ * @par Accessing Buffer Contents
+ *
+ * The contents of a buffer may be accessed using the @ref buffer_size and
+ * @ref buffer_cast functions:
+ *
+ * @code boost::asio::mutable_buffer b1 = ...;
+ * std::size_t s1 = boost::asio::buffer_size(b1);
+ * unsigned char* p1 = boost::asio::buffer_cast<unsigned char*>(b1);
+ *
+ * boost::asio::const_buffer b2 = ...;
+ * std::size_t s2 = boost::asio::buffer_size(b2);
+ * const void* p2 = boost::asio::buffer_cast<const void*>(b2); @endcode
+ *
+ * The boost::asio::buffer_cast function permits violations of type safety, so
+ * uses of it in application code should be carefully considered.
+ *
+ * For convenience, the @ref buffer_size function also works on buffer
+ * sequences (that is, types meeting the ConstBufferSequence or
+ * MutableBufferSequence type requirements). In this case, the function returns
+ * the total size of all buffers in the sequence.
+ *
+ * @par Buffer Copying
+ *
+ * The @ref buffer_copy function may be used to copy raw bytes between
+ * individual buffers and buffer sequences.
+ *
+ * In particular, when used with the @ref buffer_size, the @ref buffer_copy
+ * function can be used to linearise a sequence of buffers. For example:
+ *
+ * @code vector<const_buffer> buffers = ...;
+ *
+ * vector<unsigned char> data(boost::asio::buffer_size(buffers));
+ * boost::asio::buffer_copy(boost::asio::buffer(data), buffers); @endcode
+ *
+ * Note that @ref buffer_copy is implemented in terms of @c memcpy, and
+ * consequently it cannot be used to copy between overlapping memory regions.
+ *
+ * @par Buffer Invalidation
+ *
+ * A buffer object does not have any ownership of the memory it refers to. It
+ * is the responsibility of the application to ensure the memory region remains
+ * valid until it is no longer required for an I/O operation. When the memory
+ * is no longer available, the buffer is said to have been invalidated.
+ *
+ * For the boost::asio::buffer overloads that accept an argument of type
+ * std::vector, the buffer objects returned are invalidated by any vector
+ * operation that also invalidates all references, pointers and iterators
+ * referring to the elements in the sequence (C++ Std, 23.2.4)
+ *
+ * For the boost::asio::buffer overloads that accept an argument of type
+ * std::basic_string, the buffer objects returned are invalidated according to
+ * the rules defined for invalidation of references, pointers and iterators
+ * referring to elements of the sequence (C++ Std, 21.3).
+ *
+ * @par Buffer Arithmetic
+ *
+ * Buffer objects may be manipulated using simple arithmetic in a safe way
+ * which helps prevent buffer overruns. Consider an array initialised as
+ * follows:
+ *
+ * @code boost::array<char, 6> a = { 'a', 'b', 'c', 'd', 'e' }; @endcode
+ *
+ * A buffer object @c b1 created using:
+ *
+ * @code b1 = boost::asio::buffer(a); @endcode
+ *
+ * represents the entire array, <tt>{ 'a', 'b', 'c', 'd', 'e' }</tt>. An
+ * optional second argument to the boost::asio::buffer function may be used to
+ * limit the size, in bytes, of the buffer:
+ *
+ * @code b2 = boost::asio::buffer(a, 3); @endcode
+ *
+ * such that @c b2 represents the data <tt>{ 'a', 'b', 'c' }</tt>. Even if the
+ * size argument exceeds the actual size of the array, the size of the buffer
+ * object created will be limited to the array size.
+ *
+ * An offset may be applied to an existing buffer to create a new one:
+ *
+ * @code b3 = b1 + 2; @endcode
+ *
+ * where @c b3 will set to represent <tt>{ 'c', 'd', 'e' }</tt>. If the offset
+ * exceeds the size of the existing buffer, the newly created buffer will be
+ * empty.
+ *
+ * Both an offset and size may be specified to create a buffer that corresponds
+ * to a specific range of bytes within an existing buffer:
+ *
+ * @code b4 = boost::asio::buffer(b1 + 1, 3); @endcode
+ *
+ * so that @c b4 will refer to the bytes <tt>{ 'b', 'c', 'd' }</tt>.
+ *
+ * @par Buffers and Scatter-Gather I/O
+ *
+ * To read or write using multiple buffers (i.e. scatter-gather I/O), multiple
+ * buffer objects may be assigned into a container that supports the
+ * MutableBufferSequence (for read) or ConstBufferSequence (for write) concepts:
+ *
+ * @code
+ * char d1[128];
+ * std::vector<char> d2(128);
+ * boost::array<char, 128> d3;
+ *
+ * boost::array<mutable_buffer, 3> bufs1 = {
+ *   boost::asio::buffer(d1),
+ *   boost::asio::buffer(d2),
+ *   boost::asio::buffer(d3) };
+ * bytes_transferred = sock.receive(bufs1);
+ *
+ * std::vector<const_buffer> bufs2;
+ * bufs2.push_back(boost::asio::buffer(d1));
+ * bufs2.push_back(boost::asio::buffer(d2));
+ * bufs2.push_back(boost::asio::buffer(d3));
+ * bytes_transferred = sock.send(bufs2); @endcode
+ */
+/*@{*/
     }
     
-    #endif  // CAFFE_ELU_LAYER_HPP_
+    #endif // BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
 
     
-    TEST_F(UnicharcompressTest, DoesKannada) {
-  LOG(INFO) << 'Testing kan';
-  LoadUnicharset('kan.unicharset');
-  ExpectCorrect('kan');
-  SerializeAndUndo();
-  ExpectCorrect('kan');
-}
-    
-    // Tests that the SSE implementation gets the same result as the vanilla.
-TEST_F(IntSimdMatrixTest, SSE) {
-  if (SIMDDetect::IsSSEAvailable()) {
-    tprintf('SSE found! Continuing...');
-  } else {
-    tprintf('No SSE found! Not Tested!');
-    return;
+      static void validate(const std::array<Elem, 2>& buffer_sequence)
+  {
+    boost::asio::buffer_cast<const void*>(buffer_sequence[0]);
+    boost::asio::buffer_cast<const void*>(buffer_sequence[1]);
   }
-  std::unique_ptr<IntSimdMatrix> matrix(new IntSimdMatrixSSE());
-  ExpectEqualResults(matrix.get());
-}
+    
+        // The key associated with the context.
+    Key* key_;
     
     
-/**********************************************************************
- * UTF8 Text Renderer interface implementation
- **********************************************************************/
-TessTextRenderer::TessTextRenderer(const char *outputbase)
-    : TessResultRenderer(outputbase, 'txt') {
-}
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
     
-    #include 'intsimdmatrix.h'
-#include 'intsimdmatrixavx2.h'
-#include 'intsimdmatrixsse.h'
-#include 'simddetect.h'
-    
-    /**
- * Class to iterate over tesseract page structure, providing access to all
- * levels of the page hierarchy, without including any tesseract headers or
- * having to handle any tesseract structures.
- * WARNING! This class points to data held within the TessBaseAPI class, and
- * therefore can only be used while the TessBaseAPI class still exists and
- * has not been subjected to a call of Init, SetImage, Recognize, Clear, End
- * DetectOS, or anything else that changes the internal PAGE_RES.
- * See apitypes.h for the definition of PageIteratorLevel.
- * See also ResultIterator, derived from PageIterator, which adds in the
- * ability to access OCR output with text-specific methods.
- */
-    
-    ResultIterator::ResultIterator(const LTRResultIterator &resit)
-    : LTRResultIterator(resit) {
-  in_minor_direction_ = false;
-  at_beginning_of_minor_run_ = false;
-  preserve_interword_spaces_ = false;
-    }
-    
-    /**********************************************************************
- * ROW::operator=
- *
- * Assign rows by duplicating the row structure but NOT the WERDLIST
- **********************************************************************/
-    
-    
-/**********************************************************************
- * TBOX::bounding_union()  Build the smallest box containing both boxes
- *
- **********************************************************************/
-    
-    	if (IsUserOnly(opt))
-	{
-		FAIL_ON_ERROR(RegCreateKeyEx(HKEY_CURRENT_USER, L'Software\\Classes', 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &root, NULL));
-	}
-	else
-	{
-		root = HKEY_CLASSES_ROOT;
-	}
-    
-    
-    
-    void GLESDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color)
+    template <typename Handler>
+inline void deallocate(void* p, std::size_t s, Handler& h)
 {
-    mShaderProgram->use();
-    mShaderProgram->setUniformsForBuiltins();
-    }
+#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
+  ::operator delete(p);
+#else
+  using boost::asio::asio_handler_deallocate;
+  asio_handler_deallocate(p, s, boost::asio::detail::addressof(h));
+#endif
+}
     
-    		b2Body* body2 = m_world->CreateBody(&bd);
-		m_piece2 = body2->CreateFixture(&m_shape2, 1.0f);
+    #include <boost/asio/detail/dev_poll_reactor.hpp>
+#include <boost/asio/detail/assert.hpp>
+#include <boost/asio/detail/throw_error.hpp>
+#include <boost/asio/error.hpp>
     
-    	BulletTest()
+    bool js_cocos2dx_physics3d_PhysicsSprite3D_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_PhysicsSprite3D_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_PhysicsSprite3D(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_PhysicsSprite3D_syncNodeToPhysics(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_PhysicsSprite3D_syncPhysicsToNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_PhysicsSprite3D_getPhysicsObj(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_PhysicsSprite3D_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_PhysicsSprite3D_PhysicsSprite3D(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    #ifdef __cplusplus
+extern 'C' {
+#endif
+#include 'tolua++.h'
+#ifdef __cplusplus
+}
+#endif
+    
+    
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,'cc.PhysicsJoint',0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    class BodyTypes : public Test
+{
+public:
+	BodyTypes()
 	{
+		b2Body* ground = NULL;
 		{
 			b2BodyDef bd;
-			bd.position.Set(0.0f, 0.0f);
-			b2Body* body = m_world->CreateBody(&bd);
+			ground = m_world->CreateBody(&bd);
     }
     }
-    
-    			b2Body* prevBody = ground;
-			for (int32 i = 0; i < 3; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position.Set(-14.0f + 2.0f * i, 15.0f);
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&fd);
     }
     
-    TEST_P(EnvMoreTestWithParam, GetModTime) {
-  ASSERT_OK(env_->CreateDirIfMissing(test_dir_ + '/dir1'));
-  uint64_t mtime1 = 0x0;
-  ASSERT_OK(env_->GetFileModificationTime(test_dir_ + '/dir1', &mtime1));
-}
     
-      StatisticsJni::StatisticsJni(std::shared_ptr<Statistics> stats,
-      const std::set<uint32_t> ignore_histograms) : StatisticsImpl(stats, false),
-      m_ignore_histograms(ignore_histograms) {
-  }
-    
-    #include 'util/sync_point.h'
-#include 'util/sync_point_impl.h'
-    
-        void SetObjectField(jobject obj, jfieldID fieldID, jobject value)
-    { functions->SetObjectField(this, obj, fieldID, value); }
-    void SetBooleanField(jobject obj, jfieldID fieldID, jboolean value)
-    { functions->SetBooleanField(this, obj, fieldID, value); }
-    void SetByteField(jobject obj, jfieldID fieldID, jbyte value)
-    { functions->SetByteField(this, obj, fieldID, value); }
-    void SetCharField(jobject obj, jfieldID fieldID, jchar value)
-    { functions->SetCharField(this, obj, fieldID, value); }
-    void SetShortField(jobject obj, jfieldID fieldID, jshort value)
-    { functions->SetShortField(this, obj, fieldID, value); }
-    void SetIntField(jobject obj, jfieldID fieldID, jint value)
-    { functions->SetIntField(this, obj, fieldID, value); }
-    void SetLongField(jobject obj, jfieldID fieldID, jlong value)
-    { functions->SetLongField(this, obj, fieldID, value); }
-    void SetFloatField(jobject obj, jfieldID fieldID, jfloat value)
-    { functions->SetFloatField(this, obj, fieldID, value); }
-    void SetDoubleField(jobject obj, jfieldID fieldID, jdouble value)
-    { functions->SetDoubleField(this, obj, fieldID, value); }
-    
-    #pragma once
-#include <stdio.h>
-#include 'YGConfig.h'
-#include 'YGLayout.h'
-#include 'YGStyle.h'
-#include 'Yoga-internal.h'
-    
-      ASSERT_TRUE(YGNodeLayoutGetHadOverflow(root));
-    
-        double width;
-    double height;
-    
-    #pragma once
+    {				if (i == (e_count >> 1))
+				{
+					m_middle = body;
+				}
+				prevBody = body;
+			}
     
     
-    {    void toJS(nbind::cbOutput expose) const
     {
-        expose(width, height);
+    {			m_bullet->SetLinearVelocity(b2Vec2(0.0f, -50.0f));
+		}
+	}
+    
+    
+    {			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.position.Set(-8.0f + 8.0f * i, 12.0f);
+			b2Body* body = m_world->CreateBody(&bd);
+			body->CreateFixture(&fd);
+		}
+    
+    static std::unique_ptr<Env> def_env(new NormalizingEnvWrapper(Env::Default()));
+INSTANTIATE_TEST_CASE_P(EnvDefault, EnvBasicTestWithParam,
+                        ::testing::Values(def_env.get()));
+INSTANTIATE_TEST_CASE_P(EnvDefault, EnvMoreTestWithParam,
+                        ::testing::Values(def_env.get()));
+    
+           * Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+       * Redistributions in binary form must reproduce the above
+   copyright notice, this list of conditions and the following disclaimer
+   in the documentation and/or other materials provided with the
+   distribution.
+    
+      virtual bool Merge(const Slice& key,
+                     const Slice* existing_value,
+                     const Slice& value,
+                     std::string* new_value,
+                     Logger* logger) const override;
+    
+    #ifndef JAVA_ROCKSJNI_STATISTICSJNI_H_
+#define JAVA_ROCKSJNI_STATISTICSJNI_H_
+    
+      // MemTables are reference counted.  The initial reference count
+  // is zero and the caller must call Ref() at least once.
+  //
+  // earliest_seq should be the current SequenceNumber in the db such that any
+  // key inserted into this memtable will have an equal or larger seq number.
+  // (When a db is first created, the earliest sequence number will be 0).
+  // If the earliest sequence number is not known, kMaxSequenceNumber may be
+  // used, but this may prevent some transactions from succeeding until the
+  // first key is inserted into the memtable.
+  explicit MemTable(const InternalKeyComparator& comparator,
+                    const ImmutableCFOptions& ioptions,
+                    const MutableCFOptions& mutable_cf_options,
+                    WriteBufferManager* write_buffer_manager,
+                    SequenceNumber earliest_seq, uint32_t column_family_id);
+    
+    std::unique_ptr<CompactionFilter> CompactionFilterFactoryJniCallback::CreateCompactionFilter(
+    const CompactionFilter::Context& context) {
+  jboolean attached_thread = JNI_FALSE;
+  JNIEnv* env = getJniEnv(&attached_thread);
+  assert(env != nullptr);
     }
-};
-
     
-        method(setBorder);
+    DirectComparatorJniCallback::~DirectComparatorJniCallback() {
+  jboolean attached_thread = JNI_FALSE;
+  JNIEnv* env = getJniEnv(&attached_thread);
+  assert(env != nullptr);
+    }
     
-    #define ASSERT_BUF_SIZE 4096
-static char sAssertBuf[ASSERT_BUF_SIZE];
-static AssertHandler gAssertHandler;
-    
-    // Class that lets you declare a global but does not add a static constructor
-// to the binary. Eventually I'd like to have this auto-initialize in a
-// multithreaded environment but for now it's easiest just to use manual
-// initialization.
-template <typename T>
-class StaticInitialized {
-public:
-  constexpr StaticInitialized() :
-    m_instance(nullptr)
-  {}
+    namespace rocksdb {
     }
