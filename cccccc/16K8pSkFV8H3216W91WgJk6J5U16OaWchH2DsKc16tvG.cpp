@@ -1,254 +1,180 @@
 
         
-        // Get basic type definitions.
-#define IPC_MESSAGE_IMPL
-#include 'content/nw/src/common/common_message_generator.h'
+        // dims=[5, 4, 3, 2]->[3, 5, 4, 2]
+TEST_F(MatrixTest, RotatingTranspose_2_0) {
+  GENERIC_2D_ARRAY<int> m;
+  src_.RotatingTranspose(dims_, kNumDims_, 2, 0, &m);
+  m.ResizeNoInit(kInputSize_ / 2, 2);
+  // Verify that the result is:
+  // output tensor=[[[[0, 1][6, 7][12, 13][18, 19]]
+  //                 [[24, 25][30, 31][36, 37][42, 43]]
+  //                 [[48, 49][54, 55][60, 61][66, 67]]
+  //                 [[72, 73][78, 79][84, 85][90, 91]]
+  //                 [[96, 97][102, 103][108, 109][114, 115]]]
+  //                [[[2,3]...
+  EXPECT_EQ(0, m(0, 0));
+  EXPECT_EQ(1, m(0, 1));
+  EXPECT_EQ(6, m(1, 0));
+  EXPECT_EQ(7, m(1, 1));
+  EXPECT_EQ(24, m(4, 0));
+  EXPECT_EQ(25, m(4, 1));
+  EXPECT_EQ(30, m(5, 0));
+  EXPECT_EQ(2, m(20, 0));
+}
     
-    // static
-void App::Call(const std::string& method,
-               const base::ListValue& arguments) {
-  if (method == 'Quit') {
-    Quit();
-  } else if (method == 'CloseAllWindows') {
-    CloseAllWindows();
-  } else if (method == 'CrashBrowser') {
-    int* ptr = NULL;
-    *ptr = 1;
-  } else {
-    NOTREACHED() << 'Calling unknown method ' << method << ' of App.';
+    #define ASSERT_HOST_MSG(x, ...)                                                \
+  if (!(x)) {                                                                  \
+    tprintf(__VA_ARGS__);                                                      \
+    ASSERT_FAILED.error(#x, ABORT, 'in file %s, line %d', __FILE__, __LINE__); \
   }
+    
+    
+/**----------------------------------------------------------------------------
+        Global Data Definitions and Declarations
+----------------------------------------------------------------------------**/
+    
+    #include 'dawg.h'
+#include 'object_cache.h'
+#include 'strngs.h'
+#include 'tessdatamanager.h'
+    
+    void Timer::RequestInit() {
+  memset(&s_counters, 0, sizeof(s_counters));
 }
     
-      virtual void Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh = nullptr);
-  virtual void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result);
+    public:
+  explicit Timer(Type type, const char *name = nullptr, ReportType r = Log);
+  ~Timer();
     
-    Clipboard::Clipboard(int id,
-           const base::WeakPtr<DispatcherHost>& dispatcher_host,
-           const base::DictionaryValue& option)
-    : Base(id, dispatcher_host, option) {
-}
+    #else // USE_GCC_FAST_TLS
     
-    
-    {}  // namespace nw
-    
-    void Menu::Popup(int x, int y, content::Shell* shell) {
-  GdkEventButton* event = NULL; //FIXME: shell->web_contents()->GetRenderWidgetHostView()->GetLastMouseDown();
-  uint32_t triggering_event_time = event ? event->time : GDK_CURRENT_TIME;
-  gfx::Point point;
-  if (!event) {
-    // gfx::Rect bounds = shell->web_contents()->GetRenderWidgetHostView()->GetViewBounds();
-    // point = gfx::Point(x + bounds.x(), y + bounds.y());
-    DVLOG(1) << 'no last mouse down event';
-    point = gfx::Point(x, y);
-  }else
-    point = gfx::Point(event->x_root, event->y_root);
-    }
-    
-    namespace google {
-namespace protobuf {
-namespace python {
+    namespace HPHP { namespace jit {
     }
     }
-    }
-    
-    #include <google/protobuf/stubs/common.h>
-namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/wire_format.h>
-    
-      virtual void WriteHash(io::Printer* printer);
-  virtual void WriteEquals(io::Printer* printer);
-  virtual void WriteToString(io::Printer* printer);
-    
-    #include <string>
-    
-    #include <map>
-#include <string>
-    
-      // implements CodeGenerator ----------------------------------------
-  bool Generate(const FileDescriptor* file,
-                const string& parameter,
-                GeneratorContext* context,
-                string* error) const;
-    
-    MessageGenerator* ImmutableGeneratorFactory::NewMessageGenerator(
-    const Descriptor* descriptor) const {
-  if (HasDescriptorMethods(descriptor, context_->EnforceLite())) {
-    return new ImmutableMessageGenerator(descriptor, context_);
-  } else {
-    return new ImmutableMessageLiteGenerator(descriptor, context_);
-  }
-}
-    
-    #include <THPP/Type.hpp>
-    
-      void allGather(std::vector<at::Tensor>& output,
-                 std::vector<at::Tensor>& input,
-                 THDGroup group_id = THDGroupWORLD) override;
-  void allGather(std::vector<at::Tensor>& output, at::Tensor& input,
-                 THDGroup group_id = THDGroupWORLD) override;
-  void gather(std::vector<at::Tensor>& output, at::Tensor& input,
-              rank_type dst_rank, THDGroup group_id = THDGroupWORLD) override;
-  void scatter(std::vector<at::Tensor>& input, at::Tensor& output,
-               rank_type src_rank, THDGroup group_id = THDGroupWORLD) override;
-  void allReduce(std::vector<at::Tensor>& data,
-                 THDReduceOp operation,
-                 THDGroup group_id = THDGroupWORLD) override;
-  void allReduce(at::Tensor& data, THDReduceOp operation,
-                 THDGroup group_id = THDGroupWORLD) override;
-  void reduce(std::vector<at::Tensor>& data,
-              THDReduceOp operation,
-              rank_type dstRank,
-              THDGroup group_id = THDGroupWORLD) override;
-  void reduce(at::Tensor& data, THDReduceOp operation, rank_type dst_rank,
-              THDGroup group_id = THDGroupWORLD) override;
-  void broadcast(std::vector<at::Tensor>& data,
-                 rank_type srcRank,
-                 THDGroup group_id = THDGroupWORLD) override;
-  void broadcast(at::Tensor& data, rank_type src_id,
-                 THDGroup group_id = THDGroupWORLD) override;
-  void send(Scalar& data, rank_type dst_id) override;
-  void send(at::Tensor& data, rank_type dst_id) override;
-  void receive(Scalar& data, rank_type src_id) override;
-  rank_type receive(at::Tensor& data) override;
-  void receive(at::Tensor& data, rank_type src_id) override;
-  RequestGloo* isend(at::Tensor& data, rank_type dst_rank) override;
-  RequestGloo* ireceive(at::Tensor& data, rank_type src_rank) override;
     
     #endif
-
     
+    #define HFTRACE(LEVEL, ...)                         \
+  if (Trace::moduleEnabled(Trace::hfsort, LEVEL)) { \
+    Trace::traceRelease(__VA_ARGS__);               \
+  }
     
+    /*
+ * Lock around accesses to s_tmp_files.
+ */
+std::mutex s_tmp_files_lock;
     
-      masterCommandChannel->sendMessage(
-    packMessage(Functions::tensorPstrf, ra, rpiv, a, uplo[0], tol),
-    THDState::s_current_worker
-  );
-    
-    namespace leveldb {
-    }
-    
-    static void Usage() {
-  fprintf(
-      stderr,
-      'Usage: leveldbutil command...\n'
-      '   dump files...         -- dump contents of specified files\n'
-      );
+    bool CurlShareResource::setLongOption(long option, long value) {
+  CURLSHcode error = CURLSHE_OK;
+  error = curl_share_setopt(m_share,
+                            (CURLSHoption)option,
+                            value);
+  return error == CURLSHE_OK;
 }
     
-    #endif  // STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_
+    /**
+ * A Synchronizable object that has multiple conditional variables. The benefit
+ * is, notify() can choose to wake up a thread that is more favorable (e.g.,
+ * one with stack/heap mapped on huge pages, or one that is recently active).
+ */
+struct SynchronizableMulti {
+  explicit SynchronizableMulti(int size);
+  virtual ~SynchronizableMulti() {}
+    }
+    
+    // Get a huge page from NUMA node `node`, and return the mapped address
+// specified by `addr` or nullptr on failure.  If `addr` is nullptr, the system
+// will choose a proper address.  If the address range [addr, addr+1G) already
+// contains address in the process address space, nullptr is returned and the
+// mapping won't be changed.  If `node` is -1, any NUMA node is OK.
+void* mmap_1g(void* addr = nullptr, int node = -1);
+    
+    #ifndef GUETZLI_DCT_DOUBLE_H_
+#define GUETZLI_DCT_DOUBLE_H_
+    
+    #include <math.h>
+    
+    
+    {}  // namespace guetzli
 
     
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    #ifndef GUETZLI_IDCT_H_
+#define GUETZLI_IDCT_H_
     
-    #ifndef BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-#define BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-    
-    #endif // BOOST_ASIO_DETAIL_ATOMIC_COUNT_HPP
-
-    
-    #if defined(BOOST_ASIO_HAS_STD_FUNCTION)
-using std::function;
-#else // defined(BOOST_ASIO_HAS_STD_FUNCTION)
-using boost::function;
-#endif // defined(BOOST_ASIO_HAS_STD_FUNCTION)
-    
-    
-    {private:
-  static void barrier()
-  {
-#if defined(__ARM_ARCH_4__) \
-    || defined(__ARM_ARCH_4T__) \
-    || defined(__ARM_ARCH_5__) \
-    || defined(__ARM_ARCH_5E__) \
-    || defined(__ARM_ARCH_5T__) \
-    || defined(__ARM_ARCH_5TE__) \
-    || defined(__ARM_ARCH_5TEJ__) \
-    || defined(__ARM_ARCH_6__) \
-    || defined(__ARM_ARCH_6J__) \
-    || defined(__ARM_ARCH_6K__) \
-    || defined(__ARM_ARCH_6Z__) \
-    || defined(__ARM_ARCH_6ZK__) \
-    || defined(__ARM_ARCH_6T2__)
-# if defined(__thumb__)
-    // This is just a placeholder and almost certainly not sufficient.
-    __asm__ __volatile__ ('' : : : 'memory');
-# else // defined(__thumb__)
-    int a = 0, b = 0;
-    __asm__ __volatile__ ('swp %0, %1, [%2]'
-        : '=&r'(a) : 'r'(1), 'r'(&b) : 'memory', 'cc');
-# endif // defined(__thumb__)
-#else
-    // ARMv7 and later.
-    __asm__ __volatile__ ('dmb' : : : 'memory');
-#endif
-  }
+    enum JPEGReadError {
+  JPEG_OK = 0,
+  JPEG_SOI_NOT_FOUND,
+  JPEG_SOF_NOT_FOUND,
+  JPEG_UNEXPECTED_EOF,
+  JPEG_MARKER_BYTE_NOT_FOUND,
+  JPEG_UNSUPPORTED_MARKER,
+  JPEG_WRONG_MARKER_SIZE,
+  JPEG_INVALID_PRECISION,
+  JPEG_INVALID_WIDTH,
+  JPEG_INVALID_HEIGHT,
+  JPEG_INVALID_NUMCOMP,
+  JPEG_INVALID_SAMP_FACTOR,
+  JPEG_INVALID_START_OF_SCAN,
+  JPEG_INVALID_END_OF_SCAN,
+  JPEG_INVALID_SCAN_BIT_POSITION,
+  JPEG_INVALID_COMPS_IN_SCAN,
+  JPEG_INVALID_HUFFMAN_INDEX,
+  JPEG_INVALID_QUANT_TBL_INDEX,
+  JPEG_INVALID_QUANT_VAL,
+  JPEG_INVALID_MARKER_LEN,
+  JPEG_INVALID_SAMPLING_FACTORS,
+  JPEG_INVALID_HUFFMAN_CODE,
+  JPEG_INVALID_SYMBOL,
+  JPEG_NON_REPRESENTABLE_DC_COEFF,
+  JPEG_NON_REPRESENTABLE_AC_COEFF,
+  JPEG_INVALID_SCAN,
+  JPEG_OVERLAPPING_SCANS,
+  JPEG_INVALID_SCAN_ORDER,
+  JPEG_EXTRA_ZERO_RUN,
+  JPEG_DUPLICATE_DRI,
+  JPEG_DUPLICATE_SOF,
+  JPEG_WRONG_RESTART_MARKER,
+  JPEG_DUPLICATE_COMPONENT_ID,
+  JPEG_COMPONENT_NOT_FOUND,
+  JPEG_HUFFMAN_TABLE_NOT_FOUND,
+  JPEG_HUFFMAN_TABLE_ERROR,
+  JPEG_QUANT_TABLE_NOT_FOUND,
+  JPEG_EMPTY_DHT,
+  JPEG_EMPTY_DQT,
+  JPEG_OUT_OF_BAND_COEFF,
+  JPEG_EOB_RUN_TOO_LONG,
+  JPEG_IMAGE_TOO_LARGE,
 };
     
-    template <typename Function, typename Context>
-inline void invoke(const Function& function, Context& context)
-{
-#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  Function tmp(function);
-  tmp();
-#else
-  using boost::asio::asio_handler_invoke;
-  asio_handler_invoke(function, boost::asio::detail::addressof(context));
-#endif
-}
+      // Fills in out[] array with the 8-bit pixel view of this component cropped
+  // to the specified window. The window's upper-left corner, (xmin, ymin) must
+  // be within the image, but the window may extend past the image. In that
+  // case the edge pixels are duplicated.
+  void ToPixels(int xmin, int ymin, int xsize, int ysize,
+                uint8_t* out, int stride) const;
     
-    #define YG_NODE_STYLE_EDGE_PROPERTY(type, name, paramName)    \
-  WIN_EXPORT void YGNodeStyleSet##name(const YGNodeRef node,  \
-                                       const YGEdge edge,     \
-                                       const type paramName); \
-  WIN_EXPORT type YGNodeStyleGet##name(const YGNodeRef node, const YGEdge edge);
+      DBWrapper* db_wrapper     = ObjectWrap::Unwrap<DBWrapper>(args.This());
+  Handle<Array> sub_batches = Handle<Array>::Cast(args[0]);
+  Local<Object> sub_batch;
+  rocksdb::WriteBatch batch;
+  bool well_formed;
     
-    struct Value
-{
-    static Value fromYGValue(YGValue const & ygValue)
-    {
-        return Value(static_cast<int>(ygValue.unit), ygValue.value);
-    }
+    
+// The class for unit-testing
+class StringAppendOperatorTest : public testing::Test {
+ public:
+  StringAppendOperatorTest() {
+    DestroyDB(kDbName, Options());    // Start each test with a fresh DB
+  }
     }
     
-    void Node::setJustifyContent(int justifyContent)
-{
-    YGNodeStyleSetJustifyContent(m_node, static_cast<YGJustify>(justifyContent));
-}
+      jlong addr_compaction_filter = env->CallLongMethod(m_jcallback_obj,
+      m_jcreate_compaction_filter_methodid,
+      static_cast<jboolean>(context.is_full_compaction),
+      static_cast<jboolean>(context.is_manual_compaction));
     
-    struct Size
-{
-    double width;
-    double height;
+    ComparatorJniCallback::~ComparatorJniCallback() {
+  jboolean attached_thread = JNI_FALSE;
+  JNIEnv* env = getJniEnv(&attached_thread);
+  assert(env != nullptr);
     }
-    
-    
-    {} // namespace facebook
-
-    
-    
-    {}
-
-    
-    #pragma once
-#include <fb/assert.h>
-#include <utility>
