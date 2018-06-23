@@ -1,84 +1,34 @@
 
         
-            to remove replace in this file ismount( -> os.path.ismount( and remove this
-    function'''
-    
-    # Backwards compat only
+        # Note, sha1 is the only hash algorithm compatible with python2.4 and with
+# FIPS-140 mode (as of 11-2014)
 try:
-    from hashlib import md5 as _md5
+    from hashlib import sha1 as sha1
 except ImportError:
-    try:
-        from md5 import md5 as _md5
-    except ImportError:
-        # Assume we're running in FIPS mode here
-        _md5 = None
+    from sha import sha as sha1
     
-        parser.add_argument('--env',
-                        nargs=2,
-                        metavar=('KEY', 'VALUE'),
-                        action='append',
-                        help='environment variable to pass')
+        url = 'https://api.shippable.com/projects'
+    response = requests.get(url, data, headers=headers)
     
-    import os
-import re
+        'hostport': re.compile(
+        r'''^
+            ((?:                        # We want to match:
+                [^:\[\]]                # (a non-range character
+                |                       # ...or...
+                \[[^\]]*\]              # a complete bracketed expression)
+            )*)                         # repeated as many times as possible
+            :([0-9]+)                   # followed by a port number
+            $
+        ''', re.X
+    ),
     
-        def construct_yaml_map(self, node):
-        data = AnsibleMapping()
-        yield data
-        value = self.construct_mapping(node)
-        data.update(value)
-        data.ansible_pos = self._node_position_info(node)
-    
-        @value.setter
-    def value(self, new_value):
-        if 1 <= new_value <= 13:
-            self._value = new_value
-        else:
-            raise ValueError('Invalid card value: {}'.format(new_value))
-    
-    
-class Graph(object):
-    
-            (foo, p1), 2
-        (bar, p1), 2
-        (bar, p1), 1
-        (foo, p2), 3
-        (bar, p3), 10
-        (foo, p4), 1
-        '''
-        timestamp, product_id, category, quantity = line.split('\t')
-        if self.within_past_week(timestamp):
-            yield (category, product_id), quantity
-    
-            When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
-        '''
-        node = self.lookup.get(query)
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
-        else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
+        try:
+        return json.dumps(result, sort_keys=True, indent=indent, ensure_ascii=False)
+    except UnicodeDecodeError:
+        return json.dumps(result, sort_keys=True, indent=indent)
 
     
-        def __init__(self, user_id, name, pass_hash):
-        self.user_id = user_id
-        self.name = name
-        self.pass_hash = pass_hash
-        self.friends_by_id = {}  # key: friend id, value: User
-        self.friend_ids_to_private_chats = {}  # key: friend id, value: private chats
-        self.group_chats_by_id = {}  # key: chat id, value: GroupChat
-        self.received_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
-        self.sent_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
+        def test_max_delay_none(self):
+        strategy = _exponential_backoff(retries=7, delay=1, backoff=2, max_delay=None)
+        result = list(strategy())
+        self.assertEquals(result, [1, 2, 4, 8, 16, 32, 64])
