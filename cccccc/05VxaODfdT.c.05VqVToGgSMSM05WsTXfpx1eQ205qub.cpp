@@ -1,13 +1,40 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        
+    {  const SILDebugScope *Scope = this;
+  while (Scope->Parent.is<const SILDebugScope *>())
+    Scope = Scope->Parent.get<const SILDebugScope *>();
+  assert(Scope->Parent.is<SILFunction *>() && 'orphaned scope');
+  return Scope->Parent.get<SILFunction *>();
+}
     
-    constexpr double kPicosPerMicro = 1000000.0;
+    #include 'swift/Syntax/Rewriter.h'
+    
+    #include 'swift/Basic/LLVM.h'
+#include 'swift/AST/DiagnosticConsumer.h'
+    
+    #include 'swift/Runtime/HeapObject.h'
+#include <mutex>
+    
+    /// A LSValue is an abstraction of an object field value in program. It
+/// consists of a base that is the tracked SILValue, and a projection path to
+/// the represented field.
+class LSValue : public LSBase {
+  /// If this is a covering value, we need to go to each predecessor to
+  /// materialize the value.
+  bool CoveringValue;
+public:
+  /// Constructors.
+  LSValue() : LSBase(), CoveringValue(false) {}
+  LSValue(KeyKind Kind) : LSBase(Kind), CoveringValue(false) {}
+  LSValue(bool CSVal) : LSBase(Normal), CoveringValue(CSVal) {}
+  LSValue(SILValue B, const ProjectionPath &P)
+      : LSBase(B, P), CoveringValue(false) {}
+    }
+    
+    PyObject* NewMessageEnumsByName(const Descriptor* descriptor);
+PyObject* NewMessageEnumsSeq(const Descriptor* descriptor);
+PyObject* NewMessageEnumValuesByName(const Descriptor* descriptor);
     
       // Find the file which defines an extension extending the given message type
   // with the given field number.
@@ -27,18 +54,50 @@ limitations under the License.
   message.mutable_any_value()->PackFrom(any);
     }
     
-    #include <string>
-    
-    
-    { private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RepeatedMessageFieldGenerator);
+    // Generator options (used by csharp_generator.cc):
+struct Options {
+  Options() :
+      file_extension('.cs'),
+      base_namespace(''),
+      base_namespace_specified(false),
+      internal_access(false) {
+  }
+  // Extension of the generated file. Defaults to '.cs'
+  string file_extension;
+  // Base namespace to use to create directory hierarchy. Defaults to ''.
+  // This option allows the simple creation of a conventional C# file layout,
+  // where directories are created relative to a project-specific base
+  // namespace. For example, in a project with a base namespace of PetShop, a
+  // proto of user.proto with a C# namespace of PetShop.Model.Shared would
+  // generate Model/Shared/User.cs underneath the specified --csharp_out
+  // directory.
+  //
+  // If no base namespace is specified, all files are generated in the
+  // --csharp_out directory, with no subdirectories created automatically.
+  string base_namespace;
+  // Whether the base namespace has been explicitly specified by the user.
+  // This is required as the base namespace can be explicitly set to the empty
+  // string, meaning 'create a full directory hierarchy, starting from the first
+  // segment of the namespace.'
+  bool base_namespace_specified;
+  // Whether the generated classes should have accessibility level of 'internal'.
+  // Defaults to false that generates 'public' classes.
+  bool internal_access;
 };
     
-    class RepeatedPrimitiveFieldGenerator : public FieldGeneratorBase {
- public:
-  RepeatedPrimitiveFieldGenerator(const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options);
-  ~RepeatedPrimitiveFieldGenerator();
-    }
+    void RepeatedEnumFieldGenerator::GenerateMergingCode(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    '$name$_.Add(other.$name$_);\n');
+}
+    
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
     
     void WriteMessageDocComment(io::Printer* printer, const Descriptor* message);
 void WriteFieldDocComment(io::Printer* printer, const FieldDescriptor* field);
@@ -50,28 +109,43 @@ void WriteServiceDocComment(io::Printer* printer,
 void WriteMethodDocComment(io::Printer* printer,
                            const MethodDescriptor* method);
     
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
     
-    // Generates code for a lite extension, which may be within the scope of some
-// message or may be at file scope.  This is much simpler than FieldGenerator
-// since extensions are just simple identifiers with interesting types.
-class ImmutableExtensionLiteGenerator : public ExtensionGenerator {
- public:
-  explicit ImmutableExtensionLiteGenerator(const FieldDescriptor* descriptor,
-                                           Context* context);
-  virtual ~ImmutableExtensionLiteGenerator();
+    {    PyThreadState *_save = NULL;
+    try {
+      Py_UNBLOCK_THREADS;
+      copyFunc(LIBRARY_STATE dst, THDPModule_makeDescriptor(src_));
+      Py_BLOCK_THREADS;
+    } catch (...) {
+      if (_save) {
+        Py_BLOCK_THREADS;
+      }
+      throw;
     }
+  };
     
-      printer->Print(variables_,
-    // If this builder is non-null, it is used and the other fields are
-    // ignored.
-    'private com.google.protobuf.SingleFieldBuilder$ver$<\n'
-    '    $type$, $type$.Builder, $type$OrBuilder> $name$Builder_;'
-    '\n');
+          socklen_t err_len = sizeof(errno);
+      errno = 0;
+      ::getsockopt(socket, SOL_SOCKET, SO_ERROR, &errno, &err_len);
+      /* `errno` is set when:
+       *   1. `getsockopt` has failed
+       *   2. there is awaiting error in the socket (the error is saved to the `errno` variable)
+       */
+      if (errno != 0) {
+        throw std::system_error(errno, std::system_category());
+      }
+    
+    function<ComputationNetworkPtr(DEVICEID_TYPE)> GetCreateNetworkFn(const ScriptableObjects::IConfigRecord& config)
+{
+    // createNetwork() is a BrainScript lambda that creates the model
+    // We create a C++ wrapper around it, which we then pass to Train().
+    auto createNetworkConfigLambda = config[L'createNetwork'].AsPtr<ScriptableObjects::ConfigLambda>();
+    return [createNetworkConfigLambda](DEVICEID_TYPE /*deviceId*/)
+    {
+        // execute the lambda
+        vector<ScriptableObjects::ConfigValuePtr> args; // this lambda has no arguments
+        ScriptableObjects::ConfigLambda::NamedParams namedArgs;
+        let netValue = createNetworkConfigLambda->Apply(move(args), move(namedArgs), L'BuildNetworkFromDescription');
+        // typecast the result to the desired type
+        return netValue.AsPtr<ComputationNetwork>();
+    };
+}
