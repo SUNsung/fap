@@ -1,41 +1,83 @@
 
         
-            def run(self, args, opts):
-        # load contracts
-        contracts = build_component_list(self.settings.getwithbase('SPIDER_CONTRACTS'))
-        conman = ContractsManager(load_object(c) for c in contracts)
-        runner = TextTestRunner(verbosity=2 if opts.verbose else 1)
-        result = TextTestResult(runner.stream, runner.descriptions, runner.verbosity)
+        from tensorflow.python.platform import gfile
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-l', '--list', dest='list', action='store_true',
-            help='List available templates')
-        parser.add_option('-e', '--edit', dest='edit', action='store_true',
-            help='Edit spider after creating it')
-        parser.add_option('-d', '--dump', dest='dump', metavar='TEMPLATE',
-            help='Dump template to standard output')
-        parser.add_option('-t', '--template', dest='template', default='basic',
-            help='Uses a custom template.')
-        parser.add_option('--force', dest='force', action='store_true',
-            help='If the spider already exists, overwrite it with the template')
+    cc_library(
+    name = 'compute_session',
+    hdrs = ['compute_session.h'],
+    deps = [
+        ':index_translator',
+        ':input_batch_cache',
+        '//dragnn/components/util:bulk_feature_extractor',
+        '//dragnn/core/interfaces:component',
+        '//dragnn/core/util:label',
+        '//dragnn/protos:spec_proto_cc',
+        '//dragnn/protos:trace_proto_cc',
+    ],
+)
     
-        def dispatch_queued_call_to_newly_freed_employee(self, call, employee):
-        pass
-
-    
-        @property
-    @abstractmethod
-    def value(self):
-        pass
+    tf_proto_library_cc(
+    name = 'data_proto',
+    srcs = ['data.proto'],
+)
     
     
-class PersonServer(object):
+def fetch_dense_ragged_embeddings(comp, state):
+  '''Gets embeddings in RaggedTensor format.'''
+  _validate_embedded_fixed_features(comp)
+  num_channels = len(comp.spec.fixed_feature)
+  if not num_channels:
+    return state.handle, []
+  tf.logging.info('[%s] Adding %d fast fixed features', comp.name, num_channels)
     
-    def get_extension(link):
-    extension = os.path.splitext(link)[1][1:]
-    if extension in ['pdf', 'html']:
-        return extension
-    if 'pdf' in extension:
-        return 'pdf'    
-    return 'pdf'    
+      def testNormalFixedFeaturesAreDifferentiable(self):
+    component_spec = spec_pb2.ComponentSpec()
+    text_format.Parse('''
+        name: 'test'
+        network_unit {
+          registered_name: 'IdentityNetwork'
+        }
+        fixed_feature {
+          name: 'fixed' embedding_dim: 32 size: 1
+          pretrained_embedding_matrix { part {} }
+          vocab { part {} }
+        }
+        component_builder {
+          registered_name: 'bulk_component.BulkFeatureExtractorComponentBuilder'
+        }
+        ''', component_spec)
+    comp = bulk_component.BulkFeatureExtractorComponentBuilder(
+        self.master, component_spec)
+    
+      def testModelExport(self):
+    # Get the master spec and params for this graph.
+    master_spec = self.LoadSpec('ud-hungarian.master-spec')
+    params_path = os.path.join(
+        test_flags.source_root(),
+        'dragnn/python/testdata'
+        '/ud-hungarian.params')
+    
+        def to_json(self, value):
+        return text_type(value.__html__())
+    
+                app.config['IMAGE_STORE_TYPE'] = 'fs'
+            app.config['IMAGE_STORE_PATH'] = '/var/app/images'
+            app.config['IMAGE_STORE_BASE_URL'] = 'http://img.website.com'
+            image_store_config = app.config.get_namespace('IMAGE_STORE_')
+    
+    import os
+import re
+import sys
+from datetime import date, datetime
+from subprocess import PIPE, Popen
+    
+    
+def test_installed_module_paths(modules_tmpdir, modules_tmpdir_prefix,
+                                purge_module, site_packages, limit_loader):
+    site_packages.join('site_app.py').write(
+        'import flask\n'
+        'app = flask.Flask(__name__)\n'
+    )
+    purge_module('site_app')
+    
+        assert wsgi_errors_stream._get_current_object() is sys.stderr
