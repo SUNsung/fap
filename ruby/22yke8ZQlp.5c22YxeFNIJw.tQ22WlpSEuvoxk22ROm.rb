@@ -1,141 +1,151 @@
 
         
-            To install Clojure you should install Leiningen:
-      brew install leiningen
-    and then follow the tutorial:
-      https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
-    EOS
-  when 'osmium' then <<-EOS.undent
-    The creator of Osmium requests that it not be packaged and that people
-    use the GitHub master branch instead.
-    EOS
-  when 'gfortran' then <<-EOS.undent
-    GNU Fortran is now provided as part of GCC, and can be installed with:
-      brew install gcc
-    EOS
-  when 'play' then <<-EOS.undent
-    Play 2.3 replaces the play command with activator:
-      brew install typesafe-activator
-    
-        keys.find do |key|
-      if key.to_s.end_with?('_or_later')
-        later_tag = key.to_s[/(\w+)_or_later$/, 1].to_sym
-        MacOS::Version.from_symbol(later_tag) <= tag_version
+                msg = ' Please append `--trace` to the `#{cmd.name}` command '
+        dashes = '-' * msg.length
+        Jekyll.logger.error '', dashes
+        Jekyll.logger.error 'Jekyll #{Jekyll::VERSION} ', msg
+        Jekyll.logger.error '', ' for any additional information or backtrace. '
+        Jekyll.logger.abort_with '', dashes
       end
+      # rubocop: enable RescueException
     end
   end
 end
 
     
-        # Get rid of any info 'dir' files, so they don't conflict at the link stage
-    info_dir_file = @f.info + 'dir'
-    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
-      observe_file_removal info_dir_file
+            def url_exists?(url)
+          return true unless url.nil? || url.empty?
+          Jekyll.logger.warn 'Warning:', 'You didn't set an URL in the config file, '\
+              'you may encounter problems with some plugins.'
+          false
+        end
+    
+    module Jekyll
+  module Commands
+    class NewTheme < Jekyll::Command
+      class << self
+        def init_with_program(prog)
+          prog.command(:'new-theme') do |c|
+            c.syntax 'new-theme NAME'
+            c.description 'Creates a new Jekyll theme scaffold'
+            c.option 'code_of_conduct', \
+                     '-c', '--code-of-conduct', \
+                     'Include a Code of Conduct. (defaults to false)'
+    
+          class Servlet < WEBrick::HTTPServlet::FileHandler
+        DEFAULTS = {
+          'Cache-Control' => 'private, max-age=0, proxy-revalidate, ' \
+            'no-store, no-cache, must-revalidate',
+        }.freeze
+    
+          def extname_list
+        @extname_list ||= @config['markdown_ext'].split(',').map do |e|
+          '.#{e.downcase}'
+        end
+      end
+    
+    module Kramdown
+  module Parser
+    class SmartyPants < Kramdown::Parser::Kramdown
+      def initialize(source, options)
+        super
+        @block_parsers = [:block_html, :content]
+        @span_parsers =  [:smart_quotes, :html_entity, :typographic_syms, :span_html]
+      end
+    
+          # Check if key exists in Drop
+      #
+      # key - the string key whose value to fetch
+      #
+      # Returns true if the given key is present
+      def key?(key)
+        return false if key.nil?
+        return true if self.class.mutable? && @mutations.key?(key)
+        respond_to?(key) || fallback_data.key?(key)
+      end
+    
+          def get_type
+        return 'Reference' if base_url.path == '/spec/'
+    
+        version '3' do
+      self.release = '3.5.17'
+      self.base_url = 'https://github.com/d3/d3-3.x-api-reference/blob/master/'
+      self.root_path = 'API-Reference.md'
+    
+        version 'Sys' do
+      self.base_url = 'https://api.haxe.org/sys/'
     end
     
-            next unless path.file?
-        file = path
+        html_filters.push 'rust/entries', 'rust/clean_html'
     
-      def internal_development_commands
-    find_internal_commands HOMEBREW_LIBRARY_PATH/'dev-cmd'
+    module Docs
+  class Tensorflow < UrlScraper
+    self.name = 'TensorFlow'
+    self.type = 'tensorflow'
+    self.release = '1.8'
+    self.root_path = 'index.html'
+    self.links = {
+      home: 'https://www.tensorflow.org/',
+      code: 'https://github.com/tensorflow/tensorflow'
+    }
+    
+        def as_json
+      { name: name, path: path, type: type }
+    end
   end
+end
+
     
-        if ARGV.include?('--pinned') || ARGV.include?('--versions')
-      filtered_list
-    elsif ARGV.named.empty?
-      if ARGV.include? '--full-name'
-        full_names = Formula.installed.map(&:full_name).sort do |a, b|
-          if a.include?('/') && !b.include?('/')
-            1
-          elsif !a.include?('/') && b.include?('/')
-            -1
-          else
-            a <=> b
-          end
-        end
-        puts_columns full_names
+        grouped_codes = codes.reduce([]) do |agg, current|
+      if current[1]
+        agg << [current[0]]
       else
-        ENV['CLICOLOR'] = nil
-        exec 'ls', *ARGV.options_only << HOMEBREW_CELLAR
+        agg.last << current[0]
+        agg
       end
-    elsif ARGV.verbose? || !$stdout.tty?
-      exec 'find', *ARGV.kegs.map(&:to_s) + %w[-not -type d -print]
-    else
-      ARGV.kegs.each { |keg| PrettyListing.new keg }
     end
+    
+    class NotificationMailerPreview < ActionMailer::Preview
+  # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/mention
+  def mention
+    m = Mention.last
+    NotificationMailer.mention(m.account, Notification.find_by(activity: m))
   end
     
-        if $stdout.tty?
-      metacharacters = %w[\\ | ( ) [ ] { } ^ $ * + ? .]
-      bad_regex = metacharacters.any? do |char|
-        ARGV.any? do |arg|
-          arg.include?(char) && !arg.start_with?('/')
-        end
-      end
-      if ARGV.any? && bad_regex
-        ohai 'Did you mean to perform a regular expression search?'
-        ohai 'Surround your query with /slashes/ to search by regex.'
-      end
-    end
-    
-              @registered.each do |plugin|
-            plugin.components.provider_capabilities.each do |provider, caps|
-              results[provider].merge!(caps)
-            end
-          end
-    
-      puts 'bundle_id\tapp_name\n'
-  puts '--------------------------------------\n'
-  puts running.to_a.sort
-end
-    
-            def multiple_assignment_node
-          grandparent_node = node.parent ? node.parent.parent : nil
-          return nil unless grandparent_node
-          return nil unless grandparent_node.type == MULTIPLE_ASSIGNMENT_TYPE
-          return nil unless node.parent.type == MULTIPLE_LEFT_HAND_SIDE_TYPE
-          grandparent_node
-        end
-      end
-    end
+      # Creates a delayed logger wrapping `inner`.
+  #
+  # @param inner [Sass::Logger::Base] The wrapped logger.
+  def initialize(inner)
+    self.log_level = inner.log_level
+    @inner = inner
+    @messages = []
   end
-end
-
     
-            def parent_block_node(node)
-          node.each_ancestor(:block).first
-        end
-      end
+        # Returns the CSS for the media query.
+    #
+    # @return [String]
+    def to_css
+      css = ''
+      css << resolved_modifier
+      css << ' ' unless resolved_modifier.empty?
+      css << resolved_type
+      css << ' and ' unless resolved_type.empty? || expressions.empty?
+      css << expressions.map do |e|
+        # It's possible for there to be script nodes in Expressions even when
+        # we're converting to CSS in the case where we parsed the document as
+        # CSS originally (as in css_test.rb).
+        e.map {|c| c.is_a?(Sass::Script::Tree::Node) ? c.to_sass : c.to_s}.join
+      end.join(' and ')
+      css
     end
-  end
-end
-
     
-            def immutable_literal?(node)
-          return true if node.immutable_literal?
+      require 'sass/plugin/rack'
+  class Sass::Plugin::MerbBootLoader < Merb::BootLoader
+    after Merb::BootLoader::RackUpApplication
     
-            # Construct annotated source string (like what we parse)
-        #
-        # Reconstruct a deterministic annotated source string. This is
-        # useful for eliminating semantically irrelevant annotation
-        # ordering differences.
-        #
-        # @example standardization
-        #
-        #     source1 = AnnotatedSource.parse(<<-RUBY)
-        #     line1
-        #     ^ Annotation 1
-        #      ^^ Annotation 2
-        #     RUBY
-        #
-        #     source2 = AnnotatedSource.parse(<<-RUBY)
-        #     line1
-        #      ^^ Annotation 2
-        #     ^ Annotation 1
-        #     RUBY
-        #
-        #     source1.to_s == source2.to_s # => true
-        #
-        # @return [String]
-        def to_s
-          reconstructed = lines.dup
+        def parse_input(environment, text)
+      case text
+      when Script::MATCH
+        name = $1
+        guarded = !!$3
+        val = Script::Parser.parse($2, @line, text.size - ($3 || '').size - $2.size)
