@@ -1,115 +1,123 @@
 
         
-                def gemfile_contents
-          <<~RUBY
-            source 'https://rubygems.org'
-            # Hello! This is where you manage which Jekyll version is used to run.
-            # When you want to use a different version, change it below, save the
-            # file and run `bundle install`. Run Jekyll with `bundle exec`, like so:
-            #
-            #     bundle exec jekyll serve
-            #
-            # This will help ensure the proper Jekyll version is running.
-            # Happy Jekylling!
-            gem 'jekyll', '~> #{Jekyll::VERSION}'
-            # This is the default theme for new Jekyll sites. You may change this to anything you like.
-            gem 'minima', '~> 2.0'
-            # If you want to use GitHub Pages, remove the 'gem 'jekyll'' above and
-            # uncomment the line below. To upgrade, run `bundle update github-pages`.
-            # gem 'github-pages', group: :jekyll_plugins
-            # If you have any plugins, put them here!
-            group :jekyll_plugins do
-              gem 'jekyll-feed', '~> 0.6'
-            end
-            # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-            gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-            # Performance-booster for watching directories on Windows
-            gem 'wdm', '~> 0.1.0' if Gem.win_platform?
+            def test_accept_run_command_multiple_times
+      Timeout.timeout(TIMEOUT) do
+        assert_match(/^ready/,@worker_out.gets)
+        @worker_in.puts 'run #{TESTS}/ptest_first.rb test'
+        assert_match(/^okay/,@worker_out.gets)
+        assert_match(/^record/,@worker_out.gets)
+        assert_match(/^p/,@worker_out.gets)
+        assert_match(/^done/,@worker_out.gets)
+        assert_match(/^ready/,@worker_out.gets)
+        @worker_in.puts 'run #{TESTS}/ptest_second.rb test'
+        assert_match(/^okay/,@worker_out.gets)
+        assert_match(/^record/,@worker_out.gets)
+        assert_match(/^p/,@worker_out.gets)
+        assert_match(/^done/,@worker_out.gets)
+        assert_match(/^record/,@worker_out.gets)
+        assert_match(/^p/,@worker_out.gets)
+        assert_match(/^done/,@worker_out.gets)
+        assert_match(/^ready/,@worker_out.gets)
+      end
+    end
     
-            def validate_options(opts)
-          if opts['livereload']
-            if opts['detach']
-              Jekyll.logger.warn 'Warning:', '--detach and --livereload are mutually exclusive.' \
-                                 ' Choosing --livereload'
-              opts['detach'] = false
+        def gen_random(n)
+      ret = Random.urandom(1)
+      if ret.nil?
+        begin
+          require 'openssl'
+        rescue NoMethodError
+          raise NotImplementedError, 'No random device'
+        else
+          @rng_chooser.synchronize do
+            class << self
+              remove_method :gen_random
+              alias gen_random gen_random_openssl
             end
-            if opts['ssl_cert'] || opts['ssl_key']
-              # This is not technically true.  LiveReload works fine over SSL, but
-              # EventMachine's SSL support in Windows requires building the gem's
-              # native extensions against OpenSSL and that proved to be a process
-              # so tedious that expecting users to do it is a non-starter.
-              Jekyll.logger.abort_with 'Error:', 'LiveReload does not support SSL'
-            end
-            unless opts['watch']
-              # Using livereload logically implies you want to watch the files
-              opts['watch'] = true
-            end
-          elsif %w(livereload_min_delay
-                   livereload_max_delay
-                   livereload_ignore
-                   livereload_port).any? { |o| opts[o] }
-            Jekyll.logger.abort_with '--livereload-min-delay, '\
-               '--livereload-max-delay, --livereload-ignore, and '\
-               '--livereload-port require the --livereload option.'
+          end
+          return gen_random(n)
+        end
+      else
+        @rng_chooser.synchronize do
+          class << self
+            remove_method :gen_random
+            alias gen_random gen_random_urandom
           end
         end
-    
-          def initialize(config)
-        Jekyll::External.require_with_graceful_fail 'kramdown' unless defined?(Kramdown)
-        @config = config['kramdown'].dup || {}
-        @config[:input] = :SmartyPants
+        return gen_random(n)
       end
+    end
     
-    # Convertible provides methods for converting a pagelike item
-# from a certain type of markup into actual content
-#
-# Requires
-#   self.site -> Jekyll::Site
-#   self.content
-#   self.content=
-#   self.data=
-#   self.ext=
-#   self.output=
-#   self.name
-#   self.path
-#   self.type -> :page, :post or :draft
+        def initialize
+    end
     
-        YAML_FRONT_MATTER_REGEXP = %r!\A(---\s*\n.*?\n?)^((---|\.\.\.)\s*$\n?)!m
-    DATELESS_FILENAME_MATCHER = %r!^(?:.+/)*(.*)(\.[^.]+)$!
-    DATE_FILENAME_MATCHER = %r!^(?:.+/)*(\d{2,4}-\d{1,2}-\d{1,2})-(.*)(\.[^.]+)$!
-    
-          # Generate a Hash for use in generating JSON.
-      # This is useful if fields need to be cleared before the JSON can generate.
-      #
-      # Returns a Hash ready for JSON generation.
-      def hash_for_json(*)
-        to_h
+          it 'does not allow any other additional option' do
+        lambda { 'İS'.downcase(:lithuanian, :ascii) }.should raise_error(ArgumentError)
       end
+    end
     
-            commands << Fastlane::Actions.sh(command, log: false)
+            def self.options
+          [[
+            '--all', 'Remove all the cached pods without asking'
+          ]].concat(super)
+        end
     
-          it 'does set the exclude directories' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            cloc(exclude_dir: 'test1,test2,build')
-          end').runner.execute(:test)
-    
-            expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::VERSION_NUMBER]).to match(/cd .* && agvtool new-marketing-version 2.0.0/)
+          def actual_path
+        $PROGRAM_NAME
       end
-    
-      it 'should not override the header if already set' do
-    mock_app with_headers('X-Frame-Options' => 'allow')
-    expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('allow')
+    end
   end
 end
 
     
-      before(:each) do
-    mock_app do
-      use Rack::Protection::HttpOrigin
-      run DummyApp
+          # @param  [Xcodeproj::Project] project
+      #         The xcode project to generate a podfile for.
+      #
+      # @return [String] the text of the Podfile for the provided project
+      #
+      def podfile_template(project)
+        podfile = ''
+        podfile << 'project '#{@project_path}'\n\n' if @project_path
+        podfile << <<-PLATFORM.strip_heredoc
+          # Uncomment the next line to define a global platform for your project
+          # platform :ios, '9.0'
+        PLATFORM
+    
+            TEMPLATE_REPO = 'https://github.com/CocoaPods/pod-template.git'.freeze
+        TEMPLATE_INFO_URL = 'https://github.com/CocoaPods/pod-template'.freeze
+        CREATE_NEW_POD_INFO_URL = 'http://guides.cocoapods.org/making/making-a-cocoapod'.freeze
+    
+          def self.options
+        [
+          ['--update', 'Run `pod repo update` before listing'],
+          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
+        ].concat(super)
+      end
+    
+          super
     end
+    
+      # Extracts raw content DIV from template, used for page description as {{ content }}
+  # contains complete sub-template code on main page level
+  def raw_content(input)
+    /<div class='entry-content'>(?<content>[\s\S]*?)<\/div>\s*<(footer|\/article)>/ =~ input
+    return (content.nil?) ? input : content
   end
     
-      it 'should set the X-XSS-Protection for XHTML' do
-    expect(get('/', {}, 'wants' => 'application/xhtml+xml').headers['X-XSS-Protection']).to eq('1; mode=block')
-  end
+    
+    
+        # Same as to_s
+    def inspect
+      to_s
+    end
+    
+            Paperclip::Validators.constants.each do |constant|
+          if constant.to_s =~ /\AAttachment(.+)Validator\z/
+            validator_kind = $1.underscore.to_sym
+    
+          def check_validity!
+        unless options.has_key?(:content_type) || options.has_key?(:not)
+          raise ArgumentError, 'You must pass in either :content_type or :not to the validator'
+        end
+      end
+    end
