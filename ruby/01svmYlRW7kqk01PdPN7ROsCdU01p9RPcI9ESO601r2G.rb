@@ -1,99 +1,126 @@
 
         
-            A binary installer is available:
-      https://www.haskell.org/platform/mac.html
-    EOS
-  when 'mysqldump-secure' then <<-EOS.undent
-    The creator of mysqldump-secure tried to game our popularity metrics.
-    EOS
-  when 'ngrok' then <<-EOS.undent
-    Upstream sunsetted 1.x in March 2016 and 2.x is not open-source.
-    
-      # True if a {Formula} is being built with {Formula.head} instead of {Formula.stable}.
-  # <pre>args << '--some-new-stuff' if build.head?</pre>
-  # <pre># If there are multiple conditional arguments use a block instead of lines.
-  #  if build.head?
-  #    args << '--i-want-pizza'
-  #    args << '--and-a-cold-beer' if build.with? 'cold-beer'
-  #  end</pre>
-  def head?
-    include? 'HEAD'
-  end
-    
-        # Get rid of any info 'dir' files, so they don't conflict at the link stage
-    info_dir_file = @f.info + 'dir'
-    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
-      observe_file_removal info_dir_file
-    end
-    
-        if ARGV.include? '--list-checks'
-      puts checks.all.sort
-      exit
-    end
-    
-        if ARGV.include?('--pinned') || ARGV.include?('--versions')
-      filtered_list
-    elsif ARGV.named.empty?
-      if ARGV.include? '--full-name'
-        full_names = Formula.installed.map(&:full_name).sort do |a, b|
-          if a.include?('/') && !b.include?('/')
-            1
-          elsif !a.include?('/') && b.include?('/')
-            -1
-          else
-            a <=> b
-          end
-        end
-        puts_columns full_names
-      else
-        ENV['CLICOLOR'] = nil
-        exec 'ls', *ARGV.options_only << HOMEBREW_CELLAR
-      end
-    elsif ARGV.verbose? || !$stdout.tty?
-      exec 'find', *ARGV.kegs.map(&:to_s) + %w[-not -type d -print]
+          def self.repository(tap = nil)
+    if tap.nil? || tap.core_tap?
+      'bottles'
     else
-      ARGV.kegs.each { |keg| PrettyListing.new keg }
+      'bottles-#{tap.repo}'
     end
   end
+end
     
-        def exit_deploy_because_of_exception(ex)
-      warn t(:deploy_failed, ex: ex.message)
-      invoke 'deploy:failed'
-      exit(false)
-    end
-    
-      # Implemented by subclasses to provide default values for settings needed by
-  # this plugin. Typically done using the `set_if_empty` Capistrano DSL method.
-  #
-  # Example:
-  #
-  #   def set_defaults
-  #     set_if_empty :my_plugin_option, true
-  #   end
-  #
-  def set_defaults; end
-    
-        # @abstract
-    #
-    # Create a (new) clone of the remote-repository on the deployment target
-    #
-    # @return void
-    #
-    def clone
-      raise NotImplementedError, 'Your SCM strategy module should provide a #clone method'
-    end
-    
-      if File.exist?('Capfile')
-    warn '[skip] Capfile already exists'
-  else
-    FileUtils.cp(capfile, 'Capfile')
-    puts I18n.t(:written_file, scope: :capistrano, file: 'Capfile')
+      # True if a {Formula} is being built in 32-bit/x86 mode.
+  # This is needed for some use-cases though we prefer to build Universal
+  # when a 32-bit version is needed.
+  def build_32_bit?
+    include?('32-bit') && option_defined?('32-bit')
   end
     
-          describe 'setting an internal host and role filter' do
-        subject { dsl.roles(:app) }
-        it 'ignores it' do
-          dsl.set :filter, role: :web, host: 'example1.com'
-          expect(subject.map(&:hostname)).to eq(['example3.com', 'example4.com'])
+      private
+    
+        def self.cleanup_path(path)
+      if ARGV.dry_run?
+        puts 'Would remove: #{path} (#{path.abv})'
+      else
+        puts 'Removing: #{path}... (#{path.abv})'
+        yield
+      end
+    
+              subtree, file = File.split(object['path'])
+    
+          renamed_formulae << [old_full_name, new_full_name] if @report[:A].include? new_full_name
+    end
+    
+        def parse_symbol_spec(spec, tags)
+      case spec
+      when :clt
+        odisabled ''depends_on :clt''
+      when :tex
+        odisabled ''depends_on :tex''
+      when :libltdl
+        output_disabled(spec, 'libtool')
+      when :apr
+        output_disabled(spec, 'apr-util')
+      when :fortran
+        output_disabled(spec, 'gcc')
+      when :gpg
+        output_disabled(spec, 'gnupg')
+      when :hg
+        output_disabled(spec, 'mercurial')
+      when :mpi
+        output_disabled(spec, 'open-mpi')
+      when :python, :python2
+        output_disabled(spec, 'python@2')
+      when :python3
+        output_disabled(spec, 'python')
+      when :ant, :autoconf, :automake, :bsdmake, :cairo, :emacs, :expat,
+           :fontconfig, :freetype, :libtool, :libpng, :mysql, :perl, :pixman,
+           :postgresql, :rbenv, :ruby
+        output_disabled(spec)
+      else
+        super
+      end
+    end
+    
+            if version.head?
+          Version.create('HEAD')
+        else
+          version.dup
         end
       end
+    end
+    patches.each { |p| p.owner = self }
+  end
+    
+    desc 'Test all Gemfiles from test/*.gemfile'
+task :test_all_gemfiles do
+  require 'term/ansicolor'
+  require 'pty'
+  require 'shellwords'
+  cmd      = 'bundle install --quiet && bundle exec rake --trace'
+  statuses = Dir.glob('./test/gemfiles/*{[!.lock]}').map do |gemfile|
+    env = {'BUNDLE_GEMFILE' => gemfile}
+    cmd_with_env = '  (#{env.map { |k, v| 'export #{k}=#{Shellwords.escape v}' } * ' '}; #{cmd})'
+    $stderr.puts Term::ANSIColor.cyan('Testing\n#{cmd_with_env}')
+    PTY.spawn(env, cmd) do |r, _w, pid|
+      begin
+        r.each_line { |l| puts l }
+      rescue Errno::EIO
+        # Errno:EIO error means that the process has finished giving output.
+      ensure
+        ::Process.wait pid
+      end
+    end
+    [$? && $?.exitstatus == 0, cmd_with_env]
+  end
+  failed_cmds = statuses.reject(&:first).map { |(_status, cmd_with_env)| cmd_with_env }
+  if failed_cmds.empty?
+    $stderr.puts Term::ANSIColor.green('Tests pass with all gemfiles')
+  else
+    $stderr.puts Term::ANSIColor.red('Failing (#{failed_cmds.size} / #{statuses.size})\n#{failed_cmds * '\n'}')
+    exit 1
+  end
+end
+    
+    namespace :bower do
+    
+        # Returns a representation of the query as an array of strings and
+    # potentially {Sass::Script::Tree::Node}s (if there's interpolation in it).
+    # When the interpolation is resolved and the strings are joined together,
+    # this will be the string representation of this query.
+    #
+    # @return [Array<String, Sass::Script::Tree::Node>]
+    def to_a
+      Sass::Util.intersperse(queries.map {|q| q.to_a}, ', ').flatten
+    end
+    
+        # The type of interpolation deprecation for this node.
+    #
+    # This can be `:none`, indicating that the node doesn't use deprecated
+    # interpolation; `:immediate`, indicating that a deprecation warning should
+    # be emitted as soon as possible; or `:potential`, indicating that a
+    # deprecation warning should be emitted if the resulting string is used in a
+    # way that would distinguish it from a list.
+    #
+    # @return [Symbol]
+    attr_reader :deprecation
