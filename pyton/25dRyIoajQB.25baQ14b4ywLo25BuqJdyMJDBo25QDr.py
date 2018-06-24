@@ -1,59 +1,35 @@
 
         
-        
-@for_app('tar')
-def match(command):
-    return ('-C' not in command.script
-            and _is_tar_extract(command.script)
-            and _tar_file(command.script_parts) is not None)
+        import tornado.httpserver
+import tornado.ioloop
+import tornado.options
+import tornado.web
     
+               The ``raise_error=False`` argument currently suppresses
+           *all* errors, encapsulating them in `HTTPResponse` objects
+           with a 599 response code. This will change in Tornado 6.0:
+           ``raise_error=False`` will only affect the `HTTPError`
+           raised when a non-200 response code is used.
     
-@pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
+        The callback may be called with zero or one arguments; if an argument
+    is given it will be returned by `Wait`.
     
+           The `add_sockets` interface is more complicated, but it can be
+       used with `tornado.process.fork_processes` to give you more
+       flexibility in when the fork happens.  `add_sockets` can
+       also be used in single-process servers if you want to create
+       your listening sockets in some way other than
+       `~tornado.netutil.bind_sockets`.
     
-def variable_batch_size_comparison(data):
-    batch_sizes = [i.astype(int) for i in np.linspace(data.shape[0] // 10,
-                                                      data.shape[0], num=10)]
+            @return_future
+        def immediate_failure(self, callback):
+            1 / 0
     
-        n = 10
-    step = 10000
-    n_samples = 10000
-    dim = 10
-    n_classes = 10
-    for i in range(n):
-        print('============================================')
-        print('Entering iteration %s of %s' % (i, n))
-        print('============================================')
-        n_samples += step
-        X = np.random.randn(n_samples, dim)
-        Y = np.random.randint(0, n_classes, (n_samples,))
-        bench_scikit_tree_classifier(X, Y)
-        Y = np.random.randn(n_samples)
-        bench_scikit_tree_regressor(X, Y)
-    
-    URL = ('http://people.csail.mit.edu/jrennie/'
-       '20Newsgroups/20news-bydate.tar.gz')
-    
-    # Predict the result on some short new sentences:
-sentences = [
-    u'This is a language detection test.',
-    u'Ceci est un test de d\xe9tection de la langue.',
-    u'Dies ist ein Test, um die Sprache zu erkennen.',
-]
-predicted = clf.predict(sentences)
-    
-        if f == os.path.basename(__file__):
-        continue
-    
-    from sklearn.datasets import make_blobs
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.calibration import CalibratedClassifierCV
-from sklearn.metrics import log_loss
-    
-    We generate data from three groups of waveforms. Two of the waveforms
-(waveform 1 and waveform 2) are proportional one to the other. The cosine
-distance is invariant to a scaling of the data, as a result, it cannot
-distinguish these two waveforms. Thus even with no noise, clustering
-using this distance will not separate out waveform 1 and 2.
+        @skipBefore35
+    @gen_test
+    def test_async_await_mixed_multi_native_yieldpoint(self):
+        namespace = exec_test(globals(), locals(), '''
+        async def f1():
+            await gen.Task(self.io_loop.add_callback)
+            return 42
+        ''')
