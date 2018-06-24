@@ -1,99 +1,107 @@
 
         
-        module Homebrew
-  def build_env_keys(env)
-    %w[
-      CC CXX LD OBJC OBJCXX
-      HOMEBREW_CC HOMEBREW_CXX
-      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
-      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
-      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
-      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
-      HOMEBREW_SVN HOMEBREW_GIT
-      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
-      MAKE GIT CPP
-      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
-  end
+              module ClassMethods
+        def tests(helper_class)
+          case helper_class
+          when String, Symbol
+            self.helper_class = '#{helper_class.to_s.underscore}_helper'.camelize.safe_constantize
+          when Module
+            self.helper_class = helper_class
+          end
+        end
     
-      def query_regexp(query)
-    case query
-    when %r{^/(.*)/$} then Regexp.new($1)
-    else /.*#{Regexp.escape(query)}.*/i
-    end
-  rescue RegexpError
-    odie '#{query} is not a valid regex'
-  end
+        # inherited only
+    assert_equal 'funky.jpg', @user.highlights.first.filename.to_s
+    assert_equal 'wonky.jpg', @user.highlights.second.filename.to_s
     
-        options[:attribution] = <<-HTML
-      &copy; 1997&ndash;2018 The PHP Documentation Group<br>
-      Licensed under the Creative Commons Attribution License v3.0 or later.
-    HTML
+    module Web
+  class Topic < ActiveRecord::Base
+    has_many :replies, dependent: :destroy, foreign_key: 'parent_id', class_name: 'Web::Reply'
   end
 end
 
     
-        options[:attribution] = <<-HTML
-      &copy; 2010&ndash;2018 Christian Johansen<br>
-      Licensed under the BSD License.
-    HTML
+    class ActionCable::Channel::PeriodicTimersTest < ActionCable::TestCase
+  class ChatChannel < ActionCable::Channel::Base
+    # Method name arg
+    periodically :send_updates, every: 1
     
-        def to_a
-      @filters.dup
+        def secret_action
     end
+  end
     
-          def initialize(pairs = {})
-        @pairs = pairs
-        pairs.each do |key, value|
-          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
-          send(:'#{key}=', value)
+    class ActionCable::Connection::AuthorizationTest < ActionCable::TestCase
+  class Connection < ActionCable::Connection::Base
+    attr_reader :websocket
+    
+      [ EOFError, Errno::ECONNRESET ].each do |closed_exception|
+    test 'closes socket on #{closed_exception}' do
+      run_in_eventmachine do
+        connection = open_connection
+    
+          assert_empty @subscriptions.identifiers
+    end
+  end
+    
+    namespace :db do
+  namespace :migrate do
+    desc 'Setup the db or migrate depending on state of db'
+    task setup: :environment do
+      begin
+        if ActiveRecord::Migrator.current_version.zero?
+          Rake::Task['db:migrate'].invoke
+          Rake::Task['db:seed'].invoke
         end
-    
-            def log_level(name, options = {})
-          if options[:prepend]
-            level = log_levels.values.min
-            level = level.nil? ? 0 : level - 1
-          else
-            level = log_levels.values.max
-            level = level.nil? ? 0 : level + 1
-          end
-          log_levels.update(name => level)
-          define_logger(name)
-        end
-    
-        # The type of the query (e.g. `'screen'` or `'print'`).
-    #
-    # When parsed as Sass code, this contains strings and SassScript nodes. When
-    # parsed as CSS, it contains a single string (accessible via
-    # \{#resolved_type}).
-    #
-    # @return [Array<String, Sass::Script::Tree::Node>]
-    attr_accessor :type
-    
-          # Prints a table for a given array of records. For each record, the block
-      # is yielded two arguments: the record and a Row object. To print values
-      # for that record, add values using `row << 'some value'`. A row can
-      # optionally be highlighted in yellow using `row.yellow`.
-      def table(records, &block)
-        return if records.empty?
-        rows = collect_rows(records, &block)
-        col_widths = calculate_column_widths(rows)
-    
-      # Implemented by subclasses to hook into Capistrano's deployment flow using
-  # using the `before` and `after` DSL methods. Note that `register_hooks` will
-  # not be called if the user has opted-out of hooks when installing the plugin.
-  #
-  # Example:
-  #
-  #   def register_hooks
-  #     after 'deploy:updated', 'my_plugin:do_something'
-  #   end
-  #
-  def register_hooks; end
-    
-            def stock_movement_params
-          params.require(:stock_movement).permit(permitted_stock_movement_attributes)
-        end
+      rescue ActiveRecord::NoDatabaseError
+        Rake::Task['db:setup'].invoke
+      else
+        Rake::Task['db:migrate'].invoke
       end
     end
   end
+    
+    namespace :emojis do
+  desc 'Generate a unicode to filename mapping'
+  task :generate do
+    source = 'http://www.unicode.org/Public/emoji/5.0/emoji-test.txt'
+    codes  = []
+    dest   = Rails.root.join('app', 'javascript', 'mastodon', 'features', 'emoji', 'emoji_map.json')
+    
+          expect_updated_sign_in_at(user)
+    end
+    
+      def start_url
+    '/web/timelines/home'
+  end
+    
+          opts.on('-?', '-h', '--help', 'Show this help message.') do
+        puts opts
+        exit
+      end
+    
+        @inner.log_level = log_level
+    Sass.logger = @inner
+  end
+    
+      if defined? config.symbolize_keys!
+    config.symbolize_keys!
+  end
+    
+    if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
+  ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
+  require 'rubygems'
+  require 'bundler/setup'
+  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+elsif ENV['COCOAPODS_NO_BUNDLER']
+  require 'rubygems'
+  gem 'cocoapods'
 end
+    
+          def initialize(argv)
+        super
+        config.silent = false
+      end
+    
+            TEMPLATE_REPO = 'https://github.com/CocoaPods/pod-template.git'.freeze
+        TEMPLATE_INFO_URL = 'https://github.com/CocoaPods/pod-template'.freeze
+        CREATE_NEW_POD_INFO_URL = 'http://guides.cocoapods.org/making/making-a-cocoapod'.freeze
