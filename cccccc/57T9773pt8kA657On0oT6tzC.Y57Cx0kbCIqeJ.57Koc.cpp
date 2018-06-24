@@ -1,230 +1,282 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        template<typename T> inline
+dnnError_t dnnBatchNormalizationCreateBackwardScaleShift(
+    dnnPrimitive_t* pBatchNormalization,
+    dnnPrimitiveAttributes_t attributes,
+    const dnnLayout_t dataLayout,
+    T eps);
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+            // Copy data to the CPU device if required.
+        const ValueType *valueData;
+        NDArrayViewPtr cpuArrayView;
+        if (Device().Type() == DeviceKind::GPU)
+        {
+            // TODO: leverage sparse if the original NDArrayView is in spase.
+            cpuArrayView = MakeSharedObject<NDArrayView>(GetDataType(), Shape(), DeviceDescriptor::CPUDevice());
+            cpuArrayView->CopyFrom(*Data());
+        }
+        else if (Device().Type() == DeviceKind::CPU)
+        {
+            // TODO: direct process sparse data without copy
+            if (GetStorageFormat() != StorageFormat::Dense)
+            {
+                cpuArrayView = MakeSharedObject<NDArrayView>(GetDataType(), Shape(), DeviceDescriptor::CPUDevice());
+                cpuArrayView->CopyFrom(*Data());
+            }
+            else
+            {
+                cpuArrayView = Data();
+            }
+        } 
+        else
+        {
+            LogicError('Invalid device type (%u).', (unsigned int)Device().Type());
+        }
     
-    
-    {}  // end namespace Eigen
-    
-    namespace tensorflow {
+        // both m1 and m2 are passed in normal form (i.e., not transposed)
+    void KhatriRaoProduct(const ssematrixbase &m1, const ssematrixbase &m2)
+    {
+        auto &us = *this;
+        assert(m1.cols() == m2.cols());
+        assert(us.rows() == m1.rows() * m2.rows());
     }
     
+        // compute after second pass
+    double m_variance;
+    double m_stddev;
     
-    {  std::vector<string> workers;
-  cc->ListWorkers(&workers);
-  EXPECT_EQ(std::vector<string>(
-                {'/job:mnist/replica:0/task:0', '/job:mnist/replica:0/task:1',
-                 '/job:mnist/replica:0/task:2', '/job:mnist/replica:0/task:3',
-                 '/job:mnist/replica:0/task:4', '/job:mnist/replica:0/task:5'}),
-            workers);
+        static ProgressTracing& GetStaticInstance()
+    {
+        static ProgressTracing us;
+        return us;
+    } // wrap static state in an accessor, so we won't need a CPP file
+    
+    
+    {    return std::equal(s1.begin(), s1.end(), s2.begin(), [](const TElement& a, const TElement& b)
+    {
+        return std::tolower(a) == std::tolower(b);
+    });
 }
     
-    #include 'tensorflow/contrib/mpi/mpi_utils.h'
-namespace tensorflow {
-    }
-    
-      /// DebuggerClient is consulted at two times during name
-  /// lookup.  This is the first time: after all names in a
-  /// source file have been checked but before external
-  /// Modules are checked.  The results in the ResultVector will
-  /// be consulted first.  Return true if results have been added
-  /// to RV.
-  /// FIXME: I don't think this ever does anything useful.
-  virtual bool lookupOverrides(DeclBaseName Name, DeclContext *DC,
-                               SourceLoc Loc, bool IsTypeLookup,
-                               ResultVector &RV) = 0;
-    
-      ConvertUTF8toUTF32(&SourceNext, SourceStart + S.size(), &TargetStart,
-                     TargetStart + 1, llvm::lenientConversion);
-  if (TargetStart == &C) {
-    // The source string contains an ill-formed subsequence at the end.
-    return false;
-  }
-    
-      // In the case where inputs are swift modules, like in the merge-module step,
-  // ignore the inputs; associated unit files for the modules' source inputs
-  // should have been generated at swift module creation time.
-    
-    namespace leveldb {
-    }
-    
-    struct FileMetaData {
-  int refs;
-  int allowed_seeks;          // Seeks allowed until compaction
-  uint64_t number;
-  uint64_t file_size;         // File size in bytes
-  InternalKey smallest;       // Smallest internal key served by table
-  InternalKey largest;        // Largest internal key served by table
-    }
-    
-      VersionEdit edit;
-  for (int i = 0; i < 4; i++) {
-    TestEncodeDecode(edit);
-    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
-                 InternalKey('foo', kBig + 500 + i, kTypeValue),
-                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
-    edit.DeleteFile(4, kBig + 700 + i);
-    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
-  }
-    
-    // Comma-separated list of operations to run in the specified order
-//   Actual benchmarks:
-//
-//   fillseq       -- write N values in sequential key order in async mode
-//   fillrandom    -- write N values in random key order in async mode
-//   overwrite     -- overwrite N values in random key order in async mode
-//   fillseqsync   -- write N/100 values in sequential key order in sync mode
-//   fillrandsync  -- write N/100 values in random key order in sync mode
-//   fillrand100K  -- write N/1000 100K values in random order in async mode
-//   fillseq100K   -- write N/1000 100K values in seq order in async mode
-//   readseq       -- read N times sequentially
-//   readseq100K   -- read N/1000 100K values in sequential order in async mode
-//   readrand100K  -- read N/1000 100K values in sequential order in async mode
-//   readrandom    -- read N times in random order
-static const char* FLAGS_benchmarks =
-    'fillseq,'
-    'fillseqsync,'
-    'fillrandsync,'
-    'fillrandom,'
-    'overwrite,'
-    'readrandom,'
-    'readseq,'
-    'fillrand100K,'
-    'fillseq100K,'
-    'readseq100K,'
-    'readrand100K,'
-    ;
-    
-    class Slice {
+    /*! \brief namespace of base64 decoding and encoding table */
+namespace base64 {
+const char DecodeTable[] = {
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  62,  // '+'
+  0, 0, 0,
+  63,  // '/'
+  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
+  0, 0, 0, 0, 0, 0, 0,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
+  0, 0, 0, 0, 0, 0,
+  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
+};
+static const char EncodeTable[] =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+}  // namespace base64
+/*! \brief the stream that reads from base64, note we take from file pointers */
+class Base64InStream: public dmlc::Stream {
  public:
-  // Create an empty slice.
-  Slice() : data_(''), size_(0) { }
+  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
+    reader_.set_stream(fs);
+    num_prev = 0; tmp_ch = 0;
+  }
+  /*!
+   * \brief initialize the stream position to beginning of next base64 stream
+   * call this function before actually start read
+   */
+  inline void InitPosition(void) {
+    // get a character
+    do {
+      tmp_ch = reader_.GetChar();
+    } while (isspace(tmp_ch));
+  }
+  /*! \brief whether current position is end of a base64 stream */
+  inline bool IsEOF(void) const {
+    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    using base64::DecodeTable;
+    if (size == 0) return 0;
+    // use tlen to record left size
+    size_t tlen = size;
+    unsigned char *cptr = static_cast<unsigned char*>(ptr);
+    // if anything left, load from previous buffered result
+    if (num_prev != 0) {
+      if (num_prev == 2) {
+        if (tlen >= 2) {
+          *cptr++ = buf_prev[0];
+          *cptr++ = buf_prev[1];
+          tlen -= 2;
+          num_prev = 0;
+        } else {
+          // assert tlen == 1
+          *cptr++ = buf_prev[0]; --tlen;
+          buf_prev[0] = buf_prev[1];
+          num_prev = 1;
+        }
+      } else {
+        // assert num_prev == 1
+        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
+      }
+    }
+    if (tlen == 0) return size;
+    int nvalue;
+    // note: everything goes with 4 bytes in Base64
+    // so we process 4 bytes a unit
+    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
+      // first byte
+      nvalue = DecodeTable[tmp_ch] << 18;
+      {
+        // second byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        nvalue |= DecodeTable[tmp_ch] << 12;
+        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
+        }
+      {
+        // third byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        // handle termination
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == '=') << 'invalid base64 format';
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch] << 6;
+        if (tlen) {
+          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
+        }
+      }
+      {
+        // fourth byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
+            << 'invalid base64 format';
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch];
+        if (tlen) {
+          *cptr++ = nvalue & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev ++] = nvalue & 0xFF;
+        }
+      }
+      // get next char
+      tmp_ch = reader_.GetChar();
+    }
+    if (kStrictCheck) {
+      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
+    }
+    return size - tlen;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64InStream do not support write';
+  }
+    }
+    
+    // implementing configure.
+template<typename PairIter>
+inline void Learner::Configure(PairIter begin, PairIter end) {
+  std::vector<std::pair<std::string, std::string> > vec(begin, end);
+  this->Configure(vec);
+}
+    
+      void Write(const SparsePage& page, dmlc::Stream* fo) override {
+    CHECK(page.offset.size() != 0 && page.offset[0] == 0);
+    CHECK_EQ(page.offset.back(), page.data.size());
+    fo->Write(page.offset);
+    min_index_ = page.base_rowid;
+    fo->Write(&min_index_, sizeof(min_index_));
+    index_.data.resize(page.data.size());
+    value_.data.resize(page.data.size());
     }
     
     
     {
-    {    if (++count % 1000 == 0) {
-      txn->Commit();
-    }
-  }
-  // write the last batch
-  if (count % 1000 != 0) {
-      txn->Commit();
-  }
-  LOG(INFO) << 'Processed ' << count << ' files.';
-  delete[] pixels;
-  db->Close();
+    {bool SimpleDMatrix::SingleColBlock() const {
+  return true;
 }
+}  // namespace data
+}  // namespace xgboost
+
+    
+            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
+        if (show_demo_window)
+        {
+            ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
+            ImGui::ShowDemoWindow(&show_demo_window);
+        }
+    
+    void ImGui_ImplFreeGLUT_NewFrame()
+{
+    // Setup time step
+    ImGuiIO& io = ImGui::GetIO();
+    int current_time = glutGet(GLUT_ELAPSED_TIME);
+    io.DeltaTime = (current_time - g_Time) / 1000.0f;
+    g_Time = current_time;
+    }
+    
+    void DebugHUD_DoInterface(DebugHUD *hud)
+{
+    // 1. Show a simple window.
+    // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+    {
+        static float f = 0.0f;
+        static int counter = 0;
+        ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+        ImGui::ColorEdit3('clear color', hud->clearColor);      // Edit 3 floats representing a color
+    }
+    }
+    
+            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+        g_fenceEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+    if (g_fenceEvent == NULL)
+        return E_FAIL;
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+      virtual bool hasTag(uint32_t tag) const CXX11_OVERRIDE;
+    
+    bool AbstractProxyRequestCommand::executeInternal()
+{
+  // socket->setBlockingMode();
+  if (httpConnection_->sendBufferIsEmpty()) {
+    auto httpRequest = make_unique<HttpRequest>();
+    httpRequest->setUserAgent(getOption()->get(PREF_USER_AGENT));
+    httpRequest->setRequest(getRequest());
+    httpRequest->setProxyRequest(proxyRequest_);
+    }
+    }
     
     
-template <typename Dtype>
-class LayerRegisterer {
- public:
-  LayerRegisterer(const string& type,
-                  shared_ptr<Layer<Dtype> > (*creator)(const LayerParameter&)) {
-    // LOG(INFO) << 'Registering layer type: ' << type;
-    LayerRegistry<Dtype>::AddCreator(type, creator);
-  }
+    {  static std::unique_ptr<AuthConfig> create(std::string user,
+                                            std::string password);
 };
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of ConvolutionLayer.
- *        Fallback to ConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates convolution through forward kernels for filtering and bias
- * plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
- *
- * The CUDNN engine does not have memory overhead for matrix buffers. For many
- * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
- * but for fully-convolutional models and large inputs the CAFFE engine can be
- * faster as long as it fits in memory.
-*/
-template <typename Dtype>
-class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
- public:
-  explicit CuDNNConvolutionLayer(const LayerParameter& param)
-      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNConvolutionLayer();
-    }
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    namespace caffe {
-    }
-    
-    
-    { protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual inline bool reverse_dimensions() { return true; }
-  virtual void compute_output_shape();
-};
-    
-    
-    {}  // namespace caffe
-    
-      // We'll hold the text streamed to this object here.
-  const internal::scoped_ptr< ::std::stringstream> ss_;
-    
-    #include <iosfwd>
-#include <vector>
-#include 'gtest/internal/gtest-internal.h'
-#include 'gtest/internal/gtest-string.h'
-    
-      // Given directory = 'dir', base_name = 'test', number = 0,
-  // extension = 'xml', returns 'dir/test.xml'. If number is greater
-  // than zero (e.g., 12), returns 'dir/test_12.xml'.
-  // On Windows platform, uses \ as the separator rather than /.
-  static FilePath MakeFileName(const FilePath& directory,
-                               const FilePath& base_name,
-                               int number,
-                               const char* extension);
-    
-    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
-//
-// Helper classes providing Combine() with polymorphic features. They allow
-// casting CartesianProductGeneratorN<T> to ParamGenerator<U> if T is
-// convertible to U.
-//
-$range i 2..maxtuple
-$for i [[
-$range j 1..i
-    
-    // Macros for defining flags.
-#define GTEST_DEFINE_bool_(name, default_val, doc) \
-    GTEST_API_ bool GTEST_FLAG(name) = (default_val)
-#define GTEST_DEFINE_int32_(name, default_val, doc) \
-    GTEST_API_ ::testing::internal::Int32 GTEST_FLAG(name) = (default_val)
-#define GTEST_DEFINE_string_(name, default_val, doc) \
-    GTEST_API_ ::std::string GTEST_FLAG(name) = (default_val)
-    
-     private:
-  void CalculatePrimesUpTo(int max) {
-    ::std::fill(is_prime_, is_prime_ + is_prime_size_, true);
-    is_prime_[0] = is_prime_[1] = false;
-    }
