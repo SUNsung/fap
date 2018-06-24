@@ -1,180 +1,80 @@
 
         
-        // dims=[5, 4, 3, 2]->[3, 5, 4, 2]
-TEST_F(MatrixTest, RotatingTranspose_2_0) {
-  GENERIC_2D_ARRAY<int> m;
-  src_.RotatingTranspose(dims_, kNumDims_, 2, 0, &m);
-  m.ResizeNoInit(kInputSize_ / 2, 2);
-  // Verify that the result is:
-  // output tensor=[[[[0, 1][6, 7][12, 13][18, 19]]
-  //                 [[24, 25][30, 31][36, 37][42, 43]]
-  //                 [[48, 49][54, 55][60, 61][66, 67]]
-  //                 [[72, 73][78, 79][84, 85][90, 91]]
-  //                 [[96, 97][102, 103][108, 109][114, 115]]]
-  //                [[[2,3]...
-  EXPECT_EQ(0, m(0, 0));
-  EXPECT_EQ(1, m(0, 1));
-  EXPECT_EQ(6, m(1, 0));
-  EXPECT_EQ(7, m(1, 1));
-  EXPECT_EQ(24, m(4, 0));
-  EXPECT_EQ(25, m(4, 1));
-  EXPECT_EQ(30, m(5, 0));
-  EXPECT_EQ(2, m(20, 0));
+        void CalibrateExtrinsics(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
+                         const IntrinsicParams& param, const int check_cond,
+                         const double thresh_cond, InputOutputArray omc, InputOutputArray Tc);
+    
+    // fit second order curve to a set of 2D points
+inline void fitCurve2Order(const std::vector<Point2f>& /*points*/, std::vector<float>& /*curve*/)
+{
+    // TBD
 }
     
-    #define ASSERT_HOST_MSG(x, ...)                                                \
-  if (!(x)) {                                                                  \
-    tprintf(__VA_ARGS__);                                                      \
-    ASSERT_FAILED.error(#x, ABORT, 'in file %s, line %d', __FILE__, __LINE__); \
-  }
+                //a simple check that the position is general:
+            //  for each line check that all other points don't belong to it
+            isGeneralPosition = true;
+            for (int startPointIndex = 0; startPointIndex < usedPointsCount && isGeneralPosition; startPointIndex++)
+            {
+                for (int endPointIndex = startPointIndex + 1; endPointIndex < usedPointsCount && isGeneralPosition; endPointIndex++)
+                {
+    }
+    }
     
+    //! @cond IGNORED
     
-/**----------------------------------------------------------------------------
-        Global Data Definitions and Declarations
-----------------------------------------------------------------------------**/
-    
-    #include 'dawg.h'
-#include 'object_cache.h'
-#include 'strngs.h'
-#include 'tessdatamanager.h'
-    
-    void Timer::RequestInit() {
-  memset(&s_counters, 0, sizeof(s_counters));
+    static void* openclamdblas_check_fn(int ID)
+{
+    assert(ID >= 0 && ID < (int)(sizeof(openclamdblas_fn)/sizeof(openclamdblas_fn[0])));
+    const struct DynamicFnEntry* e = openclamdblas_fn[ID];
+    void* func = CV_CL_GET_PROC_ADDRESS(e->fnName);
+    if (!func)
+    {
+        throw cv::Exception(cv::Error::OpenCLApiCallError,
+                cv::format('OpenCL AMD BLAS function is not available: [%s]', e->fnName),
+                CV_Func, __FILE__, __LINE__);
+    }
+    *(e->ppFn) = func;
+    return func;
 }
     
-    public:
-  explicit Timer(Type type, const char *name = nullptr, ReportType r = Log);
-  ~Timer();
+    #define THC_GENERIC_FILE 'torch/csrc/generic/Storage.h'
+#include <THC/THCGenerateAllTypes.h>
     
-    #else // USE_GCC_FAST_TLS
-    
-    namespace HPHP { namespace jit {
-    }
-    }
-    
-    #endif
-    
-    #define HFTRACE(LEVEL, ...)                         \
-  if (Trace::moduleEnabled(Trace::hfsort, LEVEL)) { \
-    Trace::traceRelease(__VA_ARGS__);               \
+    void THP_decodeInt64Buffer(int64_t* dst, const uint8_t* src, THPByteOrder order, size_t len)
+{
+  for (size_t i = 0; i < len; i++) {
+    dst[i] = (int64_t) (order == THP_BIG_ENDIAN ? decodeUInt64BE(src) : decodeUInt64LE(src));
+    src += sizeof(int64_t);
   }
-    
-    /*
- * Lock around accesses to s_tmp_files.
- */
-std::mutex s_tmp_files_lock;
-    
-    bool CurlShareResource::setLongOption(long option, long value) {
-  CURLSHcode error = CURLSHE_OK;
-  error = curl_share_setopt(m_share,
-                            (CURLSHoption)option,
-                            value);
-  return error == CURLSHE_OK;
 }
     
-    /**
- * A Synchronizable object that has multiple conditional variables. The benefit
- * is, notify() can choose to wake up a thread that is more favorable (e.g.,
- * one with stack/heap mapped on huge pages, or one that is recently active).
- */
-struct SynchronizableMulti {
-  explicit SynchronizableMulti(int size);
-  virtual ~SynchronizableMulti() {}
+          // Test write entire array
+      std::vector<unsigned char> buffer(
+        CompressedBufferWriter::CalculateBufferSize(input.size(),
+          alphabet_size));
+    
+    template <class Char, std::size_t A, std::size_t B>
+constexpr bool operator<(
+    const BasicFixedString<Char, A>& a,
+    const BasicFixedString<Char, B>& b) noexcept {
+  return ordering::lt ==
+      detail::fixedstring::compare_(
+             detail::fixedstring::Helper::data_(a),
+             0u,
+             a.size(),
+             detail::fixedstring::Helper::data_(b),
+             0u,
+             b.size());
+}
+    
+      explicit LeakySingleton(CreateFunc createFunc) {
+    auto& entry = entryInstance();
+    if (entry.state != State::NotRegistered) {
+      detail::singletonWarnLeakyDoubleRegistrationAndAbort(entry.type_);
     }
-    
-    // Get a huge page from NUMA node `node`, and return the mapped address
-// specified by `addr` or nullptr on failure.  If `addr` is nullptr, the system
-// will choose a proper address.  If the address range [addr, addr+1G) already
-// contains address in the process address space, nullptr is returned and the
-// mapping won't be changed.  If `node` is -1, any NUMA node is OK.
-void* mmap_1g(void* addr = nullptr, int node = -1);
-    
-    #ifndef GUETZLI_DCT_DOUBLE_H_
-#define GUETZLI_DCT_DOUBLE_H_
-    
-    #include <math.h>
-    
-    
-    {}  // namespace guetzli
-
-    
-    #ifndef GUETZLI_IDCT_H_
-#define GUETZLI_IDCT_H_
-    
-    enum JPEGReadError {
-  JPEG_OK = 0,
-  JPEG_SOI_NOT_FOUND,
-  JPEG_SOF_NOT_FOUND,
-  JPEG_UNEXPECTED_EOF,
-  JPEG_MARKER_BYTE_NOT_FOUND,
-  JPEG_UNSUPPORTED_MARKER,
-  JPEG_WRONG_MARKER_SIZE,
-  JPEG_INVALID_PRECISION,
-  JPEG_INVALID_WIDTH,
-  JPEG_INVALID_HEIGHT,
-  JPEG_INVALID_NUMCOMP,
-  JPEG_INVALID_SAMP_FACTOR,
-  JPEG_INVALID_START_OF_SCAN,
-  JPEG_INVALID_END_OF_SCAN,
-  JPEG_INVALID_SCAN_BIT_POSITION,
-  JPEG_INVALID_COMPS_IN_SCAN,
-  JPEG_INVALID_HUFFMAN_INDEX,
-  JPEG_INVALID_QUANT_TBL_INDEX,
-  JPEG_INVALID_QUANT_VAL,
-  JPEG_INVALID_MARKER_LEN,
-  JPEG_INVALID_SAMPLING_FACTORS,
-  JPEG_INVALID_HUFFMAN_CODE,
-  JPEG_INVALID_SYMBOL,
-  JPEG_NON_REPRESENTABLE_DC_COEFF,
-  JPEG_NON_REPRESENTABLE_AC_COEFF,
-  JPEG_INVALID_SCAN,
-  JPEG_OVERLAPPING_SCANS,
-  JPEG_INVALID_SCAN_ORDER,
-  JPEG_EXTRA_ZERO_RUN,
-  JPEG_DUPLICATE_DRI,
-  JPEG_DUPLICATE_SOF,
-  JPEG_WRONG_RESTART_MARKER,
-  JPEG_DUPLICATE_COMPONENT_ID,
-  JPEG_COMPONENT_NOT_FOUND,
-  JPEG_HUFFMAN_TABLE_NOT_FOUND,
-  JPEG_HUFFMAN_TABLE_ERROR,
-  JPEG_QUANT_TABLE_NOT_FOUND,
-  JPEG_EMPTY_DHT,
-  JPEG_EMPTY_DQT,
-  JPEG_OUT_OF_BAND_COEFF,
-  JPEG_EOB_RUN_TOO_LONG,
-  JPEG_IMAGE_TOO_LARGE,
-};
-    
-      // Fills in out[] array with the 8-bit pixel view of this component cropped
-  // to the specified window. The window's upper-left corner, (xmin, ymin) must
-  // be within the image, but the window may extend past the image. In that
-  // case the edge pixels are duplicated.
-  void ToPixels(int xmin, int ymin, int xsize, int ysize,
-                uint8_t* out, int stride) const;
-    
-      DBWrapper* db_wrapper     = ObjectWrap::Unwrap<DBWrapper>(args.This());
-  Handle<Array> sub_batches = Handle<Array>::Cast(args[0]);
-  Local<Object> sub_batch;
-  rocksdb::WriteBatch batch;
-  bool well_formed;
-    
-    
-// The class for unit-testing
-class StringAppendOperatorTest : public testing::Test {
- public:
-  StringAppendOperatorTest() {
-    DestroyDB(kDbName, Options());    // Start each test with a fresh DB
+    entry.createFunc = createFunc;
+    entry.state = State::Dead;
   }
-    }
     
-      jlong addr_compaction_filter = env->CallLongMethod(m_jcallback_obj,
-      m_jcreate_compaction_filter_methodid,
-      static_cast<jboolean>(context.is_full_compaction),
-      static_cast<jboolean>(context.is_manual_compaction));
-    
-    ComparatorJniCallback::~ComparatorJniCallback() {
-  jboolean attached_thread = JNI_FALSE;
-  JNIEnv* env = getJniEnv(&attached_thread);
-  assert(env != nullptr);
-    }
+     protected:
+  bool keepAliveAcquire() override;
