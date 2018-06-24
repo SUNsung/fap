@@ -1,46 +1,83 @@
 
         
-              when :login_fail
-        if(s[:user] and s[:pass])
-          report_auth_info(s.merge({:active => false}))
-          print_status('Failed FTP Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]}')
-    
-      def parse(pkt)
-    
-    	if ln =~ /\(jmp\)/
-		parts = ln.split(' ')
-		if (parts[0][0,1] == 'j' and parts[2][0,2] == ';j' and parts[4] == '(jmp)')
-			old = parts[1]
-			func = parts[3]
-			new = addrs[func]
-			#puts '%32s: %s -> %x' % [func, old, new]
-			replaces << [func, old, new.to_s(16)]
-		end
-	end
-    
-    clsCreateJar._invoke('createJarArchive', 'Ljava.io.File;[Ljava.io.File;', fileOutJar, filesIn)
-    
-          class << self
-        alias escape_url escape
-        public :escape_html
-      end
-    
-      %w(GET HEAD).each do |method|
-    it 'accepts #{method} requests with non-whitelisted Origin' do
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).to be_ok
+            # Produce a representation of this Collection for use in Liquid.
+    # Exposes two attributes:
+    #   - label
+    #   - docs
+    #
+    # Returns a representation of this collection for use in Liquid.
+    def to_liquid
+      Drops::CollectionDrop.new self
     end
+    
+          # Conversion
+      'markdown'            => 'kramdown',
+      'highlighter'         => 'rouge',
+      'lsi'                 => false,
+      'excerpt_separator'   => '\n\n',
+      'incremental'         => false,
+    
+        # Determine whether the document is a CoffeeScript file.
+    #
+    # Returns true if extname == .coffee, false otherwise.
+    def coffeescript_file?
+      ext == '.coffee'
+    end
+    
+      def revoke_moderation!
+    set_permission('moderator', false)
   end
     
-      config.include Rack::Test::Methods
-  config.include SpecHelpers
+    class MysqlRequirement < Requirement
+  fatal true
+  satisfy do
+    odisabled('MysqlRequirement', ''depends_on \'mysql\''')
+  end
 end
     
-            def create
-          authorize! :create, StockMovement
-          @stock_movement = scope.new(stock_movement_params)
-          if @stock_movement.save
-            respond_with(@stock_movement, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_movement)
-          end
-        end
+      # Overriding #satisfied? is unsupported.
+  # Pass a block or boolean to the satisfy DSL method instead.
+  def satisfied?
+    satisfy = self.class.satisfy
+    return true unless satisfy
+    @satisfied_result = satisfy.yielder { |p| instance_eval(&p) }
+    return false unless @satisfied_result
+    true
+  end
+    
+      def recursive_dependencies
+    deps_f = []
+    recursive_dependencies = deps.map do |dep|
+      begin
+        deps_f << dep.to_formula
+        dep
+      rescue TapFormulaUnavailableError
+        # Don't complain about missing cross-tap dependencies
+        next
+      end
+    end.compact.uniq
+    deps_f.compact.each do |f|
+      f.recursive_dependencies.each do |dep|
+        recursive_dependencies << dep unless recursive_dependencies.include?(dep)
+      end
+    end
+    recursive_dependencies
+  end
+    
+        if rbenv_prefix = prefix_from_bin('rbenv')
+      prefixes << rbenv_prefix
+    end
+    
+    ```
+#{plugins_string}
+```
+#{markdown_podfile}
+EOS
+      end
+    
+        def initialize(tag_name, markup, tokens)
+      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
+      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
+      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
+      super
+    end
