@@ -1,242 +1,232 @@
 
         
-            state->preFilterType = CV_STEREO_BM_XSOBEL; //CV_STEREO_BM_NORMALIZED_RESPONSE;
-    state->preFilterSize = 9;
-    state->preFilterCap = 31;
-    state->SADWindowSize = 15;
-    state->minDisparity = 0;
-    state->numberOfDisparities = numberOfDisparities > 0 ? numberOfDisparities : 64;
-    state->textureThreshold = 10;
-    state->uniquenessRatio = 15;
-    state->speckleRange = state->speckleWindowSize = 0;
-    state->trySmallerWindows = 0;
-    state->roi1 = state->roi2 = cvRect(0,0,0,0);
-    state->disp12MaxDiff = -1;
+        // Copyright 2007-2010 Baptiste Lepilleur
+// Distributed under MIT license, or public domain if desired and
+// recognized in your jurisdiction.
+// See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
     
-        // A\B
-    cv::solve(H, A, A, cv::DECOMP_NORMAL);
-    H.release();
+    bool OurReader::parse(const char* beginDoc,
+                   const char* endDoc,
+                   Value& root,
+                   bool collectComments) {
+  if (!features_.allowComments_) {
+    collectComments = false;
+  }
+    }
     
+    class PyDescriptorDatabase : public DescriptorDatabase {
+ public:
+  explicit PyDescriptorDatabase(PyObject* py_database);
+  ~PyDescriptorDatabase();
+    }
     
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
+    
+    #include <sstream>
+    
+    void WriteMessageDocComment(io::Printer* printer, const Descriptor* message);
+void WriteFieldDocComment(io::Printer* printer, const FieldDescriptor* field);
+void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enum_);
+void WriteEnumValueDocComment(io::Printer* printer,
+                              const EnumValueDescriptor* value);
+void WriteServiceDocComment(io::Printer* printer,
+                            const ServiceDescriptor* service);
+void WriteMethodDocComment(io::Printer* printer,
+                           const MethodDescriptor* method);
+    
+    // CodeGenerator implementation which generates Java code.  If you create your
+// own protocol compiler binary and you want it to support Java output, you
+// can do so by registering an instance of this CodeGenerator with the
+// CommandLineInterface in your main() function.
+class LIBPROTOC_EXPORT JavaGenerator : public CodeGenerator {
+ public:
+  JavaGenerator();
+  ~JavaGenerator();
+    }
+    
+      virtual ExtensionGenerator* NewExtensionGenerator(
+      const FieldDescriptor* descriptor) const;
+    
+        Eigen::ComplexEigenSolver<Eigen::MatrixXcd> ces;
+    ces.compute(Mtilde_eig_cmplx);
+    
+            const std::vector<Point>* quads[4] = {&black_contours[black_order[0].first], &black_contours[black_order[1].first],
+                                         &white_contours[white_order[0].first], &white_contours[white_order[1].first]};
+        std::vector<Point2f> quads_approx[4];
+        Point2f quad_corners[4];
+        for(int k = 0; k < 4; k++)
+        {
+            std::vector<Point2f> temp;
+            for(size_t j = 0; j < quads[k]->size(); j++) temp.push_back((*quads[k])[j]);
+            approxPolyDP(Mat(temp), quads_approx[k], 0.5, true);
+    }
+    
+        static void* GetProcAddress (const char* name)
     {
-    {                return count;
-#else
-                return ::atomicMin(address, val);
-#endif
-            }
-        }; // struct cmem
-    
-    namespace at {
+        static void* h = NULL;
+        if (!h)
+        {
+            h = dlopen('libclAmdBlas.so', RTLD_LAZY | RTLD_GLOBAL);
+            if (!h)
+                return NULL;
+        }
     }
     
-    void THDTensor_(uniform)(THDTensor *self, THDGenerator *_generator, double a,
-                         double b) {
-  masterCommandChannel->sendMessage(
-    packMessage(Functions::tensorUniform, self, _generator, a, b),
-    THDState::s_current_worker
-  );
-}
+    #ifndef __OPENCV_CORE_OCL_RUNTIME_COMMON_HPP__
+#define __OPENCV_CORE_OCL_RUNTIME_COMMON_HPP__
     
-    void THP_encodeInt32Buffer(uint8_t* dst, const int32_t* src, THPByteOrder order, size_t len)
+    const uchar g_Saturate8u[] =
 {
-  memcpy(dst, src, sizeof(int32_t) * len);
-  if (order != THP_nativeByteOrder()) {
-    for (size_t i = 0; i < len; i++) {
-      swapBytes<sizeof(int32_t)>(dst);
-      dst += sizeof(int32_t);
-    }
-  }
-}
-    
-    #endif  // GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
-    
-      std::unique_ptr<grpc::Server> StartServer(int port);
-    
-      // FUTURE: use constexpr_log2 to fold instantiations of BasicFixedString
-  // together. All BasicFixedString<C, N> instantiations could share the
-  // implementation of BasicFixedString<C, M>, where M is the next highest power
-  // of 2 after N.
-  //
-  // Also, because of alignment of the data_ and size_ members, N should never
-  // be smaller than `(alignof(std::size_t)/sizeof(C))-1` (-1 because of the
-  // null terminator). OR, create a specialization for BasicFixedString<C, 0u>
-  // that does not have a size_ member, since it is unnecessary.
-  Char data_[N + 1u]; // +1 for the null terminator
-  std::size_t size_; // Nbr of chars, not incl. null terminator. size_ <= N.
-    
-    TEST(TypedIOBuf, Simple) {
-  auto buf = IOBuf::create(0);
-  TypedIOBuf<uint64_t> typed(buf.get());
-  const uint64_t n = 10000;
-  typed.reserve(0, n);
-  EXPECT_LE(n, typed.capacity());
-  for (uint64_t i = 0; i < n; i++) {
-    *typed.writableTail() = i;
-    typed.append(1);
-  }
-  EXPECT_EQ(n, typed.length());
-  for (uint64_t i = 0; i < n; i++) {
-    EXPECT_EQ(i, typed.data()[i]);
-  }
-}
-enum BufType {
-  CREATE,
-  TAKE_OWNERSHIP_MALLOC,
-  TAKE_OWNERSHIP_CUSTOM,
-  USER_OWNED,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
+     16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
+     32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
+     48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
+     64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
+     80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
+     96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
+    112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
+    144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
+    160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
+    176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
+    192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
+    208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
+    224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
+    240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255
 };
     
-    TEST_F(OrderingTest, to_ordering) {
-  EXPECT_EQ(ordering::lt, to_ordering(int(ordering::lt)));
-  EXPECT_EQ(ordering::eq, to_ordering(int(ordering::eq)));
-  EXPECT_EQ(ordering::gt, to_ordering(int(ordering::gt)));
+    #define THDPStorage TH_CONCAT_3(THDP,Real,Storage)
+#define THDPStorageStr TH_CONCAT_STRING_3(torch.cuda.,Real,Storage)
+#define THDPStorageClass TH_CONCAT_3(THDP,Real,StorageClass)
+#define THDPStorage_(NAME) TH_CONCAT_4(THDP,Real,Storage_,NAME)
+    
+    using THDTensorTypes = std::tuple<
+    THDByteTensor,
+    THDCharTensor,
+    THDShortTensor,
+    THDIntTensor,
+    THDLongTensor,
+    THDFloatTensor,
+    THDDoubleTensor
+>;
+    
+    void THP_decodeDoubleBuffer(double* dst, const uint8_t* src, THPByteOrder order, size_t len)
+{
+  for (size_t i = 0; i < len; i++) {
+    union { uint64_t x; double d; };
+    x = (order == THP_BIG_ENDIAN ? decodeUInt64BE(src) : decodeUInt64LE(src));
+    dst[i] = d;
+    src += sizeof(double);
+  }
+}
+    
+    
+    {    PyThreadState *_save = NULL;
+    try {
+      Py_UNBLOCK_THREADS;
+      copyFunc(LIBRARY_STATE dst, THDPModule_makeDescriptor(src_));
+      Py_BLOCK_THREADS;
+    } catch (...) {
+      if (_save) {
+        Py_BLOCK_THREADS;
+      }
+      throw;
+    }
+  };
+    
+        if (EXPECTS_CRASH_DUMP_END == _state)
+        return -1;
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+        if ((now - touch_times_.front()) <= time_span_) {
+        xwarn2(TSF'Freq Limit, count:%0 in %1 milsec', count_, time_span_);
+        return false;
     }
     
     
-    {} // namespace folly
+    {}
+#endif
 
     
-    #include <folly/CPortability.h>
-#include <folly/Optional.h>
-    
-      // folly::Init() will automatically initialize the logging settings based on
-  // the FOLLY_INIT_LOGGING_CONFIG declaration above and the --logging command
-  // line flag.
-  auto init = folly::Init(&argc, &argv);
-    
-      /**
-   * How long the reader thread should sleep between each read event.
-   *
-   * This is initially set to a non-zero value (read from the
-   * FLAGS_async_discard_read_sleep_usec flag) so that the reader thread reads
-   * slowly, which will fill up the pipe buffer and cause discard events.
-   *
-   * Once we have produce enough discards and are ready to finish the test the
-   * main thread reduces readSleepUS_ to 0, so the reader will finish the
-   * remaining message backlog quickly.
-   */
-  std::atomic<uint64_t> readSleepUS_{0};
+    #include 'singleton.h'
     
     
-    {static InitChecker initChecker;
-} // namespace
-    
-    TEST_F(MockEnvTest, FakeSleeping) {
-  int64_t now = 0;
-  auto s = env_->GetCurrentTime(&now);
-  ASSERT_OK(s);
-  env_->FakeSleepForMicroseconds(3 * 1000 * 1000);
-  int64_t after_sleep = 0;
-  s = env_->GetCurrentTime(&after_sleep);
-  ASSERT_OK(s);
-  auto delta = after_sleep - now;
-  // this will be true unless test runs for 2 seconds
-  ASSERT_TRUE(delta == 3 || delta == 4);
-}
-    
-    #include <map>
-#include <node.h>
-    
-      virtual bool PartialMergeMulti(const Slice& key,
-                                 const std::deque<Slice>& operand_list,
-                                 std::string* new_value, Logger* logger) const
-      override;
-    
-    int main(int argc, char** argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  // Run with regular database
-  int result;
-  {
-    fprintf(stderr, 'Running tests with regular db and operator.\n');
-    StringAppendOperatorTest::SetOpenDbFunction(&OpenNormalDb);
-    result = RUN_ALL_TESTS();
-  }
-    }
-    
-      // Skips all blocks that are completely before 'initial_offset_'.
-  //
-  // Returns true on success. Handles reporting.
-  bool SkipToInitialBlock();
-    
-    namespace rocksdb {
-JniCallback::JniCallback(JNIEnv* env, jobject jcallback_obj) {
-  // Note: jcallback_obj may be accessed by multiple threads,
-  // so we ref the jvm not the env
-  const jint rs = env->GetJavaVM(&m_jvm);
-  if(rs != JNI_OK) {
-    // exception thrown
-    return;
-  }
-    }
-    }
-    
-    
-    {
-    {    return true;
-  }
-// @lint-ignore TXT4 T25377293 Grandfathered in
+    {  private:
+//    int m_t;
 };
     
-    
-    {  assert(odds > 0);
-  if (odds % 7 == 0) {
-    // class Random uses multiplier 16807, which is 7^5. If odds are
-    // multiplier of 7, there might be limited values generated.
-    odds++;
-  }
-  auto* r = Random::GetTLSInstance();
-  bool crash = r->OneIn(odds);
-  if (crash) {
-    port::Crash(srcfile, srcline);
-  }
-}
-    
-      // Return an iterator over the keys in this representation.
-  // arena: If not null, the arena needs to be used to allocate the Iterator.
-  //        When destroying the iterator, the caller will not call 'delete'
-  //        but Iterator::~Iterator() directly. The destructor needs to destroy
-  //        all the states but those allocated in arena.
-  virtual Iterator* GetIterator(Arena* arena = nullptr) = 0;
-    
-      if(env->ExceptionCheck()) {
-    // exception thrown from CallLongMethod
-    env->ExceptionDescribe();  // print out exception to stderr
-    releaseJniEnv(attached_thread);
-    return nullptr;
-  }
-    
-    class AbstractDiskWriter : public DiskWriter {
-private:
-  std::string filename_;
-    }
-    
-    AbstractHttpServerResponseCommand::AbstractHttpServerResponseCommand(
-    cuid_t cuid, const std::shared_ptr<HttpServer>& httpServer,
-    DownloadEngine* e, const std::shared_ptr<SocketCore>& socket)
-    : Command(cuid),
-      e_(e),
-      socket_(socket),
-      httpServer_(httpServer),
-      readCheck_(false),
-      writeCheck_(true)
-{
-  setStatus(Command::STATUS_ONESHOT_REALTIME);
-  e_->addSocketForWriteCheck(socket_, this);
-}
-    
-      virtual void parse(Option& option,
-                     const std::string& arg) const CXX11_OVERRIDE;
-    
-    protected:
-  virtual bool executeInternal() CXX11_OVERRIDE;
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
     
     namespace aria2 {
     }
     
-    AnnounceTier::AnnounceTier(std::deque<std::string> urls)
-    : event(STARTED), urls(std::move(urls))
+    bool AbstractOptionHandler::getChangeOptionForReserved() const
 {
+  return flags_ & FLAG_CHANGE_OPTION_FOR_RESERVED;
 }
+    
+    
+    {
+    {    httpConnection_->sendProxyRequest(std::move(httpRequest));
+  }
+  else {
+    httpConnection_->sendPendingData();
+  }
+  if (httpConnection_->sendBufferIsEmpty()) {
+    getDownloadEngine()->addCommand(getNextCommand());
+    return true;
+  }
+  else {
+    setWriteCheckSocket(getSocket());
+    addCommandSelf();
+    return false;
+  }
+}
+    
+    
+    {  void setBtAnnounce(const std::shared_ptr<BtAnnounce>& btAnnounce);
+};
     
     class ApiCallbackDownloadEventListener : public DownloadEventListener {
 public:
@@ -248,4 +238,7 @@ public:
                        const RequestGroup* group) CXX11_OVERRIDE;
     }
     
-    #endif // D_AUTH_CONFIG_H
+    #include 'common.h'
+    
+    namespace aria2 {
+    }
