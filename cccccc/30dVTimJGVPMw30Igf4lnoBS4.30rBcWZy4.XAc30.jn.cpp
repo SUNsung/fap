@@ -1,330 +1,375 @@
 
         
-        namespace swift {
-class DependencyTracker;
-class ModuleDecl;
-class SourceFile;
-    }
+          static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
     
-    StringRef StdlibGroupsIndexRecordingConsumer::findGroupForSymbol(const IndexSymbol &sym) {
-  bool isDeclOrDef = sym.roles & ((SymbolRoleSet)SymbolRole::Declaration | (SymbolRoleSet)SymbolRole::Definition);
-  if (isDeclOrDef) {
-    if (!sym.group.empty())
-      return sym.group;
-    return findGroupNameForDecl(sym.decl);
-  }
-    }
-    
-    public:
-  DocComment(const Decl *D, swift::markup::Document *Doc,
-             swift::markup::CommentParts Parts)
-      : D(D), Doc(Doc), Parts(Parts) {}
-    
-    SILDebugScope::SILDebugScope(SILLocation Loc, SILFunction *SILFn,
-                             const SILDebugScope *ParentScope ,
-                             const SILDebugScope *InlinedCallSite)
-    : Loc(Loc), InlinedCallSite(InlinedCallSite) {
-  if (ParentScope)
-    Parent = ParentScope;
-  else {
-    assert(SILFn && 'no parent provided');
-    Parent = SILFn;
-  }
-}
-    
-    #include 'llvm/ADT/Hashing.h'
-    
-    /// Runs the given function with the given context argument exactly once.
-/// The predicate argument must point to a global or static variable of static
-/// extent of type swift_once_t.
-void swift::swift_once(swift_once_t *predicate, void (*fn)(void *),
-                       void *context) {
-#if defined(__APPLE__)
-  dispatch_once_f(predicate, context, fn);
-#elif defined(__CYGWIN__)
-  _swift_once_f(predicate, context, fn);
-#else
-  std::call_once(*predicate, [fn, context]() { fn(context); });
-#endif
-}
-
-    
-    #if !defined(JSONCPP_DEPRECATED)
-#define JSONCPP_DEPRECATED(message)
-#endif // if !defined(JSONCPP_DEPRECATED)
-    
-    // CodeGenerator implementation which generates a C++ source file and
-// header.  If you create your own protocol compiler binary and you want
-// it to support C++ output, you can do so by registering an instance of this
-// CodeGenerator with the CommandLineInterface in your main() function.
-class LIBPROTOC_EXPORT CppGenerator : public CodeGenerator {
+    class WinFrameView : public FramelessView {
  public:
-  CppGenerator();
-  ~CppGenerator();
+  WinFrameView();
+  virtual ~WinFrameView();
     }
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-namespace {
-    }
-    }
-    }
-    }
-    }
     
-      virtual void WriteHash(io::Printer* printer);
-  virtual void WriteEquals(io::Printer* printer);
-  virtual void WriteToString(io::Printer* printer);
+    {}  // namespace
     
-      std::string namespace_;
-  std::string reflectionClassname_;
+    #ifndef ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
+#define ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
+    
+    #ifndef ATOM_COMMON_DRAGGABLE_REGION_H_
+#define ATOM_COMMON_DRAGGABLE_REGION_H_
     
     
-    {
-    {
-    {}  // namespace java
-}  // namespace compiler
-}  // namespace protobuf
-    
-    /// Enforce specific types of decoration.
-enum DecorationPoint {
-  DECORATE_LOAD,
-  DECORATE_ALWAYS,
-  DECORATE_INTERVAL,
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(PrintingUIWebContentsObserver);
 };
     
-    #pragma once
+    #define FPL FILE_PATH_LITERAL
     
-    bool waitForTick(const std::shared_ptr<PermissionsRunnable>& runnable) {
-  size_t now = runnable->ticks;
-  size_t timeout = 1000;
-  size_t delay = 0;
-  while (delay < timeout) {
-    sleepFor(20);
-    if (runnable->ticks > now) {
-      return true;
-    }
-    sleepFor(200);
-    delay += 220;
+    leveldb_cache_t* leveldb_cache_create_lru(size_t capacity) {
+  leveldb_cache_t* c = new leveldb_cache_t;
+  c->rep = NewLRUCache(capacity);
+  return c;
+}
+    
+    // Print contents of a log file. (*func)() is called on every record.
+Status PrintLogContents(Env* env, const std::string& fname,
+                        void (*func)(uint64_t, Slice, WritableFile*),
+                        WritableFile* dst) {
+  SequentialFile* file;
+  Status s = env->NewSequentialFile(fname, &file);
+  if (!s.ok()) {
+    return s;
   }
-  return false;
+  CorruptionReporter reporter;
+  reporter.dst_ = dst;
+  log::Reader reader(file, &reporter, true, 0);
+  Slice record;
+  std::string scratch;
+  while (reader.ReadRecord(&record, &scratch)) {
+    (*func)(reader.LastRecordOffset(), record, dst);
+  }
+  delete file;
+  return Status::OK();
 }
     
+    #include <stdio.h>
+#include <stdlib.h>
+#include <kcpolydb.h>
+#include 'util/histogram.h'
+#include 'util/random.h'
+#include 'util/testutil.h'
     
-    {  // And of the column has constraints:
-  EXPECT_TRUE(cm['path'].notExistsOrMatches('some'));
-  EXPECT_FALSE(cm['path'].notExistsOrMatches('not_some'));
-  EXPECT_TRUE(cm['path'].exists());
-  EXPECT_TRUE(cm['path'].existsAndMatches('some'));
-}
-    
-    #include <osquery/events.h>
-#include <osquery/status.h>
-    
-    extern JSClass  *jsb_cocos2d_PhysicsSprite3D_class;
-extern JSObject *jsb_cocos2d_PhysicsSprite3D_prototype;
-    
-    
-    
-    	lua_register_cocos2dx_cocosdenshion_SimpleAudioEngine(tolua_S);
-    
-    
-    
-    
-    
-    
-    
-        glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, 0, vertices);
-    glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
-    
-    // This class implements debug drawing callbacks that are invoked
-// inside b2World::Step.
-class GLESDebugDraw : public b2Draw
-{
-    float32 mRatio;
-    cocos2d::GLProgram* mShaderProgram;
-    GLint        mColorLocation;
+    void convert_dataset(const string& input_folder, const string& output_folder,
+    const string& db_type) {
+  scoped_ptr<db::DB> train_db(db::GetDB(db_type));
+  train_db->Open(output_folder + '/cifar10_train_' + db_type, db::NEW);
+  scoped_ptr<db::Transaction> txn(train_db->NewTransaction());
+  // Data buffer
+  int label;
+  char str_buffer[kCIFARImageNBytes];
+  Datum datum;
+  datum.set_channels(3);
+  datum.set_height(kCIFARSize);
+  datum.set_width(kCIFARSize);
     }
     
-    			// Top horizontal
-			shape.Set(b2Vec2(-20.0f, 20.0f), b2Vec2(20.0f, 20.0f));
-			ground->CreateFixture(&sd);
+    #ifdef USE_OPENCV
+  /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a vector of Mat.
+   *
+   * @param mat_vector
+   *    A vector of Mat containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See memory_layer.cpp for an example.
+   */
+  void Transform(const vector<cv::Mat> & mat_vector,
+                Blob<Dtype>* transformed_blob);
     
-    inline int ReadUint8(const uint8_t* data, size_t* pos) {
-  return data[(*pos)++];
-}
-    
-    std::vector<uint8_t> OutputImage::ToSRGB(int xmin, int ymin,
-                                         int xsize, int ysize) const {
-  std::vector<uint8_t> rgb(xsize * ysize * 3);
-  for (int c = 0; c < 3; ++c) {
-    components_[c].ToPixels(xmin, ymin, xsize, ysize, &rgb[c], 3);
+      // Get a layer using a LayerParameter.
+  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
+    if (Caffe::root_solver()) {
+      LOG(INFO) << 'Creating layer ' << param.name();
+    }
+    const string& type = param.type();
+    CreatorRegistry& registry = Registry();
+    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
+        << ' (known types: ' << LayerTypeListString() << ')';
+    return registry[type](param);
   }
-  for (size_t p = 0; p < rgb.size(); p += 3) {
-    ColorTransformYCbCrToRGB(&rgb[p]);
-  }
-  return rgb;
-}
     
-    #endif  // GUETZLI_DCT_DOUBLE_H_
+    /**
+ * @brief Takes at least two Blob%s and concatenates them along either the num
+ *        or channel dimension, outputting the result.
+ */
+template <typename Dtype>
+class ConcatLayer : public Layer<Dtype> {
+ public:
+  explicit ConcatLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    #include 'caffe/layers/base_conv_layer.hpp'
+    
+    #endif  // CAFFE_CUDNN_LRN_LAYER_HPP_
 
+    
+    #endif  // CAFFE_CUDNN_RELU_LAYER_HPP_
+
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief cuDNN implementation of SoftmaxLayer.
+ *        Fallback to SoftmaxLayer for CPU mode.
+ */
+template <typename Dtype>
+class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
+ public:
+  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
+      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSoftmaxLayer();
+    }
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the computed outputs @f$
+   *        y = \gamma ^ {\alpha x + \beta}
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    int64_t getWallClockMicros() {
+  return RuntimeOption::EvalJitTimer ? HPHP::Timer::GetCurrentTimeMicros() :
+         -1;
+}
+    
+    int64_t gettime_ns(clockid_t clock) {
+  if (clock != CLOCK_THREAD_CPUTIME_ID) {
+    return folly::chrono::clock_gettime_ns(clock);
+  }
+    }
+    
+    template<typename T>
+inline Vptr emitTLSAddr(Vout& v, TLSDatum<T> datum) {
+  switch (arch()) {
+    case Arch::X64:
+      return x64::detail::emitTLSAddr(v, datum);
+    case Arch::ARM:
+      return arm::detail::emitTLSAddr(v, datum);
+    case Arch::PPC64:
+      return ppc64::detail::emitTLSAddr(v, datum);
+  }
+  not_reached();
+}
+    
+      if (!ret || numa_num_nodes <= 1) return;
+    
+    
+    {
+    {
+    {}}}
+    
+    
+float Instruction::ImmFP32() {
+  //  ImmFP: abcdefgh (8 bits)
+  // Single: aBbb.bbbc.defg.h000.0000.0000.0000.0000 (32 bits)
+  // where B is b ^ 1
+  uint32_t bits = ImmFP();
+  uint32_t bit7 = (bits >> 7) & 0x1;
+  uint32_t bit6 = (bits >> 6) & 0x1;
+  uint32_t bit5_to_0 = bits & 0x3f;
+  uint32_t result = (bit7 << 31) | ((32 - bit6) << 25) | (bit5_to_0 << 19);
+    }
+    
+    
+    {/////////////////////////////////////////////////////////////////////////////
+}
+
+    
+        char fileName[256];
+    memcpy(fileName, '/sys/devices/system/node/node', 29);
+    assert(strlen('/sys/devices/system/node/node') == 29);
+    char* p = fileName + 29;
+    // We support at most 32 NUMA node, so at most two bytes.
+    if (node >= 10) *p++ = '0' + node / 10;
+    *p++ = '0' + node % 10;
+    if (pagesize == size2m) {
+      memcpy(p, '/hugepages/hugepages-2048kB/', 28);
+      assert(strlen('/hugepages/hugepages-2048kB/') == 28);
+      p += 28;
+    } else {
+      memcpy(p, '/hugepages/hugepages-1048576kB/', 31);
+      assert(strlen('/hugepages/hugepages-1048576kB/') == 31);
+      p += 31;
+    }
+    
+    // Try to find a mount point for the 1G hugetlbfs automatically.  Return whether
+// we found one.
+bool find_hugetlbfs_path();
+    
+    inline int ReadUint16(const uint8_t* data, size_t* pos) {
+  int v = (data[*pos] << 8) + data[*pos + 1];
+  *pos += 2;
+  return v;
+}
+    
+      // Returns the distance map between the baseline image and the image in the
+  // last Compare() call (or the baseline image, if Compare() was not called
+  // yet).
+  // The dimensions of the distance map are the same as the baseline image.
+  // The interpretation of the distance values depend on the comparator used.
+  virtual const std::vector<float> distmap() const = 0;
+    
+    static const int kCbToGreenTable[256] = {
+  2919680,  2897126,  2874572,  2852018,  2829464,  2806910,  2784356,  2761802,
+  2739248,  2716694,  2694140,  2671586,  2649032,  2626478,  2603924,  2581370,
+  2558816,  2536262,  2513708,  2491154,  2468600,  2446046,  2423492,  2400938,
+  2378384,  2355830,  2333276,  2310722,  2288168,  2265614,  2243060,  2220506,
+  2197952,  2175398,  2152844,  2130290,  2107736,  2085182,  2062628,  2040074,
+  2017520,  1994966,  1972412,  1949858,  1927304,  1904750,  1882196,  1859642,
+  1837088,  1814534,  1791980,  1769426,  1746872,  1724318,  1701764,  1679210,
+  1656656,  1634102,  1611548,  1588994,  1566440,  1543886,  1521332,  1498778,
+  1476224,  1453670,  1431116,  1408562,  1386008,  1363454,  1340900,  1318346,
+  1295792,  1273238,  1250684,  1228130,  1205576,  1183022,  1160468,  1137914,
+  1115360,  1092806,  1070252,  1047698,  1025144,  1002590,   980036,   957482,
+   934928,   912374,   889820,   867266,   844712,   822158,   799604,   777050,
+   754496,   731942,   709388,   686834,   664280,   641726,   619172,   596618,
+   574064,   551510,   528956,   506402,   483848,   461294,   438740,   416186,
+   393632,   371078,   348524,   325970,   303416,   280862,   258308,   235754,
+   213200,   190646,   168092,   145538,   122984,   100430,    77876,    55322,
+    32768,    10214,   -12340,   -34894,   -57448,   -80002,  -102556,  -125110,
+  -147664,  -170218,  -192772,  -215326,  -237880,  -260434,  -282988,  -305542,
+  -328096,  -350650,  -373204,  -395758,  -418312,  -440866,  -463420,  -485974,
+  -508528,  -531082,  -553636,  -576190,  -598744,  -621298,  -643852,  -666406,
+  -688960,  -711514,  -734068,  -756622,  -779176,  -801730,  -824284,  -846838,
+  -869392,  -891946,  -914500,  -937054,  -959608,  -982162, -1004716, -1027270,
+ -1049824, -1072378, -1094932, -1117486, -1140040, -1162594, -1185148, -1207702,
+ -1230256, -1252810, -1275364, -1297918, -1320472, -1343026, -1365580, -1388134,
+ -1410688, -1433242, -1455796, -1478350, -1500904, -1523458, -1546012, -1568566,
+ -1591120, -1613674, -1636228, -1658782, -1681336, -1703890, -1726444, -1748998,
+ -1771552, -1794106, -1816660, -1839214, -1861768, -1884322, -1906876, -1929430,
+ -1951984, -1974538, -1997092, -2019646, -2042200, -2064754, -2087308, -2109862,
+ -2132416, -2154970, -2177524, -2200078, -2222632, -2245186, -2267740, -2290294,
+ -2312848, -2335402, -2357956, -2380510, -2403064, -2425618, -2448172, -2470726,
+ -2493280, -2515834, -2538388, -2560942, -2583496, -2606050, -2628604, -2651158,
+ -2673712, -2696266, -2718820, -2741374, -2763928, -2786482, -2809036, -2831590,
+};
     
     
     {}  // namespace guetzli
-
     
-    inline int Log2FloorNonZero(uint32_t n) {
-#ifdef __GNUC__
-  return 31 ^ __builtin_clz(n);
-#else
-  unsigned int result = 0;
-  while (n >>= 1) result++;
-  return result;
-#endif
-}
+      // Make a local copy of the input bit length histogram.
+  int count[kJpegHuffmanMaxBitLength + 1] = { 0 };
+  int total_count = 0;
+  for (len = 1; len <= kJpegHuffmanMaxBitLength; ++len) {
+    count[len] = count_in[len];
+    total_count += count[len];
+  }
     
-    namespace guetzli {
+        g_AttribLocationTex = glGetUniformLocation(g_ShaderHandle, 'Texture');
+    g_AttribLocationProjMtx = glGetUniformLocation(g_ShaderHandle, 'ProjMtx');
+    g_AttribLocationPosition = glGetAttribLocation(g_ShaderHandle, 'Position');
+    g_AttribLocationUV = glGetAttribLocation(g_ShaderHandle, 'UV');
+    g_AttribLocationColor = glGetAttribLocation(g_ShaderHandle, 'Color');
+    
+            // 1. Show a simple window.
+        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
     }
     
-    enum JPEGReadError {
-  JPEG_OK = 0,
-  JPEG_SOI_NOT_FOUND,
-  JPEG_SOF_NOT_FOUND,
-  JPEG_UNEXPECTED_EOF,
-  JPEG_MARKER_BYTE_NOT_FOUND,
-  JPEG_UNSUPPORTED_MARKER,
-  JPEG_WRONG_MARKER_SIZE,
-  JPEG_INVALID_PRECISION,
-  JPEG_INVALID_WIDTH,
-  JPEG_INVALID_HEIGHT,
-  JPEG_INVALID_NUMCOMP,
-  JPEG_INVALID_SAMP_FACTOR,
-  JPEG_INVALID_START_OF_SCAN,
-  JPEG_INVALID_END_OF_SCAN,
-  JPEG_INVALID_SCAN_BIT_POSITION,
-  JPEG_INVALID_COMPS_IN_SCAN,
-  JPEG_INVALID_HUFFMAN_INDEX,
-  JPEG_INVALID_QUANT_TBL_INDEX,
-  JPEG_INVALID_QUANT_VAL,
-  JPEG_INVALID_MARKER_LEN,
-  JPEG_INVALID_SAMPLING_FACTORS,
-  JPEG_INVALID_HUFFMAN_CODE,
-  JPEG_INVALID_SYMBOL,
-  JPEG_NON_REPRESENTABLE_DC_COEFF,
-  JPEG_NON_REPRESENTABLE_AC_COEFF,
-  JPEG_INVALID_SCAN,
-  JPEG_OVERLAPPING_SCANS,
-  JPEG_INVALID_SCAN_ORDER,
-  JPEG_EXTRA_ZERO_RUN,
-  JPEG_DUPLICATE_DRI,
-  JPEG_DUPLICATE_SOF,
-  JPEG_WRONG_RESTART_MARKER,
-  JPEG_DUPLICATE_COMPONENT_ID,
-  JPEG_COMPONENT_NOT_FOUND,
-  JPEG_HUFFMAN_TABLE_NOT_FOUND,
-  JPEG_HUFFMAN_TABLE_ERROR,
-  JPEG_QUANT_TABLE_NOT_FOUND,
-  JPEG_EMPTY_DHT,
-  JPEG_EMPTY_DQT,
-  JPEG_OUT_OF_BAND_COEFF,
-  JPEG_EOB_RUN_TOO_LONG,
-  JPEG_IMAGE_TOO_LARGE,
-};
-    
-      // Sets the 8x8 coefficient block with block coordinates (block_x, block_y)
-  // to block[].
-  // NOTE: If the component is 2x2 subsampled, this corresponds to the 16x16
-  // pixel area with upper-left corner (16 * block_x, 16 * block_y).
-  // REQUIRES: block[k] % quant()[k] == 0 for each coefficient index k.
-  void SetCoeffBlock(int block_x, int block_y,
-                     const coeff_t block[kDCTBlockSize]);
-    
-        // Navigation / Focus
-    // FIXME-NAV: Merge all this with the new Nav system, at least the request variables should be moved to ImGuiContext
-    int                     FocusIdxAllCounter;                 // Start at -1 and increase as assigned via FocusItemRegister()
-    int                     FocusIdxTabCounter;                 // (same, but only count widgets which you can Tab through)
-    int                     FocusIdxAllRequestCurrent;          // Item being requested for focus
-    int                     FocusIdxTabRequestCurrent;          // Tab-able item being requested for focus
-    int                     FocusIdxAllRequestNext;             // Item being requested for focus, for next update (relies on layout to be stable between the frame pressing TAB and the next frame)
-    int                     FocusIdxTabRequestNext;             // '
-    
-    
-    {        // Rendering
+            // Rendering
         ImGui::Render();
         int display_w, display_h;
-        glfwMakeContextCurrent(window);
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
         glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    	
-        glfwMakeContextCurrent(window);
-        glfwSwapBuffers(window);
-    }
+        //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound, but prefer using the GL3+ code.
+        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
     
-        // Build atlas
-    unsigned char* tex_pixels = NULL;
-    int tex_w, tex_h;
-    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
-    
-        // Setup Dear ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    
-        // Copy and convert all vertices into a single contiguous buffer
-    D3D11_MAPPED_SUBRESOURCE vtx_resource, idx_resource;
-    if (ctx->Map(g_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &vtx_resource) != S_OK)
-        return;
-    if (ctx->Map(g_pIB, 0, D3D11_MAP_WRITE_DISCARD, 0, &idx_resource) != S_OK)
-        return;
-    ImDrawVert* vtx_dst = (ImDrawVert*)vtx_resource.pData;
-    ImDrawIdx* idx_dst = (ImDrawIdx*)idx_resource.pData;
-    for (int n = 0; n < draw_data->CmdListsCount; n++)
-    {
-        const ImDrawList* cmd_list = draw_data->CmdLists[n];
-        memcpy(vtx_dst, cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size * sizeof(ImDrawVert));
-        memcpy(idx_dst, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
-        vtx_dst += cmd_list->VtxBuffer.Size;
-        idx_dst += cmd_list->IdxBuffer.Size;
-    }
-    ctx->Unmap(g_pVB, 0);
-    ctx->Unmap(g_pIB, 0);
-    
-        // Render command lists
-    int vtx_offset = 0;
-    int idx_offset = 0;
-    ImVec2 pos = draw_data->DisplayPos;
-    for (int n = 0; n < draw_data->CmdListsCount; n++)
-    {
-        const ImDrawList* cmd_list = draw_data->CmdLists[n];
-        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
-        {
-            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
-            if (pcmd->UserCallback)
-            {
-                pcmd->UserCallback(cmd_list, pcmd);
-            }
-            else
-            {
-                const RECT r = { (LONG)(pcmd->ClipRect.x - pos.x), (LONG)(pcmd->ClipRect.y - pos.y), (LONG)(pcmd->ClipRect.z - pos.x), (LONG)(pcmd->ClipRect.w - pos.y) };
-                g_pd3dDevice->SetTexture(0, (LPDIRECT3DTEXTURE9)pcmd->TextureId);
-                g_pd3dDevice->SetScissorRect(&r);
-                g_pd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, vtx_offset, 0, (UINT)cmd_list->VtxBuffer.Size, idx_offset, pcmd->ElemCount/3);
-            }
-            idx_offset += pcmd->ElemCount;
-        }
-        vtx_offset += cmd_list->VtxBuffer.Size;
-    }
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
     
     // GLFW callbacks (installed by default if you enable 'install_callbacks' during initialization)
 // Provided here if you want to chain callbacks.
 // You can also handle inputs yourself and use those as a reference.
-IMGUI_API void        ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+
+    
+      // Set the argument names to display in the benchmark name. If not called,
+  // only argument values will be shown.
+  Benchmark* ArgNames(const std::vector<std::string>& names);
+    
+        args_.push_back(std::move(tmp));
+    
+    // Returns true if stdout appears to be a terminal that supports colored
+// output, false otherwise.
+bool IsColorTerminal();
+    
+    void Increment(UserCounters *l, UserCounters const& r) {
+  // add counters present in both or just in *l
+  for (auto &c : *l) {
+    auto it = r.find(c.first);
+    if (it != r.end()) {
+      c.second.value = c.second + it->second;
+    }
+  }
+  // add counters present in r, but not in *l
+  for (auto const &tc : r) {
+    auto it = l->find(tc.first);
+    if (it == l->end()) {
+      (*l)[tc.first] = tc.second;
+    }
+  }
+}
+    
+        // print the header
+    for (auto B = elements.begin(); B != elements.end();) {
+      Out << *B++;
+      if (B != elements.end()) Out << ',';
+    }
+    for (auto B = user_counter_names_.begin(); B != user_counter_names_.end();) {
+      Out << ',\'' << *B++ << '\'';
+    }
+    Out << '\n';
+    
+    #ifdef BENCHMARK_OS_WINDOWS
+#include <Windows.h>
+#endif
