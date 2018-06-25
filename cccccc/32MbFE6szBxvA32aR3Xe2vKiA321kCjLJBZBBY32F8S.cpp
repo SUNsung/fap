@@ -1,216 +1,227 @@
 
         
-        template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36>
-internal::ValueArray36<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32, T33, T34, T35, T36> Values(T1 v1, T2 v2, T3 v3, T4 v4,
-    T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13,
-    T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21,
-    T22 v22, T23 v23, T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29,
-    T30 v30, T31 v31, T32 v32, T33 v33, T34 v34, T35 v35, T36 v36) {
-  return internal::ValueArray36<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36>(v1, v2, v3, v4,
-      v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19,
-      v20, v21, v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32, v33,
-      v34, v35, v36);
+          void set_status(const Status& status) {
+    status_ = status;
+    invoked_.Notify();
+  }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+      // Abort and close all existing sessions, disconnecting their resources from
+  // future sessions.
+  //
+  // Reset() allows misbehaving or slow sessions to be aborted and closed, and
+  // causes their resources eventually to be released.  Reset() does not wait
+  // for the computations in old sessions to cease; it merely starts the
+  // process of tearing them down.  However, if a new session is started after
+  // a Reset(), the new session is isolated from changes that old sessions
+  // (started prior to the Reset()) may continue to make to resources, provided
+  // all those resources are in containers listed in 'containers'.
+  //
+  // Old sessions may continue to have side-effects on resources not in
+  // containers listed in 'containers', and thus may affect future
+  // sessions' results in ways that are hard to predict.  Thus, if well-defined
+  // behavior is desired, is it recommended that all containers be listed in
+  // 'containers'.
+  //
+  // If the 'containers' vector is empty, the default container is assumed.
+  // If the 'containers' vector is non-empty, the default container should be
+  // listed explicitly.
+  //
+  // Sessions that support resource containers should override this function.
+  virtual Status Reset(const SessionOptions& options,
+                       const std::vector<string>& containers) {
+    return errors::Unimplemented('Reset()');
+  }
+    
+    #ifndef TENSORFLOW_COMMON_RUNTIME_SYCL_SYCL_DEVICE_CONTEXT_H_
+#define TENSORFLOW_COMMON_RUNTIME_SYCL_SYCL_DEVICE_CONTEXT_H_
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    
+    {  // Invalid names.
+  EXPECT_FALSE(IsSameAddrSp('random_invalid_target', 'random_invalid_target'));
+  EXPECT_FALSE(IsSameAddrSp('/job:/replica:10/task:10/cpu:0',
+                            '/job:/replica:10/task:10/cpu:1'));
+  EXPECT_FALSE(IsSameAddrSp('/job:mnist/replica:xx/task:10/cpu:0',
+                            '/job:mnist/replica:xx/task:10/cpu:1'));
+  EXPECT_FALSE(IsSameAddrSp('/job:mnist/replica:10/task:yy/cpu:0',
+                            '/job:mnist/replica:10/task:yy/cpu:1'));
 }
     
     
-    {}  // namespace testing
-    
-    // Next, associate a list of types with the test case, which will be
-// repeated for each type in the list.  The typedef is necessary for
-// the macro to parse correctly.
-typedef testing::Types<char, int, unsigned int> MyTypes;
-TYPED_TEST_CASE(FooTest, MyTypes);
-    
-    #if GTEST_OS_WINDOWS
-# define GTEST_PATH_SEP_ '\\'
-# define GTEST_HAS_ALT_PATH_SEP_ 1
-// The biggest signed integer type the compiler supports.
-typedef __int64 BiggestInt;
-#else
-# define GTEST_PATH_SEP_ '/'
-# define GTEST_HAS_ALT_PATH_SEP_ 0
-typedef long long BiggestInt;  // NOLINT
-#endif  // GTEST_OS_WINDOWS
-    
-    // Anything in namespace gtest_internal is Google Test's INTERNAL
-// IMPLEMENTATION DETAIL and MUST NOT BE USED DIRECTLY in user code.
-namespace gtest_internal {
-    }
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30>
-struct Types30 {
-  typedef T1 Head;
-  typedef Types29<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
-      T30> Tail;
-};
-    
-    // Type utilities needed for implementing typed and type-parameterized
-// tests.  This file is generated by a SCRIPT.  DO NOT EDIT BY HAND!
-//
-// Currently we support at most $n types in a list, and at most $n
-// type-parameterized tests in one type-parameterized test case.
-// Please contact googletestframework@googlegroups.com if you need
-// more.
-    
-    // Implementation #1 calculates the primes on-the-fly.
-class OnTheFlyPrimeTable : public PrimeTable {
- public:
-  virtual bool IsPrime(int n) const {
-    if (n <= 1) return false;
-    }
-    }
-    
-    
-    {  return result;
+    {  if (proc_id == 0) LOG(INFO) << 'MPI process-ID to gRPC server name map: \n';
+  for (int i = 0; i < number_of_procs; i++) {
+    name_to_id_[std::string(&worker_names[i * 128])] = i;
+    if (proc_id == 0)
+      LOG(INFO) << 'Process: ' << i
+                << '\tgRPC-name: ' << std::string(&worker_names[i * 128])
+                << std::endl;
+  }
 }
     
-    // This event listener monitors how many Water objects are created and
-// destroyed by each test, and reports a failure if a test leaks some Water
-// objects. It does this by comparing the number of live Water objects at
-// the beginning of a test and at the end of a test.
-class LeakChecker : public EmptyTestEventListener {
- private:
-  // Called before a test starts.
-  virtual void OnTestStart(const TestInfo& /* test_info */) {
-    initially_allocated_ = Water::allocated();
-  }
+      // Given slice 'sub' where 'sub' is fully contained in *this,
+  // (meaning that the intersection of 'sub' and *this equals 'sub'), computes
+  // the 'relative' slice of 'sub' with respect to *this.
+  //
+  // In other words, if we use A>S to denote slicing a shape S with a slice A,
+  // then the function is computing a slice X such that:
+  //   X > (this > S) = sub > S
+  // for any shape S.
+  //
+  // In general, along every dimension, the start of the relative slice is the
+  // start of the 'sub' slice minus the start of *this; the length of the
+  // relative slice is the length of the 'sub' slice.
+  //
+  // For example, say we have a shape of {3, 4, 5}, 'this' is 0,2:-:1,2, and
+  // 'sub' is 1,1:2:2,1,2, then the related slice is 1,1:2,2:0,2.
+  //
+  // The caller needs to make sure that 'sub' is indeed a sub-slice of *this;
+  // otherwise the result is undefined.
+  void ComputeRelative(const TensorSlice& sub, TensorSlice* relative) const;
+    
+    namespace tensorflow {
+#define REGISTER_COMPLEX(D, R, C)                         \
+  REGISTER_KERNEL_BUILDER(Name('Angle')                   \
+                              .Device(DEVICE_##D)         \
+                              .TypeConstraint<C>('T')     \
+                              .TypeConstraint<R>('Tout'), \
+                          UnaryOp<D##Device, functor::get_angle<C>>);
     }
     
-      ts->tv_sec += s_extra_request_nanoseconds / sec_to_ns;
-  auto res = ts->tv_nsec + s_extra_request_nanoseconds % sec_to_ns;
-  if (res > sec_to_ns) {
-    res -= sec_to_ns;
-    ts->tv_sec += 1;
+    #include 'tensorflow/core/kernels/cwise_ops_gpu_common.cu.h'
+    
+    // Adds resource events for a single device.
+void AddResourceMetadata(uint32 device_id,
+                         const std::map<uint32, const Resource *> &resources,
+                         string *json) {
+  for (const auto &pair : resources) {
+    uint32 resource_id = pair.first;
+    const Resource &resource = *pair.second;
+    if (!resource.name().empty()) {
+      Appendf(json,
+              R'({'ph':'M','pid':%u,'tid':%u,)'
+              R'('name':'thread_name','args':{)',
+              device_id, resource_id);
+      AppendEscapedName(json, resource.name());
+      Appendf(json, '}},');
+    }
+    Appendf(json,
+            R'({'ph':'M','pid':%u,'tid':%u,)'
+            R'('name':'thread_sort_index','args':{'sort_index':%u}},)',
+            device_id, resource_id, resource_id);
   }
-  ts->tv_nsec = res;
+}
     
-    #include 'hphp/runtime/vm/hhbc.h'
+    std::vector<float> Classifier::Predict(const cv::Mat& img) {
+  Blob<float>* input_layer = net_->input_blobs()[0];
+  input_layer->Reshape(1, num_channels_,
+                       input_geometry_.height, input_geometry_.width);
+  /* Forward dimension change to all layers. */
+  net_->Reshape();
+    }
     
-      // An integer is constructed from the n, imm_s and imm_r bits according to
-  // the following table:
-  //
-  //  N   imms    immr    size        S             R
-  //  1  ssssss  rrrrrr    64    UInt(ssssss)  UInt(rrrrrr)
-  //  0  0sssss  xrrrrr    32    UInt(sssss)   UInt(rrrrr)
-  //  0  10ssss  xxrrrr    16    UInt(ssss)    UInt(rrrr)
-  //  0  110sss  xxxrrr     8    UInt(sss)     UInt(rrr)
-  //  0  1110ss  xxxxrr     4    UInt(ss)      UInt(rr)
-  //  0  11110s  xxxxxr     2    UInt(s)       UInt(r)
-  // (s bits must not be all set)
-  //
-  // A pattern is constructed of size bits, where the least significant S+1
-  // bits are set. The pattern is rotated right by R, and repeated across a
-  // 32 or 64-bit value, depending on destination register width.
-  //
+      // Open leveldb
+  leveldb::DB* db;
+  leveldb::Options options;
+  options.create_if_missing = true;
+  options.error_if_exists = true;
+  leveldb::Status status = leveldb::DB::Open(
+      options, db_filename, &db);
+  CHECK(status.ok()) << 'Failed to open leveldb ' << db_filename
+      << '. Is it already existing?';
     
-      static FILE *LightPopenImpl(const char *cmd, const char *type,
-                              const char *cwd);
-  static FILE *HeavyPopenImpl(const char *cmd, const char *type,
-                              const char *cwd);
-    
-        memcpy(p, 'free_hugepages', 15);
-    assert(strlen('free_hugepages') == 14); // extra \0 byte
-    free_huge = readNumFrom(fileName);
-    
-    #include <osquery/core.h>
-#include <osquery/filesystem.h>
-#include <osquery/logger.h>
-#include <osquery/tables.h>
+    #include 'caffe/layers/neuron_layer.hpp'
     
     /**
- * @brief Create an osquery extension 'module', if an expression is true.
- *
- * This is a helper testing wrapper around CREATE_MODULE and DECLARE_MODULE.
- * It allows unit and integration tests to generate global construction code
- * that depends on data/variables available during global construction.
- *
- * And example use includes checking if a process environment variable is
- * defined. If defined the module is declared.
+ * @brief Abstract base class that factors out the BLAS code common to
+ *        ConvolutionLayer and DeconvolutionLayer.
  */
-#define CREATE_MODULE_IF(expr, name, version, min_sdk_version)                 \
-  extern 'C' EXPORT_FUNCTION void initModule(void);                            \
-  struct osquery_InternalStructCreateModule {                                  \
-    osquery_InternalStructCreateModule(void) {                                 \
-      if ((expr)) {                                                            \
-        Registry::get().declareModule(                                         \
-            name, version, min_sdk_version, OSQUERY_SDK_VERSION);              \
-      }                                                                        \
-    }                                                                          \
-  };                                                                           \
-  static osquery_InternalStructCreateModule osquery_internal_module_instance_;
-    
-    static int update_user_kernel_buffer(int options,
-                                     size_t read_offset,
-                                     size_t *max_read_offset,
-                                     int *drops) {
-  if (osquery_cqueue_advance_read(
-          &osquery.cqueue, read_offset, max_read_offset)) {
-    return -EINVAL;
-  }
-  if (!(options & OSQUERY_OPTIONS_NO_BLOCK)) {
-    ssize_t offset = 0;
-    if ((offset = osquery_cqueue_wait_for_data(&osquery.cqueue)) < 0) {
-      return -EINVAL;
-    }
-    }
+template <typename Dtype>
+class BaseConvolutionLayer : public Layer<Dtype> {
+ public:
+  explicit BaseConvolutionLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    TEST_F(StatusTests, test_constructor) {
-  auto s = Status(5, 'message');
-  EXPECT_EQ(s.getCode(), 5);
-  EXPECT_EQ(s.getMessage(), 'message');
-}
-    
-      ProcessState checkStatus(int& _status) const {
-    _status = status_;
-    return state_;
-  }
-    
-    /// The shell may request execution of all queries in a pack immediately.
-DECLARE_string(pack);
-    
-      /// Set of paths to monitor, determined by a configure step.
-  std::set<std::string> paths_;
-    
-    
-    {}
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    class ServiceBase {
-  public:
-    virtual ~ServiceBase() {}
-    void DependServices(const TServicesMap& _dependservices) { m_dependservices = _dependservices;}
-    const char* ServiceName() const { return m_servicename.c_str();}
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of ReLULayer.
+ */
+template <typename Dtype>
+class CuDNNReLULayer : public ReLULayer<Dtype> {
+ public:
+  explicit CuDNNReLULayer(const LayerParameter& param)
+      : ReLULayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNReLULayer();
     }
     
-        void Detach(const char* _key) {
-        __OnDetach(_key);
-        m_variablemap.erase(_key);
-    }
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
       private:
-    int __TestFun1(int i);
+    explicit DBWrapper();
+    ~DBWrapper();
     
-    jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const AutoBuffer& ab);
-jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const void* _buffer, size_t _length);
-void JNU_FreeJbyteArray(JNIEnv* _env, jbyteArray bytes);
+    /* Notice extracted from xxHash homepage :
+    
+      // Offset of the file position indicator within the last block when an
+  // EOF was detected.
+  size_t eof_offset_;
+    
+    
+    {
+    {  releaseJniEnv(attached_thread);
+}
+// @lint-ignore TXT4 T25377293 Grandfathered in
+}  // namespace rocksdb
+    
+         using Logger::SetInfoLogLevel;
+     using Logger::GetInfoLogLevel;
+     // Write an entry to the log file with the specified format.
+     virtual void Logv(const char* format, va_list ap);
+     // Write an entry to the log file with the specified log level
+     // and format.  Any log with level under the internal log level
+     // of *this (see @SetInfoLogLevel and @GetInfoLogLevel) will not be
+     // printed.
+     virtual void Logv(const InfoLogLevel log_level,
+         const char* format, va_list ap);
+    
+    DEFINE_FIND_STATIC_METHOD(KXlog_setAppenderMode, KXlog, 'setAppenderMode', '(I)V')
+JNIEXPORT void JNICALL Java_com_tencent_mars_xlog_Xlog_setAppenderMode
+  (JNIEnv *, jclass, jint _mode) {
+	appender_setmode((TAppenderMode)_mode);
+}
+    
+    #endif /* BASEEVENT_INTERFACE_BASEEVENT_H_ */
+
+    
+    
+    
+    
+Test_Spy_Sample::Test_Spy_Sample()
+{
+    SPY_ATTACH_CLASS(NULL);
+}
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
