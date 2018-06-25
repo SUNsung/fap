@@ -1,76 +1,128 @@
 
         
-              # This deletes the block with the given key if it exists.
-      def delete(key)
-        key    = Regexp.quote(key)
-        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$.*^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
-        @value.gsub!(regexp, '')
-      end
-    
-              # Verify the box exists that we want to repackage
-          box = @env.boxes.find(box_name, box_provider, '= #{box_version}')
-          if !box
-            raise Vagrant::Errors::BoxNotFoundWithProviderAndVersion,
-              name: box_name,
-              provider: box_provider.to_s,
-              version: box_version
-          end
-    
-              o.on('--check', 'Only checks for a capability, does not execute') do |f|
-            options[:check] = f
-          end
-        end
-    
-    # A logger that delays messages until they're explicitly flushed to an inner
-# logger.
-#
-# This can be installed around the current logger by calling \{#install!}, and
-# the original logger can be replaced by calling \{#uninstall!}. The log
-# messages can be flushed by calling \{#flush}.
-class Sass::Logger::Delayed < Sass::Logger::Base
-  # Installs a new delayed logger as the current Sass logger, wrapping the
-  # original logger.
-  #
-  # This can be undone by calling \{#uninstall!}.
-  #
-  # @return [Sass::Logger::Delayed] The newly-created logger.
-  def self.install!
-    logger = Sass::Logger::Delayed.new(Sass.logger)
-    Sass.logger = logger
-    logger
-  end
-    
-        # Returns a deep copy of this query list and all its children.
-    #
-    # @return [QueryList]
-    def deep_copy
-      QueryList.new(queries.map {|q| q.deep_copy})
-    end
-  end
-    
-            p environment.var(name)
+              plist_filename = if f.plist
+        f.plist_path.basename
       else
-        p Script::Parser.parse(text, @line, 0).perform(environment)
+        File.basename Dir['#{keg}/*.plist'].first
       end
-    rescue Sass::SyntaxError => e
-      puts 'SyntaxError: #{e.message}'
-      if @options[:trace]
-        e.backtrace.each do |line|
-          puts '\tfrom #{line}'
+      plist_link = '#{destination}/#{plist_filename}'
+      plist_domain = f.plist_path.basename('.plist')
+      destination_path = Pathname.new File.expand_path destination
+      plist_path = destination_path/plist_filename
+    
+        def self.rm_DS_Store
+      paths = Queue.new
+      %w[Cellar Frameworks Library bin etc include lib opt sbin share var].
+        map { |p| HOMEBREW_PREFIX/p }.each { |p| paths << p if p.exist? }
+      workers = (0...Hardware::CPU.cores).map do
+        Thread.new do
+          begin
+            while p = paths.pop(true)
+              quiet_system 'find', p, '-name', '.DS_Store', '-delete'
+            end
+          rescue ThreadError # ignore empty queue error
+          end
         end
       end
+      workers.map(&:join)
+    end
+    
+      def describe_python
+    python = which 'python'
+    return 'N/A' if python.nil?
+    python_binary = Utils.popen_read python, '-c', 'import sys; sys.stdout.write(sys.executable)'
+    python_binary = Pathname.new(python_binary).realpath
+    if python == python_binary
+      python
+    else
+      '#{python} => #{python_binary}'
     end
   end
-end
-
     
-      # Implemented by subclasses to provide default values for settings needed by
-  # this plugin. Typically done using the `set_if_empty` Capistrano DSL method.
-  #
-  # Example:
-  #
-  #   def set_defaults
-  #     set_if_empty :my_plugin_option, true
-  #   end
-  #
-  def set_defaults; end
+        print_remaining_files remaining_root_files, root, other
+  end
+    
+      # Use this method to generate standard caveats.
+  def standard_instructions(home_name, home_value = libexec)
+    <<-EOS.undent
+      Before you can use these tools you must export some variables to your $SHELL.
+    
+              saved = if pending_reconfirmation?
+            skip_reconfirmation!
+            self.email = unconfirmed_email
+            self.unconfirmed_email = nil
+    
+      # GET /resource/password/new
+  def new
+    self.resource = resource_class.new
+  end
+    
+    module RuboCop
+  module Cop
+    class VariableForce
+      # This class represents each assignment of a variable.
+      class Assignment
+        include Branchable
+    
+            def block_argument?
+          argument? && @scope.node.block_type?
+        end
+    
+    module RuboCop
+  module Cop
+    module Lint
+      # This cop checks that there are no repeated conditions
+      # used in case 'when' expressions.
+      #
+      # @example
+      #
+      #   # bad
+      #
+      #   case x
+      #   when 'first'
+      #     do_something
+      #   when 'first'
+      #     do_something_else
+      #   end
+      #
+      # @example
+      #
+      #   # good
+      #
+      #   case x
+      #   when 'first'
+      #     do_something
+      #   when 'second'
+      #     do_something_else
+      #   end
+      class DuplicateCaseCondition < Cop
+        MSG = 'Duplicate `when` condition detected.'.freeze
+    
+            def_node_matcher :multiple_compare?, <<-PATTERN
+          (send (send _ {:< :> :<= :>=} $_) {:< :> :<= :>=} _)
+        PATTERN
+    
+    module RuboCop
+  module Cop
+    module Style
+      # This cop checks for optional arguments to methods
+      # that do not come at the end of the argument list
+      #
+      # @example
+      #   # bad
+      #   def foo(a = 1, b, c)
+      #   end
+      #
+      #   # good
+      #   def baz(a, b, c = 1)
+      #   end
+      #
+      #   def foobar(a = 1, b = 2, c = 3)
+      #   end
+      class OptionalArguments < Cop
+        MSG = 'Optional arguments should appear at the end ' \
+              'of the argument list.'.freeze
+    
+                end
+          RUBY
+        end
