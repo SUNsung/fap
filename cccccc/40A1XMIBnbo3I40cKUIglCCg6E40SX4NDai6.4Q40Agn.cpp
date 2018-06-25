@@ -1,279 +1,218 @@
 
         
-        #include <vector>
-#include <string>
+        bool NwCurrentWindowInternalSetTitleInternalFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  EXTENSION_FUNCTION_VALIDATE(args_);
+  std::string title;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(0, &title));
+  AppWindow* window = getAppWindow(this);
+  window->set_title_override(title);
+  window->GetBaseWindow()->UpdateWindowTitle();
+  return true;
+}
     
-    QueryData genKernelIntegrity(QueryContext &context) {
-  QueryData results;
-  Row r;
-  std::string content;
-  std::string text_segment_hash;
-  std::string syscall_addr_modified;
+    namespace nw {
     }
     
-      mPlatformType = PlatformType::TYPE_OSX | PlatformType::TYPE_POSIX;
-  EXPECT_TRUE(isPlatform(PlatformType::TYPE_POSIX, mPlatformType));
-  EXPECT_TRUE(isPlatform(PlatformType::TYPE_OSX, mPlatformType));
+    namespace content {
+class RenderFrameHost;
+}
     
     
-    {  if (handle) {
-    ::CloseHandle(handle);
+    {}
+    
+     protected:
+  ~NwObjCallObjectMethodFunction() override;
+    
+    
+    {  }
+    
+    NwShellOpenItemFunction::NwShellOpenItemFunction() {
+}
+    
+    
+    {
+    {    Token token;
+    // Accept Comment after last item in the array.
+    ok = readToken(token);
+    while (token.type_ == tokenComment && ok) {
+      ok = readToken(token);
+    }
+    bool badTokenType =
+        (token.type_ != tokenArraySeparator && token.type_ != tokenArrayEnd);
+    if (!ok || badTokenType) {
+      return addErrorAndRecover(
+          'Missing ',' or ']' in array declaration', token, tokenArrayEnd);
+    }
+    if (token.type_ == tokenArrayEnd)
+      break;
   }
-}
-#else
-TEST_F(ProcessTests, test_constructorPosix) {
-  auto p = PlatformProcess(getpid());
-  EXPECT_TRUE(p.isValid());
-  EXPECT_EQ(p.nativeHandle(), getpid());
-}
-#endif
-    
-    TEST_F(StatusTests, test_ok) {
-  auto s1 = Status(5, 'message');
-  EXPECT_FALSE(s1.ok());
-  auto s2 = Status(0, 'message');
-  EXPECT_TRUE(s2.ok());
+  return true;
 }
     
-    namespace osquery {
-    }
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
     
-    bool js_cocos2dx_physics3d_Physics3DHingeConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DHingeConstraint_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DHingeConstraint(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getHingeAngle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_enableAngularMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getUpperLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getLowerLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_enableMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getBFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setAngularOnly(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setMotorTarget(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getAngularOnly(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setAxis(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getAFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_Physics3DHingeConstraint(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    
-    
-    
-    
-    
-    {    mColorLocation = glGetUniformLocation( mShaderProgram->getProgram(), 'u_color');
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
 }
     
     
     {
     {
-    {			if (settings->drawFrictionImpulse == 1)
-			{
-				b2Vec2 tangent = b2Cross(point->normal, 1.0f);
-				b2Vec2 p1 = point->position;
-				b2Vec2 p2 = p1 + k_impulseScale * point->tangentImpulse * tangent;
-				m_debugDraw.DrawSegment(p1, p2, b2Color(0.9f, 0.9f, 0.3f));
-			}
-		}
-	}
-}
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
     
-    	// Callbacks for derived classes.
-	virtual void BeginContact(b2Contact* contact) { B2_NOT_USED(contact); }
-	virtual void EndContact(b2Contact* contact) { B2_NOT_USED(contact); }
-	virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
-	virtual void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
-	{
-		B2_NOT_USED(contact);
-		B2_NOT_USED(impulse);
-	}
+      // Write any attributes used to decorate generated function members (methods and properties).
+  // Should not be used to decorate types.
+  void WriteGeneratedCodeAttributes(io::Printer* printer);
     
-    #endif
-
-    
-    
-    {	b2Body* m_middle;
-};
-    
-    
-    {	b2Body* m_middle;
-};
-    
-    TEST(IOBuf, PullAndPeek) {
-  std::unique_ptr<IOBuf> iobuf1(IOBuf::create(10));
-  append(iobuf1, 'he');
-  std::unique_ptr<IOBuf> iobuf2(IOBuf::create(10));
-  append(iobuf2, 'llo ');
-  std::unique_ptr<IOBuf> iobuf3(IOBuf::create(10));
-  append(iobuf3, 'world');
-  iobuf1->prependChain(std::move(iobuf2));
-  iobuf1->prependChain(std::move(iobuf3));
-  EXPECT_EQ(3, iobuf1->countChainElements());
-  EXPECT_EQ(11, iobuf1->computeChainDataLength());
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+namespace {
+    }
+    }
+    }
+    }
     }
     
-      for (size_t i = 0; i < count - 1; i++) {
-    auto buf2 = IOBuf::create(len + 1);
-    buf2->append(rand() % len + 1);
-    fillBuf(buf2.get(), gen);
-    buf->prependChain(std::move(buf2));
-  }
-  EXPECT_EQ(count, buf->countChainElements());
-    
-    namespace detail {
+    enum RecordType {
+  // Zero is reserved for preallocated files
+  kZeroType = 0,
     }
     
-    class OrderingTest : public testing::Test {};
-    
-    /// Futex<MockAtom> is our mocked futex implementation.  Note that the
-/// method signatures differ from the real Futex because we have elided
-/// unused default params and collapsed templated methods into the
-/// used type
-template <>
-struct Futex<MockAtom> {
-  MOCK_METHOD2(futexWait, FutexResult(uint32_t, uint32_t));
-  MOCK_METHOD3(futexWaitUntil,
-               FutexResult(uint32_t, const MockClock::time_point&, uint32_t));
-};
-    
-    namespace detail {
+    struct FileMetaData {
+  int refs;
+  int allowed_seeks;          // Seeks allowed until compaction
+  uint64_t number;
+  uint64_t file_size;         // File size in bytes
+  InternalKey smallest;       // Smallest internal key served by table
+  InternalKey largest;        // Largest internal key served by table
     }
     
-    #include <folly/Portability.h>
+      ReadOptions read_options;
+  Iterator *iter = db->NewIterator(read_options);
     
-    /**
- *  AtomicHashArray is the building block for AtomicHashMap.  It provides the
- *  core lock-free functionality, but is limited by the fact that it cannot
- *  grow past its initialization size and is a little more awkward (no public
- *  constructor, for example).  If you're confident that you won't run out of
- *  space, don't mind the awkardness, and really need bare-metal performance,
- *  feel free to use AHA directly.
- *
- *  Check out AtomicHashMap.h for more thorough documentation on perf and
- *  general pros and cons relative to other hash maps.
- *
- *  @author Spencer Ahrens <sahrens@fb.com>
- *  @author Jordan DeLong <delong.j@fb.com>
- */
+      memset(buf, 0, sizeof(buf));
+  ASSERT_EQ(0x8a9136aa, Value(buf, sizeof(buf)));
     
+      std::string ToString() const;
     
-unsigned int XXH32_intermediateDigest (void* state);
-/*
-This function does the same as XXH32_digest(), generating a 32-bit hash,
-but preserve memory context.
-This way, it becomes possible to generate intermediate hashes, and then continue feeding data with XXH32_update().
-To free memory context, use XXH32_digest(), or free().
-*/
-    
-        // Compact, Get
-    db->CompactRange(CompactRangeOptions(), nullptr, nullptr);
-    ASSERT_EQ(a, 'x\nt\nr\nsa\ngh\njk');
-    ASSERT_EQ(b, 'y\n2\nmonkey\ndf\nl;');
-    ASSERT_EQ(c, 'asdasd\nasdasd\nbbnagnagsx\nrogosh');
-    
-    class InlineSkipTest : public testing::Test {
+    class SCOPED_LOCKABLE MutexLock {
  public:
-  void Insert(TestInlineSkipList* list, Key key) {
-    char* buf = list->AllocateKey(sizeof(Key));
-    memcpy(buf, &key, sizeof(Key));
-    list->Insert(buf);
-    keys_.insert(key);
+  explicit MutexLock(port::Mutex *mu) EXCLUSIVE_LOCK_FUNCTION(mu)
+      : mu_(mu)  {
+    this->mu_->Lock();
   }
+  ~MutexLock() UNLOCK_FUNCTION() { this->mu_->Unlock(); }
     }
     
-      // call once at the beginning of a test to setup the dependency between
-  // sync points
-  void LoadDependency(const std::vector<SyncPointPair>& dependencies);
-    
-      std::unique_ptr<AuthConfig> getDefaultAuthConfig() const;
-    
-    AbstractHttpServerResponseCommand::AbstractHttpServerResponseCommand(
-    cuid_t cuid, const std::shared_ptr<HttpServer>& httpServer,
-    DownloadEngine* e, const std::shared_ptr<SocketCore>& socket)
-    : Command(cuid),
-      e_(e),
-      socket_(socket),
-      httpServer_(httpServer),
-      readCheck_(false),
-      writeCheck_(true)
-{
-  setStatus(Command::STATUS_ONESHOT_REALTIME);
-  e_->addSocketForWriteCheck(socket_, this);
-}
-    
-    
-    {} // namespace aria2
-    
-    bool AbstractOptionHandler::hasTag(uint32_t tag) const
-{
-  return (tags_ & (1 << tag));
-}
-    
-    class AbstractOptionHandler : public OptionHandler {
-protected:
-  PrefPtr pref_;
+    // A very simple random number generator.  Not especially good at
+// generating truly random bits, but good enough for our needs in this
+// package.
+class Random {
+ private:
+  uint32_t seed_;
+ public:
+  explicit Random(uint32_t s) : seed_(s & 0x7fffffffu) {
+    // Avoid bad seeds.
+    if (seed_ == 0 || seed_ == 2147483647L) {
+      seed_ = 1;
     }
-    
-      /**
-   * Counts the number of tiers to which the 'completed' event can be sent.
-   */
-  size_t countCompletedAllowedTier() const;
-    
-      A2_LOG_ERROR(
-      fmt('Failed to lookup %s in your KeyChain', fingerprint.c_str()));
-  return false;
-    
-    
-    {} // namespace fuzzer
-    
-      // Parse NumFilesInFirstCorpus.
-  if (!std::getline(IS, Line, '\n')) return false;
-  std::istringstream L2(Line);
-  NumFilesInFirstCorpus = NumFiles + 1;
-  L2 >> NumFilesInFirstCorpus;
-  if (NumFilesInFirstCorpus > NumFiles) return false;
-    
-    namespace fuzzer {
-    }
-    
-      void StopTraceRecording() {
-    if (!RecordingMemcmp)
-      return;
-    RecordingMemcmp = false;
-    for (size_t i = 0; i < NumMutations; i++) {
-      auto &M = Mutations[i];
-      if (Options.Verbosity >= 2) {
-        AutoDictUnitCounts[M.W]++;
-        AutoDictAdds++;
-        if ((AutoDictAdds & (AutoDictAdds - 1)) == 0) {
-          typedef std::pair<size_t, Word> CU;
-          std::vector<CU> CountedUnits;
-          for (auto &I : AutoDictUnitCounts)
-            CountedUnits.push_back(std::make_pair(I.second, I.first));
-          std::sort(CountedUnits.begin(), CountedUnits.end(),
-                    [](const CU &a, const CU &b) { return a.first > b.first; });
-          Printf('AutoDict:\n');
-          for (auto &I : CountedUnits) {
-            Printf('   %zd ', I.first);
-            PrintASCII(I.second.data(), I.second.size());
-            Printf('\n');
-          }
-        }
-      }
-      MD.AddWordToAutoDictionary({M.W, M.Pos});
-    }
-    for (auto &W : InterestingWords)
-      MD.AddWordToAutoDictionary({W});
   }
+  uint32_t Next() {
+    static const uint32_t M = 2147483647L;   // 2^31-1
+    static const uint64_t A = 16807;  // bits 14, 8, 7, 5, 2, 1, 0
+    // We are computing
+    //       seed_ = (seed_ * A) % M,    where M = 2^31-1
+    //
+    // seed_ must not be zero or M, or else all subsequent computed values
+    // will be zero or M respectively.  For all other values, seed_ will end
+    // up cycling through every number in [1,M-1]
+    uint64_t product = seed_ * A;
+    }
+    }
+    
+      // Format the header
+  char buf[kHeaderSize];
+  buf[4] = static_cast<char>(n & 0xff);
+  buf[5] = static_cast<char>(n >> 8);
+  buf[6] = static_cast<char>(t);
+    
+    
+    
+    
+    
+    #ifndef APPLY_FORCE_H
+#define APPLY_FORCE_H
+    
+    		if (b2_toiCalls > 0)
+		{
+			m_debugDraw.DrawString(5, m_textLine, 'toi calls = %d, ave toi iters = %3.1f, max toi iters = %d',
+				b2_toiCalls, b2_toiIters / float32(b2_toiCalls), b2_toiMaxRootIters);
+			m_textLine += DRAW_STRING_NEW_LINE;
+    }
+    
+    //---- Don't implement some functions to reduce linkage requirements.
+//#define IMGUI_DISABLE_WIN32_DEFAULT_CLIPBOARD_FUNCTIONS   // [Win32] Don't implement default clipboard handler. Won't use and link with OpenClipboard/GetClipboardData/CloseClipboard etc.
+//#define IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS         // [Win32] Don't implement default IME handler. Won't use and link with ImmGetContext/ImmSetCompositionWindow.
+//#define IMGUI_DISABLE_FORMAT_STRING_FUNCTIONS             // Don't implement ImFormatString/ImFormatStringV so you can implement them yourself if you don't want to link with vsnprintf.
+//#define IMGUI_DISABLE_MATH_FUNCTIONS                      // Don't implement ImFabs/ImSqrt/ImPow/ImFmod/ImCos/ImSin/ImAcos/ImAtan2 wrapper so you can implement them yourself. Declare your prototypes in imconfig.h.
+//#define IMGUI_DISABLE_DEFAULT_ALLOCATORS                  // Don't implement default allocators calling malloc()/free(). You will need to call ImGui::SetAllocatorFunctions().
+    
+        // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
+    // If you would like to use this DX11 sample code but remove this dependency you can: 
+    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
+    //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL. 
+    // See https://github.com/ocornut/imgui/pull/638 for sources and details.
+    
+        my_display_code();
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+                ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our windows open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
+    
+        // Upload texture to graphics system
+    g_FontTexture = new CIwTexture();
+    g_FontTexture->SetModifiable(true);
+    CIwImage& image = g_FontTexture->GetImage();
+    image.SetFormat(CIwImage::ARGB_8888);
+    image.SetWidth(width);
+    image.SetHeight(height);
+    image.SetBuffers();                                    // allocates and own buffers
+    image.ReadTexels(pixels);
+    g_FontTexture->SetMipMapping(false);
+    g_FontTexture->SetFiltering(false);
+    g_FontTexture->Upload();
