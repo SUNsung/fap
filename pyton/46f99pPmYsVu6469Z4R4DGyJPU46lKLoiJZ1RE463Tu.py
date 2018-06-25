@@ -1,53 +1,60 @@
 
         
-            def test_no_duplicated_ie_names(self):
-        name_accu = collections.defaultdict(list)
-        for ie in self.ies:
-            name_accu[ie.IE_NAME.lower()].append(type(ie).__name__)
-        for (ie_name, ie_list) in name_accu.items():
-            self.assertEqual(
-                len(ie_list), 1,
-                'Multiple extractors with the same IE_NAME '%s' (%s)' % (ie_name, ', '.join(ie_list)))
+        
+if __name__ == '__main__':
+    main(sys.argv[1:])
+
     
-            duration = parse_duration(self._search_regex(
-            r'<b>Duration:</b> (?:<q itemprop='duration'>)?(\d+:\d+)', webpage, 'duration', fatal=False))
-        view_count = int_or_none(self._html_search_regex(
-            r'<b>Views:</b> (\d+)', webpage, 'view count', fatal=False))
+    import re
     
-        '''
-    return path.replace('\\', '\\\\\\')
+            self.assertEquals(result, expected)
+
     
     
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
+print('\n# ======================================================================')
+print('#                   Calculating pi, 10000 iterations')
+print('# ======================================================================\n')
+    
+    class TZInfo:
+    def __init__(self, transitions, type_indices, ttis, abbrs):
+        self.transitions = transitions
+        self.type_indices = type_indices
+        self.ttis = ttis
+        self.abbrs = abbrs
     
     
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
+def triplet_to_brightness(rgbtuple):
+    # return the brightness (grey level) along the scale 0.0==black to
+    # 1.0==white
+    r = 0.299
+    g = 0.587
+    b = 0.114
+    return r*rgbtuple[0] + g*rgbtuple[1] + b*rgbtuple[2]
     
-    sessions.add_argument(
-    '--session',
-    metavar='SESSION_NAME_OR_PATH',
-    type=session_name_validator,
-    help='''
-    Create, or reuse and update a session. Within a session, custom headers,
-    auth credential, as well as any cookies sent by the server persist between
-    requests.
+            with patch as m:
+            m.return_value.modify = unittest.mock.Mock(
+                side_effect=ZeroDivisionError)
+            s = self.SELECTOR()
+            self.addCleanup(s.close)
+            rd, wr = self.make_socketpair()
+            s.register(rd, selectors.EVENT_READ)
+            self.assertEqual(len(s._map), 1)
+            with self.assertRaises(ZeroDivisionError):
+                s.modify(rd, selectors.EVENT_WRITE)
+            self.assertEqual(len(s._map), 0)
     
-    # FIXME:
-# We test against a local httpbin instance which uses a self-signed cert.
-# Requests without --verify=<CA_BUNDLE> will fail with a verification error.
-# See: https://github.com/kevin1024/pytest-httpbin#https-support
-CA_BUNDLE = pytest_httpbin.certs.where()
+        def _guess_media_encoding(self, source):
+        info = source.byteStream.info()
+        if 'Content-Type' in info:
+            for param in info.getplist():
+                if param.startswith('charset='):
+                    return param.split('=', 1)[1].lower()
     
-    
-class SessionNameValidator(object):
+    @dataclasses.dataclass
+class IV:
+    T_IV4 = dataclasses.InitVar
+    iv0: dataclasses.InitVar[int]
+    iv1: dataclasses.InitVar
+    iv2: T_IV2
+    iv3: T_IV3
+    not_iv4: T_IV4  # When using string annotations, this field is not recognized as an InitVar.
