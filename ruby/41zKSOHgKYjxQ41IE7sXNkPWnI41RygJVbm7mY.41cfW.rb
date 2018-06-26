@@ -1,123 +1,201 @@
 
         
-            def test_accept_run_command_multiple_times
-      Timeout.timeout(TIMEOUT) do
-        assert_match(/^ready/,@worker_out.gets)
-        @worker_in.puts 'run #{TESTS}/ptest_first.rb test'
-        assert_match(/^okay/,@worker_out.gets)
-        assert_match(/^record/,@worker_out.gets)
-        assert_match(/^p/,@worker_out.gets)
-        assert_match(/^done/,@worker_out.gets)
-        assert_match(/^ready/,@worker_out.gets)
-        @worker_in.puts 'run #{TESTS}/ptest_second.rb test'
-        assert_match(/^okay/,@worker_out.gets)
-        assert_match(/^record/,@worker_out.gets)
-        assert_match(/^p/,@worker_out.gets)
-        assert_match(/^done/,@worker_out.gets)
-        assert_match(/^record/,@worker_out.gets)
-        assert_match(/^p/,@worker_out.gets)
-        assert_match(/^done/,@worker_out.gets)
-        assert_match(/^ready/,@worker_out.gets)
+              it 'splits correctly' do
+        expected = ['One', 'Two', 'Three', 'Four Token']
+        expect(generator.split_keywords(keywords)).to eq(expected)
       end
     end
     
-        def gen_random(n)
-      ret = Random.urandom(1)
-      if ret.nil?
-        begin
-          require 'openssl'
-        rescue NoMethodError
-          raise NotImplementedError, 'No random device'
-        else
-          @rng_chooser.synchronize do
-            class << self
-              remove_method :gen_random
-              alias gen_random gen_random_openssl
-            end
-          end
-          return gen_random(n)
-        end
-      else
-        @rng_chooser.synchronize do
-          class << self
-            remove_method :gen_random
-            alias gen_random gen_random_urandom
-          end
-        end
-        return gen_random(n)
+          it 'prefers a custom version number over a boring version bump' do
+        Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number(version_number: '1.77.3', bump_type: 'major')
+        end').runner.execute(:test)
+    
+        if registration
+      u2f.authenticate!(challenges, response, Base64.decode64(registration.public_key), registration.counter)
+      registration.update(counter: response.counter)
+      true
+    end
+  rescue JSON::ParserError, NoMethodError, ArgumentError, U2F::Error
+    false
+  end
+end
+
+    
+      # Check if there is no signed in user before doing the sign out.
+  #
+  # If there is no signed in user, it will set the flash message and redirect
+  # to the after_sign_out path.
+  def verify_signed_out_user
+    if all_signed_out?
+      set_flash_message! :notice, :already_signed_out
+    
+    if defined?(ActionMailer)
+  class Devise::Mailer < Devise.parent_mailer.constantize
+    include Devise::Mailers::Helpers
+    
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
       end
+    
+          private
+    
+        # Returns a deep copy of this query list and all its children.
+    #
+    # @return [QueryList]
+    def deep_copy
+      QueryList.new(queries.map {|q| q.deep_copy})
+    end
+  end
+    
+        def self.run
+      # Apparently there's no better way than this to add Sass
+      # to Merb's Rack stack.
+      Merb::Config[:app] = Sass::Plugin::Rack.new(Merb::Config[:app])
+    end
+  end
+end
+
+    
+        # @see Node#deep_copy
+    def deep_copy
+      node = dup
+      node.instance_variable_set('@before', @before.deep_copy) if @before
+      node.instance_variable_set('@mid', @mid.deep_copy)
+      node.instance_variable_set('@after', @after.deep_copy) if @after
+      node
     end
     
-        def initialize
-    end
-    
-          it 'does not allow any other additional option' do
-        lambda { 'İS'.downcase(:lithuanian, :ascii) }.should raise_error(ArgumentError)
-      end
-    end
-    
-            def self.options
-          [[
-            '--all', 'Remove all the cached pods without asking'
-          ]].concat(super)
+            def on_array(node)
+          process(node, '%i', '%I', '%w', '%W')
         end
     
-          def actual_path
-        $PROGRAM_NAME
+            private
+    
+                      def do_something
+                  end
+    
+              expect(new_source)
+            .to eq('#{prefix}#{open}#{a}, # a\n#{b},#{close} # b\n#{suffix}')
+        end
       end
     end
   end
 end
 
     
-          # @param  [Xcodeproj::Project] project
-      #         The xcode project to generate a podfile for.
+          # The body of the method definition.
       #
-      # @return [String] the text of the Podfile for the provided project
+      # @note this can be either a `begin` node, if the method body contains
+      #       multiple expressions, or any other node, if it contains a single
+      #       expression.
       #
-      def podfile_template(project)
-        podfile = ''
-        podfile << 'project '#{@project_path}'\n\n' if @project_path
-        podfile << <<-PLATFORM.strip_heredoc
-          # Uncomment the next line to define a global platform for your project
-          # platform :ios, '9.0'
-        PLATFORM
-    
-            TEMPLATE_REPO = 'https://github.com/CocoaPods/pod-template.git'.freeze
-        TEMPLATE_INFO_URL = 'https://github.com/CocoaPods/pod-template'.freeze
-        CREATE_NEW_POD_INFO_URL = 'http://guides.cocoapods.org/making/making-a-cocoapod'.freeze
-    
-          def self.options
-        [
-          ['--update', 'Run `pod repo update` before listing'],
-          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
-        ].concat(super)
+      # @return [Node] the body of the method definition
+      def body
+        node_parts[0]
       end
     
-          super
-    end
-    
-      # Extracts raw content DIV from template, used for page description as {{ content }}
-  # contains complete sub-template code on main page level
-  def raw_content(input)
-    /<div class='entry-content'>(?<content>[\s\S]*?)<\/div>\s*<(footer|\/article)>/ =~ input
-    return (content.nil?) ? input : content
-  end
-    
-    
-    
-        # Same as to_s
-    def inspect
-      to_s
-    end
-    
-            Paperclip::Validators.constants.each do |constant|
-          if constant.to_s =~ /\AAttachment(.+)Validator\z/
-            validator_kind = $1.underscore.to_sym
-    
-          def check_validity!
-        unless options.has_key?(:content_type) || options.has_key?(:not)
-          raise ArgumentError, 'You must pass in either :content_type or :not to the validator'
+        if as == :json
+      if api_error?(data)
+        data = generate_error_hash(data)
+      else
+        selected_fields = extract_fields(filter.to_s.strip)
+        data.select! { |k,v| selected_fields.include?(k) } unless selected_fields.empty?
+        unless options.include?(:exclude_default_metadata)
+          data = data.to_hash
+          if data.values.size == 0 && selected_fields.size > 0
+            raise LogStash::Api::NotFoundError
+          end
+          data = default_metadata.merge(data)
         end
       end
+    
+        i0, s0 = index, []
+    if has_terminal?('-', false, index)
+      r2 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      @index += 1
+    else
+      terminal_parse_failure('-')
+      r2 = nil
+    end
+    if r2
+      r1 = r2
+    else
+      r1 = instantiate_node(SyntaxNode,input, index...index)
+    end
+    s0 << r1
+    if r1
+      s3, i3 = [], index
+      loop do
+        if has_terminal?('\G[0-9]', true, index)
+          r4 = true
+          @index += 1
+        else
+          r4 = nil
+        end
+        if r4
+          s3 << r4
+        else
+          break
+        end
+      end
+      if s3.empty?
+        @index = i3
+        r3 = nil
+      else
+        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+      end
+      s0 << r3
+      if r3
+        i6, s6 = index, []
+        if has_terminal?('.', false, index)
+          r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          @index += 1
+        else
+          terminal_parse_failure('.')
+          r7 = nil
+        end
+        s6 << r7
+        if r7
+          s8, i8 = [], index
+          loop do
+            if has_terminal?('\G[0-9]', true, index)
+              r9 = true
+              @index += 1
+            else
+              r9 = nil
+            end
+            if r9
+              s8 << r9
+            else
+              break
+            end
+          end
+          r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
+          s6 << r8
+        end
+        if s6.last
+          r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
+          r6.extend(Number0)
+        else
+          @index = i6
+          r6 = nil
+        end
+        if r6
+          r5 = r6
+        else
+          r5 = instantiate_node(SyntaxNode,input, index...index)
+        end
+        s0 << r5
+      end
+    end
+    if s0.last
+      r0 = instantiate_node(LogStash::Config::AST::Number,input, i0...index, s0)
+      r0.extend(Number1)
+    else
+      @index = i0
+      r0 = nil
     end
