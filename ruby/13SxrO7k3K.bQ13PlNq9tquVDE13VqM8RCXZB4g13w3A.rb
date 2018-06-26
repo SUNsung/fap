@@ -1,29 +1,36 @@
 
         
-                    # Register the handler if this is our first callback.
-            Signal.trap('INT') { fire_callbacks } if registered.length == 1
-          end
+          if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
+    
+        on :fetch_private_key do |diaspora_id|
+      key = Person.where(diaspora_handle: diaspora_id).joins(:owner).pluck(:serialized_private_key).first
+      OpenSSL::PKey::RSA.new(key) unless key.nil?
+    end
+    
+        # Loops through the list of category pages and processes each one.
+    def write_category_indexes
+      if self.layouts.key? 'category_index'
+        dir = self.config['category_dir'] || 'categories'
+        self.categories.keys.each do |category|
+          self.write_category_index(File.join(dir, category.to_url), category)
         end
     
-          def merge!(other)
-        other.each do |key, value|
-          self[convert_key(key)] = value
-        end
-        self
-      end
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
     
-          # This deletes the block with the given key if it exists.
-      def delete(key)
-        key    = Regexp.quote(key)
-        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$.*^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
-        @value.gsub!(regexp, '')
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
       end
-    
-              # Verify the box exists that we want to repackage
-          box = @env.boxes.find(box_name, box_provider, '= #{box_version}')
-          if !box
-            raise Vagrant::Errors::BoxNotFoundWithProviderAndVersion,
-              name: box_name,
-              provider: box_provider.to_s,
-              version: box_version
-          end
+      super
+    end
