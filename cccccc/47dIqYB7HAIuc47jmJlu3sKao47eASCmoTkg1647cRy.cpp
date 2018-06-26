@@ -1,159 +1,196 @@
 
         
-        
-    { private:
-  std::unordered_set<string> debug_urls_;
-};
-    
-    // A pass which performs constant folding in order to avoid unnecessary
-// computation on constants.
-class HloConstantFolding : public HloPassInterface {
- public:
-  tensorflow::StringPiece name() const override { return 'constant_folding'; }
-    }
-    
-    namespace tensorflow {
-namespace port {
-    }
-    }
-    
-    
-    {}  // namespace tensorflow
-#endif  // TENSORFLOW_USE_SYCL
-
-    
-    namespace tensorflow {
-    }
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    // Declare here, so we don't need a public header.
-Status RemoveDevice(const GraphDef& input_graph_def,
-                    const TransformFuncContext& context,
-                    GraphDef* output_graph_def);
-    
-    string TraceEventsToJson(const Trace &trace) {
-  string json;
-  Appendf(&json,
-          R'({'displayTimeUnit':'ns','metadata':{'highres-ticks':true},)');
-  Appendf(&json,
-          R'('traceEvents':[)');
-  // Convert to a std::map so that devices are sorted by the device id.
-  std::map<uint32, const Device *> sorted_devices;
-  for (const auto &pair : trace.devices()) {
-    sorted_devices[pair.first] = &pair.second;
-  }
-  AddDeviceMetadata(sorted_devices, &json);
-  for (const TraceEvent &event : trace.trace_events()) {
-    AddTraceEvent(event, &json);
-  }
-  // Add one fake event to avoid dealing with no-trailing-comma rule.
-  Appendf(&json, R'({}]})');
-  return json;
+        // Tests that GetEncodingAsString returns the right result for a trivial
+// unicharset.
+TEST_F(UnicharcompressTest, GetEncodingAsString) {
+  LoadUnicharset('trivial.unicharset');
+  ExpectCorrect('trivial');
+  STRING encoding = compressed_.GetEncodingAsString(unicharset_);
+  string encoding_str(&encoding[0], encoding.length());
+  std::vector<string> lines =
+      strings::Split(encoding_str, '\n', strings::SkipEmpty());
+  EXPECT_EQ(5, lines.size());
+  // The first line is always space.
+  EXPECT_EQ('0\t ', lines[0]);
+  // Next we have i.
+  EXPECT_EQ('1\ti', lines[1]);
+  // Next we have f.
+  EXPECT_EQ('2\tf', lines[2]);
+  // Next we have the fi ligature: ﬁ. There are no nulls in it, as there are no
+  // repeated letter ligatures in this unicharset, unlike por.unicharset above.
+  EXPECT_EQ('2,1\tﬁ', lines[3]);
+  // Finally the null character.
+  EXPECT_EQ('3\t<nul>', lines[4]);
 }
     
-    // The 'type' argument identifying a relauncher process ('--type=relauncher').
-extern const CharType* kRelauncherTypeArg;
+      /**
+   * Moves the iterator to the beginning of the text line.
+   * This class implements this functionality by moving it to the zero indexed
+   * blob of the first (leftmost) word of the row.
+   */
+  virtual void RestartRow();
     
-    int g_suppress_level = 0;
+      STRING ToString() const;
     
-    #ifndef ATOM_BROWSER_WINDOW_LIST_OBSERVER_H_
-#define ATOM_BROWSER_WINDOW_LIST_OBSERVER_H_
+    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
+static const int kHeaderSize = 4 + 2 + 1;
     
-    #ifndef ATOM_COMMON_API_REMOTE_CALLBACK_FREER_H_
-#define ATOM_COMMON_API_REMOTE_CALLBACK_FREER_H_
-#include 'atom/common/api/object_life_monitor.h'
-#include 'content/public/browser/web_contents_observer.h'
+      static Status InsertInto(const WriteBatch* batch, MemTable* memtable);
     
-      base::Lock mutex_;  // Protects the two members below.
-  // Whether one request to FetchMonitorFromWidget() has been made already.
-  bool request_sent_;
-  // The native display ID for the RenderFrameHost.
-  CGDirectDisplayID display_id_;
+    // Test for issue 178: a manual compaction causes deleted data to reappear.
+#include <iostream>
+#include <sstream>
+#include <cstdlib>
+    
+      WriteOptions write_options;
+  ASSERT_OK(db->Put(write_options, '1', 'b'));
+  ASSERT_OK(db->Put(write_options, '2', 'c'));
+  ASSERT_OK(db->Put(write_options, '3', 'd'));
+  ASSERT_OK(db->Put(write_options, '4', 'e'));
+  ASSERT_OK(db->Put(write_options, '5', 'f'));
+    
+    void BlockBuilder::Add(const Slice& key, const Slice& value) {
+  Slice last_key_piece(last_key_);
+  assert(!finished_);
+  assert(counter_ <= options_->block_restart_interval);
+  assert(buffer_.empty() // No values yet?
+         || options_->comparator->Compare(key, last_key_piece) > 0);
+  size_t shared = 0;
+  if (counter_ < options_->block_restart_interval) {
+    // See how much sharing to do with previous string
+    const size_t min_length = std::min(last_key_piece.size(), key.size());
+    while ((shared < min_length) && (last_key_piece[shared] == key[shared])) {
+      shared++;
+    }
+  } else {
+    // Restart compression
+    restarts_.push_back(buffer_.size());
+    counter_ = 0;
+  }
+  const size_t non_shared = key.size() - shared;
+    }
     
     
-    {  // We declare (but don't implement) this to prevent the compiler
-  // from implementing the assignment operator.
-  void operator=(const Message&);
+    { private:
+  const FilterPolicy* policy_;
+  const char* data_;    // Pointer to filter data (at block-start)
+  const char* offset_;  // Pointer to beginning of offset array (at block-end)
+  size_t num_;          // Number of entries in offset array
+  size_t base_lg_;      // Encoding parameter (see kFilterBaseLg in .cc file)
 };
     
-    // A copyable object representing the result of a test part (i.e. an
-// assertion or an explicit FAIL(), ADD_FAILURE(), or SUCCESS()).
-//
-// Don't inherit from TestPartResult as its destructor is not virtual.
-class GTEST_API_ TestPartResult {
- public:
-  // The possible outcomes of a test part (i.e. an assertion or an
-  // explicit SUCCEED(), FAIL(), or ADD_FAILURE()).
-  enum Type {
-    kSuccess,          // Succeeded.
-    kNonFatalFailure,  // Failed but the test can continue.
-    kFatalFailure      // Failed and the test should be terminated.
+      // Check third filter (empty)
+  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'foo'));
+  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'bar'));
+  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'box'));
+  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'hello'));
+    
+    #include 'leveldb/env.h'
+#include 'port/port.h'
+#include 'table/block.h'
+#include 'util/coding.h'
+#include 'util/crc32c.h'
+    
+    TEST(HASH, SignedUnsignedIssue) {
+  const unsigned char data1[1] = {0x62};
+  const unsigned char data2[2] = {0xc3, 0x97};
+  const unsigned char data3[3] = {0xe2, 0x99, 0xa5};
+  const unsigned char data4[4] = {0xe1, 0x80, 0xb9, 0x32};
+  const unsigned char data5[48] = {
+    0x01, 0xc0, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x14, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x04, 0x00,
+    0x00, 0x00, 0x00, 0x14,
+    0x00, 0x00, 0x00, 0x18,
+    0x28, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x02, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
   };
     }
     
-     private:
-  // Appends the contents of message to message_.
-  void AppendMessage(const Message& a_message) {
-    if (message_.get() == NULL)
-      message_.reset(new ::std::string);
-    message_->append(a_message.GetString().c_str());
-  }
+      // When user keys are different, but correctly ordered
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('hello', 200, kTypeValue)));
     
-    // DeathTest is a class that hides much of the complexity of the
-// GTEST_DEATH_TEST_ macro.  It is abstract; its static Create method
-// returns a concrete class that depends on the prevailing death test
-// style, as defined by the --gtest_death_test_style and/or
-// --gtest_internal_run_death_test flags.
+    static void Usage() {
+  fprintf(
+      stderr,
+      'Usage: leveldbutil command...\n'
+      '   dump files...         -- dump contents of specified files\n'
+      );
+}
     
-    #include <ctype.h>
-#include <float.h>
-#include <string.h>
-#include <iomanip>
-#include <limits>
-#include <set>
+    Writer::Writer(WritableFile* dest, uint64_t dest_length)
+    : dest_(dest), block_offset_(dest_length % kBlockSize) {
+  InitTypeCrc(type_crc_);
+}
     
+      // REQUIRES: Finish() has not been called since the last call to Reset().
+  // REQUIRES: key is larger than any previously added key
+  void Add(const Slice& key, const Slice& value);
     
-    { private:
-  linked_ptr<const ParamGeneratorInterface<T> > impl_;
-};
+    // Standard library components can't be forward declared, so we'll have to
+// include the array header. Fortunately, it's fairly lightweight and doesn't
+// add significantly to the compile time.
+#if defined(BOOST_ASIO_HAS_STD_ARRAY)
+# include <array>
+#endif // defined(BOOST_ASIO_HAS_STD_ARRAY)
     
+    #if !defined(BOOST_ASIO_HAS_THREADS) \
+  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
+# include <boost/asio/detail/null_fenced_block.hpp>
+#elif defined(__MACH__) && defined(__APPLE__)
+# include <boost/asio/detail/macos_fenced_block.hpp>
+#elif defined(__sun)
+# include <boost/asio/detail/solaris_fenced_block.hpp>
+#elif defined(__GNUC__) && defined(__arm__) \
+  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
+# include <boost/asio/detail/gcc_arm_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
+# include <boost/asio/detail/gcc_hppa_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+# include <boost/asio/detail/gcc_x86_fenced_block.hpp>
+#elif defined(__GNUC__) \
+  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
+# include <boost/asio/detail/gcc_sync_fenced_block.hpp>
+#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+# include <boost/asio/detail/win_fenced_block.hpp>
+#else
+# include <boost/asio/detail/null_fenced_block.hpp>
+#endif
     
-    {
-]]
-}  // namespace gtest_internal
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
     
+    #include <boost/asio/detail/push_options.hpp>
     
-    {
-    {    return -1;
-  }
-};
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
     
-    // We will track memory used by this class.
-class Water {
- public:
-  // Normal Water declarations go here.
+    #ifdef ANDROID
+#include 'comm/android/callstack.h'
+#endif
+    
+        if (touch_times_.size() <= count_) {
+        touch_times_.push_back(now);
+        return true;
     }
     
-      ClientConfig client_config;
-  client_config.set_client_type(SYNC_CLIENT);
-  client_config.set_outstanding_rpcs_per_channel(1);
-  client_config.set_client_channels(1);
-  client_config.set_rpc_type(UNARY);
-  client_config.mutable_load_params()->mutable_closed_loop();
+      private:
+    CommFrequencyLimit(CommFrequencyLimit&);
+    CommFrequencyLimit& operator=(CommFrequencyLimit&);
     
-    #include <string>
-#include <vector>
-    
-    namespace grpc {
-namespace {
-    }
-    }
-    
-    #endif  // TEST_QPS_TIMER_H
-
-    
-      grpc::Status GetGauge(ServerContext* context, const GaugeRequest* request,
-                        GaugeResponse* response) override;
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
