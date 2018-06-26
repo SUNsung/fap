@@ -1,128 +1,156 @@
 
         
-        #endif  // ATOM_BROWSER_RELAUNCHER_H_
-
-    
-    bool IsUnresponsiveEventSuppressed() {
-  return g_suppress_level > 0;
+        void Timer::GetRealtimeTime(timespec &ts) {
+  gettime(CLOCK_REALTIME, &ts);
 }
     
-    #endif  // ATOM_BROWSER_WINDOW_LIST_OBSERVER_H_
-
-    
-    #ifndef CHROME_BROWSER_EXTENSIONS_GLOBAL_SHORTCUT_LISTENER_H_
-#define CHROME_BROWSER_EXTENSIONS_GLOBAL_SHORTCUT_LISTENER_H_
-    
-        TableBuilder* builder = new TableBuilder(options, file);
-    meta->smallest.DecodeFrom(iter->key());
-    for (; iter->Valid(); iter->Next()) {
-      Slice key = iter->key();
-      meta->largest.DecodeFrom(key);
-      builder->Add(key, iter->value());
+    template<typename T>
+inline void
+emitTLSLoad(Vout& v, TLSDatum<ThreadLocalNoCheck<T>> datum, Vreg d) {
+  // We don't know for sure what's live.
+  PhysRegSaver(v, abi().gpUnreserved - abi().calleeSaved);
     }
     
-      DBIter(DBImpl* db, const Comparator* cmp, Iterator* iter, SequenceNumber s,
-         uint32_t seed)
-      : db_(db),
-        user_comparator_(cmp),
-        iter_(iter),
-        sequence_(s),
-        direction_(kForward),
-        valid_(false),
-        rnd_(seed),
-        bytes_counter_(RandomPeriod()) {
-  }
-  virtual ~DBIter() {
-    delete iter_;
-  }
-  virtual bool Valid() const { return valid_; }
-  virtual Slice key() const {
-    assert(valid_);
-    return (direction_ == kForward) ? ExtractUserKey(iter_->key()) : saved_key_;
-  }
-  virtual Slice value() const {
-    assert(valid_);
-    return (direction_ == kForward) ? iter_->value() : saved_value_;
-  }
-  virtual Status status() const {
-    if (status_.ok()) {
-      return iter_->status();
-    } else {
-      return status_;
-    }
+    Vlabel Vunit::makeScratchBlock() {
+  return makeBlock(AreaIndex::Main, 1);
+}
+    
+    void initNuma();
+    
+      void setFrontier(Address addr) {
+    assertx(m_base <= addr && addr <= (m_base + m_size));
+    m_frontier = addr;
   }
     
-    // Return a new iterator that converts internal keys (yielded by
-// '*internal_iter') that were live at the specified 'sequence' number
-// into appropriate user keys.
-extern Iterator* NewDBIterator(
-    DBImpl* db,
-    const Comparator* user_key_comparator,
-    Iterator* internal_iter,
-    SequenceNumber sequence,
-    uint32_t seed);
     
-    TEST(FormatTest, InternalKey_EncodeDecode) {
-  const char* keys[] = { '', 'k', 'hello', 'longggggggggggggggggggggg' };
-  const uint64_t seq[] = {
-    1, 2, 3,
-    (1ull << 8) - 1, 1ull << 8, (1ull << 8) + 1,
-    (1ull << 16) - 1, 1ull << 16, (1ull << 16) + 1,
-    (1ull << 32) - 1, 1ull << 32, (1ull << 32) + 1
-  };
-  for (int k = 0; k < sizeof(keys) / sizeof(keys[0]); k++) {
-    for (int s = 0; s < sizeof(seq) / sizeof(seq[0]); s++) {
-      TestKey(keys[k], seq[s], kTypeValue);
-      TestKey('hello', 1, kTypeDeletion);
-    }
+void Instruction::SetImmPCOffsetTarget(Instruction* target,
+                                       Instruction* from) {
+  auto adjusted_target = !from ? target : target + (int64_t)(this - from);
+  if (IsPCRelAddressing()) {
+    SetPCRelImmTarget(adjusted_target);
+  } else if (IsLoadOrStore()) {
+    SetPCRelLoadStoreTarget(adjusted_target);
+  } else {
+    SetBranchImmTarget(adjusted_target);
   }
 }
     
-    // Notified when log reader encounters corruption.
-class CorruptionReporter : public log::Reader::Reporter {
- public:
-  WritableFile* dst_;
-  virtual void Corruption(size_t bytes, const Status& status) {
-    std::string r = 'corruption: ';
-    AppendNumberTo(&r, bytes);
-    r += ' bytes; ';
-    r += status.ToString();
-    r.push_back('\n');
-    dst_->Append(r);
-  }
+    /*!
+ * \brief Registry entry for tree updater.
+ */
+struct GradientBoosterReg
+    : public dmlc::FunctionRegEntryBase<
+  GradientBoosterReg,
+  std::function<GradientBooster* (const std::vector<std::shared_ptr<DMatrix> > &cached_mats,
+                                  bst_float base_margin)> > {
 };
     
-          case kPrevLogNumber:
-        if (GetVarint64(&input, &prev_log_number_)) {
-          has_prev_log_number_ = true;
-        } else {
-          msg = 'previous log number';
-        }
-        break;
+    // implementing configure.
+template<typename PairIter>
+inline void Learner::Configure(PairIter begin, PairIter end) {
+  std::vector<std::pair<std::string, std::string> > vec(begin, end);
+  this->Configure(vec);
+}
     
-      typedef std::set< std::pair<int, uint64_t> > DeletedFileSet;
+      // extend the unique path
+  PathElement *unique_path = parent_unique_path + unique_depth + 1;
+  std::copy(parent_unique_path, parent_unique_path + unique_depth + 1, unique_path);
     
-    namespace leveldb {
+    // try to load group information from file, if exists
+inline bool MetaTryLoadGroup(const std::string& fname,
+                             std::vector<unsigned>* group) {
+  std::unique_ptr<dmlc::Stream> fi(dmlc::Stream::Create(fname.c_str(), 'r', true));
+  if (fi == nullptr) return false;
+  dmlc::istream is(fi.get());
+  group->clear();
+  group->push_back(0);
+  unsigned nline = 0;
+  while (is >> nline) {
+    group->push_back(group->back() + nline);
+  }
+  return true;
+}
+    
+    class SparsePageDMatrix : public DMatrix {
+ public:
+  explicit SparsePageDMatrix(std::unique_ptr<DataSource>&& source,
+                             std::string  cache_info)
+      : source_(std::move(source)), cache_info_(std::move(cache_info)) {
+  }
     }
     
-        bool transaction = (entries_per_batch > 1);
-    for (int i = 0; i < num_entries; i += entries_per_batch) {
-      // Begin write transaction
-      if (FLAGS_transaction && transaction) {
-        status = sqlite3_step(begin_trans_stmt);
-        StepErrorCheck(status);
-        status = sqlite3_reset(begin_trans_stmt);
-        ErrorCheck(status);
+        while (iter->Next()) {
+      page->Push(iter->Value());
+      if (page->MemCostBytes() >= kPageSize) {
+        bytes_write += page->MemCostBytes();
+        writer.PushWrite(std::move(page));
+        writer.Alloc(&page);
+        page->Clear();
+        double tdiff = dmlc::GetTime() - tstart;
+        LOG(CONSOLE) << 'Writing to ' << cache_info << ' in '
+                     << ((bytes_write >> 20UL) / tdiff) << ' MB/s, '
+                     << (bytes_write >> 20UL) << ' written';
       }
     }
-    
-    class Env;
-    
-    namespace leveldb {
+    if (page->data.size() != 0) {
+      writer.PushWrite(std::move(page));
     }
     
-      // Return the name of this policy.  Note that if the filter encoding
-  // changes in an incompatible way, the name returned by this method
-  // must be changed.  Otherwise, old incompatible filters may be
-  // passed to methods of this type.
-  virtual const char* Name() const = 0;
+      virtual const char* Name() const override;
+    
+    int main(int argc, char** argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  // Run with regular database
+  int result;
+  {
+    fprintf(stderr, 'Running tests with regular db and operator.\n');
+    StringAppendOperatorTest::SetOpenDbFunction(&OpenNormalDb);
+    result = RUN_ALL_TESTS();
+  }
+    }
+    
+      // Create a reader that will return log records from '*file'.
+  // '*file' must remain live while this Reader is in use.
+  //
+  // If 'reporter' is non-nullptr, it is notified whenever some data is
+  // dropped due to a detected corruption.  '*reporter' must remain
+  // live while this Reader is in use.
+  //
+  // If 'checksum' is true, verify checksums if available.
+  //
+  // The Reader will start reading at the first record located at physical
+  // position >= initial_offset within the file.
+  Reader(std::shared_ptr<Logger> info_log,
+  // @lint-ignore TXT2 T25377293 Grandfathered in
+	 unique_ptr<SequentialFileReader>&& file,
+         Reporter* reporter, bool checksum, uint64_t initial_offset,
+         uint64_t log_num);
+    
+    void JniCallback::releaseJniEnv(jboolean& attached) const {
+  JniUtil::releaseJniEnv(m_jvm, attached);
+}
+    
+      bool IsKeyPinned() const { return (key_ != buf_); }
+    
+      virtual uint64_t ApproximateNumEntries(const Slice& /*start_ikey*/,
+                                         const Slice& /*end_key*/) {
+    return 0;
+  }
+    
+      jstring jname =
+      (jstring)env->CallObjectMethod(m_jcallback_obj, jname_method_id);
+  if(env->ExceptionCheck()) {
+    // exception thrown
+    return;
+  }
+  jboolean has_exception = JNI_FALSE;
+  m_name = JniUtil::copyString(env, jname, &has_exception);  // also releases jname
+  if (has_exception == JNI_TRUE) {
+    // exception thrown
+    return;
+  }
+    
+    #include 'rocksdb/compaction_filter.h'
+#include 'rocksjni/jnicallback.h'
+    
+    #endif  // JAVA_ROCKSJNI_LOGGERJNICALLBACK_H_
