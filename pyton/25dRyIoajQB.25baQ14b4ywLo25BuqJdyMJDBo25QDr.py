@@ -1,179 +1,97 @@
 
         
-            def to_python(self, value):
-        return b64decode(value)
+            def test_b_observers_shall_be_attachable(cls):
+        cls.s.attach(cls.dec_obs)
+        cls.assertEqual(isinstance(cls.s._observers[0], DecimalViewer), True)
+        cls.assertEqual(len(cls.s._observers), 1)
+        cls.s.attach(cls.hex_obs)
+        cls.assertEqual(isinstance(cls.s._observers[1], HexViewer), True)
+        cls.assertEqual(len(cls.s._observers), 2)
     
-            # In case just a slash was appended we can be extra helpful
-        if request.base_url + '/' == exc.new_url.split('?')[0]:
-            buf.append('  The URL was defined with a trailing slash so '
-                       'Flask will automatically redirect to the URL '
-                       'with the trailing slash if it was accessed '
-                       'without one.')
+        # sample_queue.put('sam')
+    # test_object(sample_queue)
+    # print('Outside func: {}'.format(sample_queue.get()))
+    
+        def setUp(self):
+        self.e, self.g = get_localizer(language='English'), \
+                         get_localizer(language='Greek')
+    
+        def test_tc2_output(self):
+        self.tc2.run()
+        output = self.out.getvalue().strip()
+        self.assertEqual(output, self.average_result_tc2)
+    
+        def test_display_current_time_at_midnight(self):
+        '''
+        Would almost always fail (despite of right at/after midnight) if
+        untestable production code would have been used.
+        '''
+        time_provider_stub = MidnightTimeProvider()
+        class_under_test = TimeDisplay()
+        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(time_provider_stub), expected_time)
+    
+        parameter
+    '''
+    
+    *TL;DR80
+Traverses a container and accesses the container's elements.
+'''
     
     
-#: Log messages to :func:`~flask.logging.wsgi_errors_stream` with the format
-#: ``[%(asctime)s] %(levelname)s in %(module)s: %(message)s``.
-default_handler = logging.StreamHandler(wsgi_errors_stream)
-default_handler.setFormatter(logging.Formatter(
-    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
-))
+if __name__ == '__main__':
+    main()
+
     
-    https://github.com/Homebrew/homebrew-core/blob/master/Formula/httpie.rb
+        def _getargnames(self, func):
+        # type: (Callable) -> List[str]
+        try:
+            return getargspec(func).args
+        except TypeError:
+            if hasattr(func, 'func_code'):
+                # Cython-generated code has all the attributes needed
+                # by inspect.getargspec, but the inspect module only
+                # works with ordinary functions. Inline the portion of
+                # getargspec that we need here. Note that for static
+                # functions the @cython.binding(True) decorator must
+                # be used (for methods it works out of the box).
+                code = func.func_code  # type: ignore
+                return code.co_varnames[:code.co_argcount]
+            raise
     
-    
-@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
-def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
-    r = http(follow_flag, httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 1
-    assert HTTP_OK in r
-    
-            if now - self._prev_time >= self._update_interval:
-            downloaded = self.status.downloaded
+        @gen.coroutine
+    def _write_body(self, start_read):
+        if self.request.body is not None:
+            self.connection.write(self.request.body)
+        elif self.request.body_producer is not None:
+            fut = self.request.body_producer(self.connection.write)
+            if fut is not None:
+                yield fut
+        self.connection.finish()
+        if start_read:
             try:
-                speed = ((downloaded - self._prev_bytes) /
-                         (now - self._prev_time))
-            except ZeroDivisionError:
-                speed = 0
+                yield self.connection.read_response(self)
+            except StreamClosedError:
+                if not self._handle_exception(*sys.exc_info()):
+                    raise
     
-        name = 'Digest HTTP auth'
-    auth_type = 'digest'
+        if os.environ.get('TORNADO_EXTENSION') != '1':
+        # Unless the user has specified that the extension is mandatory,
+        # fall back to the pure-python implementation on any build failure.
+        kwargs['cmdclass'] = {'build_ext': custom_build_ext}
     
-        '''
-)
-output_processing.add_argument(
-    '--style', '-s',
-    dest='style',
-    metavar='STYLE',
-    default=DEFAULT_STYLE,
-    choices=AVAILABLE_STYLES,
-    help='''
-    Output coloring style (default is '{default}'). One of:
+        def process_response(self, data):
+        status, message = re.match('(.*)\t(.*)\n', to_unicode(data)).groups()
+        if status == 'ok':
+            return message
+        else:
+            raise CapError(message)
     
     
-class TestServerCert:
-    
-        if address_family == socket.AF_INET:
-        return ctypes.string_at(addr.ipv4_addr, 4)
-    if address_family == socket.AF_INET6:
-        return ctypes.string_at(addr.ipv6_addr, 16)
-    
-            self.decisionNumber = decisionNumber
-        self.eot = eot
-        self.eof = eof
-        self.min = min
-        self.max = max
-        self.accept = accept
-        self.special = special
-        self.transition = transition
-    
-                    specialState = self.special[s]
-                if specialState >= 0:
-                    #print 'is special'
-                    s = self.specialStateTransition(specialState, input)
-                    if s == -1:
-                        self.noViableAlt(s, input)
-                        return 0
-                    input.consume()
-                    continue
-    
-        @classmethod
-    def zonelist(cls, zonedir='/usr/share/zoneinfo'):
-        zones = []
-        for root, _, files in os.walk(zonedir):
-            for f in files:
-                p = os.path.join(root, f)
-                with open(p, 'rb') as o:
-                    magic =  o.read(4)
-                if magic == b'TZif':
-                    zones.append(p[len(zonedir) + 1:])
-        return zones
-    
-    def escape(m):
-    all, tail = m.group(0, 1)
-    assert all.startswith('\\')
-    esc = simple_escapes.get(tail)
-    if esc is not None:
-        return esc
-    if tail.startswith('x'):
-        hexes = tail[1:]
-        if len(hexes) < 2:
-            raise ValueError('invalid hex string escape ('\\%s')' % tail)
-        try:
-            i = int(hexes, 16)
-        except ValueError:
-            raise ValueError('invalid hex string escape ('\\%s')' % tail) from None
-    else:
-        try:
-            i = int(tail, 8)
-        except ValueError:
-            raise ValueError('invalid octal string escape ('\\%s')' % tail) from None
-    return chr(i)
-    
-        port = args.port
-    if not args.ssl:
-        if port == -1:
-            port = NNTP_PORT
-        s = NNTP(host=args.server, port=port)
-    else:
-        if port == -1:
-            port = NNTP_SSL_PORT
-        s = NNTP_SSL(host=args.server, port=port)
-    
-                def main():
-                for i in test_gen():
-                    lno = 12
-                lno = 13
-        '''
-        modules = { TEST_MODULE: code }
-        with create_modules(modules):
-            self.expect_set = [
-                ('line', 2, 'tfunc_import'),
-                    break_in_func('test_gen', TEST_MODULE_FNAME),
-                ('None', 2, 'tfunc_import'),              ('continue', ),
-                ('line', 7, 'test_gen', ({1:1}, [])),     ('next', ),
-                ('line', 8, 'test_gen'),                  ('next', ),
-                ('exception', 11, 'main', StopIteration), ('step', ),
-                ('line', 13, 'main'),                     ('quit', ),
-    
-        def test_with_suffix(self):
-        P = self.cls
-        self.assertEqual(P('c:a/b').with_suffix('.gz'), P('c:a/b.gz'))
-        self.assertEqual(P('c:/a/b').with_suffix('.gz'), P('c:/a/b.gz'))
-        self.assertEqual(P('c:a/b.py').with_suffix('.gz'), P('c:a/b.gz'))
-        self.assertEqual(P('c:/a/b.py').with_suffix('.gz'), P('c:/a/b.gz'))
-        # Path doesn't have a 'filename' component
-        self.assertRaises(ValueError, P('').with_suffix, '.gz')
-        self.assertRaises(ValueError, P('.').with_suffix, '.gz')
-        self.assertRaises(ValueError, P('/').with_suffix, '.gz')
-        self.assertRaises(ValueError, P('//My/Share').with_suffix, '.gz')
-        # Invalid suffix
-        self.assertRaises(ValueError, P('c:a/b').with_suffix, 'gz')
-        self.assertRaises(ValueError, P('c:a/b').with_suffix, '/')
-        self.assertRaises(ValueError, P('c:a/b').with_suffix, '\\')
-        self.assertRaises(ValueError, P('c:a/b').with_suffix, 'c:')
-        self.assertRaises(ValueError, P('c:a/b').with_suffix, '/.gz')
-        self.assertRaises(ValueError, P('c:a/b').with_suffix, '\\.gz')
-        self.assertRaises(ValueError, P('c:a/b').with_suffix, 'c:.gz')
-        self.assertRaises(ValueError, P('c:a/b').with_suffix, 'c/d')
-        self.assertRaises(ValueError, P('c:a/b').with_suffix, 'c\\d')
-        self.assertRaises(ValueError, P('c:a/b').with_suffix, '.c/d')
-        self.assertRaises(ValueError, P('c:a/b').with_suffix, '.c\\d')
-    
-    T_CV2 = typing.ClassVar[int]
-T_CV3 = typing.ClassVar
-    
-    def check_live_url(url):
-    
-    from ycm.client.base_request import BaseRequest, BuildRequestData
-from ycm import vimsupport
-from ycmd.utils import ToUnicode
-    
-    
-  def SendParseRequest( self, extra_data ):
-    self._parse_request = EventNotification( 'FileReadyToParse',
-                                             extra_data = extra_data )
-    self._parse_request.Start()
-    # Decrement handled tick to ensure correct handling when we are forcing
-    # reparse on buffer visit and changed tick remains the same.
-    self._handled_tick -= 1
-    self._parse_tick = self._ChangedTick()
+class GenEngineTest(AsyncTestCase):
+    def setUp(self):
+        self.warning_catcher = warnings.catch_warnings()
+        self.warning_catcher.__enter__()
+        warnings.simplefilter('ignore', DeprecationWarning)
+        super(GenEngineTest, self).setUp()
+        self.named_contexts = []
