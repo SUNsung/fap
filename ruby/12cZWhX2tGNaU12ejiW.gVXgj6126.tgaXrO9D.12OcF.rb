@@ -1,152 +1,136 @@
 
         
-        # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
+          def notification_setting_params
+    allowed_fields = NotificationSetting::EMAIL_EVENTS.dup
+    allowed_fields << :level
+    params.require(:notification_setting).permit(allowed_fields)
+  end
 end
+
     
-            # Private: Watch for file changes and rebuild the site.
-        #
-        # site - A Jekyll::Site instance
-        # options - A Hash of options passed to the command
-        #
-        # Returns nothing.
-        def watch(site, options)
-          # Warn Windows users that they might need to upgrade.
-          if Utils::Platforms.bash_on_windows?
-            Jekyll.logger.warn '',
-                               'Auto-regeneration may not work on some Windows versions.'
-            Jekyll.logger.warn '',
-                               'Please see: https://github.com/Microsoft/BashOnWindows/issues/216'
-            Jekyll.logger.warn '',
-                               'If it does not work, please upgrade Bash on Windows or '\
-                               'run Jekyll with --no-watch.'
-          end
+      def all_projects(current_user)
+    projects = []
     
-        def process(args)
-      arg_is_present? args, '--server', 'The --server command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
-                          use the 'build' subcommand.'
-      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
-                          '--watch'.'
-      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
-                          the '--watch' switch.'
-      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
-                          favour of 'highlighter'.'
-      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
-                          your config files.'
-      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
-                          config files.'
-      no_subcommand(args)
-    end
-    
-        # Determine whether the document is a YAML file.
-    #
-    # Returns true if the extname is either .yml or .yaml, false otherwise.
-    def yaml_file?
-      %w(.yaml .yml).include?(extname)
-    end
-    
-        @table_sort_info = {
-      order: { attribute.to_sym => direction.to_sym },
-      attribute: attribute,
-      direction: direction
+      def test_stat_slave
+    PTY.open {|master, slave|
+      s =  File.stat(slave.path)
+      assert_equal(Process.uid, s.uid)
+      assert_equal(0600, s.mode & 0777)
     }
+  rescue RuntimeError
+    skip $!
   end
     
-    class Converter
-  extend Forwardable
-  include Network
-  include LessConversion
-  include JsConversion
-  include FontsConversion
+        old_self = prc.call
     
-        # .btn { ... } -> @mixin btn { ... }; .btn { @include btn }
-    def extract_mixins_from_selectors(file, selectors_to_mixins)
-      selectors_to_mixins.each do |selector, mixin|
-        file = replace_rules file, Regexp.escape(selector), prefix: false do |selector_css|
-          log_transform '#{selector} { ... } -> @mixin #{mixin} { ... }; #{selector} { @include #{mixin} } ', from: 'extract_mixins_from_selectors'
-          <<-SCSS
-// [converter] extracted from `#{selector}` for libsass compatibility
-@mixin #{mixin} {#{unwrap_rule_block(selector_css)}
-}
-// [converter] extracted as `@mixin #{mixin}` for libsass compatibility
-#{selector} {
-  @include #{mixin};
-}
-          SCSS
-        end
-      end
-      file
-    end
-    
-        def log_processing(name)
-      puts yellow '  #{File.basename(name)}'
-    end
-    
-      # Disable automatic flushing of the log to improve performance.
-  # config.autoflush_log = false
-    
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
-    
-      def command_line(*options)
-    options.each { |opt| ARGV << opt }
-    subject.define_singleton_method(:exit) do |*_args|
-      throw(:system_exit, :exit)
-    end
-    subject.run
-    subject.options
+      def self.normal_file
+    touch(@file)
+    yield @file
+  ensure
+    rm_r @file
   end
     
-      [jekyllPid, compassPid, rackupPid].each { |pid| Process.wait(pid) }
+      it 'returns 1 if the first argument is a point in time after the second argument (down to a microsecond)' do
+    (Time.at(0, 100) <=> Time.at(0, 0)).should == 1
+    (Time.at(1202778512, 100) <=> Time.at(1202778512, 99)).should == 1
+  end
+    
+      class CVars
+    @@cvar  = :cvar
+    @c_ivar = :c_ivar
+    
+      trap('INT') {
+    [jekyllPid, compassPid].each { |pid| Process.kill(9, pid) rescue Errno::ESRCH }
+    exit 0
+  }
+    
+        # Creates an instance of CategoryIndex for each category page, renders it, and
+    # writes the output to a file.
+    #
+    #  +category_dir+ is the String path to the category folder.
+    #  +category+     is the category currently being processed.
+    def write_category_index(category_dir, category)
+      index = CategoryIndex.new(self, self.source, category_dir, category)
+      index.render(self.layouts, site_payload)
+      index.write(self.dest)
+      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
+      self.pages << index
+    
+      def render(context)
+    config_tag(context.registers[:site].config, @key, @tag, @classname)
+  end
 end
     
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
+        def get_cached_gist(gist, file)
+      return nil if @cache_disabled
+      cache_file = get_cache_file_for gist, file
+      File.read cache_file if File.exist? cache_file
+    end
+    
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
+    end
+    
+    module LogStash
+  module Api
+    module Commands
+      module System
+        class Plugins < Commands::Base
+          def run
+            { :total => plugins.count, :plugins => plugins }
           end
+    
+      def file_fetch(url, sha1, target)
+    filename = File.basename( URI(url).path )
+    output = '#{target}/#{filename}'
+    begin
+      actual_sha1 = file_sha1(output)
+      if actual_sha1 != sha1
+        fetch(url, sha1, output)
+      end
+    rescue Errno::ENOENT
+      fetch(url, sha1, output)
+    end
+    return output
+  end
+    
+        # True if the dimensions represent a vertical rectangle
+    def vertical?
+      height > width
+    end
+    
+            def rejecting *types
+          @rejected_types = types.flatten
+          self
         end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
-      end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
-      else
-        '#{quote}<footer>#{author}</footer>'
-      end
-      '<blockquote>#{blockquote}</blockquote>'
-    end
     
-        def html_output_for(script_url, code)
-      code = CGI.escapeHTML code
-      <<-HTML
-<div><script src='#{script_url}'></script>
-<noscript><pre><code>#{code}</code></pre></noscript></div>
-      HTML
+        # You can add your own processor via the Paperclip configuration. Normally
+    # Paperclip will load all processors from the
+    # Rails.root/lib/paperclip_processors directory, but here you can add any
+    # existing class using this mechanism.
+    #
+    #   Paperclip.configure do |c|
+    #     c.register_processor :watermarker, WatermarkingProcessor.new
+    #   end
+    def register_processor(name, processor)
+      @known_processors ||= {}
+      @known_processors[name.to_s] = processor
     end
+  end
+end
+
     
-    module Jekyll
+      class Railtie
+    def self.insert
+      Paperclip.options[:logger] = Rails.logger
