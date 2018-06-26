@@ -1,127 +1,182 @@
 
         
-        Available hooks:
+        cc_test(
+    name = 'syntaxnet_transition_state_test',
+    srcs = ['syntaxnet_transition_state_test.cc'],
+    data = [':testdata'],
+    deps = [
+        ':syntaxnet_component',
+        ':syntaxnet_transition_state',
+        '//dragnn/core:input_batch_cache',
+        '//dragnn/core/test:generic',
+        '//dragnn/core/test:mock_transition_state',
+        '//dragnn/io:sentence_input_batch',
+        '//dragnn/protos:spec_proto_cc',
+        '//syntaxnet:base',
+        '//syntaxnet:sentence_proto_cc',
+        '//syntaxnet:test_main',
+    ],
+)
+
     
-        def __exit__(self, exc_type, exc_value, traceback):
-        if exc_type is None:
-            self.stop_event.wait(self.WAIT_EVENT_TIMEOUT)
-        else:
-            if self.wait_to_close_event:
-                # avoid server from waiting for event timeouts
-                # if an exception is found in the main thread
-                self.wait_to_close_event.set()
+        # Extract the source and target token activations.  Use |stride| to collapse
+    # batch and beam into a single dimension.
+    sources = network_units.lookup_named_tensor('sources', linked_embeddings)
+    targets = network_units.lookup_named_tensor('targets', linked_embeddings)
+    source_tokens_bxnxs = tf.reshape(sources.tensor,
+                                     [stride, -1, self._source_dim])
+    target_tokens_bxnxt = tf.reshape(targets.tensor,
+                                     [stride, -1, self._target_dim])
+    num_tokens = tf.shape(source_tokens_bxnxs)[1]
     
-        @pytest.fixture(autouse=True)
-    def setup(self):
-        '''CaseInsensitiveDict instance with 'Accept' header.'''
-        self.case_insensitive_dict = CaseInsensitiveDict()
-        self.case_insensitive_dict['Accept'] = 'application/json'
+        # Export the assets as well.
+    dragnn_model_saver_lib.export_assets(master_spec, shortened_to_original,
+                                         export_path)
     
-        def test_server_closes(self):
-        '''the server closes when leaving the context manager'''
-        with Server.basic_response_server() as (host, port):
-            sock = socket.socket()
-            sock.connect((host, port))
+    # Re-export the generated MST op.
+maximum_spanning_tree = gen_mst_ops.maximum_spanning_tree
+    
+            # Force Python to track this dictionary at all times.
+        # This is necessary since Python only starts tracking
+        # dicts if they contain mutable objects.  It's a horrible,
+        # horrible hack but makes this kinda testable.
+        loc.__storage__['FOOO'] = [1, 2, 3]
+    
+        :copyright: © 2010 by the Pallets team.
+    :license: BSD, see LICENSE for more details.
+'''
+    
+      * glmnet-python
+  * scikit-learn (of course)
+    
+                gc.collect()
+            print('- benchmarking LassoLars')
+            clf = LassoLars(alpha=alpha, fit_intercept=False,
+                            normalize=False, precompute=precompute)
+            tstart = time()
+            clf.fit(X, Y)
+            lars_lasso_results.append(time() - tstart)
+    
+        from sklearn.tree import DecisionTreeClassifier
+    
+    Second example
+--------------
+The second example shows the ability of the Minimum Covariance Determinant
+robust estimator of covariance to concentrate on the main mode of the data
+distribution: the location seems to be well estimated, although the covariance
+is hard to estimate due to the banana-shaped distribution. Anyway, we can
+get rid of some outlying observations.
+The One-Class SVM is able to capture the real data structure, but the
+difficulty is to adjust its kernel bandwidth parameter so as to obtain
+a good compromise between the shape of the data scatter matrix and the
+risk of over-fitting the data.
+    
+        def fit(self):
+        print('fit the model')
+        train = np.array(self.model.data)
+        X = train[:, 0:2]
+        y = train[:, 2]
+    
+    The data is generated with the ``make_checkerboard`` function, then
+shuffled and passed to the Spectral Biclustering algorithm. The rows
+and columns of the shuffled matrix are rearranged to show the
+biclusters found by the algorithm.
+    
+    print('consensus score: {:.3f}'.format(score))
+    
+    xx = np.linspace(3, 9, 100)
+yy = np.linspace(1, 5, 100).T
+xx, yy = np.meshgrid(xx, yy)
+Xfull = np.c_[xx.ravel(), yy.ravel()]
     
     
-class ProxyError(ConnectionError):
-    '''A proxy error occurred.'''
+class DNSimpleLexiconClientTest(unittest.TestCase, dns_test_common_lexicon.BaseLexiconClientTest):
     
-    codes = LookupDict(name='status_codes')
+    # If extensions (or modules to document with autodoc) are in another directory,
+# add these directories to sys.path here. If the directory is relative to the
+# documentation root, use os.path.abspath to make it absolute, like shown here.
+#
+import os
+# import sys
+# sys.path.insert(0, os.path.abspath('.'))
     
-        def __getstate__(self):
-        '''Unlike a normal CookieJar, this class is pickleable.'''
-        state = self.__dict__.copy()
-        # remove the unpickleable RLock object
-        state.pop('_cookies_lock')
-        return state
+            mock_crypto_util.init_save_key.assert_called_once_with(
+            self.config.rsa_key_size, self.config.key_dir)
+        mock_crypto_util.init_save_csr.assert_called_once_with(
+            mock.sentinel.key, self.eg_domains, self.config.csr_dir)
+        mock_crypto_util.cert_and_chain_from_fullchain.assert_called_once_with(
+            self.eg_order.fullchain_pem)
     
-            try:
-            length = super_len(data)
-        except (TypeError, AttributeError, UnsupportedOperation):
-            length = None
+    # The language for content autogenerated by Sphinx. Refer to documentation
+# for a list of supported languages.
+#
+# This is also used if you do content translation via gettext catalogs.
+# Usually you set 'language' from the command line for these cases.
+language = 'en'
     
-        All keys are expected to be strings. The structure remembers the
-    case of the last key to be set, and ``iter(instance)``,
-    ``keys()``, ``items()``, ``iterkeys()``, and ``iteritems()``
-    will contain case-sensitive keys. However, querying and contains
-    testing is case insensitive::
+        # Create and fill-in the class template
+    numfields = len(field_names)
+    argtxt = repr(field_names).replace(''', '')[1:-1]   # tuple repr without parens or quotes
+    reprtxt = ', '.join('%s=%%r' % name for name in field_names)
+    dicttxt = ', '.join('%r: t[%d]' % (name, pos) for pos, name in enumerate(field_names))
+    template = '''class %(typename)s(tuple):
+        '%(typename)s(%(argtxt)s)' \n
+        __slots__ = () \n
+        _fields = %(field_names)r \n
+        def __new__(_cls, %(argtxt)s):
+            return _tuple.__new__(_cls, (%(argtxt)s)) \n
+        @classmethod
+        def _make(cls, iterable, new=tuple.__new__, len=len):
+            'Make a new %(typename)s object from a sequence or iterable'
+            result = new(cls, iterable)
+            if len(result) != %(numfields)d:
+                raise TypeError('Expected %(numfields)d arguments, got %%d' %% len(result))
+            return result \n
+        def __repr__(self):
+            return '%(typename)s(%(reprtxt)s)' %% self \n
+        def _asdict(t):
+            'Return a new dict which maps field names to their values'
+            return {%(dicttxt)s} \n
+        def _replace(_self, **kwds):
+            'Return a new %(typename)s object replacing specified fields with new values'
+            result = _self._make(map(kwds.pop, %(field_names)r, _self))
+            if kwds:
+                raise ValueError('Got unexpected field names: %%r' %% kwds.keys())
+            return result \n
+        def __getnewargs__(self):
+            return tuple(self) \n\n''' % locals()
+    for i, name in enumerate(field_names):
+        template += '        %s = _property(_itemgetter(%d))\n' % (name, i)
     
-        def set(self, key, value):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                item.value = value
-                return
-        self.table[hash_index].append(Item(key, value))
+      if 'word' in vim_data:
+    completion_data[ 'insertion_text' ] = vim_data[ 'word' ]
+  if 'abbr' in vim_data:
+    completion_data[ 'menu_text' ] = vim_data[ 'abbr' ]
+  if 'menu' in vim_data:
+    completion_data[ 'extra_menu_info' ] = vim_data[ 'menu' ]
+  if 'kind' in vim_data:
+    completion_data[ 'kind' ] = [ vim_data[ 'kind' ] ]
+  if 'info' in vim_data:
+    completion_data[ 'detailed_info' ] = vim_data[ 'info' ]
     
-        def __init__(self, query, results):
-        self.query = query
-        self.results = results
+      # On UNIX platforms, we use sys.executable as the Python interpreter path.
+  # We cannot use sys.executable on Windows because for unknown reasons, it
+  # returns the Vim executable. Instead, we use sys.exec_prefix to deduce the
+  # interpreter path.
+  python_interpreter = ( WIN_PYTHON_PATH if utils.OnWindows() else
+                         sys.executable )
+  if _EndsWithPython( python_interpreter ):
+    return python_interpreter
     
-            Accessing a node updates its position to the front of the LRU list.
-        '''
-        node = self.lookup.get(query)
-        if node is None:
-            return None
-        self.linked_list.move_to_front(node)
-        return node.results
-    
-    # The name for this set of Sphinx documents.  If None, it defaults to
-# '<project> v<release> documentation'.
-#html_title = None
+    if __name__ == '__main__':
+  Main()
+
     
     
-def is_translated(msg):
-    if isinstance(msg.string, basestring):
-        return bool(msg.string)
-    for item in msg.string:
-        if not item:
-            return False
-    return True
+  def done( self ):
+    return self._done
     
-        @property
-    def is_eager_to_contribute(self):
-        return True if self.blackboard.common_state['problems'] > 100 else False
-    
-        def test_parrot_greek_localization(self):
-        self.assertEqual(self.g.get('parrot'), 'parrot')
-    
-        def setUp(self):
-        self.tc1 = TC1()
-        self.tc2 = TC2()
-        self.tc3 = TC3()
-        self.average_result_tc1 = '###### In Test 1 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.average_result_tc2 = '###### In Test 2 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.average_result_tc3 = '###### In Test 3 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.runner = TestRunner()
-        self.out = StringIO()
-        self.saved_stdout = sys.stdout
-        sys.stdout = self.out
-    
+        Each rule added to this router may have a ``name`` attribute that can be
+    used to reconstruct an original uri. The actual reconstruction takes place
+    in a rule's matcher (see `Matcher.reverse`).
     '''
-Port of the Java example of 'Setter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
-    
-        def undo(self):
-        self.rename(self.dest, self.src)
-    
-        def detach(self, observer):
-        try:
-            self._observers.remove(observer)
-        except ValueError:
-            pass
