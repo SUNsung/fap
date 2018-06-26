@@ -1,85 +1,130 @@
 
         
-          setup do
-    @old_escape_html_entities_in_json = ActiveSupport.escape_html_entities_in_json
-    ActiveSupport.escape_html_entities_in_json = true
-    @template = self
-    @request = Class.new do
-      def send_early_hints(links) end
-    end.new
-  end
+            describe '#revoke!' do
+      it 'revokes the key with the client' do
+        mock_client_response(:revoke_key!)
     
-        module Behavior
-      extend ActiveSupport::Concern
-    
-          get :redirect_to_with_block_and_options
-    
-            if result.size == ids.size
-          pk_type = @klass.type_for_attribute(primary_key)
-    
-      def check_content_mismatch
-    if attribute_present?('title') && attribute_present?('content') && content == 'Mismatch'
-      errors[:title] << 'is Content Mismatch'
-    end
-  end
-    
-      scope :scope_with_lambda, lambda { all }
-    
-        def initialize(*)
-      @subscribed = false
-      super
+          it 'renders HTML' do
+        capture = render(options, screenshots)
+        expect(capture).to match(/<html>/)
+        expect(capture).to include('<li>Some</li>')
+        expect(capture).to include('<li>key</li>')
+        expect(capture).to include('<li>words</li>')
+      end
     end
     
-          env = Rack::MockRequest.env_for '/test', 'HTTP_CONNECTION' => 'upgrade', 'HTTP_UPGRADE' => 'websocket',
-        'HTTP_HOST' => 'localhost', 'HTTP_ORIGIN' => 'http://rubyonrails.com'
+            expect(result).to eq('hg parent --template '{node|short}'')
+        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template '{node|short}'')
+      end
     
-        find_union(segments, Project).includes(:namespace).order_id_desc
-  end
+        #
+    # @param ips [String] IP range(s)
+    # @return [true] if actions on ips are allowed.
+    # @return [false] if actions are not allowed on ips.
+    def allow_actions_on?(ips)
+      return true unless limit_to_network
+      return true unless boundary
+      return true if boundary.empty?
+      boundaries = Shellwords.split(boundary)
+      return true if boundaries.empty? # It's okay if there is no boundary range after all
+      given_range = Rex::Socket::RangeWalker.new(ips)
+      return false unless given_range # Can't do things to nonexistant IPs
+      allowed = false
+      boundaries.each do |boundary_range|
+        ok_range = Rex::Socket::RangeWalker.new(boundary)
+        allowed  = true if ok_range.include_range? given_range
+      end
+      return allowed
+    end
     
-    INPUT_FILENAME = 'README.md'.freeze
-OUTPUT_FILENAME = 'engineering_blogs.opml'.freeze
-TITLE = 'Engineering Blogs'.freeze
-    
-          def to_s
-        @pairs.inspect
+          case Rails.env
+      when 'development'
+        config.eager_load = false
+      when 'test'
+        config.eager_load = false
+      when 'production'
+        config.eager_load = true
       end
     end
   end
 end
-
     
-      # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
-  # permissions and removing .la files, unless the files (or parent
-  # directories) are protected by skip_clean.
-  #
-  # bin and sbin should not have any subdirectories; if either do that is
-  # caught as an audit warning
-  #
-  # lib may have a large directory tree (see Erlang for instance), and
-  # clean_dir applies cleaning rules to the entire tree
-  def clean_dir(d)
-    d.find do |path|
-      path.extend(ObserverPathnameExtension)
+      def parse(pkt)
+    # We want to return immediantly if	we do not have a packet which is handled by us
+    return unless pkt.is_tcp?
+    return if (pkt.tcp_sport != 80 and pkt.tcp_dport != 80)
+    s = find_session((pkt.tcp_sport == 80) ? get_session_src(pkt) : get_session_dst(pkt))
     
-      def contents; end
+    		elsif line =~ /\w+:\t/
+			block_do(line)
     
-    class DependencyCollector
-  module Compat
-    # Define the languages that we can handle as external dependencies.
-    LANGUAGE_MODULES = Set[
-      :lua, :lua51, :perl, :python, :python3, :ruby
-    ].freeze
+      describe ':queue_private_receive' do
+    let(:data) { '<diaspora/>' }
     
-          case entity
-      when DiasporaFederation::Entities::AccountDeletion
-        Diaspora::Federation::Receive.account_deletion(entity)
-      when DiasporaFederation::Entities::Retraction
-        Diaspora::Federation::Receive.retraction(entity, recipient_id)
-      else
-        persisted = Diaspora::Federation::Receive.perform(entity)
-        Workers::ReceiveLocal.perform_async(persisted.class.to_s, persisted.id, [recipient_id].compact) if persisted
-      end
+          private
+    
+      %w(quiet silent verbose).each do |switch|
+    it 'doesn't include --#{switch} in help' do
+      expect(help_output).not_to match(/--#{switch}/)
     end
+  end
     
-        it 'sets :http_failed if it has an unsuccessful http status code' do
-      pod = FactoryGirl.create(:pod)
+    module RuboCop
+  module Cop
+    class VariableForce
+      # A Variable represents existence of a local variable.
+      # This holds a variable declaration node,
+      # and some states of the variable.
+      class Variable
+        VARIABLE_DECLARATION_TYPES =
+          (VARIABLE_ASSIGNMENT_TYPES + ARGUMENT_DECLARATION_TYPES).freeze
+    
+            def autocorrect(node)
+          lambda do |corrector|
+            each_unnecessary_space_match(node) do |range|
+              corrector.replace(range, ' ')
+            end
+          end
+        end
+    
+            def on_block(node)
+          on_body_of_reduce(node) do |body|
+            void_next = body.each_node(:next).find do |n|
+              n.children.empty? && parent_block_node(n) == node
+            end
+    
+    module RuboCop
+  module Cop
+    module Style
+      # This cop checks for optional arguments to methods
+      # that do not come at the end of the argument list
+      #
+      # @example
+      #   # bad
+      #   def foo(a = 1, b, c)
+      #   end
+      #
+      #   # good
+      #   def baz(a, b, c = 1)
+      #   end
+      #
+      #   def foobar(a = 1, b = 2, c = 3)
+      #   end
+      class OptionalArguments < Cop
+        MSG = 'Optional arguments should appear at the end ' \
+              'of the argument list.'.freeze
+    
+          # Checks whether this node body is a void context.
+      #
+      # @return [Boolean] whether the `def` node body is a void context
+      def void_context?
+        method?(:initialize) || assignment_method?
+      end
+    
+              def plugins
+            @plugins ||= find_plugins_gem_specs.map do |spec|
+              { :name => spec.name, :version => spec.version.to_s }
+            end.sort_by do |spec|
+              spec[:name]
+            end
+          end
