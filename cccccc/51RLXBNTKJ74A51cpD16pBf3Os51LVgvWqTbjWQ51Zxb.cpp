@@ -1,359 +1,282 @@
 
         
-        #endif  // ATOM_COMMON_DRAGGABLE_REGION_H_
-
+        #include 'tensorflow/core/framework/op_kernel.h'
+#include 'tensorflow/core/framework/resource_mgr.h'
+#include 'tensorflow/core/framework/tensor_shape.h'
+#include 'tensorflow/core/platform/logging.h'
+#include 'tensorflow/core/platform/mutex.h'
+#include 'tensorflow/core/platform/thread_annotations.h'
+#include 'tensorflow/core/platform/types.h'
     
-    namespace chrome {
-    }
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    namespace chrome {
-    }
-    
-      // Sets time interval between updates. By default list of sources and their
-  // thumbnail are updated once per second. If called after StartUpdating() then
-  // it will take effect only after the next update.
-  virtual void SetUpdatePeriod(base::TimeDelta period) = 0;
-    
-    // An interface the PrintViewManager uses to notify an observer when the print
-// dialog is shown. Register the observer via PrintViewManager::set_observer.
-class PrintViewManagerObserver {
- public:
-  // Notifies the observer that the print dialog was shown.
-  virtual void OnPrintDialogShown() = 0;
-    }
-    
-    #include 'content/public/browser/web_contents_observer.h'
-#include 'ui/gfx/native_widget_types.h'
-    
-     private:
-  // IPC message handler.
-  int32_t OnHostMsgGetDeviceID(ppapi::host::HostMessageContext* context);
-  int32_t OnHostMsgGetHmonitor(ppapi::host::HostMessageContext* context);
-  int32_t OnHostMsgMonitorIsExternal(ppapi::host::HostMessageContext* context);
-    
-      virtual void CreateFilter(const Slice* keys, int n, std::string* dst) const {
-    std::vector<const char*> key_pointers(n);
-    std::vector<size_t> key_sizes(n);
-    for (int i = 0; i < n; i++) {
-      key_pointers[i] = keys[i].data();
-      key_sizes[i] = keys[i].size();
-    }
-    size_t len;
-    char* filter = (*create_)(state_, &key_pointers[0], &key_sizes[0], n, &len);
-    dst->append(filter, len);
-    free(filter);
-  }
-    
-    void DBIter::Seek(const Slice& target) {
-  direction_ = kForward;
-  ClearSavedValue();
-  saved_key_.clear();
-  AppendInternalKey(
-      &saved_key_, ParsedInternalKey(target, sequence_, kValueTypeForSeek));
-  iter_->Seek(saved_key_);
-  if (iter_->Valid()) {
-    FindNextUserEntry(false, &saved_key_ /* temporary storage */);
-  } else {
-    valid_ = false;
-  }
-}
-    
-    // Return a new iterator that converts internal keys (yielded by
-// '*internal_iter') that were live at the specified 'sequence' number
-// into appropriate user keys.
-extern Iterator* NewDBIterator(
-    DBImpl* db,
-    const Comparator* user_key_comparator,
-    Iterator* internal_iter,
-    SequenceNumber sequence,
-    uint32_t seed);
-    
-    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
-  size_t usize = user_key.size();
-  size_t needed = usize + 13;  // A conservative estimate
-  char* dst;
-  if (needed <= sizeof(space_)) {
-    dst = space_;
-  } else {
-    dst = new char[needed];
-  }
-  start_ = dst;
-  dst = EncodeVarint32(dst, usize + 8);
-  kstart_ = dst;
-  memcpy(dst, user_key.data(), usize);
-  dst += usize;
-  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
-  dst += 8;
-  end_ = dst;
-}
-    
-    
-    {  ParsedInternalKey() { }  // Intentionally left uninitialized (for speed)
-  ParsedInternalKey(const Slice& u, const SequenceNumber& seq, ValueType t)
-      : user_key(u), sequence(seq), type(t) { }
-  std::string DebugString() const;
+    // TODO(zongheng): this should be a general functor that powers SparseAdd and
+// ScatterNd ops.  It should be moved to its own head file, once the other ops
+// are implemented.
+template <typename Device, typename T, typename Index, int NDIMS,
+          scatter_op::UpdateOp op>
+struct ScatterNdFunctor {
+  // Returns -1 on success or a nonnegative i s.t. indices[i] is a bad index.
+  Index operator()(const Device& d, typename TTypes<Index>::ConstMatrix indices,
+                   typename TTypes<T>::ConstFlat updates,
+                   typename TTypes<T, NDIMS>::Tensor out);
 };
     
-    // Print contents of a log file. (*func)() is called on every record.
-Status PrintLogContents(Env* env, const std::string& fname,
-                        void (*func)(uint64_t, Slice, WritableFile*),
-                        WritableFile* dst) {
-  SequentialFile* file;
-  Status s = env->NewSequentialFile(fname, &file);
-  if (!s.ok()) {
-    return s;
+      static RecordWriterOptions CreateRecordWriterOptions(
+      const string& compression_type);
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+        const string file_format =
+        str_util::Lowercase(file_format_tensor.scalar<string>()());
+    const int32 samples_per_second =
+        samples_per_second_tensor.scalar<int32>()();
+    const int32 bits_per_second = bits_per_second_tensor.scalar<int32>()();
+    
+        NodeDef* add_node2 = graph_def.add_node();
+    add_node2->set_name('add_node2');
+    add_node2->set_op('Add');
+    add_node2->add_input('const_node1');
+    add_node2->add_input('const_node2');
+    add_node2->set_device('//device:GPU:1');
+    
+    namespace tensorflow {
+#define REGISTER_COMPLEX(D, R, C)                         \
+  REGISTER_KERNEL_BUILDER(Name('Angle')                   \
+                              .Device(DEVICE_##D)         \
+                              .TypeConstraint<C>('T')     \
+                              .TypeConstraint<R>('Tout'), \
+                          UnaryOp<D##Device, functor::get_angle<C>>);
+    }
+    
+    Status ReadGroundTruthFile(const string& file_name,
+                           std::vector<std::pair<string, int64>>* result) {
+  std::ifstream file(file_name);
+  if (!file) {
+    return tensorflow::errors::NotFound('Ground truth file '', file_name,
+                                        '' not found.');
   }
-  CorruptionReporter reporter;
-  reporter.dst_ = dst;
-  log::Reader reader(file, &reporter, true, 0);
-  Slice record;
-  std::string scratch;
-  while (reader.ReadRecord(&record, &scratch)) {
-    (*func)(reader.LastRecordOffset(), record, dst);
+  result->clear();
+  string line;
+  while (std::getline(file, line)) {
+    std::vector<string> pieces = tensorflow::str_util::Split(line, ',');
+    if (pieces.size() != 2) {
+      continue;
+    }
+    float timestamp;
+    if (!tensorflow::strings::safe_strtof(pieces[1].c_str(), &timestamp)) {
+      return tensorflow::errors::InvalidArgument(
+          'Wrong number format at line: ', line);
+    }
+    string label = pieces[0];
+    auto timestamp_int64 = static_cast<int64>(timestamp);
+    result->push_back({label, timestamp_int64});
   }
-  delete file;
+  std::sort(result->begin(), result->end(),
+            [](const std::pair<string, int64>& left,
+               const std::pair<string, int64>& right) {
+              return left.second < right.second;
+            });
   return Status::OK();
 }
     
-    enum FileType {
-  kLogFile,
-  kDBLockFile,
-  kTableFile,
-  kDescriptorFile,
-  kCurrentFile,
-  kTempFile,
-  kInfoLogFile  // Either the current one, or an old one
-};
+    #include 'base/values.h'
+#include 'base/strings/utf_string_conversions.h'
+#include 'base/strings/string16.h'
+#include 'content/nw/src/api/dispatcher_host.h'
+#include 'ui/base/clipboard/clipboard.h'
     
-    Iterator* TableCache::NewIterator(const ReadOptions& options,
-                                  uint64_t file_number,
-                                  uint64_t file_size,
-                                  Table** tableptr) {
-  if (tableptr != NULL) {
-    *tableptr = NULL;
-  }
+    class Clipboard : public Base {
+ public:
+  Clipboard(int id,
+            const base::WeakPtr<DispatcherHost>& dispatcher_host,
+            const base::DictionaryValue& option);
+  ~Clipboard() override;
     }
     
-      VersionEdit edit;
-  for (int i = 0; i < 4; i++) {
-    TestEncodeDecode(edit);
-    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
-                 InternalKey('foo', kBig + 500 + i, kTypeValue),
-                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
-    edit.DeleteFile(4, kBig + 700 + i);
-    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
-  }
     
-    // Comma-separated list of operations to run in the specified order
-//   Actual benchmarks:
-//
-//   fillseq       -- write N values in sequential key order in async mode
-//   fillseqsync   -- write N/100 values in sequential key order in sync mode
-//   fillseqbatch  -- batch write N values in sequential key order in async mode
-//   fillrandom    -- write N values in random key order in async mode
-//   fillrandsync  -- write N/100 values in random key order in sync mode
-//   fillrandbatch -- batch write N values in sequential key order in async mode
-//   overwrite     -- overwrite N values in random key order in async mode
-//   fillrand100K  -- write N/1000 100K values in random order in async mode
-//   fillseq100K   -- write N/1000 100K values in sequential order in async mode
-//   readseq       -- read N times sequentially
-//   readrandom    -- read N times in random order
-//   readrand100K  -- read N/1000 100K values in sequential order in async mode
-static const char* FLAGS_benchmarks =
-    'fillseq,'
-    'fillseqsync,'
-    'fillseqbatch,'
-    'fillrandom,'
-    'fillrandsync,'
-    'fillrandbatch,'
-    'overwrite,'
-    'overwritebatch,'
-    'readrandom,'
-    'readseq,'
-    'fillrand100K,'
-    'fillseq100K,'
-    'readseq,'
-    'readrand100K,'
-    ;
+namespace nwapi {
+    }
     
-      // keys[0,n-1] contains a list of keys (potentially with duplicates)
-  // that are ordered according to the user supplied comparator.
-  // Append a filter that summarizes keys[0,n-1] to *dst.
+    bool NwShellShowItemInFolderFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
+  manager->OnCallStaticMethod(render_frame_host(), 'Shell', 'ShowItemInFolder', *args_);
+  return true;
+}
+    
+    // Ternary predicate assertion macros.
+#define EXPECT_PRED_FORMAT3(pred_format, v1, v2, v3) \
+  GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, GTEST_NONFATAL_FAILURE_)
+#define EXPECT_PRED3(pred, v1, v2, v3) \
+  GTEST_PRED3_(pred, v1, v2, v3, GTEST_NONFATAL_FAILURE_)
+#define ASSERT_PRED_FORMAT3(pred_format, v1, v2, v3) \
+  GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, GTEST_FATAL_FAILURE_)
+#define ASSERT_PRED3(pred, v1, v2, v3) \
+  GTEST_PRED3_(pred, v1, v2, v3, GTEST_FATAL_FAILURE_)
+    
+    // A concrete DeathTestFactory implementation for normal use.
+class DefaultDeathTestFactory : public DeathTestFactory {
+ public:
+  virtual bool Create(const char* statement, const RE* regex,
+                      const char* file, int line, DeathTest** test);
+};
+    
+    // pthread_key_create() requires DeleteThreadLocalValue() to have
+// C-linkage.  Therefore it cannot be templatized to access
+// ThreadLocal<T>.  Hence the need for class
+// ThreadLocalValueHolderBase.
+class ThreadLocalValueHolderBase {
+ public:
+  virtual ~ThreadLocalValueHolderBase() {}
+};
+    
+      // Creates a UTF-16 wide string from the given ANSI string, allocating
+  // memory using new. The caller is responsible for deleting the return
+  // value using delete[]. Returns the wide string, or NULL if the
+  // input is NULL.
   //
-  // Warning: do not change the initial contents of *dst.  Instead,
-  // append the newly constructed filter to *dst.
-  virtual void CreateFilter(const Slice* keys, int n, std::string* dst)
-      const = 0;
+  // The wide string is created using the ANSI codepage (CP_ACP) to
+  // match the behaviour of the ANSI versions of Win32 calls and the
+  // C runtime.
+  static LPCWSTR AnsiToUtf16(const char* c_str);
     
-     private:
-  const char* data_;
-  size_t size_;
+      bool check_for_leaks = false;
+  if (argc > 1 && strcmp(argv[1], '--check_for_leaks') == 0 )
+    check_for_leaks = true;
+  else
+    printf('%s\n', 'Run this program with --check_for_leaks to enable '
+           'custom leak checking in the tests.');
     
-    #define EXPECT_FATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
-  do { \
-    class GTestExpectFatalFailureHelper {\
-     public:\
-      static void Execute() { statement; }\
-    };\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter:: \
-          INTERCEPT_ALL_THREADS, &gtest_failures);\
-      GTestExpectFatalFailureHelper::Execute();\
-    }\
-  } while (::testing::internal::AlwaysFalse())
+      rusage ru;
+  memset(&ru, 0, sizeof(ru));
+  auto DEBUG_ONLY ret = getrusage(who, &ru);
+  assert(ret == 0);
     
-      // Take over ownership of a raw pointer.  This should happen as soon as
-  // possible after the object is created.
-  explicit linked_ptr(T* ptr = NULL) { capture(ptr); }
-  ~linked_ptr() { depart(); }
     
-    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_STRING_H_
-
-    
-    template <int k, GTEST_$(n)_TYPENAMES_(T)>
-GTEST_ADD_REF_(GTEST_TUPLE_ELEMENT_(k, GTEST_$(n)_TUPLE_(T)))
-get(GTEST_$(n)_TUPLE_(T)& t) {
-  return gtest_internal::Get<k>::Field(t);
-}
-    
-    // The template 'selector' struct TemplateSel<Tmpl> is used to
-// represent Tmpl, which must be a class template with one type
-// parameter, as a type.  TemplateSel<Tmpl>::Bind<T>::type is defined
-// as the type Tmpl<T>.  This allows us to actually instantiate the
-// template 'selected' by TemplateSel<Tmpl>.
-//
-// This trick is necessary for simulating typedef for class templates,
-// which C++ doesn't support directly.
-template <GTEST_TEMPLATE_ Tmpl>
-struct TemplateSel {
-  template <typename T>
-  struct Bind {
-    typedef Tmpl<T> type;
-  };
+    {  // points to an event with an attached waithandle from a different request
+  PageletServerTaskEvent *m_event;
 };
     
-    #endif  // GTEST_SAMPLES_PRIME_TABLES_H_
-
+    private void close_and_restore(const struct magic_set *, const char *, int,
+    const struct stat *);
+private int unreadable_info(struct magic_set *, mode_t, const char *);
+#if 0
+private const char* get_default_magic(void);
+#endif
+private const char *file_or_stream(struct magic_set *, const char *, php_stream *);
     
+      // DataBlock can optionally be growable. The initial expansion of DataBlock
+  // will allocate a new buffer that is owned by the DataBlock, subsequent
+  // expansions will use realloc to expand this block until m_maxGrow has been
+  // reached. Only DataBlocks which have a different m_base from m_destBase may
+  // be grown, as expansion may move the location of m_destBase.
+  struct Deleter final { void operator()(uint8_t* a) const { ::free(a); } };
+  std::unique_ptr<uint8_t, Deleter> m_destBuf{nullptr};
     
-// Step 2. Use the TEST macro to define your tests.
-//
-// TEST has two parameters: the test case name and the test name.
-// After using the macro, you should define your test logic between a
-// pair of braces.  You can use a bunch of macros to indicate the
-// success or failure of a test.  EXPECT_TRUE and EXPECT_EQ are
-// examples of such macros.  For a complete list, see gtest.h.
-//
-// <TechnicalDetails>
-//
-// In Google Test, tests are grouped into test cases.  This is how we
-// keep test code organized.  You should put logically related tests
-// into the same test case.
-//
-// The test case name and the test name should both be valid C++
-// identifiers.  And you should not use underscore (_) in the names.
-//
-// Google Test guarantees that each test you define is run exactly
-// once, but it makes no guarantee on the order the tests are
-// executed.  Therefore, you should write your tests in such a way
-// that their results don't depend on their order.
-//
-// </TechnicalDetails>
+    #include 'hphp/tools/tc-print/tc-print.h'
+#include 'hphp/tools/tc-print/offline-trans-data.h'
     
-    #include <THPP/tensors/THTensor.hpp>
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
     
-      if (b->nDimension == 1) {
-    b = THDTensor_(newWithStorage2d)(b->storage, b->storageOffset, b->size[0],
-            b->stride[0], 1, 0);
-    free_b = true;
+      EXPECT_EQ(FLAGS_test_int64_alias, (int64_t)1 << 34);
+  FLAGS_test_int64_alias = (int64_t)1 << 35;
+  EXPECT_EQ(FLAGS_test_int64, (int64_t)1 << 35);
+  FLAGS_test_int64 = (int64_t)1 << 36;
+  EXPECT_EQ(FLAGS_test_int64_alias, (int64_t)1 << 36);
+  EXPECT_TRUE(FLAGS_test_int64_alias > 0);
+    
+      // Remove the backup and expect another reload to not create one.
+  removePath(path_ + '.backup');
+  ASSERT_FALSE(pathExists(path_ + '.backup'));
+    
+      void TearDown() override;
+    
+    TEST_F(PrinterTests, test_unicode) {
+  Row r = {{'name', 'Àlex Smith'}};
+  std::map<std::string, size_t> lengths;
+  computeRowLengths(r, lengths);
+    }
+    
+    void KernelEventPublisher::stop() {
+  WriteLock lock(mutex_);
+  if (queue_ != nullptr) {
+    delete queue_;
+    queue_ = nullptr;
+  }
+}
+    
+    namespace osquery {
+    }
+    
+      virtual const char* Name() const override;
+    
+    #ifndef JAVA_ROCKSJNI_STATISTICSJNI_H_
+#define JAVA_ROCKSJNI_STATISTICSJNI_H_
+    
+        virtual DecodedType decode_key(const char* key) const {
+      // The format of key is frozen and can be terated as a part of the API
+      // contract. Refer to MemTable::Add for details.
+      return GetLengthPrefixedSlice(key);
+    }
+    
+      bool pending_exception =
+      AbstractSliceJni::setHandle(env, m_jSliceA, &a, JNI_FALSE);
+  if(pending_exception) {
+    if(env->ExceptionCheck()) {
+      // exception thrown from setHandle or descendant
+      env->ExceptionDescribe(); // print out exception to stderr
+    }
+    releaseJniEnv(attached_thread);
+    return 0;
   }
     
     
-    {  copyList.push_back({ srcType, wrapper, false });
+    {    pclose(stream);
 }
     
     
-    {} // namespace aria2
+/*
+ * WakeUpLock.cpp
+ *
+ *  Created on: 2012-9-28
+ *      Author: yerungui
+ */
     
-      virtual PrefPtr getPref() const CXX11_OVERRIDE { return pref_; }
+    #include <stdlib.h>
     
-    public:
-  AbstractProxyRequestCommand(cuid_t cuid, const std::shared_ptr<Request>& req,
-                              const std::shared_ptr<FileEntry>& fileEntry,
-                              RequestGroup* requestGroup, DownloadEngine* e,
-                              const std::shared_ptr<Request>& proxyRequest,
-                              const std::shared_ptr<SocketCore>& s);
     
-    class AnnounceTier {
-public:
-  enum AnnounceEvent {
-    STARTED,
-    STARTED_AFTER_COMPLETION,
-    DOWNLOADING,
-    STOPPED,
-    COMPLETED,
-    SEEDING,
-    HALTED
-  };
+    {    void throw_exception( std::exception const & e ) {
+        xfatal2(TSF'boost exception:%_', e.what());
+        
+#ifdef ANDROID
+        char stack[4096] = {0};
+        android_callstack(stack, sizeof(stack));
+        xfatal2(TSF'%_', stack);
+#endif
     }
+}
+
     
-    class ApiCallbackDownloadEventListener : public DownloadEventListener {
-public:
-  ApiCallbackDownloadEventListener(Session* session,
-                                   DownloadEventCallback callback,
-                                   void* userData);
-  virtual ~ApiCallbackDownloadEventListener();
-  virtual void onEvent(DownloadEvent event,
-                       const RequestGroup* group) CXX11_OVERRIDE;
-    }
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    void TSpy::TestFun0()
+{
+    return reinterpret_cast<Test_Spy_Sample*>(This())->TestFun0();
+}
     
     
-    {  virtual std::unique_ptr<AuthConfig>
-  resolveAuthConfig(const std::string& hostname) = 0;
+    {  private:
+    JavaVM* vm_;
+    JNIEnv* env_;
+    bool we_attach_;
+    int status_;
 };
-    
-    size_t hash_value(FieldAccess const& access) {
-  // On purpose we don't include the write barrier kind here, as this method is
-  // really only relevant for eliminating loads and they don't care about the
-  // write barrier mode.
-  return base::hash_combine(access.base_is_tagged, access.offset,
-                            access.machine_type);
-}
-    
-      int position = 0;
-  for (int i = 0; i < properties()->length(); i++) {
-    ObjectLiteral::Property* property = properties()->at(i);
-    if (property->IsPrototype()) continue;
-    }
-    
-    Handle<Smi> StoreHandler::StoreField(Isolate* isolate, int descriptor,
-                                     FieldIndex field_index,
-                                     PropertyConstness constness,
-                                     Representation representation) {
-  DCHECK_IMPLIES(!FLAG_track_constant_fields,
-                 constness == PropertyConstness::kMutable);
-  Kind kind = constness == PropertyConstness::kMutable ? kField : kConstField;
-  return StoreField(isolate, kind, descriptor, field_index, representation);
-}
-    
-      // Build object literal constant properties
-  for (std::pair<ObjectLiteral*, size_t> literal : object_literals_) {
-    ObjectLiteral* object_literal = literal.first;
-    if (object_literal->properties_count() > 0) {
-      // If constant properties is an empty fixed array, we've already added it
-      // to the constant pool when visiting the object literal.
-      Handle<BoilerplateDescription> constant_properties =
-          object_literal->GetOrBuildConstantProperties(isolate);
-    }
-    }
-    
-     public:
-  typedef PreParserIdentifier Identifier;
-  typedef PreParserExpression Expression;
-  typedef PreParserStatement Statement;
-    
-    #endif  // V8_PROPERTY_DETAILS_H_
