@@ -1,228 +1,94 @@
 
         
-            def __init__(self, groups, env=Environment(), **kwargs):
-        '''
-        :param groups: names of processor groups to be applied
-        :param env: Environment
-        :param kwargs: additional keyword arguments for processors
-    
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
+            class Plugin(AuthPlugin):
+        auth_type = 'test-prompt-false'
+        prompt_password = False
     
     
-def test_unicode_json_item_verbose(httpbin):
-    r = http('--verbose', '--json',
-             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert UNICODE in r
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
     
-        ''',
-)
-    
-        def __getattr__(self, item):
-        return self[item]
-    
-                if self.args.auth is None or not plugin.auth_parse:
-                self.args.auth = plugin.get_auth()
-            else:
-                if already_parsed:
-                    # from the URL
-                    credentials = self.args.auth
-                else:
-                    credentials = parse_auth(self.args.auth)
-    
-        def __init__(self):
-        self._plugins = []
-    
-    
-@keras_test
-def test_model_trainability_switch():
-    # a non-trainable model has no trainable weights
-    x = Input(shape=(1,))
-    y = Dense(2)(x)
-    model = Model(x, y)
-    model.trainable = False
-    assert model.trainable_weights == []
-    
-        indices = np.arange(len(x_test))
-    np.random.shuffle(indices)
-    x_test = x_test[indices]
-    labels_test = labels_test[indices]
-    
-        # Likewise for the test set
-    X_test = HDF5Matrix(h5_path, 'my_data', start=150, end=200)
-    y_test = HDF5Matrix(h5_path, 'my_labels', start=150, end=200)
-    
-    import six
-from . import backend as K
-from .losses import mean_squared_error
-from .losses import mean_absolute_error
-from .losses import mean_absolute_percentage_error
-from .losses import mean_squared_logarithmic_error
-from .losses import hinge
-from .losses import logcosh
-from .losses import squared_hinge
-from .losses import categorical_crossentropy
-from .losses import sparse_categorical_crossentropy
-from .losses import binary_crossentropy
-from .losses import kullback_leibler_divergence
-from .losses import poisson
-from .losses import cosine_proximity
-from .utils.generic_utils import deserialize_keras_object
-from .utils.generic_utils import serialize_keras_object
-    
-            # Returns
-            preds: array-like, shape `(n_samples,)`
-                Predictions.
-        '''
-        kwargs = self.filter_sk_params(Sequential.predict, kwargs)
-        return np.squeeze(self.model.predict(x, **kwargs))
+            if downloader and exit_status == ExitStatus.OK:
+            # Last response body download.
+            download_stream, download_to = downloader.start(final_response)
+            write_stream(
+                stream=download_stream,
+                outfile=download_to,
+                flush=False,
+            )
+            downloader.finish()
+            if downloader.interrupted:
+                exit_status = ExitStatus.ERROR
+                log_error('Incomplete download: size=%d; downloaded=%d' % (
+                    downloader.status.total_size,
+                    downloader.status.downloaded
+                ))
+        return exit_status
     
     
-# knowledge transfer algorithms
-def wider2net_conv2d(teacher_w1, teacher_b1, teacher_w2, new_width, init):
-    '''Get initial weights for a wider conv2d layer with a bigger filters,
-    by 'random-padding' or 'net2wider'.
+def humanize_bytes(n, precision=2):
+    # Author: Doug Latornell
+    # Licence: MIT
+    # URL: http://code.activestate.com/recipes/577081/
+    '''Return a humanized string representation of a number of bytes.
+    
+        def __iter__(self):
+        return iter(self._plugins)
+    
+            credentials = {'username': None, 'password': None}
+        try:
+            # New style
+            plugin.raw_auth = auth['raw_auth']
+        except KeyError:
+            # Old style
+            credentials = {
+                'username': auth['username'],
+                'password': auth['password'],
+            }
+        else:
+            if plugin.auth_parse:
+                from httpie.input import parse_auth
+                parsed = parse_auth(plugin.raw_auth)
+                credentials = {
+                    'username': parsed.key,
+                    'password': parsed.value,
+                }
     
     
-def bench(factory, X, Y, X_test, Y_test, ref_coef):
-    gc.collect()
-    
-        plt.figlegend((c_bar, q_bar), ('construction', 'N-point query'),
-                  'upper right')
-    
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
-    
-        ###########################################################################
-    # List sampling algorithm
-    ###########################################################################
-    # We assume that sampling algorithm has the following signature:
-    #   sample(n_population, n_sample)
-    #
-    sampling_algorithm = {}
-    
-        xx = np.arange(start_dim, start_dim + n * step, step)
-    plt.subplot(212)
-    plt.title('Learning in high dimensional spaces')
-    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
-    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
-    plt.legend(loc='upper left')
-    plt.xlabel('number of dimensions')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
-    plt.show()
+def md5(filename):
+    if not _md5:
+        raise ValueError('MD5 not available.  Possibly running in FIPS mode')
+    return secure_hash(filename, _md5)
 
     
-            train_button = Tk.Button(fm, text='Fit', width=5,
-                                 command=controller.fit)
-        train_button.pack()
-        fm.pack(side=Tk.LEFT)
-        Tk.Button(fm, text='Clear', width=5,
-                  command=controller.clear_data).pack(side=Tk.LEFT)
+            if args.job_metadata:
+            path = os.path.join(output_dir, '%s/job.json' % job_number)
+            contents = json.dumps(j, sort_keys=True, indent=4)
     
-            clf1 = LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto').fit(X, y)
-        clf2 = LinearDiscriminantAnalysis(solver='lsqr', shrinkage=None).fit(X, y)
-    
-    
-    def getType(self):
-        return self.type 
-    
-    \note Please be warned that the line numbers in the API documentation do not
-match the real locations in the source code of the package. This is an
-unintended artifact of doxygen, which I could only convince to use the
-correct module names by concatenating all files from the package into a single
-module file...
-    
-            Returns:
-            A Future representing the given call.
-        '''
-        raise NotImplementedError()
-    
-    def is_prime(n):
-    if n % 2 == 0:
-        return False
-    
-    
-def FormatDebugInfoResponse_Completer_ServerNotRunningWithNoLogfiles_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  response[ 'completer' ][ 'servers' ][ 0 ].update( {
-    'is_running': False,
-    'logfiles': []
-  } )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'Completer name completer debug information:\n'
-      '  Server name not running\n'
-      '  Server name executable: /path/to/executable\n'
-      '  No logfiles available\n'
-      '  Server name key: value\n'
-      '  Key: value\n'
-    )
-  )
+        def on_open_shell(self):
+        try:
+            for cmd in (b'set terminal length 0', b'set terminal width 512'):
+                self._exec_cli_command(cmd)
+            self._exec_cli_command(b'set terminal length %d' % self.terminal_length)
+        except AnsibleConnectionFailure:
+            raise AnsibleConnectionFailure('unable to set terminal parameters')
 
     
-    
-def ExtractKeywordsFromGroup_KeywordStarts_test():
-  assert_that( syntax_parse._ExtractKeywordsFromGroup(
-                 syntax_parse.SyntaxGroup( '', [
-                   'foo bar',
-                   'contained boo baa',
-                   'zoo goo',
-                 ] ) ),
-               contains_inanyorder( 'foo', 'bar', 'boo', 'baa', 'zoo', 'goo' ) )
-    
-      # On UNIX platforms, we use sys.executable as the Python interpreter path.
-  # We cannot use sys.executable on Windows because for unknown reasons, it
-  # returns the Vim executable. Instead, we use sys.exec_prefix to deduce the
-  # interpreter path.
-  python_interpreter = ( WIN_PYTHON_PATH if utils.OnWindows() else
-                         sys.executable )
-  if _EndsWithPython( python_interpreter ):
-    return python_interpreter
+            self.hass.bus.listen = mock.MagicMock()
+        self.assertTrue(setup_component(self.hass, splunk.DOMAIN, config))
+        self.assertTrue(self.hass.bus.listen.called)
+        self.assertEqual(EVENT_STATE_CHANGED,
+                         self.hass.bus.listen.call_args_list[0][0][0])
     
     
-def BuildYcmdLibs( args ):
-  if not args.skip_build:
-    subprocess.check_call( [
-      sys.executable,
-      p.join( DIR_OF_THIS_SCRIPT, 'third_party', 'ycmd', 'build.py' )
-    ] )
-    
-        with patch.object( ycm._message_poll_request,
-                       '_response_future',
-                       new = MockAsyncServerResponseDone( [] ) ) as mock_future:
-      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
-  '''
-  return mock.MagicMock( wraps = FakeFuture( True, response ) )
-    
-        # If not a dictionary or a list, the response is necessarily a
-    # scalar: boolean, number, string, etc. In this case, we print
-    # it to the user.
-    if not isinstance( self._response, ( dict, list ) ):
-      return self._HandleBasicResponse()
-    
-    Loosely based on https://github.com/astropy/astropy/pull/347
-'''
-    
-        hass.services.register(DOMAIN, SERVICE_MEDIA_PREVIOUS_TRACK,
-                           lambda service:
-                           keyboard.tap_key(keyboard.media_prev_track_key),
-                           schema=TAP_KEY_SCHEMA)
-    return True
-
-    
-        config_dir = os.path.join(os.getcwd(), args.config)
+def convert(value: float, unit_1: str, unit_2: str) -> float:
+    '''Convert one unit of measurement to another.'''
+    if unit_1 not in VALID_UNITS:
+        raise ValueError(
+            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_1, LENGTH))
+    if unit_2 not in VALID_UNITS:
+        raise ValueError(
+            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_2, LENGTH))
