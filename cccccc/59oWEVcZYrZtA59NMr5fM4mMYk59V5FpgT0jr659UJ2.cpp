@@ -1,250 +1,293 @@
 
         
-        #endif  // ATOM_BROWSER_NET_URL_REQUEST_ASYNC_ASAR_JOB_H_
-
+        #include 'db/filename.h'
+#include 'db/dbformat.h'
+#include 'db/table_cache.h'
+#include 'db/version_edit.h'
+#include 'leveldb/db.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
     
-    #endif  // ATOM_BROWSER_RELAUNCHER_H_
-
+    std::string ParsedInternalKey::DebugString() const {
+  char buf[50];
+  snprintf(buf, sizeof(buf), '' @ %llu : %d',
+           (unsigned long long) sequence,
+           int(type));
+  std::string result = ''';
+  result += EscapeString(user_key.ToString());
+  result += buf;
+  return result;
+}
     
-    void DragFileItems(const std::vector<base::FilePath>& files,
-                   const gfx::Image& icon,
-                   gfx::NativeView view);
+    Status SetCurrentFile(Env* env, const std::string& dbname,
+                      uint64_t descriptor_number) {
+  // Remove leading 'dbname/' and add newline to manifest file name
+  std::string manifest = DescriptorFileName(dbname, descriptor_number);
+  Slice contents = manifest;
+  assert(contents.starts_with(dbname + '/'));
+  contents.remove_prefix(dbname.size() + 1);
+  std::string tmp = TempFileName(dbname, descriptor_number);
+  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
+  if (s.ok()) {
+    s = env->RenameFile(tmp, CurrentFileName(dbname));
+  }
+  if (!s.ok()) {
+    env->DeleteFile(tmp);
+  }
+  return s;
+}
     
-    #include 'atom/browser/ui/views/frameless_view.h'
+    // If true, do not destroy the existing database.  If you set this
+// flag and also specify a benchmark that wants a fresh database, that
+// benchmark will fail.
+static bool FLAGS_use_existing_db = false;
     
+      // Choose a location for the test database if none given with --db=<path>
+  if (FLAGS_db == NULL) {
+      leveldb::Env::Default()->GetTestDirectory(&default_db_path);
+      default_db_path += '/dbbench';
+      FLAGS_db = default_db_path.c_str();
+  }
     
-    { protected:
-  virtual ~WindowListObserver() {}
-};
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(Locker);
-};
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(RemoteCallbackFreer);
-};
-    
-      virtual ~GlobalShortcutListener();
-    
-    #endif  // STORAGE_LEVELDB_DB_BUILDER_H_
-
-    
-    
-// Owned filenames have the form:
-//    dbname/CURRENT
-//    dbname/LOCK
-//    dbname/LOG
-//    dbname/LOG.old
-//    dbname/MANIFEST-[0-9]+
-//    dbname/[0-9]+.(log|sst|ldb)
-bool ParseFileName(const std::string& fname,
-                   uint64_t* number,
-                   FileType* type) {
-  Slice rest(fname);
-  if (rest == 'CURRENT') {
-    *number = 0;
-    *type = kCurrentFile;
-  } else if (rest == 'LOCK') {
-    *number = 0;
-    *type = kDBLockFile;
-  } else if (rest == 'LOG' || rest == 'LOG.old') {
-    *number = 0;
-    *type = kInfoLogFile;
-  } else if (rest.starts_with('MANIFEST-')) {
-    rest.remove_prefix(strlen('MANIFEST-'));
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
+      struct CommentInfo {
+    CommentInfo();
+    ~CommentInfo();
     }
-    if (!rest.empty()) {
-      return false;
+    
+    
+    {PyObject* NewMessageOneofsByName(const Descriptor* descriptor);
+PyObject* NewMessageOneofsSeq(const Descriptor* descriptor);
+}  // namespace message_descriptor
+    
+    
+    {  ASSERT_TRUE(message.ParseFromString(data));
+  EXPECT_TRUE(message.has_any_value());
+  ASSERT_TRUE(message.any_value().UnpackTo(&any));
+  ASSERT_TRUE(any.UnpackTo(&submessage));
+  EXPECT_EQ(12345, submessage.int32_value());
+}
+    
+    RepeatedEnumFieldGenerator::~RepeatedEnumFieldGenerator() {
     }
-    *type = kDescriptorFile;
-    *number = num;
+    
+    
+    {
+    {
+    {}  // namespace java
+}  // namespace compiler
+}  // namespace protobuf
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+    }
+    }
+    }
+    }
+    
+    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
+    const FieldDescriptor* descriptor) const {
+  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
+    return new ImmutableExtensionGenerator(descriptor, context_);
   } else {
-    // Avoid strtoull() to keep filename format independent of the
-    // current locale
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    Slice suffix = rest;
-    if (suffix == Slice('.log')) {
-      *type = kLogFile;
-    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
-      *type = kTableFile;
-    } else if (suffix == Slice('.dbtmp')) {
-      *type = kTempFile;
-    } else {
-      return false;
-    }
-    *number = num;
+    return new ImmutableExtensionLiteGenerator(descriptor, context_);
   }
-  return true;
 }
     
-    // Return the name of the current file.  This file contains the name
-// of the current manifest file.  The result will be prefixed with
-// 'dbname'.
-extern std::string CurrentFileName(const std::string& dbname);
-    
-    void TableCache::Evict(uint64_t file_number) {
-  char buf[sizeof(file_number)];
-  EncodeFixed64(buf, file_number);
-  cache_->Erase(Slice(buf, sizeof(buf)));
-}
-    
-    
-    {}  // namespace leveldb
-    
-    
-    {  ASSERT_TRUE(! Overlaps(NULL, 'j'));
-  ASSERT_TRUE(! Overlaps('r', NULL));
-  ASSERT_TRUE(Overlaps(NULL, 'p'));
-  ASSERT_TRUE(Overlaps(NULL, 'p1'));
-  ASSERT_TRUE(Overlaps('q', NULL));
-  ASSERT_TRUE(Overlaps(NULL, NULL));
-}
-    
-    // Return a builtin comparator that uses lexicographic byte-wise
-// ordering.  The result remains the property of this module and
-// must not be deleted.
-extern const Comparator* BytewiseComparator();
-    
-    
-    {}
-    
-    // Like ASSERT_EXIT, but continues on to successive tests in the
-// test case, if any:
-# define EXPECT_EXIT(statement, predicate, regex) \
-    GTEST_DEATH_TEST_(statement, predicate, regex, GTEST_NONFATAL_FAILURE_)
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7>
-internal::ValueArray7<T1, T2, T3, T4, T5, T6, T7> Values(T1 v1, T2 v2, T3 v3,
-    T4 v4, T5 v5, T6 v6, T7 v7) {
-  return internal::ValueArray7<T1, T2, T3, T4, T5, T6, T7>(v1, v2, v3, v4, v5,
-      v6, v7);
-}
-    
-    #define GTEST_ASSERT_(expression, on_failure) \
-  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
-  if (const ::testing::AssertionResult gtest_ar = (expression)) \
-    ; \
-  else \
-    on_failure(gtest_ar.failure_message())
-    
-    template <GTEST_$(n)_TYPENAMES_(T), GTEST_$(n)_TYPENAMES_(U)>
-inline bool operator==(const GTEST_$(n)_TUPLE_(T)& t,
-                       const GTEST_$(n)_TUPLE_(U)& u) {
-  return gtest_internal::SameSizeTuplePrefixComparator<
-      tuple_size<GTEST_$(n)_TUPLE_(T) >::value,
-      tuple_size<GTEST_$(n)_TUPLE_(U) >::value>::Eq(t, u);
-}
-    
-    // redirect the messages to R's console.
-namespace dmlc {
-void CustomLogMessage::Log(const std::string& msg) {
-  Rprintf('%s\n', msg.c_str());
-}
-}  // namespace dmlc
-    
-      /*!
-   * \brief Push row block into the page.
-   * \param batch the row batch.
-   */
-  inline void Push(const dmlc::RowBlock<uint32_t>& batch) {
-    data.reserve(data.size() + batch.offset[batch.size] - batch.offset[0]);
-    offset.reserve(offset.size() + batch.size);
-    CHECK(batch.index != nullptr);
-    for (size_t i = 0; i < batch.size; ++i) {
-      offset.push_back(offset.back() + batch.offset[i + 1] - batch.offset[i]);
+    // Factory that creates generators for immutable-default messages.
+class ImmutableGeneratorFactory : public GeneratorFactory {
+ public:
+  ImmutableGeneratorFactory(Context* context);
+  virtual ~ImmutableGeneratorFactory();
     }
-    for (size_t i = batch.offset[0]; i < batch.offset[batch.size]; ++i) {
-      uint32_t index = batch.index[i];
-      bst_float fvalue = batch.value == nullptr ? 1.0f : batch.value[i];
-      data.emplace_back(index, fvalue);
-    }
-    CHECK_EQ(offset.back(), data.size());
-  }
-  /*!
-   * \brief Push a sparse page
-   * \param batch the row page
-   */
-  inline void Push(const SparsePage &batch) {
-    size_t top = offset.back();
-    data.resize(top + batch.data.size());
-    std::memcpy(dmlc::BeginPtr(data) + top,
-                dmlc::BeginPtr(batch.data),
-                sizeof(Entry) * batch.data.size());
-    size_t begin = offset.size();
-    offset.resize(begin + batch.Size());
-    for (size_t i = 0; i < batch.Size(); ++i) {
-      offset[i + begin] = top + batch.offset[i + 1];
-    }
-  }
-  /*!
-   * \brief Push one instance into page
-   *  \param inst an instance row
-   */
-  inline void Push(const Inst &inst) {
-    offset.push_back(offset.back() + inst.length);
-    size_t begin = data.size();
-    data.resize(begin + inst.length);
-    if (inst.length != 0) {
-      std::memcpy(dmlc::BeginPtr(data) + begin, inst.data,
-                  sizeof(Entry) * inst.length);
-    }
-  }
     
-      /**
-   * \fn  virtual void Predictor::PredictContribution( DMatrix* dmat,
-   * std::vector<bst_float>* out_contribs, const gbm::GBTreeModel& model,
-   * unsigned ntree_limit = 0) = 0;
+    
+    {}  // namespace google
+#endif  // GOOGLE_PROTOBUF_COMPILER_JAVA_LAZY_MESSAGE_FIELD_H__
+
+    
+      /// Sets the non-blocking mode of the acceptor.
+  /**
+   * @param mode If @c true, the acceptor's synchronous operations will fail
+   * with boost::asio::error::would_block if they are unable to perform the
+   * requested operation immediately. If @c false, synchronous operations will
+   * block until complete.
    *
-   * \brief feature contributions to individual predictions; the output will be
-   * a vector of length (nfeats + 1) * num_output_group * nsample, arranged in
-   * that order.
+   * @param ec Set to indicate what error occurred, if any.
    *
-   * \param [in,out]  dmat               The input feature matrix.
-   * \param [in,out]  out_contribs       The output feature contribs.
-   * \param           model              Model to make predictions from.
-   * \param           ntree_limit        (Optional) The ntree limit.
-   * \param           approximate        Use fast approximate algorithm.
-   * \param           condition          Condition on the condition_feature (0=no, -1=cond off, 1=cond on).
-   * \param           condition_feature  Feature to condition on (i.e. fix) during calculations.
+   * @note The non-blocking mode has no effect on the behaviour of asynchronous
+   * operations. Asynchronous operations will never fail with the error
+   * boost::asio::error::would_block.
    */
+  boost::system::error_code non_blocking(
+      bool mode, boost::system::error_code& ec)
+  {
+    return this->get_service().non_blocking(
+        this->get_implementation(), mode, ec);
+  }
     
-    /*! \brief node statistics used in regression tree */
-struct RTreeNodeStat {
-  /*! \brief loss change caused by current split */
-  bst_float loss_chg;
-  /*! \brief sum of hessian values, used to measure coverage of data */
-  bst_float sum_hess;
-  /*! \brief weight of current node */
-  bst_float base_weight;
-  /*! \brief number of child that is leaf node known up to now */
-  int leaf_child_cnt;
-};
+    template <typename Stream>
+class buffered_stream;
     
-    /*!
- * \brief Macro to register sparse page format.
+    #if defined(BOOST_ASIO_HAS_STD_FUNCTION)
+using std::function;
+#else // defined(BOOST_ASIO_HAS_STD_FUNCTION)
+using boost::function;
+#endif // defined(BOOST_ASIO_HAS_STD_FUNCTION)
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
+    
+    
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+    
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+      // Start looping through starting at the first options
+  // (so skip the exports)
+  for (auto iter = line.begin() + options_index; iter != line.end(); ++iter) {
+    if (iter->compare('-ro') == 0 || iter->compare('-o') == 0) {
+      readonly = 1;
+    }
+  }
+    
+    /// Define a map of decoration points to their expected configuration key.
+extern const std::map<DecorationPoint, std::string> kDecorationPointKeys;
+    
+     protected:
+  /// Calculate the URL once and cache the result.
+  std::string uri_;
+    
+    std::string stringFromCFNumber(const CFDataRef& cf_number, CFNumberType type) {
+  // Make sure the type is a number.
+  if (CFGetTypeID(cf_number) != CFNumberGetTypeID()) {
+    return '0';
+  }
+    }
+    
+      // Test operator upper bounds.
+  EXPECT_FALSE(cl2.matches(1000));
+  EXPECT_FALSE(cl2.matches(1001));
+    
+    
+    {  // Make sure no log file is created.
+  // RocksDB logs are intercepted and forwarded to the GLog sink.
+  auto details = SQL::selectAllFrom('file', 'path', EQUALS, path_ + '/LOG');
+  ASSERT_EQ(details.size(), 0U);
+}
+    
+    /**
+ * @brief Compute a map of metadata about the supplied QueryData object
  *
- * \code
- * // example of registering a objective
- * XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(raw)
- * .describe('Raw binary data format.')
- * .set_body([]() {
- *     return new RawFormat();
- *   });
- * \endcode
+ * @param r A row to analyze
+ * @param lengths A mutable set of column lengths
+ * @param use_columns Calulate lengths of column names or values
+ *
+ * @return A map of string to int such that the key represents the 'column' in
+ * the supplied QueryData and the int represents the length of the longest key
  */
-#define XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(Name)                       \
-  DMLC_REGISTRY_REGISTER(::xgboost::data::SparsePageFormatReg, SparsePageFormat, Name)
+void computeRowLengths(const Row& r,
+                       std::map<std::string, size_t>& lengths,
+                       bool use_columns = false);
     
-      void DoBoost(DMatrix *p_fmat,
-               HostDeviceVector<GradientPair> *in_gpair,
-               ObjFunction* obj) override {
-    monitor_.Start('DoBoost');
+    
+    {  // Then compute lengths of column names.
+  computeRowLengths(q.front(), lengths, true);
+  expected = {{'name', 10}, {'age', 4}, {'food', 23}, {'number', 6}};
+  EXPECT_EQ(lengths, expected);
+}
+    
+    using OpenBSMEventContextRef = std::shared_ptr<OpenBSMEventContext>;
+using OpenBSMSubscriptionContextRef =
+    std::shared_ptr<OpenBSMSubscriptionContext>;
+    
+      rocksdb::ColumnFamilyHandle* cf;
+  db_wrapper->status_ = db_wrapper->db_->CreateColumnFamily(
+      rocksdb::ColumnFamilyOptions(), cf_name, &cf);
+    
+      std::string scratch;
+  scratch.resize(kGood.size() + kCorrupted.size() + 16);
+  Slice result;
+  unique_ptr<RandomAccessFile> rand_file;
+  ASSERT_OK(env_->NewRandomAccessFile(kFileName, &rand_file, soptions_));
+  ASSERT_OK(rand_file->Read(0, kGood.size(), &result, &(scratch[0])));
+  ASSERT_EQ(result.compare(kGood), 0);
+    
+    
+    {} // namespace rocksdb
+
+    
+     private:
+  // A version of PartialMerge that actually performs 'partial merging'.
+  // Use this to simulate the exact behaviour of the StringAppendOperator.
+  bool _AssocPartialMergeMulti(const Slice& key,
+                               const std::deque<Slice>& operand_list,
+                               std::string* new_value, Logger* logger) const;
+    
+      // Reopen the database (the previous changes should persist / be remembered)
+  {
+    auto db = OpenDb('\n');
+    StringLists slists(db);
     }
+    
+      /// Prints the entire (list: key), for debugging.
+  void Print(const std::string& key);
+    
+      // returns true if the reader has encountered an eof condition.
+  bool IsEOF() {
+    return eof_;
+  }
+    
+      StatisticsJni::StatisticsJni(std::shared_ptr<Statistics> stats,
+      const std::set<uint32_t> ignore_histograms) : StatisticsImpl(stats, false),
+      m_ignore_histograms(ignore_histograms) {
+  }
+    
+      // Returns the sequence number of the first element that was inserted
+  // into the memtable.
+  // REQUIRES: external synchronization to prevent simultaneous
+  // operations on the same MemTable (unless this Memtable is immutable).
+  SequenceNumber GetFirstSequenceNumber() {
+    return first_seqno_.load(std::memory_order_relaxed);
+  }
+    
+      jstring jname =
+      (jstring)env->CallObjectMethod(m_jcallback_obj, jname_method_id);
+  if(env->ExceptionCheck()) {
+    // exception thrown
+    return;
+  }
+  jboolean has_exception = JNI_FALSE;
+  m_name = JniUtil::copyString(env, jname, &has_exception);  // also releases jname
+  if (has_exception == JNI_TRUE) {
+    // exception thrown
+    return;
+  }
+    
+    
+    {
+    {   private:
+     jmethodID m_jLogMethodId;
+     jobject m_jdebug_level;
+     jobject m_jinfo_level;
+     jobject m_jwarn_level;
+     jobject m_jerror_level;
+     jobject m_jfatal_level;
+     jobject m_jheader_level;
+     std::unique_ptr<char[]> format_str(const char* format, va_list ap) const;
+  };
+}  // namespace rocksdb
