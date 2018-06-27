@@ -1,113 +1,89 @@
 
         
-                    when :user
-              # When the last command was a username login
-              # We might keep track on this one in future
-            when :pass
-              # Perfect we get an +OK after a PASS command this means right password given :-)
+        module AccountFinderConcern
+  extend ActiveSupport::Concern
     
-    	if ln =~ /\(jmp\)/
-		parts = ln.split(' ')
-		if (parts[0][0,1] == 'j' and parts[2][0,2] == ';j' and parts[4] == '(jmp)')
-			old = parts[1]
-			func = parts[3]
-			new = addrs[func]
-			#puts '%32s: %s -> %x' % [func, old, new]
-			replaces << [func, old, new.to_s(16)]
-		end
-	end
-    
-        super
+    class NotificationMailerPreview < ActionMailer::Preview
+  # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/mention
+  def mention
+    m = Mention.last
+    NotificationMailer.mention(m.account, Notification.find_by(activity: m))
   end
-end
     
-          module ClassMethods
-        def inherited(subclass)
-          subclass.log_levels = subclass.superclass.log_levels.dup
-        end
+      # Clean the keg of formula @f
+  def clean
+    ObserverPathnameExtension.reset_counts!
     
-      module Sass::Plugin::Configuration
-    # Different default options in a m environment.
-    def default_options
-      @default_options ||= begin
-        version = Merb::VERSION.split('.').map {|n| n.to_i}
-        if version[0] <= 0 && version[1] < 5
-          root = MERB_ROOT
-          env  = MERB_ENV
-        else
-          root = Merb.root.to_s
-          env  = Merb.environment
-        end
+      def create_issue(repo, title, body)
+    url = 'https://api.github.com/repos/#{repo}/issues'
+    data = { 'title' => title, 'body' => body }
+    scopes = GitHub::CREATE_ISSUE_FORK_OR_PR_SCOPES
+    GitHub.open_api(url, data: data, scopes: scopes)['html_url']
+  end
     
-          concat(before_string_or_interp, concat(mid_string_or_interp, after_string_or_interp))
+          super
     end
     
-          def escape_hash(hash)
-        hash = hash.dup
-        hash.each { |k,v| hash[k] = escape(v) }
-        hash
-      end
-    
-            post '/', :file => Rack::Test::UploadedFile.new(temp_file.path), :other => '<bar>'
-        expect(body).to eq('_escaped_params_tmp_file\nhello world\n&lt;bar&gt;')
-      ensure
-        File.unlink(temp_file.path)
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
+        end
       end
     end
   end
 end
 
     
-        mock_app do
-      use Rack::Head
-      use(Rack::Config) { |e| e['rack.session'] ||= {}}
-      use changer
-      use klass
-      use detector
-      run DummyApp
-    end
-    
-            def on_case(case_node)
-          case_node.when_branches.each_with_object([]) do |when_node, previous|
-            when_node.each_condition do |condition|
-              next unless repeated_condition?(previous, condition)
-    
-      it 'registers an offense' do
-    inspect_source(source)
-    
-        i0, s0 = index, []
-    r1 = _nt_rvalue
-    s0 << r1
-    if r1
-      r2 = _nt__
-      s0 << r2
-      if r2
-        r3 = _nt_compare_operator
-        s0 << r3
-        if r3
-          r4 = _nt__
-          s0 << r4
-          if r4
-            r5 = _nt_rvalue
-            s0 << r5
-          end
-        end
+          def initialize(argv)
+        super
+        config.silent = false
       end
-    end
-    if s0.last
-      r0 = instantiate_node(LogStash::Config::AST::ComparisonExpression,input, i0...index, s0)
-      r0.extend(CompareExpression0)
-    else
-      @index = i0
-      r0 = nil
+    
+      class Blockquote < Liquid::Block
+    FullCiteWithTitle = /(\S.*)\s+(https?:\/\/)(\S+)\s+(.+)/i
+    FullCite = /(\S.*)\s+(https?:\/\/)(\S+)/i
+    AuthorTitle = /([^,]+),([^,]+)/
+    Author =  /(.+)/
+    
+          locations = Array.new
+      while (data.code.to_i == 301 || data.code.to_i == 302)
+        data = handle_gist_redirecting(data)
+        break if locations.include? data.header['Location']
+        locations << data.header['Location']
+      end
+    
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
     end
     
-          origin = caller[1]
-      if origin =~ /rubygems\/custom_require/
-        origin = caller[3]
-        if origin.nil?
-          STDERR.puts 'Unknown origin'
-          STDERR.puts caller.join('\n')
-        end
-      end
-      origin = origin.gsub(/:[0-9]+:in .*/, '') if origin
+        def initialize(tag_name, markup, tokens)
+      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
+      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
+      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
+      super
+    end
