@@ -1,121 +1,85 @@
 
         
-        
-@keras_test
-def test_nested_model_trainability():
-    # a Sequential inside a Model
-    inner_model = Sequential()
-    inner_model.add(Dense(2, input_dim=1))
+                Keyword:                   'bold #004461',   # class: 'k'
+        Keyword.Constant:          'bold #004461',   # class: 'kc'
+        Keyword.Declaration:       'bold #004461',   # class: 'kd'
+        Keyword.Namespace:         'bold #004461',   # class: 'kn'
+        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
+        Keyword.Reserved:          'bold #004461',   # class: 'kr'
+        Keyword.Type:              'bold #004461',   # class: 'kt'
     
-        if K.backend() == 'tensorflow' or K.backend() == 'cntk':
-        inputs = Input(shape=(10, 20, 20, 1))
-    else:
-        inputs = Input(shape=(10, 1, 20, 20))
-    td_conv = TimeDistributed(Conv2D(15, (5, 5)))(inputs)
-    bi_convlstm2d = Bidirectional(ConvLSTM2D(10, (3, 3)), merge_mode='concat')(td_conv)
-    model = Model(inputs=inputs, outputs=bi_convlstm2d)
-    
-        # Arguments
-        x: Input array, 3D or 4D.
-        data_format: Data format of the image array.
-        mode: One of 'caffe', 'tf' or 'torch'.
-            - caffe: will convert the images from RGB to BGR,
-                then will zero-center each color channel with
-                respect to the ImageNet dataset,
-                without scaling.
-            - tf: will scale pixels between -1 and 1,
-                sample-wise.
-            - torch: will scale pixels between 0 and 1 and then
-                will normalize each channel with respect to the
-                ImageNet dataset.
-    
-    model = Sequential()
-model.add(Embedding(max_features, embedding_size, input_length=maxlen))
-model.add(Dropout(0.25))
-model.add(Conv1D(filters,
-                 kernel_size,
-                 padding='valid',
-                 activation='relu',
-                 strides=1))
-model.add(MaxPooling1D(pool_size=pool_size))
-model.add(LSTM(lstm_output_size))
-model.add(Dense(1))
-model.add(Activation('sigmoid'))
+    Provides utility functions that are consumed internally by Requests
+which depend on extremely few external helpers (such as compat)
+'''
     
     
-@keras_test
-def test_unit_norm():
-    unit_norm_instance = constraints.unit_norm()
-    normalized = unit_norm_instance(K.variable(get_example_array()))
-    norm_of_normalized = np.sqrt(np.sum(K.eval(normalized) ** 2, axis=0))
-    # In the unit norm constraint, it should be equal to 1.
-    difference = norm_of_normalized - 1.
-    largest_difference = np.max(np.abs(difference))
-    assert(np.abs(largest_difference) < 10e-5)
+@pytest.mark.skipif(sys.version_info < (2,7), reason='Only run on Python 2.7+')
+def test_system_ssl():
+    '''Verify we're actually setting system_ssl when it should be available.'''
+    assert info()['system_ssl']['version'] != ''
     
-        In this task, there are variable length inputs of integers from 1-9, and a random
-    subset of unmasked outputs. Each of these outputs has a 50% probability of being
-    the input number unchanged, and a 50% probability of being 2*input%10.
+    import os
+import re
+import time
+import hashlib
+import threading
+import warnings
     
-                for t in range(n_frames):
-                x_shift = xstart + directionx * t
-                y_shift = ystart + directiony * t
-                noisy_movies[i, t, x_shift - w: x_shift + w,
-                             y_shift - w: y_shift + w, 0] += 1
+        # Informational.
+    100: ('continue',),
+    101: ('switching_protocols',),
+    102: ('processing',),
+    103: ('checkpoint',),
+    122: ('uri_too_long', 'request_uri_too_long'),
+    200: ('ok', 'okay', 'all_ok', 'all_okay', 'all_good', '\\o/', '✓'),
+    201: ('created',),
+    202: ('accepted',),
+    203: ('non_authoritative_info', 'non_authoritative_information'),
+    204: ('no_content',),
+    205: ('reset_content', 'reset'),
+    206: ('partial_content', 'partial'),
+    207: ('multi_status', 'multiple_status', 'multi_stati', 'multiple_stati'),
+    208: ('already_reported',),
+    226: ('im_used',),
     
-    print('Pad sequences (samples x time)')
-x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
-x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
+    with open('README.rst', 'r', 'utf-8') as f:
+    readme = f.read()
+with open('HISTORY.rst', 'r', 'utf-8') as f:
+    history = f.read()
     
-        def start_requests(self):
-        qargs = {'total': self.total, 'show': self.show}
-        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
-        return [scrapy.Request(url, dont_filter=True)]
+        def bfs(self, source, dest):
+        if source is None:
+            return False
+        queue = deque()
+        queue.append(source)
+        source.visit_state = State.visited
+        while queue:
+            node = queue.popleft()
+            print(node)
+            if dest is node:
+                return True
+            for adjacent_node in node.adj_nodes.values():
+                if adjacent_node.visit_state == State.unvisited:
+                    queue.append(adjacent_node)
+                    adjacent_node.visit_state = State.visited
+        return False
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-l', '--list', dest='list', action='store_true',
-            help='List available templates')
-        parser.add_option('-e', '--edit', dest='edit', action='store_true',
-            help='Edit spider after creating it')
-        parser.add_option('-d', '--dump', dest='dump', metavar='TEMPLATE',
-            help='Dump template to standard output')
-        parser.add_option('-t', '--template', dest='template', default='basic',
-            help='Uses a custom template.')
-        parser.add_option('--force', dest='force', action='store_true',
-            help='If the spider already exists, overwrite it with the template')
+        def extract_url(self, line):
+        '''Extract the generated url from the log line.'''
+        pass
     
-                    # execute pre and post hooks in order
-                for contract in reversed(contracts):
-                    request = contract.add_pre_hook(request, results)
-                for contract in contracts:
-                    request = contract.add_post_hook(request, results)
+        def move_to_front(self, node):
+        pass
     
-    # If true, '()' will be appended to :func: etc. cross-reference text.
-#add_function_parentheses = True
     
-        # Implement all methods from IAuthenticator, remembering to add
-    # 'self' as first argument, e.g. def prepare(self)...
+class Car(Vehicle):
     
-        # Execute the template string in a temporary namespace and
-    # support tracing utilities by setting a value for frame.f_globals['__name__']
-    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
-                     _property=property, _tuple=tuple)
-    try:
-        exec(template, namespace)
-    except SyntaxError:
-        e = _sys.exc_info()[1]
-        raise SyntaxError(e.message + ':\n' + template)
-    result = namespace[typename]
+    TOKEN = 'foo'
     
-      if config_entry is None:
-    return []
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        def test_find_all_load_skips(self):
+        # pylint: disable=protected-access
+        self.storage._load_for_server_path = mock.MagicMock(
+            side_effect=['x', errors.AccountStorageError, 'z'])
+        with mock.patch('certbot.account.os.listdir') as mock_listdir:
+            mock_listdir.return_value = ['x', 'y', 'z']
+            self.assertEqual(['x', 'z'], self.storage.find_all())
