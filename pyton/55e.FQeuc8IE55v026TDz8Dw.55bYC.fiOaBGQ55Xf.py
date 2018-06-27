@@ -1,127 +1,127 @@
-    try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-            '--auth',
-            USERNAME,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
 
-    
-    https://github.com/Homebrew/homebrew-core/blob/master/Formula/httpie.rb
-    
-    
-class Environment(object):
-    '''
-    Information about the execution context
-    (standard streams, config directory, etc).
-    
-        for chunk in stream:
-        buf.write(chunk)
-        if flush:
-            outfile.flush()
-    
-        def load_installed_plugins(self):
-        for entry_point_name in ENTRY_POINT_NAMES:
-            for entry_point in iter_entry_points(entry_point_name):
-                plugin = entry_point.load()
-                plugin.package_name = entry_point.dist.key
-                self.register(entry_point.load())
-    
-        if args.auth_plugin:
-        session.auth = {
-            'type': args.auth_plugin.auth_type,
-            'raw_auth': args.auth_plugin.raw_auth,
-        }
-    elif session.auth:
-        kwargs['auth'] = session.auth
-    
-        response = requests.get('https://api.shippable.com/jobs?runIds=%s' % args.run_id, headers=headers)
-    
-            # no location in URL
-        input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/targetHttpProxies/mytargetproxy/setUrlMap'
-        actual = GCPUtils.parse_gcp_url(input_url)
-        self.assertEquals('compute', actual['service'])
-        self.assertEquals('v1', actual['api_version'])
-        self.assertEquals('myproject', actual['project'])
-        self.assertFalse('global' in actual)
-        self.assertEquals('targetHttpProxies', actual['resource_name'])
-        self.assertEquals('mytargetproxy', actual['entity_name'])
-        self.assertEquals('setUrlMap', actual['method_name'])
-    
-        def on_open_shell(self):
-        try:
-            for cmd in (b'set terminal length 0', b'set terminal width 512'):
-                self._exec_cli_command(cmd)
-            self._exec_cli_command(b'set terminal length %d' % self.terminal_length)
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
-
-    
-            n_samples, n_features = 10 * i + 3, 10 * i + 3
-    
-    from sklearn.datasets import make_multilabel_classification
-from sklearn.metrics import (f1_score, accuracy_score, hamming_loss,
-                             jaccard_similarity_score)
-from sklearn.utils.testing import ignore_warnings
+        
+            def iter_body(self, chunk_size):
+        '''Return an iterator over the body.'''
+        raise NotImplementedError()
     
     
-def plot_feature_errors(all_errors, batch_size, all_components, data):
-    plt.figure()
-    plot_results(all_components, all_errors['pca'], label='PCA')
-    plot_results(all_components, all_errors['ipca'],
-                 label='IncrementalPCA, bsize=%i' % batch_size)
-    plot_results(all_components, all_errors['rpca'], label='RandomizedPCA')
-    plt.legend(loc='lower left')
-    plt.suptitle('Algorithm error vs. n_components\n'
-                 'LFW, size %i x %i' % data.shape)
-    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
-    plt.ylabel('Mean absolute error')
-    
-            start = time.time()
-        func(X, n_jobs=-1)
-        multi_core.append(time.time() - start)
-    
-    n_samples = np.logspace(.5, 3, 9)
-n_features = np.logspace(1, 3.5, 7)
-N_samples, N_features = np.meshgrid(n_samples,
-                                    n_features)
-scikits_time = np.zeros(N_samples.shape)
-scipy_time = np.zeros(N_samples.shape)
-    
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (3 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
-    
-            clf1 = LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto').fit(X, y)
-        clf2 = LinearDiscriminantAnalysis(solver='lsqr', shrinkage=None).fit(X, y)
+MIME_RE = re.compile(r'^[^/]+/[^/]+$')
     
     
-    def predict(self, input):
+def test_unicode_form_item_verbose(httpbin):
+    r = http('--verbose', '--form',
+             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
+    assert HTTP_OK in r
+    assert UNICODE in r
+    
+            return stream, self._output_file
+    
+        def get_auth(self, username=None, password=None):
         '''
-        From the input stream, predict what alternative will succeed
-	using this DFA (representing the covering regular approximation
-	to the underlying CFL).  Return an alternative number 1..n.  Throw
-	 an exception upon error.
-	'''
-        mark = input.mark()
-        s = 0 # we always start at s0
-        try:
-            for _ in xrange(50000):
-                #print '***Current state = %d' % s
-                
-                specialState = self.special[s]
-                if specialState >= 0:
-                    #print 'is special'
-                    s = self.specialStateTransition(specialState, input)
-                    if s == -1:
-                        self.noViableAlt(s, input)
-                        return 0
-                    input.consume()
-                    continue
+        If `auth_parse` is set to `True`, then `username`
+        and `password` contain the parsed credentials.
+    
+    
+class BasicAuthPlugin(BuiltinAuthPlugin):
+    
+    ssl = parser.add_argument_group(title='SSL')
+ssl.add_argument(
+    '--verify',
+    default='yes',
+    help='''
+    Set to 'no' (or 'false') to skip checking the host's SSL certificate.
+    Defaults to 'yes' ('true'). You can also pass the path to a CA_BUNDLE file
+    for private certs. (Or you can set the REQUESTS_CA_BUNDLE environment
+    variable instead.)
+    '''
+)
+ssl.add_argument(
+    '--ssl',  # TODO: Maybe something more general, such as --secure-protocol?
+    dest='ssl_version',
+    choices=list(sorted(SSL_VERSION_ARG_MAPPING.keys())),
+    help='''
+    The desired protocol version to use. This will default to
+    SSL v2.3 which will negotiate the highest protocol that both
+    the server and your installation of OpenSSL support. Available protocols
+    may vary depending on OpenSSL installation (only the supported ones
+    are shown here).
+    
+    
+def humanize_bytes(n, precision=2):
+    # Author: Doug Latornell
+    # Licence: MIT
+    # URL: http://code.activestate.com/recipes/577081/
+    '''Return a humanized string representation of a number of bytes.
+    
+            if self.args.auth is None and not auth_type_set:
+            if url.username is not None:
+                # Handle http://username:password@hostname/
+                username = url.username
+                password = url.password or ''
+                self.args.auth = AuthCredentials(
+                    key=username,
+                    value=password,
+                    sep=SEP_CREDENTIALS,
+                    orig=SEP_CREDENTIALS.join([username, password])
+                )
+    
+        def register(self, *plugins):
+        for plugin in plugins:
+            self._plugins.append(plugin)
+    
+        '''
+    from .client import get_requests_kwargs, dump_request
+    if os.path.sep in session_name:
+        path = os.path.expanduser(session_name)
+    else:
+        hostname = (args.headers.get('Host', None) or
+                    urlsplit(args.url).netloc.split('@')[-1])
+        if not hostname:
+            # HACK/FIXME: httpie-unixsocket's URLs have no hostname.
+            hostname = 'localhost'
+    
+            result_item = result_queue.get(block=True)
+        if result_item is not None:
+            work_item = pending_work_items[result_item.work_id]
+            del pending_work_items[result_item.work_id]
+    
+    atexit.register(_python_exit)
+    
+    def load_url(url, timeout):
+    kwargs = {'timeout': timeout} if sys.version_info >= (2, 6) else {}
+    return urlopen(url, **kwargs).read()
+    
+    # The theme to use for HTML and HTML Help pages.  Major themes that come with
+# Sphinx are currently 'default' and 'sphinxdoc'.
+html_theme = 'default'
+    
+      # On UNIX platforms, we use sys.executable as the Python interpreter path.
+  # We cannot use sys.executable on Windows because for unknown reasons, it
+  # returns the Vim executable. Instead, we use sys.exec_prefix to deduce the
+  # interpreter path.
+  python_interpreter = ( WIN_PYTHON_PATH if utils.OnWindows() else
+                         sys.executable )
+  if _EndsWithPython( python_interpreter ):
+    return python_interpreter
+    
+    
+def ParseArguments():
+  parser = argparse.ArgumentParser()
+  parser.add_argument( '--skip-build', action = 'store_true',
+                       help = 'Do not build ycmd before testing' )
+  parser.add_argument( '--coverage', action = 'store_true',
+                       help = 'Enable coverage report' )
+  parser.add_argument( '--no-flake8', action = 'store_true',
+                       help = 'Do not run flake8' )
+    
+    
+# TODO: In future, implement MockServerResponse and MockServerResponseException
+# for synchronous cases when such test cases are needed.
+
+    
+    
+class MessagesPoll( BaseRequest ):
+  def __init__( self ):
+    super( MessagesPoll, self ).__init__()
+    self._request_data = BuildRequestData()
+    self._response_future = None
