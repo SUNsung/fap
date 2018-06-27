@@ -1,81 +1,107 @@
 
         
-            # Gets the last git commit information formatted into a String by the provided
-    # pretty format String. See the git-log documentation for valid format placeholders
-    def self.last_git_commit_formatted_with(pretty_format, date_format = nil)
-      command = ['git log -1']
-      command << '--pretty=\'#{pretty_format}\''
-      command << '--date=\'#{date_format}\'' if date_format
-      Actions.sh(command.compact.join(' '), log: false).chomp
-    rescue
-      nil
-    end
-    
-          it 'does set the source directory' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            cloc(source_directory: 'MyCoolApp')
-          end').runner.execute(:test)
-    
-        alias_method :insert_before, :insert
-    
-        def to_json
-      JSON.generate(as_json)
-    end
-  end
-end
-
-    
-          if options && options[:ignore_case]
-        base = base.downcase
-        dest = dest.downcase
-      end
-    
-            css('code').each do |node|
-          node.inner_html = node.inner_html.squish
+                  opts[:SSLCertificate] = OpenSSL::X509::Certificate.new(read_file(src, cert))
+          opts[:SSLPrivateKey]  = OpenSSL::PKey::RSA.new(read_file(src, key))
+          opts[:SSLEnable] = true
         end
     
-                  # An IO::WaitReadable means there may be more IO but this
-              # IO object is not ready to be read from yet. No problem,
-              # we read as much as we can, so we break.
-              breakable = true
-            elsif e.is_a?(Errno::EAGAIN)
-              # Otherwise, we just look for the EAGAIN error which should be
-              # all that IO::WaitReadable does in Ruby 1.9.
-              breakable = true
-            end
+        # Convert this Convertible's data to a Hash suitable for use by Liquid.
+    #
+    # Returns the Hash representation of this Convertible.
+    def to_liquid(attrs = nil)
+      further_data = Hash[(attrs || self.class::ATTRIBUTES_FOR_LIQUID).map do |attribute|
+        [attribute, send(attribute)]
+      end]
     
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
-    end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
-  end
-  output += '></#{tag}>'
-end
-    
-    end
-    
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'border-top-style: inset; ' +
-                'border-right-style: none; ' +
-                'border-left-style: double;'
-      bad_rule = 'border-bottom-style: null;'
-    
-          expect('.all-buttons-hover').to have_ruleset(ruleset)
+          # return nil for `{{ site.config }}` even if --config was passed via CLI
+      def config; end
     end
   end
 end
 
     
-    describe 'margin' do
-  before(:all) do
-    ParserSupport.parse_file('library/margin')
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
+      end
+    end
+    
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
   end
+  config.static_cache_control = 'public, max-age=3600'
+    
+      def test_image_helper
+    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
+  end
+    
+    desc 'Compile bootstrap-sass to tmp/ (or first arg)'
+task :compile, :css_path do |t, args|
+  require 'sass'
+  require 'term/ansicolor'
+    
+            def self.options
+          [[
+            '--all', 'Remove all the cached pods without asking'
+          ]].concat(super)
+        end
+    
+            TEMPLATE_REPO = 'https://github.com/CocoaPods/pod-template.git'.freeze
+        TEMPLATE_INFO_URL = 'https://github.com/CocoaPods/pod-template'.freeze
+        CREATE_NEW_POD_INFO_URL = 'http://guides.cocoapods.org/making/making-a-cocoapod'.freeze
+    
+      # Implemented by subclasses to hook into Capistrano's deployment flow using
+  # using the `before` and `after` DSL methods. Note that `register_hooks` will
+  # not be called if the user has opted-out of hooks when installing the plugin.
+  #
+  # Example:
+  #
+  #   def register_hooks
+  #     after 'deploy:updated', 'my_plugin:do_something'
+  #   end
+  #
+  def register_hooks; end
+    
+        # Provide a wrapper for the SCM that loads a strategy for the user.
+    #
+    # @param [Rake] context     The context in which the strategy should run
+    # @param [Module] strategy  A module to include into the SCM instance. The
+    #    module should provide the abstract methods of Capistrano::SCM
+    #
+    def initialize(context, strategy)
+      @context = context
+      singleton = class << self; self; end
+      singleton.send(:include, strategy)
+    end
+    
+      deploy_rb = File.expand_path('../../templates/deploy.rb.erb', __FILE__)
+  stage_rb = File.expand_path('../../templates/stage.rb.erb', __FILE__)
+  capfile = File.expand_path('../../templates/Capfile', __FILE__)
+    
+        describe 'when defining hosts using the `role` syntax' do
+      before do
+        dsl.role :web, %w{example1.com example2.com example3.com}
+        dsl.role :web, %w{example1.com}, active: true
+        dsl.role :app, %w{example3.com example4.com}
+        dsl.role :app, %w{example3.com}, active: true
+        dsl.role :app, %w{example4.com}, primary: true
+        dsl.role :db, %w{example5.com}, no_release: true
+      end
+    
+    module LogStash
+  module Api
+    module Commands
+      module System
+        class Plugins < Commands::Base
+          def run
+            { :total => plugins.count, :plugins => plugins }
+          end
