@@ -1,83 +1,27 @@
 
         
-        # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-
-    
-    def test_dir(*subdirs)
-  File.join(TEST_DIR, *subdirs)
-end
-    
-    File.write(config, output)
-
-    
-    $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
-    
-        # Initialize a new Layout.
-    #
-    # site - The Site.
-    # base - The String path to the source.
-    # name - The String filename of the post file.
-    def initialize(site, base, name)
-      @site = site
-      @base = base
-      @name = name
-    
-        describe '#revoke!' do
-      it 'revokes the key with the client' do
-        mock_client_response(:revoke_key!)
-    
-      def all_projects(current_user)
-    projects = []
-    
-        def boolify(value)
-      agent.send(:boolify, value)
+            def initialize(options = {})
+      @id = options[:id]
+      @agent = options[:agent]
+      @config = options[:config]
+      @restarting = false
     end
     
-      def destroy
-    @services = current_user.services.find(params[:id])
-    @services.destroy
+        @services = current_user.services.reorder(table_sort).page(params[:page])
     
-        includes, ignores = argv_includes_ignores(ARGV)
+      validate :enough_poll_answers
+  validates :question, presence: true
     
-    class DependencyCollector
-  module Compat
-    # Define the languages that we can handle as external dependencies.
-    LANGUAGE_MODULES = Set[
-      :lua, :lua51, :perl, :python, :python3, :ruby
-    ].freeze
+        on :queue_private_receive do |guid, xml, legacy=false|
+      person = Person.find_by_guid(guid)
     
-        # Used to prune requirements when calling expand with a block.
-    def prune
-      throw(:prune, true)
+      describe ':fetch_public_key' do
+    it 'returns a public key for a person' do
+      key = DiasporaFederation.callbacks.trigger(:fetch_public_key, remote_person.diaspora_handle)
+      expect(key).to be_a(OpenSSL::PKey::RSA)
+      expect(key.to_s).to eq(remote_person.serialized_public_key)
     end
+    
+      def percent_change(today, yesterday)
+    sprintf( '%0.02f', ((today-yesterday) / yesterday.to_f)*100).to_f
   end
-end
-
-    
-      def verify_download_integrity(_fn)
-    nil
-  end
-end
-    
-            def responds?
-          methods = @subject.instance_methods.map(&:to_s)
-          methods.include?('#{@attachment_name}') &&
-            methods.include?('#{@attachment_name}=') &&
-            methods.include?('#{@attachment_name}?')
-        end
-    
-    module Paperclip
-  require 'rails'
-    
-    module Paperclip
-  # Provides helper methods that can be used in migrations.
-  module Schema
-    COLUMNS = {:file_name    => :string,
-               :content_type => :string,
-               :file_size    => :integer,
-               :updated_at   => :datetime}
