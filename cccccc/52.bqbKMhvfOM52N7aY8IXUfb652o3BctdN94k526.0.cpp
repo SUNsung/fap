@@ -1,218 +1,319 @@
 
         
-        // Call method of an object in browser.
-// function CallObjectMethod(id, type, method, args);
-v8::Handle<v8::Value> CallObjectMethod(int routing_id,
-                                       int object_id,
-                                       const std::string& type,
-                                       const std::string& method,
-                                       v8::Handle<v8::Value> args);
-    
-       bool IsCommandIdChecked(int command_id) const override;
-   bool IsCommandIdEnabled(int command_id) const override;
-    
-    
-    {}
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.setListSync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwClipboardSetListSyncFunction);
-};
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38>
-internal::ValueArray38<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32, T33, T34, T35, T36, T37, T38> Values(T1 v1, T2 v2,
-    T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12,
-    T13 v13, T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20,
-    T21 v21, T22 v22, T23 v23, T24 v24, T25 v25, T26 v26, T27 v27, T28 v28,
-    T29 v29, T30 v30, T31 v31, T32 v32, T33 v33, T34 v34, T35 v35, T36 v36,
-    T37 v37, T38 v38) {
-  return internal::ValueArray38<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38>(v1, v2,
-      v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18,
-      v19, v20, v21, v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32,
-      v33, v34, v35, v36, v37, v38);
-}
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-          typename T6, typename T7>
-void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7>& t,
-             ::std::ostream* os) {
-  PrintTupleTo(t, os);
-}
-    
-      // Constructs a TestInfo object. The newly constructed instance assumes
-  // ownership of the factory object.
-  TestInfo(const std::string& test_case_name,
-           const std::string& name,
-           const char* a_type_param,   // NULL if not a type-parameterized test
-           const char* a_value_param,  // NULL if not a value-parameterized test
-           internal::TypeId fixture_class_id,
-           internal::TestFactoryBase* factory);
-    
-      // Copy an existing linked_ptr<>, adding ourselves to the list of references.
-  template <typename U> linked_ptr(linked_ptr<U> const& ptr) { copy(&ptr); }
-  linked_ptr(linked_ptr const& ptr) {  // NOLINT
-    assert(&ptr != this);
-    copy(&ptr);
-  }
-    
-    
-    {  const T1 v1_;
-  const T2 v2_;
-  const T3 v3_;
-  const T4 v4_;
-  const T5 v5_;
-  const T6 v6_;
-  const T7 v7_;
-  const T8 v8_;
-  const T9 v9_;
-  const T10 v10_;
-  const T11 v11_;
-  const T12 v12_;
-  const T13 v13_;
-  const T14 v14_;
-  const T15 v15_;
-  const T16 v16_;
-  const T17 v17_;
-  const T18 v18_;
-  const T19 v19_;
-  const T20 v20_;
-  const T21 v21_;
-  const T22 v22_;
-  const T23 v23_;
-  const T24 v24_;
-  const T25 v25_;
-  const T26 v26_;
-  const T27 v27_;
-  const T28 v28_;
-  const T29 v29_;
-  const T30 v30_;
-  const T31 v31_;
-  const T32 v32_;
-};
-    
-    /* Opaque object representing a Bidirectional stream creating engine. Created
- * and configured outside of this API to facilitate sharing with other
- * components */
-typedef struct stream_engine {
-  void* obj;
-  void* annotation;
-} stream_engine;
-    
-    // A simple parser for the json db file. It requires the db file to have the
-// exact form of [{'location': { 'latitude': 123, 'longitude': 456}, 'name':
-// 'the name can be empty' }, { ... } ... The spaces will be stripped.
-class Parser {
- public:
-  explicit Parser(const std::string& db) : db_(db) {
-    // Remove all spaces.
-    db_.erase(
-        std::remove_if(db_.begin(), db_.end(), isspace),
-        db_.end());
-    if (!Match('[')) {
-      SetFailedAndReturnFalse();
-    }
-  }
-    }
-    
-    void ParseDb(const std::string& db, std::vector<Feature>* feature_list);
-    
-    #include <algorithm>
-    
-    #ifndef GRPC_INTERNAL_COMPILER_PYTHON_GENERATOR_H
-#define GRPC_INTERNAL_COMPILER_PYTHON_GENERATOR_H
-    
-    void SecureAuthContext::AddProperty(const grpc::string& key,
-                                    const grpc::string_ref& value) {
-  if (!ctx_) return;
-  grpc_auth_context_add_property(ctx_, key.c_str(), value.data(), value.size());
-}
-    
-      struct Result {
-    double wall;
-    double user;
-    double system;
-    unsigned long long total_cpu_time;
-    unsigned long long idle_cpu_time;
-  };
-    
-    grpc::string DescribeMethod(const grpc::protobuf::MethodDescriptor* method) {
-  std::stringstream result;
-  result << '  rpc ' << method->name()
-         << (method->client_streaming() ? '(stream ' : '(')
-         << method->input_type()->full_name() << ') returns '
-         << (method->server_streaming() ? '(stream ' : '(')
-         << method->output_type()->full_name() << ') {}\n';
-  if (method->options().deprecated()) {
-    result << ' DEPRECATED';
-  }
-  return result.str();
-}
-    
-      /// Fill the buffer with some data. Returns the number of bytes placed in the
-  /// buffer as a result of the operation, or 0 if an error occurred.
-  std::size_t fill(boost::system::error_code& ec);
-    
-    #endif // BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
+        #endif  // ATOM_BROWSER_API_ATOM_API_GLOBAL_SHORTCUT_H_
 
     
-      // Constructor for a full fenced block.
-  explicit gcc_arm_fenced_block(full_t)
-  {
-    barrier();
+    
+    {}  // namespace atom
+    
+    
+    { protected:
+  virtual ~WindowListObserver() {}
+};
+    
+    #endif  // CHROME_BROWSER_MEDIA_DESKTOP_MEDIA_LIST_H_
+
+    
+    // An interface the PrintViewManager uses to notify an observer when the print
+// dialog is shown. Register the observer via PrintViewManager::set_observer.
+class PrintViewManagerObserver {
+ public:
+  // Notifies the observer that the print dialog was shown.
+  virtual void OnPrintDialogShown() = 0;
+    }
+    
+    #include <string>
+    
+    #if defined(OS_MACOSX)
+// NOTE: if you change the value of kFrameworkName, please don't forget to
+// update components/test/run_all_unittests.cc as well.
+// TODO(tfarina): Remove the comment above, when you fix components to use plist
+// on Mac.
+extern const base::FilePath::CharType kFrameworkName[];
+#endif  // OS_MACOSX
+    
+    // dims=[5, 4, 3, 2]->[5, 3, 2, 4]
+TEST_F(MatrixTest, RotatingTranspose_1_3) {
+  GENERIC_2D_ARRAY<int> m;
+  src_.RotatingTranspose(dims_, kNumDims_, 1, 3, &m);
+  m.ResizeNoInit(kInputSize_ / 4, 4);
+  // Verify that the result is:
+  // output tensor=[[[[0, 6, 12, 18][1, 7, 13, 19]]
+  //                 [[2, 8, 14, 20][3, 9, 15, 21]]
+  //                 [[4, 10, 16, 22][5, 11, 17, 23]]]
+  //                [[[24, 30, 36, 42]...
+  EXPECT_EQ(0, m(0, 0));
+  EXPECT_EQ(6, m(0, 1));
+  EXPECT_EQ(1, m(1, 0));
+  EXPECT_EQ(2, m(2, 0));
+  EXPECT_EQ(3, m(3, 0));
+  EXPECT_EQ(4, m(4, 0));
+  EXPECT_EQ(5, m(5, 0));
+  EXPECT_EQ(24, m(6, 0));
+  EXPECT_EQ(30, m(6, 1));
+}
+    
+      /**
+   * Returns information about the current paragraph, if available.
+   *
+   *   justification -
+   *     LEFT if ragged right, or fully justified and script is left-to-right.
+   *     RIGHT if ragged left, or fully justified and script is right-to-left.
+   *     unknown if it looks like source code or we have very few lines.
+   *   is_list_item -
+   *     true if we believe this is a member of an ordered or unordered list.
+   *   is_crown -
+   *     true if the first line of the paragraph is aligned with the other
+   *     lines of the paragraph even though subsequent paragraphs have first
+   *     line indents.  This typically indicates that this is the continuation
+   *     of a previous paragraph or that it is the very first paragraph in
+   *     the chapter.
+   *   first_line_indent -
+   *     For LEFT aligned paragraphs, the first text line of paragraphs of
+   *     this kind are indented this many pixels from the left edge of the
+   *     rest of the paragraph.
+   *     for RIGHT aligned paragraphs, the first text line of paragraphs of
+   *     this kind are indented this many pixels from the right edge of the
+   *     rest of the paragraph.
+   *     NOTE 1: This value may be negative.
+   *     NOTE 2: if *is_crown == true, the first line of this paragraph is
+   *             actually flush, and first_line_indent is set to the 'common'
+   *             first_line_indent for subsequent paragraphs in this block
+   *             of text.
+   */
+  void ParagraphInfo(tesseract::ParagraphJustification *justification,
+                     bool *is_list_item,
+                     bool *is_crown,
+                     int *first_line_indent) const;
+    
+    /**
+ * NOTE! This is an exact copy of PageIterator::IsAtFinalElement with the
+ *   change that the variable next is now a ResultIterator instead of a
+ *   PageIterator.
+ */
+bool ResultIterator::IsAtFinalElement(PageIteratorLevel level,
+                                      PageIteratorLevel element) const {
+  if (Empty(element)) return true;  // Already at the end!
+  // The result is true if we step forward by element and find we are
+  // at the the end of the page or at beginning of *all* levels in:
+  // [level, element).
+  // When there is more than one level difference between element and level,
+  // we could for instance move forward one symbol and still be at the first
+  // word on a line, so we also have to be at the first symbol in a word.
+  ResultIterator next(*this);
+  next.Next(element);
+  if (next.Empty(element)) return true;  // Reached the end of the page.
+  while (element > level) {
+    element = static_cast<PageIteratorLevel>(element - 1);
+    if (!next.IsAtBeginningOf(element))
+      return false;
+  }
+  return true;
+}
+    
+    const int16_t idirtab[] = {
+  1000, 0, 998, 49, 995, 98, 989, 146,
+  980, 195, 970, 242, 956, 290, 941, 336,
+  923, 382, 903, 427, 881, 471, 857, 514,
+  831, 555, 803, 595, 773, 634, 740, 671,
+  707, 707, 671, 740, 634, 773, 595, 803,
+  555, 831, 514, 857, 471, 881, 427, 903,
+  382, 923, 336, 941, 290, 956, 242, 970,
+  195, 980, 146, 989, 98, 995, 49, 998,
+  0, 1000, -49, 998, -98, 995, -146, 989,
+  -195, 980, -242, 970, -290, 956, -336, 941,
+  -382, 923, -427, 903, -471, 881, -514, 857,
+  -555, 831, -595, 803, -634, 773, -671, 740,
+  -707, 707, -740, 671, -773, 634, -803, 595,
+  -831, 555, -857, 514, -881, 471, -903, 427,
+  -923, 382, -941, 336, -956, 290, -970, 242,
+  -980, 195, -989, 146, -995, 98, -998, 49,
+  -1000, 0, -998, -49, -995, -98, -989, -146,
+  -980, -195, -970, -242, -956, -290, -941, -336,
+  -923, -382, -903, -427, -881, -471, -857, -514,
+  -831, -555, -803, -595, -773, -634, -740, -671,
+  -707, -707, -671, -740, -634, -773, -595, -803,
+  -555, -831, -514, -857, -471, -881, -427, -903,
+  -382, -923, -336, -941, -290, -956, -242, -970,
+  -195, -980, -146, -989, -98, -995, -49, -998,
+  0, -1000, 49, -998, 98, -995, 146, -989,
+  195, -980, 242, -970, 290, -956, 336, -941,
+  382, -923, 427, -903, 471, -881, 514, -857,
+  555, -831, 595, -803, 634, -773, 671, -740,
+  707, -707, 740, -671, 773, -634, 803, -595,
+  831, -555, 857, -514, 881, -471, 903, -427,
+  923, -382, 941, -336, 956, -290, 970, -242,
+  980, -195, 989, -146, 995, -98, 998, -49
+};
+    
+    #include          'rect.h'
+    
+    // Returns an INT_FEATURE_STRUCT corresponding to the given bucket coords.
+INT_FEATURE_STRUCT IntFeatureSpace::PositionFromBuckets(int x,
+                                                        int y,
+                                                        int theta) const {
+  INT_FEATURE_STRUCT pos(
+      (x * kIntFeatureExtent + kIntFeatureExtent / 2) / x_buckets_,
+      (y * kIntFeatureExtent + kIntFeatureExtent / 2) / y_buckets_,
+      DivRounded(theta * kIntFeatureExtent, theta_buckets_));
+  return pos;
+}
+    
+    template<typename T>
+struct or_trait<T> : T {};
+    
+    class TLSConfigPlugin;
+    
+      // Now test that the default value is tracked.
+  EXPECT_FALSE(Flag::isDefault('test_string_flag'));
+    
+      {
+    auto nobody = getpwnam('nobody');
+    auto dropper = DropPrivileges::get();
+    dropper->dropTo(nobody->pw_uid, nobody->pw_gid);
+    PlatformFile fd(file_path, PF_OPEN_EXISTING | PF_READ);
+    EXPECT_FALSE(fd.isValid());
   }
     
-    void buffer_sequence_adapter_base::init_native_buffer(
-    buffer_sequence_adapter_base::native_buffer_type& buf,
-    const boost::asio::mutable_buffer& buffer)
-{
-  std::memset(&buf, 0, sizeof(native_buffer_type));
-  Microsoft::WRL::ComPtr<IInspectable> insp
-    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
-  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
+      // If a constraint list does not exist, then all checks will match.
+  // If there is no predicate clause then all results will match.
+  EXPECT_TRUE(cm['not_path'].matches('some'));
+  EXPECT_TRUE(cm['not_path'].notExistsOrMatches('some'));
+  EXPECT_FALSE(cm['not_path'].exists());
+  EXPECT_FALSE(cm['not_path'].existsAndMatches('some'));
+    
+    Status WmiResultItem::GetString(const std::string& name,
+                                std::string& ret) const {
+  std::wstring property_name = stringToWstring(name);
+  VARIANT value;
+  HRESULT hr = result_->Get(property_name.c_str(), 0, &value, nullptr, nullptr);
+  if (hr != S_OK) {
+    ret = '';
+    return Status(-1, 'Error retrieving data from WMI query.');
+  }
+  if (value.vt != VT_BSTR) {
+    ret = '';
+    VariantClear(&value);
+    return Status(-1, 'Invalid data type returned.');
+  }
+  ret = bstrToString(value.bstrVal);
+  VariantClear(&value);
+  return Status(0);
 }
     
-    #ifndef BOOST_ASIO_DETAIL_IMPL_DEV_POLL_REACTOR_HPP
-#define BOOST_ASIO_DETAIL_IMPL_DEV_POLL_REACTOR_HPP
+      /// For testing only, allow the event stream to publish its own events.
+  bool no_self_{true};
     
-    #endif // defined(BOOST_ASIO_HAS_EPOLL)
+    template <typename EventType>
+using TypedKernelEventContextRef =
+    std::shared_ptr<TypedKernelEventContext<EventType>>;
     
-      YGNodeCalculateLayout(root, 200, 100, YGDirectionLTR);
     
-    Config::Config(void)
-: m_config(YGConfigNew())
-{
-}
     
-    template<typename... ARGS>
-inline void logv(const char* tag, const char* msg, ARGS... args) noexcept {
-  log(ANDROID_LOG_VERBOSE, tag, msg, args...);
-}
     
-    template <typename T>
-inline bool operator!=(std::nullptr_t ptr, const RefPtr<T>& ref) {
-  return ref.get() != ptr;
-}
     
-    // Class that lets you declare a global but does not add a static constructor
-// to the binary. Eventually I'd like to have this auto-initialize in a
-// multithreaded environment but for now it's easiest just to use manual
-// initialization.
-template <typename T>
-class StaticInitialized {
-public:
-  constexpr StaticInitialized() :
-    m_instance(nullptr)
-  {}
+    
+    
+    
+    
+    
+    
+        mShaderProgram->setUniformLocationWith4f(mColorLocation, color.r, color.g, color.b, 1);
+    
+    	static Test* Create()
+	{
+		return new BodyTypes;
+	}
+    
+    			m_body = m_world->CreateBody(&bd);
+			m_body->CreateFixture(&box, 1.0f);
+    
+    
+    {			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.position.Set(-8.0f + 8.0f * i, 12.0f);
+			b2Body* body = m_world->CreateBody(&bd);
+			body->CreateFixture(&fd);
+		}
+    
+      std::vector<rocksdb::ColumnFamilyDescriptor> families;
+    
+     private:
+  char delim_;         // The delimiter is inserted between elements
+    
+    class StringAppendTESTOperator : public MergeOperator {
+ public:
+  // Constructor with delimiter
+  explicit StringAppendTESTOperator(char delim_char);
     }
+    
+    TEST_F(StringAppendOperatorTest, VariousKeys) {
+  auto db = OpenDb('\n');
+  StringLists slists(db);
+    }
+    
+    
+    {  // No copying allowed
+  Reader(const Reader&);
+  void operator=(const Reader&);
+};
+    
+    
+    {  // Note: we may want to access the Java callback object instance
+  // across multiple method calls, so we create a global ref
+  assert(jcallback_obj != nullptr);
+  m_jcallback_obj = env->NewGlobalRef(jcallback_obj);
+  if(jcallback_obj == nullptr) {
+    // exception thrown: OutOfMemoryError
+    return;
+  }
+}
+    
+    void SyncPoint::LoadDependencyAndMarkers(
+  const std::vector<SyncPointPair>& dependencies,
+  const std::vector<SyncPointPair>& markers) {
+  impl_->LoadDependencyAndMarkers(dependencies, markers);
+}
+    
+    
+    {  m_jFindShortSuccessorMethodId =
+    AbstractComparatorJni::getFindShortSuccessorMethodId(env);
+  if(m_jFindShortSuccessorMethodId == nullptr) {
+    // exception thrown: NoSuchMethodException or OutOfMemoryError
+    return;
+  }
+}
+    
+    /**
+ * This class acts as a bridge between C++
+ * and Java. The methods in this class will be
+ * called back from the RocksDB storage engine (C++)
+ * we then callback to the appropriate Java method
+ * this enables Comparators to be implemented in Java.
+ *
+ * The design of this Comparator caches the Java Slice
+ * objects that are used in the compare and findShortestSeparator
+ * method callbacks. Instead of creating new objects for each callback
+ * of those functions, by reuse via setHandle we are a lot
+ * faster; Unfortunately this means that we have to
+ * introduce independent locking in regions of each of those methods
+ * via the mutexs mtx_compare and mtx_findShortestSeparator respectively
+ */
+class BaseComparatorJniCallback : public JniCallback, public Comparator {
+ public:
+    BaseComparatorJniCallback(
+      JNIEnv* env, jobject jComparator,
+      const ComparatorJniCallbackOptions* copt);
+    virtual const char* Name() const;
+    virtual int Compare(const Slice& a, const Slice& b) const;
+    virtual void FindShortestSeparator(
+      std::string* start, const Slice& limit) const;
+    virtual void FindShortSuccessor(std::string* key) const;
+    }
+    
+      auto marker_iter = markers_.find(point);
+  if (marker_iter != markers_.end()) {
+    for (auto& marked_point : marker_iter->second) {
+      marked_thread_id_.emplace(marked_point, thread_id);
+    }
+  }
