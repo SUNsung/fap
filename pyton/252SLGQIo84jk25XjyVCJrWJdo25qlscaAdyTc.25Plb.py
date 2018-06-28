@@ -1,158 +1,87 @@
 
         
-            print('Classifier Training')
-    print('===================')
-    accuracy, train_time, test_time = {}, {}, {}
-    for name in sorted(args['estimators']):
-        clf = ESTIMATORS[name]
-        try:
-            clf.set_params(random_state=0)
-        except (TypeError, ValueError):
-            pass
+            dimensions = 500 * np.arange(1, n_iter + 1)
+    
+        n_features = 10
+    list_n_samples = np.linspace(100, 1000000, 5).astype(np.int)
+    lasso_results, lars_lasso_results = compute_bench(alpha, list_n_samples,
+                                            [n_features], precompute=True)
+    
+    try:
+    from urllib import urlopen
+except ImportError:
+    from urllib.request import urlopen
+    
+    import sys
+    
+    plt.show()
+
+    
+    from sklearn.datasets import make_blobs
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+    
+    plt.title('Clustering measures for 2 random uniform labelings\n'
+          'with equal number of clusters')
+plt.xlabel('Number of clusters (Number of samples is fixed to %d)' % n_samples)
+plt.ylabel('Score value')
+plt.legend(plots, names)
+plt.ylim(ymin=-0.05, ymax=1.05)
+    
+    This example, inspired from Chen's publication [1], shows a comparison
+of the estimated MSE of the LW and OAS methods, using Gaussian
+distributed data.
     
     
-def euclidean_distances(X, n_jobs):
-    return pairwise_distances(X, metric='euclidean', n_jobs=n_jobs)
+def extract_board_data(url):
+    json_data = extract_json_data(url, limit=LIMIT)
+    pin_list = json_data['pins']
+    title = json_data['title']
+    pin_count = json_data['pin_count']
+    pin_count -= len(pin_list)
     
-        (opts, args) = op.parse_args()
-    if len(args) > 0:
-        op.error('this script takes no arguments.')
-        sys.exit(1)
-    opts.n_components = type_auto_or_int(opts.n_components)
-    opts.density = type_auto_or_float(opts.density)
-    selected_transformers = opts.selected_transformers.split(',')
+    site_info = 'Mixcloud.com'
+download = mixcloud_download
+download_playlist = playlist_not_supported('mixcloud')
+
     
-        opener = build_opener()
-    html_filename = os.path.join(html_folder, lang + '.html')
-    if not os.path.exists(html_filename):
-        print('Downloading %s' % page)
-        request = Request(page)
-        # change the User Agent to avoid being blocked by Wikipedia
-        # downloading a couple of articles should not be considered abusive
-        request.add_header('User-Agent', 'OpenAnything/1.0')
-        html_content = opener.open(request).read()
-        open(html_filename, 'wb').write(html_content)
+    if (platform.python_implementation() == 'CPython' and
+        os.environ.get('TORNADO_EXTENSION') != '0'):
+    # This extension builds and works on pypy as well, although pypy's jit
+    # produces equivalent performance.
+    kwargs['ext_modules'] = [
+        Extension('tornado.speedups',
+                  sources=['tornado/speedups.c']),
+    ]
     
-    # Author: Kemal Eren <kemal@kemaleren.com>
-# License: BSD 3 clause
+        def supports_http_1_1(self):
+        '''Returns True if this request supports HTTP/1.1 semantics.
     
-    [1] 'Shrinkage Algorithms for MMSE Covariance Estimation'
-Chen et al., IEEE Trans. on Sign. Proc., Volume 58, Issue 10, October 2010.
+            event = Event()
+        test = self
+        body = []
     
-        if address_family == socket.AF_INET:
-        if len(packed_ip) != ctypes.sizeof(addr.ipv4_addr):
-            raise socket.error('packed IP wrong length for inet_ntoa')
-        ctypes.memmove(addr.ipv4_addr, packed_ip, 4)
-    elif address_family == socket.AF_INET6:
-        if len(packed_ip) != ctypes.sizeof(addr.ipv6_addr):
-            raise socket.error('packed IP wrong length for inet_ntoa')
-        ctypes.memmove(addr.ipv6_addr, packed_ip, 16)
-    else:
-        raise socket.error('unknown address family')
-    
+           Use a regular `.Application` and wrap it in `WSGIAdapter` instead.
+       This class will be removed in Tornado 6.0.
     '''
+    def __call__(self, environ, start_response):
+        return WSGIAdapter(self)(environ, start_response)
     
-        def __init__(self, type=None, text=None, channel=DEFAULT_CHANNEL,
-                 oldToken=None
-                 ):
-        Token.__init__(self)
-        
-        if oldToken is not None:
-            self.text = oldToken.text
-            self.type = oldToken.type
-            self.line = oldToken.line
-            self.charPositionInLine = oldToken.charPositionInLine
-            self.channel = oldToken.channel
-            
-        self.text = text
-        self.type = type
-        self.line = None
-        self.charPositionInLine = None
-        self.channel = channel
-        self.index = None
+            fut = http.fetch(self._OAUTH_ACCESS_TOKEN_URL,
+                         method='POST',
+                         headers={'Content-Type': 'application/x-www-form-urlencoded'},
+                         body=body)
+        fut.add_done_callback(functools.partial(self._on_access_token, callback))
     
-    	# The current Token when an error occurred.  Since not all streams
-	# can retrieve the ith Token, we have to track the Token object.
-	# For parsers.  Even when it's a tree parser, token might be set.
-        self.token = None
+        def activate(self):
+        exc_info = self.exc_info
+        if exc_info is not None:
+            self.exc_info = None
+            self.formatted_tb = traceback.format_exception(*exc_info)
     
-    
-if __name__ == '__main__':
-    main()
-
-    
-        def headers_received(self, start_line, headers):
-        request = httputil.HTTPServerRequest(
-            connection=self.request_conn,
-            server_connection=self.server_conn,
-            start_line=start_line, headers=headers)
-    
-    
-class HTTP1ServerConnection(object):
-    '''An HTTP/1.x server.'''
-    def __init__(self, stream, params=None, context=None):
-        '''
-        :arg stream: an `.IOStream`
-        :arg params: a `.HTTP1ConnectionParameters` or None
-        :arg context: an opaque application-defined object that is accessible
-            as ``connection.context``
-        '''
-        self.stream = stream
-        if params is None:
-            params = HTTP1ConnectionParameters()
-        self.params = params
-        self.context = context
-        self._serving_future = None
-    
-        @gen.coroutine
-    def get(self):
-        code = self.get_argument('code', None)
-        if code is not None:
-            # retrieve authenticate google user
-            access = yield self.get_authenticated_user(self._OAUTH_REDIRECT_URI,
-                                                       code)
-            user = yield self.oauth2_request(
-                self.test.get_url('/google/oauth2/userinfo'),
-                access_token=access['access_token'])
-            # return the user and access token as json
-            user['access_token'] = access['access_token']
-            self.write(user)
-        else:
-            yield self.authorize_redirect(
-                redirect_uri=self._OAUTH_REDIRECT_URI,
-                client_id=self.settings['google_oauth']['key'],
-                client_secret=self.settings['google_oauth']['secret'],
-                scope=['profile', 'email'],
-                response_type='code',
-                extra_params={'prompt': 'select_account'})
-    
-        def test_ip_headers(self):
-        self.assertEqual(self.fetch_json('/')['remote_ip'], '127.0.0.1')
-    
-        def consume(self):
-        try:
-            while True:
-                result = self.reader.recv(1024)
-                if not result:
-                    break
-        except (IOError, socket.error):
-            pass
-    
-        def transform(self, node, results):
-        self.found_future_import = True
-        return self.new_future_import(node)
-    
-        def test_shall_toggle_from_fm_to_am(self):
-        self.radio.toggle_amfm()
-        state = self.radio.state.name
-        expected_state_name = 'AM'
-        self.assertEqual(state, expected_state_name)
-
-    
-    from dft.parameter_injection import TimeDisplay, MidnightTimeProvider, ProductionCodeTimeProvider, datetime
-    
-    ### OUTPUT ###
-# Counting to two...
-# one two
-# Counting to five...
-# one two three four five
+            fut = Future()
+        fut.cancel()
+        is_cancelled = fut.cancelled()
+        future_set_result_unless_cancelled(fut, 42)
+        self.assertEqual(fut.cancelled(), is_cancelled)
+        if not is_cancelled:
+            self.assertEqual(fut.result(), 42)
