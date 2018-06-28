@@ -1,55 +1,59 @@
 
         
-            render_response
+          module ClassMethods
+    def setup_worker
+      active.map do |agent|
+        next unless agent.start_worker?
+        self::Worker.new(id: agent.worker_id, agent: agent)
+      end.compact
+    end
   end
     
-      # Finds the projects '@user' contributed to, limited to either public projects
-  # or projects visible to the given user.
-  #
-  # current_user - When given the list of the projects is limited to those only
-  #                visible by this user.
-  #
-  # Returns an ActiveRecord::Relation.
-  def execute(current_user = nil)
-    segments = all_projects(current_user)
-    
-      def validate_email_options
-    errors.add(:base, 'subject and expected_receive_period_in_days are required') unless options['subject'].present? && options['expected_receive_period_in_days'].present?
-    
-      class Worker
-    attr_reader :thread, :id, :agent, :config, :mutex, :scheduler, :restarting
-    
-      def destroy
-    @user_credential = current_user.user_credentials.find(params[:id])
-    @user_credential.destroy
-    
+      def show
+    respond_to do |format|
+      format.html
+      format.json { render json: @event }
     end
-
+  end
     
-        self.sigs.each_key do |k|
-      # There is only one pattern per run to test
-      matched = nil
-      matches = nil
+      def apply
+    data = contents.gsub('HOMEBREW_PREFIX', HOMEBREW_PREFIX)
+    args = %W[-g 0 -f -#{strip}]
+    Utils.popen_write('patch', *args) { |p| p.write(data) }
+    raise ErrorDuringExecution.new('patch', args) unless $CHILD_STATUS.success?
+  end
     
+      def load_logs(dir)
+    logs = {}
+    if dir.exist?
+      dir.children.sort.each do |file|
+        contents = file.size? ? file.read : 'empty log'
+        # small enough to avoid GitHub 'unicorn' page-load-timeout errors
+        max_file_size = 1_000_000
+        contents = truncate_text_to_approximate_size(contents, max_file_size, front_weight: 0.2)
+        logs[file.basename.to_s] = { content: contents }
+      end
+    end
+    raise 'No logs.' if logs.empty?
+    logs
+  end
     
-    {	if ln =~ /;(read|write)_(handle|filename)=/
-		parts = ln.split(' ')
-		if (parts[0] == 'mov')
-			parts2 = parts[2].split('=')
-			label = parts2[0]
-			label.slice!(0,1)
-			old = parts2[1]
-			new = addrs[label]
-			#puts '%32s: %s -> %x' % [label, old, new]
-			replaces << [label, old, new.to_s(16)]
-		end
-	end
-}
+          if File.directory?(source_entry)
+        FileUtils.mkdir(target_entry) unless File.exists?(target_entry)
+        transform_r(source_entry, target_entry)
+      else
+        # copy the new file, in case of being an .erb file should render first
+        if source_entry.end_with?('erb')
+          target_entry = target_entry.gsub(/.erb$/,'').gsub('example', name)
+          File.open(target_entry, 'w') { |f| f.write(render(source_entry)) }
+        else
+          FileUtils.cp(source_entry, target_entry)
+        end
+        puts '\t create #{File.join(full_plugin_name, Pathname.new(target_entry).relative_path_from(Pathname.new(@target_path)))}'
+      end
+    end
+  end
     
-    signer._invoke('JarSignerMSF','[Ljava.lang.String;',jarsignerOpts)
-    
-            def on_block(node)
-          on_body_of_reduce(node) do |body|
-            void_next = body.each_node(:next).find do |n|
-              n.children.empty? && parent_block_node(n) == node
-            end
+              def find_plugins_gem_specs
+            @specs ||= ::Gem::Specification.find_all.select{|spec| logstash_plugin_gem_spec?(spec)}
+          end
