@@ -1,212 +1,145 @@
 
         
-            '''
-    if not env.stdout_isatty and not args.prettify:
-        Stream = partial(
-            RawStream,
-            chunk_size=RawStream.CHUNK_SIZE_BY_LINE
-            if args.stream
-            else RawStream.CHUNK_SIZE
-        )
-    elif args.prettify:
-        Stream = partial(
-            PrettyStream if args.stream else BufferedPrettyStream,
-            env=env,
-            conversion=Conversion(),
-            formatting=Formatting(
-                env=env,
-                groups=args.prettify,
-                color_scheme=args.style,
-                explicit_json=args.json,
-            ),
-        )
-    else:
-        Stream = partial(EncodedStream, env=env)
+        
+atom_template = textwrap.dedent('''\
+    <?xml version='1.0' encoding='utf-8'?>
+    <feed xmlns='http://www.w3.org/2005/Atom'>
+        <link rel='self' href='http://rg3.github.io/youtube-dl/update/releases.atom' />
+        <title>youtube-dl releases</title>
+        <id>https://yt-dl.org/feed/youtube-dl-updates-feed</id>
+        <updated>@TIMESTAMP@</updated>
+        @ENTRIES@
+    </feed>''')
     
-    import pytest
-    
-        >>> humanize_bytes(1)
-    '1 B'
-    >>> humanize_bytes(1024, precision=1)
-    '1.0 kB'
-    >>> humanize_bytes(1024 * 123, precision=1)
-    '123.0 kB'
-    >>> humanize_bytes(1024 * 12342, precision=1)
-    '12.1 MB'
-    >>> humanize_bytes(1024 * 12342, precision=2)
-    '12.05 MB'
-    >>> humanize_bytes(1024 * 1234, precision=2)
-    '1.21 MB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
-    '1.31 GB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
-    '1.3 GB'
+            swf_class = swfi.extract_class(test_id)
+        func = swfi.extract_function(swf_class, 'main')
+        res = func(input_args)
+        self.assertEqual(res, output)
     
     
-def test_valid_compute_mask():
-    model = Sequential()
-    model.add(Dense(1, input_dim=2))
-    assert model.layers[0].supports_masking is True
-    assert model.layers[0].compute_mask([model.input], [0., 1.]) == [0., 1.]
-    
-    if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    help_ = 'Load h5 model trained weights'
-    parser.add_argument('-w', '--weights', help=help_)
-    help_ = 'Use mse loss instead of binary cross entropy (default)'
-    parser.add_argument('-m',
-                        '--mse',
-                        help=help_, action='store_true')
-    args = parser.parse_args()
-    models = (encoder, decoder)
-    data = (x_test, y_test)
-    
-    history = model.fit(x_train, y_train,
-                    batch_size=batch_size,
-                    epochs=epochs,
-                    verbose=1,
-                    validation_split=0.1)
-score = model.evaluate(x_test, y_test,
-                       batch_size=batch_size, verbose=1)
-print('Test score:', score[0])
-print('Test accuracy:', score[1])
+def get_info_extractor(ie_name):
+    '''Returns the info extractor class with the given ie_name'''
+    return globals()[ie_name + 'IE']
 
     
-                for t in range(n_frames):
-                x_shift = xstart + directionx * t
-                y_shift = ystart + directiony * t
-                noisy_movies[i, t, x_shift - w: x_shift + w,
-                             y_shift - w: y_shift + w, 0] += 1
     
-        def contribute(self):
-        self.blackboard.common_state['problems'] += random.randint(1, 2)
-        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
-        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
-        self.blackboard.common_state['progress'] += random.randint(10, 100)
+class CNNBlogsIE(InfoExtractor):
+    _VALID_URL = r'https?://[^\.]+\.blogs\.cnn\.com/.+'
+    _TEST = {
+        'url': 'http://reliablesources.blogs.cnn.com/2014/02/09/criminalizing-journalism/',
+        'md5': '3e56f97b0b6ffb4b79f4ea0749551084',
+        'info_dict': {
+            'id': 'bestoftv/2014/02/09/criminalizing-journalism.cnn',
+            'ext': 'mp4',
+            'title': 'Criminalizing journalism?',
+            'description': 'Glenn Greenwald responds to comments made this week on Capitol Hill that journalists could be criminal accessories.',
+            'upload_date': '20140209',
+        },
+        'expected_warnings': ['Failed to download m3u8 information'],
+        'add_ie': ['CNN'],
+    }
     
-        def test_human_adapter_shall_make_noise(self):
-        human = Human()
-        human_adapter = Adapter(human, make_noise=human.speak)
-        noise = human_adapter.make_noise()
-        expected_noise = ''hello''
-        self.assertEqual(noise, expected_noise)
+        'bracketed_hostport': re.compile(
+        r'''^
+            \[(.+)\]                    # [host identifier]
+            :([0-9]+)                   # :port number
+            $
+        ''', re.X
+    ),
     
-        def test_data_change_shall_notify_all_observers_once(cls):
-        with patch.object(cls.dec_obs, 'update') as mock_dec_obs_update,\
-                patch.object(cls.hex_obs, 'update') as mock_hex_obs_update:
-            cls.sub.data = 10
-            cls.assertEqual(mock_dec_obs_update.call_count, 1)
-            cls.assertEqual(mock_hex_obs_update.call_count, 1)
+    # Make coding more python3-ish
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
     
-        REGISTRY = {}
+        def on_open_shell(self):
+        try:
+            self._exec_cli_command('screen-length 0 temporary')
+        except AnsibleConnectionFailure:
+            raise AnsibleConnectionFailure('unable to set terminal parameters')
+
     
-        def test_display_current_time_at_midnight(self):
+        def remove(self, key):
+        hash_index = self._hash_function(key)
+        for index, item in enumerate(self.table[hash_index]):
+            if item.key == key:
+                del self.table[hash_index][index]
+                return
+        raise KeyError('Key not found')
+    
+        def reduce_priority_link_to_crawl(self, url):
+        '''Reduce the priority of a link in `links_to_crawl` to avoid cycles.'''
+        pass
+    
+            (2016-01, url0), 2
+        (2016-01, url1), 1
         '''
-        Would almost always fail (despite of right at/after midnight) if
-        untestable production code would have been used.
+        yield key, sum(values)
+    
+    
+class Bus(Vehicle):
+    
+            (2016-01, shopping), 25
+        (2016-01, shopping), 100
+        (2016-01, gas), 50
         '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay()
-        class_under_test.set_time_provider(time_provider_stub)
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+        timestamp, category, amount = line.split('\t')
+        period = self. extract_year_month(timestamp)
+        if period == self.current_year_month():
+            yield (period, category), amount
+    
+        def test_no_ask_hsts(self):
+        self.config.hsts = True
+        self._test_with_all_supported()
+        self.client.installer.enhance.assert_called_with(
+            self.domain, 'ensure-http-header', 'Strict-Transport-Security')
+    
+            complex_vh = VirtualHost(
+            'fp', 'vhp',
+            set([Addr.fromstring('*:443'), Addr.fromstring('1.2.3.4:443')]),
+            False, False)
+        self.assertTrue(complex_vh.conflicts([self.addr1]))
+        self.assertTrue(complex_vh.conflicts([self.addr2]))
+        self.assertFalse(complex_vh.conflicts([self.addr_default]))
+    
+    # The master toctree document.
+master_doc = 'index'
+    
+            link_list = self.get_streams_by_id(account_number, video_id)
     
     
+def huaban_download_board(url, output_dir, **kwargs):
+    kwargs['merge'] = False
+    board = extract_board_data(url)
+    output_dir = os.path.join(output_dir, board.title)
+    print_info(site_info, board.title, 'jpg', float('Inf'))
+    for pin in board.pins:
+        download_urls([pin.url], pin.id, pin.ext, float('Inf'),
+                      output_dir=output_dir, faker=True, **kwargs)
     
-                def on_message(self, message):
-                self.write_message(str(len(message)))
+    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
+    #sample
+    #url_sample:http://www.kugou.com/yy/album/single/536957.html
+    #hash ->key  md5(hash+kgcloud')->key  decompile swf
+    #cmd 4 for mp3 cmd 3 for m4a
+    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
+    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
+    j=loads(html)
+    url=j['url']
+    songtype, ext, size = url_info(url)
+    print_info(site_info, title, songtype, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge=merge)
     
-            # Upgrade header should be present and should be equal to WebSocket
-        if self.request.headers.get('Upgrade', '').lower() != 'websocket':
-            self.set_status(400)
-            log_msg = 'Can \'Upgrade\' only to \'WebSocket\'.'
-            self.finish(log_msg)
-            gen_log.debug(log_msg)
-            return
+            # extract raw urls
+        orig_img = match1(content,
+                         r'<meta itemprop='image' content='([^']+/originals/[^']+)'')
+        twit_img = match1(content,
+                          r'<meta property='twitter:image:src' name='twitter:image:src' content='([^']+)'')
     
-        def test_connection_refused(self):
-        cleanup_func, port = refusing_port()
-        self.addCleanup(cleanup_func)
-        with ExpectLog(gen_log, '.*', required=False):
-            with self.assertRaises(socket.error) as cm:
-                self.fetch('http://127.0.0.1:%d/' % port, raise_error=True)
+        hass.services.register(DOMAIN, SERVICE_BROWSE_URL,
+                           lambda service:
+                           webbrowser.open(service.data[ATTR_URL]),
+                           schema=SERVICE_BROWSE_URL_SCHEMA)
     
-    
-class ApplicationTest(AsyncTestCase):
-    def test_listen(self):
-        app = Application([])
-        server = app.listen(0, address='127.0.0.1')
-        server.stop()
-    
-    # _parseparam and _parse_header are copied and modified from python2.7's cgi.py
-# The original 2.7 version of this code did not correctly support some
-# combinations of semicolons and double quotes.
-# It has also been modified to support valueless parameters as seen in
-# websocket extension negotiations, and to support non-ascii values in
-# RFC 2231/5987 format.
-    
-        @gen_test
-    def test_http10_no_content_length(self):
-        # Regression test for a bug in which can_keep_alive would crash
-        # for an HTTP/1.0 (not 1.1) response with no content-length.
-        conn = HTTP1Connection(self.client_stream, True)
-        self.server_stream.write(b'HTTP/1.0 200 Not Modified\r\n\r\nhello')
-        self.server_stream.close()
-    
-        @skipBefore35
-    @gen_test
-    def test_async_for(self):
-        q = queues.Queue()
-        for i in range(5):
-            q.put(i)
-    
-        @property
-    def state(self):
-        '''Return the state of the device.'''
-        if self.pvcoutput is not None:
-            return self.pvcoutput.energy_generation
-        return None
-    
-    
-def get_github_url(app, view, path):
-    github_fmt = 'https://github.com/{}/{}/{}/{}{}'
-    return (
-        github_fmt.format(app.config.edit_on_github_project, view,
-                          app.config.edit_on_github_branch,
-                          app.config.edit_on_github_src_path, path))
-    
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/light.zigbee/
-'''
-import voluptuous as vol
-    
-        args = parser.parse_args()
-    
-    
-def _get_homehub_data(url):
-    '''Return mock homehub data.'''
-    return '''
-    [
-        {
-            'mac': 'AA:BB:CC:DD:EE:FF,
-            'hostname': 'hostname',
-            'ip': '192.168.1.43',
-            'ipv6': '',
-            'name': 'hostname',
-            'activity': '1',
-            'os': 'Unknown',
-            'device': 'Unknown',
-            'time_first_seen': '2016/06/05 11:14:45',
-            'time_last_active': '2016/06/06 11:33:08',
-            'dhcp_option': '39043T90430T9TGK0EKGE5KGE3K904390K45GK054',
-            'port': 'wl0',
-            'ipv6_ll': 'fe80::gd67:ghrr:fuud:4332',
-            'activity_ip': '1',
-            'activity_ipv6_ll': '0',
-            'activity_ipv6': '0',
-            'device_oui': 'NA',
-            'device_serial': 'NA',
-            'device_class': 'NA'
-        }
-    ]
-    '''
+    from homeassistant.components.device_tracker import bt_home_hub_5
+from homeassistant.const import CONF_HOST
