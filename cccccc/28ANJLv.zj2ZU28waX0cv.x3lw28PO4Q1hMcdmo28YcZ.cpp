@@ -1,221 +1,234 @@
 
         
-        struct Vframe {
-  Vframe(const Func* func, int parent, int cost, uint64_t entry_weight)
-    : func(func)
-    , parent(parent)
-    , entry_weight(entry_weight)
-    , inclusive_cost(cost)
-    , exclusive_cost(cost)
-  {}
+        PyObject* NewMessageExtensionsByName(const Descriptor* descriptor);
+PyObject* NewMessageExtensionsSeq(const Descriptor* descriptor);
+    
+    
+    
+    void RepeatedEnumFieldGenerator::GenerateSerializationCode(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    '$name$_.WriteTo(output, _repeated_$name$_codec);\n');
+}
+    
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+    void freeifaddrs(struct ifaddrs* addrs) {
+	struct ifaddrs* last = NULL;
+	struct ifaddrs* cursor = addrs;
+	while (cursor) {
+		delete[] cursor->ifa_name;
+		delete cursor->ifa_addr;
+		delete cursor->ifa_netmask;
+		last = cursor;
+		cursor = cursor->ifa_next;
+		delete last;
+	}
+}
+
+    
+    #include 'io/stream_peer.h'
+    
+    	void _on_peer_packet();
+	void _on_connect(String p_protocol);
+	void _on_disconnect();
+	void _on_error();
+    
+    void VideoPlayer::set_expand(bool p_expand) {
+    }
+    
+    #endif /* PCFREAD_H_ */
+    
+    
+    {    // The read() method is called when the internal input buffer is empty.
+    // Parameters:
+    // pBuf - input buffer
+    // max_bytes_to_read - maximum bytes that can be written to pBuf
+    // pEOF_flag - set this to true if at end of stream (no more bytes remaining)
+    // Returns -1 on error, otherwise return the number of bytes actually written to the buffer (which may be 0).
+    // Notes: This method will be called in a loop until you set *pEOF_flag to true or the internal buffer is full.
+    virtual int read(uint8 *pBuf, int max_bytes_to_read, bool *pEOF_flag) = 0;
+  };
+    
+    // WorkloadStats is used to track per request timing for different states
+// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
+// should be made to guard the state change with appropriate timers and
+// counters.
+//
+// The states tracked are:
+//  - In a request (this is a superset of the interpreter state)
+//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
+//  - In the JIT (currently tracks time inside the translate routine)
+//
+// Note the time in the TC is not tracked.  This is roughly:
+//   Time in request - Time in interp
+//
+// This gives us the relative interp time formula of:
+//   Relative interp time = Time in interp / Time in request
+struct WorkloadStats final {
+  enum State {
+    InRequest,
+    // -> InInterp   Okay (entering Dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InInterp,
+    // -> InRequest  Okay (leaving the dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InTrans,
+    // -> InRequest  Okay (leaving translate)
+    // -> InInterp   Okay (leaving translate)
+  };
     }
     
     //////////////////////////////////////////////////////////////////////
     
-    const char* OfflineCode::getArchName() { return 'PPC64'; }
     
+    {  CurlShareResource();
+  ~CurlShareResource() { close(); }
+  void close();
+  bool setOption(int option, const Variant& value);
+  static bool isLongOption(long option);
+  bool setLongOption(long option, long value);
+  CURLcode attachToCurlHandle(CURL *cp);
+ private:
+  CURLSH* m_share;
+  // CURLSH is a typedef to void
+  TYPE_SCAN_IGNORE_FIELD(m_share);
+};
     
-    {  if (n == 1) {
-    if (imm_s == 0x3F) {
-      return 0;
-    }
-    uint64_t bits = (1UL << (imm_s + 1)) - 1;
-    return RotateRight(bits, imm_r, 64);
-  } else {
-    if ((imm_s >> 1) == 0x1F) {
-      return 0;
-    }
-    for (int width = 0x20; width >= 0x2; width >>= 1) {
-      if ((imm_s & width) == 0) {
-        int mask = width - 1;
-        if ((imm_s & mask) == mask) {
-          return 0;
-        }
-        uint64_t bits = (1UL << ((imm_s & mask) + 1)) - 1;
-        return RepeatBitsAcrossReg(reg_size,
-                                   RotateRight(bits, imm_r & mask, width),
-                                   width);
-      }
+    void SynchronizableMulti::notifyAll() {
+  for (auto& cond_list : m_cond_list_vec) {
+    while (!cond_list.empty()) {
+      pthread_cond_signal(cond_list.front());
+      cond_list.pop_front();
     }
   }
-  not_reached();
-  return 0;
 }
     
-    #else //__cplusplus
-    
-    private:
-  static void SigChldHandler(int sig, siginfo_t* info, void* ctx);
-    
-        char fileName[256];
-    memcpy(fileName, '/sys/devices/system/node/node', 29);
-    assert(strlen('/sys/devices/system/node/node') == 29);
-    char* p = fileName + 29;
-    // We support at most 32 NUMA node, so at most two bytes.
-    if (node >= 10) *p++ = '0' + node / 10;
-    *p++ = '0' + node % 10;
-    if (pagesize == size2m) {
-      memcpy(p, '/hugepages/hugepages-2048kB/', 28);
-      assert(strlen('/hugepages/hugepages-2048kB/') == 28);
-      p += 28;
-    } else {
-      memcpy(p, '/hugepages/hugepages-1048576kB/', 31);
-      assert(strlen('/hugepages/hugepages-1048576kB/') == 31);
-      p += 31;
+    inline void* mmap_1g_impl(void* addr) {
+  void* ret = MAP_FAILED;
+  if (s_hugePath[0] != 0) {
+    int fd = -1;
+    size_t dirNameLen = strlen(s_hugePath);
+    assert(dirNameLen > 0 && s_hugePath[dirNameLen - 1] == '/');
+    for (char i = '0'; i <= '9'; ++i) {
+      s_hugePath[dirNameLen] = i;
+      // We don't put code on 1G huge pages, so no execute permission.
+      fd = open(s_hugePath, O_CREAT | O_EXCL | O_RDWR, 0666);
+      // Retry a few times if the file already exists.
+      if (fd < 0) {
+        if (errno == EEXIST) {
+          errno = 0;
+          continue;
+        } else {
+          snprintf(s_errorMsg, maxErrorMsgLen,
+                   'Failed to create hugetlbfs file %s: ', s_hugePath);
+          record_err_msg();
+          s_hugePath[dirNameLen] = 0;
+          return nullptr;
+        }
+      } else {
+        unlink(s_hugePath);
+      }
+      break;
+    }
+    }
     }
     
-    #include 'db/db_impl.h'
-#include 'leveldb/db.h'
-#include 'leveldb/env.h'
-#include 'util/testharness.h'
-#include <string>
-#include <vector>
+    // Call mprotect() on all 1G huge pages.  Useful in limiting access in child
+// processes.
+int mprotect_1g_pages(int prot);
     
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+    #include 'hphp/runtime/vm/jit/annotation.h'
+    
+    #include <map>
+#include <functional>
+    
+    TEST_F(ViewsConfigParserPluginTests, test_add_view) {
+  Config c;
+  auto s = c.update(getTestConfigMap());
+  EXPECT_TRUE(s.ok());
+    }
+    
+      char* buffer = (char*)malloc(range.length + 1);
+  if (buffer == nullptr) {
+    return '';
+  }
+  memset(buffer, 0, range.length + 1);
+    
+    
+    {
+    { protected:
+  void testPluginCheck();
+  void testReset();
+  void testPut();
+  void testGet();
+  void testDelete();
+  void testDeleteRange();
+  void testScan();
+  void testScanLimit();
+};
 }
 
     
-    class FilterPolicy;
+      /// Limit the FSEvents actions to the subscriptioned mask (if not 0).
+  FSEventStreamEventFlags mask{0};
     
-      void Clear();
-  void Add(double value);
-  void Merge(const Histogram& other);
+    /// Kernel shared buffer size in bytes.
+static const size_t kKernelQueueSize = (20 * (1 << 20));
     
-    #ifndef STORAGE_LEVELDB_UTIL_MUTEXLOCK_H_
-#define STORAGE_LEVELDB_UTIL_MUTEXLOCK_H_
-    
-    inline bool DBIter::ParseKey(ParsedInternalKey* ikey) {
-  Slice k = iter_->key();
-  ssize_t n = k.size() + iter_->value().size();
-  bytes_counter_ -= n;
-  while (bytes_counter_ < 0) {
-    bytes_counter_ += RandomPeriod();
-    db_->RecordReadSample(k);
+      // Copy constructor if different value type - use getters and setters to
+  // perform conversion
+  template <typename T2>
+  XGBOOST_DEVICE explicit GradientPairInternal(const GradientPairInternal<T2> &g) {
+    SetGrad(g.GetGrad());
+    SetHess(g.GetHess());
   }
-  if (!ParseInternalKey(k, ikey)) {
-    status_ = Status::Corruption('corrupted internal key in DBIter');
-    return false;
-  } else {
-    return true;
+    
+    // Define a customized logistic regression objective in C++.
+// Implement the interface.
+class MyLogistic : public ObjFunction {
+ public:
+  void Configure(const std::vector<std::pair<std::string, std::string> >& args) override {
+    param_.InitAllowUnknown(args);
   }
-}
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    #include <boost/asio/detail/push_options.hpp>
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    namespace boost {
-namespace asio {
-namespace detail {
+  void GetGradient(HostDeviceVector<bst_float> *preds,
+                   const MetaInfo &info,
+                   int iter,
+                   HostDeviceVector<GradientPair> *out_gpair) override {
+    out_gpair->Resize(preds->Size());
+    std::vector<bst_float>& preds_h = preds->HostVector();
+    std::vector<GradientPair>& out_gpair_h = out_gpair->HostVector();
+    for (size_t i = 0; i < preds_h.size(); ++i) {
+      bst_float w = info.GetWeight(i);
+      // scale the negative examples!
+      if (info.labels_[i] == 0.0f) w *= param_.scale_neg_weight;
+      // logistic transformation
+      bst_float p = 1.0f / (1.0f + std::exp(-preds_h[i]));
+      // this is the gradient
+      bst_float grad = (p - info.labels_[i]) * w;
+      // this is the second order gradient
+      bst_float hess = p * (1.0f - p) * w;
+      out_gpair_h.at(i) = GradientPair(grad, hess);
     }
-    }
-    }
-    
-    #include <boost/asio/detail/push_options.hpp>
-    
-    extern JSClass  *jsb_cocos2d_NavMeshObstacle_class;
-extern JSObject *jsb_cocos2d_NavMeshObstacle_prototype;
-    
-    
-    {        ok &= luaval_to_uint32(tolua_S, 2,&arg0, 'cc.SimpleAudioEngine:pauseEffect');
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_pauseEffect'', nullptr);
-            return 0;
-        }
-        cobj->pauseEffect(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:pauseEffect',argc, 1);
-    return 0;
-    
-    
-    
-    
-    {	b2Body* m_body;
-};
-    
-    
-    {    // SDL_CaptureMouse() let the OS know e.g. that our imgui drag outside the SDL window boundaries shouldn't e.g. trigger the OS window resize cursor. 
-    // The function is only supported from SDL 2.0.4 (released Jan 2016)
-    bool any_mouse_button_down = ImGui::IsAnyMouseDown();
-    SDL_CaptureMouse(any_mouse_button_down ? SDL_TRUE : SDL_FALSE);
-#else
-    if (SDL_GetWindowFlags(g_Window) & SDL_WINDOW_INPUT_FOCUS)
-        io.MousePos = ImVec2((float)mx, (float)my);
-#endif
-}
-    
-    static void CreateOrResizeBuffer(VkBuffer& buffer, VkDeviceMemory& buffer_memory, VkDeviceSize& p_buffer_size, size_t new_size, VkBufferUsageFlagBits usage)
-{
-    VkResult err;
-    if (buffer != NULL)
-        vkDestroyBuffer(g_Device, buffer, g_Allocator);
-    if (buffer_memory)
-        vkFreeMemory(g_Device, buffer_memory, g_Allocator);
-    }
-    
-    
-    {
-    {
-    {            _IdxWritePtr[0] = (ImDrawIdx)(_VtxCurrentIdx); _IdxWritePtr[1] = (ImDrawIdx)(_VtxCurrentIdx+1); _IdxWritePtr[2] = (ImDrawIdx)(_VtxCurrentIdx+2);
-            _IdxWritePtr[3] = (ImDrawIdx)(_VtxCurrentIdx); _IdxWritePtr[4] = (ImDrawIdx)(_VtxCurrentIdx+2); _IdxWritePtr[5] = (ImDrawIdx)(_VtxCurrentIdx+3);
-            _IdxWritePtr += 6;
-            _VtxCurrentIdx += 4;
-        }
-    }
-}
-    
-        bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    
-    #ifdef IMGUI_VULKAN_DEBUG_REPORT
-    // Remove the debug report callback
-    auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, 'vkDestroyDebugReportCallbackEXT');
-    vkDestroyDebugReportCallbackEXT(g_Instance, g_DebugReport, g_Allocator);
-#endif // IMGUI_VULKAN_DEBUG_REPORT
-    
-    
-    {        ImGui::Render();
-    }
-    
-            // 1. Show a simple window.
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    }
-    
-        Value(int unit, double value)
-    : unit(unit)
-    , value(value)
-    {
-    }
-    
-        Size(double width, double height)
-    : width(width)
-    , height(height)
-    {
-    }
-    
-    template<typename... ARGS>
-inline void log(int level, const char* tag, const char* msg) noexcept {
-  __android_log_write(level, tag, msg);
-}
-    
-    private:
-  void ref() {
-    ++m_refcount;
   }
+  const char* DefaultEvalMetric() const override {
+    return 'error';
+  }
+  void PredTransform(HostDeviceVector<bst_float> *io_preds) override {
+    // transform margin value to probability.
+    std::vector<bst_float> &preds = io_preds->HostVector();
+    for (size_t i = 0; i < preds.size(); ++i) {
+      preds[i] = 1.0f / (1.0f + std::exp(-preds[i]));
+    }
+  }
+  bst_float ProbToMargin(bst_float base_score) const override {
+    // transform probability to margin value
+    return -std::log(1.0f / base_score - 1.0f);
+  }
+    }
