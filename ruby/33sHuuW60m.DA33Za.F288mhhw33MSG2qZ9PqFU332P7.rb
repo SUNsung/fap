@@ -1,139 +1,100 @@
 
         
-              # Need to experiment if this priority is the best one: rendered => output_buffer
-      def document_root_element
-        Nokogiri::HTML::Document.parse(@rendered.blank? ? @output_buffer : @rendered).root
-      end
-    
-          def cast(value)
-        raise value unless value == 'value from user'
-        'cast value'
-      end
-    
-      has_many :clients, -> { order 'id' }, dependent: :destroy, before_remove: :log_before_remove, after_remove: :log_after_remove
-  has_many :unsorted_clients, class_name: 'Client'
-  has_many :unsorted_clients_with_symbol, class_name: :Client
-  has_many :clients_sorted_desc, -> { order 'id DESC' }, class_name: 'Client'
-  has_many :clients_of_firm, -> { order 'id' }, foreign_key: 'client_of', class_name: 'Client', inverse_of: :firm
-  has_many :clients_ordered_by_name, -> { order 'name' }, class_name: 'Client'
-  has_many :unvalidated_clients_of_firm, foreign_key: 'client_of', class_name: 'Client', validate: false
-  has_many :dependent_clients_of_firm, -> { order 'id' }, foreign_key: 'client_of', class_name: 'Client', dependent: :destroy
-  has_many :exclusively_dependent_clients_of_firm, -> { order 'id' }, foreign_key: 'client_of', class_name: 'Client', dependent: :delete_all
-  has_many :limited_clients, -> { limit 1 }, class_name: 'Client'
-  has_many :clients_with_interpolated_conditions, ->(firm) { where 'rating > #{firm.rating}' }, class_name: 'Client'
-  has_many :clients_like_ms, -> { where('name = 'Microsoft'').order('id') }, class_name: 'Client'
-  has_many :clients_like_ms_with_hash_conditions, -> { where(name: 'Microsoft').order('id') }, class_name: 'Client'
-  has_many :plain_clients, class_name: 'Client'
-  has_many :clients_using_primary_key, class_name: 'Client',
-           primary_key: 'name', foreign_key: 'firm_name'
-  has_many :clients_using_primary_key_with_delete_all, class_name: 'Client',
-           primary_key: 'name', foreign_key: 'firm_name', dependent: :delete_all
-  has_many :clients_grouped_by_firm_id, -> { group('firm_id').select('firm_id') }, class_name: 'Client'
-  has_many :clients_grouped_by_name, -> { group('name').select('name') }, class_name: 'Client'
-    
-        server.config.cable = ActiveSupport::HashWithIndifferentAccess.new(adapter: 'async')
-    
-      # any user that is either a moderator or an admin
-  def staff?
-    admin || moderator
-  end
-    
-    def load_apps
-  out, err, status = Open3.capture3('/usr/bin/osascript', '-e', 'tell application 'System Events' to get (name, bundle identifier, unix id) of every process')
-  if status.exitstatus > 0
-    puts err
-    exit status.exitstatus
-  end
-  out = out.split(', ')
-  one_third   = out.length / 3
-  @app_names  = out.shift(one_third)
-  @bundle_ids = out.shift(one_third)
-  @unix_ids   = out.shift(one_third)
+        def bottle_receipt_path(bottle_file)
+  Utils.popen_read('/usr/bin/tar', '-tzf', bottle_file, '*/*/INSTALL_RECEIPT.json').chomp
 end
     
-          config.paths['log']             = '#{Msf::Config.log_directory}/#{Rails.env}.log'
-      config.paths['config/database'] = [Metasploit::Framework::Database.configurations_pathname.try(:to_path)]
-    
-                end
-    
-    class SnifferFTP < BaseProtocolParser
-    
-          when :login_fail
-    
-                  s[:proto]='pop3'
-              s[:extra]='Failed Login. Banner: #{s[:banner]}'
-              report_auth_info(s)
-              print_status('Invalid POP3 Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]} (#{s[:banner].strip})')
-              s[:pass]=''
-          end
-        when nil
-          # No matches, no saved state
-        else
-          s[:last]=matched
-          sessions[s[:session]].merge!({k => matches})
-      end # end case matched
-    end # end of each_key
-  end # end of parse
-end
-    
-    # Sniffer class for GET URL's
-class SnifferURL < BaseProtocolParser
-  def register_sigs
-    self.sigs = {
-      :get		=> /^GET\s+([^\n]+)\s+HTTP\/\d\.\d/i,
-      :webhost	=> /^HOST\:\s+([^\n\r]+)/i,
-    }
-  end
-    
-    print asm
-
-    
-    require 'rex/post/meterpreter'
-    
-          def call
-        title('Gems')
-        table(all_gem_names) do |gem, row|
-          row.yellow if update_available?(gem)
-          row << gem
-          row << installed_gem_version(gem)
-          row << '(update available)' if update_available?(gem)
-        end
-      end
-    
-          private
-    
-          def stage_set?
-        !!fetch(:stage, false)
-      end
-    
-      # Read and eval a .rake file in such a way that `self` within the .rake file
-  # refers to this plugin instance. This gives the tasks in the file access to
-  # helper methods defined by the plugin.
-  def eval_rakefile(path)
-    contents = IO.read(path)
-    instance_eval(contents, path, 1)
-  end
-    
-        # @abstract
-    #
-    # Your implementation should check if the specified remote-repository is
-    # available.
-    #
-    # @return [Boolean]
-    #
-    def check
-      raise NotImplementedError, 'Your SCM strategy module should provide a #check method'
+      def describe_python
+    python = which 'python'
+    return 'N/A' if python.nil?
+    python_binary = Utils.popen_read python, '-c', 'import sys; sys.stdout.write(sys.executable)'
+    python_binary = Pathname.new(python_binary).realpath
+    if python == python_binary
+      python
+    else
+      '#{python} => #{python_binary}'
     end
-    
-      entries = [{ template: deploy_rb, file: config_dir.join('deploy.rb') }]
-  entries += envs.split(',').map { |stage| { template: stage_rb, file: deploy_dir.join('#{stage}.rb') } }
-    
-              add_offense(node)
-        end
-    
-      module Comment0
   end
     
-            def description
-          'validate the content types allowed on attachment #{@attachment_name}'
+      def test_invalid_attr
+    %W[
+      foo?
+      @foo
+      @@foo
+      $foo
+      \u3042$
+    ].each do |name|
+      assert_raise_with_message(NameError, /#{Regexp.quote(quote(name))}/) do
+        Module.new { attr_accessor name.to_sym }
+      end
+    end
+  end
+    
+      def test_flip_flop
+    eval <<-END
+    assert_equal [4,5], (1..9).select {|n| true if (n==4)..(n==5)}
+    assert_equal [4,5], (1..9).select {|n| true if (n==4)...(n==5)}
+    assert_equal [2], (1..9).select {|n| true if (n==2)..(n%2).zero?}
+    assert_equal [2,3,4], (1..9).select {|n| true if (n==2)...(n%2).zero?}
+    assert_equal [4,5,7,8], (1..9).select {|n| true if (n==4)...(n==5) or (n==7)...(n==8)}
+    assert_equal [nil, 2, 3, 4, nil], (1..5).map {|x| x if (x==2..x==4)}
+    assert_equal [1, nil, nil, nil, 5], (1..5).map {|x| x if !(x==2..x==4)}
+    END
+  end
+    
+    load_extension('data')
+    
+        assert_equal(0, h.length)
+  end
+    
+      it 'decodes the remaining doubles when passed the '*' modifier after another directive' do
+    array = '@\x15333333@\x22ffffff'.unpack(unpack_format()+unpack_format('*'))
+    array.should == [5.3, 9.2]
+  end
+    
+    describe :string_unpack_64bit_le_extra, shared: true do
+  it 'adds nil for each element requested beyond the end of the String' do
+    [ ['',                  [nil, nil, nil]],
+      ['abcdefgh',          [7523094288207667809, nil, nil]],
+      ['abcdefghcdefab',    [7523094288207667809, nil, nil]],
+      ['abcdefghcdefabde',  [7523094288207667809, 7306072665971057763, nil]]
+    ].should be_computed_by(:unpack, unpack_format(3))
+  end
+end
+    
+      it 'decodes the number of characters specified by the count modifier' do
+    [ ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U1', [0x80]],
+      ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U2', [0x80, 0x81]],
+      ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U3', [0x80, 0x81, 0x82]]
+    ].should be_computed_by(:unpack)
+  end
+    
+          def initialize(pairs = {})
+        @pairs = pairs
+        pairs.each do |key, value|
+          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
+          send(:'#{key}=', value)
+        end
+    
+    # `brew uses foo bar` returns formulae that use both foo and bar
+# If you want the union, run the command twice and concatenate the results.
+# The intersection is harder to achieve with shell tools.
+    
+      def requirements
+    dependency_collector.requirements
+  end
+    
+            def initialize(argv)
+          @pod_name = argv.shift_argument
+          @wipe_all = argv.flag?('all')
+          super
+        end
+    
+            # Runs the template configuration utilities.
+        #
+        # @return [void]
+        #
+        def print_info
+          UI.puts '\nTo learn more about the template see `#{template_repo_url}`.'
+          UI.puts 'To learn more about creating a new pod, see `#{CREATE_NEW_POD_INFO_URL}`.'
         end
