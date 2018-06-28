@@ -1,135 +1,143 @@
 
         
-                # If the session is modified to be empty, remove the cookie.
-        # If the session is empty, return without setting the cookie.
-        if not session:
-            if session.modified:
-                response.delete_cookie(
-                    app.session_cookie_name,
-                    domain=domain,
-                    path=path
-                )
+        from flask import Markup
+from flask.json.tag import TaggedJSONSerializer, JSONTag
     
-        import site_package
-    assert site_package.app.instance_path == \
-        modules_tmpdir.join('var').join('site_package-instance')
+            :param obj: an import name or object
+        '''
+        if isinstance(obj, string_types):
+            obj = import_string(obj)
+        for key in dir(obj):
+            if key.isupper():
+                self[key] = getattr(obj, key)
     
-        selections = (
-        args.console_logs,
-        args.test_results,
-        args.coverage_results,
-        args.job_metadata,
-        args.run_metadata,
-    )
+        def __init__(self, request, key):
+        form_matches = request.form.getlist(key)
+        buf = ['You tried to access the file '%s' in the request.files '
+               'dictionary but it does not exist.  The mimetype for the request '
+               'is '%s' instead of 'multipart/form-data' which means that no '
+               'file contents were transmitted.  To fix this error you should '
+               'provide enctype='multipart/form-data' in your form.' %
+               (key, request.mimetype)]
+        if form_matches:
+            buf.append('\n\nThe browser instead transmitted some file names. '
+                       'This was submitted: %s' % ', '.join(''%s'' % x
+                            for x in form_matches))
+        self.msg = ''.join(buf)
     
-        'ipv6': re.compile(
-        r'''^
-            (?:{0}:){{7}}{0}|           # uncompressed: 1:2:3:4:5:6:7:8
-            (?:{0}:){{1,6}}:|           # compressed variants, which are all
-            (?:{0}:)(?::{0}){{1,6}}|    # a::b for various lengths of a,b
-            (?:{0}:){{2}}(?::{0}){{1,5}}|
-            (?:{0}:){{3}}(?::{0}){{1,4}}|
-            (?:{0}:){{4}}(?::{0}){{1,3}}|
-            (?:{0}:){{5}}(?::{0}){{1,2}}|
-            (?:{0}:){{6}}(?::{0})|      # ...all with 2 <= a+b <= 7
-            :(?::{0}){{1,6}}|           # ::ffff(:ffff...)
-            {0}?::|                     # ffff::, ::
-                                        # ipv4-in-ipv6 variants
-            (?:0:){{6}}(?:{0}\.){{3}}{0}|
-            ::(?:ffff:)?(?:{0}\.){{3}}{0}|
-            (?:0:){{5}}ffff:(?:{0}\.){{3}}{0}
-            $
-        '''.format(ipv6_component), re.X | re.I
-    ),
+        If you configure your own :class:`logging.StreamHandler`, you may want to
+    use this for the stream. If you are using file or dict configuration and
+    can't import this directly, you can refer to it as
+    ``ext://flask.logging.wsgi_errors_stream``.
+    '''
+    return request.environ['wsgi.errors'] if request else sys.stderr
     
-        def on_open_shell(self):
-        try:
-            self._exec_cli_command('screen-length 0 temporary')
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
-
+        def _get_source_fast(self, environment, template):
+        for srcobj, loader in self._iter_loaders(template):
+            try:
+                return loader.get_source(environment, template)
+            except TemplateNotFound:
+                continue
+        raise TemplateNotFound(template)
     
-        def deal_card(self):
-        try:
-            card = self.cards[self.deal_index]
-            card.is_available = False
-            self.deal_index += 1
-        except IndexError:
-            return None
-        return card
-    
-        def __init__(self, num_levels):
-        self.num_levels = num_levels
-        self.levels = []  # List of Levels
-    
-                ret += [v] * n
-    
-            return '[@%r,%r,<%r>%s,%r:%r]' % (self.index,
-                                          txt,
-                                          self.type,
-                                          channelStr,
-                                          self.line,
-                                          self.charPositionInLine
-                                          )
+        stream = StringIO()
+    client.get('/', errors_stream=stream)
+    assert 'ERROR in test_logging: test' in stream.getvalue()
     
     
-    # [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+class assert_no_leak(object):
     
-        def getUnexpectedToken(self):
-        return self.token
+                greenlets.append(greenlet(g))
+            return 'Hello World!'
     
-            self.assertFalse(self.vhost2.conflicts([self.addr1,
-                                                self.addr_default]))
+    
+@for_app('tar')
+def match(command):
+    return ('-C' not in command.script
+            and _is_tar_extract(command.script)
+            and _tar_file(command.script_parts) is not None)
+    
+    containers = (('thefuck/python3-fish',
+               u'''FROM python:3
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'),
+              ('thefuck/python2-fish',
+               u'''FROM python:2
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'))
+    
+            # train once so that the states change
+        model.train_on_batch(np.ones((num_samples, timesteps)),
+                             np.ones((num_samples, units)))
+        out2 = model.predict(np.ones((num_samples, timesteps)))
+    
+    The VAE has a modular design. The encoder, decoder and VAE
+are 3 models that share weights. After training the VAE model,
+the encoder can be used to  generate latent vectors.
+The decoder can be used to generate MNIST digits by sampling the
+latent vector from a Gaussian distribution with mean=0 and std=1.
+    
+    num_classes = np.max(y_train) + 1
+print(num_classes, 'classes')
+    
+    ] + _py_files('scrapy/contrib') + _py_files('scrapy/contrib_exp')
+    
+        def add_post_hook(self, request, results):
+        if hasattr(self, 'post_process'):
+            cb = request.callback
+    
+    
+class ScrapesContract(Contract):
+    ''' Contract to check presence of fields in scraped items
+        @scrapes page_name page_body
+    '''
+    
+            installer.deploy_cert.side_effect = errors.PluginError
+        self.assertRaises(errors.PluginError, self.client.deploy_certificate,
+                          ['foo.bar'], 'key', 'cert', 'chain', 'fullchain')
+        installer.recovery_routine.assert_called_once_with()
+    
+    import mock
     
         @mock.patch('certbot_compatibility_test.validator.requests.get')
-    def test_redirect_wrong_status_code(self, mock_get_request):
-        mock_get_request.return_value = create_response(
-            201, {'location': 'https://test.com'})
+    def test_redirect_missing_location(self, mock_get_request):
+        mock_get_request.return_value = create_response(301)
         self.assertFalse(self.validator.redirect('test.com'))
     
-    # If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath(os.path.join(here, '..')))
+    def ehow_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+	
+	assert re.search(r'http://www.ehow.com/video_', url), 'URL you entered is not supported'
     
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    def test_smtp_success(self, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        self.assertTrue(notify('Goose', 'auntrhody@example.com',
-                               'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.connect.call_count, 1)
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
+    #----------------------------------------------------------------------
+def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    '''wrapper'''
+    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
+    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
+    hostname = urlparse(url).hostname
+    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
+        return False
+    upid = match1(url, r'.+/content/(\w+)')
     
+    def kuwo_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    if 'www.kuwo.cn/yinyue' in url:
+        rid=match1(url,'yinyue/(\d+)')
+        kuwo_download_by_rid(rid,output_dir, merge, info_only)
+    else:
+        kuwo_playlist_download(url,output_dir,merge,info_only)
     
-@click.command()
-@click.argument('catalog_file', type=click.Path())
-def cli(catalog_file):
-    # Read the old ones back.  Once we are in, we will never go.
-    with open(catalog_file) as f:
-        rv = json.load(f)['supported_locales']
+        # ordered list of supported stream types / qualities on this site
+    # order: high quality -> low quality
+    stream_types = [
+        {'id': 'original'}, # contains an 'id' or 'itag' field at minimum
+        {'id': 'small'},
+    ]
