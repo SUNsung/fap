@@ -1,100 +1,142 @@
 
         
-            brew cask install mactex
-    EOS
-  when 'pip' then <<-EOS.undent
-    Homebrew provides pip via: `brew install python`. However you will then
-    have two Pythons installed on your Mac, so alternatively you can install
-    pip via the instructions at:
+        require 'cases/helper'
+require 'models/post'
+require 'models/comment'
+require 'models/author'
+require 'models/rating'
+require 'models/categorization'
     
-          return true if prune == 'all'
+      teardown { ActiveStorage::Blob.all.each(&:purge) }
     
-      def core_tap_last_commit
-    CoreTap.instance.git_last_commit || 'never'
-  end
-    
-          puts_columns Array(result)
-    else
-      query = ARGV.first
-      rx = query_regexp(query)
-      local_results = search_formulae(rx)
-      puts_columns(local_results)
-      tap_results = search_taps(rx)
-      puts_columns(tap_results)
+    require 'test_helper'
+require 'stubs/test_server'
     
         def execute(args)
       topic_id = args[:topic_id]
       raise Discourse::InvalidParameters.new(:topic_id) unless topic_id.present?
     
-      def revoke_moderation!
-    set_permission('moderator', false)
-  end
+            # This returns all the config classes for the various pushes.
+        #
+        # @return [Registry]
+        def push_configs
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.configs[:push])
+            end
+          end
+        end
     
-        options[:container] = ->(filter) {
-      filter.current_url.path.start_with?('/getting-started') ? '#main' : '#content'
-    }
-    options[:title] = false
-    options[:root_title] = 'Elixir'
-    
-        def process_response?(response)
-      !(response.body =~ REDIRECT_RGX || response.body =~ NOT_FOUND_RGX || response.body.blank?)
+            # Helper method to get access to the class variable. This is mostly
+        # exposed for tests. This shouldn't be mucked with directly, since it's
+        # structure may change at any time.
+        def registered; @@registered; end
+      end
     end
   end
 end
 
     
-        version '5' do
-      self.release = '5.0.7'
-      self.base_url = 'http://sinonjs.org/releases/v#{release}/'
-    end
+          protected
     
-        version do
-      self.release = '4.8.3'
-      self.base_url = 'https://webpack.js.org/'
-      self.root_path = 'guides/'
-      self.initial_paths = %w(
-        concepts/
-        guides/
-        api/
-        configuration/
-        loaders/
-        plugins/
-      )
-      self.links = {
-        home: 'https://webpack.js.org/',
-        code: 'https://github.com/webpack/webpack'
-      }
-    
-        def ==(other)
-      other.is_a?(self.class) && filters == other.filters
-    end
-    
-        attr_accessor :name, :type, :path
-    
-      module DSL
-    def env(*settings)
-      @env ||= BuildEnvironment.new
-      @env.merge(settings)
+              # Success, exit status 0
+          0
+        end
+      end
     end
   end
 end
+
     
-      %w(GET HEAD POST PUT DELETE).each do |method|
-    it 'accepts #{method} requests when allow_if is true' do
-      mock_app do
-        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
-        run DummyApp
-      end
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
+            # Get the proper capability host to check
+        cap_host = nil
+        if type == :host
+          cap_host = @env.host
+        else
+          with_target_vms([]) do |vm|
+            cap_host = case type
+                       when :provider
+                         vm.provider
+                       when :guest
+                         vm.guest
+                       else
+                         raise Vagrant::Errors::CLIInvalidUsage,
+                           help: opts.help.chomp
+                       end
+          end
+        end
+    
+      def test_capture3
+    o, e, s = Open3.capture3(RUBY, '-e', 'i=STDIN.read; print i+'o'; STDOUT.flush; STDERR.print i+'e'', :stdin_data=>'i')
+    assert_equal('io', o)
+    assert_equal('ie', e)
+    assert(s.success?)
+  end
+    
+      # The shortest way to test one proc
+  def assert_compile_once(script, result_inspect:, insns: [])
+    if script.match?(/\A\n.+\n\z/m)
+      script = script.gsub(/^/, '  ')
+    else
+      script = ' #{script} '
     end
+    assert_eval_with_jit('p proc {#{script}}.call', stdout: '#{result_inspect}\n', success_count: 1, insns: insns, uplevel: 2)
   end
     
-        it 'should be able to deal with PATH_INFO = nil (fcgi?)' do
-      app = Rack::Protection::PathTraversal.new(proc { 42 })
-      expect(app.call({})).to eq(42)
-    end
+      it 'throws an exception for a wrong type' do
+    a = @s.typed_wrap_struct(1024)
+    lambda { @s.typed_get_struct_other(a) }.should raise_error(TypeError)
   end
     
-      it 'should not interfere with normal head requests' do
-    expect(head('/')).to be_ok
+        set = Set['1',nil,'2',nil,'0','1',false]
+    assert_equal(true, set === nil)
+    assert_equal(true, set === false)
+    assert_equal(true, set === '1')
+    assert_equal(false, set === 0)
+    assert_equal(false, set === true)
   end
+    
+      def test_strftime_yearday_on_last_day_of_year
+    t = Time.utc(2015, 12, 31, 0, 0, 0)
+    assert_equal('365', t.strftime('%j'))
+    t = Time.utc(2016, 12, 31, 0, 0, 0)
+    assert_equal('366', t.strftime('%j'))
+    
+      it 'decodes two shorts for two format characters' do
+    'badc'.unpack(unpack_format(nil, 2)).should == [25185, 25699]
+  end
+    
+      it 'implicitly has a count of one when no count is specified' do
+    'abc'.unpack(unpack_format).should == ['a']
+  end
+    
+      File.unlink(out) if (File.size(out) == 0)
+    
+          when :login_pass
+    
+    meterp.sock.close
+
+    
+        _cal[ver] = {
+      :execve      => __cal + [__NC_execve].pack('n'),
+      :getpeername => __cal + [__NC_getpeername].pack('n'),
+      :accept      => __cal + [__NC_accept].pack('n'),
+      :listen      => __cal + [__NC_listen].pack('n'),
+      :bind        => __cal + [__NC_bind].pack('n'),
+      :socket      => __cal + [__NC_socket].pack('n'),
+      :connect     => __cal + [__NC_connect].pack('n'),
+      :close       => __cal + [__NC_close].pack('n'),
+      :kfcntl      => __cal + [__NC_kfcntl].pack('n'),
+    }
+    
+    	def block_do(line)
+		temp = line.split('\t')
+    
+    module LogStash
+  module Api
+    module Commands
+      module System
+        class Plugins < Commands::Base
+          def run
+            { :total => plugins.count, :plugins => plugins }
+          end
