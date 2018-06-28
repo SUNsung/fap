@@ -1,163 +1,165 @@
 
         
-              with tf.variable_scope(component.name, reuse=True):
-        sources = network_units.NamedTensor(
-            tf.zeros([_BATCH_SIZE * _NUM_TOKENS, _TOKEN_DIM]), 'sources')
-        targets = network_units.NamedTensor(
-            tf.zeros([_BATCH_SIZE * _NUM_TOKENS, _TOKEN_DIM]), 'targets')
+                def check(self, value):
+            return isinstance(value, Foo)
     
-        update_network_states(self, tensors, network_states, stride)
-    self._add_runtime_hooks()
-    return state.handle
+            export YOURAPPLICATION_SETTINGS='/path/to/config/file'
     
-      def testSigmoidCrossEntropyLoss(self):
-    indices = tf.constant([0, 0, 1])
-    gold_labels = tf.constant([0, 1, 2])
-    probs = tf.constant([0.6, 0.7, 0.2])
-    logits = tf.constant([[0.9, -0.3, 0.1], [-0.5, 0.4, 2.0]])
-    cost, correct, total, gold_labels = (
-        component.build_sigmoid_cross_entropy_loss(logits, gold_labels, indices,
-                                                   probs))
+        #: Some implementations can detect whether a session is newly
+    #: created, but that is not guaranteed. Use with caution. The mixin
+    # default is hard-coded ``False``.
+    new = False
     
-    # The saved model tags to export.  The same set of tags must be specified when
-# loading the saved model.
-_SAVED_MODEL_TAGS = [tf.saved_model.tag_constants.SERVING]
     
-        if batch_size_limit is not None:
-      gold_reader_strings = gold_reader_strings[:batch_size_limit]
-      test_reader_strings = test_reader_strings[:batch_size_limit]
+def test_config_from_json():
+    app = flask.Flask(__name__)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    app.config.from_json(os.path.join(current_dir, 'static', 'config.json'))
+    common_object_test(app)
     
-      def testCreateLexiconContext(self):
-    expected_context = task_spec_pb2.TaskSpec()
-    text_format.Parse(_EXPECTED_CONTEXT, expected_context)
-    self.assertProtoEquals(
-        lexicon.create_lexicon_context('/tmp'), expected_context)
+        stream = StringIO()
+    client.get('/', errors_stream=stream)
+    assert 'ERROR in test_logging: test' in stream.getvalue()
     
-      Args:
-    num_nodes: [B] vector of graph sizes per batch item.
-    scores: [B,M,M] tensor of padded batched arc and root scores, in the format
-      used by the maximum_spanning_tree() op.  Padding values must be finite.
-    forest: If true, sum over spanning forests instead of trees.
-    max_dynamic_range: If specified, incoming scores for each node are clipped
-      to at most this far from the maximum such score (in the log domain).
+        def __enter__(self):
+        gc.disable()
+        _gc_lock.acquire()
+        loc = flask._request_ctx_stack._local
     
-        :param str u_string: unicode string to check. Must be unicode
-        and not Python 2 `str`.
-    :rtype: bool
+        def record_teardown(sender, **kwargs):
+        recorded.append(('tear_down', kwargs))
+    
+        h = history.history
+    assert_array_almost_equal(h['loss'], h['weighted_' + loss_full_name], decimal=decimal)
+    
+        assert g._keras_shape == c._keras_shape
+    assert h._keras_shape == d._keras_shape
+    
+        filename = os.path.join(model_name, 'vae_mean.png')
+    # display a 2D plot of the digit classes in the latent space
+    z_mean, _, _ = encoder.predict(x_test,
+                                   batch_size=batch_size)
+    plt.figure(figsize=(12, 10))
+    plt.scatter(z_mean[:, 0], z_mean[:, 1], c=y_test)
+    plt.colorbar()
+    plt.xlabel('z[0]')
+    plt.ylabel('z[1]')
+    plt.savefig(filename)
+    plt.show()
+    
+    model.compile(loss='binary_crossentropy',
+              optimizer='adam',
+              metrics=['accuracy'])
+    
+    model.compile(loss='categorical_crossentropy',
+              optimizer='adam',
+              metrics=['accuracy'])
+    
+            model1 = get_model(shape, data_format)
+        model2 = get_model(target_shape, target_data_format)
+        conv = K.function([model1.input], [model1.layers[0].output])
+    
+    
+def test_sigmoid():
+    '''Test using a numerically stable reference sigmoid implementation.
     '''
-    assert isinstance(u_string, str)
-    try:
-        u_string.encode('ascii')
-        return True
-    except UnicodeEncodeError:
-        return False
+    def ref_sigmoid(x):
+        if x >= 0:
+            return 1 / (1 + np.exp(-x))
+        else:
+            z = np.exp(x)
+            return z / (1 + z)
+    sigmoid = np.vectorize(ref_sigmoid)
+    
+                # if the state is not reset, output should be different
+            assert(out1.max() != out2.max())
+    
+    plt.plot(range(epochs),
+         history_model1.history['val_loss'],
+         'g-',
+         label='Network 1 Val Loss')
+plt.plot(range(epochs),
+         history_model2.history['val_loss'],
+         'r-',
+         label='Network 2 Val Loss')
+plt.plot(range(epochs),
+         history_model1.history['loss'],
+         'g--',
+         label='Network 1 Loss')
+plt.plot(range(epochs),
+         history_model2.history['loss'],
+         'r--',
+         label='Network 2 Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.savefig('comparison_of_networks.png')
 
     
-        @pytest.fixture(autouse=True)
-    def setup(self):
-        '''LookupDict instance with 'bad_gateway' attribute.'''
-        self.lookup_dict = LookupDict('test')
-        self.lookup_dict.bad_gateway = 502
+    from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import MultinomialNB
     
-                        resp = HTTPResponse.from_httplib(
-                        r,
-                        pool=conn,
-                        connection=low_conn,
-                        preload_content=False,
-                        decode_content=False
-                    )
-                except:
-                    # If we hit any problems here, clean up the connection.
-                    # Then, reraise so that we can handle the actual exception.
-                    low_conn.close()
-                    raise
+    plot(euclidean_distances)
+plot(rbf_kernels)
+plt.show()
+
     
-    import numpy as np
-from scipy.cluster import hierarchy
-import matplotlib.pyplot as plt
+    try:
+    from urllib import urlopen
+except ImportError:
+    from urllib.request import urlopen
+    
+    Sentiment analysis can be casted as a binary text classification problem,
+that is fitting a linear classifier on features extracted from the text
+of the user messages so as to guess wether the opinion of the author is
+positive or negative.
+    
+    In both examples below, the main result is that the empirical covariance
+estimate, as a non-robust one, is highly influenced by the heterogeneous
+structure of the observations. Although the robust covariance estimate is
+able to focus on the main mode of the data distribution, it sticks to the
+assumption that the data should be Gaussian distributed, yielding some biased
+estimation of the data structure, but yet accurate to some extent.
+The One-Class SVM does not assume any parametric form of the data distribution
+and can therefore model the complex shape of the data much better.
+    
+    iris = datasets.load_iris()
+X = iris.data[:, 0:2]  # we only take the first two features for visualization
+y = iris.target
     
     
-def bench_sample(sampling, n_population, n_samples):
-    gc.collect()
-    # start time
-    t_start = datetime.now()
-    sampling(n_population, n_samples)
-    delta = (datetime.now() - t_start)
-    # stop time
-    time = compute_time(t_start, delta)
-    return time
+# Code source: Gaël Varoquaux
+# Modified for documentation by Jaques Grobler
+# License: BSD 3 clause
     
-            if not in_exercise_region or linestrip.startswith('#'):
-            output_file.write(line)
+            ## The token type for the current token
+        self.type = None
     
-    # Create different classifiers. The logistic regression cannot do
-# multiclass out of the box.
-classifiers = {'L1 logistic': LogisticRegression(C=C, penalty='l1'),
-               'L2 logistic (OvR)': LogisticRegression(C=C, penalty='l2'),
-               'Linear SVC': SVC(kernel='linear', C=C, probability=True,
-                                 random_state=0),
-               'L2 logistic (Multinomial)': LogisticRegression(
-                C=C, solver='lbfgs', multi_class='multinomial'),
-               'GPC': GaussianProcessClassifier(kernel)
-               }
+    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
     
-        Only one feature contains discriminative information, the other features
-    contain only noise.
-    '''
-    X, y = make_blobs(n_samples=n_samples, n_features=1, centers=[[-2], [2]])
+	from xml.dom.minidom import parseString
+	doc = parseString(xml)
+	tab = doc.getElementsByTagName('related')[0].firstChild
     
-            self.tail.appendleft(delta)
-        self.lasttime = now
-        self.concurrent += 1
+        mediatype, ext, size = 'mp4', 'mp4', 0
+    print_info(site_info, title, mediatype, size)
+    #
+    # rtmpdump  -r 'rtmpe://cp30865.edgefcs.net/ondemand/mtviestor/_!/intlod/MTVInternational/MBUS/GeoLocals/00JP/VIAMTVI/PYC/201304/7122HVAQ4/00JPVIAMTVIPYC7122HVAQ4_640x_360_1200_m30.mp4' -o 'title.mp4' --swfVfy http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf
+    #
+    # because rtmpdump is unstable,may try serveral times
+    #
+    if not info_only:
+        # import pdb
+        # pdb.set_trace()
+        download_rtmp_url(url=url, title=title, ext=ext, params={
+                          '--swfVfy': 'http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf'}, output_dir=output_dir)
     
-            if infos:
-            writeln(' (%s)' % (', '.join(infos),))
-        else:
-            write('\n')
+            # extract title
+        self.title = match1(content,
+                            r'<meta property='og:description' name='og:description' content='([^']+)'')
     
-            def eb_wrapper(failure):
-            case = _create_testcase(method, 'errback')
-            exc_info = failure.value, failure.type, failure.getTracebackObject()
-            results.addError(case, exc_info)
-    
-    def get_marker(line):
-    matchlist = TAG_REGEX.findall(line)
-    if matchlist:
-        namematch = NAMED_A_TAG_REGEX.match(line)
-        if namematch:
-            return namematch.group(1) # group 0 is full match
-    
-        # libraries
-    lib_dir = os.path.join(base_dir, 'lib')
-    
-    def score(model, data_val, metrics, gpus, batch_size, rgb_mean=None, mean_img=None,
-          image_shape='3,224,224', data_nthreads=4, label_name='softmax_label', max_num_examples=None):
-    # create data iterator
-    data_shape = tuple([int(i) for i in image_shape.split(',')])
-    if mean_img is not None:
-        mean_args = {'mean_img':mean_img}
-    elif rgb_mean is not None:
-        rgb_mean = [float(i) for i in rgb_mean.split(',')]
-        mean_args = {'mean_r':rgb_mean[0], 'mean_g':rgb_mean[1],
-          'mean_b':rgb_mean[2]}
-    
-    # A Simple Downsampling Factory
-def DownsampleFactory(data, ch_3x3, name, attr):
-    # conv 3x3
-    conv = ConvFactory(data=data, name=name+'_conv',kernel=(3, 3), stride=(2, 2), num_filter=ch_3x3, pad=(1, 1), attr=attr)
-    # pool
-    pool = mx.symbol.Pooling(data=data, name=name+'_pool',kernel=(3, 3), stride=(2, 2), pad=(1, 1), pool_type='max', attr=attr)
-    # concat
-    concat = mx.symbol.Concat(*[conv, pool], name=name+'_ch_concat')
-    return concat
-    
-    def test_imagenet1k_inception_bn(**kwargs):
-    acc = mx.metric.create('acc')
-    m = 'imagenet1k-inception-bn'
-    g = 0.75
-    (speed,) = score(model=m,
-                     data_val=VAL_DATA,
-                     rgb_mean='123.68,116.779,103.939', metrics=acc, **kwargs)
-    r = acc.get()[1]
-    print('Tested %s acc = %f, speed = %f img/sec' % (m, r, speed))
-    assert r > g and r < g + .1
+    def print_title(title, pattern = '-'):
+    print('\n'.join(('', title, pattern * len(title)))) 
