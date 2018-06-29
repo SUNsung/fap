@@ -1,52 +1,59 @@
 
         
-            # Execute the template string in a temporary namespace and
-    # support tracing utilities by setting a value for frame.f_globals['__name__']
-    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
-                     _property=property, _tuple=tuple)
+        containers = (('thefuck/python3-fish',
+               u'''FROM python:3
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'),
+              ('thefuck/python2-fish',
+               u'''FROM python:2
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'))
+    
+        parser.add_argument('-t', '--test',
+                        dest='test',
+                        action='store_true',
+                        help='show what would be downloaded without downloading')
+    
+    alphanumeric_range = r'''
+    \[
+        (?:
+            [a-z]:[a-z]|                # one-char alphabetic range
+            [0-9]+:[0-9]+               # ...or a numeric one
+        )
+        (?::[0-9]+)?                    # numeric :step (optional)
+    \]
+'''
+    
+        if result is None:
+        return '{}'
+    
+    # Declare top-level shortcuts
+from scrapy.spiders import Spider
+from scrapy.http import Request, FormRequest
+from scrapy.selector import Selector
+from scrapy.item import Item, Field
+    
+        requires_project = False
+    crawler_process = None
+    
+            run = self.testsRun
+        plural = 's' if run != 1 else ''
+    
     try:
-        exec(template, namespace)
-    except SyntaxError:
-        e = _sys.exc_info()[1]
-        raise SyntaxError(e.message + ':\n' + template)
-    result = namespace[typename]
-    
-    def _python_exit():
-    global _shutdown
-    _shutdown = True
-    items = list(_threads_queues.items())
-    for t, q in items:
-        q.put(None)
-    for t, q in items:
-        t.join()
-    
-    def download_urls_sequential(urls, timeout=60):
-    url_to_content = {}
-    for url in urls:
-        try:
-            url_to_content[url] = load_url(url, timeout=timeout)
-        except:
-            pass
-    return url_to_content
-    
-    # -- General configuration -----------------------------------------------------
-    
-    
-def ExtractKeywordsFromGroup_Basic_test():
-  assert_that( syntax_parse._ExtractKeywordsFromGroup(
-                 syntax_parse.SyntaxGroup( '', [
-                   'foo bar',
-                   'zoo goo',
-                 ] ) ),
-               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
-    
-        def test_exception_logging_future(self):
-        '''The IOLoop examines exceptions from Futures and logs them.'''
-        with NullContext():
-            @gen.coroutine
-            def callback():
-                self.io_loop.add_callback(self.stop)
-                1 / 0
-            self.io_loop.add_callback(callback)
-            with ExpectLog(app_log, 'Exception in callback'):
-                self.wait()
+    # compatible for python2
+    from urllib2 import urlopen
+    from urllib2 import HTTPError
+    from urllib2 import URLError
+except ImportError:
+    # compatible for python3
+    from urllib.request import urlopen
+    from urllib.error import HTTPError
+    from urllib.error import URLError
