@@ -1,30 +1,28 @@
 
         
-        void PartialRunMgr::PartialRunDone(int step_id, StatusCallback done,
-                                   const Status& status) {
-  Status callback_status;
-  {
-    mutex_lock l(mu_);
-    auto run_it = step_id_to_partial_run_.find(step_id);
-    if (run_it == step_id_to_partial_run_.end()) {
-      return;
-    }
-    run_it->second->final_status.Update(status);
-    if (!run_it->second->executor_done) {
-      // If we found the partial_run, we set the final callback to call only
-      // when the executor is completely done.
-      run_it->second->final_callback = std::move(done);
-      return;
-    }
-    callback_status = run_it->second->final_status;
-  }
-  // Otherwise we call the callback immediately.
-  done(callback_status);
-  mutex_lock l(mu_);
-  step_id_to_partial_run_.erase(step_id);
-}
+          CancellationManager* cancellation_manager;
+  partial_run_mgr_.FindOrCreate(step_id, &cancellation_manager);
     
-        http://www.apache.org/licenses/LICENSE-2.0
+    // ResourceOpKernel<T> is a virtual base class for resource op implementing
+// interface type T. The inherited op looks up the resource name (determined by
+// ContainerInfo), and creates a new resource if necessary.
+//
+// Requirements:
+//  - Op must be marked as stateful.
+//  - Op must have `container` and `shared_name` attributes. Empty `container`
+//  means using the default container. Empty `shared_name` means private
+//  resource.
+//  - Subclass must override CreateResource().
+//  - Subclass is encouraged to override VerifyResource().
+template <typename T>
+class ResourceOpKernel : public OpKernel {
+ public:
+  explicit ResourceOpKernel(OpKernelConstruction* context) : OpKernel(context) {
+    OP_REQUIRES_OK(context,
+                   context->allocate_persistent(DT_STRING, TensorShape({2}),
+                                                &handle_, nullptr));
+  }
+    }
     
     Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
@@ -33,158 +31,258 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
-    inline void AppendEscapedName(string *json, const string &name) {
-  StrAppend(json, '\'name\':', Json::valueToQuotedString(name.c_str()).c_str());
-}
+    namespace internal {
+template <typename Scalar>
+struct functor_traits<scalar_clip_op<Scalar> > {
+  enum {
+    Cost = NumTraits<Scalar>::AddCost * 3,
+    PacketAccess = packet_traits<Scalar>::HasMax &&
+                   packet_traits<Scalar>::HasMin &&
+                   packet_traits<Scalar>::HasNegate
+  };
+};
+}  // namespace internal
     
-    #include 'tensorflow/core/framework/tensor_testutil.h'
-#include 'tensorflow/core/lib/core/status_test_util.h'
-#include 'tensorflow/core/lib/io/path.h'
-#include 'tensorflow/core/lib/strings/str_util.h'
+    #include <memory>
+#include 'tensorflow/core/framework/reader_base.h'
+#include 'tensorflow/core/framework/reader_op_kernel.h'
+#include 'tensorflow/core/lib/core/errors.h'
+#include 'tensorflow/core/lib/io/record_reader.h'
+#include 'tensorflow/core/lib/strings/strcat.h'
 #include 'tensorflow/core/platform/env.h'
-#include 'tensorflow/core/platform/test.h'
     
-    #define THCPDoubleStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPDoubleStorageClass)
-#define THCPFloatStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPFloatStorageClass)
-#define THCPHalfStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPHalfStorageClass)
-#define THCPLongStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPLongStorageClass)
-#define THCPIntStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPIntStorageClass)
-#define THCPShortStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPShortStorageClass)
-#define THCPCharStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPCharStorageClass)
-#define THCPByteStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPByteStorageClass)
     
-    #ifdef _THP_CORE
-#define THPStorageType TH_CONCAT_3(THP,Real,StorageType)
-#define THPStorageBaseStr TH_CONCAT_STRING_2(Real,StorageBase)
+    {}  // namespace tensorflow
+
+    
+    TEST(AccuracyUtilsTest, ReadGroundTruthFile) {
+  string file_name = tensorflow::io::JoinPath(tensorflow::testing::TmpDir(),
+                                              'ground_truth.txt');
+  string file_data = 'a,10\nb,12\n';
+  TF_ASSERT_OK(WriteStringToFile(Env::Default(), file_name, file_data));
+    }
+    
+    #import <Foundation/Foundation.h>
+    
+      if (unitWriter.write(error)) {
+    diags.diagnose(SourceLoc(), diag::error_write_index_unit, error);
+    return true;
+  }
+    
+      /// Returns the identifier string for the buffer containing the given source
+  /// location.
+  ///
+  /// This respects #line directives.
+  StringRef getBufferIdentifierForLoc(SourceLoc Loc) const {
+    if (auto VFile = getVirtualFile(Loc))
+      return VFile->Name;
+    else
+      return getIdentifierForBuffer(findBufferContainingLoc(Loc));
+  }
+    
+    #endif
+    
+    /// Runs the given function with the given context argument exactly once.
+/// The predicate argument must point to a global or static variable of static
+/// extent of type swift_once_t.
+void swift::swift_once(swift_once_t *predicate, void (*fn)(void *),
+                       void *context) {
+#if defined(__APPLE__)
+  dispatch_once_f(predicate, context, fn);
+#elif defined(__CYGWIN__)
+  _swift_once_f(predicate, context, fn);
+#else
+  std::call_once(*predicate, [fn, context]() { fn(context); });
 #endif
+}
+
     
-    using THDGeneratorPtrTypes = map_to_ptr<std::add_const, THDGeneratorTypes>::type;
-using THDTensorPtrTypes = map_to_ptr<std::add_const, THDTensorTypes>::type;
-using THDStoragePtrTypes = map_to_ptr<std::add_const, THDStorageTypes>::type;
+    /* Writes request data from |buffer| of |buffer_length| length. If auto flush is
+ * disabled, data will be sent only after bidirectional_stream_flush() is
+ * called.
+ * Each call will result in an invocation the callback's on_write_completed()
+ * method if data is sent, or its on_failed() method if there's an error.
+ * The callback's on_succeeded() method is also invoked if |end_of_stream| is
+ * set and all response data has been read.
+ */
+GRPC_SUPPORT_EXPORT
+int bidirectional_stream_write(bidirectional_stream* stream,
+                               const char* buffer,
+                               int buffer_length,
+                               bool end_of_stream);
     
-    void THDTensor_(bernoulli)(THDTensor *self, THDGenerator *_generator, double p) {
-  masterCommandChannel->sendMessage(
-    packMessage(Functions::tensorBernoulli, self, _generator, p),
-    THDState::s_current_worker
-  );
+    
+    {  GetReporter()->ReportQPS(*result);
+  GetReporter()->ReportLatency(*result);
+}
+    
+    void ParseDb(const std::string& db, std::vector<Feature>* feature_list);
+    
+    AuthPropertyIterator SecureAuthContext::end() const {
+  return AuthPropertyIterator();
 }
     
     
-    {    PyThreadState *_save = NULL;
-    try {
-      Py_UNBLOCK_THREADS;
-      copyFunc(LIBRARY_STATE dst, THDPModule_makeDescriptor(src_));
-      Py_BLOCK_THREADS;
-    } catch (...) {
-      if (_save) {
-        Py_BLOCK_THREADS;
-      }
-      throw;
-    }
+    {
+    {}  // namespace testing
+}  // namespace grpc
+    
+    double UsageTimer::Now() {
+  auto ts = gpr_now(GPR_CLOCK_REALTIME);
+  return ts.tv_sec + 1e-9 * ts.tv_nsec;
+}
+    
+      struct Result {
+    double wall;
+    double user;
+    double system;
+    unsigned long long total_cpu_time;
+    unsigned long long idle_cpu_time;
   };
     
-      cuid_t getCuid() const { return cuid_; }
+    #if USE_TASKBAR_API
+	wcscpy_s(appId, exeDir);
+#endif
     
-    protected:
-  virtual bool prepareForRetry(time_t wait);
     
-    bool AbstractOptionHandler::getChangeOptionForReserved() const
-{
-  return flags_ & FLAG_CHANGE_OPTION_FOR_RESERVED;
-}
+/*
+ * DumpCrashStack.h
+ *
+ *  Created on: 2012-9-28
+ *      Author: yerungui
+ */
     
-    bool AbstractProxyRequestCommand::executeInternal()
-{
-  // socket->setBlockingMode();
-  if (httpConnection_->sendBufferIsEmpty()) {
-    auto httpRequest = make_unique<HttpRequest>();
-    httpRequest->setUserAgent(getOption()->get(PREF_USER_AGENT));
-    httpRequest->setRequest(getRequest());
-    httpRequest->setProxyRequest(proxyRequest_);
-    }
-    }
     
-    #include 'AbstractCommand.h'
+/*
+ * WakeUpLock.h
+ *
+ *  Created on: 2012-9-28
+ *      Author: yerungui
+ */
     
-    class ActivePeerConnectionCommand : public Command {
-private:
-  RequestGroup* requestGroup_;
-  std::shared_ptr<BtRuntime> btRuntime_;
-  std::shared_ptr<PieceStorage> pieceStorage_;
-  std::shared_ptr<PeerStorage> peerStorage_;
-  std::shared_ptr<BtAnnounce> btAnnounce_;
+    int Packer_Unpack(const void* _rawbuf, size_t _rawlen, std::string& _url, unsigned int& _sequence, size_t& _packlen, PtrBuffer& _data) {
+    if (_rawlen < sizeof(LongLinkPack)) return LONGLINKPACK_CONTINUE;
     }
     
-      BinaryStream* stream_;
     
-    void AnnounceTier::nextEvent()
-{
-  switch (event) {
-  case STARTED:
-    event = DOWNLOADING;
-    break;
-  case STARTED_AFTER_COMPLETION:
-    event = SEEDING;
-    break;
-  case STOPPED:
-    event = HALTED;
-    break;
-  case COMPLETED:
-    event = SEEDING;
-    break;
-  default:
-    break;
-  }
-}
+    {        return NULL;
+    }
+    
+    //
+//  testspy_spy.cpp
+//  PublicComponent
+//
+//  Created by yerungui on 14-5-14.
+//
+    
+    // This template function declaration is used in defining arraysize.
+// Note that the function doesn't need an implementation, as we only
+// use its type.
+template <typename T, size_t N>
+char (&ArraySizeHelper(T (&array)[N]))[N];
+    
+    #endif  // BENCHMARK_COLORPRINT_H_
+
+    
+    // Parses a bool/Int32/string from the environment variable
+// corresponding to the given Google Test flag.
+bool BoolFromEnv(const char* flag, bool default_val);
+int32_t Int32FromEnv(const char* flag, int32_t default_val);
+double DoubleFromEnv(const char* flag, double default_val);
+const char* StringFromEnv(const char* flag, const char* default_val);
     
     
-    {  virtual std::unique_ptr<DiskWriter>
-  newDiskWriter(const std::string& filename) CXX11_OVERRIDE
-  {
-    return make_unique<DiskWriterType>();
-  }
+    {  double coef;
+  double rms;
+  BigO complexity;
 };
     
     
-    {  virtual std::unique_ptr<AuthConfig>
-  resolveAuthConfig(const std::string& hostname) = 0;
-};
+    {  printer(Out, COLOR_DEFAULT, '\n');
+}
     
-        jboolean* GetBooleanArrayElements(jbooleanArray array, jboolean* isCopy)
-    { return functions->GetBooleanArrayElements(this, array, isCopy); }
-    jbyte* GetByteArrayElements(jbyteArray array, jboolean* isCopy)
-    { return functions->GetByteArrayElements(this, array, isCopy); }
-    jchar* GetCharArrayElements(jcharArray array, jboolean* isCopy)
-    { return functions->GetCharArrayElements(this, array, isCopy); }
-    jshort* GetShortArrayElements(jshortArray array, jboolean* isCopy)
-    { return functions->GetShortArrayElements(this, array, isCopy); }
-    jint* GetIntArrayElements(jintArray array, jboolean* isCopy)
-    { return functions->GetIntArrayElements(this, array, isCopy); }
-    jlong* GetLongArrayElements(jlongArray array, jboolean* isCopy)
-    { return functions->GetLongArrayElements(this, array, isCopy); }
-    jfloat* GetFloatArrayElements(jfloatArray array, jboolean* isCopy)
-    { return functions->GetFloatArrayElements(this, array, isCopy); }
-    jdouble* GetDoubleArrayElements(jdoubleArray array, jboolean* isCopy)
-    { return functions->GetDoubleArrayElements(this, array, isCopy); }
-    
-      for (auto child : children_) {
-    delete child;
+    void Increment(UserCounters *l, UserCounters const& r) {
+  // add counters present in both or just in *l
+  for (auto &c : *l) {
+    auto it = r.find(c.first);
+    if (it != r.end()) {
+      c.second.value = c.second + it->second;
+    }
   }
+  // add counters present in r, but not in *l
+  for (auto const &tc : r) {
+    auto it = l->find(tc.first);
+    if (it == l->end()) {
+      (*l)[tc.first] = tc.second;
+    }
+  }
+}
     
-    #define YG_NODE_STYLE_PROPERTY_UNIT(type, name, paramName)                                    \
-  WIN_EXPORT void YGNodeStyleSet##name(const YGNodeRef node, const float paramName);          \
-  WIN_EXPORT void YGNodeStyleSet##name##Percent(const YGNodeRef node, const float paramName); \
-  WIN_EXPORT type YGNodeStyleGet##name(const YGNodeRef node);
-    
-    #include './Node.hh'
-#include './Layout.hh'
-#include './Size.hh'
-#include './Config.hh'
+    namespace benchmark {
+// NOTE: only i386 and x86_64 have been well tested.
+// PPC, sparc, alpha, and ia64 are based on
+//    http://peter.kuscsik.com/wordpress/?p=14
+// with modifications by m3b.  See also
+//    https://setisvn.ssl.berkeley.edu/svn/lib/fftw-3.0.1/kernel/cycle.h
+namespace cycleclock {
+// This should return the number of cycles since power-on.  Thread-safe.
+inline BENCHMARK_ALWAYS_INLINE int64_t Now() {
+#if defined(BENCHMARK_OS_MACOSX)
+  // this goes at the top because we need ALL Macs, regardless of
+  // architecture, to return the number of 'mach time units' that
+  // have passed since startup.  See sysinfo.cc where
+  // InitializeSystemInfo() sets the supposed cpu clock frequency of
+  // macs to the number of mach time units per second, not actual
+  // CPU clock frequency (which can change in the face of CPU
+  // frequency scaling).  Also note that when the Mac sleeps, this
+  // counter pauses; it does not continue counting, nor does it
+  // reset to zero.
+  return mach_absolute_time();
+#elif defined(BENCHMARK_OS_EMSCRIPTEN)
+  // this goes above x86-specific code because old versions of Emscripten
+  // define __x86_64__, although they have nothing to do with it.
+  return static_cast<int64_t>(emscripten_get_now() * 1e+6);
+#elif defined(__i386__)
+  int64_t ret;
+  __asm__ volatile('rdtsc' : '=A'(ret));
+  return ret;
+#elif defined(__x86_64__) || defined(__amd64__)
+  uint64_t low, high;
+  __asm__ volatile('rdtsc' : '=a'(low), '=d'(high));
+  return (high << 32) | low;
+#elif defined(__powerpc__) || defined(__ppc__)
+  // This returns a time-base, which is not always precisely a cycle-count.
+  int64_t tbl, tbu0, tbu1;
+  asm('mftbu %0' : '=r'(tbu0));
+  asm('mftb  %0' : '=r'(tbl));
+  asm('mftbu %0' : '=r'(tbu1));
+  tbl &= -static_cast<int64_t>(tbu0 == tbu1);
+  // high 32 bits in tbu1; low 32 bits in tbl  (tbu0 is garbage)
+  return (tbu1 << 32) | tbl;
+#elif defined(__sparc__)
+  int64_t tick;
+  asm('.byte 0x83, 0x41, 0x00, 0x00');
+  asm('mov   %%g1, %0' : '=r'(tick));
+  return tick;
+#elif defined(__ia64__)
+  int64_t itc;
+  asm('mov %0 = ar.itc' : '=r'(itc));
+  return itc;
+#elif defined(COMPILER_MSVC) && defined(_M_IX86)
+  // Older MSVC compilers (like 7.x) don't seem to support the
+  // __rdtsc intrinsic properly, so I prefer to use _asm instead
+  // when I know it will work.  Otherwise, I'll use __rdtsc and hope
+  // the code is being compiled with a non-ancient compiler.
+  _asm rdtsc
+#elif defined(COMPILER_MSVC)
+  return __rdtsc();
+#elif defined(BENCHMARK_OS_NACL)
+  // Native Client validator on x86/x86-64 allows RDTSC instructions,
+  // and this case is handled above. Native Client validator on ARM
+  // rejects MRC instructions (used in the ARM-specific sequence below),
+  // so we handle it here. Portable Native Client compiles to
+  // architecture-agnostic bytecode, which doesn't provide any
+  // cycle counter access mnemonics.
+    }
+    }
+    }
