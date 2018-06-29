@@ -1,93 +1,99 @@
 
         
-        
-def benchmark(estimator, data):
-    gc.collect()
-    print('Benching %s' % estimator)
-    t0 = time()
-    estimator.fit(data)
-    training_time = time() - t0
-    data_t = estimator.transform(data)
-    data_r = estimator.inverse_transform(data_t)
-    reconstruction_error = np.mean(np.abs(data - data_r))
-    return {'time': training_time, 'error': reconstruction_error}
+                self.client = _DNSimpleLexiconClient(TOKEN, 0)
     
-    def plot(func):
-    random_state = check_random_state(0)
-    one_core = []
-    multi_core = []
-    sample_sizes = range(1000, 6000, 1000)
     
-        ###########################################################################
-    # Set SparseRandomProjection input
-    sparse_matrix_params = {
-        'n_components': opts.n_components,
-        'random_state': opts.random_seed,
-        'density': opts.density,
-        'eps': opts.eps,
-    }
+# -- Options for manual page output ---------------------------------------
     
-        fn = os.path.relpath(fn,
-                         start=os.path.dirname(__import__(package).__file__))
-    try:
-        lineno = inspect.getsourcelines(obj)[1]
-    except Exception:
-        lineno = ''
-    return url_fmt.format(revision=revision, package=package,
-                          path=fn, lineno=lineno)
+            self.addr1 = Addr.fromstring('127.0.0.1')
+        self.addr2 = Addr.fromstring('127.0.0.1:*')
     
-    # Print the classification report
-print(metrics.classification_report(y_test, y_predicted,
-                                    target_names=dataset.target_names))
+    # A shorter title for the navigation bar.  Default is the same as html_title.
+#html_short_title = None
     
-        # split the dataset in training and test set:
-    docs_train, docs_test, y_train, y_test = train_test_split(
-        dataset.data, dataset.target, test_size=0.25, random_state=None)
+    # One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    (master_doc, 'certbot-nginx', u'certbot-nginx Documentation',
+     [author], 1)
+]
     
-    In this examples we will use a movie review dataset.
+    class TZInfo:
+    def __init__(self, transitions, type_indices, ttis, abbrs):
+        self.transitions = transitions
+        self.type_indices = type_indices
+        self.ttis = ttis
+        self.abbrs = abbrs
     
-    The dataset is generated using the ``make_biclusters`` function, which
-creates a matrix of small values and implants bicluster with large
-values. The rows and columns are then shuffled and passed to the
-Spectral Co-Clustering algorithm. Rearranging the shuffled matrix to
-make biclusters contiguous shows how accurately the algorithm found
-the biclusters.
+    The interface is file-like.  The implemented methods are:
+read, close, seek, tell, isatty.
+Extra methods are: skip() (called by close, skips to the end of the chunk),
+getname() (returns the name (ID) of the chunk)
     
-    plt.plot(features_samples_ratio, acc_clf1, linewidth=2,
-         label='Linear Discriminant Analysis with shrinkage', color='navy')
-plt.plot(features_samples_ratio, acc_clf2, linewidth=2,
-         label='Linear Discriminant Analysis', color='gold')
+                # test that the path returns unchanged
+            p1 = P('~/My Documents')
+            p2 = P('~alice/My Documents')
+            p3 = P('~bob/My Documents')
+            p4 = P('/~/My Documents')
+            p5 = P('d:~/My Documents')
+            p6 = P('')
+            self.assertRaises(RuntimeError, p1.expanduser)
+            self.assertRaises(RuntimeError, p2.expanduser)
+            self.assertRaises(RuntimeError, p3.expanduser)
+            self.assertEqual(p4.expanduser(), p4)
+            self.assertEqual(p5.expanduser(), p5)
+            self.assertEqual(p6.expanduser(), p6)
     
-        def run(self, args, opts):
-        if len(args) < 1:
-            raise UsageError()
-        elif len(args) > 1:
-            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
-        spname = args[0]
     
-        def add_pre_hook(self, request, results):
-        if hasattr(self, 'pre_process'):
-            cb = request.callback
+def read_binary(package: Package, resource: Resource) -> bytes:
+    '''Return the binary contents of the resource.'''
+    resource = _normalize_path(resource)
+    package = _get_package(package)
+    with open_binary(package, resource) as fp:
+        return fp.read()
     
-        # Get options and arguments.
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], _short_options, _options)
-    except getopt.GetoptError as e:
-        log.wtf('''
-    [Fatal] {}.
-    Try '{} --help' for more options.'''.format(e, script_name))
+        def __init__(self):
+        self.experts = []
+        self.common_state = {
+            'problems': 0,
+            'suggestions': 0,
+            'contributions': [],
+            'progress': 0   # percentage, if 100 -> task is finished
+        }
     
-        while pin_count > 0:
-        json_data = extract_json_data(url, max=pin_list[-1]['pin_id'],
-                                      limit=LIMIT)
-        pins = json_data['pins']
-        pin_list += pins
-        pin_count -= len(pins)
+        @classmethod
+    def setUpClass(cls):
+        ''' Class scope setup. '''
+        cls.p = Proxy()
     
-    import json
+        '''def test_object(queue):
+           queue_object = QueueObject(queue, True)
+           print('Inside func: {}'.format(queue_object.object))'''
     
-            # extract raw urls
-        orig_img = match1(content,
-                         r'<meta itemprop='image' content='([^']+/originals/[^']+)'')
-        twit_img = match1(content,
-                          r'<meta property='twitter:image:src' name='twitter:image:src' content='([^']+)'')
+        def __new__(cls, name, bases, attrs):
+        new_cls = type.__new__(cls, name, bases, attrs)
+        '''
+            Here the name of the class is used as key but it could be any class
+            parameter.
+        '''
+        cls.REGISTRY[new_cls.__name__] = new_cls
+        return new_cls
+    
+        def setup(self):
+        print('Setting up the Test')
+        time.sleep(0.1)
+        self._tm.prepareReporting()
+    
+            for i in range(3):
+            num_obj.increment()
+            print(num_obj)
+        num_obj.value += 'x'  # will fail
+        print(num_obj)
+    except Exception as e:
+        a_transaction.rollback()
+        print('-- rolled back')
+    print(num_obj)
+    
+        def __init__(self, one, other):
+        self._one = one
+        self._other = other
