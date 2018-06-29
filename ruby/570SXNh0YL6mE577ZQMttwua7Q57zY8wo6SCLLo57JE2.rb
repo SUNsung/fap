@@ -1,59 +1,53 @@
 
         
-          module ClassMethods
-    def setup_worker
-      active.map do |agent|
-        next unless agent.start_worker?
-        self::Worker.new(id: agent.worker_id, agent: agent)
-      end.compact
-    end
+          def cache_fragment(name)
+    ApplicationSerializer.fragment_cache[name] ||= yield
   end
+end
+
     
-      def show
-    respond_to do |format|
-      format.html
-      format.json { render json: @event }
-    end
-  end
-    
-      def apply
-    data = contents.gsub('HOMEBREW_PREFIX', HOMEBREW_PREFIX)
-    args = %W[-g 0 -f -#{strip}]
-    Utils.popen_write('patch', *args) { |p| p.write(data) }
-    raise ErrorDuringExecution.new('patch', args) unless $CHILD_STATUS.success?
-  end
-    
-      def load_logs(dir)
-    logs = {}
-    if dir.exist?
-      dir.children.sort.each do |file|
-        contents = file.size? ? file.read : 'empty log'
-        # small enough to avoid GitHub 'unicorn' page-load-timeout errors
-        max_file_size = 1_000_000
-        contents = truncate_text_to_approximate_size(contents, max_file_size, front_weight: 0.2)
-        logs[file.basename.to_s] = { content: contents }
-      end
-    end
-    raise 'No logs.' if logs.empty?
-    logs
-  end
-    
-          if File.directory?(source_entry)
-        FileUtils.mkdir(target_entry) unless File.exists?(target_entry)
-        transform_r(source_entry, target_entry)
+        begin
+      raise '#{short_type} does not support dry-run' unless can_dry_run?
+      readonly!
+      @dry_run_started_at = Time.zone.now
+      @dry_run_logger.info('Dry Run started')
+      if event
+        raise 'This agent cannot receive an event!' unless can_receive_events?
+        receive([event])
       else
-        # copy the new file, in case of being an .erb file should render first
-        if source_entry.end_with?('erb')
-          target_entry = target_entry.gsub(/.erb$/,'').gsub('example', name)
-          File.open(target_entry, 'w') { |f| f.write(render(source_entry)) }
-        else
-          FileUtils.cp(source_entry, target_entry)
-        end
-        puts '\t create #{File.join(full_plugin_name, Pathname.new(target_entry).relative_path_from(Pathname.new(@target_path)))}'
+        check
+      end
+      @dry_run_logger.info('Dry Run finished')
+    rescue => e
+      @dry_run_logger.info('Dry Run failed')
+      error 'Exception during dry-run. #{e.message}: #{e.backtrace.join('\n')}'
+    end
+    
+        validate :validate_evernote_options
+    
+      def set_table_sort(sort_options)
+    valid_sorts = sort_options[:sorts] or raise ArgumentError.new('You must specify :sorts as an array of valid sort attributes.')
+    default = sort_options[:default] || { valid_sorts.first.to_sym => :desc }
+    
+            return if type.nil?
+        return unless Hbc::Container.from_type(type).nil?
+        raise 'invalid container type: #{type.inspect}'
+      end
+    
+      def gistify_logs(f)
+    files = load_logs(f.logs)
+    build_time = f.logs.ctime
+    timestamp = build_time.strftime('%Y-%m-%d_%H-%M-%S')
+    
+          respond_with do |format|
+        format.html do
+          gon.preloads[:pods] = pods_json
+          gon.unchecked_count = Pod.unchecked.count
+          gon.version_failed_count = Pod.version_failed.count
+          gon.error_count = Pod.check_failed.count
+    
+        def assign_attributes(values)
+      values.each do |k, v|
+        public_send('#{k}=', v)
       end
     end
-  end
-    
-              def find_plugins_gem_specs
-            @specs ||= ::Gem::Specification.find_all.select{|spec| logstash_plugin_gem_spec?(spec)}
-          end
