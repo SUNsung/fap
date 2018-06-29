@@ -1,84 +1,68 @@
 
         
-                def get_auth(self, username=None, password=None):
-            assert self.raw_auth == USERNAME + SEP_CREDENTIALS + PASSWORD
-            assert username == USERNAME
-            assert password == PASSWORD
-            return basic_auth()
+            def shutdown(self, wait=True):
+        with self._shutdown_lock:
+            self._shutdown_thread = True
+        if self._queue_management_thread:
+            # Wake up queue management thread
+            self._result_queue.put(None)
+            if wait:
+                self._queue_management_thread.join()
+        # To reduce the risk of openning too many files, remove references to
+        # objects that use file descriptors.
+        self._queue_management_thread = None
+        self._call_queue = None
+        self._result_queue = None
+        self._processes = None
+    shutdown.__doc__ = _base.Executor.shutdown.__doc__
     
-        @property
-    def headers(self):
-        url = urlsplit(self._orig.url)
+    # Workers are created as daemon threads. This is done to allow the interpreter
+# to exit when there are still idle threads in a ThreadPoolExecutor's thread
+# pool (i.e. shutdown() was not called). However, allowing workers to die with
+# the interpreter has two undesirable properties:
+#   - The workers would still be running during interpretor shutdown,
+#     meaning that they would fail in unpredictable ways.
+#   - The workers could be killed while evaluating a work item, which could
+#     be bad if the callable being evaluated has external side-effects e.g.
+#     writing to a file.
+#
+# To work around this problem, an exit handler is installed which tells the
+# workers to exit when their work queues are empty and then waits until the
+# threads finish.
+    
+      try:
+    filepath = os.path.join( DIR_OF_YCMD, 'PYTHON_USED_DURING_BUILDING' )
+    return utils.ReadFile( filepath ).strip()
+  # We need to check for IOError for Python2 and OSError for Python3
+  except ( IOError, OSError ):
+    return None
     
     
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
+  def No_Insertion_Text_test( self ):
+    self._Check( 0, {
+      'menu_text':       'MENU TEXT',
+      'extra_menu_info': 'EXTRA MENU INFO',
+      'kind':            'K',
+      'detailed_info':   'DETAILED INFO',
+      'extra_data': {
+        'doc_string':    'DOC STRING',
+      },
+    }, {
+      'word'     : '',
+      'abbr'     : 'MENU TEXT',
+      'menu'     : 'EXTRA MENU INFO',
+      'kind'     : 'k',
+      'info'     : 'DETAILED INFO\nDOC STRING',
+      'dup'      : 1,
+      'empty'    : 1,
+      'user_data': '0'
+    } )
 
     
-        exc = Timeout('Request timed out')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR_TIMEOUT
-    assert error_msg == 'Request timed out (30s).'
-
-    
-    
-def test_follow_redirect_output_options(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=h',
-             '--history-print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 2
-    assert 'HTTP/1.1 302 FOUND' not in r
-    assert HTTP_OK in r
-    
-        @staticmethod
-    def make_header(username, password):
-        credentials = u'%s:%s' % (username, password)
-        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
-        return 'Basic %s' % token
-    
-        def load(self):
-        try:
-            with open(self.path, 'rt') as f:
-                try:
-                    data = json.load(f)
-                except ValueError as e:
-                    raise ValueError(
-                        'Invalid %s JSON: %s [%s]' %
-                        (type(self).__name__, str(e), self.path)
-                    )
-                self.update(data)
-        except IOError as e:
-            if e.errno != errno.ENOENT:
-                raise
-    
-    
-# Defaults
-OUTPUT_OPTIONS_DEFAULT = OUT_RESP_HEAD + OUT_RESP_BODY
-OUTPUT_OPTIONS_DEFAULT_STDOUT_REDIRECTED = OUT_RESP_BODY
-    
-    
-class TestRawNginxParser(unittest.TestCase):
-    '''Test the raw low-level Nginx config parser.'''
-    
-    
-class BadNonceTest(unittest.TestCase):
-    '''Tests for acme.errors.BadNonce.'''
-    
-    
-@zope.interface.implementer(interfaces.IInstaller)
-@zope.interface.provider(interfaces.IPluginFactory)
-class Installer(common.Plugin):
-    '''Example Installer.'''
+      def __init__( self, bufnr, user_options, async_diags ):
+    self.number = bufnr
+    self._parse_tick = 0
+    self._handled_tick = 0
+    self._parse_request = None
+    self._async_diags = async_diags
+    self._diag_interface = DiagnosticInterface( bufnr, user_options )
