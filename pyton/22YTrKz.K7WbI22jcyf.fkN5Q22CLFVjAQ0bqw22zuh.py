@@ -1,145 +1,135 @@
 
         
         
-atom_template = textwrap.dedent('''\
-    <?xml version='1.0' encoding='utf-8'?>
-    <feed xmlns='http://www.w3.org/2005/Atom'>
-        <link rel='self' href='http://rg3.github.io/youtube-dl/update/releases.atom' />
-        <title>youtube-dl releases</title>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed</id>
-        <updated>@TIMESTAMP@</updated>
-        @ENTRIES@
-    </feed>''')
+@keras_test
+def test_dropout_legacy_interface():
+    old_layer = keras.layers.Dropout(p=3, name='drop')
+    new_layer_1 = keras.layers.Dropout(rate=3, name='drop')
+    new_layer_2 = keras.layers.Dropout(3, name='drop')
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer_1.get_config())
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer_2.get_config())
     
-            swf_class = swfi.extract_class(test_id)
-        func = swfi.extract_function(swf_class, 'main')
-        res = func(input_args)
-        self.assertEqual(res, output)
+                if verbose == 1:
+                progbar.update(batch_end)
+        for i in range(len(outs)):
+            if i not in stateful_metric_indices:
+                outs[i] /= num_samples
+    if len(outs) == 1:
+        return outs[0]
+    return outs
+
+    
+        for i, yi in enumerate(grid_y):
+        for j, xi in enumerate(grid_x):
+            z_sample = np.array([[xi, yi]])
+            x_decoded = decoder.predict(z_sample)
+            digit = x_decoded[0].reshape(digit_size, digit_size)
+            figure[i * digit_size: (i + 1) * digit_size,
+                   j * digit_size: (j + 1) * digit_size] = digit
     
     
-def get_info_extractor(ie_name):
-    '''Returns the info extractor class with the given ie_name'''
-    return globals()[ie_name + 'IE']
+if __name__ == '__main__':
+    pytest.main([__file__])
+
+    
+        # a more explicit example
+    norm_instance = constraints.max_norm(2.0)
+    x = np.array([[0, 0, 0], [1.0, 0, 0], [3, 0, 0], [3, 3, 3]]).T
+    x_normed_target = np.array([[0, 0, 0], [1.0, 0, 0],
+                                [2.0, 0, 0],
+                                [2. / np.sqrt(3),
+                                 2. / np.sqrt(3),
+                                 2. / np.sqrt(3)]]).T
+    x_normed_actual = K.eval(norm_instance(K.variable(x)))
+    assert_allclose(x_normed_actual, x_normed_target, rtol=1e-05)
+    
+        negative_values = np.array([[-1, -2]], dtype=K.floatx())
+    result = f([negative_values])[0]
+    true_result = (np.exp(negative_values) - 1) / 2
+    
+    
+def test_convolutional_recurrent():
+    num_row = 3
+    num_col = 3
+    filters = 2
+    num_samples = 1
+    input_channel = 2
+    input_num_row = 5
+    input_num_col = 5
+    sequence_len = 2
+    for data_format in ['channels_first', 'channels_last']:
+    
+    print('Pad sequences (samples x time)')
+x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
+x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
+    
+        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    
+    
+#----------------------------------------------------------------------
+def showroom_download(url, output_dir = '.', merge = False, info_only = False, **kwargs):
+    ''''''
+    if re.match( r'(\w+)://www.showroom-live.com/([-\w]+)', url):
+        room_url_key = match1(url, r'\w+://www.showroom-live.com/([-\w]+)')
+        room_id = showroom_get_roomid_by_room_url_key(room_url_key)
+        showroom_download_by_room_id(room_id, output_dir, merge,
+                                    info_only)
+    
+        The name for each file chosen consists os the section id in the markdown document, a counter for the snippet inside the section.
+    
+    if __name__ == '__main__':
+    main()
+
+    
+        def test_threads_terminate(self):
+        self.executor.submit(mul, 21, 2)
+        self.executor.submit(mul, 6, 7)
+        self.executor.submit(mul, 3, 14)
+        self.assertEqual(len(self.executor._threads), 3)
+        self.executor.shutdown()
+        for t in self.executor._threads:
+            t.join()
+    
+      for path in not_python_paths:
+    yield EndsWithPython_Bad, path
 
     
     
-class CNNBlogsIE(InfoExtractor):
-    _VALID_URL = r'https?://[^\.]+\.blogs\.cnn\.com/.+'
-    _TEST = {
-        'url': 'http://reliablesources.blogs.cnn.com/2014/02/09/criminalizing-journalism/',
-        'md5': '3e56f97b0b6ffb4b79f4ea0749551084',
-        'info_dict': {
-            'id': 'bestoftv/2014/02/09/criminalizing-journalism.cnn',
-            'ext': 'mp4',
-            'title': 'Criminalizing journalism?',
-            'description': 'Glenn Greenwald responds to comments made this week on Capitol Hill that journalists could be criminal accessories.',
-            'upload_date': '20140209',
-        },
-        'expected_warnings': ['Failed to download m3u8 information'],
-        'add_ie': ['CNN'],
-    }
+  def Start( self ):
+    request_data = BuildRequestData()
+    request_data.update( { 'filetypes': self.filetypes } )
+    self._response = self.PostDataToHandler( request_data,
+                                             'semantic_completion_available' )
     
-        'bracketed_hostport': re.compile(
-        r'''^
-            \[(.+)\]                    # [host identifier]
-            :([0-9]+)                   # :port number
-            $
-        ''', re.X
-    ),
     
-    # Make coding more python3-ish
-from __future__ import (absolute_import, division, print_function)
-__metaclass__ = type
+  def Done( self ):
+    return bool( self._response_future ) and self._response_future.done()
     
-        def on_open_shell(self):
-        try:
-            self._exec_cli_command('screen-length 0 temporary')
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
+    
+def timedelta_to_seconds(td):
+    # type: (datetime.timedelta) -> float
+    '''Equivalent to td.total_seconds() (introduced in python 2.7).'''
+    return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10 ** 6) / float(10 ** 6)
+    
+            Some `.HTTPConnection` methods can only be called during
+        ``headers_received``.
+    
+                def finish(self):
+                event.set()
+    
+    
+globals().update(wrap_web_tests_adapter())
 
     
-        def remove(self, key):
-        hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
-            if item.key == key:
-                del self.table[hash_index][index]
-                return
-        raise KeyError('Key not found')
+            If the request is a POST, ``post_args`` should be provided. Query
+        string arguments should be given as keyword arguments.
     
-        def reduce_priority_link_to_crawl(self, url):
-        '''Reduce the priority of a link in `links_to_crawl` to avoid cycles.'''
-        pass
-    
-            (2016-01, url0), 2
-        (2016-01, url1), 1
+            This method may be called more than once to listen on multiple ports.
+        `listen` takes effect immediately; it is not necessary to call
+        `TCPServer.start` afterwards.  It is, however, necessary to start
+        the `.IOLoop`.
         '''
-        yield key, sum(values)
-    
-    
-class Bus(Vehicle):
-    
-            (2016-01, shopping), 25
-        (2016-01, shopping), 100
-        (2016-01, gas), 50
-        '''
-        timestamp, category, amount = line.split('\t')
-        period = self. extract_year_month(timestamp)
-        if period == self.current_year_month():
-            yield (period, category), amount
-    
-        def test_no_ask_hsts(self):
-        self.config.hsts = True
-        self._test_with_all_supported()
-        self.client.installer.enhance.assert_called_with(
-            self.domain, 'ensure-http-header', 'Strict-Transport-Security')
-    
-            complex_vh = VirtualHost(
-            'fp', 'vhp',
-            set([Addr.fromstring('*:443'), Addr.fromstring('1.2.3.4:443')]),
-            False, False)
-        self.assertTrue(complex_vh.conflicts([self.addr1]))
-        self.assertTrue(complex_vh.conflicts([self.addr2]))
-        self.assertFalse(complex_vh.conflicts([self.addr_default]))
-    
-    # The master toctree document.
-master_doc = 'index'
-    
-            link_list = self.get_streams_by_id(account_number, video_id)
-    
-    
-def huaban_download_board(url, output_dir, **kwargs):
-    kwargs['merge'] = False
-    board = extract_board_data(url)
-    output_dir = os.path.join(output_dir, board.title)
-    print_info(site_info, board.title, 'jpg', float('Inf'))
-    for pin in board.pins:
-        download_urls([pin.url], pin.id, pin.ext, float('Inf'),
-                      output_dir=output_dir, faker=True, **kwargs)
-    
-    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
-    #sample
-    #url_sample:http://www.kugou.com/yy/album/single/536957.html
-    #hash ->key  md5(hash+kgcloud')->key  decompile swf
-    #cmd 4 for mp3 cmd 3 for m4a
-    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
-    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
-    j=loads(html)
-    url=j['url']
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge=merge)
-    
-            # extract raw urls
-        orig_img = match1(content,
-                         r'<meta itemprop='image' content='([^']+/originals/[^']+)'')
-        twit_img = match1(content,
-                          r'<meta property='twitter:image:src' name='twitter:image:src' content='([^']+)'')
-    
-        hass.services.register(DOMAIN, SERVICE_BROWSE_URL,
-                           lambda service:
-                           webbrowser.open(service.data[ATTR_URL]),
-                           schema=SERVICE_BROWSE_URL_SCHEMA)
-    
-    from homeassistant.components.device_tracker import bt_home_hub_5
-from homeassistant.const import CONF_HOST
+        sockets = bind_sockets(port, address=address)
+        self.add_sockets(sockets)
