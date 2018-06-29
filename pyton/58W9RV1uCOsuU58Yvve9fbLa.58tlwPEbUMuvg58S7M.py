@@ -1,236 +1,231 @@
-filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
+
+        
+            self.assertTrue(isinstance(hyperparam_config, spec_pb2.GridPoint))
+    gold_doc = sentence_pb2.Sentence()
+    text_format.Parse(_DUMMY_GOLD_SENTENCE, gold_doc)
+    gold_doc_2 = sentence_pb2.Sentence()
+    text_format.Parse(_DUMMY_GOLD_SENTENCE_2, gold_doc_2)
+    reader_strings = [
+        gold_doc.SerializeToString(),
+        gold_doc_2.SerializeToString()
+    ]
+    tf.logging.info('Generating graph with config: %s', hyperparam_config)
+    with tf.Graph().as_default():
+      builder = graph_builder.MasterBuilder(master_spec, hyperparam_config)
     
-    compat_print('total downloads traffic: %s' % format_size(total_bytes))
+      Raises:
+    ValueError: if identity initialization is specified for a tensor of rank < 4
+    NotImplementedError: if an unimplemented type of initialization is specified
+  '''
+  if init_type == 'random':
+    # Random normal initialization
+    return tf.get_variable(
+        name,
+        shape=shape,
+        initializer=tf.random_normal_initializer(stddev=stddev),
+        dtype=tf.float32)
+  if init_type == 'xavier':
+    # Xavier normal initialization (Glorot and Bengio, 2010):
+    # http://proceedings.mlr.press/v9/glorot10a/glorot10a.pdf
+    return tf.get_variable(
+        name,
+        shape=shape,
+        initializer=tf.contrib.layers.xavier_initializer(),
+        dtype=tf.float32)
+  if init_type == 'varscale':
+    # Variance scaling initialization (He at al. 2015):
+    # https://arxiv.org/abs/1502.01852
+    return tf.get_variable(
+        name,
+        shape=shape,
+        initializer=tf.contrib.layers.variance_scaling_initializer(),
+        dtype=tf.float32)
+  if init_type == 'identity':
+    # 'Identity initialization' described in Yu and Koltun (2015):
+    # https://arxiv.org/abs/1511.07122v3 eqns. (4) and (5)
+    rank = len(shape)
+    square = shape[-1] == shape[-2]
+    if rank < 2:
+      raise ValueError(
+          'Identity initialization requires a tensor with rank >= 2. The given '
+          'shape has rank ' + str(rank))
+    
+          fixed_embeddings = []
+      linked_embeddings = [
+          network_units.NamedTensor(indices, 'indices', 1),
+          network_units.NamedTensor(features, 'features', 2)
+      ]
+    
+    # This should include just about everything, suitable for Jupyter notebooks or
+# building a pip package.
+py_library(
+    name = 'all_in_one_components',
+    deps = [
+        ':components',
+        '//dragnn/python:components',
+        '//dragnn/python:dragnn_ops',
+        '//dragnn/python:evaluation',
+        '//dragnn/python:lexicon',
+        '//dragnn/python:render_parse_tree_graphviz',
+        '//dragnn/python:render_spec_with_graphviz',
+        '//dragnn/python:spec_builder',
+        '//dragnn/python:trainer_lib',
+        '//dragnn/python:visualization',
+        '//syntaxnet:task_spec_pb2_py',
+    ],
+)
 
     
+      # Build the TensorFlow graph.
+  tf.logging.info('Building Graph...')
+  hyperparam_config = spec_pb2.GridPoint()
+  try:
+    text_format.Parse(FLAGS.hyperparams, hyperparam_config)
+  except text_format.ParseError:
+    text_format.Parse(base64.b64decode(FLAGS.hyperparams), hyperparam_config)
+  g = tf.Graph()
+  with g.as_default():
+    builder = graph_builder.MasterBuilder(master_spec, hyperparam_config)
+    component_targets = [
+        spec_pb2.TrainTarget(
+            name=component.name,
+            max_index=idx + 1,
+            unroll_using_oracle=[False] * idx + [True])
+        for idx, component in enumerate(master_spec.component)
+        if 'shift-only' not in component.transition_system.registered_name
+    ]
+    trainers = [
+        builder.add_training_from_config(target) for target in component_targets
+    ]
+    annotator = builder.add_annotation()
+    builder.add_saver()
     
-def _download_restricted(url, filename, age):
-    ''' Returns true if the file has been downloaded '''
+    cc_test(
+    name = 'tagger_transitions_test',
+    size = 'small',
+    srcs = ['tagger_transitions_test.cc'],
+    data = [':testdata'],
+    deps = [
+        ':parser_transitions',
+        ':populate_test_inputs',
+        ':sentence_proto_cc',
+        ':task_spec_proto_cc',
+        ':test_main',
+    ],
+)
     
-            webpage = self._download_webpage(url, playlist_id)
-        title = self._html_search_regex(
-            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<p class='excerpt'[^>]*?>(.*?)</p>',
-            webpage, 'description', fatal=False)
-        urls = re.findall(
-            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
-            webpage)
-        entries = [self.url_result(u) for u in urls]
+      def setUp(self):
+    # Creates a task context with the correct testing paths.
+    initial_task_context = os.path.join(test_flags.source_root(),
+                                        'syntaxnet/'
+                                        'testdata/context.pbtxt')
+    self._task_context = os.path.join(test_flags.temp_dir(), 'context.pbtxt')
+    with open(initial_task_context, 'r') as fin:
+      with open(self._task_context, 'w') as fout:
+        fout.write(fin.read().replace('SRCDIR', test_flags.source_root())
+                   .replace('OUTPATH', test_flags.temp_dir()))
     
-            return info_dict
+        s.register(Tag2, index=None)
+    assert isinstance(s.order[-1], Tag2)
 
     
-            metadata = self._download_json(
-            'https://api.clyp.it/%s' % audio_id, audio_id)
+            assert meth is not None, 'Unimplemented method %r' % request.method
+        return meth(*args, **kwargs)
+
     
-        # input is not an Input tensor
-    j = Input(shape=(32,), name='input_j')
-    j = Dense(32)(j)
-    k = Input(shape=(32,), name='input_k')
-    m, n = model([j, k])
+        flask.appcontext_tearing_down.connect(record_teardown, app)
+    try:
+        with app.test_client() as c:
+            rv = c.get('/')
+            assert rv.status_code == 500
+            assert recorded == []
+        assert recorded == [('tear_down', {'exc': None})]
+    finally:
+        flask.appcontext_tearing_down.disconnect(record_teardown, app)
+
+    
+    containers = (('thefuck/python3-fish',
+               u'''FROM python:3
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'),
+              ('thefuck/python2-fish',
+               u'''FROM python:2
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'))
+    
+    containers = (('thefuck/python3-tcsh',
+               u'''FROM python:3
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'),
+              ('thefuck/python2-tcsh',
+               u'''FROM python:2
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'))
+    
+    define('port', default=8888, help='run on the given port', type=int)
+    
+        def remove_handler(self, fd):
+        fd, fileobj = self.split_fd(fd)
+        if fd not in self.handlers:
+            return
+        if fd in self.readers:
+            self.asyncio_loop.remove_reader(fd)
+            self.readers.remove(fd)
+        if fd in self.writers:
+            self.asyncio_loop.remove_writer(fd)
+            self.writers.remove(fd)
+        del self.handlers[fd]
     
     
-# reparameterization trick
-# instead of sampling from Q(z|X), sample eps = N(0,I)
-# z = z_mean + sqrt(var)*eps
-def sampling(args):
-    '''Reparameterization trick by sampling fr an isotropic unit Gaussian.
+class TestIOLoopConfiguration(unittest.TestCase):
+    def run_python(self, *statements):
+        statements = [
+            'from tornado.ioloop import IOLoop, PollIOLoop',
+            'classname = lambda x: x.__class__.__name__',
+        ] + list(statements)
+        args = [sys.executable, '-c', '; '.join(statements)]
+        return native_str(subprocess.check_output(args)).strip()
     
-    # build decoder model
-latent_inputs = Input(shape=(latent_dim,), name='z_sampling')
-x = Dense(shape[1] * shape[2] * shape[3], activation='relu')(latent_inputs)
-x = Reshape((shape[1], shape[2], shape[3]))(x)
+        def acquire(self, timeout=None):
+        '''Decrement the counter. Returns a Future.
     
-                # check dropout
-            layer_test(convolutional_recurrent.ConvLSTM2D,
-                       kwargs={'data_format': data_format,
-                               'return_sequences': return_sequences,
-                               'filters': filters,
-                               'kernel_size': (num_row, num_col),
-                               'padding': 'same',
-                               'dropout': 0.1,
-                               'recurrent_dropout': 0.1},
-                       input_shape=inputs.shape)
-    
-    
-@keras_test
-def test_vector_classification():
+        .. versionchanged:: 5.0
+       The default implementation has changed from `BlockingResolver` to
+       `DefaultExecutorResolver`.
     '''
-    Classify random float vectors into 2 classes with logistic regression
-    using 2 layer neural network with ReLU hidden units.
-    '''
-    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
-                                                         num_test=200,
-                                                         input_shape=(20,),
-                                                         classification=True,
-                                                         num_classes=num_classes)
-    y_train = to_categorical(y_train)
-    y_test = to_categorical(y_test)
+    @classmethod
+    def configurable_base(cls):
+        return Resolver
     
-    # we start off with an efficient embedding layer which maps
-# our vocab indices into embedding_dims dimensions
-model.add(Embedding(max_features,
-                    embedding_dims,
-                    input_length=maxlen))
-model.add(Dropout(0.2))
+        @gen_test
+    def test_future_interface(self):
+        '''Basic test of IOStream's ability to return Futures.'''
+        stream = self._make_client_iostream()
+        connect_result = yield stream.connect(
+            ('127.0.0.1', self.get_http_port()))
+        self.assertIs(connect_result, stream)
+        yield stream.write(b'GET / HTTP/1.0\r\n\r\n')
+        first_line = yield stream.read_until(b'\r\n')
+        self.assertEqual(first_line, b'HTTP/1.1 200 OK\r\n')
+        # callback=None is equivalent to no callback.
+        header_data = yield stream.read_until(b'\r\n\r\n', callback=None)
+        headers = HTTPHeaders.parse(header_data.decode('latin1'))
+        content_length = int(headers['Content-Length'])
+        body = yield stream.read_bytes(content_length)
+        self.assertEqual(body, b'Hello')
+        stream.close()
     
-    max_features = 20000
-maxlen = 80  # cut texts after this number of words (among top max_features most common words)
-batch_size = 32
-    
-    plt.plot(range(epochs),
-         history_model1.history['val_loss'],
-         'g-',
-         label='Network 1 Val Loss')
-plt.plot(range(epochs),
-         history_model2.history['val_loss'],
-         'r-',
-         label='Network 2 Val Loss')
-plt.plot(range(epochs),
-         history_model1.history['loss'],
-         'g--',
-         label='Network 1 Loss')
-plt.plot(range(epochs),
-         history_model2.history['loss'],
-         'r--',
-         label='Network 2 Loss')
-plt.xlabel('Epochs')
-plt.ylabel('Loss')
-plt.legend()
-plt.savefig('comparison_of_networks.png')
-
-    
-    
-if __name__ == '__main__':
-    RemoveDuplicateUrls.run()
-
-    
-    
-class Person(object):
-    
-        def extract_year_month(self, line):
-        '''Return the year and month portions of the timestamp.'''
-        pass
-    
-        def add_friend_request(self, from_user_id, to_user_id):
-        pass
-    
-        This is an abstract class that must be implemented by a subclass.
-    
-    '''
-    
-        def setText(self, text):
-        self.text = text
-    
-        pass
-    
-    autodoc_member_order = 'bysource'
-autodoc_default_flags = ['show-inheritance', 'private-members']
-    
-            account_number = match1(html, r'data-account='(\d+)'')
-    
-        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-    	type, ext, size = url_info(url)
-	print_info(site_info, title, type, size)
-	
-	if not info_only:
-		download_urls([url], title, ext, size, output_dir, merge = merge)
-    
-    from ..common import *
-from ..extractor import VideoExtractor
-    
-        for i in range(10, 30):
-        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
-            i = i,
-            p = preview
-        )
-        try:
-            mime, ext, size = url_info(url)
-            break
-        except: continue
-    
-    site = Pinterest()
-download = site.download_by_url
-# TBD: implement download_playlist
-
-    
-            If a ``callback`` is given, it will be invoked with the `HTTPResponse`.
-        In the callback interface, `HTTPError` is not automatically raised.
-        Instead, you must check the response's ``error`` attribute or
-        call its `~HTTPResponse.rethrow` method.
-    
-        def _handle_request(self, request, release_callback, final_callback):
-        self._connection_class()(
-            self, request, release_callback,
-            final_callback, self.max_buffer_size, self.tcp_client,
-            self.max_header_size, self.max_body_size)
-    
-    
-class ChunkHandler(RequestHandler):
-    @gen.coroutine
-    def get(self):
-        self.write('asdf')
-        self.flush()
-        # Wait a bit to ensure the chunks are sent and received separately.
-        yield gen.sleep(0.01)
-        self.write('qwer')
-    
-        $ xcode-select --install
-    
-        def __setattr__(self, name, value):
-        name = self._normalize_name(name)
-        if isinstance(self._options.get(name), _Option):
-            return self._options[name].set(value)
-        raise AttributeError('Unrecognized option %r' % name)
-    
-        def test_nonblocking_put_exception(self):
-        q = queues.Queue(1)
-        q.put(0)
-        self.assertRaises(queues.QueueFull, q.put_nowait, 1)
-    
-            # It would be better to run the wsgiref server implementation in
-        # another thread instead of using our own WSGIContainer, but this
-        # fits better in our async testing framework and the wsgiref
-        # validator should keep us honest
-        with ignore_deprecation():
-            return WSGIContainer(validator(WSGIAdapter(
-                Application([
-                    ('/', HelloHandler),
-                    ('/path/(.*)', PathQuotingHandler),
-                    ('/typecheck', TypeCheckHandler),
-                ]))))
-    
-        This solves a nasty problem with Futures and Tasks that have an
-    exception set: if nobody asks for the exception, the exception is
-    never logged.  This violates the Zen of Python: 'Errors should
-    never pass silently.  Unless explicitly silenced.'
-    
-                def start_yield_point():
-                try:
-                    yielded.start(self)
-                    if yielded.is_ready():
-                        future_set_result_unless_cancelled(self.future, yielded.get_result())
-                    else:
-                        self.yield_point = yielded
-                except Exception:
-                    self.future = Future()
-                    future_set_exc_info(self.future, sys.exc_info())
-    
-        def bind(self, port, address=None, family=socket.AF_UNSPEC, backlog=128,
-             reuse_port=False):
-        '''Binds this server to the given port on the given address.
+            @gen.coroutine
+        def producer():
+            for item in range(10):
+                yield q.put(item)
