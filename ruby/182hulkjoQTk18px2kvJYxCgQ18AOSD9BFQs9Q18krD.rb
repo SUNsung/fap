@@ -1,90 +1,117 @@
 
         
-            keys.find do |key|
-      if key.to_s.end_with?('_or_later')
-        later_tag = key.to_s[/(\w+)_or_later$/, 1].to_sym
-        MacOS::Version.from_symbol(later_tag) <= tag_version
-      end
-    end
-  end
+        # No trailing slash
+Benchmark.ips do |x|
+  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
+  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
+  x.compare!
 end
 
     
-          puts_columns Array(result)
-    else
-      query = ARGV.first
-      rx = query_regexp(query)
-      local_results = search_formulae(rx)
-      puts_columns(local_results)
-      tap_results = search_taps(rx)
-      puts_columns(tap_results)
-    
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
-  end
-  alias_method :standard_install, :install
-    
-      describe 'instance methods' do
-    let(:key_attributes) do # these keys are intentionally strings.
-      {
-        'canDownload' => false,
-        'canRevoke' => true,
-        'keyId' => 'some-key-id',
-        'keyName' => 'fastlane',
-        'servicesCount' => 3,
-        'services' => [
-          {
-            'name' => 'APNS',
-            'id' => 'U27F4V844T',
-            'configurations' => []
-          },
-          {
-            'name' => 'MusicKit',
-            'id' => '6A7HVUVQ3M',
-            'configurations' => [
-              {
-                'name' => 'music id test',
-                'identifier' => 'music.com.snatchev.test',
-                'type' => 'music',
-                'prefix' => 'some-prefix-id',
-                'id' => 'some-music-kit-id'
-              }
-            ]
-          },
-          {
-            'name' => 'DeviceCheck',
-            'id' => 'DQ8HTZ7739',
-            'configurations' => []
-          }
-        ]
-      }
-    end
-    
-          it 'splits correctly' do
-        expected = [
-          'One',
-          'Two',
-          'Three',
-          'Four Token',
-          'Or',
-          'Newlines',
-          'Everywhere'
-        ]
-        expect(generator.split_keywords(keywords)).to eq(expected)
+          if site.theme && site.theme.layouts_path.eql?(base)
+        @base_dir = site.theme.root
+        @path = site.in_theme_dir(base, name)
+      else
+        @base_dir = site.source
+        @path = site.in_source_dir(base, name)
       end
+      @relative_path = @path.sub(@base_dir, '')
+    
+            self
+      end
+    
+      # This allows generic Altivec PPC bottles to be supported in some
+  # formulae, while also allowing specific bottles in others; e.g.,
+  # sometimes a formula has just :tiger_altivec, other times it has
+  # :tiger_g4, :tiger_g5, etc.
+  def find_altivec_tag(tag)
+    if tag.to_s =~ /(\w+)_(g4|g4e|g5)$/
+      altivec_tag = '#{$1}_altivec'.to_sym
+      altivec_tag if key?(altivec_tag)
     end
   end
-end
-
     
-          it 'it increments all targets minor version major' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(bump_type: 'major')
-        end').runner.execute(:test)
+      def <<(o)
+    @settings << o
+    self
+  end
+    
+      def observe_file_removal(path)
+    path.extend(ObserverPathnameExtension).unlink if path.exist?
+  end
+    
+      def clang
+    @clang ||= MacOS.clang_version if MacOS.has_apple_developer_tools?
+  end
+    
+    module Homebrew
+  def doctor
+    checks = Diagnostic::Checks.new
+    
+      # Use this method to generate standard caveats.
+  def standard_instructions(home_name, home_value = libexec)
+    <<-EOS.undent
+      Before you can use these tools you must export some variables to your $SHELL.
+    
+        def initial_urls
+      [ 'https://hexdocs.pm/elixir/#{self.class.release}/api-reference.html',
+        'https://hexdocs.pm/eex/#{self.class.release}/EEx.html',
+        'https://hexdocs.pm/ex_unit/#{self.class.release}/ExUnit.html',
+        'https://hexdocs.pm/iex/#{self.class.release}/IEx.html',
+        'https://hexdocs.pm/logger/#{self.class.release}/Logger.html',
+        'https://hexdocs.pm/mix/#{self.class.release}/Mix.html',
+        'https://elixir-lang.org/getting-started/introduction.html' ]
+    end
+    
+        BOOKS = %w(apache apc apcu array bc bzip2 calendar csprng classobj ctype curl
+      datetime dba dir dom ds eio errorfunc ev event exec exif fileinfo filesystem filter
+      ftp funchand gearman geoip gettext gmagick gmp hash ibase iconv iisfunc image
+      imagick imap info inotify intl json judy ldap libevent libxml lua mail mailparse
+      math mbstring mcrypt memcached misc mysqli network oauth openssl
+      outcontrol password pcntl pcre pdo pgsql phar posix proctitle pthreads quickhash regex runkit
+      reflection sca session sem session-pgsql shmop simplexml soap sockets solr sphinx spl
+      spl-types sqlite3 sqlsrv ssh2 stats stream strings sync taint tidy tokenizer uodbc url
+      v8js var varnish weakref xml xmlreader xmlrpc xmlwriter xsl yaf yar yaml zip zlib)
+    
+        def length
+      @entries.length
+    end
+    
+        def root?
+      path == 'index'
+    end
+    
+        def subpath_to(url, options = nil)
+      url = self.class.parse(url)
+      return unless origin == url.origin
+    
+    def load_apps
+  out, err, status = Open3.capture3('/usr/bin/osascript', '-e', 'tell application 'System Events' to get (name, bundle identifier, unix id) of every process')
+  if status.exitstatus > 0
+    puts err
+    exit status.exitstatus
+  end
+  out = out.split(', ')
+  one_third   = out.length / 3
+  @app_names  = out.shift(one_third)
+  @bundle_ids = out.shift(one_third)
+  @unix_ids   = out.shift(one_third)
+end
+    
+          respond_with do |format|
+        format.html do
+          gon.preloads[:pods] = pods_json
+          gon.unchecked_count = Pod.unchecked.count
+          gon.version_failed_count = Pod.version_failed.count
+          gon.error_count = Pod.check_failed.count
+    
+      def for_each_gem
+    SPREE_GEMS.each do |gem_name|
+      yield 'pkg/spree_#{gem_name}-#{version}.gem'
+    end
+    yield 'pkg/spree-#{version}.gem'
+  end
+    
+            def show
+          respond_with(stock_location)
+        end
