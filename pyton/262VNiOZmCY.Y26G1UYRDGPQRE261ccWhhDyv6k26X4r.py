@@ -1,56 +1,161 @@
 
         
-            plt.figure('scikit-learn LASSO benchmark results')
-    plt.subplot(211)
-    plt.plot(list_n_samples, lasso_results, 'b-',
-                            label='Lasso')
-    plt.plot(list_n_samples, lars_lasso_results, 'r-',
-                            label='LassoLars')
-    plt.title('precomputed Gram matrix, %d features, alpha=%s' % (n_features,
-                            alpha))
-    plt.legend(loc='upper left')
-    plt.xlabel('number of samples')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
+        # Tests.
+cc_test(
+    name = 'syntaxnet_component_test',
+    srcs = ['syntaxnet_component_test.cc'],
+    data = [':testdata'],
+    deps = [
+        ':syntaxnet_component',
+        '//dragnn/core:input_batch_cache',
+        '//dragnn/core/test:generic',
+        '//dragnn/core/test:mock_transition_state',
+        '//dragnn/io:sentence_input_batch',
+        '//syntaxnet:base',
+        '//syntaxnet:sentence_proto_cc',
+        '//syntaxnet:test_main',
+    ],
+)
     
-        classes : array-like of ints (1d or 0d)
-        The number of classes in the input.
+    tf_gen_op_libs(
+    op_lib_names = ['mst_ops'],
+)
     
-        op.add_option('--random-seed',
-                  dest='random_seed', default=13, type=int,
-                  help='Seed used by the random number generators.')
+      def testEqualFiles(self):
+    content_actual = None
+    content_expected = None
     
-        xx = np.arange(start_dim, start_dim + n * step, step)
-    plt.subplot(212)
-    plt.title('Learning in high dimensional spaces')
-    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
-    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
-    plt.legend(loc='upper left')
-    plt.xlabel('number of dimensions')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
-    plt.show()
+    # Imported for FLAGS.tf_master, which is used in the lexicon module.
+    
+    Provides utility functions that are consumed internally by Requests
+which depend on extremely few external helpers (such as compat)
+'''
+    
+            with server as address:
+            sock = socket.socket()
+            sock.connect(address)
+            time.sleep(1.5)
+            sock.sendall(data)
+            sock.close()
+    
+    
+class RequestsWarning(Warning):
+    '''Base warning for Requests.'''
+    pass
+    
+    
+class LookupDict(dict):
+    '''Dictionary lookup object.'''
+    
+    def check_live_url(url):
+    
+    def load_url(url, timeout):
+    kwargs = {'timeout': timeout} if sys.version_info >= (2, 6) else {}
+    return urlopen(url, **kwargs).read()
+    
+        # build a new DiagnosticFilter merging all filters
+    #  for the provided filetypes
+    spec = []
+    for filetype in filetypes:
+      type_specific = self._all_filters.get( filetype, [] )
+      spec.extend( type_specific )
+    
+    
+def FormatDebugInfoResponse_Completer_ServerRunningWithoutHost_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'address': None,
+    'port': None
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name running\n'
+      '  Server name process ID: 12345\n'
+      '  Server name executable: /path/to/executable\n'
+      '  Server name logfiles:\n'
+      '    /path/to/stdout/logfile\n'
+      '    /path/to/stderr/logfile\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
+    
+    
+def ConvertVimDataToCompletionData( vim_data ):
+  # see :h complete-items for a description of the dictionary fields
+  completion_data = {}
+    
+    
+class FakeResponse( object ):
+  '''A fake version of a requests response object, just about suitable for
+  mocking a server response. Not usually used directly. See
+  MockServerResponse* methods'''
+  def __init__( self, response, exception ):
+    self._json = response
+    self._exception = exception
+    self.status_code = requests.codes.ok
+    self.text = not exception
+    
+        try:
+      eq_( expected_vim_data, vim_data )
+    except Exception:
+      print( 'Expected:\n'{0}'\nwhen parsing:\n'{1}'\nBut found:\n'{2}''.format(
+          expected_vim_data,
+          completion_data,
+          vim_data ) )
+      raise
+    
+    
+def SendCompleterAvailableRequest( filetypes ):
+  request = CompleterAvailableRequest( filetypes )
+  # This is a blocking call.
+  request.Start()
+  return request.Response()
 
     
-    import sys
     
-    solutions = os.listdir(exercise_dir)
+def assert_not_dirty():
+    '''Check if there are uncommitted changes in the repo and exit if so.'''
+    try:
+        subprocess.check_call(['git', 'diff',
+                               '--no-ext-diff', '--quiet', '--exit-code'])
+    except subprocess.CalledProcessError:
+        logging.error('you have uncommitted changes. please commit them!')
+        sys.exit(1)
     
-    y_min, y_max = -50, 50
-x_min, x_max = -50, 50
+    API_TYPES = ('api', 'json')
+RSS_TYPES = ('rss', 'xml')
     
-    # Author: Olivier Grisel <olivier.grisel@ensta.org>
-# License: BSD 3 clause
+        @require_oauth2_scope('account')
+    @validate(
+        VUser(),
+        validated_prefs=PREFS_JSON_VALIDATOR,
+    )
+    @api_doc(api_section.account, json_model=PREFS_JSON_VALIDATOR,
+             uri='/api/v1/me/prefs')
+    def PATCH_prefs(self, validated_prefs):
+        user_prefs = c.user.preferences()
+        for short_name, new_value in validated_prefs.iteritems():
+            pref_name = 'pref_' + short_name
+            user_prefs[pref_name] = new_value
+        vprefs.filter_prefs(user_prefs, c.user)
+        vprefs.set_prefs(c.user, user_prefs)
+        c.user._commit()
+        return self.api_wrapper(PrefsJsonTemplate().data(c.user))
     
-    The example is engineered to show the effect of the choice of different
-metrics. It is applied to waveforms, which can be seen as
-high-dimensional vector. Indeed, the difference between metrics is
-usually more pronounced in high dimension (in particular for euclidean
-and cityblock).
+    class CaptchaController(RedditController):
+    @allow_oauth2_access
+    @api_doc(api_section.captcha, uri='/captcha/{iden}')
+    def GET_captchaimg(self, iden):
+        '''
+        Request a CAPTCHA image given an `iden`.
     
-    plt.show()
-
-    
-      if Search(r'printf\s*\(.*'.*%\d+\$', line):
-    error(filename, linenum, 'runtime/printf_format', 2,
-          '%N$ formats are unconventional.  Try rewriting to avoid them.')
+        def send429(self):
+        retry_after = request.environ.get('retry_after')
+        if retry_after:
+            response.headers['Retry-After'] = str(retry_after)
+            template_name = '/ratelimit_toofast.html'
+        else:
+            template_name = '/ratelimit_throttled.html'
