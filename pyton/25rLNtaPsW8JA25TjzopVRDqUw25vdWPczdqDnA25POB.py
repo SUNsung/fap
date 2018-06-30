@@ -1,88 +1,90 @@
 
         
-            for release in releases:
-        compat_print(release['name'])
-        for asset in release['assets']:
-            asset_name = asset['name']
-            total_bytes += asset['download_count'] * asset['size']
-            if all(not re.match(p, asset_name) for p in (
-                    r'^youtube-dl$',
-                    r'^youtube-dl-\d{4}\.\d{2}\.\d{2}(?:\.\d+)?\.tar\.gz$',
-                    r'^youtube-dl\.exe$')):
-                continue
-            compat_print(
-                ' %s size: %s downloads: %d'
-                % (asset_name, format_size(asset['size']), asset['download_count']))
+        
+def _tar_file(cmd):
+    for c in cmd:
+        for ext in tar_extensions:
+            if c.endswith(ext):
+                return (c, c[0:len(c) - len(ext)])
     
-        # Are checkable fields missing from the test case definition?
-    test_info_dict = dict((key, value if not isinstance(value, compat_str) or len(value) < 250 else 'md5:' + md5(value))
-                          for key, value in got_dict.items()
-                          if value and key in ('id', 'title', 'description', 'uploader', 'upload_date', 'timestamp', 'uploader_id', 'location', 'age_limit'))
-    missing_keys = set(test_info_dict.keys()) - set(expected_dict.keys())
-    if missing_keys:
-        def _repr(v):
-            if isinstance(v, compat_str):
-                return ''%s'' % v.replace('\\', '\\\\').replace(''', '\\'').replace('\n', '\\n')
-            else:
-                return repr(v)
-        info_dict_str = ''
-        if len(missing_keys) != len(expected_dict):
-            info_dict_str += ''.join(
-                '    %s: %s,\n' % (_repr(k), _repr(v))
-                for k, v in test_info_dict.items() if k not in missing_keys)
+        terminal_stdout_re = [
+        re.compile(br'[\r\n]?[\w+\-\.:\/\[\]]+(?:\([^\)]+\)){,3}(?:>|#) ?$'),
+        re.compile(br'\@[\w\-\.]+:\S+?[>#\$] ?$')
+    ]
     
-    import os
-import subprocess
+        strings = []
+    with open(filepath, 'r') as f:
     
-        def process_options(self, args, opts):
-        ScrapyCommand.process_options(self, args, opts)
-        try:
-            opts.spargs = arglist_to_dict(opts.spargs)
-        except ValueError:
-            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
-        if opts.output:
-            if opts.output == '-':
-                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
-            else:
-                self.settings.set('FEED_URI', opts.output, priority='cmdline')
-            feed_exporters = without_none_values(
-                self.settings.getwithbase('FEED_EXPORTERS'))
-            valid_output_formats = feed_exporters.keys()
-            if not opts.output_format:
-                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
-            if opts.output_format not in valid_output_formats:
-                raise UsageError('Unrecognized output format '%s', set one'
-                                 ' using the '-t' switch or as a file extension'
-                                 ' from the supported list %s' % (opts.output_format,
-                                                                  tuple(valid_output_formats)))
-            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
+            self.auth = Authenticator(self.config, 'dnsimple')
     
-                raise ContractFail('Returned %s %s, expected %s' % \
-                (occurrences, self.obj_name, expected))
     
-    # If false, no index is generated.
-#html_use_index = True
+# -- Options for HTMLHelp output ------------------------------------------
     
-        @classmethod
-    def add_parser_arguments(cls, parser):
-        '''Adds command line arguments needed by the plugin'''
+            cert = os.path.join(cert_and_key_dir, 'cert')
+        shutil.copy(cert_path, cert)
+        key = os.path.join(cert_and_key_dir, 'key')
+        shutil.copy(key_path, key)
+        if chain_path:
+            chain = os.path.join(cert_and_key_dir, 'chain')
+            shutil.copy(chain_path, chain)
+        else:
+            chain = None
     
-    # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+    # One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    (master_doc, 'certbot-nginx', u'certbot-nginx Documentation',
+     [author], 1)
+]
     
-        @mock.patch('certbot.display.enhancements.util')
-    def test_redirect(self, mock_util):
-        mock_util().menu.return_value = (display_util.OK, 1)
-        self.assertTrue(self._call('redirect'))
+    __author__ = 'Brian Quinlan (brian@sweetapp.com)'
     
-    DOMAIN = 'keyboard'
+            finished, pending = futures.wait(
+                [CANCELLED_AND_NOTIFIED_FUTURE,
+                 EXCEPTION_FUTURE,
+                 SUCCESSFUL_FUTURE,
+                 future1, future2],
+                timeout=1.5,
+                return_when=futures.ALL_COMPLETED)
     
-        @patch('{}._get_homehub_data'.format(patch_file), new=_get_homehub_data)
-    def test_config_minimal(self):
-        '''Test the setup with minimal configuration.'''
-        config = {
-            'device_tracker': {
-                CONF_HOST: 'foo'
-            }
-        }
-        result = bt_home_hub_5.get_scanner(None, config)
+    
+def CompileLevel( level ):
+  # valid kinds are WARNING and ERROR;
+  #  expected input levels are `warning` and `error`
+  # NOTE: we don't validate the input...
+  expected_kind = level.upper()
+    
+    
+def KeywordsFromSyntaxListOutput_JavaSyntax_test():
+  expected_keywords = (
+    'code', 'text', 'cols', 'datetime', 'disabled', 'shape', 'codetype', 'alt',
+    'compact', 'style', 'valuetype', 'short', 'finally', 'continue', 'extends',
+    'valign', 'bordercolor', 'do', 'return', 'rel', 'rules', 'void',
+    'nohref', 'abbr', 'background', 'scrolling', 'instanceof', 'name',
+    'summary', 'try', 'default', 'noshade', 'coords', 'dir', 'frame', 'usemap',
+    'ismap', 'static', 'hspace', 'vlink', 'for', 'selected', 'rev', 'vspace',
+    'content', 'method', 'version', 'volatile', 'above', 'new', 'charoff',
+    'public', 'alink', 'enum', 'codebase', 'if', 'noresize', 'interface',
+    'checked', 'byte', 'super', 'throw', 'src', 'language', 'package',
+    'standby', 'script', 'longdesc', 'maxlength', 'cellpadding', 'throws',
+    'tabindex', 'color', 'colspan', 'accesskey', 'float', 'while', 'private',
+    'height', 'boolean', 'wrap', 'prompt', 'nowrap', 'size', 'rows', 'span',
+    'clip', 'bgcolor', 'top', 'long', 'start', 'scope', 'scheme', 'type',
+    'final', 'lang', 'visibility', 'else', 'assert', 'transient', 'link',
+    'catch', 'true', 'serializable', 'target', 'lowsrc', 'this', 'double',
+    'align', 'value', 'cite', 'headers', 'below', 'protected', 'declare',
+    'classid', 'defer', 'false', 'synchronized', 'int', 'abstract', 'accept',
+    'hreflang', 'char', 'border', 'id', 'native', 'rowspan', 'charset',
+    'archive', 'strictfp', 'readonly', 'axis', 'cellspacing', 'profile',
+    'multiple', 'object', 'action', 'pagex', 'pagey', 'marginheight', 'data',
+    'class', 'frameborder', 'enctype', 'implements', 'break', 'gutter', 'url',
+    'clear', 'face', 'switch', 'marginwidth', 'width', 'left' )
+    
+        poll_again = _HandlePollResponse( response, diagnostics_handler )
+    if poll_again:
+      self._SendRequest()
+      return True
+    
+    
+  def GetErrorCount( self ):
+    return self._diag_interface.GetErrorCount()
