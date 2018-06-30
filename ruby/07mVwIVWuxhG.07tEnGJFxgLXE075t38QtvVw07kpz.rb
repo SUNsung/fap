@@ -1,142 +1,109 @@
 
         
-        # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-
+                def test_url_port
+          spec = resolve 'abstract://foo:123?encoding=utf8'
+          assert_equal({
+            'adapter'  => 'abstract',
+            'port'     => 123,
+            'host'     => 'foo',
+            'encoding' => 'utf8' }, spec)
+        end
     
-    # You can also do other things. Examples:
-# https://github.com/tmm1/stackprof/blob/master/bin/stackprof
-report = StackProf::Report.new(Marshal.load(IO.binread(PROF_OUTPUT_FILE)))
-report.print_text(
-  options[:sort],
-  options[:limit],
-  options[:select_files],
-  options[:reject_files],
-  options[:select_names],
-  options[:reject_names]
-)
+      def test_serialized_attribute_with_class_constraint
+    settings = { 'color' => 'blue' }
+    Topic.serialize(:content, Hash)
+    topic = Topic.new(content: settings)
+    assert topic.save
+    assert_equal(settings, Topic.find(topic.id).content)
+  end
     
-    class EmbeddedPatch
-  attr_writer :owner
-  attr_reader :strip
+      test 'overriding has_many_attached methods works' do
+    # attach blobs before messing with getter, which breaks `#attach`
+    @user.highlights.attach create_blob(filename: 'funky.jpg'), create_blob(filename: 'wonky.jpg')
     
-        def default_formula(_val = nil)
-      odisabled 'Requirement.default_formula'
+        topic.replies.delete(topic.replies.first)
+    topic.reload
+    assert_equal topic.replies.to_a.size, topic.replies_count
+  end
+    
+      def test_unsubscribe_client
+    with_puma_server do |port|
+      app = ActionCable.server
+      identifier = JSON.generate(channel: 'ClientTest::EchoChannel')
+    
+          assert_not connection.connected
+      assert_equal [], @server.connections
+    end
+  end
+    
+          assert_not_called(@connection.websocket, :close) do
+        @connection.process_internal_message 'type' => 'unknown'
+      end
+    end
+  end
+    
+        def self.git_log_last_commits(pretty_format, commit_count, merge_commit_filtering, date_format = nil, ancestry_path)
+      command = ['git log']
+      command << '--pretty=\'#{pretty_format}\''
+      command << '--date=\'#{date_format}\'' if date_format
+      command << '--ancestry-path' if ancestry_path
+      command << '-n #{commit_count}'
+      command << git_log_merge_commit_filtering_option(merge_commit_filtering)
+      Actions.sh(command.compact.join(' '), log: false).chomp
+    rescue
+      nil
     end
     
-        # Returns the CSS for the media query.
-    #
-    # @return [String]
-    def to_css
-      css = ''
-      css << resolved_modifier
-      css << ' ' unless resolved_modifier.empty?
-      css << resolved_type
-      css << ' and ' unless resolved_type.empty? || expressions.empty?
-      css << expressions.map do |e|
-        # It's possible for there to be script nodes in Expressions even when
-        # we're converting to CSS in the case where we parsed the document as
-        # CSS originally (as in css_test.rb).
-        e.map {|c| c.is_a?(Sass::Script::Tree::Node) ? c.to_sass : c.to_s}.join
-      end.join(' and ')
-      css
+          it 'splits correctly' do
+        expected = ['One', 'Two', 'Three', 'Four Token']
+        expect(generator.split_keywords(keywords)).to eq(expected)
+      end
     end
     
-        # Returns a string literal with the given contents.
-    #
-    # @param string [String]
-    # @return string [Sass::Script::Tree::Literal]
-    def string_literal(string)
-      Literal.new(Sass::Script::Value::String.new(string, :string))
+        context 'GIT-SVN repository' do
+      before do
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_svn?).and_return(false)
+        expect(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git_svn?).and_return(true)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git?).and_return(false)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_hg?).and_return(false)
+      end
+    
+    public_dir      = 'public'    # compiled site directory
+source_dir      = 'source'    # source file directory
+blog_index_dir  = 'source'    # directory for your blog's index page (if you put your index in source/blog/index.html, set this to 'source/blog')
+deploy_dir      = '_deploy'   # deploy directory (for Github pages deployment)
+stash_dir       = '_stash'    # directory to stash posts for speedy generation
+posts_dir       = '_posts'    # directory for blog files
+themes_dir      = '.themes'   # directory for blog files
+new_post_ext    = 'markdown'  # default new post file extension when using the new_post task
+new_page_ext    = 'markdown'  # default new page file extension when using the new_page task
+server_port     = '4000'      # port for preview server eg. localhost:4000
+    
+    # The project root directory
+$root = ::File.dirname(__FILE__)
+    
+          locations = Array.new
+      while (data.code.to_i == 301 || data.code.to_i == 302)
+        data = handle_gist_redirecting(data)
+        break if locations.include? data.header['Location']
+        locations << data.header['Location']
+      end
+    
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+      end
     end
   end
 end
-
     
-        i0, s0 = index, []
-    if has_terminal?('if', false, index)
-      r1 = instantiate_node(SyntaxNode,input, index...(index + 2))
-      @index += 2
-    else
-      terminal_parse_failure('if')
-      r1 = nil
-    end
-    s0 << r1
-    if r1
-      r2 = _nt__
-      s0 << r2
-      if r2
-        r3 = _nt_condition
-        s0 << r3
-        if r3
-          r4 = _nt__
-          s0 << r4
-          if r4
-            if has_terminal?('{', false, index)
-              r5 = instantiate_node(SyntaxNode,input, index...(index + 1))
-              @index += 1
-            else
-              terminal_parse_failure('{')
-              r5 = nil
-            end
-            s0 << r5
-            if r5
-              r6 = _nt__
-              s0 << r6
-              if r6
-                s7, i7 = [], index
-                loop do
-                  i8, s8 = index, []
-                  r9 = _nt_branch_or_plugin
-                  s8 << r9
-                  if r9
-                    r10 = _nt__
-                    s8 << r10
-                  end
-                  if s8.last
-                    r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
-                    r8.extend(If0)
-                  else
-                    @index = i8
-                    r8 = nil
-                  end
-                  if r8
-                    s7 << r8
-                  else
-                    break
-                  end
-                end
-                r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
-                s0 << r7
-                if r7
-                  if has_terminal?('}', false, index)
-                    r11 = instantiate_node(SyntaxNode,input, index...(index + 1))
-                    @index += 1
-                  else
-                    terminal_parse_failure('}')
-                    r11 = nil
-                  end
-                  s0 << r11
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-    if s0.last
-      r0 = instantiate_node(LogStash::Config::AST::If,input, i0...index, s0)
-      r0.extend(If1)
-    else
-      @index = i0
-      r0 = nil
-    end
+        def render(context)
+      includes_dir = File.join(context.registers[:site].source, '_includes')
     
-        files.each do |file|
-      download = file_fetch(file['url'], file['sha1'],target)
+      class VideoTag < Liquid::Tag
+    @video = nil
+    @poster = ''
+    @height = ''
+    @width = ''
