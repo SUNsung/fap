@@ -1,52 +1,118 @@
-        # Find a record for confirmation by unconfirmed email field
-        def find_by_unconfirmed_email_with_errors(attributes = {})
-          attributes = attributes.slice(*confirmation_keys).permit!.to_h if attributes.respond_to? :permit
-          unconfirmed_required_attributes = confirmation_keys.map { |k| k == :email ? :unconfirmed_email : k }
-          unconfirmed_attributes = attributes.symbolize_keys
-          unconfirmed_attributes[:unconfirmed_email] = unconfirmed_attributes.delete(:email)
-          find_or_initialize_with_errors(unconfirmed_required_attributes, unconfirmed_attributes, :not_found)
+
+        
+            def self.references(attributes)
+      attributes.map do |key, value|
+        if value.is_a?(Hash)
+          key
+        else
+          key = key.to_s
+          key.split('.'.freeze).first if key.include?('.'.freeze)
         end
-    
-        # The path used after confirmation.
-    def after_confirmation_path_for(resource_name, resource)
-      if signed_in?(resource_name)
-        signed_in_root_path(resource)
-      else
-        new_session_path(resource_name)
-      end
+      end.compact
     end
     
-      # Check if there is no signed in user before doing the sign out.
-  #
-  # If there is no signed in user, it will set the flash message and redirect
-  # to the after_sign_out path.
-  def verify_signed_out_user
-    if all_signed_out?
-      set_flash_message! :notice, :already_signed_out
+      test 'overriding has_many_attached methods works' do
+    # attach blobs before messing with getter, which breaks `#attach`
+    @user.highlights.attach create_blob(filename: 'funky.jpg'), create_blob(filename: 'wonky.jpg')
     
-    module Devise
-  module Controllers
-    # A module that may be optionally included in a controller in order
-    # to provide remember me behavior. Useful when signing in is done
-    # through a callback, like in OmniAuth.
-    module Rememberable
-      # Return default cookie values retrieved from session options.
-      def self.cookie_values
-        Rails.configuration.session_options.slice(:path, :domain, :secure)
+    class TestAutosaveAssociationValidationsOnAHasOneAssociation < ActiveRecord::TestCase
+  self.use_transactional_tests = false unless supports_savepoints?
+    
+    class ActionCable::Channel::BaseTest < ActionCable::TestCase
+  class ActionCable::Channel::Base
+    def kick
+      @last_action = [ :kick ]
+    end
+    
+      test 'processing invalid message' do
+    run_in_eventmachine do
+      open_connection
+    
+      test 'unsubscribe command without an identifier' do
+    run_in_eventmachine do
+      setup_connection
+    
+        options[:attribution] = <<-HTML
+      &copy; 2011&ndash;2018 Twitter, Inc.<br>
+      &copy; 2011&ndash;2018 The Bootstrap Authors<br>
+      Code licensed under the MIT License.<br>
+      Documentation licensed under the Creative Commons Attribution License v3.0.
+    HTML
+    
+        version '1.5' do
+      self.release = '1.5.3'
+      self.base_urls = [
+        'https://hexdocs.pm/elixir/#{release}/',
+        'https://hexdocs.pm/eex/#{release}/',
+        'https://hexdocs.pm/ex_unit/#{release}/',
+        'https://hexdocs.pm/iex/#{release}/',
+        'https://hexdocs.pm/logger/#{release}/',
+        'https://hexdocs.pm/mix/#{release}/',
+        'https://elixir-lang.org/getting-started/'
+      ]
+    end
+    
+        options[:attribution] = <<-HTML
+      &copy; 2005&ndash;2018 Haxe Foundation<br>
+      Licensed under a MIT license.
+    HTML
+    
+        html_filters.push 'php/internal_urls', 'php/entries', 'php/clean_html', 'title'
+    text_filters.push 'php/fix_urls'
+    
+        version 'C++' do
+      include MultipleBaseUrls
+      self.base_urls = ['https://www.tensorflow.org/api_docs/cc/', 'https://www.tensorflow.org/api_guides/cc/']
+    end
+    
+        delegate :empty?, :blank?, to: :pages
+    
+          def auth_user_unless_prompt_none!
+        prompt = params[:prompt]
+        if prompt && prompt.include?('none')
+          handle_prompt_none
+        elsif prompt && prompt.include?('login')
+          new_params = params.except('controller', 'action').permit!.to_h.merge(prompt: prompt.remove('login'))
+          reauthenticate(new_params)
+        else
+          authenticate_user!
+        end
       end
     
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
+    Liquid::Template.register_tag('img', Jekyll::ImageTag)
+
     
-          protected
+    end
     
-        private
+      # Extracts raw content DIV from template, used for page description as {{ content }}
+  # contains complete sub-template code on main page level
+  def raw_content(input)
+    /<div class='entry-content'>(?<content>[\s\S]*?)<\/div>\s*<(footer|\/article)>/ =~ input
+    return (content.nil?) ? input : content
+  end
     
-          def installed_gem_version(gem_name)
-        Gem.loaded_specs[gem_name].version
+          Dir.chdir(file_path) do
+        contents = file.read
+        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
+          contents = $1.lstrip
+        end
+        contents = pre_filter(contents)
+        if @raw
+          contents
+        else
+          partial = Liquid::Template.parse(contents)
+          context.stack do
+            partial.render(context)
+          end
+        end
       end
+    end
+  end
+end
     
-          def assert_valid_stage_names(names)
-        invalid = names.find { |n| RESERVED_NAMES.include?(n) }
-        return if invalid.nil?
+        def initialize(tag_name, markup, tokens)
+      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
+      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
+      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
+      super
+    end
