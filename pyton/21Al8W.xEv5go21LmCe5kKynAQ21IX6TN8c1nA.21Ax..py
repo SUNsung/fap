@@ -1,176 +1,162 @@
 
         
-        from itsdangerous import BadSignature, URLSafeTimedSerializer
-from werkzeug.datastructures import CallbackDict
+        flags.DEFINE_string('spec_file', 'parser_spec.textproto',
+                    'Filename to save the spec to.')
+    
+    cc_library(
+    name = 'disjoint_set_forest',
+    hdrs = ['disjoint_set_forest.h'],
+    deps = [
+        '@org_tensorflow//tensorflow/core:lib',
+    ],
+)
+    
+    py_test(
+    name = 'bulk_component_test',
+    srcs = [
+        'bulk_component_test.py',
+    ],
+    deps = [
+        ':bulk_component',
+        ':components',
+        ':dragnn_ops',
+        ':network_units',
+        '//dragnn/protos:spec_pb2_py',
+        '//syntaxnet:load_parser_ops_py',
+        '//syntaxnet:sentence_pb2_py',
+        '@org_tensorflow//tensorflow:tensorflow_py',
+        '@org_tensorflow//tensorflow/core:protos_all_py',
+    ],
+)
+    
+            # Only check shape; values are random due to initialization.
+        self.assertAllEqual(root_weights.shape.as_list(), [1, _TOKEN_DIM])
+        self.assertAllEqual(root_bias.shape.as_list(), [1, 1])
+    
+      sources_shape = tf.shape(sources)
+  targets_shape = tf.shape(targets)
+  batch_size = sources_shape[0]
+  num_tokens = sources_shape[1]
+  with tf.control_dependencies([tf.assert_equal(batch_size, targets_shape[0]),
+                                tf.assert_equal(num_tokens, targets_shape[1])]):
+    # For each token, we must compute a vector-3tensor-vector product.  There is
+    # no op for this, but we can use reshape() and matmul() to compute it.
+    
+      # Write the new spec to a temp file and export it.  The basename will be
+  # exported in the SavedModel, so use mkdtemp() with a fixed basename.
+  master_spec_path = os.path.join(tempfile.mkdtemp(), 'master_spec')
+  with tf.gfile.FastGFile(master_spec_path, 'w') as fout:
+    fout.write(text_format.MessageToString(master_spec))
+  with external_graph.as_default():
+    asset_file_tensor = tf.constant(
+        master_spec_path, name='master_spec_filepath')
+    tf.add_to_collection(tf.GraphKeys.ASSET_FILEPATHS, asset_file_tensor)
+    
+        non_averaged_hook_name = '{}/fixed_embedding_matrix_0/trimmed'.format(
+        component_name)
+    averaged_hook_name = '{}/ExponentialMovingAverage'.format(
+        non_averaged_hook_name)
+    cell_subgraph_hook_name = '{}/EXPORT/CellSubgraphSpec'.format(
+        component_name)
+    return averaged_hook_name, non_averaged_hook_name, cell_subgraph_hook_name
     
     
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
+def explain_ignored_app_run():
+    if os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
+        warn(Warning('Silently ignoring app.run() because the '
+                     'application is run from the flask command line '
+                     'executable.  Consider putting app.run() behind an '
+                     'if __name__ == '__main__' guard to silence this '
+                     'warning.'), stacklevel=3)
 
     
-    _gc_lock = threading.Lock()
+        #: The canonical way to decorate class-based views is to decorate the
+    #: return value of as_view().  However since this moves parts of the
+    #: logic from the class declaration to the place where it's hooked
+    #: into the routing system.
+    #:
+    #: You can place one or more decorators in this list and whenever the
+    #: view function is created the result is automatically decorated.
+    #:
+    #: .. versionadded:: 0.8
+    decorators = ()
     
-        flask.got_request_exception.connect(record, app)
-    try:
-        assert app.test_client().get('/').status_code == 500
-        assert len(recorded) == 1
-        assert isinstance(recorded[0], ZeroDivisionError)
-    finally:
-        flask.got_request_exception.disconnect(record, app)
     
-      def __init__(self):
-    self.spec = spec_pb2.MasterSpec()
-    self.hyperparams = spec_pb2.GridPoint()
-    self.lookup_component = {
-        'previous': MockComponent(self, spec_pb2.ComponentSpec())
-    }
+def build():
+    cmd = [sys.executable, 'setup.py', 'sdist', 'bdist_wheel']
+    Popen(cmd).wait()
     
-      # All arguments must share the same type.
-  dtype = arcs.dtype.base_dtype
-  check.Same([dtype, roots.dtype.base_dtype], 'dtype mismatch')
+            @app.route('/')
+        def index():
+            reqctx = flask._request_ctx_stack.top.copy()
     
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+        By default this will get the strings from the blns.txt file
     
-      # Then, copy all the asset files.
-  for component_spec in master_spec.component:
-    for resource_spec in component_spec.resource:
-      tf.logging.info('Copying assets for resource %s/%s.' %
-                      (component_spec.name, resource_spec.name))
-      for part in resource_spec.part:
-        original_file = shortened_to_original[part.file_pattern]
-        new_file = os.path.join(asset_dir, part.file_pattern)
-        tf.logging.info('Asset %s was renamed to %s.' % (original_file,
-                                                         new_file))
-        if tf.gfile.Exists(new_file):
-          tf.logging.info('%s already exists, skipping copy.' % (new_file))
-        else:
-          new_dir = os.path.dirname(new_file)
-          tf.gfile.MakeDirs(new_dir)
-          tf.logging.info('Copying %s to %s' % (original_file, new_dir))
-          tf.gfile.Copy(original_file, new_file, overwrite=True)
-  tf.logging.info('Asset export complete.')
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
     
-      def testSplitTagger(self):
-    self.RunFullTrainingAndInference('split-tagger',
-                                     'split_tagger_master_spec.textproto')
-    
-        default_settings = {
-        'LOG_LEVEL': 'INFO',
-        'LOGSTATS_INTERVAL': 1,
-        'CLOSESPIDER_TIMEOUT': 10,
-    }
-    
-        def from_spider(self, spider, results):
-        requests = []
-        for method in self.tested_methods_from_spidercls(type(spider)):
-            bound_method = spider.__getattribute__(method)
-            requests.append(self.from_method(bound_method, results))
-    
-        def __init__(self, *args, **kwargs):
-        super(ReturnsContract, self).__init__(*args, **kwargs)
-    
-        title = match1(html, r'&title=([^&]+)')
-    
-    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
-    #sample
-    #url_sample:http://www.kugou.com/yy/album/single/536957.html
-    #hash ->key  md5(hash+kgcloud')->key  decompile swf
-    #cmd 4 for mp3 cmd 3 for m4a
-    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
-    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
-    j=loads(html)
-    url=j['url']
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge=merge)
-    
-    def mixcloud_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url, faker=True)
-    title = r1(r'<meta property='og:title' content='([^']*)'', html)
-    preview_url = r1(r'm-preview=\'([^\']+)\'', html)
-    preview = r1(r'previews(.*)\.mp3$', preview_url)
-    
-    from html.parser import HTMLParser
-    
-            # construct available streams
-        if orig_img: self.streams['original'] = {'url': orig_img}
-        if twit_img: self.streams['small'] = {'url': twit_img}
-    
-    site_info = 'Showroom'
-download = showroom_download
-download_playlist = playlist_not_supported('showroom')
-
-    
-    The get_colordb() function will try to examine the file to figure out what the
-format of the file is.  If it can't figure out the file format, or it has
-trouble reading the file, None is returned.  You can pass get_colordb() an
-optional filetype argument.
-    
-    # String regex that string annotations for ClassVar or InitVar must match.
-# Allows 'identifier.identifier[' or 'identifier['.
-# https://bugs.python.org/issue33453 for details.
-_MODULE_IDENTIFIER_RE = re.compile(r'^(?:\s*(\w+)\s*\.)?\s*(\w+)')
-    
-        def shutdown(self, wait=True):
-        with self._shutdown_lock:
-            self._shutdown = True
-            self._work_queue.put(None)
-        if wait:
-            for t in self._threads:
-                t.join()
-    shutdown.__doc__ = _base.Executor.shutdown.__doc__
-
-    
-    class ThreadPoolExecutor(_base.Executor):
-    def __init__(self, max_workers):
-        '''Initializes a new ThreadPoolExecutor instance.
-    
-    if __name__ == '__main__':
-    main()
-
-    
-            f = Future()
-        f.add_done_callback(fn)
-        f.set_result(5)
-        self.assertEqual(5, callback_result[0])
-    
-      parsed_args, nosetests_args = parser.parse_known_args()
-    
-        def __init__(self, name):
-        self.name = name
-    
-        def run(self, msg):
-        print('{} got {}'.format(self.name, msg))
-    
-        def __new__(cls, name, bases, attrs):
-        new_cls = type.__new__(cls, name, bases, attrs)
+            Python does not have any size restrictions, but the compilation of
+        such large source files seems to be pretty memory hungry. The memory
+        consumption of the python process grew to >1.5GB when importing a
+        15MB lexer, eating all my swap space and I was to impacient to see,
+        if it could finish at all. With packed initializers that are unpacked
+        at import time of the lexer module, everything works like a charm.
+        
         '''
-            Here the name of the class is used as key but it could be any class
-            parameter.
-        '''
-        cls.REGISTRY[new_cls.__name__] = new_cls
-        return new_cls
+        
+        ret = []
+        for i in range(len(string) / 2):
+            (n, v) = ord(string[i*2]), ord(string[i*2+1])
+    
+            if i < 0:
+            i += 1 # e.g., translate LA(-1) to use offset i=0; then data[p+0-1]
+    
+    PROJ_METADATA = '%s.json' % PROJ_NAME
+    
+            if args:
+            if 'gui' in conf and conf['gui']:
+                # Enter GUI mode.
+                from .gui import gui_main
+                gui_main(*args, **conf)
+            else:
+                # Enter console mode.
+                from .console import console_main
+                console_main(*args, **conf)
+    
+            link_list = []
+    
+        stream_types = [
+        {'id': 'video'},
+        {'id': 'audio'},
+        {'id': 'slides'}
+    ]
+    
+    def showroom_download_by_room_id(room_id, output_dir = '.', merge = False, info_only = False, **kwargs):
+    '''Source: Android mobile'''
+    while True:
+        timestamp = str(int(time() * 1000))
+        api_endpoint = 'https://www.showroom-live.com/api/live/streaming_url?room_id={room_id}&_={timestamp}'.format(room_id = room_id, timestamp = timestamp)
+        html = get_content(api_endpoint)
+        html = json.loads(html)
+        #{'streaming_url_list': [{'url': 'rtmp://52.197.69.198:1935/liveedge', 'id': 1, 'label': 'original spec(low latency)', 'is_default': True, 'type': 'rtmp', 'stream_name': '7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed'}, {'url': 'http://52.197.69.198:1935/liveedge/7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed/playlist.m3u8', 'is_default': True, 'id': 2, 'type': 'hls', 'label': 'original spec'}, {'url': 'rtmp://52.197.69.198:1935/liveedge', 'id': 3, 'label': 'low spec(low latency)', 'is_default': False, 'type': 'rtmp', 'stream_name': '7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed_low'}, {'url': 'http://52.197.69.198:1935/liveedge/7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed_low/playlist.m3u8', 'is_default': False, 'id': 4, 'type': 'hls', 'label': 'low spec'}]}
+        if len(html) >= 1:
+            break
+        log.w('The live show is currently offline.')
+        sleep(1)
+    
+    import os
+import warnings
     
     
-class CatalogClass(object):
+def setup(hass, config):
+    '''Listen for browse_url events.'''
+    import webbrowser
     
-    from __future__ import print_function
-    
-        def prepareReporting(self):
-        rvalue = self._db.insert()
-        if rvalue == -1:
-            self._tc.setProblem(1)
-            self._reporter.prepare()
+    VALID_UNITS = [
+    LENGTH_KILOMETERS,
+    LENGTH_MILES,
+    LENGTH_FEET,
+    LENGTH_METERS,
+]
