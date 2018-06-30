@@ -1,89 +1,142 @@
 
         
-        module AccountFinderConcern
-  extend ActiveSupport::Concern
+        # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
+
     
-    class NotificationMailerPreview < ActionMailer::Preview
-  # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/mention
-  def mention
-    m = Mention.last
-    NotificationMailer.mention(m.account, Notification.find_by(activity: m))
-  end
+    # You can also do other things. Examples:
+# https://github.com/tmm1/stackprof/blob/master/bin/stackprof
+report = StackProf::Report.new(Marshal.load(IO.binread(PROF_OUTPUT_FILE)))
+report.print_text(
+  options[:sort],
+  options[:limit],
+  options[:select_files],
+  options[:reject_files],
+  options[:select_names],
+  options[:reject_names]
+)
     
-      # Clean the keg of formula @f
-  def clean
-    ObserverPathnameExtension.reset_counts!
+    class EmbeddedPatch
+  attr_writer :owner
+  attr_reader :strip
     
-      def create_issue(repo, title, body)
-    url = 'https://api.github.com/repos/#{repo}/issues'
-    data = { 'title' => title, 'body' => body }
-    scopes = GitHub::CREATE_ISSUE_FORK_OR_PR_SCOPES
-    GitHub.open_api(url, data: data, scopes: scopes)['html_url']
-  end
-    
-          super
+        def default_formula(_val = nil)
+      odisabled 'Requirement.default_formula'
     end
     
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
-        end
-      end
+        # Returns the CSS for the media query.
+    #
+    # @return [String]
+    def to_css
+      css = ''
+      css << resolved_modifier
+      css << ' ' unless resolved_modifier.empty?
+      css << resolved_type
+      css << ' and ' unless resolved_type.empty? || expressions.empty?
+      css << expressions.map do |e|
+        # It's possible for there to be script nodes in Expressions even when
+        # we're converting to CSS in the case where we parsed the document as
+        # CSS originally (as in css_test.rb).
+        e.map {|c| c.is_a?(Sass::Script::Tree::Node) ? c.to_sass : c.to_s}.join
+      end.join(' and ')
+      css
+    end
+    
+        # Returns a string literal with the given contents.
+    #
+    # @param string [String]
+    # @return string [Sass::Script::Tree::Literal]
+    def string_literal(string)
+      Literal.new(Sass::Script::Value::String.new(string, :string))
     end
   end
 end
 
     
-          def initialize(argv)
-        super
-        config.silent = false
-      end
-    
-      class Blockquote < Liquid::Block
-    FullCiteWithTitle = /(\S.*)\s+(https?:\/\/)(\S+)\s+(.+)/i
-    FullCite = /(\S.*)\s+(https?:\/\/)(\S+)/i
-    AuthorTitle = /([^,]+),([^,]+)/
-    Author =  /(.+)/
-    
-          locations = Array.new
-      while (data.code.to_i == 301 || data.code.to_i == 302)
-        data = handle_gist_redirecting(data)
-        break if locations.include? data.header['Location']
-        locations << data.header['Location']
-      end
-    
-          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
-        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
-        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
-          @img['title']  = title
-          @img['alt']    = alt
-        else
-          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        i0, s0 = index, []
+    if has_terminal?('if', false, index)
+      r1 = instantiate_node(SyntaxNode,input, index...(index + 2))
+      @index += 2
+    else
+      terminal_parse_failure('if')
+      r1 = nil
+    end
+    s0 << r1
+    if r1
+      r2 = _nt__
+      s0 << r2
+      if r2
+        r3 = _nt_condition
+        s0 << r3
+        if r3
+          r4 = _nt__
+          s0 << r4
+          if r4
+            if has_terminal?('{', false, index)
+              r5 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              @index += 1
+            else
+              terminal_parse_failure('{')
+              r5 = nil
+            end
+            s0 << r5
+            if r5
+              r6 = _nt__
+              s0 << r6
+              if r6
+                s7, i7 = [], index
+                loop do
+                  i8, s8 = index, []
+                  r9 = _nt_branch_or_plugin
+                  s8 << r9
+                  if r9
+                    r10 = _nt__
+                    s8 << r10
+                  end
+                  if s8.last
+                    r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
+                    r8.extend(If0)
+                  else
+                    @index = i8
+                    r8 = nil
+                  end
+                  if r8
+                    s7 << r8
+                  else
+                    break
+                  end
+                end
+                r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
+                s0 << r7
+                if r7
+                  if has_terminal?('}', false, index)
+                    r11 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                    @index += 1
+                  else
+                    terminal_parse_failure('}')
+                    r11 = nil
+                  end
+                  s0 << r11
+                end
+              end
+            end
+          end
         end
-        @img['class'].gsub!(/'/, '') if @img['class']
       end
-      super
+    end
+    if s0.last
+      r0 = instantiate_node(LogStash::Config::AST::If,input, i0...index, s0)
+      r0.extend(If1)
+    else
+      @index = i0
+      r0 = nil
     end
     
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
-    end
+        files.each do |file|
+      download = file_fetch(file['url'], file['sha1'],target)
