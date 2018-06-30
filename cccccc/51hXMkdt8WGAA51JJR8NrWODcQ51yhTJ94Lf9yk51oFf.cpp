@@ -1,125 +1,201 @@
 
         
-        namespace leveldb {
-    }
-    
-    
-    {}  // namespace leveldb
-    
-    namespace leveldb {
-    }
-    
-      // If a seek to internal key 'k' in specified file finds an entry,
-  // call (*handle_result)(arg, found_key, found_value).
-  Status Get(const ReadOptions& options,
-             uint64_t file_number,
-             uint64_t file_size,
-             const Slice& k,
-             void* arg,
-             void (*handle_result)(void*, const Slice&, const Slice&));
-    
-    void VersionEdit::Clear() {
-  comparator_.clear();
-  log_number_ = 0;
-  prev_log_number_ = 0;
-  last_sequence_ = 0;
-  next_file_number_ = 0;
-  has_comparator_ = false;
-  has_log_number_ = false;
-  has_prev_log_number_ = false;
-  has_next_file_number_ = false;
-  has_last_sequence_ = false;
-  deleted_files_.clear();
-  new_files_.clear();
+        
+    {    return S_OK;
 }
     
     
-    {}  // namespace leveldb
+    {}
     
-            // Create values for key-value pair
-        const int k = (order == SEQUENTIAL) ? i + j :
-                      (rand_.Next() % num_entries);
-        char key[100];
-        snprintf(key, sizeof(key), '%016d', k);
+      caffe::Datum datum;
+  datum.set_channels(2);  // one channel for each image in the pair
+  datum.set_height(rows);
+  datum.set_width(cols);
+  LOG(INFO) << 'A total of ' << num_items << ' items.';
+  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
+  for (int itemid = 0; itemid < num_items; ++itemid) {
+    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
+    int j = caffe::caffe_rng_rand() % num_items;
+    read_image(&image_file, &label_file, i, rows, cols,
+        pixels, &label_i);
+    read_image(&image_file, &label_file, j, rows, cols,
+        pixels + (rows * cols), &label_j);
+    datum.set_data(pixels, 2*rows*cols);
+    if (label_i  == label_j) {
+      datum.set_label(1);
+    } else {
+      datum.set_label(0);
+    }
+    datum.SerializeToString(&value);
+    std::string key_str = caffe::format_int(itemid, 8);
+    db->Put(leveldb::WriteOptions(), key_str, value);
+  }
     
-    #include 'power_iphone.h'
-    
-    	static StreamPeerSSL *create();
+    #include <vector>
     
     
-    {	if (ret < 0 && ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
-		_print_error(ret);
-		disconnect_from_stream();
-		return;
-	}
-}
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
+#endif
     
-    public:
-	struct PropertySetGet {
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLCNLayer : public LRNLayer<Dtype> {
+ public:
+  explicit CuDNNLCNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
+        tempData1(NULL), tempData2(NULL) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLCNLayer();
     }
     
-    protected:
-	void _notification(int p_what);
-	static void _bind_methods();
+    /**
+ * @brief Convolve the input with a bank of learned filters, and (optionally)
+ *        add biases, treating filters and convolution parameters in the
+ *        opposite sense as ConvolutionLayer.
+ *
+ *   ConvolutionLayer computes each output value by dotting an input window with
+ *   a filter; DeconvolutionLayer multiplies each input value by a filter
+ *   elementwise, and sums over the resulting output windows. In other words,
+ *   DeconvolutionLayer is ConvolutionLayer with the forward and backward passes
+ *   reversed. DeconvolutionLayer reuses ConvolutionParameter for its
+ *   parameters, but they take the opposite sense as in ConvolutionLayer (so
+ *   padding is removed from the output rather than added to the input, and
+ *   stride results in upsampling rather than downsampling).
+ */
+template <typename Dtype>
+class DeconvolutionLayer : public BaseConvolutionLayer<Dtype> {
+ public:
+  explicit DeconvolutionLayer(const LayerParameter& param)
+      : BaseConvolutionLayer<Dtype>(param) {}
+    }
     
-       - Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
+    void HHVM_FUNCTION(xhprof_sample_enable) {
+  if (RuntimeOption::EnableHotProfiler) {
+    s_profiler_factory->start(ProfilerKind::Sample, 0);
+  } else {
+    raise_warning('The runtime option Stats.EnableHotProfiler must be on to '
+                  'use xhprof.');
+  }
+}
     
-    bool js_cocos2dx_studio_VisibleFrame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_VisibleFrame_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_VisibleFrame(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_VisibleFrame_isVisible(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_VisibleFrame_setVisible(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_VisibleFrame_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_VisibleFrame_VisibleFrame(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    {  auto const reg = makeReg();
+  constToReg.emplace(vconst, reg);
+  regToConst.emplace(reg, vconst);
+  return reg;
+}
+    
+    
+    {  numa_node_mask = folly::nextPowTwo(numa_num_nodes) - 1;
+}
+    
+    
+    {
+    {
+    {}}}
+    
+    
+    {
+    {  ~CodeCursor() { undo(); }
+};
+}
+    
+      /**
+   * When running a CLI server, the requests executed on behalf of local
+   * processes will delegate to a light process pool run by the client.
+   */
+  static int createDelegate();
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    
     
     #if COCOS2D_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_physics_PhysicsShapePolygon_getPointsCount'.',&tolua_err);
+    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_physics_PhysicsBody_setCollisionBitmask'.',&tolua_err);
 #endif
     
     
     
-    	b2Body* m_groundBody;
-	b2AABB m_worldAABB;
-	ContactPoint m_points[k_maxContactPoints];
-	int32 m_pointCount;
-	DestructionListener m_destructionListener;
-	GLESDebugDraw m_debugDraw;
-	int32 m_textLine;
-	b2World* m_world;
-	b2Body* m_bomb;
-	b2MouseJoint* m_mouseJoint;
-	b2Vec2 m_bombSpawnPoint;
-	bool m_bombSpawning;
-	b2Vec2 m_mouseWorld;
-	int32 m_stepCount;
+        glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
     
-    		{
-			b2PolygonShape shape;
-			shape.SetAsBox(0.5f, 0.125f);
-    }
+    #ifndef RENDER_H
+#define RENDER_H
     
-    		extern int32 b2_gjkCalls, b2_gjkIters, b2_gjkMaxIters;
-		extern int32 b2_toiCalls, b2_toiIters, b2_toiMaxIters;
-		extern int32 b2_toiRootIters, b2_toiMaxRootIters;
+      // Methods related to positions, margin, padding and border
+  YGFloatOptional getLeadingPosition(const YGFlexDirection& axis,
+      const float& axisSize) const;
+  bool isLeadingPositionDefined(const YGFlexDirection& axis) const;
+  bool isTrailingPosDefined(const YGFlexDirection& axis) const;
+  YGFloatOptional getTrailingPosition(
+      const YGFlexDirection& axis,
+      const float& axisSize) const;
+  YGFloatOptional getLeadingMargin(
+      const YGFlexDirection& axis,
+      const float& widthSize) const;
+  YGFloatOptional getTrailingMargin(
+      const YGFlexDirection& axis,
+      const float& widthSize) const;
+  float getLeadingBorder(const YGFlexDirection& flexDirection) const;
+  float getTrailingBorder(const YGFlexDirection& flexDirection) const;
+  YGFloatOptional getLeadingPadding(
+      const YGFlexDirection& axis,
+      const float& widthSize) const;
+  YGFloatOptional getTrailingPadding(
+      const YGFlexDirection& axis,
+      const float& widthSize) const;
+  YGFloatOptional getLeadingPaddingAndBorder(
+      const YGFlexDirection& axis,
+      const float& widthSize) const;
+  YGFloatOptional getTrailingPaddingAndBorder(
+      const YGFlexDirection& axis,
+      const float& widthSize) const;
+  YGFloatOptional getMarginForAxis(
+      const YGFlexDirection& axis,
+      const float& widthSize) const;
+  // Setters
     
-    #endif
+    WIN_EXPORT void YGNodeCalculateLayout(const YGNodeRef node,
+                                      const float availableWidth,
+                                      const float availableHeight,
+                                      const YGDirection ownerDirection);
+    
+    
+    {  ASSERT_TRUE(YGNodeLayoutGetHadOverflow(root));
+}
 
     
+    void Config::setPointScaleFactor(float pixelsInPoint)
+{
+    YGConfigSetPointScaleFactor(m_config, pixelsInPoint);
+}
     
-    {};
-
+        Config(Config const &) = delete;
     
-    DEFINE_BOXED_PRIMITIVE(boolean, Boolean)
-DEFINE_BOXED_PRIMITIVE(byte, Byte)
-DEFINE_BOXED_PRIMITIVE(char, Character)
-DEFINE_BOXED_PRIMITIVE(short, Short)
-DEFINE_BOXED_PRIMITIVE(int, Integer)
-DEFINE_BOXED_PRIMITIVE(long, Long)
-DEFINE_BOXED_PRIMITIVE(float, Float)
-DEFINE_BOXED_PRIMITIVE(double, Double)
+    void Node::setFlexGrow(double flexGrow)
+{
+    YGNodeStyleSetFlexGrow(m_node, flexGrow);
+}
     
-    #include 'CoreClasses.h'
-#include 'References-forward.h'
+        method(getAspectRatio);
+    
+      // Creates a strong reference from a raw pointer, assuming that is already
+  // referenced from some other RefPtr. This should be used sparingly.
+  static inline RefPtr<T> assumeAlreadyReffed(T* ptr) {
+    return RefPtr<T>(ptr, ConstructionMode::External);
+  }
+    
+      T* release() {
+    T* obj = get();
+    pthread_setspecific(m_key, NULL);
+    return obj;
+  }
