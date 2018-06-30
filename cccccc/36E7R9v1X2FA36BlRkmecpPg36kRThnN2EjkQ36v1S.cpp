@@ -1,142 +1,110 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+        CV_EXPORTS void  EstimateUncertainties(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
+                           const IntrinsicParams& params, InputArray omc, InputArray Tc,
+                           IntrinsicParams& errors, Vec2d& std_err, double thresh_cond, int check_cond, double& rms);
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    int main(int argc, char* argv[]) {
-  string wav = '';
-  string graph = '';
-  string labels = '';
-  string input_name = 'wav_data';
-  string output_name = 'labels_softmax';
-  int32 how_many_labels = 3;
-  std::vector<Flag> flag_list = {
-      Flag('wav', &wav, 'audio file to be identified'),
-      Flag('graph', &graph, 'model to be executed'),
-      Flag('labels', &labels, 'path to file containing labels'),
-      Flag('input_name', &input_name, 'name of input node in model'),
-      Flag('output_name', &output_name, 'name of output node in model'),
-      Flag('how_many_labels', &how_many_labels, 'number of results to show'),
-  };
-  string usage = tensorflow::Flags::Usage(argv[0], flag_list);
-  const bool parse_result = tensorflow::Flags::Parse(&argc, argv, flag_list);
-  if (!parse_result) {
-    LOG(ERROR) << usage;
-    return -1;
-  }
+    class BareModelEstimator : public CvModelEstimator2
+{
+public:
+    BareModelEstimator(int modelPoints, CvSize modelSize, int maxBasicSolutions);
     }
     
-    // A simple parser for the json db file. It requires the db file to have the
-// exact form of [{'location': { 'latitude': 123, 'longitude': 456}, 'name':
-// 'the name can be empty' }, { ... } ... The spaces will be stripped.
-class Parser {
- public:
-  explicit Parser(const std::string& db) : db_(db) {
-    // Remove all spaces.
-    db_.erase(
-        std::remove_if(db_.begin(), db_.end(), isspace),
-        db_.end());
-    if (!Match('[')) {
-      SetFailedAndReturnFalse();
-    }
-  }
-    }
+        // Extension: 1.5
+    extern void (CODEGEN_FUNCPTR *GenQueries)(GLsizei n, GLuint *ids);
+    extern void (CODEGEN_FUNCPTR *DeleteQueries)(GLsizei n, const GLuint *ids);
+    extern GLboolean (CODEGEN_FUNCPTR *IsQuery)(GLuint id);
+    extern void (CODEGEN_FUNCPTR *BeginQuery)(GLenum target, GLuint id);
+    extern void (CODEGEN_FUNCPTR *EndQuery)(GLenum target);
+    extern void (CODEGEN_FUNCPTR *GetQueryiv)(GLenum target, GLenum pname, GLint *params);
+    extern void (CODEGEN_FUNCPTR *GetQueryObjectiv)(GLuint id, GLenum pname, GLint *params);
+    extern void (CODEGEN_FUNCPTR *GetQueryObjectuiv)(GLuint id, GLenum pname, GLuint *params);
+    extern void (CODEGEN_FUNCPTR *BindBuffer)(GLenum target, GLuint buffer);
+    extern void (CODEGEN_FUNCPTR *DeleteBuffers)(GLsizei n, const GLuint *buffers);
+    extern void (CODEGEN_FUNCPTR *GenBuffers)(GLsizei n, GLuint *buffers);
+    extern GLboolean (CODEGEN_FUNCPTR *IsBuffer)(GLuint buffer);
+    extern void (CODEGEN_FUNCPTR *BufferData)(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage);
+    extern void (CODEGEN_FUNCPTR *BufferSubData)(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid *data);
+    extern void (CODEGEN_FUNCPTR *GetBufferSubData)(GLenum target, GLintptr offset, GLsizeiptr size, GLvoid *data);
+    extern GLvoid* (CODEGEN_FUNCPTR *MapBuffer)(GLenum target, GLenum access);
+    extern GLboolean (CODEGEN_FUNCPTR *UnmapBuffer)(GLenum target);
+    extern void (CODEGEN_FUNCPTR *GetBufferParameteriv)(GLenum target, GLenum pname, GLint *params);
+    extern void (CODEGEN_FUNCPTR *GetBufferPointerv)(GLenum target, GLenum pname, GLvoid* *params);
     
-    #include 'src/compiler/config.h'
-#include 'src/compiler/generator_helpers.h'
-    
-    #include 'src/compiler/config.h'
-#include 'src/compiler/schema_interface.h'
-    
-    #include <gtest/gtest.h>
-    
-    namespace grpc {
-namespace testing {
-    }
-    }
-    
-    #include 'ifaddrs_android.h'
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/utsname.h>
-#include <sys/ioctl.h>
-#include <netinet/in.h>
-#include <net/if.h>
-#include <unistd.h>
-#include <errno.h>
-#include <linux/netlink.h>
-#include <linux/rtnetlink.h>
-    
-    	ClassDB::bind_method(D_METHOD('poll'), &StreamPeerSSL::poll);
-	ClassDB::bind_method(D_METHOD('accept_stream', 'stream'), &StreamPeerSSL::accept_stream);
-	ClassDB::bind_method(D_METHOD('connect_to_stream', 'stream', 'validate_certs', 'for_hostname'), &StreamPeerSSL::connect_to_stream, DEFVAL(false), DEFVAL(String()));
-	ClassDB::bind_method(D_METHOD('get_status'), &StreamPeerSSL::get_status);
-	ClassDB::bind_method(D_METHOD('disconnect_from_stream'), &StreamPeerSSL::disconnect_from_stream);
-    
-    	Error err;
-    
-    	Transform m_worldTransform;
-	Transform local_xform;
-	bool engine_traction;
-	bool steers;
-    
-    
-    
-    #include 'db/version_edit.h'
-#include 'util/testharness.h'
-    
-    
-    {}  // namespace leveldb
-    
-    
-    {}  // namespace leveldb
+    #endif //HAVE_LAPACK
+#endif //OPENCV_CORE_HAL_INTERNAL_HPP
 
     
-    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
-  size_t usize = user_key.size();
-  size_t needed = usize + 13;  // A conservative estimate
-  char* dst;
-  if (needed <= sizeof(space_)) {
-    dst = space_;
-  } else {
-    dst = new char[needed];
+    // Sets flags necessary for recognition in the training mode.
+// Opens and returns the pointer to the output file.
+FILE *Tesseract::init_recog_training(const STRING &fname) {
+  if (tessedit_ambigs_training) {
+    tessedit_tess_adaption_mode.set_value(0);    // turn off adaption
+    tessedit_enable_doc_dict.set_value(0);       // turn off document dictionary
+    // Explore all segmentations.
+    getDict().stopper_no_acceptable_choices.set_value(1);
   }
-  start_ = dst;
-  dst = EncodeVarint32(dst, usize + 8);
-  kstart_ = dst;
-  memcpy(dst, user_key.data(), usize);
-  dst += usize;
-  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
-  dst += 8;
-  end_ = dst;
+    }
+    
+    // This file contains types that are used both by the API and internally
+// to Tesseract. In order to decouple the API from Tesseract and prevent cyclic
+// dependencies, THIS FILE SHOULD NOT DEPEND ON ANY OTHER PART OF TESSERACT.
+// Restated: It is OK for low-level Tesseract files to include publictypes.h,
+// but not for the low-level tesseract code to include top-level API code.
+// This file should not use other Tesseract types, as that would drag
+// their includes into the API-level.
+// API-level code should include apitypes.h in preference to this file.
+    
+      if (argv0 != nullptr && *argv0 != '\0') {
+    /* Use tessdata prefix from the command line. */
+    datadir = argv0;
+  } else if (tessdata_prefix) {
+    /* Use tessdata prefix from the environment. */
+    datadir = tessdata_prefix;
+#if defined(_WIN32)
+  } else if (datadir == nullptr || _access(datadir.string(), 0) != 0) {
+    /* Look for tessdata in directory of executable. */
+    char drive[_MAX_DRIVE];
+    char dir[_MAX_DIR];
+    char path[_MAX_PATH];
+    DWORD length = GetModuleFileName(nullptr, path, sizeof(path));
+    if (length > 0 && length < sizeof(path)) {
+      errno_t result = _splitpath_s(path, drive, sizeof(drive),
+                                    dir, sizeof(dir), nullptr, 0, nullptr, 0);
+      if (result == ERANGE) {
+        tprintf('Error: Path too long: %s\n', path);
+      }
+    }
+    }
+    
+    #ifndef SWIG
+template <class T1, class T2, class R, class P1, class P2, class A1, class A2, class A3, class A4, class A5>
+inline typename _TessMemberResultCallback_2_5<true,R,T1,P1,P2,A1,A2,A3,A4,A5>::base*
+NewTessCallback( T1* obj, R (T2::*member)(P1,P2,A1,A2,A3,A4,A5) , typename Identity<P1>::type p1, typename Identity<P2>::type p2) {
+  return new _TessMemberResultCallback_2_5<true,R,T1,P1,P2,A1,A2,A3,A4,A5>(obj, member, p1, p2);
 }
+#endif
     
-    struct Options;
+    namespace mars {
+namespace baseevent {
+    }
+    }
     
-      virtual bool getChangeOptionForReserved() const CXX11_OVERRIDE;
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
     
-      virtual ~ActivePeerConnectionCommand();
+    #ifdef ANDROID
+#include 'comm/android/callstack.h'
+#endif
     
-      /**
-   * The internal announce URL pointer points to next URL.
-   * If the current URL is the last element of its group, then the first
-   * element of the next group is pointed.
-   */
-  void announceFailure();
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
     
-    #include <string>
-#include <deque>
     
-      // Don't allow copying
-  AuthConfig(const AuthConfig&);
-  AuthConfig& operator=(const AuthConfig&);
+    {  private:
+    virtual void __OnAttach(const char* _key) {}
+    virtual void __OnDetach(const char* _key) {}
+};
