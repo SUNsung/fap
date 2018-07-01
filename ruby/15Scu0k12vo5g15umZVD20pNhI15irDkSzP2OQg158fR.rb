@@ -1,17 +1,22 @@
 
         
-        puts 'Validating #{links.size} links...'
+          def as_json(options={})
+    {
+      poll_id:             id,
+      post_id:             status_message.id,
+      question:            question,
+      poll_answers:        poll_answers,
+      participation_count: participation_count
+    }
+  end
     
-      def present(payload)
-    if payload.is_a?(Hash)
-      payload = ActiveSupport::HashWithIndifferentAccess.new(payload)
-      MAIN_KEYS.each do |key|
-        return { :title => payload[key].to_s, :entries => present_hash(payload, key) } if payload.has_key?(key)
+          def request_authorization_consent_form
+        add_claims_to_scopes
+        endpoint = Api::OpenidConnect::AuthorizationPoint::EndpointStartPoint.new(current_user)
+        handle_start_point_response(endpoint)
       end
     
-      delegate :form_configurable_attributes, to: :class
-  delegate :form_configurable_fields, to: :class
-    
-      def toggle_availability
-    @service = current_user.services.find(params[:id])
-    @service.toggle_availability!
+    module Api
+  module OpenidConnect
+    class ClientsController < ApplicationController
+      skip_before_action :verify_authenticity_token
