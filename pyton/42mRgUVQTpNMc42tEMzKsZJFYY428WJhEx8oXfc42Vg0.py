@@ -1,95 +1,101 @@
 
         
-                if any([s_line.startswith(s) for s in ['* [', '- [']]):
-            if indent == last_indent:
-                blocks[-1].append(line)
-            else:
-                blocks.append([line])
-            last_indent = indent
-        else:
-            blocks.append([line])
-            last_indent = None
+        cc_library(
+    name = 'compute_session_pool',
+    srcs = ['compute_session_pool.cc'],
+    hdrs = ['compute_session_pool.h'],
+    deps = [
+        ':component_registry',
+        ':compute_session',
+        ':compute_session_impl',
+        '//dragnn/protos:spec_proto_cc',
+        '//syntaxnet:base',
+    ],
+)
     
-    versions_info = json.load(open('update/versions.json'))
-if 'signature' in versions_info:
-    del versions_info['signature']
+    # Protos.
     
-    import itertools
-import json
-import os
-import re
-import sys
+      Returns:
+    [B,M,M] tensor A with 0/1 indicators of valid arcs.  Specifically,
+      A_{b,t,s} = t,s < lengths[b] ? 1 : 0
+    [B,M] matrix T with 0/1 indicators of valid tokens.  Specifically,
+      T_{b,t} = t < lengths[b] ? 1 : 0
+  '''
+  lengths_bx1 = tf.expand_dims(lengths, 1)
+  sequence_m = tf.range(tf.cast(max_length, lengths.dtype.base_dtype))
+  sequence_1xm = tf.expand_dims(sequence_m, 0)
     
+      def testModelExport(self):
+    # Get the master spec and params for this graph.
+    master_spec = self.LoadSpec('ud-hungarian.master-spec')
+    params_path = os.path.join(
+        test_flags.source_root(),
+        'dragnn/python/testdata'
+        '/ud-hungarian.params')
     
-def _mkdir(d):
-    if not os.path.exists(d):
-        os.mkdir(d)
+        # The directory may already exist when running locally multiple times.
+    if not os.path.exists(lexicon_output_path):
+      os.mkdir(lexicon_output_path)
     
-            raw_payload = self._search_regex([
-            r'class='amtv-embed'[^>]+id='([^']+)'',
-            r'class=\\'amtv-embed\\'[^>]+id=\\'([^']+)\\'',
-        ], webpage, 'raw payload')
-        _, stage_mode, video_id, lang = raw_payload.split('-')
+            Keyword:                   'bold #004461',   # class: 'k'
+        Keyword.Constant:          'bold #004461',   # class: 'kc'
+        Keyword.Declaration:       'bold #004461',   # class: 'kd'
+        Keyword.Namespace:         'bold #004461',   # class: 'kn'
+        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
+        Keyword.Reserved:          'bold #004461',   # class: 'kr'
+        Keyword.Type:              'bold #004461',   # class: 'kt'
     
-            return {
-            'id': audio_id,
-            'title': title,
-            'description': description,
-            'duration': duration,
-            'timestamp': timestamp,
-            'formats': formats,
-        }
-
+        def test_repr(self):
+        assert repr(self.lookup_dict) == '<lookup 'test'>'
     
-    DOCUMENTATION = '''
----
-inventory: openshift
-short_description: Openshift gears external inventory script
-description:
-  - Generates inventory of Openshift gears using the REST interface
-  - this permit to reuse playbook to setup an Openshift gear
-version_added: None
-author: Michael Scherer
-'''
+            assert len(server.handler_results) == 0
     
-        # This matches a hostname or host pattern including [x:y(:z)] ranges.
-    #
-    # We roughly follow DNS rules here, but also allow ranges (and underscores).
-    # In the past, no systematic rules were enforced about inventory hostnames,
-    # but the parsing context (e.g. shlex.split(), fnmatch.fnmatch()) excluded
-    # various metacharacters anyway.
-    #
-    # We don't enforce DNS length restrictions here (63 characters per label,
-    # 253 characters total) or make any attempt to process IDNs.
+        # a Sequential inside a Sequential
+    inner_model = Sequential()
+    inner_model.add(Dense(2, input_dim=1))
+    outer_model = Sequential()
+    outer_model.add(inner_model)
+    assert outer_model.trainable_weights == inner_model.trainable_weights
+    inner_model.trainable = False
+    assert outer_model.trainable_weights == []
+    inner_model.trainable = True
+    inner_model.layers[-1].trainable = False
+    assert outer_model.trainable_weights == []
     
-        def on_open_shell(self):
-        try:
-            self._exec_cli_command('screen-length 0 temporary')
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
-
+            # check that the call to `predict` updated the states
+        out5 = model.predict(np.ones((num_samples, timesteps)))
+        assert(out4.max() != out5.max())
     
-        terminal_length = os.getenv('ANSIBLE_VYOS_TERMINAL_LENGTH', 10000)
+        # To prevent a slowdown,
+    # we find beforehand the arrays that need conversion.
+    feed = (model._feed_inputs +
+            model._feed_targets +
+            model._feed_sample_weights)
+    indices_for_conversion_to_dense = []
+    for i in range(len(feed)):
+        if issparse(ins[i]) and not K.is_sparse(feed[i]):
+            indices_for_conversion_to_dense.append(i)
     
-        terminal_stderr_re = [
-        re.compile(br'Error:'),
-    ]
+    print('Convert class vector to binary class matrix '
+      '(for use with categorical_crossentropy)')
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
+print('y_train shape:', y_train.shape)
+print('y_test shape:', y_test.shape)
     
-        def test_max_delay(self):
-        strategy = _exponential_backoff(retries=7, delay=1, backoff=2, max_delay=60)
-        result = list(strategy())
-        self.assertEquals(result, [1, 2, 4, 8, 16, 32, 60])
+    print('Build model...')
+model = Sequential()
     
-        def run(self, args, opts):
-        # load contracts
-        contracts = build_component_list(self.settings.getwithbase('SPIDER_CONTRACTS'))
-        conman = ContractsManager(load_object(c) for c in contracts)
-        runner = TextTestRunner(verbosity=2 if opts.verbose else 1)
-        result = TextTestResult(runner.stream, runner.descriptions, runner.verbosity)
+                            #print 'no viable alt'
+                        self.noViableAlt(s, input)
+                        return 0
     
-        def run(self, args, opts):
-        if len(args) < 1:
-            raise UsageError()
-        elif len(args) > 1:
-            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
-        spname = args[0]
+            self.a = a
+        self.b = b
+        
+    
+                t = self.tokens[i]
+            if op is None:
+                # no operation at that index, just dump token
+                buf.write(t.text)
+                i += 1 # move to next token
