@@ -1,161 +1,144 @@
 
         
-            def parse_symbol_spec(spec, tags)
-      case spec
-      when :clt
-        odisabled ''depends_on :clt''
-      when :tex
-        odisabled ''depends_on :tex''
-      when :libltdl
-        output_disabled(spec, 'libtool')
-      when :apr
-        output_disabled(spec, 'apr-util')
-      when :fortran
-        output_disabled(spec, 'gcc')
-      when :gpg
-        output_disabled(spec, 'gnupg')
-      when :hg
-        output_disabled(spec, 'mercurial')
-      when :mpi
-        output_disabled(spec, 'open-mpi')
-      when :python, :python2
-        output_disabled(spec, 'python@2')
-      when :python3
-        output_disabled(spec, 'python')
-      when :ant, :autoconf, :automake, :bsdmake, :cairo, :emacs, :expat,
-           :fontconfig, :freetype, :libtool, :libpng, :mysql, :perl, :pixman,
-           :postgresql, :rbenv, :ruby
-        output_disabled(spec)
-      else
-        super
+            class GradleHelper
+      # Path to the gradle script
+      attr_accessor :gradle_path
+    
+        def restart!
+      without_alive_check do
+        puts '--> Restarting #{id} at #{Time.now} <--'
+        stop!
+        setup!(scheduler, mutex)
+        run!
       end
     end
     
-      def resource(name, klass = Resource, &block)
-    if block_given?
-      raise DuplicateResourceError, name if resource_defined?(name)
-      res = klass.new(name, &block)
-      resources[name] = res
-      dependency_collector.add(res)
-    else
-      resources.fetch(name) { raise ResourceMissingError.new(owner, name) }
-    end
-  end
+                breakable = false
+            if e.is_a?(EOFError)
+              # An `EOFError` means this IO object is done!
+              breakable = true
+            elsif defined?(::IO::WaitReadable) && e.is_a?(::IO::WaitReadable)
+              # IO::WaitReadable is only available on Ruby 1.9+
     
-    Bundler.require(
-    *Rails.groups(
-        coverage: [:test],
-        db: all_environments,
-        pcap: all_environments
-    )
-)
+    module VagrantPlugins
+  module CommandCap
+    class Command < Vagrant.plugin('2', :command)
+      def self.synopsis
+        'checks and executes capability'
+      end
     
-        if extension_pathname.readable?
-      ENV['BUNDLE_GEMFILE'] = extension_pathname.to_path
-      break
+          # Get the publicly-visible URL for an imported file. This URL is used by
+      # source maps to link to the source stylesheet. This may return `nil` to
+      # indicate that no public URL is available; however, this will cause
+      # sourcemap generation to fail if any CSS is generated from files imported
+      # from this importer.
+      #
+      # If an absolute 'file:' URI can be produced for an imported file, that
+      # should be preferred to returning `nil`. However, a URL relative to
+      # `sourcemap_directory` should be preferred over an absolute 'file:' URI.
+      #
+      # @param uri [String] A URI known to be valid for this importer.
+      # @param sourcemap_directory [String, NilClass] The absolute path to a
+      #   directory on disk where the sourcemap will be saved. If uri refers to
+      #   a file on disk that's accessible relative to sourcemap_directory, this
+      #   may return a relative URL. This may be `nil` if the sourcemap's
+      #   eventual location is unknown.
+      # @return [String?] The publicly-visible URL for this file, or `nil`
+      #   indicating that no publicly-visible URL exists. This should be
+      #   appropriately URL-escaped.
+      def public_url(uri, sourcemap_directory)
+        return if @public_url_warning_issued
+        @public_url_warning_issued = true
+        Sass::Util.sass_warn <<WARNING
+WARNING: #{self.class.name} should define the #public_url method.
+WARNING
+        nil
+      end
+    
+            def define_logger(name, options = {})
+          class_eval <<-RUBY, __FILE__, __LINE__ + 1
+            def #{name}(message)
+              #{options.fetch(:to, :log)}(#{name.inspect}, message)
+            end
+          RUBY
+        end
+      end
     end
   end
 end
+
     
+        def self.definitions_for(klass)
+      instance.definitions_for(klass)
+    end
     
-    {	if ln =~ /;(read|write)_(handle|filename)=/
-		parts = ln.split(' ')
-		if (parts[0] == 'mov')
-			parts2 = parts[2].split('=')
-			label = parts2[0]
-			label.slice!(0,1)
-			old = parts2[1]
-			new = addrs[label]
-			#puts '%32s: %s -> %x' % [label, old, new]
-			replaces << [label, old, new.to_s(16)]
-		end
-	end
-}
-    
-    require 'rex/post/meterpreter'
-    
-    #certCN cannot contain commas
-certCN 		= 'Metasploit Inc.'
-#keytoolOpts 	= '-genkey -alias signFiles -keystore msfkeystore ' +
-#		  '-storepass msfstorepass -dname \'cn=#{certCN}\' ' +
-#		  '-keypass msfkeypass'
-    
-    	def parse_file(file)
-		while (line = file.gets)
-			parse_line(line)
-		end
-    
-          respond_with do |format|
-        format.html do
-          gon.preloads[:pods] = pods_json
-          gon.unchecked_count = Pod.unchecked.count
-          gon.version_failed_count = Pod.version_failed.count
-          gon.error_count = Pod.check_failed.count
-    
-        @search ||= UserSearch.new
-    @users ||= []
+            def has_column?
+          @subject.column_names.include?('#{@attachment_name}_file_name')
+        end
+      end
+    end
   end
+end
+
     
-          def redirect_prompt_error_display(error, error_description)
-        redirect_params_hash = {error: error, error_description: error_description, state: params[:state]}
-        redirect_fragment = redirect_params_hash.compact.map {|key, value| key.to_s + '=' + value }.join('&')
-        redirect_to params[:redirect_uri] + '?' + redirect_fragment
+            def rejected_types_rejected?
+          @missing_rejected_types ||= @rejected_types.select { |type| type_allowed?(type) }
+          @missing_rejected_types.none?
+        end
       end
+    end
+  end
+end
+
     
-          # Get the cache key pair for the given Sass URI.
-      # The URI need not be checked for validity.
-      #
-      # The only strict requirement is that the returned pair of strings
-      # uniquely identify the file at the given URI.
-      # However, the first component generally corresponds roughly to the directory,
-      # and the second to the basename, of the URI.
-      #
-      # Note that keys must be unique *across importers*.
-      # Thus it's probably a good idea to include the importer name
-      # at the beginning of the first component.
-      #
-      # @param uri [String] A URI known to be valid for this importer.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` currently being checked.
-      # @return [(String, String)] The key pair which uniquely identifies
-      #   the file at the given URI.
-      def key(uri, options)
-        Sass::Util.abstract(self)
+            def matches? subject
+          @subject = subject
+          @subject = subject.new if subject.class == Class
+          error_when_not_valid? && no_error_when_valid?
+        end
+    
+          if defined?(ActiveRecord)
+        Paperclip.options[:logger] = ActiveRecord::Base.logger
+        ActiveRecord::Base.send(:include, Paperclip::Glue)
       end
-    
-            def log_level(name, options = {})
-          if options[:prepend]
-            level = log_levels.values.min
-            level = level.nil? ? 0 : level - 1
-          else
-            level = log_levels.values.max
-            level = level.nil? ? 0 : level + 1
-          end
-          log_levels.update(name => level)
-          define_logger(name)
-        end
-    
-        # Returns the Sass/SCSS code for the media query list.
-    #
-    # @param options [{Symbol => Object}] An options hash (see {Sass::CSS#initialize}).
-    # @return [String]
-    def to_src(options)
-      queries.map {|q| q.to_src(options)}.join(', ')
     end
+  end
+end
+
     
-      require 'sass/plugin/rack'
-  class Sass::Plugin::MerbBootLoader < Merb::BootLoader
-    after Merb::BootLoader::RackUpApplication
-    
-        def self.each_definition(&block)
-      instance.each_definition(&block)
+          def invert_add_attachment(args)
+        [:remove_attachment, args]
+      end
     end
+  end
+end
+
     
-            def failure_message_when_negated
-          'Should not have an attachment named #{@attachment_name}'
-        end
-        alias negative_failure_message failure_message_when_negated
-    
-            def expected_attachment
-          'Expected #{@attachment_name}:\n'
-        end
+        module HelperMethods
+      # Places ActiveModel validations on the content type of the file
+      # assigned. The possible options are:
+      # * +content_type+: Allowed content types.  Can be a single content type
+      #   or an array.  Each type can be a String or a Regexp. It should be
+      #   noted that Internet Explorer uploads files with content_types that you
+      #   may not expect. For example, JPEG images are given image/pjpeg and
+      #   PNGs are image/x-png, so keep that in mind when determining how you
+      #   match.  Allows all by default.
+      # * +not+: Forbidden content types.
+      # * +message+: The message to display when the uploaded file has an invalid
+      #   content type.
+      # * +if+: A lambda or name of an instance method. Validation will only
+      #   be run is this lambda or method returns true.
+      # * +unless+: Same as +if+ but validates if lambda or method returns false.
+      # NOTE: If you do not specify an [attachment]_content_type field on your
+      # model, content_type validation will work _ONLY upon assignment_ and
+      # re-validation after the instance has been reloaded will always succeed.
+      # You'll still need to have a virtual attribute (created by +attr_accessor+)
+      # name +[attachment]_content_type+ to be able to use this validator.
+      def validates_attachment_content_type(*attr_names)
+        options = _merge_attributes(attr_names)
+        validates_with AttachmentContentTypeValidator, options.dup
+        validate_before_processing AttachmentContentTypeValidator, options.dup
+      end
+    end
+  end
+end
