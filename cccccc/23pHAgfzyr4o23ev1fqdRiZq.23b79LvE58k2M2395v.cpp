@@ -1,284 +1,273 @@
 
         
-        namespace tensorflow {
-    }
+        class Env;
+class Iterator;
+class TableCache;
+class VersionEdit;
     
-    #include 'tensorflow/contrib/mpi/mpi_utils.h'
-namespace tensorflow {
-    }
+    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
+  size_t usize = user_key.size();
+  size_t needed = usize + 13;  // A conservative estimate
+  char* dst;
+  if (needed <= sizeof(space_)) {
+    dst = space_;
+  } else {
+    dst = new char[needed];
+  }
+  start_ = dst;
+  dst = EncodeVarint32(dst, usize + 8);
+  kstart_ = dst;
+  memcpy(dst, user_key.data(), usize);
+  dst += usize;
+  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
+  dst += 8;
+  end_ = dst;
+}
     
-    REGISTER_COMPLEX(CPU, float, complex64);
-REGISTER_COMPLEX(CPU, double, complex128);
+    std::string SSTTableFileName(const std::string& name, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(name, number, 'sst');
+}
     
     
-    {    {
-      mutex_lock l(mu);
-      statuses.push_back(publish_status);
-      if (this_count == kSends - 1 && !all_done.HasBeenNotified()) {
-        all_done.Notify();
+    {
+    {  virtual void Put(const Slice& key, const Slice& value) {
+    mem_->Add(sequence_, kTypeValue, key, value);
+    sequence_++;
+  }
+  virtual void Delete(const Slice& key) {
+    mem_->Add(sequence_, kTypeDeletion, key, Slice());
+    sequence_++;
+  }
+};
+}  // namespace
+    
+    
+    {
+    {      bool known = true;
+      bool write_sync = false;
+      if (name == Slice('fillseq')) {
+        Write(write_sync, SEQUENTIAL, FRESH, num_, FLAGS_value_size, 1);
+        DBSynchronize(db_);
+      } else if (name == Slice('fillrandom')) {
+        Write(write_sync, RANDOM, FRESH, num_, FLAGS_value_size, 1);
+        DBSynchronize(db_);
+      } else if (name == Slice('overwrite')) {
+        Write(write_sync, RANDOM, EXISTING, num_, FLAGS_value_size, 1);
+        DBSynchronize(db_);
+      } else if (name == Slice('fillrandsync')) {
+        write_sync = true;
+        Write(write_sync, RANDOM, FRESH, num_ / 100, FLAGS_value_size, 1);
+        DBSynchronize(db_);
+      } else if (name == Slice('fillseqsync')) {
+        write_sync = true;
+        Write(write_sync, SEQUENTIAL, FRESH, num_ / 100, FLAGS_value_size, 1);
+        DBSynchronize(db_);
+      } else if (name == Slice('fillrand100K')) {
+        Write(write_sync, RANDOM, FRESH, num_ / 1000, 100 * 1000, 1);
+        DBSynchronize(db_);
+      } else if (name == Slice('fillseq100K')) {
+        Write(write_sync, SEQUENTIAL, FRESH, num_ / 1000, 100 * 1000, 1);
+        DBSynchronize(db_);
+      } else if (name == Slice('readseq')) {
+        ReadSequential();
+      } else if (name == Slice('readrandom')) {
+        ReadRandom();
+      } else if (name == Slice('readrand100K')) {
+        int n = reads_;
+        reads_ /= 1000;
+        ReadRandom();
+        reads_ = n;
+      } else if (name == Slice('readseq100K')) {
+        int n = reads_;
+        reads_ /= 1000;
+        ReadSequential();
+        reads_ = n;
+      } else {
+        known = false;
+        if (name != Slice()) {  // No error message for empty name
+          fprintf(stderr, 'unknown benchmark '%s'\n', name.ToString().c_str());
+        }
+      }
+      if (known) {
+        Stop(name);
       }
     }
-  };
+  }
     
-      image_format_ = kDefaultFormat;
-  image_quality_ = kDefaultQuality;
+    // Dump the contents of the file named by fname in text format to
+// *dst.  Makes a sequence of dst->Append() calls; each call is passed
+// the newline-terminated text corresponding to a single item found
+// in the file.
+//
+// Returns a non-OK result if fname does not name a leveldb storage
+// file, or if the file cannot be read.
+Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
     
-    // Create a Shell and returns its routing id.
-IPC_SYNC_MESSAGE_ROUTED2_1(ShellViewHostMsg_CreateShell,
-                           std::string /* url */,
-                           base::DictionaryValue /* manifest */,
-                           int /* result */)
+    // logistic loss for probability regression task
+struct LogisticRegression {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    const float eps = 1e-16f;
+    return fmaxf(predt * (1.0f - predt), eps);
+  }
+  template <typename T>
+  static T PredTransform(T x) { return common::Sigmoid(x); }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) {
+    const T eps = T(1e-16f);
+    return std::max(predt * (T(1.0f) - predt), eps);
+  }
+  static bst_float ProbToMargin(bst_float base_score) {
+    CHECK(base_score > 0.0f && base_score < 1.0f)
+      << 'base_score must be in (0,1) for logistic loss';
+    return -logf(1.0f / base_score - 1.0f);
+  }
+  static const char* LabelErrorMsg() {
+    return 'label must be in [0,1] for logistic regression';
+  }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
     
-    #include 'base/compiler_specific.h'
-#include 'content/nw/src/api/base/base.h'
-    
-    namespace nwapi {
+    // Define a customized logistic regression objective in C++.
+// Implement the interface.
+class MyLogistic : public ObjFunction {
+ public:
+  void Configure(const std::vector<std::pair<std::string, std::string> >& args) override {
+    param_.InitAllowUnknown(args);
+  }
+  void GetGradient(HostDeviceVector<bst_float> *preds,
+                   const MetaInfo &info,
+                   int iter,
+                   HostDeviceVector<GradientPair> *out_gpair) override {
+    out_gpair->Resize(preds->Size());
+    std::vector<bst_float>& preds_h = preds->HostVector();
+    std::vector<GradientPair>& out_gpair_h = out_gpair->HostVector();
+    for (size_t i = 0; i < preds_h.size(); ++i) {
+      bst_float w = info.GetWeight(i);
+      // scale the negative examples!
+      if (info.labels_[i] == 0.0f) w *= param_.scale_neg_weight;
+      // logistic transformation
+      bst_float p = 1.0f / (1.0f + std::exp(-preds_h[i]));
+      // this is the gradient
+      bst_float grad = (p - info.labels_[i]) * w;
+      // this is the second order gradient
+      bst_float hess = p * (1.0f - p) * w;
+      out_gpair_h.at(i) = GradientPair(grad, hess);
+    }
+  }
+  const char* DefaultEvalMetric() const override {
+    return 'error';
+  }
+  void PredTransform(HostDeviceVector<bst_float> *io_preds) override {
+    // transform margin value to probability.
+    std::vector<bst_float> &preds = io_preds->HostVector();
+    for (size_t i = 0; i < preds.size(); ++i) {
+      preds[i] = 1.0f / (1.0f + std::exp(-preds[i]));
+    }
+  }
+  bst_float ProbToMargin(bst_float base_score) const override {
+    // transform probability to margin value
+    return -std::log(1.0f / base_score - 1.0f);
+  }
     }
     
-    void Menu::Insert(MenuItem* menu_item, int pos) {
-  std::vector<MenuItem*>::iterator begin = menu_items.begin();
-  menu_items.insert(begin+pos,menu_item);
-  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    menu_item->UpdateKeys(gtk_accel_group);
+    /**
+ * Install the terminate / unexpected handlers to dump exceptions.
+ */
+void installHandlers();
+    
+      BlockingQueueAddResult addWithPriority(T item, int8_t priority) override {
+    int mid = getNumPriorities() / 2;
+    size_t queue = priority < 0
+        ? std::max(0, mid + priority)
+        : std::min(getNumPriorities() - 1, mid + priority);
+    CHECK_LT(queue, queues_.size());
+    switch (kBehavior) { // static
+      case QueueBehaviorIfFull::THROW:
+        if (!queues_[queue].write(std::move(item))) {
+          throw QueueFullException('LifoSemMPMCQueue full, can't add item');
+        }
+        break;
+      case QueueBehaviorIfFull::BLOCK:
+        queues_[queue].blockingWrite(std::move(item));
+        break;
+    }
+    return sem_.post();
   }
-  gtk_menu_shell_insert(GTK_MENU_SHELL(menu_), menu_item->menu_item_, pos);
+    
+      folly::Optional<T> try_take_for(std::chrono::milliseconds time) override {
+    T item;
+    while (!queue_.try_dequeue(item)) {
+      if (!sem_.try_wait_for(time)) {
+        return folly::none;
+      }
+    }
+    return std::move(item);
+  }
+    
+    
+    {  // Test that inheriting from MoveOnly doesn't prevent the move
+  // constructor from being noexcept.
+  static_assert(
+      std::is_nothrow_move_constructible<FooBar>::value,
+      'Should have noexcept move constructor');
 }
     
-    void Menu::Create(const base::DictionaryValue& option) {
-  is_menu_modified_ = true;
-  menu_delegate_.reset(new MenuDelegate(object_manager()));
-  menu_model_.reset(new ui::NwMenuModel(menu_delegate_.get()));
+    
+    {  std::lock_guard<std::mutex> guard(ioThread->eventBaseShutdownMutex_);
+  ioThread->eventBase = nullptr;
+  eventBaseManager_->clearEventBase();
+}
+    
+      void add(Func func) override;
+  void add(
+      Func func,
+      std::chrono::milliseconds expiration,
+      Func expireCallback = nullptr) override;
+    
+    namespace folly {
     }
     
-    using namespace extensions::nwapi::nw__clipboard;
+    bool SerialExecutor::keepAliveAcquire() {
+  auto keepAliveCounter =
+      keepAliveCounter_.fetch_add(1, std::memory_order_relaxed);
+  DCHECK(keepAliveCounter > 0);
+  return true;
+}
     
+        int unit;
+    double value;
     
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.create', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjCreateFunction);
-};
-    
-      bool NwScreenStartMonitorFunction::RunNWSync(base::ListValue* response, std::string* error) {
-    bool screens, windows;
-    EXTENSION_FUNCTION_VALIDATE(args_->GetBoolean(0, &screens));
-    EXTENSION_FUNCTION_VALIDATE(args_->GetBoolean(1, &windows));
-    NwDesktopCaptureMonitor::GetInstance()->Start(screens, windows);
-    return true;
-  }
-    
-    void projectPoints(cv::InputArray objectPoints, cv::OutputArray imagePoints,
-                   cv::InputArray _rvec,cv::InputArray _tvec,
-                   const IntrinsicParams& param, cv::OutputArray jacobian);
-    
-            // find two white and black blobs that are close to the input point
-        std::vector<std::pair<int, float> > white_order, black_order;
-        orderContours(black_contours, corners[i], black_order);
-        orderContours(white_contours, corners[i], white_order);
-    
-                            CV_Assert(arr.type() == CV_64FC2);
-                        Point2d tangentVector_1 = arr.at<Point2d>(endPointIndex) - arr.at<Point2d>(startPointIndex);
-                        Point2d tangentVector_2 = arr.at<Point2d>(testPointIndex) - arr.at<Point2d>(startPointIndex);
-    
-    /* ////////////////////////////////////////////////////////////////////
-//
-//  CvMat helper tables
-//
-// */
-    
-    namespace testing {
-    }
-    
-    
-    {  // Tersely prints the first N fields of a tuple to a string vector,
-  // one element for each field.
-  template <typename Tuple>
-  static void TersePrintPrefixToStrings(const Tuple& t, Strings* strings) {
-    TuplePrefixPrinter<N - 1>::TersePrintPrefixToStrings(t, strings);
-    ::std::stringstream ss;
-    UniversalTersePrint(::std::tr1::get<N - 1>(t), &ss);
-    strings->push_back(ss.str());
-  }
-};
-    
-    #endif  // GTEST_INCLUDE_GTEST_GTEST_SPI_H_
+    bool Config::isExperimentalFeatureEnabled(int feature) const
+{
+    return YGConfigIsExperimentalFeatureEnabled(m_config, static_cast<YGExperimentalFeature>(feature));
+}
 
     
-    #if 0
+        Config(Config const &) = delete;
     
-      // Gets the number of failed test cases.
-  int failed_test_case_count() const;
-    
-      // The d'tor pops the info pushed by the c'tor.
-  //
-  // Note that the d'tor is not virtual in order to be efficient.
-  // Don't inherit from ScopedTrace!
-  ~ScopedTrace();
-    
-      template <GTEST_7_TYPENAMES_(U)>
-  tuple(const GTEST_7_TUPLE_(U)& t) : f0_(t.f0_), f1_(t.f1_), f2_(t.f2_),
-      f3_(t.f3_), f4_(t.f4_), f5_(t.f5_), f6_(t.f6_) {}
-    
-    // We will track memory used by this class.
-class Water {
- public:
-  // Normal Water declarations go here.
-    }
-    
-    #include '../master_worker/common/RPC.hpp'
-#include 'TH/THStorage.h'
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    #ifndef BOOST_ASIO_DETAIL_ATOMIC_COUNT_HPP
-#define BOOST_ASIO_DETAIL_ATOMIC_COUNT_HPP
-    
-      static void validate(const Buffers& buffer_sequence)
-  {
-    typename Buffers::const_iterator iter = buffer_sequence.begin();
-    typename Buffers::const_iterator end = buffer_sequence.end();
-    for (; iter != end; ++iter)
-    {
-      Buffer buffer(*iter);
-      boost::asio::buffer_cast<const void*>(buffer);
-    }
-  }
-    
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS) \
-  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
-# include <boost/asio/detail/null_fenced_block.hpp>
-#elif defined(__MACH__) && defined(__APPLE__)
-# include <boost/asio/detail/macos_fenced_block.hpp>
-#elif defined(__sun)
-# include <boost/asio/detail/solaris_fenced_block.hpp>
-#elif defined(__GNUC__) && defined(__arm__) \
-  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
-# include <boost/asio/detail/gcc_arm_fenced_block.hpp>
-#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
-# include <boost/asio/detail/gcc_hppa_fenced_block.hpp>
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-# include <boost/asio/detail/gcc_x86_fenced_block.hpp>
-#elif defined(__GNUC__) \
-  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
-  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
-# include <boost/asio/detail/gcc_sync_fenced_block.hpp>
-#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
-# include <boost/asio/detail/win_fenced_block.hpp>
-#else
-# include <boost/asio/detail/null_fenced_block.hpp>
-#endif
-    
-    #if defined(BOOST_ASIO_HAS_STD_FUNCTION)
-# include <functional>
-#else // defined(BOOST_ASIO_HAS_STD_FUNCTION)
-# include <boost/function.hpp>
-#endif // defined(BOOST_ASIO_HAS_STD_FUNCTION)
-    
-    #define BOOST_ASIO_SIGNAL_HANDLER_CHECK( \
-    handler_type, handler) \
-  typedef int BOOST_ASIO_UNUSED_TYPEDEF
-    
-        // Output as Base85 encoded
-    FILE* out = stdout;
-    fprintf(out, '// File: '%s' (%d bytes)\n', filename, (int)data_sz);
-    fprintf(out, '// Exported using binary_to_compressed_c.cpp\n');
-	const char* compressed_str = use_compression ? 'compressed_' : '';
-    if (use_base85_encoding)
-    {
-        fprintf(out, 'static const char %s_%sdata_base85[%d+1] =\n    \'', symbol, compressed_str, (int)((compressed_sz+3)/4)*5);
-        char prev_c = 0;
-        for (int src_i = 0; src_i < compressed_sz; src_i += 4)
-        {
-            // This is made a little more complicated by the fact that ??X sequences are interpreted as trigraphs by old C/C++ compilers. So we need to escape pairs of ??.
-            unsigned int d = *(unsigned int*)(compressed + src_i);
-            for (unsigned int n5 = 0; n5 < 5; n5++, d /= 85)
-            {
-                char c = Encode85Byte(d);
-                fprintf(out, (c == '?' && prev_c == '?') ? '\\%c' : '%c', c);
-                prev_c = c;
-            }
-            if ((src_i % 112) == 112-4)
-                fprintf(out, '\'\n    \'');
-        }
-        fprintf(out, '\';\n\n');
-    }
-    else
-    {
-        fprintf(out, 'static const unsigned int %s_%ssize = %d;\n', symbol, compressed_str, (int)compressed_sz);
-        fprintf(out, 'static const unsigned int %s_%sdata[%d/4] =\n{', symbol, compressed_str, (int)((compressed_sz+3)/4)*4);
-        int column = 0;
-        for (int i = 0; i < compressed_sz; i += 4)
-        {
-            unsigned int d = *(unsigned int*)(compressed + i);
-            if ((column++ % 12) == 0)
-                fprintf(out, '\n    0x%08x, ', d);
-            else
-                fprintf(out, '0x%08x, ', d);
-        }
-        fprintf(out, '\n};\n\n');
-    }
-    
-    bool ImGui_ImplOpenGL2_CreateFontsTexture()
+    void Node::setMargin(int edge, double margin)
 {
-    // Build texture atlas
-    ImGuiIO& io = ImGui::GetIO();
-    unsigned char* pixels;
-    int width, height;
-    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);   // Load as RGBA 32-bits (75% of the memory is wasted, but default font is so small) because it is more likely to be compatible with user's existing shaders. If your ImTextureId represent a higher-level concept than just a GL texture id, consider calling GetTexDataAsAlpha8() instead to save on GPU memory.
-    }
-    
-        // Build atlas
-    unsigned char* tex_pixels = NULL;
-    int tex_w, tex_h;
-    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
-    
-    #ifdef _MSC_VER
-#pragma warning (disable: 4505) // unreferenced local function has been removed (stb stuff)
-#endif
-    
-    static void ImGui_ImplGlfw_UpdateMousePosAndButtons()
-{
-    // Update buttons
-    ImGuiIO& io = ImGui::GetIO();
-    for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
-    {
-        // If a mouse press event came, always pass it as 'mouse held this frame', so we don't miss click-release events that are shorter than 1 frame.
-        io.MouseDown[i] = g_MouseJustPressed[i] || glfwGetMouseButton(g_Window, i) != 0;
-        g_MouseJustPressed[i] = false;
-    }
-    }
-    
-    
-    {    // Destroy SDL mouse cursors
-    for (ImGuiMouseCursor cursor_n = 0; cursor_n < ImGuiMouseCursor_COUNT; cursor_n++)
-        SDL_FreeCursor(g_MouseCursors[cursor_n]);
-    memset(g_MouseCursors, 0, sizeof(g_MouseCursors));
+    YGNodeStyleSetMargin(m_node, static_cast<YGEdge>(edge), margin);
 }
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
     
-        if (int size = s3eClipboardGetText(NULL, 0))
-    {
-        if (g_ClipboardText)
-            delete[] g_ClipboardText;
-        g_ClipboardText = new char[size];
-        g_ClipboardText[0] = '\0';
-        s3eClipboardGetText(g_ClipboardText, size);
-    }
+    {}
+
+    
+      /**
+   * This runs the closure in a scope with fbjni's classloader. This should be
+   * the same classloader as the rest of the application and thus anything
+   * running in the closure will have access to the same classes as in a normal
+   * java-create thread.
+   */
+  static void WithClassLoader(std::function<void()>&& runnable);
