@@ -1,105 +1,84 @@
 
         
-          end
+        TEST_DIR = File.expand_path('../test', __dir__)
     
-            @value << new_block
+    # You can also do other things. Examples:
+# https://github.com/tmm1/stackprof/blob/master/bin/stackprof
+report = StackProf::Report.new(Marshal.load(IO.binread(PROF_OUTPUT_FILE)))
+report.print_text(
+  options[:sort],
+  options[:limit],
+  options[:select_files],
+  options[:reject_files],
+  options[:select_names],
+  options[:reject_names]
+)
+    
+    require 'json'
+require 'open-uri'
+    
+              # TODO: replace above lines with
+          # confirmable = find_or_initialize_with_error_by(:confirmation_token, confirmation_token)
+          # after enough time has passed that Devise clients do not use digested tokens
+    
+      # GET /resource/password/edit?reset_password_token=abcdef
+  def edit
+    self.resource = resource_class.new
+    set_minimum_password_length
+    resource.reset_password_token = params[:reset_password_token]
+  end
+    
+      def respond_to_on_destroy
+    # We actually need to hardcode this as Rails default responder doesn't
+    # support returning empty response on GET request
+    respond_to do |format|
+      format.all { head :no_content }
+      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
+    end
+  end
+end
+
+    
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
+      end
+    
+          describe 'setting an internal hosts filter' do
+        subject { dsl.roles(:app) }
+        it 'is ignored' do
+          dsl.set :filter, hosts: 'example3.com'
+          expect(subject.map(&:hostname)).to eq(['example3.com', 'example4.com'])
+        end
+      end
+    
+    task default: :test
+    
+            #target = $LOADED_FEATURES.grep(/#{path}/).first
+        #puts path
+        #puts caller.map { |c| '  #{c}' }.join('\n')
+        #fontsize = [10, duration * 48].max
+        puts '#{duration},#{path},#{source}'
+      end
+      #puts caller.map { |c| ' => #{c}' }.join('\n')
+    end
+    
+        def definitions_for(klass)
+      parent_classes = klass.ancestors.reverse
+      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
+        inherited_definitions.deep_merge! @attachments[ancestor]
       end
     end
   end
 end
 
     
-    ; TODO make this stricter if possible
-(allow network-outbound)
-    
-            def run
-          if @pod_name.nil?
-            # Note: at that point, @wipe_all is always true (thanks to `validate!`)
-            # Remove all
-            clear_cache
-          else
-            # Remove only cache for this pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            elsif cache_descriptors.count > 1 && !@wipe_all
-              # Ask which to remove
-              choices = cache_descriptors.map { |c| '#{@pod_name} v#{c[:version]} (#{pod_type(c)})' }
-              index = UI.choose_from_array(choices, 'Which pod cache do you want to remove?')
-              remove_caches([cache_descriptors[index]])
-            else
-              # Remove all found cache of this pod
-              remove_caches(cache_descriptors)
-            end
-          end
-        end
-    
-            def execute_repl_command(repl_command)
-          unless repl_command == '\n'
-            repl_commands = repl_command.split
-            subcommand = repl_commands.shift.capitalize
-            arguments = repl_commands
-            subcommand_class = Pod::Command::IPC.const_get(subcommand)
-            subcommand_class.new(CLAide::ARGV.new(arguments)).run
-            signal_end_of_output
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-            TEMPLATE_REPO = 'https://github.com/CocoaPods/pod-template.git'.freeze
-        TEMPLATE_INFO_URL = 'https://github.com/CocoaPods/pod-template'.freeze
-        CREATE_NEW_POD_INFO_URL = 'http://guides.cocoapods.org/making/making-a-cocoapod'.freeze
-    
-            sets = config.sources_manager.aggregate.all_sets
-        sets.each { |set| UI.pod(set, :name_and_version) }
-        UI.puts '\n#{sets.count} pods were found'
-      end
-    
-            rows.each do |row|
-          line = row.values.each_with_index.map do |value, col|
-            value.to_s.ljust(col_widths[col])
-          end.join(' ').rstrip
-          line = color.colorize(line, row.color) if row.color
-          puts line
-        end
-      end
-    
-            on roles(target_roles) do
-          unless test '[ -f #{file.to_s.shellescape} ]'
-            info 'Uploading #{prerequisite_file} to #{file}'
-            upload! File.open(prerequisite_file), file
-          end
-        end
-      end
+        def empty_file?
+      File.exist?(@filepath) && File.size(@filepath) == 0
     end
     
-      not_found do
-    send_file(File.join(File.dirname(__FILE__), 'public', '404.html'), {:status => 404})
-  end
-    
-        def paragraphize(input)
-      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
-    end
-  end
-end
-    
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
-    end
-  end
-    
-          if File.symlink?(code_path)
-        return 'Code directory '#{code_path}' cannot be a symlink'
-      end
+            Paperclip::Validators.constants.each do |constant|
+          if constant.to_s =~ /\AAttachment(.+)Validator\z/
+            validator_kind = $1.underscore.to_sym
