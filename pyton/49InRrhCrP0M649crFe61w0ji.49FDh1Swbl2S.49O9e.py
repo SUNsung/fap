@@ -1,123 +1,189 @@
 
-# Certain versions of pypy have a bug where clearing the exception stack
-# breaks the __exit__ function in a very peculiar way.  The second level of
-# exception blocks is necessary because pypy seems to forget to check if an
-# exception happened until the next bytecode instruction?
-#
-# Relevant PyPy bugfix commit:
-# https://bitbucket.org/pypy/pypy/commits/77ecf91c635a287e88e60d8ddb0f4e9df4003301
-# According to ronan on #pypy IRC, it is released in PyPy2 2.3 and later
-# versions.
-#
-# Ubuntu 14.04 has PyPy 2.2.1, which does exhibit this bug.
-BROKEN_PYPY_CTXMGR_EXIT = False
-if hasattr(sys, 'pypy_version_info'):
-    class _Mgr(object):
-        def __enter__(self):
-            return self
-        def __exit__(self, *args):
-            if hasattr(sys, 'exc_clear'):
-                # Python 3 (PyPy3) doesn't have exc_clear
-                sys.exc_clear()
+        
+              # A similar contract applies to the annotations.
+      self.checkOpOrder('annotations', anno['annotations'],
+                        ['GetSession', 'AttachDataReader', 'ReleaseSession'])
+    
+    import tensorflow as tf
+    
+      def testIdentityInitializerNonSquareRank2FirstDimSmaller(self):
+    divisor = 2.
+    std = 1e-3
+    shape = (2, 4)
+    m = divisor / shape[-1]
+    expected = [[m, m, -9.95908980e-04, 6.93598529e-04],
+                [-4.18301526e-04, -1.58457726e-03, m, m]]
+    self.IdentityInitializerHelper(shape, expected, divisor, std)
+    
+        tagger = spec_builder.ComponentSpecBuilder('tagger')
+    tagger.set_network_unit(name='FeedForwardNetwork', hidden_layer_sizes='256')
+    tagger.set_transition_system(name='tagger')
+    tagger.add_fixed_feature(name='words', fml='input.word', embedding_dim=64)
+    tagger.add_rnn_link(embedding_dim=-1)
+    tagger.fill_from_resources(lexicon_dir)
+    
+      # Constructs lexical resources for SyntaxNet in the given resource path, from
+  # the training data.
+  if FLAGS.compute_lexicon:
+    logging.info('Computing lexicon...')
+    lexicon.build_lexicon(FLAGS.resource_path, FLAGS.training_corpus_path)
+    
+    flags.DEFINE_integer('batch_size', 4, 'Batch size.')
+flags.DEFINE_integer('report_every', 200,
+                     'Report cost and training accuracy every this many steps.')
+flags.DEFINE_integer('job_id', 0, 'The trainer will clear checkpoints if the '
+                     'saved job id is less than the id this flag. If you want '
+                     'training to start over, increment this id.')
+    
+    cc_library(
+    name = 'whole_sentence_features',
+    srcs = ['whole_sentence_features.cc'],
+    hdrs = ['whole_sentence_features.h'],
+    deps = [
+        ':base',
+        ':feature_extractor',
+        ':registry',
+        ':task_context',
+        ':workspace',
+    ],
+    alwayslink = 1,
+)
+    
+        # To avoid having to always use the '|safe' filter in flatpage templates,
+    # mark the title and content as already safe (since they are raw HTML
+    # content in the first place).
+    f.title = mark_safe(f.title)
+    f.content = mark_safe(f.content)
+    
+        def __init__(self, args):
+        '''Initializes the plugin with the given command line args'''
+        self._temp_dir = tempfile.mkdtemp()
+        self.le_config = util.create_le_config(self._temp_dir)
+        config_dir = util.extract_configs(args.configs, self._temp_dir)
+        self._configs = [
+            os.path.join(config_dir, config)
+            for config in os.listdir(config_dir)]
+    
+        @mock.patch(
+        'certbot_compatibility_test.validator.crypto_util.probe_sni')
+    def test_certificate_failure(self, mock_probe_sni):
+        cert = OpenSSL.crypto.X509()
+        cert.set_serial_number(1337)
+        mock_probe_sni.return_value = OpenSSL.crypto.X509()
+        self.assertFalse(self.validator.certificate(
+            cert, 'test.com', '127.0.0.1'))
+    
+    autodoc_member_order = 'bysource'
+autodoc_default_flags = ['show-inheritance', 'private-members']
+    
+        # Get options and arguments.
     try:
-        try:
-            with _Mgr():
-                raise AssertionError()
-        except:
-            raise
-    except TypeError:
-        BROKEN_PYPY_CTXMGR_EXIT = True
-    except AssertionError:
-        pass
-
+        opts, args = getopt.getopt(sys.argv[1:], _short_options, _options)
+    except getopt.GetoptError as e:
+        log.wtf('''
+    [Fatal] {}.
+    Try '{} --help' for more options.'''.format(e, script_name))
     
+        stream_types = [  #this is just a sample. Will make it in prepare()
+        # {'id': '1080'},
+        # {'id': '720'},
+        # {'id': '360'},
+        # {'id': '288'},
+        # {'id': '190'},
+        # {'id': '180'},
+        
+    ]
     
-@implements_to_string
-class DebugFilesKeyError(KeyError, AssertionError):
-    '''Raised from request.files during debugging.  The idea is that it can
-    provide a better error message than just a generic KeyError/BadRequest.
-    '''
+        while pin_count > 0:
+        json_data = extract_json_data(url, max=pin_list[-1]['pin_id'],
+                                      limit=LIMIT)
+        pins = json_data['pins']
+        pin_list += pins
+        pin_count -= len(pins)
     
-        If there is no handler for the logger's effective level, add a
-    :class:`~logging.StreamHandler` for
-    :func:`~flask.logging.wsgi_errors_stream` with a basic format.
-    '''
-    logger = logging.getLogger('flask.app')
+        title = r1(r'<meta name='description' content='([^']*)'', html)
+    flashvars = r1(r'flashvars='(type=[^']*)'', html)
     
-        class _FakeSignal(object):
-        '''If blinker is unavailable, create a fake class with the same
-        interface that allows sending of signals but will fail with an
-        error on anything else.  Instead of doing anything on send, it
-        will just ignore the arguments and do nothing instead.
+            # extract title
+        self.title = match1(content,
+                            r'<meta property='og:description' name='og:description' content='([^']+)'')
+    
+    #----------------------------------------------------------------------
+def showroom_get_roomid_by_room_url_key(room_url_key):
+    '''str->str'''
+    fake_headers_mobile = {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Charset': 'UTF-8,*;q=0.5',
+        'Accept-Encoding': 'gzip,deflate,sdch',
+        'Accept-Language': 'en-US,en;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36'
+    }
+    webpage_url = 'https://www.showroom-live.com/' + room_url_key
+    html = get_content(webpage_url, headers = fake_headers_mobile)
+    roomid = match1(html, r'room\?room_id\=(\d+)')
+    assert roomid
+    return roomid
+    
+        def test_sales_manager_shall_talk_through_proxy_with_delay(cls):
+        cls.p.busy = 'No'
+        start_time = time()
+        cls.p.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+Sales Manager ready to talk\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    
+        move = Action('move')
+    person = Person('Jack', move)
+    person.do_action().amount('5m').stop()
+    
+        def test_frozen_pool(self):
+        with ObjectPool(self.sample_queue) as pool:
+            self.assertEqual(pool, 'first')
+            self.assertEqual(pool, 'first')
+        self.assertTrue(self.sample_queue.get() == 'second')
+        self.assertFalse(self.sample_queue.empty())
+        self.assertTrue(self.sample_queue.get() == 'first')
+        self.assertTrue(self.sample_queue.empty())
+    
+        def __new__(cls, name, bases, attrs):
+        new_cls = type.__new__(cls, name, bases, attrs)
         '''
+            Here the name of the class is used as key but it could be any class
+            parameter.
+        '''
+        cls.REGISTRY[new_cls.__name__] = new_cls
+        return new_cls
     
-    
-def _default_template_ctx_processor():
-    '''Default template context processor.  Injects `request`,
-    `session` and `g`.
     '''
-    reqctx = _request_ctx_stack.top
-    appctx = _app_ctx_stack.top
-    rv = {}
-    if appctx is not None:
-        rv['g'] = appctx.g
-    if reqctx is not None:
-        rv['request'] = reqctx.request
-        rv['session'] = reqctx.session
-    return rv
+Port of the Java example of 'Constructor Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050)
     
-    _gc_lock = threading.Lock()
-    
-        class FailingSessionInterface(SessionInterface):
-        def open_session(self, app, request):
-            raise SessionError()
-    
-    Available hooks:
+        def get_current_time_as_html_fragment(self, time_provider):
+        current_time = time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
     
     
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
-
+class NumObj(object):
     
-        def run(self):
-        try:
-            self.server_sock = self._create_socket_and_bind()
-            # in case self.port = 0
-            self.port = self.server_sock.getsockname()[1]
-            self.ready_event.set()
-            self._handle_requests()
+        def attach(self, observer):
+        if observer not in self._observers:
+            self._observers.append(observer)
     
+    from __future__ import print_function
     
-@pytest.mark.skipif(sys.version_info < (2,7), reason='Only run on Python 2.7+')
-def test_system_ssl():
-    '''Verify we're actually setting system_ssl when it should be available.'''
-    assert info()['system_ssl']['version'] != ''
+        context['show_on_github_url'] = show_url
+    context['edit_on_github_url'] = edit_url
     
-        if cryptography_version < [1, 3, 4]:
-        warning = 'Old version of cryptography ({0}) may cause slowdown.'.format(cryptography_version)
-        warnings.warn(warning, RequestsDependencyWarning)
+    DOMAIN = 'browser'
+SERVICE_BROWSE_URL = 'browse_url'
     
-        :param url: URL for the new :class:`Request` object.
-    :param \*\*kwargs: Optional arguments that ``request`` takes.
-    :return: :class:`Response <Response>` object
-    :rtype: requests.Response
-    '''
+    REQUIREMENTS = ['pyuserinput==0.1.11']
     
-    
-class _BenchSpider(scrapy.Spider):
-    '''A spider that follows all links'''
-    name = 'follow'
-    total = 10000
-    show = 20
-    baseurl = 'http://localhost:8998'
-    link_extractor = LinkExtractor()
-    
-        def _find_template(self, template):
-        template_file = join(self.templates_dir, '%s.tmpl' % template)
-        if exists(template_file):
-            return template_file
-        print('Unable to find template: %s\n' % template)
-        print('Use 'scrapy genspider --list' to see all available templates.')
-    
-        name = 'url'
+    patch_file = 'homeassistant.components.device_tracker.bt_home_hub_5'
