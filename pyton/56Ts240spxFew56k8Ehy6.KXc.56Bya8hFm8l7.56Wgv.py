@@ -1,59 +1,73 @@
 
         
-            try:
-        s1 = os.lstat(path)
-    except OSError:
-        # the OSError should be handled with more care
-        # it could be a 'permission denied' but path is still a mount
-        return False
+        py_test(
+    name = 'runtime_support_test',
+    srcs = ['runtime_support_test.py'],
+    deps = [
+        ':network_units',
+        ':runtime_support',
+        '//dragnn/protos:export_pb2_py',
+        '//dragnn/protos:spec_pb2_py',
+        '@org_tensorflow//tensorflow:tensorflow_py',
+    ],
+)
+    
+        # As well as annotation:
+    self.setUp()
+    comp = bulk_component.BulkAnnotatorComponentBuilder(self.master,
+                                                        component_spec)
+    
+          # Cost = -2 + ln(1 + exp(2) + exp(-1))
+      #        -1 + ln(exp(3) + exp(1) + exp(-2))
+      self.assertAlmostEqual(cost, 2.3027, 4)
+      self.assertEqual(correct, 1)
+      self.assertEqual(total, 2)
+    
+    
+def main(unused_argv):
+  # Run the exporter.
+  export(FLAGS.master_spec, FLAGS.params_path, FLAGS.export_path,
+         FLAGS.export_moving_averages, FLAGS.build_runtime_graph)
+  tf.logging.info('Export complete.')
+    
+        cmd = cmd.split()
+    
+    from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import MultinomialNB
+    
+    mu_second = 0.0 + 10 ** 6  # number of microseconds in a second
+    
+        # the training data folder must be passed as first argument
+    movie_reviews_data_folder = sys.argv[1]
+    dataset = load_files(movie_reviews_data_folder, shuffle=False)
+    print('n_samples: %d' % len(dataset.data))
+    
+    '''
+=========================================================
+The Digit Dataset
+=========================================================
+    
+    class Bigthink(VideoExtractor):
+    name = 'Bigthink'
+    
+    from ..common import *
+    
+    def kuwo_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    if 'www.kuwo.cn/yinyue' in url:
+        rid=match1(url,'yinyue/(\d+)')
+        kuwo_download_by_rid(rid,output_dir, merge, info_only)
     else:
-        # A symlink can never be a mount point
-        if os.path.stat.S_ISLNK(s1.st_mode):
-            return False
+        kuwo_playlist_download(url,output_dir,merge,info_only)
     
-        print(json.dumps(response.json(), indent=4, sort_keys=True))
+    from ..common import *
     
-        try:
-        return json.dumps(result, sort_keys=True, indent=indent, ensure_ascii=False)
-    except UnicodeDecodeError:
-        return json.dumps(result, sort_keys=True, indent=indent)
-
-    
-        def on_open_shell(self):
-        try:
-            for cmd in (b'set terminal length 0', b'set terminal width 512'):
-                self._exec_cli_command(cmd)
-            self._exec_cli_command(b'set terminal length %d' % self.terminal_length)
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
-
-    
-        return results
-
-    
-        def construct_yaml_seq(self, node):
-        data = AnsibleSequence()
-        yield data
-        data.extend(self.construct_sequence(node))
-        data.ansible_pos = self._node_position_info(node)
-    
-            raise NotImplementedError
-        
-    
-    def LT(self, i):
-        '''
-        Get the ith character of lookahead.  This is the same usually as
-        LA(i).  This will be used for labels in the generated
-        lexer code.  I'd prefer to return a char here type-wise, but it's
-        probably better to be 32-bit clean and be consistent with LA.
-        '''
-    
-        video_url = match1(html, r'filepath=(.+)&sec')
-    video_url = video_url.replace('&mid', '?mid')
-    
-    def miomio_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    html = get_html(url)
-    
-        print_info(site_info, title, ext, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir=output_dir, merge=merge)
+            for s in self.stream_types:
+            quality = s['id']
+            src = match1(content,
+                         r'src: '([^']+)', 'data-res': '%s'' % quality)
+            if src is not None:
+                url = 'http://en.musicplayon.com%s' % src
+                self.streams[quality] = {'url': url}
