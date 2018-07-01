@@ -1,417 +1,215 @@
 
         
-        // Generate param traits write methods.
-#include 'ipc/param_traits_write_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
+        #ifndef TENSORFLOW_KERNELS_SPARSE_TENSOR_DENSE_ADD_OP_H_
+#define TENSORFLOW_KERNELS_SPARSE_TENSOR_DENSE_ADD_OP_H_
     
-    #define IPC_MESSAGE_START ShellMsgStart
-    
-    namespace nwapi {
+    class RecordWriter {
+ public:
+  // Create a writer that will append data to '*dest'.
+  // '*dest' must be initially empty.
+  // '*dest' must remain live while this Writer is in use.
+  RecordWriter(WritableFile* dest,
+               const RecordWriterOptions& options = RecordWriterOptions());
     }
     
-    #include 'content/nw/src/api/menu/menu.h'
+    namespace internal {
+template <typename T>
+struct functor_traits<scalar_sigmoid_fast_derivative_op<T> > {
+  enum {
+    Cost = NumTraits<T>::AddCost * 2 + NumTraits<T>::MulCost,
+    PacketAccess = packet_traits<T>::HasAdd && packet_traits<T>::HasMul &&
+                   packet_traits<T>::HasNegate
+  };
+};
+}  // namespace internal
     
-      GdkRectangle screen_rect;
-  gdk_screen_get_monitor_geometry(screen, monitor, &screen_rect);
+    #include 'tensorflow/core/platform/platform.h'
     
-    ui::KeyboardCode GetKeycodeFromText(std::string text){
-  ui::KeyboardCode retval = ui::VKEY_UNKNOWN;
-  if (text.size() != 0){
-    std::string upperText = base::ToUpperASCII(text);
-    std::string keyName = text;
-    bool found = false;
-    if (upperText.size() == 1){
-      char key = upperText[0];
-      if (key>='0' && key<='9'){//handle digital
-        keyName = 'Digit' + upperText;
-        found = true;
-      } else if (key>='A'&&key<='Z'){//handle alphabet
-        keyName = 'Key' + upperText;
-        found = true;
-      }
-    }
-    }
-    }
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    
-    {  for (AppWindow* window : windows) {
-    if (window->NWCanClose())
-      window->GetBaseWindow()->Close();
-  }
-  return RespondNow(NoArguments());
-}
-    
-        bool ReadHTML(ClipboardData& data) {
-      DCHECK(data.type == TYPE_HTML);
-      base::string16 text;
-      std::string src_url;
-      uint32_t fragment_start, fragment_end;
-      clipboard_->ReadHTML(ui::CLIPBOARD_TYPE_COPY_PASTE, &text, &src_url, &fragment_start, &fragment_end);
-      data.data.reset(new std::string(base::UTF16ToUTF8(text)));
-      return true;
+      Status OnWorkStartedLocked() override {
+    offset_ = 0;
+    TF_RETURN_IF_ERROR(env_->NewRandomAccessFile(current_work(), &file_));
     }
     
-        if (windows) {
-      std::unique_ptr<DesktopMediaList> window_media_list =
-        std::make_unique<NativeDesktopMediaList>(
-          content::DesktopMediaID::TYPE_WINDOW,
-          webrtc::DesktopCapturer::CreateWindowCapturer(options));
-      media_list_.push_back(std::move(window_media_list));
+    sampled_audio: A rank 2 tensor containing all tracks of the audio. Dimension 0
+    is time and dimension 1 is the channel.
+contents: The binary audio file contents.
+file_format: A string describing the audio file format. This must be 'wav'.
+samples_per_second: The number of samples per second that the audio should have.
+bits_per_second: The approximate bitrate of the encoded audio file. This is
+    ignored by the 'wav' file format.
+)doc');
+    
+    MPIUtils::MPIUtils(const std::string& worker_name) {
+  InitMPI();
+  // Connect the MPI process IDs to the worker names that are used by TF.
+  // Gather the names of all the active processes (name can't be longer than
+  // 128 bytes)
+  int proc_id = 0, number_of_procs = 1;
+  char my_name[max_worker_name_length];
+  MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &proc_id));
+  MPI_CHECK(MPI_Comm_size(MPI_COMM_WORLD, &number_of_procs));
     }
     
-    #ifdef __clang__
-#elif defined __GNUC__ // not clang (gcc comes later since clang emulates gcc)
-#  if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5))
-#    define JSONCPP_DEPRECATED(message)  __attribute__ ((deprecated(message)))
-#  elif (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
-#    define JSONCPP_DEPRECATED(message)  __attribute__((__deprecated__))
-#  endif  // GNUC version
-#endif // __clang__ || __GNUC__
-    
-    bool OurReader::readValue() {
-  if (stackDepth_ >= features_.stackLimit_) throwRuntimeError('Exceeded stackLimit in readValue().');
-  ++stackDepth_;
-  Token token;
-  skipCommentTokens(token);
-  bool successful = true;
-    }
-    
-    // Find a file by file name.
-bool PyDescriptorDatabase::FindFileByName(const string& filename,
-                                          FileDescriptorProto* output) {
-  ScopedPyObjectPtr py_descriptor(PyObject_CallMethod(
-      py_database_, 'FindFileByName', 's#', filename.c_str(), filename.size()));
-  return GetFileDescriptorProto(py_descriptor.get(), output);
-}
+    // Comparison ops.
+REGISTER_OP_NO_GRADIENT('Less');
+REGISTER_OP_NO_GRADIENT('LessEqual');
+REGISTER_OP_NO_GRADIENT('Greater');
+REGISTER_OP_NO_GRADIENT('GreaterEqual');
+REGISTER_OP_NO_GRADIENT('Equal');
+REGISTER_OP_NO_GRADIENT('NotEqual');
     
      private:
-  const FileDescriptor* file_;
+  const EnumDescriptor* descriptor_;
     
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/wire_format.h>
+    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
     
-    void RepeatedPrimitiveFieldGenerator::GenerateMembers(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
-    '    = pb::FieldCodec.For$capitalized_type_name$($tag$);\n');
-  printer->Print(variables_,
-    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
-  WritePropertyDocComment(printer, descriptor_);
-  AddPublicMemberAttributes(printer);
-  printer->Print(
-    variables_,
-    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
-    '  get { return $name$_; }\n'
-    '}\n');
-}
+    #include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_repeated_enum_field.h>
     
-    SourceGeneratorBase::SourceGeneratorBase(const FileDescriptor* descriptor,
-                                         const Options *options)
-    : descriptor_(descriptor), options_(options) {
-}
+      // overroads RepeatedImmutableMessageFieldGenerator -------------------------
+  void GenerateMembers(io::Printer* printer) const;
+  void GenerateBuilderMembers(io::Printer* printer) const;
+  void GenerateParsingCode(io::Printer* printer) const;
+  void GenerateSerializationCode(io::Printer* printer) const;
+  void GenerateSerializedSizeCode(io::Printer* printer) const;
     
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-     private:
-  const FieldDescriptor* descriptor_;
-  Context* context_;
-  ClassNameResolver* name_resolver_;
-  string scope_;
-    
-    // CodeGenerator implementation which generates Java code.  If you create your
-// own protocol compiler binary and you want it to support Java output, you
-// can do so by registering an instance of this CodeGenerator with the
-// CommandLineInterface in your main() function.
-class LIBPROTOC_EXPORT JavaGenerator : public CodeGenerator {
- public:
-  JavaGenerator();
-  ~JavaGenerator();
-    }
-    
-    namespace google {
-namespace protobuf {
-  class FieldDescriptor;         // descriptor.h
-  class Descriptor;              // descriptor.h
-  class ServiceDescriptor;       // descriptor.h
-  namespace compiler {
-    namespace java {
-      class MessageGenerator;    // message.h
-      class ExtensionGenerator;  // extension.h
-      class ServiceGenerator;    // service.h
-      class Context;             // context.h
-    }
+    #define ASSERT_HOST(x) if (!(x))                                        \
+  {                                                                     \
+    ASSERT_FAILED.error(#x, ABORT, 'in file %s, line %d',               \
+                        __FILE__, __LINE__);                            \
   }
-}
-    }
     
-    void ImmutableLazyMessageOneofFieldGenerator::
-GenerateMergingCode(io::Printer* printer) const {
-  printer->Print(variables_,
-    'if (!($has_oneof_case_message$)) {\n'
-    '  $oneof_name$_ = new $lazy_type$();\n'
-    '}\n'
-    '(($lazy_type$) $oneof_name$_).merge(\n'
-    '    ($lazy_type$) other.$oneof_name$_);\n'
-    '$set_oneof_case_message$;\n');
-}
+    void FreeMFOutline(void *agr);  //MFOUTLINE                             Outline);
     
-    #include 'override_macros.h'
+    extern double TanhTable[];
+extern double LogisticTable[];
     
-    void THDTensor_(potrs)(THDTensor *rb, THDTensor *b, THDTensor *a,  const char *uplo) {
-  bool free_b = false;
-  if (b == NULL) b = rb;
-    }
+    // Include automatically generated configuration file if running autoconf.
+#ifdef HAVE_CONFIG_H
+#include 'config_auto.h'
+#endif
     
-    	static int bio_recv(void *ctx, unsigned char *buf, size_t len);
-	static int bio_send(void *ctx, const unsigned char *buf, size_t len);
+      // Sets the neighbours and good_stroke_neighbours members of the blob by
+  // searching close on all 4 sides.
+  // When finding leader dots/dashes, there is a slightly different rule for
+  // what makes a good neighbour.
+  // If activate_line_trap, then line-like objects are found and isolated.
+  void SetNeighbours(bool leaders, bool activate_line_trap, BLOBNBOX* blob);
     
-        if (!m_huff_val[index])
-      m_huff_val[index] = (uint8 *)alloc(256);
-    
-    # if defined(OC_COLLECT_METRICS)
-struct oc_mode_metrics{
-  double fragw;
-  double satd;
-  double rate;
-  double rmse;
-  double satd2;
-  double satdrate;
-  double rate2;
-  double satdrmse;
-  double rmse2;
-};
-    
-    /*Some common macros for potential platform-specific optimization.*/
-#include <math.h>
-#if !defined(_ocintrin_H)
-# define _ocintrin_H (1)
-    
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-    
-    	// Now set the registry keys
-	HKEY root = GetRootKey(opt);
-    
-    #include <boost/asio/detail/pop_options.hpp>
-    
-    #ifndef BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-#define BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-    
-    #ifndef BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-#define BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-    
-    #ifndef BOOST_ASIO_DETAIL_DESCRIPTOR_READ_OP_HPP
-#define BOOST_ASIO_DETAIL_DESCRIPTOR_READ_OP_HPP
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    #define BOOST_ASIO_ACCEPT_HANDLER_CHECK( \
-    handler_type, handler) \
-  \
-  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
-      void(boost::system::error_code)) \
-    asio_true_handler_type; \
-  \
-  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
-      sizeof(boost::asio::detail::one_arg_handler_test( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>(), \
-          static_cast<const boost::system::error_code*>(0))) == 1, \
-      'AcceptHandler type requirements not met') \
-  \
-  typedef boost::asio::detail::handler_type_requirements< \
-      sizeof( \
-        boost::asio::detail::argbyv( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>())) + \
-      sizeof( \
-        boost::asio::detail::lvref< \
-          asio_true_handler_type>()( \
-            boost::asio::detail::lvref<const boost::system::error_code>()), \
-        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-        auto startPoint = high_resolution_clock::now();
-    vector<thread *> threads;
-    for (int i = 0; i < THREADS; i++) {
-        threads.push_back(new thread([i] {
-            while(nextConnection(i));
-        }));
-    }
-    
-    
-    {    // Connect to echo server
-    newConnection();
-    return uv_run(loop, UV_RUN_DEFAULT);
-}
-    
-    void echo()
-{
-    for (int i = 0; i < connections; i++) {
-        // Write message on random socket
-        uv_write(new uv_write_t, sockets[rand() % connections], &framePack, 1, [](uv_write_t *write_t, int status) {
-            if (status < 0) {
-                cout << 'Write error' << endl;
-                exit(0);
-            }
-            delete write_t;
-        });
-    }
-    }
-    
-    
-    {}
+    #endif
 
     
-    #include 'Networking.h'
-    
-    Node::Node(int recvLength, int prePadding, int postPadding, bool useDefaultLoop) {
-    nodeData = new NodeData;
-    nodeData->recvBufferMemoryBlock = new char[recvLength];
-    nodeData->recvBuffer = nodeData->recvBufferMemoryBlock + prePadding;
-    nodeData->recvLength = recvLength - prePadding - postPadding;
+    namespace guetzli {
     }
     
-    
-    {        httpSocket->sendTransformed<NoopTransformer>(message, length, callback, callbackData, 0);
-        hasHead = true;
-    }
-    
-        Hub(int extensionOptions = 0, bool useDefaultLoop = false, unsigned int maxPayload = 16777216) : uS::Node(LARGE_BUFFER_SIZE, WebSocketProtocol<SERVER, WebSocket<SERVER>>::CONSUME_PRE_PADDING, WebSocketProtocol<SERVER, WebSocket<SERVER>>::CONSUME_POST_PADDING, useDefaultLoop),
-                                             Group<SERVER>(extensionOptions, maxPayload, this, nodeData), Group<CLIENT>(0, maxPayload, this, nodeData) {
-        inflateInit2(&inflationStream, -15);
-        zlibBuffer = new char[LARGE_BUFFER_SIZE];
-    }
-    
-    // Creates an action that invokes the given method on the given object
-// with the mock function's arguments.
-template <class Class, typename MethodPtr>
-PolymorphicAction<internal::InvokeMethodAction<Class, MethodPtr> > Invoke(
-    Class* obj_ptr, MethodPtr method_ptr) {
-  return MakePolymorphicAction(
-      internal::InvokeMethodAction<Class, MethodPtr>(obj_ptr, method_ptr));
-}
-    
-    class MockFoo {
- public:
-  // A mock method that returns a user-defined type.  Google Mock
-  // doesn't know what the default value for this type is.
-  MOCK_METHOD0(GetNonDefaultConstructible, NonDefaultConstructible());
+    static const int kCrToRedTable[256] = {
+  -179, -178, -177, -175, -174, -172, -171, -170, -168, -167, -165, -164,
+  -163, -161, -160, -158, -157, -156, -154, -153, -151, -150, -149, -147,
+  -146, -144, -143, -142, -140, -139, -137, -136, -135, -133, -132, -130,
+  -129, -128, -126, -125, -123, -122, -121, -119, -118, -116, -115, -114,
+  -112, -111, -109, -108, -107, -105, -104, -102, -101, -100,  -98,  -97,
+   -95,  -94,  -93,  -91,  -90,  -88,  -87,  -86,  -84,  -83,  -81,  -80,
+   -79,  -77,  -76,  -74,  -73,  -72,  -70,  -69,  -67,  -66,  -64,  -63,
+   -62,  -60,  -59,  -57,  -56,  -55,  -53,  -52,  -50,  -49,  -48,  -46,
+   -45,  -43,  -42,  -41,  -39,  -38,  -36,  -35,  -34,  -32,  -31,  -29,
+   -28,  -27,  -25,  -24,  -22,  -21,  -20,  -18,  -17,  -15,  -14,  -13,
+   -11,  -10,   -8,   -7,   -6,   -4,   -3,   -1,    0,    1,    3,    4,
+     6,    7,    8,   10,   11,   13,   14,   15,   17,   18,   20,   21,
+    22,   24,   25,   27,   28,   29,   31,   32,   34,   35,   36,   38,
+    39,   41,   42,   43,   45,   46,   48,   49,   50,   52,   53,   55,
+    56,   57,   59,   60,   62,   63,   64,   66,   67,   69,   70,   72,
+    73,   74,   76,   77,   79,   80,   81,   83,   84,   86,   87,   88,
+    90,   91,   93,   94,   95,   97,   98,  100,  101,  102,  104,  105,
+   107,  108,  109,  111,  112,  114,  115,  116,  118,  119,  121,  122,
+   123,  125,  126,  128,  129,  130,  132,  133,  135,  136,  137,  139,
+   140,  142,  143,  144,  146,  147,  149,  150,  151,  153,  154,  156,
+   157,  158,  160,  161,  163,  164,  165,  167,  168,  170,  171,  172,
+   174,  175,  177,  178
 };
     
-    $for k [[
-$range m 0..k-1
-    
-    // Sets the 0-terminated C string this MyString object
-// represents.
-void MyString::Set(const char* a_c_string) {
-  // Makes sure this works when c_string == c_string_
-  const char* const temp = MyString::CloneCString(a_c_string);
-  delete[] c_string_;
-  c_string_ = temp;
-}
-
-    
-        E* element = new E(old_head->element());
-    delete old_head;
-    
-    // A group of value-parameterized tests.
-    
-      h1 = fmix64(h1);
-  h2 = fmix64(h2);
-    
-    
-    {
-    { protected:
-  float momentum_{0.9};
-  float weight_decay_{0.0};
-  bool nesterov_;
-  bool fp32_update_;
-  INPUT_TAGS(GRAD, MOMENTUM, LR, PARAM);
-  OUTPUT_TAGS(OUTPUT_GRAD, OUTPUT_MOMENTUM, OUTPUT_PARAM);
-};
-}
-
-    
-    #include 'caffe2/core/operator.h'
-#include 'caffe2/core/timer.h'
-    
-    #include 'caffe2/core/context.h'
-#include 'caffe2/core/operator.h'
-    
-      // Executes the closure F on the CuDNNState associated with state_idx
-  template <typename F>
-  void with_cudnn_state(size_t state_idx, F&& f) {
-    CAFFE_ENFORCE(
-        state_idx < CAFFE2_COMPILE_TIME_MAX_CUDNN_STATES, 'Invalid state_idx');
-    auto& sync_state = cudnn_states()[context_->cuda_gpu_id()][state_idx];
+    namespace guetzli {
     }
     
-    #define MAKE_OPENGL_OPERATOR(_op)                                              \
-  _op->mutable_device_option()->set_device_type(OPENGL);
-    
-      NetBase* net = ws->CreateNet(predict_net_def);
-  LOG(INFO) << '[C2DEBUG] Benchmarking OpenGL Net';
-  net->TEST_Benchmark(caffe2::FLAGS_warmup, caffe2::FLAGS_iter, caffe2::FLAGS_run_individual);
-  // Test CPU
-  for (auto i = 0; i < predict_net_def.op().size(); ++i) {
-    auto op = predict_net_def.mutable_op(i);
-    if (std::find(cpu_ops.begin(), cpu_ops.end(), op->type()) == cpu_ops.end()) {
-      op->mutable_device_option()->set_device_type(CPU);
-    }
+    std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg) {
+  if (jpg.components.size() == 1 ||
+      (jpg.components.size() == 3 &&
+       HasYCbCrColorSpace(jpg) && (jpg.Is420() || jpg.Is444()))) {
+    OutputImage img(jpg.width, jpg.height);
+    img.CopyFromJpegData(jpg);
+    return img.ToSRGB();
   }
-  predict_net_def.set_type('simple');
-  predict_net_def.set_name('cpu_net');
-  net = ws->CreateNet(predict_net_def);
-  LOG(INFO) << '[C2DEBUG] Benchmarking CPU Net';
-  net->TEST_Benchmark(caffe2::FLAGS_warmup, caffe2::FLAGS_iter, caffe2::FLAGS_run_individual);
+  return std::vector<uint8_t>();
+}
     
-      TIndex output_offset = 0;
-  // Sort preserving indices
-  for (TIndex i = 0; i < linear_shape[0]; ++i) {
-    // Build a min-heap, the heap element is pair of (value, idx)
-    // the top of the heap is the smallest value
-    std::priority_queue<
-        std::pair<T, TIndex>,
-        std::vector<std::pair<T, TIndex>>,
-        ValueCmp<T>>
-        PQ;
+    #include <stdint.h>
+    
+      typedef std::unordered_map<detail::TypeDescriptor,
+                             detail::SingletonHolderBase*,
+                             detail::TypeDescriptorHasher> SingletonMap;
+  Synchronized<SingletonMap> singletons_;
+  Synchronized<std::unordered_set<detail::SingletonHolderBase*>>
+      eagerInitSingletons_;
+  Synchronized<std::vector<detail::TypeDescriptor>> creationOrder_;
+    
+    #pragma once
+    
+    int main(int argc, char* argv[]) {
+  // Using log macros before calling folly::initLogging() will use the default
+  // log settings defined by folly::initializeLoggerDB().  The default behavior
+  // is to log WARNING+ messages to stderr.
+  XLOG(INFO) << 'log messages less than WARNING will be ignored';
+  XLOG(ERR) << 'error messages before initLogging() will be logged to stderr';
     }
     
-    namespace caffe2 {
-    }
+    
+    {  const char* value_{nullptr};
+};
+    
+      /**
+   * Add one task for execution in the parent executor, and use the given
+   * priority for one task submission to parent executor.
+   *
+   * Since in-order execution of tasks submitted to SerialExecutor is
+   * guaranteed, the priority given here does not necessarily reflect the
+   * execution priority of the task submitted with this call to
+   * `addWithPriority`. The given priority is passed on to the parent executor
+   * for the execution of one of the SerialExecutor's tasks.
+   */
+  void addWithPriority(Func func, int8_t priority) override;
+  uint8_t getNumPriorities() const override {
+    return parent_->getNumPriorities();
+  }
+    
+    template <typename T>
+FOLLY_ALWAYS_INLINE T* hazptr_holder::get_protected(
+    const std::atomic<T*>& src) noexcept {
+  return get_protected(src, [](T* t) { return t; });
+}
+    
+      // Disabled log messages should not evaluate their arguments
+  bool argumentEvaluated = false;
+  auto getValue = [&] {
+    argumentEvaluated = true;
+    return 5;
+  };
+  FB_LOGC(foobar, DBG3, 'discarded message: %d', getValue());
+  EXPECT_FALSE(argumentEvaluated);
+    
+    
+    {} // namespace folly
+
+    
+        /**
+     * Shortcut to change the action for standard error.
+     * Note that stderr(1) will redirect the standard error to the same
+     * file descriptor as standard output; the equivalent of bash's '2>&1'
+     */
+    Options& stderrFd(int action) { return fd(STDERR_FILENO, action); }
