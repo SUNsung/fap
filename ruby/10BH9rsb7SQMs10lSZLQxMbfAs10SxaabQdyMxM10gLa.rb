@@ -1,43 +1,96 @@
 
         
-            def create_event(event)
-      return super unless dry_run?
-      if can_create_events?
-        event = build_event(event)
-        @dry_run_results[:events] << event.payload
-        event
-      else
-        error 'This Agent cannot create events!'
-      end
-    end
+            s = nil
+    homebrew_site_packages = Language::Python.homebrew_site_packages
+    user_site_packages = Language::Python.user_site_packages 'python'
+    pth_file = user_site_packages/'homebrew.pth'
+    instructions = <<-EOS.undent.gsub(/^/, '  ')
+      mkdir -p #{user_site_packages}
+      echo 'import site; site.addsitedir('#{homebrew_site_packages}')' >> #{pth_file}
+    EOS
+    
+        [@f.bin, @f.sbin, @f.lib].each { |d| clean_dir(d) if d.exist? }
+    
+      def self.factory(name)
+    Formulary.factory(name)
+  end
+    
+          export JAVA_HOME='$(/usr/libexec/java_home)'
+      export AWS_ACCESS_KEY='<Your AWS Access ID>'
+      export AWS_SECRET_KEY='<Your AWS Secret Key>'
+      export #{home_name}='#{home_value}'
+    EOS
   end
 end
 
     
-      included do
-    self.validate :validate_email_options
-  end
+      def validate_email_options
+    errors.add(:base, 'subject and expected_receive_period_in_days are required') unless options['subject'].present? && options['expected_receive_period_in_days'].present?
     
-        # we assume that the first file that requires 'sinatra' is the
-    # app_file. all other path related options are calculated based
-    # on this path by default.
-    set :app_file, caller_files.first || $0
-    
-        it 'copes with nested arrays' do
-      mock_app do |env|
-        request = Rack::Request.new(env)
-        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']['bar']]]
+          if options[:type] == :array && (options[:values].blank? || !options[:values].is_a?(Array))
+        raise ArgumentError.new('When using :array as :type you need to provide the :values as an Array')
       end
-      get '/', :foo => {:bar => '<bar>'}
-      expect(body).to eq('&lt;bar&gt;')
+    
+      def index
+    set_table_sort sorts: %w[credential_name credential_value], default: { credential_name: :asc }
+    
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
+      end
+    
+          if options.has_key?(:only)
+        @used_routes = self.routes & Array(options[:only]).map(&singularizer)
+      elsif options[:skip] == :all
+        @used_routes = []
+      else
+        @used_routes = self.routes - Array(options[:skip]).map(&singularizer)
+      end
     end
     
-      %w(GET HEAD POST PUT DELETE).each do |method|
-    it 'accepts #{method} requests when allow_if is true' do
-      mock_app do
-        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
-        run DummyApp
-      end
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
-    end
+        validate :boundary_must_be_ip_range
+    
+    #
+# Project
+#
+    
+    unless $LOAD_PATH.include? lib_path
+  $LOAD_PATH.unshift lib_path
+end
+
+    
+      # Extract the form
+  res = '<form'
+  form.attributes.each do |attr|
+    res << ' #{attr[0]}='#{attr[1].gsub(''', '')}''
   end
+  res << '> '
+    
+    require 'rubygems'  # install rubygems
+require 'hpricot'   # gem install hpricot
+require 'uri'
+require 'timeout'
+    
+          when :banner
+        # Because some ftp server send multiple banner we take only the first one and ignore the rest
+        if not (s[:info])
+          s[:info] = matches
+          report_service(s)
+        end
+    
+    module Api
+  module OpenidConnect
+    class ClientsController < ApplicationController
+      skip_before_action :verify_authenticity_token
+    
+    if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
+  ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
+  require 'rubygems'
+  require 'bundler/setup'
+  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+elsif ENV['COCOAPODS_NO_BUNDLER']
+  require 'rubygems'
+  gem 'cocoapods'
+end
