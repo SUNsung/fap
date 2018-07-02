@@ -1,92 +1,99 @@
 
         
-        def bottle_tag
-  if MacOS.version >= :lion
-    MacOS.cat
-  elsif MacOS.version == :snow_leopard
-    Hardware::CPU.is_64_bit? ? :snow_leopard : :snow_leopard_32
-  else
-    # Return, e.g., :tiger_g3, :leopard_g5_64, :leopard_64 (which is Intel)
-    if Hardware::CPU.type == :ppc
-      tag = '#{MacOS.cat}_#{Hardware::CPU.family}'.to_sym
-    else
-      tag = MacOS.cat
+                key.revoke!
+      end
     end
-    MacOS.prefer_64_bit? ? '#{tag}_64'.to_sym : tag
+  end
+end
+
+    
+          it 'prefers a custom version number over a boring version bump' do
+        Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number(version_number: '1.77.3', bump_type: 'major')
+        end').runner.execute(:test)
+    
+      def test_cmd_symbol_after_keyword
+    bug6347 = '[ruby-dev:45563]'
+    assert_not_label(:foo, 'if true then not_label:foo end', bug6347)
+    assert_not_label(:foo, 'if false; else not_label:foo end', bug6347)
+    assert_not_label(:foo, 'begin not_label:foo end', bug6347)
+    assert_not_label(:foo, 'begin ensure not_label:foo end', bug6347)
+  end
+    
+      def do_with_enum(enum, &block) # :nodoc:
+    if enum.respond_to?(:each_entry)
+      enum.each_entry(&block) if block
+    elsif enum.respond_to?(:each)
+      enum.each(&block) if block
+    else
+      raise ArgumentError, 'value must be enumerable'
+    end
+  end
+  private :do_with_enum
+    
+      def test_to_s
+    t2000 = get_t2000
+    assert_equal('2000-01-01 00:00:00 UTC', t2000.to_s)
+    assert_equal(Encoding::US_ASCII, t2000.to_s.encoding)
+    assert_kind_of(String, Time.at(946684800).getlocal.to_s)
+    assert_equal(Time.at(946684800).getlocal.to_s, Time.at(946684800).to_s)
+  end
+    
+      it 'adds nil for each element requested beyond the end of the String' do
+    [ ['abc',                  [nil, nil, nil]],
+      ['\x8f\xc2\xb5?abc',     [1.4199999570846558, nil, nil]],
+      ['\x9a\x999@33\xb3?abc', [2.9000000953674316, 1.399999976158142, nil]]
+    ].should be_computed_by(:unpack, unpack_format(3))
+  end
+    
+    describe :string_unpack_Aa, shared: true do
+  it 'decodes the number of bytes specified by the count modifier including NULL bytes' do
+    'a\x00bc'.unpack(unpack_format(3)+unpack_format).should == ['a\x00b', 'c']
+  end
+    
+        if test_conf['database']&.present?
+      ActiveRecord::Base.establish_connection(:test)
+      yield
+      ActiveRecord::Base.establish_connection(Rails.env.to_sym)
+    end
+  end
+    
+    def codepoints_to_unicode(codepoints)
+  if codepoints.include?(' ')
+    codepoints.split(' ').map(&:hex).pack('U*')
+  else
+    [codepoints.hex].pack('U')
   end
 end
     
-      def <<(o)
-    @settings << o
-    self
-  end
+            sign_in user, scope: :user
+      end
     
-      def describe_path(path)
-    return 'N/A' if path.nil?
-    realpath = path.realpath
-    if realpath == path
-      path
-    else
-      '#{path} => #{realpath}'
-    end
-  end
+    if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+  puts '## Set the codepage to 65001 for Windows machines'
+  `chcp 65001`
+end
     
-        if !updated
-      puts 'Already up-to-date.'
-    elsif hub.empty?
-      puts 'No changes to formulae.'
-    else
-      hub.dump
-      hub.reporters.each(&:migrate_tap_migration)
-      hub.reporters.each(&:migrate_formula_rename)
-      Descriptions.update_cache(hub)
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
+    
+      class ImageTag < Liquid::Tag
+    @img = nil
+    
+          super
     end
     
-      def self.canonical_name(name)
-    Formulary.canonical_name(name)
-  end
-    
-        options[:container] = ->(filter) {
-      filter.current_url.path.start_with?('/getting-started') ? '#main' : '#content'
-    }
-    options[:title] = false
-    options[:root_title] = 'Elixir'
-    
-        def parse(response)
-      unless response.url == root_url || self.class.version == 'Guide'
-        response.body.sub!(/<nav class='devsite-nav-responsive-sidebar.+?<\/nav>/m, '')
-        response.body.gsub!(/<li class='devsite-nav-item'>.+?<\/li>/m, '')
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
       end
-    
-        def as_json
-      @pages
+      super
     end
-    
-            ORDERED_DIRECTIVES.each do |directive_sym|
-          next unless directives.key?(directive_sym)
-          args = directives[directive_sym]
-          send('uninstall_#{directive_sym}', *(args.is_a?(Hash) ? [args] : args), **options)
-        end
-      end
-    
-      def dashboard
-    gon.push(pod_version: pod_version)
-  end
-    
-          def stages
-        names = Dir[stage_definitions].map { |f| File.basename(f, '.rb') }
-        assert_valid_stage_names(names)
-        names
-      end
-    
-      if ''.respond_to?(:encoding)  # Ruby 1.9+ M17N
-    context 'PATH_INFO's encoding' do
-      before do
-        @app = Rack::Protection::PathTraversal.new(proc { |e| [200, {'Content-Type' => 'text/plain'}, [e['PATH_INFO'].encoding.to_s]] })
-      end
-    
-        expect(get('/..', :foo => '<bar>')).to be_ok
-  end
-    
-                  add_offense(condition)
-            end
