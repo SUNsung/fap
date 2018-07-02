@@ -1,55 +1,116 @@
 
         
-          included do
-    scope :admins, -> { where(admin: true) }
-    scope :moderators, -> { where(moderator: true) }
-    scope :staff, -> { where('moderator or admin ') }
+            def test_simple_redirect
+      get :simple_redirect
+      assert_response :redirect
+      assert_equal 'http://test.host/module_test/module_redirect/hello_world', redirect_to_url
+    end
+    
+        assert_equal 0, firm.clients_of_firm.size
+    assert_equal 0, firm.clients_of_firm.reload.size
+    assert_equal [], Client.destroyed_client_ids[firm.id]
+    
+      after_initialize :set_email_address
+    
+        def topic(data)
+      @last_action = [ :topic, data ]
+    end
+    
+      test 'periodic timers definition' do
+    timers = ChatChannel.periodic_timers
+    
+      setup do
+    @user = User.new 'lifo'
+    @connection = TestConnection.new(@user)
   end
     
-            # Split out the targets into app and test targets
-        test_targets, app_targets = project.native_targets.
-                              sort_by { |t| t.name.downcase }.
-                              partition(&:test_target_type?)
-    
-          content_type 'application/json'
-      LogStash::Json.dump(data, {:pretty => pretty?})
-    else
-      content_type 'text/plain'
-      data.to_s
-    end
-  end
-    
-        def clear
-      @attachments = Hash.new { |h,k| h[k] = {} }
-    end
-    
-        # Returns a String describing the file's content type
-    def detect
-      if blank_name?
-        SENSIBLE_DEFAULT
-      elsif empty_file?
-        EMPTY_TYPE
-      elsif calculated_type_matches.any?
-        calculated_type_matches.first
-      else
-        type_from_file_contents || SENSIBLE_DEFAULT
-      end.to_s
-    end
-    
-            def has_column?
-          @subject.column_names.include?('#{@attachment_name}_file_name')
-        end
+            assert pubsub.verify
       end
     end
-  end
-end
-
     
-            protected
+        def connect
+      reject_unauthorized_connection
+    end
     
-          def check_validity!
-        unless options.has_key?(:content_type) || options.has_key?(:not)
-          raise ArgumentError, 'You must pass in either :content_type or :not to the validator'
+      test 'rejecting a connection causes a 404' do
+    run_in_eventmachine do
+      class CallMeMaybe
+        def call(*)
+          raise 'Do not call me!'
         end
       end
+    
+          open_connection(server)
+      close_connection
+      wait_for_async
+    
+      def external_commands
+    paths.reduce([]) do |cmds, path|
+      Dir['#{path}/brew-*'].each do |file|
+        next unless File.executable?(file)
+        cmd = File.basename(file, '.rb')[5..-1]
+        cmds << cmd unless cmd.include?('.')
+      end
+      cmds
+    end.sort
+  end
+    
+        options[:attribution] = <<-HTML
+      &copy; Django Software Foundation and individual contributors<br>
+      Licensed under the BSD License.
+    HTML
+    
+          unless root?
+        raise Invalid, 'missing name' if !name || name.empty?
+        raise Invalid, 'missing path' if !path || path.empty?
+        raise Invalid, 'missing type' if !type || type.empty?
+      end
     end
+    
+            css('.note h3', '.warning h3').each do |node|
+          node.before('<p><strong>#{node.inner_html}</strong></p>').remove
+        end
+    
+              # Parse the options
+          argv = parse_options(opts)
+          return if !argv
+          if argv.empty? || argv.length > 2
+            raise Vagrant::Errors::CLIInvalidUsage,
+              help: opts.help.chomp
+          end
+    
+    # grab name/url pairings from README.md
+readme = File.open('README.md', 'r')
+contents = readme.read
+matches = contents.scan(/\* (.*) (http.*)/)
+# All blogs that do not respond
+unavailable = []
+temp_ignores = [
+  'AdRoll',
+  'Buzzfeed',
+  'Code School',
+  'Fynd',
+  'Just Eat',
+  'Lookout',
+  'OmniTI',
+  'Paperless Post',
+  'Pluralsight',
+  'Prolific Interactive',
+  'Quora',
+  'Robert Elder Software',
+  'Simple',
+  'SourceClear',
+  'TaskRabbit',
+  'theScore',
+  'Trivago',
+  'Xmartlabs',
+  'WyeWorks',
+  'Zapier',
+  'Zoosk',
+  'Zynga',
+  'Dave Beazley',
+  'Edan Kwan',
+  'Kai Hendry',
+  'LiveOverflow',
+  'Rudolf Olah'
+]
