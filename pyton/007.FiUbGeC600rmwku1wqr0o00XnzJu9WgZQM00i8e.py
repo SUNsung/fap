@@ -1,101 +1,125 @@
 
         
-        
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
-
+        anchor = '###'
+min_entries_per_section = 3
+auth_keys = ['apiKey', 'OAuth', 'X-Mashape-Key', 'No']
+punctuation = ['.', '?', '!']
+https_keys = ['Yes', 'No']
+cors_keys = ['Yes', 'No', 'Unknown']
     
-        class Test(Base):
-        SECRET_KEY = 'config'
+        # To avoid having to always use the '|safe' filter in flatpage templates,
+    # mark the title and content as already safe (since they are raw HTML
+    # content in the first place).
+    f.title = mark_safe(f.title)
+    f.content = mark_safe(f.content)
     
+        def __init__(self, employee_id, name):
+        super(Operator, self).__init__(employee_id, name, Rank.OPERATOR)
     
-def test_safe_join_toplevel_pardir():
-    from flask.helpers import safe_join
-    with pytest.raises(NotFound):
-        safe_join('/foo', '..')
-    
-            @app.route('/')
-        def index():
-            reqctx = flask._request_ctx_stack.top.copy()
-    
-        with app.test_client() as c:
-        monkeypatch.setitem(app.config, 'EXPLAIN_TEMPLATE_LOADING', True)
-        monkeypatch.setattr(
-            logging.getLogger('flask'), 'handlers', [_TestHandler()]
-        )
-    
-    
-def print_list():
-    data = get_landscape_members_data()
-    nodes = get_nodes(data)
-    groups = get_groups(data)
-    meta = get_meta(data)
-    inventory_data = {_key: nodes, '_meta': meta}
-    inventory_data.update(groups)
-    print(json.dumps(inventory_data))
-    
-        if s1.st_dev != s2.st_dev:
-        return True     # path/.. on a different device as path
-    if s1.st_ino == s2.st_ino:
-        return True     # path/.. is the same i-node as path, i.e. path=='/'
-    return False
-
-    
-    - CommonTokenStream: A basic and most commonly used TokenStream
-  implementation.
-- TokenRewriteStream: A modification of CommonTokenStream that allows the
-  stream to be altered (by the Parser). See the 'tweak' example for a usecase.
-    
-    ## Anything on different channel than DEFAULT_CHANNEL is not parsed
-# by parser.
-HIDDEN_CHANNEL = 99
-    
-                    # look for a normal char transition
-                c = input.LA(1)
-    
-            Using setter/getter methods is deprecated. Use o.channel instead.'''
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-        @property
-    def unconsumed_tail(self):
-        # type: () -> bytes
-        '''Returns the unconsumed portion left over
+            When updating an entry, updates its position to the front of the LRU list.
+        If the entry is new and the cache is at capacity, removes the oldest entry
+        before the new entry is added.
         '''
-        return self.decompressobj.unconsumed_tail
-    
-        def write_message(self, message, binary=False):
-        '''Sends the given message to the client of this Web Socket.'''
-        if binary:
-            opcode = 0x2
+        node = self.map[query]
+        if node is not None:
+            # Key exists in cache, update the value
+            node.results = results
+            self.linked_list.move_to_front(node)
         else:
-            opcode = 0x1
-        message = tornado.escape.utf8(message)
-        assert isinstance(message, bytes)
-        self._message_bytes_out += len(message)
-        flags = 0
-        if self._compressor:
-            message = self._compressor.compress(message)
-            flags |= self.RSV1
-        # For historical reasons, write methods in Tornado operate in a semi-synchronous
-        # mode in which awaiting the Future they return is optional (But errors can
-        # still be raised). This requires us to go through an awkward dance here
-        # to transform the errors that may be returned while presenting the same
-        # semi-synchronous interface.
-        try:
-            fut = self._write_frame(True, opcode, message, flags=flags)
-        except StreamClosedError:
-            raise WebSocketClosedError()
+            # Key does not exist in cache
+            if self.size == self.MAX_SIZE:
+                # Remove the oldest entry from the linked list and lookup
+                self.lookup.pop(self.linked_list.tail.query, None)
+                self.linked_list.remove_from_tail()
+            else:
+                self.size += 1
+            # Add the new key and value
+            new_node = Node(query, results)
+            self.linked_list.append_to_front(new_node)
+            self.lookup[query] = new_node
+
+    
+            (foo, 2), p1
+        (bar, 3), p1
+        (foo, 3), p2
+        (bar, 10), p3
+        (foo, 1), p4
+    
+        def can_fit_in_spot(self, spot):
+        return spot.size in (VehicleSize.LARGE, VehicleSize.COMPACT)
+    
+        def approve_friend_request(self, from_user_id, to_user_id):
+        pass
+    
+    if hasattr(ctypes, 'windll'):
+    WSAStringToAddressA = ctypes.windll.ws2_32.WSAStringToAddressA
+    WSAAddressToStringA = ctypes.windll.ws2_32.WSAAddressToStringA
+else:
+    def not_windows():
+        raise SystemError(
+            'Invalid platform. ctypes.windll must be available.'
+        )
+    WSAStringToAddressA = not_windows
+    WSAAddressToStringA = not_windows
+    
+    - RecognitionException
+  - MismatchedRangeException
+  - MismatchedSetException
+    - MismatchedNotSetException
+    .
+  - MismatchedTokenException
+  - MismatchedTreeNodeException
+  - NoViableAltException
+  - EarlyExitException
+  - FailedPredicateException
+  .
+.
+    
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
+    
+    # Add any paths that contain custom static files (such as style sheets) here,
+# relative to this directory. They are copied after the builtin static files,
+# so a file named 'default.css' will overwrite the builtin 'default.css'.
+html_static_path = ['_static']
+    
+            mock_crypto_util.init_save_key.assert_called_once_with(
+            self.config.rsa_key_size, self.config.key_dir)
+        mock_crypto_util.init_save_csr.assert_called_once_with(
+            mock.sentinel.key, self.eg_domains, self.config.csr_dir)
+        mock_crypto_util.cert_and_chain_from_fullchain.assert_called_once_with(
+            self.eg_order.fullchain_pem)
+    
+    # If false, no module index is generated.
+#html_domain_indices = True
+    
+        def load_config(self):
+        '''Returns the next config directory to be tested'''
+        shutil.rmtree(self.le_config.work_dir, ignore_errors=True)
+        backup = os.path.join(self.le_config.work_dir, constants.BACKUP_DIR)
+        os.makedirs(backup)
+        return self._configs.pop()
+    
+        @mock.patch('certbot_compatibility_test.validator.requests.get')
+    def test_hsts_empty(self, mock_get_request):
+        mock_get_request.return_value = create_response(
+            headers={'strict-transport-security': ''})
+        self.assertFalse(self.validator.hsts('test.com'))
+    
+        if not app.config.edit_on_github_project:
+        warnings.warn('edit_on_github_project not specified')
+        return
+    if not doctree:
+        warnings.warn('doctree is None')
+        return
+    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
+    show_url = get_github_url(app, 'blob', path)
+    edit_url = get_github_url(app, 'edit', path)
+    
+    DOMAIN = 'browser'
+SERVICE_BROWSE_URL = 'browse_url'
+    
+    from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
