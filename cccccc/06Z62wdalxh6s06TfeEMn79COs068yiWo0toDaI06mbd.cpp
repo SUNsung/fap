@@ -1,150 +1,162 @@
 
         
-            f3coeff[1] = 2*D[1][2] - 2*D[1][4] + 2*D[2][1] + 2*D[2][5] + 2*D[2][9] - 2*D[4][1] - 2*D[4][5] - 2*D[4][9] + 2*D[5][2] - 2*D[5][4] + 2*D[9][2] - 2*D[9][4]; // constant term
-    f3coeff[2] = 2*D[1][6] + 2*D[1][8] + 4*D[2][3] + 4*D[2][7] + 4*D[3][2] + 4*D[3][4] + 4*D[4][3] + 4*D[4][7] - 2*D[5][6] - 2*D[5][8] + 2*D[6][1] - 2*D[6][5] - 2*D[6][9] + 4*D[7][2] + 4*D[7][4] + 2*D[8][1] - 2*D[8][5] - 2*D[8][9] - 2*D[9][6] - 2*D[9][8]; // s1^2  * s2
-    f3coeff[3] = 8*D[2][2] - 8*D[3][3] - 8*D[4][4] + 8*D[6][6] + 8*D[7][7] - 8*D[8][8]; // s1 * s2
-    f3coeff[4] = 4*D[1][8] - 4*D[1][6] + 8*D[2][3] + 8*D[2][7] + 8*D[3][2] - 8*D[3][4] - 8*D[4][3] - 8*D[4][7] - 4*D[5][6] + 4*D[5][8] - 4*D[6][1] - 4*D[6][5] + 4*D[6][9] + 8*D[7][2] - 8*D[7][4] + 4*D[8][1] + 4*D[8][5] - 4*D[8][9] + 4*D[9][6] - 4*D[9][8]; // s1 * s3
-    f3coeff[5] = 4*D[1][3] - 4*D[1][7] + 8*D[2][6] + 8*D[2][8] + 4*D[3][1] + 4*D[3][5] - 4*D[3][9] - 8*D[4][6] - 8*D[4][8] + 4*D[5][3] - 4*D[5][7] + 8*D[6][2] - 8*D[6][4] - 4*D[7][1] - 4*D[7][5] + 4*D[7][9] + 8*D[8][2] - 8*D[8][4] - 4*D[9][3] + 4*D[9][7]; // s2 * s3
-    f3coeff[6] = 4*D[1][1] - 4*D[5][5] + 4*D[5][9] + 8*D[6][6] + 8*D[6][8] + 8*D[8][6] + 8*D[8][8] + 4*D[9][5] - 4*D[9][9]; // s2^2 * s3
-    f3coeff[7] = 2*D[5][6] - 2*D[1][8] - 2*D[1][6] + 2*D[5][8] - 2*D[6][1] + 2*D[6][5] - 2*D[6][9] - 2*D[8][1] + 2*D[8][5] - 2*D[8][9] - 2*D[9][6] - 2*D[9][8]; // s2^3
-    f3coeff[8] = 6*D[3][9] - 6*D[1][7] - 6*D[3][1] - 6*D[3][5] - 6*D[1][3] - 6*D[5][3] - 6*D[5][7] - 6*D[7][1] - 6*D[7][5] + 6*D[7][9] + 6*D[9][3] + 6*D[9][7]; // s1 * s3^2
-    f3coeff[9] = 2*D[1][3] + 2*D[1][7] + 4*D[2][6] - 4*D[2][8] + 2*D[3][1] + 2*D[3][5] + 2*D[3][9] - 4*D[4][6] + 4*D[4][8] + 2*D[5][3] + 2*D[5][7] + 4*D[6][2] - 4*D[6][4] + 2*D[7][1] + 2*D[7][5] + 2*D[7][9] - 4*D[8][2] + 4*D[8][4] + 2*D[9][3] + 2*D[9][7]; // s1
-    f3coeff[10] = 8*D[2][2] - 4*D[1][5] - 4*D[1][1] - 8*D[2][4] - 8*D[4][2] + 8*D[4][4] - 4*D[5][1] - 4*D[5][5] + 4*D[9][9]; // s3
-    f3coeff[11] = 2*D[1][6] + 2*D[1][8] - 4*D[2][3] + 4*D[2][7] - 4*D[3][2] + 4*D[3][4] + 4*D[4][3] - 4*D[4][7] + 2*D[5][6] + 2*D[5][8] + 2*D[6][1] + 2*D[6][5] + 2*D[6][9] + 4*D[7][2] - 4*D[7][4] + 2*D[8][1] + 2*D[8][5] + 2*D[8][9] + 2*D[9][6] + 2*D[9][8]; // s2
-    f3coeff[12] = 6*D[6][9] - 6*D[1][8] - 6*D[5][6] - 6*D[5][8] - 6*D[6][1] - 6*D[6][5] - 6*D[1][6] - 6*D[8][1] - 6*D[8][5] + 6*D[8][9] + 6*D[9][6] + 6*D[9][8]; // s2 * s3^2
-    f3coeff[13] = 2*D[1][2] - 2*D[1][4] + 2*D[2][1] - 2*D[2][5] - 2*D[2][9] + 4*D[3][6] - 4*D[3][8] - 2*D[4][1] + 2*D[4][5] + 2*D[4][9] - 2*D[5][2] + 2*D[5][4] + 4*D[6][3] + 4*D[6][7] + 4*D[7][6] - 4*D[7][8] - 4*D[8][3] - 4*D[8][7] - 2*D[9][2] + 2*D[9][4]; // s1^2
-    f3coeff[14] = 6*D[1][4] - 6*D[1][2] - 6*D[2][1] - 6*D[2][5] + 6*D[2][9] + 6*D[4][1] + 6*D[4][5] - 6*D[4][9] - 6*D[5][2] + 6*D[5][4] + 6*D[9][2] - 6*D[9][4]; // s3^2
-    f3coeff[15] = 2*D[1][4] - 2*D[1][2] - 2*D[2][1] + 2*D[2][5] - 2*D[2][9] - 4*D[3][6] - 4*D[3][8] + 2*D[4][1] - 2*D[4][5] + 2*D[4][9] + 2*D[5][2] - 2*D[5][4] - 4*D[6][3] + 4*D[6][7] + 4*D[7][6] + 4*D[7][8] - 4*D[8][3] + 4*D[8][7] - 2*D[9][2] + 2*D[9][4]; // s2^2
-    f3coeff[16] = 4*D[1][1] + 4*D[1][5] - 4*D[1][9] + 4*D[5][1] + 4*D[5][5] - 4*D[5][9] - 4*D[9][1] - 4*D[9][5] + 4*D[9][9]; // s3^3
-    f3coeff[17] = 4*D[2][9] - 4*D[1][4] - 4*D[2][1] - 4*D[2][5] - 4*D[1][2] + 8*D[3][6] + 8*D[3][8] - 4*D[4][1] - 4*D[4][5] + 4*D[4][9] - 4*D[5][2] - 4*D[5][4] + 8*D[6][3] + 8*D[6][7] + 8*D[7][6] + 8*D[7][8] + 8*D[8][3] + 8*D[8][7] + 4*D[9][2] + 4*D[9][4]; // s1 * s2 * s3
-    f3coeff[18] = 4*D[2][6] - 2*D[1][7] - 2*D[1][3] + 4*D[2][8] - 2*D[3][1] + 2*D[3][5] - 2*D[3][9] + 4*D[4][6] + 4*D[4][8] + 2*D[5][3] + 2*D[5][7] + 4*D[6][2] + 4*D[6][4] - 2*D[7][1] + 2*D[7][5] - 2*D[7][9] + 4*D[8][2] + 4*D[8][4] - 2*D[9][3] - 2*D[9][7]; // s1 * s2^2
-    f3coeff[19] = 4*D[1][9] - 4*D[1][1] + 8*D[3][3] + 8*D[3][7] + 4*D[5][5] + 8*D[7][3] + 8*D[7][7] + 4*D[9][1] - 4*D[9][9]; // s1^2 * s3
-    f3coeff[20] = 2*D[1][3] + 2*D[1][7] + 2*D[3][1] - 2*D[3][5] - 2*D[3][9] - 2*D[5][3] - 2*D[5][7] + 2*D[7][1] - 2*D[7][5] - 2*D[7][9] - 2*D[9][3] - 2*D[9][7]; // s1^3
+          virtual ~leveldb_filterpolicy_t() {
+    (*destructor_)(state_);
+  }
     
-    #include 'common.hpp'
-#include 'warp_reduce.hpp'
-    
-    CV_EXPORTS_W void subtract(InputArray src1, Scalar src2, OutputArray dst, InputArray mask=noArray(), int dtype=-1);
-    
-    #if defined(_WIN32)
-#include <windows.h>
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-          typename T6>
-void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6>& t,
-             ::std::ostream* os) {
-  PrintTupleTo(t, os);
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
+  }
 }
     
-    // A set of macros for testing Google Test assertions or code that's expected
-// to generate Google Test fatal failures.  It verifies that the given
-// statement will cause exactly one fatal Google Test failure with 'substr'
-// being part of the failure message.
-//
-// There are two different versions of this macro. EXPECT_FATAL_FAILURE only
-// affects and considers failures generated in the current thread and
-// EXPECT_FATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
-//
-// The verification of the assertion is done correctly even when the statement
-// throws an exception or aborts the current function.
-//
-// Known restrictions:
-//   - 'statement' cannot reference local non-static variables or
-//     non-static members of the current object.
-//   - 'statement' cannot return a value.
-//   - You cannot stream a failure message to this macro.
-//
-// Note that even though the implementations of the following two
-// macros are much alike, we cannot refactor them to use a common
-// helper macro, due to some peculiarity in how the preprocessor
-// works.  The AcceptsMacroThatExpandsToUnprotectedComma test in
-// gtest_unittest.cc will fail to compile if we do that.
-#define EXPECT_FATAL_FAILURE(statement, substr) \
-  do { \
-    class GTestExpectFatalFailureHelper {\
-     public:\
-      static void Execute() { statement; }\
-    };\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter:: \
-          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
-      GTestExpectFatalFailureHelper::Execute();\
-    }\
-  } while (::testing::internal::AlwaysFalse())
-    
-    # define TYPED_TEST(CaseName, TestName) \
-  template <typename gtest_TypeParam_> \
-  class GTEST_TEST_CLASS_NAME_(CaseName, TestName) \
-      : public CaseName<gtest_TypeParam_> { \
-   private: \
-    typedef CaseName<gtest_TypeParam_> TestFixture; \
-    typedef gtest_TypeParam_ TypeParam; \
-    virtual void TestBody(); \
-  }; \
-  bool gtest_##CaseName##_##TestName##_registered_ GTEST_ATTRIBUTE_UNUSED_ = \
-      ::testing::internal::TypeParameterizedTest< \
-          CaseName, \
-          ::testing::internal::TemplateSel< \
-              GTEST_TEST_CLASS_NAME_(CaseName, TestName)>, \
-          GTEST_TYPE_PARAMS_(CaseName)>::Register(\
-              '', #CaseName, #TestName, 0); \
-  template <typename gtest_TypeParam_> \
-  void GTEST_TEST_CLASS_NAME_(CaseName, TestName)<gtest_TypeParam_>::TestBody()
-    
-     private:
-  // Replaces multiple consecutive separators with a single separator.
-  // For example, 'bar///foo' becomes 'bar/foo'. Does not eliminate other
-  // redundancies that might be in a pathname involving '.' or '..'.
-  //
-  // A pathname with multiple consecutive separators may occur either through
-  // user error or as a result of some scripts or APIs that generate a pathname
-  // with a trailing separator. On other platforms the same API or script
-  // may NOT generate a pathname with a trailing '/'. Then elsewhere that
-  // pathname may have another '/' and pathname components added to it,
-  // without checking for the separator already being there.
-  // The script language and operating system may allow paths like 'foo//bar'
-  // but some of the functions in FilePath will not handle that correctly. In
-  // particular, RemoveTrailingPathSeparator() only removes one separator, and
-  // it is called in CreateDirectoriesRecursively() assuming that it will change
-  // a pathname from directory syntax (trailing separator) to filename syntax.
-  //
-  // On Windows this method also replaces the alternate path separator '/' with
-  // the primary path separator '\\', so that for example 'bar\\/\\foo' becomes
-  // 'bar\\foo'.
+      // Return a key suitable for lookup in a MemTable.
+  Slice memtable_key() const { return Slice(start_, end_ - start_); }
     
     
-$for m [[
-  T$m f$(m)_;
-    
-      const char* const name = typeid(T).name();
-#  if GTEST_HAS_CXXABI_H_ || defined(__HP_aCC)
-  int status = 0;
-  // gcc's implementation of typeid(T).name() mangles the type name,
-  // so we have to demangle it.
-#   if GTEST_HAS_CXXABI_H_
-  using abi::__cxa_demangle;
-#   endif  // GTEST_HAS_CXXABI_H_
-  char* const readable_name = __cxa_demangle(name, 0, 0, &status);
-  const std::string name_str(status == 0 ? readable_name : name);
-  free(readable_name);
-  return name_str;
-#  else
-  return name;
-#  endif  // GTEST_HAS_CXXABI_H_ || __HP_aCC
-    
-    #include 'sample1.h'
+    {    done_++;
+    if (done_ >= next_report_) {
+      if      (next_report_ < 1000)   next_report_ += 100;
+      else if (next_report_ < 5000)   next_report_ += 500;
+      else if (next_report_ < 10000)  next_report_ += 1000;
+      else if (next_report_ < 50000)  next_report_ += 5000;
+      else if (next_report_ < 100000) next_report_ += 10000;
+      else if (next_report_ < 500000) next_report_ += 50000;
+      else                            next_report_ += 100000;
+      fprintf(stderr, '... finished %d ops%30s\r', done_, '');
+      fflush(stderr);
+    }
+  }
     
     
-// Tests IsPrime()
+    {  // Changes *key to a short string >= *key.
+  // Simple comparator implementations may return with *key unchanged,
+  // i.e., an implementation of this method that does nothing is correct.
+  virtual void FindShortSuccessor(std::string* key) const = 0;
+};
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7>
+internal::ValueArray7<T1, T2, T3, T4, T5, T6, T7> Values(T1 v1, T2 v2, T3 v3,
+    T4 v4, T5 v5, T6 v6, T7 v7) {
+  return internal::ValueArray7<T1, T2, T3, T4, T5, T6, T7>(v1, v2, v3, v4, v5,
+      v6, v7);
+}
+    
+    // This interface knows how to report a test part result.
+class TestPartResultReporterInterface {
+ public:
+  virtual ~TestPartResultReporterInterface() {}
+    }
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17>
+class ValueArray17 {
+ public:
+  ValueArray17(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16,
+      T17 v17) : v1_(v1), v2_(v2), v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7),
+      v8_(v8), v9_(v9), v10_(v10), v11_(v11), v12_(v12), v13_(v13), v14_(v14),
+      v15_(v15), v16_(v16), v17_(v17) {}
+    }
+    
+    // GTEST_n_TUPLE_(T) is the type of an n-tuple.
+#define GTEST_0_TUPLE_(T) tuple<>
+#define GTEST_1_TUPLE_(T) tuple<T##0, void, void, void, void, void, void, \
+    void, void, void>
+#define GTEST_2_TUPLE_(T) tuple<T##0, T##1, void, void, void, void, void, \
+    void, void, void>
+#define GTEST_3_TUPLE_(T) tuple<T##0, T##1, T##2, void, void, void, void, \
+    void, void, void>
+#define GTEST_4_TUPLE_(T) tuple<T##0, T##1, T##2, T##3, void, void, void, \
+    void, void, void>
+#define GTEST_5_TUPLE_(T) tuple<T##0, T##1, T##2, T##3, T##4, void, void, \
+    void, void, void>
+#define GTEST_6_TUPLE_(T) tuple<T##0, T##1, T##2, T##3, T##4, T##5, void, \
+    void, void, void>
+#define GTEST_7_TUPLE_(T) tuple<T##0, T##1, T##2, T##3, T##4, T##5, T##6, \
+    void, void, void>
+#define GTEST_8_TUPLE_(T) tuple<T##0, T##1, T##2, T##3, T##4, T##5, T##6, \
+    T##7, void, void>
+#define GTEST_9_TUPLE_(T) tuple<T##0, T##1, T##2, T##3, T##4, T##5, T##6, \
+    T##7, T##8, void>
+#define GTEST_10_TUPLE_(T) tuple<T##0, T##1, T##2, T##3, T##4, T##5, T##6, \
+    T##7, T##8, T##9>
+    
+    $range i 2..n
+    
+      const auto result =
+      RunScenario(client_config, 1, server_config, 1, WARMUP, BENCHMARK, -2, '',
+                  kInsecureCredentialsType, false);
+    
+    #include <string>
+#include <vector>
+    
+    #ifndef GRPC_INTERNAL_COMPILER_PYTHON_PRIVATE_GENERATOR_H
+#define GRPC_INTERNAL_COMPILER_PYTHON_PRIVATE_GENERATOR_H
+    
+    #ifndef TEST_QPS_USAGE_TIMER_H
+#define TEST_QPS_USAGE_TIMER_H
+    
+    #include 'src/compiler/python_generator.h'
+    
+    extern JSClass  *jsb_cocostudio_timeline_RotationSkewFrame_class;
+extern JSObject *jsb_cocostudio_timeline_RotationSkewFrame_prototype;
+    
+        argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_getEffectsVolume'', nullptr);
+            return 0;
+        }
+        double ret = cobj->getEffectsVolume();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:getEffectsVolume',argc, 0);
+    return 0;
     
     
-    {} // namespace aria2
-    
-      virtual bool getChangeOptionForReserved() const CXX11_OVERRIDE;
     
     
-    {} // namespace aria2
+    
+        argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsJointFixed_createConstraints'', nullptr);
+            return 0;
+        }
+        bool ret = cobj->createConstraints();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.PhysicsJointFixed:createConstraints',argc, 0);
+    return 0;
+    
+    	m_destructionListener.test = this;
+	m_world->SetDestructionListener(&m_destructionListener);
+	m_world->SetContactListener(this);
+	m_world->SetDebugDraw(&m_debugDraw);
+	
+	m_bombSpawning = false;
+    
+    			box.SetAsBox(0.25f, 0.25f);
