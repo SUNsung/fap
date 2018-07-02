@@ -1,107 +1,109 @@
 
         
-                  opts[:SSLCertificate] = OpenSSL::X509::Certificate.new(read_file(src, cert))
-          opts[:SSLPrivateKey]  = OpenSSL::PKey::RSA.new(read_file(src, key))
-          opts[:SSLEnable] = true
+          test 'sign in should not authenticate if not using proper authentication keys' do
+    swap Devise, authentication_keys: [:username] do
+      sign_in_as_user
+      refute warden.authenticated?(:user)
+    end
+  end
+    
+            if Devise.activerecord51?
+          def postpone_email_change?
+            postpone = self.class.reconfirmable &&
+              will_save_change_to_email? &&
+              !@bypass_confirmation_postpone &&
+              self.email.present? &&
+              (!@skip_reconfirmation_in_callback || !self.email_in_database.nil?)
+            @bypass_confirmation_postpone = false
+            postpone
+          end
+        else
+          def postpone_email_change?
+            postpone = self.class.reconfirmable &&
+              email_changed? &&
+              !@bypass_confirmation_postpone &&
+              self.email.present? &&
+              (!@skip_reconfirmation_in_callback || !self.email_was.nil?)
+            @bypass_confirmation_postpone = false
+            postpone
+          end
         end
     
-        # Convert this Convertible's data to a Hash suitable for use by Liquid.
-    #
-    # Returns the Hash representation of this Convertible.
-    def to_liquid(attrs = nil)
-      further_data = Hash[(attrs || self.class::ATTRIBUTES_FOR_LIQUID).map do |attribute|
-        [attribute, send(attribute)]
-      end]
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
+        end
     
-          # return nil for `{{ site.config }}` even if --config was passed via CLI
-      def config; end
+        # Initializes a new CategoryFeed.
+    #
+    #  +base+         is the String path to the <source>.
+    #  +category_dir+ is the String path between <source> and the category folder.
+    #  +category+     is the category currently being processed.
+    def initialize(site, base, category_dir, category)
+      @site = site
+      @base = base
+      @dir  = category_dir
+      @name = 'atom.xml'
+      self.process(@name)
+      # Read the YAML data from the layout page.
+      self.read_yaml(File.join(base, '_includes/custom'), 'category_feed.xml')
+      self.data['category']    = category
+      # Set the title for this page.
+      title_prefix             = site.config['category_title_prefix'] || 'Category: '
+      self.data['title']       = '#{title_prefix}#{category}'
+      # Set the meta-description for this page.
+      meta_description_prefix  = site.config['category_meta_description_prefix'] || 'Category: '
+      self.data['description'] = '#{meta_description_prefix}#{category}'
+    
+    desc 'Generates a dummy app for testing for every Spree engine'
+task :test_app do
+  SPREE_GEMS.each do |gem_name|
+    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
+      sh 'rake test_app'
+    end
+  end
+end
+    
+            def create
+          authorize! :create, StockLocation
+          @stock_location = StockLocation.new(stock_location_params)
+          if @stock_location.save
+            respond_with(@stock_location, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_location)
+          end
+        end
+    
+            private
+    
+      # DELETE /books/1
+  # DELETE /books/1.json
+  def destroy
+    @book.destroy
+    respond_to do |format|
+      format.html { redirect_to books_url, notice: 'Book was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+    
+            def multiple_assignment_node
+          grandparent_node = node.parent ? node.parent.parent : nil
+          return nil unless grandparent_node
+          return nil unless grandparent_node.type == MULTIPLE_ASSIGNMENT_TYPE
+          return nil unless node.parent.type == MULTIPLE_LEFT_HAND_SIDE_TYPE
+          grandparent_node
+        end
+      end
     end
   end
 end
 
     
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
-    end
-    
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
-  end
-  config.static_cache_control = 'public, max-age=3600'
-    
-      def test_image_helper
-    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
-  end
-    
-    desc 'Compile bootstrap-sass to tmp/ (or first arg)'
-task :compile, :css_path do |t, args|
-  require 'sass'
-  require 'term/ansicolor'
-    
-            def self.options
-          [[
-            '--all', 'Remove all the cached pods without asking'
-          ]].concat(super)
+              expect(new_source)
+            .to eq('#{prefix}#{open}#{a}, # a\n#{b},#{close} # b\n#{suffix}')
         end
-    
-            TEMPLATE_REPO = 'https://github.com/CocoaPods/pod-template.git'.freeze
-        TEMPLATE_INFO_URL = 'https://github.com/CocoaPods/pod-template'.freeze
-        CREATE_NEW_POD_INFO_URL = 'http://guides.cocoapods.org/making/making-a-cocoapod'.freeze
-    
-      # Implemented by subclasses to hook into Capistrano's deployment flow using
-  # using the `before` and `after` DSL methods. Note that `register_hooks` will
-  # not be called if the user has opted-out of hooks when installing the plugin.
-  #
-  # Example:
-  #
-  #   def register_hooks
-  #     after 'deploy:updated', 'my_plugin:do_something'
-  #   end
-  #
-  def register_hooks; end
-    
-        # Provide a wrapper for the SCM that loads a strategy for the user.
-    #
-    # @param [Rake] context     The context in which the strategy should run
-    # @param [Module] strategy  A module to include into the SCM instance. The
-    #    module should provide the abstract methods of Capistrano::SCM
-    #
-    def initialize(context, strategy)
-      @context = context
-      singleton = class << self; self; end
-      singleton.send(:include, strategy)
-    end
-    
-      deploy_rb = File.expand_path('../../templates/deploy.rb.erb', __FILE__)
-  stage_rb = File.expand_path('../../templates/stage.rb.erb', __FILE__)
-  capfile = File.expand_path('../../templates/Capfile', __FILE__)
-    
-        describe 'when defining hosts using the `role` syntax' do
-      before do
-        dsl.role :web, %w{example1.com example2.com example3.com}
-        dsl.role :web, %w{example1.com}, active: true
-        dsl.role :app, %w{example3.com example4.com}
-        dsl.role :app, %w{example3.com}, active: true
-        dsl.role :app, %w{example4.com}, primary: true
-        dsl.role :db, %w{example5.com}, no_release: true
       end
-    
-    module LogStash
-  module Api
-    module Commands
-      module System
-        class Plugins < Commands::Base
-          def run
-            { :total => plugins.count, :plugins => plugins }
-          end
+    end
+  end
+end
