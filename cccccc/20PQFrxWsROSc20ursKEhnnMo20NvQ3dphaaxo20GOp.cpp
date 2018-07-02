@@ -1,218 +1,235 @@
 
         
-        class DebuggerState : public DebuggerStateInterface {
+        // Like URLRequestAsarJob, but asks the JavaScript handler for file path.
+class URLRequestAsyncAsarJob : public JsAsker<asar::URLRequestAsarJob> {
  public:
-  DebuggerState(const DebugOptions& debug_options);
-  virtual ~DebuggerState();
+  URLRequestAsyncAsarJob(net::URLRequest*, net::NetworkDelegate*);
     }
     
-      // During the first Compute(), resource is either created or looked up using
-  // shared_name. In the latter case, the resource found should be verified if
-  // it is compatible with this op's configuration. The verification may fail in
-  // cases such as two graphs asking queues of the same shared name to have
-  // inconsistent capacities.
-  virtual Status VerifyResource(T* resource) { return Status::OK(); }
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    class TFRecordReader : public ReaderBase {
- public:
-  TFRecordReader(const string& node_name, const string& compression_type,
-                 Env* env)
-      : ReaderBase(strings::StrCat('TFRecordReader '', node_name, ''')),
-        env_(env),
-        offset_(0),
-        compression_type_(compression_type) {}
-    }
-    
-      EXPECT_EQ(nullptr, cc->FindWorkerChannel('invalid_target'));
-  EXPECT_EQ(nullptr, cc->FindWorkerChannel('/job:other/replica:0/task:0'));
-  EXPECT_EQ(nullptr, cc->FindWorkerChannel('/job:mnist/replica:0/task:1'));
-  EXPECT_EQ(nullptr, cc->FindWorkerChannel('/job:mnist/replica:0/task:2'));
-  EXPECT_EQ(nullptr, cc->FindWorkerChannel('/job:mnist/replica:0/task:5'));
-    
-    // Declare here, so we don't need a public header.
-Status RemoveDevice(const GraphDef& input_graph_def,
-                    const TransformFuncContext& context,
-                    GraphDef* output_graph_def);
-    
-      // Fill *indices and *sizes from *this (so that we can use the slice()
-  // function in eigen tensor). We need a tensor shape in case some of the
-  // slices are full slices.
-  // We allow NDIMS to be greater than dims(), in which case we will pad the
-  // higher dimensions with trivial dimensions.
-  template <int NDIMS>
-  void FillIndicesAndSizes(
-      const TensorShape& shape,
-      Eigen::DSizes<Eigen::DenseIndex, NDIMS>* indices,
-      Eigen::DSizes<Eigen::DenseIndex, NDIMS>* sizes) const;
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-        // Close the debug gRPC stream.
-    Status close_status = DebugIO::CloseDebugURL(server_data_.url);
-    ASSERT_TRUE(close_status.ok());
-    
-    Base::Base(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-	   const std::string& extension_id)
-    : extension_id_(extension_id),
-      id_(id),
-      delay_destruction_(false),
-      pending_destruction_(false),
-      object_manager_(object_manager) {
+    namespace base {
+class FilePath;
 }
     
-    EventListener::~EventListener() {
-  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
-    delete i->second;
+    namespace atom {
+    }
+    
+     private:
+  void* operator new(size_t size);
+  void operator delete(void*, size_t);
+    
+      const base::ListValue* preferences() const { return preferences_.get(); }
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(GlobalShortcutListener);
+};
+    
+    /* Creates a new stream object that uses |engine| and |callback|. All stream
+ * tasks are performed asynchronously on the |engine| network thread. |callback|
+ * methods are invoked synchronously on the |engine| network thread, but must
+ * not run tasks on the current thread to prevent blocking networking operations
+ * and causing exceptions during shutdown. The |annotation| is stored in
+ * bidirectional stream for arbitrary use by application.
+ *
+ * Returned |bidirectional_stream*| is owned by the caller, and must be
+ * destroyed using |bidirectional_stream_destroy|.
+ *
+ * Both |calback| and |engine| must remain valid until stream is destroyed.
+ */
+GRPC_SUPPORT_EXPORT
+bidirectional_stream* bidirectional_stream_create(
+    stream_engine* engine,
+    void* annotation,
+    bidirectional_stream_callback* callback);
+    
+    
+    {  while (!got_sigint && !worker.Done()) {
+    gpr_sleep_until(gpr_time_add(gpr_now(GPR_CLOCK_REALTIME),
+                                 gpr_time_from_seconds(5, GPR_TIMESPAN)));
   }
 }
     
-    
-    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  return item->is_enabled_;
+    inline grpc::string GetJSServiceFilename(const grpc::string& filename) {
+  return grpc_generator::StripProto(filename) + '_grpc_pb.js';
 }
     
-      GtkRequisition menu_req;
-  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
-  GdkScreen* screen;
-  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
-  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
+    #include <signal.h>
     
-    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardReadAvailableTypesFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
+    	float get_skidinfo() const;
     
-      private:
-    int GetPrimaryMonitorIndex();
-    // DesktopMediaListObserver implementation.
-    void OnSourceAdded(DesktopMediaList* list, int index) override;
-    void OnSourceRemoved(DesktopMediaList* list, int index) override;
-    void OnSourceMoved(DesktopMediaList* list, int old_index, int new_index) override;
-    void OnSourceNameChanged(DesktopMediaList* list, int index) override;
-    void OnSourceThumbnailChanged(DesktopMediaList* list, int index) override;
+    	ClassDB::bind_method(D_METHOD('set_autoplay', 'enabled'), &VideoPlayer::set_autoplay);
+	ClassDB::bind_method(D_METHOD('has_autoplay'), &VideoPlayer::has_autoplay);
     
-      // implement nw.Screen.registerStream()
-  class NwScreenRegisterStreamFunction : public NWSyncExtensionFunction {
-  public:
-    NwScreenRegisterStreamFunction();
-    bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
+    /**
+ * oc_ilog32 - Integer binary logarithm of a 32-bit value.
+ * @_v: A 32-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * The OC_ILOG_32() or OC_ILOGNZ_32() macros may be able to use a builtin
+ *  function instead, which should be faster.
+ */
+int oc_ilog32(ogg_uint32_t _v);
+/**
+ * oc_ilog64 - Integer binary logarithm of a 64-bit value.
+ * @_v: A 64-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * The OC_ILOG_64() or OC_ILOGNZ_64() macros may be able to use a builtin
+ *  function instead, which should be faster.
+ */
+int oc_ilog64(ogg_int64_t _v);
+    
+    /*Modern gcc (4.x) can compile the naive versions of min and max with cmov if
+   given an appropriate architecture, but the branchless bit-twiddling versions
+   are just as fast, and do not require any special target architecture.
+  Earlier gcc versions (3.x) compiled both code to the same assembly
+   instructions, because of the way they represented ((_b)>(_a)) internally.*/
+#define OC_MAXI(_a,_b)      ((_a)-((_a)-(_b)&-((_b)>(_a))))
+#define OC_MINI(_a,_b)      ((_a)+((_b)-(_a)&-((_b)<(_a))))
+/*Clamps an integer into the given range.
+  If _a>_c, then the lower bound _a is respected over the upper bound _c (this
+   behavior is required to meet our documented API behavior).
+  _a: The lower bound.
+  _b: The value to clamp.
+  _c: The upper boud.*/
+#define OC_CLAMPI(_a,_b,_c) (OC_MAXI(_a,OC_MINI(_b,_c)))
+#define OC_CLAMP255(_x)     ((unsigned char)((((_x)<0)-1)&((_x)|-((_x)>255))))
+/*This has a chance of compiling branchless, and is just as fast as the
+   bit-twiddling method, which is slightly less portable, since it relies on a
+   sign-extended rightshift, which is not guaranteed by ANSI (but present on
+   every relevant platform).*/
+#define OC_SIGNI(_a)        (((_a)>0)-((_a)<0))
+/*Slightly more portable than relying on a sign-extended right-shift (which is
+   not guaranteed by ANSI), and just as fast, since gcc (3.x and 4.x both)
+   compile it into the right-shift anyway.*/
+#define OC_SIGNMASK(_a)     (-((_a)<0))
+/*Divides an integer by a power of two, truncating towards 0.
+  _dividend: The integer to divide.
+  _shift:    The non-negative power of two to divide by.
+  _rmask:    (1<<_shift)-1*/
+#define OC_DIV_POW2(_dividend,_shift,_rmask)\
+  ((_dividend)+(OC_SIGNMASK(_dividend)&(_rmask))>>(_shift))
+/*Divides _x by 65536, truncating towards 0.*/
+#define OC_DIV2_16(_x) OC_DIV_POW2(_x,16,0xFFFF)
+/*Divides _x by 2, truncating towards 0.*/
+#define OC_DIV2(_x) OC_DIV_POW2(_x,1,0x1)
+/*Divides _x by 8, truncating towards 0.*/
+#define OC_DIV8(_x) OC_DIV_POW2(_x,3,0x7)
+/*Divides _x by 16, truncating towards 0.*/
+#define OC_DIV16(_x) OC_DIV_POW2(_x,4,0xF)
+/*Right shifts _dividend by _shift, adding _rval, and subtracting one for
+   negative dividends first.
+  When _rval is (1<<_shift-1), this is equivalent to division with rounding
+   ties away from zero.*/
+#define OC_DIV_ROUND_POW2(_dividend,_shift,_rval)\
+  ((_dividend)+OC_SIGNMASK(_dividend)+(_rval)>>(_shift))
+/*Divides a _x by 2, rounding towards even numbers.*/
+#define OC_DIV2_RE(_x) ((_x)+((_x)>>1&1)>>1)
+/*Divides a _x by (1<<(_shift)), rounding towards even numbers.*/
+#define OC_DIV_POW2_RE(_x,_shift) \
+  ((_x)+((_x)>>(_shift)&1)+((1<<(_shift))-1>>1)>>(_shift))
+/*Swaps two integers _a and _b if _a>_b.*/
+#define OC_SORT2I(_a,_b) \
+  do{ \
+    int t__; \
+    t__=((_a)^(_b))&-((_b)<(_a)); \
+    (_a)^=t__; \
+    (_b)^=t__; \
+  } \
+  while(0)
+    
+    #endif
+
+    
+    // logistic loss for probability regression task
+struct LogisticRegression {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    const float eps = 1e-16f;
+    return fmaxf(predt * (1.0f - predt), eps);
+  }
+  template <typename T>
+  static T PredTransform(T x) { return common::Sigmoid(x); }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) {
+    const T eps = T(1e-16f);
+    return std::max(predt * (T(1.0f) - predt), eps);
+  }
+  static bst_float ProbToMargin(bst_float base_score) {
+    CHECK(base_score > 0.0f && base_score < 1.0f)
+      << 'base_score must be in (0,1) for logistic loss';
+    return -logf(1.0f / base_score - 1.0f);
+  }
+  static const char* LabelErrorMsg() {
+    return 'label must be in [0,1] for logistic regression';
+  }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
+    
+    /*! \brief gradient statistics pair usually needed in gradient boosting */
+using GradientPair = detail::GradientPairInternal<float>;
+    
+    #include <dmlc/logging.h>
+#include <sstream>
+#include './base.h'
     
     
-    {                    index = i;
-                    found = true;
-                }
-                else if (*currentp != (ElementType)0)
-                    RuntimeError('CopyDenseToOneHot: Cannot convert to onehot vector; contains value other than 0/1.');
+    {/*!
+ * \brief Macro to register objective function.
+ *
+ * \code
+ * // example of registering a objective
+ * XGBOOST_REGISTER_OBJECTIVE(LinearRegression, 'reg:linear')
+ * .describe('Linear regression objective')
+ * .set_body([]() {
+ *     return new RegLossObj(LossType::kLinearSquare);
+ *   });
+ * \endcode
+ */
+#define XGBOOST_REGISTER_OBJECTIVE(UniqueId, Name)                      \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::ObjFunctionReg &              \
+  __make_ ## ObjFunctionReg ## _ ## UniqueId ## __ =                    \
+      ::dmlc::Registry< ::xgboost::ObjFunctionReg>::Get()->__REGISTER__(Name)
+}  // namespace xgboost
+#endif  // XGBOOST_OBJECTIVE_H_
+
     
-                if (!wasDataRead) LogicError('DataRead Failure in batch normalization statistics');
+    /*!
+ * \brief Macro to register tree updater.
+ *
+ * \code
+ * // example of registering a objective ndcg@k
+ * XGBOOST_REGISTER_TREE_UPDATER(ColMaker, 'colmaker')
+ * .describe('Column based tree maker.')
+ * .set_body([]() {
+ *     return new ColMaker<TStats>();
+ *   });
+ * \endcode
+ */
+#define XGBOOST_REGISTER_TREE_UPDATER(UniqueId, Name)                   \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::TreeUpdaterReg&               \
+  __make_ ## TreeUpdaterReg ## _ ## UniqueId ## __ =                    \
+      ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->__REGISTER__(Name)
     
-    template class NDLUtil<float>;
-template class NDLUtil<double>;
     
-        // GenerateNames - Generates a mapping table from original node to destination name
-    //    used for wildcard matches (i.e. L1* = L2*)
-    // symbolIn - symbol(s) to copy from
-    // symbolOut - symbol(s) to copy to
-    // netNdlIn -  netNdl to copy from
-    // netNdlOut - netNdl to copy to
-    // returns - Source nodes and Target names
-    typedef pair<ComputationNodeBasePtr, std::wstring> GenNameValue;
-    vector<GenNameValue> GenerateNames(const std::string& symbolIn, const std::string& symbolOut, NetNdl<ElemType>*& netNdlIn, NetNdl<ElemType>*& netNdlOut)
-    {
-        MapNodes mapInOut;
-        size_t firstStart, firstCount, secondStart, secondCount;
-        netNdlIn = ParseName(symbolIn, firstStart, firstCount, secondStart, secondCount);
-    }
     
-    namespace Microsoft { namespace MSR { namespace CNTK {
-    }
-    }
-    }
+    #endif // __cocos2dx_cocosdenshion_h__
+
     
-    template <class _T>
-class const_array_ref
+    
+    
+    
+    
+    class AddPair : public Test
 {
-    const _T* data;
-    size_t n;
-    inline void check_index(size_t i) const
-    {
-        i;
-        assert(i < n);
+public:
     }
-    inline void check_ptr() const
-    {
-        n;
-        data;
-        assert(n == 0 || data != NULL);
-    }
-    }
-    
-    TEST_F(FlagsTests, test_alias_types) {
-  // Test int32 lexical casting both ways.
-  EXPECT_EQ(FLAGS_test_int32_alias, 1);
-  FLAGS_test_int32_alias = 2;
-  EXPECT_EQ(FLAGS_test_int32, 2);
-  FLAGS_test_int32 = 3;
-  EXPECT_EQ(FLAGS_test_int32_alias, 3);
-  EXPECT_TRUE(FLAGS_test_int32_alias > 0);
-    }
-    
-    #include <osquery/status.h>
-    
-      TablePlugin::kCacheInterval = 5;
-  TablePlugin::kCacheStep = 1;
-  EXPECT_FALSE(test.testIsCached(5));
-  // Set the current time to 1, and the interval at 5.
-  test.testSetCache(TablePlugin::kCacheStep, TablePlugin::kCacheInterval);
-  // Time at 1 is cached for an interval of 5, so at time 5 the cache is fresh.
-  EXPECT_TRUE(test.testIsCached(5));
-  // 6 is the end of the cache, it is not fresh.
-  EXPECT_FALSE(test.testIsCached(6));
-  // 7 is past the cache, it is not fresh.
-  EXPECT_FALSE(test.testIsCached(7));
-    
-    Status WmiResultItem::GetUnsignedShort(const std::string& name,
-                                       unsigned short& ret) const {
-  std::wstring property_name = stringToWstring(name);
-  VARIANT value;
-  HRESULT hr = result_->Get(property_name.c_str(), 0, &value, nullptr, nullptr);
-    }
-    
-      // Check that all value lengths were maxed.
-  std::map<std::string, size_t> expected = {
-      {'name', 10}, {'age', 4}, {'food', 23}, {'number', 2}};
-  EXPECT_EQ(lengths, expected);
-    
-    TreeUpdater* TreeUpdater::Create(const std::string& name) {
-  auto *e = ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->Find(name);
-  if (e == nullptr) {
-    LOG(FATAL) << 'Unknown tree updater ' << name;
-  }
-  return (e->body)();
-}
-    
-    
-    {}  // namespace xgboost
-#endif  // XGBOOST_TREE_UPDATER_H_
