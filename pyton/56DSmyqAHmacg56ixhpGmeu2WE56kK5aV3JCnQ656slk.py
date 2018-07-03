@@ -1,100 +1,99 @@
 
         
-            s.register(Tag2, index=None)
-    assert isinstance(s.order[-1], Tag2)
+            plugin_manager.register(Plugin)
+    try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+            '--auth',
+            BASIC_AUTH_HEADER_VALUE,
+        )
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
+    
+        '''
+    
+        >>> humanize_bytes(1)
+    '1 B'
+    >>> humanize_bytes(1024, precision=1)
+    '1.0 kB'
+    >>> humanize_bytes(1024 * 123, precision=1)
+    '123.0 kB'
+    >>> humanize_bytes(1024 * 12342, precision=1)
+    '12.1 MB'
+    >>> humanize_bytes(1024 * 12342, precision=2)
+    '12.05 MB'
+    >>> humanize_bytes(1024 * 1234, precision=2)
+    '1.21 MB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
+    '1.31 GB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
+    '1.3 GB'
+    
+        ERROR_TIMEOUT = 2
+    ERROR_TOO_MANY_REDIRECTS = 6
+    
+    
+class RequestItemsDict(OrderedDict):
+    '''Multi-value dict for URL parameters and form data.'''
+    
+    from httpie.compat import urlsplit
+from httpie.config import BaseConfigDict, DEFAULT_CONFIG_DIR
+from httpie.plugins import plugin_manager
+    
+    del sys
 
     
+            if opts.nolog:
+            self.settings.set('LOG_ENABLED', False, priority='cmdline')
     
-class SessionMixin(MutableMapping):
-    '''Expands a basic dictionary with session attributes.'''
+        def post_process(self, output):
+        for x in output:
+            if isinstance(x, (BaseItem, dict)):
+                for arg in self.args:
+                    if not arg in x:
+                        raise ContractFail(''%s' field is missing' % arg)
+
     
-        def get_source(self, environment, template):
-        if self.app.config['EXPLAIN_TEMPLATE_LOADING']:
-            return self._get_source_explained(environment, template)
-        return self._get_source_fast(environment, template)
-    
-    
-def test_log_view_exception(app, client):
-    @app.route('/')
-    def index():
-        raise Exception('test')
-    
-            for chunk in self.msg.iter_body(self.CHUNK_SIZE):
-            if not converter and b'\0' in chunk:
-                converter = self.conversion.get_converter(self.mime)
-                if not converter:
-                    raise BinarySuppressedError()
-            body.extend(chunk)
-    
-    
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
-    
-            Return a ``requests.auth.AuthBase`` subclass instance.
-    
-        def _getpass(self, prompt):
-        # To allow mocking.
-        return getpass.getpass(str(prompt))
-    
-    cc_test(
-    name = 'syntaxnet_transition_state_test',
-    srcs = ['syntaxnet_transition_state_test.cc'],
-    data = [':testdata'],
-    deps = [
-        ':syntaxnet_component',
-        ':syntaxnet_transition_state',
-        '//dragnn/core:input_batch_cache',
-        '//dragnn/core/test:generic',
-        '//dragnn/core/test:mock_transition_state',
-        '//dragnn/io:sentence_input_batch',
-        '//dragnn/protos:spec_proto_cc',
-        '//syntaxnet:base',
-        '//syntaxnet:sentence_proto_cc',
-        '//syntaxnet:test_main',
-    ],
+        entry_points = {'console_scripts': proj_info['console_scripts']}
 )
 
     
-    cc_test(
-    name = 'dragnn_op_kernels_test',
-    srcs = ['ops/dragnn_op_kernels_test.cc'],
-    deps = [
-        ':compute_session',
-        ':compute_session_pool',
-        ':dragnn_op_kernels',
-        ':resource_container',
-        '//dragnn/core/test:generic',
-        '//dragnn/core/test:mock_compute_session',
-        '//dragnn/core/util:label',
-        '//syntaxnet:base',
-        '//syntaxnet:test_main',
-        '@org_tensorflow//tensorflow/core:protos_all_cc',
-        '@org_tensorflow//tensorflow/core/kernels:ops_testutil',
-        '@org_tensorflow//tensorflow/core/kernels:ops_util',
-        '@org_tensorflow//tensorflow/core/kernels:quantized_ops',
-    ],
-)
+    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
     
-      The digraph is 'unlabeled' in that there is at most one arc between any pair
-  of tokens.  If labels are required, the BiaffineLabelNetwork can be used to
-  label a set of selected arcs.
+	from xml.dom.minidom import parseString
+	doc = parseString(xml)
+	tab = doc.getElementsByTagName('related')[0].firstChild
     
-      Returns:
-    [B,M,M] tensor A with 0/1 indicators of valid arcs.  Specifically,
-      A_{b,t,s} = t,s < lengths[b] ? 1 : 0
-    [B,M] matrix T with 0/1 indicators of valid tokens.  Specifically,
-      T_{b,t} = t < lengths[b] ? 1 : 0
-  '''
-  lengths_bx1 = tf.expand_dims(lengths, 1)
-  sequence_m = tf.range(tf.cast(max_length, lengths.dtype.base_dtype))
-  sequence_1xm = tf.expand_dims(sequence_m, 0)
+        fc2video_download_by_upid(upid, output_dir, merge, info_only)
     
-        with open(empty_input_path, 'w'):
-      pass
+        def prepare(self, **kwargs):
+        content = get_content(self.url)
+        self.title = match1(content, r'<title>([^<]+)</title>')
+        s = match1(content, r'P\.s\s*=\s*\'([^\']+)\'')
+        scp = match1(content, r'InfoQConstants\.scp\s*=\s*\'([^\']+)\'')
+        scs = match1(content, r'InfoQConstants\.scs\s*=\s*\'([^\']+)\'')
+        sck = match1(content, r'InfoQConstants\.sck\s*=\s*\'([^\']+)\'')
     
-      TODO(googleuser): Try improving the condition number of the Laplacian matrix
-  directly, instead of using the indirect approach above.  For example, one
-  could add c*I to the Laplacian (i.e., Tikhonov regularization).
+    def kugou_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    if url.lower().find('5sing')!=-1:
+        #for 5sing.kugou.com
+        html=get_html(url)
+        ticket=r1(r''ticket':\s*'(.*)'',html)
+        j=loads(str(b64decode(ticket),encoding='utf-8'))
+        url=j['file']
+        title=j['songName']
+        songtype, ext, size = url_info(url)
+        print_info(site_info, title, songtype, size)
+        if not info_only:
+            download_urls([url], title, ext, size, output_dir, merge=merge)
+    else:
+        #for the www.kugou.com/
+        return kugou_download_playlist(url, output_dir=output_dir, merge=merge, info_only=info_only)
+        # raise NotImplementedError(url)       
+    
+            self.title = match1(content,
+                            r'setup\[\'title\'\] = '([^']+)';')
