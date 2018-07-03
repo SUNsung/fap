@@ -1,144 +1,205 @@
 
         
-            class GradleHelper
-      # Path to the gradle script
-      attr_accessor :gradle_path
+          def test_escape_javascript
+    assert_equal '', escape_javascript(nil)
+    assert_equal %(This \\'thing\\' is really\\n netos\\'), escape_javascript(%(This 'thing' is really\n netos'))
+    assert_equal %(backslash\\\\test), escape_javascript(%(backslash\\test))
+    assert_equal %(dont <\\/close> tags), escape_javascript(%(dont </close> tags))
+    assert_equal %(unicode &#x2028; newline), escape_javascript(%(unicode \342\200\250 newline).dup.force_encoding(Encoding::UTF_8).encode!)
+    assert_equal %(unicode &#x2029; newline), escape_javascript(%(unicode \342\200\251 newline).dup.force_encoding(Encoding::UTF_8).encode!)
     
-        def restart!
-      without_alive_check do
-        puts '--> Restarting #{id} at #{Time.now} <--'
-        stop!
-        setup!(scheduler, mutex)
-        run!
-      end
+    require 'active_record/relation/predicate_builder/association_query_value'
+require 'active_record/relation/predicate_builder/polymorphic_array_value'
+
+    
+    module ActiveRecord
+  class RelationTest < ActiveRecord::TestCase
+    fixtures :posts, :comments, :authors, :author_addresses, :ratings, :categorizations
+    
+      test 'notification for transmit_subscription_confirmation' do
+    begin
+      @channel.subscribe_to_channel
+    
+          def open_connection
+        env = Rack::MockRequest.env_for '/test', 'HTTP_HOST' => 'localhost', 'HTTP_CONNECTION' => 'upgrade', 'HTTP_UPGRADE' => 'websocket', 'HTTP_ORIGIN' => 'http://rubyonrails.com'
+    
+      def concurrently(enum)
+    enum.map { |*x| Concurrent::Future.execute { yield(*x) } }.map(&:value!)
+  end
+    
+        def send_async(method, *args)
+      send method, *args
     end
     
-                breakable = false
-            if e.is_a?(EOFError)
-              # An `EOFError` means this IO object is done!
-              breakable = true
-            elsif defined?(::IO::WaitReadable) && e.is_a?(::IO::WaitReadable)
-              # IO::WaitReadable is only available on Ruby 1.9+
+        brew cask install mactex
+    EOS
+  when 'pip' then <<-EOS.undent
+    Homebrew provides pip via: `brew install python`. However you will then
+    have two Pythons installed on your Mac, so alternatively you can install
+    pip via the instructions at:
     
-    module VagrantPlugins
-  module CommandCap
-    class Command < Vagrant.plugin('2', :command)
-      def self.synopsis
-        'checks and executes capability'
-      end
+        ENV.activate_extensions!
     
-          # Get the publicly-visible URL for an imported file. This URL is used by
-      # source maps to link to the source stylesheet. This may return `nil` to
-      # indicate that no public URL is available; however, this will cause
-      # sourcemap generation to fail if any CSS is generated from files imported
-      # from this importer.
-      #
-      # If an absolute 'file:' URI can be produced for an imported file, that
-      # should be preferred to returning `nil`. However, a URL relative to
-      # `sourcemap_directory` should be preferred over an absolute 'file:' URI.
-      #
-      # @param uri [String] A URI known to be valid for this importer.
-      # @param sourcemap_directory [String, NilClass] The absolute path to a
-      #   directory on disk where the sourcemap will be saved. If uri refers to
-      #   a file on disk that's accessible relative to sourcemap_directory, this
-      #   may return a relative URL. This may be `nil` if the sourcemap's
-      #   eventual location is unknown.
-      # @return [String?] The publicly-visible URL for this file, or `nil`
-      #   indicating that no publicly-visible URL exists. This should be
-      #   appropriately URL-escaped.
-      def public_url(uri, sourcemap_directory)
-        return if @public_url_warning_issued
-        @public_url_warning_issued = true
-        Sass::Util.sass_warn <<WARNING
-WARNING: #{self.class.name} should define the #public_url method.
-WARNING
-        nil
-      end
+      def clang_build
+    @clang_build ||= MacOS.clang_build_version if MacOS.has_apple_developer_tools?
+  end
     
-            def define_logger(name, options = {})
-          class_eval <<-RUBY, __FILE__, __LINE__ + 1
-            def #{name}(message)
-              #{options.fetch(:to, :log)}(#{name.inspect}, message)
+        if initial_revision != current_revision
+      puts 'Updated Homebrew from #{shorten_revision(initial_revision)} to #{shorten_revision(current_revision)}.'
+      updated = true
+    end
+    
+    unless dups.empty?
+  puts '\nDuplicate links:'
+  dups.each do |link|
+    puts '- #{link}'
+    puts `grep -nr '#{link}' README.md`
+  end
+  puts '\nDone with errors.'
+  exit(1)
+end
+    
+            # This returns all synced folder implementations.
+        #
+        # @return [Registry]
+        def synced_folders
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.synced_folders)
             end
-          RUBY
-        end
-      end
-    end
-  end
-end
-
-    
-        def self.definitions_for(klass)
-      instance.definitions_for(klass)
-    end
-    
-            def has_column?
-          @subject.column_names.include?('#{@attachment_name}_file_name')
-        end
-      end
-    end
-  end
-end
-
-    
-            def rejected_types_rejected?
-          @missing_rejected_types ||= @rejected_types.select { |type| type_allowed?(type) }
-          @missing_rejected_types.none?
-        end
-      end
-    end
-  end
-end
-
-    
-            def matches? subject
-          @subject = subject
-          @subject = subject.new if subject.class == Class
-          error_when_not_valid? && no_error_when_valid?
+          end
         end
     
-          if defined?(ActiveRecord)
-        Paperclip.options[:logger] = ActiveRecord::Base.logger
-        ActiveRecord::Base.send(:include, Paperclip::Glue)
+          alias_method :include?, :key?
+      alias_method :has_key?, :key?
+      alias_method :member?, :key?
+    
+          # This returns the keys (or ids) that are in the string.
+      #
+      # @return [<Array<String>]
+      def keys
+        regexp = /^#\s*VAGRANT-BEGIN:\s*(.+?)$\r?\n?(.*)$\r?\n?^#\s*VAGRANT-END:\s(\1)$/m
+        @value.scan(regexp).map do |match|
+          match[0]
+        end
+      end
+    
+      def test_open_with_block
+    r = nil
+    x = Object.new
+    y = PTY.open {|ret|
+      r = ret;
+      assert_kind_of(Array, ret)
+      assert_equal(2, ret.length)
+      assert_equal(IO, ret[0].class)
+      assert_equal(File, ret[1].class)
+      _, slave = ret
+      assert(slave.tty?)
+      assert(File.chardev?(slave.path))
+      x
+    }
+  rescue RuntimeError
+    skip $!
+  else
+    assert(r[0].closed?)
+    assert(r[1].closed?)
+    assert_equal(y, x)
+  end
+    
+        m = method(:meth)
+    obj = Object.new
+    
+      it 'does copy the backtrace' do
+    begin
+      # Explicitly raise so a backtrace is associated with the exception.
+      # It's tempting to call `set_backtrace` instead, but that complicates
+      # the test because it might affect other state (e.g., instance variables)
+      # on some implementations.
+      raise ExceptionSpecs::InitializeException.new('my exception')
+    rescue => e
+      @obj = e
+    end
+    
+      # FIXME: do not use conditionals like this around #it blocks
+  unless not home = ENV['HOME']
+    platform_is_not :windows do
+      it 'converts a pathname to an absolute pathname, using ~ (home) as base' do
+        File.expand_path('~').should == home
+        File.expand_path('~', '/tmp/gumby/ddd').should == home
+        File.expand_path('~/a', '/tmp/gumby/ddd').should == File.join(home, 'a')
+      end
+    
+      platform_is_not :windows do
+    it 'returns true if the file is a pipe' do
+      filename = tmp('i_am_a_pipe')
+      File.mkfifo(filename)
+    
+      it 'dumps an object that has had an ivar added and removed as though the ivar never was set' do
+    obj = Object.new
+    initial = Marshal.dump(obj)
+    obj.instance_variable_set(:@ivar, 1)
+    Marshal.dump(obj).should == '\004\bo:\vObject\006:\n@ivari\006'
+    obj.send :remove_instance_variable, :@ivar
+    Marshal.dump(obj).should == initial
+  end
+    
+          it 'allows Lithuanian as an extra option' do
+        'iSa'.capitalize(:turkic, :lithuanian).should == 'İsa'
+      end
+    
+        ruby_version_is '2.5' do
+      it 'returns nil if other can't be converted to a string' do
+        'abc'.casecmp?(mock('abc')).should be_nil
       end
     end
   end
 end
 
     
-          def invert_add_attachment(args)
-        [:remove_attachment, args]
-      end
+        it 'does not allow invalid options' do
+      lambda { 'abc'.swapcase(:invalid_option) }.should raise_error(ArgumentError)
     end
   end
-end
-
     
-        module HelperMethods
-      # Places ActiveModel validations on the content type of the file
-      # assigned. The possible options are:
-      # * +content_type+: Allowed content types.  Can be a single content type
-      #   or an array.  Each type can be a String or a Regexp. It should be
-      #   noted that Internet Explorer uploads files with content_types that you
-      #   may not expect. For example, JPEG images are given image/pjpeg and
-      #   PNGs are image/x-png, so keep that in mind when determining how you
-      #   match.  Allows all by default.
-      # * +not+: Forbidden content types.
-      # * +message+: The message to display when the uploaded file has an invalid
-      #   content type.
-      # * +if+: A lambda or name of an instance method. Validation will only
-      #   be run is this lambda or method returns true.
-      # * +unless+: Same as +if+ but validates if lambda or method returns false.
-      # NOTE: If you do not specify an [attachment]_content_type field on your
-      # model, content_type validation will work _ONLY upon assignment_ and
-      # re-validation after the instance has been reloaded will always succeed.
-      # You'll still need to have a virtual attribute (created by +attr_accessor+)
-      # name +[attachment]_content_type+ to be able to use this validator.
-      def validates_attachment_content_type(*attr_names)
-        options = _merge_attributes(attr_names)
-        validates_with AttachmentContentTypeValidator, options.dup
-        validate_before_processing AttachmentContentTypeValidator, options.dup
+    describe 'Invoking a method' do
+  describe 'with required args after the rest arguments' do
+    it 'binds the required arguments first' do
+      specs.fooM0RQ1(1).should == [[], 1]
+      specs.fooM0RQ1(1,2).should == [[1], 2]
+      specs.fooM0RQ1(1,2,3).should == [[1,2], 3]
+    
+    @@ layout
+<html>
+  <head>
+    <title>Super Simple Chat with Sinatra</title>
+    <meta charset='utf-8' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
+  </head>
+  <body><%= yield %></body>
+</html>
+    
+          def handle(hash)
+        was = hash.dup
+        hash.replace escape(hash)
+        was
       end
+    
+        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      subject.options[:allow_empty_referrer] = false
+      expect(subject.referrer(env)).to be_nil
+    end
+    
+      it 'should allow changing the protection mode' do
+    # I have no clue what other modes are available
+    mock_app do
+      use Rack::Protection::FrameOptions, :frame_options => :deny
+      run DummyApp
+    end
+    
+      before(:each) do
+    mock_app do
+      use Rack::Protection::HttpOrigin
+      run DummyApp
     end
   end
-end
