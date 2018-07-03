@@ -1,66 +1,43 @@
 
         
-            # The entry filter for this collection.
-    # Creates an instance of Jekyll::EntryFilter.
-    #
-    # Returns the instance of Jekyll::EntryFilter for this collection.
-    def entry_filter
-      @entry_filter ||= Jekyll::EntryFilter.new(site, relative_directory)
+            def register_compass_extension
+      ::Compass::Frameworks.register(
+          'bootstrap',
+          :version               => Bootstrap::VERSION,
+          :path                  => gem_path,
+          :stylesheets_directory => stylesheets_path,
+          :templates_directory   => File.join(gem_path, 'templates')
+      )
     end
     
-            def after_install(path, options = {})
-          unless options['blank'] || options['skip-bundle']
-            begin
-              require 'bundler'
-              bundle_install path
-            rescue LoadError
-              Jekyll.logger.info 'Could not load Bundler. Bundle install skipped.'
-            end
-          end
+        # @include and @extend from LESS:
+    #  .mixin()             -> @include mixin()
+    #  #scope > .mixin()    -> @include scope-mixin()
+    #  &:extend(.mixin all) -> @include mixin()
+    def replace_mixins(less, mixin_names)
+      mixin_pattern = /(?<=^|\s)((?:[#|\.][\w-]+\s*>\s*)*)\.([\w-]+)\((.*)\)(?!\s\{)/
+    }
     
-          class Servlet < WEBrick::HTTPServlet::FileHandler
-        DEFAULTS = {
-          'Cache-Control' => 'private, max-age=0, proxy-revalidate, ' \
-            'no-store, no-cache, must-revalidate',
-        }.freeze
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
     
-    module Hbc
-  class DSL
-    class Container
-      VALID_KEYS = Set.new [
-        :type,
-        :nested,
-      ]
+      find_files = ->(path) {
+    Find.find(Pathname.new(path).relative_path_from(Pathname.new Dir.pwd).to_s).map do |path|
+      path if File.file?(path)
+    end.compact
+  }
     
-          next if path.symlink? || path.directory?
-    
-      def apply
-    data = contents.gsub('HOMEBREW_PREFIX', HOMEBREW_PREFIX)
-    args = %W[-g 0 -f -#{strip}]
-    Utils.popen_write('patch', *args) { |p| p.write(data) }
-    raise ErrorDuringExecution.new('patch', args) unless $CHILD_STATUS.success?
-  end
-    
-            def validate!
-          super
-          if @pod_name.nil? && !@wipe_all
-            # Security measure, to avoid removing the pod cache too agressively by mistake
-            help! 'You should either specify a pod name or use the --all flag'
-          end
-        end
-    
-            self.description = <<-DESC
-          Shows the content of the pods cache as a YAML tree output, organized by pod.
-          If `NAME` is given, only the caches for that pod will be included in the output.
-        DESC
-    
-            target_module << if app.resolved_build_setting('SWIFT_OPTIMIZATION_LEVEL').values.any?
-                           <<-RUBY
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
-  use_frameworks!
-    
-            def run
-          print_version
-          signal_end_of_output
-          listen
-        end
+      # Implemented by subclasses to hook into Capistrano's deployment flow using
+  # using the `before` and `after` DSL methods. Note that `register_hooks` will
+  # not be called if the user has opted-out of hooks when installing the plugin.
+  #
+  # Example:
+  #
+  #   def register_hooks
+  #     after 'deploy:updated', 'my_plugin:do_something'
+  #   end
+  #
+  def register_hooks; end
