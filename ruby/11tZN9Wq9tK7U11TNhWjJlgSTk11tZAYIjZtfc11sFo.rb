@@ -1,136 +1,109 @@
 
         
-            it 'should map attributes to methods' do
-      expect(key.name).to eq('fastlane')
-      expect(key.id).to eq('some-key-id')
-    end
+        module Jekyll
+  module Commands
+    class New < Command
+      class << self
+        def init_with_program(prog)
+          prog.command(:new) do |c|
+            c.syntax 'new PATH'
+            c.description 'Creates a new Jekyll site scaffold in PATH'
     
-          it 'prefers a custom version number over a boring version bump' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(version_number: '1.77.3', bump_type: 'major')
-        end').runner.execute(:test)
+              @new_body.each do |line|
+            if !@livereload_added && line['<head']
+              line.gsub!(HEAD_TAG_REGEX) do |match|
+                %(#{match}#{template.result(binding)})
+              end
     
-        # apply general less to scss conversion
-    def convert_to_scss(file)
-      # get local mixin names before converting the definitions
-      mixins = shared_mixins + read_mixins(file)
-      file   = replace_vars(file)
-      file   = replace_mixin_definitions(file)
-      file   = replace_mixins(file, mixins)
-      file   = extract_mixins_from_selectors(file, CLASSES_TO_MIXINS.inject({}) { |h, cl| h.update('.#{cl}' => cl) })
-      file   = replace_spin(file)
-      file   = replace_fadein(file)
-      file   = replace_image_urls(file)
-      file   = replace_escaping(file)
-      file   = convert_less_ampersand(file)
-      file   = deinterpolate_vararg_mixins(file)
-      file   = replace_calculation_semantics(file)
-      file   = replace_file_imports(file)
-      file   = wrap_at_groups_with_at_root(file)
-      file
-    end
-    
-        def log_processing(name)
-      puts yellow '  #{File.basename(name)}'
-    end
-    
-      # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
-    
-    desc 'Test all Gemfiles from test/*.gemfile'
-task :test_all_gemfiles do
-  require 'term/ansicolor'
-  require 'pty'
-  require 'shellwords'
-  cmd      = 'bundle install --quiet && bundle exec rake --trace'
-  statuses = Dir.glob('./test/gemfiles/*{[!.lock]}').map do |gemfile|
-    env = {'BUNDLE_GEMFILE' => gemfile}
-    cmd_with_env = '  (#{env.map { |k, v| 'export #{k}=#{Shellwords.escape v}' } * ' '}; #{cmd})'
-    $stderr.puts Term::ANSIColor.cyan('Testing\n#{cmd_with_env}')
-    PTY.spawn(env, cmd) do |r, _w, pid|
-      begin
-        r.each_line { |l| puts l }
-      rescue Errno::EIO
-        # Errno:EIO error means that the process has finished giving output.
-      ensure
-        ::Process.wait pid
-      end
-    end
-    [$? && $?.exitstatus == 0, cmd_with_env]
-  end
-  failed_cmds = statuses.reject(&:first).map { |(_status, cmd_with_env)| cmd_with_env }
-  if failed_cmds.empty?
-    $stderr.puts Term::ANSIColor.green('Tests pass with all gemfiles')
-  else
-    $stderr.puts Term::ANSIColor.red('Failing (#{failed_cmds.size} / #{statuses.size})\n#{failed_cmds * '\n'}')
-    exit 1
-  end
-end
-    
-          spec['main'] =
-          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
-          find_files.(Bootstrap.fonts_path) +
-          %w(assets/javascripts/bootstrap.js)
-    
-          case Rails.env
-      when 'development'
-        config.eager_load = false
-      when 'test'
-        config.eager_load = false
-      when 'production'
-        config.eager_load = true
-      end
-    end
-  end
-end
-    
-    #
-# This script extracts the forms from the main page of each
-# web site in a list. The output of this can be used with
-# Metasploit (and other tools) to obtain the saved form data
-# of these domains.
-#
-    
-    
-# extract label addresses
-addrs = {}
-dtrans.each_line { |ln|
-	if ln =~ /;[^ ].*:/
-		parts = ln.split(' ')
-		label = parts[1]
-		label = label.slice(1,label.index(':')-1)
-		addr = parts[0].split(':')[1].to_i(16)
-		#puts '%s => %x' % [label, addr]
-		one = { label => addr }
-		addrs.merge!(one)
-	end
-}
-#puts addrs.inspect
-    
-    #compileOpts = ['']
-#outputDir		= system.getProperty('java.io.tmpdir')
-outputDir		= 'testoutdir'
-compileOpts 	= [ '-target', '1.3', '-source', '1.3', '-d', outputDir ]
-    
-    module Pod
-  class Command
-    class Env < Command
-      self.summary = 'Display pod environment'
-      self.description = 'Display pod environment.'
-    
-          def initialize(argv)
-        @update = argv.flag?('update')
-        @stats  = argv.flag?('stats')
-        super
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
       end
     
-          private
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
+        end
     
-      def command_line(*options)
-    options.each { |opt| ARGV << opt }
-    subject.define_singleton_method(:exit) do |*_args|
-      throw(:system_exit, :exit)
+          def merge(other)
+        dup.merge!(other)
+      end
+    
+            while true
+          begin
+            if Platform.windows?
+              # Windows doesn't support non-blocking reads on
+              # file descriptors or pipes so we have to get
+              # a bit more creative.
+    
+                o.on('--provider PROVIDER', String,
+                 'The specific provider type for the box to remove') do |p|
+              options[:provider] = p
+            end
+    
+      def report_disk_usage
+    disk_space = disk_usage_readable(Cleanup.disk_cleanup_size)
+    if ARGV.dry_run?
+      ohai 'This operation would free approximately #{disk_space} of disk space.'
+    else
+      ohai 'This operation has freed approximately #{disk_space} of disk space.'
     end
-    subject.run
-    subject.options
   end
+    
+      get(/.+/) do
+    send_sinatra_file(request.path) {404}
+  end
+    
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
+      end
+      super
+    end
+    
+        def names_for(klass)
+      @attachments[klass].keys
+    end
+    
+        template '/engineyard/bin/sidekiq' do
+      owner 'root'
+      group 'root' 
+      mode 0755
+      source 'sidekiq.erb' 
+    end
+    
+    module Sidekiq
+  module Generators # :nodoc:
+    class WorkerGenerator < ::Rails::Generators::NamedBase # :nodoc:
+      desc 'This generator creates a Sidekiq Worker in app/workers and a corresponding test'
+    
+        module ActionMailer
+      def sidekiq_delay(options={})
+        Proxy.new(DelayedMailer, self, options)
+      end
+      def sidekiq_delay_for(interval, options={})
+        Proxy.new(DelayedMailer, self, options.merge('at' => Time.now.to_f + interval.to_f))
+      end
+      def sidekiq_delay_until(timestamp, options={})
+        Proxy.new(DelayedMailer, self, options.merge('at' => timestamp.to_f))
+      end
+      alias_method :delay, :sidekiq_delay
+      alias_method :delay_for, :sidekiq_delay_for
+      alias_method :delay_until, :sidekiq_delay_until
+    end
