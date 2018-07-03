@@ -1,113 +1,117 @@
 
         
-            # Replacing the non-sorted libraries by the sorted ones and gathering all at the final_README file
-    blocks[0] = inner_blocks
-    final_README = table_of_contents + '- - -' + ''.join(blocks)
-    
-        try:
-        return json.dumps(result, sort_keys=True, indent=indent, ensure_ascii=False)
-    except UnicodeDecodeError:
-        return json.dumps(result, sort_keys=True, indent=indent)
+            def crawl(self):
+        while True:
+            page = self.data_store.extract_max_priority_page()
+            if page is None:
+                break
+            if self.data_store.crawled_similar(page.signature):
+                self.data_store.reduce_priority_link_to_crawl(page.url)
+            else:
+                self.crawl_page(page)
+            page = self.data_store.extract_max_priority_page()
 
     
-            # no location in URL
-        input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/targetHttpProxies/mytargetproxy/setUrlMap'
-        actual = GCPUtils.parse_gcp_url(input_url)
-        self.assertEquals('compute', actual['service'])
-        self.assertEquals('v1', actual['api_version'])
-        self.assertEquals('myproject', actual['project'])
-        self.assertFalse('global' in actual)
-        self.assertEquals('targetHttpProxies', actual['resource_name'])
-        self.assertEquals('mytargetproxy', actual['entity_name'])
-        self.assertEquals('setUrlMap', actual['method_name'])
     
-        READY = 0
-    IN_PROGRESS = 1
-    COMPLETE = 2
+class LinkedList(object):
     
-        def insert_crawled_link(self, url, signature):
-        '''Add the given link to `crawled_links`.'''
-        pass
-    
-        def extract_url(self, line):
-        '''Extract the generated url from the log line.'''
-        pass
+            (category1, 1), product4
+        (category1, 2), product1
+        (category1, 3), product2
+        (category2, 3), product1
+        (category2, 7), product3
+        '''
+        category, product_id = key
+        quantity = value
+        yield (category, quantity), product_id
     
     
-class Level(object):
+class VehicleSize(Enum):
     
-        def test_mixed_compares(self):
-        eq = self.assertEqual
+    from mrjob.job import MRJob
     
     
-def open_text(package: Package,
-              resource: Resource,
-              encoding: str = 'utf-8',
-              errors: str = 'strict') -> TextIO:
-    '''Return a file-like object opened for text reading of the resource.'''
-    resource = _normalize_path(resource)
-    package = _get_package(package)
-    reader = _get_resource_reader(package)
-    if reader is not None:
-        return TextIOWrapper(reader.open_resource(resource), encoding, errors)
-    _check_location(package)
-    absolute_package_path = os.path.abspath(package.__spec__.origin)
-    package_path = os.path.dirname(absolute_package_path)
-    full_path = os.path.join(package_path, resource)
-    try:
-        return open(full_path, mode='r', encoding=encoding, errors=errors)
-    except OSError:
-        # Just assume the loader is a resource loader; all the relevant
-        # importlib.machinery loaders are and an AttributeError for
-        # get_data() will make it clear what is needed from the loader.
-        loader = cast(ResourceLoader, package.__spec__.loader)
-        data = None
-        if hasattr(package.__spec__.loader, 'get_data'):
-            with suppress(OSError):
-                data = loader.get_data(full_path)
-        if data is None:
-            package_name = package.__spec__.name
-            message = '{!r} resource not found in {!r}'.format(
-                resource, package_name)
-            raise FileNotFoundError(message)
+class LongTest(unittest.TestCase):
+    
+            If the registered instance does not have a _dispatch method
+        then the instance will be searched to find a matching method
+        and, if found, will be called. Methods beginning with an '_'
+        are considered private and will not be called by
+        SimpleXMLRPCServer.
+    
+    T_IV2 = dataclasses.InitVar[int]
+T_IV3 = dataclasses.InitVar
+    
+    @dataclass
+class IV:
+    T_IV4 = InitVar
+    iv0: InitVar[int]
+    iv1: InitVar
+    iv2: T_IV2
+    iv3: T_IV3
+    not_iv4: T_IV4  # When using string annotations, this field is not recognized as an InitVar.
+
+    
+    >>> class LazyList:
+...     def __init__(self, g):
+...         self.sofar = []
+...         self.fetch = g.__next__
+...
+...     def __getitem__(self, i):
+...         sofar, fetch = self.sofar, self.fetch
+...         while i >= len(sofar):
+...             sofar.append(fetch())
+...         return sofar[i]
+    
+    
+class DefaultEntryTest(BaseRequestRateTest, unittest.TestCase):
+    robots_txt = '''\
+User-agent: *
+Crawl-delay: 1
+Request-rate: 3/15
+Disallow: /cyberworld/map/
+    '''
+    request_rate = urllib.robotparser.RequestRate(3, 15)
+    crawl_delay = 1
+    good = ['/', '/test.html']
+    bad = ['/cyberworld/map/index.html']
+    
+        def _add_entry(self, entry):
+        if '*' in entry.useragents:
+            # the default entry is considered last
+            if self.default_entry is None:
+                # the first default entry wins
+                self.default_entry = entry
         else:
-            return TextIOWrapper(BytesIO(data), encoding, errors)
+            self.entries.append(entry)
+    
+        def test_hash(self):
+        for x in range(-30, 30):
+            self.assertEqual(hash(x), hash(complex(x, 0)))
+            x /= 3.0    # now check against floating point
+            self.assertEqual(hash(x), hash(complex(x, 0.)))
     
     
-class InheritanceTest(unittest.TestCase):
-    @unittest.skipUnless(hasattr(socket, 'SOCK_CLOEXEC'),
-                         'SOCK_CLOEXEC not defined')
-    @support.requires_linux_version(2, 6, 28)
-    def test_SOCK_CLOEXEC(self):
-        with socket.socket(socket.AF_INET,
-                           socket.SOCK_STREAM | socket.SOCK_CLOEXEC) as s:
-            self.assertEqual(s.type, socket.SOCK_STREAM)
-            self.assertFalse(s.get_inheritable())
+class OmniCompletionRequest( CompletionRequest ):
+  def __init__( self, omni_completer, request_data ):
+    super( OmniCompletionRequest, self ).__init__( request_data )
+    self._omni_completer = omni_completer
     
-        def _test_home(self, p):
-        q = self.cls(os.path.expanduser('~'))
-        self.assertEqual(p, q)
-        self.assertEqual(str(p), str(q))
-        self.assertIs(type(p), type(q))
-        self.assertTrue(p.is_absolute())
+      if extra_nosetests_args:
+    nosetests_args.extend( extra_nosetests_args )
+  else:
+    nosetests_args.append( p.join( DIR_OF_THIS_SCRIPT, 'python' ) )
     
-        result = False
-    try:
-        ret = urlopen(url, timeout=2)
-        result = (ret.code == 200)
-    except HTTPError as e:
-        print(e, file=sys.stderr)
-    except URLError as e:
-        print(e, file=sys.stderr)
-    except timeout as e:
-        print(e, file=sys.stderr)
-    except Exception as e:
-        print(e, file=sys.stderr)
     
-        #Removing unnecessary intermediate files
-    try:
-        os.remove('htmlout.html')
-        os.remove('title.html')
-        os.remove('dir_title.html')
-    except OSError:
-        print('Error removing temporary file(s)')
+class CompleterAvailableRequest( BaseRequest ):
+  def __init__( self, filetypes ):
+    super( CompleterAvailableRequest, self ).__init__()
+    self.filetypes = filetypes
+    self._response = None
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
