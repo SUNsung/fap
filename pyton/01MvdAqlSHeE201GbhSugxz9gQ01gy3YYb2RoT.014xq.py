@@ -1,99 +1,116 @@
 
         
-                self.client = _DNSimpleLexiconClient(TOKEN, 0)
+            with open('README.md', 'w+') as sorted_file:
+        # Then all of the blocks are sorted individually
+        blocks = [''.join(sorted(block, key=lambda s: s.lower())) for block in blocks]
+        # And the result is written back to README.md
+        sorted_file.write(''.join(blocks))
+    
+        if args.weights:
+        vae = vae.load_weights(args.weights)
+    else:
+        # train the autoencoder
+        vae.fit(x_train,
+                epochs=epochs,
+                batch_size=batch_size,
+                validation_data=(x_test, None))
+        vae.save_weights('vae_cnn_mnist.h5')
+    
+    import numpy as np
+import keras
+from keras.datasets import reuters
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.preprocessing.text import Tokenizer
+    
+    print('Train...')
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=4,
+          validation_data=[x_test, y_test])
+
+    
+        # Arguments
+        n_dense: int > 0. Number of dense layers.
+        dense_units: int > 0. Number of dense units per layer.
+        dropout: keras.layers.Layer. A dropout layer to apply.
+        dropout_rate: 0 <= float <= 1. The rate of dropout.
+        kernel_initializer: str. The initializer for the weights.
+        optimizer: str/keras.optimizers.Optimizer. The optimizer to use.
+        num_classes: int > 0. The number of classes to predict.
+        max_words: int > 0. The maximum number of words per data point.
     
     
-# -- Options for manual page output ---------------------------------------
+def test_serializing_loss_class():
+    orig_loss_class = MSE_MAE_loss(0.3)
+    with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
+        serialized = losses.serialize(orig_loss_class)
+    
+                gc.collect()
+            print('- benchmarking LassoLars')
+            clf = LassoLars(alpha=alpha, fit_intercept=False,
+                            normalize=False, precompute=precompute)
+            tstart = time()
+            clf.fit(X, Y)
+            lars_lasso_results.append(time() - tstart)
+    
+    from sklearn.datasets import make_blobs
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+    
+    n_samples = 100
+n_clusters_range = np.linspace(2, n_samples, 10).astype(np.int)
     
             self.addr1 = Addr.fromstring('127.0.0.1')
-        self.addr2 = Addr.fromstring('127.0.0.1:*')
+        self.addr2 = Addr.fromstring('127.0.0.1:443')
+        self.addr_default = Addr.fromstring('_default_:443')
     
-    # A shorter title for the navigation bar.  Default is the same as html_title.
-#html_short_title = None
+        description = 'Example Installer plugin'
     
-    # One entry per manual page. List of tuples
-# (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'certbot-nginx', u'certbot-nginx Documentation',
-     [author], 1)
-]
+            Returns:
+            An iterator equivalent to: map(func, *iterables) but the calls may
+            be evaluated out-of-order.
     
-    class TZInfo:
-    def __init__(self, transitions, type_indices, ttis, abbrs):
-        self.transitions = transitions
-        self.type_indices = type_indices
-        self.ttis = ttis
-        self.abbrs = abbrs
+        def _adjust_thread_count(self):
+        # When the executor gets lost, the weakref callback will wake up
+        # the worker threads.
+        def weakref_cb(_, q=self._work_queue):
+            q.put(None)
+        # TODO(bquinlan): Should avoid creating new threads if there are more
+        # idle threads than items in the work queue.
+        if len(self._threads) < self._max_workers:
+            t = threading.Thread(target=_worker,
+                                 args=(weakref.ref(self, weakref_cb),
+                                       self._work_queue))
+            t.daemon = True
+            t.start()
+            self._threads.add(t)
+            _threads_queues[t] = self._work_queue
     
-    The interface is file-like.  The implemented methods are:
-read, close, seek, tell, isatty.
-Extra methods are: skip() (called by close, skips to the end of the chunk),
-getname() (returns the name (ID) of the chunk)
+    from nose.tools import ok_
+from ycm.paths import _EndsWithPython
     
-                # test that the path returns unchanged
-            p1 = P('~/My Documents')
-            p2 = P('~alice/My Documents')
-            p3 = P('~bob/My Documents')
-            p4 = P('/~/My Documents')
-            p5 = P('d:~/My Documents')
-            p6 = P('')
-            self.assertRaises(RuntimeError, p1.expanduser)
-            self.assertRaises(RuntimeError, p2.expanduser)
-            self.assertRaises(RuntimeError, p3.expanduser)
-            self.assertEqual(p4.expanduser(), p4)
-            self.assertEqual(p5.expanduser(), p5)
-            self.assertEqual(p6.expanduser(), p6)
+      parsed_args, nosetests_args = parser.parse_known_args()
+    
+        with patch.object( ycm._message_poll_request,
+                       '_response_future',
+                       new = MockAsyncServerResponseInProgress() ):
+      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
+  '''
+  return mock.MagicMock( wraps = FakeFuture( False ) )
+    
+        hass.services.register(DOMAIN, SERVICE_BROWSE_URL,
+                           lambda service:
+                           webbrowser.open(service.data[ATTR_URL]),
+                           schema=SERVICE_BROWSE_URL_SCHEMA)
+    
+    CONF_ON_STATE = 'on_state'
     
     
-def read_binary(package: Package, resource: Resource) -> bytes:
-    '''Return the binary contents of the resource.'''
-    resource = _normalize_path(resource)
-    package = _get_package(package)
-    with open_binary(package, resource) as fp:
-        return fp.read()
-    
-        def __init__(self):
-        self.experts = []
-        self.common_state = {
-            'problems': 0,
-            'suggestions': 0,
-            'contributions': [],
-            'progress': 0   # percentage, if 100 -> task is finished
-        }
-    
-        @classmethod
-    def setUpClass(cls):
-        ''' Class scope setup. '''
-        cls.p = Proxy()
-    
-        '''def test_object(queue):
-           queue_object = QueueObject(queue, True)
-           print('Inside func: {}'.format(queue_object.object))'''
-    
-        def __new__(cls, name, bases, attrs):
-        new_cls = type.__new__(cls, name, bases, attrs)
-        '''
-            Here the name of the class is used as key but it could be any class
-            parameter.
-        '''
-        cls.REGISTRY[new_cls.__name__] = new_cls
-        return new_cls
-    
-        def setup(self):
-        print('Setting up the Test')
-        time.sleep(0.1)
-        self._tm.prepareReporting()
-    
-            for i in range(3):
-            num_obj.increment()
-            print(num_obj)
-        num_obj.value += 'x'  # will fail
-        print(num_obj)
-    except Exception as e:
-        a_transaction.rollback()
-        print('-- rolled back')
-    print(num_obj)
-    
-        def __init__(self, one, other):
-        self._one = one
-        self._other = other
+def convert(value: float, unit_1: str, unit_2: str) -> float:
+    '''Convert one unit of measurement to another.'''
+    if unit_1 not in VALID_UNITS:
+        raise ValueError(
+            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_1, LENGTH))
+    if unit_2 not in VALID_UNITS:
+        raise ValueError(
+            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_2, LENGTH))
