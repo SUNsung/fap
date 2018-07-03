@@ -1,95 +1,167 @@
 
         
-            def __str__(self):
-        defaults = dict(type(self).__dict__)
-        actual = dict(defaults)
-        actual.update(self.__dict__)
-        actual['config'] = self.config
-        return repr_dict_nice(dict(
-            (key, value)
-            for key, value in actual.items()
-            if not key.startswith('_'))
-        )
-    
-        @property
-    def encoding(self):
-        '''Return a `str` with the message's encoding, if known.'''
-        raise NotImplementedError()
-    
-        def __init__(self, conversion, formatting, **kwargs):
-        super(PrettyStream, self).__init__(**kwargs)
-        self.formatting = formatting
-        self.conversion = conversion
-        self.mime = self.msg.content_type.split(';')[0]
-    
-    sessions.add_argument(
-    '--session',
-    metavar='SESSION_NAME_OR_PATH',
-    type=session_name_validator,
-    help='''
-    Create, or reuse and update a session. Within a session, custom headers,
-    auth credential, as well as any cookies sent by the server persist between
-    requests.
-    
-        # 128+2 SIGINT <http://www.tldp.org/LDP/abs/html/exitcodes.html>
-    ERROR_CTRL_C = 130
+            styles = {
+        # No corresponding class for the following:
+        #Text:                     '', # class:  ''
+        Whitespace:                'underline #f8f8f8',      # class: 'w'
+        Error:                     '#a40000 border:#ef2929', # class: 'err'
+        Other:                     '#000000',                # class 'x'
+    }
     
     
-def test_credentials_in_url(httpbin_both):
-    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
-                   auth='user:password')
-    r = http('GET', url)
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
+def to_native_string(string, encoding='ascii'):
+    '''Given a string object, regardless of type, returns a representation of
+    that string in the native string type, encoding and decoding where
+    necessary. This assumes ASCII unless told otherwise.
+    '''
+    if isinstance(string, builtin_str):
+        out = string
+    else:
+        if is_py2:
+            out = string.encode(encoding)
+        else:
+            out = string.decode(encoding)
     
     
-class Node(object):
+@pytest.mark.skipif(sys.version_info[:2] != (2,6), reason='Only run on Python 2.6')
+def test_system_ssl_py26():
+    '''OPENSSL_VERSION_NUMBER isn't provided in Python 2.6, verify we don't
+    blow up in this case.
+    '''
+    assert info()['system_ssl'] == {'version': ''}
+    
+            # Test for int
+        with pytest.raises(InvalidHeader) as excinfo:
+            r = requests.get(httpbin('get'), headers=headers_int)
+        assert 'foo' in str(excinfo.value)
+        # Test for dict
+        with pytest.raises(InvalidHeader) as excinfo:
+            r = requests.get(httpbin('get'), headers=headers_dict)
+        assert 'bar' in str(excinfo.value)
+        # Test for list
+        with pytest.raises(InvalidHeader) as excinfo:
+            r = requests.get(httpbin('get'), headers=headers_list)
+        assert 'baz' in str(excinfo.value)
     
     
-class SpendingByCategory(MRJob):
+@pytest.mark.parametrize(
+    'url, expected', (
+            ('http://192.168.0.1:5000/', True),
+            ('http://192.168.0.1/', True),
+            ('http://172.16.1.1/', True),
+            ('http://172.16.1.1:5000/', True),
+            ('http://localhost.localdomain:5000/v1.0/', True),
+            ('http://google.com:6000/', True),
+            ('http://172.16.1.12/', False),
+            ('http://172.16.1.12:5000/', False),
+            ('http://google.com:5000/v1.0/', False),
+    ))
+def test_should_bypass_proxies(url, expected, monkeypatch):
+    '''Tests for function should_bypass_proxies to check if proxy
+    can be bypassed or not
+    '''
+    monkeypatch.setenv('no_proxy', '192.168.0.0/24,127.0.0.1,localhost.localdomain,172.16.1.1, google.com:6000')
+    monkeypatch.setenv('NO_PROXY', '192.168.0.0/24,127.0.0.1,localhost.localdomain,172.16.1.1, google.com:6000')
+    assert should_bypass_proxies(url, no_proxy=None) == expected
     
-        def seek(self, pos, whence=0):
-        '''Seek to specified position into the chunk.
-        Default position is 0 (start of chunk).
-        If the file is not seekable, this will result in an error.
-        '''
+        text_302 = (b'HTTP/1.1 302 FOUND\r\n'
+                b'Content-Length: 0\r\n'
+                b'Location: /\r\n\r\n')
     
-        def unique_names(self):
-        # sorted
-        if not self.__allnames:
-            self.__allnames = []
-            for name, aliases in self.__byrgb.values():
-                self.__allnames.append(name)
-            self.__allnames.sort(key=str.lower)
-        return self.__allnames
+        :param url: URL for the new :class:`Request` object.
+    :param data: (optional) Dictionary (will be form-encoded), bytes, or file-like object to send in the body of the :class:`Request`.
+    :param json: (optional) json data to send in the body of the :class:`Request`.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
+    '''
     
-        def test_varargs14_kw(self):
-        msg = r'^product\(\) takes at most 1 keyword argument \(2 given\)$'
-        self.assertRaisesRegex(TypeError, msg,
-                               itertools.product, 0, repeat=1, foo=2)
+    # Backwards compat only
+try:
+    from hashlib import md5 as _md5
+except ImportError:
+    try:
+        from md5 import md5 as _md5
+    except ImportError:
+        # Assume we're running in FIPS mode here
+        _md5 = None
     
-        def _get_async(self):
-        return False
+    ipv4_component = r'''
+    (?:
+        [01]?[0-9]{{1,2}}|              # 0..199
+        2[0-4][0-9]|                    # 200..249
+        25[0-5]|                        # 250..255
+        {range}                         # or a numeric range
+    )
+'''.format(range=numeric_range)
     
-        def test_splitroot(self):
-        f = self.flavour.splitroot
-        self.assertEqual(f(''), ('', '', ''))
-        self.assertEqual(f('a'), ('', '', 'a'))
-        self.assertEqual(f('a/b'), ('', '', 'a/b'))
-        self.assertEqual(f('a/b/'), ('', '', 'a/b/'))
-        self.assertEqual(f('/a'), ('', '/', 'a'))
-        self.assertEqual(f('/a/b'), ('', '/', 'a/b'))
-        self.assertEqual(f('/a/b/'), ('', '/', 'a/b/'))
-        # The root is collapsed when there are redundant slashes
-        # except when there are exactly two leading slashes, which
-        # is a special case in POSIX.
-        self.assertEqual(f('//a'), ('', '//', 'a'))
-        self.assertEqual(f('///a'), ('', '/', 'a'))
-        self.assertEqual(f('///a/b'), ('', '/', 'a/b'))
-        # Paths which look like NT paths aren't treated specially
-        self.assertEqual(f('c:/a/b'), ('', '', 'c:/a/b'))
-        self.assertEqual(f('\\/a/b'), ('', '', '\\/a/b'))
-        self.assertEqual(f('\\a\\b'), ('', '', '\\a\\b'))
+            expected = {
+            'name': 'myhealthcheck',
+            'checkIntervalSec': 5,
+            'port': 443,
+            'unhealthyThreshold': 2,
+            'healthyThreshold': 2,
+            'host': '',
+            'timeoutSec': 5,
+            'requestPath': '/'}
+    
+        terminal_stdout_re = [
+        re.compile(r'[\r\n]?<.+>(?:\s*)$'),
+        re.compile(r'[\r\n]?\[.+\](?:\s*)$'),
+    ]
+    
+        terminal_stdout_re = [
+        re.compile(br'[\r\n]?[\w+\-\.:\/\[\]]+(?:\([^\)]+\)){,3}(?:>|#) ?$'),
+        re.compile(br'\@[\w\-\.]+:\S+?[>#\$] ?$')
+    ]
+    
+    
+def get_group_vars(groups):
+    
+        if WSAAddressToStringA(
+            ctypes.byref(addr),
+            addr_size,
+            None,
+            ip_string,
+            ctypes.byref(ip_string_size)
+    ) != 0:
+        raise socket.error(ctypes.FormatError())
+    
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
+    
+            1. error occurs
+        2. enter recovery mode, report error
+        3. consume until token found in resynch set
+        4. try to resume parsing
+        5. next match() will reset errorRecovery mode
+    
+            Terence implemented packed table initializers, because Java has a
+        size restriction on .class files and the lookup tables can grow
+        pretty large. The generated JavaLexer.java of the Java.g example
+        would be about 15MB with uncompressed array initializers.
+    
+            return abs_cert_path, abs_chain_path, abs_fullchain_path
+    
+        @mock.patch('certbot_compatibility_test.validator.requests.get')
+    def test_redirect_wrong_redirect_code(self, mock_get_request):
+        mock_get_request.return_value = create_response(
+            303, {'location': 'https://test.com'})
+        self.assertFalse(self.validator.redirect('test.com'))
+    
+        html = get_content(url)
+    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
+    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
+    
+    _FUTURE_STATES = [
+    PENDING,
+    RUNNING,
+    CANCELLED,
+    CANCELLED_AND_NOTIFIED,
+    FINISHED
+]
     
         # Create and fill-in the class template
     numfields = len(field_names)
@@ -125,74 +197,21 @@ class SpendingByCategory(MRJob):
     for i, name in enumerate(field_names):
         template += '        %s = _property(_itemgetter(%d))\n' % (name, i)
     
-    def _queue_management_worker(executor_reference,
-                             processes,
-                             pending_work_items,
-                             work_ids_queue,
-                             call_queue,
-                             result_queue):
-    '''Manages the communication between this process and the worker processes.
+    URLS = ['http://www.google.com/',
+        'http://www.apple.com/',
+        'http://www.ibm.com',
+        'http://www.thisurlprobablydoesnotexist.com',
+        'http://www.slashdot.org/',
+        'http://www.python.org/',
+        'http://www.bing.com/',
+        'http://www.facebook.com/',
+        'http://www.yahoo.com/',
+        'http://www.youtube.com/',
+        'http://www.blogger.com/']
     
-    
-def FormatDebugInfoResponse_NoResponse_test():
-  assert_that(
-    FormatDebugInfoResponse( None ),
-    equal_to( 'Server errored, no debug info from server\n' )
-  )
-    
-      def json( self ):
-    if self._exception:
-      return None
-    return self._json
-    
-    
-class CompleterAvailableRequest( BaseRequest ):
-  def __init__( self, filetypes ):
-    super( CompleterAvailableRequest, self ).__init__()
-    self.filetypes = filetypes
-    self._response = None
-    
-    
-  def Start( self ):
-    request_data = BuildRequestData( self._buffer_number )
-    if self._extra_data:
-      request_data.update( self._extra_data )
-    request_data[ 'event_name' ] = self._event_name
-    
-    from homeassistant.const import (
-    LENGTH_KILOMETERS,
-    LENGTH_MILES,
-    LENGTH_FEET,
-    LENGTH_METERS,
-    UNIT_NOT_RECOGNIZED_TEMPLATE,
-    LENGTH,
-)
-    
-    
-def _get_homehub_data(url):
-    '''Return mock homehub data.'''
-    return '''
-    [
-        {
-            'mac': 'AA:BB:CC:DD:EE:FF,
-            'hostname': 'hostname',
-            'ip': '192.168.1.43',
-            'ipv6': '',
-            'name': 'hostname',
-            'activity': '1',
-            'os': 'Unknown',
-            'device': 'Unknown',
-            'time_first_seen': '2016/06/05 11:14:45',
-            'time_last_active': '2016/06/06 11:33:08',
-            'dhcp_option': '39043T90430T9TGK0EKGE5KGE3K904390K45GK054',
-            'port': 'wl0',
-            'ipv6_ll': 'fe80::gd67:ghrr:fuud:4332',
-            'activity_ip': '1',
-            'activity_ipv6_ll': '0',
-            'activity_ipv6': '0',
-            'device_oui': 'NA',
-            'device_serial': 'NA',
-            'device_class': 'NA'
-        }
-    ]
-    '''
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
