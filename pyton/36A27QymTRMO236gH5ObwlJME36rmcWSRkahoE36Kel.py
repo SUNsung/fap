@@ -1,192 +1,104 @@
 
         
-                Operator:                  '#582800',   # class: 'o'
-        Operator.Word:             'bold #004461',   # class: 'ow' - like keywords
-    
-    '''
-requests._internal_utils
-~~~~~~~~~~~~~~
-    
-        # Informational.
-    100: ('continue',),
-    101: ('switching_protocols',),
-    102: ('processing',),
-    103: ('checkpoint',),
-    122: ('uri_too_long', 'request_uri_too_long'),
-    200: ('ok', 'okay', 'all_ok', 'all_okay', 'all_good', '\\o/', '✓'),
-    201: ('created',),
-    202: ('accepted',),
-    203: ('non_authoritative_info', 'non_authoritative_information'),
-    204: ('no_content',),
-    205: ('reset_content', 'reset'),
-    206: ('partial_content', 'partial'),
-    207: ('multi_status', 'multiple_status', 'multi_stati', 'multiple_stati'),
-    208: ('already_reported',),
-    226: ('im_used',),
-    
-        expected_digest = (b'Authorization: Digest username='user', '
-                       b'realm='me@kennethreitz.com', '
-                       b'nonce='6bf5d6e4da1ce66918800195d6b9130d', uri='/'')
-    
-    elif is_py3:
-    from urllib.parse import urlparse, urlunparse, urljoin, urlsplit, urlencode, quote, unquote, quote_plus, unquote_plus, urldefrag
-    from urllib.request import parse_http_list, getproxies, proxy_bypass, proxy_bypass_environment, getproxies_environment
-    from http import cookiejar as cookielib
-    from http.cookies import Morsel
-    from io import StringIO
-    from collections import OrderedDict
-    from collections.abc import Callable, Mapping, MutableMapping
-    
-        :param jar: cookielib.CookieJar (not necessarily a RequestsCookieJar)
-    :param request: our own requests.Request object
-    :param response: urllib3.HTTPResponse object
-    '''
-    if not (hasattr(response, '_original_response') and
-            response._original_response):
-        return
-    # the _original_response field is the wrapped httplib.HTTPResponse object,
-    req = MockRequest(request)
-    # pull out the HTTPMessage with the headers and put it in the mock:
-    res = MockResponse(response._original_response.msg)
-    jar.extract_cookies(res, req)
+        
+def test_follow_all_output_options_used_for_redirects(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 3
+    assert HTTP_OK not in r
     
     
-class LookupDict(dict):
-    '''Dictionary lookup object.'''
+def test_unicode_url_query_arg_item_verbose(httpbin):
+    r = http('--verbose', httpbin.url + '/get', u'test==%s' % UNICODE)
+    assert HTTP_OK in r
+    assert UNICODE in r
     
-    seq.add(ConvLSTM2D(filters=40, kernel_size=(3, 3),
-                   padding='same', return_sequences=True))
-seq.add(BatchNormalization())
+        '''
+    .format(OUT_RESP_BODY)
+)
     
-    from keras.preprocessing import sequence
-from keras.models import Sequential
-from keras.layers import Dense, Embedding
-from keras.layers import LSTM
-from keras.datasets import imdb
-    
-    
-class Page(object):
-    
-        def spot_freed(self):
-        self.available_spots += 1
-    
-        def __init__(self, seller_category_map, seller_category_overrides_map):
-        self.seller_category_map = seller_category_map
-        self.seller_category_overrides_map = seller_category_overrides_map
-    
-    
-class sockaddr(ctypes.Structure):
-    _fields_ = [('sa_family', ctypes.c_short),
-                ('__pad1', ctypes.c_ushort),
-                ('ipv4_addr', ctypes.c_byte * 4),
-                ('ipv6_addr', ctypes.c_byte * 16),
-                ('__pad2', ctypes.c_ulong)]
-    
-                    if self.accept[s] >= 1:
-                    #print 'accept state for alt %d' % self.accept[s]
-                    return self.accept[s]
-    
-    # Other changes from the 2.x/3.1 nntplib:
-# - automatic querying of capabilities at connect
-# - New method NNTP.getcapabilities()
-# - New method NNTP.over()
-# - New helper function decode_header()
-# - NNTP.post() and NNTP.ihave() accept file objects, bytes-like objects and
-#   arbitrary iterables yielding lines.
-# - An extensive test suite :-)
-    
-        def _extractname(self, mo):
-        return mo.group('name').strip()
-    
-    class CFunctionCalls(unittest.TestCase):
-    
-        def test_unregister_after_socket_close(self):
-        s = self.SELECTOR()
-        self.addCleanup(s.close)
-        rd, wr = self.make_socketpair()
-        s.register(rd, selectors.EVENT_READ)
-        s.register(wr, selectors.EVENT_WRITE)
-        rd.close()
-        wr.close()
-        s.unregister(rd)
-        s.unregister(wr)
-    
-        def acceptNode(self, element):
-        return self.FILTER_ACCEPT
-    
-    @dataclass
-class IV:
-    T_IV4 = InitVar
-    iv0: InitVar[int]
-    iv1: InitVar
-    iv2: T_IV2
-    iv3: T_IV3
-    not_iv4: T_IV4  # When using string annotations, this field is not recognized as an InitVar.
+        @auth.setter
+    def auth(self, auth):
+        assert set(['type', 'raw_auth']) == set(auth.keys())
+        self['auth'] = auth
 
     
-    import tornado.httpserver
-import tornado.ioloop
-import tornado.options
-import tornado.web
+    - tree.RewriteCardinalityException
+  - tree.RewriteEarlyExitException
+  - tree.RewriteEmptyStreamException
+  .
+.
     
-        def _load_ui_modules(self, modules):
-        if isinstance(modules, types.ModuleType):
-            self._load_ui_modules(dict((n, getattr(modules, n))
-                                       for n in dir(modules)))
-        elif isinstance(modules, list):
-            for m in modules:
-                self._load_ui_modules(m)
-        else:
-            assert isinstance(modules, dict)
-            for name, cls in modules.items():
-                try:
-                    if issubclass(cls, UIModule):
-                        self.ui_modules[name] = cls
-                except TypeError:
-                    pass
+                else:
+                if isinstance(self.input, CharStream):
+                    self.c = self.input.LT(1)
+                    self.line = self.input.line
+                    self.charPositionInLine = self.input.charPositionInLine
     
-            class TestServer(TCPServer):
-            def handle_stream(self, stream, address):
-                test.assertIsNone(stream.socket.cipher())
-                test.io_loop.spawn_callback(self.handle_connection, stream)
+        @property
+    def is_eager_to_contribute(self):
+        return True if self.blackboard.common_state['problems'] > 100 else False
     
-        >>> url_concat('http://example.com/foo', dict(c='d'))
-    'http://example.com/foo?c=d'
-    >>> url_concat('http://example.com/foo?a=b', dict(c='d'))
-    'http://example.com/foo?a=b&c=d'
-    >>> url_concat('http://example.com/foo?a=b', [('c', 'd'), ('c', 'd2')])
-    'http://example.com/foo?a=b&c=d&c=d2'
-    '''
-    if args is None:
-        return url
-    parsed_url = urlparse(url)
-    if isinstance(args, dict):
-        parsed_query = parse_qsl(parsed_url.query, keep_blank_values=True)
-        parsed_query.extend(args.items())
-    elif isinstance(args, list) or isinstance(args, tuple):
-        parsed_query = parse_qsl(parsed_url.query, keep_blank_values=True)
-        parsed_query.extend(args)
-    else:
-        err = ''args' parameter should be dict, list or tuple. Not {0}'.format(
-            type(args))
-        raise TypeError(err)
-    final_query = urlencode(parsed_query)
-    url = urlunparse((
-        parsed_url[0],
-        parsed_url[1],
-        parsed_url[2],
-        parsed_url[3],
-        final_query,
-        parsed_url[5]))
-    return url
+        fftv.publish('cartoon')
+    fftv.publish('music')
+    fftv.publish('ads')
+    fftv.publish('movie')
+    fftv.publish('cartoon')
+    fftv.publish('cartoon')
+    fftv.publish('movie')
+    fftv.publish('blank')
     
-                def finish(self):
-                event.set()
+        def test_display_current_time_at_midnight(self):
+        '''
+        Would almost always fail (despite of right at/after midnight) if
+        untestable production code would have been used.
+        '''
+        time_provider_stub = MidnightTimeProvider()
+        class_under_test = TimeDisplay()
+        class_under_test.set_time_provider(time_provider_stub)
+        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
     
-        @gen_test
-    def test_get_with_putters(self):
-        q = queues.Queue(1)
-        q.put_nowait(0)
-        put = q.put(1)
-        self.assertEqual(0, (yield q.get()))
-        self.assertIsNone((yield put))
+    
+### OUTPUT ###
+# <NumObj: -1>
+# <NumObj: 0>
+# <NumObj: 1>
+# <NumObj: 2>
+# -- committed
+# <NumObj: 3>
+# <NumObj: 4>
+# <NumObj: 5>
+# -- rolled back
+# <NumObj: 2>
+# -- now doing stuff ...
+# -> doing stuff failed!
+# Traceback (most recent call last):
+# File 'memento.py', line 97, in <module>
+#     num_obj.do_stuff()
+#   File 'memento.py', line 52, in transaction
+#     raise e
+#   File 'memento.py', line 49, in transaction
+#     return self.method(obj, *args, **kwargs)
+#   File 'memento.py', line 70, in do_stuff
+#     self.increment()     # <- will fail and rollback
+#   File 'memento.py', line 65, in increment
+#     self.value += 1
+# TypeError: Can't convert 'int' object to str implicitly
+# <NumObj: 2>
+
+    
+    
+# Example usage...
+def main():
+    data1 = Data('Data 1')
+    data2 = Data('Data 2')
+    view1 = DecimalViewer()
+    view2 = HexViewer()
+    data1.attach(view1)
+    data1.attach(view2)
+    data2.attach(view2)
+    data2.attach(view1)
