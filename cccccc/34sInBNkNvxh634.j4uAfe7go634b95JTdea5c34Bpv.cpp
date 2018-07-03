@@ -1,219 +1,166 @@
 
         
-        
-    {      result->AppendString(argv[i]);
+        Status BuildTable(const std::string& dbname,
+                  Env* env,
+                  const Options& options,
+                  TableCache* table_cache,
+                  Iterator* iter,
+                  FileMetaData* meta) {
+  Status s;
+  meta->file_size = 0;
+  iter->SeekToFirst();
     }
     
-    
-#include 'content/nw/src/api/event/event.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/dispatcher_host.h'
-#include 'ui/gfx/screen.h'
-    
-    
-    {  gfx::Image originImage;
-  nw::Package* package = nw::InitNWPackage();
-  if (nw::GetImage(package, base::FilePath::FromUTF8Unsafe(icon), &originImage)) {
-    const gfx::ImageSkia* originImageSkia = originImage.ToImageSkia();
-    gfx::ImageSkia resizedImageSkia = gfx::ImageSkiaOperations::CreateResizedImage(*originImageSkia,
-                                                                                   skia::ImageOperations::RESIZE_GOOD,
-                                                                                   gfx::Size(kIconWidth, kIconHeight));
-    icon_ = gfx::Image(resizedImageSkia);
+    void leveldb_approximate_sizes(
+    leveldb_t* db,
+    int num_ranges,
+    const char* const* range_start_key, const size_t* range_start_key_len,
+    const char* const* range_limit_key, const size_t* range_limit_key_len,
+    uint64_t* sizes) {
+  Range* ranges = new Range[num_ranges];
+  for (int i = 0; i < num_ranges; i++) {
+    ranges[i].start = Slice(range_start_key[i], range_start_key_len[i]);
+    ranges[i].limit = Slice(range_limit_key[i], range_limit_key_len[i]);
   }
+  db->rep->GetApproximateSizes(ranges, num_ranges, sizes);
+  delete[] ranges;
 }
     
-    #include 'caffe/layers/loss_layer.hpp'
+    // Return the name of the log file with the specified number
+// in the db named by 'dbname'.  The result will be prefixed with
+// 'dbname'.
+extern std::string LogFileName(const std::string& dbname, uint64_t number);
     
-    /**
- * @brief Convolves the input image with a bank of learned filters,
- *        and (optionally) adds biases.
- *
- *   Caffe convolves by reduction to matrix multiplication. This achieves
- *   high-throughput and generality of input and filter dimensions but comes at
- *   the cost of memory for matrices. This makes use of efficiency in BLAS.
- *
- *   The input is 'im2col' transformed to a channel K' x H x W data matrix
- *   for multiplication with the N x K' x H x W filter matrix to yield a
- *   N' x H x W output matrix that is then 'col2im' restored. K' is the
- *   input channel * kernel height * kernel width dimension of the unrolled
- *   inputs so that the im2col matrix has a column for each input region to
- *   be filtered. col2im restores the output spatial structure by rolling up
- *   the output channel N' columns of the output matrix.
- */
-template <typename Dtype>
-class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
- public:
-  /**
-   * @param param provides ConvolutionParameter convolution_param,
-   *    with ConvolutionLayer options:
-   *  - num_output. The number of filters.
-   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
-   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
-   *  filters.
-   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
-   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
-   *  for different strides. By default the convolution is dense with stride 1.
-   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
-   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
-   *  different padding. Input padding is computed implicitly instead of
-   *  actually padding.
-   *  - dilation (\b optional, default 1). The filter
-   *  dilation, given by dilation_size for equal dimensions for different
-   *  dilation. By default the convolution has dilation 1.
-   *  - group (\b optional, default 1). The number of filter groups. Group
-   *  convolution is a method for reducing parameterization by selectively
-   *  connecting input and output channels. The input and output channel dimensions must be divisible
-   *  by the number of groups. For group @f$ \geq 1 @f$, the
-   *  convolutional filters' input and output channels are separated s.t. each
-   *  group takes 1 / group of the input channels and makes 1 / group of the
-   *  output channels. Concretely 4 input channels, 8 output channels, and
-   *  2 groups separate input channels 1-2 and output channels 1-4 into the
-   *  first group and input channels 3-4 and output channels 5-8 into the second
-   *  group.
-   *  - bias_term (\b optional, default true). Whether to have a bias.
-   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
-   *    kernels + stream parallelism) engines.
-   */
-  explicit ConvolutionLayer(const LayerParameter& param)
-      : BaseConvolutionLayer<Dtype>(param) {}
-    }
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
+}
+
     
     
-    {  int M_;
-  int K_;
-  int N_;
-  bool bias_term_;
-  Blob<Dtype> bias_multiplier_;
+    {  // 'filter' contains the data appended by a preceding call to
+  // CreateFilter() on this class.  This method must return true if
+  // the key was in the list of keys passed to CreateFilter().
+  // This method may return true or false if the key was not on the
+  // list, but it should aim to return false with a high probability.
+  virtual bool KeyMayMatch(const Slice& key, const Slice& filter) const = 0;
 };
     
-            if (maxSamplesInRAM < SIZE_MAX)
-        {
-            // into how many pieces would we need to break the minibatch?
-            // TODO: The following calculation relies on the ill-devised definition of 'minibatch' of the current truncated BPTT implementation. Adapt this once fixed.
-            size_t numParallelSequences = dataReader->GetNumParallelSequencesForFixingBPTTMode();
-            size_t estimatedMBSize = tunedMBSize * numParallelSequences;
-            return (estimatedMBSize + maxSamplesInRAM - 1) / maxSamplesInRAM;
-        }
+      // Writes to the given file. Returns false in case of error.
+  bool Serialize(TFile* fp) const override;
+  // Reads from the given file. Returns false in case of error.
+  bool DeSerialize(TFile* fp) override;
     
     
-    {    auto netBuilder = make_shared<SimpleNetworkBuilder<ElemType>>(config);
-    ComputationNetworkPtr net = netBuilder->BuildNetworkFromDbnFile(dbnModelPath);
-    net->Save(modelPath);
-}
+    {}  // namespace
+
     
-    // Same as 'ReadConfigFile' function below, but takes as input string instead of wstring
-std::string ConfigParser::ReadConfigFile(const std::string& filePath)
-{
-    return ReadConfigFile(msra::strfun::utf16(filePath));
-}
+    // Extent of x,y,theta in the input feature space. [0,255].
+const int kIntFeatureExtent = 256;
+// Extent of x,y,theta dimensions in the quantized feature space.
+const int kBoostXYBuckets = 16;
+const int kBoostDirBuckets = 16;
     
-        // SaveData - save data in the file/files
-    // recordStart - Starting record number
-    // matricies - a map of section name (section:subsection) to data pointer. Data sepcifications from config file will be used to determine where and how to save data
-    // numRecords - number of records we are saving, can be zero if not applicable
-    // datasetSize - size of the dataset (in records)
-    // byteVariableSized - for variable sized data, size of current block to be written, zero when not used, or ignored if not variable sized data
-    virtual bool SaveData(size_t recordStart, const std::map<std::wstring, void*, nocase_compare>& matrices, size_t numRecords, size_t datasetSize, size_t byteVariableSized = 0);
+      // Reads the samples and their features from the given file,
+  // adding them to the trainer with the font_id from the content of the file.
+  // If verification, then these are verification samples, not training.
+  void ReadTrainingSamples(const char* page_name,
+                           const FEATURE_DEFS_STRUCT& feature_defs,
+                           bool verification);
     
-        // emit the trace message for global progress
-    // 'currentStep' will be offset by m_currentStepOffset.
-    // This only prints of enough time (10s) has elapsed since last print, and the return value is 'true' if it did print.
-    static bool TraceProgressPercentage(size_t epochNumber, double mbProg /*0..100*/, bool isTimerPaced)
+      // WARNING! Serialize/DeSerialize do not save/restore the 'cache' data
+  // members, which is mostly the mapped features, and the weight.
+  // It is assumed these can all be reconstructed from what is saved.
+  // Writes to the given file. Returns false in case of error.
+  bool Serialize(FILE* fp) const;
+  // Creates from the given file. Returns nullptr in case of error.
+  // If swap is true, assumes a big/little-endian swap is needed.
+  static TrainingSample* DeSerializeCreate(bool swap, FILE* fp);
+  // Reads from the given file. Returns false in case of error.
+  // If swap is true, assumes a big/little-endian swap is needed.
+  bool DeSerialize(bool swap, FILE* fp);
+    
+      // As LabelsViaCTC except that this function constructs the best path that
+  // contains only legal sequences of subcodes for recoder_.
+  void LabelsViaReEncode(const NetworkIO& output, GenericVector<int>* labels,
+                         GenericVector<int>* xcoords);
+  // Converts the network output to a sequence of labels, with scores, using
+  // the simple character model (each position is a char, and the null_char_ is
+  // mainly intended for tail padding.)
+  void LabelsViaSimpleText(const NetworkIO& output,
+                           GenericVector<int>* labels,
+                           GenericVector<int>* xcoords);
+    
+    
     {
-        auto& us = GetStaticInstance();
-        if (!us.m_enabled)
-        {
-            return false;
-        }
-    }
-    
-    
-    {public:
-    inline array_ref(_T* ptr, size_t size) throw()
-        : data(ptr), n(size)
     {
+    {      // 4x4 = 4x8 times 8x4, matrix 1 is constant
+      R.at(0, 0) = X100;
+      R.at(0, 1) = D(X101 * F(0.415735f) + X103 * F(0.791065f) + X105 * F(-0.352443f) + X107 * F(0.277785f));
+      R.at(0, 2) = X104;
+      R.at(0, 3) = D(X101 * F(0.022887f) + X103 * F(-0.097545f) + X105 * F(0.490393f) + X107 * F(0.865723f));
+      R.at(1, 0) = X110;
+      R.at(1, 1) = D(X111 * F(0.415735f) + X113 * F(0.791065f) + X115 * F(-0.352443f) + X117 * F(0.277785f));
+      R.at(1, 2) = X114;
+      R.at(1, 3) = D(X111 * F(0.022887f) + X113 * F(-0.097545f) + X115 * F(0.490393f) + X117 * F(0.865723f));
+      R.at(2, 0) = X120;
+      R.at(2, 1) = D(X121 * F(0.415735f) + X123 * F(0.791065f) + X125 * F(-0.352443f) + X127 * F(0.277785f));
+      R.at(2, 2) = X124;
+      R.at(2, 3) = D(X121 * F(0.022887f) + X123 * F(-0.097545f) + X125 * F(0.490393f) + X127 * F(0.865723f));
+      R.at(3, 0) = X130;
+      R.at(3, 1) = D(X131 * F(0.415735f) + X133 * F(0.791065f) + X135 * F(-0.352443f) + X137 * F(0.277785f));
+      R.at(3, 2) = X134;
+      R.at(3, 3) = D(X131 * F(0.022887f) + X133 * F(-0.097545f) + X135 * F(0.490393f) + X137 * F(0.865723f));
+      // 40 muls 24 adds
+      // 4x4 = 4x8 times 8x4, matrix 1 is constant
+      S.at(0, 0) = D(X101 * F(0.906127f) + X103 * F(-0.318190f) + X105 * F(0.212608f) + X107 * F(-0.180240f));
+      S.at(0, 1) = X102;
+      S.at(0, 2) = D(X101 * F(-0.074658f) + X103 * F(0.513280f) + X105 * F(0.768178f) + X107 * F(-0.375330f));
+      S.at(0, 3) = X106;
+      S.at(1, 0) = D(X111 * F(0.906127f) + X113 * F(-0.318190f) + X115 * F(0.212608f) + X117 * F(-0.180240f));
+      S.at(1, 1) = X112;
+      S.at(1, 2) = D(X111 * F(-0.074658f) + X113 * F(0.513280f) + X115 * F(0.768178f) + X117 * F(-0.375330f));
+      S.at(1, 3) = X116;
+      S.at(2, 0) = D(X121 * F(0.906127f) + X123 * F(-0.318190f) + X125 * F(0.212608f) + X127 * F(-0.180240f));
+      S.at(2, 1) = X122;
+      S.at(2, 2) = D(X121 * F(-0.074658f) + X123 * F(0.513280f) + X125 * F(0.768178f) + X127 * F(-0.375330f));
+      S.at(2, 3) = X126;
+      S.at(3, 0) = D(X131 * F(0.906127f) + X133 * F(-0.318190f) + X135 * F(0.212608f) + X137 * F(-0.180240f));
+      S.at(3, 1) = X132;
+      S.at(3, 2) = D(X131 * F(-0.074658f) + X133 * F(0.513280f) + X135 * F(0.768178f) + X137 * F(-0.375330f));
+      S.at(3, 3) = X136;
+      // 40 muls 24 adds
     }
-    inline array_ref() throw()
-        : data(NULL), n(0)
-    {
-    } // in case we have a vector of this
-    inline _T& operator[](size_t i) throw()
-    {
-        check_index(i);
-        return data[i];
-    }
-    inline const _T& operator[](size_t i) const throw()
-    {
-        check_index(i);
-        return data[i];
-    }
-    inline size_t size() const throw()
-    {
-        return n;
-    }
-    inline _T* begin()
-    {
-        return data;
-    }
-    inline _T* end()
-    {
-        return data + n;
-    }
-    inline void resize(size_t sz)
-    {
-        sz;
-        assert(n == sz);
-    } // allow compatibility with some functions
-    // construct from other vector types
-    template <class _V>
-    inline array_ref(_V& v)
-        : data(v.size() > 0 ? &v[0] : NULL), n((size_t) v.size())
-    {
-    }
-};
+  };
+} // end namespace DCT_Upsample
     
-    #pragma once
-#include 'rocksdb/merge_operator.h'
-#include 'rocksdb/slice.h'
+        // Returns the total number of bytes actually consumed by the decoder (which should equal the actual size of the JPEG file).
+    inline int get_total_bytes_read() const { return m_total_bytes_read; }
     
-        // Append, Flush, Append, Get
-    slists.Append('a', 'x');
-    slists.Append('b', 'y');
-    db->Flush(rocksdb::FlushOptions());
-    slists.Append('a', 't');
-    slists.Append('a', 'r');
-    slists.Append('b', '2');
+  private:
+    jpeg_decoder(const jpeg_decoder &);
+    jpeg_decoder &operator =(const jpeg_decoder &);
     
-      /// Push / Insert value at beginning/end of the list. Return the length.
-  /// May throw RedisListException
-  int PushLeft(const std::string& key, const std::string& value);
-  int PushRight(const std::string& key, const std::string& value);
+     ********************************************************************/
     
-      ~Reader();
+    /*The number of bits to output at a time.*/
+# define EC_SYM_BITS   (8)
+/*The total number of bits in each of the state registers.*/
+# define EC_CODE_BITS  (32)
+/*The maximum symbol value.*/
+# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
+/*Bits to shift by to move a symbol into the high-order position.*/
+# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
+/*Carry bit of the high-order range symbol.*/
+# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
+/*Low-order bit of the high-order range symbol.*/
+# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
+/*The number of bits available for the last, partial symbol in the code field.*/
+# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
+#endif
+
     
-      void SetInternalKey(const Slice& key_prefix, const Slice& user_key,
-                      SequenceNumber s,
-                      ValueType value_type = kValueTypeForSeek) {
-    size_t psize = key_prefix.size();
-    size_t usize = user_key.size();
-    EnlargeBufferIfNeeded(psize + usize + sizeof(uint64_t));
-    if (psize > 0) {
-      memcpy(buf_, key_prefix.data(), psize);
-    }
-    memcpy(buf_ + psize, user_key.data(), usize);
-    EncodeFixed64(buf_ + usize + psize, PackSequenceAndType(s, value_type));
-    }
-    
-      // call once at the beginning of a test to setup the dependency between
-  // sync points and setup markers indicating the successor is only enabled
-  // when it is processed on the same thread as the predecessor.
-  // When adding a marker, it implicitly adds a dependency for the marker pair.
-  void LoadDependencyAndMarkers(const std::vector<SyncPointPair>& dependencies,
-                                const std::vector<SyncPointPair>& markers);
-    
-      std::mutex              mutex_;
-  std::condition_variable cv_;
-  // sync points that have been passed through
-  std::unordered_set<std::string> cleared_points_;
-  bool enabled_ = false;
-  int num_callbacks_running_ = 0;
+    # if defined(OPUS_X86_MAY_HAVE_AVX)
+#  define MAY_HAVE_AVX(name) name ## _avx
+# else
+#  define MAY_HAVE_AVX(name) name ## _c
+# endif
