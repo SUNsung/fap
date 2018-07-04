@@ -1,319 +1,302 @@
 
         
-        
-    {  TRand random_;
-  IntSimdMatrix base_;
-};
+            base::FilePath shortcutPath(path);
+    result->AppendBoolean(base::win::CreateOrUpdateShortcutLink(shortcutPath, props, 
+      base::PathExists(shortcutPath) ? base::win::SHORTCUT_UPDATE_EXISTING : base::win::SHORTCUT_CREATE_ALWAYS));
+#else
+    result->AppendBoolean(false);
+#endif
+    return;
+  } else if (method == 'GetPackage') {
+    result->AppendString(shell->GetPackage()->package_string());
+    return;
+  } else if (method == 'SetCrashDumpDir') {
+    std::string path;
+    arguments.GetString(0, &path);
+    //FIXME: result->AppendBoolean(SetCrashDumpPath(path.c_str()));
+    return;
+  } else if (method == 'RegisterGlobalHotKey') {
+    int object_id = -1;
+    arguments.GetInteger(0, &object_id);
+    Shortcut* shortcut =
+        static_cast<Shortcut*>(DispatcherHost::GetApiObject(object_id));
+    bool success = GlobalShortcutListener::GetInstance()->RegisterAccelerator(
+                       shortcut->GetAccelerator(), shortcut);
+    if (!success)
+      shortcut->OnFailed('Register global desktop keyboard shortcut failed.');
+    
+    namespace nwapi {
+    }
     
     
-class WERD;
-class UNICHARSET;
+    {}
     
-      // Return the id associated with the given unichar representation,
-  // this representation MUST exist within the UNICHARMAP. The first
-  // length characters (maximum) from unichar_repr are used. The length
-  // MUST be non-zero.
-  UNICHAR_ID unichar_to_id(const char* const unichar_repr, int length) const;
     
-    #endif  // TESSERACT_CCUTIL_UNICODES_H_
-
+    {} // namespace nwapi
     
-    Dawg *DawgLoader::Load() {
-  TFile fp;
-  if (!data_file_->GetComponent(tessdata_dawg_type_, &fp)) return nullptr;
-  DawgType dawg_type;
-  PermuterType perm_type;
-  switch (tessdata_dawg_type_) {
-    case TESSDATA_PUNC_DAWG:
-    case TESSDATA_LSTM_PUNC_DAWG:
-      dawg_type = DAWG_TYPE_PUNCTUATION;
-      perm_type = PUNC_PERM;
-      break;
-    case TESSDATA_SYSTEM_DAWG:
-    case TESSDATA_LSTM_SYSTEM_DAWG:
-      dawg_type = DAWG_TYPE_WORD;
-      perm_type = SYSTEM_DAWG_PERM;
-      break;
-    case TESSDATA_NUMBER_DAWG:
-    case TESSDATA_LSTM_NUMBER_DAWG:
-      dawg_type = DAWG_TYPE_NUMBER;
-      perm_type = NUMBER_PERM;
-      break;
-    case TESSDATA_BIGRAM_DAWG:
-      dawg_type = DAWG_TYPE_WORD;  // doesn't actually matter
-      perm_type = COMPOUND_PERM;   // doesn't actually matter
-      break;
-    case TESSDATA_UNAMBIG_DAWG:
-      dawg_type = DAWG_TYPE_WORD;
-      perm_type = SYSTEM_DAWG_PERM;
-      break;
-    case TESSDATA_FREQ_DAWG:
-      dawg_type = DAWG_TYPE_WORD;
-      perm_type = FREQ_DAWG_PERM;
-      break;
-    default:
-      return nullptr;
-  }
-  SquishedDawg *retval =
-      new SquishedDawg(dawg_type, lang_, perm_type, dawg_debug_level_);
-  if (retval->Load(&fp)) return retval;
-  delete retval;
-  return nullptr;
+    bool MenuDelegate::IsCommandIdEnabled(int command_id) const {
+  if (command_id < 0)
+    return false;
+    }
+    
+    void Menu::Destroy() {
+  gtk_widget_destroy(menu_);
+  g_object_unref(G_OBJECT(menu_));
 }
     
-      // If we manage the given dawg, decrement its count,
-  // and possibly delete it if the count reaches zero.
-  // If dawg is unknown to us, return false.
-  bool FreeDawg(Dawg *dawg) {
-    return dawgs_.Free(dawg);
-  }
     
-     private:
-  // Constructor is private as the instance only holds information specific to
-  // the current labels, outputs etc, and is built by the static function.
-  CTC(const GenericVector<int>& labels, int null_char,
-      const GENERIC_2D_ARRAY<float>& outputs);
+    {        // allocate space for non-inplace decimation
+        MBLayoutPtr pDecimatedMBLayout = make_shared<MBLayout>();
+        pDecimatedMBLayout->SetAxisName(pMBLayout->GetAxisName());
+        StreamMinibatchInputs decimatedMB;
+        // call in-place decimation
+        pair<size_t, size_t> selected = DecimateMinibatch<ElemType>(mb, decimatedMB, pMBLayout, pDecimatedMBLayout, numprocs, rank);
+        // move the data
+        for (auto k : mb)
+        {
+            const auto& name = k.first;
+            mb.GetInputMatrix<ElemType>(name).SetValue(decimatedMB.GetInputMatrix<ElemType>(name)); // deep-copy our local one to the output location
+        }
+        pMBLayout->MoveFrom(pDecimatedMBLayout);
+        return selected;
+    }
     
-    // Non-linearity (sigmoid) functions and their derivatives.
-struct FFunc {
-  inline double operator()(double x) const { return Logistic(x); }
-};
-struct FPrime {
-  inline double operator()(double y) const { return y * (1.0 - y); }
-};
-struct ClipFFunc {
-  inline double operator()(double x) const {
-    if (x <= 0.0) return 0.0;
-    if (x >= 1.0) return 1.0;
-    return x;
+    template<> inline
+dnnError_t dnnLRNCreateForward<double>(
+    dnnPrimitive_t* pLrn,
+    dnnPrimitiveAttributes_t attributes,
+    const dnnLayout_t dataLayout,
+    size_t kernel_size,
+    double alpha,
+    double beta,
+    double k)
+{
+    return dnnLRNCreateForward_F64(
+        pLrn, attributes, dataLayout, kernel_size, alpha, beta, k);
+}
+    
+            // we stripe V
+        // This is to ensure that we only touch a subset of columns of V at once that fit into
+        // the cache. E.g. for a 1024-row V, that would be 195 columns. We then 'stream'
+        // through M, where each row of M is applied to all those columns of V. This way,
+        // both V and M come from the cache except for the first time. Each 'float' of V
+        // is loaded once into cache. Each row of M is loaded into cache once per stripe of V,
+        // in the example every 195 columns.
+        const size_t cacheablerowsV = 512; // at most
+        const size_t cacheablecolsV = 16;  // V.cacheablecols();    // don't get more than this of V per row of M
+        // 512 * 16 -> 32 KB
+    
+        void SetName(const std::wstring& name)
+    {
+        m_name = name;
+    }
+    const std::wstring& GetName();
+    int GetSectionCount() const
+    {
+        return m_sectionHeader->dataSections;
+    }
+    size_t GetRecordCount() const
+    {
+        return m_sectionHeader->elementsPerRecord != 0 ? m_sectionHeader->elementsCount / m_sectionHeader->elementsPerRecord : m_sectionHeader->elementsCount;
+    }
+    
+        Matrix<float> mB = Matrix<float>::RandomGaussian(dim2, dim1, c_deviceIdZero, 1.0f, 4.0f, IncrementCounter());
+    Matrix<float> mC = Matrix<float>::RandomGaussian(dim2, dim2, c_deviceIdZero, 1.0f, 2.0f, IncrementCounter());
+    Matrix<float> mD(mC.DeepClone());
+    
+    // understand and execute from the syntactic expression tree
+ConfigValuePtr Evaluate(ExpressionPtr);                               // evaluate the expression tree
+void Do(ExpressionPtr e);                                             // evaluate e.do
+shared_ptr<Object> EvaluateField(ExpressionPtr e, const wstring& id); // for experimental CNTK integration
+    
+        // constructors that take a config name
+    MELScript(const std::string& configname)
+        : ConfigParser(';', configname)
+    {
+    }
+    MELScript(const std::wstring& configname)
+        : ConfigParser(';', configname)
+    {
+    }
+    
+    // Data Writer class
+// interface for clients of the Data Writer
+// mirrors the IDataWriter interface, except the Init method is private (use the constructor)
+class DataWriter : public IDataWriter, protected Plugin
+{
+    IDataWriter* m_dataWriter; // writer
+    }
+    
+        float4& operator&=(const float4& other)
+    {
+        v = _mm_and_ps(v, other);
+        return *this;
+    }
+    float4& operator|=(const float4& other)
+    {
+        v = _mm_or_ps(v, other);
+        return *this;
+    }
+    float4& operator+=(const float4& other)
+    {
+        v = _mm_add_ps(v, other);
+        return *this;
+    }
+    float4& operator-=(const float4& other)
+    {
+        v = _mm_sub_ps(v, other);
+        return *this;
+    }
+    float4& operator*=(const float4& other)
+    {
+        v = _mm_mul_ps(v, other);
+        return *this;
+    }
+    float4& operator/=(const float4& other)
+    {
+        v = _mm_div_ps(v, other);
+        return *this;
+    }
+    
+    namespace leveldb {
+namespace log {
+    }
+    }
+    
+      WriteOptions write_options;
+  ASSERT_OK(db->Put(write_options, '1', 'b'));
+  ASSERT_OK(db->Put(write_options, '2', 'c'));
+  ASSERT_OK(db->Put(write_options, '3', 'd'));
+  ASSERT_OK(db->Put(write_options, '4', 'e'));
+  ASSERT_OK(db->Put(write_options, '5', 'f'));
+    
+    
+    {  double FalsePositiveRate() {
+    char buffer[sizeof(int)];
+    int result = 0;
+    for (int i = 0; i < 10000; i++) {
+      if (Matches(Key(i + 1000000000, buffer))) {
+        result++;
+      }
+    }
+    return result / 10000.0;
   }
 };
-struct ClipFPrime {
-  inline double operator()(double y) const {
-    return 0.0 < y && y < 1.0 ? 1.0 : 0.0;
+    
+    void Histogram::Add(double value) {
+  // Linear search is fast enough for our usage in db_bench
+  int b = 0;
+  while (b < kNumBuckets - 1 && kBucketLimit[b] <= value) {
+    b++;
   }
-};
-struct Relu {
-  inline double operator()(double x) const {
-    if (x <= 0.0) return 0.0;
-    return x;
-  }
-};
-struct ReluPrime {
-  inline double operator()(double y) const { return 0.0 < y ? 1.0 : 0.0; }
-};
-struct GFunc {
-  inline double operator()(double x) const { return Tanh(x); }
-};
-struct GPrime {
-  inline double operator()(double y) const { return 1.0 - y * y; }
-};
-struct ClipGFunc {
-  inline double operator()(double x) const {
-    if (x <= -1.0) return -1.0;
-    if (x >= 1.0) return 1.0;
-    return x;
-  }
-};
-struct ClipGPrime {
-  inline double operator()(double y) const {
-    return -1.0 < y && y < 1.0 ? 1.0 : 0.0;
-  }
-};
-struct HFunc {
-  inline double operator()(double x) const { return Tanh(x); }
-};
-struct HPrime {
-  inline double operator()(double y) const {
-    double u = Tanh(y);
-    return 1.0 - u * u;
-  }
-};
-struct UnityFunc {
-  inline double operator()(double x) const { return 1.0; }
-};
-struct IdentityFunc {
-  inline double operator()(double x) const { return x; }
+  buckets_[b] += 1.0;
+  if (min_ > value) min_ = value;
+  if (max_ < value) max_ = value;
+  num_++;
+  sum_ += value;
+  sum_squares_ += (value * value);
+}
+    
+      void Clear();
+  void Add(double value);
+  void Merge(const Histogram& other);
+    
+    // Helper class that locks a mutex on construction and unlocks the mutex when
+// the destructor of the MutexLock object is invoked.
+//
+// Typical usage:
+//
+//   void MyClass::MyMethod() {
+//     MutexLock l(&mu_);       // mu_ is an instance variable
+//     ... some complex code, possibly with multiple return paths ...
+//   }
+    
+    #include 'leveldb/db.h'
+#include 'db/db_impl.h'
+#include 'leveldb/cache.h'
+#include 'util/testharness.h'
+#include 'util/testutil.h'
+    
+    
+    { private:
+  /*! \brief the underlying stream */
+  dmlc::Stream *stream_;
+  /*! \brief buffer to hold data */
+  std::string buffer_;
+  /*! \brief length of valid data in buffer */
+  size_t read_len_;
+  /*! \brief pointer in the buffer */
+  size_t read_ptr_;
 };
     
     
-using namespace dmlc;
+    {  if (pos != std::string::npos) {
+    std::string fmt = cache_prefix.substr(pos + 5, cache_prefix.length());
+    size_t cpos = fmt.rfind('-');
+    if (cpos != std::string::npos) {
+      return std::make_pair(fmt.substr(0, cpos), fmt.substr(cpos + 1, fmt.length()));
+    } else {
+      return std::make_pair(fmt, fmt);
+    }
+  } else {
+    std::string raw = 'raw';
+    return std::make_pair(raw, raw);
+  }
+}
     
+          cbw.Write(buffer.data(), input.begin(), input.end());
     
-    {  delete metric;
-  metric = xgboost::Metric::Create('ndcg@2-');
-  ASSERT_STREQ(metric->Name(), 'ndcg@2-');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 1, 1e-10);
+    TEST(Metric, Precision) {
+  // When the limit for precision is not given, it takes the limit at
+  // std::numeric_limits<unsigned>::max(); hence all values are very small
+  // NOTE(AbdealiJK): Maybe this should be fixed to be num_row by default.
+  xgboost::Metric * metric = xgboost::Metric::Create('pre');
+  ASSERT_STREQ(metric->Name(), 'pre');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-7);
   EXPECT_NEAR(GetMetricEval(metric,
                             {0.1f, 0.9f, 0.1f, 0.9f},
                             {  0,   0,   1,   1}),
-              0.3868f, 0.001f);
-}
+              0, 1e-7);
+    }
     
-    #include <dmlc/registry.h>
-#include <xgboost/base.h>
-#include <xgboost/data.h>
-#include <functional>
-#include <string>
-#include <utility>
-#include <vector>
-#include '../../src/gbm/gblinear_model.h'
-#include '../../src/common/host_device_vector.h'
-    
-      XGBOOST_DEVICE explicit GradientPairInternal(int value) {
-    *this = GradientPairInternal<T>(static_cast<float>(value),
-                                  static_cast<float>(value));
-  }
-    
-    /*!
- * \brief Registry entry for tree updater.
+    namespace xgboost {
+/*!
+ * \brief interface of linear updater
  */
-struct TreeUpdaterReg
-    : public dmlc::FunctionRegEntryBase<TreeUpdaterReg,
-                                        std::function<TreeUpdater* ()> > {
-};
-    
-    #include <cstdint>
-#include <iosfwd>
-#include <typeinfo>
-#include <vector>
-    
-    
-    {  bool cas(T& u, T& v) {
-    Node* n = new Node(v);
-    hazptr_holder<Atom> hptr;
-    Node* p;
-    while (true) {
-      p = hptr.get_protected(node_);
-      if (p->val_ != u) {
-        delete n;
-        return false;
-      }
-      if (node_.compare_exchange_weak(
-              p, n, std::memory_order_relaxed, std::memory_order_release)) {
-        break;
-      }
+class LinearUpdater {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~LinearUpdater() = default;
+  /*!
+   * \brief Initialize the updater with given arguments.
+   * \param args arguments to the objective function.
+   */
+  virtual void Init(
+      const std::vector<std::pair<std::string, std::string> >& args) = 0;
     }
-    hptr.reset();
-    p->retire();
-    return true;
-  }
-};
+    }
+    
+    namespace detail {
+/*! \brief Implementation of gradient statistics pair. Template specialisation
+ * may be used to overload different gradients types e.g. low precision, high
+ * precision, integer, floating point. */
+template <typename T>
+class GradientPairInternal {
+  /*! \brief gradient statistics */
+  T grad_;
+  /*! \brief second order gradient statistics */
+  T hess_;
+    }
+    }
     
     
-    {  // Test that inheriting from MoveOnly doesn't prevent the move
-  // constructor from being noexcept.
-  static_assert(
-      std::is_nothrow_move_constructible<FooBar>::value,
-      'Should have noexcept move constructor');
+    {    return Node::fromYGNode(nodePtr);
 }
     
-    #include <thread>
+        method(setPositionType);
+    method(setPosition);
+    method(setPositionPercent);
     
-      folly::EventBase* getEventBase() override;
-    
-      auto barrier = std::make_shared<boost::barrier>(nThreads + 1);
-    
-    DEFINE_FIND_STATIC_METHOD(KXlog_appenderOpenWithMultipathWithLevel, KXlog, 'appenderOpen', '(IILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V')
-JNIEXPORT void JNICALL Java_com_tencent_mars_xlog_Xlog_appenderOpen
-	(JNIEnv *env, jclass, jint level, jint mode, jstring _cache_dir, jstring _log_dir, jstring _nameprefix, jstring _pubkey) {
-	if (NULL == _log_dir || NULL == _nameprefix) {
-		return;
-	}
-    }
-    
-    #endif
-
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    
-    {        return NULL;
-    }
-    
-        const jchar* GetStringCritical(jstring string, jboolean* isCopy)
-    { return functions->GetStringCritical(this, string, isCopy); }
-    
-    void YGNode::setStyleFlexDirection(YGFlexDirection direction) {
-  style_.flexDirection = direction;
-}
-    
-    YG_NODE_STYLE_PROPERTY(YGDirection, Direction, direction);
-YG_NODE_STYLE_PROPERTY(YGFlexDirection, FlexDirection, flexDirection);
-YG_NODE_STYLE_PROPERTY(YGJustify, JustifyContent, justifyContent);
-YG_NODE_STYLE_PROPERTY(YGAlign, AlignContent, alignContent);
-YG_NODE_STYLE_PROPERTY(YGAlign, AlignItems, alignItems);
-YG_NODE_STYLE_PROPERTY(YGAlign, AlignSelf, alignSelf);
-YG_NODE_STYLE_PROPERTY(YGPositionType, PositionType, positionType);
-YG_NODE_STYLE_PROPERTY(YGWrap, FlexWrap, flexWrap);
-YG_NODE_STYLE_PROPERTY(YGOverflow, Overflow, overflow);
-YG_NODE_STYLE_PROPERTY(YGDisplay, Display, display);
-YG_NODE_STYLE_PROPERTY(float, Flex, flex);
-YG_NODE_STYLE_PROPERTY(float, FlexGrow, flexGrow);
-YG_NODE_STYLE_PROPERTY(float, FlexShrink, flexShrink);
-YG_NODE_STYLE_PROPERTY_UNIT_AUTO(YGValue, FlexBasis, flexBasis);
-    
-    #include <nbind/api.h>
-#include <nbind/BindDefiner.h>
-    
-    void Node::setAlignItems(int alignItems)
-{
-    YGNodeStyleSetAlignItems(m_node, static_cast<YGAlign>(alignItems));
-}
-    
-        double getBorder(int edge) const;
-    
-    #pragma once
-#include <atomic>
-#include <fb/assert.h>
-#include <fb/noncopyable.h>
-#include <fb/nonmovable.h>
-#include <fb/RefPtr.h>
-    
-    // Keeps a thread-local reference to the current thread's JNIEnv.
-struct Environment {
-  // May be null if this thread isn't attached to the JVM
-  FBEXPORT static JNIEnv* current();
-  static void initialize(JavaVM* vm);
-    }
-    
-      bool operator==(const ProgramLocation& other) const {
-    // Assumes that the strings are static
-    return (m_functionName == other.m_functionName) && (m_fileName == other.m_fileName) && m_lineNumber == other.m_lineNumber;
+      T* operator->() const {
+    return m_ptr;
   }
-    
-    // This template function declaration is used in defining arraysize.
-// Note that the function doesn't need an implementation, as we only
-// use its type.
-template <typename T, size_t N>
-char (&ArraySizeHelper(T (&array)[N]))[N];
-    
-    #include <cstdlib>
-#include <ostream>
-#include <cmath>
-    
-      // All the time results are reported after being multiplied by the
-  // time unit multiplier. But since RMS is a relative quantity it
-  // should not be multiplied at all. So, here, we _divide_ it by the
-  // multiplier so that when it is multiplied later the result is the
-  // correct one.
-  double multiplier = GetTimeUnitMultiplier(reports[0].time_unit);
-    
-      // Format items per second
-  std::string items;
-  if (result.items_per_second > 0) {
-    items =
-        StrCat(' ', HumanReadableNumber(result.items_per_second), ' items/s');
-  }
-    
-      // Compile a regular expression matcher from spec.  Returns true on success.
-  //
-  // On failure (and if error is not nullptr), error is populated with a human
-  // readable error message if an error occurs.
-  bool Init(const std::string& spec, std::string* error);
-    
-    #include 'benchmark/benchmark.h'
-#include 'timers.h'
