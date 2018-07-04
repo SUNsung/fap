@@ -1,59 +1,69 @@
 
         
-          # Finds the projects '@user' contributed to, limited to either public projects
-  # or projects visible to the given user.
-  #
-  # current_user - When given the list of the projects is limited to those only
-  #                visible by this user.
-  #
-  # Returns an ActiveRecord::Relation.
-  def execute(current_user = nil)
-    segments = all_projects(current_user)
+            Or via the Cask:
+      brew cask install ngrok
+    EOS
+  end
+end
+
     
-      GEMFILE_EXTENSIONS.each do |extension|
-    extension_pathname = root.join('Gemfile#{extension}')
+        if ARGV.named.empty?
+      slow_checks = %w[
+        check_for_broken_symlinks
+        check_missing_deps
+        check_for_outdated_homebrew
+        check_for_linked_keg_only_brews
+      ]
+      methods = (checks.all.sort - slow_checks) + slow_checks
+    else
+      methods = ARGV.named
+    end
     
-      File.unlink(out) if (File.size(out) == 0)
+        def test_jobs_status
+      spawn_runner '--jobs-status'
+      buf = Timeout.timeout(TIMEOUT) {@test_out.read}
+      assert_match(/\d+=ptest_(first|second|third|forth) */,buf)
+    end
     
-          case matched
-      when :webhost
-        sessions[s[:session]].merge!({k => matches})
-        if(s[:get])
-          print_status('HTTP GET: #{s[:session]} http://#{s[:webhost]}#{s[:get]}')
-          sessions.delete(s[:session])
-          return
-        end
-      when nil
-        # No matches, no saved state
-      end # end case matched
-    end # end of each_key
-  end # end of parse
-end # end of URL sniffer
+          weird_path = [222, 173, 190, 175].pack('C*')
+      File.expand_path(weird_path).encoding.should equal(Encoding::ASCII_8BIT)
+    end
     
-          opts.on('-C', '--no-cache', 'Don't cache to sassc files.') do
-        @options[:for_engine][:read_cache] = false
+      def self.symlink
+    touch(@file)
+    File.symlink(@file, @link)
+    yield @link
+  ensure
+    rm_r @file, @link
+  end
+    
+      it 'can't read in a block when call open with File::EXCL mode' do
+    lambda {
+      File.open(@file, File::EXCL) do |f|
+        f.puts('writing').should == nil
+      end
+    }.should raise_error(IOError)
+  end
+    
+        File.pipe?(filename).should == false
+    
+        describe 'modifies self in place for full Unicode case mapping adapted for Lithuanian' do
+      it 'currently works the same as full Unicode case mapping' do
+        a = 'iß'
+        a.capitalize!(:lithuanian)
+        a.should == 'Iß'
       end
     
-      module Sass::Plugin::Configuration
-    # Different default options in a m environment.
-    def default_options
-      @default_options ||= begin
-        version = Merb::VERSION.split('.').map {|n| n.to_i}
-        if version[0] <= 0 && version[1] < 5
-          root = MERB_ROOT
-          env  = MERB_ENV
-        else
-          root = Merb.root.to_s
-          env  = Merb.environment
-        end
+      class SubSub < Sub
+    def call_super_method
+      :subsubclass_method
+    end
+  end
     
-        # Starts the read-eval-print loop.
-    def run
-      environment = Environment.new
-      @line = 0
-      loop do
-        @line += 1
-        unless (text = Readline.readline('>> '))
-          puts
-          return
-        end
+        res = Net::HTTPClientError.new('1.0', '4xx', 'test response')
+    ruby_version_is ''...'2.6' do
+      lambda { res.error! }.should raise_error(Net::HTTPServerException)
+    end
+    ruby_version_is '2.6' do
+      lambda { res.error! }.should raise_error(Net::HTTPClientException)
+    end
