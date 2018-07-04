@@ -1,133 +1,159 @@
-from google.protobuf import text_format
+
+        
+            entry = entry_template.replace('@TIMESTAMP@', timestamp)
+    entry = entry.replace('@VERSION@', v)
+    entries.append(entry)
     
-      # Similar to above, we need to sum over the valid tokens.  We analogously use
-  # tf.unsorted_segment_sum() with a specially-constructed set of 'batch IDs'.
-  sequence_b = 1 + tf.range(batch_size, dtype=tf.int32)
-  sequence_bx1 = tf.expand_dims(sequence_b, 1)
-  batch_ids_bxm = valid_tokens_bxm * sequence_bx1
-  batch_ids_bm = tf.reshape(batch_ids_bxm, [-1])
+        def test_facebook_matching(self):
+        self.assertTrue(FacebookIE.suitable('https://www.facebook.com/Shiniknoh#!/photo.php?v=10153317450565268'))
+        self.assertTrue(FacebookIE.suitable('https://www.facebook.com/cindyweather?fref=ts#!/photo.php?v=10152183998945793'))
     
-            # The scores form cycles of various sizes.
-        pad = 12345.6
-        scores_raw = [[[  0,   1, pad, pad],
-                       [  1,   0, pad, pad],
-                       [pad, pad, pad, pad],
-                       [pad, pad, pad, pad]],
-                      [[  0,   1,   0, pad],
-                       [  0,   0,   1, pad],
-                       [  1,   0,   0, pad],
-                       [pad, pad, pad, pad]],
-                      [[  0,   1,   0,   0],
-                       [  0,   0,   1,   0],
-                       [  0,   0,   0,   1],
-                       [  1,   0,   0,   0]]]  # pyformat: disable
-    
-      short_to_original = saver_lib.shorten_resource_paths(master_spec)
-  saver_lib.export_master_spec(master_spec, graph)
-  saver_lib.export_to_graph(master_spec, params_path, stripped_path, graph,
-                            export_moving_averages)
-  saver_lib.export_assets(master_spec, short_to_original, stripped_path)
-    
-      # Build the TensorFlow graph.
-  graph = tf.Graph()
-  with graph.as_default():
-    tf.set_random_seed(hyperparameters.seed)
-    builder = graph_builder.MasterBuilder(master, hyperparameters)
-    trainers = [
-        builder.add_training_from_config(target) for target in targets
-    ]
-    annotator = builder.add_annotation()
-    builder.add_saver()
-    
-    FLAGS = flags.FLAGS
-    
-      # Graph building.
-  tf.logging.info('Building the graph')
-  g = tf.Graph()
-  with g.as_default(), tf.device('/device:CPU:0'):
-    hyperparam_config = spec_pb2.GridPoint()
-    hyperparam_config.use_moving_average = True
-    builder = graph_builder.MasterBuilder(master_spec, hyperparam_config)
-    annotator = builder.add_annotation()
-    builder.add_saver()
-    
-      def testBatchOneStepPathScoresAgree(self):
-    '''Ensures that path scores computed in the beam are same in the net.'''
-    all_path_scores, beam_path_scores = self.PathScores(
-        iterations=1, beam_size=130, max_steps=1, batch_size=22)
-    self.assertArrayNear(all_path_scores[0], beam_path_scores[0], 1e-6)
+    try:
+    from .lazy_extractors import *
+    from .lazy_extractors import _ALL_CLASSES
+    _LAZY_LOADER = True
+except ImportError:
+    _LAZY_LOADER = False
+    from .extractors import *
     
     
-class Conversion(object):
+    {        webpage = self._download_webpage(url, text_id)
+        sohu_video_info_str = self._search_regex(
+            r'var\s+sohuVideoInfo\s*=\s*({[^}]+});', webpage, 'Sohu video info', default=None)
+        if sohu_video_info_str:
+            sohu_video_info = self._parse_json(
+                sohu_video_info_str, text_id, transform_source=js_to_json)
+            return self.url_result(sohu_video_info['url'], 'Sohu')
+    
+    cc_library(
+    name = 'dragnn_ops_cc',
+    srcs = [
+        'ops/dragnn_op_kernels.cc',
+        'ops/dragnn_ops.cc',
+    ],
+    deps = [
+        ':compute_session',
+        ':compute_session_op',
+        ':compute_session_pool',
+        ':resource_container',
+        ':shape_helpers',
+        '//dragnn/core/util:label',
+        '//dragnn/protos:data_proto_cc',
+        '//dragnn/protos:spec_proto_cc',
+        '//syntaxnet:base',
+        '@org_tensorflow//third_party/eigen3',
+    ],
+    alwayslink = 1,
+)
+    
+    cc_test(
+    name = 'mst_solver_random_comparison_test',
+    size = 'small',
+    timeout = 'long',
+    srcs = ['mst_solver_random_comparison_test.cc'],
+    tags = [
+        'manual',  # exclude from :all, since this is expensive
+    ],
+    deps = [
+        ':mst_solver',
+        ':spanning_tree_iterator',
+        '//syntaxnet:base',
+        '//syntaxnet:test_main',
+        '@org_tensorflow//tensorflow/core:lib',
+        '@org_tensorflow//tensorflow/core:test',
+    ],
+)
+    
+        return [tf.reshape(adjacency_bxnxn, [-1, num_tokens])]
+    
+      # Filter out entries where gold <= -1, which are batch padding entries.
+  valid = tf.greater(gold, -1)
+  valid_ix = tf.reshape(tf.where(valid), [-1])
+  valid_gold = tf.gather(gold, valid_ix)
+  valid_indices = tf.gather(indices, valid_ix)
+  valid_probs = tf.gather(probs, valid_ix)
     
     
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
-    
-                if self.args.auth is None or not plugin.auth_parse:
-                self.args.auth = plugin.get_auth()
-            else:
-                if already_parsed:
-                    # from the URL
-                    credentials = self.args.auth
-                else:
-                    credentials = parse_auth(self.args.auth)
-    
-        def test_repr(self):
-        self.assertEqual('PollError(exhausted=%s, updated={sentinel.AR: '
-                         'sentinel.AR2})' % repr(set()), repr(self.invalid))
-    
-    # If true, sectionauthor and moduleauthor directives will be shown in the
-# output. They are ignored by default.
-#show_authors = False
-    
-    import mock
-    
-        #Writing names of all directories inside 'pages' to a list
-    for os_dir in os.listdir(loc):
-        oslist.append(os_dir)
+class MockNetworkUnit(object):
     
     
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.write('Hello, world')
-    
-            If ``max_length`` is given, some input data may be left over
-        in ``unconsumed_tail``; you must retrieve this value and pass
-        it back to a future call to `decompress` if it is not empty.
-        '''
-        return self.decompressobj.decompress(value, max_length)
-    
-            yield conn.read_response(Delegate())
-        yield event.wait()
-        self.assertEqual(self.code, 200)
-        self.assertEqual(b''.join(body), b'hello')
+if __name__ == '__main__':
+  tf.test.main()
 
     
-        This decorator should not be confused with the similarly-named
-    `.IOLoop.run_in_executor`. In general, using ``run_in_executor``
-    when *calling* a blocking method is recommended instead of using
-    this decorator when *defining* a method. If compatibility with older
-    versions of Tornado is required, consider defining an executor
-    and using ``executor.submit()`` at the call site.
-    
-            if __name__ == '__main__':
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
-            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            sock.setblocking(0)
-            sock.bind(('', 8888))
-            sock.listen(128)
+        Returns:
+      A dictionary of input and output nodes.
+    '''
+    with tf.name_scope(name_scope):
+      handle, input_batch = self._get_session_with_reader(enable_tracing)
+      handle = self.build_inference(
+          handle,
+          use_moving_average=True,
+          build_runtime_graph=build_runtime_graph)
     
     
-class TCPServer(object):
-    r'''A non-blocking, single-threaded TCP server.
+@keras_test
+def test_layer_trainability_switch():
+    # with constructor argument, in Sequential
+    model = Sequential()
+    model.add(Dense(2, trainable=False, input_dim=1))
+    assert model.trainable_weights == []
     
-        def test_return_value(self):
-        with self.assertRaises(ReturnValueIgnoredError):
-            self.return_value(callback=self.stop)
+        bi_convlstm_layer = model.layers[2]
+    weight_tensor_bi_convlstm_new = saving.preprocess_weights_for_loading(
+        bi_convlstm_layer,
+        weight_tensor_bi_convlstm_old,
+        original_keras_version='1')
+    
+    
+def get_example_array():
+    np.random.seed(3537)
+    example_array = np.random.random((100, 100)) * 100. - 50.
+    example_array[0, 0] = 0.  # 0 could possibly cause trouble
+    return example_array
+    
+                    # Make it more robust by adding noise.
+                # The idea is that if during inference,
+                # the value of the pixel is not exactly one,
+                # we need to train the network to be robust and still
+                # consider it as a pixel belonging to a square.
+                if np.random.randint(0, 2):
+                    noise_f = (-1)**np.random.randint(0, 2)
+                    noisy_movies[i, t,
+                                 x_shift - w - 1: x_shift + w + 1,
+                                 y_shift - w - 1: y_shift + w + 1,
+                                 0] += noise_f * 0.1
+    
+    def evalString(s):
+    assert s.startswith(''') or s.startswith('''), repr(s[:1])
+    q = s[0]
+    if s[:3] == q*3:
+        q = q*3
+    assert s.endswith(q), repr(s[-len(q):])
+    assert len(s) >= 2*len(q)
+    s = s[len(q):-len(q)]
+    return re.sub(r'\\(\'|\'|\\|[abfnrtv]|x.{0,2}|[0-7]{1,3})', escape, s)
+    
+        def test_varargs17_kw(self):
+        msg = r'^print\(\) takes at most 4 keyword arguments \(5 given\)$'
+        self.assertRaisesRegex(TypeError, msg,
+                               print, 0, sep=1, end=2, file=3, flush=4, foo=5)
+    
+            Values that cannot be determined are returned as given by the
+        parameter presets. If bits is given as '', the sizeof(pointer)
+        (or sizeof(long) on Python version < 1.5.2) is used as
+        indicator for the supported pointer size.
+    
+        def setFeature(self, name, state):
+        if self.supportsFeature(name):
+            state = state and 1 or 0
+            try:
+                settings = self._settings[(_name_xform(name), state)]
+            except KeyError:
+                raise xml.dom.NotSupportedErr(
+                    'unsupported feature: %r' % (name,)) from None
+            else:
+                for name, value in settings:
+                    setattr(self._options, name, value)
+        else:
+            raise xml.dom.NotFoundErr('unknown feature: ' + repr(name))
