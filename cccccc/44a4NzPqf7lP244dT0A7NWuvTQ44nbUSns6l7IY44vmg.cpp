@@ -1,267 +1,158 @@
 
         
-        BareModelEstimator::BareModelEstimator(int _modelPoints, CvSize _modelSize, int _maxBasicSolutions)
-    :CvModelEstimator2(_modelPoints, _modelSize, _maxBasicSolutions)
+        
+    {
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+    
+     private:
+  const FileDescriptor* file_;
+    
+    
+    
+    TEST(JavaDocCommentTest, Escaping) {
+  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
+  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
+  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
+  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
+  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
+  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
+}
+    
+      // Returns an estimate of the number of bytes the printed code will compile to
+  virtual int GenerateRegistrationCode(io::Printer* printer);
+    
+    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
+    const FieldDescriptor* descriptor) const {
+  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
+    return new ImmutableExtensionGenerator(descriptor, context_);
+  } else {
+    return new ImmutableExtensionLiteGenerator(descriptor, context_);
+  }
+}
+    
+      // overroads ImmutableMessageFieldGenerator ---------------------------------
+  void GenerateMembers(io::Printer* printer) const;
+  void GenerateBuilderMembers(io::Printer* printer) const;
+  void GenerateInitializationCode(io::Printer* printer) const;
+  void GenerateBuilderClearCode(io::Printer* printer) const;
+  void GenerateMergingCode(io::Printer* printer) const;
+  void GenerateBuildingCode(io::Printer* printer) const;
+  void GenerateParsingCode(io::Printer* printer) const;
+  void GenerateSerializationCode(io::Printer* printer) const;
+  void GenerateSerializedSizeCode(io::Printer* printer) const;
+    
+    #endif
+
+    
+    #include <set>
+    
+    #include 'hphp/runtime/ext/extension.h'
+#include 'hphp/util/type-scan.h'
+#include <curl/curl.h>
+    
+    const StaticString s_empty('');
+const Func* lookupDirectFunc(SrcKey const sk,
+                             const StringData* fname,
+                             const StringData* clsName,
+                             bool isExact,
+                             bool isStatic) {
+  if (clsName && !clsName->empty()) {
+    auto const cls = Unit::lookupUniqueClassInContext(clsName,
+                                                      sk.func()->cls());
+    bool magic = false;
+    auto const func = lookupImmutableMethod(cls, fname, magic,
+                                            isStatic, sk.func(), isExact);
+    if (func &&
+        !isExact &&
+        !func->isImmutableFrom(cls) &&
+        (isStatic || !(func->attrs() & AttrPrivate))) return nullptr;
+    return func;
+  }
+  return lookupImmutableFunc(sk.unit(), fname).func;
+}
+    
+    template<> inline
+dnnError_t dnnLRNCreateBackward<float>(
+    dnnPrimitive_t* pLrn,
+    dnnPrimitiveAttributes_t attributes,
+    const dnnLayout_t diffLayout,
+    const dnnLayout_t dataLayout,
+    size_t kernel_size,
+    float alpha,
+    float beta,
+    float k)
 {
+    return dnnLRNCreateBackward_F32(
+        pLrn, attributes, diffLayout, dataLayout, kernel_size, alpha, beta, k);
 }
     
     
     {
     {
-    {            static __device__ __forceinline__ int atomicMax(int* address, int val)
-            {
-                return ::atomicMax(address, val);
-            }
-            static __device__ __forceinline__ float atomicMax(float* address, float val)
-            {
-            #if __CUDA_ARCH__ >= 120
-                int* address_as_i = (int*) address;
-                int old = *address_as_i, assumed;
-                do {
-                    assumed = old;
-                    old = ::atomicCAS(address_as_i, assumed,
-                        __float_as_int(::fmaxf(val, __int_as_float(assumed))));
-                } while (assumed != old);
-                return __int_as_float(old);
-            #else
-                (void) address;
-                (void) val;
-                return 0.0f;
-            #endif
-            }
-            static __device__ __forceinline__ double atomicMax(double* address, double val)
-            {
-            #if __CUDA_ARCH__ >= 130
-                unsigned long long int* address_as_ull = (unsigned long long int*) address;
-                unsigned long long int old = *address_as_ull, assumed;
-                do {
-                    assumed = old;
-                    old = ::atomicCAS(address_as_ull, assumed,
-                        __double_as_longlong(::fmax(val, __longlong_as_double(assumed))));
-                } while (assumed != old);
-                return __longlong_as_double(old);
-            #else
-                (void) address;
-                (void) val;
-                return 0.0;
-            #endif
-            }
-        };
-    }; //struct Emulation
-}}} // namespace cv { namespace cuda { namespace cudev
-    
-            // Version: 2.1
-        PIXEL_PACK_BUFFER                = 0x88EB,
-        PIXEL_UNPACK_BUFFER              = 0x88EC,
-        PIXEL_PACK_BUFFER_BINDING        = 0x88ED,
-        PIXEL_UNPACK_BUFFER_BINDING      = 0x88EF,
-        FLOAT_MAT2x3                     = 0x8B65,
-        FLOAT_MAT2x4                     = 0x8B66,
-        FLOAT_MAT3x2                     = 0x8B67,
-        FLOAT_MAT3x4                     = 0x8B68,
-        FLOAT_MAT4x2                     = 0x8B69,
-        FLOAT_MAT4x3                     = 0x8B6A,
-        SRGB                             = 0x8C40,
-        SRGB8                            = 0x8C41,
-        SRGB_ALPHA                       = 0x8C42,
-        SRGB8_ALPHA8                     = 0x8C43,
-        COMPRESSED_SRGB                  = 0x8C48,
-        COMPRESSED_SRGB_ALPHA            = 0x8C49,
-    
-    #include 'autogenerated/opencl_clamdblas_impl.hpp'
-    
-    /* [-255..255].^2 */
-const ushort g_8x16uSqrTab[] =
-{
-    65025, 64516, 64009, 63504, 63001, 62500, 62001, 61504, 61009, 60516, 60025, 59536,
-    59049, 58564, 58081, 57600, 57121, 56644, 56169, 55696, 55225, 54756, 54289, 53824,
-    53361, 52900, 52441, 51984, 51529, 51076, 50625, 50176, 49729, 49284, 48841, 48400,
-    47961, 47524, 47089, 46656, 46225, 45796, 45369, 44944, 44521, 44100, 43681, 43264,
-    42849, 42436, 42025, 41616, 41209, 40804, 40401, 40000, 39601, 39204, 38809, 38416,
-    38025, 37636, 37249, 36864, 36481, 36100, 35721, 35344, 34969, 34596, 34225, 33856,
-    33489, 33124, 32761, 32400, 32041, 31684, 31329, 30976, 30625, 30276, 29929, 29584,
-    29241, 28900, 28561, 28224, 27889, 27556, 27225, 26896, 26569, 26244, 25921, 25600,
-    25281, 24964, 24649, 24336, 24025, 23716, 23409, 23104, 22801, 22500, 22201, 21904,
-    21609, 21316, 21025, 20736, 20449, 20164, 19881, 19600, 19321, 19044, 18769, 18496,
-    18225, 17956, 17689, 17424, 17161, 16900, 16641, 16384, 16129, 15876, 15625, 15376,
-    15129, 14884, 14641, 14400, 14161, 13924, 13689, 13456, 13225, 12996, 12769, 12544,
-    12321, 12100, 11881, 11664, 11449, 11236, 11025, 10816, 10609, 10404, 10201, 10000,
-     9801,  9604,  9409,  9216,  9025,  8836,  8649,  8464,  8281,  8100,  7921,  7744,
-     7569,  7396,  7225,  7056,  6889,  6724,  6561,  6400,  6241,  6084,  5929,  5776,
-     5625,  5476,  5329,  5184,  5041,  4900,  4761,  4624,  4489,  4356,  4225,  4096,
-     3969,  3844,  3721,  3600,  3481,  3364,  3249,  3136,  3025,  2916,  2809,  2704,
-     2601,  2500,  2401,  2304,  2209,  2116,  2025,  1936,  1849,  1764,  1681,  1600,
-     1521,  1444,  1369,  1296,  1225,  1156,  1089,  1024,   961,   900,   841,   784,
-      729,   676,   625,   576,   529,   484,   441,   400,   361,   324,   289,   256,
-      225,   196,   169,   144,   121,   100,    81,    64,    49,    36,    25,    16,
-        9,     4,     1,     0,     1,     4,     9,    16,    25,    36,    49,    64,
-       81,   100,   121,   144,   169,   196,   225,   256,   289,   324,   361,   400,
-      441,   484,   529,   576,   625,   676,   729,   784,   841,   900,   961,  1024,
-     1089,  1156,  1225,  1296,  1369,  1444,  1521,  1600,  1681,  1764,  1849,  1936,
-     2025,  2116,  2209,  2304,  2401,  2500,  2601,  2704,  2809,  2916,  3025,  3136,
-     3249,  3364,  3481,  3600,  3721,  3844,  3969,  4096,  4225,  4356,  4489,  4624,
-     4761,  4900,  5041,  5184,  5329,  5476,  5625,  5776,  5929,  6084,  6241,  6400,
-     6561,  6724,  6889,  7056,  7225,  7396,  7569,  7744,  7921,  8100,  8281,  8464,
-     8649,  8836,  9025,  9216,  9409,  9604,  9801, 10000, 10201, 10404, 10609, 10816,
-    11025, 11236, 11449, 11664, 11881, 12100, 12321, 12544, 12769, 12996, 13225, 13456,
-    13689, 13924, 14161, 14400, 14641, 14884, 15129, 15376, 15625, 15876, 16129, 16384,
-    16641, 16900, 17161, 17424, 17689, 17956, 18225, 18496, 18769, 19044, 19321, 19600,
-    19881, 20164, 20449, 20736, 21025, 21316, 21609, 21904, 22201, 22500, 22801, 23104,
-    23409, 23716, 24025, 24336, 24649, 24964, 25281, 25600, 25921, 26244, 26569, 26896,
-    27225, 27556, 27889, 28224, 28561, 28900, 29241, 29584, 29929, 30276, 30625, 30976,
-    31329, 31684, 32041, 32400, 32761, 33124, 33489, 33856, 34225, 34596, 34969, 35344,
-    35721, 36100, 36481, 36864, 37249, 37636, 38025, 38416, 38809, 39204, 39601, 40000,
-    40401, 40804, 41209, 41616, 42025, 42436, 42849, 43264, 43681, 44100, 44521, 44944,
-    45369, 45796, 46225, 46656, 47089, 47524, 47961, 48400, 48841, 49284, 49729, 50176,
-    50625, 51076, 51529, 51984, 52441, 52900, 53361, 53824, 54289, 54756, 55225, 55696,
-    56169, 56644, 57121, 57600, 58081, 58564, 59049, 59536, 60025, 60516, 61009, 61504,
-    62001, 62500, 63001, 63504, 64009, 64516, 65025
-};
-    
-    	ERR_FAIL_COND_V(!connected, ERR_UNCONFIGURED);
-    
-    #endif // WEBSOCKET_CLIENT_H
+    {}}} // end namespaces
 
     
-    # if defined(OC_COLLECT_METRICS)
-struct oc_mode_metrics{
-  double fragw;
-  double satd;
-  double rate;
-  double rmse;
-  double satd2;
-  double satdrate;
-  double rate2;
-  double satdrmse;
-  double rmse2;
-};
-    
-    /*Modern gcc (4.x) can compile the naive versions of min and max with cmov if
-   given an appropriate architecture, but the branchless bit-twiddling versions
-   are just as fast, and do not require any special target architecture.
-  Earlier gcc versions (3.x) compiled both code to the same assembly
-   instructions, because of the way they represented ((_b)>(_a)) internally.*/
-#define OC_MAXI(_a,_b)      ((_a)-((_a)-(_b)&-((_b)>(_a))))
-#define OC_MINI(_a,_b)      ((_a)+((_b)-(_a)&-((_b)<(_a))))
-/*Clamps an integer into the given range.
-  If _a>_c, then the lower bound _a is respected over the upper bound _c (this
-   behavior is required to meet our documented API behavior).
-  _a: The lower bound.
-  _b: The value to clamp.
-  _c: The upper boud.*/
-#define OC_CLAMPI(_a,_b,_c) (OC_MAXI(_a,OC_MINI(_b,_c)))
-#define OC_CLAMP255(_x)     ((unsigned char)((((_x)<0)-1)&((_x)|-((_x)>255))))
-/*This has a chance of compiling branchless, and is just as fast as the
-   bit-twiddling method, which is slightly less portable, since it relies on a
-   sign-extended rightshift, which is not guaranteed by ANSI (but present on
-   every relevant platform).*/
-#define OC_SIGNI(_a)        (((_a)>0)-((_a)<0))
-/*Slightly more portable than relying on a sign-extended right-shift (which is
-   not guaranteed by ANSI), and just as fast, since gcc (3.x and 4.x both)
-   compile it into the right-shift anyway.*/
-#define OC_SIGNMASK(_a)     (-((_a)<0))
-/*Divides an integer by a power of two, truncating towards 0.
-  _dividend: The integer to divide.
-  _shift:    The non-negative power of two to divide by.
-  _rmask:    (1<<_shift)-1*/
-#define OC_DIV_POW2(_dividend,_shift,_rmask)\
-  ((_dividend)+(OC_SIGNMASK(_dividend)&(_rmask))>>(_shift))
-/*Divides _x by 65536, truncating towards 0.*/
-#define OC_DIV2_16(_x) OC_DIV_POW2(_x,16,0xFFFF)
-/*Divides _x by 2, truncating towards 0.*/
-#define OC_DIV2(_x) OC_DIV_POW2(_x,1,0x1)
-/*Divides _x by 8, truncating towards 0.*/
-#define OC_DIV8(_x) OC_DIV_POW2(_x,3,0x7)
-/*Divides _x by 16, truncating towards 0.*/
-#define OC_DIV16(_x) OC_DIV_POW2(_x,4,0xF)
-/*Right shifts _dividend by _shift, adding _rval, and subtracting one for
-   negative dividends first.
-  When _rval is (1<<_shift-1), this is equivalent to division with rounding
-   ties away from zero.*/
-#define OC_DIV_ROUND_POW2(_dividend,_shift,_rval)\
-  ((_dividend)+OC_SIGNMASK(_dividend)+(_rval)>>(_shift))
-/*Divides a _x by 2, rounding towards even numbers.*/
-#define OC_DIV2_RE(_x) ((_x)+((_x)>>1&1)>>1)
-/*Divides a _x by (1<<(_shift)), rounding towards even numbers.*/
-#define OC_DIV_POW2_RE(_x,_shift) \
-  ((_x)+((_x)>>(_shift)&1)+((1<<(_shift))-1>>1)>>(_shift))
-/*Swaps two integers _a and _b if _a>_b.*/
-#define OC_SORT2I(_a,_b) \
-  do{ \
-    int t__; \
-    t__=((_a)^(_b))&-((_b)<(_a)); \
-    (_a)^=t__; \
-    (_b)^=t__; \
-  } \
-  while(0)
-    
-    
-    {            return (m_numSubminibatches = actualnumSubminibatches);
-        }
-    
-        template <class matrixbase>
-    void addfloat(double thisscale, const msra::math::ssematrix<matrixbase> &other, float otherweight)
-    {
-        assert(nrows == other.rows());
-        assert(ncols == other.cols());
-        if (thisscale == 0.0)
-        {
-            for (size_t j = 0; j < ncols; j++)
-                for (size_t i = 0; i < nrows; i++)
-                    (*this)(i, j) = otherweight * other(i, j);
-        }
-        else if (thisscale == 1.0)
-        {
-            for (size_t j = 0; j < ncols; j++)
-                for (size_t i = 0; i < nrows; i++)
-                    (*this)(i, j) += otherweight * other(i, j);
-        }
-        else
-        {
-            for (size_t j = 0; j < ncols; j++)
-                for (size_t i = 0; i < nrows; i++)
-                    (*this)(i, j) = thisscale * (*this)(i, j) + otherweight *other(i, j);
-        }
-    }
-    
-    template void DoConvertFromDbn<float>(const ConfigParameters& config);
-template void DoConvertFromDbn<double>(const ConfigParameters& config);
-template void DoExportToDbn<float>(const ConfigParameters& config);
-template void DoExportToDbn<double>(const ConfigParameters& config);
-
-    
-    class latticepair : public std::pair<msra::lattices::lattice, msra::lattices::lattice>
+    template <class _T>
+class array_ref
 {
-public:
-    // NOTE: we don't check numerator lattice now
-    size_t getnumframes() const
+    _T* data;
+    size_t n;
+    inline void check_index(size_t i) const
     {
-        return second.getnumframes();
+        i;
+        assert(i < n);
     }
-    size_t getnumnodes() const
+    inline void check_ptr() const
     {
-        return second.getnumnodes();
+        n;
+        data;
+        assert(n == 0 || data != NULL);
     }
-    size_t getnumedges() const
-    {
-        return second.getnumedges();
     }
-    std::wstring getkey() const
-    {
-        return second.getkey();
-    }
-};
     
-    // redirect the messages to R's console.
-namespace dmlc {
-void CustomLogMessage::Log(const std::string& msg) {
-  Rprintf('%s\n', msg.c_str());
+        if (st.total_length > _rawlen) return LONGLINKPACK_CONTINUE_data;
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    Config::~Config(void)
+{
+    YGConfigFree(m_config);
 }
-}  // namespace dmlc
     
-      // Copy constructor if of same value type
-  XGBOOST_DEVICE GradientPairInternal(const GradientPairInternal<T> &g)
-      : grad_(g.grad_), hess_(g.hess_) {}  // NOLINT
+    /* static */ Node * Node::fromYGNode(YGNodeRef nodeRef)
+{
+    return reinterpret_cast<Node *>(YGNodeGetContext(nodeRef));
+}
     
-    namespace xgboost {
+        Value getPadding(int edge) const;
+    
+        method(setFlex);
+    method(setFlexBasis);
+    method(setFlexBasisPercent);
+    method(setFlexGrow);
+    method(setFlexShrink);
+    
+    void assertInternal(const char* formatstr ...) {
+    va_list va_args;
+    va_start(va_args, formatstr);
+    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
+    va_end(va_args);
+    if (gAssertHandler != NULL) {
+        gAssertHandler(sAssertBuf);
     }
+    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
+    // crash at this specific address so that we can find our crashes easier
+    *(int*)0xdeadb00c = 0;
+    // let the compiler know we won't reach the end of the function
+     __builtin_unreachable();
+}
+    
+    #pragma once
