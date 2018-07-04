@@ -1,81 +1,35 @@
 
         
-            # For pickling to work, the __module__ variable needs to be set to the frame
-    # where the named tuple is created.  Bypass this step in enviroments where
-    # sys._getframe is not defined (Jython for example).
-    if hasattr(_sys, '_getframe'):
-        result.__module__ = _sys._getframe(1).f_globals.get('__name__', '__main__')
+        
+def _is_tar_extract(cmd):
+    if '--extract' in cmd:
+        return True
     
+    if (twisted_version.major, twisted_version.minor, twisted_version.micro) >= (15, 5, 0):
+    collect_ignore += _py_files('scrapy/xlib/tx')
     
-def FormatDebugInfoResponse_NoResponse_test():
-  assert_that(
-    FormatDebugInfoResponse( None ),
-    equal_to( 'Server errored, no debug info from server\n' )
-  )
-    
-      if 'word' in vim_data:
-    completion_data[ 'insertion_text' ] = vim_data[ 'word' ]
-  if 'abbr' in vim_data:
-    completion_data[ 'menu_text' ] = vim_data[ 'abbr' ]
-  if 'menu' in vim_data:
-    completion_data[ 'extra_menu_info' ] = vim_data[ 'menu' ]
-  if 'kind' in vim_data:
-    completion_data[ 'kind' ] = [ vim_data[ 'kind' ] ]
-  if 'info' in vim_data:
-    completion_data[ 'detailed_info' ] = vim_data[ 'info' ]
-    
-    
-def EndsWithPython_Good( path ):
-  ok_( _EndsWithPython( path ),
-       'Path {0} does not end with a Python name.'.format( path ) )
-    
-        self._cached_response = self.HandleFuture( self._response_future,
-                                               truncate_message = True )
-    
-        def do_action(self):
-        print(self.name, self.action.name, end=' ')
-        return self.action
-    
-        def __new__(cls, name, bases, attrs):
-        new_cls = type.__new__(cls, name, bases, attrs)
+        def add_options(self, parser):
         '''
-            Here the name of the class is used as key but it could be any class
-            parameter.
+        Populate option parse with options available for this command
         '''
-        cls.REGISTRY[new_cls.__name__] = new_cls
-        return new_cls
+        group = OptionGroup(parser, 'Global Options')
+        group.add_option('--logfile', metavar='FILE',
+            help='log file. if omitted stderr will be used')
+        group.add_option('-L', '--loglevel', metavar='LEVEL', default=None,
+            help='log level (default: %s)' % self.settings['LOG_LEVEL'])
+        group.add_option('--nolog', action='store_true',
+            help='disable logging completely')
+        group.add_option('--profile', metavar='FILE', default=None,
+            help='write python cProfile stats to FILE')
+        group.add_option('--pidfile', metavar='FILE',
+            help='write process ID to FILE')
+        group.add_option('-s', '--set', action='append', default=[], metavar='NAME=VALUE',
+            help='set/override setting (may be repeated)')
+        group.add_option('--pdb', action='store_true', help='enable pdb on failure')
     
-    *Where is the pattern used practically?
-    
-        def test_display_current_time_at_current_time(self):
-        '''
-        Just as justification for working example with the time provider used in
-        production. (Will always pass.)
-        '''
-        production_code_time_provider = ProductionCodeTimeProvider()
-        class_under_test = TimeDisplay()
-        class_under_test.set_time_provider(production_code_time_provider)
-        current_time = datetime.datetime.now()
-        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
-
-    
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-'''
-    
-        '''catalog of multiple static methods that are executed depending on an init
-    
-    print('Counting to two...')
-for number in count_to_two():
-    print(number, end=' ')
-    
-        def __init__(self):
-        self._reporter = None
-        self._db = None
-        self._tc = None
-    
-        def __init__(self, wrapped):
-        self._wrapped = wrapped
+        def run(self, args, opts):
+        # load contracts
+        contracts = build_component_list(self.settings.getwithbase('SPIDER_CONTRACTS'))
+        conman = ContractsManager(load_object(c) for c in contracts)
+        runner = TextTestRunner(verbosity=2 if opts.verbose else 1)
+        result = TextTestResult(runner.stream, runner.descriptions, runner.verbosity)
