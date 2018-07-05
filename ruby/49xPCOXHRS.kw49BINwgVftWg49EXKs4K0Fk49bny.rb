@@ -1,56 +1,41 @@
-        a_length = a_split.length
-        b_length = b_split.length
+
+        
+        ###
+### dependencies
+###
     
-        def add(path, content)
-      @pages[path] = content
+          def call
+        title('Gems')
+        table(all_gem_names) do |gem, row|
+          row.yellow if update_available?(gem)
+          row << gem
+          row << installed_gem_version(gem)
+          row << '(update available)' if update_available?(gem)
+        end
+      end
+    
+      # Read and eval a .rake file in such a way that `self` within the .rake file
+  # refers to this plugin instance. This gives the tasks in the file access to
+  # helper methods defined by the plugin.
+  def eval_rakefile(path)
+    contents = IO.read(path)
+    instance_eval(contents, path, 1)
+  end
+    
+      def command_line(*options)
+    options.each { |opt| ARGV << opt }
+    subject.define_singleton_method(:exit) do |*_args|
+      throw(:system_exit, :exit)
     end
+    subject.run
+    subject.options
+  end
     
-            # This returns all the registered guest capabilities.
-        #
-        # @return [Hash]
-        def guest_capabilities
-          results = Hash.new { |h, k| h[k] = Registry.new }
-    
-              @env.action_runner.run(Vagrant::Action.action_box_remove, {
-            box_name:     argv[0],
-            box_provider: options[:provider],
-            box_version:  options[:version],
-            force_confirm_box_remove: options[:force],
-            box_remove_all_versions: options[:all],
-          })
-    
-        used_formulae_missing = false
-    used_formulae = begin
-      ARGV.formulae
-    rescue FormulaUnavailableError => e
-      opoo e
-      used_formulae_missing = true
-      # If the formula doesn't exist: fake the needed formula object name.
-      ARGV.named.map { |name| OpenStruct.new name: name, full_name: name }
+      desc 'Install all spree gems'
+  task install: :build do
+    for_each_gem do |gem_path|
+      Bundler.with_clean_env do
+        sh 'gem install #{gem_path}'
+      end
     end
-    
-    class DependencyCollector
-  module Compat
-    # Define the languages that we can handle as external dependencies.
-    LANGUAGE_MODULES = Set[
-      :lua, :lua51, :perl, :python, :python3, :ruby
-    ].freeze
-    
-      # The message to show when the requirement is not met.
-  def message
-    _, _, class_name = self.class.to_s.rpartition '::'
-    s = '#{class_name} unsatisfied!\n'
-    if cask
-      s += <<~EOS
-        You can install with Homebrew-Cask:
-         brew cask install #{cask}
-      EOS
-    end
-    
-              def plugins
-            @plugins ||= find_plugins_gem_specs.map do |spec|
-              { :name => spec.name, :version => spec.version.to_s }
-            end.sort_by do |spec|
-              spec[:name]
-            end
-          end
+  end
