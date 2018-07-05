@@ -1,209 +1,163 @@
 
         
-            TableBuilder* builder = new TableBuilder(options, file);
-    meta->smallest.DecodeFrom(iter->key());
-    for (; iter->Valid(); iter->Next()) {
-      Slice key = iter->key();
-      meta->largest.DecodeFrom(key);
-      builder->Add(key, iter->value());
-    }
+        #define THPDoubleStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPDoubleStorageClass)
+#define THPFloatStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPFloatStorageClass)
+#define THPHalfStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPFloatStorageClass)
+#define THPLongStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPLongStorageClass)
+#define THPIntStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPIntStorageClass)
+#define THPShortStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPShortStorageClass)
+#define THPCharStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPCharStorageClass)
+#define THPByteStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPByteStorageClass)
     
-    #endif  // STORAGE_LEVELDB_DB_DB_ITER_H_
-
     
-    
-    {  edit.SetComparatorName('foo');
-  edit.SetLogNumber(kBig + 100);
-  edit.SetNextFile(kBig + 200);
-  edit.SetLastSequence(kBig + 1000);
-  TestEncodeDecode(edit);
+void unregister_fd(int fd) {
+  pollfds.erase(
+    std::remove_if(pollfds.begin(), pollfds.end(),
+        [fd](const struct pollfd &pfd) { return pfd.fd == fd; }),
+    pollfds.end());
+  client_sessions.erase(fd);
 }
     
-    static std::string PrintContents(WriteBatch* b) {
-  InternalKeyComparator cmp(BytewiseComparator());
-  MemTable* mem = new MemTable(cmp);
-  mem->Ref();
-  std::string state;
-  Status s = WriteBatchInternal::InsertInto(b, mem);
-  int count = 0;
-  Iterator* iter = mem->NewIterator();
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    ParsedInternalKey ikey;
-    ASSERT_TRUE(ParseInternalKey(iter->key(), &ikey));
-    switch (ikey.type) {
-      case kTypeValue:
-        state.append('Put(');
-        state.append(ikey.user_key.ToString());
-        state.append(', ');
-        state.append(iter->value().ToString());
-        state.append(')');
-        count++;
-        break;
-      case kTypeDeletion:
-        state.append('Delete(');
-        state.append(ikey.user_key.ToString());
-        state.append(')');
-        count++;
-        break;
-    }
-    state.append('@');
-    state.append(NumberToString(ikey.sequence));
-  }
-  delete iter;
-  if (!s.ok()) {
-    state.append('ParseError()');
-  } else if (count != WriteBatchInternal::Count(b)) {
-    state.append('CountMismatch()');
-  }
-  mem->Unref();
-  return state;
+    void THDTensor_(cauchy)(THDTensor *self, THDGenerator *_generator, double median,
+                        double sigma) {
+  masterCommandChannel->sendMessage(
+    packMessage(Functions::tensorCauchy, self, _generator, median, sigma),
+    THDState::s_current_worker
+  );
 }
     
-        if (bytes_ > 0) {
-      char rate[100];
-      snprintf(rate, sizeof(rate), '%6.1f MB/s',
-               (bytes_ / 1048576.0) / (finish - start_));
-      if (!message_.empty()) {
-        message_  = std::string(rate) + ' ' + message_;
-      } else {
-        message_ = rate;
-      }
-    }
     
-    
-#endif  // STORAGE_LEVELDB_INCLUDE_SLICE_H_
-
-    
-    int getifaddrs(struct ifaddrs** result) {
-	int fd = socket(PF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
-	if (fd < 0) {
-		return -1;
-	}
-	netlinkrequest ifaddr_request;
-	memset(&ifaddr_request, 0, sizeof(ifaddr_request));
-	ifaddr_request.header.nlmsg_flags = NLM_F_ROOT | NLM_F_REQUEST;
-	ifaddr_request.header.nlmsg_type = RTM_GETADDR;
-	ifaddr_request.header.nlmsg_len = NLMSG_LENGTH(sizeof(ifaddrmsg));
-	ssize_t count = send(fd, &ifaddr_request, ifaddr_request.header.nlmsg_len, 0);
-	if (static_cast<size_t>(count) != ifaddr_request.header.nlmsg_len) {
-		close(fd);
-		return -1;
-	}
-	struct ifaddrs* start = NULL;
-	struct ifaddrs* current = NULL;
-	char buf[kMaxReadSize];
-	ssize_t amount_read = recv(fd, &buf, kMaxReadSize, 0);
-	while (amount_read > 0) {
-		nlmsghdr* header = reinterpret_cast<nlmsghdr*>(&buf[0]);
-		size_t header_size = static_cast<size_t>(amount_read);
-		for ( ; NLMSG_OK(header, header_size);
-		      header = NLMSG_NEXT(header, header_size)) {
-			switch (header->nlmsg_type) {
-			case NLMSG_DONE:
-				// Success. Return.
-				*result = start;
-				close(fd);
-				return 0;
-			case NLMSG_ERROR:
-				close(fd);
-				freeifaddrs(start);
-				return -1;
-			case RTM_NEWADDR: {
-				ifaddrmsg* address_msg =
-						reinterpret_cast<ifaddrmsg*>(NLMSG_DATA(header));
-				rtattr* rta = IFA_RTA(address_msg);
-				ssize_t payload_len = IFA_PAYLOAD(header);
-				while (RTA_OK(rta, payload_len)) {
-					if (rta->rta_type == IFA_ADDRESS) {
-						int family = address_msg->ifa_family;
-						if (family == AF_INET || family == AF_INET6) {
-							ifaddrs* newest = new ifaddrs;
-							memset(newest, 0, sizeof(ifaddrs));
-							if (current) {
-								current->ifa_next = newest;
-							} else {
-								start = newest;
-							}
-							if (populate_ifaddrs(newest, address_msg, RTA_DATA(rta),
-									     RTA_PAYLOAD(rta)) != 0) {
-								freeifaddrs(start);
-								*result = NULL;
-								return -1;
-							}
-							current = newest;
-						}
-					}
-					rta = RTA_NEXT(rta, payload_len);
-				}
-				break;
-			}
-			}
-		}
-		amount_read = recv(fd, &buf, kMaxReadSize, 0);
-	}
-	close(fd);
-	freeifaddrs(start);
-	return -1;
-}
-    
-    #include 'io/stream_peer.h'
-    
-    public:
-	virtual void poll();
-	virtual Error accept_stream(Ref<StreamPeer> p_base);
-	virtual Error connect_to_stream(Ref<StreamPeer> p_base, bool p_validate_certs = false, const String &p_for_hostname = String());
-	virtual Status get_status() const;
-    
-    #else
-    
-    
-    {				AudioFrame frame = buffer[j] * vol;
-				targets[0][j] = frame;
-				targets[1][j] = frame;
-			}
-		} break;
-		case AudioServer::SPEAKER_SURROUND_71: {
-    
-    #define OC_Q57(_v) ((ogg_int64_t)(_v)<<57)
-    
-    extern JSClass  *jsb_cocos2d_Physics3DConstraint_class;
-extern JSObject *jsb_cocos2d_Physics3DConstraint_prototype;
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    {    CHECK_GL_ERROR_DEBUG();
-}
-
-    
-    void Test::SpawnBomb(const b2Vec2& worldPt)
-{
-	m_bombSpawnPoint = worldPt;
-	m_bombSpawning = true;
-}
-    
-void Test::CompleteBombSpawn(const b2Vec2& p)
-{
-	if (m_bombSpawning == false)
-	{
-		return;
-	}
-    }
-    
-    
-    {	Test* test;
+    {  // For fragments
+  kFirstType = 2,
+  kMiddleType = 3,
+  kLastType = 4
 };
+static const int kMaxRecordType = kLastType;
     
-    	b2Body* m_body1;
-	b2Vec2 m_velocity;
-	float32 m_angularVelocity;
-	b2PolygonShape m_shape1;
-	b2PolygonShape m_shape2;
-	b2Fixture* m_piece1;
-	b2Fixture* m_piece2;
+      // Check that the file exists.
+  ASSERT_TRUE(env_->FileExists('/dir/f'));
+  ASSERT_OK(env_->GetFileSize('/dir/f', &file_size));
+  ASSERT_EQ(0, file_size);
+  ASSERT_OK(env_->GetChildren('/dir', &children));
+  ASSERT_EQ(1, children.size());
+  ASSERT_EQ('f', children[0]);
+    
+    const int kNumKeys = 1100000;
+    
+    #include 'leveldb/env.h'
+#include 'port/port.h'
+#include 'table/block.h'
+#include 'util/coding.h'
+#include 'util/crc32c.h'
+    
+    #endif  // STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
+
+    
+    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
+  size_t usize = user_key.size();
+  size_t needed = usize + 13;  // A conservative estimate
+  char* dst;
+  if (needed <= sizeof(space_)) {
+    dst = space_;
+  } else {
+    dst = new char[needed];
+  }
+  start_ = dst;
+  dst = EncodeVarint32(dst, usize + 8);
+  kstart_ = dst;
+  memcpy(dst, user_key.data(), usize);
+  dst += usize;
+  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
+  dst += 8;
+  end_ = dst;
+}
+    
+      // Finish building the block and return a slice that refers to the
+  // block contents.  The returned slice will remain valid for the
+  // lifetime of this builder or until Reset() is called.
+  Slice Finish();
+    
+    
+    {
+    {} // namespace exception_tracer
+} // namespace folly
+
+    
+    class OrderingTest : public testing::Test {};
+    
+    template <typename T>
+void SingletonHolder<T>::createInstance() {
+  if (creating_thread_.load(std::memory_order_acquire) ==
+        std::this_thread::get_id()) {
+    detail::singletonWarnCreateCircularDependencyAndAbort(type());
+  }
+    }
+    
+        std::lock_guard<std::mutex> lg(entry.mutex);
+    if (entry.state == State::Living) {
+      return;
+    }
+    
+      // folly::Init() will automatically initialize the logging settings based on
+  // the FOLLY_INIT_LOGGING_CONFIG declaration above and the --logging command
+  // line flag.
+  auto init = folly::Init(&argc, &argv);
+    
+    std::string fbLogFatalCheck() {
+  folly::Logger logger('some.category');
+  FB_LOG(logger, FATAL) << 'we always crash';
+  // This function mostly exists to make sure the compiler does not warn
+  // about a missing return statement here.
+}
+    
+    void SerialExecutor::add(Func func) {
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    queue_.push(std::move(func));
+  }
+  parent_->add([keepAlive = getKeepAliveToken(this)] { keepAlive->run(); });
+}
+    
+      using UniquePtr = std::unique_ptr<SerialExecutor, Deleter>;
+  [[deprecated('Replaced by create')]]
+  static UniquePtr createUnique(
+      std::shared_ptr<Executor> parent = getCPUExecutor());
+    
+    FOLLY_ALWAYS_INLINE int __builtin_clzll(unsigned long long x) {
+  unsigned long index;
+  return int(_BitScanReverse64(&index, x) ? 63 - index : 64);
+}
+    
+      /**
+   * Class representing various options: file descriptor behavior, and
+   * whether to use $PATH for searching for the executable,
+   *
+   * By default, we don't use $PATH, file descriptors are closed if
+   * the close-on-exec flag is set (fcntl FD_CLOEXEC) and inherited
+   * otherwise.
+   */
+  class Options {
+    friend class Subprocess;
+   public:
+    Options() {}  // E.g. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58328
+    }
+    
+    class ServiceBase {
+  public:
+    virtual ~ServiceBase() {}
+    void DependServices(const TServicesMap& _dependservices) { m_dependservices = _dependservices;}
+    const char* ServiceName() const { return m_servicename.c_str();}
+    }
+    
+    
+    {  private:
+//    int m_t;
+};
