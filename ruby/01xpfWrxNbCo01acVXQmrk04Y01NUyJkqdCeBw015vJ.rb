@@ -1,138 +1,44 @@
-require 'abstract_unit'
-    
-                    on.unsubscribe do |chan, count|
-                  if count == 0
-                    @subscription_lock.synchronize do
-                      @raw_client = nil
-                    end
-                  end
-                end
-              end
-            end
-          end
-    
-          def handle_exception_with_mailer_class(exception)
-        if klass = mailer_class
-          klass.handle_exception exception
-        else
-          raise exception
-        end
-      end
-  end
-end
 
-    
-      # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
-  # permissions and removing .la files, unless the files (or parent
-  # directories) are protected by skip_clean.
-  #
-  # bin and sbin should not have any subdirectories; if either do that is
-  # caught as an audit warning
-  #
-  # lib may have a large directory tree (see Erlang for instance), and
-  # clean_dir applies cleaning rules to the entire tree
-  def clean_dir(d)
-    d.find do |path|
-      path.extend(ObserverPathnameExtension)
-    
-      UNBREWED_EXCLUDE_FILES = %w[.DS_Store]
-  UNBREWED_EXCLUDE_PATHS = %w[
-    .github/*
-    bin/brew
-    lib/gdk-pixbuf-2.0/*
-    lib/gio/*
-    lib/node_modules/*
-    lib/python[23].[0-9]/*
-    lib/pypy/*
-    lib/pypy3/*
-    lib/ruby/gems/[12].*
-    lib/ruby/site_ruby/[12].*
-    lib/ruby/vendor_ruby/[12].*
-    share/pypy/*
-    share/pypy3/*
-    share/doc/homebrew/*
-    share/info/dir
-    share/man/man1/brew.1
-    share/man/whatis
-  ]
-    
-    class ReporterHub
-  attr_reader :reporters
-    
-        # Returns the unwrapped subject and body of the last commit
-    def self.last_git_commit_message
-      s = (last_git_commit_formatted_with('%B') || '').strip
-      return s if s.to_s.length > 0
-      nil
+        
+            unless formulae.empty?
+      # Dump formula list.
+      ohai title
+      puts_columns(formulae)
     end
-    
-            commands << Fastlane::Actions.sh(command, log: false)
-    
-          attr_accessor :description
-    
-        return if uses.empty?
-    puts Formatter.columns(uses.map(&:full_name).sort)
-    odie 'Missing formulae should not have dependents!' if used_formulae_missing
   end
+    
+    html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
+readme_doctree = REXML::Document.new(html_readme)
+links = REXML::XPath.match(readme_doctree, '//a')
+    
+      def test_capture3_flip
+    o, e, s = Open3.capture3(RUBY, '-e', 'STDOUT.sync=true; 1000.times { print 'o'*1000; STDERR.print 'e'*1000 }')
+    assert_equal('o'*1000000, o)
+    assert_equal('e'*1000000, e)
+    assert(s.success?)
+  end
+    
+    def usercode(f, out)
+  require 'erb'
+  compiler = ERB::Compiler.new('%-')
+  compiler.put_cmd = compiler.insert_cmd = 'out.<<'
+  lineno = f.lineno
+  src, = compiler.compile(f.read)
+  eval(src, binding, f.path, lineno)
 end
-
     
-          respond_with do |format|
-        format.html do
-          gon.preloads[:pods] = pods_json
-          gon.unchecked_count = Pod.unchecked.count
-          gon.version_failed_count = Pod.version_failed.count
-          gon.error_count = Pod.check_failed.count
+      it 'uses '-e' as file' do
+    ruby_exe('puts __FILE__', escape: false).chomp.should == '-e'
+  end
     
-          def core_gem_names
-        %w(capistrano airbrussh rake sshkit net-ssh) & Gem.loaded_specs.keys
-      end
-    
-          def stages
-        names = Dir[stage_definitions].map { |f| File.basename(f, '.rb') }
-        assert_valid_stage_names(names)
-        names
-      end
-    
-      entries.each do |entry|
-    if File.exist?(entry[:file])
-      warn '[skip] #{entry[:file]} already exists'
+      it 'returns nil if else-body is empty and expression is false' do
+    if false
+      123
     else
-      File.open(entry[:file], 'w+') do |f|
-        f.write(ERB.new(File.read(entry[:template])).result(binding))
-        puts I18n.t(:written_file, scope: :capistrano, file: entry[:file])
-      end
-    end
+    end.should == nil
   end
     
-      let(:help_output) do
-    out, _err = capture_io do
-      flags '--help', '-h'
-    end
-    out
+    describe :string_unpack_Aa, shared: true do
+  it 'decodes the number of bytes specified by the count modifier including NULL bytes' do
+    'a\x00bc'.unpack(unpack_format(3)+unpack_format).should == ['a\x00b', 'c']
   end
-    
-        for_each_gem do |gem_path|
-      sh 'gem push '#{gem_path}''
-    end
-  end
-end
-    
-            private
-    
-            def variables_in_simple_node(node)
-          simple_double_comparison?(node) do |var1, var2|
-            return [variable_name(var1), variable_name(var2)]
-          end
-          simple_comparison?(node) do |var|
-            return [variable_name(var)]
-          end
-          []
-        end
-    
-              add_offense(node)
-        end
-    
-        expect(corrected).to eq(''something'.to_sym')
-  end
-end
