@@ -1,71 +1,90 @@
-          box_name     = argv[0]
-          box_provider = argv[1].to_sym
-          box_version  = argv[2]
-    
-          def add_claims_to_scopes
-        return unless params[:claims]
-        claims_json = JSON.parse(params[:claims])
-        return unless claims_json
-        claims_array = claims_json['userinfo'].try(:keys)
-        return unless claims_array
-        req = build_rack_request
-        claims = claims_array.unshift(req[:scope]).join(' ')
-        req.update_param('scope', claims)
+
+        
+            context 'with keywords' do
+      let(:options) do
+        {
+          name: { 'en-US' => 'Fastlane Demo' },
+          description: { 'en-US' => 'Demo description' },
+          keywords: { 'en-US' => 'Some, key, words' }
+        }
       end
     
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
-      end
+          attr_accessor :description
     
-      describe '#referrer' do
-    it 'Reads referrer from Referer header' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
-      expect(subject.referrer(env)).to eq('bar.com')
-    end
+    class Devise::OmniauthCallbacksController < DeviseController
+  prepend_before_action { request.env['devise.skip_timeout'] = true }
     
-      %w(GET HEAD POST PUT DELETE).each do |method|
-    it 'accepts #{method} requests when allow_if is true' do
-      mock_app do
-        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
-        run DummyApp
-      end
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
+      def respond_to_on_destroy
+    # We actually need to hardcode this as Rails default responder doesn't
+    # support returning empty response on GET request
+    respond_to do |format|
+      format.all { head :no_content }
+      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
     end
   end
+end
+
     
-        expect(get('/', {}, 'wants' => 'application/xhtml').headers['X-XSS-Protection']).to eq('1; mode=foo')
-  end
+    class Devise::UnlocksController < DeviseController
+  prepend_before_action :require_no_authentication
     
-        # Prevents you from mocking or stubbing a method that does not exist on
-    # a real object. This is generally recommended.
-    mocks.verify_partial_doubles = true
-  end
+      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
     
-      it 'allows passing on values in env' do
-    klass    = described_class
-    changer  = Struct.new(:app) do
-      def call(env)
-        env['foo.bar'] = 42
-        app.call(env)
+          if options[:skip_helpers] == true
+        @used_helpers = @used_routes
+      elsif skip = options[:skip_helpers]
+        @used_helpers = self.routes - Array(skip).map(&singularizer)
+      else
+        @used_helpers = self.routes
       end
     end
-    detector = Struct.new(:app) do
-      def call(env)
-        app.call(env)
-      end
-    end
+  end
+end
+
     
-          def initialize_copy(copy)
-        copy.instance_variable_set(:@entries, entries.dup)
-      end
+      def with_reopen(io, arg)
+    old = io.dup
+    io.reopen(arg)
+    yield old
+  ensure
+    io.reopen(old)
+    old.close
+  end
     
-      puts '== Installing dependencies =='
-  system 'gem install bundler --conservative'
-  system 'bundle check || bundle install'
+      it 'returns nil if then-body is empty, expression is true and else part is empty' do
+    if true
+    else
+    end.should == nil
+  end
     
-      # Debug mode disables concatenation and preprocessing of assets.
-  # This option may cause significant delays in view rendering with a large
-  # number of complex assets.
-  config.assets.debug = true
+      def test_compile_insn_opt_length_size
+    assert_compile_once('#{<<~'begin;'}\n#{<<~'end;'}', result_inspect: '4', insns: %i[opt_length opt_size])
+    begin;
+      array = [1, 2]
+      array.length + array.size
+    end;
+  end
+    
+      def test_keyword_splat
+    assert_valid_syntax('foo(**h)', __FILE__)
+    o = KW2.new
+    h = {k1: 11, k2: 12}
+    assert_equal([11, 12], o.kw(**h))
+    assert_equal([11, 12], o.kw(k2: 22, **h))
+    assert_equal([11, 22], o.kw(**h, **{k2: 22}))
+    assert_equal([11, 12], o.kw(**{k2: 22}, **h))
+  end
+    
+        fmt = %w(Y m d).map { |x| '%#{x}' }.join('-') # defeats optimization
+    t = Time.at(0).getutc
+    ObjectSpace.count_objects(res = {}) # creates strings on first call
+    before = ObjectSpace.count_objects(res)[:T_STRING]
+    val = t.strftime(fmt)
+    after = ObjectSpace.count_objects(res)[:T_STRING]
+    assert_equal before + 1, after, 'only new string is the created one'
+    assert_equal '1970-01-01', val
+  end
+    
+            private
