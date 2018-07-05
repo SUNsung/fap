@@ -1,316 +1,315 @@
 
         
-        namespace tensorflow {
-namespace {
-    }
+        namespace index {
     }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+      size_t NumChildren;
     
-    namespace internal {
-template <typename T>
-struct functor_traits<scalar_sigmoid_fast_derivative_op<T> > {
-  enum {
-    Cost = NumTraits<T>::AddCost * 2 + NumTraits<T>::MulCost,
-    PacketAccess = packet_traits<T>::HasAdd && packet_traits<T>::HasMul &&
-                   packet_traits<T>::HasNegate
-  };
-};
-}  // namespace internal
+      virtual void handleDiagnostic(SourceManager &SM, SourceLoc Loc,
+                                DiagnosticKind Kind,
+                                StringRef FormatString,
+                                ArrayRef<DiagnosticArgument> FormatArgs,
+                                const DiagnosticInfo &Info) override;
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    namespace tensorflow {
-#define IsSameAddrSp DeviceNameUtils::IsSameAddressSpace
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Status ReadGroundTruthFile(const string& file_name,
-                           std::vector<std::pair<string, int64>>* result) {
-  std::ifstream file(file_name);
-  if (!file) {
-    return tensorflow::errors::NotFound('Ground truth file '', file_name,
-                                        '' not found.');
+      /// Returns true if range \c R contains the location \c Loc.  The location
+  /// \c Loc should point at the beginning of the token.
+  bool rangeContainsTokenLoc(SourceRange R, SourceLoc Loc) const {
+    return Loc == R.Start || Loc == R.End ||
+           (isBeforeInBuffer(R.Start, Loc) && isBeforeInBuffer(Loc, R.End));
   }
-  result->clear();
-  string line;
-  while (std::getline(file, line)) {
-    std::vector<string> pieces = tensorflow::str_util::Split(line, ',');
-    if (pieces.size() != 2) {
-      continue;
-    }
-    float timestamp;
-    if (!tensorflow::strings::safe_strtof(pieces[1].c_str(), &timestamp)) {
-      return tensorflow::errors::InvalidArgument(
-          'Wrong number format at line: ', line);
-    }
-    string label = pieces[0];
-    auto timestamp_int64 = static_cast<int64>(timestamp);
-    result->push_back({label, timestamp_int64});
+    
+    // On OS X and iOS, swift_once_t matches dispatch_once_t.
+typedef long swift_once_t;
+    
+    // On macOS and iOS, swift_once is implemented using GCD.
+// The compiler emits an inline check matching the barrier-free inline fast
+// path of dispatch_once(). See SwiftTargetInfo.OnceDonePredicateValue.
+    
+    void indexDeclContext(DeclContext *DC, IndexDataConsumer &consumer);
+void indexSourceFile(SourceFile *SF, StringRef hash,
+                     IndexDataConsumer &consumer);
+void indexModule(ModuleDecl *module, StringRef hash,
+                 IndexDataConsumer &consumer);
+    
+    #include 'Callee.h'
+#include 'ManagedValue.h'
+#include 'swift/AST/Types.h'
+#include 'swift/Basic/LLVM.h'
+#include 'swift/SIL/SILLocation.h'
+#include <memory>
+    
+      /// Return true if the RHS have identical projection paths.
+  ///
+  /// If both LSBase have empty paths, they are treated as having
+  /// identical projection path.
+  bool hasIdenticalProjectionPath(const LSBase &RHS) const {
+    // If both Paths have no value, then the 2 LSBases are
+    // different.
+    if (!Path.hasValue() && !RHS.Path.hasValue())
+      return false;
+    // If 1 Path has value while the other does not, then the 2
+    // LSBases are different.
+    if (Path.hasValue() != RHS.Path.hasValue())
+      return false;
+    // If both Paths are empty, then the 2 LSBases are the same.
+    if (Path.getValue().empty() && RHS.Path.getValue().empty())
+      return true;
+    // If both Paths have different values, then the 2 LSBases are
+    // different.
+    if (Path.getValue() != RHS.Path.getValue())
+      return false;
+    // Otherwise, the 2 LSBases are the same.
+    return true;
   }
-  std::sort(result->begin(), result->end(),
-            [](const std::pair<string, int64>& left,
-               const std::pair<string, int64>& right) {
-              return left.second < right.second;
-            });
-  return Status::OK();
+    
+      /// The entire text of the input file.
+  const StringRef Text;
+    
+    
+    {    auto I = std::lower_bound(Children.begin(), Children.end(), Idx,
+                              [](IndexTrieNode *a, unsigned i) {
+                                return a->Index < i;
+                              });
+    if (I != Children.end() && (*I)->Index == Idx)
+      return *I;
+    auto *N = new IndexTrieNode(Idx, this);
+    Children.insert(I, N);
+    return N;
+  }
+    
+    
+    {} // end namespace swift
+    
+    // Get basic type definitions.
+#define IPC_MESSAGE_IMPL
+#include 'content/nw/src/common/common_message_generator.h'
+    
+    namespace base {
+class ListValue;
 }
-    
-    class PyDescriptorDatabase : public DescriptorDatabase {
- public:
-  explicit PyDescriptorDatabase(PyObject* py_database);
-  ~PyDescriptorDatabase();
-    }
-    
-    #include <google/protobuf/stubs/common.h>
-namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
-namespace {
-    }
-    }
-    }
-    }
-    }
-    
-    struct InternalFieldData {
-  uint32_t data;
-};
-    
-    void DeserializeInternalFields(v8::Local<v8::Object> holder, int index,
-                               v8::StartupData payload, void* data) {
-  DCHECK_EQ(data, nullptr);
-  if (payload.raw_size == 0) {
-    holder->SetAlignedPointerInInternalField(index, nullptr);
-    return;
-  }
-  InternalFieldData* embedder_field = new InternalFieldData{0};
-  memcpy(embedder_field, payload.data, payload.raw_size);
-  holder->SetAlignedPointerInInternalField(index, embedder_field);
-  deserialized_data.push_back(embedder_field);
-}
-    
-    
-    {  Deno* d = deno_new(NULL, MessagesFromJS);
-  bool r = deno_execute(d, 'deno_main.js', 'denoMain();');
-  if (!r) {
-    printf('Error! %s\n', deno_last_exception(d));
-    exit(1);
-  }
-  deno_delete(d);
-}
-
-    
-    namespace deno {
-    }
-    
-    /** Returns the benchmark Reporter instance.
- *
- * The returned instance will take care of generating reports for all the actual
- * reporters configured via the 'enable_*_reporter' command line flags (see
- * benchmark_config.cc). */
-std::shared_ptr<Reporter> GetReporter();
-    
-    #include 'src/compiler/config.h'
-#include 'src/compiler/generator_helpers.h'
-    
-    
-    {  // Get all comments (leading, leading_detached, trailing) and print them as a
-  // docstring. Any leading space of a line will be removed, but the line
-  // wrapping will not be changed.
-  void PrintAllComments(std::vector<grpc::string> comments,
-                        grpc_generator::Printer* out);
-};
     
     
     {
-    {}  // namespace
-}  // namespace grpc
+    {    if (zoom_controller) {
+      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
+      if (zoom_factor > content::kMaximumZoomFactor) {
+        zoom_factor = content::kMaximumZoomFactor;
+      }
+      if (zoom_factor < content::kMinimumZoomFactor) {
+        zoom_factor = content::kMinimumZoomFactor;
+      }
+      x *= zoom_factor;
+      y *= zoom_factor;
+    }
     
-    #endif  // TEST_QPS_TIMER_H
+    Popup(x, y, rvh);
+  } else if (method == 'EnableShowEvent') {
+    arguments.GetBoolean(0, &enable_show_event_);
+  } else {
+    NOTREACHED() << 'Invalid call to Menu method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+    bool MenuDelegate::GetIconForCommandId(int command_id,
+                                       gfx::Image* icon) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  if (item->icon_.IsEmpty())
+    return false;
+    }
+    
+     protected:
+  ~NwClipboardGetListSyncFunction() override;
+    
+    /**********************************************************************
+ * DIR128::DIR128
+ *
+ * Quantize the direction of an FCOORD to make a DIR128.
+ **********************************************************************/
+    
+    namespace tesseract {
+    }
+    
+    #ifndef SWIG
+template <class T1, class T2, class R, class P1, class P2, class P3, class A1, class A2>
+inline typename _ConstTessMemberResultCallback_3_2<true,R,T1,P1,P2,P3,A1,A2>::base*
+NewTessCallback(const T1* obj, R (T2::*member)(P1,P2,P3,A1,A2) const, typename Identity<P1>::type p1, typename Identity<P2>::type p2, typename Identity<P3>::type p3) {
+  return new _ConstTessMemberResultCallback_3_2<true,R,T1,P1,P2,P3,A1,A2>(obj, member, p1, p2, p3);
+}
+#endif
+    
+    
+    {  if (debugfp == nullptr && strlen(debug_file.string()) > 0) {
+    debugfp = fopen(debug_file.string(), 'wb');
+  } else if (debugfp != nullptr && strlen(debug_file.string()) == 0) {
+    fclose(debugfp);
+    debugfp = nullptr;
+  }
+  if (debugfp != nullptr)
+    fprintf(debugfp, '%s', msg);
+  else
+    fprintf(stderr, '%s', msg);
+  tesseract::tprintfMutex.Unlock();
+}
 
     
-      // Proto2 Python
-  google::protobuf::compiler::python::Generator py_generator;
-  cli.RegisterGenerator('--python_out', &py_generator,
-                        'Generate Python source file.');
+    #include 'unicodes.h'
+#include 'host.h'  // for nullptr
     
-    template <typename Stream>
-class buffered_write_stream;
+      // Returns the average (in some sense) distance between the two given
+  // shapes, which may contain multiple fonts and/or unichars.
+  // This function is public to facilitate testing.
+  float ShapeDistance(const ShapeTable& shapes, int s1, int s2);
     
-    template<class T, std::size_t N>
-class array;
+      // Returns the number of canonical features of font/class 2 for which
+  // neither the feature nor any of its near neighbors occurs in the cloud
+  // of font/class 1. Each such feature is a reliable separation between
+  // the classes, ASSUMING that the canonical sample is sufficiently
+  // representative that every sample has a feature near that particular
+  // feature. To check that this is so on the fly would be prohibitively
+  // expensive, but it might be possible to pre-qualify the canonical features
+  // to include only those for which this assumption is true.
+  // ComputeCanonicalFeatures and ComputeCloudFeatures must have been called
+  // first, or the results will be nonsense.
+  int ReliablySeparable(int font_id1, int class_id1,
+                        int font_id2, int class_id2,
+                        const IntFeatureMap& feature_map,
+                        bool thorough) const;
+    
+    static int set_flags(struct ifaddrs* ifaddr) {
+	int fd = socket(AF_INET, SOCK_DGRAM, 0);
+	if (fd == -1) {
+		return -1;
+	}
+	ifreq ifr;
+	memset(&ifr, 0, sizeof(ifr));
+	strncpy(ifr.ifr_name, ifaddr->ifa_name, IFNAMSIZ - 1);
+	int rc = ioctl(fd, SIOCGIFFLAGS, &ifr);
+	close(fd);
+	if (rc == -1) {
+		return -1;
+	}
+	ifaddr->ifa_flags = ifr.ifr_flags;
+	return 0;
+}
     
     
-    {  static void init_native_buffer(iovec& iov,
-      const boost::asio::const_buffer& buffer)
-  {
-    init_iov_base(iov.iov_base, const_cast<void*>(
-          boost::asio::buffer_cast<const void*>(buffer)));
-    iov.iov_len = boost::asio::buffer_size(buffer);
-  }
-#endif // defined(BOOST_ASIO_WINDOWS) || defined(__CYGWIN__)
+    {	virtual btScalar addSingleResult(btCollisionWorld::LocalConvexResult &convexResult, bool normalInWorldSpace);
 };
     
-    #ifndef BOOST_ASIO_DETAIL_BUFFERED_STREAM_STORAGE_HPP
-#define BOOST_ASIO_DETAIL_BUFFERED_STREAM_STORAGE_HPP
+            int rc = m_crr[cr];
+        int gc = ((m_crg[cr] + m_cbg[cb]) >> 16);
+        int bc = m_cbb[cb];
     
-    #include <boost/asio/detail/pop_options.hpp>
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    #define BOOST_ASIO_RESOLVE_HANDLER_CHECK( \
-    handler_type, handler, iter_type) \
-  \
-  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
-      void(boost::system::error_code, iter_type)) \
-    asio_true_handler_type; \
-  \
-  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
-      sizeof(boost::asio::detail::two_arg_handler_test( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>(), \
-          static_cast<const boost::system::error_code*>(0), \
-          static_cast<const iter_type*>(0))) == 1, \
-      'ResolveHandler type requirements not met') \
-  \
-  typedef boost::asio::detail::handler_type_requirements< \
-      sizeof( \
-        boost::asio::detail::argbyv( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>())) + \
-      sizeof( \
-        boost::asio::detail::lvref< \
-          asio_true_handler_type>()( \
-            boost::asio::detail::lvref<const boost::system::error_code>(), \
-            boost::asio::detail::lvref<const iter_type>()), \
-        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
+        // Call this method after constructing the object to begin decompression.
+    // If JPGD_SUCCESS is returned you may then call decode() on each scanline.
+    int begin_decoding();
     
     
-    {private:
-  byte* bytes_;
-  UINT32 length_;
-  UINT32 capacity_;
-};
-    
-      /**
-   * Finds the last occurrence of any character not in `that` in this string,
-   *   starting at offset `pos`
-   * \note Equivalent to `find_last_not_of(that.data(), pos, that.size())`
-   */
-  template <std::size_t M>
-  constexpr std::size_t find_last_not_of(
-      const BasicFixedString<Char, M>& that,
-      std::size_t pos) const noexcept(false) {
-    return 0u == size_
-        ? npos
-        : detail::fixedstring::find_last_not_of_(
-              data_,
-              that.data_,
-              folly::constexpr_min(
-                  detail::fixedstring::checkOverflow(pos, size_), size_ - 1u),
-              that.size_);
-  }
-    
-    
-    {  bool cas(T& u, T& v) {
-    Node* n = new Node(v);
-    hazptr_holder<Atom> hptr;
-    Node* p;
-    while (true) {
-      p = hptr.get_protected(node_);
-      if (p->val_ != u) {
-        delete n;
-        return false;
-      }
-      if (node_.compare_exchange_weak(
-              p, n, std::memory_order_relaxed, std::memory_order_release)) {
-        break;
-      }
-    }
-    hptr.reset();
-    p->retire();
-    return true;
-  }
-};
-    
-    /**
- * This function tries to reallocate a buffer of which only the first
- * currentSize bytes are used. The problem with using realloc is that
- * if currentSize is relatively small _and_ if realloc decides it
- * needs to move the memory chunk to a new buffer, then realloc ends
- * up copying data that is not used. It's generally not a win to try
- * to hook in to realloc() behavior to avoid copies - at least in
- * jemalloc, realloc() almost always ends up doing a copy, because
- * there is little fragmentation / slack space to take advantage of.
+# if defined(OC_CLZ32)
+/**
+ * OC_ILOGNZ_32 - Integer binary logarithm of a non-zero 32-bit value.
+ * @_v: A non-zero 32-bit value.
+ * Returns floor(log2(_v))+1.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * If _v is zero, the return value is undefined; use OC_ILOG_32() instead.
  */
-FOLLY_MALLOC_CHECKED_MALLOC FOLLY_MALLOC_NOINLINE inline void* smartRealloc(
-    void* p,
-    const size_t currentSize,
-    const size_t currentCapacity,
-    const size_t newCapacity) {
-  assert(p);
-  assert(currentSize <= currentCapacity &&
-         currentCapacity < newCapacity);
+#  define OC_ILOGNZ_32(_v) (OC_CLZ32_OFFS-OC_CLZ32(_v))
+/**
+ * OC_ILOG_32 - Integer binary logarithm of a 32-bit value.
+ * @_v: A 32-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ */
+#  define OC_ILOG_32(_v)   (OC_ILOGNZ_32(_v)&-!!(_v))
+# else
+#  define OC_ILOGNZ_32(_v) (oc_ilog32(_v))
+#  define OC_ILOG_32(_v)   (oc_ilog32(_v))
+# endif
+    
+    /*All of these macros should expect floats as arguments.*/
+#define OC_MAXF(_a,_b)      ((_a)<(_b)?(_b):(_a))
+#define OC_MINF(_a,_b)      ((_a)>(_b)?(_b):(_a))
+#define OC_CLAMPF(_a,_b,_c) (OC_MINF(_a,OC_MAXF(_b,_c)))
+#define OC_FABSF(_f)        ((float)fabs(_f))
+#define OC_SQRTF(_f)        ((float)sqrt(_f))
+#define OC_POWF(_b,_e)      ((float)pow(_b,_e))
+#define OC_LOGF(_f)         ((float)log(_f))
+#define OC_IFLOORF(_f)      ((int)floor(_f))
+#define OC_ICEILF(_f)       ((int)ceil(_f))
+    
+    #endif /* OPUS_HAVE_RTCD */
+    
+    #define _ISOC9X_SOURCE 1
+#define _ISOC99_SOURCE 1
+    
+    #include <folly/Format.h>
+    
+    /*
+ * Returns an IR block corresponding to the given bytecode offset. If the block
+ * starts with a DefLabel expecting a StkPtr, this function will return an
+ * intermediate block that passes the current sp.
+ */
+Block* getBlock(IRGS& env, Offset offset);
+    
+    #include 'hphp/util/disasm.h'
+    
+    using ClusterArcSet = std::unordered_set<ClusterArc, ClusterArcHash>;
+    
+      typedef std::function<void(pid_t)> LostChildHandler;
+  static void SetLostChildHandler(const LostChildHandler& handler);
+    
+    #endif // incl_HPHP_SYNCHRONIZABLE_MULTI_H_
+
+    
+    namespace HPHP { namespace jit { namespace arm {
+    }
+    }
     }
     
-    void SerialExecutor::add(Func func) {
-  {
-    std::lock_guard<std::mutex> lock(mutex_);
-    queue_.push(std::move(func));
+    bool find_hugetlbfs_path() {
+#ifdef __linux__
+  auto mounts = fopen('/proc/mounts', 'r');
+  if (!mounts) return false;
+  // Search the file for lines like the following
+  // none /dev/hugepages hugetlbfs seclabel,relatime...
+  char line[4096];
+  char path[4096];
+  char option[4096];
+  while (fgets(line, sizeof(line), mounts)) {
+    if (sscanf(line, '%*s %s hugetlbfs %s', path, option) == 2) {
+      // It matches hugetlbfs, check page size and save results.
+      if (set_hugetlbfs_path(path)) {
+        fclose(mounts);
+        return true;
+      }
+    }
   }
-  parent_->add([keepAlive = getKeepAliveToken(this)] { keepAlive->run(); });
+  fclose(mounts);
+#endif
+  return false;
 }
     
-    FOLLY_ALWAYS_INLINE int __builtin_ffsll(long long x) {
-  unsigned long index;
-  return int(_BitScanForward64(&index, (unsigned long long)x) ? index + 1 : 0);
-}
+     protected:
+  /// Calculate the URL once and cache the result.
+  std::string uri_;
+    
+      struct tm result;
+  gmtime_r((time_t*)&epoch, &result);
+    
+     public:
+  bool shouldFire(const SCNetworkSubscriptionContextRef& sc,
+                  const SCNetworkEventContextRef& ec) const override;
+    
+    /// Kernel shared buffer size in bytes.
+static const size_t kKernelQueueSize = (20 * (1 << 20));
     
     
-    {  EXPECT_EQ(1, estimates.quantiles[0].second);
-  EXPECT_EQ(2.0 - 0.5, estimates.quantiles[1].second);
-  EXPECT_EQ(50.375, estimates.quantiles[2].second);
-  EXPECT_EQ(100.0 - 0.5, estimates.quantiles[3].second);
-  EXPECT_EQ(100, estimates.quantiles[4].second);
-}
+    {  template <typename EventType>
+  KernelEventContextRef createEventContextFrom(osquery_event_t event_type,
+                                               CQueue::event *event) const;
+};
