@@ -1,105 +1,162 @@
 
         
-            exec('def reraise(tp, value, tb=None):\n raise tp, value, tb')
+        
+def _implementation():
+    '''Return a dict with the Python implementation and version.
     
-        #: When data is changed, this is set to ``True``. Only the session
-    #: dictionary itself is tracked; if the session contains mutable
-    #: data (for example a nested dict) then this must be set to
-    #: ``True`` manually when modifying that data. The session cookie
-    #: will only be written to the response if this is ``True``.
-    modified = False
+            return 'Digest %s' % (base)
     
-                # If we have no method at all in there we don't want to add a
-            # method list. This is for instance the case for the base class
-            # or another subclass of a base method view that does not introduce
-            # new methods.
-            if methods:
-                cls.methods = methods
+        def copy(self):
+        '''Return a copy of this RequestsCookieJar.'''
+        new_cj = RequestsCookieJar()
+        new_cj.set_policy(self.get_policy())
+        new_cj.update(self)
+        return new_cj
     
     
-@pytest.mark.skipif(greenlet is None, reason='greenlet not installed')
-class TestGreenletContextCopying(object):
+from constants import *
+from dfa import *
+from exceptions import *
+from recognizers import *
+from streams import *
+from tokens import *
+
     
-        # The directory may already exist when running locally multiple times.
-    if not os.path.exists(lexicon_output_path):
-      os.mkdir(lexicon_output_path)
+            nvae = NoViableAltException(
+            self.getDescription(),
+            self.decisionNumber,
+            s,
+            input
+            )
     
-            self.assertAlmostEqual(tf.exp(log_partition_functions[0]).eval(), 2.0)
-        self.assertAlmostEqual(
-            tf.exp(log_partition_functions[1]).eval(), 3.0 * 5.0)
-        self.assertAlmostEqual(
-            tf.exp(log_partition_functions[2]).eval(), 7.0 * 11.0 * 13.0)
+            raise NotImplementedError
     
-          # Add hooks.  This should ignore channel 0 and add hooks for channel 1.
-      with tf.variable_scope(component.name, reuse=True):
-        runtime_support.add_hooks(component, export_pb2.CellSubgraphSpec())
+    def setChannel(self, channel):
+        '''@brief Set the channel of the token
     
-      def testReadAndProjectivize(self):
-    reader = sentence_io.ConllSentenceReader(
-        self.filepath, self.batch_size, projectivize=True)
-    self.assertParseable(reader, self.batch_size, False)
-    self.assertParseable(reader, self.batch_size, False)
-    self.assertParseable(reader, 14, True)
-    self.assertParseable(reader, 0, True)
-    self.assertParseable(reader, 0, True)
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licensc]
     
-      Arguments:
-    sess: TF session to use.
-    trainers: List of training ops to use.
-    annotator: Annotation op.
-    evaluator: Function taking two serialized corpora and returning a dict of
-      scalar summaries representing evaluation metrics. The 'eval_metric'
-      summary will be used for early stopping.
-    pretrain_steps: List of the no. of pre-training steps for each train op.
-    train_steps: List of the total no. of steps for each train op.
-    train_corpus: Training corpus to use.
-    eval_corpus: Holdout Corpus for early stoping.
-    eval_gold: Reference of eval_corpus for computing accuracy.
-      eval_corpus and eval_gold are allowed to be the same if eval_corpus
-      already contains gold annotation.
-      Note for segmentation eval_corpus and eval_gold are always different since
-      eval_corpus contains sentences whose tokens are utf8-characters while
-      eval_gold's tokens are gold words.
-    batch_size: How many examples to send to the train op at a time.
-    summary_writer: TF SummaryWriter to use to write summaries.
-    report_every: How often to compute summaries (in steps).
-    saver: TF saver op to save variables.
-    checkpoint_filename: File to save checkpoints to.
-    checkpoint_stats: Stats of checkpoint.
-  '''
-  if not checkpoint_stats:
-    checkpoint_stats = [0] * (len(train_steps) + 1)
+        def setUp(self):
+        from acme.errors import BadNonce
+        self.error = BadNonce(nonce='xxx', error='error')
     
-      session_config = tf.ConfigProto(
-      log_device_placement=False,
-      intra_op_parallelism_threads=FLAGS.threads,
-      inter_op_parallelism_threads=FLAGS.threads)
+        def test_get_sni_addr(self):
+        from certbot_apache.obj import Addr
+        self.assertEqual(
+            self.addr.get_sni_addr('443'), Addr.fromstring('*:443'))
+        self.assertEqual(
+            self.addr.get_sni_addr('225'), Addr.fromstring('*:225'))
+        self.assertEqual(
+            self.addr1.get_sni_addr('443'), Addr.fromstring('127.0.0.1'))
     
-        base = 'src/sentry/locale'
-    for locale in os.listdir(base):
-        fn = os.path.join(base, locale, 'LC_MESSAGES', 'django.po')
-        if not os.path.isfile(fn):
-            continue
+    # The language for content autogenerated by Sphinx. Refer to documentation
+# for a list of supported languages.
+#
+# This is also used if you do content translation via gettext catalogs.
+# Usually you set 'language' from the command line for these cases.
+language = 'en'
     
-        def on_diagnostics_passed(self):
-        super(Suspect, self).send_diagnostics_pass_report()
-        super(Suspect, self).clear_alarm()  # loss of redundancy alarm
-        super(Suspect, self).next_state('standby')
+        def test_car_adapter_shall_make_very_loud_noise(self):
+        car = Car()
+        car_adapter = Adapter(car, make_noise=car.make_noise)
+        noise = car_adapter.make_noise(10)
+        expected_noise = 'vroom!!!!!!!!!!'
     
-        def test_sequential_execution(self):
-        self.command_stack[0].execute()
-        output_after_first_execution = os.listdir(self.test_dir)
-        self.assertEqual(output_after_first_execution[0], 'bar.txt')
-        self.command_stack[1].execute()
-        output_after_second_execution = os.listdir(self.test_dir)
-        self.assertEqual(output_after_second_execution[0], 'baz.txt')
+        def test_b_observers_shall_be_attachable(cls):
+        cls.s.attach(cls.dec_obs)
+        cls.assertEqual(isinstance(cls.s._observers[0], DecimalViewer), True)
+        cls.assertEqual(len(cls.s._observers), 1)
+        cls.s.attach(cls.hex_obs)
+        cls.assertEqual(isinstance(cls.s._observers[1], HexViewer), True)
+        cls.assertEqual(len(cls.s._observers), 2)
     
-        def unsubscribe(self, msg, subscriber):
-        self.subscribers[msg].remove(subscriber)
+        def test_sales_manager_shall_not_talk_through_proxy_with_delay(cls):
+        cls.ntp.busy = 'No'
+        start_time = time()
+        cls.ntp.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+This Sales Manager will not talk to you whether he/she is busy or not\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
     
-        def test_bunch_launch(self):
-        self.runner.runAll()
-        output = self.out.getvalue().strip()
-        self.assertEqual(output, str(self.average_result_tc1 + '\n\n' +
-                         self.average_result_tc2 + '\n\n' +
-                         self.average_result_tc3))
+        def test_items_recoil(self):
+        with ObjectPool(self.sample_queue, True) as pool:
+            self.assertEqual(pool, 'first')
+        self.assertTrue(self.sample_queue.get() == 'second')
+        self.assertFalse(self.sample_queue.empty())
+        self.assertTrue(self.sample_queue.get() == 'first')
+        self.assertTrue(self.sample_queue.empty())
+    
+    print('Counting to five...')
+for number in count_to_five():
+    print(number, end=' ')
+    
+    
+if __name__ == '__main__':
+    reporter = Reporter()
+    db = DB()
+    tm = TestManager()
+    tm.setReporter(reporter)
+    tm.setDB(db)
+    reporter.setTM(tm)
+    db.setTM(tm)
+    # For simplification we are looping on the same test.
+    # Practically, it could be about various unique test classes and their
+    # objects
+    for i in range(3):
+        tc = TC()
+        tc.setTM(tm)
+        tm.setTC(tc)
+        tc.setup()
+        tc.execute()
+        tc.tearDown()
+    
+    
+def setup(app):
+    app.add_config_value('edit_on_github_project', '', True)
+    app.add_config_value('edit_on_github_branch', 'master', True)
+    app.add_config_value('edit_on_github_src_path', '', True)  # 'eg' 'docs/'
+    app.connect('html-page-context', html_page_context)
+
+    
+    
+def setup(hass, config):
+    '''Listen for browse_url events.'''
+    import webbrowser
+    
+    
+def __meters_to_feet(meters: float) -> float:
+    '''Convert meters to feet.'''
+    return meters * 3.28084
