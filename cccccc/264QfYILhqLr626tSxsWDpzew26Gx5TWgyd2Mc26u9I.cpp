@@ -1,440 +1,413 @@
 
         
-        /** Exceptions which the user cannot easily avoid.
- *
- * E.g. out-of-memory (when we use malloc), stack-overflow, malicious input
- * 
- * \remark derived from Json::Exception
- */
-class JSON_API RuntimeError : public Exception {
-public:
-  RuntimeError(std::string const& msg);
+          // The first paragraph on a page often lacks a first line indent, but should
+  // still be modeled by the same model as other body text paragraphs on the
+  // page.
+  bool is_very_first_or_continuation;
+    
+    // Writes to the given file. Returns false in case of error.
+bool TBOX::Serialize(FILE* fp) const {
+  if (!bot_left.Serialize(fp)) return false;
+  if (!top_right.Serialize(fp)) return false;
+  return true;
+}
+// Reads from the given file. Returns false in case of error.
+// If swap is true, assumes a big/little-endian swap is needed.
+bool TBOX::DeSerialize(bool swap, FILE* fp) {
+  if (!bot_left.DeSerialize(swap, fp)) return false;
+  if (!top_right.DeSerialize(swap, fp)) return false;
+  return true;
+}
+    
+    bool UNICHAR::const_iterator::is_legal() const {
+  return utf8_step(it_) > 0;
+}
+    
+    const char *kHyphenLikeUTF8[] = {
+  '-',       // ASCII hyphen-minus
+  '\u05BE',  // word hyphen in hybrew
+  '\u2010',  // hyphen
+  '\u2011',  // non-breaking hyphen
+  '\u2012',  // a hyphen the same width as digits
+  '\u2013',  // en dash
+  '\u2014',  // em dash
+  '\u2015',  // horizontal bar
+  '\u2212',  // arithmetic minus sign
+  '\uFE58',  // small em dash
+  '\uFE63',  // small hyphen-minus
+  '\uFF0D',  // fullwidth hyphen-minus
+  nullptr,      // end of our list
 };
     
-      // Find the file which defines an extension extending the given message type
-  // with the given field number.
-  // Containing_type must be a fully-qualified type name.
-  // Python objects are not required to implement this method.
-  bool FindFileContainingExtension(const string& containing_type,
-                                   int field_number,
-                                   FileDescriptorProto* output);
+      // Returns the size of the compact charset space.
+  int CompactCharsetSize() const;
+  // Returns the size of the sparse charset space.
+  int SparseCharsetSize() const;
     
+      // Displays the forward results in a window with the characters and
+  // boundaries as determined by the labels and label_coords.
+  void DisplayForward(const NetworkIO& inputs,
+                      const GenericVector<int>& labels,
+                      const GenericVector<int>& label_coords,
+                      const char* window_name,
+                      ScrollView** window);
+  // Converts the network output to a sequence of labels. Outputs labels, scores
+  // and start xcoords of each char, and each null_char_, with an additional
+  // final xcoord for the end of the output.
+  // The conversion method is determined by internal state.
+  void LabelsFromOutputs(const NetworkIO& outputs, GenericVector<int>* labels,
+                         GenericVector<int>* xcoords);
     
-    { private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(CppGenerator);
-};
+            bool wasDataRead = trainSetDataReader.GetMinibatch(inputMatrices); // fill in the minibatch data into the Input nodes' buffers directly
+        // If this returns false, the matrices may contain garbage or not sized to 0 columns.
+        // On the other hand, if it returns a 0-column matrix, that would be a perfectly cromulent minibatch (in case of data parallelism with distributed reading).
+        // If a passed matrix does not match a reader section, that is an error.
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-namespace {
-    }
-    }
-    }
-    }
-    }
+        // Attempts to compute the error signal for the whole utterance, which will
+    // be fed to the neural network as features. Currently it is a workaround
+    // for the two-forward-pass sequence and ctc training, which allows
+    // processing more utterances at the same time. Only used in Kaldi2Reader.
+    // TODO: move the two-forward-pass support out of the reader.
+    void AttemptUtteranceDerivativeFeatures(ComputationNetworkPtr net,
+                                            IDataReader* trainSetDataReader,
+                                            const std::vector<ComputationNodeBasePtr>& featureNodes,
+                                            StreamMinibatchInputs* inputMatrices);
     
-    
-    
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
-    
-    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
-    const FieldDescriptor* descriptor) const {
-  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
-    return new ImmutableExtensionGenerator(descriptor, context_);
-  } else {
-    return new ImmutableExtensionLiteGenerator(descriptor, context_);
-  }
-}
-    
-    namespace internal {
-    }
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31>
-class ValueArray31 {
- public:
-  ValueArray31(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
-      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
-      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
-      T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31) : v1_(v1), v2_(v2),
-      v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7), v8_(v8), v9_(v9), v10_(v10),
-      v11_(v11), v12_(v12), v13_(v13), v14_(v14), v15_(v15), v16_(v16),
-      v17_(v17), v18_(v18), v19_(v19), v20_(v20), v21_(v21), v22_(v22),
-      v23_(v23), v24_(v24), v25_(v25), v26_(v26), v27_(v27), v28_(v28),
-      v29_(v29), v30_(v30), v31_(v31) {}
-    }
-    
-    // This event listener monitors how many Water objects are created and
-// destroyed by each test, and reports a failure if a test leaks some Water
-// objects. It does this by comparing the number of live Water objects at
-// the beginning of a test and at the end of a test.
-class LeakChecker : public EmptyTestEventListener {
- private:
-  // Called before a test starts.
-  virtual void OnTestStart(const TestInfo& /* test_info */) {
-    initially_allocated_ = Water::allocated();
-  }
-    }
-    
-    #include <THPP/tensors/THTensor.hpp>
-    
-    template<template <typename> class Trait, typename... Types>
-struct map_to_ptr<Trait, std::tuple<Types...>> {
-  using type = std::tuple<
-    typename std::add_pointer<Types>::type...,
-    typename std::add_pointer<typename Trait<Types>::type>::type...
-  >;
-};
-    
-    void THDTensor_(gesvd2)(THDTensor *ru, THDTensor *rs, THDTensor *rv, THDTensor *ra,
-                        THDTensor *a, const char *jobu) {
-  if (a == NULL) a = ra;
-  THArgCheck(a->nDimension == 2, 1, 'A should be 2 dimensional');
-    }
-    
-    static inline uint64_t decodeUInt64BE(const uint8_t *data) {
-  return (((uint64_t)data[7])<< 0) | (((uint64_t)data[6])<< 8) |
-         (((uint64_t)data[5])<<16) | (((uint64_t)data[4])<<24) |
-         (((uint64_t)data[3])<<32) | (((uint64_t)data[2])<<40) |
-         (((uint64_t)data[1])<<48) | (((uint64_t)data[0])<<56);
-}
-    
-      ClientConfig client_config;
-  client_config.set_client_type(SYNC_CLIENT);
-  client_config.set_outstanding_rpcs_per_channel(1);
-  client_config.set_client_channels(1);
-  client_config.set_rpc_type(UNARY);
-  client_config.mutable_load_params()->mutable_closed_loop();
-    
-    
-    {}  // namespace
-    
-    void SecureAuthContext::AddProperty(const grpc::string& key,
-                                    const grpc::string_ref& value) {
-  if (!ctx_) return;
-  grpc_auth_context_add_property(ctx_, key.c_str(), value.data(), value.size());
-}
-    
-    #include 'test/cpp/qps/histogram.h'
-    
-    int protoc_main(int argc, char* argv[]) {
-  google::protobuf::compiler::CommandLineInterface cli;
-  cli.AllowPlugins('protoc-');
-    }
-    
-      int64_t getTime() const;
-    
-    
-    {
-    {}}
-
-    
-    //////////////////////////////////////////////////////////////////////
-    
-      Vconst() : kind(Quad), val(0) {}
-  explicit Vconst(Kind k)        : kind(k), isUndef(true), val(0) {}
-  explicit Vconst(bool b)        : kind(Byte), val(b) {}
-  explicit Vconst(uint8_t b)     : kind(Byte), val(b) {}
-  explicit Vconst(int8_t b)      : Vconst(uint8_t(b)) {}
-  explicit Vconst(uint32_t i)    : kind(Long), val(i) {}
-  // For historical reasons Vconst(int) produces an 8-byte constant.
-  explicit Vconst(int32_t i)     : Vconst(int64_t(i)) {}
-  explicit Vconst(uint16_t)      = delete;
-  explicit Vconst(int16_t)       = delete;
-  explicit Vconst(ullong i)      : kind(Quad), val(i) {}
-  explicit Vconst(long long i)   : Vconst(ullong(i)) {}
-  explicit Vconst(ulong i)       : Vconst(ullong(i)) {}
-  explicit Vconst(long i)        : Vconst(ullong(i)) {}
-  explicit Vconst(const void* p) : Vconst(uintptr_t(p)) {}
-  explicit Vconst(double d)      : kind(Double), doubleVal(d) {}
-    
-    
-static Variant HHVM_FUNCTION(gmp_powm,
-                             const Variant& dataA,
-                             const Variant& dataB,
-                             const Variant& dataC) {
-  mpz_t gmpDataA, gmpDataB, gmpDataC, gmpReturn;
-    }
-    
-      bool ret = true;
-  bitmask* run_nodes = numa_get_run_node_mask();
-  bitmask* mem_nodes = numa_get_mems_allowed();
-  for (int i = 0; i <= max_node; i++) {
-    if (!numa_bitmask_isbitset(run_nodes, i) ||
-        !numa_bitmask_isbitset(mem_nodes, i)) {
-      // Only deal with the case of a contiguous set of nodes where we can
-      // run/allocate memory on each node.
-      ret = false;
-      break;
-    }
-    numa_node_set |= (uint32_t)1 << i;
-    numa_num_nodes++;
-  }
-  numa_bitmask_free(run_nodes);
-  numa_bitmask_free(mem_nodes);
-    
-    public int
-magic_compile(struct magic_set *ms, const char *magicfile)
+    template<> inline
+dnnError_t dnnConvolutionCreateBackwardData<float>(
+    dnnPrimitive_t* pConvolution,
+    dnnPrimitiveAttributes_t attributes,
+    dnnAlgorithm_t algorithm,
+    size_t dimension,
+    const size_t srcSize[],
+    const size_t dstSize[],
+    const size_t filterSize[],
+    const size_t convolutionStrides[],
+    const int inputOffset[],
+    const dnnBorder_t border_type)
 {
-  if (ms == NULL)
-    return -1;
-  return file_apprentice(ms, magicfile, FILE_COMPILE);
+    return dnnConvolutionCreateBackwardData_F32(
+        pConvolution,
+        attributes,
+        algorithm,
+        dimension,
+        srcSize,
+        dstSize,
+        filterSize,
+        convolutionStrides,
+        inputOffset,
+        border_type);
 }
     
-    private:
-    
-    void embedded_data_cleanup() {
-  std::lock_guard<std::mutex> l(s_tmp_files_lock);
+                // We can use the original buffer directly but need to reshape to the valueDataShape
+            valueData = valueData->AsShape(valueDataShape);
+        }
+        else
+        {
+            if (isDataSparse)
+            {
+                if (storageFormat != StorageFormat::SparseCSC)
+                    LogicError('Value::Create currently only SparseCSC format sparse data is supported');
     }
     
-      for (const auto& iter : line_exports) {
-    Row r;
-    r['share'] = iter;
-    r['readonly'] = (readonly) ? '1' : '0';
-    }
+        Matrix<float> mBdense(c_deviceIdZero);
+    mBdense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim1, dim2, c_deviceIdZero, -5.0f, 0.4f, IncrementCounter()), 0);
+    Matrix<float> mBsparse(mBdense.DeepClone());
+    mBsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
     
-    std::string stringFromCFAbsoluteTime(const CFDataRef& cf_abstime) {
-  double value;
-  if (CFNumberGetValue((CFNumberRef)cf_abstime, kCFNumberFloat64Type, &value)) {
-    // Add seconds difference between CFAbsoluteTime and UNIX times.
-    value += kCFAbsoluteTimeIntervalSince1970;
-    }
-    }
-    
-    namespace osquery {
-    }
-    
-    REGISTER(KernelEventPublisher, 'event_publisher', 'kernel');
-    
-    // Build with, e.g:
-//   # cl.exe binary_to_compressed_c.cpp
-//   # gcc binary_to_compressed_c.cpp
-// You can also find a precompiled Windows binary in the binary/demo package available from https://github.com/ocornut/imgui
-    
-    // CHANGELOG 
-// (minor and older changes stripped away, please see git history for details)
-//  2018-06-08: Misc: Extracted imgui_impl_opengl3.cpp/.h away from the old combined GLFW/SDL+OpenGL3 examples.
-//  2018-06-08: OpenGL: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle.
-//  2018-05-25: OpenGL: Removed unnecessary backup/restore of GL_ELEMENT_ARRAY_BUFFER_BINDING since this is part of the VAO state.
-//  2018-05-14: OpenGL: Making the call to glBindSampler() optional so 3.2 context won't fail if the function is a NULL pointer.
-//  2018-03-06: OpenGL: Added const char* glsl_version parameter to ImGui_ImplOpenGL3_Init() so user can override the GLSL version e.g. '#version 150'.
-//  2018-02-23: OpenGL: Create the VAO in the render function so the setup can more easily be used with multiple shared GL context.
-//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplSdlGL3_RenderDrawData() in the .h file so you can call it yourself.
-//  2018-01-07: OpenGL: Changed GLSL shader version from 330 to 150.
-//  2017-09-01: OpenGL: Save and restore current bound sampler. Save and restore current polygon mode.
-//  2017-05-01: OpenGL: Fixed save and restore of current blend func state.
-//  2017-05-01: OpenGL: Fixed save and restore of current GL_ACTIVE_TEXTURE.
-//  2016-09-05: OpenGL: Fixed save and restore of current scissor rectangle.
-//  2016-07-29: OpenGL: Explicitly setting GL_UNPACK_ROW_LENGTH to reduce issues because SDL changes it. (#752)
-    
-    public:
-    ImGuiWindow(ImGuiContext* context, const char* name);
-    ~ImGuiWindow();
-    
-        // Create the rasterizer state
+        // ProcessNDLConfig - Process the NDL script from a configuration string value
+    // config - configuration string containing script
+    void ProcessNDLConfig(const ConfigValue& config, bool fullValidate = false)
     {
-        D3D12_RASTERIZER_DESC& desc = psoDesc.RasterizerState;
-        desc.FillMode = D3D12_FILL_MODE_SOLID;
-        desc.CullMode = D3D12_CULL_MODE_NONE;
-        desc.FrontCounterClockwise = FALSE;
-        desc.DepthBias = D3D12_DEFAULT_DEPTH_BIAS;
-        desc.DepthBiasClamp = D3D12_DEFAULT_DEPTH_BIAS_CLAMP;
-        desc.SlopeScaledDepthBias = D3D12_DEFAULT_SLOPE_SCALED_DEPTH_BIAS;
-        desc.DepthClipEnable = true;
-        desc.MultisampleEnable = FALSE;
-        desc.AntialiasedLineEnable = FALSE;
-        desc.ForcedSampleCount = 0;
-        desc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
+        NDLScript<ElemType> script(config);
+        ProcessNDLScript(&script, ndlPassAll, nullptr, fullValidate);
     }
     
-    // GLFW callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// Provided here if you want to chain callbacks.
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_API void        ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+    // ===========================================================================
+// DoExportToDbn() - implements CNTK 'exportdbn' command
+// ===========================================================================
+    
+    #include 'Basics.h'
+#include 'ScriptableObjects.h'
+#include 'BrainScriptParser.h'
+    
+        // CopySubTree - Copy subtree from one model to another model
+    // symbolIn - symbol(s) to copy from
+    // symbolOut - symbol(s) to copy to
+    // copyFlags - flags on how to copy the nodes
+    void CopySubTree(const std::string& symbolFrom, const std::string& toCNName, const std::string toNamePrefix, CopyNodeFlags copyFlags)
+    {
+        // get the nodes
+        NetNdl<ElemType>* netNdlFrom;
+    }
+    
+    
+    {
+    {
+    {}}}
 
     
-        ImGuiIO& io = ImGui::GetIO();
+    // ---------------------------------------------------------------------------
+// hardcoded_array -- wraps a fixed-size C array together with its size.
+//
+// operator[] checks index bounds in Debug builds. size() is provided such
+// that this class can be substituted for STL vector in many cases.
+// Can be constructed with a size parameter--it will be checked against the
+// hard-coded size.
+// Can also be constructed with an initialization parameter (typ. 0).
+// ---------------------------------------------------------------------------
     
-            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-        if (show_demo_window)
-        {
-            ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-            ImGui::ShowDemoWindow(&show_demo_window);
-        }
+    // ===========================================================================
+// float4 -- wrapper around the rather ugly SSE intrinsics for float[4]
+//
+// Do not use the intrinsics outside anymore; instead add all you need into this class.
+//
+// MSDN links:
+// basic: http://msdn.microsoft.com/en-us/library/x5c07e2a%28v=VS.80%29.aspx
+// load/store: (add this)
+// newer ones: (seems no single list available)
+// ===========================================================================
     
-            // 1. Show a simple window.
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+      static size_t ByteSize(const WriteBatch* batch) {
+    return batch->rep_.size();
+  }
+    
+    
+    {}  // anonymous namespace
+    
+      // Second filter
+  builder.StartBlock(3100);
+  builder.AddKey('box');
+    
+    static const int kVerbose = 1;
+    
+    namespace leveldb {
     }
     
+    std::string Histogram::ToString() const {
+  std::string r;
+  char buf[200];
+  snprintf(buf, sizeof(buf),
+           'Count: %.0f  Average: %.4f  StdDev: %.2f\n',
+           num_, Average(), StandardDeviation());
+  r.append(buf);
+  snprintf(buf, sizeof(buf),
+           'Min: %.4f  Median: %.4f  Max: %.4f\n',
+           (num_ == 0.0 ? 0.0 : min_), Median(), max_);
+  r.append(buf);
+  r.append('------------------------------------------------------\n');
+  const double mult = 100.0 / num_;
+  double sum = 0;
+  for (int b = 0; b < kNumBuckets; b++) {
+    if (buckets_[b] <= 0.0) continue;
+    sum += buckets_[b];
+    snprintf(buf, sizeof(buf),
+             '[ %7.0f, %7.0f ) %7.0f %7.3f%% %7.3f%% ',
+             ((b == 0) ? 0.0 : kBucketLimit[b-1]),      // left
+             kBucketLimit[b],                           // right
+             buckets_[b],                               // count
+             mult * buckets_[b],                        // percentage
+             mult * sum);                               // cumulative percentage
+    r.append(buf);
+    }
+    }
     
-    {    // Store letters in KeysDown[] array as both uppercase and lowercase + Handle GLUT translating CTRL+A..CTRL+Z as 1..26. 
-    // This is a hacky mess but GLUT is unable to distinguish e.g. a TAB key from CTRL+I so this is probably the best we can do here.
-    if (c >= 1 && c <= 26)
-        io.KeysDown[c] = io.KeysDown[c - 1 + 'a'] = io.KeysDown[c - 1 + 'A'] = true;
-    else if (c >= 'a' && c <= 'z')
-        io.KeysDown[c] = io.KeysDown[c - 'a' + 'A'] = true;
-    else if (c >= 'A' && c <= 'Z')
-        io.KeysDown[c] = io.KeysDown[c - 'A' + 'a'] = true;
-    else
-        io.KeysDown[c] = true;
-    ImGui_ImplFreeGLUT_UpdateKeyboardMods();
-    (void)x; (void)y; // Unused
+    std::string InternalKey::DebugString() const {
+  std::string result;
+  ParsedInternalKey parsed;
+  if (ParseInternalKey(rep_, &parsed)) {
+    result = parsed.DebugString();
+  } else {
+    result = '(bad)';
+    result.append(EscapeString(rep_));
+  }
+  return result;
 }
     
-        // Main loop
-    bool running = true;
-    while (running)
+        RecordType type;
+    const bool end = (left == fragment_length);
+    if (begin && end) {
+      type = kFullType;
+    } else if (begin) {
+      type = kFirstType;
+    } else if (end) {
+      type = kLastType;
+    } else {
+      type = kMiddleType;
+    }
+    
+    #include <stdint.h>
+#include 'leveldb/slice.h'
+    
+    #if DMLC_ENABLE_STD_THREAD
+#include './sparse_page_source.h'
+#include '../common/common.h'
+    
+    TEST(MetaInfo, SaveLoadBinary) {
+  xgboost::MetaInfo info;
+  double vals[2] = {1.0, 2.0};
+  info.SetInfo('label', vals, xgboost::kDouble, 2);
+  info.num_row_ = 2;
+  info.num_col_ = 1;
+    }
+    
+    TEST(Metric, LogLoss) {
+  xgboost::Metric * metric = xgboost::Metric::Create('logloss');
+  ASSERT_STREQ(metric->Name(), 'logloss');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              1.2039f, 0.001f);
+}
+    
+    #include '../common/host_device_vector.h'
+    
+    // logistic loss for probability regression task
+struct LogisticRegression {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    const float eps = 1e-16f;
+    return fmaxf(predt * (1.0f - predt), eps);
+  }
+  template <typename T>
+  static T PredTransform(T x) { return common::Sigmoid(x); }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) {
+    const T eps = T(1e-16f);
+    return std::max(predt * (T(1.0f) - predt), eps);
+  }
+  static bst_float ProbToMargin(bst_float base_score) {
+    CHECK(base_score > 0.0f && base_score < 1.0f)
+      << 'base_score must be in (0,1) for logistic loss';
+    return -logf(1.0f / base_score - 1.0f);
+  }
+  static const char* LabelErrorMsg() {
+    return 'label must be in [0,1] for logistic regression';
+  }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
+    
+        // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
+    if (show_another_window)
     {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        ALLEGRO_EVENT ev;
-        while (al_get_next_event(queue, &ev))
+        ImGui::Begin('Another Window', &show_another_window);
+        ImGui::Text('Hello from another window!');
+        if (ImGui::Button('Close Me'))
+            show_another_window = false;
+        ImGui::End();
+    }
+    
+        // Setup window
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_DisplayMode current;
+    SDL_GetCurrentDisplayMode(0, &current);
+    SDL_Window* window = SDL_CreateWindow('ImGui SDL2+OpenGL3 example', SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
+    SDL_GLContext gl_context = SDL_GL_CreateContext(window);
+    SDL_GL_SetSwapInterval(1); // Enable vsync
+    gl3wInit();
+    
+    int main(int, char**)
+{
+    IwGxInit();
+    }
+    
+        // Build atlas
+    unsigned char* tex_pixels = NULL;
+    int tex_w, tex_h;
+    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
+    
+    
+    {
+    {        if (multiply_table == NULL)
         {
-            ImGui_ImplAllegro5_ProcessEvent(&ev);
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
-                running = false;
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
-            {
-                ImGui_ImplAllegro5_InvalidateDeviceObjects();
-                al_acknowledge_resize(display);
-                ImGui_ImplAllegro5_CreateDeviceObjects();
-            }
+            for (uint32_t y = 0; y < h; y++, src += src_pitch, dst += dst_pitch)
+                memcpy(dst, src, w);
+        }
+        else
+        {
+            for (uint32_t y = 0; y < h; y++, src += src_pitch, dst += dst_pitch)
+                for (uint32_t x = 0; x < w; x++)
+                    dst[x] = multiply_table[src[x]];
         }
     }
-    
-            // Rendering
-        ImGui::Render();
-        IwGxSetColClear(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255);
-        IwGxClear();
-        ImGui_Marmalade_RenderDrawData(ImGui::GetDrawData());
-        IwGxSwapBuffers();
-    
-    
-    {  c3.write((uint8_t)10); // This should _not_ duplicate the two buffers.
-  t = c4.read<uint8_t>();
-  EXPECT_EQ(10, t);
 }
     
-    template <class C, std::size_t N>
-inline std::basic_ostream<C>& operator<<(
-    std::basic_ostream<C>& os,
-    const BasicFixedString<C, N>& string) {
-  using StreamSize = decltype(os.width());
-  os.write(string.begin(), static_cast<StreamSize>(string.size()));
-  return os;
-}
-    
-    
-    {  // Free the SharedInfo if it was allocated separately.
-  //
-  // This is only used by takeOwnership().
-  //
-  // To avoid this special case handling in decrementRefcount(), we could have
-  // takeOwnership() set a custom freeFn() that calls the user's free function
-  // then frees the SharedInfo object.  (This would require that
-  // takeOwnership() store the user's free function with its allocated
-  // SharedInfo object.)  However, handling this specially with a flag seems
-  // like it shouldn't be problematic.
-  if (flags() & kFlagFreeSharedInfo) {
-    delete sharedInfo();
-  }
-}
-    
-      std::lock_guard<std::mutex> entry_lock(mutex_);
-  if (state_.load(std::memory_order_acquire) == SingletonHolderState::Living) {
-    return;
-  }
-  if (state_.load(std::memory_order_acquire) ==
-        SingletonHolderState::NotRegistered) {
-    detail::singletonWarnCreateUnregisteredAndAbort(type());
-  }
-    
-      // State of the singleton entry. If state is Living, instance_ptr and
-  // instance_weak can be safely accessed w/o synchronization.
-  std::atomic<SingletonHolderState> state_{SingletonHolderState::NotRegistered};
-    
-    #include <string>
-    
-    // See portability/Unistd.h for why these need to be in a namespace
-// rather then extern 'C'.
-namespace folly {
-namespace portability {
-namespace fcntl {
-int creat(char const* fn, int pm);
-int fcntl(int fd, int cmd, ...);
-int posix_fallocate(int fd, off_t offset, off_t len);
-int open(char const* fn, int of, int pm = 0);
-}
-}
-}
-    
-    #include <folly/Executor.h>
-#include <folly/MPMCQueue.h>
-#include <folly/Range.h>
-#include <folly/executors/task_queue/BlockingQueue.h>
-#include <folly/synchronization/LifoSem.h>
-#include <glog/logging.h>
-    
-    #pragma once
-    
-      virtual bool FullMergeV2(const MergeOperationInput& merge_in,
-                           MergeOperationOutput* merge_out) const override;
-    
-      /// Remove the first (or last) num occurrences of value from the list (key)
-  /// Return the number of elements removed.
-  /// May throw RedisListException
-  int Remove(const std::string& key, int32_t num,
-             const std::string& value);
-  int RemoveFirst(const std::string& key, int32_t num,
-                  const std::string& value);
-  int RemoveLast(const std::string& key, int32_t num,
-                 const std::string& value);
-    
-    
-    {  m_jcreate_compaction_filter_methodid =
-      AbstractCompactionFilterFactoryJni::getCreateCompactionFilterMethodId(env);
-  if(m_jcreate_compaction_filter_methodid == nullptr) {
-    // exception thrown: NoSuchMethodException or OutOfMemoryError
-    return;
-  }
-}
-    
-    void BaseComparatorJniCallback::FindShortestSeparator(
-    std::string* start, const Slice& limit) const {
-  if (start == nullptr) {
-    return;
-  }
+    // Demonstrate using '##' and '###' in identifiers to manipulate ID generation.
+// This apply to regular items as well. Read FAQ section 'How can I have multiple widgets with the same label? Can I have widget without a label? (Yes). A primer on the purpose of labels/IDs.' for details.
+static void ShowExampleAppWindowTitles(bool*)
+{
+    // By default, Windows are uniquely identified by their title.
+    // You can use the '##' and '###' markers to manipulate the display/ID.
     }
     
-    #ifdef NDEBUG
-#define TEST_SYNC_POINT(x)
-#define TEST_IDX_SYNC_POINT(x, index)
-#define TEST_SYNC_POINT_CALLBACK(x, y)
-#define INIT_SYNC_POINT_SINGLETONS()
-#else
+    bool    ImGui_ImplDX10_CreateDeviceObjects()
+{
+    if (!g_pd3dDevice)
+        return false;
+    if (g_pFontSampler)
+        ImGui_ImplDX10_InvalidateDeviceObjects();
+    }
+    
+        //NotFound is okay; just return empty (similar to std::map)
+    //But network or db errors, etc, should fail the test (or at least yell)
+    if (!s.IsNotFound()) {
+      std::cerr << 'ERROR ' << s.ToString() << std::endl;
+    }
+    
+    /**
+ * Reader is a general purpose log stream reader implementation. The actual job
+ * of reading from the device is implemented by the SequentialFile interface.
+ *
+ * Please see Writer for details on the file and record layout.
+ */
+class Reader {
+ public:
+  // Interface for reporting errors.
+  class Reporter {
+   public:
+    virtual ~Reporter();
+    }
+    }
+    
+      StatisticsJni::StatisticsJni(std::shared_ptr<Statistics> stats,
+      const std::set<uint32_t> ignore_histograms) : StatisticsImpl(stats, false),
+      m_ignore_histograms(ignore_histograms) {
+  }
+    
+    
+    {  // No copying allowed
+  MemTable(const MemTable&);
+  MemTable& operator=(const MemTable&);
+};
+    
+    
+    {  }
+    
+    
+    {  assert(odds > 0);
+  if (odds % 7 == 0) {
+    // class Random uses multiplier 16807, which is 7^5. If odds are
+    // multiplier of 7, there might be limited values generated.
+    odds++;
+  }
+  auto* r = Random::GetTLSInstance();
+  bool crash = r->OneIn(odds);
+  if (crash) {
+    port::Crash(srcfile, srcline);
+  }
+}
