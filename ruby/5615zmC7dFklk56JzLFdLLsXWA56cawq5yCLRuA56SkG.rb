@@ -1,99 +1,42 @@
 
         
-          describe 'when passed Integer' do
-    it 'returns the Rational value of self raised to the passed argument' do
-      (Rational(3, 4) ** 4).should == Rational(81, 256)
-      (Rational(3, 4) ** -4).should == Rational(256, 81)
-      (Rational(-3, 4) ** -4).should == Rational(256, 81)
-      (Rational(3, -4) ** -4).should == Rational(256, 81)
+        CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-      def test_lambda_longjmp
-    assert_eval_with_jit('#{<<~'begin;'}\n#{<<~'end;'}', stdout: '5', success_count: 1)
-    begin;
-      fib = lambda do |x|
-        return x if x == 0 || x == 1
-        fib.call(x-1) + fib.call(x-2)
+            msg = ' Please append `--trace` to the `#{cmd.name}` command '
+        dashes = '-' * msg.length
+        Jekyll.logger.error '', dashes
+        Jekyll.logger.error 'Jekyll #{Jekyll::VERSION} ', msg
+        Jekyll.logger.error '', ' for any additional information or backtrace. '
+        Jekyll.logger.abort_with '', dashes
       end
-      print fib.call(5)
-    end;
-  end
-    
-        assert_raise(LocalJumpError, bug11873) do
-      bug11873.instance_eval do
-        p p{p(p);p p}, tap do
-          raise SyntaxError, 'should not be passed to tap'
-        end
-      end
+      # rubocop: enable RescueException
     end
   end
-    
-      def test_open_tempfile_path
-    Dir.mktmpdir(__method__.to_s) do |tmpdir|
-      begin
-        io = File.open(tmpdir, File::RDWR | File::TMPFILE)
-      rescue Errno::EINVAL
-        skip 'O_TMPFILE not supported (EINVAL)'
-      rescue Errno::EOPNOTSUPP
-        skip 'O_TMPFILE not supported (EOPNOTSUPP)'
-      end
-    
-        x = Hash.new
-    def x.default(k)
-      $z = k
-      self[k] = k*2
-    end
-    $z = 0
-    assert_equal(44, x[22])
-    assert_equal(22, $z)
-    $z = 0
-    assert_equal(44, x[22])
-    assert_equal(0, $z)
-  end
-    
-        assert_equal(set.size, enum.size)
-    assert_same(set, enum.each  { |i|
-      case i
-      when Numeric
-        i * 2
-      when String
-        i.upcase
-      else
-        nil
-      end
-    })
-    assert_equal(Set[2,4,6,'A','B','C',nil], set)
-  end
-    
-      it 'adds nil for each element requested beyond the end of the String' do
-    [ ['abc',                  [nil, nil, nil]],
-      ['\x8f\xc2\xb5?abc',     [1.4199999570846558, nil, nil]],
-      ['\x9a\x999@33\xb3?abc', [2.9000000953674316, 1.399999976158142, nil]]
-    ].should be_computed_by(:unpack, unpack_format(3))
-  end
-    
-      class Honda < Car
-    def initialize(*args)
-      self.make = 'Honda'
-      super(*args)
-    end
-  end
-    
-    lib_path = root.join('lib').to_path
-    
-          when :login_fail
-    
-                  s[:proto] = 'tcp'
-              s[:name]  = 'pop3'
-              s[:extra] = 'Successful Login. Banner: #{s[:banner]}'
-              report_auth_info(s)
-              print_status('Successful POP3 Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]} (#{s[:banner].strip})')
-    
-    When /^(?:|I )check '([^']*)'$/ do |field|
-  check(field)
 end
+
     
-            def has_column?
-          @subject.column_names.include?('#{@attachment_name}_file_name')
+            def proper_site_url?(site)
+          url = site.config['url']
+          [
+            url_exists?(url),
+            url_valid?(url),
+            url_absolute(url),
+          ].all?
+        end
+    
+                raise SystemExit unless process.success?
+          end
         end
       end
     end
@@ -101,13 +44,74 @@ end
 end
 
     
-        rake_tasks { load 'tasks/paperclip.rake' }
-  end
+                  Jekyll.logger.info 'LiveReload address:',
+                                 'http://#{opts['host']}:#{opts['livereload_port']}'
+            end
+          end
+          @thread.abort_on_exception = true
+        end
     
-          def has_attached_file(*attachment_names)
-        ActiveSupport::Deprecation.warn 'Method `t.has_attached_file` in the migration has been deprecated and will be replaced by `t.attachment`.'
-        attachment(*attachment_names)
+    module Kramdown
+  module Parser
+    class SmartyPants < Kramdown::Parser::Kramdown
+      def initialize(source, options)
+        super
+        @block_parsers = [:block_html, :content]
+        @span_parsers =  [:smart_quotes, :html_entity, :typographic_syms, :span_html]
       end
+    
+        # Transform the contents based on the content type.
+    #
+    # Returns the transformed contents.
+    def transform
+      _renderer.convert(content)
     end
     
-        ::Paperclip::REQUIRED_VALIDATORS = [AttachmentFileNameValidator, AttachmentContentTypeValidator, AttachmentFileTypeIgnoranceValidator]
+      # POST /resource/confirmation
+  def create
+    self.resource = resource_class.send_confirmation_instructions(resource_params)
+    yield resource if block_given?
+    
+      # POST /resource/password
+  def create
+    self.resource = resource_class.send_reset_password_instructions(resource_params)
+    yield resource if block_given?
+    
+      # DELETE /resource/sign_out
+  def destroy
+    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
+    set_flash_message! :notice, :signed_out if signed_out
+    yield if block_given?
+    respond_to_on_destroy
+  end
+    
+        def email_changed(record, opts={})
+      devise_mail(record, :email_changed, opts)
+    end
+    
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
+        end
+    
+          def initialize(pairs = {})
+        @pairs = pairs
+        pairs.each do |key, value|
+          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
+          send(:'#{key}=', value)
+        end
+    
+        def puts(*args)
+      STDERR.puts *args unless @silence
+    end
+    
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
+    
+            def address_params
+          params.require(:address).permit(permitted_address_attributes)
+        end
