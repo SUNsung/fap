@@ -1,263 +1,413 @@
 
         
-        TEST_F(UnicharcompressTest, DoesJapanese) {
-  LOG(INFO) << 'Testing jpn';
-  LoadUnicharset('jpn.unicharset');
-  ExpectCorrect('jpn');
-}
-    
-      // See PageIterator and ResultIterator for most calls.
-    
-    
-    {  // Globally accessible constants.
-  // APPROXIMATIONS of the fractions of the character cell taken by
-  // the descenders, ascenders, and x-height.
-  static const double kDescenderFraction;  // = 0.25;
-  static const double kXHeightFraction;    // = 0.5;
-  static const double kAscenderFraction;   // = 0.25;
-  // Derived value giving the x-height as a fraction of cap-height.
-  static const double kXHeightCapRatio;    // = XHeight/(XHeight + Ascender).
-};
-    
-      // Sets the destination filename and enables images to be written to a PDF
-  // on destruction.
-  void WritePDF(const char* filename) {
-    if (pixaGetCount(pixa_) > 0) {
-      pixaConvertToPdf(pixa_, 300, 1.0f, 0, 0, 'AllDebugImages', filename);
-      pixaClear(pixa_);
+        namespace atom {
     }
-  }
     
-    // Computes the Otsu threshold(s) for the given image rectangle, making one
-// for each channel. Each channel is always one byte per pixel.
-// Returns an array of threshold values and an array of hi_values, such
-// that a pixel value >threshold[channel] is considered foreground if
-// hi_values[channel] is 0 or background if 1. A hi_value of -1 indicates
-// that there is no apparent foreground. At least one hi_value will not be -1.
-// Delete thresholds and hi_values with delete [] after use.
-// The return value is the number of channels in the input image, being
-// the size of the output thresholds and hi_values arrays.
-int OtsuThreshold(Pix* src_pix, int left, int top, int width, int height,
-                  int** thresholds, int** hi_values);
+    // Platform-neutral implementation of a class that keeps track of observers and
+// monitors keystrokes. It relays messages to the appropriate observer when a
+// global shortcut has been struck by the user.
+class GlobalShortcutListener {
+ public:
+  class Observer {
+   public:
+    // Called when your global shortcut (|accelerator|) is struck.
+    virtual void OnKeyPressed(const ui::Accelerator& accelerator) = 0;
+  };
+    }
     
-    #define ASSERT_HOST_MSG(x, ...)                                                \
-  if (!(x)) {                                                                  \
-    tprintf(__VA_ARGS__);                                                      \
-    ASSERT_FAILED.error(#x, ABORT, 'in file %s, line %d', __FILE__, __LINE__); \
-  }
+      // Sets size to which the thumbnails should be scaled. If called after
+  // StartUpdating() then some thumbnails may be still scaled to the old size
+  // until they are updated.
+  virtual void SetThumbnailSize(const gfx::Size& thumbnail_size) = 0;
     
+    // HACK: Allow support for many newer emoji by overriding behavior of ZWJ and
+// emoji modifiers. This does not make the breaks correct for any version of
+// Unicode, but shifts the ways in which it is incorrect to be less harmful.
+//
+// TODO: Remove this hack and reevaluate whether we should have any static
+// notion of what a grapheme is.
+//
+// Returns true if lhs and rhs shouldn't be considered as having a grapheme
+// break between them. That is, whether we're overriding the behavior of the
+// hard coded Unicode 8 rules surrounding ZWJ and emoji modifiers.
+static inline bool graphemeBreakOverride(llvm::UTF32 lhs, llvm::UTF32 rhs) {
+  return lhs == 0x200D || (rhs >= 0x1F3FB && rhs <= 0x1F3FF);
+}
     
-    {  UNICHARMAP_NODE* nodes;
-};
-    
-    /// The following are confusable internal word punctuation symbols
-/// which we normalize to the first variant when matching in dawgs.
-extern const char *kHyphenLikeUTF8[];
-extern const char *kApostropheLikeUTF8[];
-    
-      using key_type = gloo_cache::key_type;
-  using value_type = std::tuple<
-    std::shared_ptr<algorithm_type>, // algorithm
-    std::shared_ptr<buffer_type>,    // input buffer (nullptr if not used)
-    std::shared_ptr<buffer_type>,    // output buffer (nullptr if not used)
-    std::shared_ptr<std::mutex>      // mutex to protect same algorithm from running concurrently
-  >;
+    namespace swift {
+namespace syntax {
+    }
+    }
     
     #endif
 
     
     
-void unregister_fd(int fd) {
-  pollfds.erase(
-    std::remove_if(pollfds.begin(), pollfds.end(),
-        [fd](const struct pollfd &pfd) { return pfd.fd == fd; }),
-    pollfds.end());
-  client_sessions.erase(fd);
+    
+    // Makes a failed assertion result.
+GTEST_API_ AssertionResult AssertionFailure();
+    
+      // Join an existing circle.
+  void join(linked_ptr_internal const* ptr)
+      GTEST_LOCK_EXCLUDED_(g_linked_ptr_mutex) {
+    MutexLock lock(&g_linked_ptr_mutex);
+    }
+    
+    $for k [[
+$range m 0..k-1
+$range m2 k..n-1
+#define GTEST_$(k)_TUPLE_(T) tuple<$for m, [[T##$m]]$for m2 [[, void]]>
+    
+    // Returns n! (the factorial of n).  For negative n, n! is defined to be 1.
+int Factorial(int n) {
+  int result = 1;
+  for (int i = 1; i <= n; i++) {
+    result *= i;
+  }
+    }
+    
+      THDGroup newGroup(const std::vector<rank_type>& ranks) override;
+  void clearGroupCache(THDGroup group_id = THDGroupWORLD) override;
+    
+    #define THDPDoubleStorage_CData(obj)  (obj)->cdata
+#define THDPFloatStorage_CData(obj)   (obj)->cdata
+#define THDPLongStorage_CData(obj)    (obj)->cdata
+#define THDPIntStorage_CData(obj)     (obj)->cdata
+#define THDPShortStorage_CData(obj)   (obj)->cdata
+#define THDPCharStorage_CData(obj)    (obj)->cdata
+#define THDPByteStorage_CData(obj)    (obj)->cdata
+    
+    #define THPStorage TH_CONCAT_3(THP,Real,Storage)
+#define THPStorageStr TH_CONCAT_STRING_3(torch.,Real,Storage)
+#define THPStorageClass TH_CONCAT_3(THP,Real,StorageClass)
+#define THPStorage_(NAME) TH_CONCAT_4(THP,Real,Storage_,NAME)
+    
+      struct addrinfo *next_addr = addresses.get();
+  int socket;
+  // we'll loop over the addresses only if at least of them gave us ECONNREFUSED.
+  // Maybe the host was up, but the server wasn't running.
+  bool any_refused = false;
+  while (true) {
+    try {
+      SYSCHECK(socket = ::socket(next_addr->ai_family, next_addr->ai_socktype, next_addr->ai_protocol))
+      ResourceGuard socket_guard([socket]() { ::close(socket); });
+    }
+    }
+    
+    template<> inline
+dnnError_t dnnGroupsConvolutionCreateBackwardData<double>(
+    dnnPrimitive_t* pConvolution,
+    dnnPrimitiveAttributes_t attributes,
+    dnnAlgorithm_t algorithm,
+    size_t groups,
+    size_t dimension,
+    const size_t srcSize[],
+    const size_t dstSize[],
+    const size_t filterSize[],
+    const size_t convolutionStrides[],
+    const int inputOffset[],
+    const dnnBorder_t border_type)
+{
+    return dnnGroupsConvolutionCreateBackwardData_F64(
+        pConvolution,
+        attributes,
+        algorithm,
+        groups,
+        dimension,
+        srcSize,
+        dstSize,
+        filterSize,
+        convolutionStrides,
+        inputOffset,
+        border_type);
+}
+    
+        template<unsigned int N>
+    static const char* Timestamp(char(&buf)[N])
+    {
+        std::time_t tt = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        if (!std::strftime(buf, _countof(buf), '%m/%d/%Y %H:%M:%S', std::localtime(&tt)))
+            LogicError('Timestamp: Buffer too small.');
+        return buf;
+    }
+    
+        bool empty() const
+    {
+#ifndef NONUMLATTICEMMI // TODO:set NUM lattice to null so as to save memory
+        if (numlattices.empty() ^ denlattices.empty())
+            RuntimeError('latticesource: numerator and denominator lattices must be either both empty or both not empty');
+#endif
+        return denlattices.empty();
+    }
+    
+    // ---------------------------------------------------------------------------
+// const_array_ref -- same as array_ref for 'const' (read-only) pointers
+// ---------------------------------------------------------------------------
+    
+    #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+    
+    
+    {  edit.SetComparatorName('foo');
+  edit.SetLogNumber(kBig + 100);
+  edit.SetNextFile(kBig + 200);
+  edit.SetLastSequence(kBig + 1000);
+  TestEncodeDecode(edit);
 }
     
     
-    {  auto& counter = s_counters[m_name];
-  counter.total += elapsed;
-  ++counter.count;
-  counter.max = std::max(counter.max, elapsed);
-  counter.wall_time_elapsed += elapsed_wall_clock;
-  m_finished = true;
-  return elapsed;
-}
-    
-    #endif // USE_GCC_FAST_TLS
-    
-    #endif
+#endif  // STORAGE_LEVELDB_DB_WRITE_BATCH_INTERNAL_H_
 
     
-    /*
- * Determine the next NUMA node according to state maintained in `curr_node`.
- */
-int next_numa_node(std::atomic_int& curr_node);
-/*
- * The number of numa nodes in the system
- */
-inline int num_numa_nodes() {
-  return use_numa ? numa_num_nodes : 1;
-}
-/*
- * Enable numa interleaving for the specified address range
- */
-void numa_interleave(void* start, size_t size);
-/*
- * Allocate the specified address range on the given node
- */
-void numa_bind_to(void* start, size_t size, int node);
-/*
- * Return true if node is part of the allowed set of numa nodes
- */
-inline bool numa_node_allowed(int node) {
-  if (numa_node_set == 0) return true;
-  return numa_node_set & (1u << node);
+    
+    {  size_t read = 0;
+  std::string read_data;
+  while (read < kWriteSize) {
+    ASSERT_OK(seq_file->Read(kWriteSize - read, &result, scratch));
+    read_data.append(result.data(), result.size());
+    read += result.size();
+  }
+  ASSERT_TRUE(write_data == read_data);
+  delete seq_file;
+  delete [] scratch;
 }
     
+     private:
+  void GenerateFilter();
     
-    {}
+    // The FALLTHROUGH_INTENDED macro can be used to annotate implicit fall-through
+// between switch labels. The real definition should be provided externally.
+// This one is a fallback version for unsupported compilers.
+#ifndef FALLTHROUGH_INTENDED
+#define FALLTHROUGH_INTENDED do { } while (0)
+#endif
+    
+    class HASH { };
+    
+    class SCOPED_LOCKABLE MutexLock {
+ public:
+  explicit MutexLock(port::Mutex *mu) EXCLUSIVE_LOCK_FUNCTION(mu)
+      : mu_(mu)  {
+    this->mu_->Lock();
+  }
+  ~MutexLock() UNLOCK_FUNCTION() { this->mu_->Unlock(); }
+    }
+    
+    bool js_cocos2dx_physics3d_Physics3DSliderConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DSliderConstraint_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DSliderConstraint(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredAngMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getLinearPos(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredLinMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getAngularPos(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredAngMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredLinMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_Physics3DSliderConstraint(JSContext *cx, uint32_t argc, jsval *vp);
     
     
-///////////////////////////////////////////////////////////////////////////////
     
-    # define OC_STATIC_ILOG0(_v) (!!(_v))
-# define OC_STATIC_ILOG1(_v) (((_v)&0x2)?2:OC_STATIC_ILOG0(_v))
-# define OC_STATIC_ILOG2(_v) \
- (((_v)&0xC)?2+OC_STATIC_ILOG1((_v)>>2):OC_STATIC_ILOG1(_v))
-# define OC_STATIC_ILOG3(_v) \
- (((_v)&0xF0)?4+OC_STATIC_ILOG2((_v)>>4):OC_STATIC_ILOG2(_v))
-# define OC_STATIC_ILOG4(_v) \
- (((_v)&0xFF00)?8+OC_STATIC_ILOG3((_v)>>8):OC_STATIC_ILOG3(_v))
-# define OC_STATIC_ILOG5(_v) \
- (((_v)&0xFFFF0000)?16+OC_STATIC_ILOG4((_v)>>16):OC_STATIC_ILOG4(_v))
-# define OC_STATIC_ILOG6(_v) \
- (((_v)&0xFFFFFFFF00000000ULL)?32+OC_STATIC_ILOG5((_v)>>32):OC_STATIC_ILOG5(_v))
-/**
- * OC_STATIC_ILOG_32 - The integer logarithm of an (unsigned, 32-bit) constant.
- * @_v: A non-negative 32-bit constant.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * This macro is suitable for evaluation at compile time, but it should not be
- *  used on values that can change at runtime, as it operates via exhaustive
- *  search.
- */
-# define OC_STATIC_ILOG_32(_v) (OC_STATIC_ILOG5((ogg_uint32_t)(_v)))
-/**
- * OC_STATIC_ILOG_64 - The integer logarithm of an (unsigned, 64-bit) constant.
- * @_v: A non-negative 64-bit constant.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * This macro is suitable for evaluation at compile time, but it should not be
- *  used on values that can change at runtime, as it operates via exhaustive
- *  search.
- */
-# define OC_STATIC_ILOG_64(_v) (OC_STATIC_ILOG6((ogg_int64_t)(_v)))
     
-    static const static_bookblock _resbook_16s_0={
-  {
-    {0},
-    {0,0,&_16c0_s_p1_0},
-    {0},
-    {0,0,&_16c0_s_p3_0},
-    {0,0,&_16c0_s_p4_0},
-    {0,0,&_16c0_s_p5_0},
-    {0,0,&_16c0_s_p6_0},
-    {&_16c0_s_p7_0,&_16c0_s_p7_1},
-    {&_16c0_s_p8_0,&_16c0_s_p8_1},
-    {&_16c0_s_p9_0,&_16c0_s_p9_1,&_16c0_s_p9_2}
-   }
+    
+        virtual void DrawPoint(const b2Vec2& p, float32 size, const b2Color& color);
+    
+    	enum
+	{
+		e_count = 8
+	};
+    
+            // 1. Show a simple window.
+        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    }
+    
+    
+    {        ImGui::Render();
+    }
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+            // Basic columns
+        if (ImGui::TreeNode('Basic'))
+        {
+            ImGui::Text('Without border:');
+            ImGui::Columns(3, 'mycolumns3', false);  // 3-ways, no border
+            ImGui::Separator();
+            for (int n = 0; n < 14; n++)
+            {
+                char label[32];
+                sprintf(label, 'Item %d', n);
+                if (ImGui::Selectable(label)) {}
+                //if (ImGui::Button(label, ImVec2(-1,0))) {}
+                ImGui::NextColumn();
+            }
+            ImGui::Columns(1);
+            ImGui::Separator();
+    }
+    
+    static VkAllocationCallbacks*       g_Allocator = NULL;
+static VkInstance                   g_Instance = VK_NULL_HANDLE;
+static VkPhysicalDevice             g_PhysicalDevice = VK_NULL_HANDLE;
+static VkDevice                     g_Device = VK_NULL_HANDLE;
+static uint32_t                     g_QueueFamily = (uint32_t)-1;
+static VkQueue                      g_Queue = VK_NULL_HANDLE;
+static VkDebugReportCallbackEXT     g_DebugReport = VK_NULL_HANDLE;
+static VkPipelineCache              g_PipelineCache = VK_NULL_HANDLE;
+static VkDescriptorPool             g_DescriptorPool = VK_NULL_HANDLE;
+    
+        // Create Vulkan Instance
+    {
+        VkInstanceCreateInfo create_info = {};
+        create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+        create_info.enabledExtensionCount = extensions_count;
+        create_info.ppEnabledExtensionNames = extensions;
+    }
+    
+        // Parameters stacks (current window)
+    IMGUI_API void          PushItemWidth(float item_width);                                // width of items for the common item+label case, pixels. 0.0f = default to ~2/3 of windows width, >0.0f: width in pixels, <0.0f align xx pixels to the right of window (so -1.0f always align width to the right side)
+    IMGUI_API void          PopItemWidth();
+    IMGUI_API float         CalcItemWidth();                                                // width of item given pushed settings and current cursor position
+    IMGUI_API void          PushTextWrapPos(float wrap_pos_x = 0.0f);                       // word-wrapping for Text*() commands. < 0.0f: no wrapping; 0.0f: wrap to end of window (or column); > 0.0f: wrap at 'wrap_pos_x' position in window local space
+    IMGUI_API void          PopTextWrapPos();
+    IMGUI_API void          PushAllowKeyboardFocus(bool allow_keyboard_focus);              // allow focusing using TAB/Shift-TAB, enabled by default but you can disable it for certain widgets
+    IMGUI_API void          PopAllowKeyboardFocus();
+    IMGUI_API void          PushButtonRepeat(bool repeat);                                  // in 'repeat' mode, Button*() functions return repeated true in a typematic manner (using io.KeyRepeatDelay/io.KeyRepeatRate setting). Note that you can call IsItemActive() after any Button() to tell if the button is held in the current frame.
+    IMGUI_API void          PopButtonRepeat();
+    
+      std::unique_ptr<AuthConfig> getUserDefinedAuthConfig() const;
+    
+    class AbstractCommand : public Command {
+private:
+  std::shared_ptr<Request> req_;
+  std::shared_ptr<FileEntry> fileEntry_;
+  std::shared_ptr<SocketCore> socket_;
+  std::shared_ptr<SocketRecvBuffer> socketRecvBuffer_;
+  std::shared_ptr<SocketCore> readCheckTarget_;
+  std::shared_ptr<SocketCore> writeCheckTarget_;
+    }
+    
+    
+    {  virtual bool execute() CXX11_OVERRIDE;
 };
-static const static_bookblock _resbook_16s_1={
-  {
-    {0},
-    {0,0,&_16c1_s_p1_0},
-    {0},
-    {0,0,&_16c1_s_p3_0},
-    {0,0,&_16c1_s_p4_0},
-    {0,0,&_16c1_s_p5_0},
-    {0,0,&_16c1_s_p6_0},
-    {&_16c1_s_p7_0,&_16c1_s_p7_1},
-    {&_16c1_s_p8_0,&_16c1_s_p8_1},
-    {&_16c1_s_p9_0,&_16c1_s_p9_1,&_16c1_s_p9_2}
-   }
+    
+      virtual ~AbstractProxyResponseCommand();
+    
+      virtual bool finished() CXX11_OVERRIDE;
+    
+      ~AnnounceTier();
+    
+    std::unique_ptr<AuthConfig> AuthConfig::create(std::string user,
+                                               std::string password)
+{
+  if (user.empty()) {
+    return nullptr;
+  }
+  else {
+    return make_unique<AuthConfig>(std::move(user), std::move(password));
+  }
+}
+    
+    YG_EXTERN_C_BEGIN
+    
+        int unit;
+    double value;
+    
+    template <typename T>
+inline JniType<T> callToJni(local_ref<T>&& sref) {
+  return sref.get();
+}
+    
+    
+    {    void toJS(nbind::cbOutput expose) const
+    {
+        expose(left, right, top, bottom, width, height);
+    }
 };
-static const static_bookblock _resbook_16s_2={
-  {
-    {0},
-    {0,0,&_16c2_s_p1_0},
-    {0,0,&_16c2_s_p2_0},
-    {0,0,&_16c2_s_p3_0},
-    {0,0,&_16c2_s_p4_0},
-    {&_16c2_s_p5_0,&_16c2_s_p5_1},
-    {&_16c2_s_p6_0,&_16c2_s_p6_1},
-    {&_16c2_s_p7_0,&_16c2_s_p7_1},
-    {&_16c2_s_p8_0,&_16c2_s_p8_1},
-    {&_16c2_s_p9_0,&_16c2_s_p9_1,&_16c2_s_p9_2}
-   }
-};
+
     
-      {2,0,32,  &_residue_44_mid,
-   &_huff_book__44c5_s_long,&_huff_book__44c5_s_long,
-   &_resbook_44s_5,&_resbook_44s_5}
-};
-static const vorbis_residue_template _res_44s_6[]={
-  {2,0,16,  &_residue_44_high,
-   &_huff_book__44c6_s_short,&_huff_book__44c6_s_short,
-   &_resbook_44s_6,&_resbook_44s_6},
+    namespace facebook {
+    }
     
-    static const static_bookblock _resbook_8s_0={
-  {
-    {0},
-    {0,0,&_8c0_s_p1_0},
-    {0},
-    {0,0,&_8c0_s_p3_0},
-    {0,0,&_8c0_s_p4_0},
-    {0,0,&_8c0_s_p5_0},
-    {0,0,&_8c0_s_p6_0},
-    {&_8c0_s_p7_0,&_8c0_s_p7_1},
-    {&_8c0_s_p8_0,&_8c0_s_p8_1},
-    {&_8c0_s_p9_0,&_8c0_s_p9_1,&_8c0_s_p9_2}
-   }
-};
-static const static_bookblock _resbook_8s_1={
-  {
-    {0},
-    {0,0,&_8c1_s_p1_0},
-    {0},
-    {0,0,&_8c1_s_p3_0},
-    {0,0,&_8c1_s_p4_0},
-    {0,0,&_8c1_s_p5_0},
-    {0,0,&_8c1_s_p6_0},
-    {&_8c1_s_p7_0,&_8c1_s_p7_1},
-    {&_8c1_s_p8_0,&_8c1_s_p8_1},
-    {&_8c1_s_p9_0,&_8c1_s_p9_1,&_8c1_s_p9_2}
-   }
-};
+    // As above, but tolerant of nullptr.
+template <typename T>
+static inline RefPtr<T> assumeAlreadyReffedOrNull(T* ptr) {
+  return ptr ? RefPtr<T>::assumeAlreadyReffed(ptr) : nullptr;
+}
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-    
-    void ReadDirToVectorOfUnits(const char *Path, std::vector<Unit> *V,
-                            long *Epoch, size_t MaxSize, bool ExitOnError);
-    
-    
-    {}  // namespace fuzzer
-    
-    #ifndef LLVM_FUZZER_TRACE_PC
-#define LLVM_FUZZER_TRACE_PC
-    
-    bool IsASCII(const Unit &U) { return IsASCII(U.data(), U.size()); }
+      /**
+   * As above but with a custom cleanup function
+   */
+  typedef void (*CleanupFunction)(void* obj);
+  explicit ThreadLocal(CleanupFunction cleanup) :
+    m_key(0),
+    m_cleanup(cleanup) {
+    FBASSERT(cleanup);
+    initialize();
+  }
