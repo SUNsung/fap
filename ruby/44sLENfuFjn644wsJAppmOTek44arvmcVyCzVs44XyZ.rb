@@ -1,43 +1,32 @@
 
         
-              topic.feature_topic_users(args)
-    end
-    
-      # any user that is either a moderator or an admin
-  def staff?
-    admin || moderator
-  end
-    
-          private
-    
-            expect(result).to eq('git svn info | grep Revision | egrep -o '[0-9]+'')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('git svn info | grep Revision | egrep -o '[0-9]+'')
+                def stock_movement_params
+          params.require(:stock_movement).permit(permitted_stock_movement_attributes)
+        end
       end
     end
-    
-      def all_groups(current_user)
-    groups = []
-    
-    class RubyRequirement < Requirement
-  fatal true
-  satisfy do
-    odisabled('RubyRequirement', ''depends_on \'ruby\''')
   end
 end
+
     
-    #{stack}
-#{executable_path}
-### Plugins
+            def used?
+          @variable.captured_by_block? || @referenced
+        end
     
-            self.summary = 'The repl listens to commands on standard input'
-        self.description = <<-DESC
-          The repl listens to commands on standard input and prints their
-          result to standard output.
-          It accepts all the other ipc subcommands. The repl will signal the
-          end of output with the the ASCII CR+LF `\\n\\r`.
-        DESC
+            # Annotate the source code with the RuboCop offenses provided
+        #
+        # @param offenses [Array<RuboCop::Cop::Offense>]
+        #
+        # @return [self]
+        def with_offense_annotations(offenses)
+          offense_annotations =
+            offenses.map do |offense|
+              indent     = ' ' * offense.column
+              carets     = '^' * offense.column_length
     
-              private
-    
-    module LogStash::Util::FileTools
-  extend self
+          # Checks whether this node body is a void context.
+      #
+      # @return [Boolean] whether the `def` node body is a void context
+      def void_context?
+        method?(:initialize) || assignment_method?
+      end
