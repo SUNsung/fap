@@ -1,74 +1,105 @@
 
         
-        module ActionCable
-  module Server
-    # An instance of this configuration object is available via ActionCable.server.config, which allows you to tweak Action Cable configuration
-    # in a Rails config initializer.
-    class Configuration
-      attr_accessor :logger, :log_tags
-      attr_accessor :connection_class, :worker_pool_size
-      attr_accessor :disable_request_forgery_protection, :allowed_request_origins, :allow_same_origin_as_host
-      attr_accessor :cable, :url, :mount_path
-    
-                @raw_client = nil
-    
-        def build(attribute, value)
-      if table.type(attribute.name).force_equality?(value)
-        bind = build_bind_attribute(attribute.name, value)
-        attribute.eq(bind)
+              if path.symlink? || path.directory?
+        next
+      elsif path.extname == '.la'
+        path.unlink
       else
-        handler_for(value).call(attribute, value)
+        # Set permissions for executables and non-executables
+        perms = if path.mach_o_executable? || path.text_executable?
+          0555
+        else
+          0444
+        end
+        if ARGV.debug?
+          old_perms = path.stat.mode & 0777
+          if perms != old_perms
+            puts 'Fixing #{path} permissions from #{old_perms.to_s(8)} to #{perms.to_s(8)}'
+          end
+        end
+        path.chmod perms
       end
     end
+  end
+end
+
     
-      def self.expire_cache_fragment!(name)
-    fragment_cache.delete(name)
+          out = checks.send(method)
+      unless out.nil? || out.empty?
+        if first_warning
+          $stderr.puts <<-EOS.undent
+            #{Tty.white}Please note that these warnings are just used to help the Homebrew maintainers
+            with debugging if you file an issue. If everything you use Homebrew for is
+            working fine: please don't worry and just ignore them. Thanks!#{Tty.reset}
+          EOS
+        end
+    
+      def self.factory(name)
+    Formulary.factory(name)
   end
     
-    STDOUT.sync = true if ENV['CP_STDOUT_SYNC'] == 'TRUE'
+      # Use this method to generate standard caveats.
+  def standard_instructions(home_name, home_value = libexec)
+    <<-EOS.undent
+      Before you can use these tools you must export some variables to your $SHELL.
     
-             RUBY
-                         else
-                           <<-RUBY
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
-  # use_frameworks!
+      def translation_scope
+    'devise.omniauth_callbacks'
+  end
+end
+
     
-            self.arguments = [
-          CLAide::Argument.new('NAME', true),
-        ]
-    
-          def initialize(argv)
-        @update = argv.flag?('update')
-        @stats  = argv.flag?('stats')
-        super
-      end
-    
-        def initialize(filepath)
-      @filepath = filepath
+        # The path used after resending confirmation instructions.
+    def after_resending_confirmation_instructions_path_for(resource_name)
+      is_navigational_format? ? new_session_path(resource_name) : '/'
     end
     
-        def add_active_record_callbacks
-      name = @name
-      @klass.send(:after_save) { send(name).send(:save) }
-      @klass.send(:before_destroy) { send(name).send(:queue_all_for_delete) }
-      if @klass.respond_to?(:after_commit)
-        @klass.send(:after_commit, on: :destroy) do
-          send(name).send(:flush_deletes)
-        end
-      else
-        @klass.send(:after_destroy) { send(name).send(:flush_deletes) }
-      end
+        users.all?(&:blank?)
+  end
+    
+        def reset_password_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :reset_password_instructions, opts)
     end
     
-          class HaveAttachedFileMatcher
-        def initialize attachment_name
-          @attachment_name = attachment_name
-        end
+      # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
     
-              @subject.send(@attachment_name).post_processing = false
-          @subject.send(@attachment_name).assign(file)
-          @subject.valid?
-          @subject.errors[:'#{@attachment_name}_file_size'].blank?
-        ensure
-          @subject.send(@attachment_name).post_processing = true
-        end
+          spec['version'] = Bootstrap::VERSION
+    
+    end
+    
+    
+  # Jekyll hook - the generate method is called by jekyll, and generates all of the category pages.
+  class GenerateCategories < Generator
+    safe true
+    priority :low
+    
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
+      end
+    end
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
+  end
+  output += '></#{tag}>'
+end
+    
+      # Improved version of Liquid's truncate:
+  # - Doesn't cut in the middle of a word.
+  # - Uses typographically correct ellipsis (…) insted of '...'
+  def truncate(input, length)
+    if input.length > length && input[0..(length-1)] =~ /(.+)\b.+$/im
+      $1.strip + ' &hellip;'
+    else
+      input
+    end
+  end
