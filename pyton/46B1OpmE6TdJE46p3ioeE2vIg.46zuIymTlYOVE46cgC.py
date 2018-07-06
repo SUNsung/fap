@@ -1,212 +1,165 @@
 
         
-        with open('update/versions.json', 'w') as jsonf:
-    json.dump(versions_info, jsonf, indent=4, sort_keys=True)
-
+            def finish(self):
+        assert not self.finished
+        self.finished = True
+        self.status.finished()
     
-    entry_template = textwrap.dedent('''
-    <entry>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
-        <title>New version @VERSION@</title>
-        <link href='http://rg3.github.io/youtube-dl' />
-        <content type='xhtml'>
-            <div xmlns='http://www.w3.org/1999/xhtml'>
-                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
-            </div>
-        </content>
-        <author>
-            <name>The youtube-dl maintainers</name>
-        </author>
-        <updated>@TIMESTAMP@</updated>
-    </entry>
-    ''')
+    from httpie.plugins.base import AuthPlugin
     
-            self.assertTrue(
-            isinstance(got, compat_str),
-            'Expected a %s object, but got %s for field %s' % (
-                compat_str.__name__, type(got).__name__, field))
-        self.assertTrue(
-            match_rex.match(got),
-            'field %s (value: %r) should match %r' % (field, got, match_str))
-    elif isinstance(expected, compat_str) and expected.startswith('startswith:'):
-        start_str = expected[len('startswith:'):]
-        self.assertTrue(
-            isinstance(got, compat_str),
-            'Expected a %s object, but got %s for field %s' % (
-                compat_str.__name__, type(got).__name__, field))
-        self.assertTrue(
-            got.startswith(start_str),
-            'field %s (value: %r) should start with %r' % (field, got, start_str))
-    elif isinstance(expected, compat_str) and expected.startswith('contains:'):
-        contains_str = expected[len('contains:'):]
-        self.assertTrue(
-            isinstance(got, compat_str),
-            'Expected a %s object, but got %s for field %s' % (
-                compat_str.__name__, type(got).__name__, field))
-        self.assertTrue(
-            contains_str in got,
-            'field %s (value: %r) should contain %r' % (field, got, contains_str))
-    elif isinstance(expected, type):
-        self.assertTrue(
-            isinstance(got, expected),
-            'Expected type %r for field %s, but got value %r of type %r' % (expected, field, got, type(got)))
-    elif isinstance(expected, dict) and isinstance(got, dict):
-        expect_dict(self, got, expected)
-    elif isinstance(expected, list) and isinstance(got, list):
-        self.assertEqual(
-            len(expected), len(got),
-            'Expect a list of length %d, but got a list of length %d for field %s' % (
-                len(expected), len(got), field))
-        for index, (item_got, item_expected) in enumerate(zip(got, expected)):
-            type_got = type(item_got)
-            type_expected = type(item_expected)
-            self.assertEqual(
-                type_expected, type_got,
-                'Type mismatch for list item at index %d for field %s, expected %r, got %r' % (
-                    index, field, type_expected, type_got))
-            expect_value(self, item_got, item_expected, field)
-    else:
-        if isinstance(expected, compat_str) and expected.startswith('md5:'):
-            self.assertTrue(
-                isinstance(got, compat_str),
-                'Expected field %s to be a unicode object, but got value %r of type %r' % (field, got, type(got)))
-            got = 'md5:' + md5(got)
-        elif isinstance(expected, compat_str) and expected.startswith('mincount:'):
-            self.assertTrue(
-                isinstance(got, (list, dict)),
-                'Expected field %s to be a list or a dict, but it is of type %s' % (
-                    field, type(got).__name__))
-            expected_num = int(expected.partition(':')[2])
-            assertGreaterEqual(
-                self, len(got), expected_num,
-                'Expected %d items in field %s, but only got %d' % (expected_num, field, len(got)))
-            return
-        self.assertEqual(
-            expected, got,
-            'Invalid value for field %s, expected %r, got %r' % (field, expected, got))
+        '''
+)
+network.add_argument(
+    '--check-status',
+    default=False,
+    action='store_true',
+    help='''
+    By default, HTTPie exits with 0 when no network or other fatal errors
+    occur. This flag instructs HTTPie to also check the HTTP status code and
+    exit with an error if the status indicates one.
     
-        def tearDown(self):
-        if os.path.exists(self.test_dir):
-            shutil.rmtree(self.test_dir)
+        def test_cert_file_not_found(self, httpbin_secure):
+        r = http(httpbin_secure + '/get',
+                 '--cert', '/__not_found__',
+                 error_exit_ok=True)
+        assert r.exit_status == ExitStatus.ERROR
+        assert 'No such file or directory' in r.stderr
     
+        def get_auth_plugin(self, auth_type):
+        return self.get_auth_plugin_mapping()[auth_type]
     
-class TestSocks(unittest.TestCase):
-    _SKIP_SOCKS_TEST = True
+        if args.auth_plugin:
+        session.auth = {
+            'type': args.auth_plugin.auth_type,
+            'raw_auth': args.auth_plugin.raw_auth,
+        }
+    elif session.auth:
+        kwargs['auth'] = session.auth
     
-    from .nuevo import NuevoBaseIE
+        print()
+    print('Classification performance:')
+    print('===========================')
+    print()
+    print('%s %s %s %s' % ('Classifier  ', 'train-time', 'test-time',
+                           'Accuracy'))
+    print('-' * 44)
+    for name in sorted(accuracy, key=accuracy.get):
+        print('%s %s %s %s' % (name.ljust(16),
+                               ('%.4fs' % train_time[name]).center(10),
+                               ('%.4fs' % test_time[name]).center(10),
+                               ('%.4f' % accuracy[name]).center(10)))
     
-    from .onet import OnetBaseIE
-    
-            formats = []
-        for secure in ('', 'Secure'):
-            for ext in ('Ogg', 'Mp3'):
-                format_id = '%s%s' % (secure, ext)
-                format_url = metadata.get('%sUrl' % format_id)
-                if format_url:
-                    formats.append({
-                        'url': format_url,
-                        'format_id': format_id,
-                        'vcodec': 'none',
-                    })
-        self._sort_formats(formats)
-    
-    
-print('\n# ======================================================================')
-print('#                               Factorial')
-print('# ======================================================================\n')
-    
-    def get_colordb(file, filetype=None):
-    colordb = None
-    fp = open(file)
-    try:
-        line = fp.readline()
-        if not line:
-            return None
-        # try to determine the type of RGB file it is
-        if filetype is None:
-            filetypes = FILETYPES
-        else:
-            filetypes = [filetype]
-        for typere, class_ in filetypes:
-            mo = typere.search(line)
-            if mo:
-                break
-        else:
-            # no matching type
-            return None
-        # we know the type and the class to grok the type, so suck it in
-        colordb = class_(fp)
-    finally:
-        fp.close()
-    # save a global copy
-    global DEFAULT_DB
-    DEFAULT_DB = colordb
-    return colordb
-    
-        def test_oldargs1_0(self):
-        msg = r'count\(\) takes exactly one argument \(0 given\)'
-        self.assertRaisesRegex(TypeError, msg, [].count)
-    
-            documenter = ServerHTMLDoc()
-        documentation = documenter.docserver(
-                                self.server_name,
-                                self.server_documentation,
-                                methods
-                            )
-    
-    
-def _get_resource_reader(
-        package: ModuleType) -> Optional[resources_abc.ResourceReader]:
-    # Return the package's loader if it's a ResourceReader.  We can't use
-    # a issubclass() check here because apparently abc.'s __subclasscheck__()
-    # hook wants to create a weak reference to the object, but
-    # zipimport.zipimporter does not support weak references, resulting in a
-    # TypeError.  That seems terrible.
-    spec = package.__spec__
-    if hasattr(spec.loader, 'get_resource_reader'):
-        return cast(resources_abc.ResourceReader,
-                    spec.loader.get_resource_reader(spec.name))
-    return None
-    
-        def site_maps(self):
-        if not self.sitemaps:
-            return None
-        return self.sitemaps
-    
-        def run(self):
-        '''Method representing the thread's activity.
-    
-        Each ``AsyncIOLoop`` creates a new ``asyncio.EventLoop``; this object
-    can be accessed with the ``asyncio_loop`` attribute.
-    
-            {
-            # Hostname to host or ip
-            'example.com': '127.0.1.1',
+        ###########################################################################
+    # Set SparseRandomProjection input
+    sparse_matrix_params = {
+        'n_components': opts.n_components,
+        'random_state': opts.random_seed,
+        'density': opts.density,
+        'eps': opts.eps,
     }
     
-            # A 204 response never has a body, even if doesn't have a content-length
-        # (which would otherwise mean read-until-close).  We simulate here a
-        # server that sends no content length and does not close the connection.
-        #
-        # Tests of a 204 response with no Content-Length header are included
-        # in SimpleHTTPClientTestMixin.
-        stream = request.connection.detach()
-        stream.write(b'HTTP/1.1 204 No content\r\n')
-        if request.arguments.get('error', [False])[-1]:
-            stream.write(b'Content-Length: 5\r\n')
+        # the training data folder must be passed as first argument
+    movie_reviews_data_folder = sys.argv[1]
+    dataset = load_files(movie_reviews_data_folder, shuffle=False)
+    print('n_samples: %d' % len(dataset.data))
+    
+    
+if __name__ == '__main__':
+    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
+    # block to be able to use a multi-core grid search that also works under
+    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
+    # The multiprocessing module is used as the backend of joblib.Parallel
+    # that is used when n_jobs != 1 in GridSearchCV
+    
+    # Plot perfect predictions
+plt.plot([1.0], [0.0], 'ro', ms=20, label='Class 1')
+plt.plot([0.0], [1.0], 'go', ms=20, label='Class 2')
+plt.plot([0.0], [0.0], 'bo', ms=20, label='Class 3')
+    
+    
+def generate_data(n_samples, n_features):
+    '''Generate random blob-ish data with noisy features.
+    
+    n_samples = 100
+n_clusters_range = np.linspace(2, n_samples, 10).astype(np.int)
+    
+    X = list()
+y = list()
+for i, (phi, a) in enumerate([(.5, .15), (.5, .6), (.3, .2)]):
+    for _ in range(30):
+        phase_noise = .01 * np.random.normal()
+        amplitude_noise = .04 * np.random.normal()
+        additional_noise = 1 - 2 * np.random.rand(n_features)
+        # Make the noise sparse
+        additional_noise[np.abs(additional_noise) < .997] = 0
+    
+        return strings
+
+    
+    def kuwo_download_by_rid(rid, output_dir = '.', merge = True, info_only = False):
+    html=get_content('http://player.kuwo.cn/webmusic/st/getNewMuiseByRid?rid=MUSIC_%s'%rid)
+    title=match1(html,r'<name>(.*)</name>')
+    #to get title
+    #format =aac|mp3 ->to get aac format=mp3 ->to get mp3
+    url=get_content('http://antiserver.kuwo.cn/anti.s?format=mp3&rid=MUSIC_%s&type=convert_url&response=url'%rid)
+    songtype, ext, size = url_info(url)
+    print_info(site_info, title, songtype, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir)
+    
+            print_info(site_info, title, type_, size_full)
+        if not info_only:
+            download_urls(url_list, title, ext, total_size=size_full, output_dir=output_dir, merge=merge, headers=fake_headers)
+    else:
+        raise NotImplementedError(flashvars)
+    
+    site_info = 'Mixcloud.com'
+download = mixcloud_download
+download_playlist = playlist_not_supported('mixcloud')
+
+    
+    site = Pinterest()
+download = site.download_by_url
+# TBD: implement download_playlist
+
+    
+    
+def ExtractKeywordsFromGroup_Basic_test():
+  assert_that( syntax_parse._ExtractKeywordsFromGroup(
+                 syntax_parse.SyntaxGroup( '', [
+                   'foo bar',
+                   'zoo goo',
+                 ] ) ),
+               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
+    
+      python_interpreter = _PathToPythonUsedDuringBuild()
+  if python_interpreter and utils.GetExecutable( python_interpreter ):
+    return python_interpreter
+    
+    
+  def result( self ):
+    return self._result
+    
+    
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write('Hello, world')
+    
+            with ignore_deprecation():
+            with ExceptionStackContext(error_handler):
+                self.fetch('/chunk', header_callback=header_callback)
+        self.assertEqual(len(exc_info), 1)
+        self.assertIs(exc_info[0][0], ZeroDivisionError)
+    
+    
+Multi = multi
+    
+            .. versionchanged:: 4.4
+           Added the ``reuse_port`` argument.
+        '''
+        sockets = bind_sockets(port, address=address, family=family,
+                               backlog=backlog, reuse_port=reuse_port)
+        if self._started:
+            self.add_sockets(sockets)
         else:
-            stream.write(b'Content-Length: 0\r\n')
-        stream.write(b'\r\n')
-        stream.close()
-    
-    
-class custom_build_ext(build_ext):
-    '''Allow C extension building to fail.
-    
-            The `mock.patch <unittest.mock.patch>` function (included in
-        the standard library `unittest.mock` package since Python 3.3,
-        or in the third-party ``mock`` package for older versions of
-        Python) is incompatible with objects like ``options`` that
-        override ``__getattr__`` and ``__setattr__``.  This function
-        returns an object that can be used with `mock.patch.object
-        <unittest.mock.patch.object>` to modify option values::
+            self._pending_sockets.extend(sockets)
