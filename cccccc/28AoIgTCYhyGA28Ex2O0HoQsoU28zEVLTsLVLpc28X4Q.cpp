@@ -1,134 +1,113 @@
 
         
-        namespace atom {
+          llvm::Optional<CommentParts> getParts() const {
+    return Parts;
+  }
+    
+    namespace swift {
+namespace index {
+    }
     }
     
-    #include 'base/macros.h'
-#include 'ui/events/event_rewriter.h'
-    
-    class UnresponsiveSuppressor {
- public:
-  UnresponsiveSuppressor();
-  ~UnresponsiveSuppressor();
+    /// LSLocation and LSValue are used in DenseMap.
+namespace llvm {
+using swift::LSBase;
+using swift::LSLocation;
+using swift::LSValue;
     }
     
-    #include 'chrome/common/chrome_constants.h'
+        D3D_FEATURE_LEVEL featureLevels[] =
+    {
+        D3D_FEATURE_LEVEL_11_0,
+        D3D_FEATURE_LEVEL_10_1,
+        D3D_FEATURE_LEVEL_10_0,
+    };
+    UINT numFeatureLevels = ARRAYSIZE(featureLevels);
     
-    #if defined(OS_MACOSX)
-// NOTE: if you change the value of kFrameworkName, please don't forget to
-// update components/test/run_all_unittests.cc as well.
-// TODO(tfarina): Remove the comment above, when you fix components to use plist
-// on Mac.
-extern const base::FilePath::CharType kFrameworkName[];
-#endif  // OS_MACOSX
+    static void findLinesCrossPoint(Point2f origin1, Point2f dir1, Point2f origin2, Point2f dir2, Point2f& cross_point)
+{
+    float det = dir2.x*dir1.y - dir2.y*dir1.x;
+    Point2f offset = origin2 - origin1;
+    }
     
-    namespace content {
-class RenderProcessHost;
-class Shell;
-}
+    namespace cv { namespace cuda { namespace device
+{
+    template <class T>
+    __device__ __forceinline__ T warp_reduce(volatile T *ptr , const unsigned int tid = threadIdx.x)
+    {
+        const unsigned int lane = tid & 31; // index of thread in warp (0..31)
+    }
+    }
+    }
+    }
     
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
+    //
+// END OF CUSTOM FUNCTIONS HERE
+//
     
-    #endif  // CONTENT_NW_SRC_API_BASE_BASE_H_
+    void OutputImageComponent::UpdatePixelsForBlock(
+    int block_x, int block_y, const uint8_t idct[kDCTBlockSize]) {
+  if (factor_x_ == 1 && factor_y_ == 1) {
+    for (int iy = 0; iy < 8; ++iy) {
+      for (int ix = 0; ix < 8; ++ix) {
+        int x = 8 * block_x + ix;
+        int y = 8 * block_y + iy;
+        if (x >= width_ || y >= height_) continue;
+        int p = y * width_ + x;
+        pixels_[p] = idct[8 * iy + ix] << 4;
+      }
+    }
+  } else if (factor_x_ == 2 && factor_y_ == 2) {
+    // Fill in the 10x10 pixel area in the subsampled image that will be the
+    // basis of the upsampling. This area is enough to hold the 3x3 kernel of
+    // the fancy upsampler around each pixel.
+    static const int kSubsampledEdgeSize = 10;
+    uint16_t subsampled[kSubsampledEdgeSize * kSubsampledEdgeSize];
+    for (int j = 0; j < kSubsampledEdgeSize; ++j) {
+      // The order we fill in the rows is:
+      //   8 rows intersecting the block, row below, row above
+      const int y0 = block_y * 16 + (j < 9 ? j * 2 : -2);
+      for (int i = 0; i < kSubsampledEdgeSize; ++i) {
+        // The order we fill in each row is:
+        //   8 pixels within the block, left edge, right edge
+        const int ix = ((j < 9 ? (j + 1) * kSubsampledEdgeSize : 0) +
+                        (i < 9 ? i + 1 : 0));
+        const int x0 = block_x * 16 + (i < 9 ? i * 2 : -2);
+        if (x0 < 0) {
+          subsampled[ix] = subsampled[ix + 1];
+        } else if (y0 < 0) {
+          subsampled[ix] = subsampled[ix + kSubsampledEdgeSize];
+        } else if (x0 >= width_) {
+          subsampled[ix] = subsampled[ix - 1];
+        } else if (y0 >= height_) {
+          subsampled[ix] = subsampled[ix - kSubsampledEdgeSize];
+        } else if (i < 8 && j < 8) {
+          subsampled[ix] = idct[j * 8 + i] << 4;
+        } else {
+          // Reconstruct the subsampled pixels around the edge of the current
+          // block by computing the inverse of the fancy upsampler.
+          const int y1 = std::max(y0 - 1, 0);
+          const int x1 = std::max(x0 - 1, 0);
+          subsampled[ix] = (pixels_[y0 * width_ + x0] * 9 +
+                            pixels_[y1 * width_ + x1] +
+                            pixels_[y0 * width_ + x1] * -3 +
+                            pixels_[y1 * width_ + x0] * -3) >> 2;
+        }
+      }
+    }
+    }
+    }
+    
+    #ifndef GUETZLI_ENTROPY_ENCODE_H_
+#define GUETZLI_ENTROPY_ENCODE_H_
+    
+    
+    {}  // namespace guetzli
+    
+    #endif  // GUETZLI_JPEG_HUFFMAN_DECODE_H_
 
     
-    namespace {
-RenderView* GetRenderView(v8::Handle<v8::Context> ctx) {
-  WebLocalFrame* frame = WebLocalFrame::frameForContext(ctx);
-  if (!frame || !frame->isNodeJS())
-    return NULL;
-    }
-    }
-    
-    namespace remote {
-    }
-    
-     private:
-  ObjectManager* object_manager_;
-    
-    void Menu::UpdateKeys(views::FocusManager *focus_manager){
-  if (focus_manager == NULL){
-    return ;
-  } else {
-    focus_manager_ = focus_manager;
-    for(auto* item : menu_items_) {
-      item->UpdateKeys(focus_manager);
-    }
-  }
-}
-    
-    void MenuItem::CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) {
-  if (method == 'GetChecked') {
-    result->AppendBoolean(GetChecked());
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    
-    {#endif
-}  // namespace nwapi
-    
-        bool Read(ClipboardData& data) {
-      switch(data.type) {
-        case TYPE_TEXT:
-        return ReadText(data);
-        break;
-        case TYPE_HTML:
-        return ReadHTML(data);
-        break;
-        case TYPE_RTF:
-        return ReadRTF(data);
-        break;
-        case TYPE_PNG:
-        case TYPE_JPEG:
-        return ReadImage(data);
-        break;
-        case TYPE_NONE:
-        NOTREACHED();
-        return false;
-      }
-      NOTREACHED();
-      return false;      
-    }
-    
-    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringFWithFixupFunction() {}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringFWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
-};
-    
-    class NwObjDestroyFunction : public NWSyncExtensionFunction {
- public:
-  NwObjDestroyFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-      bool NwScreenStartMonitorFunction::RunNWSync(base::ListValue* response, std::string* error) {
-    bool screens, windows;
-    EXTENSION_FUNCTION_VALIDATE(args_->GetBoolean(0, &screens));
-    EXTENSION_FUNCTION_VALIDATE(args_->GetBoolean(1, &windows));
-    NwDesktopCaptureMonitor::GetInstance()->Start(screens, windows);
-    return true;
-  }
-    
-    
-    {  private:
-    DISALLOW_COPY_AND_ASSIGN(NwScreenIsMonitorStartedFunction);
-  };
+    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
+std::vector<std::vector<float>> PreProcessChannel(
+    int w, int h, int channel, float sigma, float amount, bool blur,
+    bool sharpen, const std::vector<std::vector<float>>& image);
