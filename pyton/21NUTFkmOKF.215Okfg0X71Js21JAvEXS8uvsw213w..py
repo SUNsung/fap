@@ -1,132 +1,102 @@
 
         
-            This could be extended by having nested blocks, sorting them recursively
-    and flattening the end structure into a list of lines. Revision 2 maybe ^.^.
-'''
+        ESTIMATORS = {
+    'dummy': DummyClassifier(),
+    'random_forest': RandomForestClassifier(n_estimators=100,
+                                            max_features='sqrt',
+                                            min_samples_split=10),
+    'extra_trees': ExtraTreesClassifier(n_estimators=100,
+                                        max_features='sqrt',
+                                        min_samples_split=10),
+    'logistic_regression': LogisticRegression(),
+    'naive_bayes': MultinomialNB(),
+    'adaboost': AdaBoostClassifier(n_estimators=10),
+}
+    
+            start = datetime.now()
+        ols = linear_model.LinearRegression()
+        ols.fit(X, Y)
+        time_ols[i] = total_seconds(datetime.now() - start)
+    
+        #------------------------------------------------------------
+    # varying D
+    D_results_build = dict([(alg, np.zeros(len(Drange)))
+                            for alg in algorithms])
+    D_results_query = dict([(alg, np.zeros(len(Drange)))
+                            for alg in algorithms])
+    
+        # TASK: Build a grid search to find out whether unigrams or bigrams are
+    # more useful.
+    # Fit the pipeline on the training set using grid search for the parameters
+    parameters = {
+        'vect__ngram_range': [(1, 1), (1, 2)],
+    }
+    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)
+    grid_search.fit(docs_train, y_train)
+    
+    exercise_dir = os.path.dirname(__file__)
+if exercise_dir == '':
+    exercise_dir = '.'
+    
+    The dataset is generated using the ``make_biclusters`` function, which
+creates a matrix of small values and implants bicluster with large
+values. The rows and columns are then shuffled and passed to the
+Spectral Co-Clustering algorithm. Rearranging the shuffled matrix to
+make biclusters contiguous shows how accurately the algorithm found
+the biclusters.
+    
+    Demonstrates the effect of different metrics on the hierarchical clustering.
+    
+        classifiers = proj_info['classifiers'],
+    
+    # TBD
+def main_dev(**kwargs):
+    '''Main entry point.
+    you-get-dev
+    '''
+    
+    __all__ = ['cbs_download']
+    
+    def kugou_download_playlist(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    html=get_html(url)
+    pattern=re.compile('title='(.*?)'.* data='(\w*)\|.*?'')
+    pairs=pattern.findall(html)
+    for title,hash_val in pairs:
+        kugou_download_by_hash(title,hash_val,output_dir,merge,info_only)
+    
+    #----------------------------------------------------------------------
+def sina_xml_to_url_list(xml_data):
+    '''str->list
+    Convert XML to URL List.
+    From Biligrab.
+    '''
+    rawurl = []
+    dom = parseString(xml_data)
+    for node in dom.getElementsByTagName('durl'):
+        url = node.getElementsByTagName('url')[0]
+        rawurl.append(url.childNodes[0].data)
+    return rawurl
+    
+            result_item = result_queue.get(block=True)
+        if result_item is not None:
+            work_item = pending_work_items[result_item.work_id]
+            del pending_work_items[result_item.work_id]
+    
+    # If true, an OpenSearch description file will be output, and all pages will
+# contain a <link> tag referring to it.  The value of this option must be the
+# base URL from which the finished HTML is served.
+#html_use_opensearch = ''
+    
+    from ycm.client.debug_info_request import FormatDebugInfoResponse
     
     
-FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
-FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
-JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
-BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
-    
-    
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
-    
-    
-class DigestAuthPlugin(BuiltinAuthPlugin):
-    
-    
-#######################################################################
-# Sessions
-#######################################################################
-    
-        '''
-    headers = []
-    data = []
-    files = []
-    params = []
-    for item in items:
-        value = item.value
-        if item.sep == SEP_HEADERS:
-            if value == '':
-                # No value => unset the header
-                value = None
-            target = headers
-        elif item.sep == SEP_HEADERS_EMPTY:
-            if item.value:
-                raise ParseError(
-                    'Invalid item '%s' '
-                    '(to specify an empty header use `Header;`)'
-                    % item.orig
-                )
-            target = headers
-        elif item.sep == SEP_QUERY:
-            target = params
-        elif item.sep == SEP_FILES:
-            try:
-                with open(os.path.expanduser(value), 'rb') as f:
-                    value = (os.path.basename(value),
-                             BytesIO(f.read()),
-                             get_content_type(value))
-            except IOError as e:
-                raise ParseError(''%s': %s' % (item.orig, e))
-            target = files
-    
-        # not a test, but looks like a test
-    'scrapy/utils/testsite.py',
-    
-        def getChild(self, request, name):
-        return self
-    
-            try:
-            spidercls = self.crawler_process.spider_loader.load(name)
-        except KeyError:
-            pass
-        else:
-            # if spider already exists and not --force then halt
-            if not opts.force:
-                print('Spider %r already exists in module:' % name)
-                print('  %s' % spidercls.__module__)
-                return
-        template_file = self._find_template(opts.template)
-        if template_file:
-            self._genspider(module, name, domain, opts.template, template_file)
-            if opts.edit:
-                self.exitcode = os.system('scrapy edit '%s'' % name)
-    
-        def __init__(self, blackboard):
-        self.blackboard = blackboard
-    
-        def on_diagnostics_passed(self):
-        super(Suspect, self).send_diagnostics_pass_report()
-        super(Suspect, self).clear_alarm()  # loss of redundancy alarm
-        super(Suspect, self).next_state('standby')
-    
-        @classmethod
-    def __get_test_directory(self):
-        '''
-        Get the temporary directory for the tests.
-        '''
-        self.test_dir = os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), 'test_command')
-    
-        fftv.publish('cartoon')
-    fftv.publish('music')
-    fftv.publish('ads')
-    fftv.publish('movie')
-    fftv.publish('cartoon')
-    fftv.publish('cartoon')
-    fftv.publish('movie')
-    fftv.publish('blank')
-    
-        def __new__(cls, name, bases, attrs):
-        new_cls = type.__new__(cls, name, bases, attrs)
-        '''
-            Here the name of the class is used as key but it could be any class
-            parameter.
-        '''
-        cls.REGISTRY[new_cls.__name__] = new_cls
-        return new_cls
-    
-        def test_shall_toggle_from_fm_to_am(self):
-        self.radio.toggle_amfm()
-        state = self.radio.state.name
-        expected_state_name = 'AM'
-        self.assertEqual(state, expected_state_name)
+def SendEventNotificationAsync( event_name,
+                                buffer_number = None,
+                                extra_data = None ):
+  event = EventNotification( event_name, buffer_number, extra_data )
+  event.Start()
 
     
     
-if __name__ == '__main__':
-    main()
-
-    
-        `mask` is a `bytes` object of length 4; `data` is a `bytes` object of any length.
-    Returns a `bytes` object of the same length as `data` with the mask applied
-    as specified in section 5.3 of RFC 6455.
-    
-            self.assertEqual(cm.exception.code, 403)
+  def PopulateLocationList( self ):
+    return self._diag_interface.PopulateLocationList()
