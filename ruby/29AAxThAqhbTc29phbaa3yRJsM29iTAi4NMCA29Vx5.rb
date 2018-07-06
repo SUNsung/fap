@@ -1,102 +1,138 @@
 
         
-            @save_to.each { |_, v| FileUtils.mkdir_p(v) }
-    
-            rows.each do |row|
-          line = row.values.each_with_index.map do |value, col|
-            value.to_s.ljust(col_widths[col])
-          end.join(' ').rstrip
-          line = color.colorize(line, row.color) if row.color
-          puts line
-        end
-      end
-    
-    # IMPORTANT: The Capistrano::Plugin system is not yet considered a stable,
-# public API, and is subject to change without notice. Eventually it will be
-# officially documented and supported, but for now, use it at your own risk.
-#
-# Base class for Capistrano plugins. Makes building a Capistrano plugin as easy
-# as writing a `Capistrano::Plugin` subclass and overriding any or all of its
-# three template methods:
-#
-# * set_defaults
-# * register_hooks
-# * define_tasks
-#
-# Within the plugin you can use any methods of the Rake or Capistrano DSLs, like
-# `fetch`, `invoke`, etc. In cases when you need to use SSHKit's backend outside
-# of an `on` block, use the `backend` convenience method. E.g. `backend.test`,
-# `backend.execute`, or `backend.capture`.
-#
-# Package up and distribute your plugin class as a gem and you're good to go!
-#
-# To use a plugin, all a user has to do is install it in the Capfile, like this:
-#
-#   # Capfile
-#   require 'capistrano/superfancy'
-#   install_plugin Capistrano::Superfancy
-#
-# Or, to install the plugin without its hooks:
-#
-#   # Capfile
-#   require 'capistrano/superfancy'
-#   install_plugin Capistrano::Superfancy, load_hooks: false
-#
-class Capistrano::Plugin < Rake::TaskLib
-  include Capistrano::DSL
-    
-        # Provide a wrapper for the SCM that loads a strategy for the user.
-    #
-    # @param [Rake] context     The context in which the strategy should run
-    # @param [Module] strategy  A module to include into the SCM instance. The
-    #    module should provide the abstract methods of Capistrano::SCM
-    #
-    def initialize(context, strategy)
-      @context = context
-      singleton = class << self; self; end
-      singleton.send(:include, strategy)
+              https://pip.readthedocs.org/en/stable/installing/#install-pip
+    EOS
+  when 'pil' then <<-EOS.undent
+    Instead of PIL, consider `pip install pillow` or `brew install Homebrew/python/pillow`.
+    EOS
+  when 'macruby' then <<-EOS.undent
+    MacRuby works better when you install their package:
+      http://www.macruby.org/
+    EOS
+  when /(lib)?lzma/
+    'lzma is now part of the xz formula.'
+  when 'xcode'
+    if MacOS.version >= :lion
+      <<-EOS.undent
+      Xcode can be installed from the App Store.
+      EOS
+    else
+      <<-EOS.undent
+      Xcode can be installed from https://developer.apple.com/xcode/downloads/
+      EOS
     end
+  when 'gtest', 'googletest', 'google-test' then <<-EOS.undent
+    Installing gtest system-wide is not recommended; it should be vendored
+    in your projects that use it.
+    EOS
+  when 'gmock', 'googlemock', 'google-mock' then <<-EOS.undent
+    Installing gmock system-wide is not recommended; it should be vendored
+    in your projects that use it.
+    EOS
+  when 'sshpass' then <<-EOS.undent
+    We won't add sshpass because it makes it too easy for novice SSH users to
+    ruin SSH's security.
+    EOS
+  when 'gsutil' then <<-EOS.undent
+    Install gsutil with `pip install gsutil`
+    EOS
+  when 'clojure' then <<-EOS.undent
+    Clojure isn't really a program but a library managed as part of a
+    project and Leiningen is the user interface to that library.
     
-      deploy_rb = File.expand_path('../../templates/deploy.rb.erb', __FILE__)
-  stage_rb = File.expand_path('../../templates/stage.rb.erb', __FILE__)
-  capfile = File.expand_path('../../templates/Capfile', __FILE__)
-    
-      not_found do
-    send_file(File.join(File.dirname(__FILE__), 'public', '404.html'), {:status => 404})
+      def expand_reqs
+    formula.recursive_requirements do |dependent, req|
+      build = effective_build_options_for(dependent)
+      if (req.optional? || req.recommended?) && build.without?(req)
+        Requirement.prune
+      elsif req.build? && dependent != formula
+        Requirement.prune
+      elsif req.satisfied? && req.default_formula? && (dep = req.to_dependency).installed?
+        deps << dep
+        Requirement.prune
+      end
+    end
   end
     
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
+    module Homebrew
+  module Cleanup
+    @@disk_cleanup_size = 0
+    
+      def search
+    if ARGV.empty?
+      puts_columns Formula.full_names
+    elsif ARGV.include? '--macports'
+      exec_browser 'https://www.macports.org/ports.php?by=name&substr=#{ARGV.next}'
+    elsif ARGV.include? '--fink'
+      exec_browser 'http://pdb.finkproject.org/pdb/browse.php?summary=#{ARGV.next}'
+    elsif ARGV.include? '--debian'
+      exec_browser 'https://packages.debian.org/search?keywords=#{ARGV.next}&searchon=names&suite=all&section=all'
+    elsif ARGV.include? '--opensuse'
+      exec_browser 'https://software.opensuse.org/search?q=#{ARGV.next}'
+    elsif ARGV.include? '--fedora'
+      exec_browser 'https://admin.fedoraproject.org/pkgdb/packages/%2A#{ARGV.next}%2A/'
+    elsif ARGV.include? '--ubuntu'
+      exec_browser 'http://packages.ubuntu.com/search?keywords=#{ARGV.next}&searchon=names&suite=all&section=all'
+    elsif ARGV.include? '--desc'
+      query = ARGV.next
+      rx = query_regexp(query)
+      Descriptions.search(rx, :desc).print
+    elsif ARGV.first =~ HOMEBREW_TAP_FORMULA_REGEX
+      query = ARGV.first
+      user, repo, name = query.split('/', 3)
+    
+          def self.category
+        :misc
       end
-      super
+    end
+  end
+end
+
+    
+      def test_argv0
+    PTY.spawn([RUBY, 'argv0'], '-e', 'puts 'bar'') {|r,w,pid|
+      begin
+        assert_equal('bar\r\n', r.gets)
+      ensure
+        r.close
+        w.close
+        Process.wait(pid)
+      end
+    }
+  rescue RuntimeError
+    skip $!
+  end
+    
+        it 'returns nil if incompatible encodings' do
+      'あれ'.casecmp?('れ'.encode(Encoding::EUC_JP)).should be_nil
     end
     
+      describe 'rb_call_super' do
+    it 'calls the method in the superclass' do
+      @s.define_call_super_method CApiClassSpecs::Sub, 'call_super_method'
+      obj = CApiClassSpecs::Sub.new
+      obj.call_super_method.should == :super_method
+    end
     
-===============================================
- Error for category_generator.rb plugin
------------------------------------------------
- No 'category_index.html' in source/_layouts/
- Perhaps you haven't installed a theme yet.
-===============================================
+        def initialize(username, domain)
+      @username = username
+      @domain = domain
+    end
     
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+      private
+    
+        export LANG=en_US.UTF-8
+    \e[0m
+    DOC
+  end
+    
+            self.arguments = [
+          CLAide::Argument.new('NAME', false),
+        ]
+    
+            app_targets.each do |app_target|
+          test_targets_for_app = test_targets.select do |target|
+            target.name.downcase.start_with?(app_target.name.downcase)
+          end
+          podfile << target_module(app_target, test_targets_for_app)
         end
-    
-            private
