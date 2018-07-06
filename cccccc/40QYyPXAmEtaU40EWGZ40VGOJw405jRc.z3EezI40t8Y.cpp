@@ -1,130 +1,135 @@
 
         
-          /// DebuggerClient is consulted at two times during name
-  /// lookup.  This is the first time: after all names in a
-  /// source file have been checked but before external
-  /// Modules are checked.  The results in the ResultVector will
-  /// be consulted first.  Return true if results have been added
-  /// to RV.
-  /// FIXME: I don't think this ever does anything useful.
-  virtual bool lookupOverrides(DeclBaseName Name, DeclContext *DC,
-                               SourceLoc Loc, bool IsTypeLookup,
-                               ResultVector &RV) = 0;
+          // URLRequestJob:
+  void GetResponseInfo(net::HttpResponseInfo* info) override;
     
-    #endif // SWIFT_INDEX_INDEXRECORD_H
+    #include <memory>
+    
+      // Sent by the PluginPrefs when there is a change of plugin enable/disable
+  // status. The source is the profile.
+  NOTIFICATION_PLUGIN_ENABLE_STATUS_CHANGED,
+    
+    // DesktopMediaList provides the list of desktop media source (screens, windows,
+// tabs), and their thumbnails, to the desktop media picker dialog. It
+// transparently updates the list in the background, and notifies the desktop
+// media picker when something changes.
+class DesktopMediaList {
+ public:
+  // Struct used to represent each entry in the list.
+  struct Source {
+    // Id of the source.
+    content::DesktopMediaID id;
+    }
+    }
+    
+    #endif  // CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
 
     
-    /// Get a parsed documentation comment for the declaration, if there is one.
-Optional<DocComment *>getSingleDocComment(swift::markup::MarkupContext &Context,
-                                          const Decl *D);
+    #include 'chrome/browser/speech/tts_platform.h'
     
-    SILFunction *SILDebugScope::getParentFunction() const {
-  if (InlinedCallSite)
-    return InlinedCallSite->getParentFunction();
-  if (auto *ParentScope = Parent.dyn_cast<const SILDebugScope *>())
-    return ParentScope->getParentFunction();
-  return Parent.get<SILFunction *>();
-}
-
+    // A handful of resource-like constants related to the Chrome application.
+    
+    #include <iomanip>
     
     
-    
-    #endif // SWIFT_INDEX_INDEXDATACONSUMER_H
-
-    
-      static ResultPlanPtr computeResultPlan(SILGenFunction &SGF,
-                                         const CalleeTypeInfo &calleeTypeInfo,
-                                         SILLocation loc,
-                                         SGFContext evalContext);
-    
-    // skip isnan and isinf check for integral types
-template<typename To, typename From>
-typename std::enable_if<std::is_integral<From>::value, bool>::type overflows(From f) {
-  using limit = std::numeric_limits<To>;
-  return f < limit::lowest() || f > limit::max();
-}
-    
-    #ifdef _THP_CORE
-#define THCPStorageType TH_CONCAT_3(THCP,Real,StorageType)
-#define THCPStorageBaseStr TH_CONCAT_STRING_3(Cuda,Real,StorageBase)
+    {  if (code != STILL_ACTIVE) {
+    exitCode = code;
+    return true;
+  }
+#else
+  int status = 0;
+  if (::waitpid(process.nativeHandle(), &status, 0) == -1) {
+    return false;
+  }
+  if (WIFEXITED(status)) {
+    exitCode = WEXITSTATUS(status);
+    return true;
+  }
 #endif
-    
-    #include 'override_macros.h'
-    
-    #define THPDoubleStorage_CData(obj)  (obj)->cdata
-#define THPFloatStorage_CData(obj)   (obj)->cdata
-#define THPHalfStorage_CData(obj)    (obj)->cdata
-#define THPLongStorage_CData(obj)    (obj)->cdata
-#define THPIntStorage_CData(obj)     (obj)->cdata
-#define THPShortStorage_CData(obj)   (obj)->cdata
-#define THPCharStorage_CData(obj)    (obj)->cdata
-#define THPByteStorage_CData(obj)    (obj)->cdata
-    
-      masterCommandChannel->sendMessage(
-    packMessage(Functions::tensorGesv, rb, ra, b, a),
-    THDState::s_current_worker
-  );
-    
-    PowerIphone::~PowerIphone() {
-	// TODO Auto-generated destructor stub
+  return false;
 }
+    
+      cm['path'].add(Constraint(EQUALS, 'some'));
+    
+    #include <osquery/database.h>
+    
+    class EventTappingEventPublisher
+    : public EventPublisher<EventTappingSubscriptionContext,
+                            EventTappingEventContext> {
+  DECLARE_PUBLISHER('event_tapping');
+    }
+    
+      /// Has the FSEvents run loop and stream been started.
+  std::atomic<bool> stream_started_{false};
+    
+    TEST_F(OrderingTest, to_ordering) {
+  EXPECT_EQ(ordering::lt, to_ordering(int(ordering::lt)));
+  EXPECT_EQ(ordering::eq, to_ordering(int(ordering::eq)));
+  EXPECT_EQ(ordering::gt, to_ordering(int(ordering::gt)));
+    }
+    
+    
+    { private:
+  /* Used by the single writer */
+  void locate_lower_bound(const T& v, Atom<Node*>*& prev) const {
+    auto curr = prev->load(std::memory_order_relaxed);
+    while (curr) {
+      if (curr->elem_ >= v) {
+        break;
+      }
+      prev = &(curr->next_);
+      curr = curr->next_.load(std::memory_order_relaxed);
+    }
+    return;
+  }
+};
+    
+    
+    {  bool cas(T& u, T& v) {
+    Node* n = new Node(v);
+    hazptr_holder<Atom> hptr;
+    Node* p;
+    while (true) {
+      p = hptr.get_protected(node_);
+      if (p->val_ != u) {
+        delete n;
+        return false;
+      }
+      if (node_.compare_exchange_weak(
+              p, n, std::memory_order_relaxed, std::memory_order_release)) {
+        break;
+      }
+    }
+    hptr.reset();
+    p->retire();
+    return true;
+  }
+};
+    
+    struct BlockingQueueAddResult {
+  BlockingQueueAddResult(bool reused = false) : reusedThread(reused) {}
+  bool reusedThread;
+};
+    
+    
+    { private:
+  folly::LifoSem sem_;
+  folly::MPMCQueue<T> queue_;
+};
+    
+    
+    {} // namespace folly
 
     
-    	mbedtls_x509_crt_init(&cacert);
-    
-    	GodotAllConvexResultCallback(PhysicsDirectSpaceState::ShapeResult *p_results, int p_resultMax, const Set<RID> *p_exclude) :
-			m_results(p_results),
-			m_exclude(p_exclude),
-			m_resultMax(p_resultMax),
-			count(0) {}
-    
-    	bool initialized;
-    
-        virtual ~jpeg_decoder_mem_stream() { }
-    
-    # if defined(CLZ64)
-/**
- * OC_ILOGNZ_64 - Integer binary logarithm of a non-zero 64-bit value.
- * @_v: A non-zero 64-bit value.
- * Returns floor(log2(_v))+1.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * If _v is zero, the return value is undefined; use OC_ILOG_64() instead.
+    /*
+ * This is a simple helper program to exercise the LOG(FATAL) functionality.
  */
-#  define OC_ILOGNZ_64(_v) (CLZ64_OFFS-CLZ64(_v))
-/**
- * OC_ILOG_64 - Integer binary logarithm of a 64-bit value.
- * @_v: A 64-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- */
-#  define OC_ILOG_64(_v)   (OC_ILOGNZ_64(_v)&-!!(_v))
-# else
-#  define OC_ILOGNZ_64(_v) (oc_ilog64(_v))
-#  define OC_ILOG_64(_v)   (oc_ilog64(_v))
-# endif
+int main(int argc, char* argv[]) {
+  auto init = folly::Init(&argc, &argv);
+    }
     
-    #endif
-
+    #pragma once
     
-    /*Accesses one of four (signed) bytes given an index.
-  This can be used to avoid small lookup tables.*/
-#define OC_BYTE_TABLE32(_a,_b,_c,_d,_i) \
-  ((signed char) \
-   (((_a)&0xFF|((_b)&0xFF)<<8|((_c)&0xFF)<<16|((_d)&0xFF)<<24)>>(_i)*8))
-/*Accesses one of eight (unsigned) nibbles given an index.
-  This can be used to avoid small lookup tables.*/
-#define OC_UNIBBLE_TABLE32(_a,_b,_c,_d,_e,_f,_g,_h,_i) \
-  ((((_a)&0xF|((_b)&0xF)<<4|((_c)&0xF)<<8|((_d)&0xF)<<12| \
-   ((_e)&0xF)<<16|((_f)&0xF)<<20|((_g)&0xF)<<24|((_h)&0xF)<<28)>>(_i)*4)&0xF)
-    
-    #define opus_fft_free_arch(_st, arch) \
-   ((void)(arch), opus_fft_free_arm_neon(_st))
-    
-    
-/** 16x32 multiply, followed by a 15-bit shift right and 32-bit add.
-    b must fit in 31 bits.
-    Result fits in 32 bits. */
-#undef MAC16_32_Q15
-#define MAC16_32_Q15(c, a, b) ADD32(c, MULT16_32_Q15(a, b))
+    ssize_t pwrite(int fd, const void* buf, size_t count, off_t offset) {
+  return wrapPositional(_write, fd, offset, buf, (unsigned int)count);
+}
