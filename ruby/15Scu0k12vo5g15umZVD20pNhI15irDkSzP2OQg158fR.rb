@@ -1,22 +1,38 @@
 
         
-          def as_json(options={})
-    {
-      poll_id:             id,
-      post_id:             status_message.id,
-      question:            question,
-      poll_answers:        poll_answers,
-      participation_count: participation_count
-    }
+            def execute(args)
+    
+      def revoke_admin!
+    set_permission('admin', false)
   end
     
-          def request_authorization_consent_form
-        add_claims_to_scopes
-        endpoint = Api::OpenidConnect::AuthorizationPoint::EndpointStartPoint.new(current_user)
-        handle_start_point_response(endpoint)
-      end
+    class ApplicationSerializer < ActiveModel::Serializer
+  embed :ids, include: true
     
-    module Api
-  module OpenidConnect
-    class ClientsController < ApplicationController
-      skip_before_action :verify_authenticity_token
+      # Update version.rb file with BOOTSTRAP_SHA
+  def store_version
+    path    = 'lib/bootstrap-sass/version.rb'
+    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
+    File.open(path, 'w') { |f| f.write(content) }
+  end
+end
+
+    
+      # Set to :debug to see everything in the log.
+  config.log_level = :info
+    
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
+    
+    require 'rake/testtask'
+Rake::TestTask.new do |t|
+  t.libs << 'test'
+  t.test_files = FileList['test/**/*_test.rb']
+  t.verbose = true
+end
+    
+        def index
+      pods_json = PodPresenter.as_collection(Pod.all)
