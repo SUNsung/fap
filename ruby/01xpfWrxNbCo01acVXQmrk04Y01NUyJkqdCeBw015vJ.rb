@@ -1,44 +1,71 @@
 
         
-            unless formulae.empty?
-      # Dump formula list.
-      ohai title
-      puts_columns(formulae)
+          def worker_id(config = nil)
+    '#{self.class.to_s}-#{id}-#{Digest::SHA1.hexdigest((config.presence || options).to_json)}'
+  end
+    
+      module SortableTableHelper
+    # :call-seq:
+    #   sortable_column(attribute, default_direction = 'desc', name: attribute.humanize)
+    def sortable_column(attribute, default_direction = nil, options = nil)
+      if options.nil? && (options = Hash.try_convert(default_direction))
+        default_direction = nil
+      end
+      default_direction ||= 'desc'
+      options ||= {}
+      name = options[:name] || attribute.humanize
+      selected = @table_sort_info[:attribute].to_s == attribute
+      if selected
+        direction = @table_sort_info[:direction]
+        new_direction = direction.to_s == 'desc' ? 'asc' : 'desc'
+        classes = 'selected #{direction}'
+      else
+        classes = ''
+        new_direction = default_direction
+      end
+      link_to(name, url_for(sort: '#{attribute}.#{new_direction}'), class: classes)
     end
   end
-    
-    html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
-readme_doctree = REXML::Document.new(html_readme)
-links = REXML::XPath.match(readme_doctree, '//a')
-    
-      def test_capture3_flip
-    o, e, s = Open3.capture3(RUBY, '-e', 'STDOUT.sync=true; 1000.times { print 'o'*1000; STDERR.print 'e'*1000 }')
-    assert_equal('o'*1000000, o)
-    assert_equal('e'*1000000, e)
-    assert(s.success?)
-  end
-    
-    def usercode(f, out)
-  require 'erb'
-  compiler = ERB::Compiler.new('%-')
-  compiler.put_cmd = compiler.insert_cmd = 'out.<<'
-  lineno = f.lineno
-  src, = compiler.compile(f.read)
-  eval(src, binding, f.path, lineno)
 end
+
     
-      it 'uses '-e' as file' do
-    ruby_exe('puts __FILE__', escape: false).chomp.should == '-e'
+    def each_schema_load_environment
+  # If we're in development, also run this for the test environment.
+  # This is a somewhat hacky way to do this, so here's why:
+  # 1. We have to define this before we load the schema, or we won't
+  #    have a timestamp_id function when we get to it in the schema.
+  # 2. db:setup calls db:schema:load_if_ruby, which calls
+  #    db:schema:load, which we define above as having a prerequisite
+  #    of this task.
+  # 3. db:schema:load ends up running
+  #    ActiveRecord::Tasks::DatabaseTasks.load_schema_current, which
+  #    calls a private method `each_current_configuration`, which
+  #    explicitly also does the loading for the `test` environment
+  #    if the current environment is `development`, so we end up
+  #    needing to do the same, and we can't even use the same method
+  #    to do it.
+    
+      def text_url
+    object.local? ? medium_url(object) : nil
   end
     
-      it 'returns nil if else-body is empty and expression is false' do
-    if false
-      123
-    else
-    end.should == nil
+      def deliver_digest
+    NotificationMailer.digest(user.account).deliver_now!
+    user.touch(:last_emailed_at)
   end
+end
+
     
-    describe :string_unpack_Aa, shared: true do
-  it 'decodes the number of bytes specified by the count modifier including NULL bytes' do
-    'a\x00bc'.unpack(unpack_format(3)+unpack_format).should == ['a\x00b', 'c']
+            def find_address
+          if @order.bill_address_id == params[:id].to_i
+            @order.bill_address
+          elsif @order.ship_address_id == params[:id].to_i
+            @order.ship_address
+          else
+            raise CanCan::AccessDenied
+          end
+        end
+      end
+    end
   end
+end
