@@ -1,104 +1,160 @@
 
         
-        from youtube_dl.compat import (
-    compat_print,
-    compat_urllib_request,
-)
-from youtube_dl.utils import format_bytes
+        
+class ConnectTimeout(ConnectionError, Timeout):
+    '''The request timed out while trying to connect to the remote server.
+    
+    codes = LookupDict(name='status_codes')
+    
+    Does two benchmarks
     
     
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
+def _tabulate(results, metrics, formats):
+    '''Prints results by metric and format
     
-            webpage = self._download_webpage(url, playlist_id)
-        title = self._html_search_regex(
-            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<p class='excerpt'[^>]*?>(.*?)</p>',
-            webpage, 'description', fatal=False)
-        urls = re.findall(
-            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
-            webpage)
-        entries = [self.url_result(u) for u in urls]
+    def plot(func):
+    random_state = check_random_state(0)
+    one_core = []
+    multi_core = []
+    sample_sizes = range(1000, 6000, 1000)
     
-        exc = Timeout('Request timed out')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR_TIMEOUT
-    assert error_msg == 'Request timed out (30s).'
+        An example with a long-untouched module that everyone has
+    >>> _linkcode_resolve('py', {'module': 'tty',
+    ...                          'fullname': 'setraw'},
+    ...                   package='tty',
+    ...                   url_fmt='http://hg.python.org/cpython/file/'
+    ...                           '{revision}/Lib/{package}/{path}#L{lineno}',
+    ...                   revision='xxxx')
+    'http://hg.python.org/cpython/file/xxxx/Lib/tty/tty.py#L18'
+    '''
+    
+        in_exercise_region = False
+    
+    In both examples below, the main result is that the empirical covariance
+estimate, as a non-robust one, is highly influenced by the heterogeneous
+structure of the observations. Although the robust covariance estimate is
+able to focus on the main mode of the data distribution, it sticks to the
+assumption that the data should be Gaussian distributed, yielding some biased
+estimation of the data structure, but yet accurate to some extent.
+The One-Class SVM does not assume any parametric form of the data distribution
+and can therefore model the complex shape of the data much better.
+    
+    print(__doc__)
+    
+        acc_clf1.append(score_clf1 / n_averages)
+    acc_clf2.append(score_clf2 / n_averages)
+    
+    #Display the first digit
+plt.figure(1, figsize=(3, 3))
+plt.imshow(digits.images[-1], cmap=plt.cm.gray_r, interpolation='nearest')
+plt.show()
 
     
+    # Scrapy version
+import pkgutil
+__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
+version_info = tuple(int(v) if v.isdigit() else v
+                     for v in __version__.split('.'))
+del pkgutil
     
-def test_unicode_headers_verbose(httpbin):
-    # httpbin doesn't interpret utf8 headers
-    r = http('--verbose', httpbin.url + '/headers', u'Test:%s' % UNICODE)
-    assert HTTP_OK in r
-    assert UNICODE in r
+    import scrapy
+from scrapy.commands import ScrapyCommand
+from scrapy.linkextractors import LinkExtractor
     
-        try:
-        s1 = os.lstat(path)
-    except OSError:
-        # the OSError should be handled with more care
-        # it could be a 'permission denied' but path is still a mount
-        return False
-    else:
-        # A symlink can never be a mount point
-        if os.path.stat.S_ISLNK(s1.st_mode):
-            return False
+        def deploy_cert(self, domain, cert_path, key_path, chain_path=None,
+                    fullchain_path=None):
+        '''Installs cert'''
+        cert_path, key_path, chain_path = self.copy_certs_and_keys(
+            cert_path, key_path, chain_path)
+        self._configurator.deploy_cert(
+            domain, cert_path, key_path, chain_path, fullchain_path)
+
     
-            if args.console_logs:
-            path = os.path.join(output_dir, '%s/console.log' % job_number)
-            url = 'https://api.shippable.com/jobs/%s/consoles?download=true' % job_id
-            download(args, headers, path, url, is_json=False)
+    from certbot import interfaces
+from certbot.plugins import common
     
-            # global, resource
-        input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/global/urlMaps'
-        actual = GCPUtils.parse_gcp_url(input_url)
-        self.assertEquals('compute', actual['service'])
-        self.assertEquals('v1', actual['api_version'])
-        self.assertEquals('myproject', actual['project'])
-        self.assertTrue('global' in actual)
-        self.assertTrue(actual['global'])
-        self.assertEquals('urlMaps', actual['resource_name'])
+    |======================= In-process =====================|== Out-of-process ==|
     
-        def test_timeout(self):
-        self.assertTrue(self.timeout.timeout)
-        self.assertFalse(self.invalid.timeout)
-    
-        def test_same_server(self):
-        from certbot_apache.obj import VirtualHost
-        no_name1 = VirtualHost(
-            'fp', 'vhp', set([self.addr1]), False, False, None)
-        no_name2 = VirtualHost(
-            'fp', 'vhp', set([self.addr2]), False, False, None)
-        no_name3 = VirtualHost(
-            'fp', 'vhp', set([self.addr_default]),
-            False, False, None)
-        no_name4 = VirtualHost(
-            'fp', 'vhp', set([self.addr2, self.addr_default]),
-            False, False, None)
-    
-    # If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath(os.path.join(here, '..')))
-    
-        @mock.patch(
-        'certbot_compatibility_test.validator.crypto_util.probe_sni')
-    def test_certificate_success(self, mock_probe_sni):
-        cert = OpenSSL.crypto.X509()
-        mock_probe_sni.return_value = cert
-        self.assertTrue(self.validator.certificate(
-            cert, 'test.com', '127.0.0.1'))
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
     
-class AskTest(unittest.TestCase):
-    '''Test the ask method.'''
-    def setUp(self):
-        logging.disable(logging.CRITICAL)
+  def Empty_Insertion_Text_test( self ):
+    self._Check( 0, {
+      'insertion_text':  '',
+      'menu_text':       'MENU TEXT',
+      'extra_menu_info': 'EXTRA MENU INFO',
+      'kind':            'K',
+      'detailed_info':   'DETAILED INFO',
+      'extra_data': {
+        'doc_string':    'DOC STRING',
+      },
+    }, {
+      'word'     : '',
+      'abbr'     : 'MENU TEXT',
+      'menu'     : 'EXTRA MENU INFO',
+      'kind'     : 'k',
+      'info'     : 'DETAILED INFO\nDOC STRING',
+      'dup'      : 1,
+      'empty'    : 1,
+      'user_data': '0',
+    } )
+    
+    
+  def Response( self ):
+    return self._response
+    
+    
+class EventNotification( BaseRequest ):
+  def __init__( self, event_name, buffer_number = None, extra_data = None ):
+    super( EventNotification, self ).__init__()
+    self._event_name = event_name
+    self._buffer_number = buffer_number
+    self._extra_data = extra_data
+    self._response_future = None
+    self._cached_response = None
+    
+        def reverse(self, *args):
+        if self._path is None:
+            raise ValueError('Cannot reverse url regex ' + self.regex.pattern)
+        assert len(args) == self._group_count, 'required number of arguments ' \
+                                               'not found'
+        if not len(args):
+            return self._path
+        converted_args = []
+        for a in args:
+            if not isinstance(a, (unicode_type, bytes)):
+                a = str(a)
+            converted_args.append(url_escape(utf8(a), plus=False))
+        return self._path % tuple(converted_args)
+    
+        def test_remove_timeout_after_fire(self):
+        # It is not an error to call remove_timeout after it has run.
+        handle = self.io_loop.add_timeout(self.io_loop.time(), self.stop)
+        self.wait()
+        self.io_loop.remove_timeout(handle)
+    
+        If `.release` would increment the semaphore's value past the initial
+    value, it raises `ValueError`. Semaphores are mostly used to guard
+    resources with limited capacity, so a semaphore released too many times
+    is a sign of a bug.
+    '''
+    def __init__(self, value=1):
+        super(BoundedSemaphore, self).__init__(value=value)
+        self._initial_value = value
+    
+            If the connection was closed cleanly and a status code or reason
+        phrase was supplied, these values will be available as the attributes
+        ``self.close_code`` and ``self.close_reason``.
+    
+    # These errnos indicate that a non-blocking operation must be retried
+# at a later time.  On most platforms they're the same value, but on
+# some they differ.
+_ERRNO_WOULDBLOCK = (errno.EWOULDBLOCK, errno.EAGAIN)
+    
+                def data_received(self, data):
+                body.append(data)
