@@ -1,60 +1,52 @@
 
         
-          private
+        # For this pull request, which changes Page#dir
+# https://github.com/jekyll/jekyll/pull/4403
     
-      def describe_system_ruby
-    s = ''
-    case RUBY_VERSION
-    when /^1\.[89]/, /^2\.0/
-      s << '#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}'
-    else
-      s << RUBY_VERSION
-    end
+        options[:skip_patterns] = [
+      /\Afaq\//,
+      /\Ainternals\//,
+      /\Amisc\//,
+      /\Areleases\//,
+      /\A_/,
+      /flattened\-index\.html/]
     
-            if msg = blacklisted?(query)
-          if count > 0
-            puts
-            puts 'If you meant #{query.inspect} precisely:'
-            puts
-          end
-          puts msg
-        elsif count == 0
-          puts 'No formula found for #{query.inspect}.'
-          begin
-            GitHub.print_pull_requests_matching(query)
-          rescue GitHub::Error => e
-            SEARCH_ERROR_QUEUE << e
-          end
-        end
+    class ActivityPub::EmojiSerializer < ActiveModel::Serializer
+  include RoutingHelper
+    
+    namespace :emojis do
+  desc 'Generate a unicode to filename mapping'
+  task :generate do
+    source = 'http://www.unicode.org/Public/emoji/5.0/emoji-test.txt'
+    codes  = []
+    dest   = Rails.root.join('app', 'javascript', 'mastodon', 'features', 'emoji', 'emoji_map.json')
+    
+      def perform(user_id)
+    @user = User.find(user_id)
+    deliver_digest if @user.allows_digest_emails?
+  end
+    
+        def any_searchfield_present?
+      if %w(username email guid under13).all? { |attr| public_send(attr).blank? }
+        errors.add :base, 'no fields for search set'
       end
     end
     
-      def self.bottle_sha1(*)
-  end
-    
-          it 'renders HTML' do
-        expect(render(options, screenshots)).to match(/<html>/)
+          def process_authorization_consent(approved_string)
+        endpoint = Api::OpenidConnect::AuthorizationPoint::EndpointConfirmationPoint.new(
+          current_user, to_boolean(approved_string))
+        handle_confirmation_endpoint_response(endpoint)
       end
+    
+          def redirect(env)
+        request = Request.new(env)
+        warn env, 'attack prevented by #{self.class}'
+        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
+      end
+    
+    
+  it 'should allow changing the nosniff-mode off' do
+    mock_app do
+      use Rack::Protection::XSSHeader, :nosniff => false
+      run DummyApp
     end
-    
-    puts 'Deduping #{links.size} links...'
-    
-    ###
-### globals
-###
-    
-    desc 'Dumps output to a CSS file for testing'
-task :debug do
-  require 'sass'
-  path = Bootstrap.stylesheets_path
-  %w(bootstrap).each do |file|
-    engine = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
-    File.open('./#{file}.css', 'w') { |f| f.write(engine.render) }
-  end
-end
-    
-      desc 'Finished'
-  task :finished do
-  end
-    
-      mkdir_p deploy_dir
