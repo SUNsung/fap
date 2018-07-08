@@ -1,143 +1,187 @@
 
         
-        from flask import Markup
-from flask.json.tag import TaggedJSONSerializer, JSONTag
+            # We take the [steps, batch*beam, ...] tensor array, gather and concat
+    # the steps we might need into a [some_steps*batch*beam, ...] tensor,
+    # and flatten 'idx' to dereference this new tensor.
+    #
+    # The first element of each tensor array is reserved for an
+    # initialization variable, so we offset all step indices by +1.
+    #
+    # TODO(googleuser): It would be great to not have to extract
+    # the steps in their entirety, forcing a copy of much of the
+    # TensorArray at each step. Better would be to support a
+    # TensorArray.gather_nd to pick the specific elements directly.
+    # TODO(googleuser): In the interim, a small optimization would
+    # be to use tf.unique instead of tf.range.
+    step_min = tf.reduce_min(step_idx)
+    ta_range = tf.range(step_min + 1, tf.reduce_max(step_idx) + 2)
+    act_block = source_array.gather(ta_range)
+    act_block = tf.reshape(act_block,
+                           tf.concat([[-1], tf.shape(act_block)[2:]], 0))
+    flat_idx = (step_idx - step_min) * stride + idx
+    act_block = tf.gather(act_block, flat_idx)
+    act_block = tf.reshape(act_block, [-1, source_layer_size])
     
-            :param obj: an import name or object
-        '''
-        if isinstance(obj, string_types):
-            obj = import_string(obj)
-        for key in dir(obj):
-            if key.isupper():
-                self[key] = getattr(obj, key)
+      Arguments:
+    sess: TF session to use.
+    trainers: List of training ops to use.
+    annotator: Annotation op.
+    evaluator: Function taking two serialized corpora and returning a dict of
+      scalar summaries representing evaluation metrics. The 'eval_metric'
+      summary will be used for early stopping.
+    pretrain_steps: List of the no. of pre-training steps for each train op.
+    train_steps: List of the total no. of steps for each train op.
+    train_corpus: Training corpus to use.
+    eval_corpus: Holdout Corpus for early stoping.
+    eval_gold: Reference of eval_corpus for computing accuracy.
+      eval_corpus and eval_gold are allowed to be the same if eval_corpus
+      already contains gold annotation.
+      Note for segmentation eval_corpus and eval_gold are always different since
+      eval_corpus contains sentences whose tokens are utf8-characters while
+      eval_gold's tokens are gold words.
+    batch_size: How many examples to send to the train op at a time.
+    summary_writer: TF SummaryWriter to use to write summaries.
+    report_every: How often to compute summaries (in steps).
+    saver: TF saver op to save variables.
+    checkpoint_filename: File to save checkpoints to.
+    checkpoint_stats: Stats of checkpoint.
+  '''
+  if not checkpoint_stats:
+    checkpoint_stats = [0] * (len(train_steps) + 1)
     
-        def __init__(self, request, key):
-        form_matches = request.form.getlist(key)
-        buf = ['You tried to access the file '%s' in the request.files '
-               'dictionary but it does not exist.  The mimetype for the request '
-               'is '%s' instead of 'multipart/form-data' which means that no '
-               'file contents were transmitted.  To fix this error you should '
-               'provide enctype='multipart/form-data' in your form.' %
-               (key, request.mimetype)]
-        if form_matches:
-            buf.append('\n\nThe browser instead transmitted some file names. '
-                       'This was submitted: %s' % ', '.join(''%s'' % x
-                            for x in form_matches))
-        self.msg = ''.join(buf)
+      with tf.Session(graph=g, config=session_config) as sess:
+    tf.logging.info('Initializing variables...')
+    sess.run(tf.global_variables_initializer())
     
-        If you configure your own :class:`logging.StreamHandler`, you may want to
-    use this for the stream. If you are using file or dict configuration and
-    can't import this directly, you can refer to it as
-    ``ext://flask.logging.wsgi_errors_stream``.
-    '''
-    return request.environ['wsgi.errors'] if request else sys.stderr
+    Sample invocation:
+  bazel run -c opt <...>:dragnn_eval -- \
+    --master_spec='/path/to/master-spec' \
+    --resource_dir='/path/to/resources/'
+    --checkpoint_file='/path/to/model/name.checkpoint' \
+    --input_file='/path/to/input/documents/test.connlu'
+'''
     
-        def _get_source_fast(self, environment, template):
-        for srcobj, loader in self._iter_loaders(template):
-            try:
-                return loader.get_source(environment, template)
-            except TemplateNotFound:
-                continue
-        raise TemplateNotFound(template)
+    cc_test(
+    name = 'binary_segment_state_test',
+    size = 'small',
+    srcs = ['binary_segment_state_test.cc'],
+    deps = [
+        ':base',
+        ':parser_transitions',
+        ':term_frequency_map',
+        ':test_main',
+    ],
+)
     
-        stream = StringIO()
-    client.get('/', errors_stream=stream)
-    assert 'ERROR in test_logging: test' in stream.getvalue()
+            '''
+        available_plugins = plugin_manager.get_formatters_grouped()
+        self.enabled_plugins = []
+        for group in groups:
+            for cls in available_plugins[group]:
+                p = cls(env=env, **kwargs)
+                if p.enabled:
+                    self.enabled_plugins.append(p)
+    
+        Uses threading to periodically update the status (speed, ETA, etc.).
+    
+        http://docs.python-requests.org/en/latest/user/advanced/#transport-adapters
+    
+    positional = parser.add_argument_group(
+    title='Positional Arguments',
+    description=dedent('''
+    These arguments come after any flags and in the order they are listed here.
+    Only URL is required.
+    
+        # noinspection PyUnboundLocalVariable
+    return '%.*f %s' % (precision, n / factor, suffix)
+
+    
+        density : array-like of ints (1d or 0d)
+        The density of positive labels in the input.
+    
+            start = time.time()
+        func(X, n_jobs=1)
+        one_core.append(time.time() - start)
+    
+    import numpy as np
+from scipy.cluster import hierarchy
+import matplotlib.pyplot as plt
+    
+        scikit_regressor_results.append(
+        delta.seconds + delta.microseconds / mu_second)
+    
+        package is the name of the root module of the package
+    
+    pages = {
+    u'ar': u'http://ar.wikipedia.org/wiki/%D9%88%D9%8A%D9%83%D9%8A%D8%A8%D9%8A%D8%AF%D9%8A%D8%A7',
+    u'de': u'http://de.wikipedia.org/wiki/Wikipedia',
+    u'en': u'https://en.wikipedia.org/wiki/Wikipedia',
+    u'es': u'http://es.wikipedia.org/wiki/Wikipedia',
+    u'fr': u'http://fr.wikipedia.org/wiki/Wikip%C3%A9dia',
+    u'it': u'http://it.wikipedia.org/wiki/Wikipedia',
+    u'ja': u'http://ja.wikipedia.org/wiki/Wikipedia',
+    u'nl': u'http://nl.wikipedia.org/wiki/Wikipedia',
+    u'pl': u'http://pl.wikipedia.org/wiki/Wikipedia',
+    u'pt': u'http://pt.wikipedia.org/wiki/Wikip%C3%A9dia',
+    u'ru': u'http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F',
+#    u'zh': u'http://zh.wikipedia.org/wiki/Wikipedia',
+}
+    
+    # Plot changes in predicted probabilities via arrows
+plt.figure(0)
+colors = ['r', 'g', 'b']
+for i in range(clf_probs.shape[0]):
+    plt.arrow(clf_probs[i, 0], clf_probs[i, 1],
+              sig_clf_probs[i, 0] - clf_probs[i, 0],
+              sig_clf_probs[i, 1] - clf_probs[i, 1],
+              color=colors[y_test[i]], head_width=1e-2)
+    
+        t0 = time()
+    scores = uniform_labelings_scores(score_func, n_samples, n_clusters_range,
+                                      fixed_n_classes=n_classes)
+    print('done in %0.3fs' % (time() - t0))
+    plots.append(plt.errorbar(
+        n_clusters_range, scores.mean(axis=1), scores.std(axis=1))[0])
+    names.append(score_func.__name__)
+    
+    np.random.seed(0)
+###############################################################################
+n_features = 100
+# simulation covariance matrix (AR(1) process)
+r = 0.1
+real_cov = toeplitz(r ** np.arange(n_features))
+coloring_matrix = cholesky(real_cov)
+    
+    import matplotlib.pyplot as plt
+    
+    Loosely based on https://github.com/astropy/astropy/pull/347
+'''
     
     
-class assert_no_leak(object):
-    
-                greenlets.append(greenlet(g))
-            return 'Hello World!'
-    
-    
-@for_app('tar')
-def match(command):
-    return ('-C' not in command.script
-            and _is_tar_extract(command.script)
-            and _tar_file(command.script_parts) is not None)
-    
-    containers = (('thefuck/python3-fish',
-               u'''FROM python:3
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'),
-              ('thefuck/python2-fish',
-               u'''FROM python:2
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'))
-    
-            # train once so that the states change
-        model.train_on_batch(np.ones((num_samples, timesteps)),
-                             np.ones((num_samples, units)))
-        out2 = model.predict(np.ones((num_samples, timesteps)))
-    
-    The VAE has a modular design. The encoder, decoder and VAE
-are 3 models that share weights. After training the VAE model,
-the encoder can be used to  generate latent vectors.
-The decoder can be used to generate MNIST digits by sampling the
-latent vector from a Gaussian distribution with mean=0 and std=1.
-    
-    num_classes = np.max(y_train) + 1
-print(num_classes, 'classes')
-    
-    ] + _py_files('scrapy/contrib') + _py_files('scrapy/contrib_exp')
-    
-        def add_post_hook(self, request, results):
-        if hasattr(self, 'post_process'):
-            cb = request.callback
-    
-    
-class ScrapesContract(Contract):
-    ''' Contract to check presence of fields in scraped items
-        @scrapes page_name page_body
-    '''
-    
-            installer.deploy_cert.side_effect = errors.PluginError
-        self.assertRaises(errors.PluginError, self.client.deploy_certificate,
-                          ['foo.bar'], 'key', 'cert', 'chain', 'fullchain')
-        installer.recovery_routine.assert_called_once_with()
-    
-    import mock
-    
-        @mock.patch('certbot_compatibility_test.validator.requests.get')
-    def test_redirect_missing_location(self, mock_get_request):
-        mock_get_request.return_value = create_response(301)
-        self.assertFalse(self.validator.redirect('test.com'))
-    
-    def ehow_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-	
-	assert re.search(r'http://www.ehow.com/video_', url), 'URL you entered is not supported'
-    
-    #----------------------------------------------------------------------
-def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    '''wrapper'''
-    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
-    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
-    hostname = urlparse(url).hostname
-    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
-        return False
-    upid = match1(url, r'.+/content/(\w+)')
-    
-    def kuwo_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    if 'www.kuwo.cn/yinyue' in url:
-        rid=match1(url,'yinyue/(\d+)')
-        kuwo_download_by_rid(rid,output_dir, merge, info_only)
-    else:
-        kuwo_playlist_download(url,output_dir,merge,info_only)
-    
-        # ordered list of supported stream types / qualities on this site
-    # order: high quality -> low quality
-    stream_types = [
-        {'id': 'original'}, # contains an 'id' or 'itag' field at minimum
-        {'id': 'small'},
+def _get_homehub_data(url):
+    '''Return mock homehub data.'''
+    return '''
+    [
+        {
+            'mac': 'AA:BB:CC:DD:EE:FF,
+            'hostname': 'hostname',
+            'ip': '192.168.1.43',
+            'ipv6': '',
+            'name': 'hostname',
+            'activity': '1',
+            'os': 'Unknown',
+            'device': 'Unknown',
+            'time_first_seen': '2016/06/05 11:14:45',
+            'time_last_active': '2016/06/06 11:33:08',
+            'dhcp_option': '39043T90430T9TGK0EKGE5KGE3K904390K45GK054',
+            'port': 'wl0',
+            'ipv6_ll': 'fe80::gd67:ghrr:fuud:4332',
+            'activity_ip': '1',
+            'activity_ipv6_ll': '0',
+            'activity_ipv6': '0',
+            'device_oui': 'NA',
+            'device_serial': 'NA',
+            'device_class': 'NA'
+        }
     ]
+    '''
