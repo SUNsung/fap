@@ -1,184 +1,170 @@
 
         
-        void PartialRunMgr::PartialRunDone(int step_id, StatusCallback done,
-                                   const Status& status) {
-  Status callback_status;
+        void RegisterShellMenu(std::wstring opt, wchar_t* keyBaseName)
+{
+	// First, get the paths we will use
+    }
+    
+      /// Accept a new connection and obtain the endpoint of the peer
+  /**
+   * This function is used to accept a new connection from a peer into the
+   * given socket, and additionally provide the endpoint of the remote peer.
+   * The function call will block until a new connection has been accepted
+   * successfully or an error occurs.
+   *
+   * @param peer The socket into which the new connection will be accepted.
+   *
+   * @param peer_endpoint An endpoint object which will receive the endpoint of
+   * the remote peer.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   *
+   * @par Example
+   * @code
+   * boost::asio::ip::tcp::acceptor acceptor(io_service);
+   * ...
+   * boost::asio::ip::tcp::socket socket(io_service);
+   * boost::asio::ip::tcp::endpoint endpoint;
+   * acceptor.accept(socket, endpoint);
+   * @endcode
+   */
+  template <typename SocketService>
+  void accept(basic_socket<protocol_type, SocketService>& peer,
+      endpoint_type& peer_endpoint)
   {
-    mutex_lock l(mu_);
-    auto run_it = step_id_to_partial_run_.find(step_id);
-    if (run_it == step_id_to_partial_run_.end()) {
-      return;
-    }
-    run_it->second->final_status.Update(status);
-    if (!run_it->second->executor_done) {
-      // If we found the partial_run, we set the final callback to call only
-      // when the executor is completely done.
-      run_it->second->final_callback = std::move(done);
-      return;
-    }
-    callback_status = run_it->second->final_status;
+    boost::system::error_code ec;
+    this->get_service().accept(this->get_implementation(),
+        peer, &peer_endpoint, ec);
+    boost::asio::detail::throw_error(ec, 'accept');
   }
-  // Otherwise we call the callback immediately.
-  done(callback_status);
-  mutex_lock l(mu_);
-  step_id_to_partial_run_.erase(step_id);
-}
     
-    /** scalar_sigmoid_fast_derivative_op
-  * \ingroup CXX11_NeuralNetworks_Module
-  * \brief Template functor to compute the fast derivative of a sigmoid
-  *
-  * Input should be the backpropagated gradient.
-  *
-  * \sa class CwiseUnaryOp, Cwise::sigmoid_fast_derivative()
-  */
-template <typename T>
-struct scalar_sigmoid_fast_derivative_op {
-  EIGEN_EMPTY_STRUCT_CTOR(scalar_sigmoid_fast_derivative_op)
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
-    const T one = T(1);
-    return (one - y) * y;
+      const boost::asio::detail::function<void()>& get_debug_check() const
+  {
+    return debug_check_;
   }
-    }
-    
-    // Prefetching support
-//
-// Defined behavior on some of the uarchs:
-// PREFETCH_HINT_T0:
-//   prefetch to all levels of the hierarchy (except on p4: prefetch to L2)
-// PREFETCH_HINT_NTA:
-//   p4: fetch to L2, but limit to 1 way (out of the 8 ways)
-//   core: skip L2, go directly to L1
-//   k8 rev E and later: skip L2, can go to either of the 2-ways in L1
-enum PrefetchHint {
-  PREFETCH_HINT_T0 = 3,  // More temporal locality
-  PREFETCH_HINT_T1 = 2,
-  PREFETCH_HINT_T2 = 1,  // Less temporal locality
-  PREFETCH_HINT_NTA = 0  // No temporal locality
-};
-template <PrefetchHint hint>
-void prefetch(const void* x);
-    
-        http://www.apache.org/licenses/LICENSE-2.0
+#endif // BOOST_ASIO_ENABLE_BUFFER_DEBUGGING
     
     
-    {}  // namespace tensorflow
-    
-    class RemoveDeviceTest : public ::testing::Test {
- protected:
-  void TestRemoveDevice() {
-    GraphDef graph_def;
-    }
-    }
-    
-    
-    {inline void AddTraceEvent(const TraceEvent &event, string *json) {
-  Appendf(json, R'({'pid':%u,'tid':%u,'ts':%.5f,)', event.device_id(),
-          event.resource_id(), event.timestamp_ps() / kPicosPerMicro);
-  AppendEscapedName(json, event.name());
-  StrAppend(json, ',');
-  if (event.duration_ps() > 0) {
-    Appendf(json, R'('ph':'X','dur':%.5f},)',
-            event.duration_ps() / kPicosPerMicro);
-  } else {
-    StrAppend(json, R'('ph':'i','s':'t'},)');
+    {    return init.result.get();
   }
-}
     
-      // Size of the buffer used for caching the data read from source file.
-  int64 input_buffer_size = 256 << 10;
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
     
-    // These are all common classes it's handy to reference with no namespace.
-using tensorflow::Flag;
-using tensorflow::Status;
-using tensorflow::Tensor;
-using tensorflow::int32;
-using tensorflow::string;
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
     
-     private:
-  // Size of padded input to weight matrices = ni_ + no_ for 1-D operation
-  // and ni_ + 2 * no_ for 2-D operation. Note that there is a phantom 1 input
-  // for the bias that makes the weight matrices of size [na + 1][no].
-  int32_t na_;
-  // Number of internal states. Equal to no_ except for a softmax LSTM.
-  // ns_ is NOT serialized, but is calculated from gate_weights_.
-  int32_t ns_;
-  // Number of additional feedback states. The softmax types feed back
-  // additional output information on top of the ns_ internal states.
-  // In the case of a binary-coded (EMBEDDED) softmax, nf_ < no_.
-  int32_t nf_;
-  // Flag indicating 2-D operation.
-  bool is_2d_;
-    
-    // CALL ONLY from a signal handler! Writes a crash image to stderr.
-void signal_exit(int signal_code) {
-  tprintf('Received signal %d!\n', signal_code);
-#ifdef __linux__
-#ifndef ANDROID
-  int thread_id = syscall(SYS_gettid) % kMaxNumThreadPixes;
-#else
-  int thread_id = gettid() % kMaxNumThreadPixes;
-#endif
-  if (global_crash_pixes[thread_id] != nullptr) {
-    fprintf(stderr, 'Crash caused by image with resolution %d\n',
-            pixGetYRes(global_crash_pixes[thread_id]));
-    fprintf(stderr, '<Cut here>\n');
-    pixWriteStreamPng(stderr, global_crash_pixes[thread_id], 0.0);
-    fprintf(stderr, '\n<End cut>\n');
-  }
-  // Raise an uncaught signal, so as to get a useful stack trace.
-  raise(SIGILL);
-#else
-  abort();
-#endif
-}
-    
-      /// Return the id of the T object.
-  /// This method NEEDS a compare_callback to be passed to
-  /// set_compare_callback.
-  int get_id(T object) const;
-    
-    #define YG_NODE_STYLE_PROPERTY(type, name, paramName)                               \
-  WIN_EXPORT void YGNodeStyleSet##name(const YGNodeRef node, const type paramName); \
-  WIN_EXPORT type YGNodeStyleGet##name(const YGNodeRef node);
-    
-    template <typename R, typename... Args>
-struct jmethod_traits_from_cxx<R(Args...)> : jmethod_traits<detail::jni_sig_from_cxx<R(Args...)>> {
-};
-    
-    // TODO(t10737622): Improve on-device symbolification
-void getStackTraceSymbols(vector<StackTraceElement>& symbols,
-                          const vector<InstructionPointer>& trace) {
-  symbols.clear();
-  symbols.reserve(trace.size());
+    namespace boost {
+namespace date_time {
+    }
     }
     
-    
-    {};
+    #endif // BOOST_ASIO_DETAIL_DESCRIPTOR_WRITE_OP_HPP
 
     
-     public: // Dirtiness accessors
+      // Constructor for a full fenced block.
+  explicit gcc_arm_fenced_block(full_t)
+  {
+    barrier();
+  }
     
-    void assertInternal(const char* formatstr ...) {
-    va_list va_args;
-    va_start(va_args, formatstr);
-    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
-    va_end(va_args);
-    if (gAssertHandler != NULL) {
-        gAssertHandler(sAssertBuf);
+    #define BOOST_ASIO_DEFINE_HANDLER_PTR(op) \
+  struct ptr \
+  { \
+    Handler* h; \
+    void* v; \
+    op* p; \
+    ~ptr() \
+    { \
+      reset(); \
+    } \
+    void reset() \
+    { \
+      if (p) \
+      { \
+        p->~op(); \
+        p = 0; \
+      } \
+      if (v) \
+      { \
+        boost_asio_handler_alloc_helpers::deallocate(v, sizeof(op), *h); \
+        v = 0; \
+      } \
+    } \
+  } \
+  /**/
+    
+    #ifndef BOOST_ASIO_DETAIL_HANDLER_INVOKE_HELPERS_HPP
+#define BOOST_ASIO_DETAIL_HANDLER_INVOKE_HELPERS_HPP
+    
+      // Constructor.
+  hash_map()
+    : size_(0),
+      buckets_(0),
+      num_buckets_(0)
+  {
+  }
+    
+    #ifndef BOOST_ASIO_DETAIL_IMPL_EPOLL_REACTOR_HPP
+#define BOOST_ASIO_DETAIL_IMPL_EPOLL_REACTOR_HPP
+    
+    extern JSClass  *jsb_cocostudio_timeline_ActionTimeline_class;
+extern JSObject *jsb_cocostudio_timeline_ActionTimeline_prototype;
+    
+    
+    {        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, 'cc.SimpleAudioEngine:unloadEffect'); arg0 = arg0_tmp.c_str();
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_unloadEffect'', nullptr);
+            return 0;
+        }
+        cobj->unloadEffect(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
     }
-    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
-    // crash at this specific address so that we can find our crashes easier
-    *(int*)0xdeadb00c = 0;
-    // let the compiler know we won't reach the end of the function
-     __builtin_unreachable();
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:unloadEffect',argc, 1);
+    return 0;
+    
+    #endif // __cocos2dx_cocosdenshion_h__
+
+    
+    
+    
+    
+    
+    int register_all_cocos2dx_navmesh(lua_State* tolua_S);
+    
+    
+    
+        virtual void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color);
+    
+    struct Value
+{
+    static Value fromYGValue(YGValue const & ygValue)
+    {
+        return Value(static_cast<int>(ygValue.unit), ygValue.value);
+    }
+    }
+    
+    bool Config::isExperimentalFeatureEnabled(int feature) const
+{
+    return YGConfigIsExperimentalFeatureEnabled(m_config, static_cast<YGExperimentalFeature>(feature));
+}
+
+    
+    void Node::setMeasureFunc(nbind::cbFunction & measureFunc)
+{
+    m_measureFunc.reset(new nbind::cbFunction(measureFunc));
+    }
+    
+    template<typename... ARGS>
+inline void log(int level, const char* tag, const char* msg, ARGS... args) noexcept {
+  __android_log_print(level, tag, msg, args...);
 }
     
       /**
@@ -189,5 +175,17 @@ void getStackTraceSymbols(vector<StackTraceElement>& symbols,
    */
   static void WithClassLoader(std::function<void()>&& runnable);
     
-    namespace facebook {
-    }
+      bool operator==(const ProgramLocation& other) const {
+    // Assumes that the strings are static
+    return (m_functionName == other.m_functionName) && (m_fileName == other.m_fileName) && m_lineNumber == other.m_lineNumber;
+  }
+    
+    
+    { private:
+  Function* func_;
+};
+    
+    #endif  // BENCHMARK_API_INTERNAL_H
+
+    
+    #endif  // BENCHMARK_RE_H_
