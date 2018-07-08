@@ -1,62 +1,66 @@
 
         
-        
-def to_native_string(string, encoding='ascii'):
-    '''Given a string object, regardless of type, returns a representation of
-    that string in the native string type, encoding and decoding where
-    necessary. This assumes ASCII unless told otherwise.
+        containers = (('thefuck/python3-fish',
+               u'''FROM python:3
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'),
+              ('thefuck/python2-fish',
+               u'''FROM python:2
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'))
+    
+    
+@pytest.mark.functional
+def test_refuse_with_confirmation(proc, TIMEOUT):
+    refuse_with_confirmation(proc, TIMEOUT)
+    
+    
+class EnvironmentConfig(object):
+    uri = os.getenv('LANDSCAPE_API_URI')
+    access_key = os.getenv('LANDSCAPE_API_KEY')
+    secret_key = os.getenv('LANDSCAPE_API_SECRET')
+    ssl_ca_file = os.getenv('LANDSCAPE_API_SSL_CA_FILE')
+    
+                if key in mapping:
+                display.warning(u'While constructing a mapping from {1}, line {2}, column {3}, found a duplicate dict key ({0}).'
+                                u' Using last defined value only.'.format(key, *mapping.ansible_pos))
+    
+    
+class TestData(unittest.TestCase):
+    
+        def stop(self):
+        print('then stop')
+    
+        def test_frozen_pool(self):
+        with ObjectPool(self.sample_queue) as pool:
+            self.assertEqual(pool, 'first')
+            self.assertEqual(pool, 'first')
+        self.assertTrue(self.sample_queue.get() == 'second')
+        self.assertFalse(self.sample_queue.empty())
+        self.assertTrue(self.sample_queue.get() == 'first')
+        self.assertTrue(self.sample_queue.empty())
+    
+    
+class TestRunnerFacilities(unittest.TestCase):
+    
+    class MidnightTimeProvider(object):
     '''
-    if isinstance(string, builtin_str):
-        out = string
-    else:
-        if is_py2:
-            out = string.encode(encoding)
-        else:
-            out = string.decode(encoding)
-    
-        Provide both the name and the version of the Python implementation
-    currently running. For example, on CPython 2.7.5 it will return
-    {'name': 'CPython', 'version': '2.7.5'}.
-    
-    # The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
-    
-        :param url: URL for the new :class:`Request` object.
-    :param params: (optional) Dictionary or bytes to be sent in the query string for the :class:`Request`.
-    :param \*\*kwargs: Optional arguments that ``request`` takes.
-    :return: :class:`Response <Response>` object
-    :rtype: requests.Response
+    Class implemented as hard-coded stub (in contrast to configurable stub).
     '''
     
-    '''
-requests.compat
-~~~~~~~~~~~~~~~
+        def __init__(self):
+        self._tm = None
     
-    Requests is an HTTP library, written in Python, for human beings. Basic GET
-usage:
+    *TL;DR80
+Provides the ability to restore an object to its previous state.
+'''
     
-        def remaining_cards(self):
-        return len(self.cards) - self.deal_index
-    
-        def __init__(self, timestamp, seller, amount):
-        self.timestamp = timestamp
-        self.seller = seller
-        self.amount = amount
-    
-          # Also check if we are starting or ending an inline assembly block.
-      if inner_block.inline_asm in (_NO_ASM, _END_ASM):
-        if (depth_change != 0 and
-            inner_block.open_parentheses == 1 and
-            _MATCH_ASM.match(line)):
-          # Enter assembly block
-          inner_block.inline_asm = _INSIDE_ASM
-        else:
-          # Not entering assembly block.  If previous line was _END_ASM,
-          # we will now shift to _NO_ASM state.
-          inner_block.inline_asm = _NO_ASM
-      elif (inner_block.inline_asm == _INSIDE_ASM and
-            inner_block.open_parentheses == 0):
-        # Exit assembly block
-        inner_block.inline_asm = _END_ASM
+    from abc import abstractmethod
