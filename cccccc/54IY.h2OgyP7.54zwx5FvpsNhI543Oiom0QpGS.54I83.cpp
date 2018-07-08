@@ -1,180 +1,162 @@
 
         
-        
-    {    // passthrough
-    bool empty() const              { return m.empty(); }
-    size_type size() const          { return m.size(); }
-    size_type max_size() const      { return m.max_size(); }
-    void clear()                    { m.clear(); }
-    iterator begin()                { return m.begin(); }
-    iterator end()                  { return m.end(); }
-    const_iterator begin() const    { return m.begin(); }
-    const_iterator end() const      { return m.end(); }
-    const_iterator cbegin() const   { return m.cbegin(); }
-    const_iterator cend() const     { return m.cend(); }
-};
+        // Generate param traits write methods.
+#include 'ipc/param_traits_write_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
     
-    // Return the length of the encoding of 'key'.
-inline size_t InternalKeyEncodingLength(const ParsedInternalKey& key) {
-  return key.user_key.size() + 8;
+    IPC_SYNC_MESSAGE_ROUTED1_1(ShellViewHostMsg_SetForceClose, bool, int)
+    
+    #include 'content/nw/src/api/bindings_common.h'
+    
+    
+    {
+} // namespace extensions
+#endif
+
+    
+          displayResult->id = gfx_display.id();
+      displayResult->scale_factor = gfx_display.device_scale_factor();
+      displayResult->is_built_in = gfx_display.IsInternal();
+      displayResult->rotation = gfx_display.RotationAsDegree();
+      displayResult->touch_support = (int)gfx_display.touch_support();
+    
+    NwShellShowItemInFolderFunction::~NwShellShowItemInFolderFunction() {
 }
     
-    TEST(FormatTest, InternalKeyShortSeparator) {
-  // When user keys are same
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 99, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 101, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 100, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 100, kTypeDeletion)));
+    #endif // JSON_FORWARDS_H_INCLUDED
+    
+    void BuiltStyledStreamWriter::indent() { indentString_ += indentation_; }
+    
+    #ifndef GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_CONTAINERS_H__
+#define GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_CONTAINERS_H__
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/wire_format.h>
+    
+    class RepeatedPrimitiveFieldGenerator : public FieldGeneratorBase {
+ public:
+  RepeatedPrimitiveFieldGenerator(const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options);
+  ~RepeatedPrimitiveFieldGenerator();
     }
     
-      ReadOptions ro;
-  ro.fill_cache = false;
-  Iterator* iter = table->NewIterator(ro);
-  std::string r;
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    r.clear();
-    ParsedInternalKey key;
-    if (!ParseInternalKey(iter->key(), &key)) {
-      r = 'badkey '';
-      AppendEscapedStringTo(&r, iter->key());
-      r += '' => '';
-      AppendEscapedStringTo(&r, iter->value());
-      r += ''\n';
-      dst->Append(r);
-    } else {
-      r = ''';
-      AppendEscapedStringTo(&r, key.user_key);
-      r += '' @ ';
-      AppendNumberTo(&r, key.sequence);
-      r += ' : ';
-      if (key.type == kTypeDeletion) {
-        r += 'del';
-      } else if (key.type == kTypeValue) {
-        r += 'val';
-      } else {
-        AppendNumberTo(&r, key.type);
+    class SourceGeneratorBase {
+ protected:
+  SourceGeneratorBase(const FileDescriptor* descriptor, const Options* options);
+  virtual ~SourceGeneratorBase();
+    }
+    
+    #include <google/protobuf/descriptor.h>
+    
+    
+#define REGISTER_LAYER_CREATOR(type, creator)                                  \
+  static LayerRegisterer<float> g_creator_f_##type(#type, creator<float>);     \
+  static LayerRegisterer<double> g_creator_d_##type(#type, creator<double>)    \
+    
+      /// @brief The spatial dimensions of the input.
+  inline int input_shape(int i) {
+    return (*bottom_shape_)[channel_axis_ + i];
+  }
+  // reverse_dimensions should return true iff we are implementing deconv, so
+  // that conv helpers know which dimensions are which.
+  virtual bool reverse_dimensions() = 0;
+  // Compute height_out_ and width_out_ from other parameters.
+  virtual void compute_output_shape() = 0;
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+      if ((req_comps != 1) && (req_comps != 3) && (req_comps != 4))
+    return NULL;
+    
+    # if !defined(__OPTIMIZE__)
+#  define OP_CVTEPI16_EPI32_M64(x) \
+ (_mm_cvtepi16_epi32(_mm_loadl_epi64((__m128i *)(x))))
+# else
+#  define OP_CVTEPI16_EPI32_M64(x) \
+ (_mm_cvtepi16_epi32(*(__m128i *)(x)))
+# endif
+    
+    /*! \file silk_Inlines.h
+ *  \brief silk_Inlines.h defines OPUS_INLINE signal processing functions.
+ */
+    
+    #undef    silk_SMLAWW
+static OPUS_INLINE opus_int32 silk_SMLAWW(opus_int32 a32, opus_int32 b32, opus_int32 c32){
+    opus_int32 ret;
+    /* Nb will be counted in sub-macros*/
+    ret = silk_MLA(silk_SMLAWB((a32), (b32), (c32)), (b32), silk_RSHIFT_ROUND((c32), 16));
+    return ret;
+}
+    
+    #ifndef SILK_SIGPROC_FIX_MIPSR1_H
+#define SILK_SIGPROC_FIX_MIPSR1_H
+    
+    #ifndef GUETZLI_FDCT_H_
+#define GUETZLI_FDCT_H_
+    
+      tmp0 = in[5 * stride];
+  tmp1 = kIDCTMatrix[ 5] * tmp0;
+  tmp2 = kIDCTMatrix[13] * tmp0;
+  tmp3 = kIDCTMatrix[21] * tmp0;
+  tmp4 = kIDCTMatrix[29] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] += tmp3;
+  out[3] += tmp4;
+  out[4] -= tmp4;
+  out[5] -= tmp3;
+  out[6] -= tmp2;
+  out[7] -= tmp1;
+    
+    #endif  // GUETZLI_JPEG_DATA_DECODER_H_
+
+    
+    bool WriteJpeg(const JPEGData& jpg, bool strip_metadata, JPEGOutput out);
+    
+      // Fill in root table.
+  key = 0;
+  idx = 0;
+  for (len = 1; len <= kJpegHuffmanRootTableBits; ++len) {
+    for (; count[len] > 0; --count[len]) {
+      code.bits = len;
+      code.value = symbols[idx++];
+      reps = 1 << (kJpegHuffmanRootTableBits - len);
+      while (reps--) {
+        table[key++] = code;
       }
-      r += ' => '';
-      AppendEscapedStringTo(&r, iter->value());
-      r += ''\n';
-      dst->Append(r);
     }
   }
-  s = iter->status();
-  if (!s.ok()) {
-    dst->Append('iterator error: ' + s.ToString() + '\n');
+    
+      OutputImageComponent& component(int c) { return components_[c]; }
+  const OutputImageComponent& component(int c) const { return components_[c]; }
+    
+    #include 'guetzli/quality.h'
+    
+      // Support for running multiple copies of the same benchmark concurrently
+  // in multiple threads.  This may be useful when measuring the scaling
+  // of some piece of code.
+    
+    void FunctionBenchmark::Run(State& st) { func_(st); }
+    
+    // CheckHandler is the class constructed by failing CHECK macros. CheckHandler
+// will log information about the failures and abort when it is destructed.
+class CheckHandler {
+ public:
+  CheckHandler(const char* check, const char* file, const char* func, int line)
+      : log_(GetErrorLogInstance()) {
+    log_ << file << ':' << line << ': ' << func << ': Check `' << check
+         << '' failed. ';
   }
-    
-    
-// Owned filenames have the form:
-//    dbname/CURRENT
-//    dbname/LOCK
-//    dbname/LOG
-//    dbname/LOG.old
-//    dbname/MANIFEST-[0-9]+
-//    dbname/[0-9]+.(log|sst|ldb)
-bool ParseFileName(const std::string& fname,
-                   uint64_t* number,
-                   FileType* type) {
-  Slice rest(fname);
-  if (rest == 'CURRENT') {
-    *number = 0;
-    *type = kCurrentFile;
-  } else if (rest == 'LOCK') {
-    *number = 0;
-    *type = kDBLockFile;
-  } else if (rest == 'LOG' || rest == 'LOG.old') {
-    *number = 0;
-    *type = kInfoLogFile;
-  } else if (rest.starts_with('MANIFEST-')) {
-    rest.remove_prefix(strlen('MANIFEST-'));
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    if (!rest.empty()) {
-      return false;
-    }
-    *type = kDescriptorFile;
-    *number = num;
-  } else {
-    // Avoid strtoull() to keep filename format independent of the
-    // current locale
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    Slice suffix = rest;
-    if (suffix == Slice('.log')) {
-      *type = kLogFile;
-    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
-      *type = kTableFile;
-    } else if (suffix == Slice('.dbtmp')) {
-      *type = kTempFile;
-    } else {
-      return false;
-    }
-    *number = num;
-  }
-  return true;
-}
-    
-    // Return the name of the current file.  This file contains the name
-// of the current manifest file.  The result will be prefixed with
-// 'dbname'.
-extern std::string CurrentFileName(const std::string& dbname);
-    
-    namespace leveldb {
-    }
-    
-    #endif  // STORAGE_LEVELDB_INCLUDE_DUMPFILE_H_
-
-    
-    #ifndef BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-#define BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-    
-    #endif // BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-
-    
-    #include <boost/asio/detail/config.hpp>
-#include <boost/asio/completion_condition.hpp>
-    
-      static bool do_perform(reactor_op* base)
-  {
-    descriptor_write_op_base* o(static_cast<descriptor_write_op_base*>(base));
-    }
-    
-    #if !defined(BOOST_ASIO_WINDOWS_RUNTIME)
-    
-    #ifndef BOOST_ASIO_DETAIL_FUNCTION_HPP
-#define BOOST_ASIO_DETAIL_FUNCTION_HPP
-    
-      // We need to flush the stream buffers into the console before each
-  // SetConsoleTextAttribute call lest it affect the text that is already
-  // printed but has not yet reached the console.
-  fflush(stdout);
-  SetConsoleTextAttribute(stdout_handle,
-                          GetPlatformColorCode(color) | FOREGROUND_INTENSITY);
-  vprintf(fmt, args);
-    
-      // Populate the accumulators.
-  for (const Run& run : reports) {
-    CHECK_GT(run.complexity_n, 0) << 'Did you forget to call SetComplexityN?';
-    n.push_back(run.complexity_n);
-    real_time.push_back(run.real_accumulated_time / run.iterations);
-    cpu_time.push_back(run.cpu_accumulated_time / run.iterations);
-  }
-    
-    struct LeastSq {
-  LeastSq() : coef(0.0), rms(0.0), complexity(oNone) {}
     }
     
     
@@ -188,8 +170,3 @@ extern std::string CurrentFileName(const std::string& dbname);
     }
   }
 }
-    
-    namespace benchmark {
-namespace internal {
-    }
-    }
