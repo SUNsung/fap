@@ -1,114 +1,113 @@
 
         
-              def initialize(string)
-        @value = string
+          def post_superenv_hacks
+    # Only allow Homebrew-approved directories into the PATH, unless
+    # a formula opts-in to allowing the user's path.
+    if formula.env.userpaths? || reqs.any? { |rq| rq.env.userpaths? }
+      ENV.userpaths!
+    end
+  end
+    
+        first_warning = true
+    methods.each do |method|
+      unless checks.respond_to?(method)
+        Homebrew.failed = true
+        puts 'No check available by the name: #{method}'
+        next
       end
     
-              if argv.length == 2
-            # @deprecated
-            @env.ui.warn('WARNING: The second argument to `vagrant box remove`')
-            @env.ui.warn('is deprecated. Please use the --provider flag. This')
-            @env.ui.warn('feature will stop working in the next version.')
-            options[:provider] = argv[1]
-          end
+      def search_formulae(rx)
+    aliases = Formula.alias_full_names
+    results = (Formula.full_names+aliases).grep(rx).sort
     
-              box_name     = argv[0]
-          box_provider = argv[1].to_sym
-          box_version  = argv[2]
-    
-      def test_each_char_extended_file
-    [nil, {:textmode=>true}, {:binmode=>true}].each do |mode|
-      Tempfile.create('test-extended-file', mode) {|f|
-        assert_nil(f.getc)
-        f.print 'a'
-        f.rewind
-        result = []
-        f.each_char {|b| result << b }
-        assert_equal([?a], result, 'mode = <#{mode}>')
+      describe 'instance methods' do
+    let(:key_attributes) do # these keys are intentionally strings.
+      {
+        'canDownload' => false,
+        'canRevoke' => true,
+        'keyId' => 'some-key-id',
+        'keyName' => 'fastlane',
+        'servicesCount' => 3,
+        'services' => [
+          {
+            'name' => 'APNS',
+            'id' => 'U27F4V844T',
+            'configurations' => []
+          },
+          {
+            'name' => 'MusicKit',
+            'id' => '6A7HVUVQ3M',
+            'configurations' => [
+              {
+                'name' => 'music id test',
+                'identifier' => 'music.com.snatchev.test',
+                'type' => 'music',
+                'prefix' => 'some-prefix-id',
+                'id' => 'some-music-kit-id'
+              }
+            ]
+          },
+          {
+            'name' => 'DeviceCheck',
+            'id' => 'DQ8HTZ7739',
+            'configurations' => []
+          }
+        ]
       }
     end
-  end
     
-      def hash      # :nodoc:
-    @hash.hash
-  end
+          def load_all_tasks
+        self.tasks = []
     
-    class TC_Enumerable < Test::Unit::TestCase
-  def test_to_set
-    ary = [2,5,4,3,2,1,3]
+          it 'does set the exclude directories' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            cloc(exclude_dir: 'test1,test2,build')
+          end').runner.execute(:test)
     
-      it 'kills sleeping thread' do
-    sleeping_thread = Thread.new do
-      sleep
-      ScratchPad.record :after_sleep
-    end
-    Thread.pass while sleeping_thread.status and sleeping_thread.status != 'sleep'
-    sleeping_thread.send(@method)
-    sleeping_thread.join
-    ScratchPad.recorded.should == nil
-  end
+    begin
+  require 'bundler/setup'
+rescue LoadError
+  $stderr.puts '[*] Metasploit requires the Bundler gem to be installed'
+  $stderr.puts '    $ gem install bundler'
+  exit(1)
+end
     
-      it 'handles bad leap seconds by carrying values forward' do
-    with_timezone 'UTC' do
-      time = Time.send(@method, 2017, 7, 5, 23, 59, 60)
-      time.sec.should == 0
-      time.min.should == 0
-      time.hour.should == 0
-      time.day.should == 6
-      time.month.should == 7
-    end
-  end
+        self.sigs.each_key do |k|
+      # There is only one pattern per run to test
+      matched = nil
+      matches = nil
     
-    Print a list of currently running Applications and associated
-Bundle IDs, which may be useful in a Cask uninstall stanza, eg
+          when nil
+        # No matches, no saved state
+      else
+        sessions[s[:session]].merge!({k => matches})
+      end # end case matched
+    end # end of each_key
+  end # end of parse
+end
     
-    class Profile
-  def pod_bin
-    File.expand_path('../pod', __FILE__)
-  end
+      def parse(pkt)
+    # We want to return immediantly if	we do not have a packet which is handled by us
+    return unless pkt.is_tcp?
+    return if (pkt.tcp_sport != 80 and pkt.tcp_dport != 80)
+    s = find_session((pkt.tcp_sport == 80) ? get_session_src(pkt) : get_session_dst(pkt))
     
-          def executable_path
-        <<-EOS
-### Installation Source
+    clsJavaCompile 	= Rjb::import('javaCompile.CompileSourceInMemory')
+clsCreateJar	= Rjb::import('javaCompile.CreateJarFile')
+clsFile			= Rjb::import('java.io.File')
+system			= Rjb::import('java.lang.System')
+#clsString	= Rjb::import('java.lang.String')
     
-            # Clones the template from the remote in the working directory using
-        # the name of the Pod.
-        #
-        # @return [void]
-        #
-        def clone_template
-          UI.section('Cloning `#{template_repo_url}` into `#{@name}`.') do
-            git! ['clone', template_repo_url, @name]
+          def installed_gem_version(gem_name)
+        Gem.loaded_specs[gem_name].version
+      end
+    
+            def create
+          authorize! :create, StockMovement
+          @stock_movement = scope.new(stock_movement_params)
+          if @stock_movement.save
+            respond_with(@stock_movement, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_movement)
           end
         end
-    
-          def update_available?(gem_name)
-        latest = Gem.latest_version_for(gem_name)
-        return false if latest.nil?
-        latest > installed_gem_version(gem_name)
-      end
-    
-      # Summary is used on the Archive pages to return the first block of content from a post.
-  def summary(input)
-    if input.index(/\n\n/)
-      input.split(/\n\n/)[0]
-    else
-      input
-    end
-  end
-    
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
-    end
-    
-            #target = $LOADED_FEATURES.grep(/#{path}/).first
-        #puts path
-        #puts caller.map { |c| '  #{c}' }.join('\n')
-        #fontsize = [10, duration * 48].max
-        puts '#{duration},#{path},#{source}'
-      end
-      #puts caller.map { |c| ' => #{c}' }.join('\n')
-    end
