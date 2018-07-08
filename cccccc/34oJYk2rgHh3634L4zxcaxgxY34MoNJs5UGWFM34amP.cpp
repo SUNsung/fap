@@ -1,163 +1,164 @@
 
         
-        #define THPDoubleStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPDoubleStorageClass)
-#define THPFloatStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPFloatStorageClass)
-#define THPHalfStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPFloatStorageClass)
-#define THPLongStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPLongStorageClass)
-#define THPIntStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPIntStorageClass)
-#define THPShortStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPShortStorageClass)
-#define THPCharStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPCharStorageClass)
-#define THPByteStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPByteStorageClass)
-    
-    
-void unregister_fd(int fd) {
-  pollfds.erase(
-    std::remove_if(pollfds.begin(), pollfds.end(),
-        [fd](const struct pollfd &pfd) { return pfd.fd == fd; }),
-    pollfds.end());
-  client_sessions.erase(fd);
+        template <typename T1, typename T2, typename T3, typename T4>
+internal::ValueArray4<T1, T2, T3, T4> Values(T1 v1, T2 v2, T3 v3, T4 v4) {
+  return internal::ValueArray4<T1, T2, T3, T4>(v1, v2, v3, v4);
 }
     
-    void THDTensor_(cauchy)(THDTensor *self, THDGenerator *_generator, double median,
-                        double sigma) {
-  masterCommandChannel->sendMessage(
-    packMessage(Functions::tensorCauchy, self, _generator, median, sigma),
-    THDState::s_current_worker
-  );
+    // Overloads for various char types.
+GTEST_API_ void PrintTo(unsigned char c, ::std::ostream* os);
+GTEST_API_ void PrintTo(signed char c, ::std::ostream* os);
+inline void PrintTo(char c, ::std::ostream* os) {
+  // When printing a plain char, we always treat it as unsigned.  This
+  // way, the output won't be affected by whether the compiler thinks
+  // char is signed or not.
+  PrintTo(static_cast<unsigned char>(c), os);
 }
     
     
-    {  // For fragments
-  kFirstType = 2,
-  kMiddleType = 3,
-  kLastType = 4
+    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(SingleFailureChecker);
 };
-static const int kMaxRecordType = kLastType;
     
-      // Check that the file exists.
-  ASSERT_TRUE(env_->FileExists('/dir/f'));
-  ASSERT_OK(env_->GetFileSize('/dir/f', &file_size));
-  ASSERT_EQ(0, file_size);
-  ASSERT_OK(env_->GetChildren('/dir', &children));
-  ASSERT_EQ(1, children.size());
-  ASSERT_EQ('f', children[0]);
+      // Returns true iff the test part failed.
+  bool failed() const { return type_ != kSuccess; }
     
-    const int kNumKeys = 1100000;
+    #endif  // GTEST_HAS_DEATH_TEST
     
-    #include 'leveldb/env.h'
-#include 'port/port.h'
-#include 'table/block.h'
-#include 'util/coding.h'
-#include 'util/crc32c.h'
+      // Given directory = 'dir', relative_path = 'test.xml',
+  // returns 'dir/test.xml'.
+  // On Windows, uses \ as the separator rather than /.
+  static FilePath ConcatPaths(const FilePath& directory,
+                              const FilePath& relative_path);
     
-    #endif  // STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
-
+            begin$(j)_(other.begin$(j)_),
+        end$(j)_(other.end$(j)_),
+        current$(j)_(other.current$(j)_)
+]] {
+      ComputeCurrentValue();
+    }
     
-    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
-  size_t usize = user_key.size();
-  size_t needed = usize + 13;  // A conservative estimate
-  char* dst;
-  if (needed <= sizeof(space_)) {
-    dst = space_;
-  } else {
-    dst = new char[needed];
-  }
-  start_ = dst;
-  dst = EncodeVarint32(dst, usize + 8);
-  kstart_ = dst;
-  memcpy(dst, user_key.data(), usize);
-  dst += usize;
-  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
-  dst += 8;
-  end_ = dst;
-}
+     private:
+  const UserThreadFunc func_;  // User-supplied thread function.
+  const T param_;  // User-supplied parameter to the thread function.
+  // When non-NULL, used to block execution until the controller thread
+  // notifies.
+  Notification* const thread_can_start_;
+  bool finished_;  // true iff we know that the thread function has finished.
+  pthread_t thread_;  // The native thread object.
     
-      // Finish building the block and return a slice that refers to the
-  // block contents.  The returned slice will remain valid for the
-  // lifetime of this builder or until Reset() is called.
-  Slice Finish();
-    
-    
-    {
-    {} // namespace exception_tracer
-} // namespace folly
-
-    
-    class OrderingTest : public testing::Test {};
-    
-    template <typename T>
-void SingletonHolder<T>::createInstance() {
-  if (creating_thread_.load(std::memory_order_acquire) ==
-        std::this_thread::get_id()) {
-    detail::singletonWarnCreateCircularDependencyAndAbort(type());
+    // Returns n! (the factorial of n).  For negative n, n! is defined to be 1.
+int Factorial(int n) {
+  int result = 1;
+  for (int i = 1; i <= n; i++) {
+    result *= i;
   }
     }
     
-        std::lock_guard<std::mutex> lg(entry.mutex);
-    if (entry.state == State::Living) {
-      return;
+    	GetModuleFileName(NULL, exeDir, sizeof(exeDir));
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+        // Setup window
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_DisplayMode current;
+    SDL_GetCurrentDisplayMode(0, &current);
+    SDL_Window* window = SDL_CreateWindow('ImGui SDL2+OpenGL3 example', SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
+    SDL_GLContext gl_context = SDL_GL_CreateContext(window);
+    SDL_GL_SetSwapInterval(1); // Enable vsync
+    gl3wInit();
+    
+        // From SDL_ttf: Handy routines for converting from fixed point
+    #define FT_CEIL(X)  (((X + 63) & -64) / 64)
+    
+    #define DX12_ENABLE_DEBUG_LAYER     0
+    
+    static void SetupVulkan(const char** extensions, uint32_t extensions_count)
+{
+    VkResult err;
     }
     
-      // folly::Init() will automatically initialize the logging settings based on
-  // the FOLLY_INIT_LOGGING_CONFIG declaration above and the --logging command
-  // line flag.
-  auto init = folly::Init(&argc, &argv);
+    // Process Win32 mouse/keyboard inputs. 
+// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+// PS: In this Win32 handler, we use the capture API (GetCapture/SetCapture/ReleaseCapture) to be able to read mouse coordinations when dragging mouse outside of our window bounds.
+// PS: We treat DBLCLK messages as regular mouse down messages, so this code will work on windows classes that have the CS_DBLCLKS flag set. Our own example app code doesn't set this flag.
+IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    if (ImGui::GetCurrentContext() == NULL)
+        return 0;
+    }
     
-    std::string fbLogFatalCheck() {
-  folly::Logger logger('some.category');
-  FB_LOG(logger, FATAL) << 'we always crash';
-  // This function mostly exists to make sure the compiler does not warn
-  // about a missing return statement here.
+    void ImGui_ImplDX11_Shutdown()
+{
+    ImGui_ImplDX11_InvalidateDeviceObjects();
+    g_pd3dDevice = NULL;
+    g_pd3dDeviceContext = NULL;
 }
     
-    void SerialExecutor::add(Func func) {
-  {
-    std::lock_guard<std::mutex> lock(mutex_);
-    queue_.push(std::move(func));
-  }
-  parent_->add([keepAlive = getKeepAliveToken(this)] { keepAlive->run(); });
+    void ImGui_ImplFreeGLUT_SpecialUpFunc(int key, int x, int y)
+{
+    //printf('key_up_func %d\n', key);
+    ImGuiIO& io = ImGui::GetIO();
+    if (key + 256 < IM_ARRAYSIZE(io.KeysDown))
+        io.KeysDown[key + 256] = false;
+    ImGui_ImplFreeGLUT_UpdateKeyboardMods();
+    (void)x; (void)y; // Unused
 }
     
-      using UniquePtr = std::unique_ptr<SerialExecutor, Deleter>;
-  [[deprecated('Replaced by create')]]
-  static UniquePtr createUnique(
-      std::shared_ptr<Executor> parent = getCPUExecutor());
     
-    FOLLY_ALWAYS_INLINE int __builtin_clzll(unsigned long long x) {
-  unsigned long index;
-  return int(_BitScanReverse64(&index, x) ? 63 - index : 64);
-}
+    {    // Internal fields
+    rocksdb::Options options_;
+    rocksdb::Status status_;
+    rocksdb::DB* db_;
+    std::unordered_map<std::string, rocksdb::ColumnFamilyHandle*>
+        columnFamilies_;
+};
     
-      /**
-   * Class representing various options: file descriptor behavior, and
-   * whether to use $PATH for searching for the executable,
-   *
-   * By default, we don't use $PATH, file descriptors are closed if
-   * the close-on-exec flag is set (fcntl FD_CLOEXEC) and inherited
-   * otherwise.
-   */
-  class Options {
-    friend class Subprocess;
+      // Extend record types with the following special values
+  enum {
+    kEof = kMaxRecordType + 1,
+    // Returned whenever we find an invalid physical record.
+    // Currently there are three situations in which this happens:
+    // * The record has an invalid CRC (ReadPhysicalRecord reports a drop)
+    // * The record is a 0-length record (No drop is reported)
+    // * The record is below constructor's initial_offset (No drop is reported)
+    kBadRecord = kMaxRecordType + 2,
+    // Returned when we fail to read a valid header.
+    kBadHeader = kMaxRecordType + 3,
+    // Returned when we read an old record from a previous user of the log.
+    kOldRecord = kMaxRecordType + 4,
+    // Returned when we get a bad record length
+    kBadRecordLen = kMaxRecordType + 5,
+    // Returned when we get a bad record checksum
+    kBadRecordChecksum = kMaxRecordType + 6,
+  };
+    
+    #ifndef JAVA_ROCKSJNI_STATISTICSJNI_H_
+#define JAVA_ROCKSJNI_STATISTICSJNI_H_
+    
+      class LoggerJniCallback : public JniCallback, public Logger {
    public:
-    Options() {}  // E.g. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58328
+     LoggerJniCallback(JNIEnv* env, jobject jLogger);
+     ~LoggerJniCallback();
     }
-    
-    class ServiceBase {
-  public:
-    virtual ~ServiceBase() {}
-    void DependServices(const TServicesMap& _dependservices) { m_dependservices = _dependservices;}
-    const char* ServiceName() const { return m_servicename.c_str();}
-    }
-    
-    
-    {  private:
-//    int m_t;
-};
