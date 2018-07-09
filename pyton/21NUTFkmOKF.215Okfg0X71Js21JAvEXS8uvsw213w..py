@@ -1,102 +1,82 @@
 
         
-        ESTIMATORS = {
-    'dummy': DummyClassifier(),
-    'random_forest': RandomForestClassifier(n_estimators=100,
-                                            max_features='sqrt',
-                                            min_samples_split=10),
-    'extra_trees': ExtraTreesClassifier(n_estimators=100,
-                                        max_features='sqrt',
-                                        min_samples_split=10),
-    'logistic_regression': LogisticRegression(),
-    'naive_bayes': MultinomialNB(),
-    'adaboost': AdaBoostClassifier(n_estimators=10),
-}
+        import re
+import sys
     
-            start = datetime.now()
-        ols = linear_model.LinearRegression()
-        ols.fit(X, Y)
-        time_ols[i] = total_seconds(datetime.now() - start)
     
-        #------------------------------------------------------------
-    # varying D
-    D_results_build = dict([(alg, np.zeros(len(Drange)))
-                            for alg in algorithms])
-    D_results_query = dict([(alg, np.zeros(len(Drange)))
-                            for alg in algorithms])
+def test_config_from_object():
+    app = flask.Flask(__name__)
+    app.config.from_object(__name__)
+    common_object_test(app)
     
-        # TASK: Build a grid search to find out whether unigrams or bigrams are
-    # more useful.
-    # Fit the pipeline on the training set using grid search for the parameters
-    parameters = {
-        'vect__ngram_range': [(1, 1), (1, 2)],
-    }
-    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)
-    grid_search.fit(docs_train, y_train)
     
-    exercise_dir = os.path.dirname(__file__)
-if exercise_dir == '':
-    exercise_dir = '.'
+def test_explicit_instance_paths(modules_tmpdir):
+    with pytest.raises(ValueError) as excinfo:
+        flask.Flask(__name__, instance_path='instance')
+    assert 'must be absolute' in str(excinfo.value)
     
-    The dataset is generated using the ``make_biclusters`` function, which
-creates a matrix of small values and implants bicluster with large
-values. The rows and columns are then shuffled and passed to the
-Spectral Co-Clustering algorithm. Rearranging the shuffled matrix to
-make biclusters contiguous shows how accurately the algorithm found
-the biclusters.
+        flask.template_rendered.connect(record, app)
+    try:
+        client.get('/')
+        assert len(recorded) == 1
+        template, context = recorded[0]
+        assert template.name == 'simple_template.html'
+        assert context['whiskey'] == 42
+    finally:
+        flask.template_rendered.disconnect(record, app)
     
-    Demonstrates the effect of different metrics on the hierarchical clustering.
     
-        classifiers = proj_info['classifiers'],
+def test_follow_all_output_options_used_for_redirects(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 3
+    assert HTTP_OK not in r
     
-    # TBD
-def main_dev(**kwargs):
-    '''Main entry point.
-    you-get-dev
+            Return a ``requests.auth.AuthBase`` subclass instance.
+    
+        '''
+)
+output_processing.add_argument(
+    '--style', '-s',
+    dest='style',
+    metavar='STYLE',
+    default=DEFAULT_STYLE,
+    choices=AVAILABLE_STYLES,
+    help='''
+    Output coloring style (default is '{default}'). One of:
+    
+        def test_verify_custom_ca_bundle_path(
+            self, httpbin_secure_untrusted):
+        r = http(httpbin_secure_untrusted + '/get', '--verify', CA_BUNDLE)
+        assert HTTP_OK in r
+    
+        def __call__(self, string):
+        '''Parse `string` and return `self.key_value_class()` instance.
+    
+        .. versionchanged: 4.5
+       `URLSpec` is now a subclass of a `Rule` with `PathMatches` matcher and is preserved for
+       backwards compatibility.
     '''
+    def __init__(self, pattern, handler, kwargs=None, name=None):
+        '''Parameters:
     
-    __all__ = ['cbs_download']
+                # Now the semaphore has been released.
+            print('Worker %d is done' % worker_id)
     
-    def kugou_download_playlist(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    html=get_html(url)
-    pattern=re.compile('title='(.*?)'.* data='(\w*)\|.*?'')
-    pairs=pattern.findall(html)
-    for title,hash_val in pairs:
-        kugou_download_by_hash(title,hash_val,output_dir,merge,info_only)
+        def on_close(self):
+        self.close_future.set_result((self.close_code, self.close_reason))
     
-    #----------------------------------------------------------------------
-def sina_xml_to_url_list(xml_data):
-    '''str->list
-    Convert XML to URL List.
-    From Biligrab.
-    '''
-    rawurl = []
-    dom = parseString(xml_data)
-    for node in dom.getElementsByTagName('durl'):
-        url = node.getElementsByTagName('url')[0]
-        rawurl.append(url.childNodes[0].data)
-    return rawurl
-    
-            result_item = result_queue.get(block=True)
-        if result_item is not None:
-            work_item = pending_work_items[result_item.work_id]
-            del pending_work_items[result_item.work_id]
-    
-    # If true, an OpenSearch description file will be output, and all pages will
-# contain a <link> tag referring to it.  The value of this option must be the
-# base URL from which the finished HTML is served.
-#html_use_opensearch = ''
-    
-    from ycm.client.debug_info_request import FormatDebugInfoResponse
-    
-    
-def SendEventNotificationAsync( event_name,
-                                buffer_number = None,
-                                extra_data = None ):
-  event = EventNotification( event_name, buffer_number, extra_data )
-  event.Start()
-
-    
-    
-  def PopulateLocationList( self ):
-    return self._diag_interface.PopulateLocationList()
+        @gen_test
+    def test_write_memoryview(self):
+        rs, ws = yield self.make_iostream_pair()
+        try:
+            fut = rs.read_bytes(4)
+            ws.write(memoryview(b'hello'))
+            data = yield fut
+            self.assertEqual(data, b'hell')
+        finally:
+            ws.close()
+            rs.close()
