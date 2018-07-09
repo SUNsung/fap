@@ -1,80 +1,115 @@
 
         
-        void leveldb_repair_db(
-    const leveldb_options_t* options,
-    const char* name,
-    char** errptr) {
-  SaveError(errptr, RepairDB(name, options->rep));
-}
+        #ifndef TESSERACT_CCMAIN_PAGEITERATOR_H_
+#define TESSERACT_CCMAIN_PAGEITERATOR_H_
     
-    // Append the serialization of 'key' to *result.
-extern void AppendInternalKey(std::string* result,
-                              const ParsedInternalKey& key);
+    const char *kUTF8LineSeparator = '\u2028';  // '\xe2\x80\xa8';
+const char *kUTF8ParagraphSeparator = '\u2029';  // '\xe2\x80\xa9';
+const char *kLRM = '\u200E';  // Left-to-Right Mark
+const char *kRLM = '\u200F';  // Right-to-Left Mark
+const char *kRLE = '\u202A';  // Right-to-Left Embedding
+const char *kPDF = '\u202C';  // Pop Directional Formatting
     
-    namespace leveldb {
+    namespace tesseract {
     }
     
-    // Tag numbers for serialized VersionEdit.  These numbers are written to
-// disk and should not be changed.
-enum Tag {
-  kComparator           = 1,
-  kLogNumber            = 2,
-  kNextFileNumber       = 3,
-  kLastSequence         = 4,
-  kCompactPointer       = 5,
-  kDeletedFile          = 6,
-  kNewFile              = 7,
-  // 8 was used for large value refs
-  kPrevLogNumber        = 9
-};
+     private:
+  // Displays the blob and block bounding boxes in a window called Blocks.
+  void DisplayBlocks(BLOCK_LIST* blocks);
+  // Displays the column edges at each grid y coordinate defined by
+  // best_columns_.
+  void DisplayColumnBounds(PartSetVector* sets);
     
+    #pragma once
     
-    {  edit.SetComparatorName('foo');
-  edit.SetLogNumber(kBig + 100);
-  edit.SetNextFile(kBig + 200);
-  edit.SetLastSequence(kBig + 1000);
-  TestEncodeDecode(edit);
+      mPlatformType = PlatformType::TYPE_OSX | PlatformType::TYPE_POSIX;
+  EXPECT_TRUE(isPlatform(PlatformType::TYPE_POSIX, mPlatformType));
+  EXPECT_TRUE(isPlatform(PlatformType::TYPE_OSX, mPlatformType));
+    
+      auto file_path = kTestWorkingDirectory + 'permissions-file2';
+    
+    #ifdef WIN32
+TEST_F(ProcessTests, test_constructorWin) {
+  HANDLE handle =
+      ::OpenProcess(PROCESS_ALL_ACCESS, FALSE, ::GetCurrentProcessId());
+  EXPECT_NE(handle, reinterpret_cast<HANDLE>(nullptr));
+    }
+    
+    TEST_F(TablesTests, test_constraint_matching) {
+  struct ConstraintList cl;
+  // An empty constraint list has expectations.
+  EXPECT_FALSE(cl.exists());
+  EXPECT_FALSE(cl.exists(GREATER_THAN));
+  EXPECT_TRUE(cl.notExistsOrMatches('some'));
+    }
+    
+    Status WmiResultItem::GetBool(const std::string& name, bool& ret) const {
+  std::wstring property_name = stringToWstring(name);
+  VARIANT value;
+  HRESULT hr = result_->Get(property_name.c_str(), 0, &value, nullptr, nullptr);
+    }
+    
+    #pragma once
+    
+    /// This is a dispatched service that handles published audit replies.
+class OpenBSMConsumerRunner;
+    
+      // Assume the kernel extension is loaded, initialize the queue.
+  // This will open the extension descriptor and synchronize queue data.
+  // If any other daemons or osquery processes are using the queue this fails.
+  try {
+    WriteLock lock(mutex_);
+    queue_ = new CQueue(kKernelDevice, kKernelQueueSize);
+  } catch (const CQueueException &e) {
+    queue_ = nullptr;
+    return Status(1, e.what());
+  }
+    
+      ASSERT_TRUE(status.ok());
+  // Note: the time-parsing was removed to allow events to auto-assign.
+  ASSERT_EQ(0U, ec->time);
+  ASSERT_EQ('2016-03-22T21:17:01.701882+00:00', ec->fields.at('datetime'));
+  ASSERT_EQ('vagrant-ubuntu-trusty-64', ec->fields.at('host'));
+  ASSERT_EQ('6', ec->fields.at('severity'));
+  ASSERT_EQ('cron', ec->fields.at('facility'));
+  ASSERT_EQ('CRON[16538]', ec->fields.at('tag'));
+  ASSERT_EQ('(root) CMD (   cd / && run-parts --report /etc/cron.hourly)',
+            ec->fields.at('message'));
+    
+      // Specify the amount of iterations that should be run by this benchmark.
+  // REQUIRES: 'n > 0' and `MinTime` has not been called on this benchmark.
+  //
+  // NOTE: This function should only be used when *exact* iteration control is
+  //   needed and never to control or limit how long a benchmark runs, where
+  // `--benchmark_min_time=N` or `MinTime(...)` should be used instead.
+  Benchmark* Iterations(size_t n);
+    
+    Benchmark* Benchmark::Unit(TimeUnit unit) {
+  time_unit_ = unit;
+  return this;
 }
     
-    TEST(FindFileTest, Empty) {
-  ASSERT_EQ(0, Find('foo'));
-  ASSERT_TRUE(! Overlaps('a', 'z'));
-  ASSERT_TRUE(! Overlaps(NULL, 'z'));
-  ASSERT_TRUE(! Overlaps('a', NULL));
-  ASSERT_TRUE(! Overlaps(NULL, NULL));
+    namespace benchmark {
+// Parses 'str' for a 32-bit signed integer.  If successful, writes the result
+// to *value and returns true; otherwise leaves *value unchanged and returns
+// false.
+bool ParseInt32(const std::string& src_text, const char* str, int32_t* value);
+    }
+    
+    #include 'benchmark/benchmark.h'
+#include 'complexity.h'
+#include 'counter.h'
+    
+    double StatisticsMedian(const std::vector<double>& v) {
+  if (v.size() < 3) return StatisticsMean(v);
+  std::vector<double> partial;
+  // we need roundDown(count/2)+1 slots
+  partial.resize(1 + (v.size() / 2));
+  std::partial_sort_copy(v.begin(), v.end(), partial.begin(), partial.end());
+  // did we have odd number of samples?
+  // if yes, then the last element of partially-sorted vector is the median
+  // it no, then the average of the last two elements is the median
+  if(v.size() % 2 == 1)
+    return partial.back();
+  return (partial[partial.size() - 2] + partial[partial.size() - 1]) / 2.0;
 }
-    
-    #endif  // STORAGE_LEVELDB_INCLUDE_DUMPFILE_H_
-
-    
-    // Return a new filter policy that uses a bloom filter with approximately
-// the specified number of bits per key.  A good value for bits_per_key
-// is 10, which yields a filter with ~ 1% false positive rate.
-//
-// Callers must delete the result after any database that is using the
-// result has been closed.
-//
-// Note: if you are using a custom comparator that ignores some parts
-// of the keys being compared, you must not use NewBloomFilterPolicy()
-// and must provide your own FilterPolicy that also ignores the
-// corresponding parts of the keys.  For example, if the comparator
-// ignores trailing spaces, it would be incorrect to use a
-// FilterPolicy (like NewBloomFilterPolicy) that does not ignore
-// trailing spaces in keys.
-extern const FilterPolicy* NewBloomFilterPolicy(int bits_per_key);
-    
-    #ifdef ANDROID
-#include 'comm/android/callstack.h'
-#endif
-    
-    
-    {    SPY_DETACH_VARIABLE('TestFun0 i');
-}
-    
-    
-/*
- * ScopedJstring.h
- *
- *  Created on: 2014-8-27
- *      Author: yanguoyue
- */
