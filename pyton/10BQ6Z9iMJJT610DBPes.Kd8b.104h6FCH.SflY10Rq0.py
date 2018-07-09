@@ -1,185 +1,169 @@
 
         
-        entries = []
-for v in versions:
-    fields = v.split('.')
-    year, month, day = map(int, fields[:3])
-    faked = 0
-    patchlevel = 0
-    while True:
-        try:
-            datetime.date(year, month, day)
-        except ValueError:
-            day -= 1
-            faked += 1
-            assert day > 0
-            continue
-        break
-    if len(fields) >= 4:
-        try:
-            patchlevel = int(fields[3])
-        except ValueError:
-            patchlevel = 1
-    timestamp = '%04d-%02d-%02dT00:%02d:%02dZ' % (year, month, day, faked, patchlevel)
+        
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
     
-    header = oldreadme[:oldreadme.index('# OPTIONS')]
-footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
+            Number:                    '#990000',        # class: 'm'
     
-            self.port = random.randint(20000, 30000)
-        self.server_process = subprocess.Popen([
-            'srelay', '-f', '-i', '127.0.0.1:%d' % self.port],
-            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    Available hooks:
     
-                    fn = os.path.join(dirpath, basename)
-                with io.open(fn, encoding='utf-8') as inf:
-                    code = inf.read()
-    
-            retval = subprocess.call(args)
-        if retval == 0:
-            fsize = os.path.getsize(encodeFilename(tmpfilename))
-            self.to_screen('\r[%s] %s bytes' % (args[0], fsize))
-            self.try_rename(tmpfilename, filename)
-            self._hook_progress({
-                'downloaded_bytes': fsize,
-                'total_bytes': fsize,
-                'filename': filename,
-                'status': 'finished',
-            })
-            return True
-        else:
-            self.to_stderr('\n')
-            self.report_error('%s exited with code %d' % (args[0], retval))
-            return False
+            return self.build_response(request, resp)
 
     
-    from .common import InfoExtractor
-from ..utils import (
-    parse_duration,
-    int_or_none,
-)
+            r = requests.get(url)
+        assert r.status_code == 401
     
-        def test_contains(self):
-        n = 200
+        close_server = threading.Event()
+    server = Server(digest_response_handler, wait_to_close_event=close_server)
     
+    # The name of an image file (within the static path) to use as favicon of the
+# docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
+# pixels large.
+#html_favicon = None
     
-print('\n# ======================================================================')
-print('#                   Calculating pi, 10000 iterations')
-print('# ======================================================================\n')
+            return 'Digest %s' % (base)
     
-    int main( int argc, char **argv)
-{
-    PyImport_FrozenModules = _PyImport_FrozenModules;
-    return PythonService_main(argc, argv);
-}
-'''
+        def __len__(self):
+        return len(self._store)
     
-        def nearest(self, red, green, blue):
-        '''Return the name of color nearest (red, green, blue)'''
-        # BAW: should we use Voronoi diagrams, Delaunay triangulation, or
-        # octree for speeding up the locating of nearest point?  Exhaustive
-        # search is inefficient, but seems fast enough.
-        nearest = -1
-        nearest_name = ''
-        for name, aliases in self.__byrgb.values():
-            r, g, b = self.__byname[name.lower()]
-            rdelta = red - r
-            gdelta = green - g
-            bdelta = blue - b
-            distance = rdelta * rdelta + gdelta * gdelta + bdelta * bdelta
-            if nearest == -1 or distance < nearest:
-                nearest = distance
-                nearest_name = name
-        return nearest_name
+    # Set default logging handler to avoid 'No handler found' warnings.
+import logging
+try:  # Python 2.7+
+    from logging import NullHandler
+except ImportError:
+    class NullHandler(logging.Handler):
+        def emit(self, record):
+            pass
     
     
-class MultiPathXMLRPCServer(SimpleXMLRPCServer):
-    '''Multipath XML-RPC Server
-    This specialization of SimpleXMLRPCServer allows the user to create
-    multiple Dispatcher instances and assign them to different
-    HTTP request paths.  This makes it possible to run two or more
-    'virtual XML-RPC servers' at the same port.
-    Make sure that the requestHandler accepts the paths in question.
+class sockaddr(ctypes.Structure):
+    _fields_ = [('sa_family', ctypes.c_short),
+                ('__pad1', ctypes.c_ushort),
+                ('ipv4_addr', ctypes.c_byte * 4),
+                ('ipv6_addr', ctypes.c_byte * 16),
+                ('__pad2', ctypes.c_ulong)]
+    
+        if version_str == 'HEAD':
+        return (sys.maxint, sys.maxint, sys.maxint, sys.maxint)
+    
+        @classmethod
+    def setUpClass(self):
+        '''
+        - Create a temporary directory and file
+        /test_command
+           /foo.txt
+        - get the temporary test directory
+        - and initializes the command stack.
+        '''
+        os.mkdir('tests/test_command')
+        open('tests/test_command/foo.txt', 'w').close()
+        self.__get_test_directory()
+        self.command_stack = []
+        self.command_stack.append(MoveFileCommand(os.path.join(
+            self.test_dir, 'foo.txt'), os.path.join(self.test_dir, 'bar.txt')))
+        self.command_stack.append(MoveFileCommand(os.path.join(
+            self.test_dir, 'bar.txt'), os.path.join(self.test_dir, 'baz.txt')))
+    
+        def do_action(self):
+        print(self.name, self.action.name, end=' ')
+        return self.action
+    
+    
+class Publisher:
+    
+        class ClassRegistree(BaseRegisteredClass):
+    
+    Test code which will almost always fail (if not exactly 12:01) when untestable
+production code (production code time provider is datetime) is used:
+    
     '''
-    def __init__(self, addr, requestHandler=SimpleXMLRPCRequestHandler,
-                 logRequests=True, allow_none=False, encoding=None,
-                 bind_and_activate=True, use_builtin_types=False):
+Port of the Java example of 'Parameter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
     
-        def user_call(self, frame, argument_list):
-        # Adopt the same behavior as pdb and, as a side effect, skip also the
-        # first 'call' event when the Tracer is started with Tracer.runcall()
-        # which may be possibly considered as a bug.
-        if not self.stop_here(frame):
-            return
-        self.process_event('call', frame, argument_list)
-        self.next_set_method()
+        def main_method(self):
+        '''will execute either _instance_method_1 or _instance_method_2
     
-    from idlelib.config import idleConf
-from idlelib.delegator import Delegator
-    
-    # dataclass_module_1.py and dataclass_module_1_str.py are identical
-# except only the latter uses string annotations.
-    
-    @dataclass
-class CV:
-    T_CV4 = ClassVar
-    cv0: ClassVar[int] = 20
-    cv1: ClassVar = 30
-    cv2: T_CV2
-    cv3: T_CV3
-    not_cv4: T_CV4  # When using string annotations, this field is not recognized as a ClassVar.
-    
-            self.assertEqual(set([CANCELLED_AND_NOTIFIED_FUTURE,
-                              EXCEPTION_FUTURE,
-                              SUCCESSFUL_FUTURE]),
-                         completed_futures)
+        def report(self):
+        print('Reporting the results of Test')
+        time.sleep(0.1)
     
     
-  def _HandleDetailedInfoResponse( self ):
-    vimsupport.WriteToPreviewWindow( self._response[ 'detailed_info' ] )
+# Example usage...
+def main():
+    data1 = Data('Data 1')
+    data2 = Data('Data 2')
+    view1 = DecimalViewer()
+    view2 = HexViewer()
+    data1.attach(view1)
+    data1.attach(view2)
+    data2.attach(view2)
+    data2.attach(view1)
     
+        def toggle_amfm(self):
+        print(u'Switching to AM')
+        self.radio.state = self.radio.amstate
     
-def SendEventNotificationAsync( event_name,
-                                buffer_number = None,
-                                extra_data = None ):
-  event = EventNotification( event_name, buffer_number, extra_data )
-  event.Start()
-
+        def _find_groups(self):
+        '''Returns a tuple (reverse string, group count) for a url.
     
+            # Go through an async wrapper to ensure that the result of
+        # run_in_executor works with await and not just gen.coroutine
+        # (simply passing the underlying concurrrent future would do that).
+        namespace = exec_test(globals(), locals(), '''
+            async def async_wrapper(self_event, other_event):
+                return await IOLoop.current().run_in_executor(
+                    None, sync_func, self_event, other_event)
+        ''')
     
-  def Poll( self, diagnostics_handler ):
-    '''This should be called regularly to check for new messages in this buffer.
-    Returns True if Poll should be called again in a while. Returns False when
-    the completer or server indicated that further polling should not be done
-    for the requested file.'''
+        Releasing an unlocked lock raises `RuntimeError`.
     
-    ATTR_URL = 'url'
-ATTR_URL_DEFAULT = 'https://www.google.com'
+            .. versionadded:: 3.2
     
+            application = web.Application([
+            (r'/static/(.*)', web.StaticFileHandler, {'path': '/var/www'}),
+        ])
     
-def run(args):
-    '''Handle ensure config commandline script.'''
-    parser = argparse.ArgumentParser(
-        description=('Ensure a Home Assistant config exists, '
-                     'creates one if necessary.'))
-    parser.add_argument(
-        '-c', '--config',
-        metavar='path_to_config_dir',
-        default=config_util.get_default_config_dir(),
-        help='Directory that contains the Home Assistant configuration')
-    parser.add_argument(
-        '--script',
-        choices=['ensure_config'])
+        @unittest.skipIf(os.name == 'nt', 'flaky on windows')
+    def test_large_body_buffered_chunked(self):
+        # This test is flaky on windows for unknown reasons.
+        with ExpectLog(gen_log, '.*chunked body too large'):
+            response = self.fetch('/buffered', method='PUT',
+                                  body_producer=lambda write: write(b'a' * 10240))
+        self.assertEqual(response.code, 400)
     
-        @patch('{}._get_homehub_data'.format(patch_file), new=_get_homehub_data)
-    def test_config_minimal(self):
-        '''Test the setup with minimal configuration.'''
+            # Silence 'RuntimeWarning: coroutine 'test_coro' was never awaited'.
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore')
+            test.run(result)
+    
+    .. note::
+    
+            class Delegate(HTTPMessageDelegate):
+            def headers_received(self, start_line, headers):
+                test.code = start_line.code
+    
+        def test_setup_config_defaults(self):
+        '''Test setup with defaults.'''
         config = {
-            'device_tracker': {
-                CONF_HOST: 'foo'
+            'splunk': {
+                'host': 'host',
+                'token': 'secret',
             }
         }
-        result = bt_home_hub_5.get_scanner(None, config)
     
-        def tearDown(self):  # pylint: disable=invalid-name
-        '''Clean up.'''
-        self.session.rollback()
+    VALID_UNITS = [
+    LENGTH_KILOMETERS,
+    LENGTH_MILES,
+    LENGTH_FEET,
+    LENGTH_METERS,
+]
+    
+            before_run = datetime(2016, 7, 9, 8, 0, 0, tzinfo=dt.UTC)
+        in_run = datetime(2016, 7, 9, 13, 0, 0, tzinfo=dt.UTC)
+        in_run2 = datetime(2016, 7, 9, 15, 0, 0, tzinfo=dt.UTC)
+        in_run3 = datetime(2016, 7, 9, 18, 0, 0, tzinfo=dt.UTC)
+        after_run = datetime(2016, 7, 9, 23, 30, 0, tzinfo=dt.UTC)
