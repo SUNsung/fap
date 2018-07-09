@@ -1,191 +1,94 @@
 
         
-        void RegisterShellMenu(std::wstring opt, wchar_t* keyBaseName)
-{
-	// First, get the paths we will use
-    }
-    
-      /// Accept a new connection and obtain the endpoint of the peer
-  /**
-   * This function is used to accept a new connection from a peer into the
-   * given socket, and additionally provide the endpoint of the remote peer.
-   * The function call will block until a new connection has been accepted
-   * successfully or an error occurs.
-   *
-   * @param peer The socket into which the new connection will be accepted.
-   *
-   * @param peer_endpoint An endpoint object which will receive the endpoint of
-   * the remote peer.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   *
-   * @par Example
-   * @code
-   * boost::asio::ip::tcp::acceptor acceptor(io_service);
-   * ...
-   * boost::asio::ip::tcp::socket socket(io_service);
-   * boost::asio::ip::tcp::endpoint endpoint;
-   * acceptor.accept(socket, endpoint);
-   * @endcode
-   */
-  template <typename SocketService>
-  void accept(basic_socket<protocol_type, SocketService>& peer,
-      endpoint_type& peer_endpoint)
-  {
-    boost::system::error_code ec;
-    this->get_service().accept(this->get_implementation(),
-        peer, &peer_endpoint, ec);
-    boost::asio::detail::throw_error(ec, 'accept');
-  }
-    
-      const boost::asio::detail::function<void()>& get_debug_check() const
-  {
-    return debug_check_;
-  }
-#endif // BOOST_ASIO_ENABLE_BUFFER_DEBUGGING
-    
-    
-    {    return init.result.get();
-  }
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    namespace boost {
-namespace date_time {
-    }
-    }
-    
-    #endif // BOOST_ASIO_DETAIL_DESCRIPTOR_WRITE_OP_HPP
-
-    
-      // Constructor for a full fenced block.
-  explicit gcc_arm_fenced_block(full_t)
-  {
-    barrier();
-  }
-    
-    #define BOOST_ASIO_DEFINE_HANDLER_PTR(op) \
-  struct ptr \
-  { \
-    Handler* h; \
-    void* v; \
-    op* p; \
-    ~ptr() \
-    { \
-      reset(); \
-    } \
-    void reset() \
-    { \
-      if (p) \
-      { \
-        p->~op(); \
-        p = 0; \
-      } \
-      if (v) \
-      { \
-        boost_asio_handler_alloc_helpers::deallocate(v, sizeof(op), *h); \
-        v = 0; \
-      } \
-    } \
-  } \
-  /**/
-    
-    #ifndef BOOST_ASIO_DETAIL_HANDLER_INVOKE_HELPERS_HPP
-#define BOOST_ASIO_DETAIL_HANDLER_INVOKE_HELPERS_HPP
-    
-      // Constructor.
-  hash_map()
-    : size_(0),
-      buckets_(0),
-      num_buckets_(0)
-  {
-  }
-    
-    #ifndef BOOST_ASIO_DETAIL_IMPL_EPOLL_REACTOR_HPP
-#define BOOST_ASIO_DETAIL_IMPL_EPOLL_REACTOR_HPP
-    
-    extern JSClass  *jsb_cocostudio_timeline_ActionTimeline_class;
-extern JSObject *jsb_cocostudio_timeline_ActionTimeline_prototype;
-    
-    
-    {        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, 'cc.SimpleAudioEngine:unloadEffect'); arg0 = arg0_tmp.c_str();
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_unloadEffect'', nullptr);
-            return 0;
-        }
-        cobj->unloadEffect(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:unloadEffect',argc, 1);
-    return 0;
-    
-    #endif // __cocos2dx_cocosdenshion_h__
-
-    
-    
-    
-    
-    
-    int register_all_cocos2dx_navmesh(lua_State* tolua_S);
-    
-    
-    
-        virtual void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color);
-    
-    struct Value
-{
-    static Value fromYGValue(YGValue const & ygValue)
-    {
-        return Value(static_cast<int>(ygValue.unit), ygValue.value);
-    }
-    }
-    
-    bool Config::isExperimentalFeatureEnabled(int feature) const
-{
-    return YGConfigIsExperimentalFeatureEnabled(m_config, static_cast<YGExperimentalFeature>(feature));
-}
-
-    
-    void Node::setMeasureFunc(nbind::cbFunction & measureFunc)
-{
-    m_measureFunc.reset(new nbind::cbFunction(measureFunc));
-    }
-    
-    template<typename... ARGS>
-inline void log(int level, const char* tag, const char* msg, ARGS... args) noexcept {
-  __android_log_print(level, tag, msg, args...);
-}
-    
-      /**
-   * This runs the closure in a scope with fbjni's classloader. This should be
-   * the same classloader as the rest of the application and thus anything
-   * running in the closure will have access to the same classes as in a normal
-   * java-create thread.
-   */
-  static void WithClassLoader(std::function<void()>&& runnable);
-    
-      bool operator==(const ProgramLocation& other) const {
-    // Assumes that the strings are static
-    return (m_functionName == other.m_functionName) && (m_fileName == other.m_fileName) && m_lineNumber == other.m_lineNumber;
-  }
-    
-    
+        
     { private:
-  Function* func_;
+  struct pair_sort_first {
+    bool operator()(const std::pair<int, int> &left,
+                    const std::pair<int, int> &right) {
+      return left.first < right.first;
+    }
+  };
+  void check_batch_reindex(int initial_num, int final_num,
+                           const Dtype* ridx_data);
 };
     
-    #endif  // BENCHMARK_API_INTERNAL_H
-
+      virtual inline const char* type() const { return 'BNLL'; }
     
-    #endif  // BENCHMARK_RE_H_
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    DIR128::DIR128(                 //from fcoord
+               const FCOORD fc  //vector to quantize
+              ) {
+  int high, low, current;        //binary search
+    }
+    
+    template <bool del, class R, class P1, class A1, class A2>
+class _TessFunctionResultCallback_1_2 : public TessResultCallback2<R,A1,A2> {
+ public:
+  typedef TessResultCallback2<R,A1,A2> base;
+  typedef R (*FunctionSignature)(P1,A1,A2);
+    }
+    
+     protected:
+  // Converters to generate indices for individual feature dimensions.
+  int XBucket(int x) const {
+    int bucket = x * x_buckets_ / kIntFeatureExtent;
+    return ClipToRange(bucket, 0, static_cast<int>(x_buckets_) - 1);
+  }
+  int YBucket(int y) const {
+    int bucket = y * y_buckets_ / kIntFeatureExtent;
+    return ClipToRange(bucket, 0, static_cast<int>(y_buckets_) - 1);
+  }
+  // Use DivRounded for theta so that exactly vertical and horizontal are in
+  // the middle of a bucket. The Modulo takes care of the wrap-around.
+  int ThetaBucket(int theta) const {
+    int bucket = DivRounded(theta * theta_buckets_, kIntFeatureExtent);
+    return Modulo(bucket, theta_buckets_);
+  }
+  // Returns an INT_FEATURE_STRUCT corresponding to the given buckets.
+  INT_FEATURE_STRUCT PositionFromBuckets(int x, int y, int theta) const;
+    
+      // Displays the labels and cuts at the corresponding xcoords.
+  // Size of labels should match xcoords.
+  void DisplayLSTMOutput(const GenericVector<int>& labels,
+                         const GenericVector<int>& xcoords,
+                         int height, ScrollView* window);
+    
+      // Performs forward-backward on the given trainingdata.
+  // Returns the sample that was used or nullptr if the next sample was deemed
+  // unusable. samples_trainer could be this or an alternative trainer that
+  // holds the training samples.
+  const ImageData* TrainOnLine(LSTMTrainer* samples_trainer, bool batch) {
+    int sample_index = sample_iteration();
+    const ImageData* image =
+        samples_trainer->training_data_.GetPageBySerial(sample_index);
+    if (image != nullptr) {
+      Trainability trainable = TrainOnLine(image, batch);
+      if (trainable == UNENCODABLE || trainable == NOT_BOXED) {
+        return nullptr;  // Sample was unusable.
+      }
+    } else {
+      ++sample_iteration_;
+    }
+    return image;
+  }
+  Trainability TrainOnLine(const ImageData* trainingdata, bool batch);
+    
+    CCNonTextDetect::CCNonTextDetect(int gridsize,
+                             const ICOORD& bleft, const ICOORD& tright)
+  : BlobGrid(gridsize, bleft, tright),
+    max_noise_count_(static_cast<int>(kMaxSmallNeighboursPerPix *
+                                      gridsize * gridsize)),
+    noise_density_(nullptr) {
+  // TODO(rays) break max_noise_count_ out into an area-proportional
+  // value, as now plus an additive constant for the number of text blobs
+  // in the 3x3 neighbourhood - maybe 9.
+}
