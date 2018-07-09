@@ -1,75 +1,108 @@
 
         
-            # Get the version from youtube_dl/version.py without importing the package
-    exec(compile(open('youtube_dl/version.py').read(),
-                 'youtube_dl/version.py', 'exec'))
-    
-        def test_secondary_proxy_https(self):
-        params = self._check_params(['secondary_proxy', 'secondary_server_ip'])
-        if params is None:
-            return
-        ydl = FakeYDL()
-        req = compat_urllib_request.Request('https://yt-dl.org/ip')
-        req.add_header('Ytdl-request-proxy', params['secondary_proxy'])
-        self.assertEqual(
-            ydl.urlopen(req).read().decode('utf-8'),
-            params['secondary_server_ip'])
-    
-        _CONFIG = {
-        # http://edition.cnn.com/.element/apps/cvp/3.0/cfg/spider/cnn/expansion/config.xml
-        'edition': {
-            'data_src': 'http://edition.cnn.com/video/data/3.0/video/%s/index.xml',
-            'media_src': 'http://pmd.cdn.turner.com/cnn/big',
-        },
-        # http://money.cnn.com/.element/apps/cvp2/cfg/config.xml
-        'money': {
-            'data_src': 'http://money.cnn.com/video/data/4.0/video/%s.xml',
-            'media_src': 'http://ht3.cdn.turner.com/money/big',
-        },
-    }
-    
-            def __call__(self, hidden_dims):
-            return build_fn_clf(hidden_dims)
-    
-            layer = layer_class(units, return_sequences=False,
-                            input_shape=(timesteps, input_size),
-                            activity_regularizer='l2')
-        assert layer.activity_regularizer
-        x = keras.backend.variable(np.ones((num_samples,
-                                            timesteps,
-                                            input_size)))
-        layer(x)
-        assert len(layer.get_losses_for(x)) == 1
-    
-        reconstruction_loss *= image_size * image_size
-    kl_loss = 1 + z_log_var - K.square(z_mean) - K.exp(z_log_var)
-    kl_loss = K.sum(kl_loss, axis=-1)
-    kl_loss *= -0.5
-    vae_loss = K.mean(reconstruction_loss + kl_loss)
-    vae.add_loss(vae_loss)
-    vae.compile(optimizer='rmsprop')
-    vae.summary()
-    plot_model(vae, to_file='vae_cnn.png', show_shapes=True)
+        import youtube_dl.extractor
+from youtube_dl import YoutubeDL
+from youtube_dl.compat import (
+    compat_os_name,
+    compat_str,
+)
+from youtube_dl.utils import (
+    preferredencoding,
+    write_string,
+)
     
     
-def test_relu():
-    x = K.placeholder(ndim=2)
-    f = K.function([x], [activations.relu(x)])
+class TestAgeRestriction(unittest.TestCase):
+    def _assert_restricted(self, url, filename, age, old_age=None):
+        self.assertTrue(_download_restricted(url, filename, old_age))
+        self.assertFalse(_download_restricted(url, filename, age))
     
-    # we add a Convolution1D, which will learn filters
-# word group filters of size filter_length:
-model.add(Conv1D(filters,
-                 kernel_size,
-                 padding='valid',
-                 activation='relu',
-                 strides=1))
-# we use max pooling:
-model.add(GlobalMaxPooling1D())
     
-    ATTR_ENERGY_GENERATION = 'energy_generation'
-ATTR_POWER_GENERATION = 'power_generation'
-ATTR_ENERGY_CONSUMPTION = 'energy_consumption'
-ATTR_POWER_CONSUMPTION = 'power_consumption'
-ATTR_EFFICIENCY = 'efficiency'
+class AnitubeIE(NuevoBaseIE):
+    IE_NAME = 'anitube.se'
+    _VALID_URL = r'https?://(?:www\.)?anitube\.se/video/(?P<id>\d+)'
     
-    patch_file = 'homeassistant.components.device_tracker.bt_home_hub_5'
+        def to_json(self, value):
+        return b64encode(value).decode('ascii')
+    
+        s = TaggedJSONSerializer()
+    pytest.raises(KeyError, s.register, TagDict)
+    s.register(TagDict, force=True, index=0)
+    assert isinstance(s.tags[' d'], TagDict)
+    assert isinstance(s.order[0], TagDict)
+    
+    
+def test_send_file_max_age():
+    app = flask.Flask(__name__)
+    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 3600
+    assert app.send_file_max_age_default.seconds == 3600
+    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(hours=2)
+    assert app.send_file_max_age_default.seconds == 7200
+    
+    
+if __name__ == '__main__':
+    RemoveDuplicateUrls.run()
+
+    
+        def remove_link_to_crawl(self, url):
+        '''Remove the given link from `links_to_crawl`.'''
+        pass
+    
+            (foo, 2), p1
+        (bar, 3), p1
+        (foo, 3), p2
+        (bar, 10), p3
+        (foo, 1), p4
+    
+            (2016-01, shopping), 25
+        (2016-01, shopping), 100
+        (2016-01, gas), 50
+        '''
+        timestamp, category, amount = line.split('\t')
+        period = self. extract_year_month(timestamp)
+        if period == self.current_year_month():
+            yield (period, category), amount
+    
+            # end paren
+        test = '''
+            one'test';
+            ('two');
+            'test')red;
+            'test')'blue';
+            'test')'three;
+            (one'test')one;
+            one';
+            one'test;
+            one'test'one;
+        '''
+        parsed = loads(test)
+        self.assertEqual(parsed, [
+            ['one'test''],
+            ['('two')'],
+            [''test')red'],
+            [''test')'blue''],
+            [''test')'three'],
+            ['(one'test')one'],
+            ['one''],
+            ['one'test'],
+            ['one'test'one']
+        ])
+        self.assertRaises(ParseException, loads, r''test'one;') # fails
+        self.assertRaises(ParseException, loads, r''test;') # fails
+    
+    # http://docs.readthedocs.org/en/latest/theme.html#how-do-i-use-this-locally-and-on-read-the-docs
+# on_rtd is whether we are on readthedocs.org
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+if not on_rtd:  # only import and set the theme if we're building docs locally
+    import sphinx_rtd_theme
+    html_theme = 'sphinx_rtd_theme'
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+# otherwise, readthedocs.org uses their theme by default, so no need to specify it
+    
+        description = 'Example Installer plugin'
+    
+        filenames = []
+    for (dirpath, dnames, fnames) in os.walk(path):
+        for fname in fnames:
+            if fname.endswith('.md'):
+                filenames.append(os.sep.join([dirpath, fname]))
