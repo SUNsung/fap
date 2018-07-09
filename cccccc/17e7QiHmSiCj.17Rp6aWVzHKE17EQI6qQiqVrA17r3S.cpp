@@ -1,309 +1,345 @@
 
         
-        TEST(PartialRunMgrFindOrCreate, NewCreate) {
-  // Test that PartialRunMgr creates a new CancellationManager for new steps.
-  PartialRunMgr partial_run_mgr;
-  int step_id = 1;
-  CancellationManager* cancellation_manager;
-  partial_run_mgr.FindOrCreate(step_id, &cancellation_manager);
-  // FindOrCreate on a new step should return a new cancellation_manager.
-  int new_step_id = 2;
-  CancellationManager* new_cancellation_manager;
-  partial_run_mgr.FindOrCreate(new_step_id, &new_cancellation_manager);
-  EXPECT_NE(cancellation_manager, new_cancellation_manager);
+        #include 'content/nw/src/api/api_messages.h'
+#include 'content/nw/src/api/dispatcher_host.h'
+#include 'content/nw/src/api/shortcut/global_shortcut_listener.h'
+#include 'content/nw/src/api/shortcut/shortcut.h'
+#include 'content/nw/src/breakpad_linux.h'
+#include 'content/nw/src/browser/native_window.h'
+#include 'content/nw/src/browser/net_disk_cache_remover.h'
+#include 'content/nw/src/nw_package.h'
+#include 'content/nw/src/nw_shell.h'
+#include 'content/nw/src/shell_browser_context.h'
+#include 'content/common/view_messages.h'
+#include 'content/public/browser/browser_thread.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/browser/render_process_host.h'
+#include 'net/proxy/proxy_config.h'
+#include 'net/proxy/proxy_config_service_fixed.h'
+#include 'net/proxy/proxy_service.h'
+#include 'net/url_request/url_request_context.h'
+#include 'net/url_request/url_request_context_getter.h'
+    
+    class Base {
+ public:
+  Base(int id,
+       const base::WeakPtr<ObjectManager>& manager,
+       const base::DictionaryValue& option,
+       const std::string& extension_id);
+  virtual ~Base();
+    }
+    
+    #include 'base/values.h'
+#include 'base/strings/utf_string_conversions.h'
+#include 'base/strings/string16.h'
+#include 'content/nw/src/api/dispatcher_host.h'
+#include 'ui/base/clipboard/clipboard.h'
+    
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
+  }
 }
     
     
-    {  template <typename Packet>
-  inline Packet packetOp(const Packet& y) const {
-    const Packet one = internal::pset1<Packet>(1);
-    return internal::pmul(internal::psub(one, y), y);
-  }
-};
+    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  return item->is_checked_;
+}
     
-    class TextLineReader : public ReaderBase {
+    class MenuDelegate : public ui::SimpleMenuModel::Delegate {
  public:
-  TextLineReader(const string& node_name, int skip_header_lines, Env* env)
-      : ReaderBase(strings::StrCat('TextLineReader '', node_name, ''')),
-        skip_header_lines_(skip_header_lines),
-        env_(env),
-        line_number_(0) {}
+  MenuDelegate(ObjectManager* object_manager);
+  ~MenuDelegate() override;
     }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    void Menu::Create(const base::DictionaryValue& option) {
+  is_menu_modified_ = true;
+  menu_delegate_.reset(new MenuDelegate(object_manager()));
+  menu_model_.reset(new ui::NwMenuModel(menu_delegate_.get()));
+    }
     
-    // TODO: Enable GPU support for angle op after resolving
-// build failures on GPU (See #10643 for context).
-#if 0 && GOOGLE_CUDA
-REGISTER_COMPLEX(GPU, float, complex64);
-REGISTER_COMPLEX(GPU, double, complex128);
+    #include 'base/logging.h'
+#include 'base/strings/string_util.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menu/menu.h'
+    
+    void MenuItem::SetChecked(bool checked) {
+  // Set active will cause 'activate' to be emitted, so block here
+  block_active_ = true;
+  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_item_), checked);
+  block_active_ = false;
+}
+    
+    NwObjAllocateIdFunction::~NwObjAllocateIdFunction() {
+}
+    
+      // Called when |old_display| has been removed.
+  void NwScreenDisplayObserver::OnDisplayRemoved(const display::Display& old_display) {
+    std::unique_ptr<base::ListValue> args =
+      nwapi::nw__screen::OnDisplayRemoved::Create(*ConvertGfxDisplay(old_display));
+    DispatchEvent(
+      events::HistogramValue::UNKNOWN,
+      nwapi::nw__screen::OnDisplayRemoved::kEventName,
+      std::move(args));
+  }
+    
+    
+    {} // namespace extensions
+
+    
+        DXGI_SWAP_CHAIN_DESC sd;
+    ZeroMemory( &sd, sizeof( sd ) );
+    sd.BufferCount = 1;
+    sd.BufferDesc.Width = width;
+    sd.BufferDesc.Height = height;
+#ifdef CHECK_NV12
+    sd.BufferDesc.Format = DXGI_FORMAT_NV12;
+#else
+    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+#endif
+    sd.BufferDesc.RefreshRate.Numerator = 60;
+    sd.BufferDesc.RefreshRate.Denominator = 1;
+    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    sd.OutputWindow = NULL; //g_hWnd;
+    sd.SampleDesc.Count = 1;
+    sd.SampleDesc.Quality = 0;
+    sd.Windowed = TRUE;
+    
+    void ComputeJacobians(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
+                      const IntrinsicParams& param,  InputArray omc, InputArray Tc,
+                      const int& check_cond, const double& thresh_cond, Mat& JJ2_inv, Mat& ex3);
+    
+    #undef cv_hal_LU32f
+#define cv_hal_LU32f lapack_LU32f
+#undef cv_hal_LU64f
+#define cv_hal_LU64f lapack_LU64f
+    
+      /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *
+   * @param datum
+   *    Datum containing the data to be transformed.
+   */
+  vector<int> InferBlobShape(const Datum& datum);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *    It uses the first element to infer the shape of the blob.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   */
+  vector<int> InferBlobShape(const vector<Datum> & datum_vector);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *    It uses the first element to infer the shape of the blob.
+   *
+   * @param mat_vector
+   *    A vector of Mat containing the data to be transformed.
+   */
+#ifdef USE_OPENCV
+  vector<int> InferBlobShape(const vector<cv::Mat> & mat_vector);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *
+   * @param cv_img
+   *    cv::Mat containing the data to be transformed.
+   */
+  vector<int> InferBlobShape(const cv::Mat& cv_img);
+#endif  // USE_OPENCV
+    
+    /**
+ * @brief Computes @f$ y = |x| @f$
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
+ */
+template <typename Dtype>
+class AbsValLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit AbsValLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
 #endif
     
-    Status MatMulGradCommon(const string& opname, const string& attr_adj_x,
-                        const string& attr_adj_y, const AttrSlice& attrs,
-                        FunctionDef* g) {
-  DataType T;
-  TF_RETURN_IF_ERROR(GetNodeAttr(attrs, 'T', &T));
-  if (T == DT_COMPLEX64 || T == DT_COMPLEX128) {
-    return errors::Unimplemented(
-        'MatMul gradient for complex is not supported yet.');
-  }
-  bool ta;
-  bool tb;
-  TF_RETURN_IF_ERROR(GetNodeAttr(attrs, attr_adj_x, &ta));
-  TF_RETURN_IF_ERROR(GetNodeAttr(attrs, attr_adj_y, &tb));
-  if (!ta && !tb) {
-    return MatMulGradHelper(g, opname, attr_adj_x, attr_adj_y, 'dz', false, 'y',
-                            true, 'x', true, 'dz', false);
-  }
-  if (!ta && tb) {
-    return MatMulGradHelper(g, opname, attr_adj_x, attr_adj_y, 'dz', false, 'y',
-                            false, 'dz', true, 'x', false);
-  }
-  if (ta && !tb) {
-    return MatMulGradHelper(g, opname, attr_adj_x, attr_adj_y, 'y', false, 'dz',
-                            true, 'x', false, 'dz', false);
-  }
-  CHECK(ta && tb);
-  return MatMulGradHelper(g, opname, attr_adj_x, attr_adj_y, 'y', true, 'dz',
-                          true, 'dz', true, 'x', true);
-}
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    
-    {    server_data->thread_pool.reset(
-        new thread::ThreadPool(Env::Default(), 'test_server', 1));
-    server_data->thread_pool->Schedule(
-        [server_data, server_start_delay_micros]() {
-          Env::Default()->SleepForMicroseconds(server_start_delay_micros);
-          server_data->server->RunServer(server_data->port);
-        });
-  }
-    
-    inline ZlibCompressionOptions ZlibCompressionOptions::GZIP() {
-  ZlibCompressionOptions options = ZlibCompressionOptions();
-  options.window_bits = options.window_bits + 16;
-  return options;
-}
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    class Tesseract;
-    
-    
-    {  low = 0;
-  if (fc.y () == 0) {
-    if (fc.x () >= 0)
-      dir = 0;
-    else
-      dir = MODULUS / 2;
-    return;
-  }
-  high = MODULUS;
-  do {
-    current = (high + low) / 2;
-    if (dirtab[current] * fc >= 0)
-      low = current;
-    else
-      high = current;
-  }
-  while (high - low > 1);
-  dir = low;
-}
-
-    
-    #include 'publictypes.h'
-#include 'elst.h'
-#include 'strngs.h'
-    
-    namespace tesseract {
-    }
-    
-    const char *kApostropheLikeUTF8[] = {
-  ''',       // ASCII apostrophe
-  '`',       // ASCII backtick
-  '\u2018',  // opening single quote
-  '\u2019',  // closing single quote
-  '\u2032',  // mathematical prime mark
-  nullptr,      // end of our list.
-};
-    
-      // Sets up a Clusterer for mftraining on a single shape_id.
-  // Call FreeClusterer on the return value after use.
-  CLUSTERER* SetupForClustering(const ShapeTable& shape_table,
-                                const FEATURE_DEFS_STRUCT& feature_defs,
-                                int shape_id, int* num_samples);
-    
-    // Trainer class for LSTM networks. Most of the effort is in creating the
-// ideal target outputs from the transcription. A box file is used if it is
-// available, otherwise estimates of the char widths from the unicharset are
-// used to guide a DP search for the best fit to the transcription.
-class LSTMTrainer : public LSTMRecognizer {
+    #ifdef USE_CUDNN
+/**
+ * @brief cuDNN implementation of SoftmaxLayer.
+ *        Fallback to SoftmaxLayer for CPU mode.
+ */
+template <typename Dtype>
+class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
  public:
-  LSTMTrainer();
-  // Callbacks may be null, in which case defaults are used.
-  LSTMTrainer(FileReader file_reader, FileWriter file_writer,
-              CheckPointReader checkpoint_reader,
-              CheckPointWriter checkpoint_writer,
-              const char* model_base, const char* checkpoint_name,
-              int debug_interval, int64_t max_memory);
-  virtual ~LSTMTrainer();
+  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
+      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSoftmaxLayer();
     }
     
-    // Sets up the network for training. Initializes weights using weights of
-// scale `range` picked according to the random number generator `randomizer`.
-int WeightMatrix::InitWeightsFloat(int no, int ni, bool use_adam,
-                                   float weight_range, TRand* randomizer) {
-  int_mode_ = false;
-  wf_.Resize(no, ni, 0.0);
-  if (randomizer != nullptr) {
-    for (int i = 0; i < no; ++i) {
-      for (int j = 0; j < ni; ++j) {
-        wf_[i][j] = randomizer->SignedRand(weight_range);
-      }
-    }
-  }
-  use_adam_ = use_adam;
-  InitBackward();
-  return ni * no;
-}
+    #include 'caffe/layers/neuron_layer.hpp'
+#include 'caffe/layers/tanh_layer.hpp'
     
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-DMatrix* DMatrix::Load(const std::string& uri,
-                       bool silent,
-                       bool load_row_split,
-                       const std::string& file_format) {
-  std::string fname, cache_file;
-  size_t dlm_pos = uri.find('#');
-  if (dlm_pos != std::string::npos) {
-    cache_file = uri.substr(dlm_pos + 1, uri.length());
-    fname = uri.substr(0, dlm_pos);
-    CHECK_EQ(cache_file.find('#'), std::string::npos)
-        << 'Only one `#` is allowed in file path for cache file specification.';
-    if (load_row_split) {
-      std::ostringstream os;
-      std::vector<std::string> cache_shards = common::Split(cache_file, ':');
-      for (size_t i = 0; i < cache_shards.size(); ++i) {
-        size_t pos = cache_shards[i].rfind('.');
-        if (pos == std::string::npos) {
-          os << cache_shards[i]
-             << '.r' << rabit::GetRank()
-             << '-' <<  rabit::GetWorldSize();
-        } else {
-          os << cache_shards[i].substr(0, pos)
-             << '.r' << rabit::GetRank()
-             << '-' <<  rabit::GetWorldSize()
-             << cache_shards[i].substr(pos, cache_shards[i].length());
-        }
-        if (i + 1 != cache_shards.size()) {
-          os << ':';
-        }
-      }
-      cache_file = os.str();
-    }
-  } else {
-    fname = uri;
-  }
-  int partid = 0, npart = 1;
-  if (load_row_split) {
-    partid = rabit::GetRank();
-    npart = rabit::GetWorldSize();
-  } else {
-    // test option to load in part
-    npart = dmlc::GetEnv('XGBOOST_TEST_NPART', 1);
-  }
+      /**
+   * @brief Computes the error gradient w.r.t. the forwarded inputs.
+   *
+   * @param top output Blob vector (length 1+), providing the error gradient with
+   *        respect to the outputs
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2+), into which the top error
+   *        gradient is copied
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+    const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    class TLSConfigPlugin;
+    
+      auto nobody = getpwnam('nobody');
+  EXPECT_NE(nobody, nullptr);
+  {
+    auto dropper = DropPrivileges::get();
+    EXPECT_TRUE(dropper->dropTo(nobody->pw_uid, nobody->pw_gid));
+    EXPECT_EQ(geteuid(), nobody->pw_uid);
     }
     
-    bool SparsePageSource::Next() {
-  // doing clock rotation over shards.
-  if (page_ != nullptr) {
-    size_t n = prefetchers_.size();
-    prefetchers_[(clock_ptr_ + n - 1) % n]->Recycle(&page_);
-  }
-  if (prefetchers_[clock_ptr_]->Next(&page_)) {
-    page_->base_rowid = base_rowid_;
-    base_rowid_ += page_->Size();
-    // advance clock
-    clock_ptr_ = (clock_ptr_ + 1) % prefetchers_.size();
-    return true;
-  } else {
-    return false;
-  }
-}
+      val = getEnvVar('GTEST_OSQUERY');
+  EXPECT_FALSE(!val);
+  EXPECT_TRUE(val.is_initialized());
+  EXPECT_EQ(*val, 'true');
     
-    SEXP XGDMatrixSetInfo_R(SEXP handle, SEXP field, SEXP array) {
-  R_API_BEGIN();
-  int len = length(array);
-  const char *name = CHAR(asChar(field));
-  if (!strcmp('group', name)) {
-    std::vector<unsigned> vec(len);
-    #pragma omp parallel for schedule(static)
-    for (int i = 0; i < len; ++i) {
-      vec[i] = static_cast<unsigned>(INTEGER(array)[i]);
-    }
-    CHECK_CALL(XGDMatrixSetGroup(R_ExternalPtrAddr(handle), BeginPtr(vec), len));
-  } else {
-    std::vector<float> vec(len);
-    #pragma omp parallel for schedule(static)
-    for (int i = 0; i < len; ++i) {
-      vec[i] = REAL(array)[i];
-    }
-    CHECK_CALL(XGDMatrixSetFloatInfo(R_ExternalPtrAddr(handle),
-                                   CHAR(asChar(field)),
-                                   BeginPtr(vec), len));
-  }
-  R_API_END();
-  return R_NilValue;
-}
+    class TimeTests : public testing::Test {};
     
+     private:
+  /// Disk arbitration session.
+  DASessionRef session_{nullptr};
     
-    {
-    {}  // namespace common
-}  // namespace xgboost
-
-    
-    // logistic loss for probability regression task
-struct LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
-  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-  static T PredTransform(T x) { return common::Sigmoid(x); }
-  template <typename T>
-  static T FirstOrderGradient(T predt, T label) { return predt - label; }
-  template <typename T>
-  static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static bst_float ProbToMargin(bst_float base_score) {
-    CHECK(base_score > 0.0f && base_score < 1.0f)
-      << 'base_score must be in (0,1) for logistic loss';
-    return -logf(1.0f / base_score - 1.0f);
-  }
-  static const char* LabelErrorMsg() {
-    return 'label must be in [0,1] for logistic regression';
-  }
-  static const char* DefaultEvalMetric() { return 'rmse'; }
+    enum SCNetworkSubscriptionType {
+  ADDRESS_TARGET = 0,
+  NAME_TARGET = 1,
 };
     
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
     
-namespace xgboost {
+        // Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
+    ImGui::DestroyContext();
+    
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in the example_glfw_opengl2/ folder**
+// See imgui_impl_glfw.cpp for details.
+    
+    static void glfw_error_callback(int error, const char* description)
+{
+    fprintf(stderr, 'Glfw Error %d: %s\n', error, description);
+}
+    
+    	VkSemaphore& image_acquired_semaphore  = wd->Frames[wd->FrameIndex].ImageAcquiredSemaphore;
+	err = vkAcquireNextImageKHR(g_Device, wd->Swapchain, UINT64_MAX, image_acquired_semaphore, VK_NULL_HANDLE, &wd->FrameIndex);
+	check_vk_result(err);
+    
+        // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array that we will update during the application lifetime.
+    io.KeyMap[ImGuiKey_Tab] = VK_TAB;
+    io.KeyMap[ImGuiKey_LeftArrow] = VK_LEFT;
+    io.KeyMap[ImGuiKey_RightArrow] = VK_RIGHT;
+    io.KeyMap[ImGuiKey_UpArrow] = VK_UP;
+    io.KeyMap[ImGuiKey_DownArrow] = VK_DOWN;
+    io.KeyMap[ImGuiKey_PageUp] = VK_PRIOR;
+    io.KeyMap[ImGuiKey_PageDown] = VK_NEXT;
+    io.KeyMap[ImGuiKey_Home] = VK_HOME;
+    io.KeyMap[ImGuiKey_End] = VK_END;
+    io.KeyMap[ImGuiKey_Insert] = VK_INSERT;
+    io.KeyMap[ImGuiKey_Delete] = VK_DELETE;
+    io.KeyMap[ImGuiKey_Backspace] = VK_BACK;
+    io.KeyMap[ImGuiKey_Space] = VK_SPACE;
+    io.KeyMap[ImGuiKey_Enter] = VK_RETURN;
+    io.KeyMap[ImGuiKey_Escape] = VK_ESCAPE;
+    io.KeyMap[ImGuiKey_A] = 'A';
+    io.KeyMap[ImGuiKey_C] = 'C';
+    io.KeyMap[ImGuiKey_V] = 'V';
+    io.KeyMap[ImGuiKey_X] = 'X';
+    io.KeyMap[ImGuiKey_Y] = 'Y';
+    io.KeyMap[ImGuiKey_Z] = 'Z';
+    
+    void ImGui_ImplFreeGLUT_SpecialUpFunc(int key, int x, int y)
+{
+    //printf('key_up_func %d\n', key);
+    ImGuiIO& io = ImGui::GetIO();
+    if (key + 256 < IM_ARRAYSIZE(io.KeysDown))
+        io.KeysDown[key + 256] = false;
+    ImGui_ImplFreeGLUT_UpdateKeyboardMods();
+    (void)x; (void)y; // Unused
+}
+    
+      bool isMetadataGetMode() const { return metadataGetMode_; }
+    
+      std::string defaultValue_;
+    
+    class RequestGroup;
+class DownloadEngine;
+class Peer;
+class BtRuntime;
+class PieceStorage;
+class PeerStorage;
+class BtAnnounce;
+    
+      void resetIterator();
+  void setCurrentTier(std::deque<std::shared_ptr<AnnounceTier>>::iterator itr);
+    
+    namespace aria2 {
     }
+    
+    
+    {  static std::unique_ptr<AuthConfig> create(std::string user,
+                                            std::string password);
+};
