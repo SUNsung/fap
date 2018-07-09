@@ -1,84 +1,127 @@
 
         
-        BASE_URI = ENV['BASE_URI'] || 'https://github.com/jondot/awesome-react-native'
-    
-    def check_link(uri)
-  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
-    if (400..422).include?(status)
-      if status != 403 && !uri.exclude?('udemy.com')
-        raise 'Request had status #{status}'
-      else
-        putc('S')
-      end
-    end
-  end
-end
-    
-          if args.all? { |arg| arg.is_a?(Symbol) }
-        options.assert_valid_keys([:type, :roles, :values, :ace, :cache_response])
-      end
-    
-        @table_sort_info = {
-      order: { attribute.to_sym => direction.to_sym },
-      attribute: attribute,
-      direction: direction
-    }
+          def after_omniauth_failure_path_for(scope)
+    new_session_path(scope)
   end
     
-        def subscribe
-      authorize @account, :subscribe?
-      Pubsubhubbub::SubscribeWorker.perform_async(@account.id)
-      redirect_to admin_account_path(@account.id)
+        # The path used after sending reset password instructions
+    def after_sending_reset_password_instructions_path_for(resource_name)
+      new_session_path(resource_name) if is_navigational_format?
     end
     
-      def remove_avatar?
-    staff?
-  end
-    
-      def icon
-    object.image
-  end
-    
-        map = map.sort { |a, b| a[0].size <=> b[0].size }.to_h
-    
-    class NotificationMailerPreview < ActionMailer::Preview
-  # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/mention
-  def mention
-    m = Mention.last
-    NotificationMailer.mention(m.account, Notification.find_by(activity: m))
-  end
-    
-      def test_font_helper_without_suffix
-    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
-  end
-    
-          File.open('bower.json', 'w') do |f|
-        f.puts JSON.pretty_generate(spec)
-      end
+        def password_change(record, opts={})
+      devise_mail(record, :password_change, opts)
     end
   end
 end
 
     
-        # Initializes a new CategoryFeed.
-    #
-    #  +base+         is the String path to the <source>.
-    #  +category_dir+ is the String path between <source> and the category folder.
-    #  +category+     is the category currently being processed.
-    def initialize(site, base, category_dir, category)
-      @site = site
-      @base = base
-      @dir  = category_dir
-      @name = 'atom.xml'
-      self.process(@name)
-      # Read the YAML data from the layout page.
-      self.read_yaml(File.join(base, '_includes/custom'), 'category_feed.xml')
-      self.data['category']    = category
-      # Set the title for this page.
-      title_prefix             = site.config['category_title_prefix'] || 'Category: '
-      self.data['title']       = '#{title_prefix}#{category}'
-      # Set the meta-description for this page.
-      meta_description_prefix  = site.config['category_meta_description_prefix'] || 'Category: '
-      self.data['description'] = '#{meta_description_prefix}#{category}'
+        options[:container] = '.span9'
     
+        options[:skip] = %w(book/first-edition/README.html)
+    options[:skip_patterns] = [/(?<!\.html)\z/]
     
+            if b_length > a_length
+          (b_length - a_length).times { a_split.insert(-2, 0) }
+        elsif a_length > b_length
+          (a_length - b_length).times { b_split.insert(-2, 0) }
+        end
+    
+        delegate :empty?, :blank?, to: :pages
+    
+    module Docs
+  class URL < URI::Generic
+    PARSER = URI::Parser.new
+    
+            # This returns all registered pushes.
+        #
+        # @return [Registry]
+        def pushes
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.pushes)
+            end
+          end
+        end
+    
+                  # Read!
+              data << io.readpartial(READ_CHUNK_SIZE).encode('UTF-8', Encoding.default_external)
+            else
+              # Do a simple non-blocking read on the IO object
+              data << io.read_nonblock(READ_CHUNK_SIZE)
+            end
+          rescue Exception => e
+            # The catch-all rescue here is to support multiple Ruby versions,
+            # since we use some Ruby 1.9 specific exceptions.
+    
+          # This inserts a block with the given key and value.
+      #
+      # @param [String] key
+      # @param [String] value
+      def insert(key, value)
+        # Insert the new block into the value
+        new_block = <<BLOCK
+# VAGRANT-BEGIN: #{key}
+#{value.strip}
+# VAGRANT-END: #{key}
+BLOCK
+    
+          def stage_set?
+        !!fetch(:stage, false)
+      end
+    
+      desc 'Finish the deployment, clean up server(s).'
+  task :finishing do
+  end
+    
+      let(:help_output) do
+    out, _err = capture_io do
+      flags '--help', '-h'
+    end
+    out
+  end
+    
+      # GET /books
+  # GET /books.json
+  def index
+    @books = Book.all
+  end
+    
+    module RuboCop
+  module Cop
+    module Lint
+      # Don't omit the accumulator when calling `next` in a `reduce` block.
+      #
+      # @example
+      #
+      #   # bad
+      #
+      #   result = (1..4).reduce(0) do |acc, i|
+      #     next if i.odd?
+      #     acc + i
+      #   end
+      #
+      # @example
+      #
+      #   # good
+      #
+      #   result = (1..4).reduce(0) do |acc, i|
+      #     next acc if i.odd?
+      #     acc + i
+      #   end
+      class NextWithoutAccumulator < Cop
+        MSG = 'Use `next` with an accumulator argument in a `reduce`.'.freeze
+    
+            def immutable_literal?(node)
+          return true if node.immutable_literal?
+    
+            # @param lines [Array<String>]
+        # @param annotations [Array<(Integer, String)>]
+        #   each entry is the annotated line number and the annotation text
+        #
+        # @note annotations are sorted so that reconstructing the annotation
+        #   text via {#to_s} is deterministic
+        def initialize(lines, annotations)
+          @lines       = lines.freeze
+          @annotations = annotations.sort.freeze
+        end
