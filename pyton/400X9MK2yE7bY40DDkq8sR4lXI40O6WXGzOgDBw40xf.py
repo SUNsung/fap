@@ -1,105 +1,78 @@
 
         
-        # Incompatible changes from the 2.x nntplib:
-# - all commands are encoded as UTF-8 data (using the 'surrogateescape'
-#   error handler), except for raw message data (POST, IHAVE)
-# - all responses are decoded as UTF-8 data (using the 'surrogateescape'
-#   error handler), except for raw message data (ARTICLE, HEAD, BODY)
-# - the `file` argument to various methods is keyword-only
-#
-# - NNTP.date() returns a datetime object
-# - NNTP.newgroups() and NNTP.newnews() take a datetime (or date) object,
-#   rather than a pair of (date, time) strings.
-# - NNTP.newgroups() and NNTP.list() return a list of GroupInfo named tuples
-# - NNTP.descriptions() returns a dict mapping group names to descriptions
-# - NNTP.xover() returns a list of dicts mapping field names (header or metadata)
-#   to field values; each dict representing a message overview.
-# - NNTP.article(), NNTP.head() and NNTP.body() return a (response, ArticleInfo)
-#   tuple.
-# - the 'internal' methods have been marked private (they now start with
-#   an underscore)
-    
-        @cpython_only
-    def test_import_bug(self):
-        # We simulate a bug in importlib and check that it's not stripped
-        # away from the traceback.
-        self.create_module('foo', '')
-        importlib = sys.modules['_frozen_importlib_external']
-        if 'load_module' in vars(importlib.SourceLoader):
-            old_exec_module = importlib.SourceLoader.exec_module
-        else:
-            old_exec_module = None
         try:
-            def exec_module(*args):
-                1/0
-            importlib.SourceLoader.exec_module = exec_module
-            try:
-                import foo
-            except ZeroDivisionError as e:
-                tb = e.__traceback__
-            else:
-                self.fail('ZeroDivisionError should have been raised')
-            self.assert_traceback(tb, [__file__, '<frozen importlib', __file__])
-        finally:
-            if old_exec_module is None:
-                del importlib.SourceLoader.exec_module
-            else:
-                importlib.SourceLoader.exec_module = old_exec_module
-    
-    @dataclasses.dataclass
-class CV:
-    T_CV4 = typing.ClassVar
-    cv0: typing.ClassVar[int] = 20
-    cv1: typing.ClassVar = 30
-    cv2: T_CV2
-    cv3: T_CV3
-    not_cv4: T_CV4  # When using string annotations, this field is not recognized as a ClassVar.
-    
-    import tornado.httpserver
-import tornado.ioloop
-import tornado.options
-import tornado.web
-    
-    
-try:
-    from sys import is_finalizing
+    from .lazy_extractors import *
+    from .lazy_extractors import _ALL_CLASSES
+    _LAZY_LOADER = True
 except ImportError:
-    # Emulate it
-    def _get_emulated_is_finalizing():
-        L = []
-        atexit.register(lambda: L.append(None))
+    _LAZY_LOADER = False
+    from .extractors import *
     
-        .. deprecated:: 5.0
-       Tornado ``Futures`` have been merged with `asyncio.Future`,
-       so this method is now a no-op.
-    '''
-    return asyncio_future
     
-        def on_ping(self, data):
-        pass
+def _is_tar_extract(cmd):
+    if '--extract' in cmd:
+        return True
     
-        def resolve(self, host, port, family=socket.AF_UNSPEC, *args, **kwargs):
-        if (host, port, family) in self.mapping:
-            host, port = self.mapping[(host, port, family)]
-        elif (host, port) in self.mapping:
-            host, port = self.mapping[(host, port)]
-        elif host in self.mapping:
-            host = self.mapping[host]
-        return self.resolver.resolve(host, port, family, *args, **kwargs)
+    import re
     
-        def set(self, value):
-        if self.multiple:
-            if not isinstance(value, list):
-                raise Error('Option %r is required to be a list of %s' %
-                            (self.name, self.type.__name__))
-            for item in value:
-                if item is not None and not isinstance(item, self.type):
-                    raise Error('Option %r is required to be a list of %s' %
-                                (self.name, self.type.__name__))
-        else:
-            if value is not None and not isinstance(value, self.type):
-                raise Error('Option %r is required to be a %s (%s given)' %
-                            (self.name, self.type.__name__, type(value)))
-        self._value = value
-        if self.callback is not None:
-            self.callback(self._value)
+    #############################################
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
+    
+        def construct_yaml_str(self, node, unsafe=False):
+        # Override the default string handling function
+        # to always return unicode objects
+        value = self.construct_scalar(node)
+        ret = AnsibleUnicode(value)
+    
+        def flush(self):
+        '''Write any pending changes to the disk.'''
+        return
+    
+            # C function: METH_VARARGS
+        (dir, (1,), IGNORE_RESULT),
+    
+    rx = re.compile(r'\((\S+).py, line (\d+)')
+    
+        def test_is_symlink(self):
+        P = self.cls(BASE)
+        self.assertFalse((P / 'fileA').is_symlink())
+        self.assertFalse((P / 'dirA').is_symlink())
+        self.assertFalse((P / 'non-existing').is_symlink())
+        self.assertFalse((P / 'fileA' / 'bah').is_symlink())
+        if support.can_symlink():
+            self.assertTrue((P / 'linkA').is_symlink())
+            self.assertTrue((P / 'linkB').is_symlink())
+            self.assertTrue((P/ 'brokenLink').is_symlink())
+    
+        def open_resource(self, resource):
+        fullname_as_path = self.fullname.replace('.', '/')
+        path = f'{fullname_as_path}/{resource}'
+        try:
+            return BytesIO(self.zipimporter.get_data(path))
+        except OSError:
+            raise FileNotFoundError(path)
+    
+        base = 'src/sentry/locale'
+    for locale in os.listdir(base):
+        fn = os.path.join(base, locale, 'LC_MESSAGES', 'django.po')
+        if not os.path.isfile(fn):
+            continue
+    
+    try:
+    import queue
+except ImportError:
+    import Queue as queue
+    
+    def sequential():
+    return list(map(is_prime, PRIMES))
+    
+    
+def MockAsyncServerResponseDone( response ):
+  '''Return a fake future object that is complete with the supplied response
+  message. Suitable for mocking a response future within a client request. For
+  example:
+    
+    
+  def _HandleMessageResponse( self ):
+    vimsupport.PostVimMessage( self._response[ 'message' ], warning = False )
