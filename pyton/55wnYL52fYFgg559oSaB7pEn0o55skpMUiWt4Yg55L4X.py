@@ -1,134 +1,95 @@
 
         
-            out = issue_template_tmpl % {'version': locals()['__version__']}
+            s.register(Tag1, index=-1)
+    assert isinstance(s.order[-2], Tag1)
     
-    
-def report_warning(message):
+        If you configure your own :class:`logging.StreamHandler`, you may want to
+    use this for the stream. If you are using file or dict configuration and
+    can't import this directly, you can refer to it as
+    ``ext://flask.logging.wsgi_errors_stream``.
     '''
-    Print the message to stderr, it will be prefixed with 'WARNING:'
-    If stderr is a tty file the 'WARNING:' will be colored
-    '''
-    if sys.stderr.isatty() and compat_os_name != 'nt':
-        _msg_header = '\033[0;33mWARNING:\033[0m'
-    else:
-        _msg_header = 'WARNING:'
-    output = '%s %s\n' % (_msg_header, message)
-    if 'b' in getattr(sys.stderr, 'mode', '') or sys.version_info[0] < 3:
-        output = output.encode(preferredencoding())
-    sys.stderr.write(output)
+    return request.environ['wsgi.errors'] if request else sys.stderr
     
+                # If we have no method at all in there we don't want to add a
+            # method list. This is for instance the case for the base class
+            # or another subclass of a base method view that does not introduce
+            # new methods.
+            if methods:
+                cls.methods = methods
     
-class TestAgeRestriction(unittest.TestCase):
-    def _assert_restricted(self, url, filename, age, old_age=None):
-        self.assertTrue(_download_restricted(url, filename, old_age))
-        self.assertFalse(_download_restricted(url, filename, age))
+                version = match.group(1).strip()
     
+        @app.route('/')
+    def index():
+        return 'Hello'
     
-def get_info_extractor(ie_name):
-    '''Returns the info extractor class with the given ie_name'''
-    return globals()[ie_name + 'IE']
-
+        def test_list(self):
+        assert list(self.case_insensitive_dict) == ['Accept']
     
-            return {
-            'id': flv_id,
-            'url': rtmp_url,
-            'ext': 'flv',
-            'no_resume': True,
-            'title': title,
-            'description': description,
-            'duration': duration,
-            'view_count': view_count,
-            'comment_count': comment_count,
-            'uploader': uploader,
-            'upload_date': upload_date,
-        }
-
+        assert os.environ == environ_copy
     
-            info_dict = self._extract_from_id(mvp_id, webpage)
-        info_dict['display_id'] = display_id
+            # Abort early if there isn't one.
+        if netrc_path is None:
+            return
     
-        def _real_extract(self, url):
-        display_id = self._match_id(url)
+    # Dynamic inventory script which lets you use nodes discovered by Canonical's
+# Landscape (http://www.ubuntu.com/management/landscape-features).
+#
+# Requires the `landscape_api` Python module
+# See:
+#   - https://landscape.canonical.com/static/doc/api/api-client-package.html
+#   - https://landscape.canonical.com/static/doc/api/python-api.html
+#
+# Environment variables
+# ---------------------
+#   - `LANDSCAPE_API_URI`
+#   - `LANDSCAPE_API_KEY`
+#   - `LANDSCAPE_API_SECRET`
+#   - `LANDSCAPE_API_SSL_CA_FILE` (optional)
     
+    # (c) 2013, Michael Scherer <misc@zarb.org>
+#
+# This file is part of Ansible,
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
     
-class ClypIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?clyp\.it/(?P<id>[a-z0-9]+)'
-    _TEST = {
-        'url': 'https://clyp.it/ojz2wfah',
-        'md5': '1d4961036c41247ecfdcc439c0cddcbb',
-        'info_dict': {
-            'id': 'ojz2wfah',
-            'ext': 'mp3',
-            'title': 'Krisson80 - bits wip wip',
-            'description': '#Krisson80BitsWipWip #chiptune\n#wip',
-            'duration': 263.21,
-            'timestamp': 1443515251,
-            'upload_date': '20150929',
-        },
+    # The checksum algorithm must match with the algorithm in ShellModule.checksum() method
+checksum = secure_hash
+checksum_s = secure_hash_s
+    
+        terminal_stderr_re = [
+        re.compile(br'\n\s*Invalid command:'),
+        re.compile(br'\nCommit failed'),
+        re.compile(br'\n\s+Set failed'),
+    ]
+    
+        results = {}
+    for group in sort_groups(groups):
+        results = combine_vars(results, group.get_vars())
+    
+    #----------------------------------------------------------------------
+def showroom_get_roomid_by_room_url_key(room_url_key):
+    '''str->str'''
+    fake_headers_mobile = {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Charset': 'UTF-8,*;q=0.5',
+        'Accept-Encoding': 'gzip,deflate,sdch',
+        'Accept-Language': 'en-US,en;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36'
     }
-    
-            self.title = match1(html, r'<meta property='og:title' content='([^']*)'')
-    
-    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
-    
-	from xml.dom.minidom import parseString
-	doc = parseString(xml)
-	tab = doc.getElementsByTagName('related')[0].firstChild
-    
-        title = match1(html, r'&title=([^&]+)')
-    
-    def kugou_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    if url.lower().find('5sing')!=-1:
-        #for 5sing.kugou.com
-        html=get_html(url)
-        ticket=r1(r''ticket':\s*'(.*)'',html)
-        j=loads(str(b64decode(ticket),encoding='utf-8'))
-        url=j['file']
-        title=j['songName']
-        songtype, ext, size = url_info(url)
-        print_info(site_info, title, songtype, size)
-        if not info_only:
-            download_urls([url], title, ext, size, output_dir, merge=merge)
-    else:
-        #for the www.kugou.com/
-        return kugou_download_playlist(url, output_dir=output_dir, merge=merge, info_only=info_only)
-        # raise NotImplementedError(url)       
-    
-        return None
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-            If ``max_length`` is given, some input data may be left over
-        in ``unconsumed_tail``; you must retrieve this value and pass
-        it back to a future call to `decompress` if it is not empty.
-        '''
-        return self.decompressobj.decompress(value, max_length)
-    
-    
-class CountdownHandler(RequestHandler):
-    def get(self, count):
-        count = int(count)
-        if count > 0:
-            self.redirect(self.reverse_url('countdown', count - 1))
-        else:
-            self.write('Zero')
-    
-                def finish(self):
-                event.set()
-    
-        def _on_authentication_verified(self, future, response_fut):
-        try:
-            response = response_fut.result()
-        except Exception as e:
-            future.set_exception(AuthError(
-                'Error response %s' % e))
-            return
-        if b'is_valid:true' not in response.body:
-            future.set_exception(AuthError(
-                'Invalid OpenID response: %s' % response.body))
-            return
-    
-            g = f()
+    webpage_url = 'https://www.showroom-live.com/' + room_url_key
+    html = get_content(webpage_url, headers = fake_headers_mobile)
+    roomid = match1(html, r'room\?room_id\=(\d+)')
+    assert roomid
+    return roomid
