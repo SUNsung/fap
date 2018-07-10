@@ -1,80 +1,97 @@
 
         
-          def meta
-    object.file.meta
-  end
-end
-
-    
-      def updated
-    object.updated_at.iso8601
-  end
-    
-      private
-    
-    require 'rails_helper'
-    
-    module Metasploit
-  module Framework
-    class Application < Rails::Application
-      include Metasploit::Framework::CommonEngine
-    
-    begin
-  require 'bundler/setup'
-rescue LoadError
-  $stderr.puts '[*] Metasploit requires the Bundler gem to be installed'
-  $stderr.puts '    $ gem install bundler'
-  exit(1)
-end
-    
-        on :fetch_person_for_hcard do |guid|
-      person = Person.where(guid: guid, closed_account: false).where.not(owner: nil).take
-      if person
-        DiasporaFederation::Discovery::HCard.new(
-          guid:             person.guid,
-          nickname:         person.username,
-          full_name:        '#{person.profile.first_name} #{person.profile.last_name}'.strip,
-          url:              AppConfig.pod_uri,
-          photo_large_url:  person.image_url,
-          photo_medium_url: person.image_url(:thumb_medium),
-          photo_small_url:  person.image_url(:thumb_small),
-          public_key:       person.serialized_public_key,
-          searchable:       person.searchable,
-          first_name:       person.profile.first_name,
-          last_name:        person.profile.last_name
-        )
-      end
-    end
-    
-              render 'admins/pods'
+                def test_url_sub_key_for_sqlite3
+          spec = resolve :production, 'production' => { 'url' => 'sqlite3:foo?encoding=utf8' }
+          assert_equal({
+            'adapter'  => 'sqlite3',
+            'database' => 'foo',
+            'encoding' => 'utf8',
+            'name'     => 'production' }, spec)
         end
-        format.mobile { render 'admins/pods' }
-        format.json { render json: pods_json }
+    
+          # Appends a column or columns of a specified type.
+      #
+      #  t.string(:goat)
+      #  t.string(:goat, :sheep)
+      #
+      # See TableDefinition#column
+      [
+        :bigint,
+        :binary,
+        :boolean,
+        :date,
+        :datetime,
+        :decimal,
+        :float,
+        :integer,
+        :json,
+        :string,
+        :text,
+        :time,
+        :timestamp,
+        :virtual,
+      ].each do |column_type|
+        module_eval <<-CODE, __FILE__, __LINE__ + 1
+          def #{column_type}(*args, **options)
+            args.each { |name| column(name, :#{column_type}, options) }
+          end
+        CODE
+      end
+      alias_method :numeric, :decimal
+    end
+    
+          def test_create_table_with_timestamps_should_create_datetime_columns_with_options
+        connection.create_table table_name do |t|
+          t.timestamps null: true
+        end
+        created_columns = connection.columns(table_name)
+    
+      def test_assert_called_failure
+    error = assert_raises(Minitest::Assertion) do
+      assert_called(@object, :increment) do
+        # Call nothing...
       end
     end
     
-        case params[:range]
-    when 'week'
-      range = 1.week
-      @segment = t('admins.stats.week')
-    when '2weeks'
-      range = 2.weeks
-      @segment = t('admins.stats.2weeks')
-    when 'month'
-      range = 1.month
-      @segment = t('admins.stats.month')
-    else
-      range = 1.day
-      @segment = t('admins.stats.daily')
+        def extract_body(response)
+      ''.dup.tap do |body|
+        response[2].each { |chunk| body << chunk }
+      end
     end
     
-      private
+      test 'broadcasts_to' do
+    assert_called_with(
+      ActionCable.server,
+      :broadcast,
+      [
+        'action_cable:channel:broadcasting_test:chat:Room#1-Campfire',
+        'Hello World'
+      ]
+    ) do
+      ChatChannel.broadcast_to(Room.new(1), 'Hello World')
+    end
+  end
     
-    module LogStash
-  module Api
-    module Commands
-      module System
-        class Plugins < Commands::Base
-          def run
-            { :total => plugins.count, :plugins => plugins }
-          end
+        def connect
+      self.current_user = User.new 'lifo'
+    end
+  end
+    
+      test '#restart shuts down worker pool' do
+    assert_called(@server.worker_pool, :halt) do
+      @server.restart
+    end
+  end
+    
+    class RedisAdapterTest::Hiredis < RedisAdapterTest
+  def cable_config
+    super.merge(driver: 'hiredis')
+  end
+end
+    
+    Applications attributed to Apple are excluded from the output.
+    
+        def index
+      pods_json = PodPresenter.as_collection(Pod.all)
+    
+      end
