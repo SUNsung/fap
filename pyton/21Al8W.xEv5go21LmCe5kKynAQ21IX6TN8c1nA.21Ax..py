@@ -1,162 +1,156 @@
 
         
-        flags.DEFINE_string('spec_file', 'parser_spec.textproto',
-                    'Filename to save the spec to.')
+            def download(self, x):
+        self.result.append(x)
     
-    cc_library(
-    name = 'disjoint_set_forest',
-    hdrs = ['disjoint_set_forest.h'],
-    deps = [
-        '@org_tensorflow//tensorflow/core:lib',
-    ],
-)
+            webpage = self._download_webpage(url, playlist_id)
+        title = self._html_search_regex(
+            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
+        description = self._html_search_regex(
+            r'<p class='excerpt'[^>]*?>(.*?)</p>',
+            webpage, 'description', fatal=False)
+        urls = re.findall(
+            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
+            webpage)
+        entries = [self.url_result(u) for u in urls]
     
-    py_test(
-    name = 'bulk_component_test',
-    srcs = [
-        'bulk_component_test.py',
-    ],
-    deps = [
-        ':bulk_component',
-        ':components',
-        ':dragnn_ops',
-        ':network_units',
-        '//dragnn/protos:spec_pb2_py',
-        '//syntaxnet:load_parser_ops_py',
-        '//syntaxnet:sentence_pb2_py',
-        '@org_tensorflow//tensorflow:tensorflow_py',
-        '@org_tensorflow//tensorflow/core:protos_all_py',
-    ],
-)
-    
-            # Only check shape; values are random due to initialization.
-        self.assertAllEqual(root_weights.shape.as_list(), [1, _TOKEN_DIM])
-        self.assertAllEqual(root_bias.shape.as_list(), [1, 1])
-    
-      sources_shape = tf.shape(sources)
-  targets_shape = tf.shape(targets)
-  batch_size = sources_shape[0]
-  num_tokens = sources_shape[1]
-  with tf.control_dependencies([tf.assert_equal(batch_size, targets_shape[0]),
-                                tf.assert_equal(num_tokens, targets_shape[1])]):
-    # For each token, we must compute a vector-3tensor-vector product.  There is
-    # no op for this, but we can use reshape() and matmul() to compute it.
-    
-      # Write the new spec to a temp file and export it.  The basename will be
-  # exported in the SavedModel, so use mkdtemp() with a fixed basename.
-  master_spec_path = os.path.join(tempfile.mkdtemp(), 'master_spec')
-  with tf.gfile.FastGFile(master_spec_path, 'w') as fout:
-    fout.write(text_format.MessageToString(master_spec))
-  with external_graph.as_default():
-    asset_file_tensor = tf.constant(
-        master_spec_path, name='master_spec_filepath')
-    tf.add_to_collection(tf.GraphKeys.ASSET_FILEPATHS, asset_file_tensor)
-    
-        non_averaged_hook_name = '{}/fixed_embedding_matrix_0/trimmed'.format(
-        component_name)
-    averaged_hook_name = '{}/ExponentialMovingAverage'.format(
-        non_averaged_hook_name)
-    cell_subgraph_hook_name = '{}/EXPORT/CellSubgraphSpec'.format(
-        component_name)
-    return averaged_hook_name, non_averaged_hook_name, cell_subgraph_hook_name
-    
-    
-def explain_ignored_app_run():
-    if os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
-        warn(Warning('Silently ignoring app.run() because the '
-                     'application is run from the flask command line '
-                     'executable.  Consider putting app.run() behind an '
-                     'if __name__ == '__main__' guard to silence this '
-                     'warning.'), stacklevel=3)
+            return {
+            'id': flv_id,
+            'url': rtmp_url,
+            'ext': 'flv',
+            'no_resume': True,
+            'title': title,
+            'description': description,
+            'duration': duration,
+            'view_count': view_count,
+            'comment_count': comment_count,
+            'uploader': uploader,
+            'upload_date': upload_date,
+        }
 
     
-        #: The canonical way to decorate class-based views is to decorate the
-    #: return value of as_view().  However since this moves parts of the
-    #: logic from the class declaration to the place where it's hooked
-    #: into the routing system.
-    #:
-    #: You can place one or more decorators in this list and whenever the
-    #: view function is created the result is automatically decorated.
-    #:
-    #: .. versionadded:: 0.8
-    decorators = ()
+    import sys
+    
+            httponly = self.get_cookie_httponly(app)
+        secure = self.get_cookie_secure(app)
+        samesite = self.get_cookie_samesite(app)
+        expires = self.get_expiration_time(app, session)
+        val = self.get_signing_serializer(app).dumps(dict(session))
+        response.set_cookie(
+            app.session_cookie_name,
+            val,
+            expires=expires,
+            httponly=httponly,
+            domain=domain,
+            path=path,
+            secure=secure,
+            samesite=samesite
+        )
+
+    
+        flask.appcontext_pushed.connect(record_push, app)
+    flask.appcontext_popped.connect(record_pop, app)
+    try:
+        with app.test_client() as c:
+            rv = c.get('/')
+            assert rv.data == b'Hello'
+            assert recorded == ['push']
+        assert recorded == ['push', 'pop']
+    finally:
+        flask.appcontext_pushed.disconnect(record_push, app)
+        flask.appcontext_popped.disconnect(record_pop, app)
+    
+    # If true, `todo` and `todoList` produce output, else they produce nothing.
+todo_include_todos = True
+    
+            # Strip port numbers from netloc. This weird `if...encode`` dance is
+        # used for Python 3.2, which doesn't support unicode literals.
+        splitstr = b':'
+        if isinstance(url, str):
+            splitstr = splitstr.decode('ascii')
+        host = ri.netloc.split(splitstr)[0]
+    
+        # Check chardet for compatibility.
+    major, minor, patch = chardet_version.split('.')[:3]
+    major, minor, patch = int(major), int(minor), int(patch)
+    # chardet >= 3.0.2, < 3.1.0
+    assert major == 3
+    assert minor < 1
+    assert patch >= 2
+    
+        def on_open_shell(self):
+        try:
+            self._exec_cli_command('screen-length 0 temporary')
+        except AnsibleConnectionFailure:
+            raise AnsibleConnectionFailure('unable to set terminal parameters')
+
+    
+    AnsibleConstructor.add_constructor(
+    u'tag:yaml.org,2002:seq',
+    AnsibleConstructor.construct_yaml_seq)
+    
+            n_samples, n_features = 10 * i + 3, 10 * i + 3
     
     
-def build():
-    cmd = [sys.executable, 'setup.py', 'sdist', 'bdist_wheel']
-    Popen(cmd).wait()
+@ignore_warnings
+def benchmark(metrics=tuple(v for k, v in sorted(METRICS.items())),
+              formats=tuple(v for k, v in sorted(FORMATS.items())),
+              samples=1000, classes=4, density=.2,
+              n_times=5):
+    '''Times metric calculations for a number of inputs
     
-            @app.route('/')
-        def index():
-            reqctx = flask._request_ctx_stack.top.copy()
+    In this examples we will use a movie review dataset.
     
-        By default this will get the strings from the blns.txt file
+    We selected two sets of two variables from the Boston housing data set
+as an illustration of what kind of analysis can be done with several
+outlier detection tools. For the purpose of visualization, we are working
+with two-dimensional examples, but one should be aware that things are
+not so trivial in high-dimension, as it will be pointed out.
     
-    ## All tokens go to the parser (unless skip() is called in that rule)
-# on a particular 'channel'.  The parser tunes to a particular channel
-# so that whitespace etc... can go to the parser on a 'hidden' channel.
-DEFAULT_CHANNEL = 0
+            controller.gamma = Tk.StringVar()
+        controller.gamma.set('0.01')
+        g = Tk.Frame(valbox)
+        Tk.Label(g, text='gamma:', anchor='e', width=7).pack(side=Tk.LEFT)
+        Tk.Entry(g, width=6, textvariable=controller.gamma).pack(side=Tk.LEFT)
+        g.pack()
     
-            Python does not have any size restrictions, but the compilation of
-        such large source files seems to be pretty memory hungry. The memory
-        consumption of the python process grew to >1.5GB when importing a
-        15MB lexer, eating all my swap space and I was to impacient to see,
-        if it could finish at all. With packed initializers that are unpacked
-        at import time of the lexer module, everything works like a charm.
-        
-        '''
-        
-        ret = []
-        for i in range(len(string) / 2):
-            (n, v) = ord(string[i*2]), ord(string[i*2+1])
+        t0 = time()
+    scores = uniform_labelings_scores(score_func, n_samples, n_clusters_range)
+    print('done in %0.3fs' % (time() - t0))
+    plots.append(plt.errorbar(
+        n_clusters_range, np.median(scores, axis=1), scores.std(axis=1))[0])
+    names.append(score_func.__name__)
     
-            if i < 0:
-            i += 1 # e.g., translate LA(-1) to use offset i=0; then data[p+0-1]
+        delimiter = b'\n'
     
-    PROJ_METADATA = '%s.json' % PROJ_NAME
-    
-            if args:
-            if 'gui' in conf and conf['gui']:
-                # Enter GUI mode.
-                from .gui import gui_main
-                gui_main(*args, **conf)
-            else:
-                # Enter console mode.
-                from .console import console_main
-                console_main(*args, **conf)
-    
-            link_list = []
-    
-        stream_types = [
-        {'id': 'video'},
-        {'id': 'audio'},
-        {'id': 'slides'}
-    ]
-    
-    def showroom_download_by_room_id(room_id, output_dir = '.', merge = False, info_only = False, **kwargs):
-    '''Source: Android mobile'''
-    while True:
-        timestamp = str(int(time() * 1000))
-        api_endpoint = 'https://www.showroom-live.com/api/live/streaming_url?room_id={room_id}&_={timestamp}'.format(room_id = room_id, timestamp = timestamp)
-        html = get_content(api_endpoint)
-        html = json.loads(html)
-        #{'streaming_url_list': [{'url': 'rtmp://52.197.69.198:1935/liveedge', 'id': 1, 'label': 'original spec(low latency)', 'is_default': True, 'type': 'rtmp', 'stream_name': '7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed'}, {'url': 'http://52.197.69.198:1935/liveedge/7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed/playlist.m3u8', 'is_default': True, 'id': 2, 'type': 'hls', 'label': 'original spec'}, {'url': 'rtmp://52.197.69.198:1935/liveedge', 'id': 3, 'label': 'low spec(low latency)', 'is_default': False, 'type': 'rtmp', 'stream_name': '7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed_low'}, {'url': 'http://52.197.69.198:1935/liveedge/7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed_low/playlist.m3u8', 'is_default': False, 'id': 4, 'type': 'hls', 'label': 'low spec'}]}
-        if len(html) >= 1:
-            break
-        log.w('The live show is currently offline.')
-        sleep(1)
-    
-    import os
-import warnings
+    logger = logging.getLogger(__name__)
     
     
-def setup(hass, config):
-    '''Listen for browse_url events.'''
-    import webbrowser
+class DefaultHeadersMiddleware(object):
     
-    VALID_UNITS = [
-    LENGTH_KILOMETERS,
-    LENGTH_MILES,
-    LENGTH_FEET,
-    LENGTH_METERS,
-]
+    See documentation in docs/topics/extensions.rst
+'''
+    
+        long_description = README,
+    
+    __all__ = ['kugou_download']
+    
+    from ..common import *
+    
+    
+def mtv81_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_content(url)
+    title = HTMLParser().unescape(
+        '|'.join(match1(html, r'<title>(.*?)</title>').split('|')[:-2]))
+    
+            for s in self.stream_types:
+            quality = s['id']
+            src = match1(content,
+                         r'src: '([^']+)', 'data-res': '%s'' % quality)
+            if src is not None:
+                url = 'http://en.musicplayon.com%s' % src
+                self.streams[quality] = {'url': url}
+    
+            # extract title
+        self.title = match1(content,
+                            r'<meta property='og:description' name='og:description' content='([^']+)'')
