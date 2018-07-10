@@ -1,125 +1,139 @@
 
         
-                if any([s_line.startswith(s) for s in ['* [', '- [']]):
-            if indent == last_indent:
-                blocks[-1].append(line)
-            else:
-                blocks.append([line])
-            last_indent = indent
-        else:
-            blocks.append([line])
-            last_indent = None
+        entry_template = textwrap.dedent('''
+    <entry>
+        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
+        <title>New version @VERSION@</title>
+        <link href='http://rg3.github.io/youtube-dl' />
+        <content type='xhtml'>
+            <div xmlns='http://www.w3.org/1999/xhtml'>
+                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
+            </div>
+        </content>
+        <author>
+            <name>The youtube-dl maintainers</name>
+        </author>
+        <updated>@TIMESTAMP@</updated>
+    </entry>
+    ''')
     
-    import rsa
-import json
-from binascii import hexlify
-    
-    
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
-    
-    
-def expect_info_dict(self, got_dict, expected_dict):
-    expect_dict(self, got_dict, expected_dict)
-    # Check for the presence of mandatory fields
-    if got_dict.get('_type') not in ('playlist', 'multi_video'):
-        for key in ('id', 'url', 'title', 'ext'):
-            self.assertTrue(got_dict.get(key), 'Missing mandatory field %s' % key)
-    # Check for mandatory fields that are automatically set by YoutubeDL
-    for key in ['webpage_url', 'extractor', 'extractor_key']:
-        self.assertTrue(got_dict.get(key), 'Missing field: %s' % key)
-    
-            with io.open(as_file, 'r', encoding='utf-8') as as_f:
-            as_content = as_f.read()
-    
-    
-class AcademicEarthCourseIE(InfoExtractor):
-    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
-    IE_NAME = 'AcademicEarth:Course'
-    _TEST = {
-        'url': 'http://academicearth.org/playlists/laws-of-nature/',
-        'info_dict': {
-            'id': 'laws-of-nature',
-            'title': 'Laws of Nature',
-            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
-        },
-        'playlist_count': 3,
+        params = {
+        'age_limit': age,
+        'skip_download': True,
+        'writeinfojson': True,
+        'outtmpl': '%(id)s.%(ext)s',
     }
+    ydl = YoutubeDL(params)
+    ydl.add_default_info_extractors()
+    json_filename = os.path.splitext(filename)[0] + '.info.json'
+    try_rm(json_filename)
+    ydl.download([url])
+    res = os.path.exists(json_filename)
+    try_rm(json_filename)
+    return res
     
-    import re
+    import os
+import subprocess
     
-    
-class ClypIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?clyp\.it/(?P<id>[a-z0-9]+)'
-    _TEST = {
-        'url': 'https://clyp.it/ojz2wfah',
-        'md5': '1d4961036c41247ecfdcc439c0cddcbb',
-        'info_dict': {
-            'id': 'ojz2wfah',
-            'ext': 'mp3',
-            'title': 'Krisson80 - bits wip wip',
-            'description': '#Krisson80BitsWipWip #chiptune\n#wip',
-            'duration': 263.21,
-            'timestamp': 1443515251,
-            'upload_date': '20150929',
-        },
-    }
-    
-        _CONFIG = {
-        # http://edition.cnn.com/.element/apps/cvp/3.0/cfg/spider/cnn/expansion/config.xml
-        'edition': {
-            'data_src': 'http://edition.cnn.com/video/data/3.0/video/%s/index.xml',
-            'media_src': 'http://pmd.cdn.turner.com/cnn/big',
-        },
-        # http://money.cnn.com/.element/apps/cvp2/cfg/config.xml
-        'money': {
-            'data_src': 'http://money.cnn.com/video/data/4.0/video/%s.xml',
-            'media_src': 'http://ht3.cdn.turner.com/money/big',
-        },
-    }
-    
-    A tree.RewriteCardinalityException is raised, when the parsers hits a
-cardinality mismatch during AST construction. Although this is basically a
-bug in your grammar, it can only be detected at runtime.
+            webpage = self._download_webpage(url, playlist_id)
+        title = self._html_search_regex(
+            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
+        description = self._html_search_regex(
+            r'<p class='excerpt'[^>]*?>(.*?)</p>',
+            webpage, 'description', fatal=False)
+        urls = re.findall(
+            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
+            webpage)
+        entries = [self.url_result(u) for u in urls]
     
     
-class ANTLRInputStream(ANTLRStringStream):
-    '''
-    @brief CharStream that reads data from a file-like object.
+class AnitubeIE(NuevoBaseIE):
+    IE_NAME = 'anitube.se'
+    _VALID_URL = r'https?://(?:www\.)?anitube\.se/video/(?P<id>\d+)'
     
     
-@section Exceptions
+    {        webpage = self._download_webpage(url, text_id)
+        sohu_video_info_str = self._search_regex(
+            r'var\s+sohuVideoInfo\s*=\s*({[^}]+});', webpage, 'Sohu video info', default=None)
+        if sohu_video_info_str:
+            sohu_video_info = self._parse_json(
+                sohu_video_info_str, text_id, transform_source=js_to_json)
+            return self.url_result(sohu_video_info['url'], 'Sohu')
     
-        def amount(self, val):
-        print(val, end=' ')
-        return self
+            formats = []
+        for secure in ('', 'Secure'):
+            for ext in ('Ogg', 'Mp3'):
+                format_id = '%s%s' % (secure, ext)
+                format_url = metadata.get('%sUrl' % format_id)
+                if format_url:
+                    formats.append({
+                        'url': format_url,
+                        'format_id': format_id,
+                        'vcodec': 'none',
+                    })
+        self._sort_formats(formats)
     
-    '''
-Port of the Java example of 'Setter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
+        def implements_to_string(cls):
+        cls.__unicode__ = cls.__str__
+        cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
+        return cls
     
-    '''
-Port of the Java example of 'Parameter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
+    import os
+import types
+import errno
     
-        def rename(self, src, dest):
-        print(u'renaming %s to %s' % (src, dest))
-        os.rename(src, dest)
+        version, release_date, codename = rv
+    dev_version = bump_version(version) + '.dev'
+    
+        @app.route('/')
+    def index():
+        1 // 0
+    
+    This module is used internally by Tornado.  It is not necessarily expected
+that the functions and classes defined here will be useful to other
+applications, but they are documented here in case they are.
+    
+        def _handle_timeout(self):
+        '''Called by IOLoop when the requested timeout has passed.'''
+        with stack_context.NullContext():
+            self._timeout = None
+            while True:
+                try:
+                    ret, num_handles = self._multi.socket_action(
+                        pycurl.SOCKET_TIMEOUT, 0)
+                except pycurl.error as e:
+                    ret = e.args[0]
+                if ret != pycurl.E_CALL_MULTI_PERFORM:
+                    break
+            self._finish_pending_requests()
+    
+    '''A command line parsing module that lets modules define their own options.
+    
+    from tornado.escape import json_decode
+from tornado.test.httpserver_test import TypeCheckHandler
+from tornado.test.util import ignore_deprecation
+from tornado.testing import AsyncHTTPTestCase
+from tornado.web import RequestHandler, Application
+from tornado.wsgi import WSGIApplication, WSGIContainer, WSGIAdapter
+    
+        def get_auth_http_client(self):
+        '''Returns the `.AsyncHTTPClient` instance to be used for auth requests.
+    
+        def _get(self):
+        return heapq.heappop(self._queue)
     
         def tearDown(self):
-        if not self._bProblem:
-            print('Tearing down')
-            time.sleep(0.1)
-            self._tm.publishReport()
-        else:
-            print('Test not executed. No tear down required.')
+        super(ManualClientTest, self).tearDown()
+        self.warning_catcher.__exit__(None, None, None)
     
-        def and_specification(self, candidate):
-        raise NotImplementedError()
+        def _parse_headers(self, data):
+        # The lstrip removes newlines that some implementations sometimes
+        # insert between messages of a reused connection.  Per RFC 7230,
+        # we SHOULD ignore at least one empty line before the request.
+        # http://tools.ietf.org/html/rfc7230#section-3.5
+        data = native_str(data.decode('latin1')).lstrip('\r\n')
+        # RFC 7230 section allows for both CRLF and bare LF.
+        eol = data.find('\n')
+        start_line = data[:eol].rstrip('\r')
+        headers = httputil.HTTPHeaders.parse(data[eol:])
+        return start_line, headers
