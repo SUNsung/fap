@@ -1,107 +1,112 @@
 
         
-        module Devise
-  module Models
-    # Confirmable is responsible to verify if an account is already confirmed to
-    # sign in, and to send emails with confirmation instructions.
-    # Confirmation instructions are sent to the user email after creating a
-    # record and when manually requested by a new confirmation instruction request.
-    #
-    # Confirmable tracks the following columns:
-    #
-    # * confirmation_token   - A unique random token
-    # * confirmed_at         - A timestamp when the user clicked the confirmation link
-    # * confirmation_sent_at - A timestamp when the confirmation_token was generated (not sent)
-    # * unconfirmed_email    - An email address copied from the email attr. After confirmation
-    #                          this value is copied to the email attr then cleared
-    #
-    # == Options
-    #
-    # Confirmable adds the following options to +devise+:
-    #
-    #   * +allow_unconfirmed_access_for+: the time you want to allow the user to access their account
-    #     before confirming it. After this period, the user access is denied. You can
-    #     use this to let your user access some features of your application without
-    #     confirming the account, but blocking it after a certain period (ie 7 days).
-    #     By default allow_unconfirmed_access_for is zero, it means users always have to confirm to sign in.
-    #   * +reconfirmable+: requires any email changes to be confirmed (exactly the same way as
-    #     initial account confirmation) to be applied. Requires additional unconfirmed_email
-    #     db field to be set up (t.reconfirmable in migrations). Until confirmed, new email is
-    #     stored in unconfirmed email column, and copied to email column on successful
-    #     confirmation. Also, when used in conjunction with `send_email_changed_notification`,
-    #     the notification is sent to the original email when the change is requested,
-    #     not when the unconfirmed email is confirmed.
-    #   * +confirm_within+: the time before a sent confirmation token becomes invalid.
-    #     You can use this to force the user to confirm within a set period of time.
-    #     Confirmable will not generate a new token if a repeat confirmation is requested
-    #     during this time frame, unless the user's email changed too.
-    #
-    # == Examples
-    #
-    #   User.find(1).confirm       # returns true unless it's already confirmed
-    #   User.find(1).confirmed?    # true/false
-    #   User.find(1).send_confirmation_instructions # manually send instructions
-    #
-    module Confirmable
-      extend ActiveSupport::Concern
+          attr_accessor :output_buffer
+  attr_reader :request
     
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
+            routes &&
+          (routes.named_routes.route_defined?(name) ||
+           routes.mounted_helpers.method_defined?(name))
+      end
+    end
     
-          # Set up a subject doing an I18n lookup. At first, it attempts to set a subject
-      # based on the current mapping:
-      #
-      #   en:
-      #     devise:
-      #       mailer:
-      #         confirmation_instructions:
-      #           user_subject: '...'
-      #
-      # If one does not exist, it fallbacks to ActionMailer default:
-      #
-      #   en:
-      #     devise:
-      #       mailer:
-      #         confirmation_instructions:
-      #           subject: '...'
-      #
-      def subject_for(key)
-        I18n.t(:'#{devise_mapping.name}_subject', scope: [:devise, :mailer, key],
-          default: [:subject, key.to_s.humanize])
+        orig = Topic.new(content: { foo: :bar })
+    clone = orig.dup
+    assert_equal(orig.content, clone.content)
+  end
+    
+    module Web
+  class Reply < Web::Topic
+    belongs_to :topic, foreign_key: 'parent_id', counter_cache: true, class_name: 'Web::Topic'
+  end
+end
+
+    
+        # Block arg
+    periodically every: 3 do
+      ping
+    end
+    
+        assert subscriptions.verify
+  end
+end
+
+    
+            assert_equal 1, connection.transmissions.size
+      end
+    end
+  end
+    
+        def connect
+      @connected = true
+    end
+    
+      class FakeConnection
+    def close
+    end
+  end
+    
+        describe '#revoke!' do
+      it 'revokes the key with the client' do
+        mock_client_response(:revoke_key!)
+    
+        # Returns the current git branch - can be replaced using the environment variable `GIT_BRANCH`
+    def self.git_branch
+      return ENV['GIT_BRANCH'] if ENV['GIT_BRANCH'].to_s.length > 0 # set by Jenkins
+      s = Actions.sh('git rev-parse --abbrev-ref HEAD', log: false).chomp
+      return s.to_s.strip if s.to_s.length > 0
+      nil
+    rescue
+      nil
+    end
+    
+          it 'it increments all targets patch version number' do
+        Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number
+        end').runner.execute(:test)
+    
+      def translation_scope
+    'devise.omniauth_callbacks'
+  end
+end
+
+    
+      # GET /resource/unlock/new
+  def new
+    self.resource = resource_class.new
+  end
+    
+          def remember_key(resource, scope)
+        resource.rememberable_options.fetch(:key, 'remember_#{scope}_token')
       end
     end
   end
 end
 
     
-          def escape_string(str)
-        str = @escaper.escape_url(str)        if @url
-        str = @escaper.escape_html(str)       if @html
-        str = @escaper.escape_javascript(str) if @javascript
-        str
-      end
-    end
-  end
-end
-
-    
-        it 'leaves normal params untouched' do
-      mock_app do |env|
-        request = Rack::Request.new(env)
-        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
-      end
-      get '/', :foo => 'bar'
-      expect(body).to eq('bar')
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
     end
     
-      # Run specs in random order to surface order dependencies. If you find an
-  # order dependency and want to debug it, you can fix the order by providing
-  # the seed, which is printed after each run.
-  #     --seed 1234
-  config.order = :random
+        uses = formulae.select do |f|
+      used_formulae.all? do |ff|
+        begin
+          deps = f.runtime_dependencies if only_installed_arg
+          deps ||= if recursive
+            recursive_includes(Dependency, f, includes, ignores)
+          else
+            reject_ignores(f.deps, ignores, includes)
+          end
     
-            def autocorrect(node)
-          # Regexp#match can take a second argument, but this cop doesn't
-          # register an offense in that case
-          return unless node.first_argument.regexp_type?
+        SPREE_GEMS.each do |gem_name|
+      Dir.chdir(gem_name) do
+        sh 'gem build spree_#{gem_name}.gemspec'
+        mv 'spree_#{gem_name}-#{version}.gem', pkgdir
+      end
+    end
+    
+            def stock_location
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:id])
+        end
