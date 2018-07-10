@@ -1,29 +1,49 @@
 
         
-        When(%r!^I delete the file '(.*)'$!) do |file|
-  File.delete(file)
-end
-    
-    # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-    
-    # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-
-    
-        # Gets the path to this layout relative to its base
-    attr_reader :relative_path
-    
+              # Remembers the given resource by setting up a cookie
+      def remember_me(resource)
+        return if request.env['devise.skip_storage']
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.remember_me!
+        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
       end
     
-      protected
+          @sign_out_via = options[:sign_out_via] || Devise.sign_out_via
+      @format = options[:format]
+    
+          def key?(key)
+        super(convert_key(key))
+      end
+    
+            opts = OptionParser.new do |o|
+          o.banner = 'Usage: vagrant cap [options] TYPE NAME [args]'
+          o.separator ''
+          o.separator 'This is an advanced command. If you don't know what this'
+          o.separator 'does and you aren't explicitly trying to use it, you probably'
+          o.separator 'don't want to use this.'
+          o.separator ''
+          o.separator 'This command checks or executes arbitrary capabilities that'
+          o.separator 'Vagrant has for hosts, guests, and providers.'
+          o.separator ''
+          o.separator 'Options:'
+          o.separator ''
+    
+        def type_from_mime_magic
+      @type_from_mime_magic ||= File.open(@filepath) do |file|
+        MimeMagic.by_magic(file).try(:type)
+      end
+    end
+    
+            def responds?
+          methods = @subject.instance_methods.map(&:to_s)
+          methods.include?('#{@attachment_name}') &&
+            methods.include?('#{@attachment_name}=') &&
+            methods.include?('#{@attachment_name}?')
+        end
+    
+        def self.included(base)
+      ActiveRecord::ConnectionAdapters::Table.send :include, TableDefinition
+      ActiveRecord::ConnectionAdapters::TableDefinition.send :include, TableDefinition
+      ActiveRecord::ConnectionAdapters::AbstractAdapter.send :include, Statements
+      ActiveRecord::Migration::CommandRecorder.send :include, CommandRecorder
+    end
