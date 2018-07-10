@@ -1,62 +1,87 @@
-    options[:title] = 'CoffeeScript'
-    options[:skip_links] = true
-    
-    <script>
-  // reading
-  var es = new EventSource('/stream');
-  es.onmessage = function(e) { $('#chat').append(e.data + '\n') };
-    
-        { # yes, this is ugly, feel free to change that
-      '/..' => '/', '/a/../b' => '/b', '/a/../b/' => '/b/', '/a/.' => '/a/',
-      '/%2e.' => '/', '/a/%2E%2e/b' => '/b', '/a%2f%2E%2e%2Fb/' => '/b/',
-      '//' => '/', '/%2fetc%2Fpasswd' => '/etc/passwd'
-    }.each do |a, b|
-      it('replaces #{a.inspect} with #{b.inspect}') { expect(get(a).body).to eq(b) }
+
+        
+              message = TestMailer.send_test(args[:to_address])
+      Email::Sender.new(message, :test_message).send
     end
     
-      # Many RSpec users commonly either run the entire suite or an individual
-  # file, and it's useful to allow more verbose output when running an
-  # individual spec file.
-  if config.files_to_run.one?
-    # Use the documentation formatter for detailed output,
-    # unless a formatter has already been configured
-    # (e.g. via a command-line flag).
-    config.default_formatter = 'doc'
+      protected
+    
+        res << inp.to_html
+  end
+  res << '</form>'
+end
+    
+    clsJavaCompile 	= Rjb::import('javaCompile.CompileSourceInMemory')
+clsCreateJar	= Rjb::import('javaCompile.CreateJarFile')
+clsFile			= Rjb::import('java.io.File')
+system			= Rjb::import('java.lang.System')
+#clsString	= Rjb::import('java.lang.String')
+    
+      def initialize(filename)
+    begin
+      f = File.new(filename)
+      @template = f.read
+    rescue Errno::ENOENT
+    end
   end
     
-        def get_gist_from_web(gist, file)
-      gist_url = get_gist_url_for(gist, file)
-      data     = get_web_content(gist_url)
+        on :save_person_after_webfinger do |person|
+      # find existing person or create a new one
+      person_entity = Person.find_by(diaspora_handle: person.diaspora_id) ||
+        Person.new(diaspora_handle: person.diaspora_id, guid: person.guid,
+                   serialized_public_key: person.exported_key, pod: Pod.find_or_create_by(url: person.url))
     
-        def render(context)
-      includes_dir = File.join(context.registers[:site].source, '_includes')
+        def perform
+      return User.none unless valid?
     
-      # Extracts raw content DIV from template, used for page description as {{ content }}
-  # contains complete sub-template code on main page level
-  def raw_content(input)
-    /<div class='entry-content'>(?<content>[\s\S]*?)<\/div>\s*<(footer|\/article)>/ =~ input
-    return (content.nil?) ? input : content
+          def auth_user_unless_prompt_none!
+        prompt = params[:prompt]
+        if prompt && prompt.include?('none')
+          handle_prompt_none
+        elsif prompt && prompt.include?('login')
+          new_params = params.except('controller', 'action').permit!.to_h.merge(prompt: prompt.remove('login'))
+          reauthenticate(new_params)
+        else
+          authenticate_user!
+        end
+      end
+    
+          rescue_from OpenIDConnect::HttpError do |e|
+        http_error_page_as_json(e)
+      end
+    
+        def definitions_for(klass)
+      parent_classes = klass.ancestors.reverse
+      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
+        inherited_definitions.deep_merge! @attachments[ancestor]
+      end
+    end
   end
+end
+
     
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
+        # Returns the larger of the two dimensions
+    def larger
+      [height, width].max
     end
     
-      def _nt_method_call
-    start_index = index
-    if node_cache[:method_call].has_key?(index)
-      cached = node_cache[:method_call][index]
-      if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
-        @index = cached.interval.end
+            def description
+          'have an attachment named #{@attachment_name}'
+        end
+    
+              @subject.send(@attachment_name).post_processing = false
+          @subject.send(@attachment_name).assign(file)
+          @subject.valid?
+          @subject.errors[:'#{@attachment_name}_file_size'].blank?
+        ensure
+          @subject.send(@attachment_name).post_processing = true
+        end
+    
+          def validate_before_processing(validator_class, options)
+        options = options.dup
+        attributes = options.delete(:attributes)
+        attributes.each do |attribute|
+          options[:attributes] = [attribute]
+          create_validating_before_filter(attribute, validator_class, options)
+        end
       end
-      return cached
-    end
-    
-          if app.config.respond_to?(:paperclip_defaults)
-        Paperclip::Attachment.default_options.merge!(app.config.paperclip_defaults)
-      end
-    end
