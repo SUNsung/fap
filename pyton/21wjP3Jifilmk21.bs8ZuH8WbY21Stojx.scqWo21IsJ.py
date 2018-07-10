@@ -1,230 +1,199 @@
 
         
-        print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
+            # Sorting the libraries
+    inner_blocks = sorted(blocks[0].split('##'))
+    for i in range(1 , len(inner_blocks)):
+        if inner_blocks[i][0] != '#':
+            inner_blocks[i] = '##' + inner_blocks[i]
+    inner_blocks=''.join(inner_blocks)
     
-    import datetime
-import io
-import json
-import textwrap
+            def report_warning(self, message):
+            if re.match(regex, message):
+                return
+            old_report_warning(message)
+        self.report_warning = types.MethodType(report_warning, self)
     
-        def matching_ies(self, url):
-        return [ie.IE_NAME for ie in self.ies if ie.suitable(url) and ie.IE_NAME != 'generic']
-    
-            webpage = self._download_webpage(url, playlist_id)
-        title = self._html_search_regex(
-            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<p class='excerpt'[^>]*?>(.*?)</p>',
-            webpage, 'description', fatal=False)
-        urls = re.findall(
-            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
-            webpage)
-        entries = [self.url_result(u) for u in urls]
-    
-        def _real_extract(self, url):
-        display_id = self._match_id(url)
+        def test_cache(self):
+        ydl = FakeYDL({
+            'cachedir': self.test_dir,
+        })
+        c = Cache(ydl)
+        obj = {'x': 1, 'y': ['ä', '\\a', True]}
+        self.assertEqual(c.load('test_cache', 'k.'), None)
+        c.store('test_cache', 'k.', obj)
+        self.assertEqual(c.load('test_cache', 'k2'), None)
+        self.assertFalse(_is_empty(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), obj)
+        self.assertEqual(c.load('test_cache', 'y'), None)
+        self.assertEqual(c.load('test_cache2', 'k.'), None)
+        c.remove()
+        self.assertFalse(os.path.exists(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), None)
     
     
-class TagUUID(JSONTag):
-    __slots__ = ()
-    key = ' u'
-    
-        def list_templates(self):
-        result = set()
-        loader = self.app.jinja_loader
-        if loader is not None:
-            result.update(loader.list_templates())
-    
-    
-def set_filename_version(filename, version_number, pattern):
-    changed = []
-    
-        class Loader(object):
-        def find_module(self, name, path=None):
-            return self
-    
-        app.testing = False
-    stream = StringIO()
-    rv = client.get('/', errors_stream=stream)
-    assert rv.status_code == 500
-    assert rv.data
-    err = stream.getvalue()
-    assert 'Exception on / [GET]' in err
-    assert 'Exception: test' in err
-
+class TestMultipleSocks(unittest.TestCase):
+    @staticmethod
+    def _check_params(attrs):
+        params = get_params()
+        for attr in attrs:
+            if attr not in params:
+                print('Missing %s. Skipping.' % attr)
+                return
+        return params
     
     
-def create_temporal_sequential_model():
-    model = Sequential()
-    model.add(GRU(32, input_shape=(timesteps, input_dim), return_sequences=True))
-    model.add(TimeDistributed(Dense(num_classes)))
-    model.add(Activation('softmax'))
-    return model
+def gen_extractors():
+    ''' Return a list of an instance of every supported extractor.
+    The order does matter; the first extractor matched is the one handling the URL.
+    '''
+    return [klass() for klass in gen_extractor_classes()]
     
-        x = Input(shape=(1,))
-    y = inner_model(x)
-    outer_model = Model(x, y)
-    assert outer_model.trainable_weights == inner_model.trainable_weights
-    inner_model.trainable = False
-    assert outer_model.trainable_weights == []
-    inner_model.trainable = True
-    inner_model.layers[-1].trainable = False
-    assert outer_model.trainable_weights == []
+    import re
     
-        if args.weights:
-        vae = vae.load_weights(args.weights)
-    else:
-        # train the autoencoder
-        vae.fit(x_train,
-                epochs=epochs,
-                batch_size=batch_size,
-                validation_data=(x_test, None))
-        vae.save_weights('vae_cnn_mnist.h5')
+    
+def test_custom_tag():
+    class Foo(object):
+        def __init__(self, data):
+            self.data = data
+    
+                app.config.from_object('yourapplication.default_config')
+            from yourapplication import default_config
+            app.config.from_object(default_config)
+    
+    
+def test_existing_handler(app):
+    logging.root.addHandler(logging.StreamHandler())
+    assert app.logger.level == logging.NOTSET
+    assert not app.logger.handlers
+    
+            def get_auth(self, username=None, password=None):
+            assert self.raw_auth is None
+            assert username is None
+            assert password is None
+            return basic_auth()
+    
+    from utils import TESTS_ROOT
+    
+    
+DEFAULT_CONFIG_DIR = str(os.environ.get(
+    'HTTPIE_CONFIG_DIR',
+    os.path.expanduser('~/.httpie') if not is_windows else
+    os.path.expandvars(r'%APPDATA%\\httpie')
+))
+    
+            if self.args.download and OUT_RESP_BODY in self.args.output_options:
+            # Response body is always downloaded with --download and it goes
+            # through a different routine, so we remove it.
+            self.args.output_options = str(
+                set(self.args.output_options) - set(OUT_RESP_BODY))
     
     
 if __name__ == '__main__':
-    pytest.main([__file__])
+    RemoveDuplicateUrls.run()
 
     
-    # Training
-batch_size = 30
-epochs = 2
+        def dispatch_call(self, call):
+        if call.rank not in (Rank.OPERATOR, Rank.SUPERVISOR, Rank.DIRECTOR):
+            raise ValueError('Invalid call rank: {}'.format(call.rank))
+        employee = None
+        if call.rank == Rank.OPERATOR:
+            employee = self._dispatch_call(call, self.operators)
+        if call.rank == Rank.SUPERVISOR or employee is None:
+            employee = self._dispatch_call(call, self.supervisors)
+        if call.rank == Rank.DIRECTOR or employee is None:
+            employee = self._dispatch_call(call, self.directors)
+        if employee is None:
+            self.queued_calls.append(call)
+    
+            Accessing a node updates its position to the front of the LRU list.
+        '''
+        node = self.lookup[query]
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
     
     
-def test_serialization():
-    all_activations = ['max_norm', 'non_neg',
-                       'unit_norm', 'min_max_norm']
-    for name in all_activations:
-        fn = constraints.get(name)
-        ref_fn = getattr(constraints, name)()
-        assert fn.__class__ == ref_fn.__class__
-        config = constraints.serialize(fn)
-        fn = constraints.deserialize(config)
-        assert fn.__class__ == ref_fn.__class__
+class LinkedList(object):
     
-                # check state initialization
-            layer = convolutional_recurrent.ConvLSTM2D(filters=filters,
-                                                       kernel_size=(num_row, num_col),
-                                                       data_format=data_format,
-                                                       return_sequences=return_sequences)
-            layer.build(inputs.shape)
-            x = Input(batch_shape=inputs.shape)
-            initial_state = layer.get_initial_state(x)
-            y = layer(x, initial_state=initial_state)
-            model = Model(x, y)
-            assert model.predict(inputs).shape == layer.compute_output_shape(inputs.shape)
+    from mrjob.job import MRJob
     
+        def unique_names(self):
+        # sorted
+        if not self.__allnames:
+            self.__allnames = []
+            for name, aliases in self.__byrgb.values():
+                self.__allnames.append(name)
+            self.__allnames.sort(key=str.lower)
+        return self.__allnames
     
-@keras_test
-def test_vector_classification():
-    '''
-    Classify random float vectors into 2 classes with logistic regression
-    using 2 layer neural network with ReLU hidden units.
-    '''
-    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
-                                                         num_test=200,
-                                                         input_shape=(20,),
-                                                         classification=True,
-                                                         num_classes=num_classes)
-    y_train = to_categorical(y_train)
-    y_test = to_categorical(y_test)
+        # a re to match a gzip Accept-Encoding
+    aepattern = re.compile(r'''
+                            \s* ([^\s;]+) \s*            #content-coding
+                            (;\s* q \s*=\s* ([0-9\.]+))? #q
+                            ''', re.VERBOSE | re.IGNORECASE)
     
-        @mock.patch('certbot_compatibility_test.validator.requests.get')
-    def test_redirect_wrong_redirect_code(self, mock_get_request):
-        mock_get_request.return_value = create_response(
-            303, {'location': 'https://test.com'})
-        self.assertFalse(self.validator.redirect('test.com'))
+        def test_modify_unregister(self):
+        # Make sure the fd is unregister()ed in case of error on
+        # modify(): http://bugs.python.org/issue30014
+        if self.SELECTOR.__name__ == 'EpollSelector':
+            patch = unittest.mock.patch(
+                'selectors.EpollSelector._selector_cls')
+        elif self.SELECTOR.__name__ == 'PollSelector':
+            patch = unittest.mock.patch(
+                'selectors.PollSelector._selector_cls')
+        elif self.SELECTOR.__name__ == 'DevpollSelector':
+            patch = unittest.mock.patch(
+                'selectors.DevpollSelector._selector_cls')
+        else:
+            raise self.skipTest('')
     
-    # A dictionary with options for the search language support, empty by default.
-# Now only 'ja' uses this config value
-#html_search_options = {'type': 'default'}
+    import dataclasses
+import typing
     
-        @classmethod
-    def _call(cls, enhancement):
-        from certbot.display.enhancements import ask
-        return ask(enhancement)
+    @dataclasses.dataclass
+class CV:
+    T_CV4 = typing.ClassVar
+    cv0: typing.ClassVar[int] = 20
+    cv1: typing.ClassVar = 30
+    cv2: T_CV2
+    cv3: T_CV3
+    not_cv4: T_CV4  # When using string annotations, this field is not recognized as a ClassVar.
     
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    def test_smtp_success(self, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        self.assertTrue(notify('Goose', 'auntrhody@example.com',
-                               'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.connect.call_count, 1)
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
-    
-        # Implement all methods from IInstaller, remembering to add
-    # 'self' as first argument, e.g. def get_all_names(self)...
+    @dataclass
+class IV:
+    T_IV4 = InitVar
+    iv0: InitVar[int]
+    iv1: InitVar
+    iv2: T_IV2
+    iv3: T_IV3
+    not_iv4: T_IV4  # When using string annotations, this field is not recognized as an InitVar.
 
     
-          # Checks for common mistakes in TODO comments.
-      comment = line[commentpos:]
-      match = _RE_PATTERN_TODO.match(comment)
-      if match:
-        # One whitespace is correct; zero whitespace is handled elsewhere.
-        leading_whitespace = match.group(1)
-        if len(leading_whitespace) > 1:
-          error(filename, linenum, 'whitespace/todo', 2,
-                'Too many spaces before TODO')
-    
-                if self._state in [CANCELLED, CANCELLED_AND_NOTIFIED]:
-                raise CancelledError()
-            elif self._state == FINISHED:
-                return self._exception
+        def assertAlmostEqual(self, a, b):
+        if isinstance(a, complex):
+            if isinstance(b, complex):
+                unittest.TestCase.assertAlmostEqual(self, a.real, b.real)
+                unittest.TestCase.assertAlmostEqual(self, a.imag, b.imag)
             else:
-                raise TimeoutError()
-    
-    # For 'manual' documents, if this is true, then toplevel headings are parts,
-# not chapters.
-#latex_use_parts = False
-    
-    
-def sleep_and_raise(t):
-    time.sleep(t)
-    raise Exception('this is an exception')
+                unittest.TestCase.assertAlmostEqual(self, a.real, b)
+                unittest.TestCase.assertAlmostEqual(self, a.imag, 0.)
+        else:
+            if isinstance(b, complex):
+                unittest.TestCase.assertAlmostEqual(self, a, b.real)
+                unittest.TestCase.assertAlmostEqual(self, 0., b.imag)
+            else:
+                unittest.TestCase.assertAlmostEqual(self, a, b)
     
     
-FILTER_COMPILERS = { 'regex' : CompileRegex,
-                     'level' : CompileLevel }
+  def Done( self ):
+    return True
     
-    
-def FormatDebugInfoResponse_Completer_ServerRunningWithoutHost_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  response[ 'completer' ][ 'servers' ][ 0 ].update( {
-    'address': None,
-    'port': None
-  } )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'Completer name completer debug information:\n'
-      '  Server name running\n'
-      '  Server name process ID: 12345\n'
-      '  Server name executable: /path/to/executable\n'
-      '  Server name logfiles:\n'
-      '    /path/to/stdout/logfile\n'
-      '    /path/to/stderr/logfile\n'
-      '  Server name key: value\n'
-      '  Key: value\n'
-    )
-  )
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    import logging
+      # On UNIX platforms, we use sys.executable as the Python interpreter path.
+  # We cannot use sys.executable on Windows because for unknown reasons, it
+  # returns the Vim executable. Instead, we use sys.exec_prefix to deduce the
+  # interpreter path.
+  python_interpreter = ( WIN_PYTHON_PATH if utils.OnWindows() else
+                         sys.executable )
+  if _EndsWithPython( python_interpreter ):
+    return python_interpreter
