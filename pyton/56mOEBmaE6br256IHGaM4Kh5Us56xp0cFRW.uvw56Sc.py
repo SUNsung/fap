@@ -1,178 +1,117 @@
 
         
-        print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
+        # This view is called from FlatpageFallbackMiddleware.process_response
+# when a 404 is raised, which often means CsrfViewMiddleware.process_view
+# has not been called even if CsrfViewMiddleware is installed. So we need
+# to use @csrf_protect, in case the template needs {% csrf_token %}.
+# However, we can't just wrap this view; if no matching flatpage exists,
+# or a redirect is required for authentication, the 404 needs to be returned
+# without any CSRF checks. Therefore, we only
+# CSRF protect the internal implementation.
     
     
-class AcademicEarthCourseIE(InfoExtractor):
-    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
-    IE_NAME = 'AcademicEarth:Course'
-    _TEST = {
-        'url': 'http://academicearth.org/playlists/laws-of-nature/',
-        'info_dict': {
-            'id': 'laws-of-nature',
-            'title': 'Laws of Nature',
-            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
-        },
-        'playlist_count': 3,
+    {        Generic:                   '#000000',        # class: 'g'
+        Generic.Deleted:           '#a40000',        # class: 'gd'
+        Generic.Emph:              'italic #000000', # class: 'ge'
+        Generic.Error:             '#ef2929',        # class: 'gr'
+        Generic.Heading:           'bold #000080',   # class: 'gh'
+        Generic.Inserted:          '#00A000',        # class: 'gi'
+        Generic.Output:            '#888',           # class: 'go'
+        Generic.Prompt:            '#745334',        # class: 'gp'
+        Generic.Strong:            'bold #000000',   # class: 'gs'
+        Generic.Subheading:        'bold #800080',   # class: 'gu'
+        Generic.Traceback:         'bold #a40000',   # class: 'gt'
     }
-    
-            return {
-            'id': flv_id,
-            'url': rtmp_url,
-            'ext': 'flv',
-            'no_resume': True,
-            'title': title,
-            'description': description,
-            'duration': duration,
-            'view_count': view_count,
-            'comment_count': comment_count,
-            'uploader': uploader,
-            'upload_date': upload_date,
-        }
 
     
-            formats = []
-        for secure in ('', 'Secure'):
-            for ext in ('Ogg', 'Mp3'):
-                format_id = '%s%s' % (secure, ext)
-                format_url = metadata.get('%sUrl' % format_id)
-                if format_url:
-                    formats.append({
-                        'url': format_url,
-                        'format_id': format_id,
-                        'vcodec': 'none',
-                    })
-        self._sort_formats(formats)
     
-    py_test(
-    name = 'transformer_units_test',
-    size = 'small',
-    srcs = ['transformer_units_test.py'],
-    deps = [
-        ':network_units',
-        ':transformer_units',
-        '//dragnn/core:dragnn_bulk_ops',
-        '//dragnn/core:dragnn_ops',
-        '//dragnn/protos:spec_pb2_py',
-        '//syntaxnet:load_parser_ops_py',
-        '@org_tensorflow//tensorflow:tensorflow_py',
-        '@org_tensorflow//tensorflow/core:protos_all_py',
-    ],
-)
+@pytest.fixture
+def httpbin(httpbin):
+    return prepare_url(httpbin)
     
-          with tf.variable_scope(component.name, reuse=None):
-        component.network = biaffine_units.BiaffineDigraphNetwork(component)
+        @pytest.mark.skip(reason='this fails non-deterministically under pytest-xdist')
+    def test_request_recovery(self):
+        '''can check the requests content'''
+        # TODO: figure out why this sometimes fails when using pytest-xdist.
+        server = Server.basic_response_server(requests_to_handle=2)
+        first_request = b'put your hands up in the air'
+        second_request = b'put your hand down in the floor'
     
-        # Should not raise errors.
-    self.network_states[component_spec.name] = component.NetworkState()
-    comp.build_greedy_training(self.master_state, self.network_states)
-    self.network_states[component_spec.name] = component.NetworkState()
-    comp.build_greedy_inference(self.master_state, self.network_states)
+    import sys
     
-    from absl import app
-from absl import flags
-import tensorflow as tf
+            # Verify Authorization isn't sent to the redirected host,
+        # then send another challenge.
+        request_content = consume_socket_content(sock, timeout=0.5)
+        assert b'Authorization:' not in request_content
+        sock.send(text_401)
     
+    # One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    (master_doc, 'requests', u'Requests Documentation',
+     [author], 1)
+]
     
-if __name__ == '__main__':
-  tf.test.main()
-
+        def list_paths(self):
+        '''Utility method to list all the paths in the jar.'''
+        paths = []
+        for cookie in iter(self):
+            if cookie.path not in paths:
+                paths.append(cookie.path)
+        return paths
     
-    # Imported for FLAGS.tf_master, which is used in the lexicon module.
+        def crawl_page(self, page):
+        for url in page.child_urls:
+            self.data_store.add_link_to_crawl(url)
+        self.reverse_index_queue.generate(page)
+        self.doc_index_queue.generate(page)
+        self.data_store.remove_link_to_crawl(page.url)
+        self.data_store.insert_crawled_link(page.url, page.signature)
     
-    num_classes = 10
-batch_size = 128
-epochs = 15
-weighted_class = 5
-high_weight = 10
-train_samples = 5000
-test_samples = 1000
-timesteps = 3
-input_dim = 10
-loss = 'mse'
-loss_full_name = 'mean_squared_error'
-standard_weight = 1
-standard_score_sequential = 0.5
-    
-        x = np.ones((3, 5))
-    y = np.ones((3, 5))
-    model1.fit(x, y, verbose=0, epochs=1)
-    model2.fit(x, y, verbose=0, epochs=1)
-    
-    - Teacher model: a basic CNN model trained on MNIST for 3 epochs.
-- Net2WiderNet experiment:
-  + Student model has a wider Conv2D layer and a wider FC layer.
-  + Comparison of 'random-padding' vs 'net2wider' weight initialization.
-  + With both methods, after 1 epoch, student model should perform as well as
-    teacher model, but 'net2wider' is slightly better.
-- Net2DeeperNet experiment:
-  + Student model has an extra Conv2D layer and an extra FC layer.
-  + Comparison of 'random-init' vs 'net2deeper' weight initialization.
-  + After 1 epoch, performance of 'net2deeper' is better than 'random-init'.
-- Hyper-parameters:
-  + SGD with momentum=0.9 is used for training teacher and student models.
-  + Learning rate adjustment: it's suggested to reduce learning rate
-    to 1/10 for student model.
-  + Addition of noise in 'net2wider' is used to break weight symmetry
-    and thus enable full capacity of student models. It is optional
-    when a Dropout layer is used.
-    
-            parser.add_option_group(group)
-    
-        def syntax(self):
-        return '[options] <spider>'
-    
-        name = 'returns'
-    objects = {
-        'request': Request,
-        'requests': Request,
-        'item': (BaseItem, dict),
-        'items': (BaseItem, dict),
-    }
-    
-    
-def main():
-    tornado.options.parse_command_line()
-    application = tornado.web.Application([
-        (r'/', MainHandler),
-    ])
-    http_server = tornado.httpserver.HTTPServer(application)
-    http_server.listen(options.port)
-    tornado.ioloop.IOLoop.current().start()
-    
-        def get_compression_options(self):
-        return self.compression_options
-    
-        def start_pinging(self):
-        '''Start sending periodic pings to keep the connection alive'''
-        if self.ping_interval > 0:
-            self.last_ping = self.last_pong = IOLoop.current().time()
-            self.ping_callback = PeriodicCallback(
-                self.periodic_ping, self.ping_interval * 1000)
-            self.ping_callback.start()
-    
-            .. versionchanged:: 3.2.2
-           Added support for cookie version 2.  Both versions 1 and 2 are
-           supported.
+            (foo, p1), 2
+        (bar, p1), 3
+        (foo, p2), 3
+        (bar, p3), 10
+        (foo, p4), 1
         '''
-        token = (self.get_argument('_xsrf', None) or
-                 self.request.headers.get('X-Xsrftoken') or
-                 self.request.headers.get('X-Csrftoken'))
-        if not token:
-            raise HTTPError(403, ''_xsrf' argument missing from POST')
-        _, token, _ = self._decode_xsrf_token(token)
-        _, expected_token, _ = self._get_raw_xsrf_token()
-        if not token:
-            raise HTTPError(403, ''_xsrf' argument has invalid format')
-        if not _time_independent_equals(utf8(token), utf8(expected_token)):
-            raise HTTPError(403, 'XSRF cookie does not match POST argument')
+        yield key, sum(values)
+    
+            Accessing a node updates its position to the front of the LRU list.
+        '''
+        node = self.lookup.get(query)
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
+    
+    - ANTLRStringStream: Reads from a string objects. The input should be a unicode
+  object, or ANTLR3 will have trouble decoding non-ascii data.
+- ANTLRFileStream: Opens a file and read the contents, with optional character
+  decoding.
+- ANTLRInputStream: Reads the date from a file-like object, with optional
+  character decoding.
+    
+    
+    def endResync(self):
+        '''
+        A hook to listen in on the token consumption during error recovery.
+        The DebugParser subclasses this to fire events to the listenter.
+        '''
+    
+        
+    def __init__(self, data):
+        '''
+        @param data This should be a unicode string holding the data you want
+           to parse. If you pass in a byte string, the Lexer will choke on
+           non-ascii data.
+           
+        '''
+        
+        CharStream.__init__(self)
+        
+  	# The data being scanned
+        self.strdata = unicode(data)
+        self.data = [ord(c) for c in self.strdata]
+        
+	# How many characters are actually in the buffer
+        self.n = len(data)
