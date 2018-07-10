@@ -1,182 +1,268 @@
 
         
-        /// Index the given source file and store the results to \p indexStorePath.
-///
-/// \param primarySourceFile The source file to index.
-///
-/// \param indexUnitToken A unique identifier for this translation unit in the
-/// form of a file path.
-///
-/// \param indexStorePath The location to write the indexing data to.
-///
-/// \param indexSystemModules If true, emit index data for imported serialized
-/// swift system modules.
-///
-/// \param isDebugCompilation true for non-optimized compiler invocation.
-///
-/// \param targetTriple The target for this compilation.
-///
-/// \param dependencyTracker The set of dependencies seen while building.
-bool indexAndRecord(SourceFile *primarySourceFile, StringRef indexUnitToken,
-                    StringRef indexStorePath, bool indexSystemModules,
-                    bool isDebugCompilation, StringRef targetTriple,
-                    const DependencyTracker &dependencyTracker);
+          std::string fname = TableFileName(dbname, meta->number);
+  if (iter->Valid()) {
+    WritableFile* file;
+    s = env->NewWritableFile(fname, &file);
+    if (!s.ok()) {
+      return s;
+    }
+    }
     
-    
-    {  const SILDebugScope *Scope = this;
-  while (Scope->Parent.is<const SILDebugScope *>())
-    Scope = Scope->Parent.get<const SILDebugScope *>();
-  assert(Scope->Parent.is<SILFunction *>() && 'orphaned scope');
-  return Scope->Parent.get<SILFunction *>();
-}
+      Slice user_key() const { return ExtractUserKey(rep_); }
     
     
     {
-    {}
+    {    if (!s.ok()) {
+      assert(table == NULL);
+      delete file;
+      // We do not cache error results so that if the error is transient,
+      // or somebody repairs the file, we recover automatically.
+    } else {
+      TableAndFile* tf = new TableAndFile;
+      tf->file = file;
+      tf->table = table;
+      *handle = cache_->Insert(key, tf, 1, &DeleteEntry);
+    }
+  }
+  return s;
 }
-#endif
-
     
-    // On non-Darwin platforms we do not assume any barrier-free inline path
-// and SwiftTargetInfo.OnceDonePredicateValue is unset in the compiler.
+      // Add the specified file at the specified number.
+  // REQUIRES: This version has not been saved (see VersionSet::SaveTo)
+  // REQUIRES: 'smallest' and 'largest' are smallest and largest keys in file
+  void AddFile(int level, uint64_t file,
+               uint64_t file_size,
+               const InternalKey& smallest,
+               const InternalKey& largest) {
+    FileMetaData f;
+    f.number = file;
+    f.file_size = file_size;
+    f.smallest = smallest;
+    f.largest = largest;
+    new_files_.push_back(std::make_pair(level, f));
+  }
     
-      static ResultPlanPtr computeResultPlan(SILGenFunction &SGF,
-                                         const CalleeTypeInfo &calleeTypeInfo,
-                                         SILLocation loc,
-                                         SGFContext evalContext);
     
-    namespace swift {
-    }
+    {}  // namespace leveldb
     
-      // Returns true iff the test part passed.
-  bool passed() const { return type_ == kSuccess; }
-    
-    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
+    // Dump the contents of the file named by fname in text format to
+// *dst.  Makes a sequence of dst->Append() calls; each call is passed
+// the newline-terminated text corresponding to a single item found
+// in the file.
 //
-// Expands to the name of the variable used to remember the names of
-// the defined tests in the given test case.
-# define GTEST_TYPED_TEST_CASE_P_STATE_(TestCaseName) \
-  gtest_typed_test_case_p_state_##TestCaseName##_
+// Returns a non-OK result if fname does not name a leveldb storage
+// file, or if the file cannot be read.
+Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
     
-      // Returns true if the death test passed; that is, the test process
-  // exited during the test, its exit status matches a user-supplied
-  // predicate, and its stderr output matches a user-supplied regular
-  // expression.
-  // The user-supplied predicate may be a macro expression rather
-  // than a function pointer or functor, or else Wait and Passed could
-  // be combined.
-  virtual bool Passed(bool exit_status_ok) = 0;
+    public:
+  /** \brief Serialize a Value in <a HREF='http://www.json.org'>JSON</a> format.
+   * \param out Stream to write to. (Can be ostringstream, e.g.)
+   * \param root Value to serialize.
+   * \note There is no point in deriving from Writer, since write() should not
+   * return a value.
+   */
+  void write(std::ostream& out, const Value& root);
     
-    // Allows a controller thread to pause execution of newly created
-// threads until notified.  Instances of this class must be created
-// and destroyed in the controller thread.
-//
-// This class is only for testing Google Test's own constructs. Do not
-// use it in user tests, either directly or indirectly.
-class Notification {
+    #include <sstream>
+    
+    // TODO(jonskeet): Refactor repeated field support; all the implementations are *really* similar. We
+// should probably have a RepeatedFieldGeneratorBase.
+class RepeatedEnumFieldGenerator : public FieldGeneratorBase {
  public:
-  Notification() : notified_(false) {
-    GTEST_CHECK_POSIX_SUCCESS_(pthread_mutex_init(&mutex_, NULL));
-  }
-  ~Notification() {
-    pthread_mutex_destroy(&mutex_);
-  }
+  RepeatedEnumFieldGenerator(const FieldDescriptor* descriptor,
+                             int fieldOrdinal,
+                             const Options *options);
+  ~RepeatedEnumFieldGenerator();
     }
     
-      // Compares two C strings, ignoring case.  Returns true iff they
-  // have the same content.
-  //
-  // Unlike strcasecmp(), this function can handle NULL argument(s).
-  // A NULL C string is considered different to any non-NULL C string,
-  // including the empty string.
-  static bool CaseInsensitiveCStringEquals(const char* lhs,
-                                           const char* rhs);
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
     
-      template <GTEST_7_TYPENAMES_(U)>
-  tuple& operator=(const GTEST_7_TUPLE_(U)& t) {
-    return CopyFrom(t);
-  }
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Generates Java code for a given .proto file.
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37>
-struct Types37 {
-  typedef T1 Head;
-  typedef Types36<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
-      T30, T31, T32, T33, T34, T35, T36, T37> Tail;
+    class ImmutableLazyMessageOneofFieldGenerator
+    : public ImmutableLazyMessageFieldGenerator {
+ public:
+  ImmutableLazyMessageOneofFieldGenerator(
+      const FieldDescriptor* descriptor, int messageBitIndex,
+      int builderBitIndex, Context* context);
+  ~ImmutableLazyMessageOneofFieldGenerator();
+    }
+    
+      bool at_textline_start = at_word_start && *line_start.it_ == *it_;
+  if (level == RIL_TEXTLINE) return at_textline_start;
+    
+    #include 'platform.h'
+#include 'publictypes.h'
+    
+    
+    {  // Top-level iteration. Shape index in sparse charset_map space.
+  int shape_index_;
+  int num_shapes_;
+  // Index to the character class within a shape.
+  int shape_char_index_;
+  int num_shape_chars_;
+  // Index to the font within a shape/class pair.
+  int shape_font_index_;
+  int num_shape_fonts_;
+  // The lowest level iteration. sample_index_/num_samples_ counts samples
+  // in the current shape/class/font combination.
+  int sample_index_;
+  int num_samples_;
 };
     
-    namespace xgboost {
-namespace common {
-    }
+      const auto result =
+      RunScenario(client_config, 1, server_config, 1, WARMUP, BENCHMARK, -2, '',
+                  kInsecureCredentialsType, true);
+    
+    #include 'test/cpp/qps/benchmark_config.h'
+#include 'test/cpp/qps/driver.h'
+#include 'test/cpp/qps/report.h'
+#include 'test/cpp/qps/server.h'
+#include 'test/cpp/util/test_config.h'
+#include 'test/cpp/util/test_credentials_provider.h'
+    
+    
+    {}  // namespace routeguide
+    
+    
+    { private:
+  GeneratorConfiguration config_;
+};
+    
+    // Tucks all generator state in an anonymous namespace away from
+// PythonGrpcGenerator and the header file, mostly to encourage future changes
+// to not require updates to the grpcio-tools C++ code part. Assumes that it is
+// only ever used from a single thread.
+struct PrivateGenerator {
+  const GeneratorConfiguration& config;
+  const grpc_generator::File* file;
     }
     
-    SEXP XGDMatrixSetInfo_R(SEXP handle, SEXP field, SEXP array) {
-  R_API_BEGIN();
-  int len = length(array);
-  const char *name = CHAR(asChar(field));
-  if (!strcmp('group', name)) {
-    std::vector<unsigned> vec(len);
-    #pragma omp parallel for schedule(static)
-    for (int i = 0; i < len; ++i) {
-      vec[i] = static_cast<unsigned>(INTEGER(array)[i]);
-    }
-    CHECK_CALL(XGDMatrixSetGroup(R_ExternalPtrAddr(handle), BeginPtr(vec), len));
+    AuthPropertyIterator SecureAuthContext::begin() const {
+  if (ctx_) {
+    grpc_auth_property_iterator iter =
+        grpc_auth_context_property_iterator(ctx_);
+    const grpc_auth_property* property =
+        grpc_auth_property_iterator_next(&iter);
+    return AuthPropertyIterator(property, &iter);
   } else {
-    std::vector<float> vec(len);
-    #pragma omp parallel for schedule(static)
-    for (int i = 0; i < len; ++i) {
-      vec[i] = REAL(array)[i];
-    }
-    CHECK_CALL(XGDMatrixSetFloatInfo(R_ExternalPtrAddr(handle),
-                                   CHAR(asChar(field)),
-                                   BeginPtr(vec), len));
+    return end();
   }
-  R_API_END();
-  return R_NilValue;
 }
     
-    /*
- * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
- * Method:    RabitInit
- * Signature: ([Ljava/lang/String;)I
- */
-JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_RabitInit
-  (JNIEnv *jenv, jclass jcls, jobjectArray jargs) {
-  std::vector<std::string> args;
-  std::vector<char*> argv;
-  bst_ulong len = (bst_ulong)jenv->GetArrayLength(jargs);
-  for (bst_ulong i = 0; i < len; ++i) {
-    jstring arg = (jstring)jenv->GetObjectArrayElement(jargs, i);
-    const char *s = jenv->GetStringUTFChars(arg, 0);
-    args.push_back(std::string(s, jenv->GetStringLength(arg)));
-    if (s != nullptr) jenv->ReleaseStringUTFChars(arg, s);
-    if (args.back().length() == 0) args.pop_back();
+    
+    {  grpc::string package = service->full_name();
+  size_t pos = package.rfind('.' + service->name());
+  if (pos != grpc::string::npos) {
+    package.erase(pos);
+    result.append('package: ' + package + ';\n');
   }
+  result.append('service ' + service->name() + ' {\n');
+  for (int i = 0; i < service->method_count(); ++i) {
+    result.append(DescribeMethod(service->method(i)));
+  }
+  result.append('}\n\n');
+  return result;
+}
+    
+    namespace grpc {
     }
     
-    TEST(Metric, AMS) {
-  EXPECT_ANY_THROW(xgboost::Metric::Create('ams'));
-  xgboost::Metric * metric = xgboost::Metric::Create('ams@0.5f');
-  ASSERT_STREQ(metric->Name(), 'ams@0.5');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0.311f, 0.001f);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0.29710f, 0.001f);
-    }
+    // This template function declaration is used in defining arraysize.
+// Note that the function doesn't need an implementation, as we only
+// use its type.
+template <typename T, size_t N>
+char (&ArraySizeHelper(T (&array)[N]))[N];
     
-      /**
-   * \brief Updates linear model given gradients.
-   *
-   * \param in_gpair            The gradient pair statistics of the data.
-   * \param data                Input data matrix.
-   * \param model               Model to be updated.
-   * \param sum_instance_weight The sum instance weights, used to normalise l1/l2 penalty.
-   */
+      const HANDLE stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    
+      // When def_optional is true, it's OK to not have a '=value' part.
+  if (def_optional && (flag_end[0] == '\0')) return flag_end;
+    
+    // Returns true if the string matches the flag.
+bool IsFlag(const char* str, const char* flag);
+    
+    
+    {
+    {
+    {  // Native Client does not provide any API to access cycle counter.
+  // Use clock_gettime(CLOCK_MONOTONIC, ...) instead of gettimeofday
+  // because is provides nanosecond resolution (which is noticable at
+  // least for PNaCl modules running on x86 Mac & Linux).
+  // Initialize to always return 0 if clock_gettime fails.
+  struct timespec ts = { 0, 0 };
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  return static_cast<int64_t>(ts.tv_sec) * 1000000000 + ts.tv_nsec;
+#elif defined(__aarch64__)
+  // System timer of ARMv8 runs at a different frequency than the CPU's.
+  // The frequency is fixed, typically in the range 1-50MHz.  It can be
+  // read at CNTFRQ special register.  We assume the OS has set up
+  // the virtual timer properly.
+  int64_t virtual_timer_value;
+  asm volatile('mrs %0, cntvct_el0' : '=r'(virtual_timer_value));
+  return virtual_timer_value;
+#elif defined(__ARM_ARCH)
+  // V6 is the earliest arch that has a standard cyclecount
+  // Native Client validator doesn't allow MRC instructions.
+#if (__ARM_ARCH >= 6)
+  uint32_t pmccntr;
+  uint32_t pmuseren;
+  uint32_t pmcntenset;
+  // Read the user mode perf monitor counter access permissions.
+  asm volatile('mrc p15, 0, %0, c9, c14, 0' : '=r'(pmuseren));
+  if (pmuseren & 1) {  // Allows reading perfmon counters for user mode code.
+    asm volatile('mrc p15, 0, %0, c9, c12, 1' : '=r'(pmcntenset));
+    if (pmcntenset & 0x80000000ul) {  // Is it counting?
+      asm volatile('mrc p15, 0, %0, c9, c13, 0' : '=r'(pmccntr));
+      // The counter is set up to count every 64th cycle
+      return static_cast<int64_t>(pmccntr) * 64;  // Should optimize to << 6
+    }
+  }
+#endif
+  struct timeval tv;
+  gettimeofday(&tv, nullptr);
+  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
+#elif defined(__mips__)
+  // mips apparently only allows rdtsc for superusers, so we fall
+  // back to gettimeofday.  It's possible clock_gettime would be better.
+  struct timeval tv;
+  gettimeofday(&tv, nullptr);
+  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
+#else
+// The soft failover to a generic implementation is automatic only for ARM.
+// For other platforms the developer is expected to make an attempt to create
+// a fast implementation and use generic version if nothing better is available.
+#error You need to define CycleTimer for your OS and CPU
+#endif
+}
+}  // end namespace cycleclock
+}  // end namespace benchmark
+    
+      const CPUInfo &info = context.cpu_info;
+  Out << 'Run on (' << info.num_cpus << ' X '
+      << (info.cycles_per_second / 1000000.0) << ' MHz CPU '
+      << ((info.num_cpus > 1) ? 's' : '') << ')\n';
+  if (info.caches.size() != 0) {
+    Out << 'CPU Caches:\n';
+    for (auto &CInfo : info.caches) {
+      Out << '  L' << CInfo.level << ' ' << CInfo.type << ' '
+          << (CInfo.size / 1000) << 'K';
+      if (CInfo.num_sharing != 0)
+        Out << ' (x' << (info.num_cpus / CInfo.num_sharing) << ')';
+      Out << '\n';
+    }
+  }
+    
+      for(const auto& Stat : *reports[0].statistics) {
+    // Get the data from the accumulator to BenchmarkReporter::Run's.
+    Run data;
+    data.benchmark_name = reports[0].benchmark_name + '_' + Stat.name_;
+    data.report_label = report_label;
+    data.iterations = run_iterations;
+    }
