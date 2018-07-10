@@ -1,253 +1,233 @@
 
         
-        '''
-    The approach taken is explained below. I decided to do it simply.
-    Initially I was considering parsing the data into some sort of
-    structure and then generating an appropriate README. I am still
-    considering doing it - but for now this should work. The only issue
-    I see is that it only sorts the entries at the lowest level, and that
-    the order of the top-level contents do not match the order of the actual
-    entries.
-    
+        
+class FormDataRoutingRedirect(AssertionError):
+    '''This exception is raised by Flask in debug mode if it detects a
+    redirect caused by the routing system when the request method is not
+    GET, HEAD or OPTIONS.  Reasoning: form data will be dropped.
     '''
-requests.hooks
-~~~~~~~~~~~~~~
+    
+            if not current.propagate:
+            break
     
     
-class RequestsDependencyWarning(RequestsWarning):
-    '''An imported dependency doesn't match the expected version range.'''
-    pass
+class SessionInterface(object):
+    '''The basic interface you have to implement in order to replace the
+    default session interface which uses werkzeug's securecookie
+    implementation.  The only methods you have to implement are
+    :meth:`open_session` and :meth:`save_session`, the others have
+    useful defaults which you don't need to change.
+    
+    
+# Core signals.  For usage examples grep the source code or consult
+# the API documentation in docs/api.rst as well as docs/signals.rst
+template_rendered = _signals.signal('template-rendered')
+before_render_template = _signals.signal('before-render-template')
+request_started = _signals.signal('request-started')
+request_finished = _signals.signal('request-finished')
+request_tearing_down = _signals.signal('request-tearing-down')
+got_request_exception = _signals.signal('got-request-exception')
+appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
+appcontext_pushed = _signals.signal('appcontext-pushed')
+appcontext_popped = _signals.signal('appcontext-popped')
+message_flashed = _signals.signal('message-flashed')
 
     
-    # Grouping the document tree into Texinfo files. List of tuples
-# (source start file, target name, title, author,
-#  dir menu entry, description, category)
-texinfo_documents = [
-    (master_doc, 'Requests', u'Requests Documentation',
-     author, 'Requests', 'One line description of project.',
-     'Miscellaneous'),
-]
     
-        def __ne__(self, other):
-        return not self == other
+def test_config_missing():
+    app = flask.Flask(__name__)
+    with pytest.raises(IOError) as e:
+        app.config.from_pyfile('missing.cfg')
+    msg = str(e.value)
+    assert msg.startswith('[Errno 2] Unable to load configuration '
+                          'file (No such file or directory):')
+    assert msg.endswith('missing.cfg'')
+    assert not app.config.from_pyfile('missing.cfg', silent=True)
+    
+        Tests regressions.
+    
+        rv = app.test_client().get('/', errors_stream=out)
+    assert rv.status_code == 500
+    assert b'Internal Server Error' in rv.data
+    assert not out.getvalue()
 
     
-            # This MUST go after prepare_auth. Authenticators could add a hook
-        self.prepare_hooks(hooks)
+    plt.figure('scikit-learn Ward's method benchmark results')
+plt.imshow(np.log(ratio), aspect='auto', origin='lower')
+plt.colorbar()
+plt.contour(ratio, levels=[1, ], colors='k')
+plt.yticks(range(len(n_features)), n_features.astype(np.int))
+plt.ylabel('N features')
+plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
+plt.xlabel('N samples')
+plt.title('Scikit's time, in units of scipy time (log)')
+plt.show()
+
+    
+        op.add_option('--transformers',
+                  dest='selected_transformers',
+                  default='GaussianRandomProjection,SparseRandomProjection',
+                  type=str,
+                  help='Comma-separated list of transformer to benchmark. '
+                       'Default: %default. Available: '
+                       'GaussianRandomProjection,SparseRandomProjection')
+    
+    URL = ('http://people.csail.mit.edu/jrennie/'
+       '20Newsgroups/20news-bydate.tar.gz')
     
     
-def print_list():
-    data = get_landscape_members_data()
-    nodes = get_nodes(data)
-    groups = get_groups(data)
-    meta = get_meta(data)
-    inventory_data = {_key: nodes, '_meta': meta}
-    inventory_data.update(groups)
-    print(json.dumps(inventory_data))
+class View(object):
+    '''Test docstring. '''
+    def __init__(self, root, controller):
+        f = Figure()
+        ax = f.add_subplot(111)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.set_xlim((x_min, x_max))
+        ax.set_ylim((y_min, y_max))
+        canvas = FigureCanvasTkAgg(f, master=root)
+        canvas.show()
+        canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+        canvas._tkcanvas.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+        canvas.mpl_connect('button_press_event', self.onclick)
+        toolbar = NavigationToolbar2TkAgg(canvas, root)
+        toolbar.update()
+        self.controllbar = ControllBar(root, controller)
+        self.f = f
+        self.ax = ax
+        self.canvas = canvas
+        self.controller = controller
+        self.contours = []
+        self.c_labels = None
+        self.plot_kernels()
     
-        parser = argparse.ArgumentParser(description='Start a new Shippable run.')
+    This example demonstrates how to generate a checkerboard dataset and
+bicluster it using the Spectral Biclustering algorithm.
     
-        def on_open_shell(self):
+    plt.title('Change of predicted probabilities after sigmoid calibration')
+plt.xlabel('Probability class 1')
+plt.ylabel('Probability class 2')
+plt.xlim(-0.05, 1.05)
+plt.ylim(-0.05, 1.05)
+plt.legend(loc='best')
+    
+    
+class ScrapyCommand(object):
+    
+        def run(self, args, opts):
+        if opts.list:
+            self._list_templates()
+            return
+        if opts.dump:
+            template_file = self._find_template(opts.dump)
+            if template_file:
+                with open(template_file, 'r') as f:
+                    print(f.read())
+            return
+        if len(args) != 2:
+            raise UsageError()
+    
+            return contracts
+    
+    from scrapy.utils.defer import mustbe_deferred
+from scrapy.utils.httpobj import urlparse_cached
+from scrapy.resolver import dnscache
+from scrapy import signals
+from .middleware import DownloaderMiddlewareManager
+from .handlers import DownloadHandlers
+    
+    
+class DownloadHandlers(object):
+    
+    
+def _parse(url):
+    ''' Return tuple of (scheme, netloc, host, port, path),
+    all in bytes except for port which is int.
+    Assume url is from Request.url, which was passed via safe_url_string
+    and is ascii-only.
+    '''
+    url = url.strip()
+    parsed = urlparse(url)
+    return _parsed_url_args(parsed)
+    
+        def process_response(self, request, response, spider):
+        if not response.body:
+            return response
+    
+            if self.close_on.get('errorcount'):
+            crawler.signals.connect(self.error_count, signal=signals.spider_error)
+        if self.close_on.get('pagecount'):
+            crawler.signals.connect(self.page_count, signal=signals.response_received)
+        if self.close_on.get('timeout'):
+            crawler.signals.connect(self.spider_opened, signal=signals.spider_opened)
+        if self.close_on.get('itemcount'):
+            crawler.signals.connect(self.item_scraped, signal=signals.item_scraped)
+        crawler.signals.connect(self.spider_closed, signal=signals.spider_closed)
+    
+        def __init__(self, cards):
+        self.cards = cards
+        self.deal_index = 0
+    
+            Emit key value pairs of the form:
+    
+    
+class MH(Mailbox):
+    '''An MH mailbox.'''
+    
+        print('# The following line assumes you have built Python using the standard instructions')
+    print('# Otherwise fix the following line to point to the library.')
+    print('pythonlib = '$(pythonhome)/pcbuild/python%s$(debug_suffix).lib'' % version_suffix)
+    print()
+    
+        def is_resource(self, name):
+        # Maybe we could do better, but if we can get the data, it's a
+        # resource.  Otherwise it isn't.
+        fullname_as_path = self.fullname.replace('.', '/')
+        path = f'{fullname_as_path}/{name}'
         try:
-            for cmd in (b'set terminal length 0', b'set terminal width 512'):
-                self._exec_cli_command(cmd)
-            self._exec_cli_command(b'set terminal length %d' % self.terminal_length)
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
-
+            self.zipimporter.get_data(path)
+        except OSError:
+            return False
+        return True
     
-        results = {}
-    for group in sort_groups(groups):
-        results = combine_vars(results, group.get_vars())
+                        if set_type == 'return':
+                        self.expect_set.extend(
+                            [('exception', 10, 'main', StopIteration), ('step',),
+                             ('return', 10, 'main'),                   ('quit', ),
+                            ]
+                        )
+                    else:
+                        self.expect_set.extend(
+                            [('line', 4, 'test_gen'), ('quit', ),]
+                        )
+                    with TracerRun(self) as tracer:
+                        tracer.runcall(tfunc_import)
     
-    del sys
-
+        def test___class___instancemethod(self):
+        # See issue #14857
+        class X:
+            def f(self):
+                return __class__
+        self.assertIs(X().f(), X)
     
+        def __repr__(self):
+        res = super(Semaphore, self).__repr__()
+        extra = 'locked' if self._value == 0 else 'unlocked,value:{0}'.format(
+            self._value)
+        if self._waiters:
+            extra = '{0},waiters:{1}'.format(extra, len(self._waiters))
+        return '<{0} [{1}]>'.format(res[1:-1], extra)
     
-class _BenchSpider(scrapy.Spider):
-    '''A spider that follows all links'''
-    name = 'follow'
-    total = 10000
-    show = 20
-    baseurl = 'http://localhost:8998'
-    link_extractor = LinkExtractor()
-    
-        def process_request(self, request, spider):
-        for k, v in self._headers:
-            request.headers.setdefault(k, v)
-
-    
-        def spider_opened(self, spider):
-        self._timeout = getattr(spider, 'download_timeout', self._timeout)
-    
-    See documentation in docs/topics/downloader-middleware.rst
-'''
-    
-        def spider_opened(self, spider):
-        self.user_agent = getattr(spider, 'user_agent', self.user_agent)
-    
-    
-if __name__ == '__main__':
-    RemoveDuplicateUrls.run()
-
-    
-    
-class CallState(Enum):
-    
-        def test_from_bytes(self):
-        def check(tests, byteorder, signed=False):
-            for test, expected in tests.items():
-                try:
-                    self.assertEqual(
-                        int.from_bytes(test, byteorder, signed=signed),
-                        expected)
-                except Exception as err:
-                    raise AssertionError(
-                        'failed to convert {0} with byteorder={1!r} and signed={2}'
-                        .format(test, byteorder, signed)) from err
-    
-        def test_bp_after_last_statement(self):
-        code = '''
-            def main():
-                lno = 3
-        '''
-        modules = { TEST_MODULE: code }
-        with create_modules(modules):
-            self.expect_set = [
-                ('line', 2, 'tfunc_import'), ('break', (TEST_MODULE_FNAME, 4))
-            ]
-            with TracerRun(self) as tracer:
-                self.assertRaises(BdbError, tracer.runcall, tfunc_import)
-    
-    
-def open_text(package: Package,
-              resource: Resource,
-              encoding: str = 'utf-8',
-              errors: str = 'strict') -> TextIO:
-    '''Return a file-like object opened for text reading of the resource.'''
-    resource = _normalize_path(resource)
-    package = _get_package(package)
-    reader = _get_resource_reader(package)
-    if reader is not None:
-        return TextIOWrapper(reader.open_resource(resource), encoding, errors)
-    _check_location(package)
-    absolute_package_path = os.path.abspath(package.__spec__.origin)
-    package_path = os.path.dirname(absolute_package_path)
-    full_path = os.path.join(package_path, resource)
-    try:
-        return open(full_path, mode='r', encoding=encoding, errors=errors)
-    except OSError:
-        # Just assume the loader is a resource loader; all the relevant
-        # importlib.machinery loaders are and an AttributeError for
-        # get_data() will make it clear what is needed from the loader.
-        loader = cast(ResourceLoader, package.__spec__.loader)
-        data = None
-        if hasattr(package.__spec__.loader, 'get_data'):
-            with suppress(OSError):
-                data = loader.get_data(full_path)
-        if data is None:
-            package_name = package.__spec__.name
-            message = '{!r} resource not found in {!r}'.format(
-                resource, package_name)
-            raise FileNotFoundError(message)
+            if compression_options is None or 'compression_level' not in compression_options:
+            self._compression_level = tornado.web.GZipContentEncoding.GZIP_LEVEL
         else:
-            return TextIOWrapper(BytesIO(data), encoding, errors)
+            self._compression_level = compression_options['compression_level']
     
-        def get_agent_and_url(self, url):
-        if isinstance(url, tuple):
-            agent, url = url
-            return agent, url
-        return self.agent, url
+        def test_get_current_user_from_ui_module_is_lazy(self):
+        response = self.fetch('/without_user_module')
+        self.assertEqual(response.body, b'False')
     
-    _system_limits_checked = False
-_system_limited = None
-def _check_system_limits():
-    global _system_limits_checked, _system_limited
-    if _system_limits_checked:
-        if _system_limited:
-            raise NotImplementedError(_system_limited)
-    _system_limits_checked = True
-    try:
-        import os
-        nsems_max = os.sysconf('SC_SEM_NSEMS_MAX')
-    except (AttributeError, ValueError):
-        # sysconf not available or setting not available
-        return
-    if nsems_max == -1:
-        # indetermine limit, assume that limit is determined
-        # by available memory only
-        return
-    if nsems_max >= 256:
-        # minimum number of semaphores available
-        # according to POSIX
-        return
-    _system_limited = 'system provides too few semaphores (%d available, 256 necessary)' % nsems_max
-    raise NotImplementedError(_system_limited)
-    
-    try:
-    import queue
-except ImportError:
-    import Queue as queue
-    
-      def __init__( self, all_filters ):
-    self._all_filters = all_filters
-    self._cache = {}
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-        @classmethod
-    def setUpClass(self):
-        '''
-        - Create a temporary directory and file
-        /test_command
-           /foo.txt
-        - get the temporary test directory
-        - and initializes the command stack.
-        '''
-        os.mkdir('tests/test_command')
-        open('tests/test_command/foo.txt', 'w').close()
-        self.__get_test_directory()
-        self.command_stack = []
-        self.command_stack.append(MoveFileCommand(os.path.join(
-            self.test_dir, 'foo.txt'), os.path.join(self.test_dir, 'bar.txt')))
-        self.command_stack.append(MoveFileCommand(os.path.join(
-            self.test_dir, 'bar.txt'), os.path.join(self.test_dir, 'baz.txt')))
-    
-        fftv.publish('cartoon')
-    fftv.publish('music')
-    fftv.publish('ads')
-    fftv.publish('movie')
-    fftv.publish('cartoon')
-    fftv.publish('cartoon')
-    fftv.publish('movie')
-    fftv.publish('blank')
-    
-        def test_items_recoil(self):
-        with ObjectPool(self.sample_queue, True) as pool:
-            self.assertEqual(pool, 'first')
-        self.assertTrue(self.sample_queue.get() == 'second')
-        self.assertFalse(self.sample_queue.empty())
-        self.assertTrue(self.sample_queue.get() == 'first')
-        self.assertTrue(self.sample_queue.empty())
-    
-        def test_am_station_overflow_after_scan(self):
-        self.radio.scan()
-        station = self.radio.state.stations[self.radio.state.pos]
-        expected_station = '1250'
-        self.assertEqual(station, expected_station)
-    
-    '''
-http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
-Implementation of the iterator pattern with a generator
-    
-    
-### OUTPUT ###
-# Specification
-# False
-# True
-# False
+    from tornado.escape import _unicode, native_str
+from tornado.log import define_logging_options
+from tornado import stack_context
+from tornado.util import basestring_type, exec_in
