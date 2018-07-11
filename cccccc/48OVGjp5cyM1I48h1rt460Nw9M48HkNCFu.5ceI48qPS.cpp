@@ -1,122 +1,125 @@
 
         
-        
-    { private:
-  std::unordered_set<string> debug_urls_;
-};
-    
-    
-    {
-    {}  // namespace functor
-}  // namespace tensorflow
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    namespace internal {
-template <typename T>
-struct functor_traits<scalar_sigmoid_fast_derivative_op<T> > {
-  enum {
-    Cost = NumTraits<T>::AddCost * 2 + NumTraits<T>::MulCost,
-    PacketAccess = packet_traits<T>::HasAdd && packet_traits<T>::HasMul &&
-                   packet_traits<T>::HasNegate
-  };
-};
-}  // namespace internal
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    namespace tensorflow {
-#define REGISTER_COMPLEX(D, R, C)                         \
-  REGISTER_KERNEL_BUILDER(Name('Angle')                   \
-                              .Device(DEVICE_##D)         \
-                              .TypeConstraint<C>('T')     \
-                              .TypeConstraint<R>('Tout'), \
-                          UnaryOp<D##Device, functor::get_angle<C>>);
-    }
-    
-    namespace tensorflow {
-namespace functor {
-DEFINE_UNARY2(get_angle, complex64, complex128);
-}  // namespace functor
-}  // namespace tensorflow
-    
-      Tensor indices;
-  Tensor scores;
-  GetTopLabels(outputs, how_many_labels, &indices, &scores);
-  tensorflow::TTypes<float>::Flat scores_flat = scores.flat<float>();
-  tensorflow::TTypes<int32>::Flat indices_flat = indices.flat<int32>();
-  for (int pos = 0; pos < how_many_labels; ++pos) {
-    const int label_index = indices_flat(pos);
-    const float score = scores_flat(pos);
-    LOG(INFO) << labels_list[label_index] << ' (' << label_index
-              << '): ' << score;
-  }
+        #ifndef CONTENT_NW_SRC_API_APP_APP_H_
+#define CONTENT_NW_SRC_API_APP_APP_H_
     
     namespace base {
-class FilePath;
+class DictionaryValue;
+class ListValue;
 }
     
-    bool IsUnresponsiveEventSuppressed() {
-  return g_suppress_level > 0;
-}
-    
-    // Wrapper used to keep track of the lifetime of a WebContents.
-// Lives on the UI thread.
-class PrintingUIWebContentsObserver : public content::WebContentsObserver {
- public:
-  explicit PrintingUIWebContentsObserver(content::WebContents* web_contents);
+    void Menu::Insert(MenuItem* menu_item, int pos) {
+  if (pos < 0 || pos > (int)menu_items_.size()) return;
     }
     
-    #ifndef ATOM_BROWSER_API_ATOM_API_NET_H_
-#define ATOM_BROWSER_API_ATOM_API_NET_H_
+    #include <vector>
     
-        // Setup style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsClassic();
+    #include 'override_macros.h'
     
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
+    #define THDPDoubleStorage_CData(obj)  (obj)->cdata
+#define THDPFloatStorage_CData(obj)   (obj)->cdata
+#define THDPLongStorage_CData(obj)    (obj)->cdata
+#define THDPIntStorage_CData(obj)     (obj)->cdata
+#define THDPShortStorage_CData(obj)   (obj)->cdata
+#define THDPCharStorage_CData(obj)    (obj)->cdata
+#define THDPByteStorage_CData(obj)    (obj)->cdata
     
-                ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our windows open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
     
-    #undef STB_TEXTEDIT_STRING
-#undef STB_TEXTEDIT_CHARTYPE
-#define STB_TEXTEDIT_STRING             ImGuiTextEditState
-#define STB_TEXTEDIT_CHARTYPE           ImWchar
-#define STB_TEXTEDIT_GETWIDTH_NEWLINE   -1.0f
-#include 'stb_textedit.h'
+void unregister_fd(int fd) {
+  pollfds.erase(
+    std::remove_if(pollfds.begin(), pollfds.end(),
+        [fd](const struct pollfd &pfd) { return pfd.fd == fd; }),
+    pollfds.end());
+  client_sessions.erase(fd);
+}
     
-                // Bullet
-            ImGui::Button('Button##3');
-            ImGui::SameLine(0.0f, spacing);
-            ImGui::BulletText('Bullet text');
     
-        // Update OS mouse position
-    ImGui_ImplWin32_UpdateMousePos();
+    {  THDTensor_(free)(THDTensor_(cloneColumnMajor)(ra, a));
+}
     
-    void AbstractOptionHandler::setCumulative(bool f)
+    
+void THP_encodeInt16Buffer(uint8_t* dst, const int16_t* src, THPByteOrder order, size_t len)
 {
-  updateFlags(FLAG_CUMULATIVE, f);
+  memcpy(dst, src, sizeof(int16_t) * len);
+  if (order != THP_nativeByteOrder()) {
+    for (size_t i = 0; i < len; i++) {
+      swapBytes<sizeof(int16_t)>(dst);
+      dst += sizeof(int16_t);
+    }
+  }
 }
     
-    namespace aria2 {
+    
+    {    PyThreadState *_save = NULL;
+    try {
+      Py_UNBLOCK_THREADS;
+      copyFunc(LIBRARY_STATE dst, THDPModule_makeDescriptor(src_));
+      Py_BLOCK_THREADS;
+    } catch (...) {
+      if (_save) {
+        Py_BLOCK_THREADS;
+      }
+      throw;
     }
+  };
     
-      /**
-   * Removes current announce URL from its group and inserts it before the
-   * first element of the group.
-   * The internal announce group pointer points to the first element of the
-   * first group after this call.
-   */
-  void announceSuccess();
+      // create second key range
+  batch.Clear();
+  for (size_t i = 0; i < kNumKeys; i++) {
+    batch.Put(Key2(i), 'value for range 2 key');
+  }
+  ASSERT_OK(db->Write(leveldb::WriteOptions(), &batch));
     
-    #endif // DOWNLOAD_EVENT_LISTENER_H
-
+    class Issue200 { };
     
-    namespace aria2 {
-    }
+      for (int i = 0; i < 32; i++) {
+    buf[i] = i;
+  }
+  ASSERT_EQ(0x46dd794e, Value(buf, sizeof(buf)));
+    
+    class HASH { };
+    
+    
+    {}  // namespace leveldb
+    
+    void InternalKeyComparator::FindShortSuccessor(std::string* key) const {
+  Slice user_key = ExtractUserKey(*key);
+  std::string tmp(user_key.data(), user_key.size());
+  user_comparator_->FindShortSuccessor(&tmp);
+  if (tmp.size() < user_key.size() &&
+      user_comparator_->Compare(user_key, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*key, tmp) < 0);
+    key->swap(tmp);
+  }
+}
+    
+    extern JSClass  *jsb_cocos2d_NavMeshObstacle_class;
+extern JSObject *jsb_cocos2d_NavMeshObstacle_prototype;
+    
+    
+    
+    
+    {	if (callback.m_fixture)
+	{
+		b2Body* body = callback.m_fixture->GetBody();
+		b2MouseJointDef md;
+		md.bodyA = m_groundBody;
+		md.bodyB = body;
+		md.target = p;
+		md.maxForce = 1000.0f * body->GetMass();
+		m_mouseJoint = (b2MouseJoint*)m_world->CreateJoint(&md);
+		body->SetAwake(true);
+        return true;
+	}
+    
+    return false;
+}
+    
+    			pjd.maxMotorForce = 1000.0f;
+			pjd.enableMotor = true;
+			pjd.lowerTranslation = -10.0f;
+			pjd.upperTranslation = 10.0f;
+			pjd.enableLimit = true;
