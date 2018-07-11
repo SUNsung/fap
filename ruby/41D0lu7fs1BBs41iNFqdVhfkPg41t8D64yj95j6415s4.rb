@@ -1,52 +1,40 @@
 
         
-        namespace :db do
-  namespace :migrate do
-    desc 'Setup the db or migrate depending on state of db'
-    task setup: :environment do
-      begin
-        if ActiveRecord::Migrator.current_version.zero?
-          Rake::Task['db:migrate'].invoke
-          Rake::Task['db:seed'].invoke
-        end
-      rescue ActiveRecord::NoDatabaseError
-        Rake::Task['db:setup'].invoke
-      else
-        Rake::Task['db:migrate'].invoke
+            context 'with keywords' do
+      let(:options) do
+        {
+          name: { 'en-US' => 'Fastlane Demo' },
+          description: { 'en-US' => 'Demo description' },
+          keywords: { 'en-US' => 'Some, key, words' }
+        }
       end
+    
+            expect(result).to eq('/usr/local/bin/cloc --exclude-dir=test1,test2,build --by-file --xml  --out=build/cloc.xml')
+      end
+    
+          it 'get GIT build number' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            get_build_number_repository
+        end').runner.execute(:test)
+    
+          it 'returns the new version as return value' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number(bump_type: 'major')
+        end').runner.execute(:test)
+    
+        if test_conf['database']&.present?
+      ActiveRecord::Base.establish_connection(:test)
+      yield
+      ActiveRecord::Base.establish_connection(Rails.env.to_sym)
     end
   end
     
-      def observe_file_removal(path)
-    path.extend(ObserverPathnameExtension).unlink if path.exist?
+      def meta
+    object.file.meta
   end
+end
+
     
-          def dmg_metadata?(path)
-        relative_root = path.sub(%r{/.*}, '')
-        DMG_METADATA_FILES.include?(relative_root.basename.to_s)
-      end
-    
-        def define
-      define_flush_errors
-      define_getters
-      define_setter
-      define_query
-      register_new_attachment
-      add_active_record_callbacks
-      add_paperclip_callbacks
-      add_required_validations
-    end
-    
-            def error_when_not_valid?
-          @subject.send(@attachment_name).assign(nil)
-          @subject.valid?
-          @subject.errors[:'#{@attachment_name}'].present?
-        end
-    
-          if defined?(ActiveRecord)
-        Paperclip.options[:logger] = ActiveRecord::Base.logger
-        ActiveRecord::Base.send(:include, Paperclip::Glue)
-      end
-    end
-  end
+    def codepoints_to_filename(codepoints)
+  codepoints.downcase.gsub(/\A[0]+/, '').tr(' ', '-')
 end
