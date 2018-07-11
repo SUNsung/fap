@@ -1,119 +1,90 @@
 
         
-          def teardown
-    ActiveSupport.escape_html_entities_in_json = @old_escape_html_entities_in_json
+        describe 'The if expression' do
+  ruby_version_is '2.4' do
+    describe 'accepts multiple assignments in conditional expression' do
+      before(:each) { ScratchPad.record([]) }
+      after(:each)  { ScratchPad.clear }
+    
+        FileUtils.mkdir_p gemspec_dir
+    
+        @server_uri = base_server_uri + '/yaml'
+    @server_z_uri = base_server_uri + '/yaml.Z'
+    
+      def test_get_proxy_from_env_fallback
+    ENV['http_proxy'] = @proxy_uri
+    request = make_request @uri, nil, nil, nil
+    proxy = request.proxy_uri
+    
+      def test_ASET # '[]='
+    t = Time.now
+    h = @cls.new
+    h[1]     = 'one'
+    h[2]     = 'two'
+    h[3]     = 'three'
+    h[self]  = 'self'
+    h[t]     = 'time'
+    h[nil]   = 'nil'
+    h['nil'] = nil
+    assert_equal('one',   h[1])
+    assert_equal('two',   h[2])
+    assert_equal('three', h[3])
+    assert_equal('self',  h[self])
+    assert_equal('time',  h[t])
+    assert_equal('nil',   h[nil])
+    assert_equal(nil,     h['nil'])
+    assert_equal(nil,     h['koala'])
+    
+        # https://bugs.ruby-lang.org/issues/12091
+    assert_nothing_raised {
+      assert_equal [1,2,3,4], set.to_a
+    }
   end
     
-    module ActionCable
-  module Server
-    # An instance of this configuration object is available via ActionCable.server.config, which allows you to tweak Action Cable configuration
-    # in a Rails config initializer.
-    class Configuration
-      attr_accessor :logger, :log_tags
-      attr_accessor :connection_class, :worker_pool_size
-      attr_accessor :disable_request_forgery_protection, :allowed_request_origins, :allow_same_origin_as_host
-      attr_accessor :cable, :url, :mount_path
-    
-                def when_connected(&block)
-              if @raw_client
-                block.call
-              else
-                @when_connected << block
-              end
-            end
-    
-      test 'token_and_options returns correct token with slashes' do
-    token = 'rcHu+\\\\'/896A'
-    actual = ActionController::HttpAuthentication::Token.token_and_options(sample_request(token)).first
-    expected = token
-    assert_equal(expected, actual)
+      it 'ignores NULL bytes between directives' do
+    array = '@9\x99\x9a?\xb333'.unpack(unpack_format('\000', 2))
+    array.should == [2.9000000953674316, 1.399999976158142]
   end
     
-    class WebServiceTest < ActionDispatch::IntegrationTest
-  class TestController < ActionController::Base
-    def assign_parameters
-      if params[:full]
-        render plain: dump_params_keys
-      else
-        render plain: (params.keys - ['controller', 'action']).sort.join(', ')
-      end
+      def contents; end
+    
+      def create_gist(files, description)
+    url = 'https://api.github.com/gists'
+    data = { 'public' => true, 'files' => files, 'description' => description }
+    scopes = GitHub::CREATE_GIST_SCOPES
+    GitHub.open_api(url, data: data, scopes: scopes)['html_url']
+  end
+    
+    class DependencyCollector
+  module Compat
+    # Define the languages that we can handle as external dependencies.
+    LANGUAGE_MODULES = Set[
+      :lua, :lua51, :perl, :python, :python3, :ruby
+    ].freeze
+    
+    class SubversionRequirement < Requirement
+  fatal true
+  satisfy do
+    odisabled('SubversionRequirement', ''depends_on \'subversion\''')
+  end
+end
+    
+      def display_s
+    name
+  end
+    
+      it 'should not set the X-Frame-Options for other content types' do
+    expect(get('/', {}, 'wants' => 'text/foo').headers['X-Frame-Options']).to be_nil
+  end
+    
+      %w(POST PUT DELETE).each do |method|
+    it 'denies #{method} requests with non-whitelisted Origin' do
+      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).not_to be_ok
     end
     
-    module ActionMailer
-  # The <tt>ActionMailer::DeliveryJob</tt> class is used when you
-  # want to send emails outside of the request-response cycle.
-  #
-  # Exceptions are rescued and handled by the mailer class.
-  class DeliveryJob < ActiveJob::Base # :nodoc:
-    queue_as { ActionMailer::Base.deliver_later_queue_name }
-    
-        def call(env)
-      @stack.call(env)
-    end
+      it 'accepts a session without changes to tracked parameters' do
+    session = {:foo => :bar}
+    get '/', {}, 'rack.session' => session
+    get '/', {}, 'rack.session' => session
+    expect(session[:foo]).to eq(:bar)
   end
-    
-        assert_equal(1, @logger.logged(:info).size)
-    assert_match(/Sent mail to system@test\.lindsaar\.net/, @logger.logged(:info).first)
-    
-      protected
-    
-            expect_updated_sign_in_at(user)
-        expect(Redis.current.zcard(FeedManager.instance.key(:home, user.account_id))).to eq 3
-        expect(Redis.current.get('account:#{user.account_id}:regeneration')).to be_nil
-      end
-    end
-    
-    class ManifestSerializer < ActiveModel::Serializer
-  include RoutingHelper
-  include ActionView::Helpers::TextHelper
-    
-      # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/follow
-  def follow
-    f = Follow.last
-    NotificationMailer.follow(f.target_account, Notification.find_by(activity: f))
-  end
-    
-            attr_reader :name, :declaration_node, :scope,
-                    :assignments, :references, :captured_by_block
-        alias captured_by_block? captured_by_block
-    
-    module RuboCop
-  module Cop
-    module Layout
-      # Checks for unnecessary additional spaces inside array percent literals
-      # (i.e. %i/%w).
-      #
-      # @example
-      #
-      #   # bad
-      #   %w(foo  bar  baz)
-      #   # good
-      #   %i(foo bar baz)
-      class SpaceInsideArrayPercentLiteral < Cop
-        include MatchRange
-        include PercentLiteral
-    
-            def nested_variable_comparison?(node)
-          return false unless nested_comparison?(node)
-          variables_in_node(node).count == 1
-        end
-    
-            # @param annotated_source [String] string passed to the matchers
-        #
-        # Separates annotation lines from source lines. Tracks the real
-        # source line number that each annotation corresponds to.
-        #
-        # @return [AnnotatedSource]
-        def self.parse(annotated_source)
-          source      = []
-          annotations = []
-    
-          origin = caller[1]
-      if origin =~ /rubygems\/custom_require/
-        origin = caller[3]
-        if origin.nil?
-          STDERR.puts 'Unknown origin'
-          STDERR.puts caller.join('\n')
-        end
-      end
-      origin = origin.gsub(/:[0-9]+:in .*/, '') if origin
