@@ -1,105 +1,101 @@
 
         
-        namespace mars {
-namespace baseevent {
-    }
-    }
+        //===----------------------------------------------------------------------===//
+//                            Load Store Location
+//===----------------------------------------------------------------------===//
+using LSLocationSet = llvm::DenseSet<LSLocation>;
+using LSLocationList = llvm::SmallVector<LSLocation, 8>;
+using LSLocationIndexMap = llvm::SmallDenseMap<LSLocation, unsigned, 32>;
+using LSLocationBaseMap = llvm::DenseMap<SILValue, LSLocation>;
     
-    #ifdef ANDROID
-    
-        _outbuf.AllocWrite(st.total_length);
-    
-        bool Check();  // true pass, false limit
-    
-    class ServiceBase {
-  public:
-    virtual ~ServiceBase() {}
-    void DependServices(const TServicesMap& _dependservices) { m_dependservices = _dependservices;}
-    const char* ServiceName() const { return m_servicename.c_str();}
-    }
-    
-    
-    {        for (it = m_strmap.begin(); it != m_strmap.end(); ++it) {
-            if (it->second->This() == _this) {
-                m_strmap.erase(it);
-                break;
-            }
-        }
-    }
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    int lapack_LU32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, int* info);
+int lapack_LU64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, int* info);
+int lapack_Cholesky32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, bool* info);
+int lapack_Cholesky64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, bool* info);
+int lapack_SVD32f(float* a, size_t a_step, float* w, float* u, size_t u_step, float* vt, size_t v_step, int m, int n, int flags);
+int lapack_SVD64f(double* a, size_t a_step, double* w, double* u, size_t u_step, double* vt, size_t v_step, int m, int n, int flags);
+int lapack_QR32f(float* src1, size_t src1_step, int m, int n, int k, float* src2, size_t src2_step, float* dst, int* info);
+int lapack_QR64f(double* src1, size_t src1_step, int m, int n, int k, double* src2, size_t src2_step, double* dst, int* info);
+int lapack_gemm32f(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
+                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
+                   int m, int n, int k, int flags);
+int lapack_gemm64f(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
+                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
+                   int m, int n, int k, int flags);
+int lapack_gemm32fc(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
+                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
+                   int m, int n, int k, int flags);
+int lapack_gemm64fc(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
+                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
+                   int m, int n, int k, int flags);
     
     
-#define DEFINE_HAS_MEMBER_WITH_TYPE(member_name, member_type) \
-    template <typename T>\
-    class has_##member_name {\
-      private:\
-        struct yes_type { char x[1]; };\
-        struct no_type { char x[2]; };\
-        template <member_type (T::*)> struct tester;\
-        template <typename U> static yes_type test(tester<&U::member_name>*);\
-        template <typename U> static no_type test(...);\
-      public:\
-        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
-    };
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-        jobject NewObject(jclass clazz, jmethodID methodID, ...)
     {
-        va_list args;
-        va_start(args, methodID);
-        jobject result = functions->NewObjectV(this, clazz, methodID, args);
-        va_end(args);
-        return result;
-    }
-    
-    // convert to alias_ref<T> from T
-template <typename T>
-struct Convert<alias_ref<T>> {
-  typedef JniType<T> jniType;
-  static alias_ref<jniType> fromJni(jniType t) {
-    return wrap_alias(t);
-  }
-  static jniType toJniRet(alias_ref<jniType> t) {
-    return t.get();
-  }
-  static jniType toCall(alias_ref<jniType> t) {
-    return t.get();
-  }
-};
-    
-    void Config::setExperimentalFeatureEnabled(int feature, bool enabled)
-{
-    YGConfigSetExperimentalFeatureEnabled(m_config, static_cast<YGExperimentalFeature>(feature), enabled);
+    {
+    {  return out;
 }
-    
-    void Node::setAlignItems(int alignItems)
-{
-    YGNodeStyleSetAlignItems(m_node, static_cast<YGAlign>(alignItems));
 }
-    
-    
-    {    method(getComputedMargin);
-    method(getComputedBorder);
-    method(getComputedPadding);
 }
 
     
-    // Class that lets you declare a global but does not add a static constructor
-// to the binary. Eventually I'd like to have this auto-initialize in a
-// multithreaded environment but for now it's easiest just to use manual
-// initialization.
-template <typename T>
-class StaticInitialized {
-public:
-  constexpr StaticInitialized() :
-    m_instance(nullptr)
-  {}
+        void setWidth(double width);
+    void setWidthPercent(double width);
+    void setWidthAuto();
+    void setHeight(double height);
+    void setHeightPercent(double height);
+    void setHeightAuto();
+    
+        Size(void)
+    : width(0.0)
+    , height(0.0)
+    {
     }
+    
+        method(copyStyle);
+    
+    void assertInternal(const char* formatstr ...) {
+    va_list va_args;
+    va_start(va_args, formatstr);
+    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
+    va_end(va_args);
+    if (gAssertHandler != NULL) {
+        gAssertHandler(sAssertBuf);
+    }
+    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
+    // crash at this specific address so that we can find our crashes easier
+    *(int*)0xdeadb00c = 0;
+    // let the compiler know we won't reach the end of the function
+     __builtin_unreachable();
+}
+    
+    private:
+  void ref() {
+    ++m_refcount;
+  }
+    
+      /**
+   * This runs the closure in a scope with fbjni's classloader. This should be
+   * the same classloader as the rest of the application and thus anything
+   * running in the closure will have access to the same classes as in a normal
+   * java-create thread.
+   */
+  static void WithClassLoader(std::function<void()>&& runnable);
+    
+      static void OnThreadExit(void *obj) {
+    if (NULL != obj) {
+      delete (T*)obj;
+    }
+  }
+    
+    
+#define DEFINE_BOXED_PRIMITIVE(LITTLE, BIG)                          \
+  struct J ## BIG : detail::JPrimitive<J ## BIG, j ## LITTLE> {      \
+    static auto constexpr kJavaDescriptor = 'Ljava/lang/' #BIG ';';  \
+    static auto constexpr kValueMethod = #LITTLE 'Value';            \
+    j ## LITTLE LITTLE ## Value() const {                            \
+      return value();                                                \
+    }                                                                \
+  };                                                                 \
+  inline local_ref<jobject> autobox(j ## LITTLE val) {               \
+    return J ## BIG::valueOf(val);                                   \
+  }
