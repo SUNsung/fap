@@ -1,66 +1,24 @@
 
         
-          def revoke_admin!
-    set_permission('admin', false)
-  end
-    
-      class CachedFragment
-    def initialize(json)
-      @json = json
-    end
-    def as_json(*_args)
-      @json
-    end
-  end
-    
-          def stack
-        UI::ErrorReport.stack
+                expect(result).to eq('hg parent --template '{node|short}'')
+        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template '{node|short}'')
       end
     
-          # @param  [Xcodeproj::Project] project
-      #         The xcode project to generate a podfile for.
-      #
-      # @return [String] the text of the Podfile for the provided project
-      #
-      def podfile_template(project)
-        podfile = ''
-        podfile << 'project '#{@project_path}'\n\n' if @project_path
-        podfile << <<-PLATFORM.strip_heredoc
-          # Uncomment the next line to define a global platform for your project
-          # platform :ios, '9.0'
-        PLATFORM
+      #forward some requests to status message, because a poll is just attached to a status message and is not sharable itself
+  delegate :author_id, :diaspora_handle, :public?, :subscribers, to: :status_message
     
-            def self.options
-          [
-            ['--template-url=URL', 'The URL of the git repo containing a ' \
-                                  'compatible template'],
-          ].concat(super)
-        end
+      get(/.+/) do
+    send_sinatra_file(request.path) {404}
+  end
     
-    module RuboCop
-  module Cop
-    class VariableForce
-      # A Variable represents existence of a local variable.
-      # This holds a variable declaration node,
-      # and some states of the variable.
-      class Variable
-        VARIABLE_DECLARATION_TYPES =
-          (VARIABLE_ASSIGNMENT_TYPES + ARGUMENT_DECLARATION_TYPES).freeze
-    
-            def each_unnecessary_space_match(node, &blk)
-          each_match_range(
-            contents_range(node),
-            MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX,
-            &blk
-          )
-        end
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
       end
     end
   end
-end
-
-    
-            def autocorrect(node)
-          # Regexp#match can take a second argument, but this cop doesn't
-          # register an offense in that case
-          return unless node.first_argument.regexp_type?
