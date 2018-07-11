@@ -1,426 +1,180 @@
 
         
-        StringRef swift::unicode::extractFirstExtendedGraphemeCluster(StringRef S) {
-  // Extended grapheme cluster segmentation algorithm as described in Unicode
-  // Standard Annex #29.
-  if (S.empty())
-    return StringRef();
+          virtual bool lookupAdditions(DeclBaseName Name, DeclContext *DC,
+                               SourceLoc Loc, bool IsTypeLookup,
+                               ResultVector &RV) = 0;
+    
+    #pragma mark - NSData verification
+    
+    namespace swift {
     }
     
-    @interface LocaleBridgingTester : NSObject
-- (NSLocale *)autoupdatingCurrentLocale;
-- (BOOL)verifyAutoupdatingLocale:(NSLocale *)locale;
-@end
-    
-      void handleDiagnostic(SourceManager &SM, SourceLoc Loc,
-                        DiagnosticKind Kind,
-                        StringRef FormatString,
-                        ArrayRef<DiagnosticArgument> FormatArgs,
-                        const DiagnosticInfo &Info) override;
-    
-    
-    {    // passthrough
-    bool empty() const              { return m.empty(); }
-    size_type size() const          { return m.size(); }
-    size_type max_size() const      { return m.max_size(); }
-    void clear()                    { m.clear(); }
-    iterator begin()                { return m.begin(); }
-    iterator end()                  { return m.end(); }
-    const_iterator begin() const    { return m.begin(); }
-    const_iterator end() const      { return m.end(); }
-    const_iterator cbegin() const   { return m.cbegin(); }
-    const_iterator cend() const     { return m.cend(); }
-};
-    
-    // Return a new iterator that converts internal keys (yielded by
-// '*internal_iter') that were live at the specified 'sequence' number
-// into appropriate user keys.
-extern Iterator* NewDBIterator(
-    DBImpl* db,
-    const Comparator* user_key_comparator,
-    Iterator* internal_iter,
-    SequenceNumber sequence,
-    uint32_t seed);
-    
-    // Return the name of the old info log file for 'dbname'.
-std::string OldInfoLogFileName(const std::string& dbname) {
-  return dbname + '/LOG.old';
-}
-    
-    static void UnrefEntry(void* arg1, void* arg2) {
-  Cache* cache = reinterpret_cast<Cache*>(arg1);
-  Cache::Handle* h = reinterpret_cast<Cache::Handle*>(arg2);
-  cache->Release(h);
-}
-    
-    #ifndef STORAGE_LEVELDB_DB_TABLE_CACHE_H_
-#define STORAGE_LEVELDB_DB_TABLE_CACHE_H_
-    
-      void SetComparatorName(const Slice& name) {
-    has_comparator_ = true;
-    comparator_ = name.ToString();
-  }
-  void SetLogNumber(uint64_t num) {
-    has_log_number_ = true;
-    log_number_ = num;
-  }
-  void SetPrevLogNumber(uint64_t num) {
-    has_prev_log_number_ = true;
-    prev_log_number_ = num;
-  }
-  void SetNextFile(uint64_t num) {
-    has_next_file_number_ = true;
-    next_file_number_ = num;
-  }
-  void SetLastSequence(SequenceNumber seq) {
-    has_last_sequence_ = true;
-    last_sequence_ = seq;
-  }
-  void SetCompactPointer(int level, const InternalKey& key) {
-    compact_pointers_.push_back(std::make_pair(level, key));
-  }
-    
-    
-    {  bool Overlaps(const char* smallest, const char* largest) {
-    InternalKeyComparator cmp(BytewiseComparator());
-    Slice s(smallest != NULL ? smallest : '');
-    Slice l(largest != NULL ? largest : '');
-    return SomeFileOverlapsRange(cmp, disjoint_sorted_files_, files_,
-                                 (smallest != NULL ? &s : NULL),
-                                 (largest != NULL ? &l : NULL));
-  }
-};
-    
-    WriteBatch::Handler::~Handler() { }
-    
-    static Slice TrimSpace(Slice s) {
-  int start = 0;
-  while (start < s.size() && isspace(s[start])) {
-    start++;
-  }
-  int limit = s.size();
-  while (limit > start && isspace(s[limit-1])) {
-    limit--;
-  }
-  return Slice(s.data() + start, limit - start);
-}
-    
-    
-    {  // Usage of std::distance is not portable (does not compile with Sun Studio 12
-  // RogueWave STL,
-  // which is the one used by default).
-  // Using a portable hand-made version for non random iterator instead:
-  //   return difference_type( std::distance( current_, other.current_ ) );
-  difference_type myDistance = 0;
-  for (Value::ObjectValues::iterator it = current_; it != other.current_;
-       ++it) {
-    ++myDistance;
-  }
-  return myDistance;
-#endif
-}
-    
-      // Find a file by file name.
-  bool FindFileByName(const string& filename,
-                      FileDescriptorProto* output);
-    
-    #include <string>
-    
-    #include <google/protobuf/testing/googletest.h>
-#include <gtest/gtest.h>
-#include <google/protobuf/testing/file.h>
-    
-      std::string namespace_;
-  std::string reflectionClassname_;
-    
-    void RepeatedPrimitiveFieldGenerator::GenerateMembers(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
-    '    = pb::FieldCodec.For$capitalized_type_name$($tag$);\n');
-  printer->Print(variables_,
-    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
-  WritePropertyDocComment(printer, descriptor_);
-  AddPublicMemberAttributes(printer);
-  printer->Print(
-    variables_,
-    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
-    '  get { return $name$_; }\n'
-    '}\n');
-}
+    #ifndef SWIFT_SILGEN_RESULTPLAN_H
+#define SWIFT_SILGEN_RESULTPLAN_H
     
     namespace google {
 namespace protobuf {
-namespace compiler {
-namespace java {
-namespace {
-    }
-    }
+namespace python {
     }
     }
     }
     
-                template<typename T>
-            static __device__ __forceinline__ T atomicMin(T* address, T val)
-            {
-#if defined (__CUDA_ARCH__) && (__CUDA_ARCH__ < 120)
-                T count = ::min(*address, val);
-                do
-                {
-                    *address = count;
-                } while (*address > count);
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
+    
+    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
+    
+    
+    
+      explicit FilePath(const std::string& pathname) : pathname_(pathname) {
+    Normalize();
+  }
+    
+    // This class provides implementation of TeastFactoryBase interface.
+// It is used in TEST and TEST_F macros.
+template <class TestClass>
+class TestFactoryImpl : public TestFactoryBase {
+ public:
+  virtual Test* CreateTest() { return new TestClass; }
+};
+    
+    
+// Generates values from a pair of STL-style iterators. Used in the
+// ValuesIn() function. The elements are copied from the source range
+// since the source can be located on the stack, and the generator
+// is likely to persist beyond that stack frame.
+template <typename T>
+class ValuesInIteratorRangeGenerator : public ParamGeneratorInterface<T> {
+ public:
+  template <typename ForwardIterator>
+  ValuesInIteratorRangeGenerator(ForwardIterator begin, ForwardIterator end)
+      : container_(begin, end) {}
+  virtual ~ValuesInIteratorRangeGenerator() {}
     }
     
-    namespace cv { namespace cuda { namespace device
-{
-    template <class T>
-    __device__ __forceinline__ T warp_reduce(volatile T *ptr , const unsigned int tid = threadIdx.x)
-    {
-        const unsigned int lane = tid & 31; // index of thread in warp (0..31)
-    }
-    }
-    }
-    }
-    
-        // Define int32_t, int64_t, and uint64_t types for UST/MSC
-    // (as used in the GL_EXT_timer_query extension)
-    #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
-        #include <inttypes.h>
-    #elif defined(__sun__) || defined(__digital__)
-        #include <inttypes.h>
-        #if defined(__STDC__)
-            #if defined(__arch64__) || defined(_LP64)
-                typedef long int int64_t;
-                typedef unsigned long int uint64_t;
-            #else
-                typedef long long int int64_t;
-                typedef unsigned long long int uint64_t;
-            #endif // __arch64__
-        #endif // __STDC__
-    #elif defined( __VMS ) || defined(__sgi)
-        #include <inttypes.h>
-    #elif defined(__SCO__) || defined(__USLC__)
-        #include <stdint.h>
-    #elif defined(__UNIXOS2__) || defined(__SOL64__)
-        typedef long int int32_t;
-        typedef long long int int64_t;
-        typedef unsigned long long int uint64_t;
-    #elif defined(_WIN32) && defined(__GNUC__)
-        #include <stdint.h>
-    #elif defined(_WIN32)
-        typedef __int32 int32_t;
-        typedef __int64 int64_t;
-        typedef unsigned __int64 uint64_t;
-    #else
-        // Fallback if nothing above works
-        #include <inttypes.h>
-    #endif
+    // Brings in definitions for functions used in the testing::internal::posix
+// namespace (read, write, close, chdir, isatty, stat). We do not currently
+// use them on Windows Mobile.
+#if !GTEST_OS_WINDOWS
+// This assumes that non-Windows OSes provide unistd.h. For OSes where this
+// is not the case, we need to include headers that provide the functions
+// mentioned above.
+# include <unistd.h>
+# include <strings.h>
+#elif !GTEST_OS_WINDOWS_MOBILE
+# include <direct.h>
+# include <io.h>
 #endif
     
-        static void* WinGetProcAddress(const char* name)
-    {
-        static HMODULE opencl_module = NULL;
-        if (!opencl_module)
-        {
-            opencl_module = GetModuleHandleA('clAmdFft.Runtime.dll');
-            if (!opencl_module)
-            {
-                opencl_module = LoadLibraryA('clAmdFft.Runtime.dll');
-                if (!opencl_module)
-                    return NULL;
-            }
-        }
-        return (void*)GetProcAddress(opencl_module, name);
+    
+    {} // namespace thd
+    
+    #endif
+
+    
+    #if defined(TH_REAL_IS_FLOAT) || defined(TH_REAL_IS_DOUBLE)
+    
+    #endif
+
+    
+      // Check second filter
+  ASSERT_TRUE(reader.KeyMayMatch(3100, 'box'));
+  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'foo'));
+  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'bar'));
+  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'hello'));
+    
+    
+    {}  // namespace leveldb
+    
+      inline void ClearSavedValue() {
+    if (saved_value_.capacity() > 1048576) {
+      std::string empty;
+      swap(empty, saved_value_);
+    } else {
+      saved_value_.clear();
     }
-    #define CV_CL_GET_PROC_ADDRESS(name) WinGetProcAddress(name)
-#endif // _WIN32
-    
-    // Tests that GetEncodingAsString returns the right result for a trivial
-// unicharset.
-TEST_F(UnicharcompressTest, GetEncodingAsString) {
-  LoadUnicharset('trivial.unicharset');
-  ExpectCorrect('trivial');
-  STRING encoding = compressed_.GetEncodingAsString(unicharset_);
-  string encoding_str(&encoding[0], encoding.length());
-  std::vector<string> lines =
-      strings::Split(encoding_str, '\n', strings::SkipEmpty());
-  EXPECT_EQ(5, lines.size());
-  // The first line is always space.
-  EXPECT_EQ('0\t ', lines[0]);
-  // Next we have i.
-  EXPECT_EQ('1\ti', lines[1]);
-  // Next we have f.
-  EXPECT_EQ('2\tf', lines[2]);
-  // Next we have the fi ligature: ﬁ. There are no nulls in it, as there are no
-  // repeated letter ligatures in this unicharset, unlike por.unicharset above.
-  EXPECT_EQ('2,1\tﬁ', lines[3]);
-  // Finally the null character.
-  EXPECT_EQ('3\t<nul>', lines[4]);
-}
-    
-      // After deleting some features, finish setting up the mapping, and map
-  // all the samples. Returns the size of the compacted feature space.
-  int FinalizeMapping(SampleIterator* it);
-    
-    // Applies Func in-place to inout, of size n.
-template <class Func>
-inline void FuncInplace(int n, double* inout) {
-  Func f;
-  for (int i = 0; i < n; ++i) {
-    inout[i] = f(inout[i]);
   }
-}
-// Applies Func to u and multiplies the result by v component-wise,
-// putting the product in out, all of size n.
-template <class Func>
-inline void FuncMultiply(const double* u, const double* v, int n, double* out) {
-  Func f;
-  for (int i = 0; i < n; ++i) {
-    out[i] = f(u[i]) * v[i];
+    
+      // Format the header
+  char buf[kHeaderSize];
+  buf[4] = static_cast<char>(n & 0xff);
+  buf[5] = static_cast<char>(n >> 8);
+  buf[6] = static_cast<char>(t);
+    
+      /// Accept a new connection and obtain the endpoint of the peer
+  /**
+   * This function is used to accept a new connection from a peer into the
+   * given socket, and additionally provide the endpoint of the remote peer.
+   * The function call will block until a new connection has been accepted
+   * successfully or an error occurs.
+   *
+   * @param peer The socket into which the new connection will be accepted.
+   *
+   * @param peer_endpoint An endpoint object which will receive the endpoint of
+   * the remote peer.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   *
+   * @par Example
+   * @code
+   * boost::asio::ip::tcp::acceptor acceptor(io_service);
+   * ...
+   * boost::asio::ip::tcp::socket socket(io_service);
+   * boost::asio::ip::tcp::endpoint endpoint;
+   * acceptor.accept(socket, endpoint);
+   * @endcode
+   */
+  template <typename SocketService>
+  void accept(basic_socket<protocol_type, SocketService>& peer,
+      endpoint_type& peer_endpoint)
+  {
+    boost::system::error_code ec;
+    this->get_service().accept(this->get_implementation(),
+        peer, &peer_endpoint, ec);
+    boost::asio::detail::throw_error(ec, 'accept');
   }
-}
-// Applies the Softmax function in-place to inout, of size n.
-template <typename T>
-inline void SoftmaxInPlace(int n, T* inout) {
-  if (n <= 0) return;
-  // A limit on the negative range input to exp to guarantee non-zero output.
-  const T kMaxSoftmaxActivation = 86.0f;
-    }
-    
-    // Sets up the stride for the given array of height, width pairs.
-void StrideMap::SetStride(const std::vector<std::pair<int, int>>& h_w_pairs) {
-  int max_height = 0;
-  int max_width = 0;
-  for (const std::pair<int, int>& hw : h_w_pairs) {
-    int height = hw.first;
-    int width = hw.second;
-    heights_.push_back(height);
-    widths_.push_back(width);
-    if (height > max_height) max_height = height;
-    if (width > max_width) max_width = width;
-  }
-  shape_[FD_BATCH] = heights_.size();
-  shape_[FD_HEIGHT] = max_height;
-  shape_[FD_WIDTH] = max_width;
-  ComputeTIncrements();
-}
-    
-      // Partition creation. Accumulates vertical and horizontal text chains,
-  // puts the remaining blobs in as unknowns, and then merges/splits to
-  // minimize overlap and smoothes the types with neighbours and the color
-  // image if provided. rerotation is used to rotate the coordinate space
-  // back to the nontext_map_ image.
-  // If find_problems is true, detects possible noise pollution by the amount
-  // of partition overlap that is created by the diacritics. If excessive, the
-  // noise is separated out into diacritic blobs, and PFR_NOISE is returned.
-  // [TODO(rays): if the partition overlap is caused by heavy skew, deskews
-  // the components, saves the skew_angle and returns PFR_SKEW.] If the return
-  // is not PFR_OK, the job is incomplete, and FindInitialPartitions must be
-  // called again after cleaning up the partly done work.
-  PartitionFindResult FindInitialPartitions(PageSegMode pageseg_mode,
-                                            const FCOORD& rerotation,
-                                            bool find_problems, TO_BLOCK* block,
-                                            BLOBNBOX_LIST* diacritic_blobs,
-                                            ColPartitionGrid* part_grid,
-                                            ColPartition_LIST* big_parts,
-                                            FCOORD* skew_angle);
-  // Detects noise by a significant increase in partition overlap from
-  // pre_overlap to now, and removes noise from the union of all the overlapping
-  // partitions, placing the blobs in diacritic_blobs. Returns true if any noise
-  // was found and removed.
-  bool DetectAndRemoveNoise(int pre_overlap, const TBOX& grid_box,
-                            TO_BLOCK* block, ColPartitionGrid* part_grid,
-                            BLOBNBOX_LIST* diacritic_blobs);
-  // Finds vertical chains of text-like blobs and puts them in ColPartitions.
-  void FindVerticalTextChains(ColPartitionGrid* part_grid);
-  // Finds horizontal chains of text-like blobs and puts them in ColPartitions.
-  void FindHorizontalTextChains(ColPartitionGrid* part_grid);
-  // Finds diacritics and saves their base character in the blob.
-  void TestDiacritics(ColPartitionGrid* part_grid, TO_BLOCK* block);
-  // Searches this grid for an appropriately close and sized neighbour of the
-  // given [small] blob. If such a blob is found, the diacritic base is saved
-  // in the blob and true is returned.
-  // The small_grid is a secondary grid that contains the small/noise objects
-  // that are not in this grid, but may be useful for determining a connection
-  // between blob and its potential base character. (See DiacriticXGapFilled.)
-  bool DiacriticBlob(BlobGrid* small_grid, BLOBNBOX* blob);
-  // Returns true if there is no gap between the base char and the diacritic
-  // bigger than a fraction of the height of the base char:
-  // Eg: line end.....'
-  // The quote is a long way from the end of the line, yet it needs to be a
-  // diacritic. To determine that the quote is not part of an image, or
-  // a different text block, we check for other marks in the gap between
-  // the base char and the diacritic.
-  //                          '<--Diacritic
-  // |---------|
-  // |         |<-toobig-gap->
-  // | Base    |<ok gap>
-  // |---------|        x<-----Dot occupying gap
-  // The grid is const really.
-  bool DiacriticXGapFilled(BlobGrid* grid, const TBOX& diacritic_box,
-                           const TBOX& base_box);
-  // Merges diacritics with the ColPartition of the base character blob.
-  void MergeDiacritics(TO_BLOCK* block, ColPartitionGrid* part_grid);
-  // Any blobs on the large_blobs list of block that are still unowned by a
-  // ColPartition, are probably drop-cap or vertically touching so the blobs
-  // are removed to the big_parts list and treated separately.
-  void RemoveLargeUnusedBlobs(TO_BLOCK* block,
-                              ColPartitionGrid* part_grid,
-                              ColPartition_LIST* big_parts);
-    
-    #include 'test/cpp/qps/benchmark_config.h'
-#include 'test/cpp/qps/driver.h'
-#include 'test/cpp/qps/report.h'
-#include 'test/cpp/qps/server.h'
-#include 'test/cpp/util/test_config.h'
-#include 'test/cpp/util/test_credentials_provider.h'
-    
-    
-    
-      bool PrintBetaServicer(const grpc_generator::Service* service,
-                         grpc_generator::Printer* out);
-  bool PrintBetaServerFactory(
-      const grpc::string& package_qualified_service_name,
-      const grpc_generator::Service* service, grpc_generator::Printer* out);
-  bool PrintBetaStub(const grpc_generator::Service* service,
-                     grpc_generator::Printer* out);
-  bool PrintBetaStubFactory(const grpc::string& package_qualified_service_name,
-                            const grpc_generator::Service* service,
-                            grpc_generator::Printer* out);
-    
-    int main(int argc, char** argv) {
-  grpc::testing::InitTest(&argc, &argv, true);
-  signal(SIGINT, sigint_handler);
-    }
     
     
     {
-    {}  // namespace testing
-}  // namespace grpc
+    {} // namespace asio
+} // namespace boost
     
-    double UsageTimer::Now() {
-  auto ts = gpr_now(GPR_CLOCK_REALTIME);
-  return ts.tv_sec + 1e-9 * ts.tv_nsec;
-}
+    #include <boost/asio/detail/config.hpp>
     
-    int protoc_main(int argc, char* argv[]) {
-  google::protobuf::compiler::CommandLineInterface cli;
-  cli.AllowPlugins('protoc-');
+    
+    {private:
+  int descriptor_;
+  MutableBufferSequence buffers_;
+};
+    
+      static void do_complete(io_service_impl* owner, operation* base,
+      const boost::system::error_code& /*ec*/,
+      std::size_t /*bytes_transferred*/)
+  {
+    // Take ownership of the handler object.
+    descriptor_write_op* o(static_cast<descriptor_write_op*>(base));
+    ptr p = { boost::asio::detail::addressof(o->handler_), o, o };
     }
     
-      const std::string& functionName() const noexcept { return functionName_; }
+    #include <boost/asio/detail/config.hpp>
     
-    struct Size
+    template <typename Function, typename Context>
+inline void invoke(const Function& function, Context& context)
 {
-    double width;
-    double height;
-    }
-    
-      bool operator==(const ProgramLocation& other) const {
-    // Assumes that the strings are static
-    return (m_functionName == other.m_functionName) && (m_fileName == other.m_fileName) && m_lineNumber == other.m_lineNumber;
-  }
-    
-    inline local_ref<jobject> autobox(alias_ref<jobject> val) {
-  return make_local(val);
+#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
+  Function tmp(function);
+  tmp();
+#else
+  using boost::asio::asio_handler_invoke;
+  asio_handler_invoke(function, boost::asio::detail::addressof(context));
+#endif
 }
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
