@@ -1,71 +1,63 @@
 
         
-              # The instance of ActionView::Base that is used by +render+.
-      def view
-        @view ||= begin
-          view = @controller.view_context
-          view.singleton_class.include(_helpers)
-          view.extend(Locals)
-          view.rendered_views = rendered_views
-          view.output_buffer = output_buffer
-          view
+              out = checks.send(method)
+      unless out.nil? || out.empty?
+        if first_warning
+          $stderr.puts <<-EOS.undent
+            #{Tty.white}Please note that these warnings are just used to help the Homebrew maintainers
+            with debugging if you file an issue. If everything you use Homebrew for is
+            working fine: please don't worry and just ignore them. Thanks!#{Tty.reset}
+          EOS
         end
-      end
     
-            attributes.flat_map do |key, value|
-          if value.is_a?(Hash) && !table.has_column?(key)
-            associated_predicate_builder(key).expand_from_hash(value)
-          elsif table.associated_with?(key)
-            # Find the foreign key when using queries such as:
-            # Post.where(author: author)
-            #
-            # For polymorphic relationships, find the foreign key and type:
-            # PriceEstimate.where(estimate_of: treasure)
-            associated_table = table.associated_table(key)
-            if associated_table.polymorphic_association?
-              case value.is_a?(Array) ? value.first : value
-              when Base, Relation
-                value = [value] unless value.is_a?(Array)
-                klass = PolymorphicArrayValue
-              end
-            end
-    
-    class ActionCable::Channel::BroadcastingTest < ActionCable::TestCase
-  class ChatChannel < ActionCable::Channel::Base
+        dump_formula_report :A, 'New Formulae'
+    dump_formula_report :M, 'Updated Formulae'
+    dump_formula_report :R, 'Renamed Formulae'
+    dump_formula_report :D, 'Deleted Formulae'
   end
     
-            pubsub.expect(:subscribe, nil, ['channel', Proc, Proc])
-        pubsub.expect(:unsubscribe, nil, ['channel', Proc])
+    class NotificationMailerPreview < ActionMailer::Preview
+  # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/mention
+  def mention
+    m = Mention.last
+    NotificationMailer.mention(m.account, Notification.find_by(activity: m))
+  end
     
-    require 'test_helper'
-require 'stubs/test_server'
+      def theme_color
+    '#282c37'
+  end
     
-        def send_async(method, *args)
-      send method, *args
-    end
+    File.readlines(sitelist).each do |site|
+  site.strip!
+  next if site.length == 0
+  next if site =~ /^#/
     
-          topic = Topic.find_by(id: topic_id)
     
-            self.arguments = [
-          CLAide::Argument.new('NAME', false),
-        ]
     
-          def self.options
-        options = []
-        options.concat(super.reject { |option, _| option == '--silent' })
-      end
     
-            It is possible to specify a list of dependencies which will be used by
-        the template in the `Podfile.default` (normal targets) `Podfile.test`
-        (test targets) files which should be stored in the
-        `~/.cocoapods/templates` folder.
-      DESC
-      self.arguments = [
-        CLAide::Argument.new('XCODEPROJ', :false),
-      ]
+# extract label addresses
+addrs = {}
+dtrans.each_line { |ln|
+	if ln =~ /;[^ ].*:/
+		parts = ln.split(' ')
+		label = parts[1]
+		label = label.slice(1,label.index(':')-1)
+		addr = parts[0].split(':')[1].to_i(16)
+		#puts '%s => %x' % [label, addr]
+		one = { label => addr }
+		addrs.merge!(one)
+	end
+}
+#puts addrs.inspect
     
-            def index
-          authorize! :read, StockMovement
-          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          respond_with(@stock_movements)
+    meterp = Rex::Post::Meterpreter::Client.new(sock)
+    
+          origin = caller[1]
+      if origin =~ /rubygems\/custom_require/
+        origin = caller[3]
+        if origin.nil?
+          STDERR.puts 'Unknown origin'
+          STDERR.puts caller.join('\n')
         end
+      end
+      origin = origin.gsub(/:[0-9]+:in .*/, '') if origin
