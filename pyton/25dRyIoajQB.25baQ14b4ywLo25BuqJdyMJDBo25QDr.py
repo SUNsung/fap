@@ -1,97 +1,134 @@
 
         
-            def test_b_observers_shall_be_attachable(cls):
-        cls.s.attach(cls.dec_obs)
-        cls.assertEqual(isinstance(cls.s._observers[0], DecimalViewer), True)
-        cls.assertEqual(len(cls.s._observers), 1)
-        cls.s.attach(cls.hex_obs)
-        cls.assertEqual(isinstance(cls.s._observers[1], HexViewer), True)
-        cls.assertEqual(len(cls.s._observers), 2)
+                # reset stats on high iter-request times caused by client restarts
+        if delta > 3: # seconds
+            self._reset_stats()
+            return ''
     
-        # sample_queue.put('sam')
-    # test_object(sample_queue)
-    # print('Outside func: {}'.format(sample_queue.get()))
+    from importlib import import_module
+from os.path import join, dirname, abspath, exists, splitext
     
-        def setUp(self):
-        self.e, self.g = get_localizer(language='English'), \
-                         get_localizer(language='Greek')
-    
-        def test_tc2_output(self):
-        self.tc2.run()
-        output = self.out.getvalue().strip()
-        self.assertEqual(output, self.average_result_tc2)
-    
-        def test_display_current_time_at_midnight(self):
-        '''
-        Would almost always fail (despite of right at/after midnight) if
-        untestable production code would have been used.
-        '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay()
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(time_provider_stub), expected_time)
-    
-        parameter
-    '''
-    
-    *TL;DR80
-Traverses a container and accesses the container's elements.
-'''
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-        def _getargnames(self, func):
-        # type: (Callable) -> List[str]
-        try:
-            return getargspec(func).args
-        except TypeError:
-            if hasattr(func, 'func_code'):
-                # Cython-generated code has all the attributes needed
-                # by inspect.getargspec, but the inspect module only
-                # works with ordinary functions. Inline the portion of
-                # getargspec that we need here. Note that for static
-                # functions the @cython.binding(True) decorator must
-                # be used (for methods it works out of the box).
-                code = func.func_code  # type: ignore
-                return code.co_varnames[:code.co_argcount]
-            raise
-    
-        @gen.coroutine
-    def _write_body(self, start_read):
-        if self.request.body is not None:
-            self.connection.write(self.request.body)
-        elif self.request.body_producer is not None:
-            fut = self.request.body_producer(self.connection.write)
-            if fut is not None:
-                yield fut
-        self.connection.finish()
-        if start_read:
-            try:
-                yield self.connection.read_response(self)
-            except StreamClosedError:
-                if not self._handle_exception(*sys.exc_info()):
-                    raise
-    
-        if os.environ.get('TORNADO_EXTENSION') != '1':
-        # Unless the user has specified that the extension is mandatory,
-        # fall back to the pure-python implementation on any build failure.
-        kwargs['cmdclass'] = {'build_ext': custom_build_ext}
-    
-        def process_response(self, data):
-        status, message = re.match('(.*)\t(.*)\n', to_unicode(data)).groups()
-        if status == 'ok':
-            return message
+            self._signer = None
+        if is_botocore():
+            import botocore.auth
+            import botocore.credentials
+            kw.pop('anon', None)
+            if kw:
+                raise TypeError('Unexpected keyword arguments: %s' % kw)
+            if not self.anon:
+                SignerCls = botocore.auth.AUTH_TYPE_MAPS['s3']
+                self._signer = SignerCls(botocore.credentials.Credentials(
+                    aws_access_key_id, aws_secret_access_key))
         else:
-            raise CapError(message)
+            _S3Connection = _get_boto_connection()
+            try:
+                self.conn = _S3Connection(
+                    aws_access_key_id, aws_secret_access_key, **kw)
+            except Exception as ex:
+                raise NotConfigured(str(ex))
+    
+        def __init__(self, timeout=180):
+        self._timeout = timeout
     
     
-class GenEngineTest(AsyncTestCase):
-    def setUp(self):
-        self.warning_catcher = warnings.catch_warnings()
-        self.warning_catcher.__enter__()
-        warnings.simplefilter('ignore', DeprecationWarning)
-        super(GenEngineTest, self).setUp()
-        self.named_contexts = []
+class HttpAuthMiddleware(object):
+    '''Set Basic HTTP Authorization header
+    (http_user and http_pass spider class attributes)'''
+    
+    from mrjob.job import MRJob
+    
+    
+class SalesRanker(MRJob):
+    
+        def __init__(self, from_user_id, to_user_id, request_status, timestamp):
+        self.from_user_id = from_user_id
+        self.to_user_id = to_user_id
+        self.request_status = request_status
+        self.timestamp = timestamp
+    
+        def extract_year_month(self, timestamp):
+        '''Return the year and month portions of the timestamp.'''
+        ...
+    
+    def get_marker(line):
+    matchlist = TAG_REGEX.findall(line)
+    if matchlist:
+        namematch = NAMED_A_TAG_REGEX.match(line)
+        if namematch:
+            return namematch.group(1) # group 0 is full match
+    
+        def test_sequential_execution(self):
+        self.command_stack[0].execute()
+        output_after_first_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_first_execution[0], 'bar.txt')
+        self.command_stack[1].execute()
+        output_after_second_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_second_execution[0], 'baz.txt')
+    
+        def test_c_observers_shall_be_detachable(cls):
+        cls.s.detach(cls.dec_obs)
+        # hex viewer shall be remaining if dec viewer is detached first
+        cls.assertEqual(isinstance(cls.s._observers[0], HexViewer), True)
+        cls.assertEqual(len(cls.s._observers), 1)
+        cls.s.detach(cls.hex_obs)
+        cls.assertEqual(len(cls.s._observers), 0)
+    
+        def setUp(cls):
+        ''' Function/test case scope setup. '''
+        cls.output = StringIO()
+        cls.saved_stdout = sys.stdout
+        sys.stdout = cls.output
+    
+    
+class Action(object):
+    
+        def test_cat_greek_localization(self):
+        self.assertEqual(self.g.get('cat'), 'γάτα')
+    
+    
+class TestRunnerFacilities(unittest.TestCase):
+    
+    class TimeDisplay(object):
+    
+    from dft.parameter_injection import TimeDisplay, MidnightTimeProvider, ProductionCodeTimeProvider, datetime
+    
+            # simple test to validate param value
+        if param in self._static_method_choices.keys():
+            self.param = param
+        else:
+            raise ValueError('Invalid Value for Param: {0}'.format(param))
+    
+    from __future__ import print_function
+import os
+from os.path import lexists
+    
+            def callback(future):
+            self.future = future
+            raise Exception('callback')
+    
+        def open(self, *args, **kwargs):
+        '''Invoked when a new WebSocket is opened.
+    
+    try:
+    import ssl
+except ImportError:
+    # ssl is not available on Google App Engine
+    ssl = None
+    
+        def render_string(self, path, **kwargs):
+        '''Renders a template and returns it as a string.'''
+        return self.handler.render_string(path, **kwargs)
+    
+        See `OptionParser.print_help`.
+    '''
+    return options.print_help(file)
+    
+        # IReactorThreads
+    def callFromThread(self, f, *args, **kw):
+        assert callable(f), '%s is not callable' % f
+        with NullContext():
+            # This NullContext is mainly for an edge case when running
+            # TwistedIOLoop on top of a TornadoReactor.
+            # TwistedIOLoop.add_callback uses reactor.callFromThread and
+            # should not pick up additional StackContexts along the way.
+            self._io_loop.add_callback(f, *args, **kw)
