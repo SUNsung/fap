@@ -1,79 +1,56 @@
 
         
-        import os
-import json
-import click
+        # This view is called from FlatpageFallbackMiddleware.process_response
+# when a 404 is raised, which often means CsrfViewMiddleware.process_view
+# has not been called even if CsrfViewMiddleware is installed. So we need
+# to use @csrf_protect, in case the template needs {% csrf_token %}.
+# However, we can't just wrap this view; if no matching flatpage exists,
+# or a redirect is required for authentication, the 404 needs to be returned
+# without any CSRF checks. Therefore, we only
+# CSRF protect the internal implementation.
     
-        # Execute the template string in a temporary namespace and
-    # support tracing utilities by setting a value for frame.f_globals['__name__']
-    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
-                     _property=property, _tuple=tuple)
-    try:
-        exec(template, namespace)
-    except SyntaxError:
-        e = _sys.exc_info()[1]
-        raise SyntaxError(e.message + ':\n' + template)
-    result = namespace[typename]
+        def set_crawler(self, crawler):
+        assert not hasattr(self, '_crawler'), 'crawler already set'
+        self._crawler = crawler
     
-                self._work_queue.put(w)
-            self._adjust_thread_count()
-            return f
-    submit.__doc__ = _base.Executor.submit.__doc__
+            infos = []
+        if not self.wasSuccessful():
+            write('FAILED')
+            failed, errored = map(len, (self.failures, self.errors))
+            if failed:
+                infos.append('failures=%d' % failed)
+            if errored:
+                infos.append('errors=%d' % errored)
+        else:
+            write('OK')
     
-        def test_result_with_timeout(self):
-        self.assertRaises(futures.TimeoutError,
-                          PENDING_FUTURE.result, timeout=0)
-        self.assertRaises(futures.TimeoutError,
-                          RUNNING_FUTURE.result, timeout=0)
-        self.assertRaises(futures.CancelledError,
-                          CANCELLED_FUTURE.result, timeout=0)
-        self.assertRaises(futures.CancelledError,
-                          CANCELLED_AND_NOTIFIED_FUTURE.result, timeout=0)
-        self.assertRaises(IOError, EXCEPTION_FUTURE.result, timeout=0)
-        self.assertEqual(SUCCESSFUL_FUTURE.result(timeout=0), 42)
-    
-    
-class _MasterDiagnosticFilter( object ):
+        def _get_handler(self, scheme):
+        '''Lazy-load the downloadhandler for a scheme
+        only on the first request for that scheme.
+        '''
+        if scheme in self._handlers:
+            return self._handlers[scheme]
+        if scheme in self._notconfigured:
+            return None
+        if scheme not in self._schemes:
+            self._notconfigured[scheme] = 'no handler available for that scheme'
+            return None
     
     
-def EndsWithPython_Bad( path ):
-  ok_( not _EndsWithPython( path ),
-       'Path {0} does end with a Python name.'.format( path ) )
+class CookiesMiddleware(object):
+    '''This middleware enables working with sites that need cookies'''
     
-      return qf_item
+        def process_request(self, request, spider):
+        if self.user_agent:
+            request.headers.setdefault(b'User-Agent', self.user_agent)
 
     
-        def test_display_current_time_at_midnight(self):
-        class_under_test = TimeDisplay()
-        expected_time = '24:01'
-        result = class_under_test.get_current_time_as_as_html_fragment()
-        self.assertEqual(result, expected_time)
-'''
-    
-    from dft.constructor_injection import TimeDisplay, MidnightTimeProvider, ProductionCodeTimeProvider, datetime
-    
-    
-if __name__ == '__main__':
-    reporter = Reporter()
-    db = DB()
-    tm = TestManager()
-    tm.setReporter(reporter)
-    tm.setDB(db)
-    reporter.setTM(tm)
-    db.setTM(tm)
-    # For simplification we are looping on the same test.
-    # Practically, it could be about various unique test classes and their
-    # objects
-    for i in range(3):
-        tc = TC()
-        tc.setTM(tm)
-        tm.setTC(tc)
-        tc.setup()
-        tc.execute()
-        tc.tearDown()
-    
-        def __init__(self, radio):
-        self.radio = radio
-        self.stations = ['1250', '1380', '1510']
-        self.pos = 0
-        self.name = 'AM'
+            if self.close_on.get('errorcount'):
+            crawler.signals.connect(self.error_count, signal=signals.spider_error)
+        if self.close_on.get('pagecount'):
+            crawler.signals.connect(self.page_count, signal=signals.response_received)
+        if self.close_on.get('timeout'):
+            crawler.signals.connect(self.spider_opened, signal=signals.spider_opened)
+        if self.close_on.get('itemcount'):
+            crawler.signals.connect(self.item_scraped, signal=signals.item_scraped)
+        crawler.signals.connect(self.spider_closed, signal=signals.spider_closed)
