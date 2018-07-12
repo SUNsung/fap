@@ -1,110 +1,209 @@
 
         
-        CV_EXPORTS void  EstimateUncertainties(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
-                           const IntrinsicParams& params, InputArray omc, InputArray Tc,
-                           IntrinsicParams& errors, Vec2d& std_err, double thresh_cond, int check_cond, double& rms);
+        #if GOOGLE_CUDA
     
-    class BareModelEstimator : public CvModelEstimator2
-{
-public:
-    BareModelEstimator(int modelPoints, CvSize modelSize, int maxBasicSolutions);
+    #include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
+#include 'tensorflow/core/framework/tensor_types.h'
+    
+    
+    {  auto module = CreateNewModule();
+  auto computation = module->AddEntryComputation(builder.Build());
+  HloInstruction* root = computation->root_instruction();
+  EXPECT_EQ(root->opcode(), HloOpcode::kBatchNormTraining);
+  BatchNormExpander rewriter(/*rewrite_training_op=*/true,
+                             /*rewrite_inference_op=*/true,
+                             /*rewrite_grad_op=*/true);
+  ASSERT_TRUE(rewriter.Run(module.get()).ValueOrDie());
+  root = computation->root_instruction();
+  // Make sure this operation is expanded.
+  EXPECT_EQ(root->opcode(), HloOpcode::kTuple);
+}
+    
+    bool PropagateArrayDataTypes::Run(Model* model, std::size_t op_index) {
+  auto it = model->operators.begin() + op_index;
+  auto* op = it->get();
     }
     
-        // Extension: 1.5
-    extern void (CODEGEN_FUNCPTR *GenQueries)(GLsizei n, GLuint *ids);
-    extern void (CODEGEN_FUNCPTR *DeleteQueries)(GLsizei n, const GLuint *ids);
-    extern GLboolean (CODEGEN_FUNCPTR *IsQuery)(GLuint id);
-    extern void (CODEGEN_FUNCPTR *BeginQuery)(GLenum target, GLuint id);
-    extern void (CODEGEN_FUNCPTR *EndQuery)(GLenum target);
-    extern void (CODEGEN_FUNCPTR *GetQueryiv)(GLenum target, GLenum pname, GLint *params);
-    extern void (CODEGEN_FUNCPTR *GetQueryObjectiv)(GLuint id, GLenum pname, GLint *params);
-    extern void (CODEGEN_FUNCPTR *GetQueryObjectuiv)(GLuint id, GLenum pname, GLuint *params);
-    extern void (CODEGEN_FUNCPTR *BindBuffer)(GLenum target, GLuint buffer);
-    extern void (CODEGEN_FUNCPTR *DeleteBuffers)(GLsizei n, const GLuint *buffers);
-    extern void (CODEGEN_FUNCPTR *GenBuffers)(GLsizei n, GLuint *buffers);
-    extern GLboolean (CODEGEN_FUNCPTR *IsBuffer)(GLuint buffer);
-    extern void (CODEGEN_FUNCPTR *BufferData)(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage);
-    extern void (CODEGEN_FUNCPTR *BufferSubData)(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid *data);
-    extern void (CODEGEN_FUNCPTR *GetBufferSubData)(GLenum target, GLintptr offset, GLsizeiptr size, GLvoid *data);
-    extern GLvoid* (CODEGEN_FUNCPTR *MapBuffer)(GLenum target, GLenum access);
-    extern GLboolean (CODEGEN_FUNCPTR *UnmapBuffer)(GLenum target);
-    extern void (CODEGEN_FUNCPTR *GetBufferParameteriv)(GLenum target, GLenum pname, GLint *params);
-    extern void (CODEGEN_FUNCPTR *GetBufferPointerv)(GLenum target, GLenum pname, GLvoid* *params);
+    namespace {
+    }
     
-    #endif //HAVE_LAPACK
-#endif //OPENCV_CORE_HAL_INTERNAL_HPP
+    class DebuggerState : public DebuggerStateInterface {
+ public:
+  DebuggerState(const DebugOptions& debug_options);
+  virtual ~DebuggerState();
+    }
+    
+      double PrimalLossDerivative(const double wx, const double label,
+                              const double example_weight) const final {
+    if (label * wx >= 1) {
+      return 0;
+    }
+    if (label * wx <= 1 - gamma) {
+      return -label;
+    }
+    return (wx - label) / gamma;
+  }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our windows open/close state
+        ImGui::Checkbox('Another Window', &show_another_window);
+    
+    // CHANGELOG
+// (minor and older changes stripped away, please see git history for details)
+//  2018-06-13: Platform: Added clipboard support (from Allegro 5.1.12).
+//  2018-06-13: Renderer: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle.
+//  2018-06-13: Renderer: Backup/restore transform and clipping rectangle.
+//  2018-06-11: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors flag + honor ImGuiConfigFlags_NoMouseCursorChange flag.
+//  2018-04-18: Misc: Renamed file from imgui_impl_a5.cpp to imgui_impl_allegro5.cpp.
+//  2018-04-18: Misc: Added support for 32-bits vertex indices to avoid conversion at runtime. Added imconfig_allegro5.h to enforce 32-bit indices when included from imgui.h.
+//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplAllegro5_RenderDrawData() in the .h file so you can call it yourself.
+//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
+//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
+    
+    void ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(VkPhysicalDevice physical_device, VkDevice device, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator, int w, int h)
+{
+    uint32_t min_image_count = 2;	// FIXME: this should become a function parameter
+    }
+    
+    #include <algorithm>
+#include <assert.h>
+#include <stdio.h>
+#include <string.h>
+#include <cmath>
+#include <cstdlib>
+    
+    // Entropy encoding (Huffman) utilities.
+    
+    // Functions for reading a jpeg byte stream into a JPEGData object.
+    
+    enum JPEGReadError {
+  JPEG_OK = 0,
+  JPEG_SOI_NOT_FOUND,
+  JPEG_SOF_NOT_FOUND,
+  JPEG_UNEXPECTED_EOF,
+  JPEG_MARKER_BYTE_NOT_FOUND,
+  JPEG_UNSUPPORTED_MARKER,
+  JPEG_WRONG_MARKER_SIZE,
+  JPEG_INVALID_PRECISION,
+  JPEG_INVALID_WIDTH,
+  JPEG_INVALID_HEIGHT,
+  JPEG_INVALID_NUMCOMP,
+  JPEG_INVALID_SAMP_FACTOR,
+  JPEG_INVALID_START_OF_SCAN,
+  JPEG_INVALID_END_OF_SCAN,
+  JPEG_INVALID_SCAN_BIT_POSITION,
+  JPEG_INVALID_COMPS_IN_SCAN,
+  JPEG_INVALID_HUFFMAN_INDEX,
+  JPEG_INVALID_QUANT_TBL_INDEX,
+  JPEG_INVALID_QUANT_VAL,
+  JPEG_INVALID_MARKER_LEN,
+  JPEG_INVALID_SAMPLING_FACTORS,
+  JPEG_INVALID_HUFFMAN_CODE,
+  JPEG_INVALID_SYMBOL,
+  JPEG_NON_REPRESENTABLE_DC_COEFF,
+  JPEG_NON_REPRESENTABLE_AC_COEFF,
+  JPEG_INVALID_SCAN,
+  JPEG_OVERLAPPING_SCANS,
+  JPEG_INVALID_SCAN_ORDER,
+  JPEG_EXTRA_ZERO_RUN,
+  JPEG_DUPLICATE_DRI,
+  JPEG_DUPLICATE_SOF,
+  JPEG_WRONG_RESTART_MARKER,
+  JPEG_DUPLICATE_COMPONENT_ID,
+  JPEG_COMPONENT_NOT_FOUND,
+  JPEG_HUFFMAN_TABLE_NOT_FOUND,
+  JPEG_HUFFMAN_TABLE_ERROR,
+  JPEG_QUANT_TABLE_NOT_FOUND,
+  JPEG_EMPTY_DHT,
+  JPEG_EMPTY_DQT,
+  JPEG_OUT_OF_BAND_COEFF,
+  JPEG_EOB_RUN_TOO_LONG,
+  JPEG_IMAGE_TOO_LARGE,
+};
+    
+    /**
+ * Install the terminate / unexpected handlers to dump exceptions.
+ */
+void installHandlers();
+    
+      // Why is this overload deleted? So as not to get confused with
+  // append('null-terminated', N), where N would be a count instead
+  // of a position.
+  template <std::size_t M>
+  FOLLY_CPP14_CONSTEXPR BasicFixedString& append(
+      const BasicFixedString<Char, M>& that,
+      std::size_t pos) noexcept(false) = delete;
+    
+    TEST_F(OrderingTest, ordering) {
+  EXPECT_EQ(-1, int(ordering::lt));
+  EXPECT_EQ(0, int(ordering::eq));
+  EXPECT_EQ(+1, int(ordering::gt));
+}
+    
+    #include <folly/CPortability.h>
+#include <folly/Optional.h>
+    
+    #include <folly/Executor.h>
+#include <folly/MPMCQueue.h>
+#include <folly/Range.h>
+#include <folly/executors/task_queue/BlockingQueue.h>
+#include <folly/synchronization/LifoSem.h>
+#include <glog/logging.h>
+    
+    // Configure folly to enable INFO+ messages, and everything else to
+// enable WARNING+.
+//
+// Set the default log handler to log asynchronously by default.
+FOLLY_INIT_LOGGING_CONFIG('.=WARNING,folly=INFO; default:async=true');
+    
+    class SerialExecutor : public SequencedExecutor {
+ public:
+  SerialExecutor(SerialExecutor const&) = delete;
+  SerialExecutor& operator=(SerialExecutor const&) = delete;
+  SerialExecutor(SerialExecutor&&) = delete;
+  SerialExecutor& operator=(SerialExecutor&&) = delete;
+    }
+    
+    #endif
 
     
-    // Sets flags necessary for recognition in the training mode.
-// Opens and returns the pointer to the output file.
-FILE *Tesseract::init_recog_training(const STRING &fname) {
-  if (tessedit_ambigs_training) {
-    tessedit_tess_adaption_mode.set_value(0);    // turn off adaption
-    tessedit_enable_doc_dict.set_value(0);       // turn off document dictionary
-    // Explore all segmentations.
-    getDict().stopper_no_acceptable_choices.set_value(1);
-  }
-    }
     
-    // This file contains types that are used both by the API and internally
-// to Tesseract. In order to decouple the API from Tesseract and prevent cyclic
-// dependencies, THIS FILE SHOULD NOT DEPEND ON ANY OTHER PART OF TESSERACT.
-// Restated: It is OK for low-level Tesseract files to include publictypes.h,
-// but not for the low-level tesseract code to include top-level API code.
-// This file should not use other Tesseract types, as that would drag
-// their includes into the API-level.
-// API-level code should include apitypes.h in preference to this file.
-    
-      if (argv0 != nullptr && *argv0 != '\0') {
-    /* Use tessdata prefix from the command line. */
-    datadir = argv0;
-  } else if (tessdata_prefix) {
-    /* Use tessdata prefix from the environment. */
-    datadir = tessdata_prefix;
-#if defined(_WIN32)
-  } else if (datadir == nullptr || _access(datadir.string(), 0) != 0) {
-    /* Look for tessdata in directory of executable. */
-    char drive[_MAX_DRIVE];
-    char dir[_MAX_DIR];
-    char path[_MAX_PATH];
-    DWORD length = GetModuleFileName(nullptr, path, sizeof(path));
-    if (length > 0 && length < sizeof(path)) {
-      errno_t result = _splitpath_s(path, drive, sizeof(drive),
-                                    dir, sizeof(dir), nullptr, 0, nullptr, 0);
-      if (result == ERANGE) {
-        tprintf('Error: Path too long: %s\n', path);
+    {
+    {      argumentEvaluated = false;
+      XLOGC_IF(
+          DBG1, conds[i] || conds[j], 'testing conditional %d', getValue());
+      EXPECT_EQ((conds[i] || conds[j]) ? 1 : 0, messages.size());
+      messages.clear();
+      if (conds[i] || conds[j]) {
+        EXPECT_TRUE(argumentEvaluated);
+      } else {
+        EXPECT_FALSE(argumentEvaluated);
       }
     }
-    }
+  }
     
-    #ifndef SWIG
-template <class T1, class T2, class R, class P1, class P2, class A1, class A2, class A3, class A4, class A5>
-inline typename _TessMemberResultCallback_2_5<true,R,T1,P1,P2,A1,A2,A3,A4,A5>::base*
-NewTessCallback( T1* obj, R (T2::*member)(P1,P2,A1,A2,A3,A4,A5) , typename Identity<P1>::type p1, typename Identity<P2>::type p2) {
-  return new _TessMemberResultCallback_2_5<true,R,T1,P1,P2,A1,A2,A3,A4,A5>(obj, member, p1, p2);
-}
-#endif
-    
-    namespace mars {
-namespace baseevent {
-    }
-    }
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    #ifdef ANDROID
-#include 'comm/android/callstack.h'
-#endif
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    
-    {  private:
-    virtual void __OnAttach(const char* _key) {}
-    virtual void __OnDetach(const char* _key) {}
-};
+      // Use the simple helper function in XlogHeader2
+  testXlogHdrFunction('factor', 99);
+  ASSERT_EQ(1, messages.size());
+  EXPECT_EQ('test: factor=99', messages[0].first.getMessage());
+  EXPECT_TRUE(messages[0].first.getFileName().endsWith('XlogHeader2.h'))
+      << 'unexpected file name: ' << messages[0].first.getFileName();
+  EXPECT_EQ(LogLevel::DBG3, messages[0].first.getLevel());
+  EXPECT_EQ(
+      'folly.logging.test.XlogHeader2.h',
+      messages[0].first.getCategory()->getName());
+  EXPECT_EQ('folly.logging.test', messages[0].second->getName());
+  messages.clear();
