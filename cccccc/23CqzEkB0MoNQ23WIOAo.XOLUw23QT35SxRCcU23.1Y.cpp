@@ -1,322 +1,232 @@
-// Implements the part of the interface that caches and returns remote
-// device status attributes.
-class WorkerCachePartial : public WorkerCacheInterface {
- public:
-  bool GetDeviceLocalityNonBlocking(const string& device,
-                                    DeviceLocality* locality) override;
-    }
+
+        
+          // Clear all entries from the DeviceStatus cache.
+  void FlushStatusCache();
     
-    #include 'tensorflow/core/kernels/cwise_ops_common.h'
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    // Functor used by ReverseOp to do the computations.
-template <typename Device, typename T, int Dims>
-struct Reverse {
-  void operator()(const Device& d, typename TTypes<T, Dims>::ConstTensor input,
-                  const Eigen::array<bool, Dims>& reverse_dims,
-                  typename TTypes<T, Dims>::Tensor output) {
-    output.device(d) = input.reverse(reverse_dims);
-  }
-};
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    void printDims(char* buffer, int max_size, int* dims, int num_dims) {
-  if (max_size <= 0) return;
-  buffer[0] = '?';
-  int size = 1;
-  for (int i = 1; i < num_dims; ++i) {
-    if (max_size > size) {
-      int written_size =
-          snprintf(buffer + size, max_size - size, ',%d', dims[i]);
-      if (written_size < 0) return;
-      size += written_size;
-    }
+      // (X - E[X]) / Sqrt[Var[X] + epsilon].
+  auto normalized = add_binary(operand_shape, HloOpcode::kMultiply,
+                               operand_minus_mean, rsqrt_var_add_epsilon);
+    
+    
+    {  auto* mutable_dims = output_array.mutable_shape()->mutable_dims();
+  mutable_dims->resize(multiples.size());
+  for (int i = 0; i < mutable_dims->size(); ++i) {
+    (*mutable_dims)[i] = input_shape.dims(i) * multiples[i];
   }
 }
     
-    JNIEXPORT jintArray JNICALL
-Java_org_tensorflow_lite_Tensor_shape(JNIEnv* env, jclass clazz, jlong handle) {
-  TfLiteTensor* tensor = convertLongToTensor(env, handle);
-  if (tensor == nullptr) return nullptr;
-  int num_dims = tensor->dims->size;
-  jintArray result = env->NewIntArray(num_dims);
-  env->SetIntArrayRegion(result, 0, num_dims, tensor->dims->data);
-  return result;
+    
+    {  const auto& input_name = node.input(0);
+  const auto& bias_name = node.input(1);
+  CHECK_EQ(GetDataTypeAttr(node, 'T'), DT_FLOAT);
+  auto* biasadd = new AddOperator;
+  biasadd->inputs.push_back(input_name);
+  biasadd->inputs.push_back(bias_name);
+  biasadd->outputs.push_back(node.name());
+  model->operators.emplace_back(biasadd);
+  return tensorflow::Status::OK();
 }
     
-      Notification extend_done;
-  Notification extend_can_start;
+    TEST_F(OperatorTest, BuiltinArgMin) {
+  ArgMinOperator op;
+  auto output_toco_op = SerializeAndDeserialize(
+      GetOperator('ARG_MIN', OperatorType::kArgMin), op);
+  EXPECT_EQ(op.output_data_type, output_toco_op->output_data_type);
+}
     
-    // print model stats
-// Returns a pair (model params, non-null model params) for aggregate statistics printing.
-template <class M>
-std::pair<unsigned int, unsigned int> printmatvaluedistributionf(const char *name, const M &m)
-{
-    const unsigned int num = (unsigned int) (m.rows() * m.cols());
-    if (num == 0)
-        return std::make_pair(0UL, 0UL);
-    fprintf(stderr, '\n###### absolute weight value distribution %s (%d, %d) ######\n', name, m.rows(), m.cols());
+    void PartialRunMgr::ExecutorDone(int step_id, const Status& executor_status) {
+  StatusCallback done;
+  Status callback_status;
+  {
+    mutex_lock l(mu_);
+    auto run_it = step_id_to_partial_run_.find(step_id);
+    if (run_it == step_id_to_partial_run_.end()) {
+      return;
     }
-    
-        alpha = 3.3f;
-    beta = 1.3f;
-    Matrix<float>::MultiplyAndWeightedAdd(alpha, mB, transposeA, mAdense, transposeB, beta, mC);
-    Matrix<float>::MultiplyAndWeightedAdd(alpha, mB, transposeA, mAsparse, transposeB, beta, mD);
+    // If we found the partial_run, we call the final callback, if it
+    // exists.
+    // It is guaranteed that run_it->second->final_callback is left empty
+    // after the std::move call.
+    done = std::move(run_it->second->final_callback);
+    if (!executor_status.ok()) {
+      run_it->second->final_status = executor_status;
+    }
+    callback_status = run_it->second->final_status;
+    run_it->second->executor_done = true;
+  }
+  if (done != nullptr) {
+    done(callback_status);
+    mutex_lock l(mu_);
+    step_id_to_partial_run_.erase(step_id);
+  }
+}
     
     
     {
-    {        // the rest is done in a lambda that is only evaluated when a virgin network is needed
-        // Note that evaluating the BrainScript *is* instantiating the network, so the evaluate call must be inside the lambda.
-        createNetworkFn = [expr](DEVICEID_TYPE /*deviceId*/)
+    {}  // namespace functor
+}  // namespace tensorflow
+    
+    // Prefetching support
+//
+// Defined behavior on some of the uarchs:
+// PREFETCH_HINT_T0:
+//   prefetch to all levels of the hierarchy (except on p4: prefetch to L2)
+// PREFETCH_HINT_NTA:
+//   p4: fetch to L2, but limit to 1 way (out of the 8 ways)
+//   core: skip L2, go directly to L1
+//   k8 rev E and later: skip L2, can go to either of the 2-ways in L1
+enum PrefetchHint {
+  PREFETCH_HINT_T0 = 3,  // More temporal locality
+  PREFETCH_HINT_T1 = 2,
+  PREFETCH_HINT_T2 = 1,  // Less temporal locality
+  PREFETCH_HINT_NTA = 0  // No temporal locality
+};
+template <PrefetchHint hint>
+void prefetch(const void* x);
+    
+      Status OnWorkStartedLocked() override {
+    line_number_ = 0;
+    TF_RETURN_IF_ERROR(env_->NewRandomAccessFile(current_work(), &file_));
+    }
+    
+    
+    {}  // namespace atom
+    
+    #ifndef ATOM_BROWSER_WINDOW_LIST_OBSERVER_H_
+#define ATOM_BROWSER_WINDOW_LIST_OBSERVER_H_
+    
+    #include 'ui/gfx/geometry/rect.h'
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(PreferencesManager);
+};
+    
+      // Sent when a URL has been added or modified. This is used by the in-memory
+  // URL database and the InMemoryURLIndex (both used by autocomplete) to track
+  // changes to the main history system.
+  //
+  // The source is the profile owning the history service that changed, and
+  // the details is history::URLsModifiedDetails that lists the modified or
+  // added URLs.
+  NOTIFICATION_HISTORY_URLS_MODIFIED,
+    
+    // Platform-neutral implementation of a class that keeps track of observers and
+// monitors keystrokes. It relays messages to the appropriate observer when a
+// global shortcut has been struck by the user.
+class GlobalShortcutListener {
+ public:
+  class Observer {
+   public:
+    // Called when your global shortcut (|accelerator|) is struck.
+    virtual void OnKeyPressed(const ui::Accelerator& accelerator) = 0;
+  };
+    }
+    
+    
+    {
+    {}  // namespace
+}  // namespace tesseract
+
+    
+      // Helper to return an offset index feature. In this context an offset
+  // feature with a dir of +/-1 is a feature of a similar direction,
+  // but shifted perpendicular to the direction of the feature. An offset
+  // feature with a dir of +/-2 is feature at the same position, but rotated
+  // by +/- one [compact] quantum. Returns the index of the generated offset
+  // feature, or -1 if it doesn't exist. Dir should be in
+  // [-kNumOffsetMaps, kNumOffsetMaps] to indicate the relative direction.
+  // A dir of 0 is an identity transformation.
+  // Both input and output are from the index(sparse) feature space, not
+  // the mapped/compact feature space, but the offset feature is the minimum
+  // distance moved from the input to guarantee that it maps to the next
+  // available quantum in the mapped/compact space.
+  int OffsetFeature(int index_feature, int dir) const;
+    
+    class DawgCache {
+ public:
+  Dawg *GetSquishedDawg(const STRING &lang, TessdataType tessdata_dawg_type,
+                        int debug_level, TessdataManager *data_file);
+    }
+    
+     private:
+  // Constructor is private as the instance only holds information specific to
+  // the current labels, outputs etc, and is built by the static function.
+  CTC(const GenericVector<int>& labels, int null_char,
+      const GENERIC_2D_ARRAY<float>& outputs);
+    
+        // Start packing
+    ImVector<stbrp_node> pack_nodes;
+    pack_nodes.resize(total_rects);
+    stbrp_context context;
+    stbrp_init_target(&context, atlas->TexWidth, atlas->TexHeight, pack_nodes.Data, total_rects);
+    
+            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
+        if (show_another_window)
         {
-            // evaluate the parse tree, particularly the top-level field 'network'
-            // Evaluating it will create the network.
-            let object = EvaluateField(expr, L'network');                   // this comes back as a BS::Object
-            let network = dynamic_pointer_cast<ComputationNetwork>(object); // cast it
-            if (!network)
-                LogicError('BuildNetworkFromDescription: ComputationNetwork not what it was meant to be');
-            return network;
-        };
+            ImGui::Begin('Another Window', &show_another_window);
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+            if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+            counter++;
+        ImGui::SameLine();
+        ImGui::Text('counter = %d', counter);
+    
+    
+    {    switch (ev->type)
+    {
+    case ALLEGRO_EVENT_MOUSE_AXES:
+        io.MouseWheel += ev->mouse.dz;
+        io.MouseWheelH += ev->mouse.dw;
+        return true;
+    case ALLEGRO_EVENT_KEY_CHAR:
+        if (ev->keyboard.display == g_Display)
+            if (ev->keyboard.unichar > 0 && ev->keyboard.unichar < 0x10000)
+                io.AddInputCharacter((unsigned short)ev->keyboard.unichar);
+        return true;
+    case ALLEGRO_EVENT_KEY_DOWN:
+    case ALLEGRO_EVENT_KEY_UP:
+        if (ev->keyboard.display == g_Display)
+            io.KeysDown[ev->keyboard.keycode] = (ev->type == ALLEGRO_EVENT_KEY_DOWN);
         return true;
     }
-    else
-        return false;
+    return false;
 }
     
-    // GetWriter - get a reader type from the DLL
-// The F version gets the 'float' version, and D gets 'double'.
-extern 'C' DATAWRITER_API void GetWriterF(IDataWriter** pwriter);
-extern 'C' DATAWRITER_API void GetWriterD(IDataWriter** pwriter);
+        // Create and grow vertex/index buffers if needed
+    if (!g_pVB || g_VertexBufferSize < draw_data->TotalVtxCount)
+    {
+        if (g_pVB) { g_pVB->Release(); g_pVB = NULL; }
+        g_VertexBufferSize = draw_data->TotalVtxCount + 5000;
+        D3D10_BUFFER_DESC desc;
+        memset(&desc, 0, sizeof(D3D10_BUFFER_DESC));
+        desc.Usage = D3D10_USAGE_DYNAMIC;
+        desc.ByteWidth = g_VertexBufferSize * sizeof(ImDrawVert);
+        desc.BindFlags = D3D10_BIND_VERTEX_BUFFER;
+        desc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
+        desc.MiscFlags = 0;
+        if (ctx->CreateBuffer(&desc, NULL, &g_pVB) < 0)
+            return;
+    }
     
-    // not in the cache yet: create it (or not if no such member)
-void /*CustomConfigRecord::*/ ComputationNodeBase::LazyCreateConfigMember(const wstring& id) const /*override*/
-{
-    if (id == L'name') // node name
-    {
-        InsertConfigMember(id, ConfigValuePtr(make_shared<String>(NodeName()), [](const std::wstring &) { LogicError('should not get here'); }, L''));
-    }
-    else if (id == L'operation') // type ('operation' parameter to ComputationNode BS constructor)
-    {
-        InsertConfigMember(id, ConfigValuePtr(make_shared<String>(OperationName()), [](const std::wstring &) { LogicError('should not get here'); }, L''));
-    }
-    else if (id == L'dim') // scalar dimension (#elements) per sample
-    {
-        // Note: When freshly creating models, dimensions may not have been inferred yet.
-        size_t dim = GetSampleLayout().GetNumElements();
-        if (dim == 0)
-            InvalidArgument('%ls.dim: The node's dimensions are not known yet.', NodeName().c_str());
-        InsertConfigMember(id, MakePrimitiveConfigValuePtr((double) dim, [](const std::wstring &) { LogicError('should not get here'); }, L''));
-    }
-    else if (id == L'dims') // tensor dimension vector
-    {
-        NOT_IMPLEMENTED;
-    }
-    // TODO: Think through what tags mean. Do we allow user-named tags? Is it a set or a single string? If set, then how to compare?
-    //else if (id == L'tag')
-    //{
-    //}
-    else if (id == L'inputs' || id == OperationName() + L'Args') // e.g. node.PlusArg[0] = alternative for node.inputs[0] that shows a user that this is a Plus node
-    {
-        std::vector<ConfigValuePtr> inputsAsValues;
-        for (let& input : GetInputs())
-            inputsAsValues.push_back(ConfigValuePtr(input, [](const std::wstring &) { LogicError('should not get here'); }, L''));
-        let& arr = make_shared<ScriptableObjects::ConfigArray>(0, move(inputsAsValues));
-        InsertConfigMember(id, ConfigValuePtr(arr, [](const std::wstring &) { LogicError('should not get here'); }, L''));
-    }
-    // any other id does not exist, don't create any entry for it
+    
+    {    ImGui_ImplSDL2_UpdateMousePosAndButtons();
+    ImGui_ImplSDL2_UpdateMouseCursor();
 }
-    
-    	if (PathFileExists(cpuCfgPath)) {
-		if (PathFileExists(cfgPath)) {
-			if (!CopyFile(cfgPath, cpuCfgPath, FALSE))
-			{
-				MessageBox(NULL,
-					(GetLastError() == ERROR_ACCESS_DENIED)
-					? L'Failed to copy ConEmu.xml file to ConEmu-%COMPUTERNAME%.xml backup location! Restart Cmder as Administrator.'
-					: L'Failed to copy ConEmu.xml file to ConEmu-%COMPUTERNAME%.xml backup location!', MB_TITLE, MB_ICONSTOP);
-				exit(1);
-			}
-		}
-		else
-		{
-			if (!CopyFile(cpuCfgPath, cfgPath, FALSE))
-			{
-				MessageBox(NULL,
-					(GetLastError() == ERROR_ACCESS_DENIED)
-					? L'Failed to copy ConEmu-%COMPUTERNAME%.xml file to vendored ConEmu.xml location! Restart Cmder as Administrator.'
-					: L'Failed to copy ConEmu-%COMPUTERNAME%.xml file to vendored ConEmu.xml location!', MB_TITLE, MB_ICONSTOP);
-				exit(1);
-			}
-		}
-	}
-	else if (PathFileExists(userCfgPath)) {
-		if (PathFileExists(cfgPath)) {
-			if (!CopyFile(cfgPath, userCfgPath, FALSE))
-			{
-				MessageBox(NULL,
-					(GetLastError() == ERROR_ACCESS_DENIED)
-					? L'Failed to copy ConEmu.xml file to backup location! Restart Cmder as Administrator.'
-					: L'Failed to copy ConEmu.xml file to backup location!', MB_TITLE, MB_ICONSTOP);
-				exit(1);
-			}
-		}
-		else
-		{
-			if (!CopyFile(userCfgPath, cfgPath, FALSE))
-			{
-				MessageBox(NULL,
-					(GetLastError() == ERROR_ACCESS_DENIED)
-					? L'Failed to copy ConEmu.xml file to vendored ConEmu.xml location! Restart Cmder as Administrator.'
-					: L'Failed to copy ConEmu.xml file to vendored ConEmu.xml location!', MB_TITLE, MB_ICONSTOP);
-				exit(1);
-			}
-		}
-	}
-	else if (PathFileExists(cfgPath)) {
-		if (!CopyFile(cfgPath, userCfgPath, FALSE))
-		{
-			MessageBox(NULL,
-				(GetLastError() == ERROR_ACCESS_DENIED)
-				? L'Failed to copy ConEmu.xml file to user-conemu.xml backup location! Restart Cmder as Administrator.'
-				: L'Failed to copy ConEmu.xml file to user-conemu.xml backup location!', MB_TITLE, MB_ICONSTOP);
-			exit(1);
-		}
-	}
-	else {
-		if (!CopyFile(defaultCfgPath, cfgPath, FALSE))
-		{
-			MessageBox(NULL,
-				(GetLastError() == ERROR_ACCESS_DENIED)
-				? L'Failed to copy Cmder default ConEmu.xml file to vendored ConEmu.xml location! Restart Cmder as Administrator.'
-				: L'Failed to copy Cmder default ConEmu.xml file to vendored ConEmu.xml location!', MB_TITLE, MB_ICONSTOP);
-			exit(1);
-		}
-	}
-    
-    namespace boost {
-namespace asio {
-    }
-    }
-    
-    #endif // BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-
-    
-    
-    {private:
-  CompletionCondition completion_condition_;
-};
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    #include <boost/asio/detail/push_options.hpp>
-    
-    template <typename Time_Traits>
-void dev_poll_reactor::add_timer_queue(timer_queue<Time_Traits>& queue)
-{
-  do_add_timer_queue(queue);
-}
-    
-    // implements rabit error handling.
-extern 'C' {
-  void XGBoostAssert_R(int exp, const char *fmt, ...);
-  void XGBoostCheck_R(int exp, const char *fmt, ...);
-}
-    
-      /*! \brief constructor */
-  SparsePage() {
-    this->Clear();
-  }
-  /*! \return number of instance in the page */
-  inline size_t Size() const {
-    return offset.size() - 1;
-  }
-  /*! \return estimation of memory cost of this page */
-  inline size_t MemCostBytes() const {
-    return offset.size() * sizeof(size_t) + data.size() * sizeof(Entry);
-  }
-  /*! \brief clear the page */
-  inline void Clear() {
-    base_rowid = 0;
-    offset.clear();
-    offset.push_back(0);
-    data.clear();
-  }
-    
-    using LogCallbackRegistryStore = dmlc::ThreadLocalStore<LogCallbackRegistry>;
-    
-    TEST(Metric, PoissionNegLogLik) {
-  xgboost::Metric * metric = xgboost::Metric::Create('poisson-nloglik');
-  ASSERT_STREQ(metric->Name(), 'poisson-nloglik');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0.5f, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.2f, 0.1f, 0.2f},
-                            {  0,   0,   1,   1}),
-              1.1280f, 0.001f);
-}
-
-    
-    
-    {}  // namespace xgboost
-    
-    #include <dmlc/base.h>
-#include <dmlc/omp.h>
-#include <cmath>
-#include <iostream>
-    
-    TEST_F(MockEnvTest, Corrupt) {
-  const std::string kGood = 'this is a good string, synced to disk';
-  const std::string kCorrupted = 'this part may be corrupted';
-  const std::string kFileName = '/dir/f';
-  unique_ptr<WritableFile> writable_file;
-  ASSERT_OK(env_->NewWritableFile(kFileName, &writable_file, soptions_));
-  ASSERT_OK(writable_file->Append(kGood));
-  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size());
-    }
-    
-      /// If list is empty, return false and leave *result unchanged.
-  /// Else, remove the first/last elem, store it in *result, and return true
-  bool PopLeft(const std::string& key, std::string* result);  // First
-  bool PopRight(const std::string& key, std::string* result); // Last
-    
-      // when we know more data has been written to the file. we can use this
-  // function to force the reader to look again in the file.
-  // Also aligns the file position indicator to the start of the next block
-  // by reading the rest of the data from the EOF position to the end of the
-  // block that was partially read.
-  void UnmarkEOF();
-    
-    
-    {  // Note: we may want to access the Java callback object instance
-  // across multiple method calls, so we create a global ref
-  assert(jcallback_obj != nullptr);
-  m_jcallback_obj = env->NewGlobalRef(jcallback_obj);
-  if(jcallback_obj == nullptr) {
-    // exception thrown: OutOfMemoryError
-    return;
-  }
-}
-    
-    namespace rocksdb {
-    }
-    
-    
-    { private:
-  MergingIterator* merge_iter;
-  InternalIterator* first_iter;
-  bool use_merging_iter;
-  Arena* arena;
-};
-    
-    class CompactionFilterFactoryJniCallback : public JniCallback, public CompactionFilterFactory {
- public:
-    CompactionFilterFactoryJniCallback(
-        JNIEnv* env, jobject jcompaction_filter_factory);
-    virtual std::unique_ptr<CompactionFilter> CreateCompactionFilter(
-      const CompactionFilter::Context& context);
-    virtual const char* Name() const;
-    }
