@@ -1,274 +1,203 @@
 
         
-        // Identical to RelaunchApp, but uses |helper| as the path to the relauncher
-// process, and allows additional arguments to be supplied to the relauncher
-// process in relauncher_args. Unlike args[0], |helper| must be a pathname to
-// an executable file. The helper path given must be from the same version of
-// Chrome as the running parent browser process, as there are no guarantees
-// that the parent and relauncher processes from different versions will be
-// able to communicate with one another. This variant can be useful to
-// relaunch the same version of Chrome from another location, using that
-// location's helper.
-bool RelaunchAppWithHelper(const base::FilePath& helper,
-                           const StringVector& relauncher_args,
-                           const StringVector& args);
-    
-    struct DraggableRegion {
-  bool draggable;
-  gfx::Rect bounds;
-    }
-    
-      // User Scripts ------------------------------------------------------------
-    
-    
-    {}  // namespace printing
-    
-    // Wrapper used to keep track of the lifetime of a WebContents.
-// Lives on the UI thread.
-class PrintingUIWebContentsObserver : public content::WebContentsObserver {
- public:
-  explicit PrintingUIWebContentsObserver(content::WebContents* web_contents);
-    }
-    
-    // Tests that a unicharset that contains double-letter ligatures (eg ff) has
-// no null char in the encoding at all.
-TEST_F(UnicharcompressTest, DoesLigaturesWithDoubles) {
-  LOG(INFO) << 'Testing por with ligatures';
-  LoadUnicharset('por.unicharset');
-  ExpectCorrect('por');
-  // Check that any unichar-id that is encoded with multiple codes has the
-  // correct encoded_nulll_char_ in between.
-  for (int u = 0; u <= unicharset_.size(); ++u) {
-    RecodedCharID code;
-    int len = compressed_.EncodeUnichar(u, &code);
-    if (len > 1) {
-      // The should not be any null char in the code.
-      for (int i = 0; i < len; ++i) {
-        EXPECT_NE(encoded_null_char_, code(i));
-      }
-    }
-  }
-}
-    
-      /// Get enough parameters to be able to rebuild bounding boxes in the
-  /// original image (not just within the rectangle).
-  /// Left and top are enough with top-down coordinates, but
-  /// the height of the rectangle and the image are needed for bottom-up.
-  virtual void GetImageSizes(int* left, int* top, int* width, int* height,
-                             int* imagewidth, int* imageheight);
-    
-    
-    {  for (it.mark_cycle_pt (); !it.cycled_list (); it.forward ()) {
-    outline = it.data ();
-                                 //draw it
-    outline->plot (window, colour);
-    if (!outline->child ()->empty ())
-      plot_outline_list (outline->child (), window,
-        child_colour, child_colour);
-  }
-}
-// Draws the outlines in the given colour, and child_colour, normalized
-// using the given denorm, making use of sub-pixel accurate information
-// if available.
-static void plot_normed_outline_list(const DENORM& denorm,
-                                     C_OUTLINE_LIST *list,
-                                     ScrollView::Color colour,
-                                     ScrollView::Color child_colour,
-                                     ScrollView* window) {
-  C_OUTLINE_IT it(list);
-  for (it.mark_cycle_pt(); !it.cycled_list(); it.forward()) {
-    C_OUTLINE* outline = it.data();
-    outline->plot_normed(denorm, colour, window);
-    if (!outline->child()->empty())
-      plot_normed_outline_list(denorm, outline->child(), child_colour,
-                               child_colour, window);
-  }
-}
-#endif
-    
-    
-void set_global_subsubloc_code(int loc_code) {
-  // global_subsubloc_code = loc_code;
-    }
-    
-    #ifndef SWIG
-template <class T1, class T2, class R, class A1, class A2, class A3>
-inline typename _ConstTessMemberResultCallback_0_3<true,R,T1,A1,A2,A3>::base*
-NewTessCallback(
-    const T1* obj, R (T2::*member)(A1,A2,A3) const) {
-  return new _ConstTessMemberResultCallback_0_3<true,R,T1,A1,A2,A3>(
-      obj, member);
-}
-#endif
-    
-    DLLSYM void
-tprintf_internal(                       // Trace printf
-    const char *format, ...             // Message
-) {
-  tesseract::tprintfMutex.Lock();
-  va_list args;                  // variable args
-  static FILE *debugfp = nullptr;   // debug file
-                                 // debug window
-  int32_t offset = 0;              // into message
-  static char msg[MAX_MSG_LEN + 1];
-    }
-    
-    
-    {  // For fragments
-  kFirstType = 2,
-  kMiddleType = 3,
-  kLastType = 4
-};
-static const int kMaxRecordType = kLastType;
-    
-    // Test for issue 178: a manual compaction causes deleted data to reappear.
-#include <iostream>
-#include <sstream>
-#include <cstdlib>
-    
-        // All added keys must match
-    for (int i = 0; i < length; i++) {
-      ASSERT_TRUE(Matches(Key(i, buffer)))
-          << 'Length ' << length << '; key ' << i;
-    }
+        // Class StyledWriter
+// //////////////////////////////////////////////////////////////////
     
     
     {
-}  // namespace leveldb
-
+    {
+    {}  // namespace cpp
+}  // namespace compiler
+}  // namespace protobuf
     
-      AutoCompactTest() {
-    dbname_ = test::TmpDir() + '/autocompact_test';
-    tiny_cache_ = NewLRUCache(100);
-    options_.block_cache = tiny_cache_;
-    DestroyDB(dbname_, options_);
-    options_.create_if_missing = true;
-    options_.compression = kNoCompression;
-    ASSERT_OK(DB::Open(options_, dbname_, &db_));
-  }
-    
-      DBIter(DBImpl* db, const Comparator* cmp, Iterator* iter, SequenceNumber s,
-         uint32_t seed)
-      : db_(db),
-        user_comparator_(cmp),
-        iter_(iter),
-        sequence_(s),
-        direction_(kForward),
-        valid_(false),
-        rnd_(seed),
-        bytes_counter_(RandomPeriod()) {
-  }
-  virtual ~DBIter() {
-    delete iter_;
-  }
-  virtual bool Valid() const { return valid_; }
-  virtual Slice key() const {
-    assert(valid_);
-    return (direction_ == kForward) ? ExtractUserKey(iter_->key()) : saved_key_;
-  }
-  virtual Slice value() const {
-    assert(valid_);
-    return (direction_ == kForward) ? iter_->value() : saved_value_;
-  }
-  virtual Status status() const {
-    if (status_.ok()) {
-      return iter_->status();
-    } else {
-      return status_;
-    }
-  }
-    
-      Status EmitPhysicalRecord(RecordType type, const char* ptr, size_t length);
-    
-    
-    
-        CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1,vertexCount);
-    
-    const int32 k_maxContactPoints = 2048;
-    
-    		for (int32 i = 0; i < 2; ++i)
-		{
-			b2Vec2 vertices[3];
-			vertices[0].Set(-0.5f, 0.0f);
-			vertices[1].Set(0.5f, 0.0f);
-			vertices[2].Set(0.0f, 1.5f);
-    }
-    
-    			b2Body* prevBody = ground;
-			for (int32 i = 0; i < e_count; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position.Set(-14.5f + 1.0f * i, 5.0f);
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&fd);
-    }
-    
-    
-    {  return scope.Close(Boolean::New(true));
+    void RepeatedEnumFieldGenerator::WriteEquals(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'if(!$name$_.Equals(other.$name$_)) return false;\n');
 }
     
     
-    {}  // namespace rocksdb
+    { private:
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RepeatedMessageFieldGenerator);
+};
     
-    #ifndef JAVA_ROCKSJNI_STATISTICSJNI_H_
-#define JAVA_ROCKSJNI_STATISTICSJNI_H_
     
-    void SyncPoint::ClearCallBack(const std::string& point) {
-  impl_->ClearCallBack(point);
-}
+    {}
     
-      // Get total number of deletes in the mem table.
-  // REQUIRES: external synchronization to prevent simultaneous
-  // operations on the same MemTable (unless this Memtable is immutable).
-  uint64_t num_deletes() const {
-    return num_deletes_.load(std::memory_order_relaxed);
+    #include <string>
+    
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
+    
+    // Generates code for a lite extension, which may be within the scope of some
+// message or may be at file scope.  This is much simpler than FieldGenerator
+// since extensions are just simple identifiers with interesting types.
+class ImmutableExtensionLiteGenerator : public ExtensionGenerator {
+ public:
+  explicit ImmutableExtensionLiteGenerator(const FieldDescriptor* descriptor,
+                                           Context* context);
+  virtual ~ImmutableExtensionLiteGenerator();
+    }
+    
+    DIR128::DIR128(                 //from fcoord
+               const FCOORD fc  //vector to quantize
+              ) {
+  int high, low, current;        //binary search
+    }
+    
+     protected:
+  // Alignment display window.
+  ScrollView* align_win_;
+  // CTC target display window.
+  ScrollView* target_win_;
+  // CTC output display window.
+  ScrollView* ctc_win_;
+  // Reconstructed image window.
+  ScrollView* recon_win_;
+  // How often to display a debug image.
+  int debug_interval_;
+  // Iteration at which the last checkpoint was dumped.
+  int checkpoint_iteration_;
+  // Basename of files to save best models to.
+  STRING model_base_;
+  // Checkpoint filename.
+  STRING checkpoint_name_;
+  // Training data.
+  bool randomly_rotate_;
+  DocumentCache training_data_;
+  // Name to use when saving best_trainer_.
+  STRING best_model_name_;
+  // Number of available training stages.
+  int num_training_stages_;
+  // Checkpointing callbacks.
+  FileReader file_reader_;
+  FileWriter file_writer_;
+  // TODO(rays) These are pointers, and must be deleted. Switch to unique_ptr
+  // when we can commit to c++11.
+  CheckPointReader checkpoint_reader_;
+  CheckPointWriter checkpoint_writer_;
+    
+    // Convenience instantiation of GENERIC_2D_ARRAY<double> with additional
+// operations to write a strided vector, so the transposed form of the input
+// is memory-contiguous.
+class TransposedArray : public GENERIC_2D_ARRAY<double> {
+ public:
+  // Copies the whole input transposed, converted to double, into *this.
+  void Transpose(const GENERIC_2D_ARRAY<double>& input);
+  // Writes a vector of data representing a timestep (gradients or sources).
+  // The data is assumed to be of size1 in size (the strided dimension).
+  void WriteStrided(int t, const float* data) {
+    int size1 = dim1();
+    for (int i = 0; i < size1; ++i) put(i, t, data[i]);
+  }
+  void WriteStrided(int t, const double* data) {
+    int size1 = dim1();
+    for (int i = 0; i < size1; ++i) put(i, t, data[i]);
+  }
+  // Prints the first and last num elements of the un-transposed array.
+  void PrintUnTransposed(int num) {
+    int num_features = dim1();
+    int width = dim2();
+    for (int y = 0; y < num_features; ++y) {
+      for (int t = 0; t < width; ++t) {
+        if (num == 0 || t < num || t + num >= width) {
+          tprintf(' %g', (*this)(y, t));
+        }
+      }
+      tprintf('\n');
+    }
+  }
+};  // class TransposedArray
+    
+     private:
+  // Computes and returns the noise_density IntGrid, at the same gridsize as
+  // this by summing the number of small elements in a 3x3 neighbourhood of
+  // each grid cell. good_grid is filled with blobs that are considered most
+  // likely good text, and this is filled with small and medium blobs that are
+  // more likely non-text.
+  // The photo_map is used to bias the decision towards non-text, rather than
+  // supplying definite decision.
+  IntGrid* ComputeNoiseDensity(bool debug, Pix* photo_map, BlobGrid* good_grid);
+    
+      // Accessors for testing
+  const DENORM* denorm() const {
+    return denorm_;
+  }
+  const TextlineProjection* projection() const {
+    return &projection_;
+  }
+  void set_cjk_script(bool is_cjk) {
+    cjk_script_ = is_cjk;
   }
     
     
-    {// This factory creates a cuckoo-hashing based mem-table representation.
-// Cuckoo-hash is a closed-hash strategy, in which all key/value pairs
-// are stored in the bucket array itself instead of in some data structures
-// external to the bucket array.  In addition, each key in cuckoo hash
-// has a constant number of possible buckets in the bucket array.  These
-// two properties together makes cuckoo hash more memory efficient and
-// a constant worst-case read time.  Cuckoo hash is best suitable for
-// point-lookup workload.
-//
-// When inserting a key / value, it first checks whether one of its possible
-// buckets is empty.  If so, the key / value will be inserted to that vacant
-// bucket.  Otherwise, one of the keys originally stored in one of these
-// possible buckets will be 'kicked out' and move to one of its possible
-// buckets (and possibly kicks out another victim.)  In the current
-// implementation, such 'kick-out' path is bounded.  If it cannot find a
-// 'kick-out' path for a specific key, this key will be stored in a backup
-// structure, and the current memtable to be forced to immutable.
-//
-// Note that currently this mem-table representation does not support
-// snapshot (i.e., it only queries latest state) and iterators.  In addition,
-// MultiGet operation might also lose its atomicity due to the lack of
-// snapshot support.
-//
-// Parameters:
-//   write_buffer_size: the write buffer size in bytes.
-//   average_data_size: the average size of key + value in bytes.  This value
-//     together with write_buffer_size will be used to compute the number
-//     of buckets.
-//   hash_function_count: the number of hash functions that will be used by
-//     the cuckoo-hash.  The number also equals to the number of possible
-//     buckets each key will have.
-extern MemTableRepFactory* NewHashCuckooRepFactory(
-    size_t write_buffer_size, size_t average_data_size = 64,
-    unsigned int hash_function_count = 4);
-#endif  // ROCKSDB_LITE
-}  // namespace rocksdb
+    {}
+    
+    struct IRGS;
+    
+      /*
+   * Return true iff this Vunit needs register allocation before it can be
+   * emitted, either because it uses virtual registers or contains instructions
+   * that must be lowered by xls.
+   */
+  bool needsRegAlloc() const;
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    bool AutoloadHandler::CompareBundles::operator()(
+  const HandlerBundle& hb) {
+  auto const& lhs = *m_cufIter;
+  auto const& rhs = *hb.m_cufIter;
+    }
+    
+      bool isCompact() const {
+    return
+      RuntimeOption::EvalEnableCompactBacktrace &&
+      !m_skipTop &&
+      !m_skipInlined &&
+      !m_withSelf &&
+      !m_withThis &&
+      !m_withMetadata &&
+      !m_withPseudoMain &&
+      (!RuntimeOption::EnableArgsInBacktraces || !m_withArgValues) &&
+      !m_withArgNames &&
+      !m_limit &&
+      !m_parserFrame &&
+      !m_fromWaitHandle;
+  }
+    
+    #endif /* BASEEVENT_INTERFACE_BASEEVENT_H_ */
 
     
-    void TestKillRandom(std::string kill_point, int odds,
-                    const std::string& srcfile, int srcline) {
-  for (auto& p : rocksdb_kill_prefix_blacklist) {
-    if (kill_point.substr(0, p.length()) == p) {
-      return;
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+            if (m_publicservices.end() != m_publicservices.find(T::ServiceName()))
+            return (T*)m_publicservices[T::ServiceName()];
+    
+    #include 'boost/any.hpp'
+    
+    class TSpy :  public Spy {
+  public:
+    TSpy(void* _this): Spy(_this) {}
     }
-  }
-    }
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
