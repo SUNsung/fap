@@ -1,146 +1,164 @@
 
-def with_metaclass(meta, *bases):
-    '''Create a base class with a metaclass.'''
-    # This requires a bit of explanation: the basic idea is to make a
-    # dummy metaclass for one level of class instantiation that replaces
-    # itself with the actual metaclass.
-    class metaclass(type):
-        def __new__(cls, name, this_bases, d):
-            return meta(name, bases, d)
-    return type.__new__(metaclass, 'temporary_class', (), {})
+        
+        from .theplatform import theplatform_download_by_pid
     
-        def __get__(self, obj, type=None):
-        if obj is None:
-            return self
-        rv = obj.config[self.__name__]
-        if self.get_converter is not None:
-            rv = self.get_converter(rv)
-        return rv
+    	type, ext, size = url_info(url)
+	print_info(site_info, title, type, size)
+	
+	if not info_only:
+		download_urls([url], title, ext, size, output_dir, merge = merge)
     
-    import logging
-import sys
+        def __init__(self, pin_json):
+        img_file = pin_json['file']
+        self.id = str(pin_json['pin_id'])
+        self.url = urlparse.urljoin(self.host, img_file['key'])
+        self.ext = img_file['type'].split('/')[-1]
     
-            return list(result)
+    __all__ = ['kugou_download']
     
-    from .globals import request
-from ._compat import with_metaclass
+    site_info = 'MioMio.tv'
+download = miomio_download
+download_playlist = playlist_not_supported('miomio')
+
+    
+        def extract(self, **kwargs):
+        for i in self.streams:
+            s = self.streams[i]
+            _, s['container'], s['size'] = url_info(s['url'])
+            s['src'] = [s['url']]
     
     
-def test_config_from_json():
-    app = flask.Flask(__name__)
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    app.config.from_json(os.path.join(current_dir, 'static', 'config.json'))
-    common_object_test(app)
+print('\n# ======================================================================')
+print('#                               Factorial')
+print('# ======================================================================\n')
     
-        flask.got_request_exception.connect(record, app)
+    Usage:
+while True:
     try:
-        assert app.test_client().get('/').status_code == 500
-        assert len(recorded) == 1
-        assert isinstance(recorded[0], ZeroDivisionError)
-    finally:
-        flask.got_request_exception.disconnect(record, app)
+        chunk = Chunk(file)
+    except EOFError:
+        break
+    chunktype = chunk.getname()
+    while True:
+        data = chunk.read(nbytes)
+        if not data:
+            pass
+        # do something with data
+    
+    def escape(m):
+    all, tail = m.group(0, 1)
+    assert all.startswith('\\')
+    esc = simple_escapes.get(tail)
+    if esc is not None:
+        return esc
+    if tail.startswith('x'):
+        hexes = tail[1:]
+        if len(hexes) < 2:
+            raise ValueError('invalid hex string escape ('\\%s')' % tail)
+        try:
+            i = int(hexes, 16)
+        except ValueError:
+            raise ValueError('invalid hex string escape ('\\%s')' % tail) from None
+    else:
+        try:
+            i = int(tail, 8)
+        except ValueError:
+            raise ValueError('invalid octal string escape ('\\%s')' % tail) from None
+    return chr(i)
+    
+    SERVICETEMPLATE = '''
+extern int PythonService_main(int, char **);
+    
+                # In previous versions of SimpleXMLRPCServer, _dispatch
+            # could be overridden in this class, instead of in
+            # SimpleXMLRPCDispatcher. To maintain backwards compatibility,
+            # check to see if a subclass implements _dispatch and dispatch
+            # using that method if present.
+            response = self.server._marshaled_dispatch(
+                    data, getattr(self, '_dispatch', None), self.path
+                )
+        except Exception as e: # This should only happen if the module is buggy
+            # internal error, report as HTTP server error
+            self.send_response(500)
+    
+        def check_syntax_error(self, err, basename, lineno, offset=0):
+        self.assertIn('%s.py, line %d' % (basename, lineno), str(err))
+        self.assertEqual(os.path.basename(err.filename), basename + '.py')
+        self.assertEqual(err.lineno, lineno)
+        self.assertEqual(err.offset, offset)
+    
+            try:
+            fds = s.select()
+        except OSError as e:
+            if e.errno == errno.EINVAL and sys.platform == 'darwin':
+                # unexplainable errors on macOS don't need to fail the test
+                self.skipTest('Invalid argument error calling poll()')
+            raise
+        self.assertEqual(NUM_FDS // 2, len(fds))
+    
+    import dataclasses
+import typing
     
     
-@pytest.mark.functional
-def test_select_command_with_arrows(proc, TIMEOUT):
-    select_command_with_arrows(proc, TIMEOUT)
+def read_binary(package: Package, resource: Resource) -> bytes:
+    '''Return the binary contents of the resource.'''
+    resource = _normalize_path(resource)
+    package = _get_package(package)
+    with open_binary(package, resource) as fp:
+        return fp.read()
+    
+        def allowance(self, filename):
+        '''Preconditions:
+        - our agent applies to this entry
+        - filename is URL decoded'''
+        for line in self.rulelines:
+            if line.applies_to(filename):
+                return line.allowance
+        return True
+
     
     
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'tcsh')
-    proc.sendline(u'setenv PYTHONIOENCODING utf8')
-    proc.sendline(u'eval `thefuck --alias`')
-    return proc
+def import_object(name):
+    # type: (_BaseString) -> Any
+    '''Imports an object by name.
     
-    # This view is called from FlatpageFallbackMiddleware.process_response
-# when a 404 is raised, which often means CsrfViewMiddleware.process_view
-# has not been called even if CsrfViewMiddleware is installed. So we need
-# to use @csrf_protect, in case the template needs {% csrf_token %}.
-# However, we can't just wrap this view; if no matching flatpage exists,
-# or a redirect is required for authentication, the 404 needs to be returned
-# without any CSRF checks. Therefore, we only
-# CSRF protect the internal implementation.
+            if self.stream_request_body:
+            self.handler._prepared_future = Future()
+        # Note that if an exception escapes handler._execute it will be
+        # trapped in the Future it returns (which we are ignoring here,
+        # leaving it to be logged when the Future is GC'd).
+        # However, that shouldn't happen because _execute has a blanket
+        # except handler, and we cannot easily access the IOLoop here to
+        # call add_future (because of the requirement to remain compatible
+        # with WSGI)
+        self.handler._execute(transforms, *self.path_args,
+                              **self.path_kwargs)
+        # If we are streaming the request body, then execute() is finished
+        # when the handler has prepared to receive the body.  If not,
+        # it doesn't matter when execute() finishes (so we return None)
+        return self.handler._prepared_future
     
-            Keyword:                   'bold #004461',   # class: 'k'
-        Keyword.Constant:          'bold #004461',   # class: 'kc'
-        Keyword.Declaration:       'bold #004461',   # class: 'kd'
-        Keyword.Namespace:         'bold #004461',   # class: 'kn'
-        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
-        Keyword.Reserved:          'bold #004461',   # class: 'kr'
-        Keyword.Type:              'bold #004461',   # class: 'kt'
+        def test_malformed_first_line_log(self):
+        with ExpectLog(gen_log, '.*Malformed HTTP request line'):
+            self.stream.write(b'asdf\r\n\r\n')
+            # TODO: need an async version of ExpectLog so we don't need
+            # hard-coded timeouts here.
+            self.io_loop.add_timeout(datetime.timedelta(seconds=0.05),
+                                     self.stop)
+            self.wait()
     
+        @gen_test
+    def test_get_timeout_preempted(self):
+        q = queues.Queue()
+        get = q.get(timeout=timedelta(seconds=0.01))
+        q.put(0)
+        yield gen.sleep(0.02)
+        self.assertEqual(0, (yield get))
     
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
-    '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
-    
-    
-@pytest.mark.parametrize(
-    'mask, expected', (
-        (8, '255.0.0.0'),
-        (24, '255.255.255.0'),
-        (25, '255.255.255.128'),
-    ))
-def test_dotted_netmask(mask, expected):
-    assert dotted_netmask(mask) == expected
-    
-    import idna
-import urllib3
-import chardet
-    
-    # -------
-# Pythons
-# -------
-    
-    Data structures that power Requests.
-'''
-    
-    
-@keras_test
-def test_layer_trainability_switch():
-    # with constructor argument, in Sequential
-    model = Sequential()
-    model.add(Dense(2, trainable=False, input_dim=1))
-    assert model.trainable_weights == []
-    
-        # Returns:
-        z (tensor): sampled latent vector
-    '''
-    
-    
-@keras_test
-def test_3d_to_3d():
-    '''
-    Apply a same Dense layer for each element of time dimension of the input
-    and make predictions of the output sequence elements.
-    This does not make use of the temporal structure of the sequence
-    (see TimeDistributedDense for more details)
-    '''
-    np.random.seed(1337)
-    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=100,
-                                                         num_test=20,
-                                                         input_shape=(3, 5),
-                                                         output_shape=(3, 5),
-                                                         classification=False)
-    
-        model.compile(loss='hinge', optimizer='adagrad')
-    history = model.fit(x_train, y_train, epochs=20, batch_size=16,
-                        validation_data=(x_test, y_test), verbose=0)
-    assert (history.history['val_loss'][-1] < 0.9)
-    
-    ] + _py_files('scrapy/contrib') + _py_files('scrapy/contrib_exp')
-    
-      # A single unnamed argument for a function tends to look like old style cast.
-  # If we see those, don't issue warnings for deprecated casts.
-  remainder = line[match.end(0):]
-  if Match(r'^\s*(?:;|const\b|throw\b|final\b|override\b|[=>{),]|->)',
-           remainder):
-    return False
-    }
+        # pylint: disable=no-self-use
+    def test_from_event(self):
+        '''Test converting event to db event.'''
+        event = ha.Event('test_event', {
+            'some_data': 15
+        })
+        assert event == Events.from_event(event).to_native()
