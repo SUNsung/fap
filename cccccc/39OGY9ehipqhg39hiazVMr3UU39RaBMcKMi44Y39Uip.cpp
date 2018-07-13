@@ -1,275 +1,243 @@
 
         
         
-    {  DISALLOW_COPY_AND_ASSIGN(Locker);
-};
-    
-    namespace atom {
-    }
-    
-    // MonitorFinder maps a RenderFrameHost to the display ID on which the widget
-// is painting. This class operates on the IO thread while the RenderFrameHost
-// is on the UI thread, so the value returned by GetMonitor() may be 0 until
-// the information can be retrieved asynchronously.
-class MonitorFinder : public base::RefCountedThreadSafe<MonitorFinder> {
- public:
-  MonitorFinder(int process_id, int render_frame_id);
-    }
-    
-    #include 'chrome/browser/speech/tts_platform.h'
-    
-    #if GTEST_HAS_PARAM_TEST
-    
-    // Factory interface for death tests.  May be mocked out for testing.
-class DeathTestFactory {
- public:
-  virtual ~DeathTestFactory() { }
-  virtual bool Create(const char* statement, const RE* regex,
-                      const char* file, int line, DeathTest** test) = 0;
-};
-    
-      // Copy an existing linked_ptr<>, adding ourselves to the list of references.
-  template <typename U> linked_ptr(linked_ptr<U> const& ptr) { copy(&ptr); }
-  linked_ptr(linked_ptr const& ptr) {  // NOLINT
-    assert(&ptr != this);
-    copy(&ptr);
-  }
-    
-      // Creates an ANSI string from the given wide string, allocating
-  // memory using new. The caller is responsible for deleting the return
-  // value using delete[]. Returns the ANSI string, or NULL if the
-  // input is NULL.
-  //
-  // The returned string is created using the ANSI codepage (CP_ACP) to
-  // match the behaviour of the ANSI versions of Win32 calls and the
-  // C runtime.
-  static const char* Utf16ToAnsi(LPCWSTR utf16_str);
-#endif
-    
-      GTEST_DECLARE_TUPLE_AS_FRIEND_
-    
-    // #ifdef __GNUC__ is too general here.  It is possible to use gcc without using
-// libstdc++ (which is where cxxabi.h comes from).
-# if GTEST_HAS_CXXABI_H_
-#  include <cxxabi.h>
-# elif defined(__HP_aCC)
-#  include <acxx_demangle.h>
-# endif  // GTEST_HASH_CXXABI_H_
-    
-    
-    {
-    {}  // namespace testing
-}  // namespace grpc
-    
-    // A simple parser for the json db file. It requires the db file to have the
-// exact form of [{'location': { 'latitude': 123, 'longitude': 456}, 'name':
-// 'the name can be empty' }, { ... } ... The spaces will be stripped.
-class Parser {
- public:
-  explicit Parser(const std::string& db) : db_(db) {
-    // Remove all spaces.
-    db_.erase(
-        std::remove_if(db_.begin(), db_.end(), isspace),
-        db_.end());
-    if (!Match('[')) {
-      SetFailedAndReturnFalse();
-    }
-  }
-    }
-    
-    std::vector<grpc::string_ref> SecureAuthContext::GetPeerIdentity() const {
-  if (!ctx_) {
-    return std::vector<grpc::string_ref>();
-  }
-  grpc_auth_property_iterator iter = grpc_auth_context_peer_identity(ctx_);
-  std::vector<grpc::string_ref> identity;
-  const grpc_auth_property* property = nullptr;
-  while ((property = grpc_auth_property_iterator_next(&iter))) {
-    identity.push_back(
-        grpc::string_ref(property->value, property->value_length));
-  }
-  return identity;
+    {    RNG &rng = ts->get_rng();
+    int modelPoints = cvtest::randInt(rng);
+    CvSize modelSize = cvSize(2, modelPoints);
+    int maxBasicSolutions = cvtest::randInt(rng);
+    BareModelEstimator modelEstimator(modelPoints, modelSize, maxBasicSolutions);
+    checkSubsetResult = modelEstimator.checkSubsetPublic(&_input, usedPointsCount, checkPartialSubsets);
 }
     
-    static void get_cpu_usage(unsigned long long* total_cpu_time,
-                          unsigned long long* idle_cpu_time) {
-#ifdef __linux__
-  std::ifstream proc_stat('/proc/stat');
-  proc_stat.ignore(5);
-  std::string cpu_time_str;
-  std::string first_line;
-  std::getline(proc_stat, first_line);
-  std::stringstream first_line_s(first_line);
-  for (int i = 0; i < 10; ++i) {
-    std::getline(first_line_s, cpu_time_str, ' ');
-    *total_cpu_time += std::stol(cpu_time_str);
-    if (i == 3) {
-      *idle_cpu_time = std::stol(cpu_time_str);
-    }
-  }
-#else
-  gpr_log(GPR_INFO, 'get_cpu_usage(): Non-linux platform is not supported.');
-#endif
-}
+    #ifndef OPENCV_CUDA_WARP_REDUCE_HPP__
+#define OPENCV_CUDA_WARP_REDUCE_HPP__
     
-    grpc::string DescribeService(const grpc::protobuf::ServiceDescriptor* service) {
-  grpc::string result;
-  if (service->options().deprecated()) {
-    result.append('DEPRECATED\n');
-  }
-  result.append('filename: ' + service->file()->name() + '\n');
-    }
+    CV_EXPORTS_W void absdiff(InputArray src1, Scalar src2, OutputArray dst);
     
-    template<typename T> inline
-dnnError_t dnnPoolingCreateBackward(
-    dnnPrimitive_t* pPooling,
-    dnnPrimitiveAttributes_t attributes,
-    dnnAlgorithm_t op,
-    const dnnLayout_t srcLayout,
-    const size_t kernelSize[],
-    const size_t kernelStride[],
-    const int inputOffset[],
-    const dnnBorder_t border_type);
+    #ifndef OPENGL_NOLOAD_STYLE_HPP
+#define OPENGL_NOLOAD_STYLE_HPP
     
-        // add it to the network
-    AddNodeToNetIfNotYet(newNode);
-    
-    PrefetchGPUDataTransferer::PrefetchGPUDataTransferer(int deviceId) : GranularGPUDataTransferer(deviceId, nullptr, nullptr, true)
-{
-     cudaStreamCreateWithFlags(&m_stream, cudaStreamNonBlocking) || 'cudaStreamCreateWithFlags failed (PrefetchGPUDataTransferer ctor)';
-}
-    
-                shared_ptr<ComputationNode<ElemType>> runMeanNode = static_pointer_cast<ComputationNode<ElemType>>(runMeanParameterPtr);
-            shared_ptr<ComputationNode<ElemType>> runStdNode  = static_pointer_cast<ComputationNode<ElemType>>(runStdParameterPtr);
-    
-    template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ScriptableObjects::IConfigRecord, float>(const ScriptableObjects::IConfigRecord& config);
-template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ScriptableObjects::IConfigRecord, double>(const ScriptableObjects::IConfigRecord& config);
-template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ConfigParameters, float>(const ConfigParameters& config);
-template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ConfigParameters, double>(const ConfigParameters& config);
-template ComputationNetworkPtr GetModelFromConfig<ConfigParameters, float> (const ConfigParameters& config, const wstring&, vector<wstring>& outputNodeNamesVector);
-template ComputationNetworkPtr GetModelFromConfig<ConfigParameters, double>(const ConfigParameters& config, const wstring&, vector<wstring>& outputNodeNamesVector);
+    #endif // __OPENCV_CORE_OCL_RUNTIME_COMMON_HPP__
 
     
-    /*static*/ class ProgressTracing
-{
-    bool m_enabled;
-    bool m_tracingFlag;
-    bool m_timestampFlag;        // TODO: What does this do? TODO: camelCase
-    size_t m_totalNumberOfSteps; // total number of epochs in entire training run
-    size_t m_currentStepOffset;  // current offset
-    Timer m_progressTracingTimer;
+    #include <THPP/tensors/THTensor.hpp>
+    
+      template<typename T>
+  void allGatherT(std::vector<at::Tensor>& output,
+                  at::Tensor& input, THDGroup group_id);
+    
+    #define THCPStorage TH_CONCAT_3(THCP,Real,Storage)
+#define THCPStorageStr TH_CONCAT_STRING_3(torch.cuda.,Real,Storage)
+#define THCPStorageClass TH_CONCAT_3(THCP,Real,StorageClass)
+#define THCPStorage_(NAME) TH_CONCAT_4(THCP,Real,Storage_,NAME)
+    
+    // WorkloadStats is used to track per request timing for different states
+// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
+// should be made to guard the state change with appropriate timers and
+// counters.
+//
+// The states tracked are:
+//  - In a request (this is a superset of the interpreter state)
+//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
+//  - In the JIT (currently tracks time inside the translate routine)
+//
+// Note the time in the TC is not tracked.  This is roughly:
+//   Time in request - Time in interp
+//
+// This gives us the relative interp time formula of:
+//   Relative interp time = Time in interp / Time in request
+struct WorkloadStats final {
+  enum State {
+    InRequest,
+    // -> InInterp   Okay (entering Dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InInterp,
+    // -> InRequest  Okay (leaving the dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InTrans,
+    // -> InRequest  Okay (leaving translate)
+    // -> InInterp   Okay (leaving translate)
+  };
     }
     
-    // Compares two ASCII strings ignoring the case.
-// TODO: Should switch to boost, boost::iequal should be used instead.
-// TODO: we already have EqualCI() in Basics.h which does the same thing.
-template<class TElement>
-inline bool AreEqualIgnoreCase(
-    const std::basic_string<TElement, char_traits<TElement>, allocator<TElement>>& s1,
-    const std::basic_string<TElement, char_traits<TElement>, allocator<TElement> >& s2)
-{
-    if (s1.size() != s2.size())
-    {
-        return false;
-    }
-    }
+      auto const available = dst.thisAvailable && src.thisAvailable;
+  if (available != dst.thisAvailable) {
+    changed = true;
+    dst.thisAvailable = available;
+  }
     
-    // ---------------------------------------------------------------------------
-// const_array_ref -- same as array_ref for 'const' (read-only) pointers
-// ---------------------------------------------------------------------------
     
-        float4 operator&(const float4& other) const
-    {
-        return _mm_and_ps(v, other);
-    }
-    float4 operator|(const float4& other) const
-    {
-        return _mm_or_ps(v, other);
-    }
-    float4 operator+(const float4& other) const
-    {
-        return _mm_add_ps(v, other);
-    }
-    float4 operator-(const float4& other) const
-    {
-        return _mm_sub_ps(v, other);
-    }
-    float4 operator*(const float4& other) const
-    {
-        return _mm_mul_ps(v, other);
-    }
-    float4 operator/(const float4& other) const
-    {
-        return _mm_div_ps(v, other);
-    }
+    {private:
+  bool m_skipTop{false};
+  bool m_skipInlined{false};
+  bool m_withSelf{false};
+  bool m_withThis{false};
+  bool m_withMetadata{false};
+  bool m_withPseudoMain{false};
+  bool m_withArgValues{true};
+  bool m_withArgNames{false};
+  int m_limit{0};
+  VMParserFrame* m_parserFrame{nullptr};
+  c_WaitableWaitHandle* m_fromWaitHandle{nullptr};
+};
     
-      /// Set the timer's expiry time relative to now.
-  /**
-   * This function sets the expiry time. Any pending asynchronous wait
-   * operations will be cancelled. The handler for each cancelled operation will
-   * be invoked with the boost::asio::error::operation_aborted error code.
-   *
-   * @param expiry_time The expiry time to be used for the timer.
-   *
-   * @return The number of asynchronous operations that were cancelled.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   *
-   * @note If the timer has already expired when expires_from_now() is called,
-   * then the handlers for asynchronous wait operations will:
-   *
-   * @li have already been invoked; or
-   *
-   * @li have been queued for invocation in the near future.
-   *
-   * These handlers can no longer be cancelled, and therefore are passed an
-   * error code that indicates the successful completion of the wait operation.
+    thread_local std::atomic<size_t> g_req_num;
+__thread size_t t_req_num; // snapshot thread-local copy of g_req_num;
+__thread size_t t_gc_num; // nth collection in this request.
+__thread bool t_enable_samples;
+__thread int64_t t_trigger;
+__thread int64_t t_trigger_allocated;
+__thread int64_t t_req_age;
+__thread MemoryUsageStats t_pre_stats;
+    
+    	if (streqi(opt.c_str(), L'ALL'))
+	{
+		userOnly = false;
+	}
+	else if (streqi(opt.c_str(), L'USER'))
+	{
+		userOnly = true;
+	}
+	else
+	{
+		MessageBox(NULL, L'Unrecognized option for /REGISTER or /UNREGISTER. Must be either ALL or USER.', MB_TITLE, MB_OK);
+		exit(1);
+	}
+    
+    
+    {    if (options->Has(String::NewSymbol('target_path_id')) ||
+        options->Get(String::NewSymbol('target_path_id'))->IsInt32()) {
+      target_path_id = (int)(options->Get(
+          String::NewSymbol('target_path_id'))->ToInt32()->Value());
+    }
+  }
+    
+      StatisticsJni::StatisticsJni(std::shared_ptr<Statistics> stats,
+      const std::set<uint32_t> ignore_histograms) : StatisticsImpl(stats, false),
+      m_ignore_histograms(ignore_histograms) {
+  }
+    
+    void SyncPoint::EnableProcessing() {
+  impl_->EnableProcessing();
+}
+    
+         using Logger::SetInfoLogLevel;
+     using Logger::GetInfoLogLevel;
+     // Write an entry to the log file with the specified format.
+     virtual void Logv(const char* format, va_list ap);
+     // Write an entry to the log file with the specified log level
+     // and format.  Any log with level under the internal log level
+     // of *this (see @SetInfoLogLevel and @GetInfoLogLevel) will not be
+     // printed.
+     virtual void Logv(const InfoLogLevel log_level,
+         const char* format, va_list ap);
+    
+    
+    {    // Do it
+    std::string contents;
+    Status s = ReadFileToString(Env::Default(), fname, &contents);
+    ASSERT_TRUE(s.ok()) << s.ToString();
+    for (int i = 0; i < bytes_to_corrupt; i++) {
+      contents[i + offset] ^= 0x80;
+    }
+    s = WriteStringToFile(Env::Default(), contents, fname);
+    ASSERT_TRUE(s.ok()) << s.ToString();
+    Options options;
+    EnvOptions env_options;
+    ASSERT_NOK(VerifySstFileChecksum(options, env_options, fname));
+  }
+    
+      /** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **
+   * Finds the last occurrence of any character in `that` in this string.
+   * \note Equivalent to `find_last_of(that.data(), size(), that.size())`
    */
-  std::size_t expires_from_now(const duration& expiry_time)
-  {
-    boost::system::error_code ec;
-    std::size_t s = this->service.expires_from_now(
-        this->implementation, expiry_time, ec);
-    boost::asio::detail::throw_error(ec, 'expires_from_now');
-    return s;
+  template <std::size_t M>
+  constexpr std::size_t find_last_of(
+      const BasicFixedString<Char, M>& that) const noexcept {
+    return find_last_of(that, size_);
   }
     
-    namespace boost {
-namespace asio {
+      ~HazptrSWMRSet() {
+    auto p = head_.load();
+    while (p) {
+      auto next = p->next_.load();
+      delete p;
+      p = next;
     }
+  }
+    
+    namespace folly {
     }
     
-    template <typename CompletionCondition>
-class base_from_completion_cond
+    #ifndef HAZPTR_ONE_DOMAIN
+#define HAZPTR_ONE_DOMAIN false
+#endif
+    
+    #include <string>
+    
+      virtual void truncate(int64_t length) CXX11_OVERRIDE;
+    
+    #endif // D_ABSTRACT_OPTION_HANDLER_H
+
+    
+    void AnnounceList::shuffle()
 {
-protected:
-  explicit base_from_completion_cond(CompletionCondition completion_condition)
-    : completion_condition_(completion_condition)
-  {
+  for (const auto& tier : tiers_) {
+    auto& urls = tier->urls;
+    std::shuffle(std::begin(urls), std::end(urls),
+                 *SimpleRandomizer::getInstance());
   }
+}
+    
+      /**
+   * Returns announce event, such as started, stopped, completed, etc.
+   */
+  const char* getEventString() const;
+    
+    void AnnounceTier::nextEventIfAfterStarted()
+{
+  switch (event) {
+  case STOPPED:
+    event = HALTED;
+    break;
+  case COMPLETED:
+    event = SEEDING;
+    break;
+  default:
+    break;
+  }
+}
+    
+    #include <string>
+#include <deque>
+    
+    // DiskwriterFactory class template to create DiskWriter derived
+// object, ignoring filename.
+template <class DiskWriterType>
+class AnonDiskWriterFactory : public DiskWriterFactory {
+public:
+  AnonDiskWriterFactory() = default;
+  virtual ~AnonDiskWriterFactory() = default;
     }
     
-    #include <boost/asio/detail/config.hpp>
+    #endif // DOWNLOAD_EVENT_LISTENER_H
+
     
-      // Constructor for a full fenced block.
-  explicit gcc_arm_fenced_block(full_t)
-  {
-    barrier();
-  }
+    class AuthConfig;
     
-    #ifndef BOOST_ASIO_DETAIL_IMPL_BUFFER_SEQUENCE_ADAPTER_IPP
-#define BOOST_ASIO_DETAIL_IMPL_BUFFER_SEQUENCE_ADAPTER_IPP
     
-    int poll_read(int d, state_type state, boost::system::error_code& ec)
-{
-  if (d == -1)
-  {
-    ec = boost::asio::error::bad_descriptor;
-    return -1;
-  }
+    {};
+
+    
+        if (nodePtr == nullptr)
+        return nullptr;
+    
+    namespace facebook {
     }
     
-    void dev_poll_reactor::interrupt()
-{
-  interrupter_.interrupt();
+    // Creates a strong reference from a raw pointer, assuming that it points to a
+// freshly-created object. See the documentation for RefPtr for usage.
+template <typename T>
+static inline RefPtr<T> adoptRef(T* ptr) {
+  return RefPtr<T>::adoptRef(ptr);
 }
