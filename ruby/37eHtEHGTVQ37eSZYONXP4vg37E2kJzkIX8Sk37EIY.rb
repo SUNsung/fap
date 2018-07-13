@@ -1,76 +1,97 @@
 
         
-            if test_conf['database']&.present?
-      ActiveRecord::Base.establish_connection(:test)
-      yield
-      ActiveRecord::Base.establish_connection(Rails.env.to_sym)
-    end
-  end
-    
-        # Used to prune requirements when calling expand with a block.
-    def prune
-      throw(:prune, true)
-    end
-  end
+        def usercode(f, out)
+  require 'erb'
+  compiler = ERB::Compiler.new('%-')
+  compiler.put_cmd = compiler.insert_cmd = 'out.<<'
+  lineno = f.lineno
+  src, = compiler.compile(f.read)
+  eval(src, binding, f.path, lineno)
 end
-
     
-        def ensure_stage
-      Rake::Task.define_task(:ensure_stage) do
-        unless stage_set?
-          puts t(:stage_not_set)
-          exit 1
+      def test_hidden_key
+    bug6899 = '[ruby-core:47253]'
+    foo = 'foor'
+    bar = 'bar'
+    assert_nothing_raised(NotImplementedError, bug6899) do
+      2000.times {eval %[(foo..bar) ? 1 : 2]}
+    end
+    foo = bar
+  end
+    
+      it 'wraps and unwraps data' do
+    a = @s.typed_wrap_struct(1024)
+    @s.typed_get_struct(a).should == 1024
+  end
+    
+      def test_frozen_string_literal
+    all_assertions do |a|
+      [['disable', 'false'], ['enable', 'true']].each do |opt, exp|
+        %W[frozen_string_literal frozen-string-literal].each do |arg|
+          key = '#{opt}=#{arg}'
+          a.for(key) do
+            assert_in_out_err(['--disable=gems', '--#{key}'], 'p('foo'.frozen?)', [exp])
+          end
+        end
+      end
+      %W'disable enable'.product(%W[false true]) do |opt, exp|
+        a.for('#{opt}=>#{exp}') do
+          assert_in_out_err(['-w', '--disable=gems', '--#{opt}=frozen-string-literal'], <<-'end;', [exp])
+            #-*- frozen-string-literal: #{exp} -*-
+            p('foo'.frozen?)
+          end;
         end
       end
     end
-    
-      desc 'Started'
-  task :started do
   end
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS
-    # Supported browsers:: all
-    # More infos::         http://en.wikipedia.org/wiki/Cross-site_scripting
-    #
-    # Automatically escapes Rack::Request#params so they can be embedded in HTML
-    # or JavaScript without any further issues. Calls +html_safe+ on the escaped
-    # strings if defined, to avoid double-escaping in Rails.
-    #
-    # Options:
-    # escape:: What escaping modes to use, should be Symbol or Array of Symbols.
-    #          Available: :html (default), :javascript, :url
-    class EscapedParams < Base
-      extend Rack::Utils
-    
-        it 'denies requests with sneaky encoded session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.%73ession=SESSION_TOKEN'
-      expect(last_response).not_to be_ok
-    end
-    
-      it 'should not override the header if already set' do
-    mock_app with_headers('X-Frame-Options' => 'allow')
-    expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('allow')
-  end
-end
-
-    
-          content_type 'application/json'
-      LogStash::Json.dump(data, {:pretty => pretty?})
-    else
-      content_type 'text/plain'
-      data.to_s
-    end
-  end
-    
-            end
+          with_timezone('America/New_York') do
+        t.localtime
       end
+    
+      it 'adds the directory at the front of $LOAD_PATH' do
+    dir = tmp('rubylib/incl_front')
+    ENV['RUBYLIB'] = @pre + dir
+    paths = ruby_exe('puts $LOAD_PATH').lines.map(&:chomp)
+    if PlatformGuard.implementation? :ruby
+      # In a MRI checkout, $PWD and some extra -I entries end up as
+      # the first entries in $LOAD_PATH. So just assert that it's not last.
+      idx = paths.index(dir)
+      idx.should < paths.size-1
+    else
+      paths[0].should == dir
     end
   end
-end
-
     
-        files.each do |file|
-      download = file_fetch(file['url'], file['sha1'],target)
+      def check_closed
+    raise IOError, 'closed #{self.class}' if closed?
+  end
+    
+      # Deletes every element of the set for which block evaluates to
+  # true, and returns self. Returns an enumerator if no block is
+  # given.
+  def delete_if
+    block_given? or return enum_for(__method__) { size }
+    # @hash.delete_if should be faster, but using it breaks the order
+    # of enumeration in subclasses.
+    select { |o| yield o }.each { |o| @hash.delete(o) }
+    self
+  end
+    
+      def test_include?
+    assert_not_send([@cls[], :include?, 1])
+    assert_not_send([@cls[], :include?, nil])
+    assert_send([@h, :include?, nil])
+    assert_send([@h, :include?, 1])
+    assert_not_send([@h, :include?, 'gumby'])
+  end
+    
+      def as_boolean(string)
+    return true   if string == true   || string =~ (/(true|t|yes|y|1)$/i)
+    return false  if string == false  || string.blank? || string =~ (/(false|f|no|n|0)$/i)
+    raise ArgumentError.new('invalid value for Boolean: \'#{string}\'')
+  end
+    
+              def find_plugins_gem_specs
+            @specs ||= ::Gem::Specification.find_all.select{|spec| logstash_plugin_gem_spec?(spec)}
+          end
