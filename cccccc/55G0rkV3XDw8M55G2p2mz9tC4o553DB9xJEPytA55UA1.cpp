@@ -1,177 +1,141 @@
 
         
-        
-    {}  // namespace atom
+        #define THCPStorage TH_CONCAT_3(THCP,Real,Storage)
+#define THCPStorageStr TH_CONCAT_STRING_3(torch.cuda.,Real,Storage)
+#define THCPStorageClass TH_CONCAT_3(THCP,Real,StorageClass)
+#define THCPStorage_(NAME) TH_CONCAT_4(THCP,Real,Storage_,NAME)
     
-    namespace base {
-class FilePath;
+      masterCommandChannel->sendMessage(
+    packMessage(Functions::tensorGeqrf, ra, rtau, a),
+    THDState::s_current_worker
+  );
+    
+    SlowTimer::SlowTimer(int64_t msThreshold, const char *location, const char *info)
+  : m_timer(Timer::WallTime), m_msThreshold(msThreshold) {
+  if (location) m_location = location;
+  if (info) m_info = info;
 }
     
-    namespace chrome {
-class MonitorFinder;
+    #endif // incl_HPHP_PAGELET_SERVER_H_
+
+    
+        auto const privPropTy = [&] (const PropState& ps) -> Type {
+      if (is_closure(cls)) {
+        // For closures use variables will be the first properties of the
+        // closure object, in declaration order
+        if (uvIt != useVars.end()) return *uvIt++;
+        return Type{};
+      }
     }
     
-    #include <set>
-#include <string>
-    
-     protected:
-  /// @copydoc AbsValLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the BNLL inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
- */
-template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
- public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
+    // Output DOT-format graph.  Paste into dot -Txlib or similar.
+std::string dot_cfg(const Func& func) {
+  std::string ret;
+  for (auto& b : rpoSortAddDVs(func)) {
+    ret += folly::format(
+      'B{} [ label = \'blk:{}\\n\'+{} ]\n',
+      b->id, b->id, dot_instructions(func, *b)).str();
+    bool outputed = false;
+    forEachNormalSuccessor(*b, [&] (BlockId target) {
+      ret += folly::format('B{} -> B{};', b->id, target).str();
+      outputed = true;
+    });
+    if (outputed) ret += '\n';
+    outputed = false;
+    if (!is_single_nop(*b)) {
+      for (auto ex : b->throwExits) {
+        ret += folly::sformat('B{} -> B{} [color=red];', b->id, ex);
+        outputed = true;
+      }
+      for (auto ex : b->unwindExits) {
+        ret += folly::sformat('B{} -> B{} [color=blue];', b->id, ex);
+        outputed = true;
+      }
     }
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the ELU inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} = \left\{
-   *        \begin{array}{lr}
-   *            1           & \mathrm{if} \; x > 0 \\
-   *            y + \alpha  & \mathrm{if} \; x \le 0
-   *        \end{array} \right.
-   *      @f$ if propagate_down[0].
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-    /**
- * @brief Takes two+ Blobs, interprets last Blob as a selector and
- *  filter remaining Blobs accordingly with selector data (0 means that
- * the corresponding item has to be filtered, non-zero means that corresponding
- * item needs to stay).
- */
-template <typename Dtype>
-class FilterLayer : public Layer<Dtype> {
- public:
-  explicit FilterLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    static int make_prefixes(struct ifaddrs* ifaddr, int family, int prefixlen) {
-	char* prefix = NULL;
-	if (family == AF_INET) {
-		sockaddr_in* mask = new sockaddr_in;
-		mask->sin_family = AF_INET;
-		memset(&mask->sin_addr, 0, sizeof(in_addr));
-		ifaddr->ifa_netmask = reinterpret_cast<sockaddr*>(mask);
-		if (prefixlen > 32) {
-			prefixlen = 32;
-		}
-		prefix = reinterpret_cast<char*>(&mask->sin_addr);
-	} else if (family == AF_INET6) {
-		sockaddr_in6* mask = new sockaddr_in6;
-		mask->sin6_family = AF_INET6;
-		memset(&mask->sin6_addr, 0, sizeof(in6_addr));
-		ifaddr->ifa_netmask = reinterpret_cast<sockaddr*>(mask);
-		if (prefixlen > 128) {
-			prefixlen = 128;
-		}
-		prefix = reinterpret_cast<char*>(&mask->sin6_addr);
-	} else {
-		return -1;
-	}
-	for (int i = 0; i < (prefixlen / 8); i++) {
-		*prefix++ = 0xFF;
-	}
-	char remainder = 0xff;
-	remainder <<= (8 - prefixlen % 8);
-	*prefix = remainder;
-	return 0;
+    if (outputed) ret += '\n';
+  }
+  return ret;
 }
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
+    TEST(Type, ArrEquivalentRepresentations) {
+  {
+    auto const simple = aval(test_array_packed_value());
+    auto const bulky  = sarr_packed({ival(42), ival(23), ival(12)});
+    EXPECT_EQ(simple, bulky);
+  }
+    }
+    
+      const String& getSandboxId() const;
+  void setSandboxId(const String&);
     
     
+    {  heap_.iterate(
+    [&](HeapObject* h, size_t size) { // onBig
+      ptrs_.insert(h, size);
+      if (h->kind() == HeaderKind::BigMalloc &&
+          !type_scan::isKnownType(static_cast<MallocNode*>(h)->typeIndex())) {
+        ++unknown_;
+        h->setmarks(mark_version_);
+        cwork_.push_back(h);
+      }
+    },
+    [&](HeapObject* h, size_t size) { // onSlab
+      slab_map_.set(slab_index(h));
+    }
+  );
+  ptrs_.prepare();
+}
     
-    void opus_ifft_neon(const kiss_fft_state *st,
-                    const kiss_fft_cpx *fin,
-                    kiss_fft_cpx *fout);
+    #if 0   // merge leftover?
+        // This will automatically discard a large fraction of the data, useful if the training data is known to be highly correlated
+        if (dataDecimationFactor)
+        {
+            auto& pMBLayout = net->GetMBLayoutPtrOfNetwork();
+    }
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+        // Determine the MB size used for mapping a given learning-rate or momentum parameter to a per-sample value.
+    // MB size is the number of samples across all time steps and parallel sequences.
+    // This function exists to post-fix a design bug in SGD:
+    // In the case of BPTT, the 'minibatchSize' parameter given to the SGD module really means the truncation size,
+    // while the MB size to be used is (truncation size * number of parallel sequences).
+    // SGD also does not know #parallel sequences upfront.
+    size_t FixUpEffectiveMBSize(size_t specifiedMBSize, size_t numParallelSequences) const
+    {
+        // remedy the bug that truncation size is incorrectly passed as MB size
+        if (m_truncated && specifiedMBSize > 1)      // currently only happens in this mode
+        {
+            if (numParallelSequences == 0)
+            {
+                RuntimeError('Learning rate and momentum are not supported per minibatch, please specify them per sample.');
+            }
+    }
+    }
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+                    msra::math::float4 m0 = *pusij; // gets i..i+3
+                msra::math::float4 m1 = *pusijp1;
+                msra::math::float4 m2 = *pusijp2;
+                msra::math::float4 m3 = *pusijp3;
+    
+        static bool GetTimestampingFlag()
+    {
+        return GetStaticInstance().m_timestampFlag;
+        // TODO: timestampFlag or timestampingFlag? (Or timeStampFlag?)
+    }
+    
+    template <class _T>
+class array_ref
+{
+    _T* data;
+    size_t n;
+    inline void check_index(size_t i) const
+    {
+        i;
+        assert(i < n);
+    }
+    inline void check_ptr() const
+    {
+        n;
+        data;
+        assert(n == 0 || data != NULL);
+    }
+    }
