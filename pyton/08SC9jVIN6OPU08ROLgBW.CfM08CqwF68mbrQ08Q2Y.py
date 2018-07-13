@@ -1,138 +1,269 @@
 
         
-        
-def check_format(filename):
-    '''
-    validates that each line is formatted correctly,
-    appending to error list as needed
-    '''
-    with open(filename) as fp:
-        lines = list(line.rstrip() for line in fp)
-    check_alphabetical(lines)
-    # START Check Entries
-    num_in_category = min_entries_per_section + 1
-    category = ''
-    category_line = 0
-    for line_num, line in enumerate(lines):
-        if section_title_re.match(line):
-            title_links.append(section_title_re.match(line).group(1))
-        # check each section for the minimum number of entries
-        if line.startswith(anchor):
-            match = anchor_re.match(line)
-            if match:
-                if match.group(1) not in title_links:
-                    add_error(line_num, 'section header ({}) not added as a title link'.format(match.group(1)))
-            else:
-                add_error(line_num, 'section header is not formatted correctly')
-            if num_in_category < min_entries_per_section:
-                add_error(category_line, '{} section does not have the minimum {} entries (only has {})'.format(
-                    category, min_entries_per_section, num_in_category))
-            category = line.split(' ')[1]
-            category_line = line_num
-            num_in_category = 0
-            continue
-        # skips lines that we do not care about
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        num_in_category += 1
-        segments = line.split('|')[1:-1]
-        if len(segments) < num_segments:
-            add_error(line_num, 'entry does not have all the required sections (have {}, need {})'.format(
-                len(segments), num_segments))
-            continue
-        # START Global
-        for segment in segments:
-            # every line segment should start and end with exactly 1 space
-            if len(segment) - len(segment.lstrip()) != 1 or len(segment) - len(segment.rstrip()) != 1:
-                add_error(line_num, 'each segment must start and end with exactly 1 space')
-        # END Global
-        segments = [seg.strip() for seg in segments]
-        check_entry(line_num, segments)
-    # END Check Entries
-    
-        from inspect import getargspec
-    from cStringIO import StringIO
-    
-        app = flask.Flask(__name__)
-    app.config.from_mapping([
-        ('SECRET_KEY', 'config'),
-        ('TEST_KEY', 'foo')
-    ])
-    common_object_test(app)
-    
-        plugin_manager.register(Plugin)
-    
-        def format_body(self, content, mime):
-        if is_valid_mime(mime):
-            for p in self.enabled_plugins:
-                content = p.format_body(content, mime)
-        return content
+        with open('update/versions.json', 'w') as jsonf:
+    json.dump(versions_info, jsonf, indent=4, sort_keys=True)
 
     
+        def test_youtube_search_matching(self):
+        self.assertMatch('http://www.youtube.com/results?search_query=making+mustard', ['youtube:search_url'])
+        self.assertMatch('https://www.youtube.com/results?baz=bar&search_query=youtube-dl+test+video&filters=video&lclk=video', ['youtube:search_url'])
     
-filenames = list(rst_filenames())
-assert filenames
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
     
-@mock.patch('httpie.core.get_response')
-def test_timeout(get_response):
-    def error(msg, *args, **kwargs):
-        global error_msg
-        error_msg = msg % args
+def list_extractors(age_limit):
+    '''
+    Return a list of extractors that are suitable for the given age,
+    sorted by extractor ID.
+    '''
     
-            '''
-        raise NotImplementedError()
+            webpage = self._download_webpage(url, video_id)
+        key = self._search_regex(
+            r'src=['\']https?://[^/]+/embed/([A-Za-z0-9_-]+)', webpage, 'key')
     
-        '''
-)
-network.add_argument(
-    '--follow', '-F',
-    default=False,
-    action='store_true',
-    help='''
-    Follow 30x Location redirects.
-    
-        def _migrate_implicit_content_type(self):
-        '''Migrate the removed implicit_content_type config option'''
-        try:
-            implicit_content_type = self.pop('implicit_content_type')
-        except KeyError:
-            self.save()
-        else:
-            if implicit_content_type == 'form':
-                self['default_options'].insert(0, '--form')
-            self.save()
-            self.load()
+            return {
+            'id': info['vid'],
+            'title': info['Subject'],
+            'duration': int(info['duration']) / 1000.0,
+            'formats': formats,
+            'thumbnail': info.get('bimg') or info.get('img'),
+        }
 
     
+            formats = []
+        for secure in ('', 'Secure'):
+            for ext in ('Ogg', 'Mp3'):
+                format_id = '%s%s' % (secure, ext)
+                format_url = metadata.get('%sUrl' % format_id)
+                if format_url:
+                    formats.append({
+                        'url': format_url,
+                        'format_id': format_id,
+                        'vcodec': 'none',
+                    })
+        self._sort_formats(formats)
     
-class ExitStatus:
-    '''Exit status code constants.'''
-    OK = 0
-    ERROR = 1
-    PLUGIN_ERROR = 7
+    from keras import backend as K
+from keras.utils.test_utils import get_test_data
+from keras.models import Sequential, Model
+from keras.layers import Dense, Activation, GRU, TimeDistributed, Input
+from keras.utils import np_utils
+from keras.utils.test_utils import keras_test
+from numpy.testing import assert_almost_equal, assert_array_almost_equal
     
-                if point.name == 'p':
-                link = point.find('a')
-                if link is not None:
-                    link = clean_pdf_link(link.attrs['href'])
-                    ext = get_extension(link)
-                    print(ext)
-                    if not ext in forbidden_extensions:
-                        print(shorten_title(point.text) + ' (' + link + ')')
-                        try:
-                            name = clean_text(point.text.split('[' + ext + ']')[0])
-                            fullname = '.'.join((name, ext))
-                            if not os.path.exists('/'.join((current_directory, fullname)) ):
-                                download_pdf(link, current_directory, '.'.join((name, ext)))
-                        except KeyboardInterrupt:
-                            try:
-                                print('Press Ctrl-C in 1 second to quit')
-                                time.sleep(1)
-                            except KeyboardInterrupt:
-                                print('Cancelling..')
-                                break
-                        except:
-                            failures.append(point.text)
-                        
-        point = point.next_sibling          
+    
+@keras_test
+def test_batchnorm_legacy_interface():
+    old_layer = keras.layers.BatchNormalization(mode=0, name='bn')
+    new_layer = keras.layers.BatchNormalization(name='bn')
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
+    
+    from keras.layers import Lambda, Input, Dense
+from keras.models import Model
+from keras.datasets import mnist
+from keras.losses import mse, binary_crossentropy
+from keras.utils import plot_model
+from keras import backend as K
+    
+        for strides in [(1, 1), (2, 2)]:
+        layer_test(local.LocallyConnected2D,
+                   kwargs={'filters': filters,
+                           'kernel_size': 3,
+                           'padding': padding,
+                           'kernel_regularizer': 'l2',
+                           'bias_regularizer': 'l2',
+                           'activity_regularizer': 'l2',
+                           'strides': strides,
+                           'data_format': 'channels_last'},
+                   input_shape=(num_samples, num_row, num_col, stack_size))
+    
+    model = Sequential()
+model.add(Embedding(max_features, embedding_size, input_length=maxlen))
+model.add(Dropout(0.25))
+model.add(Conv1D(filters,
+                 kernel_size,
+                 padding='valid',
+                 activation='relu',
+                 strides=1))
+model.add(MaxPooling1D(pool_size=pool_size))
+model.add(LSTM(lstm_output_size))
+model.add(Dense(1))
+model.add(Activation('sigmoid'))
+    
+    
+def test_convolutional_recurrent():
+    num_row = 3
+    num_col = 3
+    filters = 2
+    num_samples = 1
+    input_channel = 2
+    input_num_row = 5
+    input_num_col = 5
+    sequence_len = 2
+    for data_format in ['channels_first', 'channels_last']:
+    
+    # Train the network
+noisy_movies, shifted_movies = generate_movies(n_samples=1200)
+seq.fit(noisy_movies[:1000], shifted_movies[:1000], batch_size=10,
+        epochs=300, validation_split=0.05)
+    
+    
+def create_network(n_dense=6,
+                   dense_units=16,
+                   activation='selu',
+                   dropout=AlphaDropout,
+                   dropout_rate=0.1,
+                   kernel_initializer='lecun_normal',
+                   optimizer='adam',
+                   num_classes=1,
+                   max_words=max_words):
+    '''Generic function to create a fully-connected neural network.
+    
+            response = requests.get(url, headers=headers)
+    
+    #############################################
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
+    
+        def download(self, download_func, request, spider):
+        @defer.inlineCallbacks
+        def process_request(request):
+            for method in self.methods['process_request']:
+                response = yield method(request=request, spider=spider)
+                assert response is None or isinstance(response, (Response, Request)), \
+                        'Middleware %s.process_request must return None, Response or Request, got %s' % \
+                        (six.get_method_self(method).__class__.__name__, response.__class__.__name__)
+                if response:
+                    defer.returnValue(response)
+            defer.returnValue((yield download_func(request=request,spider=spider)))
+    
+        def _add_middleware(self, mw):
+        super(SpiderMiddlewareManager, self)._add_middleware(mw)
+        if hasattr(mw, 'process_spider_input'):
+            self.methods['process_spider_input'].append(mw.process_spider_input)
+        if hasattr(mw, 'process_spider_output'):
+            self.methods['process_spider_output'].insert(0, mw.process_spider_output)
+        if hasattr(mw, 'process_spider_exception'):
+            self.methods['process_spider_exception'].insert(0, mw.process_spider_exception)
+        if hasattr(mw, 'process_start_requests'):
+            self.methods['process_start_requests'].insert(0, mw.process_start_requests)
+    
+    See documentation in docs/topics/downloader-middleware.rst
+'''
+    
+        def __init__(self, reason='cancelled'):
+        super(CloseSpider, self).__init__()
+        self.reason = reason
+    
+        return None
+    
+        def _adjust_thread_count(self):
+        # When the executor gets lost, the weakref callback will wake up
+        # the worker threads.
+        def weakref_cb(_, q=self._work_queue):
+            q.put(None)
+        # TODO(bquinlan): Should avoid creating new threads if there are more
+        # idle threads than items in the work queue.
+        if len(self._threads) < self._max_workers:
+            t = threading.Thread(target=_worker,
+                                 args=(weakref.ref(self, weakref_cb),
+                                       self._work_queue))
+            t.daemon = True
+            t.start()
+            self._threads.add(t)
+            _threads_queues[t] = self._work_queue
+    
+    
+def KeywordsFromSyntaxListOutput_PythonSyntax_test():
+  expected_keywords = (
+    'bytearray', 'IndexError', 'all', 'help', 'vars', 'SyntaxError', 'global',
+    'elif', 'unicode', 'sorted', 'memoryview', 'isinstance', 'except',
+    'nonlocal', 'NameError', 'finally', 'BytesWarning', 'dict', 'IOError',
+    'pass', 'oct', 'bin', 'SystemExit', 'return', 'StandardError', 'format',
+    'TabError', 'break', 'next', 'not', 'UnicodeDecodeError', 'False',
+    'RuntimeWarning', 'list', 'iter', 'try', 'reload', 'Warning', 'round',
+    'dir', 'cmp', 'set', 'bytes', 'UnicodeTranslateError', 'intern',
+    'issubclass', 'yield', 'Ellipsis', 'hash', 'locals', 'BufferError',
+    'slice', 'for', 'FloatingPointError', 'sum', 'VMSError', 'getattr', 'abs',
+    'print', 'import', 'True', 'FutureWarning', 'ImportWarning', 'None',
+    'EOFError', 'len', 'frozenset', 'ord', 'super', 'raise', 'TypeError',
+    'KeyboardInterrupt', 'UserWarning', 'filter', 'range', 'staticmethod',
+    'SystemError', 'or', 'BaseException', 'pow', 'RuntimeError', 'float',
+    'MemoryError', 'StopIteration', 'globals', 'divmod', 'enumerate', 'apply',
+    'LookupError', 'open', 'basestring', 'from', 'UnicodeError', 'zip', 'hex',
+    'long', 'IndentationError', 'int', 'chr', '__import__', 'type',
+    'Exception', 'continue', 'tuple', 'reduce', 'reversed', 'else', 'assert',
+    'UnicodeEncodeError', 'input', 'with', 'hasattr', 'delattr', 'setattr',
+    'raw_input', 'PendingDeprecationWarning', 'compile', 'ArithmeticError',
+    'while', 'del', 'str', 'property', 'def', 'and', 'GeneratorExit',
+    'ImportError', 'xrange', 'is', 'EnvironmentError', 'KeyError', 'coerce',
+    'SyntaxWarning', 'file', 'in', 'unichr', 'ascii', 'any', 'as', 'if',
+    'OSError', 'DeprecationWarning', 'min', 'UnicodeWarning', 'execfile', 'id',
+    'complex', 'bool', 'ValueError', 'NotImplemented', 'map', 'exec', 'buffer',
+    'max', 'class', 'object', 'repr', 'callable', 'ZeroDivisionError', 'eval',
+    '__debug__', 'ReferenceError', 'AssertionError', 'classmethod',
+    'UnboundLocalError', 'NotImplementedError', 'lambda', 'AttributeError',
+    'OverflowError', 'WindowsError' )
+    
+    
+  def Extra_Info_No_Doc_String_With_Detailed_Info_test( self ):
+    self._Check( '0', {
+      'insertion_text':  'INSERTION TEXT',
+      'menu_text':       'MENU TEXT',
+      'extra_menu_info': 'EXTRA MENU INFO',
+      'kind':            'K',
+      'detailed_info':   'DETAILED INFO',
+      'extra_data': {
+      },
+    }, {
+      'word'     : 'INSERTION TEXT',
+      'abbr'     : 'MENU TEXT',
+      'menu'     : 'EXTRA MENU INFO',
+      'kind'     : 'k',
+      'info'     : 'DETAILED INFO',
+      'dup'      : 1,
+      'empty'    : 1,
+      'user_data': '0',
+    } )
+    
+    
+def SendEventNotificationAsync( event_name,
+                                buffer_number = None,
+                                extra_data = None ):
+  event = EventNotification( event_name, buffer_number, extra_data )
+  event.Start()
+
+    
+        if not self._response_future.done():
+      # Nothing yet...
+      return True
+    
+    
+  def FileParseRequestReady( self, block = False ):
+    return bool( self._parse_request and
+                 ( block or self._parse_request.Done() ) )
+    
+                resp = self.fetch('/all_methods', method=method,
+                              allow_nonstandard_methods=True)
+            self.assertEqual(resp.code, 200)
+    
+        def running(self):
+        '''Returns True if this operation is currently running.'''
+        return not self._done
+    
+        The two decorators differ in their treatment of the ``callback``
+    argument, so we cannot simply implement ``@engine`` in terms of
+    ``@coroutine``.
+    '''
+    # On Python 3.5, set the coroutine flag on our generator, to allow it
+    # to be used with 'await'.
+    wrapped = func
+    if hasattr(types, 'coroutine'):
+        func = types.coroutine(func)
+    
+        def __aiter__(self):
+        return _QueueIterator(self)
