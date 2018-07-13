@@ -1,115 +1,171 @@
 
         
-        #ifndef TESSERACT_CCMAIN_PAGEITERATOR_H_
-#define TESSERACT_CCMAIN_PAGEITERATOR_H_
-    
-    const char *kUTF8LineSeparator = '\u2028';  // '\xe2\x80\xa8';
-const char *kUTF8ParagraphSeparator = '\u2029';  // '\xe2\x80\xa9';
-const char *kLRM = '\u200E';  // Left-to-Right Mark
-const char *kRLM = '\u200F';  // Right-to-Left Mark
-const char *kRLE = '\u202A';  // Right-to-Left Embedding
-const char *kPDF = '\u202C';  // Pop Directional Formatting
-    
-    namespace tesseract {
+        namespace message_descriptor {
+PyObject* NewMessageFieldsByName(const Descriptor* descriptor);
+PyObject* NewMessageFieldsByCamelcaseName(const Descriptor* descriptor);
+PyObject* NewMessageFieldsByNumber(const Descriptor* descriptor);
+PyObject* NewMessageFieldsSeq(const Descriptor* descriptor);
     }
     
-     private:
-  // Displays the blob and block bounding boxes in a window called Blocks.
-  void DisplayBlocks(BLOCK_LIST* blocks);
-  // Displays the column edges at each grid y coordinate defined by
-  // best_columns_.
-  void DisplayColumnBounds(PartSetVector* sets);
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
     
-    #pragma once
+    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
+
     
-      mPlatformType = PlatformType::TYPE_OSX | PlatformType::TYPE_POSIX;
-  EXPECT_TRUE(isPlatform(PlatformType::TYPE_POSIX, mPlatformType));
-  EXPECT_TRUE(isPlatform(PlatformType::TYPE_OSX, mPlatformType));
+    // Author: kenton@google.com (Kenton Varda)
     
-      auto file_path = kTestWorkingDirectory + 'permissions-file2';
     
-    #ifdef WIN32
-TEST_F(ProcessTests, test_constructorWin) {
-  HANDLE handle =
-      ::OpenProcess(PROCESS_ALL_ACCESS, FALSE, ::GetCurrentProcessId());
-  EXPECT_NE(handle, reinterpret_cast<HANDLE>(nullptr));
+    {
+    {
+    {
+    {
+}  // namespace java
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+    
+    {
+    {
+    {  inline void PutChar(char ch) {
+    out_buf += ch;
+    if (out_buf.length() >= kBufferSize) Flush();
+  }
+  inline void Flush(void) {
+    if (out_buf.length() != 0) {
+      fp->Write(&out_buf[0], out_buf.length());
+      out_buf.clear();
     }
+  }
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_BASE64_H_
+
     
-    TEST_F(TablesTests, test_constraint_matching) {
-  struct ConstraintList cl;
-  // An empty constraint list has expectations.
-  EXPECT_FALSE(cl.exists());
-  EXPECT_FALSE(cl.exists(GREATER_THAN));
-  EXPECT_TRUE(cl.notExistsOrMatches('some'));
+    using LogCallbackRegistryStore = dmlc::ThreadLocalStore<LogCallbackRegistry>;
+    
+    #include <dmlc/omp.h>
+#include <xgboost/logging.h>
+#include <algorithm>
+#include '../common/math.h'
+    
+    /*!
+ * \brief Macro to register linear updater.
+ */
+#define XGBOOST_REGISTER_LINEAR_UPDATER(UniqueId, Name)                        \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::LinearUpdaterReg&                    \
+      __make_##LinearUpdaterReg##_##UniqueId##__ =                             \
+          ::dmlc::Registry< ::xgboost::LinearUpdaterReg>::Get()->__REGISTER__( \
+              Name)
+    
+    #endif  // GUETZLI_ENTROPY_ENCODE_H_
+
+    
+    
+    {}  // namespace guetzli
+    
+    const double* NewSrgb8ToLinearTable() {
+  double* table = new double[256];
+  int i = 0;
+  for (; i < 11; ++i) {
+    table[i] = i / 12.92;
+  }
+  for (; i < 256; ++i) {
+    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
+  }
+  return table;
+}
+    
+    void ComputeBlockIDCT(const coeff_t* block, uint8_t* out) {
+  coeff_t colidcts[kDCTBlockSize];
+  const int kColScale = 11;
+  const int kColRound = 1 << (kColScale - 1);
+  for (int x = 0; x < 8; ++x) {
+    int colbuf[8] = { 0 };
+    Compute1dIDCT(&block[x], 8, colbuf);
+    for (int y = 0; y < 8; ++y) {
+      colidcts[8 * y + x] = (colbuf[y] + kColRound) >> kColScale;
     }
-    
-    Status WmiResultItem::GetBool(const std::string& name, bool& ret) const {
-  std::wstring property_name = stringToWstring(name);
-  VARIANT value;
-  HRESULT hr = result_->Get(property_name.c_str(), 0, &value, nullptr, nullptr);
+  }
+  const int kRowScale = 18;
+  const int kRowRound = 257 << (kRowScale - 1);  // includes offset by 128
+  for (int y = 0; y < 8; ++y) {
+    const int rowidx = 8 * y;
+    int rowbuf[8] = { 0 };
+    Compute1dIDCT(&colidcts[rowidx], 1, rowbuf);
+    for (int x = 0; x < 8; ++x) {
+      out[rowidx + x] =
+          std::max(0, std::min(255, (rowbuf[x] + kRowRound) >> kRowScale));
     }
+  }
+}
     
-    #pragma once
     
-    /// This is a dispatched service that handles published audit replies.
-class OpenBSMConsumerRunner;
+    {}  // namespace guetzli
     
-      // Assume the kernel extension is loaded, initialize the queue.
-  // This will open the extension descriptor and synchronize queue data.
-  // If any other daemons or osquery processes are using the queue this fails.
-  try {
-    WriteLock lock(mutex_);
-    queue_ = new CQueue(kKernelDevice, kKernelQueueSize);
-  } catch (const CQueueException &e) {
-    queue_ = nullptr;
-    return Status(1, e.what());
+      /**
+   * Construct a new string by replacing the characters denoted by the half-open
+   *   range [`first`,`last`) within this string with the `that_count`
+   *   characters from string `that` starting at position `that_pos`.
+   * \note Equivalent to
+   *   <tt>creplace(first - data(), last - first, that, that_pos,
+   *   that_count)</tt>
+   */
+  template <std::size_t M>
+  constexpr BasicFixedString<Char, N + M> creplace(
+      const Char* first,
+      const Char* last,
+      const BasicFixedString<Char, M>& that,
+      std::size_t that_pos,
+      std::size_t that_count) const noexcept(false) {
+    return creplace(first - data_, last - first, that, that_pos, that_count);
   }
     
-      ASSERT_TRUE(status.ok());
-  // Note: the time-parsing was removed to allow events to auto-assign.
-  ASSERT_EQ(0U, ec->time);
-  ASSERT_EQ('2016-03-22T21:17:01.701882+00:00', ec->fields.at('datetime'));
-  ASSERT_EQ('vagrant-ubuntu-trusty-64', ec->fields.at('host'));
-  ASSERT_EQ('6', ec->fields.at('severity'));
-  ASSERT_EQ('cron', ec->fields.at('facility'));
-  ASSERT_EQ('CRON[16538]', ec->fields.at('tag'));
-  ASSERT_EQ('(root) CMD (   cd / && run-parts --report /etc/cron.hourly)',
-            ec->fields.at('message'));
     
-      // Specify the amount of iterations that should be run by this benchmark.
-  // REQUIRES: 'n > 0' and `MinTime` has not been called on this benchmark.
-  //
-  // NOTE: This function should only be used when *exact* iteration control is
-  //   needed and never to control or limit how long a benchmark runs, where
-  // `--benchmark_min_time=N` or `MinTime(...)` should be used instead.
-  Benchmark* Iterations(size_t n);
+    {// Instantiate the most common Future types to save compile time
+template class SemiFuture<Unit>;
+template class SemiFuture<bool>;
+template class SemiFuture<int>;
+template class SemiFuture<int64_t>;
+template class SemiFuture<std::string>;
+template class SemiFuture<double>;
+template class Future<Unit>;
+template class Future<bool>;
+template class Future<int>;
+template class Future<int64_t>;
+template class Future<std::string>;
+template class Future<double>;
+} // namespace folly
     
-    Benchmark* Benchmark::Unit(TimeUnit unit) {
-  time_unit_ = unit;
-  return this;
-}
-    
-    namespace benchmark {
-// Parses 'str' for a 32-bit signed integer.  If successful, writes the result
-// to *value and returns true; otherwise leaves *value unchanged and returns
-// false.
-bool ParseInt32(const std::string& src_text, const char* str, int32_t* value);
+    void IOThreadPoolExecutor::add(
+    Func func,
+    std::chrono::milliseconds expiration,
+    Func expireCallback) {
+  ensureActiveThreads();
+  SharedMutex::ReadHolder r{&threadListLock_};
+  if (threadList_.get().empty()) {
+    throw std::runtime_error('No threads available');
+  }
+  auto ioThread = pickThread();
     }
     
-    #include 'benchmark/benchmark.h'
-#include 'complexity.h'
-#include 'counter.h'
-    
-    double StatisticsMedian(const std::vector<double>& v) {
-  if (v.size() < 3) return StatisticsMean(v);
-  std::vector<double> partial;
-  // we need roundDown(count/2)+1 slots
-  partial.resize(1 + (v.size() / 2));
-  std::partial_sort_copy(v.begin(), v.end(), partial.begin(), partial.end());
-  // did we have odd number of samples?
-  // if yes, then the last element of partially-sorted vector is the median
-  // it no, then the average of the last two elements is the median
-  if(v.size() % 2 == 1)
-    return partial.back();
-  return (partial[partial.size() - 2] + partial[partial.size() - 1]) / 2.0;
+    template <typename DigestT, typename ClockT>
+void BufferedStat<DigestT, ClockT>::append(double value, TimePoint now) {
+  if (UNLIKELY(now > expiry_.load(std::memory_order_relaxed).tp)) {
+    std::unique_lock<SharedMutex> g(mutex_, std::try_to_lock_t());
+    if (g.owns_lock()) {
+      doUpdate(now, g);
+    }
+  }
+  digestBuilder_.append(value);
 }
+    
+    #pragma once
+    
+    #include <atomic>
+#include <memory>
+#include <mutex>
+#include <queue>
