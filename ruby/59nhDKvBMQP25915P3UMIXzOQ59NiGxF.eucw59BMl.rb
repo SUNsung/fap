@@ -1,82 +1,168 @@
 
         
-            options[:title] = false
-    options[:root_title] = 'Node.js'
-    options[:container] = '#apicontent'
-    options[:skip] = %w(index.html all.html documentation.html synopsis.html)
-    
-        def length
-      @entries.length
-    end
-    
-        def as_json
-      { name: name, path: path, type: type }
-    end
-  end
-end
-
-    
-      def test_truncate_beyond_eof
-    Tempfile.create('test-truncate') {|f|
-      f.print 'abc'
-      f.truncate 10
-      assert_equal('\0' * 7, f.read(100), '[ruby-dev:24532]')
-    }
-  end
-    
-      it 'interprets Julian-Gregorian gap dates using Gregorian proleptic calendar' do
-    Time.send(@method, 1582, 10, 14, 12).to_i.should == -12219336000 # 2299160j
-  end
-    
-          def handle_jwt_bearer(req)
-        jwt_string = req['client_assertion']
-        jwt = JSON::JWT.decode jwt_string, :skip_verification
-        o_auth_app = Api::OpenidConnect::OAuthApplication.find_by(client_id: jwt['iss'])
-        raise Rack::OAuth2::Server::Authorize::BadRequest(:invalid_request) unless o_auth_app
-        public_key = fetch_public_key(o_auth_app, jwt)
-        JSON::JWT.decode(jwt_string, JSON::JWK.new(public_key).to_key)
-        req.update_param('client_id', o_auth_app.client_id)
-        req.update_param('client_secret', o_auth_app.client_secret)
-      end
-    
-            on roles(target_roles) do
-          unless test '[ -f #{file.to_s.shellescape} ]'
-            info 'Uploading #{prerequisite_file} to #{file}'
-            upload! File.open(prerequisite_file), file
-          end
+                def test_url_sub_key_for_sqlite3
+          spec = resolve :production, 'production' => { 'url' => 'sqlite3:foo?encoding=utf8' }
+          assert_equal({
+            'adapter'  => 'sqlite3',
+            'database' => 'foo',
+            'encoding' => 'utf8',
+            'name'     => 'production' }, spec)
         end
-      end
-    end
     
-      desc 'Publish the release.'
-  task :publishing do
+            dot_notation.each_key do |key|
+          table_name, column_name = key.split('.'.freeze)
+          value = attributes.delete(key)
+          attributes[table_name] ||= {}
+    
+        Pirate.create!(parrot_ids: [parrot.id], catchphrase: 'Arrrr')
+    assert_equal 0, parrot.reload.updated_count
   end
     
-          it 'sets the variable as the default' do
-        expect(dsl.fetch(:scm)).to eq :svn
+      before_destroy :overwrite_to_raise
+    
+      test 'disallow unknown args' do
+    [ 'send_updates', Object.new, nil ].each do |invalid|
+      e = assert_raise ArgumentError do
+        ChatChannel.periodically invalid, every: 1
+      end
+      assert_match(/Expected a Symbol/, e.message)
+    end
+  end
+    
+          assert_not_called(@connection.websocket, :close) do
+        @connection.process_internal_message 'type' => 'unknown'
       end
     end
   end
     
-    module Sinatra
-  class Application < Base
+        def subscribed
+      @room = Room.new params[:id]
+      @lines = []
+    end
     
-        it 'Returns nil when Referer header is invalid' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
-      expect(subject.referrer(env)).to be_nil
+      test '#restart shuts down pub/sub adapter' do
+    assert_called(@server.pubsub, :shutdown) do
+      @server.restart
     end
   end
 end
 
     
-        it 'denies requests with sneaky encoded session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.%73ession=SESSION_TOKEN'
-      expect(last_response).not_to be_ok
+      def complete_option(method)
+    if self.respond_to? 'complete_#{method}'.to_sym
+      self.send('complete_#{method}'.to_sym)
     end
-    
-      it 'denies requests with a changing Accept-Language header' do
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'b'
-    expect(session).to be_empty
   end
+    
+        # Required
+    #  Put your agent logic in here, it must not return. If it does your agent will be restarted.
+    def run; end
+    
+      def import
+    if params[:file]
+      file = params[:file]
+      content = JSON.parse(file.read)
+      new_credentials = content.map do |hash|
+        current_user.user_credentials.build(hash.slice('credential_name', 'credential_value', 'mode'))
+      end
+    
+    def prelude(f, out)
+  @exprs = {}
+  lex_state_def = false
+  while line = f.gets
+    case line
+    when /\A%%/
+      out << '%%' << $/
+      return
+    when /\A%token/
+      out << line.sub(/<\w+>/, '<val>')
+    when /\A%type/
+      out << line.sub(/<\w+>/, '<val>')
+    when /^enum lex_state_(?:bits|e) \{/
+      lex_state_def = true
+      out << line
+    when /^\}/
+      lex_state_def = false
+      out << line
+    else
+      out << line
+    end
+    if lex_state_def
+      case line
+      when /^\s*(EXPR_\w+),\s+\/\*(.+)\*\//
+        @exprs[$1.chomp('_bit')] = $2.strip
+      when /^\s*(EXPR_\w+)\s+=\s+(.+)$/
+        name = $1
+        val = $2.chomp(',')
+        @exprs[name] = 'equals to ' + (val.start_with?('(') ? '<tt>#{val}</tt>' : '+#{val}+')
+      end
+    end
+  end
+end
+    
+      it 'evaluates body if expression is true' do
+    a = []
+    if true
+      a << 123
+    end
+    a.should == [123]
+  end
+    
+      before :all do
+    begin
+      leaked = Process.waitall
+      puts 'leaked before wait specs: #{leaked}' unless leaked.empty?
+      with_feature :mjit do
+        # Ruby-space should not see PIDs used by mjit
+        leaked.should be_empty
+      end
+    rescue NotImplementedError
+    end
+  end
+    
+    #
+# SortedSet implements a Set that guarantees that its elements are
+# yielded in sorted order (according to the return values of their
+# #<=> methods) when iterating over them.
+#
+# All elements that are added to a SortedSet must respond to the <=>
+# method for comparison.
+#
+# Also, all elements must be <em>mutually comparable</em>: <tt>el1 <=>
+# el2</tt> must not return <tt>nil</tt> for any elements <tt>el1</tt>
+# and <tt>el2</tt>, else an ArgumentError will be raised when
+# iterating over the SortedSet.
+#
+# == Example
+#
+#   require 'set'
+#
+#   set = SortedSet.new([2, 1, 5, 6, 4, 5, 3, 3, 3])
+#   ary = []
+#
+#   set.each do |obj|
+#     ary << obj
+#   end
+#
+#   p ary # => [1, 2, 3, 4, 5, 6]
+#
+#   set2 = SortedSet.new([1, 2, '3'])
+#   set2.each { |obj| } # => raises ArgumentError: comparison of Fixnum with String failed
+#
+class SortedSet < Set
+  @@setup = false
+  @@mutex = Mutex.new
+    
+      def test_eq
+    set1 = Set[2,3,1]
+    set2 = Set[1,2,3]
+    
+      def type
+    'Emoji'
+  end
+    
+            expect_updated_sign_in_at(user)
+        expect(Redis.current.zcard(FeedManager.instance.key(:home, user.account_id))).to eq 3
+        expect(Redis.current.get('account:#{user.account_id}:regeneration')).to be_nil
+      end
+    end
