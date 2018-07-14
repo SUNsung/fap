@@ -1,116 +1,123 @@
 
         
-            def _close_server_sock_ignore_errors(self):
-        try:
-            self.server_sock.close()
-        except IOError:
-            pass
+            history = model.fit(x, y, sample_weight={'output2': np.array([weight])})
     
-            assert response.raw.closed
+        symbolic_weights = bi_convlstm_layer.weights
+    assert (len(symbolic_weights) == len(weight_tensor_bi_convlstm_new))
+    weight_value_tuples += zip(symbolic_weights, weight_tensor_bi_convlstm_new)
     
-        See https://github.com/requests/requests/issues/1979.
-    '''
-    text_401 = (b'HTTP/1.1 401 UNAUTHORIZED\r\n'
-                b'Content-Length: 0\r\n'
-                b'WWW-Authenticate: Digest nonce='6bf5d6e4da1ce66918800195d6b9130d''
-                b', opaque='372825293d1c26955496c80ed6426e9e', '
-                b'realm='me@kennethreitz.com', qop=auth\r\n\r\n')
-    
-    # Syntax sugar.
-_ver = sys.version_info
-    
-            # Don't do any URL preparation for non-HTTP schemes like `mailto`,
-        # `data` etc to work around exceptions from `url_parse`, which
-        # handles RFC 3986 only.
-        if ':' in url and not url.lower().startswith('http'):
-            self.url = url
-            return
-    
-    response = get_json_from_api('%s/domains/%s/applications' %
-                             (broker_url, response[0]['id']), username, password)
-    
-        to remove replace in this file ismount( -> os.path.ismount( and remove this
-    function'''
+    mse = MSE = mean_squared_error
+mae = MAE = mean_absolute_error
+mape = MAPE = mean_absolute_percentage_error
+msle = MSLE = mean_squared_logarithmic_error
+cosine = cosine_proximity
     
     
-def sort_groups(groups):
-    return sorted(groups, key=lambda g: (g.depth, g.priority, g.name))
+def get_example_array():
+    np.random.seed(3537)
+    example_array = np.random.random((100, 100)) * 100. - 50.
+    example_array[0, 0] = 0.  # 0 could possibly cause trouble
+    return example_array
     
-    try:
-    from __main__ import display
-except ImportError:
-    from ansible.utils.display import Display
-    display = Display()
+        # One dimensional arrays are supposed to raise a value error
+    with pytest.raises(ValueError):
+        f = K.function([x], [activations.softmax(x)])
     
-            if 'latency' in request.args:
-            latency = float(request.args['latency'][0])
-            reactor.callLater(latency, self._finish, request)
-            return NOT_DONE_YET
+    # (c) 2015, Marc Abramowitz <marca@surveymonkey.com>
+#
+# This file is part of Ansible.
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible. If not, see <http://www.gnu.org/licenses/>.
     
-                # create and prepare request
-            args.remove('self')
-            if set(args).issubset(set(kwargs)):
-                request = Request(**kwargs)
-    
-        def download_delay(self):
-        if self.randomize_delay:
-            return random.uniform(0.5 * self.delay, 1.5 * self.delay)
-        return self.delay
-    
-    
-def _parse(url):
-    ''' Return tuple of (scheme, netloc, host, port, path),
-    all in bytes except for port which is int.
-    Assume url is from Request.url, which was passed via safe_url_string
-    and is ascii-only.
-    '''
-    url = url.strip()
-    parsed = urlparse(url)
-    return _parsed_url_args(parsed)
+    # (c) 2013, Michael Scherer <misc@zarb.org>
+#
+# This file is part of Ansible,
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
     
     
-# XXX: move it to w3lib?
-_ajax_crawlable_re = re.compile(six.u(r'<meta\s+name=['\']fragment['\']\s+content=['\']!['\']/?>'))
-def _has_ajaxcrawlable_meta(text):
-    '''
-    >>> _has_ajaxcrawlable_meta('<html><head><meta name='fragment'  content='!'/></head><body></body></html>')
-    True
-    >>> _has_ajaxcrawlable_meta('<html><head><meta name='fragment' content='!'></head></html>')
-    True
-    >>> _has_ajaxcrawlable_meta('<html><head><!--<meta name='fragment'  content='!'/>--></head><body></body></html>')
-    False
-    >>> _has_ajaxcrawlable_meta('<html></html>')
-    False
-    '''
+def main():
+    '''Main program body.'''
+    api_key = get_api_key()
     
-    See documentation in docs/topics/downloader-middleware.rst
+        indent = None
+    if format:
+        indent = 4
+    
+    
+class FullJitterBackoffStrategyTestCase(unittest.TestCase):
+    def test_no_retries(self):
+        strategy = _full_jitter_backoff(retries=0)
+        result = list(strategy())
+        self.assertEquals(result, [], 'list should be empty')
+    
+        # matched_new_or_template is used to silence two false positives:
+    # - New operators
+    # - Template arguments with function types
+    #
+    # For template arguments, we match on types immediately following
+    # an opening bracket without any spaces.  This is a fast way to
+    # silence the common case where the function type is the first
+    # template argument.  False negative with less-than comparison is
+    # avoided because those operators are usually followed by a space.
+    #
+    #   function<double(double)>   // bracket + no space = false positive
+    #   value < double(42)         // bracket + space = true positive
+    matched_new_or_template = match.group(1)
+    
+        def test_b_observers_shall_be_attachable(cls):
+        cls.s.attach(cls.dec_obs)
+        cls.assertEqual(isinstance(cls.s._observers[0], DecimalViewer), True)
+        cls.assertEqual(len(cls.s._observers), 1)
+        cls.s.attach(cls.hex_obs)
+        cls.assertEqual(isinstance(cls.s._observers[1], HexViewer), True)
+        cls.assertEqual(len(cls.s._observers), 2)
+    
+        def __init__(self, name, action):
+        self.name = name
+        self.action = action
+    
+    
+def main():
+    message_center = Provider()
+    
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
 '''
     
-    import socket
-import ctypes
-import os
+        def __get__(self, obj, T):
+        def transaction(*args, **kwargs):
+            state = memento(obj)
+            try:
+                return self.method(obj, *args, **kwargs)
+            except Exception as e:
+                state()
+                raise e
     
-    
-    def specialStateTransition(self, s, input):
-        return -1
-    
-                    else:
-                    self.c = self.input.LA(1)
-    
-    A Parser needs a TokenStream as input (which in turn is usually fed by a
-Lexer):
-    
-            self.expecting = expecting
-    
-    def download_pdf(link, location, name):
-    try:
-        response = requests.get(link)
-        with open(os.path.join(location, name), 'wb') as f:
-        	f.write(response.content)
-        	f.close()
-    except HTTPError:
-        print('>>> Error 404: cannot be downloaded!\n') 
-        raise   
-    except socket.timeout:
-        print(' '.join(('can't download', link, 'due to connection timeout!')) )
-        raise
+        print(root_specification.is_satisfied_by(andrey))
+    print(root_specification.is_satisfied_by(ivan))
+    print(root_specification.is_satisfied_by(vasiliy))
