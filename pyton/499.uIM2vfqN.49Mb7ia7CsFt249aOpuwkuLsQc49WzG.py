@@ -1,134 +1,89 @@
 
         
-                String:                    '#4e9a06',        # class: 's'
-        String.Backtick:           '#4e9a06',        # class: 'sb'
-        String.Char:               '#4e9a06',        # class: 'sc'
-        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
-        String.Double:             '#4e9a06',        # class: 's2'
-        String.Escape:             '#4e9a06',        # class: 'se'
-        String.Heredoc:            '#4e9a06',        # class: 'sh'
-        String.Interpol:           '#4e9a06',        # class: 'si'
-        String.Other:              '#4e9a06',        # class: 'sx'
-        String.Regex:              '#4e9a06',        # class: 'sr'
-        String.Single:             '#4e9a06',        # class: 's1'
-        String.Symbol:             '#4e9a06',        # class: 'ss'
-    
-    
-def unicode_is_ascii(u_string):
-    '''Determine if unicode string only contains ASCII characters.
-    
-    # Bibliographic Dublin Core info.
-epub_title = project
-epub_author = author
-epub_publisher = author
-epub_copyright = copyright
-    
+        print('Enter the PKCS1 private key, followed by a blank line:')
+privkey = b''
+while True:
     try:
-    import threading
-except ImportError:
-    import dummy_threading as threading
+        line = input()
+    except EOFError:
+        break
+    if line == '':
+        break
+    privkey += line.encode('ascii') + b'\n'
+privkey = rsa.PrivateKey.load_pkcs1(privkey)
     
-            return dict(
-            (attr, getattr(self, attr, None))
-            for attr in self.__attrs__
-        )
     
-    ESTIMATORS = {
-    'dummy': DummyClassifier(),
-    'random_forest': RandomForestClassifier(n_estimators=100,
-                                            max_features='sqrt',
-                                            min_samples_split=10),
-    'extra_trees': ExtraTreesClassifier(n_estimators=100,
-                                        max_features='sqrt',
-                                        min_samples_split=10),
-    'logistic_regression': LogisticRegression(),
-    'naive_bayes': MultinomialNB(),
-    'adaboost': AdaBoostClassifier(n_estimators=10),
-}
+atom_template = textwrap.dedent('''\
+    <?xml version='1.0' encoding='utf-8'?>
+    <feed xmlns='http://www.w3.org/2005/Atom'>
+        <link rel='self' href='http://rg3.github.io/youtube-dl/update/releases.atom' />
+        <title>youtube-dl releases</title>
+        <id>https://yt-dl.org/feed/youtube-dl-updates-feed</id>
+        <updated>@TIMESTAMP@</updated>
+        @ENTRIES@
+    </feed>''')
     
-        for ns in n_samples:
-        for nf in n_features:
-            it += 1
-            print('==================')
-            print('Iteration %s of %s' % (it, max(len(n_samples),
-                                          len(n_features))))
-            print('==================')
-            n_informative = nf // 10
-            X, Y, coef_ = make_regression(n_samples=ns, n_features=nf,
-                                          n_informative=n_informative,
-                                          noise=0.1, coef=True)
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
-        results = benchmark([METRICS[k] for k in args.metrics],
-                        [FORMATS[k] for k in args.formats],
-                        args.samples, args.classes, args.density,
-                        args.n_times)
+    from test.helper import assertRegexpMatches
     
-    for i, n in enumerate(n_samples):
-    for j, p in enumerate(n_features):
-        X = np.random.normal(size=(n, p))
-        t0 = time.time()
-        ward.fit(X)
-        scikits_time[j, i] = time.time() - t0
-        t0 = time.time()
-        hierarchy.ward(X)
-        scipy_time[j, i] = time.time() - t0
     
-        (opts, args) = op.parse_args()
-    if len(args) > 0:
-        op.error('this script takes no arguments.')
-        sys.exit(1)
-    opts.n_components = type_auto_or_int(opts.n_components)
-    opts.density = type_auto_or_float(opts.density)
-    selected_transformers = opts.selected_transformers.split(',')
+class CNNBlogsIE(InfoExtractor):
+    _VALID_URL = r'https?://[^\.]+\.blogs\.cnn\.com/.+'
+    _TEST = {
+        'url': 'http://reliablesources.blogs.cnn.com/2014/02/09/criminalizing-journalism/',
+        'md5': '3e56f97b0b6ffb4b79f4ea0749551084',
+        'info_dict': {
+            'id': 'bestoftv/2014/02/09/criminalizing-journalism.cnn',
+            'ext': 'mp4',
+            'title': 'Criminalizing journalism?',
+            'description': 'Glenn Greenwald responds to comments made this week on Capitol Hill that journalists could be criminal accessories.',
+            'upload_date': '20140209',
+        },
+        'expected_warnings': ['Failed to download m3u8 information'],
+        'add_ie': ['CNN'],
+    }
     
-    print('consensus score: {:.1f}'.format(score))
     
-        When fixed_n_classes is not None the first labeling is considered a ground
-    truth class assignment with fixed number of classes.
+def has_level_handler(logger):
+    '''Check if there is a handler in the logging chain that will handle the
+    given logger's :meth:`effective level <~logging.Logger.getEffectiveLevel>`.
     '''
-    random_labels = np.random.RandomState(seed).randint
-    scores = np.zeros((len(n_clusters_range), n_runs))
+    level = logger.getEffectiveLevel()
+    current = logger
     
-    from concurrent.futures import (as_completed, ThreadPoolExecutor,
-                                ProcessPoolExecutor)
+        filename = os.path.join(model_name, 'digits_over_latent.png')
+    # display a 30x30 2D manifold of digits
+    n = 30
+    digit_size = 28
+    figure = np.zeros((digit_size * n, digit_size * n))
+    # linearly spaced coordinates corresponding to the 2D plot
+    # of digit classes in the latent space
+    grid_x = np.linspace(-4, 4, n)
+    grid_y = np.linspace(-4, 4, n)[::-1]
     
-    # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
-    
-    from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
-    
-          new_candidates.append( new_candidate )
-    
-    
-class OmniCompletionRequest( CompletionRequest ):
-  def __init__( self, omni_completer, request_data ):
-    super( OmniCompletionRequest, self ).__init__( request_data )
-    self._omni_completer = omni_completer
+    print('Loading data...')
+(x_train, y_train), (x_test, y_test) = reuters.load_data(num_words=max_words,
+                                                         test_split=0.2)
+print(len(x_train), 'train sequences')
+print(len(x_test), 'test sequences')
     
     
-def ParseArguments():
-  parser = argparse.ArgumentParser()
-  parser.add_argument( '--skip-build', action = 'store_true',
-                       help = 'Do not build ycmd before testing' )
-  parser.add_argument( '--coverage', action = 'store_true',
-                       help = 'Enable coverage report' )
-  parser.add_argument( '--no-flake8', action = 'store_true',
-                       help = 'Do not run flake8' )
-    
-        exception = RuntimeError( 'Check client handles exception' )
-    with patch.object( ycm._message_poll_request,
-                       '_response_future',
-                       new = MockAsyncServerResponseException( exception ) ):
-      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
-  '''
-  return mock.MagicMock( wraps = FakeFuture( True, None, exception ) )
-    
-    # Looooong poll
-TIMEOUT_SECONDS = 60
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+def test_sparse_categorical_crossentropy_4d():
+    y_pred = K.variable(np.array([[[[0.7, 0.1, 0.2],
+                                    [0.0, 0.3, 0.7],
+                                    [0.1, 0.1, 0.8]],
+                                   [[0.3, 0.7, 0.0],
+                                    [0.3, 0.4, 0.3],
+                                    [0.2, 0.5, 0.3]],
+                                   [[0.8, 0.1, 0.1],
+                                    [1.0, 0.0, 0.0],
+                                    [0.4, 0.3, 0.3]]]]))
+    y_true = K.variable(np.array([[[0, 1, 0],
+                                   [2, 1, 0],
+                                   [2, 2, 1]]]))
+    expected_loss = - (np.log(0.7) + np.log(0.3) + np.log(0.1) +
+                       np.log(K.epsilon()) + np.log(0.4) + np.log(0.2) +
+                       np.log(0.1) + np.log(K.epsilon()) + np.log(0.3)) / 9
+    loss = K.eval(losses.sparse_categorical_crossentropy(y_true, y_pred))
+    assert np.isclose(expected_loss, np.mean(loss))
