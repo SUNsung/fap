@@ -1,196 +1,156 @@
-#include <fstream>  // NOLINT(readability/streams)
-#include <string>
-    
-    void read_image(std::ifstream* image_file, std::ifstream* label_file,
-        uint32_t index, uint32_t rows, uint32_t cols,
-        char* pixels, char* label) {
-  image_file->seekg(index * rows * cols + 16);
-  image_file->read(pixels, rows * cols);
-  label_file->seekg(index + 8);
-  label_file->read(label, 1);
+
+        
+        void leveldb_options_set_paranoid_checks(
+    leveldb_options_t* opt, unsigned char v) {
+  opt->rep.paranoid_checks = v;
 }
     
-    template <typename Dtype>
-class Layer;
-    
-    
-    { protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual inline bool reverse_dimensions() { return false; }
-  virtual void compute_output_shape();
-};
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #ifdef USE_CUDNN
-/**
- * @brief cuDNN implementation of SoftmaxLayer.
- *        Fallback to SoftmaxLayer for CPU mode.
- */
-template <typename Dtype>
-class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
- public:
-  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
-      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSoftmaxLayer();
+      DBIter(DBImpl* db, const Comparator* cmp, Iterator* iter, SequenceNumber s,
+         uint32_t seed)
+      : db_(db),
+        user_comparator_(cmp),
+        iter_(iter),
+        sequence_(s),
+        direction_(kForward),
+        valid_(false),
+        rnd_(seed),
+        bytes_counter_(RandomPeriod()) {
+  }
+  virtual ~DBIter() {
+    delete iter_;
+  }
+  virtual bool Valid() const { return valid_; }
+  virtual Slice key() const {
+    assert(valid_);
+    return (direction_ == kForward) ? ExtractUserKey(iter_->key()) : saved_key_;
+  }
+  virtual Slice value() const {
+    assert(valid_);
+    return (direction_ == kForward) ? iter_->value() : saved_value_;
+  }
+  virtual Status status() const {
+    if (status_.ok()) {
+      return iter_->status();
+    } else {
+      return status_;
     }
+  }
     
-    template<> inline
-dnnError_t dnnPoolingCreateBackward<double>(
-    dnnPrimitive_t* pPooling,
-    dnnPrimitiveAttributes_t attributes,
-    dnnAlgorithm_t op,
-    const dnnLayout_t srcLayout,
-    const size_t kernelSize[],
-    const size_t kernelStride[],
-    const int inputOffset[],
-    const dnnBorder_t border_type)
+      // When user keys are different, but correctly ordered
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('hello', 200, kTypeValue)));
+    
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
+}
+    
+    TEST(WriteBatchTest, Corruption) {
+  WriteBatch batch;
+  batch.Put(Slice('foo'), Slice('bar'));
+  batch.Delete(Slice('box'));
+  WriteBatchInternal::SetSequence(&batch, 200);
+  Slice contents = WriteBatchInternal::Contents(&batch);
+  WriteBatchInternal::SetContents(&batch,
+                                  Slice(contents.data(),contents.size()-1));
+  ASSERT_EQ('Put(foo, bar)@200'
+            'ParseError()',
+            PrintContents(&batch));
+}
+    
+    #if defined(__linux)
+    time_t now = time(NULL);
+    fprintf(stderr, 'Date:           %s', ctime(&now));  // ctime() adds newline
+    
+    #endif  // STORAGE_LEVELDB_INCLUDE_FILTER_POLICY_H_
+
+    
+    
+    
+    
+    
+    
+    
+        virtual void DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color);
+    
+        void DrawTitle(const char *string);
+	virtual void Step(Settings* settings);
+	virtual void Keyboard(unsigned char key) { B2_NOT_USED(key); }
+	virtual void KeyboardUp(unsigned char key) { B2_NOT_USED(key); }
+	void ShiftMouseDown(const b2Vec2& p);
+	virtual bool MouseDown(const b2Vec2& p);
+	virtual void MouseUp(const b2Vec2& p);
+	void MouseMove(const b2Vec2& p);
+	void LaunchBomb();
+	void LaunchBomb(const b2Vec2& position, const b2Vec2& velocity);
+	
+	void SpawnBomb(const b2Vec2& worldPt);
+	void CompleteBombSpawn(const b2Vec2& p);
+    
+    		b2BodyDef bd;
+		bd.type = b2_dynamicBody;
+		bd.position = body1->GetPosition();
+		bd.angle = body1->GetAngle();
+    
+    			b2Body* body = NULL;
+			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+            // Rendering
+        ImGui::Render();
+        g_pd3dDevice->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+        g_pd3dDevice->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
+        ImGui_ImplDX10_RenderDrawData(ImGui::GetDrawData());
+    
+    
+    {    return 0;
+}
+
+    
+    
+    {    return S_OK;
+}
+    
+    
+    {    return true;
+}
+    
+    void ImGui_ImplGlfw_Shutdown()
 {
-    return dnnPoolingCreateBackward_F64(
-        pPooling,
-        attributes,
-        op,
-        srcLayout,
-        kernelSize,
-        kernelStride,
-        inputOffset,
-        border_type);
+    for (ImGuiMouseCursor cursor_n = 0; cursor_n < ImGuiMouseCursor_COUNT; cursor_n++)
+    {
+        glfwDestroyCursor(g_MouseCursors[cursor_n]);
+        g_MouseCursors[cursor_n] = NULL;
+    }
+    g_ClientApi = GlfwClientApi_Unknown;
 }
     
-    // magic numbers for headers
-const WORD magicFile = 0xACE9;       // file header, only expected at beginning of file
-const WORD magicSection = 0x4ACE;    // section headers, all other header types
-const WORD magicIncomplete = 0xBAD1; // use a section header for the file that isn't valid until we close it properly
-    
-    #include <vector>
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    #ifndef BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-#define BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-    
-    template <typename Stream>
-class buffered_write_stream;
-    
-      std::size_t check_for_completion(
-      const boost::system::error_code& ec,
-      std::size_t total_transferred)
-  {
-    return detail::adapt_completion_condition_result(
-        completion_condition_(ec, total_transferred));
-  }
-    
-      // Return the maximum size for data in the buffer.
-  size_type capacity() const
-  {
-    return buffer_.size();
-  }
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'CIwTexture*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
     
     
-    {} // namespace boost_asio_handler_invoke_helpers
+    {    ::wakeupLock_delete(object_);
+}
     
-      // The type of a const iterator over the hash map.
-  typedef typename std::list<value_type>::const_iterator const_iterator;
+    //
+//  boost_exception.cpp
+//  comm
+//
+//  Created by yanguoyue on 16/5/20.
+//
     
-      errno = 0;
-#if defined(__SYMBIAN32__)
-  int result = error_wrapper(::fcntl(d, F_GETFL, 0), ec);
-  if (result >= 0)
-  {
-    errno = 0;
-    int flag = (value ? (result | O_NONBLOCK) : (result & ~O_NONBLOCK));
-    result = error_wrapper(::fcntl(d, F_SETFL, flag), ec);
-  }
-#else // defined(__SYMBIAN32__)
-  ioctl_arg_type arg = (value ? 1 : 0);
-  int result = error_wrapper(::ioctl(d, FIONBIO, &arg), ec);
-#endif // defined(__SYMBIAN32__)
-    
-    /**
- * @brief Iterate the discovered decorators for a given point type.
- *
- * The configuration maintains various sources, each may contain a set of
- * decorators. The source tracking is abstracted for the decorator iterator.
- *
- * @param point request execution of decorators for this given point.
- * @param time an optional time for points using intervals.
- * @param source restrict run to a specific config source.
- */
-void runDecorators(DecorationPoint point,
-                   size_t time = 0,
-                   const std::string& source = '');
-    
-    #include 'osquery/core/utils.h'
-#include 'osquery/tests/test_util.h'
-    
-    Status WmiResultItem::GetVectorOfStrings(const std::string& name,
-                                         std::vector<std::string>& ret) const {
-  std::wstring property_name = stringToWstring(name);
-  VARIANT value;
-  HRESULT hr = result_->Get(property_name.c_str(), 0, &value, nullptr, nullptr);
-  if (hr != S_OK) {
-    return Status(-1, 'Error retrieving data from WMI query.');
-  }
-  if (value.vt != (VT_BSTR | VT_ARRAY)) {
-    VariantClear(&value);
-    return Status(-1, 'Invalid data type returned.');
-  }
-  long lbound, ubound;
-  SafeArrayGetLBound(value.parray, 1, &lbound);
-  SafeArrayGetUBound(value.parray, 1, &ubound);
-  long count = ubound - lbound + 1;
-    }
-    
-    namespace osquery {
-    }
-    
-      ec = std::make_shared<TypedKernelEventContext<EventType>>();
-  ec->event_type = event_type;
-  ec->time = event->time.time;
-  ec->uptime = event->time.uptime;
-  memcpy(&(ec->event), event->buf, sizeof(EventType));
-  ec->flexible_data.insert(ec->flexible_data.begin(),
-                           event->buf + sizeof(EventType),
-                           event->buf + event->size);
-    
-    #include 'osquery/events/linux/syslog.h'
-#include 'osquery/tests/test_util.h'
-    
-      state->stackTrace.push_back(absoluteProgramCounter);
-    
-    #include <yoga/Yoga.h>
-    
-    class Countable : public noncopyable, public nonmovable {
-public:
-  // RefPtr expects refcount to start at 0
-  Countable() : m_refcount(0) {}
-  virtual ~Countable()
-  {
-    FBASSERT(m_refcount == 0);
-  }
-    }
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
