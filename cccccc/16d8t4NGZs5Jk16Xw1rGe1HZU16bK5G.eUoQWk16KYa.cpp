@@ -1,185 +1,228 @@
 
         
-        
-    {  /// Return a hash code of any components from these options that should
-  /// contribute to a Swift Bridging PCH hash.
-  llvm::hash_code getPCHHashComponents() const {
-    // Nothing here that contributes anything significant when emitting the PCH.
-    return llvm::hash_value(0);
-  }
-};
-    
-    
-    {}
-    
-    #endif // SWIFT_INDEX_INDEXDATACONSUMER_H
+        // Generate param traits log methods.
+#include 'ipc/param_traits_log_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
 
     
-    /**
- * Disables or enables auto flush. By default, data is flushed after
- * every bidirectional_stream_write(). If the auto flush is disabled,
- * the client should explicitly call bidirectional_stream_flush to flush
- * the data.
- */
-GRPC_SUPPORT_EXPORT void bidirectional_stream_disable_auto_flush(
-    bidirectional_stream* stream,
-    bool disable_auto_flush);
+        base::FilePath shortcutPath(path);
+    result->AppendBoolean(base::win::CreateOrUpdateShortcutLink(shortcutPath, props, 
+      base::PathExists(shortcutPath) ? base::win::SHORTCUT_UPDATE_EXISTING : base::win::SHORTCUT_CREATE_ALWAYS));
+#else
+    result->AppendBoolean(false);
+#endif
+    return;
+  } else if (method == 'GetPackage') {
+    result->AppendString(shell->GetPackage()->package_string());
+    return;
+  } else if (method == 'SetCrashDumpDir') {
+    std::string path;
+    arguments.GetString(0, &path);
+    //FIXME: result->AppendBoolean(SetCrashDumpPath(path.c_str()));
+    return;
+  } else if (method == 'RegisterGlobalHotKey') {
+    int object_id = -1;
+    arguments.GetInteger(0, &object_id);
+    Shortcut* shortcut =
+        static_cast<Shortcut*>(DispatcherHost::GetApiObject(object_id));
+    bool success = GlobalShortcutListener::GetInstance()->RegisterAccelerator(
+                       shortcut->GetAccelerator(), shortcut);
+    if (!success)
+      shortcut->OnFailed('Register global desktop keyboard shortcut failed.');
     
-    
-    {  GetReporter()->ReportQPSPerCore(*result);
-  GetReporter()->ReportLatency(*result);
+    namespace content {
+class RenderFrameHost;
 }
     
-    std::vector<grpc::string_ref> SecureAuthContext::GetPeerIdentity() const {
-  if (!ctx_) {
-    return std::vector<grpc::string_ref>();
-  }
-  grpc_auth_property_iterator iter = grpc_auth_context_peer_identity(ctx_);
-  std::vector<grpc::string_ref> identity;
-  const grpc_auth_property* property = nullptr;
-  while ((property = grpc_auth_property_iterator_next(&iter))) {
-    identity.push_back(
-        grpc::string_ref(property->value, property->value_length));
-  }
-  return identity;
+    
+    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return;
+  item->OnClick();
 }
     
-      // gRPC Python
-  grpc_python_generator::GeneratorConfiguration grpc_py_config;
-  grpc_python_generator::PythonGrpcGenerator grpc_py_generator(grpc_py_config);
-  cli.RegisterGenerator('--grpc_python_out', &grpc_py_generator,
-                        'Generate Python source file.');
+       bool IsItemForCommandIdDynamic(int command_id) const override;
+   base::string16 GetLabelForCommandId(int command_id) const override;
+   bool GetIconForCommandId(int command_id,
+                                   gfx::Image* icon) const override;
     
-    extern JSClass  *jsb_cocosbuilder_CCBAnimationManager_class;
-extern JSObject *jsb_cocosbuilder_CCBAnimationManager_prototype;
+    NwMenuModel::NwMenuModel(Delegate* delegate) : SimpleMenuModel(delegate) {
+}
     
-    
-    
-        argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_isBackgroundMusicPlaying'', nullptr);
-            return 0;
-        }
-        bool ret = cobj->isBackgroundMusicPlaying();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:isBackgroundMusicPlaying',argc, 0);
-    return 0;
+     protected:
+  ~NwClipboardGetListSyncFunction() override;
     
     
-#endif // __cocos2dx_experimental_h__
+    {    private:
+      DISALLOW_COPY_AND_ASSIGN(NwScreenInitEventListenersFunction);      
+  };
+    
+    #endif // BITCOIN_INDIRECTMAP_H
 
     
-    
-    
-        GLfloat                glVertices[] = {
-        aabb->lowerBound.x * mRatio, aabb->lowerBound.y * mRatio,
-        aabb->upperBound.x * mRatio, aabb->lowerBound.y * mRatio,
-        aabb->upperBound.x * mRatio, aabb->upperBound.y * mRatio,
-        aabb->lowerBound.x * mRatio, aabb->upperBound.y * mRatio
-    };
-    
-    #include <cstdlib>
-    
-    			b2FixtureDef fd;
-			fd.shape = &shape;
-    
-      // Compares img with the baseline image and saves the resulting distance map
-  // inside the object. The provided image must have the same dimensions as the
-  // baseline image.
-  virtual void Compare(const OutputImage& img) = 0;
-    
-    // convolve with size*size kernel
-std::vector<float> Convolve2D(const std::vector<float>& image, int w, int h,
-                              const double* kernel, int size) {
-  auto result = image;
-  int size2 = size / 2;
-  for (size_t i = 0; i < image.size(); i++) {
-    int x = i % w;
-    int y = i / w;
-    // Avoid non-normalized results at boundary by skipping edges.
-    if (x < size2 || x + size - size2 - 1 >= w
-        || y < size2 || y + size - size2 - 1 >= h) {
-      continue;
-    }
-    float v = 0;
-    for (int j = 0; j < size * size; j++) {
-      int x2 = x + j % size - size2;
-      int y2 = y + j / size - size2;
-      v += static_cast<float>(kernel[j]) * image[y2 * w + x2];
-    }
-    result[i] = v;
+    // Called on every log record (each one of which is a WriteBatch)
+// found in a kDescriptorFile.
+static void VersionEditPrinter(uint64_t pos, Slice record, WritableFile* dst) {
+  std::string r = '--- offset ';
+  AppendNumberTo(&r, pos);
+  r += '; ';
+  VersionEdit edit;
+  Status s = edit.DecodeFrom(record);
+  if (!s.ok()) {
+    r += s.ToString();
+    r.push_back('\n');
+  } else {
+    r += edit.DebugString();
   }
-  return result;
+  dst->Append(r);
 }
     
-    namespace guetzli {
-    }
-    
-    size_t HistogramEntropyCost(const JpegHistogram& histo,
-                            const uint8_t depths[256]);
-size_t HistogramHeaderCost(const JpegHistogram& histo);
-    
-    // Used to encapsulate a particular instance of an opened database.
-//
-// This object should not be used directly in C++; it exists solely to provide
-// a mapping from a JavaScript object to a C++ code that can use the RocksDB
-// API.
-class DBWrapper : public node::ObjectWrap {
-  public:
-    static void Init(Handle<Object> exports);
-    }
-    
-     private:
-  // A version of PartialMerge that actually performs 'partial merging'.
-  // Use this to simulate the exact behaviour of the StringAppendOperator.
-  bool _AssocPartialMergeMulti(const Slice& key,
-                               const std::deque<Slice>& operand_list,
-                               std::string* new_value, Logger* logger) const;
-    
-     public: // Delete / Remove / Pop / Trim
-  /// Trim (list: key) so that it will only contain the indices from start..stop
-  /// Returns true on success
-  /// May throw RedisListException
-  bool Trim(const std::string& key, int32_t start, int32_t stop);
-    
-    #include 'rocksjni/statisticsjni.h'
-    
-      class StatisticsJni : public StatisticsImpl {
-   public:
-     StatisticsJni(std::shared_ptr<Statistics> stats);
-     StatisticsJni(std::shared_ptr<Statistics> stats,
-         const std::set<uint32_t> ignore_histograms);
-     virtual bool HistEnabledForType(uint32_t type) const override;
-    }
-    
-    void SyncPoint::Process(const std::string& point, void* cb_arg) {
-  impl_->Process(point, cb_arg);
+    Status TableCache::Get(const ReadOptions& options,
+                       uint64_t file_number,
+                       uint64_t file_size,
+                       const Slice& k,
+                       void* arg,
+                       void (*saver)(void*, const Slice&, const Slice&)) {
+  Cache::Handle* handle = NULL;
+  Status s = FindTable(file_number, file_size, &handle);
+  if (s.ok()) {
+    Table* t = reinterpret_cast<TableAndFile*>(cache_->Value(handle))->table;
+    s = t->InternalGet(options, k, arg, saver);
+    cache_->Release(handle);
+  }
+  return s;
 }
     
-      class LoggerJniCallback : public JniCallback, public Logger {
-   public:
-     LoggerJniCallback(JNIEnv* env, jobject jLogger);
-     ~LoggerJniCallback();
+    #ifndef STORAGE_LEVELDB_DB_TABLE_CACHE_H_
+#define STORAGE_LEVELDB_DB_TABLE_CACHE_H_
+    
+    
+    {    done_++;
+    if (done_ >= next_report_) {
+      if      (next_report_ < 1000)   next_report_ += 100;
+      else if (next_report_ < 5000)   next_report_ += 500;
+      else if (next_report_ < 10000)  next_report_ += 1000;
+      else if (next_report_ < 50000)  next_report_ += 5000;
+      else if (next_report_ < 100000) next_report_ += 10000;
+      else if (next_report_ < 500000) next_report_ += 50000;
+      else                            next_report_ += 100000;
+      fprintf(stderr, '... finished %d ops%30s\r', done_, '');
+      fflush(stderr);
+    }
+  }
+    
+      // The name of the comparator.  Used to check for comparator
+  // mismatches (i.e., a DB created with one comparator is
+  // accessed using a different comparator.
+  //
+  // The client of this package should switch to a new name whenever
+  // the comparator implementation changes in a way that will cause
+  // the relative ordering of any two keys to change.
+  //
+  // Names starting with 'leveldb.' are reserved and should not be used
+  // by any clients of this package.
+  virtual const char* Name() const = 0;
+    
+      // Return a pointer to the beginning of the referenced data
+  const char* data() const { return data_; }
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times ...) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (M) @f$
+   *      the inputs @f$ x_2 @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (M \times ...) @f$:
+   *      the reindexed array @f$
+   *        y = x_1[x_2]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+      /**
+   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
+   *
+   * Computes the gradients with respect to the two input vectors (bottom[0] and
+   * bottom[1]), but not the similarity label (bottom[2]).
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
+   *      as @f$ \lambda @f$ is the coefficient of this layer's output
+   *      @f$\ell_i@f$ in the overall Net loss
+   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
+   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
+   *      (*Assuming that this top Blob is not used as a bottom (input) by any
+   *      other layer of the Net.)
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$a@f$; Backward fills their diff with
+   *      gradients if propagate_down[0]
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$b@f$; Backward fills their diff with gradients if
+   *      propagate_down[1]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #include <vector>
+    
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLCNLayer : public LRNLayer<Dtype> {
+ public:
+  explicit CuDNNLCNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
+        tempData1(NULL), tempData2(NULL) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLCNLayer();
     }
     
-        ~Config(void);
     
-    void assertInternal(const char* formatstr ...) {
-    va_list va_args;
-    va_start(va_args, formatstr);
-    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
-    va_end(va_args);
-    if (gAssertHandler != NULL) {
-        gAssertHandler(sAssertBuf);
-    }
-    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
-    // crash at this specific address so that we can find our crashes easier
-    *(int*)0xdeadb00c = 0;
-    // let the compiler know we won't reach the end of the function
-     __builtin_unreachable();
+    {}  // namespace caffe
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the computed outputs @f$
+   *        y = \gamma ^ {\alpha x + \beta}
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    #include <xgboost/logging.h>
+#include 'src/common/random.h'
+#include './xgboost_R.h'
+    
+      float float2[2] = {1.0f, 2.0f};
+  EXPECT_EQ(info.GetWeight(1), 1.0f)
+    << 'When no weights are given, was expecting default value 1';
+  info.SetInfo('weight', float2, xgboost::kFloat32, 2);
+  EXPECT_EQ(info.GetWeight(1), 2.0f);
+    
+    bool SimpleDMatrix::ColBatchIter::Next() {
+  if (data_ >= 1) return false;
+  data_ += 1;
+  return true;
 }
