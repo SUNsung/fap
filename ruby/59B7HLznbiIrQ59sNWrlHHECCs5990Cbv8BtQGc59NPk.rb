@@ -1,114 +1,145 @@
 
         
-                adapter = adapter.camelize
-        adapter = 'PostgreSQL' if adapter == 'Postgresql'
-        'ActionCable::SubscriptionAdapter::#{adapter}'.constantize
+              raise Discourse::InvalidParameters.new(:to_address) unless args[:to_address].present?
+    
+        options[:attribution] = <<-HTML
+      &copy; 2011&ndash;2018 Twitter, Inc.<br>
+      &copy; 2011&ndash;2018 The Bootstrap Authors<br>
+      Code licensed under the MIT License.<br>
+      Documentation licensed under the Creative Commons Attribution License v3.0.
+    HTML
+    
+        version do
+      self.links = {
+        home: 'https://haxe.org',
+        code: 'https://github.com/HaxeFoundation/haxe'
+      }
+    
+        def initialize(name = nil, path = nil, type = nil)
+      self.name = name
+      self.path = path
+      self.type = type
+    
+        def add(path, content)
+      @pages[path] = content
+    end
+    
+            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
+          node.before(node.children).remove
+        end
+    
+        def find_remote!(username, domain)
+      find_remote(username, domain) || raise(ActiveRecord::RecordNotFound)
+    end
+    
+      def preview_url
+    if object.needs_redownload?
+      media_proxy_url(object.id, :small)
+    else
+      full_asset_url(object.file.url(:small))
+    end
+  end
+    
+        File.write(dest, Oj.dump(map))
+    puts 'Wrote emojo to destination! (#{dest})'
+  end
+end
+
+    
+      attr_reader :user
+    
+      # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/follow_request
+  def follow_request
+    f = Follow.last
+    NotificationMailer.follow_request(f.target_account, Notification.find_by(activity: f))
+  end
+    
+          less.gsub /&:extend\((#{SELECTOR_RE})(?: all)?\)/ do
+        selector = $1
+        selector =~ /\.([\w-]+)/
+        mixin    = $1
+        if mixin && mixin_names.include?(mixin)
+          '@include #{mixin}'
+        else
+          '@extend #{selector}'
+        end
+      end
+    end
+    
+      def setup
+    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
+    success = Dir.chdir DUMMY_PATH do
+      silence_stdout_if !ENV['VERBOSE'] do
+        system 'node', 'manifest.js', tmp_dir
+      end
+    end
+    assert success, 'Node.js Mincer compilation failed'
+    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
+    css_name = manifest['assets']['application.css']
+    @css = File.read('#{tmp_dir}/#{css_name}')
+  end
+end
+
+    
+          File.open('bower.json', 'w') do |f|
+        f.puts JSON.pretty_generate(spec)
       end
     end
   end
 end
 
     
-        test 'merging a hash with unknown keys raises' do
-      assert_raises(ArgumentError) { Relation::HashMerger.new(nil, omg: 'lol') }
-    end
-    
-      private
-    def log_before_remove(record)
-      log << 'before_remove#{record.id}'
-    end
-    
-    class Reply < Topic
-  belongs_to :topic, foreign_key: 'parent_id', counter_cache: true
-  belongs_to :topic_with_primary_key, class_name: 'Topic', primary_key: 'title', foreign_key: 'parent_title', counter_cache: 'replies_count', touch: true
-  has_many :replies, class_name: 'SillyReply', dependent: :destroy, foreign_key: 'parent_id'
-  has_many :silly_unique_replies, dependent: :destroy, foreign_key: 'parent_id'
-end
-    
-      before_create  :default_written_on
-  before_destroy :destroy_children
-    
-        @connection.stub(:subscriptions, subscriptions) do
-      @channel = SecretChannel.new @connection, '{id: 1}', id: 1
-      @channel.subscribe_to_channel
-    
-      def with_puma_server(rack_app = ActionCable.server, port = 3099)
-    server = ::Puma::Server.new(rack_app, ::Puma::Events.strings)
-    server.add_tcp_listener '127.0.0.1', port
-    server.min_threads = 1
-    server.max_threads = 4
-    
-          wait_for_async
-      assert_predicate connection.websocket, :alive?
-    end
-  end
-    
-          # Find commands in the path
-      unless (exts = external_commands).empty?
-        puts
-        puts 'External commands'
-        puts_columns exts
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
       end
     end
   end
-    
-        # Exclude cache, logs, and repository, if they are located under the prefix.
-    [HOMEBREW_CACHE, HOMEBREW_LOGS, HOMEBREW_REPOSITORY].each do |dir|
-      dirs.delete dir.relative_path_from(HOMEBREW_PREFIX).to_s
-    end
-    dirs.delete 'etc'
-    dirs.delete 'var'
-    
-          puts_columns Array(result)
-    else
-      query = ARGV.first
-      rx = query_regexp(query)
-      local_results = search_formulae(rx)
-      puts_columns(local_results)
-      tap_results = search_taps(rx)
-      puts_columns(tap_results)
-    
-        if !updated
-      puts 'Already up-to-date.'
-    elsif hub.empty?
-      puts 'No changes to formulae.'
-    else
-      hub.dump
-      hub.reporters.each(&:migrate_tap_migration)
-      hub.reporters.each(&:migrate_formula_rename)
-      Descriptions.update_cache(hub)
-    end
-    
-      # Use this method to generate standard caveats.
-  def standard_instructions(home_name, home_value = libexec)
-    <<-EOS.undent
-      Before you can use these tools you must export some variables to your $SHELL.
-    
-    def check_ruby
-  if RUBY_VERSION.to_f < 2.0
-    print 'You are currently using Ruby ', RUBY_VERSION, ', but version 2.0 or above is required.'
-    exit 1
-  end
 end
     
-          def initialize(pairs = {})
-        @pairs = pairs
-        pairs.each do |key, value|
-          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
-          send(:'#{key}=', value)
+        def post_render(page)
+      OctopressFilters::post_filter(page)
+    end
+  end
+    
+          unless file.file?
+        return 'File #{file} could not be found'
+      end
+    
+    class LogStash::PluginManager::Generate < LogStash::PluginManager::Command
+    
+    module LogStash
+  module Api
+    module Commands
+      module System
+        class Plugins < Commands::Base
+          def run
+            { :total => plugins.count, :plugins => plugins }
+          end
+    
+          origin = caller[1]
+      if origin =~ /rubygems\/custom_require/
+        origin = caller[3]
+        if origin.nil?
+          STDERR.puts 'Unknown origin'
+          STDERR.puts caller.join('\n')
         end
+      end
+      origin = origin.gsub(/:[0-9]+:in .*/, '') if origin
     
-        # Remove directories opposite from traversal, so that a subtree with no
-    # actual files gets removed correctly.
-    dirs.reverse_each do |d|
-      if d.children.empty?
-        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
-        d.rmdir
+      def file_sha1(path)
+    digest = Digest::SHA1.new
+    fd = File.new(path, 'r')
+    while true
+      begin
+        digest << fd.sysread(16384)
+      rescue EOFError
+        break
       end
     end
-    
-      def tag?(tag)
-    checksum_for(tag) ? true : false
+    return digest.hexdigest
+  ensure
+    fd.close if fd
   end
-    
-    module Jekyll
