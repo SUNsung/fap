@@ -1,199 +1,226 @@
 
         
-          fname = DescriptorFileName('bar', 100);
-  ASSERT_EQ('bar/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(100, number);
-  ASSERT_EQ(kDescriptorFile, type);
+          /// Resize the array to size elements.
+  /// New elements are initialized to null.
+  /// May only be called on nullValue or arrayValue.
+  /// \pre type() is arrayValue or nullValue
+  /// \post type() is arrayValue
+  void resize(ArrayIndex size);
     
-    namespace leveldb {
+     private:
+  const EnumDescriptor* descriptor_;
+    
+    
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+    
+    #include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_repeated_enum_field.h>
+    
+    // TODO(jonskeet): Refactor repeated field support; all the implementations are *really* similar. We
+// should probably have a RepeatedFieldGeneratorBase.
+class RepeatedEnumFieldGenerator : public FieldGeneratorBase {
+ public:
+  RepeatedEnumFieldGenerator(const FieldDescriptor* descriptor,
+                             int fieldOrdinal,
+                             const Options *options);
+  ~RepeatedEnumFieldGenerator();
     }
     
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/csharp/csharp_field_base.h>
     
-    {  ASSERT_TRUE(Overlaps('100', '150'));
-  ASSERT_TRUE(Overlaps('100', '200'));
-  ASSERT_TRUE(Overlaps('100', '300'));
-  ASSERT_TRUE(Overlaps('100', '400'));
-  ASSERT_TRUE(Overlaps('100', '500'));
-  ASSERT_TRUE(Overlaps('375', '400'));
-  ASSERT_TRUE(Overlaps('450', '450'));
-  ASSERT_TRUE(Overlaps('450', '500'));
+    #include <google/protobuf/compiler/java/java_doc_comment.h>
+    
+      virtual void Generate(io::Printer* printer);
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+    }
+    }
+    }
+    }
+    
+      // Returns the distance map between the baseline image and the image in the
+  // last Compare() call (or the baseline image, if Compare() was not called
+  // yet).
+  // The dimensions of the distance map are the same as the baseline image.
+  // The interpretation of the distance values depend on the comparator used.
+  virtual const std::vector<float> distmap() const = 0;
+    
+    void OutputImageComponent::ToPixels(int xmin, int ymin, int xsize, int ysize,
+                                    uint8_t* out, int stride) const {
+  assert(xmin >= 0);
+  assert(ymin >= 0);
+  assert(xmin < width_);
+  assert(ymin < height_);
+  const int yend1 = ymin + ysize;
+  const int yend0 = std::min(yend1, height_);
+  int y = ymin;
+  for (; y < yend0; ++y) {
+    const int xend1 = xmin + xsize;
+    const int xend0 = std::min(xend1, width_);
+    int x = xmin;
+    int px = y * width_ + xmin;
+    for (; x < xend0; ++x, ++px, out += stride) {
+      *out = static_cast<uint8_t>((pixels_[px] + 8 - (x & 1)) >> 4);
+    }
+    const int offset = -stride;
+    for (; x < xend1; ++x) {
+      *out = out[offset];
+      out += stride;
+    }
+  }
+  for (; y < yend1; ++y) {
+    const int offset = -stride * xsize;
+    for (int x = 0; x < xsize; ++x) {
+      *out = out[offset];
+      out += stride;
+    }
+  }
 }
     
-    // Page size. Default 1 KB
-static int FLAGS_page_size = 1024;
-    
-    namespace leveldb {
+      // Map of areas where the image is red enough (blue in case of u channel).
+  std::vector<bool> redmap(image[0].size(), false);
+  for (int y = 0; y < h; y++) {
+    for (int x = 0; x < w; x++) {
+      size_t index = y * w + x;
+      float u = yuv[1][index];
+      float v = yuv[2][index];
+    }
     }
     
-    // Asserts that a given statement causes the program to exit, with an
-// integer exit status that satisfies predicate, and emitting error output
-// that matches regex.
-# define ASSERT_EXIT(statement, predicate, regex) \
-    GTEST_DEATH_TEST_(statement, predicate, regex, GTEST_FATAL_FAILURE_)
+    #include <stddef.h>
+#include <stdint.h>
     
-    #define EXPECT_EQ(expected, actual) \
-  EXPECT_PRED_FORMAT2(::testing::internal:: \
-                      EqHelper<GTEST_IS_NULL_LITERAL_(expected)>::Compare, \
-                      expected, actual)
-#define EXPECT_NE(expected, actual) \
-  EXPECT_PRED_FORMAT2(::testing::internal::CmpHelperNE, expected, actual)
-#define EXPECT_LE(val1, val2) \
-  EXPECT_PRED_FORMAT2(::testing::internal::CmpHelperLE, val1, val2)
-#define EXPECT_LT(val1, val2) \
-  EXPECT_PRED_FORMAT2(::testing::internal::CmpHelperLT, val1, val2)
-#define EXPECT_GE(val1, val2) \
-  EXPECT_PRED_FORMAT2(::testing::internal::CmpHelperGE, val1, val2)
-#define EXPECT_GT(val1, val2) \
-  EXPECT_PRED_FORMAT2(::testing::internal::CmpHelperGT, val1, val2)
+    inline int Log2Floor(uint32_t n) {
+  return n == 0 ? -1 : Log2FloorNonZero(n);
+}
     
-      // Returns true if FilePath ends with a path separator, which indicates that
-  // it is intended to represent a directory. Returns false otherwise.
-  // This does NOT check that a directory (or file) actually exists.
-  bool IsDirectory() const;
+    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
+// quantization table must have 3 * kDCTBlockSize values.
+bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     const int* quant, JPEGData* jpg);
     
-        // No implementation - assignment is unsupported.
-    void operator=(const Iterator& other);
+    /**
+ * Get current exceptions being handled.  front() is the most recent exception.
+ * There should be at most one unless rethrowing.
+ */
+std::vector<ExceptionInfo> getCurrentExceptions();
     
-    #include 'gtest/internal/gtest-port.h'
+    // See portability/Unistd.h for why these need to be in a namespace
+// rather then extern 'C'.
+namespace folly {
+namespace portability {
+namespace fcntl {
+int creat(char const* fn, int pm);
+int fcntl(int fd, int cmd, ...);
+int posix_fallocate(int fd, off_t offset, off_t len);
+int open(char const* fn, int of, int pm = 0);
+}
+}
+}
     
-    
-    {]]
-};
-    
-    
-    {    return -1;
+      folly::Optional<T> try_take_for(std::chrono::milliseconds time) override {
+    T item;
+    while (!queue_.readIfNotEmpty(item)) {
+      if (!sem_.try_wait_for(time)) {
+        return folly::none;
+      }
+    }
+    return std::move(item);
   }
     
-    #include <set>
     
+    {
+    {      argumentEvaluated = false;
+      XLOGC_IF(
+          DBG1, conds[i] || conds[j], 'testing conditional %d', getValue());
+      EXPECT_EQ((conds[i] || conds[j]) ? 1 : 0, messages.size());
+      messages.clear();
+      if (conds[i] || conds[j]) {
+        EXPECT_TRUE(argumentEvaluated);
+      } else {
+        EXPECT_FALSE(argumentEvaluated);
+      }
+    }
+  }
     
-    {  return 0;
+    MockClock::time_point MockClock::Now = MockClock::time_point{};
+    
+        /**
+     * Change action for file descriptor fd.
+     *
+     * 'action' may be another file descriptor number (dup2()ed before the
+     * child execs), or one of CLOSE, PIPE_IN, and PIPE_OUT.
+     *
+     * CLOSE: close the file descriptor in the child
+     * PIPE_IN: open a pipe *from* the child
+     * PIPE_OUT: open a pipe *to* the child
+     *
+     * PIPE is a shortcut; same as PIPE_IN for stdin (fd 0), same as
+     * PIPE_OUT for stdout (fd 1) or stderr (fd 2), and an error for
+     * other file descriptors.
+     */
+    Options& fd(int fd, int action);
+    
+    #include 'AuthResolver.h'
+    
+    void AbstractBtMessage::setBtMessageFactory(BtMessageFactory* factory)
+{
+  messageFactory_ = factory;
 }
+    
+      BtMessageDispatcher* dispatcher_;
+    
+    void AbstractHttpServerResponseCommand::updateReadWriteCheck()
+{
+  if (httpServer_->wantRead()) {
+    if (!readCheck_) {
+      readCheck_ = true;
+      e_->addSocketForReadCheck(socket_, this);
+    }
+  }
+  else if (readCheck_) {
+    readCheck_ = false;
+    e_->deleteSocketForReadCheck(socket_, this);
+  }
+  if (httpServer_->wantWrite()) {
+    if (!writeCheck_) {
+      writeCheck_ = true;
+      e_->addSocketForWriteCheck(socket_, this);
+    }
+  }
+  else if (writeCheck_) {
+    writeCheck_ = false;
+    e_->deleteSocketForWriteCheck(socket_, this);
+  }
+}
+    
+    bool AbstractProxyRequestCommand::executeInternal()
+{
+  // socket->setBlockingMode();
+  if (httpConnection_->sendBufferIsEmpty()) {
+    auto httpRequest = make_unique<HttpRequest>();
+    httpRequest->setUserAgent(getOption()->get(PREF_USER_AGENT));
+    httpRequest->setRequest(getRequest());
+    httpRequest->setProxyRequest(proxyRequest_);
+    }
+    }
+    
+    protected:
+  virtual bool executeInternal() CXX11_OVERRIDE;
+    
+    #endif // D_ANON_DISK_WRITER_FACTORY_H
 
     
-    template <class T, class F>
-double sum(const T& container, F functor) {
-  double r = 0;
-  for (auto v = container.begin(); v != container.end(); v++) {
-    r += functor(*v);
-  }
-  return r;
-}
+    #endif // DOWNLOAD_EVENT_LISTENER_H
+
     
-    #include 'src/cpp/util/core_stats.h'
-    
-    bool js_cocos2dx_physics3d_Physics3DConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DConstraint_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DConstraint(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DConstraint_setEnabled(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_setBreakingImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getBreakingImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getBodyA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_isEnabled(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getOverrideNumSolverIterations(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getBodyB(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_setOverrideNumSolverIterations(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getConstraintType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getbtContraint(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    bool js_cocos2dx_studio_ArmatureAnimation_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_ArmatureAnimation_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_ArmatureAnimation(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_ArmatureAnimation_getSpeedScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_play(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_gotoAndPause(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_playWithIndexes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_setAnimationData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_setSpeedScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_getAnimationData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_gotoAndPlay(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_playWithNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_getMovementCount(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_playWithIndex(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_getCurrentMovementID(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_ArmatureAnimation(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    {        ok &= luaval_to_boolean(tolua_S, 2,&arg0, 'cc.PhysicsShape:setSensor');
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsShape_setSensor'', nullptr);
-            return 0;
-        }
-        cobj->setSensor(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.PhysicsShape:setSensor',argc, 1);
-    return 0;
-    
-    
-    
-    /// Random number in range [-1,1]
-inline float32 RandomFloat()
-{
-	float32 r = (float32)(std::rand() & (RAND_LIMIT));
-	r /= RAND_LIMIT;
-	r = 2.0f * r - 1.0f;
-	return r;
-}
-    
-    class AddPair : public Test
-{
-public:
-    }
-    
-    	static Test* Create()
-	{
-		return new BulletTest;
-	}
-    
-      YGNodeCalculateLayout(root, 200, 100, YGDirectionLTR);
-    
-        double top;
-    double bottom;
-    
-        method(getWidth);
-    method(getHeight);
-    
-    class Countable : public noncopyable, public nonmovable {
-public:
-  // RefPtr expects refcount to start at 0
-  Countable() : m_refcount(0) {}
-  virtual ~Countable()
-  {
-    FBASSERT(m_refcount == 0);
-  }
-    }
-    
-    
-    {private:
-  const char* m_functionName;
-  const char* m_fileName;
-  int m_lineNumber;
-};
-    
-    private:
-  void initialize() {
-    int ret = pthread_key_create(&m_key, m_cleanup);
-    if (ret != 0) {
-      const char *msg = '(unknown error)';
-      switch (ret) {
-      case EAGAIN:
-        msg = 'PTHREAD_KEYS_MAX (1024) is exceeded';
-        break;
-      case ENOMEM:
-        msg = 'Out-of-memory';
-        break;
-      }
-      (void) msg;
-      FBASSERTMSGF(0, 'pthread_key_create failed: %d %s', ret, msg);
-    }
-  }
+      virtual ~AppleTLSContext();
