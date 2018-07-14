@@ -1,186 +1,181 @@
 
         
-        versions_info['signature'] = signature
-with open('update/versions.json', 'w') as versionsf:
-    json.dump(versions_info, versionsf, indent=4, sort_keys=True)
-
+                    return self.server_sock.accept()[0]
+        except (select.error, socket.error):
+            return None
     
-        # Are checkable fields missing from the test case definition?
-    test_info_dict = dict((key, value if not isinstance(value, compat_str) or len(value) < 250 else 'md5:' + md5(value))
-                          for key, value in got_dict.items()
-                          if value and key in ('id', 'title', 'description', 'uploader', 'upload_date', 'timestamp', 'uploader_id', 'location', 'age_limit'))
-    missing_keys = set(test_info_dict.keys()) - set(expected_dict.keys())
-    if missing_keys:
-        def _repr(v):
-            if isinstance(v, compat_str):
-                return ''%s'' % v.replace('\\', '\\\\').replace(''', '\\'').replace('\n', '\\n')
-            else:
-                return repr(v)
-        info_dict_str = ''
-        if len(missing_keys) != len(expected_dict):
-            info_dict_str += ''.join(
-                '    %s: %s,\n' % (_repr(k), _repr(v))
-                for k, v in test_info_dict.items() if k not in missing_keys)
+    from requests.structures import CaseInsensitiveDict, LookupDict
     
+        def test_cookielib_cookiejar_on_redirect(self, httpbin):
+        '''Tests resolve_redirect doesn't fail when merging cookies
+        with non-RequestsCookieJar cookiejar.
     
-class C56IE(InfoExtractor):
-    _VALID_URL = r'https?://(?:(?:www|player)\.)?56\.com/(?:.+?/)?(?:v_|(?:play_album.+-))(?P<textid>.+?)\.(?:html|swf)'
-    IE_NAME = '56.com'
-    _TESTS = [{
-        'url': 'http://www.56.com/u39/v_OTM0NDA3MTY.html',
-        'md5': 'e59995ac63d0457783ea05f93f12a866',
-        'info_dict': {
-            'id': '93440716',
-            'ext': 'flv',
-            'title': '网事知多少 第32期：车怒',
-            'duration': 283.813,
-        },
-    }, {
-        'url': 'http://www.56.com/u47/v_MTM5NjQ5ODc2.html',
-        'md5': '',
-        'info_dict': {
-            'id': '82247482',
-            'title': '爱的诅咒之杜鹃花开',
-        },
-        'playlist_count': 7,
-        'add_ie': ['Sohu'],
-    }]
+            return response
     
-        def _real_extract(self, url):
-        display_id = self._match_id(url)
+        close_server = threading.Event()
+    server = Server(response_handler, wait_to_close_event=close_server)
     
-            select = self._search_regex(
-            r'(?s)<select[^>]+id='select-version'[^>]*>(.+?)</select>',
-            webpage, 'select version', default=None)
-        if select:
-            entry_ids = set()
-            entries = []
-            for mobj in re.finditer(
-                    r'<option[^>]+value=(['\'])(?P<id>[0-9a-z_]+)(?:#.+?)?\1[^>]*>(?P<title>[^<]+)',
-                    webpage):
-                entry_id = mobj.group('id')
-                if entry_id in entry_ids:
-                    continue
-                entry_ids.add(entry_id)
-                entries.append({
-                    '_type': 'url_transparent',
-                    'url': 'kaltura:%s:%s' % (partner_id, entry_id),
-                    'ie_key': 'Kaltura',
-                    'title': mobj.group('title'),
-                })
-            if entries:
-                return self.playlist_result(entries, display_id, title)
+        implementation_info = _implementation()
+    urllib3_info = {'version': urllib3.__version__}
+    chardet_info = {'version': chardet.__version__}
     
-    from .common import InfoExtractor
-from ..utils import (
-    float_or_none,
-    parse_iso8601,
-)
-    
-        plugin_manager.register(Plugin)
-    try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-            '--auth',
-            BASIC_AUTH_HEADER_VALUE,
+        # 'I want us to put a big-ol' comment on top of it that
+    # says that this behaviour is dumb but we need to preserve
+    # it because people are relying on it.'
+    #    - Lukasa
+    #
+    # These are here solely to maintain backwards compatibility
+    # for things like ints. This will be removed in 3.0.0.
+    if not isinstance(username, basestring):
+        warnings.warn(
+            'Non-string usernames will no longer be supported in Requests '
+            '3.0.0. Please convert the object you've passed in ({0!r}) to '
+            'a string or bytes object in the near future to avoid '
+            'problems.'.format(username),
+            category=DeprecationWarning,
         )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
+        username = str(username)
     
-            yield self.process_body(body)
-
+    # -------
+# Pythons
+# -------
     
+            #: A list of :class:`Response <Response>` objects from
+        #: the history of the Request. Any redirect responses will end
+        #: up here. The list is sorted from the oldest to the most recent request.
+        self.history = []
     
-def patharg(path):
-    '''
-    Back slashes need to be escaped in ITEM args,
-    even in Windows paths.
+        For example, ``headers['content-encoding']`` will return the
+    value of a ``'Content-Encoding'`` response header, regardless
+    of how the header name was originally stored.
     
-        exc = Timeout('Request timed out')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR_TIMEOUT
-    assert error_msg == 'Request timed out (30s).'
-
+        elif hasattr(o, 'len'):
+        total_length = o.len
     
-        def get_auth_plugin(self, auth_type):
-        return self.get_auth_plugin_mapping()[auth_type]
+            self.http_dispatcher = HttpsDispatcher(
+            logger, self.config, self.ip_manager, self.connect_manager
+        )
     
-            self.tail.appendleft(delta)
-        self.lasttime = now
-        self.concurrent += 1
+            host = str(host)
+        sni = str(sni)
     
-        def _find_template(self, template):
-        template_file = join(self.templates_dir, '%s.tmpl' % template)
-        if exists(template_file):
-            return template_file
-        print('Unable to find template: %s\n' % template)
-        print('Use 'scrapy genspider --list' to see all available templates.')
+                self.request_task(task)
+            self.request_onway = False
+            self.last_send_time = time_now
+            self.last_recv_time = time_now
     
-            path = self._schemes[scheme]
-        try:
-            dhcls = load_object(path)
-            dh = dhcls(self._crawler.settings)
-        except NotConfigured as ex:
-            self._notconfigured[scheme] = str(ex)
-            return None
-        except Exception as ex:
-            logger.error('Loading '%(clspath)s' for scheme '%(scheme)s'',
-                         {'clspath': path, 'scheme': scheme},
-                         exc_info=True,  extra={'crawler': self._crawler})
-            self._notconfigured[scheme] = str(ex)
-            return None
-        else:
-            self._handlers[scheme] = dh
-        return self._handlers[scheme]
+            # xlog.debug('SendBuffer put len:%d', len(data))
+        self.last_put_time = time.time()
+        with self.mutex:
+            self.pool_size += dlen
+            self.last_block.append(data)
     
-            self._set_connection_attributes(request)
+        def _get(self):
+        fastest_time = 9999
+        fastest_sock = None
+        for sock in self.pool:
+            hs_time = self.pool[sock]
+            if hs_time < fastest_time or not fastest_sock:
+                fastest_time = hs_time
+                fastest_sock = sock
     
-            return jar.make_cookies(response, request)
-
+                    # EOF Transition to accept state?
+                if c == EOF and self.eof[s] >= 0:
+                    #print 'EOF Transition to accept state %d' \
+                    #  % self.accept[self.eof[s]]
+                    return self.accept[self.eof[s]]
     
-    See documentation in docs/topics/downloader-middleware.rst
+        '''
+    data = sorted(data)
+    n = len(data)
+    if n == 0:
+        raise StatisticsError('no median for empty data')
+    if n%2 == 1:
+        return data[n//2]
+    else:
+        i = n//2
+        return (data[i - 1] + data[i])/2
+    
+    The __init__ method has one required argument, a file-like object
+(including a chunk instance), and one optional argument, a flag which
+specifies whether or not chunks are aligned on 2-byte boundaries.  The
+default is 1, i.e. aligned.
 '''
     
-    #
-# NOTE: This is the pi function from the decimal documentation, modified
-# for benchmarking purposes. Since floats do not have a context, the higher
-# intermediate precision from the original is NOT used, so the modified
-# algorithm only gives an approximation to the correctly rounded result.
-# For serious use, refer to the documentation or the appropriate literature.
-#
-def pi_float():
-    '''native float'''
-    lasts, t, s, n, na, d, da = 0, 3.0, 3, 1, 0, 0, 24
-    while s != lasts:
-        lasts = s
-        n, na = n+na, na+8
-        d, da = d+da, da+32
-        t = (t * n) / d
-        s += t
-    return s
+        def _extractrgb(self, mo):
+        return rrggbb_to_triplet(mo.group('hexrgb'))
     
-            ttis = []
-        for i in range(tzh_typecnt):
-            ttis.append(ttinfo._make(struct.unpack('>lbb', fileobj.read(6))))
+        def test_varargs0_ext(self):
+        try:
+            {}.__contains__(*())
+        except TypeError:
+            pass
     
-        def close(self):
-        '''Flush and close the mailbox.'''
-        raise NotImplementedError('Method must be implemented by subclass')
+    T_IV2 = dataclasses.InitVar[int]
+T_IV3 = dataclasses.InitVar
     
-    class IssuesTestCase(BaseTestCase):
-    '''Test fixed bdb issues.'''
+    T_CV2 = ClassVar[int]
+T_CV3 = ClassVar
     
-    @dataclass
-class IV:
-    T_IV4 = InitVar
-    iv0: InitVar[int]
-    iv1: InitVar
-    iv2: T_IV2
-    iv3: T_IV3
-    not_iv4: T_IV4  # When using string annotations, this field is not recognized as an InitVar.
+        expect = textwrap.dedent('''\
+    [
+        [
+            'blorpie'
+        ],
+        [
+            'whoops'
+        ],
+        [],
+        'd-shtaeou',
+        'd-nthiouh',
+        'i-vhbjkhnth',
+        {
+            'nifty': 87
+        },
+        {
+            'morefield': false,
+            'field': 'yes'
+        }
+    ]
+    ''')
+    
+        def find_handler(self, request, **kwargs):
+        for rule in self.rules:
+            target_params = rule.matcher.match(request)
+            if target_params is not None:
+                if rule.target_kwargs:
+                    target_params['target_kwargs'] = rule.target_kwargs
+    
+    
+class AsyncIOLoop(BaseAsyncIOLoop):
+    '''``AsyncIOLoop`` is an `.IOLoop` that runs on an ``asyncio`` event loop.
+    This class follows the usual Tornado semantics for creating new
+    ``IOLoops``; these loops are not necessarily related to the
+    ``asyncio`` default event loop.
+    
+        def _abort(self):
+        '''Instantly aborts the WebSocket connection by closing the socket'''
+        self.client_terminated = True
+        self.server_terminated = True
+        self.stream.close()  # forcibly tear down the connection
+        self.close()  # let the subclass cleanup
+    
+        @gen_test
+    def test_fetch_full_http_url(self):
+        path = 'http://localhost:%d/path' % self.external_port
+    
+        def test_static_with_range_full_file(self):
+        response = self.get_and_head('/static/robots.txt', headers={
+            'Range': 'bytes=0-'})
+        # Note: Chrome refuses to play audio if it gets an HTTP 206 in response
+        # to ``Range: bytes=0-`` :(
+        self.assertEqual(response.code, 200)
+        robots_file_path = os.path.join(self.static_dir, 'robots.txt')
+        with open(robots_file_path) as f:
+            self.assertEqual(response.body, utf8(f.read()))
+        self.assertEqual(response.headers.get('Content-Length'), '26')
+        self.assertEqual(response.headers.get('Content-Range'), None)
+    
+       When using multiple ``parse_*`` functions, pass ``final=False`` to all
+   but the last one, or side effects may occur twice (in particular,
+   this can result in log messages being doubled).
