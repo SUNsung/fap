@@ -1,57 +1,105 @@
 
         
-        class JavaScriptHelperTest < ActionView::TestCase
-  tests ActionView::Helpers::JavaScriptHelper
+            You can read more about this change at:
+      https://www.playframework.com/documentation/2.3.x/Migration23
+      https://www.playframework.com/documentation/2.3.x/Highlights23
+    EOS
+  when 'haskell-platform' then <<-EOS.undent
+    We no longer package haskell-platform. Consider installing ghc
+    and cabal-install instead:
+      brew install ghc cabal-install
     
-    module ActionCable
-  module Server
-    # An instance of this configuration object is available via ActionCable.server.config, which allows you to tweak Action Cable configuration
-    # in a Rails config initializer.
-    class Configuration
-      attr_accessor :logger, :log_tags
-      attr_accessor :connection_class, :worker_pool_size
-      attr_accessor :disable_request_forgery_protection, :allowed_request_origins, :allow_same_origin_as_host
-      attr_accessor :cable, :url, :mount_path
-    
-                klass ||= AssociationQueryValue
-            queries = klass.new(associated_table, value).queries.map do |query|
-              expand_from_hash(query).reduce(&:and)
-            end
-            queries.reduce(&:or)
-          elsif table.aggregated_with?(key)
-            mapping = table.reflect_on_aggregation(key).mapping
-            queries = Array.wrap(value).map do |object|
-              mapping.map do |field_attr, aggregate_attr|
-                if mapping.size == 1 && !object.respond_to?(aggregate_attr)
-                  build(table.arel_attribute(field_attr), object)
-                else
-                  build(table.arel_attribute(field_attr), object.send(aggregate_attr))
-                end
-              end.reduce(&:and)
-            end
-            queries.reduce(&:or)
-          else
-            build(table.arel_attribute(key), value)
-          end
-        end
-      end
-    
-      scope 'approved_as_string', -> { where(approved: true) }
-  scope :anonymous_extension, -> {} do
-    def one
-      1
+      # Allows a bottle tag to specify a specific OS or later,
+  # so the same bottle can target multiple OSs.
+  # Not used in core, used in taps.
+  def find_or_later_tag(tag)
+    begin
+      tag_version = MacOS::Version.from_symbol(tag)
+    rescue ArgumentError
+      return
     end
+    
+    module Homebrew
+  def build_env_keys(env)
+    %w[
+      CC CXX LD OBJC OBJCXX
+      HOMEBREW_CC HOMEBREW_CXX
+      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
+      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
+      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
+      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
+      HOMEBREW_SVN HOMEBREW_GIT
+      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
+      MAKE GIT CPP
+      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
   end
     
-          concurrently(clients) do |c|
-        assert_equal({ 'type' => 'welcome' }, c.read_message)  # pop the first welcome message off the stack
-        c.send_message command: 'subscribe', identifier: JSON.generate(channel: 'ClientTest::EchoChannel')
-        assert_equal({ 'identifier' => '{'channel':'ClientTest::EchoChannel'}', 'type' => 'confirm_subscription' }, c.read_message)
-        c.send_message command: 'message', identifier: JSON.generate(channel: 'ClientTest::EchoChannel'), data: JSON.generate(action: 'ding', message: 'hello')
-        assert_equal({ 'identifier' => '{'channel':'ClientTest::EchoChannel'}', 'message' => { 'dong' => 'hello' } }, c.read_message)
+        # Remove directories opposite from traversal, so that a subtree with no
+    # actual files gets removed correctly.
+    dirs.reverse_each do |d|
+      if d.children.empty?
+        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
+        d.rmdir
+      end
+    end
+    
+          return false unless prune_time
+    
+      def clang
+    @clang ||= MacOS.clang_version if MacOS.has_apple_developer_tools?
+  end
+    
+        if ARGV.named.empty?
+      slow_checks = %w[
+        check_for_broken_symlinks
+        check_missing_deps
+        check_for_outdated_homebrew
+        check_for_linked_keg_only_brews
+      ]
+      methods = (checks.all.sort - slow_checks) + slow_checks
+    else
+      methods = ARGV.named
+    end
+    
+      def self.directory
+    yield @dir
+  end
+    
+      it 'returns subclass instances when called on a subclass' do
+    StringSpecs::MyString.new('hello').capitalize.should be_an_instance_of(StringSpecs::MyString)
+    StringSpecs::MyString.new('Hello').capitalize.should be_an_instance_of(StringSpecs::MyString)
+  end
+end
+    
+            swapcased.should == 'aSSET'
+        swapcased.size.should == 5
+        swapcased.bytesize.should == 5
+        swapcased.ascii_only?.should be_true
+      end
+    end
+    
+    describe 'Net::HTTPResponse#error!' do
+  it 'raises self's class 'EXCEPTION_TYPE' Exception' do
+    res = Net::HTTPUnknownResponse.new('1.0', '???', 'test response')
+    lambda { res.error! }.should raise_error(Net::HTTPError)
+    
+    describe 'Net::HTTPResponse#error_type' do
+  it 'returns self's class 'EXCEPTION_TYPE' constant' do
+    res = Net::HTTPUnknownResponse.new('1.0', '???', 'test response')
+    res.error_type.should == Net::HTTPError
+    
+          # If the importer is based on files on the local filesystem
+      # this method should return folders which should be watched
+      # for changes.
+      #
+      # @return [Array<String>] List of absolute paths of directories to watch
+      def directories_to_watch
+        []
       end
     
-          env = Rack::MockRequest.env_for '/test', 'HTTP_CONNECTION' => 'upgrade', 'HTTP_UPGRADE' => 'websocket',
-        'HTTP_HOST' => 'localhost', 'HTTP_ORIGIN' => 'http://rubyonrails.com'
-    
+      # Uninstalls this logger from \{Sass.logger\}. This should only be called if
+  # the logger was installed using \{#install!}
+  def uninstall!
+    if Sass.logger != self
+      throw Exception.new('Can't uninstall a logger that's not currently installed.')
     end
