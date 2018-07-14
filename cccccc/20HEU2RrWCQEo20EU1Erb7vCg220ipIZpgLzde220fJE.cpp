@@ -1,101 +1,213 @@
 
         
-        //===----------------------------------------------------------------------===//
-//                            Load Store Location
-//===----------------------------------------------------------------------===//
-using LSLocationSet = llvm::DenseSet<LSLocation>;
-using LSLocationList = llvm::SmallVector<LSLocation, 8>;
-using LSLocationIndexMap = llvm::SmallDenseMap<LSLocation, unsigned, 32>;
-using LSLocationBaseMap = llvm::DenseMap<SILValue, LSLocation>;
+        /// Get a parsed documentation comment for the declaration, if there is one.
+Optional<DocComment *>getSingleDocComment(swift::markup::MarkupContext &Context,
+                                          const Decl *D);
     
-    int lapack_LU32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, int* info);
-int lapack_LU64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, int* info);
-int lapack_Cholesky32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, bool* info);
-int lapack_Cholesky64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, bool* info);
-int lapack_SVD32f(float* a, size_t a_step, float* w, float* u, size_t u_step, float* vt, size_t v_step, int m, int n, int flags);
-int lapack_SVD64f(double* a, size_t a_step, double* w, double* u, size_t u_step, double* vt, size_t v_step, int m, int n, int flags);
-int lapack_QR32f(float* src1, size_t src1_step, int m, int n, int k, float* src2, size_t src2_step, float* dst, int* info);
-int lapack_QR64f(double* src1, size_t src1_step, int m, int n, int k, double* src2, size_t src2_step, double* dst, int* info);
-int lapack_gemm32f(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
-                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm64f(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
-                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm32fc(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
-                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm64fc(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
-                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
+      /// Creates a copy of a \c MemoryBuffer and adds it to the \c SourceManager,
+  /// taking ownership of the copy.
+  unsigned addMemBufferCopy(llvm::MemoryBuffer *Buffer);
+    
+    // The compiler generates the swift_once_t values as word-sized zero-initialized
+// variables, so we want to make sure swift_once_t isn't larger than the
+// platform word or the function below might overwrite something it shouldn't.
+static_assert(sizeof(swift_once_t) <= sizeof(void*),
+              'swift_once_t must be no larger than the platform word');
+    
+    #include 'Callee.h'
+#include 'ManagedValue.h'
+#include 'swift/AST/Types.h'
+#include 'swift/Basic/LLVM.h'
+#include 'swift/SIL/SILLocation.h'
+#include <memory>
+    
+    #include 'swift/SIL/InstructionUtils.h'
+#include 'swift/SIL/Projection.h'
+#include 'swift/SILOptimizer/Analysis/AliasAnalysis.h'
+#include 'swift/SILOptimizer/Analysis/EscapeAnalysis.h'
+#include 'swift/SILOptimizer/Analysis/TypeExpansionAnalysis.h'
+#include 'swift/SILOptimizer/Analysis/ValueTracking.h'
+#include 'swift/SILOptimizer/Utils/Local.h'
+#include 'llvm/ADT/DenseMap.h'
+#include 'llvm/ADT/DenseSet.h'
+#include 'llvm/ADT/Hashing.h'
+#include 'llvm/ADT/SmallVector.h'
+#include 'llvm/Support/Debug.h'
+#include <utility> 
     
     
-    {
-    {
-    {  return out;
+    {  ASSERT_TRUE(message.ParseFromString(data));
+  EXPECT_TRUE(message.has_any_value());
+  ASSERT_TRUE(message.any_value().UnpackTo(&any));
+  ASSERT_TRUE(any.UnpackTo(&submessage));
+  EXPECT_EQ(12345, submessage.int32_value());
 }
+    
+      void WriteIntroduction(io::Printer* printer);
+  void WriteDescriptor(io::Printer* printer);
+  void WriteGeneratedCodeInfo(const Descriptor* descriptor,
+                              io::Printer* printer,
+                              bool last);
+    
+    const Options* SourceGeneratorBase::options() {
+  return this->options_;
 }
+    
+    #include '../master_worker/common/RPC.hpp'
+#include 'TH/THStorage.h'
+    
+    #include '../ChannelUtils.hpp'
+#include '../DataChannel.hpp'
+#include 'DataChannelUtils.hpp'
+    
+    #define THCPDoubleStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPDoubleStorageClass)
+#define THCPFloatStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPFloatStorageClass)
+#define THCPHalfStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPHalfStorageClass)
+#define THCPLongStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPLongStorageClass)
+#define THCPIntStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPIntStorageClass)
+#define THCPShortStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPShortStorageClass)
+#define THCPCharStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPCharStorageClass)
+#define THCPByteStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPByteStorageClass)
+    
+    #ifdef _THP_CORE
+#define THPStorageType TH_CONCAT_3(THP,Real,StorageType)
+#define THPStorageBaseStr TH_CONCAT_STRING_2(Real,StorageBase)
+#endif
+    
+    uint32_t Hash(const char* data, size_t n, uint32_t seed) {
+  // Similar to murmur hash
+  const uint32_t m = 0xc6a4a793;
+  const uint32_t r = 24;
+  const char* limit = data + n;
+  uint32_t h = seed ^ (n * m);
+    }
+    
+    double Histogram::StandardDeviation() const {
+  if (num_ == 0.0) return 0;
+  double variance = (sum_squares_ * num_ - sum_ * sum_) / (num_ * num_);
+  return sqrt(variance);
 }
+    
+    
+    {  double Median() const;
+  double Percentile(double p) const;
+  double Average() const;
+  double StandardDeviation() const;
+};
+    
+    #include 'port/port.h'
+#include 'port/thread_annotations.h'
+    
+        // Invariant: we never leave < kHeaderSize bytes in a block.
+    assert(kBlockSize - block_offset_ - kHeaderSize >= 0);
+    
+    #endif  // STORAGE_LEVELDB_DB_LOG_WRITER_H_
 
     
-        void setWidth(double width);
-    void setWidthPercent(double width);
-    void setWidthAuto();
-    void setHeight(double height);
-    void setHeightPercent(double height);
-    void setHeightAuto();
+      const char* data_;
+  size_t size_;
+  uint32_t restart_offset_;     // Offset in data_ of restart array
+  bool owned_;                  // Block owns data_[]
     
-        Size(void)
-    : width(0.0)
-    , height(0.0)
-    {
-    }
+    #include <xgboost/logging.h>
+#include <cctype>
+#include <cstdio>
+#include <string>
+#include './io.h'
     
-        method(copyStyle);
-    
-    void assertInternal(const char* formatstr ...) {
-    va_list va_args;
-    va_start(va_args, formatstr);
-    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
-    va_end(va_args);
-    if (gAssertHandler != NULL) {
-        gAssertHandler(sAssertBuf);
-    }
-    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
-    // crash at this specific address so that we can find our crashes easier
-    *(int*)0xdeadb00c = 0;
-    // let the compiler know we won't reach the end of the function
-     __builtin_unreachable();
+    // try to load weight information from file, if exists
+inline bool MetaTryLoadFloatInfo(const std::string& fname,
+                                 std::vector<bst_float>* data) {
+  std::unique_ptr<dmlc::Stream> fi(dmlc::Stream::Create(fname.c_str(), 'r', true));
+  if (fi == nullptr) return false;
+  dmlc::istream is(fi.get());
+  data->clear();
+  bst_float value;
+  while (is >> value) {
+    data->push_back(value);
+  }
+  return true;
 }
     
-    private:
-  void ref() {
-    ++m_refcount;
-  }
+    // implementing configure.
+template<typename PairIter>
+inline void Learner::Configure(PairIter begin, PairIter end) {
+  std::vector<std::pair<std::string, std::string> > vec(begin, end);
+  this->Configure(vec);
+}
     
-      /**
-   * This runs the closure in a scope with fbjni's classloader. This should be
-   * the same classloader as the rest of the application and thus anything
-   * running in the closure will have access to the same classes as in a normal
-   * java-create thread.
-   */
-  static void WithClassLoader(std::function<void()>&& runnable);
+      virtual void UpdatePredictionCache(
+      const gbm::GBTreeModel& model,
+      std::vector<std::unique_ptr<TreeUpdater>>* updaters,
+      int num_new_trees) = 0;
     
-      static void OnThreadExit(void *obj) {
-    if (NULL != obj) {
-      delete (T*)obj;
+        double sum = 0;
+    for (size_t i = 0; i < kernel.size(); i++) sum += kernel[i];
+    const double mul = 1.0 / sum;
+    
+    #include 'guetzli/gamma_correct.h'
+    
+    namespace guetzli {
     }
-  }
+    
+    #include <stdint.h>
+#include <vector>
+    
+      // Reports dropped bytes to the reporter.
+  // buffer_ must be updated to remove the dropped bytes prior to invocation.
+  void ReportCorruption(size_t bytes, const char* reason);
+  void ReportDrop(size_t bytes, const Status& reason);
     
     
-#define DEFINE_BOXED_PRIMITIVE(LITTLE, BIG)                          \
-  struct J ## BIG : detail::JPrimitive<J ## BIG, j ## LITTLE> {      \
-    static auto constexpr kJavaDescriptor = 'Ljava/lang/' #BIG ';';  \
-    static auto constexpr kValueMethod = #LITTLE 'Value';            \
-    j ## LITTLE LITTLE ## Value() const {                            \
-      return value();                                                \
-    }                                                                \
-  };                                                                 \
-  inline local_ref<jobject> autobox(j ## LITTLE val) {               \
-    return J ## BIG::valueOf(val);                                   \
+    {
+    {    return true;
   }
+// @lint-ignore TXT4 T25377293 Grandfathered in
+};
+    
+    /**
+ * @brief check if fname is exist
+ * @details [long description]
+ *
+ * @param fname [description]
+ * @return [description]
+ */
+Status EnvLibrados::FileExists(const std::string& fname)
+{
+  LOG_DEBUG('[IN]%s\n', fname.c_str());
+  std::string fid, dir, file;
+  split(fname, &dir, &file);
+  Status s = _GetFid(dir + '/' + file, fid);
+    }
+    
+    SyncPoint:: ~SyncPoint() {
+  delete impl_;
+}
+    
+    namespace rocksdb {
+// Kill the process with probability 1/odds for testing.
+extern void TestKillRandom(std::string kill_point, int odds,
+                           const std::string& srcfile, int srcline);
+    }
+    
+    #include 'db/column_family.h'
+#include 'db/db_impl.h'
+#include 'db/db_iter.h'
+#include 'db/dbformat.h'
+#include 'rocksdb/env.h'
+#include 'rocksdb/slice.h'
+#include 'rocksdb/slice_transform.h'
+#include 'table/merging_iterator.h'
+    
+      // An iterator is either positioned at a key/value pair, or
+  // not valid.  This method returns true iff the iterator is valid.
+  // Always returns false if !status().ok().
+  virtual bool Valid() const = 0;
