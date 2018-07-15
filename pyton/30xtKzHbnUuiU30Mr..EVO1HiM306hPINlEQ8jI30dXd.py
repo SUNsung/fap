@@ -1,79 +1,98 @@
 
         
-            # a Model inside a Sequential
-    x = Input(shape=(1,))
-    y = Dense(2)(x)
-    inner_model = Model(x, y)
-    outer_model = Sequential()
-    outer_model.add(inner_model)
-    assert outer_model.trainable_weights == inner_model.trainable_weights
-    inner_model.trainable = False
-    assert outer_model.trainable_weights == []
-    inner_model.trainable = True
-    inner_model.layers[-1].trainable = False
-    assert outer_model.trainable_weights == []
+        if len(sys.argv) == 2 and sys.argv[1] == '--list':
+    print(json.dumps(result))
+elif len(sys.argv) == 3 and sys.argv[1] == '--host':
+    print(json.dumps({}))
+else:
+    print('Need an argument, either --list or --host <host>')
+
     
-            inputs = np.random.random((num_samples, timesteps, input_size))
-        state = model.predict(inputs)
-        np.testing.assert_allclose(
-            keras.backend.eval(layer.states[0]), state, atol=1e-4)
-    
-        indices_for_conversion_to_dense = []
-    for i in range(len(model._feed_inputs)):
-        if issparse(ins[i]) and not K.is_sparse(model._feed_inputs[i]):
-            indices_for_conversion_to_dense.append(i)
-    
-    for i, input_text in enumerate(input_texts):
-    for t, char in enumerate(input_text):
-        encoder_input_data[i, t, input_token_index[char]] = 1.
+        try:
+        s1 = os.lstat(path)
+    except OSError:
+        # the OSError should be handled with more care
+        # it could be a 'permission denied' but path is still a mount
+        return False
+    else:
+        # A symlink can never be a mount point
+        if os.path.stat.S_ISLNK(s1.st_mode):
+            return False
     
     
-def top_k_categorical_accuracy(y_true, y_pred, k=5):
-    return K.mean(K.in_top_k(y_pred, K.argmax(y_true, axis=-1), k), axis=-1)
+class GCPUtilsTestCase(unittest.TestCase):
+    params_dict = {
+        'url_map_name': 'foo_url_map_name',
+        'description': 'foo_url_map description',
+        'host_rules': [
+            {
+                'description': 'host rules description',
+                'hosts': [
+                        'www.example.com',
+                        'www2.example.com'
+                ],
+                'path_matcher': 'host_rules_path_matcher'
+            }
+        ],
+        'path_matchers': [
+            {
+                'name': 'path_matcher_one',
+                'description': 'path matcher one',
+                'defaultService': 'bes-pathmatcher-one-default',
+                'pathRules': [
+                        {
+                            'service': 'my-one-bes',
+                            'paths': [
+                                '/',
+                                '/aboutus'
+                            ]
+                        }
+                ]
+            },
+            {
+                'name': 'path_matcher_two',
+                'description': 'path matcher two',
+                'defaultService': 'bes-pathmatcher-two-default',
+                'pathRules': [
+                        {
+                            'service': 'my-two-bes',
+                            'paths': [
+                                '/webapp',
+                                '/graphs'
+                            ]
+                        }
+                ]
+            }
+        ]
+    }
     
-        # a more explicit example
-    norm_instance = constraints.max_norm(2.0)
-    x = np.array([[0, 0, 0], [1.0, 0, 0], [3, 0, 0], [3, 3, 3]]).T
-    x_normed_target = np.array([[0, 0, 0], [1.0, 0, 0],
-                                [2.0, 0, 0],
-                                [2. / np.sqrt(3),
-                                 2. / np.sqrt(3),
-                                 2. / np.sqrt(3)]]).T
-    x_normed_actual = K.eval(norm_instance(K.variable(x)))
-    assert_allclose(x_normed_actual, x_normed_target, rtol=1e-05)
+        terminal_stdout_re = [
+        re.compile(br'[\r\n]?[\w+\-\.:\/\[\]]+(?:\([^\)]+\)){,3}(?:>|#) ?$'),
+        re.compile(br'\@[\w\-\.]+:\S+?[>#\$] ?$')
+    ]
     
-    from sklearn.datasets import make_multilabel_classification
-from sklearn.metrics import (f1_score, accuracy_score, hamming_loss,
-                             jaccard_similarity_score)
-from sklearn.utils.testing import ignore_warnings
+    #############################################
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
     
-    import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import ticker
+        description = proj_info['description'],
+    keywords = proj_info['keywords'],
     
-        op.add_option('--density',
-                  dest='density', default=1 / 3,
-                  help='Density used by the sparse random projection.'
-                       ' ('auto' or float (0.0, 1.0]')
+        html = get_content(url)
+    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
+    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
+    
+            mp3 = match1(content, r'name='filename'\s*value='([^']+\.mp3)'')
+        if mp3: mp3 = 'http://res.infoq.com/downloads/mp3downloads/%s' % mp3
+    
+    from ..common import *
     
     
-# TASK: Build a vectorizer that splits strings into sequence of 1 to 3
-# characters instead of word tokens
-    
-    iris = datasets.load_iris()
-X = iris.data[:, 0:2]  # we only take the first two features for visualization
-y = iris.target
-    
-    n_samples = 100
-n_clusters_range = np.linspace(2, n_samples, 10).astype(np.int)
-    
-        def test_eq(self):
-        self.assertTrue(self.vhost1b == self.vhost1)
-        self.assertFalse(self.vhost1 == self.vhost2)
-        self.assertEqual(str(self.vhost1b), str(self.vhost1))
-        self.assertFalse(self.vhost1b == 1234)
-    
-        # The font size ('10pt', '11pt' or '12pt').
-    #'pointsize': '10pt',
-    
-    patch_file = 'homeassistant.components.device_tracker.bt_home_hub_5'
+#----------------------------------------------------------------------
+def showroom_download(url, output_dir = '.', merge = False, info_only = False, **kwargs):
+    ''''''
+    if re.match( r'(\w+)://www.showroom-live.com/([-\w]+)', url):
+        room_url_key = match1(url, r'\w+://www.showroom-live.com/([-\w]+)')
+        room_id = showroom_get_roomid_by_room_url_key(room_url_key)
+        showroom_download_by_room_id(room_id, output_dir, merge,
+                                    info_only)
