@@ -1,137 +1,262 @@
 
         
-              # Returns constant of subscription adapter specified in config/cable.yml.
-      # If the adapter cannot be found, this will default to the Redis adapter.
-      # Also makes sure proper dependencies are required.
-      def pubsub_adapter
-        adapter = (cable.fetch('adapter') { 'redis' })
+            # Create a new Collection.
+    #
+    # site - the site to which this collection belongs.
+    # label - the name of the collection
+    #
+    # Returns nothing.
+    def initialize(site, label)
+      @site     = site
+      @label    = sanitize_label(label)
+      @metadata = extract_metadata
+    end
     
-            def test_url_host_db
-          spec = resolve 'abstract://foo/bar?encoding=utf8'
-          assert_equal({
-            'adapter'  => 'abstract',
-            'database' => 'bar',
-            'host'     => 'foo',
-            'encoding' => 'utf8' }, spec)
-        end
+            msg = ' Please append `--trace` to the `#{cmd.name}` command '
+        dashes = '-' * msg.length
+        Jekyll.logger.error '', dashes
+        Jekyll.logger.error 'Jekyll #{Jekyll::VERSION} ', msg
+        Jekyll.logger.error '', ' for any additional information or backtrace. '
+        Jekyll.logger.abort_with '', dashes
+      end
+      # rubocop: enable RescueException
+    end
+  end
+end
+
     
-        line_item = invoice.line_items.new
-    assert_equal invoice.id, line_item.invoice_id
-    
-        assert @channel.room
-    assert_predicate @channel, :subscribed?
-    
-    require 'test_helper'
-require 'stubs/test_connection'
-require 'stubs/room'
-require 'active_support/time'
-    
-        def read_messages(expected_size = 0)
-      list = []
-      loop do
-        if @has_messages.try_acquire(1, list.size < expected_size ? WAIT_WHEN_EXPECTING_EVENT : WAIT_WHEN_NOT_EXPECTING_EVENT)
-          msg = @messages.pop(true)
-          raise msg if msg.is_a?(Exception)
-    
-          # Run ::process method in a given set of Jekyll::Command subclasses and suggest
-      # re-running the associated command with --trace switch to obtain any additional
-      # information or backtrace regarding the encountered Exception.
-      #
-      # cmd     - the Jekyll::Command to be handled
-      # options - configuration overrides
-      # klass   - an array of Jekyll::Command subclasses associated with the command
-      #
-      # Note that all exceptions are rescued..
-      # rubocop: disable RescueException
-      def process_with_graceful_fail(cmd, options, *klass)
-        klass.each { |k| k.process(options) if k.respond_to?(:process) }
-      rescue Exception => e
-        raise e if cmd.trace
-    
-            # rubocop:disable Metrics/AbcSize
-        def process(args, opts)
-          if !args || args.empty?
-            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
+                Jekyll.logger.debug 'LiveReload:', 'Reloading #{p.url}'
+            Jekyll.logger.debug '', json_message
+            @websockets.each { |ws| ws.send(json_message) }
           end
-    
-            def stop
-          # There is only one EventMachine instance per Ruby process so stopping
-          # it here will stop the reactor thread we have running.
-          EM.stop if EM.reactor_running?
-          Jekyll.logger.debug 'LiveReload Server:', 'halted'
         end
     
-          # Public: Provides you with a list of processors, the ones we
-      # support internally and the ones that you have provided to us (if you
-      # are not in safe mode.)
+            # Add the ability to tap file.html the same way that Nginx does on our
+        # Docker images (or on GitHub Pages.) The difference is that we might end
+        # up with a different preference on which comes first.
     
-            # If we're just checking, then just return exit codes
-        if options[:check]
-          return 0 if cap_host.capability?(name)
-          return 1
-        end
+              # If it's a directory they want to exclude, AKA
+          # ends with a '/' then we will go on to check and
+          # see if the entry falls within that path and
+          # exclude it if that's the case.
     
-              If you don't give a pod `NAME`, you need to specify the `--all`
-          flag (this is to avoid cleaning all the cache by mistake).
-        DESC
-    
-      not_found do
-    send_file(File.join(File.dirname(__FILE__), 'public', '404.html'), {:status => 404})
+        # The stdlib recorded in the install receipt is used during dependency
+    # compatibility checks, so we only care about the stdlib that libraries
+    # link against.
+    keg.detect_cxx_stdlibs(:skip_executables => true)
   end
     
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
+    module Homebrew
+  def build_env_keys(env)
+    %w[
+      CC CXX LD OBJC OBJCXX
+      HOMEBREW_CC HOMEBREW_CXX
+      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
+      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
+      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
+      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
+      HOMEBREW_SVN HOMEBREW_GIT
+      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
+      MAKE GIT CPP
+      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
+  end
+    
+      def external_commands
+    paths.reduce([]) do |cmds, path|
+      Dir['#{path}/brew-*'].each do |file|
+        next unless File.executable?(file)
+        cmd = File.basename(file, '.rb')[5..-1]
+        cmds << cmd unless cmd.include?('.')
+      end
+      cmds
+    end.sort
+  end
+    
+          if options[:type] == :array
+        options[:roles] << :completable
+        class_eval <<-EOF
+          def complete_#{name}
+            #{options[:values]}.map { |v| {text: v, id: v} }
+          end
+        EOF
+      end
+    
+      def tumblr_consumer_key
+    ENV['TUMBLR_OAUTH_KEY']
+  end
+    
+        @user_credentials = current_user.user_credentials.reorder(table_sort).page(params[:page])
+    
+      describe 'DATA_PTR' do
+    it 'returns the struct data' do
+      a = @s.typed_wrap_struct(1024)
+      @s.typed_get_struct_data_ptr(a).should == 1024
+    end
+  end
+end
+
+    
+      before :all do
+    begin
+      leaked = Process.waitall
+      puts 'leaked before wait specs: #{leaked}' unless leaked.empty?
+      with_feature :mjit do
+        # Ruby-space should not see PIDs used by mjit
+        leaked.should be_empty
+      end
+    rescue NotImplementedError
+    end
+  end
+    
+        with_tmpchdir {|d|
+      prog = '#{d}/notexist'
+      e = assert_raise(Errno::ENOENT) {
+        Process.wait Process.spawn({'FOO'=>'BAR'}, prog)
+      }
+      assert_equal(prog, e.message.sub(/.* - /, ''))
+      e = assert_raise(Errno::ENOENT) {
+        Process.wait Process.spawn({'FOO'=>'BAR'}, [prog, 'blar'])
+      }
+      assert_equal(prog, e.message.sub(/.* - /, ''))
+    }
+    h = {}
+    cmd = [h, RUBY]
+    (ENV.keys + MANDATORY_ENVS).each do |k|
+      case k
+      when /\APATH\z/i
+      when *MANDATORY_ENVS
+        cmd << '-e' << 'ENV.delete('#{k}')'
+      else
+        h[k] = nil
       end
     end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
+    cmd << '-e' << 'puts ENV.keys.map{|e|e.upcase}'
+    IO.popen(cmd) {|io|
+      assert_equal('PATH\n', io.read)
+    }
+    
+        name, prefix = split_name(name)
+    
+        spec = util_spec 'some_gem' do |s|
+      s.signing_key = SIGNING_KEY
+      s.cert_chain = [CERT_FILE]
+    end
+    
+        set2 = Set[Set[0], 1, 2, set1]
+    assert_equal('#<Set: {#<Set: {0}>, 1, 2, #<Set: {1, 2}>}>', set2.to_s)
+    
+      it 'ignores NULL bytes between directives' do
+    '333333\x07@ffffff\xf6?'.unpack(unpack_format('\000', 2)).should == [2.9, 1.4]
   end
-  output += '></#{tag}>'
+    
+        def scoped_accounts
+      Account.unscoped.tap do |scope|
+        scope.merge! with_usernames
+        scope.merge! matching_username
+        scope.merge! matching_domain
+      end
+    end
+    
+      def remote_url
+    object.remote_url.presence
+  end
+    
+      def name
+    ':#{object.shortcode}:'
+  end
+end
+
+    
+      attr_reader :user
+    
+      def scope
+    root_url
+  end
+    
+          configure_sass
+    end
+    
+    desc 'Clean out caches: .pygments-cache, .gist-cache, .sass-cache'
+task :clean do
+  rm_rf [Dir.glob('.pygments-cache/**'), Dir.glob('.gist-cache/**'), Dir.glob('.sass-cache/**'), 'source/stylesheets/screen.css']
 end
     
-      # Used on the blog index to split posts on the <!--more--> marker
-  def excerpt(input)
-    if input.index(/<!--\s*more\s*-->/i)
-      input.split(/<!--\s*more\s*-->/i)[0]
-    else
-      input
-    end
+      get(/.+/) do
+    send_sinatra_file(request.path) {404}
   end
     
-      module NotInExpression0
-    def rvalue1
-      elements[0]
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
+      end
+      super
     end
     
-          def deliver(msg)
-        if msg.respond_to?(:deliver_now)
-          # Rails 4.2/5.0
-          msg.deliver_now
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+      end
+    
+          Dir.chdir(file_path) do
+        contents = file.read
+        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
+          contents = $1.lstrip
+        end
+        contents = pre_filter(contents)
+        if @raw
+          contents
         else
-          # Rails 3.2/4.0/4.1
-          msg.deliver
+          partial = Liquid::Template.parse(contents)
+          context.stack do
+            partial.render(context)
+          end
         end
       end
     end
+  end
+end
     
-          def insert_before(oldklass, newklass, *args)
-        i = entries.index { |entry| entry.klass == newklass }
-        new_entry = i.nil? ? Entry.new(newklass, *args) : entries.delete_at(i)
-        i = entries.index { |entry| entry.klass == oldklass } || 0
-        entries.insert(i, new_entry)
+            if attachment.nil?
+          attachment = Attachment.new(name, self, options)
+          instance_variable_set(ivar, attachment)
+        end
+    
+            def passes_validation_with_size(new_size)
+          file = StringIO.new('.')
+          override_method(file, :size){ new_size }
+          override_method(file, :to_tempfile){ file }
+    
+            required = directories.map do |directory|
+          pathname = File.expand_path(Rails.root.join(directory, filename))
+          file_exists = File.exist?(pathname)
+          require pathname if file_exists
+          file_exists
+        end
+    
+        module TableDefinition
+      def attachment(*attachment_names)
+        options = attachment_names.extract_options!
+        attachment_names.each do |attachment_name|
+          COLUMNS.each_pair do |column_name, column_type|
+            column_options = options.merge(options[column_name.to_sym] || {})
+            column('#{attachment_name}_#{column_name}', column_type, column_options)
+          end
+        end
       end
-    
-        it 'logs the exception to Sidekiq.logger' do
-      Component.new.invoke_exception(:a => 1)
-      @str_logger.rewind
-      log = @str_logger.readlines
-      assert_match(/'a':1/, log[0], 'didn't include the context')
-      assert_match(/Something didn't work!/, log[1], 'didn't include the exception message')
-      assert_match(/test\/test_exception_handler.rb/, log[2], 'didn't include the backtrace')
-    end
