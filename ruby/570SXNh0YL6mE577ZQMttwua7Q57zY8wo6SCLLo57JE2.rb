@@ -1,53 +1,55 @@
 
         
-          def cache_fragment(name)
-    ApplicationSerializer.fragment_cache[name] ||= yield
-  end
+          describe '.all' do
+    it 'uses the client to fetch all keys' do
+      mock_client_response(:list_keys, with: no_args) do
+        [
+          {
+            canDownload: false,
+            canRevoke: true,
+            keyId: 'some-key-id',
+            keyName: 'Test Key via fastlane',
+            servicesCount: 2
+          },
+          {
+            canDownload: true,
+            canRevoke: true,
+            keyId: 'B92NE4F7RG',
+            keyName: 'Test Key via browser',
+            servicesCount: 2
+          }
+        ]
+      end
+    
+          # All the available tasks
+      attr_accessor :tasks
+    
+            expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::VERSION_NUMBER]).to match(/cd .* && agvtool new-marketing-version 1.77.3/)
+      end
+    
+        def javascripts_path
+      File.join assets_path, 'javascripts'
+    end
+    
+      # Code is not reloaded between requests.
+  config.cache_classes = true
+    
+    desc 'LESS to stdin -> Sass to stdout'
+task :less_to_scss, :branch do |t, args|
+  require './tasks/converter'
+  puts Converter.new(branch: args[:branch]).convert_less(STDIN.read)
 end
-
     
-        begin
-      raise '#{short_type} does not support dry-run' unless can_dry_run?
-      readonly!
-      @dry_run_started_at = Time.zone.now
-      @dry_run_logger.info('Dry Run started')
-      if event
-        raise 'This agent cannot receive an event!' unless can_receive_events?
-        receive([event])
-      else
-        check
-      end
-      @dry_run_logger.info('Dry Run finished')
-    rescue => e
-      @dry_run_logger.info('Dry Run failed')
-      error 'Exception during dry-run. #{e.message}: #{e.backtrace.join('\n')}'
-    end
+            def matches? subject
+          @subject = subject
+          @subject = @subject.new if @subject.class == Class
+          @allowed_types && @rejected_types &&
+          allowed_types_allowed? && rejected_types_rejected?
+        end
     
-        validate :validate_evernote_options
+          class ValidateAttachmentPresenceMatcher
+        def initialize attachment_name
+          @attachment_name = attachment_name
+        end
     
-      def set_table_sort(sort_options)
-    valid_sorts = sort_options[:sorts] or raise ArgumentError.new('You must specify :sorts as an array of valid sort attributes.')
-    default = sort_options[:default] || { valid_sorts.first.to_sym => :desc }
-    
-            return if type.nil?
-        return unless Hbc::Container.from_type(type).nil?
-        raise 'invalid container type: #{type.inspect}'
-      end
-    
-      def gistify_logs(f)
-    files = load_logs(f.logs)
-    build_time = f.logs.ctime
-    timestamp = build_time.strftime('%Y-%m-%d_%H-%M-%S')
-    
-          respond_with do |format|
-        format.html do
-          gon.preloads[:pods] = pods_json
-          gon.unchecked_count = Pod.unchecked.count
-          gon.version_failed_count = Pod.version_failed.count
-          gon.error_count = Pod.check_failed.count
-    
-        def assign_attributes(values)
-      values.each do |k, v|
-        public_send('#{k}=', v)
-      end
-    end
+            protected
