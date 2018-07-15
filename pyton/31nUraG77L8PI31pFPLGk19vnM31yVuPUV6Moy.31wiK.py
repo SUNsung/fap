@@ -1,156 +1,104 @@
-# (c) 2015, Marc Abramowitz <marca@surveymonkey.com>
-#
-# This file is part of Ansible.
-#
-# Ansible is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Ansible is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible. If not, see <http://www.gnu.org/licenses/>.
+
+        
+        
+def get_config(env_var, config_var):
+    result = os.getenv(env_var)
+    if not result:
+        result = get_from_rhc_config(config_var)
+    if not result:
+        sys.exit('failed=True msg='missing %s'' % env_var)
+    return result
     
-        to remove replace in this file ismount( -> os.path.ismount( and remove this
-    function'''
-    
-    
-def get_api_key():
-    '''
-    rtype: str
-    '''
-    key = os.environ.get('SHIPPABLE_KEY', None)
-    
-        The host identifier may be a hostname (qualified or not), an IPv4 address,
-    or an IPv6 address. If allow_ranges is True, then any of those may contain
-    [x:y] range specifications, e.g. foo[1:3] or foo[0:5]-bar[x-z].
-    
-    
-class Deck(object):
-    
-    
-class GroupChat(Chat):
-    
-        if WSAStringToAddressA(
-            ip_string,
-            address_family,
-            None,
-            ctypes.byref(addr),
-            ctypes.byref(addr_size)
-    ) != 0:
-        raise socket.error(ctypes.FormatError())
-    
-    
-    def predict(self, input):
-        '''
-        From the input stream, predict what alternative will succeed
-	using this DFA (representing the covering regular approximation
-	to the underlying CFL).  Return an alternative number 1..n.  Throw
-	 an exception upon error.
-	'''
-        mark = input.mark()
-        s = 0 # we always start at s0
         try:
-            for _ in xrange(50000):
-                #print '***Current state = %d' % s
-                
-                specialState = self.special[s]
-                if specialState >= 0:
-                    #print 'is special'
-                    s = self.specialStateTransition(specialState, input)
-                    if s == -1:
-                        self.noViableAlt(s, input)
-                        return 0
-                    input.consume()
-                    continue
+        s1 = os.lstat(path)
+    except OSError:
+        # the OSError should be handled with more care
+        # it could be a 'permission denied' but path is still a mount
+        return False
+    else:
+        # A symlink can never be a mount point
+        if os.path.stat.S_ISLNK(s1.st_mode):
+            return False
     
-    from antlr3.constants import INVALID_TOKEN_TYPE
+        result = response.json()
+    
+        indent = None
+    if format:
+        indent = 4
     
     
-    def consume(self):
-        try:
-            if self.data[self.p] == 10: # \n
-                self.line += 1
-                self.charPositionInLine = 0
-            else:
-                self.charPositionInLine += 1
+def sort_groups(groups):
+    return sorted(groups, key=lambda g: (g.depth, g.priority, g.name))
     
-        def getText(self):
-        '''@brief Get the text of the token.
+        def construct_mapping(self, node, deep=False):
+        # Most of this is from yaml.constructor.SafeConstructor.  We replicate
+        # it here so that we can warn users when they have duplicate dict keys
+        # (pyyaml silently allows overwriting keys)
+        if not isinstance(node, MappingNode):
+            raise ConstructorError(None, None,
+                                   'expected a mapping node, but found %s' % node.id,
+                                   node.start_mark)
+        self.flatten_mapping(node)
+        mapping = AnsibleMapping()
     
-    # Predefined token types
-EOR_TOKEN_TYPE = 1
+        def getChild(self, request, name):
+        return self
     
-        def __init__(self, expecting, input, inserted):
-        MismatchedTokenException.__init__(self, expecting, input)
+        # default settings to be used for this command instead of global defaults
+    default_settings = {}
     
-    # One entry per manual page. List of tuples
-# (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'certbot-compatibility-test',
-     u'certbot-compatibility-test Documentation',
-     [author], 1)
-]
+        default_settings = {
+        'LOG_LEVEL': 'INFO',
+        'LOGSTATS_INTERVAL': 1,
+        'CLOSESPIDER_TIMEOUT': 10,
+    }
     
-            pieces = []
-        for fragment in pattern.split('('):
-            if ')' in fragment:
-                paren_loc = fragment.index(')')
-                if paren_loc >= 0:
-                    pieces.append('%s' + fragment[paren_loc + 1:])
-            else:
-                try:
-                    unescaped_fragment = re_unescape(fragment)
-                except ValueError:
-                    # If we can't unescape part of it, we can't
-                    # reverse this url.
-                    return (None, None)
-                pieces.append(unescaped_fragment)
     
-    .. deprecated:: 5.0
+def _create_testcase(method, desc):
+    spider = method.__self__.name
     
-            # stack_context propagates to the ioloop callback, but the worker
-        # task just has its exceptions caught and saved in the Future.
-        with ignore_deprecation():
-            with futures.ThreadPoolExecutor(1) as pool:
-                with ExceptionStackContext(handle_exception):
-                    self.io_loop.add_future(pool.submit(task), callback)
-                ready.set()
-            self.wait()
+        def handleResponse(self, response):
+        if self.factory.method.upper() == b'HEAD':
+            self.factory.page(b'')
+        elif self.length is not None and self.length > 0:
+            self.factory.noPage(self._connection_lost_reason)
+        else:
+            self.factory.page(response)
+        self.transport.loseConnection()
     
-            async def main():
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
-            stream = tornado.iostream.IOStream(s)
-            await stream.connect(('friendfeed.com', 80))
-            await stream.write(b'GET / HTTP/1.0\r\nHost: friendfeed.com\r\n\r\n')
-            header_data = await stream.read_until(b'\r\n\r\n')
-            headers = {}
-            for line in header_data.split(b'\r\n'):
-                parts = line.split(b':')
-                if len(parts) == 2:
-                    headers[parts[0].strip()] = parts[1].strip()
-            body_data = await stream.read_bytes(int(headers[b'Content-Length']))
-            print(body_data)
-            stream.close()
+        def process_request(self, request, spider):
+        auth = getattr(self, 'auth', None)
+        if auth and b'Authorization' not in request.headers:
+            request.headers[b'Authorization'] = auth
+
     
-            with contextlib.closing(SimpleAsyncHTTPClient(force_instance=True)) as client:
-            with self.assertRaises(HTTPTimeoutError) as cm:
-                yield client.fetch(path, request_timeout=0.1, raise_error=True)
-        self.assertEqual(cm.exception.response.request.url, path)
+        def spider_opened(self, spider):
+        self.user_agent = getattr(spider, 'user_agent', self.user_agent)
     
-        The C extension speeds up websocket masking, but is not essential.
-    '''
+        def close(self, reason):  # can return a deferred
+        pass
     
-           The protocol used, either 'http' or 'https'.  If ``HTTPServer.xheaders``
-       is set, will pass along the protocol used by a load balancer if
-       reported via an ``X-Scheme`` header.
     
-        define('mysql_host', default='127.0.0.1:3306', help='Main user DB')
-    define('memcache_hosts', default='127.0.0.1:11011', multiple=True,
-           help='Main user memcache servers')
+class Scientist(AbstractExpert):
     
-    import socket
+        def test_a_observer_list_shall_be_empty_initially(cls):
+        cls.assertEqual(len(cls.s._observers), 0)
+    
+        def test_items_recoil(self):
+        with ObjectPool(self.sample_queue, True) as pool:
+            self.assertEqual(pool, 'first')
+        self.assertTrue(self.sample_queue.get() == 'second')
+        self.assertFalse(self.sample_queue.empty())
+        self.assertTrue(self.sample_queue.get() == 'first')
+        self.assertTrue(self.sample_queue.empty())
+    
+    from __future__ import print_function
+    
+        @property
+    def data(self):
+        return self._data
+    
+        return True
+
+    
+        pass
