@@ -1,226 +1,265 @@
-class GlobalShortcut : public extensions::GlobalShortcutListener::Observer,
-                       public mate::TrackableObject<GlobalShortcut> {
- public:
-  static mate::Handle<GlobalShortcut> Create(v8::Isolate* isolate);
-    }
-    
-    // Relaunches the application using the helper application associated with the
-// currently running instance of Chrome in the parent browser process as the
-// executable for the relauncher process. |args| is an argv-style vector of
-// command line arguments of the form normally passed to execv. args[0] is
-// also the path to the relaunched process. Because the relauncher process
-// will ultimately launch the relaunched process via Launch Services, args[0]
-// may be either a pathname to an executable file or a pathname to an .app
-// bundle directory. The caller should exit soon after RelaunchApp returns
-// successfully. Returns true on success, although some failures can occur
-// after this function returns true if, for example, they occur within the
-// relauncher process. Returns false when the relaunch definitely failed.
-bool RelaunchApp(const StringVector& argv);
-    
-    
-    {}  // namespace atom
-    
-      std::unique_ptr<base::ListValue> preferences_;
-    
-    #endif  // CHROME_BROWSER_CHROME_PROCESS_FINDER_WIN_H_
 
+        
+        class SILDebuggerClient;
     
-      // Stop listening for the given |accelerator|, does nothing if shortcut
-  // handling is suspended.
-  void UnregisterAccelerator(const ui::Accelerator& accelerator,
-                             Observer* observer);
+    #pragma mark - NSData verification
     
-    namespace printing {
-    }
+    /// Index the given module and store the results to \p indexStorePath.
+///
+/// \param module The module to index.
+///
+/// \param indexUnitTokens A list of unique identifiers for the index units to
+/// be written. This may either be one unit per source file of \p module, or it
+/// may be a single unit, in which case all the index information will be
+/// combined into a single unit.
+///
+/// \param moduleUnitToken A unique identifier for this module unit in the form
+/// of a file path. Only used if \p indexUnitTokens are specified for each
+/// source file, otherwise the single \p indexUnitTokens value is used instead.
+///
+/// \param indexStorePath The location to write the indexing data to.
+///
+/// \param indexSystemModules If true, emit index data for imported serialized
+/// swift system modules.
+///
+/// \param isDebugCompilation true for non-optimized compiler invocation.
+///
+/// \param targetTriple The target for this compilation.
+///
+/// \param dependencyTracker The set of dependencies seen while building.
+bool indexAndRecord(ModuleDecl *module, ArrayRef<std::string> indexUnitTokens,
+                    StringRef moduleUnitToken, StringRef indexStorePath,
+                    bool indexSystemModules, bool isDebugCompilation,
+                    StringRef targetTriple,
+                    const DependencyTracker &dependencyTracker);
+// FIXME: indexUnitTokens could be StringRef, but that creates an impedance
+// mismatch in the caller.
     
-    void TtsPlatformImpl::WillSpeakUtteranceWithVoice(const Utterance* utterance,
-                                                  const VoiceData& voice_data) {
-}
-    
-    
-    {}  // namespace chrome
-    
-    // A handful of resource-like constants related to the Chrome application.
-    
-    struct Pix;
-    
-    /**----------------------------------------------------------------------------
-          Include Files and Type Defines
-----------------------------------------------------------------------------**/
-#include 'strngs.h'
-    
-      // Indexes the given array of features to a vector of sorted indices.
-  void IndexAndSortFeatures(const INT_FEATURE_STRUCT* features,
-                            int num_features,
-                            GenericVector<int>* sorted_features) const {
-    feature_space_.IndexAndSortFeatures(features, num_features,
-                                        sorted_features);
-  }
-  // Maps the given array of index/sparse features to an array of map/compact
-  // features.
-  // Assumes the input is sorted. The output indices are sorted and uniqued.
-  // Returns the number of 'missed' features, being features that
-  // don't map to the compact feature space.
-  int MapIndexedFeatures(const GenericVector<int>& index_features,
-                         GenericVector<int>* map_features) const {
-    return feature_map_.MapFeatures(index_features, map_features);
+      Optional<const swift::markup::Paragraph *> getBrief() const {
+    return Parts.Brief;
   }
     
-    // Sets the given n-vector vec to 0.
-template <typename T>
-inline void ZeroVector(int n, T* vec) {
-  memset(vec, 0, n * sizeof(*vec));
-}
+    #include 'swift/Basic/LLVM.h'
+#include 'clang/Index/IndexSymbol.h'
+#include 'llvm/ADT/SmallString.h'
     
-    #endif  // STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-
+      /// Returns the buffer ID for the specified *valid* location.
+  ///
+  /// Because a valid source location always corresponds to a source buffer,
+  /// this routine always returns a valid buffer ID.
+  unsigned findBufferContainingLoc(SourceLoc Loc) const;
     
-      static Slice Contents(const WriteBatch* batch) {
-    return Slice(batch->rep_);
+    // On macOS and iOS, swift_once is implemented using GCD.
+// The compiler emits an inline check matching the barrier-free inline fast
+// path of dispatch_once(). See SwiftTargetInfo.OnceDonePredicateValue.
+    
+    void indexDeclContext(DeclContext *DC, IndexDataConsumer &consumer);
+void indexSourceFile(SourceFile *SF, StringRef hash,
+                     IndexDataConsumer &consumer);
+void indexModule(ModuleDecl *module, StringRef hash,
+                 IndexDataConsumer &consumer);
+    
+    class AbstractionPattern;
+class Initialization;
+class RValue;
+class SILGenFunction;
+class SGFContext;
+class CalleeTypeInfo;
+    
+      /// Copy constructor.
+  LSBase(const LSBase &RHS) {
+    Base = RHS.Base;
+    Kind = RHS.Kind;
+    Path = RHS.Path;
   }
     
-      memset(buf, 0, sizeof(buf));
-  ASSERT_EQ(0x8a9136aa, Value(buf, sizeof(buf)));
+    #include 'llvm/ADT/ArrayRef.h'
     
-    class HASH { };
-    
-    namespace leveldb {
-    }
-    
-    TEST(AutoCompactTest, ReadHalf) {
-  DoReads(kCount/2);
+    inline void RowSet::Clear() {
+  rows_.clear(); size_ = 0;
 }
     
-    TEST(FormatTest, InternalKeyShortSeparator) {
-  // When user keys are same
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 99, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 101, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 100, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 100, kTypeDeletion)));
+    DMatrix* DMatrix::Create(dmlc::Parser<uint32_t>* parser,
+                         const std::string& cache_prefix) {
+  if (cache_prefix.length() == 0) {
+    std::unique_ptr<data::SimpleCSRSource> source(new data::SimpleCSRSource());
+    source->CopyFrom(parser);
+    return DMatrix::Create(std::move(source), cache_prefix);
+  } else {
+#if DMLC_ENABLE_STD_THREAD
+    if (!data::SparsePageSource::CacheExist(cache_prefix)) {
+      data::SparsePageSource::Create(parser, cache_prefix);
+    }
+    std::unique_ptr<data::SparsePageSource> source(new data::SparsePageSource(cache_prefix));
+    return DMatrix::Create(std::move(source), cache_prefix);
+#else
+    LOG(FATAL) << 'External memory is not enabled in mingw';
+    return nullptr;
+#endif
+  }
+}
+    
+          jclass batchClass = jenv->GetObjectClass(batch);
+      jlongArray joffset = (jlongArray)jenv->GetObjectField(
+          batch, jenv->GetFieldID(batchClass, 'rowOffset', '[J'));
+      jfloatArray jlabel = (jfloatArray)jenv->GetObjectField(
+          batch, jenv->GetFieldID(batchClass, 'label', '[F'));
+      jfloatArray jweight = (jfloatArray)jenv->GetObjectField(
+          batch, jenv->GetFieldID(batchClass, 'weight', '[F'));
+      jintArray jindex = (jintArray)jenv->GetObjectField(
+          batch, jenv->GetFieldID(batchClass, 'featureIndex', '[I'));
+      jfloatArray jvalue = (jfloatArray)jenv->GetObjectField(
+        batch, jenv->GetFieldID(batchClass, 'featureValue', '[F'));
+      XGBoostBatchCSR cbatch;
+      cbatch.size = jenv->GetArrayLength(joffset) - 1;
+      cbatch.offset = reinterpret_cast<jlong *>(
+          jenv->GetLongArrayElements(joffset, 0));
+      if (jlabel != nullptr) {
+        cbatch.label = jenv->GetFloatArrayElements(jlabel, 0);
+        CHECK_EQ(jenv->GetArrayLength(jlabel), static_cast<long>(cbatch.size))
+            << 'batch.label.length must equal batch.numRows()';
+      } else {
+        cbatch.label = nullptr;
+      }
+      if (jweight != nullptr) {
+        cbatch.weight = jenv->GetFloatArrayElements(jweight, 0);
+        CHECK_EQ(jenv->GetArrayLength(jweight), static_cast<long>(cbatch.size))
+            << 'batch.weight.length must equal batch.numRows()';
+      } else {
+        cbatch.weight = nullptr;
+      }
+      long max_elem = cbatch.offset[cbatch.size];
+      cbatch.index = (int*) jenv->GetIntArrayElements(jindex, 0);
+      cbatch.value = jenv->GetFloatArrayElements(jvalue, 0);
+    
+      bool Read(SparsePage* page,
+            dmlc::SeekStream* fi,
+            const std::vector<bst_uint>& sorted_index_set) override {
+    if (!fi->Read(&disk_offset_)) return false;
+    // setup the offset
+    page->offset.clear();
+    page->offset.push_back(0);
+    for (unsigned int fid : sorted_index_set) {
+      CHECK_LT(fid + 1, disk_offset_.size());
+      size_t size = disk_offset_[fid + 1] - disk_offset_[fid];
+      page->offset.push_back(page->offset.back() + size);
+    }
+    page->data.resize(page->offset.back());
+    // read in the data
+    size_t begin = fi->Tell();
+    size_t curr_offset = 0;
+    for (size_t i = 0; i < sorted_index_set.size();) {
+      bst_uint fid = sorted_index_set[i];
+      if (disk_offset_[fid] != curr_offset) {
+        CHECK_GT(disk_offset_[fid], curr_offset);
+        fi->Seek(begin + disk_offset_[fid] * sizeof(Entry));
+        curr_offset = disk_offset_[fid];
+      }
+      size_t j, size_to_read = 0;
+      for (j = i; j < sorted_index_set.size(); ++j) {
+        if (disk_offset_[sorted_index_set[j]] == disk_offset_[fid] + size_to_read) {
+          size_to_read += page->offset[j + 1] - page->offset[j];
+        } else {
+          break;
+        }
+      }
+    }
     }
     
-    #include <stdint.h>
-#include 'db/log_format.h'
-#include 'leveldb/slice.h'
-#include 'leveldb/status.h'
-    
-    
-    {  // No copying allowed
-  BlockBuilder(const BlockBuilder&);
-  void operator=(const BlockBuilder&);
-};
+    void SparsePageWriter::PushWrite(std::shared_ptr<SparsePage>&& page) {
+  qworkers_[clock_ptr_].Push(std::move(page));
+  clock_ptr_ = (clock_ptr_ + 1) % workers_.size();
+}
     
     /*!
- * \brief in-memory storage unit of sparse batch
+ * \brief Registry entry for sparse page format.
  */
-class SparsePage {
- public:
-  std::vector<size_t> offset;
-  /*! \brief the data of the segments */
-  std::vector<Entry> data;
+struct SparsePageFormatReg
+    : public dmlc::FunctionRegEntryBase<SparsePageFormatReg,
+                                        std::function<SparsePageFormat* ()> > {
+};
+    
+      // Compute Huffman codes for each histograms.
+  for (int i = 0; i < num_histo; ++i) {
+    const bool is_dc = static_cast<size_t>(i) < num_dc_histo;
+    const int idx = is_dc ? i : i - num_dc_histo;
+    int counts[kJpegHuffmanMaxBitLength + 1] = { 0 };
+    int values[JpegHistogram::kSize] = { 0 };
+    BuildHuffmanCode(&depths[i * JpegHistogram::kSize], counts, values);
+    HuffmanCodeTable table;
+    for (int j = 0; j < 256; ++j) table.depth[j] = 255;
+    BuildHuffmanCodeTable(counts, values, &table);
+    for (int c = 0; c < ncomps; ++c) {
+      if (is_dc) {
+        if (dc_histo_indexes[c] == idx) (*dc_huff_tables)[c] = table;
+      } else {
+        if (ac_histo_indexes[c] == idx) (*ac_huff_tables)[c] = table;
+      }
     }
+    int max_length = kJpegHuffmanMaxBitLength;
+    while (max_length > 0 && counts[max_length] == 0) --max_length;
+    --counts[max_length];
+    int total_count = 0;
+    for (int j = 0; j <= max_length; ++j) total_count += counts[j];
+    data[pos++] = is_dc ? i : static_cast<uint8_t>(i - num_dc_histo + 0x10);
+    for (size_t j = 1; j <= kJpegHuffmanMaxBitLength; ++j) {
+      data[pos++] = counts[j];
+    }
+    for (int j = 0; j < total_count; ++j) {
+      data[pos++] = values[j];
+    }
+  }
     
     
-    {
-    {}  // namespace data
-}  // namespace xgboost
+    {}  // namespace
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    #include <stdint.h>
+#include <vector>
+    
+    	if (NULL != _funcname) {
+		funcname_cstr = env->GetStringUTFChars(_funcname, NULL);
+	}
+    
+    
+    {    void throw_exception( std::exception const & e ) {
+        xfatal2(TSF'boost exception:%_', e.what());
+        
+#ifdef ANDROID
+        char stack[4096] = {0};
+        android_callstack(stack, sizeof(stack));
+        xfatal2(TSF'%_', stack);
+#endif
+    }
+}
 
     
     
-    {// Enable LOG(CONSOLE) for print messages to console.
-#define LOG_CONSOLE ::xgboost::ConsoleLogger()
-// Enable LOG(TRACKER) for print messages to tracker
-#define LOG_TRACKER ::xgboost::TrackerLogger()
-}  // namespace xgboost.
-#endif  // XGBOOST_LOGGING_H_
-
+/*
+ * CoreServiceBase.h
+ *
+ *  Created on: 2013-6-20
+ *      Author: yerungui
+ */
     
-    XGB_DLL int XGBoosterEvalOneIter(BoosterHandle handle,
-                                 int iter,
-                                 DMatrixHandle dmats[],
-                                 const char* evnames[],
-                                 xgboost::bst_ulong len,
-                                 const char** out_str) {
-  std::string& eval_str = XGBAPIThreadLocalStore::Get()->ret_str;
-  API_BEGIN();
-  CHECK_HANDLE();
-  auto* bst = static_cast<Booster*>(handle);
-  std::vector<DMatrix*> data_sets;
-  std::vector<std::string> data_names;
-    }
     
-      /**
-   * \brief Updates linear model given gradients.
-   *
-   * \param in_gpair            The gradient pair statistics of the data.
-   * \param data                Input data matrix.
-   * \param model               Model to be updated.
-   * \param sum_instance_weight The sum instance weights, used to normalise l1/l2 penalty.
-   */
+    {}
     
-        if      (numlit ==     0)    ;
-    else if (numlit <=    32)    stb_out (0x000020 + numlit-1);
-    else if (numlit <=  2048)    stb_out2(0x000800 + numlit-1);
-    else /*  numlit <= 65536) */ stb_out3(0x070000 + numlit-1);
     
-            // 1. Show a simple window.
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    }
+/*
+ * scop_jenv.cpp
+ *
+ *  Created on: 2012-8-21
+ *      Author: yanguoyue
+ */
     
-    void CleanupDeviceD3D()
+    
+    {} // namespace aria2
+    
+    void AbstractBtMessage::setPeerConnection(PeerConnection* peerConnection)
 {
-    CleanupRenderTarget();
-    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = NULL; }
-    if (g_pd3dDeviceContext) { g_pd3dDeviceContext->Release(); g_pd3dDeviceContext = NULL; }
-    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
+  peerConnection_ = peerConnection;
 }
     
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-        // FreeType glyph rasterizer.
-    // NB: No ctor/dtor, explicitly call Init()/Shutdown()
-    struct FreeTypeFont
-    {
-        bool        Init(const ImFontConfig& cfg, unsigned int extra_user_flags);   // Initialize from an external data buffer. Doesn't copy data, and you must ensure it stays valid up to this object lifetime.
-        void        Shutdown();
-        void        SetPixelHeight(int pixel_height);                               // Change font pixel size. All following calls to RasterizeGlyph() will use this size
-    }
-    
-            VkSubmitInfo end_info = {};
-        end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        end_info.commandBufferCount = 1;
-        end_info.pCommandBuffers = &command_buffer;
-        err = vkEndCommandBuffer(command_buffer);
-        check_vk_result(err);
-        err = vkQueueSubmit(g_Queue, 1, &end_info, VK_NULL_HANDLE);
-        check_vk_result(err);
-    
-    // Implemented features:
-//  [X] Renderer: User texture binding. Use 'CIwTexture*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+      virtual ~AdaptiveFileAllocationIterator();
