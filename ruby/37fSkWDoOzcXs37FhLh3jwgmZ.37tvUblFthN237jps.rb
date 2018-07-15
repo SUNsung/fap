@@ -1,83 +1,45 @@
 
         
-            find_union(segments, Project).includes(:namespace).order_id_desc
+          def remote_url
+    object.remote_url.presence
   end
     
-          def mailer_sender(mapping, sender = :from)
-        default_sender = default_params[sender]
-        if default_sender.present?
-          default_sender.respond_to?(:to_proc) ? instance_eval(&default_sender) : default_sender
-        elsif Devise.mailer_sender.is_a?(Proc)
-          Devise.mailer_sender.call(mapping.name)
-        else
-          Devise.mailer_sender
-        end
-      end
+    module Hbc
+  class DSL
+    class Container
+      VALID_KEYS = Set.new [
+        :type,
+        :nested,
+      ]
     
-        def default_used_route(options)
-      singularizer = lambda { |s| s.to_s.singularize.to_sym }
-    
-            if base_url.path == '/spec/'
-          index = css('.subnav li a').to_a.index(at_css('.subnav li a[href='#{result[:path]}']')) + 1
-          name.prepend '#{index}. '
-        end
-    
-        version '2' do
-      self.release = '2.3.0'
-      self.base_url = 'http://coffeescript.org/'
-    
-          options[:only_patterns] = [/\Ad3[\-\w]+\z/, /\Ad3\/blob\/master\/changes\.md\z/i]
-      options[:skip_patterns] = [/3\.x-api-reference/]
-    
-        options[:attribution] = <<-HTML
-      &copy; Joyent, Inc. and other Node contributors<br>
-      Licensed under the MIT License.<br>
-      Node.js is a trademark of Joyent, Inc. and is used with its permission.<br>
-      We are not endorsed by or affiliated with Joyent.
-    HTML
-    
-        def replace(index, name)
-      @filters[assert_index(index)] = filter_const(name)
+        used_formulae_missing = false
+    used_formulae = begin
+      ARGV.formulae
+    rescue FormulaUnavailableError => e
+      opoo e
+      used_formulae_missing = true
+      # If the formula doesn't exist: fake the needed formula object name.
+      ARGV.named.map { |name| OpenStruct.new name: name, full_name: name }
     end
     
-      attributes :id, :type, :name, :updated
+      raise
+end
     
-        grouped_codes = codes.reduce([]) do |agg, current|
-      if current[1]
-        agg << [current[0]]
-      else
-        agg.last << current[0]
-        agg
-      end
+        validate :any_searchfield_present?
+    
+        def path_for(file)
+      return file.path if file.is_a?(File)
+      return file if file.is_a?(String)
     end
     
-        def parse_symbol_spec(spec, tags)
-      case spec
-      when :clt
-        odisabled ''depends_on :clt''
-      when :tex
-        odisabled ''depends_on :tex''
-      when :libltdl
-        output_disabled(spec, 'libtool')
-      when :apr
-        output_disabled(spec, 'apr-util')
-      when :fortran
-        output_disabled(spec, 'gcc')
-      when :gpg
-        output_disabled(spec, 'gnupg')
-      when :hg
-        output_disabled(spec, 'mercurial')
-      when :mpi
-        output_disabled(spec, 'open-mpi')
-      when :python, :python2
-        output_disabled(spec, 'python@2')
-      when :python3
-        output_disabled(spec, 'python')
-      when :ant, :autoconf, :automake, :bsdmake, :cairo, :emacs, :expat,
-           :fontconfig, :freetype, :libtool, :libpng, :mysql, :perl, :pixman,
-           :postgresql, :rbenv, :ruby
-        output_disabled(spec)
-      else
-        super
-      end
+    module Sass
+  # Runs a SassScript read-eval-print loop.
+  # It presents a prompt on the terminal,
+  # reads in SassScript expressions,
+  # evaluates them,
+  # and prints the result.
+  class Repl
+    # @param options [{Symbol => Object}] An options hash.
+    def initialize(options = {})
+      @options = options
     end
