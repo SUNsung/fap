@@ -1,264 +1,156 @@
 
-    {  if (argc != 4) {
-    printf('This script converts the CIFAR dataset to the leveldb format used\n'
-           'by caffe to perform classification.\n'
-           'Usage:\n'
-           '    convert_cifar_data input_folder output_folder db_type\n'
-           'Where the input folder should contain the binary batch files.\n'
-           'The CIFAR dataset could be downloaded at\n'
-           '    http://www.cs.toronto.edu/~kriz/cifar.html\n'
-           'You should gunzip them after downloading.\n');
-  } else {
-    google::InitGoogleLogging(argv[0]);
-    convert_dataset(string(argv[1]), string(argv[2]), string(argv[3]));
-  }
-  return 0;
-}
-
+        
+        #ifndef GRPC_INTERNAL_COMPILER_PYTHON_PRIVATE_GENERATOR_H
+#define GRPC_INTERNAL_COMPILER_PYTHON_PRIVATE_GENERATOR_H
     
-      // Open leveldb
-  leveldb::DB* db;
-  leveldb::Options options;
-  options.create_if_missing = true;
-  options.error_if_exists = true;
-  leveldb::Status status = leveldb::DB::Open(
-      options, db_filename, &db);
-  CHECK(status.ok()) << 'Failed to open leveldb ' << db_filename
-      << '. Is it already existing?';
     
-      int num_kernels_im2col_;
-  int num_kernels_col2im_;
-  int conv_out_channels_;
-  int conv_in_channels_;
-  int conv_out_spatial_dim_;
-  int kernel_dim_;
-  int col_offset_;
-  int output_offset_;
+    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        }
     
-    namespace caffe {
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+        // Setup style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+    
+        // Main loop
+    bool done = false;
+    while (!done)
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            ImGui_ImplSDL2_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                done = true;
+        }
     }
     
-      virtual inline const char* type() const { return 'Convolution'; }
+    // TODO:
+// - Output texture has excessive resolution (lots of vertical waste).
+// - FreeType's memory allocator is not overridden.
+// - cfg.OversampleH, OversampleV are ignored (but perhaps not so necessary with this rasterizer).
+    
+        // Main loop
+    MSG msg;
+    ZeroMemory(&msg, sizeof(msg));
+    while (msg.message != WM_QUIT)
+    {
+        // Poll and handle messages (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+            continue;
+        }
+    }
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+        // Setup time step
+    INT64 current_time;
+    ::QueryPerformanceCounter((LARGE_INTEGER *)&current_time);
+    io.DeltaTime = (float)(current_time - g_Time) / g_TicksPerSecond;
+    g_Time = current_time;
+    
+            D3DCompile(vertexShader, strlen(vertexShader), NULL, NULL, NULL, 'main', 'vs_5_0', 0, 0, &g_pVertexShaderBlob, NULL);
+        if (g_pVertexShaderBlob == NULL) // NB: Pass ID3D10Blob* pErrorBlob to D3DCompile() to get error showing in (const char*)pErrorBlob->GetBufferPointer(). Make sure to Release() the blob!
+            return false;
+        psoDesc.VS = { g_pVertexShaderBlob->GetBufferPointer(), g_pVertexShaderBlob->GetBufferSize() };
+    
+        // Setup orthographic projection matrix
+    // Our visible imgui space lies from draw_data->DisplayPps (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right).
+    // Being agnostic of whether <d3dx9.h> or <DirectXMath.h> can be used, we aren't relying on D3DXMatrixIdentity()/D3DXMatrixOrthoOffCenterLH() or DirectX::XMMatrixIdentity()/DirectX::XMMatrixOrthographicOffCenterLH()
+    {
+        float L = draw_data->DisplayPos.x + 0.5f;
+        float R = draw_data->DisplayPos.x + draw_data->DisplaySize.x + 0.5f;
+        float T = draw_data->DisplayPos.y + 0.5f;
+        float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y + 0.5f;
+        D3DMATRIX mat_identity = { { 1.0f, 0.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f } };
+        D3DMATRIX mat_projection =
+        {
+            2.0f/(R-L),   0.0f,         0.0f,  0.0f,
+            0.0f,         2.0f/(T-B),   0.0f,  0.0f,
+            0.0f,         0.0f,         0.5f,  0.0f,
+            (L+R)/(L-R),  (T+B)/(B-T),  0.5f,  1.0f,
+        };
+        g_pd3dDevice->SetTransform(D3DTS_WORLD, &mat_identity);
+        g_pd3dDevice->SetTransform(D3DTS_VIEW, &mat_identity);
+        g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &mat_projection);
+    }
     
     
-    {  size_t tempDataSize;
-  void *tempData1, *tempData2;
-};
-#endif
-    
-    #ifdef USE_CUDNN
 /**
- * @brief CuDNN acceleration of SigmoidLayer.
+ * Captures and symbolicates a stack trace
+ *
+ * Beware of a bug on some platforms, which makes the trace loop until the
+ * buffer is full when it reaches a noexpr function. It seems to be fixed in
+ * newer versions of gcc. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56846
+ *
+ * @param skip The number of frames before capturing the trace
+ *
+ * @param limit The maximum number of frames captured
  */
-template <typename Dtype>
-class CuDNNSigmoidLayer : public SigmoidLayer<Dtype> {
- public:
-  explicit CuDNNSigmoidLayer(const LayerParameter& param)
-      : SigmoidLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSigmoidLayer();
-    }
-    
-    BlockBuilder::BlockBuilder(const Options* options)
-    : options_(options),
-      restarts_(),
-      counter_(0),
-      finished_(false) {
-  assert(options->block_restart_interval >= 1);
-  restarts_.push_back(0);       // First restart point is at offset 0
+FBEXPORT inline std::vector<StackTraceElement> getStackTraceSymbols(
+    size_t skip = 0,
+    size_t limit = kDefaultLimit) {
+  return getStackTraceSymbols(getStackTrace(skip + 1, limit));
 }
     
-    
-    {      // Ok
-      break;
-    case kSnappyCompression: {
-      size_t ulength = 0;
-      if (!port::Snappy_GetUncompressedLength(data, n, &ulength)) {
-        delete[] buf;
-        return Status::Corruption('corrupted compressed block contents');
-      }
-      char* ubuf = new char[ulength];
-      if (!port::Snappy_Uncompress(data, n, ubuf)) {
-        delete[] buf;
-        delete[] ubuf;
-        return Status::Corruption('corrupted compressed block contents');
-      }
-      delete[] buf;
-      result->data = Slice(ubuf, ulength);
-      result->heap_allocated = true;
-      result->cachable = true;
-      break;
-    }
-    default:
-      delete[] buf;
-      return Status::Corruption('bad block type');
-  }
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
-
-    
-      std::string ToString() const;
-    
-      // When user keys are different, but correctly ordered
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('hello', 200, kTypeValue)));
-    
-      // Fragment the record if necessary and emit it.  Note that if slice
-  // is empty, we still want to iterate once to emit a single
-  // zero-length record
-  Status s;
-  bool begin = true;
-  do {
-    const int leftover = kBlockSize - block_offset_;
-    assert(leftover >= 0);
-    if (leftover < kHeaderSize) {
-      // Switch to a new block
-      if (leftover > 0) {
-        // Fill the trailer (literal below relies on kHeaderSize being 7)
-        assert(kHeaderSize == 7);
-        dest_->Append(Slice('\x00\x00\x00\x00\x00\x00', leftover));
-      }
-      block_offset_ = 0;
-    }
-    }
-    
-    bool ImGui_ImplAllegro5_Init(ALLEGRO_DISPLAY* display)
+    Config::~Config(void)
 {
-    g_Display = display;
-    }
-    
-          well_formed = db_wrapper->AddToBatch(
-          batch, true,
-          Handle<Array>::Cast(sub_batch->Get(String::NewSymbol('delete'))),
-          db_wrapper, *v8::String::Utf8Value(sub_batch->Get(
-          String::NewSymbol('column_family'))));
-    } else {
-      well_formed = db_wrapper->AddToBatch(
-          batch, false,
-          Handle<Array>::Cast(sub_batch->Get(String::NewSymbol('put'))));
-      well_formed = db_wrapper->AddToBatch(
-          batch, true,
-          Handle<Array>::Cast(sub_batch->Get(String::NewSymbol('delete'))));
-    
-        // Helper methods
-    static bool HasFamilyNamed(std::string& name, DBWrapper* db);
-    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
-        Handle<Array> array);
-    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
-        Handle<Array> array, DBWrapper* db_wrapper, std::string cf);
-    static Handle<Value> CompactRangeDefault(const v8::Arguments& args);
-    static Handle<Value> CompactColumnFamily(const Arguments& args);
-    static Handle<Value> CompactOptions(const Arguments& args);
-    static Handle<Value> CompactAll(const Arguments& args);
-    
-      virtual bool FullMergeV2(const MergeOperationInput& merge_in,
-                           MergeOperationOutput* merge_out) const override;
-    
-    
-    {  }
-    
-      // Offset of the file position indicator within the last block when an
-  // EOF was detected.
-  size_t eof_offset_;
-    
-    JniCallback::~JniCallback() {
-  jboolean attached_thread = JNI_FALSE;
-  JNIEnv* env = getJniEnv(&attached_thread);
-  assert(env != nullptr);
-    }
-    
-      /**
-   * @brief write buffer data to rados
-   * @details initiate an aio write and wait for result
-   * @return [description]
-   */
-  Status Sync() { // sync data
-    int r = 0;
-    }
-    
-    void SyncPoint::Process(const std::string& point, void* cb_arg) {
-  impl_->Process(point, cb_arg);
+    YGConfigFree(m_config);
 }
     
-    #include <jni.h>
-#include <memory>
+        double width;
+    double height;
     
-    #ifndef JAVA_ROCKSJNI_LOGGERJNICALLBACK_H_
-#define JAVA_ROCKSJNI_LOGGERJNICALLBACK_H_
-    
-      WriteOptions wo;
-  wo.sync = true;
-  ASSERT_OK(db_->Put(wo, handles_[1], 'fodor', 'mirko'));
-    
-    void State::SetIterationTime(double seconds) {
-  timer_->SetIterationTime(seconds);
-}
-    
-    // Parses a string for a bool flag, in the form of either
-// '--flag=value' or '--flag'.
-//
-// In the former case, the value is taken as true if it passes IsTruthyValue().
-//
-// In the latter case, the value is taken as true.
-//
-// On success, stores the value of the flag in *value, and returns
-// true.  On failure, returns false without changing *value.
-bool ParseBoolFlag(const char* str, const char* flag, bool* value);
-    
-    void Increment(UserCounters *l, UserCounters const& r) {
-  // add counters present in both or just in *l
-  for (auto &c : *l) {
-    auto it = r.find(c.first);
-    if (it != r.end()) {
-      c.second.value = c.second + it->second;
-    }
-  }
-  // add counters present in r, but not in *l
-  for (auto const &tc : r) {
-    auto it = l->find(tc.first);
-    if (it == l->end()) {
-      (*l)[tc.first] = tc.second;
-    }
-  }
-}
-    
-      // Field with embedded double-quote characters must be doubled and the field
-  // delimited with double-quotes.
-  std::string name = run.benchmark_name;
-  ReplaceAll(&name, '\'', '\'\'');
-  Out << ''' << name << '\',';
-  if (run.error_occurred) {
-    Out << std::string(elements.size() - 3, ',');
-    Out << 'true,';
-    std::string msg = run.error_message;
-    ReplaceAll(&msg, '\'', '\'\'');
-    Out << ''' << msg << '\'\n';
-    return;
-  }
-    
-    template <class Tp>
-LogType& operator<<(LogType& log, Tp const& value) {
-  if (log.out_) {
-    *log.out_ << value;
-  }
-  return log;
-}
-    
-    
-    { private:
-  bool init_;
-// Underlying regular expression object
-#if defined(HAVE_STD_REGEX)
-  std::regex re_;
-#elif defined(HAVE_POSIX_REGEX) || defined(HAVE_GNU_POSIX_REGEX)
-  regex_t re_;
-#else
-#error No regular expression backend implementation available
-#endif
-};
+    /** @file ALog.h
+ *
+ *  Very simple android only logging. Define LOG_TAG to enable the macros.
+ */
