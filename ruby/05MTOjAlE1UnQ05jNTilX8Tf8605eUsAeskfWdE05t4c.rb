@@ -1,53 +1,55 @@
 
         
-        module Rack
-  module Protection
-    ##
-    # Prevented attack::   Cookie Tossing
-    # Supported browsers:: all
-    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
-    #
-    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
-    # session cookie. This does not protect against a cookie overflow attack.
-    #
-    # Options:
-    #
-    # session_key:: The name of the session cookie (default: 'rack.session')
-    class CookieTossing < Base
-      default_reaction :deny
+          def all_projects(current_user)
+    projects = []
     
-        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      subject.options[:allow_empty_referrer] = false
-      expect(subject.referrer(env)).to be_nil
-    end
-    
-          it 'should remain unchanged as ASCII-8BIT' do
-        body = @app.call({ 'PATH_INFO' => '/'.encode('ASCII-8BIT') })[2][0]
-        expect(body).to eq('ASCII-8BIT')
+          def plugin_gem_names
+        (Gem.loaded_specs.keys - ['capistrano']).grep(/capistrano/).sort
       end
     end
   end
 end
 
     
-      it 'accepts requests with a changing Accept-Encoding header' do
-    # this is tested because previously it led to clearing the session
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_ENCODING' => 'a'
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_ENCODING' => 'b'
-    expect(session).not_to be_empty
-  end
-    
-      it 'should set the X-XSS-Protection for XHTML' do
-    expect(get('/', {}, 'wants' => 'application/xhtml+xml').headers['X-XSS-Protection']).to eq('1; mode=block')
-  end
-    
-        mock_app do
-      use Rack::Head
-      use(Rack::Config) { |e| e['rack.session'] ||= {}}
-      use changer
-      use klass
-      use detector
-      run DummyApp
+        def after(task, post_task, *args, &block)
+      Rake::Task.define_task(post_task, *args, &block) if block_given?
+      task = Rake::Task[task]
+      task.enhance do
+        post = Rake.application.lookup(post_task, task.scope)
+        raise ArgumentError, 'Task #{post_task.inspect} not found' unless post
+        post.invoke
+      end
     end
+    
+      desc 'Finish the rollback, clean up server(s).'
+  task :finishing_rollback do
+  end
+    
+    module RuboCop
+  module Cop
+    module Style
+      # This cop checks for optional arguments to methods
+      # that do not come at the end of the argument list
+      #
+      # @example
+      #   # bad
+      #   def foo(a = 1, b, c)
+      #   end
+      #
+      #   # good
+      #   def baz(a, b, c = 1)
+      #   end
+      #
+      #   def foobar(a = 1, b = 2, c = 3)
+      #   end
+      class OptionalArguments < Cop
+        MSG = 'Optional arguments should appear at the end ' \
+              'of the argument list.'.freeze
+    
+        context 'opening brace on same line as first element' do
+      context 'last element has a trailing comma' do
+        it 'autocorrects closing brace on different line from last element' do
+          new_source = autocorrect_source(['#{prefix}#{open}#{a}, # a',
+                                           '#{b}, # b',
+                                           close,
+                                           suffix])
