@@ -1,105 +1,67 @@
 
         
-            You can read more about this change at:
-      https://www.playframework.com/documentation/2.3.x/Migration23
-      https://www.playframework.com/documentation/2.3.x/Highlights23
-    EOS
-  when 'haskell-platform' then <<-EOS.undent
-    We no longer package haskell-platform. Consider installing ghc
-    and cabal-install instead:
-      brew install ghc cabal-install
-    
-      # Allows a bottle tag to specify a specific OS or later,
-  # so the same bottle can target multiple OSs.
-  # Not used in core, used in taps.
-  def find_or_later_tag(tag)
-    begin
-      tag_version = MacOS::Version.from_symbol(tag)
-    rescue ArgumentError
-      return
-    end
-    
-    module Homebrew
-  def build_env_keys(env)
-    %w[
-      CC CXX LD OBJC OBJCXX
-      HOMEBREW_CC HOMEBREW_CXX
-      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
-      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
-      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
-      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
-      HOMEBREW_SVN HOMEBREW_GIT
-      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
-      MAKE GIT CPP
-      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
-  end
-    
-        # Remove directories opposite from traversal, so that a subtree with no
-    # actual files gets removed correctly.
-    dirs.reverse_each do |d|
-      if d.children.empty?
-        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
-        d.rmdir
+              # we readlink because this path probably doesn't exist since caveats
+      # occurs before the link step of installation
+      # Yosemite security measures mildly tighter rules:
+      # https://github.com/Homebrew/homebrew/issues/33815
+      if !plist_path.file? || !plist_path.symlink?
+        if f.plist_startup
+          s << 'To have launchd start #{f.full_name} at startup:'
+          s << '  sudo mkdir -p #{destination}' unless destination_path.directory?
+          s << '  sudo cp -fv #{f.opt_prefix}/*.plist #{destination}'
+          s << '  sudo chown root #{plist_link}'
+        else
+          s << 'To have launchd start #{f.full_name} at login:'
+          s << '  mkdir -p #{destination}' unless destination_path.directory?
+          s << '  ln -sfv #{f.opt_prefix}/*.plist #{destination}'
+        end
+        s << 'Then to load #{f.full_name} now:'
+        if f.plist_startup
+          s << '  sudo launchctl load #{plist_link}'
+        else
+          s << '  launchctl load #{plist_link}'
+        end
+      # For startup plists, we cannot tell whether it's running on launchd,
+      # as it requires for `sudo launchctl list` to get real result.
+      elsif f.plist_startup
+        s << 'To reload #{f.full_name} after an upgrade:'
+        s << '  sudo launchctl unload #{plist_link}'
+        s << '  sudo cp -fv #{f.opt_prefix}/*.plist #{destination}'
+        s << '  sudo chown root #{plist_link}'
+        s << '  sudo launchctl load #{plist_link}'
+      elsif Kernel.system '/bin/launchctl list #{plist_domain} &>/dev/null'
+        s << 'To reload #{f.full_name} after an upgrade:'
+        s << '  launchctl unload #{plist_link}'
+        s << '  launchctl load #{plist_link}'
+      else
+        s << 'To load #{f.full_name}:'
+        s << '  launchctl load #{plist_link}'
       end
+    
+        # Remove unresolved symlinks
+    symlinks.reverse_each do |s|
+      s.unlink unless s.resolved_path_exists?
     end
-    
-          return false unless prune_time
-    
-      def clang
-    @clang ||= MacOS.clang_version if MacOS.has_apple_developer_tools?
   end
     
-        if ARGV.named.empty?
-      slow_checks = %w[
-        check_for_broken_symlinks
-        check_missing_deps
-        check_for_outdated_homebrew
-        check_for_linked_keg_only_brews
-      ]
-      methods = (checks.all.sort - slow_checks) + slow_checks
-    else
-      methods = ARGV.named
-    end
-    
-      def self.directory
-    yield @dir
+      def python(_options = {}, &block)
+    opoo 'Formula#python is deprecated and will go away shortly.'
+    block.call if block_given?
+    PythonRequirement.new
   end
-    
-      it 'returns subclass instances when called on a subclass' do
-    StringSpecs::MyString.new('hello').capitalize.should be_an_instance_of(StringSpecs::MyString)
-    StringSpecs::MyString.new('Hello').capitalize.should be_an_instance_of(StringSpecs::MyString)
-  end
+  alias_method :python2, :python
+  alias_method :python3, :python
 end
+
     
-            swapcased.should == 'aSSET'
-        swapcased.size.should == 5
-        swapcased.bytesize.should == 5
-        swapcased.ascii_only?.should be_true
-      end
-    end
-    
-    describe 'Net::HTTPResponse#error!' do
-  it 'raises self's class 'EXCEPTION_TYPE' Exception' do
-    res = Net::HTTPUnknownResponse.new('1.0', '???', 'test response')
-    lambda { res.error! }.should raise_error(Net::HTTPError)
-    
-    describe 'Net::HTTPResponse#error_type' do
-  it 'returns self's class 'EXCEPTION_TYPE' constant' do
-    res = Net::HTTPUnknownResponse.new('1.0', '???', 'test response')
-    res.error_type.should == Net::HTTPError
-    
-          # If the importer is based on files on the local filesystem
-      # this method should return folders which should be watched
-      # for changes.
-      #
-      # @return [Array<String>] List of absolute paths of directories to watch
-      def directories_to_watch
-        []
-      end
-    
-      # Uninstalls this logger from \{Sass.logger\}. This should only be called if
-  # the logger was installed using \{#install!}
-  def uninstall!
-    if Sass.logger != self
-      throw Exception.new('Can't uninstall a logger that's not currently installed.')
-    end
+    # This formula serves as the base class for several very similar
+# formulae for Amazon Web Services related tools.
+class AmazonWebServicesFormula < Formula
+  # Use this method to peform a standard install for Java-based tools,
+  # keeping the .jars out of HOMEBREW_PREFIX/lib
+  def install
+    rm Dir['bin/*.cmd'] # Remove Windows versions
+    libexec.install Dir['*']
+    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
+  end
+  alias_method :standard_install, :install
