@@ -1,134 +1,65 @@
 
         
-          LOG(INFO) << 'Writing Training data';
-  for (int fileid = 0; fileid < kCIFARTrainBatches; ++fileid) {
-    // Open files
-    LOG(INFO) << 'Training Batch ' << fileid + 1;
-    string batchFileName = input_folder + '/data_batch_'
-      + caffe::format_int(fileid+1) + '.bin';
-    std::ifstream data_file(batchFileName.c_str(),
-        std::ios::in | std::ios::binary);
-    CHECK(data_file) << 'Unable to open train file #' << fileid + 1;
-    for (int itemid = 0; itemid < kCIFARBatchSize; ++itemid) {
-      read_image(&data_file, &label, str_buffer);
-      datum.set_label(label);
-      datum.set_data(str_buffer, kCIFARImageNBytes);
-      string out;
-      CHECK(datum.SerializeToString(&out));
-      txn->Put(caffe::format_int(fileid * kCIFARBatchSize + itemid, 5), out);
-    }
+        // Generate param traits write methods.
+#include 'ipc/param_traits_write_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
+    
+    // Tell browser we have to reopen.
+IPC_MESSAGE_CONTROL0(ShellViewMsg_Reopen)
+    
+    #include 'base/command_line.h'
+#include 'base/logging.h'
+#include 'base/message_loop/message_loop.h'
+#include 'base/values.h'
+    
+      GtkRequisition menu_req;
+  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
+  GdkScreen* screen;
+  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
+  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
+    
+    #include 'content/nw/src/api/menuitem/menuitem.h'
+    
+    void NwDesktopCaptureMonitor::OnSourceMoved(DesktopMediaList* list, int old_index, int new_index) {
+    DesktopMediaList::Source src = list->GetSource(new_index);
+    std::unique_ptr<base::ListValue> args = nwapi::nw__screen::OnSourceOrderChanged::Create(
+      src.id.ToString(),
+      new_index,
+      old_index);
+    DispatchEvent(
+      events::HistogramValue::UNKNOWN, 
+      nwapi::nw__screen::OnSourceOrderChanged::kEventName,
+      std::move(args));
   }
-  txn->Commit();
-  train_db->Close();
-    
-    #include <stdint.h>
-#include <sys/stat.h>
-    
-    int main(int argc, char** argv) {
-  if (argc != 4) {
-    printf('This script converts the MNIST dataset to the leveldb format used\n'
-           'by caffe to train a siamese network.\n'
-           'Usage:\n'
-           '    convert_mnist_data input_image_file input_label_file '
-           'output_db_file\n'
-           'The MNIST dataset could be downloaded at\n'
-           '    http://yann.lecun.com/exdb/mnist/\n'
-           'You should gunzip them after downloading.\n');
-  } else {
-    google::InitGoogleLogging(argv[0]);
-    convert_dataset(argv[1], argv[2], argv[3]);
-  }
-  return 0;
-}
-#else
-int main(int argc, char** argv) {
-  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
-}
-#endif  // USE_LEVELDB
-
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-      virtual inline const char* type() const { return 'Convolution'; }
-    
-    namespace caffe {
-    }
     
     
-    { protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual inline bool reverse_dimensions() { return true; }
-  virtual void compute_output_shape();
+    {  private:
+    DISALLOW_COPY_AND_ASSIGN(NwScreenStopMonitorFunction);
+  };
+    
+    
+    {  WorkloadStats (const WorkloadStats&) = delete;
+  WorkloadStats& operator=(const WorkloadStats&) = delete;
 };
     
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {
-}  // namespace caffe
-    
-      /**
-   * Invoked when all data passed to bidirectional_stream_write() is
-   * sent. To continue writing, call bidirectional_stream_write().
-   */
-  void (*on_write_completed)(bidirectional_stream* stream, const char* data);
-    
-    std::string GetDbFileContent(int argc, char** argv) {
-  std::string db_path;
-  std::string arg_str('--db_path');
-  if (argc > 1) {
-    std::string argv_1 = argv[1];
-    size_t start_position = argv_1.find(arg_str);
-    if (start_position != std::string::npos) {
-      start_position += arg_str.size();
-      if (argv_1[start_position] == ' ' ||
-          argv_1[start_position] == '=') {
-        db_path = argv_1.substr(start_position + 1);
-      }
+    void HHVM_FUNCTION(xhprof_enable, int64_t flags/* = 0 */,
+                                  const Array& args /* = null_array */) {
+  if (!RuntimeOption::EnableHotProfiler) {
+    raise_warning('The runtime option Stats.EnableHotProfiler must be on to '
+                  'use xhprof.');
+    return;
+  }
     }
-  } else {
-    db_path = 'route_guide_db.json';
+    
+    int64_t Timer::measure() const {
+  if (m_type == WallTime) {
+    return GetCurrentTimeMicros();
   }
-  std::ifstream db_file(db_path);
-  if (!db_file.is_open()) {
-    std::cout << 'Failed to open ' << db_path << std::endl;
-    return '';
-  }
-  std::stringstream db;
-  db << db_file.rdbuf();
-  return db.str();
-}
+    }
     
-    void ParseDb(const std::string& db, std::vector<Feature>* feature_list);
-    
-    #include 'test/cpp/interop/server_helper.h'
-#include 'test/cpp/util/test_config.h'
-    
-    #endif
-
-    
-    Timer::~Timer() {
-  if (!m_name.empty()) {
-    report();
-  }
-}
+    #include 'hphp/util/compatibility.h'
     
       /**
    * Get results of a task. This is blocking until task is finished or times
@@ -139,226 +70,194 @@ int main(int argc, char** argv) {
                            int &code,
                            int64_t timeout_ms);
     
-        if (b->fallthrough != NoBlockId) {
-      set_expected_depth(blockInfo[b->fallthrough]);
-      if (std::next(blockIt) == endBlockIt ||
-          blockIt[1]->id != b->fallthrough) {
-        if (b->fallthroughNS) {
-          emit_inst(bc::JmpNS { b->fallthrough });
-        } else {
-          emit_inst(bc::Jmp { b->fallthrough });
-        }
-    }
-    }
+    #ifdef HAVE_NUMA
     
     
-    {  // We may have inferred a TSStr or TSArr with a value here, but at
-  // runtime it will not be static.
-  resultTy = loosen_staticness(*resultTy);
-  return *resultTy;
-}
-    
-      // find root nodes
-  type_scan::Scanner scanner;
-  iterateRoots([&](const void* h, size_t size, type_scan::Index tyindex) {
-    // it's important that we actually scan each root node before
-    // returning, since at least one will be the C++ stack, and some
-    // nodes will only exist for the duration of the call to this lambda,
-    // for example EphemeralPtrWrapper<T>.
-    addRootNode(g, blocks, scanner, h, size, tyindex);
-  });
-    
-    
-    {        UINT64 fenceValue = g_fenceLastSignaledValue + 1;
-        g_pd3dCommandQueue->Signal(g_fence, fenceValue);
-        g_fenceLastSignaledValue = fenceValue;
-        frameCtxt->FenceValue = fenceValue;
-    }
-    
-            // 1. Show a simple window.
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    }
-    
-        // Copy and convert all vertices into a single contiguous buffer, convert colors to DX9 default format.
-    // FIXME-OPT: This is a waste of resource, the ideal is to use imconfig.h and
-    //  1) to avoid repacking colors:   #define IMGUI_USE_BGRA_PACKED_COLOR
-    //  2) to avoid repacking vertices: #define IMGUI_OVERRIDE_DRAWVERT_STRUCT_LAYOUT struct ImDrawVert { ImVec2 pos; float z; ImU32 col; ImVec2 uv; }
-    CUSTOMVERTEX* vtx_dst;
-    ImDrawIdx* idx_dst;
-    if (g_pVB->Lock(0, (UINT)(draw_data->TotalVtxCount * sizeof(CUSTOMVERTEX)), (void**)&vtx_dst, D3DLOCK_DISCARD) < 0)
-        return;
-    if (g_pIB->Lock(0, (UINT)(draw_data->TotalIdxCount * sizeof(ImDrawIdx)), (void**)&idx_dst, D3DLOCK_DISCARD) < 0)
-        return;
-    for (int n = 0; n < draw_data->CmdListsCount; n++)
     {
-        const ImDrawList* cmd_list = draw_data->CmdLists[n];
-        const ImDrawVert* vtx_src = cmd_list->VtxBuffer.Data;
-        for (int i = 0; i < cmd_list->VtxBuffer.Size; i++)
-        {
-            vtx_dst->pos[0] = vtx_src->pos.x;
-            vtx_dst->pos[1] = vtx_src->pos.y;
-            vtx_dst->pos[2] = 0.0f;
-            vtx_dst->col = (vtx_src->col & 0xFF00FF00) | ((vtx_src->col & 0xFF0000) >> 16) | ((vtx_src->col & 0xFF) << 16);     // RGBA --> ARGB for DirectX9
-            vtx_dst->uv[0] = vtx_src->uv.x;
-            vtx_dst->uv[1] = vtx_src->uv.y;
-            vtx_dst++;
-            vtx_src++;
-        }
-        memcpy(idx_dst, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
-        idx_dst += cmd_list->IdxBuffer.Size;
-    }
-    g_pVB->Unlock();
-    g_pIB->Unlock();
-    g_pd3dDevice->SetStreamSource(0, g_pVB, 0, sizeof(CUSTOMVERTEX));
-    g_pd3dDevice->SetIndices(g_pIB);
-    g_pd3dDevice->SetFVF(D3DFVF_CUSTOMVERTEX);
+    {
+    {}}}
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        VkPipelineColorBlendStateCreateInfo blend_info = {};
-    blend_info.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    blend_info.attachmentCount = 1;
-    blend_info.pAttachments = color_attachment;
-    
-        // C++ mappings of API methods
-    static Persistent<v8::Function> constructor;
-    static Handle<Value> Open(const Arguments& args);
-    static Handle<Value> New(const Arguments& args);
-    static Handle<Value> Get(const Arguments& args);
-    static Handle<Value> Put(const Arguments& args);
-    static Handle<Value> Delete(const Arguments& args);
-    static Handle<Value> Dump(const Arguments& args);
-    static Handle<Value> WriteBatch(const Arguments& args);
-    static Handle<Value> CreateColumnFamily(const Arguments& args);
-    static Handle<Value> CompactRange(const Arguments& args);
-    static Handle<Value> Close(const Arguments& args);
-    
-    
-    {  /// The backend rocksdb database.
-  /// Map : key --> list
-  ///       where a list is a sequence of elements
-  ///       and an element is a 4-byte integer (n), followed by n bytes of data
-  std::unique_ptr<DB> db_;
-};
-    
-      // Extend record types with the following special values
-  enum {
-    kEof = kMaxRecordType + 1,
-    // Returned whenever we find an invalid physical record.
-    // Currently there are three situations in which this happens:
-    // * The record has an invalid CRC (ReadPhysicalRecord reports a drop)
-    // * The record is a 0-length record (No drop is reported)
-    // * The record is below constructor's initial_offset (No drop is reported)
-    kBadRecord = kMaxRecordType + 2,
-    // Returned when we fail to read a valid header.
-    kBadHeader = kMaxRecordType + 3,
-    // Returned when we read an old record from a previous user of the log.
-    kOldRecord = kMaxRecordType + 4,
-    // Returned when we get a bad record length
-    kBadRecordLen = kMaxRecordType + 5,
-    // Returned when we get a bad record checksum
-    kBadRecordChecksum = kMaxRecordType + 6,
-  };
-    
-      // 5. create db_pool_ioctx
-  ret = _rados.ioctx_create(_db_pool_name.c_str(), _db_pool_ioctx);
-  if (ret < 0) {
-    std::cerr << 'couldn't set up ioctx! error ' << ret << std::endl;
-    ret = EXIT_FAILURE;
-    goto out;
+    Base miBaseLocal(ISS& env, LocalId locBase, MOpMode mode) {
+  auto const locName = env.ctx.func->locals[locBase].name;
+  auto const isDefine = mode == MOpMode::Define;
+  if (mode == MOpMode::None ||
+      (mode == MOpMode::Warn && !locCouldBeUninit(env, locBase))) {
+    nothrow(env);
   }
-    
-    void SyncPoint::ClearAllCallBacks() {
-  impl_->ClearAllCallBacks();
+  // If we're changing the local to define it, we don't need to do an miThrow
+  // yet---the promotions (to array or stdClass) on previously uninitialized
+  // locals happen before raising warnings that could throw, so we can wait
+  // until the first moveBase.
+  return Base { isDefine ? locAsCell(env, locBase) : derefLoc(env, locBase),
+                BaseLoc::Local,
+                TBottom,
+                locName,
+                locBase };
 }
     
-      // Insert key into the collection. (The caller will pack key and value into a
-  // single buffer and pass that in as the parameter to Insert).
-  // REQUIRES: nothing that compares equal to key is currently in the
-  // collection, and no concurrent modifications to the table in progress
-  virtual void Insert(KeyHandle handle) = 0;
+    #define IMM_BLA(n)     ret += ' '; append_switch(data.targets);
+#define IMM_SLA(n)     ret += ' '; append_sswitch(data.targets);
+#define IMM_ILA(n)     ret += ' '; append_itertab(data.iterTab);
+#define IMM_I32LA(n)   append_argv32(data.argv);
+#define IMM_BLLA(n)    append_argvb(data.argv);
+#define IMM_IVA(n)     folly::toAppend(' ', data.arg##n, &ret);
+#define IMM_I64A(n)    folly::toAppend(' ', data.arg##n, &ret);
+#define IMM_LA(n)      ret += ' ' + local_string(func, data.loc##n);
+#define IMM_IA(n)      folly::toAppend(' iter:', data.iter##n, &ret);
+#define IMM_CAR(n)     folly::toAppend(' rslot:', data.slot, &ret);
+#define IMM_CAW(n)     folly::toAppend(' wslot:', data.slot, &ret);
+#define IMM_DA(n)      folly::toAppend(' ', data.dbl##n, &ret);
+#define IMM_SA(n)      folly::toAppend(' ', escaped_string(data.str##n), &ret);
+#define IMM_RATA(n)    folly::toAppend(' ', show(data.rat), &ret);
+#define IMM_AA(n)      ret += ' ' + array_string(data.arr##n);
+#define IMM_BA(n)      folly::toAppend(' <blk:', data.target, '>', &ret);
+#define IMM_OA_IMPL(n) folly::toAppend(' ', subopToName(data.subop##n), &ret);
+#define IMM_OA(type)   IMM_OA_IMPL
+#define IMM_VSA(n)     ret += ' '; append_vsa(data.keys);
+#define IMM_KA(n)      ret += ' '; append_mkey(data.mkey);
+#define IMM_LAR(n)     ret += ' '; append_lar(data.locrange);
     
-    class CompactionFilterFactoryJniCallback : public JniCallback, public CompactionFilterFactory {
- public:
-    CompactionFilterFactoryJniCallback(
-        JNIEnv* env, jobject jcompaction_filter_factory);
-    virtual std::unique_ptr<CompactionFilter> CreateCompactionFilter(
-      const CompactionFilter::Context& context);
-    virtual const char* Name() const;
+      Array getHandlers();
+  bool addHandler(const Variant& handler, bool prepend);
+  void removeHandler(const Variant& handler);
+  void removeAllHandlers();
+  bool isRunning();
+    
+    // parse the heap to find valid objects and initialize metadata, then
+// add edges for every known root pointer and every known obj->obj ptr.
+HeapGraph makeHeapGraph(bool include_free) {
+  HeapGraph g;
+  PtrMap<const HeapObject*> blocks;
     }
     
-    #endif  // JAVA_ROCKSJNI_LOGGERJNICALLBACK_H_
+    #endif // incl_HPHP_HTTP_CLIENT_H_
 
     
-      void ReadUnlock() { ReleaseSRWLockShared(&srwLock_); }
-    
-    // Analyze the performance of a db
-class Statistics {
- public:
-  virtual ~Statistics() {}
-    }
-    
-    void* YGNodeGetContext(YGNodeRef node);
-void YGNodeSetContext(YGNodeRef node, void* context);
-YGMeasureFunc YGNodeGetMeasureFunc(YGNodeRef node);
-void YGNodeSetMeasureFunc(YGNodeRef node, YGMeasureFunc measureFunc);
-YGBaselineFunc YGNodeGetBaselineFunc(YGNodeRef node);
-void YGNodeSetBaselineFunc(YGNodeRef node, YGBaselineFunc baselineFunc);
-YGDirtiedFunc YGNodeGetDirtiedFunc(YGNodeRef node);
-void YGNodeSetDirtiedFunc(YGNodeRef node, YGDirtiedFunc dirtiedFunc);
-YGPrintFunc YGNodeGetPrintFunc(YGNodeRef node);
-void YGNodeSetPrintFunc(YGNodeRef node, YGPrintFunc printFunc);
-bool YGNodeGetHasNewLayout(YGNodeRef node);
-void YGNodeSetHasNewLayout(YGNodeRef node, bool hasNewLayout);
-YGNodeType YGNodeGetNodeType(YGNodeRef node);
-void YGNodeSetNodeType(YGNodeRef node, YGNodeType nodeType);
-bool YGNodeIsDirty(YGNodeRef node);
-bool YGNodeLayoutGetDidUseLegacyFlag(const YGNodeRef node);
-    
-      YGNodeCalculateLayout(root, 200, 100, YGDirectionLTR);
-    
-        Config(Config const &) = delete;
-    
-    #pragma once
-    
-    void assertInternal(const char* formatstr ...) {
-    va_list va_args;
-    va_start(va_args, formatstr);
-    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
-    va_end(va_args);
-    if (gAssertHandler != NULL) {
-        gAssertHandler(sAssertBuf);
-    }
-    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
-    // crash at this specific address so that we can find our crashes easier
-    *(int*)0xdeadb00c = 0;
-    // let the compiler know we won't reach the end of the function
-     __builtin_unreachable();
+    /// Create a new non-modifiable buffer that represents the given POD array.
+/**
+ * @returns A const_buffers_1 value equivalent to:
+ * @code const_buffers_1(
+ *     data.data(),
+ *     data.size() * sizeof(PodType)); @endcode
+ */
+template <typename PodType, std::size_t N>
+inline const_buffers_1 buffer(const std::array<PodType, N>& data)
+{
+  return const_buffers_1(
+      const_buffer(data.data(), data.size() * sizeof(PodType)));
 }
     
-    namespace detail {
-template <typename T, typename jprim>
-struct JPrimitive : JavaClass<T> {
-  using typename JavaClass<T>::javaobject;
-  using JavaClass<T>::javaClassStatic;
-  static local_ref<javaobject> valueOf(jprim val) {
-    static auto cls = javaClassStatic();
-    static auto method =
-      cls->template getStaticMethod<javaobject(jprim)>('valueOf');
-    return method(cls, val);
-  }
-  jprim value() const {
-    static auto method =
-      javaClassStatic()->template getMethod<jprim()>(T::kValueMethod);
-    return method(this->self());
-  }
-};
+    namespace boost {
+namespace asio {
     }
+    }
+    
+    namespace boost {
+namespace asio {
+    }
+    }
+    
+    
+    {} // namespace boost
+    
+        // Pop the key/value pair from the stack.
+    ~context()
+    {
+      call_stack<Key, Value>::top_ = next_;
+    }
+    
+    
+    {
+    {} // namespace posix_time
+} // namespace boost
+    
+        // Make a copy of the handler so that the memory can be deallocated before
+    // the upcall is made. Even if we're not about to make an upcall, a
+    // sub-object of the handler may be the true owner of the memory associated
+    // with the handler. Consequently, a local copy of the handler is required
+    // to ensure that any owning sub-object remains valid until after we have
+    // deallocated the memory here.
+    detail::binder2<Handler, boost::system::error_code, std::size_t>
+      handler(o->handler_, o->ec_, o->bytes_transferred_);
+    p.h = boost::asio::detail::addressof(handler.handler_);
+    p.reset();
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS) \
+  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
+# include <boost/asio/detail/null_fenced_block.hpp>
+#elif defined(__MACH__) && defined(__APPLE__)
+# include <boost/asio/detail/macos_fenced_block.hpp>
+#elif defined(__sun)
+# include <boost/asio/detail/solaris_fenced_block.hpp>
+#elif defined(__GNUC__) && defined(__arm__) \
+  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
+# include <boost/asio/detail/gcc_arm_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
+# include <boost/asio/detail/gcc_hppa_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+# include <boost/asio/detail/gcc_x86_fenced_block.hpp>
+#elif defined(__GNUC__) \
+  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
+# include <boost/asio/detail/gcc_sync_fenced_block.hpp>
+#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+# include <boost/asio/detail/win_fenced_block.hpp>
+#else
+# include <boost/asio/detail/null_fenced_block.hpp>
+#endif
+    
+    #include <boost/asio/detail/push_options.hpp>
+    
+      char delim_;         // The delimiter is inserted between elements
+    
+    void JniCallback::releaseJniEnv(jboolean& attached) const {
+  JniUtil::releaseJniEnv(m_jvm, attached);
+}
+    
+      class StatisticsJni : public StatisticsImpl {
+   public:
+     StatisticsJni(std::shared_ptr<Statistics> stats);
+     StatisticsJni(std::shared_ptr<Statistics> stats,
+         const std::set<uint32_t> ignore_histograms);
+     virtual bool HistEnabledForType(uint32_t type) const override;
+    }
+    
+    #ifndef NDEBUG
+namespace rocksdb {
+    }
+    
+      // Returns if there is no entry inserted to the mem table.
+  // REQUIRES: external synchronization to prevent simultaneous
+  // operations on the same MemTable (unless this Memtable is immutable).
+  bool IsEmpty() const { return first_seqno_ == 0; }
+    
+      // Same as ::Insert
+  // Returns false if MemTableRepFactory::CanHandleDuplicatedKey() is true and
+  // the <key, seq> already exists.
+  virtual bool InsertKey(KeyHandle handle) {
+    Insert(handle);
+    return true;
+  }
+    
+    bool SyncPoint::Data::PredecessorsAllCleared(const std::string& point) {
+  for (const auto& pred : predecessors_[point]) {
+    if (cleared_points_.count(pred) == 0) {
+      return false;
+    }
+  }
+  return true;
+}
+    
+      // Mutex is move only with lock ownership transfer
+  Mutex(const Mutex&) = delete;
+  void operator=(const Mutex&) = delete;
+    
+        if (update_ctx || yield_credit.load(std::memory_order_relaxed) >= 0) {
+      // we're updating the adaptation statistics, or spinning has >
+      // 50% chance of being shorter than max_yield_usec_ and causing no
+      // involuntary context switches
+      auto spin_begin = std::chrono::steady_clock::now();
+    }
+    
+    #include 'rocksdb/status.h'
