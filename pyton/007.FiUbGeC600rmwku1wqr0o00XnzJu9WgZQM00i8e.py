@@ -1,125 +1,114 @@
 
         
-        anchor = '###'
-min_entries_per_section = 3
-auth_keys = ['apiKey', 'OAuth', 'X-Mashape-Key', 'No']
-punctuation = ['.', '?', '!']
-https_keys = ['Yes', 'No']
-cors_keys = ['Yes', 'No', 'Unknown']
+        header = oldreadme[:oldreadme.index('# OPTIONS')]
+footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
     
-        # To avoid having to always use the '|safe' filter in flatpage templates,
-    # mark the title and content as already safe (since they are raw HTML
-    # content in the first place).
-    f.title = mark_safe(f.title)
-    f.content = mark_safe(f.content)
     
-        def __init__(self, employee_id, name):
-        super(Operator, self).__init__(employee_id, name, Rank.OPERATOR)
+total_bytes = 0
     
-            When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
-        '''
-        node = self.map[query]
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
-        else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(query, results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
-
     
-            (foo, 2), p1
-        (bar, 3), p1
-        (foo, 3), p2
-        (bar, 10), p3
-        (foo, 1), p4
+class AcademicEarthCourseIE(InfoExtractor):
+    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
+    IE_NAME = 'AcademicEarth:Course'
+    _TEST = {
+        'url': 'http://academicearth.org/playlists/laws-of-nature/',
+        'info_dict': {
+            'id': 'laws-of-nature',
+            'title': 'Laws of Nature',
+            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
+        },
+        'playlist_count': 3,
+    }
     
-        def can_fit_in_spot(self, spot):
-        return spot.size in (VehicleSize.LARGE, VehicleSize.COMPACT)
+            title = self._html_search_regex(r'<title>(.*?)</title>', webpage, 'title')
+        description = self._html_search_regex(
+            r'<div class='description'[^>]*>([^<]+)</div>', webpage, 'description', fatal=False)
+        thumbnail = self._html_search_regex(
+            r'preview_url\s*:\s*\'(.*?)\'', webpage, 'thumbnail', fatal=False)
     
-        def approve_friend_request(self, from_user_id, to_user_id):
-        pass
+            page = self._download_json(
+            'http://vxml.56.com/json/%s/' % text_id, text_id, 'Downloading video info')
     
-    if hasattr(ctypes, 'windll'):
-    WSAStringToAddressA = ctypes.windll.ws2_32.WSAStringToAddressA
-    WSAAddressToStringA = ctypes.windll.ws2_32.WSAAddressToStringA
-else:
-    def not_windows():
-        raise SystemError(
-            'Invalid platform. ctypes.windll must be available.'
+        model.train_on_batch(x_train[:32], y_train[:32])
+    model.test_on_batch(x_train[:32], y_train[:32])
+    
+    
+def test_regression_class_build_fn():
+    class ClassBuildFnReg(object):
+    
+            # if the state is not reset, output should be different
+        assert(out1.max() != out2.max())
+    
+    # Embedding
+max_features = 20000
+maxlen = 100
+embedding_size = 128
+    
+        # Cut to a 40x40 window
+    noisy_movies = noisy_movies[::, ::, 20:60, 20:60, ::]
+    shifted_movies = shifted_movies[::, ::, 20:60, 20:60, ::]
+    noisy_movies[noisy_movies >= 1] = 1
+    shifted_movies[shifted_movies >= 1] = 1
+    return noisy_movies, shifted_movies
+    
+    # We add a vanilla hidden layer:
+model.add(Dense(hidden_dims))
+model.add(Dropout(0.2))
+model.add(Activation('relu'))
+    
+    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
+    #sample
+    #url_sample:http://www.kugou.com/yy/album/single/536957.html
+    #hash ->key  md5(hash+kgcloud')->key  decompile swf
+    #cmd 4 for mp3 cmd 3 for m4a
+    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
+    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
+    j=loads(html)
+    url=j['url']
+    songtype, ext, size = url_info(url)
+    print_info(site_info, title, songtype, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge=merge)
+    
+    def kuwo_download_by_rid(rid, output_dir = '.', merge = True, info_only = False):
+    html=get_content('http://player.kuwo.cn/webmusic/st/getNewMuiseByRid?rid=MUSIC_%s'%rid)
+    title=match1(html,r'<name>(.*)</name>')
+    #to get title
+    #format =aac|mp3 ->to get aac format=mp3 ->to get mp3
+    url=get_content('http://antiserver.kuwo.cn/anti.s?format=mp3&rid=MUSIC_%s&type=convert_url&response=url'%rid)
+    songtype, ext, size = url_info(url)
+    print_info(site_info, title, songtype, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir)
+    
+        for i in range(10, 30):
+        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
+            i = i,
+            p = preview
         )
-    WSAStringToAddressA = not_windows
-    WSAAddressToStringA = not_windows
+        try:
+            mime, ext, size = url_info(url)
+            break
+        except: continue
     
-    - RecognitionException
-  - MismatchedRangeException
-  - MismatchedSetException
-    - MismatchedNotSetException
-    .
-  - MismatchedTokenException
-  - MismatchedTreeNodeException
-  - NoViableAltException
-  - EarlyExitException
-  - FailedPredicateException
-  .
-.
+        mediatype, ext, size = 'mp4', 'mp4', 0
+    print_info(site_info, title, mediatype, size)
+    #
+    # rtmpdump  -r 'rtmpe://cp30865.edgefcs.net/ondemand/mtviestor/_!/intlod/MTVInternational/MBUS/GeoLocals/00JP/VIAMTVI/PYC/201304/7122HVAQ4/00JPVIAMTVIPYC7122HVAQ4_640x_360_1200_m30.mp4' -o 'title.mp4' --swfVfy http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf
+    #
+    # because rtmpdump is unstable,may try serveral times
+    #
+    if not info_only:
+        # import pdb
+        # pdb.set_trace()
+        download_rtmp_url(url=url, title=title, ext=ext, params={
+                          '--swfVfy': 'http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf'}, output_dir=output_dir)
     
-    ## All tokens go to the parser (unless skip() is called in that rule)
-# on a particular 'channel'.  The parser tunes to a particular channel
-# so that whitespace etc... can go to the parser on a 'hidden' channel.
-DEFAULT_CHANNEL = 0
-    
-    # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = ['_static']
-    
-            mock_crypto_util.init_save_key.assert_called_once_with(
-            self.config.rsa_key_size, self.config.key_dir)
-        mock_crypto_util.init_save_csr.assert_called_once_with(
-            mock.sentinel.key, self.eg_domains, self.config.csr_dir)
-        mock_crypto_util.cert_and_chain_from_fullchain.assert_called_once_with(
-            self.eg_order.fullchain_pem)
-    
-    # If false, no module index is generated.
-#html_domain_indices = True
-    
-        def load_config(self):
-        '''Returns the next config directory to be tested'''
-        shutil.rmtree(self.le_config.work_dir, ignore_errors=True)
-        backup = os.path.join(self.le_config.work_dir, constants.BACKUP_DIR)
-        os.makedirs(backup)
-        return self._configs.pop()
-    
-        @mock.patch('certbot_compatibility_test.validator.requests.get')
-    def test_hsts_empty(self, mock_get_request):
-        mock_get_request.return_value = create_response(
-            headers={'strict-transport-security': ''})
-        self.assertFalse(self.validator.hsts('test.com'))
-    
-        if not app.config.edit_on_github_project:
-        warnings.warn('edit_on_github_project not specified')
-        return
-    if not doctree:
-        warnings.warn('doctree is None')
-        return
-    path = os.path.relpath(doctree.get('source'), app.builder.srcdir)
-    show_url = get_github_url(app, 'blob', path)
-    edit_url = get_github_url(app, 'edit', path)
-    
-    DOMAIN = 'browser'
-SERVICE_BROWSE_URL = 'browse_url'
-    
-    from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
+        #title
+    title = ''
+    profile_api = 'https://www.showroom-live.com/api/room/profile?room_id={room_id}'.format(room_id = room_id)
+    html = loads(get_content(profile_api))
+    try:
+        title = html['main_name']
+    except KeyError:
+        title = 'Showroom_{room_id}'.format(room_id = room_id)
