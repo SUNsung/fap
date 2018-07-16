@@ -1,148 +1,56 @@
 
-def side_effect(old_cmd, command):
-    with tarfile.TarFile(_tar_file(old_cmd.script_parts)[0]) as archive:
-        for file in archive.getnames():
-            try:
-                os.remove(file)
-            except OSError:
-                # does not try to remove directories as we cannot know if they
-                # already existed before
-                pass
-
+        
+            This could be extended by having nested blocks, sorting them recursively
+    and flattening the end structure into a list of lines. Revision 2 maybe ^.^.
+'''
     
-        #Merging all the documents into a single PDF
-    for doc in group:
-        for p in doc.pages:
-            ap.append(p)
-    
-            Args:
-            max_workers: The maximum number of threads that can be used to
-                execute the given calls.
-        '''
-        self._max_workers = max_workers
-        self._work_queue = queue.Queue()
-        self._threads = set()
-        self._shutdown = False
-        self._shutdown_lock = threading.Lock()
-    
-            f = Future()
-        self.assertTrue(f.cancel())
-        f.add_done_callback(fn)
-        self.assertTrue(was_cancelled[0])
+            def get_auth(self, username=None, password=None):
+            assert self.raw_auth is None
+            assert username is None
+            assert password is None
+            return basic_auth()
     
     
-def KeywordsFromSyntaxListOutput_StatementAndTypeHierarchy_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
-tBaa xxx foo bar
-         links to tFoo
-tFoo xxx zoo goo
-         links to tBar
-tBar xxx qux moo
-         links to Type
-sBaa xxx na bar
-         links to sFoo
-sFoo xxx zoo nb
-         links to sBar
-sBar xxx qux nc
-         links to Statement''' ),
-              contains_inanyorder( 'foo', 'bar', 'zoo', 'goo', 'qux', 'moo',
-                                   'na', 'nb', 'nc' ) )
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
+    
+    from httpie import ExitStatus
+from httpie.core import main
     
     
-def EndsWithPython_BadPaths_test():
-  not_python_paths = [
-    None,
-    '',
-    '/opt/local/bin/vim',
-    r'C:\Program Files\Vim\vim74\gvim.exe',
-    '/usr/bin/python2.5',
-    '/home/user/.pyenv/shims/python3.2',
-  ]
+@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
+def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
+    r = http(follow_flag, httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 1
+    assert HTTP_OK in r
+    
+    # def test_unicode_url_verbose(self):
+#     r = http(httpbin.url + '--verbose', u'/get?test=' + UNICODE)
+#     assert HTTP_OK in r
     
     
-  def done( self ):
-    return self._done
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    import logging
-    
-        def test_sales_manager_shall_respond_through_proxy_with_delay(cls):
-        cls.p.busy = 'Yes'
-        start_time = time()
-        cls.p.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-Sales Manager is busy\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
-    
-        def test_display_current_time_at_midnight(self):
-        '''
-        Would almost always fail (despite of right at/after midnight) if
-        untestable production code would have been used.
-        '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay()
-        class_under_test.set_time_provider(time_provider_stub)
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
-    
-        def get_current_time_as_html_fragment(self, time_provider):
-        current_time = time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-    
-        test = CatalogInstance('param_value_1')
-    test.main_method()
-    
-            # they can be executed later on
-        for cmd in command_stack:
-            cmd.execute()
+class AuthPlugin(BasePlugin):
+    '''
+    Base auth plugin class.
     
     
-if __name__ == '__main__':
-    reporter = Reporter()
-    db = DB()
-    tm = TestManager()
-    tm.setReporter(reporter)
-    tm.setDB(db)
-    reporter.setTM(tm)
-    db.setTM(tm)
-    # For simplification we are looping on the same test.
-    # Practically, it could be about various unique test classes and their
-    # objects
-    for i in range(3):
-        tc = TC()
-        tc.setTM(tm)
-        tm.setTC(tc)
-        tc.setup()
-        tc.execute()
-        tc.tearDown()
+class Config(BaseConfigDict):
     
-        def __init__(self, name=''):
-        Subject.__init__(self)
-        self.name = name
-        self._data = 0
+        def test_binary_suppresses_when_terminal(self):
+        r = http('GET', self.url)
+        assert BINARY_SUPPRESSED_NOTICE.decode() in r
+    
+        def remaining_cards(self):
+        return len(self.cards) - self.deal_index
+    
+        def set(self, results, query):
+        '''Set the result for the given query key in the cache.
+    
+            print_info(site_info, title, type_, size_full)
+        if not info_only:
+            download_urls(url_list, title, ext, total_size=size_full, output_dir=output_dir, merge=merge, headers=fake_headers)
+    else:
+        raise NotImplementedError(flashvars)
