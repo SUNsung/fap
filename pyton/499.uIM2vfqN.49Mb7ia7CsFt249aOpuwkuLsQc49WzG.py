@@ -1,89 +1,162 @@
 
         
-        print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
+            with open(empty_input_path, 'w'):
+      pass
+    
+      def create(self,
+             fixed_embeddings,
+             linked_embeddings,
+             context_tensor_arrays,
+             attention_tensor,
+             during_training,
+             stride=None):
+    '''Forwards the lengths and scores.'''
+    check.NotNone(stride, 'MstSolverNetwork requires stride')
     
     
-atom_template = textwrap.dedent('''\
-    <?xml version='1.0' encoding='utf-8'?>
-    <feed xmlns='http://www.w3.org/2005/Atom'>
-        <link rel='self' href='http://rg3.github.io/youtube-dl/update/releases.atom' />
-        <title>youtube-dl releases</title>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed</id>
-        <updated>@TIMESTAMP@</updated>
-        @ENTRIES@
-    </feed>''')
+def apply_feature_id_dropout(ids, weights, channel):
+  '''Randomly perturbs a vector of feature IDs.
     
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+          # Should be equal to the hidden dimension (128) times 3.
+      self.assertEqual(ico_bias.shape, (384,))
     
-    from test.helper import assertRegexpMatches
+      # TODO(googleuser): If the extra row is removed from the variable itself, remove
+  # the tf.slice() and point the hook directly at the variable.
+  _add_hook_node(matrix, _get_hook_name(component, var_name, '/trimmed'))
+    
+        if transition_spec.registered_name in ('shift-only', 'tagger', 'morpher',
+                                           'lm-transitions', 'dependency-label',
+                                           'category'):
+      if 'left_to_right' in transition_spec.parameters:
+        if transition_spec.parameters['left_to_right'] == 'false':
+          return 'reverse-token'
+      return 'identity'
+    
+          tf.logging.info('Processed %d documents in %.2f seconds.',
+                      len(char_corpus), time.time() - start_time)
+    
+    from tensorflow.python.platform import gfile
+from tensorflow.python.platform import tf_logging as logging
+    
+    cc_test(
+    name = 'registry_test_with_duplicate',
+    srcs = ['registry_test.cc'],
+    defines = ['DRAGNN_REGISTRY_TEST_WITH_DUPLICATE'],
+    deps = [
+        ':base',
+        ':registry',
+        ':test_main',
+        '//dragnn/core/test:generic',
+        '@org_tensorflow//tensorflow/core:test',
+    ],
+)
+    
+      def PathScores(self, iterations, beam_size, max_steps, batch_size):
+    with self.test_session(graph=tf.Graph()) as sess:
+      t = self.MakeGraph(beam_size=beam_size, max_steps=max_steps,
+                         batch_size=batch_size).training
+      sess.run(t['inits'])
+      all_path_scores = []
+      beam_path_scores = []
+      for i in range(iterations):
+        logging.info('run %d', i)
+        tensors = (
+            sess.run(
+                [t['alive_steps'], t['concat_scores'],
+                 t['all_path_scores'], t['beam_path_scores'],
+                 t['indices'], t['path_ids']]))
+    
+        def _finish(self, request):
+        self.concurrent -= 1
+        if not request.finished and not request._disconnected:
+            request.finish()
+    
+            # If no credentials could be found anywhere,
+        # consider this an anonymous connection request by default;
+        # unless 'anon' was set explicitly (True/False).
+        anon = kw.get('anon')
+        if anon is None and not aws_access_key_id and not aws_secret_access_key:
+            kw['anon'] = True
+        self.anon = kw.get('anon')
+    
+        def spider_opened(self, spider):
+        usr = getattr(spider, 'http_user', '')
+        pwd = getattr(spider, 'http_pass', '')
+        if usr or pwd:
+            self.auth = basic_auth_header(usr, pwd)
+    
+        def __init__(self, reason='cancelled'):
+        super(CloseSpider, self).__init__()
+        self.reason = reason
+    
+        def item_scraped(self, item, spider):
+        self.counter['itemcount'] += 1
+        if self.counter['itemcount'] == self.close_on['itemcount']:
+            self.crawler.engine.close_spider(spider, 'closespider_itemcount')
+    
+         
+    def getUnexpectedType(self):
+        '''Return the token type or char of the unexpected input element'''
+    
+                t = self.tokenSource.nextToken()
+       
+        # leave p pointing at first token on channel
+        self.p = 0
+        self.p = self.skipOffTokenChannels(self.p)
+    
+    if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        zones = TZInfo.zonelist()
+        for z in zones:
+            print(z)
+        sys.exit()
+    filepath = sys.argv[1]
+    if not filepath.startswith('/'):
+        filepath = os.path.join('/usr/share/zoneinfo', filepath)
+    with open(filepath, 'rb') as fileobj:
+        tzi = TZInfo.fromfile(fileobj)
+    tzi.dump(sys.stdout)
+
+    
+                lines = []
+            if file is not None:
+                # XXX lines = None instead?
+                terminators = (b'.' + _CRLF, b'.\n')
+                while 1:
+                    line = self._getline(False)
+                    if line in terminators:
+                        break
+                    if line.startswith(b'..'):
+                        line = line[1:]
+                    file.write(line)
+            else:
+                terminator = b'.'
+                while 1:
+                    line = self._getline()
+                    if line == terminator:
+                        break
+                    if line.startswith(b'..'):
+                        line = line[1:]
+                    lines.append(line)
+        finally:
+            # If this method created the file, then it must close it
+            if openedFile:
+                openedFile.close()
     
     
-class CNNBlogsIE(InfoExtractor):
-    _VALID_URL = r'https?://[^\.]+\.blogs\.cnn\.com/.+'
-    _TEST = {
-        'url': 'http://reliablesources.blogs.cnn.com/2014/02/09/criminalizing-journalism/',
-        'md5': '3e56f97b0b6ffb4b79f4ea0749551084',
-        'info_dict': {
-            'id': 'bestoftv/2014/02/09/criminalizing-journalism.cnn',
-            'ext': 'mp4',
-            'title': 'Criminalizing journalism?',
-            'description': 'Glenn Greenwald responds to comments made this week on Capitol Hill that journalists could be criminal accessories.',
-            'upload_date': '20140209',
-        },
-        'expected_warnings': ['Failed to download m3u8 information'],
-        'add_ie': ['CNN'],
-    }
+def _normalize_path(path) -> str:
+    '''Normalize a path by ensuring it is a string.
     
-    
-def has_level_handler(logger):
-    '''Check if there is a handler in the logging chain that will handle the
-    given logger's :meth:`effective level <~logging.Logger.getEffectiveLevel>`.
+        The 'size' argument is normally passed to the decorated test method as an
+    extra argument. If 'dry_run' is true, the value passed to the test method
+    may be less than the requested value. If 'dry_run' is false, it means the
+    test doesn't support dummy runs when -M is not specified.
     '''
-    level = logger.getEffectiveLevel()
-    current = logger
-    
-        filename = os.path.join(model_name, 'digits_over_latent.png')
-    # display a 30x30 2D manifold of digits
-    n = 30
-    digit_size = 28
-    figure = np.zeros((digit_size * n, digit_size * n))
-    # linearly spaced coordinates corresponding to the 2D plot
-    # of digit classes in the latent space
-    grid_x = np.linspace(-4, 4, n)
-    grid_y = np.linspace(-4, 4, n)[::-1]
-    
-    print('Loading data...')
-(x_train, y_train), (x_test, y_test) = reuters.load_data(num_words=max_words,
-                                                         test_split=0.2)
-print(len(x_train), 'train sequences')
-print(len(x_test), 'test sequences')
-    
-    
-def test_sparse_categorical_crossentropy_4d():
-    y_pred = K.variable(np.array([[[[0.7, 0.1, 0.2],
-                                    [0.0, 0.3, 0.7],
-                                    [0.1, 0.1, 0.8]],
-                                   [[0.3, 0.7, 0.0],
-                                    [0.3, 0.4, 0.3],
-                                    [0.2, 0.5, 0.3]],
-                                   [[0.8, 0.1, 0.1],
-                                    [1.0, 0.0, 0.0],
-                                    [0.4, 0.3, 0.3]]]]))
-    y_true = K.variable(np.array([[[0, 1, 0],
-                                   [2, 1, 0],
-                                   [2, 2, 1]]]))
-    expected_loss = - (np.log(0.7) + np.log(0.3) + np.log(0.1) +
-                       np.log(K.epsilon()) + np.log(0.4) + np.log(0.2) +
-                       np.log(0.1) + np.log(K.epsilon()) + np.log(0.3)) / 9
-    loss = K.eval(losses.sparse_categorical_crossentropy(y_true, y_pred))
-    assert np.isclose(expected_loss, np.mean(loss))
+    def decorator(f):
+        def wrapper(self):
+            size = wrapper.size
+            memuse = wrapper.memuse
+            if not real_max_memuse:
+                maxsize = 5147
+            else:
+                maxsize = size
