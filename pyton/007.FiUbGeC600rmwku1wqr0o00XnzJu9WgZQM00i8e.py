@@ -1,114 +1,183 @@
 
         
-        header = oldreadme[:oldreadme.index('# OPTIONS')]
-footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
+            If you configure your own :class:`logging.StreamHandler`, you may want to
+    use this for the stream. If you are using file or dict configuration and
+    can't import this directly, you can refer to it as
+    ``ext://flask.logging.wsgi_errors_stream``.
+    '''
+    return request.environ['wsgi.errors'] if request else sys.stderr
+    
+                datestr, codename = match.groups()
+            return version, parse_date(datestr), codename
     
     
-total_bytes = 0
+@pytest.mark.parametrize('encoding', ['utf-8', 'iso-8859-15', 'latin-1'])
+def test_from_pyfile_weird_encoding(tmpdir, encoding):
+    f = tmpdir.join('my_config.py')
+    f.write_binary(textwrap.dedent(u'''
+    # -*- coding: {0} -*-
+    TEST_VALUE = 'föö'
+    '''.format(encoding)).encode(encoding))
+    app = flask.Flask(__name__)
+    app.config.from_pyfile(str(f))
+    value = app.config['TEST_VALUE']
+    if PY2:
+        value = value.decode(encoding)
+    assert value == u'föö'
+
+    
+        # This test only works on CPython 2.7.
+    if sys.version_info >= (2, 7) and \
+            not hasattr(sys, 'pypy_translation_info'):
+        with assert_no_leak():
+            for x in range(10):
+                fire()
+    
+        def take_call(self, call):
+        '''Assume the employee will always successfully take the call.'''
+        self.call = call
+        self.call.employee = self
+        self.call.state = CallState.IN_PROGRESS
+    
+        def __init__(self, cards):
+        super(BlackJackHand, self).__init__(cards)
+    
+        def parse_query(self, query):
+        '''Remove markup, break text into terms, deal with typos,
+        normalize capitalization, convert to use boolean operations.
+        '''
+        ...
+    
+        def __init__(self, results):
+        self.results = results
+        self.next = next
     
     
-class AcademicEarthCourseIE(InfoExtractor):
-    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
-    IE_NAME = 'AcademicEarth:Course'
-    _TEST = {
-        'url': 'http://academicearth.org/playlists/laws-of-nature/',
-        'info_dict': {
-            'id': 'laws-of-nature',
-            'title': 'Laws of Nature',
-            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
-        },
-        'playlist_count': 3,
-    }
+@keras_test
+def test_conv1d_legacy_interface():
+    old_layer = keras.layers.Convolution1D(5,
+                                           filter_length=3,
+                                           input_dim=3,
+                                           input_length=4,
+                                           name='conv')
+    new_layer = keras.layers.Conv1D(5, 3, name='conv', input_shape=(4, 3))
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
     
-            title = self._html_search_regex(r'<title>(.*?)</title>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<div class='description'[^>]*>([^<]+)</div>', webpage, 'description', fatal=False)
-        thumbnail = self._html_search_regex(
-            r'preview_url\s*:\s*\'(.*?)\'', webpage, 'thumbnail', fatal=False)
+        # serialization / deserialization
+    json_config = model.to_json()
+    recreated_model = model_from_json(json_config)
+    recreated_model.compile('rmsprop', 'mse')
     
-            page = self._download_json(
-            'http://vxml.56.com/json/%s/' % text_id, text_id, 'Downloading video info')
+            inputs = np.random.random((num_samples, timesteps, input_size))
+        state = model.predict(inputs)
+        np.testing.assert_allclose(
+            keras.backend.eval(layer.states[0]), state, atol=1e-4)
     
-        model.train_on_batch(x_train[:32], y_train[:32])
-    model.test_on_batch(x_train[:32], y_train[:32])
+    The VAE has a modular design. The encoder, decoder and VAE
+are 3 models that share weights. After training the VAE model,
+the encoder can be used to  generate latent vectors.
+The decoder can be used to generate MNIST digits by sampling the
+latent vector from a Gaussian distribution with mean=0 and std=1.
+    
+            x = np.random.random((1,) + shape)
+    
+        # a more explicit example
+    norm_instance = constraints.max_norm(2.0)
+    x = np.array([[0, 0, 0], [1.0, 0, 0], [3, 0, 0], [3, 3, 3]]).T
+    x_normed_target = np.array([[0, 0, 0], [1.0, 0, 0],
+                                [2.0, 0, 0],
+                                [2. / np.sqrt(3),
+                                 2. / np.sqrt(3),
+                                 2. / np.sqrt(3)]]).T
+    x_normed_actual = K.eval(norm_instance(K.variable(x)))
+    assert_allclose(x_normed_actual, x_normed_target, rtol=1e-05)
+    
+        assert_allclose(result, true_result)
     
     
-def test_regression_class_build_fn():
-    class ClassBuildFnReg(object):
+@keras_test
+def test_vector_classification_functional():
+    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
+                                                         num_test=200,
+                                                         input_shape=(20,),
+                                                         classification=True,
+                                                         num_classes=num_classes)
+    # Test with functional API
+    inputs = layers.Input(shape=(x_train.shape[-1],))
+    x = layers.Dense(16, activation=keras.activations.relu)(inputs)
+    x = layers.Dense(8)(x)
+    x = layers.Activation('relu')(x)
+    outputs = layers.Dense(num_classes, activation='softmax')(x)
+    model = keras.models.Model(inputs, outputs)
+    model.compile(loss=keras.losses.sparse_categorical_crossentropy,
+                  optimizer=keras.optimizers.RMSprop(),
+                  metrics=['acc'])
+    history = model.fit(x_train, y_train, epochs=15, batch_size=16,
+                        validation_data=(x_test, y_test),
+                        verbose=0)
+    assert(history.history['val_acc'][-1] > 0.8)
     
-            # if the state is not reset, output should be different
-        assert(out1.max() != out2.max())
+    from keras.preprocessing import sequence
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.layers import Embedding
+from keras.layers import Conv1D, GlobalMaxPooling1D
+from keras.datasets import imdb
     
-    # Embedding
-max_features = 20000
-maxlen = 100
-embedding_size = 128
+            if self.closed:
+            raise ValueError('I/O operation on closed file')
+        if self.size_read >= self.chunksize:
+            return b''
+        if size < 0:
+            size = self.chunksize - self.size_read
+        if size > self.chunksize - self.size_read:
+            size = self.chunksize - self.size_read
+        data = self.file.read(size)
+        self.size_read = self.size_read + len(data)
+        if self.size_read == self.chunksize and \
+           self.align and \
+           (self.chunksize & 1):
+            dummy = self.file.read(1)
+            self.size_read = self.size_read + len(dummy)
+        return data
     
-        # Cut to a 40x40 window
-    noisy_movies = noisy_movies[::, ::, 20:60, 20:60, ::]
-    shifted_movies = shifted_movies[::, ::, 20:60, 20:60, ::]
-    noisy_movies[noisy_movies >= 1] = 1
-    shifted_movies[shifted_movies >= 1] = 1
-    return noisy_movies, shifted_movies
+        def __init__(self, dirname, factory=None, create=True):
+        '''Initialize a Maildir instance.'''
+        Mailbox.__init__(self, dirname, factory, create)
+        self._paths = {
+            'tmp': os.path.join(self._path, 'tmp'),
+            'new': os.path.join(self._path, 'new'),
+            'cur': os.path.join(self._path, 'cur'),
+            }
+        if not os.path.exists(self._path):
+            if create:
+                os.mkdir(self._path, 0o700)
+                for path in self._paths.values():
+                    os.mkdir(path, 0o700)
+            else:
+                raise NoSuchMailboxError(self._path)
+        self._toc = {}
+        self._toc_mtimes = {'cur': 0, 'new': 0}
+        self._last_read = 0         # Records last time we read cur/new
+        self._skewfactor = 0.1      # Adjust if os/fs clocks are skewing
     
-    # We add a vanilla hidden layer:
-model.add(Dense(hidden_dims))
-model.add(Dropout(0.2))
-model.add(Activation('relu'))
+        The robots.txt Exclusion Protocol is implemented as specified in
+    http://www.robotstxt.org/norobots-rfc.txt
+'''
     
-    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
-    #sample
-    #url_sample:http://www.kugou.com/yy/album/single/536957.html
-    #hash ->key  md5(hash+kgcloud')->key  decompile swf
-    #cmd 4 for mp3 cmd 3 for m4a
-    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
-    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
-    j=loads(html)
-    url=j['url']
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge=merge)
+        def shutdown(self, wait=True):
+        with self._shutdown_lock:
+            self._shutdown = True
+            self._work_queue.put(None)
+        if wait:
+            for t in self._threads:
+                t.join()
+    shutdown.__doc__ = _base.Executor.shutdown.__doc__
+
     
-    def kuwo_download_by_rid(rid, output_dir = '.', merge = True, info_only = False):
-    html=get_content('http://player.kuwo.cn/webmusic/st/getNewMuiseByRid?rid=MUSIC_%s'%rid)
-    title=match1(html,r'<name>(.*)</name>')
-    #to get title
-    #format =aac|mp3 ->to get aac format=mp3 ->to get mp3
-    url=get_content('http://antiserver.kuwo.cn/anti.s?format=mp3&rid=MUSIC_%s&type=convert_url&response=url'%rid)
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir)
     
-        for i in range(10, 30):
-        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
-            i = i,
-            p = preview
-        )
-        try:
-            mime, ext, size = url_info(url)
-            break
-        except: continue
-    
-        mediatype, ext, size = 'mp4', 'mp4', 0
-    print_info(site_info, title, mediatype, size)
-    #
-    # rtmpdump  -r 'rtmpe://cp30865.edgefcs.net/ondemand/mtviestor/_!/intlod/MTVInternational/MBUS/GeoLocals/00JP/VIAMTVI/PYC/201304/7122HVAQ4/00JPVIAMTVIPYC7122HVAQ4_640x_360_1200_m30.mp4' -o 'title.mp4' --swfVfy http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf
-    #
-    # because rtmpdump is unstable,may try serveral times
-    #
-    if not info_only:
-        # import pdb
-        # pdb.set_trace()
-        download_rtmp_url(url=url, title=title, ext=ext, params={
-                          '--swfVfy': 'http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf'}, output_dir=output_dir)
-    
-        #title
-    title = ''
-    profile_api = 'https://www.showroom-live.com/api/room/profile?room_id={room_id}'.format(room_id = room_id)
-    html = loads(get_content(profile_api))
-    try:
-        title = html['main_name']
-    except KeyError:
-        title = 'Showroom_{room_id}'.format(room_id = room_id)
+  def Poll( self, diagnostics_handler ):
+    '''This should be called regularly to check for new messages in this buffer.
+    Returns True if Poll should be called again in a while. Returns False when
+    the completer or server indicated that further polling should not be done
+    for the requested file.'''
