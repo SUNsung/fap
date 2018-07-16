@@ -1,164 +1,133 @@
 
         
-              # Run ::process method in a given set of Jekyll::Command subclasses and suggest
-      # re-running the associated command with --trace switch to obtain any additional
-      # information or backtrace regarding the encountered Exception.
-      #
-      # cmd     - the Jekyll::Command to be handled
-      # options - configuration overrides
-      # klass   - an array of Jekyll::Command subclasses associated with the command
-      #
-      # Note that all exceptions are rescued..
-      # rubocop: disable RescueException
-      def process_with_graceful_fail(cmd, options, *klass)
-        klass.each { |k| k.process(options) if k.respond_to?(:process) }
-      rescue Exception => e
-        raise e if cmd.trace
+          attr_accessor :output_buffer
+  attr_reader :request
     
-                add_build_options(c)
+        module Behavior
+      extend ActiveSupport::Concern
     
-              # Complicated JavaScript to ensure that livereload.js is loaded from the
-          # same origin as the page.  Mostly useful for dealing with the browser's
-          # distinction between 'localhost' and 127.0.0.1
-          template = <<-TEMPLATE
-          <script>
-            document.write(
-              '<script src='http://' +
-              (location.host || 'localhost').split(':')[0] +
-              ':<%=@options['livereload_port'] %>/livereload.js?snipver=1<%= livereload_args %>'' +
-              '></' +
-              'script>');
-          </script>
-          TEMPLATE
-          ERB.new(Jekyll::Utils.strip_heredoc(template))
+      def redirect_to_new_record
+    redirect_to Workshop.new(nil)
+  end
+    
+              def add_channel(channel, on_success)
+            @subscription_lock.synchronize do
+              ensure_listener_running
+              @subscribe_callbacks[channel] << on_success
+              when_connected { send_command('subscribe', channel) }
+            end
+          end
+    
+            def test_spec_name_on_key_lookup
+          spec = spec(:readonly, 'readonly' => { 'adapter' => 'sqlite3' })
+          assert_equal 'readonly', spec.name
         end
     
-        # Construct a Hash of key-value pairs which contain a mapping between
-    #   a key in the URL template and the corresponding value for this document.
+    require 'active_record/relation/predicate_builder/association_query_value'
+require 'active_record/relation/predicate_builder/polymorphic_array_value'
+
+    
+        bulb = car.bulbs.build
+    assert_equal car.id, bulb.car_id
+    
+      scope :with_object, Class.new(Struct.new(:klass)) {
+    def call
+      klass.where(approved: true)
+    end
+  }.new(self)
+    
+          assert_equal 1, events.length
+      assert_equal 'perform_action.action_cable', events[0].name
+      assert_equal 'ActionCable::Channel::BaseTest::ChatChannel', events[0].payload[:channel_class]
+      assert_equal :speak, events[0].payload[:action]
+      assert_equal data, events[0].payload[:data]
+    ensure
+      ActiveSupport::Notifications.unsubscribe 'perform_action.action_cable'
+    end
+  end
+    
+      private
+    def open_connection(server = nil)
+      server ||= TestServer.new
+    
+            # Internal hax = :(
+        client = connection.websocket.send(:websocket)
+        rack_hijack_io = client.instance_variable_get('@stream').instance_variable_get('@rack_hijack_io')
+        rack_hijack_io.stub(:write, proc { raise(closed_exception, 'foo') }) do
+          assert_called(client, :client_gone) do
+            client.write('boo')
+          end
+        end
+        assert_equal [], connection.errors
+      end
+    end
+  end
+    
+      test '#restart shuts down worker pool' do
+    assert_called(@server.worker_pool, :halt) do
+      @server.restart
+    end
+  end
+    
+            # Callback to overwrite if confirmation is required or not.
+        def confirmation_required?
+          !confirmed?
+        end
+    
+        # Check if proper Lockable module methods are present & unlock strategy
+    # allows to unlock resource on password reset
+    def unlockable?(resource)
+      resource.respond_to?(:unlock_access!) &&
+        resource.respond_to?(:unlock_strategy_enabled?) &&
+        resource.unlock_strategy_enabled?(:email)
+    end
+    
+        if resource.errors.empty?
+      set_flash_message! :notice, :unlocked
+      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+    end
+  end
+    
+        on :queue_public_receive do |xml, legacy=false|
+      Workers::ReceivePublic.perform_async(xml, legacy)
+    end
+    
+          respond_with do |format|
+        format.html do
+          gon.preloads[:pods] = pods_json
+          gon.unchecked_count = Pod.unchecked.count
+          gon.version_failed_count = Pod.version_failed.count
+          gon.error_count = Pod.check_failed.count
+    
+          # Inspired by https://github.com/nov/openid_connect_sample/blob/master/app/controllers/connect/clients_controller.rb#L24
+      def create
+        registrar = OpenIDConnect::Client::Registrar.new(request.url, params)
+        client = Api::OpenidConnect::OAuthApplication.register! registrar
+        render json: client.as_json(root: false)
+      end
+    
+    module Capistrano
+  module TaskEnhancements
+    def before(task, prerequisite, *args, &block)
+      prerequisite = Rake::Task.define_task(prerequisite, *args, &block) if block_given?
+      Rake::Task[task].enhance [prerequisite]
+    end
+    
+        # Fetch a var from the context
+    # @param [Symbol] variable The variable to fetch
+    # @param [Object] default  The default value if not found
     #
-    # Returns the Hash of key-value pairs for replacement in the URL.
-    def url_placeholders
-      @url_placeholders ||= Drops::UrlDrop.new(self)
+    def fetch(*args)
+      context.fetch(*args)
     end
     
-          def_delegator  :@obj, :site_data, :data
-      def_delegators :@obj, :time, :pages, :static_files, :documents, :tags, :categories
-    
-          # This gets the value of the block with the given key.
-      def get(key)
-        key    = Regexp.quote(key)
-        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$\r?\n?(.*?)\r?\n?^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
-        match  = regexp.match(@value)
-        return nil if !match
-        match[1]
-      end
-    
-      def test_input_line_number_range
-    bug12947 = '[ruby-core:78162] [Bug #12947]'
-    ary = b1 = b2 = nil
-    EnvUtil.suppress_warning do
-      b1 = eval('proc {|i| i if 2..4}')
-      b2 = eval('proc {|i| if 2..4; i; end}')
+      def command_line(*options)
+    options.each { |opt| ARGV << opt }
+    subject.define_singleton_method(:exit) do |*_args|
+      throw(:system_exit, :exit)
     end
-    IO.pipe {|r, w|
-      th = Thread.start {(1..5).each {|i| w.puts i};w.close}
-      ary = r.map {|i| b1.call(i.chomp)}
-      th.join
-    }
-    assert_equal([nil, '2', '3', '4', nil], ary, bug12947)
-    IO.pipe {|r, w|
-      th = Thread.start {(1..5).each {|i| w.puts i};w.close}
-      ary = r.map {|i| b2.call(i.chomp)}
-      th.join
-    }
-    assert_equal([nil, '2', '3', '4', nil], ary, bug12947)
+    subject.run
+    subject.options
   end
-end
-
-    
-      def not_label(x) @result = x; @not_label ||= nil end
-  def assert_not_label(expected, src, message = nil)
-    @result = nil
-    assert_nothing_raised(SyntaxError, message) {eval(src)}
-    assert_equal(expected, @result, message)
-  end
-    
-      describe 'DATA_PTR' do
-    it 'returns the struct data' do
-      a = @s.typed_wrap_struct(1024)
-      @s.typed_get_struct_data_ptr(a).should == 1024
-    end
-  end
-end
-
-    
-      def test_rlimit_name
-    return unless rlimit_exist?
-    [
-      :AS, 'AS',
-      :CORE, 'CORE',
-      :CPU, 'CPU',
-      :DATA, 'DATA',
-      :FSIZE, 'FSIZE',
-      :MEMLOCK, 'MEMLOCK',
-      :MSGQUEUE, 'MSGQUEUE',
-      :NICE, 'NICE',
-      :NOFILE, 'NOFILE',
-      :NPROC, 'NPROC',
-      :RSS, 'RSS',
-      :RTPRIO, 'RTPRIO',
-      :RTTIME, 'RTTIME',
-      :SBSIZE, 'SBSIZE',
-      :SIGPENDING, 'SIGPENDING',
-      :STACK, 'STACK',
-    ].each {|name|
-      if Process.const_defined? 'RLIMIT_#{name}'
-        assert_nothing_raised { Process.getrlimit(name) }
-      else
-        assert_raise(ArgumentError) { Process.getrlimit(name) }
-      end
-    }
-    assert_raise(ArgumentError) { Process.getrlimit(:FOO) }
-    assert_raise(ArgumentError) { Process.getrlimit('FOO') }
-    assert_raise_with_message(ArgumentError, /\u{30eb 30d3 30fc}/) { Process.getrlimit('\u{30eb 30d3 30fc}') }
-  end
-    
-        assert_equal 'You must add #{EXPIRED_CERT.issuer} to your local trusted store',
-                 message
-  end
-    
-      # Run Ruby script with --jit-wait (Synchronous JIT compilation).
-  # Returns [stdout, stderr]
-  def eval_with_jit(env = nil, script, **opts)
-    stdout, stderr, status = super
-    assert_equal(true, status.success?, 'Failed to run script with JIT:\n#{code_block(script)}\nstdout:\n#{code_block(stdout)}\nstderr:\n#{code_block(stderr)}')
-    [stdout, stderr]
-  end
-    
-        h = base.dup
-    assert_equal(h2, h.delete_if {|k,v| v.instance_of?(String) })
-    assert_equal(h2, h)
-    
-        assert_equal(0, Time.at(1e-10).nsec)
-    assert_equal(0, Time.at(4e-10).nsec)
-    assert_equal(0, Time.at(6e-10).nsec)
-    assert_equal(1, Time.at(14e-10).nsec)
-    assert_equal(1, Time.at(16e-10).nsec)
-    if negative_time_t?
-      assert_equal(999999999, Time.at(-1e-10).nsec)
-      assert_equal(999999999, Time.at(-4e-10).nsec)
-      assert_equal(999999999, Time.at(-6e-10).nsec)
-      assert_equal(999999998, Time.at(-14e-10).nsec)
-      assert_equal(999999998, Time.at(-16e-10).nsec)
-    end
-    
-        node_cache[:regexp_operator][start_index] = r0
-    
-          # Only print require() calls that did actual work.
-      # require() returns true on load, false if already loaded.
-      if result
-        source = caller[0]
-        #p source.include?('/lib/polyglot.rb:63:in `require'') => source
-        if source.include?('/lib/polyglot.rb:63:in `require'')
-          source = caller[1]
-        end
