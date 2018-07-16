@@ -1,67 +1,71 @@
 
         
-              # we readlink because this path probably doesn't exist since caveats
-      # occurs before the link step of installation
-      # Yosemite security measures mildly tighter rules:
-      # https://github.com/Homebrew/homebrew/issues/33815
-      if !plist_path.file? || !plist_path.symlink?
-        if f.plist_startup
-          s << 'To have launchd start #{f.full_name} at startup:'
-          s << '  sudo mkdir -p #{destination}' unless destination_path.directory?
-          s << '  sudo cp -fv #{f.opt_prefix}/*.plist #{destination}'
-          s << '  sudo chown root #{plist_link}'
-        else
-          s << 'To have launchd start #{f.full_name} at login:'
-          s << '  mkdir -p #{destination}' unless destination_path.directory?
-          s << '  ln -sfv #{f.opt_prefix}/*.plist #{destination}'
-        end
-        s << 'Then to load #{f.full_name} now:'
-        if f.plist_startup
-          s << '  sudo launchctl load #{plist_link}'
-        else
-          s << '  launchctl load #{plist_link}'
-        end
-      # For startup plists, we cannot tell whether it's running on launchd,
-      # as it requires for `sudo launchctl list` to get real result.
-      elsif f.plist_startup
-        s << 'To reload #{f.full_name} after an upgrade:'
-        s << '  sudo launchctl unload #{plist_link}'
-        s << '  sudo cp -fv #{f.opt_prefix}/*.plist #{destination}'
-        s << '  sudo chown root #{plist_link}'
-        s << '  sudo launchctl load #{plist_link}'
-      elsif Kernel.system '/bin/launchctl list #{plist_domain} &>/dev/null'
-        s << 'To reload #{f.full_name} after an upgrade:'
-        s << '  launchctl unload #{plist_link}'
-        s << '  launchctl load #{plist_link}'
-      else
-        s << 'To load #{f.full_name}:'
-        s << '  launchctl load #{plist_link}'
-      end
-    
-        # Remove unresolved symlinks
-    symlinks.reverse_each do |s|
-      s.unlink unless s.resolved_path_exists?
+        if profile_filename = ENV['PROFILE']
+  require 'ruby-prof'
+  reporter =
+    case (profile_extname = File.extname(profile_filename))
+    when '.txt'
+      RubyProf::FlatPrinterWithLineNumbers
+    when '.html'
+      RubyProf::GraphHtmlPrinter
+    when '.callgrind'
+      RubyProf::CallTreePrinter
+    else
+      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
     end
+  File.open(profile_filename, 'w') do |io|
+    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
   end
-    
-      def python(_options = {}, &block)
-    opoo 'Formula#python is deprecated and will go away shortly.'
-    block.call if block_given?
-    PythonRequirement.new
-  end
-  alias_method :python2, :python
-  alias_method :python3, :python
+else
+  Pod::Command.run(ARGV)
 end
 
     
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
+        it 'leaves TempFiles untouched' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['file'][:filename] + '\n' + \
+                                                 request.params['file'][:tempfile].read + '\n' + \
+                                                 request.params['other']]]
+      end
+    
+      it 'should not override the header if already set' do
+    mock_app with_headers('X-Frame-Options' => 'allow')
+    expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('allow')
   end
-  alias_method :standard_install, :install
+end
+
+    
+        { # yes, this is ugly, feel free to change that
+      '/..' => '/', '/a/../b' => '/b', '/a/../b/' => '/b/', '/a/.' => '/a/',
+      '/%2e.' => '/', '/a/%2E%2e/b' => '/b', '/a%2f%2E%2e%2Fb/' => '/b/',
+      '//' => '/', '/%2fetc%2Fpasswd' => '/etc/passwd'
+    }.each do |a, b|
+      it('replaces #{a.inspect} with #{b.inspect}') { expect(get(a).body).to eq(b) }
+    end
+    
+                yield arguments[optarg_position]
+          end
+        end
+    
+          # Custom destructuring method. This can be used to normalize
+      # destructuring for different variations of the node.
+      #
+      # In this case, the `def` node destructures into:
+      #
+      #   `method_name, arguments, body`
+      #
+      # while the `defs` node destructures into:
+      #
+      #   `receiver, method_name, arguments, body`
+      #
+      # so we reverse the destructured array to get the optional receiver
+      # at the end, where it can be discarded.
+      #
+      # @return [Array] the different parts of the `def` or `defs` node
+      def node_parts
+        to_a.reverse
+      end
+    end
+  end
+end
