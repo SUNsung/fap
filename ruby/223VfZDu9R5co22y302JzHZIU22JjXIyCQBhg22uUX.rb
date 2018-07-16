@@ -1,124 +1,133 @@
 
         
-            gem_dependency_check { defined?(EvernoteOAuth) && Devise.omniauth_providers.include?(:evernote) }
+          def test_javascript_tag_with_options
+    assert_dom_equal '<script id=\'the_js_tag\'>\n//<![CDATA[\nalert('hello')\n//]]>\n</script>',
+      javascript_tag('alert('hello')', id: 'the_js_tag')
   end
     
-      # Optional
-  #   Override this method if you need to group multiple agents based on an API key,
-  #   or server they connect to.
-  #   Have a look at the TwitterStreamAgent for an example.
-  def self.setup_worker; end
+    module ActionCable
+  module Server
+    # An instance of this configuration object is available via ActionCable.server.config, which allows you to tweak Action Cable configuration
+    # in a Rails config initializer.
+    class Configuration
+      attr_accessor :logger, :log_tags
+      attr_accessor :connection_class, :worker_pool_size
+      attr_accessor :disable_request_forgery_protection, :allowed_request_origins, :allow_same_origin_as_host
+      attr_accessor :cable, :url, :mount_path
     
-      def tumblr_consumer_secret
-    ENV['TUMBLR_OAUTH_SECRET']
-  end
-    
-        respond_to do |format|
-      if !running? && @job.update_attributes!(run_at: Time.now, failed_at: nil)
-        format.html { redirect_to jobs_path, notice: 'Job enqueued.' }
-        format.json { render json: @job, status: :ok }
-      else
-        format.html { redirect_to jobs_path, alert: 'Can not enqueue a running job.' }
-        format.json { render json: @job.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-    
-        bad = [
-      5, true, false, nil,
-      0.0, 1.72723e-77,
-      :foo, 'dsym_#{self.object_id.to_s(16)}_#{Time.now.to_i.to_s(16)}'.to_sym,
-      'str',
-    ].select do |x|
-      hash = {x => bug9381}
-      hash[wrapper.new(x)] != bug9381
-    end
-    assert_empty(bad, bug9381)
-  end
-    
-      it 'spawns a new Thread running the block' do
-    run = false
-    t = Thread.send(@method) { run = true }
-    t.should be_kind_of(Thread)
-    t.join
-    
-      it 'interprets pre-Gregorian reform dates using Gregorian proleptic calendar' do
-    Time.send(@method, 1582, 10, 4, 12).to_i.should == -12220200000 # 2299150j
-  end
-    
-        # .visible-sm { @include responsive-visibility() }
-    # to:
-    # @include responsive-visibility('.visible-sm')
-    def apply_mixin_parent_selector(file, rule_sel)
-      log_transform rule_sel
-      replace_rules file, '\s*' + rule_sel, comments: false do |rule, rule_pos, css|
-        body = unwrap_rule_block(rule.dup).strip
-        next rule unless body =~ /^@include \w+/m || body =~ /^@media/ && body =~ /\{\s*@include/
-        rule =~ /(#{COMMENT_RE}*)([#{SELECTOR_CHAR}\s*]+?)#{RULE_OPEN_BRACE_RE}/
-        cmt, sel = $1, $2.strip
-        # take one up selector chain if this is an &. selector
-        if sel.start_with?('&')
-          parent_sel = selector_for_pos(css, rule_pos.begin)
-          sel        = parent_sel + sel[1..-1]
+          def deserialize(value)
+        if default_value?(value)
+          value
+        else
+          coder.load(super)
         end
-        # unwrap, and replace @include
-        unindent unwrap_rule_block(rule).gsub(/(@include [\w-]+)\(?([\$\w\-,\s]*)\)?/) {
-          name, args = $1, $2
-          sel.gsub(/\s+/, ' ').split(/,\s*/ ).map { |sel_part|
-            '#{cmt}#{name}('#{sel_part}'#{', ' if args && !args.empty?}#{args})'
-          }.join(';\n')
-        }
+      end
+    
+      def test_serialized_boolean_value_false
+    topic = Topic.new(content: false)
+    assert topic.save
+    topic = topic.reload
+    assert_equal false, topic.content
+  end
+    
+        def test_eager_load_values
+      relation = Relation.new(FakeKlass)
+      relation.eager_load! :b
+      assert_predicate relation, :eager_loading?
+    end
+    
+        def topic
+    end
+  end
+    
+        # Block arg
+    periodically every: 3 do
+      ping
+    end
+    
+          env = Rack::MockRequest.env_for '/test', 'HTTP_CONNECTION' => 'upgrade', 'HTTP_UPGRADE' => 'websocket',
+        'HTTP_HOST' => 'localhost', 'HTTP_ORIGIN' => 'http://rubyonrails.com'
+    
+      test 'connection identifier' do
+    run_in_eventmachine do
+      open_connection
+      assert_equal 'User#lifo', @connection.connection_identifier
+    end
+  end
+    
+          assert_equal 1, events.length
+      assert_equal 'broadcast.action_cable', events[0].name
+      assert_equal broadcasting, events[0].payload[:broadcasting]
+      assert_equal message, events[0].payload[:message]
+      assert_equal ActiveSupport::JSON, events[0].payload[:coder]
+    ensure
+      ActiveSupport::Notifications.unsubscribe 'broadcast.action_cable'
+    end
+  end
+end
+
+    
+    def check_link(uri)
+  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
+    if (400..422).include?(status)
+      if status != 403 && !uri.exclude?('udemy.com')
+        raise 'Request had status #{status}'
+      else
+        putc('S')
       end
     end
-    }
-    
-      # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
-  config.action_controller.perform_caching = true
-    
-      config.active_support.test_order = :random
-    
-    desc 'Dumps output to a CSS file for testing'
-task :debug do
-  require 'sass'
-  path = Bootstrap.stylesheets_path
-  %w(bootstrap).each do |file|
-    engine = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
-    File.open('./#{file}.css', 'w') { |f| f.write(engine.render) }
   end
 end
     
-            def log_level?(level, min_level)
-          log_levels[level] >= log_levels[min_level]
+        # Get rid of any info 'dir' files, so they don't conflict at the link stage
+    info_dir_file = @f.info + 'dir'
+    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
+      observe_file_removal info_dir_file
+    end
+    
+    module Homebrew
+  module_function
+    
+      return unless check_content
+    
+              # Check pypi urls
+          @pypi_pattern = %r{^https?://pypi.python.org/(.*)}
+          audit_urls(urls, @pypi_pattern) do |match, url|
+            problem '#{url} should be `https://files.pythonhosted.org/#{match[1]}`'
+          end
         end
     
-      require 'sass/plugin/rack'
-  class Sass::Plugin::MerbBootLoader < Merb::BootLoader
-    after Merb::BootLoader::RackUpApplication
-    
-        # @return [Boolean] Whether the original format of the interpolation was
-    #   plain text, not an interpolation. This is used when converting back to
-    #   SassScript.
-    attr_reader :originally_text
-    
-          def escape(object)
-        case object
-        when Hash   then escape_hash(object)
-        when Array  then object.map { |o| escape(o) }
-        when String then escape_string(object)
-        when Tempfile then object
-        else nil
-        end
+          # Get the cache key pair for the given Sass URI.
+      # The URI need not be checked for validity.
+      #
+      # The only strict requirement is that the returned pair of strings
+      # uniquely identify the file at the given URI.
+      # However, the first component generally corresponds roughly to the directory,
+      # and the second to the basename, of the URI.
+      #
+      # Note that keys must be unique *across importers*.
+      # Thus it's probably a good idea to include the importer name
+      # at the beginning of the first component.
+      #
+      # @param uri [String] A URI known to be valid for this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [(String, String)] The key pair which uniquely identifies
+      #   the file at the given URI.
+      def key(uri, options)
+        Sass::Util.abstract(self)
       end
     
-      %w(GET HEAD).each do |method|
-    it 'accepts #{method} requests with non-whitelisted Origin' do
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).to be_ok
-    end
-  end
+        def parse_input(environment, text)
+      case text
+      when Script::MATCH
+        name = $1
+        guarded = !!$3
+        val = Script::Parser.parse($2, @line, text.size - ($3 || '').size - $2.size)
     
-      # Run specs in random order to surface order dependencies. If you find an
-  # order dependency and want to debug it, you can fix the order by providing
-  # the seed, which is printed after each run.
-  #     --seed 1234
-  config.order = :random
+        def initialize(tag_name, markup, tokens)
+      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
+      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
+      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
+      super
+    end
