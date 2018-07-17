@@ -1,320 +1,246 @@
 
         
-        ExtensionFunction::ResponseAction
-NwCurrentWindowInternalCloseDevToolsFunction::Run() {
-  content::RenderFrameHost* rfh = render_frame_host();
-  content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rfh);
-  scoped_refptr<content::DevToolsAgentHost> agent(
-      content::DevToolsAgentHost::GetOrCreateFor(web_contents));
-  DevToolsWindow* devtools_window =
-      DevToolsWindow::FindDevToolsWindow(agent.get());
-  if (devtools_window) {
-    devtools_window->Close();
-  }
-  return RespondNow(NoArguments());
-}
-    
-     private:
-  ObjectManager* object_manager_;
-    
-    void Menu::UpdateKeys(views::FocusManager *focus_manager){
-  if (focus_manager == NULL){
-    return ;
-  } else {
-    focus_manager_ = focus_manager;
-    for(auto* item : menu_items_) {
-      item->UpdateKeys(focus_manager);
-    }
-  }
-}
-    
-    static KeyMap keymap = {
-  {'`'    , 'Backquote'},
-  {'\\'   , 'Backslash'},
-  {'['    , 'BracketLeft'},
-  {']'    , 'BracketRight'},
-  {','    , 'Comma'},
-  {'='    , 'Equal'},
-  {'-'    , 'Minus'},
-  {'.'    , 'Period'},
-  {'''    , 'Quote'},
-  {';'    , 'Semicolon'},
-  {'/'    , 'Slash'},
-  {'\n'   , 'Enter'},
-  {'\t'   , 'Tab'},
-  {'UP'   , 'ArrowUp'},
-  {'DOWN' , 'ArrowDown'},
-  {'LEFT' , 'ArrowLeft'},
-  {'RIGHT', 'ArrowRight'},
-  {'ESC'  , 'Escape'},
-  {'MEDIANEXTTRACK', 'MediaTrackNext'},
-  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
-};
-    
-    void MenuItem::SetIcon(const std::string& icon) {
-  if (icon.empty()) {
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_), NULL); 
-  } else {
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_),
-                                  gtk_image_new_from_file(icon.c_str()));
-    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menu_item_),
-                                              TRUE);
-  }
-}
-    
-      std::string icon;
-  if (option.GetString('icon', &icon) && !icon.empty())
-    SetIcon(icon);
-    
-    
-    {      data.data.reset(new std::string(encoded_image_base64));
-      LOG(INFO) << 'NwClipboardGetSyncFunction::RunSync(' << nwapi::nw__clipboard::ToString(data.type) << ')';
-      return true;
-    }
-    
-    #include 'extensions/browser/extension_function.h'
-    
-    
-    {      return displayResult;
-    }
-    
-    
-    {  private:
-    DISALLOW_COPY_AND_ASSIGN(NwScreenIsMonitorStartedFunction);
-  };
-    
-    # if !GTEST_OS_WINDOWS
-// Tests that an exit code describes an exit due to termination by a
-// given signal.
-class GTEST_API_ KilledBySignal {
- public:
-  explicit KilledBySignal(int signum);
-  bool operator()(int exit_status) const;
- private:
-  const int signum_;
-};
-# endif  // !GTEST_OS_WINDOWS
-    
-      // Returns true if pathname describes an absolute path.
-  bool IsAbsolutePath() const;
-    
-     private:
-  // No implementation - assignment is unsupported.
-  void operator=(const ValueArray47& other);
-    
-    // <regex.h> is not available on Windows.  Use our own simple regex
-// implementation instead.
-# define GTEST_USES_SIMPLE_RE 1
-    
-    template <GTEST_10_TYPENAMES_(T), GTEST_10_TYPENAMES_(U)>
-inline bool operator==(const GTEST_10_TUPLE_(T)& t,
-                       const GTEST_10_TUPLE_(U)& u) {
-  return gtest_internal::SameSizeTuplePrefixComparator<
-      tuple_size<GTEST_10_TUPLE_(T) >::value,
-      tuple_size<GTEST_10_TUPLE_(U) >::value>::Eq(t, u);
-}
-    
-    // The following family of struct and struct templates are used to
-// represent type lists.  In particular, TypesN<T1, T2, ..., TN>
-// represents a type list with N types (T1, T2, ..., and TN) in it.
-// Except for Types0, every struct in the family has two member types:
-// Head for the first type in the list, and Tail for the rest of the
-// list.
-    
-    
+        
     {
-    {}  // namespace testing
-}  // namespace grpc
-    
-    
-    {  GetReporter()->ReportQPSPerCore(*result);
-  GetReporter()->ReportLatency(*result);
+    {    if (++count % 1000 == 0) {
+      txn->Commit();
+    }
+  }
+  // write the last batch
+  if (count % 1000 != 0) {
+      txn->Commit();
+  }
+  LOG(INFO) << 'Processed ' << count << ' files.';
+  delete[] pixels;
+  db->Close();
 }
     
-      bool PrintBetaServicer(const grpc_generator::Service* service,
-                         grpc_generator::Printer* out);
-  bool PrintBetaServerFactory(
-      const grpc::string& package_qualified_service_name,
-      const grpc_generator::Service* service, grpc_generator::Printer* out);
-  bool PrintBetaStub(const grpc_generator::Service* service,
-                     grpc_generator::Printer* out);
-  bool PrintBetaStubFactory(const grpc::string& package_qualified_service_name,
-                            const grpc_generator::Service* service,
-                            grpc_generator::Printer* out);
+    #endif  // CAFFE_DATA_TRANSFORMER_HPP_
+
     
-    template <class T, class F>
-double average(const T& container, F functor) {
-  return sum(container, functor) / container.size();
-}
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-      /// Sets the non-blocking mode of the native acceptor implementation.
-  /**
-   * This function is used to modify the non-blocking mode of the underlying
-   * native acceptor. It has no effect on the behaviour of the acceptor object's
-   * synchronous operations.
+    #include <vector>
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the reordered input.
    *
-   * @param mode If @c true, the underlying acceptor is put into non-blocking
-   * mode and direct system calls may fail with boost::asio::error::would_block
-   * (or the equivalent system error).
-   *
-   * @param ec Set to indicate what error occurred, if any. If the @c mode is
-   * @c false, but the current value of @c non_blocking() is @c true, this
-   * function fails with boost::asio::error::invalid_argument, as the
-   * combination does not make sense.
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
    */
-  boost::system::error_code native_non_blocking(
-      bool mode, boost::system::error_code& ec)
-  {
-    return this->get_service().native_non_blocking(
-        this->get_implementation(), mode, ec);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    
+    {  Blob<Dtype> diff_;  // cached for backward pass
+  Blob<Dtype> dist_sq_;  // cached for backward pass
+  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
+  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
+};
+    
+    #endif  // CAFFE_CUDNN_TANH_LAYER_HPP_
+
+    
+    
+    { protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual inline bool reverse_dimensions() { return true; }
+  virtual void compute_output_shape();
+};
+    
+    
+    {  int M_;
+  int K_;
+  int N_;
+  bool bias_term_;
+  Blob<Dtype> bias_multiplier_;
+};
+    
+    
+    {}  // namespace caffe
+    
+    #if GTEST_OS_SYMBIAN
+  // These are needed as the Nokia Symbian Compiler cannot decide between
+  // const T& and const T* in a function template. The Nokia compiler _can_
+  // decide between class template specializations for T and T*, so a
+  // tr1::type_traits-like is_pointer works, and we can overload on that.
+  template <typename T>
+  inline void StreamHelper(internal::true_type /*is_pointer*/, T* pointer) {
+    if (pointer == NULL) {
+      *ss_ << '(null)';
+    } else {
+      *ss_ << pointer;
+    }
   }
+  template <typename T>
+  inline void StreamHelper(internal::false_type /*is_pointer*/,
+                           const T& value) {
+    // See the comments in Message& operator <<(const T&) above for why
+    // we need this using statement.
+    using ::operator <<;
+    *ss_ << value;
+  }
+#endif  // GTEST_OS_SYMBIAN
     
-        // Pop the key/value pair from the stack.
-    ~context()
-    {
-      call_stack<Key, Value>::top_ = next_;
-    }
+    # define INSTANTIATE_TEST_CASE_P(prefix, test_case_name, generator) \
+  ::testing::internal::ParamGenerator<test_case_name::ParamType> \
+      gtest_##prefix##test_case_name##_EvalGenerator_() { return generator; } \
+  int gtest_##prefix##test_case_name##_dummy_ = \
+      ::testing::UnitTest::GetInstance()->parameterized_test_registry(). \
+          GetTestCasePatternHolder<test_case_name>(\
+              #test_case_name, __FILE__, __LINE__)->AddTestCaseInstantiation(\
+                  #prefix, \
+                  &gtest_##prefix##test_case_name##_EvalGenerator_, \
+                  __FILE__, __LINE__)
     
-    
-    {} // namespace boost_asio_handler_invoke_helpers
-    
-    #define BOOST_ASIO_COMPOSED_CONNECT_HANDLER_CHECK( \
-    handler_type, handler, iter_type) \
-  typedef int BOOST_ASIO_UNUSED_TYPEDEF
-    
-    SEXP XGDMatrixCreateFromCSC_R(SEXP indptr,
-                              SEXP indices,
-                              SEXP data,
-                              SEXP num_row) {
-  SEXP ret;
-  R_API_BEGIN();
-  const int *p_indptr = INTEGER(indptr);
-  const int *p_indices = INTEGER(indices);
-  const double *p_data = REAL(data);
-  size_t nindptr = static_cast<size_t>(length(indptr));
-  size_t ndata = static_cast<size_t>(length(data));
-  size_t nrow = static_cast<size_t>(INTEGER(num_row)[0]);
-  std::vector<size_t> col_ptr_(nindptr);
-  std::vector<unsigned> indices_(ndata);
-  std::vector<float> data_(ndata);
-    }
-    
-    
-    {
-    {}  // namespace obj
-}  // namespace xgboost
-    
-    template<>
-inline XGBOOST_DEVICE float GradientPairInternal<int64_t>::GetGrad() const {
-  return grad_ * 1e-4f;
-}
-template<>
-inline XGBOOST_DEVICE float GradientPairInternal<int64_t>::GetHess() const {
-  return hess_ * 1e-4f;
-}
-template<>
-inline XGBOOST_DEVICE void GradientPairInternal<int64_t>::SetGrad(float g) {
-  grad_ = static_cast<int64_t>(std::round(g * 1e4));
-}
-template<>
-inline XGBOOST_DEVICE void GradientPairInternal<int64_t>::SetHess(float h) {
-  hess_ = static_cast<int64_t>(std::round(h * 1e4));
-}
-    
-    // Store 8 gradient pairs given vectors containing gradient and Hessian
-inline void StoreGpair(xgboost::GradientPair* dst, const Float8& grad,
-                       const Float8& hess) {
-  float* ptr = reinterpret_cast<float*>(dst);
-  __m256 gpair_low = _mm256_unpacklo_ps(grad.x, hess.x);
-  __m256 gpair_high = _mm256_unpackhi_ps(grad.x, hess.x);
-  _mm256_storeu_ps(ptr, _mm256_permute2f128_ps(gpair_low, gpair_high, 0x20));
-  _mm256_storeu_ps(ptr + 8,
-                   _mm256_permute2f128_ps(gpair_low, gpair_high, 0x31));
-}
-}  // namespace avx
-#else
-namespace avx {
-/**
- * \struct  Float8
- *
- * \brief Fallback implementation not using AVX.
- */
-    
-    template <typename C>
-struct compare_equal_to : detail::cmp_pred<C, ordering::eq, 0> {
-  using detail::cmp_pred<C, ordering::eq, 0>::cmp_pred;
-};
-    
-    class SingletonVault {
+    template <typename T>
+class UniversalTersePrinter {
  public:
-  enum class Type {
-    Strict, // Singletons can't be created before registrationComplete()
-    Relaxed, // Singletons can be created before registrationComplete()
-  };
+  static void Print(const T& value, ::std::ostream* os) {
+    UniversalPrint(value, os);
+  }
+};
+template <typename T>
+class UniversalTersePrinter<T&> {
+ public:
+  static void Print(const T& value, ::std::ostream* os) {
+    UniversalPrint(value, os);
+  }
+};
+template <typename T, size_t N>
+class UniversalTersePrinter<T[N]> {
+ public:
+  static void Print(const T (&value)[N], ::std::ostream* os) {
+    UniversalPrinter<T[N]>::Print(value, os);
+  }
+};
+template <>
+class UniversalTersePrinter<const char*> {
+ public:
+  static void Print(const char* str, ::std::ostream* os) {
+    if (str == NULL) {
+      *os << 'NULL';
+    } else {
+      UniversalPrint(string(str), os);
+    }
+  }
+};
+template <>
+class UniversalTersePrinter<char*> {
+ public:
+  static void Print(char* str, ::std::ostream* os) {
+    UniversalTersePrinter<const char*>::Print(str, os);
+  }
+};
+    
+    namespace internal {
     }
     
-    // See portability/Unistd.h for why these need to be in a namespace
-// rather then extern 'C'.
-namespace folly {
-namespace portability {
-namespace fcntl {
-int creat(char const* fn, int pm);
-int fcntl(int fd, int cmd, ...);
-int posix_fallocate(int fd, off_t offset, off_t len);
-int open(char const* fn, int of, int pm = 0);
-}
-}
-}
+    // Helper function for implementing {EXPECT|ASSERT}_PRED5.  Don't use
+// this in your code.
+template <typename Pred,
+          typename T1,
+          typename T2,
+          typename T3,
+          typename T4,
+          typename T5>
+AssertionResult AssertPred5Helper(const char* pred_text,
+                                  const char* e1,
+                                  const char* e2,
+                                  const char* e3,
+                                  const char* e4,
+                                  const char* e5,
+                                  Pred pred,
+                                  const T1& v1,
+                                  const T2& v2,
+                                  const T3& v3,
+                                  const T4& v4,
+                                  const T5& v5) {
+  if (pred(v1, v2, v3, v4, v5)) return AssertionSuccess();
+    }
     
-    
-    {  ExampleObject('foo');
-  XLOG(INFO) << 'main returning';
-  return 0;
-}
-
-    
-      argumentEvaluated = false;
-  XLOGC_IF(DBG1, true, 'xlog format string %d', getValue());
-  ASSERT_EQ(1, messages.size());
-  EXPECT_TRUE(argumentEvaluated);
-  messages.clear();
-    
-    
-    {  // xlogStripFilename() should ideally be a purely compile-time evaluation.
-  // Use a static_assert() to ensure that it can be evaluated at compile time.
-  // We use EXPECT_STREQ() checks above for most of the testing since it
-  // produces nicer messages on failure.
-  static_assert(
-      constexpr_strcmp(
-          xlogStripFilename('/my/project/src/test.cpp', '/my/project'),
-          'src/test.cpp') == 0,
-      'incorrect xlogStripFilename() behavior');
-}
-
-    
-    #include <yoga/Yoga.h>
-    
-    
-    {  return _URC_NO_REASON;
-}
-    
-        double top;
-    double bottom;
-    
-    
-    {
-    {
-    {  static void OnLoad();
- private:
-  bool attachedWithThisScope_;
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
+    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
+    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
+    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32, GTEST_TEMPLATE_ T33,
+    GTEST_TEMPLATE_ T34, GTEST_TEMPLATE_ T35, GTEST_TEMPLATE_ T36,
+    GTEST_TEMPLATE_ T37, GTEST_TEMPLATE_ T38, GTEST_TEMPLATE_ T39,
+    GTEST_TEMPLATE_ T40>
+struct Templates40 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates39<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+      T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40> Tail;
 };
-}
-}
-
+    
+    // Tests negative input.
+TEST(IsPrimeTest, Negative) {
+  // This test belongs to the IsPrimeTest test case.
+    }
+    
+    int main(int, char**)
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    }
+    
+    static void ImGui_ImplAllegro5_UpdateMouseCursor()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_NoMouseCursorChange)
+        return;
+    }
+    
+    // CHANGELOG
+// (minor and older changes stripped away, please see git history for details)
+//  2018-03-22: Added FreeGLUT Platform binding.
+    
+            // Detect missing glyphs and replace them with a zero-sized box instead of relying on the default glyphs
+        // This allows us merging overlapping icon fonts more easily.
+        int rect_i = 0;
+        for (int range_i = 0; range_i < tmp.RangesCount; range_i++)
+            for (int char_i = 0; char_i < tmp.Ranges[range_i].num_chars; char_i++, rect_i++)
+                if (stbtt_FindGlyphIndex(&tmp.FontInfo, tmp.Ranges[range_i].first_unicode_codepoint_in_range + char_i) == 0)
+                    tmp.Rects[rect_i].w = tmp.Rects[rect_i].h = 0;
     
     
-    {}
-
+    {    ImGuiItemHoveredDataBackup() { Backup(); }
+    void Backup()           { ImGuiWindow* window = GImGui->CurrentWindow; LastItemId = window->DC.LastItemId; LastItemStatusFlags = window->DC.LastItemStatusFlags; LastItemRect = window->DC.LastItemRect; LastItemDisplayRect = window->DC.LastItemDisplayRect; }
+    void Restore() const    { ImGuiWindow* window = GImGui->CurrentWindow; window->DC.LastItemId = LastItemId; window->DC.LastItemStatusFlags = LastItemStatusFlags; window->DC.LastItemRect = LastItemRect; window->DC.LastItemDisplayRect = LastItemDisplayRect; }
+};
     
-    namespace facebook {
+    
+    {        D3DCompile(pixelShader, strlen(pixelShader), NULL, NULL, NULL, 'main', 'ps_4_0', 0, 0, &g_pPixelShaderBlob, NULL);
+        if (g_pPixelShaderBlob == NULL)  // NB: Pass ID3D10Blob* pErrorBlob to D3DCompile() to get error showing in (const char*)pErrorBlob->GetBufferPointer(). Make sure to Release() the blob!
+            return false;
+        if (g_pd3dDevice->CreatePixelShader((DWORD*)g_pPixelShaderBlob->GetBufferPointer(), g_pPixelShaderBlob->GetBufferSize(), NULL, &g_pPixelShader) != S_OK)
+            return false;
     }
