@@ -1,191 +1,162 @@
 
         
-            f2coeff[1] = - 2*D[1][3] + 2*D[1][7] - 2*D[3][1] - 2*D[3][5] - 2*D[3][9] - 2*D[5][3] + 2*D[5][7] + 2*D[7][1] + 2*D[7][5] + 2*D[7][9] - 2*D[9][3] + 2*D[9][7]; // constant term
-    f2coeff[2] = 4*D[1][5] - 4*D[1][1] + 8*D[2][2] + 8*D[2][4] + 8*D[4][2] + 8*D[4][4] + 4*D[5][1] - 4*D[5][5] + 4*D[9][9]; // s1^2  * s2
-    f2coeff[3] = 4*D[1][8] - 4*D[1][6] - 8*D[2][3] + 8*D[2][7] - 8*D[3][2] - 8*D[3][4] - 8*D[4][3] + 8*D[4][7] + 4*D[5][6] - 4*D[5][8] - 4*D[6][1] + 4*D[6][5] - 4*D[6][9] + 8*D[7][2] + 8*D[7][4] + 4*D[8][1] - 4*D[8][5] + 4*D[8][9] - 4*D[9][6] + 4*D[9][8]; // s1 * s2
-    f2coeff[4] = 8*D[2][2] - 8*D[3][3] - 8*D[4][4] + 8*D[6][6] + 8*D[7][7] - 8*D[8][8]; // s1 * s3
-    f2coeff[5] = 4*D[1][4] - 4*D[1][2] - 4*D[2][1] + 4*D[2][5] - 4*D[2][9] - 8*D[3][6] - 8*D[3][8] + 4*D[4][1] - 4*D[4][5] + 4*D[4][9] + 4*D[5][2] - 4*D[5][4] - 8*D[6][3] + 8*D[6][7] + 8*D[7][6] + 8*D[7][8] - 8*D[8][3] + 8*D[8][7] - 4*D[9][2] + 4*D[9][4]; // s2 * s3
-    f2coeff[6] = 6*D[5][6] - 6*D[1][8] - 6*D[1][6] + 6*D[5][8] - 6*D[6][1] + 6*D[6][5] - 6*D[6][9] - 6*D[8][1] + 6*D[8][5] - 6*D[8][9] - 6*D[9][6] - 6*D[9][8]; // s2^2 * s3
-    f2coeff[7] = 4*D[1][1] - 4*D[1][5] + 4*D[1][9] - 4*D[5][1] + 4*D[5][5] - 4*D[5][9] + 4*D[9][1] - 4*D[9][5] + 4*D[9][9]; // s2^3
-    f2coeff[8] = 2*D[2][9] - 2*D[1][4] - 2*D[2][1] - 2*D[2][5] - 2*D[1][2] + 4*D[3][6] + 4*D[3][8] - 2*D[4][1] - 2*D[4][5] + 2*D[4][9] - 2*D[5][2] - 2*D[5][4] + 4*D[6][3] + 4*D[6][7] + 4*D[7][6] + 4*D[7][8] + 4*D[8][3] + 4*D[8][7] + 2*D[9][2] + 2*D[9][4]; // s1 * s3^2
-    f2coeff[9] = 2*D[1][2] + 2*D[1][4] + 2*D[2][1] + 2*D[2][5] + 2*D[2][9] - 4*D[3][6] + 4*D[3][8] + 2*D[4][1] + 2*D[4][5] + 2*D[4][9] + 2*D[5][2] + 2*D[5][4] - 4*D[6][3] + 4*D[6][7] + 4*D[7][6] - 4*D[7][8] + 4*D[8][3] - 4*D[8][7] + 2*D[9][2] + 2*D[9][4]; // s1
-    f2coeff[10] = 2*D[1][6] + 2*D[1][8] - 4*D[2][3] + 4*D[2][7] - 4*D[3][2] + 4*D[3][4] + 4*D[4][3] - 4*D[4][7] + 2*D[5][6] + 2*D[5][8] + 2*D[6][1] + 2*D[6][5] + 2*D[6][9] + 4*D[7][2] - 4*D[7][4] + 2*D[8][1] + 2*D[8][5] + 2*D[8][9] + 2*D[9][6] + 2*D[9][8]; // s3
-    f2coeff[11] = 8*D[3][3] - 4*D[1][9] - 4*D[1][1] - 8*D[3][7] + 4*D[5][5] - 8*D[7][3] + 8*D[7][7] - 4*D[9][1] - 4*D[9][9]; // s2
-    f2coeff[12] = 4*D[1][1] - 4*D[5][5] + 4*D[5][9] + 8*D[6][6] + 8*D[6][8] + 8*D[8][6] + 8*D[8][8] + 4*D[9][5] - 4*D[9][9]; // s2 * s3^2
-    f2coeff[13] = 2*D[1][7] - 2*D[1][3] + 4*D[2][6] - 4*D[2][8] - 2*D[3][1] + 2*D[3][5] + 2*D[3][9] + 4*D[4][6] - 4*D[4][8] + 2*D[5][3] - 2*D[5][7] + 4*D[6][2] + 4*D[6][4] + 2*D[7][1] - 2*D[7][5] - 2*D[7][9] - 4*D[8][2] - 4*D[8][4] + 2*D[9][3] - 2*D[9][7]; // s1^2
-    f2coeff[14] = 2*D[1][3] - 2*D[1][7] + 4*D[2][6] + 4*D[2][8] + 2*D[3][1] + 2*D[3][5] - 2*D[3][9] - 4*D[4][6] - 4*D[4][8] + 2*D[5][3] - 2*D[5][7] + 4*D[6][2] - 4*D[6][4] - 2*D[7][1] - 2*D[7][5] + 2*D[7][9] + 4*D[8][2] - 4*D[8][4] - 2*D[9][3] + 2*D[9][7]; // s3^2
-    f2coeff[15] = 6*D[1][3] - 6*D[1][7] + 6*D[3][1] - 6*D[3][5] + 6*D[3][9] - 6*D[5][3] + 6*D[5][7] - 6*D[7][1] + 6*D[7][5] - 6*D[7][9] + 6*D[9][3] - 6*D[9][7]; // s2^2
-    f2coeff[16] = 2*D[6][9] - 2*D[1][8] - 2*D[5][6] - 2*D[5][8] - 2*D[6][1] - 2*D[6][5] - 2*D[1][6] - 2*D[8][1] - 2*D[8][5] + 2*D[8][9] + 2*D[9][6] + 2*D[9][8]; // s3^3
-    f2coeff[17] = 8*D[2][6] - 4*D[1][7] - 4*D[1][3] + 8*D[2][8] - 4*D[3][1] + 4*D[3][5] - 4*D[3][9] + 8*D[4][6] + 8*D[4][8] + 4*D[5][3] + 4*D[5][7] + 8*D[6][2] + 8*D[6][4] - 4*D[7][1] + 4*D[7][5] - 4*D[7][9] + 8*D[8][2] + 8*D[8][4] - 4*D[9][3] - 4*D[9][7]; // s1 * s2 * s3
-    f2coeff[18] = 6*D[2][5] - 6*D[1][4] - 6*D[2][1] - 6*D[1][2] - 6*D[2][9] - 6*D[4][1] + 6*D[4][5] - 6*D[4][9] + 6*D[5][2] + 6*D[5][4] - 6*D[9][2] - 6*D[9][4]; // s1 * s2^2
-    f2coeff[19] = 2*D[1][6] + 2*D[1][8] + 4*D[2][3] + 4*D[2][7] + 4*D[3][2] + 4*D[3][4] + 4*D[4][3] + 4*D[4][7] - 2*D[5][6] - 2*D[5][8] + 2*D[6][1] - 2*D[6][5] - 2*D[6][9] + 4*D[7][2] + 4*D[7][4] + 2*D[8][1] - 2*D[8][5] - 2*D[8][9] - 2*D[9][6] - 2*D[9][8]; // s1^2 * s3
-    f2coeff[20] = 2*D[1][2] + 2*D[1][4] + 2*D[2][1] - 2*D[2][5] - 2*D[2][9] + 2*D[4][1] - 2*D[4][5] - 2*D[4][9] - 2*D[5][2] - 2*D[5][4] - 2*D[9][2] - 2*D[9][4]; // s1^3
+        static void findCorner(const std::vector<Point2f>& contour, Point2f point, Point2f& corner)
+{
+    // find the nearest point
+    double min_dist = std::numeric_limits<double>::max();
+    int min_idx = -1;
+    }
+    
+    CV_ModelEstimator2_Test::CV_ModelEstimator2_Test()
+{
+    generalPositionsCount = get_test_case_count() / 2;
+    maxPointsCount = 100;
+    }
+    
+      // Gets the outcome of the test part.
+  Type type() const { return type_; }
+    
+    // Makes sure this header is not included before gtest.h.
+#ifndef GTEST_INCLUDE_GTEST_GTEST_H_
+# error Do not include gtest_pred_impl.h directly.  Include gtest.h instead.
+#endif  // GTEST_INCLUDE_GTEST_GTEST_H_
+    
+      // Many linked_ptr operations may change p.link_ for some linked_ptr
+  // variable p in the same circle as this object.  Therefore we need
+  // to prevent two such operations from occurring concurrently.
+  //
+  // Note that different types of linked_ptr objects can coexist in a
+  // circle (e.g. linked_ptr<Base>, linked_ptr<Derived1>, and
+  // linked_ptr<Derived2>).  Therefore we must use a single mutex to
+  // protect all linked_ptr objects.  This can create serious
+  // contention in production code, but is acceptable in a testing
+  // framework.
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35,
+    typename T36, typename T37, typename T38, typename T39, typename T40,
+    typename T41, typename T42, typename T43, typename T44, typename T45,
+    typename T46, typename T47, typename T48, typename T49>
+struct Types49 {
+  typedef T1 Head;
+  typedef Types48<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
+      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
+      T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
+      T44, T45, T46, T47, T48, T49> Tail;
+};
+    
+    namespace torch { namespace utils {
+    }
+    }
+    
+    #ifdef _THP_CORE
+#define THPStorageType TH_CONCAT_3(THP,Real,StorageType)
+#define THPStorageBaseStr TH_CONCAT_STRING_2(Real,StorageBase)
+#endif
+    
+    #include 'test/cpp/qps/benchmark_config.h'
+#include 'test/cpp/qps/driver.h'
+#include 'test/cpp/qps/report.h'
+#include 'test/cpp/qps/server.h'
+#include 'test/cpp/util/test_config.h'
+#include 'test/cpp/util/test_credentials_provider.h'
+    
+    #include <grpc/grpc_security.h>
     
     #endif
 
     
-    //! @cond IGNORED
+    #ifndef TEST_QPS_USAGE_TIMER_H
+#define TEST_QPS_USAGE_TIMER_H
     
-        // Extension: 2.1
-    extern void (CODEGEN_FUNCPTR *UniformMatrix2x3fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-    extern void (CODEGEN_FUNCPTR *UniformMatrix3x2fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-    extern void (CODEGEN_FUNCPTR *UniformMatrix2x4fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-    extern void (CODEGEN_FUNCPTR *UniformMatrix4x2fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-    extern void (CODEGEN_FUNCPTR *UniformMatrix3x4fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-    extern void (CODEGEN_FUNCPTR *UniformMatrix4x3fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-    
-    static void* openclamdblas_check_fn(int ID);
-    
-    
-    {
-    {
-    {} } } // namespace cv::ocl::runtime
-    
-      // Gets a pix that contains an 8 bit threshold value at each pixel. The
-  // returned pix may be an integer reduction of the binary image such that
-  // the scale factor may be inferred from the ratio of the sizes, even down
-  // to the extreme of a 1x1 pixel thresholds image.
-  // Ideally the 8 bit threshold should be the exact threshold used to generate
-  // the binary image in ThresholdToPix, but this is not a hard constraint.
-  // Returns nullptr if the input is binary. PixDestroy after use.
-  virtual Pix* GetPixRectThresholds();
-    
-    namespace tesseract {
+    class MetricsServiceImpl final : public MetricsService::Service {
+ public:
+  grpc::Status GetAllGauges(ServerContext* context, const EmptyMessage* request,
+                            ServerWriter<GaugeResponse>* writer) override;
     }
     
-      // See class comment for arguments.
-  void Init(const IndexMapBiDi* charset_map,
-            const ShapeTable* shape_table,
-            bool randomize,
-            TrainingSampleSet* sample_set);
+      int Join();
+  void Interrupt();
     
-      // Computes a very simple bag of chars char error rate.
-  double ComputeCharError(const GenericVector<int>& truth_str,
-                          const GenericVector<int>& ocr_str);
-  // Computes a very simple bag of words word recall error rate.
-  // NOTE that this is destructive on both input strings.
-  double ComputeWordError(STRING* truth_str, STRING* ocr_str);
+      // Proto2 Python
+  google::protobuf::compiler::python::Generator py_generator;
+  cli.RegisterGenerator('--python_out', &py_generator,
+                        'Generate Python source file.');
     
-    // Helper to expand a box in one of the 4 directions by the given pad,
-// provided it does not expand into any cell with a zero noise density.
-// If that is not possible, try expanding all round by a small constant.
-static TBOX AttemptBoxExpansion(const TBOX& box, const IntGrid& noise_density,
-                                int pad) {
-  TBOX expanded_box(box);
-  expanded_box.set_right(box.right() + pad);
-  if (!noise_density.AnyZeroInRect(expanded_box))
-    return expanded_box;
-  expanded_box = box;
-  expanded_box.set_left(box.left() - pad);
-  if (!noise_density.AnyZeroInRect(expanded_box))
-    return expanded_box;
-  expanded_box = box;
-  expanded_box.set_top(box.top() + pad);
-  if (!noise_density.AnyZeroInRect(expanded_box))
-    return expanded_box;
-  expanded_box = box;
-  expanded_box.set_bottom(box.bottom() + pad);
-  if (!noise_density.AnyZeroInRect(expanded_box))
-    return expanded_box;
-  expanded_box = box;
-  expanded_box.pad(kNoisePadding, kNoisePadding);
-  if (!noise_density.AnyZeroInRect(expanded_box))
-    return expanded_box;
-  return box;
+    /////////////////////////////////////////////////////////////////////////////
+    
+    static int64_t to_usec(const timeval& tv) {
+  return (int64_t(tv.tv_sec) * 1000000) + tv.tv_usec;
 }
+    
+    #ifndef incl_HPHP_TIMER_H_
+#define incl_HPHP_TIMER_H_
+    
+    template<typename T>
+inline Vptr emitTLSAddr(Vout& v, TLSDatum<T> datum) {
+  switch (arch()) {
+    case Arch::X64:
+      return x64::detail::emitTLSAddr(v, datum);
+    case Arch::ARM:
+      return arm::detail::emitTLSAddr(v, datum);
+    case Arch::PPC64:
+      return ppc64::detail::emitTLSAddr(v, datum);
+  }
+  not_reached();
+}
+    
+    namespace HPHP {
+    }
     
     /*
- * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
- * Method:    XGBoosterDumpModelEx
- * Signature: (JLjava/lang/String;I)[Ljava/lang/String;
+ * load a magic file
  */
-JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGBoosterDumpModelEx
-  (JNIEnv *jenv, jclass jcls, jlong jhandle, jstring jfmap, jint jwith_stats, jstring jformat, jobjectArray jout) {
-  BoosterHandle handle = (BoosterHandle) jhandle;
-  const char *fmap = jenv->GetStringUTFChars(jfmap, 0);
-  const char *format = jenv->GetStringUTFChars(jformat, 0);
-  bst_ulong len = 0;
-  char **result;
-    }
-    
-      double double2[2] = {1.0, 2.0};
-  EXPECT_EQ(info.GetRoot(1), 0)
-    << 'When no root_index is given, was expecting default value 0';
-  info.SetInfo('root_index', double2, xgboost::kDouble, 2);
-  EXPECT_EQ(info.GetRoot(1), 2.0f);
-    
-    TreeUpdater* TreeUpdater::Create(const std::string& name) {
-  auto *e = ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->Find(name);
-  if (e == nullptr) {
-    LOG(FATAL) << 'Unknown tree updater ' << name;
-  }
-  return (e->body)();
+public int
+magic_load(struct magic_set *ms, const char *magicfile)
+{
+  if (ms == NULL)
+  return -1;
+  return file_apprentice(ms, magicfile, FILE_LOAD);
 }
     
-    namespace xgboost {
-namespace common {
-TEST(CompressedIterator, Test) {
-  ASSERT_TRUE(detail::SymbolBits(256) == 8);
-  ASSERT_TRUE(detail::SymbolBits(150) == 8);
-  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
-  int num_elements = 1000;
-  int repetitions = 1000;
-  srand(9);
-    }
-    }
-    }
     
-    #include <osquery/config.h>
-#include <osquery/database.h>
-    
-      // Test operator upper bounds.
-  EXPECT_FALSE(cl2.matches(1000));
-  EXPECT_FALSE(cl2.matches(1001));
-    
-      // Remove the backup and expect another reload to not create one.
-  removePath(path_ + '.backup');
-  ASSERT_FALSE(pathExists(path_ + '.backup'));
-    
-    /**
- * @brief Compute a map of metadata about the supplied QueryData object
- *
- * @param r A row to analyze
- * @param lengths A mutable set of column lengths
- * @param use_columns Calulate lengths of column names or values
- *
- * @return A map of string to int such that the key represents the 'column' in
- * the supplied QueryData and the int represents the length of the longest key
- */
-void computeRowLengths(const Row& r,
-                       std::map<std::string, size_t>& lengths,
-                       bool use_columns = false);
-    
-    class SyslogTests : public testing::Test {
- public:
-  std::vector<std::string> splitCsv(std::string line) {
-    boost::tokenizer<RsyslogCsvSeparator> tokenizer(line);
-    std::vector<std::string> result(tokenizer.begin(), tokenizer.end());
-    return result;
+    {  switch (b.loc) {
+    case BaseLoc::None:
+      return 'none';
+    case BaseLoc::Elem:
+      return folly::to<std::string>(
+        'elem{', show(b.type), ',', show(b.locTy), '}'
+      );
+    case BaseLoc::Prop:
+      return folly::to<std::string>(
+        'prop{', show(b.type), ',', show(b.locTy), ',', locName(), '}'
+      );
+    case BaseLoc::StaticProp:
+      return folly::to<std::string>(
+        'sprop{', show(b.type), ',', show(b.locTy), ',', locName(), '}'
+      );
+    case BaseLoc::Local:
+      return folly::to<std::string>(
+        'local{', show(b.type), ',', locName(), ',', local(), '}'
+      );
+    case BaseLoc::This:
+      return folly::to<std::string>('this{', show(b.type), '}');
+    case BaseLoc::Stack:
+      return folly::to<std::string>(
+        'stack{', show(b.type), ',', b.locSlot, '}'
+      );
+    case BaseLoc::Global:
+      return folly::to<std::string>('global{', show(b.type), '}');
   }
-};
-    
-    
-    {      batch.Delete(*v8::String::Utf8Value(array->Get(i)->ToString()));
-      continue;
-    }
-    
-      virtual bool PartialMergeMulti(const Slice& key,
-                                 const std::deque<Slice>& operand_list,
-                                 std::string* new_value, Logger* logger) const
-      override;
-    
-    #include 'rocksjni/statisticsjni.h'
-    
-    
-    {  m_jcreate_compaction_filter_methodid =
-      AbstractCompactionFilterFactoryJni::getCreateCompactionFilterMethodId(env);
-  if(m_jcreate_compaction_filter_methodid == nullptr) {
-    // exception thrown: NoSuchMethodException or OutOfMemoryError
-    return;
-  }
+  not_reached();
 }
+    
+      if (!val) {
+    // Doubles always stay doubles
+    if (t.subtypeOf(BDbl)) return TDbl;
+    }
