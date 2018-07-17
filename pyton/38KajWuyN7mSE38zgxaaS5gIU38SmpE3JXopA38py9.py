@@ -1,44 +1,48 @@
 
         
-                # Create Response to avoid https://github.com/kevin1024/pytest-httpbin/issues/33
-        resp = requests.Response()
-        resp.raw = io.BytesIO(b'the content')
-        resp.request = prep
-        setattr(resp.raw, 'release_conn', lambda *args: args)
+            This could be extended by having nested blocks, sorting them recursively
+    and flattening the end structure into a list of lines. Revision 2 maybe ^.^.
+'''
     
-        def redirect_resp_handler(sock):
-        consume_socket_content(sock, timeout=0.5)
-        location = u'//{0}:{1}/{2}'.format(host, port, path)
-        sock.send(
-            b'HTTP/1.1 301 Moved Permanently\r\n'
-            b'Content-Length: 0\r\n'
-            b'Location: ' + location.encode('utf8') + b'\r\n'
-            b'\r\n'
-        )
-        redirect_request.append(consume_socket_content(sock, timeout=0.5))
-        sock.send(b'HTTP/1.1 200 OK\r\n\r\n')
+        def to_json(self, value):
+        # JSON objects may only have string keys, so don't bother tagging the
+        # key here.
+        return dict((k, self.serializer.tag(v)) for k, v in iteritems(value))
     
-        :param url: URL for the new :class:`Request` object.
-    :param data: (optional) Dictionary (will be form-encoded), bytes, or file-like object to send in the body of the :class:`Request`.
-    :param json: (optional) json data to send in the body of the :class:`Request`.
-    :param \*\*kwargs: Optional arguments that ``request`` takes.
-    :return: :class:`Response <Response>` object
-    :rtype: requests.Response
-    '''
+        def from_envvar(self, variable_name, silent=False):
+        '''Loads a configuration from an environment variable pointing to
+        a configuration file.  This is basically just a shortcut with nicer
+        error messages for this line of code::
     
-    configparser = None
+        op.add_option('--random-seed',
+                  dest='random_seed', default=13, type=int,
+                  help='Seed used by the random number generators.')
     
-        def test_max_delay(self):
-        strategy = _exponential_backoff(retries=7, delay=1, backoff=2, max_delay=60)
-        result = list(strategy())
-        self.assertEquals(result, [1, 2, 4, 8, 16, 32, 60])
+    In the second benchmark, we increase the number of dimensions of the
+training set, classify a sample and plot the time taken as a function
+of the number of dimensions.
+'''
+import numpy as np
+import matplotlib.pyplot as plt
+import gc
+from datetime import datetime
     
-            mp3 = match1(content, r'name='filename'\s*value='([^']+\.mp3)'')
-        if mp3: mp3 = 'http://res.infoq.com/downloads/mp3downloads/%s' % mp3
+        if not os.path.exists(ARCHIVE_NAME):
+        print('Downloading dataset from %s (14 MB)' % URL)
+        opener = urlopen(URL)
+        with open(ARCHIVE_NAME, 'wb') as archive:
+            archive.write(opener.read())
     
-    from ..common import *
-import urllib.error
-from json import loads
-from time import time, sleep
+    # Print the classification report
+print(metrics.classification_report(y_test, y_predicted,
+                                    target_names=dataset.target_names))
     
-    # A script that splits a Markdown file into plain text (for spell checking) and c++ files.
+    from sklearn.datasets import make_biclusters
+from sklearn.datasets import samples_generator as sg
+from sklearn.cluster.bicluster import SpectralCoclustering
+from sklearn.metrics import consensus_score
+    
+    The usual covariance maximum likelihood estimate can be regularized
+using shrinkage. Ledoit and Wolf proposed a close formula to compute
+the asymptotically optimal shrinkage parameter (minimizing a MSE
+criterion), yielding the Ledoit-Wolf covariance estimate.
