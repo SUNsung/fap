@@ -1,164 +1,94 @@
 
         
-            # Sorting the libraries
-    inner_blocks = sorted(blocks[0].split('##'))
-    for i in range(1 , len(inner_blocks)):
-        if inner_blocks[i][0] != '#':
-            inner_blocks[i] = '##' + inner_blocks[i]
-    inner_blocks=''.join(inner_blocks)
-    
-            def report_warning(self, message):
-            if re.match(regex, message):
-                return
-            old_report_warning(message)
-        self.report_warning = types.MethodType(report_warning, self)
-    
-        def test_cache(self):
-        ydl = FakeYDL({
-            'cachedir': self.test_dir,
-        })
-        c = Cache(ydl)
-        obj = {'x': 1, 'y': ['ä', '\\a', True]}
-        self.assertEqual(c.load('test_cache', 'k.'), None)
-        c.store('test_cache', 'k.', obj)
-        self.assertEqual(c.load('test_cache', 'k2'), None)
-        self.assertFalse(_is_empty(self.test_dir))
-        self.assertEqual(c.load('test_cache', 'k.'), obj)
-        self.assertEqual(c.load('test_cache', 'y'), None)
-        self.assertEqual(c.load('test_cache2', 'k.'), None)
-        c.remove()
-        self.assertFalse(os.path.exists(self.test_dir))
-        self.assertEqual(c.load('test_cache', 'k.'), None)
+            def set(self, results, query):
+        '''Set the result for the given query key in the cache.
     
     
-class TestMultipleSocks(unittest.TestCase):
-    @staticmethod
-    def _check_params(attrs):
-        params = get_params()
-        for attr in attrs:
-            if attr not in params:
-                print('Missing %s. Skipping.' % attr)
-                return
-        return params
+class LookupService(object):
     
+        def _clean_req(self, request, method, results):
+        ''' stop the request from returning objects and records any errors '''
     
-def gen_extractors():
-    ''' Return a list of an instance of every supported extractor.
-    The order does matter; the first extractor matched is the one handling the URL.
-    '''
-    return [klass() for klass in gen_extractor_classes()]
+        def __str__(self):
+        return (
+            '<downloader.Slot concurrency=%r delay=%0.2f randomize_delay=%r '
+            'len(active)=%d len(queue)=%d len(transferring)=%d lastseen=%s>' % (
+                self.concurrency, self.delay, self.randomize_delay,
+                len(self.active), len(self.queue), len(self.transferring),
+                datetime.fromtimestamp(self.lastseen).isoformat()
+            )
+        )
     
-    import re
-    
-    
-def test_custom_tag():
-    class Foo(object):
-        def __init__(self, data):
-            self.data = data
-    
-                app.config.from_object('yourapplication.default_config')
-            from yourapplication import default_config
-            app.config.from_object(default_config)
-    
-    
-def test_existing_handler(app):
-    logging.root.addHandler(logging.StreamHandler())
-    assert app.logger.level == logging.NOTSET
-    assert not app.logger.handlers
-    
-            def get_auth(self, username=None, password=None):
-            assert self.raw_auth is None
-            assert username is None
-            assert password is None
-            return basic_auth()
-    
-    from utils import TESTS_ROOT
-    
-    
-DEFAULT_CONFIG_DIR = str(os.environ.get(
-    'HTTPIE_CONFIG_DIR',
-    os.path.expanduser('~/.httpie') if not is_windows else
-    os.path.expandvars(r'%APPDATA%\\httpie')
-))
-    
-            if self.args.download and OUT_RESP_BODY in self.args.output_options:
-            # Response body is always downloaded with --download and it goes
-            # through a different routine, so we remove it.
-            self.args.output_options = str(
-                set(self.args.output_options) - set(OUT_RESP_BODY))
-    
-    
-if __name__ == '__main__':
-    RemoveDuplicateUrls.run()
+        def download_request(self, request, spider):
+        p = urlparse_cached(request)
+        scheme = 'https' if request.meta.get('is_secure') else 'http'
+        bucket = p.hostname
+        path = p.path + '?' + p.query if p.query else p.path
+        url = '%s://%s.s3.amazonaws.com%s' % (scheme, bucket, path)
+        if self.anon:
+            request = request.replace(url=url)
+        elif self._signer is not None:
+            import botocore.awsrequest
+            awsrequest = botocore.awsrequest.AWSRequest(
+                method=request.method,
+                url='%s://s3.amazonaws.com/%s%s' % (scheme, bucket, path),
+                headers=request.headers.to_unicode_dict(),
+                data=request.body)
+            self._signer.add_auth(awsrequest)
+            request = request.replace(
+                url=url, headers=awsrequest.headers.items())
+        else:
+            signed_headers = self.conn.make_request(
+                    method=request.method,
+                    bucket=bucket,
+                    key=unquote(p.path),
+                    query_args=unquote(p.query),
+                    headers=request.headers,
+                    data=request.body)
+            request = request.replace(url=url, headers=signed_headers)
+        return self._download_http(request, spider)
 
     
-        def dispatch_call(self, call):
-        if call.rank not in (Rank.OPERATOR, Rank.SUPERVISOR, Rank.DIRECTOR):
-            raise ValueError('Invalid call rank: {}'.format(call.rank))
-        employee = None
-        if call.rank == Rank.OPERATOR:
-            employee = self._dispatch_call(call, self.operators)
-        if call.rank == Rank.SUPERVISOR or employee is None:
-            employee = self._dispatch_call(call, self.supervisors)
-        if call.rank == Rank.DIRECTOR or employee is None:
-            employee = self._dispatch_call(call, self.directors)
-        if employee is None:
-            self.queued_calls.append(call)
-    
-            Accessing a node updates its position to the front of the LRU list.
-        '''
-        node = self.lookup[query]
-        if node is None:
-            return None
-        self.linked_list.move_to_front(node)
-        return node.results
+            if not isinstance(response, HtmlResponse) or response.status != 200:
+            return response
     
     
-class LinkedList(object):
+class BaseDupeFilter(object):
     
-    from mrjob.job import MRJob
+    class NotSupported(Exception):
+    '''Indicates a feature or method is not supported'''
+    pass
     
-        def unique_names(self):
-        # sorted
-        if not self.__allnames:
-            self.__allnames = []
-            for name, aliases in self.__byrgb.values():
-                self.__allnames.append(name)
-            self.__allnames.sort(key=str.lower)
-        return self.__allnames
+        def iterkeys(self):
+        '''Return an iterator over keys.'''
+        self._refresh()
+        for key in self._toc:
+            try:
+                self._lookup(key)
+            except KeyError:
+                continue
+            yield key
     
-        # a re to match a gzip Accept-Encoding
-    aepattern = re.compile(r'''
-                            \s* ([^\s;]+) \s*            #content-coding
-                            (;\s* q \s*=\s* ([0-9\.]+))? #q
-                            ''', re.VERBOSE | re.IGNORECASE)
+        def nearest(self, red, green, blue):
+        '''Return the name of color nearest (red, green, blue)'''
+        # BAW: should we use Voronoi diagrams, Delaunay triangulation, or
+        # octree for speeding up the locating of nearest point?  Exhaustive
+        # search is inefficient, but seems fast enough.
+        nearest = -1
+        nearest_name = ''
+        for name, aliases in self.__byrgb.values():
+            r, g, b = self.__byname[name.lower()]
+            rdelta = red - r
+            gdelta = green - g
+            bdelta = blue - b
+            distance = rdelta * rdelta + gdelta * gdelta + bdelta * bdelta
+            if nearest == -1 or distance < nearest:
+                nearest = distance
+                nearest_name = name
+        return nearest_name
     
-        def test_modify_unregister(self):
-        # Make sure the fd is unregister()ed in case of error on
-        # modify(): http://bugs.python.org/issue30014
-        if self.SELECTOR.__name__ == 'EpollSelector':
-            patch = unittest.mock.patch(
-                'selectors.EpollSelector._selector_cls')
-        elif self.SELECTOR.__name__ == 'PollSelector':
-            patch = unittest.mock.patch(
-                'selectors.PollSelector._selector_cls')
-        elif self.SELECTOR.__name__ == 'DevpollSelector':
-            patch = unittest.mock.patch(
-                'selectors.DevpollSelector._selector_cls')
-        else:
-            raise self.skipTest('')
-    
-    import dataclasses
-import typing
-    
-    @dataclasses.dataclass
-class CV:
-    T_CV4 = typing.ClassVar
-    cv0: typing.ClassVar[int] = 20
-    cv1: typing.ClassVar = 30
-    cv2: T_CV2
-    cv3: T_CV3
-    not_cv4: T_CV4  # When using string annotations, this field is not recognized as a ClassVar.
+    T_IV2 = dataclasses.InitVar[int]
+T_IV3 = dataclasses.InitVar
     
     @dataclass
 class IV:
@@ -170,30 +100,36 @@ class IV:
     not_iv4: T_IV4  # When using string annotations, this field is not recognized as an InitVar.
 
     
-        def assertAlmostEqual(self, a, b):
-        if isinstance(a, complex):
-            if isinstance(b, complex):
-                unittest.TestCase.assertAlmostEqual(self, a.real, b.real)
-                unittest.TestCase.assertAlmostEqual(self, a.imag, b.imag)
+        The decoding-related arguments have the same semantics as those of
+    bytes.decode().
+    '''
+    resource = _normalize_path(resource)
+    package = _get_package(package)
+    with open_text(package, resource, encoding, errors) as fp:
+        return fp.read()
+    
+            a = range(-2, 3)
+        self.assertEqual(a.index(0), 2)
+        self.assertEqual(range(1, 10, 3).index(4), 1)
+        self.assertEqual(range(1, -10, -3).index(-5), 2)
+    
+    def scanvars(reader, frame, locals):
+    '''Scan one logical line of Python and look up values of variables used.'''
+    vars, lasttoken, parent, prefix, value = [], None, None, '', __UNDEF__
+    for ttype, token, start, end, line in tokenize.generate_tokens(reader):
+        if ttype == tokenize.NEWLINE: break
+        if ttype == tokenize.NAME and token not in keyword.kwlist:
+            if lasttoken == '.':
+                if parent is not __UNDEF__:
+                    value = getattr(parent, token, __UNDEF__)
+                    vars.append((prefix + token, prefix, value))
             else:
-                unittest.TestCase.assertAlmostEqual(self, a.real, b)
-                unittest.TestCase.assertAlmostEqual(self, a.imag, 0.)
+                where, value = lookup(token, frame, locals)
+                vars.append((token, where, value))
+        elif token == '.':
+            prefix += lasttoken + '.'
+            parent = value
         else:
-            if isinstance(b, complex):
-                unittest.TestCase.assertAlmostEqual(self, a, b.real)
-                unittest.TestCase.assertAlmostEqual(self, 0., b.imag)
-            else:
-                unittest.TestCase.assertAlmostEqual(self, a, b)
-    
-    
-  def Done( self ):
-    return True
-    
-      # On UNIX platforms, we use sys.executable as the Python interpreter path.
-  # We cannot use sys.executable on Windows because for unknown reasons, it
-  # returns the Vim executable. Instead, we use sys.exec_prefix to deduce the
-  # interpreter path.
-  python_interpreter = ( WIN_PYTHON_PATH if utils.OnWindows() else
-                         sys.executable )
-  if _EndsWithPython( python_interpreter ):
-    return python_interpreter
+            parent, prefix = None, ''
+        lasttoken = token
+    return vars
