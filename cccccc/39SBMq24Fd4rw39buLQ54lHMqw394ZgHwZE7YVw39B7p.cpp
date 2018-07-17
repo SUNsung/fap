@@ -1,153 +1,180 @@
 
         
-        
-    {}  // namespace nwapi
-    
-    
-    {}  // namespace nwapi
-    
-    #include 'base/compiler_specific.h'
-#include 'content/nw/src/api/base/base.h'
-    
-    Menu::~Menu() {
-  Destroy();
+        // dims=[5, 4, 3, 2]->[3, 5, 4, 2]
+TEST_F(MatrixTest, RotatingTranspose_2_0) {
+  GENERIC_2D_ARRAY<int> m;
+  src_.RotatingTranspose(dims_, kNumDims_, 2, 0, &m);
+  m.ResizeNoInit(kInputSize_ / 2, 2);
+  // Verify that the result is:
+  // output tensor=[[[[0, 1][6, 7][12, 13][18, 19]]
+  //                 [[24, 25][30, 31][36, 37][42, 43]]
+  //                 [[48, 49][54, 55][60, 61][66, 67]]
+  //                 [[72, 73][78, 79][84, 85][90, 91]]
+  //                 [[96, 97][102, 103][108, 109][114, 115]]]
+  //                [[[2,3]...
+  EXPECT_EQ(0, m(0, 0));
+  EXPECT_EQ(1, m(0, 1));
+  EXPECT_EQ(6, m(1, 0));
+  EXPECT_EQ(7, m(1, 1));
+  EXPECT_EQ(24, m(4, 0));
+  EXPECT_EQ(25, m(4, 1));
+  EXPECT_EQ(30, m(5, 0));
+  EXPECT_EQ(2, m(20, 0));
 }
     
-        bool Write(ClipboardData& data) {
-      switch(data.type) {
-        case TYPE_TEXT:
-        return WriteText(data);
-        break;
-        case TYPE_HTML:
-        return WriteHTML(data);
-        break;
-        case TYPE_RTF:
-        return WriteRTF(data);
-        break;
-        case TYPE_PNG:
-        case TYPE_JPEG:
-        return WriteImage(data);
-        break;
-        case TYPE_NONE:
-        NOTREACHED();
-        return false;
-      }
-      NOTREACHED();
-      return false;
+    
+    {
+    {      datadir = drive;
+      datadir += dir;
+      datadir += '/tessdata';
     }
-    
-    void leveldb_compact_range(
-    leveldb_t* db,
-    const char* start_key, size_t start_key_len,
-    const char* limit_key, size_t limit_key_len) {
-  Slice a, b;
-  db->rep->CompactRange(
-      // Pass NULL Slice if corresponding 'const char*' is NULL
-      (start_key ? (a = Slice(start_key, start_key_len), &a) : NULL),
-      (limit_key ? (b = Slice(limit_key, limit_key_len), &b) : NULL));
-}
-    
-    void InternalFilterPolicy::CreateFilter(const Slice* keys, int n,
-                                        std::string* dst) const {
-  // We rely on the fact that the code in table.cc does not mind us
-  // adjusting keys[].
-  Slice* mkey = const_cast<Slice*>(keys);
-  for (int i = 0; i < n; i++) {
-    mkey[i] = ExtractUserKey(keys[i]);
-    // TODO(sanjay): Suppress dups?
-  }
-  user_policy_->CreateFilter(keys, n, dst);
-}
-    
-      FindFileTest() : disjoint_sorted_files_(true) { }
-    
-        // FLAGS_page_size is defaulted to 1024
-    if (FLAGS_page_size != 1024) {
-      char page_size[100];
-      snprintf(page_size, sizeof(page_size), 'PRAGMA page_size = %d',
-               FLAGS_page_size);
-      status = sqlite3_exec(db_, page_size, NULL, NULL, &err_msg);
-      ExecErrorCheck(status, err_msg);
-    }
-    
-    	ClassDB::bind_method(D_METHOD('poll'), &StreamPeerSSL::poll);
-	ClassDB::bind_method(D_METHOD('accept_stream', 'stream'), &StreamPeerSSL::accept_stream);
-	ClassDB::bind_method(D_METHOD('connect_to_stream', 'stream', 'validate_certs', 'for_hostname'), &StreamPeerSSL::connect_to_stream, DEFVAL(false), DEFVAL(String()));
-	ClassDB::bind_method(D_METHOD('get_status'), &StreamPeerSSL::get_status);
-	ClassDB::bind_method(D_METHOD('disconnect_from_stream'), &StreamPeerSSL::disconnect_from_stream);
-    
-    
-    {	return false;
-}
-    
-    	virtual bool needsCollision(btBroadphaseProxy *proxy0) const;
-    
-    
-    
-    /*Note that we do not provide a macro for abs(), because it is provided as a
-   library function, which we assume is translated into an intrinsic to avoid
-   the function call overhead and then implemented in the smartest way for the
-   target platform.
-  With modern gcc (4.x), this is true: it uses cmov instructions if the
-   architecture supports it and branchless bit-twiddling if it does not (the
-   speed difference between the two approaches is not measurable).
-  Interestingly, the bit-twiddling method was patented in 2000 (US 6,073,150)
-   by Sun Microsystems, despite prior art dating back to at least 1996:
-   http://web.archive.org/web/19961201174141/www.x86.org/ftp/articles/pentopt/PENTOPT.TXT
-  On gcc 3.x, however, our assumption is not true, as abs() is translated to a
-   conditional jump, which is horrible on deeply piplined architectures (e.g.,
-   all consumer architectures for the past decade or more).
-  Also be warned that -C*abs(x) where C is a constant is mis-optimized as
-   abs(C*x) on every gcc release before 4.2.3.
-  See bug http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34130 */
-    
-    /*============================================================================
-**      On Intel Pentium processors (especially PIII and probably P4), converting
-**      from float to int is very slow. To meet the C specs, the code produced by
-**      most C compilers targeting Pentium needs to change the FPU rounding mode
-**      before the float to int conversion is performed.
-**
-**      Changing the FPU rounding mode causes the FPU pipeline to be flushed. It
-**      is this flushing of the pipeline which is so slow.
-**
-**      Fortunately the ISO C99 specifications define the functions lrint, lrintf,
-**      llrint and llrintf which fix this problem as a side effect.
-**
-**      On Unix-like systems, the configure process should have detected the
-**      presence of these functions. If they weren't found we have to replace them
-**      here with a standard C cast.
-*/
-    
-    /**
- * Install the terminate / unexpected handlers to dump exceptions.
- */
-void installHandlers();
-    
-    // Some queue implementations (for example, LifoSemMPMCQueue or
-// PriorityLifoSemMPMCQueue) support both blocking (BLOCK) and
-// non-blocking (THROW) behaviors.
-enum class QueueBehaviorIfFull { THROW, BLOCK };
-    
-      Atom<Node*> head_;
-    
-      ~HazptrWideCAS() {
-    delete node_.load(std::memory_order_relaxed);
+#endif /* _WIN32 */
+#if defined(TESSDATA_PREFIX)
+  } else {
+/* Use tessdata prefix which was compiled in. */
+#define _STR(a) #a
+#define _XSTR(a) _STR(a)
+    datadir = _XSTR(TESSDATA_PREFIX) '/tessdata';
+#undef _XSTR
+#undef _STR
+#endif
   }
     
+     private:
+  NormalizationMode norm_mode_;
+  // Character set we are training for.
+  UNICHARSET unicharset_;
+  // Original feature space. Subspace mapping is contained in feature_map_.
+  IntFeatureSpace feature_space_;
+  TrainingSampleSet samples_;
+  TrainingSampleSet junk_samples_;
+  TrainingSampleSet verify_samples_;
+  // Master shape table defines what fonts stay together until the leaves.
+  ShapeTable master_shapes_;
+  // Flat shape table has each unichar/font id pair in a separate shape.
+  ShapeTable flat_shapes_;
+  // Font metrics gathered from multiple files.
+  FontInfoTable fontinfo_table_;
+  // Array of xheights indexed by font ids in fontinfo_table_;
+  GenericVector<int32_t> xheights_;
     
-    {  return instance_ptr_;
-}
+      // Gets a sample by its index.
+  const TrainingSample* GetSample(int index) const;
     
-    #include <fcntl.h>
+    WIN_EXPORT void YGConfigSetContext(const YGConfigRef config, void *context);
+WIN_EXPORT void *YGConfigGetContext(const YGConfigRef config);
     
-    DEFINE_FIND_STATIC_METHOD(KXlog_logWrite2, KXlog, 'logWrite2', '(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;IIJJLjava/lang/String;)V')
-JNIEXPORT void JNICALL Java_com_tencent_mars_xlog_Xlog_logWrite2
-  (JNIEnv *env, jclass, int _level, jstring _tag, jstring _filename,
-		  jstring _funcname, jint _line, jint _pid, jlong _tid, jlong _maintid, jstring _log) {
+        Config(void);
+    
+    #include <nbind/api.h>
+#include <nbind/BindDefiner.h>
+    
+     public: // Layout inspectors
+    
+    #include <nbind/nbind.h>
+    
+      void reset(T* other = NULL) {
+    T* old = (T*)pthread_getspecific(m_key);
+    if (old != other) {
+      FBASSERT(m_cleanup);
+      m_cleanup(old);
+      pthread_setspecific(m_key, other);
+    }
+  }
+    
+            // Register our message handler
+        echo_server.set_message_handler(bind(&on_message,&echo_server,::_1,::_2));
+    
+        websocket::async_echo_server s1{&std::cout, 1};
+    s1.set_option(read_message_max{64 * 1024 * 1024});
+    s1.set_option(auto_fragment{false});
+    s1.set_option(pmd);
+    s1.open(endpoint_type{
+        address_type::from_string('0.0.0.0'), 3000 }, ec);
+    
+        // this is a shared upgrade, no need to make it unique
+    const char *buf = 'GET /socket.io/?EIO=4&transport=websocket HTTP/1.1\r\n'
+                      'Host: server.example.com\r\n'
+                      'Upgrade: websocket\r\n'
+                      'Connection: Upgrade\r\n'
+                      'Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==\r\n'
+                      'Sec-WebSocket-Version: 13\r\n\r\n';
+    
+    int main(int argc, char *argv[])
+{
+    // Read arguments
+    if (argc != 5) {
+        cout << 'Usage: throughput numberOfConnections payloadByteSize framesPerSend port' << endl;
+        return -1;
+    }
     }
     
-        if (st.url_length + st.head_length > _rawlen) return LONGLINKPACK_CONTINUE_HEAD;
     
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+    {            static size_t transform(const char *src, char *dst, size_t length, int transformData) {
+                memcpy(dst, src, length);
+                return length;
+            }
+        };
+    
+    #ifdef _WIN32
+#define NOMINMAX
+#include <WinSock2.h>
+#include <Ws2tcpip.h>
+#pragma comment(lib, 'ws2_32.lib')
+#define SHUT_WR SD_SEND
+#ifdef __MINGW32__
+// Windows has always been tied to LE
+#define htobe64(x) __builtin_bswap64(x)
+#define be64toh(x) __builtin_bswap64(x)
+#else
+#define __thread __declspec(thread)
+#define htobe64(x) htonll(x)
+#define be64toh(x) ntohll(x)
+#define pthread_t DWORD
+#define pthread_self GetCurrentThreadId
+#endif
+#define WIN32_EXPORT __declspec(dllexport)
+    
+            // 15 bytes
+        unsigned char spill[LONG_MESSAGE_HEADER - 1];
+        OpCode opCode[2];
+    
+        if (dynamicZlibBuffer.length()) {
+        dynamicZlibBuffer.append(zlibBuffer, DEFLATE_OUTPUT_CHUNK - compressor->avail_out);
+    }
+    
+    template <bool isServer>
+void WebSocket<isServer>::onEnd(uS::Socket *s) {
+    WebSocket<isServer> *webSocket = static_cast<WebSocket<isServer> *>(s);
+    }
+    
+    
+    {}
+    
+    #include <napa/v8-helpers.h>
+    
+    /// <summary> The maximum message length of a single assert call. Anything over will be truncated. </summary>
+static constexpr size_t MAX_ASSERT_MESSAGE_SIZE = 512;
+    
+        /// <summary> Interface for allocator. </summary>
+    class Allocator {
+    public:
+        /// <summary> Allocate memory of given size. </summary>
+        /// <param name='size'> Requested size. </summary>
+        /// <returns> Allocated memory. May throw if error happens. </returns>
+        virtual void* Allocate(size_t size) = 0;
+    }
+    
+            CHECK_ARG(isolate, args.Length() == 0, 'class \'%s\' doesn't accept any arguments in constructor.'', WrapType::exportName);
+        JS_ENSURE(isolate, args.IsConstructCall(), 'class \'%s\' allows constructor call only.', WrapType::exportName);
+    
+    namespace napa {
+namespace module {
+    }
+    }
+    
+            template <class T>
+        static inline T* Unwrap(v8::Local<v8::Object> handle) {
+            assert(!handle.IsEmpty());
+            assert(handle->InternalFieldCount() > 0);
+    }
