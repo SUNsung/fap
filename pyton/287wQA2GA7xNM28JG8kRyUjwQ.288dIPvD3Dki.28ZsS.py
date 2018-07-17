@@ -1,36 +1,45 @@
 
         
-                video_id = match1(html, r'data-brightcove-id='(\d+)'')
-        
-        assert account_number, video_id
-    
-    __all__ = ['ehow_download']
-    
-        def extract(self, **kwargs):
-        for i in self.streams:
-            s = self.streams[i]
-            _, s['container'], s['size'] = url_info(s['url'])
-            s['src'] = [s['url']]
-    
-    __all__ = ['kugou_download']
-    
-    site_info = 'MioMio.tv'
-download = miomio_download
-download_playlist = playlist_not_supported('miomio')
-
-    
-        for i in range(10, 30):
-        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
-            i = i,
-            p = preview
+                status_line = 'HTTP/{version} {status} {reason}'.format(
+            version=version,
+            status=original.status,
+            reason=original.reason
         )
+        headers = [status_line]
         try:
-            mime, ext, size = url_info(url)
-            break
-        except: continue
+            # `original.msg` is a `http.client.HTTPMessage` on Python 3
+            # `_headers` is a 2-tuple
+            headers.extend(
+                '%s: %s' % header for header in original.msg._headers)
+        except AttributeError:
+            # and a `httplib.HTTPMessage` on Python 2.x
+            # `headers` is a list of `name: val<CRLF>`.
+            headers.extend(h.strip() for h in original.msg.headers)
     
-        def prepare(self, **kwargs):
-        # scrape the html
-        content = get_content(self.url)
     
-        oslist.sort()
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
+    
+        # If both `auth_parse` and `prompt_password` are set to `True`,
+    # and the value of `-a` lacks the password part,
+    # then the user will be prompted to type the password in.
+    prompt_password = True
+    
+    
+class RGBColorDB(ColorDB):
+    _re = re.compile(
+        r'\s*(?P<red>\d+)\s+(?P<green>\d+)\s+(?P<blue>\d+)\s+(?P<name>.*)')
+    
+            orig_alrm_handler = signal.signal(signal.SIGALRM, handler)
+        self.addCleanup(signal.signal, signal.SIGALRM, orig_alrm_handler)
+    
+    
+class DifferentAgentTest(CrawlDelayAndRequestRateTest):
+    agent = 'FigTree Robot libwww-perl/5.04'
+    # these are not actually tested, but we still need to parse it
+    # in order to accommodate the input parameters
+    request_rate = None
+    crawl_delay = None
