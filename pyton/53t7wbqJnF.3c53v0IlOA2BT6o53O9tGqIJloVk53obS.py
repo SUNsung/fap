@@ -1,107 +1,73 @@
 
         
-        
-class FlaskyStyle(Style):
-    background_color = '#f8f8f8'
-    default_style = ''
+        from mrjob.job import MRJob
     
-    # TODO: response is the only one
+            (category1, 1), product4
+        (category1, 2), product1
+        (category1, 3), product2
+        (category2, 3), product1
+        (category2, 7), product3
+        '''
+        category, product_id = key
+        quantity = value
+        yield (category, quantity), product_id
     
-        return out
+    html_folder = u'html'
+text_folder = u'paragraphs'
+short_text_folder = u'short_paragraphs'
+n_words_per_short_text = 5
+    
+    '''
+# Author: Olivier Grisel <olivier.grisel@ensta.org>
+# License: Simplified BSD
+    
+    import sys
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.svm import LinearSVC
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.datasets import load_files
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+    
+    n_clusters = (4, 3)
+data, rows, columns = make_checkerboard(
+    shape=(300, 300), n_clusters=n_clusters, noise=10,
+    shuffle=False, random_state=0)
+    
+    The dataset is generated using the ``make_biclusters`` function, which
+creates a matrix of small values and implants bicluster with large
+values. The rows and columns are then shuffled and passed to the
+Spectral Co-Clustering algorithm. Rearranging the shuffled matrix to
+make biclusters contiguous shows how accurately the algorithm found
+the biclusters.
+    
+    # Plot changes in predicted probabilities via arrows
+plt.figure(0)
+colors = ['r', 'g', 'b']
+for i in range(clf_probs.shape[0]):
+    plt.arrow(clf_probs[i, 0], clf_probs[i, 1],
+              sig_clf_probs[i, 0] - clf_probs[i, 0],
+              sig_clf_probs[i, 1] - clf_probs[i, 1],
+              color=colors[y_test[i]], head_width=1e-2)
+    
+        ax.scatter(X[:, 0], X[:, 1], color=COLORS.take((Y * [1, 2, 4]
+                                                    ).sum(axis=1)),
+               marker='.')
+    ax.scatter(p_w_c[0] * length, p_w_c[1] * length,
+               marker='*', linewidth=.5, edgecolor='black',
+               s=20 + 1500 * p_c ** 2,
+               color=COLORS.take([1, 2, 4]))
+    ax.set_xlabel('Feature 0 count')
+    return p_c, p_w_c
     
     
-@pytest.mark.skipif(sys.version_info < (2,7), reason='Only run on Python 2.7+')
-def test_system_ssl():
-    '''Verify we're actually setting system_ssl when it should be available.'''
-    assert info()['system_ssl']['version'] != ''
+class Pin:
+    host = 'http://img.hb.aicdn.com/'
     
-        @pytest.fixture(autouse=True, params=['no_proxy', 'NO_PROXY'])
-    def no_proxy(self, request, monkeypatch):
-        monkeypatch.setenv(request.param, '192.168.0.0/24,127.0.0.1,localhost.localdomain,172.16.1.1')
-    
-    # List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-exclude_patterns = ['_build']
-    
-        # By using the 'with' statement we are sure the session is closed, thus we
-    # avoid leaving sockets open which can trigger a ResourceWarning in some
-    # cases, and look like a memory leak in others.
-    with sessions.Session() as session:
-        return session.request(method=method, url=url, **kwargs)
-    
-        builtin_str = str
-    bytes = str
-    str = unicode
-    basestring = basestring
-    numeric_types = (int, long, float)
-    integer_types = (int, long)
-    
-    from . import utils
-from . import packages
-from .models import Request, Response, PreparedRequest
-from .api import request, get, head, post, patch, put, delete, options
-from .sessions import session, Session
-from .status_codes import codes
-from .exceptions import (
-    RequestException, Timeout, URLRequired,
-    TooManyRedirects, HTTPError, ConnectionError,
-    FileModeWarning, ConnectTimeout, ReadTimeout
-)
-    
-    import logging
-from twisted.internet import defer
-import six
-from scrapy.exceptions import NotSupported, NotConfigured
-from scrapy.utils.httpobj import urlparse_cached
-from scrapy.utils.misc import load_object
-from scrapy.utils.python import without_none_values
-from scrapy import signals
-    
-        def download_request(self, request, spider):
-        p = urlparse_cached(request)
-        scheme = 'https' if request.meta.get('is_secure') else 'http'
-        bucket = p.hostname
-        path = p.path + '?' + p.query if p.query else p.path
-        url = '%s://%s.s3.amazonaws.com%s' % (scheme, bucket, path)
-        if self.anon:
-            request = request.replace(url=url)
-        elif self._signer is not None:
-            import botocore.awsrequest
-            awsrequest = botocore.awsrequest.AWSRequest(
-                method=request.method,
-                url='%s://s3.amazonaws.com/%s%s' % (scheme, bucket, path),
-                headers=request.headers.to_unicode_dict(),
-                data=request.body)
-            self._signer.add_auth(awsrequest)
-            request = request.replace(
-                url=url, headers=awsrequest.headers.items())
-        else:
-            signed_headers = self.conn.make_request(
-                    method=request.method,
-                    bucket=bucket,
-                    key=unquote(p.path),
-                    query_args=unquote(p.query),
-                    headers=request.headers,
-                    data=request.body)
-            request = request.replace(url=url, headers=signed_headers)
-        return self._download_http(request, spider)
-
-    
-        text = html.remove_tags_with_content(text, ('script', 'noscript'))
-    text = html.replace_entities(text)
-    text = html.remove_comments(text)
-    return _ajax_crawlable_re.search(text) is not None
-
-    
-            body = tar_file.extractfile(tar_file.members[0]).read()
-        respcls = responsetypes.from_args(filename=tar_file.members[0].name, body=body)
-        return response.replace(body=body, cls=respcls)
-    
-    from scrapy.utils.python import without_none_values
-    
-        def process_request(self, request, spider):
-        if self.user_agent:
-            request.headers.setdefault(b'User-Agent', self.user_agent)
-
-    
-        return result
+        # ordered list of supported stream types / qualities on this site
+    # order: high quality -> low quality
+    stream_types = [
+        {'id': 'original'}, # contains an 'id' or 'itag' field at minimum
+        {'id': 'small'},
+    ]
