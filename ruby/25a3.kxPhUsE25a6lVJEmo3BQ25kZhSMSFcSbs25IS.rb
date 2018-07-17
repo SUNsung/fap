@@ -1,68 +1,83 @@
 
         
-          </body>
-</html>
-HTML
-    
-    module Jekyll
-  module Commands
-    class New < Command
-      class << self
-        def init_with_program(prog)
-          prog.command(:new) do |c|
-            c.syntax 'new PATH'
-            c.description 'Creates a new Jekyll site scaffold in PATH'
-    
-          def third_party_processors
-        self.class.constants - \
-          %w(KramdownParser PRIORITIES).map(
-            &:to_sym
-          )
-      end
-    
-    describe Deliver::HtmlGenerator do
-  let(:generator) { Deliver::HtmlGenerator.new }
-    
-      def present(payload)
-    if payload.is_a?(Hash)
-      payload = ActiveSupport::HashWithIndifferentAccess.new(payload)
-      MAIN_KEYS.each do |key|
-        return { :title => payload[key].to_s, :entries => present_hash(payload, key) } if payload.has_key?(key)
-      end
-    
-      included do
-    include Oauthable
-    
-      def test_at3
-    t2000 = get_t2000
-    assert_equal(t2000, Time.at(t2000))
-#    assert_raise(RangeError) do
-#      Time.at(2**31-1, 1_000_000)
-#      Time.at(2**63-1, 1_000_000)
-#    end
-#    assert_raise(RangeError) do
-#      Time.at(-2**31, -1_000_000)
-#      Time.at(-2**63, -1_000_000)
-#    end
-  end
-    
-      # This case occurred in JRuby where native threads are used to provide
-  # the same behavior as MRI green threads. Key to this issue was the fact
-  # that the thread which called #exit in its block was also being explicitly
-  # sent #join from outside the thread. The 100.times provides a certain
-  # probability that the deadlock will occur. It was sufficient to reliably
-  # reproduce the deadlock in JRuby.
-  it 'does not deadlock when called from within the thread while being joined from without' do
-    100.times do
-      t = Thread.new { Thread.stop; Thread.current.send(@method) }
-      Thread.pass while t.status and t.status != 'sleep'
-      t.wakeup.should == t
-      t.join.should == t
-    end
-  end
+        # No trailing slash
+Benchmark.ips do |x|
+  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
+  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
+  x.compare!
 end
 
     
-      it 'handles a value of 60 for seconds by carrying values forward in zone 'UTC'' do
-    with_timezone 'UTC' do
-      time = Time.send(@method, 1972, 6, 30, 23, 59, 60)
+        # Public: Read in a list of configuration files and merge with this hash
+    #
+    # files - the list of configuration file paths
+    #
+    # Returns the full configuration, with the defaults overridden by the values in the
+    # configuration files
+    def read_config_files(files)
+      configuration = clone
+    
+        A binary installer is available:
+      https://www.haskell.org/platform/mac.html
+    EOS
+  when 'mysqldump-secure' then <<-EOS.undent
+    The creator of mysqldump-secure tried to game our popularity metrics.
+    EOS
+  when 'ngrok' then <<-EOS.undent
+    Upstream sunsetted 1.x in March 2016 and 2.x is not open-source.
+    
+    def bottle_resolve_version(bottle_file)
+  PkgVersion.parse bottle_receipt_path(bottle_file).split('/')[1]
+end
+    
+      def last_commit
+    Homebrew.git_last_commit || 'never'
+  end
+    
+    # This formula serves as the base class for several very similar
+# formulae for Amazon Web Services related tools.
+class AmazonWebServicesFormula < Formula
+  # Use this method to peform a standard install for Java-based tools,
+  # keeping the .jars out of HOMEBREW_PREFIX/lib
+  def install
+    rm Dir['bin/*.cmd'] # Remove Windows versions
+    libexec.install Dir['*']
+    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
+  end
+  alias_method :standard_install, :install
+    
+      def short_type
+    @short_type ||= type.split('::').pop
+  end
+    
+        log = StringIO.new
+    @dry_run_started_at = Time.zone.now
+    @dry_run_logger = Logger.new(log).tap { |logger|
+      logger.formatter = proc { |severity, datetime, progname, message|
+        elapsed_time = '%02d:%02d:%02d' % 2.times.inject([datetime - @dry_run_started_at]) { |(x, *xs)|
+          [*x.divmod(60), *xs]
+        }
+    }
+    }
+    
+      def destroy
+    @user_credential = current_user.user_credentials.find(params[:id])
+    @user_credential.destroy
+    
+            # Clones the template from the remote in the working directory using
+        # the name of the Pod.
+        #
+        # @return [void]
+        #
+        def clone_template
+          UI.section('Cloning `#{template_repo_url}` into `#{@name}`.') do
+            git! ['clone', template_repo_url, @name]
+          end
+        end
+    
+          def self.options
+        [
+          ['--update', 'Run `pod repo update` before listing'],
+          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
+        ].concat(super)
+      end
