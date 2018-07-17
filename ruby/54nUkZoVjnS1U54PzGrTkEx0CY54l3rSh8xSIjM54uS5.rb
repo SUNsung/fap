@@ -1,109 +1,65 @@
 
         
-            # The path used after sending reset password instructions
-    def after_sending_reset_password_instructions_path_for(resource_name)
-      new_session_path(resource_name) if is_navigational_format?
-    end
-    
-        def reset_password_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :reset_password_instructions, opts)
-    end
-    
-          def remember_me_is_active?(resource)
-        return false unless resource.respond_to?(:remember_me)
-        scope = Devise::Mapping.find_scope!(resource)
-        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
-        resource.remember_me?(token, generated_at)
+                expect(result).to eq('hg parent --template '{node|short}'')
+        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template '{node|short}'')
       end
     
-      private
+        def valid_type?(type)
+      const_get(:TYPES).include?(type)
+    end
     
-          it 'sets the regeneration marker to expire' do
-        allow(RegenerationWorker).to receive(:perform_async)
-        get :show
-        expect(Redis.current.ttl('account:#{user.account_id}:regeneration')).to be >= 0
-      end
-    
-      def background_color
-    '#191b22'
+      def tumblr_oauth_token_secret
+    service.secret
   end
     
-    res = ''
-doc = Hpricot(File.open(input))
-doc.search('//form').each do |form|
+      def index
+    if params[:agent_id]
+      @agent = current_user.agents.find(params[:agent_id])
+      @events = @agent.events.page(params[:page])
+    else
+      @events = current_user.events.preload(:agent).page(params[:page])
+    end
     
-    # Copyright (C) 2008 Rapid7, Inc.
-    
-          case matched
-      when :webhost
-        sessions[s[:session]].merge!({k => matches})
-        if(s[:get])
-          print_status('HTTP GET: #{s[:session]} http://#{s[:webhost]}#{s[:get]}')
-          sessions.delete(s[:session])
-          return
+          included do
+        before_create :generate_confirmation_token, if: :confirmation_required?
+        after_create :skip_reconfirmation_in_callback!, if: :send_confirmation_notification?
+        if defined?(ActiveRecord) && self < ActiveRecord::Base # ActiveRecord
+          after_commit :send_on_create_confirmation_instructions, on: :create, if: :send_confirmation_notification?
+          after_commit :send_reconfirmation_instructions, on: :update, if: :reconfirmation_required?
+        else # Mongoid
+          after_create :send_on_create_confirmation_instructions, if: :send_confirmation_notification?
+          after_update :send_reconfirmation_instructions, if: :reconfirmation_required?
         end
-      when nil
-        # No matches, no saved state
-      end # end case matched
-    end # end of each_key
-  end # end of parse
-end # end of URL sniffer
+        before_update :postpone_email_change_until_confirmation_and_regenerate_confirmation_token, if: :postpone_email_change?
+      end
     
-    		self.block[-1][-1] << '''
-		self.block[-1][-1] = block[-1][-1].ljust(SIZE1)
-		self.block[-1][-1] << '/*  '
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
+          end
+        end
     
-      # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
-    
-    desc 'Dumps output to a CSS file for testing'
-task :debug do
-  require 'sass'
-  path = Bootstrap.stylesheets_path
-  %w(bootstrap).each do |file|
-    engine = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
-    File.open('./#{file}.css', 'w') { |f| f.write(engine.render) }
+          def actual_path
+        $PROGRAM_NAME
+      end
+    end
   end
 end
+
     
-          # Find a Sass file, if it exists.
-      #
-      # This is the primary entry point of the Importer.
-      # It corresponds directly to an `@import` statement in Sass.
-      # It should do three basic things:
-      #
-      # * Determine if the URI is in this importer's format.
-      #   If not, return nil.
-      # * Determine if the file indicated by the URI actually exists and is readable.
-      #   If not, return nil.
-      # * Read the file and place the contents in a {Sass::Engine}.
-      #   Return that engine.
-      #
-      # If this importer's format allows for file extensions,
-      # it should treat them the same way as the default {Filesystem} importer.
-      # If the URI explicitly has a `.sass` or `.scss` filename,
-      # the importer should look for that exact file
-      # and import it as the syntax indicated.
-      # If it doesn't exist, the importer should return nil.
-      #
-      # If the URI doesn't have either of these extensions,
-      # the importer should look for files with the extensions.
-      # If no such files exist, it should return nil.
-      #
-      # The {Sass::Engine} to be returned should be passed `options`,
-      # with a few modifications. `:syntax` should be set appropriately,
-      # `:filename` should be set to `uri`,
-      # and `:importer` should be set to this importer.
-      #
-      # @param uri [String] The URI to import.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` that's currently being resolved.
-      #   This is safe for subclasses to modify destructively.
-      #   Callers should only pass in a value they don't mind being destructively modified.
-      # @return [Sass::Engine, nil] An Engine containing the imported file,
-      #   or nil if it couldn't be found or was in the wrong format.
-      def find(uri, options)
-        Sass::Util.abstract(self)
-      end
+            self.description = <<-DESC
+          Creates a scaffold for the development of a new Pod named `NAME`
+          according to the CocoaPods best practices.
+          If a `TEMPLATE_URL`, pointing to a git repo containing a compatible
+          template, is specified, it will be used in place of the default one.
+        DESC
