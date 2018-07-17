@@ -1,230 +1,321 @@
 
         
-        #ifndef ATOM_RENDERER_PREFERENCES_MANAGER_H_
-#define ATOM_RENDERER_PREFERENCES_MANAGER_H_
-    
-      void set_minimum_size(const gfx::Size& min_size);
-  void set_maximum_size(const gfx::Size& max_size);
-    
-    #include 'atom/browser/api/event_emitter.h'
+        namespace atom {
+    }
     
     
-    {  // The name of the source file where the test part took place, or
-  // '' if the source file is unknown.
-  std::string file_name_;
-  // The line in the source file where the test part took place, or -1
-  // if the line number is unknown.
-  int line_number_;
-  std::string summary_;  // The test failure summary.
-  std::string message_;  // The test failure message.
-};
-    
-    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_LINKED_PTR_H_
+    {}  // namespace atom
 
     
-    template <class Generator1, class Generator2, class Generator3,
-    class Generator4, class Generator5>
-class CartesianProductHolder5 {
+      // Returns whether current process is browser process, currently we detect it
+  // by checking whether current has used V8 Lock, but it might be a bad idea.
+  static inline bool IsBrowserProcess() { return v8::Locker::IsActive(); }
+    
+      // This message is sent after a window has been opened.  The source is a
+  // Source<Browser> containing the affected Browser.  No details are
+  // expected.
+  NOTIFICATION_BROWSER_OPENED = NOTIFICATION_CHROME_START,
+    
+    std::string TtsPlatformImpl::error() {
+  return error_;
+}
+    
+    
+    {}  // namespace api
+    
+    static PyObject* recursive_to_list(
+    char* data, IntList sizes, IntList strides, int64_t dim,
+    ScalarType scalarType, int64_t elementSize)
+{
+  int64_t ndim = sizes.size();
+  if (dim == ndim) {
+    return torch::utils::load_scalar(data, scalarType);
+  }
+  auto n = sizes[dim];
+  auto list = THPObjectPtr(PyList_New(n));
+  if (!list) throw python_error();
+  for (int64_t i = 0; i < n; i++) {
+    PyObject* obj = recursive_to_list(data, sizes, strides, dim + 1, scalarType, elementSize);
+    if (!obj) throw python_error();
+    PyList_SET_ITEM(list.get(), i, obj);
+    data += strides[dim] * elementSize;
+  }
+  return list.release();
+}
+    
+    #define THCPDoubleStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPDoubleStorageClass)
+#define THCPFloatStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPFloatStorageClass)
+#define THCPHalfStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPHalfStorageClass)
+#define THCPLongStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPLongStorageClass)
+#define THCPIntStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPIntStorageClass)
+#define THCPShortStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPShortStorageClass)
+#define THCPCharStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPCharStorageClass)
+#define THCPByteStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPByteStorageClass)
+    
+    #define THPDoubleStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPDoubleStorageClass)
+#define THPFloatStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPFloatStorageClass)
+#define THPHalfStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPFloatStorageClass)
+#define THPLongStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPLongStorageClass)
+#define THPIntStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPIntStorageClass)
+#define THPShortStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPShortStorageClass)
+#define THPCharStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPCharStorageClass)
+#define THPByteStorage_Check(obj) \
+    PyObject_IsInstance(obj, THPByteStorageClass)
+    
+    
+    {  THDTensor_(free)(THDTensor_(cloneColumnMajor)(ra, a));
+}
+    
+    
+    {    PyThreadState *_save = NULL;
+    try {
+      Py_UNBLOCK_THREADS;
+      copyFunc(LIBRARY_STATE dst, THDPModule_makeDescriptor(src_));
+      Py_BLOCK_THREADS;
+    } catch (...) {
+      if (_save) {
+        Py_BLOCK_THREADS;
+      }
+      throw;
+    }
+  };
+    
+    #include <arpa/inet.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <sys/poll.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <cstring>
+#include <memory>
+#include <string>
+#include <thread>
+#include <algorithm>
+    
+    namespace xgboost {
+namespace common {
+/*! \brief buffer reader of the stream that allows you to get */
+class StreamBufferReader {
  public:
-CartesianProductHolder5(const Generator1& g1, const Generator2& g2,
-    const Generator3& g3, const Generator4& g4, const Generator5& g5)
-      : g1_(g1), g2_(g2), g3_(g3), g4_(g4), g5_(g5) {}
-  template <typename T1, typename T2, typename T3, typename T4, typename T5>
-  operator ParamGenerator< ::std::tr1::tuple<T1, T2, T3, T4, T5> >() const {
-    return ParamGenerator< ::std::tr1::tuple<T1, T2, T3, T4, T5> >(
-        new CartesianProductGenerator5<T1, T2, T3, T4, T5>(
-        static_cast<ParamGenerator<T1> >(g1_),
-        static_cast<ParamGenerator<T2> >(g2_),
-        static_cast<ParamGenerator<T3> >(g3_),
-        static_cast<ParamGenerator<T4> >(g4_),
-        static_cast<ParamGenerator<T5> >(g5_)));
+  explicit StreamBufferReader(size_t buffer_size)
+      :stream_(NULL),
+       read_len_(1), read_ptr_(1) {
+    buffer_.resize(buffer_size);
+  }
+  /*!
+   * \brief set input stream
+   */
+  inline void set_stream(dmlc::Stream *stream) {
+    stream_ = stream;
+    read_len_ = read_ptr_ = 1;
+  }
+  /*!
+   * \brief allows quick read using get char
+   */
+  inline char GetChar(void) {
+    while (true) {
+      if (read_ptr_ < read_len_) {
+        return buffer_[read_ptr_++];
+      } else {
+        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
+        if (read_len_ == 0) return EOF;
+        read_ptr_ = 0;
+      }
+    }
+  }
+  /*! \brief whether we are reaching the end of file */
+  inline bool AtEnd(void) const {
+    return read_len_ == 0;
   }
     }
-    
-    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
-//
-// Outputs a message explaining invalid registration of different
-// fixture class for the same test case. This may happen when
-// TEST_P macro is used to define two tests with the same name
-// but in different namespaces.
-GTEST_API_ void ReportInvalidTestCaseType(const char* test_case_name,
-                                          const char* file, int line);
-    
-      // Compares two wide C strings.  Returns true iff they have the same
-  // content.
-  //
-  // Unlike wcscmp(), this function can handle NULL argument(s).  A
-  // NULL C string is considered different to any non-NULL C string,
-  // including the empty string.
-  static bool WideCStringEquals(const wchar_t* lhs, const wchar_t* rhs);
-    
-    
-]]
-// 6.1.3.2 Tuple creation functions.
-    
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
-    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
-    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
-    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32>
-struct Templates32 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates31<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-      T29, T30, T31, T32> Tail;
-};
-    
-    
-    {	LRESULT lr = SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)'Environment', SMTO_ABORTIFHUNG | SMTO_NOTIMEOUTIFNOTHUNG, 5000, NULL);
-	lr = SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM)L'Environment', SMTO_ABORTIFHUNG | SMTO_NOTIMEOUTIFNOTHUNG, 5000, NULL); // For Windows >= 8
-}
-    
-      // Set the count for the number of entries in the batch.
-  static void SetCount(WriteBatch* batch, int n);
-    
-    std::string Key2(int i) {
-  return Key1(i) + '_xxx';
-}
-    
-    #endif  // STORAGE_LEVELDB_TABLE_FILTER_BLOCK_H_
-
-    
-    namespace leveldb {
+    }
     }
     
+          jclass batchClass = jenv->GetObjectClass(batch);
+      jlongArray joffset = (jlongArray)jenv->GetObjectField(
+          batch, jenv->GetFieldID(batchClass, 'rowOffset', '[J'));
+      jfloatArray jlabel = (jfloatArray)jenv->GetObjectField(
+          batch, jenv->GetFieldID(batchClass, 'label', '[F'));
+      jfloatArray jweight = (jfloatArray)jenv->GetObjectField(
+          batch, jenv->GetFieldID(batchClass, 'weight', '[F'));
+      jintArray jindex = (jintArray)jenv->GetObjectField(
+          batch, jenv->GetFieldID(batchClass, 'featureIndex', '[I'));
+      jfloatArray jvalue = (jfloatArray)jenv->GetObjectField(
+        batch, jenv->GetFieldID(batchClass, 'featureValue', '[F'));
+      XGBoostBatchCSR cbatch;
+      cbatch.size = jenv->GetArrayLength(joffset) - 1;
+      cbatch.offset = reinterpret_cast<jlong *>(
+          jenv->GetLongArrayElements(joffset, 0));
+      if (jlabel != nullptr) {
+        cbatch.label = jenv->GetFloatArrayElements(jlabel, 0);
+        CHECK_EQ(jenv->GetArrayLength(jlabel), static_cast<long>(cbatch.size))
+            << 'batch.label.length must equal batch.numRows()';
+      } else {
+        cbatch.label = nullptr;
+      }
+      if (jweight != nullptr) {
+        cbatch.weight = jenv->GetFloatArrayElements(jweight, 0);
+        CHECK_EQ(jenv->GetArrayLength(jweight), static_cast<long>(cbatch.size))
+            << 'batch.weight.length must equal batch.numRows()';
+      } else {
+        cbatch.weight = nullptr;
+      }
+      long max_elem = cbatch.offset[cbatch.size];
+      cbatch.index = (int*) jenv->GetIntArrayElements(jindex, 0);
+      cbatch.value = jenv->GetFloatArrayElements(jvalue, 0);
     
-    {}  // namespace leveldb
+        while (make_next_col(page.get())) {
+      for (size_t i = 0; i < page->Size(); ++i) {
+        col_size_[i] += page->offset[i + 1] - page->offset[i];
+      }
+    }
     
-    static const int kValueSize = 200 * 1024;
-static const int kTotalSize = 100 * 1024 * 1024;
-static const int kCount = kTotalSize / kValueSize;
+      bool SingleColBlock() const override {
+    return false;
+  }
     
     
     {
-    {}  // namespace log
-}  // namespace leveldb
+    {XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(raw)
+.describe('Raw binary data format.')
+.set_body([]() {
+    return new SparsePageRawFormat();
+  });
+}  // namespace data
+}  // namespace xgboost
 
     
-    #include <stddef.h>
-#include <stdint.h>
-#include 'leveldb/iterator.h'
-    
-           * Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
-       * Redistributions in binary form must reproduce the above
-   copyright notice, this list of conditions and the following disclaimer
-   in the documentation and/or other materials provided with the
-   distribution.
-    
-      virtual const char* Name() const override;
-    
-      // Create a reader that will return log records from '*file'.
-  // '*file' must remain live while this Reader is in use.
-  //
-  // If 'reporter' is non-nullptr, it is notified whenever some data is
-  // dropped due to a detected corruption.  '*reporter' must remain
-  // live while this Reader is in use.
-  //
-  // If 'checksum' is true, verify checksums if available.
-  //
-  // The Reader will start reading at the first record located at physical
-  // position >= initial_offset within the file.
-  Reader(std::shared_ptr<Logger> info_log,
-  // @lint-ignore TXT2 T25377293 Grandfathered in
-	 unique_ptr<SequentialFileReader>&& file,
-         Reporter* reporter, bool checksum, uint64_t initial_offset,
-         uint64_t log_num);
-    
-      // Note: The name of a Comparator will not change during it's lifetime,
-  // so we cache it in a global var
-  jmethodID jNameMethodId = AbstractComparatorJni::getNameMethodId(env);
-  if(jNameMethodId == nullptr) {
-    // exception thrown: NoSuchMethodException or OutOfMemoryError
-    return;
-  }
-  jstring jsName = (jstring)env->CallObjectMethod(m_jcallback_obj, jNameMethodId);
-  if(env->ExceptionCheck()) {
-    // exception thrown
-    return;
-  }
-  jboolean has_exception = JNI_FALSE;
-  m_name = JniUtil::copyString(env, jsName,
-      &has_exception);  // also releases jsName
-  if (has_exception == JNI_TRUE) {
-    // exception thrown
-    return;
-  }
-    
-    /**
- * This class acts as a bridge between C++
- * and Java. The methods in this class will be
- * called back from the RocksDB storage engine (C++)
- * we then callback to the appropriate Java method
- * this enables Comparators to be implemented in Java.
- *
- * The design of this Comparator caches the Java Slice
- * objects that are used in the compare and findShortestSeparator
- * method callbacks. Instead of creating new objects for each callback
- * of those functions, by reuse via setHandle we are a lot
- * faster; Unfortunately this means that we have to
- * introduce independent locking in regions of each of those methods
- * via the mutexs mtx_compare and mtx_findShortestSeparator respectively
- */
-class BaseComparatorJniCallback : public JniCallback, public Comparator {
- public:
-    BaseComparatorJniCallback(
-      JNIEnv* env, jobject jComparator,
-      const ComparatorJniCallbackOptions* copt);
-    virtual const char* Name() const;
-    virtual int Compare(const Slice& a, const Slice& b) const;
-    virtual void FindShortestSeparator(
-      std::string* start, const Slice& limit) const;
-    virtual void FindShortSuccessor(std::string* key) const;
+        bool FreeTypeFont::CalcGlyphInfo(uint32_t codepoint, GlyphInfo &glyph_info, FT_Glyph& ft_glyph, FT_BitmapGlyph& ft_bitmap)
+    {
+        uint32_t glyph_index = FT_Get_Char_Index(FreetypeFace, codepoint);
+        if (glyph_index == 0)
+            return false;
+        FT_Error error = FT_Load_Glyph(FreetypeFace, glyph_index, FreetypeLoadFlags);
+        if (error)
+            return false;
     }
     
-         using Logger::SetInfoLogLevel;
-     using Logger::GetInfoLogLevel;
-     // Write an entry to the log file with the specified format.
-     virtual void Logv(const char* format, va_list ap);
-     // Write an entry to the log file with the specified log level
-     // and format.  Any log with level under the internal log level
-     // of *this (see @SetInfoLogLevel and @GetInfoLogLevel) will not be
-     // printed.
-     virtual void Logv(const InfoLogLevel log_level,
-         const char* format, va_list ap);
-    
-    #include <vector>
-#include <string>
-    
-    class DumpCrashStack {
-  public:
-    DumpCrashStack() {}
-    ~DumpCrashStack() {}
-    }
-    
-    WakeUpLock::~WakeUpLock() {
-    ASSERT(object_);
-    xinfo2('delete wakeuplock:%p', object_);
-    }
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-        if (touch_times_.size() <= count_) {
-        touch_times_.push_back(now);
-        return true;
-    }
-    
-    int TSpy::__TestFun1(int i)
+    void ImGui_ImplGlfw_Shutdown()
 {
-    return reinterpret_cast<Test_Spy_Sample*>(This())->__TestFun1(i);
+    for (ImGuiMouseCursor cursor_n = 0; cursor_n < ImGuiMouseCursor_COUNT; cursor_n++)
+    {
+        glfwDestroyCursor(g_MouseCursors[cursor_n]);
+        g_MouseCursors[cursor_n] = NULL;
+    }
+    g_ClientApi = GlfwClientApi_Unknown;
 }
     
-    #include <jni.h>
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    //---- Don't define obsolete functions/enums names. Consider enabling from time to time after updating to avoid using soon-to-be obsolete function/names.
+//#define IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+    
+    // Storage for current popup stack
+struct ImGuiPopupRef
+{
+    ImGuiID             PopupId;        // Set on OpenPopup()
+    ImGuiWindow*        Window;         // Resolved on BeginPopup() - may stay unresolved if user never calls OpenPopup()
+    ImGuiWindow*        ParentWindow;   // Set on OpenPopup()
+    int                 OpenFrameCount; // Set on OpenPopup()
+    ImGuiID             OpenParentId;   // Set on OpenPopup(), we need this to differenciate multiple menu sets from each others (e.g. inside menu bar vs loose menu items)
+    ImVec2              OpenPopupPos;   // Set on OpenPopup(), preferred popup position (typically == OpenMousePos when using mouse)
+    ImVec2              OpenMousePos;   // Set on OpenPopup(), copy of mouse position at the time of opening popup
+};
+    
+      // Returns the combined score of the output image in the last Compare() call
+  // (or the baseline image, if Compare() was not called yet), based on output
+  // size and the similarity metric.
+  virtual double ScoreOutputSize(int size) const = 0;
+    
+    
+    {
+    {    int last_dc = 0;
+    const coeff_t* src_coeffs = components_[c].coeffs();
+    coeff_t* dest_coeffs = &comp->coeffs[0];
+    for (int block_y = 0; block_y < comp->height_in_blocks; ++block_y) {
+      for (int block_x = 0; block_x < comp->width_in_blocks; ++block_x) {
+        if (block_y >= components_[c].height_in_blocks() ||
+            block_x >= components_[c].width_in_blocks()) {
+          dest_coeffs[0] = last_dc;
+          for (int k = 1; k < kDCTBlockSize; ++k) {
+            dest_coeffs[k] = 0;
+          }
+        } else {
+          for (int k = 0; k < kDCTBlockSize; ++k) {
+            const int quant = q[c][k];
+            int coeff = src_coeffs[k];
+            assert(coeff % quant == 0);
+            dest_coeffs[k] = coeff / quant;
+          }
+          src_coeffs += kDCTBlockSize;
+        }
+        last_dc = dest_coeffs[0];
+        dest_coeffs += kDCTBlockSize;
+      }
+    }
+  }
+  SaveQuantTables(q, jpg);
+}
+    
+    void IDCT1d(const double* in, int stride, double* out) {
+  for (int x = 0; x < 8; ++x) {
+    out[x * stride] = 0.0;
+    for (int u = 0; u < 8; ++u) {
+      out[x * stride] += kDCTMatrix[8 * u + x] * in[u * stride];
+    }
+  }
+}
+    
+    namespace guetzli {
+    }
+    
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg) {
+  bool has_Adobe_marker = false;
+  uint8_t Adobe_transform = 0;
+  for (const std::string& app : jpg.app_data) {
+    if (static_cast<uint8_t>(app[0]) == 0xe0) {
+      return true;
+    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
+      has_Adobe_marker = true;
+      Adobe_transform = app[14];
+    }
+  }
+  if (has_Adobe_marker) {
+    return (Adobe_transform != 0);
+  }
+  const int cid0 = jpg.components[0].id;
+  const int cid1 = jpg.components[1].id;
+  const int cid2 = jpg.components[2].id;
+  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
+}
+    
+    namespace {
+    }
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    enum JpegReadMode {
+  JPEG_READ_HEADER,   // only basic headers
+  JPEG_READ_TABLES,   // headers and tables (quant, Huffman, ...)
+  JPEG_READ_ALL,      // everything
+};
