@@ -1,164 +1,226 @@
 
         
-        from .theplatform import theplatform_download_by_pid
+        entry_template = textwrap.dedent('''
+    <entry>
+        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
+        <title>New version @VERSION@</title>
+        <link href='http://rg3.github.io/youtube-dl' />
+        <content type='xhtml'>
+            <div xmlns='http://www.w3.org/1999/xhtml'>
+                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
+            </div>
+        </content>
+        <author>
+            <name>The youtube-dl maintainers</name>
+        </author>
+        <updated>@TIMESTAMP@</updated>
+    </entry>
+    ''')
     
-    	type, ext, size = url_info(url)
-	print_info(site_info, title, type, size)
-	
-	if not info_only:
-		download_urls([url], title, ext, size, output_dir, merge = merge)
+        # Are checkable fields missing from the test case definition?
+    test_info_dict = dict((key, value if not isinstance(value, compat_str) or len(value) < 250 else 'md5:' + md5(value))
+                          for key, value in got_dict.items()
+                          if value and key in ('id', 'title', 'description', 'uploader', 'upload_date', 'timestamp', 'uploader_id', 'location', 'age_limit'))
+    missing_keys = set(test_info_dict.keys()) - set(expected_dict.keys())
+    if missing_keys:
+        def _repr(v):
+            if isinstance(v, compat_str):
+                return ''%s'' % v.replace('\\', '\\\\').replace(''', '\\'').replace('\n', '\\n')
+            else:
+                return repr(v)
+        info_dict_str = ''
+        if len(missing_keys) != len(expected_dict):
+            info_dict_str += ''.join(
+                '    %s: %s,\n' % (_repr(k), _repr(v))
+                for k, v in test_info_dict.items() if k not in missing_keys)
     
-        def __init__(self, pin_json):
-        img_file = pin_json['file']
-        self.id = str(pin_json['pin_id'])
-        self.url = urlparse.urljoin(self.host, img_file['key'])
-        self.ext = img_file['type'].split('/')[-1]
+            self.server_process.terminate()
+        self.server_process.communicate()
     
-    __all__ = ['kugou_download']
+            def _find_spec(key):
+            m = re.search(
+                r'(?m)^//\s*%s:\s*(.*?)\n' % re.escape(key), as_content)
+            if not m:
+                raise ValueError('Cannot find %s in %s' % (key, testfile))
+            return json.loads(m.group(1))
     
-    site_info = 'MioMio.tv'
-download = miomio_download
-download_playlist = playlist_not_supported('miomio')
+            webpage = self._download_webpage(url, playlist_id)
+        title = self._html_search_regex(
+            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
+        description = self._html_search_regex(
+            r'<p class='excerpt'[^>]*?>(.*?)</p>',
+            webpage, 'description', fatal=False)
+        urls = re.findall(
+            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
+            webpage)
+        entries = [self.url_result(u) for u in urls]
+    
+        def _real_extract(self, url):
+        video_id = self._match_id(url)
+    
+    
+class AnySexIE(InfoExtractor):
+    _VALID_URL = r'https?://(?:www\.)?anysex\.com/(?P<id>\d+)'
+    _TEST = {
+        'url': 'http://anysex.com/156592/',
+        'md5': '023e9fbb7f7987f5529a394c34ad3d3d',
+        'info_dict': {
+            'id': '156592',
+            'ext': 'mp4',
+            'title': 'Busty and sexy blondie in her bikini strips for you',
+            'description': 'md5:de9e418178e2931c10b62966474e1383',
+            'categories': ['Erotic'],
+            'duration': 270,
+            'age_limit': 18,
+        }
+    }
+    
+    from .onet import OnetBaseIE
+    
+            select = self._search_regex(
+            r'(?s)<select[^>]+id='select-version'[^>]*>(.+?)</select>',
+            webpage, 'select version', default=None)
+        if select:
+            entry_ids = set()
+            entries = []
+            for mobj in re.finditer(
+                    r'<option[^>]+value=(['\'])(?P<id>[0-9a-z_]+)(?:#.+?)?\1[^>]*>(?P<title>[^<]+)',
+                    webpage):
+                entry_id = mobj.group('id')
+                if entry_id in entry_ids:
+                    continue
+                entry_ids.add(entry_id)
+                entries.append({
+                    '_type': 'url_transparent',
+                    'url': 'kaltura:%s:%s' % (partner_id, entry_id),
+                    'ie_key': 'Kaltura',
+                    'title': mobj.group('title'),
+                })
+            if entries:
+                return self.playlist_result(entries, display_id, title)
+    
+        def extract_url(self, line):
+        '''Extract the generated url from the log line.'''
+        pass
+    
+        def add_user(self, user_id, name, pass_hash):
+        pass
+    
+    
+if __name__ == '__main__':
+    SpendingByCategory.run()
 
     
-        def extract(self, **kwargs):
-        for i in self.streams:
-            s = self.streams[i]
-            _, s['container'], s['size'] = url_info(s['url'])
-            s['src'] = [s['url']]
+            # start checks
+        if opts.list:
+            for spider, methods in sorted(contract_reqs.items()):
+                if not methods and not opts.verbose:
+                    continue
+                print(spider)
+                for method in sorted(methods):
+                    print('  * %s' % method)
+        else:
+            start = time.time()
+            self.crawler_process.start()
+            stop = time.time()
     
     
-print('\n# ======================================================================')
-print('#                               Factorial')
-print('# ======================================================================\n')
+class ScrapyHTTPPageGetter(HTTPClient):
     
-    Usage:
-while True:
+        def __init__(self, debug=False):
+        self.jars = defaultdict(CookieJar)
+        self.debug = debug
+    
+        def __init__(self):
+        self._formats = {
+            'tar': self._is_tar,
+            'zip': self._is_zip,
+            'gz': self._is_gzip,
+            'bz2': self._is_bzip2
+        }
+    
+        def spider_opened(self, spider):
+        self.user_agent = getattr(spider, 'user_agent', self.user_agent)
+    
+    
+def main():
+    tornado.options.parse_command_line()
+    application = tornado.web.Application([
+        (r'/', MainHandler),
+    ])
+    http_server = tornado.httpserver.HTTPServer(application)
+    http_server.listen(options.port)
+    tornado.ioloop.IOLoop.current().start()
+    
+        def new_future_import(self, old):
+        new = FromImport('__future__',
+                         [Name('absolute_import', prefix=' '), Comma(),
+                          Name('division', prefix=' '), Comma(),
+                          Name('print_function', prefix=' ')])
+        if old is not None:
+            new.prefix = old.prefix
+        return new
+    
     try:
-        chunk = Chunk(file)
-    except EOFError:
-        break
-    chunktype = chunk.getname()
-    while True:
-        data = chunk.read(nbytes)
-        if not data:
-            pass
-        # do something with data
-    
-    def escape(m):
-    all, tail = m.group(0, 1)
-    assert all.startswith('\\')
-    esc = simple_escapes.get(tail)
-    if esc is not None:
-        return esc
-    if tail.startswith('x'):
-        hexes = tail[1:]
-        if len(hexes) < 2:
-            raise ValueError('invalid hex string escape ('\\%s')' % tail)
-        try:
-            i = int(hexes, 16)
-        except ValueError:
-            raise ValueError('invalid hex string escape ('\\%s')' % tail) from None
-    else:
-        try:
-            i = int(tail, 8)
-        except ValueError:
-            raise ValueError('invalid octal string escape ('\\%s')' % tail) from None
-    return chr(i)
-    
-    SERVICETEMPLATE = '''
-extern int PythonService_main(int, char **);
-    
-                # In previous versions of SimpleXMLRPCServer, _dispatch
-            # could be overridden in this class, instead of in
-            # SimpleXMLRPCDispatcher. To maintain backwards compatibility,
-            # check to see if a subclass implements _dispatch and dispatch
-            # using that method if present.
-            response = self.server._marshaled_dispatch(
-                    data, getattr(self, '_dispatch', None), self.path
-                )
-        except Exception as e: # This should only happen if the module is buggy
-            # internal error, report as HTTP server error
-            self.send_response(500)
-    
-        def check_syntax_error(self, err, basename, lineno, offset=0):
-        self.assertIn('%s.py, line %d' % (basename, lineno), str(err))
-        self.assertEqual(os.path.basename(err.filename), basename + '.py')
-        self.assertEqual(err.lineno, lineno)
-        self.assertEqual(err.offset, offset)
-    
-            try:
-            fds = s.select()
-        except OSError as e:
-            if e.errno == errno.EINVAL and sys.platform == 'darwin':
-                # unexplainable errors on macOS don't need to fail the test
-                self.skipTest('Invalid argument error calling poll()')
-            raise
-        self.assertEqual(NUM_FDS // 2, len(fds))
-    
-    import dataclasses
-import typing
+    from urllib.parse import unquote
+except ImportError:
+    # Python 2.
+    from urllib import unquote
     
     
-def read_binary(package: Package, resource: Resource) -> bytes:
-    '''Return the binary contents of the resource.'''
-    resource = _normalize_path(resource)
-    package = _get_package(package)
-    with open_binary(package, resource) as fp:
-        return fp.read()
+class LoginHandler(BaseHandler, TwitterMixin):
+    @gen.coroutine
+    def get(self):
+        if self.get_argument('oauth_token', None):
+            user = yield self.get_authenticated_user()
+            del user['description']
+            self.set_secure_cookie(self.COOKIE_NAME, json_encode(user))
+            self.redirect(self.get_argument('next', '/'))
+        else:
+            yield self.authorize_redirect(callback_uri=self.request.full_url())
     
-        def allowance(self, filename):
-        '''Preconditions:
-        - our agent applies to this entry
-        - filename is URL decoded'''
-        for line in self.rulelines:
-            if line.applies_to(filename):
-                return line.allowance
-        return True
-
+        url = options.url + '/updateReports?agent=%s' % options.name
+    update_ws = yield websocket_connect(url, None)
+    msg = yield update_ws.read_message()
+    assert msg is None
+    IOLoop.instance().stop()
+    
+    import aiopg
+import bcrypt
+import markdown
+import os.path
+import psycopg2
+import re
+import tornado.escape
+import tornado.httpserver
+import tornado.ioloop
+import tornado.locks
+import tornado.options
+import tornado.web
+import unicodedata
+    
+        # tornado.websocket
+    'WebSocketProtocol',
+    'WebSocketProtocol13',
+    'WebSocketProtocol76',
+]
     
     
-def import_object(name):
-    # type: (_BaseString) -> Any
-    '''Imports an object by name.
+class DummyAsyncHandler(web.RequestHandler):
+    @gen.coroutine
+    def get(self):
+        raise web.Finish('ok\n')
     
-            if self.stream_request_body:
-            self.handler._prepared_future = Future()
-        # Note that if an exception escapes handler._execute it will be
-        # trapped in the Future it returns (which we are ignoring here,
-        # leaving it to be logged when the Future is GC'd).
-        # However, that shouldn't happen because _execute has a blanket
-        # except handler, and we cannot easily access the IOLoop here to
-        # call add_future (because of the requirement to remain compatible
-        # with WSGI)
-        self.handler._execute(transforms, *self.path_args,
-                              **self.path_kwargs)
-        # If we are streaming the request body, then execute() is finished
-        # when the handler has prepared to receive the body.  If not,
-        # it doesn't matter when execute() finishes (so we return None)
-        return self.handler._prepared_future
+        family = {
+        'unspec': socket.AF_UNSPEC,
+        'inet': socket.AF_INET,
+        'inet6': socket.AF_INET6,
+    }[options.family]
     
-        def test_malformed_first_line_log(self):
-        with ExpectLog(gen_log, '.*Malformed HTTP request line'):
-            self.stream.write(b'asdf\r\n\r\n')
-            # TODO: need an async version of ExpectLog so we don't need
-            # hard-coded timeouts here.
-            self.io_loop.add_timeout(datetime.timedelta(seconds=0.05),
-                                     self.stop)
-            self.wait()
-    
-        @gen_test
-    def test_get_timeout_preempted(self):
-        q = queues.Queue()
-        get = q.get(timeout=timedelta(seconds=0.01))
-        q.put(0)
-        yield gen.sleep(0.02)
-        self.assertEqual(0, (yield get))
-    
-        # pylint: disable=no-self-use
-    def test_from_event(self):
-        '''Test converting event to db event.'''
-        event = ha.Event('test_event', {
-            'some_data': 15
-        })
-        assert event == Events.from_event(event).to_native()
+    try:
+    # Use setuptools if available, for install_requires (among other things).
+    import setuptools
+    from setuptools import setup
+except ImportError:
+    setuptools = None
+    from distutils.core import setup
