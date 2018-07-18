@@ -1,68 +1,72 @@
 
         
-          def post_superenv_hacks
-    # Only allow Homebrew-approved directories into the PATH, unless
-    # a formula opts-in to allowing the user's path.
-    if formula.env.userpaths? || reqs.any? { |rq| rq.env.userpaths? }
-      ENV.userpaths!
+        # For this pull request, which changes Page#dir
+# https://github.com/jekyll/jekyll/pull/4403
+    
+            def disconnect(websocket)
+          @websockets.delete(websocket)
+        end
+    
+          def month
+        @obj.date.strftime('%m')
+      end
+    
+        # --
+    # NOTE: Pathutil#in_path? gets the realpath.
+    # @param [<Anything>] entry the entry you want to validate.
+    # Check if a path is outside of our given root.
+    # --
+    def symlink_outside_site_source?(entry)
+      !Pathutil.new(entry).in_path?(
+        site.in_source_dir
+      )
+    end
+    
+        def to_json
+      JSON.generate(as_json)
+    end
+    
+        def contains?(url, options = nil)
+      !!subpath_to(url, options)
+    end
+    
+    def codepoints_to_unicode(codepoints)
+  if codepoints.include?(' ')
+    codepoints.split(' ').map(&:hex).pack('U*')
+  else
+    [codepoints.hex].pack('U')
+  end
+end
+    
+          expect {
+        DiasporaFederation.callbacks.trigger(:fetch_person_url_to, diaspora_id, '/path/on/pod')
+      }.to raise_error DiasporaFederation::Discovery::DiscoveryError
     end
   end
     
-      # True if a {Formula} is being built universally.
-  # e.g. on newer Intel Macs this means a combined x86_64/x86 binary/library.
-  # <pre>args << '--universal-binary' if build.universal?</pre>
-  def universal?
-    include?('universal') && option_defined?('universal')
-  end
+            def autocorrect(node)
+          lambda do |corrector|
+            each_unnecessary_space_match(node) do |range|
+              corrector.replace(range, ' ')
+            end
+          end
+        end
     
-        def self.cleanup_cellar
-      Formula.installed.each do |formula|
-        cleanup_formula formula
+            def repeated_condition?(previous, condition)
+          previous.any? { |c| c.include?(condition) }
+        end
       end
     end
-    
-      def external_commands
-    paths.reduce([]) do |cmds, path|
-      Dir['#{path}/brew-*'].each do |file|
-        next unless File.executable?(file)
-        cmd = File.basename(file, '.rb')[5..-1]
-        cmds << cmd unless cmd.include?('.')
-      end
-      cmds
-    end.sort
   end
+end
+
     
-        updated_taps = []
-    Tap.each do |tap|
-      next unless tap.git?
-      begin
-        reporter = Reporter.new(tap)
-      rescue Reporter::ReporterRevisionUnsetError => e
-        onoe e if ARGV.homebrew_developer?
-        next
-      end
-      if reporter.updated?
-        updated_taps << tap.name
-        hub.add(reporter)
-      end
-    end
+            def on_block(node)
+          on_body_of_reduce(node) do |body|
+            void_next = body.each_node(:next).find do |n|
+              n.children.empty? && parent_block_node(n) == node
+            end
     
-      def present(payload)
-    if payload.is_a?(Hash)
-      payload = ActiveSupport::HashWithIndifferentAccess.new(payload)
-      MAIN_KEYS.each do |key|
-        return { :title => payload[key].to_s, :entries => present_hash(payload, key) } if payload.has_key?(key)
-      end
-    
-      def validate_evernote_options
-    unless evernote_consumer_key.present? &&
-      evernote_consumer_secret.present? &&
-      evernote_oauth_token.present?
-      errors.add(:base, 'Evernote ENV variables and a Service are required')
-    end
-  end
-    
-      if ARGV.include? '--no-ansi'
-    STDERR.puts <<-DOC
-    WARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
-    Consider adding the following to ~/.profile:
+            def on_send(node)
+          return unless node.receiver && node.method?(:freeze) &&
+                        immutable_literal?(node.receiver)
