@@ -1,351 +1,405 @@
-class Classifier {
- public:
-  Classifier(const string& model_file,
-             const string& trained_file,
-             const string& mean_file,
-             const string& label_file);
-    }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    /**
- * @brief Takes at least two Blob%s and concatenates them along either the num
- *        or channel dimension, outputting the result.
- */
-template <typename Dtype>
-class ConcatLayer : public Layer<Dtype> {
- public:
-  explicit ConcatLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    
-    {  Blob<Dtype> diff_;  // cached for backward pass
-  Blob<Dtype> dist_sq_;  // cached for backward pass
-  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
-  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
-};
-    
-    #include 'caffe/layers/softmax_layer.hpp'
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {}  // namespace caffe
-    
-    // Get the first character as UCS-4.
-int UNICHAR::first_uni() const {
-  static const int utf8_offsets[5] = {
-    0, 0, 0x3080, 0xE2080, 0x3C82080
-  };
-  int uni = 0;
-  int len = utf8_step(chars);
-  const char* src = chars;
-    }
-    
-    const char *kApostropheLikeUTF8[] = {
-  ''',       // ASCII apostrophe
-  '`',       // ASCII backtick
-  '\u2018',  // opening single quote
-  '\u2019',  // closing single quote
-  '\u2032',  // mathematical prime mark
-  nullptr,      // end of our list.
-};
-    
-      // Map to subset the actual charset space.
-  const IndexMapBiDi* charset_map_;
-  // Shape table to recombine character classes into shapes
-  const ShapeTable* shape_table_;
-  // The samples to iterate over.
-  TrainingSampleSet* sample_set_;
-  // Flag to control randomizing the sample features.
-  bool randomize_;
-  // Shape table owned by this used to iterate character classes.
-  ShapeTable* owned_shape_table_;
-    
-    // Computes and returns the dot product of the two n-vectors u and v.
-/* static */
-double WeightMatrix::DotProduct(const double* u, const double* v, int n) {
-  // Note: because the order of addition is different among the 3 DotProduct
-  // functions, the results can (and do) vary slightly (although they agree
-  // to within about 4e-15). This produces different results when running
-  // training, despite all random inputs being precisely equal.
-  // To get consistent results, use just one of these DotProduct functions.
-  // On a test multi-layer network, serial is 57% slower than sse, and avx
-  // is about 8% faster than sse. This suggests that the time is memory
-  // bandwidth constrained and could benefit from holding the reused vector
-  // in AVX registers.
-  if (SIMDDetect::IsAVXAvailable()) return DotProductAVX(u, v, n);
-  if (SIMDDetect::IsSSEAvailable()) return DotProductSSE(u, v, n);
-  double total = 0.0;
-  for (int k = 0; k < n; ++k) total += u[k] * v[k];
-  return total;
+
+        
+        TEST_F(UnicharcompressTest, DoesJapanese) {
+  LOG(INFO) << 'Testing jpn';
+  LoadUnicharset('jpn.unicharset');
+  ExpectCorrect('jpn');
 }
     
-      // Accessors.
-  bool is_int_mode() const {
-    return int_mode_;
+    const int16_t idirtab[] = {
+  1000, 0, 998, 49, 995, 98, 989, 146,
+  980, 195, 970, 242, 956, 290, 941, 336,
+  923, 382, 903, 427, 881, 471, 857, 514,
+  831, 555, 803, 595, 773, 634, 740, 671,
+  707, 707, 671, 740, 634, 773, 595, 803,
+  555, 831, 514, 857, 471, 881, 427, 903,
+  382, 923, 336, 941, 290, 956, 242, 970,
+  195, 980, 146, 989, 98, 995, 49, 998,
+  0, 1000, -49, 998, -98, 995, -146, 989,
+  -195, 980, -242, 970, -290, 956, -336, 941,
+  -382, 923, -427, 903, -471, 881, -514, 857,
+  -555, 831, -595, 803, -634, 773, -671, 740,
+  -707, 707, -740, 671, -773, 634, -803, 595,
+  -831, 555, -857, 514, -881, 471, -903, 427,
+  -923, 382, -941, 336, -956, 290, -970, 242,
+  -980, 195, -989, 146, -995, 98, -998, 49,
+  -1000, 0, -998, -49, -995, -98, -989, -146,
+  -980, -195, -970, -242, -956, -290, -941, -336,
+  -923, -382, -903, -427, -881, -471, -857, -514,
+  -831, -555, -803, -595, -773, -634, -740, -671,
+  -707, -707, -671, -740, -634, -773, -595, -803,
+  -555, -831, -514, -857, -471, -881, -427, -903,
+  -382, -923, -336, -941, -290, -956, -242, -970,
+  -195, -980, -146, -989, -98, -995, -49, -998,
+  0, -1000, 49, -998, 98, -995, 146, -989,
+  195, -980, 242, -970, 290, -956, 336, -941,
+  382, -923, 427, -903, 471, -881, 514, -857,
+  555, -831, 595, -803, 634, -773, 671, -740,
+  707, -707, 740, -671, 773, -634, 803, -595,
+  831, -555, 857, -514, 881, -471, 903, -427,
+  923, -382, 941, -336, 956, -290, 970, -242,
+  980, -195, 989, -146, 995, -98, 998, -49
+};
+    
+    template <class R, class P1, class P2, class P3, class P4, class A1, class A2, class A3, class A4>
+inline typename _TessFunctionResultCallback_4_4<false,R,P1,P2,P3,P4,A1,A2,A3,A4>::base*
+NewPermanentTessCallback(R (*function)(P1,P2,P3,P4,A1,A2,A3,A4), typename Identity<P1>::type p1, typename Identity<P2>::type p2, typename Identity<P3>::type p3, typename Identity<P4>::type p4) {
+  return new _TessFunctionResultCallback_4_4<false,R,P1,P2,P3,P4,A1,A2,A3,A4>(function, p1, p2, p3, p4);
+}
+    
+      const IndexMapBiDi& charset_map() const {
+    return *charset_map_;
   }
-  int NumOutputs() const { return int_mode_ ? wi_.dim1() : wf_.dim1(); }
-  // Provides one set of weights. Only used by peep weight maxpool.
-  const double* GetWeights(int index) const { return wf_[index]; }
-  // Provides access to the deltas (dw_).
-  double GetDW(int i, int j) const { return dw_(i, j); }
+  const ShapeTable* shape_table() const {
+    return shape_table_;
+  }
+  // Sample set operations.
+  const TrainingSampleSet* sample_set() const {
+    return sample_set_;
+  }
     
-      // The equation region detector pointer. Note: This pointer is passed in by
-  // member function SetEquationDetect, and releasing it is NOT owned by this
-  // class.
-  EquationDetectBase* equation_detect_;
+      // Accessors
+  int num_samples() const {
+    return samples_.size();
+  }
+  int num_raw_samples() const {
+    return num_raw_samples_;
+  }
+  int NumFonts() const {
+    return font_id_map_.SparseSize();
+  }
+  const UNICHARSET& unicharset() const {
+    return unicharset_;
+  }
+  int charsetsize() const {
+    return unicharset_size_;
+  }
+  const FontInfoTable& fontinfo_table() const {
+    return fontinfo_table_;
+  }
     
-    namespace osquery {
-namespace tables {
+    // Sums the products of weight updates in *this and other, splitting into
+// positive (same direction) in *same and negative (different direction) in
+// *changed.
+void WeightMatrix::CountAlternators(const WeightMatrix& other, double* same,
+                                    double* changed) const {
+  int num_outputs = updates_.dim1();
+  int num_inputs = updates_.dim2();
+  ASSERT_HOST(num_outputs == other.updates_.dim1());
+  ASSERT_HOST(num_inputs == other.updates_.dim2());
+  for (int i = 0; i < num_outputs; ++i) {
+    const double* this_i = updates_[i];
+    const double* other_i = other.updates_[i];
+    for (int j = 0; j < num_inputs; ++j) {
+      double product = this_i[j] * other_i[j];
+      if (product < 0.0)
+        *changed -= product;
+      else
+        *same += product;
     }
-    }
-    
-    #include <gtest/gtest.h>
-    
-      struct tm result;
-  localtime_r((time_t*)&epoch, &result);
-    
-    /// The shell may need to disable events for fast operations.
-DECLARE_bool(disable_events);
-    
-      void tearDown() override;
-    
-     public:
-  KernelEventPublisher() : EventPublisher(), queue_(nullptr) {}
-    
-    TEST_F(SyslogTests, test_populate_event_context) {
-  std::string line =
-      R'|('2016-03-22T21:17:01.701882+00:00','vagrant-ubuntu-trusty-64','6','cron','CRON[16538]:',' (root) CMD (   cd / && run-parts --report /etc/cron.hourly)')|';
-  SyslogEventPublisher pub;
-  auto ec = pub.createEventContext();
-  Status status = pub.populateEventContext(line, ec);
-    }
-    
-    /*
- * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
- * Method:    RabitTrackerPrint
- * Signature: (Ljava/lang/String;)I
- */
-JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_RabitTrackerPrint
-  (JNIEnv *jenv, jclass jcls, jstring jmsg) {
-  std::string str(jenv->GetStringUTFChars(jmsg, 0),
-                  jenv->GetStringLength(jmsg));
-  RabitTrackerPrint(str.c_str());
-  return 0;
+  }
 }
     
-    /*!
- * \brief Internal data structured used by XGBoost during training.
- *  There are two ways to create a customized DMatrix that reads in user defined-format.
- *
- *  - Provide a dmlc::Parser and pass into the DMatrix::Create
- *  - Alternatively, if data can be represented by an URL, define a new dmlc::Parser and register by DMLC_REGISTER_DATA_PARSER;
- *      - This works best for user defined data input source, such as data-base, filesystem.
- *  - Provide a DataSource, that can be passed to DMatrix::Create
- *      This can be used to re-use inmemory data structure into DMatrix.
- */
-class DMatrix {
+    // WorkloadStats is used to track per request timing for different states
+// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
+// should be made to guard the state change with appropriate timers and
+// counters.
+//
+// The states tracked are:
+//  - In a request (this is a superset of the interpreter state)
+//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
+//  - In the JIT (currently tracks time inside the translate routine)
+//
+// Note the time in the TC is not tracked.  This is roughly:
+//   Time in request - Time in interp
+//
+// This gives us the relative interp time formula of:
+//   Relative interp time = Time in interp / Time in request
+struct WorkloadStats final {
+  enum State {
+    InRequest,
+    // -> InInterp   Okay (entering Dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InInterp,
+    // -> InRequest  Okay (leaving the dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InTrans,
+    // -> InRequest  Okay (leaving translate)
+    // -> InInterp   Okay (leaving translate)
+  };
+    }
+    
+    
+    {  if (flags & XhpTrace) {
+    s_profiler_factory->start(ProfilerKind::Trace, flags);
+  } else if (flags & Memo) {
+    flags = 0;  /* flags are not used by MemoProfiler::MemoProfiler */
+    s_profiler_factory->start(ProfilerKind::Memo, flags);
+  } else if (flags & External) {
+    for (ArrayIter iter(args); iter; ++iter) {
+      if (iter.first().toInt32() == 0) {
+         flags = iter.second().toInt32();
+      }
+    }
+    s_profiler_factory->start(ProfilerKind::External, flags);
+  } else {
+    s_profiler_factory->start(ProfilerKind::Hierarchical, flags);
+  }
+}
+    
+      struct Hash {
+    size_t operator()(Vconst c) const {
+      return
+        std::hash<uint64_t>()(c.val) ^ std::hash<int>()(c.kind) ^ c.isUndef;
+    }
+  };
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    void MemoryManager::resetEagerGC() {
+  if (RuntimeOption::EvalEagerGC && RuntimeOption::EvalFilterGCPoints) {
+    t_surprise_filter.clear();
+  }
+}
+    
+    void OutputImageComponent::Reset(int factor_x, int factor_y) {
+  factor_x_ = factor_x;
+  factor_y_ = factor_y;
+  width_in_blocks_ = (width_ + 8 * factor_x_ - 1) / (8 * factor_x_);
+  height_in_blocks_ = (height_ + 8 * factor_y_ - 1) / (8 * factor_y_);
+  num_blocks_ = width_in_blocks_ * height_in_blocks_;
+  coeffs_ = std::vector<coeff_t>(num_blocks_ * kDCTBlockSize);
+  pixels_ = std::vector<uint16_t>(width_ * height_, 128 << 4);
+  for (int i = 0; i < kDCTBlockSize; ++i) quant_[i] = 1;
+}
+    
+    static const int kCrToRedTable[256] = {
+  -179, -178, -177, -175, -174, -172, -171, -170, -168, -167, -165, -164,
+  -163, -161, -160, -158, -157, -156, -154, -153, -151, -150, -149, -147,
+  -146, -144, -143, -142, -140, -139, -137, -136, -135, -133, -132, -130,
+  -129, -128, -126, -125, -123, -122, -121, -119, -118, -116, -115, -114,
+  -112, -111, -109, -108, -107, -105, -104, -102, -101, -100,  -98,  -97,
+   -95,  -94,  -93,  -91,  -90,  -88,  -87,  -86,  -84,  -83,  -81,  -80,
+   -79,  -77,  -76,  -74,  -73,  -72,  -70,  -69,  -67,  -66,  -64,  -63,
+   -62,  -60,  -59,  -57,  -56,  -55,  -53,  -52,  -50,  -49,  -48,  -46,
+   -45,  -43,  -42,  -41,  -39,  -38,  -36,  -35,  -34,  -32,  -31,  -29,
+   -28,  -27,  -25,  -24,  -22,  -21,  -20,  -18,  -17,  -15,  -14,  -13,
+   -11,  -10,   -8,   -7,   -6,   -4,   -3,   -1,    0,    1,    3,    4,
+     6,    7,    8,   10,   11,   13,   14,   15,   17,   18,   20,   21,
+    22,   24,   25,   27,   28,   29,   31,   32,   34,   35,   36,   38,
+    39,   41,   42,   43,   45,   46,   48,   49,   50,   52,   53,   55,
+    56,   57,   59,   60,   62,   63,   64,   66,   67,   69,   70,   72,
+    73,   74,   76,   77,   79,   80,   81,   83,   84,   86,   87,   88,
+    90,   91,   93,   94,   95,   97,   98,  100,  101,  102,  104,  105,
+   107,  108,  109,  111,  112,  114,  115,  116,  118,  119,  121,  122,
+   123,  125,  126,  128,  129,  130,  132,  133,  135,  136,  137,  139,
+   140,  142,  143,  144,  146,  147,  149,  150,  151,  153,  154,  156,
+   157,  158,  160,  161,  163,  164,  165,  167,  168,  170,  171,  172,
+   174,  175,  177,  178
+};
+    
+    inline int Log2FloorNonZero(uint32_t n) {
+#ifdef __GNUC__
+  return 31 ^ __builtin_clz(n);
+#else
+  unsigned int result = 0;
+  while (n >>= 1) result++;
+  return result;
+#endif
+}
+    
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg) {
+  bool has_Adobe_marker = false;
+  uint8_t Adobe_transform = 0;
+  for (const std::string& app : jpg.app_data) {
+    if (static_cast<uint8_t>(app[0]) == 0xe0) {
+      return true;
+    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
+      has_Adobe_marker = true;
+      Adobe_transform = app[14];
+    }
+  }
+  if (has_Adobe_marker) {
+    return (Adobe_transform != 0);
+  }
+  const int cid0 = jpg.components[0].id;
+  const int cid1 = jpg.components[1].id;
+  const int cid2 = jpg.components[2].id;
+  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
+}
+    
+    #include <stddef.h>
+#include <stdint.h>
+    
+    // Functions for writing a JPEGData object into a jpeg byte stream.
+    
+      // Make a local copy of the input bit length histogram.
+  int count[kJpegHuffmanMaxBitLength + 1] = { 0 };
+  int total_count = 0;
+  for (len = 1; len <= kJpegHuffmanMaxBitLength; ++len) {
+    count[len] = count_in[len];
+    total_count += count[len];
+  }
+    
+    double ButteraugliScoreForQuality(double quality) {
+  if (quality < kLowestQuality) quality = kLowestQuality;
+  if (quality > kHighestQuality) quality = kHighestQuality;
+  int index = static_cast<int>(quality);
+  double mix = quality - index;
+  return kScoreForQuality[index - kLowestQuality] * (1 - mix) +
+      kScoreForQuality[index - kLowestQuality + 1] * mix;
+}
+    
+    // A builder class to build a merging iterator by adding iterators one by one.
+class MergeIteratorBuilder {
  public:
-  /*! \brief default constructor */
-  DMatrix()  = default;
-  /*! \brief meta information of the dataset */
-  virtual MetaInfo& Info() = 0;
-  /*! \brief meta information of the dataset */
-  virtual const MetaInfo& Info() const = 0;
-  /*!
-   * \brief get the row iterator, reset to beginning position
-   * \note Only either RowIterator or  column Iterator can be active.
-   */
-  virtual dmlc::DataIter<SparsePage>* RowIterator() = 0;
-  /*!\brief get column iterator, reset to the beginning position */
-  virtual dmlc::DataIter<SparsePage>* ColIterator() = 0;
-  /*!
-   * \brief check if column access is supported, if not, initialize column access.
-   * \param max_row_perbatch auxiliary information, maximum row used in each column batch.
-   *         this is a hint information that can be ignored by the implementation.
-   * \param sorted If column features should be in sorted order           
-   * \return Number of column blocks in the column access.
-   */
-  virtual void InitColAccess(size_t max_row_perbatch, bool sorted) = 0;
-  // the following are column meta data, should be able to answer them fast.
-  /*! \return whether column access is enabled */
-  virtual bool HaveColAccess(bool sorted) const = 0;
-  /*! \return Whether the data columns single column block. */
-  virtual bool SingleColBlock() const = 0;
-  /*! \brief get number of non-missing entries in column */
-  virtual size_t GetColSize(size_t cidx) const = 0;
-  /*! \brief get column density */
-  virtual float GetColDensity(size_t cidx) const = 0;
-  /*! \return reference of buffered rowset, in column access */
-  virtual const RowSet& BufferedRowset() const = 0;
-  /*! \brief virtual destructor */
-  virtual ~DMatrix() = default;
-  /*!
-   * \brief Save DMatrix to local file.
-   *  The saved file only works for non-sharded dataset(single machine training).
-   *  This API is deprecated and dis-encouraged to use.
-   * \param fname The file name to be saved.
-   * \return The created DMatrix.
-   */
-  virtual void SaveToLocalFile(const std::string& fname);
-  /*!
-   * \brief Load DMatrix from URI.
-   * \param uri The URI of input.
-   * \param silent Whether print information during loading.
-   * \param load_row_split Flag to read in part of rows, divided among the workers in distributed mode.
-   * \param file_format The format type of the file, used for dmlc::Parser::Create.
-   *   By default 'auto' will be able to load in both local binary file.
-   * \return The created DMatrix.
-   */
-  static DMatrix* Load(const std::string& uri,
-                       bool silent,
-                       bool load_row_split,
-                       const std::string& file_format = 'auto');
-  /*!
-   * \brief create a new DMatrix, by wrapping a row_iterator, and meta info.
-   * \param source The source iterator of the data, the create function takes ownership of the source.
-   * \param cache_prefix The path to prefix of temporary cache file of the DMatrix when used in external memory mode.
-   *     This can be nullptr for common cases, and in-memory mode will be used.
-   * \return a Created DMatrix.
-   */
-  static DMatrix* Create(std::unique_ptr<DataSource>&& source,
-                         const std::string& cache_prefix = '');
-  /*!
-   * \brief Create a DMatrix by loading data from parser.
-   *  Parser can later be deleted after the DMatrix i created.
-   * \param parser The input data parser
-   * \param cache_prefix The path to prefix of temporary cache file of the DMatrix when used in external memory mode.
-   *     This can be nullptr for common cases, and in-memory mode will be used.
-   * \sa dmlc::Parser
-   * \note dmlc-core provides efficient distributed data parser for libsvm format.
-   *  User can create and register customized parser to load their own format using DMLC_REGISTER_DATA_PARSER.
-   *  See 'dmlc-core/include/dmlc/data.h' for detail.
-   * \return A created DMatrix.
-   */
-  static DMatrix* Create(dmlc::Parser<uint32_t>* parser,
-                         const std::string& cache_prefix = '');
+  // comparator: the comparator used in merging comparator
+  // arena: where the merging iterator needs to be allocated from.
+  explicit MergeIteratorBuilder(const InternalKeyComparator* comparator,
+                                Arena* arena, bool prefix_seek_mode = false);
+  ~MergeIteratorBuilder();
     }
     
-    // redefines the logging macro if not existed
-#ifndef LOG
-#define LOG(severity) LOG_##severity.stream()
-#endif
     
-    TEST(Metric, Error) {
-  xgboost::Metric * metric = xgboost::Metric::Create('error');
-  ASSERT_STREQ(metric->Name(), 'error');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0.5f, 0.001f);
-    }
+    {  InternalIterator* iter_;
+  bool valid_;
+  Slice key_;
+};
     
-    TEST(Metric, AMS) {
-  EXPECT_ANY_THROW(xgboost::Metric::Create('ams'));
-  xgboost::Metric * metric = xgboost::Metric::Create('ams@0.5f');
-  ASSERT_STREQ(metric->Name(), 'ams@0.5');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0.311f, 0.001f);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0.29710f, 0.001f);
-    }
-    
-    /*!
- * \brief Whether always log console message with time.
- *  It will display like, with timestamp appended to head of the message.
- *  '[21:47:50] 6513x126 matrix with 143286 entries loaded from
- * ../data/agaricus.txt.train'
- */
-#ifndef XGBOOST_LOG_WITH_TIME
-#define XGBOOST_LOG_WITH_TIME 1
-#endif
+    #include <exception>
+#include <stdexcept>
     
     
-    {    printf('DestroyContext()\n');
-    ImGui::DestroyContext();
-    return 0;
-}
+    {} // namespace folly
 
     
-            err = vkResetCommandPool(g_Device, command_pool, 0);
-        check_vk_result(err);
-        VkCommandBufferBeginInfo begin_info = {};
-        begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-        begin_info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-        err = vkBeginCommandBuffer(command_buffer, &begin_info);
-        check_vk_result(err);
     
-    static void ImGui_ImplWin32_UpdateMousePos()
-{
-    ImGuiIO& io = ImGui::GetIO();
-    }
-    
-        // Store our identifier
-    io.Fonts->TexID = (void *)g_FontTexture;
-    
-    void ImGui_ImplSDL2_NewFrame(SDL_Window* window)
-{
-    ImGuiIO& io = ImGui::GetIO();
-    IM_ASSERT(io.Fonts->IsBuilt());     // Font atlas needs to be built, call renderer _NewFrame() function e.g. ImGui_ImplOpenGL3_NewFrame() 
-    }
-    
-        // Bind pipeline and descriptor sets:
     {
-        vkCmdBindPipeline(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, g_Pipeline);
-        VkDescriptorSet desc_set[1] = { g_DescriptorSet };
-        vkCmdBindDescriptorSets(command_buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, g_PipelineLayout, 0, 1, desc_set, 0, NULL);
-    }
+    {} // namespace detail
+} // namespace folly
+
     
-    class ActivePeerConnectionCommand : public Command {
-private:
-  RequestGroup* requestGroup_;
-  std::shared_ptr<BtRuntime> btRuntime_;
-  std::shared_ptr<PieceStorage> pieceStorage_;
-  std::shared_ptr<PeerStorage> peerStorage_;
-  std::shared_ptr<BtAnnounce> btAnnounce_;
-    }
+      /**
+   * Set all pipes from / to child to be non-blocking.  communicate() does
+   * this for you.
+   */
+  void setAllNonBlocking();
     
-      int64_t offset_;
-    
-      bool currentTierAcceptsStoppedEvent() const;
-    
-    void AnnounceTier::nextEvent()
+    AbstractBtMessage::AbstractBtMessage(uint8_t id, const char* name)
+    : BtMessage(id),
+      invalidate_(false),
+      uploading_(false),
+      cuid_(0),
+      name_(name),
+      pieceStorage_(nullptr),
+      dispatcher_(nullptr),
+      messageFactory_(nullptr),
+      requestFactory_(nullptr),
+      peerConnection_(nullptr),
+      metadataGetMode_(false)
 {
-  switch (event) {
-  case STARTED:
-    event = DOWNLOADING;
-    break;
-  case STARTED_AFTER_COMPLETION:
-    event = SEEDING;
-    break;
-  case STOPPED:
-    event = HALTED;
-    break;
-  case COMPLETED:
-    event = SEEDING;
-    break;
-  default:
-    break;
+}
+    
+    class AbstractCommand : public Command {
+private:
+  std::shared_ptr<Request> req_;
+  std::shared_ptr<FileEntry> fileEntry_;
+  std::shared_ptr<SocketCore> socket_;
+  std::shared_ptr<SocketRecvBuffer> socketRecvBuffer_;
+  std::shared_ptr<SocketCore> readCheckTarget_;
+  std::shared_ptr<SocketCore> writeCheckTarget_;
+    }
+    
+      virtual ssize_t readData(unsigned char* data, size_t len,
+                           int64_t offset) CXX11_OVERRIDE;
+    
+    
+    {} // namespace aria2
+    
+      virtual bool finished() CXX11_OVERRIDE;
+    
+    void AnnounceList::resetIterator()
+{
+  currentTier_ = std::begin(tiers_);
+  if (currentTier_ != std::end(tiers_) && (*currentTier_)->urls.size()) {
+    currentTracker_ = std::begin((*currentTier_)->urls);
+    currentTrackerInitialized_ = true;
+  }
+  else {
+    currentTrackerInitialized_ = false;
   }
 }
     
     namespace aria2 {
     }
     
-    #include 'a2functional.h'
     
-    #endif // D_AUTH_CONFIG_H
+    {  virtual std::unique_ptr<DiskWriter>
+  newDiskWriter(const std::string& filename) CXX11_OVERRIDE
+  {
+    return make_unique<DiskWriterType>();
+  }
+};
+    
+    #include <ostream>
+    
+      // Don't allow copying
+  AuthConfig(const AuthConfig&);
+  AuthConfig& operator=(const AuthConfig&);
+    
+    #endif // D_AUTH_RESOLVER_H
+
+    
+      YGNodeCalculateLayout(root, 200, 100, YGDirectionLTR);
+    
+     public:
+    
+    #include <fb/assert.h>
+#include <fb/log.h>
+    
+    #pragma once
+#include <functional>
+#include <string>
+#include <jni.h>
+    
+      const char* functionName() const { return m_functionName; }
+  const char* fileName() const { return m_fileName; }
+  int lineNumber() const { return m_lineNumber; }
+    
+    // Reference counting smart pointer. This is designed to work with the
+// Countable class or other implementations in the future. It is designed in a
+// way to be both efficient and difficult to misuse. Typical usage is very
+// simple once you learn the patterns (and the compiler will help!):
+//
+// By default, the internal pointer is null.
+//   RefPtr<Foo> ref;
+//
+// Object creation requires explicit construction:
+//   RefPtr<Foo> ref = createNew<Foo>(...);
+//
+// Or if the constructor is not public:
+//   RefPtr<Foo> ref = adoptRef(new Foo(...));
+//
+// But you can implicitly create from nullptr:
+//   RefPtr<Foo> maybeRef = cond ? ref : nullptr;
+//
+// Move/Copy Construction/Assignment are straightforward:
+//   RefPtr<Foo> ref2 = ref;
+//   ref = std::move(ref2);
+//
+// Destruction automatically drops the RefPtr's reference as expected.
+//
+// Upcasting is implicit but downcasting requires an explicit cast:
+//   struct Bar : public Foo {};
+//   RefPtr<Bar> barRef = static_cast<RefPtr<Bar>>(ref);
+//   ref = barRef;
+//
+template <class T>
+class RefPtr {
+public:
+  constexpr RefPtr() :
+    m_ptr(nullptr)
+  {}
+    }
