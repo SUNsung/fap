@@ -1,139 +1,299 @@
-    return inner
+
+        
+            model.train_on_batch(x_train[:32], y_train[:32],
+                         sample_weight=sample_weight[:32])
+    model.test_on_batch(x_train[:32], y_train[:32],
+                        sample_weight=sample_weight[:32])
+    score = model.evaluate(x_test[test_ids, :], y_test[test_ids, :], verbose=0)
+    assert(score < standard_score_sequential)
     
-        @property
-    def content_type(self):
-        '''Return the message content type.'''
-        ct = self._orig.headers.get('Content-Type', '')
-        if not isinstance(ct, str):
-            ct = ct.decode('utf8')
-        return ct
+        x = Input(shape=(1,))
+    y = inner_model(x)
+    outer_model = Model(x, y)
+    assert outer_model.trainable_weights == inner_model.trainable_weights
+    inner_model.trainable = False
+    assert outer_model.trainable_weights == []
+    inner_model.trainable = True
+    inner_model.layers[-1].trainable = False
+    assert outer_model.trainable_weights == []
     
-    
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
-    
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
+            inputs = np.random.random((num_samples, timesteps, input_size))
+        initial_state = [np.random.random((num_samples, units))
+                         for _ in range(num_states)]
+        targets = np.random.random((num_samples, units))
+        model.fit([inputs] + initial_state, targets)
     
     
-def test_follow_redirect_output_options(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=h',
-             '--history-print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 2
-    assert 'HTTP/1.1 302 FOUND' not in r
-    assert HTTP_OK in r
+@keras_test
+def test_locallyconnected_2d():
+    num_samples = 5
+    filters = 3
+    stack_size = 4
+    num_row = 6
+    num_col = 8
+    padding = 'valid'
+    
+    model = Sequential()
+model.add(Embedding(max_features, embedding_size, input_length=maxlen))
+model.add(Dropout(0.25))
+model.add(Conv1D(filters,
+                 kernel_size,
+                 padding='valid',
+                 activation='relu',
+                 strides=1))
+model.add(MaxPooling1D(pool_size=pool_size))
+model.add(LSTM(lstm_output_size))
+model.add(Dense(1))
+model.add(Activation('sigmoid'))
+    
+    print('-')
+print('inputs: integer tensor of shape (samples, max_length)')
+print('inputs_train shape:', inputs_train.shape)
+print('inputs_test shape:', inputs_test.shape)
+print('-')
+print('queries: integer tensor of shape (samples, max_length)')
+print('queries_train shape:', queries_train.shape)
+print('queries_test shape:', queries_test.shape)
+print('-')
+print('answers: binary (1 or 0) tensor of shape (samples, vocab_size)')
+print('answers_train shape:', answers_train.shape)
+print('answers_test shape:', answers_test.shape)
+print('-')
+print('Compiling...')
+    
+            generator_train_loss = np.mean(np.array(epoch_gen_loss), axis=0)
     
     
-def test_unicode_digest_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--auth-type=digest',
-         '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
+def copy_weights(teacher_model, student_model, layer_names):
+    '''Copy weights from teacher_model to student_model,
+     for layers with names listed in layer_names
+    '''
+    for name in layer_names:
+        weights = teacher_model.get_layer(name=name).get_weights()
+        student_model.get_layer(name=name).set_weights(weights)
+    
+        model = Sequential()
+    model.add(layers.TimeDistributed(
+        layers.Dense(y_train.shape[-1]), input_shape=(x_train.shape[1], x_train.shape[2])))
+    model.compile(loss='hinge', optimizer='rmsprop')
+    history = model.fit(x_train, y_train, epochs=20, batch_size=16,
+                        validation_data=(x_test, y_test), verbose=0)
+    assert(history.history['loss'][-1] < 1.)
+    
+                # check state initialization
+            layer = convolutional_recurrent.ConvLSTM2D(filters=filters,
+                                                       kernel_size=(num_row, num_col),
+                                                       data_format=data_format,
+                                                       return_sequences=return_sequences)
+            layer.build(inputs.shape)
+            x = Input(batch_shape=inputs.shape)
+            initial_state = layer.get_initial_state(x)
+            y = layer(x, initial_state=initial_state)
+            model = Model(x, y)
+            assert model.predict(inputs).shape == layer.compute_output_shape(inputs.shape)
+    
+    
+@keras_test
+def test_vector_classification_functional():
+    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
+                                                         num_test=200,
+                                                         input_shape=(20,),
+                                                         classification=True,
+                                                         num_classes=num_classes)
+    # Test with functional API
+    inputs = layers.Input(shape=(x_train.shape[-1],))
+    x = layers.Dense(16, activation=keras.activations.relu)(inputs)
+    x = layers.Dense(8)(x)
+    x = layers.Activation('relu')(x)
+    outputs = layers.Dense(num_classes, activation='softmax')(x)
+    model = keras.models.Model(inputs, outputs)
+    model.compile(loss=keras.losses.sparse_categorical_crossentropy,
+                  optimizer=keras.optimizers.RMSprop(),
+                  metrics=['acc'])
+    history = model.fit(x_train, y_train, epochs=15, batch_size=16,
+                        validation_data=(x_test, y_test),
+                        verbose=0)
+    assert(history.history['val_acc'][-1] > 0.8)
+    
+        def _finish(self, request):
+        self.concurrent -= 1
+        if not request.finished and not request._disconnected:
+            request.finish()
+    
+        def parse(self, response):
+        for link in self.link_extractor.extract_links(response):
+            yield scrapy.Request(link.url, callback=self.parse)
 
     
-        name = 'Basic HTTP auth'
-    auth_type = 'basic'
+                if line.startswith('@'):
+                name, args = re.match(r'@(\w+)\s*(.*)', line).groups()
+                args = re.split(r'\s+', args)
+    
+        def download_request(self, request, spider):
+        scheme = urlparse_cached(request).scheme
+        handler = self._get_handler(scheme)
+        if not handler:
+            raise NotSupported('Unsupported URL scheme '%s': %s' %
+                               (scheme, self._notconfigured[scheme]))
+        return handler.download_request(request, spider)
+    
+        def handleHeader(self, key, value):
+        self.headers.appendlist(key, value)
+    
+        def process_request(self, request, spider):
+        for k, v in self._headers:
+            request.headers.setdefault(k, v)
+
+    
+        def process_request(self, request, spider):
+        auth = getattr(self, 'auth', None)
+        if auth and b'Authorization' not in request.headers:
+            request.headers[b'Authorization'] = auth
+
+    
+        @classmethod
+    def from_settings(cls, settings):
+        debug = settings.getbool('DUPEFILTER_DEBUG')
+        return cls(job_dir(settings), debug)
+    
+        def item_scraped(self, item, spider):
+        self.counter['itemcount'] += 1
+        if self.counter['itemcount'] == self.close_on['itemcount']:
+            self.crawler.engine.close_spider(spider, 'closespider_itemcount')
+    
+                if self.config.PROXY_TYPE == 'HTTP':
+                proxy_type = socks.HTTP
+            elif self.config.PROXY_TYPE == 'SOCKS4':
+                proxy_type = socks.SOCKS4
+            elif self.config.PROXY_TYPE == 'SOCKS5':
+                proxy_type = socks.SOCKS5
+            else:
+                self.logger.error('proxy type %s unknown, disable proxy', self.config.PROXY_TYPE)
+                raise Exception()
+    
+    RecognitionException are generated, when a recognizer encounters incorrect
+or unexpected input.
     
     
-CLIENT_CERT = os.path.join(TESTS_ROOT, 'client_certs', 'client.crt')
-CLIENT_KEY = os.path.join(TESTS_ROOT, 'client_certs', 'client.key')
-CLIENT_PEM = os.path.join(TESTS_ROOT, 'client_certs', 'client.pem')
+    def recover(self, input, re):
+        '''
+        Recover from an error found on the input stream.  This is
+        for NoViableAlt and mismatched symbol exceptions.  If you enable
+        single token insertion and deletion, this will usually not
+        handle mismatched symbol exceptions but there could be a mismatched
+        token that the match() routine could not recover from.
+        '''
+        
+        # PROBLEM? what if input stream is not the same as last time
+        # perhaps make lastErrorIndex a member of input
+        if self._state.lastErrorIndex == input.index():
+            # uh oh, another error at same token index; must be a case
+            # where LT(1) is in the recovery token set so nothing is
+            # consumed; consume a single token so at least to prevent
+            # an infinite loop; this is a failsafe.
+            input.consume()
     
-        def register(self, *plugins):
-        for plugin in plugins:
-            self._plugins.append(plugin)
+        >>> from fractions import Fraction as F
+    >>> _sum([F(2, 3), F(7, 5), F(1, 4), F(5, 6)])
+    (<class 'fractions.Fraction'>, Fraction(63, 20), 4)
     
-        def __init__(self, path, *args, **kwargs):
-        super(Session, self).__init__(*args, **kwargs)
-        self._path = path
-        self['headers'] = {}
-        self['cookies'] = {}
-        self['auth'] = {
-            'type': None,
-            'username': None,
-            'password': None
-        }
+        @classmethod
+    def zonelist(cls, zonedir='/usr/share/zoneinfo'):
+        zones = []
+        for root, _, files in os.walk(zonedir):
+            for f in files:
+                p = os.path.join(root, f)
+                with open(p, 'rb') as o:
+                    magic =  o.read(4)
+                if magic == b'TZif':
+                    zones.append(p[len(zonedir) + 1:])
+        return zones
     
-    from sklearn.cluster import AgglomerativeClustering
+            rd, wr = self.make_socketpair()
     
-        ###########################################################################
-    # Set custom tracking based method
-    sampling_algorithm['custom-tracking-selection'] = \
-        lambda n_population, n_samples, random_state=None: \
-            sample_without_replacement(n_population,
-                                       n_samples,
-                                       method='tracking_selection',
-                                       random_state=random_state)
+    T_CV2 = ClassVar[int]
+T_CV3 = ClassVar
     
-    from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import Perceptron
-from sklearn.pipeline import Pipeline
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
+        def test_stdin_stdout(self):
+        args = sys.executable, '-m', 'json.tool'
+        with Popen(args, stdin=PIPE, stdout=PIPE, stderr=PIPE) as proc:
+            out, err = proc.communicate(self.data.encode())
+        self.assertEqual(out.splitlines(), self.expect.encode().splitlines())
+        self.assertEqual(err, b'')
     
-    data, row_idx, col_idx = sg._shuffle(data, random_state=0)
-plt.matshow(data, cmap=plt.cm.Blues)
-plt.title('Shuffled dataset')
+        def test_display_current_time_at_midnight(self):
+        '''
+        Would almost always fail (despite of right at/after midnight) if
+        untestable production code would have been used.
+        '''
+        time_provider_stub = MidnightTimeProvider()
+        class_under_test = TimeDisplay()
+        class_under_test.set_time_provider(time_provider_stub)
+        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
     
-    X = list()
-y = list()
-for i, (phi, a) in enumerate([(.5, .15), (.5, .6), (.3, .2)]):
-    for _ in range(30):
-        phase_noise = .01 * np.random.normal()
-        amplitude_noise = .04 * np.random.normal()
-        additional_noise = 1 - 2 * np.random.rand(n_features)
-        # Make the noise sparse
-        additional_noise[np.abs(additional_noise) < .997] = 0
+            # simple test to validate param value
+        if param in self._static_method_choices.keys():
+            self.param = param
+        else:
+            raise ValueError('Invalid Value for Param: {0}'.format(param))
     
-        failures = []
-    while point is not None:
-        if point.name:
-            if re.search('h[1-2]', point.name):
-                if point.name == 'h1':
-                    h1_directory = os.path.join(output_directory, clean_text(point.text))
-                    current_directory = h1_directory
-                elif point.name == 'h2':
-                    current_directory = os.path.join(h1_directory, clean_text(point.text))  
-                if not os.path.exists(current_directory):
-                    os.makedirs(current_directory)
-                print_title(point.text)
-    
-    define('port', default=8888, help='run on the given port', type=int)
-    
-        class ConnectionDelegate(HTTPServerConnectionDelegate):
-        def start_request(self, server_conn, request_conn):
-            return MessageDelegate(request_conn)
+        def attach(self, observer):
+        if observer not in self._observers:
+            self._observers.append(observer)
     
     
-class WSGIApplication(web.Application):
-    '''A WSGI equivalent of `tornado.web.Application`.
+def evaluate_proposal_file(dataset, proposal_file, output_dir):
+    '''Evaluate box proposal average recall.'''
+    roidb = dataset.get_roidb(gt=True, proposal_file=proposal_file)
+    results = task_evaluation.evaluate_box_proposals(dataset, roidb)
+    task_evaluation.log_box_proposal_results(results)
+    recall_file = os.path.join(output_dir, 'rpn_proposal_recall.pkl')
+    save_object(results, recall_file)
+    return results
+
     
-        def test_isolation_empty(self):
-        # Similar to test_isolation_nonempty, but here the f2/f3 chain
-        # is started without any context.  Behavior should be equivalent
-        # to the nonempty case (although historically it was not)
-        def f1():
-            with NullContext():
-                wrapped = wrap(f2)
-            with StackContext(functools.partial(self.context, 'c2')):
-                wrapped()
+            pre_nms_topn = min(cfg.RETINANET.PRE_NMS_TOP_N, len(candidate_inds))
+        inds = np.argpartition(
+            cls_prob_ravel[candidate_inds], -pre_nms_topn)[-pre_nms_topn:]
+        inds = candidate_inds[inds]
     
-            # Wait for callback 1 to time out.
-        yield gen.sleep(0.02)
-        self.assertEqual(['timeout'], self.history)
+    
+# ---------------------------------------------------------------------------- #
+# RPN and Faster R-CNN outputs and losses
+# ---------------------------------------------------------------------------- #
+    
+    
+def _get_image_blob(roidb):
+    '''Builds an input blob from the images in the roidb at the specified
+    scales.
+    '''
+    num_images = len(roidb)
+    # Sample random scales to use for each image in this batch
+    scale_inds = np.random.randint(
+        0, high=len(cfg.TRAIN.SCALES), size=num_images
+    )
+    processed_ims = []
+    im_scales = []
+    for i in range(num_images):
+        im = cv2.imread(roidb[i]['image'])
+        assert im is not None, \
+            'Failed to read image \'{}\''.format(roidb[i]['image'])
+        if roidb[i]['flipped']:
+            im = im[:, ::-1, :]
+        target_size = cfg.TRAIN.SCALES[scale_inds[i]]
+        im, im_scale = blob_utils.prep_im_for_blob(
+            im, cfg.PIXEL_MEANS, target_size, cfg.TRAIN.MAX_SIZE
+        )
+        im_scales.append(im_scale)
+        processed_ims.append(im)
+    
+    
+def add_retinanet_blobs(blobs, im_scales, roidb, image_width, image_height):
+    '''Add RetinaNet blobs.'''
+    # RetinaNet is applied to many feature levels, as in the FPN paper
+    k_max, k_min = cfg.FPN.RPN_MAX_LEVEL, cfg.FPN.RPN_MIN_LEVEL
+    scales_per_octave = cfg.RETINANET.SCALES_PER_OCTAVE
+    num_aspect_ratios = len(cfg.RETINANET.ASPECT_RATIOS)
+    aspect_ratios = cfg.RETINANET.ASPECT_RATIOS
+    anchor_scale = cfg.RETINANET.ANCHOR_SCALE
