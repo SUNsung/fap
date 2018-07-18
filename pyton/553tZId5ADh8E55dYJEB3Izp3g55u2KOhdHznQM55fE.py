@@ -1,230 +1,129 @@
 
         
-        print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
-    
-        params = {
-        'age_limit': age,
-        'skip_download': True,
-        'writeinfojson': True,
-        'outtmpl': '%(id)s.%(ext)s',
-    }
-    ydl = YoutubeDL(params)
-    ydl.add_default_info_extractors()
-    json_filename = os.path.splitext(filename)[0] + '.info.json'
-    try_rm(json_filename)
-    ydl.download([url])
-    res = os.path.exists(json_filename)
-    try_rm(json_filename)
-    return res
-    
-    # Allow direct execution
-import os
-import sys
-import unittest
-import collections
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            # Then we cluster the lines together as blocks
+    # Each block represents a collection of lines that should be sorted
+    # This was done by assuming only links ([...](...)) are meant to be sorted
+    # Clustering is done by indentation
+    blocks = []
+    last_indent = None
+    for line in read_me:
+        s_line = line.lstrip()
+        indent = len(line) - len(s_line)
     
     
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
+class ConnectCreator(object):
+    def __init__(self, logger, config, openssl_context, host_manager,
+                 timeout=5, debug=False,
+                 check_cert=None):
+        self.logger = logger
+        self.config = config
+        self.openssl_context = openssl_context
+        self.host_manager = host_manager
+        self.timeout = timeout
+        self.debug = debug
+        if check_cert:
+            self.check_cert = check_cert
+        self.update_config()
+    
+            if task.method == 'HEAD' or response.status in [204, 304]:
+            response.content_length = 0
     
     
-if __name__ == '__main__':
-    unittest.main()
-
+def inet_ntop(address_family, packed_ip):
+    addr = sockaddr()
+    addr.sa_family = address_family
+    addr_size = ctypes.c_int(ctypes.sizeof(addr))
+    ip_string = ctypes.create_string_buffer(128)
+    ip_string_size = ctypes.c_int(ctypes.sizeof(ip_string))
     
+    And tree.TreeParser finally fetches its input from a tree.TreeNodeStream:
     
-class AcademicEarthCourseIE(InfoExtractor):
-    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
-    IE_NAME = 'AcademicEarth:Course'
-    _TEST = {
-        'url': 'http://academicearth.org/playlists/laws-of-nature/',
-        'info_dict': {
-            'id': 'laws-of-nature',
-            'title': 'Laws of Nature',
-            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
-        },
-        'playlist_count': 3,
-    }
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
     
-    py_test(
-    name = 'mst_units_test',
-    size = 'small',
-    srcs = ['mst_units_test.py'],
-    deps = [
-        ':mst_units',
-        ':network_units',
-        '//dragnn/protos:spec_pb2_py',
-        '@org_tensorflow//tensorflow:tensorflow_py',
-    ],
-)
-
+            path = os.path.join(self.tempdir, 'file.ini')
+        dns_test_common.write({'dnsimple_token': TOKEN}, path)
     
-        tf.logging.info('Loading params...')
-    session.run('save/restore_all', {'save/Const:0': params_path})
+        # The font size ('10pt', '11pt' or '12pt').
+    #
+    # 'pointsize': '10pt',
     
-        try:
-      with open(FLAGS.expected_file) as expected:
-        content_expected = expected.read()
-    except IOError as e:
-      self.fail('Error opening '%s': %s' % (FLAGS.expected_file, e.strerror))
+        '''
+    if cli.set_by_cli(cli_arg_path):
+        return util.safe_open(pem_path, chmod=0o644, mode='wb'),\
+            os.path.abspath(pem_path)
+    else:
+        uniq = util.unique_file(pem_path, 0o644, 'wb')
+        return uniq[0], os.path.abspath(uniq[1])
     
-      def testTaggerParser(self):
-    self.RunFullTrainingAndInference(
-        'tagger-parser',
-        'tagger_parser_master_spec.textproto',
-        component_weights=[0., 1., 1.],
-        unroll_using_oracle=[False, True, True],
-        expected_num_actions=12,
-        expected=_TAGGER_PARSER_EXPECTED_SENTENCES)
+        @mock.patch(
+        'certbot_compatibility_test.validator.crypto_util.probe_sni')
+    def test_certificate_error(self, mock_probe_sni):
+        cert = OpenSSL.crypto.X509()
+        mock_probe_sni.side_effect = [acme_errors.Error]
+        self.assertFalse(self.validator.certificate(
+            cert, 'test.com', '127.0.0.1'))
     
-      Args:
-    num_nodes: [B] vector of graph sizes per batch item.
-    scores: [B,M,M] tensor of padded batched arc and root scores, in the format
-      used by the maximum_spanning_tree() op.  Padding values must be finite.
-    forest: If true, sum over spanning forests instead of trees.
-    max_dynamic_range: If specified, incoming scores for each node are clipped
-      to at most this far from the maximum such score (in the log domain).
+        def create_enqueue_blobs(self):
+        blob_names = self.get_output_names()
+        enqueue_blob_names = [
+            '{}_enqueue_{}'.format(b, self._loader_id) for b in blob_names
+        ]
+        for gpu_id in range(self._num_gpus):
+            with c2_utils.NamedCudaScope(gpu_id):
+                for blob in enqueue_blob_names:
+                    workspace.CreateBlob(core.ScopedName(blob))
+        return enqueue_blob_names
     
-        cmd = cmd.split()
-    
-    
-@pytest.mark.functional
-def test_with_confirmation(proc, TIMEOUT):
-    with_confirmation(proc, TIMEOUT)
-    
-    '''
-import hashlib
-import requests
-    
-            request_line = '{method} {path}{query} HTTP/1.1'.format(
-            method=self._orig.method,
-            path=url.path or '/',
-            query='?' + url.query if url.query else ''
+        # Perform detection at different aspect ratios
+    for aspect_ratio in cfg.TEST.BBOX_AUG.ASPECT_RATIOS:
+        scores_ar, boxes_ar = im_detect_bbox_aspect_ratio(
+            model, im, aspect_ratio, box_proposals
         )
+        add_preds_t(scores_ar, boxes_ar)
     
-    from httpie.plugins import plugin_manager
-from httpie.context import Environment
     
-                if args.check_status or downloader:
-                exit_status = get_exit_status(
-                    http_status=response.status_code,
-                    follow=args.follow
-                )
-                if not env.stdout_isatty and exit_status != ExitStatus.OK:
-                    log_error(
-                        'HTTP %s %s', response.raw.status, response.raw.reason,
-                        level='warning'
-                    )
+def add_keypoint_rcnn_blobs(
+    blobs, roidb, fg_rois_per_image, fg_inds, im_scale, batch_idx
+):
+    '''Add Mask R-CNN keypoint specific blobs to the given blobs dictionary.'''
+    # Note: gt_inds must match how they're computed in
+    # datasets.json_dataset._merge_proposal_boxes_into_roidb
+    gt_inds = np.where(roidb['gt_classes'] > 0)[0]
+    max_overlaps = roidb['max_overlaps']
+    gt_keypoints = roidb['gt_keypoints']
     
-            :param mime: E.g., 'application/atom+xml'.
-        :param content: The body content as text
+    logger = logging.getLogger(__name__)
     
-        def load(self):
-        super(Config, self).load()
-        self._migrate_implicit_content_type()
-    
-        ERROR_TIMEOUT = 2
-    ERROR_TOO_MANY_REDIRECTS = 6
-    
-    n_samples = np.logspace(.5, 3, 9)
-n_features = np.logspace(1, 3.5, 7)
-N_samples, N_features = np.meshgrid(n_samples,
-                                    n_features)
-scikits_time = np.zeros(N_samples.shape)
-scipy_time = np.zeros(N_samples.shape)
-    
-        print('')
-    print('')
-
-    
-    plt.show()
-
-    
-    plt.title('Clustering measures for random uniform labeling\n'
-          'against reference assignment with %d classes' % n_classes)
-plt.xlabel('Number of clusters (Number of samples is fixed to %d)' % n_samples)
-plt.ylabel('Score value')
-plt.ylim(ymin=-0.05, ymax=1.05)
-plt.legend(plots, names)
-plt.show()
-
-    
-    X = list()
-y = list()
-for i, (phi, a) in enumerate([(.5, .15), (.5, .6), (.3, .2)]):
-    for _ in range(30):
-        phase_noise = .01 * np.random.normal()
-        amplitude_noise = .04 * np.random.normal()
-        additional_noise = 1 - 2 * np.random.rand(n_features)
-        # Make the noise sparse
-        additional_noise[np.abs(additional_noise) < .997] = 0
-    
-    [1] 'Shrinkage Algorithms for MMSE Covariance Estimation'
-Chen et al., IEEE Trans. on Sign. Proc., Volume 58, Issue 10, October 2010.
-    
-        def set_flags(self, flags):
-        '''Set the given flags and unset all others.'''
-        self._info = '2,' + ''.join(sorted(flags))
-    
-    int WINAPI WinMain(
-    HINSTANCE hInstance,      // handle to current instance
-    HINSTANCE hPrevInstance,  // handle to previous instance
-    LPSTR lpCmdLine,          // pointer to command line
-    int nCmdShow              // show state of window
-    )
-{
-    extern int Py_FrozenMain(int, char **);
-    PyImport_FrozenModules = _PyImport_FrozenModules;
-    return Py_FrozenMain(__argc, __argv);
-}
-'''
-    
-        ''' Returns the machine type, e.g. 'i386'
-    
-        def close(self, close_when_done=None):
-        if self.after_id:
-            after_id = self.after_id
-            self.after_id = None
-            if DEBUG: print('cancel scheduled recolorizer')
-            self.after_cancel(after_id)
-        self.allow_colorizing = False
-        self.stop_colorizing = True
-        if close_when_done:
-            if not self.colorizing:
-                close_when_done.destroy()
-            else:
-                self.close_when_done = close_when_done
-    
-    @dataclasses.dataclass
-class CV:
-    T_CV4 = typing.ClassVar
-    cv0: typing.ClassVar[int] = 20
-    cv1: typing.ClassVar = 30
-    cv2: T_CV2
-    cv3: T_CV3
-    not_cv4: T_CV4  # When using string annotations, this field is not recognized as a ClassVar.
-    
-    @dataclass
-class IV:
-    T_IV4 = InitVar
-    iv0: InitVar[int]
-    iv1: InitVar
-    iv2: T_IV2
-    iv3: T_IV3
-    not_iv4: T_IV4  # When using string annotations, this field is not recognized as an InitVar.
+        def test_size_exceptions(self):
+        A = np.random.randn(2, 256, 42, 86).astype(np.float32)
+        I = np.array(np.random.permutation(10), dtype=np.int32)
+        with self.assertRaises(RuntimeError):
+            self._run_op_test(A, I)
