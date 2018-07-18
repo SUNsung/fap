@@ -1,31 +1,39 @@
 
         
-        html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
-readme_doctree = REXML::Document.new(html_readme)
-links = REXML::XPath.match(readme_doctree, '//a')
+          test 'fails when we do not have any permitted parameters for the action' do
+    sanitizer = sanitizer('user' => { 'email' => 'jose', 'password' => 'invalid' })
     
-        # Returns whether `string` is a valid IP address or IP address range.
-    #
-    # @return [true] if valid IP address or IP address range.
-    # @return [false] otherwise.
-    def valid_ip_or_range?(string)
-      range = Rex::Socket::RangeWalker.new(string)
-      range && range.ranges && range.ranges.any?
+        # The path used after resending confirmation instructions.
+    def after_resending_confirmation_instructions_path_for(resource_name)
+      is_navigational_format? ? new_session_path(resource_name) : '/'
     end
     
-    unless $LOAD_PATH.include? lib_path
-  $LOAD_PATH.unshift lib_path
-end
-
+          # Remembers the given resource by setting up a cookie
+      def remember_me(resource)
+        return if request.env['devise.skip_storage']
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.remember_me!
+        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
+      end
     
-      def parse(pkt)
-    # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 21 and pkt.tcp_dport != 21)
-    s = find_session((pkt.tcp_sport == 21) ? get_session_src(pkt) : get_session_dst(pkt))
-    s[:sname] ||= 'ftp'
+    class Poll < ApplicationRecord
+  include Diaspora::Federated::Base
+  include Diaspora::Fields::Guid
     
-    puts '* System info:'
+            person_entity = Person.find_by(diaspora_handle: existing_person_entity.diaspora_handle)
     
-    #Rjb::load('.', jvmargs=[])
-Rjb::load('#{ENV['JAVA_HOME']}/lib/tools.jar:.',jvmargs=[])
+        # Swaps the height and width if necessary
+    def auto_orient
+      if EXIF_ROTATED_ORIENTATION_VALUES.include?(@orientation)
+        @height, @width = @width, @height
+        @orientation -= 4
+      end
+    end
+    
+    module Paperclip
+  class << self
+    attr_writer :registered_attachments_styles_path
+    def registered_attachments_styles_path
+      @registered_attachments_styles_path ||= Rails.root.join('public/system/paperclip_attachments.yml').to_s
+    end
+  end
