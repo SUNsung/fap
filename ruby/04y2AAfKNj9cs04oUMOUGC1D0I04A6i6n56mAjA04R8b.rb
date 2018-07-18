@@ -1,115 +1,117 @@
 
         
-            If you wish to use the 2.x release you can install it
-    either via Homebrew:
-      brew install homebrew/binary/ngrok2
-    
-    class BuildEnvironment
-  def initialize(*settings)
-    @settings = Set.new(*settings)
+          # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/favourite
+  def favourite
+    f = Favourite.last
+    NotificationMailer.favourite(f.status.account, Notification.find_by(activity: f))
   end
     
-      # True if a {Formula} is being built universally.
-  # e.g. on newer Intel Macs this means a combined x86_64/x86 binary/library.
-  # <pre>args << '--universal-binary' if build.universal?</pre>
-  def universal?
-    include?('universal') && option_defined?('universal')
-  end
-    
-        # Exclude cache, logs, and repository, if they are located under the prefix.
-    [HOMEBREW_CACHE, HOMEBREW_LOGS, HOMEBREW_REPOSITORY].each do |dir|
-      dirs.delete dir.relative_path_from(HOMEBREW_PREFIX).to_s
+    module Capistrano
+  module TaskEnhancements
+    def before(task, prerequisite, *args, &block)
+      prerequisite = Rake::Task.define_task(prerequisite, *args, &block) if block_given?
+      Rake::Task[task].enhance [prerequisite]
     end
-    dirs.delete 'etc'
-    dirs.delete 'var'
     
-            if msg = blacklisted?(query)
-          if count > 0
-            puts
-            puts 'If you meant #{query.inspect} precisely:'
-            puts
-          end
-          puts msg
-        elsif count == 0
-          puts 'No formula found for #{query.inspect}.'
-          begin
-            GitHub.print_pull_requests_matching(query)
-          rescue GitHub::Error => e
-            SEARCH_ERROR_QUEUE << e
-          end
+      desc 'Finished'
+  task :finished do
+  end
+    
+            it 'roles defined using the `role` syntax are included' do
+          as = dsl.roles(:app).map { |server| '#{server.user}@#{server.hostname}:#{server.port}' }
+          expect(as.size).to eq(2)
+          expect(as[0]).to eq('deployer@example1.com:1234')
+          expect(as[1]).to eq('@example1.com:5678')
         end
       end
     end
     
-        unless updated_taps.empty?
-      puts 'Updated #{updated_taps.size} tap#{plural(updated_taps.size)} ' \
-           '(#{updated_taps.join(', ')}).'
-      updated = true
+      // writing
+  $('form').on('submit',function(e) {
+    $.post('/', {msg: '<%= user %>: ' + $('#msg').val()});
+    $('#msg').val(''); $('#msg').focus();
+    e.preventDefault();
+  });
+</script>
+    
+          def call(env)
+        status, headers, body = super
+        response = Rack::Response.new(body, status, headers)
+        request = Rack::Request.new(env)
+        remove_bad_cookies(request, response)
+        response.finish
+      end
+    
+        it 'accepts requests with a single session cookie' do
+      get '/', {}, 'HTTP_COOKIE' => 'rack.session=SESSION_TOKEN'
+      expect(last_response).to be_ok
     end
     
-      def self.class_s(name)
-    Formulary.class_s(name)
-  end
+        it 'leaves normal params untouched' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
+      end
+      get '/', :foo => 'bar'
+      expect(body).to eq('bar')
+    end
     
-            if entries.empty?
-          css('.quickindex[id]').each do |node|
-            name = node['id'].remove(/quickindex\.?/)
-            next if name.empty? || name =~ /\.\d+\z/ || name =~ /\A([^\.]+)\.\1\z/
-            entries << ['#{self.name}.#{name}', name]
+        mock_app do
+      use Rack::Head
+      use(Rack::Config) { |e| e['rack.session'] ||= {}}
+      use changer
+      use klass
+      use detector
+      run DummyApp
+    end
+    
+        def calculated_type_matches
+      possible_types.select do |content_type|
+        content_type == type_from_file_contents
+      end
+    end
+    
+            def failure_message_when_negated
+          'Should not have an attachment named #{@attachment_name}'
+        end
+        alias negative_failure_message failure_message_when_negated
+    
+            def failure_message
+          '#{expected_attachment}\n'.tap do |message|
+            message << accepted_types_and_failures.to_s
+            message << '\n\n' if @allowed_types.present? && @rejected_types.present?
+            message << rejected_types_and_failures.to_s
           end
         end
     
-          options[:only_patterns] = [/\Agetting-started\//, /\Alayout\//, /\Acontent\//, /\Acomponents\//, /\Autilities\//, /\Amigration\//]
-    end
-    
-        options[:attribution] = <<-HTML
-      &copy; Django Software Foundation and individual contributors<br>
-      Licensed under the BSD License.
-    HTML
-    
-    module Docs
-  class Tensorflow < UrlScraper
-    self.name = 'TensorFlow'
-    self.type = 'tensorflow'
-    self.release = '1.8'
-    self.root_path = 'index.html'
-    self.links = {
-      home: 'https://www.tensorflow.org/',
-      code: 'https://github.com/tensorflow/tensorflow'
-    }
-    
-        def initialize(name = nil, path = nil, type = nil)
-      self.name = name
-      self.path = path
-      self.type = type
-    
-            def define_logger(name, options = {})
-          class_eval <<-RUBY, __FILE__, __LINE__ + 1
-            def #{name}(message)
-              #{options.fetch(:to, :log)}(#{name.inspect}, message)
-            end
-          RUBY
-        end
-      end
+        # You can add your own processor via the Paperclip configuration. Normally
+    # Paperclip will load all processors from the
+    # Rails.root/lib/paperclip_processors directory, but here you can add any
+    # existing class using this mechanism.
+    #
+    #   Paperclip.configure do |c|
+    #     c.register_processor :watermarker, WatermarkingProcessor.new
+    #   end
+    def register_processor(name, processor)
+      @known_processors ||= {}
+      @known_processors[name.to_s] = processor
     end
   end
 end
 
     
-      Sass::Plugin.options.merge!(config)
-    
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
-    end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
-  end
-  output += '></#{tag}>'
-end
+        module ClassMethods
+      # This method is a shortcut to validator classes that is in
+      # 'Attachment...Validator' format. It is almost the same thing as the
+      # +validates+ method that shipped with Rails, but this is customized to
+      # be using with attachment validators. This is helpful when you're using
+      # multiple attachment validators on a single attachment.
+      #
+      # Example of using the validator:
+      #
+      #   validates_attachment :avatar, :presence => true,
+      #      :content_type => { :content_type => 'image/jpg' },
+      #      :size => { :in => 0..10.kilobytes }
+      #
+      def validates_attachment(*attributes)
+        options = attributes.extract_options!.dup
