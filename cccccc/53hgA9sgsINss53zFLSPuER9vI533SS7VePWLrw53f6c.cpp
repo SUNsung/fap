@@ -1,282 +1,451 @@
-#if GTEST_HAS_STD_WSTRING
-  // Converts the given wide string to a narrow string using the UTF-8
-  // encoding, and streams the result to this Message object.
-  Message& operator <<(const ::std::wstring& wstr);
-#endif  // GTEST_HAS_STD_WSTRING
+
+        
+        Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42, typename T43, typename T44, typename T45,
-    typename T46, typename T47>
-internal::ValueArray47<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
-    T44, T45, T46, T47> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7,
-    T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15,
-    T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23,
-    T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31,
-    T32 v32, T33 v33, T34 v34, T35 v35, T36 v36, T37 v37, T38 v38, T39 v39,
-    T40 v40, T41 v41, T42 v42, T43 v43, T44 v44, T45 v45, T46 v46, T47 v47) {
-  return internal::ValueArray47<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39,
-      T40, T41, T42, T43, T44, T45, T46, T47>(v1, v2, v3, v4, v5, v6, v7, v8,
-      v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23,
-      v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34, v35, v36, v37,
-      v38, v39, v40, v41, v42, v43, v44, v45, v46, v47);
-}
+    template <typename Device, typename T>
+struct Reverse<Device, T, 0> {
+  void operator()(const Device& d, typename TTypes<T, 0>::ConstTensor input,
+                  const Eigen::array<bool, 0>& reverse_dims,
+                  typename TTypes<T, 0>::Tensor output) {
+    // Reversing a scalar is copying it.
+    output.device(d) = input;
+  }
+};
     
-    // A macro for testing Google Test assertions or code that's expected to
-// generate Google Test non-fatal failures.  It asserts that the given
-// statement will cause exactly one non-fatal Google Test failure with 'substr'
-// being part of the failure message.
-//
-// There are two different versions of this macro. EXPECT_NONFATAL_FAILURE only
-// affects and considers failures generated in the current thread and
-// EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
-//
-// 'statement' is allowed to reference local variables and members of
-// the current object.
-//
-// The verification of the assertion is done correctly even when the statement
-// throws an exception or aborts the current function.
-//
-// Known restrictions:
-//   - You cannot stream a failure message to this macro.
-//
-// Note that even though the implementations of the following two
-// macros are much alike, we cannot refactor them to use a common
-// helper macro, due to some peculiarity in how the preprocessor
-// works.  If we do that, the code won't compile when the user gives
-// EXPECT_NONFATAL_FAILURE() a statement that contains a macro that
-// expands to code containing an unprotected comma.  The
-// AcceptsMacroThatExpandsToUnprotectedComma test in gtest_unittest.cc
-// catches that.
-//
-// For the same reason, we have to write
-//   if (::testing::internal::AlwaysTrue()) { statement; }
-// instead of
-//   GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement)
-// to avoid an MSVC warning on unreachable code.
-#define EXPECT_NONFATAL_FAILURE(statement, substr) \
-  do {\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
-        (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter:: \
-          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
-      if (::testing::internal::AlwaysTrue()) { statement; }\
-    }\
-  } while (::testing::internal::AlwaysFalse())
+      // Create work vector
+  gtl::InlinedVector<int64, 32> scratch_holder(t_size);
     
-    // Type-parameterized tests are abstract test patterns parameterized
-// by a type.  Compared with typed tests, type-parameterized tests
-// allow you to define the test pattern without knowing what the type
-// parameters are.  The defined pattern can be instantiated with
-// different types any number of times, in any number of translation
-// units.
-//
-// If you are designing an interface or concept, you can define a
-// suite of type-parameterized tests to verify properties that any
-// valid implementation of the interface/concept should have.  Then,
-// each implementation can easily instantiate the test suite to verify
-// that it conforms to the requirements, without having to write
-// similar tests repeatedly.  Here's an example:
-    
-    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
-//
-// TestMetaFactory creates test factories for passing into
-// MakeAndRegisterTestInfo function. Since MakeAndRegisterTestInfo receives
-// ownership of test factory pointer, same factory object cannot be passed
-// into that method twice. But ParameterizedTestCaseInfo is going to call
-// it for each Test/Parameter value combination. Thus it needs meta factory
-// creator class.
-template <class TestCase>
-class TestMetaFactory
-    : public TestMetaFactoryBase<typename TestCase::ParamType> {
- public:
-  typedef typename TestCase::ParamType ParamType;
+    // The current impl actually ignores the axis argument.
+// Only determine the index of the maximum value in the last dimension.
+TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node, bool is_arg_max) {
+  const TfLiteTensor* input = GetInput(context, node, kInputTensor);
+  const TfLiteTensor* axis = GetInput(context, node, kAxis);
+  TfLiteTensor* output = GetOutput(context, node, kOutputTensor);
     }
     
+    namespace {
+// TODO(suharshs): Move this to a common location to allow other part of the
+// repo to use it.
+template <typename T, typename... Args>
+std::unique_ptr<T> MakeUnique(Args&&... args) {
+  return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+}  // namespace
     
-    { private:
-  String();  // Not meant to be instantiated.
-};  // class String
+    
+    {  // Run constant folding operations on the given module. Returns whether the
+  // module was changed (constant expressions folded).
+  StatusOr<bool> Run(HloModule* module) override;
+};
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    
+    {  template <typename Packet>
+  inline Packet packetOp(const Packet& y) const {
+    const Packet one = internal::pset1<Packet>(1);
+    return internal::pmul(internal::psub(one, y), y);
+  }
+};
+    
+    #ifndef TENSORFLOW_PLATFORM_PREFETCH_H_
+#define TENSORFLOW_PLATFORM_PREFETCH_H_
+    
+    
+    {}  // namespace
+    
+    #include <string>
+#include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
+#include 'tensorflow/core/framework/tensor_shape.h'
+#include 'tensorflow/core/framework/tensor_slice.pb.h'
+#include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/lib/core/stringpiece.h'
+#include 'tensorflow/core/lib/gtl/inlined_vector.h'
+#include 'tensorflow/core/platform/logging.h'
+    
+    namespace tensorflow {
+#define REGISTER_COMPLEX(D, R, C)                         \
+  REGISTER_KERNEL_BUILDER(Name('Angle')                   \
+                              .Device(DEVICE_##D)         \
+                              .TypeConstraint<C>('T')     \
+                              .TypeConstraint<R>('Tout'), \
+                          UnaryOp<D##Device, functor::get_angle<C>>);
+    }
+    
+    // WorkloadStats is used to track per request timing for different states
+// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
+// should be made to guard the state change with appropriate timers and
+// counters.
+//
+// The states tracked are:
+//  - In a request (this is a superset of the interpreter state)
+//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
+//  - In the JIT (currently tracks time inside the translate routine)
+//
+// Note the time in the TC is not tracked.  This is roughly:
+//   Time in request - Time in interp
+//
+// This gives us the relative interp time formula of:
+//   Relative interp time = Time in interp / Time in request
+struct WorkloadStats final {
+  enum State {
+    InRequest,
+    // -> InInterp   Okay (entering Dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InInterp,
+    // -> InRequest  Okay (leaving the dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InTrans,
+    // -> InRequest  Okay (leaving translate)
+    // -> InInterp   Okay (leaving translate)
+  };
+    }
+    
+    void HHVM_FUNCTION(xhprof_frame_begin, const String& name) {
+  Profiler *prof = ThreadInfo::s_threadInfo->m_profiler;
+  if (prof) {
+    s_profiler_factory->cacheString(name);
+    prof->beginFrame(name.data());
+  }
+}
     
     
     {
-    {bool RunQuit(const grpc::string& credential_type);
-}  // namespace testing
-}  // namespace grpc
-    
-    std::vector<grpc::testing::Server*>* g_inproc_servers = nullptr;
-    
-    grpc::string DescribeService(const grpc::protobuf::ServiceDescriptor* service) {
-  grpc::string result;
-  if (service->options().deprecated()) {
-    result.append('DEPRECATED\n');
-  }
-  result.append('filename: ' + service->file()->name() + '\n');
-    }
-    
-    
-    {  gpr_subprocess* const subprocess_;
-};
-    
-    int getifaddrs(struct ifaddrs** result) {
-	int fd = socket(PF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
-	if (fd < 0) {
-		return -1;
-	}
-	netlinkrequest ifaddr_request;
-	memset(&ifaddr_request, 0, sizeof(ifaddr_request));
-	ifaddr_request.header.nlmsg_flags = NLM_F_ROOT | NLM_F_REQUEST;
-	ifaddr_request.header.nlmsg_type = RTM_GETADDR;
-	ifaddr_request.header.nlmsg_len = NLMSG_LENGTH(sizeof(ifaddrmsg));
-	ssize_t count = send(fd, &ifaddr_request, ifaddr_request.header.nlmsg_len, 0);
-	if (static_cast<size_t>(count) != ifaddr_request.header.nlmsg_len) {
-		close(fd);
-		return -1;
-	}
-	struct ifaddrs* start = NULL;
-	struct ifaddrs* current = NULL;
-	char buf[kMaxReadSize];
-	ssize_t amount_read = recv(fd, &buf, kMaxReadSize, 0);
-	while (amount_read > 0) {
-		nlmsghdr* header = reinterpret_cast<nlmsghdr*>(&buf[0]);
-		size_t header_size = static_cast<size_t>(amount_read);
-		for ( ; NLMSG_OK(header, header_size);
-		      header = NLMSG_NEXT(header, header_size)) {
-			switch (header->nlmsg_type) {
-			case NLMSG_DONE:
-				// Success. Return.
-				*result = start;
-				close(fd);
-				return 0;
-			case NLMSG_ERROR:
-				close(fd);
-				freeifaddrs(start);
-				return -1;
-			case RTM_NEWADDR: {
-				ifaddrmsg* address_msg =
-						reinterpret_cast<ifaddrmsg*>(NLMSG_DATA(header));
-				rtattr* rta = IFA_RTA(address_msg);
-				ssize_t payload_len = IFA_PAYLOAD(header);
-				while (RTA_OK(rta, payload_len)) {
-					if (rta->rta_type == IFA_ADDRESS) {
-						int family = address_msg->ifa_family;
-						if (family == AF_INET || family == AF_INET6) {
-							ifaddrs* newest = new ifaddrs;
-							memset(newest, 0, sizeof(ifaddrs));
-							if (current) {
-								current->ifa_next = newest;
-							} else {
-								start = newest;
-							}
-							if (populate_ifaddrs(newest, address_msg, RTA_DATA(rta),
-									     RTA_PAYLOAD(rta)) != 0) {
-								freeifaddrs(start);
-								*result = NULL;
-								return -1;
-							}
-							current = newest;
-						}
-					}
-					rta = RTA_NEXT(rta, payload_len);
-				}
-				break;
-			}
-			}
-		}
-		amount_read = recv(fd, &buf, kMaxReadSize, 0);
-	}
-	close(fd);
-	freeifaddrs(start);
-	return -1;
-}
-    
-    	static PoolByteArray get_project_cert_array();
-	static void load_certs_from_memory(const PoolByteArray &p_memory);
-	static bool is_available();
-    
-    void WebSocketClient::_on_disconnect() {
-    }
-    
-    class VehicleBody : public RigidBody {
-    }
-    
-    	// Copy to server's audio buffer
-	switch (AudioServer::get_singleton()->get_speaker_mode()) {
-    }
-    
-    struct GodotRestInfoContactResultCallback : public btCollisionWorld::ContactResultCallback {
-public:
-	const btCollisionObject *m_self_object;
-	PhysicsDirectSpaceState::ShapeRestInfo *m_result;
-	bool m_collided;
-	real_t m_min_distance;
-	const btCollisionObject *m_rest_info_collision_object;
-	btVector3 m_rest_info_bt_point;
-	const Set<RID> *m_exclude;
-    }
-    
-      // Loads a JPEG image from a memory buffer or a file.
-  // req_comps can be 1 (grayscale), 3 (RGB), or 4 (RGBA).
-  // On return, width/height will be set to the image's dimensions, and actual_comps will be set to the either 1 (grayscale) or 3 (RGB).
-  // Notes: For more control over where and how the source data is read, see the decompress_jpeg_image_from_stream() function below, or call the jpeg_decoder class directly.
-  // Requesting a 8 or 32bpp image is currently a little faster than 24bpp because the jpeg_decoder class itself currently always unpacks to either 8 or 32bpp.
-  unsigned char *decompress_jpeg_image_from_memory(const unsigned char *pSrc_data, int src_data_size, int *width, int *height, int *actual_comps, int req_comps);
-  unsigned char *decompress_jpeg_image_from_file(const char *pSrc_filename, int *width, int *height, int *actual_comps, int req_comps);
-    
-    /*The number of bits to output at a time.*/
-# define EC_SYM_BITS   (8)
-/*The total number of bits in each of the state registers.*/
-# define EC_CODE_BITS  (32)
-/*The maximum symbol value.*/
-# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
-/*Bits to shift by to move a symbol into the high-order position.*/
-# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
-/*Carry bit of the high-order range symbol.*/
-# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
-/*Low-order bit of the high-order range symbol.*/
-# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
-/*The number of bits available for the last, partial symbol in the code field.*/
-# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
-#endif
+    {} }
 
     
-    /// Enforce specific types of decoration.
-enum DecorationPoint {
-  DECORATE_LOAD,
-  DECORATE_ALWAYS,
-  DECORATE_INTERVAL,
-};
-    
-    
-    {  if (hr != S_OK) {
-    return Status(-1, 'Error retrieving data from WMI query.');
+    Timer::~Timer() {
+  if (!m_name.empty()) {
+    report();
   }
-  if (value.vt != VT_UINT) {
-    VariantClear(&value);
-    return Status(-1, 'Invalid data type returned.');
-  }
-  ret = value.uiVal;
-  VariantClear(&value);
-  return Status(0);
 }
     
-    struct DiskArbitrationSubscriptionContext : public SubscriptionContext {
-  // Limit events for this subscription to virtual disks (DMG files)
-  bool physical_disks{false};
-};
+    /*
+ * Timing execution of block of codes.
+ */
+struct Timer {
+  enum Type {
+    WallTime,
+    SystemCPU,
+    UserCPU,
+    TotalCPU,
+  };
+  enum ReportType {
+    Log,
+    Stderr,
+    Trace,
+  };
+  enum Who {
+    Self = RUSAGE_SELF,
+    Children = RUSAGE_CHILDREN,
+#ifdef RUSAGE_THREAD
+    Thread = RUSAGE_THREAD,
+#endif
+  };
+    }
     
-    #include <osquery/events.h>
+      /**
+   * Create a task. This returns a task handle, or null object
+   * if there are no worker threads.
+   */
+  static Resource TaskStart(
+    const String& url, const Array& headers,
+    const String& remote_host,
+    const String& post_data = null_string,
+    const Array& files = null_array,
+    int timeoutSeconds = -1,
+    PageletServerTaskEvent *event = nullptr
+  );
+    
+    struct Vframe {
+  Vframe(const Func* func, int parent, int cost, uint64_t entry_weight)
+    : func(func)
+    , parent(parent)
+    , entry_weight(entry_weight)
+    , inclusive_cost(cost)
+    , exclusive_cost(cost)
+  {}
+    }
+    
+    struct Block;
+struct SSATmp;
+    
+    
+    {  switch (op.arg1) {
+  case 0:
+    return success();
+  case 1:
+    return topT(env, 0).subtypeOf(BNum) ? success() : false;
+  case 2:
+    if (topT(env, 0).subtypeOf(BNum) &&
+        topT(env, 1).subtypeOf(BNum)) {
+      return success();
+    }
+    break;
+  }
+  return false;
+}
+    
+    
+    {  return match<bool>(
+    dst,
+    [&] (DeadIter) {
+      match<void>(
+        src,
+        [] (DeadIter) {},
+        [] (const LiveIter&) {
+          always_assert(false && 'merging dead iter with live iter');
+        }
+      );
+      return false;
+    },
+    [&] (LiveIter& diter) {
+      return match<bool>(
+        src,
+        [&] (DeadIter) {
+          always_assert(false && 'merging live iter with dead iter');
+          return false;
+        },
+        [&] (const LiveIter& siter) {
+          auto key = join(diter.types.key, siter.types.key);
+          auto value = join(diter.types.value, siter.types.value);
+          auto const count = mergeCounts(diter.types.count, siter.types.count);
+          auto const throws1 =
+            diter.types.mayThrowOnInit || siter.types.mayThrowOnInit;
+          auto const throws2 =
+            diter.types.mayThrowOnNext || siter.types.mayThrowOnNext;
+          auto const baseLocal = (diter.baseLocal != siter.baseLocal)
+            ? NoLocalId
+            : diter.baseLocal;
+          auto const keyLocal = (diter.keyLocal != siter.keyLocal)
+            ? NoLocalId
+            : diter.keyLocal;
+          auto const initBlock = (diter.initBlock != siter.initBlock)
+            ? NoBlockId
+            : diter.initBlock;
+          auto const changed =
+            !equivalently_refined(key, diter.types.key) ||
+            !equivalently_refined(value, diter.types.value) ||
+            count != diter.types.count ||
+            throws1 != diter.types.mayThrowOnInit ||
+            throws2 != diter.types.mayThrowOnNext ||
+            keyLocal != diter.keyLocal ||
+            baseLocal != diter.baseLocal ||
+            initBlock != diter.initBlock;
+          diter.types =
+            IterTypes {
+              std::move(key),
+              std::move(value),
+              count,
+              throws1,
+              throws2
+            };
+          diter.baseLocal = baseLocal;
+          diter.keyLocal = keyLocal;
+          diter.initBlock = initBlock;
+          return changed;
+        }
+      );
+    }
+  );
+}
+    
+    #include 'hphp/hhbbc/eval-cell.h'
+#include 'hphp/hhbbc/type-system.h'
+    
+      /**
+   * Skip the top frame of the stack. Used to jump over internal frames.
+   */
+  BacktraceArgs& skipTop(bool skipTop = true) {
+    m_skipTop = skipTop;
+    return *this;
+  }
+    
+    #include 'hphp/runtime/base/req-list.h'
+#include 'hphp/runtime/base/request-event-handler.h'
+#include 'hphp/runtime/base/request-local.h'
+#include 'hphp/runtime/base/req-ptr.h'
+#include 'hphp/runtime/base/type-array.h'
+#include 'hphp/runtime/base/type-resource.h'
+#include 'hphp/runtime/base/type-string.h'
+#include 'hphp/runtime/base/type-variant.h'
+    
+    size_t ClusterHistograms(JpegHistogram* histo, size_t* num,
+                         int* histo_indexes, uint8_t* depth) {
+  memset(depth, 0, *num * JpegHistogram::kSize);
+  size_t costs[kMaxComponents];
+  for (size_t i = 0; i < *num; ++i) {
+    histo_indexes[i] = i;
+    std::vector<HuffmanTree> tree(2 * JpegHistogram::kSize + 1);
+    CreateHuffmanTree(histo[i].counts, JpegHistogram::kSize,
+                      kJpegHuffmanMaxBitLength, &tree[0],
+                      &depth[i * JpegHistogram::kSize]);
+    costs[i] = (HistogramHeaderCost(histo[i]) +
+                HistogramEntropyCost(histo[i],
+                                     &depth[i * JpegHistogram::kSize]));
+  }
+  const size_t orig_num = *num;
+  while (*num > 1) {
+    size_t last = *num - 1;
+    size_t second_last = *num - 2;
+    JpegHistogram combined(histo[last]);
+    combined.AddHistogram(histo[second_last]);
+    std::vector<HuffmanTree> tree(2 * JpegHistogram::kSize + 1);
+    uint8_t depth_combined[JpegHistogram::kSize] = { 0 };
+    CreateHuffmanTree(combined.counts, JpegHistogram::kSize,
+                      kJpegHuffmanMaxBitLength, &tree[0], depth_combined);
+    size_t cost_combined = (HistogramHeaderCost(combined) +
+                            HistogramEntropyCost(combined, depth_combined));
+    if (cost_combined < costs[last] + costs[second_last]) {
+      histo[second_last] = combined;
+      histo[last] = JpegHistogram();
+      costs[second_last] = cost_combined;
+      memcpy(&depth[second_last * JpegHistogram::kSize], depth_combined,
+             sizeof(depth_combined));
+      for (size_t i = 0; i < orig_num; ++i) {
+        if (histo_indexes[i] == last) {
+          histo_indexes[i] = second_last;
+        }
+      }
+      --(*num);
+    } else {
+      break;
+    }
+  }
+  size_t total_cost = 0;
+  for (size_t i = 0; i < *num; ++i) {
+    total_cost += costs[i];
+  }
+  return (total_cost + 7) / 8;
+}
+    
+    void OutputImage::ToLinearRGB(int xmin, int ymin, int xsize, int ysize,
+                              std::vector<std::vector<float> >* rgb) const {
+  const double* lut = Srgb8ToLinearTable();
+  std::vector<uint8_t> rgb_pixels = ToSRGB(xmin, ymin, xsize, ysize);
+  for (int p = 0; p < xsize * ysize; ++p) {
+    for (int i = 0; i < 3; ++i) {
+      (*rgb)[i][p] = static_cast<float>(lut[rgb_pixels[3 * p + i]]);
+    }
+  }
+}
+    
+    
+    {}  // namespace guetzli
+
+    
+    #ifndef GUETZLI_DCT_DOUBLE_H_
+#define GUETZLI_DCT_DOUBLE_H_
+    
+    // Computes the DCT (Discrete Cosine Transform) of the 8x8 array in 'block',
+// scaled up by a factor of 16. The values in 'block' are laid out row-by-row
+// and the result is written to the same memory area.
+void ComputeBlockDCT(coeff_t* block);
+    
+    std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg) {
+  if (jpg.components.size() == 1 ||
+      (jpg.components.size() == 3 &&
+       HasYCbCrColorSpace(jpg) && (jpg.Is420() || jpg.Is444()))) {
+    OutputImage img(jpg.width, jpg.height);
+    img.CopyFromJpegData(jpg);
+    return img.ToSRGB();
+  }
+  return std::vector<uint8_t>();
+}
+    
+    #ifndef GUETZLI_JPEG_DATA_DECODER_H_
+#define GUETZLI_JPEG_DATA_DECODER_H_
+    
+    // Single pixel rgb to 16-bit yuv conversion.
+// The returned yuv values are signed integers in the
+// range [-128, 127] inclusive.
+inline static void RGBToYUV16(const uint8_t* const rgb,
+                              coeff_t *out) {
+  enum { FRAC = 16, HALF = 1 << (FRAC - 1) };
+  const int r = rgb[0];
+  const int g = rgb[1];
+  const int b = rgb[2];
+  out[0] = (19595 * r  + 38469 * g +  7471 * b - (128 << 16) + HALF) >> FRAC;
+  out[64] = (-11059 * r - 21709 * g + 32768 * b + HALF - 1) >> FRAC;
+  out[128] = (32768 * r  - 27439 * g -  5329 * b + HALF - 1) >> FRAC;
+}
+    
+    // Parses the jpeg stream contained in data[*pos ... len) and fills in *jpg with
+// the parsed information.
+// If mode is JPEG_READ_HEADER, it fills in only the image dimensions in *jpg.
+// Returns false if the data is not valid jpeg, or if it contains an unsupported
+// jpeg feature.
+bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
+              JPEGData* jpg);
+// string variant
+bool ReadJpeg(const std::string& data, JpegReadMode mode,
+              JPEGData* jpg);
+    
+      // Special case code with only one value.
+  if (total_count == 1) {
+    code.bits = 0;
+    code.value = symbols[0];
+    for (key = 0; key < total_size; ++key) {
+      table[key] = code;
+    }
+    return total_size;
+  }
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
+std::vector<std::vector<float>> PreProcessChannel(
+    int w, int h, int channel, float sigma, float amount, bool blur,
+    bool sharpen, const std::vector<std::vector<float>>& image);
+    
+    // Butteraugli scores that correspond to JPEG quality levels, starting at
+// kLowestQuality. They were computed by taking median BA scores of JPEGs
+// generated using libjpeg-turbo at given quality from a set of PNGs.
+// The scores above quality level 100 are just linearly decreased so that score
+// for 110 is 90% of the score for 100.
+const double kScoreForQuality[] = {
+  2.810761,  // 70
+  2.729300,
+  2.689687,
+  2.636811,
+  2.547863,
+  2.525400,
+  2.473416,
+  2.366133,
+  2.338078,
+  2.318654,
+  2.201674,  // 80
+  2.145517,
+  2.087322,
+  2.009328,
+  1.945456,
+  1.900112,
+  1.805701,
+  1.750194,
+  1.644175,
+  1.562165,
+  1.473608,  // 90
+  1.382021,
+  1.294298,
+  1.185402,
+  1.066781,
+  0.971769,  // 95
+  0.852901,
+  0.724544,
+  0.611302,
+  0.443185,
+  0.211578,  // 100
+  0.209462,
+  0.207346,
+  0.205230,
+  0.203114,
+  0.200999,  // 105
+  0.198883,
+  0.196767,
+  0.194651,
+  0.192535,
+  0.190420,  // 110
+  0.190420,
+};
