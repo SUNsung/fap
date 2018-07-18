@@ -1,180 +1,216 @@
 
         
-        // dims=[5, 4, 3, 2]->[3, 5, 4, 2]
-TEST_F(MatrixTest, RotatingTranspose_2_0) {
-  GENERIC_2D_ARRAY<int> m;
-  src_.RotatingTranspose(dims_, kNumDims_, 2, 0, &m);
-  m.ResizeNoInit(kInputSize_ / 2, 2);
-  // Verify that the result is:
-  // output tensor=[[[[0, 1][6, 7][12, 13][18, 19]]
-  //                 [[24, 25][30, 31][36, 37][42, 43]]
-  //                 [[48, 49][54, 55][60, 61][66, 67]]
-  //                 [[72, 73][78, 79][84, 85][90, 91]]
-  //                 [[96, 97][102, 103][108, 109][114, 115]]]
-  //                [[[2,3]...
-  EXPECT_EQ(0, m(0, 0));
-  EXPECT_EQ(1, m(0, 1));
-  EXPECT_EQ(6, m(1, 0));
-  EXPECT_EQ(7, m(1, 1));
-  EXPECT_EQ(24, m(4, 0));
-  EXPECT_EQ(25, m(4, 1));
-  EXPECT_EQ(30, m(5, 0));
-  EXPECT_EQ(2, m(20, 0));
-}
-    
-    
-    {
-    {      datadir = drive;
-      datadir += dir;
-      datadir += '/tessdata';
+        namespace leveldb {
     }
-#endif /* _WIN32 */
-#if defined(TESSDATA_PREFIX)
-  } else {
-/* Use tessdata prefix which was compiled in. */
-#define _STR(a) #a
-#define _XSTR(a) _STR(a)
-    datadir = _XSTR(TESSDATA_PREFIX) '/tessdata';
-#undef _XSTR
-#undef _STR
-#endif
-  }
     
      private:
-  NormalizationMode norm_mode_;
-  // Character set we are training for.
-  UNICHARSET unicharset_;
-  // Original feature space. Subspace mapping is contained in feature_map_.
-  IntFeatureSpace feature_space_;
-  TrainingSampleSet samples_;
-  TrainingSampleSet junk_samples_;
-  TrainingSampleSet verify_samples_;
-  // Master shape table defines what fonts stay together until the leaves.
-  ShapeTable master_shapes_;
-  // Flat shape table has each unichar/font id pair in a separate shape.
-  ShapeTable flat_shapes_;
-  // Font metrics gathered from multiple files.
-  FontInfoTable fontinfo_table_;
-  // Array of xheights indexed by font ids in fontinfo_table_;
-  GenericVector<int32_t> xheights_;
+  void FindNextUserEntry(bool skipping, std::string* skip);
+  void FindPrevUserEntry();
+  bool ParseKey(ParsedInternalKey* key);
     
-      // Gets a sample by its index.
-  const TrainingSample* GetSample(int index) const;
+      ASSERT_TRUE(ParseInternalKey(in, &decoded));
+  ASSERT_EQ(key, decoded.user_key.ToString());
+  ASSERT_EQ(seq, decoded.sequence);
+  ASSERT_EQ(vt, decoded.type);
     
-    WIN_EXPORT void YGConfigSetContext(const YGConfigRef config, void *context);
-WIN_EXPORT void *YGConfigGetContext(const YGConfigRef config);
+    // Notified when log reader encounters corruption.
+class CorruptionReporter : public log::Reader::Reporter {
+ public:
+  WritableFile* dst_;
+  virtual void Corruption(size_t bytes, const Status& status) {
+    std::string r = 'corruption: ';
+    AppendNumberTo(&r, bytes);
+    r += ' bytes; ';
+    r += status.ToString();
+    r.push_back('\n');
+    dst_->Append(r);
+  }
+};
     
-        Config(void);
+    static std::string MakeFileName(const std::string& name, uint64_t number,
+                                const char* suffix) {
+  char buf[100];
+  snprintf(buf, sizeof(buf), '/%06llu.%s',
+           static_cast<unsigned long long>(number),
+           suffix);
+  return name + buf;
+}
     
-    #include <nbind/api.h>
-#include <nbind/BindDefiner.h>
+    void WriteBatchInternal::SetCount(WriteBatch* b, int n) {
+  EncodeFixed32(&b->rep_[8], n);
+}
     
-     public: // Layout inspectors
+    #include 'leveldb/db.h'
     
-    #include <nbind/nbind.h>
     
-      void reset(T* other = NULL) {
-    T* old = (T*)pthread_getspecific(m_key);
-    if (old != other) {
-      FBASSERT(m_cleanup);
-      m_cleanup(old);
-      pthread_setspecific(m_key, other);
+    {    done_++;
+    if (done_ >= next_report_) {
+      if      (next_report_ < 1000)   next_report_ += 100;
+      else if (next_report_ < 5000)   next_report_ += 500;
+      else if (next_report_ < 10000)  next_report_ += 1000;
+      else if (next_report_ < 50000)  next_report_ += 5000;
+      else if (next_report_ < 100000) next_report_ += 10000;
+      else if (next_report_ < 500000) next_report_ += 50000;
+      else                            next_report_ += 100000;
+      fprintf(stderr, '... finished %d ops%30s\r', done_, '');
+      fflush(stderr);
     }
   }
     
-            // Register our message handler
-        echo_server.set_message_handler(bind(&on_message,&echo_server,::_1,::_2));
     
-        websocket::async_echo_server s1{&std::cout, 1};
-    s1.set_option(read_message_max{64 * 1024 * 1024});
-    s1.set_option(auto_fragment{false});
-    s1.set_option(pmd);
-    s1.open(endpoint_type{
-        address_type::from_string('0.0.0.0'), 3000 }, ec);
+    {  leveldb::Benchmark benchmark;
+  benchmark.Run();
+  return 0;
+}
+
     
-        // this is a shared upgrade, no need to make it unique
-    const char *buf = 'GET /socket.io/?EIO=4&transport=websocket HTTP/1.1\r\n'
-                      'Host: server.example.com\r\n'
-                      'Upgrade: websocket\r\n'
-                      'Connection: Upgrade\r\n'
-                      'Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==\r\n'
-                      'Sec-WebSocket-Version: 13\r\n\r\n';
-    
-    int main(int argc, char *argv[])
-{
-    // Read arguments
-    if (argc != 5) {
-        cout << 'Usage: throughput numberOfConnections payloadByteSize framesPerSend port' << endl;
-        return -1;
-    }
+    namespace leveldb {
     }
     
+    // Dump the contents of the file named by fname in text format to
+// *dst.  Makes a sequence of dst->Append() calls; each call is passed
+// the newline-terminated text corresponding to a single item found
+// in the file.
+//
+// Returns a non-OK result if fname does not name a leveldb storage
+// file, or if the file cannot be read.
+Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
     
-    {            static size_t transform(const char *src, char *dst, size_t length, int transformData) {
-                memcpy(dst, src, length);
-                return length;
-            }
-        };
+    #define REGISTER_LAYER_CLASS(type)                                             \
+  template <typename Dtype>                                                    \
+  shared_ptr<Layer<Dtype> > Creator_##type##Layer(const LayerParameter& param) \
+  {                                                                            \
+    return shared_ptr<Layer<Dtype> >(new type##Layer<Dtype>(param));           \
+  }                                                                            \
+  REGISTER_LAYER_CREATOR(type, Creator_##type##Layer)
     
-    #ifdef _WIN32
-#define NOMINMAX
-#include <WinSock2.h>
-#include <Ws2tcpip.h>
-#pragma comment(lib, 'ws2_32.lib')
-#define SHUT_WR SD_SEND
-#ifdef __MINGW32__
-// Windows has always been tied to LE
-#define htobe64(x) __builtin_bswap64(x)
-#define be64toh(x) __builtin_bswap64(x)
-#else
-#define __thread __declspec(thread)
-#define htobe64(x) htonll(x)
-#define be64toh(x) ntohll(x)
-#define pthread_t DWORD
-#define pthread_self GetCurrentThreadId
-#endif
-#define WIN32_EXPORT __declspec(dllexport)
-    
-            // 15 bytes
-        unsigned char spill[LONG_MESSAGE_HEADER - 1];
-        OpCode opCode[2];
-    
-        if (dynamicZlibBuffer.length()) {
-        dynamicZlibBuffer.append(zlibBuffer, DEFLATE_OUTPUT_CHUNK - compressor->avail_out);
+    #ifdef USE_CUDNN
+/**
+ * @brief cuDNN implementation of SoftmaxLayer.
+ *        Fallback to SoftmaxLayer for CPU mode.
+ */
+template <typename Dtype>
+class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
+ public:
+  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
+      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSoftmaxLayer();
     }
     
-    template <bool isServer>
-void WebSocket<isServer>::onEnd(uS::Socket *s) {
-    WebSocket<isServer> *webSocket = static_cast<WebSocket<isServer> *>(s);
+      virtual inline const char* type() const { return 'Eltwise'; }
+  virtual inline int MinBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+      virtual inline const char* type() const { return 'ELU'; }
+    
+      virtual inline const char* type() const { return 'Exp'; }
+    
+    
+    {  // Gate weight arrays of size [na + 1, no].
+  WeightMatrix gate_weights_[WT_COUNT];
+  // Used only if this is a softmax LSTM.
+  FullyConnected* softmax_;
+  // Input padded with previous output of size [width, na].
+  NetworkIO source_;
+  // Internal state used during forward operation, of size [width, ns].
+  NetworkIO state_;
+  // State of the 2-d maxpool, generated during forward, used during backward.
+  GENERIC_2D_ARRAY<int8_t> which_fg_;
+  // Internal state saved from forward, but used only during backward.
+  NetworkIO node_values_[WT_COUNT];
+  // Preserved input stride_map used for Backward when NT_LSTM_SQUASHED.
+  StrideMap input_map_;
+  int input_width_;
+};
+    
+    void ResultIterator::AppendUTF8WordText(STRING *text) const {
+  if (!it_->word()) return;
+  ASSERT_HOST(it_->word()->best_choice != nullptr);
+  bool reading_direction_is_ltr =
+      current_paragraph_is_ltr_ ^ in_minor_direction_;
+  if (at_beginning_of_minor_run_) {
+    *text += reading_direction_is_ltr ? kLRM : kRLM;
+  }
+    }
+    
+      // Writes to the given file. Returns false in case of error.
+  bool Serialize(FILE* fp) const;
+  // Reads from the given file. Returns false in case of error.
+  // If swap is true, assumes a big/little-endian swap is needed.
+  bool DeSerialize(bool swap, FILE* fp);
+    
+      // Accessors.
+  bool is_int_mode() const {
+    return int_mode_;
+  }
+  int NumOutputs() const { return int_mode_ ? wi_.dim1() : wf_.dim1(); }
+  // Provides one set of weights. Only used by peep weight maxpool.
+  const double* GetWeights(int index) const { return wf_[index]; }
+  // Provides access to the deltas (dw_).
+  double GetDW(int i, int j) const { return dw_(i, j); }
+    
+      // This method resolves the cc bbox to a particular row and returns the row's
+  // xheight. This uses block_list_ if available, else just returns the
+  // global_xheight_ estimate currently set in the object.
+  int GetXheightForCC(Box* cc_bbox);
+    
+    /*
+XXH32() :
+    Calculate the 32-bits hash of sequence of length 'len' stored at memory address 'input'.
+    The memory between input & input+len must be valid (allocated and read-accessible).
+    'seed' can be used to alter the result predictably.
+    This function successfully passes all SMHasher tests.
+    Speed on Core 2 Duo @ 3 GHz (single thread, SMHasher benchmark) : 5.4 GB/s
+    Note that 'len' is type 'int', which means it is limited to 2^31-1.
+    If your data is larger, use the advanced functions below.
+*/
+    
+    class StringAppendTESTOperator : public MergeOperator {
+ public:
+  // Constructor with delimiter
+  explicit StringAppendTESTOperator(char delim_char);
+    }
+    
+     public: // Delete / Remove / Pop / Trim
+  /// Trim (list: key) so that it will only contain the indices from start..stop
+  /// Returns true on success
+  /// May throw RedisListException
+  bool Trim(const std::string& key, int32_t start, int32_t stop);
+    
+    namespace rocksdb {
     }
     
     
-    {}
+    {   private:
+     const std::set<uint32_t> m_ignore_histograms;
+ };
     
-    #include <napa/v8-helpers.h>
+    void SyncPoint::ClearAllCallBacks() {
+  impl_->ClearAllCallBacks();
+}
     
-    /// <summary> The maximum message length of a single assert call. Anything over will be truncated. </summary>
-static constexpr size_t MAX_ASSERT_MESSAGE_SIZE = 512;
+    #include <jni.h>
+#include <memory>
+#include <string>
+#include 'rocksjni/jnicallback.h'
+#include 'port/port.h'
+#include 'rocksdb/env.h'
     
-        /// <summary> Interface for allocator. </summary>
-    class Allocator {
-    public:
-        /// <summary> Allocate memory of given size. </summary>
-        /// <param name='size'> Requested size. </summary>
-        /// <returns> Allocated memory. May throw if error happens. </returns>
-        virtual void* Allocate(size_t size) = 0;
-    }
-    
-            CHECK_ARG(isolate, args.Length() == 0, 'class \'%s\' doesn't accept any arguments in constructor.'', WrapType::exportName);
-        JS_ENSURE(isolate, args.IsConstructCall(), 'class \'%s\' allows constructor call only.', WrapType::exportName);
-    
-    namespace napa {
-namespace module {
-    }
-    }
-    
-            template <class T>
-        static inline T* Unwrap(v8::Local<v8::Object> handle) {
-            assert(!handle.IsEmpty());
-            assert(handle->InternalFieldCount() > 0);
-    }
+      /**
+   * COMPACTION_KEY_DROP_* count the reasons for key drop during compaction
+   * There are 4 reasons currently.
+   */
+  COMPACTION_KEY_DROP_NEWER_ENTRY,  // key was written with a newer value.
+                                    // Also includes keys dropped for range del.
+  COMPACTION_KEY_DROP_OBSOLETE,     // The key is obsolete.
+  COMPACTION_KEY_DROP_RANGE_DEL,    // key was covered by a range tombstone.
+  COMPACTION_KEY_DROP_USER,  // user compaction function has dropped the key.
+  COMPACTION_RANGE_DEL_DROP_OBSOLETE,  // all keys in range were deleted.
+  // Deletions obsoleted before bottom level due to file gap optimization.
+  COMPACTION_OPTIMIZED_DEL_DROP_OBSOLETE,
+  // If a compaction was cancelled in sfm to prevent ENOSPC
+  COMPACTION_CANCELLED,
