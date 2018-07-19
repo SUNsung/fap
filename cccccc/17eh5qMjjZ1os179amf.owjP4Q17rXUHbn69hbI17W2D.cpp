@@ -1,206 +1,188 @@
-#endif  // ATOM_COMMON_DRAGGABLE_REGION_H_
+
+        
+        
+    {
+    {        double startWeight = cvtest::randReal(rng);
+        CV_Assert(arr.type() == CV_64FC2);
+        arr.at<Point2d>(modifiedPointIndex) = startWeight * arr.at<Point2d>(startPointIndex) + (1.0 - startWeight) * arr.at<Point2d>(endPointIndex);
+    }
+}
+    
+    #endif //HAVE_LAPACK
+#endif //OPENCV_CORE_HAL_INTERNAL_HPP
 
     
-    #include 'content/public/browser/web_contents_observer.h'
-#include 'ui/gfx/native_widget_types.h'
     
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
+    {  GetReporter()->ReportQPS(*result);
+  GetReporter()->ReportLatency(*result);
+}
+    
+    gpr_atm grpc::testing::interop::g_got_sigint;
+    
+    double UsageTimer::Now() {
+  auto ts = gpr_now(GPR_CLOCK_REALTIME);
+  return ts.tv_sec + 1e-9 * ts.tv_nsec;
 }
     
     
-    {  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method(
-      routing_id,
-      object_id,
-      type,
-      method,
-      *static_cast<base::ListValue*>(value_args.get())));
-  return v8::Undefined(isolate);
+    {
+    {}  // namespace testing
+}  // namespace grpc
+    
+      // Proto2 Python
+  google::protobuf::compiler::python::Generator py_generator;
+  cli.RegisterGenerator('--python_out', &py_generator,
+                        'Generate Python source file.');
+    
+        for (const auto& fromNode : fromNet.GetEvalOrder(fromRoot)) // BUGBUG: This probably will fail because the precomputed eval orders are invalid at this point.
+    {
+        wstring fromNodeName = fromNode->NodeName();
+        wstring toNodeName = toNamePrefix + fromNodeName;
+    }
+    
+        float alpha = 1.0f * rng() / rng.max();
+    Matrix<float>::ScaleAndAdd(alpha, mAdense, mBdense);
+    
+    #pragma comment(lib, 'cudart.lib')
+    
+    function<ComputationNetworkPtr(DEVICEID_TYPE)> GetCreateNetworkFn(const ConfigParameters&)
+{
+    NOT_IMPLEMENTED;
+} // old CNTK config does not support lambdas
+    
+    // Data Writer interface
+// implemented by some DataWriters
+class DATAWRITER_API IDataWriter
+{
+public:
+    typedef std::string LabelType;
+    typedef unsigned int LabelIdType;
+    }
+    
+    // ---------------------------------------------------------------------------
+// latticesource -- manages loading of lattices for MMI (in pairs for numer and denom)
+// ---------------------------------------------------------------------------
+    
+    template <class _T, int _N>
+class hardcoded_array
+{
+    _T data[_N];
+    inline void check_index(size_t i) const
+    {
+        i;
+        assert(i < _N);
+    }
+    inline void check_size(size_t n) const
+    {
+        n;
+        assert(n == _N);
+    }
+    }
+    
+    #ifdef _WIN32
+#include <intrin.h> // for intrinsics
+#endif
+#ifdef __unix__
+#include <x86intrin.h>
+#endif
+    
+    // ===================================================================
+// behave like a config
+// This allows to access nodes inside a network as if it was an IConfigRecord.
+// This is meant to be used by whatever we will replace MEL.
+// ===================================================================
+    
+    template <typename ElemType>
+class CNTKEvalBase : public IEvaluateModelBase<ElemType>
+{
+protected:
+    typedef shared_ptr<ComputationNode<ElemType>> ComputationNodePtr;
+    ConfigParameters m_config;
+    ComputationNetworkPtr m_net;
+    }
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     JPEGData* jpg) {
+  static const int quant[3 * kDCTBlockSize] = {
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  };
+  return EncodeRGBToJpeg(rgb, w, h, quant, jpg);
 }
     
-    #include 'base/strings/string_piece.h'
-#include 'v8/include/v8.h'
+    struct JpegHistogram {
+  static const int kSize = kJpegHuffmanAlphabetSize + 1;
+    }
     
-    
-    {  DISALLOW_COPY_AND_ASSIGN(Clipboard);
+    enum JPEGReadError {
+  JPEG_OK = 0,
+  JPEG_SOI_NOT_FOUND,
+  JPEG_SOF_NOT_FOUND,
+  JPEG_UNEXPECTED_EOF,
+  JPEG_MARKER_BYTE_NOT_FOUND,
+  JPEG_UNSUPPORTED_MARKER,
+  JPEG_WRONG_MARKER_SIZE,
+  JPEG_INVALID_PRECISION,
+  JPEG_INVALID_WIDTH,
+  JPEG_INVALID_HEIGHT,
+  JPEG_INVALID_NUMCOMP,
+  JPEG_INVALID_SAMP_FACTOR,
+  JPEG_INVALID_START_OF_SCAN,
+  JPEG_INVALID_END_OF_SCAN,
+  JPEG_INVALID_SCAN_BIT_POSITION,
+  JPEG_INVALID_COMPS_IN_SCAN,
+  JPEG_INVALID_HUFFMAN_INDEX,
+  JPEG_INVALID_QUANT_TBL_INDEX,
+  JPEG_INVALID_QUANT_VAL,
+  JPEG_INVALID_MARKER_LEN,
+  JPEG_INVALID_SAMPLING_FACTORS,
+  JPEG_INVALID_HUFFMAN_CODE,
+  JPEG_INVALID_SYMBOL,
+  JPEG_NON_REPRESENTABLE_DC_COEFF,
+  JPEG_NON_REPRESENTABLE_AC_COEFF,
+  JPEG_INVALID_SCAN,
+  JPEG_OVERLAPPING_SCANS,
+  JPEG_INVALID_SCAN_ORDER,
+  JPEG_EXTRA_ZERO_RUN,
+  JPEG_DUPLICATE_DRI,
+  JPEG_DUPLICATE_SOF,
+  JPEG_WRONG_RESTART_MARKER,
+  JPEG_DUPLICATE_COMPONENT_ID,
+  JPEG_COMPONENT_NOT_FOUND,
+  JPEG_HUFFMAN_TABLE_NOT_FOUND,
+  JPEG_HUFFMAN_TABLE_ERROR,
+  JPEG_QUANT_TABLE_NOT_FOUND,
+  JPEG_EMPTY_DHT,
+  JPEG_EMPTY_DQT,
+  JPEG_OUT_OF_BAND_COEFF,
+  JPEG_EOB_RUN_TOO_LONG,
+  JPEG_IMAGE_TOO_LARGE,
 };
     
-    
-#include 'content/nw/src/api/event/event.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/dispatcher_host.h'
-#include 'ui/gfx/screen.h'
-    
-    
-    {  template<typename T> bool RemoveListener() {
-    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
-    if (i!=listerners_.end()) {
-      delete i->second;
-      listerners_.erase(i);
-      return true;
+      // Fill in root table.
+  key = 0;
+  idx = 0;
+  for (len = 1; len <= kJpegHuffmanRootTableBits; ++len) {
+    for (; count[len] > 0; --count[len]) {
+      code.bits = len;
+      code.value = symbols[idx++];
+      reps = 1 << (kJpegHuffmanRootTableBits - len);
+      while (reps--) {
+        table[key++] = code;
+      }
     }
-    return false;
   }
-private:
-  DISALLOW_COPY_AND_ASSIGN(EventListener);
-};
     
-       bool HasIcon(int command_id) override;
-    
-    #include 'base/logging.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/nw/src/nw_shell.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/browser/render_widget_host_view.h'
-#include 'ui/gfx/point.h'
-#include 'vector'
-#include 'gtk/gtk.h'
-    
-    NwMenuModel::NwMenuModel(Delegate* delegate) : SimpleMenuModel(delegate) {
-}
-    
-    void MenuItem::Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh) {
-  if (method == 'SetLabel') {
-    std::string label;
-    arguments.GetString(0, &label);
-    SetLabel(label);
-  } else if (method == 'SetIcon') {
-    std::string icon;
-    arguments.GetString(0, &icon);
-    SetIcon(icon);
-  } else if (method == 'SetIconIsTemplate') {
-    bool isTemplate;
-    arguments.GetBoolean(0, &isTemplate);
-    SetIconIsTemplate(isTemplate);
-  } else if (method == 'SetTooltip') {
-    std::string tooltip;
-    arguments.GetString(0, &tooltip);
-    SetTooltip(tooltip);
-  } else if (method == 'SetEnabled') {
-    bool enabled = true;
-    arguments.GetBoolean(0, &enabled);
-    SetEnabled(enabled);
-  } else if (method == 'SetChecked') {
-    bool checked = false;
-    arguments.GetBoolean(0, &checked);
-    SetChecked(checked);
-  } else if (method == 'SetSubmenu') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    SetSubmenu(object_manager()->GetApiObject<Menu>(object_id));
-#if defined(OS_MACOSX)
-  } else if (method == 'SetKey') {
-    std::string key;
-    arguments.GetString(0, &key);
-    SetKey(key);
-  } else if (method == 'SetModifiers') {
-    std::string mod;
-    arguments.GetString(0, &mod);
-    SetModifiers(mod);
-#endif
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    namespace extensions {
-    }
-    
-    void NwDesktopCaptureMonitor::OnSourceThumbnailChanged(DesktopMediaList* list, int index) {
-    std::string base64;
-    }
-    
-    static HRESULT InitDevice()
-{
-    HRESULT hr = S_OK;
-    }
-    
-    
-    {    if(start_x == -1)
-    {
-        return 0;
-    }
-    else
-    {
-        low_thresh = cvRound(max_start_x + 0.25*(max_end_x - max_start_x));
-        high_thresh = cvRound(max_start_x + 0.75*(max_end_x - max_start_x));
-        return 1;
-    }
-}
-    
-    
-    {
-    {                return count;
-#else
-                return ::atomicMin(address, val);
-#endif
-            }
-        }; // struct cmem
-    
-    #include 'runtime_common.hpp'
-    
-      EventTappingEventPublisher() : EventPublisher() {}
-    
-     private:
-  /**
-   * @brief The existing configure-time discovered path.
-   *
-   * The FSEvents publisher expects paths from a configuration to contain
-   * filesystem globbing wildcards, as opposed to SQL wildcards. It also expects
-   * paths to be canonicalized up to the first wildcard. To FSEvents a double
-   * wildcard, meaning recursive, is a watch on the base path string. A single
-   * wildcard means the same watch but a preserved globbing pattern, which is
-   * applied at event-fire time to limit subscriber results.
-   *
-   * This backup will allow post-fire subscriptions to match. It will also allow
-   * faster reconfigures by not performing string manipulation twice.
-   */
-  std::string discovered_;
-    
-    #pragma once
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // This class implements debug drawing callbacks that are invoked
-// inside b2World::Step.
-class GLESDebugDraw : public b2Draw
-{
-    float32 mRatio;
-    cocos2d::GLProgram* mShaderProgram;
-    GLint        mColorLocation;
-    }
-    
-        void DrawTitle(const char *string);
-	virtual void Step(Settings* settings);
-	virtual void Keyboard(unsigned char key) { B2_NOT_USED(key); }
-	virtual void KeyboardUp(unsigned char key) { B2_NOT_USED(key); }
-	void ShiftMouseDown(const b2Vec2& p);
-	virtual bool MouseDown(const b2Vec2& p);
-	virtual void MouseUp(const b2Vec2& p);
-	void MouseMove(const b2Vec2& p);
-	void LaunchBomb();
-	void LaunchBomb(const b2Vec2& position, const b2Vec2& velocity);
-	
-	void SpawnBomb(const b2Vec2& worldPt);
-	void CompleteBombSpawn(const b2Vec2& p);
-    
-    			b2FixtureDef sd;
-			sd.shape = &shape;
-			sd.density = 0.0f;
-			sd.restitution = k_restitution;
-    
-    #endif
+      void ToLinearRGB(std::vector<std::vector<float> >* rgb) const;
