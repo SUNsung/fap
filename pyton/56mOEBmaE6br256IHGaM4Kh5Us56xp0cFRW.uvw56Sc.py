@@ -1,101 +1,191 @@
 
         
         
+@pytest.mark.functional
+def test_without_confirmation(proc, TIMEOUT):
+    without_confirmation(proc, TIMEOUT)
     
-    from scrapy.http import Request, Response
-from scrapy.middleware import MiddlewareManager
-from scrapy.utils.defer import mustbe_deferred
-from scrapy.utils.conf import build_component_list
+    # (c) 2015, Marc Abramowitz <marca@surveymonkey.com>
+#
+# This file is part of Ansible.
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible. If not, see <http://www.gnu.org/licenses/>.
     
-    
-class DownloadTimeoutMiddleware(object):
-    
-        @classmethod
-    def from_crawler(cls, crawler):
-        return cls(crawler)
-    
-    A Parser needs a TokenStream as input (which in turn is usually fed by a
-Lexer):
-    
-            self.decisionNumber = decisionNumber
-        self.eot = eot
-        self.eof = eof
-        self.min = min
-        self.max = max
-        self.accept = accept
-        self.special = special
-        self.transition = transition
-    
-        To avoid English-only error messages and to generally make things
-    as flexible as possible, these exceptions are not created with strings,
-    but rather the information necessary to generate an error.  Then
-    the various reporting methods in Parser and Lexer can be overridden
-    to generate a localized error message.  For example, MismatchedToken
-    exceptions are built with the expected token type.
-    So, don't expect getMessage() to return anything.
-    
-            self.error(nvae)
-        raise nvae
-    
-            self.node = nodes.LT(1)
-        adaptor = nodes.adaptor
-        payload = adaptor.getToken(self.node)
-        if payload is not None:
-            self.token = payload
-            if payload.line <= 0:
-                # imaginary node; no line/pos info; scan backwards
-                i = -1
-                priorNode = nodes.LT(i)
-                while priorNode is not None:
-                    priorPayload = adaptor.getToken(priorNode)
-                    if priorPayload is not None and priorPayload.line > 0:
-                        # we found the most recent real line / pos info
-                        self.line = priorPayload.line
-                        self.charPositionInLine = priorPayload.charPositionInLine
-                        self.approximateLineInfo = True
-                        break
-    
-        >>> Point = namedtuple('Point', 'x y')
-    >>> Point.__doc__                   # docstring for the new class
-    'Point(x, y)'
-    >>> p = Point(11, y=22)             # instantiate with positional args or keywords
-    >>> p[0] + p[1]                     # indexable like a plain tuple
-    33
-    >>> x, y = p                        # unpack like a regular tuple
-    >>> x, y
-    (11, 22)
-    >>> p.x + p.y                       # fields also accessable by name
-    33
-    >>> d = p._asdict()                 # convert to a dictionary
-    >>> d['x']
-    11
-    >>> Point(**d)                      # convert from a dictionary
-    Point(x=11, y=22)
-    >>> p._replace(x=100)               # _replace() is like str.replace() but targets named fields
-    Point(x=100, y=22)
-    
-    
-def ExtractKeywordsFromGroup_KeywordMiddle_test():
-  assert_that( syntax_parse._ExtractKeywordsFromGroup(
-                 syntax_parse.SyntaxGroup( '', [
-                   'foo contained bar',
-                   'zoo goo'
-                 ] ) ),
-               contains_inanyorder( 'foo', 'contained', 'bar', 'zoo', 'goo' ) )
-    
-        raise RuntimeError( 'Path in 'g:ycm_server_python_interpreter' option '
-                        'does not point to a valid Python 2.7 or 3.4+.' )
-    
-      for path in not_python_paths:
-    yield EndsWithPython_Bad, path
+        if s1.st_dev != s2.st_dev:
+        return True     # path/.. on a different device as path
+    if s1.st_ino == s2.st_ino:
+        return True     # path/.. is the same i-node as path, i.e. path=='/'
+    return False
 
     
-      if 'COVERAGE' in os.environ:
-    parsed_args.coverage = ( os.environ[ 'COVERAGE' ] == 'true' )
+        def on_open_shell(self):
+        try:
+            for cmd in (b'set terminal length 0', b'set terminal width 512'):
+                self._exec_cli_command(cmd)
+            self._exec_cli_command(b'set terminal length %d' % self.terminal_length)
+        except AnsibleConnectionFailure:
+            raise AnsibleConnectionFailure('unable to set terminal parameters')
+
     
+            return contracts
     
-def SendEventNotificationAsync( event_name,
-                                buffer_number = None,
-                                extra_data = None ):
-  event = EventNotification( event_name, buffer_number, extra_data )
-  event.Start()
+        def __init__(self, crawler):
+        self._crawler = crawler
+        self._schemes = {}  # stores acceptable schemes on instancing
+        self._handlers = {}  # stores instanced handlers for schemes
+        self._notconfigured = {}  # remembers failed handlers
+        handlers = without_none_values(
+            crawler.settings.getwithbase('DOWNLOAD_HANDLERS'))
+        for scheme, clspath in six.iteritems(handlers):
+            self._schemes[scheme] = clspath
+    
+            def process_spider_exception(_failure):
+            exception = _failure.value
+            for method in self.methods['process_spider_exception']:
+                result = method(response=response, exception=exception, spider=spider)
+                assert result is None or _isiterable(result), \
+                    'Middleware %s must returns None, or an iterable object, got %s ' % \
+                    (fname(method), type(result))
+                if result is not None:
+                    return result
+            return _failure
+    
+        def request_seen(self, request):
+        return False
+    
+            total_count = 0
+        translated_count = 0
+        with open(fn) as f:
+            catalog = read_po(f)
+            for msg in catalog:
+                total_count += 1
+                if is_translated(msg):
+                    translated_count += 1
+        pct = translated_count / float(total_count) * 100
+        click.echo('% -7s % 2d%%' % (
+            locale,
+            pct,
+        ), err=True)
+        if pct >= MINIMUM and locale not in rv:
+            rv.append(locale)
+    with open(catalog_file, 'w') as f:
+        json.dump({
+            'supported_locales': sorted(rv)
+        }, f, indent=2)
+        f.write('\n')
+    
+    '''Functions for evaluating results computed for a json dataset.'''
+    
+                # union
+            uni = ((bb[2] - bb[0] + 1.) * (bb[3] - bb[1] + 1.) +
+                   (BBGT[:, 2] - BBGT[:, 0] + 1.) *
+                   (BBGT[:, 3] - BBGT[:, 1] + 1.) - inters)
+    
+    logger = logging.getLogger(__name__)
+    
+        # ==========================================================================
+    # classification tower with logits and prob prediction
+    # ==========================================================================
+    for lvl in range(k_min, k_max + 1):
+        bl_in = blobs_in[k_max - lvl]  # blobs_in is in reversed order
+        # classification tower stack convolution starts
+        for nconv in range(cfg.RETINANET.NUM_CONVS):
+            suffix = 'n{}_fpn{}'.format(nconv, lvl)
+            dim_in, dim_out = dim_in, dim_in
+            if lvl == k_min:
+                bl_out = model.Conv(
+                    bl_in,
+                    'retnet_cls_conv_' + suffix,
+                    dim_in,
+                    dim_out,
+                    3,
+                    stride=1,
+                    pad=1,
+                    weight_init=('GaussianFill', {
+                        'std': 0.01
+                    }),
+                    bias_init=('ConstantFill', {
+                        'value': 0.
+                    })
+                )
+            else:
+                bl_out = model.ConvShared(
+                    bl_in,
+                    'retnet_cls_conv_' + suffix,
+                    dim_in,
+                    dim_out,
+                    3,
+                    stride=1,
+                    pad=1,
+                    weight='retnet_cls_conv_n{}_fpn{}_w'.format(nconv, k_min),
+                    bias='retnet_cls_conv_n{}_fpn{}_b'.format(nconv, k_min)
+                )
+            bl_in = model.Relu(bl_out, bl_out)
+            bl_feat = bl_in
+        # cls tower stack convolution ends. Add the logits layer now
+        if lvl == k_min:
+            retnet_cls_pred = model.Conv(
+                bl_feat,
+                'retnet_cls_pred_fpn{}'.format(lvl),
+                dim_in,
+                cls_pred_dim * A,
+                3,
+                pad=1,
+                stride=1,
+                weight_init=('GaussianFill', {
+                    'std': 0.01
+                }),
+                bias_init=bias_init
+            )
+        else:
+            retnet_cls_pred = model.ConvShared(
+                bl_feat,
+                'retnet_cls_pred_fpn{}'.format(lvl),
+                dim_in,
+                cls_pred_dim * A,
+                3,
+                pad=1,
+                stride=1,
+                weight='retnet_cls_pred_fpn{}_w'.format(k_min),
+                bias='retnet_cls_pred_fpn{}_b'.format(k_min)
+            )
+        if not model.train:
+            if cfg.RETINANET.SOFTMAX:
+                model.net.GroupSpatialSoftmax(
+                    retnet_cls_pred,
+                    'retnet_cls_prob_fpn{}'.format(lvl),
+                    num_classes=cls_pred_dim
+                )
+            else:
+                model.net.Sigmoid(
+                    retnet_cls_pred, 'retnet_cls_prob_fpn{}'.format(lvl)
+                )
+        if cfg.RETINANET.SHARE_CLS_BBOX_TOWER:
+            bbox_feat_list.append(bl_feat)
+    
+        def _run_speed_test(self, iters=5, N=1024):
+        '''This function provides an example of how to benchmark custom
+        operators using the Caffe2 'prof_dag' network execution type. Please
+        note that for 'prof_dag' to work, Caffe2 must be compiled with profiling
+        support using the `-DUSE_PROF=ON` option passed to `cmake` when building
+        Caffe2.
+        '''
+        net = core.Net('test')
+        net.Proto().type = 'prof_dag'
+        net.Proto().num_workers = 2
+        Y = net.BatchPermutation(['X', 'I'], 'Y')
+        Y_flat = net.FlattenToVec([Y], 'Y_flat')
+        loss = net.AveragedLoss([Y_flat], 'loss')
+        net.AddGradientOperators([loss])
+        workspace.CreateNet(net)
