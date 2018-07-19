@@ -1,83 +1,80 @@
 
         
-            def find_remote(username, domain)
-      AccountFinder.new(username, domain).account
+              assert_equal 3, ratings.count
     end
+    
+      has_many :replies, dependent: :destroy, foreign_key: 'parent_id', autosave: true
+  has_many :approved_replies, -> { approved }, class_name: 'Reply', foreign_key: 'parent_id', counter_cache: 'replies_count'
+    
+        # Proc arg
+    periodically -> { ping }, every: 2
+    
+      class StreamTest < ActionCable::TestCase
+    test 'streaming start and stop' do
+      run_in_eventmachine do
+        connection = TestConnection.new
+        pubsub = Minitest::Mock.new connection.pubsub
+    
+    html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
+readme_doctree = REXML::Document.new(html_readme)
+links = REXML::XPath.match(readme_doctree, '//a')
+    
+      get(/.+/) do
+    send_sinatra_file(request.path) {404}
   end
     
-      # Before we load the schema, define the timestamp_id function.
-  # Idiomatically, we might do this in a migration, but then it
-  # wouldn't end up in schema.rb, so we'd need to figure out a way to
-  # get it in before doing db:setup as well. This is simpler, and
-  # ensures it's always in place.
-  Rake::Task['db:schema:load'].enhance ['db:define_timestamp_id']
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
     
-      def id
-    ActivityPub::TagManager.instance.uri_for(object)
-  end
+      class ImageTag < Liquid::Tag
+    @img = nil
     
-    if profile_filename = ENV['PROFILE']
-  require 'ruby-prof'
-  reporter =
-    case (profile_extname = File.extname(profile_filename))
-    when '.txt'
-      RubyProf::FlatPrinterWithLineNumbers
-    when '.html'
-      RubyProf::GraphHtmlPrinter
-    when '.callgrind'
-      RubyProf::CallTreePrinter
-    else
-      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
-    end
-  File.open(profile_filename, 'w') do |io|
-    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
-  end
-else
-  Pod::Command.run(ARGV)
-end
-
+      class VideoTag < Liquid::Tag
+    @video = nil
+    @poster = ''
+    @height = ''
+    @width = ''
     
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
-        end
-      end
+        def type_from_file_command
+      @type_from_file_command ||=
+        FileCommandContentTypeDetector.new(@filepath).detect
     end
   end
 end
 
     
-            # Clones the template from the remote in the working directory using
-        # the name of the Pod.
-        #
-        # @return [void]
-        #
-        def clone_template
-          UI.section('Cloning `#{template_repo_url}` into `#{@name}`.') do
-            git! ['clone', template_repo_url, @name]
-          end
-        end
+        # True if the dimensions represent a vertical rectangle
+    def vertical?
+      height > width
+    end
     
-          def update_if_necessary!
-        if @update && config.verbose?
-          UI.section('\nUpdating Spec Repositories\n'.yellow) do
-            Repo.new(ARGV.new(['update'])).run
-          end
-        end
-      end
+    
+    {  # Returns hash with styles missing from recent run of rake paperclip:refresh:missing_styles
+  #   {
+  #     :User => {:avatar => [:big]},
+  #     :Book => {
+  #       :cover => [:croppable]},
+  #     }
+  #   }
+  def self.missing_attachments_styles
+    current_styles = current_attachments_styles
+    registered_styles = get_registered_attachments_styles
+    
+        module ClassMethods
+      # This method is a shortcut to validator classes that is in
+      # 'Attachment...Validator' format. It is almost the same thing as the
+      # +validates+ method that shipped with Rails, but this is customized to
+      # be using with attachment validators. This is helpful when you're using
+      # multiple attachment validators on a single attachment.
+      #
+      # Example of using the validator:
+      #
+      #   validates_attachment :avatar, :presence => true,
+      #      :content_type => { :content_type => 'image/jpg' },
+      #      :size => { :in => 0..10.kilobytes }
+      #
+      def validates_attachment(*attributes)
+        options = attributes.extract_options!.dup
