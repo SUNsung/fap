@@ -1,118 +1,78 @@
 
         
-            old_layer = keras.layers.GlobalAveragePooling2D(dim_ordering='th', name='global_avgpool2d')
-    new_layer = keras.layers.GlobalAvgPool2D(data_format='channels_first', name='global_avgpool2d')
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
-    
-            layer_test(local.LocallyConnected2D,
-                   kwargs={'filters': filters,
-                           'kernel_size': (3, 3),
-                           'padding': padding,
-                           'kernel_regularizer': 'l2',
-                           'bias_regularizer': 'l2',
-                           'activity_regularizer': 'l2',
-                           'strides': strides,
-                           'data_format': 'channels_first'},
-                   input_shape=(num_samples, stack_size, num_row, num_col))
-    
-        # 50% of the time the correct output is the input.
-    # The other 50% of the time it's 2 * input % 10
-    y = (x * np.random.random_integers(1, 2, x.shape)) % 10
-    ys = np.zeros((y.size, 10), dtype='int32')
-    for i, target in enumerate(y.flat):
-        ys[i, target] = 1
-    ys = ys.reshape(y.shape + (10,))
-    
-        x = K.placeholder(ndim=2)
-    f = K.function([x], [activations.softsign(x)])
-    test_values = get_standard_values()
-    
-    # we add a Convolution1D, which will learn filters
-# word group filters of size filter_length:
-model.add(Conv1D(filters,
-                 kernel_size,
-                 padding='valid',
-                 activation='relu',
-                 strides=1))
-# we use max pooling:
-model.add(GlobalMaxPooling1D())
-    
-    
-    
-    
-    def noViableAlt(self, s, input):
-        if self.recognizer._state.backtracking > 0:
-            raise BacktrackingFailed
-    
-            self._state.token = token
         
-        return token
+def get_new_command(command):
+    dir = shell.quote(_tar_file(command.script_parts)[1])
+    return shell.and_('mkdir -p {dir}', '{cmd} -C {dir}') \
+        .format(dir=dir, cmd=command.script)
+    
+    containers = (('thefuck/python3-fish',
+               u'''FROM python:3
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'),
+              ('thefuck/python2-fish',
+               u'''FROM python:2
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'))
+    
+        def render(self, request):
+        now = time()
+        delta = now - self.lasttime
+    
+    import logging
+from twisted.internet import defer
+import six
+from scrapy.exceptions import NotSupported, NotConfigured
+from scrapy.utils.httpobj import urlparse_cached
+from scrapy.utils.misc import load_object
+from scrapy.utils.python import without_none_values
+from scrapy import signals
     
     
-    def getCharPositionInLine(self):
-        return self.charPositionInLine
+class UserAgentMiddleware(object):
+    '''This middleware allows spiders to override the user_agent'''
     
-    def setCharPositionInLine(self, pos):
-        self.charPositionInLine = pos
+                logger.debug('Successfully added TXT record with id: %d', record_id)
+        except digitalocean.Error as e:
+            logger.debug('Error adding TXT record using the DigitalOcean API: %s', e)
+            raise errors.PluginError('Error adding TXT record using the DigitalOcean API: {0}'
+                                     .format(e))
     
-        def get_sequences(self):
-        '''Return a name-to-key-list dictionary to define each sequence.'''
-        results = {}
-        with open(os.path.join(self._path, '.mh_sequences'), 'r', encoding='ASCII') as f:
-            all_keys = set(self.keys())
-            for line in f:
-                try:
-                    name, contents = line.split(':')
-                    keys = set()
-                    for spec in contents.split():
-                        if spec.isdigit():
-                            keys.add(int(spec))
-                        else:
-                            start, stop = (int(x) for x in spec.split('-'))
-                            keys.update(range(start, stop + 1))
-                    results[name] = [key for key in sorted(keys) \
-                                         if key in all_keys]
-                    if len(results[name]) == 0:
-                        del results[name]
-                except ValueError:
-                    raise FormatError('Invalid sequence specification: %s' %
-                                      line.rstrip())
-        return results
+        # WARNING: To ensure changes are in line with Certbot's privacy
+    # policy, talk to a core Certbot team member before making any
+    # changes here.
+    if config.user_agent is None:
+        ua = ('CertbotACMEClient/{0} ({1}; {2}{8}) Authenticator/{3} Installer/{4} '
+              '({5}; flags: {6}) Py/{7}')
+        if os.environ.get('CERTBOT_DOCS') == '1':
+            cli_command = 'certbot(-auto)'
+            os_info = 'OS_NAME OS_VERSION'
+            python_version = 'major.minor.patchlevel'
+        else:
+            cli_command = cli.cli_command
+            os_info = util.get_os_info_ua()
+            python_version = platform.python_version()
+        ua = ua.format(certbot.__version__, cli_command, os_info,
+                       config.authenticator, config.installer, config.verb,
+                       ua_flags(config), python_version,
+                       '; ' + config.user_agent_comment if config.user_agent_comment else '')
+    else:
+        ua = config.user_agent
+    return ua
     
-        def set_debuglevel(self, level):
-        '''Set the debugging level.  Argument 'level' means:
-        0: no debugging output (default)
-        1: print commands and responses but not body text etc.
-        2: also print raw lines read and sent before stripping CR/LF'''
+            self.assertTrue(self.vhost1.same_server(self.vhost2))
+        self.assertTrue(no_name1.same_server(no_name2))
     
-        def test_badfuture6(self):
-        with self.assertRaises(SyntaxError) as cm:
-            from test import badsyntax_future6
-        self.check_syntax_error(cm.exception, 'badsyntax_future6', 3)
+    # If true, SmartyPants will be used to convert quotes and dashes to
+# typographically correct entities.
+#html_use_smartypants = True
     
-    def break_in_func(funcname, fname=__file__, temporary=False, cond=None):
-    return 'break', (fname, None, temporary, cond, funcname)
-    
-    
-@contextmanager
-def path(package: Package, resource: Resource) -> Iterator[Path]:
-    '''A context manager providing a file path object to the resource.
-    
-    
-class AnotherInvalidRequestRateTest(BaseRobotTest, unittest.TestCase):
-    # also test that Allow and Diasallow works well with each other
-    robots_txt = '''\
-User-agent: Googlebot
-Allow: /folder1/myfile.html
-Disallow: /folder1/
-Request-rate: whale/banana
-    '''
-    agent = 'Googlebot'
-    good = ['/folder1/myfile.html']
-    bad = ['/folder1/anotherfile.html']
-    
-        def test_p2a_objects(self):
-        array = (c_char_p * 5)()
-        self.assertEqual(array._objects, None)
-        array[0] = b'foo bar'
-        self.assertEqual(array._objects, {'0': b'foo bar'})
+    # -- Options for LaTeX output ---------------------------------------------
