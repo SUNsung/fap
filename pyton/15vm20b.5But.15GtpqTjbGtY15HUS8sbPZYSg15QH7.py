@@ -1,211 +1,360 @@
 
         
-            with open('README.md', 'w+') as sorted_file:
-        # Then all of the blocks are sorted individually
-        blocks = [''.join(sorted(block, key=lambda s: s.lower())) for block in blocks]
-        # And the result is written back to README.md
-        sorted_file.write(''.join(blocks))
-    
-        def from_pyfile(self, filename, silent=False):
-        '''Updates the values in the config from a Python file.  This function
-        behaves as if the file was imported as module with the
-        :meth:`from_object` function.
-    
-        This session backend will set the :attr:`modified` and
-    :attr:`accessed` attributes. It cannot reliably track whether a
-    session is new (vs. empty), so :attr:`new` remains hard coded to
-    ``False``.
-    '''
-    
-        if release_date.date() != date.today():
-        fail(
-            'Release date is not today (%s != %s)',
-            release_date.date(), date.today()
-        )
-    
-    
-def test_get_namespace():
-    app = flask.Flask(__name__)
-    app.config['FOO_OPTION_1'] = 'foo option 1'
-    app.config['FOO_OPTION_2'] = 'foo option 2'
-    app.config['BAR_STUFF_1'] = 'bar stuff 1'
-    app.config['BAR_STUFF_2'] = 'bar stuff 2'
-    foo_options = app.config.get_namespace('FOO_')
-    assert 2 == len(foo_options)
-    assert 'foo option 1' == foo_options['option_1']
-    assert 'foo option 2' == foo_options['option_2']
-    bar_options = app.config.get_namespace('BAR_', lowercase=False)
-    assert 2 == len(bar_options)
-    assert 'bar stuff 1' == bar_options['STUFF_1']
-    assert 'bar stuff 2' == bar_options['STUFF_2']
-    foo_options = app.config.get_namespace('FOO_', trim_namespace=False)
-    assert 2 == len(foo_options)
-    assert 'foo option 1' == foo_options['foo_option_1']
-    assert 'foo option 2' == foo_options['foo_option_2']
-    bar_options = app.config.get_namespace('BAR_', lowercase=False, trim_namespace=False)
-    assert 2 == len(bar_options)
-    assert 'bar stuff 1' == bar_options['BAR_STUFF_1']
-    assert 'bar stuff 2' == bar_options['BAR_STUFF_2']
-    
-        from config_package_app import app
-    assert app.instance_path == str(modules_tmpdir.join('instance'))
-    
-    import flask
-    
-    
-def get_info(package_name):
-    api_url = 'https://pypi.python.org/pypi/{}/json'.format(package_name)
-    resp = requests.get(api_url).json()
-    hasher = hashlib.sha256()
-    for release in resp['urls']:
-        download_url = release['url']
-        if download_url.endswith('.tar.gz'):
-            hasher.update(requests.get(download_url).content)
-            return {
-                'name': package_name,
-                'url': download_url,
-                'sha256': hasher.hexdigest(),
-            }
-    else:
-        raise RuntimeError(
-            '{}: download not found: {}'.format(package_name, resp))
-    
-    
-def test_unicode_url_query_arg_item_verbose(httpbin):
-    r = http('--verbose', httpbin.url + '/get', u'test==%s' % UNICODE)
-    assert HTTP_OK in r
-    assert UNICODE in r
-    
-    from httpie import __version__ as httpie_version, ExitStatus
-from httpie.compat import str, bytes, is_py3
-from httpie.client import get_response
-from httpie.downloads import Downloader
-from httpie.context import Environment
-from httpie.plugins import plugin_manager
-from httpie.output.streams import (
-    build_output_stream,
-    write_stream,
-    write_stream_with_colors_win_py3
+        cc_test(
+    name = 'input_batch_cache_test',
+    srcs = ['input_batch_cache_test.cc'],
+    deps = [
+        ':input_batch_cache',
+        '//dragnn/core/interfaces:input_batch',
+        '//syntaxnet:base',
+        '//syntaxnet:test_main',
+    ],
 )
     
-    
-class TransportPlugin(BasePlugin):
-    '''
-    
-    
-DEFAULT_CONFIG_DIR = str(os.environ.get(
-    'HTTPIE_CONFIG_DIR',
-    os.path.expanduser('~/.httpie') if not is_windows else
-    os.path.expandvars(r'%APPDATA%\\httpie')
-))
-    
-        '''
-    abbrevs = [
-        (1 << 50, 'PB'),
-        (1 << 40, 'TB'),
-        (1 << 30, 'GB'),
-        (1 << 20, 'MB'),
-        (1 << 10, 'kB'),
-        (1, 'B')
-    ]
-    
-        # Used only when requested with --check-status:
-    ERROR_HTTP_3XX = 3
-    ERROR_HTTP_4XX = 4
-    ERROR_HTTP_5XX = 5
-    
-        def _hash_function(self, key):
-        return key % self.size
-    
-        def crawl_page(self, page):
-        for url in page.child_urls:
-            self.data_store.add_link_to_crawl(url)
-        self.reverse_index_queue.generate(page)
-        self.doc_index_queue.generate(page)
-        self.data_store.remove_link_to_crawl(page.url)
-        self.data_store.insert_crawled_link(page.url, page.signature)
-    
-    
-if __name__ == '__main__':
-    HitCounts.run()
+    cc_library(
+    name = 'mst_ops_cc',
+    srcs = [
+        'ops/mst_op_kernels.cc',
+        'ops/mst_ops.cc',
+    ],
+    deps = [
+        ':mst_solver',
+        '//syntaxnet:base',
+        '@org_tensorflow//tensorflow/core:framework_headers_lib',
+        '@org_tensorflow//tensorflow/core:lib',
+    ],
+    alwayslink = 1,
+)
 
     
-        def reducer_identity(self, key, value):
-        yield key, value
+    py_library(
+    name = 'trainer_lib',
+    srcs = ['trainer_lib.py'],
+    deps = [
+        '//dragnn/protos:spec_pb2_py',
+        '//syntaxnet:parser_ops',
+        '//syntaxnet:sentence_pb2_py',
+        '//syntaxnet:task_spec_pb2_py',
+        '//syntaxnet/util:check',
+        '@org_tensorflow//tensorflow:tensorflow_py',
+        '@org_tensorflow//tensorflow/core:protos_all_py',
+    ],
+)
     
-        def can_fit_vehicle(self, vehicle):
-        if self.vehicle is not None:
-            return False
-        return vehicle.can_fit_in_spot(self)
+      def build_structured_training(self, state, network_states):
+    '''Builds a beam search based training loop for this component.
     
-    def ehow_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-	
-	assert re.search(r'http://www.ehow.com/video_', url), 'URL you entered is not supported'
+      Returns:
+    a scalar `Tensor`, the learning rate based on current step and hyperparams.
+  '''
+  if hyperparams.learning_method != 'composite':
+    base_rate = hyperparams.learning_rate
+    adjusted_steps = step_var
+  else:
+    spec = hyperparams.composite_optimizer_spec
+    switch = tf.less(step_var, spec.switch_after_steps)
+    base_rate = tf.cond(switch, lambda: tf.constant(spec.method1.learning_rate),
+                        lambda: tf.constant(spec.method2.learning_rate))
+    if spec.reset_learning_rate:
+      adjusted_steps = tf.cond(switch, lambda: step_var,
+                               lambda: step_var - spec.switch_after_steps)
+    else:
+      adjusted_steps = step_var
     
-        print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([video_url], title, ext, size, output_dir, merge=merge, headers = fake_headers)
     
-    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
-    #sample
-    #url_sample:http://www.kugou.com/yy/album/single/536957.html
-    #hash ->key  md5(hash+kgcloud')->key  decompile swf
-    #cmd 4 for mp3 cmd 3 for m4a
-    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
-    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
-    j=loads(html)
-    url=j['url']
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge=merge)
+class LexiconTest(tf.test.TestCase):
     
-    def kuwo_download_by_rid(rid, output_dir = '.', merge = True, info_only = False):
-    html=get_content('http://player.kuwo.cn/webmusic/st/getNewMuiseByRid?rid=MUSIC_%s'%rid)
-    title=match1(html,r'<name>(.*)</name>')
-    #to get title
-    #format =aac|mp3 ->to get aac format=mp3 ->to get mp3
-    url=get_content('http://antiserver.kuwo.cn/anti.s?format=mp3&rid=MUSIC_%s&type=convert_url&response=url'%rid)
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir)
+      # Locally-normalize and optionally clip the scores.
+  max_scores_bxmx1 = tf.reshape(max_scores_bm, [batch_size, max_nodes, 1])
+  scores_bxmxm -= max_scores_bxmx1
+  if max_dynamic_range is not None:
+    # After normalization, the scores are non-positive with max=0, so the
+    # |max_dynamic_range| can be applied directly.
+    #
+    # PyLint thinks '-max_dynamic_range' is invalid because it defaults to None.
     
-        print_info(site_info, title, ext, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir=output_dir, merge=merge)
     
-        def prepare(self, **kwargs):
-        content = get_content(self.url)
+tar_extensions = ('.tar', '.tar.Z', '.tar.bz2', '.tar.gz', '.tar.lz',
+                  '.tar.lzma', '.tar.xz', '.taz', '.tb2', '.tbz', '.tbz2',
+                  '.tgz', '.tlz', '.txz', '.tz')
     
-        def test_varargs2(self):
-        self.assertRaises(TypeError, {}.__contains__, 0, 1)
     
-        def test_step(self):
-        self.expect_set = [
-            ('line', 2, 'tfunc_main'),  ('step', ),
-            ('line', 3, 'tfunc_main'),  ('step', ),
-            ('call', 1, 'tfunc_first'), ('step', ),
-            ('line', 2, 'tfunc_first'), ('quit', ),
-        ]
-        with TracerRun(self) as tracer:
-            tracer.runcall(tfunc_main)
+@keras_test
+def test_class_weight_wrong_classes():
+    model = create_sequential_model()
+    model.compile(loss=loss, optimizer='rmsprop')
     
-            # determine the base URI is we can
-        import posixpath, urllib.parse
-        parts = urllib.parse.urlparse(systemId)
-        scheme, netloc, path, params, query, fragment = parts
-        # XXX should we check the scheme here as well?
-        if path and not path.endswith('/'):
-            path = posixpath.dirname(path) + '/'
-            parts = scheme, netloc, path, params, query, fragment
-            source.baseURI = urllib.parse.urlunparse(parts)
     
-        def __init__(self, url=''):
-        self.entries = []
-        self.sitemaps = []
-        self.default_entry = None
-        self.disallow_all = False
-        self.allow_all = False
-        self.set_url(url)
-        self.last_checked = 0
+@keras_test
+def test_atrousconv1d_legacy_interface():
+    old_layer = keras.layers.AtrousConvolution1D(5, 3,
+                                                 init='normal',
+                                                 subsample_length=2,
+                                                 border_mode='valid',
+                                                 W_regularizer='l1',
+                                                 b_regularizer='l2',
+                                                 W_constraint='maxnorm',
+                                                 b_constraint='unitnorm',
+                                                 atrous_rate=2,
+                                                 name='conv')
+    new_layer = keras.layers.Conv1D(5, 3,
+                                    kernel_initializer='normal',
+                                    strides=2,
+                                    padding='valid',
+                                    kernel_regularizer='l1',
+                                    bias_regularizer='l2',
+                                    kernel_constraint='max_norm',
+                                    bias_constraint='unit_norm',
+                                    dilation_rate=2,
+                                    name='conv')
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
+    
+            inputs = keras.Input((timesteps, input_size))
+        initial_state = [keras.Input((units,)) for _ in range(num_states)]
+        layer = layer_class(units)
+        if len(initial_state) == 1:
+            output = layer(inputs, initial_state=initial_state[0])
+        else:
+            output = layer(inputs, initial_state=initial_state)
+        assert initial_state[0] in layer._inbound_nodes[0].input_tensors
+    
+    
+@keras_test
+def test_locallyconnected_1d():
+    num_samples = 2
+    num_steps = 8
+    input_dim = 5
+    filter_length = 3
+    filters = 4
+    padding = 'valid'
+    strides = 1
+    
+        for epoch in range(1, epochs + 1):
+        print('Epoch {}/{}'.format(epoch, epochs))
+    
+                # test for output shape:
+            output = layer_test(convolutional_recurrent.ConvLSTM2D,
+                                kwargs={'data_format': data_format,
+                                        'return_sequences': return_sequences,
+                                        'filters': filters,
+                                        'kernel_size': (num_row, num_col),
+                                        'padding': 'valid'},
+                                input_shape=inputs.shape)
+    
+    
+@keras_test
+def test_vector_classification_functional():
+    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
+                                                         num_test=200,
+                                                         input_shape=(20,),
+                                                         classification=True,
+                                                         num_classes=num_classes)
+    # Test with functional API
+    inputs = layers.Input(shape=(x_train.shape[-1],))
+    x = layers.Dense(16, activation=keras.activations.relu)(inputs)
+    x = layers.Dense(8)(x)
+    x = layers.Activation('relu')(x)
+    outputs = layers.Dense(num_classes, activation='softmax')(x)
+    model = keras.models.Model(inputs, outputs)
+    model.compile(loss=keras.losses.sparse_categorical_crossentropy,
+                  optimizer=keras.optimizers.RMSprop(),
+                  metrics=['acc'])
+    history = model.fit(x_train, y_train, epochs=15, batch_size=16,
+                        validation_data=(x_test, y_test),
+                        verbose=0)
+    assert(history.history['val_acc'][-1] > 0.8)
+    
+    # We add a vanilla hidden layer:
+model.add(Dense(hidden_dims))
+model.add(Dropout(0.2))
+model.add(Activation('relu'))
+    
+        parser.add_argument('run_id',
+                        metavar='RUN',
+                        help='shippable run id, run url or run name formatted as: account/project/run_number')
+    
+        # What we're left with now must be an IPv4 or IPv6 address, possibly with
+    # numeric ranges, or a hostname with alphanumeric ranges.
+    
+    
+class FullJitterBackoffStrategyTestCase(unittest.TestCase):
+    def test_no_retries(self):
+        strategy = _full_jitter_backoff(retries=0)
+        result = list(strategy())
+        self.assertEquals(result, [], 'list should be empty')
+    
+        for i, NN in enumerate(Nrange):
+        print('N = %i (%i out of %i)' % (NN, i + 1, len(Nrange)))
+        X = get_data(NN, D, dataset)
+        for algorithm in algorithms:
+            nbrs = neighbors.NearestNeighbors(n_neighbors=min(NN, k),
+                                              algorithm=algorithm,
+                                              leaf_size=leaf_size)
+            t0 = time()
+            nbrs.fit(X)
+            t1 = time()
+            nbrs.kneighbors(X)
+            t2 = time()
+    
+        print('Decompressing %s' % ARCHIVE_NAME)
+    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
+        archive.extractall(path='.')
+    os.remove(ARCHIVE_NAME)
+
+    
+        # split the dataset in training and test set:
+    docs_train, docs_test, y_train, y_test = train_test_split(
+        dataset.data, dataset.target, test_size=0.25, random_state=None)
+    
+        # the training data folder must be passed as first argument
+    movie_reviews_data_folder = sys.argv[1]
+    dataset = load_files(movie_reviews_data_folder, shuffle=False)
+    print('n_samples: %d' % len(dataset.data))
+    
+        def clear_data(self):
+        self.model.data = []
+        self.fitted = False
+        self.model.changed('clear')
+    
+    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
+                             random_state=0)
+model.fit(data)
+score = consensus_score(model.biclusters_,
+                        (rows[:, row_idx], columns[:, col_idx]))
+    
+    # Generate data
+X, y = make_blobs(n_samples=1000, n_features=2, random_state=42,
+                  cluster_std=5.0)
+X_train, y_train = X[:600], y[:600]
+X_valid, y_valid = X[600:800], y[600:800]
+X_train_valid, y_train_valid = X[:800], y[:800]
+X_test, y_test = X[800:], y[800:]
+    
+        acc_clf1.append(score_clf1 / n_averages)
+    acc_clf2.append(score_clf2 / n_averages)
+    
+        ax.scatter(X[:, 0], X[:, 1], color=COLORS.take((Y * [1, 2, 4]
+                                                    ).sum(axis=1)),
+               marker='.')
+    ax.scatter(p_w_c[0] * length, p_w_c[1] * length,
+               marker='*', linewidth=.5, edgecolor='black',
+               s=20 + 1500 * p_c ** 2,
+               color=COLORS.take([1, 2, 4]))
+    ax.set_xlabel('Feature 0 count')
+    return p_c, p_w_c
+    
+    # Grouping the document tree into Texinfo files. List of tuples
+# (source start file, target name, title, author,
+#  dir menu entry, description, category)
+texinfo_documents = [
+    (master_doc, 'certbot-dns-dnsimple', u'certbot-dns-dnsimple Documentation',
+     author, 'certbot-dns-dnsimple', 'One line description of project.',
+     'Miscellaneous'),
+]
+    
+        def test_eq(self):
+        self.assertTrue(self.vhost1b == self.vhost1)
+        self.assertFalse(self.vhost1 == self.vhost2)
+        self.assertEqual(str(self.vhost1b), str(self.vhost1))
+        self.assertFalse(self.vhost1b == 1234)
+    
+        def __init__(self, args):
+        '''Initializes the plugin with the given command line args'''
+        self._temp_dir = tempfile.mkdtemp()
+        self.le_config = util.create_le_config(self._temp_dir)
+        config_dir = util.extract_configs(args.configs, self._temp_dir)
+        self._configs = [
+            os.path.join(config_dir, config)
+            for config in os.listdir(config_dir)]
+    
+    
+class ValidatorTest(unittest.TestCase):
+    def setUp(self):
+        self.validator = validator.Validator()
+    
+        def unlock(self):
+        '''Unlock the mailbox if it is locked.'''
+        if self._locked:
+            _unlock_file(self._file)
+            _sync_close(self._file)
+            del self._file
+            self._locked = False
+    
+        def check_syntax_error(self, err, basename, lineno, offset=0):
+        self.assertIn('%s.py, line %d' % (basename, lineno), str(err))
+        self.assertEqual(os.path.basename(err.filename), basename + '.py')
+        self.assertEqual(err.lineno, lineno)
+        self.assertEqual(err.offset, offset)
+    
+    
+def _name_xform(name):
+    return name.lower().replace('-', '_')
+    
+        def index2coords(self, index):
+        assert 0 <= index < self.m * self.n
+        return divmod(index, self.n)
+    
+        def applies_to(self, filename):
+        return self.path == '*' or filename.startswith(self.path)
+    
+            self.assertRaises(TypeError, range, 0.0, 2, 1)
+        self.assertRaises(TypeError, range, 1, 2.0, 1)
+        self.assertRaises(TypeError, range, 1, 2, 1.0)
+        self.assertRaises(TypeError, range, 1e100, 1e101, 1e101)
+    
+        Args:
+        pending_work_items: A dict mapping work ids to _WorkItems e.g.
+            {5: <_WorkItem...>, 6: <_WorkItem...>, ...}
+        work_ids: A queue.Queue of work ids e.g. Queue([5, 6, ...]). Work ids
+            are consumed and the corresponding _WorkItems from
+            pending_work_items are transformed into _CallItems and put in
+            call_queue.
+        call_queue: A multiprocessing.Queue that will be filled with _CallItems
+            derived from _WorkItems.
+    '''
+    while True:
+        if call_queue.full():
+            return
+        try:
+            work_id = work_ids.get(block=False)
+        except queue.Empty:
+            return
+        else:
+            work_item = pending_work_items[work_id]
+    
+    def download_urls_sequential(urls, timeout=60):
+    url_to_content = {}
+    for url in urls:
+        try:
+            url_to_content[url] = load_url(url, timeout=timeout)
+        except:
+            pass
+    return url_to_content
+    
+    # There are two options for replacing |today|: either, you set today to some
+# non-false value, then it is used:
+#today = ''
+# Else, today_fmt is used as the format for a strftime call.
+#today_fmt = '%B %d, %Y'
+    
+        with patch.object( ycm._message_poll_request,
+                       '_response_future',
+                       new = MockAsyncServerResponseInProgress() ):
+      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
+  '''
+  return mock.MagicMock( wraps = FakeFuture( False ) )
+    
+    
+def SendCompleterAvailableRequest( filetypes ):
+  request = CompleterAvailableRequest( filetypes )
+  # This is a blocking call.
+  request.Start()
+  return request.Response()
+
+    
+    
+  def Start( self ):
+    request_data = BuildRequestData( self._buffer_number )
+    if self._extra_data:
+      request_data.update( self._extra_data )
+    request_data[ 'event_name' ] = self._event_name
