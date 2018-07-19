@@ -1,174 +1,164 @@
 
         
-            # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
+          </body>
+</html>
+HTML
+CONTENT_NOT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+        # The entry filter for this collection.
+    # Creates an instance of Jekyll::EntryFilter.
+    #
+    # Returns the instance of Jekyll::EntryFilter for this collection.
+    def entry_filter
+      @entry_filter ||= Jekyll::EntryFilter.new(site, relative_directory)
     end
     
-        def default_defaults(options)
-      @defaults = Hash.new
-      @defaults.merge!(options[:defaults]) if options[:defaults]
-    end
+    module Jekyll
+  module Commands
+    class Build < Command
+      class << self
+        # Create the Mercenary command for the Jekyll CLI for this Command
+        def init_with_program(prog)
+          prog.command(:build) do |c|
+            c.syntax      'build [options]'
+            c.description 'Build your site'
+            c.alias :b
     
-      def unsilence?
-    staff?
-  end
+            private
     
-    def each_schema_load_environment
-  # If we're in development, also run this for the test environment.
-  # This is a somewhat hacky way to do this, so here's why:
-  # 1. We have to define this before we load the schema, or we won't
-  #    have a timestamp_id function when we get to it in the schema.
-  # 2. db:setup calls db:schema:load_if_ruby, which calls
-  #    db:schema:load, which we define above as having a prerequisite
-  #    of this task.
-  # 3. db:schema:load ends up running
-  #    ActiveRecord::Tasks::DatabaseTasks.load_schema_current, which
-  #    calls a private method `each_current_configuration`, which
-  #    explicitly also does the loading for the `test` environment
-  #    if the current environment is `development`, so we end up
-  #    needing to do the same, and we can't even use the same method
-  #    to do it.
-    
-            expect_updated_sign_in_at(user)
-        expect(Redis.current.zcard(FeedManager.instance.key(:home, user.account_id))).to eq 3
-        expect(Redis.current.get('account:#{user.account_id}:regeneration')).to be_nil
+          def valid_processors
+        %w(kramdown) + third_party_processors
       end
-    end
     
-    sitelist = ARGV.shift() || usage()
-output   = ARGV.shift() || usage()
-    
-          when :login_fail
-    
-    			if temp[2].length == 2
-				self.block[-1][-1] << temp[2][0].ljust(8)
-				self.block[-1][-1] << temp[2][1]
-			elsif temp[2].length == 3
-				self.block[-1][-1] << temp[2][0].ljust(8)
-				self.block[-1][-1] << temp[2][1]
-				self.block[-1][-1] << ' '
-				self.block[-1][-1] << temp[2][2]
-			else
-				self.block[-1][-1] << temp[2].to_s
-			end
-		end
-    
-      def setup
-    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
-    success = Dir.chdir DUMMY_PATH do
-      silence_stdout_if !ENV['VERBOSE'] do
-        system 'node', 'manifest.js', tmp_dir
-      end
-    end
-    assert success, 'Node.js Mincer compilation failed'
-    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
-    css_name = manifest['assets']['application.css']
-    @css = File.read('#{tmp_dir}/#{css_name}')
-  end
-end
-
-    
-      # POST /books
-  # POST /books.json
-  def create
-    @book = Book.new(book_params)
-    
-            def operator_assignment_node
-          return nil unless node.parent
-          return nil unless OPERATOR_ASSIGNMENT_TYPES.include?(node.parent.type)
-          return nil unless node.sibling_index.zero?
-          node.parent
+          def convert(content)
+        document = Kramdown::Document.new(content, @config)
+        html_output = document.to_html.chomp
+        if @config['show_warnings']
+          document.warnings.each do |warning|
+            Jekyll.logger.warn 'Kramdown warning:', warning.sub(%r!^Warning:\s+!, '')
+          end
         end
-    
-            def each_unnecessary_space_match(node, &blk)
-          each_match_range(
-            contents_range(node),
-            MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX,
-            &blk
-          )
-        end
+        html_output
       end
     end
   end
 end
 
     
-              lambda do |corrector|
-            corrector.replace(center.source_range, new_center)
-          end
-        end
+          def fallback_data
+        @fallback_data ||= {}
       end
     end
   end
 end
 
     
-                end
-          RUBY
-        end
+          def short_month
+        @obj.date.strftime('%b')
       end
     
-    shared_examples_for 'multiline literal brace layout trailing comma' do
-  let(:prefix) { '' } # A prefix before the opening brace.
-  let(:suffix) { '' } # A suffix for the line after the closing brace.
-  let(:open) { nil } # The opening brace.
-  let(:close) { nil } # The closing brace.
-  let(:a) { 'a' } # The first element.
-  let(:b) { 'b' } # The second element.
+              if entry.end_with?('/')
+            entry_path.in_path?(
+              item
+            )
     
-          content_type 'application/json'
-      LogStash::Json.dump(data, {:pretty => pretty?})
-    else
-      content_type 'text/plain'
-      data.to_s
-    end
+      # SecureRandom.hex generates a random hexadecimal string.
+  #
+  # The argument _n_ specifies the length, in bytes, of the random number to be generated.
+  # The length of the resulting hexadecimal string is twice of _n_.
+  #
+  # If _n_ is not specified or is nil, 16 is assumed.
+  # It may be larger in the future.
+  #
+  # The result may contain 0-9 and a-f.
+  #
+  #   require 'securerandom'
+  #
+  #   SecureRandom.hex #=> 'eb693ec8252cd630102fd0d0fb7c3485'
+  #   SecureRandom.hex #=> '91dc3bfb4de5b11d029d376634589b61'
+  #
+  # If a secure random number generator is not available,
+  # +NotImplementedError+ is raised.
+  def hex(n=nil)
+    random_bytes(n).unpack('H*')[0]
   end
     
-              def plugins
-            @plugins ||= find_plugins_gem_specs.map do |spec|
-              { :name => spec.name, :version => spec.version.to_s }
-            end.sort_by do |spec|
-              spec[:name]
-            end
-          end
+      def test_pty_check_raise
+    bug2642 = '[ruby-dev:44600]'
+    st1 = st2 = pid = nil
+    PTY.spawn('cat') do |r,w,id|
+      pid = id
+      assert_nothing_raised(PTY::ChildExited, bug2642) {st1 = PTY.check(pid, true)}
+      w.close
+      r.close
+      sleep(0.1)
+      st2 = assert_raise(PTY::ChildExited, bug2642) {PTY.check(pid, true)}.status
+    end
+  rescue RuntimeError
+    skip $!
+  else
+    assert_nil(st1)
+    assert_equal(pid, st2.pid)
+  end
     
-      def file_fetch(url, sha1, target)
-    filename = File.basename( URI(url).path )
-    output = '#{target}/#{filename}'
-    begin
-      actual_sha1 = file_sha1(output)
-      if actual_sha1 != sha1
-        fetch(url, sha1, output)
+          it 'does not keep buffer content if it is longer than offset + result' do
+        n = [ 65, 66, 67 ]
+        buffer = '1234567890'
+        n.pack('@3ccc', buffer: buffer).should == '123ABC'
       end
-    rescue Errno::ENOENT
-      fetch(url, sha1, output)
     end
-    return output
   end
-    
-    When /^(?:|I )select '([^']*)' from '([^']*)'$/ do |value, field|
-  select(value, :from => field)
 end
+
     
-        # Returns the smaller of the two dimensions
-    def smaller
-      [height, width].min
+      it 'does not modify a HOME string argument' do
+    str = '~/a'
+    File.expand_path(str).should == '#{Dir.home}/a'
+    str.should == '~/a'
+  end
+    
+      # For this test we delete the file first to reset the perms
+  it 'opens the file when passed mode, num, permissions and block' do
+    rm_r @file
+    File.umask(0022)
+    File.open(@file, 'w', 0755){ |fh| }
+    platform_is_not :windows do
+      File.stat(@file).mode.to_s(8).should == '100755'
     end
+    File.exist?(@file).should == true
+  end
     
-            def failure_message
-          'Attachment #{@attachment_name} should be required'
-        end
+        File.pipe?(filename).should == false
     
-                if options.has_key?(validator_kind)
-              validator_options = options.delete(validator_kind)
-              validator_options = {} if validator_options == true
-              conditional_options = options.slice(:if, :unless)
-              Array.wrap(validator_options).each do |local_options|
-                method_name = Paperclip::Validators.const_get(constant.to_s).helper_method_name
-                send(method_name, attributes, local_options.merge(conditional_options))
-              end
-            end
-          end
-        end
-      end
+    describe 'String#upcase' do
+  it 'returns a copy of self with all lowercase letters upcased' do
+    'Hello'.upcase.should == 'HELLO'
+    'hello'.upcase.should == 'HELLO'
+  end
+    
+        res = Net::HTTPServerError.new('1.0', '5xx', 'test response')
+    res.error_type.should == Net::HTTPFatalError
+  end
+end
+
+    
+      def icon
+    object.image
+  end
+    
+      # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/favourite
+  def favourite
+    f = Favourite.last
+    NotificationMailer.favourite(f.status.account, Notification.find_by(activity: f))
+  end
