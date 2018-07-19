@@ -1,201 +1,91 @@
 
         
-        
-    {    return S_OK;
-}
-    
-    
-    {}
-    
-      caffe::Datum datum;
-  datum.set_channels(2);  // one channel for each image in the pair
-  datum.set_height(rows);
-  datum.set_width(cols);
-  LOG(INFO) << 'A total of ' << num_items << ' items.';
-  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
-  for (int itemid = 0; itemid < num_items; ++itemid) {
-    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
-    int j = caffe::caffe_rng_rand() % num_items;
-    read_image(&image_file, &label_file, i, rows, cols,
-        pixels, &label_i);
-    read_image(&image_file, &label_file, j, rows, cols,
-        pixels + (rows * cols), &label_j);
-    datum.set_data(pixels, 2*rows*cols);
-    if (label_i  == label_j) {
-      datum.set_label(1);
-    } else {
-      datum.set_label(0);
-    }
-    datum.SerializeToString(&value);
-    std::string key_str = caffe::format_int(itemid, 8);
-    db->Put(leveldb::WriteOptions(), key_str, value);
-  }
-    
-    #include <vector>
-    
-    
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
-};
-#endif
-    
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLCNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLCNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
-        tempData1(NULL), tempData2(NULL) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLCNLayer();
-    }
-    
-    /**
- * @brief Convolve the input with a bank of learned filters, and (optionally)
- *        add biases, treating filters and convolution parameters in the
- *        opposite sense as ConvolutionLayer.
- *
- *   ConvolutionLayer computes each output value by dotting an input window with
- *   a filter; DeconvolutionLayer multiplies each input value by a filter
- *   elementwise, and sums over the resulting output windows. In other words,
- *   DeconvolutionLayer is ConvolutionLayer with the forward and backward passes
- *   reversed. DeconvolutionLayer reuses ConvolutionParameter for its
- *   parameters, but they take the opposite sense as in ConvolutionLayer (so
- *   padding is removed from the output rather than added to the input, and
- *   stride results in upsampling rather than downsampling).
- */
-template <typename Dtype>
-class DeconvolutionLayer : public BaseConvolutionLayer<Dtype> {
- public:
-  explicit DeconvolutionLayer(const LayerParameter& param)
-      : BaseConvolutionLayer<Dtype>(param) {}
-    }
-    
-    void HHVM_FUNCTION(xhprof_sample_enable) {
-  if (RuntimeOption::EnableHotProfiler) {
-    s_profiler_factory->start(ProfilerKind::Sample, 0);
-  } else {
-    raise_warning('The runtime option Stats.EnableHotProfiler must be on to '
-                  'use xhprof.');
-  }
-}
-    
-    
-    {  auto const reg = makeReg();
-  constToReg.emplace(vconst, reg);
-  regToConst.emplace(reg, vconst);
-  return reg;
-}
-    
-    
-    {  numa_node_mask = folly::nextPowTwo(numa_num_nodes) - 1;
-}
-    
-    
-    {
-    {
-    {}}}
-    
-    
-    {
-    {  ~CodeCursor() { undo(); }
-};
-}
-    
-      /**
-   * When running a CLI server, the requests executed on behalf of local
-   * processes will delegate to a light process pool run by the client.
-   */
-  static int createDelegate();
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    
-    
-    #if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_physics_PhysicsBody_setCollisionBitmask'.',&tolua_err);
-#endif
-    
-    
-    
-        glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
-    
-    #ifndef RENDER_H
-#define RENDER_H
-    
-      // Methods related to positions, margin, padding and border
-  YGFloatOptional getLeadingPosition(const YGFlexDirection& axis,
-      const float& axisSize) const;
-  bool isLeadingPositionDefined(const YGFlexDirection& axis) const;
-  bool isTrailingPosDefined(const YGFlexDirection& axis) const;
-  YGFloatOptional getTrailingPosition(
-      const YGFlexDirection& axis,
-      const float& axisSize) const;
-  YGFloatOptional getLeadingMargin(
-      const YGFlexDirection& axis,
-      const float& widthSize) const;
-  YGFloatOptional getTrailingMargin(
-      const YGFlexDirection& axis,
-      const float& widthSize) const;
-  float getLeadingBorder(const YGFlexDirection& flexDirection) const;
-  float getTrailingBorder(const YGFlexDirection& flexDirection) const;
-  YGFloatOptional getLeadingPadding(
-      const YGFlexDirection& axis,
-      const float& widthSize) const;
-  YGFloatOptional getTrailingPadding(
-      const YGFlexDirection& axis,
-      const float& widthSize) const;
-  YGFloatOptional getLeadingPaddingAndBorder(
-      const YGFlexDirection& axis,
-      const float& widthSize) const;
-  YGFloatOptional getTrailingPaddingAndBorder(
-      const YGFlexDirection& axis,
-      const float& widthSize) const;
-  YGFloatOptional getMarginForAxis(
-      const YGFlexDirection& axis,
-      const float& widthSize) const;
-  // Setters
-    
-    WIN_EXPORT void YGNodeCalculateLayout(const YGNodeRef node,
-                                      const float availableWidth,
-                                      const float availableHeight,
-                                      const YGDirection ownerDirection);
-    
-    
-    {  ASSERT_TRUE(YGNodeLayoutGetHadOverflow(root));
-}
+        /* End of file. */
 
     
-    void Config::setPointScaleFactor(float pixelsInPoint)
-{
-    YGConfigSetPointScaleFactor(m_config, pixelsInPoint);
+    void cv::cuda::flip(InputArray, OutputArray, int, Stream&) { throw_no_cuda(); }
+    
+    static int set_flags(struct ifaddrs* ifaddr) {
+	int fd = socket(AF_INET, SOCK_DGRAM, 0);
+	if (fd == -1) {
+		return -1;
+	}
+	ifreq ifr;
+	memset(&ifr, 0, sizeof(ifr));
+	strncpy(ifr.ifr_name, ifaddr->ifa_name, IFNAMSIZ - 1);
+	int rc = ioctl(fd, SIOCGIFFLAGS, &ifr);
+	close(fd);
+	if (rc == -1) {
+		return -1;
+	}
+	ifaddr->ifa_flags = ifr.ifr_flags;
+	return 0;
 }
     
-        Config(Config const &) = delete;
+    	virtual bool is_server() const;
+	virtual ConnectionStatus get_connection_status() const = 0;
     
-    void Node::setFlexGrow(double flexGrow)
-{
-    YGNodeStyleSetFlexGrow(m_node, flexGrow);
+    
+    {	// Check the amount resampler can really handle.
+	// If it cannot, wait 'wait_resampler_phase_limit' times.
+	// This mechanism contributes to smoother pause/unpause operation.
+	if (p_frames <= resampler.get_num_of_ready_frames() ||
+			wait_resampler_limit <= wait_resampler) {
+		wait_resampler = 0;
+		return resampler.mix(p_buffer, p_frames);
+	}
+	wait_resampler++;
+	return false;
 }
     
-        method(getAspectRatio);
+    	GodotDeepPenetrationContactResultCallback(const btCollisionObjectWrapper *body0Wrap, const btCollisionObjectWrapper *body1Wrap) :
+			btManifoldResult(body0Wrap, body1Wrap),
+			m_penetration_distance(0),
+			m_other_compound_shape_index(0) {}
     
-      // Creates a strong reference from a raw pointer, assuming that is already
-  // referenced from some other RefPtr. This should be used sparingly.
-  static inline RefPtr<T> assumeAlreadyReffed(T* ptr) {
-    return RefPtr<T>(ptr, ConstructionMode::External);
-  }
     
-      T* release() {
-    T* obj = get();
-    pthread_setspecific(m_key, NULL);
-    return obj;
-  }
+#ifndef PCFREAD_H_
+#define PCFREAD_H_
+    
+        struct huff_tables
+    {
+      bool ac_table;
+      uint  look_up[256];
+      uint  look_up2[256];
+      uint8 code_size[256];
+      uint  tree[512];
+    };
+    
+    # if defined(OC_COLLECT_METRICS)
+typedef struct oc_mode_metrics oc_mode_metrics;
+# endif
+typedef struct oc_mode_rd      oc_mode_rd;
+    
+    /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q16
+static OPUS_INLINE opus_val32 MULT16_32_Q16_armv4(opus_val16 a, opus_val32 b)
+{
+  unsigned rd_lo;
+  int rd_hi;
+  __asm__(
+      '#MULT16_32_Q16\n\t'
+      'smull %0, %1, %2, %3\n\t'
+      : '=&r'(rd_lo), '=&r'(rd_hi)
+      : '%r'(b),'r'(a<<16)
+  );
+  return rd_hi;
+}
+#define MULT16_32_Q16(a, b) (MULT16_32_Q16_armv4(a, b))
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
