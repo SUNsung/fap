@@ -1,451 +1,347 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+        void DragFileItems(const std::vector<base::FilePath>& files,
+                   const gfx::Image& icon,
+                   gfx::NativeView view);
     
-    template <typename Device, typename T>
-struct Reverse<Device, T, 0> {
-  void operator()(const Device& d, typename TTypes<T, 0>::ConstTensor input,
-                  const Eigen::array<bool, 0>& reverse_dims,
-                  typename TTypes<T, 0>::Tensor output) {
-    // Reversing a scalar is copying it.
-    output.device(d) = input;
-  }
-};
-    
-      // Create work vector
-  gtl::InlinedVector<int64, 32> scratch_holder(t_size);
-    
-    // The current impl actually ignores the axis argument.
-// Only determine the index of the maximum value in the last dimension.
-TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node, bool is_arg_max) {
-  const TfLiteTensor* input = GetInput(context, node, kInputTensor);
-  const TfLiteTensor* axis = GetInput(context, node, kAxis);
-  TfLiteTensor* output = GetOutput(context, node, kOutputTensor);
+    namespace atom {
     }
     
-    namespace {
-// TODO(suharshs): Move this to a common location to allow other part of the
-// repo to use it.
-template <typename T, typename... Args>
-std::unique_ptr<T> MakeUnique(Args&&... args) {
-  return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
-}
-}  // namespace
+     private:
+  // The following methods are implemented by platform-specific implementations
+  // of this class.
+  //
+  // Start/StopListening are called when transitioning between zero and nonzero
+  // registered accelerators. StartListening will be called after
+  // RegisterAcceleratorImpl and StopListening will be called after
+  // UnregisterAcceleratorImpl.
+  //
+  // For RegisterAcceleratorImpl, implementations return false if registration
+  // did not complete successfully.
+  virtual void StartListening() = 0;
+  virtual void StopListening() = 0;
+  virtual bool RegisterAcceleratorImpl(const ui::Accelerator& accelerator) = 0;
+  virtual void UnregisterAcceleratorImpl(
+      const ui::Accelerator& accelerator) = 0;
     
-    
-    {  // Run constant folding operations on the given module. Returns whether the
-  // module was changed (constant expressions folded).
-  StatusOr<bool> Run(HloModule* module) override;
-};
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    
-    {  template <typename Packet>
-  inline Packet packetOp(const Packet& y) const {
-    const Packet one = internal::pset1<Packet>(1);
-    return internal::pmul(internal::psub(one, y), y);
-  }
-};
-    
-    #ifndef TENSORFLOW_PLATFORM_PREFETCH_H_
-#define TENSORFLOW_PLATFORM_PREFETCH_H_
-    
-    
-    {}  // namespace
+    #endif  // CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
+
     
     #include <string>
-#include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
-#include 'tensorflow/core/framework/tensor_shape.h'
-#include 'tensorflow/core/framework/tensor_slice.pb.h'
-#include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/lib/core/stringpiece.h'
-#include 'tensorflow/core/lib/gtl/inlined_vector.h'
-#include 'tensorflow/core/platform/logging.h'
     
-    namespace tensorflow {
-#define REGISTER_COMPLEX(D, R, C)                         \
-  REGISTER_KERNEL_BUILDER(Name('Angle')                   \
-                              .Device(DEVICE_##D)         \
-                              .TypeConstraint<C>('T')     \
-                              .TypeConstraint<R>('Tout'), \
-                          UnaryOp<D##Device, functor::get_angle<C>>);
+    #if defined(OS_MACOSX)
+const base::FilePath::CharType kFrameworkName[] =
+    FPL(ATOM_PRODUCT_NAME ' Framework.framework');
+#endif  // OS_MACOSX
+    
+    namespace chrome {
     }
     
-    // WorkloadStats is used to track per request timing for different states
-// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
-// should be made to guard the state change with appropriate timers and
-// counters.
-//
-// The states tracked are:
-//  - In a request (this is a superset of the interpreter state)
-//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
-//  - In the JIT (currently tracks time inside the translate routine)
-//
-// Note the time in the TC is not tracked.  This is roughly:
-//   Time in request - Time in interp
-//
-// This gives us the relative interp time formula of:
-//   Relative interp time = Time in interp / Time in request
-struct WorkloadStats final {
-  enum State {
-    InRequest,
-    // -> InInterp   Okay (entering Dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InInterp,
-    // -> InRequest  Okay (leaving the dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InTrans,
-    // -> InRequest  Okay (leaving translate)
-    // -> InInterp   Okay (leaving translate)
-  };
+     protected:
+  explicit Net(v8::Isolate* isolate);
+  ~Net() override;
+    
+    void CV_ModelEstimator2_Test::get_test_array_types_and_sizes( int /*test_case_idx*/,
+                                                              vector<vector<Size> > &sizes, vector<vector<int> > &types )
+{
+    RNG &rng = ts->get_rng();
+    checkPartialSubsets = (cvtest::randInt(rng) % 2 == 0);
     }
     
-    void HHVM_FUNCTION(xhprof_frame_begin, const String& name) {
-  Profiler *prof = ThreadInfo::s_threadInfo->m_profiler;
-  if (prof) {
-    s_profiler_factory->cacheString(name);
-    prof->beginFrame(name.data());
-  }
-}
     
-    
-    {
-    {} }
-
-    
-    Timer::~Timer() {
-  if (!m_name.empty()) {
-    report();
-  }
-}
-    
-    /*
- * Timing execution of block of codes.
- */
-struct Timer {
-  enum Type {
-    WallTime,
-    SystemCPU,
-    UserCPU,
-    TotalCPU,
-  };
-  enum ReportType {
-    Log,
-    Stderr,
-    Trace,
-  };
-  enum Who {
-    Self = RUSAGE_SELF,
-    Children = RUSAGE_CHILDREN,
-#ifdef RUSAGE_THREAD
-    Thread = RUSAGE_THREAD,
+    {        return dlsym(h, name);
+    }
+    #define CV_CL_GET_PROC_ADDRESS(name) GetProcAddress(name)
 #endif
-  };
-    }
     
-      /**
-   * Create a task. This returns a task handle, or null object
-   * if there are no worker threads.
-   */
-  static Resource TaskStart(
-    const String& url, const Array& headers,
-    const String& remote_host,
-    const String& post_data = null_string,
-    const Array& files = null_array,
-    int timeoutSeconds = -1,
-    PageletServerTaskEvent *event = nullptr
-  );
+    using namespace cv::ocl::runtime;
     
-    struct Vframe {
-  Vframe(const Func* func, int parent, int cost, uint64_t entry_weight)
-    : func(func)
-    , parent(parent)
-    , entry_weight(entry_weight)
-    , inclusive_cost(cost)
-    , exclusive_cost(cost)
-  {}
-    }
+    const uchar g_Saturate8u[] =
+{
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
+     16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
+     32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
+     48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
+     64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
+     80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
+     96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
+    112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
+    144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
+    160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
+    176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
+    192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
+    208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
+    224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
+    240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255
+};
     
-    struct Block;
-struct SSATmp;
+    Ptr<LookUpTable> cv::cuda::createLookUpTable(InputArray) { throw_no_cuda(); return Ptr<LookUpTable>(); }
     
+    #include 'generic/THTensorLapack.cpp'
+#include 'THGenerateFloatTypes.h'
     
-    {  switch (op.arg1) {
-  case 0:
-    return success();
-  case 1:
-    return topT(env, 0).subtypeOf(BNum) ? success() : false;
-  case 2:
-    if (topT(env, 0).subtypeOf(BNum) &&
-        topT(env, 1).subtypeOf(BNum)) {
-      return success();
-    }
-    break;
-  }
-  return false;
+      /// Attempts to find a value for the given `key`. If found, returns a
+  /// reference to the value. If not, throws an exception.
+  T& at(const std::string& key);
+  const T& at(const std::string& key) const;
+    
+    static bool hasContiguousSubspace(TensorList tl) {
+  // true if all the non-null tensors are adjacent
+  auto isDefined = [](const Tensor & tensor){ return tensor.defined(); };
+  auto isNull = [](const Tensor & tensor){ return !tensor.defined(); };
+  auto start = std::find_if(tl.begin(), tl.end(), isDefined);
+  auto stop = std::find_if(tl.rbegin(), tl.rend(), isDefined);
+  auto it = std::find_if(start, stop.base(), isNull);
+  return it == stop.base();
 }
     
+      std::vector<THCStream*> streams;
+  Py_ssize_t length = PySequence_Fast_GET_SIZE(seq.get());
+  for (Py_ssize_t i = 0; i < length; i++) {
+    PyObject *stream = PySequence_Fast_GET_ITEM(seq.get(), i);
+    }
     
-    {  return match<bool>(
-    dst,
-    [&] (DeadIter) {
-      match<void>(
-        src,
-        [] (DeadIter) {},
-        [] (const LiveIter&) {
-          always_assert(false && 'merging dead iter with live iter');
-        }
-      );
+    
+    {  // Try to parse the numbers
+  result = THLongStorage_newWithSize(length);
+  for (Py_ssize_t i = 0; i < length; ++i) {
+    PyObject *arg = PyTuple_GET_ITEM(args, i + ignore_first);
+    if (!THPUtils_checkLong(arg)) {
       return false;
-    },
-    [&] (LiveIter& diter) {
-      return match<bool>(
-        src,
-        [&] (DeadIter) {
-          always_assert(false && 'merging live iter with dead iter');
-          return false;
-        },
-        [&] (const LiveIter& siter) {
-          auto key = join(diter.types.key, siter.types.key);
-          auto value = join(diter.types.value, siter.types.value);
-          auto const count = mergeCounts(diter.types.count, siter.types.count);
-          auto const throws1 =
-            diter.types.mayThrowOnInit || siter.types.mayThrowOnInit;
-          auto const throws2 =
-            diter.types.mayThrowOnNext || siter.types.mayThrowOnNext;
-          auto const baseLocal = (diter.baseLocal != siter.baseLocal)
-            ? NoLocalId
-            : diter.baseLocal;
-          auto const keyLocal = (diter.keyLocal != siter.keyLocal)
-            ? NoLocalId
-            : diter.keyLocal;
-          auto const initBlock = (diter.initBlock != siter.initBlock)
-            ? NoBlockId
-            : diter.initBlock;
-          auto const changed =
-            !equivalently_refined(key, diter.types.key) ||
-            !equivalently_refined(value, diter.types.value) ||
-            count != diter.types.count ||
-            throws1 != diter.types.mayThrowOnInit ||
-            throws2 != diter.types.mayThrowOnNext ||
-            keyLocal != diter.keyLocal ||
-            baseLocal != diter.baseLocal ||
-            initBlock != diter.initBlock;
-          diter.types =
-            IterTypes {
-              std::move(key),
-              std::move(value),
-              count,
-              throws1,
-              throws2
-            };
-          diter.baseLocal = baseLocal;
-          diter.keyLocal = keyLocal;
-          diter.initBlock = initBlock;
-          return changed;
-        }
-      );
     }
-  );
+    THLongStorage_set(result, i, THPUtils_unpackLong(arg));
+  }
+  return true;
 }
     
-    #include 'hphp/hhbbc/eval-cell.h'
-#include 'hphp/hhbbc/type-system.h'
+      // Populate outputs
+  for (int k = 0; k < N; k++) { // For each box, even skipped
+    }
     
-      /**
-   * Skip the top frame of the stack. Used to jump over internal frames.
-   */
-  BacktraceArgs& skipTop(bool skipTop = true) {
-    m_skipTop = skipTop;
-    return *this;
+    
+    { private:
+  TIndex dense_last_dim_;
+  INPUT_TAGS(LENGTHS, INDICES, DENSE);
+};
+    
+    int64_t getWallClockMicros() {
+  return RuntimeOption::EvalJitTimer ? HPHP::Timer::GetCurrentTimeMicros() :
+         -1;
+}
+    
+      /* Second, try to get a magic file from Common Files */
+  if ((home = getenv('COMMONPROGRAMFILES')) != NULL) {
+    if (asprintf(&tmppath, '%s%s', home, hmagic) >= 0)
+      APPENDPATH();
   }
     
-    #include 'hphp/runtime/base/req-list.h'
-#include 'hphp/runtime/base/request-event-handler.h'
-#include 'hphp/runtime/base/request-local.h'
-#include 'hphp/runtime/base/req-ptr.h'
-#include 'hphp/runtime/base/type-array.h'
-#include 'hphp/runtime/base/type-resource.h'
-#include 'hphp/runtime/base/type-string.h'
-#include 'hphp/runtime/base/type-variant.h'
     
-    size_t ClusterHistograms(JpegHistogram* histo, size_t* num,
-                         int* histo_indexes, uint8_t* depth) {
-  memset(depth, 0, *num * JpegHistogram::kSize);
-  size_t costs[kMaxComponents];
-  for (size_t i = 0; i < *num; ++i) {
-    histo_indexes[i] = i;
-    std::vector<HuffmanTree> tree(2 * JpegHistogram::kSize + 1);
-    CreateHuffmanTree(histo[i].counts, JpegHistogram::kSize,
-                      kJpegHuffmanMaxBitLength, &tree[0],
-                      &depth[i * JpegHistogram::kSize]);
-    costs[i] = (HistogramHeaderCost(histo[i]) +
-                HistogramEntropyCost(histo[i],
-                                     &depth[i * JpegHistogram::kSize]));
+    {  return ret;
+}
+    
+      for (auto& c : unit.classes) {
+    folly::toAppend(
+      indent(2, show(*c)),
+      &ret
+    );
   }
-  const size_t orig_num = *num;
-  while (*num > 1) {
-    size_t last = *num - 1;
-    size_t second_last = *num - 2;
-    JpegHistogram combined(histo[last]);
-    combined.AddHistogram(histo[second_last]);
-    std::vector<HuffmanTree> tree(2 * JpegHistogram::kSize + 1);
-    uint8_t depth_combined[JpegHistogram::kSize] = { 0 };
-    CreateHuffmanTree(combined.counts, JpegHistogram::kSize,
-                      kJpegHuffmanMaxBitLength, &tree[0], depth_combined);
-    size_t cost_combined = (HistogramHeaderCost(combined) +
-                            HistogramEntropyCost(combined, depth_combined));
-    if (cost_combined < costs[last] + costs[second_last]) {
-      histo[second_last] = combined;
-      histo[last] = JpegHistogram();
-      costs[second_last] = cost_combined;
-      memcpy(&depth[second_last * JpegHistogram::kSize], depth_combined,
-             sizeof(depth_combined));
-      for (size_t i = 0; i < orig_num; ++i) {
-        if (histo_indexes[i] == last) {
-          histo_indexes[i] = second_last;
+    
+    
+    {}
+    
+      static bool IsVirtualDirectory(const String& filename);
+  static bool IsVirtualFile(const String& filename);
+  static bool IsPlainFilePath(const String& filename) {
+    return filename.find('://') == String::npos;
+  }
+    
+    
+    {  HeapImpl& heap_;
+  GCBits const mark_version_;
+  size_t num_small_{0}, num_big_{0}, num_slabs_{0};
+  size_t marked_{0}, pinned_{0}, unknown_{0}; // object counts
+  Counter cscanned_roots_, cscanned_; // bytes
+  Counter xscanned_roots_, xscanned_; // bytes
+  size_t init_ns_, initfree_ns_, roots_ns_{0}, mark_ns_{0}, sweep_ns_;
+  size_t max_worklist_{0}; // max size of cwork_ + xwork_
+  size_t freed_bytes_{0};
+  PtrMap<const HeapObject*> ptrs_;
+  MemBlock slabs_range_;
+  boost::dynamic_bitset<> slab_map_; // 1 bit per 2M
+  type_scan::Scanner type_scanner_;
+  std::vector<const HeapObject*> cwork_, xwork_;
+  APCGCManager* const apcgc_;
+};
+    
+    #pragma comment(lib, 'Shlwapi.lib')
+    
+        // change all inputs of this new node to share the old one's inputs
+    for (int i = 0; i < oldNode->GetNumInputs(); i++)
+    {
+        newNode->SetInput(i, oldNode->GetInputs()[i]); // TODO: use AttachInput()?
+        //oldNode->SetInput(i, nullptr); // BUGBUG: old node should no longer point into the network
+    }
+    
+    template <typename ElemType>
+void DoConvertFromDbn(const ConfigParameters& config)
+{
+    wstring modelPath = config(L'modelPath');
+    wstring dbnModelPath = config(L'dbnModelPath');
+    }
+    
+    #include <memory> // for shared_ptr
+    
+        // Destroy - cleanup and remove this class
+    // NOTE: this destroys the object, and it can't be used past this point
+    virtual void Destroy();
+    
+        ProgressTracing()
+        : m_enabled(false), m_tracingFlag(false), m_timestampFlag(false), m_totalNumberOfSteps(0), m_currentStepOffset(0)
+    {
+    }
+    
+        virtual VariableSchema GetOutputSchema() const override;
+    
+    // Returns the next Huffman-coded symbol.
+int ReadSymbol(const HuffmanTableEntry* table, BitReaderState* br) {
+  int nbits;
+  br->FillBitWindow();
+  int val = (br->val_ >> (br->bits_left_ - 8)) & 0xff;
+  table += val;
+  nbits = table->bits - 8;
+  if (nbits > 0) {
+    br->bits_left_ -= 8;
+    table += table->value;
+    val = (br->val_ >> (br->bits_left_ - nbits)) & ((1 << nbits) - 1);
+    table += val;
+  }
+  br->bits_left_ -= table->bits;
+  return table->value;
+}
+    
+    std::vector<std::vector<float> > RGBToYUV(const std::vector<float>& rgb) {
+  std::vector<std::vector<float> > yuv(3, std::vector<float>(rgb.size() / 3));
+  for (size_t i = 0, p = 0; p < rgb.size(); ++i, p += 3) {
+    const float r = rgb[p + 0];
+    const float g = rgb[p + 1];
+    const float b = rgb[p + 2];
+    yuv[0][i] = RGBToY(r, g, b);
+    yuv[1][i] = RGBToU(r, g, b);
+    yuv[2][i] = RGBToV(r, g, b);
+  }
+  return yuv;
+}
+    
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
+    
+      // Compute YUV444 DCT coefficients.
+  int block_ix = 0;
+  for (int block_y = 0; block_y < jpg->MCU_rows; ++block_y) {
+    for (int block_x = 0; block_x < jpg->MCU_cols; ++block_x) {
+      coeff_t block[3 * kDCTBlockSize];
+      // RGB->YUV transform.
+      for (int iy = 0; iy < 8; ++iy) {
+        for (int ix = 0; ix < 8; ++ix) {
+          int y = std::min(h - 1, 8 * block_y + iy);
+          int x = std::min(w - 1, 8 * block_x + ix);
+          int p = y * w + x;
+          RGBToYUV16(&rgb[3 * p], &block[8 * iy + ix]);
         }
       }
-      --(*num);
-    } else {
-      break;
+      // DCT
+      for (int i = 0; i < 3; ++i) {
+        ComputeBlockDCT(&block[i * kDCTBlockSize]);
+      }
+      // Quantization
+      for (int i = 0; i < 3 * 64; ++i) {
+        Quantize(&block[i], iquant[i]);
+      }
+      // Copy the resulting coefficients to *jpg.
+      for (int i = 0; i < 3; ++i) {
+        memcpy(&jpg->components[i].coeffs[block_ix * kDCTBlockSize],
+               &block[i * kDCTBlockSize], kDCTBlockSize * sizeof(block[0]));
+      }
+      ++block_ix;
     }
   }
-  size_t total_cost = 0;
-  for (size_t i = 0; i < *num; ++i) {
-    total_cost += costs[i];
-  }
-  return (total_cost + 7) / 8;
-}
     
-    void OutputImage::ToLinearRGB(int xmin, int ymin, int xsize, int ysize,
-                              std::vector<std::vector<float> >* rgb) const {
-  const double* lut = Srgb8ToLinearTable();
-  std::vector<uint8_t> rgb_pixels = ToSRGB(xmin, ymin, xsize, ysize);
-  for (int p = 0; p < xsize * ysize; ++p) {
-    for (int i = 0; i < 3; ++i) {
-      (*rgb)[i][p] = static_cast<float>(lut[rgb_pixels[3 * p + i]]);
+    namespace guetzli {
     }
-  }
-}
     
     
-    {}  // namespace guetzli
+    {} // namespace folly
 
     
-    #ifndef GUETZLI_DCT_DOUBLE_H_
-#define GUETZLI_DCT_DOUBLE_H_
+    #include <folly/synchronization/Hazptr.h>
     
-    // Computes the DCT (Discrete Cosine Transform) of the 8x8 array in 'block',
-// scaled up by a factor of 16. The values in 'block' are laid out row-by-row
-// and the result is written to the same memory area.
-void ComputeBlockDCT(coeff_t* block);
-    
-    std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg) {
-  if (jpg.components.size() == 1 ||
-      (jpg.components.size() == 3 &&
-       HasYCbCrColorSpace(jpg) && (jpg.Is420() || jpg.Is444()))) {
-    OutputImage img(jpg.width, jpg.height);
-    img.CopyFromJpegData(jpg);
-    return img.ToSRGB();
-  }
-  return std::vector<uint8_t>();
-}
-    
-    #ifndef GUETZLI_JPEG_DATA_DECODER_H_
-#define GUETZLI_JPEG_DATA_DECODER_H_
-    
-    // Single pixel rgb to 16-bit yuv conversion.
-// The returned yuv values are signed integers in the
-// range [-128, 127] inclusive.
-inline static void RGBToYUV16(const uint8_t* const rgb,
-                              coeff_t *out) {
-  enum { FRAC = 16, HALF = 1 << (FRAC - 1) };
-  const int r = rgb[0];
-  const int g = rgb[1];
-  const int b = rgb[2];
-  out[0] = (19595 * r  + 38469 * g +  7471 * b - (128 << 16) + HALF) >> FRAC;
-  out[64] = (-11059 * r - 21709 * g + 32768 * b + HALF - 1) >> FRAC;
-  out[128] = (32768 * r  - 27439 * g -  5329 * b + HALF - 1) >> FRAC;
-}
-    
-    // Parses the jpeg stream contained in data[*pos ... len) and fills in *jpg with
-// the parsed information.
-// If mode is JPEG_READ_HEADER, it fills in only the image dimensions in *jpg.
-// Returns false if the data is not valid jpeg, or if it contains an unsupported
-// jpeg feature.
-bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
-              JPEGData* jpg);
-// string variant
-bool ReadJpeg(const std::string& data, JpegReadMode mode,
-              JPEGData* jpg);
-    
-      // Special case code with only one value.
-  if (total_count == 1) {
-    code.bits = 0;
-    code.value = symbols[0];
-    for (key = 0; key < total_size; ++key) {
-      table[key] = code;
+      BlockingQueueAddResult addWithPriority(T item, int8_t priority) override {
+    int mid = getNumPriorities() / 2;
+    size_t queue = priority < 0
+        ? std::max(0, mid + priority)
+        : std::min(getNumPriorities() - 1, mid + priority);
+    CHECK_LT(queue, queues_.size());
+    switch (kBehavior) { // static
+      case QueueBehaviorIfFull::THROW:
+        if (!queues_[queue].write(std::move(item))) {
+          throw QueueFullException('LifoSemMPMCQueue full, can't add item');
+        }
+        break;
+      case QueueBehaviorIfFull::BLOCK:
+        queues_[queue].blockingWrite(std::move(item));
+        break;
     }
-    return total_size;
+    return sem_.post();
   }
     
-    #include 'guetzli/jpeg_data.h'
+    /** hazptr_priv structures
+ *  Thread private lists of retired objects that belong to the default domain.
+ */
+class hazptr_priv {
+  std::atomic<hazptr_obj*> head_;
+  std::atomic<hazptr_obj*> tail_;
+  int rcount_;
+  bool active_;
+  hazptr_priv* prev_;
+  hazptr_priv* next_;
+    }
     
-    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
-std::vector<std::vector<float>> PreProcessChannel(
-    int w, int h, int channel, float sigma, float amount, bool blur,
-    bool sharpen, const std::vector<std::vector<float>>& image);
-    
-    // Butteraugli scores that correspond to JPEG quality levels, starting at
-// kLowestQuality. They were computed by taking median BA scores of JPEGs
-// generated using libjpeg-turbo at given quality from a set of PNGs.
-// The scores above quality level 100 are just linearly decreased so that score
-// for 110 is 90% of the score for 100.
-const double kScoreForQuality[] = {
-  2.810761,  // 70
-  2.729300,
-  2.689687,
-  2.636811,
-  2.547863,
-  2.525400,
-  2.473416,
-  2.366133,
-  2.338078,
-  2.318654,
-  2.201674,  // 80
-  2.145517,
-  2.087322,
-  2.009328,
-  1.945456,
-  1.900112,
-  1.805701,
-  1.750194,
-  1.644175,
-  1.562165,
-  1.473608,  // 90
-  1.382021,
-  1.294298,
-  1.185402,
-  1.066781,
-  0.971769,  // 95
-  0.852901,
-  0.724544,
-  0.611302,
-  0.443185,
-  0.211578,  // 100
-  0.209462,
-  0.207346,
-  0.205230,
-  0.203114,
-  0.200999,  // 105
-  0.198883,
-  0.196767,
-  0.194651,
-  0.192535,
-  0.190420,  // 110
-  0.190420,
-};
+    #pragma once
