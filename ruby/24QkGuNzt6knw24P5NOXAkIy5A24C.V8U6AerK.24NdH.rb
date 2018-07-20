@@ -1,115 +1,90 @@
 
         
-        # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-
+              it 'renders HTML' do
+        capture = render(options, screenshots)
+        expect(capture).to match(/<html>/)
+        expect(capture).to include('<li>Some</li>')
+        expect(capture).to include('<li>key</li>')
+        expect(capture).to include('<li>words</li>')
+      end
+    end
     
-          def convert(content)
-        document = Kramdown::Document.new(content, @config)
-        html_output = document.to_html.chomp
-        if @config['show_warnings']
-          document.warnings.each do |warning|
-            Jekyll.logger.warn 'Kramdown warning:', warning.sub(%r!^Warning:\s+!, '')
+            command = [escaped_gradle_path, 'tasks', '--console=plain'].join(' ')
+        output = Action.sh(command, print_command: false, print_command_output: false)
+        output.split('\n').each do |line|
+          if (result = line.match(/(\w+)\s\-\s([\w\s]+)/))
+            self.tasks << GradleTask.new(title: result[1], description: result[2])
           end
         end
-        html_output
+    
+            expect(result).to eq('hg parent --template {rev}')
+        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template {rev}')
       end
     end
   end
 end
 
     
-    module Jekyll
-  module Deprecator
-    extend self
-    
-          options[:only_patterns] = [/\Agetting-started\//, /\Alayout\//, /\Acontent\//, /\Acomponents\//, /\Autilities\//, /\Amigration\//]
-    end
-    
-          options[:container] = '.container'
+          assert_contain 'Invalid email address'
+      refute warden.authenticated?(:admin)
     end
   end
-end
-
     
-        version 'Java' do
-      self.base_url = 'https://api.haxe.org/java/'
-    end
-    
-      def test_hidden_key
-    bug6899 = '[ruby-core:47253]'
-    foo = 'foor'
-    bar = 'bar'
-    assert_nothing_raised(NotImplementedError, bug6899) do
-      2000.times {eval %[(foo..bar) ? 1 : 2]}
-    end
-    foo = bar
-  end
-    
-        line = __LINE__+5
-    e = assert_raise(NoMethodError) do
-      1.upto 0 do
+          def initialize(*args, &block)
+        @bypass_confirmation_postpone = false
+        @skip_reconfirmation_in_callback = false
+        @reconfirmation_required = false
+        @skip_confirmation_notification = false
+        @raw_confirmation_token = nil
+        super
       end
-        .
-        foo(
-          1,
-          2,
+    
+        # Check if a reset_password_token is provided in the request
+    def assert_reset_token_passed
+      if params[:reset_password_token].blank?
+        set_flash_message(:alert, :no_token)
+        redirect_to new_session_path(resource_name)
+      end
+    end
+    
+      # POST /resource/unlock
+  def create
+    self.resource = resource_class.send_unlock_instructions(resource_params)
+    yield resource if block_given?
+    
+        def unlock_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :unlock_instructions, opts)
+    end
+    
+          def remember_cookie_values(resource)
+        options = { httponly: true }
+        options.merge!(forget_cookie_values(resource))
+        options.merge!(
+          value: resource.class.serialize_into_cookie(resource),
+          expires: resource.remember_expires_at
         )
-    end
-    assert_equal(line, e.backtrace_locations[0].lineno)
-  end
-    
-      describe 'RDATA()' do
-    it 'returns the struct data' do
-      a = @s.wrap_struct(1024)
-      @s.get_struct_rdata(a).should == 1024
-    end
-    
-      def add_file(name, mode) # :yields: io
-    check_closed
-    
-      def test_implicit_upper_case_proxy
-    use_ui @stub_ui do
-      ENV['HTTP_PROXY'] = @proxy_uri
-      fetcher = Gem::RemoteFetcher.new nil
-      @fetcher = fetcher
-      assert_data_from_proxy fetcher.fetch_path(@server_uri)
-    end
-  end
-    
-      it 'decodes the remaining shorts when passed the '*' modifier' do
-    'abcd'.unpack(unpack_format('*')).should == [25185, 25699]
-  end
-    
-    module Jekyll
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
       end
-    end
+    
+    module RuboCop
+  module Cop
+    module FormulaAudit
+      # This cop audits urls and mirrors in Formulae
+      class Urls < FormulaCop
+        def audit_formula(_node, _class_node, _parent_class_node, body_node)
+          urls = find_every_func_call_by_name(body_node, :url)
+          mirrors = find_every_func_call_by_name(body_node, :mirror)
+    
+              # Check if command-line is wrongly used in formula's desc
+          if match = regex_match_group(desc, /(command ?line)/i)
+            c = match.to_s.chars.first
+            problem 'Description should use \'#{c}ommand-line\' instead of \'#{match}\''
+          end
+    
+      def create_scaffold(source, target)
+    transform_r(source, target)
   end
-end
     
-    end
-    
-      class IncludeCodeTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      @title = nil
-      @file = nil
-      if markup.strip =~ /\s*lang:(\S+)/i
-        @filetype = $1
-        markup = markup.strip.sub(/lang:\S+/i,'')
-      end
-      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
-        @title = $1 || nil
-        @file = $3
-      end
-      super
-    end
+            def description
+          'have an attachment named #{@attachment_name}'
+        end
