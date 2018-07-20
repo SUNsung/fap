@@ -1,127 +1,80 @@
-        def determine_default_helper_class(name)
-          determine_constant_from_test_name(name) do |constant|
-            Module === constant && !(Class === constant)
-          end
-        end
+
+        
+          protected
     
-          def initialize
-        @log_tags = []
-    
-          # Calls this block after #reset is called on the instance. Used for resetting external collaborators, like Time.zone.
-      def resets(&block)
-        set_callback :reset, :after, &block
-      end
-    
-        test 'head :processing (102) does not return a content-type header' do
-      headers = HeadController.action(:processing).call(Rack::MockRequest.env_for('/')).second
-      assert_nil headers['Content-Type']
-      assert_nil headers['Content-Length']
+        def unlock_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :unlock_instructions, opts)
     end
     
-        rescue_from StandardError, with: :handle_exception_with_mailer_class
+          def remember_cookie_values(resource)
+        options = { httponly: true }
+        options.merge!(forget_cookie_values(resource))
+        options.merge!(
+          value: resource.class.serialize_into_cookie(resource),
+          expires: resource.remember_expires_at
+        )
+      end
     
-      # Skips the current run on Rubinius using Minitest::Assertions#skip
-  private def rubinius_skip(message = '')
-    skip message if RUBY_ENGINE == 'rbx'
+          @router_name = options[:router_name]
+    
+      it 'uses '-e' as file' do
+    ruby_exe('puts __FILE__', escape: false).chomp.should == '-e'
   end
-  # Skips the current run on JRuby using Minitest::Assertions#skip
-  private def jruby_skip(message = '')
-    skip message if defined?(JRUBY_VERSION)
+    
+      describe 'RTYPEDATA' do
+    it 'returns the struct data' do
+      a = @s.typed_wrap_struct(1024)
+      @s.typed_get_struct_rdata(a).should == 1024
+    end
+    
+        add_file name, mode do |io|
+      Gem::Package::DigestIO.wrap io, digests do |digest_io|
+        yield digest_io
+      end
+    end
+    
+        gemspec_file = File.join(@tempdir, @gem.spec_name)
+    
+      def test_ssl_connection
+    ssl_server = self.class.start_ssl_server
+    temp_ca_cert = File.join(DIR, 'ca_cert.pem')
+    with_configured_fetcher(':ssl_ca_cert: #{temp_ca_cert}') do |fetcher|
+      fetcher.fetch_path('https://localhost:#{ssl_server.config[:Port]}/yaml')
+    end
+  end
+    
+      def meta
+    object.file.meta
   end
 end
 
     
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
-    
-          # Keep a list of subclasses of Jekyll::Command every time it's inherited
-      # Called automatically.
-      #
-      # base - the subclass
-      #
-      # Returns nothing
-      def inherited(base)
-        subclasses << base
-        super(base)
-      end
-    
-          # Handling Reading
-      'safe'                => false,
-      'include'             => ['.htaccess'],
-      'exclude'             => %w(
-        Gemfile Gemfile.lock node_modules vendor/bundle/ vendor/cache/ vendor/gems/
-        vendor/ruby/
-      ),
-      'keep_files'          => ['.git', '.svn'],
-      'encoding'            => 'utf-8',
-      'markdown_ext'        => 'markdown,mkdown,mkdn,mkd,md',
-      'strict_front_matter' => false,
-    
-          def parse_content
-        add_text @src.scan(%r!\A.*\n!)
-      end
-      define_parser(:content, %r!\A!)
-    end
+      def deliver_digest
+    NotificationMailer.digest(user.account).deliver_now!
+    user.touch(:last_emailed_at)
   end
 end
+
     
-        # Construct a Hash of key-value pairs which contain a mapping between
-    #   a key in the URL template and the corresponding value for this document.
-    #
-    # Returns the Hash of key-value pairs for replacement in the URL.
-    def url_placeholders
-      @url_placeholders ||= Drops::UrlDrop.new(self)
-    end
+        it 'tracks when sign in is older than one day' do
+      user.update(current_sign_in_at: 2.days.ago)
+      sign_in user, scope: :user
+      get :show
     
-        def execute(args)
+              if @address.update_attributes(address_params)
+            respond_with(@address, default_template: :show)
+          else
+            invalid_resource!(@address)
+          end
+        end
     
-    #
-# Railties
-#
+            def stock_location
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:id])
+        end
     
-        inp.attributes.keys.each do |ikey|
-      if (ikey.downcase == 'value')
-        inp[ikey] = ''
-        next
-      end
-    
-      def parse(pkt)
-    # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 21 and pkt.tcp_dport != 21)
-    s = find_session((pkt.tcp_sport == 21) ? get_session_src(pkt) : get_session_dst(pkt))
-    s[:sname] ||= 'ftp'
-    
-          # Inspired by https://github.com/nov/openid_connect_sample/blob/master/app/controllers/connect/clients_controller.rb#L24
-      def create
-        registrar = OpenIDConnect::Client::Registrar.new(request.url, params)
-        client = Api::OpenidConnect::OAuthApplication.register! registrar
-        render json: client.as_json(root: false)
-      end
-    
-    if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
-  ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
-  require 'rubygems'
-  require 'bundler/setup'
-  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-elsif ENV['COCOAPODS_NO_BUNDLER']
-  require 'rubygems'
-  gem 'cocoapods'
-end
-    
-          def self.options
-        [
-          ['--update', 'Run `pod repo update` before listing'],
-          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
-        ].concat(super)
-      end
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
+        end
