@@ -1,43 +1,65 @@
 
         
-            def from_envvar(self, variable_name, silent=False):
-        '''Loads a configuration from an environment variable pointing to
-        a configuration file.  This is basically just a shortcut with nicer
-        error messages for this line of code::
-    
-        for idx, (loader, srcobj, triple) in enumerate(attempts):
-        if isinstance(srcobj, Flask):
-            src_info = 'application '%s'' % srcobj.import_name
-        elif isinstance(srcobj, Blueprint):
-            src_info = 'blueprint '%s' (%s)' % (srcobj.name,
-                                                srcobj.import_name)
-        else:
-            src_info = repr(srcobj)
-    
-        def make_null_session(self, app):
-        '''Creates a null session which acts as a replacement object if the
-        real session support could not be loaded due to a configuration
-        error.  This mainly aids the user experience because the job of the
-        null session is to still support lookup without complaining but
-        modifications are answered with a helpful error message of what
-        failed.
-    
-        rv = parse_changelog()
-    
-        class Test(Base):
-        SECRET_KEY = 'config'
+            unexpectedType = property(getUnexpectedType)
     
     
-def test_egg_installed_paths(install_egg, modules_tmpdir,
-                             modules_tmpdir_prefix):
-    modules_tmpdir.mkdir('site_egg').join('__init__.py').write(
-        'import flask\n\napp = flask.Flask(__name__)'
-    )
-    install_egg('site_egg')
+            stat => ID '=' expr ';'
+             => ID '=' atom ('+' atom)* ';'
+             => ID '=' '(' expr ')' ('+' atom)* ';'
+             => ID '=' '(' atom ')' ('+' atom)* ';'
+             => ID '=' '(' INT ')' ('+' atom)* ';'
+             => ID '=' '(' INT ')' ';'
+    
+        # The font size ('10pt', '11pt' or '12pt').
+    #
+    # 'pointsize': '10pt',
+    
+        def _rollback_and_restart(self, success_msg):
+        '''Rollback the most recent checkpoint and restart the webserver
+    
+    
+class VirtualHostTest(unittest.TestCase):
+    '''Test the VirtualHost class.'''
+    
+    
+    {    # Latex figure (float) alignment
+    #'figure_align': 'htbp',
+}
+    
+    Usage:
+while True:
     try:
-        import site_egg
-        assert site_egg.app.instance_path == \
-            str(modules_tmpdir.join('var/').join('site_egg-instance'))
-    finally:
-        if 'site_egg' in sys.modules:
-            del sys.modules['site_egg']
+        chunk = Chunk(file)
+    except EOFError:
+        break
+    chunktype = chunk.getname()
+    while True:
+        data = chunk.read(nbytes)
+        if not data:
+            pass
+        # do something with data
+    
+        def _lookup(self, key=None):
+        '''Return (start, stop) or raise KeyError.'''
+        if self._toc is None:
+            self._generate_toc()
+        if key is not None:
+            try:
+                return self._toc[key]
+            except KeyError:
+                raise KeyError('No message with key: %s' % key) from None
+    
+        def test_as_bytes_common(self):
+        sep = os.fsencode(self.sep)
+        P = self.cls
+        self.assertEqual(bytes(P('a/b')), b'a' + sep + b'b')
+    
+    T_CV2 = ClassVar[int]
+T_CV3 = ClassVar
+    
+    
+def read_text(package: Package,
+              resource: Resource,
+              encoding: str = 'utf-8',
+              errors: str = 'strict') -> str:
+    '''Return the decoded string of the resource.
