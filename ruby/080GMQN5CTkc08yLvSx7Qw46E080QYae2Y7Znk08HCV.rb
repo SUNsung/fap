@@ -1,44 +1,77 @@
 
         
-          def resource
-    @resource ||=
-      if params[:project_id].present?
-        Project.find(params[:project_id])
-      elsif params[:namespace_id].present?
-        Group.find(params[:namespace_id])
-      end
+          def short_type
+    @short_type ||= type.split('::').pop
   end
     
-    class U2fRegistration < ActiveRecord::Base
-  belongs_to :user
+      def recipients(payload = {})
+    emails = interpolated(payload)['recipients']
+    if emails.present?
+      if emails.is_a?(String)
+        [emails]
+      else
+        emails
+      end
+    else
+      [user.email]
+    end
+  end
     
-            # This returns all the registered commands.
-        #
-        # @return [Registry<Symbol, Array<Proc, Hash>>]
-        def commands
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.commands)
-            end
+          _form_configurable_fields[name] = options
+    end
+    
+        # Optional
+    #   Use this method the gracefully stop your agent but make sure the run method return, or
+    #   terminate the thread.
+    def stop; end
+  end
+end
+=end
+module LongRunnable
+  extend ActiveSupport::Concern
+    
+          html_filters.push 'bootstrap/entries_v4', 'bootstrap/clean_html_v4'
+    
+        version '1.5' do
+      self.release = '1.5.3'
+      self.base_urls = [
+        'https://hexdocs.pm/elixir/#{release}/',
+        'https://hexdocs.pm/eex/#{release}/',
+        'https://hexdocs.pm/ex_unit/#{release}/',
+        'https://hexdocs.pm/iex/#{release}/',
+        'https://hexdocs.pm/logger/#{release}/',
+        'https://hexdocs.pm/mix/#{release}/',
+        'https://elixir-lang.org/getting-started/'
+      ]
+    end
+    
+        def parse(response)
+      unless response.url == root_url || self.class.version == 'Guide'
+        response.body.sub!(/<nav class='devsite-nav-responsive-sidebar.+?<\/nav>/m, '')
+        response.body.gsub!(/<li class='devsite-nav-item'>.+?<\/li>/m, '')
+      end
+    
+        def to_a
+      @filters.dup
+    end
+    
+    module Docs
+  class PageDb
+    attr_reader :pages
+    
+                # Register the handler if this is our first callback.
+            Signal.trap('INT') { fire_callbacks } if registered.length == 1
           end
         end
     
-          def values_at(*indices)
-        indices.collect { |key| self[convert_key(key)] }
+            # Success, exit status 0
+        0
       end
+    end
+  end
+end
+
     
-    
-class SnifferIMAP < BaseProtocolParser
-    
-    	if ln =~ /\(jmp\)/
-		parts = ln.split(' ')
-		if (parts[0][0,1] == 'j' and parts[2][0,2] == ';j' and parts[4] == '(jmp)')
-			old = parts[1]
-			func = parts[3]
-			new = addrs[func]
-			#puts '%32s: %s -> %x' % [func, old, new]
-			replaces << [func, old, new.to_s(16)]
-		end
-	end
-    
-    codez = Array.new
+      def start_url
+    '/web/timelines/home'
+  end
