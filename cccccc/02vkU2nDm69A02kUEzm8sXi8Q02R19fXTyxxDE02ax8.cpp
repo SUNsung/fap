@@ -1,176 +1,226 @@
 
         
-        #include 'base/values.h'
-#include 'extensions/common/draggable_region.h'
-#include 'content/public/common/common_param_traits.h'
-#include 'ipc/ipc_message_macros.h'
-#include 'ui/gfx/ipc/gfx_param_traits.h'
+        
+    {}  // namespace nwapi
     
-    #ifndef CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
-#define CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
-    
-    
-#include 'content/nw/src/api/event/event.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/dispatcher_host.h'
-#include 'ui/gfx/screen.h'
-    
-    class BaseEvent {
-  friend class EventListener;
-  DISALLOW_COPY_AND_ASSIGN(BaseEvent);
+    namespace remote {
     }
     
-      if (!item->enable_shortcut_)
+    EventListener::EventListener(int id,
+  const base::WeakPtr<DispatcherHost>& dispatcher_host,
+  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
+    }
+    
+    Menu::Menu(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+           const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
+  Create(option);
+}
+    
+    
+bool MenuDelegate::GetAcceleratorForCommandId(
+      int command_id,
+      ui::Accelerator* accelerator) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
     return false;
-    
-    ui::KeyboardCode GetKeycodeFromText(std::string text){
-  ui::KeyboardCode retval = ui::VKEY_UNKNOWN;
-  if (text.size() != 0){
-    std::string upperText = base::ToUpperASCII(text);
-    std::string keyName = text;
-    bool found = false;
-    if (upperText.size() == 1){
-      char key = upperText[0];
-      if (key>='0' && key<='9'){//handle digital
-        keyName = 'Digit' + upperText;
-        found = true;
-      } else if (key>='A'&&key<='Z'){//handle alphabet
-        keyName = 'Key' + upperText;
-        found = true;
-      }
-    }
-    }
     }
     
-      int NwDesktopCaptureMonitor::GetPrimaryMonitorIndex() {
-  #ifdef _WIN32 
-    int count=0;
-    for (int i = 0;; ++i) {
-      DISPLAY_DEVICE device;
-      device.cb = sizeof(device);
-      BOOL ret = EnumDisplayDevices(NULL, i, &device, 0);
-      if(!ret)
-        break;
-      if (device.StateFlags & DISPLAY_DEVICE_ACTIVE){
-        if (device.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE){
-          return count;
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.App.clearCache', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwAppClearCacheFunction);
+};
+    
+    ExtensionFunction::ResponseAction
+NwObjCallObjectMethodAsyncFunction::Run() {
+  EXTENSION_FUNCTION_VALIDATE(args_);
+  base::ListValue* arguments = nullptr;
+  int id = 0;
+  std::string type, method;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
+    }
+    
+      NwScreenGetScreensFunction::NwScreenGetScreensFunction() {}
+    
+    void ComputeJacobians(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
+                      const IntrinsicParams& param,  InputArray omc, InputArray Tc,
+                      const int& check_cond, const double& thresh_cond, Mat& JJ2_inv, Mat& ex3);
+    
+    
+    {            ptr[tid] = partial = partial + ptr[tid + 16];
+            ptr[tid] = partial = partial + ptr[tid + 8];
+            ptr[tid] = partial = partial + ptr[tid + 4];
+            ptr[tid] = partial = partial + ptr[tid + 2];
+            ptr[tid] = partial = partial + ptr[tid + 1];
         }
-        count++;
-      }
+    
+    static void* openclamdfft_check_fn(int ID)
+{
+    assert(ID >= 0 && ID < (int)(sizeof(openclamdfft_fn)/sizeof(openclamdfft_fn[0])));
+    const struct DynamicFnEntry* e = openclamdfft_fn[ID];
+    void* func = CV_CL_GET_PROC_ADDRESS(e->fnName);
+    if (!func)
+    {
+        throw cv::Exception(cv::Error::OpenCLApiCallError,
+                cv::format('OpenCL AMD FFT function is not available: [%s]', e->fnName),
+                CV_Func, __FILE__, __LINE__);
     }
-  #endif
-    return -1;
+    *(e->ppFn) = func;
+    return func;
+}
+    
+    using namespace cv::ocl::runtime;
+    
+      N = std::min<int>(labels_.size(), N);
+  std::vector<int> maxN = Argmax(output, N);
+  std::vector<Prediction> predictions;
+  for (int i = 0; i < N; ++i) {
+    int idx = maxN[i];
+    predictions.push_back(std::make_pair(labels_[idx], output[idx]));
   }
     
+      gflags::SetUsageMessage('This script converts the MNIST dataset to\n'
+        'the lmdb/leveldb format used by Caffe to load data.\n'
+        'Usage:\n'
+        '    convert_mnist_data [FLAGS] input_image_file input_label_file '
+        'output_db_file\n'
+        'The MNIST dataset could be downloaded at\n'
+        '    http://yann.lecun.com/exdb/mnist/\n'
+        'You should gunzip them after downloading,'
+        'or directly use data/mnist/get_mnist.sh\n');
+  gflags::ParseCommandLineFlags(&argc, &argv, true);
     
-    {  delete tensor;
-  delete tensor2;
-  cout << 'OK' << endl;
-  return 0;
+    #include <vector>
+    
+    
+    {  /**
+   * @brief Computes the error gradient w.r.t. the BNLL inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
+    
+      bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnLRNDescriptor_t norm_desc_;
+  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include 'caffe/layers/neuron_layer.hpp'
+#include 'caffe/layers/sigmoid_layer.hpp'
+    
+    #include 'caffe/layers/neuron_layer.hpp'
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the ELU inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x} = \left\{
+   *        \begin{array}{lr}
+   *            1           & \mathrm{if} \; x > 0 \\
+   *            y + \alpha  & \mathrm{if} \; x \le 0
+   *        \end{array} \right.
+   *      @f$ if propagate_down[0].
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    // Do the sharpening to the v channel, but only in areas where it will help
+// channel should be 2 for v sharpening, or 1 for less effective u sharpening
+std::vector<std::vector<float>> PreProcessChannel(
+    int w, int h, int channel, float sigma, float amount, bool blur,
+    bool sharpen, const std::vector<std::vector<float>>& image) {
+  if (!blur && !sharpen) return image;
+    }
+    
+    void DCT1d(const double* in, int stride, double* out) {
+  for (int x = 0; x < 8; ++x) {
+    out[x * stride] = 0.0;
+    for (int u = 0; u < 8; ++u) {
+      out[x * stride] += kDCTMatrix[8 * x + u] * in[u * stride];
+    }
+  }
 }
+    
+    bool SetDepth(int p, HuffmanTree *pool, uint8_t *depth, int max_depth);
+    
+    
+    {}  // namespace guetzli
+    
+    #include <cmath>
+    
+      tmp0 = in[4 * stride];
+  tmp1 = kIDCTMatrix[ 4] * tmp0;
+  out[0] += tmp1;
+  out[1] -= tmp1;
+  out[2] -= tmp1;
+  out[3] += tmp1;
+  out[4] += tmp1;
+  out[5] -= tmp1;
+  out[6] -= tmp1;
+  out[7] += tmp1;
+    
+    // Fills in 'result' with the inverse DCT of 'block'.
+// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
+// a row-by-row memory layout.
+void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
+    
+    std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg) {
+  if (jpg.components.size() == 1 ||
+      (jpg.components.size() == 3 &&
+       HasYCbCrColorSpace(jpg) && (jpg.Is420() || jpg.Is444()))) {
+    OutputImage img(jpg.width, jpg.height);
+    img.CopyFromJpegData(jpg);
+    return img.ToSRGB();
+  }
+  return std::vector<uint8_t>();
+}
+    
+    #include <string>
+    
+    // Definition of error codes for parsing jpeg files.
+    
+    #endif  // GUETZLI_JPEG_HUFFMAN_DECODE_H_
 
     
-        virtual bool isCompleted() override;
-    virtual void wait() override;
-    
-    static PyObject* recursive_to_list(
-    char* data, IntList sizes, IntList strides, int64_t dim,
-    ScalarType scalarType, int64_t elementSize)
-{
-  int64_t ndim = sizes.size();
-  if (dim == ndim) {
-    return torch::utils::load_scalar(data, scalarType);
-  }
-  auto n = sizes[dim];
-  auto list = THPObjectPtr(PyList_New(n));
-  if (!list) throw python_error();
-  for (int64_t i = 0; i < n; i++) {
-    PyObject* obj = recursive_to_list(data, sizes, strides, dim + 1, scalarType, elementSize);
-    if (!obj) throw python_error();
-    PyList_SET_ITEM(list.get(), i, obj);
-    data += strides[dim] * elementSize;
-  }
-  return list.release();
-}
-    
-    void THDTensor_(multinomial)(THDLongTensor *self, THDGenerator *_generator,
-                             THDTensor *prob_dist, int n_sample,
-                             int with_replacement) {
-  int start_dim = THDTensor_(nDimension)(prob_dist);
-  if (start_dim == 1) {
-    THDTensor_(resize2d)(prob_dist, 1, THDTensor_(size)(prob_dist, 0));
-  }
-    }
-    
-    extern THDTensorDescriptor* THDPModule_makeDescriptor(PyObject *obj);
-template <typename TensorSrc>
-void THDPInsertCopyFunctionFromWorker(
-  THPCopyList& copyList,
-  void (*copyFunc)(THDTensorDescriptor* x, TensorSrc *z))
-{
-  auto wrapper = [copyFunc](PyObject* dst_, PyObject* src_) {
-    TensorSrc* src = THPTypeInfo<TensorSrc>::cdata(src_);
-    }
-    }
-    
-    #include 'osquery/core/conversions.h'
-    
-      {
-    auto dropper = DropPrivileges::get();
-    EXPECT_TRUE(dropper->dropTo(nobody->pw_uid, nobody->pw_gid));
-    EXPECT_EQ(geteuid(), nobody->pw_uid);
-    }
-    
-    
-    {  if (hr != S_OK) {
-    return Status(-1, 'Error retrieving data from WMI query.');
-  }
-  if (value.vt != VT_BOOL) {
-    VariantClear(&value);
-    return Status(-1, 'Invalid data type returned.');
-  }
-  ret = value.boolVal == VARIANT_TRUE ? true : false;
-  VariantClear(&value);
-  return Status(0);
-}
-    
-      // Check that all value lengths were maxed.
-  std::map<std::string, size_t> expected = {
-      {'name', 10}, {'age', 4}, {'food', 23}, {'number', 2}};
-  EXPECT_EQ(lengths, expected);
-    
-      static void DiskDisappearedCallback(DADiskRef disk, void* context);
-    
-      EventTappingEventPublisher() : EventPublisher() {}
-    
-      // Other methods
-  YGValue marginLeadingValue(const YGFlexDirection axis) const;
-  YGValue marginTrailingValue(const YGFlexDirection axis) const;
-  YGValue resolveFlexBasisPtr() const;
-  void resolveDimension();
-  YGDirection resolveDirection(const YGDirection ownerDirection);
-  void clearChildren();
-  /// Replaces the occurrences of oldChild with newChild
-  void replaceChild(YGNodeRef oldChild, YGNodeRef newChild);
-  void replaceChild(YGNodeRef child, uint32_t index);
-  void insertChild(YGNodeRef child, uint32_t index);
-  /// Removes the first occurrence of child
-  bool removeChild(YGNodeRef child);
-  void removeChild(uint32_t index);
-    
-        int unit;
-    double value;
-    
-      auto i = 0;
-  out << 'Backtrace:\n';
-  for (auto& elm : trace) {
-    out << '    #' << dec << setfill('0') << setw(2) << i++ << ' ' << elm << '\n';
-  }
-    
-        method(setExperimentalFeatureEnabled);
-    method(setPointScaleFactor);
-    
-    template<typename... ARGS>
-inline void logw(const char* tag, const char* msg, ARGS... args) noexcept {
-  log(ANDROID_LOG_WARN, tag, msg, args...);
-}
+      std::vector<uint8_t> ToSRGB(int xmin, int ymin, int xsize, int ysize) const;
