@@ -1,359 +1,184 @@
-// relauncher implements main browser application relaunches across platforms.
-// When a browser wants to relaunch itself, it can't simply fork off a new
-// process and exec a new browser from within. That leaves open a window
-// during which two browser applications might be running concurrently. If
-// that happens, each will wind up with a distinct Dock icon, which is
-// especially bad if the user expected the Dock icon to be persistent by
-// choosing Keep in Dock from the icon's contextual menu.
-//
-// relauncher approaches this problem by introducing an intermediate
-// process (the 'relauncher') in between the original browser ('parent') and
-// replacement browser ('relaunched'). The helper executable is used for the
-// relauncher process; because it's an LSUIElement, it doesn't get a Dock
-// icon and isn't visible as a running application at all. The parent will
-// start a relauncher process, giving it the 'writer' side of a pipe that it
-// retains the 'reader' end of. When the relauncher starts up, it will
-// establish a kqueue to wait for the parent to exit, and will then write to
-// the pipe. The parent, upon reading from the pipe, is free to exit. When the
-// relauncher is notified via its kqueue that the parent has exited, it
-// proceeds, launching the relaunched process. The handshake to synchronize
-// the parent with the relauncher is necessary to avoid races: the relauncher
-// needs to be sure that it's monitoring the parent and not some other process
-// in light of PID reuse, so the parent must remain alive long enough for the
-// relauncher to set up its kqueue.
+
+        
+        #include 'ui/gfx/image/image.h'
     
-    #ifndef ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
-#define ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
+    #include 'atom/browser/unresponsive_suppressor.h'
     
+      // Sent when a browser action's visibility has changed. The source is the
+  // ExtensionPrefs* that changed, and the details are a std::string with the
+  // extension's ID.
+  NOTIFICATION_EXTENSION_BROWSER_ACTION_VISIBILITY_CHANGED,
     
-    {}  // namespace atom
+    #ifndef CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
+#define CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
     
+    // File name of the Pepper Flash plugin on different platforms.
+const base::FilePath::CharType kPepperFlashPluginFilename[] =
+#if defined(OS_MACOSX)
+    FPL('PepperFlashPlayer.plugin');
+#elif defined(OS_WIN)
+    FPL('pepflashplayer.dll');
+#else  // OS_LINUX, etc.
+    FPL('libpepflashplayer.so');
+#endif
     
-    {  DraggableRegion();
-};
+      void set_minimum_size(const gfx::Size& min_size);
+  void set_maximum_size(const gfx::Size& max_size);
     
-    class PreferencesManager : public content::RenderThreadObserver {
- public:
-  PreferencesManager();
-  ~PreferencesManager() override;
-    }
-    
-    namespace chrome {
-    }
-    
-    // Parse hex color like '#FFF' or '#EFEFEF'
-SkColor ParseHexColor(const std::string& name);
-    
-    
-    {  int width = input_layer->width();
-  int height = input_layer->height();
-  float* input_data = input_layer->mutable_cpu_data();
-  for (int i = 0; i < input_layer->channels(); ++i) {
-    cv::Mat channel(height, width, CV_32FC1, input_data);
-    input_channels->push_back(channel);
-    input_data += width * height;
-  }
-}
-    
-    
-    {
-    {    if (++count % 1000 == 0) {
-      txn->Commit();
-    }
-  }
-  // write the last batch
-  if (count % 1000 != 0) {
-      txn->Commit();
-  }
-  LOG(INFO) << 'Processed ' << count << ' files.';
-  delete[] pixels;
-  db->Close();
-}
-    
-    int main(int argc, char** argv) {
-  if (argc != 4) {
-    printf('This script converts the MNIST dataset to the leveldb format used\n'
-           'by caffe to train a siamese network.\n'
-           'Usage:\n'
-           '    convert_mnist_data input_image_file input_label_file '
-           'output_db_file\n'
-           'The MNIST dataset could be downloaded at\n'
-           '    http://yann.lecun.com/exdb/mnist/\n'
-           'You should gunzip them after downloading.\n');
-  } else {
-    google::InitGoogleLogging(argv[0]);
-    convert_dataset(argv[1], argv[2], argv[3]);
-  }
-  return 0;
-}
-#else
-int main(int argc, char** argv) {
-  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
-}
-#endif  // USE_LEVELDB
+    #endif  // ATOM_COMMON_COLOR_UTIL_H_
 
     
+    // Get basic type definitions.
+#define IPC_MESSAGE_IMPL
+#include 'content/nw/src/common/common_message_generator.h'
     
-    {  /**
-   * @brief Computes the error gradient w.r.t. the absolute value inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} =
-   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
+    public:
+  EventListener(int id,
+                const base::WeakPtr<DispatcherHost>& dispatcher_host,
+                const base::DictionaryValue& option);
     
-      virtual inline const char* type() const { return 'BatchReindex'; }
-  virtual inline int ExactNumBottomBlobs() const { return 2; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-    
-    {}  // namespace caffe
-    
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLCNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLCNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
-        tempData1(NULL), tempData2(NULL) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLCNLayer();
-    }
+          std::string encoded_image_base64;
+      std::string encoded_image_str(encoded_image.data(), encoded_image.data() + encoded_image.size());
+      base::Base64Encode(encoded_image_str, &encoded_image_base64);
     
      protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  ~NwClipboardReadAvailableTypesFunction() override;
     
-    #include 'caffe/layers/neuron_layer.hpp'
-#include 'caffe/layers/relu_layer.hpp'
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {}  // namespace caffe
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2+)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs to be filtered @f$ x_1 @f$
-   *   -# ...
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs to be filtered @f$ x_K @f$
-   *   -# @f$ (N \times 1 \times 1 \times 1) @f$
-   *      the selector blob
-   * @param top output Blob vector (length 1+)
-   *   -# @f$ (S \times C \times H \times W) @f$ ()
-   *        the filtered output @f$ x_1 @f$
-   *        where S is the number of items
-   *        that haven't been filtered
-   *      @f$ (S \times C \times H \times W) @f$
-   *        the filtered output @f$ x_K @f$
-   *        where S is the number of items
-   *        that haven't been filtered
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-    const vector<Blob<Dtype>*>& top);
-    
-      grpc::testing::RunQPS();
-    
-    #include <grpc/support/log.h>
-    
-    int main(int argc, char** argv) {
-  grpc::testing::InitTest(&argc, &argv, true);
-  signal(SIGINT, sigint_handler);
-    }
-    
-    
-    { private:
-  gpr_timespec start_time_;
-  long num_queries_;
-  std::mutex num_queries_mu_;
-};
-    
-    
-    {  grpc::string package = service->full_name();
-  size_t pos = package.rfind('.' + service->name());
-  if (pos != grpc::string::npos) {
-    package.erase(pos);
-    result.append('package: ' + package + ';\n');
+      void NwDesktopCaptureMonitor::Stop() {
+    started_ = false;
+    media_list_.clear();
   }
-  result.append('service ' + service->name() + ' {\n');
-  for (int i = 0; i < service->method_count(); ++i) {
-    result.append(DescribeMethod(service->method(i)));
-  }
-  result.append('}\n\n');
-  return result;
+    
+    // dims=[5, 4, 3, 2]->[5, 3, 2, 4]
+TEST_F(MatrixTest, RotatingTranspose_1_3) {
+  GENERIC_2D_ARRAY<int> m;
+  src_.RotatingTranspose(dims_, kNumDims_, 1, 3, &m);
+  m.ResizeNoInit(kInputSize_ / 4, 4);
+  // Verify that the result is:
+  // output tensor=[[[[0, 6, 12, 18][1, 7, 13, 19]]
+  //                 [[2, 8, 14, 20][3, 9, 15, 21]]
+  //                 [[4, 10, 16, 22][5, 11, 17, 23]]]
+  //                [[[24, 30, 36, 42]...
+  EXPECT_EQ(0, m(0, 0));
+  EXPECT_EQ(6, m(0, 1));
+  EXPECT_EQ(1, m(1, 0));
+  EXPECT_EQ(2, m(2, 0));
+  EXPECT_EQ(3, m(3, 0));
+  EXPECT_EQ(4, m(4, 0));
+  EXPECT_EQ(5, m(5, 0));
+  EXPECT_EQ(24, m(6, 0));
+  EXPECT_EQ(30, m(6, 1));
 }
-    
-    
-    {  gpr_subprocess* const subprocess_;
-};
-    
-    #ifndef incl_HPHP_WORKLOAD_STATS_H_
-#define incl_HPHP_WORKLOAD_STATS_H_
-    
-    
-    {
-    {} }
-
-    
-    const char *Timer::getName() const {
-  switch (m_type) {
-  case WallTime:  return 'wall time';
-  case SystemCPU: return 'system cpu';
-  case UserCPU:   return 'user cpu';
-  case TotalCPU:  return 'total cpu';
-  default: assert(false);
-  }
-  return nullptr;
-}
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    
-      std::string m_url;
-  HeaderMap m_requestHeaders;
-  bool m_get;
-  std::string m_postData;
-  std::string m_remoteHost;
-    
-    #ifdef HAVE_NUMA
-    
-    #endif
-
-    
-    void emit_pseudomain(EmitUnitState& state,
-                     UnitEmitter& ue,
-                     const php::Unit& unit) {
-  FTRACE(2,  '    pseudomain\n');
-  auto& pm = *unit.pseudomain;
-  ue.initMain(std::get<0>(pm.srcInfo.loc),
-              std::get<1>(pm.srcInfo.loc));
-  auto const fe = ue.getMain();
-  auto const info = emit_bytecode(state, ue, pm);
-  if (is_systemlib_part(unit)) {
-    ue.m_mergeOnly = true;
-    auto const tv = make_tv<KindOfInt64>(1);
-    ue.m_mainReturn = tv;
-  } else {
-    ue.m_mergeOnly =
-      ue.m_returnSeen && ue.m_mainReturn.m_type != KindOfUninit;
-  }
-    }
-    
-      assert(src.initialized);
-  assert(dst.locals.size() == src.locals.size());
-  assert(dst.iters.size() == src.iters.size());
-  assert(dst.clsRefSlots.size() == src.clsRefSlots.size());
-  assert(dst.stack.size() == src.stack.size());
-  assert(dst.fpiStack.size() == src.fpiStack.size());
-    
-      auto append_vsa = [&] (const CompactVector<LSString>& keys) {
-    ret += '<';
-    auto delim = '';
-    for (auto& s : keys) {
-      ret += delim + escaped_string(s);
-      delim = ',';
-    }
-    ret += '>';
-  };
-    
-      for (auto& t : optionals()) EXPECT_EQ(t, opt(unopt(t)));
-  for (auto& t : optionals()) EXPECT_TRUE(is_opt(t));
-  for (auto& t : all()) {
-    auto const found =
-      std::find(begin(optionals()), end(optionals()), t) != end(optionals());
-    EXPECT_EQ(found, is_opt(t));
-  }
     
       /**
-   * This method may return ContinueAutoloading, StopAutoloading, or
-   * RetryAutoloading.
+   * Returns the baseline of the current object at the given level.
+   * The baseline is the line that passes through (x1, y1) and (x2, y2).
+   * WARNING: with vertical text, baselines may be vertical!
+   * Returns false if there is no baseline at the current position.
    */
-  Result invokeFailureCallback(const_variant_ref func, const String& kind,
-                               const String& name, const Variant& err);
+  bool Baseline(PageIteratorLevel level,
+                int* x1, int* y1, int* x2, int* y2) const;
     
-    Array createBacktrace(const BacktraceArgs& backtraceArgs);
-void addBacktraceToStructLog(const Array& bt, StructuredLogEntry& cols);
-int64_t createBacktraceHash();
-req::ptr<CompactTrace> createCompactBacktrace();
-    
-      bool marked(const HeapObject* h) {
-    return h->marks() == mark_version_;
-  }
-  template<bool apcgc> void checkedEnqueue(const void* p);
-  template<bool apcgc> void exactEnqueue(const void* p);
-  HeapObject* find(const void*);
-    
-      int target_level = -1, target_path_id = 0;
-    
-        slists.Append('c', 'bbnagnagsx');
-    slists.Append('a', 'sa');
-    slists.Append('b', 'df');
-    slists.Append('a', 'gh');
-    slists.Append('a', 'jk');
-    slists.Append('b', 'l;');
-    slists.Append('c', 'rogosh');
-    
-    
-    {
-    {    return true;
-  }
-// @lint-ignore TXT4 T25377293 Grandfathered in
-};
-    
-      if (Status::OK() != s) {
-    return s;
-  }
-    
-    // Return an iterator that provided the union of the data in
-// children[0,n-1].  Takes ownership of the child iterators and
-// will delete them when the result iterator is deleted.
-//
-// The result does no duplicate suppression.  I.e., if a particular
-// key is present in K child iterators, it will be yielded K times.
-//
-// REQUIRES: n >= 0
-extern InternalIterator* NewMergingIterator(
-    const InternalKeyComparator* comparator, InternalIterator** children, int n,
-    Arena* arena = nullptr, bool prefix_seek_mode = false);
-    
-    #ifndef JAVA_ROCKSJNI_COMPACTION_FILTER_FACTORY_JNICALLBACK_H_
-#define JAVA_ROCKSJNI_COMPACTION_FILTER_FACTORY_JNICALLBACK_H_
-    
-    struct ComparatorJniCallbackOptions {
-  // Use adaptive mutex, which spins in the user space before resorting
-  // to kernel. This could reduce context switch when the mutex is not
-  // heavily contended. However, if the mutex is hot, we could end up
-  // wasting spin time.
-  // Default: false
-  bool use_adaptive_mutex;
+    struct PARA : public ELIST_LINK {
+ public:
+  PARA() : model(nullptr), is_list_item(false),
+           is_very_first_or_continuation(false), has_drop_cap(false) {}
     }
     
-    #ifdef OS_WIN
+    #ifndef TESSERACT_CCUTIL_DOUBLEPTR_H_
+#define TESSERACT_CCUTIL_DOUBLEPTR_H_
+    
+      // Replicates the samples to a minimum frequency defined by
+  // 2 * kSampleRandomSize, or for larger counts duplicates all samples.
+  // After replication, the replicated samples are perturbed slightly, but
+  // in a predictable and repeatable way.
+  // Use after OrganizeByFontAndClass().
+  void ReplicateAndRandomizeSamples();
+    
+    // Generic weight matrix for network layers. Can store the matrix as either
+// an array of floats or int8_t. Provides functions to compute the forward and
+// backward steps with the matrix and updates to the weights.
+class WeightMatrix {
+ public:
+  WeightMatrix() : int_mode_(false), use_adam_(false) {}
+  // Sets up the network for training. Initializes weights using weights of
+  // scale `range` picked according to the random number generator `randomizer`.
+  // Note the order is outputs, inputs, as this is the order of indices to
+  // the matrix, so the adjacent elements are multiplied by the input during
+  // a forward operation.
+  int InitWeightsFloat(int no, int ni, bool use_adam, float weight_range,
+                       TRand* randomizer);
+  // Changes the number of outputs to the size of the given code_map, copying
+  // the old weight matrix entries for each output from code_map[output] where
+  // non-negative, and uses the mean (over all outputs) of the existing weights
+  // for all outputs with negative code_map entries. Returns the new number of
+  // weights.
+  int RemapOutputs(const std::vector<int>& code_map);
+    }
+    
+    // The CCNonTextDetect class contains grid-based operations on blobs to create
+// a full-resolution image mask analogous yet complementary to
+// pixGenHalftoneMask as it is better at line-drawings, graphs and charts.
+class CCNonTextDetect : public BlobGrid {
+ public:
+  CCNonTextDetect(int gridsize, const ICOORD& bleft, const ICOORD& tright);
+  virtual ~CCNonTextDetect();
+    }
+    
+      // Hoovers up all un-owned blobs and deletes them.
+  // The rest get released from the block so the ColPartitions can pass
+  // ownership to the output blocks.
+  void ReleaseBlobsAndCleanupUnused(TO_BLOCK* block);
+  // Splits partitions that cross columns where they have nothing in the gap.
+  void GridSplitPartitions();
+  // Merges partitions where there is vertical overlap, within a single column,
+  // and the horizontal gap is small enough.
+  void GridMergePartitions();
+  // Inserts remaining noise blobs into the most applicable partition if any.
+  // If there is no applicable partition, then the blobs are deleted.
+  void InsertRemainingNoise(TO_BLOCK* block);
+  // Remove partitions that come from horizontal lines that look like
+  // underlines, but are not part of a table.
+  void GridRemoveUnderlinePartitions();
+  // Add horizontal line separators as partitions.
+  void GridInsertHLinePartitions();
+  // Add vertical line separators as partitions.
+  void GridInsertVLinePartitions();
+  // For every ColPartition in the grid, sets its type based on position
+  // in the columns.
+  void SetPartitionTypes();
+  // Only images remain with multiple types in a run of partners.
+  // Sets the type of all in the group to the maximum of the group.
+  void SmoothPartnerRuns();
+    
+      // Returns the input image provided to the object. This object is owned by
+  // this class. Callers may want to clone the returned pix to work with it.
+  Pix* orig_pix() {
+    return orig_pix_;
+  }
+    
+    /**********************************************************************
+ * loop_bounding_box
+ *
+ * Find the bounding box of the edge loop.
+ **********************************************************************/
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    #define opus_fft_alloc_arch(_st, arch) \
+   ((void)(arch), opus_fft_alloc_arm_neon(_st))
+    
+    /* get number of leading zeros and fractional part (the bits right after the leading one */
+static OPUS_INLINE void silk_CLZ_FRAC(
+    opus_int32 in,            /* I  input                               */
+    opus_int32 *lz,           /* O  number of leading zeros             */
+    opus_int32 *frac_Q7       /* O  the 7 bits right after the leading one */
+)
+{
+    opus_int32 lzeros = silk_CLZ32(in);
+    }
