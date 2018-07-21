@@ -1,121 +1,54 @@
 
         
-        describe Deliver::HtmlGenerator do
-  let(:generator) { Deliver::HtmlGenerator.new }
-    
-            expect(result).to eq('svn info | grep Revision | egrep -o '[0-9]+'')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('svn info | grep Revision | egrep -o '[0-9]+'')
-      end
+          describe 'with -n and a Fixnum range' do
+    before :each do
+      @script = '-W0 -ne 'print if %s' #{fixture(__FILE__, 'conditional_range.txt')}'
     end
     
-          it 'increments the build number of the Xcode project' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_build_number(xcodeproj: '.xcproject')
-        end').runner.execute(:test)
+    load_extension('typed_data')
     
+          Process.wait(0).should == pid2
+      Process.wait.should == pid1
+    end
     
-    {      delta = 1
-      stat = File.stat(path)
-      assert_in_delta tb,   stat.birthtime.to_f, delta
-      assert_in_delta t0+2, stat.mtime.to_f, delta
-      if stat.birthtime != stat.ctime
-        assert_in_delta t0+4, stat.ctime.to_f, delta
-      end
-      if /mswin|mingw/ !~ RUBY_PLATFORM && !Bug::File::Fs.noatime?(path)
-        # Windows delays updating atime
-        assert_in_delta t0+6, stat.atime.to_f, delta
-      end
+      def test_system_wordsplit
+    with_tmpchdir {|d|
+      write_file('script', <<-'End')
+        File.open('result', 'w') {|t| t << 'haha pid=#{$$} ppid=#{Process.ppid}' }
+        exit 5
+      End
+      str = '#{RUBY} script'
+      ret = system(str)
+      status = $?
+      assert_equal(false, ret)
+      assert_predicate(status, :exited?)
+      assert_equal(5, status.exitstatus)
+      assert_equal('haha pid=#{status.pid} ppid=#{$$}', File.read('result'))
     }
-  rescue NotImplementedError
   end
     
-      it 'does not decode an int when fewer bytes than an int remain and the '*' modifier is passed' do
-    'abc'.unpack(unpack_format('*')).should == []
-  end
-    
-      class SubclassX
-    attr_reader :key
-    def initialize(*)
-      @key = :value
-      super
-    end
-  end
-end
-
-    
-      it 'raises an ArgumentError if not passed a block' do
-    lambda {
-      Thread.send(@method)
-    }.should raise_error(ArgumentError)
-  end
-    
-        10.times { sleep 0.1 if t.status and t.status != 'sleep' }
-    after_sleep1.should == false # t should be blocked on the first sleep
-    t.send(@method)
-    
-    #
-# This script extracts the forms from the main page of each
-# web site in a list. The output of this can be used with
-# Metasploit (and other tools) to obtain the saved form data
-# of these domains.
-#
-    
-    
-    
-    #keytool = clsKeyTool
-#jarsigner = clsJarSigner
-    
-    class Parser
-  def initialize(filename)
-    @src = Source.new(filename)
-  end
-    
-          rescue_from OpenIDConnect::ValidationFailed,
-                  ActiveRecord::RecordInvalid, Api::OpenidConnect::Error::InvalidSectorIdentifierUri do |e|
-        validation_fail_as_json(e)
+          if name.bytesize > 100 or prefix.empty? then
+        raise Gem::Package::TooLongFileName.new('File \'#{prefix}/#{name}\' has a too long name (should be 100 or less)')
       end
     
-        # Outputs a single category as an <a> link.
-    #
-    #  +category+ is a category string to format as an <a> link
-    #
-    # Returns string
-    #
-    def category_link(category)
-      dir = @context.registers[:site].config['category_dir']
-      '<a class='category' href='/#{dir}/#{category.to_url}/'>#{category}</a>'
+        @gem = util_spec 'some_gem' do |s|
+      s.rubyforge_project = 'example'
     end
     
-        def html_output_for(script_url, code)
-      code = CGI.escapeHTML code
-      <<-HTML
-<div><script src='#{script_url}'></script>
-<noscript><pre><code>#{code}</code></pre></noscript></div>
-      HTML
-    end
+      def test_stat_inode
+    assert_not_equal 0, File.stat(__FILE__).ino
+  end
     
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
-      end
-    end
+        assert_equal(hb, h2.update(h1))
+    assert_equal(hb, h2)
+  end
+    
+    describe :string_unpack_32bit_le_signed, shared: true do
+  it 'decodes an int with most significant bit set as a negative number' do
+    '\x00\xaa\x00\xff'.unpack(unpack_format()).should == [-16733696]
   end
 end
     
-      # Improved version of Liquid's truncatewords:
-  # - Uses typographically correct ellipsis (…) insted of '...'
-  def truncatewords(input, length)
-    truncate = input.split(' ')
-    if truncate.length > length
-      truncate[0..length-1].join(' ').strip + ' &hellip;'
-    else
-      input
-    end
+      it 'implicitly has a count of one when no count modifier is passed' do
+    '\xc2\x80\xc2\x81\xc2\x82\xc2\x83'.unpack('U1').should == [0x80]
   end
-    
-        def render(context)
-      file_dir = (context.registers[:site].source || 'source')
-      file_path = Pathname.new(file_dir).expand_path
-      file = file_path + @file
