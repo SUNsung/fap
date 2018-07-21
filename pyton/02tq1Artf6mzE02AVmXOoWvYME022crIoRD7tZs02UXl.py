@@ -1,158 +1,168 @@
 
         
-        import rsa
-import json
-from binascii import hexlify
+        
+def consume_socket_content(sock, timeout=0.5):
+    chunks = 65536
+    content = b''
     
-    options = helptext[helptext.index('  General Options:') + 19:]
-options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
-options = '# OPTIONS\n' + options + '\n'
-    
-    
-if __name__ == '__main__':
-    unittest.main()
+        :param str u_string: unicode string to check. Must be unicode
+        and not Python 2 `str`.
+    :rtype: bool
+    '''
+    assert isinstance(u_string, str)
+    try:
+        u_string.encode('ascii')
+        return True
+    except UnicodeEncodeError:
+        return False
 
     
-            categories = re.findall(
-            r'<a href='http://anysex\.com/categories/[^']+' title='[^']*'>([^<]+)</a>', webpage)
+    try:
+    from urllib3.contrib import pyopenssl
+except ImportError:
+    pyopenssl = None
+    OpenSSL = None
+    cryptography = None
+else:
+    import OpenSSL
+    import cryptography
     
-            return {
-            'id': info['vid'],
-            'title': info['Subject'],
-            'duration': int(info['duration']) / 1000.0,
-            'formats': formats,
-            'thumbnail': info.get('bimg') or info.get('img'),
-        }
+    import copy
+import time
+import calendar
+    
+        def get(self, key, default=None):
+        return self.__dict__.get(key, default)
 
     
-        _TESTS = [{
-        'url': 'http://camwithher.tv/view_video.php?viewkey=6e9a24e2c0e842e1f177&page=&viewtype=&category=',
-        'info_dict': {
-            'id': '5644',
-            'ext': 'flv',
-            'title': 'Periscope Tease',
-            'description': 'In the clouds teasing on periscope to my favorite song',
-            'duration': 240,
-            'view_count': int,
-            'comment_count': int,
-            'uploader': 'MileenaK',
-            'upload_date': '20160322',
-        },
-        'params': {
-            'skip_download': True,
-        }
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?viewkey=6dfd8b7c97531a459937',
-        'only_matching': True,
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?page=&viewkey=6e9a24e2c0e842e1f177&viewtype=&category=',
-        'only_matching': True,
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?viewkey=b6c3b5bea9515d1a1fc4&page=&viewtype=&category=mv',
-        'only_matching': True,
-    }]
+        :param url: URL for the new :class:`Request` object.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
+    '''
     
-            webpage = self._download_webpage(url, display_id)
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
     
-        _TESTS = [{
-        'url': 'http://edition.cnn.com/video/?/video/sports/2013/06/09/nadal-1-on-1.cnn',
-        'md5': '3e6121ea48df7e2259fe73a0628605c4',
-        'info_dict': {
-            'id': 'sports/2013/06/09/nadal-1-on-1.cnn',
-            'ext': 'mp4',
-            'title': 'Nadal wins 8th French Open title',
-            'description': 'World Sport\'s Amanda Davies chats with 2013 French Open champion Rafael Nadal.',
-            'duration': 135,
-            'upload_date': '20130609',
-        },
-        'expected_warnings': ['Failed to download m3u8 information'],
-    }, {
-        'url': 'http://edition.cnn.com/video/?/video/us/2013/08/21/sot-student-gives-epic-speech.georgia-institute-of-technology&utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+rss%2Fcnn_topstories+%28RSS%3A+Top+Stories%29',
-        'md5': 'b5cc60c60a3477d185af8f19a2a26f4e',
-        'info_dict': {
-            'id': 'us/2013/08/21/sot-student-gives-epic-speech.georgia-institute-of-technology',
-            'ext': 'mp4',
-            'title': 'Student's epic speech stuns new freshmen',
-            'description': 'A Georgia Tech student welcomes the incoming freshmen with an epic speech backed by music from \'2001: A Space Odyssey.\'',
-            'upload_date': '20130821',
-        },
-        'expected_warnings': ['Failed to download m3u8 information'],
-    }, {
-        'url': 'http://www.cnn.com/video/data/2.0/video/living/2014/12/22/growing-america-nashville-salemtown-board-episode-1.hln.html',
-        'md5': 'f14d02ebd264df951feb2400e2c25a1b',
-        'info_dict': {
-            'id': 'living/2014/12/22/growing-america-nashville-salemtown-board-episode-1.hln',
-            'ext': 'mp4',
-            'title': 'Nashville Ep. 1: Hand crafted skateboards',
-            'description': 'md5:e7223a503315c9f150acac52e76de086',
-            'upload_date': '20141222',
-        },
-        'expected_warnings': ['Failed to download m3u8 information'],
-    }, {
-        'url': 'http://money.cnn.com/video/news/2016/08/19/netflix-stunning-stats.cnnmoney/index.html',
-        'md5': '52a515dc1b0f001cd82e4ceda32be9d1',
-        'info_dict': {
-            'id': '/video/news/2016/08/19/netflix-stunning-stats.cnnmoney',
-            'ext': 'mp4',
-            'title': '5 stunning stats about Netflix',
-            'description': 'Did you know that Netflix has more than 80 million members? Here are five facts about the online video distributor that you probably didn\'t know.',
-            'upload_date': '20160819',
-        },
-        'params': {
-            # m3u8 download
-            'skip_download': True,
-        },
-    }, {
-        'url': 'http://cnn.com/video/?/video/politics/2015/03/27/pkg-arizona-senator-church-attendance-mandatory.ktvk',
-        'only_matching': True,
-    }, {
-        'url': 'http://cnn.com/video/?/video/us/2015/04/06/dnt-baker-refuses-anti-gay-order.wkmg',
-        'only_matching': True,
-    }, {
-        'url': 'http://edition.cnn.com/videos/arts/2016/04/21/olympic-games-cultural-a-z-brazil.cnn',
-        'only_matching': True,
-    }]
+                    # not in range and not EOF/EOT, must be invalid symbol
+                self.noViableAlt(s, input)
+                return 0
     
-        # test with functional API
-    inputs = keras.Input((timesteps, dim))
-    outputs = keras.layers.Bidirectional(rnn(output_dim),
-                                         merge_mode=mode)(inputs)
-    model = keras.Model(inputs, outputs)
-    model.compile(loss='mse', optimizer='sgd')
-    model.fit(x, y, epochs=1, batch_size=1)
+            else:
+            return self.c
+    
+        # overridden by generated subclasses
+    tokenNames = None
+    
+    INVALID_TOKEN_TYPE = 0
+    
+    for prec in [9, 19]:
+    print('\nPrecision: %d decimal digits\n' % prec)
+    for func in to_benchmark:
+        start = time.time()
+        if C is not None:
+            C.getcontext().prec = prec
+        P.getcontext().prec = prec
+        for i in range(10000):
+            x = func()
+        print('%s:' % func.__name__.replace('pi_', ''))
+        print('result: %s' % str(x))
+        print('time: %fs\n' % (time.time()-start))
+    
+    if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        zones = TZInfo.zonelist()
+        for z in zones:
+            print(z)
+        sys.exit()
+    filepath = sys.argv[1]
+    if not filepath.startswith('/'):
+        filepath = os.path.join('/usr/share/zoneinfo', filepath)
+    with open(filepath, 'rb') as fileobj:
+        tzi = TZInfo.fromfile(fileobj)
+    tzi.dump(sys.stdout)
+
     
     
-@keras_test
-def test_max_norm():
-    array = get_example_array()
-    for m in get_test_values():
-        norm_instance = constraints.max_norm(m)
-        normed = norm_instance(K.variable(array))
-        assert(np.all(K.eval(normed) < m))
+class DifferentAgentTest(CrawlDelayAndRequestRateTest):
+    agent = 'FigTree Robot libwww-perl/5.04'
+    # these are not actually tested, but we still need to parse it
+    # in order to accommodate the input parameters
+    request_rate = None
+    crawl_delay = None
     
-    from keras.preprocessing import sequence
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional
-from keras.datasets import imdb
+        The func will be passed to sys.setprofile() for each thread, before its
+    run() method is called.
     
-            @defer.inlineCallbacks
-        def process_exception(_failure):
-            exception = _failure.value
-            for method in self.methods['process_exception']:
-                response = yield method(request=request, exception=exception,
-                                        spider=spider)
-                assert response is None or isinstance(response, (Response, Request)), \
-                    'Middleware %s.process_exception must return None, Response or Request, got %s' % \
-                    (six.get_method_self(method).__class__.__name__, type(response))
-                if response:
-                    defer.returnValue(response)
-            defer.returnValue(_failure)
+        '''
+    def gen(a, b):
+        try:
+            while 1:
+                x = next(a)
+                y = next(b)
+                yield x
+                yield y
+        except StopIteration:
+            return
     
-            respcls = responsetypes.from_args(body=body)
-        return response.replace(body=body, cls=respcls)
-    
-    class UsageError(Exception):
-    '''To indicate a command-line usage error'''
-    def __init__(self, *a, **kw):
-        self.print_help = kw.pop('print_help', True)
-        super(UsageError, self).__init__(*a, **kw)
+        def test_various___class___pathologies(self):
+        # See issue #12370
+        class X(A):
+            def f(self):
+                return super().f()
+            __class__ = 413
+        x = X()
+        self.assertEqual(x.f(), 'A')
+        self.assertEqual(x.__class__, 413)
+        class X:
+            x = __class__
+            def f():
+                __class__
+        self.assertIs(X.x, type(self))
+        with self.assertRaises(NameError) as e:
+            exec('''class X:
+                __class__
+                def f():
+                    __class__''', globals(), {})
+        self.assertIs(type(e.exception), NameError) # Not UnboundLocalError
+        class X:
+            global __class__
+            __class__ = 42
+            def f():
+                __class__
+        self.assertEqual(globals()['__class__'], 42)
+        del globals()['__class__']
+        self.assertNotIn('__class__', X.__dict__)
+        class X:
+            nonlocal __class__
+            __class__ = 42
+            def f():
+                __class__
+        self.assertEqual(__class__, 42)
