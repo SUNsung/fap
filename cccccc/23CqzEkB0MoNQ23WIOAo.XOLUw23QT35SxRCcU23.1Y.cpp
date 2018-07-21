@@ -1,232 +1,275 @@
 
         
-          // Clear all entries from the DeviceStatus cache.
-  void FlushStatusCache();
+          // GlobalShortcutListener::Observer implementation.
+  void OnKeyPressed(const ui::Accelerator& accelerator) override;
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      // (X - E[X]) / Sqrt[Var[X] + epsilon].
-  auto normalized = add_binary(operand_shape, HloOpcode::kMultiply,
-                               operand_minus_mean, rsqrt_var_add_epsilon);
-    
-    
-    {  auto* mutable_dims = output_array.mutable_shape()->mutable_dims();
-  mutable_dims->resize(multiples.size());
-  for (int i = 0; i < mutable_dims->size(); ++i) {
-    (*mutable_dims)[i] = input_shape.dims(i) * multiples[i];
-  }
-}
-    
-    
-    {  const auto& input_name = node.input(0);
-  const auto& bias_name = node.input(1);
-  CHECK_EQ(GetDataTypeAttr(node, 'T'), DT_FLOAT);
-  auto* biasadd = new AddOperator;
-  biasadd->inputs.push_back(input_name);
-  biasadd->inputs.push_back(bias_name);
-  biasadd->outputs.push_back(node.name());
-  model->operators.emplace_back(biasadd);
-  return tensorflow::Status::OK();
-}
-    
-    TEST_F(OperatorTest, BuiltinArgMin) {
-  ArgMinOperator op;
-  auto output_toco_op = SerializeAndDeserialize(
-      GetOperator('ARG_MIN', OperatorType::kArgMin), op);
-  EXPECT_EQ(op.output_data_type, output_toco_op->output_data_type);
-}
-    
-    void PartialRunMgr::ExecutorDone(int step_id, const Status& executor_status) {
-  StatusCallback done;
-  Status callback_status;
-  {
-    mutex_lock l(mu_);
-    auto run_it = step_id_to_partial_run_.find(step_id);
-    if (run_it == step_id_to_partial_run_.end()) {
-      return;
-    }
-    // If we found the partial_run, we call the final callback, if it
-    // exists.
-    // It is guaranteed that run_it->second->final_callback is left empty
-    // after the std::move call.
-    done = std::move(run_it->second->final_callback);
-    if (!executor_status.ok()) {
-      run_it->second->final_status = executor_status;
-    }
-    callback_status = run_it->second->final_status;
-    run_it->second->executor_done = true;
-  }
-  if (done != nullptr) {
-    done(callback_status);
-    mutex_lock l(mu_);
-    step_id_to_partial_run_.erase(step_id);
-  }
-}
-    
-    
-    {
-    {}  // namespace functor
-}  // namespace tensorflow
-    
-    // Prefetching support
+    // relauncher implements main browser application relaunches across platforms.
+// When a browser wants to relaunch itself, it can't simply fork off a new
+// process and exec a new browser from within. That leaves open a window
+// during which two browser applications might be running concurrently. If
+// that happens, each will wind up with a distinct Dock icon, which is
+// especially bad if the user expected the Dock icon to be persistent by
+// choosing Keep in Dock from the icon's contextual menu.
 //
-// Defined behavior on some of the uarchs:
-// PREFETCH_HINT_T0:
-//   prefetch to all levels of the hierarchy (except on p4: prefetch to L2)
-// PREFETCH_HINT_NTA:
-//   p4: fetch to L2, but limit to 1 way (out of the 8 ways)
-//   core: skip L2, go directly to L1
-//   k8 rev E and later: skip L2, can go to either of the 2-ways in L1
-enum PrefetchHint {
-  PREFETCH_HINT_T0 = 3,  // More temporal locality
-  PREFETCH_HINT_T1 = 2,
-  PREFETCH_HINT_T2 = 1,  // Less temporal locality
-  PREFETCH_HINT_NTA = 0  // No temporal locality
-};
-template <PrefetchHint hint>
-void prefetch(const void* x);
+// relauncher approaches this problem by introducing an intermediate
+// process (the 'relauncher') in between the original browser ('parent') and
+// replacement browser ('relaunched'). The helper executable is used for the
+// relauncher process; because it's an LSUIElement, it doesn't get a Dock
+// icon and isn't visible as a running application at all. The parent will
+// start a relauncher process, giving it the 'writer' side of a pipe that it
+// retains the 'reader' end of. When the relauncher starts up, it will
+// establish a kqueue to wait for the parent to exit, and will then write to
+// the pipe. The parent, upon reading from the pipe, is free to exit. When the
+// relauncher is notified via its kqueue that the parent has exited, it
+// proceeds, launching the relaunched process. The handshake to synchronize
+// the parent with the relauncher is necessary to avoid races: the relauncher
+// needs to be sure that it's monitoring the parent and not some other process
+// in light of PID reuse, so the parent must remain alive long enough for the
+// relauncher to set up its kqueue.
     
-      Status OnWorkStartedLocked() override {
-    line_number_ = 0;
-    TF_RETURN_IF_ERROR(env_->NewRandomAccessFile(current_work(), &file_));
-    }
-    
-    
-    {}  // namespace atom
-    
-    #ifndef ATOM_BROWSER_WINDOW_LIST_OBSERVER_H_
-#define ATOM_BROWSER_WINDOW_LIST_OBSERVER_H_
-    
-    #include 'ui/gfx/geometry/rect.h'
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(PreferencesManager);
-};
-    
-      // Sent when a URL has been added or modified. This is used by the in-memory
-  // URL database and the InMemoryURLIndex (both used by autocomplete) to track
-  // changes to the main history system.
-  //
-  // The source is the profile owning the history service that changed, and
-  // the details is history::URLsModifiedDetails that lists the modified or
-  // added URLs.
-  NOTIFICATION_HISTORY_URLS_MODIFIED,
-    
-    // Platform-neutral implementation of a class that keeps track of observers and
-// monitors keystrokes. It relays messages to the appropriate observer when a
-// global shortcut has been struck by the user.
-class GlobalShortcutListener {
- public:
-  class Observer {
-   public:
-    // Called when your global shortcut (|accelerator|) is struck.
-    virtual void OnKeyPressed(const ui::Accelerator& accelerator) = 0;
-  };
-    }
-    
-    
-    {
-    {}  // namespace
-}  // namespace tesseract
+    #endif  // ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
 
     
-      // Helper to return an offset index feature. In this context an offset
-  // feature with a dir of +/-1 is a feature of a similar direction,
-  // but shifted perpendicular to the direction of the feature. An offset
-  // feature with a dir of +/-2 is feature at the same position, but rotated
-  // by +/- one [compact] quantum. Returns the index of the generated offset
-  // feature, or -1 if it doesn't exist. Dir should be in
-  // [-kNumOffsetMaps, kNumOffsetMaps] to indicate the relative direction.
-  // A dir of 0 is an identity transformation.
-  // Both input and output are from the index(sparse) feature space, not
-  // the mapped/compact feature space, but the offset feature is the minimum
-  // distance moved from the input to guarantee that it maps to the next
-  // available quantum in the mapped/compact space.
-  int OffsetFeature(int index_feature, int dir) const;
-    
-    class DawgCache {
- public:
-  Dawg *GetSquishedDawg(const STRING &lang, TessdataType tessdata_dawg_type,
-                        int debug_level, TessdataManager *data_file);
+    namespace mate {
     }
     
-     private:
-  // Constructor is private as the instance only holds information specific to
-  // the current labels, outputs etc, and is built by the static function.
-  CTC(const GenericVector<int>& labels, int null_char,
-      const GENERIC_2D_ARRAY<float>& outputs);
     
-        // Start packing
-    ImVector<stbrp_node> pack_nodes;
-    pack_nodes.resize(total_rects);
-    stbrp_context context;
-    stbrp_init_target(&context, atlas->TexWidth, atlas->TexHeight, pack_nodes.Data, total_rects);
+    {  DraggableRegion();
+};
     
-            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
+      // Sets ID of the hosting desktop picker dialog. The window with this ID will
+  // be filtered out from the list of sources.
+  virtual void SetViewDialogWindowId(content::DesktopMediaID::Id dialog_id) = 0;
     
-            if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text('counter = %d', counter);
+      // This returns true if all components are specified, and min and max are
+  // equal.
+  bool HasFixedSize() const;
     
+    #endif  // ATOM_BROWSER_API_ATOM_API_NET_H_
+
     
-    {    switch (ev->type)
-    {
-    case ALLEGRO_EVENT_MOUSE_AXES:
-        io.MouseWheel += ev->mouse.dz;
-        io.MouseWheelH += ev->mouse.dw;
-        return true;
-    case ALLEGRO_EVENT_KEY_CHAR:
-        if (ev->keyboard.display == g_Display)
-            if (ev->keyboard.unichar > 0 && ev->keyboard.unichar < 0x10000)
-                io.AddInputCharacter((unsigned short)ev->keyboard.unichar);
-        return true;
-    case ALLEGRO_EVENT_KEY_DOWN:
-    case ALLEGRO_EVENT_KEY_UP:
-        if (ev->keyboard.display == g_Display)
-            io.KeysDown[ev->keyboard.keycode] = (ev->type == ALLEGRO_EVENT_KEY_DOWN);
-        return true;
+    // Convert a Python object to a FileDescriptorProto pointer.
+// Handles all kinds of Python errors, which are simply logged.
+static bool GetFileDescriptorProto(PyObject* py_descriptor,
+                                   FileDescriptorProto* output) {
+  if (py_descriptor == NULL) {
+    if (PyErr_ExceptionMatches(PyExc_KeyError)) {
+      // Expected error: item was simply not found.
+      PyErr_Clear();
+    } else {
+      GOOGLE_LOG(ERROR) << 'DescriptorDatabase method raised an error';
+      PyErr_Print();
     }
     return false;
+  }
+  if (py_descriptor == Py_None) {
+    return false;
+  }
+  const Descriptor* filedescriptor_descriptor =
+      FileDescriptorProto::default_instance().GetDescriptor();
+  CMessage* message = reinterpret_cast<CMessage*>(py_descriptor);
+  if (PyObject_TypeCheck(py_descriptor, &CMessage_Type) &&
+      message->message->GetDescriptor() == filedescriptor_descriptor) {
+    // Fast path: Just use the pointer.
+    FileDescriptorProto* file_proto =
+        static_cast<FileDescriptorProto*>(message->message);
+    *output = *file_proto;
+    return true;
+  } else {
+    // Slow path: serialize the message. This allows to use databases which
+    // use a different implementation of FileDescriptorProto.
+    ScopedPyObjectPtr serialized_pb(
+        PyObject_CallMethod(py_descriptor, 'SerializeToString', NULL));
+    if (serialized_pb == NULL) {
+      GOOGLE_LOG(ERROR)
+          << 'DescriptorDatabase method did not return a FileDescriptorProto';
+      PyErr_Print();
+      return false;
+    }
+    char* str;
+    Py_ssize_t len;
+    if (PyBytes_AsStringAndSize(serialized_pb.get(), &str, &len) < 0) {
+      GOOGLE_LOG(ERROR)
+          << 'DescriptorDatabase method did not return a FileDescriptorProto';
+      PyErr_Print();
+      return false;
+    }
+    FileDescriptorProto file_proto;
+    if (!file_proto.ParseFromArray(str, len)) {
+      GOOGLE_LOG(ERROR)
+          << 'DescriptorDatabase method did not return a FileDescriptorProto';
+      return false;
+    }
+    *output = file_proto;
+    return true;
+  }
 }
     
-        // Create and grow vertex/index buffers if needed
-    if (!g_pVB || g_VertexBufferSize < draw_data->TotalVtxCount)
+    #include <google/protobuf/testing/googletest.h>
+#include <gtest/gtest.h>
+#include <google/protobuf/testing/file.h>
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/wire_format.h>
+    
+    
+    
+    #include <string>
+    
+    
     {
-        if (g_pVB) { g_pVB->Release(); g_pVB = NULL; }
-        g_VertexBufferSize = draw_data->TotalVtxCount + 5000;
-        D3D10_BUFFER_DESC desc;
-        memset(&desc, 0, sizeof(D3D10_BUFFER_DESC));
-        desc.Usage = D3D10_USAGE_DYNAMIC;
-        desc.ByteWidth = g_VertexBufferSize * sizeof(ImDrawVert);
-        desc.BindFlags = D3D10_BIND_VERTEX_BUFFER;
-        desc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
-        desc.MiscFlags = 0;
-        if (ctx->CreateBuffer(&desc, NULL, &g_pVB) < 0)
-            return;
+    {
+    {
+    {
+    {}  // namespace
+}  // namespace java
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+      // All static variables have to be declared at the top-level of the file
+  // so that we can control initialization order, which is important for
+  // DescriptorProto bootstrapping to work.
+  virtual void GenerateStaticVariables(
+      io::Printer* printer, int* bytecode_estimate) = 0;
+    
+    static void PrintScriptDirs(const GenericVector<StrongScriptDirection> &dirs) {
+  for (int i = 0; i < dirs.size(); i++) {
+    switch (dirs[i]) {
+      case DIR_NEUTRAL: tprintf ('N '); break;
+      case DIR_LEFT_TO_RIGHT: tprintf('L '); break;
+      case DIR_RIGHT_TO_LEFT: tprintf('R '); break;
+      case DIR_MIX: tprintf('Z '); break;
+      default: tprintf('? '); break;
+    }
+  }
+  tprintf('\n');
+}
+    
+    
+    {  virtual R Run() {
+    if (!del) {
+      R result = (*function_)(p1_,p2_,p3_,p4_,p5_);
+      return result;
+    } else {
+      R result = (*function_)(p1_,p2_,p3_,p4_,p5_);
+      //  zero out the pointer to ensure segfault if used again
+      function_ = nullptr;
+      delete this;
+      return result;
+    }
+  }
+};
+    
+      void Clear();
+    
+      // Creates and returns a Pix with the same resolution as the original
+  // in which 1 (black) pixels represent likely non text (photo, line drawing)
+  // areas of the page, deleting from the blob_block the blobs that were
+  // determined to be non-text.
+  // The photo_map (binary image mask) is used to bias the decision towards
+  // non-text, rather than supplying a definite decision.
+  // The blob_block is the usual result of connected component analysis,
+  // holding the detected blobs.
+  // The returned Pix should be PixDestroyed after use.
+  Pix* ComputeNonTextMask(bool debug, Pix* photo_map, TO_BLOCK* blob_block);
+    
+                // second, get data from reader, stored it in cache
+            // 1. for each key, allocate the specific matrix on device
+            for (auto& pa : inputMatrices)
+            {
+                const wstring& name = pa.first;
+                const auto& input = pa.second;
+                auto& M = input.GetMatrix<ElemType>();
+                if (m_inputMatricesCache.find(name) == m_inputMatricesCache.end())
+                    m_inputMatricesCache.AddInput(name, make_shared<Matrix<ElemType>>(M, M.GetDeviceId()), input.pMBLayout, input.sampleLayout); // deep copy from M
+                else
+                    m_inputMatricesCache.GetInputMatrix<ElemType>(name).SetValue(M);
+            }
+            // 2. MBlayout
+            m_MBLayoutCache->CopyFrom(net.GetMBLayoutPtrOfNetwork());
+            size_t nParallelSequences = m_MBLayoutCache->GetNumParallelSequences();
+    
+    #include 'Basics.h'
+#include 'ComputationNetwork.h'
+#include 'SimpleEvaluator.h'
+#include 'DataReader.h'
+#include 'ScriptableObjects.h'
+#include 'Criterion.h'
+#include <vector>
+#include <string>
+#include <stdexcept>
+#include 'fileutil.h'
+#include 'Config.h'
+#include <chrono>
+#include <random>
+#include 'Profiler.h'
+#include 'MASGD.h'
+#include 'ASGDHelper.h'
+#include <map>
+using namespace std; // ugh! TODO: get rid of this from .h files!!!
+    
+    template<> inline
+dnnError_t dnnConversionCreate<double>(dnnPrimitive_t* pConversion, const dnnLayout_t from, const dnnLayout_t to)
+{
+    return dnnConversionCreate_F64(pConversion, from, to);
+}
+    
+    // understand and execute from the syntactic expression tree
+ConfigValuePtr Evaluate(ExpressionPtr);                               // evaluate the expression tree
+void Do(ExpressionPtr e);                                             // evaluate e.do
+shared_ptr<Object> EvaluateField(ExpressionPtr e, const wstring& id); // for experimental CNTK integration
+    
+    
+    {  // Check that deleting works.
+  ASSERT_TRUE(!env_->DeleteFile('/dir/non_existent').ok());
+  ASSERT_OK(env_->DeleteFile('/dir/g'));
+  ASSERT_TRUE(!env_->FileExists('/dir/g'));
+  ASSERT_OK(env_->GetChildren('/dir', &children));
+  ASSERT_EQ(0, children.size());
+  ASSERT_OK(env_->DeleteDir('/dir'));
+}
+    
+      // create first key range
+  leveldb::WriteBatch batch;
+  for (size_t i = 0; i < kNumKeys; i++) {
+    batch.Put(Key1(i), 'value for range 1 key');
+  }
+  ASSERT_OK(db->Write(leveldb::WriteOptions(), &batch));
+    
+    BlockBuilder::BlockBuilder(const Options* options)
+    : options_(options),
+      restarts_(),
+      counter_(0),
+      finished_(false) {
+  assert(options->block_restart_interval >= 1);
+  restarts_.push_back(0);       // First restart point is at offset 0
+}
+    
+    class FilterPolicy;
+    
+    class Histogram {
+ public:
+  Histogram() { }
+  ~Histogram() { }
     }
     
+    // Helper class that locks a mutex on construction and unlocks the mutex when
+// the destructor of the MutexLock object is invoked.
+//
+// Typical usage:
+//
+//   void MyClass::MyMethod() {
+//     MutexLock l(&mu_);       // mu_ is an instance variable
+//     ... some complex code, possibly with multiple return paths ...
+//   }
     
-    {    ImGui_ImplSDL2_UpdateMousePosAndButtons();
-    ImGui_ImplSDL2_UpdateMouseCursor();
-}
+    #include <stdint.h>
+    
+      ~Writer();
