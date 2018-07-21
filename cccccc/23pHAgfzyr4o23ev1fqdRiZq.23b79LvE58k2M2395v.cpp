@@ -1,213 +1,253 @@
 
         
-        class ObjectManager;
-    
-    namespace nwapi {
-    }
-    
-    void Menu::UpdateKeys(views::FocusManager *focus_manager){
-  if (focus_manager == NULL){
-    return ;
-  } else {
-    focus_manager_ = focus_manager;
-    for(auto* item : menu_items_) {
-      item->UpdateKeys(focus_manager);
-    }
-  }
+        TEST_F(UnicharcompressTest, DoesMarathi) {
+  LOG(INFO) << 'Testing mar';
+  LoadUnicharset('mar.unicharset');
+  ExpectCorrect('mar');
 }
     
-        std::string tooltip;
-    if (option.GetString('tooltip', &tooltip))
-      SetTooltip(tooltip);
+     private:
+  // Size of padded input to weight matrices = ni_ + no_ for 1-D operation
+  // and ni_ + 2 * no_ for 2-D operation. Note that there is a phantom 1 input
+  // for the bias that makes the weight matrices of size [na + 1][no].
+  int32_t na_;
+  // Number of internal states. Equal to no_ except for a softmax LSTM.
+  // ns_ is NOT serialized, but is calculated from gate_weights_.
+  int32_t ns_;
+  // Number of additional feedback states. The softmax types feed back
+  // additional output information on top of the ns_ internal states.
+  // In the case of a binary-coded (EMBEDDED) softmax, nf_ < no_.
+  int32_t nf_;
+  // Flag indicating 2-D operation.
+  bool is_2d_;
     
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.destroy', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjDestroyFunction);
+    const int16_t idirtab[] = {
+  1000, 0, 998, 49, 995, 98, 989, 146,
+  980, 195, 970, 242, 956, 290, 941, 336,
+  923, 382, 903, 427, 881, 471, 857, 514,
+  831, 555, 803, 595, 773, 634, 740, 671,
+  707, 707, 671, 740, 634, 773, 595, 803,
+  555, 831, 514, 857, 471, 881, 427, 903,
+  382, 923, 336, 941, 290, 956, 242, 970,
+  195, 980, 146, 989, 98, 995, 49, 998,
+  0, 1000, -49, 998, -98, 995, -146, 989,
+  -195, 980, -242, 970, -290, 956, -336, 941,
+  -382, 923, -427, 903, -471, 881, -514, 857,
+  -555, 831, -595, 803, -634, 773, -671, 740,
+  -707, 707, -740, 671, -773, 634, -803, 595,
+  -831, 555, -857, 514, -881, 471, -903, 427,
+  -923, 382, -941, 336, -956, 290, -970, 242,
+  -980, 195, -989, 146, -995, 98, -998, 49,
+  -1000, 0, -998, -49, -995, -98, -989, -146,
+  -980, -195, -970, -242, -956, -290, -941, -336,
+  -923, -382, -903, -427, -881, -471, -857, -514,
+  -831, -555, -803, -595, -773, -634, -740, -671,
+  -707, -707, -671, -740, -634, -773, -595, -803,
+  -555, -831, -514, -857, -471, -881, -427, -903,
+  -382, -923, -336, -941, -290, -956, -242, -970,
+  -195, -980, -146, -989, -98, -995, -49, -998,
+  0, -1000, 49, -998, 98, -995, 146, -989,
+  195, -980, 242, -970, 290, -956, 336, -941,
+  382, -923, 427, -903, 471, -881, 514, -857,
+  555, -831, 595, -803, 634, -773, 671, -740,
+  707, -707, 740, -671, 773, -634, 803, -595,
+  831, -555, 857, -514, 881, -471, 903, -427,
+  923, -382, 941, -336, 956, -290, 970, -242,
+  980, -195, 989, -146, 995, -98, 998, -49
 };
     
-    bool NwShellOpenItemFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
-  manager->OnCallStaticMethod(render_frame_host(), 'Shell', 'OpenItem', *args_);
-  return true;
+      const IndexMapBiDi& charset_map() const {
+    return *charset_map_;
+  }
+  const ShapeTable* shape_table() const {
+    return shape_table_;
+  }
+  // Sample set operations.
+  const TrainingSampleSet* sample_set() const {
+    return sample_set_;
+  }
+    
+      // Provides access to the UNICHARSET that this classifier works with.
+  const UNICHARSET& GetUnicharset() const { return ccutil_.unicharset; }
+  // Provides access to the UnicharCompress that this classifier works with.
+  const UnicharCompress& GetRecoder() const { return recoder_; }
+  // Provides access to the Dict that this classifier works with.
+  const Dict* GetDict() const { return dict_; }
+  // Sets the sample iteration to the given value. The sample_iteration_
+  // determines the seed for the random number generator. The training
+  // iteration is incremented only by a successful training iteration.
+  void SetIteration(int iteration) {
+    sample_iteration_ = iteration;
+  }
+  // Accessors for textline image normalization.
+  int NumInputs() const {
+    return network_->NumInputs();
+  }
+  int null_char() const { return null_char_; }
+    
+        // in-place decimation, for use with data-parallel processing
+    // returns a subset of parallel sequences
+    template <class ElemType>
+    static pair<size_t, size_t> DecimateMinibatchInPlace(StreamMinibatchInputs& mb,    // matrix to be decimated
+                                                         size_t numprocs, size_t rank, // rank info
+                                                         MBLayoutPtr pMBLayout)        // get decimated as well
+    {
+        if (numprocs == 1)
+            return pair<size_t, size_t>(0, pMBLayout->GetNumParallelSequences());
+        // no need to do inplace decimation if numproc == 1
+    }
+    
+    template<typename T> inline
+dnnError_t dnnInnerProductCreateBackwardData(
+    dnnPrimitive_t* pInnerProduct,
+    dnnPrimitiveAttributes_t attributes,
+    size_t dimensions,
+    const size_t srcSize[],
+    size_t outputChannels);
+    
+    GPUDataTransferer::GPUDataTransferer(int deviceId, bool useConcurrentStreams) 
+{
+#pragma warning(disable : 4127)
+    if (useConcurrentStreams && (s_fetchStream == NULL))
+    {
+        cudaStreamCreateWithFlags(&s_fetchStream, cudaStreamNonBlocking) || 'cudaStreamCreateWithFlags failed';
+        cudaStreamCreateWithFlags(&s_assignStream, cudaStreamNonBlocking) || 'cudaStreamCreateWithFlags failed';
+    }
+    }
+    
+        void getlattices(const std::wstring& key, std::shared_ptr<const latticepair>& L, size_t expectedframes) const
+    {
+        std::shared_ptr<latticepair> LP(new latticepair);
+        denlattices.getlattice(key, LP->second, expectedframes); // this loads the lattice from disk, using the existing L.second object
+        L = LP;
+    }
+    
+    
+    {public:
+    inline array_ref(_T* ptr, size_t size) throw()
+        : data(ptr), n(size)
+    {
+    }
+    inline array_ref() throw()
+        : data(NULL), n(0)
+    {
+    } // in case we have a vector of this
+    inline _T& operator[](size_t i) throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline const _T& operator[](size_t i) const throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline size_t size() const throw()
+    {
+        return n;
+    }
+    inline _T* begin()
+    {
+        return data;
+    }
+    inline _T* end()
+    {
+        return data + n;
+    }
+    inline void resize(size_t sz)
+    {
+        sz;
+        assert(n == sz);
+    } // allow compatibility with some functions
+    // construct from other vector types
+    template <class _V>
+    inline array_ref(_V& v)
+        : data(v.size() > 0 ? &v[0] : NULL), n((size_t) v.size())
+    {
+    }
+};
+    
+    namespace leveldb {
+namespace log {
+    }
+    }
+    
+      // Add an element that should not be reflected in the iterator.
+  ASSERT_OK(db->Put(write_options, '25', 'cd'));
+    
+      // Add string delta to buffer_ followed by value
+  buffer_.append(key.data() + shared, non_shared);
+  buffer_.append(value.data(), value.size());
+    
+    void BlockHandle::EncodeTo(std::string* dst) const {
+  // Sanity check that all fields have been set
+  assert(offset_ != ~static_cast<uint64_t>(0));
+  assert(size_ != ~static_cast<uint64_t>(0));
+  PutVarint64(dst, offset_);
+  PutVarint64(dst, size_);
 }
     
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED5.  Don't use
-// this in your code.
-#define GTEST_PRED5_(pred, v1, v2, v3, v4, v5, on_failure)\
-  GTEST_ASSERT_(::testing::AssertPred5Helper(#pred, \
-                                             #v1, \
-                                             #v2, \
-                                             #v3, \
-                                             #v4, \
-                                             #v5, \
-                                             pred, \
-                                             v1, \
-                                             v2, \
-                                             v3, \
-                                             v4, \
-                                             v5), on_failure)
+    TEST(CRC, Extend) {
+  ASSERT_EQ(Value('hello world', 11),
+            Extend(Value('hello ', 6), 'world', 5));
+}
     
-    #if GTEST_HAS_DEATH_TEST
-    
-    namespace testing {
-namespace internal {
+    std::string Histogram::ToString() const {
+  std::string r;
+  char buf[200];
+  snprintf(buf, sizeof(buf),
+           'Count: %.0f  Average: %.4f  StdDev: %.2f\n',
+           num_, Average(), StandardDeviation());
+  r.append(buf);
+  snprintf(buf, sizeof(buf),
+           'Min: %.4f  Median: %.4f  Max: %.4f\n',
+           (num_ == 0.0 ? 0.0 : min_), Median(), max_);
+  r.append(buf);
+  r.append('------------------------------------------------------\n');
+  const double mult = 100.0 / num_;
+  double sum = 0;
+  for (int b = 0; b < kNumBuckets; b++) {
+    if (buckets_[b] <= 0.0) continue;
+    sum += buckets_[b];
+    snprintf(buf, sizeof(buf),
+             '[ %7.0f, %7.0f ) %7.0f %7.3f%% %7.3f%% ',
+             ((b == 0) ? 0.0 : kBucketLimit[b-1]),      // left
+             kBucketLimit[b],                           // right
+             buckets_[b],                               // count
+             mult * buckets_[b],                        // percentage
+             mult * sum);                               // cumulative percentage
+    r.append(buf);
     }
     }
     
-    // This is used internally by all instances of linked_ptr<>.  It needs to be
-// a non-template class because different types of linked_ptr<> can refer to
-// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
-// So, it needs to be possible for different types of linked_ptr to participate
-// in the same circular linked list, so we need a single class type here.
-//
-// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
-class linked_ptr_internal {
+    #include 'port/port.h'
+#include 'port/thread_annotations.h'
+    
+    class Writer {
  public:
-  // Create a new circle that includes only this instance.
-  void join_new() {
-    next_ = this;
-  }
+  // Create a writer that will append data to '*dest'.
+  // '*dest' must be initially empty.
+  // '*dest' must remain live while this Writer is in use.
+  explicit Writer(WritableFile* dest);
     }
     
-      TestCaseInfoContainer test_case_infos_;
+      const char* data_;
+  size_t size_;
+  uint32_t restart_offset_;     // Offset in data_ of restart array
+  bool owned_;                  // Block owns data_[]
     
-    // isspace(int ch) and friends accept an unsigned char or EOF.  char
-// may be signed, depending on the compiler (or compiler flags).
-// Therefore we need to cast a char to unsigned char before calling
-// isspace(), etc.
     
-    template <GTEST_8_TYPENAMES_(T)>
-inline GTEST_8_TUPLE_(T) make_tuple(const T0& f0, const T1& f1, const T2& f2,
-    const T3& f3, const T4& f4, const T5& f5, const T6& f6, const T7& f7) {
-  return GTEST_8_TUPLE_(T)(f0, f1, f2, f3, f4, f5, f6, f7);
+    {    return Convolve2X(image, w, h, kernel.data(), kernel.size(), mul);
 }
     
+    #include <algorithm>
+#include <cmath>
     
-    {    // Now, we have i <= n/i < n.
-    // If n is divisible by i, n is not prime.
-    if (n % i == 0) return false;
-  }
+    #include 'guetzli/jpeg_data.h'
     
-    	virtual void poll() = 0;
-	virtual Error accept_stream(Ref<StreamPeer> p_base) = 0;
-	virtual Error connect_to_stream(Ref<StreamPeer> p_base, bool p_validate_certs = false, const String &p_for_hostname = String()) = 0;
-	virtual Status get_status() const = 0;
+    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
+std::vector<std::vector<float>> PreProcessChannel(
+    int w, int h, int channel, float sigma, float amount, bool blur,
+    bool sharpen, const std::vector<std::vector<float>>& image);
     
-    public:
-	GodotClosestRayResultCallback(const btVector3 &rayFromWorld, const btVector3 &rayToWorld, const Set<RID> *p_exclude) :
-			btCollisionWorld::ClosestRayResultCallback(rayFromWorld, rayToWorld),
-			m_exclude(p_exclude),
-			m_pickRay(false),
-			m_shapeId(0) {}
-    
-    
-    
-    QueryData genNFSShares(QueryContext& context) {
-  QueryData results;
-    }
-    
-    /**
- * @brief Iterate the discovered decorators for a given point type.
- *
- * The configuration maintains various sources, each may contain a set of
- * decorators. The source tracking is abstracted for the decorator iterator.
- *
- * @param point request execution of decorators for this given point.
- * @param time an optional time for points using intervals.
- * @param source restrict run to a specific config source.
- */
-void runDecorators(DecorationPoint point,
-                   size_t time = 0,
-                   const std::string& source = '');
-    
-        auto dropper = DropPrivileges::get();
-    EXPECT_TRUE(dropper->dropToParent(perm_path_ + 'ro'));
-    EXPECT_TRUE(dropper->dropped_);
-    EXPECT_EQ(dropper->to_user_, nobody->pw_uid);
-    
-     private:
-  /// Plugin name
-  std::string name_;
-    
-     private:
-  void restart();
-    
-    static std::unique_ptr<Env> def_env(new NormalizingEnvWrapper(Env::Default()));
-INSTANTIATE_TEST_CASE_P(EnvDefault, EnvBasicTestWithParam,
-                        ::testing::Values(def_env.get()));
-INSTANTIATE_TEST_CASE_P(EnvDefault, EnvMoreTestWithParam,
-                        ::testing::Values(def_env.get()));
-    
-    TEST_F(MockEnvTest, Corrupt) {
-  const std::string kGood = 'this is a good string, synced to disk';
-  const std::string kCorrupted = 'this part may be corrupted';
-  const std::string kFileName = '/dir/f';
-  unique_ptr<WritableFile> writable_file;
-  ASSERT_OK(env_->NewWritableFile(kFileName, &writable_file, soptions_));
-  ASSERT_OK(writable_file->Append(kGood));
-  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size());
-    }
-    
-    
-    {  // Note: we may want to access the Java callback object instance
-  // across multiple method calls, so we create a global ref
-  assert(jcallback_obj != nullptr);
-  m_jcallback_obj = env->NewGlobalRef(jcallback_obj);
-  if(jcallback_obj == nullptr) {
-    // exception thrown: OutOfMemoryError
-    return;
-  }
-}
-    
-    namespace rocksdb {
-    }
-    
-    
-    {    // if file not exist
-    if (ret < 0) {
-      _file_size = 0;
-    }
-  }
-    
-    std::unique_ptr<CompactionFilter> CompactionFilterFactoryJniCallback::CreateCompactionFilter(
-    const CompactionFilter::Context& context) {
-  jboolean attached_thread = JNI_FALSE;
-  JNIEnv* env = getJniEnv(&attached_thread);
-  assert(env != nullptr);
-    }
-    
-    ComparatorJniCallback::~ComparatorJniCallback() {
-  jboolean attached_thread = JNI_FALSE;
-  JNIEnv* env = getJniEnv(&attached_thread);
-  assert(env != nullptr);
-    }
-    
-      // Generally your program life cycle should be fine with calling
-  // get() repeatedly rather than saving the reference, and then not
-  // call get() during process shutdown.
-  [[deprecated('Replaced by try_get')]]
-  static T* get() { return getEntry().get(); }
-    
-    // I have no idea what the normal values for these are,
-// and really don't care what they are. They're only used
-// within fcntl, so it's not an issue.
-#define FD_CLOEXEC HANDLE_FLAG_INHERIT
-#define O_NONBLOCK 1
-#define F_GETFD 1
-#define F_SETFD 2
-#define F_GETFL 3
-#define F_SETFL 4
-    
-    inline void* checkedCalloc(size_t n, size_t size) {
-  void* p = calloc(n, size);
-  if (!p) {
-    throw_exception<std::bad_alloc>();
-  }
-  return p;
-}
-    
-       private:
-    friend class SerialExecutor;
-    explicit Deleter(std::shared_ptr<Executor> parent)
-        : parent_(std::move(parent)) {}
+    #include 'guetzli/quality.h'
