@@ -1,193 +1,74 @@
 
         
-                def test_encoded_password
-          password = 'am@z1ng_p@ssw0rd#!'
-          encoded_password = URI.encode_www_form_component(password)
-          spec = resolve 'abstract://foo:#{encoded_password}@localhost/bar'
-          assert_equal password, spec['password']
+            You can read more about this change at:
+      https://www.playframework.com/documentation/2.3.x/Migration23
+      https://www.playframework.com/documentation/2.3.x/Highlights23
+    EOS
+  when 'haskell-platform' then <<-EOS.undent
+    We no longer package haskell-platform. Consider installing ghc
+    and cabal-install instead:
+      brew install ghc cabal-install
+    
+          keg_only_deps.each do |dep|
+        ENV.prepend_path 'PATH', dep.opt_bin.to_s
+        ENV.prepend_path 'PKG_CONFIG_PATH', '#{dep.opt_lib}/pkgconfig'
+        ENV.prepend_path 'PKG_CONFIG_PATH', '#{dep.opt_share}/pkgconfig'
+        ENV.prepend_path 'ACLOCAL_PATH', '#{dep.opt_share}/aclocal'
+        ENV.prepend_path 'CMAKE_PREFIX_PATH', dep.opt_prefix.to_s
+        ENV.prepend 'LDFLAGS', '-L#{dep.opt_lib}' if dep.opt_lib.directory?
+        ENV.prepend 'CPPFLAGS', '-I#{dep.opt_include}' if dep.opt_include.directory?
+      end
+    end
+    
+      def zsh_completion_caveats
+    if keg && keg.completion_installed?(:zsh) then <<-EOS.undent
+      zsh completion has been installed to:
+        #{HOMEBREW_PREFIX}/share/zsh/site-functions
+      EOS
+    end
+  end
+    
+        dirs.each do |d|
+      files = []
+      d.find { |pn| files << pn unless pn.directory? }
+      print_remaining_files files, d
+    end
+    
+        if $stdout.tty?
+      metacharacters = %w[\\ | ( ) [ ] { } ^ $ * + ? .]
+      bad_regex = metacharacters.any? do |char|
+        ARGV.any? do |arg|
+          arg.include?(char) && !arg.start_with?('/')
         end
-    
-                klass ||= AssociationQueryValue
-            queries = klass.new(associated_table, value).queries.map do |query|
-              expand_from_hash(query).reduce(&:and)
-            end
-            queries.reduce(&:or)
-          elsif table.aggregated_with?(key)
-            mapping = table.reflect_on_aggregation(key).mapping
-            queries = Array.wrap(value).map do |object|
-              mapping.map do |field_attr, aggregate_attr|
-                if mapping.size == 1 && !object.respond_to?(aggregate_attr)
-                  build(table.arel_attribute(field_attr), object)
-                else
-                  build(table.arel_attribute(field_attr), object.send(aggregate_attr))
-                end
-              end.reduce(&:and)
-            end
-            queries.reduce(&:or)
-          else
-            build(table.arel_attribute(key), value)
-          end
-        end
       end
-    
-        assert_same car, new_bulb.car
-  end
-    
-    class WrongReply < Reply
-  validate :errors_on_empty_content
-  validate :title_is_wrong_create, on: :create
-    
-      has_many :replies, dependent: :destroy, foreign_key: 'parent_id', autosave: true
-  has_many :approved_replies, -> { approved }, class_name: 'Reply', foreign_key: 'parent_id', counter_cache: 'replies_count'
-    
-      test 'broadcasting_for with a string' do
-    assert_equal 'hello', ChatChannel.broadcasting_for('hello')
-  end
-end
-
-    
-      test 'disallow block and arg together' do
-    e = assert_raise ArgumentError do
-      ChatChannel.periodically(:send_updates, every: 1) { ping }
-    end
-    assert_match(/not both/, e.message)
-  end
-    
-      test 'websocket connection' do
-    run_in_eventmachine do
-      connection = open_connection
-      connection.process
-    
-          assert_kind_of ChatChannel, channel
-      assert_equal 1, channel.room.id
-    end
-  end
-    
-      test 'broadcast generates notification' do
-    begin
-      server = TestServer.new
-    
-      def all_groups(current_user)
-    groups = []
-    
-      # POST /resource/confirmation
-  def create
-    self.resource = resource_class.send_confirmation_instructions(resource_params)
-    yield resource if block_given?
-    
-        def email_changed(record, opts={})
-      devise_mail(record, :email_changed, opts)
-    end
-    
-          def remember_me_is_active?(resource)
-        return false unless resource.respond_to?(:remember_me)
-        scope = Devise::Mapping.find_scope!(resource)
-        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
-        resource.remember_me?(token, generated_at)
-      end
-    
-          if options[:skip_helpers] == true
-        @used_helpers = @used_routes
-      elsif skip = options[:skip_helpers]
-        @used_helpers = self.routes - Array(skip).map(&singularizer)
-      else
-        @used_helpers = self.routes
+      if ARGV.any? && bad_regex
+        ohai 'Did you mean to perform a regular expression search?'
+        ohai 'Surround your query with /slashes/ to search by regex.'
       end
     end
+    
+      def self.factory(name)
+    Formulary.factory(name)
   end
-end
+    
+    end
 
     
-      def deliver_digest
-    NotificationMailer.digest(user.account).deliver_now!
-    user.touch(:last_emailed_at)
+        def javascripts_path
+      File.join assets_path, 'javascripts'
+    end
+    
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
   end
-end
-
+  config.static_cache_control = 'public, max-age=3600'
     
-          expect_updated_sign_in_at(user)
-    end
-    
-      def start_url
-    '/web/timelines/home'
-  end
-    
-    # Copyright (C) 2008 Rapid7, Inc.
-    
-    
-    # immediate selector of css at pos
-    def selector_for_pos(css, pos, depth = -1)
-      css[css_def_pos(css, pos, depth)].dup.strip
-    end
-    
-        def log_processing(name)
-      puts yellow '  #{File.basename(name)}'
-    end
-    
-    class NodeMincerTest < Minitest::Test
-  DUMMY_PATH = 'test/dummy_node_mincer'
-    
-        def common_options(opts)
-      opts.separator ''
-      opts.separator 'Common Options:'
-    
-            def log_level(name, options = {})
-          if options[:prepend]
-            level = log_levels.values.min
-            level = level.nil? ? 0 : level - 1
-          else
-            level = log_levels.values.max
-            level = level.nil? ? 0 : level + 1
-          end
-          log_levels.update(name => level)
-          define_logger(name)
-        end
-    
-      entries.each do |entry|
-    if File.exist?(entry[:file])
-      warn '[skip] #{entry[:file]} already exists'
-    else
-      File.open(entry[:file], 'w+') do |f|
-        f.write(ERB.new(File.read(entry[:template])).result(binding))
-        puts I18n.t(:written_file, scope: :capistrano, file: entry[:file])
-      end
-    end
-  end
-    
-        it 'Returns nil when Referer header is invalid' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
-      expect(subject.referrer(env)).to be_nil
-    end
-  end
-end
-
-    
-            post '/', :file => Rack::Test::UploadedFile.new(temp_file.path), :other => '<bar>'
-        expect(body).to eq('_escaped_params_tmp_file\nhello world\n&lt;bar&gt;')
-      ensure
-        File.unlink(temp_file.path)
-      end
-    end
-  end
-end
-
-    
-      it 'should not override the header if already set' do
-    mock_app with_headers('X-Frame-Options' => 'allow')
-    expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('allow')
-  end
-end
-
-    
-      it 'should allow changing the protection mode' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::XSSHeader, :xss_mode => :foo
-      run DummyApp
-    end
-    
-      # Run specs in random order to surface order dependencies. If you find an
-  # order dependency and want to debug it, you can fix the order by providing
-  # the seed, which is printed after each run.
-  #     --seed 1234
-  config.order = :random
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
