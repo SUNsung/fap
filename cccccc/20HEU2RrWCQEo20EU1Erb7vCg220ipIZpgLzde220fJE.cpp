@@ -1,213 +1,177 @@
 
         
-        /// Get a parsed documentation comment for the declaration, if there is one.
-Optional<DocComment *>getSingleDocComment(swift::markup::MarkupContext &Context,
-                                          const Decl *D);
-    
-      /// Creates a copy of a \c MemoryBuffer and adds it to the \c SourceManager,
-  /// taking ownership of the copy.
-  unsigned addMemBufferCopy(llvm::MemoryBuffer *Buffer);
-    
-    // The compiler generates the swift_once_t values as word-sized zero-initialized
-// variables, so we want to make sure swift_once_t isn't larger than the
-// platform word or the function below might overwrite something it shouldn't.
-static_assert(sizeof(swift_once_t) <= sizeof(void*),
-              'swift_once_t must be no larger than the platform word');
-    
-    #include 'Callee.h'
-#include 'ManagedValue.h'
-#include 'swift/AST/Types.h'
-#include 'swift/Basic/LLVM.h'
-#include 'swift/SIL/SILLocation.h'
-#include <memory>
-    
-    #include 'swift/SIL/InstructionUtils.h'
-#include 'swift/SIL/Projection.h'
-#include 'swift/SILOptimizer/Analysis/AliasAnalysis.h'
-#include 'swift/SILOptimizer/Analysis/EscapeAnalysis.h'
-#include 'swift/SILOptimizer/Analysis/TypeExpansionAnalysis.h'
-#include 'swift/SILOptimizer/Analysis/ValueTracking.h'
-#include 'swift/SILOptimizer/Utils/Local.h'
-#include 'llvm/ADT/DenseMap.h'
-#include 'llvm/ADT/DenseSet.h'
-#include 'llvm/ADT/Hashing.h'
-#include 'llvm/ADT/SmallVector.h'
-#include 'llvm/Support/Debug.h'
-#include <utility> 
-    
-    
-    {  ASSERT_TRUE(message.ParseFromString(data));
-  EXPECT_TRUE(message.has_any_value());
-  ASSERT_TRUE(message.any_value().UnpackTo(&any));
-  ASSERT_TRUE(any.UnpackTo(&submessage));
-  EXPECT_EQ(12345, submessage.int32_value());
-}
-    
-      void WriteIntroduction(io::Printer* printer);
-  void WriteDescriptor(io::Printer* printer);
-  void WriteGeneratedCodeInfo(const Descriptor* descriptor,
-                              io::Printer* printer,
-                              bool last);
-    
-    const Options* SourceGeneratorBase::options() {
-  return this->options_;
-}
-    
-    #include '../master_worker/common/RPC.hpp'
-#include 'TH/THStorage.h'
-    
-    #include '../ChannelUtils.hpp'
-#include '../DataChannel.hpp'
-#include 'DataChannelUtils.hpp'
-    
-    #define THCPDoubleStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPDoubleStorageClass)
-#define THCPFloatStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPFloatStorageClass)
-#define THCPHalfStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPHalfStorageClass)
-#define THCPLongStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPLongStorageClass)
-#define THCPIntStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPIntStorageClass)
-#define THCPShortStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPShortStorageClass)
-#define THCPCharStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPCharStorageClass)
-#define THCPByteStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPByteStorageClass)
-    
-    #ifdef _THP_CORE
-#define THPStorageType TH_CONCAT_3(THP,Real,StorageType)
-#define THPStorageBaseStr TH_CONCAT_STRING_2(Real,StorageBase)
-#endif
-    
-    uint32_t Hash(const char* data, size_t n, uint32_t seed) {
-  // Similar to murmur hash
-  const uint32_t m = 0xc6a4a793;
-  const uint32_t r = 24;
-  const char* limit = data + n;
-  uint32_t h = seed ^ (n * m);
-    }
-    
-    double Histogram::StandardDeviation() const {
-  if (num_ == 0.0) return 0;
-  double variance = (sum_squares_ * num_ - sum_ * sum_) / (num_ * num_);
-  return sqrt(variance);
+        namespace base {
+class FilePath;
 }
     
     
-    {  double Median() const;
-  double Percentile(double p) const;
-  double Average() const;
-  double StandardDeviation() const;
-};
+    {}  // namespace chrome
     
-    #include 'port/port.h'
-#include 'port/thread_annotations.h'
-    
-        // Invariant: we never leave < kHeaderSize bytes in a block.
-    assert(kBlockSize - block_offset_ - kHeaderSize >= 0);
-    
-    #endif  // STORAGE_LEVELDB_DB_LOG_WRITER_H_
-
-    
-      const char* data_;
-  size_t size_;
-  uint32_t restart_offset_;     // Offset in data_ of restart array
-  bool owned_;                  // Block owns data_[]
-    
-    #include <xgboost/logging.h>
-#include <cctype>
-#include <cstdio>
-#include <string>
-#include './io.h'
-    
-    // try to load weight information from file, if exists
-inline bool MetaTryLoadFloatInfo(const std::string& fname,
-                                 std::vector<bst_float>* data) {
-  std::unique_ptr<dmlc::Stream> fi(dmlc::Stream::Create(fname.c_str(), 'r', true));
-  if (fi == nullptr) return false;
-  dmlc::istream is(fi.get());
-  data->clear();
-  bst_float value;
-  while (is >> value) {
-    data->push_back(value);
-  }
-  return true;
+    void TtsPlatformImpl::clear_error() {
+  error_ = std::string();
 }
     
-    // implementing configure.
-template<typename PairIter>
-inline void Learner::Configure(PairIter begin, PairIter end) {
-  std::vector<std::pair<std::string, std::string> > vec(begin, end);
-  this->Configure(vec);
-}
     
-      virtual void UpdatePredictionCache(
-      const gbm::GBTreeModel& model,
-      std::vector<std::unique_ptr<TreeUpdater>>* updaters,
-      int num_new_trees) = 0;
+    {}  // namespace chrome
     
-        double sum = 0;
-    for (size_t i = 0; i < kernel.size(); i++) sum += kernel[i];
-    const double mul = 1.0 / sum;
+    #ifndef ATOM_COMMON_COLOR_UTIL_H_
+#define ATOM_COMMON_COLOR_UTIL_H_
     
-    #include 'guetzli/gamma_correct.h'
+      DebuggerClient(ASTContext &C) : Ctx(C) { }
+  virtual ~DebuggerClient() = default;
+  
+  // DebuggerClient is consulted at the beginning of the parsing
+  // of various DeclKinds to see whether the decl should be parsed
+  // in the global context rather than the current context.
+  // This question will only be asked if the decl's current context
+  // is a function marked with the LLDBDebuggerFunction attribute.
+  virtual bool shouldGlobalize(Identifier Name, DeclKind kind) = 0;
+  
+  virtual void didGlobalize (Decl *Decl) = 0;
     
-    namespace guetzli {
-    }
-    
-    #include <stdint.h>
-#include <vector>
-    
-      // Reports dropped bytes to the reporter.
-  // buffer_ must be updated to remove the dropped bytes prior to invocation.
-  void ReportCorruption(size_t bytes, const char* reason);
-  void ReportDrop(size_t bytes, const Status& reason);
+    /// Runs the given function with the given context argument exactly once.
+/// The predicate argument must point to a global or static variable of static
+/// extent of type swift_once_t.
+SWIFT_RUNTIME_EXPORT
+void swift_once(swift_once_t *predicate, void (*fn)(void *), void *context);
     
     
     {
-    {    return true;
+    {} // end namespace index
+} // end namespace swift
+    
+      /// Initialize a location with a new set of base, projectionpath and kind.
+  void init(SILValue B, const Optional<ProjectionPath> &P, KeyKind K= Normal) {
+    Base = B;
+    Path = P;
+    Kind = K;
   }
-// @lint-ignore TXT4 T25377293 Grandfathered in
-};
     
-    /**
- * @brief check if fname is exist
- * @details [long description]
- *
- * @param fname [description]
- * @return [description]
- */
-Status EnvLibrados::FileExists(const std::string& fname)
-{
-  LOG_DEBUG('[IN]%s\n', fname.c_str());
-  std::string fid, dir, file;
-  split(fname, &dir, &file);
-  Status s = _GetFid(dir + '/' + file, fid);
-    }
     
-    SyncPoint:: ~SyncPoint() {
-  delete impl_;
+    {} // end namespace swift
+    
+    
+    {  return 0;
 }
+
     
-    namespace rocksdb {
-// Kill the process with probability 1/odds for testing.
-extern void TestKillRandom(std::string kill_point, int odds,
-                           const std::string& srcfile, int srcline);
+    static void RunQPS() {
+  gpr_log(GPR_INFO, 'Running QPS test, open-loop');
     }
     
-    #include 'db/column_family.h'
-#include 'db/db_impl.h'
-#include 'db/db_iter.h'
-#include 'db/dbformat.h'
-#include 'rocksdb/env.h'
-#include 'rocksdb/slice.h'
-#include 'rocksdb/slice_transform.h'
-#include 'table/merging_iterator.h'
+    namespace grpc {
+    }
     
-      // An iterator is either positioned at a key/value pair, or
-  // not valid.  This method returns true iff the iterator is valid.
-  // Always returns false if !status().ok().
-  virtual bool Valid() const = 0;
+    	String host = p_url;
+	String path = '/';
+	int p_len = -1;
+	int port = 80;
+	bool ssl = false;
+	if (host.begins_with('wss://')) {
+		ssl = true; // we should implement this
+		host = host.substr(6, host.length() - 6);
+		port = 443;
+	} else {
+		ssl = false;
+		if (host.begins_with('ws://'))
+			host = host.substr(5, host.length() - 5);
+	}
+    
+    public:
+	Error connect_to_url(String p_url, PoolVector<String> p_protocols = PoolVector<String>(), bool gd_mp_api = false);
+    
+    /*
+ * We assume CHAR_BIT is 8 in many places. In practice, this is true on our
+ * target platforms, so not an issue, but let's just be extra sure.
+ */
+#include <limits.h>
+#if CHAR_BIT != 8
+#error 'mbed TLS requires a platform with 8-bit chars'
+#endif
+    
+    	bool initialized;
+    
+      Copyright 2003 by
+  Francesco Zappa Nardelli
+    
+        // Returns the next scan line.
+    // For grayscale images, pScan_line will point to a buffer containing 8-bit pixels (get_bytes_per_pixel() will return 1). 
+    // Otherwise, it will always point to a buffer containing 32-bit RGBA pixels (A will always be 255, and get_bytes_per_pixel() will return 4).
+    // Returns JPGD_SUCCESS if a scan line has been returned.
+    // Returns JPGD_DONE if all scan lines have been returned.
+    // Returns JPGD_FAILED if an error occurred. Call get_error_code() for a more info.
+    int decode(const void** pScan_line, uint* pScan_line_len);
+    
+    inline jpgd_status get_error_code() const { return m_error_code; }
+    
+    #include 'x86/x86cpu.h'
+/* We currently support 5 x86 variants:
+ * arch[0] -> non-sse
+ * arch[1] -> sse
+ * arch[2] -> sse2
+ * arch[3] -> sse4.1
+ * arch[4] -> avx
+ */
+#define OPUS_ARCHMASK 7
+int opus_select_arch(void);
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+       - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+    namespace leveldb {
+    }
+    
+      // count the keys
+  leveldb::Iterator* iter = db->NewIterator(leveldb::ReadOptions());
+  size_t num_keys = 0;
+  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+    num_keys++;
+  }
+  delete iter;
+  ASSERT_EQ(kNumKeys, num_keys) << 'Bad number of keys';
+    
+    // A FilterBlockBuilder is used to construct all of the filters for a
+// particular Table.  It generates a single string which is stored as
+// a special block in the Table.
+//
+// The sequence of calls to FilterBlockBuilder must match the regexp:
+//      (StartBlock AddKey*)* Finish
+class FilterBlockBuilder {
+ public:
+  explicit FilterBlockBuilder(const FilterPolicy*);
+    }
+    
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
+}
+
+    
+    #include <stddef.h>
+#include <stdint.h>
+#include 'leveldb/iterator.h'
