@@ -1,306 +1,375 @@
 
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(UnresponsiveSuppressor);
-};
-    
-    
-    { protected:
-  virtual ~WindowListObserver() {}
-};
-    
-    struct DraggableRegion {
-  bool draggable;
-  gfx::Rect bounds;
-    }
-    
-    namespace ui {
-class Accelerator;
+        
+        namespace base {
+class FilePath;
 }
     
-    // DesktopMediaList provides the list of desktop media source (screens, windows,
-// tabs), and their thumbnails, to the desktop media picker dialog. It
-// transparently updates the list in the background, and notifies the desktop
-// media picker when something changes.
-class DesktopMediaList {
- public:
-  // Struct used to represent each entry in the list.
-  struct Source {
-    // Id of the source.
-    content::DesktopMediaID id;
-    }
-    }
-    
-    void TtsPlatformImpl::clear_error() {
-  error_ = std::string();
+    UnresponsiveSuppressor::UnresponsiveSuppressor() {
+  g_suppress_level++;
 }
     
-    // filenames
-const base::FilePath::CharType kCacheDirname[] = FPL('Cache');
-const base::FilePath::CharType kChannelIDFilename[] = FPL('Origin Bound Certs');
-const base::FilePath::CharType kCookieFilename[] = FPL('Cookies');
-const base::FilePath::CharType kCRLSetFilename[] =
-    FPL('Certificate Revocation Lists');
-const base::FilePath::CharType kCustomDictionaryFileName[] =
-    FPL('Custom Dictionary.txt');
-const base::FilePath::CharType kExtensionActivityLogFilename[] =
-    FPL('Extension Activity');
-const base::FilePath::CharType kExtensionsCookieFilename[] =
-    FPL('Extension Cookies');
-const base::FilePath::CharType kFirstRunSentinel[] = FPL('First Run');
-const base::FilePath::CharType kGCMStoreDirname[] = FPL('GCM Store');
-const base::FilePath::CharType kLocalStateFilename[] = FPL('Local State');
-const base::FilePath::CharType kLocalStorePoolName[] = FPL('LocalStorePool');
-const base::FilePath::CharType kMediaCacheDirname[] = FPL('Media Cache');
-const base::FilePath::CharType kNetworkPersistentStateFilename[] =
-    FPL('Network Persistent State');
-const base::FilePath::CharType kOfflinePageArchviesDirname[] =
-    FPL('Offline Pages/archives');
-const base::FilePath::CharType kOfflinePageMetadataDirname[] =
-    FPL('Offline Pages/metadata');
-const base::FilePath::CharType kPreferencesFilename[] = FPL('Preferences');
-const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[] =
-    FPL('Protected Preferences');
-const base::FilePath::CharType kReadmeFilename[] = FPL('README');
-const base::FilePath::CharType kResetPromptMementoFilename[] =
-    FPL('Reset Prompt Memento');
-const base::FilePath::CharType kSafeBrowsingBaseFilename[] =
-    FPL('Safe Browsing');
-const base::FilePath::CharType kSecurePreferencesFilename[] =
-    FPL('Secure Preferences');
-const base::FilePath::CharType kServiceStateFileName[] = FPL('Service State');
-const base::FilePath::CharType kSingletonCookieFilename[] =
-    FPL('SingletonCookie');
-const base::FilePath::CharType kSingletonLockFilename[] = FPL('SingletonLock');
-const base::FilePath::CharType kSingletonSocketFilename[] =
-    FPL('SingletonSocket');
-const base::FilePath::CharType kSupervisedUserSettingsFilename[] =
-    FPL('Managed Mode Settings');
-const base::FilePath::CharType kThemePackFilename[] = FPL('Cached Theme.pak');
-const base::FilePath::CharType kThemePackMaterialDesignFilename[] =
-    FPL('Cached Theme Material Design.pak');
-const base::FilePath::CharType kWebAppDirname[] = FPL('Web Applications');
     
-    #if defined(OS_MACOSX)
-// NOTE: if you change the value of kFrameworkName, please don't forget to
-// update components/test/run_all_unittests.cc as well.
-// TODO(tfarina): Remove the comment above, when you fix components to use plist
-// on Mac.
-extern const base::FilePath::CharType kFrameworkName[];
-#endif  // OS_MACOSX
+    {}  // namespace atom
     
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
+    #ifndef CHROME_BROWSER_PRINTING_PRINT_VIEW_MANAGER_OBSERVER_H_
+#define CHROME_BROWSER_PRINTING_PRINT_VIEW_MANAGER_OBSERVER_H_
     
+    // File name of the Pepper Flash plugin on different platforms.
+extern const base::FilePath::CharType kPepperFlashPluginFilename[];
     
-    {    if(start_x == -1)
-    {
-        return 0;
+     protected:
+  explicit Net(v8::Isolate* isolate);
+  ~Net() override;
+    
+    #include 'db/db_iter.h'
+    
+    namespace leveldb {
     }
-    else
-    {
-        low_thresh = cvRound(max_start_x + 0.25*(max_end_x - max_start_x));
-        high_thresh = cvRound(max_start_x + 0.75*(max_end_x - max_start_x));
-        return 1;
-    }
+    
+    
+    {  // When limit user key is prefix of start user key
+  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
+            Shorten(IKey('foobar', 100, kTypeValue),
+                    IKey('foo', 200, kTypeValue)));
 }
     
-                static __device__ __forceinline__ int atomicMin(int* address, int val)
-            {
-                return ::atomicMin(address, val);
-            }
-            static __device__ __forceinline__ float atomicMin(float* address, float val)
-            {
-            #if __CUDA_ARCH__ >= 120
-                int* address_as_i = (int*) address;
-                int old = *address_as_i, assumed;
-                do {
-                    assumed = old;
-                    old = ::atomicCAS(address_as_i, assumed,
-                        __float_as_int(::fminf(val, __int_as_float(assumed))));
-                } while (assumed != old);
-                return __int_as_float(old);
-            #else
-                (void) address;
-                (void) val;
-                return 0.0f;
-            #endif
-            }
-            static __device__ __forceinline__ double atomicMin(double* address, double val)
-            {
-            #if __CUDA_ARCH__ >= 130
-                unsigned long long int* address_as_ull = (unsigned long long int*) address;
-                unsigned long long int old = *address_as_ull, assumed;
-                do {
-                    assumed = old;
-                    old = ::atomicCAS(address_as_ull, assumed,
-                        __double_as_longlong(::fmin(val, __longlong_as_double(assumed))));
-                } while (assumed != old);
-                return __longlong_as_double(old);
-            #else
-                (void) address;
-                (void) val;
-                return 0.0;
-            #endif
-            }
+    TableCache::TableCache(const std::string& dbname,
+                       const Options* options,
+                       int entries)
+    : env_(options->env),
+      dbname_(dbname),
+      options_(options),
+      cache_(NewLRUCache(entries)) {
+}
     
-        // Extension: 1.2
-    extern void (CODEGEN_FUNCPTR *BlendColor)(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
-    extern void (CODEGEN_FUNCPTR *BlendEquation)(GLenum mode);
-    extern void (CODEGEN_FUNCPTR *DrawRangeElements)(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid *indices);
-    extern void (CODEGEN_FUNCPTR *TexSubImage3D)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid *pixels);
-    extern void (CODEGEN_FUNCPTR *CopyTexSubImage3D)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height);
+      // Return an iterator for the specified file number (the corresponding
+  // file length must be exactly 'file_size' bytes).  If 'tableptr' is
+  // non-NULL, also sets '*tableptr' to point to the Table object
+  // underlying the returned iterator, or NULL if no Table object underlies
+  // the returned iterator.  The returned '*tableptr' object is owned by
+  // the cache and should not be deleted, and is valid for as long as the
+  // returned iterator is live.
+  Iterator* NewIterator(const ReadOptions& options,
+                        uint64_t file_number,
+                        uint64_t file_size,
+                        Table** tableptr = NULL);
     
-    #if defined(_WIN32)
-#include <windows.h>
-    
-    namespace cv { namespace ocl { namespace runtime {
-    }
-    }
-    }
-    
-    static PyObject* recursive_to_list(
-    char* data, IntList sizes, IntList strides, int64_t dim,
-    ScalarType scalarType, int64_t elementSize)
-{
-  int64_t ndim = sizes.size();
-  if (dim == ndim) {
-    return torch::utils::load_scalar(data, scalarType);
+      // Add the specified file at the specified number.
+  // REQUIRES: This version has not been saved (see VersionSet::SaveTo)
+  // REQUIRES: 'smallest' and 'largest' are smallest and largest keys in file
+  void AddFile(int level, uint64_t file,
+               uint64_t file_size,
+               const InternalKey& smallest,
+               const InternalKey& largest) {
+    FileMetaData f;
+    f.number = file;
+    f.file_size = file_size;
+    f.smallest = smallest;
+    f.largest = largest;
+    new_files_.push_back(std::make_pair(level, f));
   }
-  auto n = sizes[dim];
-  auto list = THPObjectPtr(PyList_New(n));
-  if (!list) throw python_error();
-  for (int64_t i = 0; i < n; i++) {
-    PyObject* obj = recursive_to_list(data, sizes, strides, dim + 1, scalarType, elementSize);
-    if (!obj) throw python_error();
-    PyList_SET_ITEM(list.get(), i, obj);
-    data += strides[dim] * elementSize;
+    
+    static std::string PrintContents(WriteBatch* b) {
+  InternalKeyComparator cmp(BytewiseComparator());
+  MemTable* mem = new MemTable(cmp);
+  mem->Ref();
+  std::string state;
+  Status s = WriteBatchInternal::InsertInto(b, mem);
+  int count = 0;
+  Iterator* iter = mem->NewIterator();
+  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+    ParsedInternalKey ikey;
+    ASSERT_TRUE(ParseInternalKey(iter->key(), &ikey));
+    switch (ikey.type) {
+      case kTypeValue:
+        state.append('Put(');
+        state.append(ikey.user_key.ToString());
+        state.append(', ');
+        state.append(iter->value().ToString());
+        state.append(')');
+        count++;
+        break;
+      case kTypeDeletion:
+        state.append('Delete(');
+        state.append(ikey.user_key.ToString());
+        state.append(')');
+        count++;
+        break;
+    }
+    state.append('@');
+    state.append(NumberToString(ikey.sequence));
   }
-  return list.release();
+  delete iter;
+  if (!s.ok()) {
+    state.append('ParseError()');
+  } else if (count != WriteBatchInternal::Count(b)) {
+    state.append('CountMismatch()');
+  }
+  mem->Unref();
+  return state;
 }
     
-    #include 'override_macros.h'
+    #endif  // STORAGE_LEVELDB_INCLUDE_FILTER_POLICY_H_
+
     
     
-    {  PyTypeObject* srcType = THPTypeInfo<TensorSrc>::pyType();
-  copyList.push_back({ srcType, wrapper, false });
+    {  if (argc != 4) {
+    printf('This script converts the CIFAR dataset to the leveldb format used\n'
+           'by caffe to perform classification.\n'
+           'Usage:\n'
+           '    convert_cifar_data input_folder output_folder db_type\n'
+           'Where the input folder should contain the binary batch files.\n'
+           'The CIFAR dataset could be downloaded at\n'
+           '    http://www.cs.toronto.edu/~kriz/cifar.html\n'
+           'You should gunzip them after downloading.\n');
+  } else {
+    google::InitGoogleLogging(argv[0]);
+    convert_dataset(string(argv[1]), string(argv[2]), string(argv[3]));
+  }
+  return 0;
 }
-    
-          int optval = 1;
-      SYSCHECK(::setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(int)))
-      SYSCHECK(::bind(socket, next_addr->ai_addr, next_addr->ai_addrlen))
-      SYSCHECK(::listen(socket, LISTEN_QUEUE_SIZE))
-      break;
-    } catch (const std::system_error& e) {
-      ::close(socket);
-      next_addr = next_addr->ai_next;
+
     
       /**
-   * Add a piece of response to the pipeline.
+   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
+   *
+   * Computes the gradients with respect to the two input vectors (bottom[0] and
+   * bottom[1]), but not the similarity label (bottom[2]).
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
+   *      as @f$ \lambda @f$ is the coefficient of this layer's output
+   *      @f$\ell_i@f$ in the overall Net loss
+   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
+   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
+   *      (*Assuming that this top Blob is not used as a bottom (input) by any
+   *      other layer of the Net.)
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$a@f$; Backward fills their diff with
+   *      gradients if propagate_down[0]
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$b@f$; Backward fills their diff with gradients if
+   *      propagate_down[1]
    */
-  static void AddToPipeline(const std::string &s);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    //////////////////////////////////////////////////////////////////////
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of TanHLayer.
+ */
+template <typename Dtype>
+class CuDNNTanHLayer : public TanHLayer<Dtype> {
+ public:
+  explicit CuDNNTanHLayer(const LayerParameter& param)
+      : TanHLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNTanHLayer();
+    }
+    
+      virtual inline const char* type() const { return 'Deconvolution'; }
     
     
-void Instruction::SetBranchImmTarget(Instruction* target) {
-  assert(((target - this) & 3) == 0);
-  Instr branch_imm = 0;
-  uint32_t imm_mask = 0;
-  int offset = (target - this) >> kInstructionSizeLog2;
-  switch (BranchType()) {
-    case CondBranchType: {
-      branch_imm = Assembler::ImmCondBranch(offset);
-      imm_mask = ImmCondBranch_mask;
-      break;
-    }
-    case UncondBranchType: {
-      branch_imm = Assembler::ImmUncondBranch(offset);
-      imm_mask = ImmUncondBranch_mask;
-      break;
-    }
-    case CompareBranchType: {
-      branch_imm = Assembler::ImmCmpBranch(offset);
-      imm_mask = ImmCmpBranch_mask;
-      break;
-    }
-    case TestBranchType: {
-      branch_imm = Assembler::ImmTestBranch(offset);
-      imm_mask = ImmTestBranch_mask;
-      break;
-    }
-    default: not_reached();
+    {}  // namespace caffe
+    
+    
+    {}  // namespace caffe
+    
+    # define INSTANTIATE_TEST_CASE_P(prefix, test_case_name, generator) \
+  ::testing::internal::ParamGenerator<test_case_name::ParamType> \
+      gtest_##prefix##test_case_name##_EvalGenerator_() { return generator; } \
+  int gtest_##prefix##test_case_name##_dummy_ = \
+      ::testing::UnitTest::GetInstance()->parameterized_test_registry(). \
+          GetTestCasePatternHolder<test_case_name>(\
+              #test_case_name, __FILE__, __LINE__)->AddTestCaseInstantiation(\
+                  #prefix, \
+                  &gtest_##prefix##test_case_name##_EvalGenerator_, \
+                  __FILE__, __LINE__)
+    
+    
+    {  template <typename U> void copy(linked_ptr<U> const* ptr) {
+    value_ = ptr->get();
+    if (value_)
+      link_.join(&ptr->link_);
+    else
+      link_.join_new();
   }
-  SetInstructionBits(Mask(~imm_mask) | branch_imm);
-}
+};
     
-    namespace HPHP {
-/////////////////////////////////////////////////////////////////////////////
+       private:
+    Iterator(const Iterator& other)
+        : base_(other.base_),
+        begin1_(other.begin1_),
+        end1_(other.end1_),
+        current1_(other.current1_),
+        begin2_(other.begin2_),
+        end2_(other.end2_),
+        current2_(other.current2_),
+        begin3_(other.begin3_),
+        end3_(other.end3_),
+        current3_(other.current3_),
+        begin4_(other.begin4_),
+        end4_(other.end4_),
+        current4_(other.current4_),
+        begin5_(other.begin5_),
+        end5_(other.end5_),
+        current5_(other.current5_),
+        begin6_(other.begin6_),
+        end6_(other.end6_),
+        current6_(other.current6_) {
+      ComputeCurrentValue();
+    }
+    
+      // Converts a wide C string to a String using the UTF-8 encoding.
+  // NULL will be converted to '(null)'.  If an error occurred during
+  // the conversion, '(failed to convert from wide string)' is
+  // returned.
+  static std::string ShowWideCString(const wchar_t* wide_c_str);
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
+    GTEST_TEMPLATE_ T25>
+struct Templates25 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates24<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25> Tail;
+};
+    
+    
+    {  // Returns the smallest prime number greater than p; or returns -1
+  // if the next prime is beyond the capacity of the table.
+  virtual int GetNextPrime(int p) const = 0;
+};
+    
+    // We will track memory used by this class.
+class Water {
+ public:
+  // Normal Water declarations go here.
     }
     
     
-    {/////////////////////////////////////////////////////////////////////////////
+    {  delete tensor;
+  delete tensor2;
+  cout << 'OK' << endl;
+  return 0;
 }
+
+    
+    TEST_CASE('Optim/ProducesPyTorchValues/Adagrad') {
+  check_exact_values<Adagrad>(
+      AdagradOptions(1.0).weight_decay(1e-6).lr_decay(1e-3),
+      expected_parameters::Adagrad);
+}
+    
+      auto axes_tensor = dummy_->NewDummyName();
+  c2_op = ret.ops.Add();
+  {
+    caffe2::Argument shape;
+    shape.set_name('shape');
+    shape.add_ints(axes_vals.ints_size());
+    BuildOperator(
+        c2_op, 'GivenTensorIntFill', {}, {axes_tensor}, {shape, axes_vals});
+  }
+    
+    PyObject *THPDevice_repr(THPDevice *self)
+{
+  std::ostringstream oss;
+  oss << 'device(type=\'' << self->device.type() << '\'';
+  if (self->device.has_index()) {
+    oss << ', index=' << self->device.index();
+  }
+  oss << ')';
+  return THPUtils_packString(oss.str().c_str());
+}
+    
+        CAFFE_ENFORCE_GT(data.dim(1), 8, 'DATA must have more than 8 columns');
+    // Subtract 8 from the #columns of data for the 4 bytes for scale and 4
+    // bytes for bias that we use in the fused representation (per row).
+    const std::vector<TIndex> shape = {lengths.dim(0), data.dim(1) - 8};
+    output->Resize(shape);
+    
+    #endif  // STORAGE_LEVELDB_DB_VERSION_EDIT_H_
+
+    
+      // Store the specified number as the sequence number for the start of
+  // this batch.
+  static void SetSequence(WriteBatch* batch, SequenceNumber seq);
+    
+    void Histogram::Merge(const Histogram& other) {
+  if (other.min_ < min_) min_ = other.min_;
+  if (other.max_ > max_) max_ = other.max_;
+  num_ += other.num_;
+  sum_ += other.sum_;
+  sum_squares_ += other.sum_squares_;
+  for (int b = 0; b < kNumBuckets; b++) {
+    buckets_[b] += other.buckets_[b];
+  }
+}
+    
+    // Helper class that locks a mutex on construction and unlocks the mutex when
+// the destructor of the MutexLock object is invoked.
+//
+// Typical usage:
+//
+//   void MyClass::MyMethod() {
+//     MutexLock l(&mu_);       // mu_ is an instance variable
+//     ... some complex code, possibly with multiple return paths ...
+//   }
+    
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
+}
+
+    
+    class WritableFile;
+    
+    
+    
+    
+    
+    #if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_physics_PhysicsJointLimit_setMin'.',&tolua_err);
 #endif
-
     
-    void MethodStatement::checkParameters(FileScopeRawPtr scope) {
-  // only allow parameter modifiers (public, private, protected)
-  // on constructor for promotion
-  if (!m_params) {
-    return;
-  }
-  bool isCtor = isNamed('__construct');
-  for (int i = 0; i < m_params->getCount(); i++) {
-    auto param =
-      dynamic_pointer_cast<ParameterExpression>((*m_params)[i]);
-    switch (param->getModifier()) {
-    case 0:
-      continue;
-    case T_PUBLIC:
-    case T_PRIVATE:
-    case T_PROTECTED:
-      if (isCtor) {
-        m_autoPropCount++;
-        continue;
-      }
-    default:
-      if (isCtor) {
-        param->parseTimeFatal(scope,
-                              'Invalid modifier on __construct, only public, '
-                              'private or protected allowed');
-      } else {
-        param->parseTimeFatal(scope,
-                              'Parameters modifiers not allowed on methods');
-      }
-    }
-  }
-}
-
     
-    TEST_F(YogaTest_HadOverflowTests, children_overflow_no_wrap_and_no_flex_children) {
-  const YGNodeRef child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child0, 80);
-  YGNodeStyleSetHeight(child0, 40);
-  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
-  YGNodeStyleSetMargin(child0, YGEdgeBottom, 15);
-  YGNodeInsertChild(root, child0, 0);
-  const YGNodeRef child1 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child1, 80);
-  YGNodeStyleSetHeight(child1, 40);
-  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
-  YGNodeInsertChild(root, child1, 1);
-    }
     
-    /* static */ Config * Config::create(void)
-{
-    return new Config();
-}
+    		case 'a':
+			{
+				m_body->ApplyTorque(50.0f, true);
+			}
+			break;
     
-    int Node::getFlexDirection(void) const
-{
-    return YGNodeStyleGetFlexDirection(m_node);
-}
-    
-    void setAssertHandler(AssertHandler assertHandler) {
-    gAssertHandler = assertHandler;
-}
+    			b2PolygonShape shape;
+			shape.SetAsBox(0.75f, 0.75f);
