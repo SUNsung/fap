@@ -1,154 +1,198 @@
 
         
-        
-llvm::Optional<ASTNode>
-SyntaxASTMap::getNodeForSyntax(syntax::Syntax SyntaxNode) const {
-  auto Found = SyntaxMap.find(SyntaxNode.Root);
-  if (Found == SyntaxMap.end()) {
-    return None;
+        class DebuggerClient {
+protected:
+  ASTContext &Ctx;
+public:
+  typedef SmallVectorImpl<LookupResultEntry> ResultVector;
+    }
+    
+    
+    {
+    {    if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Decl *>()) {
+      SemanticNode.get<Decl *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else {
+      llvm_unreachable('ASTNode has pointer to unknown thing!');
+    }
+    llvm::errs() << '\n=====================================================\n';
   }
-  return Found->getSecond();
 }
+
     
-      ArrayRef<const MarkupASTNode *> getChildren() const {
-    return {};
+    #pragma mark - NSCalendar verification
+    
+    #include 'swift/Syntax/Rewriter.h'
+    
+    
+    {  StringRef getReceiverUSR() const {
+    for (auto Relation: Relations) {
+      if (Relation.roles & (SymbolRoleSet) SymbolRole::RelationReceivedBy)
+        return Relation.USR;
+    }
+    return StringRef();
   }
+};
     
-      /// Indicates whether to allow diagnostics for \c <unknown> locations if
-  /// \c VerifyMode is not \c NoVerify.
-  bool VerifyIgnoreUnknown = false;
+    namespace swift {
+class ModuleDecl;
+class SourceFile;
+class DeclContext;
+    }
     
-      // #line directive handling.
-  struct VirtualFile {
-    CharSourceRange Range;
-    std::string Name;
-    int LineOffset;
-  };
-  std::map<const char *, VirtualFile> VirtualFiles;
-  mutable std::pair<const char *, const VirtualFile*> CachedVFile = {nullptr, nullptr};
+    namespace swift {
+namespace index {
+    }
+    }
     
-    #include 'swift/Runtime/HeapObject.h'
-#include <mutex>
-    
-    #ifndef BITCOIN_INDIRECTMAP_H
-#define BITCOIN_INDIRECTMAP_H
-    
-    #include 'leveldb/db.h'
-#include 'db/db_impl.h'
-#include 'leveldb/cache.h'
-#include 'util/testharness.h'
-#include 'util/testutil.h'
-    
-    #include 'db/filename.h'
-#include 'db/dbformat.h'
-#include 'db/table_cache.h'
-#include 'db/version_edit.h'
-#include 'leveldb/db.h'
-#include 'leveldb/env.h'
-#include 'leveldb/iterator.h'
-    
-    using leveldb::Cache;
-using leveldb::Comparator;
-using leveldb::CompressionType;
-using leveldb::DB;
-using leveldb::Env;
-using leveldb::FileLock;
-using leveldb::FilterPolicy;
-using leveldb::Iterator;
-using leveldb::kMajorVersion;
-using leveldb::kMinorVersion;
-using leveldb::Logger;
-using leveldb::NewBloomFilterPolicy;
-using leveldb::NewLRUCache;
-using leveldb::Options;
-using leveldb::RandomAccessFile;
-using leveldb::Range;
-using leveldb::ReadOptions;
-using leveldb::SequentialFile;
-using leveldb::Slice;
-using leveldb::Snapshot;
-using leveldb::Status;
-using leveldb::WritableFile;
-using leveldb::WriteBatch;
-using leveldb::WriteOptions;
+      /// Take the last level projection off. Return the modified LSValue.
+  LSValue &stripLastLevelProjection() {
+    Path.getValue().pop_back();
+    return *this;
+  }
     
     namespace leveldb {
     }
     
-    // If filename is a leveldb file, store the type of the file in *type.
-// The number encoded in the filename is stored in *number.  If the
-// filename was successfully parsed, returns true.  Else return false.
-extern bool ParseFileName(const std::string& filename,
-                          uint64_t* number,
-                          FileType* type);
-    
-    
-    {    fprintf(stdout, '%-12s : %11.3f micros/op;%s%s\n',
-            name.ToString().c_str(),
-            (finish - start_) * 1e6 / done_,
-            (message_.empty() ? '' : ' '),
-            message_.c_str());
-    if (FLAGS_histogram) {
-      fprintf(stdout, 'Microseconds per op:\n%s\n', hist_.ToString().c_str());
-    }
-    fflush(stdout);
+      inline void SaveKey(const Slice& k, std::string* dst) {
+    dst->assign(k.data(), k.size());
   }
     
-    // If true, do not destroy the existing database.  If you set this
-// flag and also specify a benchmark that wants a fresh database, that
-// benchmark will fail.
-static bool FLAGS_use_existing_db = false;
+    #include <stdint.h>
+#include 'leveldb/db.h'
+#include 'db/dbformat.h'
+    
+      // If a seek to internal key 'k' in specified file finds an entry,
+  // call (*handle_result)(arg, found_key, found_value).
+  Status Get(const ReadOptions& options,
+             uint64_t file_number,
+             uint64_t file_size,
+             const Slice& k,
+             void* arg,
+             void (*handle_result)(void*, const Slice&, const Slice&));
+    
+    void VersionEdit::Clear() {
+  comparator_.clear();
+  log_number_ = 0;
+  prev_log_number_ = 0;
+  last_sequence_ = 0;
+  next_file_number_ = 0;
+  has_comparator_ = false;
+  has_log_number_ = false;
+  has_prev_log_number_ = false;
+  has_next_file_number_ = false;
+  has_last_sequence_ = false;
+  deleted_files_.clear();
+  new_files_.clear();
+}
     
     
     {}  // namespace leveldb
     
-      // If *start < limit, changes *start to a short string in [start,limit).
-  // Simple comparator implementations may return with *start unchanged,
-  // i.e., an implementation of this method that does nothing is correct.
-  virtual void FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const = 0;
+    TEST(FindFileTest, Single) {
+  Add('p', 'q');
+  ASSERT_EQ(0, Find('a'));
+  ASSERT_EQ(0, Find('p'));
+  ASSERT_EQ(0, Find('p1'));
+  ASSERT_EQ(0, Find('q'));
+  ASSERT_EQ(1, Find('q1'));
+  ASSERT_EQ(1, Find('z'));
+    }
     
-    /// Helper replacement for REGISTER, used within extension modules.
-#define REGISTER_MODULE(t, r, n)                                               \
-  auto t##Module = Registry::get().registry(r)->add(n, std::make_shared<t>());
+    void WriteBatchInternal::Append(WriteBatch* dst, const WriteBatch* src) {
+  SetCount(dst, Count(dst) + Count(src));
+  assert(src->rep_.size() >= kHeader);
+  dst->rep_.append(src->rep_.data() + kHeader, src->rep_.size() - kHeader);
+}
+    
+    namespace cv {
+    }
+    
+    CV_EXPORTS_W void max(InputArray src1, Scalar src2, OutputArray dst);
+    
+    
+    {    syncOutput(dst, _dst, stream);
+}
     
     /**
- * @brief Iterate the discovered decorators for a given point type.
+ * @brief Access the internal storage of the Decorator parser.
  *
- * The configuration maintains various sources, each may contain a set of
- * decorators. The source tracking is abstracted for the decorator iterator.
+ * The decoration set is a map of column name to value. It contains the opaque
+ * set of decoration point results.
  *
- * @param point request execution of decorators for this given point.
- * @param time an optional time for points using intervals.
- * @param source restrict run to a specific config source.
+ * Decorations are applied to log items before they are sent to the downstream
+ * logging APIs: logString, logSnapshot, etc.
+ *
+ * @param results the output parameter to write decorations.
  */
-void runDecorators(DecorationPoint point,
-                   size_t time = 0,
-                   const std::string& source = '');
+void getDecorations(std::map<std::string, std::string>& results);
     
+    class TLSConfigPlugin;
     
-    {  void SetUp() {}
-};
+        std::string content;
+    setDatabaseValue(kPersistentSettings, 'complex_example', '1');
+    if (getDatabaseValue(kPersistentSettings, 'complex_example', content)) {
+      r['database_test'] = content;
+    }
     
+      BlockingQueueAddResult add(T item) override {
+    queue_.enqueue(std::move(item));
+    return sem_.post();
+  }
     
-    {
-    {  EXPECT_EQ(expected, toAsciiTimeUTC(&result));
+    namespace folly {
+    }
+    
+    template <typename DigestT, typename ClockT>
+void BufferedDigest<DigestT, ClockT>::onNewDigest(
+    DigestT digest,
+    TimePoint /*newExpiry*/,
+    TimePoint /*oldExpiry*/,
+    const std::unique_lock<SharedMutex>& /*g*/) {
+  std::array<DigestT, 2> a{{digest_, std::move(digest)}};
+  digest_ = DigestT::merge(a);
 }
-}
-
-    
-    
-    {  // Make sure no log file is created.
-  // RocksDB logs are intercepted and forwarded to the GLog sink.
-  auto details = SQL::selectAllFrom('file', 'path', EQUALS, path_ + '/LOG');
-  ASSERT_EQ(details.size(), 0U);
-}
-    
-    /// The shell may request execution of all queries in a pack immediately.
-DECLARE_string(pack);
-    
-    #include 'osquery/core/conversions.h'
-#include 'osquery/dispatcher/distributed.h'
     
     #pragma once
+    
+    // See portability/Unistd.h for why these need to be in a namespace
+// rather then extern 'C'.
+namespace folly {
+namespace portability {
+namespace fcntl {
+int creat(char const* fn, int pm);
+int fcntl(int fd, int cmd, ...);
+int posix_fallocate(int fd, off_t offset, off_t len);
+int open(char const* fn, int of, int pm = 0);
+}
+}
+}
+    
+    /*
+ * baseevent.h
+ *
+ *  Created on: 2016年3月24日
+ *      Author: caoshaokun
+ */
+    
+    
+    {        vecdump_.push_back(strstack);
+        strstack.clear();
+    }
+    
+    //
+//  comm_frequency_limit.cc
+//  comm
+//
+//  Created by liucan on 13-11-23.
+//
+    
+    #ifndef COMM_COMM_FREQUENCY_LIMIT_H_
+#define COMM_COMM_FREQUENCY_LIMIT_H_
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
