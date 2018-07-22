@@ -1,205 +1,113 @@
 
         
-          def test_escape_javascript
-    assert_equal '', escape_javascript(nil)
-    assert_equal %(This \\'thing\\' is really\\n netos\\'), escape_javascript(%(This 'thing' is really\n netos'))
-    assert_equal %(backslash\\\\test), escape_javascript(%(backslash\\test))
-    assert_equal %(dont <\\/close> tags), escape_javascript(%(dont </close> tags))
-    assert_equal %(unicode &#x2028; newline), escape_javascript(%(unicode \342\200\250 newline).dup.force_encoding(Encoding::UTF_8).encode!)
-    assert_equal %(unicode &#x2029; newline), escape_javascript(%(unicode \342\200\251 newline).dup.force_encoding(Encoding::UTF_8).encode!)
-    
-    require 'active_record/relation/predicate_builder/association_query_value'
-require 'active_record/relation/predicate_builder/polymorphic_array_value'
-
-    
-    module ActiveRecord
-  class RelationTest < ActiveRecord::TestCase
-    fixtures :posts, :comments, :authors, :author_addresses, :ratings, :categorizations
-    
-      test 'notification for transmit_subscription_confirmation' do
-    begin
-      @channel.subscribe_to_channel
-    
-          def open_connection
-        env = Rack::MockRequest.env_for '/test', 'HTTP_HOST' => 'localhost', 'HTTP_CONNECTION' => 'upgrade', 'HTTP_UPGRADE' => 'websocket', 'HTTP_ORIGIN' => 'http://rubyonrails.com'
-    
-      def concurrently(enum)
-    enum.map { |*x| Concurrent::Future.execute { yield(*x) } }.map(&:value!)
-  end
-    
-        def send_async(method, *args)
-      send method, *args
-    end
-    
-        brew cask install mactex
-    EOS
-  when 'pip' then <<-EOS.undent
-    Homebrew provides pip via: `brew install python`. However you will then
-    have two Pythons installed on your Mac, so alternatively you can install
-    pip via the instructions at:
-    
-        ENV.activate_extensions!
-    
-      def clang_build
-    @clang_build ||= MacOS.clang_build_version if MacOS.has_apple_developer_tools?
-  end
-    
-        if initial_revision != current_revision
-      puts 'Updated Homebrew from #{shorten_revision(initial_revision)} to #{shorten_revision(current_revision)}.'
-      updated = true
-    end
-    
-    unless dups.empty?
-  puts '\nDuplicate links:'
-  dups.each do |link|
-    puts '- #{link}'
-    puts `grep -nr '#{link}' README.md`
-  end
-  puts '\nDone with errors.'
-  exit(1)
-end
-    
-            # This returns all synced folder implementations.
-        #
-        # @return [Registry]
-        def synced_folders
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.synced_folders)
-            end
-          end
-        end
-    
-          alias_method :include?, :key?
-      alias_method :has_key?, :key?
-      alias_method :member?, :key?
-    
-          # This returns the keys (or ids) that are in the string.
-      #
-      # @return [<Array<String>]
-      def keys
-        regexp = /^#\s*VAGRANT-BEGIN:\s*(.+?)$\r?\n?(.*)$\r?\n?^#\s*VAGRANT-END:\s(\1)$/m
-        @value.scan(regexp).map do |match|
-          match[0]
+                  # Success, exit status 0
+          0
         end
       end
+    end
+  end
+end
+
     
-      def test_open_with_block
-    r = nil
-    x = Object.new
-    y = PTY.open {|ret|
-      r = ret;
-      assert_kind_of(Array, ret)
-      assert_equal(2, ret.length)
-      assert_equal(IO, ret[0].class)
-      assert_equal(File, ret[1].class)
-      _, slave = ret
-      assert(slave.tty?)
-      assert(File.chardev?(slave.path))
-      x
-    }
+            # Parse the options
+        argv = parse_options(opts)
+        return if !argv
+        if argv.length < 2
+          raise Vagrant::Errors::CLIInvalidUsage,
+            help: opts.help.chomp
+        end
+    
+        def test_no_retry_option
+      spawn_runner '--no-retry'
+      buf = Timeout.timeout(TIMEOUT) {@test_out.read}
+      refute_match(/^Retrying\.+$/,buf)
+      assert_match(/^ +\d+\) Failure:\nTestD#test_fail_at_worker/,buf)
+    end
+    
+      # SecureRandom.hex generates a random hexadecimal string.
+  #
+  # The argument _n_ specifies the length, in bytes, of the random number to be generated.
+  # The length of the resulting hexadecimal string is twice of _n_.
+  #
+  # If _n_ is not specified or is nil, 16 is assumed.
+  # It may be larger in the future.
+  #
+  # The result may contain 0-9 and a-f.
+  #
+  #   require 'securerandom'
+  #
+  #   SecureRandom.hex #=> 'eb693ec8252cd630102fd0d0fb7c3485'
+  #   SecureRandom.hex #=> '91dc3bfb4de5b11d029d376634589b61'
+  #
+  # If a secure random number generator is not available,
+  # +NotImplementedError+ is raised.
+  def hex(n=nil)
+    random_bytes(n).unpack('H*')[0]
+  end
+    
+      def test_pty_check_default
+    st1 = st2 = pid = nil
+    `echo` # preset $?
+    PTY.spawn('cat') do |r,w,id|
+      pid = id
+      st1 = PTY.check(pid)
+      w.close
+      r.close
+      begin
+        sleep(0.1)
+      end until st2 = PTY.check(pid)
+    end
   rescue RuntimeError
     skip $!
   else
-    assert(r[0].closed?)
-    assert(r[1].closed?)
-    assert_equal(y, x)
+    assert_nil(st1)
+    assert_equal(pid, st2.pid)
   end
     
-        m = method(:meth)
-    obj = Object.new
+      # TODO: This should probably be replaced with a 'should behave like' that uses
+  # the many scoping/binding specs from kernel/eval_spec, since most of those
+  # behaviors are the same for instance_eval. See also module_eval/class_eval.
     
-      it 'does copy the backtrace' do
-    begin
-      # Explicitly raise so a backtrace is associated with the exception.
-      # It's tempting to call `set_backtrace` instead, but that complicates
-      # the test because it might affect other state (e.g., instance variables)
-      # on some implementations.
-      raise ExceptionSpecs::InitializeException.new('my exception')
-    rescue => e
-      @obj = e
-    end
-    
-      # FIXME: do not use conditionals like this around #it blocks
-  unless not home = ENV['HOME']
-    platform_is_not :windows do
-      it 'converts a pathname to an absolute pathname, using ~ (home) as base' do
-        File.expand_path('~').should == home
-        File.expand_path('~', '/tmp/gumby/ddd').should == home
-        File.expand_path('~/a', '/tmp/gumby/ddd').should == File.join(home, 'a')
-      end
-    
-      platform_is_not :windows do
-    it 'returns true if the file is a pipe' do
-      filename = tmp('i_am_a_pipe')
-      File.mkfifo(filename)
-    
-      it 'dumps an object that has had an ivar added and removed as though the ivar never was set' do
-    obj = Object.new
-    initial = Marshal.dump(obj)
-    obj.instance_variable_set(:@ivar, 1)
-    Marshal.dump(obj).should == '\004\bo:\vObject\006:\n@ivari\006'
-    obj.send :remove_instance_variable, :@ivar
-    Marshal.dump(obj).should == initial
-  end
-    
-          it 'allows Lithuanian as an extra option' do
-        'iSa'.capitalize(:turkic, :lithuanian).should == 'İsa'
-      end
-    
-        ruby_version_is '2.5' do
-      it 'returns nil if other can't be converted to a string' do
-        'abc'.casecmp?(mock('abc')).should be_nil
+          it 'does not allow any other additional option' do
+        lambda { 'aiS'.swapcase(:turkic, :ascii) }.should raise_error(ArgumentError)
       end
     end
-  end
-end
-
     
-        it 'does not allow invalid options' do
-      lambda { 'abc'.swapcase(:invalid_option) }.should raise_error(ArgumentError)
-    end
-  end
-    
-    describe 'Invoking a method' do
-  describe 'with required args after the rest arguments' do
-    it 'binds the required arguments first' do
-      specs.fooM0RQ1(1).should == [[], 1]
-      specs.fooM0RQ1(1,2).should == [[1], 2]
-      specs.fooM0RQ1(1,2,3).should == [[1,2], 3]
-    
-    @@ layout
-<html>
-  <head>
-    <title>Super Simple Chat with Sinatra</title>
-    <meta charset='utf-8' />
-    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
-  </head>
-  <body><%= yield %></body>
-</html>
-    
-          def handle(hash)
-        was = hash.dup
-        hash.replace escape(hash)
-        was
+        describe 'modifies self in place for full Unicode case mapping adapted for Turkic languages' do
+      it 'upcases ASCII characters according to Turkic semantics' do
+        a = 'i'
+        a.upcase!(:turkic)
+        a.should == 'İ'
       end
     
-        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      subject.options[:allow_empty_referrer] = false
-      expect(subject.referrer(env)).to be_nil
+        res = Net::HTTPClientError.new('1.0', '4xx', 'test response')
+    ruby_version_is ''...'2.6' do
+      res.error_type.should == Net::HTTPServerException
+    end
+    ruby_version_is '2.6' do
+      res.error_type.should == Net::HTTPClientException
     end
     
-      it 'should allow changing the protection mode' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::FrameOptions, :frame_options => :deny
-      run DummyApp
+        it 'denies requests with duplicate session cookies' do
+      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
+      expect(last_response).not_to be_ok
     end
     
-      before(:each) do
-    mock_app do
-      use Rack::Protection::HttpOrigin
-      run DummyApp
+      %w(GET HEAD POST PUT DELETE).each do |method|
+    it 'accepts #{method} requests when allow_if is true' do
+      mock_app do
+        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
+        run DummyApp
+      end
+      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
     end
   end
+    
+        expect(get('/', {}, 'wants' => 'application/xhtml').headers['X-XSS-Protection']).to eq('1; mode=foo')
+  end
+    
+      # Run specs in random order to surface order dependencies. If you find an
+  # order dependency and want to debug it, you can fix the order by providing
+  # the seed, which is printed after each run.
+  #     --seed 1234
+  config.order = :random
