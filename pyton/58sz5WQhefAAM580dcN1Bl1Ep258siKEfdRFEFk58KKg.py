@@ -1,125 +1,174 @@
 
         
+          def __init__(self, master, component_spec):
+    self.master = master
+    self.spec = component_spec
+    self.name = component_spec.name
+    self.network = MockNetwork()
+    self.beam_size = 1
+    self.num_actions = 45
+    self._attrs = {}
+    
+        Raises:
+      RuntimeError: if fixed features are configured.
+    '''
+    logging.info('Building component: %s', self.spec.name)
+    if self.spec.fixed_feature:
+      raise RuntimeError(
+          'Fixed features are not compatible with bulk annotation. '
+          'Use the 'bulk-features' component instead.')
+    linked_embeddings = [
+        fetch_linked_embedding(self, network_states, spec)
+        for spec in self.spec.linked_feature
+    ]
+    
+      Args:
+    root: [S] vector of activations for the artificial root token.
+    tokens: [B,N,T] tensor of batched activations for root tokens.
+    weights_arc: [S,T] matrix of weights.
+    weights_source: [S] vector of weights.
+    
+      def testArcSourcePotentialsFromTokens(self):
+    with self.test_session():
+      tokens = tf.constant([[[4, 5, 6],
+                             [5, 6, 7],
+                             [6, 7, 8]],
+                            [[6, 7, 8],
+                             [5, 6, 7],
+                             [4, 5, 6]]], tf.float32)  # pyformat: disable
+      weights = tf.constant([2, 3, 5], tf.float32)
+    
+    flags.DEFINE_string('master_spec', None, 'Path to task context with '
+                    'inputs and parameters for feature extractors.')
+flags.DEFINE_string('params_path', None, 'Path to trained model parameters.')
+flags.DEFINE_string('export_path', '', 'Output path for exported servo model.')
+flags.DEFINE_bool('export_moving_averages', False,
+                  'Whether to export the moving average parameters.')
+flags.DEFINE_bool('build_runtime_graph', False,
+                  'Whether to build a graph for use by the runtime.')
+    
+            expected_sentences = [expected[i] for i in [0, 0, 1, 0]]
+    
+    
+class Environment(BaseEnvironment):
+    '''Works like a regular Jinja2 environment but has some additional
+    knowledge of how Flask's blueprint works so that it can prepend the
+    name of the blueprint to referenced templates if necessary.
+    '''
+    
+                for key in http_method_funcs:
+                if hasattr(cls, key):
+                    methods.add(key.upper())
+    
+    
+def test_main_module_paths(modules_tmpdir, purge_module):
+    app = modules_tmpdir.join('main_app.py')
+    app.write('import flask\n\napp = flask.Flask('__main__')')
+    purge_module('main_app')
+    
+    from flask._compat import StringIO
+    
+        rv = client.get('/')
+    assert rv.data == b'dcba'
+    
+    
+def patharg(path):
+    '''
+    Back slashes need to be escaped in ITEM args,
+    even in Windows paths.
+    
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
+    
+    
+def test_follow_all_output_options_used_for_redirects(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 3
+    assert HTTP_OK not in r
+    
+    
+def test_unicode_url_query_arg_item_verbose(httpbin):
+    r = http('--verbose', httpbin.url + '/get', u'test==%s' % UNICODE)
+    assert HTTP_OK in r
+    assert UNICODE in r
+    
+        # Used only when requested with --check-status:
+    ERROR_HTTP_3XX = 3
+    ERROR_HTTP_4XX = 4
+    ERROR_HTTP_5XX = 5
+    
+    
+def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
+    '''When credentials are passed in URL and via -a at the same time,
+     then the ones from -a are used.'''
+    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
+                   auth='user:wrong')
+    r = http('--auth=user:password', 'GET', url)
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
+    
+        def test_binary_file_form(self, httpbin):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('--print=B', '--form', 'POST', httpbin.url + '/post',
+                 'test@' + BIN_FILE_PATH_ARG, env=env)
+        assert bytes(BIN_FILE_CONTENT) in bytes(r)
+    
+        def test_filter_gcp_fields(self):
+        input_data = {
+            u'kind': u'compute#httpsHealthCheck',
+            u'description': u'',
+            u'timeoutSec': 5,
+            u'checkIntervalSec': 5,
+            u'port': 443,
+            u'healthyThreshold': 2,
+            u'host': u'',
+            u'requestPath': u'/',
+            u'unhealthyThreshold': 2,
+            u'creationTimestamp': u'2017-05-16T15:09:36.546-07:00',
+            u'id': u'8727093129334146639',
+            u'selfLink': u'https://www.googleapis.com/compute/v1/projects/myproject/global/httpsHealthChecks/myhealthcheck',
+            u'name': u'myhealthcheck'}
+    
+    from ansible.module_utils._text import to_bytes
+from ansible.parsing.yaml.objects import AnsibleMapping, AnsibleSequence, AnsibleUnicode
+from ansible.parsing.yaml.objects import AnsibleVaultEncryptedUnicode
+from ansible.utils.unsafe_proxy import wrap_var
+from ansible.parsing.vault import VaultLib
+    
+            raise NotImplementedError
+    
+    
+    def getCharPositionInLine(self):
+        '''@brief Get the column of the tokens first character,
         
-def check_alphabetical(lines):
-    '''
-    checks if all entries per section are in alphabetical order based in entry title
-    '''
-    sections = {}
-    section_line_num = {}
-    for line_num, line in enumerate(lines):
-        if line.startswith(anchor):
-            category = line.split(anchor)[1].strip()
-            sections[category] = []
-            section_line_num[category] = line_num
-            continue
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        title = [x.strip() for x in line.split('|')[1:-1]][0].upper()
-        sections[category].append(title)
+        Columns are numbered 0..n-1
+        
+        Using setter/getter methods is deprecated. Use o.charPositionInLine instead.'''
     
-        iterkeys = lambda d: iter(d.keys())
-    itervalues = lambda d: iter(d.values())
-    iteritems = lambda d: iter(d.items())
+            # Self test
+        self.assertTrue(self.addr.conflicts(self.addr))
+        self.assertTrue(self.addr1.conflicts(self.addr1))
+        # This is a tricky one...
+        self.assertTrue(self.addr1.conflicts(self.addr2))
     
-    from werkzeug.utils import import_string
-from ._compat import string_types, iteritems
-from . import json
+        @mock.patch('certbot_compatibility_test.validator.requests.get')
+    def test_succesful_redirect(self, mock_get_request):
+        mock_get_request.return_value = create_response(
+            301, {'location': 'https://test.com'})
+        self.assertTrue(self.validator.redirect('test.com'))
     
-        with app.test_request_context('/'):
-        assert flask.url_for('sub', _external=True) == \
-               'http://foo.localhost.localdomain:5000/'
-    
-        # a Model inside a Model
-    x = Input(shape=(1,))
-    y = Dense(2)(x)
-    inner_model = Model(x, y)
-    x = Input(shape=(1,))
-    y = inner_model(x)
-    outer_model = Model(x, y)
-    assert outer_model.trainable_weights == inner_model.trainable_weights
-    inner_model.trainable = False
-    assert outer_model.trainable_weights == []
-    inner_model.trainable = True
-    inner_model.layers[-1].trainable = False
-    assert outer_model.trainable_weights == []
-    
-    from keras import backend as K
-from keras import constraints
-from keras.utils.test_utils import keras_test
-    
-    model1 = create_network(num_classes=num_classes, **network1)
-history_model1 = model1.fit(x_train,
-                            y_train,
-                            batch_size=batch_size,
-                            epochs=epochs,
-                            verbose=1,
-                            validation_split=0.1)
-    
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
-    
-        def add_card(self, card):
-        self.cards.append(card)
-    
-    
-if __name__ == '__main__':
-    SalesRanker.run()
-
-    
-        def mapper(self, _, line):
-        '''Parse each log line, extract and transform relevant lines.
-    
-        long_description = README,
-    
-    
-def construct_url(url, **params):
-    param_str = urlparse.urlencode(params)
-    return url + '?' + param_str
-    
-    def kugou_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    if url.lower().find('5sing')!=-1:
-        #for 5sing.kugou.com
-        html=get_html(url)
-        ticket=r1(r''ticket':\s*'(.*)'',html)
-        j=loads(str(b64decode(ticket),encoding='utf-8'))
-        url=j['file']
-        title=j['songName']
-        songtype, ext, size = url_info(url)
-        print_info(site_info, title, songtype, size)
-        if not info_only:
-            download_urls([url], title, ext, size, output_dir, merge=merge)
-    else:
-        #for the www.kugou.com/
-        return kugou_download_playlist(url, output_dir=output_dir, merge=merge, info_only=info_only)
-        # raise NotImplementedError(url)       
-    
-    __all__ = ['kuwo_download']
-    
-    def mixcloud_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url, faker=True)
-    title = r1(r'<meta property='og:title' content='([^']*)'', html)
-    preview_url = r1(r'm-preview=\'([^\']+)\'', html)
-    preview = r1(r'previews(.*)\.mp3$', preview_url)
-    
-    
-def AdjustCandidateInsertionText( candidates ):
-  '''This function adjusts the candidate insertion text to take into account the
-  text that's currently in front of the cursor.
-    
-      if extra_nosetests_args:
-    nosetests_args.extend( extra_nosetests_args )
-  else:
-    nosetests_args.append( p.join( DIR_OF_THIS_SCRIPT, 'python' ) )
-    
-    
-def MockAsyncServerResponseInProgress():
-  '''Return a fake future object that is incomplete. Suitable for mocking a
-  response future within a client request. For example:
-    
-        self._response_future = self.PostDataToHandlerAsync( request_data,
-                                                         'event_notification' )
+        @mock.patch('certbot.display.enhancements.util')
+    def test_redirect(self, mock_util):
+        mock_util().menu.return_value = (display_util.OK, 1)
+        self.assertTrue(self._call('redirect'))
