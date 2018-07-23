@@ -1,290 +1,123 @@
-void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    // Get string from resource_id.
-base::StringPiece GetStringResource(int resource_id);
-    
-    #endif  // CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
 
-    
-    
-#include 'content/nw/src/api/event/event.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/dispatcher_host.h'
-#include 'ui/gfx/screen.h'
-    
-    class BaseEvent {
-  friend class EventListener;
-  DISALLOW_COPY_AND_ASSIGN(BaseEvent);
+        
+            /*virtual*/ void Value::CopyFrom(const Value& source)
+    {
+        // TODO: Check if this is a derived type and throw an exception in that case
+        Data()->CopyFrom(*source.Data());
+        if ((Mask() == nullptr) && (source.Mask() != nullptr))
+            InvalidArgument('Value::CopyFrom: Invalid source object; Cannot copy a Value with a mask into 'this' Value which does not have a mask.');
     }
     
-     protected:
-  ~NwAppQuitFunction() override;
-    
-      // implement nw.Screen.getScreens()
-  class NwScreenGetScreensFunction: public NWSyncExtensionFunction {
-    public:
-      NwScreenGetScreensFunction();
-      bool RunNWSync(base::ListValue* response, std::string* error) override;
+        inline const_array_ref<msra::math::float4> col4(size_t j) const
+    {
+        return const_array_ref<msra::math::float4>((const msra::math::float4 *) &p[locate(0, j)], colstride / 4);
+    }
+    inline msra::math::float4 &float4(size_t i, size_t j)
+    {
+        return *(msra::math::float4 *) &p[locate(i, j)];
+    }
+    inline const msra::math::float4 &float4(size_t i, size_t j) const
+    {
+        return *(const msra::math::float4 *) &p[locate(i, j)];
+    }
+    operator array_ref<msra::math::float4>()
+    {
+        return array_ref<msra::math::float4>((msra::math::float4 *) p, colstride / 4 * numcols);
+    }
+    operator const_array_ref<msra::math::float4>() const
+    {
+        return const_array_ref<msra::math::float4>((const msra::math::float4 *) p, colstride / 4 * numcols);
     }
     
-    #ifndef STORAGE_LEVELDB_DB_BUILDER_H_
-#define STORAGE_LEVELDB_DB_BUILDER_H_
-    
-    void DBIter::SeekToFirst() {
-  direction_ = kForward;
-  ClearSavedValue();
-  iter_->SeekToFirst();
-  if (iter_->Valid()) {
-    FindNextUserEntry(false, &saved_key_ /* temporary storage */);
-  } else {
-    valid_ = false;
-  }
+    // change all nodes that have fromNode as input to have toNode as input instead
+void ComputationNetwork::ChangeNodeInputs(ComputationNodeBasePtr fromNode, ComputationNodeBasePtr toNode)
+{
+    for (auto nodeIter = m_nameToNodeMap.begin(); nodeIter != m_nameToNodeMap.end(); nodeIter++)
+    {
+        ComputationNodeBasePtr node = nodeIter->second;
+        for (int i = 0; i < node->GetNumInputs(); i++)
+            if (node->GetInputs()[i] == fromNode)
+                node->SetInput(i, toNode);
+    }
 }
     
-    void AppendInternalKey(std::string* result, const ParsedInternalKey& key) {
-  result->append(key.user_key.data(), key.user_key.size());
-  PutFixed64(result, PackSequenceAndType(key.sequence, key.type));
-}
+    #pragma warning(push)
+#pragma warning(disable : 4200) // warning C4200: nonstandard extension used : zero-sized array in struct/union
+// Section Header on Disk
+struct SectionHeader
+{
+    WORD wMagic;            // magic number ACE9
+    WORD version;           // version number ##.## in hex
+    WORD sizeHeader;        // size of this header (rounded up to mappable boundary)
+    WORD dataSections;      // number of data sub-sections (for nesting)
+    WORD sectionType;       // what is the type of the data in this section
+    WORD sectionData;       // type of section (SectionData enum)
+    WORD bytesPerElement;   // number of bytes per element, (0 means variable)
+    WORD customStructureID; // ID for custom structure
+    WORD elementsPerRecord; // number of elements per Record
+    WORD flags;             // bit flags, dependent on sectionType
+    WORD writtenID;         // unique ID so files written at the same time can be identified
+    WORD unusedWords[5];
+    size_t elementsCount; // number of total elements stored
+    // * section specific data goes below here * //
+    WORD labelKind;                                                    // kind of label (LabelKind type)
+    WORD labelDim;                                                     // number of possible states for labels (category type)
+    char unused[descriptionSize - 18 * sizeof(WORD) - sizeof(size_t)]; // space for future expansion (zero out in current versions)
+    char nameDescription[descriptionSize];                             // name and description of section contents in this format (name: description) (string, with extra bytes zeroed out, at least one null terminator required)
+    size_t size;                                                       // size of this section (including header)
+    size_t sizeAll;                                                    // size of this section (including header and all sub-sections)
+    size_t sectionFilePosition[];                                      // sub-section file offsets (if needed), assumed to be in File Position order
+};
+#pragma warning(pop)
     
-    Iterator* TableCache::NewIterator(const ReadOptions& options,
-                                  uint64_t file_number,
-                                  uint64_t file_size,
-                                  Table** tableptr) {
-  if (tableptr != NULL) {
-    *tableptr = NULL;
-  }
-    }
-    
-          case kNextFileNumber:
-        if (GetVarint64(&input, &next_file_number_)) {
-          has_next_file_number_ = true;
-        } else {
-          msg = 'next file number';
-        }
-        break;
-    
-    #include 'db/memtable.h'
-#include 'db/write_batch_internal.h'
-#include 'leveldb/env.h'
-#include 'util/logging.h'
-#include 'util/testharness.h'
-    
-        if (bytes_ > 0) {
-      char rate[100];
-      snprintf(rate, sizeof(rate), '%6.1f MB/s',
-               (bytes_ / 1048576.0) / (finish - start_));
-      if (!message_.empty()) {
-        message_  = std::string(rate) + ' ' + message_;
-      } else {
-        message_ = rate;
-      }
+    BOOST_FIXTURE_TEST_CASE(MatrixSparsePlusSparse, RandomSeedFixture)
+{
+    std::mt19937 rng(0);
+    Matrix<float> mAdense(c_deviceIdZero);
+    mAdense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim1, dim2, c_deviceIdZero, -3.0f, 0.1f, IncrementCounter()), 0);
+    Matrix<float> mAsparse(mAdense.DeepClone());
     }
     
-    // Returns a new environment that stores its data in memory and delegates
-// all non-file-storage tasks to base_env. The caller must delete the result
-// when it is no longer needed.
-// *base_env must remain live while the result is in use.
-Env* NewMemEnv(Env* base_env);
-    
-    #ifndef STORAGE_LEVELDB_INCLUDE_DUMPFILE_H_
-#define STORAGE_LEVELDB_INCLUDE_DUMPFILE_H_
-    
-      // Create a slice that refers to the contents of 's'
-  Slice(const std::string& s) : data_(s.data()), size_(s.size()) { }
+    // understand and execute from the syntactic expression tree
+ConfigValuePtr Evaluate(ExpressionPtr);                               // evaluate the expression tree
+void Do(ExpressionPtr e);                                             // evaluate e.do
+shared_ptr<Object> EvaluateField(ExpressionPtr e, const wstring& id); // for experimental CNTK integration
     
     
-    {            size_t stFrame = 0;
-            for (size_t iUtt = 0; iUtt < extraMaps.size(); iUtt++)
-            {
-                size_t numFramesInThisUtterance = lattices[iUtt]->getnumframes();
-                size_t iParallelSeq = extraMaps[iUtt]; // i-th utterance belongs to iParallelSeq-th parallel sequence
-                if (iParallelSeq >= parallelSeqStId && iParallelSeq < parallelSeqEnId)
-                {
-                    // this utterance has been selected
-                    decimatedLattices->push_back(lattices[iUtt]);
-                    decimatedBoundaryPtr->insert(decimatedBoundaryPtr->end(), boundaries.begin() + stFrame, boundaries.begin() + stFrame + numFramesInThisUtterance);
-                    decimatedUidPtr->insert(decimatedUidPtr->end(), uids.begin() + stFrame, uids.begin() + stFrame + numFramesInThisUtterance);
-                    decimatedExtraMapPtr->push_back(extraMaps[iUtt] - parallelSeqStId);
-                }
-                stFrame += numFramesInThisUtterance;
-            }
-        }
-    
-        template <typename ElementType>
-    void Value::CopyVariableValueToVector(const Variable& outputVariable, std::vector<std::vector<ElementType>>& sequences)
-    { 
-        // Check the data type matches
-        if (AsDataType<ElementType>() != GetDataType())
-            InvalidArgument('The specified ElementType %s does not match the DataType %s', typeid(ElementType).name(), DataTypeName(GetDataType()));
-    }
-    
-        InvalidateCompiledNetwork();
-    
-        // accessors
-    SectionFile* GetSectionFile() const
+    {    virtual void ResetState() override
     {
-        return m_file;
+        m_start = 1 - m_start;
     }
-    SectionHeader* GetHeader() const
-    {
-        return m_sectionHeader;
-    }
-    size_t GetFilePosition() const
-    {
-        return m_filePosition;
-    }
-    void SetFilePosition(size_t filePosition)
-    {
-        m_filePosition = filePosition;
-    }
-    MappingType GetMappingType() const
-    {
-        return m_mappingType;
-    }
-    void SetMappingType(MappingType mappingType)
-    {
-        m_mappingType = mappingType;
-    }
-    size_t GetSize() const
-    {
-        return m_sectionHeader->size;
-    }
-    void SetSize(size_t size)
-    {
-        m_sectionHeader->size = size;
-    }
-    size_t GetSizeAll() const
-    {
-        return m_sectionHeader->sizeAll;
-    }
-    void SetSizeAll(size_t size)
-    {
-        m_sectionHeader->sizeAll = size;
-    }
-    size_t GetHeaderSize() const
-    {
-        return m_sectionHeader->sizeHeader;
-    }
-    void SetHeaderSize(size_t size)
-    {
-        assert(size < 0x10000);
-        m_sectionHeader->sizeHeader = (WORD) size;
-    }
-    size_t GetMappedSize() const
-    {
-        return m_mappedSize;
-    }
-    void SetMappedSize(size_t mappedSize)
-    {
-        m_mappedSize = mappedSize;
-    }
-    void SetDescription(const std::string& description)
-    {
-        assert(description.size() < _countof(m_sectionHeader->nameDescription));
-        strcpy(m_sectionHeader->nameDescription, description.c_str());
-    }
-    char* GetDescription() const
-    {
-        return m_sectionHeader->nameDescription;
-    }
-    void SetDataTypeSize(SectionData dataType, size_t size)
-    {
-        assert(size < 0x10000);
-        m_sectionHeader->bytesPerElement = (WORD) size;
-        m_sectionHeader->sectionData = (WORD) dataType;
-    }
-    void GetDataTypeSize(SectionData& dataType, size_t& size) const
-    {
-        size = m_sectionHeader->bytesPerElement;
-        dataType = (SectionData) m_sectionHeader->sectionData;
-    }
-    // ElementSize - number of bytes per element, (0 means variable)
-    void SetElementSize(size_t elementSize)
-    {
-        assert(elementSize < 0x10000);
-        m_sectionHeader->bytesPerElement = (WORD) elementSize;
-    }
-    size_t GetElementSize() const
-    {
-        return (size_t) m_sectionHeader->bytesPerElement;
-    }
-    // ElementsPerRecord - number of elements per record
-    void SetElementsPerRecord(size_t elementsPerRecord)
-    {
-        assert(elementsPerRecord < 0x10000);
-        m_sectionHeader->elementsPerRecord = (WORD) elementsPerRecord;
-    }
-    size_t GetElementsPerRecord() const
-    {
-        return (size_t) m_sectionHeader->elementsPerRecord;
-    }
-    // ElementCount - number of total elements stored
-    void SetElementCount(size_t elementCount)
-    {
-        m_sectionHeader->elementsCount = elementCount;
-    }
-    size_t GetElementCount() const
-    {
-        return m_sectionHeader->elementsCount;
-    }
-    
-    	XLoggerInfo xlog_info;
-	gettimeofday(&xlog_info.timeval, NULL);
-	xlog_info.level = (TLogLevel)_level;
-	xlog_info.line = (int)_line;
-	xlog_info.pid = (int)_pid;
-	xlog_info.tid = LONGTHREADID2INT(_tid);
-	xlog_info.maintid = LONGTHREADID2INT(_maintid);
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    
-    {  private:
-    TServicesMap m_services;
-    TServicesMap m_publicservices;
-    std::vector<ServiceBase*> m_releasevec;
 };
     
-    #ifndef SERVICEBASE_H_
-#define SERVICEBASE_H_
+                // copy over the data
+            std::vector<ElemType>* data = iter->second;
+            size_t index = m_currentRecord * rows;
+            size_t numberToCopy = rows * numRecords;
+            data->resize(index + numberToCopy);
+            ElemType* dataPtr = ((ElemType*)data->data()) + index;
+            if (matrix->GetNumElements() > numberToCopy)
+                RuntimeError('The output matrix being saved has more data than the numRecords (%d) requested to be saved', (int)numRecords);
     
-    //
-//  testspy_spy.cpp
-//  PublicComponent
-//
-//  Created by yerungui on 14-5-14.
-//
+    /**
+ * Symbolicates a stack trace into a given vector
+ *
+ * @param symbols The vector to receive the output. The vector is cleared and
+ * enough room to keep the frames are reserved.
+ *
+ * @param stackTrace The input stack trace
+ */
+FBEXPORT void getStackTraceSymbols(std::vector<StackTraceElement>& symbols,
+                                   const std::vector<InstructionPointer>& trace);
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    #include <nbind/api.h>
+#include <nbind/BindDefiner.h>
+#include <yoga/Yoga.h>
     
-      virtual void setChangeGlobalOption(bool f) CXX11_OVERRIDE;
-    
-    bool AbstractProxyRequestCommand::executeInternal()
-{
-  // socket->setBlockingMode();
-  if (httpConnection_->sendBufferIsEmpty()) {
-    auto httpRequest = make_unique<HttpRequest>();
-    httpRequest->setUserAgent(getOption()->get(PREF_USER_AGENT));
-    httpRequest->setRequest(getRequest());
-    httpRequest->setProxyRequest(proxyRequest_);
-    }
-    }
-    
-      virtual ~AbstractProxyResponseCommand();
-    
-      void reconfigure(const std::vector<std::vector<std::string>>& announceList);
-  void reconfigure(const std::string& url);
-    
-    class AuthConfig;
+      /**
+   * This runs the closure in a scope with fbjni's classloader. This should be
+   * the same classloader as the rest of the application and thus anything
+   * running in the closure will have access to the same classes as in a normal
+   * java-create thread.
+   */
+  static void WithClassLoader(std::function<void()>&& runnable);
