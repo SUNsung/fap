@@ -1,89 +1,61 @@
 
         
-        if isinstance(helptext, bytes):
-    helptext = helptext.decode('utf-8')
-    
-        for release in releases:
-        compat_print(release['name'])
-        for asset in release['assets']:
-            asset_name = asset['name']
-            total_bytes += asset['download_count'] * asset['size']
-            if all(not re.match(p, asset_name) for p in (
-                    r'^youtube-dl$',
-                    r'^youtube-dl-\d{4}\.\d{2}\.\d{2}(?:\.\d+)?\.tar\.gz$',
-                    r'^youtube-dl\.exe$')):
-                continue
-            compat_print(
-                ' %s size: %s downloads: %d'
-                % (asset_name, format_size(asset['size']), asset['download_count']))
-    
-        def assertMatch(self, url, ie_list):
-        self.assertEqual(self.matching_ies(url), ie_list)
+        import errno
+import io
+import hashlib
+import json
+import os.path
+import re
+import types
+import sys
     
     
-class RtspFD(FileDownloader):
-    def real_download(self, filename, info_dict):
-        url = info_dict['url']
-        self.report_destination(filename)
-        tmpfilename = self.temp_name(filename)
+from youtube_dl import YoutubeDL
+    
+            webpage = self._download_webpage(url, video_id)
     
     
-def list_extractors(age_limit):
-    '''
-    Return a list of extractors that are suitable for the given age,
-    sorted by extractor ID.
-    '''
+class ClipRsIE(OnetBaseIE):
+    _VALID_URL = r'https?://(?:www\.)?clip\.rs/(?P<id>[^/]+)/\d+'
+    _TEST = {
+        'url': 'http://www.clip.rs/premijera-frajle-predstavljaju-novi-spot-za-pesmu-moli-me-moli/3732',
+        'md5': 'c412d57815ba07b56f9edc7b5d6a14e5',
+        'info_dict': {
+            'id': '1488842.1399140381',
+            'ext': 'mp4',
+            'title': 'PREMIJERA Frajle predstavljaju novi spot za pesmu Moli me, moli',
+            'description': 'md5:56ce2c3b4ab31c5a2e0b17cb9a453026',
+            'duration': 229,
+            'timestamp': 1459850243,
+            'upload_date': '20160405',
+        }
+    }
     
+            entry_id = self._search_regex(
+            r'<a[^>]+id=(['\'])embed-kaltura\1[^>]+data-kaltura=(['\'])(?P<id>[0-9a-z_]+)\2',
+            webpage, 'kaltura entry_id', group='id')
     
-    {        webpage = self._download_webpage(url, text_id)
-        sohu_video_info_str = self._search_regex(
-            r'var\s+sohuVideoInfo\s*=\s*({[^}]+});', webpage, 'Sohu video info', default=None)
-        if sohu_video_info_str:
-            sohu_video_info = self._parse_json(
-                sohu_video_info_str, text_id, transform_source=js_to_json)
-            return self.url_result(sohu_video_info['url'], 'Sohu')
+        def _real_extract(self, url):
+        sub_domain, path, page_title = re.match(self._VALID_URL, url).groups()
+        if sub_domain not in ('money', 'edition'):
+            sub_domain = 'edition'
+        config = self._CONFIG[sub_domain]
+        return self._extract_cvp_info(
+            config['data_src'] % path, page_title, {
+                'default': {
+                    'media_src': config['media_src'],
+                }
+            })
     
-    
-def test_auth_plugin_require_auth_false(httpbin):
-    
-        def get_converter(self, mime):
-        if is_valid_mime(mime):
-            for converter_class in plugin_manager.get_converters():
-                if converter_class.supports(mime):
-                    return converter_class(mime)
-    
-    
-def test_unicode_json_item(httpbin):
-    r = http('--json', 'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert r.json['json'] == {'test': UNICODE}
-    
-        name = 'Basic HTTP auth'
-    auth_type = 'basic'
-    
-        '''
-)
-positional.add_argument(
-    'url',
-    metavar='URL',
-    help='''
-    The scheme defaults to 'http://' if the URL does not include one.
-    (You can override this with: --default-scheme=https)
-    
-    
-class BaseConfigDict(dict):
-    
-    
-EXIT_STATUS_LABELS = {
-    value: key
-    for key, value in ExitStatus.__dict__.items()
-    if key.isupper()
-}
+        exc = Timeout('Request timed out')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR_TIMEOUT
+    assert error_msg == 'Request timed out (30s).'
 
     
-        # Auth
-    def get_auth_plugins(self):
-        return [plugin for plugin in self if issubclass(plugin, AuthPlugin)]
+            See https://github.com/jakubroztocil/httpie/issues/212
     
         def test_binary_stdin(self, httpbin):
         with open(BIN_FILE_PATH, 'rb') as stdin:
@@ -95,80 +67,88 @@ EXIT_STATUS_LABELS = {
             r = http('--print=B', 'POST', httpbin.url + '/post', env=env)
             assert r == BIN_FILE_CONTENT
     
-    # There are two options for replacing |today|: either, you set today to some
-# non-false value, then it is used:
-#today = ''
-# Else, today_fmt is used as the format for a strftime call.
-#today_fmt = '%B %d, %Y'
-    
-        def create_enqueue_blobs(self):
-        blob_names = self.get_output_names()
-        enqueue_blob_names = [
-            '{}_enqueue_{}'.format(b, self._loader_id) for b in blob_names
-        ]
-        for gpu_id in range(self._num_gpus):
-            with c2_utils.NamedCudaScope(gpu_id):
-                for blob in enqueue_blob_names:
-                    workspace.CreateBlob(core.ScopedName(blob))
-        return enqueue_blob_names
-    
-        # Column 0 is the batch index in the (batch ind, x1, y1, x2, y2) encoding,
-    # so we remove it since we just want to return boxes
-    # Scale proposals back to the original input image scale
-    boxes = boxes[:, 1:] / im_scale
-    return boxes, scores
-    
-                kps_score = 0
-            for k in range(kps_dets[j].shape[1]):
-                xy.append(float(kps_dets[j][0, k]))
-                xy.append(float(kps_dets[j][1, k]))
-                xy.append(1)
-                if not use_box_score:
-                    kps_score += kps_dets[j][score_index, k]
+        def test_format_option(self, httpbin):
+        env = MockEnvironment(colors=256)
+        r = http('--print=B', '--pretty=format',
+                 'GET', httpbin.url + '/get', 'a=b',
+                 env=env)
+        # Tests that the JSON data is formatted.
+        assert r.strip().count('\n') == 2
+        assert COLOR not in r
     
     
-# ---------------------------------------------------------------------------- #
-# Functions for bolting FPN onto a backbone architectures
-# ---------------------------------------------------------------------------- #
+def default_hooks():
+    return dict((event, []) for event in HOOKS)
     
-    from detectron.core.config import cfg
-import detectron.utils.blob as blob_utils
+                if isinstance(e.reason, _ProxyError):
+                raise ProxyError(e, request=request)
     
-    '''Construct minibatches for Detectron networks.'''
+    import json
+import platform
+import sys
+import ssl
     
-        retnet_roi_fg_bbox_locs -> for the bbox regression, since we are only
-                               interested in regressing on fg bboxes which are
-                               M in number and the output prediction of the network
-                               is of shape N x (A * 4) x H x W
-                               (in case of non class-specific bbox), so we
-                               store the locations of positive fg boxes in this
-                               blob retnet_roi_fg_bbox_locs of shape M x 4 where
-                               each row looks like: [img_id, anchor_id, x_loc, y_loc]
-    '''
-    # im_info: (height, width, image scale)
-    blob_names = ['im_info']
-    assert cfg.FPN.FPN_ON, 'RetinaNet uses FPN for dense detection'
-    # Same format as RPN blobs, but one per FPN level
-    if is_training:
-        blob_names += ['retnet_fg_num', 'retnet_bg_num']
-        for lvl in range(cfg.FPN.RPN_MIN_LEVEL, cfg.FPN.RPN_MAX_LEVEL + 1):
-            suffix = 'fpn{}'.format(lvl)
-            blob_names += [
-                'retnet_cls_labels_' + suffix,
-                'retnet_roi_bbox_targets_' + suffix,
-                'retnet_roi_fg_bbox_locs_' + suffix,
-            ]
-    return blob_names
+        All keys are expected to be strings. The structure remembers the
+    case of the last key to be set, and ``iter(instance)``,
+    ``keys()``, ``items()``, ``iterkeys()``, and ``iteritems()``
+    will contain case-sensitive keys. However, querying and contains
+    testing is case insensitive::
     
-            X = np.random.randn(N, 256, 14, 14)
-        for _i in range(iters):
-            I = np.random.permutation(N)
-            workspace.FeedBlob('X', X.astype(np.float32))
-            workspace.FeedBlob('I', I.astype(np.int32))
-            workspace.RunNet(net.Proto().name)
-            np.testing.assert_allclose(
-                workspace.FetchBlob('Y'), X[I], rtol=1e-5, atol=1e-08
-            )
+    
+root = Root()
+factory = Site(root)
+reactor.listenTCP(8880, factory)
+reactor.run()
+
+    
+        def short_desc(self):
+        return 'Generate new spider using pre-defined templates'
+    
+        class _v20_S3Connection(S3Connection):
+        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
+        def _mexe(self, http_request, *args, **kwargs):
+            http_request.authorize(connection=self)
+            return http_request.headers
+    
+    try:
+    from cStringIO import StringIO as BytesIO
+except ImportError:
+    from io import BytesIO
+    
+    
+class DownloadTimeoutMiddleware(object):
+    
+    from scrapy import signals
+    
+    class UsageError(Exception):
+    '''To indicate a command-line usage error'''
+    def __init__(self, *a, **kw):
+        self.print_help = kw.pop('print_help', True)
+        super(UsageError, self).__init__(*a, **kw)
+    
+        def item_scraped(self, item, spider):
+        self.counter['itemcount'] += 1
+        if self.counter['itemcount'] == self.close_on['itemcount']:
+            self.crawler.engine.close_spider(spider, 'closespider_itemcount')
+    
+        def test_human_adapter_shall_make_noise(self):
+        human = Human()
+        human_adapter = Adapter(human, make_noise=human.speak)
+        noise = human_adapter.make_noise()
+        expected_noise = ''hello''
+        self.assertEqual(noise, expected_noise)
+    
+        def test_data_change_shall_notify_all_observers_once(cls):
+        with patch.object(cls.dec_obs, 'update') as mock_dec_obs_update,\
+                patch.object(cls.hex_obs, 'update') as mock_hex_obs_update:
+            cls.sub.data = 10
+            cls.assertEqual(mock_dec_obs_update.call_count, 1)
+            cls.assertEqual(mock_hex_obs_update.call_count, 1)
+    
+    
+class TestLocalizer(unittest.TestCase):
+    
+    class TimeDisplay(object):
     
         def __init__(self):
-        self.graph = defaultdict(list)
+        self._observers = []
