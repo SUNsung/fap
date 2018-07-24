@@ -1,123 +1,165 @@
 
         
-            /*virtual*/ void Value::CopyFrom(const Value& source)
-    {
-        // TODO: Check if this is a derived type and throw an exception in that case
-        Data()->CopyFrom(*source.Data());
-        if ((Mask() == nullptr) && (source.Mask() != nullptr))
-            InvalidArgument('Value::CopyFrom: Invalid source object; Cannot copy a Value with a mask into 'this' Value which does not have a mask.');
+        class PreferencesManager : public content::RenderThreadObserver {
+ public:
+  PreferencesManager();
+  ~PreferencesManager() override;
     }
     
-        inline const_array_ref<msra::math::float4> col4(size_t j) const
-    {
-        return const_array_ref<msra::math::float4>((const msra::math::float4 *) &p[locate(0, j)], colstride / 4);
-    }
-    inline msra::math::float4 &float4(size_t i, size_t j)
-    {
-        return *(msra::math::float4 *) &p[locate(i, j)];
-    }
-    inline const msra::math::float4 &float4(size_t i, size_t j) const
-    {
-        return *(const msra::math::float4 *) &p[locate(i, j)];
-    }
-    operator array_ref<msra::math::float4>()
-    {
-        return array_ref<msra::math::float4>((msra::math::float4 *) p, colstride / 4 * numcols);
-    }
-    operator const_array_ref<msra::math::float4>() const
-    {
-        return const_array_ref<msra::math::float4>((const msra::math::float4 *) p, colstride / 4 * numcols);
-    }
+    // Attempts to send the current command line to an already running instance of
+// Chrome via a WM_COPYDATA message.
+// Returns true if a running Chrome is found and successfully notified.
+// |fast_start| is true when this is being called on the window fast start path.
+NotifyChromeResult AttemptToNotifyRunningChrome(HWND remote_window,
+                                                bool fast_start);
     
-    // change all nodes that have fromNode as input to have toNode as input instead
-void ComputationNetwork::ChangeNodeInputs(ComputationNodeBasePtr fromNode, ComputationNodeBasePtr toNode)
-{
-    for (auto nodeIter = m_nameToNodeMap.begin(); nodeIter != m_nameToNodeMap.end(); nodeIter++)
-    {
-        ComputationNodeBasePtr node = nodeIter->second;
-        for (int i = 0; i < node->GetNumInputs(); i++)
-            if (node->GetInputs()[i] == fromNode)
-                node->SetInput(i, toNode);
-    }
+    #include 'base/strings/string16.h'
+#include 'base/time/time.h'
+#include 'content/public/browser/desktop_media_id.h'
+#include 'ui/gfx/image/image_skia.h'
+    
+    // File name of the Pepper Flash plugin on different platforms.
+const base::FilePath::CharType kPepperFlashPluginFilename[] =
+#if defined(OS_MACOSX)
+    FPL('PepperFlashPlayer.plugin');
+#elif defined(OS_WIN)
+    FPL('pepflashplayer.dll');
+#else  // OS_LINUX, etc.
+    FPL('libpepflashplayer.so');
+#endif
+    
+      char delim_;         // The delimiter is inserted between elements
+    
+    
+    {  // Note: we may want to access the Java callback object instance
+  // across multiple method calls, so we create a global ref
+  assert(jcallback_obj != nullptr);
+  m_jcallback_obj = env->NewGlobalRef(jcallback_obj);
+  if(jcallback_obj == nullptr) {
+    // exception thrown: OutOfMemoryError
+    return;
+  }
 }
     
-    #pragma warning(push)
-#pragma warning(disable : 4200) // warning C4200: nonstandard extension used : zero-sized array in struct/union
-// Section Header on Disk
-struct SectionHeader
-{
-    WORD wMagic;            // magic number ACE9
-    WORD version;           // version number ##.## in hex
-    WORD sizeHeader;        // size of this header (rounded up to mappable boundary)
-    WORD dataSections;      // number of data sub-sections (for nesting)
-    WORD sectionType;       // what is the type of the data in this section
-    WORD sectionData;       // type of section (SectionData enum)
-    WORD bytesPerElement;   // number of bytes per element, (0 means variable)
-    WORD customStructureID; // ID for custom structure
-    WORD elementsPerRecord; // number of elements per Record
-    WORD flags;             // bit flags, dependent on sectionType
-    WORD writtenID;         // unique ID so files written at the same time can be identified
-    WORD unusedWords[5];
-    size_t elementsCount; // number of total elements stored
-    // * section specific data goes below here * //
-    WORD labelKind;                                                    // kind of label (LabelKind type)
-    WORD labelDim;                                                     // number of possible states for labels (category type)
-    char unused[descriptionSize - 18 * sizeof(WORD) - sizeof(size_t)]; // space for future expansion (zero out in current versions)
-    char nameDescription[descriptionSize];                             // name and description of section contents in this format (name: description) (string, with extra bytes zeroed out, at least one null terminator required)
-    size_t size;                                                       // size of this section (including header)
-    size_t sizeAll;                                                    // size of this section (including header and all sub-sections)
-    size_t sectionFilePosition[];                                      // sub-section file offsets (if needed), assumed to be in File Position order
-};
-#pragma warning(pop)
-    
-    BOOST_FIXTURE_TEST_CASE(MatrixSparsePlusSparse, RandomSeedFixture)
-{
-    std::mt19937 rng(0);
-    Matrix<float> mAdense(c_deviceIdZero);
-    mAdense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim1, dim2, c_deviceIdZero, -3.0f, 0.1f, IncrementCounter()), 0);
-    Matrix<float> mAsparse(mAdense.DeepClone());
+      class StatisticsJni : public StatisticsImpl {
+   public:
+     StatisticsJni(std::shared_ptr<Statistics> stats);
+     StatisticsJni(std::shared_ptr<Statistics> stats,
+         const std::set<uint32_t> ignore_histograms);
+     virtual bool HistEnabledForType(uint32_t type) const override;
     }
     
-    // understand and execute from the syntactic expression tree
-ConfigValuePtr Evaluate(ExpressionPtr);                               // evaluate the expression tree
-void Do(ExpressionPtr e);                                             // evaluate e.do
-shared_ptr<Object> EvaluateField(ExpressionPtr e, const wstring& id); // for experimental CNTK integration
+      virtual MemTableRep* CreateMemTableRep(const MemTableRep::KeyComparator&,
+                                         Allocator*, const SliceTransform*,
+                                         Logger* logger) = 0;
+  virtual MemTableRep* CreateMemTableRep(
+      const MemTableRep::KeyComparator& key_cmp, Allocator* allocator,
+      const SliceTransform* slice_transform, Logger* logger,
+      uint32_t /* column_family_id */) {
+    return CreateMemTableRep(key_cmp, allocator, slice_transform, logger);
+  }
     
-    
-    {    virtual void ResetState() override
-    {
-        m_start = 1 - m_start;
+    namespace rocksdb {
     }
-};
     
-                // copy over the data
-            std::vector<ElemType>* data = iter->second;
-            size_t index = m_currentRecord * rows;
-            size_t numberToCopy = rows * numRecords;
-            data->resize(index + numberToCopy);
-            ElemType* dataPtr = ((ElemType*)data->data()) + index;
-            if (matrix->GetNumElements() > numberToCopy)
-                RuntimeError('The output matrix being saved has more data than the numRecords (%d) requested to be saved', (int)numRecords);
+      // disable sync point processing
+  void DisableProcessing();
     
-    /**
- * Symbolicates a stack trace into a given vector
- *
- * @param symbols The vector to receive the output. The vector is cleared and
- * enough room to keep the frames are reserved.
- *
- * @param stackTrace The input stack trace
- */
-FBEXPORT void getStackTraceSymbols(std::vector<StackTraceElement>& symbols,
-                                   const std::vector<InstructionPointer>& trace);
+      // Moves to the next entry in the source.  After this call, Valid() is
+  // true iff the iterator was not positioned at the last entry in the source.
+  // REQUIRES: Valid()
+  virtual void Next() = 0;
     
-    #include <nbind/api.h>
-#include <nbind/BindDefiner.h>
-#include <yoga/Yoga.h>
+      // Return the key for the current entry.  The underlying storage for
+  // the returned slice is valid only until the next modification of
+  // the iterator.
+  // REQUIRES: Valid()
+  virtual Slice key() const = 0;
+    
+    #ifndef BASEEVENT_INTERFACE_BASEEVENT_H_
+#define BASEEVENT_INTERFACE_BASEEVENT_H_
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    template <class T>
+inline int SimpleUnpack(const void* _rawbuf, size_t _rawlen, size_t& _packlen, PtrBuffer& _data) {
+    if (sizeof(T) > _rawlen) return SIMPLE_CONTINUE;
+    }
+    
+    #include <string>
+#include <set>
+#include <map>
+    
+      bool Init() override { return true; }
+    
+      *ptr_d_d = 0.5 * m_c * (m_identity - ts * 0.5 * m_a).inverse() * m_b + m_d;
+    
+    #include 'modules/common/adapters/proto/adapter_config.pb.h'
+    
+    namespace apollo {
+namespace planning {
+    }
+    }
+    
+    bool Polygon2d::Contains(const Polygon2d &polygon) const {
+  CHECK_GE(points_.size(), 3);
+  if (area_ < polygon.area() - kMathEpsilon) {
+    return false;
+  }
+  if (!IsPointIn(polygon.points()[0])) {
+    return false;
+  }
+  const auto &line_segments = polygon.line_segments();
+  return std::all_of(line_segments.begin(), line_segments.end(),
+                     [&](const LineSegment2d &line_segment) {
+                       return Contains(line_segment);
+                     });
+}
     
       /**
-   * This runs the closure in a scope with fbjni's classloader. This should be
-   * the same classloader as the rest of the application and thus anything
-   * running in the closure will have access to the same classes as in a normal
-   * java-create thread.
+   * @brief Compute the distance from a point to the polygon. If the point is
+   *        within the polygon, return 0. Otherwise, this distance is
+   *        the minimal distance from the point to the edges of the polygon.
+   * @param point The point to compute whose distance to the polygon.
+   * @return The distance from the point to the polygon.
    */
-  static void WithClassLoader(std::function<void()>&& runnable);
+  double DistanceTo(const Vec2d &point) const;
+    
+      // Read each camera's config
+  std::unordered_map<std::string, CameraCoeffient> camera_coeffients;
+  for (const auto &camera_focus_config :
+       config_.multi_camera_projection_config().camera_focus_config()) {
+    const auto &camera_model_name = camera_focus_config.name();
+    CameraCoeffient camera_coeffient;
+    if (!camera_coeffient.init(camera_model_name,
+                               camera_focus_config.camera_extrinsic_file(),
+                               camera_focus_config.camera_intrinsic_file())) {
+      AERROR << camera_model_name << ' Projection init failed.';
+      return false;
+    }
+    camera_coeffients[camera_model_name] = camera_coeffient;
+    camera_names_.push_back(camera_model_name);
+  }
+    
+    namespace apollo {
+namespace perception {
+namespace traffic_light {
+// @brief 2 Camera Projection project the Light into the image.
+class MultiCamerasProjection {
+ public:
+  MultiCamerasProjection() = default;
+    }
+    }
+    }
+    }
+    
+    bool UnityRecognize::Init() {
+  if (!GetProtoFromFile(FLAGS_traffic_light_recognizer_config, &config_)) {
+    AERROR << 'Cannot get config proto from file: '
+           << FLAGS_traffic_light_recognizer_config;
+    return false;
+  }
+    }
