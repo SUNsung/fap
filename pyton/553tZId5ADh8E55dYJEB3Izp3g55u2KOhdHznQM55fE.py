@@ -1,129 +1,69 @@
 
         
-            # Then we cluster the lines together as blocks
-    # Each block represents a collection of lines that should be sorted
-    # This was done by assuming only links ([...](...)) are meant to be sorted
-    # Clustering is done by indentation
-    blocks = []
-    last_indent = None
-    for line in read_me:
-        s_line = line.lstrip()
-        indent = len(line) - len(s_line)
+        
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
     
-class ConnectCreator(object):
-    def __init__(self, logger, config, openssl_context, host_manager,
-                 timeout=5, debug=False,
-                 check_cert=None):
-        self.logger = logger
-        self.config = config
-        self.openssl_context = openssl_context
-        self.host_manager = host_manager
-        self.timeout = timeout
-        self.debug = debug
-        if check_cert:
-            self.check_cert = check_cert
-        self.update_config()
+if __name__ == '__main__':
+    unittest.main()
+
     
-            if task.method == 'HEAD' or response.status in [204, 304]:
-            response.content_length = 0
+            if check_executable('mplayer', ['-h']):
+            args = [
+                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
+                '-dumpstream', '-dumpfile', tmpfilename, url]
+        elif check_executable('mpv', ['-h']):
+            args = [
+                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
+        else:
+            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
+            return False
+    
+            webpage = self._download_webpage(url, video_id)
+        key = self._search_regex(
+            r'src=['\']https?://[^/]+/embed/([A-Za-z0-9_-]+)', webpage, 'key')
+    
+            def get_auth(self, username=None, password=None):
+            assert self.raw_auth is None
+            assert username is None
+            assert password is None
+            return basic_auth()
+    
+        By default, it represents the actual environment.
+    All of the attributes can be overwritten though, which
+    is used by the test suite to simulate various scenarios.
     
     
-def inet_ntop(address_family, packed_ip):
-    addr = sockaddr()
-    addr.sa_family = address_family
-    addr_size = ctypes.c_int(ctypes.sizeof(addr))
-    ip_string = ctypes.create_string_buffer(128)
-    ip_string_size = ctypes.c_int(ctypes.sizeof(ip_string))
+def test_follow_all_redirects_shown(httpbin):
+    r = http('--follow', '--all', httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 3
+    assert r.count('HTTP/1.1 302 FOUND', 2)
+    assert HTTP_OK in r
     
-    And tree.TreeParser finally fetches its input from a tree.TreeNodeStream:
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
-    
-            path = os.path.join(self.tempdir, 'file.ini')
-        dns_test_common.write({'dnsimple_token': TOKEN}, path)
-    
-        # The font size ('10pt', '11pt' or '12pt').
-    #
-    # 'pointsize': '10pt',
+        # By default the `-a` argument is parsed for `username:password`.
+    # Set this to `False` to disable the parsing and error handling.
+    auth_parse = True
     
         '''
-    if cli.set_by_cli(cli_arg_path):
-        return util.safe_open(pem_path, chmod=0o644, mode='wb'),\
-            os.path.abspath(pem_path)
-    else:
-        uniq = util.unique_file(pem_path, 0o644, 'wb')
-        return uniq[0], os.path.abspath(uniq[1])
+    def _validate_crlf(self, msg):
+        lines = iter(msg.splitlines(True))
+        for header in lines:
+            if header == CRLF:
+                break
+            assert header.endswith(CRLF), repr(header)
+        else:
+            assert 0, 'CRLF between headers and body not found in %r' % msg
+        body = ''.join(lines)
+        assert CRLF not in body
+        return body
     
-        @mock.patch(
-        'certbot_compatibility_test.validator.crypto_util.probe_sni')
-    def test_certificate_error(self, mock_probe_sni):
-        cert = OpenSSL.crypto.X509()
-        mock_probe_sni.side_effect = [acme_errors.Error]
-        self.assertFalse(self.validator.certificate(
-            cert, 'test.com', '127.0.0.1'))
+        def setUp(self):
+        from acme.errors import BadNonce
+        self.error = BadNonce(nonce='xxx', error='error')
     
-        def create_enqueue_blobs(self):
-        blob_names = self.get_output_names()
-        enqueue_blob_names = [
-            '{}_enqueue_{}'.format(b, self._loader_id) for b in blob_names
-        ]
-        for gpu_id in range(self._num_gpus):
-            with c2_utils.NamedCudaScope(gpu_id):
-                for blob in enqueue_blob_names:
-                    workspace.CreateBlob(core.ScopedName(blob))
-        return enqueue_blob_names
-    
-        # Perform detection at different aspect ratios
-    for aspect_ratio in cfg.TEST.BBOX_AUG.ASPECT_RATIOS:
-        scores_ar, boxes_ar = im_detect_bbox_aspect_ratio(
-            model, im, aspect_ratio, box_proposals
-        )
-        add_preds_t(scores_ar, boxes_ar)
-    
-    
-def add_keypoint_rcnn_blobs(
-    blobs, roidb, fg_rois_per_image, fg_inds, im_scale, batch_idx
-):
-    '''Add Mask R-CNN keypoint specific blobs to the given blobs dictionary.'''
-    # Note: gt_inds must match how they're computed in
-    # datasets.json_dataset._merge_proposal_boxes_into_roidb
-    gt_inds = np.where(roidb['gt_classes'] > 0)[0]
-    max_overlaps = roidb['max_overlaps']
-    gt_keypoints = roidb['gt_keypoints']
-    
-    logger = logging.getLogger(__name__)
-    
-        def test_size_exceptions(self):
-        A = np.random.randn(2, 256, 42, 86).astype(np.float32)
-        I = np.array(np.random.permutation(10), dtype=np.int32)
-        with self.assertRaises(RuntimeError):
-            self._run_op_test(A, I)
+            self.vhost1b = VirtualHost(
+            'filep', 'vh_path', set([self.addr1]), False, False, 'localhost')
