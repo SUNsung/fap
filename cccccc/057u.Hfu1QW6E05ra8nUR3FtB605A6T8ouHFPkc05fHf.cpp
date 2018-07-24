@@ -1,85 +1,127 @@
 
         
-        
-    {}  // namespace atom
+        The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
     
-    namespace internal {
+      if (m_eof_flag)
+    return;
+    
+    
+    {}
+
+    
+    const uint8_t Javelin::Data::BITSCALE_8_TO_5_FLOOR[256] = {
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+ 1, 1, 1, 1, 1, 1, 1, 2, 2, 2,
+ 2, 2, 2, 2, 2, 3, 3, 3, 3, 3,
+ 3, 3, 3, 4, 4, 4, 4, 4, 4, 4,
+ 4, 4, 5, 5, 5, 5, 5, 5, 5, 5,
+ 6, 6, 6, 6, 6, 6, 6, 6, 7, 7,
+ 7, 7, 7, 7, 7, 7, 8, 8, 8, 8,
+ 8, 8, 8, 8, 8, 9, 9, 9, 9, 9,
+ 9, 9, 9, 10, 10, 10, 10, 10, 10, 10,
+ 10, 11, 11, 11, 11, 11, 11, 11, 11, 12,
+ 12, 12, 12, 12, 12, 12, 12, 13, 13, 13,
+ 13, 13, 13, 13, 13, 13, 14, 14, 14, 14,
+ 14, 14, 14, 14, 15, 15, 15, 15, 15, 15,
+ 15, 15, 16, 16, 16, 16, 16, 16, 16, 16,
+ 17, 17, 17, 17, 17, 17, 17, 17, 17, 18,
+ 18, 18, 18, 18, 18, 18, 18, 19, 19, 19,
+ 19, 19, 19, 19, 19, 20, 20, 20, 20, 20,
+ 20, 20, 20, 21, 21, 21, 21, 21, 21, 21,
+ 21, 22, 22, 22, 22, 22, 22, 22, 22, 22,
+ 23, 23, 23, 23, 23, 23, 23, 23, 24, 24,
+ 24, 24, 24, 24, 24, 24, 25, 25, 25, 25,
+ 25, 25, 25, 25, 26, 26, 26, 26, 26, 26,
+ 26, 26, 26, 27, 27, 27, 27, 27, 27, 27,
+ 27, 28, 28, 28, 28, 28, 28, 28, 28, 29,
+ 29, 29, 29, 29, 29, 29, 29, 30, 30, 30,
+ 30, 30, 30, 30, 30, 31};
+    
+    #endif
+
+    
+    /// The Redis functionality (see http://redis.io/commands#list)
+/// All functions may THROW a RedisListException
+class RedisLists {
+ public: // Constructors / Destructors
+  /// Construct a new RedisLists database, with name/path of db.
+  /// Will clear the database on open iff destructive is true (default false).
+  /// Otherwise, it will restore saved changes.
+  /// May throw RedisListException
+  RedisLists(const std::string& db_path,
+             Options options, bool destructive = false);
     }
     
-    class WindowListObserver {
- public:
-  // Called immediately after a window is added to the list.
-  virtual void OnWindowAdded(NativeWindow* window) {}
-    }
+      // Returns the next active logfile number when this memtable is about to
+  // be flushed to storage
+  // REQUIRES: external synchronization to prevent simultaneous
+  // operations on the same MemTable.
+  uint64_t GetNextLogNumber() { return mem_next_logfile_number_; }
     
-    class PreferencesManager : public content::RenderThreadObserver {
- public:
-  PreferencesManager();
-  ~PreferencesManager() override;
-    }
+    #include 'db/dbformat.h'
+#include 'rocksdb/types.h'
     
-    namespace base {
-class FilePath;
+    #ifndef JAVA_ROCKSJNI_COMPACTION_FILTER_FACTORY_JNICALLBACK_H_
+#define JAVA_ROCKSJNI_COMPACTION_FILTER_FACTORY_JNICALLBACK_H_
+    
+    
+    {  m_jFindShortSuccessorMethodId =
+    AbstractComparatorJni::getFindShortSuccessorMethodId(env);
+  if(m_jFindShortSuccessorMethodId == nullptr) {
+    // exception thrown: NoSuchMethodException or OutOfMemoryError
+    return;
+  }
+}
+    
+    // Assume that for everywhere
+#undef PLATFORM_IS_LITTLE_ENDIAN
+#define PLATFORM_IS_LITTLE_ENDIAN true
+    
+    struct HistogramData {
+  double median;
+  double percentile95;
+  double percentile99;
+  double average;
+  double standard_deviation;
+  // zero-initialize new members since old Statistics::histogramData()
+  // implementations won't write them.
+  double max = 0.0;
+  uint64_t count = 0;
+  uint64_t sum = 0;
+};
+    
+    void AbstractOptionHandler::updateFlags(int flag, bool val)
+{
+  if (val) {
+    flags_ |= flag;
+  }
+  else {
+    flags_ &= ~flag;
+  }
 }
     
     
-    {}  // namespace extensions
-    
-    #include 'base/strings/string16.h'
-#include 'base/time/time.h'
-#include 'content/public/browser/desktop_media_id.h'
-#include 'ui/gfx/image/image_skia.h'
-    
-    void TtsPlatformImpl::clear_error() {
-  error_ = std::string();
+    {
+    {    httpConnection_->sendProxyRequest(std::move(httpRequest));
+  }
+  else {
+    httpConnection_->sendPendingData();
+  }
+  if (httpConnection_->sendBufferIsEmpty()) {
+    getDownloadEngine()->addCommand(getNextCommand());
+    return true;
+  }
+  else {
+    setWriteCheckSocket(getSocket());
+    addCommandSelf();
+    return false;
+  }
 }
     
-    #include 'chrome/common/chrome_constants.h'
     
-            break;
-      }
-      case JPGD_YH1V1:
-      {
-        H1V1Convert();
-        *pScan_line = m_pScan_line_0;
-        break;
-      }
-      case JPGD_GRAYSCALE:
-      {
-        gray_convert();
-        *pScan_line = m_pScan_line_0;
+    {} // namespace aria2
     
-    # define OC_STATIC_ILOG0(_v) (!!(_v))
-# define OC_STATIC_ILOG1(_v) (((_v)&0x2)?2:OC_STATIC_ILOG0(_v))
-# define OC_STATIC_ILOG2(_v) \
- (((_v)&0xC)?2+OC_STATIC_ILOG1((_v)>>2):OC_STATIC_ILOG1(_v))
-# define OC_STATIC_ILOG3(_v) \
- (((_v)&0xF0)?4+OC_STATIC_ILOG2((_v)>>4):OC_STATIC_ILOG2(_v))
-# define OC_STATIC_ILOG4(_v) \
- (((_v)&0xFF00)?8+OC_STATIC_ILOG3((_v)>>8):OC_STATIC_ILOG3(_v))
-# define OC_STATIC_ILOG5(_v) \
- (((_v)&0xFFFF0000)?16+OC_STATIC_ILOG4((_v)>>16):OC_STATIC_ILOG4(_v))
-# define OC_STATIC_ILOG6(_v) \
- (((_v)&0xFFFFFFFF00000000ULL)?32+OC_STATIC_ILOG5((_v)>>32):OC_STATIC_ILOG5(_v))
-/**
- * OC_STATIC_ILOG_32 - The integer logarithm of an (unsigned, 32-bit) constant.
- * @_v: A non-negative 32-bit constant.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * This macro is suitable for evaluation at compile time, but it should not be
- *  used on values that can change at runtime, as it operates via exhaustive
- *  search.
- */
-# define OC_STATIC_ILOG_32(_v) (OC_STATIC_ILOG5((ogg_uint32_t)(_v)))
-/**
- * OC_STATIC_ILOG_64 - The integer logarithm of an (unsigned, 64-bit) constant.
- * @_v: A non-negative 64-bit constant.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * This macro is suitable for evaluation at compile time, but it should not be
- *  used on values that can change at runtime, as it operates via exhaustive
- *  search.
- */
-# define OC_STATIC_ILOG_64(_v) (OC_STATIC_ILOG6((ogg_int64_t)(_v)))
+      virtual int64_t getCurrentLength() CXX11_OVERRIDE;
+    
+    #include 'common.h'
