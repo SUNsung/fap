@@ -1,356 +1,210 @@
 
         
-        // The argument separating arguments intended for the relauncher process from
-// those intended for the relaunched process. '---' is chosen instead of '--'
-// because CommandLine interprets '--' as meaning 'end of switches', but
-// for many purposes, the relauncher process' CommandLine ought to interpret
-// arguments intended for the relaunched process, to get the correct settings
-// for such things as logging and the user-data-dir in case it affects crash
-// reporting.
-extern const CharType* kRelauncherArgSeparator;
-    
-     protected:
-  RemoteCallbackFreer(v8::Isolate* isolate,
-                      v8::Local<v8::Object> target,
-                      int object_id,
-                      content::WebContents* web_conents);
-  ~RemoteCallbackFreer() override;
-    
-      // Sent when a global error has changed and the error UI should update it
-  // self. The source is a Source<Profile> containing the profile for the
-  // error. The detail is a GlobalError object that has changed or NULL if
-  // all error UIs should update.
-  NOTIFICATION_GLOBAL_ERRORS_CHANGED,
-    
-    // Attempts to send the current command line to an already running instance of
-// Chrome via a WM_COPYDATA message.
-// Returns true if a running Chrome is found and successfully notified.
-// |fast_start| is true when this is being called on the window fast start path.
-NotifyChromeResult AttemptToNotifyRunningChrome(HWND remote_window,
-                                                bool fast_start);
-    
-    void TtsPlatformImpl::clear_error() {
-  error_ = std::string();
-}
-    
-    // Print contents of a log file. (*func)() is called on every record.
-Status PrintLogContents(Env* env, const std::string& fname,
-                        void (*func)(uint64_t, Slice, WritableFile*),
-                        WritableFile* dst) {
-  SequentialFile* file;
-  Status s = env->NewSequentialFile(fname, &file);
-  if (!s.ok()) {
-    return s;
-  }
-  CorruptionReporter reporter;
-  reporter.dst_ = dst;
-  log::Reader reader(file, &reporter, true, 0);
-  Slice record;
-  std::string scratch;
-  while (reader.ReadRecord(&record, &scratch)) {
-    (*func)(reader.LastRecordOffset(), record, dst);
-  }
-  delete file;
-  return Status::OK();
-}
-    
-    std::string LogFileName(const std::string& name, uint64_t number) {
-  assert(number > 0);
-  return MakeFileName(name, number, 'log');
-}
-    
-    static void UnrefEntry(void* arg1, void* arg2) {
-  Cache* cache = reinterpret_cast<Cache*>(arg1);
-  Cache::Handle* h = reinterpret_cast<Cache::Handle*>(arg2);
-  cache->Release(h);
-}
-    
-      void SetComparatorName(const Slice& name) {
-    has_comparator_ = true;
-    comparator_ = name.ToString();
-  }
-  void SetLogNumber(uint64_t num) {
-    has_log_number_ = true;
-    log_number_ = num;
-  }
-  void SetPrevLogNumber(uint64_t num) {
-    has_prev_log_number_ = true;
-    prev_log_number_ = num;
-  }
-  void SetNextFile(uint64_t num) {
-    has_next_file_number_ = true;
-    next_file_number_ = num;
-  }
-  void SetLastSequence(SequenceNumber seq) {
-    has_last_sequence_ = true;
-    last_sequence_ = seq;
-  }
-  void SetCompactPointer(int level, const InternalKey& key) {
-    compact_pointers_.push_back(std::make_pair(level, key));
-  }
-    
-    
-    {  edit.SetComparatorName('foo');
-  edit.SetLogNumber(kBig + 100);
-  edit.SetNextFile(kBig + 200);
-  edit.SetLastSequence(kBig + 1000);
-  TestEncodeDecode(edit);
-}
-    
-      FindFileTest() : disjoint_sorted_files_(true) { }
-    
-    
+        namespace gl
+{
+    enum
     {
-    {      bool known = true;
-      bool write_sync = false;
-      if (name == Slice('fillseq')) {
-        Write(write_sync, SEQUENTIAL, FRESH, num_, FLAGS_value_size, 1);
-        WalCheckpoint(db_);
-      } else if (name == Slice('fillseqbatch')) {
-        Write(write_sync, SEQUENTIAL, FRESH, num_, FLAGS_value_size, 1000);
-        WalCheckpoint(db_);
-      } else if (name == Slice('fillrandom')) {
-        Write(write_sync, RANDOM, FRESH, num_, FLAGS_value_size, 1);
-        WalCheckpoint(db_);
-      } else if (name == Slice('fillrandbatch')) {
-        Write(write_sync, RANDOM, FRESH, num_, FLAGS_value_size, 1000);
-        WalCheckpoint(db_);
-      } else if (name == Slice('overwrite')) {
-        Write(write_sync, RANDOM, EXISTING, num_, FLAGS_value_size, 1);
-        WalCheckpoint(db_);
-      } else if (name == Slice('overwritebatch')) {
-        Write(write_sync, RANDOM, EXISTING, num_, FLAGS_value_size, 1000);
-        WalCheckpoint(db_);
-      } else if (name == Slice('fillrandsync')) {
-        write_sync = true;
-        Write(write_sync, RANDOM, FRESH, num_ / 100, FLAGS_value_size, 1);
-        WalCheckpoint(db_);
-      } else if (name == Slice('fillseqsync')) {
-        write_sync = true;
-        Write(write_sync, SEQUENTIAL, FRESH, num_ / 100, FLAGS_value_size, 1);
-        WalCheckpoint(db_);
-      } else if (name == Slice('fillrand100K')) {
-        Write(write_sync, RANDOM, FRESH, num_ / 1000, 100 * 1000, 1);
-        WalCheckpoint(db_);
-      } else if (name == Slice('fillseq100K')) {
-        Write(write_sync, SEQUENTIAL, FRESH, num_ / 1000, 100 * 1000, 1);
-        WalCheckpoint(db_);
-      } else if (name == Slice('readseq')) {
-        ReadSequential();
-      } else if (name == Slice('readrandom')) {
-        Read(RANDOM, 1);
-      } else if (name == Slice('readrand100K')) {
-        int n = reads_;
-        reads_ /= 1000;
-        Read(RANDOM, 1);
-        reads_ = n;
-      } else {
-        known = false;
-        if (name != Slice()) {  // No error message for empty name
-          fprintf(stderr, 'unknown benchmark '%s'\n', name.ToString().c_str());
-        }
-      }
-      if (known) {
-        Stop(name);
-      }
+        // Version: 1.1
+        DEPTH_BUFFER_BIT                 = 0x00000100,
+        STENCIL_BUFFER_BIT               = 0x00000400,
+        COLOR_BUFFER_BIT                 = 0x00004000,
+        FALSE_                           = 0,
+        TRUE_                            = 1,
+        POINTS                           = 0x0000,
+        LINES                            = 0x0001,
+        LINE_LOOP                        = 0x0002,
+        LINE_STRIP                       = 0x0003,
+        TRIANGLES                        = 0x0004,
+        TRIANGLE_STRIP                   = 0x0005,
+        TRIANGLE_FAN                     = 0x0006,
+        QUADS                            = 0x0007,
+        NEVER                            = 0x0200,
+        LESS                             = 0x0201,
+        EQUAL                            = 0x0202,
+        LEQUAL                           = 0x0203,
+        GREATER                          = 0x0204,
+        NOTEQUAL                         = 0x0205,
+        GEQUAL                           = 0x0206,
+        ALWAYS                           = 0x0207,
+        ZERO                             = 0,
+        ONE                              = 1,
+        SRC_COLOR                        = 0x0300,
+        ONE_MINUS_SRC_COLOR              = 0x0301,
+        SRC_ALPHA                        = 0x0302,
+        ONE_MINUS_SRC_ALPHA              = 0x0303,
+        DST_ALPHA                        = 0x0304,
+        ONE_MINUS_DST_ALPHA              = 0x0305,
+        DST_COLOR                        = 0x0306,
+        ONE_MINUS_DST_COLOR              = 0x0307,
+        SRC_ALPHA_SATURATE               = 0x0308,
+        NONE                             = 0,
+        FRONT_LEFT                       = 0x0400,
+        FRONT_RIGHT                      = 0x0401,
+        BACK_LEFT                        = 0x0402,
+        BACK_RIGHT                       = 0x0403,
+        FRONT                            = 0x0404,
+        BACK                             = 0x0405,
+        LEFT                             = 0x0406,
+        RIGHT                            = 0x0407,
+        FRONT_AND_BACK                   = 0x0408,
+        NO_ERROR_                        = 0,
+        INVALID_ENUM                     = 0x0500,
+        INVALID_VALUE                    = 0x0501,
+        INVALID_OPERATION                = 0x0502,
+        OUT_OF_MEMORY                    = 0x0505,
+        CW                               = 0x0900,
+        CCW                              = 0x0901,
+        POINT_SIZE                       = 0x0B11,
+        POINT_SIZE_RANGE                 = 0x0B12,
+        POINT_SIZE_GRANULARITY           = 0x0B13,
+        LINE_SMOOTH                      = 0x0B20,
+        LINE_WIDTH                       = 0x0B21,
+        LINE_WIDTH_RANGE                 = 0x0B22,
+        LINE_WIDTH_GRANULARITY           = 0x0B23,
+        POLYGON_MODE                     = 0x0B40,
+        POLYGON_SMOOTH                   = 0x0B41,
+        CULL_FACE                        = 0x0B44,
+        CULL_FACE_MODE                   = 0x0B45,
+        FRONT_FACE                       = 0x0B46,
+        DEPTH_RANGE                      = 0x0B70,
+        DEPTH_TEST                       = 0x0B71,
+        DEPTH_WRITEMASK                  = 0x0B72,
+        DEPTH_CLEAR_VALUE                = 0x0B73,
+        DEPTH_FUNC                       = 0x0B74,
+        STENCIL_TEST                     = 0x0B90,
+        STENCIL_CLEAR_VALUE              = 0x0B91,
+        STENCIL_FUNC                     = 0x0B92,
+        STENCIL_VALUE_MASK               = 0x0B93,
+        STENCIL_FAIL                     = 0x0B94,
+        STENCIL_PASS_DEPTH_FAIL          = 0x0B95,
+        STENCIL_PASS_DEPTH_PASS          = 0x0B96,
+        STENCIL_REF                      = 0x0B97,
+        STENCIL_WRITEMASK                = 0x0B98,
+        VIEWPORT                         = 0x0BA2,
+        DITHER                           = 0x0BD0,
+        BLEND_DST                        = 0x0BE0,
+        BLEND_SRC                        = 0x0BE1,
+        BLEND                            = 0x0BE2,
+        LOGIC_OP_MODE                    = 0x0BF0,
+        COLOR_LOGIC_OP                   = 0x0BF2,
+        DRAW_BUFFER                      = 0x0C01,
+        READ_BUFFER                      = 0x0C02,
+        SCISSOR_BOX                      = 0x0C10,
+        SCISSOR_TEST                     = 0x0C11,
+        COLOR_CLEAR_VALUE                = 0x0C22,
+        COLOR_WRITEMASK                  = 0x0C23,
+        DOUBLEBUFFER                     = 0x0C32,
+        STEREO                           = 0x0C33,
+        LINE_SMOOTH_HINT                 = 0x0C52,
+        POLYGON_SMOOTH_HINT              = 0x0C53,
+        UNPACK_SWAP_BYTES                = 0x0CF0,
+        UNPACK_LSB_FIRST                 = 0x0CF1,
+        UNPACK_ROW_LENGTH                = 0x0CF2,
+        UNPACK_SKIP_ROWS                 = 0x0CF3,
+        UNPACK_SKIP_PIXELS               = 0x0CF4,
+        UNPACK_ALIGNMENT                 = 0x0CF5,
+        PACK_SWAP_BYTES                  = 0x0D00,
+        PACK_LSB_FIRST                   = 0x0D01,
+        PACK_ROW_LENGTH                  = 0x0D02,
+        PACK_SKIP_ROWS                   = 0x0D03,
+        PACK_SKIP_PIXELS                 = 0x0D04,
+        PACK_ALIGNMENT                   = 0x0D05,
+        MAX_TEXTURE_SIZE                 = 0x0D33,
+        MAX_VIEWPORT_DIMS                = 0x0D3A,
+        SUBPIXEL_BITS                    = 0x0D50,
+        TEXTURE_1D                       = 0x0DE0,
+        TEXTURE_2D                       = 0x0DE1,
+        POLYGON_OFFSET_UNITS             = 0x2A00,
+        POLYGON_OFFSET_POINT             = 0x2A01,
+        POLYGON_OFFSET_LINE              = 0x2A02,
+        POLYGON_OFFSET_FILL              = 0x8037,
+        POLYGON_OFFSET_FACTOR            = 0x8038,
+        TEXTURE_BINDING_1D               = 0x8068,
+        TEXTURE_BINDING_2D               = 0x8069,
+        TEXTURE_WIDTH                    = 0x1000,
+        TEXTURE_HEIGHT                   = 0x1001,
+        TEXTURE_INTERNAL_FORMAT          = 0x1003,
+        TEXTURE_BORDER_COLOR             = 0x1004,
+        TEXTURE_RED_SIZE                 = 0x805C,
+        TEXTURE_GREEN_SIZE               = 0x805D,
+        TEXTURE_BLUE_SIZE                = 0x805E,
+        TEXTURE_ALPHA_SIZE               = 0x805F,
+        DONT_CARE                        = 0x1100,
+        FASTEST                          = 0x1101,
+        NICEST                           = 0x1102,
+        BYTE                             = 0x1400,
+        UNSIGNED_BYTE                    = 0x1401,
+        SHORT                            = 0x1402,
+        UNSIGNED_SHORT                   = 0x1403,
+        INT                              = 0x1404,
+        UNSIGNED_INT                     = 0x1405,
+        FLOAT                            = 0x1406,
+        DOUBLE                           = 0x140A,
+        CLEAR                            = 0x1500,
+        AND                              = 0x1501,
+        AND_REVERSE                      = 0x1502,
+        COPY                             = 0x1503,
+        AND_INVERTED                     = 0x1504,
+        NOOP                             = 0x1505,
+        XOR                              = 0x1506,
+        OR                               = 0x1507,
+        NOR                              = 0x1508,
+        EQUIV                            = 0x1509,
+        INVERT                           = 0x150A,
+        OR_REVERSE                       = 0x150B,
+        COPY_INVERTED                    = 0x150C,
+        OR_INVERTED                      = 0x150D,
+        NAND                             = 0x150E,
+        SET                              = 0x150F,
+        TEXTURE                          = 0x1702,
+        COLOR                            = 0x1800,
+        DEPTH                            = 0x1801,
+        STENCIL                          = 0x1802,
+        STENCIL_INDEX                    = 0x1901,
+        DEPTH_COMPONENT                  = 0x1902,
+        RED                              = 0x1903,
+        GREEN                            = 0x1904,
+        BLUE                             = 0x1905,
+        ALPHA                            = 0x1906,
+        RGB                              = 0x1907,
+        RGBA                             = 0x1908,
+        POINT                            = 0x1B00,
+        LINE                             = 0x1B01,
+        FILL                             = 0x1B02,
+        KEEP                             = 0x1E00,
+        REPLACE                          = 0x1E01,
+        INCR                             = 0x1E02,
+        DECR                             = 0x1E03,
+        VENDOR                           = 0x1F00,
+        RENDERER                         = 0x1F01,
+        VERSION_                         = 0x1F02,
+        EXTENSIONS                       = 0x1F03,
+        NEAREST                          = 0x2600,
+        LINEAR                           = 0x2601,
+        NEAREST_MIPMAP_NEAREST           = 0x2700,
+        LINEAR_MIPMAP_NEAREST            = 0x2701,
+        NEAREST_MIPMAP_LINEAR            = 0x2702,
+        LINEAR_MIPMAP_LINEAR             = 0x2703,
+        TEXTURE_MAG_FILTER               = 0x2800,
+        TEXTURE_MIN_FILTER               = 0x2801,
+        TEXTURE_WRAP_S                   = 0x2802,
+        TEXTURE_WRAP_T                   = 0x2803,
+        PROXY_TEXTURE_1D                 = 0x8063,
+        PROXY_TEXTURE_2D                 = 0x8064,
+        REPEAT                           = 0x2901,
+        R3_G3_B2                         = 0x2A10,
+        RGB4                             = 0x804F,
+        RGB5                             = 0x8050,
+        RGB8                             = 0x8051,
+        RGB10                            = 0x8052,
+        RGB12                            = 0x8053,
+        RGB16                            = 0x8054,
+        RGBA2                            = 0x8055,
+        RGBA4                            = 0x8056,
+        RGB5_A1                          = 0x8057,
+        RGBA8                            = 0x8058,
+        RGB10_A2                         = 0x8059,
+        RGBA12                           = 0x805A,
+        RGBA16                           = 0x805B,
     }
-  }
-    
-    #ifndef STORAGE_LEVELDB_INCLUDE_COMPARATOR_H_
-#define STORAGE_LEVELDB_INCLUDE_COMPARATOR_H_
-    
-    	void set_verify_ssl_enabled(bool p_verify_ssl);
-	bool is_verify_ssl_enabled() const;
-    
-    public:
-	void set_radius(float p_radius);
-	float get_radius() const;
-    
-    	GodotClosestConvexResultCallback(const btVector3 &convexFromWorld, const btVector3 &convexToWorld, const Set<RID> *p_exclude) :
-			btCollisionWorld::ClosestConvexResultCallback(convexFromWorld, convexToWorld),
-			m_exclude(p_exclude) {}
-    
-    # if defined(OC_COLLECT_METRICS)
-struct oc_mode_metrics{
-  double fragw;
-  double satd;
-  double rate;
-  double rmse;
-  double satd2;
-  double satdrate;
-  double rate2;
-  double satdrmse;
-  double rmse2;
-};
-    
-    /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q16
-static OPUS_INLINE opus_val32 MULT16_32_Q16_armv4(opus_val16 a, opus_val32 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      '#MULT16_32_Q16\n\t'
-      'smull %0, %1, %2, %3\n\t'
-      : '=&r'(rd_lo), '=&r'(rd_hi)
-      : '%r'(b),'r'(a<<16)
-  );
-  return rd_hi;
-}
-#define MULT16_32_Q16(a, b) (MULT16_32_Q16_armv4(a, b))
-    
-            __inline long int float2int(float value)
-        {
-                return _mm_cvtss_si32(_mm_load_ss(&value));
-        }
-#elif (defined(_MSC_VER) && _MSC_VER >= 1400) && defined (_M_IX86)
-        #include <math.h>
-    
-    // redirect the nath functions.
-bool CheckNAN(double v) {
-  return ISNAN(v);
-}
-double LogGamma(double v) {
-  return lgammafn(v);
-}
-    
-    namespace xgboost {
-namespace common {
-/*! \brief buffer reader of the stream that allows you to get */
-class StreamBufferReader {
- public:
-  explicit StreamBufferReader(size_t buffer_size)
-      :stream_(NULL),
-       read_len_(1), read_ptr_(1) {
-    buffer_.resize(buffer_size);
-  }
-  /*!
-   * \brief set input stream
-   */
-  inline void set_stream(dmlc::Stream *stream) {
-    stream_ = stream;
-    read_len_ = read_ptr_ = 1;
-  }
-  /*!
-   * \brief allows quick read using get char
-   */
-  inline char GetChar(void) {
-    while (true) {
-      if (read_ptr_ < read_len_) {
-        return buffer_[read_ptr_++];
-      } else {
-        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
-        if (read_len_ == 0) return EOF;
-        read_ptr_ = 0;
-      }
     }
-  }
-  /*! \brief whether we are reaching the end of file */
-  inline bool AtEnd(void) const {
-    return read_len_ == 0;
-  }
-    }
-    }
-    }
-    
-    /*!
- * \brief A vector-like structure to represent set of rows.
- * But saves the memory when all rows are in the set (common case in xgb)
- */
-class RowSet {
- public:
-  /*! \return i-th row index */
-  inline bst_uint operator[](size_t i) const;
-  /*! \return the size of the set. */
-  inline size_t Size() const;
-  /*! \brief push the index back to the set */
-  inline void PushBack(bst_uint i);
-  /*! \brief clear the set */
-  inline void Clear();
-  /*!
-   * \brief save rowset to file.
-   * \param fo The file to be saved.
-   */
-  inline void Save(dmlc::Stream* fo) const;
-  /*!
-   * \brief Load rowset from file.
-   * \param fi The file to be loaded.
-   * \return if read is successful.
-   */
-  inline bool Load(dmlc::Stream* fi);
-  /*! \brief constructor */
-  RowSet()  = default;
-    }
-    
-      float float2[2] = {1.0f, 2.0f};
-  EXPECT_EQ(info.GetWeight(1), 1.0f)
-    << 'When no weights are given, was expecting default value 1';
-  info.SetInfo('weight', float2, xgboost::kFloat32, 2);
-  EXPECT_EQ(info.GetWeight(1), 2.0f);
-    
-    #include <xgboost/data.h>
-#include <xgboost/learner.h>
-#include <xgboost/c_api.h>
-#include <xgboost/logging.h>
-#include <dmlc/thread_local.h>
-#include <rabit/rabit.h>
-#include <cstdio>
-#include <vector>
-#include <string>
-#include <cstring>
-#include <memory>
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-    
-    {    printf('DestroyContext()\n');
-    ImGui::DestroyContext();
-    return 0;
-}
-
-    
-    void ResizeSwapChain(HWND hWnd, int width, int height)
-{
-    DXGI_SWAP_CHAIN_DESC1 sd;
-    g_pSwapChain->GetDesc1(&sd);
-    sd.Width = width;
-    sd.Height = height;
-    }
-    
-        // Update OS mouse position
-    ImGui_ImplWin32_UpdateMousePos();
-    
-    
-    {    return true;
-}
-    
-    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
-
-    
-    JNIEXPORT jint JNICALL Java_com_tencent_mars_xlog_Xlog_getLogLevel
-  (JNIEnv *, jobject) {
-	return xlogger_Level();
-}
-    
-    #include <vector>
-#include <string>
-    
-    
-Test_Spy_Sample::Test_Spy_Sample()
-{
-    SPY_ATTACH_CLASS(NULL);
-}
-    
-    void TSpy::TestFun0()
-{
-    return reinterpret_cast<Test_Spy_Sample*>(This())->TestFun0();
-}
-    
-    #include <jni.h>
