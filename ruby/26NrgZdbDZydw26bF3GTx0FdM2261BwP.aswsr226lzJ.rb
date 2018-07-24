@@ -1,96 +1,54 @@
 
         
-              # Returns constant of subscription adapter specified in config/cable.yml.
-      # If the adapter cannot be found, this will default to the Redis adapter.
-      # Also makes sure proper dependencies are required.
-      def pubsub_adapter
-        adapter = (cable.fetch('adapter') { 'redis' })
+          def index
+    set_table_sort sorts: %w[provider name global], default: { provider: :asc }
     
-            def test_spec_name_with_inline_config
-          spec = spec('adapter' => 'sqlite3')
-          assert_equal 'primary', spec.name, 'should default to primary id'
+      # Removes any empty directories in the formula's prefix subtree
+  # Keeps any empty directions projected by skip_clean
+  # Removes any unresolved symlinks
+  def prune
+    dirs = []
+    symlinks = []
+    @f.prefix.find do |path|
+      if path == @f.libexec || @f.skip_clean?(path)
+        Find.prune
+      elsif path.symlink?
+        symlinks << path
+      elsif path.directory?
+        dirs << path
+      end
+    end
+    
+      def gistify_logs(f)
+    files = load_logs(f.logs)
+    build_time = f.logs.ctime
+    timestamp = build_time.strftime('%Y-%m-%d_%H-%M-%S')
+    
+              # Check if a/an are used in a formula's desc
+          if match = regex_match_group(desc, /^(an?)\s/i)
+            problem 'Description shouldn't start with an indefinite article i.e. \'#{match.to_s.strip}\''
+          end
+    
+        def each_definition
+      @attachments.each do |klass, attachments|
+        attachments.each do |name, options|
+          yield klass, name, options
         end
       end
     end
-  end
-end
-
     
-        # Abstract representation of a column definition. Instances of this type
-    # are typically created by methods in TableDefinition, and added to the
-    # +columns+ attribute of said TableDefinition object, in order to be used
-    # for generating a number of table creation or table changing SQL statements.
-    ColumnDefinition = Struct.new(:name, :type, :options, :sql_type) do # :nodoc:
-      def primary_key?
-        options[:primary_key]
-      end
-    
-        def get_latest
-      transmit data: 'latest'
-    end
-    
-            assert_equal 1, connection.transmissions.size
+        # Swaps the height and width if necessary
+    def auto_orient
+      if EXIF_ROTATED_ORIENTATION_VALUES.include?(@orientation)
+        @height, @width = @width, @height
+        @orientation -= 4
       end
     end
-  end
     
-      def wait_for_async
-    wait_for_executor Concurrent.global_io_executor
-  end
-    
-        def test_quit
-      Timeout.timeout(TIMEOUT) do
-        @worker_in.puts 'quit'
-        assert_match(/^bye$/m,@worker_out.read)
-      end
-    end
-  end
-    
-      def test_close_in_block
-    PTY.open {|master, slave|
-      slave.close
-      master.close
-      assert(slave.closed?)
-      assert(master.closed?)
-    }
-  rescue RuntimeError
-    skip $!
-  else
-    assert_nothing_raised {
-      PTY.open {|master, slave|
-        slave.close
-        master.close
-      }
-    }
-  end
-    
-        it 'expand_path for commoms unix path  give a full path' do
-      File.expand_path('/tmp/').should =='/tmp'
-      File.expand_path('/tmp/../../../tmp').should == '/tmp'
-      File.expand_path('').should == Dir.pwd
-      File.expand_path('./////').should == Dir.pwd
-      File.expand_path('.').should == Dir.pwd
-      File.expand_path(Dir.pwd).should == Dir.pwd
-      File.expand_path('~/').should == @home
-      File.expand_path('~/..badfilename').should == '#{@home}/..badfilename'
-      File.expand_path('~/a','~/b').should == '#{@home}/a'
-      File.expand_path('..').should == File.dirname(Dir.pwd)
-    end
-    
-          rm_r filename
-    end
-  end
-    
-          after :each do
-        rm_r @fifo
-      end
-    
-      describe 'rb_cv_set' do
-    it 'sets a class variable' do
-      o = CApiClassSpecs::CVars.new
-      o.new_cv.should be_nil
-      @s.rb_cv_set(CApiClassSpecs::CVars, '@@new_cv', 1)
-      o.new_cv.should == 1
-      CApiClassSpecs::CVars.remove_class_variable :@@new_cv
-    end
-  end
+            def failure_message
+          '#{expected_attachment}\n'.tap do |message|
+            message << accepted_types_and_failures.to_s
+            message << '\n\n' if @allowed_types.present? && @rejected_types.present?
+            message << rejected_types_and_failures.to_s
+          end
+        end
