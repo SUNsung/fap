@@ -1,180 +1,140 @@
 
         
-          virtual bool lookupAdditions(DeclBaseName Name, DeclContext *DC,
-                               SourceLoc Loc, bool IsTypeLookup,
-                               ResultVector &RV) = 0;
-    
-    #pragma mark - NSData verification
-    
-    namespace swift {
-    }
-    
-    #ifndef SWIFT_SILGEN_RESULTPLAN_H
-#define SWIFT_SILGEN_RESULTPLAN_H
-    
-    namespace google {
-namespace protobuf {
-namespace python {
-    }
-    }
-    }
-    
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
-    
-    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
-    
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
-    
-    
-    
-      explicit FilePath(const std::string& pathname) : pathname_(pathname) {
-    Normalize();
-  }
-    
-    // This class provides implementation of TeastFactoryBase interface.
-// It is used in TEST and TEST_F macros.
-template <class TestClass>
-class TestFactoryImpl : public TestFactoryBase {
- public:
-  virtual Test* CreateTest() { return new TestClass; }
-};
-    
-    
-// Generates values from a pair of STL-style iterators. Used in the
-// ValuesIn() function. The elements are copied from the source range
-// since the source can be located on the stack, and the generator
-// is likely to persist beyond that stack frame.
-template <typename T>
-class ValuesInIteratorRangeGenerator : public ParamGeneratorInterface<T> {
- public:
-  template <typename ForwardIterator>
-  ValuesInIteratorRangeGenerator(ForwardIterator begin, ForwardIterator end)
-      : container_(begin, end) {}
-  virtual ~ValuesInIteratorRangeGenerator() {}
-    }
-    
-    // Brings in definitions for functions used in the testing::internal::posix
-// namespace (read, write, close, chdir, isatty, stat). We do not currently
-// use them on Windows Mobile.
-#if !GTEST_OS_WINDOWS
-// This assumes that non-Windows OSes provide unistd.h. For OSes where this
-// is not the case, we need to include headers that provide the functions
-// mentioned above.
-# include <unistd.h>
-# include <strings.h>
-#elif !GTEST_OS_WINDOWS_MOBILE
-# include <direct.h>
-# include <io.h>
-#endif
-    
-    
-    {} // namespace thd
-    
-    #endif
-
-    
-    #if defined(TH_REAL_IS_FLOAT) || defined(TH_REAL_IS_DOUBLE)
-    
-    #endif
-
-    
-      // Check second filter
-  ASSERT_TRUE(reader.KeyMayMatch(3100, 'box'));
-  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'foo'));
-  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'bar'));
-  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'hello'));
-    
-    
-    {}  // namespace leveldb
-    
-      inline void ClearSavedValue() {
-    if (saved_value_.capacity() > 1048576) {
-      std::string empty;
-      swap(empty, saved_value_);
-    } else {
-      saved_value_.clear();
-    }
-  }
-    
-      // Format the header
-  char buf[kHeaderSize];
-  buf[4] = static_cast<char>(n & 0xff);
-  buf[5] = static_cast<char>(n >> 8);
-  buf[6] = static_cast<char>(t);
-    
-      /// Accept a new connection and obtain the endpoint of the peer
-  /**
-   * This function is used to accept a new connection from a peer into the
-   * given socket, and additionally provide the endpoint of the remote peer.
-   * The function call will block until a new connection has been accepted
-   * successfully or an error occurs.
-   *
-   * @param peer The socket into which the new connection will be accepted.
-   *
-   * @param peer_endpoint An endpoint object which will receive the endpoint of
-   * the remote peer.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   *
-   * @par Example
-   * @code
-   * boost::asio::ip::tcp::acceptor acceptor(io_service);
-   * ...
-   * boost::asio::ip::tcp::socket socket(io_service);
-   * boost::asio::ip::tcp::endpoint endpoint;
-   * acceptor.accept(socket, endpoint);
-   * @endcode
-   */
-  template <typename SocketService>
-  void accept(basic_socket<protocol_type, SocketService>& peer,
-      endpoint_type& peer_endpoint)
-  {
-    boost::system::error_code ec;
-    this->get_service().accept(this->get_implementation(),
-        peer, &peer_endpoint, ec);
-    boost::asio::detail::throw_error(ec, 'accept');
-  }
-    
-    
-    {
-    {} // namespace asio
-} // namespace boost
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    
-    {private:
-  int descriptor_;
-  MutableBufferSequence buffers_;
-};
-    
-      static void do_complete(io_service_impl* owner, operation* base,
-      const boost::system::error_code& /*ec*/,
-      std::size_t /*bytes_transferred*/)
-  {
-    // Take ownership of the handler object.
-    descriptor_write_op* o(static_cast<descriptor_write_op*>(base));
-    ptr p = { boost::asio::detail::addressof(o->handler_), o, o };
-    }
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    template <typename Function, typename Context>
-inline void invoke(const Function& function, Context& context)
-{
-#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  Function tmp(function);
-  tmp();
-#else
-  using boost::asio::asio_handler_invoke;
-  asio_handler_invoke(function, boost::asio::detail::addressof(context));
-#endif
+        template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33, typename T34, typename T35>
+internal::ValueArray35<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+    T29, T30, T31, T32, T33, T34, T35> Values(T1 v1, T2 v2, T3 v3, T4 v4,
+    T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13,
+    T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21,
+    T22 v22, T23 v23, T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29,
+    T30 v30, T31 v31, T32 v32, T33 v33, T34 v34, T35 v35) {
+  return internal::ValueArray35<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
+      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35>(v1, v2, v3, v4, v5, v6,
+      v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21,
+      v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34, v35);
 }
+    
+    // Then, use TYPED_TEST_P() to define as many type-parameterized tests
+// for this type-parameterized test case as you want.
+TYPED_TEST_P(FooTest, DoesBlah) {
+  // Inside a test, refer to TypeParam to get the type parameter.
+  TypeParam n = 0;
+  ...
+}
+    
+    // This provides interface PrimeTable that determines whether a number is a
+// prime and determines a next prime number. This interface is used
+// in Google Test samples demonstrating use of parameterized tests.
+    
+    // This event listener monitors how many Water objects are created and
+// destroyed by each test, and reports a failure if a test leaks some Water
+// objects. It does this by comparing the number of live Water objects at
+// the beginning of a test and at the end of a test.
+class LeakChecker : public EmptyTestEventListener {
+ private:
+  // Called before a test starts.
+  virtual void OnTestStart(const TestInfo& /* test_info */) {
+    initially_allocated_ = Water::allocated();
+  }
+    }
+    
+      // ============= Accessing data ==============.
+  // Coordinate system:
+  // Integer coordinates are at the cracks between the pixels.
+  // The top-left corner of the top-left pixel in the image is at (0,0).
+  // The bottom-right corner of the bottom-right pixel in the image is at
+  // (width, height).
+  // Every bounding box goes from the top-left of the top-left contained
+  // pixel to the bottom-right of the bottom-right contained pixel, so
+  // the bounding box of the single top-left pixel in the image is:
+  // (0,0)->(1,1).
+  // If an image rectangle has been set in the API, then returned coordinates
+  // relate to the original (full) image, rather than the rectangle.
+    
+    void ResultIterator::CalculateTextlineOrder(
+    bool paragraph_is_ltr,
+    const LTRResultIterator &resit,
+    GenericVector<StrongScriptDirection> *dirs_arg,
+    GenericVectorEqEq<int> *word_indices) const {
+  GenericVector<StrongScriptDirection> dirs;
+  GenericVector<StrongScriptDirection> *directions;
+  directions = (dirs_arg != nullptr) ? dirs_arg : &dirs;
+  directions->truncate(0);
+    }
+    
+    const ICOORD *dirtab = (ICOORD *) idirtab;
+    
+    namespace tesseract {
+/**********************************************************************
+ * main_setup
+ *
+ * Main for mithras demo program. Read the arguments and set up globals.
+ **********************************************************************/
+    }
+    
+      // Writes the given float_classes (produced by SetupForFloat2Int) as inttemp
+  // to the given inttemp_file, and the corresponding pffmtable.
+  // The unicharset is the original encoding of graphemes, and shape_set should
+  // match the size of the shape_table, and may possibly be totally fake.
+  void WriteInttempAndPFFMTable(const UNICHARSET& unicharset,
+                                const UNICHARSET& shape_set,
+                                const ShapeTable& shape_table,
+                                CLASS_STRUCT* float_classes,
+                                const char* inttemp_file,
+                                const char* pffmtable_file);
+    
+      // Computes the mean_column_gap_.
+  void ComputeMeanColumnGap(bool any_multi_column);
+    
+    template <typename Stream>
+class buffered_read_stream;
     
     #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    #endif // BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
+
+    
+      // Obtain the value at the top of the stack.
+  static Value* top()
+  {
+    context* elem = top_;
+    return elem ? elem->value_ : 0;
+  }
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
+    
+      char* buffer = (char*)malloc(range.length + 1);
+  if (buffer == nullptr) {
+    return '';
+  }
+  memset(buffer, 0, range.length + 1);
+    
+    
+    {
+    {    // Checking if we are generally in an unprivileged mode.
+    auto dropper2 = DropPrivileges::get();
+    EXPECT_FALSE(dropper2->dropped());
+  }
+}
+    
+      /// Restrict to a specific devtype.
+  std::string devtype;
+    
+      int fd = open(kLinuxMemPath.c_str(), O_RDONLY);
+  if (fd < 0) {
+    return Status(1, std::string('Cannot open ') + kLinuxMemPath);
+  }
