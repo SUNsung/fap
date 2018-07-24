@@ -1,83 +1,40 @@
 
         
-              def rendered_views
-        @_rendered_views ||= RenderedViewsCollection.new
-      end
+          def cache_fragment(name)
+    ApplicationSerializer.fragment_cache[name] ||= yield
+  end
+end
+
     
-            # Require the adapter itself and give useful feedback about
-        #   1. Missing adapter gems and
-        #   2. Adapter gems' missing dependencies.
-        path_to_adapter = 'action_cable/subscription_adapter/#{adapter}'
-        begin
-          require path_to_adapter
-        rescue LoadError => e
-          # We couldn't require the adapter itself. Raise an exception that
-          # points out config typos and missing gems.
-          if e.path == path_to_adapter
-            # We can assume that a non-builtin adapter was specified, so it's
-            # either misspelled or missing from Gemfile.
-            raise e.class, 'Could not load the '#{adapter}' Action Cable pubsub adapter. Ensure that the adapter is spelled correctly in config/cable.yml and that you've added the necessary adapter gem to your Gemfile.', e.backtrace
+    def each_schema_load_environment
+  # If we're in development, also run this for the test environment.
+  # This is a somewhat hacky way to do this, so here's why:
+  # 1. We have to define this before we load the schema, or we won't
+  #    have a timestamp_id function when we get to it in the schema.
+  # 2. db:setup calls db:schema:load_if_ruby, which calls
+  #    db:schema:load, which we define above as having a prerequisite
+  #    of this task.
+  # 3. db:schema:load ends up running
+  #    ActiveRecord::Tasks::DatabaseTasks.load_schema_current, which
+  #    calls a private method `each_current_configuration`, which
+  #    explicitly also does the loading for the `test` environment
+  #    if the current environment is `development`, so we end up
+  #    needing to do the same, and we can't even use the same method
+  #    to do it.
     
-          def force_equality?(value)
-        coder.respond_to?(:object_class) && value.is_a?(coder.object_class)
-      end
-    
-          relation = Relation.new(klass)
-      relation.merge!(where: ['foo = ?', 'bar'])
-      assert_equal Relation::WhereClause.new(['foo = bar']), relation.where_clause
-    end
-    
-        def speak(data)
-      @last_action = [ :speak, data ]
-    end
-    
-        def read_message
-      @has_messages.try_acquire(1, WAIT_WHEN_EXPECTING_EVENT)
-    
-          assert_called(connection.subscriptions, :unsubscribe_from_all) do
-        connection.send :handle_close
-      end
-    
-    class ActionCable::Connection::StreamTest < ActionCable::TestCase
-  class Connection < ActionCable::Connection::Base
-    attr_reader :connected, :websocket, :errors
-    
-          assert_called(channel1, :unsubscribe_from_channel) do
-        assert_called(channel2, :unsubscribe_from_channel) do
-          @subscriptions.unsubscribe_from_all
-        end
-      end
-    end
+      def id
+    ActivityPub::TagManager.instance.uri_for(object)
   end
     
-    module Capistrano
-  module Doctor
-    # Prints table of all Capistrano-related gems and their version numbers. If
-    # there is a newer version of a gem available, call attention to it.
-    class GemsDoctor
-      include Capistrano::Doctor::OutputHelpers
+    namespace :emojis do
+  desc 'Generate a unicode to filename mapping'
+  task :generate do
+    source = 'http://www.unicode.org/Public/emoji/5.0/emoji-test.txt'
+    codes  = []
+    dest   = Rails.root.join('app', 'javascript', 'mastodon', 'features', 'emoji', 'emoji_map.json')
     
-          # Prints a table for a given array of records. For each record, the block
-      # is yielded two arguments: the record and a Row object. To print values
-      # for that record, add values using `row << 'some value'`. A row can
-      # optionally be highlighted in yellow using `row.yellow`.
-      def table(records, &block)
-        return if records.empty?
-        rows = collect_rows(records, &block)
-        col_widths = calculate_column_widths(rows)
-    
-            on roles(target_roles) do
-          unless test '[ -f #{file.to_s.shellescape} ]'
-            info 'Uploading #{prerequisite_file} to #{file}'
-            upload! File.open(prerequisite_file), file
-          end
-        end
-      end
-    end
-    
-        orig_stdout = $stdout
-    orig_stderr = $stderr
-    captured_stdout = StringIO.new
-    captured_stderr = StringIO.new
-    $stdout = captured_stdout
-    $stderr = captured_stderr
+      # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/follow
+  def follow
+    f = Follow.last
+    NotificationMailer.follow(f.target_account, Notification.find_by(activity: f))
+  end
