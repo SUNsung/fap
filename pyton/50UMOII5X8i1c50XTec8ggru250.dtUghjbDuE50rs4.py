@@ -1,110 +1,149 @@
 
         
-            entry = entry_template.replace('@TIMESTAMP@', timestamp)
-    entry = entry.replace('@VERSION@', v)
-    entries.append(entry)
+        anchor = '###'
+min_entries_per_section = 3
+auth_keys = ['apiKey', 'OAuth', 'X-Mashape-Key', 'No']
+punctuation = ['.', '?', '!']
+https_keys = ['Yes', 'No']
+cors_keys = ['Yes', 'No', 'Unknown']
     
-        def test_no_duplicates(self):
-        ies = gen_extractors()
-        for tc in gettestcases(include_onlymatching=True):
-            url = tc['url']
-            for ie in ies:
-                if type(ie).__name__ in ('GenericIE', tc['name'] + 'IE'):
-                    self.assertTrue(ie.suitable(url), '%s should match URL %r' % (type(ie).__name__, url))
-                else:
-                    self.assertFalse(
-                        ie.suitable(url),
-                        '%s should not match URL %r . That URL belongs to %s.' % (type(ie).__name__, url, tc['name']))
+        def save_session(self, app, session, response):
+        '''This is called for actual sessions returned by :meth:`open_session`
+        at the end of the request.  This is still called during a request
+        context so if you absolutely need access to the request you can do
+        that.
+        '''
+        raise NotImplementedError()
     
+        class _FakeSignal(object):
+        '''If blinker is unavailable, create a fake class with the same
+        interface that allows sending of signals but will fail with an
+        error on anything else.  Instead of doing anything on send, it
+        will just ignore the arguments and do nothing instead.
+        '''
     
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
-    
-    
-for testfile in os.listdir(TEST_DIR):
-    _make_testfunc(testfile)
+        def get_source(self, environment, template):
+        if self.app.config['EXPLAIN_TEMPLATE_LOADING']:
+            return self._get_source_explained(environment, template)
+        return self._get_source_fast(environment, template)
     
     
-class TestUnicodeLiterals(unittest.TestCase):
-    def test_all_files(self):
-        for dirpath, dirnames, filenames in os.walk(rootDir):
-            for ignore_dir in IGNORED_DIRS:
-                if ignore_dir in dirnames:
-                    # If we remove the directory from dirnames os.walk won't
-                    # recurse into it
-                    dirnames.remove(ignore_dir)
-            for basename in filenames:
-                if not basename.endswith('.py'):
-                    continue
-                if basename in IGNORED_FILES:
-                    continue
+def test_explicit_instance_paths(modules_tmpdir):
+    with pytest.raises(ValueError) as excinfo:
+        flask.Flask(__name__, instance_path='instance')
+    assert 'must be absolute' in str(excinfo.value)
     
-            title = metadata['Title']
-        description = metadata.get('Description')
-        duration = float_or_none(metadata.get('Duration'))
-        timestamp = parse_iso8601(metadata.get('DateCreated'))
+        @app.route('/')
+    def index():
+        calls.append('handler')
+        return 'ignored anyway'
+    
+        @app.route('/')
+    def index():
+        return flask.render_template('template_filter.html', value='abcd')
+    
+            print('benchmarking scikit-learn: ')
+        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
+        print('benchmarking glmnet: ')
+        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
+    
+                k_results_build[algorithm][i] = (t1 - t0)
+            k_results_query[algorithm][i] = (t2 - t1)
+    
+    def plot(func):
+    random_state = check_random_state(0)
+    one_core = []
+    multi_core = []
+    sample_sizes = range(1000, 6000, 1000)
+    
+    # TASK: Predict the outcome on the testing set in a variable named y_predicted
+    
+    plt.figure(2)  # 'banana' shape
+plt.title('Outlier detection on a real data set (boston housing)')
+plt.scatter(X2[:, 0], X2[:, 1], color='black')
+plt.xlim((xx2.min(), xx2.max()))
+plt.ylim((yy2.min(), yy2.max()))
+plt.legend((legend2_values_list[0].collections[0],
+            legend2_values_list[1].collections[0],
+            legend2_values_list[2].collections[0]),
+           (legend2_keys_list[0], legend2_keys_list[1], legend2_keys_list[2]),
+           loc='upper center',
+           prop=matplotlib.font_manager.FontProperties(size=12))
+plt.ylabel('% lower status of the population')
+plt.xlabel('average number of rooms per dwelling')
+    
+    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
+                             random_state=0)
+model.fit(data)
+score = consensus_score(model.biclusters_,
+                        (rows[:, row_idx], columns[:, col_idx]))
+    
+    This example demonstrates how to generate a dataset and bicluster it
+using the Spectral Co-Clustering algorithm.
+    
+    The example is engineered to show the effect of the choice of different
+metrics. It is applied to waveforms, which can be seen as
+high-dimensional vector. Indeed, the difference between metrics is
+usually more pronounced in high dimension (in particular for euclidean
+and cityblock).
     
     
-def write_with_harness(codefile, sourcefile, start_linenum, linebuffer):
-    '''write output with additional lines to make code likely compilable'''
-    # add commonly used headers, so that lines can likely compile.
-    # This is work in progress, the main issue remains handling class
-    # declarations in in-function code differently
-    with io.open(codefile, 'w') as code_filehandle:
-        code_filehandle.write('''\
-#include<stdio.h>      // by md-split
-#include<stdlib.h>     // by md-split
-#include<tuple>        // by md-split
-#include<utility>      // by md-split
-#include<limits>       // by md-split
-#include<functional>   // by md-split
-#include<string>       // by md-split
-#include<map>          // by md-split
-#include<iostream>     // by md-split
-#include<vector>       // by md-split
-#include<algorithm>    // by md-split
-#include<memory>       // by md-split
-using namespace std;   // by md-split
-// %s : %s
-''' % (sourcefile, start_linenum))
-        # TODO: if not toplevel code, wrap inside class
-        for codeline in linebuffer:
-            code_filehandle.write(codeline)
+def inet_pton(address_family, ip_string):
+    addr = sockaddr()
+    addr.sa_family = address_family
+    addr_size = ctypes.c_int(ctypes.sizeof(addr))
+    
+    - RecognitionException
+  - MismatchedRangeException
+  - MismatchedSetException
+    - MismatchedNotSetException
+    .
+  - MismatchedTokenException
+  - MismatchedTreeNodeException
+  - NoViableAltException
+  - EarlyExitException
+  - FailedPredicateException
+  .
+.
     
     
-    {  # An else clause should be on the same line as the preceding closing brace.
-  if Match(r'\s*else\b\s*(?:if\b|\{|$)', line):
-    prevline = GetPreviousNonBlankLine(clean_lines, linenum)[0]
-    if Match(r'\s*}\s*$', prevline):
-      error(filename, linenum, 'whitespace/newline', 4,
-            'An else should appear on the same line as the preceding }')
+    {
+    {        tokens.insertAfter('pass1', t, 'text to put after t');}
+        tokens.insertAfter('pass2', u, 'text after u');}
+        System.out.println(tokens.toString('pass1'));
+        System.out.println(tokens.toString('pass2'));
     
-                if point.name == 'p':
-                link = point.find('a')
-                if link is not None:
-                    link = clean_pdf_link(link.attrs['href'])
-                    ext = get_extension(link)
-                    print(ext)
-                    if not ext in forbidden_extensions:
-                        print(shorten_title(point.text) + ' (' + link + ')')
-                        try:
-                            name = clean_text(point.text.split('[' + ext + ']')[0])
-                            fullname = '.'.join((name, ext))
-                            if not os.path.exists('/'.join((current_directory, fullname)) ):
-                                download_pdf(link, current_directory, '.'.join((name, ext)))
-                        except KeyboardInterrupt:
-                            try:
-                                print('Press Ctrl-C in 1 second to quit')
-                                time.sleep(1)
-                            except KeyboardInterrupt:
-                                print('Cancelling..')
-                                break
-                        except:
-                            failures.append(point.text)
-                        
-        point = point.next_sibling          
+        def test_parse_from_file3(self):
+        with open(util.get_data_filename('multiline_quotes.conf')) as handle:
+            parsed = util.filter_comments(load(handle))
+        self.assertEqual(
+            parsed,
+            [[['http'],
+                [[['server'],
+                    [['listen', '*:443'],
+                    [['location', '/'],
+                        [['body_filter_by_lua',
+                          '\'ngx.ctx.buffered = (ngx.ctx.buffered or '')'
+                          ' .. string.sub(ngx.arg[1], 1, 1000)\n'
+                          '                            '
+                          'if ngx.arg[2] then\n'
+                          '                              '
+                          'ngx.var.resp_body = ngx.ctx.buffered\n'
+                          '                            end\'']]]]]]]])
+    
+        def setUp(self):
+        from acme.errors import PollError
+        self.timeout = PollError(
+            exhausted=set([mock.sentinel.AR]),
+            updated={})
+        self.invalid = PollError(exhausted=set(), updated={
+            mock.sentinel.AR: mock.sentinel.AR2})
+    
+    # Grouping the document tree into Texinfo files. List of tuples
+# (source start file, target name, title, author,
+#  dir menu entry, description, category)
+texinfo_documents = [
+    (master_doc, 'certbot-apache', u'certbot-apache Documentation',
+     author, 'certbot-apache', 'One line description of project.',
+     'Miscellaneous'),
+]
