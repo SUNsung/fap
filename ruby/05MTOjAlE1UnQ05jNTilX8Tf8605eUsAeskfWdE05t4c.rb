@@ -1,55 +1,37 @@
 
         
-          def all_projects(current_user)
-    projects = []
-    
-          def plugin_gem_names
-        (Gem.loaded_specs.keys - ['capistrano']).grep(/capistrano/).sort
-      end
-    end
-  end
-end
+        # puts '\nDone.'
 
     
-        def after(task, post_task, *args, &block)
-      Rake::Task.define_task(post_task, *args, &block) if block_given?
-      task = Rake::Task[task]
-      task.enhance do
-        post = Rake.application.lookup(post_task, task.scope)
-        raise ArgumentError, 'Task #{post_task.inspect} not found' unless post
-        post.invoke
-      end
-    end
-    
-      desc 'Finish the rollback, clean up server(s).'
-  task :finishing_rollback do
+      def validate_type
+    errors.add(:type, 'cannot be changed once an instance has been created') if type_changed? && !new_record?
+    errors.add(:type, 'is not a valid type') unless self.class.valid_type?(type)
   end
     
-    module RuboCop
-  module Cop
-    module Style
-      # This cop checks for optional arguments to methods
-      # that do not come at the end of the argument list
-      #
-      # @example
-      #   # bad
-      #   def foo(a = 1, b, c)
-      #   end
-      #
-      #   # good
-      #   def baz(a, b, c = 1)
-      #   end
-      #
-      #   def foobar(a = 1, b = 2, c = 3)
-      #   end
-      class OptionalArguments < Cop
-        MSG = 'Optional arguments should appear at the end ' \
-              'of the argument list.'.freeze
+    EOS
+end
     
-        context 'opening brace on same line as first element' do
-      context 'last element has a trailing comma' do
-        it 'autocorrects closing brace on different line from last element' do
-          new_source = autocorrect_source(['#{prefix}#{open}#{a}, # a',
-                                           '#{b}, # b',
-                                           close,
-                                           suffix])
+    With optional '-t <bundle-id>', silently test if a given app
+is running, exiting with an error code if not.
+    
+    require 'formula'
+require 'system_config'
+require 'stringio'
+require 'socket'
+    
+              urls += mirrors
+    
+      def as_json(options={})
+    {
+      poll_id:             id,
+      post_id:             status_message.id,
+      question:            question,
+      poll_answers:        poll_answers,
+      participation_count: participation_count
+    }
+  end
+    
+        def index
+      pods_json = PodPresenter.as_collection(Pod.all)
+    
+            private
