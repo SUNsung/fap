@@ -1,177 +1,354 @@
 
         
-        class EventDisabler : public ui::EventRewriter {
- public:
-  EventDisabler();
-  ~EventDisabler() override;
+        
+    {        // Matrix row is used 'cacheablecolsV' times from the cache. If too small,
+        // then it is also not efficient. So apply a looser upper bound.
+        // Needs to be at least 4 to allow for dotprod4() optimization (4 columns of V in parallel)
+        if (cacheablecolsV < 16)
+            cacheablecolsV = 16;
+        return cacheablecolsV;
     }
     
-      // Download Notifications --------------------------------------------------
     
-      // Register an observer for when a certain |accelerator| is struck. Returns
-  // true if register successfully, or false if 1) the specificied |accelerator|
-  // has been registered by another caller or other native applications, or
-  // 2) shortcut handling is suspended.
-  //
-  // Note that we do not support recognizing that an accelerator has been
-  // registered by another application on all platforms. This is a per-platform
-  // consideration.
-  bool RegisterAccelerator(const ui::Accelerator& accelerator,
-                           Observer* observer);
+    {
+    {
+    {}}}
+
     
-    // An interface the PrintViewManager uses to notify an observer when the print
-// dialog is shown. Register the observer via PrintViewManager::set_observer.
-class PrintViewManagerObserver {
- public:
-  // Notifies the observer that the print dialog was shown.
-  virtual void OnPrintDialogShown() = 0;
+        bnNodes = m_net->SortByGlobalEvalOrder(bnNodes);
+    for (auto& node : bnNodes)
+    {
+        let bnNode = static_pointer_cast<BatchNormalizationNode<ElemType>>(node);
+        size_t actualMBSize = 0;
     }
     
-    #ifndef CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
-#define CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
+        // other goodies I came across (intrin.h):
+    //  - _mm_prefetch
+    //  - _mm_stream_ps --store without polluting cache
+    //  - unknown: _mm_addsub_ps, _mm_hsub_ps, _mm_movehdup_ps, _mm_moveldup_ps, _mm_blend_ps, _mm_blendv_ps, _mm_insert_ps, _mm_extract_ps, _mm_round_ps
+    //  - _mm_dp_ps dot product! http://msdn.microsoft.com/en-us/library/bb514054.aspx
+    //    Not so interesting for long vectors, we get better numerical precision with parallel adds and hadd at the end
     
-    #include 'chrome/browser/speech/tts_platform.h'
+        template<template<typename> class ValueContainer> 
+    void ForwardPassT(const std::vector < ValueBuffer<ElemType, ValueContainer> >& inputs,
+                      std::vector < ValueBuffer<ElemType, ValueContainer> >& outputs, bool resetRNN);
     
-    #include 'base/files/file_path.h'
+    TEST(LogTest, MarginalTrailer2) {
+  // Make a trailer that is exactly the same length as an empty record.
+  const int n = kBlockSize - 2*kHeaderSize;
+  Write(BigString('foo', n));
+  ASSERT_EQ(kBlockSize - kHeaderSize, WrittenBytes());
+  Write('bar');
+  ASSERT_EQ(BigString('foo', n), Read());
+  ASSERT_EQ('bar', Read());
+  ASSERT_EQ('EOF', Read());
+  ASSERT_EQ(0, DroppedBytes());
+  ASSERT_EQ('', ReportMessage());
+}
     
-    #include 'db/dbformat.h'
-#include 'util/logging.h'
-#include 'util/testharness.h'
+      // compact database
+  std::string start_key = Key1(0);
+  std::string end_key = Key1(kNumKeys - 1);
+  leveldb::Slice least(start_key.data(), start_key.size());
+  leveldb::Slice greatest(end_key.data(), end_key.size());
     
-      ReadOptions ro;
-  ro.fill_cache = false;
-  Iterator* iter = table->NewIterator(ro);
-  std::string r;
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    r.clear();
-    ParsedInternalKey key;
-    if (!ParseInternalKey(iter->key(), &key)) {
-      r = 'badkey '';
-      AppendEscapedStringTo(&r, iter->key());
-      r += '' => '';
-      AppendEscapedStringTo(&r, iter->value());
-      r += ''\n';
-      dst->Append(r);
+      const FilterPolicy* policy_;
+  std::string keys_;              // Flattened key contents
+  std::vector<size_t> start_;     // Starting index in keys_ of each key
+  std::string result_;            // Filter data computed so far
+  std::vector<Slice> tmp_keys_;   // policy_->CreateFilter() argument
+  std::vector<uint32_t> filter_offsets_;
+    
+    
+    {  Status result = metaindex_handle_.DecodeFrom(input);
+  if (result.ok()) {
+    result = index_handle_.DecodeFrom(input);
+  }
+  if (result.ok()) {
+    // We skip over any leftover data (just padding for now) in 'input'
+    const char* end = magic_ptr + 8;
+    *input = Slice(end, input->data() + input->size() - end);
+  }
+  return result;
+}
+    
+    
+    {  unsigned char data[48] = {
+    0x01, 0xc0, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x14, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x04, 0x00,
+    0x00, 0x00, 0x00, 0x14,
+    0x00, 0x00, 0x00, 0x18,
+    0x28, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x02, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+  };
+  ASSERT_EQ(0xd9963a56, Value(reinterpret_cast<char*>(data), sizeof(data)));
+}
+    
+    // The FALLTHROUGH_INTENDED macro can be used to annotate implicit fall-through
+// between switch labels. The real definition should be provided externally.
+// This one is a fallback version for unsupported compilers.
+#ifndef FALLTHROUGH_INTENDED
+#define FALLTHROUGH_INTENDED do { } while (0)
+#endif
+    
+    double Histogram::StandardDeviation() const {
+  if (num_ == 0.0) return 0;
+  double variance = (sum_squares_ * num_ - sum_ * sum_) / (num_ * num_);
+  return sqrt(variance);
+}
+    
+    static std::string IKey(const std::string& user_key,
+                        uint64_t seq,
+                        ValueType vt) {
+  std::string encoded;
+  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
+  return encoded;
+}
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+typedef long atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef std::atomic<long> atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef boost::detail::atomic_count atomic_count;
+inline void increment(atomic_count& a, long b) { while (b > 0) ++a, --b; }
+#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+    
+      // Return the maximum size for data in the buffer.
+  size_type capacity() const
+  {
+    return buffer_.size();
+  }
+    
+    template <typename Function, typename Context>
+inline void invoke(const Function& function, Context& context)
+{
+#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
+  Function tmp(function);
+  tmp();
+#else
+  using boost::asio::asio_handler_invoke;
+  asio_handler_invoke(function, boost::asio::detail::addressof(context));
+#endif
+}
+    
+    class winrt_buffer_impl :
+  public Microsoft::WRL::RuntimeClass<
+    Microsoft::WRL::RuntimeClassFlags<
+      Microsoft::WRL::RuntimeClassType::WinRtClassicComMix>,
+    ABI::Windows::Storage::Streams::IBuffer,
+    Windows::Storage::Streams::IBufferByteAccess>
+{
+public:
+  explicit winrt_buffer_impl(const boost::asio::const_buffer& b)
+  {
+    bytes_ = const_cast<byte*>(boost::asio::buffer_cast<const byte*>(b));
+    length_ = boost::asio::buffer_size(b);
+    capacity_ = boost::asio::buffer_size(b);
+  }
+    }
+    
+    #include <boost/asio/detail/push_options.hpp>
+    
+    extern JSClass  *jsb_cocosbuilder_CCBReader_class;
+extern JSObject *jsb_cocosbuilder_CCBReader_prototype;
+    
+    extern JSClass  *jsb_cocos2d_Physics3DComponent_class;
+extern JSObject *jsb_cocos2d_Physics3DComponent_prototype;
+    
+    bool js_cocos2dx_studio_BoneNode_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_BoneNode_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_BoneNode(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_BoneNode_getDebugDrawWidth(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_getChildBones(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_getBlendFunc(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_getAllSubBones(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_setBlendFunc(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_setDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_getVisibleSkinsRect(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_getAllSubSkins(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_displaySkin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_isDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_addSkin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_getRootSkeletonNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_setDebugDrawLength(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_getSkins(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_getVisibleSkins(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_setDebugDrawWidth(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_getDebugDrawLength(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_setDebugDrawColor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_getDebugDrawColor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BoneNode_BoneNode(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    #if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+    
+    #ifdef __cplusplus
+extern 'C' {
+#endif
+#include 'tolua++.h'
+#ifdef __cplusplus
+}
+#endif
+    
+    
+    
+    
+    
+    
+    
+    void GLESDebugDraw::DrawTransform(const b2Transform& xf)
+{
+    b2Vec2 p1 = xf.p, p2;
+    const float32 k_axisScale = 0.4f;
+    p2 = p1 + k_axisScale * xf.q.GetXAxis();
+    DrawSegment(p1, p2, b2Color(1,0,0));
+    }
+    
+    
+    {			// Bottom horizontal
+			shape.Set(b2Vec2(-20.0f, -20.0f), b2Vec2(20.0f, -20.0f));
+			ground->CreateFixture(&sd);
+		}
+    
+    	b2Body* m_body1;
+	b2Vec2 m_velocity;
+	float32 m_angularVelocity;
+	b2PolygonShape m_shape1;
+	b2PolygonShape m_shape2;
+	b2Fixture* m_piece1;
+	b2Fixture* m_piece2;
+    
+    			b2FixtureDef fd;
+			fd.shape = &shape;
+			fd.density = 1.0f;
+    
+    			b2FixtureDef fd;
+			fd.shape = &shape;
+			fd.density = 1.0f;
+    
+    
+    {  EXPECT_EQ(D.cols(), 5);
+  EXPECT_EQ(D.rows(), 1);
+  EXPECT_FLOAT_EQ(D(0, 0), 0);
+  EXPECT_FLOAT_EQ(D(0, 1), 0);
+  EXPECT_FLOAT_EQ(D(0, 2), 0);
+  EXPECT_FLOAT_EQ(D(0, 3), 0);
+  EXPECT_FLOAT_EQ(D(0, 4), 0);
+}
+    
+      for (StopSignLaneVehicles::iterator it = watch_vehicles->begin();
+       it != watch_vehicles->end();
+       /*no increment*/) {
+    std::vector<std::string>& vehicle_ids = it->second;
+    // clean obstacles not in current perception
+    for (auto obstacle_it = vehicle_ids.begin();
+         obstacle_it != vehicle_ids.end();
+         /*no increment*/) {
+      if (obstacle_ids.count(*obstacle_it) == 0) {
+        ADEBUG << 'lane[' << it->first << '] obstacle[' << *obstacle_it
+               << '] not exist any more. erase.';
+        obstacle_it = vehicle_ids.erase(obstacle_it);
+      } else {
+        ++obstacle_it;
+      }
+    }
+    if (vehicle_ids.empty()) {
+      watch_vehicles->erase(it++);
     } else {
-      r = ''';
-      AppendEscapedStringTo(&r, key.user_key);
-      r += '' @ ';
-      AppendNumberTo(&r, key.sequence);
-      r += ' : ';
-      if (key.type == kTypeDeletion) {
-        r += 'del';
-      } else if (key.type == kTypeValue) {
-        r += 'val';
-      } else {
-        AppendNumberTo(&r, key.type);
-      }
-      r += ' => '';
-      AppendEscapedStringTo(&r, iter->value());
-      r += ''\n';
-      dst->Append(r);
+      ++it;
     }
   }
-  s = iter->status();
-  if (!s.ok()) {
-    dst->Append('iterator error: ' + s.ToString() + '\n');
+    
+    #include 'modules/planning/common/obstacle.h'
+    
+    bool Polygon2d::Contains(const LineSegment2d &line_segment) const {
+  if (line_segment.length() <= kMathEpsilon) {
+    return IsPointIn(line_segment.start());
   }
-    
-    
-    {}  // namespace leveldb
-    
-    
-    {  std::vector< std::pair<int, InternalKey> > compact_pointers_;
-  DeletedFileSet deleted_files_;
-  std::vector< std::pair<int, FileMetaData> > new_files_;
-};
-    
-    TEST(FindFileTest, OverlapSequenceChecks) {
-  Add('200', '200', 5000, 3000);
-  ASSERT_TRUE(! Overlaps('199', '199'));
-  ASSERT_TRUE(! Overlaps('201', '300'));
-  ASSERT_TRUE(Overlaps('200', '200'));
-  ASSERT_TRUE(Overlaps('190', '200'));
-  ASSERT_TRUE(Overlaps('200', '210'));
+  CHECK_GE(points_.size(), 3);
+  if (!IsPointIn(line_segment.start())) {
+    return false;
+  }
+  if (!IsPointIn(line_segment.end())) {
+    return false;
+  }
+  if (!is_convex_) {
+    std::vector<LineSegment2d> overlaps = GetAllOverlaps(line_segment);
+    double total_length = 0;
+    for (const auto &overlap_seg : overlaps) {
+      total_length += overlap_seg.length();
+    }
+    return total_length >= line_segment.length() - kMathEpsilon;
+  }
+  return true;
 }
     
-    TEST(WriteBatchTest, Multiple) {
-  WriteBatch batch;
-  batch.Put(Slice('foo'), Slice('bar'));
-  batch.Delete(Slice('box'));
-  batch.Put(Slice('baz'), Slice('boo'));
-  WriteBatchInternal::SetSequence(&batch, 100);
-  ASSERT_EQ(100, WriteBatchInternal::Sequence(&batch));
-  ASSERT_EQ(3, WriteBatchInternal::Count(&batch));
-  ASSERT_EQ('Put(baz, boo)@102'
-            'Delete(box)@101'
-            'Put(foo, bar)@100',
-            PrintContents(&batch));
+      /**
+   * @brief Compute the distance from a point to the boundary of the polygon.
+   *        This distance is equal to the minimal distance from the point
+   *        to the edges of the polygon.
+   * @param point The point to compute whose distance to the polygon.
+   * @return The distance from the point to the polygon's boundary.
+   */
+  double DistanceToBoundary(const Vec2d &point) const;
+    
+    
+    {
+    {    AINFO << 'Lidar to ' << camera_names_[i] << ' transform: ';
+    AINFO << camera_coeffient.camera_extrinsic;
+  }
+  camera_coeffient_.resize(camera_names_.size());
+  camera_coeffient_[kLongFocusIdx] = camera_coeffients['camera_25mm_focus'];
+  camera_coeffient_[kShortFocusIdx] = camera_coeffients['camera_6mm_focus'];
+  // auto &short_focus_camera_coeffient = camera_coeffients['camera_6mm_focus'];
+  // auto &long_focus_camera_coeffient = camera_coeffients['camera_25mm_focus'];
+  camera_coeffient_[kLongFocusIdx].camera_extrinsic =
+      camera_coeffient_[kLongFocusIdx].camera_extrinsic *
+      camera_coeffient_[kShortFocusIdx].camera_extrinsic;
+  AINFO << 'Lidar to long(25mm): ';
+  AINFO << camera_coeffient_[kLongFocusIdx].camera_extrinsic;
+  return true;
 }
     
-        if (bytes_ > 0) {
-      char rate[100];
-      snprintf(rate, sizeof(rate), '%6.1f MB/s',
-               (bytes_ / 1048576.0) / (finish - start_));
-      if (!message_.empty()) {
-        message_  = std::string(rate) + ' ' + message_;
-      } else {
-        message_ = rate;
-      }
+      virtual ~MultiCamerasProjection() = default;
+  virtual bool Init();
+  virtual bool Project(const CarPose &pose, const ProjectOption &option,
+                       Light *light) const;
+  std::string name() const { return 'TLPreprocessor'; }
+    
+    bool UnityRecognize::Init() {
+  if (!GetProtoFromFile(FLAGS_traffic_light_recognizer_config, &config_)) {
+    AERROR << 'Cannot get config proto from file: '
+           << FLAGS_traffic_light_recognizer_config;
+    return false;
+  }
     }
     
     
-    {}  // namespace leveldb
-    
-      // Compares img with the baseline image and saves the resulting distance map
-  // inside the object. The provided image must have the same dimensions as the
-  // baseline image.
-  virtual void Compare(const OutputImage& img) = 0;
-    
-    static const int kCbToGreenTable[256] = {
-  2919680,  2897126,  2874572,  2852018,  2829464,  2806910,  2784356,  2761802,
-  2739248,  2716694,  2694140,  2671586,  2649032,  2626478,  2603924,  2581370,
-  2558816,  2536262,  2513708,  2491154,  2468600,  2446046,  2423492,  2400938,
-  2378384,  2355830,  2333276,  2310722,  2288168,  2265614,  2243060,  2220506,
-  2197952,  2175398,  2152844,  2130290,  2107736,  2085182,  2062628,  2040074,
-  2017520,  1994966,  1972412,  1949858,  1927304,  1904750,  1882196,  1859642,
-  1837088,  1814534,  1791980,  1769426,  1746872,  1724318,  1701764,  1679210,
-  1656656,  1634102,  1611548,  1588994,  1566440,  1543886,  1521332,  1498778,
-  1476224,  1453670,  1431116,  1408562,  1386008,  1363454,  1340900,  1318346,
-  1295792,  1273238,  1250684,  1228130,  1205576,  1183022,  1160468,  1137914,
-  1115360,  1092806,  1070252,  1047698,  1025144,  1002590,   980036,   957482,
-   934928,   912374,   889820,   867266,   844712,   822158,   799604,   777050,
-   754496,   731942,   709388,   686834,   664280,   641726,   619172,   596618,
-   574064,   551510,   528956,   506402,   483848,   461294,   438740,   416186,
-   393632,   371078,   348524,   325970,   303416,   280862,   258308,   235754,
-   213200,   190646,   168092,   145538,   122984,   100430,    77876,    55322,
-    32768,    10214,   -12340,   -34894,   -57448,   -80002,  -102556,  -125110,
-  -147664,  -170218,  -192772,  -215326,  -237880,  -260434,  -282988,  -305542,
-  -328096,  -350650,  -373204,  -395758,  -418312,  -440866,  -463420,  -485974,
-  -508528,  -531082,  -553636,  -576190,  -598744,  -621298,  -643852,  -666406,
-  -688960,  -711514,  -734068,  -756622,  -779176,  -801730,  -824284,  -846838,
-  -869392,  -891946,  -914500,  -937054,  -959608,  -982162, -1004716, -1027270,
- -1049824, -1072378, -1094932, -1117486, -1140040, -1162594, -1185148, -1207702,
- -1230256, -1252810, -1275364, -1297918, -1320472, -1343026, -1365580, -1388134,
- -1410688, -1433242, -1455796, -1478350, -1500904, -1523458, -1546012, -1568566,
- -1591120, -1613674, -1636228, -1658782, -1681336, -1703890, -1726444, -1748998,
- -1771552, -1794106, -1816660, -1839214, -1861768, -1884322, -1906876, -1929430,
- -1951984, -1974538, -1997092, -2019646, -2042200, -2064754, -2087308, -2109862,
- -2132416, -2154970, -2177524, -2200078, -2222632, -2245186, -2267740, -2290294,
- -2312848, -2335402, -2357956, -2380510, -2403064, -2425618, -2448172, -2470726,
- -2493280, -2515834, -2538388, -2560942, -2583496, -2606050, -2628604, -2651158,
- -2673712, -2696266, -2718820, -2741374, -2763928, -2786482, -2809036, -2831590,
+    {  /**
+   * @brief Compute a trajectory for execution.
+   * @param planning_init_point The trajectory point where planning starts.
+   * @param frame Current planning frame.
+   * @param reference_line_info The computed reference line.
+   * @return OK if planning succeeds; error otherwise.
+   */
+  virtual apollo::common::Status PlanOnReferenceLine(
+      const common::TrajectoryPoint& planning_init_point, Frame* frame,
+      ReferenceLineInfo* reference_line_info) = 0;
 };
-    
-    
-    {}  // namespace guetzli
-    
-    #include <algorithm>
-#include <string.h>
-    
-    enum JpegReadMode {
-  JPEG_READ_HEADER,   // only basic headers
-  JPEG_READ_TABLES,   // headers and tables (quant, Huffman, ...)
-  JPEG_READ_ALL,      // everything
-};
-    
-    // Preprocesses U and V channel for better results after downsampling.
