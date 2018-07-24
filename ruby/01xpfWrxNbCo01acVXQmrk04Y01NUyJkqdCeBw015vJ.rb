@@ -1,71 +1,80 @@
 
         
-          def worker_id(config = nil)
-    '#{self.class.to_s}-#{id}-#{Digest::SHA1.hexdigest((config.presence || options).to_json)}'
+          def failure_message
+    exception = request.respond_to?(:get_header) ? request.get_header('omniauth.error') : request.env['omniauth.error']
+    error   = exception.error_reason if exception.respond_to?(:error_reason)
+    error ||= exception.error        if exception.respond_to?(:error)
+    error ||= (request.respond_to?(:get_header) ? request.get_header('omniauth.error.type') : request.env['omniauth.error.type']).to_s
+    error.to_s.humanize if error
   end
     
-      module SortableTableHelper
-    # :call-seq:
-    #   sortable_column(attribute, default_direction = 'desc', name: attribute.humanize)
-    def sortable_column(attribute, default_direction = nil, options = nil)
-      if options.nil? && (options = Hash.try_convert(default_direction))
-        default_direction = nil
-      end
-      default_direction ||= 'desc'
-      options ||= {}
-      name = options[:name] || attribute.humanize
-      selected = @table_sort_info[:attribute].to_s == attribute
-      if selected
-        direction = @table_sort_info[:direction]
-        new_direction = direction.to_s == 'desc' ? 'asc' : 'desc'
-        classes = 'selected #{direction}'
-      else
-        classes = ''
-        new_direction = default_direction
-      end
-      link_to(name, url_for(sort: '#{attribute}.#{new_direction}'), class: classes)
+        if resource.errors.empty?
+      set_flash_message!(:notice, :confirmed)
+      respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
     end
   end
-end
-
     
-    def each_schema_load_environment
-  # If we're in development, also run this for the test environment.
-  # This is a somewhat hacky way to do this, so here's why:
-  # 1. We have to define this before we load the schema, or we won't
-  #    have a timestamp_id function when we get to it in the schema.
-  # 2. db:setup calls db:schema:load_if_ruby, which calls
-  #    db:schema:load, which we define above as having a prerequisite
-  #    of this task.
-  # 3. db:schema:load ends up running
-  #    ActiveRecord::Tasks::DatabaseTasks.load_schema_current, which
-  #    calls a private method `each_current_configuration`, which
-  #    explicitly also does the loading for the `test` environment
-  #    if the current environment is `development`, so we end up
-  #    needing to do the same, and we can't even use the same method
-  #    to do it.
+        def confirmation_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :confirmation_instructions, opts)
+    end
     
-      def text_url
-    object.local? ? medium_url(object) : nil
-  end
+          @sign_out_via = options[:sign_out_via] || Devise.sign_out_via
+      @format = options[:format]
     
-      def deliver_digest
-    NotificationMailer.digest(user.account).deliver_now!
-    user.touch(:last_emailed_at)
-  end
-end
-
+        private
     
-            def find_address
-          if @order.bill_address_id == params[:id].to_i
-            @order.bill_address
-          elsif @order.ship_address_id == params[:id].to_i
-            @order.ship_address
-          else
-            raise CanCan::AccessDenied
+          when :bye
+        sessions.delete(s[:session])
+    
+    # This is a completely hackish way to do this, and could break with future
+# versions of the JDK.  Need to find a better way to use sun.security.tools.KeyTool
+# and .JarSigner than modifying the source.  These rely on internal APIs that may
+# change.
+signer = Rjb::import('javaCompile.SignJar')
+#clsKeyTool = Rjb::import('sun.security.tools.KeyTool')
+#clsKeyTool = Rjb::import('sun.security.tools.KeyToolMSF')
+#clsJarSigner = Rjb::import('javaCompile.SignJar.JarSignerMSF')
+#clsJarSigner = Rjb::import('sun.security.tools.JarSigner')
+#clsJarSigner = Rjb::import('sun.security.tools.JarSignerMSF')
+    
+          private
+    
+        def tasks_without_stage_dependency
+      stages + default_tasks
+    end
+    
+          it { expect(subject).to be_truthy }
+    end
+    
+        alias :empty? :empty_file?
+    
+            def description
+          'have an attachment named #{@attachment_name}'
+        end
+    
+            def type_allowed?(type)
+          @subject.send('#{@attachment_name}_content_type=', type)
+          @subject.valid?
+          @subject.errors[:'#{@attachment_name}_content_type'].blank?
+        end
+    
+            def failure_message_when_negated
+          'Attachment #{@attachment_name} should not be required'
+        end
+        alias negative_failure_message failure_message_when_negated
+    
+                if options.has_key?(validator_kind)
+              validator_options = options.delete(validator_kind)
+              validator_options = {} if validator_options == true
+              conditional_options = options.slice(:if, :unless)
+              Array.wrap(validator_options).each do |local_options|
+                method_name = Paperclip::Validators.const_get(constant.to_s).helper_method_name
+                send(method_name, attributes, local_options.merge(conditional_options))
+              end
+            end
           end
         end
       end
-    end
-  end
-end
