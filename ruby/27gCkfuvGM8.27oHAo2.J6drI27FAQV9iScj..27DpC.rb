@@ -1,37 +1,37 @@
 
         
-        end
-
-    
-          if options[:type] == :array
-        options[:roles] << :completable
-        class_eval <<-EOF
-          def complete_#{name}
-            #{options[:values]}.map { |v| {text: v, id: v} }
-          end
-        EOF
+            #
+    # @param ips [String] IP range(s)
+    # @return [true] if actions on ips are allowed.
+    # @return [false] if actions are not allowed on ips.
+    def allow_actions_on?(ips)
+      return true unless limit_to_network
+      return true unless boundary
+      return true if boundary.empty?
+      boundaries = Shellwords.split(boundary)
+      return true if boundaries.empty? # It's okay if there is no boundary range after all
+      given_range = Rex::Socket::RangeWalker.new(ips)
+      return false unless given_range # Can't do things to nonexistant IPs
+      allowed = false
+      boundaries.each do |boundary_range|
+        ok_range = Rex::Socket::RangeWalker.new(boundary)
+        allowed  = true if ok_range.include_range? given_range
       end
-    
-        # Returns whether `string` is a valid IP address or IP address range.
-    #
-    # @return [true] if valid IP address or IP address range.
-    # @return [false] otherwise.
-    def valid_ip_or_range?(string)
-      range = Rex::Socket::RangeWalker.new(string)
-      range && range.ranges && range.ranges.any?
+      return allowed
     end
     
-    unless ENV['BUNDLE_GEMFILE']
-  require 'pathname'
+    class Parser
     
-      fd.close
+        def replace_all(file, regex, replacement = nil, &block)
+      log_transform regex, replacement
+      new_file = file.gsub(regex, replacement, &block)
+      raise 'replace_all #{regex}, #{replacement} NO MATCH' if file == new_file
+      new_file
+    end
     
-            # Remove it form the session objects so freeup
-        sessions.delete(s[:session])
+      # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = false
     
-    meterp.core.use('Stdapi')
-    
-      def get_result
-    @src.get_result
+      def test_image_helper
+    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
   end
-end
