@@ -1,260 +1,153 @@
-    def implements_to_string(cls):
-        cls.__unicode__ = cls.__str__
-        cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
-        return cls
+
+        
+        import datetime
+import io
+import json
+import textwrap
     
-            def __init__(self, name, doc=None):
-            self.name = name
-            self.__doc__ = doc
-        def _fail(self, *args, **kwargs):
-            raise RuntimeError('signalling support is unavailable '
-                               'because the blinker library is '
-                               'not installed.')
-        send = lambda *a, **kw: None
-        connect = disconnect = has_receivers_for = receivers_for = \
-            temporarily_connected_to = connected_to = _fail
-        del _fail
+        def to_screen(self, s, skip_eol=None):
+        print(s)
     
-        def dispatch_request(self):
-        '''Subclasses have to override this method to implement the
-        actual view function code.  This method is called with all
-        the arguments from the URL rule.
-        '''
-        raise NotImplementedError()
+                    m = re.search(r'(?<=\s)u[\''](?!\)|,|$)', code)
+                if m is not None:
+                    self.assertTrue(
+                        m is None,
+                        'u present in %s, around %s' % (
+                            fn, code[m.start() - 10:m.end() + 10]))
     
-                if next(lineiter).count('-') != len(match.group(0)):
-                continue
+    try:
+    from .lazy_extractors import *
+    from .lazy_extractors import _ALL_CLASSES
+    _LAZY_LOADER = True
+except ImportError:
+    _LAZY_LOADER = False
+    from .extractors import *
     
+            webpage = self._download_webpage(url, video_id)
+        key = self._search_regex(
+            r'src=['\']https?://[^/]+/embed/([A-Za-z0-9_-]+)', webpage, 'key')
     
-def test_installed_package_paths(limit_loader, modules_tmpdir,
-                                 modules_tmpdir_prefix, purge_module,
-                                 monkeypatch):
-    installed_path = modules_tmpdir.mkdir('path')
-    monkeypatch.syspath_prepend(installed_path)
+        class Tag2(JSONTag):
+        key = ' 2'
     
     
-def test_teardown_with_previous_exception(app):
-    buffer = []
-    
-        def inner(r):
-        r.headers['Authorization'] = header
-        return r
-    
-        def get_converter(self, mime):
-        if is_valid_mime(mime):
-            for converter_class in plugin_manager.get_converters():
-                if converter_class.supports(mime):
-                    return converter_class(mime)
-    
-        '''
-)
-positional.add_argument(
-    'items',
-    metavar='REQUEST_ITEM',
-    nargs=ZERO_OR_MORE,
-    default=None,
-    type=KeyValueArgType(*SEP_GROUP_ALL_ITEMS),
-    help=r'''
-    Optional key-value pairs to be included in the request. The separator used
-    determines the type:
+#: Log messages to :func:`~flask.logging.wsgi_errors_stream` with the format
+#: ``[%(asctime)s] %(levelname)s in %(module)s: %(message)s``.
+default_handler = logging.StreamHandler(wsgi_errors_stream)
+default_handler.setFormatter(logging.Formatter(
+    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+))
     
     
-@pytest.mark.parametrize('argument_name', ['--auth-type', '-A'])
-def test_digest_auth(httpbin_both, argument_name):
-    r = http(argument_name + '=digest', '--auth=user:password',
-             'GET', httpbin_both.url + '/digest-auth/auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
+# Core signals.  For usage examples grep the source code or consult
+# the API documentation in docs/api.rst as well as docs/signals.rst
+template_rendered = _signals.signal('template-rendered')
+before_render_template = _signals.signal('before-render-template')
+request_started = _signals.signal('request-started')
+request_finished = _signals.signal('request-finished')
+request_tearing_down = _signals.signal('request-tearing-down')
+got_request_exception = _signals.signal('got-request-exception')
+appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
+appcontext_pushed = _signals.signal('appcontext-pushed')
+appcontext_popped = _signals.signal('appcontext-popped')
+message_flashed = _signals.signal('message-flashed')
+
     
+    from jinja2 import BaseLoader, Environment as BaseEnvironment, \
+     TemplateNotFound
     
-def to_native_string(string, encoding='ascii'):
-    '''Given a string object, regardless of type, returns a representation of
-    that string in the native string type, encoding and decoding where
-    necessary. This assumes ASCII unless told otherwise.
-    '''
-    if isinstance(string, builtin_str):
-        out = string
+        # Get (branch, commit) if running from a git repo.
+    head = git.get_head(kwargs['repo_path'])
+    
+            # cookie handler
+        ssl_context = request.HTTPSHandler(
+            context=ssl.SSLContext(ssl.PROTOCOL_TLSv1))
+        cookie_handler = request.HTTPCookieProcessor()
+        opener = request.build_opener(ssl_context, cookie_handler)
+        opener.addheaders = [
+            ('Referer', self.url),
+            ('Cookie',
+             'CloudFront-Policy=%s;CloudFront-Signature=%s;CloudFront-Key-Pair-Id=%s' % (scp, scs, sck))
+        ]
+        request.install_opener(opener)
+    
+    def kuwo_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    if 'www.kuwo.cn/yinyue' in url:
+        rid=match1(url,'yinyue/(\d+)')
+        kuwo_download_by_rid(rid,output_dir, merge, info_only)
     else:
-        if is_py2:
-            out = string.encode(encoding)
-        else:
-            out = string.decode(encoding)
+        kuwo_playlist_download(url,output_dir,merge,info_only)
     
-        get_item_parameters = pytest.mark.parametrize(
-        'key, value', (
-            ('bad_gateway', 502),
-            ('not_a_key', None)
-        )
-    )
-    
-        return {'name': implementation, 'version': implementation_version}
-    
-        def __eq__(self, other):
-        return all([
-            self.username == getattr(other, 'username', None),
-            self.password == getattr(other, 'password', None)
-        ])
-    
-        model.fit(x_train, y_train, batch_size=batch_size,
-              epochs=epochs // 3, verbose=0,
-              sample_weight=sample_weight)
-    model.fit(x_train, y_train, batch_size=batch_size,
-              epochs=epochs // 3, verbose=0,
-              sample_weight=sample_weight,
-              validation_split=0.1)
-    
-        preds = clf.predict(X_test, batch_size=batch_size)
-    assert preds.shape == (num_test, )
-    for prediction in np.unique(preds):
-        assert prediction in string_classes
-    
-            layer = layer_class(units, return_sequences=False,
-                            input_shape=(timesteps, input_size),
-                            activity_regularizer='l2')
-        assert layer.activity_regularizer
-        x = keras.backend.variable(np.ones((num_samples,
-                                            timesteps,
-                                            input_size)))
-        layer(x)
-        assert len(layer.get_losses_for(x)) == 1
-    
-            # Test equivalence of convert_dense_weights_data_format
-        out1 = model1.predict(x)
-        layer_utils.convert_dense_weights_data_format(model1.layers[2], prev_shape, target_data_format)
-        for (src, dst) in zip(model1.layers, model2.layers):
-            dst.set_weights(src.get_weights())
-        out2 = model2.predict(transpose(x))
-    
-    
-def get_example_array():
-    np.random.seed(3537)
-    example_array = np.random.random((100, 100)) * 100. - 50.
-    example_array[0, 0] = 0.  # 0 could possibly cause trouble
-    return example_array
-    
-                # check state initialization
-            layer = convolutional_recurrent.ConvLSTM2D(filters=filters,
-                                                       kernel_size=(num_row, num_col),
-                                                       data_format=data_format,
-                                                       return_sequences=return_sequences)
-            layer.build(inputs.shape)
-            x = Input(batch_shape=inputs.shape)
-            initial_state = layer.get_initial_state(x)
-            y = layer(x, initial_state=initial_state)
-            model = Model(x, y)
-            assert model.predict(inputs).shape == layer.compute_output_shape(inputs.shape)
-    
-    print('Build model...')
-model = Sequential()
-    
-    
-def test_sparse_categorical_crossentropy_4d():
-    y_pred = K.variable(np.array([[[[0.7, 0.1, 0.2],
-                                    [0.0, 0.3, 0.7],
-                                    [0.1, 0.1, 0.8]],
-                                   [[0.3, 0.7, 0.0],
-                                    [0.3, 0.4, 0.3],
-                                    [0.2, 0.5, 0.3]],
-                                   [[0.8, 0.1, 0.1],
-                                    [1.0, 0.0, 0.0],
-                                    [0.4, 0.3, 0.3]]]]))
-    y_true = K.variable(np.array([[[0, 1, 0],
-                                   [2, 1, 0],
-                                   [2, 2, 1]]]))
-    expected_loss = - (np.log(0.7) + np.log(0.3) + np.log(0.1) +
-                       np.log(K.epsilon()) + np.log(0.4) + np.log(0.2) +
-                       np.log(0.1) + np.log(K.epsilon()) + np.log(0.3)) / 9
-    loss = K.eval(losses.sparse_categorical_crossentropy(y_true, y_pred))
-    assert np.isclose(expected_loss, np.mean(loss))
-    
-    
-class LinkedList(object):
-    
-    
-class Categorizer(object):
+    #----------------------------------------------------------------------
+def sina_xml_to_url_list(xml_data):
+    '''str->list
+    Convert XML to URL List.
+    From Biligrab.
+    '''
+    rawurl = []
+    dom = parseString(xml_data)
+    for node in dom.getElementsByTagName('durl'):
+        url = node.getElementsByTagName('url')[0]
+        rawurl.append(url.childNodes[0].data)
+    return rawurl
     
     from ..common import *
     
-    class MusicPlayOn(VideoExtractor):
-    name = 'MusicPlayOn'
+    from ..common import *
     
+    def get_marker(line):
+    matchlist = TAG_REGEX.findall(line)
+    if matchlist:
+        namematch = NAMED_A_TAG_REGEX.match(line)
+        if namematch:
+            return namematch.group(1) # group 0 is full match
     
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.write('Hello, world')
+    def test_main(verbose=None):
+    import sys
+    test_classes = (
+        TestBasic,
+        TestVariousIteratorArgs,
+        TestSubclass,
+        TestSubclassWithKwargs,
+        TestSequence,
+    )
     
-               The ``callback`` and ``streaming_callback`` arguments are
-           deprecated and will be removed in Tornado 6.0. Use the
-           returned `.Future` (and ``partial=True`` for
-           ``streaming_callback``) instead.
+    def _sync_flush(f):
+    '''Ensure changes to file f are physically on disk.'''
+    f.flush()
+    if hasattr(os, 'fsync'):
+        os.fsync(f.fileno())
     
-        .. deprecated:: 5.1
+        objects = []
+    libs = ['shell32.lib', 'comdlg32.lib', 'wsock32.lib', 'user32.lib', 'oleaut32.lib']
+    for moddefn in moddefns:
+        print('# Module', moddefn.name)
+        for file in moddefn.sourceFiles:
+            base = os.path.basename(file)
+            base, ext = os.path.splitext(base)
+            objects.append(base + '.obj')
+            print(r'$(temp_dir)\%s.obj: '%s'' % (base, file))
+            print('\t@$(CC) -c -nologo /Fo$* $(cdl) $(c_debug) /D BUILD_FREEZE', end=' ')
+            print(''-I$(pythonhome)/Include'  '-I$(pythonhome)/PC' \\')
+            print('\t\t$(cflags) $(cdebug) $(cinclude) \\')
+            extra = moddefn.GetCompilerOptions()
+            if extra:
+                print('\t\t%s \\' % (' '.join(extra),))
+            print('\t\t'%s'' % file)
+            print()
     
-           HTTP version specified in request, e.g. 'HTTP/1.1'
+    # dataclass_module_1.py and dataclass_module_1_str.py are identical
+# except only the latter uses string annotations.
     
-    .. note::
+        def test_stdin_stdout(self):
+        args = sys.executable, '-m', 'json.tool'
+        with Popen(args, stdin=PIPE, stdout=PIPE, stderr=PIPE) as proc:
+            out, err = proc.communicate(self.data.encode())
+        self.assertEqual(out.splitlines(), self.expect.encode().splitlines())
+        self.assertEqual(err, b'')
     
-        @property
-    def device_state_attributes(self):
-        '''Return the state attributes of the monitored installation.'''
-        if self.pvcoutput is not None:
-            return {
-                ATTR_ENERGY_GENERATION: self.pvcoutput.energy_generation,
-                ATTR_POWER_GENERATION: self.pvcoutput.power_generation,
-                ATTR_ENERGY_CONSUMPTION: self.pvcoutput.energy_consumption,
-                ATTR_POWER_CONSUMPTION: self.pvcoutput.power_consumption,
-                ATTR_EFFICIENCY: self.pvcoutput.efficiency,
-                ATTR_TEMPERATURE: self.pvcoutput.temperature,
-                ATTR_VOLTAGE: self.pvcoutput.voltage,
-            }
-    
-        def _setup(self, mock_requests):
-        '''Test the setup.'''
-        self.mock_post = mock_requests.post
-        self.mock_request_exception = Exception
-        mock_requests.exceptions.RequestException = self.mock_request_exception
-        config = {
-            'splunk': {
-                'host': 'host',
-                'token': 'secret',
-                'port': 8088,
-            }
-        }
-    
-    ATTR_URL = 'url'
-ATTR_URL_DEFAULT = 'https://www.google.com'
-    
-    
-def media_next_track(hass):
-    '''Press the keyboard button for next track.'''
-    hass.services.call(DOMAIN, SERVICE_MEDIA_NEXT_TRACK)
-    
-    For more details about this platform, please refer to the documentation at
-https://home-assistant.io/components/light.zigbee/
-'''
-import voluptuous as vol
-    
-    
-def run(args):
-    '''Handle ensure config commandline script.'''
-    parser = argparse.ArgumentParser(
-        description=('Ensure a Home Assistant config exists, '
-                     'creates one if necessary.'))
-    parser.add_argument(
-        '-c', '--config',
-        metavar='path_to_config_dir',
-        default=config_util.get_default_config_dir(),
-        help='Directory that contains the Home Assistant configuration')
-    parser.add_argument(
-        '--script',
-        choices=['ensure_config'])
-    
-    
-def convert(value: float, unit_1: str, unit_2: str) -> float:
-    '''Convert one unit of measurement to another.'''
-    if unit_1 not in VALID_UNITS:
-        raise ValueError(
-            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_1, LENGTH))
-    if unit_2 not in VALID_UNITS:
-        raise ValueError(
-            UNIT_NOT_RECOGNIZED_TEMPLATE.format(unit_2, LENGTH))
+    def clean_pdf_link(link):
+    if 'arxiv' in link:
+        link = link.replace('abs', 'pdf')   
+        if not(link.endswith('.pdf')):
+            link = '.'.join((link, 'pdf'))
