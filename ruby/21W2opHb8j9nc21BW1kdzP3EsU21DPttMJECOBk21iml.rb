@@ -1,47 +1,40 @@
 
         
-        class Converter
-  extend Forwardable
-  include Network
-  include LessConversion
-  include JsConversion
-  include FontsConversion
+        class U2fRegistration < ActiveRecord::Base
+  belongs_to :user
     
-        alias log puts
+    invalids = []
+Parallel.each(links, in_threads: 4) do |link|
+  href = link.attribute('href').to_s
+  begin
+    case check_link(URI.join(BASE_URI, href))
+    when (200...300)
+      putc('.')
+    when (300..302)
+      putc('w')
+    end
+  rescue => e
+    putc('F')
+    invalids << '#{href} (reason: #{e.message})'
+  end
+end
     
-      def test_font_helper_without_suffix
-    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
+        if successfully_sent?(resource)
+      respond_with({}, location: after_resending_confirmation_instructions_path_for(resource_name))
+    else
+      respond_with(resource)
+    end
   end
     
-      def as_json(options={})
-    {
-      poll_id:             id,
-      post_id:             status_message.id,
-      question:            question,
-      poll_answers:        poll_answers,
-      participation_count: participation_count
-    }
+      def serialize_options(resource)
+    methods = resource_class.authentication_keys.dup
+    methods = methods.keys if methods.is_a?(Hash)
+    methods << :password if resource.respond_to?(:password)
+    { methods: methods, only: [:password] }
   end
     
-          def handle_prompt_with_signed_in_user
-        client_id = params[:client_id]
-        if client_id
-          auth = Api::OpenidConnect::Authorization.find_by_client_id_user_and_scopes(client_id,
-                                                                                     current_user, params[:scope])
-          if auth
-            process_authorization_consent('true')
-          else
-            handle_params_error('interaction_required', 'User must already be authorized when `prompt` is `none`')
-          end
-        else
-          handle_params_error('bad_request', 'Client ID is missing from request')
-        end
-      end
+    if defined?(ActionMailer)
+  class Devise::Mailer < Devise.parent_mailer.constantize
+    include Devise::Mailers::Helpers
     
-      protected
-  def extract_fields(filter_string)
-    (filter_string.empty? ? [] : filter_string.split(',').map { |s| s.strip.to_sym })
-  end
-    
-        r0
-  end
+          protected
