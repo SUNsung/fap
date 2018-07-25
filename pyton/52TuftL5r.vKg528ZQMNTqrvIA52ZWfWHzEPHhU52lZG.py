@@ -1,59 +1,67 @@
-site_info = '花瓣 (Huaban)'
-    
-    site_info = 'MioMio.tv'
-download = miomio_download
-download_playlist = playlist_not_supported('miomio')
 
+        
+        '''
+    The approach taken is explained below. I decided to do it simply.
+    Initially I was considering parsing the data into some sort of
+    structure and then generating an appropriate README. I am still
+    considering doing it - but for now this should work. The only issue
+    I see is that it only sorts the entries at the lowest level, and that
+    the order of the top-level contents do not match the order of the actual
+    entries.
     
-        mediatype, ext, size = 'mp4', 'mp4', 0
-    print_info(site_info, title, mediatype, size)
-    #
-    # rtmpdump  -r 'rtmpe://cp30865.edgefcs.net/ondemand/mtviestor/_!/intlod/MTVInternational/MBUS/GeoLocals/00JP/VIAMTVI/PYC/201304/7122HVAQ4/00JPVIAMTVIPYC7122HVAQ4_640x_360_1200_m30.mp4' -o 'title.mp4' --swfVfy http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf
-    #
-    # because rtmpdump is unstable,may try serveral times
-    #
-    if not info_only:
-        # import pdb
-        # pdb.set_trace()
-        download_rtmp_url(url=url, title=title, ext=ext, params={
-                          '--swfVfy': 'http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf'}, output_dir=output_dir)
+        with self.test_session() as sess:
+      cost, correct, total, gold_labels = (
+          sess.run([cost, correct, total, gold_labels]))
     
-        type_, ext, size = url_info(stream_url)
-    print_info(site_info, title, type_, size)
-    if not info_only:
-        download_url_ffmpeg(url=stream_url, title=title, ext= 'mp4', output_dir=output_dir)
+      NB: The format of the shortened resource paths should be considered an
+  implementation detail and may change.
     
-        def test_sequential_execution(self):
-        self.command_stack[0].execute()
-        output_after_first_execution = os.listdir(self.test_dir)
-        self.assertEqual(output_after_first_execution[0], 'bar.txt')
-        self.command_stack[1].execute()
-        output_after_second_execution = os.listdir(self.test_dir)
-        self.assertEqual(output_after_second_execution[0], 'baz.txt')
+        with tf.Session(graph=restored_graph, config=restoration_config) as sess:
+      tf.saved_model.loader.load(sess, [tf.saved_model.tag_constants.SERVING],
+                                 export_path)
     
-        @classmethod
-    def setUpClass(cls):
-        cls.dec_obs = DecimalViewer()
-        cls.hex_obs = HexViewer()
-        cls.sub = Data('Data')
-        # inherited behavior already tested with TestSubject
-        cls.sub.attach(cls.dec_obs)
-        cls.sub.attach(cls.hex_obs)
+      def testCreateLexiconContext(self):
+    expected_context = task_spec_pb2.TaskSpec()
+    text_format.Parse(_EXPECTED_CONTEXT, expected_context)
+    self.assertProtoEquals(
+        lexicon.create_lexicon_context('/tmp'), expected_context)
     
-        fftv = Publisher(message_center)
+        ###########################################################################
+    # Set custom reservoir based method
+    sampling_algorithm['custom-pool'] = \
+        lambda n_population, n_samples, random_state=None: \
+            sample_without_replacement(n_population,
+                                       n_samples,
+                                       method='pool',
+                                       random_state=random_state)
     
-    class ParameterInjectionTest(unittest.TestCase):
+        # start time
+    tstart = datetime.now()
+    clf = DecisionTreeRegressor()
+    clf.fit(X, Y).predict(X)
+    delta = (datetime.now() - tstart)
+    # stop time
     
-        def get_current_time_as_html_fragment(self, time_provider):
-        current_time = time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
+    import matplotlib
+matplotlib.use('TkAgg')
     
+        When fixed_n_classes is not None the first labeling is considered a ground
+    truth class assignment with fixed number of classes.
+    '''
+    random_labels = np.random.RandomState(seed).randint
+    scores = np.zeros((len(n_clusters_range), n_runs))
     
-class ConcreteHandler3(Handler):
+        def apply_enhancement(self, domains, enhancement, options=None):
+        '''Applies an enhancement on all domains.
     
+    from acme import errors as acme_errors
+from certbot_compatibility_test import validator
     
-class Reporter:
+    # There are two options for replacing |today|: either, you set today to some
+# non-false value, then it is used:
+#today = ''
+# Else, today_fmt is used as the format for a strftime call.
+#today_fmt = '%B %d, %Y'
     
-        def increment(self):
-        self.value += 1
+    # If true, do not generate a @detailmenu in the 'Top' node's menu.
+#texinfo_no_detailmenu = False
