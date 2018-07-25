@@ -1,45 +1,51 @@
 
         
-                status_line = 'HTTP/{version} {status} {reason}'.format(
-            version=version,
-            status=original.status,
-            reason=original.reason
-        )
-        headers = [status_line]
-        try:
-            # `original.msg` is a `http.client.HTTPMessage` on Python 3
-            # `_headers` is a 2-tuple
-            headers.extend(
-                '%s: %s' % header for header in original.msg._headers)
-        except AttributeError:
-            # and a `httplib.HTTPMessage` on Python 2.x
-            # `headers` is a list of `name: val<CRLF>`.
-            headers.extend(h.strip() for h in original.msg.headers)
-    
-    
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
-    
-        # If both `auth_parse` and `prompt_password` are set to `True`,
-    # and the value of `-a` lacks the password part,
-    # then the user will be prompted to type the password in.
-    prompt_password = True
-    
-    
-class RGBColorDB(ColorDB):
-    _re = re.compile(
-        r'\s*(?P<red>\d+)\s+(?P<green>\d+)\s+(?P<blue>\d+)\s+(?P<name>.*)')
-    
-            orig_alrm_handler = signal.signal(signal.SIGALRM, handler)
-        self.addCleanup(signal.signal, signal.SIGALRM, orig_alrm_handler)
-    
-    
-class DifferentAgentTest(CrawlDelayAndRequestRateTest):
-    agent = 'FigTree Robot libwww-perl/5.04'
-    # these are not actually tested, but we still need to parse it
-    # in order to accommodate the input parameters
-    request_rate = None
-    crawl_delay = None
+        
+def check_format(filename):
+    '''
+    validates that each line is formatted correctly,
+    appending to error list as needed
+    '''
+    with open(filename) as fp:
+        lines = list(line.rstrip() for line in fp)
+    check_alphabetical(lines)
+    # START Check Entries
+    num_in_category = min_entries_per_section + 1
+    category = ''
+    category_line = 0
+    for line_num, line in enumerate(lines):
+        if section_title_re.match(line):
+            title_links.append(section_title_re.match(line).group(1))
+        # check each section for the minimum number of entries
+        if line.startswith(anchor):
+            match = anchor_re.match(line)
+            if match:
+                if match.group(1) not in title_links:
+                    add_error(line_num, 'section header ({}) not added as a title link'.format(match.group(1)))
+            else:
+                add_error(line_num, 'section header is not formatted correctly')
+            if num_in_category < min_entries_per_section:
+                add_error(category_line, '{} section does not have the minimum {} entries (only has {})'.format(
+                    category, min_entries_per_section, num_in_category))
+            category = line.split(' ')[1]
+            category_line = line_num
+            num_in_category = 0
+            continue
+        # skips lines that we do not care about
+        if not line.startswith('|') or line.startswith('|---'):
+            continue
+        num_in_category += 1
+        segments = line.split('|')[1:-1]
+        if len(segments) < num_segments:
+            add_error(line_num, 'entry does not have all the required sections (have {}, need {})'.format(
+                len(segments), num_segments))
+            continue
+        # START Global
+        for segment in segments:
+            # every line segment should start and end with exactly 1 space
+            if len(segment) - len(segment.lstrip()) != 1 or len(segment) - len(segment.rstrip()) != 1:
+                add_error(line_num, 'each segment must start and end with exactly 1 space')
+        # END Global
+        segments = [seg.strip() for seg in segments]
+        check_entry(line_num, segments)
+    # END Check Entries
