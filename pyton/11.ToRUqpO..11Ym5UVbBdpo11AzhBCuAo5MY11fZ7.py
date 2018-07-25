@@ -1,101 +1,208 @@
 
         
-        # This view is called from FlatpageFallbackMiddleware.process_response
-# when a 404 is raised, which often means CsrfViewMiddleware.process_view
-# has not been called even if CsrfViewMiddleware is installed. So we need
-# to use @csrf_protect, in case the template needs {% csrf_token %}.
-# However, we can't just wrap this view; if no matching flatpage exists,
-# or a redirect is required for authentication, the 404 needs to be returned
-# without any CSRF checks. Therefore, we only
-# CSRF protect the internal implementation.
+        # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
-        @pytest.fixture(autouse=True)
-    def setup(self):
-        '''LookupDict instance with 'bad_gateway' attribute.'''
-        self.lookup_dict = LookupDict('test')
-        self.lookup_dict.bad_gateway = 502
-    
-        :param url: URL for the new :class:`Request` object.
-    :param params: (optional) Dictionary or bytes to be sent in the query string for the :class:`Request`.
-    :param \*\*kwargs: Optional arguments that ``request`` takes.
-    :return: :class:`Response <Response>` object
-    :rtype: requests.Response
-    '''
-    
-        return max(0, total_length - current_position)
-    
-    import numpy as np
-from scipy.cluster import hierarchy
-import matplotlib.pyplot as plt
-    
-            for iteration in xrange(opts.n_times):
-            print('\titer %s...' % iteration, end='')
-            time_to_fit, time_to_transform = bench_scikit_transformer(X_dense,
-              transformers[name])
-            time_fit[name].append(time_to_fit)
-            time_transform[name].append(time_to_transform)
-            print('done')
-    
-        fig = plt.figure('scikit-learn sample w/o replacement benchmark results')
-    plt.title('n_population = %s, n_times = %s' %
-              (opts.n_population, opts.n_times))
-    ax = fig.add_subplot(111)
-    for name in sampling_algorithm:
-        ax.plot(ratio, time[name], label=name)
-    
-        # split the dataset in training and test set:
-    docs_train, docs_test, y_train, y_test = train_test_split(
-        dataset.data, dataset.target, test_size=0.25, random_state=None)
-    
-        # TASK: Build a grid search to find out whether unigrams or bigrams are
-    # more useful.
-    # Fit the pipeline on the training set using grid search for the parameters
-    parameters = {
-        'vect__ngram_range': [(1, 1), (1, 2)],
+        _TEST = {
+        'url': 'http://www.anitube.se/video/36621',
+        'md5': '59d0eeae28ea0bc8c05e7af429998d43',
+        'info_dict': {
+            'id': '36621',
+            'ext': 'mp4',
+            'title': 'Recorder to Randoseru 01',
+            'duration': 180.19,
+        },
+        'skip': 'Blocked in the US',
     }
-    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)
-    grid_search.fit(docs_train, y_train)
     
-    plt.figure(2)  # 'banana' shape
-plt.title('Outlier detection on a real data set (boston housing)')
-plt.scatter(X2[:, 0], X2[:, 1], color='black')
-plt.xlim((xx2.min(), xx2.max()))
-plt.ylim((yy2.min(), yy2.max()))
-plt.legend((legend2_values_list[0].collections[0],
-            legend2_values_list[1].collections[0],
-            legend2_values_list[2].collections[0]),
-           (legend2_keys_list[0], legend2_keys_list[1], legend2_keys_list[2]),
-           loc='upper center',
-           prop=matplotlib.font_manager.FontProperties(size=12))
-plt.ylabel('% lower status of the population')
-plt.xlabel('average number of rooms per dwelling')
+        def _real_extract(self, url):
+        display_id = self._match_id(url)
     
-    plt.plot(features_samples_ratio, acc_clf1, linewidth=2,
-         label='Linear Discriminant Analysis with shrinkage', color='navy')
-plt.plot(features_samples_ratio, acc_clf2, linewidth=2,
-         label='Linear Discriminant Analysis', color='gold')
+            select = self._search_regex(
+            r'(?s)<select[^>]+id='select-version'[^>]*>(.+?)</select>',
+            webpage, 'select version', default=None)
+        if select:
+            entry_ids = set()
+            entries = []
+            for mobj in re.finditer(
+                    r'<option[^>]+value=(['\'])(?P<id>[0-9a-z_]+)(?:#.+?)?\1[^>]*>(?P<title>[^<]+)',
+                    webpage):
+                entry_id = mobj.group('id')
+                if entry_id in entry_ids:
+                    continue
+                entry_ids.add(entry_id)
+                entries.append({
+                    '_type': 'url_transparent',
+                    'url': 'kaltura:%s:%s' % (partner_id, entry_id),
+                    'ie_key': 'Kaltura',
+                    'title': mobj.group('title'),
+                })
+            if entries:
+                return self.playlist_result(entries, display_id, title)
     
-    def main():
-    for name, fn in [('sequential', sequential),
-                     ('processes', with_process_pool_executor),
-                     ('threads', with_thread_pool_executor)]:
-        sys.stdout.write('%s: ' % name.ljust(12))
-        start = time.time()
-        if fn() != [True] * len(PRIMES):
-            sys.stdout.write('failed\n')
-        else:
-            sys.stdout.write('%.2f seconds\n' % (time.time() - start))
+    cc_library(
+    name = 'syntaxnet_component',
+    srcs = ['syntaxnet_component.cc'],
+    hdrs = ['syntaxnet_component.h'],
+    deps = [
+        ':syntaxnet_link_feature_extractor',
+        ':syntaxnet_transition_state',
+        '//dragnn/components/util:bulk_feature_extractor',
+        '//dragnn/core:beam',
+        '//dragnn/core:component_registry',
+        '//dragnn/core:input_batch_cache',
+        '//dragnn/core/interfaces:component',
+        '//dragnn/core/interfaces:transition_state',
+        '//dragnn/core/util:label',
+        '//dragnn/io:sentence_input_batch',
+        '//dragnn/io:syntaxnet_sentence',
+        '//dragnn/protos:data_proto_cc',
+        '//dragnn/protos:spec_proto_cc',
+        '//dragnn/protos:trace_proto_cc',
+        '//syntaxnet:base',
+        '//syntaxnet:parser_transitions',
+        '//syntaxnet:registry',
+        '//syntaxnet:sparse_proto_cc',
+        '//syntaxnet:task_context',
+        '//syntaxnet:task_spec_proto_cc',
+        '//syntaxnet:utils',
+        '//util/utf8:unicodetext',
+    ],
+    alwayslink = 1,
+)
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+      # Construct the tagger. This is a simple left-to-right LSTM sequence tagger.
+  tagger = spec_builder.ComponentSpecBuilder('tagger')
+  tagger.set_network_unit(
+      name='wrapped_units.LayerNormBasicLSTMNetwork',
+      hidden_layer_sizes='256')
+  tagger.set_transition_system(name='tagger')
+  tagger.add_token_link(source=lookahead, fml='input.focus', embedding_dim=64)
+    
+    cc_test(
+    name = 'dragnn_bulk_op_kernels_test',
+    srcs = ['ops/dragnn_bulk_op_kernels_test.cc'],
+    deps = [
+        ':compute_session_pool',
+        ':dragnn_bulk_op_kernels',
+        ':resource_container',
+        '//dragnn/components/util:bulk_feature_extractor',
+        '//dragnn/core/test:mock_compute_session',
+        '//dragnn/core/util:label',
+        '//syntaxnet:base',
+        '//syntaxnet:test_main',
+        '@org_tensorflow//tensorflow/core/kernels:ops_testutil',
+        '@org_tensorflow//tensorflow/core/kernels:quantized_ops',
+    ],
+)
+
+    
+    tf_gen_op_libs(
+    op_lib_names = ['mst_ops'],
+)
+    
+    py_library(
+    name = 'trainer_lib',
+    srcs = ['trainer_lib.py'],
+    deps = [
+        '//dragnn/protos:spec_pb2_py',
+        '//syntaxnet:parser_ops',
+        '//syntaxnet:sentence_pb2_py',
+        '//syntaxnet:task_spec_pb2_py',
+        '//syntaxnet/util:check',
+        '@org_tensorflow//tensorflow:tensorflow_py',
+        '@org_tensorflow//tensorflow/core:protos_all_py',
+    ],
+)
+    
+        self._weights = []
+    self._weights.append(
+        tf.get_variable('weights_arc', [self._source_dim, self._target_dim],
+                        tf.float32, tf.orthogonal_initializer()))
+    self._weights.append(
+        tf.get_variable('weights_source', [self._source_dim], tf.float32,
+                        tf.zeros_initializer()))
+    self._weights.append(
+        tf.get_variable('root', [self._source_dim], tf.float32,
+                        tf.zeros_initializer()))
+    
+          context_tensor_arrays = []
+      for context_layer in self.network.context_layers:
+        index = self.network.get_layer_index(context_layer.name)
+        context_tensor_arrays.append(arrays[index])
+    
+      Returns:
+    [B,N] matrix R of root-selection potentials as defined above.  The dtype of
+    R is the same as that of the arguments.
+  '''
+  # All arguments must have statically-known rank.
+  check.Eq(root.get_shape().ndims, 1, 'root must be a vector')
+  check.Eq(tokens.get_shape().ndims, 3, 'tokens must be rank 3')
+  check.Eq(weights_arc.get_shape().ndims, 2, 'weights_arc must be a matrix')
+  check.Eq(weights_source.get_shape().ndims, 1,
+           'weights_source must be a vector')
+    
+          self.assertAllEqual(potentials.eval(), [[[6, 2, 3],
+                                               [2, 7, 4],
+                                               [3, 4, 8]],
+                                              [[8, 4, 5],
+                                               [2, 7, 4],
+                                               [1, 2, 6]]])  # pyformat: disable
+    
+    '''Converter for DRAGNN checkpoint+master-spec files to TF SavedModels.
+    
+        # Restore the graph from the checkpoint into a new Graph object.
+    restored_graph = tf.Graph()
+    restoration_config = tf.ConfigProto(
+        log_device_placement=False,
+        intra_op_parallelism_threads=10,
+        inter_op_parallelism_threads=10)
+    
+    from absl import flags
+import tensorflow as tf
     
     
-class CompleterAvailableRequest( BaseRequest ):
-  def __init__( self, filetypes ):
-    super( CompleterAvailableRequest, self ).__init__()
-    self.filetypes = filetypes
-    self._response = None
+def log_partition_function(num_nodes,
+                           scores,
+                           forest=False,
+                           max_dynamic_range=None):
+  r'''Returns the log of the sum-of-product of spanning trees or forests.
+    
+        :copyright: © 2010 by the Pallets team.
+    :license: BSD, see LICENSE for more details.
+'''
+    
+    
+def has_level_handler(logger):
+    '''Check if there is a handler in the logging chain that will handle the
+    given logger's :meth:`effective level <~logging.Logger.getEffectiveLevel>`.
+    '''
+    level = logger.getEffectiveLevel()
+    current = logger
+    
+        class _FakeSignal(object):
+        '''If blinker is unavailable, create a fake class with the same
+        interface that allows sending of signals but will fail with an
+        error on anything else.  Instead of doing anything on send, it
+        will just ignore the arguments and do nothing instead.
+        '''
+    
+            assert meth is not None, 'Unimplemented method %r' % request.method
+        return meth(*args, **kwargs)
+
+    
+    
+def test_existing_handler(app):
+    logging.root.addHandler(logging.StreamHandler())
+    assert app.logger.level == logging.NOTSET
+    assert not app.logger.handlers
+    
+    
+tar_extensions = ('.tar', '.tar.Z', '.tar.bz2', '.tar.gz', '.tar.lz',
+                  '.tar.lzma', '.tar.xz', '.taz', '.tb2', '.tbz', '.tbz2',
+                  '.tgz', '.tlz', '.txz', '.tz')
+    
+    # TODO: ensure that history changes.
