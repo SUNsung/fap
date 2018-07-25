@@ -1,262 +1,331 @@
 
         
-          void GetDeviceLocalityAsync(const string& device, DeviceLocality* locality,
-                              StatusCallback) override;
-    
-    template <typename Container1, typename Container2, typename Cmp>
-inline int64 LevenshteinDistance(const Container1& s, const Container2& t,
-                                 const Cmp& cmp) {
-  return LevenshteinDistance(
-      gtl::ArraySlice<typename Container1::value_type>(s.data(), s.size()),
-      gtl::ArraySlice<typename Container1::value_type>(t.data(), t.size()),
-      cmp);
+        namespace content {
+class RenderProcessHost;
+class Shell;
 }
     
+    #endif  // CONTENT_NW_SRC_API_BASE_BASE_H_
+
     
-    {  return Status::OK();
+    
+    {  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method(
+      routing_id,
+      object_id,
+      type,
+      method,
+      *static_cast<base::ListValue*>(value_args.get())));
+  return v8::Undefined(isolate);
 }
     
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    
-    {  EXPECT_THAT(model.GetOutput(), ElementsAreArray({1, 0}));
-  EXPECT_THAT(model.GetOutputShape(), ElementsAreArray({1, 1, 2, 1}));
-}
-    
-      /// DebuggerClient is consulted at two times during name
-  /// lookup.  This is the first time: after all names in a
-  /// source file have been checked but before external
-  /// Modules are checked.  The results in the ResultVector will
-  /// be consulted first.  Return true if results have been added
-  /// to RV.
-  /// FIXME: I don't think this ever does anything useful.
-  virtual bool lookupOverrides(DeclBaseName Name, DeclContext *DC,
-                               SourceLoc Loc, bool IsTypeLookup,
-                               ResultVector &RV) = 0;
-    
-    void SyntaxASTMap::clearSyntaxMap() {
-  SyntaxMap.shrink_and_clear();
-}
-    
-    #pragma mark - NSCalendar verification
-    
-    
-    {///////////////////////////////////////////////////////////////////////////////
-}
-    
-    namespace HPHP {
-    }
-    
-    
-    {
-    {
-    {}}}
-    
-      // DataBlock can optionally be growable. The initial expansion of DataBlock
-  // will allocate a new buffer that is owned by the DataBlock, subsequent
-  // expansions will use realloc to expand this block until m_maxGrow has been
-  // reached. Only DataBlocks which have a different m_base from m_destBase may
-  // be grown, as expansion may move the location of m_destBase.
-  struct Deleter final { void operator()(uint8_t* a) const { ::free(a); } };
-  std::unique_ptr<uint8_t, Deleter> m_destBuf{nullptr};
-    
-    Variant *get_intercept_handler(const String& name, int8_t* flag) {
-  TRACE(1, 'get_intercept_handler %s flag is %d\n',
-        name.get()->data(), (int)*flag);
-  if (*flag == -1) {
-    Lock lock(s_mutex);
-    if (*flag == -1) {
-      auto sd = makeStaticString(name.get());
-      auto &entry = s_registered_flags[StrNR(sd)];
-      entry.second.push_back(flag);
-      *flag = entry.first;
-    }
-    if (!*flag) return nullptr;
+    void Clipboard::Call(const std::string& method,
+                     const base::ListValue& arguments) {
+  if (method == 'Set') {
+    std::string text, type;
+    arguments.GetString(0, &text);
+    arguments.GetString(1, &type);
+    SetText(text);
+  } else if (method == 'Clear') {
+    Clear();
+  } else {
+    NOTREACHED() << 'Invalid call to Clipboard method:' << method
+                 << ' arguments:' << arguments;
   }
+}
+    
+    class NwClipboardSetListSyncFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardSetListSyncFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     }
     
-    //////////////////////////////////////////////////////////////////////
+        // following code is modified from `DesktopCaptureChooseDesktopMediaFunctionBase::OnPickerDialogResults`
+    // in chrome/browser/extensions/api/desktop_capture/desktop_capture_base.cc
     
-      void write(const char *v, int len = -1, bool isArrayKey = false,
-             bool noQuotes = false);
-    
-    void SlabManager::init() {
-  if (!s_slabManagers.empty()) return;
-#ifdef HAVE_NUMA
-  unsigned max_node = numa_max_node();
-#else
-  unsigned constexpr max_node = 0;
-#endif
-  const unsigned numNodes = num_numa_nodes(); // number of NUMA node allowed
-  s_slabManagers.reserve(max_node + 1);
-    }
-    
-    bool Bump1GMapper::addMappingImpl(BumpAllocState& state, size_t /*newSize*/) {
-  // Check quota and alignment before mmap
-  if (m_currNumPages >= m_maxNumPages) {
-    m_failed = true;
-    return false;
+    /*!
+ * \brief convert Rcpp's Dimension to internal shape vector
+ * This will reverse the shape layout internally
+ * \param rshape The dimension in R
+ * \return A internal vector representation of shapes in mxnet.
+ */
+inline std::vector<mx_uint> Dim2InternalShape(const Rcpp::Dimension &rshape) {
+  std::vector<mx_uint> shape(rshape.size());
+  for (size_t i = 0; i < rshape.size(); ++i) {
+    shape[rshape.size() - i - 1] = rshape[i];
   }
-  auto const currFrontier = state.frontier();
-  if (currFrontier % size1g != 0) return false;
-    }
+  return shape;
+}
     
-      /// Gets the non-blocking mode of the native acceptor implementation.
-  /**
-   * This function is used to retrieve the non-blocking mode of the underlying
-   * native acceptor. This mode has no effect on the behaviour of the acceptor
-   * object's synchronous operations.
-   *
-   * @returns @c true if the underlying acceptor is in non-blocking mode and
-   * direct system calls may fail with boost::asio::error::would_block (or the
-   * equivalent system error).
-   *
-   * @note The current non-blocking mode is cached by the acceptor object.
-   * Consequently, the return value may be incorrect if the non-blocking mode
-   * was set directly on the native acceptor.
+    namespace mxnet {
+namespace R {
+/*! \brief The Rcpp Symbol class of MXNet */
+class Executor : public MXNetMovable<Executor> {
+ public:
+  /*! \return typename from R side. */
+  inline static const char* TypeName() {
+    return 'MXExecutor';
+  }
+  /*!
+   * \return Get reference of the arg arrays of executor.
    */
-  bool native_non_blocking() const
-  {
-    return this->get_service().native_non_blocking(this->get_implementation());
+  const Rcpp::List& arg_arrays() const {
+    return *arg_arrays_;
   }
-    
-    #endif // BOOST_ASIO_BASIC_WAITABLE_TIMER_HPP
-
-    
-    namespace boost {
-namespace asio {
-    }
-    }
-    
-    namespace boost {
-    }
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-      /// Clear the buffer.
-  void clear()
-  {
-    begin_offset_ = 0;
-    end_offset_ = 0;
+  /*!
+   * \return Get reference of the aux arrays of executor.
+   */
+  const Rcpp::List& aux_arrays() const {
+    return *aux_arrays_;
   }
+  /*!
+   * \return Get reference of gradient arrays of executor.
+   */
+  const Rcpp::List& grad_arrays() const {
+    return *grad_arrays_;
+  }
+  /*!
+   * \return Get reference of gradient arrays of executor.
+   */
+  const Rcpp::List& out_arrays() const {
+    return *out_arrays_;
+  }
+  /*!
+   * \return Get the arg arrays of executor.
+   */
+  Rcpp::List GetArgArrays() const {
+    return CloneArray(*arg_arrays_);
+  }
+  /*!
+   * \return Get the grad arrays of executor.
+   */
+  Rcpp::List GetGradArrays() const {
+    return CloneArray(*grad_arrays_);
+  }
+  /*!
+   * \return Get the auxiliary arrays of executor.
+   */
+  Rcpp::List GetAuxArrays() const {
+    return CloneArray(*aux_arrays_);
+  }
+  /*!
+   * \return Get the outputx arrays of executor.
+   */
+  Rcpp::List GetOuputArrays() const {
+    return CloneArray(*out_arrays_);
+  }
+  /*!
+   * \brief Update the arg_arrays of executor, based on name-matching.
+   * \param array The array to update
+   * \param match_name whether to use name to match the input, instead of index.
+   * \param skip_null Whether null is allowed, when there is NULL in the array, simply ignore.
+   * \return a result executor, moved from exec.
+   */
+  void UpdateArgArray(const Rcpp::List& array,
+                      bool match_name,
+                      bool allow_null);
+  /*!
+   * \brief Update the aux_arrays of executor, based on name-matching.
+   * \param array The array to update
+   * \param match_name whether to use name to match the input, instead of index.
+   * \param skip_null Whether null is allowed, when there is NULL in the array, simply ignore.
+   * \return a result executor, moved from exec.
+   */
+  void UpdateAuxArray(const Rcpp::List& array,
+                      bool match_name,
+                      bool allow_null);
+  /*!
+   * \brief Update the grad_arrays of executor, based on name-matching.
+   * \param array The array to update
+   * \param match_name whether to use name to match the input, instead of index.
+   * \param skip_null Whether null is allowed, when there is NULL in the array, simply ignore.
+   * \return a result executor, moved from exec.
+   */
+  void UpdateGradArray(const Rcpp::List& array,
+                      bool match_name,
+                      bool allow_null);
+  /*!
+   * \brief Peform a forward operation on exec, this will set the out_arrays.
+   * \param is_train whether it is training phase.
+   * \param kwargs additional parameters.
+   * \return a result executor, moved from exec.
+   */
+  void Forward(bool is_train,
+               const Rcpp::List& kwargs);
+  /*!
+   * \brief Peform a backward operation on exec, this will set the grad_arrays.
+   * \param output_grads the gradient on outputs, to be propagated back.
+   * \return a result executor, moved from exec.
+   */
+  void Backward(const Rcpp::List& output_grads);
+  /*!
+   * \brief Create a new R Executor by bind on symbol
+   * \param symbol The R symbol to bind.
+   * \param context The device to bind.
+   * \param arg_arrays The argument arrays giving the initial value of arguments.
+   * \param aux_arrays The auxiliary state arrays giving the initial value of auxiliary states.
+   * \param grad_reqs Array of booleans, giving the requirements of gradient.
+   */
+  static RObjectType Bind(const Symbol::RObjectType& symbol,
+                          const Context::RObjectType& context,
+                          const Rcpp::List& arg_arrays,
+                          const Rcpp::List& aux_arrays,
+                          const Rcpp::List& grad_reqs);
+  /*! \brief static function to initialize the Rcpp functions */
+  static void InitRcppModule();
+  // destructor
+  ~Executor() {
+    delete out_arrays_;
+    delete arg_arrays_;
+    delete grad_arrays_;
+    delete aux_arrays_;
+    }
+    }
+    }
+    }
     
-    class ptime;
+    ArrayDataIter::ArrayDataIter(const Rcpp::NumericVector& data,
+                             const Rcpp::NumericVector& label,
+                             const Rcpp::NumericVector& unif_rnds,
+                             int batch_size,
+                             bool shuffle) : counter_(0) {
+  Rcpp::IntegerVector dshape = data.attr('dim');
+  Rcpp::IntegerVector lshape = label.attr('dim');
+  if (dshape[dshape.size() - 1] != lshape[lshape.size() - 1]) {
+    if (dshape[0] == lshape[0]) {
+      RLOG_FATAL << 'Seems X, y was passed in a Row major way, '
+                 << 'MXNetR adopts a column major convention.\n'
+                 << 'Please pass in transpose of X instead';
+    } else {
+      RLOG_FATAL << 'Data and label shape in-consistent';
+    }
+  }
+  num_data = lshape[lshape.size() - 1];
+  std::vector<size_t> order(num_data);
+  for (size_t i = 0; i < order.size(); ++i) {
+    order[i] = i;
+  }
+    }
     
-        // Make a copy of the handler so that the memory can be deallocated before
-    // the upcall is made. Even if we're not about to make an upcall, a
-    // sub-object of the handler may be the true owner of the memory associated
-    // with the handler. Consequently, a local copy of the handler is required
-    // to ensure that any owning sub-object remains valid until after we have
-    // deallocated the memory here.
-    detail::binder2<Handler, boost::system::error_code, std::size_t>
-      handler(o->handler_, o->ec_, o->bytes_transferred_);
-    p.h = boost::asio::detail::addressof(handler.handler_);
-    p.reset();
+    /*
+ * Given a computation graph and a set of input node entries, this function cuts
+ * the node entries and creates new variable nodes as the input nodes of the
+ * subgraph. It returns the nodes that connect to the subgraph directly and
+ * the names of the new variable nodes.
+ */
+bool CutGraphInputs(const std::vector<nnvm::NodeEntry *> &input_entries,
+                    bool skip_var, std::vector<nnvm::NodeEntry> *orig_entries) {
+  struct pred_entry {
+    nnvm::NodeEntry e;
+    explicit pred_entry(const nnvm::NodeEntry &_e): e(_e) {}
+    bool operator()(const nnvm::NodeEntry e1) {
+      return e.node == e1.node && e.index == e1.index;
+    }
+  };
+    }
     
-    #include <boost/asio/detail/push_options.hpp>
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    template <typename Function, typename Context>
-inline void invoke(const Function& function, Context& context)
-{
-#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  Function tmp(function);
-  tmp();
-#else
-  using boost::asio::asio_handler_invoke;
-  asio_handler_invoke(function, boost::asio::detail::addressof(context));
+    struct ConcatGrad {
+  const char *op_name;
+  std::vector<nnvm::NodeEntry> operator()(const nnvm::NodePtr& n,
+                                          const std::vector<nnvm::NodeEntry>& ograds) const {
+    CHECK_EQ(ograds.size(), 1);
+    std::vector<nnvm::NodeEntry> heads(ograds.begin(), ograds.end());
+#if MXNET_USE_MKLDNN == 1
+    for (size_t i = 0; i < n->inputs.size(); i++) {
+      heads.push_back(n->inputs[i]);
+    }
 #endif
-}
-    
-    // Newer gcc, clang need special treatment to suppress unused typedef warnings.
-#if defined(__clang__)
-# if defined(__apple_build_version__)
-#  if (__clang_major__ >= 7)
-#   define BOOST_ASIO_UNUSED_TYPEDEF __attribute__((__unused__))
-#  endif // (__clang_major__ >= 7)
-# elif ((__clang_major__ == 3) && (__clang_minor__ >= 6)) \
-    || (__clang_major__ > 3)
-#  define BOOST_ASIO_UNUSED_TYPEDEF __attribute__((__unused__))
-# endif // ((__clang_major__ == 3) && (__clang_minor__ >= 6))
-        //   || (__clang_major__ > 3)
-#elif defined(__GNUC__)
-# if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4)
-#  define BOOST_ASIO_UNUSED_TYPEDEF __attribute__((__unused__))
-# endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4)
-#endif // defined(__GNUC__)
-#if !defined(BOOST_ASIO_UNUSED_TYPEDEF)
-# define BOOST_ASIO_UNUSED_TYPEDEF
-#endif // !defined(BOOST_ASIO_UNUSED_TYPEDEF)
-    
-      STDMETHODIMP Buffer(byte** value)
-  {
-    *value = bytes_;
-    return S_OK;
+    return MakeGradNode(op_name, n, heads, n->attrs.dict);
   }
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    bool WakeUpLock::IsLocking() {
-    return ::wakeupLock_IsLocking(object_);
-}
-    
-    void SimpleIntPack(const void* _data, size_t _datalen, AutoBuffer& _outbuf) {
-    SimplePack<unsigned int>(_data, _datalen, _outbuf);
-}
-    
-    
-    {    void throw_exception( std::exception const & e ) {
-        xfatal2(TSF'boost exception:%_', e.what());
-        
-#ifdef ANDROID
-        char stack[4096] = {0};
-        android_callstack(stack, sizeof(stack));
-        xfatal2(TSF'%_', stack);
-#endif
-    }
-}
-
-    
-            if (m_publicservices.end() != m_publicservices.find(T::ServiceName()))
-            return (T*)m_publicservices[T::ServiceName()];
-    
-        template<typename T>
-    T* _Service() {
-        if (m_dependservices.end() != m_dependservices.find(T::ServiceName()))
-            return (T*)m_dependservices[T::ServiceName()];
-    }
-    
-    int TSpy::__TestFun1(int i)
-{
-    return reinterpret_cast<Test_Spy_Sample*>(This())->__TestFun1(i);
-}
-    
-    
-    {  private:
-    virtual void __OnAttach(const char* _key) {}
-    virtual void __OnDetach(const char* _key) {}
 };
-
     
-    // char* to jstring
-jstring JNU_Chars2Jstring(JNIEnv* _env, const char* pat);
-void JNU_FreeJstring(JNIEnv* _env, jstring str);
+      auto deduce = [&](std::vector<AttrType> *vec, size_t size, const char *name) {
+      for (size_t i = 0; i < size; ++i) {
+        CHECK(assign(&dattr, (*vec)[i]))
+          << 'Incompatible attr in node ' << attrs.name << ' at ' << i << '-th '
+          << name << ': ' << 'expected ' << attr_string(dattr)
+          << ', got ' << attr_string((*vec)[i]);
+      }
+    };
+  deduce(in_attrs, in_size, 'input');
+  if (reverse_infer) deduce(out_attrs, out_size, 'output');
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+            // rather than search for all matches, only try 4 candidate locations,
+        // chosen based on 4 different hash functions of different lengths.
+        // this strategy is inspired by LZO; hashing is unrolled here using the
+        // 'hc' macro
+        h = stb__hc3(q,0, 1, 2); h1 = STB__SCRAMBLE(h);
+        t = chash[h1]; if (t) STB__TRY(t,0);
+        h = stb__hc2(q,h, 3, 4); h2 = STB__SCRAMBLE(h);
+        h = stb__hc2(q,h, 5, 6);        t = chash[h2]; if (t) STB__TRY(t,1);
+        h = stb__hc2(q,h, 7, 8); h3 = STB__SCRAMBLE(h);
+        h = stb__hc2(q,h, 9,10);        t = chash[h3]; if (t) STB__TRY(t,1);
+        h = stb__hc2(q,h,11,12); h4 = STB__SCRAMBLE(h);
+        t = chash[h4]; if (t) STB__TRY(t,1);
+    
+        ALLEGRO_LOCKED_REGION *locked_img = al_lock_bitmap(img, al_get_bitmap_format(img), ALLEGRO_LOCK_WRITEONLY);
+    if (!locked_img)
+    {
+        al_destroy_bitmap(img);
+        return false;
+    }
+    memcpy(locked_img->data, pixels, sizeof(int)*width*height);
+    al_unlock_bitmap(img);
+    
+        ImGui_ImplDX12_CreateFontsTexture();
+    
+    // Implemented features:
+//  [X] Platform: Clipboard support.
+//  [X] Platform: Gamepad navigation mapping. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
+//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
+//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
+    
+        // Create The Shader Modules:
+    {
+        VkShaderModuleCreateInfo vert_info = {};
+        vert_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+        vert_info.codeSize = sizeof(__glsl_shader_vert_spv);
+        vert_info.pCode = (uint32_t*)__glsl_shader_vert_spv;
+        err = vkCreateShaderModule(g_Device, &vert_info, g_Allocator, &vert_module);
+        check_vk_result(err);
+        VkShaderModuleCreateInfo frag_info = {};
+        frag_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+        frag_info.codeSize = sizeof(__glsl_shader_frag_spv);
+        frag_info.pCode = (uint32_t*)__glsl_shader_frag_spv;
+        err = vkCreateShaderModule(g_Device, &frag_info, g_Allocator, &frag_module);
+        check_vk_result(err);
+    }
+    
+    // Process Win32 mouse/keyboard inputs. 
+// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+// PS: In this Win32 handler, we use the capture API (GetCapture/SetCapture/ReleaseCapture) to be able to read mouse coordinations when dragging mouse outside of our window bounds.
+// PS: We treat DBLCLK messages as regular mouse down messages, so this code will work on windows classes that have the CS_DBLCLKS flag set. Our own example app code doesn't set this flag.
+IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    if (ImGui::GetCurrentContext() == NULL)
+        return 0;
+    }
+    
+    
+    {        // Create the constant buffer
+        {
+            D3D11_BUFFER_DESC desc;
+            desc.ByteWidth = sizeof(VERTEX_CONSTANT_BUFFER);
+            desc.Usage = D3D11_USAGE_DYNAMIC;
+            desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+            desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+            desc.MiscFlags = 0;
+            g_pd3dDevice->CreateBuffer(&desc, NULL, &g_pVertexConstantBuffer);
+        }
+    }
+    
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_ElementsHandle);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr)cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx), (const GLvoid*)cmd_list->IdxBuffer.Data, GL_STREAM_DRAW);
+    
+    #include <stdint.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
+#include 'imgui.h'
+#include 'imgui_impl_allegro5.h'
