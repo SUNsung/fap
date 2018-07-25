@@ -1,83 +1,123 @@
 
         
-            @classmethod
-    def setUpClass(cls):
-        support.requires('network')
-        with support.transient_internet(cls.base_url):
-            cls.parser = urllib.robotparser.RobotFileParser(cls.robots_txt)
-            cls.parser.read()
-    
-                elif event == 'exception':
-                if not isinstance(self.exc_info[1], self.expect[3]):
-                    self.raise_not_expected(
-                        'Wrong exception at expect_set item %d, got '%s'' %
-                        (self.expect_set_no, self.exc_info))
-    
-            * Some platforms report ASCII as ANSI_X3.4-1968
-        * Some platforms report ASCII as US-ASCII
-        * Some platforms report UTF-8 instead of utf-8
-        '''
-        data = data.replace(b'ANSI_X3.4-1968', b'ascii')
-        data = data.replace(b'US-ASCII', b'ascii')
-        data = data.lower()
-        return data
-    
-            Args:
-            max_workers: The maximum number of threads that can be used to
-                execute the given calls.
-        '''
-        self._max_workers = max_workers
-        self._work_queue = queue.Queue()
-        self._threads = set()
-        self._shutdown = False
-        self._shutdown_lock = threading.Lock()
-    
-    def download_urls_sequential(urls, timeout=60):
-    url_to_content = {}
-    for url in urls:
+            def on_open_shell(self):
         try:
-            url_to_content[url] = load_url(url, timeout=timeout)
-        except:
-            pass
-    return url_to_content
-    
-    # The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# The short X.Y version.
-version = '2.1.3'
-# The full version, including alpha/beta/rc tags.
-release = '2.1.3'
-    
-    def main():
-    for name, fn in [('sequential', sequential),
-                     ('processes', with_process_pool_executor),
-                     ('threads', with_thread_pool_executor)]:
-        sys.stdout.write('%s: ' % name.ljust(12))
-        start = time.time()
-        if fn() != [True] * len(PRIMES):
-            sys.stdout.write('failed\n')
-        else:
-            sys.stdout.write('%.2f seconds\n' % (time.time() - start))
-    
-        pil_image.show()
+            self._exec_cli_command('screen-length 0 temporary')
+        except AnsibleConnectionFailure:
+            raise AnsibleConnectionFailure('unable to set terminal parameters')
 
     
-    # Initialize some variables
-face_locations = []
-face_encodings = []
     
-        # Find all the faces and face enqcodings in the frame of video
-    face_locations = face_recognition.face_locations(rgb_frame)
-    face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+class AnsibleConstructor(SafeConstructor):
+    def __init__(self, file_name=None, vault_secrets=None):
+        self._ansible_file_name = file_name
+        super(AnsibleConstructor, self).__init__()
+        self._vaults = {}
+        self.vault_secrets = vault_secrets or []
+        self._vaults['default'] = VaultLib(secrets=self.vault_secrets)
     
-        # Multi-core processing only supported on Python 3.4 or greater
-    if (sys.version_info < (3, 4)) and cpus != 1:
-        click.echo('WARNING: Multi-processing support requires Python 3.4 or greater. Falling back to single-threaded processing!')
-        cpus = 1
+        def test_parse_from_file(self):
+        with open(util.get_data_filename('foo.conf')) as handle:
+            parsed = util.filter_comments(load(handle))
+        self.assertEqual(
+            parsed,
+            [['user', 'www-data'],
+             [['http'],
+              [[['server'], [
+                  ['listen', '*:80', 'default_server', 'ssl'],
+                  ['server_name', '*.www.foo.com', '*.www.example.com'],
+                  ['root', '/home/ubuntu/sites/foo/'],
+                  [['location', '/status'], [
+                      [['types'], [['image/jpeg', 'jpg']]],
+                  ]],
+                  [['location', '~', r'case_sensitive\.php$'], [
+                      ['index', 'index.php'],
+                      ['root', '/var/root'],
+                  ]],
+                  [['location', '~*', r'case_insensitive\.php$'], []],
+                  [['location', '=', r'exact_match\.php$'], []],
+                  [['location', '^~', r'ignore_regex\.php$'], []]
+              ]]]]]
+        )
     
-            # Draw a label with a name below the face
-        text_width, text_height = draw.textsize(name)
-        draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
-        draw.text((left + 6, bottom - text_height - 5), name, fill=(255, 255, 255, 255))
+    # http://docs.readthedocs.org/en/latest/theme.html#how-do-i-use-this-locally-and-on-read-the-docs
+# on_rtd is whether we are on readthedocs.org
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+if not on_rtd:  # only import and set the theme if we're building docs locally
+    import sphinx_rtd_theme
+    html_theme = 'sphinx_rtd_theme'
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+# otherwise, readthedocs.org uses their theme by default, so no need to specify it
+    
+    from certbot import errors
+from certbot.display import util as display_util
+    
+    # Find all the faces in the image using the default HOG-based model.
+# This method is fairly accurate, but not as accurate as the CNN model and not GPU accelerated.
+# See also: find_faces_in_picture_cnn.py
+face_locations = face_recognition.face_locations(image)
+    
+        face_names = []
+    for face_encoding in face_encodings:
+        # See if the face is a match for the known face(s)
+        match = face_recognition.compare_faces(known_faces, face_encoding, tolerance=0.50)
+    
+    import face_recognition
+from flask import Flask, jsonify, request, redirect
+    
+    
+def test_image(image_to_check, model):
+    unknown_image = face_recognition.load_image_file(image_to_check)
+    face_locations = face_recognition.face_locations(unknown_image, number_of_times_to_upsample=0, model=model)
+    
+    setup(
+    name='face_recognition',
+    version='1.2.2',
+    description='Recognize faces from Python or from the command line',
+    long_description=readme + '\n\n' + history,
+    author='Adam Geitgey',
+    author_email='ageitgey@gmail.com',
+    url='https://github.com/ageitgey/face_recognition',
+    packages=[
+        'face_recognition',
+    ],
+    package_dir={'face_recognition': 'face_recognition'},
+    package_data={
+        'face_recognition': ['models/*.dat']
+    },
+    entry_points={
+        'console_scripts': [
+            'face_recognition=face_recognition.face_recognition_cli:main',
+            'face_detection=face_recognition.face_detection_cli:main'
+        ]
+    },
+    install_requires=requirements,
+    license='MIT license',
+    zip_safe=False,
+    keywords='face_recognition',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+    ],
+    test_suite='tests',
+    tests_require=test_requirements
+)
+
+    
+        # Let's trace out each facial feature in the image with a line!
+    pil_image = Image.fromarray(image)
+    d = ImageDraw.Draw(pil_image)
+    
+    import PIL.Image
+import dlib
+import numpy as np
