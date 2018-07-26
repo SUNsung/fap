@@ -1,95 +1,84 @@
 
         
-        TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
-  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
-  // Identifiers can't start with digits
-  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
-  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
-}
-    
-    
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-    
-    void RepeatedEnumFieldGenerator::GenerateCloningCode(io::Printer* printer) {
-  printer->Print(variables_,
-    '$name$_ = other.$name$_.Clone();\n');
-}
-    
-    
-    
-    #if defined(BOOST_ASIO_HAS_BOOST_WORKAROUND)
-# include <boost/detail/workaround.hpp>
-# if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582)) \
-    || BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
-#  define BOOST_ASIO_ENABLE_ARRAY_BUFFER_WORKAROUND
-# endif // BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-        // || BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
-#endif // defined(BOOST_ASIO_HAS_BOOST_WORKAROUND)
-    
-    
-    {    return init.result.get();
-  }
-    
-    #endif // BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-// Nothing to include.
-#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
-# include <atomic>
-#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
-# include <boost/detail/atomic_count.hpp>
-#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
-    
-      native_buffer_type* buffers()
-  {
-    return &buffer_;
-  }
-    
-    
-    {private:
-  int descriptor_;
-  MutableBufferSequence buffers_;
+        
+    {  // Make vanilla new/delete illegal.
+  void *operator new(size_t Bytes) = delete;
+  void operator delete(void *Data) = delete;
 };
     
-    #ifndef BOOST_ASIO_DETAIL_DESCRIPTOR_WRITE_OP_HPP
-#define BOOST_ASIO_DETAIL_DESCRIPTOR_WRITE_OP_HPP
+      ArrayRef<MarkupASTNode *> getChildren() {
+    return {getTrailingObjects<MarkupASTNode *>(), NumChildren};
+  }
     
-    // That gcc wants both of these prototypes seems mysterious. VC, for
-// its part, can't decide which to use (another mystery). Matching of
-// template overloads: the final frontier.
-#ifndef COMPILER_MSVC
-template <typename T, size_t N>
-char (&ArraySizeHelper(const T (&array)[N]))[N];
-#endif
+    #endif
+
     
-    bool FindBenchmarksInternal(const std::string& re,
-                            std::vector<Benchmark::Instance>* benchmarks,
-                            std::ostream* Err);
+      ResultPlanPtr build(Initialization *emitInto, AbstractionPattern origType,
+                      CanType substType);
+  ResultPlanPtr buildForTuple(Initialization *emitInto,
+                              AbstractionPattern origType,
+                              CanTupleType substType);
     
-    #define GUARDED_BY(x) THREAD_ANNOTATION_ATTRIBUTE__(guarded_by(x))
+      /// Tracks previous replacements so we don't pump the rewrite buffer with
+  /// multiple equivalent replacements, which can result in weird behavior.
+  llvm::SmallSet<Replacement, 32> Replacements;
     
-      // Compile a regular expression matcher from spec.  Returns true on success.
-  //
-  // On failure (and if error is not nullptr), error is populated with a human
-  // readable error message if an error occurs.
-  bool Init(const std::string& spec, std::string* error);
     
-    #ifdef BENCHMARK_OS_WINDOWS
-#include <Windows.h>
-#endif
+    {  IfConfigClause(SourceLoc Loc, Expr *Cond,
+                 ArrayRef<ASTNode> Elements, bool isActive)
+    : Loc(Loc), Cond(Cond), Elements(Elements), isActive(isActive) {
+  }
+};
+    
+    #include 'base/values.h'
+#include 'extensions/common/draggable_region.h'
+#include 'content/public/common/common_param_traits.h'
+#include 'ipc/ipc_message_macros.h'
+#include 'ui/gfx/ipc/gfx_param_traits.h'
+    
+    
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
+    
+    Clipboard::Clipboard(int id,
+           const base::WeakPtr<DispatcherHost>& dispatcher_host,
+           const base::DictionaryValue& option)
+    : Base(id, dispatcher_host, option) {
+}
+    
+    class ObjectManager;
+    
+      GtkRequisition menu_req;
+  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
+  GdkScreen* screen;
+  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
+  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
+    
+    class NwAppSetProxyConfigFunction : public NWSyncExtensionFunction {
+ public:
+  NwAppSetProxyConfigFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+      private:
+    bool ReadText(ClipboardData& data) {
+      DCHECK(data.type == TYPE_TEXT);
+      base::string16 text;
+      clipboard_->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+      data.data.reset(new std::string(base::UTF16ToUTF8(text)));
+      return true;
+    }
+    
+    #include 'chrome/browser/devtools/devtools_window.h'
+#include 'chrome/browser/extensions/devtools_util.h'
+#include 'chrome/browser/extensions/extension_service.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/public/browser/render_view_host.h'
+#include 'content/public/browser/web_contents.h'
+#include 'extensions/browser/extension_system.h'
+#include 'extensions/common/error_utils.h'
