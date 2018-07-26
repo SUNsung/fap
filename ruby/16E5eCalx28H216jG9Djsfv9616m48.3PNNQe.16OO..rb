@@ -1,61 +1,177 @@
 
         
-            # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
-    end
-    
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
-    
-      def setup
-    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
-    success = Dir.chdir DUMMY_PATH do
-      silence_stdout_if !ENV['VERBOSE'] do
-        system 'node', 'manifest.js', tmp_dir
+            keys.each do |key|
+      value = env[key]
+      s = '#{key}: #{value}'
+      case key
+      when 'CC', 'CXX', 'LD'
+        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
       end
+      f.puts s
     end
-    assert success, 'Node.js Mincer compilation failed'
-    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
-    css_name = manifest['assets']['application.css']
-    @css = File.read('#{tmp_dir}/#{css_name}')
   end
 end
 
     
-        on :receive_entity do |entity, sender, recipient_id|
-      Person.by_account_identifier(sender).pod.try(:schedule_check_if_needed)
-    
-      def dashboard
-    gon.push(pod_version: pod_version)
+        if !Language::Python.in_sys_path?('python', homebrew_site_packages)
+      s = <<-EOS.undent
+        Python modules have been installed and Homebrew's site-packages is not
+        in your Python sys.path, so you will not be able to import the modules
+        this formula installed. If you plan to develop with these modules,
+        please run:
+      EOS
+      s += instructions
+    elsif keg.python_pth_files_installed?
+      s = <<-EOS.undent
+        This formula installed .pth files to Homebrew's site-packages and your
+        Python isn't configured to process them, so you will not be able to
+        import the modules this formula installed. If you plan to develop
+        with these modules, please run:
+      EOS
+      s += instructions
+    end
+    s
   end
     
-            def initialize
-          @values = []
-        end
+          # Find commands in Homebrew/dev-cmd
+      if ARGV.homebrew_developer?
+        puts
+        puts 'Built-in development commands'
+        puts_columns internal_development_commands
+      end
     
-        def define_remote_file_task(task, target_roles)
-      Capistrano::UploadTask.define_task(task) do |t|
-        prerequisite_file = t.prerequisites.first
-        file = shared_path.join(t.name)
+            if msg = blacklisted?(query)
+          if count > 0
+            puts
+            puts 'If you meant #{query.inspect} precisely:'
+            puts
+          end
+          puts msg
+        elsif count == 0
+          puts 'No formula found for #{query.inspect}.'
+          begin
+            GitHub.print_pull_requests_matching(query)
+          rescue GitHub::Error => e
+            SEARCH_ERROR_QUEUE << e
+          end
+        end
+      end
+    end
+    
+                o.on('-f', '--force', 'Remove without confirmation.') do |f|
+              options[:force] = f
+            end
+    
+            opts = OptionParser.new do |o|
+          o.banner = 'Usage: vagrant cap [options] TYPE NAME [args]'
+          o.separator ''
+          o.separator 'This is an advanced command. If you don't know what this'
+          o.separator 'does and you aren't explicitly trying to use it, you probably'
+          o.separator 'don't want to use this.'
+          o.separator ''
+          o.separator 'This command checks or executes arbitrary capabilities that'
+          o.separator 'Vagrant has for hosts, guests, and providers.'
+          o.separator ''
+          o.separator 'Options:'
+          o.separator ''
+    
+        def teardown
+      if @worker_pid && @worker_in
+        begin
+          begin
+            @worker_in.puts 'quit'
+          rescue IOError, Errno::EPIPE
+          end
+          Timeout.timeout(2) do
+            Process.waitpid(@worker_pid)
+          end
+        rescue Timeout::Error
+          begin
+            Process.kill(:KILL, @worker_pid)
+          rescue Errno::ESRCH
+          end
+        end
+      end
+    ensure
+      begin
+        @worker_in.close
+        @worker_out.close
+      rescue Errno::EPIPE
+        # may already broken and rescue'ed in above code
+      end
+    end
+    
+      def self.block_device
+    raise 'Could not find a block device' unless @block
+    yield @block
+  end
+    
+          it 'allows Turkic as an extra option (and applies Turkic semantics)' do
+        'iS'.swapcase(:lithuanian, :turkic).should == 'İs'
+      end
+    
+      def brief_build_info(f)
+    build_time_str = f.logs.ctime.strftime('%Y-%m-%d %H:%M:%S')
+    s = <<~EOS
+      Homebrew build logs for #{f.full_name} on #{OS_VERSION}
+    EOS
+    if ARGV.include?('--with-hostname')
+      hostname = Socket.gethostname
+      s << 'Host: #{hostname}\n'
+    end
+    s << 'Build date: #{build_time_str}\n'
+    s
+  end
+    
+              # Check for http:// GitHub repo urls, https:// is preferred.
+          gh_pattern = %r{^http://github\.com/.*\.git$}
+          audit_urls(urls, gh_pattern) do |_, url|
+            problem 'Please use https:// for #{url}'
+          end
+    
+            rows.each do |row|
+          line = row.values.each_with_index.map do |value, col|
+            value.to_s.ljust(col_widths[col])
+          end.join(' ').rstrip
+          line = color.colorize(line, row.color) if row.color
+          puts line
+        end
+      end
+    
+    # IMPORTANT: The Capistrano::Plugin system is not yet considered a stable,
+# public API, and is subject to change without notice. Eventually it will be
+# officially documented and supported, but for now, use it at your own risk.
+#
+# Base class for Capistrano plugins. Makes building a Capistrano plugin as easy
+# as writing a `Capistrano::Plugin` subclass and overriding any or all of its
+# three template methods:
+#
+# * set_defaults
+# * register_hooks
+# * define_tasks
+#
+# Within the plugin you can use any methods of the Rake or Capistrano DSLs, like
+# `fetch`, `invoke`, etc. In cases when you need to use SSHKit's backend outside
+# of an `on` block, use the `backend` convenience method. E.g. `backend.test`,
+# `backend.execute`, or `backend.capture`.
+#
+# Package up and distribute your plugin class as a gem and you're good to go!
+#
+# To use a plugin, all a user has to do is install it in the Capfile, like this:
+#
+#   # Capfile
+#   require 'capistrano/superfancy'
+#   install_plugin Capistrano::Superfancy
+#
+# Or, to install the plugin without its hooks:
+#
+#   # Capfile
+#   require 'capistrano/superfancy'
+#   install_plugin Capistrano::Superfancy, load_hooks: false
+#
+class Capistrano::Plugin < Rake::TaskLib
+  include Capistrano::DSL
     
       desc 'Update server(s) by setting up a new release.'
   task :updating do
   end
-    
-    desc 'Generates a dummy app for testing for every Spree engine'
-task :test_app do
-  SPREE_GEMS.each do |gem_name|
-    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
-      sh 'rake test_app'
-    end
-  end
-end
-    
-              if @address.update_attributes(address_params)
-            respond_with(@address, default_template: :show)
-          else
-            invalid_resource!(@address)
-          end
-        end
