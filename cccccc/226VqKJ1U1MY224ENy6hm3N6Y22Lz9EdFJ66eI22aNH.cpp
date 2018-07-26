@@ -1,112 +1,38 @@
 
         
-        Status SetCurrentFile(Env* env, const std::string& dbname,
-                      uint64_t descriptor_number) {
-  // Remove leading 'dbname/' and add newline to manifest file name
-  std::string manifest = DescriptorFileName(dbname, descriptor_number);
-  Slice contents = manifest;
-  assert(contents.starts_with(dbname + '/'));
-  contents.remove_prefix(dbname.size() + 1);
-  std::string tmp = TempFileName(dbname, descriptor_number);
-  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
-  if (s.ok()) {
-    s = env->RenameFile(tmp, CurrentFileName(dbname));
+        
+    {
+    {} // end namespace index
+} // end namespace swift
+    
+    
+    {} // end namespace swift
+    
+    /// Runs the given function with the given context argument exactly once.
+/// The predicate argument must point to a global or static variable of static
+/// extent of type swift_once_t.
+SWIFT_RUNTIME_EXPORT
+void swift_once(swift_once_t *predicate, void (*fn)(void *), void *context);
+    
+    #ifndef SWIFT_INDEX_INDEXDATACONSUMER_H
+#define SWIFT_INDEX_INDEXDATACONSUMER_H
+    
+    
+    {
+    {
+    {  unsigned getNumFixitsApplied() const {
+    return NumFixitsApplied;
   }
-  if (!s.ok()) {
-    env->DeleteFile(tmp);
-  }
-  return s;
-}
-    
-      // These two overloads allow streaming a wide C string to a Message
-  // using the UTF-8 encoding.
-  Message& operator <<(const wchar_t* wide_c_str);
-  Message& operator <<(wchar_t* wide_c_str);
-    
-    #include <iosfwd>
-#include <vector>
-#include 'gtest/internal/gtest-internal.h'
-#include 'gtest/internal/gtest-string.h'
-    
-    // First, define a fixture class template.  It should be parameterized
-// by a type.  Remember to derive it from testing::Test.
-template <typename T>
-class FooTest : public testing::Test {
-  ...
 };
+} // end namespace migrator
+} // end namespace swift
     
-    // Generates a nonfatal failure at the given source file location with
-// a generic message.
-#define ADD_FAILURE_AT(file, line) \
-  GTEST_MESSAGE_AT_(file, line, 'Failed', \
-                    ::testing::TestPartResult::kNonFatalFailure)
-    
-      CartesianProductGenerator5(const ParamGenerator<T1>& g1,
-      const ParamGenerator<T2>& g2, const ParamGenerator<T3>& g3,
-      const ParamGenerator<T4>& g4, const ParamGenerator<T5>& g5)
-      : g1_(g1), g2_(g2), g3_(g3), g4_(g4), g5_(g5) {}
-  virtual ~CartesianProductGenerator5() {}
-    
-    #if GTEST_HAS_GLOBAL_WSTRING
-typedef ::wstring wstring;
-#elif GTEST_HAS_STD_WSTRING
-typedef ::std::wstring wstring;
-#endif  // GTEST_HAS_GLOBAL_WSTRING
-    
-    // Returns true iff n is a prime number.
-bool IsPrime(int n) {
-  // Trivial case 1: small numbers
-  if (n <= 1) return false;
-    }
-    
-      bool check_for_leaks = false;
-  if (argc > 1 && strcmp(argv[1], '--check_for_leaks') == 0 )
-    check_for_leaks = true;
-  else
-    printf('%s\n', 'Run this program with --check_for_leaks to enable '
-           'custom leak checking in the tests.');
-    
-    #include 'power_iphone.h'
-    
-    public:
-	virtual void poll();
-	virtual Error accept_stream(Ref<StreamPeer> p_base);
-	virtual Error connect_to_stream(Ref<StreamPeer> p_base, bool p_validate_certs = false, const String &p_for_hostname = String());
-	virtual Status get_status() const;
-    
-    
-    {	return connect_to_host(host, path, port, ssl, p_protocols);
+    template<typename T>
+inline void
+emitTLSLoad(Vout& v, TLSDatum<ThreadLocalNoCheck<T>> datum, Vreg d) {
+  auto const off = ThreadLocalNoCheck<T>::node_ptr_offset();
+  v << load{emitTLSAddr(v, datum) + safe_cast<int32_t>(off), d};
 }
-    
-    
-    {  p[0] = static_cast<jpgd_block_t>(s << pD->m_successive_low);
-}
-    
-    /*Some specific platforms may have optimized intrinsic or inline assembly
-   versions of these functions which can substantially improve performance.
-  We define macros for them to allow easy incorporation of these non-ANSI
-   features.*/
-    
-      const timespec& getStartTimer() const;
-  int getTimeoutSeconds() const;
-    
-    
-    {  return setCouldHaveSideEffects(locRaw(env, loc));
-}
-    
-    bool mustBeArrLike(const Type& ty) {
-  return ty.subtypeOf(BArr | BVec | BDict | BKeyset);
-}
-    
-      // Non-simple types (ones that are represented by pointers) can always
-  // possibly be null.
-  if (t.subtypeOfAny(TStr, TArr, TVec, TDict,
-                     TKeyset, TObj, TRes)) {
-    t |= TInitNull;
-  } else {
-    // Otherwise it should be a simple type or possibly everything.
-    assert(t == TInitCell || t.subtypeOfAny(TBool, TInt, TDbl, TNull));
-  }
     
     Type typeAddO(Type t1, Type t2) {
   if (auto t = eval_const(t1, t2, cellAddO))          return *t;
@@ -119,188 +45,127 @@ bool IsPrime(int n) {
   return TInitCell;
 }
     
+      std::string m_proxyHost;
+  int         m_proxyPort;
+  std::string m_proxyUsername;
+  std::string m_proxyPassword;
     
-    {  // session backup/restore for RPCRequestHandler
-  Array m_shutdownsBackup;
-  req::vector<std::pair<Variant,int>> m_userErrorHandlersBackup;
-  req::vector<Variant> m_userExceptionHandlersBackup;
-  Variant m_exitCallback;
-  String m_sandboxId; // cache the sandbox id for the request
-  int m_pageletTasksStarted;
-  const VirtualHost* m_vhost;
-public:
-  DebuggerSettings debuggerSettings;
-  req::vector_set<ObjectData*> m_liveBCObjs; // objects with destructors
-private:
-  size_t m_apcMemSize{0};
-  std::vector<APCHandle*> m_apcHandles; // gets moved to treadmill
-public:
-  // Although the error handlers may want to access dynamic properties,
-  // we cannot *call* the error handlers (or their destructors) while
-  // destroying the context, so C++ order of destruction is not an issue.
-  req::fast_map<const ObjectData*,ArrayNoDtor> dynPropTable;
-  TYPE_SCAN_IGNORE_FIELD(dynPropTable);
-  VarEnv* m_globalVarEnv;
-  struct FileInfo {
-    Unit* unit;
-    time_t ts_sec; // timestamp seconds
-    unsigned long ts_nsec; // timestamp nanoseconds (or 0 if ns not supported)
-  };
-  req::hash_map<const StringData*, FileInfo, string_data_hash, string_data_same>
-    m_evaledFiles;
-  req::vector<const StringData*> m_evaledFilesOrder;
-  req::vector<Unit*> m_createdFuncs;
-  req::vector<Fault> m_faults;
-  int m_lambdaCounter;
-  using VMStateVec = req::TinyVector<VMState, 32>;
-  VMStateVec m_nestedVMs;
-  TYPE_SCAN_IGNORE_FIELD(m_nestedVMs); // handled explicitly in heap-scan.h
-  int m_nesting;
-  bool m_dbgNoBreak;
-  bool m_unwindingCppException;
-private:
-  Array m_evaledArgs;
-  String m_lastErrorPath;
-  int m_lastErrorLine;
-public:
-  Variant m_setprofileCallback;
-  Variant m_memThresholdCallback;
-  uint64_t m_setprofileFlags;
-  bool m_executingSetprofileCallback;
-public:
-  Cell m_headerCallback;
-  bool m_headerCallbackDone{false}; // used to prevent infinite loops
-private:
-  ExcLoggerHook m_logger_hook;
-};
+    // Set by a .ini file at the start
+static SystemSettings s_system_settings;
     
-    /*! \brief data type accepted by xgboost interface */
-enum DataType {
-  kFloat32 = 1,
-  kDouble = 2,
-  kUInt32 = 3,
-  kUInt64 = 4
-};
-    
-    SparsePageSource::SparsePageSource(const std::string& cache_info)
-    : base_rowid_(0), page_(nullptr), clock_ptr_(0) {
-  // read in the info files
-  std::vector<std::string> cache_shards = common::Split(cache_info, ':');
-  CHECK_NE(cache_shards.size(), 0U);
-  {
-    std::string name_info = cache_shards[0];
-    std::unique_ptr<dmlc::Stream> finfo(dmlc::Stream::Create(name_info.c_str(), 'r'));
-    int tmagic;
-    CHECK_EQ(finfo->Read(&tmagic, sizeof(tmagic)), sizeof(tmagic));
-    this->info.LoadBinary(finfo.get());
-  }
-  files_.resize(cache_shards.size());
-  formats_.resize(cache_shards.size());
-  prefetchers_.resize(cache_shards.size());
-    }
-    
-    using LogCallbackRegistryStore = dmlc::ThreadLocalStore<LogCallbackRegistry>;
-    
-        argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        double arg0;
-    }
-    
-    
-    
-    #if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-    
-    // This class implements debug drawing callbacks that are invoked
-// inside b2World::Step.
-class GLESDebugDraw : public b2Draw
-{
-    float32 mRatio;
-    cocos2d::GLProgram* mShaderProgram;
-    GLint        mColorLocation;
-    }
-    
-    
-    {	b2Vec2 viewCenter;
-	float32 hz;
-	int32 velocityIterations;
-	int32 positionIterations;
-	int32 drawShapes;
-	int32 drawJoints;
-	int32 drawAABBs;
-	int32 drawContactPoints;
-	int32 drawContactNormals;
-	int32 drawContactImpulse;
-	int32 drawFrictionImpulse;
-	int32 drawCOMs;
-	int32 drawStats;
-	int32 drawProfile;
-	int32 enableWarmStarting;
-	int32 enableContinuous;
-	int32 enableSubStepping;
-	int32 enableSleep;
-	int32 pause;
-	int32 singleStep;
-};
-    
-    		body1->SetAngularVelocity(m_angularVelocity);
-		body1->SetLinearVelocity(velocity1);
-    
-    #endif
-
-    
-    #include 'Common.h'
-#include 'References.h'
-    
-    /**
- * Symbolicates a stack trace into a given vector
- *
- * @param symbols The vector to receive the output. The vector is cleared and
- * enough room to keep the frames are reserved.
- *
- * @param stackTrace The input stack trace
- */
-FBEXPORT void getStackTraceSymbols(std::vector<StackTraceElement>& symbols,
-                                   const std::vector<InstructionPointer>& trace);
-    
-      YGNodeCalculateLayout(root, 200, 100, YGDirectionLTR);
-    
-        Node * getParent(void);
-    Node * getChild(unsigned index);
-    
-        method(getAlignContent);
-    method(getAlignItems);
-    method(getAlignSelf);
-    method(getFlexDirection);
-    method(getFlexWrap);
-    method(getJustifyContent);
-    
-    template<typename... ARGS>
-inline void logv(const char* tag, const char* msg, ARGS... args) noexcept {
-  log(ANDROID_LOG_VERBOSE, tag, msg, args...);
+    TEST(LogTest, UnexpectedMiddleType) {
+  Write('foo');
+  SetByte(6, kMiddleType);
+  FixChecksum(0, 3);
+  ASSERT_EQ('EOF', Read());
+  ASSERT_EQ(3, DroppedBytes());
+  ASSERT_EQ('OK', MatchError('missing start'));
 }
     
-      /**
-   * This runs the closure in a scope with fbjni's classloader. This should be
-   * the same classloader as the rest of the application and thus anything
-   * running in the closure will have access to the same classes as in a normal
-   * java-create thread.
-   */
-  static void WithClassLoader(std::function<void()>&& runnable);
     
-    // Class that lets you declare a global but does not add a static constructor
-// to the binary. Eventually I'd like to have this auto-initialize in a
-// multithreaded environment but for now it's easiest just to use manual
-// initialization.
-template <typename T>
-class StaticInitialized {
-public:
-  constexpr StaticInitialized() :
-    m_instance(nullptr)
-  {}
+    {  size_t read = 0;
+  std::string read_data;
+  while (read < kWriteSize) {
+    ASSERT_OK(seq_file->Read(kWriteSize - read, &result, scratch));
+    read_data.append(result.data(), result.size());
+    read += result.size();
+  }
+  ASSERT_TRUE(write_data == read_data);
+  delete seq_file;
+  delete [] scratch;
+}
+    
+    
+    {  // Skewed: pick 'base' uniformly from range [0,max_log] and then
+  // return 'base' random bits.  The effect is to pick a number in the
+  // range [0,2^max_log-1] with exponential bias towards smaller numbers.
+  uint32_t Skewed(int max_log) {
+    return Uniform(1 << Uniform(max_log + 1));
+  }
+};
+    
+    
+    {  // Verify that the size of the key space not touched by the reads
+  // is pretty much unchanged.
+  const int64_t final_other_size = Size(Key(n), Key(kCount));
+  ASSERT_LE(final_other_size, initial_other_size + 1048576);
+  ASSERT_GE(final_other_size, initial_other_size/5 - 1048576);
+}
+    
+    
+    {  // When limit user key is prefix of start user key
+  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
+            Shorten(IKey('foobar', 100, kTypeValue),
+                    IKey('foo', 200, kTypeValue)));
+}
+    
+    
+    {  // No copying allowed
+  BlockBuilder(const BlockBuilder&);
+  void operator=(const BlockBuilder&);
+};
+    
+    template <typename T>
+bool SingletonHolder<T>::hasLiveInstance() {
+  return !instance_weak_.expired();
+}
+    
+    
+    {  Type type_;
+};
+    
+      void push(T val) {
+    auto node = new Node(val, head());
+    while (!cas_head(node->next_, node)) {
+      /* try again */;
+    }
+  }
+    
+    #pragma once
+    
+    
+    { private:
+  folly::LifoSem sem_;
+  folly::MPMCQueue<T> queue_;
+};
+    
+    class alignas(hardware_destructive_interference_size) hazptr_rec {
+  friend class hazptr_domain;
+  friend class hazptr_holder;
+  friend struct hazptr_tc_entry;
     }
     
-    #ifndef FBASSERT_H
-#define FBASSERT_H
+    #include <folly/portability/GTest.h>
+    
+    void AbstractBtMessage::setBtMessageFactory(BtMessageFactory* factory)
+{
+  messageFactory_ = factory;
+}
+    
+    namespace aria2 {
+    }
+    
+    
+    {} // namespace aria2
+    
+      virtual ssize_t readData(unsigned char* data, size_t len,
+                           int64_t offset) CXX11_OVERRIDE;
+    
+    // DiskwriterFactory class template to create DiskWriter derived
+// object, ignoring filename.
+template <class DiskWriterType>
+class AnonDiskWriterFactory : public DiskWriterFactory {
+public:
+  AnonDiskWriterFactory() = default;
+  virtual ~AnonDiskWriterFactory() = default;
+    }
+    
+    
+    {  std::shared_ptr<AsyncNameResolver> asyncNameResolver_[2];
+  size_t numResolver_;
+  int resolverCheck_;
+  bool ipv4_;
+  bool ipv6_;
+};
+    
+    #include 'common.h'
