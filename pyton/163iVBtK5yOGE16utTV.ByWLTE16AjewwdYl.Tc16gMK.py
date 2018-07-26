@@ -1,233 +1,166 @@
 
         
-        
-class FormDataRoutingRedirect(AssertionError):
-    '''This exception is raised by Flask in debug mode if it detects a
-    redirect caused by the routing system when the request method is not
-    GET, HEAD or OPTIONS.  Reasoning: form data will be dropped.
+                (2016-01, url0), 1
+        (2016-01, url0), 1
+        (2016-01, url1), 1
+        '''
+        url = self.extract_url(line)
+        period = self.extract_year_month(line)
+        yield (period, url), 1
+    
+    
+class UserService(object):
+    
+        def remove(self, key):
+        hash_index = self._hash_function(key)
+        for index, item in enumerate(self.table[hash_index]):
+            if item.key == key:
+                del self.table[hash_index][index]
+                return
+        raise KeyError('Key not found')
+
+    
+            Accessing a node updates its position to the front of the LRU list.
+        '''
+        node = self.lookup[query]
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
+    
+    
+def test_idna_with_version_attribute(mocker):
+    '''Verify we're actually setting idna version when it should be available.'''
+    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
+    assert info()['idna'] == {'version': '2.6'}
+
+    
+    from .models import Response
+from .compat import urlparse, basestring
+from .utils import (DEFAULT_CA_BUNDLE_PATH, extract_zipped_paths,
+                    get_encoding_from_headers, prepend_scheme_if_needed,
+                    get_auth_from_url, urldefragauth, select_proxy)
+from .structures import CaseInsensitiveDict
+from .cookies import extract_cookies_to_jar
+from .exceptions import (ConnectionError, ConnectTimeout, ReadTimeout, SSLError,
+                         ProxyError, RetryError, InvalidSchema, InvalidProxyURL)
+from .auth import _basic_auth_str
+    
+    # The reST default role (used for this markup: `text`) to use for all
+# documents.
+#default_role = None
+    
+            :param name: a string containing name of cookie
+        :param domain: (optional) string containing domain of cookie
+        :param path: (optional) string containing path of cookie
+        :raises KeyError: if cookie is not found
+        :raises CookieConflictError: if there are multiple cookies
+            that match name and optionally domain and path
+        :return: cookie.value
+        '''
+        toReturn = None
+        for cookie in iter(self):
+            if cookie.name == name:
+                if domain is None or cookie.domain == domain:
+                    if path is None or cookie.path == path:
+                        if toReturn is not None:  # if there are multiple cookies that meet passed in criteria
+                            raise CookieConflictError('There are multiple cookies with name, %r' % (name))
+                        toReturn = cookie.value  # we will eventually return this as long as no cookie conflict
+    
+        If the constructor, ``.update``, or equality comparison
+    operations are given keys that have equal ``.lower()``s, the
+    behavior is undefined.
     '''
     
-            if not current.propagate:
-            break
+        # Informational.
+    100: ('continue',),
+    101: ('switching_protocols',),
+    102: ('processing',),
+    103: ('checkpoint',),
+    122: ('uri_too_long', 'request_uri_too_long'),
+    200: ('ok', 'okay', 'all_ok', 'all_okay', 'all_good', '\\o/', '✓'),
+    201: ('created',),
+    202: ('accepted',),
+    203: ('non_authoritative_info', 'non_authoritative_information'),
+    204: ('no_content',),
+    205: ('reset_content', 'reset'),
+    206: ('partial_content', 'partial'),
+    207: ('multi_status', 'multiple_status', 'multi_stati', 'multiple_stati'),
+    208: ('already_reported',),
+    226: ('im_used',),
+    
+            if is_py2:
+            if isinstance(scheme, str):
+                scheme = scheme.encode('utf-8')
+            if isinstance(netloc, str):
+                netloc = netloc.encode('utf-8')
+            if isinstance(path, str):
+                path = path.encode('utf-8')
+            if isinstance(query, str):
+                query = query.encode('utf-8')
+            if isinstance(fragment, str):
+                fragment = fragment.encode('utf-8')
+    
+        if WSAStringToAddressA(
+            ip_string,
+            address_family,
+            None,
+            ctypes.byref(addr),
+            ctypes.byref(addr_size)
+    ) != 0:
+        raise socket.error(ctypes.FormatError())
+    
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
+    
+                if isinstance(self.input, TreeNodeStream):
+                self.extractInformationFromTreeNodeStream(self.input)
+    
+        # Parse and validate the field names.  Validation serves two purposes,
+    # generating informative error messages and preventing template injection attacks.
+    if isinstance(field_names, basestring):
+        field_names = field_names.replace(',', ' ').split() # names separated by whitespace and/or commas
+    field_names = tuple(map(str, field_names))
+    for name in (typename,) + field_names:
+        if not all(c.isalnum() or c=='_' for c in name):
+            raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
+        if _iskeyword(name):
+            raise ValueError('Type names and field names cannot be a keyword: %r' % name)
+        if name[0].isdigit():
+            raise ValueError('Type names and field names cannot start with a number: %r' % name)
+    seen_names = set()
+    for name in field_names:
+        if name.startswith('_'):
+            raise ValueError('Field names cannot start with an underscore: %r' % name)
+        if name in seen_names:
+            raise ValueError('Encountered duplicate field name: %r' % name)
+        seen_names.add(name)
+    
+            for future in as_completed(future_to_url):
+            try:
+                url_to_content[future_to_url[future]] = future.result()
+            except:
+                pass
+        return url_to_content
+    finally:
+        executor.shutdown()
     
     
-class SessionInterface(object):
-    '''The basic interface you have to implement in order to replace the
-    default session interface which uses werkzeug's securecookie
-    implementation.  The only methods you have to implement are
-    :meth:`open_session` and :meth:`save_session`, the others have
-    useful defaults which you don't need to change.
+  @staticmethod
+  def CreateFromOptions( user_options ):
+    all_filters = dict( user_options.get( 'filter_diagnostics', {} ) )
+    compiled_by_type = {}
+    for type_spec, filter_value in iteritems( dict( all_filters ) ):
+      filetypes = [ type_spec ]
+      if type_spec.find( ',' ) != -1:
+        filetypes = type_spec.split( ',' )
+      for filetype in filetypes:
+        compiled_by_type[ filetype ] = _CompileFilters( filter_value )
     
     
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
-
-    
-    
-def test_config_missing():
-    app = flask.Flask(__name__)
-    with pytest.raises(IOError) as e:
-        app.config.from_pyfile('missing.cfg')
-    msg = str(e.value)
-    assert msg.startswith('[Errno 2] Unable to load configuration '
-                          'file (No such file or directory):')
-    assert msg.endswith('missing.cfg'')
-    assert not app.config.from_pyfile('missing.cfg', silent=True)
-    
-        Tests regressions.
-    
-        rv = app.test_client().get('/', errors_stream=out)
-    assert rv.status_code == 500
-    assert b'Internal Server Error' in rv.data
-    assert not out.getvalue()
-
-    
-    plt.figure('scikit-learn Ward's method benchmark results')
-plt.imshow(np.log(ratio), aspect='auto', origin='lower')
-plt.colorbar()
-plt.contour(ratio, levels=[1, ], colors='k')
-plt.yticks(range(len(n_features)), n_features.astype(np.int))
-plt.ylabel('N features')
-plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
-plt.xlabel('N samples')
-plt.title('Scikit's time, in units of scipy time (log)')
-plt.show()
-
-    
-        op.add_option('--transformers',
-                  dest='selected_transformers',
-                  default='GaussianRandomProjection,SparseRandomProjection',
-                  type=str,
-                  help='Comma-separated list of transformer to benchmark. '
-                       'Default: %default. Available: '
-                       'GaussianRandomProjection,SparseRandomProjection')
-    
-    URL = ('http://people.csail.mit.edu/jrennie/'
-       '20Newsgroups/20news-bydate.tar.gz')
-    
-    
-class View(object):
-    '''Test docstring. '''
-    def __init__(self, root, controller):
-        f = Figure()
-        ax = f.add_subplot(111)
-        ax.set_xticks([])
-        ax.set_yticks([])
-        ax.set_xlim((x_min, x_max))
-        ax.set_ylim((y_min, y_max))
-        canvas = FigureCanvasTkAgg(f, master=root)
-        canvas.show()
-        canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
-        canvas._tkcanvas.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
-        canvas.mpl_connect('button_press_event', self.onclick)
-        toolbar = NavigationToolbar2TkAgg(canvas, root)
-        toolbar.update()
-        self.controllbar = ControllBar(root, controller)
-        self.f = f
-        self.ax = ax
-        self.canvas = canvas
-        self.controller = controller
-        self.contours = []
-        self.c_labels = None
-        self.plot_kernels()
-    
-    This example demonstrates how to generate a checkerboard dataset and
-bicluster it using the Spectral Biclustering algorithm.
-    
-    plt.title('Change of predicted probabilities after sigmoid calibration')
-plt.xlabel('Probability class 1')
-plt.ylabel('Probability class 2')
-plt.xlim(-0.05, 1.05)
-plt.ylim(-0.05, 1.05)
-plt.legend(loc='best')
-    
-    
-class ScrapyCommand(object):
-    
-        def run(self, args, opts):
-        if opts.list:
-            self._list_templates()
-            return
-        if opts.dump:
-            template_file = self._find_template(opts.dump)
-            if template_file:
-                with open(template_file, 'r') as f:
-                    print(f.read())
-            return
-        if len(args) != 2:
-            raise UsageError()
-    
-            return contracts
-    
-    from scrapy.utils.defer import mustbe_deferred
-from scrapy.utils.httpobj import urlparse_cached
-from scrapy.resolver import dnscache
-from scrapy import signals
-from .middleware import DownloaderMiddlewareManager
-from .handlers import DownloadHandlers
-    
-    
-class DownloadHandlers(object):
-    
-    
-def _parse(url):
-    ''' Return tuple of (scheme, netloc, host, port, path),
-    all in bytes except for port which is int.
-    Assume url is from Request.url, which was passed via safe_url_string
-    and is ascii-only.
-    '''
-    url = url.strip()
-    parsed = urlparse(url)
-    return _parsed_url_args(parsed)
-    
-        def process_response(self, request, response, spider):
-        if not response.body:
-            return response
-    
-            if self.close_on.get('errorcount'):
-            crawler.signals.connect(self.error_count, signal=signals.spider_error)
-        if self.close_on.get('pagecount'):
-            crawler.signals.connect(self.page_count, signal=signals.response_received)
-        if self.close_on.get('timeout'):
-            crawler.signals.connect(self.spider_opened, signal=signals.spider_opened)
-        if self.close_on.get('itemcount'):
-            crawler.signals.connect(self.item_scraped, signal=signals.item_scraped)
-        crawler.signals.connect(self.spider_closed, signal=signals.spider_closed)
-    
-        def __init__(self, cards):
-        self.cards = cards
-        self.deal_index = 0
-    
-            Emit key value pairs of the form:
-    
-    
-class MH(Mailbox):
-    '''An MH mailbox.'''
-    
-        print('# The following line assumes you have built Python using the standard instructions')
-    print('# Otherwise fix the following line to point to the library.')
-    print('pythonlib = '$(pythonhome)/pcbuild/python%s$(debug_suffix).lib'' % version_suffix)
-    print()
-    
-        def is_resource(self, name):
-        # Maybe we could do better, but if we can get the data, it's a
-        # resource.  Otherwise it isn't.
-        fullname_as_path = self.fullname.replace('.', '/')
-        path = f'{fullname_as_path}/{name}'
-        try:
-            self.zipimporter.get_data(path)
-        except OSError:
-            return False
-        return True
-    
-                        if set_type == 'return':
-                        self.expect_set.extend(
-                            [('exception', 10, 'main', StopIteration), ('step',),
-                             ('return', 10, 'main'),                   ('quit', ),
-                            ]
-                        )
-                    else:
-                        self.expect_set.extend(
-                            [('line', 4, 'test_gen'), ('quit', ),]
-                        )
-                    with TracerRun(self) as tracer:
-                        tracer.runcall(tfunc_import)
-    
-        def test___class___instancemethod(self):
-        # See issue #14857
-        class X:
-            def f(self):
-                return __class__
-        self.assertIs(X().f(), X)
-    
-        def __repr__(self):
-        res = super(Semaphore, self).__repr__()
-        extra = 'locked' if self._value == 0 else 'unlocked,value:{0}'.format(
-            self._value)
-        if self._waiters:
-            extra = '{0},waiters:{1}'.format(extra, len(self._waiters))
-        return '<{0} [{1}]>'.format(res[1:-1], extra)
-    
-            if compression_options is None or 'compression_level' not in compression_options:
-            self._compression_level = tornado.web.GZipContentEncoding.GZIP_LEVEL
-        else:
-            self._compression_level = compression_options['compression_level']
-    
-        def test_get_current_user_from_ui_module_is_lazy(self):
-        response = self.fetch('/without_user_module')
-        self.assertEqual(response.body, b'False')
-    
-    from tornado.escape import _unicode, native_str
-from tornado.log import define_logging_options
-from tornado import stack_context
-from tornado.util import basestring_type, exec_in
+class OmniCompletionRequest( CompletionRequest ):
+  def __init__( self, omni_completer, request_data ):
+    super( OmniCompletionRequest, self ).__init__( request_data )
+    self._omni_completer = omni_completer
