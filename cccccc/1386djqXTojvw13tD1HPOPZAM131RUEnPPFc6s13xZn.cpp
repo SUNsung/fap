@@ -1,239 +1,265 @@
-  assert(peekType(msg) == thpp::Type::LONG_STORAGE);
-  THLongStorage *storage2 = unpackTHLongStorage(msg);
-  assert(storage2->size == STORAGE_SIZE);
-  for (int64_t i = 0; i < STORAGE_SIZE; i++)
-    assert(storage2->data[i] == i);
-  
-  int vec_size = unpackInteger(msg);
-  assert(vec_size == VEC_SIZE);
-  for (int i = 0; i < VEC_SIZE; i++)
-    assert(unpackInteger(msg) == 7);
+
+        
+          /// When evaluating an expression in the context of an existing source file,
+  /// we may want to prefer declarations from that source file.
+  /// The DebuggerClient can return a private-discriminator to tell lookup to
+  /// prefer these certain decls.
+  virtual Identifier getPreferredPrivateDiscriminator() = 0;
     
-    #define THDPStorage TH_CONCAT_3(THDP,Real,Storage)
-#define THDPStorageStr TH_CONCAT_STRING_3(torch.cuda.,Real,Storage)
-#define THDPStorageClass TH_CONCAT_3(THDP,Real,StorageClass)
-#define THDPStorage_(NAME) TH_CONCAT_4(THDP,Real,Storage_,NAME)
-    
-    
-void register_fd(int fd) {
-  struct pollfd pfd = {0};
-  pfd.fd = fd;
-  pfd.events = POLLIN;
-  pollfds.push_back(pfd);
-}
-    
-    void THDTensor_(ormqr)(THDTensor *ra, THDTensor *a, THDTensor *tau, THDTensor *c,
-                       const char *side, const char *trans) {
-  if (a == NULL) a = ra;
-  THArgCheck(a->nDimension == 2, 1, 'A should be 2 dimensional');
-  masterCommandChannel->sendMessage(
-    packMessage(Functions::tensorOrmqr, ra, a, tau, c, side[0], trans[0]),
-    THDState::s_current_worker
-  );
-  THDTensor_(free)(THDTensor_(cloneColumnMajor)(ra, c));
-}
-    
-    void THP_decodeDoubleBuffer(double* dst, const uint8_t* src, THPByteOrder order, size_t len)
-{
-  for (size_t i = 0; i < len; i++) {
-    union { uint64_t x; double d; };
-    x = (order == THP_BIG_ENDIAN ? decodeUInt64BE(src) : decodeUInt64LE(src));
-    dst[i] = d;
-    src += sizeof(double);
+      void setParts(CommentParts P) {
+    Parts = P;
   }
+    
+    #include 'swift/Basic/SourceLoc.h'
+#include 'llvm/ADT/Optional.h'
+#include 'llvm/ADT/StringMap.h'
+#include 'llvm/Support/SourceMgr.h'
+#include <map>
+    
+    
+    {
+    {} // end namespace index
+} // end namespace swift
+    
+    template <> struct DenseMapInfo<LSLocation> {
+  static inline LSLocation getEmptyKey() {
+    return LSLocation(LSBase::Empty);
+  }
+  static inline LSLocation getTombstoneKey() {
+    return LSLocation(LSBase::Tombstone);
+  }
+  static inline unsigned getHashValue(const LSLocation &Loc) {
+    return hash_value(Loc);
+  }
+  static bool isEqual(const LSLocation &LHS, const LSLocation &RHS) {
+    return LHS == RHS;
+  }
+};
+    
+    class CompilerInvocation;
+struct DiagnosticInfo;
+struct MigratorOptions;
+class SourceManager;
+    
+    /// This represents one part of a #if block.  If the condition field is
+/// non-null, then this represents a #if or a #elseif, otherwise it represents
+/// an #else block.
+struct IfConfigClause {
+  /// The location of the #if, #elseif, or #else keyword.
+  SourceLoc Loc;
+  
+  /// The condition guarding this #if or #elseif block.  If this is null, this
+  /// is a #else clause.
+  Expr *Cond;
+  
+  /// Elements inside the clause
+  ArrayRef<ASTNode> Elements;
+    }
+    
+    #if GTEST_OS_SYMBIAN
+  // Streams a value (either a pointer or not) to this object.
+  template <typename T>
+  inline Message& operator <<(const T& value) {
+    StreamHelper(typename internal::is_pointer<T>::type(), value);
+    return *this;
+  }
+#else
+  // Streams a non-pointer value to this object.
+  template <typename T>
+  inline Message& operator <<(const T& val) {
+    // Some libraries overload << for STL containers.  These
+    // overloads are defined in the global namespace instead of ::std.
+    //
+    // C++'s symbol lookup rule (i.e. Koenig lookup) says that these
+    // overloads are visible in either the std namespace or the global
+    // namespace, but not other namespaces, including the testing
+    // namespace which Google Test's Message class is in.
+    //
+    // To allow STL containers (and other types that has a << operator
+    // defined in the global namespace) to be used in Google Test
+    // assertions, testing::Message must access the custom << operator
+    // from the global namespace.  With this using declaration,
+    // overloads of << defined in the global namespace and those
+    // visible via Koenig lookup are both exposed in this function.
+    using ::operator <<;
+    *ss_ << val;
+    return *this;
+  }
+    
+    // Prints the fields of a tuple tersely to a string vector, one
+// element for each field.  See the comment before
+// UniversalTersePrint() for how we define 'tersely'.
+template <typename Tuple>
+Strings UniversalTersePrintTupleFieldsToStrings(const Tuple& value) {
+  Strings result;
+  TuplePrefixPrinter< ::std::tr1::tuple_size<Tuple>::value>::
+      TersePrintPrefixToStrings(value, &result);
+  return result;
+}
+#endif  // GTEST_HAS_TR1_TUPLE
+    
+    
+    {  return AssertionFailure() << pred_text << '('
+                            << e1 << ', '
+                            << e2 << ', '
+                            << e3 << ', '
+                            << e4 << ') evaluates to false, where'
+                            << '\n' << e1 << ' evaluates to ' << v1
+                            << '\n' << e2 << ' evaluates to ' << v2
+                            << '\n' << e3 << ' evaluates to ' << v3
+                            << '\n' << e4 << ' evaluates to ' << v4;
 }
     
-      struct addrinfo *next_addr = addresses.get();
-  int socket;
-  // we'll loop over the addresses only if at least of them gave us ECONNREFUSED.
-  // Maybe the host was up, but the server wasn't running.
-  bool any_refused = false;
-  while (true) {
-    try {
-      SYSCHECK(socket = ::socket(next_addr->ai_family, next_addr->ai_socktype, next_addr->ai_protocol))
-      ResourceGuard socket_guard([socket]() { ::close(socket); });
-    }
-    }
+    // The base case for the compile time recursion.
+template <GTEST_TEMPLATE_ Fixture, typename Types>
+class TypeParameterizedTestCase<Fixture, Templates0, Types> {
+ public:
+  static bool Register(const char* /*prefix*/, const char* /*case_name*/,
+                       const char* /*test_names*/) {
+    return true;
+  }
+};
     
-    /* Opaque object representing a Bidirectional stream creating engine. Created
- * and configured outside of this API to facilitate sharing with other
- * components */
-typedef struct stream_engine {
-  void* obj;
-  void* annotation;
-} stream_engine;
+    // The specialization for size 8.
+template <>
+class TypeWithSize<8> {
+ public:
+#if GTEST_OS_WINDOWS
+  typedef __int64 Int;
+  typedef unsigned __int64 UInt;
+#else
+  typedef long long Int;  // NOLINT
+  typedef unsigned long long UInt;  // NOLINT
+#endif  // GTEST_OS_WINDOWS
+};
     
-    #include <grpc/support/log.h>
+    // ByRef<T>::type is T if T is a reference; otherwise it's const T&.
+template <typename T>
+struct ByRef { typedef const T& type; };  // NOLINT
+template <typename T>
+struct ByRef<T&> { typedef T& type; };  // NOLINT
     
-    DEFINE_int32(driver_port, 0, 'Port for communication with driver');
-DEFINE_int32(server_port, 0, 'Port for operation as a server');
-DEFINE_string(credential_type, grpc::testing::kInsecureCredentialsType,
-              'Credential type for communication with driver');
+    // We don't want to require the users to write TypesN<...> directly,
+// as that would require them to count the length.  Types<...> is much
+// easier to write, but generates horrible messages when there is a
+// compiler error, as gcc insists on printing out each template
+// argument, even if it has the default value (this means Types<int>
+// will appear as Types<int, None, None, ..., None> in the compiler
+// errors).
+//
+// Our solution is to combine the best part of the two approaches: a
+// user would write Types<T1, ..., TN>, and Google Test will translate
+// that to TypesN<T1, ..., TN> internally to make error messages
+// readable.  The translation is done by the 'type' member of the
+// Types template.
     
-    #endif  // GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
     
-    UsageTimer::Result UsageTimer::Sample() {
-  Result r;
-  r.wall = Now();
-  get_resource_usage(&r.user, &r.system);
-  r.total_cpu_time = 0;
-  r.idle_cpu_time = 0;
-  get_cpu_usage(&r.total_cpu_time, &r.idle_cpu_time);
-  return r;
+    {	ADD_SIGNAL(MethodInfo('data_received'));
+	ADD_SIGNAL(MethodInfo('connection_established', PropertyInfo(Variant::STRING, 'protocol')));
+	ADD_SIGNAL(MethodInfo('connection_closed'));
+	ADD_SIGNAL(MethodInfo('connection_error'));
 }
-    
-     private:
-  static Result Sample();
-    
-    #endif // WEBSOCKET_CLIENT_H
 
     
-    #if defined(MBEDTLS_SSL_DTLS_BADMAC_LIMIT) &&                              \
-    ( !defined(MBEDTLS_SSL_TLS_C) || !defined(MBEDTLS_SSL_PROTO_DTLS) )
-#error 'MBEDTLS_SSL_DTLS_BADMAC_LIMIT  defined, but not all prerequisites'
-#endif
+    	GodotDeepPenetrationContactResultCallback(const btCollisionObjectWrapper *body0Wrap, const btCollisionObjectWrapper *body1Wrap) :
+			btManifoldResult(body0Wrap, body1Wrap),
+			m_penetration_distance(0),
+			m_other_compound_shape_index(0) {}
     
-    /*The number of extra bits of precision at which to store rate metrics.*/
-# define OC_BIT_SCALE  (6)
-/*The number of extra bits of precision at which to store RMSE metrics.
-  This must be at least half OC_BIT_SCALE (rounded up).*/
-# define OC_RMSE_SCALE (5)
-/*The number of bins to partition statistics into.*/
-# define OC_SAD_BINS   (24)
-/*The number of bits of precision to drop from SAD scores to assign them to a
-   bin.*/
-# define OC_SAD_SHIFT  (9)
+    # if defined(OC_COLLECT_METRICS)
+typedef struct oc_mode_metrics oc_mode_metrics;
+# endif
+typedef struct oc_mode_rd      oc_mode_rd;
     
-      static void GetRealtimeTime(timespec &sp);
-  static void GetMonotonicTime(timespec &sp);
-  static int64_t GetCurrentTimeMicros();
-  static int64_t GetRusageMicros(Type t, Who who);
-  static int64_t GetThreadCPUTimeNanos();
-  const char *getName() const;
-  int64_t getMicroSeconds() const;
-  void report() const;
+    /*Some specific platforms may have optimized intrinsic or inline assembly
+   versions of these functions which can substantially improve performance.
+  We define macros for them to allow easy incorporation of these non-ANSI
+   features.*/
     
-    #else // HAVE_NUMA undefined
-namespace HPHP {
-    }
-    
-      // check union_of and commonAncestor API
-  EXPECT_TRUE((*(*clsA).commonAncestor(*clsB)).same(*clsBase));
-  EXPECT_TRUE((*(*clsB).commonAncestor(*clsA)).same(*clsBase));
-  EXPECT_TRUE((*(*clsAA).commonAncestor(*clsAB)).same(*clsA));
-  EXPECT_TRUE((*(*clsAB).commonAncestor(*clsAA)).same(*clsA));
-  EXPECT_TRUE((*(*clsA).commonAncestor(*clsBAA)).same(*clsBase));
-  EXPECT_TRUE((*(*clsBAA).commonAncestor(*clsA)).same(*clsBase));
-  EXPECT_TRUE((*(*clsBAA).commonAncestor(*clsB)).same(*clsB));
-  EXPECT_TRUE((*(*clsB).commonAncestor(*clsBAA)).same(*clsB));
-  EXPECT_TRUE((*(*clsBAA).commonAncestor(*clsBB)).same(*clsB));
-  EXPECT_TRUE((*(*clsBB).commonAncestor(*clsBAA)).same(*clsB));
-  EXPECT_TRUE((*(*clsAA).commonAncestor(*clsBase)).same(*clsBase));
-  EXPECT_TRUE((*(*clsBase).commonAncestor(*clsAA)).same(*clsBase));
-  EXPECT_FALSE((*clsAA).commonAncestor(*clsTestClass));
-  EXPECT_FALSE((*clsTestClass).commonAncestor(*clsAA));
-  EXPECT_FALSE((*clsBAA).commonAncestor(*clsNonUnique));
-  EXPECT_FALSE((*clsNonUnique).commonAncestor(*clsBAA));
-    
-    #define FAIL_ON_ERROR(x) { DWORD ec; if ((ec = (x)) != ERROR_SUCCESS) { ShowErrorAndExit(ec, __WFUNCTION__, __LINE__); } }
-    
-    #include 'db/log_reader.h'
-#include 'db/log_writer.h'
-#include 'leveldb/env.h'
-#include 'util/coding.h'
-#include 'util/crc32c.h'
-#include 'util/random.h'
-#include 'util/testharness.h'
-    
-      // Check the crc of the type and the block contents
-  const char* data = contents.data();    // Pointer to where Read put the data
-  if (options.verify_checksums) {
-    const uint32_t crc = crc32c::Unmask(DecodeFixed32(data + n + 1));
-    const uint32_t actual = crc32c::Value(data, n + 1);
-    if (actual != crc) {
-      delete[] buf;
-      s = Status::Corruption('block checksum mismatch');
-      return s;
-    }
-  }
-    
-    class BloomTest {
- private:
-  const FilterPolicy* policy_;
-  std::string filter_;
-  std::vector<std::string> keys_;
-    }
-    
-    namespace leveldb {
+        // Setup orthographic projection matrix
+    // Our visible imgui space lies from draw_data->DisplayPps (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right).
+    {
+        float L = draw_data->DisplayPos.x;
+        float R = draw_data->DisplayPos.x + draw_data->DisplaySize.x;
+        float T = draw_data->DisplayPos.y;
+        float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y;
+        ALLEGRO_TRANSFORM transform;
+        al_identity_transform(&transform);
+        al_use_transform(&transform);
+        al_orthographic_transform(&transform, L, T, 1.0f, R, B, -1.0f);
+        al_use_projection_transform(&transform);
     }
     
     
-    {    // Compute (product % M) using the fact that ((x << 31) % M) == x.
-    seed_ = static_cast<uint32_t>((product >> 31) + (product & M));
-    // The first reduction may overflow by 1 bit, so we may need to
-    // repeat.  mod == M is not possible; using > allows the faster
-    // sign-bit-based test.
-    if (seed_ > M) {
-      seed_ -= M;
-    }
-    return seed_;
-  }
-  // Returns a uniformly distributed value in the range [0..n-1]
-  // REQUIRES: n > 0
-  uint32_t Uniform(int n) { return Next() % n; }
-    
-    #include <boost/asio/detail/config.hpp>
-#include <cstddef>
-#include <boost/asio/basic_io_object.hpp>
-#include <boost/asio/detail/handler_type_requirements.hpp>
-#include <boost/asio/detail/throw_error.hpp>
-#include <boost/asio/error.hpp>
-#include <boost/asio/wait_traits.hpp>
-#include <boost/asio/waitable_timer_service.hpp>
-    
-    #include <boost/asio/detail/config.hpp>
-#include <cstddef>
-#include <boost/asio/async_result.hpp>
-#include <boost/asio/buffered_read_stream_fwd.hpp>
-#include <boost/asio/buffer.hpp>
-#include <boost/asio/detail/bind_handler.hpp>
-#include <boost/asio/detail/buffer_resize_guard.hpp>
-#include <boost/asio/detail/buffered_stream_storage.hpp>
-#include <boost/asio/detail/noncopyable.hpp>
-#include <boost/asio/detail/type_traits.hpp>
-#include <boost/asio/error.hpp>
-#include <boost/asio/io_service.hpp>
-    
-    template <>
-class base_from_completion_cond<transfer_all_t>
-{
-protected:
-  explicit base_from_completion_cond(transfer_all_t)
-  {
-  }
-    }
-    
-    #ifndef BOOST_ASIO_DETAIL_FUNCTION_HPP
-#define BOOST_ASIO_DETAIL_FUNCTION_HPP
-    
-    #include <boost/asio/detail/pop_options.hpp>
-    
-    #include <dmlc/base.h>
-#include <dmlc/data.h>
-#include <cstring>
-#include <memory>
-#include <numeric>
-#include <string>
-#include <vector>
-#include './base.h'
-    
-    // functions related to booster
-void _BoosterFinalizer(SEXP ext) {
-  if (R_ExternalPtrAddr(ext) == NULL) return;
-  CHECK_CALL(XGBoosterFree(R_ExternalPtrAddr(ext)));
-  R_ClearExternalPtr(ext);
+    {    return true;
 }
     
-      virtual void Update(HostDeviceVector<GradientPair>* in_gpair, DMatrix* data,
-                      gbm::GBLinearModel* model,
-                      double sum_instance_weight) = 0;
+    static void ImGui_ImplFreeGLUT_UpdateKeyboardMods()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    int mods = glutGetModifiers();
+    io.KeyCtrl = (mods & GLUT_ACTIVE_CTRL) != 0;
+    io.KeyShift = (mods & GLUT_ACTIVE_SHIFT) != 0;
+    io.KeyAlt = (mods & GLUT_ACTIVE_ALT) != 0;
+}
+    
+        io.KeyCtrl = s3eKeyboardGetState(s3eKeyLeftControl) == S3E_KEY_STATE_DOWN || s3eKeyboardGetState(s3eKeyRightControl) == S3E_KEY_STATE_DOWN;
+    io.KeyShift = s3eKeyboardGetState(s3eKeyLeftShift) == S3E_KEY_STATE_DOWN || s3eKeyboardGetState(s3eKeyRightShift) == S3E_KEY_STATE_DOWN;
+    io.KeyAlt = s3eKeyboardGetState(s3eKeyLeftAlt) == S3E_KEY_STATE_DOWN || s3eKeyboardGetState(s3eKeyRightAlt) == S3E_KEY_STATE_DOWN;
+    io.KeySuper = s3eKeyboardGetState(s3eKeyLeftWindows) == S3E_KEY_STATE_DOWN || s3eKeyboardGetState(s3eKeyRightWindows) == S3E_KEY_STATE_DOWN;
+    
+    //---- Define constructor and implicit cast operators to convert back<>forth from your math types and ImVec2/ImVec4.
+// This will be inlined as part of ImVec2 and ImVec4 class declarations.
+/*
+#define IM_VEC2_CLASS_EXTRA                                                 \
+        ImVec2(const MyVec2& f) { x = f.x; y = f.y; }                       \
+        operator MyVec2() const { return MyVec2(x,y); }
+    
+    // Functions
+bool    ImGui_ImplOpenGL3_Init(const char* glsl_version)
+{
+    // Store GLSL version string so we can refer to it later in case we recreate shaders. Note: GLSL version is NOT the same as GL version. Leave this to NULL if unsure.
+    if (glsl_version == NULL)
+        glsl_version = '#version 130';
+    IM_ASSERT((int)strlen(glsl_version) + 2 < IM_ARRAYSIZE(g_GlslVersionString));
+    strcpy(g_GlslVersionString, glsl_version);
+    strcat(g_GlslVersionString, '\n');
+    return true;
+}
+    
+    struct ImmutableMemTableOptions {
+  explicit ImmutableMemTableOptions(const ImmutableCFOptions& ioptions,
+                                    const MutableCFOptions& mutable_cf_options);
+  size_t arena_block_size;
+  uint32_t memtable_prefix_bloom_bits;
+  size_t memtable_huge_page_size;
+  bool inplace_update_support;
+  size_t inplace_update_num_locks;
+  UpdateStatus (*inplace_callback)(char* existing_value,
+                                   uint32_t* existing_value_size,
+                                   Slice delta_value,
+                                   std::string* merged_value);
+  size_t max_successive_merges;
+  Statistics* statistics;
+  MergeOperator* merge_operator;
+  Logger* info_log;
+};
+    
+    const char* BaseComparatorJniCallback::Name() const {
+  return m_name.get();
+}
+    
+    #include <jni.h>
+#include <memory>
+#include <string>
+#include 'rocksjni/jnicallback.h'
+#include 'rocksdb/comparator.h'
+#include 'rocksdb/slice.h'
+#include 'port/port.h'
+    
+    inline int pthread_key_delete(pthread_key_t key) {
+  if (!TlsFree(key)) {
+    return EINVAL;
+  }
+  return 0;
+}
