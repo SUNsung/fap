@@ -1,172 +1,295 @@
 
         
-        // Generate param traits write methods.
-#include 'ipc/param_traits_write_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
+        namespace atom {
+    }
     
-    IPC_SYNC_MESSAGE_ROUTED1_1(ShellViewHostMsg_SetForceClose, bool, int)
+    #include 'base/time/time.h'
     
-    #include 'content/nw/src/api/bindings_common.h'
+      // Called by platform specific implementations of this class whenever a key
+  // is struck. Only called for keys that have an observer registered.
+  void NotifyKeyPressed(const ui::Accelerator& accelerator);
     
+    // filenames
+const base::FilePath::CharType kCacheDirname[] = FPL('Cache');
+const base::FilePath::CharType kChannelIDFilename[] = FPL('Origin Bound Certs');
+const base::FilePath::CharType kCookieFilename[] = FPL('Cookies');
+const base::FilePath::CharType kCRLSetFilename[] =
+    FPL('Certificate Revocation Lists');
+const base::FilePath::CharType kCustomDictionaryFileName[] =
+    FPL('Custom Dictionary.txt');
+const base::FilePath::CharType kExtensionActivityLogFilename[] =
+    FPL('Extension Activity');
+const base::FilePath::CharType kExtensionsCookieFilename[] =
+    FPL('Extension Cookies');
+const base::FilePath::CharType kFirstRunSentinel[] = FPL('First Run');
+const base::FilePath::CharType kGCMStoreDirname[] = FPL('GCM Store');
+const base::FilePath::CharType kLocalStateFilename[] = FPL('Local State');
+const base::FilePath::CharType kLocalStorePoolName[] = FPL('LocalStorePool');
+const base::FilePath::CharType kMediaCacheDirname[] = FPL('Media Cache');
+const base::FilePath::CharType kNetworkPersistentStateFilename[] =
+    FPL('Network Persistent State');
+const base::FilePath::CharType kOfflinePageArchviesDirname[] =
+    FPL('Offline Pages/archives');
+const base::FilePath::CharType kOfflinePageMetadataDirname[] =
+    FPL('Offline Pages/metadata');
+const base::FilePath::CharType kPreferencesFilename[] = FPL('Preferences');
+const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[] =
+    FPL('Protected Preferences');
+const base::FilePath::CharType kReadmeFilename[] = FPL('README');
+const base::FilePath::CharType kResetPromptMementoFilename[] =
+    FPL('Reset Prompt Memento');
+const base::FilePath::CharType kSafeBrowsingBaseFilename[] =
+    FPL('Safe Browsing');
+const base::FilePath::CharType kSecurePreferencesFilename[] =
+    FPL('Secure Preferences');
+const base::FilePath::CharType kServiceStateFileName[] = FPL('Service State');
+const base::FilePath::CharType kSingletonCookieFilename[] =
+    FPL('SingletonCookie');
+const base::FilePath::CharType kSingletonLockFilename[] = FPL('SingletonLock');
+const base::FilePath::CharType kSingletonSocketFilename[] =
+    FPL('SingletonSocket');
+const base::FilePath::CharType kSupervisedUserSettingsFilename[] =
+    FPL('Managed Mode Settings');
+const base::FilePath::CharType kThemePackFilename[] = FPL('Cached Theme.pak');
+const base::FilePath::CharType kThemePackMaterialDesignFilename[] =
+    FPL('Cached Theme Material Design.pak');
+const base::FilePath::CharType kWebAppDirname[] = FPL('Web Applications');
     
-    {
-} // namespace extensions
-#endif
-
+    #if defined(OS_MACOSX)
+// NOTE: if you change the value of kFrameworkName, please don't forget to
+// update components/test/run_all_unittests.cc as well.
+// TODO(tfarina): Remove the comment above, when you fix components to use plist
+// on Mac.
+extern const base::FilePath::CharType kFrameworkName[];
+#endif  // OS_MACOSX
     
-          displayResult->id = gfx_display.id();
-      displayResult->scale_factor = gfx_display.device_scale_factor();
-      displayResult->is_built_in = gfx_display.IsInternal();
-      displayResult->rotation = gfx_display.RotationAsDegree();
-      displayResult->touch_support = (int)gfx_display.touch_support();
-    
-    NwShellShowItemInFolderFunction::~NwShellShowItemInFolderFunction() {
-}
-    
-    #endif // JSON_FORWARDS_H_INCLUDED
-    
-    void BuiltStyledStreamWriter::indent() { indentString_ += indentation_; }
-    
-    #ifndef GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_CONTAINERS_H__
-#define GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_CONTAINERS_H__
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/wire_format.h>
-    
-    class RepeatedPrimitiveFieldGenerator : public FieldGeneratorBase {
+    /**
+ * @brief Takes at least two Blob%s and concatenates them along either the num
+ *        or channel dimension, outputting the result.
+ */
+template <typename Dtype>
+class ConcatLayer : public Layer<Dtype> {
  public:
-  RepeatedPrimitiveFieldGenerator(const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options);
-  ~RepeatedPrimitiveFieldGenerator();
+  explicit ConcatLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    class SourceGeneratorBase {
- protected:
-  SourceGeneratorBase(const FileDescriptor* descriptor, const Options* options);
-  virtual ~SourceGeneratorBase();
+    /**
+ * @brief Convolves the input image with a bank of learned filters,
+ *        and (optionally) adds biases.
+ *
+ *   Caffe convolves by reduction to matrix multiplication. This achieves
+ *   high-throughput and generality of input and filter dimensions but comes at
+ *   the cost of memory for matrices. This makes use of efficiency in BLAS.
+ *
+ *   The input is 'im2col' transformed to a channel K' x H x W data matrix
+ *   for multiplication with the N x K' x H x W filter matrix to yield a
+ *   N' x H x W output matrix that is then 'col2im' restored. K' is the
+ *   input channel * kernel height * kernel width dimension of the unrolled
+ *   inputs so that the im2col matrix has a column for each input region to
+ *   be filtered. col2im restores the output spatial structure by rolling up
+ *   the output channel N' columns of the output matrix.
+ */
+template <typename Dtype>
+class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
+ public:
+  /**
+   * @param param provides ConvolutionParameter convolution_param,
+   *    with ConvolutionLayer options:
+   *  - num_output. The number of filters.
+   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
+   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
+   *  filters.
+   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
+   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
+   *  for different strides. By default the convolution is dense with stride 1.
+   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
+   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
+   *  different padding. Input padding is computed implicitly instead of
+   *  actually padding.
+   *  - dilation (\b optional, default 1). The filter
+   *  dilation, given by dilation_size for equal dimensions for different
+   *  dilation. By default the convolution has dilation 1.
+   *  - group (\b optional, default 1). The number of filter groups. Group
+   *  convolution is a method for reducing parameterization by selectively
+   *  connecting input and output channels. The input and output channel dimensions must be divisible
+   *  by the number of groups. For group @f$ \geq 1 @f$, the
+   *  convolutional filters' input and output channels are separated s.t. each
+   *  group takes 1 / group of the input channels and makes 1 / group of the
+   *  output channels. Concretely 4 input channels, 8 output channels, and
+   *  2 groups separate input channels 1-2 and output channels 1-4 into the
+   *  first group and input channels 3-4 and output channels 5-8 into the second
+   *  group.
+   *  - bias_term (\b optional, default true). Whether to have a bias.
+   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
+   *    kernels + stream parallelism) engines.
+   */
+  explicit ConvolutionLayer(const LayerParameter& param)
+      : BaseConvolutionLayer<Dtype>(param) {}
     }
     
-    #include <google/protobuf/descriptor.h>
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of ReLULayer.
+ */
+template <typename Dtype>
+class CuDNNReLULayer : public ReLULayer<Dtype> {
+ public:
+  explicit CuDNNReLULayer(const LayerParameter& param)
+      : ReLULayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNReLULayer();
+    }
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of TanHLayer.
+ */
+template <typename Dtype>
+class CuDNNTanHLayer : public TanHLayer<Dtype> {
+ public:
+  explicit CuDNNTanHLayer(const LayerParameter& param)
+      : TanHLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNTanHLayer();
+    }
     
     
-#define REGISTER_LAYER_CREATOR(type, creator)                                  \
-  static LayerRegisterer<float> g_creator_f_##type(#type, creator<float>);     \
-  static LayerRegisterer<double> g_creator_d_##type(#type, creator<double>)    \
-    
-      /// @brief The spatial dimensions of the input.
-  inline int input_shape(int i) {
-    return (*bottom_shape_)[channel_axis_ + i];
-  }
-  // reverse_dimensions should return true iff we are implementing deconv, so
-  // that conv helpers know which dimensions are which.
-  virtual bool reverse_dimensions() = 0;
-  // Compute height_out_ and width_out_ from other parameters.
-  virtual void compute_output_shape() = 0;
+    {}  // namespace caffe
     
      protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the computed outputs. At training time, we have @f$
+   *      y_{\mbox{train}} = \left\{
+   *         \begin{array}{ll}
+   *            \frac{x}{1 - p} & \mbox{if } u > p \\
+   *            0 & \mbox{otherwise}
+   *         \end{array} \right.
+   *      @f$, where @f$ u \sim U(0, 1)@f$ is generated independently for each
+   *      input at each iteration. At test time, we simply have
+   *      @f$ y_{\mbox{test}} = \mathbb{E}[y_{\mbox{train}}] = x @f$.
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
   virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    }
     
-      if ((req_comps != 1) && (req_comps != 3) && (req_comps != 4))
-    return NULL;
     
-    # if !defined(__OPTIMIZE__)
-#  define OP_CVTEPI16_EPI32_M64(x) \
- (_mm_cvtepi16_epi32(_mm_loadl_epi64((__m128i *)(x))))
-# else
-#  define OP_CVTEPI16_EPI32_M64(x) \
- (_mm_cvtepi16_epi32(*(__m128i *)(x)))
-# endif
+    {}  // namespace caffe
     
-    /*! \file silk_Inlines.h
- *  \brief silk_Inlines.h defines OPUS_INLINE signal processing functions.
- */
+    // Asserts that a given statement causes the program to exit, with an
+// integer exit status that satisfies predicate, and emitting error output
+// that matches regex.
+# define ASSERT_EXIT(statement, predicate, regex) \
+    GTEST_DEATH_TEST_(statement, predicate, regex, GTEST_FATAL_FAILURE_)
     
-    #undef    silk_SMLAWW
-static OPUS_INLINE opus_int32 silk_SMLAWW(opus_int32 a32, opus_int32 b32, opus_int32 c32){
-    opus_int32 ret;
-    /* Nb will be counted in sub-macros*/
-    ret = silk_MLA(silk_SMLAWB((a32), (b32), (c32)), (b32), silk_RSHIFT_ROUND((c32), 16));
-    return ret;
+    #endif  // GTEST_HAS_TYPED_TEST_P
+    
+      // Gets the i-th test case among all the test cases. i can range from 0 to
+  // total_test_case_count() - 1. If i is not in that range, returns NULL.
+  const TestCase* GetTestCase(int i) const;
+    
+      static void set_last_death_test_message(const std::string& message);
+    
+        virtual const ParamGeneratorInterface<ParamType>* BaseGenerator() const {
+      return base_;
+    }
+    // Advance should not be called on beyond-of-range iterators
+    // so no component iterators must be beyond end of range, either.
+    virtual void Advance() {
+      assert(!AtEnd());
+      ++current$(i)_;
+    }
+    
+    static int populate_ifaddrs(struct ifaddrs* ifaddr, ifaddrmsg* msg, void* bytes,
+		     size_t len) {
+	if (set_ifname(ifaddr, msg->ifa_index) != 0) {
+		return -1;
+	}
+	if (set_flags(ifaddr) != 0) {
+		return -1;
+	}
+	if (set_addresses(ifaddr, msg, bytes, len) != 0) {
+		return -1;
+	}
+	if (make_prefixes(ifaddr, msg->ifa_family, msg->ifa_prefixlen) != 0) {
+		return -1;
+	}
+	return 0;
 }
     
-    #ifndef SILK_SIGPROC_FIX_MIPSR1_H
-#define SILK_SIGPROC_FIX_MIPSR1_H
+    	void _on_peer_packet();
+	void _on_connect(String p_protocol);
+	void _on_disconnect();
+	void _on_error();
     
-    #ifndef GUETZLI_FDCT_H_
-#define GUETZLI_FDCT_H_
     
-      tmp0 = in[5 * stride];
-  tmp1 = kIDCTMatrix[ 5] * tmp0;
-  tmp2 = kIDCTMatrix[13] * tmp0;
-  tmp3 = kIDCTMatrix[21] * tmp0;
-  tmp4 = kIDCTMatrix[29] * tmp0;
-  out[0] += tmp1;
-  out[1] += tmp2;
-  out[2] += tmp3;
-  out[3] += tmp4;
-  out[4] -= tmp4;
-  out[5] -= tmp3;
-  out[6] -= tmp2;
-  out[7] -= tmp1;
     
-    #endif  // GUETZLI_JPEG_DATA_DECODER_H_
-
+    #if defined(HAVE_ARM_NE10)
     
-    bool WriteJpeg(const JPEGData& jpg, bool strip_metadata, JPEGOutput out);
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
     
-      // Fill in root table.
-  key = 0;
-  idx = 0;
-  for (len = 1; len <= kJpegHuffmanRootTableBits; ++len) {
-    for (; count[len] > 0; --count[len]) {
-      code.bits = len;
-      code.value = symbols[idx++];
-      reps = 1 << (kJpegHuffmanRootTableBits - len);
-      while (reps--) {
-        table[key++] = code;
-      }
-    }
+      virtual bool PartialMergeMulti(const Slice& key,
+                                 const std::deque<Slice>& operand_list,
+                                 std::string* new_value, Logger* logger) const
+      override;
+    
+      // returns true if the reader has encountered an eof condition.
+  bool IsEOF() {
+    return eof_;
   }
     
-      OutputImageComponent& component(int c) { return components_[c]; }
-  const OutputImageComponent& component(int c) const { return components_[c]; }
     
-    #include 'guetzli/quality.h'
+    {   private:
+     const std::set<uint32_t> m_ignore_histograms;
+ };
     
-      // Support for running multiple copies of the same benchmark concurrently
-  // in multiple threads.  This may be useful when measuring the scaling
-  // of some piece of code.
-    
-    void FunctionBenchmark::Run(State& st) { func_(st); }
-    
-    // CheckHandler is the class constructed by failing CHECK macros. CheckHandler
-// will log information about the failures and abort when it is destructed.
-class CheckHandler {
- public:
-  CheckHandler(const char* check, const char* file, const char* func, int line)
-      : log_(GetErrorLogInstance()) {
-    log_ << file << ':' << line << ': ' << func << ': Check `' << check
-         << '' failed. ';
-  }
+    namespace rocksdb {
+// Kill the process with probability 1/odds for testing.
+extern void TestKillRandom(std::string kill_point, int odds,
+                           const std::string& srcfile, int srcline);
     }
     
+    class Arena;
+// Return an empty iterator (yields nothing) allocated from arena.
+extern InternalIterator* NewEmptyInternalIterator(Arena* arena);
     
-    {  for (auto it = reports.begin(); it != reports.end(); ++it) {
-    out << indent << '{\n';
-    PrintRunData(*it);
-    out << indent << '}';
-    auto it_cp = it;
-    if (++it_cp != reports.end()) {
-      out << ',\n';
-    }
+     private:
+  void SaveError(const Status& s) {
+    if (status_.ok() && !s.ok()) status_ = s;
   }
-}
+  void SkipEmptyDataBlocksForward();
+  void SkipEmptyDataBlocksBackward();
+  void SetSecondLevelIterator(InternalIterator* iter);
+  void InitDataBlock();
