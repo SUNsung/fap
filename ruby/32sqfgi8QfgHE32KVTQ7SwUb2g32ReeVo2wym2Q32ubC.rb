@@ -1,38 +1,30 @@
 
         
-            If you wish to use the 2.x release you can install it
-    either via Homebrew:
-      brew install homebrew/binary/ngrok2
+            uninstall quit: 'bundle.id.goes.here'
     
-      def internal_commands
-    find_internal_commands HOMEBREW_LIBRARY_PATH/'cmd'
-  end
+      if ARGV.include? '--no-ansi'
+    STDERR.puts <<-DOC
+    WARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
+    Consider adding the following to ~/.profile:
     
-    get '/' do
-  halt erb(:login) unless params[:user]
-  erb :chat, :locals => { :user => params[:user].gsub(/\W/, '') }
-end
+            def validate!
+          super
+          if @pod_name.nil? && !@wipe_all
+            # Security measure, to avoid removing the pod cache too agressively by mistake
+            help! 'You should either specify a pod name or use the --all flag'
+          end
+        end
     
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
-    end
-  end
-    
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
+          def stage_set?
+        !!fetch(:stage, false)
       end
     
-        it 'denies requests with sneaky encoded session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.%73ession=SESSION_TOKEN'
-      expect(last_response).not_to be_ok
+      it 'overrides the rake method, but still prints the rake version' do
+    out, _err = capture_io do
+      flags '--version', '-V'
     end
+    expect(out).to match(/\bCapistrano Version\b/)
+    expect(out).to match(/\b#{Capistrano::VERSION}\b/)
+    expect(out).to match(/\bRake Version\b/)
+    expect(out).to match(/\b#{Rake::VERSION}\b/)
+  end
