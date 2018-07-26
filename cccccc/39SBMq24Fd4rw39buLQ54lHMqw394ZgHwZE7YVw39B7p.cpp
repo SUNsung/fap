@@ -1,216 +1,199 @@
 
         
-        namespace leveldb {
+        namespace google {
+namespace protobuf {
+namespace python {
+    }
+    }
     }
     
-     private:
-  void FindNextUserEntry(bool skipping, std::string* skip);
-  void FindPrevUserEntry();
-  bool ParseKey(ParsedInternalKey* key);
-    
-      ASSERT_TRUE(ParseInternalKey(in, &decoded));
-  ASSERT_EQ(key, decoded.user_key.ToString());
-  ASSERT_EQ(seq, decoded.sequence);
-  ASSERT_EQ(vt, decoded.type);
-    
-    // Notified when log reader encounters corruption.
-class CorruptionReporter : public log::Reader::Reporter {
- public:
-  WritableFile* dst_;
-  virtual void Corruption(size_t bytes, const Status& status) {
-    std::string r = 'corruption: ';
-    AppendNumberTo(&r, bytes);
-    r += ' bytes; ';
-    r += status.ToString();
-    r.push_back('\n');
-    dst_->Append(r);
+    // Generator options (used by csharp_generator.cc):
+struct Options {
+  Options() :
+      file_extension('.cs'),
+      base_namespace(''),
+      base_namespace_specified(false),
+      internal_access(false) {
   }
+  // Extension of the generated file. Defaults to '.cs'
+  string file_extension;
+  // Base namespace to use to create directory hierarchy. Defaults to ''.
+  // This option allows the simple creation of a conventional C# file layout,
+  // where directories are created relative to a project-specific base
+  // namespace. For example, in a project with a base namespace of PetShop, a
+  // proto of user.proto with a C# namespace of PetShop.Model.Shared would
+  // generate Model/Shared/User.cs underneath the specified --csharp_out
+  // directory.
+  //
+  // If no base namespace is specified, all files are generated in the
+  // --csharp_out directory, with no subdirectories created automatically.
+  string base_namespace;
+  // Whether the base namespace has been explicitly specified by the user.
+  // This is required as the base namespace can be explicitly set to the empty
+  // string, meaning 'create a full directory hierarchy, starting from the first
+  // segment of the namespace.'
+  bool base_namespace_specified;
+  // Whether the generated classes should have accessibility level of 'internal'.
+  // Defaults to false that generates 'public' classes.
+  bool internal_access;
 };
     
-    static std::string MakeFileName(const std::string& name, uint64_t number,
-                                const char* suffix) {
-  char buf[100];
-  snprintf(buf, sizeof(buf), '/%06llu.%s',
-           static_cast<unsigned long long>(number),
-           suffix);
-  return name + buf;
-}
+    #include <string>
     
-    void WriteBatchInternal::SetCount(WriteBatch* b, int n) {
-  EncodeFixed32(&b->rep_[8], n);
-}
-    
-    #include 'leveldb/db.h'
-    
-    
-    {    done_++;
-    if (done_ >= next_report_) {
-      if      (next_report_ < 1000)   next_report_ += 100;
-      else if (next_report_ < 5000)   next_report_ += 500;
-      else if (next_report_ < 10000)  next_report_ += 1000;
-      else if (next_report_ < 50000)  next_report_ += 5000;
-      else if (next_report_ < 100000) next_report_ += 10000;
-      else if (next_report_ < 500000) next_report_ += 50000;
-      else                            next_report_ += 100000;
-      fprintf(stderr, '... finished %d ops%30s\r', done_, '');
-      fflush(stderr);
+    namespace google {
+namespace protobuf {
+  namespace compiler {
+    namespace java {
+      class Context;           // context.h
+      class ClassNameResolver; // name_resolver.h
     }
   }
+  namespace io {
+    class Printer;             // printer.h
+  }
+}
+    }
     
+    grpc::string SecureAuthContext::GetPeerIdentityPropertyName() const {
+  if (!ctx_) {
+    return '';
+  }
+  const char* name = grpc_auth_context_peer_identity_property_name(ctx_);
+  return name == nullptr ? '' : name;
+}
     
-    {  leveldb::Benchmark benchmark;
-  benchmark.Run();
-  return 0;
+    static void sigint_handler(int x) {
+  gpr_atm_no_barrier_store(&grpc::testing::interop::g_got_sigint, true);
+}
+    
+    #endif  // TEST_QPS_TIMER_H
+
+    
+      std::unique_ptr<grpc::Server> StartServer(int port);
+    
+    PowerIphone::~PowerIphone() {
+	// TODO Auto-generated destructor stub
 }
 
     
-    namespace leveldb {
-    }
+    protected:
+	Ref<WebSocketPeer> _peer;
+	bool verify_ssl;
     
-    // Dump the contents of the file named by fname in text format to
-// *dst.  Makes a sequence of dst->Append() calls; each call is passed
-// the newline-terminated text corresponding to a single item found
-// in the file.
-//
-// Returns a non-OK result if fname does not name a leveldb storage
-// file, or if the file cannot be read.
-Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
+    #if defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) &&                 \
+    ( !defined(MBEDTLS_ECDH_C) || !defined(MBEDTLS_RSA_C) ||          \
+      !defined(MBEDTLS_X509_CRT_PARSE_C) || !defined(MBEDTLS_PKCS1_V15) )
+#error 'MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED defined, but not all prerequisites'
+#endif
     
-    #define REGISTER_LAYER_CLASS(type)                                             \
-  template <typename Dtype>                                                    \
-  shared_ptr<Layer<Dtype> > Creator_##type##Layer(const LayerParameter& param) \
-  {                                                                            \
-    return shared_ptr<Layer<Dtype> >(new type##Layer<Dtype>(param));           \
-  }                                                                            \
-  REGISTER_LAYER_CREATOR(type, Creator_##type##Layer)
+    		} break;
+		case AudioServer::SPEAKER_SURROUND_51: {
     
-    #ifdef USE_CUDNN
-/**
- * @brief cuDNN implementation of SoftmaxLayer.
- *        Fallback to SoftmaxLayer for CPU mode.
- */
-template <typename Dtype>
-class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
- public:
-  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
-      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSoftmaxLayer();
-    }
-    
-      virtual inline const char* type() const { return 'Eltwise'; }
-  virtual inline int MinBottomBlobs() const { return 2; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-      virtual inline const char* type() const { return 'ELU'; }
-    
-      virtual inline const char* type() const { return 'Exp'; }
-    
-    
-    {  // Gate weight arrays of size [na + 1, no].
-  WeightMatrix gate_weights_[WT_COUNT];
-  // Used only if this is a softmax LSTM.
-  FullyConnected* softmax_;
-  // Input padded with previous output of size [width, na].
-  NetworkIO source_;
-  // Internal state used during forward operation, of size [width, ns].
-  NetworkIO state_;
-  // State of the 2-d maxpool, generated during forward, used during backward.
-  GENERIC_2D_ARRAY<int8_t> which_fg_;
-  // Internal state saved from forward, but used only during backward.
-  NetworkIO node_values_[WT_COUNT];
-  // Preserved input stride_map used for Backward when NT_LSTM_SQUASHED.
-  StrideMap input_map_;
-  int input_width_;
+    # if defined(OC_COLLECT_METRICS)
+struct oc_mode_metrics{
+  double fragw;
+  double satd;
+  double rate;
+  double rmse;
+  double satd2;
+  double satdrate;
+  double rate2;
+  double satdrmse;
+  double rmse2;
 };
     
-    void ResultIterator::AppendUTF8WordText(STRING *text) const {
-  if (!it_->word()) return;
-  ASSERT_HOST(it_->word()->best_choice != nullptr);
-  bool reading_direction_is_ltr =
-      current_paragraph_is_ltr_ ^ in_minor_direction_;
-  if (at_beginning_of_minor_run_) {
-    *text += reading_direction_is_ltr ? kLRM : kRLM;
-  }
-    }
+    /*Some common macros for potential platform-specific optimization.*/
+#include <math.h>
+#if !defined(_ocintrin_H)
+# define _ocintrin_H (1)
     
-      // Writes to the given file. Returns false in case of error.
-  bool Serialize(FILE* fp) const;
-  // Reads from the given file. Returns false in case of error.
-  // If swap is true, assumes a big/little-endian swap is needed.
-  bool DeSerialize(bool swap, FILE* fp);
+    #ifndef FLOAT_CAST_H
+#define FLOAT_CAST_H
     
-      // Accessors.
-  bool is_int_mode() const {
-    return int_mode_;
-  }
-  int NumOutputs() const { return int_mode_ ? wi_.dim1() : wf_.dim1(); }
-  // Provides one set of weights. Only used by peep weight maxpool.
-  const double* GetWeights(int index) const { return wf_[index]; }
-  // Provides access to the deltas (dw_).
-  double GetDW(int i, int j) const { return dw_(i, j); }
-    
-      // This method resolves the cc bbox to a particular row and returns the row's
-  // xheight. This uses block_list_ if available, else just returns the
-  // global_xheight_ estimate currently set in the object.
-  int GetXheightForCC(Box* cc_bbox);
-    
-    /*
-XXH32() :
-    Calculate the 32-bits hash of sequence of length 'len' stored at memory address 'input'.
-    The memory between input & input+len must be valid (allocated and read-accessible).
-    'seed' can be used to alter the result predictably.
-    This function successfully passes all SMHasher tests.
-    Speed on Core 2 Duo @ 3 GHz (single thread, SMHasher benchmark) : 5.4 GB/s
-    Note that 'len' is type 'int', which means it is limited to 2^31-1.
-    If your data is larger, use the advanced functions below.
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
     
-    class StringAppendTESTOperator : public MergeOperator {
- public:
-  // Constructor with delimiter
-  explicit StringAppendTESTOperator(char delim_char);
-    }
+        /* Compute number of bits head room and normalize inputs */
+    a_headrm = silk_CLZ32( silk_abs(a32) ) - 1;
+    a32_nrm = silk_LSHIFT(a32, a_headrm);                                       /* Q: a_headrm                  */
+    b_headrm = silk_CLZ32( silk_abs(b32) ) - 1;
+    b32_nrm = silk_LSHIFT(b32, b_headrm);                                       /* Q: b_headrm                  */
     
-     public: // Delete / Remove / Pop / Trim
-  /// Trim (list: key) so that it will only contain the indices from start..stop
-  /// Returns true on success
-  /// May throw RedisListException
-  bool Trim(const std::string& key, int32_t start, int32_t stop);
-    
-    namespace rocksdb {
-    }
-    
-    
-    {   private:
-     const std::set<uint32_t> m_ignore_histograms;
- };
-    
-    void SyncPoint::ClearAllCallBacks() {
-  impl_->ClearAllCallBacks();
+    #undef silk_ADD_POS_SAT64
+static OPUS_INLINE opus_int64 silk_ADD_POS_SAT64(opus_int64 a, opus_int64 b){
+    opus_int64 tmp;
+    ops_count += 1;
+    tmp = ((((a)+(b)) & 0x8000000000000000LL) ? silk_int64_MAX : ((a)+(b)));
+    return(tmp);
 }
     
-    #include <jni.h>
-#include <memory>
-#include <string>
-#include 'rocksjni/jnicallback.h'
-#include 'port/port.h'
-#include 'rocksdb/env.h'
+    #include <xgboost/logging.h>
+#include 'src/common/random.h'
+#include './xgboost_R.h'
     
-      /**
-   * COMPACTION_KEY_DROP_* count the reasons for key drop during compaction
-   * There are 4 reasons currently.
-   */
-  COMPACTION_KEY_DROP_NEWER_ENTRY,  // key was written with a newer value.
-                                    // Also includes keys dropped for range del.
-  COMPACTION_KEY_DROP_OBSOLETE,     // The key is obsolete.
-  COMPACTION_KEY_DROP_RANGE_DEL,    // key was covered by a range tombstone.
-  COMPACTION_KEY_DROP_USER,  // user compaction function has dropped the key.
-  COMPACTION_RANGE_DEL_DROP_OBSOLETE,  // all keys in range were deleted.
-  // Deletions obsoleted before bottom level due to file gap optimization.
-  COMPACTION_OPTIMIZED_DEL_DROP_OBSOLETE,
-  // If a compaction was cancelled in sfm to prevent ENOSPC
-  COMPACTION_CANCELLED,
+    // extend our decision path with a fraction of one and zero extensions
+inline void ExtendPath(PathElement *unique_path, unsigned unique_depth,
+                       bst_float zero_fraction, bst_float one_fraction, int feature_index) {
+  unique_path[unique_depth].feature_index = feature_index;
+  unique_path[unique_depth].zero_fraction = zero_fraction;
+  unique_path[unique_depth].one_fraction = one_fraction;
+  unique_path[unique_depth].pweight = (unique_depth == 0 ? 1.0f : 0.0f);
+  for (int i = unique_depth - 1; i >= 0; i--) {
+    unique_path[i+1].pweight += one_fraction * unique_path[i].pweight * (i + 1)
+                                / static_cast<bst_float>(unique_depth + 1);
+    unique_path[i].pweight = zero_fraction * unique_path[i].pweight * (unique_depth - i)
+                             / static_cast<bst_float>(unique_depth + 1);
+  }
+}
+    
+    void GHistBuilder::SubtractionTrick(GHistRow self, GHistRow sibling, GHistRow parent) {
+  const uint32_t nbins = static_cast<bst_omp_uint>(nbins_);
+  constexpr int kUnroll = 8;  // loop unrolling factor
+  const uint32_t rest = nbins % kUnroll;
+    }
+    
+      MetaInfo& Info() override {
+    return source_->info;
+  }
+    
+    const std::vector<std::string>& DumpCrashStack::StackList() const {
+    return vecdump_;
+}
+
+    
+    
+    {    void throw_exception( std::exception const & e ) {
+        xfatal2(TSF'boost exception:%_', e.what());
+        
+#ifdef ANDROID
+        char stack[4096] = {0};
+        android_callstack(stack, sizeof(stack));
+        xfatal2(TSF'%_', stack);
+#endif
+    }
+}
+
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    class CommFrequencyLimit {
+  public:
+    CommFrequencyLimit(size_t _count, uint64_t _time_span);
+    ~CommFrequencyLimit();
+    }
+    
+        void TestFun0();
+    void TestFun2()  {__TestFun1(1);}
