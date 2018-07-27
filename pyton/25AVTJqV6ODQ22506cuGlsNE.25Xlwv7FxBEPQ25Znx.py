@@ -1,85 +1,76 @@
 
         
-            alpha = 0.01  # regularization parameter
+        from twisted import version as _txv
+twisted_version = (_txv.major, _txv.minor, _txv.micro)
     
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
+            return key
     
-        op.add_option('--algorithm',
-                  dest='selected_algorithm',
-                  default=default_algorithms,
-                  type=str,
-                  help='Comma-separated list of transformer to benchmark. '
-                       'Default: %default. \nAvailable: %default')
+    import logging
+from twisted.internet import defer
+import six
+from scrapy.exceptions import NotSupported, NotConfigured
+from scrapy.utils.httpobj import urlparse_cached
+from scrapy.utils.misc import load_object
+from scrapy.utils.python import without_none_values
+from scrapy import signals
     
-    mu_second = 0.0 + 10 ** 6  # number of microseconds in a second
+            # If no credentials could be found anywhere,
+        # consider this an anonymous connection request by default;
+        # unless 'anon' was set explicitly (True/False).
+        anon = kw.get('anon')
+        if anon is None and not aws_access_key_id and not aws_secret_access_key:
+            kw['anon'] = True
+        self.anon = kw.get('anon')
     
-    
-URL = ('http://www.cs.cornell.edu/people/pabo/'
-       'movie-review-data/review_polarity.tar.gz')
-    
-    URL = ('http://people.csail.mit.edu/jrennie/'
-       '20Newsgroups/20news-bydate.tar.gz')
-    
-        # TASK: Build a grid search to find out whether unigrams or bigrams are
-    # more useful.
-    # Fit the pipeline on the training set using grid search for the parameters
-    
-        def plot_support_vectors(self, support_vectors):
-        '''Plot the support vectors by placing circles over the
-        corresponding data points and adds the circle collection
-        to the contours list.'''
-        cs = self.ax.scatter(support_vectors[:, 0], support_vectors[:, 1],
-                             s=80, edgecolors='k', facecolors='none')
-        self.contours.append(cs)
-    
-    # Author: Kemal Eren <kemal@kemaleren.com>
-# License: BSD 3 clause
-    
-    # Plot changes in predicted probabilities via arrows
-plt.figure(0)
-colors = ['r', 'g', 'b']
-for i in range(clf_probs.shape[0]):
-    plt.arrow(clf_probs[i, 0], clf_probs[i, 1],
-              sig_clf_probs[i, 0] - clf_probs[i, 0],
-              sig_clf_probs[i, 1] - clf_probs[i, 1],
-              color=colors[y_test[i]], head_width=1e-2)
-    
-    np.random.seed(0)
-###############################################################################
-n_features = 100
-# simulation covariance matrix (AR(1) process)
-r = 0.1
-real_cov = toeplitz(r ** np.arange(n_features))
-coloring_matrix = cholesky(real_cov)
-    
-    from tornado.options import define, options
-    
-            elif callable(target):
-            return _CallableAdapter(
-                partial(target, **target_params), request.connection
-            )
+        def _format_cookie(self, cookie):
+        # build cookie string
+        cookie_str = '%s=%s' % (cookie['name'], cookie['value'])
     
     
-def _resolve_addr(host, port, family=socket.AF_UNSPEC):
-    # On Solaris, getaddrinfo fails if the given port is not found
-    # in /etc/services and no socket type is given, so we must pass
-    # one here.  The socket type used here doesn't seem to actually
-    # matter (we discard the one we get back in the results),
-    # so the addresses we return should still be usable with SOCK_DGRAM.
-    addrinfo = socket.getaddrinfo(host, port, family, socket.SOCK_STREAM)
-    results = []
-    for family, socktype, proto, canonname, address in addrinfo:
-        results.append((family, address))
-    return results
+class DecompressionMiddleware(object):
+    ''' This middleware tries to recognise and extract the possibly compressed
+    responses that may arrive. '''
     
-        def get_app(self):
-        class App(HTTPServerConnectionDelegate):
-            def start_request(self, server_conn, request_conn):
-                return StreamingChunkSizeTest.MessageDelegate(request_conn)
-        return App()
+        @classmethod
+    def from_crawler(cls, crawler):
+        o = cls(crawler.settings.getfloat('DOWNLOAD_TIMEOUT'))
+        crawler.signals.connect(o.spider_opened, signal=signals.spider_opened)
+        return o
+    
+            if self.close_on.get('errorcount'):
+            crawler.signals.connect(self.error_count, signal=signals.spider_error)
+        if self.close_on.get('pagecount'):
+            crawler.signals.connect(self.page_count, signal=signals.response_received)
+        if self.close_on.get('timeout'):
+            crawler.signals.connect(self.spider_opened, signal=signals.spider_opened)
+        if self.close_on.get('itemcount'):
+            crawler.signals.connect(self.item_scraped, signal=signals.item_scraped)
+        crawler.signals.connect(self.spider_closed, signal=signals.spider_closed)
+    
+        def test_b_observers_shall_be_attachable(cls):
+        cls.s.attach(cls.dec_obs)
+        cls.assertEqual(isinstance(cls.s._observers[0], DecimalViewer), True)
+        cls.assertEqual(len(cls.s._observers), 1)
+        cls.s.attach(cls.hex_obs)
+        cls.assertEqual(isinstance(cls.s._observers[1], HexViewer), True)
+        cls.assertEqual(len(cls.s._observers), 2)
+    
+        def get_current_time_as_html_fragment(self, time_provider):
+        current_time = time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
+    
+        def __init__(self, param):
+    
+    '''
+http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
+Implementation of the iterator pattern with a generator
+    
+    from __future__ import print_function
+    
+    
+# Test our radio out
+if __name__ == '__main__':
+    radio = Radio()
+    actions = [radio.scan] * 2 + [radio.toggle_amfm] + [radio.scan] * 2
+    actions *= 2
