@@ -1,269 +1,225 @@
 
         
-        namespace tensorflow {
-    }
-    
-    class TextLineReader : public ReaderBase {
+        // Implements the part of the interface that caches and returns remote
+// device status attributes.
+class WorkerCachePartial : public WorkerCacheInterface {
  public:
-  TextLineReader(const string& node_name, int skip_header_lines, Env* env)
-      : ReaderBase(strings::StrCat('TextLineReader '', node_name, ''')),
-        skip_header_lines_(skip_header_lines),
-        env_(env),
-        line_number_(0) {}
+  bool GetDeviceLocalityNonBlocking(const string& device,
+                                    DeviceLocality* locality) override;
     }
     
-    using GPUDevice = Eigen::GpuDevice;
     
-    MPIUtils::MPIUtils(const std::string& worker_name) {
-  InitMPI();
-  // Connect the MPI process IDs to the worker names that are used by TF.
-  // Gather the names of all the active processes (name can't be longer than
-  // 128 bytes)
-  int proc_id = 0, number_of_procs = 1;
-  char my_name[max_worker_name_length];
-  MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &proc_id));
-  MPI_CHECK(MPI_Comm_size(MPI_COMM_WORLD, &number_of_procs));
+    {#if GOOGLE_CUDA
+// A special GPU kernel for int32.
+// TODO(b/25387198): Also enable int32 in device memory. This kernel
+// registration requires all int32 inputs and outputs to be in host memory.
+REGISTER_KERNEL_BUILDER(Name('Mod')
+                            .Device(DEVICE_GPU)
+                            .HostMemory('x')
+                            .HostMemory('y')
+                            .HostMemory('z')
+                            .TypeConstraint<int32>('T'),
+                        BinaryOp<CPUDevice, functor::safe_mod<int32>>);
+REGISTER_KERNEL_BUILDER(Name('TruncateMod')
+                            .Device(DEVICE_GPU)
+                            .HostMemory('x')
+                            .HostMemory('y')
+                            .HostMemory('z')
+                            .TypeConstraint<int32>('T'),
+                        BinaryOp<CPUDevice, functor::safe_mod<int32>>);
+#endif
+}  // namespace tensorflow
+
+    
+    #include 'tensorflow/compiler/xla/service/hlo_module.h'
+#include 'tensorflow/compiler/xla/service/hlo_pass_interface.h'
+    
+      double ComputeDualLoss(const double current_dual, const double example_label,
+                         const double example_weight) const final {
+    // For binary classification, there are 2 conjugate functions, one per
+    // label value (-1 and 1).
+    const double y_alpha = current_dual * example_label;  // y \alpha
+    if (y_alpha < 0 || y_alpha > 1.0) {
+      return std::numeric_limits<double>::max();
     }
-    
-    Status SubGrad(const AttrSlice& attrs, FunctionDef* g) {
-  // clang-format off
-  return GradForBinaryCwise(g, {
-      {{'gx'}, 'Identity', {'dz'}},
-      {{'gy'}, 'Neg', {'dz'}},          // -dz
-  });
-  // clang-format on
-}
-REGISTER_OP_GRADIENT('Sub', SubGrad);
-    
-    void CalculateAccuracyStats(
-    const std::vector<std::pair<string, int64>>& ground_truth_list,
-    const std::vector<std::pair<string, int64>>& found_words,
-    int64 up_to_time_ms, int64 time_tolerance_ms,
-    StreamingAccuracyStats* stats) {
-  int64 latest_possible_time;
-  if (up_to_time_ms == -1) {
-    latest_possible_time = std::numeric_limits<int64>::max();
-  } else {
-    latest_possible_time = up_to_time_ms + time_tolerance_ms;
+    return (-y_alpha + 0.5 * gamma * current_dual * current_dual) *
+           example_weight;
   }
-  stats->how_many_ground_truth_words = 0;
-  for (const std::pair<string, int64>& ground_truth : ground_truth_list) {
-    const int64 ground_truth_time = ground_truth.second;
-    if (ground_truth_time > latest_possible_time) {
-      break;
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #include 'tensorflow/contrib/ffmpeg/ffmpeg_lib.h'
+#include 'tensorflow/core/framework/common_shape_fns.h'
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+    
+    #ifndef CV_CL_GET_PROC_ADDRESS
+#ifdef __GNUC__
+#warning('OPENCV: OpenCL BLAS dynamic library loader: check configuration')
+#else
+#pragma message('WARNING: OPENCV: OpenCL BLAS dynamic library loader: check configuration')
+#endif
+#define CV_CL_GET_PROC_ADDRESS(name) NULL
+#endif
+    
+        static void* WinGetProcAddress(const char* name)
+    {
+        static HMODULE opencl_module = NULL;
+        if (!opencl_module)
+        {
+            opencl_module = GetModuleHandleA('clAmdFft.Runtime.dll');
+            if (!opencl_module)
+            {
+                opencl_module = LoadLibraryA('clAmdFft.Runtime.dll');
+                if (!opencl_module)
+                    return NULL;
+            }
+        }
+        return (void*)GetProcAddress(opencl_module, name);
     }
-    ++stats->how_many_ground_truth_words;
+    #define CV_CL_GET_PROC_ADDRESS(name) WinGetProcAddress(name)
+#endif // _WIN32
+    
+    using namespace cv::ocl::runtime;
+    
+    void cv::cuda::flip(InputArray, OutputArray, int, Stream&) { throw_no_cuda(); }
+    
+      /// Return true if no image has been set.
+  bool IsEmpty() const;
+    
+    const ICOORD *dirtab = (ICOORD *) idirtab;
+    
+      // Return whether a given text line could be a first paragraph line according
+  // to this paragraph model.
+  bool ValidBodyLine(int lmargin, int lindent, int rindent, int rmargin) const;
+    
+      // Connects this and other, discarding any existing connections.
+  void Connect(DoublePtr* other) {
+    other->Disconnect();
+    Disconnect();
+    other->other_end_ = this;
+    other_end_ = other;
   }
+  // Disconnects this and other, making OtherEnd() return nullptr for both.
+  void Disconnect() {
+    if (other_end_ != nullptr) {
+      other_end_->other_end_ = nullptr;
+      other_end_ = nullptr;
     }
+  }
+  // Returns the pointer to the other end of the double pointer.
+  DoublePtr* OtherEnd() const {
+    return other_end_;
+  }
     
-        // in-place decimation, for use with data-parallel processing
-    // returns a subset of parallel sequences
-    template <class ElemType>
-    static pair<size_t, size_t> DecimateMinibatchInPlace(StreamMinibatchInputs& mb,    // matrix to be decimated
-                                                         size_t numprocs, size_t rank, // rank info
-                                                         MBLayoutPtr pMBLayout)        // get decimated as well
-    {
-        if (numprocs == 1)
-            return pair<size_t, size_t>(0, pMBLayout->GetNumParallelSequences());
-        // no need to do inplace decimation if numproc == 1
-    }
+      // Iterator functions designed for use with a simple for loop:
+  // for (it.Begin(); !it.AtEnd(); it.Next()) {
+  //   const TrainingSample& sample = it.GetSample();
+  //   int class_id = it.GetCompactClassID();
+  //   ...
+  // }
+  void Begin();
+  bool AtEnd() const;
+  const TrainingSample& GetSample() const;
+  TrainingSample* MutableSample() const;
+  // Returns the total index (from the original set of samples) of the current
+  // sample.
+  int GlobalSampleIndex() const;
+  // Returns the index of the current sample in compact charset space, so
+  // in a 2-class problem between x and y, the returned indices will all be
+  // 0 or 1, and have nothing to do with the unichar_ids.
+  // If the charset_map_ is nullptr, then this is equal to GetSparseClassID().
+  int GetCompactClassID() const;
+  // Returns the index of the current sample in sparse charset space, so
+  // in a 2-class problem between x and y, the returned indices will all be
+  // x or y, where x and y may be unichar_ids (no shape_table_) or shape_ids
+  // with a shape_table_.
+  int GetSparseClassID() const;
+  // Moves on to the next indexable sample. If the end is reached, leaves
+  // the state such that AtEnd() is true.
+  void Next();
     
-    template<> inline
-dnnError_t dnnReleaseBuffer<float>(void* ptr)
-{
-    return dnnReleaseBuffer_F32(ptr);
+      // Evaluates the textlineiness of a ColPartition. Uses EvaluateBox below,
+  // but uses the median top/bottom for horizontal and median left/right for
+  // vertical instead of the bounding box edges.
+  // Evaluates for both horizontal and vertical and returns the best result,
+  // with a positive value for horizontal and a negative value for vertical.
+  int EvaluateColPartition(const ColPartition& part, const DENORM* denorm,
+                           bool debug) const;
+    
+    // Insert the given blocks at the front of the completed_blocks_ list so
+// they can be kept in the correct reading order.
+void WorkingPartSet::InsertCompletedBlocks(BLOCK_LIST* blocks,
+                                           TO_BLOCK_LIST* to_blocks) {
+  BLOCK_IT block_it(&completed_blocks_);
+  block_it.add_list_before(blocks);
+  TO_BLOCK_IT to_block_it(&to_blocks_);
+  to_block_it.add_list_before(to_blocks);
 }
-template<> inline
-dnnError_t dnnReleaseBuffer<double>(void* ptr)
-{
-    return dnnReleaseBuffer_F64(ptr);
-}
+    
+    const char* AbstractOptionHandler::getName() const { return pref_->k; }
     
     
-    {    auto netBuilder = make_shared<SimpleNetworkBuilder<ElemType>>(config);
-    ComputationNetworkPtr net = netBuilder->BuildNetworkFromDbnFile(dbnModelPath);
-    net->Save(modelPath);
-}
+    {} // namespace aria2
     
-    // understand and execute from the syntactic expression tree
-ConfigValuePtr Evaluate(ExpressionPtr);                               // evaluate the expression tree
-void Do(ExpressionPtr e);                                             // evaluate e.do
-shared_ptr<Object> EvaluateField(ExpressionPtr e, const wstring& id); // for experimental CNTK integration
     
-    namespace Microsoft { namespace MSR { namespace CNTK {
-    }
-    }
-    }
-    
-    class latticepair : public std::pair<msra::lattices::lattice, msra::lattices::lattice>
-{
-public:
-    // NOTE: we don't check numerator lattice now
-    size_t getnumframes() const
-    {
-        return second.getnumframes();
-    }
-    size_t getnumnodes() const
-    {
-        return second.getnumnodes();
-    }
-    size_t getnumedges() const
-    {
-        return second.getnumedges();
-    }
-    std::wstring getkey() const
-    {
-        return second.getkey();
-    }
+    {  virtual std::unique_ptr<DiskWriter>
+  newDiskWriter(const std::string& filename) CXX11_OVERRIDE
+  {
+    return make_unique<DiskWriterType>();
+  }
 };
     
-    // ===========================================================================
-// float4 -- wrapper around the rather ugly SSE intrinsics for float[4]
-//
-// Do not use the intrinsics outside anymore; instead add all you need into this class.
-//
-// MSDN links:
-// basic: http://msdn.microsoft.com/en-us/library/x5c07e2a%28v=VS.80%29.aspx
-// load/store: (add this)
-// newer ones: (seems no single list available)
-// ===========================================================================
-    
-    namespace osquery {
+    class ApiCallbackDownloadEventListener : public DownloadEventListener {
+public:
+  ApiCallbackDownloadEventListener(Session* session,
+                                   DownloadEventCallback callback,
+                                   void* userData);
+  virtual ~ApiCallbackDownloadEventListener();
+  virtual void onEvent(DownloadEvent event,
+                       const RequestGroup* group) CXX11_OVERRIDE;
     }
     
-    #include <osquery/core.h>
-#include <osquery/system.h>
-    
-    TEST_F(RocksDBDatabasePluginTests, test_corruption) {
-  ASSERT_TRUE(pathExists(path_));
-  ASSERT_FALSE(pathExists(path_ + '.backup'));
+    class AsyncNameResolverMan {
+public:
+  AsyncNameResolverMan();
+  // Destructor does not call disableNameResolverCheck(). Application
+  // must call it before the destruction of this object.
+  ~AsyncNameResolverMan();
+  // Enable IPv4 address lookup. default: true
+  void setIPv4(bool ipv4) { ipv4_ = ipv4; }
+  // Enable IPv6 address lookup. default: true
+  void setIPv6(bool ipv6) { ipv6_ = ipv6; }
+  // Returns true if asynchronous name resolution has been started.
+  bool started() const;
+  // Starts asynchronous name resolution.
+  void startAsync(const std::string& hostname, DownloadEngine* e,
+                  Command* command);
+  // Appends resolved addresses to |res|.
+  void getResolvedAddress(std::vector<std::string>& res) const;
+  // Adds resolvers to DownloadEngine to check event notification.
+  void setNameResolverCheck(DownloadEngine* e, Command* command);
+  // Removes resolvers from DownloadEngine.
+  void disableNameResolverCheck(DownloadEngine* e, Command* command);
+  // Returns true if any of resolvers are added in DownloadEngine.
+  bool resolverChecked() const { return resolverCheck_; }
+  // Returns status value: 0 for inprogress, 1 for success and -1 for
+  // failure.
+  int getStatus() const;
+  // Returns last error string
+  const std::string& getLastError() const;
+  // Resets state. Also removes resolvers from DownloadEngine.
+  void reset(DownloadEngine* e, Command* command);
     }
     
-    #include <osquery/database.h>
-    
-    
-    {/**
- * @brief Generate a row string for query results
- *
- * @param r A row to analyze
- * @param lengths The data returned from computeQueryDataLengths
- * @param columns The order of the keys (since maps are unordered)
- *
- * @return A string, with a newline, representing your row
- */
-std::string generateRow(const Row& r,
-                        const std::map<std::string, size_t>& lengths,
-                        const std::vector<std::string>& columns);
-}
-
-    
-    
-    {
-    {  std::map<std::string, size_t> expected = {{'name', 10}};
-  EXPECT_EQ(lengths, expected);
-}
-}
-
-    
-      static CGEventRef eventCallback(CGEventTapProxy proxy,
-                                  CGEventType type,
-                                  CGEventRef event,
-                                  void* refcon);
-    
-    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-bool ImGui_ImplAllegro5_ProcessEvent(ALLEGRO_EVENT *ev)
-{
-    ImGuiIO& io = ImGui::GetIO();
-    }
-    
-    // CHANGELOG 
-// (minor and older changes stripped away, please see git history for details)
-//  2018-06-08: Misc: Extracted imgui_impl_opengl2.cpp/.h away from the old combined GLFW/SDL+OpenGL2 examples.
-//  2018-06-08: OpenGL: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle.
-//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplGlfwGL2_RenderDrawData() in the .h file so you can call it yourself.
-//  2017-09-01: OpenGL: Save and restore current polygon mode.
-//  2016-09-10: OpenGL: Uploading font texture as RGBA32 to increase compatibility with users shaders (not ideal).
-//  2016-09-05: OpenGL: Fixed save and restore of current scissor rectangle.
-    
-        IMGUI_API void          ItemSize(const ImVec2& size, float text_offset_y = 0.0f);
-    IMGUI_API void          ItemSize(const ImRect& bb, float text_offset_y = 0.0f);
-    IMGUI_API bool          ItemAdd(const ImRect& bb, ImGuiID id, const ImRect* nav_bb = NULL);
-    IMGUI_API bool          ItemHoverable(const ImRect& bb, ImGuiID id);
-    IMGUI_API bool          IsClippedEx(const ImRect& bb, ImGuiID id, bool clip_even_when_logged);
-    IMGUI_API bool          FocusableItemRegister(ImGuiWindow* window, ImGuiID id, bool tab_stop = true);      // Return true if focus is requested
-    IMGUI_API void          FocusableItemUnregister(ImGuiWindow* window);
-    IMGUI_API ImVec2        CalcItemSize(ImVec2 size, float default_x, float default_y);
-    IMGUI_API float         CalcWrapWidthForPos(const ImVec2& pos, float wrap_pos_x);
-    IMGUI_API void          PushMultiItemsWidths(int components, float width_full = 0.0f);
-    IMGUI_API void          PushItemFlag(ImGuiItemFlags option, bool enabled);
-    IMGUI_API void          PopItemFlag();
-    
-            ID3D12Fence* fence = NULL;
-        hr = g_pd3dDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
-        IM_ASSERT(SUCCEEDED(hr));
-    
-    // use this setting to scale the interface - e.g. on device you could use 2 or 3 scale factor
-static ImVec2       g_RenderScale = ImVec2(1.0f,1.0f);
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_Marmalade_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_Marmalade_CreateDeviceObjects();
-    
-        // Setup GLUT display function
-    // We will also call ImGui_ImplFreeGLUT_InstallFuncs() to get all the other functions installed for us, 
-    // otherwise it is possible to install our own functions and call the imgui_impl_freeglut.h functions ourselves.
-    glutDisplayFunc(glut_display_func);
-    
-        // Setup Dear ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    
-    // Old-style macros
-#define BENCHMARK_WITH_ARG(n, a) BENCHMARK(n)->Arg((a))
-#define BENCHMARK_WITH_ARG2(n, a1, a2) BENCHMARK(n)->Args({(a1), (a2)})
-#define BENCHMARK_WITH_UNIT(n, t) BENCHMARK(n)->Unit((t))
-#define BENCHMARK_RANGE(n, lo, hi) BENCHMARK(n)->Range((lo), (hi))
-#define BENCHMARK_RANGE2(n, l1, h1, l2, h2) \
-  BENCHMARK(n)->RangePair({{(l1), (h1)}, {(l2), (h2)}})
-    
-    // This template function declaration is used in defining arraysize.
-// Note that the function doesn't need an implementation, as we only
-// use its type.
-template <typename T, size_t N>
-char (&ArraySizeHelper(T (&array)[N]))[N];
-    
-    Benchmark* Benchmark::DenseThreadRange(int min_threads, int max_threads,
-                                       int stride) {
-  CHECK_GT(min_threads, 0);
-  CHECK_GE(max_threads, min_threads);
-  CHECK_GE(stride, 1);
-    }
-    
-      // currently there is no error handling for failure, so this is hack.
-  CHECK(ret >= 0);
-    
-    // Returns true if the string matches the flag.
-bool IsFlag(const char* str, const char* flag);
-    
-    
-    {  results.push_back(big_o);
-  results.push_back(rms);
-  return results;
-}
-    
-    // Return a vector containing the bigO and RMS information for the specified
-// list of reports. If 'reports.size() < 2' an empty vector is returned.
-std::vector<BenchmarkReporter::Run> ComputeBigO(
-    const std::vector<BenchmarkReporter::Run>& reports);
-    
-    
-    {} // end namespace benchmark
-
-    
-    namespace benchmark {
+    class AuthConfig {
+private:
+  std::string authScheme_;
+  std::string user_;
+  std::string password_;
     }
