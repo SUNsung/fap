@@ -1,85 +1,75 @@
 
         
-            def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
-    
-            When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
-        '''
-        node = self.lookup.get(query)
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
-        else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
-
-    
-        def park_vehicle(self, vehicle):
-        spot = self._find_available_spot(vehicle)
-        if spot is None:
-            return None
-        else:
-            spot.park_vehicle(vehicle)
-            return spot
-    
-        def remove_user(self, user_id):
-        pass
-    
-    # Dynamic inventory script which lets you use nodes discovered by Canonical's
-# Landscape (http://www.ubuntu.com/management/landscape-features).
-#
-# Requires the `landscape_api` Python module
-# See:
-#   - https://landscape.canonical.com/static/doc/api/api-client-package.html
-#   - https://landscape.canonical.com/static/doc/api/python-api.html
-#
-# Environment variables
-# ---------------------
-#   - `LANDSCAPE_API_URI`
-#   - `LANDSCAPE_API_KEY`
-#   - `LANDSCAPE_API_SECRET`
-#   - `LANDSCAPE_API_SSL_CA_FILE` (optional)
+            with open('README.md', 'w+') as sorted_file:
+        # Then all of the blocks are sorted individually
+        blocks = [''.join(sorted(block, key=lambda s: s.lower())) for block in blocks]
+        # And the result is written back to README.md
+        sorted_file.write(''.join(blocks))
     
     
-def secure_hash(filename, hash_func=sha1):
-    ''' Return a secure hash hex digest of local file, None if file is not present or a directory. '''
-    
-    patterns = {
-    # This matches a square-bracketed expression with a port specification. What
-    # is inside the square brackets is validated later.
-    }
-    
-    ## All tokens go to the parser (unless skip() is called in that rule)
-# on a particular 'channel'.  The parser tunes to a particular channel
-# so that whitespace etc... can go to the parser on a 'hidden' channel.
-DEFAULT_CHANNEL = 0
+if len(sys.argv) <= 1:
+    print('Specify the version number as parameter')
+    sys.exit()
+version = sys.argv[1]
     
     
-    def index(self):
-        '''
-        Return the current input symbol index 0..n where n indicates the
-        last symbol has been read.  The index is the symbol about to be
-        read not the most recently read symbol.
-        '''
+def _is_empty(d):
+    return not bool(os.listdir(d))
     
-    class CommonToken(Token):
-    '''@brief Basic token implementation.
+        def test_proxy_https(self):
+        params = self._check_params(['primary_proxy', 'primary_server_ip'])
+        if params is None:
+            return
+        ydl = FakeYDL({
+            'proxy': params['primary_proxy']
+        })
+        self.assertEqual(
+            ydl.urlopen('https://yt-dl.org/ip').read().decode('utf-8'),
+            params['primary_server_ip'])
     
-    A character stream is usually the first element in the pipeline of a typical
-ANTLR3 application. It is used as the input for a Lexer.
+    DOCUMENTATION = '''
+---
+inventory: openshift
+short_description: Openshift gears external inventory script
+description:
+  - Generates inventory of Openshift gears using the REST interface
+  - this permit to reuse playbook to setup an Openshift gear
+version_added: None
+author: Michael Scherer
+'''
+    
+    from ansible.plugins.terminal import TerminalBase
+from ansible.errors import AnsibleConnectionFailure
+    
+    
+def get_group_vars(groups):
+    
+        def construct_vault_encrypted_unicode(self, node):
+        value = self.construct_scalar(node)
+        b_ciphertext_data = to_bytes(value)
+        # could pass in a key id here to choose the vault to associate with
+        # TODO/FIXME: plugin vault selector
+        vault = self._vaults['default']
+        if vault.secrets is None:
+            raise ConstructorError(context=None, context_mark=None,
+                                   problem='found !vault but no vault password provided',
+                                   problem_mark=node.start_mark,
+                                   note=None)
+        ret = AnsibleVaultEncryptedUnicode(b_ciphertext_data)
+        ret.vault = vault
+        return ret
+    
+        def test_weird_blocks(self):
+        test = r'''
+            if ($http_user_agent ~ MSIE) {
+                rewrite ^(.*)$ /msie/$1 break;
+            }
+    
+        def setUp(self):
+        from acme.errors import MissingNonce
+        self.response = mock.MagicMock(headers={})
+        self.response.request.method = 'FOO'
+        self.error = MissingNonce(self.response)
+    
+    # A shorter title for the navigation bar.  Default is the same as html_title.
+#html_short_title = None
