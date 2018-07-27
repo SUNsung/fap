@@ -1,239 +1,153 @@
 
         
-          bool Register(const ui::Accelerator& accelerator,
-                const base::Closure& callback);
-  bool IsRegistered(const ui::Accelerator& accelerator);
-  void Unregister(const ui::Accelerator& accelerator);
-  void UnregisterAll();
+          /**
+   * Returns a binary image of the current object at the given level.
+   * The position and size match the return from BoundingBoxInternal, and so
+   * this could be upscaled with respect to the original input image.
+   * Use pixDestroy to delete the image after use.
+   */
+  Pix* GetBinaryImage(PageIteratorLevel level) const;
     
-      // URLRequestJob:
-  void GetResponseInfo(net::HttpResponseInfo* info) override;
-    
-    namespace atom {
-    }
-    
-      // Returns whether current process is browser process, currently we detect it
-  // by checking whether current has used V8 Lock, but it might be a bad idea.
-  static inline bool IsBrowserProcess() { return v8::Locker::IsActive(); }
-    
-    #include 'ui/gfx/geometry/rect.h'
-    
-      // This message is sent before a tab has been closed.  The source is a
-  // Source<NavigationController> with a pointer to the controller for the
-  // closed tab.  No details are expected.
-  //
-  // See also content::NOTIFICATION_WEB_CONTENTS_DESTROYED, which is sent when
-  // the WebContents containing the NavigationController is destroyed.
-  NOTIFICATION_TAB_CLOSING,
-    
-    #endif  // CHROME_BROWSER_CHROME_PROCESS_FINDER_WIN_H_
-
-    
-      virtual ~DesktopMediaList() {}
-    
-    
-    {}  // namespace extensions
-    
-    #endif  // ATOM_COMMON_COLOR_UTIL_H_
-
-    
-    // Generate param traits read methods.
-#include 'ipc/param_traits_read_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
-    
-    EventListener::~EventListener() {
-  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
-    delete i->second;
+    void IntFeatureMap::Clear() {
+  for (int dir = 0; dir < kNumOffsetMaps; ++dir) {
+    delete [] offset_plus_[dir];
+    delete [] offset_minus_[dir];
+    offset_plus_[dir] = nullptr;
+    offset_minus_[dir] = nullptr;
   }
 }
     
+    // Max number of neighbour small objects per squared gridsize before a grid
+// cell becomes image.
+const double kMaxSmallNeighboursPerPix = 1.0 / 32;
+// Max number of small blobs a large blob may overlap before it is rejected
+// and determined to be image.
+const int kMaxLargeOverlapsWithSmall = 3;
+// Max number of small blobs a medium blob may overlap before it is rejected
+// and determined to be image. Larger than for large blobs as medium blobs
+// may be complex Chinese characters. Very large Chinese characters are going
+// to overlap more medium blobs than small.
+const int kMaxMediumOverlapsWithSmall = 12;
+// Max number of normal blobs a large blob may overlap before it is rejected
+// and determined to be image. This is set higher to allow for drop caps, which
+// may overlap a lot of good text blobs.
+const int kMaxLargeOverlapsWithMedium = 12;
+// Multiplier of original noise_count used to test for the case of spreading
+// noise beyond where it should really be.
+const int kOriginalNoiseMultiple = 8;
+// Pixel padding for noise blobs when rendering on the image
+// mask to encourage them to join together. Make it too big and images
+// will fatten out too much and have to be clipped to text.
+const int kNoisePadding = 4;
+// Fraction of max_noise_count_ to be added to the noise count if there is
+// photo mask in the background.
+const double kPhotoOffsetFraction = 0.375;
+// Min ratio of perimeter^2/16area for a 'good' blob in estimating noise
+// density. Good blobs are supposed to be highly likely real text.
+// We consider a square to have unit ratio, where A=(p/4)^2, hence the factor
+// of 16. Digital circles are weird and have a minimum ratio of pi/64, not
+// the 1/(4pi) that you would expect.
+const double kMinGoodTextPARatio = 1.5;
     
-    {protected:
-  BaseEvent(){}
-  virtual ~BaseEvent(){}
-};
+    void block_edges(Pix *t_image,         // thresholded image
+                 PDBLK *block,         // block in image
+                 C_OUTLINE_IT* outline_it);
+void make_margins(PDBLK *block,            // block in image
+                  BLOCK_LINE_IT *line_it,  // for old style
+                  uint8_t *pixels,           // pixels to strip
+                  uint8_t margin,            // white-out pixel
+                  int16_t left,              // block edges
+                  int16_t right,
+                  int16_t y);                // line coord                 );
+void line_edges(int16_t x,                     // coord of line start
+                int16_t y,                     // coord of line
+                int16_t xext,                  // width of line
+                uint8_t uppercolour,           // start of prev line
+                uint8_t * bwpos,               // thresholded line
+                CRACKEDGE ** prevline,       // edges in progress
+                CRACKEDGE **free_cracks,
+                C_OUTLINE_IT* outline_it);
+CRACKEDGE *h_edge(int sign,                  // sign of edge
+                  CRACKEDGE * join,          // edge to join to
+                  CrackPos* pos);
+CRACKEDGE *v_edge(int sign,                  // sign of edge
+                  CRACKEDGE * join,          // edge to join to
+                  CrackPos* pos);
+void join_edges(CRACKEDGE *edge1,            // edges to join
+                CRACKEDGE *edge2,            // no specific order
+                CRACKEDGE **free_cracks,
+                C_OUTLINE_IT* outline_it);
+void free_crackedges(CRACKEDGE *start);
     
-    #include 'base/values.h'
-#include 'components/zoom/zoom_controller.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/common/page_zoom.h'
-#include 'ui/views/controls/menu/menu_runner.h'
-    
-       bool IsItemForCommandIdDynamic(int command_id) const override;
-   base::string16 GetLabelForCommandId(int command_id) const override;
-   bool GetIconForCommandId(int command_id,
-                                   gfx::Image* icon) const override;
-    
-      if (type == 'separator') {
-    menu_item_ = gtk_separator_menu_item_new();
-  } else {
-    if (type == 'checkbox') {
-      menu_item_ = gtk_check_menu_item_new();
-      bool checked;
-      if (option.GetBoolean('checked', &checked))
-        SetChecked(checked);
-    } else {
-      menu_item_ = gtk_image_menu_item_new();
-      std::string icon;
-      if (option.GetString('icon', &icon))
-        SetIcon(icon);
-    }
-    }
-    
-     protected:
-  ~NwAppQuitFunction() override;
-    
-    bool NwClipboardClearSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  clipboard->Clear(ui::CLIPBOARD_TYPE_COPY_PASTE);
-  return true;
+    // Insert the given blocks at the front of the completed_blocks_ list so
+// they can be kept in the correct reading order.
+void WorkingPartSet::InsertCompletedBlocks(BLOCK_LIST* blocks,
+                                           TO_BLOCK_LIST* to_blocks) {
+  BLOCK_IT block_it(&completed_blocks_);
+  block_it.add_list_before(blocks);
+  TO_BLOCK_IT to_block_it(&to_blocks_);
+  to_block_it.add_list_before(to_blocks);
 }
     
-      protected:
-    ~NwScreenRegisterStreamFunction() override {}
-    DECLARE_EXTENSION_FUNCTION('nw.Screen.registerStream', UNKNOWN)
+      // Sets the coordinates of the current macro-block for the purpose of
+  // CompareBlock() calls.
+  virtual void SwitchBlock(int block_x, int block_y,
+                           int factor_x, int factor_y) = 0;
     
-    static HRESULT InitDevice()
-{
-    HRESULT hr = S_OK;
+    void OutputImage::SaveToJpegData(JPEGData* jpg) const {
+  assert(components_[0].factor_x() == 1);
+  assert(components_[0].factor_y() == 1);
+  jpg->width = width_;
+  jpg->height = height_;
+  jpg->max_h_samp_factor = 1;
+  jpg->max_v_samp_factor = 1;
+  jpg->MCU_cols = components_[0].width_in_blocks();
+  jpg->MCU_rows = components_[0].height_in_blocks();
+  int ncomp = components_[1].IsAllZero() && components_[2].IsAllZero() ? 1 : 3;
+  for (int i = 1; i < ncomp; ++i) {
+    jpg->max_h_samp_factor = std::max(jpg->max_h_samp_factor,
+                                      components_[i].factor_x());
+    jpg->max_v_samp_factor = std::max(jpg->max_h_samp_factor,
+                                      components_[i].factor_y());
+    jpg->MCU_cols = std::min(jpg->MCU_cols, components_[i].width_in_blocks());
+    jpg->MCU_rows = std::min(jpg->MCU_rows, components_[i].height_in_blocks());
+  }
+  jpg->components.resize(ncomp);
+  int q[3][kDCTBlockSize];
+  for (int c = 0; c < 3; ++c) {
+    memcpy(&q[c][0], components_[c].quant(), kDCTBlockSize * sizeof(q[0][0]));
+  }
+  for (int c = 0; c < ncomp; ++c) {
+    JPEGComponent* comp = &jpg->components[c];
+    assert(jpg->max_h_samp_factor % components_[c].factor_x() == 0);
+    assert(jpg->max_v_samp_factor % components_[c].factor_y() == 0);
+    comp->id = c;
+    comp->h_samp_factor = jpg->max_h_samp_factor / components_[c].factor_x();
+    comp->v_samp_factor = jpg->max_v_samp_factor / components_[c].factor_y();
+    comp->width_in_blocks = jpg->MCU_cols * comp->h_samp_factor;
+    comp->height_in_blocks = jpg->MCU_rows * comp->v_samp_factor;
+    comp->num_blocks = comp->width_in_blocks * comp->height_in_blocks;
+    comp->coeffs.resize(kDCTBlockSize * comp->num_blocks);
+    }
     }
     
-    void projectPoints(cv::InputArray objectPoints, cv::OutputArray imagePoints,
-                   cv::InputArray _rvec,cv::InputArray _tvec,
-                   const IntrinsicParams& param, cv::OutputArray jacobian);
+    #include <assert.h>
+#include <algorithm>
     
-    #if 0
-    
-    
-    {
-    {
-    {  inline void PutChar(char ch) {
-    out_buf += ch;
-    if (out_buf.length() >= kBufferSize) Flush();
+    const double* NewSrgb8ToLinearTable() {
+  double* table = new double[256];
+  int i = 0;
+  for (; i < 11; ++i) {
+    table[i] = i / 12.92;
   }
-  inline void Flush(void) {
-    if (out_buf.length() != 0) {
-      fp->Write(&out_buf[0], out_buf.length());
-      out_buf.clear();
-    }
+  for (; i < 256; ++i) {
+    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
   }
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_BASE64_H_
-
-    
-    
-    {  if (pos != std::string::npos) {
-    std::string fmt = cache_prefix.substr(pos + 5, cache_prefix.length());
-    size_t cpos = fmt.rfind('-');
-    if (cpos != std::string::npos) {
-      return std::make_pair(fmt.substr(0, cpos), fmt.substr(cpos + 1, fmt.length()));
-    } else {
-      return std::make_pair(fmt, fmt);
-    }
-  } else {
-    std::string raw = 'raw';
-    return std::make_pair(raw, raw);
-  }
+  return table;
 }
     
-    using LogCallbackRegistryStore = dmlc::ThreadLocalStore<LogCallbackRegistry>;
+    #include 'guetzli/jpeg_data.h'
     
-    TEST(Metric, MAE) {
-  xgboost::Metric * metric = xgboost::Metric::Create('mae');
-  ASSERT_STREQ(metric->Name(), 'mae');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0.5f, 0.001f);
-}
-    
-    namespace xgboost {
-namespace tree {
-// List of files that will be force linked in static links.
-DMLC_REGISTRY_LINK_TAG(updater_colmaker);
-DMLC_REGISTRY_LINK_TAG(updater_skmaker);
-DMLC_REGISTRY_LINK_TAG(updater_refresh);
-DMLC_REGISTRY_LINK_TAG(updater_prune);
-DMLC_REGISTRY_LINK_TAG(updater_fast_hist);
-DMLC_REGISTRY_LINK_TAG(updater_histmaker);
-DMLC_REGISTRY_LINK_TAG(updater_sync);
-#ifdef XGBOOST_USE_CUDA
-DMLC_REGISTRY_LINK_TAG(updater_gpu);
-DMLC_REGISTRY_LINK_TAG(updater_gpu_hist);
-#endif
-}  // namespace tree
-}  // namespace xgboost
-
-    
-    SEXP XGDMatrixCreateFromCSC_R(SEXP indptr,
-                              SEXP indices,
-                              SEXP data,
-                              SEXP num_row) {
-  SEXP ret;
-  R_API_BEGIN();
-  const int *p_indptr = INTEGER(indptr);
-  const int *p_indices = INTEGER(indices);
-  const double *p_data = REAL(data);
-  size_t nindptr = static_cast<size_t>(length(indptr));
-  size_t ndata = static_cast<size_t>(length(data));
-  size_t nrow = static_cast<size_t>(INTEGER(num_row)[0]);
-  std::vector<size_t> col_ptr_(nindptr);
-  std::vector<unsigned> indices_(ndata);
-  std::vector<float> data_(ndata);
-    }
-    
-    /*!
- * \brief Tag function as usable by device
- */
-#ifdef __NVCC__
-#define XGBOOST_DEVICE __host__ __device__
-#else
-#define XGBOOST_DEVICE
-#endif
-    
-    	ScopedJstring tag_jstr(env, tag);
-	ScopedJstring filename_jstr(env, filename);
-	ScopedJstring funcname_jstr(env, funcname);
-	ScopedJstring log_jst(env, _log);
-    
-    	extern jobject getLoadLibraries(JNIEnv *_env);
-    
-    #endif
-
-    
-    // true pass, false limit
-bool CommFrequencyLimit::Check() {
-    uint64_t now = ::gettickcount();
-    if (!touch_times_.empty() && (now<touch_times_.front()) ) { //if user modify the time, amend it
-    	xwarn2(TSF'Must be modified time.now=%_', now);
-    	size_t size = touch_times_.size();
-    	touch_times_.clear();
-    	for (size_t i=0; i<size; ++i) {
-    		touch_times_.push_back(now-1);
-    	}
-    }
-    }
-    
-      private:
-    void __StartupCreater();
-    void __FirstGetCreater(const std::string& _servicename);
-    void __Creater(std::vector<ServiceRegister>& _vec);
-    
-    #include <string>
-#include <set>
-#include <map>
-    
-    //============================================================================
-// Name        : has_member.h
-// Author      :
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
+    void BuildSequentialHuffmanCodes(
+    const JPEGData& jpg, std::vector<HuffmanCodeTable>* dc_huffman_code_tables,
+    std::vector<HuffmanCodeTable>* ac_huffman_code_tables);
