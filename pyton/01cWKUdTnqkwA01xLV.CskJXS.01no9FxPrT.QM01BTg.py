@@ -1,116 +1,123 @@
 
         
-                    if self.wait_to_close_event:
-                self.wait_to_close_event.wait(self.WAIT_EVENT_TIMEOUT)
-        finally:
-            self.ready_event.set() # just in case of exception
-            self._close_server_sock_ignore_errors()
-            self.stop_event.set()
+        from werkzeug.local import LocalProxy
     
-        def redirect_resp_handler(sock):
-        consume_socket_content(sock, timeout=0.5)
-        location = u'//{0}:{1}/{2}'.format(host, port, path)
-        sock.send(
-            b'HTTP/1.1 301 Moved Permanently\r\n'
-            b'Content-Length: 0\r\n'
-            b'Location: ' + location.encode('utf8') + b'\r\n'
-            b'\r\n'
-        )
-        redirect_request.append(consume_socket_content(sock, timeout=0.5))
-        sock.send(b'HTTP/1.1 200 OK\r\n\r\n')
+    from datetime import timedelta
+import os
+import textwrap
     
-    # -- Options for LaTeX output ---------------------------------------------
     
-        if isinstance(password, str):
-        password = password.encode('latin1')
+@pytest.fixture(autouse=True)
+def reset_logging(pytestconfig):
+    root_handlers = logging.root.handlers[:]
+    logging.root.handlers = []
+    root_level = logging.root.level
     
-        def _find(self, name, domain=None, path=None):
-        '''Requests uses this method internally to get cookie values.
+                greenlets.append(greenlet(g))
+            return 'Hello World!'
     
-        :param url: URL for the new :class:`Request` object.
-    :param data: (optional) Dictionary, list of tuples, bytes, or file-like
-        object to send in the body of the :class:`Request`.
-    :param json: (optional) json data to send in the body of the :class:`Request`.
-    :param \*\*kwargs: Optional arguments that ``request`` takes.
-    :return: :class:`Response <Response>` object
-    :rtype: requests.Response
+    
+def main(args_list):
+    args = get_args(args_list)
+    if args.list:
+        print_list()
+    if args.host:
+        print_host(args.host)
+    
+    
+def get_from_rhc_config(variable):
+    global configparser
+    CONF_FILE = os.path.expanduser('~/.openshift/express.conf')
+    if os.path.exists(CONF_FILE):
+        if not configparser:
+            ini_str = '[root]\n' + open(CONF_FILE, 'r').read()
+            configparser = ConfigParser.SafeConfigParser()
+            configparser.readfp(StringIO.StringIO(ini_str))
+        try:
+            return configparser.get('root', variable)
+        except ConfigParser.NoOptionError:
+            return None
+    
+    
+def extract_contents(args, path, output_dir):
     '''
+    :type args: any
+    :type path: str
+    :type output_dir: str
+    '''
+    if not args.test:
+        if not os.path.exists(path):
+            return
     
-        def _genspider(self, module, name, domain, template_name, template_file):
-        '''Generate the spider module, based on the given template'''
-        tvars = {
-            'project_name': self.settings.get('BOT_NAME'),
-            'ProjectName': string_camelcase(self.settings.get('BOT_NAME')),
-            'module': module,
-            'name': name,
-            'domain': domain,
-            'classname': '%sSpider' % ''.join(s.capitalize() \
-                for s in module.split('_'))
-        }
-        if self.settings.get('NEWSPIDER_MODULE'):
-            spiders_module = import_module(self.settings['NEWSPIDER_MODULE'])
-            spiders_dir = abspath(dirname(spiders_module.__file__))
-        else:
-            spiders_module = None
-            spiders_dir = '.'
-        spider_file = '%s.py' % join(spiders_dir, module)
-        shutil.copyfile(template_file, spider_file)
-        render_templatefile(spider_file, **tvars)
-        print('Created spider %r using template %r ' % (name, \
-            template_name), end=('' if spiders_module else '\n'))
-        if spiders_module:
-            print('in module:\n  %s.%s' % (spiders_module.__name__, module))
+        parser = argparse.ArgumentParser(description='Start a new Shippable run.')
     
-        @classmethod
-    def from_crawler(cls, crawler):
-        o = cls(crawler.settings.getfloat('DOWNLOAD_TIMEOUT'))
-        crawler.signals.connect(o.spider_opened, signal=signals.spider_opened)
-        return o
+        def on_open_shell(self):
+        try:
+            for cmd in (b'set terminal length 0', b'set terminal width 512'):
+                self._exec_cli_command(cmd)
+            self._exec_cli_command(b'set terminal length %d' % self.terminal_length)
+        except AnsibleConnectionFailure:
+            raise AnsibleConnectionFailure('unable to set terminal parameters')
+
+    
+        results = {}
+    for group in sort_groups(groups):
+        results = combine_vars(results, group.get_vars())
+    
+            if opts.pidfile:
+            with open(opts.pidfile, 'w') as f:
+                f.write(str(os.getpid()) + os.linesep)
+    
+        def needs_backout(self):
+        return len(self.active) >= self.total_concurrency
+    
+        def download_request(self, request, spider):
+        scheme = urlparse_cached(request).scheme
+        handler = self._get_handler(scheme)
+        if not handler:
+            raise NotSupported('Unsupported URL scheme '%s': %s' %
+                               (scheme, self._notconfigured[scheme]))
+        return handler.download_request(request, spider)
+    
+        def spider_opened(self, spider):
+        self._timeout = getattr(spider, 'download_timeout', self._timeout)
+    
+    from w3lib.http import basic_auth_header
+    
+    from scrapy import signals
+    
+        def error_count(self, failure, response, spider):
+        self.counter['errorcount'] += 1
+        if self.counter['errorcount'] == self.close_on['errorcount']:
+            self.crawler.engine.close_spider(spider, 'closespider_errorcount')
+    
+            #Conversion of md to HTML
+        for md in allmd:
+    
+    # PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read from your webcam.
+# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
+# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+    
+        :param X_img_path: path to image to be recognized
+    :param knn_clf: (optional) a knn classifier object. if not specified, model_save_path must be specified.
+    :param model_path: (optional) path to a pickled knn classifier. if not specified, model_save_path must be knn_clf.
+    :param distance_threshold: (optional) distance threshold for face classification. the larger it is, the more chance
+           of mis-classifying an unknown person as a known one.
+    :return: a list of names and face locations for the recognized faces in the image: [(name, bounding box), ...].
+        For faces of unrecognized persons, the name 'unknown' will be returned.
+    '''
+    if not os.path.isfile(X_img_path) or os.path.splitext(X_img_path)[1][1:] not in ALLOWED_EXTENSIONS:
+        raise Exception('Invalid image path: {}'.format(X_img_path))
     
     
-class UserAgentMiddleware(object):
-    '''This middleware allows spiders to override the user_agent'''
+def test_image(image_to_check, model):
+    unknown_image = face_recognition.load_image_file(image_to_check)
+    face_locations = face_recognition.face_locations(unknown_image, number_of_times_to_upsample=0, model=model)
     
-    class CloseSpider(Exception):
-    '''Raise this from callbacks to request the spider to be closed'''
+    test_requirements = [
+    'tox',
+    'flake8==2.6.0'
+]
     
-        '''
-    
-    # A shorter title for the navigation bar.  Default is the same as html_title.
-#html_short_title = None
-    
-    YCM_VAR_PREFIX = 'ycm_'
-    
-    from ycm.tests.test_utils import MockVimModule
-MockVimModule()
-    
-        poll_again = _HandlePollResponse( response, diagnostics_handler )
-    if poll_again:
-      self._SendRequest()
-      return True
-    
-        def test_wildcard_etag(self):
-        computed_etag = ''xyzzy''
-        etags = '*'
-        self.check_url(
-            '/cache/' + computed_etag, method='GET',
-            headers=[('If-None-Match', etags)],
-            expected_status=304,
-            allowed_warnings=[rs.MISSING_HDRS_304])
-    
-        for i in range(1, num_tests + 1):
-        logging.info('running test case %d', i)
-        url = options.url + '/runCase?case=%d&agent=%s' % (i, options.name)
-        test_ws = yield websocket_connect(url, None, compression_options={})
-        while True:
-            message = yield test_ws.read_message()
-            if message is None:
-                break
-            test_ws.write_message(message, binary=isinstance(message, bytes))
-    
-    # These benchmarks are delicate.  They hit various fast-paths in the gen
-# machinery in order to stay synchronous so we don't need an IOLoop.
-# This removes noise from the results, but it's easy to change things
-# in a way that completely invalidates the results.
-    
-            Typical usage::
+    # Find all facial features in all the faces in the image
+face_landmarks_list = face_recognition.face_landmarks(image)
