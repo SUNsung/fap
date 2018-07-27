@@ -1,343 +1,384 @@
 
         
-        namespace google {
-namespace protobuf {
-    }
-    }
-    
-    
-    { private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(CppGenerator);
-};
-    
-    
-    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ReflectionClassGenerator);
-};
-    
-    void RepeatedEnumFieldGenerator::GenerateCloningCode(io::Printer* printer) {
-  printer->Print(variables_,
-    '$name$_ = other.$name$_.Clone();\n');
-}
-    
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
-    
-    // Author: liujisi@google.com (Pherl Liu)
-    
-    // Helper function for printing a tuple.  T must be instantiated with
-// a tuple type.
-template <typename T>
-void PrintTupleTo(const T& t, ::std::ostream* os);
-    
-      // Appends the given TestPartResult to the array.
-  void Append(const TestPartResult& result);
-    
-    #endif  // 0
-    
-      template <GTEST_7_TYPENAMES_(U)>
-  tuple& CopyFrom(const GTEST_7_TUPLE_(U)& t) {
-    f0_ = t.f0_;
-    f1_ = t.f1_;
-    f2_ = t.f2_;
-    f3_ = t.f3_;
-    f4_ = t.f4_;
-    f5_ = t.f5_;
-    f6_ = t.f6_;
-    return *this;
+          ArrayRef<const swift::markup::MarkupASTNode *> getBodyNodes() const {
+    return Parts.BodyNodes;
   }
     
-    // 6.1.3.4 Element access.
+    class InlineHTML final : public InlineContent {
+  StringRef LiteralContent;
+  InlineHTML(StringRef LiteralContent)
+    : InlineContent(ASTNodeKind::InlineHTML),
+      LiteralContent(LiteralContent) {}
+public:
+  static InlineHTML *create(MarkupContext &MC, StringRef LiteralContent);
+    }
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38>
-struct Types38 {
-  typedef T1 Head;
-  typedef Types37<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
-      T30, T31, T32, T33, T34, T35, T36, T37, T38> Tail;
-};
+    #include 'llvm/ADT/Hashing.h'
     
+      void forceColors() {
+    ForceColors = true;
+  }
     
-    {  // n has no integer factor in the range (1, n), and thus is prime.
-  return true;
-}
+    namespace swift {
+class ModuleDecl;
+class SourceFile;
+class DeclContext;
+    }
+    
+    namespace swift {
+namespace index {
+    }
+    }
+    
+    #endif // BITCOIN_INDIRECTMAP_H
 
     
-    
-// Tests Factorial().
-    
-    #ifndef GRPC_TEST_CPP_UTIL_BENCHMARK_CONFIG_H
-#define GRPC_TEST_CPP_UTIL_BENCHMARK_CONFIG_H
-    
-    std::string GetDbFileContent(int argc, char** argv);
-    
-      bool generate_in_pb2_grpc;
-    
-    #include <fstream>
-#include <sstream>
-#include <string>
-    
-      // Create a QpsGauge with name 'name'. is_present is set to true if the Gauge
-  // is already present in the map.
-  // NOTE: CreateQpsGauge can be called anytime (i.e before or after calling
-  // StartServer).
-  std::shared_ptr<QpsGauge> CreateQpsGauge(const grpc::string& name,
-                                           bool* already_present);
-    
-      /// Start an asynchronous accept.
-  /**
-   * This function is used to asynchronously accept a new connection into a
-   * socket. The function call always returns immediately.
-   *
-   * @param peer The socket into which the new connection will be accepted.
-   * Ownership of the peer object is retained by the caller, which must
-   * guarantee that it is valid until the handler is called.
-   *
-   * @param handler The handler to be called when the accept operation
-   * completes. Copies will be made of the handler as required. The function
-   * signature of the handler must be:
-   * @code void handler(
-   *   const boost::system::error_code& error // Result of operation.
-   * ); @endcode
-   * Regardless of whether the asynchronous operation completes immediately or
-   * not, the handler will not be invoked from within this function. Invocation
-   * of the handler will be performed in a manner equivalent to using
-   * boost::asio::io_service::post().
-   *
-   * @par Example
-   * @code
-   * void accept_handler(const boost::system::error_code& error)
-   * {
-   *   if (!error)
-   *   {
-   *     // Accept succeeded.
-   *   }
-   * }
-   *
-   * ...
-   *
-   * boost::asio::ip::tcp::acceptor acceptor(io_service);
-   * ...
-   * boost::asio::ip::tcp::socket socket(io_service);
-   * acceptor.async_accept(socket, accept_handler);
-   * @endcode
-   */
-  template <typename Protocol1, typename SocketService, typename AcceptHandler>
-  BOOST_ASIO_INITFN_RESULT_TYPE(AcceptHandler,
-      void (boost::system::error_code))
-  async_accept(basic_socket<Protocol1, SocketService>& peer,
-      BOOST_ASIO_MOVE_ARG(AcceptHandler) handler,
-      typename enable_if<is_convertible<Protocol, Protocol1>::value>::type* = 0)
-  {
-    // If you get an error on the following line it means that your handler does
-    // not meet the documented type requirements for a AcceptHandler.
-    BOOST_ASIO_ACCEPT_HANDLER_CHECK(AcceptHandler, handler) type_check;
+    struct leveldb_comparator_t : public Comparator {
+  void* state_;
+  void (*destructor_)(void*);
+  int (*compare_)(
+      void*,
+      const char* a, size_t alen,
+      const char* b, size_t blen);
+  const char* (*name_)(void*);
     }
     
+     private:
+  void FindNextUserEntry(bool skipping, std::string* skip);
+  void FindPrevUserEntry();
+  bool ParseKey(ParsedInternalKey* key);
     
-    {
-    {} // namespace asio
-} // namespace boost
+      Slice in(encoded);
+  ParsedInternalKey decoded('', 0, kTypeValue);
     
-      // Resize the buffer to the specified length.
-  void resize(size_type length)
-  {
-    BOOST_ASIO_ASSERT(length <= capacity());
-    if (begin_offset_ + length <= capacity())
-    {
-      end_offset_ = begin_offset_ + length;
-    }
-    else
-    {
-      using namespace std; // For memmove.
-      memmove(&buffer_[0], &buffer_[0] + begin_offset_, size());
-      end_offset_ = length;
-      begin_offset_ = 0;
-    }
+      // If a seek to internal key 'k' in specified file finds an entry,
+  // call (*handle_result)(arg, found_key, found_value).
+  Status Get(const ReadOptions& options,
+             uint64_t file_number,
+             uint64_t file_size,
+             const Slice& k,
+             void* arg,
+             void (*handle_result)(void*, const Slice&, const Slice&));
+    
+    
+    {  Status result;
+  if (msg != NULL) {
+    result = Status::Corruption('VersionEdit', msg);
   }
-    
-    #ifndef BOOST_ASIO_DETAIL_EVENT_HPP
-#define BOOST_ASIO_DETAIL_EVENT_HPP
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS) \
-  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
-typedef null_fenced_block fenced_block;
-#elif defined(__MACH__) && defined(__APPLE__)
-typedef macos_fenced_block fenced_block;
-#elif defined(__sun)
-typedef solaris_fenced_block fenced_block;
-#elif defined(__GNUC__) && defined(__arm__) \
-  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
-typedef gcc_arm_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
-typedef gcc_hppa_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-typedef gcc_x86_fenced_block fenced_block;
-#elif defined(__GNUC__) \
-  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
-  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
-typedef gcc_sync_fenced_block fenced_block;
-#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
-typedef win_fenced_block fenced_block;
-#else
-typedef null_fenced_block fenced_block;
-#endif
-    
-    #endif // BOOST_ASIO_DETAIL_FUNCTION_HPP
-
-    
-    
-    {private:
-  static void barrier()
-  {
-#if defined(__ARM_ARCH_4__) \
-    || defined(__ARM_ARCH_4T__) \
-    || defined(__ARM_ARCH_5__) \
-    || defined(__ARM_ARCH_5E__) \
-    || defined(__ARM_ARCH_5T__) \
-    || defined(__ARM_ARCH_5TE__) \
-    || defined(__ARM_ARCH_5TEJ__) \
-    || defined(__ARM_ARCH_6__) \
-    || defined(__ARM_ARCH_6J__) \
-    || defined(__ARM_ARCH_6K__) \
-    || defined(__ARM_ARCH_6Z__) \
-    || defined(__ARM_ARCH_6ZK__) \
-    || defined(__ARM_ARCH_6T2__)
-# if defined(__thumb__)
-    // This is just a placeholder and almost certainly not sufficient.
-    __asm__ __volatile__ ('' : : : 'memory');
-# else // defined(__thumb__)
-    int a = 0, b = 0;
-    __asm__ __volatile__ ('swp %0, %1, [%2]'
-        : '=&r'(a) : 'r'(1), 'r'(&b) : 'memory', 'cc');
-# endif // defined(__thumb__)
-#else
-    // ARMv7 and later.
-    __asm__ __volatile__ ('dmb' : : : 'memory');
-#endif
-  }
-};
-    
-      // The number of elements in the hash.
-  std::size_t size_;
-    
-    
-    {  errno = 0;
-  int result = error_wrapper(::fcntl(d, cmd), ec);
-  if (result != -1)
-    ec = boost::system::error_code();
   return result;
 }
     
-    extern JSClass  *jsb_cocosbuilder_CCBReader_class;
-extern JSObject *jsb_cocosbuilder_CCBReader_prototype;
+    class VersionEditTest { };
     
+    // If true, do not destroy the existing database.  If you set this
+// flag and also specify a benchmark that wants a fresh database, that
+// benchmark will fail.
+static bool FLAGS_use_existing_db = false;
     
-    
-    #if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_physics_PhysicsShape_getTag'', nullptr);
-        return 0;
+    class Slice {
+ public:
+  // Create an empty slice.
+  Slice() : data_(''), size_(0) { }
     }
-#endif
     
-        virtual void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color);
+    #include 'caffe/layers/neuron_layer.hpp'
     
-    #ifndef TEST_H
-#define TEST_H
+      bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnLRNDescriptor_t norm_desc_;
+  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
     
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of PoolingLayer.
+ *        Fallback to PoolingLayer for CPU mode.
+*/
+template <typename Dtype>
+class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
+ public:
+  explicit CuDNNPoolingLayer(const LayerParameter& param)
+      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNPoolingLayer();
+  // Currently, cuDNN does not support the extra top blob.
+  virtual inline int MinTopBlobs() const { return -1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    }
     
-    {  // Add new data and corrupt it
-  ASSERT_OK(writable_file->Append(kCorrupted));
-  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size() + kCorrupted.size());
-  result.clear();
-  ASSERT_OK(rand_file->Read(kGood.size(), kCorrupted.size(),
-            &result, &(scratch[0])));
-  ASSERT_EQ(result.compare(kCorrupted), 0);
-  // Corrupted
-  ASSERT_OK(dynamic_cast<MockEnv*>(env_)->CorruptBuffer(kFileName));
-  result.clear();
-  ASSERT_OK(rand_file->Read(kGood.size(), kCorrupted.size(),
-            &result, &(scratch[0])));
-  ASSERT_NE(result.compare(kCorrupted), 0);
+    /**
+ * @brief During training only, sets a random portion of @f$x@f$ to 0, adjusting
+ *        the rest of the vector magnitude accordingly.
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
+ */
+template <typename Dtype>
+class DropoutLayer : public NeuronLayer<Dtype> {
+ public:
+  /**
+   * @param param provides DropoutParameter dropout_param,
+   *     with DropoutLayer options:
+   *   - dropout_ratio (\b optional, default 0.5).
+   *     Sets the probability @f$ p @f$ that any given unit is dropped.
+   */
+  explicit DropoutLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    #endif  // CAFFE_ELTWISE_LAYER_HPP_
+
+    
+    #include <THPP/tensors/THTensor.hpp>
+    
+    static Py_ssize_t THPDevice_hash(THPDevice *self)
+{
+  HANDLE_TH_ERRORS
+  return static_cast<Py_ssize_t>(std::hash<at::Device>{}(self->device) % std::numeric_limits<Py_ssize_t>::max());
+  END_HANDLE_TH_ERRORS_RET(-1)
 }
     
-      // Extend record types with the following special values
-  enum {
-    kEof = kMaxRecordType + 1,
-    // Returned whenever we find an invalid physical record.
-    // Currently there are three situations in which this happens:
-    // * The record has an invalid CRC (ReadPhysicalRecord reports a drop)
-    // * The record is a 0-length record (No drop is reported)
-    // * The record is below constructor's initial_offset (No drop is reported)
-    kBadRecord = kMaxRecordType + 2,
-    // Returned when we fail to read a valid header.
-    kBadHeader = kMaxRecordType + 3,
-    // Returned when we read an old record from a previous user of the log.
-    kOldRecord = kMaxRecordType + 4,
-    // Returned when we get a bad record length
-    kBadRecordLen = kMaxRecordType + 5,
-    // Returned when we get a bad record checksum
-    kBadRecordChecksum = kMaxRecordType + 6,
-  };
     
-      // Add an entry into memtable that maps key to value at the
-  // specified sequence number and with the specified type.
-  // Typically value will be empty if type==kTypeDeletion.
-  //
-  // REQUIRES: if allow_concurrent = false, external synchronization to prevent
-  // simultaneous operations on the same MemTable.
-  //
-  // Returns false if MemTableRepFactory::CanHandleDuplicatedKey() is true and
-  // the <key, seq> already exists.
-  bool Add(SequenceNumber seq, ValueType type, const Slice& key,
-           const Slice& value, bool allow_concurrent = false,
-           MemTablePostProcessInfo* post_process_info = nullptr);
+    {
+    {    if (PyObject_IsInstance(stream, THCPStreamClass)) {
+      streams.push_back( ((THCPStream *)stream)->cdata);
+    } else if (stream == Py_None) {
+      streams.push_back(NULL);
+    } else {
+      std::runtime_error('Unknown data type found in stream list. Need THCStream or None');
+    }
+  }
+  return streams;
+}
     
-    // This class contains a fixed array of buckets, each
-// pointing to a skiplist (null if the bucket is empty).
-// bucket_count: number of fixed array buckets
-// skiplist_height: the max height of the skiplist
-// skiplist_branching_factor: probabilistic size ratio between adjacent
-//                            link lists in the skiplist
-extern MemTableRepFactory* NewHashSkipListRepFactory(
-    size_t bucket_count = 1000000, int32_t skiplist_height = 4,
-    int32_t skiplist_branching_factor = 4
-);
+      bool RunOnDevice() override;
     
-    std::unique_ptr<CompactionFilter> CompactionFilterFactoryJniCallback::CreateCompactionFilter(
-    const CompactionFilter::Context& context) {
-  jboolean attached_thread = JNI_FALSE;
-  JNIEnv* env = getJniEnv(&attached_thread);
-  assert(env != nullptr);
+        TIndex w_ind = 0;
+    for (TIndex j = 0; j < num_nz_ent; ++j) {
+      TIndex cur_seg = seg_data[j];
+      TIndex cur_key = key_data[j];
+      T cur_val = val_data[j];
+      TIndex grad_out_stride = cur_seg * num_outputs_;
+      for (TIndex i = 0; i < num_outputs_; ++i) {
+        T grad_out_scale = grad_out_data[grad_out_stride + i] * cur_val;
+        for (TIndex k = 0; k < num_alpha; ++k) {
+          hash_data[0] = cur_key;
+          hash_data[1] = i;
+          hash_data[2] = k;
+          hash_data[3] = HASH_MAGIC;
+    }
+    }
     }
     
-    class ComparatorJniCallback : public BaseComparatorJniCallback {
+    template <typename T, class Context>
+class BBoxTransformOp final : public Operator<Context> {
  public:
-      ComparatorJniCallback(
-        JNIEnv* env, jobject jComparator,
-        const ComparatorJniCallbackOptions* copt);
-      ~ComparatorJniCallback();
-};
-    
-      class LoggerJniCallback : public JniCallback, public Logger {
-   public:
-     LoggerJniCallback(JNIEnv* env, jobject jLogger);
-     ~LoggerJniCallback();
+  BBoxTransformOp(const OperatorDef& operator_def, Workspace* ws)
+      : Operator<Context>(operator_def, ws),
+        weights_(OperatorBase::GetRepeatedArgument<T>(
+            'weights',
+            vector<T>{1.0f, 1.0f, 1.0f, 1.0f})),
+        apply_scale_(
+            OperatorBase::GetSingleArgument<bool>('apply_scale', true)),
+        correct_transform_coords_(OperatorBase::GetSingleArgument<bool>(
+            'correct_transform_coords',
+            false)),
+        rotated_(OperatorBase::GetSingleArgument<bool>('rotated', false)),
+        angle_bound_on_(
+            OperatorBase::GetSingleArgument<bool>('angle_bound_on', true)),
+        angle_bound_lo_(
+            OperatorBase::GetSingleArgument<int>('angle_bound_lo', -90)),
+        angle_bound_hi_(
+            OperatorBase::GetSingleArgument<int>('angle_bound_hi', 90)),
+        clip_angle_thresh_(
+            OperatorBase::GetSingleArgument<float>('clip_angle_thresh', 1.0)) {
+    CAFFE_ENFORCE_EQ(
+        weights_.size(),
+        4,
+        'weights size ' + caffe2::to_string(weights_.size()) + 'must be 4.');
+  }
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
     }
     
-    const bool kLittleEndian = true;
+    
+    {} // namespace utils
+    
+      EArrXb keep = (ws >= min_size) && (hs >= min_size) &&
+      (x_ctr < T(im_info[1])) && (y_ctr < T(im_info[0]));
+    
+    bool THPWrapper_check(PyObject * obj)
+{
+  return (PyObject*)Py_TYPE(obj) == THPWrapperClass;
+}
+    
+    static void outliterals(stb_uchar *in, int numlit)
+{
+    while (numlit > 65536) {
+        outliterals(in,65536);
+        in     += 65536;
+        numlit -= 65536;
+    }
+    }
+    
+    
+    {    printf('DestroyContext()\n');
+    ImGui::DestroyContext();
+    return 0;
+}
+
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Setup render state: fixed-pipeline, alpha-blending, no face culling, no depth testing, shade mode (for gradient)
+    g_pd3dDevice->SetPixelShader(NULL);
+    g_pd3dDevice->SetVertexShader(NULL);
+    g_pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+    g_pd3dDevice->SetRenderState(D3DRS_LIGHTING, false);
+    g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, false);
+    g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
+    g_pd3dDevice->SetRenderState(D3DRS_ALPHATESTENABLE, false);
+    g_pd3dDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+    g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+    g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+    g_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, true);
+    g_pd3dDevice->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_GOURAUD);
+    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
+    g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+    g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+    g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+    g_pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+    g_pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+    
+    // CHANGELOG
+// (minor and older changes stripped away, please see git history for details)
+//  2018-06-29: Inputs: Added support for the ImGuiMouseCursor_Hand cursor.
+//  2018-06-08: Misc: Extracted imgui_impl_glfw.cpp/.h away from the old combined GLFW+OpenGL/Vulkan examples.
+//  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors flag + honor ImGuiConfigFlags_NoMouseCursorChange flag.
+//  2018-02-20: Inputs: Added support for mouse cursors (ImGui::GetMouseCursor() value, passed to glfwSetCursor()).
+//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
+//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
+//  2018-01-25: Inputs: Added gamepad support if ImGuiConfigFlags_NavEnableGamepad is set.
+//  2018-01-25: Inputs: Honoring the io.WantSetMousePos by repositioning the mouse (when using navigation and ImGuiConfigFlags_NavMoveMouse is set).
+//  2018-01-20: Inputs: Added Horizontal Mouse Wheel support.
+//  2018-01-18: Inputs: Added mapping for ImGuiKey_Insert.
+//  2017-08-25: Inputs: MousePos set to -FLT_MAX,-FLT_MAX when mouse is unavailable/missing (instead of -1,-1).
+//  2016-10-15: Misc: Added a void* user_data parameter to Clipboard function handlers.
+    
+    // Implemented features:
+//  [X] Platform: Clipboard support.
+//  [X] Platform: Gamepad navigation mapping. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
+//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
+//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        if (!g_DescriptorSetLayout)
+    {
+        VkSampler sampler[1] = {g_FontSampler};
+        VkDescriptorSetLayoutBinding binding[1] = {};
+        binding[0].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        binding[0].descriptorCount = 1;
+        binding[0].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        binding[0].pImmutableSamplers = sampler;
+        VkDescriptorSetLayoutCreateInfo info = {};
+        info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+        info.bindingCount = 1;
+        info.pBindings = binding;
+        err = vkCreateDescriptorSetLayout(g_Device, &info, g_Allocator, &g_DescriptorSetLayout);
+        check_vk_result(err);
+    }
+    
+        // Render command lists
+    int vtx_offset = 0;
+    int idx_offset = 0;
+    ImVec2 pos = draw_data->DisplayPos;
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
+        {
+            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
+            if (pcmd->UserCallback)
+            {
+                // User callback (registered via ImDrawList::AddCallback)
+                pcmd->UserCallback(cmd_list, pcmd);
+            }
+            else
+            {
+                // Apply scissor/clipping rectangle
+                const D3D10_RECT r = { (LONG)(pcmd->ClipRect.x - pos.x), (LONG)(pcmd->ClipRect.y - pos.y), (LONG)(pcmd->ClipRect.z - pos.x), (LONG)(pcmd->ClipRect.w - pos.y)};
+                ctx->RSSetScissorRects(1, &r);
+    }
+    }
+    }
+    
+    // OpenGL2 Render function.
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
+// Note that this implementation is little overcomplicated because we are saving/setting up/restoring every OpenGL state explicitly, in order to be able to run within any OpenGL engine that doesn't do so. 
+void ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data)
+{
+    // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
+    ImGuiIO& io = ImGui::GetIO();
+    int fb_width = (int)(draw_data->DisplaySize.x * io.DisplayFramebufferScale.x);
+    int fb_height = (int)(draw_data->DisplaySize.y * io.DisplayFramebufferScale.y);
+    if (fb_width == 0 || fb_height == 0)
+        return;
+    draw_data->ScaleClipRects(io.DisplayFramebufferScale);
+    }
+    
+        // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, polygon fill
+    glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_SCISSOR_TEST);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    
+                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
+    
+        if (!array->Get(i)->IsArray()) {
+      return false;
+    }
+    
+    XXH32_sizeofState() is used to know how much space must be allocated for the xxHash 32-bits state.
+Note that the state must be aligned to access 'long long' fields. Memory must be allocated and referenced by a pointer.
+This pointer must then be provided as 'state' into XXH32_resetState(), which initializes the state.
+    
+    // Return an iterator that provided the union of the data in
+// children[0,n-1].  Takes ownership of the child iterators and
+// will delete them when the result iterator is deleted.
+//
+// The result does no duplicate suppression.  I.e., if a particular
+// key is present in K child iterators, it will be yielded K times.
+//
+// REQUIRES: n >= 0
+extern InternalIterator* NewMergingIterator(
+    const InternalKeyComparator* comparator, InternalIterator** children, int n,
+    Arena* arena = nullptr, bool prefix_seek_mode = false);
+    
+      // TODO(adamretter): slice object can potentially be cached using thread local
+  // variable to avoid locking. Could make this configurable depending on
+  // performance.
+  mtx_findShortestSeparator.get()->Lock();
+    
+    // VS 15 has snprintf
+#define snprintf _snprintf
