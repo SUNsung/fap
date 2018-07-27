@@ -1,253 +1,190 @@
 
         
-        TEST_F(UnicharcompressTest, DoesMarathi) {
-  LOG(INFO) << 'Testing mar';
-  LoadUnicharset('mar.unicharset');
-  ExpectCorrect('mar');
-}
+        #if defined(OS_WIN)
+StringType GetWaitEventName(base::ProcessId pid);
     
-     private:
-  // Size of padded input to weight matrices = ni_ + no_ for 1-D operation
-  // and ni_ + 2 * no_ for 2-D operation. Note that there is a phantom 1 input
-  // for the bias that makes the weight matrices of size [na + 1][no].
-  int32_t na_;
-  // Number of internal states. Equal to no_ except for a softmax LSTM.
-  // ns_ is NOT serialized, but is calculated from gate_weights_.
-  int32_t ns_;
-  // Number of additional feedback states. The softmax types feed back
-  // additional output information on top of the ns_ internal states.
-  // In the case of a binary-coded (EMBEDDED) softmax, nf_ < no_.
-  int32_t nf_;
-  // Flag indicating 2-D operation.
-  bool is_2d_;
-    
-    const int16_t idirtab[] = {
-  1000, 0, 998, 49, 995, 98, 989, 146,
-  980, 195, 970, 242, 956, 290, 941, 336,
-  923, 382, 903, 427, 881, 471, 857, 514,
-  831, 555, 803, 595, 773, 634, 740, 671,
-  707, 707, 671, 740, 634, 773, 595, 803,
-  555, 831, 514, 857, 471, 881, 427, 903,
-  382, 923, 336, 941, 290, 956, 242, 970,
-  195, 980, 146, 989, 98, 995, 49, 998,
-  0, 1000, -49, 998, -98, 995, -146, 989,
-  -195, 980, -242, 970, -290, 956, -336, 941,
-  -382, 923, -427, 903, -471, 881, -514, 857,
-  -555, 831, -595, 803, -634, 773, -671, 740,
-  -707, 707, -740, 671, -773, 634, -803, 595,
-  -831, 555, -857, 514, -881, 471, -903, 427,
-  -923, 382, -941, 336, -956, 290, -970, 242,
-  -980, 195, -989, 146, -995, 98, -998, 49,
-  -1000, 0, -998, -49, -995, -98, -989, -146,
-  -980, -195, -970, -242, -956, -290, -941, -336,
-  -923, -382, -903, -427, -881, -471, -857, -514,
-  -831, -555, -803, -595, -773, -634, -740, -671,
-  -707, -707, -671, -740, -634, -773, -595, -803,
-  -555, -831, -514, -857, -471, -881, -427, -903,
-  -382, -923, -336, -941, -290, -956, -242, -970,
-  -195, -980, -146, -989, -98, -995, -49, -998,
-  0, -1000, 49, -998, 98, -995, 146, -989,
-  195, -980, 242, -970, 290, -956, 336, -941,
-  382, -923, 427, -903, 471, -881, 514, -857,
-  555, -831, 595, -803, 634, -773, 671, -740,
-  707, -707, 740, -671, 773, -634, 803, -595,
-  831, -555, 857, -514, 881, -471, 903, -427,
-  923, -382, 941, -336, 956, -290, 970, -242,
-  980, -195, 989, -146, 995, -98, 998, -49
-};
-    
-      const IndexMapBiDi& charset_map() const {
-    return *charset_map_;
-  }
-  const ShapeTable* shape_table() const {
-    return shape_table_;
-  }
-  // Sample set operations.
-  const TrainingSampleSet* sample_set() const {
-    return sample_set_;
-  }
-    
-      // Provides access to the UNICHARSET that this classifier works with.
-  const UNICHARSET& GetUnicharset() const { return ccutil_.unicharset; }
-  // Provides access to the UnicharCompress that this classifier works with.
-  const UnicharCompress& GetRecoder() const { return recoder_; }
-  // Provides access to the Dict that this classifier works with.
-  const Dict* GetDict() const { return dict_; }
-  // Sets the sample iteration to the given value. The sample_iteration_
-  // determines the seed for the random number generator. The training
-  // iteration is incremented only by a successful training iteration.
-  void SetIteration(int iteration) {
-    sample_iteration_ = iteration;
-  }
-  // Accessors for textline image normalization.
-  int NumInputs() const {
-    return network_->NumInputs();
-  }
-  int null_char() const { return null_char_; }
-    
-        // in-place decimation, for use with data-parallel processing
-    // returns a subset of parallel sequences
-    template <class ElemType>
-    static pair<size_t, size_t> DecimateMinibatchInPlace(StreamMinibatchInputs& mb,    // matrix to be decimated
-                                                         size_t numprocs, size_t rank, // rank info
-                                                         MBLayoutPtr pMBLayout)        // get decimated as well
-    {
-        if (numprocs == 1)
-            return pair<size_t, size_t>(0, pMBLayout->GetNumParallelSequences());
-        // no need to do inplace decimation if numproc == 1
+    namespace atom {
     }
     
-    template<typename T> inline
-dnnError_t dnnInnerProductCreateBackwardData(
+    class NativeWindow;
+    
+    namespace atom {
+    }
+    
+      // Called by platform specific implementations of this class whenever a key
+  // is struck. Only called for keys that have an observer registered.
+  void NotifyKeyPressed(const ui::Accelerator& accelerator);
+    
+    #ifndef CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
+#define CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
+    
+        SECTION('operator[key] throws when given an invalid key') {
+      REQUIRE_THROWS_WITH(cursor['foo'], StartsWith('No such key: 'foo''));
+      REQUIRE_THROWS_WITH(cursor['bar'], StartsWith('No such key: 'bar''));
+    }
+    
+      CursorBase() = default;
+    
+    /// Optimizer that defines a required `step()` method that takes no arguments
+/// and produces no values. The only side effect is that parameters are updated
+/// according to the concrete optimization algorithm.
+class Optimizer : public detail::OptimizerBase {
+ public:
+  using detail::OptimizerBase::OptimizerBase;
+  virtual void step() = 0;
+};
+    
+    void THPDevice_init(PyObject *module)
+{
+  if (PyType_Ready(&THPDeviceType) < 0) {
+    throw python_error();
+  }
+  Py_INCREF(&THPDeviceType);
+  if (PyModule_AddObject(module, 'device', (PyObject *)&THPDeviceType) != 0) {
+    throw python_error();
+  }
+}
+
+    
+      EArrXi maxIndices(N * keypoint_count);
+  // finding max value first (only maxCoeff() is vectorized, not
+  // maxCoeff(&index)), then find the index (equalness check is also fast)
+  EArrXf maxScores = heatmaps.rowwise().maxCoeff();
+  for (int r = 0; r < N * keypoint_count; r++) {
+    float maxScore = maxScores[r];
+    for (int c = 0; c < heatmap_size * heatmap_size; c++) {
+      if (heatmaps(r, c) == maxScore) {
+        maxIndices[r] = c;
+        break;
+      }
+    }
+  }
+    
+        const auto* weight_data = weight.template data<T>();
+    const auto* alpha_data = adaptive_ ? Input(4).template data<T>() : 0;
+    const auto* val_data = val.template data<T>();
+    const auto* key_data = key.template data<TIndex>();
+    
+    
+    {  // RPN_PRE_NMS_TOP_N
+  int rpn_pre_nms_topN_{6000};
+  // RPN_POST_NMS_TOP_N
+  int rpn_post_nms_topN_{300};
+  // RPN_NMS_THRESH
+  float rpn_nms_thresh_{0.7};
+  // RPN_MIN_SIZE
+  float rpn_min_size_{16};
+  // Correct bounding box transform coordates, see bbox_transform() in boxes.py
+  // Set to true to match the detectron code, set to false for backward
+  // compatibility
+  bool correct_transform_coords_{false};
+  // If set, for rotated boxes in RRPN, output angles are normalized to be
+  // within [angle_bound_lo, angle_bound_hi].
+  bool angle_bound_on_{true};
+  int angle_bound_lo_{-90};
+  int angle_bound_hi_{90};
+  // For RRPN, clip almost horizontal boxes within this threshold of
+  // tolerance for backward compatibility. Set to negative value for
+  // no clipping.
+  float clip_angle_thresh_{1.0};
+};
+    
+      // Convert inputs and figure out weights
+  std::unordered_set<std::string> weights;
+  const std::vector<string>& ws_blobs = ws->Blobs();
+  for (const auto& s : ws_blobs) {
+    VLOG(2) << 'Add weights: ' << s;
+    weights.emplace(s);
+  }
+    
+    static PyObject* THPWrapperClass = NULL;
+    
+            NotifyChangedNodes<ElemType>(net, inputMatrices);
+    
+    template<> inline
+dnnError_t dnnInnerProductCreateBackwardData<float>(
     dnnPrimitive_t* pInnerProduct,
     dnnPrimitiveAttributes_t attributes,
     size_t dimensions,
     const size_t srcSize[],
-    size_t outputChannels);
-    
-    GPUDataTransferer::GPUDataTransferer(int deviceId, bool useConcurrentStreams) 
+    size_t outputChannels)
 {
-#pragma warning(disable : 4127)
-    if (useConcurrentStreams && (s_fetchStream == NULL))
-    {
-        cudaStreamCreateWithFlags(&s_fetchStream, cudaStreamNonBlocking) || 'cudaStreamCreateWithFlags failed';
-        cudaStreamCreateWithFlags(&s_assignStream, cudaStreamNonBlocking) || 'cudaStreamCreateWithFlags failed';
-    }
-    }
-    
-        void getlattices(const std::wstring& key, std::shared_ptr<const latticepair>& L, size_t expectedframes) const
-    {
-        std::shared_ptr<latticepair> LP(new latticepair);
-        denlattices.getlattice(key, LP->second, expectedframes); // this loads the lattice from disk, using the existing L.second object
-        L = LP;
-    }
-    
-    
-    {public:
-    inline array_ref(_T* ptr, size_t size) throw()
-        : data(ptr), n(size)
-    {
-    }
-    inline array_ref() throw()
-        : data(NULL), n(0)
-    {
-    } // in case we have a vector of this
-    inline _T& operator[](size_t i) throw()
-    {
-        check_index(i);
-        return data[i];
-    }
-    inline const _T& operator[](size_t i) const throw()
-    {
-        check_index(i);
-        return data[i];
-    }
-    inline size_t size() const throw()
-    {
-        return n;
-    }
-    inline _T* begin()
-    {
-        return data;
-    }
-    inline _T* end()
-    {
-        return data + n;
-    }
-    inline void resize(size_t sz)
-    {
-        sz;
-        assert(n == sz);
-    } // allow compatibility with some functions
-    // construct from other vector types
-    template <class _V>
-    inline array_ref(_V& v)
-        : data(v.size() > 0 ? &v[0] : NULL), n((size_t) v.size())
-    {
-    }
-};
-    
-    namespace leveldb {
-namespace log {
-    }
-    }
-    
-      // Add an element that should not be reflected in the iterator.
-  ASSERT_OK(db->Put(write_options, '25', 'cd'));
-    
-      // Add string delta to buffer_ followed by value
-  buffer_.append(key.data() + shared, non_shared);
-  buffer_.append(value.data(), value.size());
-    
-    void BlockHandle::EncodeTo(std::string* dst) const {
-  // Sanity check that all fields have been set
-  assert(offset_ != ~static_cast<uint64_t>(0));
-  assert(size_ != ~static_cast<uint64_t>(0));
-  PutVarint64(dst, offset_);
-  PutVarint64(dst, size_);
+    return dnnInnerProductCreateBackwardData_F32(
+        pInnerProduct, attributes, dimensions, srcSize, outputChannels);
+}
+template<> inline
+dnnError_t dnnInnerProductCreateBackwardData<double>(
+    dnnPrimitive_t* pInnerProduct,
+    dnnPrimitiveAttributes_t attributes,
+    size_t dimensions,
+    const size_t srcSize[],
+    size_t outputChannels)
+{
+    return dnnInnerProductCreateBackwardData_F64(
+        pInnerProduct, attributes, dimensions, srcSize, outputChannels);
 }
     
-    TEST(CRC, Extend) {
-  ASSERT_EQ(Value('hello world', 11),
-            Extend(Value('hello ', 6), 'world', 5));
+        // This prints a PROGRESS message with a percentage value of 0 to prevent timeouts on Philly
+    // when executing long running non-training operations like PreCompute, CV, Eval, and Write
+    static size_t TraceFakeProgress(size_t numIterationsBeforePrintingProgress, size_t numItersSinceLastPrintOfProgress)
+    {
+        size_t newNumItersSinceLastPrintOfProgress = numItersSinceLastPrintOfProgress;
+        if (GetTracingFlag())
+        {
+            newNumItersSinceLastPrintOfProgress++;
+            if (newNumItersSinceLastPrintOfProgress >= numIterationsBeforePrintingProgress)
+            {
+                printf('PROGRESS: %.2f%%\n', 0.0f);
+                newNumItersSinceLastPrintOfProgress = 0;
+            }
+        }
+    }
+    
+    // Writes len bytes from buf, using the out callback.
+inline bool JPEGWrite(JPEGOutput out, const uint8_t* buf, size_t len) {
+  static const size_t kBlockSize = 1u << 30;
+  size_t pos = 0;
+  while (len - pos > kBlockSize) {
+    if (!out.Write(buf + pos, kBlockSize)) {
+      return false;
+    }
+    pos += kBlockSize;
+  }
+  return out.Write(buf + pos, len - pos);
 }
     
-    std::string Histogram::ToString() const {
-  std::string r;
-  char buf[200];
-  snprintf(buf, sizeof(buf),
-           'Count: %.0f  Average: %.4f  StdDev: %.2f\n',
-           num_, Average(), StandardDeviation());
-  r.append(buf);
-  snprintf(buf, sizeof(buf),
-           'Min: %.4f  Median: %.4f  Max: %.4f\n',
-           (num_ == 0.0 ? 0.0 : min_), Median(), max_);
-  r.append(buf);
-  r.append('------------------------------------------------------\n');
-  const double mult = 100.0 / num_;
-  double sum = 0;
-  for (int b = 0; b < kNumBuckets; b++) {
-    if (buckets_[b] <= 0.0) continue;
-    sum += buckets_[b];
-    snprintf(buf, sizeof(buf),
-             '[ %7.0f, %7.0f ) %7.0f %7.3f%% %7.3f%% ',
-             ((b == 0) ? 0.0 : kBucketLimit[b-1]),      // left
-             kBucketLimit[b],                           // right
-             buckets_[b],                               // count
-             mult * buckets_[b],                        // percentage
-             mult * sum);                               // cumulative percentage
-    r.append(buf);
-    }
-    }
+    #include <math.h>
     
-    #include 'port/port.h'
-#include 'port/thread_annotations.h'
-    
-    class Writer {
- public:
-  // Create a writer that will append data to '*dest'.
-  // '*dest' must be initially empty.
-  // '*dest' must remain live while this Writer is in use.
-  explicit Writer(WritableFile* dest);
-    }
-    
-      const char* data_;
-  size_t size_;
-  uint32_t restart_offset_;     // Offset in data_ of restart array
-  bool owned_;                  // Block owns data_[]
-    
-    
-    {    return Convolve2X(image, w, h, kernel.data(), kernel.size(), mul);
-}
-    
-    #include <algorithm>
-#include <cmath>
+      tmp0 = in[stride];
+  tmp1 = kIDCTMatrix[ 1] * tmp0;
+  tmp2 = kIDCTMatrix[ 9] * tmp0;
+  tmp3 = kIDCTMatrix[17] * tmp0;
+  tmp4 = kIDCTMatrix[25] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] += tmp3;
+  out[3] += tmp4;
+  out[4] -= tmp4;
+  out[5] -= tmp3;
+  out[6] -= tmp2;
+  out[7] -= tmp1;
     
     #include 'guetzli/jpeg_data.h'
     
-    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
-std::vector<std::vector<float>> PreProcessChannel(
-    int w, int h, int channel, float sigma, float amount, bool blur,
-    bool sharpen, const std::vector<std::vector<float>>& image);
+    std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg) {
+  if (jpg.components.size() == 1 ||
+      (jpg.components.size() == 3 &&
+       HasYCbCrColorSpace(jpg) && (jpg.Is420() || jpg.Is444()))) {
+    OutputImage img(jpg.width, jpg.height);
+    img.CopyFromJpegData(jpg);
+    return img.ToSRGB();
+  }
+  return std::vector<uint8_t>();
+}
     
-    #include 'guetzli/quality.h'
+    #endif  // GUETZLI_JPEG_DATA_DECODER_H_
+
+    
+    
+    {  return true;
+}
