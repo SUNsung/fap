@@ -1,95 +1,152 @@
 
         
-            s.register(Tag1, index=-1)
-    assert isinstance(s.order[-2], Tag1)
+        import io
+import optparse
     
-        If you configure your own :class:`logging.StreamHandler`, you may want to
-    use this for the stream. If you are using file or dict configuration and
-    can't import this directly, you can refer to it as
-    ``ext://flask.logging.wsgi_errors_stream``.
-    '''
-    return request.environ['wsgi.errors'] if request else sys.stderr
+    if isinstance(helptext, bytes):
+    helptext = helptext.decode('utf-8')
     
-                # If we have no method at all in there we don't want to add a
-            # method list. This is for instance the case for the base class
-            # or another subclass of a base method view that does not introduce
-            # new methods.
-            if methods:
-                cls.methods = methods
-    
-                version = match.group(1).strip()
-    
-        @app.route('/')
-    def index():
-        return 'Hello'
-    
-        def test_list(self):
-        assert list(self.case_insensitive_dict) == ['Accept']
-    
-        assert os.environ == environ_copy
-    
-            # Abort early if there isn't one.
-        if netrc_path is None:
-            return
-    
-    # Dynamic inventory script which lets you use nodes discovered by Canonical's
-# Landscape (http://www.ubuntu.com/management/landscape-features).
-#
-# Requires the `landscape_api` Python module
-# See:
-#   - https://landscape.canonical.com/static/doc/api/api-client-package.html
-#   - https://landscape.canonical.com/static/doc/api/python-api.html
-#
-# Environment variables
-# ---------------------
-#   - `LANDSCAPE_API_URI`
-#   - `LANDSCAPE_API_KEY`
-#   - `LANDSCAPE_API_SECRET`
-#   - `LANDSCAPE_API_SSL_CA_FILE` (optional)
-    
-    # (c) 2013, Michael Scherer <misc@zarb.org>
-#
-# This file is part of Ansible,
-#
-# Ansible is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Ansible is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
-    
-    # The checksum algorithm must match with the algorithm in ShellModule.checksum() method
-checksum = secure_hash
-checksum_s = secure_hash_s
-    
-        terminal_stderr_re = [
-        re.compile(br'\n\s*Invalid command:'),
-        re.compile(br'\nCommit failed'),
-        re.compile(br'\n\s+Set failed'),
-    ]
-    
-        results = {}
-    for group in sort_groups(groups):
-        results = combine_vars(results, group.get_vars())
-    
-    #----------------------------------------------------------------------
-def showroom_get_roomid_by_room_url_key(room_url_key):
-    '''str->str'''
-    fake_headers_mobile = {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Charset': 'UTF-8,*;q=0.5',
-        'Accept-Encoding': 'gzip,deflate,sdch',
-        'Accept-Language': 'en-US,en;q=0.8',
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36'
+        params = {
+        'age_limit': age,
+        'skip_download': True,
+        'writeinfojson': True,
+        'outtmpl': '%(id)s.%(ext)s',
     }
-    webpage_url = 'https://www.showroom-live.com/' + room_url_key
-    html = get_content(webpage_url, headers = fake_headers_mobile)
-    roomid = match1(html, r'room\?room_id\=(\d+)')
-    assert roomid
-    return roomid
+    ydl = YoutubeDL(params)
+    ydl.add_default_info_extractors()
+    json_filename = os.path.splitext(filename)[0] + '.info.json'
+    try_rm(json_filename)
+    ydl.download([url])
+    res = os.path.exists(json_filename)
+    try_rm(json_filename)
+    return res
+    
+    from __future__ import unicode_literals
+    
+    
+def gen_extractors():
+    ''' Return a list of an instance of every supported extractor.
+    The order does matter; the first extractor matched is the one handling the URL.
+    '''
+    return [klass() for klass in gen_extractor_classes()]
+    
+            duration = parse_duration(self._search_regex(
+            r'<b>Duration:</b> (?:<q itemprop='duration'>)?(\d+:\d+)', webpage, 'duration', fatal=False))
+        view_count = int_or_none(self._html_search_regex(
+            r'<b>Views:</b> (\d+)', webpage, 'view count', fatal=False))
+    
+    from .common import InfoExtractor
+from ..utils import js_to_json
+    
+    
+if __name__ == '__main__':
+    SalesRanker.run()
+
+    
+        def append_to_front(self, node):
+        pass
+    
+        def __init__(self, level, row, spot_number, spot_size, vehicle_size):
+        self.level = level
+        self.row = row
+        self.spot_number = spot_number
+        self.spot_size = spot_size
+        self.vehicle_size = vehicle_size
+        self.vehicle = None
+    
+        def get(self, key):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                return item.value
+        raise KeyError('Key not found')
+    
+    
+class Node(object):
+    
+        def extract_max_priority_page(self):
+        '''Return the highest priority link in `links_to_crawl`.'''
+        pass
+    
+    
+class ConnectionError(RequestException):
+    '''A Connection error occurred.'''
+    
+        pyopenssl_info = {
+        'version': None,
+        'openssl_version': '',
+    }
+    if OpenSSL:
+        pyopenssl_info = {
+            'version': OpenSSL.__version__,
+            'openssl_version': '%x' % OpenSSL.SSL.OPENSSL_VERSION_NUMBER,
+        }
+    cryptography_info = {
+        'version': getattr(cryptography, '__version__', ''),
+    }
+    idna_info = {
+        'version': getattr(idna, '__version__', ''),
+    }
+    
+    This module implements the Requests API.
+    
+    
+class EnvironmentConfig(object):
+    uri = os.getenv('LANDSCAPE_API_URI')
+    access_key = os.getenv('LANDSCAPE_API_KEY')
+    secret_key = os.getenv('LANDSCAPE_API_SECRET')
+    ssl_ca_file = os.getenv('LANDSCAPE_API_SSL_CA_FILE')
+    
+            expected = {
+            'name': 'myhealthcheck',
+            'checkIntervalSec': 5,
+            'port': 443,
+            'unhealthyThreshold': 2,
+            'healthyThreshold': 2,
+            'host': '',
+            'timeoutSec': 5,
+            'requestPath': '/'}
+    
+        print()
+    print('Classification performance:')
+    print('===========================')
+    print()
+    print('%s %s %s %s' % ('Classifier  ', 'train-time', 'test-time',
+                           'Accuracy'))
+    print('-' * 44)
+    for name in sorted(accuracy, key=accuracy.get):
+        print('%s %s %s %s' % (name.ljust(16),
+                               ('%.4fs' % train_time[name]).center(10),
+                               ('%.4fs' % test_time[name]).center(10),
+                               ('%.4f' % accuracy[name]).center(10)))
+    
+        return lasso_results, lars_lasso_results
+    
+        print('Transformer performance:')
+    print('===========================')
+    print('Results are averaged over %s repetition(s).' % opts.n_times)
+    print('')
+    print('%s | %s | %s' % ('Transformer'.ljust(30),
+                            'fit'.center(12),
+                            'transform'.center(12)))
+    print(31 * '-' + ('|' + '-' * 14) * 2)
+    
+        print('Averaging results...', end='')
+    for name in sampling_algorithm:
+        time[name] = np.mean(time[name], axis=1)
+    print('done\n')
+    
+        if not os.path.exists(ARCHIVE_NAME):
+        print('Downloading dataset from %s (14 MB)' % URL)
+        opener = urlopen(URL)
+        with open(ARCHIVE_NAME, 'wb') as archive:
+            archive.write(opener.read())
+    
+        input_file = open(os.path.join(exercise_dir, f))
+    output_file = open(os.path.join(skeleton_dir, f), 'w')
+    
+    
+def generate_data(n_samples, n_features):
+    '''Generate random blob-ish data with noisy features.
+    
+    from sklearn import datasets
