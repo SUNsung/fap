@@ -1,317 +1,123 @@
 
         
-          // drawing the text
-  gfx::PlatformFont *platform_font = gfx::PlatformFont::CreateDefault();
-  const int fontSize = sizeY * 0.65f;
-  gfx::Font font(platform_font->GetFontName(), fontSize);
-  platform_font->Release();
-  platform_font = NULL;
-  const int yMargin = (sizeY - fontSize) / 2;
-  canvas.DrawStringRectWithFlags(value, gfx::FontList(font), SK_ColorWHITE, gfx::Rect(sizeX, fontSize + yMargin + 1), gfx::Canvas::TEXT_ALIGN_CENTER);
+            http://www.apache.org/licenses/LICENSE-2.0
     
-    // Multiply-included file, no traditional include guard.
-#include <string>
-    
-        base::FilePath processPath;
-    PathService::Get(base::FILE_EXE, &processPath);
-    props.set_target(processPath);
-    
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    // Get RenderView from current js context (only works under window context).
-content::RenderView* GetCurrentRenderView();
-content::RenderView* GetEnteredRenderView();
-    
-    
-namespace nwapi {
-    }
-    
-    
-    {}  // namespace nwapi
-
-    
-    namespace nw {
-    }
-    
-    void MenuItem::SetChecked(bool checked) {
-  // Set active will cause 'activate' to be emitted, so block here
-  block_active_ = true;
-  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_item_), checked);
-  block_active_ = false;
-}
-    
-    
-    {  helper->DeleteAppCacheGroup(manifest_url);
-  return true;
-}
-    
-    #include 'extensions/browser/extension_function.h'
-    
-    bool NwObjCreateFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::DictionaryValue* options = nullptr;
-  int id = 0;
-  std::string type;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetDictionary(2, &options));
-    }
-    
-        if (screens) {
-      std::unique_ptr<DesktopMediaList> screen_media_list =
-        std::make_unique<NativeDesktopMediaList>(
-          content::DesktopMediaID::TYPE_SCREEN,
-          webrtc::DesktopCapturer::CreateScreenCapturer(options));
-      media_list_.push_back(std::move(screen_media_list));
-    }
-    
-    #ifndef GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_CONTAINERS_H__
-#define GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_CONTAINERS_H__
-    
-    // Find the file that declares the given fully-qualified symbol name.
-bool PyDescriptorDatabase::FindFileContainingSymbol(
-    const string& symbol_name, FileDescriptorProto* output) {
-  ScopedPyObjectPtr py_descriptor(
-      PyObject_CallMethod(py_database_, 'FindFileContainingSymbol', 's#',
-                          symbol_name.c_str(), symbol_name.size()));
-  return GetFileDescriptorProto(py_descriptor.get(), output);
-}
-    
-    
-    {  protobuf_unittest::TestAny message;
-  message.mutable_any_value()->PackFrom(any);
-  ASSERT_TRUE(message.ParseFromString(message.SerializeAsString()));
-  EXPECT_FALSE(message.any_value().Is<protobuf_unittest::TestAny>());
-  EXPECT_TRUE(message.any_value().Is<google::protobuf::Any>());
-}
-    
-    class EnumGenerator : public SourceGeneratorBase {
+    class RecordWriterOptions {
  public:
-  EnumGenerator(const EnumDescriptor* descriptor, const Options* options);
-  ~EnumGenerator();
+  enum CompressionType { NONE = 0, ZLIB_COMPRESSION = 1 };
+  CompressionType compression_type = NONE;
     }
     
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/wire_format.h>
+    REGISTER_KERNEL_BUILDER(Name('TextLineReader').Device(DEVICE_CPU),
+                        TextLineReaderOp);
+REGISTER_KERNEL_BUILDER(Name('TextLineReaderV2').Device(DEVICE_CPU),
+                        TextLineReaderOp);
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
-namespace {
-    }
-    }
-    }
-    }
-    }
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    #include <google/protobuf/compiler/java/java_context.h>
-#include <google/protobuf/compiler/java/java_enum_field.h>
-#include <google/protobuf/compiler/java/java_extension.h>
-#include <google/protobuf/compiler/java/java_extension_lite.h>
-#include <google/protobuf/compiler/java/java_field.h>
-#include <google/protobuf/compiler/java/java_helpers.h>
-#include <google/protobuf/compiler/java/java_message.h>
-#include <google/protobuf/compiler/java/java_message_lite.h>
-#include <google/protobuf/compiler/java/java_service.h>
-    
-    namespace google {
-namespace protobuf {
-  class FieldDescriptor;         // descriptor.h
-  class Descriptor;              // descriptor.h
-  class ServiceDescriptor;       // descriptor.h
-  namespace compiler {
-    namespace java {
-      class MessageGenerator;    // message.h
-      class ExtensionGenerator;  // extension.h
-      class ServiceGenerator;    // service.h
-      class Context;             // context.h
-    }
-  }
-}
-    }
-    
-    // The tests from the instantiation above will have these names:
-//
-//    * AnotherInstantiationName/FooTest.DoesBlah/0 for 'cat'
-//    * AnotherInstantiationName/FooTest.DoesBlah/1 for 'dog'
-//    * AnotherInstantiationName/FooTest.HasBlahBlah/0 for 'cat'
-//    * AnotherInstantiationName/FooTest.HasBlahBlah/1 for 'dog'
-//
-// Please note that INSTANTIATE_TEST_CASE_P will instantiate all tests
-// in the given test case, whether their definitions come before or
-// AFTER the INSTANTIATE_TEST_CASE_P statement.
-//
-// Please also note that generator expressions (including parameters to the
-// generators) are evaluated in InitGoogleTest(), after main() has started.
-// This allows the user on one hand, to adjust generator parameters in order
-// to dynamically determine a set of tests to run and on the other hand,
-// give the user a chance to inspect the generated tests with Google Test
-// reflection API before RUN_ALL_TESTS() is executed.
-//
-// You can see samples/sample7_unittest.cc and samples/sample8_unittest.cc
-// for more examples.
-//
-// In the future, we plan to publish the API for defining new parameter
-// generators. But for now this interface remains part of the internal
-// implementation and is subject to change.
-//
-//
-// A parameterized test fixture must be derived from testing::Test and from
-// testing::WithParamInterface<T>, where T is the type of the parameter
-// values. Inheriting from TestWithParam<T> satisfies that requirement because
-// TestWithParam<T> inherits from both Test and WithParamInterface. In more
-// complicated hierarchies, however, it is occasionally useful to inherit
-// separately from Test and WithParamInterface. For example:
-    
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED1.  Don't use
-// this in your code.
-#define GTEST_PRED1_(pred, v1, on_failure)\
-  GTEST_ASSERT_(::testing::AssertPred1Helper(#pred, \
-                                             #v1, \
-                                             pred, \
-                                             v1), on_failure)
-    
-    #include 'gtest/internal/gtest-internal.h'
-    
-      void depart() {
-    if (link_.depart()) delete value_;
-  }
-    
-    ]]
-    
-      // Looks up or creates and returns a structure containing information about
-  // tests and instantiations of a particular test case.
-  template <class TestCase>
-  ParameterizedTestCaseInfo<TestCase>* GetTestCasePatternHolder(
-      const char* test_case_name,
-      const char* file,
-      int line) {
-    ParameterizedTestCaseInfo<TestCase>* typed_test_info = NULL;
-    for (TestCaseInfoContainer::iterator it = test_case_infos_.begin();
-         it != test_case_infos_.end(); ++it) {
-      if ((*it)->GetTestCaseName() == test_case_name) {
-        if ((*it)->GetTestCaseTypeId() != GetTypeId<TestCase>()) {
-          // Complain about incorrect usage of Google Test facilities
-          // and terminate the program since we cannot guaranty correct
-          // test case setup and tear-down in this case.
-          ReportInvalidTestCaseType(test_case_name,  file, line);
-          posix::Abort();
-        } else {
-          // At this point we are sure that the object we found is of the same
-          // type we are looking for, so we downcast it to that type
-          // without further checks.
-          typed_test_info = CheckedDowncastToActualType<
-              ParameterizedTestCaseInfo<TestCase> >(*it);
-        }
-        break;
-      }
-    }
-    if (typed_test_info == NULL) {
-      typed_test_info = new ParameterizedTestCaseInfo<TestCase>(test_case_name);
-      test_case_infos_.push_back(typed_test_info);
-    }
-    return typed_test_info;
-  }
-  void RegisterTests() {
-    for (TestCaseInfoContainer::iterator it = test_case_infos_.begin();
-         it != test_case_infos_.end(); ++it) {
-      (*it)->RegisterTests();
-    }
-  }
+        const string file_format =
+        str_util::Lowercase(file_format_tensor.scalar<string>()());
+    const int32 samples_per_second =
+        samples_per_second_tensor.scalar<int32>()();
+    const int32 bits_per_second = bits_per_second_tensor.scalar<int32>()();
     
     
-    {  // n has no integer factor in the range (1, n), and thus is prime.
-  return true;
-}
+    {}  // end namespace tensorflow
 
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
     
-    unsigned char *decompress_jpeg_image_from_memory(const unsigned char *pSrc_data, int src_data_size, int *width, int *height, int *actual_comps, int req_comps)
-{
-  jpgd::jpeg_decoder_mem_stream mem_stream(pSrc_data, src_data_size);
-  return decompress_jpeg_image_from_stream(&mem_stream, width, height, actual_comps, req_comps);
-}
+    {}  // namespace testing
     
-    # if defined(OC_COLLECT_METRICS)
-struct oc_mode_metrics{
-  double fragw;
-  double satd;
-  double rate;
-  double rmse;
-  double satd2;
-  double satdrate;
-  double rate2;
-  double satdrmse;
-  double rmse2;
-};
+    # define TYPED_TEST(CaseName, TestName) \
+  template <typename gtest_TypeParam_> \
+  class GTEST_TEST_CLASS_NAME_(CaseName, TestName) \
+      : public CaseName<gtest_TypeParam_> { \
+   private: \
+    typedef CaseName<gtest_TypeParam_> TestFixture; \
+    typedef gtest_TypeParam_ TypeParam; \
+    virtual void TestBody(); \
+  }; \
+  bool gtest_##CaseName##_##TestName##_registered_ GTEST_ATTRIBUTE_UNUSED_ = \
+      ::testing::internal::TypeParameterizedTest< \
+          CaseName, \
+          ::testing::internal::TemplateSel< \
+              GTEST_TEST_CLASS_NAME_(CaseName, TestName)>, \
+          GTEST_TYPE_PARAMS_(CaseName)>::Register(\
+              '', #CaseName, #TestName, 0); \
+  template <typename gtest_TypeParam_> \
+  void GTEST_TEST_CLASS_NAME_(CaseName, TestName)<gtest_TypeParam_>::TestBody()
     
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-    
-    #undef    silk_SMLAWW
-static OPUS_INLINE opus_int32 silk_SMLAWW(opus_int32 a32, opus_int32 b32, opus_int32 c32){
-    opus_int32 ret;
-    /* Nb will be counted in sub-macros*/
-    ret = silk_MLA(silk_SMLAWB((a32), (b32), (c32)), (b32), silk_RSHIFT_ROUND((c32), 16));
-    return ret;
-}
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
-
-    
-    class FilterPolicy;
-    
-    namespace leveldb {
-    }
-    
-    namespace leveldb {
-    }
-    
-    struct BlockContents;
-class Comparator;
-    
-    TreeUpdater* TreeUpdater::Create(const std::string& name) {
-  auto *e = ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->Find(name);
-  if (e == nullptr) {
-    LOG(FATAL) << 'Unknown tree updater ' << name;
+      // Returns the text streamed into this AssertionResult. Test assertions
+  // use it when they fail (i.e., the predicate's outcome doesn't match the
+  // assertion's expectation). When nothing has been streamed into the
+  // object, returns an empty string.
+  const char* message() const {
+    return message_.get() != NULL ?  message_->c_str() : '';
   }
-  return (e->body)();
-}
+  // TODO(vladl@google.com): Remove this after making sure no clients use it.
+  // Deprecated; please use message() instead.
+  const char* failure_message() const { return message(); }
     
-    // tress
-#include '../src/tree/tree_model.cc'
-#include '../src/tree/tree_updater.cc'
-#include '../src/tree/updater_colmaker.cc'
-#include '../src/tree/updater_fast_hist.cc'
-#include '../src/tree/updater_prune.cc'
-#include '../src/tree/updater_refresh.cc'
-#include '../src/tree/updater_sync.cc'
-#include '../src/tree/updater_histmaker.cc'
-#include '../src/tree/updater_skmaker.cc'
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT3.
+// Don't use this in your code.
+#define GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, on_failure)\
+  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, v1, v2, v3), \
+                on_failure)
     
-    namespace xgboost {
-namespace obj {
-    }
+      // ParamIterator assumes ownership of the impl_ pointer.
+  ParamIterator(const ParamIterator& other) : impl_(other.impl_->Clone()) {}
+  ParamIterator& operator=(const ParamIterator& other) {
+    if (this != &other)
+      impl_.reset(other.impl_->Clone());
+    return *this;
+  }
+    
+      GTEST_DECLARE_TUPLE_AS_FRIEND_
+    
+    bool js_cocos2dx_physics3d_Physics3DComponent_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DComponent_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DComponent(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DComponent_syncNodeToPhysics(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_addToPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_syncPhysicsToNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_setPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_setTransformInPhysics(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DComponentName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_Physics3DComponent(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    #ifndef AddPair_H
+#define AddPair_H
+    
+    
+    {			if ((p.x < -10.0f && v.x < 0.0f) ||
+				(p.x > 10.0f && v.x > 0.0f))
+			{
+				v.x = -v.x;
+				m_platform->SetLinearVelocity(v);
+			}
+		}
+    
+    		b2Body* body2 = m_world->CreateBody(&bd);
+		m_piece2 = body2->CreateFixture(&m_shape2, 1.0f);
+    
+    			//m_x = RandomFloat(-1.0f, 1.0f);
+			m_x = 0.20352793f;
+			bd.position.Set(m_x, 10.0f);
+			bd.bullet = true;
+    
+    		// Car
+		{
+			b2PolygonShape chassis;
+			b2Vec2 vertices[8];
+			vertices[0].Set(-1.5f, -0.5f);
+			vertices[1].Set(1.5f, -0.5f);
+			vertices[2].Set(1.5f, 0.0f);
+			vertices[3].Set(0.0f, 0.9f);
+			vertices[4].Set(-1.15f, 0.9f);
+			vertices[5].Set(-1.5f, 0.2f);
+			chassis.Set(vertices, 6);
     }
