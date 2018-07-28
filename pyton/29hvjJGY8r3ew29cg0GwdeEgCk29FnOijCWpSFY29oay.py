@@ -1,194 +1,142 @@
 
         
-            def _test_with_all_supported(self):
-        if self.client.installer is None:
-            self.client.installer = mock.MagicMock()
-        self.client.installer.supported_enhancements.return_value = [
-            'ensure-http-header', 'redirect', 'staple-ocsp']
-        self.client.enhance_config([self.domain], None)
-        self.assertEqual(self.client.installer.save.call_count, 1)
-        self.assertEqual(self.client.installer.restart.call_count, 1)
+            def _handle_requests(self):
+        for _ in range(self.requests_to_handle):
+            sock = self._accept_connection()
+            if not sock:
+                break
     
-        def test_conflicts(self):
-        # Note: Defined IP is more important than defined port in match
-        self.assertTrue(self.addr.conflicts(self.addr1))
-        self.assertTrue(self.addr.conflicts(self.addr2))
-        self.assertTrue(self.addr.conflicts(self.addr_defined))
-        self.assertFalse(self.addr.conflicts(self.addr_default))
     
-        def get_testable_domain_names(self):
-        '''Returns the set of domain names that can be tested against'''
-        if self._test_names:
-            return self._test_names
-        else:
-            return {'example.com'}
+@pytest.mark.skipif(sys.version_info[:2] != (2,6), reason='Only run on Python 2.6')
+def test_system_ssl_py26():
+    '''OPENSSL_VERSION_NUMBER isn't provided in Python 2.6, verify we don't
+    blow up in this case.
+    '''
+    assert info()['system_ssl'] == {'version': ''}
     
-        @mock.patch(
-        'certbot_compatibility_test.validator.crypto_util.probe_sni')
-    def test_certificate_success(self, mock_probe_sni):
-        cert = OpenSSL.crypto.X509()
-        mock_probe_sni.return_value = cert
-        self.assertTrue(self.validator.certificate(
-            cert, 'test.com', '127.0.0.1'))
+    import idna
+import urllib3
+import chardet
     
-    # A shorter title for the navigation bar.  Default is the same as html_title.
-#html_short_title = None
+    # If true, show URL addresses after external links.
+#man_show_urls = False
     
-        '''
-    data = sorted(data)
-    n = len(data)
-    if n == 0:
-        raise StatisticsError('no median for empty data')
-    if n%2 == 1:
-        return data[n//2]
+        for i, yi in enumerate(grid_y):
+        for j, xi in enumerate(grid_x):
+            z_sample = np.array([[xi, yi]])
+            x_decoded = decoder.predict(z_sample)
+            digit = x_decoded[0].reshape(digit_size, digit_size)
+            figure[i * digit_size: (i + 1) * digit_size,
+                   j * digit_size: (j + 1) * digit_size] = digit
+    
+            x = np.random.random((1,) + shape)
+    
+    
+@keras_test
+def test_max_norm():
+    array = get_example_array()
+    for m in get_test_values():
+        norm_instance = constraints.max_norm(m)
+        normed = norm_instance(K.variable(array))
+        assert(np.all(K.eval(normed) < m))
+    
+    
+def test_selu():
+    x = K.placeholder(ndim=2)
+    f = K.function([x], [activations.selu(x)])
+    alpha = 1.6732632423543772848170429916717
+    scale = 1.0507009873554804934193349852946
+    
+    
+max_features = 20000
+# cut texts after this number of words
+# (among top max_features most common words)
+maxlen = 100
+batch_size = 32
+    
+    from .cifar import load_batch
+from ..utils.data_utils import get_file
+from .. import backend as K
+import numpy as np
+import os
+    
+            # test exceptions
+        no_projects_input_url = 'https://www.googleapis.com/compute/v1/not-projects/myproject/global/backendServices/mybackendservice/getHealth'
+        no_resource_input_url = 'https://www.googleapis.com/compute/v1/not-projects/myproject/global'
+    
+    import os
+import re
+    
+    
+def get_data(N, D, dataset='dense'):
+    if dataset == 'dense':
+        np.random.seed(0)
+        return np.random.random((N, D))
+    elif dataset == 'digits':
+        X = datasets.load_digits().data
+        i = np.argsort(X[0])[::-1]
+        X = X[:, i]
+        return X[:N, :D]
     else:
-        return data[n//2 - 1]
+        raise ValueError('invalid dataset: %s' % dataset)
     
-        if C is not None:
-        assert(sx == sy)
-
+        (opts, args) = op.parse_args()
+    if len(args) > 0:
+        op.error('this script takes no arguments.')
+        sys.exit(1)
+    opts.n_components = type_auto_or_int(opts.n_components)
+    opts.density = type_auto_or_float(opts.density)
+    selected_transformers = opts.selected_transformers.split(',')
     
-    Usage:
-while True:
-    try:
-        chunk = Chunk(file)
-    except EOFError:
-        break
-    chunktype = chunk.getname()
-    while True:
-        data = chunk.read(nbytes)
-        if not data:
-            pass
-        # do something with data
+        # Print and plot the confusion matrix
+    cm = metrics.confusion_matrix(y_test, y_predicted)
+    print(cm)
     
-    def evalString(s):
-    assert s.startswith(''') or s.startswith('''), repr(s[:1])
-    q = s[0]
-    if s[:3] == q*3:
-        q = q*3
-    assert s.endswith(q), repr(s[-len(q):])
-    assert len(s) >= 2*len(q)
-    s = s[len(q):-len(q)]
-    return re.sub(r'\\(\'|\'|\\|[abfnrtv]|x.{0,2}|[0-7]{1,3})', escape, s)
+    A simple graphical frontend for Libsvm mainly intended for didactic
+purposes. You can create data points by point and click and visualize
+the decision region induced by different kernels and parameter settings.
     
-        def __len__(self):
-        '''Return a count of messages in the mailbox.'''
-        return len(list(self.iterkeys()))
+    # Plot modifications of calibrator
+for i in range(prediction.shape[0]):
+    plt.arrow(p[i, 0], p[i, 1],
+              prediction[i, 0] - p[i, 0], prediction[i, 1] - p[i, 1],
+              head_width=1e-2, color=colors[np.argmax(p[i])])
+# Plot boundaries of unit simplex
+plt.plot([0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], 'k', label='Simplex')
     
-    class AnnotationsFutureTestCase(unittest.TestCase):
-    template = dedent(
-        '''
-        from __future__ import annotations
-        def f() -> {ann}:
-            ...
-        def g(arg: {ann}) -> None:
-            ...
-        var: {ann}
-        var2: {ann} = None
-        '''
-    )
-    
-        def test_open_mode(self):
-        old_mask = os.umask(0)
-        self.addCleanup(os.umask, old_mask)
-        p = self.cls(BASE)
-        with (p / 'new_file').open('wb'):
-            pass
-        st = os.stat(join('new_file'))
-        self.assertEqual(stat.S_IMODE(st.st_mode), 0o666)
-        os.umask(0o022)
-        with (p / 'other_new_file').open('wb'):
-            pass
-        st = os.stat(join('other_new_file'))
-        self.assertEqual(stat.S_IMODE(st.st_mode), 0o644)
-    
-            rd, wr = self.make_socketpair()
-    
-    import dataclasses
-import typing
-    
-        def do_GET(self):
-        self.send_error(403, 'Forbidden access')
+    # plot shrinkage coefficient
+plt.subplot(2, 1, 2)
+plt.errorbar(n_samples_range, lw_shrinkage.mean(1), yerr=lw_shrinkage.std(1),
+             label='Ledoit-Wolf', color='navy', lw=2)
+plt.errorbar(n_samples_range, oa_shrinkage.mean(1), yerr=oa_shrinkage.std(1),
+             label='OAS', color='darkorange', lw=2)
+plt.xlabel('n_samples')
+plt.ylabel('Shrinkage')
+plt.legend(loc='lower right')
+plt.ylim(plt.ylim()[0], 1. + (plt.ylim()[1] - plt.ylim()[0]) / 10.)
+plt.xlim(5, 31)
     
     
-if __name__ == '__main__':
-    main()
-
+def naughty_strings(filepath=FILEPATH):
+    '''Get the list of naughty_strings.
     
-        def on_message(self, message):
-        logging.info('got message %r', message)
-        parsed = tornado.escape.json_decode(message)
-        chat = {
-            'id': str(uuid.uuid4()),
-            'body': parsed['body'],
-        }
-        chat['html'] = tornado.escape.to_basestring(
-            self.render_string('message.html', message=chat))
+    \note Please be warned that the line numbers in the API documentation do not
+match the real locations in the source code of the package. This is an
+unintended artifact of doxygen, which I could only convince to use the
+correct module names by concatenating all files from the package into a single
+module file...
     
-    '''Usage: python file_receiver.py
     
-    '''Usage: python file_uploader.py [--put] file1.txt file2.png ...
+class MismatchedNotSetException(MismatchedSetException):
+    '''@brief Used for remote debugger deserialization'''
     
-    Circular references are not leaks per se, because they will eventually
-be GC'd. However, on CPython, they prevent the reference-counting fast
-path from being used and instead rely on the slower full GC. This
-increases memory footprint and CPU overhead, so we try to eliminate
-circular references created by normal operation.
-'''
+    def __str__(self):
+        return 'MismatchedNotSetException(%r!=%r)' % (
+            self.getUnexpectedType(), self.expecting
+            )
+    __repr__ = __str__
     
-        for host in args:
-        print('Resolving %s' % host)
-        for resolver in resolvers:
-            addrinfo = yield resolver.resolve(host, 80, family)
-            print('%s: %s' % (resolver.__class__.__name__,
-                              pprint.pformat(addrinfo)))
-        print()
+            self.decisionNumber = decisionNumber
     
-        if not os.path.exists(EASY_INSTALL):
-        filename = download_to_cache('http://python-distribute.org/distribute_setup.py')
-        subprocess.check_call([sys.executable, filename])
     
-    setup(
-    name='tornado',
-    version=version,
-    packages=['tornado', 'tornado.test', 'tornado.platform'],
-    package_data={
-        # data files need to be listed both here (which determines what gets
-        # installed) and in MANIFEST.in (which determines what gets included
-        # in the sdist tarball)
-        'tornado.test': [
-            'README',
-            'csv_translations/fr_FR.csv',
-            'gettext_translations/fr_FR/LC_MESSAGES/tornado_test.mo',
-            'gettext_translations/fr_FR/LC_MESSAGES/tornado_test.po',
-            'options_test.cfg',
-            'options_test_types.cfg',
-            'options_test_types_str.cfg',
-            'static/robots.txt',
-            'static/sample.xml',
-            'static/sample.xml.gz',
-            'static/sample.xml.bz2',
-            'static/dir/index.html',
-            'static_foo.txt',
-            'templates/utf8.html',
-            'test.crt',
-            'test.key',
-        ],
-    },
-    author='Facebook',
-    author_email='python-tornado@googlegroups.com',
-    url='http://www.tornadoweb.org/',
-    license='http://www.apache.org/licenses/LICENSE-2.0',
-    description=('Tornado is a Python web framework and asynchronous networking library,'
-                 ' originally developed at FriendFeed.'),
-    classifiers=[
-        'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy',
-    ],
-    **kwargs
-)
+MINIMUM = 80
