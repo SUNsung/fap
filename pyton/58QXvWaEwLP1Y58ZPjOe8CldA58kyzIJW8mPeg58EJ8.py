@@ -1,161 +1,170 @@
 
         
-        cc_library(
-    name = 'syntaxnet_transition_state',
-    srcs = ['syntaxnet_transition_state.cc'],
-    hdrs = ['syntaxnet_transition_state.h'],
-    deps = [
-        '//dragnn/core/interfaces:cloneable_transition_state',
-        '//dragnn/core/interfaces:transition_state',
-        '//dragnn/io:syntaxnet_sentence',
-        '//dragnn/protos:trace_proto_cc',
-        '//syntaxnet:base',
-        '//syntaxnet:parser_transitions',
-    ],
-)
+            def take_call(self, call):
+        '''Assume the employee will always successfully take the call.'''
+        self.call = call
+        self.call.employee = self
+        self.call.state = CallState.IN_PROGRESS
     
-    cc_library(
-    name = 'mst_ops_cc',
-    srcs = [
-        'ops/mst_op_kernels.cc',
-        'ops/mst_ops.cc',
-    ],
-    deps = [
-        ':mst_solver',
-        '//syntaxnet:base',
-        '@org_tensorflow//tensorflow/core:framework_headers_lib',
-        '@org_tensorflow//tensorflow/core:lib',
-    ],
-    alwayslink = 1,
-)
-
+            (2016-01, url0), 1
+        (2016-01, url0), 1
+        (2016-01, url1), 1
+        '''
+        url = self.extract_url(line)
+        period = self.extract_year_month(line)
+        yield (period, url), 1
     
-        # Extract the source and target token activations.  Use |stride| to collapse
-    # batch and beam into a single dimension.
-    sources = network_units.lookup_named_tensor('sources', linked_embeddings)
-    targets = network_units.lookup_named_tensor('targets', linked_embeddings)
-    source_tokens_bxnxs = tf.reshape(sources.tensor,
-                                     [stride, -1, self._source_dim])
-    target_tokens_bxnxt = tf.reshape(targets.tensor,
-                                     [stride, -1, self._target_dim])
-    num_tokens = tf.shape(source_tokens_bxnxs)[1]
-    
-        Raises:
-      RuntimeError: if fixed features are configured.
-    '''
-    logging.info('Building component: %s', self.spec.name)
-    if self.spec.fixed_feature:
-      raise RuntimeError(
-          'Fixed features are not compatible with bulk annotation. '
-          'Use the 'bulk-features' component instead.')
-    linked_embeddings = [
-        fetch_linked_embedding(self, network_states, spec)
-        for spec in self.spec.linked_feature
-    ]
-    
-          # The cost corresponding to the three entries is, respectively,
-      # 0.7012, 0.7644, and 1.7269. Each of them is computed using the formula
-      # -prob_i * log(sigmoid(logit_i)) - (1-prob_i) * log(1-sigmoid(logit_i))
-      self.assertAlmostEqual(cost, 3.1924, 4)
-      self.assertEqual(correct, 1)
-      self.assertEqual(total, 3)
-      self.assertAllEqual(gold_labels, [0, 1, 2])
-    
-    '''Converter for DRAGNN checkpoint+master-spec files to TF SavedModels.
-    
-          tf_out = sess.run(
-          'annotation/annotations:0',
-          feed_dict={'annotation/ComputeSession/InputBatch:0': test_inputs})
-    
-        Args:
-      handle: Handle tensor for the ComputeSession.
-      use_moving_average: Whether or not to read from the moving
-        average variables instead of the true parameters. Note: it is not
-        possible to make gradient updates when this is True.
-      build_runtime_graph: Whether to build a graph for use by the runtime.
-    
-        #: Some implementations can detect changes to the session and set
-    #: this when that happens. The mixin default is hard coded to
-    #: ``True``.
-    modified = True
-    
-    import flask
-    
-            Keyword:                   'bold #004461',   # class: 'k'
-        Keyword.Constant:          'bold #004461',   # class: 'kc'
-        Keyword.Declaration:       'bold #004461',   # class: 'kd'
-        Keyword.Namespace:         'bold #004461',   # class: 'kn'
-        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
-        Keyword.Reserved:          'bold #004461',   # class: 'kr'
-        Keyword.Type:              'bold #004461',   # class: 'kt'
-    
-    This module provides the capabilities for the Requests hooks system.
+            (foo, p1), 2
+        (bar, p1), 3
+        (foo, p2), 3
+        (bar, p3), 10
+        (foo, p4), 1
+        '''
+        yield key, sum(values)
     
     
-@pytest.fixture
-def httpbin(httpbin):
-    return prepare_url(httpbin)
+class LinkedList(object):
     
-        :param url: URL for the new :class:`Request` object.
-    :param data: (optional) Dictionary (will be form-encoded), bytes, or file-like object to send in the body of the :class:`Request`.
-    :param json: (optional) json data to send in the body of the :class:`Request`.
-    :param \*\*kwargs: Optional arguments that ``request`` takes.
-    :return: :class:`Response <Response>` object
-    :rtype: requests.Response
+        def bfs(self, source, dest):
+        if source is None:
+            return False
+        queue = deque()
+        queue.append(source)
+        source.visit_state = State.visited
+        while queue:
+            node = queue.popleft()
+            print(node)
+            if dest is node:
+                return True
+            for adjacent_node in node.adj_nodes.values():
+                if adjacent_node.visit_state == State.unvisited:
+                    queue.append(adjacent_node)
+                    adjacent_node.visit_state = State.visited
+        return False
+    
+    
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
+    
+    
+@mock.patch('httpie.core.get_response')
+def test_error_traceback(get_response):
+    exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    with raises(ConnectionError):
+        main(['--ignore-stdin', '--traceback', 'www.google.com'])
+    
+        # Will be set to the raw value of `-a` (if provided) before
+    # `get_auth()` gets called.
+    raw_auth = None
+    
+        # Used only when requested with --check-status:
+    ERROR_HTTP_3XX = 3
+    ERROR_HTTP_4XX = 4
+    ERROR_HTTP_5XX = 5
+    
+        def test_actual_download(self, httpbin_both, httpbin):
+        robots_txt = '/robots.txt'
+        body = urlopen(httpbin + robots_txt).read().decode()
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('--download', httpbin_both.url + robots_txt, env=env)
+        assert 'Downloading' in r.stderr
+        assert '[K' in r.stderr
+        assert 'Done' in r.stderr
+        assert body == r
+    
+        def test_verbose_implies_all(self, httpbin):
+        r = http('--verbose', '--follow', httpbin + '/redirect/1')
+        assert 'GET /redirect/1 HTTP/1.1' in r
+        assert 'HTTP/1.1 302 FOUND' in r
+        assert 'GET /get HTTP/1.1' in r
+        assert HTTP_OK in r
+    
+        def __enter__(self):
+        from scrapy.utils.test import get_testenv
+        pargs = [sys.executable, '-u', '-m', 'scrapy.utils.benchserver']
+        self.proc = subprocess.Popen(pargs, stdout=subprocess.PIPE,
+                                     env=get_testenv())
+        self.proc.stdout.readline()
+    
+    
+    
+            return requests
+    
+            e.g.:
+        @returns request
+        @returns request 2
+        @returns request 2 10
+        @returns request 0 10
     '''
     
-            # Strip port numbers from netloc. This weird `if...encode`` dance is
-        # used for Python 3.2, which doesn't support unicode literals.
-        splitstr = b':'
-        if isinstance(url, str):
-            splitstr = splitstr.decode('ascii')
-        host = ri.netloc.split(splitstr)[0]
+        def _download(self, slot, request, spider):
+        # The order is very important for the following deferreds. Do not change!
     
-    import tornado.httpserver
-import tornado.ioloop
-import tornado.options
-import tornado.web
+            if not aws_access_key_id:
+            aws_access_key_id = settings['AWS_ACCESS_KEY_ID']
+        if not aws_secret_access_key:
+            aws_secret_access_key = settings['AWS_SECRET_ACCESS_KEY']
     
-            ChatSocketHandler.update_cache(chat)
-        ChatSocketHandler.send_updates(chat)
+        def handleResponse(self, response):
+        if self.factory.method.upper() == b'HEAD':
+            self.factory.page(b'')
+        elif self.length is not None and self.length > 0:
+            self.factory.noPage(self._connection_lost_reason)
+        else:
+            self.factory.page(response)
+        self.transport.loseConnection()
     
-        def start_tree(self, tree, filename):
-        self.found_future_import = False
+        def scrape_response(self, scrape_func, response, request, spider):
+        fname = lambda f:'%s.%s' % (
+                six.get_method_self(f).__class__.__name__,
+                six.get_method_function(f).__name__)
     
     
-def run():
-    io_loop = IOLoop(make_current=True)
-    app = Application([('/', RootHandler)])
-    port = random.randrange(options.min_port, options.max_port)
-    app.listen(port, address='127.0.0.1')
-    signal.signal(signal.SIGCHLD, handle_sigchld)
-    args = ['ab']
-    args.extend(['-n', str(options.n)])
-    args.extend(['-c', str(options.c)])
-    if options.keepalive:
-        args.append('-k')
-    if options.quiet:
-        # just stops the progress messages printed to stderr
-        args.append('-q')
-    args.append('http://127.0.0.1:%d/' % port)
-    subprocess.Popen(args)
-    io_loop.start()
-    io_loop.close()
-    io_loop.clear_current()
+class AjaxCrawlMiddleware(object):
+    '''
+    Handle 'AJAX crawlable' pages marked as crawlable via meta tag.
+    For more info see https://developers.google.com/webmasters/ajax-crawling/docs/getting-started.
+    '''
     
-    define('port', default=8888, help='run on the given port', type=int)
-define('db_host', default='127.0.0.1', help='blog database host')
-define('db_port', default=5432, help='blog database port')
-define('db_database', default='blog', help='blog database name')
-define('db_user', default='blog', help='blog database user')
-define('db_password', default='blog', help='blog database password')
+        @classmethod
+    def from_crawler(cls, crawler):
+        o = cls(crawler.settings.getfloat('DOWNLOAD_TIMEOUT'))
+        crawler.signals.connect(o.spider_opened, signal=signals.spider_opened)
+        return o
     
-                stack.append(item)
-            stack_ids.add(item_id)
-            inner(gc.get_referents(item))
-            stack.pop()
-            stack_ids.remove(item_id)
-            visited_ids.add(item_id)
+        @staticmethod
+    def get_streams_by_id(account_number, video_id):
+        '''
+        int, int->list
+        
+        Get the height of the videos.
+        
+        Since brightcove is using 3 kinds of links: rtmp, http and https,
+        we will be using the HTTPS one to make it secure.
+        
+        If somehow akamaihd.net is blocked by the Great Fucking Wall,
+        change the 'startswith https' to http.
+        '''
+        endpoint = 'https://edge.api.brightcove.com/playback/v1/accounts/{account_number}/videos/{video_id}'.format(account_number = account_number, video_id = video_id)
+        fake_header_id = fake_headers
+        #is this somehow related to the time? Magic....
+        fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
     
-    ********************************************************************
-'''
+    from ..common import *
+    
+        t = r1(r'type=(\w+)', flashvars)
+    id = r1(r'vid=([^']+)', flashvars)
+    if t == 'youku':
+        youku_download_by_vid(id, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
+    elif t == 'tudou':
+        tudou_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    elif t == 'sina' or t == 'video':
+        fake_headers['Referer'] = url
+        url = 'http://www.miomio.tv/mioplayer/mioplayerconfigfiles/sina.php?vid=' + id
+        xml_data = get_content(url, headers=fake_headers, decoded=True)
+        url_list = sina_xml_to_url_list(xml_data)
