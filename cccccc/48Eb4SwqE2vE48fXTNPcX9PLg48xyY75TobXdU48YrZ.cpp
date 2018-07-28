@@ -1,233 +1,142 @@
 
         
-        #include <grpc/support/log.h>
-    
-    #include 'src/compiler/config.h'
-#include 'src/compiler/schema_interface.h'
-    
-    namespace grpc {
-namespace testing {
+        /// A utility for finding dead-end blocks.
+///
+/// Dead-end blocks are blocks from which there is no path to the function exit
+/// (either return or throw). These are blocks which end with an unreachable
+/// instruction and blocks from which all paths end in 'unreachable' blocks.
+/// This utility is needed to determine if the a value definition can have a
+/// lack of users ignored along a specific path.
+class DeadEndBlocks {
+  llvm::SetVector<const SILBasicBlock *> ReachableBlocks;
+  const SILFunction *F;
+  bool isComputed = false;
     }
-    }
     
-    template<typename T>
-inline void
-emitTLSLoad(Vout& v, TLSDatum<ThreadLocalNoCheck<T>> datum, Vreg d) {
-  auto const off = ThreadLocalNoCheck<T>::node_ptr_offset();
-  v << load{emitTLSAddr(v, datum) + safe_cast<int32_t>(off), d};
-}
+    #include 'swift/Markup/Markup.h'
+#include 'llvm/ADT/Optional.h'
     
-    inline void initNuma() {}
-inline constexpr int next_numa_node(std::atomic_int& curr_node) { return 0; }
-inline constexpr int num_numa_nodes() { return 1; }
-inline void numa_interleave(void* start, size_t size) {}
-inline void numa_bind_to(void* start, size_t size, int node) {}
-inline constexpr bool numa_node_allowed(int node) { return true; }
+      virtual void handleDiagnostic(SourceManager &SM, SourceLoc Loc,
+                                DiagnosticKind Kind,
+                                StringRef FormatString,
+                                ArrayRef<DiagnosticArgument> FormatArgs,
+                                const DiagnosticInfo &Info) override;
     
-      switch (file_fsmagic(ms, inname, &sb, stream)) {
-  case -1:    /* error */
-    goto done;
-  case 0:      /* nothing found */
-    break;
-  default:    /* matched it and printed type */
-    rv = 0;
-    goto done;
+      void setHashbangBufferID(unsigned BufferID) {
+    assert(HashbangBufferID == 0U && 'Hashbang buffer ID already set');
+    HashbangBufferID = BufferID;
   }
     
-      /*
-   * allocRaw
-   * alloc
-   *
-   * Simple bump allocator, supporting power-of-two alignment. alloc<T>() is a
-   * simple typed wrapper around allocRaw().
-   */
-  void* allocRaw(size_t sz, size_t align = 16) {
-    // Round frontier up to a multiple of align
-    align = folly::nextPowTwo(align) - 1;
-    auto const nf = (uint8_t*)(((uintptr_t)m_frontier + align) & ~align);
-    assertCanEmit(nf - m_frontier + sz);
-    setFrontier(nf);
-    auto data = m_frontier;
-    m_frontier += sz;
-    assertx(m_frontier <= m_base + m_size);
-    return data;
-  }
     
-    template<typename Op>
-LocalId key_local(ISS& env, Op op) {
-  switch (op.mkey.mcode) {
-    case MEC: case MPC:
-      return topStkLocal(env, op.mkey.idx);
-    case MEL: case MPL:
-      return op.mkey.local;
-    case MW:
-    case MEI:
-    case MET: case MPT: case MQT:
-      return NoLocalId;
-  }
-  not_reached();
-}
+    {} // end namespace swift
     
-    //////////////////////////////////////////////////////////////////////
-    
-    
-    {  // find heap->heap pointers
-  for (size_t i = 0, n = g.nodes.size(); i < n; i++) {
-    if (g.nodes[i].is_root) continue;
-    auto h = g.nodes[i].h;
-    scanHeapObject(h, scanner);
-    auto from = blocks.index(h);
-    assertx(from == i);
-    scanner.finish(
-      [&](const void* p, std::size_t size) {
-        conservativeScan(p, size, [&](const void** addr, const void* ptr) {
-          if (auto r = blocks.region(ptr)) {
-            auto to = blocks.index(r);
-            auto offset = uintptr_t(addr) - uintptr_t(h);
-            addPtr(g, from, to, HeapGraph::Ambiguous, offset);
-          }
-        });
-      },
-      [&](const void** addr) {
-        if (auto r = blocks.region(*addr)) {
-          auto to = blocks.index(r);
-          auto offset = uintptr_t(addr) - uintptr_t(h);
-          addPtr(g, from, to, HeapGraph::Counted, offset);
-        }
-      },
-      [&](const void* p) {
-        auto weak = static_cast<const WeakRefDataHandle*>(p);
-        auto addr = &(weak->wr_data->pointee.m_data.pobj);
-        if (auto r = blocks.region(*addr)) {
-          auto to = blocks.index(r);
-          addPtr(g, from, to, HeapGraph::Weak, 0);
-        }
-      }
-    );
-  }
-  g.nodes.shrink_to_fit();
-  g.ptrs.shrink_to_fit();
-  g.root_ptrs.shrink_to_fit();
-  g.root_nodes.shrink_to_fit();
-  return g;
-}
-    
-      Array       m_stream_context_options;
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    #endif // BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
+    #endif // SWIFT_SIL_LSBASE_H
 
     
-    #define BOOST_ASIO_COMPLETION_HANDLER_CHECK( \
-    handler_type, handler) \
-  \
-  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
-      void()) asio_true_handler_type; \
-  \
-  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
-      sizeof(boost::asio::detail::zero_arg_handler_test( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>(), 0)) == 1, \
-      'CompletionHandler type requirements not met') \
-  \
-  typedef boost::asio::detail::handler_type_requirements< \
-      sizeof( \
-        boost::asio::detail::argbyv( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>())) + \
-      sizeof( \
-        boost::asio::detail::lvref< \
-          asio_true_handler_type>()(), \
-        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
     
-    #include <boost/asio/detail/push_options.hpp>
+    {} // end namespace swift
     
-    
-    
-    
-    
-    
-    
-        CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1,vertexCount);
-    
-    	b2BodyDef bd;
-	bd.type = b2_dynamicBody;
-	bd.position = position;
-	bd.bullet = true;
-	m_bomb = m_world->CreateBody(&bd);
-	m_bomb->SetLinearVelocity(velocity);
-	
-	b2CircleShape circle;
-	circle.m_radius = 0.3f;
-    
-    			b2PolygonShape shape;
-			shape.SetAsBox(0.5f, 4.0f, b2Vec2(4.0f, 0.0f), 0.5f * b2_pi);
-    
-    		// Breakable dynamic body
-		{
-			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(0.0f, 40.0f);
-			bd.angle = 0.25f * b2_pi;
-			m_body1 = m_world->CreateBody(&bd);
+    // Process Win32 mouse/keyboard inputs. 
+// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+// PS: In this Win32 handler, we use the capture API (GetCapture/SetCapture/ReleaseCapture) to be able to read mouse coordinations when dragging mouse outside of our window bounds.
+// PS: We treat DBLCLK messages as regular mouse down messages, so this code will work on windows classes that have the CS_DBLCLKS flag set. Our own example app code doesn't set this flag.
+IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    if (ImGui::GetCurrentContext() == NULL)
+        return 0;
     }
     
-    	enum
-	{
-		e_count = 8
-	};
+    // DirectX data
+static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
+static LPDIRECT3DVERTEXBUFFER9  g_pVB = NULL;
+static LPDIRECT3DINDEXBUFFER9   g_pIB = NULL;
+static LPDIRECT3DTEXTURE9       g_FontTexture = NULL;
+static int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
     
-    namespace folly {
+    void ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(VkPhysicalDevice physical_device, VkDevice device, ImGui_ImplVulkanH_WindowData* wd, const VkAllocationCallbacks* allocator, int w, int h)
+{
+    uint32_t min_image_count = 2;	// FIXME: this should become a function parameter
     }
     
-    template <typename T>
-bool SingletonHolder<T>::creationStarted() {
-  // If alive, then creation was of course started.
-  // This is flipped after creating_thread_ was set, and before it was reset.
-  if (state_.load(std::memory_order_acquire) == SingletonHolderState::Living) {
-    return true;
-  }
+    #include <stdint.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
+#include 'imgui.h'
+#include 'imgui_impl_allegro5.h'
+    
+        // Main loop
+    while (!glfwWindowShouldClose(window))
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        glfwPollEvents();
     }
     
-      bool remove(const T& v) {
-    auto prev = &head_;
-    locate_lower_bound(v, prev);
-    auto curr = prev->load(std::memory_order_relaxed);
-    if (!curr || curr->elem_ != v) {
-      return false;
-    }
-    Node* curr_next = curr->next_.load();
-    // Patch up the actual list...
-    prev->store(curr_next, std::memory_order_release);
-    // ...and only then null out the removed node.
-    curr->next_.store(nullptr, std::memory_order_release);
-    curr->retire();
-    return true;
+    #include 'guetzli/idct.h'
+#include 'guetzli/color_transform.h'
+#include 'guetzli/dct_double.h'
+#include 'guetzli/gamma_correct.h'
+#include 'guetzli/preprocess_downsample.h'
+#include 'guetzli/quantize.h'
+    
+    // Fills in 'result' with the inverse DCT of 'block'.
+// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
+// a row-by-row memory layout.
+void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
+    
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
+    
+    #include <string>
+    
+    void UpdateACHistogramForDCTBlock(const coeff_t* coeffs,
+                                  JpegHistogram* ac_histogram);
+    
+      // Make a local copy of the input bit length histogram.
+  int count[kJpegHuffmanMaxBitLength + 1] = { 0 };
+  int total_count = 0;
+  for (len = 1; len <= kJpegHuffmanMaxBitLength; ++len) {
+    count[len] = count_in[len];
+    total_count += count[len];
   }
     
-      Atom<Node*> node_;
     
-      folly::Optional<T> try_take_for(std::chrono::milliseconds time) override {
-    T item;
-    while (!queue_.readIfNotEmpty(item)) {
-      if (!sem_.try_wait_for(time)) {
-        return folly::none;
-      }
-    }
-    return std::move(item);
-  }
+/*
+ * DumpCrashStack.h
+ *
+ *  Created on: 2012-9-28
+ *      Author: yerungui
+ */
     
-      BlockingQueueAddResult add(T item) override {
-    queue_.enqueue(std::move(item));
-    return sem_.post();
-  }
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
     
-      EXPECT_EQ(5050, estimates.sum);
-  EXPECT_EQ(100, estimates.count);
+            __FirstGetCreater(T::ServiceName());
+    
+        Spy* GetSpy(const char* _name) const
+    { return m_strmap.find(_name)->second; }
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    #endif
+
+    
+    #include 'scope_jenv.h'
+#include <stddef.h>
+#include <unistd.h>
+#include <pthread.h>
+#include 'assert/__assert.h'
