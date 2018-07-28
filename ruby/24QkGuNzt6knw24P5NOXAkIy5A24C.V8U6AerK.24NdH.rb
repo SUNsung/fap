@@ -1,90 +1,112 @@
 
         
-              it 'renders HTML' do
-        capture = render(options, screenshots)
-        expect(capture).to match(/<html>/)
-        expect(capture).to include('<li>Some</li>')
-        expect(capture).to include('<li>key</li>')
-        expect(capture).to include('<li>words</li>')
-      end
-    end
-    
-            command = [escaped_gradle_path, 'tasks', '--console=plain'].join(' ')
-        output = Action.sh(command, print_command: false, print_command_output: false)
-        output.split('\n').each do |line|
-          if (result = line.match(/(\w+)\s\-\s([\w\s]+)/))
-            self.tasks << GradleTask.new(title: result[1], description: result[2])
-          end
+              class << self
+        # Mark a given block of code as a 'busy' block of code, which will
+        # register a SIGINT handler for the duration of the block. When a
+        # SIGINT occurs, the `sig_callback` proc will be called. It is up
+        # to the callback to behave properly and exit the application.
+        def busy(sig_callback)
+          register(sig_callback)
+          return yield
+        ensure
+          unregister(sig_callback)
         end
     
-            expect(result).to eq('hg parent --template {rev}')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template {rev}')
+          protected
+    
+        HTTP.get(source).to_s.split('\n').each do |line|
+      next if line.start_with? '#'
+      parts = line.split(';').map(&:strip)
+      next if parts.size < 2
+      codes << [parts[0], parts[1].start_with?('fully-qualified')]
+    end
+    
+    describe ApplicationController, type: :controller do
+  controller do
+    include UserTrackingConcern
+    
+    begin
+  require 'bundler/setup'
+rescue LoadError
+  $stderr.puts '[*] Metasploit requires the Bundler gem to be installed'
+  $stderr.puts '    $ gem install bundler'
+  exit(1)
+end
+    
+          when nil
+        # No matches, no saved state
+      else
+        sessions[s[:session]].merge!({k => matches})
+      end # end case matched
+    end # end of each_key
+  end # end of parse
+end
+    
+    classNames = [ 'HelloWorld1', 'HelloWorld2' ]
+    
+    class Parser
+  def initialize(filename)
+    @src = Source.new(filename)
+  end
+    
+        # Returns the CSS for the media query.
+    #
+    # @return [String]
+    def to_css
+      css = ''
+      css << resolved_modifier
+      css << ' ' unless resolved_modifier.empty?
+      css << resolved_type
+      css << ' and ' unless resolved_type.empty? || expressions.empty?
+      css << expressions.map do |e|
+        # It's possible for there to be script nodes in Expressions even when
+        # we're converting to CSS in the case where we parsed the document as
+        # CSS originally (as in css_test.rb).
+        e.map {|c| c.is_a?(Sass::Script::Tree::Node) ? c.to_sass : c.to_s}.join
+      end.join(' and ')
+      css
+    end
+    
+      Sass::Plugin.options.merge!(config)
+    
+    if profile_filename = ENV['PROFILE']
+  require 'ruby-prof'
+  reporter =
+    case (profile_extname = File.extname(profile_filename))
+    when '.txt'
+      RubyProf::FlatPrinterWithLineNumbers
+    when '.html'
+      RubyProf::GraphHtmlPrinter
+    when '.callgrind'
+      RubyProf::CallTreePrinter
+    else
+      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
+    end
+  File.open(profile_filename, 'w') do |io|
+    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
+  end
+else
+  Pod::Command.run(ARGV)
+end
+
+    
+            def execute_repl_command(repl_command)
+          unless repl_command == '\n'
+            repl_commands = repl_command.split
+            subcommand = repl_commands.shift.capitalize
+            arguments = repl_commands
+            subcommand_class = Pod::Command::IPC.const_get(subcommand)
+            subcommand_class.new(CLAide::ARGV.new(arguments)).run
+            signal_end_of_output
+          end
+        end
       end
     end
   end
 end
 
     
-          assert_contain 'Invalid email address'
-      refute warden.authenticated?(:admin)
+      module InExpression0
+    def rvalue1
+      elements[0]
     end
-  end
-    
-          def initialize(*args, &block)
-        @bypass_confirmation_postpone = false
-        @skip_reconfirmation_in_callback = false
-        @reconfirmation_required = false
-        @skip_confirmation_notification = false
-        @raw_confirmation_token = nil
-        super
-      end
-    
-        # Check if a reset_password_token is provided in the request
-    def assert_reset_token_passed
-      if params[:reset_password_token].blank?
-        set_flash_message(:alert, :no_token)
-        redirect_to new_session_path(resource_name)
-      end
-    end
-    
-      # POST /resource/unlock
-  def create
-    self.resource = resource_class.send_unlock_instructions(resource_params)
-    yield resource if block_given?
-    
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
-    end
-    
-          def remember_cookie_values(resource)
-        options = { httponly: true }
-        options.merge!(forget_cookie_values(resource))
-        options.merge!(
-          value: resource.class.serialize_into_cookie(resource),
-          expires: resource.remember_expires_at
-        )
-      end
-    
-    module RuboCop
-  module Cop
-    module FormulaAudit
-      # This cop audits urls and mirrors in Formulae
-      class Urls < FormulaCop
-        def audit_formula(_node, _class_node, _parent_class_node, body_node)
-          urls = find_every_func_call_by_name(body_node, :url)
-          mirrors = find_every_func_call_by_name(body_node, :mirror)
-    
-              # Check if command-line is wrongly used in formula's desc
-          if match = regex_match_group(desc, /(command ?line)/i)
-            c = match.to_s.chars.first
-            problem 'Description should use \'#{c}ommand-line\' instead of \'#{match}\''
-          end
-    
-      def create_scaffold(source, target)
-    transform_r(source, target)
-  end
-    
-            def description
-          'have an attachment named #{@attachment_name}'
-        end
