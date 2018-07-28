@@ -1,177 +1,361 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        // Like URLRequestAsarJob, but asks the JavaScript handler for file path.
+class URLRequestAsyncAsarJob : public JsAsker<asar::URLRequestAsarJob> {
+ public:
+  URLRequestAsyncAsarJob(net::URLRequest*, net::NetworkDelegate*);
+    }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #define FPL FILE_PATH_LITERAL
     
-        http://www.apache.org/licenses/LICENSE-2.0
+    #include <google/protobuf/stubs/logging.h>
+#include <google/protobuf/stubs/common.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/pyext/message.h>
+#include <google/protobuf/pyext/scoped_pyobject_ptr.h>
     
-    void MPIUtils::InitMPI() {
-  // Initialize the MPI environment if that hasn't been done
-  int flag = 0;
-  MPI_CHECK(MPI_Initialized(&flag));
-  if (!flag) {
-    int proc_id = 0, number_of_procs = 1, len = -1;
-    char my_host_name[max_worker_name_length];
-    // MPI_CHECK(MPI_Init_thread(0, 0, MPI_THREAD_MULTIPLE, &flag));
-    MPI_CHECK(MPI_Init(0, 0));
-    MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &proc_id));
-    MPI_CHECK(MPI_Comm_size(MPI_COMM_WORLD, &number_of_procs));
-    MPI_CHECK(MPI_Get_processor_name(my_host_name, &len));
-    fprintf(stderr,
-            'MPI Environment initialized. Process id: %d Total processes: %d '
-            '|| Hostname: %s \n',
-            proc_id, number_of_procs, my_host_name);
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
+    
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/wire_format.h>
+    
+    // -----------------------------------------------------------------------
+// functions exposed by this module
+// -----------------------------------------------------------------------
+    
+    // ---------------------------------------------------------------------------
+// ProgressTracing -- static helper class for logging a progress indicator
+//
+// This is for use by the cluster management tools for indicating global progress to the user.
+//
+// This logs to stdout (not stderr) in a specific format, e.g. understood by the Philly cluster. The format is:
+//  PROGRESS xx.xx%
+//  EVALERR xx.xx%
+//
+// Specifically, this class handles a two-level progress computation:
+//  - outer level: loop over multiple training phases, each running multiple steps (epochs)
+//  - inner level in one training phase: loop over multiple steps, *without* knowledge about the other training phases
+//
+// In order for the inner level to log correctly in the global context, the outer loop
+// must inform this class about the total number of steps and the current offset to apply in the inner level.
+// ---------------------------------------------------------------------------
+    
+        bool haslattice(std::wstring key) const
+    {
+#ifdef NONUMLATTICEMMI
+        return denlattices.haslattice(key);
+#else
+        return numlattices.haslattice(key) && denlattices.haslattice(key);
+#endif
+    }
+    
+    
+    {public:
+    inline hardcoded_array() throw()
+    {
+    }
+    inline hardcoded_array(size_t n) throw()
+    {
+        check_size(n);
+    } // we can instantiate with a size parameter--just checks the size
+    inline hardcoded_array(size_t n, const _T& val) throw()
+    {
+        check_size(n);
+        for (size_t i = 0; i < n; i++)
+            data[i] = val;
+    }
+    inline _T& operator[](size_t i) throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline const _T& operator[](size_t i) const throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline size_t size() const throw()
+    {
+        return _N;
+    }
+};
+
+    
+    void Executor::UpdateAuxArray(const Rcpp::List& array,
+                              bool match_name,
+                              bool skip_null) {
+  UpdateArray('aux.arrays', array, aux_arrays_, match_name, skip_null);
+}
+    
+    template<int NT, int X, int NumBanks = 32> struct sConflictFreeStorage {
+	enum { count = NT * X };
+	enum { divisor = sBankConflictDivisor<X, NumBanks>::value };
+	enum { padding = sDivSafe<count, divisor>::value };
+	enum { value = count + padding };
+};
+    
+    namespace Rcpp {
+  template<>
+  inline bool is<mxnet::R::NDArray>(SEXP x) {
+    if (TYPEOF(x) != EXTPTRSXP) return false;
+    Rcpp::XPtr<mxnet::R::NDBlob> ptr(x);
+    SEXP attr = ptr.attr('class');
+    return attr != R_NilValue &&
+        Rcpp::as<std::string>(attr) == 'MXNDArray';
+    return true;
+  }
+}  // namespace Rcpp
+#endif  // MXNET_RCPP_NDARRAY_H_
+
+    
+    int MXSymbolInferShapePartial(SymbolHandle sym,
+                              mx_uint num_args,
+                              const char** keys,
+                              const mx_uint *arg_ind_ptr,
+                              const mx_uint *arg_shape_data,
+                              mx_uint *in_shape_size,
+                              const mx_uint **in_shape_ndim,
+                              const mx_uint ***in_shape_data,
+                              mx_uint *out_shape_size,
+                              const mx_uint **out_shape_ndim,
+                              const mx_uint ***out_shape_data,
+                              mx_uint *aux_shape_size,
+                              const mx_uint **aux_shape_ndim,
+                              const mx_uint ***aux_shape_data,
+                              int *complete) {
+  int succ;
+  *complete = 1;
+  return MXSymbolInferShape(sym, num_args, keys,
+                            arg_ind_ptr, arg_shape_data,
+                            in_shape_size, in_shape_ndim, in_shape_data,
+                            out_shape_size, out_shape_ndim, out_shape_data,
+                            aux_shape_size, aux_shape_ndim, aux_shape_data,
+                            &succ);
+}
+    
+    void MKLDNNConcatForward(const nnvm::NodeAttrs& attrs, const OpContext &ctx,
+                         const std::vector<NDArray> &in_data,
+                         const std::vector<OpReqType> &req,
+                         const std::vector<NDArray> &out_data) {
+  TmpMemMgr::Get()->Init(ctx.requested[concat_enum::kTempSpace]);
+  const ConcatParam& param = nnvm::get<ConcatParam>(attrs.parsed);
+  int num_in_data = param.num_args;
+  int concat_dim = param.dim;
+  std::vector<mkldnn::memory::primitive_desc> data_md;
+  std::vector<const mkldnn::memory *> data_mem;
+  data_md.reserve(num_in_data);
+  data_mem.reserve(num_in_data);
+  for (int i = 0; i < num_in_data; i++) {
+    const mkldnn::memory *tmp_mem = in_data[i].GetMKLDNNData();
+    mkldnn::memory::primitive_desc tmp_pd = tmp_mem->get_primitive_desc();
+    data_md.push_back(tmp_pd);
+    data_mem.push_back(tmp_mem);
+  }
+  MKLDNNConcatFwd &fwd = GetConcatForward(concat_dim, in_data, data_md);
+  mxnet::mkldnn_output_t out_mem = CreateMKLDNNMem(out_data[concat_enum::kOut],
+                                                   fwd.fwd_pd.dst_primitive_desc(),
+                                                   req[concat_enum::kOut]);
+  fwd.SetNewMem(data_mem, *out_mem.second);
+  MKLDNNStream::Get()->RegisterPrim(fwd.GetFwd());
+  CommitOutput(out_data[concat_enum::kOut], out_mem);
+  MKLDNNStream::Get()->Submit();
+}
+    
+    /**
+ * Get current exceptions being handled.  front() is the most recent exception.
+ * There should be at most one unless rethrowing.
+ */
+std::vector<ExceptionInfo> getCurrentExceptions();
+    
+    class SingletonVault {
+ public:
+  enum class Type {
+    Strict, // Singletons can't be created before registrationComplete()
+    Relaxed, // Singletons can be created before registrationComplete()
+  };
+    }
+    
+      bool pop(T& val) {
+    hazptr_local<1, Atom> h;
+    hazptr_holder<Atom>& hptr = h[0];
+    Node* node;
+    while (true) {
+      node = hptr.get_protected(head_);
+      if (node == nullptr) {
+        return false;
+      }
+      auto next = node->next();
+      if (cas_head(node, next)) {
+        break;
+      }
+    }
+    hptr.reset();
+    val = node->value();
+    node->retire();
+    return true;
+  }
+    
+      bool remove(const T& v) {
+    auto prev = &head_;
+    locate_lower_bound(v, prev);
+    auto curr = prev->load(std::memory_order_relaxed);
+    if (!curr || curr->elem_ != v) {
+      return false;
+    }
+    Node* curr_next = curr->next_.load();
+    // Patch up the actual list...
+    prev->store(curr_next, std::memory_order_release);
+    // ...and only then null out the removed node.
+    curr->next_.store(nullptr, std::memory_order_release);
+    curr->retire();
+    return true;
+  }
+    
+    // See portability/Unistd.h for why these need to be in a namespace
+// rather then extern 'C'.
+namespace folly {
+namespace portability {
+namespace fcntl {
+int creat(char const* fn, int pm);
+int fcntl(int fd, int cmd, ...);
+int posix_fallocate(int fd, off_t offset, off_t len);
+int open(char const* fn, int of, int pm = 0);
+}
+}
+}
+    
+      folly::Optional<T> try_take_for(std::chrono::milliseconds time) override {
+    T item;
+    while (true) {
+      if (nonBlockingTake(item)) {
+        return std::move(item);
+      }
+      if (!sem_.try_wait_for(time)) {
+        return folly::none;
+      }
+    }
+  }
+    
+        uint64_t origAllocated = *counter;
+    
+    FOLLY_ALWAYS_INLINE int __builtin_ctzll(unsigned long long x) {
+  unsigned long index;
+  return int(_BitScanForward64(&index, x) ? index : 64);
+}
+    
+      void push(hazptr_obj* obj) {
+    while (true) {
+      if (tail()) {
+        if (pushInNonEmptyList(obj)) {
+          break;
+        }
+      } else {
+        if (pushInEmptyList(obj)) {
+          break;
+        }
+      }
+    }
+    if (++rcount_ >= HAZPTR_PRIV_THRESHOLD) {
+      push_all_to_domain();
+    }
+  }
+    
+      // Actions to run in child.
+  // Note that this runs after vfork(), so tread lightly.
+  // Returns 0 on success, or an errno value on failure.
+  int prepareChild(const Options& options,
+                   const sigset_t* sigmask,
+                   const char* childDir) const;
+  int runChild(const char* executable, char** argv, char** env,
+               const Options& options) const;
+    
+    /* Platform specific TLS support
+ * gcc implements __thread
+ * msvc implements __declspec(thread)
+ * the semantics are the same
+ * (but remember __thread has different semantics when using emutls (ex. apple))
+ */
+#if defined(_MSC_VER)
+# define FOLLY_TLS __declspec(thread)
+#elif defined(__GNUC__) || defined(__clang__)
+# define FOLLY_TLS __thread
+#else
+# error cannot define platform specific thread local storage
+#endif
+    
+    ///////////////////////////////////
+#if FOLLY_F14_VECTOR_INTRINSICS_AVAILABLE
+///////////////////////////////////
+    
+    class AbstractCommand : public Command {
+private:
+  std::shared_ptr<Request> req_;
+  std::shared_ptr<FileEntry> fileEntry_;
+  std::shared_ptr<SocketCore> socket_;
+  std::shared_ptr<SocketRecvBuffer> socketRecvBuffer_;
+  std::shared_ptr<SocketCore> readCheckTarget_;
+  std::shared_ptr<SocketCore> writeCheckTarget_;
+    }
+    
+    
+    {} // namespace aria2
+
+    
+    void AbstractOptionHandler::updateFlags(int flag, bool val)
+{
+  if (val) {
+    flags_ |= flag;
+  }
+  else {
+    flags_ &= ~flag;
   }
 }
     
-    TEST(AccuracyUtilsTest, CalculateAccuracyStats) {
-  StreamingAccuracyStats stats;
-  CalculateAccuracyStats({{'a', 1000}, {'b', 9000}},
-                         {{'a', 1200}, {'b', 5000}, {'a', 8700}}, 10000, 500,
-                         &stats);
-  EXPECT_EQ(2, stats.how_many_ground_truth_words);
-  EXPECT_EQ(2, stats.how_many_ground_truth_matched);
-  EXPECT_EQ(1, stats.how_many_false_positives);
-  EXPECT_EQ(1, stats.how_many_correct_words);
-  EXPECT_EQ(1, stats.how_many_wrong_words);
+    
+    {
+    {    httpConnection_->sendProxyRequest(std::move(httpRequest));
+  }
+  else {
+    httpConnection_->sendPendingData();
+  }
+  if (httpConnection_->sendBufferIsEmpty()) {
+    getDownloadEngine()->addCommand(getNextCommand());
+    return true;
+  }
+  else {
+    setWriteCheckSocket(getSocket());
+    addCommandSelf();
+    return false;
+  }
 }
     
-      for (auto alphabet_size : test_cases) {
-    for (int i = 0; i < repetitions; i++) {
-      std::vector<int> input(num_elements);
-      std::generate(input.begin(), input.end(),
-        [=]() { return rand() % alphabet_size; });
-      CompressedBufferWriter cbw(alphabet_size);
-    }
-    }
-    
-    namespace xgboost {
-    }
-    
-    namespace xgboost {
-/*!
- * \brief interface of tree update module, that performs update of a tree.
- */
-class TreeUpdater {
- public:
-  /*! \brief virtual destructor */
-  virtual ~TreeUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
-   */
-  virtual void Init(const std::vector<std::pair<std::string, std::string> >& args) = 0;
-  /*!
-   * \brief perform update to the tree models
-   * \param gpair the gradient pair statistics of the data
-   * \param data The data matrix passed to the updater.
-   * \param trees references the trees to be updated, updater will change the content of trees
-   *   note: all the trees in the vector are updated, with the same statistics,
-   *         but maybe different random seeds, usually one tree is passed in at a time,
-   *         there can be multiple trees when we train random forest style model
-   */
-  virtual void Update(HostDeviceVector<GradientPair>* gpair,
-                      DMatrix* data,
-                      const std::vector<RegTree*>& trees) = 0;
-    }
-    }
-    
-        c.type = type_[fid];
-    const size_t block_offset = boundary_[fid].index_begin / packing_factor_;
-    const size_t elem_offset = boundary_[fid].index_begin % packing_factor_;
-    c.index = reinterpret_cast<const T*>(&index_[block_offset]) + elem_offset;
-    c.index_base = index_base_[fid];
-    c.row_ind = &row_ind_[boundary_[fid].row_ind_begin];
-    c.len = boundary_[fid].index_end - boundary_[fid].index_begin;
-    
-    #include <exception>
-#include 'comm/xlogger/xlogger.h'
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    
-#define DEFINE_HAS_MEMBER_WITH_TYPE(member_name, member_type) \
-    template <typename T>\
-    class has_##member_name {\
-      private:\
-        struct yes_type { char x[1]; };\
-        struct no_type { char x[2]; };\
-        template <member_type (T::*)> struct tester;\
-        template <typename U> static yes_type test(tester<&U::member_name>*);\
-        template <typename U> static no_type test(...);\
-      public:\
-        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
-    };
-    
-    
-#endif /* SCOP_JENV_H_ */
-
-    
-    
-    {  private:
-    JNIEnv* env_;
-    jstring jstr_;
-    const char* char_;
-    bool jstr2char_;
-};
-    
-    #endif //INC_ASTRefCount_hpp__
-
-    
-    
-    {protected:
-	unsigned char* buffer;	///< the buffer with data
-	unsigned char* ptr;		///< position ptr into the buffer
-	unsigned char* end;		///< end sentry for buffer
-	bool delete_buffer;		///< flag signifying if we have to delete the buffer
-};
-    
-    	virtual RefToken getTokenObject() const
-	{
-		return _returnToken;
-	}
-    
-    #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
-namespace antlr {
-#endif
+    namespace aria2 {
     }
     
     
-    {	IOException( ANTLR_USE_NAMESPACE(std)exception& e )
-		: ANTLRException(e.what())
-	{
-	}
-	IOException( const ANTLR_USE_NAMESPACE(std)string& mesg )
-		: ANTLRException(mesg)
-	{
-	}
-	virtual ~IOException() throw()
-	{
-	}
-};
-    
-    #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
-namespace antlr {
-#endif
-    }
-    
-    /* ANTLR Translator Generator
- * Project led by Terence Parr at http://www.jGuru.com
- * Software rights: http://www.antlr.org/license.html
- *
- * $Id: //depot/code/org.antlr/release/antlr-2.7.7/lib/cpp/antlr/NoViableAltForCharException.hpp#2 $
- */
+    {} // namespace aria2
