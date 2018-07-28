@@ -1,50 +1,64 @@
 
         
-                private
-    
-        def scaling dst, ratio
-      if ratio.horizontal? || ratio.square?
-        [ '%dx' % dst.width, ratio.width ]
-      else
-        [ 'x%d' % dst.height, ratio.height ]
-      end
+          def brief_build_info(f)
+    build_time_str = f.logs.ctime.strftime('%Y-%m-%d %H:%M:%S')
+    s = <<~EOS
+      Homebrew build logs for #{f.full_name} on #{OS_VERSION}
+    EOS
+    if ARGV.include?('--with-hostname')
+      hostname = Socket.gethostname
+      s << 'Host: #{hostname}\n'
     end
+    s << 'Build date: #{build_time_str}\n'
+    s
+  end
     
-        def define
-      define_flush_errors
-      define_getters
-      define_setter
-      define_query
-      register_new_attachment
-      add_active_record_callbacks
-      add_paperclip_callbacks
-      add_required_validations
-    end
+              debian_pattern = %r{^git://anonscm\.debian\.org/users/(.*)}i
+          audit_urls(urls, debian_pattern) do |match, url|
+            problem '#{url} should be `https://anonscm.debian.org/git/users/#{match[1]}`'
+          end
     
-            def matches? subject
-          @subject = subject
-          @subject = @subject.new if @subject.class == Class
-          lower_than_low? && higher_than_low? && lower_than_high? && higher_than_high?
+            def name
+          @node.children.first
         end
     
-          def drop_attached_file(*args)
-        ActiveSupport::Deprecation.warn 'Method `drop_attached_file` in the migration has been deprecated and will be replaced by `remove_attachment`.'
-        remove_attachment(*args)
-      end
-    end
+    module RuboCop
+  module Cop
+    module Layout
+      # Checks for unnecessary additional spaces inside array percent literals
+      # (i.e. %i/%w).
+      #
+      # @example
+      #
+      #   # bad
+      #   %w(foo  bar  baz)
+      #   # good
+      #   %i(foo bar baz)
+      class SpaceInsideArrayPercentLiteral < Cop
+        include MatchRange
+        include PercentLiteral
     
-        module ClassMethods
-      # This method is a shortcut to validator classes that is in
-      # 'Attachment...Validator' format. It is almost the same thing as the
-      # +validates+ method that shipped with Rails, but this is customized to
-      # be using with attachment validators. This is helpful when you're using
-      # multiple attachment validators on a single attachment.
+    module RuboCop
+  module Cop
+    module Performance
+      # This cop identifies the use of `Regexp#match` or `String#match`, which
+      # returns `#<MatchData>`/`nil`. The return value of `=~` is an integral
+      # index/`nil` and is more performant.
       #
-      # Example of using the validator:
+      # @example
+      #   # bad
+      #   do_something if str.match(/regex/)
+      #   while regex.match('str')
+      #     do_something
+      #   end
       #
-      #   validates_attachment :avatar, :presence => true,
-      #      :content_type => { :content_type => 'image/jpg' },
-      #      :size => { :in => 0..10.kilobytes }
-      #
-      def validates_attachment(*attributes)
-        options = attributes.extract_options!.dup
+      #   # good
+      #   method(str =~ /regex/)
+      #   return value unless regex =~ 'str'
+      class RedundantMatch < Cop
+        MSG = 'Use `=~` in places where the `MatchData` returned by ' \
+              '`#match` will not be used.'.freeze
+    
+            def autocorrect(node)
+          center = multiple_compare?(node)
+          new_center = '#{center.source} && #{center.source}'
