@@ -1,405 +1,299 @@
 
         
-        TEST_F(UnicharcompressTest, DoesJapanese) {
-  LOG(INFO) << 'Testing jpn';
-  LoadUnicharset('jpn.unicharset');
-  ExpectCorrect('jpn');
-}
+        AT_API CUDAStream createCUDAStreamWithOptions(int32_t flags, int32_t priority);
     
-    const int16_t idirtab[] = {
-  1000, 0, 998, 49, 995, 98, 989, 146,
-  980, 195, 970, 242, 956, 290, 941, 336,
-  923, 382, 903, 427, 881, 471, 857, 514,
-  831, 555, 803, 595, 773, 634, 740, 671,
-  707, 707, 671, 740, 634, 773, 595, 803,
-  555, 831, 514, 857, 471, 881, 427, 903,
-  382, 923, 336, 941, 290, 956, 242, 970,
-  195, 980, 146, 989, 98, 995, 49, 998,
-  0, 1000, -49, 998, -98, 995, -146, 989,
-  -195, 980, -242, 970, -290, 956, -336, 941,
-  -382, 923, -427, 903, -471, 881, -514, 857,
-  -555, 831, -595, 803, -634, 773, -671, 740,
-  -707, 707, -740, 671, -773, 634, -803, 595,
-  -831, 555, -857, 514, -881, 471, -903, 427,
-  -923, 382, -941, 336, -956, 290, -970, 242,
-  -980, 195, -989, 146, -995, 98, -998, 49,
-  -1000, 0, -998, -49, -995, -98, -989, -146,
-  -980, -195, -970, -242, -956, -290, -941, -336,
-  -923, -382, -903, -427, -881, -471, -857, -514,
-  -831, -555, -803, -595, -773, -634, -740, -671,
-  -707, -707, -671, -740, -634, -773, -595, -803,
-  -555, -831, -514, -857, -471, -881, -427, -903,
-  -382, -923, -336, -941, -290, -956, -242, -970,
-  -195, -980, -146, -989, -98, -995, -49, -998,
-  0, -1000, 49, -998, 98, -995, 146, -989,
-  195, -980, 242, -970, 290, -956, 336, -941,
-  382, -923, 427, -903, 471, -881, 514, -857,
-  555, -831, 595, -803, 634, -773, 671, -740,
-  707, -707, 740, -671, 773, -634, 803, -595,
-  831, -555, 857, -514, 881, -471, 903, -427,
-  923, -382, 941, -336, 956, -290, 970, -242,
-  980, -195, 989, -146, 995, -98, 998, -49
-};
-    
-    template <class R, class P1, class P2, class P3, class P4, class A1, class A2, class A3, class A4>
-inline typename _TessFunctionResultCallback_4_4<false,R,P1,P2,P3,P4,A1,A2,A3,A4>::base*
-NewPermanentTessCallback(R (*function)(P1,P2,P3,P4,A1,A2,A3,A4), typename Identity<P1>::type p1, typename Identity<P2>::type p2, typename Identity<P3>::type p3, typename Identity<P4>::type p4) {
-  return new _TessFunctionResultCallback_4_4<false,R,P1,P2,P3,P4,A1,A2,A3,A4>(function, p1, p2, p3, p4);
-}
-    
-      const IndexMapBiDi& charset_map() const {
-    return *charset_map_;
-  }
-  const ShapeTable* shape_table() const {
-    return shape_table_;
-  }
-  // Sample set operations.
-  const TrainingSampleSet* sample_set() const {
-    return sample_set_;
-  }
-    
-      // Accessors
-  int num_samples() const {
-    return samples_.size();
-  }
-  int num_raw_samples() const {
-    return num_raw_samples_;
-  }
-  int NumFonts() const {
-    return font_id_map_.SparseSize();
-  }
-  const UNICHARSET& unicharset() const {
-    return unicharset_;
-  }
-  int charsetsize() const {
-    return unicharset_size_;
-  }
-  const FontInfoTable& fontinfo_table() const {
-    return fontinfo_table_;
-  }
-    
-    // Sums the products of weight updates in *this and other, splitting into
-// positive (same direction) in *same and negative (different direction) in
-// *changed.
-void WeightMatrix::CountAlternators(const WeightMatrix& other, double* same,
-                                    double* changed) const {
-  int num_outputs = updates_.dim1();
-  int num_inputs = updates_.dim2();
-  ASSERT_HOST(num_outputs == other.updates_.dim1());
-  ASSERT_HOST(num_inputs == other.updates_.dim2());
-  for (int i = 0; i < num_outputs; ++i) {
-    const double* this_i = updates_[i];
-    const double* other_i = other.updates_[i];
-    for (int j = 0; j < num_inputs; ++j) {
-      double product = this_i[j] * other_i[j];
-      if (product < 0.0)
-        *changed -= product;
-      else
-        *same += product;
-    }
-  }
-}
-    
-    // WorkloadStats is used to track per request timing for different states
-// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
-// should be made to guard the state change with appropriate timers and
-// counters.
-//
-// The states tracked are:
-//  - In a request (this is a superset of the interpreter state)
-//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
-//  - In the JIT (currently tracks time inside the translate routine)
-//
-// Note the time in the TC is not tracked.  This is roughly:
-//   Time in request - Time in interp
-//
-// This gives us the relative interp time formula of:
-//   Relative interp time = Time in interp / Time in request
-struct WorkloadStats final {
-  enum State {
-    InRequest,
-    // -> InInterp   Okay (entering Dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InInterp,
-    // -> InRequest  Okay (leaving the dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InTrans,
-    // -> InRequest  Okay (leaving translate)
-    // -> InInterp   Okay (leaving translate)
-  };
+    /// A variant of `DeviceGuard` that augments it with an understanding of CUDA
+/// streams. This guard can not only set and reset the current CUDA device, but
+/// also set and reset the current CUDA stream. It is important to note that
+/// because a CUDA stream is intrinsically associated with the CUDA device to
+/// which it is bound, setting the CUDA stream *also* sets the current CUDA
+/// device to that of the stream.
+struct CUDAGuard {
+  /// Default constructor, does nothing and causes no change in the current
+  /// stream or device until `set_stream` or `set_device` is called.
+  CUDAGuard() = default;
     }
     
+    In cuDNN 7, a new function, cudnnRestoreDropoutDescriptor was added, which
+forgoes the expensive initialization process, and can initialize the
+descriptor with a pre-initialized state CUDA tensor.  This is great, because
+it means we can simply pass in the state tensor and then initialize the
+descriptor internally.  Unfortunately, this function is not available in
+cuDNN 6.
     
-    {  if (flags & XhpTrace) {
-    s_profiler_factory->start(ProfilerKind::Trace, flags);
-  } else if (flags & Memo) {
-    flags = 0;  /* flags are not used by MemoProfiler::MemoProfiler */
-    s_profiler_factory->start(ProfilerKind::Memo, flags);
-  } else if (flags & External) {
-    for (ArrayIter iter(args); iter; ++iter) {
-      if (iter.first().toInt32() == 0) {
-         flags = iter.second().toInt32();
+    #include <unordered_map>
+#include <mutex>
+    
+      virtual void cuFFTClearPlanCache() const {
+    AT_ERROR('Cannot access cuFFT plan cache without ATen_cuda library. ', CUDA_HELP);
+  }
+    
+    // Name of function in python module and name used for error messages by
+// at::check* functions.
+const char* cudnn_relu_name = 'cudnn_relu';
+    
+    /*!
+ * \brief protected MXNet C API call, report R error if happens.
+ * \param func Expression to call.
+ */
+#define MX_CALL(func)                                              \
+  {                                                                \
+    int e = (func);                                                \
+    if (e != 0) {                                                  \
+      throw Rcpp::exception(MXGetLastError());                     \
+    }                                                              \
+  }
+/*!
+ * \brief set seed to the random number generator
+ * \param seed the seed to set.
+ */
+void SetSeed(int seed);
+    
+        for (size_t i = 0; i < grad_reqs.size(); ++i) {
+      if (Rcpp::as<std::string>(grad_reqs[i]) != 'null'
+          && Rcpp::as<std::string>(grad_reqs[i]) != 'write'
+          && Rcpp::as<std::string>(grad_reqs[i]) != 'add') {
+        RLOG_FATAL << 'grad_req must be one of 'null', 'write' or 'add'';
       }
     }
-    s_profiler_factory->start(ProfilerKind::External, flags);
-  } else {
-    s_profiler_factory->start(ProfilerKind::Hierarchical, flags);
-  }
-}
-    
-      struct Hash {
-    size_t operator()(Vconst c) const {
-      return
-        std::hash<uint64_t>()(c.val) ^ std::hash<int>()(c.kind) ^ c.isUndef;
-    }
-  };
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    void MemoryManager::resetEagerGC() {
-  if (RuntimeOption::EvalEagerGC && RuntimeOption::EvalFilterGCPoints) {
-    t_surprise_filter.clear();
-  }
-}
-    
-    void OutputImageComponent::Reset(int factor_x, int factor_y) {
-  factor_x_ = factor_x;
-  factor_y_ = factor_y;
-  width_in_blocks_ = (width_ + 8 * factor_x_ - 1) / (8 * factor_x_);
-  height_in_blocks_ = (height_ + 8 * factor_y_ - 1) / (8 * factor_y_);
-  num_blocks_ = width_in_blocks_ * height_in_blocks_;
-  coeffs_ = std::vector<coeff_t>(num_blocks_ * kDCTBlockSize);
-  pixels_ = std::vector<uint16_t>(width_ * height_, 128 << 4);
-  for (int i = 0; i < kDCTBlockSize; ++i) quant_[i] = 1;
-}
-    
-    static const int kCrToRedTable[256] = {
-  -179, -178, -177, -175, -174, -172, -171, -170, -168, -167, -165, -164,
-  -163, -161, -160, -158, -157, -156, -154, -153, -151, -150, -149, -147,
-  -146, -144, -143, -142, -140, -139, -137, -136, -135, -133, -132, -130,
-  -129, -128, -126, -125, -123, -122, -121, -119, -118, -116, -115, -114,
-  -112, -111, -109, -108, -107, -105, -104, -102, -101, -100,  -98,  -97,
-   -95,  -94,  -93,  -91,  -90,  -88,  -87,  -86,  -84,  -83,  -81,  -80,
-   -79,  -77,  -76,  -74,  -73,  -72,  -70,  -69,  -67,  -66,  -64,  -63,
-   -62,  -60,  -59,  -57,  -56,  -55,  -53,  -52,  -50,  -49,  -48,  -46,
-   -45,  -43,  -42,  -41,  -39,  -38,  -36,  -35,  -34,  -32,  -31,  -29,
-   -28,  -27,  -25,  -24,  -22,  -21,  -20,  -18,  -17,  -15,  -14,  -13,
-   -11,  -10,   -8,   -7,   -6,   -4,   -3,   -1,    0,    1,    3,    4,
-     6,    7,    8,   10,   11,   13,   14,   15,   17,   18,   20,   21,
-    22,   24,   25,   27,   28,   29,   31,   32,   34,   35,   36,   38,
-    39,   41,   42,   43,   45,   46,   48,   49,   50,   52,   53,   55,
-    56,   57,   59,   60,   62,   63,   64,   66,   67,   69,   70,   72,
-    73,   74,   76,   77,   79,   80,   81,   83,   84,   86,   87,   88,
-    90,   91,   93,   94,   95,   97,   98,  100,  101,  102,  104,  105,
-   107,  108,  109,  111,  112,  114,  115,  116,  118,  119,  121,  122,
-   123,  125,  126,  128,  129,  130,  132,  133,  135,  136,  137,  139,
-   140,  142,  143,  144,  146,  147,  149,  150,  151,  153,  154,  156,
-   157,  158,  160,  161,  163,  164,  165,  167,  168,  170,  171,  172,
-   174,  175,  177,  178
-};
-    
-    inline int Log2FloorNonZero(uint32_t n) {
-#ifdef __GNUC__
-  return 31 ^ __builtin_clz(n);
-#else
-  unsigned int result = 0;
-  while (n >>= 1) result++;
-  return result;
-#endif
-}
-    
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg) {
-  bool has_Adobe_marker = false;
-  uint8_t Adobe_transform = 0;
-  for (const std::string& app : jpg.app_data) {
-    if (static_cast<uint8_t>(app[0]) == 0xe0) {
-      return true;
-    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
-      has_Adobe_marker = true;
-      Adobe_transform = app[14];
-    }
-  }
-  if (has_Adobe_marker) {
-    return (Adobe_transform != 0);
-  }
-  const int cid0 = jpg.components[0].id;
-  const int cid1 = jpg.components[1].id;
-  const int cid2 = jpg.components[2].id;
-  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
-}
-    
-    #include <stddef.h>
-#include <stdint.h>
-    
-    // Functions for writing a JPEGData object into a jpeg byte stream.
-    
-      // Make a local copy of the input bit length histogram.
-  int count[kJpegHuffmanMaxBitLength + 1] = { 0 };
-  int total_count = 0;
-  for (len = 1; len <= kJpegHuffmanMaxBitLength; ++len) {
-    count[len] = count_in[len];
-    total_count += count[len];
-  }
-    
-    double ButteraugliScoreForQuality(double quality) {
-  if (quality < kLowestQuality) quality = kLowestQuality;
-  if (quality > kHighestQuality) quality = kHighestQuality;
-  int index = static_cast<int>(quality);
-  double mix = quality - index;
-  return kScoreForQuality[index - kLowestQuality] * (1 - mix) +
-      kScoreForQuality[index - kLowestQuality + 1] * mix;
-}
-    
-    // A builder class to build a merging iterator by adding iterators one by one.
-class MergeIteratorBuilder {
- public:
-  // comparator: the comparator used in merging comparator
-  // arena: where the merging iterator needs to be allocated from.
-  explicit MergeIteratorBuilder(const InternalKeyComparator* comparator,
-                                Arena* arena, bool prefix_seek_mode = false);
-  ~MergeIteratorBuilder();
-    }
-    
-    
-    {  InternalIterator* iter_;
-  bool valid_;
-  Slice key_;
-};
-    
-    #include <exception>
-#include <stdexcept>
-    
-    
-    {} // namespace folly
-
     
     
     {
-    {} // namespace detail
-} // namespace folly
-
-    
-      /**
-   * Set all pipes from / to child to be non-blocking.  communicate() does
-   * this for you.
+    {
+    {  /*! \return a new Object that is moved from current one */
+  inline Executor* CreateMoveObject() {
+    Executor *moved = new Executor();
+    *moved = *this;
+    out_arrays_ = nullptr;
+    arg_arrays_ = nullptr;
+    grad_arrays_ = nullptr;
+    aux_arrays_ = nullptr;
+    return moved;
+  }
+  /*!
+   * \brief Clone src into a new space.
+   * \param src source list of arrays to clone.
+   * \return A cloned list of arrays under same context.
    */
-  void setAllNonBlocking();
+  static Rcpp::List CloneArray(const Rcpp::List& src);
+  /*!
+   * \brief Copy arrays from to to
+   * \param array_name The name of the array, used for error message.
+   * \param from source list to copy from.
+   * \param to target list to copy to.
+   * \param match_name whether to use name to match the input, instead of index.
+   * \param skip_null Whether null is allowed, when there is NULL in the array, simply ignore.
+   */
+  static void UpdateArray(const char* array_name,
+                          const Rcpp::List& from, Rcpp::List *to,
+                          bool match_name, bool skip_null);
+  /*! \brief output arrays of Executor */
+  Rcpp::List *out_arrays_;
+  /*! \brief argument arrays of Executor */
+  Rcpp::List *arg_arrays_;
+  /*! \brief gradient arrays of Executor */
+  Rcpp::List *grad_arrays_;
+  /*! \brief auxiliary arrays of Executor */
+  Rcpp::List *aux_arrays_;
+  /*! \brief internal executor handle */
+  ExecutorHandle handle_;
+};
+}  // namespace R
+}  // namespace mxnet
     
-    AbstractBtMessage::AbstractBtMessage(uint8_t id, const char* name)
-    : BtMessage(id),
-      invalidate_(false),
-      uploading_(false),
-      cuid_(0),
-      name_(name),
-      pieceStorage_(nullptr),
-      dispatcher_(nullptr),
-      messageFactory_(nullptr),
-      requestFactory_(nullptr),
-      peerConnection_(nullptr),
-      metadataGetMode_(false)
-{
+    /*!
+ * \brief Resiger a storage and dispatch mode inference function based on
+ *        storage types of the inputs and outputs, and the dev_mask for the operator.
+ *
+ * \note Register under 'FInferStorageType'
+ */
+using FInferStorageType = std::function<bool (const NodeAttrs& attrs,
+                                              const int dev_mask,
+                                              DispatchMode* dispatch_mode,
+                                              std::vector<int>* in_attrs,
+                                              std::vector<int>* out_attrs)>;
+    
+      OpStatePtr GetCachedOpState(const Context& ctx);
+  bool SetForwardGraph(
+      GraphInfo* info,
+      const bool recording,
+      const std::vector<NDArray*>& inputs);
+  bool SetBackwardGraph(
+      GraphInfo* info,
+      const std::vector<OpReqType>& reqs,
+      const std::vector<NDArray*>& inputs,
+      bool detect_inplace_addto = false);
+  OpStatePtr DynamicForward(
+      const Context& default_ctx,
+      const std::vector<NDArray*>& inputs,
+      const std::vector<NDArray*>& outputs);
+  void DynamicBackward(
+      const bool retain_graph,
+      const OpStatePtr& op_state,
+      const std::vector<NDArray*>& inputs,
+      const std::vector<OpReqType>& reqs,
+      const std::vector<NDArray*>& outputs);
+  void StaticAllocMemory(
+      const OpStatePtr& state_ptr,
+      bool recording,
+      bool keep_fwd);
+  void StaticInitExec(
+      const OpStatePtr& state_ptr,
+      bool recording,
+      bool keep_fwd);
+  void StaticRunOps(
+      const Context& default_ctx,
+      const nnvm::Graph& g,
+      const OpStatePtr& state_ptr,
+      const std::vector<NDArray *> &state_arrays,
+      size_t start_nid,
+      size_t end_nid);
+  OpStatePtr StaticForward(
+      const Context& default_ctx,
+      const std::vector<NDArray*>& inputs,
+      const std::vector<NDArray*>& outputs);
+  void StaticBackward(
+      const bool retain_graph,
+      const OpStatePtr& state_ptr,
+      const std::vector<NDArray*>& inputs,
+      const std::vector<OpReqType>& reqs,
+      const std::vector<NDArray*>& outputs);
+    
+            if (!same_lhs_rhs) {
+          rhs_row = Tensor<cpu, 1, DType>(lhs_row.dptr_ + nr_cols, Shape1(nr_cols));
+          OpBase::FillDense<DType>(s, rhs_row.shape_.Size(), DType(0), req, rhs_row.dptr_);
+        } else {
+          rhs_row = lhs_row;
+        }
+    
+    /*! \brief Binary launch, with FComputeEx for prefer dense */
+#define MXNET_OPERATOR_REGISTER_BINARY_WITH_SPARSE_CPU_PD(__name$, __kernel$)              \
+  MXNET_OPERATOR_REGISTER_BINARY(__name$)                                               \
+  .set_attr<FInferStorageType>('FInferStorageType',                                     \
+    ElemwiseBinaryOp::PreferDenseStorageType<true, true, true>)                         \
+  .set_attr<FCompute>('FCompute<cpu>', ElemwiseBinaryOp::Compute<cpu, __kernel$>)       \
+  .set_attr<FComputeEx>('FComputeEx<cpu>', ElemwiseBinaryOp::ComputeEx<cpu, __kernel$>) \
+  .set_attr<FResourceRequest>('FResourceRequest',  /* For Sparse CSR */ \
+    [](const NodeAttrs& attrs) { \
+      return std::vector<ResourceRequest>{ResourceRequest::kTempSpace};})
+    
+    
+    {
+    {
+    {
+    {
+    {          num_threads = mxnet_op::get_num_threads<cpu>(nnr);
+          dim_t seg_len = (nnr + num_threads - 1) / num_threads;
+          if (trans_lhs) {
+            mxnet_op::Kernel<DotCsrTransDnsRspByRowBlocks, cpu>::Launch(s, num_threads,
+              data_out.dptr<DType>(), prefix_sum, row_idx_out, data_l.dptr<DType>(),
+              indptr_l.dptr<IType>(), col_idx_l.dptr<CType>(), data_r.dptr<DType>(),
+              seg_len, lhs.shape()[0], nnr, ret->shape()[1]);
+          } else {
+            LOG(FATAL) << 'DotCsrDnsRspImpl has not implemented dot(csr, dns)=rsp yet.';
+          }
+        });
+      });
+    });
+  });
 }
     
-    class AbstractCommand : public Command {
-private:
-  std::shared_ptr<Request> req_;
-  std::shared_ptr<FileEntry> fileEntry_;
-  std::shared_ptr<SocketCore> socket_;
-  std::shared_ptr<SocketRecvBuffer> socketRecvBuffer_;
-  std::shared_ptr<SocketCore> readCheckTarget_;
-  std::shared_ptr<SocketCore> writeCheckTarget_;
+    
+// Declare enumeration of input order to make code more intuitive.
+// These enums are only visible within this header
+namespace roialign {
+enum ROIAlignOpInputs {kData, kBox};
+enum ROIAlignOpOutputs {kOut};
+}  // roialign
+    
+    bool js_cocos2dx_physics3d_Physics3DWorld_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DWorld_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DWorld(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DWorld_setGravity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_stepSimulate(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_needCollisionChecking(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_collisionChecking(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_setGhostPairCallback(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_init(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_removeAllPhysics3DObjects(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_isDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_removeAllPhysics3DConstraints(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_getGravity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_removePhysics3DConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_addPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_setDebugDrawEnable(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_removePhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_getPhysicsObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_addPhysics3DConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_debugDraw(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_sweepShape(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_Physics3DWorld(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+        argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        int arg0;
     }
     
-      virtual ssize_t readData(unsigned char* data, size_t len,
-                           int64_t offset) CXX11_OVERRIDE;
-    
-    
-    {} // namespace aria2
-    
-      virtual bool finished() CXX11_OVERRIDE;
-    
-    void AnnounceList::resetIterator()
+    extern TestEntry g_testEntries[];
+// This is called when a joint in the world is implicitly destroyed
+// because an attached body is destroyed. This gives us a chance to
+// nullify the mouse joint.
+class DestructionListener : public b2DestructionListener
 {
-  currentTier_ = std::begin(tiers_);
-  if (currentTier_ != std::end(tiers_) && (*currentTier_)->urls.size()) {
-    currentTracker_ = std::begin((*currentTier_)->urls);
-    currentTrackerInitialized_ = true;
-  }
-  else {
-    currentTrackerInitialized_ = false;
-  }
-}
-    
-    namespace aria2 {
+public:
+	void SayGoodbye(b2Fixture* fixture) { B2_NOT_USED(fixture); }
+	void SayGoodbye(b2Joint* joint);
     }
     
     
-    {  virtual std::unique_ptr<DiskWriter>
-  newDiskWriter(const std::string& filename) CXX11_OVERRIDE
-  {
-    return make_unique<DiskWriterType>();
-  }
+    {
+    {			float minX = -6.0f;
+			float maxX = 0.0f;
+			float minY = 4.0f;
+			float maxY = 6.0f;
+			
+			for (int32 i = 0; i < 400; ++i)
+			{
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
+				bd.position = b2Vec2(RandomFloat(minX,maxX),RandomFloat(minY,maxY));
+				b2Body* body = m_world->CreateBody(&bd);
+				body->CreateFixture(&shape, 0.01f);
+			}
+		}
+		
+		{
+			b2PolygonShape shape;
+			shape.SetAsBox(1.5f, 1.5f);
+			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.position.Set(-40.0f,5.0f);
+			bd.bullet = true;
+			b2Body* body = m_world->CreateBody(&bd);
+			body->CreateFixture(&shape, 1.0f);
+			body->SetLinearVelocity(b2Vec2(150.0f, 0.0f));
+		}
+	}
+    
+    	enum
+	{
+		e_count = 30
+	};
+    
+    enum NDK_CRASH_PARSER_STATE {
+    EXPECTS_CRASH_DUMP,
+    EXPECTS_CRASH_DUMP_HEADER,
+    EXPECTS_CRASH_DUMP_CONTENT,
+    EXPECTS_CRASH_DUMP_END,
 };
     
-    #include <ostream>
+    #endif
     
-      // Don't allow copying
-  AuthConfig(const AuthConfig&);
-  AuthConfig& operator=(const AuthConfig&);
-    
-    #endif // D_AUTH_RESOLVER_H
-
-    
-      YGNodeCalculateLayout(root, 200, 100, YGDirectionLTR);
-    
-     public:
-    
-    #include <fb/assert.h>
-#include <fb/log.h>
-    
-    #pragma once
-#include <functional>
-#include <string>
-#include <jni.h>
-    
-      const char* functionName() const { return m_functionName; }
-  const char* fileName() const { return m_fileName; }
-  int lineNumber() const { return m_lineNumber; }
-    
-    // Reference counting smart pointer. This is designed to work with the
-// Countable class or other implementations in the future. It is designed in a
-// way to be both efficient and difficult to misuse. Typical usage is very
-// simple once you learn the patterns (and the compiler will help!):
-//
-// By default, the internal pointer is null.
-//   RefPtr<Foo> ref;
-//
-// Object creation requires explicit construction:
-//   RefPtr<Foo> ref = createNew<Foo>(...);
-//
-// Or if the constructor is not public:
-//   RefPtr<Foo> ref = adoptRef(new Foo(...));
-//
-// But you can implicitly create from nullptr:
-//   RefPtr<Foo> maybeRef = cond ? ref : nullptr;
-//
-// Move/Copy Construction/Assignment are straightforward:
-//   RefPtr<Foo> ref2 = ref;
-//   ref = std::move(ref2);
-//
-// Destruction automatically drops the RefPtr's reference as expected.
-//
-// Upcasting is implicit but downcasting requires an explicit cast:
-//   struct Bar : public Foo {};
-//   RefPtr<Bar> barRef = static_cast<RefPtr<Bar>>(ref);
-//   ref = barRef;
-//
-template <class T>
-class RefPtr {
-public:
-  constexpr RefPtr() :
-    m_ptr(nullptr)
-  {}
+        void RemoveSpy(void* _this) {
+        m_thismap.erase(_this);
     }
