@@ -1,127 +1,83 @@
 
         
-        The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-    
-      if (m_eof_flag)
-    return;
+        #if GOOGLE_CUDA
     
     
-    {}
-
+    {  return call;
+}
     
-    const uint8_t Javelin::Data::BITSCALE_8_TO_5_FLOOR[256] = {
- 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
- 1, 1, 1, 1, 1, 1, 1, 2, 2, 2,
- 2, 2, 2, 2, 2, 3, 3, 3, 3, 3,
- 3, 3, 3, 4, 4, 4, 4, 4, 4, 4,
- 4, 4, 5, 5, 5, 5, 5, 5, 5, 5,
- 6, 6, 6, 6, 6, 6, 6, 6, 7, 7,
- 7, 7, 7, 7, 7, 7, 8, 8, 8, 8,
- 8, 8, 8, 8, 8, 9, 9, 9, 9, 9,
- 9, 9, 9, 10, 10, 10, 10, 10, 10, 10,
- 10, 11, 11, 11, 11, 11, 11, 11, 11, 12,
- 12, 12, 12, 12, 12, 12, 12, 13, 13, 13,
- 13, 13, 13, 13, 13, 13, 14, 14, 14, 14,
- 14, 14, 14, 14, 15, 15, 15, 15, 15, 15,
- 15, 15, 16, 16, 16, 16, 16, 16, 16, 16,
- 17, 17, 17, 17, 17, 17, 17, 17, 17, 18,
- 18, 18, 18, 18, 18, 18, 18, 19, 19, 19,
- 19, 19, 19, 19, 19, 20, 20, 20, 20, 20,
- 20, 20, 20, 21, 21, 21, 21, 21, 21, 21,
- 21, 22, 22, 22, 22, 22, 22, 22, 22, 22,
- 23, 23, 23, 23, 23, 23, 23, 23, 24, 24,
- 24, 24, 24, 24, 24, 24, 25, 25, 25, 25,
- 25, 25, 25, 25, 26, 26, 26, 26, 26, 26,
- 26, 26, 26, 27, 27, 27, 27, 27, 27, 27,
- 27, 28, 28, 28, 28, 28, 28, 28, 28, 29,
- 29, 29, 29, 29, 29, 29, 29, 30, 30, 30,
- 30, 30, 30, 30, 30, 31};
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    #endif
-
+      // RPC handler for deleting a session.
+  void CloseSessionHandler(
+      MasterCall<CloseSessionRequest, CloseSessionResponse>* call) {
+    master_impl_->CloseSession(&call->request, &call->response,
+                               [call](const Status& status) {
+                                 call->SendResponse(ToGrpcStatus(status));
+                               });
+    ENQUEUE_REQUEST(CloseSession, false);
+  }
     
-    /// The Redis functionality (see http://redis.io/commands#list)
-/// All functions may THROW a RedisListException
-class RedisLists {
- public: // Constructors / Destructors
-  /// Construct a new RedisLists database, with name/path of db.
-  /// Will clear the database on open iff destructive is true (default false).
-  /// Otherwise, it will restore saved changes.
-  /// May throw RedisListException
-  RedisLists(const std::string& db_path,
-             Options options, bool destructive = false);
+    #include 'tensorflow/core/distributed_runtime/partial_run_mgr.h'
+    
+      partial_run_mgr_.PartialRunDone(step_id,
+                                  [this](Status status) { set_status(status); },
+                                  param.partial_run_status);
+  partial_run_mgr_.ExecutorDone(step_id, param.executor_status);
+    
+    class TFRecordReader : public ReaderBase {
+ public:
+  TFRecordReader(const string& node_name, const string& compression_type,
+                 Env* env)
+      : ReaderBase(strings::StrCat('TFRecordReader '', node_name, ''')),
+        env_(env),
+        offset_(0),
+        compression_type_(compression_type) {}
     }
     
-      // Returns the next active logfile number when this memtable is about to
-  // be flushed to storage
-  // REQUIRES: external synchronization to prevent simultaneous
-  // operations on the same MemTable.
-  uint64_t GetNextLogNumber() { return mem_next_logfile_number_; }
+    extern JSClass  *jsb_cocosbuilder_CCBReader_class;
+extern JSObject *jsb_cocosbuilder_CCBReader_prototype;
     
-    #include 'db/dbformat.h'
-#include 'rocksdb/types.h'
-    
-    #ifndef JAVA_ROCKSJNI_COMPACTION_FILTER_FACTORY_JNICALLBACK_H_
-#define JAVA_ROCKSJNI_COMPACTION_FILTER_FACTORY_JNICALLBACK_H_
-    
-    
-    {  m_jFindShortSuccessorMethodId =
-    AbstractComparatorJni::getFindShortSuccessorMethodId(env);
-  if(m_jFindShortSuccessorMethodId == nullptr) {
-    // exception thrown: NoSuchMethodException or OutOfMemoryError
-    return;
-  }
+    #ifdef __cplusplus
+extern 'C' {
+#endif
+#include 'tolua++.h'
+#ifdef __cplusplus
 }
-    
-    // Assume that for everywhere
-#undef PLATFORM_IS_LITTLE_ENDIAN
-#define PLATFORM_IS_LITTLE_ENDIAN true
-    
-    struct HistogramData {
-  double median;
-  double percentile95;
-  double percentile99;
-  double average;
-  double standard_deviation;
-  // zero-initialize new members since old Statistics::histogramData()
-  // implementations won't write them.
-  double max = 0.0;
-  uint64_t count = 0;
-  uint64_t sum = 0;
-};
-    
-    void AbstractOptionHandler::updateFlags(int flag, bool val)
-{
-  if (val) {
-    flags_ |= flag;
-  }
-  else {
-    flags_ &= ~flag;
-  }
-}
+#endif
     
     
-    {
-    {    httpConnection_->sendProxyRequest(std::move(httpRequest));
-  }
-  else {
-    httpConnection_->sendPendingData();
-  }
-  if (httpConnection_->sendBufferIsEmpty()) {
-    getDownloadEngine()->addCommand(getNextCommand());
-    return true;
-  }
-  else {
-    setWriteCheckSocket(getSocket());
-    addCommandSelf();
-    return false;
-  }
-}
+    
+        CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(2,vertexCount*2);
+    
+    #define	RAND_LIMIT	32767
+#define DRAW_STRING_NEW_LINE 25
+    
+    				b2Vec2 anchor(-15.0f + 2.0f * i, 15.0f);
+				jd.Initialize(prevBody, body, anchor);
+				m_world->CreateJoint(&jd);
+    
+        // Setup display size (every frame to accommodate for window resizing)
+    int w, h;
+    w = al_get_display_width(g_Display);
+    h = al_get_display_height(g_Display);
+    io.DisplaySize = ImVec2((float)w, (float)h);
+    
+        // Setup back-end capabilities flags
+    ImGuiIO& io = ImGui::GetIO();
+    io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;         // We can honor GetMouseCursor() values (optional)
+    io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;          // We can honor io.WantSetMousePos requests (optional, rarely used)
+    
+    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
+
     
     
-    {} // namespace aria2
-    
-      virtual int64_t getCurrentLength() CXX11_OVERRIDE;
-    
-    #include 'common.h'
+    {        glfwMakeContextCurrent(window);
+        glfwSwapBuffers(window);
+    }
