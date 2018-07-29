@@ -1,452 +1,397 @@
 
         
-        #include 'tensorflow/core/kernels/cwise_ops_gpu_common.cu.h'
-    
-    template <typename Device, typename T>
-struct Reverse<Device, T, 0> {
-  void operator()(const Device& d, typename TTypes<T, 0>::ConstTensor input,
-                  const Eigen::array<bool, 0>& reverse_dims,
-                  typename TTypes<T, 0>::Tensor output) {
-    // Reversing a scalar is copying it.
-    output.device(d) = input;
-  }
-};
-    
-    /*
- *  Class:     org_tensorflow_lite_NativeInterpreterWrapper
- *  Method:
- *  Signature: (Ljava/lang/Object;J)J
- */
-JNIEXPORT jlong JNICALL
-Java_org_tensorflow_lite_NativeInterpreterWrapper_createModelWithBuffer(
-    JNIEnv* env, jclass clazz, jobject model_buffer, jlong error_handle);
-    
-    void PartialRunMgr::ExecutorDone(int step_id, const Status& executor_status) {
-  StatusCallback done;
-  Status callback_status;
-  {
-    mutex_lock l(mu_);
-    auto run_it = step_id_to_partial_run_.find(step_id);
-    if (run_it == step_id_to_partial_run_.end()) {
-      return;
-    }
-    // If we found the partial_run, we call the final callback, if it
-    // exists.
-    // It is guaranteed that run_it->second->final_callback is left empty
-    // after the std::move call.
-    done = std::move(run_it->second->final_callback);
-    if (!executor_status.ok()) {
-      run_it->second->final_status = executor_status;
-    }
-    callback_status = run_it->second->final_status;
-    run_it->second->executor_done = true;
-  }
-  if (done != nullptr) {
-    done(callback_status);
-    mutex_lock l(mu_);
-    step_id_to_partial_run_.erase(step_id);
-  }
-}
-    
-      CancellationManager* cancellation_manager;
-  partial_run_mgr_.FindOrCreate(step_id, &cancellation_manager);
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    void SYCLDeviceContext::CopyCPUTensorToDevice(const Tensor *cpu_tensor,
-                                              Device *device,
-                                              Tensor *device_tensor,
-                                              StatusCallback done) const {
-  const int64 total_bytes = cpu_tensor->TotalBytes();
-  if (total_bytes > 0) {
-    const void *src_ptr = DMAHelper::base(cpu_tensor);
-    void *dst_ptr = DMAHelper::base(device_tensor);
-    switch (cpu_tensor->dtype()) {
-      case DT_FLOAT:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_DOUBLE:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<double *>(dst_ptr),
-            static_cast<const double *>(src_ptr), total_bytes);
-        break;
-      case DT_INT32:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT64:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_HALF:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<Eigen::half *>(dst_ptr),
-            static_cast<const Eigen::half *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX64:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<std::complex<float> *>(dst_ptr),
-            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX128:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<std::complex<double> *>(dst_ptr),
-            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
-        break;
-      case DT_INT8:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT16:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT8:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT16:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<uint16 *>(dst_ptr),
-            static_cast<const uint16 *>(src_ptr), total_bytes);
-        break;
-      case DT_BOOL:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
-            total_bytes);
-        break;
-      default:
-        assert(false && 'unsupported type');
-    }
-  }
-  device->eigen_sycl_device()->synchronize();
-  done(Status::OK());
-}
-    
-      void CopyCPUTensorToDevice(const Tensor *cpu_tensor, Device *device,
-                             Tensor *device_tensor,
-                             StatusCallback done) const override;
-    
-    # define TEST_P(test_case_name, test_name) \
-  class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) \
-      : public test_case_name { \
-   public: \
-    GTEST_TEST_CLASS_NAME_(test_case_name, test_name)() {} \
-    virtual void TestBody(); \
-   private: \
-    static int AddToRegistry() { \
-      ::testing::UnitTest::GetInstance()->parameterized_test_registry(). \
-          GetTestCasePatternHolder<test_case_name>(\
-              #test_case_name, __FILE__, __LINE__)->AddTestPattern(\
-                  #test_case_name, \
-                  #test_name, \
-                  new ::testing::internal::TestMetaFactory< \
-                      GTEST_TEST_CLASS_NAME_(test_case_name, test_name)>()); \
-      return 0; \
-    } \
-    static int gtest_registering_dummy_; \
-    GTEST_DISALLOW_COPY_AND_ASSIGN_(\
-        GTEST_TEST_CLASS_NAME_(test_case_name, test_name)); \
-  }; \
-  int GTEST_TEST_CLASS_NAME_(test_case_name, \
-                             test_name)::gtest_registering_dummy_ = \
-      GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::AddToRegistry(); \
-  void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()
-    
-    INSTANTIATE_TEST_CASE_P(InstantiationName,
-                        FooTest,
-                        Values('meeny', 'miny', 'moe'));
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-          typename T6, typename T7, typename T8, typename T9>
-void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9>& t,
-             ::std::ostream* os) {
-  PrintTupleTo(t, os);
-}
-    
-      const InterceptMode intercept_mode_;
-  TestPartResultReporterInterface* old_reporter_;
-  TestPartResultArray* const result_;
-    
-    class GTEST_API_ FilePath {
- public:
-  FilePath() : pathname_('') { }
-  FilePath(const FilePath& rhs) : pathname_(rhs.pathname_) { }
-    }
-    
-    namespace internal {
-    }
-    
-      // Many linked_ptr operations may change p.link_ for some linked_ptr
-  // variable p in the same circle as this object.  Therefore we need
-  // to prevent two such operations from occurring concurrently.
-  //
-  // Note that different types of linked_ptr objects can coexist in a
-  // circle (e.g. linked_ptr<Base>, linked_ptr<Derived1>, and
-  // linked_ptr<Derived2>).  Therefore we must use a single mutex to
-  // protect all linked_ptr objects.  This can create serious
-  // contention in production code, but is acceptable in a testing
-  // framework.
-    
-    // GTEST_n_TYPENAMES_(T) declares a list of n typenames.
-    
-      // Now, we have that n is odd and n >= 3.
-    
-    
-    {  int initially_allocated_;
-};
-    
-    // Step 3. Call RUN_ALL_TESTS() in main().
-//
-// We do this by linking in src/gtest_main.cc file, which consists of
-// a main() function which calls RUN_ALL_TESTS() for us.
-//
-// This runs all the tests you've defined, prints the result, and
-// returns 0 if successful, or 1 otherwise.
-//
-// Did you notice that we didn't register the tests?  The
-// RUN_ALL_TESTS() macro magically knows about all the tests we
-// defined.  Isn't this convenient?
-
-    
-    #ifndef TESSERACT_CCSTRUCT_OCRPARA_H_
-#define TESSERACT_CCSTRUCT_OCRPARA_H_
-    
-    #include 'unichar.h'
-#include 'errcode.h'
-#include 'genericvector.h'
-#include 'tprintf.h'
-    
-    const char *kUTF8LineSeparator = '\u2028';  // '\xe2\x80\xa8';
-const char *kUTF8ParagraphSeparator = '\u2029';  // '\xe2\x80\xa9';
-const char *kLRM = '\u200E';  // Left-to-Right Mark
-const char *kRLM = '\u200F';  // Right-to-Left Mark
-const char *kRLE = '\u202A';  // Right-to-Left Embedding
-const char *kPDF = '\u202C';  // Pop Directional Formatting
-    
-    // After deleting some features, finish setting up the mapping, and map
-// all the samples. Returns the size of the compacted feature space.
-int IntFeatureMap::FinalizeMapping(SampleIterator* it) {
-  if (mapping_changed_) {
-    feature_map_.CompleteMerges();
-    compact_size_ = feature_map_.CompactSize();
-#ifdef EXPERIMENT_ON
-    it->MapSampleFeatures(*this);
+        
+    {#if GOOGLE_CUDA
+// A special GPU kernel for int32.
+// TODO(b/25387198): Also enable int32 in device memory. This kernel
+// registration requires all int32 inputs and outputs to be in host memory.
+REGISTER_KERNEL_BUILDER(Name('Mod')
+                            .Device(DEVICE_GPU)
+                            .HostMemory('x')
+                            .HostMemory('y')
+                            .HostMemory('z')
+                            .TypeConstraint<int32>('T'),
+                        BinaryOp<CPUDevice, functor::safe_mod<int32>>);
+REGISTER_KERNEL_BUILDER(Name('TruncateMod')
+                            .Device(DEVICE_GPU)
+                            .HostMemory('x')
+                            .HostMemory('y')
+                            .HostMemory('z')
+                            .TypeConstraint<int32>('T'),
+                        BinaryOp<CPUDevice, functor::safe_mod<int32>>);
 #endif
-    mapping_changed_ = false;
-  }
-  return compact_size_;
-}
-    
-      // Helper computes min and mean best results in the output.
-  void OutputStats(const NetworkIO& outputs,
-                   float* min_output, float* mean_output, float* sd);
-  // Recognizes the image_data, returning the labels,
-  // scores, and corresponding pairs of start, end x-coords in coords.
-  // Returned in scale_factor is the reduction factor
-  // between the image and the output coords, for computing bounding boxes.
-  // If re_invert is true, the input is inverted back to its original
-  // photometric interpretation if inversion is attempted but fails to
-  // improve the results. This ensures that outputs contains the correct
-  // forward outputs for the best photometric interpretation.
-  // inputs is filled with the used inputs to the network.
-  bool RecognizeLine(const ImageData& image_data, bool invert, bool debug,
-                     bool re_invert, bool upside_down, float* scale_factor,
-                     NetworkIO* inputs, NetworkIO* outputs);
-    
-      // Set the equation detection pointer.
-  void SetEquationDetect(EquationDetectBase* detect);
-    
-    
-    {  if (colour == ScrollView::RED || colour == ScrollView::BLUE) {
-    looplength = loop_bounding_box (start, botleft, topright);
-    outline = new C_OUTLINE (start, botleft, topright, looplength);
-                                 //add to list
-    outline_it->add_after_then_move (outline);
-  }
-}
-    
-    using namespace torch::nn;
-using namespace torch::detail;
-    
-      virtual ~OptimizerBase() = default;
-    
-      THPObjectPtr args;
-  std::ostringstream oss;
-  oss << self->device.type();
-  if (self->device.has_index()) {
-    args = THPObjectPtr{Py_BuildValue('(si)', oss.str().c_str(), self->device.index())};
-  } else {
-    args = THPObjectPtr{Py_BuildValue('(s)', oss.str().c_str())};
-  }
-  if (!args) throw python_error();
-  PyTuple_SET_ITEM(ret.get(), 1, args.release());
-    
-        // Extract max keypoints and probabilities from heatmaps
-    for (int j = 0; j < keypoint_count; j++) {
-      const int heatmap_index = k * keypoint_count + j;
-      const int maxIndex = maxIndices[heatmap_index];
-      const float maxScore = maxScores[heatmap_index];
-      const int maxY = maxIndex / heatmap_size;
-      const int maxX = maxIndex - heatmap_size * maxY;
-    }
-    
-      void IncrementByte(int offset, int delta) {
-    dest_.contents_[offset] += delta;
-  }
-    
-    TEST(MemEnvTest, LargeWrite) {
-  const size_t kWriteSize = 300 * 1024;
-  char* scratch = new char[kWriteSize * 2];
-    }
-    
-    void Footer::EncodeTo(std::string* dst) const {
-  const size_t original_size = dst->size();
-  metaindex_handle_.EncodeTo(dst);
-  index_handle_.EncodeTo(dst);
-  dst->resize(2 * BlockHandle::kMaxEncodedLength);  // Padding
-  PutFixed32(dst, static_cast<uint32_t>(kTableMagicNumber & 0xffffffffu));
-  PutFixed32(dst, static_cast<uint32_t>(kTableMagicNumber >> 32));
-  assert(dst->size() == original_size + kEncodedLength);
-  (void)original_size;  // Disable unused variable warning.
-}
-    
-      void Build() {
-    std::vector<Slice> key_slices;
-    for (size_t i = 0; i < keys_.size(); i++) {
-      key_slices.push_back(Slice(keys_[i]));
-    }
-    filter_.clear();
-    policy_->CreateFilter(&key_slices[0], static_cast<int>(key_slices.size()),
-                          &filter_);
-    keys_.clear();
-    if (kVerbose >= 2) DumpFilter();
-  }
-    
-    double Histogram::Percentile(double p) const {
-  double threshold = num_ * (p / 100.0);
-  double sum = 0;
-  for (int b = 0; b < kNumBuckets; b++) {
-    sum += buckets_[b];
-    if (sum >= threshold) {
-      // Scale linearly within this bucket
-      double left_point = (b == 0) ? 0 : kBucketLimit[b-1];
-      double right_point = kBucketLimit[b];
-      double left_sum = sum - buckets_[b];
-      double right_sum = sum;
-      double pos = (threshold - left_sum) / (right_sum - left_sum);
-      double r = left_point + (right_point - left_point) * pos;
-      if (r < min_) r = min_;
-      if (r > max_) r = max_;
-      return r;
-    }
-  }
-  return max_;
-}
-    
-    void DBIter::SeekToLast() {
-  direction_ = kReverse;
-  ClearSavedValue();
-  iter_->SeekToLast();
-  FindPrevUserEntry();
-}
-    
-    Writer::Writer(WritableFile* dest, uint64_t dest_length)
-    : dest_(dest), block_offset_(dest_length % kBlockSize) {
-  InitTypeCrc(type_crc_);
-}
-    
-    /**
- * @brief Iterate the discovered decorators for a given point type.
- *
- * The configuration maintains various sources, each may contain a set of
- * decorators. The source tracking is abstracted for the decorator iterator.
- *
- * @param point request execution of decorators for this given point.
- * @param time an optional time for points using intervals.
- * @param source restrict run to a specific config source.
- */
-void runDecorators(DecorationPoint point,
-                   size_t time = 0,
-                   const std::string& source = '');
-    
-    TEST_F(PermissionsTests, test_functional_drop) {
-  if (getuid() != 0) {
-    LOG(WARNING) << 'Not root, skipping (explicit) unprivileged testing';
-    return;
-  }
-    }
-    
-    #include 'osquery/core/utils.h'
-#include 'osquery/tests/test_util.h'
-    
-    
-    {  BSTR* pData = nullptr;
-  SafeArrayAccessData(value.parray, (void**)&pData);
-  ret.reserve(count);
-  for (long i = 0; i < count; i++) {
-    ret.push_back(bstrToString(pData[i]));
-  }
-  SafeArrayUnaccessData(value.parray);
-  VariantClear(&value);
-  return Status(0);
-}
-    
-    /// Handle a maximum of 10 events before request another lock.
-static const int kKernelEventsIterate = 10;
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    #include 'platform_comm.h'
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    #endif /* defined(COMM_COMM_FREQUENCY_LIMIT_H_) */
+}  // namespace tensorflow
 
     
-    namespace design_patterns {
+    #include 'tensorflow/core/lib/gtl/array_slice.h'
+#include 'tensorflow/core/lib/gtl/inlined_vector.h'
+    
+      HloComputation::Builder builder(TestName());
+  HloInstruction* param0 = builder.AddInstruction(
+      HloInstruction::CreateParameter(0, input_shape, 'activiation'));
+    
+    template <typename T>
+class ArgMaxOpModel : public ArgBaseOpModel<T> {
+ public:
+  ArgMaxOpModel(std::initializer_list<int> input_shape, TensorType input_type,
+                TensorType output_type, TensorType index_output_type)
+      : ArgBaseOpModel<T>(input_shape, input_type, output_type,
+                          index_output_type) {
+    ArgBaseOpModel<T>::SetBuiltinOp(
+        BuiltinOperator_ARG_MAX, BuiltinOptions_ArgMaxOptions,
+        CreateArgMaxOptions(ArgBaseOpModel<T>::builder_, index_output_type)
+            .Union());
+    ArgBaseOpModel<T>::BuildInterpreter({input_shape, {1, 1, 1, 1}});
+  }
+};
+    
+      // Compute the intersection with another slice and if 'result' is not
+  // nullptr, store the results in *result; returns true if there is any real
+  // intersection.
+  bool Intersect(const TensorSlice& other, TensorSlice* result) const;
+  // A short hand.
+  bool Overlaps(const TensorSlice& other) const {
+    return Intersect(other, nullptr);
+  }
+    
+    // REGISTER_OP_GRADIENT('Prod', ProdGrad);
+// REGISTER_OP_GRADIENT('SegmentSum', SegmentSumGrad);
+// REGISTER_OP_GRADIENT('SegmentMean', SegmentMeanGrad);
+// REGISTER_OP_GRADIENT('SparseSegmentSum', SparseSegmentSumGrad);
+// REGISTER_OP_GRADIENT('SparseSegmentMean', SparseSegmentMeanGrad);
+// REGISTER_OP_GRADIENT('SparseSegmentSqrtN', SparseSegmentSqrtNGrad);
+// REGISTER_OP_GRADIENT('SegmentMin', SegmentMinGrad);
+// REGISTER_OP_GRADIENT('SegmentMax', SegmentMaxGrad);
+// REGISTER_OP_GRADIENT('UnsortedSegmentSum', UnsortedSegmentSumGrad);
+// REGISTER_OP_GRADIENT('UnsortedSegmentMax', UnsortedSegmentMaxGrad);
+    
+    #include 'db/filename.h'
+#include 'db/dbformat.h'
+#include 'db/table_cache.h'
+#include 'db/version_edit.h'
+#include 'leveldb/db.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
+    
+    namespace leveldb {
     }
     
-    #include 'comm/debugger/test_spy_sample.h'
-#include 'comm/xlogger/xlogger.h'
+      ValueType value_type = kTypeDeletion;
+  if (iter_->Valid()) {
+    do {
+      ParsedInternalKey ikey;
+      if (ParseKey(&ikey) && ikey.sequence <= sequence_) {
+        if ((value_type != kTypeDeletion) &&
+            user_comparator_->Compare(ikey.user_key, saved_key_) < 0) {
+          // We encountered a non-deleted value in entries for previous keys,
+          break;
+        }
+        value_type = ikey.type;
+        if (value_type == kTypeDeletion) {
+          saved_key_.clear();
+          ClearSavedValue();
+        } else {
+          Slice raw_value = iter_->value();
+          if (saved_value_.capacity() > raw_value.size() + 1048576) {
+            std::string empty;
+            swap(empty, saved_value_);
+          }
+          SaveKey(ExtractUserKey(iter_->key()), &saved_key_);
+          saved_value_.assign(raw_value.data(), raw_value.size());
+        }
+      }
+      iter_->Prev();
+    } while (iter_->Valid());
+  }
     
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+    void InternalFilterPolicy::CreateFilter(const Slice* keys, int n,
+                                        std::string* dst) const {
+  // We rely on the fact that the code in table.cc does not mind us
+  // adjusting keys[].
+  Slice* mkey = const_cast<Slice*>(keys);
+  for (int i = 0; i < n; i++) {
+    mkey[i] = ExtractUserKey(keys[i]);
+    // TODO(sanjay): Suppress dups?
+  }
+  user_policy_->CreateFilter(keys, n, dst);
+}
     
-    #define DEFINE_HAS_MEMBER(member_name) \
-    template <typename T>\
-    class has_##member_name {\
-      private:\
-        struct yes_type { char x[1]; };\
-        struct no_type { char x[2]; };\
-        template <int> struct tester;\
-        template <typename U> static yes_type test(tester<sizeof(&U::member_name)>*);\
-        template <typename U> static no_type test(...);\
-      public:\
-        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
-    };
+    static std::string IKey(const std::string& user_key,
+                        uint64_t seq,
+                        ValueType vt) {
+  std::string encoded;
+  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
+  return encoded;
+}
+    
+    #include <stdio.h>
+#include 'db/dbformat.h'
+#include 'db/filename.h'
+#include 'db/log_reader.h'
+#include 'db/version_edit.h'
+#include 'db/write_batch_internal.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
+#include 'leveldb/options.h'
+#include 'leveldb/status.h'
+#include 'leveldb/table.h'
+#include 'leveldb/write_batch.h'
+#include 'util/logging.h'
+    
+    // Make the CURRENT file point to the descriptor file with the
+// specified number.
+extern Status SetCurrentFile(Env* env, const std::string& dbname,
+                             uint64_t descriptor_number);
+    
+    Status TableCache::FindTable(uint64_t file_number, uint64_t file_size,
+                             Cache::Handle** handle) {
+  Status s;
+  char buf[sizeof(file_number)];
+  EncodeFixed64(buf, file_number);
+  Slice key(buf, sizeof(buf));
+  *handle = cache_->Lookup(key);
+  if (*handle == NULL) {
+    std::string fname = TableFileName(dbname_, file_number);
+    RandomAccessFile* file = NULL;
+    Table* table = NULL;
+    s = env_->NewRandomAccessFile(fname, &file);
+    if (!s.ok()) {
+      std::string old_fname = SSTTableFileName(dbname_, file_number);
+      if (env_->NewRandomAccessFile(old_fname, &file).ok()) {
+        s = Status::OK();
+      }
+    }
+    if (s.ok()) {
+      s = Table::Open(*options_, file, file_size, &table);
+    }
+    }
+    }
+    
+    #include 'db/memtable.h'
+#include 'db/write_batch_internal.h'
+#include 'leveldb/env.h'
+#include 'util/logging.h'
+#include 'util/testharness.h'
+    
+    // Returns a new environment that stores its data in memory and delegates
+// all non-file-storage tasks to base_env. The caller must delete the result
+// when it is no longer needed.
+// *base_env must remain live while the result is in use.
+Env* NewMemEnv(Env* base_env);
+    
+    #include 'test/cpp/qps/report.h'
+    
+    /* Writes request data from |buffer| of |buffer_length| length. If auto flush is
+ * disabled, data will be sent only after bidirectional_stream_flush() is
+ * called.
+ * Each call will result in an invocation the callback's on_write_completed()
+ * method if data is sent, or its on_failed() method if there's an error.
+ * The callback's on_succeeded() method is also invoked if |end_of_stream| is
+ * set and all response data has been read.
+ */
+GRPC_SUPPORT_EXPORT
+int bidirectional_stream_write(bidirectional_stream* stream,
+                               const char* buffer,
+                               int buffer_length,
+                               bool end_of_stream);
+    
+    namespace grpc {
+namespace testing {
+    }
+    }
+    
+    // A simple parser for the json db file. It requires the db file to have the
+// exact form of [{'location': { 'latitude': 123, 'longitude': 456}, 'name':
+// 'the name can be empty' }, { ... } ... The spaces will be stripped.
+class Parser {
+ public:
+  explicit Parser(const std::string& db) : db_(db) {
+    // Remove all spaces.
+    db_.erase(
+        std::remove_if(db_.begin(), db_.end(), isspace),
+        db_.end());
+    if (!Match('[')) {
+      SetFailedAndReturnFalse();
+    }
+  }
+    }
+    
+    #include 'src/compiler/config.h'
+#include 'src/compiler/schema_interface.h'
+    
+    UsageTimer::Result UsageTimer::Sample() {
+  Result r;
+  r.wall = Now();
+  get_resource_usage(&r.user, &r.system);
+  r.total_cpu_time = 0;
+  r.idle_cpu_time = 0;
+  get_cpu_usage(&r.total_cpu_time, &r.idle_cpu_time);
+  return r;
+}
+    
+      // Create a QpsGauge with name 'name'. is_present is set to true if the Gauge
+  // is already present in the map.
+  // NOTE: CreateQpsGauge can be called anytime (i.e before or after calling
+  // StartServer).
+  std::shared_ptr<QpsGauge> CreateQpsGauge(const grpc::string& name,
+                                           bool* already_present);
+    
+    void CoreStatsToProto(const grpc_stats_data& core, Stats* proto) {
+  for (int i = 0; i < GRPC_STATS_COUNTER_COUNT; i++) {
+    Metric* m = proto->add_metrics();
+    m->set_name(grpc_stats_counter_name[i]);
+    m->set_count(core.counters[i]);
+  }
+  for (int i = 0; i < GRPC_STATS_HISTOGRAM_COUNT; i++) {
+    Metric* m = proto->add_metrics();
+    m->set_name(grpc_stats_histogram_name[i]);
+    Histogram* h = m->mutable_histogram();
+    for (int j = 0; j < grpc_stats_histo_buckets[i]; j++) {
+      Bucket* b = h->add_buckets();
+      b->set_start(grpc_stats_histo_bucket_boundaries[i][j]);
+      b->set_count(core.histograms[grpc_stats_histo_start[i] + j]);
+    }
+  }
+}
+    
+      VersionEdit edit;
+  for (int i = 0; i < 4; i++) {
+    TestEncodeDecode(edit);
+    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
+                 InternalKey('foo', kBig + 500 + i, kTypeValue),
+                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
+    edit.DeleteFile(4, kBig + 700 + i);
+    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
+  }
+    
+    namespace leveldb {
+    }
+    
+    void BlockBuilder::Reset() {
+  buffer_.clear();
+  restarts_.clear();
+  restarts_.push_back(0);       // First restart point is at offset 0
+  counter_ = 0;
+  finished_ = false;
+  last_key_.clear();
+}
+    
+    
+    { private:
+  const FilterPolicy* policy_;
+  const char* data_;    // Pointer to filter data (at block-start)
+  const char* offset_;  // Pointer to beginning of offset array (at block-end)
+  size_t num_;          // Number of entries in offset array
+  size_t base_lg_;      // Encoding parameter (see kFilterBaseLg in .cc file)
+};
+    
+    
+    {}  // namespace leveldb
+    
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
+  }
+}
+    
+      // When user keys are different, but correctly ordered
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('hello', 200, kTypeValue)));
+    
+    static void Usage() {
+  fprintf(
+      stderr,
+      'Usage: leveldbutil command...\n'
+      '   dump files...         -- dump contents of specified files\n'
+      );
+}
+    
+    // Returns the next Huffman-coded symbol.
+int ReadSymbol(const HuffmanTableEntry* table, BitReaderState* br) {
+  int nbits;
+  br->FillBitWindow();
+  int val = (br->val_ >> (br->bits_left_ - 8)) & 0xff;
+  table += val;
+  nbits = table->bits - 8;
+  if (nbits > 0) {
+    br->bits_left_ -= 8;
+    table += table->value;
+    val = (br->val_ >> (br->bits_left_ - nbits)) & ((1 << nbits) - 1);
+    table += val;
+  }
+  br->bits_left_ -= table->bits;
+  return table->value;
+}
+    
+    size_t EstimateJpegDataSize(const int num_components,
+                            const std::vector<JpegHistogram>& histograms) {
+  assert(histograms.size() == 2 * num_components);
+  std::vector<JpegHistogram> clustered = histograms;
+  size_t num_dc = num_components;
+  size_t num_ac = num_components;
+  int indexes[kMaxComponents];
+  uint8_t depth[kMaxComponents * JpegHistogram::kSize];
+  return (ClusterHistograms(&clustered[0], &num_dc, indexes, depth) +
+          ClusterHistograms(&clustered[num_components], &num_ac, indexes,
+                            depth));
+}
+    
+    // kDCTMatrix[8*u+x] = 0.5*alpha(u)*cos((2*x+1)*u*M_PI/16),
+// where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
+static const double kDCTMatrix[64] = {
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.4903926402,  0.4157348062,  0.2777851165,  0.0975451610,
+ -0.0975451610, -0.2777851165, -0.4157348062, -0.4903926402,
+  0.4619397663,  0.1913417162, -0.1913417162, -0.4619397663,
+ -0.4619397663, -0.1913417162,  0.1913417162,  0.4619397663,
+  0.4157348062, -0.0975451610, -0.4903926402, -0.2777851165,
+  0.2777851165,  0.4903926402,  0.0975451610, -0.4157348062,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.2777851165, -0.4903926402,  0.0975451610,  0.4157348062,
+ -0.4157348062, -0.0975451610,  0.4903926402, -0.2777851165,
+  0.1913417162, -0.4619397663,  0.4619397663, -0.1913417162,
+ -0.1913417162,  0.4619397663, -0.4619397663,  0.1913417162,
+  0.0975451610, -0.2777851165,  0.4157348062, -0.4903926402,
+  0.4903926402, -0.4157348062,  0.2777851165, -0.0975451610,
+};
+    
+    namespace guetzli {
+    }
+    
+    
+    {}  // namespace guetzli
+    
+    const double* Srgb8ToLinearTable() {
+  static const double* const kSrgb8ToLinearTable = NewSrgb8ToLinearTable();
+  return kSrgb8ToLinearTable;
+}
+    
+    namespace guetzli {
+    }
+    
+    namespace guetzli {
+    }
+    
+    #include <stddef.h>
+#include <stdint.h>
+    
+    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
+std::vector<std::vector<float>> PreProcessChannel(
+    int w, int h, int channel, float sigma, float amount, bool blur,
+    bool sharpen, const std::vector<std::vector<float>>& image);
