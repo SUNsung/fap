@@ -1,76 +1,108 @@
 
         
-        from twisted import version as _txv
-twisted_version = (_txv.major, _txv.minor, _txv.micro)
+                .. versionadded:: 0.11
+        '''
+        rv = {}
+        for k, v in iteritems(self):
+            if not k.startswith(namespace):
+                continue
+            if trim_namespace:
+                key = k[len(namespace):]
+            else:
+                key = k
+            if lowercase:
+                key = key.lower()
+            rv[key] = v
+        return rv
     
-            return key
+    signals_available = False
+try:
+    from blinker import Namespace
+    signals_available = True
+except ImportError:
+    class Namespace(object):
+        def signal(self, name, doc=None):
+            return _FakeSignal(name, doc)
     
-    import logging
-from twisted.internet import defer
-import six
-from scrapy.exceptions import NotSupported, NotConfigured
-from scrapy.utils.httpobj import urlparse_cached
-from scrapy.utils.misc import load_object
-from scrapy.utils.python import without_none_values
-from scrapy import signals
+        #: The canonical way to decorate class-based views is to decorate the
+    #: return value of as_view().  However since this moves parts of the
+    #: logic from the class declaration to the place where it's hooked
+    #: into the routing system.
+    #:
+    #: You can place one or more decorators in this list and whenever the
+    #: view function is created the result is automatically decorated.
+    #:
+    #: .. versionadded:: 0.8
+    decorators = ()
     
-            # If no credentials could be found anywhere,
-        # consider this an anonymous connection request by default;
-        # unless 'anon' was set explicitly (True/False).
-        anon = kw.get('anon')
-        if anon is None and not aws_access_key_id and not aws_secret_access_key:
-            kw['anon'] = True
-        self.anon = kw.get('anon')
+    import numpy as np
+import keras
+from keras.datasets import reuters
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.preprocessing.text import Tokenizer
     
-        def _format_cookie(self, cookie):
-        # build cookie string
-        cookie_str = '%s=%s' % (cookie['name'], cookie['value'])
+            x = np.random.random((1,) + shape)
     
+    See lstm_seq2seq.py for more details on the model architecture and how
+it is trained.
+'''
+from __future__ import print_function
     
-class DecompressionMiddleware(object):
-    ''' This middleware tries to recognise and extract the possibly compressed
-    responses that may arrive. '''
+    At least 20 epochs are required before the generated text
+starts sounding coherent.
+    
+                    layer = convolutional_recurrent.ConvLSTM2D(**kwargs)
+                layer.build(inputs.shape)
+                assert len(layer.losses) == 3
+                assert layer.activity_regularizer
+                output = layer(K.variable(np.ones(inputs.shape)))
+                assert len(layer.losses) == 4
+                K.eval(output)
+    
+    - RNNs are tricky. Choice of batch size is important,
+choice of loss and optimizer is critical, etc.
+Some configurations won't converge.
+    
+        def _send_switchover_response(self):
+        return 'send switchover response'
     
         @classmethod
-    def from_crawler(cls, crawler):
-        o = cls(crawler.settings.getfloat('DOWNLOAD_TIMEOUT'))
-        crawler.signals.connect(o.spider_opened, signal=signals.spider_opened)
-        return o
+    def __get_test_directory(self):
+        '''
+        Get the temporary directory for the tests.
+        '''
+        self.test_dir = os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), 'test_command')
     
-            if self.close_on.get('errorcount'):
-            crawler.signals.connect(self.error_count, signal=signals.spider_error)
-        if self.close_on.get('pagecount'):
-            crawler.signals.connect(self.page_count, signal=signals.response_received)
-        if self.close_on.get('timeout'):
-            crawler.signals.connect(self.spider_opened, signal=signals.spider_opened)
-        if self.close_on.get('itemcount'):
-            crawler.signals.connect(self.item_scraped, signal=signals.item_scraped)
-        crawler.signals.connect(self.spider_closed, signal=signals.spider_closed)
+        def test_sales_manager_shall_not_respond_through_proxy_with_delay(cls):
+        cls.ntp.busy = 'Yes'
+        start_time = time()
+        cls.ntp.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+This Sales Manager will not talk to you whether he/she is busy or not\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+
     
-        def test_b_observers_shall_be_attachable(cls):
-        cls.s.attach(cls.dec_obs)
-        cls.assertEqual(isinstance(cls.s._observers[0], DecimalViewer), True)
-        cls.assertEqual(len(cls.s._observers), 1)
-        cls.s.attach(cls.hex_obs)
-        cls.assertEqual(isinstance(cls.s._observers[1], HexViewer), True)
-        cls.assertEqual(len(cls.s._observers), 2)
+        def test_bear_eng_localization(self):
+        self.assertEqual(self.e.get('bear'), 'bear')
     
-        def get_current_time_as_html_fragment(self, time_provider):
-        current_time = time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
+        def test_shall_toggle_from_am_to_fm(self):
+        self.radio.toggle_amfm()
+        state = self.radio.state.name
+        expected_state_name = 'FM'
+        self.assertEqual(state, expected_state_name)
     
-        def __init__(self, param):
+    print('Counting to five...')
+for number in count_to_five():
+    print(number, end=' ')
     
     '''
-http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
-Implementation of the iterator pattern with a generator
+@author: Gordeev Andrey <gordeev.and.and@gmail.com>
     
-    from __future__ import print_function
-    
-    
-# Test our radio out
-if __name__ == '__main__':
-    radio = Radio()
-    actions = [radio.scan] * 2 + [radio.toggle_amfm] + [radio.scan] * 2
-    actions *= 2
+        '''Base state. This is to share functionality'''
