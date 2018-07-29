@@ -1,245 +1,212 @@
 
         
-        IPC_SYNC_MESSAGE_ROUTED3_1(ShellViewHostMsg_Call_Static_Method_Sync,
-                           std::string /* type name */,
-                           std::string /* method name */,
-                           base::ListValue /* arguments */,
-                           base::ListValue /* result */)
+        struct Options;
+struct FileMetaData;
     
-    class ObjectManager;
+    void DBIter::SeekToFirst() {
+  direction_ = kForward;
+  ClearSavedValue();
+  iter_->SeekToFirst();
+  if (iter_->Valid()) {
+    FindNextUserEntry(false, &saved_key_ /* temporary storage */);
+  } else {
+    valid_ = false;
+  }
+}
     
-    class EventListener : public Base {
-  std::map<int, BaseEvent*> listerners_;
-    }
+    typedef uint64_t SequenceNumber;
+    
+    TableCache::~TableCache() {
+  delete cache_;
+}
     
     
-    {  // ExtensionFunction:
-  ResponseAction Run() override;
-  DECLARE_EXTENSION_FUNCTION('nw.App.closeAllWindows', UNKNOWN)
+    {  edit.SetComparatorName('foo');
+  edit.SetLogNumber(kBig + 100);
+  edit.SetNextFile(kBig + 200);
+  edit.SetLastSequence(kBig + 1000);
+  TestEncodeDecode(edit);
+}
+    
+    
+    {
+    {  virtual void Put(const Slice& key, const Slice& value) {
+    mem_->Add(sequence_, kTypeValue, key, value);
+    sequence_++;
+  }
+  virtual void Delete(const Slice& key) {
+    mem_->Add(sequence_, kTypeDeletion, key, Slice());
+    sequence_++;
+  }
 };
+}  // namespace
     
-    namespace extensions {
-    }
+    // Return a new filter policy that uses a bloom filter with approximately
+// the specified number of bits per key.  A good value for bits_per_key
+// is 10, which yields a filter with ~ 1% false positive rate.
+//
+// Callers must delete the result after any database that is using the
+// result has been closed.
+//
+// Note: if you are using a custom comparator that ignores some parts
+// of the keys being compared, you must not use NewBloomFilterPolicy()
+// and must provide your own FilterPolicy that also ignores the
+// corresponding parts of the keys.  For example, if the comparator
+// ignores trailing spaces, it would be incorrect to use a
+// FilterPolicy (like NewBloomFilterPolicy) that does not ignore
+// trailing spaces in keys.
+extern const FilterPolicy* NewBloomFilterPolicy(int bits_per_key);
     
-    
-    {    private:
-      DISALLOW_COPY_AND_ASSIGN(NwScreenGetScreensFunction);      
-  };
-    
-      void Transform(const Datum& datum, Dtype* transformed_data);
-  // Tranformation parameters
-  TransformationParameter param_;
-    
-    /**
- * @brief Convolves the input image with a bank of learned filters,
- *        and (optionally) adds biases.
- *
- *   Caffe convolves by reduction to matrix multiplication. This achieves
- *   high-throughput and generality of input and filter dimensions but comes at
- *   the cost of memory for matrices. This makes use of efficiency in BLAS.
- *
- *   The input is 'im2col' transformed to a channel K' x H x W data matrix
- *   for multiplication with the N x K' x H x W filter matrix to yield a
- *   N' x H x W output matrix that is then 'col2im' restored. K' is the
- *   input channel * kernel height * kernel width dimension of the unrolled
- *   inputs so that the im2col matrix has a column for each input region to
- *   be filtered. col2im restores the output spatial structure by rolling up
- *   the output channel N' columns of the output matrix.
- */
-template <typename Dtype>
-class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
- public:
-  /**
-   * @param param provides ConvolutionParameter convolution_param,
-   *    with ConvolutionLayer options:
-   *  - num_output. The number of filters.
-   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
-   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
-   *  filters.
-   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
-   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
-   *  for different strides. By default the convolution is dense with stride 1.
-   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
-   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
-   *  different padding. Input padding is computed implicitly instead of
-   *  actually padding.
-   *  - dilation (\b optional, default 1). The filter
-   *  dilation, given by dilation_size for equal dimensions for different
-   *  dilation. By default the convolution has dilation 1.
-   *  - group (\b optional, default 1). The number of filter groups. Group
-   *  convolution is a method for reducing parameterization by selectively
-   *  connecting input and output channels. The input and output channel dimensions must be divisible
-   *  by the number of groups. For group @f$ \geq 1 @f$, the
-   *  convolutional filters' input and output channels are separated s.t. each
-   *  group takes 1 / group of the input channels and makes 1 / group of the
-   *  output channels. Concretely 4 input channels, 8 output channels, and
-   *  2 groups separate input channels 1-2 and output channels 1-4 into the
-   *  first group and input channels 3-4 and output channels 5-8 into the second
-   *  group.
-   *  - bias_term (\b optional, default true). Whether to have a bias.
-   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
-   *    kernels + stream parallelism) engines.
-   */
-  explicit ConvolutionLayer(const LayerParameter& param)
-      : BaseConvolutionLayer<Dtype>(param) {}
-    }
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    /**
- * @brief Convolve the input with a bank of learned filters, and (optionally)
- *        add biases, treating filters and convolution parameters in the
- *        opposite sense as ConvolutionLayer.
- *
- *   ConvolutionLayer computes each output value by dotting an input window with
- *   a filter; DeconvolutionLayer multiplies each input value by a filter
- *   elementwise, and sums over the resulting output windows. In other words,
- *   DeconvolutionLayer is ConvolutionLayer with the forward and backward passes
- *   reversed. DeconvolutionLayer reuses ConvolutionParameter for its
- *   parameters, but they take the opposite sense as in ConvolutionLayer (so
- *   padding is removed from the output rather than added to the input, and
- *   stride results in upsampling rather than downsampling).
- */
-template <typename Dtype>
-class DeconvolutionLayer : public BaseConvolutionLayer<Dtype> {
- public:
-  explicit DeconvolutionLayer(const LayerParameter& param)
-      : BaseConvolutionLayer<Dtype>(param) {}
-    }
-    
-    /**
- * @brief Computes @f$ y = \gamma ^ {\alpha x + \beta} @f$,
- *        as specified by the scale @f$ \alpha @f$, shift @f$ \beta @f$,
- *        and base @f$ \gamma @f$.
- */
-template <typename Dtype>
-class ExpLayer : public NeuronLayer<Dtype> {
- public:
-  /**
-   * @param param provides ExpParameter exp_param,
-   *     with ExpLayer options:
-   *   - scale (\b optional, default 1) the scale @f$ \alpha @f$
-   *   - shift (\b optional, default 0) the shift @f$ \beta @f$
-   *   - base (\b optional, default -1 for a value of @f$ e \approx 2.718 @f$)
-   *         the base @f$ \gamma @f$
-   */
-  explicit ExpLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    inline void RowSet::Save(dmlc::Stream* fo) const {
-  fo->Write(rows_);
-  fo->Write(&size_, sizeof(size_));
-}
-    
-    void SimpleCSRSource::CopyFrom(dmlc::Parser<uint32_t>* parser) {
-  // use qid to get group info
-  const uint64_t default_max = std::numeric_limits<uint64_t>::max();
-  uint64_t last_group_id = default_max;
-  bst_uint group_size = 0;
-  this->Clear();
-  while (parser->Next()) {
-    const dmlc::RowBlock<uint32_t>& batch = parser->Value();
-    if (batch.label != nullptr) {
-      info.labels_.insert(info.labels_.end(), batch.label, batch.label + batch.size);
-    }
-    if (batch.weight != nullptr) {
-      info.weights_.insert(info.weights_.end(), batch.weight, batch.weight + batch.size);
-    }
-    if (batch.qid != nullptr) {
-      info.qids_.insert(info.qids_.end(), batch.qid, batch.qid + batch.size);
-      // get group
-      for (size_t i = 0; i < batch.size; ++i) {
-        const uint64_t cur_group_id = batch.qid[i];
-        if (last_group_id == default_max || last_group_id != cur_group_id) {
-          info.group_ptr_.push_back(group_size);
-        }
-        last_group_id = cur_group_id;
-        ++group_size;
-      }
-    }
-    }
-    }
-    
-    
-    {
-    {
-    {      // Test write Symbol
-      std::vector<unsigned char> buffer2(
-        CompressedBufferWriter::CalculateBufferSize(input.size(),
-          alphabet_size));
-      for (int i = 0; i < input.size(); i++) {
-        cbw.WriteSymbol(buffer2.data(), input[i], i);
-      }
-      CompressedIterator<int> ci2(buffer.data(), alphabet_size);
-      std::vector<int> output2(input.size());
-      for (int i = 0; i < input.size(); i++) {
-        output2[i] = ci2[i];
-      }
-      ASSERT_TRUE(input == output2);
-    }
-  }
+    inline bool operator!=(const Slice& x, const Slice& y) {
+  return !(x == y);
 }
     
     
     {
-    {    std::ostringstream oss;
-    std::copy(line.begin() + options_index,
-              line.end(),
-              std::ostream_iterator<std::string>(oss, ' '));
-    r['options'] = oss.str();
-    results.push_back(r);
-  }
-}
-    
-    TEST_F(ProcessTests, test_envVar) {
-  auto val = getEnvVar('GTEST_OSQUERY');
-  EXPECT_FALSE(val);
-  EXPECT_FALSE(val.is_initialized());
-    }
-    
-    Status WmiResultItem::GetUChar(const std::string& name,
-                               unsigned char& ret) const {
-  std::wstring property_name = stringToWstring(name);
-  VARIANT value;
-  HRESULT hr = result_->Get(property_name.c_str(), 0, &value, nullptr, nullptr);
-  if (hr != S_OK) {
-    return Status(-1, 'Error retrieving data from WMI query.');
-  }
-  if (value.vt != VT_UI1) {
-    VariantClear(&value);
-    return Status(-1, 'Invalid data type returned.');
-  }
-  ret = value.bVal;
-  VariantClear(&value);
-  return Status(0);
-}
-    
-    
-    {/**
- * @brief Generate a row string for query results
- *
- * @param r A row to analyze
- * @param lengths The data returned from computeQueryDataLengths
- * @param columns The order of the keys (since maps are unordered)
- *
- * @return A string, with a newline, representing your row
- */
-std::string generateRow(const Row& r,
-                        const std::map<std::string, size_t>& lengths,
-                        const std::vector<std::string>& columns);
-}
+    {class ConstBufferCursor : public detail::CursorBase<const Tensor> {
+ public:
+  explicit ConstBufferCursor(const Module& module);
+  /* implicit */ ConstBufferCursor(const BufferCursor& cursor);
+};
+} // namespace nn
+} // namespace torch
 
     
-    namespace facebook {
-namespace alog {
+    #include <torch/nn/cursor.h>
+#include <torch/tensor.h>
+    
+    #endif
+
+    
+    #include 'generic/utils.cpp'
+#include <TH/THGenerateHalfType.h>
+    
+    static PyObject * THPWrapper_pynew(PyTypeObject *type, PyObject *args, PyObject *kwargs)
+{
+  PyObject* self = type->tp_alloc(type, 0);
+  THPWrapper* wrapper = (THPWrapper*) self;
+  wrapper->data = NULL;
+  wrapper->destructor = NULL;
+  return self;
+}
+    
+    namespace 
+{
+    // Glyph metrics:
+    // --------------
+    //
+    //                       xmin                     xmax
+    //                        |                         |
+    //                        |<-------- width -------->|
+    //                        |                         |
+    //              |         +-------------------------+----------------- ymax
+    //              |         |    ggggggggg   ggggg    |     ^        ^
+    //              |         |   g:::::::::ggg::::g    |     |        |
+    //              |         |  g:::::::::::::::::g    |     |        |
+    //              |         | g::::::ggggg::::::gg    |     |        |
+    //              |         | g:::::g     g:::::g     |     |        |
+    //    offsetX  -|-------->| g:::::g     g:::::g     |  offsetY     |
+    //              |         | g:::::g     g:::::g     |     |        |
+    //              |         | g::::::g    g:::::g     |     |        |
+    //              |         | g:::::::ggggg:::::g     |     |        |
+    //              |         |  g::::::::::::::::g     |     |      height
+    //              |         |   gg::::::::::::::g     |     |        |
+    //  baseline ---*---------|---- gggggggg::::::g-----*--------      |
+    //            / |         |             g:::::g     |              |
+    //     origin   |         | gggggg      g:::::g     |              |
+    //              |         | g:::::gg   gg:::::g     |              |
+    //              |         |  g::::::ggg:::::::g     |              |
+    //              |         |   gg:::::::::::::g      |              |
+    //              |         |     ggg::::::ggg        |              |
+    //              |         |         gggggg          |              v
+    //              |         +-------------------------+----------------- ymin
+    //              |                                   |
+    //              |------------- advanceX ----------->|
+    }
+    
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'CIwTexture*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+    
+            // Start the Dear ImGui frame
+        ImGui_Marmalade_NewFrame();
+        ImGui::NewFrame();
+    
+    
+    {    // Restore modified DX state
+    ctx->RSSetScissorRects(old.ScissorRectsCount, old.ScissorRects);
+    ctx->RSSetViewports(old.ViewportsCount, old.Viewports);
+    ctx->RSSetState(old.RS); if (old.RS) old.RS->Release();
+    ctx->OMSetBlendState(old.BlendState, old.BlendFactor, old.SampleMask); if (old.BlendState) old.BlendState->Release();
+    ctx->OMSetDepthStencilState(old.DepthStencilState, old.StencilRef); if (old.DepthStencilState) old.DepthStencilState->Release();
+    ctx->PSSetShaderResources(0, 1, &old.PSShaderResource); if (old.PSShaderResource) old.PSShaderResource->Release();
+    ctx->PSSetSamplers(0, 1, &old.PSSampler); if (old.PSSampler) old.PSSampler->Release();
+    ctx->PSSetShader(old.PS, old.PSInstances, old.PSInstancesCount); if (old.PS) old.PS->Release();
+    for (UINT i = 0; i < old.PSInstancesCount; i++) if (old.PSInstances[i]) old.PSInstances[i]->Release();
+    ctx->VSSetShader(old.VS, old.VSInstances, old.VSInstancesCount); if (old.VS) old.VS->Release();
+    ctx->VSSetConstantBuffers(0, 1, &old.VSConstantBuffer); if (old.VSConstantBuffer) old.VSConstantBuffer->Release();
+    for (UINT i = 0; i < old.VSInstancesCount; i++) if (old.VSInstances[i]) old.VSInstances[i]->Release();
+    ctx->IASetPrimitiveTopology(old.PrimitiveTopology);
+    ctx->IASetIndexBuffer(old.IndexBuffer, old.IndexBufferFormat, old.IndexBufferOffset); if (old.IndexBuffer) old.IndexBuffer->Release();
+    ctx->IASetVertexBuffers(0, 1, &old.VertexBuffer, &old.VertexBufferStride, &old.VertexBufferOffset); if (old.VertexBuffer) old.VertexBuffer->Release();
+    ctx->IASetInputLayout(old.InputLayout); if (old.InputLayout) old.InputLayout->Release();
+}
+    
+        bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    
+      if (!args[0]->IsString() || !args[1]->IsString()) {
+    return scope.Close(Boolean::New(false));
+  }
+    
+    JniCallback::~JniCallback() {
+  jboolean attached_thread = JNI_FALSE;
+  JNIEnv* env = getJniEnv(&attached_thread);
+  assert(env != nullptr);
+    }
+    
+      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
+    if (type >= HISTOGRAM_ENUM_MAX) {
+      return false;
+    }
+    
+    if (m_ignore_histograms.count(type) > 0) {
+        return false;
     }
     }
     
-    FBEXPORT void assertInternal(const char* formatstr, ...) __attribute__((noreturn));
+      jboolean attached_thread = JNI_FALSE;
+  JNIEnv* env = getJniEnv(&attached_thread);
+  assert(env != nullptr);
+    
+    struct ComparatorJniCallbackOptions {
+  // Use adaptive mutex, which spins in the user space before resorting
+  // to kernel. This could reduce context switch when the mutex is not
+  // heavily contended. However, if the mutex is hot, we could end up
+  // wasting spin time.
+  // Default: false
+  bool use_adaptive_mutex;
+    }
+    
+         using Logger::SetInfoLogLevel;
+     using Logger::GetInfoLogLevel;
+     // Write an entry to the log file with the specified format.
+     virtual void Logv(const char* format, va_list ap);
+     // Write an entry to the log file with the specified log level
+     // and format.  Any log with level under the internal log level
+     // of *this (see @SetInfoLogLevel and @GetInfoLogLevel) will not be
+     // printed.
+     virtual void Logv(const InfoLogLevel log_level,
+         const char* format, va_list ap);
+    
+      struct SyncPointPair {
+    std::string predecessor;
+    std::string successor;
+  };
+    
+      // If supported, renew the iterator to represent the latest state. The
+  // iterator will be invalidated after the call. Not supported if
+  // ReadOptions.snapshot is given when creating the iterator.
+  virtual Status Refresh() {
+    return Status::NotSupported('Refresh() is not supported');
+  }
