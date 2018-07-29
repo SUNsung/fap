@@ -1,186 +1,452 @@
 
         
-        
-    {  DraggableRegion();
-};
-    
-      // Sent when a global error has changed and the error UI should update it
-  // self. The source is a Source<Profile> containing the profile for the
-  // error. The detail is a GlobalError object that has changed or NULL if
-  // all error UIs should update.
-  NOTIFICATION_GLOBAL_ERRORS_CHANGED,
-    
-    #include 'content/public/browser/web_contents_observer.h'
-#include 'ui/gfx/native_widget_types.h'
-    
-    #include 'chrome/common/chrome_constants.h'
-    
-    std::unique_ptr<ScenarioResult> RunScenario(
-    const grpc::testing::ClientConfig& client_config, size_t num_clients,
-    const grpc::testing::ServerConfig& server_config, size_t num_servers,
-    int warmup_seconds, int benchmark_seconds, int spawn_local_worker_count,
-    const grpc::string& qps_server_target_override,
-    const grpc::string& credential_type, bool run_inproc);
-    
-    #include <grpc/support/log.h>
-    
-    // Tucks all generator state in an anonymous namespace away from
-// PythonGrpcGenerator and the header file, mostly to encourage future changes
-// to not require updates to the grpcio-tools C++ code part. Assumes that it is
-// only ever used from a single thread.
-struct PrivateGenerator {
-  const GeneratorConfiguration& config;
-  const grpc_generator::File* file;
+            TableBuilder* builder = new TableBuilder(options, file);
+    meta->smallest.DecodeFrom(iter->key());
+    for (; iter->Valid(); iter->Next()) {
+      Slice key = iter->key();
+      meta->largest.DecodeFrom(key);
+      builder->Add(key, iter->value());
     }
     
-    #ifndef TEST_QPS_USAGE_TIMER_H
-#define TEST_QPS_USAGE_TIMER_H
-    
-    TEST(LogTest, MarginalTrailer) {
-  // Make a trailer that is exactly the same length as an empty record.
-  const int n = kBlockSize - 2*kHeaderSize;
-  Write(BigString('foo', n));
-  ASSERT_EQ(kBlockSize - kHeaderSize, WrittenBytes());
-  Write('');
-  Write('bar');
-  ASSERT_EQ(BigString('foo', n), Read());
-  ASSERT_EQ('', Read());
-  ASSERT_EQ('bar', Read());
-  ASSERT_EQ('EOF', Read());
+    void DBIter::FindNextUserEntry(bool skipping, std::string* skip) {
+  // Loop until we hit an acceptable entry to yield
+  assert(iter_->Valid());
+  assert(direction_ == kForward);
+  do {
+    ParsedInternalKey ikey;
+    if (ParseKey(&ikey) && ikey.sequence <= sequence_) {
+      switch (ikey.type) {
+        case kTypeDeletion:
+          // Arrange to skip all upcoming entries for this key since
+          // they are hidden by this deletion.
+          SaveKey(ikey.user_key, skip);
+          skipping = true;
+          break;
+        case kTypeValue:
+          if (skipping &&
+              user_comparator_->Compare(ikey.user_key, *skip) <= 0) {
+            // Entry hidden
+          } else {
+            valid_ = true;
+            saved_key_.clear();
+            return;
+          }
+          break;
+      }
+    }
+    iter_->Next();
+  } while (iter_->Valid());
+  saved_key_.clear();
+  valid_ = false;
 }
     
-      VersionEdit edit;
-  for (int i = 0; i < 4; i++) {
-    TestEncodeDecode(edit);
-    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
-                 InternalKey('foo', kBig + 500 + i, kTypeValue),
-                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
-    edit.DeleteFile(4, kBig + 700 + i);
-    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
-  }
+     private:
+  // We construct a char array of the form:
+  //    klength  varint32               <-- start_
+  //    userkey  char[klength]          <-- kstart_
+  //    tag      uint64
+  //                                    <-- end_
+  // The array is a suitable MemTable key.
+  // The suffix starting with 'userkey' can be used as an InternalKey.
+  const char* start_;
+  const char* kstart_;
+  const char* end_;
+  char space_[200];      // Avoid allocation for short keys
     
-    
-    {  // Pick up remaining bytes
-  switch (limit - data) {
-    case 3:
-      h += static_cast<unsigned char>(data[2]) << 16;
-      FALLTHROUGH_INTENDED;
-    case 2:
-      h += static_cast<unsigned char>(data[1]) << 8;
-      FALLTHROUGH_INTENDED;
-    case 1:
-      h += static_cast<unsigned char>(data[0]);
-      h *= m;
-      h ^= (h >> r);
-      break;
-  }
-  return h;
+    Status DumpDescriptor(Env* env, const std::string& fname, WritableFile* dst) {
+  return PrintLogContents(env, fname, VersionEditPrinter, dst);
 }
     
-      // Read until size drops significantly.
-  std::string limit_key = Key(n);
-  for (int read = 0; true; read++) {
-    ASSERT_LT(read, 100) << 'Taking too long to compact';
-    Iterator* iter = db_->NewIterator(ReadOptions());
-    for (iter->SeekToFirst();
-         iter->Valid() && iter->key().ToString() < limit_key;
-         iter->Next()) {
-      // Drop data
-    }
-    delete iter;
-    // Wait a little bit to allow any triggered compactions to complete.
-    Env::Default()->SleepForMicroseconds(1000000);
-    uint64_t size = Size(Key(0), Key(n));
-    fprintf(stderr, 'iter %3d => %7.3f MB [other %7.3f MB]\n',
-            read+1, size/1048576.0, Size(Key(n), Key(kCount))/1048576.0);
-    if (size <= initial_size/10) {
-      break;
-    }
-  }
+    // Return the name of a temporary file owned by the db named 'dbname'.
+// The result will be prefixed with 'dbname'.
+extern std::string TempFileName(const std::string& dbname, uint64_t number);
+    
+    void VersionEdit::Clear() {
+  comparator_.clear();
+  log_number_ = 0;
+  prev_log_number_ = 0;
+  last_sequence_ = 0;
+  next_file_number_ = 0;
+  has_comparator_ = false;
+  has_log_number_ = false;
+  has_prev_log_number_ = false;
+  has_next_file_number_ = false;
+  has_last_sequence_ = false;
+  deleted_files_.clear();
+  new_files_.clear();
+}
+    
+      // Return the name of this policy.  Note that if the filter encoding
+  // changes in an incompatible way, the name returned by this method
+  // must be changed.  Otherwise, old incompatible filters may be
+  // passed to methods of this type.
+  virtual const char* Name() const = 0;
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12>
+internal::ValueArray12<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+    T12> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+    T10 v10, T11 v11, T12 v12) {
+  return internal::ValueArray12<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12);
+}
+    
+    // Overload for C arrays.  Multi-dimensional arrays are printed
+// properly.
     
     
-    {  // No copying allowed
-  Writer(const Writer&);
-  void operator=(const Writer&);
+    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(HasNewFatalFailureHelper);
 };
     
-      // Returns an estimate of the current (uncompressed) size of the block
-  // we are building.
-  size_t CurrentSizeEstimate() const;
     
-    bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
-              JPEGData* jpg) {
-  size_t pos = 0;
-  // Check SOI marker.
-  EXPECT_MARKER();
-  int marker = data[pos + 1];
-  pos += 2;
-  if (marker != 0xd8) {
-    fprintf(stderr, 'Did not find expected SOI marker, actual=%d\n', marker);
-    jpg->error = JPEG_SOI_NOT_FOUND;
+    {
+    {}  // namespace internal
+}  // namespace testing
+    
+      // Returns true iff n is a prime number.
+  virtual bool IsPrime(int n) const = 0;
+    
+    #include 'sample1.h'
+    
+    
+    { private:
+  static int allocated_;
+};
+    
+      /// Return true if we are processing the full image.
+  bool IsFullImage() const {
+    return rect_left_ == 0 && rect_top_ == 0 &&
+           rect_width_ == image_width_ && rect_height_ == image_height_;
+  }
+    
+    // Converts a utf-8 string to a vector of unicodes.
+// Returns an empty vector if the input contains invalid UTF-8.
+/* static */
+std::vector<char32> UNICHAR::UTF8ToUTF32(const char* utf8_str) {
+  const int utf8_length = strlen(utf8_str);
+  std::vector<char32> unicodes;
+  unicodes.reserve(utf8_length);
+  const_iterator end_it(end(utf8_str, utf8_length));
+  for (const_iterator it(begin(utf8_str, utf8_length)); it != end_it; ++it) {
+    if (it.is_legal()) {
+      unicodes.push_back(*it);
+    } else {
+      unicodes.clear();
+      return unicodes;
+    }
+  }
+  return unicodes;
+}
+    
+    void IntFeatureMap::Clear() {
+  for (int dir = 0; dir < kNumOffsetMaps; ++dir) {
+    delete [] offset_plus_[dir];
+    delete [] offset_minus_[dir];
+    offset_plus_[dir] = nullptr;
+    offset_minus_[dir] = nullptr;
+  }
+}
+    
+      // Runs a hierarchical agglomerative clustering to merge shapes in the given
+  // shape_table, while satisfying the given constraints:
+  // * End with at least min_shapes left in shape_table,
+  // * No shape shall have more than max_shape_unichars in it,
+  // * Don't merge shapes where the distance between them exceeds max_dist.
+  void ClusterShapes(int min_shapes, int max_shape_unichars,
+                     float max_dist, ShapeTable* shape_table);
+    
+    #endif  // TESSERACT_CLASSIFY_SAMPLEITERATOR_H_
+
+    
+     private:
+  // Computes matrix.vector v = Wu.
+  // u is of size starts.back()+extents.back() and the output v is of size
+  // starts.size().
+  // The weight matrix w, is of size starts.size()xMAX(extents)+add_bias_fwd.
+  // If add_bias_fwd, an extra element at the end of w[i] is the bias weight
+  // and is added to v[i].
+  static void MatrixDotVectorInternal(const GENERIC_2D_ARRAY<double>& w,
+                                      bool add_bias_fwd, bool skip_bias_back,
+                                      const double* u, double* v);
+    
+    // The CCNonTextDetect class contains grid-based operations on blobs to create
+// a full-resolution image mask analogous yet complementary to
+// pixGenHalftoneMask as it is better at line-drawings, graphs and charts.
+class CCNonTextDetect : public BlobGrid {
+ public:
+  CCNonTextDetect(int gridsize, const ICOORD& bleft, const ICOORD& tright);
+  virtual ~CCNonTextDetect();
+    }
+    
+    #endif
+
+    
+      // Returns true if the blob appears to be outside of a horizontal textline.
+  // Such blobs are potentially diacritics (even if large in Thai) and should
+  // be kept away from initial textline finding.
+  bool BoxOutOfHTextline(const TBOX& box, const DENORM* denorm,
+                        bool debug) const;
+    
+      // Memory management
+  // Note: only destructible (non-default) streams are ref counted
+  bool CUDAStream_retain(CUDAStreamInternals* ptr) {
+    AT_ASSERT(ptr);
+    if (ptr->is_destructible) return(++ptr->refcount > 1);
+    return true;
+  }
+    
+    struct DynamicCUDAInterfaceSetter {
+  DynamicCUDAInterfaceSetter() {
+    using at::detail::DynamicCUDAInterface;
+    DynamicCUDAInterface::set_device = set_device;
+    DynamicCUDAInterface::get_device = get_device;
+    DynamicCUDAInterface::unchecked_set_device = unchecked_set_device;
+  }
+};
+    
+    
+    {  auto dataType = getCudnnDataType(*theta);
+  SpatialTransformerDescriptor desc;
+  setSamplerDescriptor(desc, dataType, N, C, H, W);
+  AT_CUDNN_CHECK(cudnnSpatialTfGridGeneratorForward(getCudnnHandle(), desc.desc(),
+                                                 theta->data_ptr(),
+                                                 grid_t.data_ptr()));
+  return grid_t;
+}
+    
+    #endif
+
+    
+    bool ProcessScan(const uint8_t* data, const size_t len,
+                 const std::vector<HuffmanTableEntry>& dc_huff_lut,
+                 const std::vector<HuffmanTableEntry>& ac_huff_lut,
+                 uint16_t scan_progression[kMaxComponents][kDCTBlockSize],
+                 bool is_progressive,
+                 size_t* pos,
+                 JPEGData* jpg) {
+  if (!ProcessSOS(data, len, pos, jpg)) {
     return false;
   }
-  int lut_size = kMaxHuffmanTables * kJpegHuffmanLutSize;
-  std::vector<HuffmanTableEntry> dc_huff_lut(lut_size);
-  std::vector<HuffmanTableEntry> ac_huff_lut(lut_size);
-  bool found_sof = false;
-  uint16_t scan_progression[kMaxComponents][kDCTBlockSize] = { { 0 } };
+  JPEGScanInfo* scan_info = &jpg->scan_info.back();
+  bool is_interleaved = (scan_info->components.size() > 1);
+  int MCUs_per_row;
+  int MCU_rows;
+  if (is_interleaved) {
+    MCUs_per_row = jpg->MCU_cols;
+    MCU_rows = jpg->MCU_rows;
+  } else {
+    const JPEGComponent& c = jpg->components[scan_info->components[0].comp_idx];
+    MCUs_per_row =
+        DivCeil(jpg->width * c.h_samp_factor, 8 * jpg->max_h_samp_factor);
+    MCU_rows =
+        DivCeil(jpg->height * c.v_samp_factor, 8 * jpg->max_v_samp_factor);
+  }
+  coeff_t last_dc_coeff[kMaxComponents] = {0};
+  BitReaderState br(data, len, *pos);
+  int restarts_to_go = jpg->restart_interval;
+  int next_restart_marker = 0;
+  int eobrun = -1;
+  int block_scan_index = 0;
+  const int Al = is_progressive ? scan_info->Al : 0;
+  const int Ah = is_progressive ? scan_info->Ah : 0;
+  const int Ss = is_progressive ? scan_info->Ss : 0;
+  const int Se = is_progressive ? scan_info->Se : 63;
+  const uint16_t scan_bitmask = Ah == 0 ? (0xffff << Al) : (1u << Al);
+  const uint16_t refinement_bitmask = (1 << Al) - 1;
+  for (size_t i = 0; i < scan_info->components.size(); ++i) {
+    int comp_idx = scan_info->components[i].comp_idx;
+    for (int k = Ss; k <= Se; ++k) {
+      if (scan_progression[comp_idx][k] & scan_bitmask) {
+        fprintf(stderr, 'Overlapping scans: component=%d k=%d prev_mask=%d '
+                'cur_mask=%d\n', comp_idx, k, scan_progression[i][k],
+                scan_bitmask);
+        jpg->error = JPEG_OVERLAPPING_SCANS;
+        return false;
+      }
+      if (scan_progression[comp_idx][k] & refinement_bitmask) {
+        fprintf(stderr, 'Invalid scan order, a more refined scan was already '
+                'done: component=%d k=%d prev_mask=%d cur_mask=%d\n', comp_idx,
+                k, scan_progression[i][k], scan_bitmask);
+        jpg->error = JPEG_INVALID_SCAN_ORDER;
+        return false;
+      }
+      scan_progression[comp_idx][k] |= scan_bitmask;
+    }
+  }
+  if (Al > 10) {
+    fprintf(stderr, 'Scan parameter Al=%d is not supported in guetzli.\n', Al);
+    jpg->error = JPEG_NON_REPRESENTABLE_AC_COEFF;
+    return false;
+  }
+  for (int mcu_y = 0; mcu_y < MCU_rows; ++mcu_y) {
+    for (int mcu_x = 0; mcu_x < MCUs_per_row; ++mcu_x) {
+      // Handle the restart intervals.
+      if (jpg->restart_interval > 0) {
+        if (restarts_to_go == 0) {
+          if (ProcessRestart(data, len,
+                             &next_restart_marker, &br, jpg)) {
+            restarts_to_go = jpg->restart_interval;
+            memset(last_dc_coeff, 0, sizeof(last_dc_coeff));
+            if (eobrun > 0) {
+              fprintf(stderr, 'End-of-block run too long.\n');
+              jpg->error = JPEG_EOB_RUN_TOO_LONG;
+              return false;
+            }
+            eobrun = -1;   // fresh start
+          } else {
+            return false;
+          }
+        }
+        --restarts_to_go;
+      }
+      // Decode one MCU.
+      for (size_t i = 0; i < scan_info->components.size(); ++i) {
+        JPEGComponentScanInfo* si = &scan_info->components[i];
+        JPEGComponent* c = &jpg->components[si->comp_idx];
+        const HuffmanTableEntry* dc_lut =
+            &dc_huff_lut[si->dc_tbl_idx * kJpegHuffmanLutSize];
+        const HuffmanTableEntry* ac_lut =
+            &ac_huff_lut[si->ac_tbl_idx * kJpegHuffmanLutSize];
+        int nblocks_y = is_interleaved ? c->v_samp_factor : 1;
+        int nblocks_x = is_interleaved ? c->h_samp_factor : 1;
+        for (int iy = 0; iy < nblocks_y; ++iy) {
+          for (int ix = 0; ix < nblocks_x; ++ix) {
+            int block_y = mcu_y * nblocks_y + iy;
+            int block_x = mcu_x * nblocks_x + ix;
+            int block_idx = block_y * c->width_in_blocks + block_x;
+            coeff_t* coeffs = &c->coeffs[block_idx * kDCTBlockSize];
+            if (Ah == 0) {
+              if (!DecodeDCTBlock(dc_lut, ac_lut, Ss, Se, Al, &eobrun, &br, jpg,
+                                  &last_dc_coeff[si->comp_idx], coeffs)) {
+                return false;
+              }
+            } else {
+              if (!RefineDCTBlock(ac_lut, Ss, Se, Al,
+                                  &eobrun, &br, jpg, coeffs)) {
+                return false;
+              }
+            }
+            ++block_scan_index;
+          }
+        }
+      }
+    }
+  }
+  if (eobrun > 0) {
+    fprintf(stderr, 'End-of-block run too long.\n');
+    jpg->error = JPEG_EOB_RUN_TOO_LONG;
+    return false;
+  }
+  if (!br.FinishStream(pos)) {
+    jpg->error = JPEG_INVALID_SCAN;
+    return false;
+  }
+  if (*pos > len) {
+    fprintf(stderr, 'Unexpected end of file during scan. pos=%d len=%d\n',
+            static_cast<int>(*pos), static_cast<int>(len));
+    jpg->error = JPEG_UNEXPECTED_EOF;
+    return false;
+  }
+  return true;
+}
+    
+    // Writes a string using the out callback.
+inline bool JPEGWrite(JPEGOutput out, const std::string& s) {
+  const uint8_t* data = reinterpret_cast<const uint8_t*>(&s[0]);
+  return JPEGWrite(out, data, s.size());
+}
+    
+    // Performs in-place floating point 8x8 inverse DCT on block[0..63].
+void ComputeBlockIDCTDouble(double block[64]);
+    
+        size_t i = 0;      // Points to the next leaf node.
+    size_t j = n + 1;  // Points to the next non-leaf node.
+    for (size_t k = n - 1; k != 0; --k) {
+      size_t left, right;
+      if (tree[i].total_count_ <= tree[j].total_count_) {
+        left = i;
+        ++i;
+      } else {
+        left = j;
+        ++j;
+      }
+      if (tree[i].total_count_ <= tree[j].total_count_) {
+        right = i;
+        ++i;
+      } else {
+        right = j;
+        ++j;
+      }
     }
     
-    void OutputImage::Downsample(const DownsampleConfig& cfg) {
-  if (components_[1].IsAllZero() && components_[2].IsAllZero()) {
-    // If the image is already grayscale, nothing to do.
-    return;
-  }
-  if (cfg.use_silver_screen &&
-      cfg.u_factor_x == 2 && cfg.u_factor_y == 2 &&
-      cfg.v_factor_x == 2 && cfg.v_factor_y == 2) {
-    std::vector<uint8_t> rgb = ToSRGB();
-    std::vector<std::vector<float> > yuv = RGBToYUV420(rgb, width_, height_);
-    SetDownsampledCoefficients(yuv[0], 1, 1, &components_[0]);
-    SetDownsampledCoefficients(yuv[1], 2, 2, &components_[1]);
-    SetDownsampledCoefficients(yuv[2], 2, 2, &components_[2]);
-    return;
-  }
-  // Get the floating-point precision YUV array represented by the set of
-  // DCT coefficients.
-  std::vector<std::vector<float> > yuv(3, std::vector<float>(width_ * height_));
-  for (int c = 0; c < 3; ++c) {
-    components_[c].ToFloatPixels(&yuv[c][0], 1);
-  }
+    // Entropy encoding (Huffman) utilities.
+    
+    #endif  // GUETZLI_FAST_LOG_H_
+
+    
+    namespace guetzli {
     }
     
-    // Performs in-place floating point 8x8 DCT on block[0..63].
-// Note that the DCT used here is the DCT-2 with the first term multiplied by
-// 1/sqrt(2) and the result scaled by 1/2.
-void ComputeBlockDCTDouble(double block[64]);
+    #include 'guetzli/gamma_correct.h'
     
-    #include <stddef.h>
-#include <stdint.h>
+    // Fills in 'result' with the inverse DCT of 'block'.
+// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
+// a row-by-row memory layout.
+void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
     
-    #include 'guetzli/jpeg_data.h'
+    namespace guetzli {
+    }
     
-    #include 'guetzli/jpeg_data.h'
+      // Make a local copy of the input bit length histogram.
+  int count[kJpegHuffmanMaxBitLength + 1] = { 0 };
+  int total_count = 0;
+  for (len = 1; len <= kJpegHuffmanMaxBitLength; ++len) {
+    count[len] = count_in[len];
+    total_count += count[len];
+  }
     
-    #include 'guetzli/jpeg_data_encoder.h'
-    
-    
-    {  const int width_;
-  const int height_;
-  int factor_x_;
-  int factor_y_;
-  int width_in_blocks_;
-  int height_in_blocks_;
-  int num_blocks_;
-  std::vector<coeff_t> coeffs_;
-  std::vector<uint16_t> pixels_;
-  // Same as last argument of ApplyGlobalQuantization() (default is all 1s).
-  int quant_[kDCTBlockSize];
-};
+      void ToLinearRGB(std::vector<std::vector<float> >* rgb) const;
     
     // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
 std::vector<std::vector<float>> PreProcessChannel(
     int w, int h, int channel, float sigma, float amount, bool blur,
     bool sharpen, const std::vector<std::vector<float>>& image);
     
-    #include 'guetzli/quality.h'
+    #include 'dumpcrash_stack.h'
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    class Test_Spy_Sample {
+  public:
+    Test_Spy_Sample();
+    ~Test_Spy_Sample();
+    }
+    
+    #include 'comm/debugger/spy.inl'
+    
+    //============================================================================
+// Name        : has_member.h
+// Author      :
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+    
+    ScopeJEnv::ScopeJEnv(JavaVM* jvm, jint _capacity)
+    : vm_(jvm), env_(NULL), we_attach_(false), status_(0) {
+    ASSERT(jvm);
+    do {
+        env_ = (JNIEnv*)pthread_getspecific(g_env_key);
+        
+        if (NULL != env_) {
+            break;
+        }
+        
+        status_ = vm_->GetEnv((void**) &env_, JNI_VERSION_1_6);
+    }
+    }
+    
+        ~ScopedJstring();
