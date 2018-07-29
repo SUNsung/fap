@@ -1,101 +1,79 @@
 
         
-            READY = 0
-    IN_PROGRESS = 1
-    COMPLETE = 2
+        
+@keras_test
+@skipif_no_tf_gpu
+def test_specify_initial_state_keras_tensor():
+    input_size = 10
+    timesteps = 6
+    units = 2
+    num_samples = 32
+    for layer_class in [keras.layers.CuDNNGRU, keras.layers.CuDNNLSTM]:
+        num_states = 2 if layer_class is keras.layers.CuDNNLSTM else 1
     
-    from mrjob.job import MRJob
-    
-        def remove_user(self, user_id):
-        pass
-    
-    
-class LookupService(object):
-    
-        exec('def reraise(tp, value, tb=None):\n raise tp, value, tb')
-    
-        if not git_is_clean():
-        fail('You have uncommitted changes in git')
-    
-    
-def test_installed_package_paths(limit_loader, modules_tmpdir,
-                                 modules_tmpdir_prefix, purge_module,
-                                 monkeypatch):
-    installed_path = modules_tmpdir.mkdir('path')
-    monkeypatch.syspath_prepend(installed_path)
+        # VAE loss = mse_loss or xent_loss + kl_loss
+    if args.mse:
+        reconstruction_loss = mse(K.flatten(inputs), K.flatten(outputs))
+    else:
+        reconstruction_loss = binary_crossentropy(K.flatten(inputs),
+                                                  K.flatten(outputs))
     
     
-def test_wsgi_errors_stream(app, client):
-    @app.route('/')
-    def index():
-        app.logger.error('test')
-        return ''
+@keras_test
+def test_max_norm():
+    array = get_example_array()
+    for m in get_test_values():
+        norm_instance = constraints.max_norm(m)
+        normed = norm_instance(K.variable(array))
+        assert(np.all(K.eval(normed) < m))
     
-        flask.before_render_template.connect(record, app)
-    try:
-        rv = app.test_client().get('/')
-        assert len(recorded) == 1
-        template, context = recorded[0]
-        assert template.name == 'simple_template.html'
-        assert context['whiskey'] == 43
-        assert rv.data == b'<h1>43</h1>'
-    finally:
-        flask.before_render_template.disconnect(record, app)
+    print('Pad sequences (samples x time)')
+x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
+x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
     
     
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
+print('\nBuilding network 2...')
+model2 = create_network(num_classes=num_classes, **network2)
+    
+    
+def test_sparse_categorical_crossentropy_4d():
+    y_pred = K.variable(np.array([[[[0.7, 0.1, 0.2],
+                                    [0.0, 0.3, 0.7],
+                                    [0.1, 0.1, 0.8]],
+                                   [[0.3, 0.7, 0.0],
+                                    [0.3, 0.4, 0.3],
+                                    [0.2, 0.5, 0.3]],
+                                   [[0.8, 0.1, 0.1],
+                                    [1.0, 0.0, 0.0],
+                                    [0.4, 0.3, 0.3]]]]))
+    y_true = K.variable(np.array([[[0, 1, 0],
+                                   [2, 1, 0],
+                                   [2, 2, 1]]]))
+    expected_loss = - (np.log(0.7) + np.log(0.3) + np.log(0.1) +
+                       np.log(K.epsilon()) + np.log(0.4) + np.log(0.2) +
+                       np.log(0.1) + np.log(K.epsilon()) + np.log(0.3)) / 9
+    loss = K.eval(losses.sparse_categorical_crossentropy(y_true, y_pred))
+    assert np.isclose(expected_loss, np.mean(loss))
+    
+    # Note, sha1 is the only hash algorithm compatible with python2.4 and with
+# FIPS-140 mode (as of 11-2014)
+try:
+    from hashlib import sha1 as sha1
+except ImportError:
+    from sha import sha as sha1
+    
+    
+if __name__ == '__main__':
+    main()
 
     
-    from httpie import ExitStatus
-from utils import http, HTTP_OK
-    
-        # This be set automatically once the plugin has been loaded.
-    package_name = None
-    
-        def test_binary_stdin(self, httpbin):
-        with open(BIN_FILE_PATH, 'rb') as stdin:
-            env = MockEnvironment(
-                stdin=stdin,
-                stdin_isatty=False,
-                stdout_isatty=False
-            )
-            r = http('--print=B', 'POST', httpbin.url + '/post', env=env)
-            assert r == BIN_FILE_CONTENT
-    
-        def test_filename_from_url(self):
-        assert 'foo.txt' == filename_from_url(
-            url='http://example.org/foo',
-            content_type='text/plain'
-        )
-        assert 'foo.html' == filename_from_url(
-            url='http://example.org/foo',
-            content_type='text/html; charset=utf8'
-        )
-        assert 'foo' == filename_from_url(
-            url='http://example.org/foo',
-            content_type=None
-        )
-        assert 'foo' == filename_from_url(
-            url='http://example.org/foo',
-            content_type='x-foo/bar'
-        )
-    
-    import os
-import sys
-from .common import *
-    
-    EOF = -1
-    
-            This method has a side-effect: if we have seen this input for
-        this rule and successfully parsed before, then seek ahead to
-        1 past the stop token matched for this rule last time.
-        '''
+    ipv4_component = r'''
+    (?:
+        [01]?[0-9]{{1,2}}|              # 0..199
+        2[0-4][0-9]|                    # 200..249
+        25[0-5]|                        # 250..255
+        {range}                         # or a numeric range
+    )
+'''.format(range=numeric_range)
