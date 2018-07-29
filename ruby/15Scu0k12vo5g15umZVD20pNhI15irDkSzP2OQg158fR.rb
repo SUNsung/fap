@@ -1,124 +1,78 @@
 
         
-          url = File.dirname(url)
-  url == FORWARD_SLASH ? url : '#{url}/'
-end
+            def every(*args, &blk)
+      schedule(:every, args, &blk)
+    end
     
-    def site_configuration(overrides = {})
-  build_configs({
-    'source'      => source_dir,
-    'destination' => dest_dir
-  }, build_configs(overrides))
-end
-    
-    class Devise::ConfirmationsController < DeviseController
-  # GET /resource/confirmation/new
-  def new
-    self.resource = resource_class.new
+        valid_oauth_providers :tumblr
   end
     
-      def serialize_options(resource)
-    methods = resource_class.authentication_keys.dup
-    methods = methods.keys if methods.is_a?(Hash)
-    methods << :password if resource.respond_to?(:password)
-    { methods: methods, only: [:password] }
-  end
-    
-        def password_change(record, opts={})
-      devise_mail(record, :password_change, opts)
+        respond_to do |format|
+      format.html { redirect_to services_path }
+      format.json { render json: @service }
     end
   end
 end
 
     
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
-    
-          def headers_for(action, opts)
-        headers = {
-          subject: subject_for(action),
-          to: resource.email,
-          from: mailer_sender(devise_mapping),
-          reply_to: mailer_reply_to(devise_mapping),
-          template_path: template_paths,
-          template_name: action
-        }.merge(opts)
-    
-    puts '\nUnable to find an RSS feed for the following blogs:'
-puts '==================================================='
-unavailable.each do |b|
-  puts '#{b.name} | #{b.web_url}'
-end
-puts '==================================================='
-
-    
-          def plugin_gem_names
-        (Gem.loaded_specs.keys - ['capistrano']).grep(/capistrano/).sort
-      end
-    end
-  end
-end
-
-    
-      # Implemented by subclasses to define Rake tasks. Typically a plugin will call
-  # `eval_rakefile` to load Rake tasks from a separate .rake file.
-  #
-  # Example:
-  #
-  #   def define_tasks
-  #     eval_rakefile File.expand_path('../tasks.rake', __FILE__)
-  #   end
-  #
-  # For simple tasks, you can define them inline. No need for a separate file.
-  #
-  #   def define_tasks
-  #     desc 'Do something fantastic.'
-  #     task 'my_plugin:fantastic' do
-  #       ...
-  #     end
-  #   end
-  #
-  def define_tasks; end
-    
-        # @abstract
-    #
-    # Create a (new) clone of the remote-repository on the deployment target
-    #
-    # @return void
-    #
-    def clone
-      raise NotImplementedError, 'Your SCM strategy module should provide a #clone method'
-    end
-    
-        describe 'when passed server literal names' do
-      before do
-        ENV.delete 'ROLES'
-        ENV.delete 'HOSTS'
-        @coordinator = mock('coordinator')
-        @coordinator.expects(:each).returns(nil)
+          def key?(key)
+        super(convert_key(key))
       end
     
-      def command_line(*options)
-    options.each { |opt| ARGV << opt }
-    subject.define_singleton_method(:exit) do |*_args|
-      throw(:system_exit, :exit)
-    end
-    subject.run
-    subject.options
-  end
+          # Reads data from an IO object while it can, returning the data it reads.
+      # When it encounters a case when it can't read anymore, it returns the
+      # data.
+      #
+      # @return [String]
+      def self.read_until_block(io)
+        data = ''
     
-            def on_array(node)
-          process(node, '%i', '%I', '%w', '%W')
+              # Repackage the box
+          output_name = @env.vagrantfile.config.package.name || 'package.box'
+          output_path = Pathname.new(File.expand_path(output_name, FileUtils.pwd))
+          box.repackage(output_path)
+    
+            type = argv.shift.to_sym
+        name = argv.shift.to_sym
+    
+      # Before we load the schema, define the timestamp_id function.
+  # Idiomatically, we might do this in a migration, but then it
+  # wouldn't end up in schema.rb, so we'd need to figure out a way to
+  # get it in before doing db:setup as well. This is simpler, and
+  # ensures it's always in place.
+  Rake::Task['db:schema:load'].enhance ['db:define_timestamp_id']
+    
+          it 'regenerates feed when sign in is older than two weeks' do
+        get :show
+    
+          encoding_option(opts)
+    
+      Sass::Plugin.options.merge!(config)
+    
+        # Starts the read-eval-print loop.
+    def run
+      environment = Environment.new
+      @line = 0
+      loop do
+        @line += 1
+        unless (text = Readline.readline('>> '))
+          puts
+          return
         end
     
-              add_offense(node)
-        end
+            def on_case(case_node)
+          case_node.when_branches.each_with_object([]) do |when_node, previous|
+            when_node.each_condition do |condition|
+              next unless repeated_condition?(previous, condition)
     
-        context 'when first child is NOT a method' do
-      it 'does not require blank line at the beginning of #{type} body '\
-        'but requires blank line before first def definition '\
-        'and requires blank line at the end of #{type} body' do
-        inspect_source(<<-RUBY.strip_indent)
-          #{type} SomeObject
-            include Something
+        context '#{type} with constant and child #{type}' do
+      let(:source) do
+        <<-RUBY.strip_indent
+          #{type} Parent
+            URL = %q(http://example.com)
+            #{type} SomeObject
+              def do_something; end
+            end
+          end
+        RUBY
+      end
