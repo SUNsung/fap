@@ -1,44 +1,63 @@
-  with gfile.FastGFile(FLAGS.spec_file, 'w') as f:
-    f.write(str(master_spec).encode('utf-8'))
+
+        
+                    if self._state in [CANCELLED, CANCELLED_AND_NOTIFIED]:
+                return True
     
-      Returns:
-    [B,N,L] tensor of label potentials as defined above, with the same dtype as
-    the arguments.
-  '''
-  check.Eq(tokens.get_shape().ndims, 3, 'tokens must be rank 3')
-  check.Eq(weights.get_shape().ndims, 2, 'weights must be a matrix')
+    def main():
+    for name, fn in [('sequential',
+                      functools.partial(download_urls_sequential, URLS)),
+                     ('processes',
+                      functools.partial(download_urls_with_executor,
+                                        URLS,
+                                        ProcessPoolExecutor(10))),
+                     ('threads',
+                      functools.partial(download_urls_with_executor,
+                                        URLS,
+                                        ThreadPoolExecutor(10)))]:
+        sys.stdout.write('%s: ' % name.ljust(12))
+        start = time.time()
+        url_map = fn()
+        sys.stdout.write('%.2f seconds (%d of %d downloaded)\n' %
+                         (time.time() - start, len(url_map), len(URLS)))
     
-    flags.DEFINE_string('master_spec', None, 'Path to task context with '
-                    'inputs and parameters for feature extractors.')
-flags.DEFINE_string('params_path', None, 'Path to trained model parameters.')
-flags.DEFINE_string('export_path', '', 'Output path for exported servo model.')
-flags.DEFINE_bool('export_moving_averages', False,
-                  'Whether to export the moving average parameters.')
-flags.DEFINE_bool('build_runtime_graph', False,
-                  'Whether to build a graph for use by the runtime.')
+    PRIMES = [
+    112272535095293,
+    112582705942171,
+    112272535095293,
+    115280095190773,
+    115797848077099,
+    117450548693743,
+    993960000099397]
     
-    FLAGS = flags.FLAGS
     
-    simple_escapes = {'a': '\a',
-                  'b': '\b',
-                  'f': '\f',
-                  'n': '\n',
-                  'r': '\r',
-                  't': '\t',
-                  'v': '\v',
-                  ''': ''',
-                  ''': ''',
-                  '\\': '\\'}
+  def Extra_Info_No_Doc_String_test( self ):
+    self._Check( 0, {
+      'insertion_text':  'INSERTION TEXT',
+      'menu_text':       'MENU TEXT',
+      'extra_menu_info': 'EXTRA MENU INFO',
+      'kind':            'K',
+      'extra_data': {
+      },
+    }, {
+      'word'     : 'INSERTION TEXT',
+      'abbr'     : 'MENU TEXT',
+      'menu'     : 'EXTRA MENU INFO',
+      'kind'     : 'k',
+      'dup'      : 1,
+      'empty'    : 1,
+      'user_data': '0',
+    } )
     
-        def _longcmdstring(self, line, file=None):
-        '''Internal: send a command and get the response plus following text.
-        Same as _longcmd() and _getlongresp(), except that the returned `lines`
-        are unicode strings rather than bytes objects.
-        '''
-        self._putcmd(line)
-        resp, list = self._getlongresp(file)
-        return resp, [line.decode(self.encoding, self.errors)
-                      for line in list]
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-        def mtime(self):
-        '''Returns the time the robots.txt file was last fetched.
+    
+  def Start( self ):
+    self.PostDataToHandler( {},
+                            'shutdown',
+                            TIMEOUT_SECONDS,
+                            display_message = False )
