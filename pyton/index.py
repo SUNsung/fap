@@ -1,42 +1,80 @@
 
         
-        
-class HitCounts(MRJob):
+        cc_library(
+    name = 'dragnn_ops_cc',
+    srcs = [
+        'ops/dragnn_op_kernels.cc',
+        'ops/dragnn_ops.cc',
+    ],
+    deps = [
+        ':compute_session',
+        ':compute_session_op',
+        ':compute_session_pool',
+        ':resource_container',
+        ':shape_helpers',
+        '//dragnn/core/util:label',
+        '//dragnn/protos:data_proto_cc',
+        '//dragnn/protos:spec_proto_cc',
+        '//syntaxnet:base',
+        '@org_tensorflow//third_party/eigen3',
+    ],
+    alwayslink = 1,
+)
     
-            (foo, p1), 2
-        (bar, p1), 3
-        (foo, p2), 3
-        (bar, p3), 10
-        (foo, p4), 1
-        '''
-        yield key, sum(values)
+    tf_proto_library_py(
+    name = 'spec_pb2',
+    srcs = ['spec.proto'],
+)
     
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
     
-if __name__ == '__main__':
-    SpendingByCategory.run()
-
+      # The one-hot argmax is a subgradient of max.  Convert the batch of maximal
+  # spanning trees into 0/1 indicators, then scale them by the relevant output
+  # gradients from |d_loss_d_max_scores|.  Note that |d_loss_d_max_scores| must
+  # be reshaped in order for it to broadcast across the batch dimension.
+  indicators_bxmxm = tf.one_hot(argmax_sources_bxm, input_dim, dtype=dtype)
+  d_loss_d_max_scores_bx1 = tf.expand_dims(d_loss_d_max_scores, -1)
+  d_loss_d_max_scores_bx1x1 = tf.expand_dims(d_loss_d_max_scores_bx1, -1)
+  d_loss_d_scores_bxmxm = indicators_bxmxm * d_loss_d_max_scores_bx1x1
+  return None, d_loss_d_scores_bxmxm
     
-            video_id = match1(html, r'data-brightcove-id='(\d+)'')
-        
-        assert account_number, video_id
+            # start checks
+        if opts.list:
+            for spider, methods in sorted(contract_reqs.items()):
+                if not methods and not opts.verbose:
+                    continue
+                print(spider)
+                for method in sorted(methods):
+                    print('  * %s' % method)
+        else:
+            start = time.time()
+            self.crawler_process.start()
+            stop = time.time()
     
-    from .theplatform import theplatform_download_by_pid
+        def _find_template(self, template):
+        template_file = join(self.templates_dir, '%s.tmpl' % template)
+        if exists(template_file):
+            return template_file
+        print('Unable to find template: %s\n' % template)
+        print('Use 'scrapy genspider --list' to see all available templates.')
     
-        video_url = match1(html, r'filepath=(.+)&sec')
-    video_url = video_url.replace('&mid', '?mid')
+            # If no credentials could be found anywhere,
+        # consider this an anonymous connection request by default;
+        # unless 'anon' was set explicitly (True/False).
+        anon = kw.get('anon')
+        if anon is None and not aws_access_key_id and not aws_secret_access_key:
+            kw['anon'] = True
+        self.anon = kw.get('anon')
     
-    #----------------------------------------------------------------------
-def showroom_get_roomid_by_room_url_key(room_url_key):
-    '''str->str'''
-    fake_headers_mobile = {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Charset': 'UTF-8,*;q=0.5',
-        'Accept-Encoding': 'gzip,deflate,sdch',
-        'Accept-Language': 'en-US,en;q=0.8',
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36'
-    }
-    webpage_url = 'https://www.showroom-live.com/' + room_url_key
-    html = get_content(webpage_url, headers = fake_headers_mobile)
-    roomid = match1(html, r'room\?room_id\=(\d+)')
-    assert roomid
-    return roomid
+            # Method command
+        self.sendCommand(self.factory.method, self.factory.path)
+        # Headers
+        for key, values in self.factory.headers.items():
+            for value in values:
+                self.sendHeader(key, value)
+        self.endHeaders()
+        # Body
+        if self.factory.body is not None:
+            self.transport.write(self.factory.body)
