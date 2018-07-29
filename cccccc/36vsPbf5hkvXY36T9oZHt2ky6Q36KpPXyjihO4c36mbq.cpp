@@ -1,302 +1,300 @@
 
         
-            base::FilePath shortcutPath(path);
-    result->AppendBoolean(base::win::CreateOrUpdateShortcutLink(shortcutPath, props, 
-      base::PathExists(shortcutPath) ? base::win::SHORTCUT_UPDATE_EXISTING : base::win::SHORTCUT_CREATE_ALWAYS));
-#else
-    result->AppendBoolean(false);
-#endif
-    return;
-  } else if (method == 'GetPackage') {
-    result->AppendString(shell->GetPackage()->package_string());
-    return;
-  } else if (method == 'SetCrashDumpDir') {
-    std::string path;
-    arguments.GetString(0, &path);
-    //FIXME: result->AppendBoolean(SetCrashDumpPath(path.c_str()));
-    return;
-  } else if (method == 'RegisterGlobalHotKey') {
-    int object_id = -1;
-    arguments.GetInteger(0, &object_id);
-    Shortcut* shortcut =
-        static_cast<Shortcut*>(DispatcherHost::GetApiObject(object_id));
-    bool success = GlobalShortcutListener::GetInstance()->RegisterAccelerator(
-                       shortcut->GetAccelerator(), shortcut);
-    if (!success)
-      shortcut->OnFailed('Register global desktop keyboard shortcut failed.');
-    
-    namespace nwapi {
-    }
-    
-    
-    {}
-    
-    
-    {} // namespace nwapi
-    
-    bool MenuDelegate::IsCommandIdEnabled(int command_id) const {
-  if (command_id < 0)
-    return false;
-    }
-    
-    void Menu::Destroy() {
-  gtk_widget_destroy(menu_);
-  g_object_unref(G_OBJECT(menu_));
-}
-    
-    
-    {        // allocate space for non-inplace decimation
-        MBLayoutPtr pDecimatedMBLayout = make_shared<MBLayout>();
-        pDecimatedMBLayout->SetAxisName(pMBLayout->GetAxisName());
-        StreamMinibatchInputs decimatedMB;
-        // call in-place decimation
-        pair<size_t, size_t> selected = DecimateMinibatch<ElemType>(mb, decimatedMB, pMBLayout, pDecimatedMBLayout, numprocs, rank);
-        // move the data
-        for (auto k : mb)
-        {
-            const auto& name = k.first;
-            mb.GetInputMatrix<ElemType>(name).SetValue(decimatedMB.GetInputMatrix<ElemType>(name)); // deep-copy our local one to the output location
-        }
-        pMBLayout->MoveFrom(pDecimatedMBLayout);
-        return selected;
-    }
-    
-    template<> inline
-dnnError_t dnnLRNCreateForward<double>(
-    dnnPrimitive_t* pLrn,
-    dnnPrimitiveAttributes_t attributes,
-    const dnnLayout_t dataLayout,
-    size_t kernel_size,
-    double alpha,
-    double beta,
-    double k)
-{
-    return dnnLRNCreateForward_F64(
-        pLrn, attributes, dataLayout, kernel_size, alpha, beta, k);
-}
-    
-            // we stripe V
-        // This is to ensure that we only touch a subset of columns of V at once that fit into
-        // the cache. E.g. for a 1024-row V, that would be 195 columns. We then 'stream'
-        // through M, where each row of M is applied to all those columns of V. This way,
-        // both V and M come from the cache except for the first time. Each 'float' of V
-        // is loaded once into cache. Each row of M is loaded into cache once per stripe of V,
-        // in the example every 195 columns.
-        const size_t cacheablerowsV = 512; // at most
-        const size_t cacheablecolsV = 16;  // V.cacheablecols();    // don't get more than this of V per row of M
-        // 512 * 16 -> 32 KB
-    
-        void SetName(const std::wstring& name)
-    {
-        m_name = name;
-    }
-    const std::wstring& GetName();
-    int GetSectionCount() const
-    {
-        return m_sectionHeader->dataSections;
-    }
-    size_t GetRecordCount() const
-    {
-        return m_sectionHeader->elementsPerRecord != 0 ? m_sectionHeader->elementsCount / m_sectionHeader->elementsPerRecord : m_sectionHeader->elementsCount;
-    }
-    
-        Matrix<float> mB = Matrix<float>::RandomGaussian(dim2, dim1, c_deviceIdZero, 1.0f, 4.0f, IncrementCounter());
-    Matrix<float> mC = Matrix<float>::RandomGaussian(dim2, dim2, c_deviceIdZero, 1.0f, 2.0f, IncrementCounter());
-    Matrix<float> mD(mC.DeepClone());
-    
-    // understand and execute from the syntactic expression tree
-ConfigValuePtr Evaluate(ExpressionPtr);                               // evaluate the expression tree
-void Do(ExpressionPtr e);                                             // evaluate e.do
-shared_ptr<Object> EvaluateField(ExpressionPtr e, const wstring& id); // for experimental CNTK integration
-    
-        // constructors that take a config name
-    MELScript(const std::string& configname)
-        : ConfigParser(';', configname)
-    {
-    }
-    MELScript(const std::wstring& configname)
-        : ConfigParser(';', configname)
-    {
-    }
-    
-    // Data Writer class
-// interface for clients of the Data Writer
-// mirrors the IDataWriter interface, except the Init method is private (use the constructor)
-class DataWriter : public IDataWriter, protected Plugin
-{
-    IDataWriter* m_dataWriter; // writer
-    }
-    
-        float4& operator&=(const float4& other)
-    {
-        v = _mm_and_ps(v, other);
-        return *this;
-    }
-    float4& operator|=(const float4& other)
-    {
-        v = _mm_or_ps(v, other);
-        return *this;
-    }
-    float4& operator+=(const float4& other)
-    {
-        v = _mm_add_ps(v, other);
-        return *this;
-    }
-    float4& operator-=(const float4& other)
-    {
-        v = _mm_sub_ps(v, other);
-        return *this;
-    }
-    float4& operator*=(const float4& other)
-    {
-        v = _mm_mul_ps(v, other);
-        return *this;
-    }
-    float4& operator/=(const float4& other)
-    {
-        v = _mm_div_ps(v, other);
-        return *this;
-    }
-    
-    namespace leveldb {
-namespace log {
-    }
-    }
-    
-      WriteOptions write_options;
-  ASSERT_OK(db->Put(write_options, '1', 'b'));
-  ASSERT_OK(db->Put(write_options, '2', 'c'));
-  ASSERT_OK(db->Put(write_options, '3', 'd'));
-  ASSERT_OK(db->Put(write_options, '4', 'e'));
-  ASSERT_OK(db->Put(write_options, '5', 'f'));
-    
-    
-    {  double FalsePositiveRate() {
-    char buffer[sizeof(int)];
-    int result = 0;
-    for (int i = 0; i < 10000; i++) {
-      if (Matches(Key(i + 1000000000, buffer))) {
-        result++;
+        // Tests that a unicharset that contains double-letter ligatures (eg ff) has
+// no null char in the encoding at all.
+TEST_F(UnicharcompressTest, DoesLigaturesWithDoubles) {
+  LOG(INFO) << 'Testing por with ligatures';
+  LoadUnicharset('por.unicharset');
+  ExpectCorrect('por');
+  // Check that any unichar-id that is encoded with multiple codes has the
+  // correct encoded_nulll_char_ in between.
+  for (int u = 0; u <= unicharset_.size(); ++u) {
+    RecodedCharID code;
+    int len = compressed_.EncodeUnichar(u, &code);
+    if (len > 1) {
+      // The should not be any null char in the code.
+      for (int i = 0; i < len; ++i) {
+        EXPECT_NE(encoded_null_char_, code(i));
       }
     }
-    return result / 10000.0;
-  }
-};
-    
-    void Histogram::Add(double value) {
-  // Linear search is fast enough for our usage in db_bench
-  int b = 0;
-  while (b < kNumBuckets - 1 && kBucketLimit[b] <= value) {
-    b++;
-  }
-  buckets_[b] += 1.0;
-  if (min_ > value) min_ = value;
-  if (max_ < value) max_ = value;
-  num_++;
-  sum_ += value;
-  sum_squares_ += (value * value);
-}
-    
-      void Clear();
-  void Add(double value);
-  void Merge(const Histogram& other);
-    
-    // Helper class that locks a mutex on construction and unlocks the mutex when
-// the destructor of the MutexLock object is invoked.
-//
-// Typical usage:
-//
-//   void MyClass::MyMethod() {
-//     MutexLock l(&mu_);       // mu_ is an instance variable
-//     ... some complex code, possibly with multiple return paths ...
-//   }
-    
-    #include 'leveldb/db.h'
-#include 'db/db_impl.h'
-#include 'leveldb/cache.h'
-#include 'util/testharness.h'
-#include 'util/testutil.h'
-    
-    
-    { private:
-  /*! \brief the underlying stream */
-  dmlc::Stream *stream_;
-  /*! \brief buffer to hold data */
-  std::string buffer_;
-  /*! \brief length of valid data in buffer */
-  size_t read_len_;
-  /*! \brief pointer in the buffer */
-  size_t read_ptr_;
-};
-    
-    
-    {  if (pos != std::string::npos) {
-    std::string fmt = cache_prefix.substr(pos + 5, cache_prefix.length());
-    size_t cpos = fmt.rfind('-');
-    if (cpos != std::string::npos) {
-      return std::make_pair(fmt.substr(0, cpos), fmt.substr(cpos + 1, fmt.length()));
-    } else {
-      return std::make_pair(fmt, fmt);
-    }
-  } else {
-    std::string raw = 'raw';
-    return std::make_pair(raw, raw);
   }
 }
     
-          cbw.Write(buffer.data(), input.begin(), input.end());
+      // Runs backward propagation of errors on the deltas line.
+  // See Network for a detailed discussion of the arguments.
+  bool Backward(bool debug, const NetworkIO& fwd_deltas,
+                NetworkScratch* scratch, NetworkIO* back_deltas) override;
+  // Updates the weights using the given learning rate, momentum and adam_beta.
+  // num_samples is used in the adam computation iff use_adam_ is true.
+  void Update(float learning_rate, float momentum, float adam_beta,
+              int num_samples) override;
+  // Sums the products of weight updates in *this and other, splitting into
+  // positive (same direction) in *same and negative (different direction) in
+  // *changed.
+  void CountAlternators(const Network& other, double* same,
+                        double* changed) const override;
+  // Prints the weights for debug purposes.
+  void PrintW();
+  // Prints the weight deltas for debug purposes.
+  void PrintDW();
     
-    TEST(Metric, Precision) {
-  // When the limit for precision is not given, it takes the limit at
-  // std::numeric_limits<unsigned>::max(); hence all values are very small
-  // NOTE(AbdealiJK): Maybe this should be fixed to be num_row by default.
-  xgboost::Metric * metric = xgboost::Metric::Create('pre');
-  ASSERT_STREQ(metric->Name(), 'pre');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-7);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0, 1e-7);
+      // Return whether a given text line could be a first paragraph line according
+  // to this paragraph model.
+  bool ValidBodyLine(int lmargin, int lindent, int rindent, int rmargin) const;
+    
+    // Copies the given feature_space and uses it as the index feature map
+// from INT_FEATURE_STRUCT.
+void IntFeatureMap::Init(const IntFeatureSpace& feature_space) {
+  feature_space_ = feature_space;
+  mapping_changed_ = false;
+  int sparse_size = feature_space_.Size();
+  feature_map_.Init(sparse_size, true);
+  feature_map_.Setup();
+  compact_size_ = feature_map_.CompactSize();
+  // Initialize look-up tables if needed.
+  FCOORD dir = FeatureDirection(0);
+  if (dir.x() == 0.0f && dir.y() == 0.0f)
+    InitIntegerFX();
+  // Compute look-up tables to generate offset features.
+  for (int dir = 0; dir < kNumOffsetMaps; ++dir) {
+    delete [] offset_plus_[dir];
+    delete [] offset_minus_[dir];
+    offset_plus_[dir] = new int[sparse_size];
+    offset_minus_[dir] = new int[sparse_size];
+  }
+  for (int dir = 1; dir <= kNumOffsetMaps; ++dir) {
+    for (int i = 0; i < sparse_size; ++i) {
+      int offset_index = ComputeOffsetFeature(i, dir);
+      offset_plus_[dir - 1][i] = offset_index;
+      offset_index = ComputeOffsetFeature(i, -dir);
+      offset_minus_[dir - 1][i] = offset_index;
+    }
+  }
+}
+    
+    
+    {  // Non-serialized data initialized by other means or used temporarily
+  // during loading of training samples.
+  // Number of different class labels in unicharset_.
+  int charsetsize_;
+  // Flag to indicate that we are running shape analysis and need fragments
+  // fixing.
+  bool enable_shape_anaylsis_;
+  // Flag to indicate that sample replication is required.
+  bool enable_replication_;
+  // Array of classids of fragments that replace the correctly segmented chars.
+  int* fragments_;
+  // Classid of previous correctly segmented sample that was added.
+  int prev_unichar_id_;
+  // Debug output control.
+  int debug_level_;
+  // Feature map used to construct reduced feature spaces for compact
+  // classifiers.
+  IntFeatureMap feature_map_;
+  // Vector of Pix pointers used for classifiers that need the image.
+  // Indexed by page_num_ in the samples.
+  // These images are owned by the trainer and need to be pixDestroyed.
+  GenericVector<Pix*> page_images_;
+  // Vector of filenames of loaded tr files.
+  GenericVector<STRING> tr_filenames_;
+};
+    
+      // Tests each blob in the list to see if it is certain non-text using 2
+  // conditions:
+  // 1. blob overlaps a cell with high value in noise_density_ (previously set
+  // by ComputeNoiseDensity).
+  // OR 2. The blob overlaps more than max_blob_overlaps in *this grid. This
+  // condition is disabled with max_blob_overlaps == -1.
+  // If it does, the blob is declared non-text, and is used to mark up the
+  // nontext_mask. Such blobs are fully deleted, and non-noise blobs have their
+  // neighbours reset, as they may now point to deleted data.
+  // WARNING: The blobs list blobs may be in the *this grid, but they are
+  // not removed. If any deleted blobs might be in *this, then this must be
+  // Clear()ed immediately after MarkAndDeleteNonTextBlobs is called.
+  // If the win is not nullptr, deleted blobs are drawn on it in red, and kept
+  void MarkAndDeleteNonTextBlobs(BLOBNBOX_LIST* blobs,
+                                 int max_blob_overlaps,
+                                 ScrollView* win, ScrollView::Color ok_color,
+                                 Pix* nontext_mask);
+  // Returns true if the given blob overlaps more than max_overlaps blobs
+  // in the current grid.
+  bool BlobOverlapsTooMuch(BLOBNBOX* blob, int max_overlaps);
+    
+      // Helper functions for TransformToBlocks.
+  // Add the part to the temp list in the correct order.
+  void AddToTempPartList(ColPartition* part, ColPartition_CLIST* temp_list);
+  // Add everything from the temp list to the work_set assuming correct order.
+  void EmptyTempPartList(ColPartition_CLIST* temp_list,
+                         WorkingPartSet_LIST* work_set);
+    
+      // Refreshes the words in the segmentation block list by using blobs in the
+  // input blob list.
+  // The segmentation block list must be set.
+  void RefreshSegmentationWithNewBlobs(C_BLOB_LIST* new_blobs);
+    
+    /**********************************************************************
+ * complete_edge
+ *
+ * Complete the edge by cleaning it up.
+ **********************************************************************/
+    
+    
+    {
+    {  resetDatabase();
+  EXPECT_FALSE(pathExists(path_ + '.backup'));
+}
+}
+
+    
+      // Regardless of the status of the kernel extension, if the device node does
+  // not exist then the kernel publisher will silently shutdown.
+  // This is not considered an error, and does not emit an error log.
+  if (!isWritable(kKernelDevice)) {
+    return Status(2, 'Cannot access ' + kKernelDevice);
+  }
+    
+    
+    {  // Too many fields
+  bad_line = R'('2016-03-22T21:17:01.701882+00:00','','6','','','','')';
+  ec = pub.createEventContext();
+  status = pub.populateEventContext(bad_line, ec);
+  ASSERT_FALSE(status.ok());
+  ASSERT_NE(std::string::npos, status.getMessage().find('more'));
+}
+    
+        Node* next() {
+      return next_;
     }
     
-    namespace xgboost {
-/*!
- * \brief interface of linear updater
- */
-class LinearUpdater {
- public:
-  /*! \brief virtual destructor */
-  virtual ~LinearUpdater() = default;
-  /*!
-   * \brief Initialize the updater with given arguments.
-   * \param args arguments to the objective function.
+      bool remove(const T& v) {
+    auto prev = &head_;
+    locate_lower_bound(v, prev);
+    auto curr = prev->load(std::memory_order_relaxed);
+    if (!curr || curr->elem_ != v) {
+      return false;
+    }
+    Node* curr_next = curr->next_.load();
+    // Patch up the actual list...
+    prev->store(curr_next, std::memory_order_release);
+    // ...and only then null out the removed node.
+    curr->next_.store(nullptr, std::memory_order_release);
+    curr->retire();
+    return true;
+  }
+    
+      folly::Optional<T> try_take_for(std::chrono::milliseconds time) override {
+    T item;
+    while (true) {
+      if (nonBlockingTake(item)) {
+        return std::move(item);
+      }
+      if (!sem_.try_wait_for(time)) {
+        return folly::none;
+      }
+    }
+  }
+    
+        static const void* volatile ptr = malloc(1);
+    if (!ptr) {
+      // wtf, failing to allocate 1 byte
+      return false;
+    }
+    
+      // Move from the registration phase to the 'you can actually instantiate
+  // things now' phase.
+  folly::SingletonVault::singleton()->registrationComplete();
+    
+    FOLLY_ALWAYS_INLINE int __builtin_ctzll(unsigned long long x) {
+  unsigned long index;
+  return int(_BitScanForward64(&index, x) ? index : 64);
+}
+    
+    inline void hazptr_domain::tryBulkReclaim() {
+  HAZPTR_DEBUG_PRINT(this);
+  do {
+    auto hcount = hcount_.load(std::memory_order_acquire);
+    auto rcount = rcount_.load(std::memory_order_acquire);
+    if (rcount < HAZPTR_SCAN_THRESHOLD || rcount < HAZPTR_SCAN_MULT * hcount) {
+      return;
+    }
+    if (rcount_.compare_exchange_weak(
+            rcount, 0, std::memory_order_release, std::memory_order_relaxed)) {
+      break;
+    }
+  } while (true);
+  bulkReclaim();
+}
+    
+    
+    {  EXPECT_EQ(1, estimates.quantiles[0].second);
+  EXPECT_EQ(2.0 - 0.5, estimates.quantiles[1].second);
+  EXPECT_EQ(50.375, estimates.quantiles[2].second);
+  EXPECT_EQ(100.0 - 0.5, estimates.quantiles[3].second);
+  EXPECT_EQ(100, estimates.quantiles[4].second);
+}
+    
+      /**
+   * String representation of the default value.
+   * (note: string literal default values will be stringified with quotes)
    */
-  virtual void Init(
-      const std::vector<std::pair<std::string, std::string> >& args) = 0;
-    }
-    }
+  folly::StringPiece defaultStr;
     
-    namespace detail {
-/*! \brief Implementation of gradient statistics pair. Template specialisation
- * may be used to overload different gradients types e.g. low precision, high
- * precision, integer, floating point. */
-template <typename T>
-class GradientPairInternal {
-  /*! \brief gradient statistics */
-  T grad_;
-  /*! \brief second order gradient statistics */
-  T hess_;
-    }
-    }
+    #endif /* DUMPCRASHSTACK_H_ */
+
     
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
     
-    {    return Node::fromYGNode(nodePtr);
+    ScopeJEnv::~ScopeJEnv() {
+    if (NULL != env_) {
+        env_->PopLocalFrame(NULL);
+    }
 }
     
-        method(setPositionType);
-    method(setPosition);
-    method(setPositionPercent);
+    void AbstractOptionHandler::setEraseAfterParse(bool f)
+{
+  updateFlags(FLAG_ERASE_AFTER_PARSE, f);
+}
     
-      T* operator->() const {
-    return m_ptr;
+      virtual void allocateChunk() CXX11_OVERRIDE;
+    
+    bool AnnounceList::currentTierAcceptsStoppedEvent() const
+{
+  if (currentTrackerInitialized_) {
+    return FindStoppedAllowedTier()(*currentTier_);
   }
+    }
+    
+    void AnnounceTier::nextEvent()
+{
+  switch (event) {
+  case STARTED:
+    event = DOWNLOADING;
+    break;
+  case STARTED_AFTER_COMPLETION:
+    event = SEEDING;
+    break;
+  case STOPPED:
+    event = HALTED;
+    break;
+  case COMPLETED:
+    event = SEEDING;
+    break;
+  default:
+    break;
+  }
+}
+    
+    class ApiCallbackDownloadEventListener : public DownloadEventListener {
+public:
+  ApiCallbackDownloadEventListener(Session* session,
+                                   DownloadEventCallback callback,
+                                   void* userData);
+  virtual ~ApiCallbackDownloadEventListener();
+  virtual void onEvent(DownloadEvent event,
+                       const RequestGroup* group) CXX11_OVERRIDE;
+    }
+    
+    
+    {} // namespace aria2
