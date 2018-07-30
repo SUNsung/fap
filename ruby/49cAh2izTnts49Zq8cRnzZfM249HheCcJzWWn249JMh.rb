@@ -1,80 +1,136 @@
-      # Keep a list of subclasses of Jekyll::Command every time it's inherited
-      # Called automatically.
-      #
-      # base - the subclass
-      #
-      # Returns nothing
-      def inherited(base)
-        subclasses << base
-        super(base)
+
+        
+            brew cask install mactex
+    EOS
+  when 'pip' then <<-EOS.undent
+    Homebrew provides pip via: `brew install python`. However you will then
+    have two Pythons installed on your Mac, so alternatively you can install
+    pip via the instructions at:
+    
+        keys.each do |key|
+      value = env[key]
+      s = '#{key}: #{value}'
+      case key
+      when 'CC', 'CXX', 'LD'
+        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
       end
-    
-              Jekyll::Hooks.register(:site, :post_render) do |site|
-            regenerator = Jekyll::Regenerator.new(site)
-            @changed_pages = site.pages.select do |p|
-              regenerator.regenerate?(p)
-            end
-          end
-    
-            private
-    
-            def self.skip_processing?(request, response, options)
-          new(request, response, options).skip_processing?
-        end
-    
-          # `{{ site.related_posts }}` is how posts can get posts related to
-      # them, either through LSI if it's enabled, or through the most
-      # recent posts.
-      # We should remove this in 4.0 and switch to `{{ post.related_posts }}`.
-      def related_posts
-        return nil unless @current_document.is_a?(Jekyll::Document)
-        @current_document.related_posts
-      end
-      attr_writer :current_document
-    
-          options[:only_patterns] = [/\Agetting-started\//, /\Alayout\//, /\Acontent\//, /\Acomponents\//, /\Autilities\//, /\Amigration\//]
-    end
-    
-          options[:container] = '.container'
+      f.puts s
     end
   end
 end
 
     
-        version '1.4' do
-      self.release = '1.4.5'
-      self.base_urls = [
-        'https://hexdocs.pm/elixir/#{release}/',
-        'https://hexdocs.pm/eex/#{release}/',
-        'https://hexdocs.pm/ex_unit/#{release}/',
-        'https://hexdocs.pm/iex/#{release}/',
-        'https://hexdocs.pm/logger/#{release}/',
-        'https://hexdocs.pm/mix/#{release}/',
-        'https://elixir-lang.org/getting-started/'
-      ]
+        def self.cleanup_logs
+      return unless HOMEBREW_LOGS.directory?
+      HOMEBREW_LOGS.subdirs.each do |dir|
+        cleanup_path(dir) { dir.rmtree } if prune?(dir, :days_default => 14)
+      end
     end
     
-        def sort_fn(a, b)
-      if (a.getbyte(0) >= 49 && a.getbyte(0) <= 57) || (b.getbyte(0) >= 49 && b.getbyte(0) <= 57)
-        a_split = a.split(SPLIT_INTS)
-        b_split = b.split(SPLIT_INTS)
+      def find_internal_commands(directory)
+    directory.children.reduce([]) do |cmds, f|
+      cmds << f.basename.to_s.sub(/\.(?:rb|sh)$/, '') if f.file?
+      cmds
+    end
+  end
+end
+
     
-        def add(path, content)
-      @pages[path] = content
+        first_warning = true
+    methods.each do |method|
+      unless checks.respond_to?(method)
+        Homebrew.failed = true
+        puts 'No check available by the name: #{method}'
+        next
+      end
+    
+        renamed_formulae = []
+    @report[:D].each do |old_full_name|
+      old_name = old_full_name.split('/').last
+      new_name = tap.formula_renames[old_name]
+      next unless new_name
+    
+      private
+    
+        if registration
+      u2f.authenticate!(challenges, response, Base64.decode64(registration.public_key), registration.counter)
+      registration.update(counter: response.counter)
+      true
+    end
+  rescue JSON::ParserError, NoMethodError, ArgumentError, U2F::Error
+    false
+  end
+end
+
+    
+        def run!
+      @thread = Thread.new do
+        Thread.current[:name] = '#{id}-#{Time.now}'
+        begin
+          run
+        rescue SignalException, SystemExit
+          stop!
+        rescue StandardError => e
+          message = '#{id} Exception #{e.message}:\n#{e.backtrace.first(10).join('\n')}'
+          AgentRunner.with_connection do
+            agent.error(message)
+          end
+        end
+      end
     end
     
-        def subpath_to(url, options = nil)
-      url = self.class.parse(url)
-      return unless origin == url.origin
+      get(/.+/) do
+    send_sinatra_file(request.path) {404}
+  end
     
-    output = File.new(OUTPUT_FILENAME, 'wb')
-output.write(xml.target!)
-output.close
-    
-        it 'contains the OpenID issuer' do
-      wf = DiasporaFederation.callbacks.trigger(:fetch_person_for_webfinger, alice.diaspora_handle)
-      links = wf.additional_data[:links]
-      openid_issuer = links.find {|l| l[:rel] == OpenIDConnect::Discovery::Provider::Issuer::REL_VALUE }
-      expect(openid_issuer).not_to be_nil
-      expect(openid_issuer[:href]).to eq(Rails.application.routes.url_helpers.root_url)
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
     end
+    
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
+    end
+    
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
+      end
+      super
+    end
+    
+            private
+    
+            # @param annotated_source [String] string passed to the matchers
+        #
+        # Separates annotation lines from source lines. Tracks the real
+        # source line number that each annotation corresponds to.
+        #
+        # @return [AnnotatedSource]
+        def self.parse(annotated_source)
+          source      = []
+          annotations = []
