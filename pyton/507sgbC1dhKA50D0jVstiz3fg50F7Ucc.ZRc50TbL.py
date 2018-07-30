@@ -1,37 +1,25 @@
 
         
-            Models: `flatpages.flatpages`
-    Templates: Uses the template defined by the ``template_name`` field,
-        or :template:`flatpages/default.html` if template_name is not defined.
-    Context:
-        flatpage
-            `flatpages.flatpages` object
+                def to_json(self, value):
+            return self.serializer.tag(value.data)
+    
+    
+@implements_to_string
+class DebugFilesKeyError(KeyError, AssertionError):
+    '''Raised from request.files during debugging.  The idea is that it can
+    provide a better error message than just a generic KeyError/BadRequest.
     '''
-    if not url.startswith('/'):
-        url = '/' + url
-    site_id = get_current_site(request).id
-    try:
-        f = get_object_or_404(FlatPage, url=url, sites=site_id)
-    except Http404:
-        if not url.endswith('/') and settings.APPEND_SLASH:
-            url += '/'
-            f = get_object_or_404(FlatPage, url=url, sites=site_id)
-            return HttpResponsePermanentRedirect('%s/' % request.path)
-        else:
-            raise
-    return render_flatpage(request, f)
     
-        def __init__(self, rank):
-        self.state = CallState.READY
-        self.rank = rank
-        self.employee = None
+        The decorators stored in the decorators list are applied one after another
+    when the view function is created.  Note that you can *not* use the class
+    based decorators since those would decorate the view class and not the
+    generated view function!
+    '''
     
     
-class Graph(object):
+def main():
+    os.chdir(os.path.join(os.path.dirname(__file__), '..'))
     
-            (2016-01, shopping), 125
-        (2016-01, gas), 50
-        '''
-        total = sum(values)
-        self.handle_budget_notifications(key, total)
-        yield key, sum(values)
+    import flask
+from flask._compat import PY2
+import pytest
