@@ -1,87 +1,67 @@
 
         
-              message = TestMailer.send_test(args[:to_address])
-      Email::Sender.new(message, :test_message).send
+        class Converter
+  extend Forwardable
+  include Network
+  include LessConversion
+  include JsConversion
+  include FontsConversion
+    
+        def log_status(status)
+      puts bold status
     end
     
-      protected
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
     
-        res << inp.to_html
-  end
-  res << '</form>'
-end
+        def miscellaneous(opts)
+      opts.separator ''
+      opts.separator 'Miscellaneous:'
     
-    clsJavaCompile 	= Rjb::import('javaCompile.CompileSourceInMemory')
-clsCreateJar	= Rjb::import('javaCompile.CreateJarFile')
-clsFile			= Rjb::import('java.io.File')
-system			= Rjb::import('java.lang.System')
-#clsString	= Rjb::import('java.lang.String')
+      require 'sass/plugin/rack'
+  class Sass::Plugin::MerbBootLoader < Merb::BootLoader
+    after Merb::BootLoader::RackUpApplication
     
-      def initialize(filename)
-    begin
-      f = File.new(filename)
-      @template = f.read
-    rescue Errno::ENOENT
-    end
-  end
-    
-        on :save_person_after_webfinger do |person|
-      # find existing person or create a new one
-      person_entity = Person.find_by(diaspora_handle: person.diaspora_id) ||
-        Person.new(diaspora_handle: person.diaspora_id, guid: person.guid,
-                   serialized_public_key: person.exported_key, pod: Pod.find_or_create_by(url: person.url))
-    
-        def perform
-      return User.none unless valid?
-    
-          def auth_user_unless_prompt_none!
-        prompt = params[:prompt]
-        if prompt && prompt.include?('none')
-          handle_prompt_none
-        elsif prompt && prompt.include?('login')
-          new_params = params.except('controller', 'action').permit!.to_h.merge(prompt: prompt.remove('login'))
-          reauthenticate(new_params)
-        else
-          authenticate_user!
+            on roles(target_roles) do
+          unless test '[ -f #{file.to_s.shellescape} ]'
+            info 'Uploading #{prerequisite_file} to #{file}'
+            upload! File.open(prerequisite_file), file
+          end
         end
-      end
-    
-          rescue_from OpenIDConnect::HttpError do |e|
-        http_error_page_as_json(e)
-      end
-    
-        def definitions_for(klass)
-      parent_classes = klass.ancestors.reverse
-      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
-        inherited_definitions.deep_merge! @attachments[ancestor]
       end
     end
-  end
-end
-
     
-        # Returns the larger of the two dimensions
-    def larger
-      [height, width].max
-    end
+      it 'provides a --format option which enables the choice of output formatting'
     
-            def description
-          'have an attachment named #{@attachment_name}'
+              @assignments = []
+          @references = []
+          @captured_by_block = false
         end
     
-              @subject.send(@attachment_name).post_processing = false
-          @subject.send(@attachment_name).assign(file)
-          @subject.valid?
-          @subject.errors[:'#{@attachment_name}_file_size'].blank?
-        ensure
-          @subject.send(@attachment_name).post_processing = true
+                  add_offense(condition)
+            end
+    
+                end
+          RUBY
         end
     
-          def validate_before_processing(validator_class, options)
-        options = options.dup
-        attributes = options.delete(:attributes)
-        attributes.each do |attribute|
-          options[:attributes] = [attribute]
-          create_validating_before_filter(attribute, validator_class, options)
-        end
+              def plugins
+            @plugins ||= find_plugins_gem_specs.map do |spec|
+              { :name => spec.name, :version => spec.version.to_s }
+            end.sort_by do |spec|
+              spec[:name]
+            end
+          end
+    
+      def _nt_not_in_operator
+    start_index = index
+    if node_cache[:not_in_operator].has_key?(index)
+      cached = node_cache[:not_in_operator][index]
+      if cached
+        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
       end
+      return cached
+    end
