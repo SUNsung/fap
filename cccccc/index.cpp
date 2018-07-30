@@ -1,384 +1,239 @@
 
         
-        // HACK: Allow support for many newer emoji by overriding behavior of ZWJ and
-// emoji modifiers. This does not make the breaks correct for any version of
-// Unicode, but shifts the ways in which it is incorrect to be less harmful.
-//
-// TODO: Remove this hack and reevaluate whether we should have any static
-// notion of what a grapheme is.
-//
-// Returns true if lhs and rhs shouldn't be considered as having a grapheme
-// break between them. That is, whether we're overriding the behavior of the
-// hard coded Unicode 8 rules surrounding ZWJ and emoji modifiers.
-static inline bool graphemeBreakOverride(llvm::UTF32 lhs, llvm::UTF32 rhs) {
-  return lhs == 0x200D || (rhs >= 0x1F3FB && rhs <= 0x1F3FF);
-}
+        double median(const Mat& row);
     
-      IndexRelation(SymbolRoleSet Roles, const Decl *Sym, SymbolInfo SymInfo, StringRef Name, StringRef USR)
-  : decl(Sym), symInfo(SymInfo), roles(Roles), name(Name), USR(USR) {}
+    //! @cond IGNORED
     
-    void leveldb_writebatch_put(
-    leveldb_writebatch_t* b,
-    const char* key, size_t klen,
-    const char* val, size_t vlen) {
-  b->rep.Put(Slice(key, klen), Slice(val, vlen));
-}
-    
-    #ifndef STORAGE_LEVELDB_DB_DB_ITER_H_
-#define STORAGE_LEVELDB_DB_DB_ITER_H_
-    
-    // A helper class useful for DBImpl::Get()
-class LookupKey {
- public:
-  // Initialize *this for looking up user_key at a snapshot with
-  // the specified sequence number.
-  LookupKey(const Slice& user_key, SequenceNumber sequence);
-    }
-    
-    bool GuessType(const std::string& fname, FileType* type) {
-  size_t pos = fname.rfind('/');
-  std::string basename;
-  if (pos == std::string::npos) {
-    basename = fname;
-  } else {
-    basename = std::string(fname.data() + pos + 1, fname.size() - pos - 1);
-  }
-  uint64_t ignored;
-  return ParseFileName(basename, &ignored, type);
-}
-    
-    // Use the db with the following name.
-static const char* FLAGS_db = NULL;
-    
-    // Dump the contents of the file named by fname in text format to
-// *dst.  Makes a sequence of dst->Append() calls; each call is passed
-// the newline-terminated text corresponding to a single item found
-// in the file.
-//
-// Returns a non-OK result if fname does not name a leveldb storage
-// file, or if the file cannot be read.
-Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
-    
-      // Return the name of this policy.  Note that if the filter encoding
-  // changes in an incompatible way, the name returned by this method
-  // must be changed.  Otherwise, old incompatible filters may be
-  // passed to methods of this type.
-  virtual const char* Name() const = 0;
-    
-    
-    {  // Intentionally copyable
+    const uchar g_Saturate8u[] =
+{
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
+     16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
+     32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
+     48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
+     64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
+     80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
+     96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
+    112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
+    144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
+    160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
+    176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
+    192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
+    208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
+    224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
+    240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255
 };
     
-    int main(int argc, char** argv) {
-  if (argc != 4) {
-    printf('This script converts the MNIST dataset to the leveldb format used\n'
-           'by caffe to train a siamese network.\n'
-           'Usage:\n'
-           '    convert_mnist_data input_image_file input_label_file '
-           'output_db_file\n'
-           'The MNIST dataset could be downloaded at\n'
-           '    http://yann.lecun.com/exdb/mnist/\n'
-           'You should gunzip them after downloading.\n');
-  } else {
-    google::InitGoogleLogging(argv[0]);
-    convert_dataset(argv[1], argv[2], argv[3]);
+      for (auto s: tensor->sizes())
+    assert(s == 2);
+  for (int i = 0; i < 2; i++)
+    assert(reinterpret_cast<float*>(tensor->data())[i] == 5);
+    
+    
+    {  if (src->size[dimension] == 1 && src->nDimension > 1) {
+    for (size_t d = dimension; d < self->nDimension-1; d++) {
+      self->size[d] = self->size[d+1];
+      self->stride[d] = self->stride[d+1];
+    }
+    self->nDimension--;
   }
-  return 0;
-}
-#else
-int main(int argc, char** argv) {
-  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
-}
-#endif  // USE_LEVELDB
-
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2+)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_1 @f$
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_2 @f$
-   *   -# ...
-   *   - K @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_K @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      the concatenated output @f$
-   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    #endif  // CAFFE_CONV_LAYER_HPP_
-
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of ConvolutionLayer.
- *        Fallback to ConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates convolution through forward kernels for filtering and bias
- * plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
- *
- * The CUDNN engine does not have memory overhead for matrix buffers. For many
- * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
- * but for fully-convolutional models and large inputs the CAFFE engine can be
- * faster as long as it fits in memory.
-*/
-template <typename Dtype>
-class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
- public:
-  explicit CuDNNConvolutionLayer(const LayerParameter& param)
-      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNConvolutionLayer();
-    }
-    
-    namespace caffe {
-    }
-    
-      // Check that append works.
-  ASSERT_OK(env_->NewAppendableFile('/dir/f', &writable_file));
-  ASSERT_OK(env_->GetFileSize('/dir/f', &file_size));
-  ASSERT_EQ(3, file_size);
-  ASSERT_OK(writable_file->Append('hello'));
-  delete writable_file;
-    
-      virtual void CreateFilter(const Slice* keys, int n, std::string* dst) const {
-    for (int i = 0; i < n; i++) {
-      uint32_t h = Hash(keys[i].data(), keys[i].size(), 1);
-      PutFixed32(dst, h);
-    }
-  }
-    
-    
-    {      // Ok
-      break;
-    case kSnappyCompression: {
-      size_t ulength = 0;
-      if (!port::Snappy_GetUncompressedLength(data, n, &ulength)) {
-        delete[] buf;
-        return Status::Corruption('corrupted compressed block contents');
-      }
-      char* ubuf = new char[ulength];
-      if (!port::Snappy_Uncompress(data, n, ubuf)) {
-        delete[] buf;
-        delete[] ubuf;
-        return Status::Corruption('corrupted compressed block contents');
-      }
-      delete[] buf;
-      result->data = Slice(ubuf, ulength);
-      result->heap_allocated = true;
-      result->cachable = true;
-      break;
-    }
-    default:
-      delete[] buf;
-      return Status::Corruption('bad block type');
-  }
-    
-      bool Matches(const Slice& s) {
-    if (!keys_.empty()) {
-      Build();
-    }
-    return policy_->KeyMayMatch(s, filter_);
-  }
-    
-    uint32_t Hash(const char* data, size_t n, uint32_t seed) {
-  // Similar to murmur hash
-  const uint32_t m = 0xc6a4a793;
-  const uint32_t r = 24;
-  const char* limit = data + n;
-  uint32_t h = seed ^ (n * m);
-    }
-    
-    double Histogram::Percentile(double p) const {
-  double threshold = num_ * (p / 100.0);
-  double sum = 0;
-  for (int b = 0; b < kNumBuckets; b++) {
-    sum += buckets_[b];
-    if (sum >= threshold) {
-      // Scale linearly within this bucket
-      double left_point = (b == 0) ? 0 : kBucketLimit[b-1];
-      double right_point = kBucketLimit[b];
-      double left_sum = sum - buckets_[b];
-      double right_sum = sum;
-      double pos = (threshold - left_sum) / (right_sum - left_sum);
-      double r = left_point + (right_point - left_point) * pos;
-      if (r < min_) r = min_;
-      if (r > max_) r = max_;
-      return r;
-    }
-  }
-  return max_;
 }
     
-    #include <string>
-    
-    namespace leveldb {
-    }
-    
-    
-    {    // Compute (product % M) using the fact that ((x << 31) % M) == x.
-    seed_ = static_cast<uint32_t>((product >> 31) + (product & M));
-    // The first reduction may overflow by 1 bit, so we may need to
-    // repeat.  mod == M is not possible; using > allows the faster
-    // sign-bit-based test.
-    if (seed_ > M) {
-      seed_ -= M;
-    }
-    return seed_;
-  }
-  // Returns a uniformly distributed value in the range [0..n-1]
-  // REQUIRES: n > 0
-  uint32_t Uniform(int n) { return Next() % n; }
-    
-    #include <stdio.h>
-#include 'db/dbformat.h'
-#include 'port/port.h'
-#include 'util/coding.h'
-    
-      // Compute the crc of the record type and the payload.
-  uint32_t crc = crc32c::Extend(type_crc_[t], ptr, n);
-  crc = crc32c::Mask(crc);                 // Adjust for storage
-  EncodeFixed32(buf, crc);
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    // Standard library components can't be forward declared, so we'll have to
-// include the array header. Fortunately, it's fairly lightweight and doesn't
-// add significantly to the compile time.
-#if defined(BOOST_ASIO_HAS_STD_ARRAY)
-# include <array>
-#endif // defined(BOOST_ASIO_HAS_STD_ARRAY)
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    #include <boost/asio/detail/config.hpp>
-#include <boost/asio/buffer.hpp>
-#include <boost/asio/detail/assert.hpp>
-#include <cstddef>
-#include <cstring>
-#include <vector>
-    
-    #endif // BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
-
-    
-    
-    {    // Make the upcall if required.
-    if (owner)
-    {
-      fenced_block b(fenced_block::half);
-      BOOST_ASIO_HANDLER_INVOCATION_BEGIN((handler.arg1_, handler.arg2_));
-      boost_asio_handler_invoke_helpers::invoke(handler, handler.handler_);
-      BOOST_ASIO_HANDLER_INVOCATION_END;
-    }
-  }
-    
-    template <typename ConstBufferSequence, typename Handler>
-class descriptor_write_op
-  : public descriptor_write_op_base<ConstBufferSequence>
+    PyObject *THPDevice_New(const at::Device& device)
 {
-public:
-  BOOST_ASIO_DEFINE_HANDLER_PTR(descriptor_write_op);
-    }
+  auto type = (PyTypeObject*)&THPDeviceType;
+  auto self = THPObjectPtr{type->tp_alloc(type, 0)};
+  if (!self) throw python_error();
+  auto self_ = reinterpret_cast<THPDevice*>(self.get());
+  self_->device = device;
+  return self.release();
+}
     
-    #ifndef BOOST_ASIO_DETAIL_EVENT_HPP
-#define BOOST_ASIO_DETAIL_EVENT_HPP
+    static bool backCompatKeepdimWarn = false;
     
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+      CAFFE_ENFORCE_EQ(heatmaps_in.ndim(), 4);
+  const int N = heatmaps_in.dim32(0);
+  CAFFE_ENFORCE_EQ(heatmaps_in.dim32(0), N);
+  const int keypoint_count = heatmaps_in.dim32(1);
+  const int heatmap_size = heatmaps_in.dim32(2);
+  CAFFE_ENFORCE_GE(heatmap_size, 2); // at least 2x2 for approx
+  CAFFE_ENFORCE_EQ(heatmaps_in.dim32(2), heatmaps_in.dim32(3));
     
-    extern JSClass  *jsb_cocostudio_ComRender_class;
-extern JSObject *jsb_cocostudio_ComRender_prototype;
+    #ifndef CAFFE2_OPERATORS_BATCH_SPARSE_TO_DENSE_OP_H_
+#define CAFFE2_OPERATORS_BATCH_SPARSE_TO_DENSE_OP_H_
     
-    
-    
-    int register_all_cocos2dx_experimental_video(lua_State* tolua_S);
-    
-    
-    {        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, 'cc.PhysicsBody:setCategoryBitmask');
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsBody_setCategoryBitmask'', nullptr);
-            return 0;
-        }
-        cobj->setCategoryBitmask(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.PhysicsBody:setCategoryBitmask',argc, 1);
-    return 0;
-    
-    
-    
-    bool BenchmarkFamilies::FindBenchmarks(
-    const std::string& spec, std::vector<Benchmark::Instance>* benchmarks,
-    std::ostream* ErrStream) {
-  CHECK(ErrStream);
-  auto& Err = *ErrStream;
-  // Make regular expression out of command-line flag
-  std::string error_msg;
-  Regex re;
-  if (!re.Init(spec, &error_msg)) {
-    Err << 'Could not compile benchmark re: ' << error_msg << std::endl;
-    return false;
+    template <typename T, class Context>
+class BBoxTransformOp final : public Operator<Context> {
+ public:
+  BBoxTransformOp(const OperatorDef& operator_def, Workspace* ws)
+      : Operator<Context>(operator_def, ws),
+        weights_(OperatorBase::GetRepeatedArgument<T>(
+            'weights',
+            vector<T>{1.0f, 1.0f, 1.0f, 1.0f})),
+        apply_scale_(
+            OperatorBase::GetSingleArgument<bool>('apply_scale', true)),
+        correct_transform_coords_(OperatorBase::GetSingleArgument<bool>(
+            'correct_transform_coords',
+            false)),
+        rotated_(OperatorBase::GetSingleArgument<bool>('rotated', false)),
+        angle_bound_on_(
+            OperatorBase::GetSingleArgument<bool>('angle_bound_on', true)),
+        angle_bound_lo_(
+            OperatorBase::GetSingleArgument<int>('angle_bound_lo', -90)),
+        angle_bound_hi_(
+            OperatorBase::GetSingleArgument<int>('angle_bound_hi', 90)),
+        clip_angle_thresh_(
+            OperatorBase::GetSingleArgument<float>('clip_angle_thresh', 1.0)) {
+    CAFFE_ENFORCE_EQ(
+        weights_.size(),
+        4,
+        'weights size ' + caffe2::to_string(weights_.size()) + 'must be 4.');
   }
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
     }
     
-    #endif  // BENCHMARK_COLORPRINT_H_
-
+      // Generate bounding box proposals for a given image
+  // im_info: [height, width, im_scale]
+  // all_anchors: (H * W * A, 4)
+  // bbox_deltas_tensor: (4 * A, H, W)
+  // scores_tensor: (A, H, W)
+  // out_boxes: (n, 5)
+  // out_probs: n
+  void ProposalsForOneImage(
+      const Eigen::Array3f& im_info,
+      const Eigen::Map<const ERMatXf>& all_anchors,
+      const utils::ConstTensorView<float>& bbox_deltas_tensor,
+      const utils::ConstTensorView<float>& scores_tensor,
+      ERArrXXf* out_boxes,
+      EArrXf* out_probs) const;
     
-    // Parses a bool/Int32/string from the environment variable
-// corresponding to the given Google Test flag.
-bool BoolFromEnv(const char* flag, bool default_val);
-int32_t Int32FromEnv(const char* flag, int32_t default_val);
-double DoubleFromEnv(const char* flag, double default_val);
-const char* StringFromEnv(const char* flag, const char* default_val);
+      EMatXf result_gt(5, 5);
+  result_gt << 252.668, 107.367, 91.4381, 276.165, 0.0, 217.686, 19.3551,
+      147.631, 205.397, 55.0, 187.363, 214.185, 19.865, 31.0368, 100.0, 270.234,
+      210.513, 235.963, 130.163, -50.0, 36.1956, 140.863, 62.2665, 259.645,
+      180.5;
     
-      LeastSq best_fit;
     
-    // Return a vector containing the bigO and RMS information for the specified
-// list of reports. If 'reports.size() < 2' an empty vector is returned.
-std::vector<BenchmarkReporter::Run> ComputeBigO(
-    const std::vector<BenchmarkReporter::Run>& reports);
     
-    #if defined(BENCHMARK_OS_MACOSX)
-#include <mach/mach_time.h>
-#endif
-// For MSVC, we want to use '_asm rdtsc' when possible (since it works
-// with even ancient MSVC compilers), and when not possible the
-// __rdtsc intrinsic, declared in <intrin.h>.  Unfortunately, in some
-// environments, <windows.h> and <intrin.h> have conflicting
-// declarations of some other intrinsics, breaking compilation.
-// Therefore, we simply declare __rdtsc ourselves. See also
-// http://connect.microsoft.com/VisualStudio/feedback/details/262047
-#if defined(COMPILER_MSVC) && !defined(_M_IX86)
-extern 'C' uint64_t __rdtsc();
-#pragma intrinsic(__rdtsc)
-#endif
     
-    void JSONReporter::ReportRuns(std::vector<Run> const& reports) {
-  if (reports.empty()) {
-    return;
-  }
-  std::string indent(4, ' ');
-  std::ostream& out = GetOutputStream();
-  if (!first_report_) {
-    out << ',\n';
-  }
-  first_report_ = false;
+    
+    
+    
+    
+    {    p2 = p1 + k_axisScale * xf.q.GetYAxis();
+    DrawSegment(p1,p2,b2Color(0,1,0));
+}
+    
+        virtual void DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color);
+    
+    		case 'a':
+			{
+				m_body->ApplyTorque(50.0f, true);
+			}
+			break;
+    
+    
+    {	bool m_broke;
+	bool m_break;
+};
+    
+    	Bridge()
+	{
+		b2Body* ground = NULL;
+		{
+			b2BodyDef bd;
+			ground = m_world->CreateBody(&bd);
     }
+    }
+    
+      // Compares img with the baseline image and saves the resulting distance map
+  // inside the object. The provided image must have the same dimensions as the
+  // baseline image.
+  virtual void Compare(const OutputImage& img) = 0;
+    
+    // TODO(user) Use SRGB->linear conversion and a lookup-table.
+inline float GammaToLinear(float x) {
+  return static_cast<float>(std::pow(x / 255.0f, 2.2));
+}
+    
+    static const int kCbToBlueTable[256] = {
+  -227, -225, -223, -222, -220, -218, -216, -214, -213, -211, -209, -207,
+  -206, -204, -202, -200, -198, -197, -195, -193, -191, -190, -188, -186,
+  -184, -183, -181, -179, -177, -175, -174, -172, -170, -168, -167, -165,
+  -163, -161, -159, -158, -156, -154, -152, -151, -149, -147, -145, -144,
+  -142, -140, -138, -136, -135, -133, -131, -129, -128, -126, -124, -122,
+  -120, -119, -117, -115, -113, -112, -110, -108, -106, -105, -103, -101,
+   -99,  -97,  -96,  -94,  -92,  -90,  -89,  -87,  -85,  -83,  -82,  -80,
+   -78,  -76,  -74,  -73,  -71,  -69,  -67,  -66,  -64,  -62,  -60,  -58,
+   -57,  -55,  -53,  -51,  -50,  -48,  -46,  -44,  -43,  -41,  -39,  -37,
+   -35,  -34,  -32,  -30,  -28,  -27,  -25,  -23,  -21,  -19,  -18,  -16,
+   -14,  -12,  -11,   -9,   -7,   -5,   -4,   -2,    0,    2,    4,    5,
+     7,    9,   11,   12,   14,   16,   18,   19,   21,   23,   25,   27,
+    28,   30,   32,   34,   35,   37,   39,   41,   43,   44,   46,   48,
+    50,   51,   53,   55,   57,   58,   60,   62,   64,   66,   67,   69,
+    71,   73,   74,   76,   78,   80,   82,   83,   85,   87,   89,   90,
+    92,   94,   96,   97,   99,  101,  103,  105,  106,  108,  110,  112,
+   113,  115,  117,  119,  120,  122,  124,  126,  128,  129,  131,  133,
+   135,  136,  138,  140,  142,  144,  145,  147,  149,  151,  152,  154,
+   156,  158,  159,  161,  163,  165,  167,  168,  170,  172,  174,  175,
+   177,  179,  181,  183,  184,  186,  188,  190,  191,  193,  195,  197,
+   198,  200,  202,  204,  206,  207,  209,  211,  213,  214,  216,  218,
+   220,  222,  223,  225,
+};
+    
+    namespace guetzli {
+    }
+    
+    std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg) {
+  if (jpg.components.size() == 1 ||
+      (jpg.components.size() == 3 &&
+       HasYCbCrColorSpace(jpg) && (jpg.Is420() || jpg.Is444()))) {
+    OutputImage img(jpg.width, jpg.height);
+    img.CopyFromJpegData(jpg);
+    return img.ToSRGB();
+  }
+  return std::vector<uint8_t>();
+}
+    
+    
+    {}  // namespace guetzli
+    
+    #include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+    
+      void ToLinearRGB(std::vector<std::vector<float> >* rgb) const;
