@@ -1,53 +1,64 @@
 
         
-        class U2fRegistration < ActiveRecord::Base
-  belongs_to :user
+          if Rails.env == 'development'
+    test_conf = ActiveRecord::Base.configurations['test']
     
-        def as_json
-      { name: name, path: path, type: type }
-    end
+      def text_url
+    object.local? ? medium_url(object) : nil
   end
-end
-
     
-            entries
+    class ActivityPub::EmojiSerializer < ActiveModel::Serializer
+  include RoutingHelper
+    
+        # @param modifier [Array<String, Sass::Script::Tree::Node>] See \{#modifier}
+    # @param type [Array<String, Sass::Script::Tree::Node>] See \{#type}
+    # @param expressions [Array<Array<String, Sass::Script::Tree::Node>>] See \{#expressions}
+    def initialize(modifier, type, expressions)
+      @modifier = modifier
+      @type = type
+      @expressions = expressions
+    end
+    
+            def find_address
+          if @order.bill_address_id == params[:id].to_i
+            @order.bill_address
+          elsif @order.ship_address_id == params[:id].to_i
+            @order.ship_address
+          else
+            raise CanCan::AccessDenied
+          end
+        end
       end
     end
   end
 end
 
     
-      # Before we load the schema, define the timestamp_id function.
-  # Idiomatically, we might do this in a migration, but then it
-  # wouldn't end up in schema.rb, so we'd need to figure out a way to
-  # get it in before doing db:setup as well. This is simpler, and
-  # ensures it's always in place.
-  Rake::Task['db:schema:load'].enhance ['db:define_timestamp_id']
+            protected
     
-    class REST::MediaAttachmentSerializer < ActiveModel::Serializer
-  include RoutingHelper
+          class ValidateAttachmentContentTypeMatcher
+        def initialize attachment_name
+          @attachment_name = attachment_name
+          @allowed_types = []
+          @rejected_types = []
+        end
     
-      def deliver_digest
-    NotificationMailer.digest(user.account).deliver_now!
-    user.touch(:last_emailed_at)
+            def no_error_when_valid?
+          @file = StringIO.new('.')
+          @subject.send(@attachment_name).assign(@file)
+          @subject.valid?
+          expected_message = [
+            @attachment_name.to_s.titleize,
+            I18n.t(:blank, scope: [:errors, :messages])
+          ].join(' ')
+          @subject.errors.full_messages.exclude?(expected_message)
+        end
+      end
+    end
   end
 end
 
     
-      # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/reblog
-  def reblog
-    r = Status.where.not(reblog_of_id: nil).first
-    NotificationMailer.reblog(r.reblog.account, Notification.find_by(activity: r))
-  end
-    
-        def log_status(status)
-      puts bold status
-    end
-    
-      # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
-    
-          spec['main'] =
-          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
-          find_files.(Bootstrap.fonts_path) +
-          %w(assets/javascripts/bootstrap.js)
+            def lower_than_low?
+          @low.nil? || !passes_validation_with_size(@low - 1)
+        end
