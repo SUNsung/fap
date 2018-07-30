@@ -1,113 +1,165 @@
 
         
-              def initialize
-        @log_tags = []
+        class PostgresqlAdapterTest < ActionCable::TestCase
+  include CommonSubscriptionAdapterTest
     
-          include ActiveModel::Type::Helpers::Mutable
-    
-        assert_equal 1, companies(:first_firm).reload.clients_of_firm.size
-    assert_equal 1, companies(:first_firm).clients_of_firm.reload.size
+      test 'broadcasting_for with an object' do
+    assert_equal 'Room#1-Campfire', ChatChannel.broadcasting_for(Room.new(1))
   end
     
-      test 'should subscribe to a channel' do
-    @channel.subscribe_to_channel
-    assert_equal 1, @channel.room.id
+      test 'timer start and stop' do
+    mock = Minitest::Mock.new
+    3.times { mock.expect(:shutdown, nil) }
+    
+    WebSocket::Frame::Data.prepend Module.new {
+  def initialize(*)
+    @masking_key = nil
+    super
   end
+}
+#
+####
     
-          expected = { 'identifier' => '{id: 1}', 'type' => 'reject_subscription' }
-      assert_equal expected, @connection.last_transmission
-      assert_equal 1, @connection.transmissions.size
+          env = Rack::MockRequest.env_for '/test', 'HTTP_HOST' => 'localhost', 'HTTP_CONNECTION' => 'upgrade', 'HTTP_UPGRADE' => 'websocket'
+      @connection = Connection.new(server, env)
     
-      test 'connection identifier' do
-    run_in_eventmachine do
-      open_connection
-      assert_equal 'User#lifo', @connection.connection_identifier
+          Connection.new(@server, env).tap do |connection|
+        connection.process
+        connection.send :handle_open
+        assert connection.connected
+      end
     end
-  end
+end
+
     
-          assert_empty @subscriptions.identifiers
-    end
-  end
+          # Filtering Content
+      'show_drafts'         => nil,
+      'limit_posts'         => 0,
+      'future'              => false,
+      'unpublished'         => false,
     
-      # Finds the projects '@user' contributed to, limited to either public projects
-  # or projects visible to the given user.
-  #
-  # current_user - When given the list of the projects is limited to those only
-  #                visible by this user.
-  #
-  # Returns an ActiveRecord::Relation.
-  def execute(current_user = nil)
-    segments = all_projects(current_user)
+    module Jekyll
+  module Deprecator
+    extend self
     
-      private
+    module Jekyll
+  module Drops
+    class UnifiedPayloadDrop < Drop
+      mutable true
     
-        registration
-  end
-    
-            def update
-          authorize! :update, stock_location
-          if stock_location.update_attributes(stock_location_params)
-            respond_with(stock_location, status: 200, default_template: :show)
+            # With reconfirmable, notify the original email when the user first
+        # requests the email change, instead of when the change is confirmed.
+        def send_email_changed_notification?
+          if self.class.reconfirmable
+            self.class.send_email_changed_notification && reconfirmation_required?
           else
-            invalid_resource!(stock_location)
+            super
           end
         end
     
-    # Use this to fill in an entire form with data from a table. Example:
-#
-#   When I fill in the following:
-#     | Account Number | 5002       |
-#     | Expiry date    | 2009-11-01 |
-#     | Note           | Nice guy   |
-#     | Wants Email?   |            |
-#
-# TODO: Add support for checkbox, select og option
-# based on naming conventions.
-#
-When /^(?:|I )fill in the following:$/ do |fields|
-  fields.rows_hash.each do |name, value|
-    When %{I fill in '#{name}' with '#{value}'}
+        # The path used after unlocking the resource
+    def after_unlock_path_for(resource)
+      new_session_path(resource)  if is_navigational_format?
+    end
+    
+        def unlock_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :unlock_instructions, opts)
+    end
+    
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
+    end
+    
+          # Prints a table for a given array of records. For each record, the block
+      # is yielded two arguments: the record and a Row object. To print values
+      # for that record, add values using `row << 'some value'`. A row can
+      # optionally be highlighted in yellow using `row.yellow`.
+      def table(records, &block)
+        return if records.empty?
+        rows = collect_rows(records, &block)
+        col_widths = calculate_column_widths(rows)
+    
+          def stages
+        names = Dir[stage_definitions].map { |f| File.basename(f, '.rb') }
+        assert_valid_stage_names(names)
+        names
+      end
+    
+      # Implemented by subclasses to define Rake tasks. Typically a plugin will call
+  # `eval_rakefile` to load Rake tasks from a separate .rake file.
+  #
+  # Example:
+  #
+  #   def define_tasks
+  #     eval_rakefile File.expand_path('../tasks.rake', __FILE__)
+  #   end
+  #
+  # For simple tasks, you can define them inline. No need for a separate file.
+  #
+  #   def define_tasks
+  #     desc 'Do something fantastic.'
+  #     task 'my_plugin:fantastic' do
+  #       ...
+  #     end
+  #   end
+  #
+  def define_tasks; end
+    
+      desc 'Rollback to previous release.'
+  task :rollback do
+    %w{ starting started
+        reverting reverted
+        publishing published
+        finishing_rollback finished }.each do |task|
+      invoke 'deploy:#{task}'
+    end
   end
 end
     
-        # scale to the requested geometry and preserve the aspect ratio
-    def scale_to(new_geometry)
-      scale = [new_geometry.width.to_f / self.width.to_f , new_geometry.height.to_f / self.height.to_f].min
-      Paperclip::Geometry.new((self.width * scale).round, (self.height * scale).round)
+            def stock_location
+          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
+        end
+    
+    module WithinHelpers
+  def with_scope(locator)
+    locator ? within(*selector_for(locator)) { yield } : yield
+  end
+end
+World(WithinHelpers)
+    
+      # Defines the geometry of an image.
+  class Geometry
+    attr_accessor :height, :width, :modifier
+    
+            def type_allowed?(type)
+          @subject.send('#{@attachment_name}_content_type=', type)
+          @subject.valid?
+          @subject.errors[:'#{@attachment_name}_content_type'].blank?
+        end
+    
+            def no_error_when_valid?
+          @file = StringIO.new('.')
+          @subject.send(@attachment_name).assign(@file)
+          @subject.valid?
+          expected_message = [
+            @attachment_name.to_s.titleize,
+            I18n.t(:blank, scope: [:errors, :messages])
+          ].join(' ')
+          @subject.errors.full_messages.exclude?(expected_message)
+        end
+      end
     end
   end
 end
 
     
-            def matches? subject
-          @subject = subject
-          @subject = @subject.class unless Class === @subject
-          responds? && has_column?
+          def validate_blacklist(record, attribute, value)
+        if forbidden.present? && forbidden.any? { |type| type === value }
+          mark_invalid record, attribute, forbidden
         end
-    
-            def failure_message
-          '#{expected_attachment}\n'.tap do |message|
-            message << accepted_types_and_failures.to_s
-            message << '\n\n' if @allowed_types.present? && @rejected_types.present?
-            message << rejected_types_and_failures.to_s
-          end
-        end
-    
-            def failure_message
-          'Attachment #{@attachment_name} should be required'
-        end
-    
-        # You can add your own processor via the Paperclip configuration. Normally
-    # Paperclip will load all processors from the
-    # Rails.root/lib/paperclip_processors directory, but here you can add any
-    # existing class using this mechanism.
-    #
-    #   Paperclip.configure do |c|
-    #     c.register_processor :watermarker, WatermarkingProcessor.new
-    #   end
-    def register_processor(name, processor)
-      @known_processors ||= {}
-      @known_processors[name.to_s] = processor
-    end
-  end
-end
+      end
