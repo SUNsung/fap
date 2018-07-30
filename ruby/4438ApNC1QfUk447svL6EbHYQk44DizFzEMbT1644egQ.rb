@@ -1,60 +1,64 @@
 
         
-              topic = Topic.find_by(id: topic_id)
+              html_filters.push 'd3/clean_html', 'd3/entries_v4'
     
+        version 'C#' do
+      self.base_url = 'https://api.haxe.org/cs/'
     end
+    
+        options[:only] = BOOKS.map { |s| 'book.#{s}.html' }
+    
+        def initialize
+      @pages = {}
+    end
+    
+            # Helper method to get access to the class variable. This is mostly
+        # exposed for tests. This shouldn't be mucked with directly, since it's
+        # structure may change at any time.
+        def registered; @@registered; end
+      end
+    end
+  end
+end
 
     
-      def self.expire_cache_fragment!(name)
-    fragment_cache.delete(name)
-  end
+    module Vagrant
+  module Util
+    class IO
+      # The chunk size for reading from subprocess IO.
+      READ_CHUNK_SIZE = 4096
     
-        def enable
-      authorize @account.user, :enable?
-      @account.user.enable!
-      log_action :enable, @account.user
-      redirect_to admin_account_path(@account.id)
+            expect {
+          DiasporaFederation.callbacks.trigger(:save_person_after_webfinger, person)
+        }.to raise_error ActiveRecord::RecordInvalid, /Person with same GUID already exists: #{alice.diaspora_handle}/
+      end
     end
     
-      def text_url
-    object.local? ? medium_url(object) : nil
-  end
+      OVERRIDE_FIELDS_ON_FB_UPDATE = [:contact_id, :person_id, :request_id, :invitation_id, :photo_url, :name, :username]
+  MAX_CHARACTERS = 63206
     
-        existence_maps.each do |group|
-      existing_one = group.key(true)
-    
-      def short_name
-    object.site_title
-  end
-    
-          rescue_from JSON::JWS::VerificationFailed do |e|
-        logger.info e.backtrace[0, 10].join('\n')
-        handle_params_error('bad_request', e.message)
-      end
-    
-          def find
-        client = Api::OpenidConnect::OAuthApplication.find_by(client_name: params[:client_name])
-        if client
-          render json: {client_id: client.client_id}
-        else
-          render json: {error: 'Client with name #{params[:client_name]} does not exist'}
+            def create
+          authorize! :create, StockLocation
+          @stock_location = StockLocation.new(stock_location_params)
+          if @stock_location.save
+            respond_with(@stock_location, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_location)
+          end
         end
+    
+            #target = $LOADED_FEATURES.grep(/#{path}/).first
+        #puts path
+        #puts caller.map { |c| '  #{c}' }.join('\n')
+        #fontsize = [10, duration * 48].max
+        puts '#{duration},#{path},#{source}'
       end
-    
-    desc 'Clean out caches: .pygments-cache, .gist-cache, .sass-cache'
-task :clean do
-  rm_rf [Dir.glob('.pygments-cache/**'), Dir.glob('.gist-cache/**'), Dir.glob('.sass-cache/**'), 'source/stylesheets/screen.css']
-end
-    
-        def get_gist_from_web(gist, file)
-      gist_url = get_gist_url_for(gist, file)
-      data     = get_web_content(gist_url)
-    
-      # Summary is used on the Archive pages to return the first block of content from a post.
-  def summary(input)
-    if input.index(/\n\n/)
-      input.split(/\n\n/)[0]
-    else
-      input
+      #puts caller.map { |c| ' => #{c}' }.join('\n')
     end
-  end
+    
+          elsif download =~ /.tgz/
+        prefix = download.gsub('.tgz', '').gsub('#{target}/', '')
+        untar(download) do |entry|
+          next unless out = eval_file(entry, file['files'], prefix)
+          File.join(target, out)
+        end
