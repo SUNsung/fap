@@ -1,88 +1,63 @@
 
         
-        
-def auto_parallel(metagraph, model):
-  from tensorflow.python.grappler import tf_optimizer
-  rewriter_config = rewriter_config_pb2.RewriterConfig()
-  rewriter_config.optimizers.append('autoparallel')
-  rewriter_config.auto_parallel.enable = True
-  rewriter_config.auto_parallel.num_replicas = FLAGS.num_gpus
-  optimized_graph = tf_optimizer.OptimizeGraph(rewriter_config, metagraph)
-  metagraph.graph_def.CopyFrom(optimized_graph)
-  UpdateCollection(metagraph, model)
+            def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer)
+        ]
+    
+        def __init__(self, operators, supervisors, directors):
+        self.operators = operators
+        self.supervisors = supervisors
+        self.directors = directors
+        self.queued_calls = deque()
+    
+        def remove(self, key):
+        hash_index = self._hash_function(key)
+        for index, item in enumerate(self.table[hash_index]):
+            if item.key == key:
+                del self.table[hash_index][index]
+                return
+        raise KeyError('Key not found')
 
     
-        # Create a HashTable mapping label strings to integer ids.
-    table_initializer = tf.contrib.lookup.KeyValueTensorInitializer(
-        keys=list(input_config.label_map.keys()),
-        values=list(input_config.label_map.values()),
-        key_dtype=tf.string,
-        value_dtype=tf.int32)
-    label_to_id = tf.contrib.lookup.HashTable(
-        table_initializer, default_value=-1)
     
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-    
-      This function assumes the directory structure of the Mikulski Archive for
-  Space Telescopes (http://archive.stsci.edu/pub/kepler/lightcurves).
-  Specifically, the filenames for a particular Kepler target star have the
-  following format:
-    
-      Args:
-    time: 1D numpy array of time values.
-    period: A positive real scalar; the period to fold over.
-    t0: The center of the resulting folded vector; this value is mapped to 0.
-    
-    
-def compute_path_embeddings(model, session, instances):
-  '''Compute the path embeddings for all the distinct paths.
-    
-    
-def ArrayToDatum(arr):
-  '''Converts numpy array to DatumProto.
-    
-        old_layer = keras.layers.MaxPooling2D((2, 2), 2, 'valid', name='maxpool2d')
-    new_layer = keras.layers.MaxPool2D(pool_size=2, strides=2, padding='valid', name='maxpool2d')
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
-    
-    
-@keras_test
-def test_locallyconnected_2d():
-    num_samples = 5
-    filters = 3
-    stack_size = 4
-    num_row = 6
-    num_col = 8
-    padding = 'valid'
-    
-        # learn the alphabet with stacked LSTM
-    model = Sequential([
-        layers.LSTM(16, return_sequences=True, input_shape=(sequence_length, number_of_chars)),
-        layers.LSTM(16, return_sequences=False),
-        layers.Dense(number_of_chars, activation='softmax')
-    ])
-    model.compile(loss='categorical_crossentropy', optimizer='adam')
-    model.fit(x, y, batch_size=1, epochs=60, verbose=1)
-    
-    
-if __name__ == '__main__':
-    pytest.main([__file__])
+@pytest.fixture
+def httpbin_secure(httpbin_secure):
+    return prepare_url(httpbin_secure)
 
     
-        for i in range(10, 30):
-        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
-            i = i,
-            p = preview
+    try:
+    import simplejson as json
+except ImportError:
+    import json
+    
+            .. seealso:: values() and items().
+        '''
+        return list(self.iterkeys())
+    
+            p = PreparedRequest()
+        p.prepare(
+            method=request.method.upper(),
+            url=request.url,
+            files=request.files,
+            data=request.data,
+            json=request.json,
+            headers=merge_setting(request.headers, self.headers, dict_class=CaseInsensitiveDict),
+            params=merge_setting(request.params, self.params),
+            auth=merge_setting(auth, self.auth),
+            cookies=merged_cookies,
+            hooks=merge_hooks(request.hooks, self.hooks),
         )
-        try:
-            mime, ext, size = url_info(url)
-            break
-        except: continue
+        return p
     
-        def prepare(self, **kwargs):
-        content = get_content(self.url)
+    def get_marker(line):
+    matchlist = TAG_REGEX.findall(line)
+    if matchlist:
+        namematch = NAMED_A_TAG_REGEX.match(line)
+        if namematch:
+            return namematch.group(1) # group 0 is full match
     
         >>> Point = namedtuple('Point', 'x y')
     >>> Point.__doc__                   # docstring for the new class
@@ -103,75 +78,56 @@ if __name__ == '__main__':
     >>> p._replace(x=100)               # _replace() is like str.replace() but targets named fields
     Point(x=100, y=22)
     
-                self._pending_work_items[self._queue_count] = w
-            self._work_ids.put(self._queue_count)
-            self._queue_count += 1
-            # Wake up queue management thread
-            self._result_queue.put(None)
+    _threads_queues = weakref.WeakKeyDictionary()
+_shutdown = False
     
-    def with_process_pool_executor():
-    with ProcessPoolExecutor(10) as executor:
-        return list(executor.map(is_prime, PRIMES))
-    
-        def test_done_callback_already_cancelled(self):
-        was_cancelled = [None]
-        def fn(callback_future):
-            was_cancelled[0] = callback_future.cancelled()
-    
-    
-class OmniCompletionRequest( CompletionRequest ):
-  def __init__( self, omni_completer, request_data ):
-    super( OmniCompletionRequest, self ).__init__( request_data )
-    self._omni_completer = omni_completer
+        def _adjust_thread_count(self):
+        # When the executor gets lost, the weakref callback will wake up
+        # the worker threads.
+        def weakref_cb(_, q=self._work_queue):
+            q.put(None)
+        # TODO(bquinlan): Should avoid creating new threads if there are more
+        # idle threads than items in the work queue.
+        if len(self._threads) < self._max_workers:
+            t = threading.Thread(target=_worker,
+                                 args=(weakref.ref(self, weakref_cb),
+                                       self._work_queue))
+            t.daemon = True
+            t.start()
+            self._threads.add(t)
+            _threads_queues[t] = self._work_queue
     
     
-def EndsWithPython_Bad( path ):
-  ok_( not _EndsWithPython( path ),
-       'Path {0} does end with a Python name.'.format( path ) )
+  @staticmethod
+  def CreateFromOptions( user_options ):
+    all_filters = dict( user_options.get( 'filter_diagnostics', {} ) )
+    compiled_by_type = {}
+    for type_spec, filter_value in iteritems( dict( all_filters ) ):
+      filetypes = [ type_spec ]
+      if type_spec.find( ',' ) != -1:
+        filetypes = type_spec.split( ',' )
+      for filetype in filetypes:
+        compiled_by_type[ filetype ] = _CompileFilters( filter_value )
     
+          if 'abbr' not in new_candidate:
+        new_candidate[ 'abbr' ] = new_candidate[ 'word' ]
     
-def ParseArguments():
-  parser = argparse.ArgumentParser()
-  parser.add_argument( '--skip-build', action = 'store_true',
-                       help = 'Do not build ycmd before testing' )
-  parser.add_argument( '--coverage', action = 'store_true',
-                       help = 'Enable coverage report' )
-  parser.add_argument( '--no-flake8', action = 'store_true',
-                       help = 'Do not run flake8' )
+    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
+# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
+# positive matches at the risk of more false negatives.
     
-    If the `~functools.singledispatch` library is available (standard in
-Python 3.4, available via the `singledispatch
-<https://pypi.python.org/pypi/singledispatch>`_ package on older
-versions), additional types of objects may be yielded. Tornado includes
-support for ``asyncio.Future`` and Twisted's ``Deferred`` class when
-``tornado.platform.asyncio`` and ``tornado.platform.twisted`` are imported.
-See the `convert_yielded` function to extend this mechanism.
+        # Make the eyebrows into a nightmare
+    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
+    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
+    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
+    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
     
-        '''
-    def __init__(self, async_client_class=None, **kwargs):
-        # Initialize self._closed at the beginning of the constructor
-        # so that an exception raised here doesn't lead to confusing
-        # failures in __del__.
-        self._closed = True
-        self._io_loop = IOLoop(make_current=False)
-        if async_client_class is None:
-            async_client_class = AsyncHTTPClient
-        # Create the client while our IOLoop is 'current', without
-        # clobbering the thread's real current IOLoop (if any).
-        self._async_client = self._io_loop.run_sync(
-            gen.coroutine(lambda: async_client_class(**kwargs)))
-        self._closed = False
+    setup_encode_face = '''
+import face_recognition
     
-        .. testoutput::
+    # Load the jpg file into a numpy array
+image = face_recognition.load_image_file('biden.jpg')
     
-    from tornado.concurrent import (Future, return_future, ReturnValueIgnoredError,
-                                run_on_executor, future_set_result_unless_cancelled)
-from tornado.escape import utf8, to_unicode
-from tornado import gen
-from tornado.ioloop import IOLoop
-from tornado.iostream import IOStream
-from tornado.log import app_log
-from tornado import stack_context
-from tornado.tcpserver import TCPServer
-from tornado.testing import AsyncTestCase, ExpectLog, bind_unused_port, gen_test
-from tornado.test.util import unittest, skipBefore35, exec_test, ignore_deprecation
+    import sys
+import os
+from unittest.mock import MagicMock
