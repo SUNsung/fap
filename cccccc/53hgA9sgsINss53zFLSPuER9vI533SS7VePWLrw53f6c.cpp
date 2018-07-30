@@ -1,347 +1,391 @@
 
         
-        void DragFileItems(const std::vector<base::FilePath>& files,
-                   const gfx::Image& icon,
-                   gfx::NativeView view);
+        
+    {    return S_OK;
+}
     
-    namespace atom {
+    struct CV_EXPORTS IntrinsicParams
+{
+    Vec2d f;
+    Vec2d c;
+    Vec4d k;
+    double alpha;
+    std::vector<uchar> isEstimate;
     }
     
-     private:
-  // The following methods are implemented by platform-specific implementations
-  // of this class.
-  //
-  // Start/StopListening are called when transitioning between zero and nonzero
-  // registered accelerators. StartListening will be called after
-  // RegisterAcceleratorImpl and StopListening will be called after
-  // UnregisterAcceleratorImpl.
-  //
-  // For RegisterAcceleratorImpl, implementations return false if registration
-  // did not complete successfully.
-  virtual void StartListening() = 0;
-  virtual void StopListening() = 0;
-  virtual bool RegisterAcceleratorImpl(const ui::Accelerator& accelerator) = 0;
-  virtual void UnregisterAcceleratorImpl(
-      const ui::Accelerator& accelerator) = 0;
+    #include 'common.hpp'
+#include 'warp_reduce.hpp'
     
-    #endif  // CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
+    namespace cv
+{
+    }
+    
+    #undef cv_hal_LU32f
+#define cv_hal_LU32f lapack_LU32f
+#undef cv_hal_LU64f
+#define cv_hal_LU64f lapack_LU64f
+    
+    
+    {    // Explicit template instantiations
+    template /*static*/ CNTK_API ValuePtr Value::Create<float>(const NDShape& sampleShape, const std::vector<std::vector<float>>& sequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::Create<double>(const NDShape& sampleShape, const std::vector<std::vector<double>>& sequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::Create<float16>(const NDShape& sampleShape, const std::vector<std::vector<float16>>& sequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::Create<float>(const NDShape& sampleShape, const std::vector<std::vector<size_t>>& oneHotSequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::Create<double>(const NDShape& sampleShape, const std::vector<std::vector<size_t>>& oneHotSequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::Create<float16>(const NDShape& sampleShape, const std::vector<std::vector<size_t>>& oneHotSequences, const std::vector<bool>& sequenceStartFlags, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateBatch<float>(const NDShape& sampleShape, const std::vector<float>& batchData, const DeviceDescriptor& device, bool readOnly /*= false */);
+    template /*static*/ CNTK_API ValuePtr Value::CreateBatch<double>(const NDShape& sampleShape, const std::vector<double>& batchData, const DeviceDescriptor& device, bool readOnly /*= false */);
+    template /*static*/ CNTK_API ValuePtr Value::CreateBatch<float16>(const NDShape& sampleShape, const std::vector<float16>& batchData, const DeviceDescriptor& device, bool readOnly /*= false */);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<float>(const NDShape& sampleShape, const std::vector<float>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly /*= false */);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<double>(const NDShape& sampleShape, const std::vector<double>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly /*= false */);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<float16> (const NDShape& sampleShape, const std::vector<float16>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly /*= false */);
+    template /*static*/ CNTK_API ValuePtr Value::CreateBatch<float>(size_t dimension, const std::vector<size_t>& batchData, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateBatch<double>(size_t dimension, const std::vector<size_t>& batchData, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateBatch<float16> (size_t dimension, const std::vector<size_t>& batchData, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<float>(size_t dimension, const std::vector<size_t>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<double>(size_t dimension, const std::vector<size_t>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<float16>(size_t dimension, const std::vector<size_t>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<float>(const NDShape& sampleShape, size_t sequenceLength, const SparseIndexType* colStarts, const SparseIndexType* rowIndices, const float* nonZeroValues, size_t numNonZeroValues, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<double>(const NDShape& sampleShape, size_t sequenceLength, const SparseIndexType* colStarts, const SparseIndexType* rowIndices, const double* nonZeroValues, size_t numNonZeroValues, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template /*static*/ CNTK_API ValuePtr Value::CreateSequence<float16>(const NDShape& sampleShape, size_t sequenceLength, const SparseIndexType* colStarts, const SparseIndexType* rowIndices, const float16* nonZeroValues, size_t numNonZeroValues, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/);
+    template CNTK_API void Value::CopyVariableValueToVector<float>(const Variable& outputVariable, std::vector<std::vector<float>>& sequences);
+    template CNTK_API void Value::CopyVariableValueToVector<double>(const Variable& outputVariable, std::vector<std::vector<double>>& sequences);
+    template CNTK_API void Value::CopyVariableValueToVector<float16>(const Variable& outputVariable, std::vector<std::vector<float16>>& sequences);
+    template CNTK_API void Value::CopyVariableValueToVector<float>(const Variable& outputVariable, std::vector<std::vector<size_t>>& sequences);
+    template CNTK_API void Value::CopyVariableValueToVector<double>(const Variable& outputVariable, std::vector<std::vector<size_t>>& sequences);
+    template CNTK_API void Value::CopyVariableValueToVector<float16>(const Variable& outputVariable, std::vector<std::vector<size_t>>& sequences);
+    template CNTK_API std::tuple<size_t, size_t, size_t> Value::ValidateSparseCSCAndGetIndexBufferSizes<float>(const Variable& outputVariable);
+    template CNTK_API std::tuple<size_t, size_t, size_t> Value::ValidateSparseCSCAndGetIndexBufferSizes<double>(const Variable& outputVariable);
+    template CNTK_API std::tuple<size_t, size_t, size_t> Value::ValidateSparseCSCAndGetIndexBufferSizes<float16>(const Variable& outputVariable);
+    template CNTK_API void Value::CopyVariableValueToCSCSparse<float>(size_t sequenceLength, std::vector<SparseIndexType>& colStarts, std::vector<SparseIndexType>& rowIndices, std::vector<float>& nonZeroValues, size_t& numNonZeroValues);
+    template CNTK_API void Value::CopyVariableValueToCSCSparse<double>(size_t sequenceLength, std::vector<SparseIndexType>& colStarts, std::vector<SparseIndexType>& rowIndices, std::vector<double>& nonZeroValues, size_t& numNonZeroValues);
+    template CNTK_API void Value::CopyVariableValueToCSCSparse<float16>(size_t sequenceLength, std::vector<SparseIndexType>& colStarts, std::vector<SparseIndexType>& rowIndices, std::vector<float16>& nonZeroValues, size_t& numNonZeroValues);
+    template float Value::AsScalar<float>() const;
+    template double Value::AsScalar<double>() const;
+    template float16 Value::AsScalar<float16>() const;
+}
 
     
-    #include <string>
-    
-    #if defined(OS_MACOSX)
-const base::FilePath::CharType kFrameworkName[] =
-    FPL(ATOM_PRODUCT_NAME ' Framework.framework');
-#endif  // OS_MACOSX
-    
-    namespace chrome {
-    }
-    
-     protected:
-  explicit Net(v8::Isolate* isolate);
-  ~Net() override;
-    
-    void CV_ModelEstimator2_Test::get_test_array_types_and_sizes( int /*test_case_idx*/,
-                                                              vector<vector<Size> > &sizes, vector<vector<int> > &types )
-{
-    RNG &rng = ts->get_rng();
-    checkPartialSubsets = (cvtest::randInt(rng) % 2 == 0);
-    }
-    
-    
-    {        return dlsym(h, name);
-    }
-    #define CV_CL_GET_PROC_ADDRESS(name) GetProcAddress(name)
+    #include 'Basics.h'
+#include 'Platform.h'
+#include 'simple_checked_arrays.h' // ... for dotprod(); we can eliminate this I believe
+#include 'ssefloat4.h'
+#include <stdexcept>
+#ifndef __unix__
+#include <ppl.h>
+#include 'pplhelpers.h'
+#include 'numahelpers.h'
 #endif
+#include 'fileutil.h' // for saving and reading matrices
+#include <limits>     // for NaN
+#include <malloc.h>
     
-    using namespace cv::ocl::runtime;
-    
-    const uchar g_Saturate8u[] =
+    void GranularGPUDataTransferer::WaitForSyncPointOnAssignStreamAsync()
 {
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
-     16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
-     32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
-     48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
-     64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
-     80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
-     96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
-    112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
-    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
-    144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
-    160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
-    176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
-    192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
-    208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
-    224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
-    240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255
-};
-    
-    Ptr<LookUpTable> cv::cuda::createLookUpTable(InputArray) { throw_no_cuda(); return Ptr<LookUpTable>(); }
-    
-    #include 'generic/THTensorLapack.cpp'
-#include 'THGenerateFloatTypes.h'
-    
-      /// Attempts to find a value for the given `key`. If found, returns a
-  /// reference to the value. If not, throws an exception.
-  T& at(const std::string& key);
-  const T& at(const std::string& key) const;
-    
-    static bool hasContiguousSubspace(TensorList tl) {
-  // true if all the non-null tensors are adjacent
-  auto isDefined = [](const Tensor & tensor){ return tensor.defined(); };
-  auto isNull = [](const Tensor & tensor){ return !tensor.defined(); };
-  auto start = std::find_if(tl.begin(), tl.end(), isDefined);
-  auto stop = std::find_if(tl.rbegin(), tl.rend(), isDefined);
-  auto it = std::find_if(start, stop.base(), isNull);
-  return it == stop.base();
+    PrepareDevice(m_deviceId);
+    cudaStreamWaitEvent(GetAssignStream(), m_syncEvent, 0 /*flags 'must be 0'*/) || 'cudaStreamWaitEvent failed';
 }
     
-      std::vector<THCStream*> streams;
-  Py_ssize_t length = PySequence_Fast_GET_SIZE(seq.get());
-  for (Py_ssize_t i = 0; i < length; i++) {
-    PyObject *stream = PySequence_Fast_GET_ITEM(seq.get(), i);
-    }
+        // save model
+    if (!useParallelTrain || m_mpi->CurrentNodeRank() == m_mpi->MainNodeRank())
+        m_net->Save(newModelPath);
     
+        // SaveData - save data in the file/files
+    // recordStart - Starting record number
+    // matricies - a map of section name (section:subsection) to data pointer. Data sepcifications from config file will be used to determine where and how to save data
+    // numRecords - number of records we are saving, can be zero if not applicable
+    // datasetSize - size of the dataset (in records)
+    // byteVariableSized - for variable sized data, size of current block to be written, zero when not used, or ignored if not variable sized data
+    virtual bool SaveData(size_t recordStart, const std::map<std::wstring, void*, nocase_compare>& matrices, size_t numRecords, size_t datasetSize, size_t byteVariableSized = 0);
     
-    {  // Try to parse the numbers
-  result = THLongStorage_newWithSize(length);
-  for (Py_ssize_t i = 0; i < length; ++i) {
-    PyObject *arg = PyTuple_GET_ITEM(args, i + ignore_first);
-    if (!THPUtils_checkLong(arg)) {
-      return false;
-    }
-    THLongStorage_set(result, i, THPUtils_unpackLong(arg));
-  }
-  return true;
-}
-    
-      // Populate outputs
-  for (int k = 0; k < N; k++) { // For each box, even skipped
-    }
-    
-    
-    { private:
-  TIndex dense_last_dim_;
-  INPUT_TAGS(LENGTHS, INDICES, DENSE);
-};
-    
-    int64_t getWallClockMicros() {
-  return RuntimeOption::EvalJitTimer ? HPHP::Timer::GetCurrentTimeMicros() :
-         -1;
-}
-    
-      /* Second, try to get a magic file from Common Files */
-  if ((home = getenv('COMMONPROGRAMFILES')) != NULL) {
-    if (asprintf(&tmppath, '%s%s', home, hmagic) >= 0)
-      APPENDPATH();
-  }
-    
-    
-    {  return ret;
-}
-    
-      for (auto& c : unit.classes) {
-    folly::toAppend(
-      indent(2, show(*c)),
-      &ret
-    );
-  }
-    
-    
-    {}
-    
-      static bool IsVirtualDirectory(const String& filename);
-  static bool IsVirtualFile(const String& filename);
-  static bool IsPlainFilePath(const String& filename) {
-    return filename.find('://') == String::npos;
-  }
-    
-    
-    {  HeapImpl& heap_;
-  GCBits const mark_version_;
-  size_t num_small_{0}, num_big_{0}, num_slabs_{0};
-  size_t marked_{0}, pinned_{0}, unknown_{0}; // object counts
-  Counter cscanned_roots_, cscanned_; // bytes
-  Counter xscanned_roots_, xscanned_; // bytes
-  size_t init_ns_, initfree_ns_, roots_ns_{0}, mark_ns_{0}, sweep_ns_;
-  size_t max_worklist_{0}; // max size of cwork_ + xwork_
-  size_t freed_bytes_{0};
-  PtrMap<const HeapObject*> ptrs_;
-  MemBlock slabs_range_;
-  boost::dynamic_bitset<> slab_map_; // 1 bit per 2M
-  type_scan::Scanner type_scanner_;
-  std::vector<const HeapObject*> cwork_, xwork_;
-  APCGCManager* const apcgc_;
-};
-    
-    #pragma comment(lib, 'Shlwapi.lib')
-    
-        // change all inputs of this new node to share the old one's inputs
-    for (int i = 0; i < oldNode->GetNumInputs(); i++)
+        bool empty() const
     {
-        newNode->SetInput(i, oldNode->GetInputs()[i]); // TODO: use AttachInput()?
-        //oldNode->SetInput(i, nullptr); // BUGBUG: old node should no longer point into the network
+#ifndef NONUMLATTICEMMI // TODO:set NUM lattice to null so as to save memory
+        if (numlattices.empty() ^ denlattices.empty())
+            RuntimeError('latticesource: numerator and denominator lattices must be either both empty or both not empty');
+#endif
+        return denlattices.empty();
     }
     
-    template <typename ElemType>
-void DoConvertFromDbn(const ConfigParameters& config)
+        // prefetch a float4 from an address
+    static void prefetch(const float4* p)
+    {
+        _mm_prefetch((const char*) const_cast<float4*>(p), _MM_HINT_T0);
+    }
+    
+    // ===================================================================
+// behave like a config
+// This allows to access nodes inside a network as if it was an IConfigRecord.
+// This is meant to be used by whatever we will replace MEL.
+// ===================================================================
+    
+      /// Open the acceptor using the specified protocol.
+  /**
+   * This function opens the socket acceptor so that it will use the specified
+   * protocol.
+   *
+   * @param protocol An object specifying which protocol is to be used.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   *
+   * @par Example
+   * @code
+   * boost::asio::ip::tcp::acceptor acceptor(io_service);
+   * acceptor.open(boost::asio::ip::tcp::v4());
+   * @endcode
+   */
+  void open(const protocol_type& protocol = protocol_type())
+  {
+    boost::system::error_code ec;
+    this->get_service().open(this->get_implementation(), protocol, ec);
+    boost::asio::detail::throw_error(ec, 'open');
+  }
+    
+    
+    {
+    {} // namespace asio
+} // namespace boost
+    
+    template <typename Stream>
+class buffered_read_stream;
+    
+    template <typename CompletionCondition>
+class base_from_completion_cond
 {
-    wstring modelPath = config(L'modelPath');
-    wstring dbnModelPath = config(L'dbnModelPath');
+protected:
+  explicit base_from_completion_cond(CompletionCondition completion_condition)
+    : completion_condition_(completion_condition)
+  {
+  }
     }
     
-    #include <memory> // for shared_ptr
     
-        // Destroy - cleanup and remove this class
-    // NOTE: this destroys the object, and it can't be used past this point
-    virtual void Destroy();
+    {private:
+  native_buffer_type buffers_[2];
+  std::size_t total_buffer_size_;
+};
     
-        ProgressTracing()
-        : m_enabled(false), m_tracingFlag(false), m_timestampFlag(false), m_totalNumberOfSteps(0), m_currentStepOffset(0)
+    #endif // BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
+
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
+    
+      errno = 0;
+#if defined(__SYMBIAN32__)
+  int result = error_wrapper(::fcntl(d, F_GETFL, 0), ec);
+  if (result >= 0)
+  {
+    errno = 0;
+    int flag = (value ? (result | O_NONBLOCK) : (result & ~O_NONBLOCK));
+    result = error_wrapper(::fcntl(d, F_SETFL, flag), ec);
+  }
+#else // defined(__SYMBIAN32__)
+  ioctl_arg_type arg = (value ? 1 : 0);
+  int result = error_wrapper(::ioctl(d, FIONBIO, &arg), ec);
+#endif // defined(__SYMBIAN32__)
+    
+    /*
+ * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
+ * Method:    XGDMatrixFree
+ * Signature: (J)V
+ */
+JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGDMatrixFree
+  (JNIEnv *jenv, jclass jcls, jlong jhandle) {
+  DMatrixHandle handle = (DMatrixHandle) jhandle;
+  int ret = XGDMatrixFree(handle);
+  return ret;
+}
+    
+    #include '../helpers.h'
+    
+    TEST(Metric, Error) {
+  xgboost::Metric * metric = xgboost::Metric::Create('error');
+  ASSERT_STREQ(metric->Name(), 'error');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              0.5f, 0.001f);
+    }
+    
+    
+    {/// Clear decorations for a source when it updates.
+void clearDecorations(const std::string& source);
+}
+
+    
+    
+    {  status_ = Status(0);
+}
+    
+    
     {
-    }
+    {  resetDatabase();
+  EXPECT_FALSE(pathExists(path_ + '.backup'));
+}
+}
+
     
-        virtual VariableSchema GetOutputSchema() const override;
+      /// Restrict to a specific devnode.
+  std::string devnode;
     
-    // Returns the next Huffman-coded symbol.
-int ReadSymbol(const HuffmanTableEntry* table, BitReaderState* br) {
-  int nbits;
-  br->FillBitWindow();
-  int val = (br->val_ >> (br->bits_left_ - 8)) & 0xff;
-  table += val;
-  nbits = table->bits - 8;
-  if (nbits > 0) {
-    br->bits_left_ -= 8;
-    table += table->value;
-    val = (br->val_ >> (br->bits_left_ - nbits)) & ((1 << nbits) - 1);
-    table += val;
+    
+    {  std::vector<std::string> program_arguments = {
+      '/System/Library/CoreServices/FileSyncAgent.app/Contents/Resources/'
+      'FileSyncAgent_sshd-keygen-wrapper',
+      '-i',
+      '-f',
+      '/System/Library/CoreServices/FileSyncAgent.app/Contents/Resources/'
+      'FileSyncAgent_sshd_config',
+  };
+  pt::ptree program_arguments_tree = tree.get_child('ProgramArguments');
+  std::vector<std::string> program_arguments_parsed;
+  for (const auto& argument : program_arguments_tree) {
+    program_arguments_parsed.push_back(argument.second.get<std::string>(''));
   }
-  br->bits_left_ -= table->bits;
-  return table->value;
+  EXPECT_EQ(program_arguments_parsed, program_arguments);
 }
     
-    std::vector<std::vector<float> > RGBToYUV(const std::vector<float>& rgb) {
-  std::vector<std::vector<float> > yuv(3, std::vector<float>(rgb.size() / 3));
-  for (size_t i = 0, p = 0; p < rgb.size(); ++i, p += 3) {
-    const float r = rgb[p + 0];
-    const float g = rgb[p + 1];
-    const float b = rgb[p + 2];
-    yuv[0][i] = RGBToY(r, g, b);
-    yuv[1][i] = RGBToU(r, g, b);
-    yuv[2][i] = RGBToV(r, g, b);
-  }
-  return yuv;
-}
-    
-    // Decodes the parsed jpeg coefficients into an RGB image.
-// There can be only either 1 or 3 image components, in either case, an RGB
-// output image will be generated.
-// Only YUV420 and YUV444 sampling factors are supported.
-// Vector will be empty if a decoding error occurred.
-std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
-    
-      // Compute YUV444 DCT coefficients.
-  int block_ix = 0;
-  for (int block_y = 0; block_y < jpg->MCU_rows; ++block_y) {
-    for (int block_x = 0; block_x < jpg->MCU_cols; ++block_x) {
-      coeff_t block[3 * kDCTBlockSize];
-      // RGB->YUV transform.
-      for (int iy = 0; iy < 8; ++iy) {
-        for (int ix = 0; ix < 8; ++ix) {
-          int y = std::min(h - 1, 8 * block_y + iy);
-          int x = std::min(w - 1, 8 * block_x + ix);
-          int p = y * w + x;
-          RGBToYUV16(&rgb[3 * p], &block[8 * iy + ix]);
+    void BuildDCHistograms(const JPEGData& jpg, JpegHistogram* histo) {
+  for (size_t i = 0; i < jpg.components.size(); ++i) {
+    const JPEGComponent& c = jpg.components[i];
+    JpegHistogram* dc_histogram = &histo[i];
+    coeff_t last_dc_coeff = 0;
+    for (int mcu_y = 0; mcu_y < jpg.MCU_rows; ++mcu_y) {
+      for (int mcu_x = 0; mcu_x < jpg.MCU_cols; ++mcu_x) {
+        for (int iy = 0; iy < c.v_samp_factor; ++iy) {
+          for (int ix = 0; ix < c.h_samp_factor; ++ix) {
+            int block_y = mcu_y * c.v_samp_factor + iy;
+            int block_x = mcu_x * c.h_samp_factor + ix;
+            int block_idx = block_y * c.width_in_blocks + block_x;
+            coeff_t dc_coeff = c.coeffs[block_idx << 6];
+            int diff = std::abs(dc_coeff - last_dc_coeff);
+            int nbits = Log2Floor(diff) + 1;
+            dc_histogram->Add(nbits);
+            last_dc_coeff = dc_coeff;
+          }
         }
       }
-      // DCT
-      for (int i = 0; i < 3; ++i) {
-        ComputeBlockDCT(&block[i * kDCTBlockSize]);
-      }
-      // Quantization
-      for (int i = 0; i < 3 * 64; ++i) {
-        Quantize(&block[i], iquant[i]);
-      }
-      // Copy the resulting coefficients to *jpg.
-      for (int i = 0; i < 3; ++i) {
-        memcpy(&jpg->components[i].coeffs[block_ix * kDCTBlockSize],
-               &block[i * kDCTBlockSize], kDCTBlockSize * sizeof(block[0]));
-      }
-      ++block_ix;
     }
   }
+}
+    
+    inline float RGBToY(float r, float g, float b) {
+  return 0.299f * r + 0.587f * g + 0.114f * b;
+}
+    
+    #endif  // GUETZLI_ENTROPY_ENCODE_H_
+
+    
+    #ifndef GUETZLI_FAST_LOG_H_
+#define GUETZLI_FAST_LOG_H_
+    
+    #ifndef GUETZLI_FDCT_H_
+#define GUETZLI_FDCT_H_
     
     namespace guetzli {
     }
     
-    
-    {} // namespace folly
+    #endif  // GUETZLI_JPEG_DATA_READER_H_
 
     
-    #include <folly/synchronization/Hazptr.h>
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
     
-      BlockingQueueAddResult addWithPriority(T item, int8_t priority) override {
-    int mid = getNumPriorities() / 2;
-    size_t queue = priority < 0
-        ? std::max(0, mid + priority)
-        : std::min(getNumPriorities() - 1, mid + priority);
-    CHECK_LT(queue, queues_.size());
-    switch (kBehavior) { // static
-      case QueueBehaviorIfFull::THROW:
-        if (!queues_[queue].write(std::move(item))) {
-          throw QueueFullException('LifoSemMPMCQueue full, can't add item');
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    #include <exception>
+#include 'comm/xlogger/xlogger.h'
+    
+    void CommFrequencyLimit::__DelOlderTouchTime(uint64_t _time) {
+    for (std::list<uint64_t>::iterator iter = touch_times_.begin(); iter != touch_times_.end();) {
+        if ((_time - (*iter)) > time_span_) {
+            iter = touch_times_.erase(iter);
+            continue;
         }
-        break;
-      case QueueBehaviorIfFull::BLOCK:
-        queues_[queue].blockingWrite(std::move(item));
-        break;
     }
-    return sem_.post();
+    }
+    
+    #include 'comm/debugger/test_spy_sample.h'
+#include 'comm/xlogger/xlogger.h'
+    
+    
+#endif /* defined(__PublicComponent__testspy__) */
+
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+        ~ScopedJstring();
+    
+    void Obstacle::SetVelocity(const PerceptionObstacle& perception_obstacle,
+                           Feature* feature) {
+  double velocity_x = 0.0;
+  double velocity_y = 0.0;
+  double velocity_z = 0.0;
+    }
+    
+    Box2d::Box2d(const AABox2d &aabox)
+    : center_(aabox.center()),
+      length_(aabox.length()),
+      width_(aabox.width()),
+      half_length_(aabox.half_length()),
+      half_width_(aabox.half_width()),
+      heading_(0.0),
+      cos_heading_(1.0),
+      sin_heading_(0.0) {
+  CHECK_GT(length_, -kMathEpsilon);
+  CHECK_GT(width_, -kMathEpsilon);
+}
+    
+    
+    {  if (config_.recognizer_config_size() != 2) {
+    AERROR << 'RecognizeConfig size should be 2.';
+    return false;
   }
-    
-    /** hazptr_priv structures
- *  Thread private lists of retired objects that belong to the default domain.
- */
-class hazptr_priv {
-  std::atomic<hazptr_obj*> head_;
-  std::atomic<hazptr_obj*> tail_;
-  int rcount_;
-  bool active_;
-  hazptr_priv* prev_;
-  hazptr_priv* next_;
+  for (const auto &recognizer_config : config_.recognizer_config()) {
+    if (recognizer_config.name() == 'UnityRecognizeNight') {
+      classify_night_ = std::make_shared<ClassifyBySimple>(
+          recognizer_config.classify_net(), recognizer_config.classify_model(),
+          recognizer_config.classify_threshold(),
+          static_cast<unsigned int>(recognizer_config.classify_resize_width()),
+          static_cast<unsigned int>(
+              recognizer_config.classify_resize_height()));
     }
+    if (recognizer_config.name() == 'UnityRecognize') {
+      classify_day_ = std::make_shared<ClassifyBySimple>(
+          recognizer_config.classify_net(), recognizer_config.classify_model(),
+          recognizer_config.classify_threshold(),
+          static_cast<unsigned int>(recognizer_config.classify_resize_width()),
+          static_cast<unsigned int>(
+              recognizer_config.classify_resize_height()));
+    }
+  }
+  return true;
+}
     
-    #pragma once
+     private:
+  bool InitSharedData();
+  bool InitRectifier();
+  bool InitRecognizer();
+  bool InitReviser();
+    
+    bool UnityRectify::Init() {
+  if (!GetProtoFromFile(FLAGS_traffic_light_rectifier_config, &config_)) {
+    AERROR << 'Cannot get config proto from file: '
+           << FLAGS_traffic_light_rectifier_config;
+    return false;
+  }
+    }
