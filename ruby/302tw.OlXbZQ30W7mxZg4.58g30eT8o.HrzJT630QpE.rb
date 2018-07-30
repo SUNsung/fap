@@ -1,67 +1,89 @@
 
         
-        module Jobs
-    
-        # Get the hash of the last commit
-    def self.last_git_commit_hash(short)
-      format_specifier = short ? '%h' : '%H'
-      string = last_git_commit_formatted_with(format_specifier).to_s
-      return string unless string.empty?
-      return nil
+        module ModuleTest
+  class ModuleRedirectController < ::RedirectController
+    def module_redirect
+      redirect_to controller: '/redirect', action: 'hello_world'
     end
-    
-            expect(result).to eq('git svn info | grep Revision | egrep -o '[0-9]+'')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('git svn info | grep Revision | egrep -o '[0-9]+'')
-      end
-    end
-    
-            expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::VERSION_NUMBER]).to end_with('&& agvtool new-marketing-version 1.77.3')
-      end
-    
-        projects << @user.contributed_projects.visible_to_user(current_user) if current_user
-    projects << @user.contributed_projects.public_to_user(current_user)
-    
-        groups
   end
+    
+    module ActionCable
+  module Server
+    # An instance of this configuration object is available via ActionCable.server.config, which allows you to tweak Action Cable configuration
+    # in a Rails config initializer.
+    class Configuration
+      attr_accessor :logger, :log_tags
+      attr_accessor :connection_class, :worker_pool_size
+      attr_accessor :disable_request_forgery_protection, :allowed_request_origins, :allow_same_origin_as_host
+      attr_accessor :cable, :url, :mount_path
+    
+          private
+    
+          broadcasting = 'test_queue'
+      message = { body: 'test message' }
+      server.broadcast(broadcasting, message)
+    
+      def short_type
+    @short_type ||= type.split('::').pop
+  end
+    
+      MAIN_KEYS = %w[title message text main value]
+    
+        version '5' do
+      self.release = '5.4.0'
+      self.base_url = 'https://github.com/d3/'
+      self.root_path = 'd3/blob/master/API.md'
+    
+        SPLIT_INTS = /(?<=\d)\.(?=[\s\d])/.freeze
+    
+        it 'returns nil when the post has no facebook_id' do
+      expect(@service.post_opts(@post)).to be_nil
+    end
+  end
+    
+          def handle_start_point_response(endpoint)
+        _status, header, response = endpoint.call(request.env)
+        if response.redirect?
+          redirect_to header['Location']
+        else
+          save_params_and_render_consent_form(endpoint)
+        end
+      end
+    
+    post '/' do
+  connections.each { |out| out << 'data: #{params[:msg]}\n\n' }
+  204 # response without entity body
 end
-
     
-      # After we load the schema, make sure we have sequences for each
-  # table using timestamp IDs.
-  Rake::Task['db:schema:load'].enhance do
-    Rake::Task['db:ensure_id_sequences_exist'].invoke
-  end
-    
-      def display
-    'standalone'
-  end
-    
-      # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/follow
-  def follow
-    f = Follow.last
-    NotificationMailer.follow(f.target_account, Notification.find_by(activity: f))
-  end
-    
-    With optional '-t <bundle-id>', silently test if a given app
-is running, exiting with an error code if not.
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
-      end
+      it 'should allow changing the protection mode' do
+    # I have no clue what other modes are available
+    mock_app do
+      use Rack::Protection::FrameOptions, :frame_options => :deny
+      run DummyApp
     end
-  end
-end
     
-          unless file.file?
-        return 'File #{file} could not be found'
+            def argument_positions(arguments)
+          optarg_positions = []
+          arg_positions = []
+    
+            # @param lines [Array<String>]
+        # @param annotations [Array<(Integer, String)>]
+        #   each entry is the annotated line number and the annotation text
+        #
+        # @note annotations are sorted so that reconstructing the annotation
+        #   text via {#to_s} is deterministic
+        def initialize(lines, annotations)
+          @lines       = lines.freeze
+          @annotations = annotations.sort.freeze
+        end
+    
+          # The body of the method definition.
+      #
+      # @note this can be either a `begin` node, if the method body contains
+      #       multiple expressions, or any other node, if it contains a single
+      #       expression.
+      #
+      # @return [Node] the body of the method definition
+      def body
+        node_parts[0]
       end
-    
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
-    end
