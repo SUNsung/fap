@@ -1,142 +1,113 @@
 
         
-        #include 'test/cpp/qps/report.h'
+        	virtual void poll() = 0;
+	virtual Error connect_to_host(String p_host, String p_path, uint16_t p_port, bool p_ssl, PoolVector<String> p_protocol = PoolVector<String>()) = 0;
+	virtual void disconnect_from_host() = 0;
+	virtual IP_Address get_connected_host() const = 0;
+	virtual uint16_t get_connected_port() const = 0;
     
-    #ifdef __cplusplus
-extern 'C' {
-#endif
-    }
-    
-      signal(SIGINT, sigint_handler);
-    
-    void SecureAuthContext::AddProperty(const grpc::string& key,
-                                    const grpc::string_ref& value) {
-  if (!ctx_) return;
-  grpc_auth_context_add_property(ctx_, key.c_str(), value.data(), value.size());
-}
-    
-    
-    {
-    {}  // namespace
-}  // namespace grpc
-    
-    #include 'test/cpp/qps/histogram.h'
-    
-    UsageTimer::UsageTimer() : start_(Sample()) {}
-    
-    /*
- * This implements a Metrics server defined in
- * src/proto/grpc/testing/metrics.proto. Any
- * test service can use this to export Metrics (TODO (sreek): Only Gauges for
- * now).
- *
- * Example:
- *    MetricsServiceImpl metricsImpl;
- *    ..
- *    // Create QpsGauge(s). Note: QpsGauges can be created even after calling
- *    // 'StartServer'.
- *    QpsGauge qps_gauge1 = metricsImpl.CreateQpsGauge('foo', is_present);
- *    // qps_gauge1 can now be used anywhere in the program by first making a
- *    // one-time call qps_gauge1.Reset() and then calling qps_gauge1.Incr()
- *    // every time to increment a query counter
- *
- *    ...
- *    // Create the metrics server
- *    std::unique_ptr<grpc::Server> server = metricsImpl.StartServer(port);
- *    server->Wait(); // Note: This is blocking.
+    /**
+ * oc_ilog32 - Integer binary logarithm of a 32-bit value.
+ * @_v: A 32-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * The OC_ILOG_32() or OC_ILOGNZ_32() macros may be able to use a builtin
+ *  function instead, which should be faster.
  */
-namespace grpc {
-namespace testing {
-    }
-    }
+int oc_ilog32(ogg_uint32_t _v);
+/**
+ * oc_ilog64 - Integer binary logarithm of a 64-bit value.
+ * @_v: A 64-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * The OC_ILOG_64() or OC_ILOGNZ_64() macros may be able to use a builtin
+ *  function instead, which should be faster.
+ */
+int oc_ilog64(ogg_int64_t _v);
     
-    namespace grpc {
-    }
+    #define opus_fft_alloc_arch(_st, arch) \
+   ((void)(arch), opus_fft_alloc_arm_neon(_st))
     
-    bool EncodeSOF(const JPEGData& jpg, JPEGOutput out) {
-  const size_t ncomps = jpg.components.size();
-  const size_t marker_len = 8 + 3 * ncomps;
-  std::vector<uint8_t> data(marker_len + 2);
-  size_t pos = 0;
-  data[pos++] = 0xff;
-  data[pos++] = 0xc1;
-  data[pos++] = static_cast<uint8_t>(marker_len >> 8);
-  data[pos++] = marker_len & 0xff;
-  data[pos++] = kJpegPrecision;
-  data[pos++] = jpg.height >> 8;
-  data[pos++] = jpg.height & 0xff;
-  data[pos++] = jpg.width >> 8;
-  data[pos++] = jpg.width & 0xff;
-  data[pos++] = static_cast<uint8_t>(ncomps);
-  for (size_t i = 0; i < ncomps; ++i) {
-    data[pos++] = jpg.components[i].id;
-    data[pos++] = ((jpg.components[i].h_samp_factor << 4) |
-                      (jpg.components[i].v_samp_factor));
-    const size_t quant_idx = jpg.components[i].quant_idx;
-    if (quant_idx >= jpg.quant.size()) {
-      return false;
-    }
-    data[pos++] = jpg.quant[quant_idx].index;
-  }
-  return JPEGWrite(out, &data[0], pos);
+    #if defined(OPUS_HAVE_RTCD) && \
+  (defined(OPUS_ARM_ASM) || defined(OPUS_ARM_MAY_HAVE_NEON_INTR))
+#include 'arm/armcpu.h'
+    
+    /*      These defines enable functionality introduced with the 1999 ISO C
+**      standard. They must be defined before the inclusion of math.h to
+**      engage them. If optimisation is enabled, these functions will be
+**      inlined. With optimisation switched off, you have to link in the
+**      maths library using -lm.
+*/
+    
+    #undef silk_SUB_SAT32
+static OPUS_INLINE opus_int32 silk_SUB_SAT32( opus_int32 a32, opus_int32 b32 ) {
+    opus_int32 res;
+    ops_count += 1;
+    res =     ((((a32)-(b32)) & 0x80000000) == 0 ?                                            \
+            (( (a32) & ((b32)^0x80000000) & 0x80000000) ? silk_int32_MIN : (a32)-(b32)) :    \
+            ((((a32)^0x80000000) & (b32)  & 0x80000000) ? silk_int32_MAX : (a32)-(b32)) );
+    return res;
 }
     
-    void OutputImageComponent::ApplyGlobalQuantization(const int q[kDCTBlockSize]) {
-  for (int block_y = 0; block_y < height_in_blocks_; ++block_y) {
-    for (int block_x = 0; block_x < width_in_blocks_; ++block_x) {
-      coeff_t block[kDCTBlockSize];
-      GetCoeffBlock(block_x, block_y, block);
-      if (QuantizeBlock(block, q)) {
-        SetCoeffBlock(block_x, block_y, block);
-      }
-    }
-  }
-  memcpy(quant_, q, sizeof(quant_));
-}
-    
-    std::vector<float> LinearlyDownsample2x2(const std::vector<float>& rgb_in,
-                                         const int width, const int height) {
-  assert(rgb_in.size() == 3 * width * height);
-  int w = (width + 1) / 2;
-  int h = (height + 1) / 2;
-  std::vector<float> rgb_out(3 * w * h);
-  for (int y = 0, p = 0; y < h; ++y) {
-    for (int x = 0; x < w; ++x) {
-      for (int i = 0; i < 3; ++i, ++p) {
-        rgb_out[p] = 0.0;
-        for (int iy = 0; iy < 2; ++iy) {
-          for (int ix = 0; ix < 2; ++ix) {
-            int yy = std::min(height - 1, 2 * y + iy);
-            int xx = std::min(width - 1, 2 * x + ix);
-            rgb_out[p] += GammaToLinear(rgb_in[3 * (yy * width + xx) + i]);
-          }
-        }
-        rgb_out[p] = LinearToGamma(0.25f * rgb_out[p]);
-      }
-    }
-  }
-  return rgb_out;
-}
-    
-    #include <math.h>
-    
-    // Fills in 'result' with the inverse DCT of 'block'.
-// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
-// a row-by-row memory layout.
-void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
-    
-    struct Layout
-{
-    double left;
-    double right;
-    }
-    
-        Value getFlexBasis(void) const;
-    double getFlexGrow(void) const;
-    double getFlexShrink(void) const;
-    
-        Size(void)
-    : width(0.0)
-    , height(0.0)
+        for (int n = 0; n < 50; n++)
     {
+        printf('NewFrame() %d\n', n);
+        io.DisplaySize = ImVec2(1920, 1080);
+        io.DeltaTime = 1.0f / 60.0f;
+        ImGui::NewFrame();
+    }
+    
+        // From SDL_ttf: Handy routines for converting from fixed point
+    #define FT_CEIL(X)  (((X + 63) & -64) / 64)
+    
+    // Render function.
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
+void ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data)
+{
+    // Handle cases of screen coordinates != from framebuffer coordinates (e.g. retina displays)
+    ImGuiIO& io = ImGui::GetIO();
+    draw_data->ScaleClipRects(io.DisplayFramebufferScale);
+    }
+    
+    bool    ImGui_ImplVulkan_Init(ImGui_ImplVulkan_InitInfo* info, VkRenderPass render_pass)
+{
+    IM_ASSERT(info->Instance != NULL);
+    IM_ASSERT(info->PhysicalDevice != NULL);
+    IM_ASSERT(info->Device != NULL);
+    IM_ASSERT(info->Queue != NULL);
+    IM_ASSERT(info->DescriptorPool != NULL);
+    IM_ASSERT(render_pass != NULL);
+    }
+    
+        // Bind shader and vertex buffers
+    unsigned int stride = sizeof(ImDrawVert);
+    unsigned int offset = 0;
+    ctx->IASetInputLayout(g_pInputLayout);
+    ctx->IASetVertexBuffers(0, 1, &g_pVB, &stride, &offset);
+    ctx->IASetIndexBuffer(g_pIB, sizeof(ImDrawIdx) == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT, 0);
+    ctx->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    ctx->VSSetShader(g_pVertexShader);
+    ctx->VSSetConstantBuffers(0, 1, &g_pVertexConstantBuffer);
+    ctx->PSSetShader(g_pPixelShader);
+    ctx->PSSetSamplers(0, 1, &g_pFontSampler);
+    
+    #include <stdint.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
+#include 'imgui.h'
+#include 'imgui_impl_allegro5.h'
+    
+    int main(int, char**)
+{
+    // Setup window
+    glfwSetErrorCallback(glfw_error_callback);
+    if (!glfwInit())
+        return 1;
+    GLFWwindow* window = glfwCreateWindow(1280, 720, 'Dear ImGui GLFW+OpenGL2 example', NULL, NULL);
+    if (window == NULL)
+        return 1;
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1); // Enable vsync
     }
