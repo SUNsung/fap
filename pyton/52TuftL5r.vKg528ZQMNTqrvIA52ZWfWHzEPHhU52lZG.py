@@ -1,67 +1,162 @@
 
         
-        '''
-    The approach taken is explained below. I decided to do it simply.
-    Initially I was considering parsing the data into some sort of
-    structure and then generating an appropriate README. I am still
-    considering doing it - but for now this should work. The only issue
-    I see is that it only sorts the entries at the lowest level, and that
-    the order of the top-level contents do not match the order of the actual
-    entries.
+        if isinstance(helptext, bytes):
+    helptext = helptext.decode('utf-8')
     
-        with self.test_session() as sess:
-      cost, correct, total, gold_labels = (
-          sess.run([cost, correct, total, gold_labels]))
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
-      NB: The format of the shortened resource paths should be considered an
-  implementation detail and may change.
     
-        with tf.Session(graph=restored_graph, config=restoration_config) as sess:
-      tf.saved_model.loader.load(sess, [tf.saved_model.tag_constants.SERVING],
-                                 export_path)
-    
-      def testCreateLexiconContext(self):
-    expected_context = task_spec_pb2.TaskSpec()
-    text_format.Parse(_EXPECTED_CONTEXT, expected_context)
-    self.assertProtoEquals(
-        lexicon.create_lexicon_context('/tmp'), expected_context)
-    
-        ###########################################################################
-    # Set custom reservoir based method
-    sampling_algorithm['custom-pool'] = \
-        lambda n_population, n_samples, random_state=None: \
-            sample_without_replacement(n_population,
-                                       n_samples,
-                                       method='pool',
-                                       random_state=random_state)
-    
-        # start time
-    tstart = datetime.now()
-    clf = DecisionTreeRegressor()
-    clf.fit(X, Y).predict(X)
-    delta = (datetime.now() - tstart)
-    # stop time
-    
-    import matplotlib
-matplotlib.use('TkAgg')
-    
-        When fixed_n_classes is not None the first labeling is considered a ground
-    truth class assignment with fixed number of classes.
+def gen_extractors():
+    ''' Return a list of an instance of every supported extractor.
+    The order does matter; the first extractor matched is the one handling the URL.
     '''
-    random_labels = np.random.RandomState(seed).randint
-    scores = np.zeros((len(n_clusters_range), n_runs))
+    return [klass() for klass in gen_extractor_classes()]
     
-        def apply_enhancement(self, domains, enhancement, options=None):
-        '''Applies an enhancement on all domains.
+            return {
+            '_type': 'playlist',
+            'id': playlist_id,
+            'title': title,
+            'description': description,
+            'entries': entries,
+        }
+
     
-    from acme import errors as acme_errors
-from certbot_compatibility_test import validator
+        _TEST = {
+        'url': 'http://www.anitube.se/video/36621',
+        'md5': '59d0eeae28ea0bc8c05e7af429998d43',
+        'info_dict': {
+            'id': '36621',
+            'ext': 'mp4',
+            'title': 'Recorder to Randoseru 01',
+            'duration': 180.19,
+        },
+        'skip': 'Blocked in the US',
+    }
     
-    # There are two options for replacing |today|: either, you set today to some
-# non-false value, then it is used:
-#today = ''
-# Else, today_fmt is used as the format for a strftime call.
-#today_fmt = '%B %d, %Y'
+            return {
+            'id': video_id,
+            'url': video_url,
+            'ext': 'mp4',
+            'title': title,
+            'description': description,
+            'thumbnail': thumbnail,
+            'categories': categories,
+            'duration': duration,
+            'view_count': view_count,
+            'age_limit': 18,
+        }
+
     
-    # If true, do not generate a @detailmenu in the 'Top' node's menu.
-#texinfo_no_detailmenu = False
+        _TESTS = [{
+        'url': 'http://camwithher.tv/view_video.php?viewkey=6e9a24e2c0e842e1f177&page=&viewtype=&category=',
+        'info_dict': {
+            'id': '5644',
+            'ext': 'flv',
+            'title': 'Periscope Tease',
+            'description': 'In the clouds teasing on periscope to my favorite song',
+            'duration': 240,
+            'view_count': int,
+            'comment_count': int,
+            'uploader': 'MileenaK',
+            'upload_date': '20160322',
+        },
+        'params': {
+            'skip_download': True,
+        }
+    }, {
+        'url': 'http://camwithher.tv/view_video.php?viewkey=6dfd8b7c97531a459937',
+        'only_matching': True,
+    }, {
+        'url': 'http://camwithher.tv/view_video.php?page=&viewkey=6e9a24e2c0e842e1f177&viewtype=&category=',
+        'only_matching': True,
+    }, {
+        'url': 'http://camwithher.tv/view_video.php?viewkey=b6c3b5bea9515d1a1fc4&page=&viewtype=&category=mv',
+        'only_matching': True,
+    }]
+    
+            title = metadata['Title']
+        description = metadata.get('Description')
+        duration = float_or_none(metadata.get('Duration'))
+        timestamp = parse_iso8601(metadata.get('DateCreated'))
+    
+    
+if __name__ == '__main__':
+    RemoveDuplicateUrls.run()
+
+    
+            (2016-01, url0), 2
+        (2016-01, url1), 1
+        '''
+        yield key, sum(values)
+    
+        def _find_available_spot(self, vehicle):
+        '''Find an available spot where vehicle can fit, or return None'''
+        pass
+    
+        def extract_year_month(self, timestamp):
+        '''Return the year and month portions of the timestamp.'''
+        ...
+    
+        def remove(self, key):
+        hash_index = self._hash_function(key)
+        for index, item in enumerate(self.table[hash_index]):
+            if item.key == key:
+                del self.table[hash_index][index]
+                return
+        raise KeyError('Key not found')
+
+    
+    
+class State(Enum):
+    unvisited = 0
+    visited = 1
+    
+        plt.figure('scikit-learn GLM benchmark results')
+    plt.xlabel('Dimensions')
+    plt.ylabel('Time (s)')
+    plt.plot(dimensions, time_ridge, color='r')
+    plt.plot(dimensions, time_ols, color='g')
+    plt.plot(dimensions, time_lasso, color='b')
+    
+        if args.plot is not None:
+        max_val = getattr(args, args.plot)
+        if args.plot in ('classes', 'samples'):
+            min_val = 2
+        else:
+            min_val = 0
+        steps = np.linspace(min_val, max_val, num=args.n_steps + 1)[1:]
+        if args.plot in ('classes', 'samples'):
+            steps = np.unique(np.round(steps).astype(int))
+        setattr(args, args.plot, steps)
+    
+    
+if __name__ == '__main__':
+    ###########################################################################
+    # Option parser
+    ###########################################################################
+    op = optparse.OptionParser()
+    op.add_option('--n-times',
+                  dest='n_times', default=5, type=int,
+                  help='Benchmark results are average over n_times experiments')
+    
+    import socket
+import ctypes
+import os
+    
+    A Lexer emits Token objects which are usually buffered by a TokenStream. A
+Parser can build a Tree, if the output=AST option has been set in the grammar.
+    
+    
+    def getStop(self):
+        return self.stop
+    
+            Using setter/getter methods is deprecated. Use o.text instead.
+        '''
+        raise NotImplementedError
+    
+    def setText(self, text):
+        '''@brief Set the text of the token.
