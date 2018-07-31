@@ -1,116 +1,23 @@
 
         
-          ArrayRef<const swift::markup::MarkupASTNode *> getBodyNodes() const {
-    return Parts.BodyNodes;
-  }
+          char label_i;
+  char label_j;
+  char* pixels = new char[2 * rows * cols];
+  std::string value;
     
-    class InlineHTML final : public InlineContent {
-  StringRef LiteralContent;
-  InlineHTML(StringRef LiteralContent)
-    : InlineContent(ASTNodeKind::InlineHTML),
-      LiteralContent(LiteralContent) {}
-public:
-  static InlineHTML *create(MarkupContext &MC, StringRef LiteralContent);
-    }
-    
-    #include 'llvm/ADT/Hashing.h'
-    
-      void forceColors() {
-    ForceColors = true;
-  }
-    
-    namespace swift {
-class ModuleDecl;
-class SourceFile;
-class DeclContext;
-    }
-    
-    namespace swift {
-namespace index {
-    }
-    }
-    
-    #endif // BITCOIN_INDIRECTMAP_H
-
-    
-    struct leveldb_comparator_t : public Comparator {
-  void* state_;
-  void (*destructor_)(void*);
-  int (*compare_)(
-      void*,
-      const char* a, size_t alen,
-      const char* b, size_t blen);
-  const char* (*name_)(void*);
-    }
-    
-     private:
-  void FindNextUserEntry(bool skipping, std::string* skip);
-  void FindPrevUserEntry();
-  bool ParseKey(ParsedInternalKey* key);
-    
-      Slice in(encoded);
-  ParsedInternalKey decoded('', 0, kTypeValue);
-    
-      // If a seek to internal key 'k' in specified file finds an entry,
-  // call (*handle_result)(arg, found_key, found_value).
-  Status Get(const ReadOptions& options,
-             uint64_t file_number,
-             uint64_t file_size,
-             const Slice& k,
-             void* arg,
-             void (*handle_result)(void*, const Slice&, const Slice&));
-    
-    
-    {  Status result;
-  if (msg != NULL) {
-    result = Status::Corruption('VersionEdit', msg);
-  }
-  return result;
-}
-    
-    class VersionEditTest { };
-    
-    // If true, do not destroy the existing database.  If you set this
-// flag and also specify a benchmark that wants a fresh database, that
-// benchmark will fail.
-static bool FLAGS_use_existing_db = false;
-    
-    class Slice {
- public:
-  // Create an empty slice.
-  Slice() : data_(''), size_(0) { }
-    }
-    
-    #include 'caffe/layers/neuron_layer.hpp'
-    
-      bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnLRNDescriptor_t norm_desc_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
+    /**
+ * @brief Applies common transformations to the input data, such as
+ * scaling, mirroring, substracting the image mean...
+ */
 template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
+class DataTransformer {
  public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+  explicit DataTransformer(const TransformationParameter& param, Phase phase);
+  virtual ~DataTransformer() {}
     }
     
     /**
- * @brief During training only, sets a random portion of @f$x@f$ to 0, adjusting
- *        the rest of the vector magnitude accordingly.
+ * @brief Computes @f$ y = |x| @f$
  *
  * @param bottom input Blob vector (length 1)
  *   -# @f$ (N \times C \times H \times W) @f$
@@ -120,265 +27,373 @@ class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
  *      the computed outputs @f$ y = |x| @f$
  */
 template <typename Dtype>
-class DropoutLayer : public NeuronLayer<Dtype> {
+class AbsValLayer : public NeuronLayer<Dtype> {
  public:
-  /**
-   * @param param provides DropoutParameter dropout_param,
-   *     with DropoutLayer options:
-   *   - dropout_ratio (\b optional, default 0.5).
-   *     Sets the probability @f$ p @f$ that any given unit is dropped.
-   */
-  explicit DropoutLayer(const LayerParameter& param)
+  explicit AbsValLayer(const LayerParameter& param)
       : NeuronLayer<Dtype>(param) {}
   virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+    }
+    
+    
+    { protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
+   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
+   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
+   *      the computed outputs @f$
+   *       y_n = \arg\max\limits_i x_{ni}
+   *      @f$ (for @f$ K = 1 @f$).
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
-    }
-    
-    #endif  // CAFFE_ELTWISE_LAYER_HPP_
-
-    
-    #include <THPP/tensors/THTensor.hpp>
-    
-    static Py_ssize_t THPDevice_hash(THPDevice *self)
-{
-  HANDLE_TH_ERRORS
-  return static_cast<Py_ssize_t>(std::hash<at::Device>{}(self->device) % std::numeric_limits<Py_ssize_t>::max());
-  END_HANDLE_TH_ERRORS_RET(-1)
-}
-    
-    
-    {
-    {    if (PyObject_IsInstance(stream, THCPStreamClass)) {
-      streams.push_back( ((THCPStream *)stream)->cdata);
-    } else if (stream == Py_None) {
-      streams.push_back(NULL);
-    } else {
-      std::runtime_error('Unknown data type found in stream list. Need THCStream or None');
-    }
+  /// @brief Not implemented (non-differentiable function)
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+    NOT_IMPLEMENTED;
   }
-  return streams;
-}
+  bool out_max_val_;
+  size_t top_k_;
+  bool has_axis_;
+  int axis_;
+};
     
-      bool RunOnDevice() override;
+      /**
+   * @brief Computes the error gradient w.r.t. the reordered input.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-        TIndex w_ind = 0;
-    for (TIndex j = 0; j < num_nz_ent; ++j) {
-      TIndex cur_seg = seg_data[j];
-      TIndex cur_key = key_data[j];
-      T cur_val = val_data[j];
-      TIndex grad_out_stride = cur_seg * num_outputs_;
-      for (TIndex i = 0; i < num_outputs_; ++i) {
-        T grad_out_scale = grad_out_data[grad_out_stride + i] * cur_val;
-        for (TIndex k = 0; k < num_alpha; ++k) {
-          hash_data[0] = cur_key;
-          hash_data[1] = i;
-          hash_data[2] = k;
-          hash_data[3] = HASH_MAGIC;
-    }
-    }
-    }
-    
-    template <typename T, class Context>
-class BBoxTransformOp final : public Operator<Context> {
+    /**
+ * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
+ *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$
+ *      y = \left\{
+ *         \begin{array}{ll}
+ *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
+ *            \log(1 + \exp(x)) & \mbox{otherwise}
+ *         \end{array} \right.
+ *      @f$
+ */
+template <typename Dtype>
+class BNLLLayer : public NeuronLayer<Dtype> {
  public:
-  BBoxTransformOp(const OperatorDef& operator_def, Workspace* ws)
-      : Operator<Context>(operator_def, ws),
-        weights_(OperatorBase::GetRepeatedArgument<T>(
-            'weights',
-            vector<T>{1.0f, 1.0f, 1.0f, 1.0f})),
-        apply_scale_(
-            OperatorBase::GetSingleArgument<bool>('apply_scale', true)),
-        correct_transform_coords_(OperatorBase::GetSingleArgument<bool>(
-            'correct_transform_coords',
-            false)),
-        rotated_(OperatorBase::GetSingleArgument<bool>('rotated', false)),
-        angle_bound_on_(
-            OperatorBase::GetSingleArgument<bool>('angle_bound_on', true)),
-        angle_bound_lo_(
-            OperatorBase::GetSingleArgument<int>('angle_bound_lo', -90)),
-        angle_bound_hi_(
-            OperatorBase::GetSingleArgument<int>('angle_bound_hi', 90)),
-        clip_angle_thresh_(
-            OperatorBase::GetSingleArgument<float>('clip_angle_thresh', 1.0)) {
-    CAFFE_ENFORCE_EQ(
-        weights_.size(),
-        4,
-        'weights size ' + caffe2::to_string(weights_.size()) + 'must be 4.');
-  }
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  explicit BNLLLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+    }
     }
     
+     protected:
+  /// @copydoc ContrastiveLossLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-    {} // namespace utils
+      bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnLRNDescriptor_t norm_desc_;
+  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
     
-      EArrXb keep = (ws >= min_size) && (hs >= min_size) &&
-      (x_ctr < T(im_info[1])) && (y_ctr < T(im_info[0]));
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    bool THPWrapper_check(PyObject * obj)
-{
-  return (PyObject*)Py_TYPE(obj) == THPWrapperClass;
+    
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_;
+  cudnnTensorDescriptor_t top_desc_;
+  cudnnActivationDescriptor_t activ_desc_;
+};
+#endif
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include <vector>
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the forwarded inputs.
+   *
+   * @param top output Blob vector (length 1+), providing the error gradient with
+   *        respect to the outputs
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2+), into which the top error
+   *        gradient is copied
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+    const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #include <torch/nn/cursor.h>
+#include <torch/tensor.h>
+    
+      // Calculate the softmax
+  ERArrXXf probs(
+      heatmaps_in.dim32(0) * heatmaps_in.dim32(1),
+      heatmaps_in.dim32(2) * heatmaps_in.dim32(3));
+  if (should_output_softmax_) {
+    // softmax output is expensive to compute, if should_output_softmax is not
+    // specified, don't populate it
+    ERArrXXf heatmap_exp = heatmaps.exp();
+    for (int r = 0; r < N * keypoint_count; r++) {
+      probs.row(r) = heatmap_exp.row(r) / heatmap_exp.row(r).sum();
+    }
+  } /* otherwise not initialized */
+    
+    
+    {} // namespace caffe2
+    
+    // NB: Device is NOT tested for here; a CUDA nullptr is as much a nullptr as a
+// CPU nullptr
+    
+    static int set_flags(struct ifaddrs* ifaddr) {
+	int fd = socket(AF_INET, SOCK_DGRAM, 0);
+	if (fd == -1) {
+		return -1;
+	}
+	ifreq ifr;
+	memset(&ifr, 0, sizeof(ifr));
+	strncpy(ifr.ifr_name, ifaddr->ifa_name, IFNAMSIZ - 1);
+	int rc = ioctl(fd, SIOCGIFFLAGS, &ifr);
+	close(fd);
+	if (rc == -1) {
+		return -1;
+	}
+	ifaddr->ifa_flags = ifr.ifr_flags;
+	return 0;
 }
     
-    static void outliterals(stb_uchar *in, int numlit)
-{
-    while (numlit > 65536) {
-        outliterals(in,65536);
-        in     += 65536;
-        numlit -= 65536;
-    }
-    }
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
     
+        /* Compute number of bits head room and normalize inputs */
+    a_headrm = silk_CLZ32( silk_abs(a32) ) - 1;
+    a32_nrm = silk_LSHIFT(a32, a_headrm);                                       /* Q: a_headrm                  */
+    b_headrm = silk_CLZ32( silk_abs(b32) ) - 1;
+    b32_nrm = silk_LSHIFT(b32, b_headrm);                                       /* Q: b_headrm                  */
     
-    {    printf('DestroyContext()\n');
-    ImGui::DestroyContext();
-    return 0;
+    #include <dmlc/logging.h>
+#include <dmlc/thread_local.h>
+#include <sstream>
+#include './base.h'
+    
+    SEXP XGBoosterGetAttrNames_R(SEXP handle) {
+  SEXP out;
+  R_API_BEGIN();
+  bst_ulong len;
+  const char **res;
+  CHECK_CALL(XGBoosterGetAttrNames(R_ExternalPtrAddr(handle),
+                                   &len, &res));
+  if (len > 0) {
+    out = PROTECT(allocVector(STRSXP, len));
+    for (size_t i = 0; i < len; ++i) {
+      SET_STRING_ELT(out, i, mkChar(res[i]));
+    }
+  } else {
+    out = PROTECT(R_NilValue);
+  }
+  R_API_END();
+  UNPROTECT(1);
+  return out;
 }
 
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
     
-        // Setup render state: fixed-pipeline, alpha-blending, no face culling, no depth testing, shade mode (for gradient)
-    g_pd3dDevice->SetPixelShader(NULL);
-    g_pd3dDevice->SetVertexShader(NULL);
-    g_pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-    g_pd3dDevice->SetRenderState(D3DRS_LIGHTING, false);
-    g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, false);
-    g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
-    g_pd3dDevice->SetRenderState(D3DRS_ALPHATESTENABLE, false);
-    g_pd3dDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-    g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-    g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-    g_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, true);
-    g_pd3dDevice->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_GOURAUD);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
-    g_pd3dDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-    g_pd3dDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-    
-    // CHANGELOG
-// (minor and older changes stripped away, please see git history for details)
-//  2018-06-29: Inputs: Added support for the ImGuiMouseCursor_Hand cursor.
-//  2018-06-08: Misc: Extracted imgui_impl_glfw.cpp/.h away from the old combined GLFW+OpenGL/Vulkan examples.
-//  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors flag + honor ImGuiConfigFlags_NoMouseCursorChange flag.
-//  2018-02-20: Inputs: Added support for mouse cursors (ImGui::GetMouseCursor() value, passed to glfwSetCursor()).
-//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
-//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
-//  2018-01-25: Inputs: Added gamepad support if ImGuiConfigFlags_NavEnableGamepad is set.
-//  2018-01-25: Inputs: Honoring the io.WantSetMousePos by repositioning the mouse (when using navigation and ImGuiConfigFlags_NavMoveMouse is set).
-//  2018-01-20: Inputs: Added Horizontal Mouse Wheel support.
-//  2018-01-18: Inputs: Added mapping for ImGuiKey_Insert.
-//  2017-08-25: Inputs: MousePos set to -FLT_MAX,-FLT_MAX when mouse is unavailable/missing (instead of -1,-1).
-//  2016-10-15: Misc: Added a void* user_data parameter to Clipboard function handlers.
-    
-    // Implemented features:
-//  [X] Platform: Clipboard support.
-//  [X] Platform: Gamepad navigation mapping. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
-//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
-//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        if (!g_DescriptorSetLayout)
     {
-        VkSampler sampler[1] = {g_FontSampler};
-        VkDescriptorSetLayoutBinding binding[1] = {};
-        binding[0].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        binding[0].descriptorCount = 1;
-        binding[0].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-        binding[0].pImmutableSamplers = sampler;
-        VkDescriptorSetLayoutCreateInfo info = {};
-        info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-        info.bindingCount = 1;
-        info.pBindings = binding;
-        err = vkCreateDescriptorSetLayout(g_Device, &info, g_Allocator, &g_DescriptorSetLayout);
-        check_vk_result(err);
-    }
-    
-        // Render command lists
-    int vtx_offset = 0;
-    int idx_offset = 0;
-    ImVec2 pos = draw_data->DisplayPos;
-    for (int n = 0; n < draw_data->CmdListsCount; n++)
     {
-        const ImDrawList* cmd_list = draw_data->CmdLists[n];
-        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
-        {
-            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
-            if (pcmd->UserCallback)
-            {
-                // User callback (registered via ImDrawList::AddCallback)
-                pcmd->UserCallback(cmd_list, pcmd);
-            }
-            else
-            {
-                // Apply scissor/clipping rectangle
-                const D3D10_RECT r = { (LONG)(pcmd->ClipRect.x - pos.x), (LONG)(pcmd->ClipRect.y - pos.y), (LONG)(pcmd->ClipRect.z - pos.x), (LONG)(pcmd->ClipRect.w - pos.y)};
-                ctx->RSSetScissorRects(1, &r);
+    {      // Test write Symbol
+      std::vector<unsigned char> buffer2(
+        CompressedBufferWriter::CalculateBufferSize(input.size(),
+          alphabet_size));
+      for (int i = 0; i < input.size(); i++) {
+        cbw.WriteSymbol(buffer2.data(), input[i], i);
+      }
+      CompressedIterator<int> ci2(buffer.data(), alphabet_size);
+      std::vector<int> output2(input.size());
+      for (int i = 0; i < input.size(); i++) {
+        output2[i] = ci2[i];
+      }
+      ASSERT_TRUE(input == output2);
     }
+  }
+}
+    
+    bool js_cocos2dx_navmesh_NavMeshObstacle_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_navmesh_NavMeshObstacle_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_navmesh_NavMeshObstacle(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_navmesh_NavMeshObstacle_getSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_initWith(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_syncToObstacle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_syncToNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_getHeight(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_getRadius(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_NavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DConeTwistConstraint_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DConeTwistConstraint(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getBFrame(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistAngle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistSpan(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setDamping(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getAFrame(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_enableMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_Physics3DConeTwistConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+    
+    		b2Profile aveProfile;
+		memset(&aveProfile, 0, sizeof(b2Profile));
+		if (m_stepCount > 0)
+		{
+			float32 scale = 1.0f / m_stepCount;
+			aveProfile.step = scale * m_totalProfile.step;
+			aveProfile.collide = scale * m_totalProfile.collide;
+			aveProfile.solve = scale * m_totalProfile.solve;
+			aveProfile.solveInit = scale * m_totalProfile.solveInit;
+			aveProfile.solveVelocity = scale * m_totalProfile.solveVelocity;
+			aveProfile.solvePosition = scale * m_totalProfile.solvePosition;
+			aveProfile.solveTOI = scale * m_totalProfile.solveTOI;
+			aveProfile.broadphase = scale * m_totalProfile.broadphase;
+		}
+    
+    			b2FixtureDef fd;
+			fd.shape = &shape;
+			fd.friction = 0.6f;
+			fd.density = 2.0f;
+    
+    			b2EdgeShape shape;
+    
+    
+    {
+    {}  // namespace planning
+}  // namespace apollo
+
+    
+      bool Associate(const cv::Mat& img, const double timestamp,
+                 std::vector<std::shared_ptr<VisualObject>>* objects) override {
+    return true;
+  }
+    
+    bool Box2d::HasOverlap(const LineSegment2d &line_segment) const {
+  if (line_segment.length() <= kMathEpsilon) {
+    return IsPointIn(line_segment.start());
+  }
+  if (std::fmax(line_segment.start().x(), line_segment.end().x()) < min_x() ||
+      std::fmin(line_segment.start().x(), line_segment.end().x()) > max_x() ||
+      std::fmax(line_segment.start().y(), line_segment.end().y()) < min_x() ||
+      std::fmin(line_segment.start().y(), line_segment.end().y()) > max_x()) {
+    return false;
+  }
+  return DistanceTo(line_segment) <= kMathEpsilon;
+}
+    
+    
+    {
+    {    AINFO << 'Lidar to ' << camera_names_[i] << ' transform: ';
+    AINFO << camera_coeffient.camera_extrinsic;
+  }
+  camera_coeffient_.resize(camera_names_.size());
+  camera_coeffient_[kLongFocusIdx] = camera_coeffients['camera_25mm_focus'];
+  camera_coeffient_[kShortFocusIdx] = camera_coeffients['camera_6mm_focus'];
+  // auto &short_focus_camera_coeffient = camera_coeffients['camera_6mm_focus'];
+  // auto &long_focus_camera_coeffient = camera_coeffients['camera_25mm_focus'];
+  camera_coeffient_[kLongFocusIdx].camera_extrinsic =
+      camera_coeffient_[kLongFocusIdx].camera_extrinsic *
+      camera_coeffient_[kShortFocusIdx].camera_extrinsic;
+  AINFO << 'Lidar to long(25mm): ';
+  AINFO << camera_coeffient_[kLongFocusIdx].camera_extrinsic;
+  return true;
+}
+    
+    TEST_F(DecisionTest, green_flash) {
+  std::vector<int> color_list = {3, 3, 3, 0, 3, 0, 3, 3, 0, 3,
+                                 0, 3, 0, 3, 0, 0, 0, 0, 0, 3};
+  do_test(reviser_, color_list, GREEN);
+}
+    
+    bool PathDecision::AddLongitudinalDecision(const std::string &tag,
+                                           const std::string &object_id,
+                                           const ObjectDecisionType &decision) {
+  auto *path_obstacle = path_obstacles_.Find(object_id);
+  if (!path_obstacle) {
+    AERROR << 'failed to find obstacle';
+    return false;
+  }
+  path_obstacle->AddLongitudinalDecision(tag, decision);
+  return true;
+}
+    
+      /**
+   * @brief Override function Plan in parent class Planner.
+   * @param planning_init_point The trajectory point where planning starts.
+   * @param frame Current planning frame.
+   * @return OK if planning succeeds; error otherwise.
+   */
+  apollo::common::Status Plan(
+      const common::TrajectoryPoint& planning_init_point,
+      Frame* frame) override;
+    
+    class CurveMath {
+ public:
+  CurveMath() = delete;
+  /**
+   * @brief Compute the curvature (kappa) given curve X = (x(t), y(t))
+   *        which t is an arbitrary parameter.
+   * @param dx dx / dt
+   * @param d2x d(dx) / dt
+   * @param dy dy / dt
+   * @param d2y d(dy) / dt
+   * @return the curvature
+   */
+  static double ComputeCurvature(const double dx, const double d2x,
+                                 const double dy, const double d2y);
     }
-    }
-    
-    // OpenGL2 Render function.
-// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
-// Note that this implementation is little overcomplicated because we are saving/setting up/restoring every OpenGL state explicitly, in order to be able to run within any OpenGL engine that doesn't do so. 
-void ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data)
-{
-    // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
-    ImGuiIO& io = ImGui::GetIO();
-    int fb_width = (int)(draw_data->DisplaySize.x * io.DisplayFramebufferScale.x);
-    int fb_height = (int)(draw_data->DisplaySize.y * io.DisplayFramebufferScale.y);
-    if (fb_width == 0 || fb_height == 0)
-        return;
-    draw_data->ScaleClipRects(io.DisplayFramebufferScale);
-    }
-    
-        // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, polygon fill
-    glEnable(GL_BLEND);
-    glBlendEquation(GL_FUNC_ADD);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_DEPTH_TEST);
-    glEnable(GL_SCISSOR_TEST);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
-    
-        if (!array->Get(i)->IsArray()) {
-      return false;
-    }
-    
-    XXH32_sizeofState() is used to know how much space must be allocated for the xxHash 32-bits state.
-Note that the state must be aligned to access 'long long' fields. Memory must be allocated and referenced by a pointer.
-This pointer must then be provided as 'state' into XXH32_resetState(), which initializes the state.
-    
-    // Return an iterator that provided the union of the data in
-// children[0,n-1].  Takes ownership of the child iterators and
-// will delete them when the result iterator is deleted.
-//
-// The result does no duplicate suppression.  I.e., if a particular
-// key is present in K child iterators, it will be yielded K times.
-//
-// REQUIRES: n >= 0
-extern InternalIterator* NewMergingIterator(
-    const InternalKeyComparator* comparator, InternalIterator** children, int n,
-    Arena* arena = nullptr, bool prefix_seek_mode = false);
-    
-      // TODO(adamretter): slice object can potentially be cached using thread local
-  // variable to avoid locking. Could make this configurable depending on
-  // performance.
-  mtx_findShortestSeparator.get()->Lock();
-    
-    // VS 15 has snprintf
-#define snprintf _snprintf
