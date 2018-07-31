@@ -1,138 +1,67 @@
 
         
-        
-def check_format(filename):
-    '''
-    validates that each line is formatted correctly,
-    appending to error list as needed
-    '''
-    with open(filename) as fp:
-        lines = list(line.rstrip() for line in fp)
-    check_alphabetical(lines)
-    # START Check Entries
-    num_in_category = min_entries_per_section + 1
-    category = ''
-    category_line = 0
-    for line_num, line in enumerate(lines):
-        if section_title_re.match(line):
-            title_links.append(section_title_re.match(line).group(1))
-        # check each section for the minimum number of entries
-        if line.startswith(anchor):
-            match = anchor_re.match(line)
-            if match:
-                if match.group(1) not in title_links:
-                    add_error(line_num, 'section header ({}) not added as a title link'.format(match.group(1)))
-            else:
-                add_error(line_num, 'section header is not formatted correctly')
-            if num_in_category < min_entries_per_section:
-                add_error(category_line, '{} section does not have the minimum {} entries (only has {})'.format(
-                    category, min_entries_per_section, num_in_category))
-            category = line.split(' ')[1]
-            category_line = line_num
-            num_in_category = 0
-            continue
-        # skips lines that we do not care about
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        num_in_category += 1
-        segments = line.split('|')[1:-1]
-        if len(segments) < num_segments:
-            add_error(line_num, 'entry does not have all the required sections (have {}, need {})'.format(
-                len(segments), num_segments))
-            continue
-        # START Global
-        for segment in segments:
-            # every line segment should start and end with exactly 1 space
-            if len(segment) - len(segment.lstrip()) != 1 or len(segment) - len(segment.rstrip()) != 1:
-                add_error(line_num, 'each segment must start and end with exactly 1 space')
-        # END Global
-        segments = [seg.strip() for seg in segments]
-        check_entry(line_num, segments)
-    # END Check Entries
+            def setType(self, ttype):
+        self.type = ttype
     
-        def run(self, args, opts):
-        if opts.list:
-            self._list_templates()
-            return
-        if opts.dump:
-            template_file = self._find_template(opts.dump)
-            if template_file:
-                with open(template_file, 'r') as f:
-                    print(f.read())
-            return
-        if len(args) != 2:
-            raise UsageError()
+    for i, face_distance in enumerate(face_distances):
+    print('The test image has a distance of {:.2} from known image #{}'.format(face_distance, i))
+    print('- With a normal cutoff of 0.6, would the test image match the known image? {}'.format(face_distance < 0.6))
+    print('- With a very strict cutoff of 0.5, would the test image match the known image? {}'.format(face_distance < 0.5))
+    print()
+
     
-        def _get_slot(self, request, spider):
-        key = self._get_slot_key(request, spider)
-        if key not in self.slots:
-            conc = self.ip_concurrency if self.ip_concurrency else self.domain_concurrency
-            conc, delay = _get_concurrency_delay(conc, spider, self.settings)
-            self.slots[key] = Slot(conc, delay, self.randomize_delay)
-    
-        def _add_middleware(self, mw):
-        if hasattr(mw, 'process_request'):
-            self.methods['process_request'].append(mw.process_request)
-        if hasattr(mw, 'process_response'):
-            self.methods['process_response'].insert(0, mw.process_response)
-        if hasattr(mw, 'process_exception'):
-            self.methods['process_exception'].insert(0, mw.process_exception)
-    
-            ajax_crawl_request.meta['ajax_crawlable'] = True
-        return ajax_crawl_request
+    # This is a very simple benchmark to give you an idea of how fast each step of face recognition will run on your system.
+# Notice that face detection gets very slow at large image sizes. So you might consider running face detection on a
+# scaled down version of your image and then running face encodings on the the full size image.
     
     
-class DefaultHeadersMiddleware(object):
+def detect_faces_in_image(file_stream):
+    # Pre-calculated face encoding of Obama generated with face_recognition.face_encodings(img)
+    known_face_encoding = [-0.09634063,  0.12095481, -0.00436332, -0.07643753,  0.0080383,
+                            0.01902981, -0.07184699, -0.09383309,  0.18518871, -0.09588896,
+                            0.23951106,  0.0986533 , -0.22114635, -0.1363683 ,  0.04405268,
+                            0.11574756, -0.19899382, -0.09597053, -0.11969153, -0.12277931,
+                            0.03416885, -0.00267565,  0.09203379,  0.04713435, -0.12731361,
+                           -0.35371891, -0.0503444 , -0.17841317, -0.00310897, -0.09844551,
+                           -0.06910533, -0.00503746, -0.18466514, -0.09851682,  0.02903969,
+                           -0.02174894,  0.02261871,  0.0032102 ,  0.20312519,  0.02999607,
+                           -0.11646006,  0.09432904,  0.02774341,  0.22102901,  0.26725179,
+                            0.06896867, -0.00490024, -0.09441824,  0.11115381, -0.22592428,
+                            0.06230862,  0.16559327,  0.06232892,  0.03458837,  0.09459756,
+                           -0.18777156,  0.00654241,  0.08582542, -0.13578284,  0.0150229 ,
+                            0.00670836, -0.08195844, -0.04346499,  0.03347827,  0.20310158,
+                            0.09987706, -0.12370517, -0.06683611,  0.12704916, -0.02160804,
+                            0.00984683,  0.00766284, -0.18980607, -0.19641446, -0.22800779,
+                            0.09010898,  0.39178532,  0.18818057, -0.20875394,  0.03097027,
+                           -0.21300618,  0.02532415,  0.07938635,  0.01000703, -0.07719778,
+                           -0.12651891, -0.04318593,  0.06219772,  0.09163868,  0.05039065,
+                           -0.04922386,  0.21839413, -0.02394437,  0.06173781,  0.0292527 ,
+                            0.06160797, -0.15553983, -0.02440624, -0.17509389, -0.0630486 ,
+                            0.01428208, -0.03637431,  0.03971229,  0.13983178, -0.23006812,
+                            0.04999552,  0.0108454 , -0.03970895,  0.02501768,  0.08157793,
+                           -0.03224047, -0.04502571,  0.0556995 , -0.24374914,  0.25514284,
+                            0.24795187,  0.04060191,  0.17597422,  0.07966681,  0.01920104,
+                           -0.01194376, -0.02300822, -0.17204897, -0.0596558 ,  0.05307484,
+                            0.07417042,  0.07126575,  0.00209804]
     
-        def spider_opened(self, spider):
-        usr = getattr(spider, 'http_user', '')
-        pwd = getattr(spider, 'http_pass', '')
-        if usr or pwd:
-            self.auth = basic_auth_header(usr, pwd)
-    
-        def __init__(self, path=None, debug=False):
-        self.file = None
-        self.fingerprints = set()
-        self.logdupes = True
-        self.debug = debug
-        self.logger = logging.getLogger(__name__)
-        if path:
-            self.file = open(os.path.join(path, 'requests.seen'), 'a+')
-            self.file.seek(0)
-            self.fingerprints.update(x.rstrip() for x in self.file)
-    
-        long_description = README,
-    
-        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    
-        def prepare(self, **kwargs):
-        content = get_content(self.url)
-        self.title = match1(content, r'<title>([^<]+)</title>')
-        s = match1(content, r'P\.s\s*=\s*\'([^\']+)\'')
-        scp = match1(content, r'InfoQConstants\.scp\s*=\s*\'([^\']+)\'')
-        scs = match1(content, r'InfoQConstants\.scs\s*=\s*\'([^\']+)\'')
-        sck = match1(content, r'InfoQConstants\.sck\s*=\s*\'([^\']+)\'')
-    
-    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
-    #sample
-    #url_sample:http://www.kugou.com/yy/album/single/536957.html
-    #hash ->key  md5(hash+kgcloud')->key  decompile swf
-    #cmd 4 for mp3 cmd 3 for m4a
-    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
-    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
-    j=loads(html)
-    url=j['url']
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge=merge)
+    # The name of an image file (within the static path) to use as favicon
+# of the docs.  This file should be a Windows icon file (.ico) being
+# 16x16 or 32x32 pixels large.
+#html_favicon = None
     
     
-#----------------------------------------------------------------------
-def showroom_download(url, output_dir = '.', merge = False, info_only = False, **kwargs):
-    ''''''
-    if re.match( r'(\w+)://www.showroom-live.com/([-\w]+)', url):
-        room_url_key = match1(url, r'\w+://www.showroom-live.com/([-\w]+)')
-        room_id = showroom_get_roomid_by_room_url_key(room_url_key)
-        showroom_download_by_room_id(room_id, output_dir, merge,
-                                    info_only)
+@click.command()
+@click.argument('known_people_folder')
+@click.argument('image_to_check')
+@click.option('--cpus', default=1, help='number of CPU cores to use in parallel (can speed up processing lots of images). -1 means 'use all in system'')
+@click.option('--tolerance', default=0.6, help='Tolerance for face comparisons. Default is 0.6. Lower this if you get multiple matches for the same person.')
+@click.option('--show-distance', default=False, type=bool, help='Output face distance. Useful for tweaking tolerance setting.')
+def main(known_people_folder, image_to_check, cpus, tolerance, show_distance):
+    known_names, known_face_encodings = scan_known_people(known_people_folder)
+    
+        # STEP 2: Using the trained classifier, make predictions for unknown images
+    for image_file in os.listdir('knn_examples/test'):
+        full_file_path = os.path.join('knn_examples/test', image_file)
+    
+    # Find all facial features in all the faces in the image
+face_landmarks_list = face_recognition.face_landmarks(image)
