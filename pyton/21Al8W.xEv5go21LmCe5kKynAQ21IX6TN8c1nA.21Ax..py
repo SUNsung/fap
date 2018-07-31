@@ -1,156 +1,185 @@
 
         
-            def download(self, x):
-        self.result.append(x)
+        import pytest
     
-            webpage = self._download_webpage(url, playlist_id)
-        title = self._html_search_regex(
-            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<p class='excerpt'[^>]*?>(.*?)</p>',
-            webpage, 'description', fatal=False)
-        urls = re.findall(
-            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
-            webpage)
-        entries = [self.url_result(u) for u in urls]
     
-            return {
-            'id': flv_id,
-            'url': rtmp_url,
-            'ext': 'flv',
-            'no_resume': True,
-            'title': title,
-            'description': description,
-            'duration': duration,
-            'view_count': view_count,
-            'comment_count': comment_count,
-            'uploader': uploader,
-            'upload_date': upload_date,
-        }
-
+def with_metaclass(meta, *bases):
+    '''Create a base class with a metaclass.'''
+    # This requires a bit of explanation: the basic idea is to make a
+    # dummy metaclass for one level of class instantiation that replaces
+    # itself with the actual metaclass.
+    class metaclass(type):
+        def __new__(cls, name, this_bases, d):
+            return meta(name, bases, d)
+    return type.__new__(metaclass, 'temporary_class', (), {})
     
-    import sys
+        def dispatch_request(self, *args, **kwargs):
+        meth = getattr(self, request.method.lower(), None)
     
-            httponly = self.get_cookie_httponly(app)
-        secure = self.get_cookie_secure(app)
-        samesite = self.get_cookie_samesite(app)
-        expires = self.get_expiration_time(app, session)
-        val = self.get_signing_serializer(app).dumps(dict(session))
-        response.set_cookie(
-            app.session_cookie_name,
-            val,
-            expires=expires,
-            httponly=httponly,
-            domain=domain,
-            path=path,
-            secure=secure,
-            samesite=samesite
-        )
-
     
-        flask.appcontext_pushed.connect(record_push, app)
-    flask.appcontext_popped.connect(record_pop, app)
+def test_config_from_json():
+    app = flask.Flask(__name__)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    app.config.from_json(os.path.join(current_dir, 'static', 'config.json'))
+    common_object_test(app)
+    
+        def record(sender, message, category):
+        recorded.append((message, category))
+    
     try:
-        with app.test_client() as c:
-            rv = c.get('/')
-            assert rv.data == b'Hello'
-            assert recorded == ['push']
-        assert recorded == ['push', 'pop']
-    finally:
-        flask.appcontext_pushed.disconnect(record_push, app)
-        flask.appcontext_popped.disconnect(record_pop, app)
+    import json
+except ImportError:
+    import simplejson as json
     
-    # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = True
+    from ansible.plugins.terminal import TerminalBase
+from ansible.errors import AnsibleConnectionFailure
     
-            # Strip port numbers from netloc. This weird `if...encode`` dance is
-        # used for Python 3.2, which doesn't support unicode literals.
-        splitstr = b':'
-        if isinstance(url, str):
-            splitstr = splitstr.decode('ascii')
-        host = ri.netloc.split(splitstr)[0]
+        def test_max_delay_none(self):
+        strategy = _exponential_backoff(retries=7, delay=1, backoff=2, max_delay=None)
+        result = list(strategy())
+        self.assertEquals(result, [1, 2, 4, 8, 16, 32, 64])
     
-        # Check chardet for compatibility.
-    major, minor, patch = chardet_version.split('.')[:3]
-    major, minor, patch = int(major), int(minor), int(patch)
-    # chardet >= 3.0.2, < 3.1.0
-    assert major == 3
-    assert minor < 1
-    assert patch >= 2
-    
-        def on_open_shell(self):
-        try:
-            self._exec_cli_command('screen-length 0 temporary')
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
-
-    
-    AnsibleConstructor.add_constructor(
-    u'tag:yaml.org,2002:seq',
-    AnsibleConstructor.construct_yaml_seq)
-    
-            n_samples, n_features = 10 * i + 3, 10 * i + 3
+        Returns
+    -------
+    array of floats shaped like (metrics, formats, samples, classes, density)
+        Time in seconds.
+    '''
+    metrics = np.atleast_1d(metrics)
+    samples = np.atleast_1d(samples)
+    classes = np.atleast_1d(classes)
+    density = np.atleast_1d(density)
+    formats = np.atleast_1d(formats)
+    out = np.zeros((len(metrics), len(formats), len(samples), len(classes),
+                    len(density)), dtype=float)
+    it = itertools.product(samples, classes, density)
+    for i, (s, c, d) in enumerate(it):
+        _, y_true = make_multilabel_classification(n_samples=s, n_features=1,
+                                                   n_classes=c, n_labels=d * c,
+                                                   random_state=42)
+        _, y_pred = make_multilabel_classification(n_samples=s, n_features=1,
+                                                   n_classes=c, n_labels=d * c,
+                                                   random_state=84)
+        for j, f in enumerate(formats):
+            f_true = f(y_true)
+            f_pred = f(y_pred)
+            for k, metric in enumerate(metrics):
+                t = timeit(partial(metric, f_true, f_pred), number=n_times)
     
     
-@ignore_warnings
-def benchmark(metrics=tuple(v for k, v in sorted(METRICS.items())),
-              formats=tuple(v for k, v in sorted(FORMATS.items())),
-              samples=1000, classes=4, density=.2,
-              n_times=5):
-    '''Times metric calculations for a number of inputs
+if __name__ == '__main__':
+    ###########################################################################
+    # Option parser
+    ###########################################################################
+    op = optparse.OptionParser()
+    op.add_option('--n-times',
+                  dest='n_times', default=5, type=int,
+                  help='Benchmark results are average over n_times experiments')
     
-    In this examples we will use a movie review dataset.
+        selected_algorithm = opts.selected_algorithm.split(',')
+    for key in selected_algorithm:
+        if key not in default_algorithms.split(','):
+            raise ValueError('Unknown sampling algorithm \'%s\' not in (%s).'
+                             % (key, default_algorithms))
     
-    We selected two sets of two variables from the Boston housing data set
-as an illustration of what kind of analysis can be done with several
-outlier detection tools. For the purpose of visualization, we are working
-with two-dimensional examples, but one should be aware that things are
-not so trivial in high-dimension, as it will be pointed out.
+    URL = ('http://people.csail.mit.edu/jrennie/'
+       '20Newsgroups/20news-bydate.tar.gz')
     
-            controller.gamma = Tk.StringVar()
-        controller.gamma.set('0.01')
-        g = Tk.Frame(valbox)
-        Tk.Label(g, text='gamma:', anchor='e', width=7).pack(side=Tk.LEFT)
-        Tk.Entry(g, width=6, textvariable=controller.gamma).pack(side=Tk.LEFT)
-        g.pack()
+        # Print the classification report
+    print(metrics.classification_report(y_test, y_predicted,
+                                        target_names=dataset.target_names))
     
-        t0 = time()
-    scores = uniform_labelings_scores(score_func, n_samples, n_clusters_range)
-    print('done in %0.3fs' % (time() - t0))
-    plots.append(plt.errorbar(
-        n_clusters_range, np.median(scores, axis=1), scores.std(axis=1))[0])
-    names.append(score_func.__name__)
+    # Author: Virgile Fritsch <virgile.fritsch@inria.fr>
+# License: BSD 3 clause
     
-        delimiter = b'\n'
-    
-    logger = logging.getLogger(__name__)
-    
-    
-class DefaultHeadersMiddleware(object):
-    
-    See documentation in docs/topics/extensions.rst
+    Note that this two-dimensional example is very degenerate:
+generally the number of features would be much greater than the
+'document length', while here we have much larger documents than vocabulary.
+Similarly, with ``n_classes > n_features``, it is much less likely that a
+feature distinguishes a particular class.
 '''
     
-        long_description = README,
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-l', '--list', dest='list', action='store_true',
+            help='List available templates')
+        parser.add_option('-e', '--edit', dest='edit', action='store_true',
+            help='Edit spider after creating it')
+        parser.add_option('-d', '--dump', dest='dump', metavar='TEMPLATE',
+            help='Dump template to standard output')
+        parser.add_option('-t', '--template', dest='template', default='basic',
+            help='Uses a custom template.')
+        parser.add_option('--force', dest='force', action='store_true',
+            help='If the spider already exists, overwrite it with the template')
     
-    __all__ = ['kugou_download']
+        def _get_slot(self, request, spider):
+        key = self._get_slot_key(request, spider)
+        if key not in self.slots:
+            conc = self.ip_concurrency if self.ip_concurrency else self.domain_concurrency
+            conc, delay = _get_concurrency_delay(conc, spider, self.settings)
+            self.slots[key] = Slot(conc, delay, self.randomize_delay)
     
-    from ..common import *
+    from scrapy.http import Request, Response
+from scrapy.middleware import MiddlewareManager
+from scrapy.utils.defer import mustbe_deferred
+from scrapy.utils.conf import build_component_list
+    
+            if not isinstance(response, HtmlResponse) or response.status != 200:
+            return response
+    
+            for fmt, func in six.iteritems(self._formats):
+            new_response = func(response)
+            if new_response:
+                logger.debug('Decompressed response with format: %(responsefmt)s',
+                             {'responsefmt': fmt}, extra={'spider': spider})
+                return new_response
+        return response
+
     
     
-def mtv81_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_content(url)
-    title = HTMLParser().unescape(
-        '|'.join(match1(html, r'<title>(.*?)</title>').split('|')[:-2]))
+def main():
+    args = parse_args()
+    zip_path = fetch_zip(
+        args.tag,
+        args.externals_dir / 'zips',
+        org=args.organization,
+        binary=args.binary,
+        verbose=args.verbose,
+    )
+    final_name = args.externals_dir / args.tag
+    extract_zip(args.externals_dir, zip_path).replace(final_name)
     
-            for s in self.stream_types:
-            quality = s['id']
-            src = match1(content,
-                         r'src: '([^']+)', 'data-res': '%s'' % quality)
-            if src is not None:
-                url = 'http://en.musicplayon.com%s' % src
-                self.streams[quality] = {'url': url}
+        @staticmethod
+    def calculate_indent(line):
+        return len(line) - len(line.strip())
     
-            # extract title
-        self.title = match1(content,
-                            r'<meta property='og:description' name='og:description' content='([^']+)'')
+        def test_disallowed_grouping__empty_group_on_right(self):
+        self.parse_function_should_fail('''
+module foo
+foo.empty_group
+    param: int
+    [
+    [
+    ]
+    group2 : int
+    ]
+            ''')
+    
+    
+def receiver(group):
+    # Look up multicast group address in name server and find out IP version
+    addrinfo = socket.getaddrinfo(group, None)[0]
+    
+        def display(self):
+        self.nfound = self.nfound + 1
+        if self.silent:
+            return
+        print('+-' + '--'*self.n + '+')
+        for y in range(self.n-1, -1, -1):
+            print('|', end=' ')
+            for x in range(self.n):
+                if self.y[x] == y:
+                    print('Q', end=' ')
+                else:
+                    print('.', end=' ')
+            print('|')
+        print('+-' + '--'*self.n + '+')
