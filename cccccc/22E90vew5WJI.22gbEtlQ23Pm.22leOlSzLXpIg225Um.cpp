@@ -1,153 +1,313 @@
 
         
-          /**
-   * Returns a binary image of the current object at the given level.
-   * The position and size match the return from BoundingBoxInternal, and so
-   * this could be upscaled with respect to the original input image.
-   * Use pixDestroy to delete the image after use.
-   */
-  Pix* GetBinaryImage(PageIteratorLevel level) const;
+          // Quit the whole app.
+  static void Quit(content::RenderProcessHost* rph = NULL);
     
-    void IntFeatureMap::Clear() {
-  for (int dir = 0; dir < kNumOffsetMaps; ++dir) {
-    delete [] offset_plus_[dir];
-    delete [] offset_minus_[dir];
-    offset_plus_[dir] = nullptr;
-    offset_minus_[dir] = nullptr;
+    
+    {}  // namespace nw
+
+    
+    
+    {  if (enable_shortcut_) {
+    focus_manager_->UnregisterAccelerator(accelerator_, this);
   }
+  if (submenu_) {
+    submenu_->RemoveKeys();
+  }
+  focus_manager_ = NULL;
 }
     
-    // Max number of neighbour small objects per squared gridsize before a grid
-// cell becomes image.
-const double kMaxSmallNeighboursPerPix = 1.0 / 32;
-// Max number of small blobs a large blob may overlap before it is rejected
-// and determined to be image.
-const int kMaxLargeOverlapsWithSmall = 3;
-// Max number of small blobs a medium blob may overlap before it is rejected
-// and determined to be image. Larger than for large blobs as medium blobs
-// may be complex Chinese characters. Very large Chinese characters are going
-// to overlap more medium blobs than small.
-const int kMaxMediumOverlapsWithSmall = 12;
-// Max number of normal blobs a large blob may overlap before it is rejected
-// and determined to be image. This is set higher to allow for drop caps, which
-// may overlap a lot of good text blobs.
-const int kMaxLargeOverlapsWithMedium = 12;
-// Multiplier of original noise_count used to test for the case of spreading
-// noise beyond where it should really be.
-const int kOriginalNoiseMultiple = 8;
-// Pixel padding for noise blobs when rendering on the image
-// mask to encourage them to join together. Make it too big and images
-// will fatten out too much and have to be clipped to text.
-const int kNoisePadding = 4;
-// Fraction of max_noise_count_ to be added to the noise count if there is
-// photo mask in the background.
-const double kPhotoOffsetFraction = 0.375;
-// Min ratio of perimeter^2/16area for a 'good' blob in estimating noise
-// density. Good blobs are supposed to be highly likely real text.
-// We consider a square to have unit ratio, where A=(p/4)^2, hence the factor
-// of 16. Digital circles are weird and have a minimum ratio of pi/64, not
-// the 1/(4pi) that you would expect.
-const double kMinGoodTextPARatio = 1.5;
-    
-    void block_edges(Pix *t_image,         // thresholded image
-                 PDBLK *block,         // block in image
-                 C_OUTLINE_IT* outline_it);
-void make_margins(PDBLK *block,            // block in image
-                  BLOCK_LINE_IT *line_it,  // for old style
-                  uint8_t *pixels,           // pixels to strip
-                  uint8_t margin,            // white-out pixel
-                  int16_t left,              // block edges
-                  int16_t right,
-                  int16_t y);                // line coord                 );
-void line_edges(int16_t x,                     // coord of line start
-                int16_t y,                     // coord of line
-                int16_t xext,                  // width of line
-                uint8_t uppercolour,           // start of prev line
-                uint8_t * bwpos,               // thresholded line
-                CRACKEDGE ** prevline,       // edges in progress
-                CRACKEDGE **free_cracks,
-                C_OUTLINE_IT* outline_it);
-CRACKEDGE *h_edge(int sign,                  // sign of edge
-                  CRACKEDGE * join,          // edge to join to
-                  CrackPos* pos);
-CRACKEDGE *v_edge(int sign,                  // sign of edge
-                  CRACKEDGE * join,          // edge to join to
-                  CrackPos* pos);
-void join_edges(CRACKEDGE *edge1,            // edges to join
-                CRACKEDGE *edge2,            // no specific order
-                CRACKEDGE **free_cracks,
-                C_OUTLINE_IT* outline_it);
-void free_crackedges(CRACKEDGE *start);
-    
-    // Insert the given blocks at the front of the completed_blocks_ list so
-// they can be kept in the correct reading order.
-void WorkingPartSet::InsertCompletedBlocks(BLOCK_LIST* blocks,
-                                           TO_BLOCK_LIST* to_blocks) {
-  BLOCK_IT block_it(&completed_blocks_);
-  block_it.add_list_before(blocks);
-  TO_BLOCK_IT to_block_it(&to_blocks_);
-  to_block_it.add_list_before(to_blocks);
-}
-    
-      // Sets the coordinates of the current macro-block for the purpose of
-  // CompareBlock() calls.
-  virtual void SwitchBlock(int block_x, int block_y,
-                           int factor_x, int factor_y) = 0;
-    
-    void OutputImage::SaveToJpegData(JPEGData* jpg) const {
-  assert(components_[0].factor_x() == 1);
-  assert(components_[0].factor_y() == 1);
-  jpg->width = width_;
-  jpg->height = height_;
-  jpg->max_h_samp_factor = 1;
-  jpg->max_v_samp_factor = 1;
-  jpg->MCU_cols = components_[0].width_in_blocks();
-  jpg->MCU_rows = components_[0].height_in_blocks();
-  int ncomp = components_[1].IsAllZero() && components_[2].IsAllZero() ? 1 : 3;
-  for (int i = 1; i < ncomp; ++i) {
-    jpg->max_h_samp_factor = std::max(jpg->max_h_samp_factor,
-                                      components_[i].factor_x());
-    jpg->max_v_samp_factor = std::max(jpg->max_h_samp_factor,
-                                      components_[i].factor_y());
-    jpg->MCU_cols = std::min(jpg->MCU_cols, components_[i].width_in_blocks());
-    jpg->MCU_rows = std::min(jpg->MCU_rows, components_[i].height_in_blocks());
-  }
-  jpg->components.resize(ncomp);
-  int q[3][kDCTBlockSize];
-  for (int c = 0; c < 3; ++c) {
-    memcpy(&q[c][0], components_[c].quant(), kDCTBlockSize * sizeof(q[0][0]));
-  }
-  for (int c = 0; c < ncomp; ++c) {
-    JPEGComponent* comp = &jpg->components[c];
-    assert(jpg->max_h_samp_factor % components_[c].factor_x() == 0);
-    assert(jpg->max_v_samp_factor % components_[c].factor_y() == 0);
-    comp->id = c;
-    comp->h_samp_factor = jpg->max_h_samp_factor / components_[c].factor_x();
-    comp->v_samp_factor = jpg->max_v_samp_factor / components_[c].factor_y();
-    comp->width_in_blocks = jpg->MCU_cols * comp->h_samp_factor;
-    comp->height_in_blocks = jpg->MCU_rows * comp->v_samp_factor;
-    comp->num_blocks = comp->width_in_blocks * comp->height_in_blocks;
-    comp->coeffs.resize(kDCTBlockSize * comp->num_blocks);
+      // Ignore first non-switch arg if it's not a standalone package.
+  bool ignore_arg = !package->self_extract();
+  for (unsigned i = 1; i < argv.size(); ++i) {
+    if (ignore_arg && args.size() && argv[i] == args[0]) {
+      ignore_arg = false;
+      continue;
     }
     }
     
-    #include <assert.h>
-#include <algorithm>
+    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardReadAvailableTypesFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
     
-    const double* NewSrgb8ToLinearTable() {
-  double* table = new double[256];
-  int i = 0;
-  for (; i < 11; ++i) {
-    table[i] = i / 12.92;
-  }
-  for (; i < 256; ++i) {
-    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
-  }
-  return table;
+    #include 'base/lazy_instance.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/nw_screen.h'
+#include 'extensions/browser/extensions_browser_client.h'
+#include 'ui/display/display_observer.h'
+#include 'ui/display/display.h'
+#include 'ui/display/screen.h'
+    
+    void leveldb_writebatch_delete(
+    leveldb_writebatch_t* b,
+    const char* key, size_t klen) {
+  b->rep.Delete(Slice(key, klen));
 }
     
-    #include 'guetzli/jpeg_data.h'
+    // Memtables and sstables that make the DB representation contain
+// (userkey,seq,type) => uservalue entries.  DBIter
+// combines multiple entries for the same userkey found in the DB
+// representation into a single entry while accounting for sequence
+// numbers, deletion markers, overwrites, etc.
+class DBIter: public Iterator {
+ public:
+  // Which direction is the iterator currently moving?
+  // (1) When moving forward, the internal iterator is positioned at
+  //     the exact entry that yields this->key(), this->value()
+  // (2) When moving backwards, the internal iterator is positioned
+  //     just before all entries whose user key == this->key().
+  enum Direction {
+    kForward,
+    kReverse
+  };
+    }
     
-    void BuildSequentialHuffmanCodes(
-    const JPEGData& jpg, std::vector<HuffmanCodeTable>* dc_huffman_code_tables,
-    std::vector<HuffmanCodeTable>* ac_huffman_code_tables);
+    Status SetCurrentFile(Env* env, const std::string& dbname,
+                      uint64_t descriptor_number) {
+  // Remove leading 'dbname/' and add newline to manifest file name
+  std::string manifest = DescriptorFileName(dbname, descriptor_number);
+  Slice contents = manifest;
+  assert(contents.starts_with(dbname + '/'));
+  contents.remove_prefix(dbname.size() + 1);
+  std::string tmp = TempFileName(dbname, descriptor_number);
+  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
+  if (s.ok()) {
+    s = env->RenameFile(tmp, CurrentFileName(dbname));
+  }
+  if (!s.ok()) {
+    env->DeleteFile(tmp);
+  }
+  return s;
+}
+    
+      fname = TableFileName('bar', 200);
+  ASSERT_EQ('bar/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(200, number);
+  ASSERT_EQ(kTableFile, type);
+    
+          case kNewFile:
+        if (GetLevel(&input, &level) &&
+            GetVarint64(&input, &f.number) &&
+            GetVarint64(&input, &f.file_size) &&
+            GetInternalKey(&input, &f.smallest) &&
+            GetInternalKey(&input, &f.largest)) {
+          new_files_.push_back(std::make_pair(level, f));
+        } else {
+          msg = 'new-file entry';
+        }
+        break;
+    
+      // Return true iff 'x' is a prefix of '*this'
+  bool starts_with(const Slice& x) const {
+    return ((size_ >= x.size_) &&
+            (memcmp(data_, x.data_, x.size_) == 0));
+  }
+    
+    
+    {  stackDepth_g = 0;  // Yes, this is bad coding, but options are limited.
+  bool successful = readValue();
+  Token token;
+  skipCommentTokens(token);
+  if (collectComments_ && !commentsBefore_.empty())
+    root.setComment(commentsBefore_, commentAfter);
+  if (features_.strictRoot_) {
+    if (!root.isArray() && !root.isObject()) {
+      // Set error location to start of doc, ideally should be first token found
+      // in doc
+      token.type_ = tokenError;
+      token.start_ = beginDoc;
+      token.end_ = endDoc;
+      addError(
+          'A valid JSON document must be either an array or an object value.',
+          token);
+      return false;
+    }
+  }
+  return successful;
+}
+    
+    // Initialize the various types and objects.
+bool InitDescriptorMappingTypes();
+    
+    // Find the file which defines an extension extending the given message type
+// with the given field number.
+// Python DescriptorDatabases are not required to implement this method.
+bool PyDescriptorDatabase::FindFileContainingExtension(
+    const string& containing_type, int field_number,
+    FileDescriptorProto* output) {
+  ScopedPyObjectPtr py_method(
+      PyObject_GetAttrString(py_database_, 'FindFileContainingExtension'));
+  if (py_method == NULL) {
+    // This method is not implemented, returns without error.
+    PyErr_Clear();
+    return false;
+  }
+  ScopedPyObjectPtr py_descriptor(
+      PyObject_CallFunction(py_method.get(), 's#i', containing_type.c_str(),
+                            containing_type.size(), field_number));
+  return GetFileDescriptorProto(py_descriptor.get(), output);
+}
+    
+    // CodeGenerator implementation which generates a C++ source file and
+// header.  If you create your own protocol compiler binary and you want
+// it to support C++ output, you can do so by registering an instance of this
+// CodeGenerator with the CommandLineInterface in your main() function.
+class LIBPROTOC_EXPORT CppGenerator : public CodeGenerator {
+ public:
+  CppGenerator();
+  ~CppGenerator();
+    }
+    
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
+}
+    
+    
+    { private:
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RepeatedPrimitiveFieldGenerator);
+};
+    
+      // Returns an estimate of the number of bytes the printed code will compile to
+  virtual int GenerateRegistrationCode(io::Printer* printer);
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_JAVA_GENERATOR_H__
+#define GOOGLE_PROTOBUF_COMPILER_JAVA_GENERATOR_H__
+    
+    ServiceGenerator* ImmutableGeneratorFactory::NewServiceGenerator(
+    const ServiceDescriptor* descriptor) const {
+  return new ImmutableServiceGenerator(descriptor, context_);
+}
+    
+    void read_image(std::ifstream* image_file, std::ifstream* label_file,
+        uint32_t index, uint32_t rows, uint32_t cols,
+        char* pixels, char* label) {
+  image_file->seekg(index * rows * cols + 16);
+  image_file->read(pixels, rows * cols);
+  label_file->seekg(index + 8);
+  label_file->read(label, 1);
+}
+    
+    
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
+#endif
+    
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLCNLayer : public LRNLayer<Dtype> {
+ public:
+  explicit CuDNNLCNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
+        tempData1(NULL), tempData2(NULL) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLCNLayer();
+    }
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #endif  // CAFFE_DECONV_LAYER_HPP_
+
+    
+    /**
+ * @brief A layer for learning 'embeddings' of one-hot vector input.
+ *        Equivalent to an InnerProductLayer with one-hot vectors as input, but
+ *        for efficiency the input is the 'hot' index of each column itself.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class EmbedLayer : public Layer<Dtype> {
+ public:
+  explicit EmbedLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    
+    {  Dtype inner_scale_, outer_scale_;
+};
+    
+    #include 'AuthResolver.h'
+    
+    
+    {} // namespace aria2
+
+    
+      void setPeerConnection(PeerConnection* peerConnection);
+    
+      void disableWriteCheckSocket();
+    
+    void AnnounceTier::nextEventIfAfterStarted()
+{
+  switch (event) {
+  case STOPPED:
+    event = HALTED;
+    break;
+  case COMPLETED:
+    event = SEEDING;
+    break;
+  default:
+    break;
+  }
+}
+    
+    class ApiCallbackDownloadEventListener : public DownloadEventListener {
+public:
+  ApiCallbackDownloadEventListener(Session* session,
+                                   DownloadEventCallback callback,
+                                   void* userData);
+  virtual ~ApiCallbackDownloadEventListener();
+  virtual void onEvent(DownloadEvent event,
+                       const RequestGroup* group) CXX11_OVERRIDE;
+    }
+    
+    class AuthConfig;
+    
+      if (state->stackTrace.size() == state->stackTrace.capacity()) {
+    return _URC_END_OF_STACK;
+  }
+    
+    template <typename T, typename B>
+/* static */ inline std::string HybridClass<T, B>::JavaPart::get_instantiated_java_descriptor() {
+  return T::kJavaDescriptor;
+}
+    
+    #include <nbind/api.h>
+#include <nbind/BindDefiner.h>
+    
+      template <typename U>
+  explicit operator RefPtr<U> () const;
