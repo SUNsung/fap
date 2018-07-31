@@ -1,107 +1,133 @@
 
         
-        namespace tensorflow {
-namespace gtl {
-    }
-    }
-    
-    class DebugGraphDecorator : public DebugGraphDecoratorInterface {
- public:
-  DebugGraphDecorator(const DebugOptions& debug_options)
-      : debug_options_(debug_options) {}
-  virtual ~DebugGraphDecorator() {}
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // TODO(zongheng): this should be a general functor that powers SparseAdd and
-// ScatterNd ops.  It should be moved to its own head file, once the other ops
-// are implemented.
-template <typename Device, typename T, typename Index, int NDIMS,
-          scatter_op::UpdateOp op>
-struct ScatterNdFunctor {
-  // Returns -1 on success or a nonnegative i s.t. indices[i] is a bad index.
-  Index operator()(const Device& d, typename TTypes<Index>::ConstMatrix indices,
-                   typename TTypes<T>::ConstFlat updates,
-                   typename TTypes<T, NDIMS>::Tensor out);
-};
-    
-    
+        
     {
-    {    SetReaderFactory([this, compression_type, env]() {
-      return new TFRecordReader(name(), compression_type, env);
-    });
+    {            low_sum = quantile_sum;
+            start_x = x;
+        }
+    }
+    
+    #ifdef HAVE_CLAMDBLAS
+    
+    #include 'precomp.hpp'
+    
+    int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
+	_In_opt_ HINSTANCE hPrevInstance,
+	_In_ LPTSTR    lpCmdLine,
+	_In_ int       nCmdShow)
+{
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
+	UNREFERENCED_PARAMETER(nCmdShow);
+    }
+    
+    /**
+ * @brief A more 'complex' example table is provided to assist with tests.
+ *
+ * This table will access options and flags known to the extension.
+ * An extension should not assume access to any CLI flags- rather, access is
+ * provided via the osquery-meta table: osquery_flags.
+ *
+ * There is no API/C++ wrapper to provide seamless use of flags yet.
+ * We can force an implicit query to the manager though.
+ *
+ * Database access should be mediated by the *Database functions.
+ * Direct use of the 'database' registry will lead to undefined behavior.
+ */
+class ComplexExampleTable : public TablePlugin {
+ private:
+  TableColumns columns() const {
+    return {
+        std::make_tuple('flag_test', TEXT_TYPE, ColumnOptions::DEFAULT),
+        std::make_tuple('database_test', TEXT_TYPE, ColumnOptions::DEFAULT),
+    };
   }
+    }
+    
+    
+    
+    #if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+    
+    
+    
+    #ifndef RENDER_H
+#define RENDER_H
+    
+    		b2Body* ground;
+		{
+			b2BodyDef bd;
+			bd.position.Set(0.0f, 20.0f);
+			ground = m_world->CreateBody(&bd);
+    }
+    
+     private: // Private Functions
+  /// Calls InsertBefore or InsertAfter
+  int Insert(const std::string& key, const std::string& pivot,
+             const std::string& value, bool insert_after);
+ private:
+  std::string db_name_;       // The actual database name/path
+  WriteOptions put_option_;
+  ReadOptions get_option_;
+    
+    
+    {  // No copying allowed
+  Reader(const Reader&);
+  void operator=(const Reader&);
 };
     
-    void leveldb_env_destroy(leveldb_env_t* env) {
-  if (!env->is_default) delete env->rep;
-  delete env;
-}
-    
-    std::string TempFileName(const std::string& dbname, uint64_t number) {
-  assert(number > 0);
-  return MakeFileName(dbname, number, 'dbtmp');
-}
-    
-    static Slice TrimSpace(Slice s) {
-  int start = 0;
-  while (start < s.size() && isspace(s[start])) {
-    start++;
+      StatisticsJni::StatisticsJni(std::shared_ptr<Statistics> stats,
+      const std::set<uint32_t> ignore_histograms) : StatisticsImpl(stats, false),
+      m_ignore_histograms(ignore_histograms) {
   }
-  int limit = s.size();
-  while (limit > start && isspace(s[limit-1])) {
-    limit--;
+    
+      /**
+   * @brief noop
+   * @details [long description]
+   *
+   * @param offset [description]
+   * @param length [description]
+   *
+   * @return [description]
+   */
+  Status InvalidateCache(size_t offset, size_t length) {
+    return Status::OK();
   }
-  return Slice(s.data() + start, limit - start);
-}
     
-      // Create a slice that refers to d[0,n-1].
-  Slice(const char* d, size_t n) : data_(d), size_(n) { }
+      // Updates flush_state_ using ShouldFlushNow()
+  void UpdateFlushState();
     
+      using MemTableRepFactory::CreateMemTableRep;
+  virtual MemTableRep* CreateMemTableRep(const MemTableRep::KeyComparator&,
+                                         Allocator*, const SliceTransform*,
+                                         Logger* logger) override;
     
-    {} // namespace A2STR
-    
-    class AbstractHttpServerResponseCommand : public Command {
-private:
-  DownloadEngine* e_;
-  std::shared_ptr<SocketCore> socket_;
-  std::shared_ptr<HttpServer> httpServer_;
-  Timer timeoutTimer_;
-  bool readCheck_;
-  bool writeCheck_;
+    std::unique_ptr<CompactionFilter> CompactionFilterFactoryJniCallback::CreateCompactionFilter(
+    const CompactionFilter::Context& context) {
+  jboolean attached_thread = JNI_FALSE;
+  JNIEnv* env = getJniEnv(&attached_thread);
+  assert(env != nullptr);
     }
     
-    
-    {} // namespace aria2
-    
-    class AdaptiveFileAllocationIterator : public FileAllocationIterator {
-private:
-  std::unique_ptr<FileAllocationIterator> allocator_;
+      bool pending_exception =
+      AbstractSliceJni::setHandle(env, m_jSliceA, &a, JNI_FALSE);
+  if(pending_exception) {
+    if(env->ExceptionCheck()) {
+      // exception thrown from setHandle or descendant
+      env->ExceptionDescribe(); // print out exception to stderr
     }
+    releaseJniEnv(attached_thread);
+    return 0;
+  }
     
-    void AnnounceList::reconfigure(const std::string& url)
-{
-  std::deque<std::string> urls{url};
-  tiers_.push_back(std::make_shared<AnnounceTier>(std::move(urls)));
-  resetIterator();
-}
-    
-    #endif // DOWNLOAD_EVENT_LISTENER_H
+    #endif  // JAVA_ROCKSJNI_COMPARATORJNICALLBACK_H_
 
     
-    private:
-  TLSSessionSide side_;
-  TLSVersion minTLSVer_;
-  bool verifyPeer_;
-  SecIdentityRef credentials_;
-    
-    class AsyncNameResolver;
-class DownloadEngine;
-class Command;
-class Option;
+      // # of times bloom filter has avoided file reads, i.e., negatives.
+  BLOOM_FILTER_USEFUL,
+  // # of times bloom FullFilter has not avoided the reads.
+  BLOOM_FILTER_FULL_POSITIVE,
+  // # of times bloom FullFilter has not avoided the reads and data actually
+  // exist.
+  BLOOM_FILTER_FULL_TRUE_POSITIVE,
