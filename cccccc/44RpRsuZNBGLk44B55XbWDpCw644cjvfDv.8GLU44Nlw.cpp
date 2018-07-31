@@ -1,339 +1,72 @@
 
         
-        
-    {  view->CopyFromSurface(gfx::Rect(),  // Copy entire surface area.
-                        gfx::Size(),  // Result contains device-level detail.
-      base::Bind(&NwCurrentWindowInternalCapturePageInternalFunction::CopyFromBackingStoreComplete,
-                 this));
-  return RespondLater();
+        // Identical to RelaunchApp, but uses |helper| as the path to the relauncher
+// process, and allows additional arguments to be supplied to the relauncher
+// process in relauncher_args. Unlike args[0], |helper| must be a pathname to
+// an executable file. The helper path given must be from the same version of
+// Chrome as the running parent browser process, as there are no guarantees
+// that the parent and relauncher processes from different versions will be
+// able to communicate with one another. This variant can be useful to
+// relaunch the same version of Chrome from another location, using that
+// location's helper.
+bool RelaunchAppWithHelper(const base::FilePath& helper,
+                           const StringVector& relauncher_args,
+                           const StringVector& args);
+    
+    void DragFileItems(const std::vector<base::FilePath>& files,
+                   const gfx::Image& icon,
+                   gfx::NativeView view);
+    
+      // ui::EventRewriter:
+  ui::EventRewriteStatus RewriteEvent(
+      const ui::Event& event,
+      std::unique_ptr<ui::Event>* rewritten_event) override;
+  ui::EventRewriteStatus NextDispatchEvent(
+      const ui::Event& last_event,
+      std::unique_ptr<ui::Event>* new_event) override;
+    
+    
+    {}  // namespace atom
+    
+    // Attempts to send the current command line to an already running instance of
+// Chrome via a WM_COPYDATA message.
+// Returns true if a running Chrome is found and successfully notified.
+// |fast_start| is true when this is being called on the window fast start path.
+NotifyChromeResult AttemptToNotifyRunningChrome(HWND remote_window,
+                                                bool fast_start);
+    
+    void TtsPlatformImpl::clear_error() {
+  error_ = std::string();
 }
     
-    EventListener::EventListener(int id,
-  const base::WeakPtr<DispatcherHost>& dispatcher_host,
-  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
-    }
     
-    void MenuItem::CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) {
-  if (method == 'GetChecked') {
-    result->AppendBoolean(GetChecked());
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-      if (type == 'separator') {
-    menu_item_ = gtk_separator_menu_item_new();
-  } else {
-    if (type == 'checkbox') {
-      menu_item_ = gtk_check_menu_item_new();
-      bool checked;
-      if (option.GetBoolean('checked', &checked))
-        SetChecked(checked);
-    } else {
-      menu_item_ = gtk_image_menu_item_new();
-      std::string icon;
-      if (option.GetString('icon', &icon))
-        SetIcon(icon);
-    }
-    }
-    
-      std::string key;
-  std::string modifiers;
-  option.GetString('key',&key);
-  option.GetString('modifiers',&modifiers);
-    
-    NwClipboardGetListSyncFunction::NwClipboardGetListSyncFunction() {
-}
-    
-    bool NwShellShowItemInFolderFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
-  manager->OnCallStaticMethod(render_frame_host(), 'Shell', 'ShowItemInFolder', *args_);
-  return true;
-}
-    
-    struct leveldb_t              { DB*               rep; };
-struct leveldb_iterator_t     { Iterator*         rep; };
-struct leveldb_writebatch_t   { WriteBatch        rep; };
-struct leveldb_snapshot_t     { const Snapshot*   rep; };
-struct leveldb_readoptions_t  { ReadOptions       rep; };
-struct leveldb_writeoptions_t { WriteOptions      rep; };
-struct leveldb_options_t      { Options           rep; };
-struct leveldb_cache_t        { Cache*            rep; };
-struct leveldb_seqfile_t      { SequentialFile*   rep; };
-struct leveldb_randomfile_t   { RandomAccessFile* rep; };
-struct leveldb_writablefile_t { WritableFile*     rep; };
-struct leveldb_logger_t       { Logger*           rep; };
-struct leveldb_filelock_t     { FileLock*         rep; };
-    
-    Iterator* NewDBIterator(
-    DBImpl* db,
-    const Comparator* user_key_comparator,
-    Iterator* internal_iter,
-    SequenceNumber sequence,
-    uint32_t seed) {
-  return new DBIter(db, user_key_comparator, internal_iter, sequence, seed);
-}
-    
-    // Return a new iterator that converts internal keys (yielded by
-// '*internal_iter') that were live at the specified 'sequence' number
-// into appropriate user keys.
-extern Iterator* NewDBIterator(
-    DBImpl* db,
-    const Comparator* user_key_comparator,
-    Iterator* internal_iter,
-    SequenceNumber sequence,
-    uint32_t seed);
-    
-    class FormatTest { };
-    
-      // Return an iterator for the specified file number (the corresponding
-  // file length must be exactly 'file_size' bytes).  If 'tableptr' is
-  // non-NULL, also sets '*tableptr' to point to the Table object
-  // underlying the returned iterator, or NULL if no Table object underlies
-  // the returned iterator.  The returned '*tableptr' object is owned by
-  // the cache and should not be deleted, and is valid for as long as the
-  // returned iterator is live.
-  Iterator* NewIterator(const ReadOptions& options,
-                        uint64_t file_number,
-                        uint64_t file_size,
-                        Table** tableptr = NULL);
-    
-    
-    {}  // namespace leveldb
-    
-      FindFileTest() : disjoint_sorted_files_(true) { }
-    
-    void WriteBatch::Clear() {
-  rep_.clear();
-  rep_.resize(kHeader);
-}
-    
-    inline int Slice::compare(const Slice& b) const {
-  const size_t min_len = (size_ < b.size_) ? size_ : b.size_;
-  int r = memcmp(data_, b.data_, min_len);
-  if (r == 0) {
-    if (size_ < b.size_) r = -1;
-    else if (size_ > b.size_) r = +1;
-  }
-  return r;
-}
-    
-    CV_EXPORTS void  EstimateUncertainties(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
-                           const IntrinsicParams& params, InputArray omc, InputArray Tc,
-                           IntrinsicParams& errors, Vec2d& std_err, double thresh_cond, int check_cond, double& rms);
-    
-    #endif /* OPENCV_CUDA_WARP_REDUCE_HPP__ */
-
-    
-    namespace gl
-{
-    enum
     {
-        // Version: 1.1
-        DEPTH_BUFFER_BIT                 = 0x00000100,
-        STENCIL_BUFFER_BIT               = 0x00000400,
-        COLOR_BUFFER_BIT                 = 0x00004000,
-        FALSE_                           = 0,
-        TRUE_                            = 1,
-        POINTS                           = 0x0000,
-        LINES                            = 0x0001,
-        LINE_LOOP                        = 0x0002,
-        LINE_STRIP                       = 0x0003,
-        TRIANGLES                        = 0x0004,
-        TRIANGLE_STRIP                   = 0x0005,
-        TRIANGLE_FAN                     = 0x0006,
-        QUADS                            = 0x0007,
-        NEVER                            = 0x0200,
-        LESS                             = 0x0201,
-        EQUAL                            = 0x0202,
-        LEQUAL                           = 0x0203,
-        GREATER                          = 0x0204,
-        NOTEQUAL                         = 0x0205,
-        GEQUAL                           = 0x0206,
-        ALWAYS                           = 0x0207,
-        ZERO                             = 0,
-        ONE                              = 1,
-        SRC_COLOR                        = 0x0300,
-        ONE_MINUS_SRC_COLOR              = 0x0301,
-        SRC_ALPHA                        = 0x0302,
-        ONE_MINUS_SRC_ALPHA              = 0x0303,
-        DST_ALPHA                        = 0x0304,
-        ONE_MINUS_DST_ALPHA              = 0x0305,
-        DST_COLOR                        = 0x0306,
-        ONE_MINUS_DST_COLOR              = 0x0307,
-        SRC_ALPHA_SATURATE               = 0x0308,
-        NONE                             = 0,
-        FRONT_LEFT                       = 0x0400,
-        FRONT_RIGHT                      = 0x0401,
-        BACK_LEFT                        = 0x0402,
-        BACK_RIGHT                       = 0x0403,
-        FRONT                            = 0x0404,
-        BACK                             = 0x0405,
-        LEFT                             = 0x0406,
-        RIGHT                            = 0x0407,
-        FRONT_AND_BACK                   = 0x0408,
-        NO_ERROR_                        = 0,
-        INVALID_ENUM                     = 0x0500,
-        INVALID_VALUE                    = 0x0501,
-        INVALID_OPERATION                = 0x0502,
-        OUT_OF_MEMORY                    = 0x0505,
-        CW                               = 0x0900,
-        CCW                              = 0x0901,
-        POINT_SIZE                       = 0x0B11,
-        POINT_SIZE_RANGE                 = 0x0B12,
-        POINT_SIZE_GRANULARITY           = 0x0B13,
-        LINE_SMOOTH                      = 0x0B20,
-        LINE_WIDTH                       = 0x0B21,
-        LINE_WIDTH_RANGE                 = 0x0B22,
-        LINE_WIDTH_GRANULARITY           = 0x0B23,
-        POLYGON_MODE                     = 0x0B40,
-        POLYGON_SMOOTH                   = 0x0B41,
-        CULL_FACE                        = 0x0B44,
-        CULL_FACE_MODE                   = 0x0B45,
-        FRONT_FACE                       = 0x0B46,
-        DEPTH_RANGE                      = 0x0B70,
-        DEPTH_TEST                       = 0x0B71,
-        DEPTH_WRITEMASK                  = 0x0B72,
-        DEPTH_CLEAR_VALUE                = 0x0B73,
-        DEPTH_FUNC                       = 0x0B74,
-        STENCIL_TEST                     = 0x0B90,
-        STENCIL_CLEAR_VALUE              = 0x0B91,
-        STENCIL_FUNC                     = 0x0B92,
-        STENCIL_VALUE_MASK               = 0x0B93,
-        STENCIL_FAIL                     = 0x0B94,
-        STENCIL_PASS_DEPTH_FAIL          = 0x0B95,
-        STENCIL_PASS_DEPTH_PASS          = 0x0B96,
-        STENCIL_REF                      = 0x0B97,
-        STENCIL_WRITEMASK                = 0x0B98,
-        VIEWPORT                         = 0x0BA2,
-        DITHER                           = 0x0BD0,
-        BLEND_DST                        = 0x0BE0,
-        BLEND_SRC                        = 0x0BE1,
-        BLEND                            = 0x0BE2,
-        LOGIC_OP_MODE                    = 0x0BF0,
-        COLOR_LOGIC_OP                   = 0x0BF2,
-        DRAW_BUFFER                      = 0x0C01,
-        READ_BUFFER                      = 0x0C02,
-        SCISSOR_BOX                      = 0x0C10,
-        SCISSOR_TEST                     = 0x0C11,
-        COLOR_CLEAR_VALUE                = 0x0C22,
-        COLOR_WRITEMASK                  = 0x0C23,
-        DOUBLEBUFFER                     = 0x0C32,
-        STEREO                           = 0x0C33,
-        LINE_SMOOTH_HINT                 = 0x0C52,
-        POLYGON_SMOOTH_HINT              = 0x0C53,
-        UNPACK_SWAP_BYTES                = 0x0CF0,
-        UNPACK_LSB_FIRST                 = 0x0CF1,
-        UNPACK_ROW_LENGTH                = 0x0CF2,
-        UNPACK_SKIP_ROWS                 = 0x0CF3,
-        UNPACK_SKIP_PIXELS               = 0x0CF4,
-        UNPACK_ALIGNMENT                 = 0x0CF5,
-        PACK_SWAP_BYTES                  = 0x0D00,
-        PACK_LSB_FIRST                   = 0x0D01,
-        PACK_ROW_LENGTH                  = 0x0D02,
-        PACK_SKIP_ROWS                   = 0x0D03,
-        PACK_SKIP_PIXELS                 = 0x0D04,
-        PACK_ALIGNMENT                   = 0x0D05,
-        MAX_TEXTURE_SIZE                 = 0x0D33,
-        MAX_VIEWPORT_DIMS                = 0x0D3A,
-        SUBPIXEL_BITS                    = 0x0D50,
-        TEXTURE_1D                       = 0x0DE0,
-        TEXTURE_2D                       = 0x0DE1,
-        POLYGON_OFFSET_UNITS             = 0x2A00,
-        POLYGON_OFFSET_POINT             = 0x2A01,
-        POLYGON_OFFSET_LINE              = 0x2A02,
-        POLYGON_OFFSET_FILL              = 0x8037,
-        POLYGON_OFFSET_FACTOR            = 0x8038,
-        TEXTURE_BINDING_1D               = 0x8068,
-        TEXTURE_BINDING_2D               = 0x8069,
-        TEXTURE_WIDTH                    = 0x1000,
-        TEXTURE_HEIGHT                   = 0x1001,
-        TEXTURE_INTERNAL_FORMAT          = 0x1003,
-        TEXTURE_BORDER_COLOR             = 0x1004,
-        TEXTURE_RED_SIZE                 = 0x805C,
-        TEXTURE_GREEN_SIZE               = 0x805D,
-        TEXTURE_BLUE_SIZE                = 0x805E,
-        TEXTURE_ALPHA_SIZE               = 0x805F,
-        DONT_CARE                        = 0x1100,
-        FASTEST                          = 0x1101,
-        NICEST                           = 0x1102,
-        BYTE                             = 0x1400,
-        UNSIGNED_BYTE                    = 0x1401,
-        SHORT                            = 0x1402,
-        UNSIGNED_SHORT                   = 0x1403,
-        INT                              = 0x1404,
-        UNSIGNED_INT                     = 0x1405,
-        FLOAT                            = 0x1406,
-        DOUBLE                           = 0x140A,
-        CLEAR                            = 0x1500,
-        AND                              = 0x1501,
-        AND_REVERSE                      = 0x1502,
-        COPY                             = 0x1503,
-        AND_INVERTED                     = 0x1504,
-        NOOP                             = 0x1505,
-        XOR                              = 0x1506,
-        OR                               = 0x1507,
-        NOR                              = 0x1508,
-        EQUIV                            = 0x1509,
-        INVERT                           = 0x150A,
-        OR_REVERSE                       = 0x150B,
-        COPY_INVERTED                    = 0x150C,
-        OR_INVERTED                      = 0x150D,
-        NAND                             = 0x150E,
-        SET                              = 0x150F,
-        TEXTURE                          = 0x1702,
-        COLOR                            = 0x1800,
-        DEPTH                            = 0x1801,
-        STENCIL                          = 0x1802,
-        STENCIL_INDEX                    = 0x1901,
-        DEPTH_COMPONENT                  = 0x1902,
-        RED                              = 0x1903,
-        GREEN                            = 0x1904,
-        BLUE                             = 0x1905,
-        ALPHA                            = 0x1906,
-        RGB                              = 0x1907,
-        RGBA                             = 0x1908,
-        POINT                            = 0x1B00,
-        LINE                             = 0x1B01,
-        FILL                             = 0x1B02,
-        KEEP                             = 0x1E00,
-        REPLACE                          = 0x1E01,
-        INCR                             = 0x1E02,
-        DECR                             = 0x1E03,
-        VENDOR                           = 0x1F00,
-        RENDERER                         = 0x1F01,
-        VERSION_                         = 0x1F02,
-        EXTENSIONS                       = 0x1F03,
-        NEAREST                          = 0x2600,
-        LINEAR                           = 0x2601,
-        NEAREST_MIPMAP_NEAREST           = 0x2700,
-        LINEAR_MIPMAP_NEAREST            = 0x2701,
-        NEAREST_MIPMAP_LINEAR            = 0x2702,
-        LINEAR_MIPMAP_LINEAR             = 0x2703,
-        TEXTURE_MAG_FILTER               = 0x2800,
-        TEXTURE_MIN_FILTER               = 0x2801,
-        TEXTURE_WRAP_S                   = 0x2802,
-        TEXTURE_WRAP_T                   = 0x2803,
-        PROXY_TEXTURE_1D                 = 0x8063,
-        PROXY_TEXTURE_2D                 = 0x8064,
-        REPEAT                           = 0x2901,
-        R3_G3_B2                         = 0x2A10,
-        RGB4                             = 0x804F,
-        RGB5                             = 0x8050,
-        RGB8                             = 0x8051,
-        RGB10                            = 0x8052,
-        RGB12                            = 0x8053,
-        RGB16                            = 0x8054,
-        RGBA2                            = 0x8055,
-        RGBA4                            = 0x8056,
-        RGB5_A1                          = 0x8057,
-        RGBA8                            = 0x8058,
-        RGB10_A2                         = 0x8059,
-        RGBA12                           = 0x805A,
-        RGBA16                           = 0x805B,
+    {
+    {
+    {                        const float eps = 1e-4f;
+                        //TODO: perhaps it is better to normalize the cross product by norms of the tangent vectors
+                        if (fabs(tangentVector_1.cross(tangentVector_2)) < eps)
+                        {
+                            isGeneralPosition = false;
+                        }
+                    }
+                }
+            }
+        }
+        while(!isGeneralPosition);
+    }
+    else
+    {
+        //create points in a degenerate position (there are at least 3 points belonging to the same line)
+    
+    namespace cv { namespace cuda { namespace device
+{
+    template <class T>
+    __device__ __forceinline__ T warp_reduce(volatile T *ptr , const unsigned int tid = threadIdx.x)
+    {
+        const unsigned int lane = tid & 31; // index of thread in warp (0..31)
+    }
+    }
     }
     }
     
@@ -389,162 +122,305 @@ extern Iterator* NewDBIterator(
      248.f,  249.f,  250.f,  251.f,  252.f,  253.f,  254.f,  255.f
 };
     
-    
-    {	int got;
-	Error err = sp->base->get_partial_data((uint8_t *)buf, len, got);
-	if (err != OK) {
-		return MBEDTLS_ERR_SSL_INTERNAL_ERROR;
-	}
-	if (got == 0) {
-		return MBEDTLS_ERR_SSL_WANT_READ;
-	}
-	return got;
-}
-    
-    #if defined(MBEDTLS_DHM_C) && !defined(MBEDTLS_BIGNUM_C)
-#error 'MBEDTLS_DHM_C defined, but not all prerequisites'
-#endif
-    
-      Copyright 2003 by
-  Francesco Zappa Nardelli
-    
-      class jpeg_decoder
-  {
-  public:
-    // Call get_error_code() after constructing to determine if the stream is valid or not. You may call the get_width(), get_height(), etc.
-    // methods after the constructor is called. You may then either destruct the object, or begin decoding the image by calling begin_decoding(), then decode() on each scanline.
-    jpeg_decoder(jpeg_decoder_stream *pStream);
+    namespace internal {
     }
     
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
     
-      // Sets the coordinates of the current macro-block for the purpose of
-  // CompareBlock() calls.
-  virtual void SwitchBlock(int block_x, int block_y,
-                           int factor_x, int factor_y) = 0;
-    
-    // Performs in-place floating point 8x8 DCT on block[0..63].
-// Note that the DCT used here is the DCT-2 with the first term multiplied by
-// 1/sqrt(2) and the result scaled by 1/2.
-void ComputeBlockDCTDouble(double block[64]);
-    
-    #ifndef GUETZLI_FAST_LOG_H_
-#define GUETZLI_FAST_LOG_H_
-    
-    const double* NewSrgb8ToLinearTable() {
-  double* table = new double[256];
-  int i = 0;
-  for (; i < 11; ++i) {
-    table[i] = i / 12.92;
+    {  // Tersely prints the first N fields of a tuple to a string vector,
+  // one element for each field.
+  template <typename Tuple>
+  static void TersePrintPrefixToStrings(const Tuple& t, Strings* strings) {
+    TuplePrefixPrinter<N - 1>::TersePrintPrefixToStrings(t, strings);
+    ::std::stringstream ss;
+    UniversalTersePrint(::std::tr1::get<N - 1>(t), &ss);
+    strings->push_back(ss.str());
   }
-  for (; i < 256; ++i) {
-    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
-  }
-  return table;
-}
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
-// quantization table must have 3 * kDCTBlockSize values.
-bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     const int* quant, JPEGData* jpg);
-    
-    #endif  // GUETZLI_JPEG_ERROR_H_
-
-    
-    
-    {  const int width_;
-  const int height_;
-  int factor_x_;
-  int factor_y_;
-  int width_in_blocks_;
-  int height_in_blocks_;
-  int num_blocks_;
-  std::vector<coeff_t> coeffs_;
-  std::vector<uint16_t> pixels_;
-  // Same as last argument of ApplyGlobalQuantization() (default is all 1s).
-  int quant_[kDCTBlockSize];
 };
     
-    namespace {
+      // The c'tor sets this object as the test part result reporter used
+  // by Google Test.  The 'result' parameter specifies where to report the
+  // results. This reporter will only catch failures generated in the current
+  // thread. DEPRECATED
+  explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
+    
+    namespace testing {
     }
     
+    #if GTEST_HAS_DEATH_TEST
     
-//****************************
-// Type
-//****************************
-typedef enum { XXH_OK=0, XXH_ERROR } XXH_errorcode;
-    
-    class StringAppendOperator : public AssociativeMergeOperator {
- public:
-  // Constructor: specify delimiter
-  explicit StringAppendOperator(char delim_char);
-    }
-    
-      // Generate a list of random keys and values
-  const int kWordCount = 15;
-  std::string words[] = {'sdasd', 'triejf', 'fnjsdfn', 'dfjisdfsf', '342839',
-                         'dsuha', 'mabuais', 'sadajsid', 'jf9834hf', '2d9j89',
-                         'dj9823jd', 'a', 'dk02ed2dh', '$(jd4h984$(*', 'mabz'};
-  const int kKeyCount = 6;
-  std::string keys[] = {'dhaiusdhu', 'denidw', 'daisda', 'keykey', 'muki',
-                        'shzassdianmd'};
-    
-      // Read the next record into *record.  Returns true if read
-  // successfully, false if we hit end of the input.  May use
-  // '*scratch' as temporary storage.  The contents filled in *record
-  // will only be valid until the next mutating operation on this
-  // reader or the next mutation to *scratch.
-  bool ReadRecord(Slice* record, std::string* scratch,
-                  WALRecoveryMode wal_recovery_mode =
-                      WALRecoveryMode::kTolerateCorruptedTailRecords);
-    
-    struct ComparatorJniCallbackOptions {
-  // Use adaptive mutex, which spins in the user space before resorting
-  // to kernel. This could reduce context switch when the mutex is not
-  // heavily contended. However, if the mutex is hot, we could end up
-  // wasting spin time.
-  // Default: false
-  bool use_adaptive_mutex;
-    }
-    
-      rocksdb::SyncPoint::GetInstance()->EnableProcessing();
-  rocksdb::port::Thread threads([&] {
-    CompactRangeOptions compact_options;
-    compact_options.exclusive_manual_compaction = false;
-    ASSERT_OK(
-        db_->CompactRange(compact_options, handles_[1], nullptr, nullptr));
-  });
-    
-    bool IsZero(double n);
-    
-    Benchmark* Benchmark::DenseRange(int start, int limit, int step) {
-  CHECK(ArgsCnt() == -1 || ArgsCnt() == 1);
-  CHECK_GE(start, 0);
-  CHECK_LE(start, limit);
-  for (int arg = start; arg <= limit; arg += step) {
-    args_.push_back({arg});
+      template <typename T>
+  operator ParamGenerator<T>() const {
+    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
+        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
+        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
+        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
+        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
+        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
+        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
+        static_cast<T>(v21_), static_cast<T>(v22_), static_cast<T>(v23_),
+        static_cast<T>(v24_), static_cast<T>(v25_), static_cast<T>(v26_),
+        static_cast<T>(v27_), static_cast<T>(v28_), static_cast<T>(v29_),
+        static_cast<T>(v30_), static_cast<T>(v31_), static_cast<T>(v32_),
+        static_cast<T>(v33_), static_cast<T>(v34_), static_cast<T>(v35_),
+        static_cast<T>(v36_), static_cast<T>(v37_)};
+    return ValuesIn(array);
   }
-  return this;
+    
+    // The following family of struct and struct templates are used to
+// represent template lists.  In particular, TemplatesN<T1, T2, ...,
+// TN> represents a list of N templates (T1, T2, ..., and TN).  Except
+// for Templates0, every struct in the family has two member types:
+// Head for the selector of the first template in the list, and Tail
+// for the rest of the list.
+    
+    
+    {  // <TechnicalDetails>
+  //
+  // EXPECT_EQ(expected, actual) is the same as
+  //
+  //   EXPECT_TRUE((expected) == (actual))
+  //
+  // except that it will print both the expected value and the actual
+  // value when the assertion fails.  This is very helpful for
+  // debugging.  Therefore in this case EXPECT_EQ is preferred.
+  //
+  // On the other hand, EXPECT_TRUE accepts any Boolean expression,
+  // and is thus more general.
+  //
+  // </TechnicalDetails>
 }
     
-    #endif  // BENCHMARK_COLORPRINT_H_
-
-    
-    // Source project : https://github.com/ismaelJimenez/cpp.leastsq
-// Adapted to be used with google benchmark
-    
-    bool ConsoleReporter::ReportContext(const Context& context) {
-  name_field_width_ = context.name_field_width;
-  printed_header_ = false;
-  prev_counters_.clear();
+        // -------------------------------------------------------------------
+    // GetMinibatchIntoNetwork() -- get one minibatch from Reader (this->trainSetDataReader) into Network (this->net)
+    // Returns false if no data is read. In that case, no other return value can be expected to contain meaningful values (e.g. actualMBSize will be unchanged).
+    // Sets actualMBSize to the number of matrix columns. Note that 0 is a valid value to be returned for actualMBSize, caller must handle that correctly.
+    // -------------------------------------------------------------------
+    // Note: This will go away with the redesigned reader interface.
+    // TODO: callers of this often do ComputationNetwork::BumpEvalTimeStamp(featureNodes) and also for labels; we should eliminate the need for this.
+    template <class ElemType>
+    static bool GetMinibatchIntoNetwork(IDataReader& trainSetDataReader,
+                                        ComputationNetworkPtr net,
+                                        ComputationNodeBasePtr criterionNode,
+                                        bool useDistributedMBReading,
+                                        bool useParallelTrain,
+                                        StreamMinibatchInputs& inputMatrices,
+                                        size_t& actualMBSize, 
+                                        const MPIWrapperPtr& mpi)
+    {
+        // Reading consists of a sequence of Reader API calls:
+        //  - GetMinibatch() --fills the inputMatrices and copies the MBLayout from Reader into inputMatrices
+        //  - SetActualMiniBatchSizeFromFeatures()  --tells Network to resize the nodes' buffers
+        // with the special twist that in presence of parallelization, there is some decimation involved.
     }
     
-    BenchmarkReporter::Context::Context() : cpu_info(CPUInfo::Get()) {}
     
-    #include <cerrno>
-#include <cstdlib>
-#include <ctime>
+    {    mA.SwitchToMatrixType(MatrixType::DENSE, matrixFormatDense, false);
+    BOOST_CHECK_EQUAL(MatrixType::DENSE, mA.GetMatrixType());
+}
+    
+    void GPUDataTransferer::CopyGPUToCPUAsync(void* gpuBuffer, size_t totalSize, void* cpuBuffer)
+{
+    m_inner->CopyGPUToCPUAsync(gpuBuffer, 1, totalSize, cpuBuffer);
+    m_inner->RecordGPUToCPUCopy();
+}
+    
+    template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ScriptableObjects::IConfigRecord, float>(const ScriptableObjects::IConfigRecord& config);
+template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ScriptableObjects::IConfigRecord, double>(const ScriptableObjects::IConfigRecord& config);
+template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ConfigParameters, float>(const ConfigParameters& config);
+template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ConfigParameters, double>(const ConfigParameters& config);
+template ComputationNetworkPtr GetModelFromConfig<ConfigParameters, float> (const ConfigParameters& config, const wstring&, vector<wstring>& outputNodeNamesVector);
+template ComputationNetworkPtr GetModelFromConfig<ConfigParameters, double>(const ConfigParameters& config, const wstring&, vector<wstring>& outputNodeNamesVector);
+
+    
+    private:
+    static VariableLayout ToVariableLayout(const ComputationNodeBasePtr n);
+    std::vector<ComputationNodeBasePtr> m_outputNodes;
+    std::shared_ptr<ScopedNetworkOperationMode> m_scopedNetworkOperationMode;
+    std::vector<ComputationNodeBasePtr> m_inputNodes;
+    StreamMinibatchInputs m_inputMatrices;
+    bool m_started;
+    
+    
+    {
+    {
+    {      if (Rcpp::as<std::string>(grad_reqs[i]) != 'null') {
+        ret->at(i) = NDArray::Empty(NDArray::FromRObject(source_array[i]).dim(), ctx);
+        handles->at(i) = NDArray::FromRObject(ret->at(i))->handle;
+        grad_req_type->at(i) = req_map[Rcpp::as<std::string>(grad_reqs[i])];
+      }
+    }
+  } catch(const Rcpp::exception& ex) {
+    delete ret;
+    throw ex;
+  }
+  return ret;
+}
+    
+    /*!
+ * \brief MXNet's internal data iterator.
+ */
+class MXDataIter : public DataIter {
+ public:
+  /*! \return typename from R side. */
+  inline static const char* TypeName() {
+    return 'MXNativeDataIter';
+  }
+  // implement the interface
+  virtual void Reset();
+  virtual bool Next();
+  virtual int NumPad() const;
+  virtual Rcpp::List Value() const;
+  virtual ~MXDataIter() {
+    MX_CALL(MXDataIterFree(handle_));
+  }
+    }
+    
+    /*!
+ * \brief An array packer that packs NDArray array together on
+ *   slowest changing dimension.
+ */
+class NDArrayPacker {
+ public:
+  // constructor
+  NDArrayPacker() {}
+  /*!
+   * \brief Push the array to the packer
+   * \param nd The array to push the data into.
+   */
+  void Push(const NDArray::RObjectType& nd);
+  /*!
+   * \brief Get the R array out from packed data.
+   * \return The packed data.
+   */
+  Rcpp::NumericVector Get() const;
+  /*! \return constructor */
+  static Rcpp::RObject CreateNDArrayPacker();
+    }
+    
+    /*!
+ * \brief Register a function to determine if the output of a quantized operator
+ * needs to be requantized. This is usually used for the operators
+ * taking int8 data types while accumulating in int32, e.g. quantized_conv.
+ * \note Register under 'FNeedRequantize' for non-quantized operators
+ */
+using FNeedRequantize = std::function<bool (const NodeAttrs& attrs)>;
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file graph_executor.h
+ * \brief Executor to execute the computation graph.
+ */
+#ifndef MXNET_EXECUTOR_GRAPH_EXECUTOR_H_
+#define MXNET_EXECUTOR_GRAPH_EXECUTOR_H_
+    
+    using CachedOpPtr = std::shared_ptr<CachedOp>;
+    
+    void ElementwiseSumContainsDnsImpl(mshadow::Stream<cpu>* s,
+                                   const Resource& rsc,
+                                   const std::vector<NDArray>& nds,
+                                   NDArray* out) {
+  using namespace mxnet::op;
+  using namespace mxnet::op::mxnet_op;
+  const TBlob& out_data = out->data();
+  MSHADOW_TYPE_SWITCH(out->dtype(), DType, {  // data type
+    Kernel<set_zero, cpu>::Launch(s, out_data.Size(), out_data.dptr<DType>());
+    for (size_t i = 0; i < nds.size(); ++i) {
+      const NDArray& nd = nds[i];
+      const nnvm::dim_t num_rows = nd.shape()[0];
+      const nnvm::dim_t num_cols = nd.shape()[1];
+      const TBlob& nd_data = nd.data();
+    }
+    }
+    }
+    
+      auto write = [&](std::vector<AttrType> *vec, size_t size, const char *name) {
+      for (size_t i = 0; i < size; ++i) {
+        CHECK(assign(&(*vec)[i], dattr))
+          << 'Incompatible attr in node ' << attrs.name << ' at ' << i << '-th '
+          << name << ': ' << 'expected ' << attr_string(dattr)
+          << ', got ' << attr_string((*vec)[i]);
+      }
+    };
+  write(in_attrs, in_size, 'input');
+  write(out_attrs, out_size, 'output');
+    
+      template<typename xpu, typename OP>
+  static void Compute(const nnvm::NodeAttrs &attrs,
+                      const OpContext &ctx,
+                      const std::vector<TBlob> &inputs,
+                      const std::vector<OpReqType> &req,
+                      const std::vector<TBlob> &outputs) {
+    using namespace mxnet_op;
+    if (req[0] != kNullOp) {
+      Stream<xpu> *s = ctx.get_stream<xpu>();
+      CHECK_EQ(inputs.size(), 2U);
+      CHECK_EQ(outputs.size(), 1U);
+      MXNET_ASSIGN_REQ_SWITCH(req[0], Req, {
+        MSHADOW_TYPE_SWITCH(outputs[0].type_flag_, DType, {
+          const size_t size = (minthree(outputs[0].Size(), inputs[0].Size(), inputs[1].Size())
+          + DataType<DType>::kLanes - 1) / DataType<DType>::kLanes;
+          Kernel<mxnet_op::op_with_req<OP, Req>, xpu>::Launch(s, size,
+          outputs[0].dptr<DType>(),
+          inputs[0].dptr<DType>(), inputs[1].dptr<DType>());
+        });
+      });
+    }
+  }
+    
+    /*! \brief Fill output with a scalar integer value */
+template<typename xpu, int value>
+void FillCompute(const nnvm::NodeAttrs& attrs,
+                 const OpContext& ctx,
+                 const std::vector<TBlob>& inputs,
+                 const std::vector<OpReqType>& req,
+                 const std::vector<TBlob>& outputs) {
+  Fill<true>(ctx.get_stream<xpu>(), outputs[0], req[0], value);
+}
+    
+    #endif  // MXNET_OPERATOR_CONTRIB_ROI_ALIGN_INL_H_
+
+    
+            static float f = 0.0f;
+        ImGui::Text('Hello, world!');
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
+        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
+        ImGui::ShowDemoWindow(NULL);
+    
+            hr = cmdList->Close();
+        IM_ASSERT(SUCCEEDED(hr));
+    
+    VkSurfaceFormatKHR ImGui_ImplVulkanH_SelectSurfaceFormat(VkPhysicalDevice physical_device, VkSurfaceKHR surface, const VkFormat* request_formats, int request_formats_count, VkColorSpaceKHR request_color_space)
+{
+    IM_ASSERT(request_formats != NULL);
+    IM_ASSERT(request_formats_count > 0);
+    }
+    
+    static bool show_demo_window = true;
+static bool show_another_window = false;
+static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    
+    int main(int, char**)
+{
+    // Setup window
+    glfwSetErrorCallback(glfw_error_callback);
+    if (!glfwInit())
+        return 1;
+    GLFWwindow* window = glfwCreateWindow(1280, 720, 'Dear ImGui GLFW+OpenGL2 example', NULL, NULL);
+    if (window == NULL)
+        return 1;
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1); // Enable vsync
+    }
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    static void check_vk_result(VkResult err)
+{
+    if (err == 0) return;
+    printf('VkResult %d\n', err);
+    if (err < 0)
+        abort();
+}
