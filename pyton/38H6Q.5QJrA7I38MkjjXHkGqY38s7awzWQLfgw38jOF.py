@@ -1,56 +1,82 @@
 
         
-        # Scrapy version
-import pkgutil
-__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
-version_info = tuple(int(v) if v.isdigit() else v
-                     for v in __version__.split('.'))
-del pkgutil
+            # test stacked bidirectional layers
+    model = keras.Sequential()
+    model.add(keras.layers.Bidirectional(rnn(output_dim,
+                                             return_sequences=True),
+                                         merge_mode=mode,
+                                         input_shape=(None, dim)))
+    model.add(keras.layers.Bidirectional(rnn(output_dim), merge_mode=mode))
+    model.compile(loss='mse', optimizer='sgd')
+    model.fit(x, y, epochs=1, batch_size=1)
     
-                tested_methods = conman.tested_methods_from_spidercls(spidercls)
-            if opts.list:
-                for method in tested_methods:
-                    contract_reqs[spidercls.name].append(method)
-            elif tested_methods:
-                self.crawler_process.crawl(spidercls)
+        plt.figure(figsize=(10, 10))
+    start_range = digit_size // 2
+    end_range = n * digit_size + start_range + 1
+    pixel_range = np.arange(start_range, end_range, digit_size)
+    sample_range_x = np.round(grid_x, 1)
+    sample_range_y = np.round(grid_y, 1)
+    plt.xticks(pixel_range, sample_range_x)
+    plt.yticks(pixel_range, sample_range_y)
+    plt.xlabel('z[0]')
+    plt.ylabel('z[1]')
+    plt.imshow(figure, cmap='Greys_r')
+    plt.savefig(filename)
+    plt.show()
     
-                    # execute pre and post hooks in order
-                for contract in reversed(contracts):
-                    request = contract.add_pre_hook(request, results)
-                for contract in contracts:
-                    request = contract.add_post_hook(request, results)
+    # Convolution
+kernel_size = 5
+filters = 64
+pool_size = 4
     
-        def download(self, download_func, request, spider):
-        @defer.inlineCallbacks
-        def process_request(request):
-            for method in self.methods['process_request']:
-                response = yield method(request=request, spider=spider)
-                assert response is None or isinstance(response, (Response, Request)), \
-                        'Middleware %s.process_request must return None, Response or Request, got %s' % \
-                        (six.get_method_self(method).__class__.__name__, response.__class__.__name__)
-                if response:
-                    defer.returnValue(response)
-            defer.returnValue((yield download_func(request=request,spider=spider)))
+    print('Convert class vector to binary class matrix '
+      '(for use with categorical_crossentropy)')
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
+print('y_train shape:', y_train.shape)
+print('y_test shape:', y_test.shape)
     
-        def __init__(self, timeout=180):
-        self._timeout = timeout
     
-        @classmethod
-    def from_crawler(cls, crawler):
-        o = cls(crawler.settings['USER_AGENT'])
-        crawler.signals.connect(o.spider_opened, signal=signals.spider_opened)
-        return o
+@keras_test
+def test_masked_temporal():
+    '''
+    Confirm that even with masking on both inputs and outputs, cross-entropies are
+    of the expected scale.
     
-        def log(self, request, spider):
-        if self.debug:
-            msg = 'Filtered duplicate request: %(request)s'
-            self.logger.debug(msg, {'request': request}, extra={'spider': spider})
-        elif self.logdupes:
-            msg = ('Filtered duplicate request: %(request)s'
-                   ' - no more duplicates will be shown'
-                   ' (see DUPEFILTER_DEBUG to show all duplicates)')
-            self.logger.debug(msg, {'request': request}, extra={'spider': spider})
-            self.logdupes = False
     
-    from scrapy import signals
-from scrapy.exceptions import NotConfigured
+@keras_test
+def test_vector_regression():
+    '''
+    Perform float data prediction (regression) using 2 layer MLP
+    with tanh and sigmoid activations.
+    '''
+    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
+                                                         num_test=200,
+                                                         input_shape=(20,),
+                                                         output_shape=(num_classes,),
+                                                         classification=False)
+    
+    print('Train...')
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=15,
+          validation_data=(x_test, y_test))
+score, acc = model.evaluate(x_test, y_test,
+                            batch_size=batch_size)
+print('Test score:', score)
+print('Test accuracy:', acc)
+
+    
+        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
+        loaded_model = keras.models.load_model(model_filename)
+        loaded_model.predict(np.random.rand(128, 2))
+    
+    
+def load_data():
+    '''Loads CIFAR10 dataset.
+    
+    from .cifar import load_batch
+from ..utils.data_utils import get_file
+from .. import backend as K
+import numpy as np
+import os
