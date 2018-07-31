@@ -1,149 +1,214 @@
 
         
-        #include <memory>
+        
+    {}  // namespace nwapi
+    
+      virtual void Call(const std::string& method,
+                    const base::ListValue& arguments,
+                    content::RenderFrameHost* rvh = nullptr);
+  virtual void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result);
+    
+    // Tell browser to delete a object.
+// function DeallocateObject(id);
+v8::Handle<v8::Value> DeallocateObject(int routing_id,
+                                       int object_id);
+    
+      GtkRequisition menu_req;
+  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
+  GdkScreen* screen;
+  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
+  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
     
     
-    {}  // namespace grpc_node_generator
-    
-    SecureAuthContext::~SecureAuthContext() {
-  if (take_ownership_) grpc_auth_context_release(ctx_);
-}
-    
-    int main(int argc, char** argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
 
     
-    #include <string>
+     protected:
+  ~NwAppClearAppCacheFunction() override;
     
-      // Proto2 Python
-  google::protobuf::compiler::python::Generator py_generator;
-  cli.RegisterGenerator('--python_out', &py_generator,
-                        'Generate Python source file.');
+     private:
+  // wrap im2col/col2im so we don't have to remember the (long) argument lists
+  inline void conv_im2col_cpu(const Dtype* data, Dtype* col_buff) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      im2col_cpu(data, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
+    } else {
+      im2col_nd_cpu(data, num_spatial_axes_, conv_input_shape_.cpu_data(),
+          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
+          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), col_buff);
+    }
+  }
+  inline void conv_col2im_cpu(const Dtype* col_buff, Dtype* data) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      col2im_cpu(col_buff, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
+    } else {
+      col2im_nd_cpu(col_buff, num_spatial_axes_, conv_input_shape_.cpu_data(),
+          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
+          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), data);
+    }
+  }
+#ifndef CPU_ONLY
+  inline void conv_im2col_gpu(const Dtype* data, Dtype* col_buff) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      im2col_gpu(data, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
+    } else {
+      im2col_nd_gpu(data, num_spatial_axes_, num_kernels_im2col_,
+          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
+          kernel_shape_.gpu_data(), pad_.gpu_data(),
+          stride_.gpu_data(), dilation_.gpu_data(), col_buff);
+    }
+  }
+  inline void conv_col2im_gpu(const Dtype* col_buff, Dtype* data) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      col2im_gpu(col_buff, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
+    } else {
+      col2im_nd_gpu(col_buff, num_spatial_axes_, num_kernels_col2im_,
+          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
+          kernel_shape_.gpu_data(), pad_.gpu_data(), stride_.gpu_data(),
+          dilation_.gpu_data(), data);
+    }
+  }
+#endif
     
-    This pointer must be provided as 'void* state' parameter for XXH32_update().
-XXH32_update() can be called as many times as necessary.
-The user must provide a valid (allocated) input.
-The function returns an error code, with 0 meaning OK, and any other value meaning there is an error.
-Note that 'len' is type 'int', which means it is limited to 2^31-1.
-If your data is larger, it is recommended to chunk your data into blocks
-of size for example 2^30 (1GB) to avoid any 'int' overflow issue.
+    
+    {}  // namespace caffe
+    
+     protected:
+  /// @copydoc BNLLLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
     
-    {   private:
-     const std::set<uint32_t> m_ignore_histograms;
- };
+    { protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual inline bool reverse_dimensions() { return false; }
+  virtual void compute_output_shape();
+};
     
-    SyncPoint* SyncPoint::GetInstance() {
-  static SyncPoint sync_point;
-  return &sync_point;
-}
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLRNLayer : public LRNLayer<Dtype> {
+ public:
+  explicit CuDNNLRNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLRNLayer();
+    }
     
-         using Logger::SetInfoLogLevel;
-     using Logger::GetInfoLogLevel;
-     // Write an entry to the log file with the specified format.
-     virtual void Logv(const char* format, va_list ap);
-     // Write an entry to the log file with the specified log level
-     // and format.  Any log with level under the internal log level
-     // of *this (see @SetInfoLogLevel and @GetInfoLogLevel) will not be
-     // printed.
-     virtual void Logv(const InfoLogLevel log_level,
-         const char* format, va_list ap);
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
     
     {
-    {    std::lock_guard<std::mutex> guard(w->StateMutex());
-    assert(w->state.load(std::memory_order_relaxed) != new_state);
-    w->state.store(new_state, std::memory_order_relaxed);
-    w->StateCV().notify_one();
-  }
+}  // namespace caffe
+    
+      virtual inline const char* type() const { return 'Embed'; }
+  virtual inline int ExactNumBottomBlobs() const { return 1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+    
+    {  /* Invoked when data is read into the buffer passed to
+   * bidirectional_stream_read(). Only part of the buffer may be
+   * populated. To continue reading, call bidirectional_stream_read().
+   * It may be invoked after on_response_trailers_received()}, if there was
+   * pending read data before trailers were received.
+   *
+   * If |bytes_read| is 0, it means the remote side has signaled that it will
+   * send no more data; future calls to bidirectional_stream_read()
+   * will result in the on_data_read() callback or on_succeded() callback if
+   * bidirectional_stream_write() was invoked with end_of_stream set to
+   * true.
+   */
+  void (*on_read_completed)(bidirectional_stream* stream,
+                            char* data,
+                            int bytes_read);
+    
+    
+    {  GetReporter()->ReportQPSPerCore(*result);
+  GetReporter()->ReportLatency(*result);
 }
     
-    class AbstractDiskWriter : public DiskWriter {
-private:
-  std::string filename_;
+      ServerConfig server_config;
+  server_config.set_server_type(SYNC_SERVER);
+    
+    namespace routeguide {
+class Feature;
     }
     
-    class AbstractProxyResponseCommand : public AbstractCommand {
-private:
-  std::shared_ptr<HttpConnection> httpConnection_;
-    }
+    #endif
+
     
-    #include <algorithm>
+    #include <dmlc/logging.h>
+#include <dmlc/thread_local.h>
+#include <sstream>
+#include './base.h'
     
-    class AnnounceList {
-public:
-private:
-  std::deque<std::shared_ptr<AnnounceTier>> tiers_;
-  std::deque<std::shared_ptr<AnnounceTier>>::iterator currentTier_;
-  std::deque<std::string>::iterator currentTracker_;
-  bool currentTrackerInitialized_;
-    }
-    
-    AnnounceTier::~AnnounceTier() = default;
-    
-    
-    {private:
-  Session* session_;
-  DownloadEventCallback callback_;
-  void* userData_;
+    // common regressions
+// linear regression
+struct LinearSquareLoss {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    return 1.0f;
+  }
+  template <typename T>
+  static T PredTransform(T x) { return x; }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
+  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
+  static const char* LabelErrorMsg() { return ''; }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
 };
     
-      // certfile can contain multiple certificates.
-  virtual bool addTrustedCACertFile(const std::string& certfile) CXX11_OVERRIDE;
-    
-    #include <vector>
-#include <string>
-#include <memory>
-    
-    #define CALL_STATIC_TYPE_METHOD(_jtype, _jname)                             \
-    _jtype CallStatic##_jname##Method(jclass clazz, jmethodID methodID,     \
-        ...)                                                                \
-    {                                                                       \
-        _jtype result;                                                      \
-        va_list args;                                                       \
-        va_start(args, methodID);                                           \
-        result = functions->CallStatic##_jname##MethodV(this, clazz,        \
-                    methodID, args);                                        \
-        va_end(args);                                                       \
-        return result;                                                      \
-    }
-#define CALL_STATIC_TYPE_METHODV(_jtype, _jname)                            \
-    _jtype CallStatic##_jname##MethodV(jclass clazz, jmethodID methodID,    \
-        va_list args)                                                       \
-    { return functions->CallStatic##_jname##MethodV(this, clazz, methodID,  \
-        args); }
-#define CALL_STATIC_TYPE_METHODA(_jtype, _jname)                            \
-    _jtype CallStatic##_jname##MethodA(jclass clazz, jmethodID methodID,    \
-        jvalue* args)                                                       \
-    { return functions->CallStatic##_jname##MethodA(this, clazz, methodID,  \
-        args); }
-    
-      /**
-   * The offset within the current function
-   */
-  int functionOffset() const noexcept {
-    auto absoluteSymbol = static_cast<const char*>(functionAddress_);
-    auto absoluteabsoluteProgramCounter =
-        static_cast<const char*>(absoluteProgramCounter_);
-    return absoluteabsoluteProgramCounter - absoluteSymbol;
-  }
-    
-        method(getPositionType);
-    method(getPosition);
-    
-    void assertInternal(const char* formatstr ...) {
-    va_list va_args;
-    va_start(va_args, formatstr);
-    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
-    va_end(va_args);
-    if (gAssertHandler != NULL) {
-        gAssertHandler(sAssertBuf);
-    }
-    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
-    // crash at this specific address so that we can find our crashes easier
-    *(int*)0xdeadb00c = 0;
-    // let the compiler know we won't reach the end of the function
-     __builtin_unreachable();
-}
+    /*!
+ * \brief Check if alignas(*) keyword is supported. (g++ 4.8 or higher)
+ */
+#if defined(__GNUC__) && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 8) || __GNUC__ > 4)
+#define XGBOOST_ALIGNAS(X) alignas(X)
+#else
+#define XGBOOST_ALIGNAS(X)
+#endif
