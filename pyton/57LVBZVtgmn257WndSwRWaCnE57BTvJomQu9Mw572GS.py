@@ -1,87 +1,123 @@
 
         
-                :param variable_name: name of the environment variable
-        :param silent: set to ``True`` if you want silent failure for missing
-                       files.
-        :return: bool. ``True`` if able to load config, ``False`` otherwise.
-        '''
-        rv = os.environ.get(variable_name)
-        if not rv:
-            if silent:
-                return False
-            raise RuntimeError('The environment variable %r is not set '
-                               'and as such configuration could not be '
-                               'loaded.  Set this variable and make it '
-                               'point to a configuration file' %
-                               variable_name)
-        return self.from_pyfile(rv, silent=silent)
-    
-        return False
-    
-        :param template_name_or_list: the name of the template to be
-                                  rendered, or an iterable with template names
-                                  the first one existing will be rendered
-    :param context: the variables that should be available in the
-                    context of the template.
-    '''
-    ctx = _app_ctx_stack.top
-    ctx.app.update_template_context(context)
-    return _render(ctx.app.jinja_env.get_or_select_template(template_name_or_list),
-                   context, ctx.app)
-    
-                if match is None:
-                continue
-    
-        :copyright: © 2010 by the Pallets team.
-    :license: BSD, see LICENSE for more details.
-'''
-    
-        flask.got_request_exception.connect(record, app)
-    try:
-        assert app.test_client().get('/').status_code == 500
-        assert len(recorded) == 1
-        assert isinstance(recorded[0], ZeroDivisionError)
-    finally:
-        flask.got_request_exception.disconnect(record, app)
+        import rsa
+import json
+from binascii import hexlify
     
     
-FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
-FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
-JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
-BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
+class TestUnicodeLiterals(unittest.TestCase):
+    def test_all_files(self):
+        for dirpath, dirnames, filenames in os.walk(rootDir):
+            for ignore_dir in IGNORED_DIRS:
+                if ignore_dir in dirnames:
+                    # If we remove the directory from dirnames os.walk won't
+                    # recurse into it
+                    dirnames.remove(ignore_dir)
+            for basename in filenames:
+                if not basename.endswith('.py'):
+                    continue
+                if basename in IGNORED_FILES:
+                    continue
+    
+            return info_dict
+
+    
+            formats = []
+        for secure in ('', 'Secure'):
+            for ext in ('Ogg', 'Mp3'):
+                format_id = '%s%s' % (secure, ext)
+                format_url = metadata.get('%sUrl' % format_id)
+                if format_url:
+                    formats.append({
+                        'url': format_url,
+                        'format_id': format_id,
+                        'vcodec': 'none',
+                    })
+        self._sort_formats(formats)
+    
+        def format_headers(self, headers):
+        for p in self.enabled_plugins:
+            headers = p.format_headers(headers)
+        return headers
     
     
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
     
-        '''
-)
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
     
     
-DEFAULT_CONFIG_DIR = str(os.environ.get(
-    'HTTPIE_CONFIG_DIR',
-    os.path.expanduser('~/.httpie') if not is_windows else
-    os.path.expandvars(r'%APPDATA%\\httpie')
-))
-    
-    
-def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
-    '''When credentials are passed in URL and via -a at the same time,
-     then the ones from -a are used.'''
-    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
-                   auth='user:wrong')
-    r = http('--auth=user:password', 'GET', url)
+def test_unicode_raw_json_item(httpbin):
+    r = http('--json', 'POST', httpbin.url + '/post',
+             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
     assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
+    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
+    
+        # noinspection PyMethodOverriding
+    def get_auth(self, username, password):
+        return HTTPBasicAuth(username, password)
     
     
-def is_translated(msg):
-    if isinstance(msg.string, basestring):
-        return bool(msg.string)
-    for item in msg.string:
-        if not item:
-            return False
-    return True
+def test_missing_auth(httpbin):
+    r = http(
+        '--auth-type=basic',
+        'GET',
+        httpbin + '/basic-auth/user/password',
+        error_exit_ok=True
+    )
+    assert HTTP_OK not in r
+    assert '--auth required' in r.stderr
+
+    
+    
+class TestBinaryRequestData:
+    
+    
+    def predict(self, input):
+        '''
+        From the input stream, predict what alternative will succeed
+	using this DFA (representing the covering regular approximation
+	to the underlying CFL).  Return an alternative number 1..n.  Throw
+	 an exception upon error.
+	'''
+        mark = input.mark()
+        s = 0 # we always start at s0
+        try:
+            for _ in xrange(50000):
+                #print '***Current state = %d' % s
+    
+    
+        if input is not None:
+            self.input = input
+            self.index = input.index()
+    
+            self.auth = Authenticator(self.config, 'dnsimple')
+    
+    import os
+import unittest
+    
+    # Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+latex_documents = [
+    (master_doc, 'certbot-dns-nsone.tex', u'certbot-dns-nsone Documentation',
+     u'Certbot Project', 'manual'),
+]
+    
+        This function takes care of generating fresh private key,
+    registering the account, optionally accepting CA Terms of Service
+    and finally saving the account. It should be called prior to
+    initialization of `Client`, unless account has already been created.
+    
+    # -- General configuration ------------------------------------------------
