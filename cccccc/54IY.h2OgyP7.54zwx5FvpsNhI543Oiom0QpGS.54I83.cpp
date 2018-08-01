@@ -1,295 +1,284 @@
 
         
-        namespace atom {
+        - (void)appendAction:(ObjectBehaviorAction)action;
+- (void)enumerate:(void (^)(ObjectBehaviorAction))block;
+- (void)reset;
+- (void)dump;
+@end
+    
+    
+    {
+    {}
+}
+#endif
+
+    
+    namespace swift {
     }
     
-    #include 'base/time/time.h'
+    /// A shorthand to clearly indicate that a value is a reference counted and
+/// heap-allocated.
+template <typename Inner>
+using RC = llvm::IntrusiveRefCntPtr<Inner>;
     
-      // Called by platform specific implementations of this class whenever a key
-  // is struck. Only called for keys that have an observer registered.
-  void NotifyKeyPressed(const ui::Accelerator& accelerator);
+    #endif // SWIFT_INDEX_INDEX_H
+
     
-    // filenames
-const base::FilePath::CharType kCacheDirname[] = FPL('Cache');
-const base::FilePath::CharType kChannelIDFilename[] = FPL('Origin Bound Certs');
-const base::FilePath::CharType kCookieFilename[] = FPL('Cookies');
-const base::FilePath::CharType kCRLSetFilename[] =
-    FPL('Certificate Revocation Lists');
-const base::FilePath::CharType kCustomDictionaryFileName[] =
-    FPL('Custom Dictionary.txt');
-const base::FilePath::CharType kExtensionActivityLogFilename[] =
-    FPL('Extension Activity');
-const base::FilePath::CharType kExtensionsCookieFilename[] =
-    FPL('Extension Cookies');
-const base::FilePath::CharType kFirstRunSentinel[] = FPL('First Run');
-const base::FilePath::CharType kGCMStoreDirname[] = FPL('GCM Store');
-const base::FilePath::CharType kLocalStateFilename[] = FPL('Local State');
-const base::FilePath::CharType kLocalStorePoolName[] = FPL('LocalStorePool');
-const base::FilePath::CharType kMediaCacheDirname[] = FPL('Media Cache');
-const base::FilePath::CharType kNetworkPersistentStateFilename[] =
-    FPL('Network Persistent State');
-const base::FilePath::CharType kOfflinePageArchviesDirname[] =
-    FPL('Offline Pages/archives');
-const base::FilePath::CharType kOfflinePageMetadataDirname[] =
-    FPL('Offline Pages/metadata');
-const base::FilePath::CharType kPreferencesFilename[] = FPL('Preferences');
-const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[] =
-    FPL('Protected Preferences');
-const base::FilePath::CharType kReadmeFilename[] = FPL('README');
-const base::FilePath::CharType kResetPromptMementoFilename[] =
-    FPL('Reset Prompt Memento');
-const base::FilePath::CharType kSafeBrowsingBaseFilename[] =
-    FPL('Safe Browsing');
-const base::FilePath::CharType kSecurePreferencesFilename[] =
-    FPL('Secure Preferences');
-const base::FilePath::CharType kServiceStateFileName[] = FPL('Service State');
-const base::FilePath::CharType kSingletonCookieFilename[] =
-    FPL('SingletonCookie');
-const base::FilePath::CharType kSingletonLockFilename[] = FPL('SingletonLock');
-const base::FilePath::CharType kSingletonSocketFilename[] =
-    FPL('SingletonSocket');
-const base::FilePath::CharType kSupervisedUserSettingsFilename[] =
-    FPL('Managed Mode Settings');
-const base::FilePath::CharType kThemePackFilename[] = FPL('Cached Theme.pak');
-const base::FilePath::CharType kThemePackMaterialDesignFilename[] =
-    FPL('Cached Theme Material Design.pak');
-const base::FilePath::CharType kWebAppDirname[] = FPL('Web Applications');
+    protected:
+  /// The base of the object.
+  SILValue Base;
+  /// Empty key, tombstone key or normal key.
+  KeyKind Kind;
+  /// The path to reach the accessed field of the object.
+  Optional<ProjectionPath> Path;
     
-    #if defined(OS_MACOSX)
-// NOTE: if you change the value of kFrameworkName, please don't forget to
-// update components/test/run_all_unittests.cc as well.
-// TODO(tfarina): Remove the comment above, when you fix components to use plist
-// on Mac.
-extern const base::FilePath::CharType kFrameworkName[];
-#endif  // OS_MACOSX
+      /// True if this is the active clause of the #if block.
+  bool isActive;
     
-    /**
- * @brief Takes at least two Blob%s and concatenates them along either the num
- *        or channel dimension, outputting the result.
- */
-template <typename Dtype>
-class ConcatLayer : public Layer<Dtype> {
+    /// Optimizer that requires the loss function to be supplied to the `step()`
+/// function, as it may evaluate the loss function multiple times per step.
+/// Examples of such algorithms are conjugate gradient and LBFGS. The `step()`
+/// function also returns the loss value.
+class LossClosureOptimizer : public detail::OptimizerBase {
  public:
-  explicit ConcatLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
+  /// A loss function closure, which is expected to return the loss value.
+  using LossClosure = std::function<Tensor()>;
+  using detail::OptimizerBase::OptimizerBase;
+  virtual Tensor step(LossClosure closure) = 0;
+};
     
-    /**
- * @brief Convolves the input image with a bank of learned filters,
- *        and (optionally) adds biases.
- *
- *   Caffe convolves by reduction to matrix multiplication. This achieves
- *   high-throughput and generality of input and filter dimensions but comes at
- *   the cost of memory for matrices. This makes use of efficiency in BLAS.
- *
- *   The input is 'im2col' transformed to a channel K' x H x W data matrix
- *   for multiplication with the N x K' x H x W filter matrix to yield a
- *   N' x H x W output matrix that is then 'col2im' restored. K' is the
- *   input channel * kernel height * kernel width dimension of the unrolled
- *   inputs so that the im2col matrix has a column for each input region to
- *   be filtered. col2im restores the output spatial structure by rolling up
- *   the output channel N' columns of the output matrix.
- */
-template <typename Dtype>
-class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
- public:
-  /**
-   * @param param provides ConvolutionParameter convolution_param,
-   *    with ConvolutionLayer options:
-   *  - num_output. The number of filters.
-   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
-   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
-   *  filters.
-   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
-   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
-   *  for different strides. By default the convolution is dense with stride 1.
-   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
-   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
-   *  different padding. Input padding is computed implicitly instead of
-   *  actually padding.
-   *  - dilation (\b optional, default 1). The filter
-   *  dilation, given by dilation_size for equal dimensions for different
-   *  dilation. By default the convolution has dilation 1.
-   *  - group (\b optional, default 1). The number of filter groups. Group
-   *  convolution is a method for reducing parameterization by selectively
-   *  connecting input and output channels. The input and output channel dimensions must be divisible
-   *  by the number of groups. For group @f$ \geq 1 @f$, the
-   *  convolutional filters' input and output channels are separated s.t. each
-   *  group takes 1 / group of the input channels and makes 1 / group of the
-   *  output channels. Concretely 4 input channels, 8 output channels, and
-   *  2 groups separate input channels 1-2 and output channels 1-4 into the
-   *  first group and input channels 3-4 and output channels 5-8 into the second
-   *  group.
-   *  - bias_term (\b optional, default true). Whether to have a bias.
-   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
-   *    kernels + stream parallelism) engines.
-   */
-  explicit ConvolutionLayer(const LayerParameter& param)
-      : BaseConvolutionLayer<Dtype>(param) {}
-    }
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
- */
-template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
- public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
-    }
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of TanHLayer.
- */
-template <typename Dtype>
-class CuDNNTanHLayer : public TanHLayer<Dtype> {
- public:
-  explicit CuDNNTanHLayer(const LayerParameter& param)
-      : TanHLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNTanHLayer();
-    }
-    
-    
-    {}  // namespace caffe
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the computed outputs. At training time, we have @f$
-   *      y_{\mbox{train}} = \left\{
-   *         \begin{array}{ll}
-   *            \frac{x}{1 - p} & \mbox{if } u > p \\
-   *            0 & \mbox{otherwise}
-   *         \end{array} \right.
-   *      @f$, where @f$ u \sim U(0, 1)@f$ is generated independently for each
-   *      input at each iteration. At test time, we simply have
-   *      @f$ y_{\mbox{test}} = \mathbb{E}[y_{\mbox{train}}] = x @f$.
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    }
-    
-    
-    {}  // namespace caffe
-    
-    // Asserts that a given statement causes the program to exit, with an
-// integer exit status that satisfies predicate, and emitting error output
-// that matches regex.
-# define ASSERT_EXIT(statement, predicate, regex) \
-    GTEST_DEATH_TEST_(statement, predicate, regex, GTEST_FATAL_FAILURE_)
-    
-    #endif  // GTEST_HAS_TYPED_TEST_P
-    
-      // Gets the i-th test case among all the test cases. i can range from 0 to
-  // total_test_case_count() - 1. If i is not in that range, returns NULL.
-  const TestCase* GetTestCase(int i) const;
-    
-      static void set_last_death_test_message(const std::string& message);
-    
-        virtual const ParamGeneratorInterface<ParamType>* BaseGenerator() const {
-      return base_;
-    }
-    // Advance should not be called on beyond-of-range iterators
-    // so no component iterators must be beyond end of range, either.
-    virtual void Advance() {
-      assert(!AtEnd());
-      ++current$(i)_;
-    }
-    
-    static int populate_ifaddrs(struct ifaddrs* ifaddr, ifaddrmsg* msg, void* bytes,
-		     size_t len) {
-	if (set_ifname(ifaddr, msg->ifa_index) != 0) {
-		return -1;
-	}
-	if (set_flags(ifaddr) != 0) {
-		return -1;
-	}
-	if (set_addresses(ifaddr, msg, bytes, len) != 0) {
-		return -1;
-	}
-	if (make_prefixes(ifaddr, msg->ifa_family, msg->ifa_prefixlen) != 0) {
-		return -1;
-	}
-	return 0;
+    OptimizerBase::OptimizerBase(const ParameterCursor& cursor) {
+  add_parameters(cursor);
 }
     
-    	void _on_peer_packet();
-	void _on_connect(String p_protocol);
-	void _on_disconnect();
-	void _on_error();
+    Tensor rfft(const Tensor& self, const int64_t signal_ndim, const bool normalized,
+            const bool onesided) {
+  return _fft(self, signal_ndim, /* complex_input */ false,
+              /* complex_output */ true, /* inverse */ false, {}, normalized,
+              onesided);
+}
     
+    PyObject *THPDevice_repr(THPDevice *self)
+{
+  std::ostringstream oss;
+  oss << 'device(type=\'' << self->device.type() << '\'';
+  if (self->device.has_index()) {
+    oss << ', index=' << self->device.index();
+  }
+  oss << ')';
+  return THPUtils_packString(oss.str().c_str());
+}
     
+    #include 'override_macros.h'
     
-    #if defined(HAVE_ARM_NE10)
+    THLongStoragePtr THPUtils_unpackSize(PyObject *arg) {
+  THLongStoragePtr result;
+  if (!THPUtils_tryUnpackLongs(arg, result)) {
+    std::string msg = 'THPUtils_unpackSize() expects a torch.Size (got '';
+    msg += Py_TYPE(arg)->tp_name;
+    msg += '')';
+    throw std::runtime_error(msg);
+  }
+  return result;
+}
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+    Tensor logdet(const Tensor& self) {
+  AT_CHECK(at::isFloatingType(self.type().scalarType()) &&
+           self.dim() == 2 && self.size(0) == self.size(1),
+           'logdet(', self.type(), '{', self.sizes(), '}): expected a 2D square tensor '
+           'of floating types');
+  double det_P;
+  Tensor diag_U, det;
+  int info;
+  std::tie(det_P, diag_U, info) = _lu_det_P_diag_U_info(self);
+  if (info > 0) {
+    det = at::zeros({}, self.type());
+  } else {
+    det = diag_U.prod().mul_(det_P);
+  }
+  if (det.sign().toCDouble() <= 0) {
+    return det.log_();  // in order to get proper -inf (det=0) or nan (det<0)
+  } else {
+    return diag_U.abs().log().sum();
+  }
+}
     
-      virtual bool PartialMergeMulti(const Slice& key,
-                                 const std::deque<Slice>& operand_list,
-                                 std::string* new_value, Logger* logger) const
-      override;
+        HHVM_FE(fb_setprofile);
+    HHVM_FE(xhprof_frame_begin);
+    HHVM_FE(xhprof_frame_end);
+    HHVM_FE(xhprof_enable);
+    HHVM_FE(xhprof_disable);
+    HHVM_FE(xhprof_network_enable);
+    HHVM_FE(xhprof_network_disable);
+    HHVM_FE(xhprof_sample_enable);
+    HHVM_FE(xhprof_sample_disable);
     
-      // returns true if the reader has encountered an eof condition.
-  bool IsEOF() {
-    return eof_;
+      if (!getenv('HHVM_JIT_TIMER_NO_SORT')) {
+    auto totalSort = [] (const TimerName& a, const TimerName& b) {
+      return s_counters[a.name].total > s_counters[b.name].total;
+    };
+    std::sort(begin(names_copy), end(names_copy), totalSort);
   }
     
+    ///////////////////////////////////////////////////////////////////////////////
     
-    {   private:
-     const std::set<uint32_t> m_ignore_histograms;
- };
+    BumpAllocState::BumpAllocState(uintptr_t base, size_t maxCap, LockPolicy p)
+  : m_base(base)
+  , m_maxCapacity(maxCap)
+  , m_lockPolicy(p) {
+  auto ret = mmap((void*)base, maxCap, PROT_NONE,
+                  MAP_ANONYMOUS | MAP_PRIVATE | MAP_NORESERVE,
+                  -1, 0);
+  if (ret != (void*)base) {
+    char msg[128];
+    if (ret == MAP_FAILED) {
+      std::snprintf(msg, sizeof(msg),
+                    'failed to reserve address range 0x%' PRIxPTR
+                    ' to 0x%' PRIxPTR ', errno = %d',
+                    base, base + maxCap, errno);
+    } else {
+      munmap(ret, maxCap);
+      std::snprintf(msg, sizeof(msg),
+                    'failed to reserve address range 0x%' PRIxPTR
+                    ' to 0x%' PRIxPTR ', got 0x%p instead',
+                    base, base + maxCap, ret);
+    }
+    throw std::runtime_error{msg};
+  }
+}
     
-    namespace rocksdb {
-// Kill the process with probability 1/odds for testing.
-extern void TestKillRandom(std::string kill_point, int odds,
-                           const std::string& srcfile, int srcline);
+    
+    {  BumpExtentAllocator* extAlloc = GetByArenaId<BumpExtentAllocator>(arena_ind);
+  do {
+    size_t oldSize = extAlloc->m_size.load(std::memory_order_relaxed);
+    uintptr_t ret = (extAlloc->m_base + oldSize + alignment - 1) & mask;
+    size_t newSize = ret + size - extAlloc->m_base;
+    if (newSize <= extAlloc->m_currCapacity) {
+      // Looks like existing capacity is enough.
+      if (extAlloc->m_size.compare_exchange_weak(oldSize, newSize)) {
+        *zero = true;
+        *commit = true;
+        return reinterpret_cast<void*>(ret);
+      }
+    } else {
+      if (newSize > extAlloc->m_maxCapacity) return nullptr;
+      if (extAlloc->m_lockPolicy != LockPolicy::Blocking) {
+        if (!extAlloc->m_mutex.try_lock()) {
+          return nullptr;
+        }
+      } else {
+        extAlloc->m_mutex.lock();
+      }
+      bool succ = extAlloc->m_mapper &&
+        extAlloc->m_mapper->addMapping(*extAlloc, newSize);
+      extAlloc->m_mutex.unlock();
+      if (!succ) return nullptr;
+    }
+  } while (true);
+  not_reached();
+}
+    
+      auto src  = getUseVars();
+  auto dest = ret->getUseVars();
+  auto const nProps = cls->numDeclProperties();
+  auto const stop = src + nProps;
+  for (; src != stop; ++src, ++dest) {
+    tvDup(*src, *dest);
+  }
+    
+      Class* getClass() const {
+    return LIKELY(hdr()->ctxIsClass()) ?
+      reinterpret_cast<Class*>(hdr()->ctx_bits & ~ClosureHdr::kClassBit) :
+      nullptr;
+  }
+  void setClass(Class* cls) {
+    assertx(cls);
+    hdr()->ctx_bits = reinterpret_cast<uintptr_t>(cls) | ClosureHdr::kClassBit;
+  }
+  bool hasClass() const { return hdr()->ctxIsClass(); }
+    
+    
+    
+    
+    {        ok &= luaval_to_uint32(tolua_S, 2,&arg0, 'cc.SimpleAudioEngine:stopEffect');
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_stopEffect'', nullptr);
+            return 0;
+        }
+        cobj->stopEffect(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:stopEffect',argc, 1);
+    return 0;
+    
+    
+    
+    int register_all_cocos2dx_csloader(lua_State* tolua_S);
+    
+    
+    
+        CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1,1);
+    
+    class ApplyForce : public Test
+{
+public:
+	ApplyForce()
+	{
+		m_world->SetGravity(b2Vec2(0.0f, 0.0f));
+    }
     }
     
-    class Arena;
-// Return an empty iterator (yields nothing) allocated from arena.
-extern InternalIterator* NewEmptyInternalIterator(Arena* arena);
     
-     private:
-  void SaveError(const Status& s) {
-    if (status_.ok() && !s.ok()) status_ = s;
+    { private:
+  /* Used by the single writer */
+  void locate_lower_bound(const T& v, Atom<Node*>*& prev) const {
+    auto curr = prev->load(std::memory_order_relaxed);
+    while (curr) {
+      if (curr->elem_ >= v) {
+        break;
+      }
+      prev = &(curr->next_);
+      curr = curr->next_.load(std::memory_order_relaxed);
+    }
+    return;
   }
-  void SkipEmptyDataBlocksForward();
-  void SkipEmptyDataBlocksBackward();
-  void SetSecondLevelIterator(InternalIterator* iter);
-  void InitDataBlock();
+};
+    
+    /** Wide CAS.
+ */
+template <typename T, template <typename> class Atom = std::atomic>
+class HazptrWideCAS {
+  struct Node : public hazptr_obj_base<Node, Atom> {
+    T val_;
+    explicit Node(T v = {}) : val_(v) {}
+  };
+    }
+    
+    #include <folly/MPMCQueue.h>
+#include <folly/executors/task_queue/BlockingQueue.h>
+#include <folly/synchronization/LifoSem.h>
+    
+    FOLLY_ALWAYS_INLINE int __builtin_ctzl(unsigned long x) {
+  return __builtin_ctz((unsigned int)x);
+}
+    
+    
+    {  HANDLE h = (HANDLE)_get_osfhandle(fd);
+  if (h == INVALID_HANDLE_VALUE) {
+    return -1;
+  }
+  if (!SetEndOfFile(h)) {
+    return -1;
+  }
+  return 0;
+}
+    
+    
+    {  EXPECT_EQ(1, estimates.quantiles[0].second);
+  EXPECT_EQ(2.0 - 0.5, estimates.quantiles[1].second);
+  EXPECT_EQ(50.375, estimates.quantiles[2].second);
+  EXPECT_EQ(100.0 - 0.5, estimates.quantiles[3].second);
+  EXPECT_EQ(100, estimates.quantiles[4].second);
+}
