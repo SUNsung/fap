@@ -1,213 +1,279 @@
 
         
-        void Timer::report() const {
-  int64_t ms = getMicroSeconds();
-  int seconds = ms / 1000000;
-  PRINT_MSG('%s took %d'%02d\' (%' PRId64 ' us) %s', m_name.c_str(),
-            seconds / 60, seconds % 60, ms, getName());
-}
+        // Generate param traits write methods.
+#include 'ipc/param_traits_write_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
     
-    template<typename T>
-inline Vptr emitTLSAddr(Vout& v, TLSDatum<T> datum) {
-  switch (arch()) {
-    case Arch::X64:
-      return x64::detail::emitTLSAddr(v, datum);
-    case Arch::ARM:
-      return arm::detail::emitTLSAddr(v, datum);
-    case Arch::PPC64:
-      return ppc64::detail::emitTLSAddr(v, datum);
+    namespace nwapi {
+    }
+    
+    void MenuItem::SetIcon(const std::string& icon) {
+  if (icon.empty()) {
+    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_), NULL); 
+  } else {
+    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_),
+                                  gtk_image_new_from_file(icon.c_str()));
+    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menu_item_),
+                                              TRUE);
   }
-  not_reached();
 }
     
-    SSATmp* implInstanceOfD(IRGS& env, SSATmp* src, const StringData* className);
     
-      /*
-   * Return true iff this Vunit needs register allocation before it can be
-   * emitted, either because it uses virtual registers or contains instructions
-   * that must be lowered by xls.
-   */
-  bool needsRegAlloc() const;
+    {  int menu_id;
+  if (option.GetInteger('submenu', &menu_id))
+    SetSubmenu(object_manager()->GetApiObject<Menu>(menu_id));
+}
     
+    bool NwAppGetArgvSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
+    }
     
-    {  CurlShareResource();
-  ~CurlShareResource() { close(); }
-  void close();
-  bool setOption(int option, const Variant& value);
-  static bool isLongOption(long option);
-  bool setLongOption(long option, long value);
-  CURLcode attachToCurlHandle(CURL *cp);
+        bool Write(ClipboardData& data) {
+      switch(data.type) {
+        case TYPE_TEXT:
+        return WriteText(data);
+        break;
+        case TYPE_HTML:
+        return WriteHTML(data);
+        break;
+        case TYPE_RTF:
+        return WriteRTF(data);
+        break;
+        case TYPE_PNG:
+        case TYPE_JPEG:
+        return WriteImage(data);
+        break;
+        case TYPE_NONE:
+        NOTREACHED();
+        return false;
+      }
+      NOTREACHED();
+      return false;
+    }
+    
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
  private:
-  CURLSH* m_share;
-  // CURLSH is a typedef to void
-  TYPE_SCAN_IGNORE_FIELD(m_share);
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
 };
     
     
-    {  for (int i = 0; i < numArgs; ++i) {
-    gen(
-      env,
-      InitPackedLayoutArray,
-      IndexData { static_cast<uint32_t>(numArgs - i - 1) },
-      array,
-      popC(env, DataTypeGeneric)
-    );
-  }
-  push(env, array);
-}
+    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethodSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodSyncFunction);
+};
     
-      kFullType = 1,
+        D3D_FEATURE_LEVEL featureLevels[] =
+    {
+        D3D_FEATURE_LEVEL_11_0,
+        D3D_FEATURE_LEVEL_10_1,
+        D3D_FEATURE_LEVEL_10_0,
+    };
+    UINT numFeatureLevels = ARRAYSIZE(featureLevels);
     
-    class MemTable;
-    
-      // create second key range
-  batch.Clear();
-  for (size_t i = 0; i < kNumKeys; i++) {
-    batch.Put(Key2(i), 'value for range 2 key');
-  }
-  ASSERT_OK(db->Write(leveldb::WriteOptions(), &batch));
-    
-    TEST(CRC, Mask) {
-  uint32_t crc = Value('foo', 3);
-  ASSERT_NE(crc, Mask(crc));
-  ASSERT_NE(crc, Mask(Mask(crc)));
-  ASSERT_EQ(crc, Unmask(Mask(crc)));
-  ASSERT_EQ(crc, Unmask(Unmask(Mask(Mask(crc)))));
-}
-    
-    #ifndef STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
-#define STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
-    
-    TEST(FormatTest, InternalKeyShortSeparator) {
-  // When user keys are same
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 99, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 101, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 100, kTypeValue)));
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foo', 100, kTypeDeletion)));
+            struct glob
+        {
+            static __device__ __forceinline__ int atomicAdd(int* address, int val)
+            {
+                return ::atomicAdd(address, val);
+            }
+            static __device__ __forceinline__ unsigned int atomicAdd(unsigned int* address, unsigned int val)
+            {
+                return ::atomicAdd(address, val);
+            }
+            static __device__ __forceinline__ float atomicAdd(float* address, float val)
+            {
+            #if __CUDA_ARCH__ >= 200
+                return ::atomicAdd(address, val);
+            #else
+                int* address_as_i = (int*) address;
+                int old = *address_as_i, assumed;
+                do {
+                    assumed = old;
+                    old = ::atomicCAS(address_as_i, assumed,
+                        __float_as_int(val + __int_as_float(assumed)));
+                } while (assumed != old);
+                return __int_as_float(old);
+            #endif
+            }
+            static __device__ __forceinline__ double atomicAdd(double* address, double val)
+            {
+            #if __CUDA_ARCH__ >= 130
+                unsigned long long int* address_as_ull = (unsigned long long int*) address;
+                unsigned long long int old = *address_as_ull, assumed;
+                do {
+                    assumed = old;
+                    old = ::atomicCAS(address_as_ull, assumed,
+                        __double_as_longlong(val + __longlong_as_double(assumed)));
+                } while (assumed != old);
+                return __longlong_as_double(old);
+            #else
+                (void) address;
+                (void) val;
+                return 0.0;
+            #endif
+            }
     }
     
-    int main(int argc, char** argv) {
-  leveldb::Env* env = leveldb::Env::Default();
-  bool ok = true;
-  if (argc < 2) {
-    Usage();
-    ok = false;
-  } else {
-    std::string command = argv[1];
-    if (command == 'dump') {
-      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
-    } else {
-      Usage();
-      ok = false;
+    #undef cv_hal_SVD32f
+#define cv_hal_SVD32f lapack_SVD32f
+#undef cv_hal_SVD64f
+#define cv_hal_SVD64f lapack_SVD64f
+    
+        static void* GetProcAddress (const char* name)
+    {
+        static void* h = NULL;
+        if (!h)
+        {
+            h = dlopen('libclAmdBlas.so', RTLD_LAZY | RTLD_GLOBAL);
+            if (!h)
+                return NULL;
+        }
     }
+    
+    
+    {        return dlsym(h, name);
+    }
+    #define CV_CL_GET_PROC_ADDRESS(name) GetProcAddress(name)
+#endif
+    
+      // Erase an element from the values list by splicing it to the spares list.
+  void values_erase(iterator it)
+  {
+    *it = value_type();
+    spares_.splice(spares_.begin(), values_, it);
   }
-  return (ok ? 0 : 1);
+    
+    
+    {  return false;
 }
-
     
-      // REQUIRES: Finish() has not been called since the last call to Reset().
-  // REQUIRES: key is larger than any previously added key
-  void Add(const Slice& key, const Slice& value);
+    #pragma once
     
-    bool js_cocos2dx_studio_ActionTimeline_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_ActionTimeline_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_ActionTimeline(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_ActionTimeline_setFrameEventCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_clearFrameEndCallFuncs(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_setAnimationEndCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_addTimeline(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getCurrentFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getStartFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_pause(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_start(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_removeTimeline(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_setLastFrameCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_IsAnimationInfoExists(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getTimelines(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_play(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getAnimationInfo(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_resume(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_addFrameEndCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_removeAnimationInfo(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getTimeSpeed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_addAnimationInfo(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_gotoFrameAndPause(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_isPlaying(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_removeFrameEndCallFuncs(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_gotoFrameAndPlay(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_clearFrameEventCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getEndFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_setTimeSpeed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_clearLastFrameCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_setDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_setCurrentFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_removeFrameEndCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_ActionTimeline(JSContext *cx, uint32_t argc, jsval *vp);
+      BlockingQueueAddResult add(T item) override {
+    switch (kBehavior) { // static
+      case QueueBehaviorIfFull::THROW:
+        if (!queue_.write(std::move(item))) {
+          throw QueueFullException('LifoSemMPMCQueue full, can't add item');
+        }
+        break;
+      case QueueBehaviorIfFull::BLOCK:
+        queue_.blockingWrite(std::move(item));
+        break;
+    }
+    return sem_.post();
+  }
     
-    #ifndef RENDER_H
-#define RENDER_H
+     public:
+  HazptrSWMRSet() : head_(nullptr) {}
     
-    /// Random floating point number in range [lo, hi]
-inline float32 RandomFloat(float32 lo, float32 hi)
+    namespace folly {
+namespace futures {
+    }
+    }
+    
+    
+    {// cpplib is an implementation of the standard library, and is the one typically
+// used with the msvc compiler
+#if _CPPLIB_VER
+constexpr auto kCpplibVer = _CPPLIB_VER;
+#else
+constexpr auto kCpplibVer = 0;
+#endif
+} // namespace folly
+    
+    TEST(AlignedSysAllocator, bad_alloc_default) {
+  using Alloc = AlignedSysAllocator<float>;
+  Alloc const alloc(1024);
+  std::vector<float, Alloc> nums(alloc);
+  if (!kIsSanitize) {
+    EXPECT_THROW(nums.reserve(kTooBig), std::bad_alloc);
+  }
+}
+    
+    #include <string>
+    
+    namespace aria2 {
+    }
+    
+      virtual ~AbstractHttpServerResponseCommand();
+    
+    void AbstractOptionHandler::setCumulative(bool f)
 {
-	float32 r = (float32)(std::rand() & (RAND_LIMIT));
-	r /= RAND_LIMIT;
-	r = (hi - lo) * r + lo;
-	return r;
+  updateFlags(FLAG_CUMULATIVE, f);
 }
     
-    	AddPair()
-	{
-		m_world->SetGravity(b2Vec2(0.0f,0.0f));
-		{
-			b2CircleShape shape;
-			shape.m_p.SetZero();
-			shape.m_radius = 0.1f;
-    }
+    public:
+  AbstractProxyResponseCommand(
+      cuid_t cuid, const std::shared_ptr<Request>& req,
+      const std::shared_ptr<FileEntry>& fileEntry, RequestGroup* requestGroup,
+      const std::shared_ptr<HttpConnection>& httpConnection, DownloadEngine* e,
+      const std::shared_ptr<SocketCore>& s);
+    
+    class AsyncNameResolverMan {
+public:
+  AsyncNameResolverMan();
+  // Destructor does not call disableNameResolverCheck(). Application
+  // must call it before the destruction of this object.
+  ~AsyncNameResolverMan();
+  // Enable IPv4 address lookup. default: true
+  void setIPv4(bool ipv4) { ipv4_ = ipv4; }
+  // Enable IPv6 address lookup. default: true
+  void setIPv6(bool ipv6) { ipv6_ = ipv6; }
+  // Returns true if asynchronous name resolution has been started.
+  bool started() const;
+  // Starts asynchronous name resolution.
+  void startAsync(const std::string& hostname, DownloadEngine* e,
+                  Command* command);
+  // Appends resolved addresses to |res|.
+  void getResolvedAddress(std::vector<std::string>& res) const;
+  // Adds resolvers to DownloadEngine to check event notification.
+  void setNameResolverCheck(DownloadEngine* e, Command* command);
+  // Removes resolvers from DownloadEngine.
+  void disableNameResolverCheck(DownloadEngine* e, Command* command);
+  // Returns true if any of resolvers are added in DownloadEngine.
+  bool resolverChecked() const { return resolverCheck_; }
+  // Returns status value: 0 for inprogress, 1 for success and -1 for
+  // failure.
+  int getStatus() const;
+  // Returns last error string
+  const std::string& getLastError() const;
+  // Resets state. Also removes resolvers from DownloadEngine.
+  void reset(DownloadEngine* e, Command* command);
     }
     
-    			m_world->CreateJoint(&pjd);
+      // Specify the amount of iterations that should be run by this benchmark.
+  // REQUIRES: 'n > 0' and `MinTime` has not been called on this benchmark.
+  //
+  // NOTE: This function should only be used when *exact* iteration control is
+  //   needed and never to control or limit how long a benchmark runs, where
+  // `--benchmark_min_time=N` or `MinTime(...)` should be used instead.
+  Benchmark* Iterations(size_t n);
     
-    			b2Body* prevBody = ground;
-			for (int32 i = 0; i < 3; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position.Set(-14.0f + 2.0f * i, 15.0f);
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&fd);
-    }
+    // Returns true if stdout appears to be a terminal that supports colored
+// output, false otherwise.
+bool IsColorTerminal();
     
-      /**
-  * Construct and inject a mock singleton which should be used only from tests.
-  * Unlike regular singletons which are initialized once per process lifetime,
-  * mock singletons live for the duration of a test. This means that one process
-  * running multiple tests can initialize and register the same singleton
-  * multiple times. This functionality should be used only from tests
-  * since it relaxes validation and performance in order to be able to perform
-  * the injection. The returned mock singleton is functionality identical to
-  * regular singletons.
-  */
-  static void make_mock(std::nullptr_t /* c */ = nullptr,
-                        typename Singleton<T>::TeardownFunc t = nullptr) {
-    make_mock([]() { return new T; }, t);
+    void Finish(UserCounters *l, double cpu_time, double num_threads) {
+  for (auto &c : *l) {
+    c.second.value = Finish(c.second, cpu_time, num_threads);
   }
+}
     
-    // Invoking code that uses XLOG() statements before main() is safe.
-// This will use default log settings defined by folly::initializeLoggerDB().
-static ExampleObject staticInitialized('static');
-    
-      EXPECT_EQ(5050, estimates.sum);
-  EXPECT_EQ(100, estimates.count);
+      CPUInfo const& info = context.cpu_info;
+  out << indent << FormatKV('num_cpus', static_cast<int64_t>(info.num_cpus))
+      << ',\n';
+  out << indent
+      << FormatKV('mhz_per_cpu',
+                  RoundDouble(info.cycles_per_second / 1000000.0))
+      << ',\n';
+  out << indent << FormatKV('cpu_scaling_enabled', info.scaling_enabled)
+      << ',\n';
