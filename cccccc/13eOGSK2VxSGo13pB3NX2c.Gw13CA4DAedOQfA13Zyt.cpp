@@ -1,228 +1,320 @@
-Base::Base(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-	   const std::string& extension_id)
-    : extension_id_(extension_id),
-      id_(id),
-      delay_destruction_(false),
-      pending_destruction_(false),
-      object_manager_(object_manager) {
-}
+
+        
+        #endif  // TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
+
     
-    #ifndef CONTENT_NW_SRC_API_BINDINGS_COMMON_H_
-#define CONTENT_NW_SRC_API_BINDINGS_COMMON_H_
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
+    /*
+ * Deprecated in favor of EncodeAudioOpV2.
+ */
+class EncodeAudioOp : public OpKernel {
+ public:
+  explicit EncodeAudioOp(OpKernelConstruction* context) : OpKernel(context) {
+    OP_REQUIRES_OK(context, context->GetAttr('file_format', &file_format_));
+    file_format_ = str_util::Lowercase(file_format_);
+    OP_REQUIRES(context, file_format_ == 'wav',
+                errors::InvalidArgument('file_format arg must be \'wav\'.'));
+    }
+    }
     
-    {  *icon = item->icon_;
-  return true;
-}
+      CHECK(worker_name.size() < max_worker_name_length)
+      << 'Specified worker name is too long.';
+  snprintf(my_name, max_worker_name_length, worker_name.c_str());
+  std::vector<char> worker_names(number_of_procs * max_worker_name_length);
+  MPI_CHECK(MPI_Allgather(my_name, max_worker_name_length, MPI_CHAR,
+                          &worker_names[0], max_worker_name_length, MPI_CHAR,
+                          MPI_COMM_WORLD));
     
+    #  define ASSERT_DEBUG_DEATH(statement, regex) \
+  GTEST_EXECUTE_STATEMENT_(statement, regex)
     
-    {    block_active_ = false;
-    g_signal_connect(menu_item_, 'activate',
-                     G_CALLBACK(OnClickThunk), this);
+      ThreadWithParam(
+      UserThreadFunc func, T param, Notification* thread_can_start)
+      : func_(func),
+        param_(param),
+        thread_can_start_(thread_can_start),
+        finished_(false) {
+    ThreadWithParamBase* const base = this;
+    // The thread can be created only after all fields except thread_
+    // have been initialized.
+    GTEST_CHECK_POSIX_SUCCESS_(
+        pthread_create(&thread_, 0, &ThreadFuncWithCLinkage, base));
   }
+  ~ThreadWithParam() { Join(); }
     
-    void NwDesktopCaptureMonitor::OnSourceAdded(DesktopMediaList* list, int index) {
-    DesktopMediaList::Source src = list->GetSource(index);
-    }
-    
-      // implement nw.Screen.getScreens()
-  class NwScreenGetScreensFunction: public NWSyncExtensionFunction {
-    public:
-      NwScreenGetScreensFunction();
-      bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    static HRESULT InitDevice()
-{
-    HRESULT hr = S_OK;
-    }
-    
-    void CV_ModelEstimator2_Test::get_test_array_types_and_sizes( int /*test_case_idx*/,
-                                                              vector<vector<Size> > &sizes, vector<vector<int> > &types )
-{
-    RNG &rng = ts->get_rng();
-    checkPartialSubsets = (cvtest::randInt(rng) % 2 == 0);
-    }
-    
-    // GL type for 'half' precision (s10e5) float data in host memory
-#ifndef GL_ARB_half_float_pixel
-    typedef unsigned short GLhalfARB;
-#endif
-#ifndef GL_NV_half_float
-    typedef unsigned short GLhalfNV;
-#endif
-    
-    #if defined(_WIN32)
-#include <windows.h>
-    
-    static void RunSynchronousUnaryPingPong() {
-  gpr_log(GPR_INFO, 'Running Synchronous Unary Ping Pong');
-    }
-    
-    // Get leading or trailing comments in a string. Comment lines start with '// '.
-// Leading detached comments are put in in front of leading comments.
-template <typename DescriptorType>
-inline grpc::string GetNodeComments(const DescriptorType* desc, bool leading) {
-  return grpc_generator::GetPrefixedComments(desc, leading, '//');
-}
+      template <GTEST_7_TYPENAMES_(U)>
+  tuple& CopyFrom(const GTEST_7_TUPLE_(U)& t) {
+    f0_ = t.f0_;
+    f1_ = t.f1_;
+    f2_ = t.f2_;
+    f3_ = t.f3_;
+    f4_ = t.f4_;
+    f5_ = t.f5_;
+    f6_ = t.f6_;
+    return *this;
+  }
     
      private:
-  bool PrintPreamble(grpc_generator::Printer* out);
-  bool PrintBetaPreamble(grpc_generator::Printer* out);
-  bool PrintGAServices(grpc_generator::Printer* out);
-  bool PrintBetaServices(grpc_generator::Printer* out);
-    
-    namespace grpc {
-namespace testing {
-    }
+  void CalculatePrimesUpTo(int max) {
+    ::std::fill(is_prime_, is_prime_ + is_prime_size_, true);
+    is_prime_[0] = is_prime_[1] = false;
     }
     
-    #include 'src/proto/grpc/testing/metrics.grpc.pb.h'
-#include 'src/proto/grpc/testing/metrics.pb.h'
+    // Returns true iff n is a prime number.
+bool IsPrime(int n) {
+  // Trivial case 1: small numbers
+  if (n <= 1) return false;
+    }
+    
+    // We will track memory used by this class.
+class Water {
+ public:
+  // Normal Water declarations go here.
+    }
+    
+      bool thrown = false;
+  try {
+    thpp::IntTensor &a = dynamic_cast<thpp::IntTensor&>(*tensor);
+  } catch(std::bad_cast &e) {
+    thrown = true;
+  }
+  assert(thrown);
+    
+      // Creates (and retains) and new cuda stream
+  CUDAStreamInternals* CUDAStream_createAndRetainWithOptions(int32_t flags, int32_t priority) {
+    CUDAStreamInternals* internals = (CUDAStreamInternals*) malloc(sizeof(CUDAStreamInternals));
+    internals->is_destructible = true;
+    internals->refcount = 1;
+    internals->device = current_device();
+    #ifndef __HIP_PLATFORM_HCC__
+      AT_CUDA_CHECK(cudaStreamCreateWithPriority(&internals->stream, flags, priority));
+    #else 
+      AT_CUDA_CHECK(cudaStreamCreateWithFlags(&internals->stream, flags));
+    #endif // __HIP_PLATFORM_HCC__
+    return internals;
+  }
+    
+    std::tuple<Tensor, Tensor, Tensor> cudnn_batch_norm_backward(
+    const Tensor& input, const Tensor& grad_output, const Tensor& weight,
+    const Tensor& running_mean, const Tensor& running_var,
+    const Tensor& save_mean, const Tensor& save_var,
+    double epsilon) {
+  throw std::runtime_error('cudnn_batch_norm_backward: ATen not compiled with cuDNN support');
+}
+    
+      Constant one(dataType, 1);
+  Constant zero(dataType, 0);
+    
+    void checkGridSize(CheckedFrom c, TensorArg grid, TensorArg input)
+{
+  // assert size of grid is n*h*w*2
+  // FYI: grid is between [-1, 1], where -1 left most pixel,
+  // 1 represents right most pixel (and hence 0 is the center pixel)
+  // if grid has values >1 or <-1, those values are ignored
+  checkContiguous(c, grid);
+  checkDim(c, grid, 4);
+  // TODO: Maybe more user friendly to report where the expected size
+  // came from
+  checkSize(c, grid, 0, input->size(0));
+  checkSize(c, grid, 3, 2);
+}
+    
+    #endif // AT_CUDNN_ENABLED()
+
     
     
-    {  gpr_subprocess* const subprocess_;
+
+    
+    // Create the pybind11 module
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+  // Use the same name as the check functions so error messages make sense
+  m.def(cudnn_relu_name, &cudnn_relu, 'CuDNN ReLU');
+}
+
+    
+    // can add more non-MKL operators if needed
+namespace caffe2 {
+REGISTER_MKL_OPERATOR(
+    Softmax,
+    mkl::MKLFallbackOp<SoftmaxOp<float, CPUContext>>);
+REGISTER_MKL_OPERATOR(
+    Reshape,
+    mkl::MKLFallbackOp<ReshapeOp<float, CPUContext>, SkipIndices<1>>);
+REGISTER_MKL_OPERATOR(
+    LabelCrossEntropy,
+    mkl::MKLFallbackOp<LabelCrossEntropyOp<float, CPUContext>>);
+REGISTER_MKL_OPERATOR(
+    AveragedLoss,
+    mkl::MKLFallbackOp<AveragedLoss<float, CPUContext>>);
+    }
+    
+    /* Opaque object representing a Bidirectional stream creating engine. Created
+ * and configured outside of this API to facilitate sharing with other
+ * components */
+typedef struct stream_engine {
+  void* obj;
+  void* annotation;
+} stream_engine;
+    
+      ClientConfig client_config;
+  client_config.set_client_type(SYNC_CLIENT);
+  client_config.set_outstanding_rpcs_per_channel(1);
+  client_config.set_client_channels(1);
+  client_config.set_rpc_type(UNARY);
+  client_config.mutable_load_params()->mutable_closed_loop();
+    
+    static const int WARMUP = 5;
+static const int BENCHMARK = 5;
+    
+      bool SetFailedAndReturnFalse() {
+    failed_ = true;
+    return false;
+  }
+    
+    #include <signal.h>
+    
+    class UsageTimer {
+ public:
+  UsageTimer();
+    }
+    
+    /**
+ * @brief Iterate the discovered decorators for a given point type.
+ *
+ * The configuration maintains various sources, each may contain a set of
+ * decorators. The source tracking is abstracted for the decorator iterator.
+ *
+ * @param point request execution of decorators for this given point.
+ * @param time an optional time for points using intervals.
+ * @param source restrict run to a specific config source.
+ */
+void runDecorators(DecorationPoint point,
+                   size_t time = 0,
+                   const std::string& source = '');
+    
+    #include <osquery/config.h>
+#include <osquery/dispatcher.h>
+    
+      // Now test inclusive bounds.
+  struct ConstraintList cl3;
+  constraint = Constraint(LESS_THAN_OR_EQUALS);
+  constraint.expr = '1000';
+  cl3.add(constraint);
+  constraint = Constraint(GREATER_THAN_OR_EQUALS);
+  constraint.expr = '1';
+  cl3.add(constraint);
+    
+    
+    {  if (hr != S_OK) {
+    return Status(-1, 'Error retrieving data from WMI query.');
+  }
+  if (value.vt != VT_BOOL) {
+    VariantClear(&value);
+    return Status(-1, 'Invalid data type returned.');
+  }
+  ret = value.boolVal == VARIANT_TRUE ? true : false;
+  VariantClear(&value);
+  return Status(0);
+}
+    
+    namespace osquery {
+    }
+    
+    TEST_F(SyslogTests, test_populate_event_context) {
+  std::string line =
+      R'|('2016-03-22T21:17:01.701882+00:00','vagrant-ubuntu-trusty-64','6','cron','CRON[16538]:',' (root) CMD (   cd / && run-parts --report /etc/cron.hourly)')|';
+  SyslogEventPublisher pub;
+  auto ec = pub.createEventContext();
+  Status status = pub.populateEventContext(line, ec);
+    }
+    
+    static void PLIST_parse_file(benchmark::State& state) {
+  while (state.KeepRunning()) {
+    pt::ptree tree;
+    auto status = parsePlist(kTestDataPath + 'test.plist', tree);
+  }
+}
+    
+    
+    {  // Make sure we can connect to designated stream
+  VLOG(1) << 'Firehose logging initialized with stream: '
+          << FLAGS_aws_firehose_stream;
+  return Status(0);
+}
+    
+        // C++ mappings of API methods
+    static Persistent<v8::Function> constructor;
+    static Handle<Value> Open(const Arguments& args);
+    static Handle<Value> New(const Arguments& args);
+    static Handle<Value> Get(const Arguments& args);
+    static Handle<Value> Put(const Arguments& args);
+    static Handle<Value> Delete(const Arguments& args);
+    static Handle<Value> Dump(const Arguments& args);
+    static Handle<Value> WriteBatch(const Arguments& args);
+    static Handle<Value> CreateColumnFamily(const Arguments& args);
+    static Handle<Value> CompactRange(const Arguments& args);
+    static Handle<Value> Close(const Arguments& args);
+    
+      virtual bool FullMergeV2(const MergeOperationInput& merge_in,
+                           MergeOperationOutput* merge_out) const override;
+    
+      /// If list is empty, return false and leave *result unchanged.
+  /// Else, remove the first/last elem, store it in *result, and return true
+  bool PopLeft(const std::string& key, std::string* result);  // First
+  bool PopRight(const std::string& key, std::string* result); // Last
+    
+      // 5. create db_pool_ioctx
+  ret = _rados.ioctx_create(_db_pool_name.c_str(), _db_pool_ioctx);
+  if (ret < 0) {
+    std::cerr << 'couldn't set up ioctx! error ' << ret << std::endl;
+    ret = EXIT_FAILURE;
+    goto out;
+  }
+    
+    
+    {class DirectComparatorJniCallback : public BaseComparatorJniCallback {
+ public:
+      DirectComparatorJniCallback(
+        JNIEnv* env, jobject jComparator,
+        const ComparatorJniCallbackOptions* copt);
+      ~DirectComparatorJniCallback();
 };
+}  // namespace rocksdb
     
-    	PoolByteArray out;
-	String certs_path = GLOBAL_DEF('network/ssl/certificates', '');
-	ProjectSettings::get_singleton()->set_custom_property_info('network/ssl/certificates', PropertyInfo(Variant::STRING, 'network/ssl/certificates', PROPERTY_HINT_FILE, '*.crt'));
+    #endif  // STORAGE_ROCKSDB_INCLUDE_STATISTICS_H_
+
     
-    	virtual Error get_data(uint8_t *p_buffer, int p_bytes);
-	virtual Error get_partial_data(uint8_t *p_buffer, int p_bytes, int &r_received);
     
-    Ref<VideoStream> VideoPlayer::get_stream() const {
+/*
+ * DumpCrashStack.h
+ *
+ *  Created on: 2012-9-28
+ *      Author: yerungui
+ */
+    
+    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
     }
     
-    	static void _bind_methods();
     
-        FreeType font driver for pcf fonts
+/*
+ * CoreServiceBase.h
+ *
+ *  Created on: 2013-6-20
+ *      Author: yerungui
+ */
     
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
+    #ifndef COMM_HAS_MEMBER_H_
+#define COMM_HAS_MEMBER_H_
     
-    void SparsePageSource::BeforeFirst() {
-  base_rowid_ = 0;
-  clock_ptr_ = 0;
-  for (auto& p : prefetchers_) {
-    p->BeforeFirst();
-  }
-}
-    
-    class BaseLogger {
- public:
-  BaseLogger() {
-#if XGBOOST_LOG_WITH_TIME
-    log_stream_ << '[' << dmlc::DateLogger().HumanDate() << '] ';
-#endif
-  }
-  std::ostream& stream() { return log_stream_; }  // NOLINT
-    }
-    
-    TEST(Metric, LogLoss) {
-  xgboost::Metric * metric = xgboost::Metric::Create('logloss');
-  ASSERT_STREQ(metric->Name(), 'logloss');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              1.2039f, 0.001f);
-}
-    
-    SEXP XGBoosterGetAttr_R(SEXP handle, SEXP name) {
-  SEXP out;
-  R_API_BEGIN();
-  int success;
-  const char *val;
-  CHECK_CALL(XGBoosterGetAttr(R_ExternalPtrAddr(handle),
-                              CHAR(asChar(name)),
-                              &val,
-                              &success));
-  if (success) {
-    out = PROTECT(allocVector(STRSXP, 1));
-    SET_STRING_ELT(out, 0, mkChar(val));
-  } else {
-    out = PROTECT(R_NilValue);
-  }
-  R_API_END();
-  UNPROTECT(1);
-  return out;
-}
-    
-    TEST(Metric, AMS) {
-  EXPECT_ANY_THROW(xgboost::Metric::Create('ams'));
-  xgboost::Metric * metric = xgboost::Metric::Create('ams@0.5f');
-  ASSERT_STREQ(metric->Name(), 'ams@0.5');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0.311f, 0.001f);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0.29710f, 0.001f);
-    }
-    
-    /*! \brief High precision gradient statistics pair */
-using GradientPairPrecise = detail::GradientPairInternal<double>;
-    
-        // Compress
-    int maxlen = data_sz + 512 + (data_sz >> 2) + sizeof(int); // total guess
-    char* compressed = use_compression ? new char[maxlen] : data;
-    int compressed_sz = use_compression ? stb_compress((stb_uchar*)compressed, (stb_uchar*)data, data_sz) : data_sz;
-    if (use_compression)
-		memset(compressed + compressed_sz, 0, maxlen - compressed_sz);
-    
-            // 1. Show a simple window.
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    }
-    
-            // 1. Show a simple window.
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    }
-    
-    #include 'env/mock_env.h'
-    
-       You can contact the author at :
-   - xxHash source repository : http://code.google.com/p/xxhash/
-*/
-    
-    
-// The class for unit-testing
-class StringAppendOperatorTest : public testing::Test {
- public:
-  StringAppendOperatorTest() {
-    DestroyDB(kDbName, Options());    // Start each test with a fresh DB
-  }
-    }
-    
-      if(m_jcallback_obj != nullptr) {    
-    env->DeleteGlobalRef(m_jcallback_obj);
-  }
-    
-    void SyncPoint::ClearTrace() {
-  impl_->ClearTrace();
-}
-    
-      // Same as ::Insert
-  // Returns false if MemTableRepFactory::CanHandleDuplicatedKey() is true and
-  // the <key, seq> already exists.
-  virtual bool InsertKey(KeyHandle handle) {
-    Insert(handle);
-    return true;
-  }
-    
-      // check the file is not locked
-  ASSERT_TRUE( AssertFileIsNotLocked() );
+    jvalue JNU_CallMethodByName(JNIEnv* _env, jobject obj, const char* _name, const char* descriptor, ...);
+jvalue JNU_CallStaticMethodByName(JNIEnv* _env, jclass clazz, const char* _name, const char* descriptor, ...);
+jvalue JNU_CallStaticMethodByName(JNIEnv* _env, const char* _class_name, const char* _name, const char* descriptor, ...);
+jvalue JNU_CallStaticMethodByMethodInfo(JNIEnv* _env, JniMethodInfo _method_info, ...);
+jvalue JNU_GetStaticField(JNIEnv* _env, jclass clazz, const char* _name, const char* sig);
+jvalue JNU_GetField(JNIEnv* _env, jobject obj, const char* _name, const char* sig);
