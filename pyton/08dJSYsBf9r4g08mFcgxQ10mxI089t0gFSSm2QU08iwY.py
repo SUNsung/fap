@@ -1,129 +1,178 @@
 
         
-        
-PACKAGES = [
-    'httpie',
-    'requests',
-    'pygments',
-]
-    
-        def __init__(self, **kwargs):
-        '''
-        Use keyword arguments to overwrite
-        any of the class attributes for this instance.
-    
-        def get_converter(self, mime):
-        if is_valid_mime(mime):
-            for converter_class in plugin_manager.get_converters():
-                if converter_class.supports(mime):
-                    return converter_class(mime)
-    
-    
-def test_follow_redirect_output_options(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=h',
-             '--history-print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 2
-    assert 'HTTP/1.1 302 FOUND' not in r
-    assert HTTP_OK in r
-    
-        '''.format(
-        default=DEFAULT_STYLE,
-        available='\n'.join(
-            '{0}{1}'.format(8 * ' ', line.strip())
-            for line in wrap(', '.join(sorted(AVAILABLE_STYLES)), 60)
-        ).rstrip(),
-    )
+        # Tests.
+cc_test(
+    name = 'syntaxnet_component_test',
+    srcs = ['syntaxnet_component_test.cc'],
+    data = [':testdata'],
+    deps = [
+        ':syntaxnet_component',
+        '//dragnn/core:input_batch_cache',
+        '//dragnn/core/test:generic',
+        '//dragnn/core/test:mock_transition_state',
+        '//dragnn/io:sentence_input_batch',
+        '//syntaxnet:base',
+        '//syntaxnet:sentence_proto_cc',
+        '//syntaxnet:test_main',
+    ],
 )
     
-        def _getpass(self, prompt):
-        # To allow mocking.
-        return getpass.getpass(str(prompt))
+      def testBulkFeatureIdExtractorOkWithOneFixedFeature(self):
+    component_spec = spec_pb2.ComponentSpec()
+    text_format.Parse('''
+        name: 'test'
+        network_unit {
+          registered_name: 'IdentityNetwork'
+        }
+        fixed_feature {
+          name: 'fixed' embedding_dim: -1 size: 1
+        }
+        ''', component_spec)
+    comp = bulk_component.BulkFeatureIdExtractorComponentBuilder(
+        self.master, component_spec)
     
-        def unregister(self, plugin):
-        self._plugins.remove(plugin)
     
-        requests_session.cookies = session.cookies
+class ComponentTest(test_util.TensorFlowTestCase):
     
-    import os
+                              [[[  8,  19,  37],
+                            [ 18,  43,  85],
+                            [ 28,  67, 133]],
+                           [[ 27,  65, 131],
+                            [ 17,  41,  83],
+                            [  7,  17,  35]]])  # pyformat: disable
     
-        indent = None
-    if format:
-        indent = 4
+      NB: The format of the shortened resource paths should be considered an
+  implementation detail and may change.
     
-            # test exceptions
-        no_projects_input_url = 'https://www.googleapis.com/compute/v1/not-projects/myproject/global/backendServices/mybackendservice/getHealth'
-        no_resource_input_url = 'https://www.googleapis.com/compute/v1/not-projects/myproject/global'
     
-        def on_open_shell(self):
-        try:
-            self._exec_cli_command(b'environment no more')
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
+_DUMMY_GOLD_SENTENCE = '''
+token {
+  word: 'sentence' start: 0 end: 7 tag: 'NN' category: 'NOUN' label: 'ROOT'
+}
+token {
+  word: '0' start: 9 end: 9 head: 0 tag: 'CD' category: 'NUM' label: 'num'
+}
+token {
+  word: '.' start: 10 end: 10 head: 0 tag: '.' category: '.' label: 'punct'
+}
+'''
+    
+        def reducer(self, key, values):
+        total = sum(values)
+        if total == 1:
+            yield key, total
+    
+        def categorize(self, transaction):
+        if transaction.seller in self.seller_category_map:
+            return self.seller_category_map[transaction.seller]
+        if transaction.seller in self.seller_category_overrides_map:
+            seller_category_map[transaction.seller] = \
+                self.manual_overrides[transaction.seller].peek_min()
+            return self.seller_category_map[transaction.seller]
+        return None
+    
+        def __repr__(self):
+        return '<%s %s>' % (self.__class__.__name__, dict.__repr__(self))
 
     
-    @mainpage
+        def get_cookie_secure(self, app):
+        '''Returns True if the cookie should be secure.  This currently
+        just returns the value of the ``SESSION_COOKIE_SECURE`` setting.
+        '''
+        return app.config['SESSION_COOKIE_SECURE']
     
-    EOF = -1
-    
-    	html = get_html(url)
-	contentid = r1(r'<meta name='contentid' scheme='DMINSTR2' content='([^']+)' />', html)
-	vid = r1(r''demand_ehow_videoid':'([^']+)'', html)
-	assert vid
-    
-    __all__ = ['fc2video_download']
-    
-    def mixcloud_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url, faker=True)
-    title = r1(r'<meta property='og:title' content='([^']*)'', html)
-    preview_url = r1(r'm-preview=\'([^\']+)\'', html)
-    preview = r1(r'previews(.*)\.mp3$', preview_url)
-    
-        url = sorted(
-        map(lambda x: x.firstChild.nodeValue, xml.getElementsByTagName('src')),
-        key=lambda x: int(match1(x, r'_(\d+?)_')))[-1]
-    
-        #title
-    title = ''
-    profile_api = 'https://www.showroom-live.com/api/room/profile?room_id={room_id}'.format(room_id = room_id)
-    html = loads(get_content(profile_api))
-    try:
-        title = html['main_name']
-    except KeyError:
-        title = 'Showroom_{room_id}'.format(room_id = room_id)
+        def get_source(self, environment, template):
+        if self.app.config['EXPLAIN_TEMPLATE_LOADING']:
+            return self._get_source_explained(environment, template)
+        return self._get_source_fast(environment, template)
     
     
-def save_debug_screenshot(ts, im, piece_x, piece_y, board_x, board_y):
-    '''
-    对 debug 图片加上详细的注释
+def test_get_namespace():
+    app = flask.Flask(__name__)
+    app.config['FOO_OPTION_1'] = 'foo option 1'
+    app.config['FOO_OPTION_2'] = 'foo option 2'
+    app.config['BAR_STUFF_1'] = 'bar stuff 1'
+    app.config['BAR_STUFF_2'] = 'bar stuff 2'
+    foo_options = app.config.get_namespace('FOO_')
+    assert 2 == len(foo_options)
+    assert 'foo option 1' == foo_options['option_1']
+    assert 'foo option 2' == foo_options['option_2']
+    bar_options = app.config.get_namespace('BAR_', lowercase=False)
+    assert 2 == len(bar_options)
+    assert 'bar stuff 1' == bar_options['STUFF_1']
+    assert 'bar stuff 2' == bar_options['STUFF_2']
+    foo_options = app.config.get_namespace('FOO_', trim_namespace=False)
+    assert 2 == len(foo_options)
+    assert 'foo option 1' == foo_options['foo_option_1']
+    assert 'foo option 2' == foo_options['foo_option_2']
+    bar_options = app.config.get_namespace('BAR_', lowercase=False, trim_namespace=False)
+    assert 2 == len(bar_options)
+    assert 'bar stuff 1' == bar_options['BAR_STUFF_1']
+    assert 'bar stuff 2' == bar_options['BAR_STUFF_2']
     
-    '''
-    make_debug_dir(screenshot_backup_dir)
-    draw = ImageDraw.Draw(im)
-    draw.line((piece_x, piece_y) + (board_x, board_y), fill=2, width=3)
-    draw.line((piece_x, 0, piece_x, im.size[1]), fill=(255, 0, 0))
-    draw.line((0, piece_y, im.size[0], piece_y), fill=(255, 0, 0))
-    draw.line((board_x, 0, board_x, im.size[1]), fill=(0, 0, 255))
-    draw.line((0, board_y, im.size[0], board_y), fill=(0, 0, 255))
-    draw.ellipse((piece_x - 10, piece_y - 10, piece_x + 10, piece_y + 10), fill=(255, 0, 0))
-    draw.ellipse((board_x - 10, board_y - 10, board_x + 10, board_y + 10), fill=(0, 0, 255))
-    del draw
-    im.save(os.path.join(os.getcwd(), screenshot_backup_dir,
-                         '#' + str(ts) + '.png'))
+    
+@mock.patch('httpie.input.AuthCredentials._getpass',
+            new=lambda self, prompt: 'password')
+def test_password_prompt(httpbin):
+    r = http('--auth', 'user',
+             'GET', httpbin.url + '/basic-auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
+    
+        def test_binary_stdin(self, httpbin):
+        with open(BIN_FILE_PATH, 'rb') as stdin:
+            env = MockEnvironment(
+                stdin=stdin,
+                stdin_isatty=False,
+                stdout_isatty=False
+            )
+            r = http('--print=B', 'POST', httpbin.url + '/post', env=env)
+            assert r == BIN_FILE_CONTENT
     
     
-def jump(distance, delta_piece_y):
-    '''
-    跳跃一定的距离
-    '''
-    # 计算程序长度与截图测得的距离的比例
-    scale = 0.945 * 2 / head_diameter
-    actual_distance = distance * scale * (math.sqrt(6) / 2)
-    press_time = (-945 + math.sqrt(945 ** 2 + 4 * 105 *
-                                   36 * actual_distance)) / (2 * 105) * 1000
-    press_time *= press_coefficient
-    press_time = max(press_time, 200)  # 设置 200ms 是最小的按压时间
-    press_time = int(press_time)
+def test_default_options(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http(httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['form'] == {'foo': 'bar'}
+    
+        def test_verbose_json(self, httpbin):
+        r = http('--verbose',
+                 'POST', httpbin.url + '/post', 'foo=bar', 'baz=bar')
+        assert HTTP_OK in r
+        assert ''baz': 'bar'' in r
+    
+        def construct_yaml_seq(self, node):
+        data = AnsibleSequence()
+        yield data
+        data.extend(self.construct_sequence(node))
+        data.ansible_pos = self._node_position_info(node)
+    
+        def test_max_delay(self):
+        strategy = _exponential_backoff(retries=7, delay=1, backoff=2, max_delay=60)
+        result = list(strategy())
+        self.assertEquals(result, [1, 2, 4, 8, 16, 32, 60])
+    
+    # Make coding more python3-ish
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
+    
+        def GoToListTest( command, response ):
+      # Note: the detail of these called are tested by
+      # GoToResponse_QuickFix_test, so here we just check that the right call is
+      # made
+      with patch( 'ycm.vimsupport.SetQuickFixList' ) as set_qf_list:
+        with patch( 'ycm.vimsupport.OpenQuickFixList' ) as open_qf_list:
+          request = CommandRequest( [ command ] )
+          request._response = response
+          request.RunPostCommandActionsIfNeeded( 'tab' )
+          ok_( set_qf_list.called )
+          ok_( open_qf_list.called )
+    
+    
+# Emulates Vim buffer
+# Used to store buffer related information like diagnostics, latest parse
+# request. Stores buffer change tick at the parse request moment, allowing
+# to effectively determine whether reparse is needed for the buffer.
+class Buffer( object ):
