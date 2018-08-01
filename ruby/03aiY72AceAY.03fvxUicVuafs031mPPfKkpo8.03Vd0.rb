@@ -1,80 +1,98 @@
 
         
-              assert_equal 3, ratings.count
-    end
-    
-      has_many :replies, dependent: :destroy, foreign_key: 'parent_id', autosave: true
-  has_many :approved_replies, -> { approved }, class_name: 'Reply', foreign_key: 'parent_id', counter_cache: 'replies_count'
-    
-        # Proc arg
-    periodically -> { ping }, every: 2
-    
-      class StreamTest < ActionCable::TestCase
-    test 'streaming start and stop' do
-      run_in_eventmachine do
-        connection = TestConnection.new
-        pubsub = Minitest::Mock.new connection.pubsub
-    
-    html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
-readme_doctree = REXML::Document.new(html_readme)
-links = REXML::XPath.match(readme_doctree, '//a')
-    
-      get(/.+/) do
-    send_sinatra_file(request.path) {404}
+        class Bintray
+  def self.package(formula_name)
+    formula_name.to_s.tr('+', 'x')
   end
     
-    def config_tag(config, key, tag=nil, classname=nil)
-  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
-  tag       ||= 'div'
-  classname ||= key.sub(/_/, '-').sub(/\./, '-')
-  output      = '<#{tag} class='#{classname}''
-    
-      class ImageTag < Liquid::Tag
-    @img = nil
-    
-      class VideoTag < Liquid::Tag
-    @video = nil
-    @poster = ''
-    @height = ''
-    @width = ''
-    
-        def type_from_file_command
-      @type_from_file_command ||=
-        FileCommandContentTypeDetector.new(@filepath).detect
+        keys.each do |key|
+      value = env[key]
+      s = '#{key}: #{value}'
+      case key
+      when 'CC', 'CXX', 'LD'
+        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
+      end
+      f.puts s
     end
   end
 end
 
     
-        # True if the dimensions represent a vertical rectangle
-    def vertical?
-      height > width
+            if Pathname::BOTTLE_EXTNAME_RX === file.to_s
+          version = bottle_resolve_version(file) rescue file.version
+        else
+          version = file.version
+        end
+        next unless version
+        next unless (name = file.basename.to_s[/(.*)-(?:#{Regexp.escape(version)})/, 1])
+    
+      def python(_options = {}, &block)
+    opoo 'Formula#python is deprecated and will go away shortly.'
+    block.call if block_given?
+    PythonRequirement.new
+  end
+  alias_method :python2, :python
+  alias_method :python3, :python
+end
+
+    
+    puts 'Deduping #{links.size} links...'
+    
+    # puts '\nDone.'
+
+    
+    class Devise::OmniauthCallbacksController < DeviseController
+  prepend_before_action { request.env['devise.skip_timeout'] = true }
+    
+        # Check if a reset_password_token is provided in the request
+    def assert_reset_token_passed
+      if params[:reset_password_token].blank?
+        set_flash_message(:alert, :no_token)
+        redirect_to new_session_path(resource_name)
+      end
     end
     
+            routes.each do |module_name, actions|
+          [:path, :url].each do |path_or_url|
+            actions.each do |action|
+              action = action ? '#{action}_' : ''
+              method = :'#{action}#{module_name}_#{path_or_url}'
     
-    {  # Returns hash with styles missing from recent run of rake paperclip:refresh:missing_styles
-  #   {
-  #     :User => {:avatar => [:big]},
-  #     :Book => {
-  #       :cover => [:croppable]},
-  #     }
-  #   }
-  def self.missing_attachments_styles
-    current_styles = current_attachments_styles
-    registered_styles = get_registered_attachments_styles
+        def log_file_info(s)
+      puts '    #{magenta s}'
+    end
     
-        module ClassMethods
-      # This method is a shortcut to validator classes that is in
-      # 'Attachment...Validator' format. It is almost the same thing as the
-      # +validates+ method that shipped with Rails, but this is customized to
-      # be using with attachment validators. This is helpful when you're using
-      # multiple attachment validators on a single attachment.
-      #
-      # Example of using the validator:
-      #
-      #   validates_attachment :avatar, :presence => true,
-      #      :content_type => { :content_type => 'image/jpg' },
-      #      :size => { :in => 0..10.kilobytes }
-      #
-      def validates_attachment(*attributes)
-        options = attributes.extract_options!.dup
+      def test_font_helper_without_suffix
+    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
+  end
+    
+      path = 'assets/stylesheets'
+  css_path = args.with_defaults(css_path: 'tmp')[:css_path]
+  puts Term::ANSIColor.bold 'Compiling SCSS in #{path}'
+  Dir.mkdir(css_path) unless File.directory?(css_path)
+  %w(_bootstrap bootstrap/_theme).each do |file|
+    save_path = '#{css_path}/#{file.sub(/(^|\/)?_+/, '\1').sub('/', '-')}.css'
+    puts Term::ANSIColor.cyan('  #{save_path}') + '...'
+    engine    = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
+    css       = engine.render
+    File.open(save_path, 'w') { |f| f.write css }
+  end
+end
+    
+            def yellow
+          @color = :yellow
+        end
+      end
+    
+            on roles(target_roles) do
+          unless test '[ -f #{file.to_s.shellescape} ]'
+            info 'Uploading #{prerequisite_file} to #{file}'
+            upload! File.open(prerequisite_file), file
+          end
+        end
+      end
+    end
+    
+      desc 'Finish the deployment, clean up server(s).'
+  task :finishing do
+  end
