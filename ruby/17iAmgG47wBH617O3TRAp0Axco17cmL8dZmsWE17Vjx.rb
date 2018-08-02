@@ -1,116 +1,99 @@
 
         
-            def test_simple_redirect
-      get :simple_redirect
-      assert_response :redirect
-      assert_equal 'http://test.host/module_test/module_redirect/hello_world', redirect_to_url
-    end
+          def set_table_sort(sort_options)
+    valid_sorts = sort_options[:sorts] or raise ArgumentError.new('You must specify :sorts as an array of valid sort attributes.')
+    default = sort_options[:default] || { valid_sorts.first.to_sym => :desc }
     
-        assert_equal 0, firm.clients_of_firm.size
-    assert_equal 0, firm.clients_of_firm.reload.size
-    assert_equal [], Client.destroyed_client_ids[firm.id]
-    
-      after_initialize :set_email_address
-    
-        def topic(data)
-      @last_action = [ :topic, data ]
-    end
-    
-      test 'periodic timers definition' do
-    timers = ChatChannel.periodic_timers
-    
-      setup do
-    @user = User.new 'lifo'
-    @connection = TestConnection.new(@user)
+      def failure
+    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
+    redirect_to after_omniauth_failure_path_for(resource_name)
   end
     
-            assert pubsub.verify
-      end
-    end
+      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
     
-        def connect
-      reject_unauthorized_connection
-    end
+            # Unregisters a SIGINT handler.
+        def unregister(sig_callback)
+          @@mutex.synchronize do
+            registered.delete(sig_callback)
     
-      test 'rejecting a connection causes a 404' do
-    run_in_eventmachine do
-      class CallMeMaybe
-        def call(*)
-          raise 'Do not call me!'
-        end
-      end
-    
-          open_connection(server)
-      close_connection
-      wait_for_async
-    
-      def external_commands
-    paths.reduce([]) do |cmds, path|
-      Dir['#{path}/brew-*'].each do |file|
-        next unless File.executable?(file)
-        cmd = File.basename(file, '.rb')[5..-1]
-        cmds << cmd unless cmd.include?('.')
-      end
-      cmds
-    end.sort
+      it 'uses 'main' as self' do
+    ruby_exe('puts self', escape: false).chomp.should == 'main'
   end
     
-        options[:attribution] = <<-HTML
-      &copy; Django Software Foundation and individual contributors<br>
-      Licensed under the BSD License.
-    HTML
+      def test_hidden_key
+    bug6899 = '[ruby-core:47253]'
+    foo = 'foor'
+    bar = 'bar'
+    assert_nothing_raised(NotImplementedError, bug6899) do
+      2000.times {eval %[(foo..bar) ? 1 : 2]}
+    end
+    foo = bar
+  end
     
-          unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
+      describe 'RDATA()' do
+    it 'returns the struct data' do
+      a = @s.wrap_struct(1024)
+      @s.get_struct_rdata(a).should == 1024
+    end
+    
+      it 'keeps spaces in the value' do
+    ENV['RUBYLIB'] = @pre + ' rubylib/incl '
+    out = ruby_exe('puts $LOAD_PATH')
+    out.should include(' rubylib/incl ')
+  end
+end
+
+    
+        File.open path, 'wb', permissions do |io|
+      if passphrase and cipher
+        io.write pemmable.to_pem cipher, passphrase
+      else
+        io.write pemmable.to_pem
       end
     end
     
-            css('.note h3', '.warning h3').each do |node|
-          node.before('<p><strong>#{node.inner_html}</strong></p>').remove
+        spec = util_spec 'some_gem' do |s|
+      s.signing_key = SIGNING_KEY
+      s.cert_chain = [CERT_FILE]
+    end
+    
+      def test_doc_rdoc
+    @cmd.handle_options %w[--doc=rdoc]
+    
+    # added in 1.0.2
+have_func('EC_curve_nist2nid')
+have_func('X509_REVOKED_dup')
+have_func('X509_STORE_CTX_get0_store')
+have_func('SSL_CTX_set_alpn_select_cb')
+OpenSSL.check_func_or_macro('SSL_CTX_set1_curves_list', 'openssl/ssl.h')
+OpenSSL.check_func_or_macro('SSL_CTX_set_ecdh_auto', 'openssl/ssl.h')
+OpenSSL.check_func_or_macro('SSL_get_server_tmp_key', 'openssl/ssl.h')
+have_func('SSL_is_server')
+    
+            def stock_location
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:id])
         end
     
-              # Parse the options
-          argv = parse_options(opts)
-          return if !argv
-          if argv.empty? || argv.length > 2
-            raise Vagrant::Errors::CLIInvalidUsage,
-              help: opts.help.chomp
-          end
+            def stock_movement_params
+          params.require(:stock_movement).permit(permitted_stock_movement_attributes)
+        end
+      end
+    end
+  end
+end
+
     
-    # grab name/url pairings from README.md
-readme = File.open('README.md', 'r')
-contents = readme.read
-matches = contents.scan(/\* (.*) (http.*)/)
-# All blogs that do not respond
-unavailable = []
-temp_ignores = [
-  'AdRoll',
-  'Buzzfeed',
-  'Code School',
-  'Fynd',
-  'Just Eat',
-  'Lookout',
-  'OmniTI',
-  'Paperless Post',
-  'Pluralsight',
-  'Prolific Interactive',
-  'Quora',
-  'Robert Elder Software',
-  'Simple',
-  'SourceClear',
-  'TaskRabbit',
-  'theScore',
-  'Trivago',
-  'Xmartlabs',
-  'WyeWorks',
-  'Zapier',
-  'Zoosk',
-  'Zynga',
-  'Dave Beazley',
-  'Edan Kwan',
-  'Kai Hendry',
-  'LiveOverflow',
-  'Rudolf Olah'
-]
+        module ClassMethods
+      def attachment_definitions
+        Paperclip::AttachmentRegistry.definitions_for(self)
+      end
+    end
+  end
+end
+
+    
+            def expected_attachment
+          'Expected #{@attachment_name}:\n'
+        end
