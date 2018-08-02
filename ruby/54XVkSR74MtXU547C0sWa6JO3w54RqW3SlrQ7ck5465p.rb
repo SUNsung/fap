@@ -1,104 +1,105 @@
 
         
-            # Gets the last git commit information formatted into a String by the provided
-    # pretty format String. See the git-log documentation for valid format placeholders
-    def self.last_git_commit_formatted_with(pretty_format, date_format = nil)
-      command = ['git log -1']
-      command << '--pretty=\'#{pretty_format}\''
-      command << '--date=\'#{date_format}\'' if date_format
-      Actions.sh(command.compact.join(' '), log: false).chomp
-    rescue
-      nil
+          url = File.dirname(url)
+  url == FORWARD_SLASH ? url : '#{url}/'
+end
+    
+        # Fetch the Documents in this collection.
+    # Defaults to an empty array if no documents have been read in.
+    #
+    # Returns an array of Jekyll::Document objects.
+    def docs
+      @docs ||= []
     end
     
-          it 'sets the regeneration marker to expire' do
-        allow(RegenerationWorker).to receive(:perform_async)
-        get :show
-        expect(Redis.current.ttl('account:#{user.account_id}:regeneration')).to be >= 0
+            # Private: Watch for file changes and rebuild the site.
+        #
+        # site - A Jekyll::Site instance
+        # options - A Hash of options passed to the command
+        #
+        # Returns nothing.
+        def watch(site, options)
+          # Warn Windows users that they might need to upgrade.
+          if Utils::Platforms.bash_on_windows?
+            Jekyll.logger.warn '',
+                               'Auto-regeneration may not work on some Windows versions.'
+            Jekyll.logger.warn '',
+                               'Please see: https://github.com/Microsoft/BashOnWindows/issues/216'
+            Jekyll.logger.warn '',
+                               'If it does not work, please upgrade Bash on Windows or '\
+                               'run Jekyll with --no-watch.'
+          end
+    
+            def preserve_source_location?(path, options)
+          !options['force'] && !Dir['#{path}/**/*'].empty?
+        end
+    
+              new_theme_name = args.join('_')
+          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
+    
+          def key?(key)
+        (@obj.collections.key?(key) && key != 'posts') || super
       end
     
-      def scope
-    root_url
-  end
+          attr_accessor :page, :layout, :content, :paginator
+      attr_accessor :highlighter_prefix, :highlighter_suffix
     
-      def contents; end
+          #
+      # Require a gem or gems. If it's not present, show a very nice error
+      # message that explains everything and is much more helpful than the
+      # normal LoadError.
+      #
+      # names - a string gem name or array of gem names
+      #
+      def require_with_graceful_fail(names)
+        Array(names).each do |name|
+          begin
+            Jekyll.logger.debug 'Requiring:', name.to_s
+            require name
+          rescue LoadError => e
+            Jekyll.logger.error 'Dependency Error:', <<~MSG
+              Yikes! It looks like you don't have #{name} or one of its dependencies installed.
+              In order to use Jekyll as currently configured, you'll need to install this gem.
     
-        includes, ignores = argv_includes_ignores(ARGV)
-    
-        def parse_string_spec(spec, tags)
-      if (tag = tags.first) && LANGUAGE_MODULES.include?(tag)
-        odisabled ''depends_on ... => #{tag.inspect}''
-      end
-    
-      def display_s
-    name
-  end
-    
-        # Paths
-    def gem_path
-      @gem_path ||= File.expand_path '..', File.dirname(__FILE__)
-    end
-    
-        it 'denies requests with duplicate session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
-      expect(last_response).not_to be_ok
-    end
-    
-      # These two settings work together to allow you to limit a spec run
-  # to individual examples or groups you care about by tagging them with
-  # `:focus` metadata. When nothing is tagged with `:focus`, all examples
-  # get run.
-  config.filter_run :focus
-  config.run_all_when_everything_filtered = true
-    
-        expect_any_instance_of(detector).to receive(:call).with(
-      hash_including('foo.bar' => 42)
-    ).and_call_original
-    
-      class IncludeArrayTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedFragment}+)/
-    def initialize(tag_name, markup, tokens)
-      if markup =~ Syntax
-        @array_name = $1
+    def check_link(uri)
+  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
+    if (400..422).include?(status)
+      if status != 403 && !uri.exclude?('udemy.com')
+        raise 'Request had status #{status}'
       else
-        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+        putc('S')
       end
+    end
+  end
+end
     
-        # Returns the width and height in a format suitable to be passed to Geometry.parse
-    def to_s
-      s = ''
-      s << width.to_i.to_s if width > 0
-      s << 'x#{height.to_i}' if height > 0
-      s << modifier.to_s
-      s
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
     end
     
-            def responds?
-          methods = @subject.instance_methods.map(&:to_s)
-          methods.include?('#{@attachment_name}') &&
-            methods.include?('#{@attachment_name}=') &&
-            methods.include?('#{@attachment_name}?')
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
+            end
+          else
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+          end
         end
-    
-            required = directories.map do |directory|
-          pathname = File.expand_path(Rails.root.join(directory, filename))
-          file_exists = File.exist?(pathname)
-          require pathname if file_exists
-          file_exists
-        end
-    
-      class Railtie < Rails::Railtie
-    initializer 'paperclip.insert_into_active_record' do |app|
-      ActiveSupport.on_load :active_record do
-        Paperclip::Railtie.insert
       end
-    
-        def self.included(base)
-      ActiveRecord::ConnectionAdapters::Table.send :include, TableDefinition
-      ActiveRecord::ConnectionAdapters::TableDefinition.send :include, TableDefinition
-      ActiveRecord::ConnectionAdapters::AbstractAdapter.send :include, Statements
-      ActiveRecord::Migration::CommandRecorder.send :include, CommandRecorder
+      rtn
     end
-    
-            validate_whitelist(record, attribute, value)
-        validate_blacklist(record, attribute, value)
+  end
