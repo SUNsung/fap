@@ -1,52 +1,57 @@
 
         
-            brew cask install mactex
-    EOS
-  when 'pip' then <<-EOS.undent
-    Homebrew provides pip via: `brew install python`. However you will then
-    have two Pythons installed on your Mac, so alternatively you can install
-    pip via the instructions at:
+            # The entry filter for this collection.
+    # Creates an instance of Jekyll::EntryFilter.
+    #
+    # Returns the instance of Jekyll::EntryFilter for this collection.
+    def entry_filter
+      @entry_filter ||= Jekyll::EntryFilter.new(site, relative_directory)
+    end
     
-      def self.canonical_name(name)
-    Formulary.canonical_name(name)
+          # Keep a list of subclasses of Jekyll::Command every time it's inherited
+      # Called automatically.
+      #
+      # base - the subclass
+      #
+      # Returns nothing
+      def inherited(base)
+        subclasses << base
+        super(base)
+      end
+    
+            def deprecated_relative_permalinks(site)
+          if site.config['relative_permalinks']
+            Jekyll::Deprecator.deprecation_message 'Your site still uses relative permalinks,' \
+                                                   ' which was removed in Jekyll v3.0.0.'
+            true
+          end
+        end
+    
+        if registration
+      u2f.authenticate!(challenges, response, Base64.decode64(registration.public_key), registration.counter)
+      registration.update(counter: response.counter)
+      true
+    end
+  rescue JSON::ParserError, NoMethodError, ArgumentError, U2F::Error
+    false
   end
-    
-      no_protocol_file_contents = %r{https?:\\?/\\?/}
-  details[:file] = details[:file].gsub(no_protocol_file_contents, '/')
-  secure_details[:file] = secure_details[:file].gsub(no_protocol_file_contents, '/')
-    
-          def all_gem_names
-        core_gem_names + plugin_gem_names
-      end
-    
-          def stage_definitions
-        stage_config_path.join('*.rb')
-      end
-    
-    class Rack::Builder
-  include Sinatra::Delegator
 end
 
     
-          def call(env)
-        request  = Request.new(env)
-        get_was  = handle(request.GET)
-        post_was = handle(request.POST) rescue nil
-        app.call env
-      ensure
-        request.GET.replace  get_was  if get_was
-        request.POST.replace post_was if post_was
-      end
+          protected
     
-      it 'accepts requests with the same Accept-Language header' do
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
-    expect(session).not_to be_empty
-  end
+              # Repackage the box
+          output_name = @env.vagrantfile.config.package.name || 'package.box'
+          output_path = Pathname.new(File.expand_path(output_name, FileUtils.pwd))
+          box.repackage(output_path)
     
-      it 'should not override the header if already set X-Content-Type-Options' do
-    mock_app with_headers('X-Content-Type-Options' => 'sniff')
-    expect(get('/', {}, 'wants' => 'text/html').headers['X-Content-Type-Options']).to eq('sniff')
-  end
-end
+            def signal_end_of_output
+          output_pipe.puts(END_OF_OUTPUT_SIGNAL)
+          STDOUT.flush
+        end
+    
+            def initialize(argv)
+          @name = argv.shift_argument
+          @only_errors = argv.flag?('only-errors')
+          super
+        end
