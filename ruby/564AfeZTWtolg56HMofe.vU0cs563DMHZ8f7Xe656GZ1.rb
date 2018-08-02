@@ -1,153 +1,77 @@
 
         
-            assert_response 307
-    assert_equal referer, redirect_to_url
-  end
+          # Finds the projects '@user' contributed to, limited to either public projects
+  # or projects visible to the given user.
+  #
+  # current_user - When given the list of the projects is limited to those only
+  #                visible by this user.
+  #
+  # Returns an ActiveRecord::Relation.
+  def execute(current_user = nil)
+    segments = all_projects(current_user)
     
-            def test_url_sub_key_for_sqlite3
-          spec = resolve :production, 'production' => { 'url' => 'sqlite3:foo?encoding=utf8' }
-          assert_equal({
-            'adapter'  => 'sqlite3',
-            'database' => 'foo',
-            'encoding' => 'utf8',
-            'name'     => 'production' }, spec)
-        end
+        uninstall quit: 'bundle.id.goes.here'
     
-            def encoded(value)
-          unless default_value?(value)
-            coder.dump(value)
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
           end
         end
-    end
+    
+            def run
+          print_version
+          signal_end_of_output
+          listen
+        end
+    
+    desc 'copy dot files for deployment'
+task :copydot, :source, :dest do |t, args|
+  FileList['#{args.source}/**/.*'].exclude('**/.', '**/..', '**/.DS_Store', '**/._*').each do |file|
+    cp_r file, file.gsub(/#{args.source}/, '#{args.dest}') unless File.directory?(file)
   end
 end
-
     
-    class UniqueReply < Reply
-  belongs_to :topic, foreign_key: 'parent_id', counter_cache: true
-  validates_uniqueness_of :content, scope: 'parent_id'
-end
-    
-        @connection.stub(:subscriptions, subscriptions) do
-      @channel = SecretChannel.new @connection, '{id: 1}', id: 1
-      @channel.subscribe_to_channel
-    
-        def send_async(method, *args)
-      send method, *args
-    end
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
   end
     
-          assert_not connection.connected
-      assert_equal [], @server.connections
+        # Outputs the post.date as formatted html, with hooks for CSS styling.
+    #
+    #  +date+ is the date object to format as HTML.
+    #
+    # Returns string
+    def date_to_html_string(date)
+      result = '<span class='month'>' + date.strftime('%b').upcase + '</span> '
+      result << date.strftime('<span class='day'>%d</span> ')
+      result << date.strftime('<span class='year'>%Y</span> ')
+      result
     end
-  end
     
-          @connection.process
-      @connection.send :handle_open
-    end
-    
-          assert_called(channel, :unsubscribe_from_channel) do
-        @subscriptions.execute_command 'command' => 'unsubscribe', 'identifier' => @chat_identifier
-      end
-    
-    require 'test_helper'
-require 'stubs/test_server'
-require 'active_support/core_ext/hash/indifferent_access'
-    
-      def create_gist(files, description)
-    url = 'https://api.github.com/gists'
-    data = { 'public' => true, 'files' => files, 'description' => description }
-    scopes = GitHub::CREATE_GIST_SCOPES
-    GitHub.open_api(url, data: data, scopes: scopes)['html_url']
-  end
-    
-        uses = formulae.select do |f|
-      used_formulae.all? do |ff|
-        begin
-          deps = f.runtime_dependencies if only_installed_arg
-          deps ||= if recursive
-            recursive_includes(Dependency, f, includes, ignores)
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
+            end
           else
-            reject_ignores(f.deps, ignores, includes)
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
           end
-    
-    class MercurialRequirement < Requirement
-  fatal true
-  satisfy do
-    odisabled('MercurialRequirement', ''depends_on \'mercurial\''')
-  end
-end
-    
-      def_delegators :@logger, :log, :log_status, :log_processing, :log_transform, :log_file_info, :log_processed, :log_http_get_file, :log_http_get_files, :silence_log
-    
-      def setup
-    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
-    success = Dir.chdir DUMMY_PATH do
-      silence_stdout_if !ENV['VERBOSE'] do
-        system 'node', 'manifest.js', tmp_dir
+        end
       end
-    end
-    assert success, 'Node.js Mincer compilation failed'
-    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
-    css_name = manifest['assets']['application.css']
-    @css = File.read('#{tmp_dir}/#{css_name}')
-  end
-end
-
-    
-    desc 'Dumps output to a CSS file for testing'
-task :debug do
-  require 'sass'
-  path = Bootstrap.stylesheets_path
-  %w(bootstrap).each do |file|
-    engine = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
-    File.open('./#{file}.css', 'w') { |f| f.write(engine.render) }
-  end
-end
-    
-        def self.clear
-      instance.clear
-    end
-    
-        def blank_name?
-      @filepath.nil? || @filepath.empty?
-    end
-    
-    module Paperclip
-  # Provides helper methods that can be used in migrations.
-  module Schema
-    COLUMNS = {:file_name    => :string,
-               :content_type => :string,
-               :file_size    => :integer,
-               :updated_at   => :datetime}
-    
-        ::Paperclip::REQUIRED_VALIDATORS = [AttachmentFileNameValidator, AttachmentContentTypeValidator, AttachmentFileTypeIgnoranceValidator]
-    
-        module HelperMethods
-      # Places ActiveModel validations on the content type of the file
-      # assigned. The possible options are:
-      # * +content_type+: Allowed content types.  Can be a single content type
-      #   or an array.  Each type can be a String or a Regexp. It should be
-      #   noted that Internet Explorer uploads files with content_types that you
-      #   may not expect. For example, JPEG images are given image/pjpeg and
-      #   PNGs are image/x-png, so keep that in mind when determining how you
-      #   match.  Allows all by default.
-      # * +not+: Forbidden content types.
-      # * +message+: The message to display when the uploaded file has an invalid
-      #   content type.
-      # * +if+: A lambda or name of an instance method. Validation will only
-      #   be run is this lambda or method returns true.
-      # * +unless+: Same as +if+ but validates if lambda or method returns false.
-      # NOTE: If you do not specify an [attachment]_content_type field on your
-      # model, content_type validation will work _ONLY upon assignment_ and
-      # re-validation after the instance has been reloaded will always succeed.
-      # You'll still need to have a virtual attribute (created by +attr_accessor+)
-      # name +[attachment]_content_type+ to be able to use this validator.
-      def validates_attachment_content_type(*attr_names)
-        options = _merge_attributes(attr_names)
-        validates_with AttachmentContentTypeValidator, options.dup
-        validate_before_processing AttachmentContentTypeValidator, options.dup
-      end
+      rtn
     end
   end
-end
