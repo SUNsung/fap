@@ -1,108 +1,75 @@
 
         
-                .. versionadded:: 0.11
-        '''
-        rv = {}
-        for k, v in iteritems(self):
-            if not k.startswith(namespace):
-                continue
-            if trim_namespace:
-                key = k[len(namespace):]
-            else:
-                key = k
-            if lowercase:
-                key = key.lower()
-            rv[key] = v
-        return rv
+            def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer)
+        ]
     
-    signals_available = False
-try:
-    from blinker import Namespace
-    signals_available = True
-except ImportError:
-    class Namespace(object):
-        def signal(self, name, doc=None):
-            return _FakeSignal(name, doc)
+        def _escalate_call(self):
+        self.call.state = CallState.READY
+        call = self.call
+        self.call = None
+        self.call_center.notify_call_escalated(call)
     
-        #: The canonical way to decorate class-based views is to decorate the
-    #: return value of as_view().  However since this moves parts of the
-    #: logic from the class declaration to the place where it's hooked
-    #: into the routing system.
-    #:
-    #: You can place one or more decorators in this list and whenever the
-    #: view function is created the result is automatically decorated.
-    #:
-    #: .. versionadded:: 0.8
-    decorators = ()
+        def categorize(self, transaction):
+        if transaction.seller in self.seller_category_map:
+            return self.seller_category_map[transaction.seller]
+        if transaction.seller in self.seller_category_overrides_map:
+            seller_category_map[transaction.seller] = \
+                self.manual_overrides[transaction.seller].peek_min()
+            return self.seller_category_map[transaction.seller]
+        return None
     
-    import numpy as np
-import keras
-from keras.datasets import reuters
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation
-from keras.preprocessing.text import Tokenizer
+            self.args = args
+        self.http_port = 80
+        self.https_port = 443
+        self._configurator = self._all_names = self._test_names = None
     
-            x = np.random.random((1,) + shape)
+    	for video in tab.childNodes:
+		if re.search(contentid, video.attributes['link'].value):
+			url = video.attributes['flv'].value
+			break
     
-    See lstm_seq2seq.py for more details on the model architecture and how
-it is trained.
-'''
-from __future__ import print_function
+    def kuwo_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    if 'www.kuwo.cn/yinyue' in url:
+        rid=match1(url,'yinyue/(\d+)')
+        kuwo_download_by_rid(rid,output_dir, merge, info_only)
+    else:
+        kuwo_playlist_download(url,output_dir,merge,info_only)
     
-    At least 20 epochs are required before the generated text
-starts sounding coherent.
+    from html.parser import HTMLParser
     
-                    layer = convolutional_recurrent.ConvLSTM2D(**kwargs)
-                layer.build(inputs.shape)
-                assert len(layer.losses) == 3
-                assert layer.activity_regularizer
-                output = layer(K.variable(np.ones(inputs.shape)))
-                assert len(layer.losses) == 4
-                K.eval(output)
+    def showroom_download_by_room_id(room_id, output_dir = '.', merge = False, info_only = False, **kwargs):
+    '''Source: Android mobile'''
+    while True:
+        timestamp = str(int(time() * 1000))
+        api_endpoint = 'https://www.showroom-live.com/api/live/streaming_url?room_id={room_id}&_={timestamp}'.format(room_id = room_id, timestamp = timestamp)
+        html = get_content(api_endpoint)
+        html = json.loads(html)
+        #{'streaming_url_list': [{'url': 'rtmp://52.197.69.198:1935/liveedge', 'id': 1, 'label': 'original spec(low latency)', 'is_default': True, 'type': 'rtmp', 'stream_name': '7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed'}, {'url': 'http://52.197.69.198:1935/liveedge/7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed/playlist.m3u8', 'is_default': True, 'id': 2, 'type': 'hls', 'label': 'original spec'}, {'url': 'rtmp://52.197.69.198:1935/liveedge', 'id': 3, 'label': 'low spec(low latency)', 'is_default': False, 'type': 'rtmp', 'stream_name': '7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed_low'}, {'url': 'http://52.197.69.198:1935/liveedge/7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed_low/playlist.m3u8', 'is_default': False, 'id': 4, 'type': 'hls', 'label': 'low spec'}]}
+        if len(html) >= 1:
+            break
+        log.w('The live show is currently offline.')
+        sleep(1)
     
-    - RNNs are tricky. Choice of batch size is important,
-choice of loss and optimizer is critical, etc.
-Some configurations won't converge.
-    
-        def _send_switchover_response(self):
-        return 'send switchover response'
-    
-        @classmethod
-    def __get_test_directory(self):
-        '''
-        Get the temporary directory for the tests.
-        '''
-        self.test_dir = os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), 'test_command')
-    
-        def test_sales_manager_shall_not_respond_through_proxy_with_delay(cls):
-        cls.ntp.busy = 'Yes'
-        start_time = time()
-        cls.ntp.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-This Sales Manager will not talk to you whether he/she is busy or not\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
+            print('I see someone named {}!'.format(name))
 
     
-        def test_bear_eng_localization(self):
-        self.assertEqual(self.e.get('bear'), 'bear')
+        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+    rgb_frame = frame[:, :, ::-1]
     
-        def test_shall_toggle_from_am_to_fm(self):
-        self.radio.toggle_amfm()
-        state = self.radio.state.name
-        expected_state_name = 'FM'
-        self.assertEqual(state, expected_state_name)
+                for face_location in face_locations:
+                # Print the location of each face in this frame
+                top, right, bottom, left = face_location
+                print(' - A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
     
-    print('Counting to five...')
-for number in count_to_five():
-    print(number, end=' ')
+        # If no faces are found in the image, return an empty result.
+    if len(X_face_locations) == 0:
+        return []
     
-    '''
-@author: Gordeev Andrey <gordeev.and.and@gmail.com>
-    
-        '''Base state. This is to share functionality'''
+            face_encoding_a1 = api.face_encodings(img_a1)[0]
+        face_encoding_a2 = api.face_encodings(img_a2)[0]
+        face_encoding_a3 = api.face_encodings(img_a3)[0]
+        face_encoding_b1 = api.face_encodings(img_b1)[0]
