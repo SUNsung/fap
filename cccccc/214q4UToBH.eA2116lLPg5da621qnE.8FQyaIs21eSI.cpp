@@ -1,212 +1,151 @@
 
         
-        struct Options;
-struct FileMetaData;
+        #include 'ifaddrs_android.h'
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/utsname.h>
+#include <sys/ioctl.h>
+#include <netinet/in.h>
+#include <net/if.h>
+#include <unistd.h>
+#include <errno.h>
+#include <linux/netlink.h>
+#include <linux/rtnetlink.h>
     
-    void DBIter::SeekToFirst() {
-  direction_ = kForward;
-  ClearSavedValue();
-  iter_->SeekToFirst();
-  if (iter_->Valid()) {
-    FindNextUserEntry(false, &saved_key_ /* temporary storage */);
-  } else {
-    valid_ = false;
-  }
-}
+    		case AudioServer::SPEAKER_MODE_STEREO: {
+			AudioFrame *target = AudioServer::get_singleton()->thread_get_channel_mix_buffer(bus_index, 0);
+    }
     
-    typedef uint64_t SequenceNumber;
+    #define opus_fft(_st, _fin, _fout, arch) \
+   ((void)(arch), opus_fft_neon(_st, _fin, _fout))
     
-    TableCache::~TableCache() {
-  delete cache_;
-}
-    
-    
-    {  edit.SetComparatorName('foo');
-  edit.SetLogNumber(kBig + 100);
-  edit.SetNextFile(kBig + 200);
-  edit.SetLastSequence(kBig + 1000);
-  TestEncodeDecode(edit);
-}
+    #ifndef CELT_FIXED_GENERIC_MIPSR1_H
+#define CELT_FIXED_GENERIC_MIPSR1_H
     
     
-    {
-    {  virtual void Put(const Slice& key, const Slice& value) {
-    mem_->Add(sequence_, kTypeValue, key, value);
-    sequence_++;
-  }
-  virtual void Delete(const Slice& key) {
-    mem_->Add(sequence_, kTypeDeletion, key, Slice());
-    sequence_++;
-  }
+    {  // For fragments
+  kFirstType = 2,
+  kMiddleType = 3,
+  kLastType = 4
 };
-}  // namespace
+static const int kMaxRecordType = kLastType;
     
-    // Return a new filter policy that uses a bloom filter with approximately
-// the specified number of bits per key.  A good value for bits_per_key
-// is 10, which yields a filter with ~ 1% false positive rate.
-//
-// Callers must delete the result after any database that is using the
-// result has been closed.
-//
-// Note: if you are using a custom comparator that ignores some parts
-// of the keys being compared, you must not use NewBloomFilterPolicy()
-// and must provide your own FilterPolicy that also ignores the
-// corresponding parts of the keys.  For example, if the comparator
-// ignores trailing spaces, it would be incorrect to use a
-// FilterPolicy (like NewBloomFilterPolicy) that does not ignore
-// trailing spaces in keys.
-extern const FilterPolicy* NewBloomFilterPolicy(int bits_per_key);
-    
-    inline bool operator!=(const Slice& x, const Slice& y) {
-  return !(x == y);
-}
-    
-    
-    {
-    {class ConstBufferCursor : public detail::CursorBase<const Tensor> {
- public:
-  explicit ConstBufferCursor(const Module& module);
-  /* implicit */ ConstBufferCursor(const BufferCursor& cursor);
-};
-} // namespace nn
-} // namespace torch
+    #endif  // STORAGE_LEVELDB_DB_VERSION_EDIT_H_
 
     
-    #include <torch/nn/cursor.h>
-#include <torch/tensor.h>
     
-    #endif
-
-    
-    #include 'generic/utils.cpp'
-#include <TH/THGenerateHalfType.h>
-    
-    static PyObject * THPWrapper_pynew(PyTypeObject *type, PyObject *args, PyObject *kwargs)
-{
-  PyObject* self = type->tp_alloc(type, 0);
-  THPWrapper* wrapper = (THPWrapper*) self;
-  wrapper->data = NULL;
-  wrapper->destructor = NULL;
-  return self;
+    {  // These are no-ops, but we test they return success.
+  ASSERT_OK(writable_file->Sync());
+  ASSERT_OK(writable_file->Flush());
+  ASSERT_OK(writable_file->Close());
+  delete writable_file;
 }
     
-    namespace 
-{
-    // Glyph metrics:
-    // --------------
-    //
-    //                       xmin                     xmax
-    //                        |                         |
-    //                        |<-------- width -------->|
-    //                        |                         |
-    //              |         +-------------------------+----------------- ymax
-    //              |         |    ggggggggg   ggggg    |     ^        ^
-    //              |         |   g:::::::::ggg::::g    |     |        |
-    //              |         |  g:::::::::::::::::g    |     |        |
-    //              |         | g::::::ggggg::::::gg    |     |        |
-    //              |         | g:::::g     g:::::g     |     |        |
-    //    offsetX  -|-------->| g:::::g     g:::::g     |  offsetY     |
-    //              |         | g:::::g     g:::::g     |     |        |
-    //              |         | g::::::g    g:::::g     |     |        |
-    //              |         | g:::::::ggggg:::::g     |     |        |
-    //              |         |  g::::::::::::::::g     |     |      height
-    //              |         |   gg::::::::::::::g     |     |        |
-    //  baseline ---*---------|---- gggggggg::::::g-----*--------      |
-    //            / |         |             g:::::g     |              |
-    //     origin   |         | gggggg      g:::::g     |              |
-    //              |         | g:::::gg   gg:::::g     |              |
-    //              |         |  g::::::ggg:::::::g     |              |
-    //              |         |   gg:::::::::::::g      |              |
-    //              |         |     ggg::::::ggg        |              |
-    //              |         |         gggggg          |              v
-    //              |         +-------------------------+----------------- ymin
-    //              |                                   |
-    //              |------------- advanceX ----------->|
-    }
-    
-    // Implemented features:
-//  [X] Renderer: User texture binding. Use 'CIwTexture*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-    
-            // Start the Dear ImGui frame
-        ImGui_Marmalade_NewFrame();
-        ImGui::NewFrame();
+      // delete second key range
+  batch.Clear();
+  for (size_t i = 0; i < kNumKeys; i++) {
+    batch.Delete(Key2(i));
+  }
+  ASSERT_OK(db->Write(leveldb::WriteOptions(), &batch));
     
     
-    {    // Restore modified DX state
-    ctx->RSSetScissorRects(old.ScissorRectsCount, old.ScissorRects);
-    ctx->RSSetViewports(old.ViewportsCount, old.Viewports);
-    ctx->RSSetState(old.RS); if (old.RS) old.RS->Release();
-    ctx->OMSetBlendState(old.BlendState, old.BlendFactor, old.SampleMask); if (old.BlendState) old.BlendState->Release();
-    ctx->OMSetDepthStencilState(old.DepthStencilState, old.StencilRef); if (old.DepthStencilState) old.DepthStencilState->Release();
-    ctx->PSSetShaderResources(0, 1, &old.PSShaderResource); if (old.PSShaderResource) old.PSShaderResource->Release();
-    ctx->PSSetSamplers(0, 1, &old.PSSampler); if (old.PSSampler) old.PSSampler->Release();
-    ctx->PSSetShader(old.PS, old.PSInstances, old.PSInstancesCount); if (old.PS) old.PS->Release();
-    for (UINT i = 0; i < old.PSInstancesCount; i++) if (old.PSInstances[i]) old.PSInstances[i]->Release();
-    ctx->VSSetShader(old.VS, old.VSInstances, old.VSInstancesCount); if (old.VS) old.VS->Release();
-    ctx->VSSetConstantBuffers(0, 1, &old.VSConstantBuffer); if (old.VSConstantBuffer) old.VSConstantBuffer->Release();
-    for (UINT i = 0; i < old.VSInstancesCount; i++) if (old.VSInstances[i]) old.VSInstances[i]->Release();
-    ctx->IASetPrimitiveTopology(old.PrimitiveTopology);
-    ctx->IASetIndexBuffer(old.IndexBuffer, old.IndexBufferFormat, old.IndexBufferOffset); if (old.IndexBuffer) old.IndexBuffer->Release();
-    ctx->IASetVertexBuffers(0, 1, &old.VertexBuffer, &old.VertexBufferStride, &old.VertexBufferOffset); if (old.VertexBuffer) old.VertexBuffer->Release();
-    ctx->IASetInputLayout(old.InputLayout); if (old.InputLayout) old.InputLayout->Release();
+    {  delete iter;
+  delete db;
+  DestroyDB(dbpath, options);
 }
     
-        bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    void Footer::EncodeTo(std::string* dst) const {
+  const size_t original_size = dst->size();
+  metaindex_handle_.EncodeTo(dst);
+  index_handle_.EncodeTo(dst);
+  dst->resize(2 * BlockHandle::kMaxEncodedLength);  // Padding
+  PutFixed32(dst, static_cast<uint32_t>(kTableMagicNumber & 0xffffffffu));
+  PutFixed32(dst, static_cast<uint32_t>(kTableMagicNumber >> 32));
+  assert(dst->size() == original_size + kEncodedLength);
+  (void)original_size;  // Disable unused variable warning.
+}
     
-      if (!args[0]->IsString() || !args[1]->IsString()) {
-    return scope.Close(Boolean::New(false));
+    #include 'util/hash.h'
+#include 'util/testharness.h'
+    
+    // Helper class that locks a mutex on construction and unlocks the mutex when
+// the destructor of the MutexLock object is invoked.
+//
+// Typical usage:
+//
+//   void MyClass::MyMethod() {
+//     MutexLock l(&mu_);       // mu_ is an instance variable
+//     ... some complex code, possibly with multiple return paths ...
+//   }
+    
+      // Fragment the record if necessary and emit it.  Note that if slice
+  // is empty, we still want to iterate once to emit a single
+  // zero-length record
+  Status s;
+  bool begin = true;
+  do {
+    const int leftover = kBlockSize - block_offset_;
+    assert(leftover >= 0);
+    if (leftover < kHeaderSize) {
+      // Switch to a new block
+      if (leftover > 0) {
+        // Fill the trailer (literal below relies on kHeaderSize being 7)
+        assert(kHeaderSize == 7);
+        dest_->Append(Slice('\x00\x00\x00\x00\x00\x00', leftover));
+      }
+      block_offset_ = 0;
+    }
+    }
+    
+    std::vector<uint8_t> OutputImage::ToSRGB(int xmin, int ymin,
+                                         int xsize, int ysize) const {
+  std::vector<uint8_t> rgb(xsize * ysize * 3);
+  for (int c = 0; c < 3; ++c) {
+    components_[c].ToPixels(xmin, ymin, xsize, ysize, &rgb[c], 3);
   }
-    
-    JniCallback::~JniCallback() {
-  jboolean attached_thread = JNI_FALSE;
-  JNIEnv* env = getJniEnv(&attached_thread);
-  assert(env != nullptr);
-    }
-    
-      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
-    if (type >= HISTOGRAM_ENUM_MAX) {
-      return false;
-    }
-    
-    if (m_ignore_histograms.count(type) > 0) {
-        return false;
-    }
-    }
-    
-      jboolean attached_thread = JNI_FALSE;
-  JNIEnv* env = getJniEnv(&attached_thread);
-  assert(env != nullptr);
-    
-    struct ComparatorJniCallbackOptions {
-  // Use adaptive mutex, which spins in the user space before resorting
-  // to kernel. This could reduce context switch when the mutex is not
-  // heavily contended. However, if the mutex is hot, we could end up
-  // wasting spin time.
-  // Default: false
-  bool use_adaptive_mutex;
-    }
-    
-         using Logger::SetInfoLogLevel;
-     using Logger::GetInfoLogLevel;
-     // Write an entry to the log file with the specified format.
-     virtual void Logv(const char* format, va_list ap);
-     // Write an entry to the log file with the specified log level
-     // and format.  Any log with level under the internal log level
-     // of *this (see @SetInfoLogLevel and @GetInfoLogLevel) will not be
-     // printed.
-     virtual void Logv(const InfoLogLevel log_level,
-         const char* format, va_list ap);
-    
-      struct SyncPointPair {
-    std::string predecessor;
-    std::string successor;
-  };
-    
-      // If supported, renew the iterator to represent the latest state. The
-  // iterator will be invalidated after the call. Not supported if
-  // ReadOptions.snapshot is given when creating the iterator.
-  virtual Status Refresh() {
-    return Status::NotSupported('Refresh() is not supported');
+  for (size_t p = 0; p < rgb.size(); p += 3) {
+    ColorTransformYCbCrToRGB(&rgb[p]);
   }
+  return rgb;
+}
+    
+    // Do the sharpening to the v channel, but only in areas where it will help
+// channel should be 2 for v sharpening, or 1 for less effective u sharpening
+std::vector<std::vector<float>> PreProcessChannel(
+    int w, int h, int channel, float sigma, float amount, bool blur,
+    bool sharpen, const std::vector<std::vector<float>>& image) {
+  if (!blur && !sharpen) return image;
+    }
+    
+    
+    {}  // namespace guetzli
+    
+    #include <stddef.h>
+#include <stdint.h>
+    
+    const double* NewSrgb8ToLinearTable() {
+  double* table = new double[256];
+  int i = 0;
+  for (; i < 11; ++i) {
+    table[i] = i / 12.92;
+  }
+  for (; i < 256; ++i) {
+    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
+  }
+  return table;
+}
+    
+    #include 'guetzli/output_image.h'
+    
+    // Output callback function with associated data.
+struct JPEGOutput {
+  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
+  bool Write(const uint8_t* buf, size_t len) const {
+    return (len == 0) || (cb(data, buf, len) == len);
+  }
+ private:
+  JPEGOutputHook cb;
+  void* data;
+};
