@@ -1,138 +1,129 @@
 
         
-            BOOKS = %w(apache apc apcu array bc bzip2 calendar csprng classobj ctype curl
-      datetime dba dir dom ds eio errorfunc ev event exec exif fileinfo filesystem filter
-      ftp funchand gearman geoip gettext gmagick gmp hash ibase iconv iisfunc image
-      imagick imap info inotify intl json judy ldap libevent libxml lua mail mailparse
-      math mbstring mcrypt memcached misc mysqli network oauth openssl
-      outcontrol password pcntl pcre pdo pgsql phar posix proctitle pthreads quickhash regex runkit
-      reflection sca session sem session-pgsql shmop simplexml soap sockets solr sphinx spl
-      spl-types sqlite3 sqlsrv ssh2 stats stream strings sync taint tidy tokenizer uodbc url
-      v8js var varnish weakref xml xmlreader xmlrpc xmlwriter xsl yaf yar yaml zip zlib)
-    
-        version 'Guide' do
-      self.base_url = 'https://www.tensorflow.org/'
-      self.root_path = 'get_started/get_started'
-      self.initial_paths = %w(
-        programmers_guide/reading_data
-        tutorials/mandelbrot
-        performance/performance_guide
-        deploy/hadoop
-        extend/architecture)
-    
-        attr_accessor :name, :type, :path
-    
-        def subpath_from(url, options = nil)
-      self.class.parse(url).subpath_to(self, options)
-    end
-    
-            css('.toplang', '#quickview', '.top').remove
-    
-                  # An IO::WaitReadable means there may be more IO but this
-              # IO object is not ready to be read from yet. No problem,
-              # we read as much as we can, so we break.
-              breakable = true
-            elsif e.is_a?(Errno::EAGAIN)
-              # Otherwise, we just look for the EAGAIN error which should be
-              # all that IO::WaitReadable does in Ruby 1.9.
-              breakable = true
-            end
-    
-            # Success, exit status 0
-        0
+                # This unregisters a plugin so that its components will no longer
+        # be used. Note that this should only be used for testing purposes.
+        def unregister(plugin)
+          if @registered.include?(plugin)
+            @logger.info('Unregistered: #{plugin.name}')
+            @registered.delete(plugin)
+          end
+        end
       end
     end
   end
 end
 
     
-        def account
-      scoped_accounts.order(id: :asc).take
-    end
-    
-      def short_name
-    object.site_title
+        end
   end
-    
-    def usage
-  $stderr.puts '#{$0} [site list] [output-dir]'
-  exit(0)
 end
+
     
-    puts '* Closing socket'
+        # Validates that {#boundary} is {#valid_ip_or_range? a valid IP address or
+    # IP address range}. Due to this not being tested before it was moved here
+    # from Mdm, the default workspace does not validate. We always validate boundaries
+    # and a workspace may have a blank default boundary.
+    #
+    # @return [void]
+    def boundary_must_be_ip_range
+      unless boundary.blank?
+        begin
+          boundaries = Shellwords.split(boundary)
+        rescue ArgumentError
+          boundaries = []
+        end
     
-          private
+    classNames.each { |name|
+	filesIn << clsFile.new_with_sig('Ljava.lang.String;', '#{outputDir}/#{name}.class')
+}
     
-          def handle(hash)
-        was = hash.dup
-        hash.replace escape(hash)
-        was
-      end
+    parser = Parser.new(filename)
+parser.parse
+print parser.get_result
     
-      def transform_r(source, target)
-    Dir.entries(source).each do |entry|
-      next if [ '.', '..' ].include?(entry)
-      source_entry = File.join(source, entry)
-      target_entry = File.join(target, entry)
+    	def parse_line(line)
+		if line =~ /\w+ <[\.\w]+>:/
+			# End a previous block
+			unless block_size == 0
+				block_end
+			end
+			block_begin(line)
     
-      def as_boolean(string)
-    return true   if string == true   || string =~ (/(true|t|yes|y|1)$/i)
-    return false  if string == false  || string.blank? || string =~ (/(false|f|no|n|0)$/i)
-    raise ArgumentError.new('invalid value for Boolean: \'#{string}\'')
+      validate :enough_poll_answers
+  validates :question, presence: true
+    
+      def post(post, url='')
+    logger.debug 'event=post_to_service type=facebook sender_id=#{user_id} post=#{post.guid}'
+    response = post_to_facebook('https://graph.facebook.com/me/feed', create_post_params(post).to_param)
+    response = JSON.parse response.body
+    post.facebook_id = response['id']
+    post.save
   end
     
-        i0, s0 = index, []
-    r1 = _nt_rvalue
-    s0 << r1
-    if r1
-      r2 = _nt__
-      s0 << r2
-      if r2
-        r3 = _nt_in_operator
-        s0 << r3
-        if r3
-          r4 = _nt__
-          s0 << r4
-          if r4
-            r5 = _nt_rvalue
-            s0 << r5
-          end
+          def handle_params_error(error, error_description)
+        if params[:client_id] && params[:redirect_uri]
+          handle_params_error_when_client_id_and_redirect_uri_exists(error, error_description)
+        else
+          render_error I18n.t('api.openid_connect.error_page.could_not_authorize'), error_description
         end
       end
+    
+        if run? && ARGV.any?
+      require 'optparse'
+      OptionParser.new { |op|
+        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
+        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
+        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
+        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
+        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
+        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
+      }.parse!(ARGV.dup)
     end
-    if s0.last
-      r0 = instantiate_node(LogStash::Config::AST::InExpression,input, i0...index, s0)
-      r0.extend(InExpression0)
-    else
-      @index = i0
-      r0 = nil
+  end
+    
+        { # yes, this is ugly, feel free to change that
+      '/..' => '/', '/a/../b' => '/b', '/a/../b/' => '/b/', '/a/.' => '/a/',
+      '/%2e.' => '/', '/a/%2E%2e/b' => '/b', '/a%2f%2E%2e%2Fb/' => '/b/',
+      '//' => '/', '/%2fetc%2Fpasswd' => '/etc/passwd'
+    }.each do |a, b|
+      it('replaces #{a.inspect} with #{b.inspect}') { expect(get(a).body).to eq(b) }
     end
     
-        # Returns a String describing the file's content type
-    def detect
-      if blank_name?
-        SENSIBLE_DEFAULT
-      elsif empty_file?
-        EMPTY_TYPE
-      elsif calculated_type_matches.any?
-        calculated_type_matches.first
-      else
-        type_from_file_contents || SENSIBLE_DEFAULT
-      end.to_s
-    end
+        expect(get('/')).to be_ok
+  end
+end
+
     
-          class ValidateAttachmentContentTypeMatcher
-        def initialize attachment_name
-          @attachment_name = attachment_name
-          @allowed_types = []
-          @rejected_types = []
-        end
-    
-            return if (value.nil? && options[:allow_nil]) || (value.blank? && options[:allow_blank])
-    
-          def check_validity!
-        unless options.has_key?(:matches) || options.has_key?(:not)
-          raise ArgumentError, 'You must pass in either :matches or :not to the validator'
-        end
+          locations = Array.new
+      while (data.code.to_i == 301 || data.code.to_i == 302)
+        data = handle_gist_redirecting(data)
+        break if locations.include? data.header['Location']
+        locations << data.header['Location']
       end
+    
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
+    end
+    
+      class RenderPartialTag < Liquid::Tag
+    include OctopressFilters
+    def initialize(tag_name, markup, tokens)
+      @file = nil
+      @raw = false
+      if markup =~ /^(\S+)\s?(\w+)?/
+        @file = $1.strip
+        @raw = $2 == 'raw'
+      end
+      super
     end
