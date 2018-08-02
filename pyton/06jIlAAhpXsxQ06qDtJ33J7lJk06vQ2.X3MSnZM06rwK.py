@@ -1,245 +1,167 @@
 
         
-        options = helptext[helptext.index('  General Options:') + 19:]
-options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
-options = '# OPTIONS\n' + options + '\n'
+            for idx, (loader, srcobj, triple) in enumerate(attempts):
+        if isinstance(srcobj, Flask):
+            src_info = 'application '%s'' % srcobj.import_name
+        elif isinstance(srcobj, Blueprint):
+            src_info = 'blueprint '%s' (%s)' % (srcobj.name,
+                                                srcobj.import_name)
+        else:
+            src_info = repr(srcobj)
     
     
-def expect_warnings(ydl, warnings_re):
-    real_warning = ydl.report_warning
+class SecureCookieSession(CallbackDict, SessionMixin):
+    '''Base class for sessions based on signed cookies.
     
-        def test_keywords(self):
-        self.assertMatch(':ytsubs', ['youtube:subscriptions'])
-        self.assertMatch(':ytsubscriptions', ['youtube:subscriptions'])
-        self.assertMatch(':ythistory', ['youtube:history'])
-    
-    
-class TestSocks(unittest.TestCase):
-    _SKIP_SOCKS_TEST = True
-    
-        def _real_extract(self, url):
-        playlist_id = self._match_id(url)
-    
-            duration = parse_duration(self._search_regex(
-            r'<b>Duration:</b> (?:<q itemprop='duration'>)?(\d+:\d+)', webpage, 'duration', fatal=False))
-        view_count = int_or_none(self._html_search_regex(
-            r'<b>Views:</b> (\d+)', webpage, 'view count', fatal=False))
-    
-    from werkzeug.local import LocalProxy
-    
-        def get_cookie_secure(self, app):
-        '''Returns True if the cookie should be secure.  This currently
-        just returns the value of the ``SESSION_COOKIE_SECURE`` setting.
-        '''
-        return app.config['SESSION_COOKIE_SECURE']
-    
-            def __init__(self, name, doc=None):
-            self.name = name
-            self.__doc__ = doc
-        def _fail(self, *args, **kwargs):
-            raise RuntimeError('signalling support is unavailable '
-                               'because the blinker library is '
-                               'not installed.')
-        send = lambda *a, **kw: None
-        connect = disconnect = has_receivers_for = receivers_for = \
-            temporarily_connected_to = connected_to = _fail
-        del _fail
-    
-            if 'methods' not in d:
-            methods = set()
+            # If the request method is HEAD and we don't have a handler for it
+        # retry with GET.
+        if meth is None and request.method == 'HEAD':
+            meth = getattr(self, 'get', None)
     
     
-def test_explicit_instance_paths(modules_tmpdir):
-    with pytest.raises(ValueError) as excinfo:
-        flask.Flask(__name__, instance_path='instance')
-    assert 'must be absolute' in str(excinfo.value)
+def build():
+    cmd = [sys.executable, 'setup.py', 'sdist', 'bdist_wheel']
+    Popen(cmd).wait()
     
-        class CustomFlask(flask.Flask):
-        session_interface = FailingSessionInterface()
+    import flask
+from flask.sessions import SessionInterface
     
-        app.add_template_filter(my_reverse)
-    assert 'my_reverse' in app.jinja_env.filters.keys()
-    assert app.jinja_env.filters['my_reverse'] == my_reverse
-    assert app.jinja_env.filters['my_reverse']('abcd') == 'dcba'
+        h = history.history
+    assert_array_almost_equal(h['loss'], h['weighted_' + loss_full_name], decimal=decimal)
     
-    tf_proto_library_py(
-    name = 'data_pb2',
-    srcs = ['data.proto'],
-)
+        # a Model inside a Sequential
+    x = Input(shape=(1,))
+    y = Dense(2)(x)
+    inner_model = Model(x, y)
+    outer_model = Sequential()
+    outer_model.add(inner_model)
+    assert outer_model.trainable_weights == inner_model.trainable_weights
+    inner_model.trainable = False
+    assert outer_model.trainable_weights == []
+    inner_model.trainable = True
+    inner_model.layers[-1].trainable = False
+    assert outer_model.trainable_weights == []
     
-    py_library(
-    name = 'spec_builder',
-    srcs = ['spec_builder.py'],
-    deps = [
-        ':lexicon',
-        '//dragnn/protos:spec_pb2_py',
-        '//syntaxnet:parser_ops',
-        '//syntaxnet/util:check',
-        '@org_tensorflow//tensorflow:tensorflow_py',
-    ],
-)
+        z_mean, z_log_var = args
+    batch = K.shape(z_mean)[0]
+    dim = K.int_shape(z_mean)[1]
+    # by default, random_normal has mean=0 and std=1.0
+    epsilon = K.random_normal(shape=(batch, dim))
+    return z_mean + K.exp(0.5 * z_log_var) * epsilon
     
-      Args:
-    comp: ComponentBuilder object with respect to which the feature is to be
-        fetched
-    network_states: dictionary of NetworkState objects
-    feature_spec: FeatureSpec proto for the linked feature to be looked up
+        reconstruction_loss *= image_size * image_size
+    kl_loss = 1 + z_log_var - K.square(z_mean) - K.exp(z_log_var)
+    kl_loss = K.sum(kl_loss, axis=-1)
+    kl_loss *= -0.5
+    vae_loss = K.mean(reconstruction_loss + kl_loss)
+    vae.add_loss(vae_loss)
+    vae.compile(optimizer='rmsprop')
+    vae.summary()
+    plot_model(vae, to_file='vae_cnn.png', show_shapes=True)
     
-      def testCombineArcAndRootPotentials(self):
-    with self.test_session():
-      arcs = tf.constant([[[1, 2, 3],
-                           [2, 3, 4],
-                           [3, 4, 5]],
-                          [[3, 4, 5],
-                           [2, 3, 4],
-                           [1, 2, 3]]], tf.float32)  # pyformat: disable
-      roots = tf.constant([[6, 7, 8],
-                           [8, 7, 6]], tf.float32)  # pyformat: disable
+    print('Loading data...')
+(x_train, y_train), (x_test, y_test) = reuters.load_data(num_words=max_words,
+                                                         test_split=0.2)
+print(len(x_train), 'train sequences')
+print(len(x_test), 'test sequences')
     
-      Returns:
-    Dict mapping from shortened resource path to original resource path.
-  '''
-  for component_spec in master_spec.component:
-    for feature_spec in component_spec.fixed_feature:
-      feature_spec.ClearField('pretrained_embedding_matrix')
-      feature_spec.ClearField('vocab')
+        history = model.fit(x, ys, validation_split=0.05, batch_size=10,
+                        verbose=0, epochs=3)
+    ground_truth = -np.log(0.5)
+    assert(np.abs(history.history['loss'][-1] - ground_truth) < 0.06)
     
+                # check that output changes after states are reset
+            # (even though the model itself didn't change)
+            layer.reset_states()
+            out3 = model.predict(np.ones_like(inputs))
+            assert(out2.max() != out3.max())
     
-def main(args_list):
-    args = get_args(args_list)
-    if args.list:
-        print_list()
-    if args.host:
-        print_host(args.host)
+                    # Make it more robust by adding noise.
+                # The idea is that if during inference,
+                # the value of the pixel is not exactly one,
+                # we need to train the network to be robust and still
+                # consider it as a pixel belonging to a square.
+                if np.random.randint(0, 2):
+                    noise_f = (-1)**np.random.randint(0, 2)
+                    noisy_movies[i, t,
+                                 x_shift - w - 1: x_shift + w + 1,
+                                 y_shift - w - 1: y_shift + w + 1,
+                                 0] += noise_f * 0.1
     
+    - RNNs are tricky. Choice of batch size is important,
+choice of loss and optimizer is critical, etc.
+Some configurations won't converge.
     
-def secure_hash_s(data, hash_func=sha1):
-    ''' Return a secure hash hex digest of data. '''
+            # put all lines in the file into a Python list
+        strings = f.readlines()
+        
+        # above line leaves trailing newline characters; strip them out
+        strings = [x.strip(u'\n') for x in strings]
+        
+        # remove empty-lines and comments
+        strings = [x for x in strings if x and not x.startswith(u'#')]
+        
+        # insert empty string since all are being removed
+        strings.insert(0, u'')
     
-    try:
-    import json
-except ImportError:
-    import simplejson as json
+    def _create_and_install_waiters(fs, return_when):
+    if return_when == _AS_COMPLETED:
+        waiter = _AsCompletedWaiter()
+    elif return_when == FIRST_COMPLETED:
+        waiter = _FirstCompletedWaiter()
+    else:
+        pending_count = sum(
+                f._state not in [CANCELLED_AND_NOTIFIED, FINISHED] for f in fs)
     
-    from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import MultinomialNB
-    
-    import matplotlib.pyplot as plt
-    
-        try:
-        fn = inspect.getsourcefile(obj)
-    except Exception:
-        fn = None
-    if not fn:
-        try:
-            fn = inspect.getsourcefile(sys.modules[obj.__module__])
-        except Exception:
-            fn = None
-    if not fn:
-        return
-    
-            cmap_group = Tk.Frame(fm)
-        Tk.Radiobutton(cmap_group, text='Hyperplanes',
-                       variable=controller.surface_type, value=0,
-                       command=controller.refit).pack(anchor=Tk.W)
-        Tk.Radiobutton(cmap_group, text='Surface',
-                       variable=controller.surface_type, value=1,
-                       command=controller.refit).pack(anchor=Tk.W)
-    
-    plt.matshow(fit_data, cmap=plt.cm.Blues)
-plt.title('After biclustering; rearranged to show biclusters')
-    
-    from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.gaussian_process.kernels import RBF
-from sklearn import datasets
+            f = Future()
+        f.set_exception(Exception('test'))
+        f.add_done_callback(fn)
+        self.assertEqual(('test',), callback_exception[0].args)
     
     
-def sqr(x):
-    return np.sign(np.cos(x))
-    
-    np.random.seed(0)
-###############################################################################
-n_features = 100
-# simulation covariance matrix (AR(1) process)
-r = 0.1
-real_cov = toeplitz(r ** np.arange(n_features))
-coloring_matrix = cholesky(real_cov)
-    
-        def test_timeout(self):
-        self.assertTrue(self.timeout.timeout)
-        self.assertFalse(self.invalid.timeout)
-    
-        @mock.patch('certbot_compatibility_test.validator.requests.get')
-    def test_redirect_wrong_redirect_code(self, mock_get_request):
-        mock_get_request.return_value = create_response(
-            303, {'location': 'https://test.com'})
-        self.assertFalse(self.validator.redirect('test.com'))
-    
-    # Language to be used for generating the HTML full-text search index.
-# Sphinx supports the following languages:
-#   'da', 'de', 'en', 'es', 'fi', 'fr', 'hu', 'it', 'ja'
-#   'nl', 'no', 'pt', 'ro', 'ru', 'sv', 'tr'
-#html_search_language = 'en'
-    
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    @mock.patch('certbot.notify.subprocess.Popen')
-    def test_smtp_failure(self, mock_popen, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        lmtp_obj.sendmail.side_effect = socket.error(17)
-        proc = mock.MagicMock()
-        mock_popen.return_value = proc
-        self.assertTrue(notify('Goose', 'auntrhody@example.com',
-                               'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
-        self.assertEqual(proc.communicate.call_count, 1)
+  def tearDown( self ):
+    self._request = None
     
     
-def run(args):
-    '''Handle ensure config commandline script.'''
-    parser = argparse.ArgumentParser(
-        description=('Ensure a Home Assistant config exists, '
-                     'creates one if necessary.'))
-    parser.add_argument(
-        '-c', '--config',
-        metavar='path_to_config_dir',
-        default=config_util.get_default_config_dir(),
-        help='Directory that contains the Home Assistant configuration')
-    parser.add_argument(
-        '--script',
-        choices=['ensure_config'])
-    
-    
-def _get_homehub_data(url):
-    '''Return mock homehub data.'''
-    return '''
-    [
+@YouCompleteMeInstance()
+def SendCommandRequest_BuildRange_NoVisualMarks_test( ycm, *args ):
+  current_buffer = VimBuffer( 'buffer', contents = [ 'first line',
+                                                     'second line' ] )
+  with MockVimBuffers( [ current_buffer ], [ current_buffer ] ):
+    with patch( 'ycm.youcompleteme.SendCommandRequest' ) as send_request:
+      ycm.SendCommandRequest( [ 'GoTo' ], 'python', '', True, 1, 2 )
+      send_request.assert_called_once_with(
+        [ 'GoTo' ],
+        'python',
+        '',
         {
-            'mac': 'AA:BB:CC:DD:EE:FF,
-            'hostname': 'hostname',
-            'ip': '192.168.1.43',
-            'ipv6': '',
-            'name': 'hostname',
-            'activity': '1',
-            'os': 'Unknown',
-            'device': 'Unknown',
-            'time_first_seen': '2016/06/05 11:14:45',
-            'time_last_active': '2016/06/06 11:33:08',
-            'dhcp_option': '39043T90430T9TGK0EKGE5KGE3K904390K45GK054',
-            'port': 'wl0',
-            'ipv6_ll': 'fe80::gd67:ghrr:fuud:4332',
-            'activity_ip': '1',
-            'activity_ipv6_ll': '0',
-            'activity_ipv6': '0',
-            'device_oui': 'NA',
-            'device_serial': 'NA',
-            'device_class': 'NA'
+          'options': {
+            'tab_size': 2,
+            'insert_spaces': True
+          },
+          'range': {
+            'start': {
+              'line_num': 1,
+              'column_num': 1
+            },
+            'end': {
+              'line_num': 2,
+              'column_num': 12
+            }
+          }
         }
-    ]
-    '''
+      )
+    
+    
+def FormatDebugInfoResponse_NoResponse_test():
+  assert_that(
+    FormatDebugInfoResponse( None ),
+    equal_to( 'Server errored, no debug info from server\n' )
+  )
+    
+      try:
+    filepath = os.path.join( DIR_OF_YCMD, 'PYTHON_USED_DURING_BUILDING' )
+    return utils.ReadFile( filepath ).strip()
+  # We need to check for IOError for Python2 and OSError for Python3
+  except ( IOError, OSError ):
+    return None
