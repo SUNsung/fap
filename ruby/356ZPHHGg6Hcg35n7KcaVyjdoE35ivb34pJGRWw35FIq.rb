@@ -1,101 +1,89 @@
 
         
-          def test_module_redirect
-    get :module_redirect
-    assert_response :redirect
-    assert_redirected_to 'http://test.host/module_test/module_redirect/hello_world'
-  end
+                # Parse the options
+        argv = parse_options(opts)
+        return if !argv
+        if argv.length < 2
+          raise Vagrant::Errors::CLIInvalidUsage,
+            help: opts.help.chomp
+        end
     
-            # The abstract adapter is used simply to bypass the bit of code that
-        # checks that the adapter file can be required in.
+        # @see Node#deep_copy
+    def deep_copy
+      node = dup
+      node.instance_variable_set('@before', @before.deep_copy) if @before
+      node.instance_variable_set('@mid', @mid.deep_copy)
+      node.instance_variable_set('@after', @after.deep_copy) if @after
+      node
+    end
     
-          def initialize(subtype, coder)
-        @subtype = subtype
-        @coder = coder
-        super(subtype)
+          def call
+        title('Gems')
+        table(all_gem_names) do |gem, row|
+          row.yellow if update_available?(gem)
+          row << gem
+          row << installed_gem_version(gem)
+          row << '(update available)' if update_available?(gem)
+        end
       end
     
-    class TestAutosaveAssociationValidationsOnABelongsToAssociation < ActiveRecord::TestCase
-  self.use_transactional_tests = false unless supports_savepoints?
+            rows.each do |row|
+          line = row.values.each_with_index.map do |value, col|
+            value.to_s.ljust(col_widths[col])
+          end.join(' ').rstrip
+          line = color.colorize(line, row.color) if row.color
+          puts line
+        end
+      end
     
-      before_destroy do |client|
-    if client.firm
-      Client.destroyed_client_ids[client.firm.id] << client.id
-    end
-    true
-  end
-    
-      test 'broadcasting_for with a string' do
-    assert_equal 'hello', ChatChannel.broadcasting_for('hello')
-  end
-end
-
-    
-        # Block arg
-    periodically every: 3 do
-      ping
+        def ensure_stage
+      Rake::Task.define_task(:ensure_stage) do
+        unless stage_set?
+          puts t(:stage_not_set)
+          exit 1
+        end
+      end
     end
     
-      test 'subscription rejection' do
-    subscriptions = Minitest::Mock.new
-    subscriptions.expect(:remove_subscription, SecretChannel, [SecretChannel])
-    
-            wait_for_async
-    
-          rescue IOError
-        # Work around https://bugs.ruby-lang.org/issues/13405
-        #
-        # Puma's sometimes raising while shutting down, when it closes
-        # its internal pipe. We can safely ignore that, but we do need
-        # to do the step skipped by the exception:
-        server.binder.close
-    
-      [ EOFError, Errno::ECONNRESET ].each do |closed_exception|
-    test 'closes socket on #{closed_exception}' do
-      run_in_eventmachine do
-        connection = open_connection
-    
-    # Copyright (C) 2008 Rapid7, Inc.
-    
-    vers.each do |ver|
-  case ver
-  when '6.1.4'
-    __NR_execve      = 7
-    __NR_getpeername = 211
-    __NR_accept      = 237
-    __NR_listen      = 240
-    __NR_bind        = 242
-    __NR_socket      = 243
-    __NR_connect     = 244
-    __NR_close       = 278
-    __NR_kfcntl      = 658
-    
-        # See \{#modifier}.
-    # @return [String]
-    def resolved_modifier
-      # modifier should contain only a single string
-      modifier.first || ''
-    end
-    
-        # Interpolation in a property is of the form `before #{mid} after`.
+        # Provide a wrapper for the SCM that loads a strategy for the user.
     #
-    # @param before [Node] See {Interpolation#before}
-    # @param mid [Node] See {Interpolation#mid}
-    # @param after [Node] See {Interpolation#after}
-    # @param wb [Boolean] See {Interpolation#whitespace_before}
-    # @param wa [Boolean] See {Interpolation#whitespace_after}
-    # @param originally_text [Boolean] See {Interpolation#originally_text}
-    # @param warn_for_color [Boolean] See {Interpolation#warn_for_color}
-    # @comment
-    #   rubocop:disable ParameterLists
-    def initialize(before, mid, after, wb, wa, opts = {})
-      # rubocop:enable ParameterLists
-      @before = before
-      @mid = mid
-      @after = after
-      @whitespace_before = wb
-      @whitespace_after = wa
-      @originally_text = opts[:originally_text] || false
-      @warn_for_color = opts[:warn_for_color] || false
-      @deprecation = opts[:deprecation] || :none
+    # @param [Rake] context     The context in which the strategy should run
+    # @param [Module] strategy  A module to include into the SCM instance. The
+    #    module should provide the abstract methods of Capistrano::SCM
+    #
+    def initialize(context, strategy)
+      @context = context
+      singleton = class << self; self; end
+      singleton.send(:include, strategy)
+    end
+    
+      entries.each do |entry|
+    if File.exist?(entry[:file])
+      warn '[skip] #{entry[:file]} already exists'
+    else
+      File.open(entry[:file], 'w+') do |f|
+        f.write(ERB.new(File.read(entry[:template])).result(binding))
+        puts I18n.t(:written_file, scope: :capistrano, file: entry[:file])
+      end
+    end
+  end
+    
+      it 'enables printing all config variables on command line parameter' do
+    capture_io do
+      flags '--print-config-variables', '-p'
+    end
+    expect(Capistrano::Configuration.fetch(:print_config_variables)).to be true
+  end
+    
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+      end
+    
+        def poster
+      'poster='#{@poster}'' if @poster
     end
