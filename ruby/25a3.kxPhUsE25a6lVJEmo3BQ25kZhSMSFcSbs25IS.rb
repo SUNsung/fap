@@ -1,83 +1,140 @@
 
         
-        # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
+              # Create a full Jekyll configuration with the options passed in as overrides
+      #
+      # options - the configuration overrides
+      #
+      # Returns a full Jekyll configuration
+      def configuration_from_options(options)
+        return options if options.is_a?(Jekyll::Configuration)
+        Jekyll.configuration(options)
+      end
+    
+            attr_reader :content_length, :new_body, :livereload_added
+    
+    module Kramdown
+  module Parser
+    class SmartyPants < Kramdown::Parser::Kramdown
+      def initialize(source, options)
+        super
+        @block_parsers = [:block_html, :content]
+        @span_parsers =  [:smart_quotes, :html_entity, :typographic_syms, :span_html]
+      end
+    
+          def categories
+        category_set = Set.new
+        Array(@obj.data['categories']).each do |category|
+          category_set << category.to_s.downcase
+        end
+        category_set.to_a.join('/')
+      end
+    
+        context 'with keywords' do
+      let(:options) do
+        {
+          name: { 'en-US' => 'Fastlane Demo' },
+          description: { 'en-US' => 'Demo description' },
+          keywords: { 'en-US' => 'Some, key, words' }
+        }
+      end
+    
+          it 'does switch to plain text when xml is toggled off' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            cloc(xml: false)
+          end').runner.execute(:test)
+    
+        context 'GIT-SVN repository' do
+      before do
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_svn?).and_return(false)
+        expect(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git_svn?).and_return(true)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git?).and_return(false)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_hg?).and_return(false)
+      end
+    
+            def show
+          authorize! :read, @order, order_token
+          @address = find_address
+          respond_with(@address)
+        end
+    
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
+        end
+    
+            def operator_assignment_node
+          return nil unless node.parent
+          return nil unless OPERATOR_ASSIGNMENT_TYPES.include?(node.parent.type)
+          return nil unless node.sibling_index.zero?
+          node.parent
+        end
+    
+            def on_send(node)
+          return unless match_call?(node) &&
+                        (!node.value_used? || only_truthiness_matters?(node)) &&
+                        !(node.parent && node.parent.block_type?)
+    
+          # Custom destructuring method. This can be used to normalize
+      # destructuring for different variations of the node.
+      #
+      # In this case, the `def` node destructures into:
+      #
+      #   `method_name, arguments, body`
+      #
+      # while the `defs` node destructures into:
+      #
+      #   `receiver, method_name, arguments, body`
+      #
+      # so we reverse the destructured array to get the optional receiver
+      # at the end, where it can be discarded.
+      #
+      # @return [Array] the different parts of the `def` or `defs` node
+      def node_parts
+        to_a.reverse
+      end
+    end
+  end
 end
 
     
-        # Public: Read in a list of configuration files and merge with this hash
-    #
-    # files - the list of configuration file paths
-    #
-    # Returns the full configuration, with the defaults overridden by the values in the
-    # configuration files
-    def read_config_files(files)
-      configuration = clone
-    
-        A binary installer is available:
-      https://www.haskell.org/platform/mac.html
-    EOS
-  when 'mysqldump-secure' then <<-EOS.undent
-    The creator of mysqldump-secure tried to game our popularity metrics.
-    EOS
-  when 'ngrok' then <<-EOS.undent
-    Upstream sunsetted 1.x in March 2016 and 2.x is not open-source.
-    
-    def bottle_resolve_version(bottle_file)
-  PkgVersion.parse bottle_receipt_path(bottle_file).split('/')[1]
-end
-    
-      def last_commit
-    Homebrew.git_last_commit || 'never'
-  end
-    
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
-  end
-  alias_method :standard_install, :install
-    
-      def short_type
-    @short_type ||= type.split('::').pop
-  end
-    
-        log = StringIO.new
-    @dry_run_started_at = Time.zone.now
-    @dry_run_logger = Logger.new(log).tap { |logger|
-      logger.formatter = proc { |severity, datetime, progname, message|
-        elapsed_time = '%02d:%02d:%02d' % 2.times.inject([datetime - @dry_run_started_at]) { |(x, *xs)|
-          [*x.divmod(60), *xs]
-        }
-    }
-    }
-    
-      def destroy
-    @user_credential = current_user.user_credentials.find(params[:id])
-    @user_credential.destroy
-    
-            # Clones the template from the remote in the working directory using
-        # the name of the Pod.
-        #
-        # @return [void]
-        #
-        def clone_template
-          UI.section('Cloning `#{template_repo_url}` into `#{@name}`.') do
-            git! ['clone', template_repo_url, @name]
-          end
-        end
-    
-          def self.options
-        [
-          ['--update', 'Run `pod repo update` before listing'],
-          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
-        ].concat(super)
+        def definitions_for(klass)
+      parent_classes = klass.ancestors.reverse
+      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
+        inherited_definitions.deep_merge! @attachments[ancestor]
       end
+    end
+  end
+end
+
+    
+    
+    {
+    {  # Returns hash with styles for all classes using Paperclip.
+  # Unfortunately current version does not work with lambda styles:(
+  #   {
+  #     :User => {:avatar => [:small, :big]},
+  #     :Book => {
+  #       :cover => [:thumb, :croppable]},
+  #       :sample => [:thumb, :big]},
+  #     }
+  #   }
+  def self.current_attachments_styles
+    Hash.new.tap do |current_styles|
+      Paperclip::AttachmentRegistry.each_definition do |klass, attachment_name, attachment_attributes|
+        # TODO: is it even possible to take into account Procs?
+        next if attachment_attributes[:styles].kind_of?(Proc)
+        attachment_attributes[:styles].try(:keys).try(:each) do |style_name|
+          klass_sym = klass.to_s.to_sym
+          current_styles[klass_sym] ||= Hash.new
+          current_styles[klass_sym][attachment_name.to_sym] ||= Array.new
+          current_styles[klass_sym][attachment_name.to_sym] << style_name.to_sym
+          current_styles[klass_sym][attachment_name.to_sym].map!(&:to_s).sort!.map!(&:to_sym).uniq!
+        end
+      end
+    end
+  end
+  private_class_method :current_attachments_styles
+    
+        rake_tasks { load 'tasks/paperclip.rake' }
+  end
