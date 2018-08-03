@@ -1,106 +1,100 @@
 
         
-        def main
-  output = nil
-  parser = OptionParser.new
-  parser.banner = 'Usage: #{File.basename($0)} [--output=PATH] <parse.y>'
-  parser.on('--output=PATH', 'An output file.') {|path|
-    output = path
-  }
-  parser.on('--help', 'Prints this message and quit.') {
-    puts parser.help
-    exit true
-  }
-  begin
-    parser.parse!
-  rescue OptionParser::ParseError => err
-    $stderr.puts err.message
-    $stderr.puts parser.help
-    exit false
-  end
-  unless ARGV.size == 1
-    abort 'wrong number of arguments (#{ARGV.size} for 1)'
-  end
-  out = ''.dup
-  File.open(ARGV[0]) {|f|
-    prelude f, out
-    grammar f, out
-    usercode f, out
-  }
-  if output
-    File.open(output, 'w') {|f|
-      f.write out
-    }
-  else
-    print out
+        # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
+    
+            # After a new blog has been created, print a success notification and
+        # then automatically execute bundle install from within the new blog dir
+        # unless the user opts to generate a blank blog or skip 'bundle install'.
+    
+            def initialize
+          @websockets = []
+          @connections_count = 0
+          @started_event = Utils::ThreadEvent.new
+          @stopped_event = Utils::ThreadEvent.new
+        end
+    
+          def posts
+        @site_posts ||= @obj.posts.docs.sort { |a, b| b <=> a }
+      end
+    
+          private
+    
+          unless root?
+        raise Invalid, 'missing name' if !name || name.empty?
+        raise Invalid, 'missing path' if !path || path.empty?
+        raise Invalid, 'missing type' if !type || type.empty?
+      end
+    end
+    
+    module Docs
+  class PageDb
+    attr_reader :pages
+    
+            css('.note h3', '.warning h3').each do |node|
+          node.before('<p><strong>#{node.inner_html}</strong></p>').remove
+        end
+    
+          if path.extname == '.la'
+        path.unlink
+      elsif path.basename.to_s == 'perllocal.pod'
+        # Both this file & the .packlist one below are completely unnecessary
+        # to package & causes pointless conflict with other formulae. They are
+        # removed by Debian, Arch & MacPorts amongst other packagers as well.
+        # The files are created as part of installing any Perl module.
+        path.unlink
+      elsif path.basename.to_s == '.packlist' # Hidden file, not file extension!
+        path.unlink
+      else
+        # Set permissions for executables and non-executables
+        perms = if executable_path?(path)
+          0555
+        else
+          0444
+        end
+        if ARGV.debug?
+          old_perms = path.stat.mode & 0777
+          if perms != old_perms
+            puts 'Fixing #{path} permissions from #{old_perms.to_s(8)} to #{perms.to_s(8)}'
+          end
+        end
+        path.chmod perms
+      end
+    end
   end
 end
     
-        it 'mimics a sed conditional with a zero-element exclusive-end range' do
-      eval '10.times { |i| ScratchPad << i if (i == 4)...(i == 4) }'
-      ScratchPad.recorded.should == [4, 5, 6, 7, 8, 9]
-    end
+              # Check for git:// GitHub repo urls, https:// is preferred.
+          git_gh_pattern = %r{^git://[^/]*github\.com/}
+          audit_urls(urls, git_gh_pattern) do |_, url|
+            problem 'Please use https:// for #{url}'
+          end
     
-      describe 'RDATA()' do
-    it 'returns the struct data' do
-      a = @s.wrap_struct(1024)
-      @s.get_struct_rdata(a).should == 1024
-    end
-    
-    load_extension('typed_data')
-    
-      def test_execopts_popen
-    with_tmpchdir {|d|
-      IO.popen('#{RUBY} -e 'puts :foo'') {|io| assert_equal('foo\n', io.read) }
-      assert_raise(Errno::ENOENT) { IO.popen(['echo bar']) {} } # assuming 'echo bar' command not exist.
-      IO.popen(ECHO['baz']) {|io| assert_equal('baz\n', io.read) }
-    }
-  end
-    
-        @gem.send :remove_instance_variable, :@rubygems_version
-    
-        @installer = Gem::Installer.at @gem, @cmd.options
-    @installer.install
-    assert_path_exists File.join(Gem.user_dir, 'gems')
-    assert_path_exists File.join(Gem.user_dir, 'gems', @spec.full_name)
-  end
-    
-    
-    {      delta = 1
-      stat = File.stat(path)
-      assert_in_delta tb,   stat.birthtime.to_f, delta
-      assert_in_delta t0+2, stat.mtime.to_f, delta
-      if stat.birthtime != stat.ctime
-        assert_in_delta t0+4, stat.ctime.to_f, delta
+            def autocorrect(node)
+          lambda do |corrector|
+            correction = node.source
+            first_word = string_content(node).split.first
+            unless VALID_LOWERCASE_WORDS.include?(first_word)
+              first_char = first_word.to_s.chars.first
+              correction.sub!(/^(['']?)([a-z])/, '\\1#{first_char.upcase}')
+            end
+            correction.sub!(/^(['']?)an?\s/i, '\\1')
+            correction.gsub!(/(ommand ?line)/i, 'ommand-line')
+            correction.gsub!(/(^|[^a-z])#{@formula_name}([^a-z]|$)/i, '\\1\\2')
+            correction.gsub!(/^(['']?)\s+/, '\\1')
+            correction.gsub!(/\s+(['']?)$/, '\\1')
+            correction.gsub!(/\.(['']?)$/, '\\1')
+            corrector.insert_before(node.source_range, correction)
+            corrector.remove(node.source_range)
+          end
+        end
       end
-      if /mswin|mingw/ !~ RUBY_PLATFORM && !Bug::File::Fs.noatime?(path)
-        # Windows delays updating atime
-        assert_in_delta t0+6, stat.atime.to_f, delta
-      end
-    }
-  rescue NotImplementedError
-  end
-    
-      # Returns true if the set is a superset of the given set.
-  def superset?(set)
-    case
-    when set.instance_of?(self.class) && @hash.respond_to?(:>=)
-      @hash >= set.instance_variable_get(:@hash)
-    when set.is_a?(Set)
-      size >= set.size && set.all? { |o| include?(o) }
-    else
-      raise ArgumentError, 'value must be a set'
     end
   end
-  alias >= superset?
-    
-      it 'adds nil for each element requested beyond the end of the String' do
-    [ ['abc',                  [nil, nil, nil]],
-      ['\x8f\xc2\xb5?abc',     [1.4199999570846558, nil, nil]],
-      ['\x9a\x999@33\xb3?abc', [2.9000000953674316, 1.399999976158142, nil]]
-    ].should be_computed_by(:unpack, unpack_format(3))
-  end
-    
-      it 'decodes the remaining shorts when passed the '*' modifier' do
-    'badc'.unpack(unpack_format('*')).should == [25185, 25699]
-  end
+end
