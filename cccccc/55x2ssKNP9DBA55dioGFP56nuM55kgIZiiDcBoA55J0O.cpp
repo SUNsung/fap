@@ -1,113 +1,184 @@
 
         
-        	virtual void poll() = 0;
-	virtual Error connect_to_host(String p_host, String p_path, uint16_t p_port, bool p_ssl, PoolVector<String> p_protocol = PoolVector<String>()) = 0;
-	virtual void disconnect_from_host() = 0;
-	virtual IP_Address get_connected_host() const = 0;
-	virtual uint16_t get_connected_port() const = 0;
-    
-    /**
- * oc_ilog32 - Integer binary logarithm of a 32-bit value.
- * @_v: A 32-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * The OC_ILOG_32() or OC_ILOGNZ_32() macros may be able to use a builtin
- *  function instead, which should be faster.
- */
-int oc_ilog32(ogg_uint32_t _v);
-/**
- * oc_ilog64 - Integer binary logarithm of a 64-bit value.
- * @_v: A 64-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * The OC_ILOG_64() or OC_ILOGNZ_64() macros may be able to use a builtin
- *  function instead, which should be faster.
- */
-int oc_ilog64(ogg_int64_t _v);
-    
-    #define opus_fft_alloc_arch(_st, arch) \
-   ((void)(arch), opus_fft_alloc_arm_neon(_st))
-    
-    #if defined(OPUS_HAVE_RTCD) && \
-  (defined(OPUS_ARM_ASM) || defined(OPUS_ARM_MAY_HAVE_NEON_INTR))
-#include 'arm/armcpu.h'
-    
-    /*      These defines enable functionality introduced with the 1999 ISO C
-**      standard. They must be defined before the inclusion of math.h to
-**      engage them. If optimisation is enabled, these functions will be
-**      inlined. With optimisation switched off, you have to link in the
-**      maths library using -lm.
-*/
-    
-    #undef silk_SUB_SAT32
-static OPUS_INLINE opus_int32 silk_SUB_SAT32( opus_int32 a32, opus_int32 b32 ) {
-    opus_int32 res;
-    ops_count += 1;
-    res =     ((((a32)-(b32)) & 0x80000000) == 0 ?                                            \
-            (( (a32) & ((b32)^0x80000000) & 0x80000000) ? silk_int32_MIN : (a32)-(b32)) :    \
-            ((((a32)^0x80000000) & (b32)  & 0x80000000) ? silk_int32_MAX : (a32)-(b32)) );
-    return res;
+        OS::PowerState PowerIphone::get_power_state() {
+	if (UpdatePowerInfo()) {
+		return power_state;
+	} else {
+		return OS::POWERSTATE_UNKNOWN;
+	}
 }
     
-        for (int n = 0; n < 50; n++)
+    /// Returns the list of contacts pairs in this order: Local contact, other body contact
+struct GodotContactPairContactResultCallback : public btCollisionWorld::ContactResultCallback {
+public:
+	const btCollisionObject *m_self_object;
+	Vector3 *m_results;
+	int m_resultMax;
+	int m_count;
+	const Set<RID> *m_exclude;
+    }
+    
+    
+#if !defined(FFT_ARM_H)
+#define FFT_ARM_H
+    
+    
+/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q15
+static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4(opus_val16 a, opus_val32 b)
+{
+  unsigned rd_lo;
+  int rd_hi;
+  __asm__(
+      '#MULT16_32_Q15\n\t'
+      'smull %0, %1, %2, %3\n\t'
+      : '=&r'(rd_lo), '=&r'(rd_hi)
+      : '%r'(b), 'r'(a<<16)
+  );
+  /*We intentionally don't OR in the high bit of rd_lo for speed.*/
+  return rd_hi<<1;
+}
+#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv4(a, b))
+    
+    #elif (defined(OPUS_X86_MAY_HAVE_SSE) && !defined(OPUS_X86_PRESUME_SSE)) || \
+  (defined(OPUS_X86_MAY_HAVE_SSE2) && !defined(OPUS_X86_PRESUME_SSE2)) || \
+  (defined(OPUS_X86_MAY_HAVE_SSE4_1) && !defined(OPUS_X86_PRESUME_SSE4_1)) || \
+  (defined(OPUS_X86_MAY_HAVE_AVX) && !defined(OPUS_X86_PRESUME_AVX))
+    
+    #undef silk_SMLATT_ovflw
+#define silk_SMLATT_ovflw silk_SMLATT
+    
+        // Determine the MB size used for mapping a given learning-rate or momentum parameter to a per-sample value.
+    // MB size is the number of samples across all time steps and parallel sequences.
+    // This function exists to post-fix a design bug in SGD:
+    // In the case of BPTT, the 'minibatchSize' parameter given to the SGD module really means the truncation size,
+    // while the MB size to be used is (truncation size * number of parallel sequences).
+    // SGD also does not know #parallel sequences upfront.
+    size_t FixUpEffectiveMBSize(size_t specifiedMBSize, size_t numParallelSequences) const
     {
-        printf('NewFrame() %d\n', n);
-        io.DisplaySize = ImVec2(1920, 1080);
-        io.DeltaTime = 1.0f / 60.0f;
-        ImGui::NewFrame();
+        // remedy the bug that truncation size is incorrectly passed as MB size
+        if (m_truncated && specifiedMBSize > 1)      // currently only happens in this mode
+        {
+            if (numParallelSequences == 0)
+            {
+                RuntimeError('Learning rate and momentum are not supported per minibatch, please specify them per sample.');
+            }
+    }
     }
     
-        // From SDL_ttf: Handy routines for converting from fixed point
-    #define FT_CEIL(X)  (((X + 63) & -64) / 64)
-    
-    // Render function.
-// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
-void ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data)
+    template <class ElemType>
+void PostComputingActions<ElemType>::BatchNormalizationStatistics(IDataReader * dataReader, const vector<wstring>& evalNodeNames, 
+    const wstring newModelPath, const size_t mbSize, const int iters)
 {
-    // Handle cases of screen coordinates != from framebuffer coordinates (e.g. retina displays)
-    ImGuiIO& io = ImGui::GetIO();
-    draw_data->ScaleClipRects(io.DisplayFramebufferScale);
+    // since the mean and variance of bn will be modified in statistics,
+    // training mode will make it work. And there is no back prop, other parameters
+    // are fixed during computing.
+    ScopedNetworkOperationMode modeGuard(m_net, NetworkOperationMode::training);
     }
     
-    bool    ImGui_ImplVulkan_Init(ImGui_ImplVulkan_InitInfo* info, VkRenderPass render_pass)
+        // other goodies I came across (intrin.h):
+    //  - _mm_prefetch
+    //  - _mm_stream_ps --store without polluting cache
+    //  - unknown: _mm_addsub_ps, _mm_hsub_ps, _mm_movehdup_ps, _mm_moveldup_ps, _mm_blend_ps, _mm_blendv_ps, _mm_insert_ps, _mm_extract_ps, _mm_round_ps
+    //  - _mm_dp_ps dot product! http://msdn.microsoft.com/en-us/library/bb514054.aspx
+    //    Not so interesting for long vectors, we get better numerical precision with parallel adds and hadd at the end
+    
+    // not in the cache yet: create it (or not if no such member)
+void /*CustomConfigRecord::*/ ComputationNodeBase::LazyCreateConfigMember(const wstring& id) const /*override*/
 {
-    IM_ASSERT(info->Instance != NULL);
-    IM_ASSERT(info->PhysicalDevice != NULL);
-    IM_ASSERT(info->Device != NULL);
-    IM_ASSERT(info->Queue != NULL);
-    IM_ASSERT(info->DescriptorPool != NULL);
-    IM_ASSERT(render_pass != NULL);
+    if (id == L'name') // node name
+    {
+        InsertConfigMember(id, ConfigValuePtr(make_shared<String>(NodeName()), [](const std::wstring &) { LogicError('should not get here'); }, L''));
     }
-    
-        // Bind shader and vertex buffers
-    unsigned int stride = sizeof(ImDrawVert);
-    unsigned int offset = 0;
-    ctx->IASetInputLayout(g_pInputLayout);
-    ctx->IASetVertexBuffers(0, 1, &g_pVB, &stride, &offset);
-    ctx->IASetIndexBuffer(g_pIB, sizeof(ImDrawIdx) == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT, 0);
-    ctx->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    ctx->VSSetShader(g_pVertexShader);
-    ctx->VSSetConstantBuffers(0, 1, &g_pVertexConstantBuffer);
-    ctx->PSSetShader(g_pPixelShader);
-    ctx->PSSetSamplers(0, 1, &g_pFontSampler);
-    
-    #include <stdint.h>
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
-#include 'imgui.h'
-#include 'imgui_impl_allegro5.h'
-    
-    int main(int, char**)
-{
-    // Setup window
-    glfwSetErrorCallback(glfw_error_callback);
-    if (!glfwInit())
-        return 1;
-    GLFWwindow* window = glfwCreateWindow(1280, 720, 'Dear ImGui GLFW+OpenGL2 example', NULL, NULL);
-    if (window == NULL)
-        return 1;
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
+    else if (id == L'operation') // type ('operation' parameter to ComputationNode BS constructor)
+    {
+        InsertConfigMember(id, ConfigValuePtr(make_shared<String>(OperationName()), [](const std::wstring &) { LogicError('should not get here'); }, L''));
     }
+    else if (id == L'dim') // scalar dimension (#elements) per sample
+    {
+        // Note: When freshly creating models, dimensions may not have been inferred yet.
+        size_t dim = GetSampleLayout().GetNumElements();
+        if (dim == 0)
+            InvalidArgument('%ls.dim: The node's dimensions are not known yet.', NodeName().c_str());
+        InsertConfigMember(id, MakePrimitiveConfigValuePtr((double) dim, [](const std::wstring &) { LogicError('should not get here'); }, L''));
+    }
+    else if (id == L'dims') // tensor dimension vector
+    {
+        NOT_IMPLEMENTED;
+    }
+    // TODO: Think through what tags mean. Do we allow user-named tags? Is it a set or a single string? If set, then how to compare?
+    //else if (id == L'tag')
+    //{
+    //}
+    else if (id == L'inputs' || id == OperationName() + L'Args') // e.g. node.PlusArg[0] = alternative for node.inputs[0] that shows a user that this is a Plus node
+    {
+        std::vector<ConfigValuePtr> inputsAsValues;
+        for (let& input : GetInputs())
+            inputsAsValues.push_back(ConfigValuePtr(input, [](const std::wstring &) { LogicError('should not get here'); }, L''));
+        let& arr = make_shared<ScriptableObjects::ConfigArray>(0, move(inputsAsValues));
+        InsertConfigMember(id, ConfigValuePtr(arr, [](const std::wstring &) { LogicError('should not get here'); }, L''));
+    }
+    // any other id does not exist, don't create any entry for it
+}
+    
+    #include 'modules/common/configs/vehicle_config_helper.h'
+#include 'modules/planning/common/planning_gflags.h'
+#include 'modules/planning/tasks/traffic_decider/backside_vehicle.h'
+#include 'modules/planning/tasks/traffic_decider/change_lane.h'
+#include 'modules/planning/tasks/traffic_decider/creeper.h'
+#include 'modules/planning/tasks/traffic_decider/crosswalk.h'
+#include 'modules/planning/tasks/traffic_decider/destination.h'
+#include 'modules/planning/tasks/traffic_decider/front_vehicle.h'
+#include 'modules/planning/tasks/traffic_decider/keep_clear.h'
+#include 'modules/planning/tasks/traffic_decider/pull_over.h'
+#include 'modules/planning/tasks/traffic_decider/reference_line_end.h'
+#include 'modules/planning/tasks/traffic_decider/rerouting.h'
+#include 'modules/planning/tasks/traffic_decider/signal_light.h'
+#include 'modules/planning/tasks/traffic_decider/stop_sign.h'
+    
+    #include <algorithm>
+#include <cmath>
+#include <limits>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+    
+    
+    {  std::unique_ptr<SimulationWorldUpdater> sim_world_updater_;
+  std::unique_ptr<PointCloudUpdater> point_cloud_updater_;
+  std::unique_ptr<CivetServer> server_;
+  std::unique_ptr<SimControl> sim_control_;
+  std::unique_ptr<WebSocketHandler> websocket_;
+  std::unique_ptr<WebSocketHandler> map_ws_;
+  std::unique_ptr<WebSocketHandler> point_cloud_ws_;
+  std::unique_ptr<ImageHandler> image_;
+  std::unique_ptr<MapService> map_service_;
+  std::unique_ptr<HMI> hmi_;
+};
+    
+      main_stop_.Clear();
+  main_stop_.set_reason_code(obj_stop.reason_code());
+  main_stop_.set_reason('stop by ' + obj_id);
+  main_stop_.mutable_stop_point()->set_x(obj_stop.stop_point().x());
+  main_stop_.mutable_stop_point()->set_y(obj_stop.stop_point().y());
+  main_stop_.set_stop_heading(obj_stop.stop_heading());
+  stop_reference_line_s_ = stop_line_s;
+    
+    
+    {  /**
+   * @brief Compute the curvature change rate w.r.t. curve length (dkappa) given
+   * curve X = (x(t), y(t))
+   *        which t is an arbitrary parameter.
+   * @param dx dx / dt
+   * @param d2x d(dx) / dt
+   * @param dy dy / dt
+   * @param d2y d(dy) / dt
+   * @param d3x d(d2x) / dt
+   * @param d3y d(d2y) / dt
+   * @return the curvature change rate
+   */
+  static double ComputeCurvatureDerivative(const double dx, const double d2x,
+                                           const double d3x, const double dy,
+                                           const double d2y, const double d3y);
+};
