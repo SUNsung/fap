@@ -1,43 +1,91 @@
 
         
-            def register_compass_extension
-      ::Compass::Frameworks.register(
-          'bootstrap',
-          :version               => Bootstrap::VERSION,
-          :path                  => gem_path,
-          :stylesheets_directory => stylesheets_path,
-          :templates_directory   => File.join(gem_path, 'templates')
-      )
+              key = Spaceship::Portal::Key.find('some-key-id')
+      expect(key).to be_instance_of(Spaceship::Portal::Key)
+      expect(key.id).to eq('some-key-id')
     end
+  end
     
-        # @include and @extend from LESS:
-    #  .mixin()             -> @include mixin()
-    #  #scope > .mixin()    -> @include scope-mixin()
-    #  &:extend(.mixin all) -> @include mixin()
-    def replace_mixins(less, mixin_names)
-      mixin_pattern = /(?<=^|\s)((?:[#|\.][\w-]+\s*>\s*)*)\.([\w-]+)\((.*)\)(?!\s\{)/
-    }
+            if params[:add_to_search_list]
+          keychains = Action.sh('security list-keychains -d user').shellsplit
+          keychains << File.expand_path(keychain_path)
+          commands << Fastlane::Actions.sh('security list-keychains -s #{keychains.shelljoin}', log: false)
+        end
     
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
+          it 'raises an exception when xcode project path wasn't found' do
+        expect do
+          Fastlane::FastFile.new.parse('lane :test do
+            increment_version_number(xcodeproj: '/nothere')
+          end').runner.execute(:test)
+        end.to raise_error('Could not find Xcode project')
+      end
     
-      find_files = ->(path) {
-    Find.find(Pathname.new(path).relative_path_from(Pathname.new Dir.pwd).to_s).map do |path|
-      path if File.file?(path)
-    end.compact
-  }
+      protected
     
-      # Implemented by subclasses to hook into Capistrano's deployment flow using
-  # using the `before` and `after` DSL methods. Note that `register_hooks` will
-  # not be called if the user has opted-out of hooks when installing the plugin.
-  #
-  # Example:
-  #
-  #   def register_hooks
-  #     after 'deploy:updated', 'my_plugin:do_something'
-  #   end
-  #
-  def register_hooks; end
+          included do
+        include Devise::Controllers::ScopedViews
+      end
+    
+    (allow file-write*
+  (literal
+    '/dev/dtracehelper'
+    '/dev/null'
+  )
+  (regex
+    #'^<%= Pod::Config.instance.project_root %>'
+    #'^<%= Pod::Config.instance.repos_dir %>'
+    #'^/Users/[^.]+/Library/Caches/CocoaPods/*'
+    #'^/dev/tty'
+    #'^/private/var'
+  )
+)
+    
+            def initialize(argv)
+          @name = argv.shift_argument
+          @template_url = argv.option('template-url', TEMPLATE_REPO)
+          super
+          @additional_args = argv.remainder!
+        end
+    
+            self.description = <<-DESC
+          Lints the spec-repo `NAME`. If a directory is provided it is assumed
+          to be the root of a repo. Finally, if `NAME` is not provided this
+          will lint all the spec-repos known to CocoaPods.
+        DESC
+    
+    # The project root directory
+$root = ::File.dirname(__FILE__)
+    
+    module Jekyll
+    
+            Dir.chdir(includes_dir) do
+          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
+          if choices.include?(file)
+            source = File.read(file)
+            partial = Liquid::Template.parse(source)
+            context.stack do
+              rtn = rtn + partial.render(context)
+            end
+          else
+            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+          end
+        end
+      end
+      rtn
+    end
+  end
+    
+            # 'match' is a fairly generic name, so we don't flag it unless we see
+        # a string or regexp literal on one side or the other
+        def_node_matcher :match_call?, <<-PATTERN
+          {(send {str regexp} :match _)
+           (send !nil? :match {str regexp})}
+        PATTERN
+    
+            def on_case(case_node)
+          case_node.when_branches.each_with_object([]) do |when_node, previous|
+            when_node.each_condition do |condition|
+              next unless repeated_condition?(previous, condition)
+    
+      context 'symmetrical style' do
+    let(:cop_config) { { 'EnforcedStyle' => 'symmetrical' } }
