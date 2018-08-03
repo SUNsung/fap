@@ -1,150 +1,425 @@
 
         
-        // EXPECT_DEATH_IF_SUPPORTED(statement, regex) and
-// ASSERT_DEATH_IF_SUPPORTED(statement, regex) expand to real death tests if
-// death tests are supported; otherwise they just issue a warning.  This is
-// useful when you are combining death test assertions with normal test
-// assertions in one test.
-#if GTEST_HAS_DEATH_TEST
-# define EXPECT_DEATH_IF_SUPPORTED(statement, regex) \
-    EXPECT_DEATH(statement, regex)
-# define ASSERT_DEATH_IF_SUPPORTED(statement, regex) \
-    ASSERT_DEATH(statement, regex)
-#else
-# define EXPECT_DEATH_IF_SUPPORTED(statement, regex) \
-    GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, )
-# define ASSERT_DEATH_IF_SUPPORTED(statement, regex) \
-    GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, return)
-#endif
+        #endif  // ATOM_BROWSER_API_ATOM_API_GLOBAL_SHORTCUT_H_
+
     
-    // A copyable object representing the result of a test part (i.e. an
-// assertion or an explicit FAIL(), ADD_FAILURE(), or SUCCESS()).
-//
-// Don't inherit from TestPartResult as its destructor is not virtual.
-class GTEST_API_ TestPartResult {
- public:
-  // The possible outcomes of a test part (i.e. an assertion or an
-  // explicit SUCCEED(), FAIL(), or ADD_FAILURE()).
-  enum Type {
-    kSuccess,          // Succeeded.
-    kNonFatalFailure,  // Failed but the test can continue.
-    kFatalFailure      // Failed and the test should be terminated.
-  };
+    namespace {
     }
     
-    // This header implements typed tests and type-parameterized tests.
+    #include <memory>
     
-    #include 'gtest/internal/gtest-port.h'
+    #ifndef CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
+#define CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
     
-      template <typename T>
-  operator ParamGenerator<T>() const {
-    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
-        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
-        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
-        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
-        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
-        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
-        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
-        static_cast<T>(v21_), static_cast<T>(v22_), static_cast<T>(v23_),
-        static_cast<T>(v24_), static_cast<T>(v25_), static_cast<T>(v26_)};
-    return ValuesIn(array);
+    #if defined(OS_MACOSX)
+// NOTE: if you change the value of kFrameworkName, please don't forget to
+// update components/test/run_all_unittests.cc as well.
+// TODO(tfarina): Remove the comment above, when you fix components to use plist
+// on Mac.
+extern const base::FilePath::CharType kFrameworkName[];
+#endif  // OS_MACOSX
+    
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
   }
-    
-    $for k [[
-$range m 0..k-1
-$range m2 k..n-1
-#define GTEST_$(k)_TUPLE_(T) tuple<$for m, [[T##$m]]$for m2 [[, void]]>
-    
-    // This provides interface PrimeTable that determines whether a number is a
-// prime and determines a next prime number. This interface is used
-// in Google Test samples demonstrating use of parameterized tests.
-    
-      // Now, we have that n is odd and n >= 3.
-    
-    std::vector<float> Blur(const std::vector<float>& image, int w, int h) {
-    // This is only made for small sigma, e.g. 1.3.
-    static const double kSigma = 1.3;
-    std::vector<double> kernel(5);
-    for (size_t i = 0; i < kernel.size(); i++) {
-      kernel[i] = Normal(1.0 * i - kernel.size() / 2, kSigma);
-    }
-    }
-    
-    static const int kCrToGreenTable[256] = {
-  5990656,  5943854,  5897052,  5850250,  5803448,  5756646,  5709844,  5663042,
-  5616240,  5569438,  5522636,  5475834,  5429032,  5382230,  5335428,  5288626,
-  5241824,  5195022,  5148220,  5101418,  5054616,  5007814,  4961012,  4914210,
-  4867408,  4820606,  4773804,  4727002,  4680200,  4633398,  4586596,  4539794,
-  4492992,  4446190,  4399388,  4352586,  4305784,  4258982,  4212180,  4165378,
-  4118576,  4071774,  4024972,  3978170,  3931368,  3884566,  3837764,  3790962,
-  3744160,  3697358,  3650556,  3603754,  3556952,  3510150,  3463348,  3416546,
-  3369744,  3322942,  3276140,  3229338,  3182536,  3135734,  3088932,  3042130,
-  2995328,  2948526,  2901724,  2854922,  2808120,  2761318,  2714516,  2667714,
-  2620912,  2574110,  2527308,  2480506,  2433704,  2386902,  2340100,  2293298,
-  2246496,  2199694,  2152892,  2106090,  2059288,  2012486,  1965684,  1918882,
-  1872080,  1825278,  1778476,  1731674,  1684872,  1638070,  1591268,  1544466,
-  1497664,  1450862,  1404060,  1357258,  1310456,  1263654,  1216852,  1170050,
-  1123248,  1076446,  1029644,   982842,   936040,   889238,   842436,   795634,
-   748832,   702030,   655228,   608426,   561624,   514822,   468020,   421218,
-   374416,   327614,   280812,   234010,   187208,   140406,    93604,    46802,
-        0,   -46802,   -93604,  -140406,  -187208,  -234010,  -280812,  -327614,
-  -374416,  -421218,  -468020,  -514822,  -561624,  -608426,  -655228,  -702030,
-  -748832,  -795634,  -842436,  -889238,  -936040,  -982842, -1029644, -1076446,
- -1123248, -1170050, -1216852, -1263654, -1310456, -1357258, -1404060, -1450862,
- -1497664, -1544466, -1591268, -1638070, -1684872, -1731674, -1778476, -1825278,
- -1872080, -1918882, -1965684, -2012486, -2059288, -2106090, -2152892, -2199694,
- -2246496, -2293298, -2340100, -2386902, -2433704, -2480506, -2527308, -2574110,
- -2620912, -2667714, -2714516, -2761318, -2808120, -2854922, -2901724, -2948526,
- -2995328, -3042130, -3088932, -3135734, -3182536, -3229338, -3276140, -3322942,
- -3369744, -3416546, -3463348, -3510150, -3556952, -3603754, -3650556, -3697358,
- -3744160, -3790962, -3837764, -3884566, -3931368, -3978170, -4024972, -4071774,
- -4118576, -4165378, -4212180, -4258982, -4305784, -4352586, -4399388, -4446190,
- -4492992, -4539794, -4586596, -4633398, -4680200, -4727002, -4773804, -4820606,
- -4867408, -4914210, -4961012, -5007814, -5054616, -5101418, -5148220, -5195022,
- -5241824, -5288626, -5335428, -5382230, -5429032, -5475834, -5522636, -5569438,
- -5616240, -5663042, -5709844, -5756646, -5803448, -5850250, -5897052, -5943854,
-};
-    
-    const double* Srgb8ToLinearTable() {
-  static const double* const kSrgb8ToLinearTable = NewSrgb8ToLinearTable();
-  return kSrgb8ToLinearTable;
 }
     
-    #ifndef GUETZLI_IDCT_H_
-#define GUETZLI_IDCT_H_
-    
-    bool WriteJpeg(const JPEGData& jpg, bool strip_metadata, JPEGOutput out);
-    
-      std::vector<uint8_t> ToSRGB() const;
-    
-    #include 'guetzli/quality.h'
-    
-    
-    { private:
-  folly::LifoSem sem_;
-  std::vector<folly::MPMCQueue<T>> queues_;
-};
-    
-      struct Node : public hazptr_obj_base<Node, Atom, Reclaimer<Node>> {
-    T elem_;
-    Atom<Node*> next_;
+      template<typename T> T* AddListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i==listerners_.end()) {
+      T* listener_object = new T(this);
+      listerners_[T::id] = listener_object;
+      return listener_object;
     }
-    
-      // Add an unsorted range that will have to be merged in.
-  s = makeVectorOfWrappers<CountCopyCtor, int>({10, 6, 5, 2});
-    
-    #include <folly/detail/MemoryIdler.h>
-    
-    #include <folly/executors/IOExecutor.h>
-#include <folly/executors/ThreadPoolExecutor.h>
-#include <folly/io/async/EventBaseManager.h>
-    
-      for (auto& cpuLocalBuffer : cpuLocalBuffers_) {
-    SpinLockGuard g(cpuLocalBuffer.mutex);
-    valuesVec.push_back(std::move(cpuLocalBuffer.buffer));
-    if (cpuLocalBuffer.digest) {
-      digestPtrs.push_back(std::move(cpuLocalBuffer.digest));
-    }
+    return NULL;
   }
     
-    void singletonPrintDestructionStackTrace(const TypeDescriptor& type);
+    #ifndef CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
+#define CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
+    
+    #include 'content/nw/src/api/menu/menu.h'
+    
+    
+void MenuItem::UpdateKeys(GtkAccelGroup *gtk_accel_group){
+  this->gtk_accel_group = gtk_accel_group;
+  if (enable_shortcut && GTK_IS_ACCEL_GROUP(gtk_accel_group)){
+    gtk_widget_add_accelerator(
+      menu_item_,
+      'activate',
+      gtk_accel_group,
+      keyval,
+      modifiers_mask,
+      GTK_ACCEL_VISIBLE);
+  }
+  if (submenu_ != NULL){
+    submenu_->UpdateKeys(gtk_accel_group);
+  }
+  return;
+}
+    
+    #include 'base/files/file_path.h'
+#include 'base/strings/string_util.h'
+#include 'base/strings/utf_string_conversions.h'
+#include 'base/threading/thread_restrictions.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menu/menu.h'
+#include 'content/nw/src/nw_base.h'
+#include 'content/nw/src/nw_content.h'
+#include 'content/nw/src/nw_package.h'
+#include 'ui/base/accelerators/accelerator.h'
+#include 'ui/gfx/image/image_skia_operations.h'
+#include 'ui/events/event_constants.h'//for modifier key code
+#include 'base/logging.h'
+    
+      // Ignore first non-switch arg if it's not a standalone package.
+  bool ignore_arg = !package->self_extract();
+  for (unsigned i = 1; i < argv.size(); ++i) {
+    if (ignore_arg && args.size() && argv[i] == args[0]) {
+      ignore_arg = false;
+      continue;
+    }
+    }
+    
+     protected:
+  ~NwClipboardReadAvailableTypesFunction() override;
+    
+    In jurisdictions which recognize Public Domain property, the user of this 
+software may choose to accept it either as 1) Public Domain, 2) under the 
+conditions of the MIT License (see below), or 3) under the terms of dual 
+Public Domain/MIT License conditions described here, as they choose.
+    
+    static const char* kModuleName = '_api_implementation';
+static const char kModuleDocstring[] =
+'_api_implementation is a module that exposes compile-time constants that\n'
+'determine the default API implementation to use for Python proto2.\n'
+'\n'
+'It complements api_implementation.py by setting defaults using compile-time\n'
+'constants defined in C, such that one can set defaults at compilation\n'
+'(e.g. with blaze flag --copt=-DPYTHON_PROTO2_CPP_IMPL_V2).';
+    
+    #include <google/protobuf/pyext/descriptor_database.h>
+    
+    
+    {  ASSERT_TRUE(message.ParseFromString(data));
+  EXPECT_TRUE(message.has_any_value());
+  ASSERT_TRUE(message.any_value().UnpackTo(&submessage));
+  EXPECT_EQ(12345, submessage.int32_value());
+}
+    
+    class RepeatedPrimitiveFieldGenerator : public FieldGeneratorBase {
+ public:
+  RepeatedPrimitiveFieldGenerator(const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options);
+  ~RepeatedPrimitiveFieldGenerator();
+    }
+    
+    
+    {
+  shared_ptr<Caffe::RNG> rng_;
+  Phase phase_;
+  Blob<Dtype> data_mean_;
+  vector<Dtype> mean_values_;
+};
+    
+      // Adds a creator.
+  static void AddCreator(const string& type, Creator creator) {
+    CreatorRegistry& registry = Registry();
+    CHECK_EQ(registry.count(type), 0)
+        << 'Layer type ' << type << ' already registered.';
+    registry[type] = creator;
+  }
+    
+    namespace caffe {
+    }
+    
+    #endif  // CAFFE_ARGMAX_LAYER_HPP_
+
+    
+    #endif  // CAFFE_BATCHREINDEX_LAYER_HPP_
+
+    
+    /*
+ * Computes the difference between two timespec objects in microseconds.
+ */
+int64_t gettime_diff_us(const timespec&, const timespec&);
+    
+    namespace HPHP { namespace jit {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    }
+    
+      if (mustBeThisObj(env, env.state.mInstrState.base)) {
+    auto const optThisTy = thisType(env);
+    auto const thisTy    = optThisTy ? *optThisTy : TObj;
+    if (name) {
+      auto const propTy = thisPropAsCell(env, name);
+      moveBase(env,
+               Base { propTy ? *propTy : TInitCell,
+                      BaseLoc::Prop,
+                      thisTy,
+                      name },
+               update);
+    } else {
+      moveBase(env,
+               Base { TInitCell, BaseLoc::Prop, thisTy },
+               update);
+    }
+    return;
+  }
+    
+    Type typeShl(Type t1, Type t2) { return shift_impl(t1, t2, cellShl); }
+Type typeShr(Type t1, Type t2) { return shift_impl(t1, t2, cellShr); }
+    
+    struct Array;
+struct Variant;
+    
+    template<> inline
+dnnError_t dnnReLUCreateForward<float>(
+    dnnPrimitive_t* pRelu,
+    dnnPrimitiveAttributes_t attributes,
+    const dnnLayout_t dataLayout,
+    float negativeSlope)
+{
+    return dnnReLUCreateForward_F32(pRelu, attributes, dataLayout, negativeSlope);
+}
+    
+        virtual void CreateNetwork(const std::string& networkDescription) override
+    {
+        CNTKEvalBase<ElemType>::CreateNetwork(networkDescription);
+    }
+    
+    virtual void Init(const std::string& config) override
+    {
+        CNTKEvalBase<ElemType>::Init(config);
+        m_start = 0;
+    }
+    
+      /// Constructor to set a particular expiry time relative to now.
+  /**
+   * This constructor creates a timer and sets the expiry time.
+   *
+   * @param io_service The io_service object that the timer will use to dispatch
+   * handlers for any asynchronous operations performed on the timer.
+   *
+   * @param expiry_time The expiry time to be used for the timer, relative to
+   * now.
+   */
+  basic_waitable_timer(boost::asio::io_service& io_service,
+      const duration& expiry_time)
+    : basic_io_object<WaitableTimerService>(io_service)
+  {
+    boost::system::error_code ec;
+    this->service.expires_from_now(this->implementation, expiry_time, ec);
+    boost::asio::detail::throw_error(ec, 'expires_from_now');
+  }
+    
+    #ifndef BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+#define BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+    
+    #ifndef BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
+#define BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
+    
+    // Standard library components can't be forward declared, so we'll have to
+// include the array header. Fortunately, it's fairly lightweight and doesn't
+// add significantly to the compile time.
+#if defined(BOOST_ASIO_HAS_STD_ARRAY)
+# include <array>
+#endif // defined(BOOST_ASIO_HAS_STD_ARRAY)
+    
+    #include <boost/asio/detail/config.hpp>
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS) \
+  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
+typedef null_fenced_block fenced_block;
+#elif defined(__MACH__) && defined(__APPLE__)
+typedef macos_fenced_block fenced_block;
+#elif defined(__sun)
+typedef solaris_fenced_block fenced_block;
+#elif defined(__GNUC__) && defined(__arm__) \
+  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
+typedef gcc_arm_fenced_block fenced_block;
+#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
+typedef gcc_hppa_fenced_block fenced_block;
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+typedef gcc_x86_fenced_block fenced_block;
+#elif defined(__GNUC__) \
+  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
+typedef gcc_sync_fenced_block fenced_block;
+#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+typedef win_fenced_block fenced_block;
+#else
+typedef null_fenced_block fenced_block;
+#endif
+    
+    
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+    #endif // defined(BOOST_ASIO_WINDOWS_RUNTIME)
+    
+    #include <boost/asio/detail/config.hpp>
+    
+    namespace xgboost {
+ConsoleLogger::~ConsoleLogger() {
+  dmlc::CustomLogMessage::Log(log_stream_.str());
+}
+TrackerLogger::~TrackerLogger() {
+  dmlc::CustomLogMessage::Log(log_stream_.str());
+}
+}  // namespace xgboost
+    
+    namespace xgboost {
+  data::SparsePageFormat* data::SparsePageFormat::Create(const std::string& name) {
+  auto *e = ::dmlc::Registry< ::xgboost::data::SparsePageFormatReg>::Get()->Find(name);
+  if (e == nullptr) {
+    LOG(FATAL) << 'Unknown format type ' << name;
+  }
+  return (e->body)();
+}
+    }
+    
+    bool SparsePageSource::CacheExist(const std::string& cache_info) {
+  std::vector<std::string> cache_shards = common::Split(cache_info, ':');
+  CHECK_NE(cache_shards.size(), 0U);
+  {
+    std::string name_info = cache_shards[0];
+    std::unique_ptr<dmlc::Stream> finfo(dmlc::Stream::Create(name_info.c_str(), 'r', true));
+    if (finfo == nullptr) return false;
+  }
+  for (const std::string& prefix : cache_shards) {
+    std::string name_row = prefix + '.row.page';
+    std::unique_ptr<dmlc::Stream> frow(dmlc::Stream::Create(name_row.c_str(), 'r', true));
+    if (frow == nullptr) return false;
+  }
+  return true;
+}
+    
+    static stb_uint stb_adler32(stb_uint adler32, stb_uchar *buffer, stb_uint buflen)
+{
+    const unsigned long ADLER_MOD = 65521;
+    unsigned long s1 = adler32 & 0xffff, s2 = adler32 >> 16;
+    unsigned long blocklen, i;
+    }
+    
+        // Create and grow vertex/index buffers if needed
+    if (!g_pVB || g_VertexBufferSize < draw_data->TotalVtxCount)
+    {
+        if (g_pVB) { g_pVB->Release(); g_pVB = NULL; }
+        g_VertexBufferSize = draw_data->TotalVtxCount + 5000;
+        D3D12_HEAP_PROPERTIES props;
+        memset(&props, 0, sizeof(D3D12_HEAP_PROPERTIES));
+        props.Type = D3D12_HEAP_TYPE_UPLOAD;
+        props.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+        props.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+        D3D12_RESOURCE_DESC desc;
+        memset(&desc, 0, sizeof(D3D12_RESOURCE_DESC));
+        desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+        desc.Width = g_VertexBufferSize * sizeof(ImDrawVert);
+        desc.Height = 1;
+        desc.DepthOrArraySize = 1;
+        desc.MipLevels = 1;
+        desc.Format = DXGI_FORMAT_UNKNOWN;
+        desc.SampleDesc.Count = 1;
+        desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+        desc.Flags = D3D12_RESOURCE_FLAG_NONE;
+        if (g_pd3dDevice->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_GENERIC_READ, NULL, IID_PPV_ARGS(&g_pVB)) < 0)
+            return;
+        frameResources->VB = g_pVB;
+        frameResources->VertexBufferSize = g_VertexBufferSize;
+    }
+    if (!g_pIB || g_IndexBufferSize < draw_data->TotalIdxCount)
+    {
+        if (g_pIB) { g_pIB->Release(); g_pIB = NULL; }
+        g_IndexBufferSize = draw_data->TotalIdxCount + 10000;
+        D3D12_HEAP_PROPERTIES props;
+        memset(&props, 0, sizeof(D3D12_HEAP_PROPERTIES));
+        props.Type = D3D12_HEAP_TYPE_UPLOAD;
+        props.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
+        props.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
+        D3D12_RESOURCE_DESC desc;
+        memset(&desc, 0, sizeof(D3D12_RESOURCE_DESC));
+        desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+        desc.Width = g_IndexBufferSize * sizeof(ImDrawIdx);
+        desc.Height = 1;
+        desc.DepthOrArraySize = 1;
+        desc.MipLevels = 1;
+        desc.Format = DXGI_FORMAT_UNKNOWN;
+        desc.SampleDesc.Count = 1;
+        desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+        desc.Flags = D3D12_RESOURCE_FLAG_NONE;
+        if (g_pd3dDevice->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc, D3D12_RESOURCE_STATE_GENERIC_READ, NULL, IID_PPV_ARGS(&g_pIB)) < 0)
+            return;
+        frameResources->IB = g_pIB;
+        frameResources->IndexBufferSize = g_IndexBufferSize;
+    }
+    
+        // Render command lists
+    int vtx_offset = 0;
+    int idx_offset = 0;
+    ImVec2 pos = draw_data->DisplayPos;
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
+        {
+            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
+            if (pcmd->UserCallback)
+            {
+                pcmd->UserCallback(cmd_list, pcmd);
+            }
+            else
+            {
+                const RECT r = { (LONG)(pcmd->ClipRect.x - pos.x), (LONG)(pcmd->ClipRect.y - pos.y), (LONG)(pcmd->ClipRect.z - pos.x), (LONG)(pcmd->ClipRect.w - pos.y) };
+                g_pd3dDevice->SetTexture(0, (LPDIRECT3DTEXTURE9)pcmd->TextureId);
+                g_pd3dDevice->SetScissorRect(&r);
+                g_pd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, vtx_offset, 0, (UINT)cmd_list->VtxBuffer.Size, idx_offset, pcmd->ElemCount/3);
+            }
+            idx_offset += pcmd->ElemCount;
+        }
+        vtx_offset += cmd_list->VtxBuffer.Size;
+    }
+    
+    int32 ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data)
+{
+    // pEvent->m_Button is of type s3ePointerButton and indicates which mouse
+    // button was pressed.  For touchscreen this should always have the value
+    // S3E_POINTER_BUTTON_SELECT
+    s3ePointerEvent* pEvent = (s3ePointerEvent*)system_data;
+    }
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+      void setRequest(const std::shared_ptr<Request>& request);
+    
+    
+    {  virtual bool execute() CXX11_OVERRIDE;
+};
+    
+    
+    {  virtual std::unique_ptr<Command> getNextCommand() = 0;
+};
+    
+    #include 'common.h'
+    
+    #include <ostream>
+    
+    #endif // D_AUTH_CONFIG_H
