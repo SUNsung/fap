@@ -1,90 +1,94 @@
 
         
-        
-@registry.RegisteredClass
-class ComponentBuilderBase(object):
-  '''Utility to build a single Component in a DRAGNN stack of models.
-    
-      def testArcSourcePotentialsFromTokens(self):
-    with self.test_session():
-      tokens = tf.constant([[[4, 5, 6],
-                             [5, 6, 7],
-                             [6, 7, 8]],
-                            [[6, 7, 8],
-                             [5, 6, 7],
-                             [4, 5, 6]]], tf.float32)  # pyformat: disable
-      weights = tf.constant([2, 3, 5], tf.float32)
-    
-          grads_and_vars = self.optimizer.compute_gradients(
-          cost, var_list=params_to_train)
-      clipped_gradients = [
-          (self._clip_gradients(g), v) for g, v in grads_and_vars
-      ]
-      gradient_norm = tf.global_norm(list(zip(*clipped_gradients))[0])
+            def __init__(self, first_user, second_user):
+        super(PrivateChat, self).__init__()
+        self.users.append(first_user)
+        self.users.append(second_user)
     
     
-_DUMMY_GOLD_SENTENCE = '''
-token {
-  word: 'sentence' start: 0 end: 7 tag: 'NN' category: 'NOUN' label: 'ROOT'
-}
-token {
-  word: '0' start: 9 end: 9 head: 0 tag: 'CD' category: 'NUM' label: 'num'
-}
-token {
-  word: '.' start: 10 end: 10 head: 0 tag: '.' category: '.' label: 'punct'
-}
-'''
+class State(Enum):
+    unvisited = 0
+    visited = 1
     
-    Provides utility functions that are consumed internally by Requests
-which depend on extremely few external helpers (such as compat)
-'''
+        :param str u_string: unicode string to check. Must be unicode
+        and not Python 2 `str`.
+    :rtype: bool
+    '''
+    assert isinstance(u_string, str)
+    try:
+        u_string.encode('ascii')
+        return True
+    except UnicodeEncodeError:
+        return False
+
+    
+    
+class RequestsWarning(Warning):
+    '''Base warning for Requests.'''
+    pass
+    
+    
+# -- Options for manual page output ---------------------------------------
+    
+    from . import utils
+from . import packages
+from .models import Request, Response, PreparedRequest
+from .api import request, get, head, post, patch, put, delete, options
+from .sessions import session, Session
+from .status_codes import codes
+from .exceptions import (
+    RequestException, Timeout, URLRequired,
+    TooManyRedirects, HTTPError, ConnectionError,
+    FileModeWarning, ConnectTimeout, ReadTimeout
+)
+    
+    
+class AuthenticatorTest(test_util.TempDirTestCase,
+                        dns_test_common_lexicon.BaseLexiconAuthenticatorTest):
+    
+    # The master toctree document.
+master_doc = 'index'
+    
+            chain_file, abs_chain_path =\
+                _open_pem_file('chain_path', chain_path)
+        fullchain_file, abs_fullchain_path =\
+                _open_pem_file('fullchain_path', fullchain_path)
+    
+            self.addr1 = Addr.fromstring('127.0.0.1')
+        self.addr2 = Addr.fromstring('127.0.0.1:*')
+    
+    
+def fetch_zip(commit_hash, zip_dir, *, org='python', binary=False, verbose):
+    repo = f'cpython-{'bin' if binary else 'source'}-deps'
+    url = f'https://github.com/{org}/{repo}/archive/{commit_hash}.zip'
+    reporthook = None
+    if verbose:
+        reporthook = print
+    zip_dir.mkdir(parents=True, exist_ok=True)
+    filename, headers = urlretrieve(
+        url,
+        zip_dir / f'{commit_hash}.zip',
+        reporthook=reporthook,
+    )
+    return filename
+    
+    
+class TypeDefVisitor(EmitVisitor):
+    def visitModule(self, mod):
+        for dfn in mod.dfns:
+            self.visit(dfn)
+    
+        def clear(self):
+        for ta in self._array:
+            ta._text.clear()
     
     import sys
     
-        def __init__(self, *args, **kwargs):
-        '''Initialize RequestException with `request` and `response` objects.'''
-        response = kwargs.pop('response', None)
-        self.response = response
-        self.request = kwargs.pop('request', None)
-        if (response is not None and not self.request and
-                hasattr(response, 'request')):
-            self.request = self.response.request
-        super(RequestException, self).__init__(*args, **kwargs)
     
+class Tests(unittest.TestCase):
     
-    {    # Server Error.
-    500: ('internal_server_error', 'server_error', '/o\\', '✗'),
-    501: ('not_implemented',),
-    502: ('bad_gateway',),
-    503: ('service_unavailable', 'unavailable'),
-    504: ('gateway_timeout',),
-    505: ('http_version_not_supported', 'http_version'),
-    506: ('variant_also_negotiates',),
-    507: ('insufficient_storage',),
-    509: ('bandwidth_limit_exceeded', 'bandwidth'),
-    510: ('not_extended',),
-    511: ('network_authentication_required', 'network_auth', 'network_authentication'),
-}
+    N = 8                                   # Default; command line overrides
     
-        pyopenssl_info = {
-        'version': None,
-        'openssl_version': '',
-    }
-    if OpenSSL:
-        pyopenssl_info = {
-            'version': OpenSSL.__version__,
-            'openssl_version': '%x' % OpenSSL.SSL.OPENSSL_VERSION_NUMBER,
-        }
-    cryptography_info = {
-        'version': getattr(cryptography, '__version__', ''),
-    }
-    idna_info = {
-        'version': getattr(idna, '__version__', ''),
-    }
-    
-    # General information about the project.
-project = u'Requests'
-copyright = u'MMXVIII. A <a href='http://kennethreitz.com/pages/open-projects.html'>Kenneth Reitz</a> Project'
-author = u'Kenneth Reitz'
-    
-        replace_chars = ' \'''
+        subtracted
+    >>> a - b
+    Vec(-2, 0, 2)
