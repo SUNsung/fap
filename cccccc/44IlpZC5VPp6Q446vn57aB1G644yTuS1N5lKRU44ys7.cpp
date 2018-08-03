@@ -1,307 +1,236 @@
 
         
-          std::unique_ptr<v8::Locker> locker_;
-    
-    #ifndef ATOM_COMMON_DRAGGABLE_REGION_H_
-#define ATOM_COMMON_DRAGGABLE_REGION_H_
-    
-    
-    {}  // namespace extensions
-    
-    #if defined(OS_MACOSX)
-// NOTE: if you change the value of kFrameworkName, please don't forget to
-// update components/test/run_all_unittests.cc as well.
-// TODO(tfarina): Remove the comment above, when you fix components to use plist
-// on Mac.
-extern const base::FilePath::CharType kFrameworkName[];
-#endif  // OS_MACOSX
-    
-    
-    {}  // namespace atom
-    
-        return;
-  } else if (method == 'ClearCache') {
-    ClearCache(GetRenderProcessHost());
-    return;
-  } else if (method == 'CreateShortcut') {
-#if defined(OS_WIN)
-    base::string16 path;
-    arguments.GetString(0, &path);
-    
-      // Post 'reopen' event.
-  // (This event is received when the user clicked the icon in the Dock).
-  static void EmitReopenEvent();
-    
-     private:
-  void SetText(std::string& text);
-  std::string GetText();
-  void Clear();
-    
-    namespace nw {
-    }
-    
-    NwShellOpenItemFunction::NwShellOpenItemFunction() {
+        
+    {  EXPECT_EQ(status(), param.expected_status);
 }
     
-    void projectPoints(cv::InputArray objectPoints, cv::OutputArray imagePoints,
-                   cv::InputArray _rvec,cv::InputArray _tvec,
-                   const IntrinsicParams& param, cv::OutputArray jacobian);
+    #include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/lib/core/stringpiece.h'
+#if !defined(IS_SLIM_BUILD)
+#include 'tensorflow/core/lib/io/zlib_compression_options.h'
+#include 'tensorflow/core/lib/io/zlib_outputbuffer.h'
+#endif  // IS_SLIM_BUILD
+#include 'tensorflow/core/platform/macros.h'
+#include 'tensorflow/core/platform/types.h'
     
-    #ifndef CODEGEN_FUNCPTR
-    #define CODEGEN_REMOVE_FUNCPTR
-    #if defined(_WIN32)
-        #define CODEGEN_FUNCPTR APIENTRY
-    #else
-        #define CODEGEN_FUNCPTR
-    #endif
-#endif // CODEGEN_FUNCPTR
-    
-    #ifndef __OPENCV_CORE_OCL_RUNTIME_COMMON_HPP__
-#define __OPENCV_CORE_OCL_RUNTIME_COMMON_HPP__
-    
-    void read_image(std::ifstream* image_file, std::ifstream* label_file,
-        uint32_t index, uint32_t rows, uint32_t cols,
-        char* pixels, char* label) {
-  image_file->seekg(index * rows * cols + 16);
-  image_file->read(pixels, rows * cols);
-  label_file->seekg(index + 8);
-  label_file->read(label, 1);
-}
-    
-      static vector<string> LayerTypeList() {
-    CreatorRegistry& registry = Registry();
-    vector<string> layer_types;
-    for (typename CreatorRegistry::iterator iter = registry.begin();
-         iter != registry.end(); ++iter) {
-      layer_types.push_back(iter->first);
-    }
-    return layer_types;
+    void MPIUtils::InitMPI() {
+  // Initialize the MPI environment if that hasn't been done
+  int flag = 0;
+  MPI_CHECK(MPI_Initialized(&flag));
+  if (!flag) {
+    int proc_id = 0, number_of_procs = 1, len = -1;
+    char my_host_name[max_worker_name_length];
+    // MPI_CHECK(MPI_Init_thread(0, 0, MPI_THREAD_MULTIPLE, &flag));
+    MPI_CHECK(MPI_Init(0, 0));
+    MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &proc_id));
+    MPI_CHECK(MPI_Comm_size(MPI_COMM_WORLD, &number_of_procs));
+    MPI_CHECK(MPI_Get_processor_name(my_host_name, &len));
+    fprintf(stderr,
+            'MPI Environment initialized. Process id: %d Total processes: %d '
+            '|| Hostname: %s \n',
+            proc_id, number_of_procs, my_host_name);
   }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    /**
- * @brief Index into the input blob along its first axis.
- *
- * This layer can be used to select, reorder, and even replicate examples in a
- * batch.  The second blob is cast to int and treated as an index into the
- * first axis of the first blob.
- */
-template <typename Dtype>
-class BatchReindexLayer : public Layer<Dtype> {
- public:
-  explicit BatchReindexLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of ConvolutionLayer.
- *        Fallback to ConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates convolution through forward kernels for filtering and bias
- * plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
- *
- * The CUDNN engine does not have memory overhead for matrix buffers. For many
- * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
- * but for fully-convolutional models and large inputs the CAFFE engine can be
- * faster as long as it fits in memory.
-*/
-template <typename Dtype>
-class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
- public:
-  explicit CuDNNConvolutionLayer(const LayerParameter& param)
-      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNConvolutionLayer();
-    }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    namespace caffe {
-    }
-    
-    namespace caffe {
-    }
-    
-    
-    {}  // namespace caffe
-    
-    #include <vector>
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the computed outputs @f$
-   *        y = \gamma ^ {\alpha x + \beta}
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    #endif  // CAFFE_FILTER_LAYER_HPP_
-
-    
-    TEST(LogTest, ReadSecondTenThousand) {
-  CheckInitialOffsetRecord(10000, 1);
 }
     
-    class MemTable;
+      // Conversion of a TensorSlice to other formats
+  void AsProto(TensorSliceProto* proto) const;
+  string DebugString() const;
     
-      // Create a file.
-  ASSERT_OK(env_->NewWritableFile('/dir/f', &writable_file));
-  ASSERT_OK(env_->GetFileSize('/dir/f', &file_size));
-  ASSERT_EQ(0, file_size);
-  delete writable_file;
+    bool swift::unicode::isSingleUnicodeScalar(StringRef S) {
+  unsigned Scalar;
+  return extractFirstUnicodeScalarImpl(S, Scalar);
+}
     
-    const double Histogram::kBucketLimit[kNumBuckets] = {
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 45,
-  50, 60, 70, 80, 90, 100, 120, 140, 160, 180, 200, 250, 300, 350, 400, 450,
-  500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000,
-  3500, 4000, 4500, 5000, 6000, 7000, 8000, 9000, 10000, 12000, 14000,
-  16000, 18000, 20000, 25000, 30000, 35000, 40000, 45000, 50000, 60000,
-  70000, 80000, 90000, 100000, 120000, 140000, 160000, 180000, 200000,
-  250000, 300000, 350000, 400000, 450000, 500000, 600000, 700000, 800000,
-  900000, 1000000, 1200000, 1400000, 1600000, 1800000, 2000000, 2500000,
-  3000000, 3500000, 4000000, 4500000, 5000000, 6000000, 7000000, 8000000,
-  9000000, 10000000, 12000000, 14000000, 16000000, 18000000, 20000000,
-  25000000, 30000000, 35000000, 40000000, 45000000, 50000000, 60000000,
-  70000000, 80000000, 90000000, 100000000, 120000000, 140000000, 160000000,
-  180000000, 200000000, 250000000, 300000000, 350000000, 400000000,
-  450000000, 500000000, 600000000, 700000000, 800000000, 900000000,
-  1000000000, 1200000000, 1400000000, 1600000000, 1800000000, 2000000000,
-  2500000000.0, 3000000000.0, 3500000000.0, 4000000000.0, 4500000000.0,
-  5000000000.0, 6000000000.0, 7000000000.0, 8000000000.0, 9000000000.0,
-  1e200,
+    #import <Foundation/Foundation.h>
+    
+    /// Index the given module and store the results to \p indexStorePath.
+///
+/// \param module The module to index.
+///
+/// \param indexUnitTokens A list of unique identifiers for the index units to
+/// be written. This may either be one unit per source file of \p module, or it
+/// may be a single unit, in which case all the index information will be
+/// combined into a single unit.
+///
+/// \param moduleUnitToken A unique identifier for this module unit in the form
+/// of a file path. Only used if \p indexUnitTokens are specified for each
+/// source file, otherwise the single \p indexUnitTokens value is used instead.
+///
+/// \param indexStorePath The location to write the indexing data to.
+///
+/// \param indexSystemModules If true, emit index data for imported serialized
+/// swift system modules.
+///
+/// \param isDebugCompilation true for non-optimized compiler invocation.
+///
+/// \param targetTriple The target for this compilation.
+///
+/// \param dependencyTracker The set of dependencies seen while building.
+bool indexAndRecord(ModuleDecl *module, ArrayRef<std::string> indexUnitTokens,
+                    StringRef moduleUnitToken, StringRef indexStorePath,
+                    bool indexSystemModules, bool isDebugCompilation,
+                    StringRef targetTriple,
+                    const DependencyTracker &dependencyTracker);
+// FIXME: indexUnitTokens could be StringRef, but that creates an impedance
+// mismatch in the caller.
+    
+    #include 'swift/Markup/Markup.h'
+#include 'llvm/ADT/Optional.h'
+    
+    /// A SyntaxRewriter for applying a set of formatting rules to a Syntax tree.
+struct FormatSyntaxRewriter : public SyntaxRewriter {
+  virtual StructDeclSyntax
+  rewriteStructDecl(StructDeclSyntax Struct) override;
 };
     
-    #ifndef ROCKSDB_LITE
-#pragma once
+    #ifndef SWIFT_SYNTAX_REFERENCES_H
+#define SWIFT_SYNTAX_REFERENCES_H
     
-      // Offset of the last record returned by ReadRecord.
-  uint64_t last_record_offset_;
-  // Offset of the first location past the end of buffer_.
-  uint64_t end_of_buffer_offset_;
+    namespace swift {
+class ModuleDecl;
+class SourceFile;
+class DeclContext;
+    }
     
+    /// This represents one part of a #if block.  If the condition field is
+/// non-null, then this represents a #if or a #elseif, otherwise it represents
+/// an #else block.
+struct IfConfigClause {
+  /// The location of the #if, #elseif, or #else keyword.
+  SourceLoc Loc;
+  
+  /// The condition guarding this #if or #elseif block.  If this is null, this
+  /// is a #else clause.
+  Expr *Cond;
+  
+  /// Elements inside the clause
+  ArrayRef<ASTNode> Elements;
+    }
     
-    {  // Note: we may want to access the Java callback object instance
-  // across multiple method calls, so we create a global ref
-  assert(jcallback_obj != nullptr);
-  m_jcallback_obj = env->NewGlobalRef(jcallback_obj);
-  if(jcallback_obj == nullptr) {
-    // exception thrown: OutOfMemoryError
-    return;
+    namespace llvm {
+  class MemoryBuffer;
+}
+    
+    // Reads the DRI marker and saved the restart interval into *jpg.
+bool ProcessDRI(const uint8_t* data, const size_t len, size_t* pos,
+                JPEGData* jpg) {
+  if (jpg->restart_interval > 0) {
+    fprintf(stderr, 'Duplicate DRI marker.\n');
+    jpg->error = JPEG_DUPLICATE_DRI;
+    return false;
   }
+  const size_t start_pos = *pos;
+  VERIFY_LEN(4);
+  size_t marker_len = ReadUint16(data, pos);
+  int restart_interval = ReadUint16(data, pos);
+  jpg->restart_interval = restart_interval;
+  VERIFY_MARKER_END();
+  return true;
 }
     
-      uint64_t GetID() const { return id_; }
+    // kDCTMatrix[8*u+x] = 0.5*alpha(u)*cos((2*x+1)*u*M_PI/16),
+// where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
+static const double kDCTMatrix[64] = {
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.4903926402,  0.4157348062,  0.2777851165,  0.0975451610,
+ -0.0975451610, -0.2777851165, -0.4157348062, -0.4903926402,
+  0.4619397663,  0.1913417162, -0.1913417162, -0.4619397663,
+ -0.4619397663, -0.1913417162,  0.1913417162,  0.4619397663,
+  0.4157348062, -0.0975451610, -0.4903926402, -0.2777851165,
+  0.2777851165,  0.4903926402,  0.0975451610, -0.4157348062,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.2777851165, -0.4903926402,  0.0975451610,  0.4157348062,
+ -0.4157348062, -0.0975451610,  0.4903926402, -0.2777851165,
+  0.1913417162, -0.4619397663,  0.4619397663, -0.1913417162,
+ -0.1913417162,  0.4619397663, -0.4619397663,  0.1913417162,
+  0.0975451610, -0.2777851165,  0.4157348062, -0.4903926402,
+  0.4903926402, -0.4157348062,  0.2777851165, -0.0975451610,
+};
     
-        virtual DecodedType decode_key(const char* key) const {
-      // The format of key is frozen and can be terated as a part of the API
-      // contract. Refer to MemTable::Add for details.
-      return GetLengthPrefixedSlice(key);
+        // The nodes are:
+    // [0, n): the sorted leaf nodes that we start with.
+    // [n]: we add a sentinel here.
+    // [n + 1, 2n): new parent nodes are added here, starting from
+    //              (n+1). These are naturally in ascending order.
+    // [2n]: we add a sentinel at the end as well.
+    // There will be (2n+1) elements at the end.
+    const HuffmanTree sentinel(~static_cast<uint32_t>(0), -1, -1);
+    tree[n] = sentinel;
+    tree[n + 1] = sentinel;
+    
+    namespace guetzli {
     }
     
     
-    {  measure_ = measureFunc;
-}
+    {}  // namespace guetzli
+
     
-    /* static */ Config * Config::create(void)
-{
-    return new Config();
-}
+      tmp1 = kIDCTMatrix[0] * in[0];
+  out[0] = out[1] = out[2] = out[3] = out[4] = out[5] = out[6] = out[7] = tmp1;
     
-    struct Layout
-{
-    double left;
-    double right;
-    }
+    #include 'guetzli/jpeg_data.h'
     
-        method(setPositionType);
-    method(setPosition);
-    method(setPositionPercent);
+    // Output callback function with associated data.
+struct JPEGOutput {
+  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
+  bool Write(const uint8_t* buf, size_t len) const {
+    return (len == 0) || (cb(data, buf, len) == len);
+  }
+ private:
+  JPEGOutputHook cb;
+  void* data;
+};
     
-    #include <fb/assert.h>
-#include <fb/log.h>
+    enum JPEGReadError {
+  JPEG_OK = 0,
+  JPEG_SOI_NOT_FOUND,
+  JPEG_SOF_NOT_FOUND,
+  JPEG_UNEXPECTED_EOF,
+  JPEG_MARKER_BYTE_NOT_FOUND,
+  JPEG_UNSUPPORTED_MARKER,
+  JPEG_WRONG_MARKER_SIZE,
+  JPEG_INVALID_PRECISION,
+  JPEG_INVALID_WIDTH,
+  JPEG_INVALID_HEIGHT,
+  JPEG_INVALID_NUMCOMP,
+  JPEG_INVALID_SAMP_FACTOR,
+  JPEG_INVALID_START_OF_SCAN,
+  JPEG_INVALID_END_OF_SCAN,
+  JPEG_INVALID_SCAN_BIT_POSITION,
+  JPEG_INVALID_COMPS_IN_SCAN,
+  JPEG_INVALID_HUFFMAN_INDEX,
+  JPEG_INVALID_QUANT_TBL_INDEX,
+  JPEG_INVALID_QUANT_VAL,
+  JPEG_INVALID_MARKER_LEN,
+  JPEG_INVALID_SAMPLING_FACTORS,
+  JPEG_INVALID_HUFFMAN_CODE,
+  JPEG_INVALID_SYMBOL,
+  JPEG_NON_REPRESENTABLE_DC_COEFF,
+  JPEG_NON_REPRESENTABLE_AC_COEFF,
+  JPEG_INVALID_SCAN,
+  JPEG_OVERLAPPING_SCANS,
+  JPEG_INVALID_SCAN_ORDER,
+  JPEG_EXTRA_ZERO_RUN,
+  JPEG_DUPLICATE_DRI,
+  JPEG_DUPLICATE_SOF,
+  JPEG_WRONG_RESTART_MARKER,
+  JPEG_DUPLICATE_COMPONENT_ID,
+  JPEG_COMPONENT_NOT_FOUND,
+  JPEG_HUFFMAN_TABLE_NOT_FOUND,
+  JPEG_HUFFMAN_TABLE_ERROR,
+  JPEG_QUANT_TABLE_NOT_FOUND,
+  JPEG_EMPTY_DHT,
+  JPEG_EMPTY_DQT,
+  JPEG_OUT_OF_BAND_COEFF,
+  JPEG_EOB_RUN_TOO_LONG,
+  JPEG_IMAGE_TOO_LARGE,
+};
     
-    namespace facebook {
-    }
-    
-    #pragma once
-    
-    #include 'internal_macros.h'
-    
-          manager.reset(new internal::ThreadManager(b.threads));
-      for (std::size_t ti = 0; ti < pool.size(); ++ti) {
-        pool[ti] = std::thread(&RunInThread, &b, iters,
-                               static_cast<int>(ti + 1), manager.get());
-      }
-      RunInThread(&b, iters, 0, manager.get());
-      manager->WaitForAllThreads();
-      for (std::thread& thread : pool) thread.join();
-      internal::ThreadManager::Result results;
-      {
-        MutexLock l(manager->GetBenchmarkMutex());
-        results = manager->results;
-      }
-      manager.reset();
-      // Adjust real/manual time stats since they were reported per thread.
-      results.real_time_used /= b.threads;
-      results.manual_time_used /= b.threads;
-    
-    namespace benchmark {
-namespace internal {
-    }
-    }
-    
-    #include 'internal_macros.h'
-#include 'log.h'
-    
-    // Parses a string for a string flag, in the form of
-// '--flag=value'.
-//
-// On success, stores the value of the flag in *value, and returns
-// true.  On failure, returns false without changing *value.
-bool ParseStringFlag(const char* str, const char* flag, std::string* value);
-    
-    std::vector<BenchmarkReporter::Run> ComputeBigO(
-    const std::vector<BenchmarkReporter::Run>& reports) {
-  typedef BenchmarkReporter::Run Run;
-  std::vector<Run> results;
-    }
-    
-    #if defined(HAVE_STD_REGEX)
-#include <regex>
-#elif defined(HAVE_GNU_POSIX_REGEX)
-#include <gnuregex.h>
-#elif defined(HAVE_POSIX_REGEX)
-#include <regex.h>
-#else
-#error No regular expression backend was found!
-#endif
-#include <string>
-    
-      // Sample standard deviation is undefined for n = 1
-  if (v.size() == 1)
-    return 0.0;
+    static const int kJpegHuffmanRootTableBits = 8;
+// Maximum huffman lookup table size.
+// According to zlib/examples/enough.c, 758 entries are always enough for
+// an alphabet of 257 symbols (256 + 1 special symbol for the all 1s code) and
+// max bit length 16 if the root table has 8 bits.
+static const int kJpegHuffmanLutSize = 758;
