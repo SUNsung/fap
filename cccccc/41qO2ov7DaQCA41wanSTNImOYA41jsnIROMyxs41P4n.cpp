@@ -1,446 +1,390 @@
-// Access an object value by name, create a null member if it does not exist.
-// @pre Type of '*this' is object or null.
-// @param key is null-terminated.
-Value& Value::resolveReference(const char* key) {
-  JSON_ASSERT_MESSAGE(
-      type_ == nullValue || type_ == objectValue,
-      'in Json::Value::resolveReference(): requires objectValue');
-  if (type_ == nullValue)
-    *this = Value(objectValue);
-  CZString actualKey(
-      key, static_cast<unsigned>(strlen(key)), CZString::noDuplication); // NOTE!
-  ObjectValues::iterator it = value_.map_->lower_bound(actualKey);
-  if (it != value_.map_->end() && (*it).first == actualKey)
-    return (*it).second;
-    }
-    
-    // Find the file that declares the given fully-qualified symbol name.
-bool PyDescriptorDatabase::FindFileContainingSymbol(
-    const string& symbol_name, FileDescriptorProto* output) {
-  ScopedPyObjectPtr py_descriptor(
-      PyObject_CallMethod(py_database_, 'FindFileContainingSymbol', 's#',
-                          symbol_name.c_str(), symbol_name.size()));
-  return GetFileDescriptorProto(py_descriptor.get(), output);
-}
-    
-    TEST(AnyTest, TestPackAndUnpack) {
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  protobuf_unittest::TestAny message;
-  message.mutable_any_value()->PackFrom(submessage);
-    }
-    
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
-    
-    
-    {
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
 
-    
-    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
-    
-    // TODO(jonskeet): Refactor repeated field support; all the implementations are *really* similar. We
-// should probably have a RepeatedFieldGeneratorBase.
-class RepeatedEnumFieldGenerator : public FieldGeneratorBase {
- public:
-  RepeatedEnumFieldGenerator(const FieldDescriptor* descriptor,
-                             int fieldOrdinal,
-                             const Options *options);
-  ~RepeatedEnumFieldGenerator();
+        
+        
+    {  /// Returns true if \p BB is a dead-end block.
+  bool isDeadEnd(SILBasicBlock *BB) {
+    if (!isComputed) {
+      // Lazily compute the dataflow.
+      compute();
+      isComputed = true;
     }
-    
-    RepeatedPrimitiveFieldGenerator::~RepeatedPrimitiveFieldGenerator() {
-    }
-    
-    SourceGeneratorBase::~SourceGeneratorBase() {
-}
-    
-      std::string class_access_level();
-  const Options* options();
-    
-    
-    {
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace java
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-    MessageGenerator* ImmutableGeneratorFactory::NewMessageGenerator(
-    const Descriptor* descriptor) const {
-  if (HasDescriptorMethods(descriptor, context_->EnforceLite())) {
-    return new ImmutableMessageGenerator(descriptor, context_);
-  } else {
-    return new ImmutableMessageLiteGenerator(descriptor, context_);
+    return ReachableBlocks.count(BB) == 0;
   }
-}
-    
-        for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
-    {
-        g_driverType = driverTypes[driverTypeIndex];
-        hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-                D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
-        if (SUCCEEDED(hr))
-            break;
-    }
-    if (FAILED(hr))
-        return hr;
-    
-    #endif
-
-    
-    #ifndef OPENCV_CUDA_EMULATION_HPP_
-#define OPENCV_CUDA_EMULATION_HPP_
-    
-    //! @endcond
-    
-    #undef cv_hal_Cholesky32f
-#define cv_hal_Cholesky32f lapack_Cholesky32f
-#undef cv_hal_Cholesky64f
-#define cv_hal_Cholesky64f lapack_Cholesky64f
-    
-      /// @brief The spatial dimensions of the input.
-  inline int input_shape(int i) {
-    return (*bottom_shape_)[channel_axis_ + i];
-  }
-  // reverse_dimensions should return true iff we are implementing deconv, so
-  // that conv helpers know which dimensions are which.
-  virtual bool reverse_dimensions() = 0;
-  // Compute height_out_ and width_out_ from other parameters.
-  virtual void compute_output_shape() = 0;
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2+)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_1 @f$
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_2 @f$
-   *   -# ...
-   *   - K @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_K @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      the concatenated output @f$
-   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    
-    {  size_t tempDataSize;
-  void *tempData1, *tempData2;
 };
-#endif
     
-    #include <vector>
+    /// Index the given source file and store the results to \p indexStorePath.
+///
+/// \param primarySourceFile The source file to index.
+///
+/// \param indexUnitToken A unique identifier for this translation unit in the
+/// form of a file path.
+///
+/// \param indexStorePath The location to write the indexing data to.
+///
+/// \param indexSystemModules If true, emit index data for imported serialized
+/// swift system modules.
+///
+/// \param isDebugCompilation true for non-optimized compiler invocation.
+///
+/// \param targetTriple The target for this compilation.
+///
+/// \param dependencyTracker The set of dependencies seen while building.
+bool indexAndRecord(SourceFile *primarySourceFile, StringRef indexUnitToken,
+                    StringRef indexStorePath, bool indexSystemModules,
+                    bool isDebugCompilation, StringRef targetTriple,
+                    const DependencyTracker &dependencyTracker);
     
     
-    {}  // namespace caffe
+    {  virtual ~MarkupASTVisitor() {}
+};
     
-    #include <vector>
+    /// Format a Syntax tree with the given rules.
+Syntax format(Syntax Tree);
+// TODO: Representation for formatting rules, etc. This is just a figment
+// for now.
     
-    /**
- * @brief Convolve the input with a bank of learned filters, and (optionally)
- *        add biases, treating filters and convolution parameters in the
- *        opposite sense as ConvolutionLayer.
- *
- *   ConvolutionLayer computes each output value by dotting an input window with
- *   a filter; DeconvolutionLayer multiplies each input value by a filter
- *   elementwise, and sums over the resulting output windows. In other words,
- *   DeconvolutionLayer is ConvolutionLayer with the forward and backward passes
- *   reversed. DeconvolutionLayer reuses ConvolutionParameter for its
- *   parameters, but they take the opposite sense as in ConvolutionLayer (so
- *   padding is removed from the output rather than added to the input, and
- *   stride results in upsampling rather than downsampling).
- */
-template <typename Dtype>
-class DeconvolutionLayer : public BaseConvolutionLayer<Dtype> {
- public:
-  explicit DeconvolutionLayer(const LayerParameter& param)
-      : BaseConvolutionLayer<Dtype>(param) {}
+    #include 'llvm/Support/raw_ostream.h'
+    
+    
+    {} // namespace SourceKit
+    
+    // Read through the first n keys repeatedly and check that they get
+// compacted (verified by checking the size of the key space).
+void AutoCompactTest::DoReads(int n) {
+  std::string value(kValueSize, 'x');
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
     }
     
-    /* Location of code at error codes Reserve 0..2 (status codes 0..23 for UNLV)*/
-#define LOC_UNUSED0        0
-#define LOC_UNUSED1        1
-#define LOC_UNUSED2        2
-#define LOC_INIT      3
-#define LOC_EDGE_PROG   4
-#define LOC_TEXT_ORD_ROWS 5
-#define LOC_TEXT_ORD_WORDS  6
-#define LOC_PASS1     7
-#define LOC_PASS2     8
-/* Reserve up to 8..13 for adding subloc 0/3 plus subsubloc 0/1/2 */
-#define LOC_FUZZY_SPACE   14
-/* Reserve up to 14..20 for adding subloc 0/3 plus subsubloc 0/1/2 */
-#define LOC_MM_ADAPT    21
-#define LOC_DOC_BLK_REJ   22
-#define LOC_WRITE_RESULTS 23
-#define LOC_ADAPTIVE    24
-/* DON'T DEFINE ANY LOCATION > 31 !!! */
+    Status BuildTable(const std::string& dbname,
+                  Env* env,
+                  const Options& options,
+                  TableCache* table_cache,
+                  Iterator* iter,
+                  FileMetaData* meta) {
+  Status s;
+  meta->file_size = 0;
+  iter->SeekToFirst();
+    }
     
-      // Computes vectors of min and max label index for each timestep, based on
-  // whether skippability of nulls makes it possible to complete a valid path.
-  bool ComputeLabelLimits();
-  // Computes targets based purely on the labels by spreading the labels evenly
-  // over the available timesteps.
-  void ComputeSimpleTargets(GENERIC_2D_ARRAY<float>* targets) const;
-  // Computes mean positions and half widths of the simple targets by spreading
-  // the labels even over the available timesteps.
-  void ComputeWidthsAndMeans(GenericVector<float>* half_widths,
-                             GenericVector<int>* means) const;
-  // Calculates and returns a suitable fraction of the simple targets to add
-  // to the network outputs.
-  float CalculateBiasFraction();
-  // Runs the forward CTC pass, filling in log_probs.
-  void Forward(GENERIC_2D_ARRAY<double>* log_probs) const;
-  // Runs the backward CTC pass, filling in log_probs.
-  void Backward(GENERIC_2D_ARRAY<double>* log_probs) const;
-  // Normalizes and brings probs out of log space with a softmax over time.
-  void NormalizeSequence(GENERIC_2D_ARRAY<double>* probs) const;
-  // For each timestep computes the max prob for each class over all
-  // instances of the class in the labels_, and sets the targets to
-  // the max observed prob.
-  void LabelsToClasses(const GENERIC_2D_ARRAY<double>& probs,
-                       NetworkIO* targets) const;
-  // Normalizes the probabilities such that no target has a prob below min_prob,
-  // and, provided that the initial total is at least min_total_prob, then all
-  // probs will sum to 1, otherwise to sum/min_total_prob. The maximum output
-  // probability is thus 1 - (num_classes-1)*min_prob.
-  static void NormalizeProbs(GENERIC_2D_ARRAY<float>* probs);
-  // Returns true if the label at index is a needed null.
-  bool NeededNull(int index) const;
-  // Returns exp(clipped(x)), clipping x to a reasonable range to prevent over/
-  // underflow.
-  static double ClippedExp(double x) {
-    if (x < -kMaxExpArg_) return exp(-kMaxExpArg_);
-    if (x > kMaxExpArg_) return exp(kMaxExpArg_);
-    return exp(x);
+    #ifndef STORAGE_LEVELDB_DB_BUILDER_H_
+#define STORAGE_LEVELDB_DB_BUILDER_H_
+    
+      std::string comparator_;
+  uint64_t log_number_;
+  uint64_t prev_log_number_;
+  uint64_t next_file_number_;
+  SequenceNumber last_sequence_;
+  bool has_comparator_;
+  bool has_log_number_;
+  bool has_prev_log_number_;
+  bool has_next_file_number_;
+  bool has_last_sequence_;
+    
+    TEST(FindFileTest, Single) {
+  Add('p', 'q');
+  ASSERT_EQ(0, Find('a'));
+  ASSERT_EQ(0, Find('p'));
+  ASSERT_EQ(0, Find('p1'));
+  ASSERT_EQ(0, Find('q'));
+  ASSERT_EQ(1, Find('q1'));
+  ASSERT_EQ(1, Find('z'));
+    }
+    
+    
+    {    // Change locking mode to exclusive and create tables/index for database
+    std::string locking_stmt = 'PRAGMA locking_mode = EXCLUSIVE';
+    std::string create_stmt =
+          'CREATE TABLE test (key blob, value blob, PRIMARY KEY(key))';
+    std::string stmt_array[] = { locking_stmt, create_stmt };
+    int stmt_array_length = sizeof(stmt_array) / sizeof(std::string);
+    for (int i = 0; i < stmt_array_length; i++) {
+      status = sqlite3_exec(db_, stmt_array[i].c_str(), NULL, NULL, &err_msg);
+      ExecErrorCheck(status, err_msg);
+    }
   }
     
-    #endif  // TESSERACT_TRAINING_DEGRADEIMAGE_H_
-
     
-     protected:
-  // Consumes the next Grapheme in codes_[codes_used_++...] and copies it to
-  // parts_ and output_. Returns true if a valid Grapheme was consumed,
-  // otherwise does not increment codes_used_.
-  bool ConsumeGraphemeIfValid() override;
-  // Returns the CharClass corresponding to the given Unicode ch.
-  CharClass UnicodeToCharClass(char32 ch) const override;
+    {    // Create tuning options and open the database
+    int open_options = kyotocabinet::PolyDB::OWRITER |
+                       kyotocabinet::PolyDB::OCREATE;
+    int tune_options = kyotocabinet::TreeDB::TSMALL |
+        kyotocabinet::TreeDB::TLINEAR;
+    if (FLAGS_compression) {
+      tune_options |= kyotocabinet::TreeDB::TCOMPRESS;
+      db_->tune_compressor(&comp_);
+    }
+    db_->tune_options(tune_options);
+    db_->tune_page_cache(FLAGS_cache_size);
+    db_->tune_page(FLAGS_page_size);
+    db_->tune_map(256LL<<20);
+    if (sync) {
+      open_options |= kyotocabinet::PolyDB::OAUTOSYNC;
+    }
+    if (!db_->open(file_name, open_options)) {
+      fprintf(stderr, 'open error: %s\n', db_->error().name());
+    }
+  }
     
-        for (auto &pfd: pollfds) {
-      if (pfd.revents & (POLLERR | POLLHUP)) {
-        // some process died
-        DEBUG('detaching process');
-        auto &session = client_sessions.at(pfd.fd);
-        DEBUG('%d has died', session.pid);
-        to_remove.push_back(pfd.fd);
-      } else if (pfd.revents & POLLIN) {
-        if (pfd.fd == srv_socket->socket_fd) {
-          // someone is joining
-          DEBUG('registered new client');
-          auto client = srv_socket->accept();
-          int fd = client.socket_fd;
-          to_add.push_back(fd);
-          client_sessions.emplace(fd, std::move(client));
-        } else {
-          // someone wants to register a segment
-          DEBUG('got alloc info');
-          auto &session = client_sessions.at(pfd.fd);
-          AllocInfo info = session.socket.receive();
-          session.pid = info.pid;
-          DEBUG('got alloc info: %d %d %s', (int)info.free, info.pid, info.filename);
-          if (info.free) {
-            free_used_object(info.filename);
-          } else {
-            used_objects.insert(info.filename);
-            DEBUG('registered object %s', info.filename);
-            session.socket.confirm();
-          }
+    #include <string>
+#include 'leveldb/env.h'
+#include 'leveldb/status.h'
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20>
+internal::ValueArray20<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20> Values(T1 v1, T2 v2, T3 v3, T4 v4,
+    T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13,
+    T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20) {
+  return internal::ValueArray20<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20>(v1, v2, v3, v4, v5, v6, v7,
+      v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20);
+}
+    
+    namespace testing {
+    }
+    
+    
+    {
+    {}  // namespace internal
+}  // namespace testing
+    
+    
+template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9>
+class CartesianProductGenerator9
+    : public ParamGeneratorInterface< ::std::tr1::tuple<T1, T2, T3, T4, T5, T6,
+        T7, T8, T9> > {
+ public:
+  typedef ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8, T9> ParamType;
+    }
+    
+        for (int i = 2; i*i <= n; i++) {
+      // n is divisible by an integer other than 1 and itself.
+      if ((n % i) == 0) return false;
+    }
+    
+    
+    {    // You can generate a failure in any event handler except
+    // OnTestPartResult. Just use an appropriate Google Test assertion to do
+    // it.
+    EXPECT_LE(difference, 0) << 'Leaked ' << difference << ' unit(s) of Water!';
+  }
+    
+    // Tests that the RotatingTranspose function does the right thing for various
+// transformations.
+// dims=[5, 4, 3, 2]->[5, 2, 4, 3]
+TEST_F(MatrixTest, RotatingTranspose_3_1) {
+  GENERIC_2D_ARRAY<int> m;
+  src_.RotatingTranspose(dims_, kNumDims_, 3, 1, &m);
+  m.ResizeNoInit(kInputSize_ / 3, 3);
+  // Verify that the result is:
+  // output tensor=[[[[0, 2, 4][6, 8, 10][12, 14, 16][18, 20, 22]]
+  //                 [[1, 3, 5][7, 9, 11][13, 15, 17][19, 21, 23]]]
+  //                [[[24, 26, 28]...
+  EXPECT_EQ(0, m(0, 0));
+  EXPECT_EQ(2, m(0, 1));
+  EXPECT_EQ(4, m(0, 2));
+  EXPECT_EQ(6, m(1, 0));
+  EXPECT_EQ(1, m(4, 0));
+  EXPECT_EQ(24, m(8, 0));
+  EXPECT_EQ(26, m(8, 1));
+  EXPECT_EQ(25, m(12, 0));
+}
+    
+    /**********************************************************************
+ * DIR128::DIR128
+ *
+ * Quantize the direction of an FCOORD to make a DIR128.
+ **********************************************************************/
+    
+    // Get a terminated UTF8 string: Must delete[] it after use.
+char* UNICHAR::utf8_str() const {
+  int len = utf8_len();
+  char* str = new char[len + 1];
+  memcpy(str, chars, len);
+  str[len] = 0;
+  return str;
+}
+    
+    const char *kUTF8LineSeparator = '\u2028';  // '\xe2\x80\xa8';
+const char *kUTF8ParagraphSeparator = '\u2029';  // '\xe2\x80\xa9';
+const char *kLRM = '\u200E';  // Left-to-Right Mark
+const char *kRLM = '\u200F';  // Right-to-Left Mark
+const char *kRLE = '\u202A';  // Right-to-Left Embedding
+const char *kPDF = '\u202C';  // Pop Directional Formatting
+    
+      // Loads all pages from the given tif filename and append to page_images_.
+  // Must be called after ReadTrainingSamples, as the current number of images
+  // is used as an offset for page numbers in the samples.
+  void LoadPageImages(const char* filename);
+    
+    // Convenience instantiation of GENERIC_2D_ARRAY<double> with additional
+// operations to write a strided vector, so the transposed form of the input
+// is memory-contiguous.
+class TransposedArray : public GENERIC_2D_ARRAY<double> {
+ public:
+  // Copies the whole input transposed, converted to double, into *this.
+  void Transpose(const GENERIC_2D_ARRAY<double>& input);
+  // Writes a vector of data representing a timestep (gradients or sources).
+  // The data is assumed to be of size1 in size (the strided dimension).
+  void WriteStrided(int t, const float* data) {
+    int size1 = dim1();
+    for (int i = 0; i < size1; ++i) put(i, t, data[i]);
+  }
+  void WriteStrided(int t, const double* data) {
+    int size1 = dim1();
+    for (int i = 0; i < size1; ++i) put(i, t, data[i]);
+  }
+  // Prints the first and last num elements of the un-transposed array.
+  void PrintUnTransposed(int num) {
+    int num_features = dim1();
+    int width = dim2();
+    for (int y = 0; y < num_features; ++y) {
+      for (int t = 0; t < width; ++t) {
+        if (num == 0 || t < num || t + num >= width) {
+          tprintf(' %g', (*this)(y, t));
         }
       }
+      tprintf('\n');
     }
-    
-    #include 'master_worker/master/THDTensor.h'
-#include 'master_worker/master/THDStorage.h'
-    
-          struct pollfd pfd;
-      pfd.fd = socket;
-      pfd.events = POLLOUT;
-    
-    int gettime(clockid_t clock, timespec* ts) {
-  if (clock != CLOCK_THREAD_CPUTIME_ID) {
-    return folly::chrono::clock_gettime(clock, ts);
   }
+};  // class TransposedArray
+    
+    // The CCNonTextDetect class contains grid-based operations on blobs to create
+// a full-resolution image mask analogous yet complementary to
+// pixGenHalftoneMask as it is better at line-drawings, graphs and charts.
+class CCNonTextDetect : public BlobGrid {
+ public:
+  CCNonTextDetect(int gridsize, const ICOORD& bleft, const ICOORD& tright);
+  virtual ~CCNonTextDetect();
     }
     
-    struct PageletTransport final : Transport, Synchronizable {
-  PageletTransport(
-    const String& url, const Array& headers, const String& postData,
-    const String& remoteHost,
-    const std::set<std::string> &rfc1867UploadedFiles,
-    const Array& files, int timeoutSeconds);
+      // Set the equation detection pointer.
+  void SetEquationDetect(EquationDetectBase* detect);
+    
+    void complete_edge(CRACKEDGE *start,  //start of loop
+                   C_OUTLINE_IT* outline_it) {
+  ScrollView::Color colour;                 //colour to draw in
+  int16_t looplength;              //steps in loop
+  ICOORD botleft;                //bounding box
+  ICOORD topright;
+  C_OUTLINE *outline;            //new outline
     }
     
-    //////////////////////////////////////////////////////////////////////
+      // Returns true if the blob appears to be outside of a horizontal textline.
+  // Such blobs are potentially diacritics (even if large in Thai) and should
+  // be kept away from initial textline finding.
+  bool BoxOutOfHTextline(const TBOX& box, const DENORM* denorm,
+                        bool debug) const;
     
-      // Non-simple types (ones that are represented by pointers) can always
-  // possibly be null.
-  if (t.subtypeOfAny(TStr, TArr, TVec, TDict,
-                     TKeyset, TObj, TRes)) {
-    t |= TInitNull;
-  } else {
-    // Otherwise it should be a simple type or possibly everything.
-    assert(t == TInitCell || t.subtypeOfAny(TBool, TInt, TDbl, TNull));
+    #include '../helpers.h'
+    
+    TEST(Metric, RMSE) {
+  xgboost::Metric * metric = xgboost::Metric::Create('rmse');
+  ASSERT_STREQ(metric->Name(), 'rmse');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              0.6403f, 0.001f);
+}
+    
+    namespace xgboost {
+    }
+    
+    SEXP XGBoosterModelToRaw_R(SEXP handle) {
+  SEXP ret;
+  R_API_BEGIN();
+  bst_ulong olen;
+  const char *raw;
+  CHECK_CALL(XGBoosterGetModelRaw(R_ExternalPtrAddr(handle), &olen, &raw));
+  ret = PROTECT(allocVector(RAWSXP, olen));
+  if (olen != 0) {
+    memcpy(RAW(ret), raw, olen);
   }
-    
-    template <class CellOp>
-Type typeSubMulImplO(Type t1, Type t2, CellOp op) {
-  if (auto t = eval_const(t1, t2, op))          return *t;
-  if (t1.subtypeOf(BInt) && t2.subtypeOf(BInt)) return TNum;
-  if (auto t = usual_arith_conversions(t1, t2)) return *t;
-  return TInitPrim;
+  R_API_END();
+  UNPROTECT(1);
+  return ret;
 }
     
       /**
-   * This method may return ContinueAutoloading, StopAutoloading, or
-   * RetryAutoloading.
+   * \brief Updates linear model given gradients.
+   *
+   * \param in_gpair            The gradient pair statistics of the data.
+   * \param data                Input data matrix.
+   * \param model               Model to be updated.
+   * \param sum_instance_weight The sum instance weights, used to normalise l1/l2 penalty.
    */
-  Result invokeFailureCallback(const_variant_ref func, const String& kind,
-                               const String& name, const Variant& err);
     
-    namespace HPHP {
-    }
-    
-      /**
-   * Read one record a time. Returns a false on failure or eof.
-   */
-  Variant readRecord(const String& delimiter, int64_t maxlen = 0);
-    
-    #endif // incl_HPHP_HTTP_CLIENT_H_
-
-    
-      /// Start an asynchronous accept.
-  /**
-   * This function is used to asynchronously accept a new connection into a
-   * socket, and additionally obtain the endpoint of the remote peer. The
-   * function call always returns immediately.
-   *
-   * @param peer The socket into which the new connection will be accepted.
-   * Ownership of the peer object is retained by the caller, which must
-   * guarantee that it is valid until the handler is called.
-   *
-   * @param peer_endpoint An endpoint object into which the endpoint of the
-   * remote peer will be written. Ownership of the peer_endpoint object is
-   * retained by the caller, which must guarantee that it is valid until the
-   * handler is called.
-   *
-   * @param handler The handler to be called when the accept operation
-   * completes. Copies will be made of the handler as required. The function
-   * signature of the handler must be:
-   * @code void handler(
-   *   const boost::system::error_code& error // Result of operation.
-   * ); @endcode
-   * Regardless of whether the asynchronous operation completes immediately or
-   * not, the handler will not be invoked from within this function. Invocation
-   * of the handler will be performed in a manner equivalent to using
-   * boost::asio::io_service::post().
-   */
-  template <typename SocketService, typename AcceptHandler>
-  BOOST_ASIO_INITFN_RESULT_TYPE(AcceptHandler,
-      void (boost::system::error_code))
-  async_accept(basic_socket<protocol_type, SocketService>& peer,
-      endpoint_type& peer_endpoint, BOOST_ASIO_MOVE_ARG(AcceptHandler) handler)
-  {
-    // If you get an error on the following line it means that your handler does
-    // not meet the documented type requirements for a AcceptHandler.
-    BOOST_ASIO_ACCEPT_HANDLER_CHECK(AcceptHandler, handler) type_check;
-    }
-    
-      /// Start an asynchronous wait on the timer.
-  /**
-   * This function may be used to initiate an asynchronous wait against the
-   * timer. It always returns immediately.
-   *
-   * For each call to async_wait(), the supplied handler will be called exactly
-   * once. The handler will be called when:
-   *
-   * @li The timer has expired.
-   *
-   * @li The timer was cancelled, in which case the handler is passed the error
-   * code boost::asio::error::operation_aborted.
-   *
-   * @param handler The handler to be called when the timer expires. Copies
-   * will be made of the handler as required. The function signature of the
-   * handler must be:
-   * @code void handler(
-   *   const boost::system::error_code& error // Result of operation.
-   * ); @endcode
-   * Regardless of whether the asynchronous operation completes immediately or
-   * not, the handler will not be invoked from within this function. Invocation
-   * of the handler will be performed in a manner equivalent to using
-   * boost::asio::io_service::post().
-   */
-  template <typename WaitHandler>
-  BOOST_ASIO_INITFN_RESULT_TYPE(WaitHandler,
-      void (boost::system::error_code))
-  async_wait(BOOST_ASIO_MOVE_ARG(WaitHandler) handler)
-  {
-    // If you get an error on the following line it means that your handler does
-    // not meet the documented type requirements for a WaitHandler.
-    BOOST_ASIO_WAIT_HANDLER_CHECK(WaitHandler, handler) type_check;
-    }
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    // Standard library components can't be forward declared, so we'll have to
-// include the array header. Fortunately, it's fairly lightweight and doesn't
-// add significantly to the compile time.
-#if defined(BOOST_ASIO_HAS_STD_ARRAY)
-# include <array>
-#endif // defined(BOOST_ASIO_HAS_STD_ARRAY)
-    
-    #include <boost/asio/detail/push_options.hpp>
-    
-    #if !defined(BOOST_ASIO_WINDOWS) && !defined(__CYGWIN__)
-    
-        if (result != 0
-        && (ec == boost::asio::error::would_block
-          || ec == boost::asio::error::try_again))
+        argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
     {
-      // According to UNIX Network Programming Vol. 1, it is possible for
-      // close() to fail with EWOULDBLOCK under certain circumstances. What
-      // isn't clear is the state of the descriptor after this error. The one
-      // current OS where this behaviour is seen, Windows, says that the socket
-      // remains open. Therefore we'll put the descriptor back into blocking
-      // mode and have another attempt at closing it.
-#if defined(__SYMBIAN32__)
-      int flags = ::fcntl(d, F_GETFL, 0);
-      if (flags >= 0)
-        ::fcntl(d, F_SETFL, flags & ~O_NONBLOCK);
-#else // defined(__SYMBIAN32__)
-      ioctl_arg_type arg = 0;
-      ::ioctl(d, FIONBIO, &arg);
-#endif // defined(__SYMBIAN32__)
-      state &= ~non_blocking;
+        double arg0;
     }
+    
+    int register_all_cocos2dx_experimental_video(lua_State* tolua_S);
+    
+    
+    
+    
+    
+    #ifndef AddPair_H
+#define AddPair_H
+    
+    	static Test* Create()
+	{
+		return new ApplyForce;
+	}
+    
+    			b2RevoluteJointDef jd;
+			jd.Initialize(ground, body, body->GetPosition());
+			jd.lowerAngle = -8.0f * b2_pi / 180.0f;
+			jd.upperAngle = 8.0f * b2_pi / 180.0f;
+			jd.enableLimit = true;
+			m_world->CreateJoint(&jd);
+    
+    extern 'C' {
+    }
+    
+        std::string strstack;
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+        if (_packlen > _rawlen) return SIMPLE_CONTINUE_DATA;
+    
+    
+CommFrequencyLimit::CommFrequencyLimit(size_t _count, uint64_t _time_span)
+    : count_(_count)
+    , time_span_(_time_span) {
+    xassert2(count_ > 0);
+    xassert2(time_span_ > 0);
+}
+    
+    
+/*
+ * CoreServiceBase.h
+ *
+ *  Created on: 2013-6-20
+ *      Author: yerungui
+ */
+    
+    int TSpy::__TestFun1(int i)
+{
+    return reinterpret_cast<Test_Spy_Sample*>(This())->__TestFun1(i);
+}
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    
+    {  private:
+    JNIEnv* env_;
+    jstring jstr_;
+    const char* char_;
+    bool jstr2char_;
+};
