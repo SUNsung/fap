@@ -1,284 +1,207 @@
 
         
-        - (void)appendAction:(ObjectBehaviorAction)action;
-- (void)enumerate:(void (^)(ObjectBehaviorAction))block;
-- (void)reset;
-- (void)dump;
-@end
+        class VersionEditTest { };
+    
+      // Check that the directory is empty.
+  ASSERT_TRUE(!env_->FileExists('/dir/non_existent'));
+  ASSERT_TRUE(!env_->GetFileSize('/dir/non_existent', &file_size).ok());
+  ASSERT_OK(env_->GetChildren('/dir', &children));
+  ASSERT_EQ(0, children.size());
+    
+    class Issue200 { };
+    
+    BlockBuilder::BlockBuilder(const Options* options)
+    : options_(options),
+      restarts_(),
+      counter_(0),
+      finished_(false) {
+  assert(options->block_restart_interval >= 1);
+  restarts_.push_back(0);       // First restart point is at offset 0
+}
+    
+    class SCOPED_LOCKABLE MutexLock {
+ public:
+  explicit MutexLock(port::Mutex *mu) EXCLUSIVE_LOCK_FUNCTION(mu)
+      : mu_(mu)  {
+    this->mu_->Lock();
+  }
+  ~MutexLock() UNLOCK_FUNCTION() { this->mu_->Unlock(); }
+    }
+    
+    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
+  size_t usize = user_key.size();
+  size_t needed = usize + 13;  // A conservative estimate
+  char* dst;
+  if (needed <= sizeof(space_)) {
+    dst = space_;
+  } else {
+    dst = new char[needed];
+  }
+  start_ = dst;
+  dst = EncodeVarint32(dst, usize + 8);
+  kstart_ = dst;
+  memcpy(dst, user_key.data(), usize);
+  dst += usize;
+  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
+  dst += 8;
+  end_ = dst;
+}
+    
+    TEST(FormatTest, InternalKey_EncodeDecode) {
+  const char* keys[] = { '', 'k', 'hello', 'longggggggggggggggggggggg' };
+  const uint64_t seq[] = {
+    1, 2, 3,
+    (1ull << 8) - 1, 1ull << 8, (1ull << 8) + 1,
+    (1ull << 16) - 1, 1ull << 16, (1ull << 16) + 1,
+    (1ull << 32) - 1, 1ull << 32, (1ull << 32) + 1
+  };
+  for (int k = 0; k < sizeof(keys) / sizeof(keys[0]); k++) {
+    for (int s = 0; s < sizeof(seq) / sizeof(seq[0]); s++) {
+      TestKey(keys[k], seq[s], kTypeValue);
+      TestKey('hello', 1, kTypeDeletion);
+    }
+  }
+}
+    
+    namespace leveldb {
+namespace {
+    }
+    }
+    
+    
+    {  // Write the header and the payload
+  Status s = dest_->Append(Slice(buf, kHeaderSize));
+  if (s.ok()) {
+    s = dest_->Append(Slice(ptr, n));
+    if (s.ok()) {
+      s = dest_->Flush();
+    }
+  }
+  block_offset_ += kHeaderSize + n;
+  return s;
+}
+    
+      // Create a writer that will append data to '*dest'.
+  // '*dest' must have initial length 'dest_length'.
+  // '*dest' must remain live while this Writer is in use.
+  Writer(WritableFile* dest, uint64_t dest_length);
+    
+    /**
+ * @brief Iterate the discovered decorators for a given point type.
+ *
+ * The configuration maintains various sources, each may contain a set of
+ * decorators. The source tracking is abstracted for the decorator iterator.
+ *
+ * @param point request execution of decorators for this given point.
+ * @param time an optional time for points using intervals.
+ * @param source restrict run to a specific config source.
+ */
+void runDecorators(DecorationPoint point,
+                   size_t time = 0,
+                   const std::string& source = '');
+    
+    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
+  Config c;
+  std::vector<std::string> old_views_vec;
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  old_views_vec.clear();
+  auto s = c.update(getTestConfigMap('view_test.conf'));
+  EXPECT_TRUE(s.ok());
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
+    }
+    
+    TEST_F(PermissionsTests, test_multi_thread_permissions) {
+  if (getuid() != 0) {
+    LOG(WARNING) << 'Not root, skipping multi-thread deprivilege testing';
+    return;
+  }
+    }
+    
+    TEST_F(ProcessTests, test_launchWorker) {
+  {
+    std::vector<char*> argv;
+    for (size_t i = 0; i < kExpectedWorkerArgsCount; i++) {
+      char* entry = new char[strlen(kExpectedWorkerArgs[i]) + 1];
+      EXPECT_NE(entry, nullptr);
+      memset(entry, '\0', strlen(kExpectedWorkerArgs[i]) + 1);
+      memcpy(entry, kExpectedWorkerArgs[i], strlen(kExpectedWorkerArgs[i]));
+      argv.push_back(entry);
+    }
+    argv.push_back(nullptr);
+    }
+    }
+    
+    /**
+ * @brief A more 'complex' example table is provided to assist with tests.
+ *
+ * This table will access options and flags known to the extension.
+ * An extension should not assume access to any CLI flags- rather, access is
+ * provided via the osquery-meta table: osquery_flags.
+ *
+ * There is no API/C++ wrapper to provide seamless use of flags yet.
+ * We can force an implicit query to the manager though.
+ *
+ * Database access should be mediated by the *Database functions.
+ * Direct use of the 'database' registry will lead to undefined behavior.
+ */
+class ComplexExampleTable : public TablePlugin {
+ private:
+  TableColumns columns() const {
+    return {
+        std::make_tuple('flag_test', TEXT_TYPE, ColumnOptions::DEFAULT),
+        std::make_tuple('database_test', TEXT_TYPE, ColumnOptions::DEFAULT),
+    };
+  }
+    }
+    
+    static void PLIST_parse_content(benchmark::State& state) {
+  // Buffer the plist content into memory.
+  std::string content;
+  readFile(kTestDataPath + 'test.plist', content);
+    }
+    
+    	jstring tag = (jstring)JNU_GetField(env, _log_info, 'tag', 'Ljava/lang/String;').l;
+	jstring filename = (jstring)JNU_GetField(env, _log_info, 'filename', 'Ljava/lang/String;').l;
+	jstring funcname = (jstring)JNU_GetField(env, _log_info, 'funcname', 'Ljava/lang/String;').l;
+	jint line = JNU_GetField(env, _log_info, 'line', 'I').i;
+	jlong pid = JNU_GetField(env, _log_info, 'pid', 'J').i;
+	jlong tid = JNU_GetField(env, _log_info, 'tid', 'J').j;
+	jlong maintid = JNU_GetField(env, _log_info, 'maintid', 'J').j;
     
     
     {
     {}
 }
-#endif
-
     
-    namespace swift {
+    #ifndef COMM_COMM_FREQUENCY_LIMIT_H_
+#define COMM_COMM_FREQUENCY_LIMIT_H_
+    
+    class ServiceBase {
+  public:
+    virtual ~ServiceBase() {}
+    void DependServices(const TServicesMap& _dependservices) { m_dependservices = _dependservices;}
+    const char* ServiceName() const { return m_servicename.c_str();}
     }
     
-    /// A shorthand to clearly indicate that a value is a reference counted and
-/// heap-allocated.
-template <typename Inner>
-using RC = llvm::IntrusiveRefCntPtr<Inner>;
+    //
+//  testspy.cpp
+//  PublicComponent
+//
+//  Created by yerungui on 14-5-13.
+//
     
-    #endif // SWIFT_INDEX_INDEX_H
-
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
     
-    protected:
-  /// The base of the object.
-  SILValue Base;
-  /// Empty key, tombstone key or normal key.
-  KeyKind Kind;
-  /// The path to reach the accessed field of the object.
-  Optional<ProjectionPath> Path;
     
-      /// True if this is the active clause of the #if block.
-  bool isActive;
-    
-    /// Optimizer that requires the loss function to be supplied to the `step()`
-/// function, as it may evaluate the loss function multiple times per step.
-/// Examples of such algorithms are conjugate gradient and LBFGS. The `step()`
-/// function also returns the loss value.
-class LossClosureOptimizer : public detail::OptimizerBase {
- public:
-  /// A loss function closure, which is expected to return the loss value.
-  using LossClosure = std::function<Tensor()>;
-  using detail::OptimizerBase::OptimizerBase;
-  virtual Tensor step(LossClosure closure) = 0;
+    {  private:
+    JNIEnv* env_;
+    jstring jstr_;
+    const char* char_;
+    bool jstr2char_;
 };
-    
-    OptimizerBase::OptimizerBase(const ParameterCursor& cursor) {
-  add_parameters(cursor);
-}
-    
-    Tensor rfft(const Tensor& self, const int64_t signal_ndim, const bool normalized,
-            const bool onesided) {
-  return _fft(self, signal_ndim, /* complex_input */ false,
-              /* complex_output */ true, /* inverse */ false, {}, normalized,
-              onesided);
-}
-    
-    PyObject *THPDevice_repr(THPDevice *self)
-{
-  std::ostringstream oss;
-  oss << 'device(type=\'' << self->device.type() << '\'';
-  if (self->device.has_index()) {
-    oss << ', index=' << self->device.index();
-  }
-  oss << ')';
-  return THPUtils_packString(oss.str().c_str());
-}
-    
-    #include 'override_macros.h'
-    
-    THLongStoragePtr THPUtils_unpackSize(PyObject *arg) {
-  THLongStoragePtr result;
-  if (!THPUtils_tryUnpackLongs(arg, result)) {
-    std::string msg = 'THPUtils_unpackSize() expects a torch.Size (got '';
-    msg += Py_TYPE(arg)->tp_name;
-    msg += '')';
-    throw std::runtime_error(msg);
-  }
-  return result;
-}
-    
-    Tensor logdet(const Tensor& self) {
-  AT_CHECK(at::isFloatingType(self.type().scalarType()) &&
-           self.dim() == 2 && self.size(0) == self.size(1),
-           'logdet(', self.type(), '{', self.sizes(), '}): expected a 2D square tensor '
-           'of floating types');
-  double det_P;
-  Tensor diag_U, det;
-  int info;
-  std::tie(det_P, diag_U, info) = _lu_det_P_diag_U_info(self);
-  if (info > 0) {
-    det = at::zeros({}, self.type());
-  } else {
-    det = diag_U.prod().mul_(det_P);
-  }
-  if (det.sign().toCDouble() <= 0) {
-    return det.log_();  // in order to get proper -inf (det=0) or nan (det<0)
-  } else {
-    return diag_U.abs().log().sum();
-  }
-}
-    
-        HHVM_FE(fb_setprofile);
-    HHVM_FE(xhprof_frame_begin);
-    HHVM_FE(xhprof_frame_end);
-    HHVM_FE(xhprof_enable);
-    HHVM_FE(xhprof_disable);
-    HHVM_FE(xhprof_network_enable);
-    HHVM_FE(xhprof_network_disable);
-    HHVM_FE(xhprof_sample_enable);
-    HHVM_FE(xhprof_sample_disable);
-    
-      if (!getenv('HHVM_JIT_TIMER_NO_SORT')) {
-    auto totalSort = [] (const TimerName& a, const TimerName& b) {
-      return s_counters[a.name].total > s_counters[b.name].total;
-    };
-    std::sort(begin(names_copy), end(names_copy), totalSort);
-  }
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    
-    BumpAllocState::BumpAllocState(uintptr_t base, size_t maxCap, LockPolicy p)
-  : m_base(base)
-  , m_maxCapacity(maxCap)
-  , m_lockPolicy(p) {
-  auto ret = mmap((void*)base, maxCap, PROT_NONE,
-                  MAP_ANONYMOUS | MAP_PRIVATE | MAP_NORESERVE,
-                  -1, 0);
-  if (ret != (void*)base) {
-    char msg[128];
-    if (ret == MAP_FAILED) {
-      std::snprintf(msg, sizeof(msg),
-                    'failed to reserve address range 0x%' PRIxPTR
-                    ' to 0x%' PRIxPTR ', errno = %d',
-                    base, base + maxCap, errno);
-    } else {
-      munmap(ret, maxCap);
-      std::snprintf(msg, sizeof(msg),
-                    'failed to reserve address range 0x%' PRIxPTR
-                    ' to 0x%' PRIxPTR ', got 0x%p instead',
-                    base, base + maxCap, ret);
-    }
-    throw std::runtime_error{msg};
-  }
-}
-    
-    
-    {  BumpExtentAllocator* extAlloc = GetByArenaId<BumpExtentAllocator>(arena_ind);
-  do {
-    size_t oldSize = extAlloc->m_size.load(std::memory_order_relaxed);
-    uintptr_t ret = (extAlloc->m_base + oldSize + alignment - 1) & mask;
-    size_t newSize = ret + size - extAlloc->m_base;
-    if (newSize <= extAlloc->m_currCapacity) {
-      // Looks like existing capacity is enough.
-      if (extAlloc->m_size.compare_exchange_weak(oldSize, newSize)) {
-        *zero = true;
-        *commit = true;
-        return reinterpret_cast<void*>(ret);
-      }
-    } else {
-      if (newSize > extAlloc->m_maxCapacity) return nullptr;
-      if (extAlloc->m_lockPolicy != LockPolicy::Blocking) {
-        if (!extAlloc->m_mutex.try_lock()) {
-          return nullptr;
-        }
-      } else {
-        extAlloc->m_mutex.lock();
-      }
-      bool succ = extAlloc->m_mapper &&
-        extAlloc->m_mapper->addMapping(*extAlloc, newSize);
-      extAlloc->m_mutex.unlock();
-      if (!succ) return nullptr;
-    }
-  } while (true);
-  not_reached();
-}
-    
-      auto src  = getUseVars();
-  auto dest = ret->getUseVars();
-  auto const nProps = cls->numDeclProperties();
-  auto const stop = src + nProps;
-  for (; src != stop; ++src, ++dest) {
-    tvDup(*src, *dest);
-  }
-    
-      Class* getClass() const {
-    return LIKELY(hdr()->ctxIsClass()) ?
-      reinterpret_cast<Class*>(hdr()->ctx_bits & ~ClosureHdr::kClassBit) :
-      nullptr;
-  }
-  void setClass(Class* cls) {
-    assertx(cls);
-    hdr()->ctx_bits = reinterpret_cast<uintptr_t>(cls) | ClosureHdr::kClassBit;
-  }
-  bool hasClass() const { return hdr()->ctxIsClass(); }
-    
-    
-    
-    
-    {        ok &= luaval_to_uint32(tolua_S, 2,&arg0, 'cc.SimpleAudioEngine:stopEffect');
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_stopEffect'', nullptr);
-            return 0;
-        }
-        cobj->stopEffect(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:stopEffect',argc, 1);
-    return 0;
-    
-    
-    
-    int register_all_cocos2dx_csloader(lua_State* tolua_S);
-    
-    
-    
-        CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1,1);
-    
-    class ApplyForce : public Test
-{
-public:
-	ApplyForce()
-	{
-		m_world->SetGravity(b2Vec2(0.0f, 0.0f));
-    }
-    }
-    
-    
-    { private:
-  /* Used by the single writer */
-  void locate_lower_bound(const T& v, Atom<Node*>*& prev) const {
-    auto curr = prev->load(std::memory_order_relaxed);
-    while (curr) {
-      if (curr->elem_ >= v) {
-        break;
-      }
-      prev = &(curr->next_);
-      curr = curr->next_.load(std::memory_order_relaxed);
-    }
-    return;
-  }
-};
-    
-    /** Wide CAS.
- */
-template <typename T, template <typename> class Atom = std::atomic>
-class HazptrWideCAS {
-  struct Node : public hazptr_obj_base<Node, Atom> {
-    T val_;
-    explicit Node(T v = {}) : val_(v) {}
-  };
-    }
-    
-    #include <folly/MPMCQueue.h>
-#include <folly/executors/task_queue/BlockingQueue.h>
-#include <folly/synchronization/LifoSem.h>
-    
-    FOLLY_ALWAYS_INLINE int __builtin_ctzl(unsigned long x) {
-  return __builtin_ctz((unsigned int)x);
-}
-    
-    
-    {  HANDLE h = (HANDLE)_get_osfhandle(fd);
-  if (h == INVALID_HANDLE_VALUE) {
-    return -1;
-  }
-  if (!SetEndOfFile(h)) {
-    return -1;
-  }
-  return 0;
-}
-    
-    
-    {  EXPECT_EQ(1, estimates.quantiles[0].second);
-  EXPECT_EQ(2.0 - 0.5, estimates.quantiles[1].second);
-  EXPECT_EQ(50.375, estimates.quantiles[2].second);
-  EXPECT_EQ(100.0 - 0.5, estimates.quantiles[3].second);
-  EXPECT_EQ(100, estimates.quantiles[4].second);
-}
