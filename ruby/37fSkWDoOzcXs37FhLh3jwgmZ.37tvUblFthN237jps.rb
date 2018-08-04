@@ -1,92 +1,92 @@
 
         
-              it 'renders HTML' do
-        capture = render(options, screenshots)
-        expect(capture).to match(/<html>/)
-        expect(capture).to include('<li>Some</li>')
-        expect(capture).to include('<li>key</li>')
-        expect(capture).to include('<li>words</li>')
+                # Build your Jekyll site.
+        #
+        # site - the Jekyll::Site instance to build
+        # options - A Hash of options passed to the command
+        #
+        # Returns nothing.
+        def build(site, options)
+          t = Time.now
+          source      = options['source']
+          destination = options['destination']
+          incremental = options['incremental']
+          Jekyll.logger.info 'Source:', source
+          Jekyll.logger.info 'Destination:', destination
+          Jekyll.logger.info 'Incremental build:',
+                             (incremental ? 'enabled' : 'disabled. Enable with --incremental')
+          Jekyll.logger.info 'Generating...'
+          process_site(site)
+          Jekyll.logger.info '', 'done in #{(Time.now - t).round(3)} seconds.'
+        end
+    
+              if options['blank']
+            create_blank_site new_blog_path
+          else
+            create_site new_blog_path
+          end
+    
+          private
+    
+          it 'renders HTML' do
+        expect(render(options, screenshots)).to match(/<html>/)
       end
     end
     
-            expect(result).to eq('hg parent --template {rev}')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template {rev}')
+            expect(result).to eq('/usr/local/bin/cloc --exclude-dir=test1,test2,build --by-file --xml  --out=build/cloc.xml')
+      end
+    
+            # This returns all the registered communicators.
+        #
+        # @return [Hash]
+        def communicators
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.communicator)
+            end
+          end
+        end
+    
+            @value << new_block
       end
     end
   end
 end
 
     
-          it 'prefers a custom version number over a boring version bump' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(version_number: '1.77.3', bump_type: 'major')
-        end').runner.execute(:test)
+              # Verify the box exists that we want to repackage
+          box = @env.boxes.find(box_name, box_provider, '= #{box_version}')
+          if !box
+            raise Vagrant::Errors::BoxNotFoundWithProviderAndVersion,
+              name: box_name,
+              provider: box_provider.to_s,
+              version: box_version
+          end
     
-    def check_link(uri)
-  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
-    if (400..422).include?(status)
-      if status != 403 && !uri.exclude?('udemy.com')
-        raise 'Request had status #{status}'
-      else
-        putc('S')
+            def autocorrect(node)
+          # Regexp#match can take a second argument, but this cop doesn't
+          # register an offense in that case
+          return unless node.first_argument.regexp_type?
+    
+            def on_block(node)
+          on_body_of_reduce(node) do |body|
+            void_next = body.each_node(:next).find do |n|
+              n.children.empty? && parent_block_node(n) == node
+            end
+    
+        status data.respond_to?(:status_code) ? data.status_code : 200
+    
+              def logstash_plugin_gem_spec?(spec)
+            spec.metadata && spec.metadata['logstash_plugin'] == 'true'
+          end
+    
+            #target = $LOADED_FEATURES.grep(/#{path}/).first
+        #puts path
+        #puts caller.map { |c| '  #{c}' }.join('\n')
+        #fontsize = [10, duration * 48].max
+        puts '#{duration},#{path},#{source}'
       end
-    end
-  end
-end
-    
-          options[:only_patterns] = [/\Agetting-started\//, /\Alayout\//, /\Acontent\//, /\Acomponents\//, /\Autilities\//, /\Amigration\//]
+      #puts caller.map { |c| ' => #{c}' }.join('\n')
     end
     
-        version 'C#' do
-      self.base_url = 'https://api.haxe.org/cs/'
     end
-    
-        options[:only_patterns] = [
-      /\Alanguage\./,
-      /\Aclass\./,
-      /\Afunctions?\./,
-      /\Acontrol-structures/,
-      /\Aregexp\./,
-      /\Areserved\.exceptions/,
-      /\Areserved\.interfaces/,
-      /\Areserved\.variables/]
-    
-    module Docs
-  class EntryIndex
-    attr_reader :entries, :types
-    
-        def type=(value)
-      @type = value.try :strip
-    end
-    
-        delegate :empty?, :blank?, to: :pages
-    
-            def find_order
-          @order = Spree::Order.find_by!(number: order_id)
-        end
-    
-        def add_required_validations
-      options = Paperclip::Attachment.default_options.deep_merge(@options)
-      if options[:validate_media_type] != false
-        name = @name
-        @klass.validates_media_type_spoof_detection name,
-          :if => ->(instance){ instance.send(name).dirty? }
-      end
-    end
-    
-            def responds?
-          methods = @subject.instance_methods.map(&:to_s)
-          methods.include?('#{@attachment_name}') &&
-            methods.include?('#{@attachment_name}=') &&
-            methods.include?('#{@attachment_name}?')
-        end
-    
-      class Railtie
-    def self.insert
-      Paperclip.options[:logger] = Rails.logger
-    
-          def validate_blacklist(record, attribute, value)
-        if forbidden.present? && forbidden.any? { |type| type === value }
-          mark_invalid record, attribute, forbidden
-        end
-      end
