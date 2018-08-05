@@ -1,65 +1,57 @@
 
         
-              def force_equality?(value)
-        coder.respond_to?(:object_class) && value.is_a?(coder.object_class)
-      end
-    
-        firm.reload
-    assert_not_predicate firm.clients, :loaded?
-    assert_queries(1) do
-      assert_equal true, firm.clients.include?(client)
+            def process_response?(response)
+      !(response.body =~ REDIRECT_RGX || response.body =~ NOT_FOUND_RGX || response.body.blank?)
     end
-    assert_not_predicate firm.clients, :loaded?
-  end
-    
-        def private_method
-      'I am Jack's innermost fears and aspirations'
-    end
-    
-    require 'test_helper'
-require 'stubs/test_connection'
-require 'stubs/room'
-    
-          assert_equal [ -1, {}, [] ], response
-    end
-  end
-    
-          assert_kind_of ChatChannel, channel
-      assert_equal 1, channel.room.id
-    end
-  end
-    
-          events = []
-      ActiveSupport::Notifications.subscribe 'broadcast.action_cable' do |*args|
-        events << ActiveSupport::Notifications::Event.new(*args)
-      end
-    
-    # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-
-    
-          # `{{ site.related_posts }}` is how posts can get posts related to
-      # them, either through LSI if it's enabled, or through the most
-      # recent posts.
-      # We should remove this in 4.0 and switch to `{{ post.related_posts }}`.
-      def related_posts
-        return nil unless @current_document.is_a?(Jekyll::Document)
-        @current_document.related_posts
-      end
-      attr_writer :current_document
-    
-            if exp.is_a?(Regexp)
-          entry_path =~ exp
-    
-      def delete_from_facebook(url, body)
-    Faraday.delete(url, body)
   end
 end
 
     
-        def index
-      pods_json = PodPresenter.as_collection(Pod.all)
+        version 'C++' do
+      include MultipleBaseUrls
+      self.base_urls = ['https://www.tensorflow.org/api_docs/cc/', 'https://www.tensorflow.org/api_guides/cc/']
+    end
+    
+            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
+          next if node.previous.try(:content).present? || node.next.try(:content).present?
+          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
+          node.content = node.content.strip
+          node.name = 'pre' if node.content =~ /\s/
+          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
+        end
+    
+      def self.socket
+    require 'socket'
+    name = tmp('ftype_socket.socket')
+    rm_r name
+    socket = UNIXServer.new name
+    begin
+      yield name
+    ensure
+      socket.close
+      rm_r name
+    end
+  end
+end
+
+    
+      it 'returns subclass instances when called on a subclass' do
+    StringSpecs::MyString.new('').swapcase.should be_an_instance_of(StringSpecs::MyString)
+    StringSpecs::MyString.new('hello').swapcase.should be_an_instance_of(StringSpecs::MyString)
+  end
+end
+    
+      ruby_version_is ''...'2.4' do
+    it 'is locale insensitive (only replaces a-z)' do
+      'äöü'.upcase.should == 'äöü'
+    
+    With optional '-t <bundle-id>', silently test if a given app
+is running, exiting with an error code if not.
+    
+              # Check for Maven Central urls, prefer HTTPS redirector over specific host
+          maven_pattern = %r{https?://(?:central|repo\d+)\.maven\.org/maven2/(.+)$}
+          audit_urls(urls, maven_pattern) do |match, url|
+            problem '#{url} should be `https://search.maven.org/remotecontent?filepath=#{match[1]}`'
+          end
+        end
+      end
