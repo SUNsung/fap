@@ -1,80 +1,167 @@
 
         
-        cc_library(
-    name = 'dragnn_ops_cc',
-    srcs = [
-        'ops/dragnn_op_kernels.cc',
-        'ops/dragnn_ops.cc',
-    ],
-    deps = [
-        ':compute_session',
-        ':compute_session_op',
-        ':compute_session_pool',
-        ':resource_container',
-        ':shape_helpers',
-        '//dragnn/core/util:label',
-        '//dragnn/protos:data_proto_cc',
-        '//dragnn/protos:spec_proto_cc',
-        '//syntaxnet:base',
-        '@org_tensorflow//third_party/eigen3',
-    ],
-    alwayslink = 1,
-)
+        
+#: Log messages to :func:`~flask.logging.wsgi_errors_stream` with the format
+#: ``[%(asctime)s] %(levelname)s in %(module)s: %(message)s``.
+default_handler = logging.StreamHandler(wsgi_errors_stream)
+default_handler.setFormatter(logging.Formatter(
+    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+))
     
-    tf_proto_library_py(
-    name = 'spec_pb2',
-    srcs = ['spec.proto'],
-)
+            return list(result)
     
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+            # If the request method is HEAD and we don't have a handler for it
+        # retry with GET.
+        if meth is None and request.method == 'HEAD':
+            meth = getattr(self, 'get', None)
     
-      # The one-hot argmax is a subgradient of max.  Convert the batch of maximal
-  # spanning trees into 0/1 indicators, then scale them by the relevant output
-  # gradients from |d_loss_d_max_scores|.  Note that |d_loss_d_max_scores| must
-  # be reshaped in order for it to broadcast across the batch dimension.
-  indicators_bxmxm = tf.one_hot(argmax_sources_bxm, input_dim, dtype=dtype)
-  d_loss_d_max_scores_bx1 = tf.expand_dims(d_loss_d_max_scores, -1)
-  d_loss_d_max_scores_bx1x1 = tf.expand_dims(d_loss_d_max_scores_bx1, -1)
-  d_loss_d_scores_bxmxm = indicators_bxmxm * d_loss_d_max_scores_bx1x1
-  return None, d_loss_d_scores_bxmxm
+        with app.test_request_context(errors_stream=stream):
+        assert wsgi_errors_stream._get_current_object() is stream
     
-            # start checks
-        if opts.list:
-            for spider, methods in sorted(contract_reqs.items()):
-                if not methods and not opts.verbose:
-                    continue
-                print(spider)
-                for method in sorted(methods):
-                    print('  * %s' % method)
-        else:
-            start = time.time()
-            self.crawler_process.start()
-            stop = time.time()
+        # 50% of the time the correct output is the input.
+    # The other 50% of the time it's 2 * input % 10
+    y = (x * np.random.random_integers(1, 2, x.shape)) % 10
+    ys = np.zeros((y.size, 10), dtype='int32')
+    for i, target in enumerate(y.flat):
+        ys[i, target] = 1
+    ys = ys.reshape(y.shape + (10,))
     
-        def _find_template(self, template):
-        template_file = join(self.templates_dir, '%s.tmpl' % template)
-        if exists(template_file):
-            return template_file
-        print('Unable to find template: %s\n' % template)
-        print('Use 'scrapy genspider --list' to see all available templates.')
     
-            # If no credentials could be found anywhere,
-        # consider this an anonymous connection request by default;
-        # unless 'anon' was set explicitly (True/False).
-        anon = kw.get('anon')
-        if anon is None and not aws_access_key_id and not aws_secret_access_key:
-            kw['anon'] = True
-        self.anon = kw.get('anon')
+@keras_test
+def test_vector_classification_functional():
+    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
+                                                         num_test=200,
+                                                         input_shape=(20,),
+                                                         classification=True,
+                                                         num_classes=num_classes)
+    # Test with functional API
+    inputs = layers.Input(shape=(x_train.shape[-1],))
+    x = layers.Dense(16, activation=keras.activations.relu)(inputs)
+    x = layers.Dense(8)(x)
+    x = layers.Activation('relu')(x)
+    outputs = layers.Dense(num_classes, activation='softmax')(x)
+    model = keras.models.Model(inputs, outputs)
+    model.compile(loss=keras.losses.sparse_categorical_crossentropy,
+                  optimizer=keras.optimizers.RMSprop(),
+                  metrics=['acc'])
+    history = model.fit(x_train, y_train, epochs=15, batch_size=16,
+                        validation_data=(x_test, y_test),
+                        verbose=0)
+    assert(history.history['val_acc'][-1] > 0.8)
     
-            # Method command
-        self.sendCommand(self.factory.method, self.factory.path)
-        # Headers
-        for key, values in self.factory.headers.items():
-            for value in values:
-                self.sendHeader(key, value)
-        self.endHeaders()
-        # Body
-        if self.factory.body is not None:
-            self.transport.write(self.factory.body)
+    print('Train...')
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=4,
+          validation_data=[x_test, y_test])
+
+    
+    print('Loading data...')
+(x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=max_features)
+print(len(x_train), 'train sequences')
+print(len(x_test), 'test sequences')
+    
+        for i in range(1, 6):
+        fpath = os.path.join(path, 'data_batch_' + str(i))
+        (x_train[(i - 1) * 10000: i * 10000, :, :, :],
+         y_train[(i - 1) * 10000: i * 10000]) = load_batch(fpath)
+    
+    
+def rbf_kernels(X, n_jobs):
+    return pairwise_kernels(X, metric='rbf', n_jobs=n_jobs, gamma=0.1)
+    
+    from sklearn.externals.six.moves import xrange
+from sklearn.utils.random import sample_without_replacement
+    
+    First, we fix a training set, increase the number of
+samples to classify and plot number of classified samples as a
+function of time.
+    
+        An example with a long-untouched module that everyone has
+    >>> _linkcode_resolve('py', {'module': 'tty',
+    ...                          'fullname': 'setraw'},
+    ...                   package='tty',
+    ...                   url_fmt='http://hg.python.org/cpython/file/'
+    ...                           '{revision}/Lib/{package}/{path}#L{lineno}',
+    ...                   revision='xxxx')
+    'http://hg.python.org/cpython/file/xxxx/Lib/tty/tty.py#L18'
+    '''
+    
+        opener = build_opener()
+    html_filename = os.path.join(html_folder, lang + '.html')
+    if not os.path.exists(html_filename):
+        print('Downloading %s' % page)
+        request = Request(page)
+        # change the User Agent to avoid being blocked by Wikipedia
+        # downloading a couple of articles should not be considered abusive
+        request.add_header('User-Agent', 'OpenAnything/1.0')
+        html_content = opener.open(request).read()
+        open(html_filename, 'wb').write(html_content)
+    
+        if not os.path.exists(ARCHIVE_NAME):
+        print('Downloading dataset from %s (3 MB)' % URL)
+        opener = urlopen(URL)
+        with open(ARCHIVE_NAME, 'wb') as archive:
+            archive.write(opener.read())
+    
+    URL = ('http://people.csail.mit.edu/jrennie/'
+       '20Newsgroups/20news-bydate.tar.gz')
+    
+        # import matplotlib.pyplot as plt
+    # plt.matshow(cm)
+    # plt.show()
+
+    
+    plt.matshow(fit_data, cmap=plt.cm.Blues)
+plt.title('After biclustering; rearranged to show biclusters')
+    
+        Both random labelings have the same number of clusters for each value
+    possible value in ``n_clusters_range``.
+    
+    # Generate waveform data
+n_features = 2000
+t = np.pi * np.linspace(0, 1, n_features)
+    
+    from sklearn.datasets import make_multilabel_classification as make_ml_clf
+    
+        def test_b_observers_shall_be_attachable(cls):
+        cls.s.attach(cls.dec_obs)
+        cls.assertEqual(isinstance(cls.s._observers[0], DecimalViewer), True)
+        cls.assertEqual(len(cls.s._observers), 1)
+        cls.s.attach(cls.hex_obs)
+        cls.assertEqual(isinstance(cls.s._observers[1], HexViewer), True)
+        cls.assertEqual(len(cls.s._observers), 2)
+    
+        def test_sales_manager_shall_talk_through_proxy_with_delay(cls):
+        cls.p.busy = 'No'
+        start_time = time()
+        cls.p.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+Sales Manager ready to talk\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    
+        print('After subclassing: ')
+    for k in RegistryHolder.REGISTRY:
+        print(k)
+    
+    '''
+Port of the Java example of 'Constructor Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050)
+    
+        def get_current_time_as_html_fragment(self, time_provider):
+        current_time = time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
+    
+            depending on self.param value
+        '''
+        self._static_method_choices[self.param].__get__(None, self.__class__)()
+    
+    if __name__ == '__main__':
+    main()
