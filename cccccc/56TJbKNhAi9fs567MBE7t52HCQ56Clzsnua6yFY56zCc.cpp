@@ -1,190 +1,111 @@
 
         
-          // Return the user key
-  Slice user_key() const { return Slice(kstart_, end_ - kstart_ - 8); }
-    
-    namespace leveldb {
-    }
-    
-    enum FileType {
-  kLogFile,
-  kDBLockFile,
-  kTableFile,
-  kDescriptorFile,
-  kCurrentFile,
-  kTempFile,
-  kInfoLogFile  // Either the current one, or an old one
-};
-    
-      for (size_t i = 0; i < compact_pointers_.size(); i++) {
-    PutVarint32(dst, kCompactPointer);
-    PutVarint32(dst, compact_pointers_[i].first);  // level
-    PutLengthPrefixedSlice(dst, compact_pointers_[i].second.Encode());
-  }
-    
-    
-    {  std::vector< std::pair<int, InternalKey> > compact_pointers_;
-  DeletedFileSet deleted_files_;
-  std::vector< std::pair<int, FileMetaData> > new_files_;
-};
-    
-    // Number of key/values to place in database
-static int FLAGS_num = 1000000;
-    
-    namespace leveldb {
-    }
-    
-    class Slice;
-    
-    // Prints a value using the type inferred by the compiler.  The
-// difference between this and UniversalTersePrint() is that for a
-// (const) char pointer, this prints both the pointer and the
-// NUL-terminated string.
-template <typename T>
-void UniversalPrint(const T& value, ::std::ostream* os) {
-  // A workarond for the bug in VC++ 7.1 that prevents us from instantiating
-  // UniversalPrinter with T directly.
-  typedef T T1;
-  UniversalPrinter<T1>::Print(value, os);
-}
-    
-    // The 'Types' template argument below must have spaces around it
-// since some compilers may choke on '>>' when passing a template
-// instance (e.g. Types<int>)
-# define INSTANTIATE_TYPED_TEST_CASE_P(Prefix, CaseName, Types) \
-  bool gtest_##Prefix##_##CaseName GTEST_ATTRIBUTE_UNUSED_ = \
-      ::testing::internal::TypeParameterizedTestCase<CaseName, \
-          GTEST_CASE_NAMESPACE_(CaseName)::gtest_AllTests_, \
-          ::testing::internal::TypeList< Types >::type>::Register(\
-              #Prefix, #CaseName, GTEST_REGISTERED_TEST_NAMES_(CaseName))
-    
-      // Returns true iff the given string ends with the given suffix, ignoring
-  // case. Any string is considered to end with an empty suffix.
-  static bool EndsWithCaseInsensitive(
-      const std::string& str, const std::string& suffix);
-    
-    // The following family of struct and struct templates are used to
-// represent type lists.  In particular, TypesN<T1, T2, ..., TN>
-// represents a type list with N types (T1, T2, ..., and TN) in it.
-// Except for Types0, every struct in the family has two member types:
-// Head for the first type in the list, and Tail for the rest of the
-// list.
-    
-    #ifndef GTEST_SAMPLES_PRIME_TABLES_H_
-#define GTEST_SAMPLES_PRIME_TABLES_H_
-    
-    Timer::Timer(Type type, const char *name /* = NULL */, ReportType r)
-  : m_type(type), m_report(r) {
-  if (name) {
-    m_name = name;
-    PRINT_MSG('%s...', name);
-  }
-  m_start = measure();
-}
-    
-    template<typename T>
-inline void
-emitTLSLoad(Vout& v, TLSDatum<ThreadLocalNoCheck<T>> datum, Vreg d) {
-  auto const off = ThreadLocalNoCheck<T>::node_ptr_offset();
-  v << load{emitTLSAddr(v, datum) + safe_cast<int32_t>(off), d};
-}
-    
-    
-    {  auto const reg = makeReg();
-  constToReg.emplace(vconst, reg);
-  regToConst.emplace(reg, vconst);
-  return reg;
-}
-    
-    #ifdef HAVE_NUMA
-    
-    #ifndef  lint
-FILE_RCSID('@(#)$File: magic.c,v 1.78 2013/01/07 18:20:19 christos Exp $')
-#endif  /* lint */
-    
-    /**
- * This is PHP's 'stream', base class of plain file, gzipped file, directory
- * and sockets. We are not going to structure directories this way at all,
- * but we will have PlainFile, ZipFile and Socket derive from this base class,
- * so they can share some minimal functionalities.
- */
-struct File : SweepableResourceData {
-  static String TranslatePath(const String& filename);
-  // Same as TranslatePath except doesn't make paths absolute
-  static String TranslatePathKeepRelative(const char* fn, uint32_t len);
-  static String TranslatePathKeepRelative(const String& filename) {
-    return TranslatePathKeepRelative(filename.c_str(), filename.size());
-  }
-  static String TranslatePathKeepRelative(const std::string& filename) {
-    return TranslatePathKeepRelative(filename.c_str(), filename.size());
-  }
-  // Same as TranslatePath except checks the file cache on miss
-  static String TranslatePathWithFileCache(const String& filename);
-  static String TranslateCommand(const String& cmd);
-  static req::ptr<File> Open(
-    const String& filename, const String& mode,
-    int options = 0, const req::ptr<StreamContext>& context = nullptr);
-    }
-    
-    void MemoryManager::setMemoryLimit(size_t limit) {
-  assertx(limit <= (size_t)std::numeric_limits<int64_t>::max());
-  m_usageLimit = limit;
-  updateNextGc();
-}
-    
-    // Sort the root nodes, least popular first.
-static inline bool SortHuffmanTree(const HuffmanTree& v0,
-                                   const HuffmanTree& v1) {
-  if (v0.total_count_ != v1.total_count_) {
-    return v0.total_count_ < v1.total_count_;
-  }
-  return v0.index_right_or_value_ > v1.index_right_or_value_;
-}
-    
-    namespace guetzli {
-    }
-    
-    #ifndef GUETZLI_IDCT_H_
-#define GUETZLI_IDCT_H_
-    
-    namespace guetzli {
-    }
-    
-    bool WriteJpeg(const JPEGData& jpg, bool strip_metadata, JPEGOutput out);
-    
-    // Builds jpeg-style Huffman lookup table from the given symbols.
-// The symbols are in order of increasing bit lengths. The number of symbols
-// with bit length n is given in counts[n] for each n >= 1.
-// Returns the size of the lookup table.
-int BuildJpegHuffmanTable(const int* counts, const int* symbols,
-                          HuffmanTableEntry* lut);
-    
-      // Requires that comp is not downsampled.
-  void CopyFromJpegComponent(const JPEGComponent& comp,
-                             int factor_x, int factor_y,
-                             const int* quant);
-    
-    static int __ParseStack(FILE* file,  NDK_CRASH_PARSER_STATE& _state, char _strcache[2048], std::string& strout) {
-    ASSERT(file);
-    }
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    
-    
-    #ifndef CORESERVICEBASE_H_
-#define CORESERVICEBASE_H_
-    
-    //
-//  testspy.cpp
-//  PublicComponent
+        // WorkloadStats is used to track per request timing for different states
+// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
+// should be made to guard the state change with appropriate timers and
+// counters.
 //
-//  Created by yerungui on 14-5-13.
+// The states tracked are:
+//  - In a request (this is a superset of the interpreter state)
+//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
+//  - In the JIT (currently tracks time inside the translate routine)
 //
+// Note the time in the TC is not tracked.  This is roughly:
+//   Time in request - Time in interp
+//
+// This gives us the relative interp time formula of:
+//   Relative interp time = Time in interp / Time in request
+struct WorkloadStats final {
+  enum State {
+    InRequest,
+    // -> InInterp   Okay (entering Dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InInterp,
+    // -> InRequest  Okay (leaving the dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InTrans,
+    // -> InRequest  Okay (leaving translate)
+    // -> InInterp   Okay (leaving translate)
+  };
+    }
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    
+    {  auto& counter = s_counters[m_name];
+  counter.total += elapsed;
+  ++counter.count;
+  counter.max = std::max(counter.max, elapsed);
+  counter.wall_time_elapsed += elapsed_wall_clock;
+  m_finished = true;
+  return elapsed;
+}
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+    void initNuma();
+    
+      /**
+   * StreamContext settings for this connection
+   */
+  void setStreamContextOptions(const Array &opts) {
+    m_stream_context_options = opts;
+  }
+  /**
+   * require SLS/TLS
+   * (default) CURLUSESSL_NONE, CURLUSESSL_TRY, CURLUSESSL_CONTROL,
+   *           CURLUSESSL_ALL
+   */
+    
+    
+    {
+    {///////////////////////////////////////////////////////////////////////////////
+}}
+    
+    private:
+  /// Copy data out of the internal buffer to the specified target buffer.
+  /// Returns the number of bytes copied.
+  template <typename MutableBufferSequence>
+  std::size_t copy(const MutableBufferSequence& buffers)
+  {
+    std::size_t bytes_copied = boost::asio::buffer_copy(
+        buffers, storage_.data(), storage_.size());
+    storage_.consume(bytes_copied);
+    return bytes_copied;
+  }
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
+    
+    #define BOOST_ASIO_CONNECT_HANDLER_CHECK( \
+    handler_type, handler) \
+  \
+  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
+      void(boost::system::error_code)) \
+    asio_true_handler_type; \
+  \
+  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
+      sizeof(boost::asio::detail::one_arg_handler_test( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>(), \
+          static_cast<const boost::system::error_code*>(0))) == 1, \
+      'ConnectHandler type requirements not met') \
+  \
+  typedef boost::asio::detail::handler_type_requirements< \
+      sizeof( \
+        boost::asio::detail::argbyv( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>())) + \
+      sizeof( \
+        boost::asio::detail::lvref< \
+          asio_true_handler_type>()( \
+            boost::asio::detail::lvref<const boost::system::error_code>()), \
+        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
+    
+    template <typename Time_Traits>
+void dev_poll_reactor::add_timer_queue(timer_queue<Time_Traits>& queue)
+{
+  do_add_timer_queue(queue);
+}
