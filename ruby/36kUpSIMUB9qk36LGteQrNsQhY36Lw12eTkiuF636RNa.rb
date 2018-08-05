@@ -1,34 +1,83 @@
 
         
-            context 'only newlines' do
-      let(:keywords) { 'One\nTwo\r\nThree\nFour Token\n' }
+              private
     
-          it 'does set the output directory' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            cloc(output_directory: '/tmp')
-          end').runner.execute(:test)
+    # IMPORTANT: The Capistrano::Plugin system is not yet considered a stable,
+# public API, and is subject to change without notice. Eventually it will be
+# officially documented and supported, but for now, use it at your own risk.
+#
+# Base class for Capistrano plugins. Makes building a Capistrano plugin as easy
+# as writing a `Capistrano::Plugin` subclass and overriding any or all of its
+# three template methods:
+#
+# * set_defaults
+# * register_hooks
+# * define_tasks
+#
+# Within the plugin you can use any methods of the Rake or Capistrano DSLs, like
+# `fetch`, `invoke`, etc. In cases when you need to use SSHKit's backend outside
+# of an `on` block, use the `backend` convenience method. E.g. `backend.test`,
+# `backend.execute`, or `backend.capture`.
+#
+# Package up and distribute your plugin class as a gem and you're good to go!
+#
+# To use a plugin, all a user has to do is install it in the Capfile, like this:
+#
+#   # Capfile
+#   require 'capistrano/superfancy'
+#   install_plugin Capistrano::Superfancy
+#
+# Or, to install the plugin without its hooks:
+#
+#   # Capfile
+#   require 'capistrano/superfancy'
+#   install_plugin Capistrano::Superfancy, load_hooks: false
+#
+class Capistrano::Plugin < Rake::TaskLib
+  include Capistrano::DSL
     
-          it 'it increments all targets minor version major' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(bump_type: 'major')
-        end').runner.execute(:test)
+      entries.each do |entry|
+    if File.exist?(entry[:file])
+      warn '[skip] #{entry[:file]} already exists'
+    else
+      File.open(entry[:file], 'w+') do |f|
+        f.write(ERB.new(File.read(entry[:template])).result(binding))
+        puts I18n.t(:written_file, scope: :capistrano, file: entry[:file])
+      end
+    end
+  end
     
-        version '2' do
-      self.release = '2.3.0'
-      self.base_url = 'http://coffeescript.org/'
+          describe 'fetching servers by role' do
+        subject { dsl.roles(:app) }
     
-            return a.casecmp(b) if a_length == 1 && b_length == 1
-        return 1 if a_length == 1
-        return -1 if b_length == 1
-    
-        def root?
-      path == 'index'
+        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      subject.options[:allow_empty_referrer] = false
+      expect(subject.referrer(env)).to be_nil
     end
     
-      # if rss_url already in existing opml file, use that; otherwise, do a lookup
-  rss_url = nil
-  existing_blog = xml.xpath('//outline[@htmlUrl='#{web_url}']').first if xml
-  if existing_blog
-    rss_url = existing_blog.attr('xmlUrl')
-    puts '#{name}: ALREADY HAVE'
+      %w(GET HEAD POST PUT DELETE).each do |method|
+    it 'accepts #{method} requests with no Origin' do
+      expect(send(method.downcase, '/')).to be_ok
+    end
   end
+    
+        it 'should be able to deal with PATH_INFO = nil (fcgi?)' do
+      app = Rack::Protection::PathTraversal.new(proc { 42 })
+      expect(app.call({})).to eq(42)
+    end
+  end
+    
+      it 'should not leak changes to env' do
+    klass    = described_class
+    detector = Struct.new(:app) do
+      def call(env)
+        was = env.dup
+        res = app.call(env)
+        was.each do |k,v|
+          next if env[k] == v
+          fail 'env[#{k.inspect}] changed from #{v.inspect} to #{env[k].inspect}'
+        end
+        res
+      end
+    end
