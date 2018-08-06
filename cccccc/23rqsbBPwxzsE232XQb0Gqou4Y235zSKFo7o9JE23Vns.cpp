@@ -1,87 +1,146 @@
 
         
-          virtual inline int MinBottomBlobs() const { return 1; }
-  virtual inline int MinTopBlobs() const { return 1; }
-  virtual inline bool EqualNumBottomTopBlobs() const { return true; }
+          /// Get a reference to the lowest layer.
+  lowest_layer_type& lowest_layer()
+  {
+    return next_layer_.lowest_layer();
+  }
     
-    /**
- * @brief Index into the input blob along its first axis.
- *
- * This layer can be used to select, reorder, and even replicate examples in a
- * batch.  The second blob is cast to int and treated as an index into the
- * first axis of the first blob.
- */
-template <typename Dtype>
-class BatchReindexLayer : public Layer<Dtype> {
- public:
-  explicit BatchReindexLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
+    // Standard library components can't be forward declared, so we'll have to
+// include the array header. Fortunately, it's fairly lightweight and doesn't
+// add significantly to the compile time.
+#if defined(BOOST_ASIO_HAS_STD_ARRAY)
+# include <array>
+#endif // defined(BOOST_ASIO_HAS_STD_ARRAY)
     
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of ConvolutionLayer.
- *        Fallback to ConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates convolution through forward kernels for filtering and bias
- * plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
- *
- * The CUDNN engine does not have memory overhead for matrix buffers. For many
- * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
- * but for fully-convolutional models and large inputs the CAFFE engine can be
- * faster as long as it fits in memory.
-*/
-template <typename Dtype>
-class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
- public:
-  explicit CuDNNConvolutionLayer(const LayerParameter& param)
-      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNConvolutionLayer();
-    }
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
     
     
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_;
-  cudnnTensorDescriptor_t top_desc_;
-};
+    {private:
+  static void barrier()
+  {
+#if defined(__ARM_ARCH_4__) \
+    || defined(__ARM_ARCH_4T__) \
+    || defined(__ARM_ARCH_5__) \
+    || defined(__ARM_ARCH_5E__) \
+    || defined(__ARM_ARCH_5T__) \
+    || defined(__ARM_ARCH_5TE__) \
+    || defined(__ARM_ARCH_5TEJ__) \
+    || defined(__ARM_ARCH_6__) \
+    || defined(__ARM_ARCH_6J__) \
+    || defined(__ARM_ARCH_6K__) \
+    || defined(__ARM_ARCH_6Z__) \
+    || defined(__ARM_ARCH_6ZK__) \
+    || defined(__ARM_ARCH_6T2__)
+# if defined(__thumb__)
+    // This is just a placeholder and almost certainly not sufficient.
+    __asm__ __volatile__ ('' : : : 'memory');
+# else // defined(__thumb__)
+    int a = 0, b = 0;
+    __asm__ __volatile__ ('swp %0, %1, [%2]'
+        : '=&r'(a) : 'r'(1), 'r'(&b) : 'memory', 'cc');
+# endif // defined(__thumb__)
+#else
+    // ARMv7 and later.
+    __asm__ __volatile__ ('dmb' : : : 'memory');
 #endif
-    
-    
-    {}  // namespace caffe
-    
-    namespace caffe {
-    }
-    
-    
-    {  bool first_reshape_;
-  vector<int> indices_to_forward_;
+  }
 };
     
-    void BaseComparatorJniCallback::FindShortestSeparator(
-    std::string* start, const Slice& limit) const {
-  if (start == nullptr) {
-    return;
-  }
+    template <typename Time_Traits>
+std::size_t dev_poll_reactor::cancel_timer(timer_queue<Time_Traits>& queue,
+    typename timer_queue<Time_Traits>::per_timer_data& timer,
+    std::size_t max_cancelled)
+{
+  boost::asio::detail::mutex::scoped_lock lock(mutex_);
+  op_queue<operation> ops;
+  std::size_t n = queue.cancel_timer(timer, ops, max_cancelled);
+  lock.unlock();
+  io_service_.post_deferred_completions(ops);
+  return n;
+}
+    
+      int timeout = block ? get_timeout() : 0;
+  lock.unlock();
+    
+    template <typename C>
+struct compare_greater : detail::cmp_pred<C, ordering::gt, 0> {
+  using detail::cmp_pred<C, ordering::gt, 0>::cmp_pred;
+};
+    
+    
+    { private:
+  std::array<std::weak_ptr<T>, kNumSlots> slots_;
+};
+    
+    FOLLY_ALWAYS_INLINE int __builtin_clzll(unsigned long long x) {
+  unsigned long index;
+  return int(_BitScanReverse64(&index, x) ? 63 - index : 64);
+}
+    
+    /** TLS life state */
+    
+    TEST(allocateOverAligned, manualOverCustomAlloc) {
+  // allocates 6 byte with alignment 64 using non-standard allocator, which
+  // will result in an allocation of 64 + alignof(max_align_t) underneath.
+  ExpectingAlloc<short> a(
+      alignof(folly::max_align_t), 64 / alignof(folly::max_align_t) + 1);
+  auto p = folly::allocateOverAligned<decltype(a), 64>(a, 3);
+  EXPECT_EQ((reinterpret_cast<uintptr_t>(p) % 64), 0);
+  folly::deallocateOverAligned<decltype(a), 64>(a, p, 3);
+  EXPECT_EQ(
+      (folly::allocationBytesForOverAligned<decltype(a), 64>(3)),
+      64 + alignof(folly::max_align_t));
+}
+    
+    using namespace folly;
+    
+    void AbstractBtMessage::setBtMessageValidator(
+    std::unique_ptr<BtMessageValidator> validator)
+{
+  validator_ = std::move(validator);
+}
+    
+      const std::shared_ptr<SocketCore>& getSocket() const { return socket_; }
+    
+      char shortName_;
+    
+    bool AbstractProxyRequestCommand::executeInternal()
+{
+  // socket->setBlockingMode();
+  if (httpConnection_->sendBufferIsEmpty()) {
+    auto httpRequest = make_unique<HttpRequest>();
+    httpRequest->setUserAgent(getOption()->get(PREF_USER_AGENT));
+    httpRequest->setRequest(getRequest());
+    httpRequest->setProxyRequest(proxyRequest_);
+    }
     }
     
-    namespace rocksdb {
+    #endif // D_ABSTRACT_PROXY_REQUEST_COMMAND_H
+
+    
+    class AbstractProxyResponseCommand : public AbstractCommand {
+private:
+  std::shared_ptr<HttpConnection> httpConnection_;
     }
     
-      void DeleteIter(bool is_arena_mode) {
-    if (iter_) {
-      if (!is_arena_mode) {
-        delete iter_;
-      } else {
-        iter_->~InternalIterator();
-      }
-    }
+      void setNumNewConnection(int numNewConnection)
+  {
+    numNewConnection_ = numNewConnection;
   }
+    
+      virtual ~AppleTLSContext();
+    
+    namespace aria2 {
+    }
+    
+    
+    {  virtual std::unique_ptr<AuthConfig>
+  resolveAuthConfig(const std::string& hostname) = 0;
+};
