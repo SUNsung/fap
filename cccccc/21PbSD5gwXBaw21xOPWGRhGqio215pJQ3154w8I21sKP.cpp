@@ -1,153 +1,248 @@
 
         
-        template <class T>
-struct DereferencingComparator { bool operator()(const T a, const T b) const { return *a < *b; } };
+        
+    {  typedef std::unordered_map<string, DeviceAttributes> StatusMap;
+  StatusMap device_status_cache_ GUARDED_BY(mu_);
+};
     
-      // Get initial measurement of the space we will be reading.
-  const int64_t initial_size = Size(Key(0), Key(n));
-  const int64_t initial_other_size = Size(Key(n), Key(kCount));
-    
-    
-    {    if (s.ok()) {
-      // Verify that the table is usable
-      Iterator* it = table_cache->NewIterator(ReadOptions(),
-                                              meta->number,
-                                              meta->file_size);
-      s = it->status();
-      delete it;
-    }
-  }
-    
-    void leveldb_options_set_paranoid_checks(
-    leveldb_options_t* opt, unsigned char v) {
-  opt->rep.paranoid_checks = v;
-}
-    
-    #include <stdint.h>
-#include 'leveldb/db.h'
-#include 'db/dbformat.h'
+    namespace tensorflow {
+namespace functor {
+// TODO(b/32239807) No GPU ops for mod yet.
+}  // namespace functor
+}  // namespace tensorflow
     
     
-// Owned filenames have the form:
-//    dbname/CURRENT
-//    dbname/LOCK
-//    dbname/LOG
-//    dbname/LOG.old
-//    dbname/MANIFEST-[0-9]+
-//    dbname/[0-9]+.(log|sst|ldb)
-bool ParseFileName(const std::string& fname,
-                   uint64_t* number,
-                   FileType* type) {
-  Slice rest(fname);
-  if (rest == 'CURRENT') {
-    *number = 0;
-    *type = kCurrentFile;
-  } else if (rest == 'LOCK') {
-    *number = 0;
-    *type = kDBLockFile;
-  } else if (rest == 'LOG' || rest == 'LOG.old') {
-    *number = 0;
-    *type = kInfoLogFile;
-  } else if (rest.starts_with('MANIFEST-')) {
-    rest.remove_prefix(strlen('MANIFEST-'));
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    if (!rest.empty()) {
-      return false;
-    }
-    *type = kDescriptorFile;
-    *number = num;
-  } else {
-    // Avoid strtoull() to keep filename format independent of the
-    // current locale
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    Slice suffix = rest;
-    if (suffix == Slice('.log')) {
-      *type = kLogFile;
-    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
-      *type = kTableFile;
-    } else if (suffix == Slice('.dbtmp')) {
-      *type = kTempFile;
-    } else {
-      return false;
-    }
-    *number = num;
-  }
-  return true;
-}
-    
-      // Successful parses
-  static struct {
-    const char* fname;
-    uint64_t number;
-    FileType type;
-  } cases[] = {
-    { '100.log',            100,   kLogFile },
-    { '0.log',              0,     kLogFile },
-    { '0.sst',              0,     kTableFile },
-    { '0.ldb',              0,     kTableFile },
-    { 'CURRENT',            0,     kCurrentFile },
-    { 'LOCK',               0,     kDBLockFile },
-    { 'MANIFEST-2',         2,     kDescriptorFile },
-    { 'MANIFEST-7',         7,     kDescriptorFile },
-    { 'LOG',                0,     kInfoLogFile },
-    { 'LOG.old',            0,     kInfoLogFile },
-    { '18446744073709551615.log', 18446744073709551615ull, kLogFile },
-  };
-  for (int i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
-    std::string f = cases[i].fname;
-    ASSERT_TRUE(ParseFileName(f, &number, &type)) << f;
-    ASSERT_EQ(cases[i].type, type) << f;
-    ASSERT_EQ(cases[i].number, number) << f;
-  }
-    
-      typedef std::set< std::pair<int, uint64_t> > DeletedFileSet;
-    
-      ASSERT_TRUE(! Overlaps('100', '149'));
-  ASSERT_TRUE(! Overlaps('251', '299'));
-  ASSERT_TRUE(! Overlaps('451', '500'));
-  ASSERT_TRUE(! Overlaps('351', '399'));
-    
-    
-    {}  // namespace leveldb
+    {#if GOOGLE_CUDA
+// A special GPU kernel for int32.
+// TODO(b/25387198): Also enable int32 in device memory. This kernel
+// registration requires all int32 inputs and outputs to be in host memory.
+REGISTER_KERNEL_BUILDER(Name('Mod')
+                            .Device(DEVICE_GPU)
+                            .HostMemory('x')
+                            .HostMemory('y')
+                            .HostMemory('z')
+                            .TypeConstraint<int32>('T'),
+                        BinaryOp<CPUDevice, functor::safe_mod<int32>>);
+REGISTER_KERNEL_BUILDER(Name('TruncateMod')
+                            .Device(DEVICE_GPU)
+                            .HostMemory('x')
+                            .HostMemory('y')
+                            .HostMemory('z')
+                            .TypeConstraint<int32>('T'),
+                        BinaryOp<CPUDevice, functor::safe_mod<int32>>);
+#endif
+}  // namespace tensorflow
 
     
-    TEST(WriteBatchTest, Corruption) {
-  WriteBatch batch;
-  batch.Put(Slice('foo'), Slice('bar'));
-  batch.Delete(Slice('box'));
-  WriteBatchInternal::SetSequence(&batch, 200);
-  Slice contents = WriteBatchInternal::Contents(&batch);
-  WriteBatchInternal::SetContents(&batch,
-                                  Slice(contents.data(),contents.size()-1));
-  ASSERT_EQ('Put(foo, bar)@200'
-            'ParseError()',
-            PrintContents(&batch));
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #include 'tensorflow/compiler/xla/service/batchnorm_expander.h'
+    
+    #ifndef TENSORFLOW_DEBUGGER_STATE_IMPL_H_
+#define TENSORFLOW_DEBUGGER_STATE_IMPL_H_
+    
+    
+    {
+    {}  // namespace port
+}  // namespace tensorflow
+    
+    Status PowGrad(const AttrSlice& attrs, FunctionDef* g) {
+  // clang-format off
+  std::vector<FDH::Node> nodes = {
+    {{'z'}, 'Pow', {'x', 'y'}},
+    // dz * y * Pow(x, y - 1)
+    FDH::Const('const_zero', 0.0f),
+    FDH::Const('const_one', 1.0f),
+    {{'zero'}, 'Cast', {'const_zero'}, {{'SrcT', DT_FLOAT}, {'DstT', '$T'}}},
+    {{'one'}, 'Cast', {'const_one'}, {{'SrcT', DT_FLOAT}, {'DstT', '$T'}}},
+    {{'t0'}, 'Sub', {'y', 'one'}, {}, {'dz'}},
+    {{'t1'}, 'Pow', {'x', 't0'}},
+    {{'t2'}, 'Mul', {'dz', 'y'}},
+    {{'gx'}, 'Mul', {'t1', 't2'}},
+    {{'unsafe_log'}, 'Log', {'x'}, {}, {'dz'}},
+    {{'zeros'}, 'ZerosLike', {'x'}}};
+  // clang-format on
+  std::vector<FDH::Node> log_x_handling;
+  DataType T;
+  TF_RETURN_IF_ERROR(GetNodeAttr(attrs, 'T', &T));
+  if (T == DT_COMPLEX64 || T == DT_COMPLEX128) {
+    // dz * z * (x != 0 ? Log(x) : 0)
+    // clang-format off
+    log_x_handling = {
+      {{'nz_x'}, 'NotEqual', {'x', 'zero'}},
+      {{'safe_log'}, 'Select', {'nz_x', 'unsafe_log', 'zeros'}}};
+    // clang-format on
+  } else {
+    // dz * z * (x > 0 ? Log(x) : 0)
+    // clang-format off
+    log_x_handling = {
+      {{'pos_x'}, 'Greater', {'x', 'zero'}},
+      {{'safe_log'}, 'Select', {'pos_x', 'unsafe_log', 'zeros'}}};
+    // clang-format on
+  }
+  nodes.insert(nodes.end(), log_x_handling.begin(), log_x_handling.end());
+  nodes.push_back({{'t4'}, 'Mul', {'dz', 'z'}});
+  nodes.push_back({{'gy'}, 'Mul', {'safe_log', 't4'}});
+  return GradForBinaryCwise(g, nodes);
+}
+REGISTER_OP_GRADIENT('Pow', PowGrad);
+    
+      virtual bool lookupAdditions(DeclBaseName Name, DeclContext *DC,
+                               SourceLoc Loc, bool IsTypeLookup,
+                               ResultVector &RV) = 0;
+    
+    void SyntaxASTMap::dumpSyntaxMap() const {
+  for (const auto &SyntaxAndSemaNode : SyntaxMap) {
+    auto SyntaxNode = SyntaxAndSemaNode.getFirst();
+    auto SemanticNode = SyntaxAndSemaNode.getSecond();
+    }
+    }
+    
+      ArrayRef<const swift::markup::MarkupASTNode *> getBodyNodes() const {
+    return Parts.BodyNodes;
+  }
+    
+    namespace swift {
+namespace syntax {
+    }
+    }
+    
+      /// When emitting fixits as code edits, apply all fixits from diagnostics
+  /// without any filtering.
+  bool FixitCodeForAllDiagnostics = false;
+    
+    /// \brief Diagnostic consumer that displays diagnostics to standard error.
+class PrintingDiagnosticConsumer : public DiagnosticConsumer {
+  llvm::raw_ostream &Stream;
+  bool ForceColors = false;
+  bool DidErrorOccur = false;
+public:
+  PrintingDiagnosticConsumer(llvm::raw_ostream &stream = llvm::errs()) :
+    Stream(stream) { }
+    }
+    
+    namespace swift {
+    }
+    
+    #endif
+    
+    class CanType;
+class SILValue;
+    
+    #define JSON_ASSERT_MESSAGE(condition, message)                                \
+  if (!(condition)) {                                                          \
+    JSON_FAIL_MESSAGE(message);                                                \
+  }
+    
+    PyDescriptorDatabase::PyDescriptorDatabase(PyObject* py_database)
+    : py_database_(py_database) {
+  Py_INCREF(py_database_);
 }
     
-    // Dump the contents of the file named by fname in text format to
-// *dst.  Makes a sequence of dst->Append() calls; each call is passed
-// the newline-terminated text corresponding to a single item found
-// in the file.
-//
-// Returns a non-OK result if fname does not name a leveldb storage
-// file, or if the file cannot be read.
-Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
+      string data = message.SerializeAsString();
     
-    class Slice;
+      // implements CodeGenerator ----------------------------------------
+  bool Generate(const FileDescriptor* file,
+                const string& parameter,
+                GeneratorContext* generator_context,
+                string* error) const;
     
-    int main(int argc, char** argv) {
-  FLAGS_alsologtostderr = 1;
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
+    
+    
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+    
+    
+    { private:
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RepeatedEnumFieldGenerator);
+};
+    
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+    
+    MessageGenerator* ImmutableGeneratorFactory::NewMessageGenerator(
+    const Descriptor* descriptor) const {
+  if (HasDescriptorMethods(descriptor, context_->EnforceLite())) {
+    return new ImmutableMessageGenerator(descriptor, context_);
+  } else {
+    return new ImmutableMessageLiteGenerator(descriptor, context_);
+  }
+}
+    
+    /**
+ * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
+ *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$
+ *      y = \left\{
+ *         \begin{array}{ll}
+ *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
+ *            \log(1 + \exp(x)) & \mbox{otherwise}
+ *         \end{array} \right.
+ *      @f$
+ */
+template <typename Dtype>
+class BNLLLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit BNLLLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+    }
     }
     
     
-    {  /**
-   * @brief Computes the error gradient w.r.t. the absolute value inputs.
+    {}  // namespace caffe
+    
+      virtual inline int ExactNumBottomBlobs() const { return 3; }
+  virtual inline const char* type() const { return 'ContrastiveLoss'; }
+  /**
+   * Unlike most loss layers, in the ContrastiveLossLayer we can backpropagate
+   * to the first two inputs.
+   */
+  virtual inline bool AllowForceBackward(const int bottom_index) const {
+    return bottom_index != 2;
+  }
+    
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLCNLayer : public LRNLayer<Dtype> {
+ public:
+  explicit CuDNNLCNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
+        tempData1(NULL), tempData2(NULL) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLCNLayer();
+    }
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    
+    {}  // namespace caffe
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the ELU inputs.
    *
    * @param top output Blob vector (length 1), providing the error gradient with
    *      respect to the outputs
@@ -155,13 +250,16 @@ Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
    *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
    *      with respect to computed outputs @f$ y @f$
    * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
+   * @param bottom input Blob vector (length 1)
    *   -# @f$ (N \times C \times H \times W) @f$
    *      the inputs @f$ x @f$; Backward fills their diff with
    *      gradients @f$
-   *        \frac{\partial E}{\partial x} =
-   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
-   *      @f$ if propagate_down[0]
+   *        \frac{\partial E}{\partial x} = \left\{
+   *        \begin{array}{lr}
+   *            1           & \mathrm{if} \; x > 0 \\
+   *            y + \alpha  & \mathrm{if} \; x \le 0
+   *        \end{array} \right.
+   *      @f$ if propagate_down[0].
    */
   virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
@@ -169,60 +267,104 @@ Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 };
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
+    #ifndef TEST_QPS_DRIVER_H
+#define TEST_QPS_DRIVER_H
     
-    #endif  // CAFFE_CUDNN_POOLING_LAYER_HPP_
-
+      bool Generate(const grpc::protobuf::FileDescriptor* file,
+                const grpc::string& parameter,
+                grpc::protobuf::compiler::GeneratorContext* context,
+                grpc::string* error) const;
     
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
- */
-template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
- public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
+    
+    {
+    {}  // namespace
+}  // namespace grpc
+    
+    static void get_cpu_usage(unsigned long long* total_cpu_time,
+                          unsigned long long* idle_cpu_time) {
+#ifdef __linux__
+  std::ifstream proc_stat('/proc/stat');
+  proc_stat.ignore(5);
+  std::string cpu_time_str;
+  std::string first_line;
+  std::getline(proc_stat, first_line);
+  std::stringstream first_line_s(first_line);
+  for (int i = 0; i < 10; ++i) {
+    std::getline(first_line_s, cpu_time_str, ' ');
+    *total_cpu_time += std::stol(cpu_time_str);
+    if (i == 3) {
+      *idle_cpu_time = std::stol(cpu_time_str);
+    }
+  }
+#else
+  gpr_log(GPR_INFO, 'get_cpu_usage(): Non-linux platform is not supported.');
+#endif
+}
+    
+     private:
+  static Result Sample();
+    
+    PowerIphone::PowerIphone() :
+		nsecs_left(-1),
+		percent_left(-1),
+		power_state(OS::POWERSTATE_UNKNOWN) {
+	// TODO Auto-generated constructor stub
+}
+    
+    void WebSocketClient::_on_connect(String p_protocol) {
     }
     
-    #endif  // CAFFE_ELTWISE_LAYER_HPP_
+    			if (!playback->is_playing()) {
+				emit_signal(SceneStringNames::get_singleton()->finished);
+			}
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+    
+    int opus_fft_alloc_arm_neon(kiss_fft_state *st);
+void opus_fft_free_arm_neon(kiss_fft_state *st);
+    
+    
+/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q15
+static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4(opus_val16 a, opus_val32 b)
+{
+  unsigned rd_lo;
+  int rd_hi;
+  __asm__(
+      '#MULT16_32_Q15\n\t'
+      'smull %0, %1, %2, %3\n\t'
+      : '=&r'(rd_lo), '=&r'(rd_hi)
+      : '%r'(b), 'r'(a<<16)
+  );
+  /*We intentionally don't OR in the high bit of rd_lo for speed.*/
+  return rd_hi<<1;
+}
+#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv4(a, b))
+    
+    /*Constants used by the entropy encoder/decoder.*/
+    
+    #endif /* CELT_FIXED_GENERIC_MIPSR1_H */
 
     
-    	if (is_single_mode)
-	{
-		if (!streqi(cmderTask.c_str(), L'')) {
-			swprintf_s(args, L'%s /single /Icon \'%s\' /Title Cmder /dir \'%s\' /run {%s}', args, icoPath, cmderStart.c_str(), cmderTask.c_str());
-		}
-		else {
-			swprintf_s(args, L'%s /single /Icon \'%s\' /Title Cmder /dir \'%s\'', args, icoPath, cmderStart.c_str());
-		}
-	}
-	else
-	{
-		if (!streqi(cmderTask.c_str(), L'')) {
-			swprintf_s(args, L'/Icon \'%s\' /Title Cmder /dir \'%s\' /run {%s}', icoPath, cmderStart.c_str(), cmderTask.c_str());
-		}
-		else {
-			swprintf_s(args, L'%s /Icon \'%s\' /Title Cmder /dir \'%s\'', args, icoPath, cmderStart.c_str());
-		}
-	}
+    # if defined(__clang__) || !defined(__OPTIMIZE__)
+#  define OP_CVTEPI8_EPI32_M32(x) \
+ (_mm_cvtepi8_epi32(_mm_cvtsi32_si128(*(int *)(x))))
+# else
+#  define OP_CVTEPI8_EPI32_M32(x) \
+ (_mm_cvtepi8_epi32(*(__m128i *)(x)))
+#endif
     
-    namespace rabit {
-namespace utils {
-extern 'C' {
-  void (*Printf)(const char *fmt, ...) = Rprintf;
-  void (*Assert)(int exp, const char *fmt, ...) = XGBoostAssert_R;
-  void (*Check)(int exp, const char *fmt, ...) = XGBoostCheck_R;
-  void (*Error)(const char *fmt, ...) = error;
-}
-}
+    
+    {    ret = ops_count;
+    ops_count = 0;
+    return(ret);
 }
     
      private:
@@ -284,182 +426,86 @@ class Base64OutStream: public dmlc::Stream {
     this->Flush();
   }
     
-    void SparsePageSource::Create(DMatrix* src,
-                              const std::string& cache_info) {
-  std::vector<std::string> cache_shards = common::Split(cache_info, ':');
-  CHECK_NE(cache_shards.size(), 0U);
-  // read in the info files.
-  std::string name_info = cache_shards[0];
-  std::vector<std::string> name_shards, format_shards;
-  for (const std::string& prefix : cache_shards) {
-    name_shards.push_back(prefix + '.row.page');
-    format_shards.push_back(SparsePageFormat::DecideFormat(prefix).first);
-  }
-  {
-    SparsePageWriter writer(name_shards, format_shards, 6);
-    std::shared_ptr<SparsePage> page;
-    writer.Alloc(&page); page->Clear();
-    }
-    }
-    
-    
-    {// Enable LOG(CONSOLE) for print messages to console.
-#define LOG_CONSOLE ::xgboost::ConsoleLogger()
-// Enable LOG(TRACKER) for print messages to tracker
-#define LOG_TRACKER ::xgboost::TrackerLogger()
-}  // namespace xgboost.
-#endif  // XGBOOST_LOGGING_H_
-
-    
-    TEST(Metric, PoissionNegLogLik) {
-  xgboost::Metric * metric = xgboost::Metric::Create('poisson-nloglik');
-  ASSERT_STREQ(metric->Name(), 'poisson-nloglik');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0.5f, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.2f, 0.1f, 0.2f},
-                            {  0,   0,   1,   1}),
-              1.1280f, 0.001f);
+    /*
+ * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
+ * Method:    XGDMatrixSaveBinary
+ * Signature: (JLjava/lang/String;I)V
+ */
+JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGDMatrixSaveBinary
+  (JNIEnv *jenv, jclass jcls, jlong jhandle, jstring jfname, jint jsilent) {
+  DMatrixHandle handle = (DMatrixHandle) jhandle;
+  const char* fname = jenv->GetStringUTFChars(jfname, 0);
+  int ret = XGDMatrixSaveBinary(handle, fname, jsilent);
+  if (fname) jenv->ReleaseStringUTFChars(jfname, (const char *)fname);
+  return ret;
 }
-
+    
+      if (npart != 1) {
+    LOG(CONSOLE) << 'Load part of data ' << partid
+                 << ' of ' << npart << ' parts';
+  }
+  // legacy handling of binary data loading
+  if (file_format == 'auto' && npart == 1) {
+    int magic;
+    std::unique_ptr<dmlc::Stream> fi(dmlc::Stream::Create(fname.c_str(), 'r', true));
+    if (fi != nullptr) {
+      common::PeekableInStream is(fi.get());
+      if (is.PeekRead(&magic, sizeof(magic)) == sizeof(magic) &&
+          magic == data::SimpleCSRSource::kMagic) {
+        std::unique_ptr<data::SimpleCSRSource> source(new data::SimpleCSRSource());
+        source->LoadBinary(&is);
+        DMatrix* dmat = DMatrix::Create(std::move(source), cache_file);
+        if (!silent) {
+          LOG(CONSOLE) << dmat->Info().num_row_ << 'x' << dmat->Info().num_col_ << ' matrix with '
+                       << dmat->Info().num_nonzero_ << ' entries loaded from ' << uri;
+        }
+        return dmat;
+      }
+    }
+  }
     
     
     {
-    {}  // namespace common
+    {}  // namespace data
 }  // namespace xgboost
 
     
-      /**
-   * \brief Updates linear model given gradients.
-   *
-   * \param in_gpair            The gradient pair statistics of the data.
-   * \param data                Input data matrix.
-   * \param model               Model to be updated.
-   * \param sum_instance_weight The sum instance weights, used to normalise l1/l2 penalty.
-   */
+      fs = dmlc::Stream::Create(tmp_file.c_str(), 'r');
+  xgboost::MetaInfo inforead;
+  inforead.LoadBinary(fs);
+  EXPECT_EQ(inforead.labels_, info.labels_);
+  EXPECT_EQ(inforead.num_col_, info.num_col_);
+  EXPECT_EQ(inforead.num_row_, info.num_row_);
     
-    #if defined(__GNUC__) && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 8) || __GNUC__ > 4) && \
-    !defined(__CUDACC__)
-#include <parallel/algorithm>
-#define XGBOOST_PARALLEL_SORT(X, Y, Z) __gnu_parallel::sort((X), (Y), (Z))
-#define XGBOOST_PARALLEL_STABLE_SORT(X, Y, Z) \
-  __gnu_parallel::stable_sort((X), (Y), (Z))
-#elif defined(_MSC_VER) && (!__INTEL_COMPILER)
-#include <ppl.h>
-#define XGBOOST_PARALLEL_SORT(X, Y, Z) concurrency::parallel_sort((X), (Y), (Z))
-#define XGBOOST_PARALLEL_STABLE_SORT(X, Y, Z) std::stable_sort((X), (Y), (Z))
-#else
-#define XGBOOST_PARALLEL_SORT(X, Y, Z) std::sort((X), (Y), (Z))
-#define XGBOOST_PARALLEL_STABLE_SORT(X, Y, Z) std::stable_sort((X), (Y), (Z))
-#endif
-    
-    class TLSConfigPlugin : public ConfigPlugin,
-                        public std::enable_shared_from_this<TLSConfigPlugin> {
- public:
-  Status setUp() override;
-  Status genConfig(std::map<std::string, std::string>& config) override;
-    }
-    
-    
-    {    // Check if overflowed
-    if (value > 0) {
-      return boost::lexical_cast<std::string>(std::llround(value));
-    }
-  }
-    
-      auto process = PlatformProcess::getCurrentProcess();
-  EXPECT_NE(nullptr, process.get());
-    
-    /// The shell may request execution of all queries in a pack immediately.
-DECLARE_string(pack);
-    
-    const std::string kKernelDevice = '/dev/osquery';
-    
-    #include 'jsapi.h'
-#include 'jsfriendapi.h'
-    
-    bool js_cocos2dx_studio_TextureData_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_TextureData_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_TextureData(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_TextureData_getContourData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_TextureData_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_TextureData_addContourData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_TextureData_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_TextureData_TextureData(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,'cc.SimpleAudioEngine',0,&tolua_err)) goto tolua_lerror;
-#endif
-    
-    
-    
-    
-    {    tolua_beginmodule(tolua_S,'PhysicsShapeEdgeChain');
-        tolua_function(tolua_S,'getPointsCount',lua_cocos2dx_physics_PhysicsShapeEdgeChain_getPointsCount);
-    tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsShapeEdgeChain).name();
-    g_luaType[typeName] = 'cc.PhysicsShapeEdgeChain';
-    g_typeCast['PhysicsShapeEdgeChain'] = 'cc.PhysicsShapeEdgeChain';
-    return 1;
-}
-    
-    
-    {		Test::Step(settings);
-		m_debugDraw.DrawString(5, m_textLine, 'Keys: (d) dynamic, (s) static, (k) kinematic');
-		m_textLine += DRAW_STRING_NEW_LINE;
-	}
-    
-    	static Test* Create()
-	{
-		return new BulletTest;
-	}
-    
-    		for (int32 i = 0; i < 2; ++i)
-		{
-			b2Vec2 vertices[3];
-			vertices[0].Set(-0.5f, 0.0f);
-			vertices[1].Set(0.5f, 0.0f);
-			vertices[2].Set(0.0f, 1.5f);
-    }
-    
-    
-    {  double max_x_ = std::numeric_limits<double>::min();
-  double min_x_ = std::numeric_limits<double>::max();
-  double max_y_ = std::numeric_limits<double>::min();
-  double min_y_ = std::numeric_limits<double>::max();
-};
-    
-    #include 'modules/perception/proto/traffic_light/multi_camera_projection_config.pb.h'
-    
-    TEST_F(DecisionTest, green_flash) {
-  std::vector<int> color_list = {3, 3, 3, 0, 3, 0, 3, 3, 0, 3,
-                                 0, 3, 0, 3, 0, 0, 0, 0, 0, 3};
-  do_test(reviser_, color_list, GREEN);
-}
-    
-    /**
- * @class Planner
- * @brief Planner is a base class for specific planners.
- *        It contains a pure virtual function Plan which must be implemented in
- * derived class.
+    /*!
+ * \brief Whether customize the logger outputs.
  */
-class Planner {
- public:
-  /**
-   * @brief Constructor
-   */
-  Planner() = default;
-    }
+#ifndef XGBOOST_CUSTOMIZE_LOGGER
+#define XGBOOST_CUSTOMIZE_LOGGER XGBOOST_STRICT_R_MODE
+#endif
     
-      /**
-   * @brief Set lane feature vector
-   * @param Obstacle pointer
-   *        Lane sequence pointer
-   *        Feature container in a vector for receiving the feature values
-   */
-  void SetLaneFeatureValues(Obstacle* obstacle_ptr,
-                            LaneSequence* lane_sequence_ptr,
-                            std::vector<double>* feature_values);
+    #include '../common/host_device_vector.h'
+    
+    // common regressions
+// linear regression
+struct LinearSquareLoss {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    return 1.0f;
+  }
+  template <typename T>
+  static T PredTransform(T x) { return x; }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
+  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
+  static const char* LabelErrorMsg() { return ''; }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
