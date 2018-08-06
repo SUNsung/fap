@@ -1,350 +1,229 @@
 
         
-          DebuggerClient(ASTContext &C) : Ctx(C) { }
-  virtual ~DebuggerClient() = default;
-  
-  // DebuggerClient is consulted at the beginning of the parsing
-  // of various DeclKinds to see whether the decl should be parsed
-  // in the global context rather than the current context.
-  // This question will only be asked if the decl's current context
-  // is a function marked with the LLDBDebuggerFunction attribute.
-  virtual bool shouldGlobalize(Identifier Name, DeclKind kind) = 0;
-  
-  virtual void didGlobalize (Decl *Decl) = 0;
-    
-    
-    {
-    {    C[0] = C[1];
-    TargetStart = C + 1;
-    GCBForC0 = GCBForC1;
-  }
-}
-    
-    /// Index the given source file and store the results to \p indexStorePath.
-///
-/// \param primarySourceFile The source file to index.
-///
-/// \param indexUnitToken A unique identifier for this translation unit in the
-/// form of a file path.
-///
-/// \param indexStorePath The location to write the indexing data to.
-///
-/// \param indexSystemModules If true, emit index data for imported serialized
-/// swift system modules.
-///
-/// \param isDebugCompilation true for non-optimized compiler invocation.
-///
-/// \param targetTriple The target for this compilation.
-///
-/// \param dependencyTracker The set of dependencies seen while building.
-bool indexAndRecord(SourceFile *primarySourceFile, StringRef indexUnitToken,
-                    StringRef indexStorePath, bool indexSystemModules,
-                    bool isDebugCompilation, StringRef targetTriple,
-                    const DependencyTracker &dependencyTracker);
-    
-      swift::markup::CommentParts getParts() const {
-    return Parts;
-  }
-    
-    namespace swift {
-namespace syntax {
-    }
-    }
-    
-    namespace swift {
-    }
-    
-      ResultPlanPtr build(Initialization *emitInto, AbstractionPattern origType,
-                      CanType substType);
-  ResultPlanPtr buildForTuple(Initialization *emitInto,
-                              AbstractionPattern origType,
-                              CanTupleType substType);
-    
-    /* Map whose keys are pointers, but are compared by their dereferenced values.
- *
- * Differs from a plain std::map<const K*, T, DereferencingComparator<K*> > in
- * that methods that take a key for comparison take a K rather than taking a K*
- * (taking a K* would be confusing, since it's the value rather than the address
- * of the object for comparison that matters due to the dereferencing comparator).
- *
- * Objects pointed to by keys must not be modified in any way that changes the
- * result of DereferencingComparator.
- */
-template <class K, class T>
-class indirectmap {
-private:
-    typedef std::map<const K*, T, DereferencingComparator<const K*> > base;
-    base m;
-public:
-    typedef typename base::iterator iterator;
-    typedef typename base::const_iterator const_iterator;
-    typedef typename base::size_type size_type;
-    typedef typename base::value_type value_type;
-    }
-    
-    // Notified when log reader encounters corruption.
-class CorruptionReporter : public log::Reader::Reporter {
- public:
-  WritableFile* dst_;
-  virtual void Corruption(size_t bytes, const Status& status) {
-    std::string r = 'corruption: ';
-    AppendNumberTo(&r, bytes);
-    r += ' bytes; ';
-    r += status.ToString();
-    r.push_back('\n');
-    dst_->Append(r);
-  }
-};
-    
-    #include 'leveldb/db.h'
-    
-    
-    {}  // namespace
-    
-    
-    {  // 'filter' contains the data appended by a preceding call to
-  // CreateFilter() on this class.  This method must return true if
-  // the key was in the list of keys passed to CreateFilter().
-  // This method may return true or false if the key was not on the
-  // list, but it should aim to return false with a high probability.
-  virtual bool KeyMayMatch(const Slice& key, const Slice& filter) const = 0;
-};
-    
-      /// Accept a new connection and obtain the endpoint of the peer
-  /**
-   * This function is used to accept a new connection from a peer into the
-   * given socket, and additionally provide the endpoint of the remote peer.
-   * The function call will block until a new connection has been accepted
-   * successfully or an error occurs.
-   *
-   * @param peer The socket into which the new connection will be accepted.
-   *
-   * @param peer_endpoint An endpoint object which will receive the endpoint of
-   * the remote peer.
-   *
-   * @param ec Set to indicate what error occurred, if any.
-   *
-   * @par Example
-   * @code
-   * boost::asio::ip::tcp::acceptor acceptor(io_service);
-   * ...
-   * boost::asio::ip::tcp::socket socket(io_service);
-   * boost::asio::ip::tcp::endpoint endpoint;
-   * boost::system::error_code ec;
-   * acceptor.accept(socket, endpoint, ec);
-   * if (ec)
-   * {
-   *   // An error occurred.
-   * }
-   * @endcode
-   */
-  template <typename SocketService>
-  boost::system::error_code accept(
-      basic_socket<protocol_type, SocketService>& peer,
-      endpoint_type& peer_endpoint, boost::system::error_code& ec)
-  {
-    return this->get_service().accept(
-        this->get_implementation(), peer, &peer_endpoint, ec);
-  }
-    
-      /// Set the timer's expiry time relative to now.
-  /**
-   * This function sets the expiry time. Any pending asynchronous wait
-   * operations will be cancelled. The handler for each cancelled operation will
-   * be invoked with the boost::asio::error::operation_aborted error code.
-   *
-   * @param expiry_time The expiry time to be used for the timer.
-   *
-   * @return The number of asynchronous operations that were cancelled.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   *
-   * @note If the timer has already expired when expires_from_now() is called,
-   * then the handlers for asynchronous wait operations will:
-   *
-   * @li have already been invoked; or
-   *
-   * @li have been queued for invocation in the near future.
-   *
-   * These handlers can no longer be cancelled, and therefore are passed an
-   * error code that indicates the successful completion of the wait operation.
-   */
-  std::size_t expires_from_now(const duration& expiry_time)
-  {
-    boost::system::error_code ec;
-    std::size_t s = this->service.expires_from_now(
-        this->implementation, expiry_time, ec);
-    boost::asio::detail::throw_error(ec, 'expires_from_now');
-    return s;
-  }
-    
-    
-    {
-    {} // namespace asio
-} // namespace boost
-    
-    #endif // BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-
-    
-    #include <boost/asio/detail/push_options.hpp>
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    #endif // defined(BOOST_ASIO_HAS_EPOLL)
-    
-    TEST(Metric, LogLoss) {
-  xgboost::Metric * metric = xgboost::Metric::Create('logloss');
-  ASSERT_STREQ(metric->Name(), 'logloss');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              1.2039f, 0.001f);
-}
-    
-    namespace xgboost {
-namespace tree {
-// List of files that will be force linked in static links.
-DMLC_REGISTRY_LINK_TAG(updater_colmaker);
-DMLC_REGISTRY_LINK_TAG(updater_skmaker);
-DMLC_REGISTRY_LINK_TAG(updater_refresh);
-DMLC_REGISTRY_LINK_TAG(updater_prune);
-DMLC_REGISTRY_LINK_TAG(updater_fast_hist);
-DMLC_REGISTRY_LINK_TAG(updater_histmaker);
-DMLC_REGISTRY_LINK_TAG(updater_sync);
-#ifdef XGBOOST_USE_CUDA
-DMLC_REGISTRY_LINK_TAG(updater_gpu);
-DMLC_REGISTRY_LINK_TAG(updater_gpu_hist);
-#endif
-}  // namespace tree
-}  // namespace xgboost
-
-    
-    /*!
- * \brief Registry entry for linear updater.
- */
-struct LinearUpdaterReg
-    : public dmlc::FunctionRegEntryBase<LinearUpdaterReg,
-                                        std::function<LinearUpdater*()> > {};
-    
-    // Define a customized logistic regression objective in C++.
-// Implement the interface.
-class MyLogistic : public ObjFunction {
- public:
-  void Configure(const std::vector<std::pair<std::string, std::string> >& args) override {
-    param_.InitAllowUnknown(args);
-  }
-  void GetGradient(HostDeviceVector<bst_float> *preds,
-                   const MetaInfo &info,
-                   int iter,
-                   HostDeviceVector<GradientPair> *out_gpair) override {
-    out_gpair->Resize(preds->Size());
-    std::vector<bst_float>& preds_h = preds->HostVector();
-    std::vector<GradientPair>& out_gpair_h = out_gpair->HostVector();
-    for (size_t i = 0; i < preds_h.size(); ++i) {
-      bst_float w = info.GetWeight(i);
-      // scale the negative examples!
-      if (info.labels_[i] == 0.0f) w *= param_.scale_neg_weight;
-      // logistic transformation
-      bst_float p = 1.0f / (1.0f + std::exp(-preds_h[i]));
-      // this is the gradient
-      bst_float grad = (p - info.labels_[i]) * w;
-      // this is the second order gradient
-      bst_float hess = p * (1.0f - p) * w;
-      out_gpair_h.at(i) = GradientPair(grad, hess);
-    }
-  }
-  const char* DefaultEvalMetric() const override {
-    return 'error';
-  }
-  void PredTransform(HostDeviceVector<bst_float> *io_preds) override {
-    // transform margin value to probability.
-    std::vector<bst_float> &preds = io_preds->HostVector();
-    for (size_t i = 0; i < preds.size(); ++i) {
-      preds[i] = 1.0f / (1.0f + std::exp(-preds[i]));
-    }
-  }
-  bst_float ProbToMargin(bst_float base_score) const override {
-    // transform probability to margin value
-    return -std::log(1.0f / base_score - 1.0f);
-  }
-    }
-    
-    //
-// Exception tracer library.
-    
-      T take() override {
-    T item;
-    while (!queue_.readIfNotEmpty(item)) {
-      sem_.wait();
-    }
-    return item;
-  }
-    
-      folly::Optional<T> try_take_for(std::chrono::milliseconds time) override {
-    T item;
-    while (!queue_.try_dequeue(item)) {
-      if (!sem_.try_wait_for(time)) {
-        return folly::none;
-      }
-    }
-    return std::move(item);
-  }
-    
-      template <typename Self, typename K>
-  static self_iterator_t<Self> upper_bound(Self& self, K const& key) {
-    auto f = [c = self.key_comp()](K const& a, value_type const& b) {
-      return c(a, b.first);
+        private:
+#ifndef JSONCPP_DOC_EXCLUDE_IMPLEMENTATION
+  class CZString {
+  public:
+    enum DuplicationPolicy {
+      noDuplication = 0,
+      duplicate,
+      duplicateOnCopy
     };
-    return std::upper_bound(self.begin(), self.end(), key, f);
-  }
-    
-      explicit CountCopyCtor(int val) : val_(val), count_(0) {}
-    
-    TEST_F(UtilityTest, copy) {
-  struct MyData {};
-  struct Worker {
-    size_t rrefs = 0, crefs = 0;
-    void something(MyData&&) {
-      ++rrefs;
+    CZString(ArrayIndex index);
+    CZString(char const* str, unsigned length, DuplicationPolicy allocate);
+    CZString(CZString const& other);
+#if JSON_HAS_RVALUE_REFERENCES
+    CZString(CZString&& other);
+#endif
+    ~CZString();
+    CZString& operator=(CZString other);
+    bool operator<(CZString const& other) const;
+    bool operator==(CZString const& other) const;
+    ArrayIndex index() const;
+    //const char* c_str() const; ///< \deprecated
+    char const* data() const;
+    unsigned length() const;
+    bool isStaticString() const;
     }
-    void something(const MyData&) {
-      ++crefs;
-    }
-  };
-    }
     
-    TEST(Via, SimpleTimedGetTryVia) {
-  TimedDrivableExecutor e2;
-  Promise<folly::Unit> p;
-  auto f = p.getFuture();
-  EXPECT_THROW(f.getTryVia(&e2, std::chrono::seconds(1)), FutureTimeout);
-}
+    // Initialize the various types and objects.
+bool InitDescriptorMappingTypes();
+    
+    #include <google/protobuf/stubs/logging.h>
+#include <google/protobuf/stubs/common.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/pyext/message.h>
+#include <google/protobuf/pyext/scoped_pyobject_ptr.h>
     
     
-    {  diff -= this->bufferDuration_;
-  slidingWindow_.set(diff / this->bufferDuration_, std::move(digest));
-}
-    
-      std::vector<DigestT> digests;
-  for (auto& digestPtr : digestPtrs) {
-    digests.push_back(std::move(*digestPtr));
-  }
-    
-    AbstractHttpServerResponseCommand::~AbstractHttpServerResponseCommand()
-{
-  if (readCheck_) {
-    e_->deleteSocketForReadCheck(socket_, this);
-  }
-  if (writeCheck_) {
-    e_->deleteSocketForWriteCheck(socket_, this);
-  }
-}
-    
-    #include 'AbstractCommand.h'
-    
-    
-    {  void setBtAnnounce(const std::shared_ptr<BtAnnounce>& btAnnounce);
+    { private:
+  // The python object that implements the database. The reference is owned.
+  PyObject* py_database_;
 };
     
-    AuthConfig::AuthConfig() {}
+    
+    {  ASSERT_TRUE(message.ParseFromString(data));
+  EXPECT_TRUE(message.has_any_value());
+  ASSERT_TRUE(message.any_value().UnpackTo(&any));
+  ASSERT_TRUE(any.UnpackTo(&submessage));
+  EXPECT_EQ(12345, submessage.int32_value());
+}
+    
+      // implements CodeGenerator ----------------------------------------
+  bool Generate(const FileDescriptor* file,
+                const string& parameter,
+                GeneratorContext* generator_context,
+                string* error) const;
+    
+    void RepeatedEnumFieldGenerator::GenerateSerializedSizeCode(io::Printer* printer) {  
+  printer->Print(
+    variables_,
+    'size += $name$_.CalculateSize(_repeated_$name$_codec);\n');
+}
+    
+      virtual void WriteHash(io::Printer* printer);
+  virtual void WriteEquals(io::Printer* printer);
+  virtual void WriteToString(io::Printer* printer);
+    
+      // Returns an estimate of the number of bytes the printed code will compile to
+  virtual int GenerateRegistrationCode(io::Printer* printer);
+    
+    #include <google/protobuf/compiler/java/java_context.h>
+#include <google/protobuf/compiler/java/java_enum_field.h>
+#include <google/protobuf/compiler/java/java_extension.h>
+#include <google/protobuf/compiler/java/java_extension_lite.h>
+#include <google/protobuf/compiler/java/java_field.h>
+#include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_message.h>
+#include <google/protobuf/compiler/java/java_message_lite.h>
+#include <google/protobuf/compiler/java/java_service.h>
+    
+    #include 'gtest/internal/gtest-port.h'
+    
+    // Finally, you can use INSTANTIATE_TEST_CASE_P to instantiate the test
+// case with any set of parameters you want. Google Test defines a number
+// of functions for generating test parameters. They return what we call
+// (surprise!) parameter generators. Here is a  summary of them, which
+// are all in the testing namespace:
+//
+//
+//  Range(begin, end [, step]) - Yields values {begin, begin+step,
+//                               begin+step+step, ...}. The values do not
+//                               include end. step defaults to 1.
+//  Values(v1, v2, ..., vN)    - Yields values {v1, v2, ..., vN}.
+//  ValuesIn(container)        - Yields values from a C-style array, an STL
+//  ValuesIn(begin,end)          container, or an iterator range [begin, end).
+//  Bool()                     - Yields sequence {false, true}.
+//  Combine(g1, g2, ..., gN)   - Yields all combinations (the Cartesian product
+//                               for the math savvy) of the values generated
+//                               by the N generators.
+//
+// For more details, see comments at the definitions of these functions below
+// in this file.
+//
+// The following statement will instantiate tests from the FooTest test case
+// each with parameter values 'meeny', 'miny', and 'moe'.
+    
+    template <typename T>
+::std::string PrintToString(const T& value) {
+  ::std::stringstream ss;
+  internal::UniversalTersePrinter<T>::Print(value, &ss);
+  return ss.str();
+}
+    
+      // Gets the summary of the failure message by omitting the stack
+  // trace in it.
+  static std::string ExtractSummary(const char* message);
+    
+    // Next, associate a list of types with the test case, which will be
+// repeated for each type in the list.  The typedef is necessary for
+// the macro to parse correctly.
+typedef testing::Types<char, int, unsigned int> MyTypes;
+TYPED_TEST_CASE(FooTest, MyTypes);
+    
+      // Returns the text representation of the value parameter, or NULL if this
+  // is not a value-parameterized test.
+  const char* value_param() const {
+    if (value_param_.get() != NULL)
+      return value_param_->c_str();
+    return NULL;
+  }
+    
+    // 6.1.4 Pairs.
+// Unimplemented.
+    
+    // The following family of struct and struct templates are used to
+// represent template lists.  In particular, TemplatesN<T1, T2, ...,
+// TN> represents a list of N templates (T1, T2, ..., and TN).  Except
+// for Templates0, every struct in the family has two member types:
+// Head for the selector of the first template in the list, and Tail
+// for the rest of the list.
+    
+    
+    {  // Returns the smallest prime number greater than p; or returns -1
+  // if the next prime is beyond the capacity of the table.
+  virtual int GetNextPrime(int p) const = 0;
+};
+    
+    static const int WARMUP = 5;
+static const int BENCHMARK = 5;
+    
+      grpc::testing::interop::RunServer(
+      grpc::testing::CreateInteropServerCredentials());
+    
+    //---- Tip: You can add extra functions within the ImGui:: namespace, here or in your own headers files.
+/*
+namespace ImGui
+{
+    void MyFunction(const char* name, const MyMatrix44& v);
+}
+*/
+
+    
+        len = stb_compress_chunk(input, input, input+length, length, &literals, chash, stb__hashsize-1);
+    assert(len == length);
+    
+        for (int n = 0; n < 50; n++)
+    {
+        printf('NewFrame() %d\n', n);
+        io.DisplaySize = ImVec2(1920, 1080);
+        io.DeltaTime = 1.0f / 60.0f;
+        ImGui::NewFrame();
+    }
+    
+    void ImGui_ImplFreeGLUT_SpecialFunc(int key, int x, int y)
+{
+    //printf('key_down_func %d\n', key);
+    ImGuiIO& io = ImGui::GetIO();
+    if (key + 256 < IM_ARRAYSIZE(io.KeysDown))
+        io.KeysDown[key + 256] = true;
+    ImGui_ImplFreeGLUT_UpdateKeyboardMods();
+    (void)x; (void)y; // Unused
+}
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
+IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
+    
+        // Main loop
+    bool running = true;
+    while (running)
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        ALLEGRO_EVENT ev;
+        while (al_get_next_event(queue, &ev))
+        {
+            ImGui_ImplAllegro5_ProcessEvent(&ev);
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
+                running = false;
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
+            {
+                ImGui_ImplAllegro5_InvalidateDeviceObjects();
+                al_acknowledge_resize(display);
+                ImGui_ImplAllegro5_CreateDeviceObjects();
+            }
+        }
+    }
+    
+        glfwDestroyWindow(window);
+    glfwTerminate();
+    
+    
+    {    _state = EXPECTS_CRASH_DUMP_END;
+    return 0;
+}
+    
+    int SimpleIntUnpack(const void* _rawbuf, size_t _rawlen, size_t& _packlen, PtrBuffer& _data) {
+    return SimpleUnpack<unsigned int>(_rawbuf, _rawlen, _packlen, _data);
+}
+    
+    #ifndef COMM_COMM_FREQUENCY_LIMIT_H_
+#define COMM_COMM_FREQUENCY_LIMIT_H_
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
