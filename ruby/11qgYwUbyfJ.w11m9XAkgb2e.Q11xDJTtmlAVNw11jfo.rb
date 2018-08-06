@@ -1,59 +1,93 @@
 
         
-        require 'pry'
-$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
-require 'jekyll'
+            prune
+  end
     
-    STDOUT.sync = true
-    
-        # Initialize a new Layout.
-    #
-    # site - The Site.
-    # base - The String path to the source.
-    # name - The String filename of the post file.
-    def initialize(site, base, name)
-      @site = site
-      @base = base
-      @name = name
-    
-    end
-
-    
-    
-    {
-    {        '[#{elapsed_time}] #{severity} -- #{progname}: #{message}\n'
-      }
-    }
-    @dry_run_results = {
-      events: [],
-    }
-    
-        if options['recipients'].present?
-      emails = options['recipients']
-      emails = [emails] if emails.is_a?(String)
-      unless emails.all? { |email| email =~ Devise.email_regexp || email =~ /\{/ }
-        errors.add(:base, ''when provided, 'recipients' should be an email address or an array of email addresses')
+        results.map do |name|
+      begin
+        formula = Formulary.factory(name)
+        canonical_name = formula.name
+        canonical_full_name = formula.full_name
+      rescue
+        canonical_name = canonical_full_name = name
       end
-    end
-  end
-    }
-    
-      def validate_evernote_options
-    unless evernote_consumer_key.present? &&
-      evernote_consumer_secret.present? &&
-      evernote_oauth_token.present?
-      errors.add(:base, 'Evernote ENV variables and a Service are required')
-    end
-  end
-    
-      def load_event
-    @event = current_user.events.find(params[:id])
+      # Ignore aliases from results when the full name was also found
+      if aliases.include?(name) && results.include?(canonical_full_name)
+        next
+      elsif (HOMEBREW_CELLAR/canonical_name).directory?
+        pretty_installed(name)
+      else
+        name
+      end
+    end.compact
   end
 end
 
     
-      #forward some requests to status message, because a poll is just attached to a status message and is not sharable itself
-  delegate :author_id, :diaspora_handle, :public?, :subscribers, to: :status_message
+    invalids = []
+Parallel.each(links, in_threads: 4) do |link|
+  href = link.attribute('href').to_s
+  begin
+    case check_link(URI.join(BASE_URI, href))
+    when (200...300)
+      putc('.')
+    when (300..302)
+      putc('w')
+    end
+  rescue => e
+    putc('F')
+    invalids << '#{href} (reason: #{e.message})'
+  end
+end
+    
+          options[:only] = %w(getting-started/ css/ components/ javascript/)
+    end
+  end
+end
+
+    
+        version 'HashLink' do
+      self.base_url = 'https://api.haxe.org/hl/'
+    end
+    
+          options[:only_patterns] = [
+        /\Aget_started/,
+        /\Aprogrammers_guide/,
+        /\Atutorials/,
+        /\Aperformance/,
+        /\Adeploy/,
+        /\Aextend/]
+    end
+    
+            if b_length > a_length
+          (b_length - a_length).times { a_split.insert(-2, 0) }
+        elsif a_length > b_length
+          (a_length - b_length).times { b_split.insert(-2, 0) }
+        end
+    
+        def assert_index(index)
+      i = index.is_a?(Integer) ? index : @filters.index(filter_const(index))
+      raise 'No such filter to insert: #{index}' unless i
+      i
+    end
+  end
+end
+
+    
+        def add(path, content)
+      @pages[path] = content
+    end
+    
+      def gist_logs
+    raise FormulaUnspecifiedError if ARGV.resolved_formulae.length != 1
+    
+        formulae = ARGV.include?('--installed') ? Formula.installed : Formula
+    recursive = ARGV.flag? '--recursive'
+    only_installed_arg = ARGV.include?('--installed') &&
+                         !ARGV.include?('--include-build') &&
+                         !ARGV.include?('--include-test') &&
+                         !ARGV.include?('--include-optional') &&
+                         !ARGV.include?('--skip-recommended')
     
           respond_with do |format|
         format.html do
@@ -61,3 +95,86 @@ end
           gon.unchecked_count = Pod.unchecked.count
           gon.version_failed_count = Pod.version_failed.count
           gon.error_count = Pod.check_failed.count
+    
+          rescue_from OpenIDConnect::ValidationFailed,
+                  ActiveRecord::RecordInvalid, Api::OpenidConnect::Error::InvalidSectorIdentifierUri do |e|
+        validation_fail_as_json(e)
+      end
+    
+    if profile_filename = ENV['PROFILE']
+  require 'ruby-prof'
+  reporter =
+    case (profile_extname = File.extname(profile_filename))
+    when '.txt'
+      RubyProf::FlatPrinterWithLineNumbers
+    when '.html'
+      RubyProf::GraphHtmlPrinter
+    when '.callgrind'
+      RubyProf::CallTreePrinter
+    else
+      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
+    end
+  File.open(profile_filename, 'w') do |io|
+    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
+  end
+else
+  Pod::Command.run(ARGV)
+end
+
+    
+      def developer_prefix
+    `xcode-select --print-path`.strip
+  end
+    
+            self.arguments = [
+          CLAide::Argument.new('NAME', false),
+        ]
+    
+          def self.options
+        [
+          ['--update', 'Run `pod repo update` before listing'],
+          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
+        ].concat(super)
+      end
+    
+                validator = Source::HealthReporter.new(source.repo)
+            validator.pre_check do |_name, _version|
+              UI.print '.'
+            end
+            report = validator.analyze
+            UI.puts
+            UI.puts
+    
+              if @address.update_attributes(address_params)
+            respond_with(@address, default_template: :show)
+          else
+            invalid_resource!(@address)
+          end
+        end
+    
+            def operator
+          assignment_node = meta_assignment_node || @node
+          assignment_node.loc.operator.source
+        end
+    
+            def should_be_unused?
+          name.to_s.start_with?('_')
+        end
+    
+              self.class.new(lines, offense_annotations)
+        end
+    
+              it 'autocorrects the offenses' do
+            new_source = autocorrect_source(source)
+            expect(new_source).to eq(<<-RUBY.strip_indent)
+              #{type} Parent
+                #{type} SomeObject
+                  URL = %q(http://example.com)
+    
+        context 'opening brace on same line as first element' do
+      context 'last element has a trailing comma' do
+        it 'autocorrects closing brace on different line from last element' do
+          new_source = autocorrect_source(['#{prefix}#{open}#{a}, # a',
+                                           '#{b}, # b',
+                                           close,
+                                           suffix])
