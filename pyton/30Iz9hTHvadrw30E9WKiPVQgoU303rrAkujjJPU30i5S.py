@@ -1,207 +1,102 @@
 
         
-            if s1.st_dev != s2.st_dev:
-        return True     # path/.. on a different device as path
-    if s1.st_ino == s2.st_ino:
-        return True     # path/.. is the same i-node as path, i.e. path=='/'
-    return False
-
+                with self.assertRaises(Exception):
+          tf.test.compute_gradient_error(
+              scores, [3, 4, 4], log_partition_functions, [3], init_scores)
+    
+          self.assertAllEqual(predictions.eval(),
+                          [[0.0, 1.0, 0.0],
+                           [0.0, 1.0, 0.0],
+                           [0.0, 0.0, 0.0],
+                           [0.0, 1.0, 0.0],
+                           [0.0, 0.0, 1.0],
+                           [0.0, 0.0, 1.0]])  # pyformat: disable
+    
+    
+@pytest.mark.functional
+def test_without_confirmation(proc, TIMEOUT):
+    without_confirmation(proc, TIMEOUT)
+    
+                # train once so that the states change
+            model.train_on_batch(np.ones_like(inputs),
+                                 np.random.random(out1.shape))
+            out2 = model.predict(np.ones_like(inputs))
+    
+            for j in range(n):
+            # Initial position
+            xstart = np.random.randint(20, 60)
+            ystart = np.random.randint(20, 60)
+            # Direction of motion
+            directionx = np.random.randint(0, 3) - 1
+            directiony = np.random.randint(0, 3) - 1
+    
+    print('Pad sequences (samples x time)')
+x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
+x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
+    
+    network2 = {
+    'n_dense': 6,
+    'dense_units': 16,
+    'activation': 'selu',
+    'dropout': AlphaDropout,
+    'dropout_rate': 0.1,
+    'kernel_initializer': 'lecun_normal',
+    'optimizer': 'sgd'
+}
+    
+        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
+        deserialized = losses.deserialize(serialized)
+    assert isinstance(deserialized, MSE_MAE_loss)
+    assert deserialized.mse_fraction == 0.3
     
         if os.path.exists(path):
         return
     
-        if result is None:
-        return '{}'
-    
-    
-class TerminalModule(TerminalBase):
-    
-        def construct_yaml_map(self, node):
-        data = AnsibleMapping()
-        yield data
-        value = self.construct_mapping(node)
-        data.update(value)
-        data.ansible_pos = self._node_position_info(node)
-    
-    
-class HashTable(object):
-    
-        def is_face_card(self):
-        '''Jack = 11, Queen = 12, King = 13'''
-        return True if 10 < self._value <= 13 else False
-    
-        def can_fit_vehicle(self, vehicle):
-        if self.vehicle is not None:
-            return False
-        return vehicle.can_fit_in_spot(self)
-    
-            (2016-01, shopping), 125
-        (2016-01, gas), 50
-        '''
-        total = sum(values)
-        self.handle_budget_notifications(key, total)
-        yield key, sum(values)
-    
-                if isinstance(self.input, TokenStream):
-                self.token = self.input.LT(1)
-                self.line = self.token.line
-                self.charPositionInLine = self.token.charPositionInLine
-    
-    
-    def test_conversion(self):
-    
-    def evalString(s):
-    assert s.startswith(''') or s.startswith('''), repr(s[:1])
-    q = s[0]
-    if s[:3] == q*3:
-        q = q*3
-    assert s.endswith(q), repr(s[-len(q):])
-    assert len(s) >= 2*len(q)
-    s = s[len(q):-len(q)]
-    return re.sub(r'\\(\'|\'|\\|[abfnrtv]|x.{0,2}|[0-7]{1,3})', escape, s)
-    
-        def check_syntax_error(self, err, basename, lineno, offset=0):
-        self.assertIn('%s.py, line %d' % (basename, lineno), str(err))
-        self.assertEqual(os.path.basename(err.filename), basename + '.py')
-        self.assertEqual(err.lineno, lineno)
-        self.assertEqual(err.offset, offset)
-    
-        def _get_byteStream(self):
-        return self.byteStream
-    def _set_byteStream(self, byteStream):
-        self.byteStream = byteStream
-    
-    T_CV2 = typing.ClassVar[int]
-T_CV3 = typing.ClassVar
-    
-    @dataclasses.dataclass
-class IV:
-    T_IV4 = dataclasses.InitVar
-    iv0: dataclasses.InitVar[int]
-    iv1: dataclasses.InitVar
-    iv2: T_IV2
-    iv3: T_IV3
-    not_iv4: T_IV4  # When using string annotations, this field is not recognized as an InitVar.
+        def on_open_shell(self):
+        try:
+            self._exec_cli_command('screen-length 0 temporary')
+        except AnsibleConnectionFailure:
+            raise AnsibleConnectionFailure('unable to set terminal parameters')
 
     
-    def _worker(executor_reference, work_queue):
-    try:
-        while True:
-            work_item = work_queue.get(block=True)
-            if work_item is not None:
-                work_item.run()
-                continue
-            executor = executor_reference()
-            # Exit if:
-            #   - The interpreter is shutting down OR
-            #   - The executor that owns the worker has been collected OR
-            #   - The executor that owns the worker has been shutdown.
-            if _shutdown or executor is None or executor._shutdown:
-                # Notice other workers
-                work_queue.put(None)
-                return
-            del executor
-    except BaseException:
-        _base.LOGGER.critical('Exception in worker', exc_info=True)
+    AnsibleConstructor.add_constructor(
+    u'tag:yaml.org,2002:str',
+    AnsibleConstructor.construct_yaml_str)
     
-    def download_urls_sequential(urls, timeout=60):
-    url_to_content = {}
-    for url in urls:
-        try:
-            url_to_content[url] = load_url(url, timeout=timeout)
-        except:
-            pass
-    return url_to_content
+        data_train = fetch_20newsgroups_vectorized(subset='train')
+    data_test = fetch_20newsgroups_vectorized(subset='test')
+    X_train = check_array(data_train.data, dtype=np.float32,
+                          accept_sparse='csc')
+    X_test = check_array(data_test.data, dtype=np.float32, accept_sparse='csr')
+    y_train = data_train.target
+    y_test = data_test.target
     
+        for i, kk in enumerate(krange):
+        print('k = %i (%i out of %i)' % (kk, i + 1, len(krange)))
+        for algorithm in algorithms:
+            nbrs = neighbors.NearestNeighbors(n_neighbors=kk,
+                                              algorithm=algorithm,
+                                              leaf_size=leaf_size)
+            t0 = time()
+            nbrs.fit(X)
+            t1 = time()
+            nbrs.kneighbors(X)
+            t2 = time()
     
-def KeywordsFromSyntaxListOutput_CppSyntax_test():
-  expected_keywords = (
-    'int_fast32_t', 'FILE', 'size_t', 'bitor', 'typedef', 'const', 'struct',
-    'uint8_t', 'fpos_t', 'thread_local', 'unsigned', 'uint_least16_t', 'do',
-    'intptr_t', 'uint_least64_t', 'return', 'auto', 'void', '_Complex',
-    'break', '_Alignof', 'not', 'using', '_Static_assert', '_Thread_local',
-    'public', 'uint_fast16_t', 'this', 'continue', 'char32_t', 'int16_t',
-    'intmax_t', 'static', 'clock_t', 'sizeof', 'int_fast64_t', 'mbstate_t',
-    'try', 'xor', 'uint_fast32_t', 'int_least8_t', 'div_t', 'volatile',
-    'template', 'char16_t', 'new', 'ldiv_t', 'int_least16_t', 'va_list',
-    'uint_least8_t', 'goto', 'noreturn', 'enum', 'static_assert', 'bitand',
-    'compl', 'imaginary', 'jmp_buf', 'throw', 'asm', 'ptrdiff_t', 'uint16_t',
-    'or', 'uint_fast8_t', '_Bool', 'int32_t', 'float', 'private', 'restrict',
-    'wint_t', 'operator', 'not_eq', '_Imaginary', 'alignas', 'union', 'long',
-    'uint_least32_t', 'int_least64_t', 'friend', 'uintptr_t', 'int8_t', 'else',
-    'export', 'int_fast8_t', 'catch', 'true', 'case', 'default', 'double',
-    '_Noreturn', 'signed', 'typename', 'while', 'protected', 'wchar_t',
-    'wctrans_t', 'uint64_t', 'delete', 'and', 'register', 'false', 'int',
-    'uintmax_t', 'off_t', 'char', 'int64_t', 'int_fast16_t', 'DIR', '_Atomic',
-    'time_t', 'xor_eq', 'namespace', 'virtual', 'complex', 'bool', 'mutable',
-    'if', 'int_least32_t', 'sig_atomic_t', 'and_eq', 'ssize_t', 'alignof',
-    '_Alignas', '_Generic', 'extern', 'class', 'typeid', 'short', 'for',
-    'uint_fast64_t', 'wctype_t', 'explicit', 'or_eq', 'switch', 'uint32_t',
-    'inline' )
+        for n_samples in sample_sizes:
+        X = random_state.rand(n_samples, 300)
     
-      new_candidates = []
-  for candidate in candidates:
-    if isinstance( candidate, dict ):
-      new_candidate = candidate.copy()
+    html_folder = u'html'
+text_folder = u'paragraphs'
+short_text_folder = u'short_paragraphs'
+n_words_per_short_text = 5
     
-      python_interpreter = vim.eval( 'g:ycm_server_python_interpreter' )
-  if python_interpreter:
-    python_interpreter = utils.FindExecutable( python_interpreter )
-    if python_interpreter:
-      return python_interpreter
+        if not os.path.exists(ARCHIVE_NAME):
+        print('Downloading dataset from %s (3 MB)' % URL)
+        opener = urlopen(URL)
+        with open(ARCHIVE_NAME, 'wb') as archive:
+            archive.write(opener.read())
     
-        try:
-      eq_( expected_vim_data, vim_data )
-    except Exception:
-      print( 'Expected:\n'{0}'\nwhen parsing:\n'{1}'\nBut found:\n'{2}''.format(
-          expected_vim_data,
-          completion_data,
-          vim_data ) )
-      raise
-    
-        def test_sales_manager_shall_talk_through_proxy_with_delay(cls):
-        cls.p.busy = 'No'
-        start_time = time()
-        cls.p.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-Sales Manager ready to talk\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
-    
-        move = Action('move')
-    person = Person('Jack', move)
-    person.do_action().amount('5m').stop()
-    
-        def test_frozen_pool(self):
-        with ObjectPool(self.sample_queue) as pool:
-            self.assertEqual(pool, 'first')
-            self.assertEqual(pool, 'first')
-        self.assertTrue(self.sample_queue.get() == 'second')
-        self.assertFalse(self.sample_queue.empty())
-        self.assertTrue(self.sample_queue.get() == 'first')
-        self.assertTrue(self.sample_queue.empty())
-    
-        def now(self):
-        current_time_is_always_midnight = '24:01'
-        return current_time_is_always_midnight
-
-    
-    
-def count_to(count):
-    '''Counts by word numbers, up to a maximum of five'''
-    numbers = ['one', 'two', 'three', 'four', 'five']
-    for number in numbers[:count]:
-        yield number
-    
-        def prepareReporting(self):
-        rvalue = self._db.insert()
-        if rvalue == -1:
-            self._tc.setProblem(1)
-            self._reporter.prepare()
-    
-        def scan(self):
-        self.state.scan()
+    plt.show()
