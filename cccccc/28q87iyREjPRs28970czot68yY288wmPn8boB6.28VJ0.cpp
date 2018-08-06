@@ -1,495 +1,549 @@
 
         
-          /// Indicates whether the diagnostics produced during compilation should be
-  /// checked against expected diagnostics, indicated by markers in the
-  /// input source file.
-  enum {
-    NoVerify,
-    Verify,
-    VerifyAndApplyFixes
-  } VerifyMode = NoVerify;
-    
-    
-    {
-    {} // end namespace index
-} // end namespace swift
-    
-      ~IndexTrieNode() {
-    for (auto *N : Children)
-      delete N;
-  }
-    
-    /// This represents one part of a #if block.  If the condition field is
-/// non-null, then this represents a #if or a #elseif, otherwise it represents
-/// an #else block.
-struct IfConfigClause {
-  /// The location of the #if, #elseif, or #else keyword.
-  SourceLoc Loc;
-  
-  /// The condition guarding this #if or #elseif block.  If this is null, this
-  /// is a #else clause.
-  Expr *Cond;
-  
-  /// Elements inside the clause
-  ArrayRef<ASTNode> Elements;
+        
+    {  template<typename T> bool RemoveListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i!=listerners_.end()) {
+      delete i->second;
+      listerners_.erase(i);
+      return true;
     }
-    
-      bool thrown = false;
-  try {
-    thpp::IntTensor &a = dynamic_cast<thpp::IntTensor&>(*tensor);
-  } catch(std::bad_cast &e) {
-    thrown = true;
+    return false;
   }
-  assert(thrown);
-    
-        SECTION(
-        'operator[key] returns the correct modules when given a valid key') {
-      REQUIRE(&cursor['0'] == &model[0]);
-      REQUIRE(&cursor['1'] == &model[1]);
-      REQUIRE(&cursor['2'] == &model[2]);
-    }
-    
-      /// Helper function to construct a vector of zero-d out variables, each the
-  /// same shape as the variable at the corresponding index in the input
-  /// container.
-  template <typename ParameterContainer>
-  std::vector<Tensor> zero_buffers_like(const ParameterContainer& parameters) {
-    std::vector<Tensor> result;
-    result.reserve(parameters.size());
-    for (auto& parameter : parameters) {
-      result.push_back(torch::zeros_like(parameter));
-    }
-    return result;
-  }
-    
-    
-    {
-    {    if (totalSize + self->storageOffset > 0) {
-      if (!self->storage)
-        self->storage = THDStorage_(new)();
-      if (totalSize + self->storageOffset > self->storage->size)
-        THDStorage_(resize)(self->storage, totalSize+self->storageOffset);
-    }
-  } else {
-    self->nDimension = 0;
-  }
-}
-    
-    #ifdef USE_CUDA
-std::vector <THCStream*> THPUtils_PySequence_to_THCStreamList(PyObject *obj) {
-  if (!PySequence_Check(obj)) {
-    throw std::runtime_error('Expected a sequence in THPUtils_PySequence_to_THCStreamList');
-  }
-  THPObjectPtr seq = THPObjectPtr(PySequence_Fast(obj, NULL));
-  if (seq.get() == NULL) {
-    throw std::runtime_error('expected PySequence, but got ' + std::string(THPUtils_typename(obj)));
-  }
-    }
-    
-        // Extract max keypoints and probabilities from heatmaps
-    for (int j = 0; j < keypoint_count; j++) {
-      const int heatmap_index = k * keypoint_count + j;
-      const int maxIndex = maxIndices[heatmap_index];
-      const float maxScore = maxScores[heatmap_index];
-      const int maxY = maxIndex / heatmap_size;
-      const int maxX = maxIndex - heatmap_size * maxY;
-    }
-    
-      EMatXf result_gt(5, 5);
-  result_gt << 252.668, 107.367, 91.4381, 276.165, 0.0, 217.686, 19.3551,
-      147.631, 205.397, 55.0, 187.363, 214.185, 19.865, 31.0368, -80.0, 270.234,
-      210.513, 235.963, 130.163, -50.0, 36.1956, 140.863, 62.2665, 259.645, 0.5;
-    
-    using object_id_type = uint64_t;
-    
-    void sendValueToMaster(int64_t value) {
-  IntScalar scalar(value);
-  dataChannel->send(scalar, 0);
-}
-    
-    
-    {  if (flags & XhpTrace) {
-    s_profiler_factory->start(ProfilerKind::Trace, flags);
-  } else if (flags & Memo) {
-    flags = 0;  /* flags are not used by MemoProfiler::MemoProfiler */
-    s_profiler_factory->start(ProfilerKind::Memo, flags);
-  } else if (flags & External) {
-    for (ArrayIter iter(args); iter; ++iter) {
-      if (iter.first().toInt32() == 0) {
-         flags = iter.second().toInt32();
-      }
-    }
-    s_profiler_factory->start(ProfilerKind::External, flags);
-  } else {
-    s_profiler_factory->start(ProfilerKind::Hierarchical, flags);
-  }
-}
-    
-    #define PRINT_MSG(...)                          \
-  switch (m_report) {                           \
-    case Log:                                   \
-      Logger::Info(__VA_ARGS__);                \
-      break;                                    \
-    case Stderr:                                \
-      fprintf(stderr, __VA_ARGS__);             \
-      break;                                    \
-    case Trace:                                 \
-      Trace::traceRelease(__VA_ARGS__);         \
-      break;                                    \
-    default: not_reached();                     \
-  }
-    
-    #else // USE_GCC_FAST_TLS
-    
-      /**
-   * Get results of a task. This is blocking until task is finished or times
-   * out. The status code is set to -1 in the event of a timeout.
-   */
-  static String TaskResult(const Resource& task,
-                           Array &headers,
-                           int &code,
-                           int64_t timeout_ms);
-    
-    /*
- * Returns an IR block corresponding to the given bytecode offset. If the block
- * starts with a DefLabel expecting a StkPtr, this function will return an
- * intermediate block that passes the current sp.
- */
-Block* getBlock(IRGS& env, Offset offset);
-    
-    #include 'hphp/runtime/base/exceptions.h'
-#include 'hphp/system/systemlib.h'
-    
-    /*
- * DecRef a string s, calling release if its reference count goes to
- * zero.
- */
-void decRefStr(StringData* s);
-    
-    struct StringDataHashCompare {
-  bool equal(const StringData *s1, const StringData *s2) const {
-    assertx(s1 && s2);
-    return s1->same(s2);
-  }
-  size_t hash(const StringData *s) const {
-    assertx(s);
-    return s->hash();
-  }
+private:
+  DISALLOW_COPY_AND_ASSIGN(EventListener);
 };
     
-    namespace HPHP {
-    }
+    #endif  // CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
+
     
-    /*
- * Functions for differentiating global litstrId's from unit-local Id's.
- */
-bool isGlobalLitstrId(Id id);
-Id encodeGlobalLitstrId(Id id);
-Id decodeGlobalLitstrId(Id id);
-    
-    #if USE_JEMALLOC_EXTENT_HOOKS
-    
-    bool set_hugetlbfs_path(const char* path) {
-  if (get_hugepage_size(path) != size1g) return false;
-  size_t len = strlen(path);
-  if (len + 8 >= sizeof(s_hugePath)) return false;
-  memcpy(s_hugePath, path, len);
-  *reinterpret_cast<int*>(s_hugePath + len) = 0;
-  if (s_hugePath[len - 1] != '/') {
-    s_hugePath[len] = '/';
+    void Menu::Insert(MenuItem* menu_item, int pos) {
+  std::vector<MenuItem*>::iterator begin = menu_items.begin();
+  menu_items.insert(begin+pos,menu_item);
+  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
+    menu_item->UpdateKeys(gtk_accel_group);
   }
-  return true;
+  gtk_menu_shell_insert(GTK_MENU_SHELL(menu_), menu_item->menu_item_, pos);
 }
     
-    const Func* lookupUnknownFunc(const StringData* name) {
-  return loadUnknownFuncHelper(name, raise_resolve_undefined);
+    void Menu::UpdateStates() {
 }
     
-    namespace leveldb {
+    MenuItem::~MenuItem() {
+  Destroy();
+}
+    
+     protected:
+  ~NwAppCrashBrowserFunction() override {}
+    
+    namespace extensions {
     }
+    
+      /// Return the index of the referenced Value, or -1 if it is not an arrayValue.
+  UInt index() const;
+    
+    OurFeatures OurFeatures::all() { return OurFeatures(); }
+    
+    static int kImplVersion = -1;  // -1 means 'Unspecified by compiler flags'.
+    
+    // Find the file which defines an extension extending the given message type
+// with the given field number.
+// Python DescriptorDatabases are not required to implement this method.
+bool PyDescriptorDatabase::FindFileContainingExtension(
+    const string& containing_type, int field_number,
+    FileDescriptorProto* output) {
+  ScopedPyObjectPtr py_method(
+      PyObject_GetAttrString(py_database_, 'FindFileContainingExtension'));
+  if (py_method == NULL) {
+    // This method is not implemented, returns without error.
+    PyErr_Clear();
+    return false;
+  }
+  ScopedPyObjectPtr py_descriptor(
+      PyObject_CallFunction(py_method.get(), 's#i', containing_type.c_str(),
+                            containing_type.size(), field_number));
+  return GetFileDescriptorProto(py_descriptor.get(), output);
+}
+    
+    #include <google/protobuf/descriptor_database.h>
+    
+    #include <google/protobuf/any_test.pb.h>
+#include <gtest/gtest.h>
+    
+    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_ENUM_FIELD_H__
+    
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+    
+    { private:
+  Context* context_;
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ImmutableGeneratorFactory);
+};
+    
+    void CalibrateExtrinsics(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
+                         const IntrinsicParams& param, const int check_cond,
+                         const double thresh_cond, InputOutputArray omc, InputOutputArray Tc);
+    
+            const int erode_count = 1;
+        erode(black_comp, black_comp, Mat(), Point(-1, -1), erode_count);
+        erode(white_comp, white_comp, Mat(), Point(-1, -1), erode_count);
+    
+                        for (int testPointIndex = 0; testPointIndex < usedPointsCount && isGeneralPosition; testPointIndex++)
+                    {
+                        if (testPointIndex == startPointIndex || testPointIndex == endPointIndex)
+                        {
+                            continue;
+                        }
+    }
+    
+    //! @endcond
+    
+    #ifdef HAVE_CLAMDBLAS
+    
+    /* [-255..255].^2 */
+const ushort g_8x16uSqrTab[] =
+{
+    65025, 64516, 64009, 63504, 63001, 62500, 62001, 61504, 61009, 60516, 60025, 59536,
+    59049, 58564, 58081, 57600, 57121, 56644, 56169, 55696, 55225, 54756, 54289, 53824,
+    53361, 52900, 52441, 51984, 51529, 51076, 50625, 50176, 49729, 49284, 48841, 48400,
+    47961, 47524, 47089, 46656, 46225, 45796, 45369, 44944, 44521, 44100, 43681, 43264,
+    42849, 42436, 42025, 41616, 41209, 40804, 40401, 40000, 39601, 39204, 38809, 38416,
+    38025, 37636, 37249, 36864, 36481, 36100, 35721, 35344, 34969, 34596, 34225, 33856,
+    33489, 33124, 32761, 32400, 32041, 31684, 31329, 30976, 30625, 30276, 29929, 29584,
+    29241, 28900, 28561, 28224, 27889, 27556, 27225, 26896, 26569, 26244, 25921, 25600,
+    25281, 24964, 24649, 24336, 24025, 23716, 23409, 23104, 22801, 22500, 22201, 21904,
+    21609, 21316, 21025, 20736, 20449, 20164, 19881, 19600, 19321, 19044, 18769, 18496,
+    18225, 17956, 17689, 17424, 17161, 16900, 16641, 16384, 16129, 15876, 15625, 15376,
+    15129, 14884, 14641, 14400, 14161, 13924, 13689, 13456, 13225, 12996, 12769, 12544,
+    12321, 12100, 11881, 11664, 11449, 11236, 11025, 10816, 10609, 10404, 10201, 10000,
+     9801,  9604,  9409,  9216,  9025,  8836,  8649,  8464,  8281,  8100,  7921,  7744,
+     7569,  7396,  7225,  7056,  6889,  6724,  6561,  6400,  6241,  6084,  5929,  5776,
+     5625,  5476,  5329,  5184,  5041,  4900,  4761,  4624,  4489,  4356,  4225,  4096,
+     3969,  3844,  3721,  3600,  3481,  3364,  3249,  3136,  3025,  2916,  2809,  2704,
+     2601,  2500,  2401,  2304,  2209,  2116,  2025,  1936,  1849,  1764,  1681,  1600,
+     1521,  1444,  1369,  1296,  1225,  1156,  1089,  1024,   961,   900,   841,   784,
+      729,   676,   625,   576,   529,   484,   441,   400,   361,   324,   289,   256,
+      225,   196,   169,   144,   121,   100,    81,    64,    49,    36,    25,    16,
+        9,     4,     1,     0,     1,     4,     9,    16,    25,    36,    49,    64,
+       81,   100,   121,   144,   169,   196,   225,   256,   289,   324,   361,   400,
+      441,   484,   529,   576,   625,   676,   729,   784,   841,   900,   961,  1024,
+     1089,  1156,  1225,  1296,  1369,  1444,  1521,  1600,  1681,  1764,  1849,  1936,
+     2025,  2116,  2209,  2304,  2401,  2500,  2601,  2704,  2809,  2916,  3025,  3136,
+     3249,  3364,  3481,  3600,  3721,  3844,  3969,  4096,  4225,  4356,  4489,  4624,
+     4761,  4900,  5041,  5184,  5329,  5476,  5625,  5776,  5929,  6084,  6241,  6400,
+     6561,  6724,  6889,  7056,  7225,  7396,  7569,  7744,  7921,  8100,  8281,  8464,
+     8649,  8836,  9025,  9216,  9409,  9604,  9801, 10000, 10201, 10404, 10609, 10816,
+    11025, 11236, 11449, 11664, 11881, 12100, 12321, 12544, 12769, 12996, 13225, 13456,
+    13689, 13924, 14161, 14400, 14641, 14884, 15129, 15376, 15625, 15876, 16129, 16384,
+    16641, 16900, 17161, 17424, 17689, 17956, 18225, 18496, 18769, 19044, 19321, 19600,
+    19881, 20164, 20449, 20736, 21025, 21316, 21609, 21904, 22201, 22500, 22801, 23104,
+    23409, 23716, 24025, 24336, 24649, 24964, 25281, 25600, 25921, 26244, 26569, 26896,
+    27225, 27556, 27889, 28224, 28561, 28900, 29241, 29584, 29929, 30276, 30625, 30976,
+    31329, 31684, 32041, 32400, 32761, 33124, 33489, 33856, 34225, 34596, 34969, 35344,
+    35721, 36100, 36481, 36864, 37249, 37636, 38025, 38416, 38809, 39204, 39601, 40000,
+    40401, 40804, 41209, 41616, 42025, 42436, 42849, 43264, 43681, 44100, 44521, 44944,
+    45369, 45796, 46225, 46656, 47089, 47524, 47961, 48400, 48841, 49284, 49729, 50176,
+    50625, 51076, 51529, 51984, 52441, 52900, 53361, 53824, 54289, 54756, 55225, 55696,
+    56169, 56644, 57121, 57600, 58081, 58564, 59049, 59536, 60025, 60516, 61009, 61504,
+    62001, 62500, 63001, 63504, 64009, 64516, 65025
+};
+    
+    // This flag controls the style of death tests.  Valid values are 'threadsafe',
+// meaning that the death test child process will re-execute the test binary
+// from the start, running only a single death test, or 'fast',
+// meaning that the child process will execute the test logic immediately
+// after forking.
+GTEST_DECLARE_string_(death_test_style);
+    
+    // Helper function for implementing {EXPECT|ASSERT}_PRED4.  Don't use
+// this in your code.
+template <typename Pred,
+          typename T1,
+          typename T2,
+          typename T3,
+          typename T4>
+AssertionResult AssertPred4Helper(const char* pred_text,
+                                  const char* e1,
+                                  const char* e2,
+                                  const char* e3,
+                                  const char* e4,
+                                  Pred pred,
+                                  const T1& v1,
+                                  const T2& v2,
+                                  const T3& v3,
+                                  const T4& v4) {
+  if (pred(v1, v2, v3, v4)) return AssertionSuccess();
+    }
+    
+    // Traps C++ exceptions escaping statement and reports them as test
+// failures. Note that trapping SEH exceptions is not implemented here.
+# if GTEST_HAS_EXCEPTIONS
+#  define GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, death_test) \
+  try { \
+    GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
+  } catch (const ::std::exception& gtest_exception) { \
+    fprintf(\
+        stderr, \
+        '\n%s: Caught std::exception-derived exception escaping the ' \
+        'death test statement. Exception message: %s\n', \
+        ::testing::internal::FormatFileLocation(__FILE__, __LINE__).c_str(), \
+        gtest_exception.what()); \
+    fflush(stderr); \
+    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
+  } catch (...) { \
+    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
+  }
+    
+    // Adapts a native array to a read-only STL-style container.  Instead
+// of the complete STL container concept, this adaptor only implements
+// members useful for Google Mock's container matchers.  New members
+// should be added as needed.  To simplify the implementation, we only
+// support Element being a raw type (i.e. having no top-level const or
+// reference modifier).  It's the client's responsibility to satisfy
+// this requirement.  Element can be an array type itself (hence
+// multi-dimensional arrays are supported).
+template <typename Element>
+class NativeArray {
+ public:
+  // STL-style container typedefs.
+  typedef Element value_type;
+  typedef Element* iterator;
+  typedef const Element* const_iterator;
+    }
+    
+       private:
+    Iterator(const Iterator& other)
+        : base_(other.base_), $for j, [[
+    
+    template <>
+struct Templates<$for i, [[NoneT]]> {
+  typedef Templates0 type;
+};
+    
+    
+// Step 2. Use the TEST macro to define your tests.
+//
+// TEST has two parameters: the test case name and the test name.
+// After using the macro, you should define your test logic between a
+// pair of braces.  You can use a bunch of macros to indicate the
+// success or failure of a test.  EXPECT_TRUE and EXPECT_EQ are
+// examples of such macros.  For a complete list, see gtest.h.
+//
+// <TechnicalDetails>
+//
+// In Google Test, tests are grouped into test cases.  This is how we
+// keep test code organized.  You should put logically related tests
+// into the same test case.
+//
+// The test case name and the test name should both be valid C++
+// identifiers.  And you should not use underscore (_) in the names.
+//
+// Google Test guarantees that each test you define is run exactly
+// once, but it makes no guarantee on the order the tests are
+// executed.  Therefore, you should write your tests in such a way
+// that their results don't depend on their order.
+//
+// </TechnicalDetails>
+    
+    void freeifaddrs(struct ifaddrs* addrs) {
+	struct ifaddrs* last = NULL;
+	struct ifaddrs* cursor = addrs;
+	while (cursor) {
+		delete[] cursor->ifa_name;
+		delete cursor->ifa_addr;
+		delete cursor->ifa_netmask;
+		last = cursor;
+		cursor = cursor->ifa_next;
+		delete last;
+	}
+}
+
+    
+    
+    {}
+    
+    
+    {  Status result = metaindex_handle_.DecodeFrom(input);
+  if (result.ok()) {
+    result = index_handle_.DecodeFrom(input);
+  }
+  if (result.ok()) {
+    // We skip over any leftover data (just padding for now) in 'input'
+    const char* end = magic_ptr + 8;
+    *input = Slice(end, input->data() + input->size() - end);
+  }
+  return result;
+}
     
     int main(int argc, char** argv) {
   return leveldb::test::RunAllTests();
 }
 
     
-    static int NextLength(int length) {
-  if (length < 10) {
-    length += 1;
-  } else if (length < 100) {
-    length += 10;
-  } else if (length < 1000) {
-    length += 100;
-  } else {
-    length += 1000;
-  }
-  return length;
-}
-    
-    
-    {  ASSERT_EQ(Hash(0, 0, 0xbc9f1d34), 0xbc9f1d34);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data1), sizeof(data1), 0xbc9f1d34),
-      0xef1345c4);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data2), sizeof(data2), 0xbc9f1d34),
-      0x5b663814);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data3), sizeof(data3), 0xbc9f1d34),
-      0x323c078f);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data4), sizeof(data4), 0xbc9f1d34),
-      0xed21633a);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data5), sizeof(data5), 0x12345678),
-      0xf333dabb);
-}
-    
-    #endif  // STORAGE_LEVELDB_UTIL_RANDOM_H_
-
-    
-    static const int kValueSize = 200 * 1024;
-static const int kTotalSize = 100 * 1024 * 1024;
-static const int kCount = kTotalSize / kValueSize;
-    
-    void InternalKeyComparator::FindShortSuccessor(std::string* key) const {
-  Slice user_key = ExtractUserKey(*key);
-  std::string tmp(user_key.data(), user_key.size());
-  user_comparator_->FindShortSuccessor(&tmp);
-  if (tmp.size() < user_key.size() &&
-      user_comparator_->Compare(user_key, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*key, tmp) < 0);
-    key->swap(tmp);
+    static void InitTypeCrc(uint32_t* type_crc) {
+  for (int i = 0; i <= kMaxRecordType; i++) {
+    char t = static_cast<char>(i);
+    type_crc[i] = crc32c::Value(&t, 1);
   }
 }
     
-    TEST(FormatTest, InternalKeyShortestSuccessor) {
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            ShortSuccessor(IKey('foo', 100, kTypeValue)));
-  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
-            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
-}
     
-    class Writer {
- public:
-  // Create a writer that will append data to '*dest'.
-  // '*dest' must be initially empty.
-  // '*dest' must remain live while this Writer is in use.
-  explicit Writer(WritableFile* dest);
-    }
-    
-    inline void RowSet::Clear() {
-  rows_.clear(); size_ = 0;
-}
-    
-    TEST(Metric, RMSE) {
-  xgboost::Metric * metric = xgboost::Metric::Create('rmse');
-  ASSERT_STREQ(metric->Name(), 'rmse');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0.6403f, 0.001f);
-}
-    
-        ImVec2 max_glyph_size(1.0f, 1.0f);
-    
-    #include <s3eClipboard.h>
-#include <s3ePointer.h>
-#include <s3eKeyboard.h>
-#include <IwTexture.h>
-#include <IwGx.h>
-    
-        // Per Spec Format and View Format are expected to be the same unless VK_IMAGE_CREATE_MUTABLE_BIT was set at image creation
-    // Assuming that the default behavior is without setting this bit, there is no need for separate Swapchain image and image view format
-    // Additionally several new color spaces were introduced with Vulkan Spec v1.0.40,
-    // hence we must make sure that a format with the mostly available color space, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR, is found and used.
-    uint32_t avail_count;
-    vkGetPhysicalDeviceSurfaceFormatsKHR(physical_device, surface, &avail_count, NULL);
-    ImVector<VkSurfaceFormatKHR> avail_format;
-    avail_format.resize((int)avail_count);
-    vkGetPhysicalDeviceSurfaceFormatsKHR(physical_device, surface, &avail_count, avail_format.Data);
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-        // Main loop
-    bool done = false;
-    while (!done)
     {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-            ImGui_ImplSDL2_ProcessEvent(&event);
-            if (event.type == SDL_QUIT)
-                done = true;
-        }
-    }
+    {}  // namespace log
+}  // namespace leveldb
     
-    #include 'imgui.h'
-#include 'imgui_impl_win32.h'
-#include 'imgui_impl_dx11.h'
-#include <d3d11.h>
-#define DIRECTINPUT_VERSION 0x0800
-#include <dinput.h>
-#include <tchar.h>
+    #ifndef STORAGE_LEVELDB_TABLE_BLOCK_H_
+#define STORAGE_LEVELDB_TABLE_BLOCK_H_
     
-      virtual void onAbort();
-    
-    AbstractOptionHandler::AbstractOptionHandler(PrefPtr pref,
-                                             const char* description,
-                                             const std::string& defaultValue,
-                                             ARG_TYPE argType, char shortName)
-    : pref_(pref),
-      description_(description),
-      defaultValue_(defaultValue),
-      argType_(argType),
-      shortName_(shortName),
-      tags_(0),
-      flags_(0)
-{
-}
-    
-    #endif // D_LIBSSL_TLS_CONTEXT_H
+    #endif  // STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_
 
     
-    class AsyncNameResolverMan {
-public:
-  AsyncNameResolverMan();
-  // Destructor does not call disableNameResolverCheck(). Application
-  // must call it before the destruction of this object.
-  ~AsyncNameResolverMan();
-  // Enable IPv4 address lookup. default: true
-  void setIPv4(bool ipv4) { ipv4_ = ipv4; }
-  // Enable IPv6 address lookup. default: true
-  void setIPv6(bool ipv6) { ipv6_ = ipv6; }
-  // Returns true if asynchronous name resolution has been started.
-  bool started() const;
-  // Starts asynchronous name resolution.
-  void startAsync(const std::string& hostname, DownloadEngine* e,
-                  Command* command);
-  // Appends resolved addresses to |res|.
-  void getResolvedAddress(std::vector<std::string>& res) const;
-  // Adds resolvers to DownloadEngine to check event notification.
-  void setNameResolverCheck(DownloadEngine* e, Command* command);
-  // Removes resolvers from DownloadEngine.
-  void disableNameResolverCheck(DownloadEngine* e, Command* command);
-  // Returns true if any of resolvers are added in DownloadEngine.
-  bool resolverChecked() const { return resolverCheck_; }
-  // Returns status value: 0 for inprogress, 1 for success and -1 for
-  // failure.
-  int getStatus() const;
-  // Returns last error string
-  const std::string& getLastError() const;
-  // Resets state. Also removes resolvers from DownloadEngine.
-  void reset(DownloadEngine* e, Command* command);
-    }
+        // Compress
+    int maxlen = data_sz + 512 + (data_sz >> 2) + sizeof(int); // total guess
+    char* compressed = use_compression ? new char[maxlen] : data;
+    int compressed_sz = use_compression ? stb_compress((stb_uchar*)compressed, (stb_uchar*)data, data_sz) : data_sz;
+    if (use_compression)
+		memset(compressed + compressed_sz, 0, maxlen - compressed_sz);
     
-    #include 'modules/planning/tasks/traffic_decider/traffic_decider.h'
-    
-    bool ContinuousToDiscrete(const Eigen::MatrixXd &m_a,
-                          const Eigen::MatrixXd &m_b,
-                          const Eigen::MatrixXd &m_c,
-                          const Eigen::MatrixXd &m_d, const double ts,
-                          Eigen::MatrixXd *ptr_a_d, Eigen::MatrixXd *ptr_b_d,
-                          Eigen::MatrixXd *ptr_c_d, Eigen::MatrixXd *ptr_d_d) {
-  if (ts <= 0.0) {
-    AERROR << 'ContinuousToDiscrete : ts is less than or equal to zero';
-    return false;
-  }
-    }
-    
-    #include <array>
-#include <memory>
-#include <vector>
-    
-    
-    {  const Vec2d direction_vec = Vec2d::CreateUnitVec2d(heading);
-  double min_proj = std::numeric_limits<double>::infinity();
-  double max_proj = -std::numeric_limits<double>::infinity();
-  for (const auto &pt : points_) {
-    const double proj = pt.InnerProd(direction_vec);
-    if (proj < min_proj) {
-      min_proj = proj;
-      *first = pt;
-    }
-    if (proj > max_proj) {
-      max_proj = proj;
-      *last = pt;
-    }
-  }
-}
-    
-    #include 'modules/dreamview/backend/handlers/image_handler.h'
-#include 'modules/dreamview/backend/handlers/websocket_handler.h'
-#include 'modules/dreamview/backend/hmi/hmi.h'
-#include 'modules/dreamview/backend/map/map_service.h'
-#include 'modules/dreamview/backend/point_cloud/point_cloud_updater.h'
-#include 'modules/dreamview/backend/sim_control/sim_control.h'
-#include 'modules/dreamview/backend/simulation_world/simulation_world_updater.h'
-    
-    #include 'modules/common/util/file.h'
-#include 'modules/perception/common/perception_gflags.h'
-#include 'modules/perception/traffic_light/recognizer/classify.h'
-    
-    #include 'modules/common/util/file.h'
-#include 'modules/perception/common/perception_gflags.h'
-#include 'modules/perception/traffic_light/base/utils.h'
-#include 'modules/perception/traffic_light/rectify/cropbox.h'
-#include 'modules/perception/traffic_light/rectify/detection.h'
-#include 'modules/perception/traffic_light/rectify/select.h'
-    
-    namespace apollo {
-namespace perception {
-namespace traffic_light {
-    }
-    }
-    }
-    
-    template<typename T, typename RefType>
-auto dynamic_ref_cast(const RefType& ref) ->
-enable_if_t<IsPlainJniReference<T>(), decltype(static_ref_cast<T>(ref))>
+    int main(int, char**)
 {
-  if (! ref) {
-    return decltype(static_ref_cast<T>(ref))();
-  }
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
     }
     
-    #include <nbind/api.h>
-#include <nbind/BindDefiner.h>
+        D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc;
+    memset(&psoDesc, 0, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
+    psoDesc.NodeMask = 1;
+    psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+    psoDesc.pRootSignature = g_pRootSignature;
+    psoDesc.SampleMask = UINT_MAX;
+    psoDesc.NumRenderTargets = 1;
+    psoDesc.RTVFormats[0] = g_RTVFormat;
+    psoDesc.SampleDesc.Count = 1;
+    psoDesc.Flags = D3D12_PIPELINE_STATE_FLAG_NONE;
     
-    class Countable : public noncopyable, public nonmovable {
-public:
-  // RefPtr expects refcount to start at 0
-  Countable() : m_refcount(0) {}
-  virtual ~Countable()
-  {
-    FBASSERT(m_refcount == 0);
-  }
-    }
     
-      /**
-   * This runs the closure in a scope with fbjni's classloader. This should be
-   * the same classloader as the rest of the application and thus anything
-   * running in the closure will have access to the same classes as in a normal
-   * java-create thread.
-   */
-  static void WithClassLoader(std::function<void()>&& runnable);
-    
-    // Creates a strong reference from a raw pointer, assuming that is already
-// referenced from some other RefPtr and that it is non-null. This should be
-// used sparingly.
-template <typename T>
-static inline RefPtr<T> assumeAlreadyReffed(T* ptr) {
-  return RefPtr<T>::assumeAlreadyReffed(ptr);
+    {    // Store letters in KeysDown[] array as both uppercase and lowercase + Handle GLUT translating CTRL+A..CTRL+Z as 1..26. 
+    // This is a hacky mess but GLUT is unable to distinguish e.g. a TAB key from CTRL+I so this is probably the best we can do here.
+    if (c >= 1 && c <= 26)
+        io.KeysDown[c] = io.KeysDown[c - 1 + 'a'] = io.KeysDown[c - 1 + 'A'] = true;
+    else if (c >= 'a' && c <= 'z')
+        io.KeysDown[c] = io.KeysDown[c - 'a' + 'A'] = true;
+    else if (c >= 'A' && c <= 'Z')
+        io.KeysDown[c] = io.KeysDown[c - 'A' + 'a'] = true;
+    else
+        io.KeysDown[c] = true;
+    ImGui_ImplFreeGLUT_UpdateKeyboardMods();
+    (void)x; (void)y; // Unused
 }
+    
+                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+    
+    {		err = vkResetFences(g_Device, 1, &fd->Fence);
+        check_vk_result(err);
+    }
+    {
+        err = vkResetCommandPool(g_Device, fd->CommandPool, 0);
+        check_vk_result(err);
+        VkCommandBufferBeginInfo info = {};
+        info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        err = vkBeginCommandBuffer(fd->CommandBuffer, &info);
+        check_vk_result(err);
+    }
+    {
+        VkRenderPassBeginInfo info = {};
+        info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        info.renderPass = wd->RenderPass;
+		info.framebuffer = wd->Framebuffer[wd->FrameIndex];
+        info.renderArea.extent.width = wd->Width;
+        info.renderArea.extent.height = wd->Height;
+        info.clearValueCount = 1;
+        info.pClearValues = &wd->ClearValue;
+        vkCmdBeginRenderPass(fd->CommandBuffer, &info, VK_SUBPASS_CONTENTS_INLINE);
+    }
+    
+    extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+        return true;
+    }
+    
+        ImGui_ImplWin32_Init(hwnd);
+    ImGui_ImplDX12_Init(g_pd3dDevice, NUM_FRAMES_IN_FLIGHT, 
+        DXGI_FORMAT_R8G8B8A8_UNORM,
+        g_pd3dSrvDescHeap->GetCPUDescriptorHandleForHeapStart(), 
+        g_pd3dSrvDescHeap->GetGPUDescriptorHandleForHeapStart());
+    
+    // Decodes one 8x8 block of DCT coefficients from the bit stream.
+bool DecodeDCTBlock(const HuffmanTableEntry* dc_huff,
+                    const HuffmanTableEntry* ac_huff,
+                    int Ss, int Se, int Al,
+                    int* eobrun,
+                    BitReaderState* br,
+                    JPEGData* jpg,
+                    coeff_t* last_dc_coeff,
+                    coeff_t* coeffs) {
+  int s;
+  int r;
+  bool eobrun_allowed = Ss > 0;
+  if (Ss == 0) {
+    s = ReadSymbol(dc_huff, br);
+    if (s >= kJpegDCAlphabetSize) {
+      fprintf(stderr, 'Invalid Huffman symbol %d for DC coefficient.\n', s);
+      jpg->error = JPEG_INVALID_SYMBOL;
+      return false;
+    }
+    if (s > 0) {
+      r = br->ReadBits(s);
+      s = HuffExtend(r, s);
+    }
+    s += *last_dc_coeff;
+    const int dc_coeff = SignedLeftshift(s, Al);
+    coeffs[0] = dc_coeff;
+    if (dc_coeff != coeffs[0]) {
+      fprintf(stderr, 'Invalid DC coefficient %d\n', dc_coeff);
+      jpg->error = JPEG_NON_REPRESENTABLE_DC_COEFF;
+      return false;
+    }
+    *last_dc_coeff = s;
+    ++Ss;
+  }
+  if (Ss > Se) {
+    return true;
+  }
+  if (*eobrun > 0) {
+    --(*eobrun);
+    return true;
+  }
+  for (int k = Ss; k <= Se; k++) {
+    s = ReadSymbol(ac_huff, br);
+    if (s >= kJpegHuffmanAlphabetSize) {
+      fprintf(stderr, 'Invalid Huffman symbol %d for AC coefficient %d\n',
+              s, k);
+      jpg->error = JPEG_INVALID_SYMBOL;
+      return false;
+    }
+    r = s >> 4;
+    s &= 15;
+    if (s > 0) {
+      k += r;
+      if (k > Se) {
+        fprintf(stderr, 'Out-of-band coefficient %d band was %d-%d\n',
+                k, Ss, Se);
+        jpg->error = JPEG_OUT_OF_BAND_COEFF;
+        return false;
+      }
+      if (s + Al >= kJpegDCAlphabetSize) {
+        fprintf(stderr, 'Out of range AC coefficient value: s=%d Al=%d k=%d\n',
+                s, Al, k);
+        jpg->error = JPEG_NON_REPRESENTABLE_AC_COEFF;
+        return false;
+      }
+      r = br->ReadBits(s);
+      s = HuffExtend(r, s);
+      coeffs[kJPEGNaturalOrder[k]] = SignedLeftshift(s, Al);
+    } else if (r == 15) {
+      k += 15;
+    } else {
+      *eobrun = 1 << r;
+      if (r > 0) {
+        if (!eobrun_allowed) {
+          fprintf(stderr, 'End-of-block run crossing DC coeff.\n');
+          jpg->error = JPEG_EOB_RUN_TOO_LONG;
+          return false;
+        }
+        *eobrun += br->ReadBits(r);
+      }
+      break;
+    }
+  }
+  --(*eobrun);
+  return true;
+}
+    
+        // Determine area to update.
+    int xmin = std::max(block_x * 16 - 1, 0);
+    int xmax = std::min(block_x * 16 + 16, width_ - 1);
+    int ymin = std::max(block_y * 16 - 1, 0);
+    int ymax = std::min(block_y * 16 + 16, height_ - 1);
+    
+    void ComputeBlockIDCT(const coeff_t* block, uint8_t* out) {
+  coeff_t colidcts[kDCTBlockSize];
+  const int kColScale = 11;
+  const int kColRound = 1 << (kColScale - 1);
+  for (int x = 0; x < 8; ++x) {
+    int colbuf[8] = { 0 };
+    Compute1dIDCT(&block[x], 8, colbuf);
+    for (int y = 0; y < 8; ++y) {
+      colidcts[8 * y + x] = (colbuf[y] + kColRound) >> kColScale;
+    }
+  }
+  const int kRowScale = 18;
+  const int kRowRound = 257 << (kRowScale - 1);  // includes offset by 128
+  for (int y = 0; y < 8; ++y) {
+    const int rowidx = 8 * y;
+    int rowbuf[8] = { 0 };
+    Compute1dIDCT(&colidcts[rowidx], 1, rowbuf);
+    for (int x = 0; x < 8; ++x) {
+      out[rowidx + x] =
+          std::max(0, std::min(255, (rowbuf[x] + kRowRound) >> kRowScale));
+    }
+  }
+}
+    
+    
+    {}  // namespace guetzli
+    
+    namespace guetzli {
+    }
+    
+    
+    {  return total_size;
+}
+    
+    namespace guetzli {
+    }
+    
+    namespace rocksdb {
+    }
+    
+    #ifndef JAVA_ROCKSJNI_STATISTICSJNI_H_
+#define JAVA_ROCKSJNI_STATISTICSJNI_H_
+    
+    void SyncPoint::Data::ClearCallBack(const std::string& point) {
+  std::unique_lock<std::mutex> lock(mutex_);
+  while (num_callbacks_running_ > 0) {
+    cv_.wait(lock);
+  }
+  callbacks_.erase(point);
+}
+    
+    class Mutex {
+ public:
+    }
