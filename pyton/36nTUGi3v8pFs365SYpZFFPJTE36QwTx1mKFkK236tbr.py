@@ -1,226 +1,318 @@
 
         
-        filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
+                def get_auth(self, username=None, password=None):
+            assert self.raw_auth is None
+            assert username is None
+            assert password is None
+            return basic_auth()
     
-    try:
-    input = raw_input
-except NameError:
-    pass
-    
-        if not releases:
-        break
-    
-    # Allow direct execution
-import os
-import sys
-import unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        CHUNK_SIZE = 1024 * 10
     
     
-class TestUnicodeLiterals(unittest.TestCase):
-    def test_all_files(self):
-        for dirpath, dirnames, filenames in os.walk(rootDir):
-            for ignore_dir in IGNORED_DIRS:
-                if ignore_dir in dirnames:
-                    # If we remove the directory from dirnames os.walk won't
-                    # recurse into it
-                    dirnames.remove(ignore_dir)
-            for basename in filenames:
-                if not basename.endswith('.py'):
-                    continue
-                if basename in IGNORED_FILES:
-                    continue
+with codecs.open(JSON_FILE_PATH, encoding='utf8') as f:
+    JSON_FILE_CONTENT = f.read()
     
-            if check_executable('mplayer', ['-h']):
-            args = [
-                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
-                '-dumpstream', '-dumpfile', tmpfilename, url]
-        elif check_executable('mpv', ['-h']):
-            args = [
-                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
-        else:
-            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
-            return False
+        def __init__(self, **kwargs):
+        '''
+        :param env: an class:`Environment` instance
+        :param kwargs: additional keyword argument that some
+                       processor might require.
     
+        '''
+    .format(''.join(OUTPUT_OPTIONS))
+)
+output_options.add_argument(
+    '--all',
+    default=False,
+    action='store_true',
+    help='''
+    By default, only the final request/response is shown. Use this flag to show
+    any intermediary requests/responses as well. Intermediary requests include
+    followed redirects (with --follow), the first unauthorized request when
+    Digest auth is used (--auth=digest), etc.
     
-def list_extractors(age_limit):
-    '''
-    Return a list of extractors that are suitable for the given age,
-    sorted by extractor ID.
-    '''
-    
-            return self._extract_nuevo(
-            'http://www.anitube.se/nuevo/econfig.php?key=%s' % key, video_id)
+        def test_download_interrupted(self, httpbin_both):
+        devnull = open(os.devnull, 'w')
+        downloader = Downloader(output_file=devnull, progress_file=devnull)
+        downloader.start(Response(
+            url=httpbin_both.url + '/',
+            headers={'Content-Length': 5}
+        ))
+        downloader.chunk_downloaded(b'1234')
+        downloader.finish()
+        assert downloader.interrupted
 
     
-            title = self._html_search_regex(
-            r'<div[^>]+style='float:left'[^>]*>\s*<h2>(.+?)</h2>', webpage, 'title')
-        description = self._html_search_regex(
-            r'>Description:</span>(.+?)</div>', webpage, 'description', default=None)
+        def test_CRLF_ugly_request(self, httpbin):
+        r = http('--pretty=none', '--print=HB', 'GET', httpbin.url + '/get')
+        self._validate_crlf(r)
     
-        def _real_extract(self, url):
-        webpage = self._download_webpage(url, url_basename(url))
-        cnn_url = self._html_search_regex(r'video:\s*'([^']+)'', webpage, 'cnn url')
-        return {
-            '_type': 'url',
-            'url': 'http://cnn.com/video/?/video/' + cnn_url,
-            'ie_key': CNNIE.ie_key(),
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
+    
+      # At this point, all that should be left is actual casts.
+  error(filename, linenum, 'readability/casting', 4,
+        'Using C-style cast.  Use %s<%s>(...) instead' %
+        (cast_type, match.group(1)))
+    
+    # Workers are created as daemon threads. This is done to allow the interpreter
+# to exit when there are still idle threads in a ThreadPoolExecutor's thread
+# pool (i.e. shutdown() was not called). However, allowing workers to die with
+# the interpreter has two undesirable properties:
+#   - The workers would still be running during interpretor shutdown,
+#     meaning that they would fail in unpredictable ways.
+#   - The workers could be killed while evaluating a work item, which could
+#     be bad if the callable being evaluated has external side-effects e.g.
+#     writing to a file.
+#
+# To work around this problem, an exit handler is installed which tells the
+# workers to exit when their work queues are empty and then waits until the
+# threads finish.
+    
+    
+def _BuildQfListItem( goto_data_item ):
+  qf_item = {}
+  if 'filepath' in goto_data_item:
+    qf_item[ 'filename' ] = ToUnicode( goto_data_item[ 'filepath' ] )
+  if 'description' in goto_data_item:
+    qf_item[ 'text' ] = ToUnicode( goto_data_item[ 'description' ] )
+  if 'line_num' in goto_data_item:
+    qf_item[ 'lnum' ] = goto_data_item[ 'line_num' ]
+  if 'column_num' in goto_data_item:
+    # ycmd returns columns 1-based, and QuickFix lists require 'byte offsets'.
+    # See :help getqflist and equivalent comment in
+    # vimsupport.ConvertDiagnosticsToQfList.
+    #
+    # When the Vim help says 'byte index', it really means '1-based column
+    # number' (which is somewhat confusing). :help getqflist states 'first
+    # column is 1'.
+    qf_item[ 'col' ] = goto_data_item[ 'column_num' ]
+    
+    
+@YouCompleteMeInstance()
+def SendCommandRequest_BuildRange_NoVisualMarks_test( ycm, *args ):
+  current_buffer = VimBuffer( 'buffer', contents = [ 'first line',
+                                                     'second line' ] )
+  with MockVimBuffers( [ current_buffer ], [ current_buffer ] ):
+    with patch( 'ycm.youcompleteme.SendCommandRequest' ) as send_request:
+      ycm.SendCommandRequest( [ 'GoTo' ], 'python', '', True, 1, 2 )
+      send_request.assert_called_once_with(
+        [ 'GoTo' ],
+        'python',
+        '',
+        {
+          'options': {
+            'tab_size': 2,
+            'insert_spaces': True
+          },
+          'range': {
+            'start': {
+              'line_num': 1,
+              'column_num': 1
+            },
+            'end': {
+              'line_num': 2,
+              'column_num': 12
+            }
+          }
         }
-
+      )
+    
+        assert_that( vim.current.window.cursor, equal_to( ( 2, 4 ) ) )
+    vim_command.assert_has_exact_calls( [
+      call( 'normal! m\'' ),
+      call( u'keepjumps belowright edit {0}'.format( target_name ) ),
+      call( 'normal! zz' )
+    ] )
+    
+        self._AddExtraConfDataIfNeeded( request_data )
+    self._latest_completion_request = CompletionRequest( request_data )
+    self._latest_completion_request.Start()
     
     
-def test_config_missing_json():
-    app = flask.Flask(__name__)
-    with pytest.raises(IOError) as e:
-        app.config.from_json('missing.json')
-    msg = str(e.value)
-    assert msg.startswith('[Errno 2] Unable to load configuration '
-                          'file (No such file or directory):')
-    assert msg.endswith('missing.json'')
-    assert not app.config.from_json('missing.json', silent=True)
+def _CompileFilters( config ):
+  '''Given a filter config dictionary, return a list of compiled filters'''
+  filters = []
     
     
-def test_installed_package_paths(limit_loader, modules_tmpdir,
-                                 modules_tmpdir_prefix, purge_module,
-                                 monkeypatch):
-    installed_path = modules_tmpdir.mkdir('path')
-    monkeypatch.syspath_prepend(installed_path)
+def FormatDebugInfoResponse_ExtraConfFoundButNotLoaded_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'extra_conf' ].update( {
+    'is_loaded': False,
+    'path': '/path/to/extra/conf'
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Extra configuration file found but not loaded\n'
+      'Extra configuration path: /path/to/extra/conf\n'
+    )
+  )
     
-            result = greenlets[0].run()
-        assert result == 42
+      It could be argued that the user actually wants the final buffer state to be
+  'foo.zoobar|' (the cursor at the end), but that would be much more difficult
+  to implement and is probably not worth doing.
+  '''
     
-                self.handler_results.append(handler_result)
-    
-       >>> payload = dict(key1='value1', key2='value2')
-   >>> r = requests.post('http://httpbin.org/post', data=payload)
-   >>> print(r.text)
-   {
-     ...
-     'form': {
-       'key2': 'value2',
-       'key1': 'value1'
-     },
-     ...
-   }
-    
-        global __doc__
-    __doc__ = (__doc__ + '\n' +
-               '\n'.join(doc(code) for code in sorted(_codes))
-               if __doc__ is not None else None)
-    
-        plt.figure('scikit-learn GLM benchmark results')
-    plt.xlabel('Dimensions')
-    plt.ylabel('Time (s)')
-    plt.plot(dimensions, time_ridge, color='r')
-    plt.plot(dimensions, time_ols, color='g')
-    plt.plot(dimensions, time_lasso, color='b')
-    
-        if args.plot is not None:
-        max_val = getattr(args, args.plot)
-        if args.plot in ('classes', 'samples'):
-            min_val = 2
-        else:
-            min_val = 0
-        steps = np.linspace(min_val, max_val, num=args.n_steps + 1)[1:]
-        if args.plot in ('classes', 'samples'):
-            steps = np.unique(np.round(steps).astype(int))
-        setattr(args, args.plot, steps)
-    
-    import time
-    
-        dim = start_dim
-    for i in range(0, n):
-        print('============================================')
-        print('Entering iteration %s of %s' % (i, n))
-        print('============================================')
-        dim += step
-        X = np.random.randn(100, dim)
-        Y = np.random.randint(0, n_classes, (100,))
-        bench_scikit_tree_classifier(X, Y)
-        Y = np.random.randn(100)
-        bench_scikit_tree_regressor(X, Y)
-    
-    # Split the dataset in training and test set:
-docs_train, docs_test, y_train, y_test = train_test_split(
-    dataset.data, dataset.target, test_size=0.5)
-    
-    Second example
---------------
-The second example shows the ability of the Minimum Covariance Determinant
-robust estimator of covariance to concentrate on the main mode of the data
-distribution: the location seems to be well estimated, although the covariance
-is hard to estimate due to the banana-shaped distribution. Anyway, we can
-get rid of some outlying observations.
-The One-Class SVM is able to capture the real data structure, but the
-difficulty is to adjust its kernel bandwidth parameter so as to obtain
-a good compromise between the shape of the data scatter matrix and the
-risk of over-fitting the data.
-    
-    plt.show()
-
-    
-    np.random.seed(0)
-###############################################################################
-n_features = 100
-# simulation covariance matrix (AR(1) process)
-r = 0.1
-real_cov = toeplitz(r ** np.arange(n_features))
-coloring_matrix = cholesky(real_cov)
-    
-    
-# Code source: Gaël Varoquaux
-# Modified for documentation by Jaques Grobler
-# License: BSD 3 clause
-    
-    print('The data was generated from (random_state=%d):' % RANDOM_SEED)
-print('Class', 'P(C)', 'P(w0|C)', 'P(w1|C)', sep='\t')
-for k, p, p_w in zip(['red', 'blue', 'yellow'], p_c, p_w_c.T):
-    print('%s\t%0.2f\t%0.2f\t%0.2f' % (k, p, p_w[0], p_w[1]))
-
-    
-    # Language to be used for generating the HTML full-text search index.
-# Sphinx supports the following languages:
-#   'da', 'de', 'en', 'es', 'fi', 'fr', 'hu', 'it', 'ja'
-#   'nl', 'no', 'pt', 'ro', 'ru', 'sv', 'tr'
-#html_search_language = 'en'
-    
-        def _raise_alarm(self):
-        return 'raise alarm'
-    
-    
-def main():
-    command_stack = []
-    
-        This is, in fact, just syntactic sugar around a memento closure.
     '''
-    deep = False
-    states = []
+@author: Eugene Duboviy <eugene.dubovoy@gmail.com> | github.com/duboviy
     
-        print(u'Setting Data 1 = 10')
-    data1.data = 10
-    print(u'Setting Data 2 = 15')
-    data2.data = 15
-    print(u'Setting Data 1 = 3')
-    data1.data = 3
-    print(u'Setting Data 2 = 5')
-    data2.data = 5
-    print(u'Detach HexViewer from data1 and data2.')
-    data1.detach(view2)
-    data2.detach(view2)
-    print(u'Setting Data 1 = 10')
-    data1.data = 10
-    print(u'Setting Data 2 = 15')
-    data2.data = 15
+        def on_switchover(self):
+        self._hsm._perform_switchover()
+        self._hsm._check_mate_status()
+        self._hsm._send_switchover_response()
+    
+        def test_dog_shall_bark(self):
+        noise = self.dog.bark()
+        expected_noise = 'woof!'
+        self.assertEqual(noise, expected_noise)
+    
+        def setUp(self):
+        self.tc1 = TC1()
+        self.tc2 = TC2()
+        self.tc3 = TC3()
+        self.average_result_tc1 = '###### In Test 1 ######\n' + \
+                                  'Setting up\n' + \
+                                  'Running test\n' + \
+                                  'Tearing down\n' + \
+                                  'Test Finished'
+        self.average_result_tc2 = '###### In Test 2 ######\n' + \
+                                  'Setting up\n' + \
+                                  'Running test\n' + \
+                                  'Tearing down\n' + \
+                                  'Test Finished'
+        self.average_result_tc3 = '###### In Test 3 ######\n' + \
+                                  'Setting up\n' + \
+                                  'Running test\n' + \
+                                  'Tearing down\n' + \
+                                  'Test Finished'
+        self.runner = TestRunner()
+        self.out = StringIO()
+        self.saved_stdout = sys.stdout
+        sys.stdout = self.out
+    
+        def __init__(self):
+        pass
+    
+        def test_display_current_time_at_current_time(self):
+        '''
+        Just as justification for working example with the time provider used in
+        production. (Will always pass.)
+        '''
+        production_code_time_provider = ProductionCodeTimeProvider()
+        class_under_test = TimeDisplay()
+        current_time = datetime.datetime.now()
+        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(production_code_time_provider), expected_time)
+    
+    
+def count_to(count):
+    '''Counts by word numbers, up to a maximum of five'''
+    numbers = ['one', 'two', 'three', 'four', 'five']
+    for number in numbers[:count]:
+        yield number
+    
+            traceback.print_exc(file=sys.stdout)
+    print(num_obj)
+    
+        def is_satisfied_by(self, candidate):
+        return bool(self._one.is_satisfied_by(candidate) or
+                    self._other.is_satisfied_by(candidate))
+    
+    
+@gen.engine
+def run_tests():
+    url = options.url + '/getCaseCount'
+    control_ws = yield websocket_connect(url, None)
+    num_tests = int((yield control_ws.read_message()))
+    logging.info('running %d cases', num_tests)
+    msg = yield control_ws.read_message()
+    assert msg is None
+    
+    
+class BaseHandler(tornado.web.RequestHandler):
+    def get_current_user(self):
+        user_json = self.get_secure_cookie('fbdemo_user')
+        if not user_json:
+            return None
+        return tornado.escape.json_decode(user_json)
+    
+        logging.warning('Starting fetch with curl client')
+    curl_client = CurlAsyncHTTPClient()
+    curl_client.fetch('http://localhost:%d/' % options.port,
+                      callback=callback)
+    IOLoop.current().start()
+    
+    
+if __name__ == '__main__':
+    main()
+
+    
+    
+class ObjectHandler(BaseRequestHandler):
+    def get(self, bucket, object_name):
+        object_name = urllib.unquote(object_name)
+        path = self._object_path(bucket, object_name)
+        if not path.startswith(self.application.directory) or \
+           not os.path.isfile(path):
+            raise web.HTTPError(404)
+        info = os.stat(path)
+        self.set_header('Content-Type', 'application/unknown')
+        self.set_header('Last-Modified', datetime.datetime.utcfromtimestamp(
+            info.st_mtime))
+        object_file = open(path, 'rb')
+        try:
+            self.finish(object_file.read())
+        finally:
+            object_file.close()
+    
+    # Get a reference to the Raspberry Pi camera.
+# If this fails, make sure you have a camera connected to the RPi and that you
+# enabled your camera in raspi-config and rebooted first.
+camera = picamera.PiCamera()
+camera.resolution = (320, 240)
+output = np.empty((240, 320, 3), dtype=np.uint8)
+    
+    # Note: This example is only tested with Python 3 (not Python 2)
+    
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+    
+         Structure:
+        <train_dir>/
+        ├── <person1>/
+        │   ├── <somename1>.jpeg
+        │   ├── <somename2>.jpeg
+        │   ├── ...
+        ├── <person2>/
+        │   ├── <somename1>.jpeg
+        │   └── <somename2>.jpeg
+        └── ...
