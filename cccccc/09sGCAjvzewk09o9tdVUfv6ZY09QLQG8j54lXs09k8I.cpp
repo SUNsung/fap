@@ -1,452 +1,397 @@
 
         
-            TableBuilder* builder = new TableBuilder(options, file);
-    meta->smallest.DecodeFrom(iter->key());
-    for (; iter->Valid(); iter->Next()) {
-      Slice key = iter->key();
-      meta->largest.DecodeFrom(key);
-      builder->Add(key, iter->value());
-    }
+          if (t_size > s_size) return LevenshteinDistance(t, s, cmp);
     
-    void DBIter::FindNextUserEntry(bool skipping, std::string* skip) {
-  // Loop until we hit an acceptable entry to yield
-  assert(iter_->Valid());
-  assert(direction_ == kForward);
-  do {
-    ParsedInternalKey ikey;
-    if (ParseKey(&ikey) && ikey.sequence <= sequence_) {
-      switch (ikey.type) {
-        case kTypeDeletion:
-          // Arrange to skip all upcoming entries for this key since
-          // they are hidden by this deletion.
-          SaveKey(ikey.user_key, skip);
-          skipping = true;
-          break;
-        case kTypeValue:
-          if (skipping &&
-              user_comparator_->Compare(ikey.user_key, *skip) <= 0) {
-            // Entry hidden
-          } else {
-            valid_ = true;
-            saved_key_.clear();
-            return;
-          }
-          break;
-      }
-    }
-    iter_->Next();
-  } while (iter_->Valid());
-  saved_key_.clear();
-  valid_ = false;
+      // E[X].
+  auto mean = add(Mean(elements_per_feature_int64, sum, add));
+    
+    TfLiteStatus ArgMinEval(TfLiteContext* context, TfLiteNode* node) {
+  return Eval(context, node, false);
 }
     
-     private:
-  // We construct a char array of the form:
-  //    klength  varint32               <-- start_
-  //    userkey  char[klength]          <-- kstart_
-  //    tag      uint64
-  //                                    <-- end_
-  // The array is a suitable MemTable key.
-  // The suffix starting with 'userkey' can be used as an InternalKey.
-  const char* start_;
-  const char* kstart_;
-  const char* end_;
-  char space_[200];      // Avoid allocation for short keys
-    
-    Status DumpDescriptor(Env* env, const std::string& fname, WritableFile* dst) {
-  return PrintLogContents(env, fname, VersionEditPrinter, dst);
-}
-    
-    // Return the name of a temporary file owned by the db named 'dbname'.
-// The result will be prefixed with 'dbname'.
-extern std::string TempFileName(const std::string& dbname, uint64_t number);
-    
-    void VersionEdit::Clear() {
-  comparator_.clear();
-  log_number_ = 0;
-  prev_log_number_ = 0;
-  last_sequence_ = 0;
-  next_file_number_ = 0;
-  has_comparator_ = false;
-  has_log_number_ = false;
-  has_prev_log_number_ = false;
-  has_next_file_number_ = false;
-  has_last_sequence_ = false;
-  deleted_files_.clear();
-  new_files_.clear();
-}
-    
-      // Return the name of this policy.  Note that if the filter encoding
-  // changes in an incompatible way, the name returned by this method
-  // must be changed.  Otherwise, old incompatible filters may be
-  // passed to methods of this type.
-  virtual const char* Name() const = 0;
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12>
-internal::ValueArray12<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-    T12> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
-    T10 v10, T11 v11, T12 v12) {
-  return internal::ValueArray12<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12);
-}
-    
-    // Overload for C arrays.  Multi-dimensional arrays are printed
-// properly.
-    
-    
-    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(HasNewFatalFailureHelper);
+    template <typename T>
+class ArgMaxOpModel : public ArgBaseOpModel<T> {
+ public:
+  ArgMaxOpModel(std::initializer_list<int> input_shape, TensorType input_type,
+                TensorType output_type, TensorType index_output_type)
+      : ArgBaseOpModel<T>(input_shape, input_type, output_type,
+                          index_output_type) {
+    ArgBaseOpModel<T>::SetBuiltinOp(
+        BuiltinOperator_ARG_MAX, BuiltinOptions_ArgMaxOptions,
+        CreateArgMaxOptions(ArgBaseOpModel<T>::builder_, index_output_type)
+            .Union());
+    ArgBaseOpModel<T>::BuildInterpreter({input_shape, {1, 1, 1, 1}});
+  }
 };
+    
+      double ComputePrimalLoss(const double wx, const double example_label,
+                           const double example_weight) const final {
+    const double y_wx = example_label * wx;
+    if (y_wx >= 1) return 0;
+    if (y_wx <= 1 - gamma) return (1 - y_wx - gamma / 2) * example_weight;
+    return (1 - y_wx) * (1 - y_wx) * example_weight * 0.5 / gamma;
+  }
+    
+    #include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
+#include 'tensorflow/core/framework/tensor_types.h'
+#include 'tensorflow/core/framework/types.h'
+#include 'tensorflow/core/kernels/scatter_functor.h'
+    
+      // If we have a full slice along dimension 'd'.
+  bool IsFullAt(int d) const {
+    return lengths_[d] == kFullExtent && starts_[d] == 0;
+  }
+    
+    namespace tensorflow {
+#define REGISTER_COMPLEX(D, R, C)                         \
+  REGISTER_KERNEL_BUILDER(Name('Angle')                   \
+                              .Device(DEVICE_##D)         \
+                              .TypeConstraint<C>('T')     \
+                              .TypeConstraint<R>('Tout'), \
+                          UnaryOp<D##Device, functor::get_angle<C>>);
+    }
+    
+    // Adds resource events for a single device.
+void AddResourceMetadata(uint32 device_id,
+                         const std::map<uint32, const Resource *> &resources,
+                         string *json) {
+  for (const auto &pair : resources) {
+    uint32 resource_id = pair.first;
+    const Resource &resource = *pair.second;
+    if (!resource.name().empty()) {
+      Appendf(json,
+              R'({'ph':'M','pid':%u,'tid':%u,)'
+              R'('name':'thread_name','args':{)',
+              device_id, resource_id);
+      AppendEscapedName(json, resource.name());
+      Appendf(json, '}},');
+    }
+    Appendf(json,
+            R'({'ph':'M','pid':%u,'tid':%u,)'
+            R'('name':'thread_sort_index','args':{'sort_index':%u}},)',
+            device_id, resource_id, resource_id);
+  }
+}
+    
+    #include 'db/builder.h'
+    
+      inline void ClearSavedValue() {
+    if (saved_value_.capacity() > 1048576) {
+      std::string empty;
+      swap(empty, saved_value_);
+    } else {
+      saved_value_.clear();
+    }
+  }
+    
+    class Env;
+    
+      VersionEdit edit;
+  for (int i = 0; i < 4; i++) {
+    TestEncodeDecode(edit);
+    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
+                 InternalKey('foo', kBig + 500 + i, kTypeValue),
+                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
+    edit.DeleteFile(4, kBig + 700 + i);
+    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
+  }
+    
+    void WriteBatch::Delete(const Slice& key) {
+  WriteBatchInternal::SetCount(this, WriteBatchInternal::Count(this) + 1);
+  rep_.push_back(static_cast<char>(kTypeDeletion));
+  PutLengthPrefixedSlice(&rep_, key);
+}
+    
+    #include <stdio.h>
+#include <stdlib.h>
+#include <kcpolydb.h>
+#include 'util/histogram.h'
+#include 'util/random.h'
+#include 'util/testutil.h'
+    
+    namespace leveldb {
+    }
+    
+    inline bool operator!=(const Slice& x, const Slice& y) {
+  return !(x == y);
+}
+    
+    
+    {  delete db;
+  delete [] pixels;
+}
+    
+    /**
+ * @brief Applies common transformations to the input data, such as
+ * scaling, mirroring, substracting the image mean...
+ */
+template <typename Dtype>
+class DataTransformer {
+ public:
+  explicit DataTransformer(const TransformationParameter& param, Phase phase);
+  virtual ~DataTransformer() {}
+    }
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+      int num_kernels_im2col_;
+  int num_kernels_col2im_;
+  int conv_out_channels_;
+  int conv_in_channels_;
+  int conv_out_spatial_dim_;
+  int kernel_dim_;
+  int col_offset_;
+  int output_offset_;
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_2 @f$
+   *   -# ...
+   *   - K @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_K @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      the concatenated output @f$
+   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    
+    { protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual inline bool reverse_dimensions() { return false; }
+  virtual void compute_output_shape();
+};
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #endif  // CAFFE_CUDNN_LCN_LAYER_HPP_
+
+    
+    
+    {  int size_;
+  Dtype alpha_, beta_, k_;
+};
+#endif
+    
+    #include <vector>
+    
+     public:
+  // Constructs an empty Message.
+  Message();
+    
+    // Implements printing an array type T[N].
+template <typename T, size_t N>
+class UniversalPrinter<T[N]> {
+ public:
+  // Prints the given array, omitting some elements when there are too
+  // many.
+  static void Print(const T (&a)[N], ::std::ostream* os) {
+    UniversalPrintArray(a, N, os);
+  }
+};
+    
+    // Then, use TYPED_TEST_P() to define as many type-parameterized tests
+// for this type-parameterized test case as you want.
+TYPED_TEST_P(FooTest, DoesBlah) {
+  // Inside a test, refer to TypeParam to get the type parameter.
+  TypeParam n = 0;
+  ...
+}
+    
+    
+    {  GTEST_DISALLOW_ASSIGN_(AssertionResult);
+};
+    
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT3.
+// Don't use this in your code.
+#define GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, on_failure)\
+  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, v1, v2, v3), \
+                on_failure)
+    
+    // Utilities for native arrays.
+    
+      template <GTEST_3_TYPENAMES_(U)>
+  tuple& operator=(const GTEST_3_TUPLE_(U)& t) {
+    return CopyFrom(t);
+  }
+    
+    template <typename Tuple> struct tuple_size;
+    
+    // Type utilities needed for implementing typed and type-parameterized
+// tests.  This file is generated by a SCRIPT.  DO NOT EDIT BY HAND!
+//
+// Currently we support at most 50 types in a list, and at most 50
+// type-parameterized tests in one type-parameterized test case.
+// Please contact googletestframework@googlegroups.com if you need
+// more.
+    
+    namespace {
+    }
+    
+    #include 'test/cpp/qps/benchmark_config.h'
+#include 'test/cpp/qps/driver.h'
+#include 'test/cpp/qps/report.h'
+#include 'test/cpp/qps/server.h'
+#include 'test/cpp/util/test_config.h'
+#include 'test/cpp/util/test_credentials_provider.h'
+    
+    
+    {  bool failed_ = false;
+  std::string db_;
+  size_t current_ = 0;
+  const std::string location_ = '\'location\':';
+  const std::string latitude_ = '\'latitude\':';
+  const std::string longitude_ = '\'longitude\':';
+  const std::string name_ = '\'name\':';
+};
+    
+    
+    
+    #endif  // GRPC_INTERNAL_COMPILER_PYTHON_GENERATOR_H
+
+    
+    #include 'src/compiler/python_generator.h'
+#include 'src/compiler/schema_interface.h'
     
     
     {
-    {}  // namespace internal
-}  // namespace testing
+    {}  // namespace
+}  // namespace grpc
     
-      // Returns true iff n is a prime number.
-  virtual bool IsPrime(int n) const = 0;
-    
-    #include 'sample1.h'
-    
-    
-    { private:
-  static int allocated_;
-};
-    
-      /// Return true if we are processing the full image.
-  bool IsFullImage() const {
-    return rect_left_ == 0 && rect_top_ == 0 &&
-           rect_width_ == image_width_ && rect_height_ == image_height_;
-  }
-    
-    // Converts a utf-8 string to a vector of unicodes.
-// Returns an empty vector if the input contains invalid UTF-8.
-/* static */
-std::vector<char32> UNICHAR::UTF8ToUTF32(const char* utf8_str) {
-  const int utf8_length = strlen(utf8_str);
-  std::vector<char32> unicodes;
-  unicodes.reserve(utf8_length);
-  const_iterator end_it(end(utf8_str, utf8_length));
-  for (const_iterator it(begin(utf8_str, utf8_length)); it != end_it; ++it) {
-    if (it.is_legal()) {
-      unicodes.push_back(*it);
-    } else {
-      unicodes.clear();
-      return unicodes;
-    }
-  }
-  return unicodes;
-}
-    
-    void IntFeatureMap::Clear() {
-  for (int dir = 0; dir < kNumOffsetMaps; ++dir) {
-    delete [] offset_plus_[dir];
-    delete [] offset_minus_[dir];
-    offset_plus_[dir] = nullptr;
-    offset_minus_[dir] = nullptr;
-  }
-}
-    
-      // Runs a hierarchical agglomerative clustering to merge shapes in the given
-  // shape_table, while satisfying the given constraints:
-  // * End with at least min_shapes left in shape_table,
-  // * No shape shall have more than max_shape_unichars in it,
-  // * Don't merge shapes where the distance between them exceeds max_dist.
-  void ClusterShapes(int min_shapes, int max_shape_unichars,
-                     float max_dist, ShapeTable* shape_table);
-    
-    #endif  // TESSERACT_CLASSIFY_SAMPLEITERATOR_H_
-
-    
-     private:
-  // Computes matrix.vector v = Wu.
-  // u is of size starts.back()+extents.back() and the output v is of size
-  // starts.size().
-  // The weight matrix w, is of size starts.size()xMAX(extents)+add_bias_fwd.
-  // If add_bias_fwd, an extra element at the end of w[i] is the bias weight
-  // and is added to v[i].
-  static void MatrixDotVectorInternal(const GENERIC_2D_ARRAY<double>& w,
-                                      bool add_bias_fwd, bool skip_bias_back,
-                                      const double* u, double* v);
-    
-    // The CCNonTextDetect class contains grid-based operations on blobs to create
-// a full-resolution image mask analogous yet complementary to
-// pixGenHalftoneMask as it is better at line-drawings, graphs and charts.
-class CCNonTextDetect : public BlobGrid {
+    class SubProcess {
  public:
-  CCNonTextDetect(int gridsize, const ICOORD& bleft, const ICOORD& tright);
-  virtual ~CCNonTextDetect();
+  SubProcess(const std::vector<std::string>& args);
+  ~SubProcess();
     }
     
-    #endif
-
+        // We need a width for the skyline algorithm. Using a dumb heuristic here to decide of width. User can override TexDesiredWidth and TexGlyphPadding if they wish.
+    // Width doesn't really matter much, but some API/GPU have texture size limitations and increasing width can decrease height.
+    atlas->TexWidth = (atlas->TexDesiredWidth > 0) ? atlas->TexDesiredWidth : (total_glyphs_count > 4000) ? 4096 : (total_glyphs_count > 2000) ? 2048 : (total_glyphs_count > 1000) ? 1024 : 512;
     
-      // Returns true if the blob appears to be outside of a horizontal textline.
-  // Such blobs are potentially diacritics (even if large in Thai) and should
-  // be kept away from initial textline finding.
-  bool BoxOutOfHTextline(const TBOX& box, const DENORM* denorm,
-                        bool debug) const;
+    int main(int argc, char** argv)
+{ 
+    // Create GLUT window
+    glutInit(&argc, argv);
+    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
+    glutInitWindowSize(1280, 720);
+    glutCreateWindow('Dear ImGui FreeGLUT+OpenGL2 Example');
+    }
     
-      // Memory management
-  // Note: only destructible (non-default) streams are ref counted
-  bool CUDAStream_retain(CUDAStreamInternals* ptr) {
-    AT_ASSERT(ptr);
-    if (ptr->is_destructible) return(++ptr->refcount > 1);
-    return true;
-  }
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
     
-    struct DynamicCUDAInterfaceSetter {
-  DynamicCUDAInterfaceSetter() {
-    using at::detail::DynamicCUDAInterface;
-    DynamicCUDAInterface::set_device = set_device;
-    DynamicCUDAInterface::get_device = get_device;
-    DynamicCUDAInterface::unchecked_set_device = unchecked_set_device;
-  }
+        // Main loop
+    MSG msg;
+    ZeroMemory(&msg, sizeof(msg));
+    while (msg.message != WM_QUIT)
+    {
+        // Poll and handle messages (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+            continue;
+        }
+    }
+    
+    
+    {} // namespace detail
+    
+    template <typename Base>
+struct HybridTraits<
+    Base,
+    typename std::enable_if<std::is_base_of<BaseHybridClass, Base>::value>::type> {
+ using CxxBase = Base;
+ using JavaBase = typename Base::JavaPart;
 };
     
+    template <typename M, M method, typename C, typename... Args>
+inline NativeMethodWrapper* exceptionWrapJNIMethod(
+    void (C::*method0)(Args... args)) {
+  (void)method0;
+  struct funcWrapper {
+    JNI_ENTRY_POINT static void call(JNIEnv* env, jobject obj,
+                                     typename Convert<typename std::decay<Args>::type>::jniType... args) {
+      try {
+        try {
+          auto aref = wrap_alias(static_cast<typename C::jhybridobject>(obj));
+          // This is usually a noop, but if the hybrid object is a
+          // base class of other classes which register JNI methods,
+          // this will get the right type for the registered method.
+          auto cobj = static_cast<C*>(facebook::jni::cthis(aref));
+          (cobj->*method)(Convert<typename std::decay<Args>::type>::fromJni(args)...);
+        } catch (const std::exception& ex) {
+          C::mapException(ex);
+          throw;
+        }
+      } catch (...) {
+        translatePendingCppExceptionToJavaException();
+      }
+    }
+  };
+    }
     
-    {  auto dataType = getCudnnDataType(*theta);
-  SpatialTransformerDescriptor desc;
-  setSamplerDescriptor(desc, dataType, N, C, H, W);
-  AT_CUDNN_CHECK(cudnnSpatialTfGridGeneratorForward(getCudnnHandle(), desc.desc(),
-                                                 theta->data_ptr(),
-                                                 grid_t.data_ptr()));
-  return grid_t;
+    WIN_EXPORT bool YGNodeCanUseCachedMeasurement(
+    const YGMeasureMode widthMode,
+    const float width,
+    const YGMeasureMode heightMode,
+    const float height,
+    const YGMeasureMode lastWidthMode,
+    const float lastWidth,
+    const YGMeasureMode lastHeightMode,
+    const float lastHeight,
+    const float lastComputedWidth,
+    const float lastComputedHeight,
+    const float marginRow,
+    const float marginColumn,
+    const YGConfigRef config);
+    
+    bool Config::isExperimentalFeatureEnabled(int feature) const
+{
+    return YGConfigIsExperimentalFeatureEnabled(m_config, static_cast<YGExperimentalFeature>(feature));
 }
-    
-    #endif
 
     
-    bool ProcessScan(const uint8_t* data, const size_t len,
-                 const std::vector<HuffmanTableEntry>& dc_huff_lut,
-                 const std::vector<HuffmanTableEntry>& ac_huff_lut,
-                 uint16_t scan_progression[kMaxComponents][kDCTBlockSize],
-                 bool is_progressive,
-                 size_t* pos,
-                 JPEGData* jpg) {
-  if (!ProcessSOS(data, len, pos, jpg)) {
-    return false;
-  }
-  JPEGScanInfo* scan_info = &jpg->scan_info.back();
-  bool is_interleaved = (scan_info->components.size() > 1);
-  int MCUs_per_row;
-  int MCU_rows;
-  if (is_interleaved) {
-    MCUs_per_row = jpg->MCU_cols;
-    MCU_rows = jpg->MCU_rows;
-  } else {
-    const JPEGComponent& c = jpg->components[scan_info->components[0].comp_idx];
-    MCUs_per_row =
-        DivCeil(jpg->width * c.h_samp_factor, 8 * jpg->max_h_samp_factor);
-    MCU_rows =
-        DivCeil(jpg->height * c.v_samp_factor, 8 * jpg->max_v_samp_factor);
-  }
-  coeff_t last_dc_coeff[kMaxComponents] = {0};
-  BitReaderState br(data, len, *pos);
-  int restarts_to_go = jpg->restart_interval;
-  int next_restart_marker = 0;
-  int eobrun = -1;
-  int block_scan_index = 0;
-  const int Al = is_progressive ? scan_info->Al : 0;
-  const int Ah = is_progressive ? scan_info->Ah : 0;
-  const int Ss = is_progressive ? scan_info->Ss : 0;
-  const int Se = is_progressive ? scan_info->Se : 63;
-  const uint16_t scan_bitmask = Ah == 0 ? (0xffff << Al) : (1u << Al);
-  const uint16_t refinement_bitmask = (1 << Al) - 1;
-  for (size_t i = 0; i < scan_info->components.size(); ++i) {
-    int comp_idx = scan_info->components[i].comp_idx;
-    for (int k = Ss; k <= Se; ++k) {
-      if (scan_progression[comp_idx][k] & scan_bitmask) {
-        fprintf(stderr, 'Overlapping scans: component=%d k=%d prev_mask=%d '
-                'cur_mask=%d\n', comp_idx, k, scan_progression[i][k],
-                scan_bitmask);
-        jpg->error = JPEG_OVERLAPPING_SCANS;
-        return false;
-      }
-      if (scan_progression[comp_idx][k] & refinement_bitmask) {
-        fprintf(stderr, 'Invalid scan order, a more refined scan was already '
-                'done: component=%d k=%d prev_mask=%d cur_mask=%d\n', comp_idx,
-                k, scan_progression[i][k], scan_bitmask);
-        jpg->error = JPEG_INVALID_SCAN_ORDER;
-        return false;
-      }
-      scan_progression[comp_idx][k] |= scan_bitmask;
-    }
-  }
-  if (Al > 10) {
-    fprintf(stderr, 'Scan parameter Al=%d is not supported in guetzli.\n', Al);
-    jpg->error = JPEG_NON_REPRESENTABLE_AC_COEFF;
-    return false;
-  }
-  for (int mcu_y = 0; mcu_y < MCU_rows; ++mcu_y) {
-    for (int mcu_x = 0; mcu_x < MCUs_per_row; ++mcu_x) {
-      // Handle the restart intervals.
-      if (jpg->restart_interval > 0) {
-        if (restarts_to_go == 0) {
-          if (ProcessRestart(data, len,
-                             &next_restart_marker, &br, jpg)) {
-            restarts_to_go = jpg->restart_interval;
-            memset(last_dc_coeff, 0, sizeof(last_dc_coeff));
-            if (eobrun > 0) {
-              fprintf(stderr, 'End-of-block run too long.\n');
-              jpg->error = JPEG_EOB_RUN_TOO_LONG;
-              return false;
-            }
-            eobrun = -1;   // fresh start
-          } else {
-            return false;
-          }
-        }
-        --restarts_to_go;
-      }
-      // Decode one MCU.
-      for (size_t i = 0; i < scan_info->components.size(); ++i) {
-        JPEGComponentScanInfo* si = &scan_info->components[i];
-        JPEGComponent* c = &jpg->components[si->comp_idx];
-        const HuffmanTableEntry* dc_lut =
-            &dc_huff_lut[si->dc_tbl_idx * kJpegHuffmanLutSize];
-        const HuffmanTableEntry* ac_lut =
-            &ac_huff_lut[si->ac_tbl_idx * kJpegHuffmanLutSize];
-        int nblocks_y = is_interleaved ? c->v_samp_factor : 1;
-        int nblocks_x = is_interleaved ? c->h_samp_factor : 1;
-        for (int iy = 0; iy < nblocks_y; ++iy) {
-          for (int ix = 0; ix < nblocks_x; ++ix) {
-            int block_y = mcu_y * nblocks_y + iy;
-            int block_x = mcu_x * nblocks_x + ix;
-            int block_idx = block_y * c->width_in_blocks + block_x;
-            coeff_t* coeffs = &c->coeffs[block_idx * kDCTBlockSize];
-            if (Ah == 0) {
-              if (!DecodeDCTBlock(dc_lut, ac_lut, Ss, Se, Al, &eobrun, &br, jpg,
-                                  &last_dc_coeff[si->comp_idx], coeffs)) {
-                return false;
-              }
-            } else {
-              if (!RefineDCTBlock(ac_lut, Ss, Se, Al,
-                                  &eobrun, &br, jpg, coeffs)) {
-                return false;
-              }
-            }
-            ++block_scan_index;
-          }
-        }
-      }
-    }
-  }
-  if (eobrun > 0) {
-    fprintf(stderr, 'End-of-block run too long.\n');
-    jpg->error = JPEG_EOB_RUN_TOO_LONG;
-    return false;
-  }
-  if (!br.FinishStream(pos)) {
-    jpg->error = JPEG_INVALID_SCAN;
-    return false;
-  }
-  if (*pos > len) {
-    fprintf(stderr, 'Unexpected end of file during scan. pos=%d len=%d\n',
-            static_cast<int>(*pos), static_cast<int>(len));
-    jpg->error = JPEG_UNEXPECTED_EOF;
-    return false;
-  }
-  return true;
-}
+        method(setAlignContent);
+    method(setAlignItems);
+    method(setAlignSelf);
+    method(setFlexDirection);
+    method(setFlexWrap);
+    method(setJustifyContent);
     
-    // Writes a string using the out callback.
-inline bool JPEGWrite(JPEGOutput out, const std::string& s) {
-  const uint8_t* data = reinterpret_cast<const uint8_t*>(&s[0]);
-  return JPEGWrite(out, data, s.size());
-}
-    
-    // Performs in-place floating point 8x8 inverse DCT on block[0..63].
-void ComputeBlockIDCTDouble(double block[64]);
-    
-        size_t i = 0;      // Points to the next leaf node.
-    size_t j = n + 1;  // Points to the next non-leaf node.
-    for (size_t k = n - 1; k != 0; --k) {
-      size_t left, right;
-      if (tree[i].total_count_ <= tree[j].total_count_) {
-        left = i;
-        ++i;
-      } else {
-        left = j;
-        ++j;
-      }
-      if (tree[i].total_count_ <= tree[j].total_count_) {
-        right = i;
-        ++i;
-      } else {
-        right = j;
-        ++j;
-      }
+    namespace facebook {
     }
     
-    // Entropy encoding (Huffman) utilities.
-    
-    #endif  // GUETZLI_FAST_LOG_H_
-
-    
-    namespace guetzli {
-    }
-    
-    #include 'guetzli/gamma_correct.h'
-    
-    // Fills in 'result' with the inverse DCT of 'block'.
-// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
-// a row-by-row memory layout.
-void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
-    
-    namespace guetzli {
-    }
-    
-      // Make a local copy of the input bit length histogram.
-  int count[kJpegHuffmanMaxBitLength + 1] = { 0 };
-  int total_count = 0;
-  for (len = 1; len <= kJpegHuffmanMaxBitLength; ++len) {
-    count[len] = count_in[len];
-    total_count += count[len];
-  }
-    
-      void ToLinearRGB(std::vector<std::vector<float> >* rgb) const;
-    
-    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
-std::vector<std::vector<float>> PreProcessChannel(
-    int w, int h, int channel, float sigma, float amount, bool blur,
-    bool sharpen, const std::vector<std::vector<float>>& image);
-    
-    #include 'dumpcrash_stack.h'
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    class Test_Spy_Sample {
-  public:
-    Test_Spy_Sample();
-    ~Test_Spy_Sample();
-    }
-    
-    #include 'comm/debugger/spy.inl'
-    
-    //============================================================================
-// Name        : has_member.h
-// Author      :
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
-    
-    ScopeJEnv::ScopeJEnv(JavaVM* jvm, jint _capacity)
-    : vm_(jvm), env_(NULL), we_attach_(false), status_(0) {
-    ASSERT(jvm);
-    do {
-        env_ = (JNIEnv*)pthread_getspecific(g_env_key);
-        
-        if (NULL != env_) {
-            break;
-        }
-        
-        status_ = vm_->GetEnv((void**) &env_, JNI_VERSION_1_6);
+    namespace facebook {
+namespace alog {
     }
     }
-    
-        ~ScopedJstring();
