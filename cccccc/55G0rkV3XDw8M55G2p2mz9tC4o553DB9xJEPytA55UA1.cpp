@@ -1,120 +1,272 @@
 
         
-        #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
-
-    
-    static int NextLength(int length) {
-  if (length < 10) {
-    length += 1;
-  } else if (length < 100) {
-    length += 10;
-  } else if (length < 1000) {
-    length += 100;
-  } else {
-    length += 1000;
-  }
-  return length;
+        void leveldb_put(
+    leveldb_t* db,
+    const leveldb_writeoptions_t* options,
+    const char* key, size_t keylen,
+    const char* val, size_t vallen,
+    char** errptr) {
+  SaveError(errptr,
+            db->rep->Put(options->rep, Slice(key, keylen), Slice(val, vallen)));
 }
     
-    namespace leveldb {
-    }
+      virtual void Next();
+  virtual void Prev();
+  virtual void Seek(const Slice& target);
+  virtual void SeekToFirst();
+  virtual void SeekToLast();
     
-    class StdoutPrinter : public WritableFile {
- public:
-  virtual Status Append(const Slice& data) {
-    fwrite(data.data(), 1, data.size(), stdout);
-    return Status::OK();
-  }
-  virtual Status Close() { return Status::OK(); }
-  virtual Status Flush() { return Status::OK(); }
-  virtual Status Sync() { return Status::OK(); }
+    // Value types encoded as the last component of internal keys.
+// DO NOT CHANGE THESE ENUM VALUES: they are embedded in the on-disk
+// data structures.
+enum ValueType {
+  kTypeDeletion = 0x0,
+  kTypeValue = 0x1
 };
+// kValueTypeForSeek defines the ValueType that should be passed when
+// constructing a ParsedInternalKey object for seeking to a particular
+// sequence number (since we sort sequence numbers in decreasing order
+// and the value type is embedded as the low 8 bits in the sequence
+// number in internal keys, we need to use the highest-numbered
+// ValueType, not the lowest).
+static const ValueType kValueTypeForSeek = kTypeValue;
     
-    bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DConeTwistConstraint_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DConeTwistConstraint(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getBFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistAngle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistSpan(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setDamping(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getAFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_enableMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_Physics3DConeTwistConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+    #include 'db/dbformat.h'
+#include 'port/port.h'
+#include 'util/logging.h'
+#include 'util/testharness.h'
     
-    bool js_cocos2dx_studio_ContourData_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_ContourData_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_ContourData(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_ContourData_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ContourData_addVertex(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ContourData_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ContourData_ContourData(JSContext *cx, uint32_t argc, jsval *vp);
+    Iterator* TableCache::NewIterator(const ReadOptions& options,
+                                  uint64_t file_number,
+                                  uint64_t file_size,
+                                  Table** tableptr) {
+  if (tableptr != NULL) {
+    *tableptr = NULL;
+  }
+    }
     
-        cobj = (CocosDenshion::SimpleAudioEngine*)tolua_tousertype(tolua_S,1,0);
+      int Find(const char* key) {
+    InternalKey target(key, 100, kTypeValue);
+    InternalKeyComparator cmp(BytewiseComparator());
+    return FindFile(cmp, files_, target.Encode());
+  }
     
-    #endif // __cocos2dx_csloader_h__
-
+    TEST(WriteBatchTest, Corruption) {
+  WriteBatch batch;
+  batch.Put(Slice('foo'), Slice('bar'));
+  batch.Delete(Slice('box'));
+  WriteBatchInternal::SetSequence(&batch, 200);
+  Slice contents = WriteBatchInternal::Contents(&batch);
+  WriteBatchInternal::SetContents(&batch,
+                                  Slice(contents.data(),contents.size()-1));
+  ASSERT_EQ('Put(foo, bar)@200'
+            'ParseError()',
+            PrintContents(&batch));
+}
+    
+      void PrintHeader() {
+    const int kKeySize = 16;
+    PrintEnvironment();
+    fprintf(stdout, 'Keys:       %d bytes each\n', kKeySize);
+    fprintf(stdout, 'Values:     %d bytes each (%d bytes after compression)\n',
+            FLAGS_value_size,
+            static_cast<int>(FLAGS_value_size * FLAGS_compression_ratio + 0.5));
+    fprintf(stdout, 'Entries:    %d\n', num_);
+    fprintf(stdout, 'RawSize:    %.1f MB (estimated)\n',
+            ((static_cast<int64_t>(kKeySize + FLAGS_value_size) * num_)
+             / 1048576.0));
+    fprintf(stdout, 'FileSize:   %.1f MB (estimated)\n',
+            (((kKeySize + FLAGS_value_size * FLAGS_compression_ratio) * num_)
+             / 1048576.0));
+    PrintWarnings();
+    fprintf(stdout, '------------------------------------------------\n');
+  }
+    
+      // The name of the comparator.  Used to check for comparator
+  // mismatches (i.e., a DB created with one comparator is
+  // accessed using a different comparator.
+  //
+  // The client of this package should switch to a new name whenever
+  // the comparator implementation changes in a way that will cause
+  // the relative ordering of any two keys to change.
+  //
+  // Names starting with 'leveldb.' are reserved and should not be used
+  // by any clients of this package.
+  virtual const char* Name() const = 0;
     
     
+    {}  // namespace testing
+    
+    # if GTEST_HAS_COMBINE
+// Combine() allows the user to combine two or more sequences to produce
+// values of a Cartesian product of those sequences' elements.
+//
+// Synopsis:
+// Combine(gen1, gen2, ..., genN)
+//   - returns a generator producing sequences with elements coming from
+//     the Cartesian product of elements from the sequences generated by
+//     gen1, gen2, ..., genN. The sequence elements will have a type of
+//     tuple<T1, T2, ..., TN> where T1, T2, ..., TN are the types
+//     of elements from sequences produces by gen1, gen2, ..., genN.
+//
+// Combine can have up to $maxtuple arguments. This number is currently limited
+// by the maximum number of elements in the tuple implementation used by Google
+// Test.
+//
+// Example:
+//
+// This will instantiate tests in test case AnimalTest each one with
+// the parameter values tuple('cat', BLACK), tuple('cat', WHITE),
+// tuple('dog', BLACK), and tuple('dog', WHITE):
+//
+// enum Color { BLACK, GRAY, WHITE };
+// class AnimalTest
+//     : public testing::TestWithParam<tuple<const char*, Color> > {...};
+//
+// TEST_P(AnimalTest, AnimalLooksNice) {...}
+//
+// INSTANTIATE_TEST_CASE_P(AnimalVariations, AnimalTest,
+//                         Combine(Values('cat', 'dog'),
+//                                 Values(BLACK, WHITE)));
+//
+// This will instantiate tests in FlagDependentTest with all variations of two
+// Boolean flags:
+//
+// class FlagDependentTest
+//     : public testing::TestWithParam<tuple<bool, bool> > {
+//   virtual void SetUp() {
+//     // Assigns external_flag_1 and external_flag_2 values from the tuple.
+//     tie(external_flag_1, external_flag_2) = GetParam();
+//   }
+// };
+//
+// TEST_P(FlagDependentTest, TestFeature1) {
+//   // Test your code using external_flag_1 and external_flag_2 here.
+// }
+// INSTANTIATE_TEST_CASE_P(TwoBoolSequence, FlagDependentTest,
+//                         Combine(Bool(), Bool()));
+//
+$range i 2..maxtuple
+$for i [[
+$range j 1..i
+    
+    // The variables defined in the type-parameterized test macros are
+// static as typically these macros are used in a .h file that can be
+// #included in multiple translation units linked together.
+# define TYPED_TEST_CASE_P(CaseName) \
+  static ::testing::internal::TypedTestCasePState \
+      GTEST_TYPED_TEST_CASE_P_STATE_(CaseName)
+    
+     private:
+  // A string containing a description of the outcome of the last death test.
+  static std::string last_death_test_message_;
+    
+     private:
+  class Iterator : public ParamIteratorInterface<ParamType> {
+   public:
+    Iterator(const ParamGeneratorInterface<ParamType>* base,
+      const ParamGenerator<T1>& g1,
+      const typename ParamGenerator<T1>::iterator& current1,
+      const ParamGenerator<T2>& g2,
+      const typename ParamGenerator<T2>::iterator& current2,
+      const ParamGenerator<T3>& g3,
+      const typename ParamGenerator<T3>::iterator& current3,
+      const ParamGenerator<T4>& g4,
+      const typename ParamGenerator<T4>::iterator& current4,
+      const ParamGenerator<T5>& g5,
+      const typename ParamGenerator<T5>::iterator& current5,
+      const ParamGenerator<T6>& g6,
+      const typename ParamGenerator<T6>::iterator& current6,
+      const ParamGenerator<T7>& g7,
+      const typename ParamGenerator<T7>::iterator& current7,
+      const ParamGenerator<T8>& g8,
+      const typename ParamGenerator<T8>::iterator& current8,
+      const ParamGenerator<T9>& g9,
+      const typename ParamGenerator<T9>::iterator& current9,
+      const ParamGenerator<T10>& g10,
+      const typename ParamGenerator<T10>::iterator& current10)
+        : base_(base),
+          begin1_(g1.begin()), end1_(g1.end()), current1_(current1),
+          begin2_(g2.begin()), end2_(g2.end()), current2_(current2),
+          begin3_(g3.begin()), end3_(g3.end()), current3_(current3),
+          begin4_(g4.begin()), end4_(g4.end()), current4_(current4),
+          begin5_(g5.begin()), end5_(g5.end()), current5_(current5),
+          begin6_(g6.begin()), end6_(g6.end()), current6_(current6),
+          begin7_(g7.begin()), end7_(g7.end()), current7_(current7),
+          begin8_(g8.begin()), end8_(g8.end()), current8_(current8),
+          begin9_(g9.begin()), end9_(g9.end()), current9_(current9),
+          begin10_(g10.begin()), end10_(g10.end()), current10_(current10)    {
+      ComputeCurrentValue();
+    }
+    virtual ~Iterator() {}
+    }
+    
+    ]]
+      ComputeCurrentValue();
+    }
+    virtual ParamIteratorInterface<ParamType>* Clone() const {
+      return new Iterator(*this);
+    }
+    virtual const ParamType* Current() const { return &current_value_; }
+    virtual bool Equals(const ParamIteratorInterface<ParamType>& other) const {
+      // Having the same base generator guarantees that the other
+      // iterator is of the same type and we can downcast.
+      GTEST_CHECK_(BaseGenerator() == other.BaseGenerator())
+          << 'The program attempted to compare iterators '
+          << 'from different generators.' << std::endl;
+      const Iterator* typed_other =
+          CheckedDowncastToActualType<const Iterator>(&other);
+      // We must report iterators equal if they both point beyond their
+      // respective ranges. That can happen in a variety of fashions,
+      // so we have to consult AtEnd().
+      return (AtEnd() && typed_other->AtEnd()) ||
+         ($for j  && [[
+    
+    # ifdef __BORLANDC__
+inline int IsATTY(int fd) { return isatty(fd); }
+inline int StrCaseCmp(const char* s1, const char* s2) {
+  return stricmp(s1, s2);
+}
+inline char* StrDup(const char* src) { return strdup(src); }
+# else  // !__BORLANDC__
+#  if GTEST_OS_WINDOWS_MOBILE
+inline int IsATTY(int /* fd */) { return 0; }
+#  else
+inline int IsATTY(int fd) { return _isatty(fd); }
+#  endif  // GTEST_OS_WINDOWS_MOBILE
+inline int StrCaseCmp(const char* s1, const char* s2) {
+  return _stricmp(s1, s2);
+}
+inline char* StrDup(const char* src) { return _strdup(src); }
+# endif  // __BORLANDC__
+    
+      // Compares two C strings.  Returns true iff they have the same content.
+  //
+  // Unlike strcmp(), this function can handle NULL argument(s).  A
+  // NULL C string is considered different to any non-NULL C string,
+  // including the empty string.
+  static bool CStringEquals(const char* lhs, const char* rhs);
     
     
+]]
     
-            ok &= luaval_to_vec2(tolua_S, 2, &arg0, 'cc.PhysicsBody:applyImpulse');
+    #include <boost/lexical_cast.hpp>
     
-    // This class implements debug drawing callbacks that are invoked
-// inside b2World::Step.
-class GLESDebugDraw : public b2Draw
+      forwarder_ = std::make_shared<FirehoseLogForwarder>(
+      'aws_firehose', FLAGS_aws_firehose_period, 500);
+  Status s = forwarder_->setUp();
+  if (!s.ok()) {
+    LOG(ERROR) << 'Error initializing Firehose logger: ' << s.getMessage();
+    return s;
+  }
+    
+            HANDLE event = CreateEvent(0, 0, 0, 0);
+        IM_ASSERT(event != NULL);
+    
+    int main(int, char**)
 {
-    float32 mRatio;
-    cocos2d::GLProgram* mShaderProgram;
-    GLint        mColorLocation;
+    // Create application window
+    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
+    RegisterClassEx(&wc);
+    HWND hwnd = CreateWindow(_T('ImGui Example'), _T('Dear ImGui DirectX10 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
     }
-    
-    
-    {		int32 proxyCount = m_world->GetProxyCount();
-		int32 height = m_world->GetTreeHeight();
-		int32 balance = m_world->GetTreeBalance();
-		float32 quality = m_world->GetTreeQuality();
-		m_debugDraw.DrawString(5, m_textLine, 'proxies/height/balance/quality = %d/%d/%d/%g', proxyCount, height, balance, quality);
-		m_textLine += DRAW_STRING_NEW_LINE;
-	}
-    
-    #endif
-
-    
-    			b2PolygonShape shape;
-			shape.SetAsBox(0.5f, 4.0f, b2Vec2(4.0f, 0.0f), 0.5f * b2_pi);
-    
-    		b2Body* body2 = m_world->CreateBody(&bd);
-		m_piece2 = body2->CreateFixture(&m_shape2, 1.0f);
-    
-    	void Launch()
-	{
-		m_body->SetTransform(b2Vec2(0.0f, 4.0f), 0.0f);
-		m_body->SetLinearVelocity(b2Vec2_zero);
-		m_body->SetAngularVelocity(0.0f);
-    }
-    
-    
-    {			bd.position.Set(230.0f, 4.5f);
-			body = m_world->CreateBody(&bd);
-			body->CreateFixture(&box, 0.5f);
-		}
