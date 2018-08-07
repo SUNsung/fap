@@ -1,99 +1,113 @@
 
         
-            # Read the allowed documents into the collection's array of docs.
-    #
-    # Returns the sorted array of docs.
-    def read
-      filtered_entries.each do |file_path|
-        full_path = collection_dir(file_path)
-        next if File.directory?(full_path)
-        if Utils.has_yaml_header? full_path
-          read_document(full_path)
-        else
-          read_static_file(file_path, full_path)
-        end
-      end
-      docs.sort!
-    end
+                # Require the adapter itself and give useful feedback about
+        #   1. Missing adapter gems and
+        #   2. Adapter gems' missing dependencies.
+        path_to_adapter = 'action_cable/subscription_adapter/#{adapter}'
+        begin
+          require path_to_adapter
+        rescue LoadError => e
+          # We couldn't require the adapter itself. Raise an exception that
+          # points out config typos and missing gems.
+          if e.path == path_to_adapter
+            # We can assume that a non-builtin adapter was specified, so it's
+            # either misspelled or missing from Gemfile.
+            raise e.class, 'Could not load the '#{adapter}' Action Cable pubsub adapter. Ensure that the adapter is spelled correctly in config/cable.yml and that you've added the necessary adapter gem to your Gemfile.', e.backtrace
     
-              if @jekyll_opts['livereload']
-            return rtn if SkipAnalyzer.skip_processing?(req, res, @jekyll_opts)
+      def test_nil_is_not_changed_when_serialized_with_a_class
+    Topic.serialize(:content, Array)
     
-          def output_ext(_ext)
-        '.html'
-      end
-    
-          super
-      input = @options[:input]
-      if File.directory?(input)
-        raise 'Error: '#{input.path}' is a directory (did you mean to use --recursive?)'
-      end
-      output = @options[:output]
-      output = input if @options[:in_place]
-      process_file(input, output)
-    end
-    
-        # Merges this query with another. The returned query queries for
-    # the intersection between the two inputs.
-    #
-    # Both queries should be resolved.
-    #
-    # @param other [Query]
-    # @return [Query?] The merged query, or nil if there is no intersection.
-    def merge(other)
-      m1, t1 = resolved_modifier.downcase, resolved_type.downcase
-      m2, t2 = other.resolved_modifier.downcase, other.resolved_type.downcase
-      t1 = t2 if t1.empty?
-      t2 = t1 if t2.empty?
-      if (m1 == 'not') ^ (m2 == 'not')
-        return if t1 == t2
-        type = m1 == 'not' ? t2 : t1
-        mod = m1 == 'not' ? m2 : m1
-      elsif m1 == 'not' && m2 == 'not'
-        # CSS has no way of representing 'neither screen nor print'
-        return unless t1 == t2
-        type = t1
-        mod = 'not'
-      elsif t1 != t2
-        return
-      else # t1 == t2, neither m1 nor m2 are 'not'
-        type = t1
-        mod = m1.empty? ? m2 : m1
-      end
-      Query.new([mod], [type], other.expressions + expressions)
-    end
-    
-      # DELETE /books/1
-  # DELETE /books/1.json
-  def destroy
-    @book.destroy
-    respond_to do |format|
-      format.html { redirect_to books_url, notice: 'Book was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+      setup do
+    @connection = TestConnection.new
   end
     
-            def on_case(case_node)
-          case_node.when_branches.each_with_object([]) do |when_node, previous|
-            when_node.each_condition do |condition|
-              next unless repeated_condition?(previous, condition)
-    
-            def_node_matcher :multiple_compare?, <<-PATTERN
-          (send (send _ {:< :> :<= :>=} $_) {:< :> :<= :>=} _)
-        PATTERN
-    
-              [optarg_positions, arg_positions]
-        end
-      end
+      test 'disallow block and arg together' do
+    e = assert_raise ArgumentError do
+      ChatChannel.periodically(:send_updates, every: 1) { ping }
     end
+    assert_match(/not both/, e.message)
+  end
+    
+        assert subscriptions.verify
   end
 end
 
     
-    shared_examples_for 'multiline literal brace layout trailing comma' do
-  let(:prefix) { '' } # A prefix before the opening brace.
-  let(:suffix) { '' } # A suffix for the line after the closing brace.
-  let(:open) { nil } # The opening brace.
-  let(:close) { nil } # The closing brace.
-  let(:a) { 'a' } # The first element.
-  let(:b) { 'b' } # The second element.
+      test 'broadcast generates notification' do
+    begin
+      server = TestServer.new
+    
+      def test_commandline
+    commandline = 'echo quux\n'
+    Open3.popen3(commandline) {|i,o,e,t|
+      assert_equal('quux\n', o.read)
+    }
+  end
+    
+      it 'returns nil if else-body is empty, expression is false and then-body is empty' do
+    if false
+    else
+    end.should == nil
+  end
+    
+        it 'allows changing the wrapped struct' do
+      a = @s.wrap_struct(1024)
+      @s.change_struct(a, 100)
+      @s.get_struct(a).should == 100
+    end
+  end
+    
+        # This spec is probably system-dependent.
+    it 'waits for a child whose process group ID is that of the calling process' do
+      pid1 = Process.spawn(ruby_cmd('exit'), pgroup: true)
+      pid2 = Process.spawn(ruby_cmd('exit'))
+    
+          ##
+      # Used by UserDB to create a basic password entry
+    
+          klass = nil
+      mesg = nil
+      begin
+        mutex.lock
+        cv.wait mutex
+        mutex.unlock
+      rescue Exception => e
+        klass = e.class
+        mesg = e.message
+      end
+      puts klass
+      print mesg
+INPUT
+  end
+    
+      # test that waiting producers are woken up on close
+  def close_wakeup( num_items, num_threads, &qcreate )
+    raise 'This test won't work with num_items(#{num_items}) >= num_threads(#{num_threads})' if num_items >= num_threads
+    
+      # Update version.rb file with BOOTSTRAP_SHA
+  def store_version
+    path    = 'lib/bootstrap-sass/version.rb'
+    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
+    File.open(path, 'w') { |f| f.write(content) }
+  end
+end
+
+    
+      # Full error reports are disabled and caching is turned on.
+  config.consider_all_requests_local       = false
+  config.action_controller.perform_caching = true
+    
+        if as == :json
+      if api_error?(data)
+        data = generate_error_hash(data)
+      else
+        selected_fields = extract_fields(filter.to_s.strip)
+        data.select! { |k,v| selected_fields.include?(k) } unless selected_fields.empty?
+        unless options.include?(:exclude_default_metadata)
+          data = data.to_hash
+          if data.values.size == 0 && selected_fields.size > 0
+            raise LogStash::Api::NotFoundError
+          end
+          data = default_metadata.merge(data)
+        end
+      end
