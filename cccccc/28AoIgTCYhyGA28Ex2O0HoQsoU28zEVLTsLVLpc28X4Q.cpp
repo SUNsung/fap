@@ -1,354 +1,367 @@
 
         
-        
-    {        // Matrix row is used 'cacheablecolsV' times from the cache. If too small,
-        // then it is also not efficient. So apply a looser upper bound.
-        // Needs to be at least 4 to allow for dotprod4() optimization (4 columns of V in parallel)
-        if (cacheablecolsV < 16)
-            cacheablecolsV = 16;
-        return cacheablecolsV;
+          /// This is the second time DebuggerClient is consulted:
+  /// after all names in external Modules are checked, the client
+  /// gets a chance to add names to the list of candidates that
+  /// have been found in the external module lookup.
+    
+    
+llvm::Optional<ASTNode>
+SyntaxASTMap::getNodeForSyntax(syntax::Syntax SyntaxNode) const {
+  auto Found = SyntaxMap.find(SyntaxNode.Root);
+  if (Found == SyntaxMap.end()) {
+    return None;
+  }
+  return Found->getSecond();
+}
+    
+    #include 'swift/Basic/LLVM.h'
+#include 'llvm/ADT/ArrayRef.h'
+#include 'llvm/ADT/StringRef.h'
+    
+    /// A SyntaxRewriter for applying a set of formatting rules to a Syntax tree.
+struct FormatSyntaxRewriter : public SyntaxRewriter {
+  virtual StructDeclSyntax
+  rewriteStructDecl(StructDeclSyntax Struct) override;
+};
+    
+      /// Tracks previous replacements so we don't pump the rewrite buffer with
+  /// multiple equivalent replacements, which can result in weird behavior.
+  llvm::SmallSet<Replacement, 32> Replacements;
+    
+    
+    {
+    {    rph->Send(new ShellViewMsg_Reopen());
+  }
+}
+    
+      // Post 'reopen' event.
+  // (This event is received when the user clicked the icon in the Dock).
+  static void EmitReopenEvent();
+    
+    // Call method of an object in browser and return the result.
+// function CallObjectMethod(id, type, method, args);
+v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
+                                           int object_id,
+                                           const std::string& type,
+                                           const std::string& method,
+                                           v8::Handle<v8::Value> args);
+    
+    void MenuItem::CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) {
+  if (method == 'GetChecked') {
+    result->AppendBoolean(GetChecked());
+  } else {
+    NOTREACHED() << 'Invalid call to MenuItem method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+    #include 'content/nw/src/api/menuitem/menuitem.h'
+    
+     protected:
+  ~NwAppClearAppCacheFunction() override;
+    
+     protected:
+  ~NwObjCreateFunction() override;
+    
+     protected:
+   /**
+   * @brief Generates a random integer from Uniform({0, 1, ..., n-1}).
+   *
+   * @param n
+   *    The upperbound (exclusive) value of the random number.
+   * @return
+   *    A uniformly random integer value from ({0, 1, ..., n-1}).
+   */
+  virtual int Rand(int n);
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of ConvolutionLayer.
+ *        Fallback to ConvolutionLayer for CPU mode.
+ *
+ * cuDNN accelerates convolution through forward kernels for filtering and bias
+ * plus backward kernels for the gradient w.r.t. the filters, biases, and
+ * inputs. Caffe + cuDNN further speeds up the computation through forward
+ * parallelism across groups and backward parallelism across gradients.
+ *
+ * The CUDNN engine does not have memory overhead for matrix buffers. For many
+ * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
+ * but for fully-convolutional models and large inputs the CAFFE engine can be
+ * faster as long as it fits in memory.
+*/
+template <typename Dtype>
+class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
+ public:
+  explicit CuDNNConvolutionLayer(const LayerParameter& param)
+      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNConvolutionLayer();
+    }
+    
+      EltwiseParameter_EltwiseOp op_;
+  vector<Dtype> coeffs_;
+  Blob<int> max_idx_;
+    
+    #include 'network.h'
+#include 'fullyconnected.h'
+    
+      /**
+   * Returns true if the iterator is at the start of an object at the given
+   * level.
+   *
+   * For instance, suppose an iterator it is pointed to the first symbol of the
+   * first word of the third line of the second paragraph of the first block in
+   * a page, then:
+   *   it.IsAtBeginningOf(RIL_BLOCK) = false
+   *   it.IsAtBeginningOf(RIL_PARA) = false
+   *   it.IsAtBeginningOf(RIL_TEXTLINE) = true
+   *   it.IsAtBeginningOf(RIL_WORD) = true
+   *   it.IsAtBeginningOf(RIL_SYMBOL) = true
+   */
+  virtual bool IsAtBeginningOf(PageIteratorLevel level) const;
+    
+      /// Return true if we are processing the full image.
+  bool IsFullImage() const {
+    return rect_left_ == 0 && rect_top_ == 0 &&
+           rect_width_ == image_width_ && rect_height_ == image_height_;
+  }
+    
+    namespace tesseract {
+    }
+    
+      // Returns the average (in some sense) distance between the two given
+  // shapes, which may contain multiple fonts and/or unichars.
+  // This function is public to facilitate testing.
+  float ShapeDistance(const ShapeTable& shapes, int s1, int s2);
+    
+    struct CrackPos {
+  CRACKEDGE** free_cracks;   // Freelist for fast allocation.
+  int x;                     // Position of new edge.
+  int y;
+};
+    
+    class PythonGrpcGenerator : public grpc::protobuf::compiler::CodeGenerator {
+ public:
+  PythonGrpcGenerator(const GeneratorConfiguration& config);
+  ~PythonGrpcGenerator();
     }
     
     
-    {
-    {
-    {}}}
+    {  const Result start_;
+};
+    
+    #include 'src/compiler/python_generator.h'
+    
+        private:
+        void EnumerateStatefulNodesForRoot(ComputationNetwork& net, ComputationNodeBasePtr root, std::map<wstring, shared_ptr<IStatefulNode>>& statefulNodes)
+        {
+            for (const auto& node : net.GetAllNodesForRoot(root))
+            {
+                const auto& name = node->GetName();
+                if (statefulNodes.find(name) != statefulNodes.end())
+                    continue; // already in the list  --TODO: use insert()
+                shared_ptr<IStatefulNode> pNode = dynamic_pointer_cast<IStatefulNode>(node);
+                if (pNode) // if it is an IStatefulNode then report it
+                    statefulNodes[name] = pNode;
+            }
+        }
+    
+    // -----------------------------------------------------------------------
+// network editing
+// -----------------------------------------------------------------------
+    
+        bool transposeA = false, transposeB = false;
+    float alpha = 0.3f;
+    float beta = 0.0f;
+    Matrix<float>::MultiplyAndWeightedAdd(alpha, mB, transposeA, mAdense, transposeB, beta, mC);
+    Matrix<float>::MultiplyAndWeightedAdd(alpha, mB, transposeA, mAsparse, transposeB, beta, mD);
+    
+    template void DoConvertFromDbn<float>(const ConfigParameters& config);
+template void DoConvertFromDbn<double>(const ConfigParameters& config);
+template void DoExportToDbn<float>(const ConfigParameters& config);
+template void DoExportToDbn<double>(const ConfigParameters& config);
 
     
-        bnNodes = m_net->SortByGlobalEvalOrder(bnNodes);
-    for (auto& node : bnNodes)
+    #include <memory> // for shared_ptr
+    
+    public:
+    // DataWriter Constructor
+    // config - [in] configuration parameters for the datareader
+    template <class ConfigRecordType>
+    DataWriter(const ConfigRecordType& config);
+    // constructor from Scripting
+    DataWriter(const ScriptableObjects::IConfigRecordPtr configp)
+        : DataWriter(*configp)
     {
-        let bnNode = static_pointer_cast<BatchNormalizationNode<ElemType>>(node);
-        size_t actualMBSize = 0;
+    }
+    virtual ~DataWriter();
+    
+        // This prints a PROGRESS message with a percentage value of 0 to prevent timeouts on Philly
+    // when executing long running non-training operations like PreCompute, CV, Eval, and Write
+    static size_t TraceFakeProgress(size_t numIterationsBeforePrintingProgress, size_t numItersSinceLastPrintOfProgress)
+    {
+        size_t newNumItersSinceLastPrintOfProgress = numItersSinceLastPrintOfProgress;
+        if (GetTracingFlag())
+        {
+            newNumItersSinceLastPrintOfProgress++;
+            if (newNumItersSinceLastPrintOfProgress >= numIterationsBeforePrintingProgress)
+            {
+                printf('PROGRESS: %.2f%%\n', 0.0f);
+                newNumItersSinceLastPrintOfProgress = 0;
+            }
+        }
     }
     
-        // other goodies I came across (intrin.h):
-    //  - _mm_prefetch
-    //  - _mm_stream_ps --store without polluting cache
-    //  - unknown: _mm_addsub_ps, _mm_hsub_ps, _mm_movehdup_ps, _mm_moveldup_ps, _mm_blend_ps, _mm_blendv_ps, _mm_insert_ps, _mm_extract_ps, _mm_round_ps
-    //  - _mm_dp_ps dot product! http://msdn.microsoft.com/en-us/library/bb514054.aspx
-    //    Not so interesting for long vectors, we get better numerical precision with parallel adds and hadd at the end
+    // ---------------------------------------------------------------------------
+// array_ref -- wraps a C pointer to an array together with its size.
+//
+// Called _ref because this is a reference to the array rather than the array
+// itself (since it wraps a pointer). No need to pass an array_ref by reference.
+//
+// operator[] checks index bounds in Debug builds. size() is provided such
+// that this class can be substituted for STL vector in many cases.
+// ---------------------------------------------------------------------------
     
         template<template<typename> class ValueContainer> 
     void ForwardPassT(const std::vector < ValueBuffer<ElemType, ValueContainer> >& inputs,
                       std::vector < ValueBuffer<ElemType, ValueContainer> >& outputs, bool resetRNN);
     
-    TEST(LogTest, MarginalTrailer2) {
-  // Make a trailer that is exactly the same length as an empty record.
-  const int n = kBlockSize - 2*kHeaderSize;
-  Write(BigString('foo', n));
-  ASSERT_EQ(kBlockSize - kHeaderSize, WrittenBytes());
-  Write('bar');
-  ASSERT_EQ(BigString('foo', n), Read());
-  ASSERT_EQ('bar', Read());
-  ASSERT_EQ('EOF', Read());
-  ASSERT_EQ(0, DroppedBytes());
-  ASSERT_EQ('', ReportMessage());
-}
+    //****************************
+// Simple Hash Functions
+//****************************
     
-      // compact database
-  std::string start_key = Key1(0);
-  std::string end_key = Key1(kNumKeys - 1);
-  leveldb::Slice least(start_key.data(), start_key.size());
-  leveldb::Slice greatest(end_key.data(), end_key.size());
-    
-      const FilterPolicy* policy_;
-  std::string keys_;              // Flattened key contents
-  std::vector<size_t> start_;     // Starting index in keys_ of each key
-  std::string result_;            // Filter data computed so far
-  std::vector<Slice> tmp_keys_;   // policy_->CreateFilter() argument
-  std::vector<uint32_t> filter_offsets_;
-    
-    
-    {  Status result = metaindex_handle_.DecodeFrom(input);
-  if (result.ok()) {
-    result = index_handle_.DecodeFrom(input);
-  }
-  if (result.ok()) {
-    // We skip over any leftover data (just padding for now) in 'input'
-    const char* end = magic_ptr + 8;
-    *input = Slice(end, input->data() + input->size() - end);
-  }
-  return result;
-}
-    
-    
-    {  unsigned char data[48] = {
-    0x01, 0xc0, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x14, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x04, 0x00,
-    0x00, 0x00, 0x00, 0x14,
-    0x00, 0x00, 0x00, 0x18,
-    0x28, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x02, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-  };
-  ASSERT_EQ(0xd9963a56, Value(reinterpret_cast<char*>(data), sizeof(data)));
-}
-    
-    // The FALLTHROUGH_INTENDED macro can be used to annotate implicit fall-through
-// between switch labels. The real definition should be provided externally.
-// This one is a fallback version for unsupported compilers.
-#ifndef FALLTHROUGH_INTENDED
-#define FALLTHROUGH_INTENDED do { } while (0)
-#endif
-    
-    double Histogram::StandardDeviation() const {
-  if (num_ == 0.0) return 0;
-  double variance = (sum_squares_ * num_ - sum_ * sum_) / (num_ * num_);
-  return sqrt(variance);
-}
-    
-    static std::string IKey(const std::string& user_key,
-                        uint64_t seq,
-                        ValueType vt) {
-  std::string encoded;
-  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
-  return encoded;
-}
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-typedef long atomic_count;
-inline void increment(atomic_count& a, long b) { a += b; }
-#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
-typedef std::atomic<long> atomic_count;
-inline void increment(atomic_count& a, long b) { a += b; }
-#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
-typedef boost::detail::atomic_count atomic_count;
-inline void increment(atomic_count& a, long b) { while (b > 0) ++a, --b; }
-#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
-    
-      // Return the maximum size for data in the buffer.
-  size_type capacity() const
-  {
-    return buffer_.size();
-  }
-    
-    template <typename Function, typename Context>
-inline void invoke(const Function& function, Context& context)
-{
-#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  Function tmp(function);
-  tmp();
-#else
-  using boost::asio::asio_handler_invoke;
-  asio_handler_invoke(function, boost::asio::detail::addressof(context));
-#endif
-}
-    
-    class winrt_buffer_impl :
-  public Microsoft::WRL::RuntimeClass<
-    Microsoft::WRL::RuntimeClassFlags<
-      Microsoft::WRL::RuntimeClassType::WinRtClassicComMix>,
-    ABI::Windows::Storage::Streams::IBuffer,
-    Windows::Storage::Streams::IBufferByteAccess>
-{
-public:
-  explicit winrt_buffer_impl(const boost::asio::const_buffer& b)
-  {
-    bytes_ = const_cast<byte*>(boost::asio::buffer_cast<const byte*>(b));
-    length_ = boost::asio::buffer_size(b);
-    capacity_ = boost::asio::buffer_size(b);
-  }
+    namespace rocksdb {
     }
     
-    #include <boost/asio/detail/push_options.hpp>
+      // Offset of the file position indicator within the last block when an
+  // EOF was detected.
+  size_t eof_offset_;
     
-    extern JSClass  *jsb_cocosbuilder_CCBReader_class;
-extern JSObject *jsb_cocosbuilder_CCBReader_prototype;
-    
-    extern JSClass  *jsb_cocos2d_Physics3DComponent_class;
-extern JSObject *jsb_cocos2d_Physics3DComponent_prototype;
-    
-    bool js_cocos2dx_studio_BoneNode_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_BoneNode_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_BoneNode(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_BoneNode_getDebugDrawWidth(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getChildBones(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getBlendFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getAllSubBones(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_setBlendFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_setDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getVisibleSkinsRect(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getAllSubSkins(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_displaySkin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_isDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_addSkin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getRootSkeletonNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_setDebugDrawLength(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getSkins(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getVisibleSkins(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_setDebugDrawWidth(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getDebugDrawLength(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_setDebugDrawColor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getDebugDrawColor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_BoneNode(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    #if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-    
-    #ifdef __cplusplus
-extern 'C' {
-#endif
-#include 'tolua++.h'
-#ifdef __cplusplus
-}
-#endif
-    
-    
-    
-    
-    
-    
-    
-    void GLESDebugDraw::DrawTransform(const b2Transform& xf)
-{
-    b2Vec2 p1 = xf.p, p2;
-    const float32 k_axisScale = 0.4f;
-    p2 = p1 + k_axisScale * xf.q.GetXAxis();
-    DrawSegment(p1, p2, b2Color(1,0,0));
-    }
-    
-    
-    {			// Bottom horizontal
-			shape.Set(b2Vec2(-20.0f, -20.0f), b2Vec2(20.0f, -20.0f));
-			ground->CreateFixture(&sd);
-		}
-    
-    	b2Body* m_body1;
-	b2Vec2 m_velocity;
-	float32 m_angularVelocity;
-	b2PolygonShape m_shape1;
-	b2PolygonShape m_shape2;
-	b2Fixture* m_piece1;
-	b2Fixture* m_piece2;
-    
-    			b2FixtureDef fd;
-			fd.shape = &shape;
-			fd.density = 1.0f;
-    
-    			b2FixtureDef fd;
-			fd.shape = &shape;
-			fd.density = 1.0f;
-    
-    
-    {  EXPECT_EQ(D.cols(), 5);
-  EXPECT_EQ(D.rows(), 1);
-  EXPECT_FLOAT_EQ(D(0, 0), 0);
-  EXPECT_FLOAT_EQ(D(0, 1), 0);
-  EXPECT_FLOAT_EQ(D(0, 2), 0);
-  EXPECT_FLOAT_EQ(D(0, 3), 0);
-  EXPECT_FLOAT_EQ(D(0, 4), 0);
-}
-    
-      for (StopSignLaneVehicles::iterator it = watch_vehicles->begin();
-       it != watch_vehicles->end();
-       /*no increment*/) {
-    std::vector<std::string>& vehicle_ids = it->second;
-    // clean obstacles not in current perception
-    for (auto obstacle_it = vehicle_ids.begin();
-         obstacle_it != vehicle_ids.end();
-         /*no increment*/) {
-      if (obstacle_ids.count(*obstacle_it) == 0) {
-        ADEBUG << 'lane[' << it->first << '] obstacle[' << *obstacle_it
-               << '] not exist any more. erase.';
-        obstacle_it = vehicle_ids.erase(obstacle_it);
-      } else {
-        ++obstacle_it;
-      }
-    }
-    if (vehicle_ids.empty()) {
-      watch_vehicles->erase(it++);
-    } else {
-      ++it;
-    }
-  }
-    
-    #include 'modules/planning/common/obstacle.h'
-    
-    bool Polygon2d::Contains(const LineSegment2d &line_segment) const {
-  if (line_segment.length() <= kMathEpsilon) {
-    return IsPointIn(line_segment.start());
-  }
-  CHECK_GE(points_.size(), 3);
-  if (!IsPointIn(line_segment.start())) {
-    return false;
-  }
-  if (!IsPointIn(line_segment.end())) {
-    return false;
-  }
-  if (!is_convex_) {
-    std::vector<LineSegment2d> overlaps = GetAllOverlaps(line_segment);
-    double total_length = 0;
-    for (const auto &overlap_seg : overlaps) {
-      total_length += overlap_seg.length();
-    }
-    return total_length >= line_segment.length() - kMathEpsilon;
-  }
-  return true;
+    JNIEnv* JniCallback::getJniEnv(jboolean* attached) const {
+  return JniUtil::getJniEnv(m_jvm, attached);
 }
     
       /**
-   * @brief Compute the distance from a point to the boundary of the polygon.
-   *        This distance is equal to the minimal distance from the point
-   *        to the edges of the polygon.
-   * @param point The point to compute whose distance to the polygon.
-   * @return The distance from the point to the polygon's boundary.
+   * @brief [brief description]
+   * @details [long description]
+   * @return true if Sync() and Fsync() are safe to call concurrently with Append()and Flush().
    */
-  double DistanceToBoundary(const Vec2d &point) const;
-    
-    
-    {
-    {    AINFO << 'Lidar to ' << camera_names_[i] << ' transform: ';
-    AINFO << camera_coeffient.camera_extrinsic;
+  bool IsSyncThreadSafe() const {
+    return true;
   }
-  camera_coeffient_.resize(camera_names_.size());
-  camera_coeffient_[kLongFocusIdx] = camera_coeffients['camera_25mm_focus'];
-  camera_coeffient_[kShortFocusIdx] = camera_coeffients['camera_6mm_focus'];
-  // auto &short_focus_camera_coeffient = camera_coeffients['camera_6mm_focus'];
-  // auto &long_focus_camera_coeffient = camera_coeffients['camera_25mm_focus'];
-  camera_coeffient_[kLongFocusIdx].camera_extrinsic =
-      camera_coeffient_[kLongFocusIdx].camera_extrinsic *
-      camera_coeffient_[kShortFocusIdx].camera_extrinsic;
-  AINFO << 'Lidar to long(25mm): ';
-  AINFO << camera_coeffient_[kLongFocusIdx].camera_extrinsic;
-  return true;
-}
     
-      virtual ~MultiCamerasProjection() = default;
-  virtual bool Init();
-  virtual bool Project(const CarPose &pose, const ProjectOption &option,
-                       Light *light) const;
-  std::string name() const { return 'TLPreprocessor'; }
+    // The factory is to create memtables based on a hash table:
+// it contains a fixed array of buckets, each pointing to either a linked list
+// or a skip list if number of entries inside the bucket exceeds
+// threshold_use_skiplist.
+// @bucket_count: number of fixed array buckets
+// @huge_page_tlb_size: if <=0, allocate the hash table bytes from malloc.
+//                      Otherwise from huge page TLB. The user needs to reserve
+//                      huge pages for it to be allocated, like:
+//                          sysctl -w vm.nr_hugepages=20
+//                      See linux doc Documentation/vm/hugetlbpage.txt
+// @bucket_entries_logging_threshold: if number of entries in one bucket
+//                                    exceeds this number, log about it.
+// @if_log_bucket_dist_when_flash: if true, log distribution of number of
+//                                 entries when flushing.
+// @threshold_use_skiplist: a bucket switches to skip list if number of
+//                          entries exceed this parameter.
+extern MemTableRepFactory* NewHashLinkListRepFactory(
+    size_t bucket_count = 50000, size_t huge_page_tlb_size = 0,
+    int bucket_entries_logging_threshold = 4096,
+    bool if_log_bucket_dist_when_flash = true,
+    uint32_t threshold_use_skiplist = 256);
     
-    bool UnityRecognize::Init() {
-  if (!GetProtoFromFile(FLAGS_traffic_light_recognizer_config, &config_)) {
-    AERROR << 'Cannot get config proto from file: '
-           << FLAGS_traffic_light_recognizer_config;
-    return false;
+      if(m_jSliceA != nullptr) {
+    env->DeleteGlobalRef(m_jSliceA);
+  }
+    
+    
+    {  ComparatorJniCallbackOptions() : use_adaptive_mutex(false) {
+  }
+};
+    
+    void TestKillRandom(std::string kill_point, int odds,
+                    const std::string& srcfile, int srcline) {
+  for (auto& p : rocksdb_kill_prefix_blacklist) {
+    if (kill_point.substr(0, p.length()) == p) {
+      return;
+    }
   }
     }
     
     
-    {  /**
-   * @brief Compute a trajectory for execution.
-   * @param planning_init_point The trajectory point where planning starts.
-   * @param frame Current planning frame.
-   * @param reference_line_info The computed reference line.
-   * @return OK if planning succeeds; error otherwise.
-   */
-  virtual apollo::common::Status PlanOnReferenceLine(
-      const common::TrajectoryPoint& planning_init_point, Frame* frame,
-      ReferenceLineInfo* reference_line_info) = 0;
-};
+    {// Instantiate the most common Future types to save compile time
+template class SemiFuture<Unit>;
+template class SemiFuture<bool>;
+template class SemiFuture<int>;
+template class SemiFuture<int64_t>;
+template class SemiFuture<std::string>;
+template class SemiFuture<double>;
+template class Future<Unit>;
+template class Future<bool>;
+template class Future<int>;
+template class Future<int64_t>;
+template class Future<std::string>;
+template class Future<double>;
+} // namespace folly
+    
+      ThreadPtr makeThread() override;
+  std::shared_ptr<IOThread> pickThread();
+  void threadRun(ThreadPtr thread) override;
+  void stopThreads(size_t n) override;
+  size_t getPendingTaskCountImpl() override;
+    
+    #include <folly/stats/detail/BufferedStat.h>
+    
+      // Not yet built.  Is it currently in progress?
+  if (creating_thread_.load(std::memory_order_acquire) != std::thread::id()) {
+    return true;
+  }
+    
+      TypeDescriptor type() const {
+    return type_;
+  }
+  virtual bool hasLiveInstance() = 0;
+  virtual void createInstance() = 0;
+  virtual bool creationStarted() = 0;
+  virtual void preDestroyInstance(ReadMostlyMainPtrDeleter<>&) = 0;
+  virtual void destroyInstance() = 0;
+    
+      BENCHMARK_DEPRECATED_MSG('use 'range(1)' instead')
+  int range_y() const { return range(1); }
+    
+    #endif  // BENCHMARK_COLORPRINT_H_
+
+    
+    // Reads and returns the string environment variable corresponding to
+// the given flag; if it's not set, returns default_value.
+const char* StringFromEnv(const char* flag, const char* default_value) {
+  const std::string env_var = FlagToEnvVar(flag);
+  const char* const value = getenv(env_var.c_str());
+  return value == nullptr ? default_value : value;
+}
+    
+    
+    {    // Compute all possible fitting curves and stick to the best one
+    for (const auto& fit : fit_curves) {
+      LeastSq current_fit = MinimalLeastSq(n, time, FittingCurve(fit));
+      if (current_fit.rms < best_fit.rms) {
+        best_fit = current_fit;
+        best_fit.complexity = fit;
+      }
+    }
+  } else {
+    best_fit = MinimalLeastSq(n, time, FittingCurve(complexity));
+    best_fit.complexity = complexity;
+  }
