@@ -1,361 +1,206 @@
 
         
-        // Like URLRequestAsarJob, but asks the JavaScript handler for file path.
-class URLRequestAsyncAsarJob : public JsAsker<asar::URLRequestAsarJob> {
+        // A macro for testing Google Test assertions or code that's expected to
+// generate Google Test non-fatal failures.  It asserts that the given
+// statement will cause exactly one non-fatal Google Test failure with 'substr'
+// being part of the failure message.
+//
+// There are two different versions of this macro. EXPECT_NONFATAL_FAILURE only
+// affects and considers failures generated in the current thread and
+// EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
+//
+// 'statement' is allowed to reference local variables and members of
+// the current object.
+//
+// The verification of the assertion is done correctly even when the statement
+// throws an exception or aborts the current function.
+//
+// Known restrictions:
+//   - You cannot stream a failure message to this macro.
+//
+// Note that even though the implementations of the following two
+// macros are much alike, we cannot refactor them to use a common
+// helper macro, due to some peculiarity in how the preprocessor
+// works.  If we do that, the code won't compile when the user gives
+// EXPECT_NONFATAL_FAILURE() a statement that contains a macro that
+// expands to code containing an unprotected comma.  The
+// AcceptsMacroThatExpandsToUnprotectedComma test in gtest_unittest.cc
+// catches that.
+//
+// For the same reason, we have to write
+//   if (::testing::internal::AlwaysTrue()) { statement; }
+// instead of
+//   GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement)
+// to avoid an MSVC warning on unreachable code.
+#define EXPECT_NONFATAL_FAILURE(statement, substr) \
+  do {\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
+        (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
+      if (::testing::internal::AlwaysTrue()) { statement; }\
+    }\
+  } while (::testing::internal::AlwaysFalse())
+    
+    // First, define a fixture class template.  It should be parameterized
+// by a type.  Remember to derive it from testing::Test.
+template <typename T>
+class FooTest : public testing::Test {
  public:
-  URLRequestAsyncAsarJob(net::URLRequest*, net::NetworkDelegate*);
-    }
-    
-    #define FPL FILE_PATH_LITERAL
-    
-    #include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/pyext/message.h>
-#include <google/protobuf/pyext/scoped_pyobject_ptr.h>
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
-    
-      virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateFreezingCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/wire_format.h>
-    
-    // -----------------------------------------------------------------------
-// functions exposed by this module
-// -----------------------------------------------------------------------
-    
-    // ---------------------------------------------------------------------------
-// ProgressTracing -- static helper class for logging a progress indicator
-//
-// This is for use by the cluster management tools for indicating global progress to the user.
-//
-// This logs to stdout (not stderr) in a specific format, e.g. understood by the Philly cluster. The format is:
-//  PROGRESS xx.xx%
-//  EVALERR xx.xx%
-//
-// Specifically, this class handles a two-level progress computation:
-//  - outer level: loop over multiple training phases, each running multiple steps (epochs)
-//  - inner level in one training phase: loop over multiple steps, *without* knowledge about the other training phases
-//
-// In order for the inner level to log correctly in the global context, the outer loop
-// must inform this class about the total number of steps and the current offset to apply in the inner level.
-// ---------------------------------------------------------------------------
-    
-        bool haslattice(std::wstring key) const
-    {
-#ifdef NONUMLATTICEMMI
-        return denlattices.haslattice(key);
-#else
-        return numlattices.haslattice(key) && denlattices.haslattice(key);
-#endif
-    }
-    
-    
-    {public:
-    inline hardcoded_array() throw()
-    {
-    }
-    inline hardcoded_array(size_t n) throw()
-    {
-        check_size(n);
-    } // we can instantiate with a size parameter--just checks the size
-    inline hardcoded_array(size_t n, const _T& val) throw()
-    {
-        check_size(n);
-        for (size_t i = 0; i < n; i++)
-            data[i] = val;
-    }
-    inline _T& operator[](size_t i) throw()
-    {
-        check_index(i);
-        return data[i];
-    }
-    inline const _T& operator[](size_t i) const throw()
-    {
-        check_index(i);
-        return data[i];
-    }
-    inline size_t size() const throw()
-    {
-        return _N;
-    }
-};
-
-    
-    void Executor::UpdateAuxArray(const Rcpp::List& array,
-                              bool match_name,
-                              bool skip_null) {
-  UpdateArray('aux.arrays', array, aux_arrays_, match_name, skip_null);
-}
-    
-    template<int NT, int X, int NumBanks = 32> struct sConflictFreeStorage {
-	enum { count = NT * X };
-	enum { divisor = sBankConflictDivisor<X, NumBanks>::value };
-	enum { padding = sDivSafe<count, divisor>::value };
-	enum { value = count + padding };
+  ...
+  typedef std::list<T> List;
+  static T shared_;
+  T value_;
 };
     
-    namespace Rcpp {
-  template<>
-  inline bool is<mxnet::R::NDArray>(SEXP x) {
-    if (TYPEOF(x) != EXTPTRSXP) return false;
-    Rcpp::XPtr<mxnet::R::NDBlob> ptr(x);
-    SEXP attr = ptr.attr('class');
-    return attr != R_NilValue &&
-        Rcpp::as<std::string>(attr) == 'MXNDArray';
-    return true;
-  }
-}  // namespace Rcpp
-#endif  // MXNET_RCPP_NDARRAY_H_
-
+      // Given directory = 'dir', base_name = 'test', number = 0,
+  // extension = 'xml', returns 'dir/test.xml'. If number is greater
+  // than zero (e.g., 12), returns 'dir/test_12.xml'.
+  // On Windows platform, uses \ as the separator rather than /.
+  static FilePath MakeFileName(const FilePath& directory,
+                               const FilePath& base_name,
+                               int number,
+                               const char* extension);
     
-    int MXSymbolInferShapePartial(SymbolHandle sym,
-                              mx_uint num_args,
-                              const char** keys,
-                              const mx_uint *arg_ind_ptr,
-                              const mx_uint *arg_shape_data,
-                              mx_uint *in_shape_size,
-                              const mx_uint **in_shape_ndim,
-                              const mx_uint ***in_shape_data,
-                              mx_uint *out_shape_size,
-                              const mx_uint **out_shape_ndim,
-                              const mx_uint ***out_shape_data,
-                              mx_uint *aux_shape_size,
-                              const mx_uint **aux_shape_ndim,
-                              const mx_uint ***aux_shape_data,
-                              int *complete) {
-  int succ;
-  *complete = 1;
-  return MXSymbolInferShape(sym, num_args, keys,
-                            arg_ind_ptr, arg_shape_data,
-                            in_shape_size, in_shape_ndim, in_shape_data,
-                            out_shape_size, out_shape_ndim, out_shape_data,
-                            aux_shape_size, aux_shape_ndim, aux_shape_data,
-                            &succ);
-}
-    
-    void MKLDNNConcatForward(const nnvm::NodeAttrs& attrs, const OpContext &ctx,
-                         const std::vector<NDArray> &in_data,
-                         const std::vector<OpReqType> &req,
-                         const std::vector<NDArray> &out_data) {
-  TmpMemMgr::Get()->Init(ctx.requested[concat_enum::kTempSpace]);
-  const ConcatParam& param = nnvm::get<ConcatParam>(attrs.parsed);
-  int num_in_data = param.num_args;
-  int concat_dim = param.dim;
-  std::vector<mkldnn::memory::primitive_desc> data_md;
-  std::vector<const mkldnn::memory *> data_mem;
-  data_md.reserve(num_in_data);
-  data_mem.reserve(num_in_data);
-  for (int i = 0; i < num_in_data; i++) {
-    const mkldnn::memory *tmp_mem = in_data[i].GetMKLDNNData();
-    mkldnn::memory::primitive_desc tmp_pd = tmp_mem->get_primitive_desc();
-    data_md.push_back(tmp_pd);
-    data_mem.push_back(tmp_mem);
-  }
-  MKLDNNConcatFwd &fwd = GetConcatForward(concat_dim, in_data, data_md);
-  mxnet::mkldnn_output_t out_mem = CreateMKLDNNMem(out_data[concat_enum::kOut],
-                                                   fwd.fwd_pd.dst_primitive_desc(),
-                                                   req[concat_enum::kOut]);
-  fwd.SetNewMem(data_mem, *out_mem.second);
-  MKLDNNStream::Get()->RegisterPrim(fwd.GetFwd());
-  CommitOutput(out_data[concat_enum::kOut], out_mem);
-  MKLDNNStream::Get()->Submit();
-}
-    
-    /**
- * Get current exceptions being handled.  front() is the most recent exception.
- * There should be at most one unless rethrowing.
- */
-std::vector<ExceptionInfo> getCurrentExceptions();
-    
-    class SingletonVault {
+    // This is used internally by all instances of linked_ptr<>.  It needs to be
+// a non-template class because different types of linked_ptr<> can refer to
+// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
+// So, it needs to be possible for different types of linked_ptr to participate
+// in the same circular linked list, so we need a single class type here.
+//
+// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
+class linked_ptr_internal {
  public:
-  enum class Type {
-    Strict, // Singletons can't be created before registrationComplete()
-    Relaxed, // Singletons can be created before registrationComplete()
-  };
+  // Create a new circle that includes only this instance.
+  void join_new() {
+    next_ = this;
+  }
     }
     
-      bool pop(T& val) {
-    hazptr_local<1, Atom> h;
-    hazptr_holder<Atom>& hptr = h[0];
-    Node* node;
-    while (true) {
-      node = hptr.get_protected(head_);
-      if (node == nullptr) {
-        return false;
-      }
-      auto next = node->next();
-      if (cas_head(node, next)) {
-        break;
-      }
+    # if GTEST_HAS_COMBINE
+// INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
+//
+// Generates values from the Cartesian product of values produced
+// by the argument generators.
+//
+template <typename T1, typename T2>
+class CartesianProductGenerator2
+    : public ParamGeneratorInterface< ::std::tr1::tuple<T1, T2> > {
+ public:
+  typedef ::std::tr1::tuple<T1, T2> ParamType;
     }
-    hptr.reset();
-    val = node->value();
-    node->retire();
-    return true;
+    
+      // Creates a UTF-16 wide string from the given ANSI string, allocating
+  // memory using new. The caller is responsible for deleting the return
+  // value using delete[]. Returns the wide string, or NULL if the
+  // input is NULL.
+  //
+  // The wide string is created using the ANSI codepage (CP_ACP) to
+  // match the behaviour of the ANSI versions of Win32 calls and the
+  // C runtime.
+  static LPCWSTR AnsiToUtf16(const char* c_str);
+    
+      template <GTEST_6_TYPENAMES_(U)>
+  tuple& CopyFrom(const GTEST_6_TUPLE_(U)& t) {
+    f0_ = t.f0_;
+    f1_ = t.f1_;
+    f2_ = t.f2_;
+    f3_ = t.f3_;
+    f4_ = t.f4_;
+    f5_ = t.f5_;
+    return *this;
   }
     
-      bool remove(const T& v) {
-    auto prev = &head_;
-    locate_lower_bound(v, prev);
-    auto curr = prev->load(std::memory_order_relaxed);
-    if (!curr || curr->elem_ != v) {
-      return false;
-    }
-    Node* curr_next = curr->next_.load();
-    // Patch up the actual list...
-    prev->store(curr_next, std::memory_order_release);
-    // ...and only then null out the removed node.
-    curr->next_.store(nullptr, std::memory_order_release);
-    curr->retire();
-    return true;
-  }
-    
-    // See portability/Unistd.h for why these need to be in a namespace
-// rather then extern 'C'.
-namespace folly {
-namespace portability {
-namespace fcntl {
-int creat(char const* fn, int pm);
-int fcntl(int fd, int cmd, ...);
-int posix_fallocate(int fd, off_t offset, off_t len);
-int open(char const* fn, int of, int pm = 0);
-}
-}
+    TEST(ListenersTest, DoesNotLeak) {
+  Water* water = new Water;
+  delete water;
 }
     
-      folly::Optional<T> try_take_for(std::chrono::milliseconds time) override {
-    T item;
-    while (true) {
-      if (nonBlockingTake(item)) {
-        return std::move(item);
-      }
-      if (!sem_.try_wait_for(time)) {
-        return folly::none;
-      }
+        // Parallel training
+    MPIWrapperPtr m_mpi;
+    
+        // this = A * B where B is passed as its transposed form B'
+    void matprod_mmt(const ssematrixbase &A, const ssematrixbase &Bt)
+    {
+        auto &us = *this;
+        assert(us.rows() == A.rows());
+        assert(us.cols() == Bt.rows()); // Bt.rows() == B.cols()
+        assert(A.cols() == Bt.cols());  // Bt.cols() == B.rows()
+        // fprintf (stderr, '0x%x(%d,%d) x 0x%x(%d,%d)' -> 0x%x(%d,%d)\n', A.p, A.rows(), A.cols(), Bt.p, Bt.rows(), Bt.cols(), us.p, us.rows(), us.cols());
     }
-  }
     
-        uint64_t origAllocated = *counter;
-    
-    FOLLY_ALWAYS_INLINE int __builtin_ctzll(unsigned long long x) {
-  unsigned long index;
-  return int(_BitScanForward64(&index, x) ? index : 64);
-}
-    
-      void push(hazptr_obj* obj) {
-    while (true) {
-      if (tail()) {
-        if (pushInNonEmptyList(obj)) {
-          break;
-        }
-      } else {
-        if (pushInEmptyList(obj)) {
-          break;
-        }
-      }
-    }
-    if (++rcount_ >= HAZPTR_PRIV_THRESHOLD) {
-      push_all_to_domain();
-    }
-  }
-    
-      // Actions to run in child.
-  // Note that this runs after vfork(), so tread lightly.
-  // Returns 0 on success, or an errno value on failure.
-  int prepareChild(const Options& options,
-                   const sigset_t* sigmask,
-                   const char* childDir) const;
-  int runChild(const char* executable, char** argv, char** env,
-               const Options& options) const;
-    
-    /* Platform specific TLS support
- * gcc implements __thread
- * msvc implements __declspec(thread)
- * the semantics are the same
- * (but remember __thread has different semantics when using emutls (ex. apple))
- */
-#if defined(_MSC_VER)
-# define FOLLY_TLS __declspec(thread)
-#elif defined(__GNUC__) || defined(__clang__)
-# define FOLLY_TLS __thread
-#else
-# error cannot define platform specific thread local storage
-#endif
-    
-    ///////////////////////////////////
-#if FOLLY_F14_VECTOR_INTRINSICS_AVAILABLE
-///////////////////////////////////
-    
-    class AbstractCommand : public Command {
-private:
-  std::shared_ptr<Request> req_;
-  std::shared_ptr<FileEntry> fileEntry_;
-  std::shared_ptr<SocketCore> socket_;
-  std::shared_ptr<SocketRecvBuffer> socketRecvBuffer_;
-  std::shared_ptr<SocketCore> readCheckTarget_;
-  std::shared_ptr<SocketCore> writeCheckTarget_;
+        // change all inputs of this new node to share the old one's inputs
+    for (int i = 0; i < oldNode->GetNumInputs(); i++)
+    {
+        newNode->SetInput(i, oldNode->GetInputs()[i]); // TODO: use AttachInput()?
+        //oldNode->SetInput(i, nullptr); // BUGBUG: old node should no longer point into the network
     }
     
     
-    {} // namespace aria2
+    {
+    {
+    {}}}
 
     
-    void AbstractOptionHandler::updateFlags(int flag, bool val)
+    template <class ConfigRecordType, typename ElemType>
+bool TryGetNetworkFactory(const ConfigRecordType& config, function<ComputationNetworkPtr(DEVICEID_TYPE)>& createNetworkFn)
 {
-  if (val) {
-    flags_ |= flag;
-  }
-  else {
-    flags_ &= ~flag;
-  }
-}
-    
-    
-    {
-    {    httpConnection_->sendProxyRequest(std::move(httpRequest));
-  }
-  else {
-    httpConnection_->sendPendingData();
-  }
-  if (httpConnection_->sendBufferIsEmpty()) {
-    getDownloadEngine()->addCommand(getNextCommand());
-    return true;
-  }
-  else {
-    setWriteCheckSocket(getSocket());
-    addCommandSelf();
-    return false;
-  }
-}
-    
-    namespace aria2 {
+    DEVICEID_TYPE deviceId = DeviceFromConfig(config);
     }
     
     
-    {} // namespace aria2
+    {
+    {
+    {}}} // end namespaces
+
+    
+      /// Gets the non-blocking mode of the acceptor.
+  /**
+   * @returns @c true if the acceptor's synchronous operations will fail with
+   * boost::asio::error::would_block if they are unable to perform the requested
+   * operation immediately. If @c false, synchronous operations will block
+   * until complete.
+   *
+   * @note The non-blocking mode has no effect on the behaviour of asynchronous
+   * operations. Asynchronous operations will never fail with the error
+   * boost::asio::error::would_block.
+   */
+  bool non_blocking() const
+  {
+    return this->get_service().non_blocking(this->get_implementation());
+  }
+    
+    #endif // BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    template <typename CompletionCondition>
+class base_from_completion_cond
+{
+protected:
+  explicit base_from_completion_cond(CompletionCondition completion_condition)
+    : completion_condition_(completion_condition)
+  {
+  }
+    }
+    
+    #endif // BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
+
+    
+    #endif // BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
+
+    
+    #ifndef BOOST_ASIO_DETAIL_FUNCTION_HPP
+#define BOOST_ASIO_DETAIL_FUNCTION_HPP
+    
+    
+    {} // namespace boost_asio_handler_alloc_helpers
+    
+    #include <boost/asio/detail/pop_options.hpp>
