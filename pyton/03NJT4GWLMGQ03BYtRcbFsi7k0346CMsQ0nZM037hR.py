@@ -1,90 +1,110 @@
 
         
-            cmd = cmd.split()
-    
-    # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = ['_static']
-    
-    PRIMES = [
-    112272535095293,
-    112582705942171,
-    112272535095293,
-    115280095190773,
-    115797848077099,
-    117450548693743,
-    993960000099397]
+            return len(cmd) > 1 and 'x' in cmd[1]
     
     
-  def Start( self ):
-    self._results = self._omni_completer.ComputeCandidates( self.request_data )
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
+    
+        @get_item_parameters
+    def test_get(self, key, value):
+        assert self.lookup_dict.get(key) == value
+
+    
+            with Server(handler) as (host, port):
+            sock = socket.socket()
+            sock.connect((host, port))
+            sock.sendall(question)
+            text = sock.recv(1000)
+            assert text == answer
+            sock.close()
     
     
-def EndsWithPython_Good( path ):
-  ok_( _EndsWithPython( path ),
-       'Path {0} does not end with a Python name.'.format( path ) )
+class ChunkedEncodingError(RequestException):
+    '''The server declared chunked encoding but sent an invalid chunk.'''
     
-    DIR_OF_THIS_SCRIPT = p.dirname( p.abspath( __file__ ) )
-DIR_OF_THIRD_PARTY = p.join( DIR_OF_THIS_SCRIPT, 'third_party' )
-DIR_OF_YCMD_THIRD_PARTY = p.join( DIR_OF_THIRD_PARTY, 'ycmd', 'third_party' )
-    
-        with patch.object( ycm._message_poll_request,
-                       '_response_future',
-                       new = MockAsyncServerResponseDone( [] ) ) as mock_future:
-      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
-  '''
-  return mock.MagicMock( wraps = FakeFuture( True, response ) )
+        with server as (host, port):
+        url = u'http://{0}:{1}'.format(host, port)
+        r = requests.get(url=url, allow_redirects=True)
+        assert r.status_code == 200
+        assert len(r.history) == 1
+        assert r.history[0].status_code == 301
+        assert redirect_request[0].startswith(b'GET /' + expected_path + b' HTTP/1.1')
+        assert r.url == u'{0}/{1}'.format(url, expected_path.decode('ascii'))
     
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    request_data.update( { 'filetypes': self.filetypes } )
-    self._response = self.PostDataToHandler( request_data,
-                                             'semantic_completion_available' )
+class HTTPBasicAuth(AuthBase):
+    '''Attaches HTTP Basic Authentication to the given Request object.'''
+    
+        def __repr__(self):
+        return str(dict(self.items()))
+    
+    from codecs import open
+    
+        parser.add_argument('--key',
+                        metavar='KEY',
+                        default=api_key,
+                        required=not api_key,
+                        help='Shippable API key')
+    
+        indent = None
+    if format:
+        indent = 4
+    
+        terminal_stdout_re = [
+        re.compile(r'[\r\n]?<.+>(?:\s*)$'),
+        re.compile(r'[\r\n]?\[.+\](?:\s*)$'),
+    ]
+    
+        return results
+
+    
+        def test_max_delay_none(self):
+        strategy = _exponential_backoff(retries=7, delay=1, backoff=2, max_delay=None)
+        result = list(strategy())
+        self.assertEquals(result, [1, 2, 4, 8, 16, 32, 64])
+    
+    from tornado.options import define, options
     
     
-  def Response( self ):
-    if self._cached_response:
-      return self._cached_response
+class Application(tornado.web.Application):
+    def __init__(self):
+        handlers = [
+            (r'/', MainHandler),
+            (r'/auth/login', AuthLoginHandler),
+            (r'/auth/logout', AuthLogoutHandler),
+        ]
+        settings = dict(
+            cookie_secret='__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__',
+            login_url='/auth/login',
+            template_path=os.path.join(os.path.dirname(__file__), 'templates'),
+            static_path=os.path.join(os.path.dirname(__file__), 'static'),
+            xsrf_cookies=True,
+            facebook_api_key=options.facebook_api_key,
+            facebook_secret=options.facebook_secret,
+            ui_modules={'Post': PostModule},
+            debug=True,
+            autoescape=None,
+        )
+        tornado.web.Application.__init__(self, handlers, **settings)
     
-        def test_cat_adapter_shall_make_noise(self):
-        cat = Cat()
-        cat_adapter = Adapter(cat, make_noise=cat.meow)
-        noise = cat_adapter.make_noise()
-        expected_noise = 'meow!'
-        self.assertEqual(noise, expected_noise)
+        def callback(response):
+        response.rethrow()
+        assert len(response.body) == (options.num_chunks * options.chunk_size)
+        logging.warning('fetch completed in %s seconds', response.request_time)
+        IOLoop.current().stop()
     
-        def test_sales_manager_shall_not_talk_through_proxy_with_delay(cls):
-        cls.ntp.busy = 'No'
-        start_time = time()
-        cls.ntp.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-This Sales Manager will not talk to you whether he/she is busy or not\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
     
-    from dft.constructor_injection import TimeDisplay, MidnightTimeProvider, ProductionCodeTimeProvider, datetime
+@gen.engine
+def e1():
+    for i in range(10):
+        yield gen.Task(e2)
     
-        def __init__(self, param):
-        # simple test to validate param value
-        if param in self._class_method_choices:
-            self.param = param
-        else:
-            raise ValueError('Invalid Value for Param: {0}'.format(param))
-    
-        def __get__(self, obj, T):
-        def transaction(*args, **kwargs):
-            state = memento(obj)
-            try:
-                return self.method(obj, *args, **kwargs)
-            except Exception as e:
-                state()
-                raise e
-    
-        def toggle_amfm(self):
-        self.state.toggle_amfm()
+    1) Install virtualbox guest additions (from the device menu in virtualbox)
+2) Set up a shared folder to the root of your tornado repo.  It must be a
+   read-write mount to use tox, although the tests can be run directly
+   in a read-only mount.  This will probably assign drive letter E:.
+3) Install Python 2.7 from python.org.
+4) Run this script by double-clicking it, or running
+   'c:\python27\python.exe bootstrap.py' in a shell.
