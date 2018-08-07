@@ -1,83 +1,91 @@
 
         
-              private
+        CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-    # IMPORTANT: The Capistrano::Plugin system is not yet considered a stable,
-# public API, and is subject to change without notice. Eventually it will be
-# officially documented and supported, but for now, use it at your own risk.
-#
-# Base class for Capistrano plugins. Makes building a Capistrano plugin as easy
-# as writing a `Capistrano::Plugin` subclass and overriding any or all of its
-# three template methods:
-#
-# * set_defaults
-# * register_hooks
-# * define_tasks
-#
-# Within the plugin you can use any methods of the Rake or Capistrano DSLs, like
-# `fetch`, `invoke`, etc. In cases when you need to use SSHKit's backend outside
-# of an `on` block, use the `backend` convenience method. E.g. `backend.test`,
-# `backend.execute`, or `backend.capture`.
-#
-# Package up and distribute your plugin class as a gem and you're good to go!
-#
-# To use a plugin, all a user has to do is install it in the Capfile, like this:
-#
-#   # Capfile
-#   require 'capistrano/superfancy'
-#   install_plugin Capistrano::Superfancy
-#
-# Or, to install the plugin without its hooks:
-#
-#   # Capfile
-#   require 'capistrano/superfancy'
-#   install_plugin Capistrano::Superfancy, load_hooks: false
-#
-class Capistrano::Plugin < Rake::TaskLib
-  include Capistrano::DSL
-    
-      entries.each do |entry|
-    if File.exist?(entry[:file])
-      warn '[skip] #{entry[:file]} already exists'
-    else
-      File.open(entry[:file], 'w+') do |f|
-        f.write(ERB.new(File.read(entry[:template])).result(binding))
-        puts I18n.t(:written_file, scope: :capistrano, file: entry[:file])
-      end
+        # Check whether a gem plugin is allowed to be used during this build.
+    #
+    # plugin_name - the name of the plugin
+    #
+    # Returns true if the plugin name is in the whitelist or if the site is not
+    #   in safe mode.
+    def plugin_allowed?(plugin_name)
+      !site.safe || whitelist.include?(plugin_name)
     end
+    
+        # Get rid of any info 'dir' files, so they don't conflict at the link stage
+    info_dir_file = @f.info + 'dir'
+    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
+      observe_file_removal info_dir_file
+    end
+    
+      private
+    
+    end
+
+    
+      def icon
+    object.image
   end
     
-          describe 'fetching servers by role' do
-        subject { dsl.roles(:app) }
-    
-        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      subject.options[:allow_empty_referrer] = false
-      expect(subject.referrer(env)).to be_nil
+        HTTP.get(source).to_s.split('\n').each do |line|
+      next if line.start_with? '#'
+      parts = line.split(';').map(&:strip)
+      next if parts.size < 2
+      codes << [parts[0], parts[1].start_with?('fully-qualified')]
     end
     
-      %w(GET HEAD POST PUT DELETE).each do |method|
-    it 'accepts #{method} requests with no Origin' do
-      expect(send(method.downcase, '/')).to be_ok
-    end
+      def display
+    'standalone'
   end
     
-        it 'should be able to deal with PATH_INFO = nil (fcgi?)' do
-      app = Rack::Protection::PathTraversal.new(proc { 42 })
-      expect(app.call({})).to eq(42)
+      private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_book
+      @book = Book.find(params[:id])
     end
-  end
     
-      it 'should not leak changes to env' do
-    klass    = described_class
-    detector = Struct.new(:app) do
-      def call(env)
-        was = env.dup
-        res = app.call(env)
-        was.each do |k,v|
-          next if env[k] == v
-          fail 'env[#{k.inspect}] changed from #{v.inspect} to #{env[k].inspect}'
-        end
-        res
-      end
-    end
+    module RuboCop
+  module Cop
+    module Lint
+      # This cop checks that there are no repeated conditions
+      # used in case 'when' expressions.
+      #
+      # @example
+      #
+      #   # bad
+      #
+      #   case x
+      #   when 'first'
+      #     do_something
+      #   when 'first'
+      #     do_something_else
+      #   end
+      #
+      # @example
+      #
+      #   # good
+      #
+      #   case x
+      #   when 'first'
+      #     do_something
+      #   when 'second'
+      #     do_something_else
+      #   end
+      class DuplicateCaseCondition < Cop
+        MSG = 'Duplicate `when` condition detected.'.freeze
+    
+              arguments.each_with_index do |argument, index|
+            optarg_positions << index if argument.optarg_type?
+            arg_positions << index if argument.arg_type?
+          end
