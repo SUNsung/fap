@@ -1,223 +1,56 @@
 
         
-        // Read through the first n keys repeatedly and check that they get
-// compacted (verified by checking the size of the key space).
-void AutoCompactTest::DoReads(int n) {
-  std::string value(kValueSize, 'x');
-  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
-    }
-    
-    Status BuildTable(const std::string& dbname,
-                  Env* env,
-                  const Options& options,
-                  TableCache* table_cache,
-                  Iterator* iter,
-                  FileMetaData* meta) {
-  Status s;
-  meta->file_size = 0;
-  iter->SeekToFirst();
-    }
-    
-    namespace leveldb {
-    }
-    
-    // Return the legacy file name for an sstable with the specified number
-// in the db named by 'dbname'. The result will be prefixed with
-// 'dbname'.
-extern std::string SSTTableFileName(const std::string& dbname, uint64_t number);
-    
-    namespace leveldb {
-    }
-    
-    struct FileMetaData {
-  int refs;
-  int allowed_seeks;          // Seeks allowed until compaction
-  uint64_t number;
-  uint64_t file_size;         // File size in bytes
-  InternalKey smallest;       // Smallest internal key served by table
-  InternalKey largest;        // Largest internal key served by table
-    }
-    
-    class VersionEditTest { };
-    
-      ASSERT_TRUE(! Overlaps('100', '149'));
-  ASSERT_TRUE(! Overlaps('251', '299'));
-  ASSERT_TRUE(! Overlaps('451', '500'));
-  ASSERT_TRUE(! Overlaps('351', '399'));
-    
-      void PrintWarnings() {
-#if defined(__GNUC__) && !defined(__OPTIMIZE__)
-    fprintf(stdout,
-            'WARNING: Optimization is disabled: benchmarks unnecessarily slow\n'
-            );
-#endif
-#ifndef NDEBUG
-    fprintf(stdout,
-            'WARNING: Assertions are enabled; benchmarks unnecessarily slow\n');
-#endif
-  }
-    
-    // Number of key/values to place in database
-static int FLAGS_num = 1000000;
-    
-      void OCRTester(const char* imgname, const char* groundtruth, const char* tessdatadir, const char* lang) {
-    //log.info() << tessdatadir << ' for language: ' << lang << std::endl;
-    char *outText;
-    std::locale loc('C'); // You can also use '' for the default system locale
-    std::ifstream file(groundtruth);
-    file.imbue(loc); // Use it for file input
-    std::string gtText((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-    tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
-    ASSERT_FALSE(api->Init(tessdatadir, lang)) << 'Could not initialize tesseract.';
-    Pix *image = pixRead(imgname);
-    ASSERT_TRUE(image != nullptr) << 'Failed to read test image.';
-    api->SetImage(image);
-    outText = api->GetUTF8Text();
-    EXPECT_EQ(gtText,outText) << 'Phototest.tif OCR does not match ground truth for ' << ::testing::PrintToString(lang);
-    api->End();
-    delete [] outText;
-    pixDestroy(&image);
-  }
-    
-    
-    {
-    {}  // namespace
-}  // namespace tesseract
-
-    
-    // Factory makes and returns an IntSimdMatrix (sub)class of the best
-// available type for the current architecture.
-/* static */
-IntSimdMatrix* IntSimdMatrix::GetFastestMultiplier() {
-  IntSimdMatrix* multiplier = nullptr;
-  if (SIMDDetect::IsAVX2Available()) {
-    multiplier = new IntSimdMatrixAVX2();
-  } else if (SIMDDetect::IsSSEAvailable()) {
-    multiplier = new IntSimdMatrixSSE();
-  } else {
-    // Default c++ implementation.
-    multiplier = new IntSimdMatrix();
-  }
-  return multiplier;
-}
-    
-    struct OSBestResult {
-  OSBestResult() : orientation_id(0), script_id(0), sconfidence(0.0),
-                   oconfidence(0.0) {}
-  int orientation_id;
-  int script_id;
-  float sconfidence;
-  float oconfidence;
-};
-    
-    #endif  // TESSERACT_CCMAIN_PAGEITERATOR_H_
-
-    
-      // Compute the number of unichars in the label.
-  GenericVector<UNICHAR_ID> encoding;
-  if (!unicharset.encode_string(label, true, &encoding, nullptr, nullptr)) {
-    tprintf('Not outputting illegal unichar %s\n', label);
-    return;
-  }
-    
-      // Returns the x,y means as an FCOORD.
-  FCOORD mean_point() const;
-    
-    
-    {  if (!any_good_hivalue) {
-    // Use the best of the ones that were not good enough.
-    (*hi_values)[best_hi_index] = best_hi_value;
-  }
-  PERF_COUNT_END
-  return num_channels;
-}
-    
-      /* Invoked when initial response headers are received.
-   * Consumer must call bidirectional_stream_read() to start reading.
-   * Consumer may call bidirectional_stream_write() to start writing or
-   * close the stream. Contents of |headers| is valid for duration of the call.
-   */
-  void (*on_response_headers_received)(
-      bidirectional_stream* stream,
-      const bidirectional_stream_header_array* headers,
-      const char* negotiated_protocol);
-    
-    void ParseDb(const std::string& db, std::vector<Feature>* feature_list);
-    
-    #include <signal.h>
-    
-    #endif
-
-    
-    static double time_double(struct timeval* tv) {
-  return tv->tv_sec + 1e-6 * tv->tv_usec;
-}
-#endif
-    
-      static double Now();
-    
-    class QpsGauge {
+        template <bool del, class R, class P1, class P2, class A1, class A2, class A3>
+class _TessFunctionResultCallback_2_3 : public TessResultCallback3<R,A1,A2,A3> {
  public:
-  QpsGauge();
+  typedef TessResultCallback3<R,A1,A2,A3> base;
+  typedef R (*FunctionSignature)(P1,P2,A1,A2,A3);
     }
     
-    class BaseLogger {
- public:
-  BaseLogger() {
-#if XGBOOST_LOG_WITH_TIME
-    log_stream_ << '[' << dmlc::DateLogger().HumanDate() << '] ';
-#endif
-  }
-  std::ostream& stream() { return log_stream_; }  // NOLINT
-    }
+      // Returns the distance between the given pair of font/class pairs.
+  // Finds in cache or computes and caches.
+  // OrganizeByFontAndClass must have been already called.
+  float ClusterDistance(int font_id1, int class_id1,
+                        int font_id2, int class_id2,
+                        const IntFeatureMap& feature_map);
     
+      // Computes matrix.vector v = Wu.
+  // u is of size W.dim2() - 1 and the output v is of size W.dim1().
+  // u is imagined to have an extra element at the end with value 1, to
+  // implement the bias, but it doesn't actually have it.
+  // Asserts that the call matches what we have.
+  void MatrixDotVector(const double* u, double* v) const;
+  void MatrixDotVector(const int8_t* u, double* v) const;
+  // MatrixDotVector for peep weights, MultiplyAccumulate adds the
+  // component-wise products of *this[0] and v to inout.
+  void MultiplyAccumulate(const double* v, double* inout);
+  // Computes vector.matrix v = uW.
+  // u is of size W.dim1() and the output v is of size W.dim2() - 1.
+  // The last result is discarded, as v is assumed to have an imaginary
+  // last value of 1, as with MatrixDotVector.
+  void VectorDotMatrix(const double* u, double* v) const;
+  // Fills dw_[i][j] with the dot product u[i][] . v[j][], using elements
+  // from u and v, starting with u[i][offset] and v[j][offset].
+  // Note that (matching MatrixDotVector) v[last][] is missing, presumed 1.0.
+  // Runs parallel if requested. Note that inputs must be transposed.
+  void SumOuterTransposed(const TransposedArray& u, const TransposedArray& v,
+                          bool parallel);
+  // Updates the weights using the given learning rate, momentum and adam_beta.
+  // num_samples is used in the Adam correction factor.
+  void Update(double learning_rate, double momentum, double adam_beta,
+              int num_samples);
+  // Adds the dw_ in other to the dw_ is *this.
+  void AddDeltas(const WeightMatrix& other);
+  // Sums the products of weight updates in *this and other, splitting into
+  // positive (same direction) in *same and negative (different direction) in
+  // *changed.
+  void CountAlternators(const WeightMatrix& other, double* same,
+                        double* changed) const;
     
-    {}  // namespace xgboost
-#endif  // XGBOOST_TREE_UPDATER_H_
-
-    
-    bool WakeUpLock::IsLocking() {
-    return ::wakeupLock_IsLocking(object_);
-}
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-        JNIEnv* GetEnv();
-    int Status();
-    
-      // REQUIRES: timer is not running and 'SkipWithError(...)' has not been called
-  //           by the current thread.
-  // Start the benchmark timer.  The timer is NOT running on entrance to the
-  // benchmark function. It begins running after control flow enters the
-  // benchmark loop.
-  //
-  // NOTE: PauseTiming()/ResumeTiming() are relatively
-  // heavyweight, and so their use should generally be avoided
-  // within each benchmark iteration, if possible.
-  void ResumeTiming();
-    
-    #endif  // BENCHMARK_COLORPRINT_H_
-
-    
-    // Macros for defining flags.
-#define DEFINE_bool(name, default_val, doc) bool FLAG(name) = (default_val)
-#define DEFINE_int32(name, default_val, doc) int32_t FLAG(name) = (default_val)
-#define DEFINE_int64(name, default_val, doc) int64_t FLAG(name) = (default_val)
-#define DEFINE_double(name, default_val, doc) double FLAG(name) = (default_val)
-#define DEFINE_string(name, default_val, doc) \
-  std::string FLAG(name) = (default_val)
-    
-      if (!rate.empty()) {
-    printer(Out, COLOR_DEFAULT, ' %*s', 13, rate.c_str());
-  }
-    
-    #include <cstdint>
-    
-    
-    {#ifndef NDEBUG
-  Out << '***WARNING*** Library was built as DEBUG. Timings may be '
-         'affected.\n';
-#endif
-}
+     private:
+  // Internal version of EvaluateBox returns the unclipped gradients as well
+  // as the result of EvaluateBox.
+  // hgrad1 and hgrad2 are the gradients for the horizontal textline.
+  int EvaluateBoxInternal(const TBOX& box, const DENORM* denorm, bool debug,
+                          int* hgrad1, int* hgrad2,
+                          int* vgrad1, int* vgrad2) const;
