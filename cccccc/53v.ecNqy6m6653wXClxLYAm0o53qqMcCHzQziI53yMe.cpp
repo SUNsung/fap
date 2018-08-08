@@ -1,266 +1,309 @@
 
         
-        namespace Json {
+        // The argument separating arguments intended for the relauncher process from
+// those intended for the relaunched process. '---' is chosen instead of '--'
+// because CommandLine interprets '--' as meaning 'end of switches', but
+// for many purposes, the relauncher process' CommandLine ought to interpret
+// arguments intended for the relaunched process, to get the correct settings
+// for such things as logging and the user-data-dir in case it affects crash
+// reporting.
+extern const CharType* kRelauncherArgSeparator;
+    
+    #include <vector>
+    
+    namespace atom {
     }
     
-    // Find the file that declares the given fully-qualified symbol name.
-bool PyDescriptorDatabase::FindFileContainingSymbol(
-    const string& symbol_name, FileDescriptorProto* output) {
-  ScopedPyObjectPtr py_descriptor(
-      PyObject_CallMethod(py_database_, 'FindFileContainingSymbol', 's#',
-                          symbol_name.c_str(), symbol_name.size()));
-  return GetFileDescriptorProto(py_descriptor.get(), output);
+    
+    {}  // namespace printing
+    
+    
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(Net);
+};
+    
+    int main(int /*argc*/, char** /*argv*/)
+{
+    InitDevice();
+    return 0;
 }
+
     
+        CV_Assert( state != 0 );
     
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
+    void ComputeExtrinsicRefine(const Mat& imagePoints, const Mat& objectPoints, Mat& rvec,
+                            Mat&  tvec, Mat& J, const int MaxIter,
+                            const IntrinsicParams& param, const double thresh_cond);
+CV_EXPORTS Mat ComputeHomography(Mat m, Mat M);
     
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
+        Mat img = _img.getMat(), cornersM = _corners.getMat();
+    int ncorners = cornersM.checkVector(2, CV_32F);
+    CV_Assert( ncorners >= 0 );
+    Point2f* corners = cornersM.ptr<Point2f>();
+    const int nbins = 256;
+    float ranges[] = {0, 256};
+    const float* _ranges = ranges;
+    Mat hist;
     
-    // Author: kenton@google.com (Kenton Varda)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-//
-// Generates Java code for a given .proto file.
+    /** @file
+ * @deprecated Use @ref cudev instead.
+ */
     
+            // Core Extension: ARB_uniform_buffer_object
+        UNIFORM_BUFFER                   = 0x8A11,
+        UNIFORM_BUFFER_BINDING           = 0x8A28,
+        UNIFORM_BUFFER_START             = 0x8A29,
+        UNIFORM_BUFFER_SIZE              = 0x8A2A,
+        MAX_VERTEX_UNIFORM_BLOCKS        = 0x8A2B,
+        MAX_FRAGMENT_UNIFORM_BLOCKS      = 0x8A2D,
+        MAX_COMBINED_UNIFORM_BLOCKS      = 0x8A2E,
+        MAX_UNIFORM_BUFFER_BINDINGS      = 0x8A2F,
+        MAX_UNIFORM_BLOCK_SIZE           = 0x8A30,
+        MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS = 0x8A31,
+        MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS = 0x8A33,
+        UNIFORM_BUFFER_OFFSET_ALIGNMENT  = 0x8A34,
+        ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH = 0x8A35,
+        ACTIVE_UNIFORM_BLOCKS            = 0x8A36,
+        UNIFORM_TYPE                     = 0x8A37,
+        UNIFORM_SIZE                     = 0x8A38,
+        UNIFORM_NAME_LENGTH              = 0x8A39,
+        UNIFORM_BLOCK_INDEX              = 0x8A3A,
+        UNIFORM_OFFSET                   = 0x8A3B,
+        UNIFORM_ARRAY_STRIDE             = 0x8A3C,
+        UNIFORM_MATRIX_STRIDE            = 0x8A3D,
+        UNIFORM_IS_ROW_MAJOR             = 0x8A3E,
+        UNIFORM_BLOCK_BINDING            = 0x8A3F,
+        UNIFORM_BLOCK_DATA_SIZE          = 0x8A40,
+        UNIFORM_BLOCK_NAME_LENGTH        = 0x8A41,
+        UNIFORM_BLOCK_ACTIVE_UNIFORMS    = 0x8A42,
+        UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES = 0x8A43,
+        UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER = 0x8A44,
+        UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER = 0x8A46,
+        INVALID_INDEX                    = 0xFFFFFFFF,
+        MAX_GEOMETRY_UNIFORM_BLOCKS      = 0x8A2C,
+        MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS = 0x8A32,
+        UNIFORM_BLOCK_REFERENCED_BY_GEOMETRY_SHADER = 0x8A45,
     
-    {}  // namespace testing_internal
+    using namespace cv::ocl::runtime;
     
-    // A set of macros for testing Google Test assertions or code that's expected
-// to generate Google Test fatal failures.  It verifies that the given
-// statement will cause exactly one fatal Google Test failure with 'substr'
-// being part of the failure message.
-//
-// There are two different versions of this macro. EXPECT_FATAL_FAILURE only
-// affects and considers failures generated in the current thread and
-// EXPECT_FATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
-//
-// The verification of the assertion is done correctly even when the statement
-// throws an exception or aborts the current function.
-//
-// Known restrictions:
-//   - 'statement' cannot reference local non-static variables or
-//     non-static members of the current object.
-//   - 'statement' cannot return a value.
-//   - You cannot stream a failure message to this macro.
-//
-// Note that even though the implementations of the following two
-// macros are much alike, we cannot refactor them to use a common
-// helper macro, due to some peculiarity in how the preprocessor
-// works.  The AcceptsMacroThatExpandsToUnprotectedComma test in
-// gtest_unittest.cc will fail to compile if we do that.
-#define EXPECT_FATAL_FAILURE(statement, substr) \
-  do { \
-    class GTestExpectFatalFailureHelper {\
-     public:\
-      static void Execute() { statement; }\
-    };\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter:: \
-          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
-      GTestExpectFatalFailureHelper::Execute();\
-    }\
-  } while (::testing::internal::AlwaysFalse())
+    const float g_8x32fTab[] =
+{
+    -128.f, -127.f, -126.f, -125.f, -124.f, -123.f, -122.f, -121.f,
+    -120.f, -119.f, -118.f, -117.f, -116.f, -115.f, -114.f, -113.f,
+    -112.f, -111.f, -110.f, -109.f, -108.f, -107.f, -106.f, -105.f,
+    -104.f, -103.f, -102.f, -101.f, -100.f,  -99.f,  -98.f,  -97.f,
+     -96.f,  -95.f,  -94.f,  -93.f,  -92.f,  -91.f,  -90.f,  -89.f,
+     -88.f,  -87.f,  -86.f,  -85.f,  -84.f,  -83.f,  -82.f,  -81.f,
+     -80.f,  -79.f,  -78.f,  -77.f,  -76.f,  -75.f,  -74.f,  -73.f,
+     -72.f,  -71.f,  -70.f,  -69.f,  -68.f,  -67.f,  -66.f,  -65.f,
+     -64.f,  -63.f,  -62.f,  -61.f,  -60.f,  -59.f,  -58.f,  -57.f,
+     -56.f,  -55.f,  -54.f,  -53.f,  -52.f,  -51.f,  -50.f,  -49.f,
+     -48.f,  -47.f,  -46.f,  -45.f,  -44.f,  -43.f,  -42.f,  -41.f,
+     -40.f,  -39.f,  -38.f,  -37.f,  -36.f,  -35.f,  -34.f,  -33.f,
+     -32.f,  -31.f,  -30.f,  -29.f,  -28.f,  -27.f,  -26.f,  -25.f,
+     -24.f,  -23.f,  -22.f,  -21.f,  -20.f,  -19.f,  -18.f,  -17.f,
+     -16.f,  -15.f,  -14.f,  -13.f,  -12.f,  -11.f,  -10.f,   -9.f,
+      -8.f,   -7.f,   -6.f,   -5.f,   -4.f,   -3.f,   -2.f,   -1.f,
+       0.f,    1.f,    2.f,    3.f,    4.f,    5.f,    6.f,    7.f,
+       8.f,    9.f,   10.f,   11.f,   12.f,   13.f,   14.f,   15.f,
+      16.f,   17.f,   18.f,   19.f,   20.f,   21.f,   22.f,   23.f,
+      24.f,   25.f,   26.f,   27.f,   28.f,   29.f,   30.f,   31.f,
+      32.f,   33.f,   34.f,   35.f,   36.f,   37.f,   38.f,   39.f,
+      40.f,   41.f,   42.f,   43.f,   44.f,   45.f,   46.f,   47.f,
+      48.f,   49.f,   50.f,   51.f,   52.f,   53.f,   54.f,   55.f,
+      56.f,   57.f,   58.f,   59.f,   60.f,   61.f,   62.f,   63.f,
+      64.f,   65.f,   66.f,   67.f,   68.f,   69.f,   70.f,   71.f,
+      72.f,   73.f,   74.f,   75.f,   76.f,   77.f,   78.f,   79.f,
+      80.f,   81.f,   82.f,   83.f,   84.f,   85.f,   86.f,   87.f,
+      88.f,   89.f,   90.f,   91.f,   92.f,   93.f,   94.f,   95.f,
+      96.f,   97.f,   98.f,   99.f,  100.f,  101.f,  102.f,  103.f,
+     104.f,  105.f,  106.f,  107.f,  108.f,  109.f,  110.f,  111.f,
+     112.f,  113.f,  114.f,  115.f,  116.f,  117.f,  118.f,  119.f,
+     120.f,  121.f,  122.f,  123.f,  124.f,  125.f,  126.f,  127.f,
+     128.f,  129.f,  130.f,  131.f,  132.f,  133.f,  134.f,  135.f,
+     136.f,  137.f,  138.f,  139.f,  140.f,  141.f,  142.f,  143.f,
+     144.f,  145.f,  146.f,  147.f,  148.f,  149.f,  150.f,  151.f,
+     152.f,  153.f,  154.f,  155.f,  156.f,  157.f,  158.f,  159.f,
+     160.f,  161.f,  162.f,  163.f,  164.f,  165.f,  166.f,  167.f,
+     168.f,  169.f,  170.f,  171.f,  172.f,  173.f,  174.f,  175.f,
+     176.f,  177.f,  178.f,  179.f,  180.f,  181.f,  182.f,  183.f,
+     184.f,  185.f,  186.f,  187.f,  188.f,  189.f,  190.f,  191.f,
+     192.f,  193.f,  194.f,  195.f,  196.f,  197.f,  198.f,  199.f,
+     200.f,  201.f,  202.f,  203.f,  204.f,  205.f,  206.f,  207.f,
+     208.f,  209.f,  210.f,  211.f,  212.f,  213.f,  214.f,  215.f,
+     216.f,  217.f,  218.f,  219.f,  220.f,  221.f,  222.f,  223.f,
+     224.f,  225.f,  226.f,  227.f,  228.f,  229.f,  230.f,  231.f,
+     232.f,  233.f,  234.f,  235.f,  236.f,  237.f,  238.f,  239.f,
+     240.f,  241.f,  242.f,  243.f,  244.f,  245.f,  246.f,  247.f,
+     248.f,  249.f,  250.f,  251.f,  252.f,  253.f,  254.f,  255.f
+};
     
-    
-    {  // With this overloaded version, we allow anonymous enums to be used
-  // in {ASSERT|EXPECT}_EQ when compiled with gcc 4, as anonymous
-  // enums can be implicitly cast to BiggestInt.
-  //
-  // Even though its body looks the same as the above version, we
-  // cannot merge the two, as it will make anonymous enums unhappy.
-  static AssertionResult Compare(const char* expected_expression,
-                                 const char* actual_expression,
-                                 BiggestInt expected,
-                                 BiggestInt actual) {
-    return CmpHelperEQ(expected_expression, actual_expression, expected,
-                       actual);
+      static vector<string> LayerTypeList() {
+    CreatorRegistry& registry = Registry();
+    vector<string> layer_types;
+    for (typename CreatorRegistry::iterator iter = registry.begin();
+         iter != registry.end(); ++iter) {
+      layer_types.push_back(iter->first);
+    }
+    return layer_types;
   }
-};
     
-        void ComputeCurrentValue() {
-      if (!AtEnd())
-        current_value_ = ParamType(*current1_, *current2_, *current3_,
-            *current4_, *current5_, *current6_);
-    }
-    bool AtEnd() const {
-      // We must report iterator past the end of the range when either of the
-      // component iterators has reached the end of its range.
-      return
-          current1_ == end1_ ||
-          current2_ == end2_ ||
-          current3_ == end3_ ||
-          current4_ == end4_ ||
-          current5_ == end5_ ||
-          current6_ == end6_;
-    }
-    
-    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
-//
-// ParameterizedTestCaseInfo accumulates tests obtained from TEST_P
-// macro invocations for a particular test case and generators
-// obtained from INSTANTIATE_TEST_CASE_P macro invocations for that
-// test case. It registers tests with all values generated by all
-// generators when asked.
-template <class TestCase>
-class ParameterizedTestCaseInfo : public ParameterizedTestCaseInfoBase {
+    /**
+ * @brief Abstract base class that factors out the BLAS code common to
+ *        ConvolutionLayer and DeconvolutionLayer.
+ */
+template <typename Dtype>
+class BaseConvolutionLayer : public Layer<Dtype> {
  public:
-  // ParamType and GeneratorCreationFunc are private types but are required
-  // for declarations of public methods AddTestPattern() and
-  // AddTestCaseInstantiation().
-  typedef typename TestCase::ParamType ParamType;
-  // A function that returns an instance of appropriate generator type.
-  typedef ParamGenerator<ParamType>(GeneratorCreationFunc)();
+  explicit BaseConvolutionLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
     
-    {  T0 f0_;
-  T1 f1_;
-  T2 f2_;
-  T3 f3_;
-  T4 f4_;
-  T5 f5_;
-  T6 f6_;
-  T7 f7_;
-  T8 f8_;
+    {}  // namespace caffe
+    
+      virtual inline const char* type() const { return 'Concat'; }
+  virtual inline int MinBottomBlobs() const { return 1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+      bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnLRNDescriptor_t norm_desc_;
+  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
+    
+    
+    {}  // namespace caffe
+    
+    /**
+ * @brief A layer for learning 'embeddings' of one-hot vector input.
+ *        Equivalent to an InnerProductLayer with one-hot vectors as input, but
+ *        for efficiency the input is the 'hot' index of each column itself.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class EmbedLayer : public Layer<Dtype> {
+ public:
+  explicit EmbedLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    TEST_F(MockEnvTest, FakeSleeping) {
+  int64_t now = 0;
+  auto s = env_->GetCurrentTime(&now);
+  ASSERT_OK(s);
+  env_->FakeSleepForMicroseconds(3 * 1000 * 1000);
+  int64_t after_sleep = 0;
+  s = env_->GetCurrentTime(&after_sleep);
+  ASSERT_OK(s);
+  auto delta = after_sleep - now;
+  // this will be true unless test runs for 2 seconds
+  ASSERT_TRUE(delta == 3 || delta == 4);
+}
+    
+      // Reports dropped bytes to the reporter.
+  // buffer_ must be updated to remove the dropped bytes prior to invocation.
+  void ReportCorruption(size_t bytes, const char* reason);
+  void ReportDrop(size_t bytes, const Status& reason);
+    
+      jboolean attached_thread = JNI_FALSE;
+  JNIEnv* env = getJniEnv(&attached_thread);
+  assert(env != nullptr);
+    
+     private:
+    // used for synchronisation in compare method
+    std::unique_ptr<port::Mutex> mtx_compare;
+    // used for synchronisation in findShortestSeparator method
+    std::unique_ptr<port::Mutex> mtx_findShortestSeparator;
+    std::unique_ptr<const char[]> m_name;
+    jmethodID m_jCompareMethodId;
+    jmethodID m_jFindShortestSeparatorMethodId;
+    jmethodID m_jFindShortSuccessorMethodId;
+    
+    template <typename C, ordering o, bool ne>
+struct cmp_pred : private C {
+  using C::C;
+    }
+    
+      static Entry& entryInstance() {
+    /* library-local */ static auto entry = detail::createGlobal<Entry, Tag>();
+    return *entry;
+  }
+    
+    #include <atomic>
+    
+    
+    {    queues_.reserve(capacities.size());
+    for (auto capacity : capacities) {
+      queues_.emplace_back(capacity);
+    }
+  }
+    
+      BlockingQueueAddResult add(T item) override {
+    queue_.enqueue(std::move(item));
+    return sem_.post();
+  }
+    
+      // Move from the registration phase to the 'you can actually instantiate
+  // things now' phase.
+  folly::SingletonVault::singleton()->registrationComplete();
+    
+    template <size_t M>
+FOLLY_ALWAYS_INLINE hazptr_array<M>& hazptr_array<M>::operator=(
+    hazptr_array&& other) noexcept {
+  HAZPTR_DEBUG_PRINT(this << ' ' << M << ' ' << &other);
+  auto h = reinterpret_cast<hazptr_holder*>(&raw_);
+  for (size_t i = 0; i < M; ++i) {
+    h[i] = std::move(other[i]);
+    HAZPTR_DEBUG_PRINT(i << ' ' << &h[i] << ' ' << &other[i]);
+  }
+  empty_ = other.empty_;
+  other.empty_ = true;
+  return *this;
+}
+    
+    
+    {  // vector of {quantile, value}
+  std::vector<std::pair<double, double>> quantiles;
 };
     
-    # define GTEST_TEMPLATE_ template <typename T> class
+      static time_point now() {
+    return Now;
+  }
     
-    /*Modern gcc (4.x) can compile the naive versions of min and max with cmov if
-   given an appropriate architecture, but the branchless bit-twiddling versions
-   are just as fast, and do not require any special target architecture.
-  Earlier gcc versions (3.x) compiled both code to the same assembly
-   instructions, because of the way they represented ((_b)>(_a)) internally.*/
-#define OC_MAXI(_a,_b)      ((_a)-((_a)-(_b)&-((_b)>(_a))))
-#define OC_MINI(_a,_b)      ((_a)+((_b)-(_a)&-((_b)<(_a))))
-/*Clamps an integer into the given range.
-  If _a>_c, then the lower bound _a is respected over the upper bound _c (this
-   behavior is required to meet our documented API behavior).
-  _a: The lower bound.
-  _b: The value to clamp.
-  _c: The upper boud.*/
-#define OC_CLAMPI(_a,_b,_c) (OC_MAXI(_a,OC_MINI(_b,_c)))
-#define OC_CLAMP255(_x)     ((unsigned char)((((_x)<0)-1)&((_x)|-((_x)>255))))
-/*This has a chance of compiling branchless, and is just as fast as the
-   bit-twiddling method, which is slightly less portable, since it relies on a
-   sign-extended rightshift, which is not guaranteed by ANSI (but present on
-   every relevant platform).*/
-#define OC_SIGNI(_a)        (((_a)>0)-((_a)<0))
-/*Slightly more portable than relying on a sign-extended right-shift (which is
-   not guaranteed by ANSI), and just as fast, since gcc (3.x and 4.x both)
-   compile it into the right-shift anyway.*/
-#define OC_SIGNMASK(_a)     (-((_a)<0))
-/*Divides an integer by a power of two, truncating towards 0.
-  _dividend: The integer to divide.
-  _shift:    The non-negative power of two to divide by.
-  _rmask:    (1<<_shift)-1*/
-#define OC_DIV_POW2(_dividend,_shift,_rmask)\
-  ((_dividend)+(OC_SIGNMASK(_dividend)&(_rmask))>>(_shift))
-/*Divides _x by 65536, truncating towards 0.*/
-#define OC_DIV2_16(_x) OC_DIV_POW2(_x,16,0xFFFF)
-/*Divides _x by 2, truncating towards 0.*/
-#define OC_DIV2(_x) OC_DIV_POW2(_x,1,0x1)
-/*Divides _x by 8, truncating towards 0.*/
-#define OC_DIV8(_x) OC_DIV_POW2(_x,3,0x7)
-/*Divides _x by 16, truncating towards 0.*/
-#define OC_DIV16(_x) OC_DIV_POW2(_x,4,0xF)
-/*Right shifts _dividend by _shift, adding _rval, and subtracting one for
-   negative dividends first.
-  When _rval is (1<<_shift-1), this is equivalent to division with rounding
-   ties away from zero.*/
-#define OC_DIV_ROUND_POW2(_dividend,_shift,_rval)\
-  ((_dividend)+OC_SIGNMASK(_dividend)+(_rval)>>(_shift))
-/*Divides a _x by 2, rounding towards even numbers.*/
-#define OC_DIV2_RE(_x) ((_x)+((_x)>>1&1)>>1)
-/*Divides a _x by (1<<(_shift)), rounding towards even numbers.*/
-#define OC_DIV_POW2_RE(_x,_shift) \
-  ((_x)+((_x)>>(_shift)&1)+((1<<(_shift))-1>>1)>>(_shift))
-/*Swaps two integers _a and _b if _a>_b.*/
-#define OC_SORT2I(_a,_b) \
-  do{ \
-    int t__; \
-    t__=((_a)^(_b))&-((_b)<(_a)); \
-    (_a)^=t__; \
-    (_b)^=t__; \
-  } \
-  while(0)
+    template <typename Value, typename T>
+struct AllocatorHasDefaultObjectDestroy<std::allocator<Value>, T>
+    : std::true_type {};
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
     
-    #undef MULT16_16_Q15_SUB
-static inline int MULT16_16_Q15_SUB(int a, int b, int c, int d) {
-    int m;
-    asm volatile('MULT $ac1, %0, %1' : : 'r' ((int)a), 'r' ((int)b));
-    asm volatile('msub $ac1, %0, %1' : : 'r' ((int)c), 'r' ((int)d));
-    asm volatile('EXTR.W %0,$ac1, %1' : '=r' (m): 'i' (15));
-    return m;
+    {
+    {
+    {} // namespace detail
+} // namespace f14
+} // namespace folly
+    
+    TEST(allocateOverAligned, manualOverCustomAlloc) {
+  // allocates 6 byte with alignment 64 using non-standard allocator, which
+  // will result in an allocation of 64 + alignof(max_align_t) underneath.
+  ExpectingAlloc<short> a(
+      alignof(folly::max_align_t), 64 / alignof(folly::max_align_t) + 1);
+  auto p = folly::allocateOverAligned<decltype(a), 64>(a, 3);
+  EXPECT_EQ((reinterpret_cast<uintptr_t>(p) % 64), 0);
+  folly::deallocateOverAligned<decltype(a), 64>(a, p, 3);
+  EXPECT_EQ(
+      (folly::allocationBytesForOverAligned<decltype(a), 64>(3)),
+      64 + alignof(folly::max_align_t));
 }
-    
-    
-    {  state_ = SingletonHolderState::Dead;
-}
-    
-    #include <folly/synchronization/Hazptr.h>
-    
-    #include <folly/concurrency/UnboundedQueue.h>
-#include <folly/executors/task_queue/BlockingQueue.h>
-#include <folly/synchronization/LifoSem.h>
     
     namespace folly {
-  using std::goodMallocSize;
-  using std::jemallocMinInPlaceExpandable;
-  using std::usingJEMalloc;
-  using std::smartRealloc;
-  using std::checkedMalloc;
-  using std::checkedCalloc;
-  using std::checkedRealloc;
-}
-    
-    FOLLY_ALWAYS_INLINE int __builtin_ctz(unsigned int x) {
-  unsigned long index;
-  return int(_BitScanForward(&index, (unsigned long)x) ? index : 32);
-}
-    
-    /** hazptr_tc_entry */
-    
-    /* Test user defined type support */
-struct UserDefinedType {
-  explicit UserDefinedType(folly::StringPiece value) {
-    if (value == 'a') {
-      value_ = 0;
-    } else if (value == 'b') {
-      value_ = 100;
-    } else {
-      throw std::runtime_error('Invalid value passed to UserDefinedType ctor');
+namespace settings {
     }
-  }
     }
