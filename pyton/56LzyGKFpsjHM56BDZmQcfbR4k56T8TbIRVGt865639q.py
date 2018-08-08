@@ -1,58 +1,70 @@
 
         
-        
-def prepare_url(value):
-    # Issue #1483: Make sure the URL always has a trailing slash
-    httpbin_url = value.url.rstrip('/') + '/'
+        cc_test(
+    name = 'mst_solver_test',
+    size = 'small',
+    srcs = ['mst_solver_test.cc'],
+    deps = [
+        ':mst_solver',
+        '//dragnn/core/test:generic',
+        '//syntaxnet:base',
+        '//syntaxnet:test_main',
+        '@org_tensorflow//tensorflow/core:test',
+    ],
+)
     
-        def test_basic_response(self):
-        '''the basic response server returns an empty http response'''
-        with Server.basic_response_server() as (host, port):
-            r = requests.get('http://{0}:{1}'.format(host, port))
-            assert r.status_code == 200
-            assert r.text == u''
-            assert r.headers['Content-Length'] == '0'
+        builder = bulk_component.BulkFeatureExtractorComponentBuilder(
+        self.master, component_spec)
+    builder.network = AssertPreCreateBeforeCreateNetwork(builder, self)
+    builder.build_greedy_training(
+        component.MasterState(['foo', 'bar'], 2), self.network_states)
     
-            :param proxy: The proxy to return a urllib3 ProxyManager for.
-        :param proxy_kwargs: Extra keyword arguments used to configure the Proxy Manager.
-        :returns: ProxyManager
-        :rtype: urllib3.ProxyManager
-        '''
-        if proxy in self.proxy_manager:
-            manager = self.proxy_manager[proxy]
-        elif proxy.lower().startswith('socks'):
-            username, password = get_auth_from_url(proxy)
-            manager = self.proxy_manager[proxy] = SOCKSProxyManager(
-                proxy,
-                username=username,
-                password=password,
-                num_pools=self._pool_connections,
-                maxsize=self._pool_maxsize,
-                block=self._pool_block,
-                **proxy_kwargs
-            )
-        else:
-            proxy_headers = self.proxy_headers(proxy)
-            manager = self.proxy_manager[proxy] = proxy_from_url(
-                proxy,
-                proxy_headers=proxy_headers,
-                num_pools=self._pool_connections,
-                maxsize=self._pool_maxsize,
-                block=self._pool_block,
-                **proxy_kwargs)
+    # Imported for FLAGS.tf_master, which is used in the lexicon module.
     
-        def __eq__(self, other):
-        if isinstance(other, Mapping):
-            other = CaseInsensitiveDict(other)
-        else:
-            return NotImplemented
-        # Compare insensitively
-        return dict(self.lower_items()) == dict(other.lower_items())
-    
-    This module implements the Requests API.
+            app.config.from_envvar('YOURAPPLICATION_SETTINGS')
     
     
-def merge_hooks(request_hooks, session_hooks, dict_class=OrderedDict):
-    '''Properly merges both requests and session hooks.
+def attach_enctype_error_multidict(request):
+    '''Since Flask 0.8 we're monkeypatching the files object in case a
+    request is detected that does not use multipart form data but the files
+    object is accessed.
+    '''
+    oldcls = request.files.__class__
+    class newcls(oldcls):
+        def __getitem__(self, key):
+            try:
+                return oldcls.__getitem__(self, key)
+            except KeyError:
+                if key not in request.form:
+                    raise
+                raise DebugFilesKeyError(request, key)
+    newcls.__name__ = oldcls.__name__
+    newcls.__module__ = oldcls.__module__
+    request.files.__class__ = newcls
     
-    packages = ['requests']
+    
+# Core signals.  For usage examples grep the source code or consult
+# the API documentation in docs/api.rst as well as docs/signals.rst
+template_rendered = _signals.signal('template-rendered')
+before_render_template = _signals.signal('before-render-template')
+request_started = _signals.signal('request-started')
+request_finished = _signals.signal('request-finished')
+request_tearing_down = _signals.signal('request-tearing-down')
+got_request_exception = _signals.signal('got-request-exception')
+appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
+appcontext_pushed = _signals.signal('appcontext-pushed')
+appcontext_popped = _signals.signal('appcontext-popped')
+message_flashed = _signals.signal('message-flashed')
+
+    
+        from site_app import app
+    assert app.instance_path == \
+        modules_tmpdir.join('var').join('site_app-instance')
+    
+        response = app.test_client().get('/')
+    assert response.status_code == 500
+    assert not flask.request
+    assert not flask.current_app
+
+    
+    import pytest
