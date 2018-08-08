@@ -1,282 +1,186 @@
 
         
-        template<typename T> inline
-dnnError_t dnnBatchNormalizationCreateBackwardScaleShift(
-    dnnPrimitive_t* pBatchNormalization,
-    dnnPrimitiveAttributes_t attributes,
-    const dnnLayout_t dataLayout,
-    T eps);
+        // Generate param traits read methods.
+#include 'ipc/param_traits_read_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
     
-            // Copy data to the CPU device if required.
-        const ValueType *valueData;
-        NDArrayViewPtr cpuArrayView;
-        if (Device().Type() == DeviceKind::GPU)
-        {
-            // TODO: leverage sparse if the original NDArrayView is in spase.
-            cpuArrayView = MakeSharedObject<NDArrayView>(GetDataType(), Shape(), DeviceDescriptor::CPUDevice());
-            cpuArrayView->CopyFrom(*Data());
-        }
-        else if (Device().Type() == DeviceKind::CPU)
-        {
-            // TODO: direct process sparse data without copy
-            if (GetStorageFormat() != StorageFormat::Dense)
-            {
-                cpuArrayView = MakeSharedObject<NDArrayView>(GetDataType(), Shape(), DeviceDescriptor::CPUDevice());
-                cpuArrayView->CopyFrom(*Data());
-            }
-            else
-            {
-                cpuArrayView = Data();
-            }
-        } 
-        else
-        {
-            LogicError('Invalid device type (%u).', (unsigned int)Device().Type());
-        }
-    
-        // both m1 and m2 are passed in normal form (i.e., not transposed)
-    void KhatriRaoProduct(const ssematrixbase &m1, const ssematrixbase &m2)
-    {
-        auto &us = *this;
-        assert(m1.cols() == m2.cols());
-        assert(us.rows() == m1.rows() * m2.rows());
-    }
-    
-        // compute after second pass
-    double m_variance;
-    double m_stddev;
-    
-        static ProgressTracing& GetStaticInstance()
-    {
-        static ProgressTracing us;
-        return us;
-    } // wrap static state in an accessor, so we won't need a CPP file
-    
-    
-    {    return std::equal(s1.begin(), s1.end(), s2.begin(), [](const TElement& a, const TElement& b)
-    {
-        return std::tolower(a) == std::tolower(b);
-    });
+    void Clipboard::SetText(std::string& text) {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  ui::Clipboard::ObjectMap map;
+  map[ui::Clipboard::CBF_TEXT].push_back(
+      std::vector<char>(text.begin(), text.end()));
+  clipboard->WriteObjects(ui::CLIPBOARD_TYPE_COPY_PASTE, map);
 }
     
-    /*! \brief namespace of base64 decoding and encoding table */
-namespace base64 {
-const char DecodeTable[] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  62,  // '+'
-  0, 0, 0,
-  63,  // '/'
-  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
-  0, 0, 0, 0, 0, 0, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
-  0, 0, 0, 0, 0, 0,
-  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
+    
+bool MenuDelegate::GetAcceleratorForCommandId(
+      int command_id,
+      ui::Accelerator* accelerator) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+    }
+    
+    #include 'extensions/browser/extension_function.h'
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethod', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodFunction);
 };
-static const char EncodeTable[] =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-}  // namespace base64
-/*! \brief the stream that reads from base64, note we take from file pointers */
-class Base64InStream: public dmlc::Stream {
- public:
-  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
-    reader_.set_stream(fs);
-    num_prev = 0; tmp_ch = 0;
-  }
-  /*!
-   * \brief initialize the stream position to beginning of next base64 stream
-   * call this function before actually start read
-   */
-  inline void InitPosition(void) {
-    // get a character
-    do {
-      tmp_ch = reader_.GetChar();
-    } while (isspace(tmp_ch));
-  }
-  /*! \brief whether current position is end of a base64 stream */
-  inline bool IsEOF(void) const {
-    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    using base64::DecodeTable;
-    if (size == 0) return 0;
-    // use tlen to record left size
-    size_t tlen = size;
-    unsigned char *cptr = static_cast<unsigned char*>(ptr);
-    // if anything left, load from previous buffered result
-    if (num_prev != 0) {
-      if (num_prev == 2) {
-        if (tlen >= 2) {
-          *cptr++ = buf_prev[0];
-          *cptr++ = buf_prev[1];
-          tlen -= 2;
-          num_prev = 0;
-        } else {
-          // assert tlen == 1
-          *cptr++ = buf_prev[0]; --tlen;
-          buf_prev[0] = buf_prev[1];
-          num_prev = 1;
-        }
-      } else {
-        // assert num_prev == 1
-        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
-      }
-    }
-    if (tlen == 0) return size;
-    int nvalue;
-    // note: everything goes with 4 bytes in Base64
-    // so we process 4 bytes a unit
-    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
-      // first byte
-      nvalue = DecodeTable[tmp_ch] << 18;
-      {
-        // second byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        nvalue |= DecodeTable[tmp_ch] << 12;
-        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
-        }
-      {
-        // third byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        // handle termination
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == '=') << 'invalid base64 format';
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch] << 6;
-        if (tlen) {
-          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
-        }
-      }
-      {
-        // fourth byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
-            << 'invalid base64 format';
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch];
-        if (tlen) {
-          *cptr++ = nvalue & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev ++] = nvalue & 0xFF;
-        }
-      }
-      // get next char
-      tmp_ch = reader_.GetChar();
-    }
-    if (kStrictCheck) {
-      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
-    }
-    return size - tlen;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64InStream do not support write';
-  }
-    }
-    
-    // implementing configure.
-template<typename PairIter>
-inline void Learner::Configure(PairIter begin, PairIter end) {
-  std::vector<std::pair<std::string, std::string> > vec(begin, end);
-  this->Configure(vec);
-}
-    
-      void Write(const SparsePage& page, dmlc::Stream* fo) override {
-    CHECK(page.offset.size() != 0 && page.offset[0] == 0);
-    CHECK_EQ(page.offset.back(), page.data.size());
-    fo->Write(page.offset);
-    min_index_ = page.base_rowid;
-    fo->Write(&min_index_, sizeof(min_index_));
-    index_.data.resize(page.data.size());
-    value_.data.resize(page.data.size());
-    }
     
     
-    {
-    {bool SimpleDMatrix::SingleColBlock() const {
-  return true;
-}
-}  // namespace data
-}  // namespace xgboost
+    {} // extensions
 
     
-            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-        if (show_demo_window)
-        {
-            ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-            ImGui::ShowDemoWindow(&show_demo_window);
-        }
+      /// \c true if root must be either an array or an object value. Default: \c
+  /// false.
+  bool strictRoot_;
     
-    void ImGui_ImplFreeGLUT_NewFrame()
-{
-    // Setup time step
-    ImGuiIO& io = ImGui::GetIO();
-    int current_time = glutGet(GLUT_ELAPSED_TIME);
-    io.DeltaTime = (current_time - g_Time) / 1000.0f;
-    g_Time = current_time;
+    // Initialize the various types and objects.
+bool InitDescriptorMappingTypes();
+    
+    // Find the file which defines an extension extending the given message type
+// with the given field number.
+// Python DescriptorDatabases are not required to implement this method.
+bool PyDescriptorDatabase::FindFileContainingExtension(
+    const string& containing_type, int field_number,
+    FileDescriptorProto* output) {
+  ScopedPyObjectPtr py_method(
+      PyObject_GetAttrString(py_database_, 'FindFileContainingExtension'));
+  if (py_method == NULL) {
+    // This method is not implemented, returns without error.
+    PyErr_Clear();
+    return false;
+  }
+  ScopedPyObjectPtr py_descriptor(
+      PyObject_CallFunction(py_method.get(), 's#i', containing_type.c_str(),
+                            containing_type.size(), field_number));
+  return GetFileDescriptorProto(py_descriptor.get(), output);
+}
+    
+    #include <string>
+#include <google/protobuf/compiler/code_generator.h>
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_MESSAGE_FIELD_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_MESSAGE_FIELD_H__
+    
+    void RepeatedPrimitiveFieldGenerator::GenerateSerializedSizeCode(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'size += $name$_.CalculateSize(_repeated_$name$_codec);\n');
+}
+    
+    const Options* SourceGeneratorBase::options() {
+  return this->options_;
+}
+    
+    // Generates code for a lite extension, which may be within the scope of some
+// message or may be at file scope.  This is much simpler than FieldGenerator
+// since extensions are just simple identifiers with interesting types.
+class ImmutableExtensionLiteGenerator : public ExtensionGenerator {
+ public:
+  explicit ImmutableExtensionLiteGenerator(const FieldDescriptor* descriptor,
+                                           Context* context);
+  virtual ~ImmutableExtensionLiteGenerator();
     }
     
-    void DebugHUD_DoInterface(DebugHUD *hud)
-{
-    // 1. Show a simple window.
-    // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-    {
-        static float f = 0.0f;
-        static int counter = 0;
-        ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-        ImGui::ColorEdit3('clear color', hud->clearColor);      // Edit 3 floats representing a color
-    }
-    }
+    // Tests that the RotatingTranspose function does the right thing for various
+// transformations.
+// dims=[5, 4, 3, 2]->[5, 2, 4, 3]
+TEST_F(MatrixTest, RotatingTranspose_3_1) {
+  GENERIC_2D_ARRAY<int> m;
+  src_.RotatingTranspose(dims_, kNumDims_, 3, 1, &m);
+  m.ResizeNoInit(kInputSize_ / 3, 3);
+  // Verify that the result is:
+  // output tensor=[[[[0, 2, 4][6, 8, 10][12, 14, 16][18, 20, 22]]
+  //                 [[1, 3, 5][7, 9, 11][13, 15, 17][19, 21, 23]]]
+  //                [[[24, 26, 28]...
+  EXPECT_EQ(0, m(0, 0));
+  EXPECT_EQ(2, m(0, 1));
+  EXPECT_EQ(4, m(0, 2));
+  EXPECT_EQ(6, m(1, 0));
+  EXPECT_EQ(1, m(4, 0));
+  EXPECT_EQ(24, m(8, 0));
+  EXPECT_EQ(26, m(8, 1));
+  EXPECT_EQ(25, m(12, 0));
+}
     
-            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
     
-        g_fenceEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-    if (g_fenceEvent == NULL)
-        return E_FAIL;
+#endif  // TESSERACT_LSTM_LSTM_H_
+
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-      virtual bool hasTag(uint32_t tag) const CXX11_OVERRIDE;
-    
-    bool AbstractProxyRequestCommand::executeInternal()
-{
-  // socket->setBlockingMode();
-  if (httpConnection_->sendBufferIsEmpty()) {
-    auto httpRequest = make_unique<HttpRequest>();
-    httpRequest->setUserAgent(getOption()->get(PREF_USER_AGENT));
-    httpRequest->setRequest(getRequest());
-    httpRequest->setProxyRequest(proxyRequest_);
-    }
+    DIR128::DIR128(                 //from fcoord
+               const FCOORD fc  //vector to quantize
+              ) {
+  int high, low, current;        //binary search
     }
     
+      // Generates debug output relating to the canonical distance between the
+  // two given UTF8 grapheme strings.
+  void DebugCanonical(const char* unichar_str1, const char* unichar_str2);
+  #ifndef GRAPHICS_DISABLED
+  // Debugging for cloud/canonical features.
+  // Displays a Features window containing:
+  // If unichar_str2 is in the unicharset, and canonical_font is non-negative,
+  // displays the canonical features of the char/font combination in red.
+  // If unichar_str1 is in the unicharset, and cloud_font is non-negative,
+  // displays the cloud feature of the char/font combination in green.
+  // The canonical features are drawn first to show which ones have no
+  // matches in the cloud features.
+  // Until the features window is destroyed, each click in the features window
+  // will display the samples that have that feature in a separate window.
+  void DisplaySamples(const char* unichar_str1, int cloud_font,
+                      const char* unichar_str2, int canonical_font);
+  #endif  // GRAPHICS_DISABLED
     
-    {  static std::unique_ptr<AuthConfig> create(std::string user,
-                                            std::string password);
-};
+    
+#ifndef TESSERACT_CLASSIFY_SAMPLEITERATOR_H_
+#define TESSERACT_CLASSIFY_SAMPLEITERATOR_H_
+    
+    	// Set path to vendored ConEmu config file
+	PathCombine(cfgPath, exeDir, L'vendor\\conemu-maximus5\\ConEmu.xml');
+    
+    // This function will create a Huffman tree.
+//
+// The (data,length) contains the population counts.
+// The tree_limit is the maximum bit depth of the Huffman codes.
+//
+// The depth contains the tree, i.e., how many bits are used for
+// the symbol.
+//
+// The actual Huffman tree is constructed in the tree[] array, which has to
+// be at least 2 * length + 1 long.
+//
+// See http://en.wikipedia.org/wiki/Huffman_coding
+void CreateHuffmanTree(const uint32_t *data,
+                       const size_t length,
+                       const int tree_limit,
+                       HuffmanTree* tree,
+                       uint8_t *depth);
+    
+    
+    {}  // namespace guetzli
+
+    
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
+    
+      // Fills in block[] with the 8x8 coefficient block with block coordinates
+  // (block_x, block_y).
+  // NOTE: If the component is 2x2 subsampled, this corresponds to the 16x16
+  // pixel area with upper-left corner (16 * block_x, 16 * block_y).
+  void GetCoeffBlock(int block_x, int block_y,
+                     coeff_t block[kDCTBlockSize]) const;
+    
+    constexpr int kLowestQuality = 70;
+constexpr int kHighestQuality = 110;
