@@ -1,252 +1,266 @@
 
         
-          void WriteIntroduction(io::Printer* printer);
-  void WriteDescriptor(io::Printer* printer);
-  void WriteGeneratedCodeInfo(const Descriptor* descriptor,
-                              io::Printer* printer,
-                              bool last);
-    
-    RepeatedEnumFieldGenerator::RepeatedEnumFieldGenerator(
-    const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options)
-    : FieldGeneratorBase(descriptor, fieldOrdinal, options) {
-}
-    
-      // Write any attributes used to decorate generated function members (methods and properties).
-  // Should not be used to decorate types.
-  void WriteGeneratedCodeAttributes(io::Printer* printer);
-    
-    #include <google/protobuf/compiler/java/java_doc_comment.h>
-    
-    // CodeGenerator implementation which generates Java code.  If you create your
-// own protocol compiler binary and you want it to support Java output, you
-// can do so by registering an instance of this CodeGenerator with the
-// CommandLineInterface in your main() function.
-class LIBPROTOC_EXPORT JavaGenerator : public CodeGenerator {
- public:
-  JavaGenerator();
-  ~JavaGenerator();
+        namespace Json {
     }
     
-    
-    { private:
-  Context* context_;
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ImmutableGeneratorFactory);
-};
-    
-      // Add the specified file at the specified number.
-  // REQUIRES: This version has not been saved (see VersionSet::SaveTo)
-  // REQUIRES: 'smallest' and 'largest' are smallest and largest keys in file
-  void AddFile(int level, uint64_t file,
-               uint64_t file_size,
-               const InternalKey& smallest,
-               const InternalKey& largest) {
-    FileMetaData f;
-    f.number = file;
-    f.file_size = file_size;
-    f.smallest = smallest;
-    f.largest = largest;
-    new_files_.push_back(std::make_pair(level, f));
-  }
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+    // Find the file that declares the given fully-qualified symbol name.
+bool PyDescriptorDatabase::FindFileContainingSymbol(
+    const string& symbol_name, FileDescriptorProto* output) {
+  ScopedPyObjectPtr py_descriptor(
+      PyObject_CallMethod(py_database_, 'FindFileContainingSymbol', 's#',
+                          symbol_name.c_str(), symbol_name.size()));
+  return GetFileDescriptorProto(py_descriptor.get(), output);
 }
-
-    
-    size_t BlockBuilder::CurrentSizeEstimate() const {
-  return (buffer_.size() +                        // Raw data buffer
-          restarts_.size() * sizeof(uint32_t) +   // Restart array
-          sizeof(uint32_t));                      // Restart array length
-}
-    
-    
-    {  unsigned char data[48] = {
-    0x01, 0xc0, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x14, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x04, 0x00,
-    0x00, 0x00, 0x00, 0x14,
-    0x00, 0x00, 0x00, 0x18,
-    0x28, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x02, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-  };
-  ASSERT_EQ(0xd9963a56, Value(reinterpret_cast<char*>(data), sizeof(data)));
-}
-    
-    void Histogram::Clear() {
-  min_ = kBucketLimit[kNumBuckets-1];
-  max_ = 0;
-  num_ = 0;
-  sum_ = 0;
-  sum_squares_ = 0;
-  for (int i = 0; i < kNumBuckets; i++) {
-    buckets_[i] = 0;
-  }
-}
-    
-    #include 'port/port.h'
-#include 'port/thread_annotations.h'
-    
-      // Returns an estimate of the current (uncompressed) size of the block
-  // we are building.
-  size_t CurrentSizeEstimate() const;
-    
-    
-    {        ok &= luaval_to_boolean(tolua_S, 3,&arg1, 'cc.SimpleAudioEngine:playBackgroundMusic');
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_playBackgroundMusic'', nullptr);
-            return 0;
-        }
-        cobj->playBackgroundMusic(arg0, arg1);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:playBackgroundMusic',argc, 1);
-    return 0;
-    
-    
-    
-    
-    
-    
-    {		// Continue the query.
-		return true;
-	}
     
     
     {
-    {			float minX = -6.0f;
-			float maxX = 0.0f;
-			float minY = 4.0f;
-			float maxY = 6.0f;
-			
-			for (int32 i = 0; i < 400; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position = b2Vec2(RandomFloat(minX,maxX),RandomFloat(minY,maxY));
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&shape, 0.01f);
-			}
-		}
-		
-		{
-			b2PolygonShape shape;
-			shape.SetAsBox(1.5f, 1.5f);
-			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(-40.0f,5.0f);
-			bd.bullet = true;
-			b2Body* body = m_world->CreateBody(&bd);
-			body->CreateFixture(&shape, 1.0f);
-			body->SetLinearVelocity(b2Vec2(150.0f, 0.0f));
-		}
-	}
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
     
-    	static Test* Create()
-	{
-		return new ApplyForce;
-	}
-    
-    
-    {		m_break = false;
-		m_broke = false;
-	}
-    
-    		// Car
-		{
-			b2PolygonShape chassis;
-			b2Vec2 vertices[8];
-			vertices[0].Set(-1.5f, -0.5f);
-			vertices[1].Set(1.5f, -0.5f);
-			vertices[2].Set(1.5f, 0.0f);
-			vertices[3].Set(0.0f, 0.9f);
-			vertices[4].Set(-1.15f, 0.9f);
-			vertices[5].Set(-1.5f, 0.2f);
-			chassis.Set(vertices, 6);
-    }
-    
-    DEFINE_FIND_STATIC_METHOD(KXlog_setAppenderMode, KXlog, 'setAppenderMode', '(I)V')
-JNIEXPORT void JNICALL Java_com_tencent_mars_xlog_Xlog_setAppenderMode
-  (JNIEnv *, jclass, jint _mode) {
-	appender_setmode((TAppenderMode)_mode);
+    TEST(JavaDocCommentTest, Escaping) {
+  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
+  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
+  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
+  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
+  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
+  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
 }
     
-    #endif /* BASEEVENT_INTERFACE_BASEEVENT_H_ */
-
-    
-        snprintf(processname, sizeof(processname), '>>> %s <<<', _processname.c_str());
-    
-    WakeUpLock::WakeUpLock() {
-    object_ = ::wakeupLock_new();
-    ASSERT(object_);
-    xinfo2('new wakeuplock:%p', object_);
-}
-    
-    #include 'basepacker.h'
-    
-    #include <exception>
-#include 'comm/xlogger/xlogger.h'
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Generates Java code for a given .proto file.
     
     
-    {        return NULL;
-    }
+    {}  // namespace testing_internal
     
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+    // A set of macros for testing Google Test assertions or code that's expected
+// to generate Google Test fatal failures.  It verifies that the given
+// statement will cause exactly one fatal Google Test failure with 'substr'
+// being part of the failure message.
+//
+// There are two different versions of this macro. EXPECT_FATAL_FAILURE only
+// affects and considers failures generated in the current thread and
+// EXPECT_FATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
+//
+// The verification of the assertion is done correctly even when the statement
+// throws an exception or aborts the current function.
+//
+// Known restrictions:
+//   - 'statement' cannot reference local non-static variables or
+//     non-static members of the current object.
+//   - 'statement' cannot return a value.
+//   - You cannot stream a failure message to this macro.
+//
+// Note that even though the implementations of the following two
+// macros are much alike, we cannot refactor them to use a common
+// helper macro, due to some peculiarity in how the preprocessor
+// works.  The AcceptsMacroThatExpandsToUnprotectedComma test in
+// gtest_unittest.cc will fail to compile if we do that.
+#define EXPECT_FATAL_FAILURE(statement, substr) \
+  do { \
+    class GTestExpectFatalFailureHelper {\
+     public:\
+      static void Execute() { statement; }\
+    };\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kFatalFailure, (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter:: \
+          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
+      GTestExpectFatalFailureHelper::Execute();\
+    }\
+  } while (::testing::internal::AlwaysFalse())
     
-    class ScopeJEnv {
-  public:
-    ScopeJEnv(JavaVM* jvm, jint _capacity = 16);
-    ~ScopeJEnv();
-    }
     
-    template<typename F>
-inline JStaticMethod<F> JClass::getStaticMethod(
-    const char* name,
-    const char* descriptor) const {
-  const auto env = internal::getEnv();
-  const auto method = env->GetStaticMethodID(self(), name, descriptor);
-  FACEBOOK_JNI_THROW_EXCEPTION_IF(!method);
-  return JStaticMethod<F>{method};
-}
-    
-    void HybridDataOnLoad();
-    
-    /// JMethod specialization for references that wraps the return value in a @ref local_ref
-template<typename R, typename... Args>
-class JMethod<R(Args...)> : public JMethodBase {
- public:
-   // TODO: static_assert is jobject-derived or local_ref jobject
-  using JniRet = typename detail::Convert<typename std::decay<R>::type>::jniType;
-  static_assert(IsPlainJniReference<JniRet>(), 'JniRet must be a JNI reference');
-  using JMethodBase::JMethodBase;
-  JMethod() noexcept {};
-  JMethod(const JMethod& other) noexcept = default;
-    }
-    
-    bool Config::isExperimentalFeatureEnabled(int feature) const
-{
-    return YGConfigIsExperimentalFeatureEnabled(m_config, static_cast<YGExperimentalFeature>(feature));
-}
-
-    
-    #include <nbind/api.h>
-#include <nbind/BindDefiner.h>
-    
-        method(setPadding);
-    method(setPaddingPercent);
-    
-      T* operator->() const {
-    return m_ptr;
+    {  // With this overloaded version, we allow anonymous enums to be used
+  // in {ASSERT|EXPECT}_EQ when compiled with gcc 4, as anonymous
+  // enums can be implicitly cast to BiggestInt.
+  //
+  // Even though its body looks the same as the above version, we
+  // cannot merge the two, as it will make anonymous enums unhappy.
+  static AssertionResult Compare(const char* expected_expression,
+                                 const char* actual_expression,
+                                 BiggestInt expected,
+                                 BiggestInt actual) {
+    return CmpHelperEQ(expected_expression, actual_expression, expected,
+                       actual);
   }
+};
+    
+        void ComputeCurrentValue() {
+      if (!AtEnd())
+        current_value_ = ParamType(*current1_, *current2_, *current3_,
+            *current4_, *current5_, *current6_);
+    }
+    bool AtEnd() const {
+      // We must report iterator past the end of the range when either of the
+      // component iterators has reached the end of its range.
+      return
+          current1_ == end1_ ||
+          current2_ == end2_ ||
+          current3_ == end3_ ||
+          current4_ == end4_ ||
+          current5_ == end5_ ||
+          current6_ == end6_;
+    }
+    
+    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
+//
+// ParameterizedTestCaseInfo accumulates tests obtained from TEST_P
+// macro invocations for a particular test case and generators
+// obtained from INSTANTIATE_TEST_CASE_P macro invocations for that
+// test case. It registers tests with all values generated by all
+// generators when asked.
+template <class TestCase>
+class ParameterizedTestCaseInfo : public ParameterizedTestCaseInfoBase {
+ public:
+  // ParamType and GeneratorCreationFunc are private types but are required
+  // for declarations of public methods AddTestPattern() and
+  // AddTestCaseInstantiation().
+  typedef typename TestCase::ParamType ParamType;
+  // A function that returns an instance of appropriate generator type.
+  typedef ParamGenerator<ParamType>(GeneratorCreationFunc)();
+    }
+    
+    
+    {  T0 f0_;
+  T1 f1_;
+  T2 f2_;
+  T3 f3_;
+  T4 f4_;
+  T5 f5_;
+  T6 f6_;
+  T7 f7_;
+  T8 f8_;
+};
+    
+    # define GTEST_TEMPLATE_ template <typename T> class
+    
+    /*Modern gcc (4.x) can compile the naive versions of min and max with cmov if
+   given an appropriate architecture, but the branchless bit-twiddling versions
+   are just as fast, and do not require any special target architecture.
+  Earlier gcc versions (3.x) compiled both code to the same assembly
+   instructions, because of the way they represented ((_b)>(_a)) internally.*/
+#define OC_MAXI(_a,_b)      ((_a)-((_a)-(_b)&-((_b)>(_a))))
+#define OC_MINI(_a,_b)      ((_a)+((_b)-(_a)&-((_b)<(_a))))
+/*Clamps an integer into the given range.
+  If _a>_c, then the lower bound _a is respected over the upper bound _c (this
+   behavior is required to meet our documented API behavior).
+  _a: The lower bound.
+  _b: The value to clamp.
+  _c: The upper boud.*/
+#define OC_CLAMPI(_a,_b,_c) (OC_MAXI(_a,OC_MINI(_b,_c)))
+#define OC_CLAMP255(_x)     ((unsigned char)((((_x)<0)-1)&((_x)|-((_x)>255))))
+/*This has a chance of compiling branchless, and is just as fast as the
+   bit-twiddling method, which is slightly less portable, since it relies on a
+   sign-extended rightshift, which is not guaranteed by ANSI (but present on
+   every relevant platform).*/
+#define OC_SIGNI(_a)        (((_a)>0)-((_a)<0))
+/*Slightly more portable than relying on a sign-extended right-shift (which is
+   not guaranteed by ANSI), and just as fast, since gcc (3.x and 4.x both)
+   compile it into the right-shift anyway.*/
+#define OC_SIGNMASK(_a)     (-((_a)<0))
+/*Divides an integer by a power of two, truncating towards 0.
+  _dividend: The integer to divide.
+  _shift:    The non-negative power of two to divide by.
+  _rmask:    (1<<_shift)-1*/
+#define OC_DIV_POW2(_dividend,_shift,_rmask)\
+  ((_dividend)+(OC_SIGNMASK(_dividend)&(_rmask))>>(_shift))
+/*Divides _x by 65536, truncating towards 0.*/
+#define OC_DIV2_16(_x) OC_DIV_POW2(_x,16,0xFFFF)
+/*Divides _x by 2, truncating towards 0.*/
+#define OC_DIV2(_x) OC_DIV_POW2(_x,1,0x1)
+/*Divides _x by 8, truncating towards 0.*/
+#define OC_DIV8(_x) OC_DIV_POW2(_x,3,0x7)
+/*Divides _x by 16, truncating towards 0.*/
+#define OC_DIV16(_x) OC_DIV_POW2(_x,4,0xF)
+/*Right shifts _dividend by _shift, adding _rval, and subtracting one for
+   negative dividends first.
+  When _rval is (1<<_shift-1), this is equivalent to division with rounding
+   ties away from zero.*/
+#define OC_DIV_ROUND_POW2(_dividend,_shift,_rval)\
+  ((_dividend)+OC_SIGNMASK(_dividend)+(_rval)>>(_shift))
+/*Divides a _x by 2, rounding towards even numbers.*/
+#define OC_DIV2_RE(_x) ((_x)+((_x)>>1&1)>>1)
+/*Divides a _x by (1<<(_shift)), rounding towards even numbers.*/
+#define OC_DIV_POW2_RE(_x,_shift) \
+  ((_x)+((_x)>>(_shift)&1)+((1<<(_shift))-1>>1)>>(_shift))
+/*Swaps two integers _a and _b if _a>_b.*/
+#define OC_SORT2I(_a,_b) \
+  do{ \
+    int t__; \
+    t__=((_a)^(_b))&-((_b)<(_a)); \
+    (_a)^=t__; \
+    (_b)^=t__; \
+  } \
+  while(0)
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+    #undef MULT16_16_Q15_SUB
+static inline int MULT16_16_Q15_SUB(int a, int b, int c, int d) {
+    int m;
+    asm volatile('MULT $ac1, %0, %1' : : 'r' ((int)a), 'r' ((int)b));
+    asm volatile('msub $ac1, %0, %1' : : 'r' ((int)c), 'r' ((int)d));
+    asm volatile('EXTR.W %0,$ac1, %1' : '=r' (m): 'i' (15));
+    return m;
+}
+    
+    
+    {  state_ = SingletonHolderState::Dead;
+}
+    
+    #include <folly/synchronization/Hazptr.h>
+    
+    #include <folly/concurrency/UnboundedQueue.h>
+#include <folly/executors/task_queue/BlockingQueue.h>
+#include <folly/synchronization/LifoSem.h>
+    
+    namespace folly {
+  using std::goodMallocSize;
+  using std::jemallocMinInPlaceExpandable;
+  using std::usingJEMalloc;
+  using std::smartRealloc;
+  using std::checkedMalloc;
+  using std::checkedCalloc;
+  using std::checkedRealloc;
+}
+    
+    FOLLY_ALWAYS_INLINE int __builtin_ctz(unsigned int x) {
+  unsigned long index;
+  return int(_BitScanForward(&index, (unsigned long)x) ? index : 32);
+}
+    
+    /** hazptr_tc_entry */
+    
+    /* Test user defined type support */
+struct UserDefinedType {
+  explicit UserDefinedType(folly::StringPiece value) {
+    if (value == 'a') {
+      value_ = 0;
+    } else if (value == 'b') {
+      value_ = 100;
+    } else {
+      throw std::runtime_error('Invalid value passed to UserDefinedType ctor');
+    }
+  }
+    }
