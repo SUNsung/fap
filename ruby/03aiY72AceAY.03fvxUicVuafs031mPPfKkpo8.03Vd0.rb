@@ -1,30 +1,85 @@
 
         
-                def test_url_sub_key_for_sqlite3
-          spec = resolve :production, 'production' => { 'url' => 'sqlite3:foo?encoding=utf8' }
-          assert_equal({
-            'adapter'  => 'sqlite3',
-            'database' => 'foo',
-            'encoding' => 'utf8',
-            'name'     => 'production' }, spec)
+          def evernote_client
+    EvernoteOAuth::Client.new(
+      token:           evernote_oauth_token,
+      consumer_key:    evernote_consumer_key,
+      consumer_secret: evernote_consumer_secret,
+      sandbox:         use_sandbox?
+    )
+  end
+    
+      def set_table_sort(sort_options)
+    valid_sorts = sort_options[:sorts] or raise ArgumentError.new('You must specify :sorts as an array of valid sort attributes.')
+    default = sort_options[:default] || { valid_sorts.first.to_sym => :desc }
+    
+                  # Read!
+              data << io.readpartial(READ_CHUNK_SIZE).encode('UTF-8', Encoding.default_external)
+            else
+              # Do a simple non-blocking read on the IO object
+              data << io.read_nonblock(READ_CHUNK_SIZE)
+            end
+          rescue Exception => e
+            # The catch-all rescue here is to support multiple Ruby versions,
+            # since we use some Ruby 1.9 specific exceptions.
+    
+              # Success, exit status 0
+          0
+        end
+      end
+    end
+  end
+end
+
+    
+            # Get the proper capability host to check
+        cap_host = nil
+        if type == :host
+          cap_host = @env.host
+        else
+          with_target_vms([]) do |vm|
+            cap_host = case type
+                       when :provider
+                         vm.provider
+                       when :guest
+                         vm.guest
+                       else
+                         raise Vagrant::Errors::CLIInvalidUsage,
+                           help: opts.help.chomp
+                       end
+          end
         end
     
-          def inspect
-        Kernel.instance_method(:inspect).bind(self).call
-      end
+    module Metasploit
+  module Framework
+    class Application < Rails::Application
+      include Metasploit::Framework::CommonEngine
     
-      private
-    def subscribe_to_chat_channel(identifier = @chat_identifier)
-      @subscriptions.execute_command 'command' => 'subscribe', 'identifier' => identifier
-      assert_equal identifier, @subscriptions.identifiers.last
+    msfenv_real_pathname = Pathname.new(__FILE__).realpath
+root = msfenv_real_pathname.parent.parent
     
-    class BroadcastingTest < ActionCable::TestCase
-  test 'fetching a broadcaster converts the broadcasting queue to a string' do
-    broadcasting = :test_queue
-    server = TestServer.new
-    broadcaster = server.broadcaster_for(broadcasting)
+    # Copyright (C) 2008 Rapid7, Inc.
     
-      def validate_type
-    errors.add(:type, 'cannot be changed once an instance has been created') if type_changed? && !new_record?
-    errors.add(:type, 'is not a valid type') unless self.class.valid_type?(type)
-  end
+    #certCN cannot contain commas
+certCN 		= 'Metasploit Inc.'
+#keytoolOpts 	= '-genkey -alias signFiles -keystore msfkeystore ' +
+#		  '-storepass msfstorepass -dname \'cn=#{certCN}\' ' +
+#		  '-keypass msfkeypass'
+    
+        private
+    
+            def matches? subject
+          @subject = subject
+          @subject = @subject.class unless Class === @subject
+          responds? && has_column?
+        end
+    
+            def allowing *types
+          @allowed_types = types.flatten
+          self
+        end
+    
+          class ValidateAttachmentPresenceMatcher
+        def initialize attachment_name
+          @attachment_name = attachment_name
+        end
