@@ -1,89 +1,41 @@
 
         
-          # Setting the :extname option will control what extension (if any) is appended to the url for assets
-  def test_javascript_include_tag
-    assert_dom_equal '<script src='/foo.js'></script>',  javascript_include_tag('/foo')
-    assert_dom_equal '<script src='/foo'></script>',     javascript_include_tag('/foo', extname: false)
-    assert_dom_equal '<script src='/foo.bar'></script>', javascript_include_tag('/foo', extname: '.bar')
-  end
+          def dry_run!(event = nil)
+    @dry_run = true
     
-            adapter = adapter.camelize
-        adapter = 'PostgreSQL' if adapter == 'Postgresql'
-        'ActionCable::SubscriptionAdapter::#{adapter}'.constantize
-      end
+      # Optional
+  #   Override this method if you need to group multiple agents based on an API key,
+  #   or server they connect to.
+  #   Have a look at the TwitterStreamAgent for an example.
+  def self.setup_worker; end
+    
+      def tumblr
+    Tumblr.configure do |config|
+      config.consumer_key = tumblr_consumer_key
+      config.consumer_secret = tumblr_consumer_secret
+      config.oauth_token = tumblr_oauth_token
+      config.oauth_token_secret = tumblr_oauth_token_secret
     end
+    
+    Tumblr::Client.new
   end
 end
-
     
-    module Web
-  class Topic < ActiveRecord::Base
-    has_many :replies, dependent: :destroy, foreign_key: 'parent_id', class_name: 'Web::Reply'
-  end
-end
-
+      def destroy
+    @event.destroy
     
-      test 'disallow negative and zero periods' do
-    [ 0, 0.0, 0.seconds, -1, -1.seconds, 'foo', :foo, Object.new ].each do |invalid|
-      e = assert_raise ArgumentError do
-        ChatChannel.periodically :send_updates, every: invalid
-      end
-      assert_match(/Expected every:/, e.message)
-    end
-  end
+      def update
+    @user_credential = current_user.user_credentials.find(params[:id])
     
-      test '#restart shuts down worker pool' do
-    assert_called(@server.worker_pool, :halt) do
-      @server.restart
-    end
-  end
-    
-          def execute
-        options = {}
-        options[:check] = false
-    
-        def log_status(status)
-      puts bold status
+        def script_url_for(gist_id, filename)
+      url = 'https://gist.github.com/#{gist_id}.js'
+      url = '#{url}?file=#{filename}' unless filename.nil? or filename.empty?
+      url
     end
     
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
-    end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
-  end
-  output += '></#{tag}>'
-end
+        def render(context)
+      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
+      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
+      file = code_path + @file
     
-          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
-        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
-        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
-          @img['title']  = title
-          @img['alt']    = alt
-        else
-          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
-        end
-        @img['class'].gsub!(/'/, '') if @img['class']
-      end
-      super
-    end
-    
-      class IncludeArrayTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedFragment}+)/
-    def initialize(tag_name, markup, tokens)
-      if markup =~ Syntax
-        @array_name = $1
-      else
-        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
-      end
-    
-          unless file.file?
-        return 'File #{file} could not be found'
-      end
+    Liquid::Template.register_tag('video', Jekyll::VideoTag)
