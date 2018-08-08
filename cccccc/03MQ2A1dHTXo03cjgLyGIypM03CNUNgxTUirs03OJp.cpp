@@ -1,374 +1,340 @@
 
         
-        class ObjectManager;
+        using base::MessageLoop;
+using base::CommandLine;
+using content::BrowserThread;
+using content::Shell;
+using content::ShellBrowserContext;
+using content::RenderProcessHost;
     
-    // Tell browser to delete a object.
-// function DeallocateObject(id);
-v8::Handle<v8::Value> DeallocateObject(int routing_id,
-                                       int object_id);
+      int id() const { return id_; }
+  std::string extension_id_;
+  ObjectManager* object_manager() const { return object_manager_.get(); }
     
-    base::string16 MenuDelegate::GetLabelForCommandId(int command_id) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  return item->label_;
+    
+    
+    #include 'base/strings/string_piece.h'
+#include 'v8/include/v8.h'
+    
+    void Clipboard::SetText(std::string& text) {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  ui::Clipboard::ObjectMap map;
+  map[ui::Clipboard::CBF_TEXT].push_back(
+      std::vector<char>(text.begin(), text.end()));
+  clipboard->WriteObjects(ui::CLIPBOARD_TYPE_COPY_PASTE, map);
 }
     
-    namespace nw {
-    }
-    
-    void Menu::UpdateKeys(views::FocusManager *focus_manager){
-  if (focus_manager == NULL){
-    return ;
-  } else {
-    focus_manager_ = focus_manager;
-    for(auto* item : menu_items_) {
-      item->UpdateKeys(focus_manager);
-    }
-  }
+    void MenuItem::SetEnabled(bool enabled) {
+  is_enabled_ = enabled;
+  if (menu_)
+    menu_->UpdateStates();
 }
-    
-    namespace nw {
-    }
     
      protected:
-  ~NwClipboardReadAvailableTypesFunction() override;
+  ~NwAppClearAppCacheFunction() override;
     
+    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringWithFixupFunction(){}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethodAsync', UNKNOWN)
+ protected:
+  ~NwMenuGetNSStringWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
  private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodAsyncFunction);
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
 };
     
-    namespace extensions {
-    }
-    
-    void ComputeJacobians(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
-                      const IntrinsicParams& param,  InputArray omc, InputArray Tc,
-                      const int& check_cond, const double& thresh_cond, Mat& JJ2_inv, Mat& ex3);
-    
-    #endif /* OPENCV_CUDA_WARP_REDUCE_HPP__ */
-
+    void dAB(cv::InputArray A, InputArray B, OutputArray dABdA, OutputArray dABdB);
     
     
-    {}
-    
-            LOGPRINTF(stderr, 'Estimating Statistics --> %ls\n', bnNode->GetName().c_str());
-    
-    using namespace std;
-using namespace Microsoft::MSR::ScriptableObjects;
-    
-    template <class _T>
-class const_array_ref
-{
-    const _T* data;
-    size_t n;
-    inline void check_index(size_t i) const
-    {
-        i;
-        assert(i < n);
-    }
-    inline void check_ptr() const
-    {
-        n;
-        data;
-        assert(n == 0 || data != NULL);
-    }
-    }
-    
-    using namespace std;
-using namespace ScriptableObjects;
-    
-        auto process = PlatformProcess::launchWorker(
-        kProcessTestExecPath.c_str(),
-        static_cast<int>(kExpectedWorkerArgsCount),
-        &argv[0]);
-    for (size_t i = 0; i < argv.size(); i++) {
-      delete[] argv[i];
-    }
-    
-    TEST_F(TablesTests, test_constraint) {
-  auto constraint = Constraint(EQUALS);
-  constraint.expr = 'none';
-    }
-    
-    Status WmiResultItem::GetUnsignedShort(const std::string& name,
-                                       unsigned short& ret) const {
-  std::wstring property_name = stringToWstring(name);
-  VARIANT value;
-  HRESULT hr = result_->Get(property_name.c_str(), 0, &value, nullptr, nullptr);
-    }
-    
-     private:
-  void setName(const std::string& name) {
-    name_ = name;
-  }
-    
-     public:
-  bool shouldFire(const FSEventsSubscriptionContextRef& sc,
-                  const FSEventsEventContextRef& ec) const override;
-    
-    
-/*
- * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
- * Method:    XGDMatrixCreateFromMat
- * Signature: ([FIIF)J
- */
-JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGDMatrixCreateFromMat
-  (JNIEnv *jenv, jclass jcls, jfloatArray jdata, jint jnrow, jint jncol, jfloat jmiss, jlongArray jout) {
-  DMatrixHandle result;
-  jfloat* data = jenv->GetFloatArrayElements(jdata, 0);
-  bst_ulong nrow = (bst_ulong)jnrow;
-  bst_ulong ncol = (bst_ulong)jncol;
-  jint ret = (jint) XGDMatrixCreateFromMat((float const *)data, nrow, ncol, jmiss, &result);
-  setHandle(jenv, jout, result);
-  //release
-  jenv->ReleaseFloatArrayElements(jdata, data, 0);
-  return ret;
+    {    sizes[OUTPUT][0] = sizes[REF_OUTPUT][0] = cvSize(1, 1);
+    types[OUTPUT][0] = types[REF_OUTPUT][0] = CV_8UC1;
 }
     
-    void DMatrix::SaveToLocalFile(const std::string& fname) {
-  data::SimpleCSRSource source;
-  source.CopyFrom(this);
-  std::unique_ptr<dmlc::Stream> fo(dmlc::Stream::Create(fname.c_str(), 'w'));
-  source.SaveBinary(fo.get());
+                static __device__ __forceinline__ int atomicMin(int* address, int val)
+            {
+                return ::atomicMin(address, val);
+            }
+            static __device__ __forceinline__ float atomicMin(float* address, float val)
+            {
+            #if __CUDA_ARCH__ >= 120
+                int* address_as_i = (int*) address;
+                int old = *address_as_i, assumed;
+                do {
+                    assumed = old;
+                    old = ::atomicCAS(address_as_i, assumed,
+                        __float_as_int(::fminf(val, __int_as_float(assumed))));
+                } while (assumed != old);
+                return __int_as_float(old);
+            #else
+                (void) address;
+                (void) val;
+                return 0.0f;
+            #endif
+            }
+            static __device__ __forceinline__ double atomicMin(double* address, double val)
+            {
+            #if __CUDA_ARCH__ >= 130
+                unsigned long long int* address_as_ull = (unsigned long long int*) address;
+                unsigned long long int old = *address_as_ull, assumed;
+                do {
+                    assumed = old;
+                    old = ::atomicCAS(address_as_ull, assumed,
+                        __double_as_longlong(::fmin(val, __longlong_as_double(assumed))));
+                } while (assumed != old);
+                return __longlong_as_double(old);
+            #else
+                (void) address;
+                (void) val;
+                return 0.0;
+            #endif
+            }
+    
+    
+    {    // Legacy
+    extern void (CODEGEN_FUNCPTR *EnableClientState)(GLenum cap);
+    extern void (CODEGEN_FUNCPTR *DisableClientState)(GLenum cap);
+    extern void (CODEGEN_FUNCPTR *VertexPointer)(GLint size, GLenum type, GLsizei stride, const GLvoid *ptr);
+    extern void (CODEGEN_FUNCPTR *NormalPointer)(GLenum type, GLsizei stride, const GLvoid *ptr);
+    extern void (CODEGEN_FUNCPTR *ColorPointer)(GLint size, GLenum type, GLsizei stride, const GLvoid *ptr);
+    extern void (CODEGEN_FUNCPTR *TexCoordPointer)(GLint size, GLenum type, GLsizei stride, const GLvoid *ptr);
+    extern void (CODEGEN_FUNCPTR *TexEnvi)(GLenum target, GLenum pname, GLint param);
+    extern void (CODEGEN_FUNCPTR *MatrixMode)(GLenum mode);
+    extern void (CODEGEN_FUNCPTR *LoadIdentity)(void);
+    extern void (CODEGEN_FUNCPTR *Ortho)(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble near_val, GLdouble far_val);
+    extern void (CODEGEN_FUNCPTR *Color3d)(GLdouble red, GLdouble green, GLdouble blue);
 }
     
+    #ifndef CV_CL_GET_PROC_ADDRESS
+#ifdef __GNUC__
+#warning('OPENCV: OpenCL FFT dynamic library loader: check configuration')
+#else
+#pragma message('WARNING: OPENCV: OpenCL FFT dynamic library loader: check configuration')
+#endif
+#define CV_CL_GET_PROC_ADDRESS(name) NULL
+#endif
     
-    {// Enable LOG(CONSOLE) for print messages to console.
-#define LOG_CONSOLE ::xgboost::ConsoleLogger()
-// Enable LOG(TRACKER) for print messages to tracker
-#define LOG_TRACKER ::xgboost::TrackerLogger()
-}  // namespace xgboost.
-#endif  // XGBOOST_LOGGING_H_
-
+    /* ////////////////////////////////////////////////////////////////////
+//
+//  CvMat helper tables
+//
+// */
     
-    // logistic loss, but predict un-transformed margin
-struct LogisticRaw : public LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
+      /// Set the timer's expiry time as an absolute time.
+  /**
+   * This function sets the expiry time. Any pending asynchronous wait
+   * operations will be cancelled. The handler for each cancelled operation will
+   * be invoked with the boost::asio::error::operation_aborted error code.
+   *
+   * @param expiry_time The expiry time to be used for the timer.
+   *
+   * @return The number of asynchronous operations that were cancelled.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   *
+   * @note If the timer has already expired when expires_at() is called, then
+   * the handlers for asynchronous wait operations will:
+   *
+   * @li have already been invoked; or
+   *
+   * @li have been queued for invocation in the near future.
+   *
+   * These handlers can no longer be cancelled, and therefore are passed an
+   * error code that indicates the successful completion of the wait operation.
+   */
+  std::size_t expires_at(const time_point& expiry_time)
+  {
+    boost::system::error_code ec;
+    std::size_t s = this->service.expires_at(
+        this->implementation, expiry_time, ec);
+    boost::asio::detail::throw_error(ec, 'expires_at');
+    return s;
   }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    predt = common::Sigmoid(predt);
-    return fmaxf(predt * (1.0f - predt), eps);
+    
+      /// Determine the amount of data that may be read without blocking.
+  std::size_t in_avail(boost::system::error_code& ec)
+  {
+    ec = boost::system::error_code();
+    return storage_.size();
   }
-  template <typename T>
-    static T PredTransform(T x) { return x; }
-  template <typename T>
-    static T FirstOrderGradient(T predt, T label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  template <typename T>
-    static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    predt = common::Sigmoid(predt);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static const char* DefaultEvalMetric() { return 'auc'; }
-};
     
-    /*!
- * \brief Registry entry for linear updater.
- */
-struct LinearUpdaterReg
-    : public dmlc::FunctionRegEntryBase<LinearUpdaterReg,
-                                        std::function<LinearUpdater*()> > {};
+    #ifndef BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
+#define BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
     
-      // Sets the coordinates of the current macro-block for the purpose of
-  // CompareBlock() calls.
-  virtual void SwitchBlock(int block_x, int block_y,
-                           int factor_x, int factor_y) = 0;
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+typedef long atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef std::atomic<long> atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef boost::detail::atomic_count atomic_count;
+inline void increment(atomic_count& a, long b) { while (b > 0) ++a, --b; }
+#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
     
-    #ifndef GUETZLI_FAST_LOG_H_
-#define GUETZLI_FAST_LOG_H_
-    
-    namespace guetzli {
-    }
-    
-    enum JPEGReadError {
-  JPEG_OK = 0,
-  JPEG_SOI_NOT_FOUND,
-  JPEG_SOF_NOT_FOUND,
-  JPEG_UNEXPECTED_EOF,
-  JPEG_MARKER_BYTE_NOT_FOUND,
-  JPEG_UNSUPPORTED_MARKER,
-  JPEG_WRONG_MARKER_SIZE,
-  JPEG_INVALID_PRECISION,
-  JPEG_INVALID_WIDTH,
-  JPEG_INVALID_HEIGHT,
-  JPEG_INVALID_NUMCOMP,
-  JPEG_INVALID_SAMP_FACTOR,
-  JPEG_INVALID_START_OF_SCAN,
-  JPEG_INVALID_END_OF_SCAN,
-  JPEG_INVALID_SCAN_BIT_POSITION,
-  JPEG_INVALID_COMPS_IN_SCAN,
-  JPEG_INVALID_HUFFMAN_INDEX,
-  JPEG_INVALID_QUANT_TBL_INDEX,
-  JPEG_INVALID_QUANT_VAL,
-  JPEG_INVALID_MARKER_LEN,
-  JPEG_INVALID_SAMPLING_FACTORS,
-  JPEG_INVALID_HUFFMAN_CODE,
-  JPEG_INVALID_SYMBOL,
-  JPEG_NON_REPRESENTABLE_DC_COEFF,
-  JPEG_NON_REPRESENTABLE_AC_COEFF,
-  JPEG_INVALID_SCAN,
-  JPEG_OVERLAPPING_SCANS,
-  JPEG_INVALID_SCAN_ORDER,
-  JPEG_EXTRA_ZERO_RUN,
-  JPEG_DUPLICATE_DRI,
-  JPEG_DUPLICATE_SOF,
-  JPEG_WRONG_RESTART_MARKER,
-  JPEG_DUPLICATE_COMPONENT_ID,
-  JPEG_COMPONENT_NOT_FOUND,
-  JPEG_HUFFMAN_TABLE_NOT_FOUND,
-  JPEG_HUFFMAN_TABLE_ERROR,
-  JPEG_QUANT_TABLE_NOT_FOUND,
-  JPEG_EMPTY_DHT,
-  JPEG_EMPTY_DQT,
-  JPEG_OUT_OF_BAND_COEFF,
-  JPEG_EOB_RUN_TOO_LONG,
-  JPEG_IMAGE_TOO_LARGE,
-};
-    
-    #endif  // GUETZLI_JPEG_HUFFMAN_DECODE_H_
-
-    
-      DBWrapper* db_wrapper = ObjectWrap::Unwrap<DBWrapper>(args.This());
-  rocksdb::Slice begin  = *v8::String::Utf8Value(args[0]->ToString());
-  rocksdb::Slice end    = *v8::String::Utf8Value(args[1]->ToString());
-  Local<Object> options = args[2]->ToObject();
-  std::string cf        = *v8::String::Utf8Value(args[3]->ToString());
-    
-    TEST_F(MockEnvTest, Corrupt) {
-  const std::string kGood = 'this is a good string, synced to disk';
-  const std::string kCorrupted = 'this part may be corrupted';
-  const std::string kFileName = '/dir/f';
-  unique_ptr<WritableFile> writable_file;
-  ASSERT_OK(env_->NewWritableFile(kFileName, &writable_file, soptions_));
-  ASSERT_OK(writable_file->Append(kGood));
-  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size());
-    }
-    
-    
-unsigned int XXH32_intermediateDigest (void* state);
-/*
-This function does the same as XXH32_digest(), generating a 32-bit hash,
-but preserve memory context.
-This way, it becomes possible to generate intermediate hashes, and then continue feeding data with XXH32_update().
-To free memory context, use XXH32_digest(), or free().
-*/
-    
-      /// Return (list: key)[first..last] (inclusive)
-  /// May throw RedisListException
-  std::vector<std::string> Range(const std::string& key,
-                                 int32_t first, int32_t last);
-    
-    #include 'rocksjni/statisticsjni.h'
-    
-    #include <jni.h>
-#include <memory>
-    
-    
+        // Find the next context with the same key.
+    Value* next_by_key() const
     {
-    {    start->assign(result_start.get());
-  }
-  releaseJniEnv(attached_thread);
-}
-    
-    void SyncPoint::Data::Process(const std::string& point, void* cb_arg) {
-  if (!enabled_) {
-    return;
-  }
-    }
-    
-    #include 'port/port.h'
-#include 'util/random.h'
-    
-    
-    {  OutputOptions output_options_;
-  size_t name_field_width_;
-  UserCounters prev_counters_;
-  bool printed_header_;
-};
-    
-    
-    {
-    {      // See how much iterations should be increased by
-      // Note: Avoid division by zero with max(seconds, 1ns).
-      double multiplier = min_time * 1.4 / std::max(seconds, 1e-9);
-      // If our last run was at least 10% of FLAGS_benchmark_min_time then we
-      // use the multiplier directly. Otherwise we use at most 10 times
-      // expansion.
-      // NOTE: When the last run was at least 10% of the min time the max
-      // expansion should be 14x.
-      bool is_significant = (seconds / min_time) > 0.1;
-      multiplier = is_significant ? multiplier : std::min(10.0, multiplier);
-      if (multiplier <= 1.0) multiplier = 2.0;
-      double next_iters = std::max(multiplier * iters, iters + 1.0);
-      if (next_iters > kMaxIterations) {
-        next_iters = kMaxIterations;
+      context* elem = next_;
+      while (elem)
+      {
+        if (elem->key_ == key_)
+          return elem->value_;
+        elem = elem->next_;
       }
-      VLOG(3) << 'Next iters: ' << next_iters << ', ' << multiplier << '\n';
-      iters = static_cast<int>(next_iters + 0.5);
+      return 0;
     }
-  }
-  // Calculate additional statistics
-  auto stat_reports = ComputeStats(reports);
-  if ((b.complexity != oNone) && b.last_benchmark_instance) {
-    auto additional_run_stats = ComputeBigO(*complexity_reports);
-    stat_reports.insert(stat_reports.end(), additional_run_stats.begin(),
-                        additional_run_stats.end());
-    complexity_reports->clear();
-  }
     
-    // Parses a string for a bool flag, in the form of either
-// '--flag=value' or '--flag'.
-//
-// In the former case, the value is taken as true if it passes IsTruthyValue().
-//
-// In the latter case, the value is taken as true.
-//
-// On success, stores the value of the flag in *value, and returns
-// true.  On failure, returns false without changing *value.
-bool ParseBoolFlag(const char* str, const char* flag, bool* value);
-    
-      LeastSq best_fit;
-    
-    // This data structure will contain the result returned by MinimalLeastSq
-//   - coef        : Estimated coeficient for the high-order term as
-//                   interpolated from data.
-//   - rms         : Normalized Root Mean Squared Error.
-//   - complexity  : Scalability form (e.g. oN, oNLogN). In case a scalability
-//                   form has been provided to MinimalLeastSq this will return
-//                   the same value. In case BigO::oAuto has been selected, this
-//                   parameter will return the best fitting curve detected.
-    
-      std::string walltime_value = LocalDateTimeString();
-  out << indent << FormatKV('date', walltime_value) << ',\n';
-    
-    double BenchmarkReporter::Run::GetAdjustedRealTime() const {
-  double new_time = real_accumulated_time * GetTimeUnitMultiplier(time_unit);
-  if (iterations != 0) new_time /= static_cast<double>(iterations);
-  return new_time;
-}
-    
-    namespace benchmark {
-#ifdef BENCHMARK_OS_WINDOWS
-// Window's Sleep takes milliseconds argument.
-void SleepForMilliseconds(int milliseconds) { Sleep(milliseconds); }
-void SleepForSeconds(double seconds) {
-  SleepForMilliseconds(static_cast<int>(kNumMillisPerSecond * seconds));
-}
-#else   // BENCHMARK_OS_WINDOWS
-void SleepForMicroseconds(int microseconds) {
-  struct timespec sleep_time;
-  sleep_time.tv_sec = microseconds / kNumMicrosPerSecond;
-  sleep_time.tv_nsec = (microseconds % kNumMicrosPerSecond) * kNumNanosPerMicro;
-  while (nanosleep(&sleep_time, &sleep_time) != 0 && errno == EINTR)
-    ;  // Ignore signals and wait for the full interval to elapse.
-}
+      static void do_complete(io_service_impl* owner, operation* base,
+      const boost::system::error_code& /*ec*/,
+      std::size_t /*bytes_transferred*/)
+  {
+    // Take ownership of the handler object.
+    descriptor_read_op* o(static_cast<descriptor_read_op*>(base));
+    ptr p = { boost::asio::detail::addressof(o->handler_), o, o };
     }
+    
+    
+    {private:
+  int descriptor_;
+  ConstBufferSequence buffers_;
+};
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+typedef null_event event;
+#elif defined(BOOST_ASIO_WINDOWS)
+typedef win_event event;
+#elif defined(BOOST_ASIO_HAS_PTHREADS)
+typedef posix_event event;
+#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
+typedef std_event event;
+#endif
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    bool js_cocos2dx_physics3d_Physics3DWorld_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DWorld_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DWorld(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DWorld_setGravity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_stepSimulate(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_needCollisionChecking(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_collisionChecking(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_setGhostPairCallback(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_init(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_removeAllPhysics3DObjects(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_isDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_removeAllPhysics3DConstraints(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_getGravity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_removePhysics3DConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_addPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_setDebugDrawEnable(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_removePhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_getPhysicsObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_addPhysics3DConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_debugDraw(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_sweepShape(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DWorld_Physics3DWorld(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    bool js_cocos2dx_studio_BatchNode_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_BatchNode_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_BatchNode(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_BatchNode_create(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+    
+        argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsShape_getMoment'', nullptr);
+            return 0;
+        }
+        double ret = cobj->getMoment();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.PhysicsShape:getMoment',argc, 0);
+    return 0;
+    
+    
+    
+        b2Vec2* vertices = new b2Vec2[vertexCount];
+    for( int i=0;i<vertexCount;i++) 
+    {
+        vertices[i] = old_vertices[i];
+        vertices[i] *= mRatio;
+    }
+    
+    
+    {
+    {				// We are done, terminate the query.
+				return false;
+			}
+		}
+    
+    
+    {	static Test* Create()
+	{
+		return new AddPair;
+	}
+};
+    
+    		// Cache velocities to improve movement on breakage.
+		if (m_broke == false)
+		{
+			m_velocity = m_body1->GetLinearVelocity();
+			m_angularVelocity = m_body1->GetAngularVelocity();
+		}
+    
+    apollo::common::util::Factory<TrafficRuleConfig::RuleId, TrafficRule,
+                              TrafficRule *(*)(const TrafficRuleConfig &config)>
+    TrafficDecider::s_rule_factory;
+    
+      ts = 1;
+    
+      const auto& trajectory = id_obstacle_map_.at(obstacle_id)->Trajectory();
+  int num_traj_point = trajectory.trajectory_point_size();
+  if (num_traj_point < 2) {
+    return 0.0;
+  }
+    
+      virtual bool Init() = 0;
+    
+    void Box2d::Shift(const Vec2d &shift_vec) {
+  center_ += shift_vec;
+  InitCorners();
+}
+    
+      /**
+   * @brief Compute the square of distance from a point to the polygon.
+   *        If the point is within the polygon, return 0. Otherwise,
+   *        this square of distance is the minimal square of distance from
+   *        the point to the edges of the polygon.
+   * @param point The point to compute whose square of distance to the polygon.
+   * @return The square of distance from the point to the polygon.
+   */
+  double DistanceSquareTo(const Vec2d &point) const;
+    
+    #include 'modules/perception/traffic_light/interface/base_projection.h'
+    
+    #ifndef MODULES_PLANNING_PLANNER_PLANNER_H_
+#define MODULES_PLANNING_PLANNER_PLANNER_H_
+    
+    #endif  // MODULES_PREDICTION_EVALUATOR_VEHICLE_MLP_EVALUATOR_H_
