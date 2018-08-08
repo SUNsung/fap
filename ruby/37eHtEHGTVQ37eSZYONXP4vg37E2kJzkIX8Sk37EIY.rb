@@ -1,97 +1,131 @@
 
         
-        def usercode(f, out)
-  require 'erb'
-  compiler = ERB::Compiler.new('%-')
-  compiler.put_cmd = compiler.insert_cmd = 'out.<<'
-  lineno = f.lineno
-  src, = compiler.compile(f.read)
-  eval(src, binding, f.path, lineno)
+                  External.require_with_graceful_fail 'jekyll-watch'
+          watch_method = Jekyll::Watcher.method(:watch)
+          if watch_method.parameters.size == 1
+            watch_method.call(
+              options
+            )
+          else
+            watch_method.call(
+              options, site
+            )
+          end
+        end
+      end
+    end
+  end
 end
+
     
-      def test_hidden_key
-    bug6899 = '[ruby-core:47253]'
-    foo = 'foor'
-    bar = 'bar'
-    assert_nothing_raised(NotImplementedError, bug6899) do
-      2000.times {eval %[(foo..bar) ? 1 : 2]}
-    end
-    foo = bar
-  end
-    
-      it 'wraps and unwraps data' do
-    a = @s.typed_wrap_struct(1024)
-    @s.typed_get_struct(a).should == 1024
-  end
-    
-      def test_frozen_string_literal
-    all_assertions do |a|
-      [['disable', 'false'], ['enable', 'true']].each do |opt, exp|
-        %W[frozen_string_literal frozen-string-literal].each do |arg|
-          key = '#{opt}=#{arg}'
-          a.for(key) do
-            assert_in_out_err(['--disable=gems', '--#{key}'], 'p('foo'.frozen?)', [exp])
+            def deprecated_relative_permalinks(site)
+          if site.config['relative_permalinks']
+            Jekyll::Deprecator.deprecation_message 'Your site still uses relative permalinks,' \
+                                                   ' which was removed in Jekyll v3.0.0.'
+            true
           end
         end
+    
+          def site
+        @site_drop ||= SiteDrop.new(@obj)
       end
-      %W'disable enable'.product(%W[false true]) do |opt, exp|
-        a.for('#{opt}=>#{exp}') do
-          assert_in_out_err(['-w', '--disable=gems', '--#{opt}=frozen-string-literal'], <<-'end;', [exp])
-            #-*- frozen-string-literal: #{exp} -*-
-            p('foo'.frozen?)
-          end;
-        end
-      end
-    end
+    
+      def regular?
+    !staff?
   end
     
-          with_timezone('America/New_York') do
-        t.localtime
+      def cache_fragment(name)
+    ApplicationSerializer.fragment_cache[name] ||= yield
+  end
+end
+
+    
+        it 'sets $? to a Process::Status' do
+      pid = Process.spawn(ruby_cmd('exit'))
+      Process.wait
+      $?.should be_kind_of(Process::Status)
+      $?.pid.should == pid
+    end
+    
+        assert_equal %w[rdoc ri], @cmd.options[:document]
+  end
+    
+          def reload
+        mtime = File::mtime(@path)
+        if mtime > @mtime
+          @passwd.clear
+          File.open(@path){|io|
+            while line = io.gets
+              line.chomp!
+              case line
+              when %r!\A[^:]+:[a-zA-Z0-9./]{13}\z!
+                if @password_hash == :bcrypt
+                  raise StandardError, '.htpasswd file contains crypt password, only bcrypt passwords supported'
+                end
+                user, pass = line.split(':')
+              when %r!\A[^:]+:\$2[aby]\$\d{2}\$.{53}\z!
+                if @password_hash == :crypt
+                  raise StandardError, '.htpasswd file contains bcrypt password, only crypt passwords supported'
+                end
+                user, pass = line.split(':')
+              when /:\$/, /:{SHA}/
+                raise NotImplementedError,
+                      'MD5, SHA1 .htpasswd file not supported'
+              else
+                raise StandardError, 'bad .htpasswd file'
+              end
+              @passwd[user] = pass
+            end
+          }
+          @mtime = mtime
+        end
       end
     
-      it 'adds the directory at the front of $LOAD_PATH' do
-    dir = tmp('rubylib/incl_front')
-    ENV['RUBYLIB'] = @pre + dir
-    paths = ruby_exe('puts $LOAD_PATH').lines.map(&:chomp)
-    if PlatformGuard.implementation? :ruby
-      # In a MRI checkout, $PWD and some extra -I entries end up as
-      # the first entries in $LOAD_PATH. So just assert that it's not last.
-      idx = paths.index(dir)
-      idx.should < paths.size-1
+    
+    # Set of reserved words used by Ruby, you should not use these for
+    # constants or variables
+    ReservedWords = %w[
+      BEGIN END
+      alias and
+      begin break
+      case class
+      def defined do
+      else elsif end ensure
+      false for
+      if in
+      module
+      next nil not
+      or
+      redo rescue retry return
+      self super
+      then true
+      undef unless until
+      when while
+      yield
+    ]
+    
+    if profile_filename = ENV['PROFILE']
+  require 'ruby-prof'
+  reporter =
+    case (profile_extname = File.extname(profile_filename))
+    when '.txt'
+      RubyProf::FlatPrinterWithLineNumbers
+    when '.html'
+      RubyProf::GraphHtmlPrinter
+    when '.callgrind'
+      RubyProf::CallTreePrinter
     else
-      paths[0].should == dir
+      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
     end
+  File.open(profile_filename, 'w') do |io|
+    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
   end
+else
+  Pod::Command.run(ARGV)
+end
+
     
-      def check_closed
-    raise IOError, 'closed #{self.class}' if closed?
-  end
-    
-      # Deletes every element of the set for which block evaluates to
-  # true, and returns self. Returns an enumerator if no block is
-  # given.
-  def delete_if
-    block_given? or return enum_for(__method__) { size }
-    # @hash.delete_if should be faster, but using it breaks the order
-    # of enumeration in subclasses.
-    select { |o| yield o }.each { |o| @hash.delete(o) }
-    self
-  end
-    
-      def test_include?
-    assert_not_send([@cls[], :include?, 1])
-    assert_not_send([@cls[], :include?, nil])
-    assert_send([@h, :include?, nil])
-    assert_send([@h, :include?, 1])
-    assert_not_send([@h, :include?, 'gumby'])
-  end
-    
-      def as_boolean(string)
-    return true   if string == true   || string =~ (/(true|t|yes|y|1)$/i)
-    return false  if string == false  || string.blank? || string =~ (/(false|f|no|n|0)$/i)
-    raise ArgumentError.new('invalid value for Boolean: \'#{string}\'')
-  end
-    
-              def find_plugins_gem_specs
-            @specs ||= ::Gem::Specification.find_all.select{|spec| logstash_plugin_gem_spec?(spec)}
-          end
+          def initialize(argv)
+        super
+        config.silent = false
+      end
