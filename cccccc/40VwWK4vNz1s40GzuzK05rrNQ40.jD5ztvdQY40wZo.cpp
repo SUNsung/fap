@@ -1,123 +1,318 @@
 
         
-            http://www.apache.org/licenses/LICENSE-2.0
-    
-    class RecordWriterOptions {
- public:
-  enum CompressionType { NONE = 0, ZLIB_COMPRESSION = 1 };
-  CompressionType compression_type = NONE;
-    }
-    
-    REGISTER_KERNEL_BUILDER(Name('TextLineReader').Device(DEVICE_CPU),
-                        TextLineReaderOp);
-REGISTER_KERNEL_BUILDER(Name('TextLineReaderV2').Device(DEVICE_CPU),
-                        TextLineReaderOp);
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-        const string file_format =
-        str_util::Lowercase(file_format_tensor.scalar<string>()());
-    const int32 samples_per_second =
-        samples_per_second_tensor.scalar<int32>()();
-    const int32 bits_per_second = bits_per_second_tensor.scalar<int32>()();
+        std::unique_ptr<ScenarioResult> RunScenario(
+    const grpc::testing::ClientConfig& client_config, size_t num_clients,
+    const grpc::testing::ServerConfig& server_config, size_t num_servers,
+    int warmup_seconds, int benchmark_seconds, int spawn_local_worker_count,
+    const grpc::string& qps_server_target_override,
+    const grpc::string& credential_type, bool run_inproc);
     
     
-    {}  // end namespace tensorflow
+    {  return 0;
+}
 
     
     
-    {}  // namespace testing
+    {}  // namespace grpc_node_generator
     
-    # define TYPED_TEST(CaseName, TestName) \
-  template <typename gtest_TypeParam_> \
-  class GTEST_TEST_CLASS_NAME_(CaseName, TestName) \
-      : public CaseName<gtest_TypeParam_> { \
-   private: \
-    typedef CaseName<gtest_TypeParam_> TestFixture; \
-    typedef gtest_TypeParam_ TypeParam; \
-    virtual void TestBody(); \
-  }; \
-  bool gtest_##CaseName##_##TestName##_registered_ GTEST_ATTRIBUTE_UNUSED_ = \
-      ::testing::internal::TypeParameterizedTest< \
-          CaseName, \
-          ::testing::internal::TemplateSel< \
-              GTEST_TEST_CLASS_NAME_(CaseName, TestName)>, \
-          GTEST_TYPE_PARAMS_(CaseName)>::Register(\
-              '', #CaseName, #TestName, 0); \
-  template <typename gtest_TypeParam_> \
-  void GTEST_TEST_CLASS_NAME_(CaseName, TestName)<gtest_TypeParam_>::TestBody()
+    #include 'src/cpp/common/secure_auth_context.h'
     
-      // Returns the text streamed into this AssertionResult. Test assertions
-  // use it when they fail (i.e., the predicate's outcome doesn't match the
-  // assertion's expectation). When nothing has been streamed into the
-  // object, returns an empty string.
-  const char* message() const {
-    return message_.get() != NULL ?  message_->c_str() : '';
-  }
-  // TODO(vladl@google.com): Remove this after making sure no clients use it.
-  // Deprecated; please use message() instead.
-  const char* failure_message() const { return message(); }
+    gpr_atm grpc::testing::interop::g_got_sigint;
     
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT3.
-// Don't use this in your code.
-#define GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, on_failure)\
-  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, v1, v2, v3), \
-                on_failure)
-    
-      // ParamIterator assumes ownership of the impl_ pointer.
-  ParamIterator(const ParamIterator& other) : impl_(other.impl_->Clone()) {}
-  ParamIterator& operator=(const ParamIterator& other) {
-    if (this != &other)
-      impl_.reset(other.impl_->Clone());
-    return *this;
-  }
-    
-      GTEST_DECLARE_TUPLE_AS_FRIEND_
-    
-    bool js_cocos2dx_physics3d_Physics3DComponent_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DComponent_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DComponent(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DComponent_syncNodeToPhysics(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_addToPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_syncPhysicsToNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_setPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_setTransformInPhysics(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DComponentName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_Physics3DComponent(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    #ifndef AddPair_H
-#define AddPair_H
+    #ifndef TEST_QPS_USAGE_TIMER_H
+#define TEST_QPS_USAGE_TIMER_H
     
     
-    {			if ((p.x < -10.0f && v.x < 0.0f) ||
-				(p.x > 10.0f && v.x > 0.0f))
-			{
-				v.x = -v.x;
-				m_platform->SetLinearVelocity(v);
-			}
-		}
+    {
+    {}  // namespace log
+}  // namespace leveldb
     
-    		b2Body* body2 = m_world->CreateBody(&bd);
-		m_piece2 = body2->CreateFixture(&m_shape2, 1.0f);
     
-    			//m_x = RandomFloat(-1.0f, 1.0f);
-			m_x = 0.20352793f;
-			bd.position.Set(m_x, 10.0f);
-			bd.bullet = true;
+    {}  // namespace leveldb
     
-    		// Car
-		{
-			b2PolygonShape chassis;
-			b2Vec2 vertices[8];
-			vertices[0].Set(-1.5f, -0.5f);
-			vertices[1].Set(1.5f, -0.5f);
-			vertices[2].Set(1.5f, 0.0f);
-			vertices[3].Set(0.0f, 0.9f);
-			vertices[4].Set(-1.15f, 0.9f);
-			vertices[5].Set(-1.5f, 0.2f);
-			chassis.Set(vertices, 6);
+    double Histogram::Percentile(double p) const {
+  double threshold = num_ * (p / 100.0);
+  double sum = 0;
+  for (int b = 0; b < kNumBuckets; b++) {
+    sum += buckets_[b];
+    if (sum >= threshold) {
+      // Scale linearly within this bucket
+      double left_point = (b == 0) ? 0 : kBucketLimit[b-1];
+      double right_point = kBucketLimit[b];
+      double left_sum = sum - buckets_[b];
+      double right_sum = sum;
+      double pos = (threshold - left_sum) / (right_sum - left_sum);
+      double r = left_point + (right_point - left_point) * pos;
+      if (r < min_) r = min_;
+      if (r > max_) r = max_;
+      return r;
     }
+  }
+  return max_;
+}
+    
+    
+    { private:
+  port::Mutex *const mu_;
+  // No copying allowed
+  MutexLock(const MutexLock&);
+  void operator=(const MutexLock&);
+};
+    
+    #endif  // STORAGE_LEVELDB_UTIL_RANDOM_H_
+
+    
+    void InternalFilterPolicy::CreateFilter(const Slice* keys, int n,
+                                        std::string* dst) const {
+  // We rely on the fact that the code in table.cc does not mind us
+  // adjusting keys[].
+  Slice* mkey = const_cast<Slice*>(keys);
+  for (int i = 0; i < n; i++) {
+    mkey[i] = ExtractUserKey(keys[i]);
+    // TODO(sanjay): Suppress dups?
+  }
+  user_policy_->CreateFilter(keys, n, dst);
+}
+    
+    #endif  // STORAGE_LEVELDB_DB_LOG_WRITER_H_
+
+    
+      // Return true iff no entries have been added since the last Reset()
+  bool empty() const {
+    return buffer_.empty();
+  }
+    
+    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
+  Config c;
+  std::vector<std::string> old_views_vec;
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  old_views_vec.clear();
+  auto s = c.update(getTestConfigMap('view_test.conf'));
+  EXPECT_TRUE(s.ok());
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
+    }
+    
+    TEST_F(PermissionsTests, test_nobody_drop) {
+  if (getuid() != 0) {
+    LOG(WARNING) << 'Not root, skipping (explicit) unprivileged testing';
+    return;
+  }
+    }
+    
+    /**
+ * @brief Generate the separator string for query results
+ *
+ * @param lengths The data returned from computeQueryDataLengths
+ * @param columns The order of the keys (since maps are unordered)
+ *
+ * @return A string, with a newline, representing your separator
+ */
+std::string generateToken(const std::map<std::string, size_t>& lengths,
+                          const std::vector<std::string>& columns);
+    
+    
+    {  // Then compute lengths of column names.
+  computeRowLengths(q.front(), lengths, true);
+  expected = {{'name', 10}, {'age', 4}, {'food', 23}, {'number', 6}};
+  EXPECT_EQ(lengths, expected);
+}
+    
+    template <typename EventType>
+using TypedKernelEventContextRef =
+    std::shared_ptr<TypedKernelEventContext<EventType>>;
+    
+    
+    {TEST_F(SyslogTests, test_csv_separator) {
+  ASSERT_EQ(std::vector<std::string>({'', '', '', '', ''}), splitCsv(',,,,'));
+  ASSERT_EQ(std::vector<std::string>({' ', ' ', ' ', ' ', ' '}),
+            splitCsv(' , , , , '));
+  ASSERT_EQ(std::vector<std::string>({'foo', 'bar', 'baz'}),
+            splitCsv('foo,bar,baz'));
+  ASSERT_EQ(std::vector<std::string>({'foo', 'bar', 'baz'}),
+            splitCsv('\'foo\',\'bar\',\'baz\''));
+  ASSERT_EQ(std::vector<std::string>({',foo,', ',bar', 'baz,'}),
+            splitCsv('\',foo,\',\',bar\',\'baz,\''));
+  ASSERT_EQ(std::vector<std::string>({',f\\oo,', ',ba\\'r', 'baz\\,'}),
+            splitCsv('\',f\\oo,\',\',ba\\'r\',\'baz\\,\''));
+  ASSERT_EQ(std::vector<std::string>({'\',f\\o\'o,', '\',ba\\'r', 'baz\\,\''}),
+            splitCsv('\'\'\',f\\o\'\'o,\',\'\'\',ba\\'r\',\'baz\\,\'\'\''));
+  ASSERT_EQ(std::vector<std::string>({'\',f\\ø\'o,', '\',bá\\'r', 'baz\\,\''}),
+            splitCsv('\'\'\',f\\ø\'\'o,\',\'\'\',bá\\'r\',\'baz\\,\'\'\''));
+}
+}
+
+    
+    
+    {
+    {  /// Protects the count of buffered logs
+  RecursiveMutex count_mutex_;
+};
+}
+
+    
+    
+    {        // [Internals]
+        FontInfo        Info;               // Font descriptor of the current font.
+        unsigned int    UserFlags;          // = ImFontConfig::RasterizerFlags
+        FT_Library      FreetypeLibrary;
+        FT_Face         FreetypeFace;
+        FT_Int32        FreetypeLoadFlags;
+    };
+    
+            static float f = 0.0f;
+        ImGui::Text('Hello, world!');
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
+        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
+        ImGui::ShowDemoWindow(NULL);
+    
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'ALLEGRO_BITMAP*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+//  [X] Platform: Clipboard support (from Allegro 5.1.12)
+//  [X] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'.
+    
+    
+    {    return 0;
+}
+
+    
+        // Create Vulkan Instance
+    {
+        VkInstanceCreateInfo create_info = {};
+        create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+        create_info.enabledExtensionCount = extensions_count;
+        create_info.ppEnabledExtensionNames = extensions;
+    }
+    
+        // Main loop
+    MSG msg;
+    ZeroMemory(&msg, sizeof(msg));
+    while (msg.message != WM_QUIT)
+    {
+        // Poll and handle messages (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+            continue;
+        }
+    }
+    
+    #endif
+
+    
+    
+    
+    class StringAppendOperator : public AssociativeMergeOperator {
+ public:
+  // Constructor: specify delimiter
+  explicit StringAppendOperator(char delim_char);
+    }
+    
+      // Notify the underlying storage that no more items will be added.
+  // REQUIRES: external synchronization to prevent simultaneous
+  // operations on the same MemTable.
+  // After MarkImmutable() is called, you should not attempt to
+  // write anything to this MemTable().  (Ie. do not call Add() or Update()).
+  void MarkImmutable() {
+    table_->MarkReadOnly();
+    mem_tracker_.DoneAllocating();
+  }
+    
+    // A builder class to build a merging iterator by adding iterators one by one.
+class MergeIteratorBuilder {
+ public:
+  // comparator: the comparator used in merging comparator
+  // arena: where the merging iterator needs to be allocated from.
+  explicit MergeIteratorBuilder(const InternalKeyComparator* comparator,
+                                Arena* arena, bool prefix_seek_mode = false);
+  ~MergeIteratorBuilder();
+    }
+    
+    int BaseComparatorJniCallback::Compare(const Slice& a, const Slice& b) const {
+  jboolean attached_thread = JNI_FALSE;
+  JNIEnv* env = getJniEnv(&attached_thread);
+  assert(env != nullptr);
+    }
+    
+      class LoggerJniCallback : public JniCallback, public Logger {
+   public:
+     LoggerJniCallback(JNIEnv* env, jobject jLogger);
+     ~LoggerJniCallback();
+    }
+    
+    double HistogramStat::StandardDeviation() const {
+  uint64_t cur_num = num();
+  uint64_t cur_sum = sum();
+  uint64_t cur_sum_squares = sum_squares();
+  if (cur_num == 0) return 0;
+  double variance =
+      static_cast<double>(cur_sum_squares * cur_num - cur_sum * cur_sum) /
+      static_cast<double>(cur_num * cur_num);
+  return sqrt(variance);
+}
+std::string HistogramStat::ToString() const {
+  uint64_t cur_num = num();
+  std::string r;
+  char buf[1650];
+  snprintf(buf, sizeof(buf),
+           'Count: %' PRIu64 ' Average: %.4f  StdDev: %.2f\n',
+           cur_num, Average(), StandardDeviation());
+  r.append(buf);
+  snprintf(buf, sizeof(buf),
+           'Min: %' PRIu64 '  Median: %.4f  Max: %' PRIu64 '\n',
+           (cur_num == 0 ? 0 : min()), Median(), (cur_num == 0 ? 0 : max()));
+  r.append(buf);
+  snprintf(buf, sizeof(buf),
+           'Percentiles: '
+           'P50: %.2f P75: %.2f P99: %.2f P99.9: %.2f P99.99: %.2f\n',
+           Percentile(50), Percentile(75), Percentile(99), Percentile(99.9),
+           Percentile(99.99));
+  r.append(buf);
+  r.append('------------------------------------------------------\n');
+  if (cur_num == 0) return r;   // all buckets are empty
+  const double mult = 100.0 / cur_num;
+  uint64_t cumulative_sum = 0;
+  for (unsigned int b = 0; b < num_buckets_; b++) {
+    uint64_t bucket_value = bucket_at(b);
+    if (bucket_value <= 0.0) continue;
+    cumulative_sum += bucket_value;
+    snprintf(buf, sizeof(buf),
+             '%c %7' PRIu64 ', %7' PRIu64 ' ] %8' PRIu64 ' %7.3f%% %7.3f%% ',
+             (b == 0) ? '[' : '(',
+             (b == 0) ? 0 : bucketMapper.BucketLimit(b-1),  // left
+              bucketMapper.BucketLimit(b),  // right
+              bucket_value,                   // count
+             (mult * bucket_value),           // percentage
+             (mult * cumulative_sum));       // cumulative percentage
+    r.append(buf);
+    }
+    }
+    
+    
+    {
+}
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+        void RemoveSpy(void* _this) {
+        m_thismap.erase(_this);
+    }
+    
+    
+Test_Spy_Sample::Test_Spy_Sample()
+{
+    SPY_ATTACH_CLASS(NULL);
+}
+    
+    #ifndef COMM_HAS_MEMBER_H_
+#define COMM_HAS_MEMBER_H_
