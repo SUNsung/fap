@@ -1,355 +1,252 @@
 
         
-        void SyntaxASTMap::dumpSyntaxMap() const {
-  for (const auto &SyntaxAndSemaNode : SyntaxMap) {
-    auto SyntaxNode = SyntaxAndSemaNode.getFirst();
-    auto SemanticNode = SyntaxAndSemaNode.getSecond();
-    }
-    }
+        namespace tensorflow {
+namespace functor {
+// TODO(b/32239807) No GPU ops for mod yet.
+}  // namespace functor
+}  // namespace tensorflow
     
-    @interface TimeZoneBridgingTester : NSObject
-- (NSTimeZone *)autoupdatingCurrentTimeZone;
-- (BOOL)verifyAutoupdatingTimeZone:(NSTimeZone *)tz;
-@end
-    
-    #elif defined(__CYGWIN__)
-    
-      ResultPlanPtr build(Initialization *emitInto, AbstractionPattern origType,
-                      CanType substType);
-  ResultPlanPtr buildForTuple(Initialization *emitInto,
-                              AbstractionPattern origType,
-                              CanTupleType substType);
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
     
-    {      I = I->getParent();
-    } while (I);
+    {
+    {}  // namespace gtl
+}  // namespace tensorflow
     
-    namespace leveldb {
+    TEST_F(GrpcDebugTest, SendSingleDebugTensorViaGrpcTest) {
+  Tensor tensor(DT_FLOAT, TensorShape({1, 1}));
+  tensor.flat<float>()(0) = 42.0;
+  const DebugNodeKey kDebugNodeKey('/job:localhost/replica:0/task:0/cpu:0',
+                                   'foo_tensor', 0, 'DebugIdentity');
+  TF_ASSERT_OK(DebugIO::PublishDebugTensor(
+      kDebugNodeKey, tensor, Env::Default()->NowMicros(), {server_data_.url}));
+  TF_ASSERT_OK(DebugIO::CloseDebugURL(server_data_.url));
     }
     
-      if (direction_ == kForward) {  // Switch directions?
-    // iter_ is pointing at the current entry.  Scan backwards until
-    // the key changes so we can use the normal reverse scanning code.
-    assert(iter_->Valid());  // Otherwise valid_ would have been false
-    SaveKey(ExtractUserKey(iter_->key()), &saved_key_);
-    while (true) {
-      iter_->Prev();
-      if (!iter_->Valid()) {
-        valid_ = false;
-        saved_key_.clear();
-        ClearSavedValue();
-        return;
-      }
-      if (user_comparator_->Compare(ExtractUserKey(iter_->key()),
-                                    saved_key_) < 0) {
-        break;
-      }
-    }
-    direction_ = kReverse;
+    
+llvm::Optional<ASTNode>
+SyntaxASTMap::getNodeForSyntax(syntax::Syntax SyntaxNode) const {
+  auto Found = SyntaxMap.find(SyntaxNode.Root);
+  if (Found == SyntaxMap.end()) {
+    return None;
   }
-    
-    
-// Called on every log record (each one of which is a WriteBatch)
-// found in a kLogFile.
-static void WriteBatchPrinter(uint64_t pos, Slice record, WritableFile* dst) {
-  std::string r = '--- offset ';
-  AppendNumberTo(&r, pos);
-  r += '; ';
-  if (record.size() < 12) {
-    r += 'log record length ';
-    AppendNumberTo(&r, record.size());
-    r += ' is too small\n';
-    dst->Append(r);
-    return;
-  }
-  WriteBatch batch;
-  WriteBatchInternal::SetContents(&batch, record);
-  r += 'sequence ';
-  AppendNumberTo(&r, WriteBatchInternal::Sequence(&batch));
-  r.push_back('\n');
-  dst->Append(r);
-  WriteBatchItemPrinter batch_item_printer;
-  batch_item_printer.dst_ = dst;
-  Status s = batch.Iterate(&batch_item_printer);
-  if (!s.ok()) {
-    dst->Append('  error: ' + s.ToString() + '\n');
-  }
+  return Found->getSecond();
 }
     
-    std::string CurrentFileName(const std::string& dbname) {
-  return dbname + '/CURRENT';
-}
-    
-    void WriteBatch::Put(const Slice& key, const Slice& value) {
-  WriteBatchInternal::SetCount(this, WriteBatchInternal::Count(this) + 1);
-  rep_.push_back(static_cast<char>(kTypeValue));
-  PutLengthPrefixedSlice(&rep_, key);
-  PutLengthPrefixedSlice(&rep_, value);
-}
-    
-      void PrintHeader() {
-    const int kKeySize = 16;
-    PrintEnvironment();
-    fprintf(stdout, 'Keys:       %d bytes each\n', kKeySize);
-    fprintf(stdout, 'Values:     %d bytes each\n', FLAGS_value_size);
-    fprintf(stdout, 'Entries:    %d\n', num_);
-    fprintf(stdout, 'RawSize:    %.1f MB (estimated)\n',
-            ((static_cast<int64_t>(kKeySize + FLAGS_value_size) * num_)
-             / 1048576.0));
-    PrintWarnings();
-    fprintf(stdout, '------------------------------------------------\n');
-  }
-    
-      // The name of the comparator.  Used to check for comparator
-  // mismatches (i.e., a DB created with one comparator is
-  // accessed using a different comparator.
-  //
-  // The client of this package should switch to a new name whenever
-  // the comparator implementation changes in a way that will cause
-  // the relative ordering of any two keys to change.
-  //
-  // Names starting with 'leveldb.' are reserved and should not be used
-  // by any clients of this package.
-  virtual const char* Name() const = 0;
-    
-      // Open leveldb
-  leveldb::DB* db;
-  leveldb::Options options;
-  options.create_if_missing = true;
-  options.error_if_exists = true;
-  leveldb::Status status = leveldb::DB::Open(
-      options, db_filename, &db);
-  CHECK(status.ok()) << 'Failed to open leveldb ' << db_filename
-      << '. Is it already existing?';
-    
-     protected:
-  /// @copydoc AbsValLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {}  // namespace caffe
-    
-    #include 'caffe/layers/loss_layer.hpp'
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    /**
- * @brief Convolve the input with a bank of learned filters, and (optionally)
- *        add biases, treating filters and convolution parameters in the
- *        opposite sense as ConvolutionLayer.
- *
- *   ConvolutionLayer computes each output value by dotting an input window with
- *   a filter; DeconvolutionLayer multiplies each input value by a filter
- *   elementwise, and sums over the resulting output windows. In other words,
- *   DeconvolutionLayer is ConvolutionLayer with the forward and backward passes
- *   reversed. DeconvolutionLayer reuses ConvolutionParameter for its
- *   parameters, but they take the opposite sense as in ConvolutionLayer (so
- *   padding is removed from the output rather than added to the input, and
- *   stride results in upsampling rather than downsampling).
- */
-template <typename Dtype>
-class DeconvolutionLayer : public BaseConvolutionLayer<Dtype> {
- public:
-  explicit DeconvolutionLayer(const LayerParameter& param)
-      : BaseConvolutionLayer<Dtype>(param) {}
+    namespace swift {
     }
     
-    namespace caffe {
-    }
-    
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    private:
-  friend const void* boost::asio::detail::buffer_cast_helper(
-      const const_buffer& b);
-  friend std::size_t boost::asio::detail::buffer_size_helper(
-      const const_buffer& b);
-    
-    namespace boost {
-namespace asio {
-    }
-    }
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-# include <boost/asio/detail/null_event.hpp>
-#elif defined(BOOST_ASIO_WINDOWS)
-# include <boost/asio/detail/win_event.hpp>
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-# include <boost/asio/detail/posix_event.hpp>
-#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-# include <boost/asio/detail/std_event.hpp>
+    #include <dispatch/dispatch.h>
+static_assert(std::is_same<swift_once_t, dispatch_once_t>::value,
+              'swift_once_t and dispatch_once_t must stay in sync');
 #else
-# error Only Windows, POSIX and std::condition_variable are supported!
+    
+    #ifndef SWIFT_INDEX_INDEX_H
+#define SWIFT_INDEX_INDEX_H
+    
+      /// Returns true when the sequence of indices represented by this
+  /// node is a prefix of the sequence represented by the passed-in node.
+  bool isPrefixOf(const IndexTrieNode *Other) const {
+    const IndexTrieNode *I = Other;
+    }
+    
+    		Node *parent;
+		Node *owner;
+		Vector<Node *> children; // list of children
+		int pos;
+		int depth;
+		int blocked; // safeguard that throws an error when attempting to modify the tree in a harmful way while being traversed.
+		StringName name;
+		SceneTree *tree;
+		bool inside_tree;
+		bool ready_notified; //this is a small hack, so if a node is added during _ready() to the tree, it correctly gets the _ready() notification
+		bool ready_first;
+#ifdef TOOLS_ENABLED
+		NodePath import_path; //path used when imported, used by scene editors to keep tracking
 #endif
     
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-    #define BOOST_ASIO_ACCEPT_HANDLER_CHECK( \
-    handler_type, handler) \
-  typedef int BOOST_ASIO_UNUSED_TYPEDEF
-    
-      // Erase an entry from the map.
-  void erase(iterator it)
-  {
-    BOOST_ASIO_ASSERT(it != values_.end());
-    BOOST_ASIO_ASSERT(num_buckets_ != 0);
-    }
-    
-        // Copy and convert all vertices into a single contiguous buffer, convert colors to DX9 default format.
-    // FIXME-OPT: This is a waste of resource, the ideal is to use imconfig.h and
-    //  1) to avoid repacking colors:   #define IMGUI_USE_BGRA_PACKED_COLOR
-    //  2) to avoid repacking vertices: #define IMGUI_OVERRIDE_DRAWVERT_STRUCT_LAYOUT struct ImDrawVert { ImVec2 pos; float z; ImU32 col; ImVec2 uv; }
-    CUSTOMVERTEX* vtx_dst;
-    ImDrawIdx* idx_dst;
-    if (g_pVB->Lock(0, (UINT)(draw_data->TotalVtxCount * sizeof(CUSTOMVERTEX)), (void**)&vtx_dst, D3DLOCK_DISCARD) < 0)
-        return;
-    if (g_pIB->Lock(0, (UINT)(draw_data->TotalIdxCount * sizeof(ImDrawIdx)), (void**)&idx_dst, D3DLOCK_DISCARD) < 0)
-        return;
-    for (int n = 0; n < draw_data->CmdListsCount; n++)
-    {
-        const ImDrawList* cmd_list = draw_data->CmdLists[n];
-        const ImDrawVert* vtx_src = cmd_list->VtxBuffer.Data;
-        for (int i = 0; i < cmd_list->VtxBuffer.Size; i++)
-        {
-            vtx_dst->pos[0] = vtx_src->pos.x;
-            vtx_dst->pos[1] = vtx_src->pos.y;
-            vtx_dst->pos[2] = 0.0f;
-            vtx_dst->col = (vtx_src->col & 0xFF00FF00) | ((vtx_src->col & 0xFF0000) >> 16) | ((vtx_src->col & 0xFF) << 16);     // RGBA --> ARGB for DirectX9
-            vtx_dst->uv[0] = vtx_src->uv.x;
-            vtx_dst->uv[1] = vtx_src->uv.y;
-            vtx_dst++;
-            vtx_src++;
-        }
-        memcpy(idx_dst, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
-        idx_dst += cmd_list->IdxBuffer.Size;
-    }
-    g_pVB->Unlock();
-    g_pIB->Unlock();
-    g_pd3dDevice->SetStreamSource(0, g_pVB, 0, sizeof(CUSTOMVERTEX));
-    g_pd3dDevice->SetIndices(g_pIB);
-    g_pd3dDevice->SetFVF(D3DFVF_CUSTOMVERTEX);
+    #include 'ifaddrs_android.h'
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/utsname.h>
+#include <sys/ioctl.h>
+#include <netinet/in.h>
+#include <net/if.h>
+#include <unistd.h>
+#include <errno.h>
+#include <linux/netlink.h>
+#include <linux/rtnetlink.h>
     
     
-    {    // Update mouse position
-    const ImVec2 mouse_pos_backup = io.MousePos;
-    io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
-    if (glfwGetWindowAttrib(g_Window, GLFW_FOCUSED))
-    {
-        if (io.WantSetMousePos)
-        {
-            glfwSetCursorPos(g_Window, (double)mouse_pos_backup.x, (double)mouse_pos_backup.y);
-        }
-        else
-        {
-            double mouse_x, mouse_y;
-            glfwGetCursorPos(g_Window, &mouse_x, &mouse_y);
-            io.MousePos = ImVec2((float)mouse_x, (float)mouse_y);
-        }
-    }
+# if defined(OC_CLZ32)
+/**
+ * OC_ILOGNZ_32 - Integer binary logarithm of a non-zero 32-bit value.
+ * @_v: A non-zero 32-bit value.
+ * Returns floor(log2(_v))+1.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * If _v is zero, the return value is undefined; use OC_ILOG_32() instead.
+ */
+#  define OC_ILOGNZ_32(_v) (OC_CLZ32_OFFS-OC_CLZ32(_v))
+/**
+ * OC_ILOG_32 - Integer binary logarithm of a 32-bit value.
+ * @_v: A 32-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ */
+#  define OC_ILOG_32(_v)   (OC_ILOGNZ_32(_v)&-!!(_v))
+# else
+#  define OC_ILOGNZ_32(_v) (oc_ilog32(_v))
+#  define OC_ILOG_32(_v)   (oc_ilog32(_v))
+# endif
+    
+    /*The number of extra bits of precision at which to store rate metrics.*/
+# define OC_BIT_SCALE  (6)
+/*The number of extra bits of precision at which to store RMSE metrics.
+  This must be at least half OC_BIT_SCALE (rounded up).*/
+# define OC_RMSE_SCALE (5)
+/*The number of bins to partition statistics into.*/
+# define OC_SAD_BINS   (24)
+/*The number of bits of precision to drop from SAD scores to assign them to a
+   bin.*/
+# define OC_SAD_SHIFT  (9)
+    
+      {
+    auto dropper = DropPrivileges::get();
+    EXPECT_TRUE(dropper->dropTo(std::to_string(nobody->pw_uid),
+                                std::to_string(nobody->pw_gid)));
+    EXPECT_EQ(geteuid(), nobody->pw_uid);
+  }
+    
+      // Test existence checks based on flags.
+  EXPECT_TRUE(cl.exists());
+  EXPECT_TRUE(cl.exists(EQUALS));
+  EXPECT_TRUE(cl.exists(EQUALS | LESS_THAN));
+  EXPECT_FALSE(cl.exists(LESS_THAN));
+    
+    #include <gtest/gtest.h>
+    
+    
+    {/**
+ * @brief Generate a row string for query results
+ *
+ * @param r A row to analyze
+ * @param lengths The data returned from computeQueryDataLengths
+ * @param columns The order of the keys (since maps are unordered)
+ *
+ * @return A string, with a newline, representing your row
+ */
+std::string generateRow(const Row& r,
+                        const std::map<std::string, size_t>& lengths,
+                        const std::vector<std::string>& columns);
 }
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
-IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
+
     
     
-    {    // Create texture sampler
+    {  /// Optional category passed to the callback.
+  std::string category;
+};
+    
+    #include <aws/core/client/AWSError.h>
+#include <aws/core/utils/Outcome.h>
+#include <aws/firehose/model/PutRecordBatchRequest.h>
+#include <aws/firehose/model/PutRecordBatchResult.h>
+    
+      size_t getFailedRecordCount(Outcome& outcome) const override;
+  Result getResult(Outcome& outcome) const override;
+    
+    bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    bool js_cocos2dx_navmesh_NavMesh_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_navmesh_NavMesh_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_navmesh_NavMesh(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_navmesh_NavMesh_removeNavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_removeNavMeshAgent(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_update(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_isDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_addNavMeshAgent(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_addNavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_setDebugDrawEnable(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_debugDraw(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_NavMesh(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    bool js_cocos2dx_physics3d_Physics3DObject_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DObject_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DObject(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DObject_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getUserData(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getObjType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_setPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getWorldTransform(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_setMask(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getMask(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_needCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+#endif // __cocos2dx_experimental_h__
+
+    
+    
     {
-        D3D10_SAMPLER_DESC desc;
-        ZeroMemory(&desc, sizeof(desc));
-        desc.Filter = D3D10_FILTER_MIN_MAG_MIP_LINEAR;
-        desc.AddressU = D3D10_TEXTURE_ADDRESS_WRAP;
-        desc.AddressV = D3D10_TEXTURE_ADDRESS_WRAP;
-        desc.AddressW = D3D10_TEXTURE_ADDRESS_WRAP;
-        desc.MipLODBias = 0.f;
-        desc.ComparisonFunc = D3D10_COMPARISON_ALWAYS;
-        desc.MinLOD = 0.f;
-        desc.MaxLOD = 0.f;
-        g_pd3dDevice->CreateSamplerState(&desc, &g_pFontSampler);
-    }
-}
-    
-        // Setup Vulkan binding
-    ImGui_ImplVulkan_InitInfo init_info = {};
-    init_info.Instance = g_Instance;
-    init_info.PhysicalDevice = g_PhysicalDevice;
-    init_info.Device = g_Device;
-    init_info.QueueFamily = g_QueueFamily;
-    init_info.Queue = g_Queue;
-    init_info.PipelineCache = g_PipelineCache;
-    init_info.DescriptorPool = g_DescriptorPool;
-    init_info.Allocator = g_Allocator;
-    init_info.CheckVkResultFn = check_vk_result;
-    ImGui_ImplVulkan_Init(&init_info, wd->RenderPass);
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-        while (fgets(_strcache, 2048, file)) {
-        if (strstr(_strcache, gs_crash_dump_header) != NULL) {
-            ASSERT(EXPECTS_CRASH_DUMP_HEADER != _state);
-    }
-    }
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    CommFrequencyLimit::~CommFrequencyLimit()
-{}
-    
-    #include 'comm/debugger/spy_impl_helper.inl'
-#include 'comm/debugger/test_spy_sample.h'
-    
-    // bool JNU_Jstring2Wstring( JNIEnv* _env, const jstring jstr, std::wstring& wstr); //in linux sizeof(wchar_t)==4 but sizeof(jchar)==2
-wchar_t* JNU_Jstring2Wchar(JNIEnv* _env, const jstring jstr);
-void JNU_FreeWchar(JNIEnv* _env, jstring str, wchar_t* wchar);
-jstring JNU_Wstring2Jstring(JNIEnv* _env, const std::wstring& wstr);
-jstring JNU_Wchar2JString(JNIEnv* _env, wchar_t* wchar);
-    
-    extern pthread_key_t g_env_key;
+    {			float minX = -6.0f;
+			float maxX = 0.0f;
+			float minY = 4.0f;
+			float maxY = 6.0f;
+			
+			for (int32 i = 0; i < 400; ++i)
+			{
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
+				bd.position = b2Vec2(RandomFloat(minX,maxX),RandomFloat(minY,maxY));
+				b2Body* body = m_world->CreateBody(&bd);
+				body->CreateFixture(&shape, 0.01f);
+			}
+		}
+		
+		{
+			b2PolygonShape shape;
+			shape.SetAsBox(1.5f, 1.5f);
+			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.position.Set(-40.0f,5.0f);
+			bd.bullet = true;
+			b2Body* body = m_world->CreateBody(&bd);
+			body->CreateFixture(&shape, 1.0f);
+			body->SetLinearVelocity(b2Vec2(150.0f, 0.0f));
+		}
+	}
