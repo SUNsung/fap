@@ -1,96 +1,55 @@
 
         
-              def subscribe(channel, callback, success_callback = nil)
-        listener.add_subscriber(channel, callback, success_callback)
-      end
+              raise Discourse::InvalidParameters.new(:to_address) unless args[:to_address].present?
     
-        person.readers.create(post_id: post.id)
+      protected
     
-      scope :scope_with_lambda, lambda { all }
+          def get_type
+        return 'Reference' if base_url.path == '/spec/'
     
-        def connect
-      self.current_user = User.new 'lifo'
+        options[:attribution] = <<-HTML
+      &copy; 2011&ndash;2018 Twitter, Inc.<br>
+      &copy; 2011&ndash;2018 The Bootstrap Authors<br>
+      Code licensed under the MIT License.<br>
+      Documentation licensed under the Creative Commons Attribution License v3.0.
+    HTML
+    
+          html_filters.push 'd3/clean_html', 'd3/entries_v3', 'title'
+    
+        def types_as_json
+      @types.values.sort! { |a, b| sort_fn(a.name, b.name) }.map(&:as_json)
     end
-  end
     
-      test '#restart shuts down pub/sub adapter' do
-    assert_called(@server.pubsub, :shutdown) do
-      @server.restart
-    end
-  end
-end
-
+        private
     
-      def regular?
-    !staff?
-  end
-    
-      class CachedFragment
-    def initialize(json)
-      @json = json
-    end
-    def as_json(*_args)
-      @json
-    end
-  end
-    
-      def failed_strategy
-    request.respond_to?(:get_header) ? request.get_header('omniauth.error.strategy') : request.env['omniauth.error.strategy']
-  end
-    
-          attr_accessor(*VALID_KEYS)
-      attr_accessor :pairs
-    
-              deps.any? do |dep|
-            begin
-              dep.to_formula.full_name == ff.full_name
-            rescue
-              dep.name == ff.name
-            end
-          end
-        rescue FormulaUnavailableError
-          # Silently ignore this case as we don't care about things used in
-          # taps that aren't currently tapped.
-          next
+            css('h2:not([id]) a[id]:not([href])').each do |node|
+          node.parent['id'] = node['id']
+          node.before(node.children).remove
         end
-      end
-    end
     
-      output_hash = Digest::SHA256.digest(output) if hash_needed
+      def id
+    object.id.to_s
+  end
     
-          def create_validating_before_filter(attribute, validator_class, options)
-        if_clause = options.delete(:if)
-        unless_clause = options.delete(:unless)
-        send(:'before_#{attribute}_post_process', :if => if_clause, :unless => unless_clause) do |*args|
-          validator_class.new(options.dup).validate(self)
-        end
-      end
+      def participation_answer(user)
+    poll_participations.find_by(author_id: user.person.id)
+  end
     
-        module HelperMethods
-      # Places ActiveModel validations on the content type of the file
-      # assigned. The possible options are:
-      # * +content_type+: Allowed content types.  Can be a single content type
-      #   or an array.  Each type can be a String or a Regexp. It should be
-      #   noted that Internet Explorer uploads files with content_types that you
-      #   may not expect. For example, JPEG images are given image/pjpeg and
-      #   PNGs are image/x-png, so keep that in mind when determining how you
-      #   match.  Allows all by default.
-      # * +not+: Forbidden content types.
-      # * +message+: The message to display when the uploaded file has an invalid
-      #   content type.
-      # * +if+: A lambda or name of an instance method. Validation will only
-      #   be run is this lambda or method returns true.
-      # * +unless+: Same as +if+ but validates if lambda or method returns false.
-      # NOTE: If you do not specify an [attachment]_content_type field on your
-      # model, content_type validation will work _ONLY upon assignment_ and
-      # re-validation after the instance has been reloaded will always succeed.
-      # You'll still need to have a virtual attribute (created by +attr_accessor+)
-      # name +[attachment]_content_type+ to be able to use this validator.
-      def validates_attachment_content_type(*attr_names)
-        options = _merge_attributes(attr_names)
-        validates_with AttachmentContentTypeValidator, options.dup
-        validate_before_processing AttachmentContentTypeValidator, options.dup
-      end
+      describe '#profile_photo_url' do
+    it 'returns a large profile photo url' do
+      @service.uid = 'abc123'
+      @service.access_token = 'token123'
+      expect(@service.profile_photo_url).to eq(
+      'https://graph.facebook.com/abc123/picture?type=large&access_token=token123'
+      )
     end
   end
-end
+    
+          def save_request_parameters
+        session[:client_id] = @o_auth_application.client_id
+        session[:response_type] = @response_type
+        session[:redirect_uri] = @redirect_uri
+        session[:scopes] = scopes_as_space_seperated_values
+        session[:state] = params[:state]
+        session[:nonce] = params[:nonce]
+      end
