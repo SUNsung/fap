@@ -1,105 +1,151 @@
 
         
-              if path.symlink? || path.directory?
-        next
-      elsif path.extname == '.la'
-        path.unlink
+        # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
+    
+        # Extract options for this collection from the site configuration.
+    #
+    # Returns the metadata for this collection
+    def extract_metadata
+      if site.config['collections'].is_a?(Hash)
+        site.config['collections'][label] || {}
       else
-        # Set permissions for executables and non-executables
-        perms = if path.mach_o_executable? || path.text_executable?
-          0555
-        else
-          0444
-        end
-        if ARGV.debug?
-          old_perms = path.stat.mode & 0777
-          if perms != old_perms
-            puts 'Fixing #{path} permissions from #{old_perms.to_s(8)} to #{perms.to_s(8)}'
-          end
-        end
-        path.chmod perms
+        {}
       end
+    end
+    
+            # Internal: Gets the filename of the sample post to be created
+        #
+        # Returns the filename of the sample post, as a String
+        def initialized_post_name
+          '_posts/#{Time.now.strftime('%Y-%m-%d')}-welcome-to-jekyll.markdown'
+        end
+    
+          def initialize(config)
+        Jekyll::External.require_with_graceful_fail 'kramdown' unless defined?(Kramdown)
+        @config = config['kramdown'].dup || {}
+        @config[:input] = :SmartyPants
+      end
+    
+          def key?(key)
+        (@obj.collections.key?(key) && key != 'posts') || super
+      end
+    
+          def short_year
+        @obj.date.strftime('%y')
+      end
+    
+      if tap.nil? || tap.core_tap?
+    full_name = name
+  else
+    full_name = '#{tap}/#{name}'
+  end
+    
+      formula = ARGV.formulae.first
+  options = Options.create(ARGV.flags_only)
+  build   = Build.new(formula, options)
+  build.install
+rescue Exception => e
+  Marshal.dump(e, error_pipe)
+  error_pipe.close
+  exit! 1
+end
+
+    
+        keys.each do |key|
+      value = env[key]
+      s = '#{key}: #{value}'
+      case key
+      when 'CC', 'CXX', 'LD'
+        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
+      end
+      f.puts s
     end
   end
 end
 
     
-          out = checks.send(method)
-      unless out.nil? || out.empty?
-        if first_warning
-          $stderr.puts <<-EOS.undent
-            #{Tty.white}Please note that these warnings are just used to help the Homebrew maintainers
-            with debugging if you file an issue. If everything you use Homebrew for is
-            working fine: please don't worry and just ignore them. Thanks!#{Tty.reset}
-          EOS
+        s = nil
+    homebrew_site_packages = Language::Python.homebrew_site_packages
+    user_site_packages = Language::Python.user_site_packages 'python'
+    pth_file = user_site_packages/'homebrew.pth'
+    instructions = <<-EOS.undent.gsub(/^/, '  ')
+      mkdir -p #{user_site_packages}
+      echo 'import site; site.addsitedir('#{homebrew_site_packages}')' >> #{pth_file}
+    EOS
+    
+      # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
+  # permissions and removing .la files, unless the files (or parent
+  # directories) are protected by skip_clean.
+  #
+  # bin and sbin should not have any subdirectories; if either do that is
+  # caught as an audit warning
+  #
+  # lib may have a large directory tree (see Erlang for instance), and
+  # clean_dir applies cleaning rules to the entire tree
+  def clean_dir(d)
+    d.find do |path|
+      path.extend(ObserverPathnameExtension)
+    
+        def self.cleanup_cache
+      return unless HOMEBREW_CACHE.directory?
+      HOMEBREW_CACHE.children.each do |path|
+        if path.to_s.end_with? '.incomplete'
+          cleanup_path(path) { path.unlink }
+          next
+        end
+        if path.basename.to_s == 'java_cache' && path.directory?
+          cleanup_path(path) { FileUtils.rm_rf path }
+          next
+        end
+        if prune?(path)
+          if path.file?
+            cleanup_path(path) { path.unlink }
+          elsif path.directory? && path.to_s.include?('--')
+            cleanup_path(path) { FileUtils.rm_rf path }
+          end
+          next
         end
     
-      def self.factory(name)
-    Formulary.factory(name)
-  end
+        if ARGV.include? '--list-checks'
+      puts checks.all.sort
+      exit
+    end
+    
+        if $stdout.tty?
+      metacharacters = %w[\\ | ( ) [ ] { } ^ $ * + ? .]
+      bad_regex = metacharacters.any? do |char|
+        ARGV.any? do |arg|
+          arg.include?(char) && !arg.start_with?('/')
+        end
+      end
+      if ARGV.any? && bad_regex
+        ohai 'Did you mean to perform a regular expression search?'
+        ohai 'Surround your query with /slashes/ to search by regex.'
+      end
+    end
     
       # Use this method to generate standard caveats.
   def standard_instructions(home_name, home_value = libexec)
     <<-EOS.undent
       Before you can use these tools you must export some variables to your $SHELL.
     
-      def translation_scope
-    'devise.omniauth_callbacks'
-  end
-end
-
-    
-        # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
-    end
-    
-        users.all?(&:blank?)
+      def use_sandbox?
+    ENV['USE_EVERNOTE_SANDBOX'] == 'true'
   end
     
-        def reset_password_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :reset_password_instructions, opts)
-    end
-    
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
-    
-          spec['version'] = Bootstrap::VERSION
-    
-    end
-    
-    
-  # Jekyll hook - the generate method is called by jekyll, and generates all of the category pages.
-  class GenerateCategories < Generator
-    safe true
-    priority :low
-    
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
-    end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
-  end
-  output += '></#{tag}>'
-end
-    
-      # Improved version of Liquid's truncate:
-  # - Doesn't cut in the middle of a word.
-  # - Uses typographically correct ellipsis (…) insted of '...'
-  def truncate(input, length)
-    if input.length > length && input[0..(length-1)] =~ /(.+)\b.+$/im
-      $1.strip + ' &hellip;'
-    else
-      input
+        respond_to do |format|
+      format.html
+      format.json { render json: @events }
     end
   end
+    
+        @services = current_user.services.reorder(table_sort).page(params[:page])
+    
+          next if path.symlink? || path.directory?
