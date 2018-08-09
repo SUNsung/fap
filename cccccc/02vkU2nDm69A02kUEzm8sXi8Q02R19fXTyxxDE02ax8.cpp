@@ -1,168 +1,180 @@
 
         
-        #endif  // ATOM_BROWSER_NET_URL_REQUEST_ASYNC_ASAR_JOB_H_
-
+        // relauncher implements main browser application relaunches across platforms.
+// When a browser wants to relaunch itself, it can't simply fork off a new
+// process and exec a new browser from within. That leaves open a window
+// during which two browser applications might be running concurrently. If
+// that happens, each will wind up with a distinct Dock icon, which is
+// especially bad if the user expected the Dock icon to be persistent by
+// choosing Keep in Dock from the icon's contextual menu.
+//
+// relauncher approaches this problem by introducing an intermediate
+// process (the 'relauncher') in between the original browser ('parent') and
+// replacement browser ('relaunched'). The helper executable is used for the
+// relauncher process; because it's an LSUIElement, it doesn't get a Dock
+// icon and isn't visible as a running application at all. The parent will
+// start a relauncher process, giving it the 'writer' side of a pipe that it
+// retains the 'reader' end of. When the relauncher starts up, it will
+// establish a kqueue to wait for the parent to exit, and will then write to
+// the pipe. The parent, upon reading from the pipe, is free to exit. When the
+// relauncher is notified via its kqueue that the parent has exited, it
+// proceeds, launching the relaunched process. The handshake to synchronize
+// the parent with the relauncher is necessary to avoid races: the relauncher
+// needs to be sure that it's monitoring the parent and not some other process
+// in light of PID reuse, so the parent must remain alive long enough for the
+// relauncher to set up its kqueue.
     
-      // Stop listening for the given |accelerator|, does nothing if shortcut
-  // handling is suspended.
-  void UnregisterAccelerator(const ui::Accelerator& accelerator,
-                             Observer* observer);
     
-    #endif  // CHROME_BROWSER_PRINTING_PRINT_VIEW_MANAGER_OBSERVER_H_
-
+    {}  // namespace extensions
     
-    void TtsPlatformImpl::WillSpeakUtteranceWithVoice(const Utterance* utterance,
-                                                  const VoiceData& voice_data) {
+    #include 'chrome/browser/speech/tts_platform.h'
+    
+    namespace chrome {
+    }
+    
+    // Tests that a unicharset that contains double-letter ligatures (eg ff) has
+// no null char in the encoding at all.
+TEST_F(UnicharcompressTest, DoesLigaturesWithDoubles) {
+  LOG(INFO) << 'Testing por with ligatures';
+  LoadUnicharset('por.unicharset');
+  ExpectCorrect('por');
+  // Check that any unichar-id that is encoded with multiple codes has the
+  // correct encoded_nulll_char_ in between.
+  for (int u = 0; u <= unicharset_.size(); ++u) {
+    RecodedCharID code;
+    int len = compressed_.EncodeUnichar(u, &code);
+    if (len > 1) {
+      // The should not be any null char in the code.
+      for (int i = 0; i < len; ++i) {
+        EXPECT_NE(encoded_null_char_, code(i));
+      }
+    }
+  }
 }
     
-    #endif  // ATOM_COMMON_COLOR_UTIL_H_
-
+      // ============= Accessing data ==============.
+  // Coordinate system:
+  // Integer coordinates are at the cracks between the pixels.
+  // The top-left corner of the top-left pixel in the image is at (0,0).
+  // The bottom-right corner of the bottom-right pixel in the image is at
+  // (width, height).
+  // Every bounding box goes from the top-left of the top-left contained
+  // pixel to the bottom-right of the bottom-right contained pixel, so
+  // the bounding box of the single top-left pixel in the image is:
+  // (0,0)->(1,1).
+  // If an image rectangle has been set in the API, then returned coordinates
+  // relate to the original (full) image, rather than the rectangle.
     
-    // Finally, you can use INSTANTIATE_TEST_CASE_P to instantiate the test
-// case with any set of parameters you want. Google Test defines a number
-// of functions for generating test parameters. They return what we call
-// (surprise!) parameter generators. Here is a  summary of them, which
-// are all in the testing namespace:
-//
-//
-//  Range(begin, end [, step]) - Yields values {begin, begin+step,
-//                               begin+step+step, ...}. The values do not
-//                               include end. step defaults to 1.
-//  Values(v1, v2, ..., vN)    - Yields values {v1, v2, ..., vN}.
-//  ValuesIn(container)        - Yields values from a C-style array, an STL
-//  ValuesIn(begin,end)          container, or an iterator range [begin, end).
-//  Bool()                     - Yields sequence {false, true}.
-//  Combine(g1, g2, ..., gN)   - Yields all combinations (the Cartesian product
-//                               for the math savvy) of the values generated
-//                               by the N generators.
-//
-// For more details, see comments at the definitions of these functions below
-// in this file.
-//
-// The following statement will instantiate tests from the FooTest test case
-// each with parameter values 'meeny', 'miny', and 'moe'.
+    const char *kUTF8LineSeparator = '\u2028';  // '\xe2\x80\xa8';
+const char *kUTF8ParagraphSeparator = '\u2029';  // '\xe2\x80\xa9';
+const char *kLRM = '\u200E';  // Left-to-Right Mark
+const char *kRLM = '\u200F';  // Right-to-Left Mark
+const char *kRLE = '\u202A';  // Right-to-Left Embedding
+const char *kPDF = '\u202C';  // Pop Directional Formatting
     
-      // Appends the TestPartResult object to the TestPartResultArray
-  // received in the constructor.
-  //
-  // This method is from the TestPartResultReporterInterface
-  // interface.
-  virtual void ReportTestPartResult(const TestPartResult& result);
- private:
-  void Init();
     
-    // This helper class is used by {ASSERT|EXPECT}_NO_FATAL_FAILURE to check if a
-// statement generates new fatal failures. To do so it registers itself as the
-// current test part result reporter. Besides checking if fatal failures were
-// reported, it only delegates the reporting to the former result reporter.
-// The original result reporter is restored in the destructor.
-// INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-class GTEST_API_ HasNewFatalFailureHelper
-    : public TestPartResultReporterInterface {
- public:
-  HasNewFatalFailureHelper();
-  virtual ~HasNewFatalFailureHelper();
-  virtual void ReportTestPartResult(const TestPartResult& result);
-  bool has_new_fatal_failure() const { return has_new_fatal_failure_; }
- private:
-  bool has_new_fatal_failure_;
-  TestPartResultReporterInterface* original_reporter_;
+    { private:
+  // Choice between float and 8 bit int implementations.
+  GENERIC_2D_ARRAY<double> wf_;
+  GENERIC_2D_ARRAY<int8_t> wi_;
+  // Transposed copy of wf_, used only for Backward, and set with each Update.
+  TransposedArray wf_t_;
+  // Which of wf_ and wi_ are we actually using.
+  bool int_mode_;
+  // True if we are running adam in this weight matrix.
+  bool use_adam_;
+  // If we are using wi_, then scales_ is a factor to restore the row product
+  // with a vector to the correct range.
+  GenericVector<double> scales_;
+  // Weight deltas. dw_ is the new delta, and updates_ the momentum-decaying
+  // amount to be added to wf_/wi_.
+  GENERIC_2D_ARRAY<double> dw_;
+  GENERIC_2D_ARRAY<double> updates_;
+  // Iff use_adam_, the sum of squares of dw_. The number of samples is
+  // given to Update(). Serialized iff use_adam_.
+  GENERIC_2D_ARRAY<double> dw_sq_sum_;
+  // Holds the optimal integer multiplier for this machine.
+  std::unique_ptr<IntSimdMatrix> multiplier_;
+};
+    
+      // Undo the deskew that was done in FindTabVectors, as recognition is done
+  // without correcting blobs or blob outlines for skew.
+  // Reskew the completed blocks to put them back to the original rotated coords
+  // that were created by CorrectOrientation.
+  // If the input_is_rtl, then reflect the blocks in the y-axis to undo the
+  // reflection that was done before FindTabVectors.
+  // Blocks that were identified as vertical text (relative to the rotated
+  // coordinates) are further rotated so the text lines are horizontal.
+  // blob polygonal outlines are rotated to match the position of the blocks
+  // that they are in, and their bounding boxes are recalculated to be accurate.
+  // Record appropriate inverse transformations and required
+  // classifier transformation in the blocks.
+  void RotateAndReskewBlocks(bool input_is_rtl, TO_BLOCK_LIST* to_blocks);
+    
+    void complete_edge(CRACKEDGE *start,  //start of loop
+                   C_OUTLINE_IT* outline_it) {
+  ScrollView::Color colour;                 //colour to draw in
+  int16_t looplength;              //steps in loop
+  ICOORD botleft;                //bounding box
+  ICOORD topright;
+  C_OUTLINE *outline;            //new outline
     }
     
-      // Gets the number of tests to be printed in the XML report.
-  int reportable_test_count() const;
+    struct CrackPos {
+  CRACKEDGE** free_cracks;   // Freelist for fast allocation.
+  int x;                     // Position of new edge.
+  int y;
+};
     
-        // No implementation - assignment is unsupported.
-    void operator=(const Iterator& other);
-    
-     private:
-  class Iterator : public ParamIteratorInterface<ParamType> {
-   public:
-    Iterator(const ParamGeneratorInterface<ParamType>* base, $for j, [[
+    template <typename T>
+std::weak_ptr<T> SingletonHolder<T>::get_weak() {
+  if (UNLIKELY(state_.load(std::memory_order_acquire) !=
+               SingletonHolderState::Living)) {
+    createInstance();
+  }
     }
     
-      // Converts a wide C string to a String using the UTF-8 encoding.
-  // NULL will be converted to '(null)'.  If an error occurred during
-  // the conversion, '(failed to convert from wide string)' is
-  // returned.
-  static std::string ShowWideCString(const wchar_t* wide_c_str);
+    inline void* checkedCalloc(size_t n, size_t size) {
+  void* p = calloc(n, size);
+  if (!p) {
+    throw_exception<std::bad_alloc>();
+  }
+  return p;
+}
     
-    #endif  // GTEST_SAMPLES_PRIME_TABLES_H_
-
+    #include <folly/init/Init.h>
     
-      bool check_for_leaks = false;
-  if (argc > 1 && strcmp(argv[1], '--check_for_leaks') == 0 )
-    check_for_leaks = true;
-  else
-    printf('%s\n', 'Run this program with --check_for_leaks to enable '
-           'custom leak checking in the tests.');
     
-            D3D12_ROOT_SIGNATURE_DESC desc = {};
-        desc.NumParameters = _countof(param);
-        desc.pParameters = param;
-        desc.NumStaticSamplers = 1;
-        desc.pStaticSamplers = &staticSampler;
-        desc.Flags =
-            D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
-            D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
-            D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
-            D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
+    { private:
+  std::atomic<uint64_t> light_{0};
+  std::atomic<uint64_t> heavy_{0};
+  std::atomic<uint64_t> seq_cst_{0};
+};
     
-    void ImGui_ImplFreeGLUT_NewFrame()
-{
-    // Setup time step
-    ImGuiIO& io = ImGui::GetIO();
-    int current_time = glutGet(GLUT_ELAPSED_TIME);
-    io.DeltaTime = (current_time - g_Time) / 1000.0f;
-    g_Time = current_time;
-    }
+    #include <folly/futures/Barrier.h>
+#include <folly/lang/Exception.h>
     
-    IMGUI_IMPL_API bool     ImGui_Marmalade_Init(bool install_callbacks);
-IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
-IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
-IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
+     public:
+  using value_type = T;
     
-        // Setup viewport:
-    {
-        VkViewport viewport;
-        viewport.x = 0;
-        viewport.y = 0;
-        viewport.width = draw_data->DisplaySize.x;
-        viewport.height = draw_data->DisplaySize.y;
-        viewport.minDepth = 0.0f;
-        viewport.maxDepth = 1.0f;
-        vkCmdSetViewport(command_buffer, 0, 1, &viewport);
-    }
+    // This template function declaration is used in defining arraysize.
+// Note that the function doesn't need an implementation, as we only
+// use its type.
+template <typename T, size_t N>
+char (&ArraySizeHelper(T (&array)[N]))[N];
     
-            // Rendering
-        ImGui::Render();
-        IwGxSetColClear(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255);
-        IwGxClear();
-        ImGui_Marmalade_RenderDrawData(ImGui::GetDrawData());
-        IwGxSwapBuffers();
+      // We need to flush the stream buffers into the console before each
+  // SetConsoleTextAttribute call lest it affect the text that is already
+  // printed but has not yet reached the console.
+  fflush(stdout);
+  SetConsoleTextAttribute(stdout_handle,
+                          GetPlatformColorCode(color) | FOREGROUND_INTENSITY);
+  vprintf(fmt, args);
     
-    int main(int, char**)
-{
-    // Setup window
-    glfwSetErrorCallback(glfw_error_callback);
-    if (!glfwInit())
-        return 1;
-    GLFWwindow* window = glfwCreateWindow(1280, 720, 'Dear ImGui GLFW+OpenGL2 example', NULL, NULL);
-    if (window == NULL)
-        return 1;
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
-    }
+    std::string FormatString(const char* msg, va_list args);
+std::string FormatString(const char* msg, ...);
     
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-    
-            VkSubmitInfo end_info = {};
-        end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        end_info.commandBufferCount = 1;
-        end_info.pCommandBuffers = &command_buffer;
-        err = vkEndCommandBuffer(command_buffer);
-        check_vk_result(err);
-        err = vkQueueSubmit(g_Queue, 1, &end_info, VK_NULL_HANDLE);
-        check_vk_result(err);
+      if (reports.size() - error_count < 2) {
+    // We don't report aggregated data if there was a single run.
+    return results;
+  }
