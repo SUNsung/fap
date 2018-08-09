@@ -1,56 +1,47 @@
 
         
-            # Then we cluster the lines together as blocks
-    # Each block represents a collection of lines that should be sorted
-    # This was done by assuming only links ([...](...)) are meant to be sorted
-    # Clustering is done by indentation
-    blocks = []
-    last_indent = None
-    for line in read_me:
-        s_line = line.lstrip()
-        indent = len(line) - len(s_line)
-    
-            layer = layer_class(units, return_sequences=False,
-                            input_shape=(timesteps, input_size),
-                            activity_regularizer='l2')
-        assert layer.activity_regularizer
-        x = keras.backend.variable(np.ones((num_samples,
-                                            timesteps,
-                                            input_size)))
-        layer(x)
-        assert len(layer.get_losses_for(x)) == 1
-    
-    from keras import backend as K
-from keras.models import Sequential, Model
-from keras.layers import convolutional_recurrent, Input
-from keras.utils.test_utils import layer_test
-from keras import regularizers
-    
-        def get_config(self):
-        return {'mse_fraction': self.mse_fraction}
-    
-        def __init__(self, input, ruleName, predicateText):
-        RecognitionException.__init__(self, input)
         
-        self.ruleName = ruleName
-        self.predicateText = predicateText
+def main():
+    if len(sys.argv) < 2:
+        print('No file passed (file should contain Markdown table syntax)')
+        sys.exit(1)
+    check_format(sys.argv[1])
+    if len(errors) > 0:
+        for err in errors:
+            print(err)
+        sys.exit(1)
     
-            '''
-        
-        return self
     
-                    specialState = self.special[s]
-                if specialState >= 0:
-                    #print 'is special'
-                    s = self.specialStateTransition(specialState, input)
-                    if s == -1:
-                        self.noViableAlt(s, input)
-                        return 0
-                    input.consume()
-                    continue
+def main():
+    tornado.options.parse_command_line()
+    application = tornado.web.Application([
+        (r'/', MainHandler),
+    ])
+    http_server = tornado.httpserver.HTTPServer(application)
+    http_server.listen(options.port)
+    tornado.ioloop.IOLoop.current().start()
     
-        print('Done!')
-    if failures:
-        print('Some downloads have failed:')
-        for fail in failures:
-            print('> ' + fail)
+        def new_future_import(self, old):
+        new = FromImport('__future__',
+                         [Name('absolute_import', prefix=' '), Comma(),
+                          Name('division', prefix=' '), Comma(),
+                          Name('print_function', prefix=' ')])
+        if old is not None:
+            new.prefix = old.prefix
+        return new
+    
+    
+class MainHandler(BaseHandler, TwitterMixin):
+    @authenticated
+    @gen.coroutine
+    def get(self):
+        timeline = yield self.twitter_request(
+            '/statuses/home_timeline',
+            access_token=self.current_user['access_token'])
+        self.render('home.html', timeline=timeline)
+    
+        IOLoop.instance().start()
+    
+    define('port', default=8888, help='run on the given port', type=int)
+define('facebook_api_key', help='your Facebook application API key', type=str)
+define('facebook_secret', help='your Facebook application secret', type=str)
