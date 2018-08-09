@@ -1,84 +1,65 @@
 
         
-        
-# reparameterization trick
-# instead of sampling from Q(z|X), sample eps = N(0,I)
-# z = z_mean + sqrt(var)*eps
-def sampling(args):
-    '''Reparameterization trick by sampling fr an isotropic unit Gaussian.
-    
-    from keras import backend as K
-from keras import constraints
-from keras.utils.test_utils import keras_test
-    
-    history_model2 = model2.fit(x_train,
-                            y_train,
-                            batch_size=batch_size,
-                            epochs=epochs,
-                            verbose=1,
-                            validation_split=0.1)
-    
-        np.random.seed(seed)
-    indices = np.arange(len(x))
-    np.random.shuffle(indices)
-    x = x[indices]
-    y = y[indices]
-    
-        def test_sales_manager_shall_respond_through_proxy_with_delay(cls):
-        cls.p.busy = 'Yes'
-        start_time = time()
-        cls.p.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-Sales Manager is busy\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
-    
-        def test_dog_greek_localization(self):
-        self.assertEqual(self.g.get('dog'), 'σκύλος')
-    
-    Test code which will almost always fail (if not exactly 12:01) when untestable
-production code (have a look into constructor_injection.py) is used:
-    
-        def setTM(self, tm):
-        self._tm = tm
-    
-    from tornado.options import define, options
-    
-    
-class LoginHandler(BaseHandler, TwitterMixin):
-    @gen.coroutine
-    def get(self):
-        if self.get_argument('oauth_token', None):
-            user = yield self.get_authenticated_user()
-            del user['description']
-            self.set_secure_cookie(self.COOKIE_NAME, json_encode(user))
-            self.redirect(self.get_argument('next', '/'))
         else:
-            yield self.authorize_redirect(callback_uri=self.request.full_url())
+    text_type = unicode
+    string_types = (str, unicode)
+    integer_types = (int, long)
+    
+        def from_envvar(self, variable_name, silent=False):
+        '''Loads a configuration from an environment variable pointing to
+        a configuration file.  This is basically just a shortcut with nicer
+        error messages for this line of code::
+    
+        recorded = []
+    
+      def PrintErrorCounts(self):
+    '''Print a summary of errors by category, and the total.'''
+    for category, count in sorted(iteritems(self.errors_by_category)):
+      self.PrintInfo('Category \'%s\' errors found: %d\n' %
+                       (category, count))
+    if self.error_count > 0:
+      self.PrintInfo('Total errors found: %d\n' % self.error_count)
+    
+        '''
+    
+    # Add any paths that contain custom themes here, relative to this directory.
+#html_theme_path = []
+    
+    from hamcrest import assert_that, contains, has_entries
+from mock import patch
     
     
-@gen.coroutine
-def put(filenames):
-    client = httpclient.AsyncHTTPClient()
-    for filename in filenames:
-        mtype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
-        headers = {'Content-Type': mtype}
-        producer = partial(raw_producer, filename)
-        url_path = quote(os.path.basename(filename))
-        response = yield client.fetch('http://localhost:8888/%s' % url_path,
-                                      method='PUT',
-                                      headers=headers,
-                                      body_producer=producer)
-        print(response)
+def FormatDebugInfoResponse_Completer_ServerNotRunningWithNoLogfiles_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'is_running': False,
+    'logfiles': []
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name not running\n'
+      '  Server name executable: /path/to/executable\n'
+      '  No logfiles available\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
+
     
-        print('Start on 8888')
-    application.listen(8888, '127.0.0.1')
     
-    PYTHON_VERSIONS = [
-    (r'c:\python27\python.exe', 'http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi'),
-    (r'c:\python36\python.exe', 'http://www.python.org/ftp/python/3.6.0/python-3.6.0.msi'),
-]
+def ConvertVimDataToCompletionData( vim_data ):
+  # see :h complete-items for a description of the dictionary fields
+  completion_data = {}
+    
+      # As a last resort, we search python in the PATH. We prefer Python 2 over 3
+  # for the sake of backwards compatibility with ycm_extra_conf.py files out
+  # there; few people wrote theirs to work on py3.
+  # So we check 'python2' before 'python' because on some distributions (Arch
+  # Linux for example), python refers to python3.
+  python_interpreter = utils.PathToFirstExistingExecutable( [ 'python2',
+                                                              'python',
+                                                              'python3' ] )
+  if python_interpreter:
+    return python_interpreter
