@@ -1,105 +1,37 @@
 
         
-        
-def side_effect(old_cmd, command):
-    with tarfile.TarFile(_tar_file(old_cmd.script_parts)[0]) as archive:
-        for file in archive.getnames():
-            try:
-                os.remove(file)
-            except OSError:
-                # does not try to remove directories as we cannot know if they
-                # already existed before
-                pass
-
+            classifiers = proj_info['classifiers'],
     
+            for s in self.stream_types:
+            quality = s['id']
+            src = match1(content,
+                         r'src: '([^']+)', 'data-res': '%s'' % quality)
+            if src is not None:
+                url = 'http://en.musicplayon.com%s' % src
+                self.streams[quality] = {'url': url}
     
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'thefuck --alias > ~/.config/fish/config.fish')
-    proc.sendline(u'fish')
-    return proc
+        def extract(self, **kwargs):
+        for i in self.streams:
+            # for each available stream
+            s = self.streams[i]
+            # fill in 'container' field and 'size' field (optional)
+            _, s['container'], s['size'] = url_info(s['url'])
+            # 'src' field is a list of processed urls for direct downloading
+            # usually derived from 'url'
+            s['src'] = [s['url']]
     
-        plugin_manager.register(Plugin)
-    try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
+    # CALL_FUNCTION_VAR_KW
+def function_5(dummy, dummy2, **dummy3):
+    if False:
+        return 7
+    return 8
     
+        @property
+    def contradiction(self):
+        pass
     
-def has_docutils():
-    try:
-        # noinspection PyUnresolvedReferences
-        import docutils
-        return True
-    except ImportError:
-        return False
-    
-        See <https://github.com/httpie/httpie-ntlm> for an example auth plugin.
-    
-            with open(self.path, 'w') as f:
-            json.dump(self, f, indent=4, sort_keys=True, ensure_ascii=True)
-            f.write('\n')
-    
-    
-class TestVerboseFlag:
-    def test_verbose(self, httpbin):
-        r = http('--verbose',
-                 'GET', httpbin.url + '/get', 'test-header:__test__')
-        assert HTTP_OK in r
-        assert r.count('__test__') == 2
-    
-            if args.job_metadata:
-            path = os.path.join(output_dir, '%s/job.json' % job_number)
-            contents = json.dumps(j, sort_keys=True, indent=4)
-    
-        return results
-
-    
-        def construct_yaml_map(self, node):
-        data = AnsibleMapping()
-        yield data
-        value = self.construct_mapping(node)
-        data.update(value)
-        data.ansible_pos = self._node_position_info(node)
-    
-    
-class FullJitterBackoffStrategyTestCase(unittest.TestCase):
-    def test_no_retries(self):
-        strategy = _full_jitter_backoff(retries=0)
-        result = list(strategy())
-        self.assertEquals(result, [], 'list should be empty')
-    
-            '''
-        if self.installer is None:
-            logger.warning('No installer is specified, there isn't any '
-                           'configuration to enhance.')
-            raise errors.Error('No installer available')
-    
-    # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
-    
-    
-def ConvertVimDataToCompletionData( vim_data ):
-  # see :h complete-items for a description of the dictionary fields
-  completion_data = {}
-    
-    from ycm.client.base_request import BaseRequest, BuildRequestData
-    
-    
-# This class can be used to keep the ycmd server alive for the duration of the
-# life of the client. By default, ycmd shuts down if it doesn't see a request in
-# a while.
-class YcmdKeepalive( object ):
-  def __init__( self, ping_interval_seconds = 60 * 10 ):
-    self._keepalive_thread = Thread( target = self._ThreadMain )
-    self._keepalive_thread.daemon = True
-    self._ping_interval_seconds = ping_interval_seconds
+            # Define a writable temp dir that will be used as cwd while running
+        # the tests. The name of the dir includes the pid to allow parallel
+        # testing (see the -j option).
+        test_cwd = 'test_python_{}'.format(os.getpid())
+        test_cwd = os.path.join(TEMPDIR, test_cwd)
