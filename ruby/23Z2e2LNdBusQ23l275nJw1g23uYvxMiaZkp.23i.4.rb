@@ -1,63 +1,99 @@
 
         
-            def no_subcommand(args)
-      unless args.empty? ||
-          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
-        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
-                          Run `jekyll help` to find out more.'
-        abort
-      end
+            # The entry filter for this collection.
+    # Creates an instance of Jekyll::EntryFilter.
+    #
+    # Returns the instance of Jekyll::EntryFilter for this collection.
+    def entry_filter
+      @entry_filter ||= Jekyll::EntryFilter.new(site, relative_directory)
     end
     
-          def site
-        @site_drop ||= SiteDrop.new(@obj)
+          class Servlet < WEBrick::HTTPServlet::FileHandler
+        DEFAULTS = {
+          'Cache-Control' => 'private, max-age=0, proxy-revalidate, ' \
+            'no-store, no-cache, must-revalidate',
+        }.freeze
+    
+          def jekyll
+        JekyllDrop.global
       end
     
-          #
-      # Require a gem or file if it's present, otherwise silently fail.
-      #
-      # names - a string gem name or array of gem names
-      #
-      def require_if_present(names)
-        Array(names).each do |name|
-          begin
-            require name
-          rescue LoadError
-            Jekyll.logger.debug 'Couldn't load #{name}. Skipping.'
-            yield(name, version_constraint(name)) if block_given?
-            false
+                  If you run into trouble, you can find helpful resources at https://jekyllrb.com/help/!
+            MSG
+            raise Jekyll::Errors::MissingDependencyException, name
           end
         end
       end
-    
-          options[:only_patterns] = [/\Ad3[\-\w]+\z/, /\Ad3\/blob\/master\/changes\.md\z/i]
-      options[:skip_patterns] = [/3\.x-api-reference/]
-    
-        options[:attribution] = <<-HTML
-      &copy; 1997&ndash;2018 The PHP Documentation Group<br>
-      Licensed under the Creative Commons Attribution License v3.0 or later.
-    HTML
+    end
   end
 end
 
     
-        private
+          it 'fills the gap with \\0 if buffer content is shorter than offset' do
+        n = [ 65, 66, 67 ]
+        buffer = '123'
+        n.pack('@6ccc', buffer: buffer).should == '123\0\0\0ABC'
+      end
     
-    # A logger that delays messages until they're explicitly flushed to an inner
-# logger.
-#
-# This can be installed around the current logger by calling \{#install!}, and
-# the original logger can be replaced by calling \{#uninstall!}. The log
-# messages can be flushed by calling \{#flush}.
-class Sass::Logger::Delayed < Sass::Logger::Base
-  # Installs a new delayed logger as the current Sass logger, wrapping the
-  # original logger.
-  #
-  # This can be undone by calling \{#uninstall!}.
-  #
-  # @return [Sass::Logger::Delayed] The newly-created logger.
-  def self.install!
-    logger = Sass::Logger::Delayed.new(Sass.logger)
-    Sass.logger = logger
-    logger
+        it 'does not expand ~ENV['USER'] when it's not at the start' do
+      File.expand_path('/~#{ENV['USER']}/a').should == '/~#{ENV['USER']}/a'
+    end
+    
+        ruby_version_is '2.4' do
+      it 'case folds' do
+        'ß'.casecmp?('ss').should be_true
+      end
+    end
+    
+      it 'returns a subclass instance for subclasses' do
+    StringSpecs::MyString.new('FOObar').downcase.should be_an_instance_of(StringSpecs::MyString)
+  end
+end
+    
+          it 'allows Turkic as an extra option (and applies Turkic semantics)' do
+        'iS'.swapcase(:lithuanian, :turkic).should == 'İs'
+      end
+    
+    if Encoding.default_external != Encoding::UTF_8
+    
+            def execute_repl_command(repl_command)
+          unless repl_command == '\n'
+            repl_commands = repl_command.split
+            subcommand = repl_commands.shift.capitalize
+            arguments = repl_commands
+            subcommand_class = Pod::Command::IPC.const_get(subcommand)
+            subcommand_class.new(CLAide::ARGV.new(arguments)).run
+            signal_end_of_output
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+        r0
+  end
+    
+          # Only print require() calls that did actual work.
+      # require() returns true on load, false if already loaded.
+      if result
+        source = caller[0]
+        #p source.include?('/lib/polyglot.rb:63:in `require'') => source
+        if source.include?('/lib/polyglot.rb:63:in `require'')
+          source = caller[1]
+        end
+    
+        outpath = file.gsub('.gz', '')
+    tgz = Zlib::GzipReader.new(File.open(file))
+    begin
+      File.open(outpath, 'w') do |out|
+        IO::copy_stream(tgz, out)
+      end
+      File.unlink(file)
+    rescue
+      File.unlink(outpath) if File.file?(outpath)
+     raise
+    end
+    tgz.close
   end
