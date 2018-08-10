@@ -1,197 +1,87 @@
 
         
-            groups << @user.authorized_groups.visible_to_user(current_user) if current_user
-    groups << @user.authorized_groups.public_to_user(current_user)
+            You can read more about this change at:
+      https://www.playframework.com/documentation/2.3.x/Migration23
+      https://www.playframework.com/documentation/2.3.x/Highlights23
+    EOS
+  when 'haskell-platform' then <<-EOS.undent
+    We no longer package haskell-platform. Consider installing ghc
+    and cabal-install instead:
+      brew install ghc cabal-install
     
-    def main(pidfile, cmd)
-  if middle_pid = Process.fork
-    # outer process
-    # Do not exit the outer process before the middle process finishes
-    Process.waitpid(middle_pid)
-    exit $?.exitstatus
+      def std?
+    @settings.include? :std
   end
     
-          if valid_type?(type)
-        type.constantize.new(attributes).tap do |instance|
-          instance.user = user if instance.respond_to?(:user=)
+        def self.cleanup_cache
+      return unless HOMEBREW_CACHE.directory?
+      HOMEBREW_CACHE.children.each do |path|
+        if path.to_s.end_with? '.incomplete'
+          cleanup_path(path) { path.unlink }
+          next
+        end
+        if path.basename.to_s == 'java_cache' && path.directory?
+          cleanup_path(path) { FileUtils.rm_rf path }
+          next
+        end
+        if prune?(path)
+          if path.file?
+            cleanup_path(path) { path.unlink }
+          elsif path.directory? && path.to_s.include?('--')
+            cleanup_path(path) { FileUtils.rm_rf path }
+          end
+          next
+        end
+    
+      def describe_ruby
+    ruby = which 'ruby'
+    return 'N/A' if ruby.nil?
+    ruby_binary = Utils.popen_read ruby, '-rrbconfig', '-e', \
+      'include RbConfig;print'#{CONFIG['bindir']}/#{CONFIG['ruby_install_name']}#{CONFIG['EXEEXT']}''
+    ruby_binary = Pathname.new(ruby_binary).realpath
+    if ruby == ruby_binary
+      ruby
+    else
+      '#{ruby} => #{ruby_binary}'
+    end
+  end
+    
+        checks.inject_dump_stats! if ARGV.switch? 'D'
+    
+    class PrettyListing
+  def initialize(path)
+    Pathname.new(path).children.sort_by { |p| p.to_s.downcase }.each do |pn|
+      case pn.basename.to_s
+      when 'bin', 'sbin'
+        pn.find { |pnn| puts pnn unless pnn.directory? }
+      when 'lib'
+        print_dir pn do |pnn|
+          # dylibs have multiple symlinks and we don't care about them
+          (pnn.extname == '.dylib' || pnn.extname == '.pc') && !pnn.symlink?
         end
       else
-        const_get(:BASE_CLASS_NAME).constantize.new(attributes).tap do |instance|
-          instance.type = type
-          instance.user = user if instance.respond_to?(:user=)
+        if pn.directory?
+          if pn.symlink?
+            puts '#{pn} -> #{pn.readlink}'
+          else
+            print_dir pn
+          end
+        elsif Metafiles.list?(pn.basename.to_s)
+          puts pn
         end
       end
     end
   end
-end
     
-        begin
-      raise '#{short_type} does not support dry-run' unless can_dry_run?
-      readonly!
-      @dry_run_started_at = Time.zone.now
-      @dry_run_logger.info('Dry Run started')
-      if event
-        raise 'This agent cannot receive an event!' unless can_receive_events?
-        receive([event])
-      else
-        check
-      end
-      @dry_run_logger.info('Dry Run finished')
-    rescue => e
-      @dry_run_logger.info('Dry Run failed')
-      error 'Exception during dry-run. #{e.message}: #{e.backtrace.join('\n')}'
-    end
+              subtree, file = File.split(object['path'])
     
-        @services = current_user.services.reorder(table_sort).page(params[:page])
+    BASE_URI = ENV['BASE_URI'] || 'https://github.com/jondot/awesome-react-native'
     
-      def test_keyword_self_reference
-    bug9593 = '[ruby-core:61299] [Bug #9593]'
-    o = Object.new
-    assert_warn(/circular argument reference - var/) do
-      o.instance_eval('def foo(var: defined?(var)) var end')
-    end
-    assert_equal(42, o.foo(var: 42))
-    assert_equal('local-variable', o.foo, bug9593)
+    html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
+readme_doctree = REXML::Document.new(html_readme)
+links = REXML::XPath.match(readme_doctree, '//a')
     
-      ##
-  # The default set of extensions are:
-  #
-  # * The certificate is not a certificate authority
-  # * The key for the certificate may be used for key and data encipherment
-  #   and digital signatures
-  # * The certificate contains a subject key identifier
-    
-      def test_post_install_message_no
-    @cmd.handle_options %w[--no-post-install-message]
-    
-        assert_equal URI(@proxy_uri), proxy
-  end
-    
-      def participation_answer(user)
-    poll_participations.find_by(author_id: user.person.id)
-  end
-    
-        on :fetch_private_key do |diaspora_id|
-      key = Person.where(diaspora_handle: diaspora_id).joins(:owner).pluck(:serialized_private_key).first
-      OpenSSL::PKey::RSA.new(key) unless key.nil?
-    end
-    
-        def index
-      pods_json = PodPresenter.as_collection(Pod.all)
-    
-        def assign_attributes(values)
-      values.each do |k, v|
-        public_send('#{k}=', v)
-      end
-    end
-    
-      def _log(level, message)
-    @messages << [level, message]
-  end
-end
-
-    
-            {
-          :always_update     => false,
-          :template_location => root + '/public/stylesheets/sass',
-          :css_location      => root + '/public/stylesheets',
-          :cache_location    => root + '/tmp/sass-cache',
-          :always_check      => env != 'production',
-          :quiet             => env != 'production',
-          :full_exception    => env != 'production'
-        }.freeze
-      end
-    end
-  end
-    
-    @@ layout
-<html>
-  <head>
-    <title>Super Simple Chat with Sinatra</title>
-    <meta charset='utf-8' />
-    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
-  </head>
-  <body><%= yield %></body>
-</html>
-    
-          def escape_string(str)
-        str = @escaper.escape_url(str)        if @url
-        str = @escaper.escape_html(str)       if @html
-        str = @escaper.escape_javascript(str) if @javascript
-        str
-      end
-    end
-  end
-end
-
-    
-        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      subject.options[:allow_empty_referrer] = false
-      expect(subject.referrer(env)).to be_nil
-    end
-    
-      it 'should not override the header if already set' do
-    mock_app with_headers('X-Frame-Options' => 'allow')
-    expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('allow')
-  end
-end
-
-    
-        it 'accepts #{method} requests with whitelisted Origin' do
-      mock_app do
-        use Rack::Protection::HttpOrigin, :origin_whitelist => ['http://www.friend.com']
-        run DummyApp
-      end
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://www.friend.com')).to be_ok
-    end
-  end
-end
-
-    
-      it 'should not override the header if already set X-Content-Type-Options' do
-    mock_app with_headers('X-Content-Type-Options' => 'sniff')
-    expect(get('/', {}, 'wants' => 'text/html').headers['X-Content-Type-Options']).to eq('sniff')
-  end
-end
-
-    
-      # rspec-mocks config goes here. You can use an alternate test double
-  # library (such as bogus or mocha) by changing the `mock_with` option here.
-  config.mock_with :rspec do |mocks|
-    # Enable only the newer, non-monkey-patching expect syntax.
-    # For more details, see:
-    #   - http://teaisaweso.me/blog/2013/05/27/rspecs-new-message-expectation-syntax/
-    mocks.syntax = :expect
-    
-      it 'allows passing on values in env' do
-    klass    = described_class
-    changer  = Struct.new(:app) do
-      def call(env)
-        env['foo.bar'] = 42
-        app.call(env)
-      end
-    end
-    detector = Struct.new(:app) do
-      def call(env)
-        app.call(env)
-      end
-    end
-    
-        def add_paperclip_callbacks
-      @klass.send(
-        :define_paperclip_callbacks,
-        :post_process, :'#{@name}_post_process')
-    end
-    
-      # Get list of styles saved on previous deploy (running rake paperclip:refresh:missing_styles)
-  def self.get_registered_attachments_styles
-    YAML.load_file(Paperclip.registered_attachments_styles_path)
-  rescue Errno::ENOENT
-    nil
-  end
-  private_class_method :get_registered_attachments_styles
-    
-        def clear_processors!
-      @known_processors.try(:clear)
-    end
+        def render(context)
+      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
+      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
+      file = code_path + @file
