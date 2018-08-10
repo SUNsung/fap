@@ -1,353 +1,404 @@
 
         
-        namespace {
-    }
+          /// This is the second time DebuggerClient is consulted:
+  /// after all names in external Modules are checked, the client
+  /// gets a chance to add names to the list of candidates that
+  /// have been found in the external module lookup.
     
-    class UnresponsiveSuppressor {
- public:
-  UnresponsiveSuppressor();
-  ~UnresponsiveSuppressor();
-    }
+    #endif
+
     
-    #ifndef ATOM_RENDERER_PREFERENCES_MANAGER_H_
-#define ATOM_RENDERER_PREFERENCES_MANAGER_H_
     
-      // Sent when the applications in the NTP app launcher have been reordered.
-  // The details, if not NoDetails, is the std::string ID of the extension that
-  // was moved.
-  NOTIFICATION_EXTENSION_LAUNCHER_REORDERED,
+    {
+    {  bool didErrorOccur() {
+    return DidErrorOccur;
+  }
+};
+  
+}
+    
+    #include 'swift/Runtime/HeapObject.h'
+#include <mutex>
+    
+    
+    {} // end namespace swift
     
     
     { private:
-  DISALLOW_COPY_AND_ASSIGN(PrintingUIWebContentsObserver);
+  App();
+  DISALLOW_COPY_AND_ASSIGN(App);
 };
     
-    #if defined(OS_MACOSX)
-const base::FilePath::CharType kFrameworkName[] =
-    FPL(ATOM_PRODUCT_NAME ' Framework.framework');
-#endif  // OS_MACOSX
-    
-    #pragma once
-    
-        // create a section from config parameters
-    Section* CreateSection(const ConfigParameters& config, Section* parentSection, size_t p_records, size_t p_windowSize = 0);
-    Section* CreateSection(const ScriptableObjects::IConfigRecord& config, Section* parentSection, size_t p_records, size_t p_windowSize = 0);
+    #include 'content/nw/src/api/base/base.h'
     
     
-    {    // TODO: as soon as beta != 0.0 the 'MultiplyAndWeightedAdd' fails with stack overflow (also in the first test 5 lines above)
-    // alpha = 2.4f;
-    // beta = 3.4f;
-    // mCsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
-    // Matrix<float>::MultiplyAndWeightedAdd(alpha, mAdense, transposeA, mBdense, transposeB, beta, mCdense);
-    // Matrix<float>::MultiplyAndWeightedAdd(alpha, mAsparse, transposeA, mBsparse, transposeB, beta, mCsparse);
-    // mCsparse.SwitchToMatrixType(MatrixType::DENSE, matrixFormatDense, true);
-    // BOOST_CHECK(mCsparse.IsEqualTo(mCdense, c_epsilonFloatE4));
-}
-    
-        // save model
-    if (!useParallelTrain || m_mpi->CurrentNodeRank() == m_mpi->MainNodeRank())
-        m_net->Save(newModelPath);
-    
-        bool empty() const
-    {
-#ifndef NONUMLATTICEMMI // TODO:set NUM lattice to null so as to save memory
-        if (numlattices.empty() ^ denlattices.empty())
-            RuntimeError('latticesource: numerator and denominator lattices must be either both empty or both not empty');
-#endif
-        return denlattices.empty();
+namespace nwapi {
     }
     
-    namespace msra { namespace math {
-    }
-    }
-    
-    vector<wstring> /*IConfigRecord::*/ ComputationNodeBase::GetMemberIds() const
-{
-    return vector<wstring>{ L'name', L'operation', L'dim', L'dims', /*L'tag', */L'inputs', OperationName() + L'Args' };
-}
-    
-    
-    {
-    {            if (m_recordCount != 0)
-            {
-                // record count must be the same for all the data
-                if (recordCount != m_recordCount)
-                    RuntimeError('Record Count of %ls (%lux%lu) does not match the record count of previous entries (%lu).', val.c_str(), rows, recordCount, m_recordCount);
-            }
-            else
-            {
-                m_recordCount = recordCount;
-            }
-        }
+    class MenuDelegate : public ui::SimpleMenuModel::Delegate {
+ public:
+  MenuDelegate(ObjectManager* object_manager);
+  ~MenuDelegate() override;
     }
     
-      ASSERT_OK(DB::Open(options, '/dir/db', &db));
-  for (size_t i = 0; i < 3; ++i) {
-    ASSERT_OK(db->Put(WriteOptions(), keys[i], vals[i]));
+    namespace nw {
+    }
+    
+        std::string label;
+    if (option.GetString('label', &label))
+      SetLabel(label);
+    
+    void MenuItem::UpdateKeys(views::FocusManager *focus_manager){
+  if (focus_manager == NULL){
+    return ;
+  } else {
+    focus_manager_ = focus_manager;
+    if (enable_shortcut_){
+      focus_manager->RegisterAccelerator(
+        accelerator_,
+        ui::AcceleratorManager::kHighPriority,
+        this);
+    }
+    if (submenu_ != NULL){
+      submenu_->UpdateKeys(focus_manager);
+    }
   }
-    
-    namespace leveldb {
-    }
-    
-    size_t BlockBuilder::CurrentSizeEstimate() const {
-  return (buffer_.size() +                        // Raw data buffer
-          restarts_.size() * sizeof(uint32_t) +   // Restart array
-          sizeof(uint32_t));                      // Restart array length
 }
     
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     
-    {
-}  // namespace leveldb
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+};
+    
+    void convert_dataset(const char* image_filename, const char* label_filename,
+        const char* db_path, const string& db_backend) {
+  // Open files
+  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
+  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
+  CHECK(image_file) << 'Unable to open file ' << image_filename;
+  CHECK(label_file) << 'Unable to open file ' << label_filename;
+  // Read the magic and the meta data
+  uint32_t magic;
+  uint32_t num_items;
+  uint32_t num_labels;
+  uint32_t rows;
+  uint32_t cols;
+    }
+    
+      /**
+   * @brief Applies the same transformation defined in the data layer's
+   * transform_param block to all the num images in a input_blob.
+   *
+   * @param input_blob
+   *    A Blob containing the data to be transformed. It applies the same
+   *    transformation to all the num images in the blob.
+   * @param transformed_blob
+   *    This is destination blob, it will contain as many images as the
+   *    input blob. It can be part of top blob's data.
+   */
+  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
+    
+    #endif  // CAFFE_BNLL_LAYER_HPP_
 
     
-      // Reset the contents as if the BlockBuilder was just constructed.
-  void Reset();
+    #include <vector>
     
-    
-    {    switch (msg)
-    {
-    case WM_SIZE:
-        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
-        {
-            ImGui_ImplDX10_InvalidateDeviceObjects();
-            CleanupRenderTarget();
-            g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
-            CreateRenderTarget();
-            ImGui_ImplDX10_CreateDeviceObjects();
-        }
-        return 0;
-    case WM_SYSCOMMAND:
-        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
-            return 0;
-        break;
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        return 0;
-    }
-    return DefWindowProc(hWnd, msg, wParam, lParam);
-}
-    
-        // Upload Fonts
-    {
-        // Use any command queue
-        VkCommandPool command_pool = wd->Frames[wd->FrameIndex].CommandPool;
-        VkCommandBuffer command_buffer = wd->Frames[wd->FrameIndex].CommandBuffer;
-    }
-    
-        // Create the vertex shader
-    {
-        static const char* vertexShader =
-            'cbuffer vertexBuffer : register(b0) \
-            {\
-              float4x4 ProjectionMatrix; \
-            };\
-            struct VS_INPUT\
-            {\
-              float2 pos : POSITION;\
-              float4 col : COLOR0;\
-              float2 uv  : TEXCOORD0;\
-            };\
-            \
-            struct PS_INPUT\
-            {\
-              float4 pos : SV_POSITION;\
-              float4 col : COLOR0;\
-              float2 uv  : TEXCOORD0;\
-            };\
-            \
-            PS_INPUT main(VS_INPUT input)\
-            {\
-              PS_INPUT output;\
-              output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));\
-              output.col = input.col;\
-              output.uv  = input.uv;\
-              return output;\
-            }';
-    }
-    
-    /*
-XXH32() :
-    Calculate the 32-bits hash of sequence of length 'len' stored at memory address 'input'.
-    The memory between input & input+len must be valid (allocated and read-accessible).
-    'seed' can be used to alter the result predictably.
-    This function successfully passes all SMHasher tests.
-    Speed on Core 2 Duo @ 3 GHz (single thread, SMHasher benchmark) : 5.4 GB/s
-    Note that 'len' is type 'int', which means it is limited to 2^31-1.
-    If your data is larger, use the advanced functions below.
-*/
-    
-      // Read some more
-  bool ReadMore(size_t* drop_size, int *error);
-    
-    #include 'rocksjni/statisticsjni.h'
-    
-    // A file abstraction for reading sequentially through a file
-class LibradosSequentialFile : public SequentialFile {
-  librados::IoCtx * _io_ctx;
-  std::string _fid;
-  std::string _hint;
-  int _offset;
-public:
-  LibradosSequentialFile(librados::IoCtx * io_ctx, std::string fid, std::string hint):
-    _io_ctx(io_ctx), _fid(fid), _hint(hint), _offset(0) {}
-    }
-    
-    DirectComparatorJniCallback::DirectComparatorJniCallback(
-    JNIEnv* env, jobject jComparator,
-    const ComparatorJniCallbackOptions* copt) :
-    BaseComparatorJniCallback(env, jComparator, copt) {
-  m_jSliceA = env->NewGlobalRef(DirectSliceJni::construct0(env));
-  if(m_jSliceA == nullptr) {
-    // exception thrown: OutOfMemoryError
-    return;
-  }
-    }
-    
-      class LoggerJniCallback : public JniCallback, public Logger {
-   public:
-     LoggerJniCallback(JNIEnv* env, jobject jLogger);
-     ~LoggerJniCallback();
-    }
-    
-    
-void SyncPoint::Data::LoadDependency(const std::vector<SyncPointPair>& dependencies) {
-  std::lock_guard<std::mutex> lock(mutex_);
-  successors_.clear();
-  predecessors_.clear();
-  cleared_points_.clear();
-  for (const auto& dependency : dependencies) {
-    successors_[dependency.predecessor].push_back(dependency.successor);
-    predecessors_[dependency.successor].push_back(dependency.predecessor);
-  }
-  cv_.notify_all();
-}
-    
-    #ifndef WAKEUPLOCK_H_
-#define WAKEUPLOCK_H_
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-      private:
-    int __TestFun1(int i);
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    class JSONReporter : public BenchmarkReporter {
+    /**
+ * @brief Convolves the input image with a bank of learned filters,
+ *        and (optionally) adds biases.
+ *
+ *   Caffe convolves by reduction to matrix multiplication. This achieves
+ *   high-throughput and generality of input and filter dimensions but comes at
+ *   the cost of memory for matrices. This makes use of efficiency in BLAS.
+ *
+ *   The input is 'im2col' transformed to a channel K' x H x W data matrix
+ *   for multiplication with the N x K' x H x W filter matrix to yield a
+ *   N' x H x W output matrix that is then 'col2im' restored. K' is the
+ *   input channel * kernel height * kernel width dimension of the unrolled
+ *   inputs so that the im2col matrix has a column for each input region to
+ *   be filtered. col2im restores the output spatial structure by rolling up
+ *   the output channel N' columns of the output matrix.
+ */
+template <typename Dtype>
+class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
  public:
-  JSONReporter() : first_report_(true) {}
-  virtual bool ReportContext(const Context& context);
-  virtual void ReportRuns(const std::vector<Run>& reports);
-  virtual void Finalize();
+  /**
+   * @param param provides ConvolutionParameter convolution_param,
+   *    with ConvolutionLayer options:
+   *  - num_output. The number of filters.
+   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
+   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
+   *  filters.
+   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
+   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
+   *  for different strides. By default the convolution is dense with stride 1.
+   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
+   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
+   *  different padding. Input padding is computed implicitly instead of
+   *  actually padding.
+   *  - dilation (\b optional, default 1). The filter
+   *  dilation, given by dilation_size for equal dimensions for different
+   *  dilation. By default the convolution has dilation 1.
+   *  - group (\b optional, default 1). The number of filter groups. Group
+   *  convolution is a method for reducing parameterization by selectively
+   *  connecting input and output channels. The input and output channel dimensions must be divisible
+   *  by the number of groups. For group @f$ \geq 1 @f$, the
+   *  convolutional filters' input and output channels are separated s.t. each
+   *  group takes 1 / group of the input channels and makes 1 / group of the
+   *  output channels. Concretely 4 input channels, 8 output channels, and
+   *  2 groups separate input channels 1-2 and output channels 1-4 into the
+   *  first group and input channels 3-4 and output channels 5-8 into the second
+   *  group.
+   *  - bias_term (\b optional, default true). Whether to have a bias.
+   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
+   *    kernels + stream parallelism) engines.
+   */
+  explicit ConvolutionLayer(const LayerParameter& param)
+      : BaseConvolutionLayer<Dtype>(param) {}
     }
     
-      BENCHMARK_NORETURN ~CheckHandler() BENCHMARK_NOEXCEPT_OP(false) {
-    log_ << std::endl;
-    CallAbortHandler();
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    namespace caffe {
+    }
+    
+    Variant HHVM_FUNCTION(xhprof_network_disable) {
+  return ServerStats::EndNetworkProfile();
+}
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+      /* Second, try to get a magic file from Common Files */
+  if ((home = getenv('COMMONPROGRAMFILES')) != NULL) {
+    if (asprintf(&tmppath, '%s%s', home, hmagic) >= 0)
+      APPENDPATH();
   }
     
-    // Returns true if stdout appears to be a terminal that supports colored
-// output, false otherwise.
-bool IsColorTerminal();
     
-    // Parses a bool/Int32/string from the environment variable
-// corresponding to the given Google Test flag.
-bool BoolFromEnv(const char* flag, bool default_val);
-int32_t Int32FromEnv(const char* flag, int32_t default_val);
-double DoubleFromEnv(const char* flag, double default_val);
-const char* StringFromEnv(const char* flag, const char* default_val);
+    {    auto const need = nBytes - available();
+    auto const amt = std::min(std::max(m_size + need, 2 * m_size), m_maxGrow);
+    if (amt < m_size + need) return false;
+    if (!m_destBuf) {
+      m_destBuf.reset((Address)::malloc(amt));
+      ::memcpy(m_destBuf.get(), m_destBase, used());
+    } else {
+      m_destBuf.reset((Address)::realloc(m_destBuf.release(), amt));
+    }
+    if (!m_destBuf) reportMallocError(amt);
+    m_destBase = m_destBuf.get();
+    m_size = amt;
+    return true;
+  }
+    
+    folly::Optional<Type> usual_arith_conversions(Type t1, Type t2) {
+  /*
+   * TODO(#3577303): some of these could be nothrow, which is probably
+   * information we have want to propagate back out through the return
+   * value here (rather than bundling everything into the
+   * interpreter).
+   */
+  if (t1.subtypeOf(BInt) && t2.subtypeOf(BInt)) return TInt;
+  if (t1.subtypeOf(BInt) && t2.subtypeOf(BDbl)) return TDbl;
+  if (t1.subtypeOf(BDbl) && t2.subtypeOf(BInt)) return TDbl;
+  if (t1.subtypeOf(BDbl) && t2.subtypeOf(BDbl)) return TDbl;
+  if (t1.subtypeOf(BNum) && t2.subtypeOf(BNum)) return TNum;
+  return folly::none;
+}
+    
+      bool autoloadFunc(StringData* name);
+  bool autoloadConstant(StringData* name);
+  bool autoloadType(const String& name);
+  bool setMap(const Array& map, const String& root);
+  DECLARE_STATIC_REQUEST_LOCAL(AutoloadHandler, s_instance);
+    
+      /*
+   * Construct an unserializer, with an optional whitelist of classes to
+   * allow. In the whitelist, empty_array means 'allow no classes', while
+   * null_array means allow any classes.  We default to null_array since
+   * serialization is not limited inside the VM.
+   */
+  VariableUnserializer(
+    const char* str,
+    size_t len,
+    Type type,
+    bool allowUnknownSerializableClass = false,
+    const Array& options = null_array);
+    
+    bool EncodeMetadata(const JPEGData& jpg, bool strip_metadata, JPEGOutput out) {
+  if (strip_metadata) {
+    const uint8_t kApp0Data[] = {
+      0xff, 0xe0, 0x00, 0x10,        // APP0
+      0x4a, 0x46, 0x49, 0x46, 0x00,  // 'JFIF'
+      0x01, 0x01,                    // v1.01
+      0x00, 0x00, 0x01, 0x00, 0x01,  // aspect ratio = 1:1
+      0x00, 0x00                     // thumbnail width/height
+    };
+    return JPEGWrite(out, kApp0Data, sizeof(kApp0Data));
+  }
+  bool ok = true;
+  for (size_t i = 0; i < jpg.app_data.size(); ++i) {
+    uint8_t data[1] = { 0xff };
+    ok = ok && JPEGWrite(out, data, sizeof(data));
+    ok = ok && JPEGWrite(out, jpg.app_data[i]);
+  }
+  for (size_t i = 0; i < jpg.com_data.size(); ++i) {
+    uint8_t data[2] = { 0xff, 0xfe };
+    ok = ok && JPEGWrite(out, data, sizeof(data));
+    ok = ok && JPEGWrite(out, jpg.com_data[i]);
+  }
+  return ok;
+}
+    
+    void OutputImageComponent::Reset(int factor_x, int factor_y) {
+  factor_x_ = factor_x;
+  factor_y_ = factor_y;
+  width_in_blocks_ = (width_ + 8 * factor_x_ - 1) / (8 * factor_x_);
+  height_in_blocks_ = (height_ + 8 * factor_y_ - 1) / (8 * factor_y_);
+  num_blocks_ = width_in_blocks_ * height_in_blocks_;
+  coeffs_ = std::vector<coeff_t>(num_blocks_ * kDCTBlockSize);
+  pixels_ = std::vector<uint16_t>(width_ * height_, 128 << 4);
+  for (int i = 0; i < kDCTBlockSize; ++i) quant_[i] = 1;
+}
+    
+    static const uint8_t kRangeLimitLut[4 * 256] = {
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
+  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
+  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
+  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
+  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
+  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
+  96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
+ 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+ 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
+ 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
+ 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
+ 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
+ 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
+ 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
+ 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
+ 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+};
+    
+    
+    {
+    {
+    {      // Add back the last sentinel node.
+      tree[j_end + 1] = sentinel;
+    }
+    if (SetDepth(static_cast<int>(2 * n - 1), &tree[0], depth, tree_limit)) {
+      /* We need to pack the Huffman tree in tree_limit bits. If this was not
+         successful, add fake entities to the lowest values and retry. */
+      break;
+    }
+  }
+}
+    
+    inline int Log2FloorNonZero(uint32_t n) {
+#ifdef __GNUC__
+  return 31 ^ __builtin_clz(n);
+#else
+  unsigned int result = 0;
+  while (n >>= 1) result++;
+  return result;
+#endif
+}
+    
+    namespace guetzli {
+    }
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    bool IsZero(double n);
     
     namespace benchmark {
+// Parses 'str' for a 32-bit signed integer.  If successful, writes the result
+// to *value and returns true; otherwise leaves *value unchanged and returns
+// false.
+bool ParseInt32(const std::string& src_text, const char* str, int32_t* value);
     }
     
-    double Finish(Counter const& c, double cpu_time, double num_threads) {
-  double v = c.value;
-  if (c.flags & Counter::kIsRate) {
-    v /= cpu_time;
+      if (run.bytes_per_second > 0.0) {
+    Out << run.bytes_per_second;
   }
-  if (c.flags & Counter::kAvgThreads) {
-    v /= num_threads;
+  Out << ',';
+  if (run.items_per_second > 0.0) {
+    Out << run.items_per_second;
   }
-  return v;
-}
+  Out << ',';
+  if (!run.report_label.empty()) {
+    // Field with embedded double-quote characters must be doubled and the field
+    // delimited with double-quotes.
+    std::string label = run.report_label;
+    ReplaceAll(&label, '\'', '\'\'');
+    Out << '\'' << label << '\'';
+  }
+  Out << ',,';  // for error_occurred and error_message
     
     
-    {
-    {
-    {  // Native Client does not provide any API to access cycle counter.
-  // Use clock_gettime(CLOCK_MONOTONIC, ...) instead of gettimeofday
-  // because is provides nanosecond resolution (which is noticable at
-  // least for PNaCl modules running on x86 Mac & Linux).
-  // Initialize to always return 0 if clock_gettime fails.
-  struct timespec ts = { 0, 0 };
-  clock_gettime(CLOCK_MONOTONIC, &ts);
-  return static_cast<int64_t>(ts.tv_sec) * 1000000000 + ts.tv_nsec;
-#elif defined(__aarch64__)
-  // System timer of ARMv8 runs at a different frequency than the CPU's.
-  // The frequency is fixed, typically in the range 1-50MHz.  It can be
-  // read at CNTFRQ special register.  We assume the OS has set up
-  // the virtual timer properly.
-  int64_t virtual_timer_value;
-  asm volatile('mrs %0, cntvct_el0' : '=r'(virtual_timer_value));
-  return virtual_timer_value;
-#elif defined(__ARM_ARCH)
-  // V6 is the earliest arch that has a standard cyclecount
-  // Native Client validator doesn't allow MRC instructions.
-#if (__ARM_ARCH >= 6)
-  uint32_t pmccntr;
-  uint32_t pmuseren;
-  uint32_t pmcntenset;
-  // Read the user mode perf monitor counter access permissions.
-  asm volatile('mrc p15, 0, %0, c9, c14, 0' : '=r'(pmuseren));
-  if (pmuseren & 1) {  // Allows reading perfmon counters for user mode code.
-    asm volatile('mrc p15, 0, %0, c9, c12, 1' : '=r'(pmcntenset));
-    if (pmcntenset & 0x80000000ul) {  // Is it counting?
-      asm volatile('mrc p15, 0, %0, c9, c13, 0' : '=r'(pmccntr));
-      // The counter is set up to count every 64th cycle
-      return static_cast<int64_t>(pmccntr) * 64;  // Should optimize to << 6
-    }
-  }
+    {#ifndef NDEBUG
+  Out << '***WARNING*** Library was built as DEBUG. Timings may be '
+         'affected.\n';
 #endif
-  struct timeval tv;
-  gettimeofday(&tv, nullptr);
-  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
-#elif defined(__mips__)
-  // mips apparently only allows rdtsc for superusers, so we fall
-  // back to gettimeofday.  It's possible clock_gettime would be better.
-  struct timeval tv;
-  gettimeofday(&tv, nullptr);
-  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
-#else
-// The soft failover to a generic implementation is automatic only for ARM.
-// For other platforms the developer is expected to make an attempt to create
-// a fast implementation and use generic version if nothing better is available.
-#error You need to define CycleTimer for your OS and CPU
-#endif
-}
-}  // end namespace cycleclock
-}  // end namespace benchmark
-    
-    double BenchmarkReporter::Run::GetAdjustedRealTime() const {
-  double new_time = real_accumulated_time * GetTimeUnitMultiplier(time_unit);
-  if (iterations != 0) new_time /= static_cast<double>(iterations);
-  return new_time;
-}
-    
-    double StatisticsMedian(const std::vector<double>& v) {
-  if (v.size() < 3) return StatisticsMean(v);
-  std::vector<double> partial;
-  // we need roundDown(count/2)+1 slots
-  partial.resize(1 + (v.size() / 2));
-  std::partial_sort_copy(v.begin(), v.end(), partial.begin(), partial.end());
-  // did we have odd number of samples?
-  // if yes, then the last element of partially-sorted vector is the median
-  // it no, then the average of the last two elements is the median
-  if(v.size() % 2 == 1)
-    return partial.back();
-  return (partial[partial.size() - 2] + partial[partial.size() - 1]) / 2.0;
 }
