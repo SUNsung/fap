@@ -1,163 +1,135 @@
 
         
-            Models: `flatpages.flatpages`
-    Templates: Uses the template defined by the ``template_name`` field,
-        or :template:`flatpages/default.html` if template_name is not defined.
-    Context:
-        flatpage
-            `flatpages.flatpages` object
-    '''
-    if not url.startswith('/'):
-        url = '/' + url
-    site_id = get_current_site(request).id
-    try:
-        f = get_object_or_404(FlatPage, url=url, sites=site_id)
-    except Http404:
-        if not url.endswith('/') and settings.APPEND_SLASH:
-            url += '/'
-            f = get_object_or_404(FlatPage, url=url, sites=site_id)
-            return HttpResponsePermanentRedirect('%s/' % request.path)
-        else:
-            raise
-    return render_flatpage(request, f)
+        num_classes = 10
+batch_size = 128
+epochs = 15
+weighted_class = 5
+high_weight = 10
+train_samples = 5000
+test_samples = 1000
+timesteps = 3
+input_dim = 10
+loss = 'mse'
+loss_full_name = 'mean_squared_error'
+standard_weight = 1
+standard_score_sequential = 0.5
     
     
-class _BenchServer(object):
+@keras_test
+@skipif_no_tf_gpu
+def test_trainability():
+    input_size = 10
+    units = 2
+    for layer_class in [keras.layers.CuDNNGRU, keras.layers.CuDNNLSTM]:
+        layer = layer_class(units)
+        layer.build((None, None, input_size))
+        assert len(layer.weights) == 3
+        assert len(layer.trainable_weights) == 3
+        assert len(layer.non_trainable_weights) == 0
+        layer.trainable = False
+        assert len(layer.weights) == 3
+        assert len(layer.non_trainable_weights) == 3
+        assert len(layer.trainable_weights) == 0
+        layer.trainable = True
+        assert len(layer.weights) == 3
+        assert len(layer.trainable_weights) == 3
+        assert len(layer.non_trainable_weights) == 0
     
-        def crawled_similar(self, signature):
-        '''Determine if we've already crawled a page matching the given signature'''
-        pass
-    
-            When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
-        '''
-        node = self.lookup.get(query)
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
-        else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
+    history = model.fit(x_train, y_train,
+                    batch_size=batch_size,
+                    epochs=epochs,
+                    verbose=1,
+                    validation_split=0.1)
+score = model.evaluate(x_test, y_test,
+                       batch_size=batch_size, verbose=1)
+print('Test score:', score[0])
+print('Test accuracy:', score[1])
 
     
-        def reducer(self, key, values):
-        '''Sum values for each key.
     
-            # What is index of token/char were we looking at when the error
-        # occurred?
-        self.index = None
+@keras_test
+def test_max_norm():
+    array = get_example_array()
+    for m in get_test_values():
+        norm_instance = constraints.max_norm(m)
+        normed = norm_instance(K.variable(array))
+        assert(np.all(K.eval(normed) < m))
     
-    import logging
-import numpy as np
-import os
-import shutil
-import uuid
+        x = K.placeholder(ndim=2)
+    f = K.function([x], [activations.softplus(x)])
+    test_values = get_standard_values()
     
-                        image['width'] = json_ann['imgWidth']
-                    image['height'] = json_ann['imgHeight']
-                    image['file_name'] = filename[:-len(
-                        ends_in % data_set.split('_')[0])] + 'leftImg8bit.png'
-                    image['seg_file_name'] = filename[:-len(
-                        ends_in % data_set.split('_')[0])] + \
-                        '%s_instanceIds.png' % data_set.split('_')[0]
-                    images.append(image)
+    - LSTM loss decrease patterns during training can be quite different
+from what you see with CNNs/MLPs/etc.
+'''
+from __future__ import print_function
     
     
-if __name__ == '__main__':
-    args = parse_args()
-    print(args)
-    assert os.path.exists(args.coco_model_file_name), \
-        'Weights file does not exist'
-    weights = load_and_convert_coco_model(args)
+def create_network(n_dense=6,
+                   dense_units=16,
+                   activation='selu',
+                   dropout=AlphaDropout,
+                   dropout_rate=0.1,
+                   kernel_initializer='lecun_normal',
+                   optimizer='adam',
+                   num_classes=1,
+                   max_words=max_words):
+    '''Generic function to create a fully-connected neural network.
     
-    from detectron.datasets.dataset_catalog import get_ann_fn
-from detectron.utils.timer import Timer
     
+def test_sparse_categorical_crossentropy_4d():
+    y_pred = K.variable(np.array([[[[0.7, 0.1, 0.2],
+                                    [0.0, 0.3, 0.7],
+                                    [0.1, 0.1, 0.8]],
+                                   [[0.3, 0.7, 0.0],
+                                    [0.3, 0.4, 0.3],
+                                    [0.2, 0.5, 0.3]],
+                                   [[0.8, 0.1, 0.1],
+                                    [1.0, 0.0, 0.0],
+                                    [0.4, 0.3, 0.3]]]]))
+    y_true = K.variable(np.array([[[0, 1, 0],
+                                   [2, 1, 0],
+                                   [2, 2, 1]]]))
+    expected_loss = - (np.log(0.7) + np.log(0.3) + np.log(0.1) +
+                       np.log(K.epsilon()) + np.log(0.4) + np.log(0.2) +
+                       np.log(0.1) + np.log(K.epsilon()) + np.log(0.3)) / 9
+    loss = K.eval(losses.sparse_categorical_crossentropy(y_true, y_pred))
+    assert np.isclose(expected_loss, np.mean(loss))
     
-def evaluate_all(
-    dataset, all_boxes, all_segms, all_keyps, output_dir, use_matlab=False
-):
-    '''Evaluate 'all' tasks, where 'all' includes box detection, instance
-    segmentation, and keypoint detection.
+        # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
     '''
-    all_results = evaluate_boxes(
-        dataset, all_boxes, output_dir, use_matlab=use_matlab
-    )
-    logger.info('Evaluating bounding boxes is done!')
-    if cfg.MODEL.MASK_ON:
-        results = evaluate_masks(dataset, all_boxes, all_segms, output_dir)
-        all_results[dataset.name].update(results[dataset.name])
-        logger.info('Evaluating segmentations is done!')
-    if cfg.MODEL.KEYPOINTS_ON:
-        results = evaluate_keypoints(dataset, all_boxes, all_keyps, output_dir)
-        all_results[dataset.name].update(results[dataset.name])
-        logger.info('Evaluating keypoints is done!')
-    return all_results
+    assert 0 <= test_split < 1
+    path = get_file(path,
+                    origin='https://s3.amazonaws.com/keras-datasets/boston_housing.npz',
+                    file_hash='f553886a1f8d56431e820c5b82552d9d95cfcb96d1e678153f8839538947dff5')
+    f = np.load(path)
+    x = f['x']
+    y = f['y']
+    f.close()
     
-        # compute precision recall
-    fp = np.cumsum(fp)
-    tp = np.cumsum(tp)
-    rec = tp / float(npos)
-    # avoid divide by zero in case the first detection matches a difficult
-    # ground truth
-    prec = tp / np.maximum(tp + fp, np.finfo(np.float64).eps)
-    ap = voc_ap(rec, prec, use_07_metric)
-    
-        if cfg.KRCNN.USE_DECONV:
-        # Apply ConvTranspose to the feature representation; results in 2x
-        # upsampling
-        blob_in = model.ConvTranspose(
-            blob_in,
-            'kps_deconv',
-            dim,
-            cfg.KRCNN.DECONV_DIM,
-            kernel=cfg.KRCNN.DECONV_KERNEL,
-            pad=int(cfg.KRCNN.DECONV_KERNEL / 2 - 1),
-            stride=2,
-            weight_init=gauss_fill(0.01),
-            bias_init=const_fill(0.0)
-        )
-        model.Relu('kps_deconv', 'kps_deconv')
-        dim = cfg.KRCNN.DECONV_DIM
-    
-    import numpy as np
-    
-    setup_face_landmarks = '''
-import face_recognition
-    
-    # Load a sample picture and learn how to recognize it.
-obama_image = face_recognition.load_image_file('obama.jpg')
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
-    
-    # Release handle to the webcam
-video_capture.release()
-cv2.destroyAllWindows()
-
-    
-    # If not '', a 'Last updated on:' timestamp is inserted at every page
-# bottom, using the given strftime format.
-#html_last_updated_fmt = '%b %d, %Y'
-    
-        if os.path.isdir(image_to_check):
-        if cpus == 1:
-            [test_image(image_file, model) for image_file in image_files_in_folder(image_to_check)]
-        else:
-            process_images_in_process_pool(image_files_in_folder(image_to_check), cpus, model)
-    else:
-        test_image(image_to_check, model)
-    
-    test_requirements = [
-    'tox',
-    'flake8==2.6.0'
+    known_encodings = [
+    obama_face_encoding,
+    biden_face_encoding
 ]
+    
+    # Find all the faces in the image using a pre-trained convolutional neural network.
+# This method is more accurate than the default HOG model, but it's slower
+# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
+# this will use GPU acceleration and perform well.
+# See also: find_faces_in_picture.py
+face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
+    
+    while True:
+    # Grab a single frame of video
+    ret, frame = input_movie.read()
+    frame_number += 1
+    
+        # Every 128 frames (the default batch size), batch process the list of frames to find faces
+    if len(frames) == 128:
+        batch_of_face_locations = face_recognition.batch_face_locations(frames, number_of_times_to_upsample=0)
+    
+        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
+    context = multiprocessing
+    if 'forkserver' in multiprocessing.get_all_start_methods():
+        context = multiprocessing.get_context('forkserver')
