@@ -1,169 +1,98 @@
 
         
-        
-@pytest.mark.functional
-def test_select_command_with_arrows(proc, TIMEOUT):
-    select_command_with_arrows(proc, TIMEOUT)
+            def mapper(self, _, line):
+        yield line, 1
     
-            Number:                    '#990000',        # class: 'm'
+        def escalate_call(self):
+        self.call.level = Rank.SUPERVISOR
+        self._escalate_call()
     
-    Available hooks:
-    
-            return self.build_response(request, resp)
-
-    
-            r = requests.get(url)
-        assert r.status_code == 401
-    
-        close_server = threading.Event()
-    server = Server(digest_response_handler, wait_to_close_event=close_server)
-    
-    # The name of an image file (within the static path) to use as favicon of the
-# docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
-# pixels large.
-#html_favicon = None
-    
-            return 'Digest %s' % (base)
-    
-        def __len__(self):
-        return len(self._store)
-    
-    # Set default logging handler to avoid 'No handler found' warnings.
-import logging
-try:  # Python 2.7+
-    from logging import NullHandler
-except ImportError:
-    class NullHandler(logging.Handler):
-        def emit(self, record):
-            pass
-    
-    
-class sockaddr(ctypes.Structure):
-    _fields_ = [('sa_family', ctypes.c_short),
-                ('__pad1', ctypes.c_ushort),
-                ('ipv4_addr', ctypes.c_byte * 4),
-                ('ipv6_addr', ctypes.c_byte * 16),
-                ('__pad2', ctypes.c_ulong)]
-    
-        if version_str == 'HEAD':
-        return (sys.maxint, sys.maxint, sys.maxint, sys.maxint)
-    
-        @classmethod
-    def setUpClass(self):
+            (2016-01, url0), 1
+        (2016-01, url0), 1
+        (2016-01, url1), 1
         '''
-        - Create a temporary directory and file
-        /test_command
-           /foo.txt
-        - get the temporary test directory
-        - and initializes the command stack.
+        url = self.extract_url(line)
+        period = self.extract_year_month(line)
+        yield (period, url), 1
+    
+        def remove_from_tail(self):
+        pass
+    
+    
+class UserService(object):
+    
+        def get_person(self, person_id):
+        person_server = self.lookup[person_id]
+        return person_server.people[person_id]
+    
+            # because special names such as Name.Class, Name.Function, etc.
+        # are not recognized as such later in the parsing, we choose them
+        # to look the same as ordinary variables.
+        Name:                      '#000000',        # class: 'n'
+        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
+        Name.Builtin:              '#004461',        # class: 'nb'
+        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
+        Name.Class:                '#000000',        # class: 'nc' - to be revised
+        Name.Constant:             '#000000',        # class: 'no' - to be revised
+        Name.Decorator:            '#888',           # class: 'nd' - to be revised
+        Name.Entity:               '#ce5c00',        # class: 'ni'
+        Name.Exception:            'bold #cc0000',   # class: 'ne'
+        Name.Function:             '#000000',        # class: 'nf'
+        Name.Property:             '#000000',        # class: 'py'
+        Name.Label:                '#f57900',        # class: 'nl'
+        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
+        Name.Other:                '#000000',        # class: 'nx'
+        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
+        Name.Variable:             '#000000',        # class: 'nv' - to be revised
+        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
+        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
+        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
+    
+            with Server.basic_response_server(wait_to_close_event=block_server) as (host, port):
+            sock = socket.socket()
+            sock.connect((host, port))
+            sock.sendall(b'send something')
+            time.sleep(2.5)
+            sock.sendall(b'still alive')
+            block_server.set()  # release server block
+    
+            :param request: The :class:`PreparedRequest <PreparedRequest>` being sent.
+        :param stream: (optional) Whether to stream the request content.
+        :param timeout: (optional) How long to wait for the server to send
+            data before giving up, as a float, or a :ref:`(connect timeout,
+            read timeout) <timeouts>` tuple.
+        :type timeout: float or tuple
+        :param verify: (optional) Either a boolean, in which case it controls whether we verify
+            the server's TLS certificate, or a string, in which case it must be a path
+            to a CA bundle to use
+        :param cert: (optional) Any user-provided SSL certificate to be trusted.
+        :param proxies: (optional) The proxies dictionary to apply to the request.
         '''
-        os.mkdir('tests/test_command')
-        open('tests/test_command/foo.txt', 'w').close()
-        self.__get_test_directory()
-        self.command_stack = []
-        self.command_stack.append(MoveFileCommand(os.path.join(
-            self.test_dir, 'foo.txt'), os.path.join(self.test_dir, 'bar.txt')))
-        self.command_stack.append(MoveFileCommand(os.path.join(
-            self.test_dir, 'bar.txt'), os.path.join(self.test_dir, 'baz.txt')))
+        raise NotImplementedError
     
-        def do_action(self):
-        print(self.name, self.action.name, end=' ')
-        return self.action
+    # Allow duplicate toc entries.
+#epub_tocdup = True
     
-    
-class Publisher:
-    
-        class ClassRegistree(BaseRegisteredClass):
-    
-    Test code which will almost always fail (if not exactly 12:01) when untestable
-production code (production code time provider is datetime) is used:
-    
+        :param url: URL for the new :class:`Request` object.
+    :param data: (optional) Dictionary, list of tuples, bytes, or file-like
+        object to send in the body of the :class:`Request`.
+    :param json: (optional) json data to send in the body of the :class:`Request`.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
     '''
-Port of the Java example of 'Parameter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
     
-        def main_method(self):
-        '''will execute either _instance_method_1 or _instance_method_2
-    
-        def report(self):
-        print('Reporting the results of Test')
-        time.sleep(0.1)
-    
-    
-# Example usage...
-def main():
-    data1 = Data('Data 1')
-    data2 = Data('Data 2')
-    view1 = DecimalViewer()
-    view2 = HexViewer()
-    data1.attach(view1)
-    data1.attach(view2)
-    data2.attach(view2)
-    data2.attach(view1)
-    
-        def toggle_amfm(self):
-        print(u'Switching to AM')
-        self.radio.state = self.radio.amstate
-    
-        def _find_groups(self):
-        '''Returns a tuple (reverse string, group count) for a url.
-    
-            # Go through an async wrapper to ensure that the result of
-        # run_in_executor works with await and not just gen.coroutine
-        # (simply passing the underlying concurrrent future would do that).
-        namespace = exec_test(globals(), locals(), '''
-            async def async_wrapper(self_event, other_event):
-                return await IOLoop.current().run_in_executor(
-                    None, sync_func, self_event, other_event)
-        ''')
-    
-        Releasing an unlocked lock raises `RuntimeError`.
-    
-            .. versionadded:: 3.2
-    
-            application = web.Application([
-            (r'/static/(.*)', web.StaticFileHandler, {'path': '/var/www'}),
-        ])
-    
-        @unittest.skipIf(os.name == 'nt', 'flaky on windows')
-    def test_large_body_buffered_chunked(self):
-        # This test is flaky on windows for unknown reasons.
-        with ExpectLog(gen_log, '.*chunked body too large'):
-            response = self.fetch('/buffered', method='PUT',
-                                  body_producer=lambda write: write(b'a' * 10240))
-        self.assertEqual(response.code, 400)
-    
-            # Silence 'RuntimeWarning: coroutine 'test_coro' was never awaited'.
-        with warnings.catch_warnings():
-            warnings.simplefilter('ignore')
-            test.run(result)
-    
-    .. note::
-    
-            class Delegate(HTTPMessageDelegate):
-            def headers_received(self, start_line, headers):
-                test.code = start_line.code
-    
-        def test_setup_config_defaults(self):
-        '''Test setup with defaults.'''
-        config = {
-            'splunk': {
-                'host': 'host',
-                'token': 'secret',
-            }
-        }
-    
-    VALID_UNITS = [
-    LENGTH_KILOMETERS,
-    LENGTH_MILES,
-    LENGTH_FEET,
-    LENGTH_METERS,
-]
-    
-            before_run = datetime(2016, 7, 9, 8, 0, 0, tzinfo=dt.UTC)
-        in_run = datetime(2016, 7, 9, 13, 0, 0, tzinfo=dt.UTC)
-        in_run2 = datetime(2016, 7, 9, 15, 0, 0, tzinfo=dt.UTC)
-        in_run3 = datetime(2016, 7, 9, 18, 0, 0, tzinfo=dt.UTC)
-        after_run = datetime(2016, 7, 9, 23, 30, 0, tzinfo=dt.UTC)
+            for (k, v) in files:
+            # support for explicit filename
+            ft = None
+            fh = None
+            if isinstance(v, (tuple, list)):
+                if len(v) == 2:
+                    fn, fp = v
+                elif len(v) == 3:
+                    fn, fp, ft = v
+                else:
+                    fn, fp, ft, fh = v
+            else:
+                fn = guess_filename(v) or k
+                fp = v
