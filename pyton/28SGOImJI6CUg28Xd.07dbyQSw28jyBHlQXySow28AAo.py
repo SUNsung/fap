@@ -1,71 +1,70 @@
 
         
-        
-def is_valid_mime(mime):
-    return mime and MIME_RE.match(mime)
+                self.assertEqual(parsed, parsed_new)
+        self.assertEqual(parsed_new, [
+            ['#', ' Use bar.conf when it's a full moon!'],
+            ['include', 'foo.conf'],
+            ['#', ' Kilroy was here'],
+            ['check_status'],
+            [['server'],
+             [['#', ''],
+              ['#', ' Don't forget to open up your firewall!'],
+              ['#', ''],
+              ['listen', '1234'],
+              ['#', ' listen 80;']]],
+        ])
+    
+        def has_more_configs(self):
+        '''Returns true if there are more configs to test'''
+        return bool(self._configs)
+    
+        @mock.patch(
+        'certbot_compatibility_test.validator.crypto_util.probe_sni')
+    def test_certificate_success(self, mock_probe_sni):
+        cert = OpenSSL.crypto.X509()
+        mock_probe_sni.return_value = cert
+        self.assertTrue(self.validator.certificate(
+            cert, 'test.com', '127.0.0.1'))
     
     
-def write_stream(stream, outfile, flush):
-    '''Write the output stream.'''
-    try:
-        # Writing bytes so we use the buffer interface (Python 3).
-        buf = outfile.buffer
-    except AttributeError:
-        buf = outfile
-    
-    from httpie import ExitStatus
-from utils import http, HTTP_OK
-    
-        # noinspection PyMethodOverriding
-    def get_auth(self, username, password):
-        return requests.auth.HTTPDigestAuth(username, password)
-
+# -- Options for manual page output ---------------------------------------
     
     
-class PluginManager(object):
+class RedirectTest(unittest.TestCase):
+    '''Test the redirect_by_default method.'''
+    @classmethod
+    def _call(cls):
+        from certbot.display.enhancements import redirect_by_default
+        return redirect_by_default()
     
-    A tree.TreeAdaptor is used by the parser to create tree.Tree objects for the
-input Token objects.
+    from concurrent.futures import _base
     
-                            #print 'no viable alt'
-                        self.noViableAlt(s, input)
-                        return 0
     
-    from .theplatform import theplatform_download_by_pid
+def _GetRequiredNamespaceImport( completion ):
+  if ( 'extra_data' not in completion
+       or 'required_namespace_import' not in completion[ 'extra_data' ] ):
+    return None
+  return completion[ 'extra_data' ][ 'required_namespace_import' ]
     
-        def __init__(self, pin_json):
-        img_file = pin_json['file']
-        self.id = str(pin_json['pin_id'])
-        self.url = urlparse.urljoin(self.host, img_file['key'])
-        self.ext = img_file['type'].split('/')[-1]
     
-        def find_handler(self, request, **kwargs):
-        # type: (httputil.HTTPServerRequest, typing.Any)->httputil.HTTPMessageDelegate
-        '''Must be implemented to return an appropriate instance of `~.httputil.HTTPMessageDelegate`
-        that can serve the request.
-        Routing implementations may pass additional kwargs to extend the routing logic.
+  def _HandleGotoResponse( self, modifiers ):
+    if isinstance( self._response, list ):
+      vimsupport.SetQuickFixList(
+        [ _BuildQfListItem( x ) for x in self._response ] )
+      vimsupport.OpenQuickFixList( focus = True, autoclose = True )
+    else:
+      vimsupport.JumpToLocation( self._response[ 'filepath' ],
+                                 self._response[ 'line_num' ],
+                                 self._response[ 'column_num' ],
+                                 modifiers )
     
-            # Write a message that is allowed.
-        msg = 'a' * 1024
-        ws.write_message(msg)
-        resp = yield ws.read_message()
-        self.assertEqual(resp, msg)
     
-        ``reuse_port`` option sets ``SO_REUSEPORT`` option for every socket
-    in the list. If your platform doesn't support this option ValueError will
-    be raised.
-    '''
-    if reuse_port and not hasattr(socket, 'SO_REUSEPORT'):
-        raise ValueError('the platform doesn't support SO_REUSEPORT')
+def CurrentLineAndColumn():
+  '''Returns the 0-based current line and 0-based current column.'''
+  # See the comment in CurrentColumn about the calculation for the line and
+  # column number
+  line, column = vim.current.window.cursor
+  line -= 1
+  return line, column
     
-        class MainHandler(tornado.web.RequestHandler):
-        def get(self):
-            self.write('Hello, world')
-    
-        @gen_test
-    def test_get_timeout_preempted(self):
-        q = queues.Queue()
-        get = q.get(timeout=timedelta(seconds=0.01))
-        q.put(0)
-        yield gen.sleep(0.02)
-        self.assertEqual(0, (yield get))
+      return FilterLevel
