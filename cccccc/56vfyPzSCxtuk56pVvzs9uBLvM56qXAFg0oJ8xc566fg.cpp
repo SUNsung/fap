@@ -1,279 +1,108 @@
 
         
-        TEST(AnyTest, TestPackAndUnpack) {
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  protobuf_unittest::TestAny message;
-  message.mutable_any_value()->PackFrom(submessage);
-    }
+        #include <math.h>
     
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-        state->preFilterType = CV_STEREO_BM_XSOBEL; //CV_STEREO_BM_NORMALIZED_RESPONSE;
-    state->preFilterSize = 9;
-    state->preFilterCap = 31;
-    state->SADWindowSize = 15;
-    state->minDisparity = 0;
-    state->numberOfDisparities = numberOfDisparities > 0 ? numberOfDisparities : 64;
-    state->textureThreshold = 10;
-    state->uniquenessRatio = 15;
-    state->speckleRange = state->speckleWindowSize = 0;
-    state->trySmallerWindows = 0;
-    state->roi1 = state->roi2 = cvRect(0,0,0,0);
-    state->disp12MaxDiff = -1;
-    
-    protected:
-    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types );
-    void fill_array( int test_case_idx, int i, int j, Mat& arr );
-    double get_success_error_level( int test_case_idx, int i, int j );
-    void run_func();
-    void prepare_to_validation( int test_case_idx );
-    
-            // Version: 3.0
-        COMPARE_REF_TO_TEXTURE           = 0x884E,
-        CLIP_DISTANCE0                   = 0x3000,
-        CLIP_DISTANCE1                   = 0x3001,
-        CLIP_DISTANCE2                   = 0x3002,
-        CLIP_DISTANCE3                   = 0x3003,
-        CLIP_DISTANCE4                   = 0x3004,
-        CLIP_DISTANCE5                   = 0x3005,
-        CLIP_DISTANCE6                   = 0x3006,
-        CLIP_DISTANCE7                   = 0x3007,
-        MAX_CLIP_DISTANCES               = 0x0D32,
-        MAJOR_VERSION                    = 0x821B,
-        MINOR_VERSION                    = 0x821C,
-        NUM_EXTENSIONS                   = 0x821D,
-        CONTEXT_FLAGS                    = 0x821E,
-        COMPRESSED_RED                   = 0x8225,
-        COMPRESSED_RG                    = 0x8226,
-        CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT = 0x0001,
-        RGBA32F                          = 0x8814,
-        RGB32F                           = 0x8815,
-        RGBA16F                          = 0x881A,
-        RGB16F                           = 0x881B,
-        VERTEX_ATTRIB_ARRAY_INTEGER      = 0x88FD,
-        MAX_ARRAY_TEXTURE_LAYERS         = 0x88FF,
-        MIN_PROGRAM_TEXEL_OFFSET         = 0x8904,
-        MAX_PROGRAM_TEXEL_OFFSET         = 0x8905,
-        CLAMP_READ_COLOR                 = 0x891C,
-        FIXED_ONLY                       = 0x891D,
-        TEXTURE_1D_ARRAY                 = 0x8C18,
-        PROXY_TEXTURE_1D_ARRAY           = 0x8C19,
-        TEXTURE_2D_ARRAY                 = 0x8C1A,
-        PROXY_TEXTURE_2D_ARRAY           = 0x8C1B,
-        TEXTURE_BINDING_1D_ARRAY         = 0x8C1C,
-        TEXTURE_BINDING_2D_ARRAY         = 0x8C1D,
-        R11F_G11F_B10F                   = 0x8C3A,
-        UNSIGNED_INT_10F_11F_11F_REV     = 0x8C3B,
-        RGB9_E5                          = 0x8C3D,
-        UNSIGNED_INT_5_9_9_9_REV         = 0x8C3E,
-        TEXTURE_SHARED_SIZE              = 0x8C3F,
-        TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH = 0x8C76,
-        TRANSFORM_FEEDBACK_BUFFER_MODE   = 0x8C7F,
-        MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS = 0x8C80,
-        TRANSFORM_FEEDBACK_VARYINGS      = 0x8C83,
-        TRANSFORM_FEEDBACK_BUFFER_START  = 0x8C84,
-        TRANSFORM_FEEDBACK_BUFFER_SIZE   = 0x8C85,
-        PRIMITIVES_GENERATED             = 0x8C87,
-        TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN = 0x8C88,
-        RASTERIZER_DISCARD               = 0x8C89,
-        MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS = 0x8C8A,
-        MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS = 0x8C8B,
-        INTERLEAVED_ATTRIBS              = 0x8C8C,
-        SEPARATE_ATTRIBS                 = 0x8C8D,
-        TRANSFORM_FEEDBACK_BUFFER        = 0x8C8E,
-        TRANSFORM_FEEDBACK_BUFFER_BINDING = 0x8C8F,
-        RGBA32UI                         = 0x8D70,
-        RGB32UI                          = 0x8D71,
-        RGBA16UI                         = 0x8D76,
-        RGB16UI                          = 0x8D77,
-        RGBA8UI                          = 0x8D7C,
-        RGB8UI                           = 0x8D7D,
-        RGBA32I                          = 0x8D82,
-        RGB32I                           = 0x8D83,
-        RGBA16I                          = 0x8D88,
-        RGB16I                           = 0x8D89,
-        RGBA8I                           = 0x8D8E,
-        RGB8I                            = 0x8D8F,
-        RED_INTEGER                      = 0x8D94,
-        GREEN_INTEGER                    = 0x8D95,
-        BLUE_INTEGER                     = 0x8D96,
-        RGB_INTEGER                      = 0x8D98,
-        RGBA_INTEGER                     = 0x8D99,
-        BGR_INTEGER                      = 0x8D9A,
-        BGRA_INTEGER                     = 0x8D9B,
-        SAMPLER_1D_ARRAY                 = 0x8DC0,
-        SAMPLER_2D_ARRAY                 = 0x8DC1,
-        SAMPLER_1D_ARRAY_SHADOW          = 0x8DC3,
-        SAMPLER_2D_ARRAY_SHADOW          = 0x8DC4,
-        SAMPLER_CUBE_SHADOW              = 0x8DC5,
-        UNSIGNED_INT_VEC2                = 0x8DC6,
-        UNSIGNED_INT_VEC3                = 0x8DC7,
-        UNSIGNED_INT_VEC4                = 0x8DC8,
-        INT_SAMPLER_1D                   = 0x8DC9,
-        INT_SAMPLER_2D                   = 0x8DCA,
-        INT_SAMPLER_3D                   = 0x8DCB,
-        INT_SAMPLER_CUBE                 = 0x8DCC,
-        INT_SAMPLER_1D_ARRAY             = 0x8DCE,
-        INT_SAMPLER_2D_ARRAY             = 0x8DCF,
-        UNSIGNED_INT_SAMPLER_1D          = 0x8DD1,
-        UNSIGNED_INT_SAMPLER_2D          = 0x8DD2,
-        UNSIGNED_INT_SAMPLER_3D          = 0x8DD3,
-        UNSIGNED_INT_SAMPLER_CUBE        = 0x8DD4,
-        UNSIGNED_INT_SAMPLER_1D_ARRAY    = 0x8DD6,
-        UNSIGNED_INT_SAMPLER_2D_ARRAY    = 0x8DD7,
-        QUERY_WAIT                       = 0x8E13,
-        QUERY_NO_WAIT                    = 0x8E14,
-        QUERY_BY_REGION_WAIT             = 0x8E15,
-        QUERY_BY_REGION_NO_WAIT          = 0x8E16,
-        BUFFER_ACCESS_FLAGS              = 0x911F,
-        BUFFER_MAP_LENGTH                = 0x9120,
-        BUFFER_MAP_OFFSET                = 0x9121,
-    
-    static void* openclamdblas_check_fn(int ID)
+    namespace cv { namespace cuda { namespace device
 {
-    assert(ID >= 0 && ID < (int)(sizeof(openclamdblas_fn)/sizeof(openclamdblas_fn[0])));
-    const struct DynamicFnEntry* e = openclamdblas_fn[ID];
-    void* func = CV_CL_GET_PROC_ADDRESS(e->fnName);
-    if (!func)
+    template <class T>
+    __device__ __forceinline__ T warp_reduce(volatile T *ptr , const unsigned int tid = threadIdx.x)
     {
-        throw cv::Exception(cv::Error::OpenCLApiCallError,
-                cv::format('OpenCL AMD BLAS function is not available: [%s]', e->fnName),
-                CV_Func, __FILE__, __LINE__);
+        const unsigned int lane = tid & 31; // index of thread in warp (0..31)
     }
-    *(e->ppFn) = func;
-    return func;
+    }
+    }
+    }
+    
+    #if defined(_WIN32)
+#include <windows.h>
+    
+    /* [-255..255].^2 */
+const ushort g_8x16uSqrTab[] =
+{
+    65025, 64516, 64009, 63504, 63001, 62500, 62001, 61504, 61009, 60516, 60025, 59536,
+    59049, 58564, 58081, 57600, 57121, 56644, 56169, 55696, 55225, 54756, 54289, 53824,
+    53361, 52900, 52441, 51984, 51529, 51076, 50625, 50176, 49729, 49284, 48841, 48400,
+    47961, 47524, 47089, 46656, 46225, 45796, 45369, 44944, 44521, 44100, 43681, 43264,
+    42849, 42436, 42025, 41616, 41209, 40804, 40401, 40000, 39601, 39204, 38809, 38416,
+    38025, 37636, 37249, 36864, 36481, 36100, 35721, 35344, 34969, 34596, 34225, 33856,
+    33489, 33124, 32761, 32400, 32041, 31684, 31329, 30976, 30625, 30276, 29929, 29584,
+    29241, 28900, 28561, 28224, 27889, 27556, 27225, 26896, 26569, 26244, 25921, 25600,
+    25281, 24964, 24649, 24336, 24025, 23716, 23409, 23104, 22801, 22500, 22201, 21904,
+    21609, 21316, 21025, 20736, 20449, 20164, 19881, 19600, 19321, 19044, 18769, 18496,
+    18225, 17956, 17689, 17424, 17161, 16900, 16641, 16384, 16129, 15876, 15625, 15376,
+    15129, 14884, 14641, 14400, 14161, 13924, 13689, 13456, 13225, 12996, 12769, 12544,
+    12321, 12100, 11881, 11664, 11449, 11236, 11025, 10816, 10609, 10404, 10201, 10000,
+     9801,  9604,  9409,  9216,  9025,  8836,  8649,  8464,  8281,  8100,  7921,  7744,
+     7569,  7396,  7225,  7056,  6889,  6724,  6561,  6400,  6241,  6084,  5929,  5776,
+     5625,  5476,  5329,  5184,  5041,  4900,  4761,  4624,  4489,  4356,  4225,  4096,
+     3969,  3844,  3721,  3600,  3481,  3364,  3249,  3136,  3025,  2916,  2809,  2704,
+     2601,  2500,  2401,  2304,  2209,  2116,  2025,  1936,  1849,  1764,  1681,  1600,
+     1521,  1444,  1369,  1296,  1225,  1156,  1089,  1024,   961,   900,   841,   784,
+      729,   676,   625,   576,   529,   484,   441,   400,   361,   324,   289,   256,
+      225,   196,   169,   144,   121,   100,    81,    64,    49,    36,    25,    16,
+        9,     4,     1,     0,     1,     4,     9,    16,    25,    36,    49,    64,
+       81,   100,   121,   144,   169,   196,   225,   256,   289,   324,   361,   400,
+      441,   484,   529,   576,   625,   676,   729,   784,   841,   900,   961,  1024,
+     1089,  1156,  1225,  1296,  1369,  1444,  1521,  1600,  1681,  1764,  1849,  1936,
+     2025,  2116,  2209,  2304,  2401,  2500,  2601,  2704,  2809,  2916,  3025,  3136,
+     3249,  3364,  3481,  3600,  3721,  3844,  3969,  4096,  4225,  4356,  4489,  4624,
+     4761,  4900,  5041,  5184,  5329,  5476,  5625,  5776,  5929,  6084,  6241,  6400,
+     6561,  6724,  6889,  7056,  7225,  7396,  7569,  7744,  7921,  8100,  8281,  8464,
+     8649,  8836,  9025,  9216,  9409,  9604,  9801, 10000, 10201, 10404, 10609, 10816,
+    11025, 11236, 11449, 11664, 11881, 12100, 12321, 12544, 12769, 12996, 13225, 13456,
+    13689, 13924, 14161, 14400, 14641, 14884, 15129, 15376, 15625, 15876, 16129, 16384,
+    16641, 16900, 17161, 17424, 17689, 17956, 18225, 18496, 18769, 19044, 19321, 19600,
+    19881, 20164, 20449, 20736, 21025, 21316, 21609, 21904, 22201, 22500, 22801, 23104,
+    23409, 23716, 24025, 24336, 24649, 24964, 25281, 25600, 25921, 26244, 26569, 26896,
+    27225, 27556, 27889, 28224, 28561, 28900, 29241, 29584, 29929, 30276, 30625, 30976,
+    31329, 31684, 32041, 32400, 32761, 33124, 33489, 33856, 34225, 34596, 34969, 35344,
+    35721, 36100, 36481, 36864, 37249, 37636, 38025, 38416, 38809, 39204, 39601, 40000,
+    40401, 40804, 41209, 41616, 42025, 42436, 42849, 43264, 43681, 44100, 44521, 44944,
+    45369, 45796, 46225, 46656, 47089, 47524, 47961, 48400, 48841, 49284, 49729, 50176,
+    50625, 51076, 51529, 51984, 52441, 52900, 53361, 53824, 54289, 54756, 55225, 55696,
+    56169, 56644, 57121, 57600, 58081, 58564, 59049, 59536, 60025, 60516, 61009, 61504,
+    62001, 62500, 63001, 63504, 64009, 64516, 65025
+};
+    
+      Eigen::Matrix<float, 2, 2> D = PseudoInverse<float, 2>(C, epsilon);
+    
+    namespace apollo {
+namespace perception {
+    }
+    }
+    
+    #include 'modules/common/math/box2d.h'
+#include 'modules/planning/common/obstacle.h'
+#include 'modules/planning/common/reference_line_info.h'
+#include 'modules/planning/common/trajectory/discretized_trajectory.h'
+#include 'modules/planning/lattice/behavior/path_time_graph.h'
+    
+    void Box2d::LateralExtend(const double extension_length) {
+  width_ += extension_length;
+  half_width_ += extension_length / 2.0;
+  InitCorners();
 }
     
-      /// (Deprecated: Use native_handle().) Get the native acceptor representation.
-  /**
-   * This function may be used to obtain the underlying representation of the
-   * acceptor. This is intended to allow access to native acceptor functionality
-   * that is not otherwise provided.
+      /**
+   * @brief Determines the distance between two boxes
+   * @param box The box whose distance to this box we want to compute
+   * @return A distance
    */
-  native_type native()
-  {
-    return this->get_service().native_handle(this->get_implementation());
+  double DistanceTo(const Box2d &box) const;
+    
+      /**
+   * @brief Save offline feature values in proto
+   * @param Lane sequence
+   * @param Vector of feature values
+   */
+  void SaveOfflineFeatures(LaneSequence* sequence,
+                           const std::vector<double>& feature_values);
+    
+    
+    {    decision.mutable_ignore();
+    path_obstacle.AddLongitudinalDecision('test_ignore', decision);
+    EXPECT_FALSE(path_obstacle.HasLateralDecision());
+    EXPECT_TRUE(path_obstacle.HasLongitudinalDecision());
+    EXPECT_FALSE(path_obstacle.LateralDecision().has_ignore());
+    EXPECT_TRUE(path_obstacle.LongitudinalDecision().has_overtake());
   }
-    
-    private:
-  /// Copy data out of the internal buffer to the specified target buffer.
-  /// Returns the number of bytes copied.
-  template <typename MutableBufferSequence>
-  std::size_t copy(const MutableBufferSequence& buffers)
-  {
-    std::size_t bytes_copied = boost::asio::buffer_copy(
-        buffers, storage_.data(), storage_.size());
-    storage_.consume(bytes_copied);
-    return bytes_copied;
-  }
-    
-    #endif // BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
-
-    
-    // Standard library components can't be forward declared, so we'll have to
-// include the array header. Fortunately, it's fairly lightweight and doesn't
-// add significantly to the compile time.
-#if defined(BOOST_ASIO_HAS_STD_ARRAY)
-# include <array>
-#endif // defined(BOOST_ASIO_HAS_STD_ARRAY)
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    #include <boost/asio/detail/config.hpp>
-#include <boost/asio/completion_condition.hpp>
-    
-    // Helper class to determine whether or not the current thread is inside an
-// invocation of io_service::run() for a specified io_service object.
-template <typename Key, typename Value = unsigned char>
-class call_stack
-{
-public:
-  // Context class automatically pushes the key/value pair on to the stack.
-  class context
-    : private noncopyable
-  {
-  public:
-    // Push the key on to the stack.
-    explicit context(Key* k)
-      : key_(k),
-        next_(call_stack<Key, Value>::top_)
-    {
-      value_ = reinterpret_cast<unsigned char*>(this);
-      call_stack<Key, Value>::top_ = this;
-    }
-    }
-    }
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-typedef null_event event;
-#elif defined(BOOST_ASIO_WINDOWS)
-typedef win_event event;
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-typedef posix_event event;
-#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-typedef std_event event;
-#endif
-    
-      // Find an entry in the map.
-  iterator find(const K& k)
-  {
-    if (num_buckets_)
-    {
-      size_t bucket = calculate_hash_value(k) % num_buckets_;
-      iterator it = buckets_[bucket].first;
-      if (it == values_.end())
-        return values_.end();
-      iterator end_it = buckets_[bucket].last;
-      ++end_it;
-      while (it != end_it)
-      {
-        if (it->first == k)
-          return it;
-        ++it;
-      }
-    }
-    return values_.end();
-  }
-    
-    void buffer_sequence_adapter_base::init_native_buffer(
-    buffer_sequence_adapter_base::native_buffer_type& buf,
-    const boost::asio::mutable_buffer& buffer)
-{
-  std::memset(&buf, 0, sizeof(native_buffer_type));
-  Microsoft::WRL::ComPtr<IInspectable> insp
-    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
-  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
-}
-    
-    template <typename Time_Traits>
-void epoll_reactor::remove_timer_queue(timer_queue<Time_Traits>& queue)
-{
-  do_remove_timer_queue(queue);
-}
-    
-    #include <vector>
-#include <string>
-    
-    WakeUpLock::WakeUpLock() {
-    object_ = ::wakeupLock_new();
-    ASSERT(object_);
-    xinfo2('new wakeuplock:%p', object_);
-}
-    
-    #endif /* WAKEUPLOCK_H_ */
-
-    
-    #ifndef SCOPEDJSTRING_H_
-#define SCOPEDJSTRING_H_
