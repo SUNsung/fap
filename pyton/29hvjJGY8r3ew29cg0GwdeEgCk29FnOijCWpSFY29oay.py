@@ -1,142 +1,97 @@
 
         
-            def _handle_requests(self):
-        for _ in range(self.requests_to_handle):
-            sock = self._accept_connection()
-            if not sock:
-                break
+        DEFAULT_TEMPLATE = 'flatpages/default.html'
     
-    
-@pytest.mark.skipif(sys.version_info[:2] != (2,6), reason='Only run on Python 2.6')
-def test_system_ssl_py26():
-    '''OPENSSL_VERSION_NUMBER isn't provided in Python 2.6, verify we don't
-    blow up in this case.
-    '''
-    assert info()['system_ssl'] == {'version': ''}
-    
-    import idna
-import urllib3
-import chardet
-    
-    # If true, show URL addresses after external links.
-#man_show_urls = False
-    
-        for i, yi in enumerate(grid_y):
-        for j, xi in enumerate(grid_x):
-            z_sample = np.array([[xi, yi]])
-            x_decoded = decoder.predict(z_sample)
-            digit = x_decoded[0].reshape(digit_size, digit_size)
-            figure[i * digit_size: (i + 1) * digit_size,
-                   j * digit_size: (j + 1) * digit_size] = digit
-    
-            x = np.random.random((1,) + shape)
+    print('Vectorizing sequence data...')
+tokenizer = Tokenizer(num_words=max_words)
+x_train = tokenizer.sequences_to_matrix(x_train, mode='binary')
+x_test = tokenizer.sequences_to_matrix(x_test, mode='binary')
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
     
     
 @keras_test
-def test_max_norm():
+def test_min_max_norm():
     array = get_example_array()
     for m in get_test_values():
-        norm_instance = constraints.max_norm(m)
+        norm_instance = constraints.min_max_norm(min_value=m, max_value=m * 2)
         normed = norm_instance(K.variable(array))
-        assert(np.all(K.eval(normed) < m))
+        value = K.eval(normed)
+        l2 = np.sqrt(np.sum(np.square(value), axis=0))
+        assert not l2[l2 < m]
+        assert not l2[l2 > m * 2 + 1e-5]
+    
+        # Test with Sequential API
+    model = Sequential([
+        layers.Dense(16, input_shape=(x_train.shape[-1],), activation='relu'),
+        layers.Dense(8),
+        layers.Activation('relu'),
+        layers.Dense(num_classes, activation='softmax')
+    ])
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='rmsprop',
+                  metrics=['accuracy'])
+    model.summary()
+    history = model.fit(x_train, y_train, epochs=15, batch_size=16,
+                        validation_data=(x_test, y_test),
+                        verbose=0)
+    assert(history.history['val_acc'][-1] > 0.8)
+    config = model.get_config()
+    model = Sequential.from_config(config)
+    
+    print('Pad sequences (samples x time)')
+x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
+x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
+    
+        x_train = np.array(x[:int(len(x) * (1 - test_split))])
+    y_train = np.array(y[:int(len(x) * (1 - test_split))])
+    x_test = np.array(x[int(len(x) * (1 - test_split)):])
+    y_test = np.array(y[int(len(x) * (1 - test_split)):])
+    return (x_train, y_train), (x_test, y_test)
+
+    
+        # Returns
+        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    '''
+    dirname = 'cifar-10-batches-py'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
     
     
-def test_selu():
-    x = K.placeholder(ndim=2)
-    f = K.function([x], [activations.selu(x)])
-    alpha = 1.6732632423543772848170429916717
-    scale = 1.0507009873554804934193349852946
+def load_data(label_mode='fine'):
+    '''Loads CIFAR100 dataset.
     
+    # (c) 2016 Red Hat, Inc.
+#
+# This file is part of Ansible
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
+'''CLI tool for starting new Shippable CI runs.'''
     
-max_features = 20000
-# cut texts after this number of words
-# (among top max_features most common words)
-maxlen = 100
-batch_size = 32
-    
-    from .cifar import load_batch
-from ..utils.data_utils import get_file
-from .. import backend as K
-import numpy as np
-import os
-    
-            # test exceptions
-        no_projects_input_url = 'https://www.googleapis.com/compute/v1/not-projects/myproject/global/backendServices/mybackendservice/getHealth'
-        no_resource_input_url = 'https://www.googleapis.com/compute/v1/not-projects/myproject/global'
-    
-    import os
-import re
-    
-    
-def get_data(N, D, dataset='dense'):
-    if dataset == 'dense':
-        np.random.seed(0)
-        return np.random.random((N, D))
-    elif dataset == 'digits':
-        X = datasets.load_digits().data
-        i = np.argsort(X[0])[::-1]
-        X = X[:, i]
-        return X[:N, :D]
-    else:
-        raise ValueError('invalid dataset: %s' % dataset)
-    
-        (opts, args) = op.parse_args()
-    if len(args) > 0:
-        op.error('this script takes no arguments.')
-        sys.exit(1)
-    opts.n_components = type_auto_or_int(opts.n_components)
-    opts.density = type_auto_or_float(opts.density)
-    selected_transformers = opts.selected_transformers.split(',')
-    
-        # Print and plot the confusion matrix
-    cm = metrics.confusion_matrix(y_test, y_predicted)
-    print(cm)
-    
-    A simple graphical frontend for Libsvm mainly intended for didactic
-purposes. You can create data points by point and click and visualize
-the decision region induced by different kernels and parameter settings.
-    
-    # Plot modifications of calibrator
-for i in range(prediction.shape[0]):
-    plt.arrow(p[i, 0], p[i, 1],
-              prediction[i, 0] - p[i, 0], prediction[i, 1] - p[i, 1],
-              head_width=1e-2, color=colors[np.argmax(p[i])])
-# Plot boundaries of unit simplex
-plt.plot([0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], 'k', label='Simplex')
-    
-    # plot shrinkage coefficient
-plt.subplot(2, 1, 2)
-plt.errorbar(n_samples_range, lw_shrinkage.mean(1), yerr=lw_shrinkage.std(1),
-             label='Ledoit-Wolf', color='navy', lw=2)
-plt.errorbar(n_samples_range, oa_shrinkage.mean(1), yerr=oa_shrinkage.std(1),
-             label='OAS', color='darkorange', lw=2)
-plt.xlabel('n_samples')
-plt.ylabel('Shrinkage')
-plt.legend(loc='lower right')
-plt.ylim(plt.ylim()[0], 1. + (plt.ylim()[1] - plt.ylim()[0]) / 10.)
-plt.xlim(5, 31)
-    
-    
-def naughty_strings(filepath=FILEPATH):
-    '''Get the list of naughty_strings.
-    
-    \note Please be warned that the line numbers in the API documentation do not
-match the real locations in the source code of the package. This is an
-unintended artifact of doxygen, which I could only convince to use the
-correct module names by concatenating all files from the package into a single
-module file...
-    
-    
-class MismatchedNotSetException(MismatchedSetException):
-    '''@brief Used for remote debugger deserialization'''
-    
-    def __str__(self):
-        return 'MismatchedNotSetException(%r!=%r)' % (
-            self.getUnexpectedType(), self.expecting
-            )
-    __repr__ = __str__
-    
-            self.decisionNumber = decisionNumber
-    
-    
-MINIMUM = 80
+        terminal_stderr_re = [
+        re.compile(r'% ?Error: '),
+        re.compile(r'^% \w+', re.M),
+        re.compile(r'% ?Bad secret'),
+        re.compile(r'invalid input', re.I),
+        re.compile(r'(?:incomplete|ambiguous) command', re.I),
+        re.compile(r'connection timed out', re.I),
+        re.compile(r'[^\r\n]+ not found', re.I),
+        re.compile(r''[^']' +returned error code: ?\d+'),
+        re.compile(r'syntax error'),
+        re.compile(r'unknown command'),
+        re.compile(r'Error\[\d+\]: ', re.I),
+        re.compile(r'Error:', re.I)
+    ]
