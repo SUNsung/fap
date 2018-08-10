@@ -1,73 +1,41 @@
 
         
-          def fetch_checksum_for(tag)
-    tag = find_matching_tag(tag)
-    return self[tag], tag if tag
-  end
+          if ARGV.include? '--no-ansi'
+    STDERR.puts <<-DOC
+    WARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
+    Consider adding the following to ~/.profile:
     
-    module Homebrew
-  def build_env_keys(env)
-    %w[
-      CC CXX LD OBJC OBJCXX
-      HOMEBREW_CC HOMEBREW_CXX
-      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
-      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
-      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
-      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
-      HOMEBREW_SVN HOMEBREW_GIT
-      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
-      MAKE GIT CPP
-      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
-  end
+    ```
+Executable Path: #{actual_path}
+```
+EOS
+      end
     
-        current_revision_var = 'HOMEBREW_UPDATE_AFTER#{repo_var}'
-    @current_revision = ENV[current_revision_var].to_s
-    raise ReporterRevisionUnsetError, current_revision_var if @current_revision.empty?
-  end
+            def update
+          authorize! :update, stock_location
+          if stock_location.update_attributes(stock_location_params)
+            respond_with(stock_location, status: 200, default_template: :show)
+          else
+            invalid_resource!(stock_location)
+          end
+        end
     
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
-  end
-  alias_method :standard_install, :install
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
+        end
     
-      private
-    
-        groups << @user.authorized_groups.visible_to_user(current_user) if current_user
-    groups << @user.authorized_groups.public_to_user(current_user)
-    
-    class EmacsRequirement < Requirement
-  fatal true
-  satisfy do
-    odisabled('EmacsRequirement', ''depends_on \'emacs\''')
-  end
+    When /^(?:|I )press '([^']*)'$/ do |button|
+  click_button(button)
 end
     
-        def assets_path
-      @assets_path ||= File.join gem_path, 'assets'
+        def define_query
+      name = @name
+      @klass.send :define_method, '#{@name}?' do
+        send(name).file?
+      end
     end
     
-    desc 'Start a dummy (test) Rails app server'
-task :dummy_rails do
-  require 'rack'
-  require 'term/ansicolor'
-  port = ENV['PORT'] || 9292
-  puts %Q(Starting on #{Term::ANSIColor.cyan 'http://localhost:#{port}'})
-  Rack::Server.start(
-    config: 'test/dummy_rails/config.ru',
-    Port: port)
-end
-    
-              def plugins
-            @plugins ||= find_plugins_gem_specs.map do |spec|
-              { :name => spec.name, :version => spec.version.to_s }
-            end.sort_by do |spec|
-              spec[:name]
-            end
-          end
+    module Paperclip
+  require 'rails'
