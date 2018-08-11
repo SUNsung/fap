@@ -1,127 +1,209 @@
 
         
-                String:                    '#4e9a06',        # class: 's'
-        String.Backtick:           '#4e9a06',        # class: 'sb'
-        String.Char:               '#4e9a06',        # class: 'sc'
-        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
-        String.Double:             '#4e9a06',        # class: 's2'
-        String.Escape:             '#4e9a06',        # class: 'se'
-        String.Heredoc:            '#4e9a06',        # class: 'sh'
-        String.Interpol:           '#4e9a06',        # class: 'si'
-        String.Other:              '#4e9a06',        # class: 'sx'
-        String.Regex:              '#4e9a06',        # class: 'sr'
-        String.Single:             '#4e9a06',        # class: 's1'
-        String.Symbol:             '#4e9a06',        # class: 'ss'
-    
-        def run(self):
-        try:
-            self.server_sock = self._create_socket_and_bind()
-            # in case self.port = 0
-            self.port = self.server_sock.getsockname()[1]
-            self.ready_event.set()
-            self._handle_requests()
-    
-            cookie = list(jar)[0]
-        assert cookie.secure == secure
-        assert cookie.domain == domain
-        assert cookie._rest['HttpOnly'] == rest['HttpOnly']
+            print('20 newsgroups')
+    print('=============')
+    print('X_train.shape = {0}'.format(X_train.shape))
+    print('X_train.format = {0}'.format(X_train.format))
+    print('X_train.dtype = {0}'.format(X_train.dtype))
+    print('X_train density = {0}'
+          ''.format(X_train.nnz / np.product(X_train.shape)))
+    print('y_train {0}'.format(y_train.shape))
+    print('X_test {0}'.format(X_test.shape))
+    print('X_test.format = {0}'.format(X_test.format))
+    print('X_test.dtype = {0}'.format(X_test.dtype))
+    print('y_test {0}'.format(y_test.shape))
+    print()
     
     
-@pytest.mark.parametrize(
-    'value, length', (
-        ('', 0),
-        ('T', 1),
-        ('Test', 4),
-        ('Cont', 0),
-        ('Other', -5),
-        ('Content', None),
-    ))
-def test_iter_slices(value, length):
-    if length is None or (length <= 0 and len(value) > 0):
-        # Reads all content at once
-        assert len(list(iter_slices(value, length))) == 1
+def _tabulate(results, metrics, formats):
+    '''Prints results by metric and format
+    
+    
+def get_data(N, D, dataset='dense'):
+    if dataset == 'dense':
+        np.random.seed(0)
+        return np.random.random((N, D))
+    elif dataset == 'digits':
+        X = datasets.load_digits().data
+        i = np.argsort(X[0])[::-1]
+        X = X[:, i]
+        return X[:N, :D]
     else:
-        assert len(list(iter_slices(value, 1))) == length
+        raise ValueError('invalid dataset: %s' % dataset)
     
-    # Syntax sugar.
-_ver = sys.version_info
-    
-            raise KeyError('name=%r, domain=%r, path=%r' % (name, domain, path))
-    
-    from . import utils
-from . import packages
-from .models import Request, Response, PreparedRequest
-from .api import request, get, head, post, patch, put, delete, options
-from .sessions import session, Session
-from .status_codes import codes
-from .exceptions import (
-    RequestException, Timeout, URLRequired,
-    TooManyRedirects, HTTPError, ConnectionError,
-    FileModeWarning, ConnectTimeout, ReadTimeout
-)
-    
-        it = 0
-    
-        for i, kk in enumerate(krange):
-        print('k = %i (%i out of %i)' % (kk, i + 1, len(krange)))
-        for algorithm in algorithms:
-            nbrs = neighbors.NearestNeighbors(n_neighbors=kk,
-                                              algorithm=algorithm,
-                                              leaf_size=leaf_size)
-            t0 = time()
-            nbrs.fit(X)
-            t1 = time()
-            nbrs.kneighbors(X)
-            t2 = time()
-    
-        transformers['SparseRandomProjection'] = \
-        SparseRandomProjection(**sparse_matrix_params)
-    
-      * scikit-learn
-    
-    
-def _get_git_revision():
-    try:
-        revision = subprocess.check_output(REVISION_CMD.split()).strip()
-    except (subprocess.CalledProcessError, OSError):
-        print('Failed to execute git to get revision')
-        return None
-    return revision.decode('utf-8')
+    import matplotlib.pyplot as plt
     
     try:
     from urllib import urlopen
 except ImportError:
     from urllib.request import urlopen
     
-    plt.show()
+            if event == 'clear':
+            self.ax.clear()
+            self.ax.set_xticks([])
+            self.ax.set_yticks([])
+            self.contours = []
+            self.c_labels = None
+            self.plot_kernels()
+    
+    data, rows, columns = make_biclusters(
+    shape=(300, 300), n_clusters=5, noise=5,
+    shuffle=False, random_state=0)
+    
+    
+n_train = 20  # samples for training
+n_test = 200  # samples for testing
+n_averages = 50  # how often to repeat classification
+n_features_max = 75  # maximum number of features
+step = 4  # step size for the calculation
+    
+    plots = []
+names = []
+for score_func in score_funcs:
+    print('Computing %s for %d values of n_clusters and n_samples=%d'
+          % (score_func.__name__, len(n_clusters_range), n_samples))
+    
+    
+# Plot clustering results
+for index, metric in enumerate(['cosine', 'euclidean', 'cityblock']):
+    model = AgglomerativeClustering(n_clusters=n_clusters,
+                                    linkage='average', affinity=metric)
+    model.fit(X)
+    plt.figure()
+    plt.axes([0, 0, 1, 1])
+    for l, c in zip(np.arange(model.n_clusters), 'rgbk'):
+        plt.plot(X[model.labels_ == l].T, c=c, alpha=.5)
+    plt.axis('tight')
+    plt.axis('off')
+    plt.suptitle('AgglomerativeClustering(affinity=%s)' % metric, size=20)
+    
+            self.running = False
+    
+        def put(self, sn, data):
+        self.lock.acquire()
+        try:
+            if sn < self.next_sn:
+                # xlog.warn('recv_pool put timeout sn:%d', sn)
+                return False
+            elif sn > self.next_sn:
+                # xlog.debug('recv_pool put unorder sn:%d', sn)
+                if sn in self.block_list:
+                    # xlog.warn('recv_pool put sn:%d exist', sn)
+                    return False
+                else:
+                    self.block_list.append(sn)
+                    self.process_callback(data)
+                    return True
+            else:
+                # xlog.debug('recv_pool put sn:%d in order', sn)
+                self.process_callback(data)
+                self.next_sn = sn + 1
+    
+            # http 1.1 worker
+        self.set_var('http1_first_ping_wait', 300)
+        self.set_var('http1_ping_interval', 300)
+        self.set_var('http1_idle_time', 360)
+        self.set_var('http1_max_process_tasks', 99999999)
+    
+            self.create_more_connection()
+    
+                ret += [v] * n
+    
+            1. error occurs
+        2. enter recovery mode, report error
+        3. consume until token found in resynch set
+        4. try to resume parsing
+        5. next match() will reset errorRecovery mode
+    
+    
+############################################################################
+#
+# token implementations
+#
+# Token
+# +- CommonToken
+# \- ClassicToken
+#
+############################################################################
+    
+    # Add any Sphinx extension module names here, as strings. They can be
+# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
+# ones.
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.todo',
+    'sphinx.ext.coverage',
+    'sphinx.ext.viewcode',
+]
+    
+    # If true, an OpenSearch description file will be output, and all pages will
+# contain a <link> tag referring to it.  The value of this option must be the
+# base URL from which the finished HTML is served.
+#html_use_opensearch = ''
+    
+      # There are three ways we might decide not to print an error message:
+  # a 'NOLINT(category)' comment appears in the source,
+  # the verbosity level isn't high enough, or the filters filter it out.
+  if IsErrorSuppressedByNolint(category, linenum):
+    return False
+    
+        # sample_queue.put('sam')
+    # test_object(sample_queue)
+    # print('Outside func: {}'.format(sample_queue.get()))
+    
+    '''
+Port of the Java example of 'Parameter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
+    
+        def execute(self):
+        self.rename(self.src, self.dest)
+    
+        def setProblem(self, value):
+        self._bProblem = value
+    
+        def attach(self, observer):
+        if observer not in self._observers:
+            self._observers.append(observer)
+    
+    ### OUTPUT ###
+# Scanning... Station is 1380 AM
+# Scanning... Station is 1510 AM
+# Switching to FM
+# Scanning... Station is 89.1 FM
+# Scanning... Station is 103.9 FM
+# Scanning... Station is 81.3 FM
+# Scanning... Station is 89.1 FM
+# Switching to AM
+# Scanning... Station is 1250 AM
+# Scanning... Station is 1380 AM
 
     
-    np.random.seed(0)
-###############################################################################
-n_features = 100
-# simulation covariance matrix (AR(1) process)
-r = 0.1
-real_cov = toeplitz(r ** np.arange(n_features))
-coloring_matrix = cholesky(real_cov)
     
-        def setUp(cls):
-        ''' Function/test case scope setup. '''
-        cls.output = StringIO()
-        cls.saved_stdout = sys.stdout
-        sys.stdout = cls.output
+@tornado.web.stream_request_body
+class PUTHandler(tornado.web.RequestHandler):
+    def initialize(self):
+        self.bytes_read = 0
     
-        def __init__(self, name):
-        self.name = name
+    try:
+    xrange
+except NameError:
+    xrange = range
     
-        parameter
-    '''
+    extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.coverage',
+    'sphinx.ext.doctest',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.viewcode',
+]
     
-            # and can also be undone at will
-        for cmd in reversed(command_stack):
-            cmd.undo()
-    finally:
-        os.unlink('foo.txt')
-    
-    *TL;DR80
-Traverses a container and accesses the container's elements.
-'''
+        warning_message = '''
+********************************************************************
+WARNING: %s could not
+be compiled. No C extensions are essential for Tornado to run,
+although they do result in significant speed improvements for
+websockets.
+%s
