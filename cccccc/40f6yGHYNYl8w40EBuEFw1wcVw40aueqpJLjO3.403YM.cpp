@@ -1,268 +1,251 @@
-// Generate constructors.
-#include 'ipc/struct_constructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
+
+        
+        #ifndef TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_WORKER_CACHE_PARTIAL_H_
+#define TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_WORKER_CACHE_PARTIAL_H_
     
-    // Call method of an object in browser.
-// function CallObjectMethod(id, type, method, args);
-v8::Handle<v8::Value> CallObjectMethod(int routing_id,
-                                       int object_id,
-                                       const std::string& type,
-                                       const std::string& method,
-                                       v8::Handle<v8::Value> args);
+    namespace tensorflow {
+namespace functor {
+// TODO(b/32239807) No GPU ops for mod yet.
+}  // namespace functor
+}  // namespace tensorflow
     
+      int64* scratch = scratch_holder.data();
     
-namespace nwapi {
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#include <gtest/gtest.h>
+#include 'tensorflow/contrib/lite/interpreter.h'
+#include 'tensorflow/contrib/lite/kernels/register.h'
+#include 'tensorflow/contrib/lite/kernels/test_util.h'
+#include 'tensorflow/contrib/lite/model.h'
+    
+    #include 'tensorflow/core/kernels/loss.h'
+#include 'tensorflow/core/lib/core/errors.h'
+#include 'tensorflow/core/lib/core/status.h'
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    #include <memory>
+#include 'tensorflow/core/framework/reader_base.h'
+#include 'tensorflow/core/framework/reader_op_kernel.h'
+#include 'tensorflow/core/lib/core/errors.h'
+#include 'tensorflow/core/lib/io/inputbuffer.h'
+#include 'tensorflow/core/lib/strings/strcat.h'
+#include 'tensorflow/core/platform/env.h'
+    
+        string compression_type;
+    OP_REQUIRES_OK(context,
+                   context->GetAttr('compression_type', &compression_type));
+    
+    namespace tensorflow {
     }
     
-    #ifndef CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
-#define CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
+    
+    {inline void AddTraceEvent(const TraceEvent &event, string *json) {
+  Appendf(json, R'({'pid':%u,'tid':%u,'ts':%.5f,)', event.device_id(),
+          event.resource_id(), event.timestamp_ps() / kPicosPerMicro);
+  AppendEscapedName(json, event.name());
+  StrAppend(json, ',');
+  if (event.duration_ps() > 0) {
+    Appendf(json, R'('ph':'X','dur':%.5f},)',
+            event.duration_ps() / kPicosPerMicro);
+  } else {
+    StrAppend(json, R'('ph':'i','s':'t'},)');
+  }
+}
     
     
-    {#endif
-}  // namespace nwapi
+    {
+    {    if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Decl *>()) {
+      SemanticNode.get<Decl *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else {
+      llvm_unreachable('ASTNode has pointer to unknown thing!');
+    }
+    llvm::errs() << '\n=====================================================\n';
+  }
+}
+
+    
+      ArrayRef<MarkupASTNode *> getChildren() {
+    return {getTrailingObjects<MarkupASTNode *>(), NumChildren};
+  }
+    
+    #include 'llvm/Support/raw_ostream.h'
+    
+    #endif // SWIFT_SYNTAX_REFERENCES_H
+
+    
+    // On macOS and iOS, swift_once is implemented using GCD.
+// The compiler emits an inline check matching the barrier-free inline fast
+// path of dispatch_once(). See SwiftTargetInfo.OnceDonePredicateValue.
+    
+      virtual bool recordHash(StringRef hash, bool isKnown) = 0;
+  virtual bool startDependency(StringRef name, StringRef path, bool isClangModule,
+                               bool isSystem, StringRef hash) = 0;
+  virtual bool finishDependency(bool isClangModule) = 0;
+  virtual Action startSourceEntity(const IndexSymbol &symbol) = 0;
+  virtual bool finishSourceEntity(SymbolInfo symInfo, SymbolRoleSet roles) = 0;
+    
+      /// True if this is the active clause of the #if block.
+  bool isActive;
+    
+    // Get basic type definitions.
+#define IPC_MESSAGE_IMPL
+#include 'content/nw/src/common/common_message_generator.h'
+    
+    Menu::~Menu() {
+  Destroy();
+}
     
      protected:
   ~NwAppCrashBrowserFunction() override {}
     
-    namespace extensions {
-    }
     
-    #include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/pyext/message.h>
-#include <google/protobuf/pyext/scoped_pyobject_ptr.h>
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
-    
-    
-    {
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-      virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateFreezingCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
-    
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
-    
-      virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateFreezingCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
-    
-    
-    {}  // namespace google
-#endif  // GOOGLE_PROTOBUF_COMPILER_JAVA_DOC_COMMENT_H__
-
-    
-    // CodeGenerator implementation which generates Java code.  If you create your
-// own protocol compiler binary and you want it to support Java output, you
-// can do so by registering an instance of this CodeGenerator with the
-// CommandLineInterface in your main() function.
-class LIBPROTOC_EXPORT JavaGenerator : public CodeGenerator {
- public:
-  JavaGenerator();
-  ~JavaGenerator();
-    }
-    
-        GradientsUpdateType GradUpdateType() const
-    {
-        return m_gradType.type;
-    }
-    double GradientUpdateNoiseStd() const
-    {
-        return m_gradType.gaussianNoiseInjectStd;
-    }
-    
-    template<> inline
-dnnError_t dnnPrimitiveGetAttributes<double>(dnnPrimitive_t primitive, dnnPrimitiveAttributes_t* attributes)
-{
-    return dnnPrimitiveGetAttributes_F64(primitive, attributes);
-}
-    
-    
-    {
-    {
-    {// utility function to round an integer up to a multiple of size
-size_t RoundUp(size_t value, size_t size);
-// HIGH and LOW DWORD functions
-DWORD HIDWORD(size_t size);
-DWORD LODWORD(size_t size);
-} } }
-
-    
-        mAsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
-    mBsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
-    Matrix<float>::ScaleAndAdd(alpha, mAsparse, mBsparse);
-    
-    class latticepair : public std::pair<msra::lattices::lattice, msra::lattices::lattice>
-{
-public:
-    // NOTE: we don't check numerator lattice now
-    size_t getnumframes() const
-    {
-        return second.getnumframes();
-    }
-    size_t getnumnodes() const
-    {
-        return second.getnumnodes();
-    }
-    size_t getnumedges() const
-    {
-        return second.getnumedges();
-    }
-    std::wstring getkey() const
-    {
-        return second.getkey();
-    }
-};
-    
-    template <class _T, int _N>
-class hardcoded_array
-{
-    _T data[_N];
-    inline void check_index(size_t i) const
-    {
-        i;
-        assert(i < _N);
-    }
-    inline void check_size(size_t n) const
-    {
-        n;
-        assert(n == _N);
-    }
-    }
-    
-    
-    {
-    {      if (!well_formed) {
-        return scope.Close(Boolean::New(false));
-      }
-    }
-  }
-    
-    Comparison (single thread, Windows Seven 32 bits, using SMHasher on a Core 2 Duo @3GHz)
-    
-      virtual const char* Name() const override;
-    
-    #ifndef JAVA_ROCKSJNI_STATISTICSJNI_H_
-#define JAVA_ROCKSJNI_STATISTICSJNI_H_
-    
-    namespace rocksdb {
-    }
-    
-     private:
-    // used for synchronisation in compare method
-    std::unique_ptr<port::Mutex> mtx_compare;
-    // used for synchronisation in findShortestSeparator method
-    std::unique_ptr<port::Mutex> mtx_findShortestSeparator;
-    std::unique_ptr<const char[]> m_name;
-    jmethodID m_jCompareMethodId;
-    jmethodID m_jFindShortestSeparatorMethodId;
-    jmethodID m_jFindShortSuccessorMethodId;
-    
-      class LoggerJniCallback : public JniCallback, public Logger {
-   public:
-     LoggerJniCallback(JNIEnv* env, jobject jLogger);
-     ~LoggerJniCallback();
-    }
-    
-    // Wrapper around the platform efficient
-// or otherwise preferrable implementation
-using Thread = WindowsThread;
-    
-        jboolean*   (*GetBooleanArrayElements)(JNIEnv*, jbooleanArray, jboolean*);
-    jbyte*      (*GetByteArrayElements)(JNIEnv*, jbyteArray, jboolean*);
-    jchar*      (*GetCharArrayElements)(JNIEnv*, jcharArray, jboolean*);
-    jshort*     (*GetShortArrayElements)(JNIEnv*, jshortArray, jboolean*);
-    jint*       (*GetIntArrayElements)(JNIEnv*, jintArray, jboolean*);
-    jlong*      (*GetLongArrayElements)(JNIEnv*, jlongArray, jboolean*);
-    jfloat*     (*GetFloatArrayElements)(JNIEnv*, jfloatArray, jboolean*);
-    jdouble*    (*GetDoubleArrayElements)(JNIEnv*, jdoubleArray, jboolean*);
-    
-    Config::~Config(void)
-{
-    YGConfigFree(m_config);
-}
-    
-        static void destroy(Node * node);
-    
-    #pragma once
-    
-      bool hasOnlyOneRef() const {
-    return m_refcount == 1;
-  }
+    {}
     
     /**
- * RAII Object that attaches a thread to the JVM. Failing to detach from a thread before it
- * exits will cause a crash, as will calling Detach an extra time, and this guard class helps
- * keep that straight. In addition, it remembers whether it performed the attach or not, so it
- * is safe to nest it with itself or with non-fbjni code that manages the attachment correctly.
+ * @brief Iterate the discovered decorators for a given point type.
  *
- * Potential concerns:
- *  - Attaching to the JVM is fast (~100us on MotoG), but ideally you would attach while the
- *    app is not busy.
- *  - Having a thread detach at arbitrary points is not safe in Dalvik; you need to be sure that
- *    there is no Java code on the current stack or you run the risk of a crash like:
- *      ERROR: detaching thread with interp frames (count=18)
- *    (More detail at https://groups.google.com/forum/#!topic/android-ndk/2H8z5grNqjo)
- *    ThreadScope won't do a detach if the thread was already attached before the guard is
- *    instantiated, but there's probably some usage that could trip this up.
- *  - Newly attached C++ threads only get the bootstrap class loader -- i.e. java language
- *    classes, not any of our application's classes. This will be different behavior than threads
- *    that were initiated on the Java side. A workaround is to pass a global reference for a
- *    class or instance to the new thread; this bypasses the need for the class loader.
- *    (See http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/invocation.html#attach_current_thread)
- *    If you need access to the application's classes, you can use ThreadScope::WithClassLoader.
+ * The configuration maintains various sources, each may contain a set of
+ * decorators. The source tracking is abstracted for the decorator iterator.
+ *
+ * @param point request execution of decorators for this given point.
+ * @param time an optional time for points using intervals.
+ * @param source restrict run to a specific config source.
  */
-class FBEXPORT ThreadScope {
+void runDecorators(DecorationPoint point,
+                   size_t time = 0,
+                   const std::string& source = '');
+    
+    class TLSConfigPlugin : public ConfigPlugin,
+                        public std::enable_shared_from_this<TLSConfigPlugin> {
  public:
-  ThreadScope();
-  ThreadScope(ThreadScope&) = delete;
-  ThreadScope(ThreadScope&&) = default;
-  ThreadScope& operator=(ThreadScope&) = delete;
-  ThreadScope& operator=(ThreadScope&&) = delete;
-  ~ThreadScope();
+  Status setUp() override;
+  Status genConfig(std::map<std::string, std::string>& config) override;
     }
     
-      template <typename ...Args>
-  void initialize(Args&&... arguments) {
-    FBASSERT(!m_instance);
-    m_instance = new T(std::forward<Args>(arguments)...);
-  }
+    #ifdef WIN32
+  pid = (int)::GetCurrentProcessId();
+#else
+  pid = getpid();
+#endif
     
-    namespace detail {
-template <typename T, typename jprim>
-struct JPrimitive : JavaClass<T> {
-  using typename JavaClass<T>::javaobject;
-  using JavaClass<T>::javaClassStatic;
-  static local_ref<javaobject> valueOf(jprim val) {
-    static auto cls = javaClassStatic();
-    static auto method =
-      cls->template getStaticMethod<javaobject(jprim)>('valueOf');
-    return method(cls, val);
-  }
-  jprim value() const {
-    static auto method =
-      javaClassStatic()->template getMethod<jprim()>(T::kValueMethod);
-    return method(this->self());
+    /**
+ * @brief Run an interactive SQL query shell.
+ *
+ * @code{.cpp}
+ *   // Copyright 2004-present Facebook. All Rights Reserved.
+ *   #include <osquery/core.h>
+ *   #include <osquery/devtools.h>
+ *
+ *   int main(int argc, char *argv[]) {
+ *     osquery::initOsquery(argc, argv);
+ *     return osquery::launchIntoShell(argc, argv);
+ *   }
+ * @endcode
+ *
+ * @param argc the number of elements in argv
+ * @param argv the command-line flags
+ *
+ * @return an int which represents the 'return code'
+ */
+int launchIntoShell(int argc, char** argv);
+    
+    class PrinterTests : public testing::Test {
+ public:
+  QueryData q;
+  std::vector<std::string> order;
+  void SetUp() {
+    order = {'name', 'age', 'food', 'number'};
+    q = {
+        {
+         {'name', 'Mike Jones'},
+         {'age', '39'},
+         {'food', 'mac and cheese'},
+         {'number', '1'},
+        },
+        {
+         {'name', 'John Smith'},
+         {'age', '44'},
+         {'food', 'peanut butter and jelly'},
+         {'number', '2'},
+        },
+        {
+         {'name', 'Doctor Who'},
+         {'age', '2000'},
+         {'food', 'fish sticks and custard'},
+         {'number', '11'},
+        },
+    };
   }
 };
-    }
+    
+    
+    {  // Too many fields
+  bad_line = R'('2016-03-22T21:17:01.701882+00:00','','6','','','','')';
+  ec = pub.createEventContext();
+  status = pub.populateEventContext(bad_line, ec);
+  ASSERT_FALSE(status.ok());
+  ASSERT_NE(std::string::npos, status.getMessage().find('more'));
+}
+    
+    size_t FirehoseLogForwarder::getMaxBytesPerBatch() const {
+  return 4000000U;
+}
+    
+      Status setUp() override;
+    
+    // Performs in-place floating point 8x8 DCT on block[0..63].
+// Note that the DCT used here is the DCT-2 with the first term multiplied by
+// 1/sqrt(2) and the result scaled by 1/2.
+void ComputeBlockDCTDouble(double block[64]);
+    
+    #include <stdint.h>
+    
+      // Requires that comp is not downsampled.
+  void CopyFromJpegComponent(const JPEGComponent& comp,
+                             int factor_x, int factor_y,
+                             const int* quant);
+    
+    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
+std::vector<std::vector<float>> PreProcessChannel(
+    int w, int h, int channel, float sigma, float amount, bool blur,
+    bool sharpen, const std::vector<std::vector<float>>& image);
+    
+    void SimpleShortPack(const void* _data, size_t _datalen, AutoBuffer& _outbuf) {
+    SimplePack<uint16_t>(_data, _datalen, _outbuf);
+}
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+        Spy* GetSpy(const void* _this) const
+    { return m_thismap.find(_this)->second; }
+    
+    
+#define DEFINE_HAS_MEMBER_WITH_TYPE(member_name, member_type) \
+    template <typename T>\
+    class has_##member_name {\
+      private:\
+        struct yes_type { char x[1]; };\
+        struct no_type { char x[2]; };\
+        template <member_type (T::*)> struct tester;\
+        template <typename U> static yes_type test(tester<&U::member_name>*);\
+        template <typename U> static no_type test(...);\
+      public:\
+        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
+    };
+    
+    #ifndef _COMM_FUNCTION_H_
+#define _COMM_FUNCTION_H_
