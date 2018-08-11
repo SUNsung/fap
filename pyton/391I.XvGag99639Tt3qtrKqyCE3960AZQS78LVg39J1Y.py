@@ -1,65 +1,110 @@
 
         
-        from base64 import b64decode, b64encode
-from datetime import datetime
-from uuid import UUID
+        
+def get_new_command(command):
+    dir = shell.quote(_tar_file(command.script_parts)[1])
+    return shell.and_('mkdir -p {dir}', '{cmd} -C {dir}') \
+        .format(dir=dir, cmd=command.script)
     
-        If there is no handler for the logger's effective level, add a
-    :class:`~logging.StreamHandler` for
-    :func:`~flask.logging.wsgi_errors_stream` with a basic format.
+    
+def to_native_string(string, encoding='ascii'):
+    '''Given a string object, regardless of type, returns a representation of
+    that string in the native string type, encoding and decoding where
+    necessary. This assumes ASCII unless told otherwise.
     '''
-    logger = logging.getLogger('flask.app')
+    if isinstance(string, builtin_str):
+        out = string
+    else:
+        if is_py2:
+            out = string.encode(encoding)
+        else:
+            out = string.decode(encoding)
     
-        handler = logging.StreamHandler()
-    logging.root.addHandler(handler)
-    assert has_level_handler(logger)
     
-                def g():
-                assert not flask.request
-                assert not flask.current_app
-                with reqctx:
-                    assert flask.request
-                    assert flask.current_app == app
-                    assert flask.request.path == '/'
-                    assert flask.request.args['foo'] == 'bar'
-                assert not flask.request
-                return 42
+class FileModeWarning(RequestsWarning, DeprecationWarning):
+    '''A file was opened in text mode, but Requests determined its binary length.'''
+    pass
     
-        try:
-        rv = app.test_client().get('/')
-        assert rv.data == b'stuff'
     
-        old_layer = keras.layers.Deconvolution2D(5, 3, nb_col=3, output_shape=(6, 7, 5), name='deconv')
-    new_layer = keras.layers.Conv2DTranspose(5, (3, 3), name='deconv')
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
+@pytest.mark.parametrize('var,scheme', _proxy_combos)
+def test_use_proxy_from_environment(httpbin, var, scheme):
+    url = '{0}://httpbin.org'.format(scheme)
+    fake_proxy = Server()  # do nothing with the requests; just close the socket
+    with fake_proxy as (host, port):
+        proxy_url = 'socks5://{0}:{1}'.format(host, port)
+        kwargs = {var: proxy_url}
+        with override_environ(**kwargs):
+            # fake proxy's lack of response will cause a ConnectionError
+            with pytest.raises(requests.exceptions.ConnectionError):
+                requests.get(url)
     
-        z_mean, z_log_var = args
-    batch = K.shape(z_mean)[0]
-    dim = K.int_shape(z_mean)[1]
-    # by default, random_normal has mean=0 and std=1.0
-    epsilon = K.random_normal(shape=(batch, dim))
-    return z_mean + K.exp(0.5 * z_log_var) * epsilon
+        This function works best on CPython and PyPy: in particular, it probably
+    doesn't work for Jython or IronPython. Future investigation should be done
+    to work out the correct shape of the code for those platforms.
+    '''
+    implementation = platform.python_implementation()
     
-            for j in range(n):
-            # Initial position
-            xstart = np.random.randint(20, 60)
-            ystart = np.random.randint(20, 60)
-            # Direction of motion
-            directionx = np.random.randint(0, 3) - 1
-            directiony = np.random.randint(0, 3) - 1
+        def handle_redirect(self, r, **kwargs):
+        '''Reset num_401_calls counter on redirects.'''
+        if r.is_redirect:
+            self._thread_local.num_401_calls = 1
     
-    from keras.preprocessing import sequence
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional
-from keras.datasets import imdb
+    elif is_py3:
+    from urllib.parse import urlparse, urlunparse, urljoin, urlsplit, urlencode, quote, unquote, quote_plus, unquote_plus, urldefrag
+    from urllib.request import parse_http_list, getproxies, proxy_bypass, proxy_bypass_environment, getproxies_environment
+    from http import cookiejar as cookielib
+    from http.cookies import Morsel
+    from io import StringIO
+    from collections import OrderedDict
+    from collections.abc import Callable, Mapping, MutableMapping
     
-        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
-        loss = MSE_MAE_loss(0.3)
-        inputs = keras.layers.Input((2,))
-        outputs = keras.layers.Dense(1, name='model_output')(inputs)
-        model = keras.models.Model(inputs, outputs)
-        model.compile(optimizer='sgd', loss={'model_output': loss})
-        model.fit(np.random.rand(256, 2), np.random.rand(256, 1))
-        model.save(model_filename)
+    type_nullable=     0x1000
+type_key=          0x2000
+# XXX temporary, localizable?
+knownbits = datasizemask | type_valid | type_localizable | \
+            typemask | type_nullable | type_key
     
-        return (x_train, y_train), (x_test, y_test)
+            drive, path = splitdrive(paths[0].replace(altsep, sep))
+        common = path.split(sep)
+        common = [c for c in common if c and c != curdir]
+    
+        # arguments are not equal, and if numeric, are too far apart
+    if failure is not None:
+        fail_fmt = 'expected {!r}, got {!r}'
+        fail_msg = fail_fmt.format(expected, got)
+        fail_msg += ' ({})'.format(failure)
+        return fail_msg
+    else:
+        return None
+    
+            class C2:
+            def __getnewargs__(self):
+                return 'bad args'
+        obj = C2()
+        for proto in protocols:
+            if proto >= 2:
+                with self.assertRaises(TypeError):
+                    obj.__reduce_ex__(proto)
+    
+            for cls in bytearray, memoryview:
+            path_bytes = cls(os.fsencode(self.path))
+            with self.assertWarns(DeprecationWarning):
+                entries = list(os.scandir(path_bytes))
+            self.assertEqual(len(entries), 1, entries)
+            entry = entries[0]
+    
+        @requires_sha3
+    def test_case_sha3_256_0(self):
+        self.check('sha3_256', b'',
+          'a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a')
+    
+                    if db_setup_debug: print('db: looking for db.h in', f)
+                if os.path.exists(f):
+                    with open(f, 'rb') as file:
+                        f = file.read()
+                    m = re.search(br'#define\WDB_VERSION_MAJOR\W(\d+)', f)
+                    if m:
+                        db_major = int(m.group(1))
+                        m = re.search(br'#define\WDB_VERSION_MINOR\W(\d+)', f)
+                        db_minor = int(m.group(1))
+                        db_ver = (db_major, db_minor)
