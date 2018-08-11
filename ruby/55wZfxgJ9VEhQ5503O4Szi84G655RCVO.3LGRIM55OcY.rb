@@ -1,96 +1,56 @@
 
         
-            You can install it using Cask:
+          # Finds the projects '@user' contributed to, limited to either public projects
+  # or projects visible to the given user.
+  #
+  # current_user - When given the list of the projects is limited to those only
+  #                visible by this user.
+  #
+  # Returns an ActiveRecord::Relation.
+  def execute(current_user = nil)
+    segments = all_projects(current_user)
     
-      def internal_commands
-    find_internal_commands HOMEBREW_LIBRARY_PATH/'cmd'
-  end
-    
-      def hardware
-    'CPU: #{Hardware.cores_as_words}-core #{Hardware::CPU.bits}-bit #{Hardware::CPU.family}'
-  end
-    
-    # See browser for an example
-class GithubGistFormula < ScriptFileFormula
-  def self.url(val)
-    super
-    version File.basename(File.dirname(val))[0, 6]
-  end
-end
-    
-      end
-    
-        context 'only newlines' do
-      let(:keywords) { 'One\nTwo\r\nThree\nFour Token\n' }
-    
-          it 'does switch to plain text when xml is toggled off' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            cloc(xml: false)
-          end').runner.execute(:test)
-    
-        html_filters.push 'haxe/clean_html', 'haxe/entries'
-    
-            css('.toplang', '#quickview', '.top').remove
-    
-    if (ip == nil || port == nil)
-  puts 'Syntax: test.rb <ip> [port]\n'
-  exit
-end
-    
-    #Rjb::load('.', jvmargs=[])
-Rjb::load('#{ENV['JAVA_HOME']}/lib/tools.jar:.',jvmargs=[])
-    
-    
-
-    
-      def parse
-    @result = ERB.new(@template).result(binding)
-  end
-    
-          respond_with do |format|
-        format.html { redirect_to admin_pods_path }
-        format.json { render json: PodPresenter.new(pod).as_json }
+          if valid_type?(type)
+        type.constantize.new(attributes).tap do |instance|
+          instance.user = user if instance.respond_to?(:user=)
+        end
+      else
+        const_get(:BASE_CLASS_NAME).constantize.new(attributes).tap do |instance|
+          instance.type = type
+          instance.user = user if instance.respond_to?(:user=)
+        end
       end
     end
   end
 end
-
     
-    class Profile
-  def pod_bin
-    File.expand_path('../pod', __FILE__)
+        begin
+      raise '#{short_type} does not support dry-run' unless can_dry_run?
+      readonly!
+      @dry_run_started_at = Time.zone.now
+      @dry_run_logger.info('Dry Run started')
+      if event
+        raise 'This agent cannot receive an event!' unless can_receive_events?
+        receive([event])
+      else
+        check
+      end
+      @dry_run_logger.info('Dry Run finished')
+    rescue => e
+      @dry_run_logger.info('Dry Run failed')
+      error 'Exception during dry-run. #{e.message}: #{e.backtrace.join('\n')}'
+    end
+    
+      def evernote_client
+    EvernoteOAuth::Client.new(
+      token:           evernote_oauth_token,
+      consumer_key:    evernote_consumer_key,
+      consumer_secret: evernote_consumer_secret,
+      sandbox:         use_sandbox?
+    )
   end
     
-            self.arguments = [
-          CLAide::Argument.new('NAME', false),
-        ]
-    
-            self.summary = 'The repl listens to commands on standard input'
-        self.description = <<-DESC
-          The repl listens to commands on standard input and prints their
-          result to standard output.
-          It accepts all the other ipc subcommands. The repl will signal the
-          end of output with the the ASCII CR+LF `\\n\\r`.
-        DESC
-    
-                report.pods_by_warning.each do |message, versions_by_name|
-              UI.puts '-> #{message}'.yellow
-              versions_by_name.each { |name, versions| UI.puts '  - #{name} (#{versions * ', '})' }
-              UI.puts
-            end
-    
-            def should_be_unused?
-          name.to_s.start_with?('_')
+            def stock_location
+          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
         end
-    
-            def on_send(node)
-          return unless match_call?(node) &&
-                        (!node.value_used? || only_truthiness_matters?(node)) &&
-                        !(node.parent && node.parent.block_type?)
-    
-              it 'autocorrects the offenses' do
-            new_source = autocorrect_source(source)
-            expect(new_source).to eq(<<-RUBY.strip_indent)
-              #{type} Parent
-                #{type} SomeObject
-                  include Something
