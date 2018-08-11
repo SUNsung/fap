@@ -1,75 +1,68 @@
 
         
-            if s1.st_dev != s2.st_dev:
-        return True     # path/.. on a different device as path
-    if s1.st_ino == s2.st_ino:
-        return True     # path/.. is the same i-node as path, i.e. path=='/'
-    return False
-
+            def contribute(self):
+        self.blackboard.common_state['problems'] += random.randint(1, 10)
+        self.blackboard.common_state['suggestions'] += random.randint(1, 10)
+        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
+        self.blackboard.common_state['progress'] += random.randint(1, 2)
     
-        try:
-        return json.dumps(result, sort_keys=True, indent=indent, ensure_ascii=False)
-    except UnicodeDecodeError:
-        return json.dumps(result, sort_keys=True, indent=indent)
-
+        def test_c_observers_shall_be_detachable(cls):
+        cls.s.detach(cls.dec_obs)
+        # hex viewer shall be remaining if dec viewer is detached first
+        cls.assertEqual(isinstance(cls.s._observers[0], HexViewer), True)
+        cls.assertEqual(len(cls.s._observers), 1)
+        cls.s.detach(cls.hex_obs)
+        cls.assertEqual(len(cls.s._observers), 0)
+    
+        def test_sales_manager_shall_not_talk_through_proxy_with_delay(cls):
+        cls.ntp.busy = 'No'
+        start_time = time()
+        cls.ntp.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+This Sales Manager will not talk to you whether he/she is busy or not\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    
+        # sample_queue.put('sam')
+    # test_object(sample_queue)
+    # print('Outside func: {}'.format(sample_queue.get()))
+    
+    '''
+Port of the Java example of 'Setter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
+    
+        def get_current_time_as_html_fragment(self, time_provider):
+        current_time = time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
+    
+        # verify that none of the target files exist
+    assert(not lexists('foo.txt'))
+    assert(not lexists('bar.txt'))
+    assert(not lexists('baz.txt'))
+    try:
+        with open('foo.txt', 'w'):  # Creating the file
+            pass
     
     
-def get_group_vars(groups):
+# Example usage...
+def main():
+    data1 = Data('Data 1')
+    data2 = Data('Data 2')
+    view1 = DecimalViewer()
+    view2 = HexViewer()
+    data1.attach(view1)
+    data1.attach(view2)
+    data2.attach(view2)
+    data2.attach(view1)
     
-        def _node_position_info(self, node):
-        # the line number where the previous token has ended (plus empty lines)
-        # Add one so that the first line is line 1 rather than line 0
-        column = node.start_mark.column + 1
-        line = node.start_mark.line + 1
+        def and_specification(self, candidate):
+        raise NotImplementedError()
     
-        def test_full_jitter(self):
-        retries = 5
-        seed = 1
-    
-        def remove(self, key):
-        '''Remove the keyed message; raise KeyError if it doesn't exist.'''
-        _singlefileMailbox.remove(self, key)
-        if key in self._labels:
-            del self._labels[key]
-    
-        def __init__(self):
-        # setup variables used for HTML documentation
-        self.server_name = 'XML-RPC Server Documentation'
-        self.server_documentation = \
-            'This server exports the following methods through the XML-RPC '\
-            'protocol.'
-        self.server_title = 'XML-RPC Server Documentation'
-    
-        def load(self, uri):
-        raise NotImplementedError('haven't written this yet')
-    
-        def init_test(self):
-        self.cur_except = None
-        self.expect_set_no = 0
-        self.breakpoint_hits = None
-        self.expected_list = list(islice(self.expect_set, 0, None, 2))
-        self.set_list = list(islice(self.expect_set, 1, None, 2))
-    
-        def test_open_common(self):
-        p = self.cls(BASE)
-        with (p / 'fileA').open('r') as f:
-            self.assertIsInstance(f, io.TextIOBase)
-            self.assertEqual(f.read(), 'this is file A\n')
-        with (p / 'fileA').open('rb') as f:
-            self.assertIsInstance(f, io.BufferedIOBase)
-            self.assertEqual(f.read().strip(), b'this is file A')
-        with (p / 'fileA').open('rb', buffering=0) as f:
-            self.assertIsInstance(f, io.RawIOBase)
-            self.assertEqual(f.read().strip(), b'this is file A')
-    
-        def test_underscores(self):
-        # check underscores
-        for lit in VALID_UNDERSCORE_LITERALS:
-            if not any(ch in lit for ch in 'xXoObB'):
-                self.assertEqual(complex(lit), eval(lit))
-                self.assertEqual(complex(lit), complex(lit.replace('_', '')))
-        for lit in INVALID_UNDERSCORE_LITERALS:
-            if lit in ('0_7', '09_99'):  # octals are not recognized here
-                continue
-            if not any(ch in lit for ch in 'xXoObB'):
-                self.assertRaises(ValueError, complex, lit)
+        '''Base state. This is to share functionality'''
