@@ -1,215 +1,208 @@
 
         
-        #ifndef TENSORFLOW_KERNELS_REVERSE_OP_H_
-#define TENSORFLOW_KERNELS_REVERSE_OP_H_
+        
+    {  /// Returns true if \p BB is a dead-end block.
+  bool isDeadEnd(SILBasicBlock *BB) {
+    if (!isComputed) {
+      // Lazily compute the dataflow.
+      compute();
+      isComputed = true;
+    }
+    return ReachableBlocks.count(BB) == 0;
+  }
+};
     
-    class TextLineReader : public ReaderBase {
+    #include 'swift/Markup/Markup.h'
+#include 'llvm/ADT/Optional.h'
+    
+    /// Format a Syntax tree with the given rules.
+Syntax format(Syntax Tree);
+// TODO: Representation for formatting rules, etc. This is just a figment
+// for now.
+    
+    #endif // SWIFT_INDEX_INDEX_H
+
+    
+    class IndexDataConsumer {
+  virtual void anchor();
+    }
+    
+    namespace SourceKit {
+  class LangSupport;
+  class NotificationCenter;
+    }
+    
+    // Generate param traits read methods.
+#include 'ipc/param_traits_read_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
+    
+    #include 'base/strings/string_piece.h'
+#include 'v8/include/v8.h'
+    
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
+    
+    
+    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  return item->is_enabled_;
+}
+    
+    #include 'content/nw/src/api/menu/menu.h'
+    
+    void MenuItem::OnClick() {
+  // Automatically flip checkbox.
+  if (type_ == 'checkbox')
+    is_checked_ = !is_checked_;
+    }
+    
+    #include 'base/command_line.h'
+#include 'base/memory/ptr_util.h'
+#include 'chrome/browser/browsing_data/browsing_data_appcache_helper.h'
+#include 'chrome/browser/browsing_data/browsing_data_helper.h'
+#include 'chrome/browser/devtools/devtools_window.h'
+#include 'chrome/browser/extensions/devtools_util.h'
+#include 'chrome/browser/extensions/extension_service.h'
+#include 'content/nw/src/api/nw_app.h'
+#include 'content/nw/src/nw_base.h'
+#include 'content/public/browser/render_frame_host.h'
+#include 'content/public/browser/render_process_host.h'
+#include 'content/public/browser/render_view_host.h'
+#include 'content/public/browser/storage_partition.h'
+#include 'content/public/browser/web_contents.h'
+#include 'extensions/browser/app_window/app_window.h'
+#include 'extensions/browser/app_window/app_window_registry.h'
+#include 'extensions/browser/app_window/native_app_window.h'
+#include 'extensions/browser/extension_system.h'
+#include 'extensions/common/error_utils.h'
+#include 'net/proxy_resolution/proxy_config.h'
+#include 'net/proxy_resolution/proxy_config_service_fixed.h'
+#include 'net/proxy_resolution/proxy_resolution_service.h'
+#include 'net/url_request/url_request_context.h'
+#include 'net/url_request/url_request_context_getter.h'
+#include 'net/traffic_annotation/network_traffic_annotation_test_helper.h'
+    
+     protected:
+  ~NwObjCallObjectMethodSyncFunction() override;
+    
+    #include 'extensions/browser/extension_function.h'
+    
+    #include <osquery/config.h>
+#include <osquery/database.h>
+    
+    class TLSConfigPlugin : public ConfigPlugin,
+                        public std::enable_shared_from_this<TLSConfigPlugin> {
  public:
-  TextLineReader(const string& node_name, int skip_header_lines, Env* env)
-      : ReaderBase(strings::StrCat('TextLineReader '', node_name, ''')),
-        skip_header_lines_(skip_header_lines),
-        env_(env),
-        line_number_(0) {}
+  Status setUp() override;
+  Status genConfig(std::map<std::string, std::string>& config) override;
     }
     
-    #define EIGEN_USE_GPU
+      // Wait for the permissions thread to write once.
+  EXPECT_TRUE(waitForTick(perms_thread));
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+      auto process = PlatformProcess::getCurrentProcess();
+  EXPECT_NE(nullptr, process.get());
     
-      /// Open the acceptor using the specified protocol.
-  /**
-   * This function opens the socket acceptor so that it will use the specified
-   * protocol.
-   *
-   * @param protocol An object specifying which protocol is to be used.
-   *
-   * @param ec Set to indicate what error occurred, if any.
-   *
-   * @par Example
-   * @code
-   * boost::asio::ip::tcp::acceptor acceptor(io_service);
-   * boost::system::error_code ec;
-   * acceptor.open(boost::asio::ip::tcp::v4(), ec);
-   * if (ec)
-   * {
-   *   // An error occurred.
-   * }
-   * @endcode
-   */
-  boost::system::error_code open(const protocol_type& protocol,
-      boost::system::error_code& ec)
-  {
-    return this->get_service().open(this->get_implementation(), protocol, ec);
+      hr = ::CoInitializeSecurity(nullptr,
+                              -1,
+                              nullptr,
+                              nullptr,
+                              RPC_C_AUTHN_LEVEL_DEFAULT,
+                              RPC_C_IMP_LEVEL_IMPERSONATE,
+                              nullptr,
+                              EOAC_NONE,
+                              nullptr);
+  hr = ::CoCreateInstance(CLSID_WbemLocator,
+                          0,
+                          CLSCTX_INPROC_SERVER,
+                          IID_IWbemLocator,
+                          (LPVOID*)&locator_);
+  if (hr != S_OK) {
+    locator_ = nullptr;
+    return;
   }
     
-    template <typename Stream>
-class buffered_write_stream;
+      // Check that all value lengths were maxed.
+  std::map<std::string, size_t> expected = {
+      {'name', 10}, {'age', 4}, {'food', 23}, {'number', 2}};
+  EXPECT_EQ(lengths, expected);
     
-    // Standard library components can't be forward declared, so we'll have to
-// include the array header. Fortunately, it's fairly lightweight and doesn't
-// add significantly to the compile time.
-#if defined(BOOST_ASIO_HAS_STD_ARRAY)
-# include <array>
-#endif // defined(BOOST_ASIO_HAS_STD_ARRAY)
+    class ExampleTable : public TablePlugin {
+ private:
+  TableColumns columns() const {
+    return {
+        std::make_tuple('example_text', TEXT_TYPE, ColumnOptions::DEFAULT),
+        std::make_tuple(
+            'example_integer', INTEGER_TYPE, ColumnOptions::DEFAULT),
+    };
+  }
+    }
     
-    template <>
-class base_from_completion_cond<transfer_all_t>
+                ImGui::AlignTextToFramePadding(); // If your line starts with text, call this to align it to upcoming widgets.
+            ImGui::Text('Text aligned to Widget'); ImGui::SameLine();
+            ImGui::Button('Widget##1'); ImGui::SameLine();
+            ImGui::Text('Widget'); ImGui::SameLine();
+            ImGui::SmallButton('Widget##2'); ImGui::SameLine();
+            ImGui::Button('Widget##3');
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+    static void glfw_error_callback(int error, const char* description)
 {
-protected:
-  explicit base_from_completion_cond(transfer_all_t)
-  {
-  }
-    }
-    
-    #include <boost/asio/detail/pop_options.hpp>
-    
-      static void do_complete(io_service_impl* owner, operation* base,
-      const boost::system::error_code& /*ec*/,
-      std::size_t /*bytes_transferred*/)
-  {
-    // Take ownership of the handler object.
-    descriptor_read_op* o(static_cast<descriptor_read_op*>(base));
-    ptr p = { boost::asio::detail::addressof(o->handler_), o, o };
-    }
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-# include <boost/asio/detail/null_event.hpp>
-#elif defined(BOOST_ASIO_WINDOWS)
-# include <boost/asio/detail/win_event.hpp>
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-# include <boost/asio/detail/posix_event.hpp>
-#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-# include <boost/asio/detail/std_event.hpp>
-#else
-# error Only Windows, POSIX and std::condition_variable are supported!
-#endif
-    
-      // Destructor.
-  ~gcc_arm_fenced_block()
-  {
-    barrier();
-  }
-    
-          if (events[i].events & (POLLOUT | POLLERR | POLLHUP))
-        more_writes = op_queue_[write_op].perform_operations(descriptor, ops);
-      else
-        more_writes = op_queue_[write_op].has_operation(descriptor);
-    
-    // Writes DHT and SOS marker segments to out and fills in DC/AC Huffman tables
-// for each component of the image.
-bool BuildAndEncodeHuffmanCodes(const JPEGData& jpg, JPEGOutput out,
-                                std::vector<HuffmanCodeTable>* dc_huff_tables,
-                                std::vector<HuffmanCodeTable>* ac_huff_tables) {
-  const int ncomps = jpg.components.size();
-  dc_huff_tables->resize(ncomps);
-  ac_huff_tables->resize(ncomps);
-    }
-    
-    #ifndef GUETZLI_FAST_LOG_H_
-#define GUETZLI_FAST_LOG_H_
-    
-    // Fills in 'result' with the inverse DCT of 'block'.
-// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
-// a row-by-row memory layout.
-void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
-    
-    // Single pixel rgb to 16-bit yuv conversion.
-// The returned yuv values are signed integers in the
-// range [-128, 127] inclusive.
-inline static void RGBToYUV16(const uint8_t* const rgb,
-                              coeff_t *out) {
-  enum { FRAC = 16, HALF = 1 << (FRAC - 1) };
-  const int r = rgb[0];
-  const int g = rgb[1];
-  const int b = rgb[2];
-  out[0] = (19595 * r  + 38469 * g +  7471 * b - (128 << 16) + HALF) >> FRAC;
-  out[64] = (-11059 * r - 21709 * g + 32768 * b + HALF - 1) >> FRAC;
-  out[128] = (32768 * r  - 27439 * g -  5329 * b + HALF - 1) >> FRAC;
+    fprintf(stderr, 'Glfw Error %d: %s\n', error, description);
 }
     
+        // Main loop
+    while (!glfwWindowShouldClose(window))
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        glfwPollEvents();
+    }
     
-    {} // namespace aria2
-    
-      BtMessageFactory* messageFactory_;
-    
-      // Resets request_. This method is more efficient than
-  // setRequest(std::shared_ptr<Request>());
-  void resetRequest();
-    
-    void AbstractHttpServerResponseCommand::updateReadWriteCheck()
+    void CreateRenderTarget()
 {
-  if (httpServer_->wantRead()) {
-    if (!readCheck_) {
-      readCheck_ = true;
-      e_->addSocketForReadCheck(socket_, this);
-    }
-  }
-  else if (readCheck_) {
-    readCheck_ = false;
-    e_->deleteSocketForReadCheck(socket_, this);
-  }
-  if (httpServer_->wantWrite()) {
-    if (!writeCheck_) {
-      writeCheck_ = true;
-      e_->addSocketForWriteCheck(socket_, this);
-    }
-  }
-  else if (writeCheck_) {
-    writeCheck_ = false;
-    e_->deleteSocketForWriteCheck(socket_, this);
-  }
+    ID3D11Texture2D* pBackBuffer;
+    g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+    g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
+    pBackBuffer->Release();
 }
     
-      virtual void parse(Option& option,
-                     const std::string& arg) const CXX11_OVERRIDE;
-    
-    
-    {} // namespace aria2
-    
-      // Don't allow copying
-  AuthConfig(const AuthConfig&);
-  AuthConfig& operator=(const AuthConfig&);
-    
-        int getAlignContent(void) const;
-    int getAlignItems(void) const;
-    int getAlignSelf(void) const;
-    int getFlexDirection(void) const;
-    int getFlexWrap(void) const;
-    int getJustifyContent(void) const;
-    
-    namespace facebook {
-namespace jni {
-    }
-    }
-    
-      // Creates a strong reference from a raw pointer, assuming that it points to a
-  // freshly-created object. See the documentation for RefPtr for usage.
-  static inline RefPtr<T> adoptRef(T* ptr) {
-    return RefPtr<T>(ptr, ConstructionMode::Adopted);
-  }
-    
-      T* release() {
-    T* obj = get();
-    pthread_setspecific(m_key, NULL);
-    return obj;
-  }
-    
-    
-#define DEFINE_BOXED_PRIMITIVE(LITTLE, BIG)                          \
-  struct J ## BIG : detail::JPrimitive<J ## BIG, j ## LITTLE> {      \
-    static auto constexpr kJavaDescriptor = 'Ljava/lang/' #BIG ';';  \
-    static auto constexpr kValueMethod = #LITTLE 'Value';            \
-    j ## LITTLE LITTLE ## Value() const {                            \
-      return value();                                                \
-    }                                                                \
-  };                                                                 \
-  inline local_ref<jobject> autobox(j ## LITTLE val) {               \
-    return J ## BIG::valueOf(val);                                   \
-  }
-    
-    #pragma once
+    //---- Don't implement some functions to reduce linkage requirements.
+//#define IMGUI_DISABLE_WIN32_DEFAULT_CLIPBOARD_FUNCTIONS   // [Win32] Don't implement default clipboard handler. Won't use and link with OpenClipboard/GetClipboardData/CloseClipboard etc.
+//#define IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS         // [Win32] Don't implement default IME handler. Won't use and link with ImmGetContext/ImmSetCompositionWindow.
+//#define IMGUI_DISABLE_FORMAT_STRING_FUNCTIONS             // Don't implement ImFormatString/ImFormatStringV so you can implement them yourself if you don't want to link with vsnprintf.
+//#define IMGUI_DISABLE_MATH_FUNCTIONS                      // Don't implement ImFabs/ImSqrt/ImPow/ImFmod/ImCos/ImSin/ImAcos/ImAtan2 wrapper so you can implement them yourself. Declare your prototypes in imconfig.h.
+//#define IMGUI_DISABLE_DEFAULT_ALLOCATORS                  // Don't implement default allocators calling malloc()/free() to avoid linking with them. You will need to call ImGui::SetAllocatorFunctions().
