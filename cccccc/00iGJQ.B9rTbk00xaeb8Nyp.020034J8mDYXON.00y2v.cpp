@@ -1,143 +1,452 @@
-Value& Path::make(Value& root) const {
-  Value* node = &root;
-  for (Args::const_iterator it = args_.begin(); it != args_.end(); ++it) {
-    const PathArgument& arg = *it;
-    if (arg.kind_ == PathArgument::kindIndex) {
-      if (!node->isArray()) {
-        // Error: node is not an array at position ...
-      }
-      node = &((*node)[arg.index_]);
-    } else if (arg.kind_ == PathArgument::kindKey) {
-      if (!node->isObject()) {
-        // Error: node is not an object at position...
-      }
-      node = &((*node)[arg.key_]);
+
+        
+        /// A utility for finding dead-end blocks.
+///
+/// Dead-end blocks are blocks from which there is no path to the function exit
+/// (either return or throw). These are blocks which end with an unreachable
+/// instruction and blocks from which all paths end in 'unreachable' blocks.
+/// This utility is needed to determine if the a value definition can have a
+/// lack of users ignored along a specific path.
+class DeadEndBlocks {
+  llvm::SetVector<const SILBasicBlock *> ReachableBlocks;
+  const SILFunction *F;
+  bool isComputed = false;
     }
-  }
-  return *node;
-}
     
-    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
-  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
-  // Identifiers can't start with digits
-  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
-  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
-}
+    /// Index the given module and store the results to \p indexStorePath.
+///
+/// \param module The module to index.
+///
+/// \param indexUnitTokens A list of unique identifiers for the index units to
+/// be written. This may either be one unit per source file of \p module, or it
+/// may be a single unit, in which case all the index information will be
+/// combined into a single unit.
+///
+/// \param moduleUnitToken A unique identifier for this module unit in the form
+/// of a file path. Only used if \p indexUnitTokens are specified for each
+/// source file, otherwise the single \p indexUnitTokens value is used instead.
+///
+/// \param indexStorePath The location to write the indexing data to.
+///
+/// \param indexSystemModules If true, emit index data for imported serialized
+/// swift system modules.
+///
+/// \param isDebugCompilation true for non-optimized compiler invocation.
+///
+/// \param targetTriple The target for this compilation.
+///
+/// \param dependencyTracker The set of dependencies seen while building.
+bool indexAndRecord(ModuleDecl *module, ArrayRef<std::string> indexUnitTokens,
+                    StringRef moduleUnitToken, StringRef indexStorePath,
+                    bool indexSystemModules, bool isDebugCompilation,
+                    StringRef targetTriple,
+                    const DependencyTracker &dependencyTracker);
+// FIXME: indexUnitTokens could be StringRef, but that creates an impedance
+// mismatch in the caller.
     
-      void WriteIntroduction(io::Printer* printer);
-  void WriteDescriptor(io::Printer* printer);
-  void WriteGeneratedCodeInfo(const Descriptor* descriptor,
-                              io::Printer* printer,
-                              bool last);
+    /// Attempt to get a doc comment from the declaration, or other inherited
+/// sources, like from base classes or protocols.
+Optional<DocComment *> getCascadingDocComment(swift::markup::MarkupContext &MC,
+                                             const Decl *D);
     
-    void RepeatedPrimitiveFieldGenerator::GenerateMembers(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
-    '    = pb::FieldCodec.For$capitalized_type_name$($tag$);\n');
-  printer->Print(variables_,
-    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
-  WritePropertyDocComment(printer, descriptor_);
-  AddPublicMemberAttributes(printer);
-  printer->Print(
-    variables_,
-    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
-    '  get { return $name$_; }\n'
-    '}\n');
-}
+      size_t NumChildren;
     
-    void SourceGeneratorBase::WriteGeneratedCodeAttributes(io::Printer* printer) {
-  printer->Print('[global::System.Diagnostics.DebuggerNonUserCodeAttribute]\n');
-}
+    #include 'swift/Syntax/Rewriter.h'
     
-    namespace google {
-namespace protobuf {
-  namespace io {
-    class Printer;             // printer.h
-  }
-}
+    #endif
+
+    
+    SymbolInfo getSymbolInfoForDecl(const Decl *D);
+SymbolSubKind getSubKindForAccessor(AccessorKind AK);
+bool isLocalSymbol(const Decl *D);
+    
+    
+    {}
+    
+    #include 'swift/Index/IndexDataConsumer.h'
+    
+    class IndexDataConsumer {
+  virtual void anchor();
     }
+    
+    
+    {    auto I = std::lower_bound(Children.begin(), Children.end(), Idx,
+                              [](IndexTrieNode *a, unsigned i) {
+                                return a->Index < i;
+                              });
+    if (I != Children.end() && (*I)->Index == Idx)
+      return *I;
+    auto *N = new IndexTrieNode(Idx, this);
+    Children.insert(I, N);
+    return N;
+  }
+    
+    class UnicharcompressTest : public ::testing::Test {
+ protected:
+  // Loads and compresses the given unicharset.
+  void LoadUnicharset(const string& unicharset_name) {
+    string radical_stroke_file =
+        file::JoinPath(FLAGS_test_srcdir,
+                       'langdata/radical-stroke.txt');
+    string unicharset_file = file::JoinPath(
+        FLAGS_test_srcdir, 'testdata',
+        unicharset_name);
+    string uni_data;
+    CHECK_OK(file::GetContents(unicharset_file, &uni_data, file::Defaults()));
+    string radical_data;
+    CHECK_OK(file::GetContents(radical_stroke_file, &radical_data,
+                               file::Defaults()));
+    CHECK(
+        unicharset_.load_from_inmemory_file(uni_data.data(), uni_data.size()));
+    STRING radical_str(radical_data.c_str());
+    null_char_ =
+        unicharset_.has_special_codes() ? UNICHAR_BROKEN : unicharset_.size();
+    compressed_.ComputeEncoding(unicharset_, null_char_, &radical_str);
+    // Get the encoding of the null char.
+    RecodedCharID code;
+    compressed_.EncodeUnichar(null_char_, &code);
+    encoded_null_char_ = code(0);
+    string output_name = file::JoinPath(
+        FLAGS_test_tmpdir, absl::StrCat(unicharset_name, '.encoding.txt'));
+    STRING encoding = compressed_.GetEncodingAsString(unicharset_);
+    string encoding_str(&encoding[0], encoding.size());
+    CHECK_OK(file::SetContents(output_name, encoding_str, file::Defaults()));
+    LOG(INFO) << 'Wrote encoding to:' << output_name;
+  }
+  // Serializes and de-serializes compressed_ over itself.
+  void SerializeAndUndo() {
+    GenericVector<char> data;
+    TFile wfp;
+    wfp.OpenWrite(&data);
+    EXPECT_TRUE(compressed_.Serialize(&wfp));
+    TFile rfp;
+    rfp.Open(&data[0], data.size());
+    EXPECT_TRUE(compressed_.DeSerialize(&rfp));
+  }
+  // Returns true if the lang is in CJK.
+  bool IsCJKLang(const string& lang) {
+    return lang == 'chi_sim' || lang == 'chi_tra' || lang == 'kor' ||
+           lang == 'jpn';
+  }
+  // Returns true if the lang is Indic.
+  bool IsIndicLang(const string& lang) {
+    return lang == 'asm' || lang == 'ben' || lang == 'bih' || lang == 'hin' ||
+           lang == 'mar' || lang == 'nep' || lang == 'san' || lang == 'bod' ||
+           lang == 'dzo' || lang == 'guj' || lang == 'kan' || lang == 'mal' ||
+           lang == 'ori' || lang == 'pan' || lang == 'sin' || lang == 'tam' ||
+           lang == 'tel';
+  }
+    }
+    
+      // Runs backward propagation of errors on the deltas line.
+  // See Network for a detailed discussion of the arguments.
+  bool Backward(bool debug, const NetworkIO& fwd_deltas,
+                NetworkScratch* scratch, NetworkIO* back_deltas) override;
+  // Updates the weights using the given learning rate, momentum and adam_beta.
+  // num_samples is used in the adam computation iff use_adam_ is true.
+  void Update(float learning_rate, float momentum, float adam_beta,
+              int num_samples) override;
+  // Sums the products of weight updates in *this and other, splitting into
+  // positive (same direction) in *same and negative (different direction) in
+  // *changed.
+  void CountAlternators(const Network& other, double* same,
+                        double* changed) const override;
+  // Prints the weights for debug purposes.
+  void PrintW();
+  // Prints the weight deltas for debug purposes.
+  void PrintDW();
+    
+    #include 'errcode.h'
+    
+    // Get the first character as UCS-4.
+int UNICHAR::first_uni() const {
+  static const int utf8_offsets[5] = {
+    0, 0, 0x3080, 0xE2080, 0x3C82080
+  };
+  int uni = 0;
+  int len = utf8_step(chars);
+  const char* src = chars;
+    }
+    
+      // Iterator functions designed for use with a simple for loop:
+  // for (it.Begin(); !it.AtEnd(); it.Next()) {
+  //   const TrainingSample& sample = it.GetSample();
+  //   int class_id = it.GetCompactClassID();
+  //   ...
+  // }
+  void Begin();
+  bool AtEnd() const;
+  const TrainingSample& GetSample() const;
+  TrainingSample* MutableSample() const;
+  // Returns the total index (from the original set of samples) of the current
+  // sample.
+  int GlobalSampleIndex() const;
+  // Returns the index of the current sample in compact charset space, so
+  // in a 2-class problem between x and y, the returned indices will all be
+  // 0 or 1, and have nothing to do with the unichar_ids.
+  // If the charset_map_ is nullptr, then this is equal to GetSparseClassID().
+  int GetCompactClassID() const;
+  // Returns the index of the current sample in sparse charset space, so
+  // in a 2-class problem between x and y, the returned indices will all be
+  // x or y, where x and y may be unichar_ids (no shape_table_) or shape_ids
+  // with a shape_table_.
+  int GetSparseClassID() const;
+  // Moves on to the next indexable sample. If the end is reached, leaves
+  // the state such that AtEnd() is true.
+  void Next();
+    
+      // Tests each blob in the list to see if it is certain non-text using 2
+  // conditions:
+  // 1. blob overlaps a cell with high value in noise_density_ (previously set
+  // by ComputeNoiseDensity).
+  // OR 2. The blob overlaps more than max_blob_overlaps in *this grid. This
+  // condition is disabled with max_blob_overlaps == -1.
+  // If it does, the blob is declared non-text, and is used to mark up the
+  // nontext_mask. Such blobs are fully deleted, and non-noise blobs have their
+  // neighbours reset, as they may now point to deleted data.
+  // WARNING: The blobs list blobs may be in the *this grid, but they are
+  // not removed. If any deleted blobs might be in *this, then this must be
+  // Clear()ed immediately after MarkAndDeleteNonTextBlobs is called.
+  // If the win is not nullptr, deleted blobs are drawn on it in red, and kept
+  void MarkAndDeleteNonTextBlobs(BLOBNBOX_LIST* blobs,
+                                 int max_blob_overlaps,
+                                 ScrollView* win, ScrollView::Color ok_color,
+                                 Pix* nontext_mask);
+  // Returns true if the given blob overlaps more than max_overlaps blobs
+  // in the current grid.
+  bool BlobOverlapsTooMuch(BLOBNBOX* blob, int max_overlaps);
     
     
     {
-    {    if (i % kSampleEvery == 0) {
-      REQUIRE(
-          expected_parameters.at(i / kSampleEvery).size() == parameters.size());
-      for (size_t p = 0; p < parameters.size(); ++p) {
-        REQUIRE(parameters.at(p)->defined());
-        auto computed = parameters.at(p)->flatten();
-        auto expected = expected_parameters.at(i / kSampleEvery).at(p);
-        if (!computed.allclose(expected, /*rtol=*/1e-3, /*atol=*/1e-5)) {
-          std::cout << 'Iteration ' << i << ': ' << computed
-                    << ' != ' << expected << ' (parameter ' << p << ')'
-                    << std::endl;
-          REQUIRE(false);
-        }
+    {
+    {
+    {        // In addition to the same type, the next box must not be above the
+        // current box, nor (if image) too far below.
+        PolyBlockType type = part->type(), next_type = next_block_part->type();
+        if (ColPartition::TypesSimilar(type, next_type) &&
+            !part->IsLineType() && !next_block_part->IsLineType() &&
+            next_box.bottom() <= part_box.top() &&
+            (text_block || part_box.bottom() <= next_box.top()))
+          next_part = next_block_part;
       }
+    } while (!part_it_.empty() && next_part != nullptr);
+    if (!text_block) {
+      TO_BLOCK* to_block = ColPartition::MakeBlock(bleft, tright,
+                                                   &block_parts, used_parts);
+      if (to_block != nullptr) {
+        TO_BLOCK_IT to_block_it(&to_blocks_);
+        to_block_it.add_to_end(to_block);
+        BLOCK_IT block_it(&completed_blocks_);
+        block_it.add_to_end(to_block->block);
+      }
+    } else {
+      // Further sub-divide text blocks where linespacing changes.
+      ColPartition::LineSpacingBlocks(bleft, tright, resolution, &block_parts,
+                                      used_parts,
+                                      &completed_blocks_, &to_blocks_);
     }
   }
+  part_it_.set_to_list(&part_set_);
+  latest_part_ = nullptr;
+  ASSERT_HOST(completed_blocks_.length() == to_blocks_.length());
 }
     
     
-    {  // Sum with broadcasting to compute the full index
-  linearIndex = unsqueezeN(linearIndex, emptyBefore, emptyAfter);
-  if (beforeIndex.defined()) {
-    linearIndex = linearIndex + beforeIndex;
-  }
-  if (afterIndex.defined()) {
-    linearIndex = linearIndex + afterIndex;
-  }
-  return linearIndex;
-}
+    {
+    {}  // namespace testing
+}  // namespace grpc
     
-    Tensor irfft(const Tensor& self, const int64_t signal_ndim, const bool normalized,
-             const bool onesided,  IntList signal_sizes) {
-  return _fft(self, signal_ndim, /* complex_input */ true,
-              /* complex_output */ false, /* inverse */ true, signal_sizes,
-              normalized, onesided);
-}
+    #include <grpc/support/log.h>
     
-      const AttributeProto* remove(const std::string& key) {
-    const AttributeProto* result = nullptr;
-    auto iter = onnx_attrs_.find(key);
-    if (iter != onnx_attrs_.end()) {
-      result = iter->second;
-      onnx_attrs_.erase(iter);
+      const auto result =
+      RunScenario(client_config, 1, server_config, 1, WARMUP, BENCHMARK, -2, '',
+                  kInsecureCredentialsType, false);
+    
+    namespace grpc {
     }
-    return result;
-  }
     
-    /* Can we use 32 bit math for indexing? */
-THC_API bool THCTensor_canUse32BitIndexMath(THCState* state, const THCTensor* t, ptrdiff_t max_elem=INT32_MAX);
-/* Are all tensors 32-bit indexable? */
-THC_API bool THCTensor_all32BitIndexable(THCState* state, THCTensor** inputs, int numInputs);
-THC_API void THCTensor_preserveReduceDimSemantics(THCState *state, THCTensor *tensor, int in_dims,
-                                                  int64_t dimension, int keepdim);
-/* Returns false if there is no possibility that the tensor    */
-/* has more than one index that references the same datapoint, */
-/* true otherwise.                                             */
-THC_API bool THCTensor_maybeOverlappingIndices(THCState* state, const THCTensor* t);
+    #include <grpc/support/log.h>
+#include <grpc/support/time.h>
+#ifdef __linux__
+#include <sys/resource.h>
+#include <sys/time.h>
+    
+        Value::Value(const NDArrayViewPtr& data, const NDMaskPtr& mask)
+        : m_data(data), m_mask(mask)
+    {
+        if (mask != nullptr)
+        {
+            auto dataShape = data->Shape();
+            auto maskShape = mask->Shape();
+    }
+    }
+    
+    
+    {public:
+    inline array_ref(_T* ptr, size_t size) throw()
+        : data(ptr), n(size)
+    {
+    }
+    inline array_ref() throw()
+        : data(NULL), n(0)
+    {
+    } // in case we have a vector of this
+    inline _T& operator[](size_t i) throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline const _T& operator[](size_t i) const throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline size_t size() const throw()
+    {
+        return n;
+    }
+    inline _T* begin()
+    {
+        return data;
+    }
+    inline _T* end()
+    {
+        return data + n;
+    }
+    inline void resize(size_t sz)
+    {
+        sz;
+        assert(n == sz);
+    } // allow compatibility with some functions
+    // construct from other vector types
+    template <class _V>
+    inline array_ref(_V& v)
+        : data(v.size() > 0 ? &v[0] : NULL), n((size_t) v.size())
+    {
+    }
+};
+    
+        virtual VariableSchema GetOutputSchema() const override;
+    
+        virtual void GetSections(std::map<std::wstring, SectionType, nocase_compare>& /*sections*/)
+    {
+        assert(false);
+        NOT_IMPLEMENTED;
+    }
+    virtual bool SaveData(size_t /*recordStart*/, const std::map<std::wstring, void*, nocase_compare>& matrices, size_t numRecords, size_t /*datasetSize*/, size_t /*byteVariableSized*/)
+    {
+        // loop through all the output vectors to copy the data over
+        for (auto iter = m_outputs->begin(); iter != m_outputs->end(); ++iter)
+        {
+            // figure out the dimension of the data
+            std::wstring val = iter->first;
+            size_t rows = (*m_dimensions)[val];
+            // size_t count = rows*numRecords;
+    }
+    }
+    
+    enum RecordType {
+  // Zero is reserved for preallocated files
+  kZeroType = 0,
+    }
+    
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
+}
 
     
-        if (adaptive_) {
-      const auto& alpha = Input(5);
-      num_alpha = alpha.dim(0);
-      auto* grad_alpha = Output(2);
-      grad_alpha->ResizeLike(alpha);
-      grad_alpha_data = grad_alpha->template mutable_data<T>();
-      memset(grad_alpha_data, 0, sizeof(T) * num_alpha);
+    
+    {  // Update state
+  last_key_.resize(shared);
+  last_key_.append(key.data() + shared, non_shared);
+  assert(Slice(last_key_) == key);
+  counter_++;
+}
+    
+    bool HandleDumpCommand(Env* env, char** files, int num) {
+  StdoutPrinter printer;
+  bool ok = true;
+  for (int i = 0; i < num; i++) {
+    Status s = DumpFile(env, files[i], &printer);
+    if (!s.ok()) {
+      fprintf(stderr, '%s\n', s.ToString().c_str());
+      ok = false;
+    }
+  }
+  return ok;
+}
+    
+    class Block {
+ public:
+  // Initialize the block with the specified contents.
+  explicit Block(const BlockContents& contents);
     }
     
-      // TODO: enable the filler
-  DISABLE_INPUT_FILLERS(Context)
+      char delim_;         // The delimiter is inserted between elements
+    
+    SyncPoint* SyncPoint::GetInstance() {
+  static SyncPoint sync_point;
+  return &sync_point;
+}
+    
+        // Compare a and b. Return a negative value if a is less than b, 0 if they
+    // are equal, and a positive value if a is greater than b
+    virtual int operator()(const char* prefix_len_key1,
+                           const char* prefix_len_key2) const = 0;
+    
+    #ifndef JAVA_ROCKSJNI_LOGGERJNICALLBACK_H_
+#define JAVA_ROCKSJNI_LOGGERJNICALLBACK_H_
+    
+    #define LEVELDB_ONCE_INIT port::OnceType::Init()
+extern void InitOnce(OnceType* once, void (*initializer)());
+    
+    // a buffer size used for temp string buffers
+const int kTmpStrBufferSize = 200;
+    
+    std::vector<Status> CompactedDBImpl::MultiGet(const ReadOptions& options,
+    const std::vector<ColumnFamilyHandle*>&,
+    const std::vector<Slice>& keys, std::vector<std::string>* values) {
+  autovector<TableReader*, 16> reader_list;
+  for (const auto& key : keys) {
+    const FdWithKeyRange& f = files_.files[FindFile(key)];
+    if (user_comparator_->Compare(key, ExtractUserKey(f.smallest_key)) < 0) {
+      reader_list.push_back(nullptr);
+    } else {
+      LookupKey lkey(key, kMaxSequenceNumber);
+      f.fd.table_reader->Prepare(lkey.internal_key());
+      reader_list.push_back(f.fd.table_reader);
+    }
+  }
+  std::vector<Status> statuses(keys.size(), Status::NotFound());
+  values->resize(keys.size());
+  int idx = 0;
+  for (auto* r : reader_list) {
+    if (r != nullptr) {
+      PinnableSlice pinnable_val;
+      std::string& value = (*values)[idx];
+      GetContext get_context(user_comparator_, nullptr, nullptr, nullptr,
+                             GetContext::kNotFound, keys[idx], &pinnable_val,
+                             nullptr, nullptr, nullptr, nullptr);
+      LookupKey lkey(keys[idx], kMaxSequenceNumber);
+      r->Get(options, lkey.internal_key(), &get_context, nullptr);
+      value.assign(pinnable_val.data(), pinnable_val.size());
+      if (get_context.State() == GetContext::kFound) {
+        statuses[idx] = Status::OK();
+      }
+    }
+    ++idx;
+  }
+  return statuses;
+}
+    
+    #include <vector>
+#include <string>
+    
+        if (st.total_length > _rawlen) return LONGLINKPACK_CONTINUE_data;
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    #endif /* SCOPEDJSTRING_H_ */
