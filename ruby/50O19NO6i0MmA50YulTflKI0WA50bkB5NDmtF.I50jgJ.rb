@@ -1,51 +1,47 @@
 
         
-        def bottle_tag
-  if MacOS.version >= :lion
-    MacOS.cat
-  elsif MacOS.version == :snow_leopard
-    Hardware::CPU.is_64_bit? ? :snow_leopard : :snow_leopard_32
-  else
-    # Return, e.g., :tiger_g3, :leopard_g5_64, :leopard_64 (which is Intel)
-    if Hardware::CPU.type == :ppc
-      tag = '#{MacOS.cat}_#{Hardware::CPU.family}'.to_sym
-    else
-      tag = MacOS.cat
-    end
-    MacOS.prefer_64_bit? ? '#{tag}_64'.to_sym : tag
-  end
-end
+        # The project root directory
+$root = ::File.dirname(__FILE__)
     
-        # Get rid of any info 'dir' files, so they don't conflict at the link stage
-    info_dir_file = @f.info + 'dir'
-    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
-      observe_file_removal info_dir_file
-    end
-    
-          path_modified_time < prune_time
-    end
-  end
-end
-
-    
-      def gcc_42
-    @gcc_42 ||= MacOS.gcc_42_build_version if MacOS.has_apple_developer_tools?
-  end
-    
-        first_warning = true
-    methods.each do |method|
-      unless checks.respond_to?(method)
-        Homebrew.failed = true
-        puts 'No check available by the name: #{method}'
-        next
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
       end
+      super
+    end
     
-      def description
-    strip_tags(object.site_description.presence || I18n.t('about.about_mastodon_html'))
-  end
+        def require(path)
+      start = Time.now
+      result = require_debug(path)
+      duration = Time.now - start
     
-      # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/reblog
-  def reblog
-    r = Status.where.not(reblog_of_id: nil).first
-    NotificationMailer.reblog(r.reblog.account, Notification.find_by(activity: r))
-  end
+        def type_from_mime_magic
+      @type_from_mime_magic ||= File.open(@filepath) do |file|
+        MimeMagic.by_magic(file).try(:type)
+      end
+    end
+    
+            def failure_message_when_negated
+          'Should not have an attachment named #{@attachment_name}'
+        end
+        alias negative_failure_message failure_message_when_negated
+    
+            def allowing *types
+          @allowed_types = types.flatten
+          self
+        end
+    
+          def validate_before_processing(validator_class, options)
+        options = options.dup
+        attributes = options.delete(:attributes)
+        attributes.each do |attribute|
+          options[:attributes] = [attribute]
+          create_validating_before_filter(attribute, validator_class, options)
+        end
+      end
