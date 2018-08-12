@@ -1,186 +1,187 @@
 
         
-        // Generate param traits read methods.
-#include 'ipc/param_traits_read_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
-    
-    void Clipboard::SetText(std::string& text) {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  ui::Clipboard::ObjectMap map;
-  map[ui::Clipboard::CBF_TEXT].push_back(
-      std::vector<char>(text.begin(), text.end()));
-  clipboard->WriteObjects(ui::CLIPBOARD_TYPE_COPY_PASTE, map);
-}
-    
-    
-bool MenuDelegate::GetAcceleratorForCommandId(
-      int command_id,
-      ui::Accelerator* accelerator) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
+          LOG(INFO) << 'Writing Training data';
+  for (int fileid = 0; fileid < kCIFARTrainBatches; ++fileid) {
+    // Open files
+    LOG(INFO) << 'Training Batch ' << fileid + 1;
+    string batchFileName = input_folder + '/data_batch_'
+      + caffe::format_int(fileid+1) + '.bin';
+    std::ifstream data_file(batchFileName.c_str(),
+        std::ios::in | std::ios::binary);
+    CHECK(data_file) << 'Unable to open train file #' << fileid + 1;
+    for (int itemid = 0; itemid < kCIFARBatchSize; ++itemid) {
+      read_image(&data_file, &label, str_buffer);
+      datum.set_label(label);
+      datum.set_data(str_buffer, kCIFARImageNBytes);
+      string out;
+      CHECK(datum.SerializeToString(&out));
+      txn->Put(caffe::format_int(fileid * kCIFARBatchSize + itemid, 5), out);
     }
-    
-    #include 'extensions/browser/extension_function.h'
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethod', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodFunction);
-};
-    
-    
-    {} // extensions
-
-    
-      /// \c true if root must be either an array or an object value. Default: \c
-  /// false.
-  bool strictRoot_;
-    
-    // Initialize the various types and objects.
-bool InitDescriptorMappingTypes();
-    
-    // Find the file which defines an extension extending the given message type
-// with the given field number.
-// Python DescriptorDatabases are not required to implement this method.
-bool PyDescriptorDatabase::FindFileContainingExtension(
-    const string& containing_type, int field_number,
-    FileDescriptorProto* output) {
-  ScopedPyObjectPtr py_method(
-      PyObject_GetAttrString(py_database_, 'FindFileContainingExtension'));
-  if (py_method == NULL) {
-    // This method is not implemented, returns without error.
-    PyErr_Clear();
-    return false;
   }
-  ScopedPyObjectPtr py_descriptor(
-      PyObject_CallFunction(py_method.get(), 's#i', containing_type.c_str(),
-                            containing_type.size(), field_number));
-  return GetFileDescriptorProto(py_descriptor.get(), output);
+  txn->Commit();
+  train_db->Close();
+    
+    
+    {  /* Compute the global mean pixel value and create a mean image
+   * filled with this value. */
+  cv::Scalar channel_mean = cv::mean(mean);
+  mean_ = cv::Mat(input_geometry_, mean.type(), channel_mean);
 }
     
-    #include <string>
-#include <google/protobuf/compiler/code_generator.h>
+    #define REGISTER_LAYER_CLASS(type)                                             \
+  template <typename Dtype>                                                    \
+  shared_ptr<Layer<Dtype> > Creator_##type##Layer(const LayerParameter& param) \
+  {                                                                            \
+    return shared_ptr<Layer<Dtype> >(new type##Layer<Dtype>(param));           \
+  }                                                                            \
+  REGISTER_LAYER_CREATOR(type, Creator_##type##Layer)
     
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
+      /// @brief The spatial dimensions of the input.
+  inline int input_shape(int i) {
+    return (*bottom_shape_)[channel_axis_ + i];
+  }
+  // reverse_dimensions should return true iff we are implementing deconv, so
+  // that conv helpers know which dimensions are which.
+  virtual bool reverse_dimensions() = 0;
+  // Compute height_out_ and width_out_ from other parameters.
+  virtual void compute_output_shape() = 0;
     
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_MESSAGE_FIELD_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_MESSAGE_FIELD_H__
     
-    void RepeatedPrimitiveFieldGenerator::GenerateSerializedSizeCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'size += $name$_.CalculateSize(_repeated_$name$_codec);\n');
-}
+    {}  // namespace caffe
     
-    const Options* SourceGeneratorBase::options() {
-  return this->options_;
-}
+     protected:
+  /// @copydoc ContrastiveLossLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-    // Generates code for a lite extension, which may be within the scope of some
-// message or may be at file scope.  This is much simpler than FieldGenerator
-// since extensions are just simple identifiers with interesting types.
-class ImmutableExtensionLiteGenerator : public ExtensionGenerator {
+      int size_, pre_pad_;
+  Dtype alpha_, beta_, k_;
+    
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLRNLayer : public LRNLayer<Dtype> {
  public:
-  explicit ImmutableExtensionLiteGenerator(const FieldDescriptor* descriptor,
-                                           Context* context);
-  virtual ~ImmutableExtensionLiteGenerator();
+  explicit CuDNNLRNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLRNLayer();
     }
     
-    // Tests that the RotatingTranspose function does the right thing for various
-// transformations.
-// dims=[5, 4, 3, 2]->[5, 2, 4, 3]
-TEST_F(MatrixTest, RotatingTranspose_3_1) {
-  GENERIC_2D_ARRAY<int> m;
-  src_.RotatingTranspose(dims_, kNumDims_, 3, 1, &m);
-  m.ResizeNoInit(kInputSize_ / 3, 3);
-  // Verify that the result is:
-  // output tensor=[[[[0, 2, 4][6, 8, 10][12, 14, 16][18, 20, 22]]
-  //                 [[1, 3, 5][7, 9, 11][13, 15, 17][19, 21, 23]]]
-  //                [[[24, 26, 28]...
-  EXPECT_EQ(0, m(0, 0));
-  EXPECT_EQ(2, m(0, 1));
-  EXPECT_EQ(4, m(0, 2));
-  EXPECT_EQ(6, m(1, 0));
-  EXPECT_EQ(1, m(4, 0));
-  EXPECT_EQ(24, m(8, 0));
-  EXPECT_EQ(26, m(8, 1));
-  EXPECT_EQ(25, m(12, 0));
+     protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the computed outputs @f$
+   *        y = \left\{
+   *        \begin{array}{lr}
+   *            x                  & \mathrm{if} \; x > 0 \\
+   *            \alpha (\exp(x)-1) & \mathrm{if} \; x \le 0
+   *        \end{array} \right.
+   *      @f$.  
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    class TLSConfigPlugin : public ConfigPlugin,
+                        public std::enable_shared_from_this<TLSConfigPlugin> {
+ public:
+  Status setUp() override;
+  Status genConfig(std::map<std::string, std::string>& config) override;
+    }
+    
+    Status WmiResultItem::GetString(const std::string& name,
+                                std::string& ret) const {
+  std::wstring property_name = stringToWstring(name);
+  VARIANT value;
+  HRESULT hr = result_->Get(property_name.c_str(), 0, &value, nullptr, nullptr);
+  if (hr != S_OK) {
+    ret = '';
+    return Status(-1, 'Error retrieving data from WMI query.');
+  }
+  if (value.vt != VT_BSTR) {
+    ret = '';
+    VariantClear(&value);
+    return Status(-1, 'Invalid data type returned.');
+  }
+  ret = bstrToString(value.bstrVal);
+  VariantClear(&value);
+  return Status(0);
 }
     
     
-#endif  // TESSERACT_LSTM_LSTM_H_
-
+    {  // Too many fields
+  bad_line = R'('2016-03-22T21:17:01.701882+00:00','','6','','','','')';
+  ec = pub.createEventContext();
+  status = pub.populateEventContext(bad_line, ec);
+  ASSERT_FALSE(status.ok());
+  ASSERT_NE(std::string::npos, status.getMessage().find('more'));
+}
     
-    DIR128::DIR128(                 //from fcoord
-               const FCOORD fc  //vector to quantize
-              ) {
-  int high, low, current;        //binary search
+      /// Action as a string (as given by udev).
+  std::string action_string;
+    
+      forwarder_ = std::make_shared<FirehoseLogForwarder>(
+      'aws_firehose', FLAGS_aws_firehose_period, 500);
+  Status s = forwarder_->setUp();
+  if (!s.ok()) {
+    LOG(ERROR) << 'Error initializing Firehose logger: ' << s.getMessage();
+    return s;
+  }
+    
+    #ifdef ANDROID
+    
+        void Lock(int64_t _timelock);  // ms
+    void Lock();
+    void Unlock();
+    bool IsLocking();
+    
+        if (0 != st.hash && st.hash != adler32(0, (const unsigned char*)_rawbuf + st.head_length,  st.total_length - st.head_length)) return __LINE__;
+    
+    
+    {    void throw_exception( std::exception const & e ) {
+        xfatal2(TSF'boost exception:%_', e.what());
+        
+#ifdef ANDROID
+        char stack[4096] = {0};
+        android_callstack(stack, sizeof(stack));
+        xfatal2(TSF'%_', stack);
+#endif
     }
-    
-      // Generates debug output relating to the canonical distance between the
-  // two given UTF8 grapheme strings.
-  void DebugCanonical(const char* unichar_str1, const char* unichar_str2);
-  #ifndef GRAPHICS_DISABLED
-  // Debugging for cloud/canonical features.
-  // Displays a Features window containing:
-  // If unichar_str2 is in the unicharset, and canonical_font is non-negative,
-  // displays the canonical features of the char/font combination in red.
-  // If unichar_str1 is in the unicharset, and cloud_font is non-negative,
-  // displays the cloud feature of the char/font combination in green.
-  // The canonical features are drawn first to show which ones have no
-  // matches in the cloud features.
-  // Until the features window is destroyed, each click in the features window
-  // will display the samples that have that feature in a separate window.
-  void DisplaySamples(const char* unichar_str1, int cloud_font,
-                      const char* unichar_str2, int canonical_font);
-  #endif  // GRAPHICS_DISABLED
-    
-    
-#ifndef TESSERACT_CLASSIFY_SAMPLEITERATOR_H_
-#define TESSERACT_CLASSIFY_SAMPLEITERATOR_H_
-    
-    	// Set path to vendored ConEmu config file
-	PathCombine(cfgPath, exeDir, L'vendor\\conemu-maximus5\\ConEmu.xml');
-    
-    // This function will create a Huffman tree.
-//
-// The (data,length) contains the population counts.
-// The tree_limit is the maximum bit depth of the Huffman codes.
-//
-// The depth contains the tree, i.e., how many bits are used for
-// the symbol.
-//
-// The actual Huffman tree is constructed in the tree[] array, which has to
-// be at least 2 * length + 1 long.
-//
-// See http://en.wikipedia.org/wiki/Huffman_coding
-void CreateHuffmanTree(const uint32_t *data,
-                       const size_t length,
-                       const int tree_limit,
-                       HuffmanTree* tree,
-                       uint8_t *depth);
-    
-    
-    {}  // namespace guetzli
+}
 
     
-    // Decodes the parsed jpeg coefficients into an RGB image.
-// There can be only either 1 or 3 image components, in either case, an RGB
-// output image will be generated.
-// Only YUV420 and YUV444 sampling factors are supported.
-// Vector will be empty if a decoding error occurred.
-std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
     
-      // Fills in block[] with the 8x8 coefficient block with block coordinates
-  // (block_x, block_y).
-  // NOTE: If the component is 2x2 subsampled, this corresponds to the 16x16
-  // pixel area with upper-left corner (16 * block_x, 16 * block_y).
-  void GetCoeffBlock(int block_x, int block_y,
-                     coeff_t block[kDCTBlockSize]) const;
+    {    __DelOlderTouchTime(now);
+    touch_times_.push_back(now);
+    return true;
+}
     
-    constexpr int kLowestQuality = 70;
-constexpr int kHighestQuality = 110;
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    
+    static bool SpyHookLogFunc(struct XLoggerInfo_t& _info, std::string& _log);
+    void TestFun0();
+    int __TestFun1(int i);
+    
+    JNIEnv* ScopeJEnv::GetEnv() {
+    return env_;
+}
+    
+      private:
+    ScopedJstring();
+    ScopedJstring(const ScopedJstring&);
+    ScopedJstring& operator=(const ScopedJstring&);
