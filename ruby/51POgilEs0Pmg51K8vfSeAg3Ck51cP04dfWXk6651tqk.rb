@@ -1,99 +1,114 @@
 
         
-              # Topic may be hard deleted due to spam, no point complaining
-      # we would have to look at the topics table id sequence to find cases
-      # where this was called with an invalid id, no point really
-      return unless topic.present?
+          # Clean the keg of formula @f
+  def clean
+    ObserverPathnameExtension.reset_counts!
     
-    module Jobs
+        first_warning = true
+    methods.each do |method|
+      unless checks.respond_to?(method)
+        Homebrew.failed = true
+        puts 'No check available by the name: #{method}'
+        next
+      end
     
-          it 'renders HTML' do
-        capture = render(options, screenshots)
-        expect(capture).to match(/<html>/)
-        expect(capture).to include('<li>Some</li>')
-        expect(capture).to include('<li>key</li>')
-        expect(capture).to include('<li>words</li>')
+          # This returns the keys (or ids) that are in the string.
+      #
+      # @return [<Array<String>]
+      def keys
+        regexp = /^#\s*VAGRANT-BEGIN:\s*(.+?)$\r?\n?(.*)$\r?\n?^#\s*VAGRANT-END:\s(\1)$/m
+        @value.scan(regexp).map do |match|
+          match[0]
+        end
+      end
+    
+        # use Feedbag as a backup to Google Feeds Api
+    if rss_url.nil?
+      rss_url = Feedbag.find(web_url).first
+      if rss_url.nil?
+        suggested_paths = ['/rss', '/feed', '/feeds', '/atom.xml', '/feed.xml', '/rss.xml', '.atom']
+        suggested_paths.each do |suggested_path|
+          rss_url = Feedbag.find('#{web_url.chomp('/')}#{suggested_path}').first
+          break if rss_url
+        end
       end
     end
+  end
     
-          it 'raises an exception when use passes workspace' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            increment_version_number(xcodeproj: 'project.xcworkspace')
-          end').runner.execute(:test)
-        end.to raise_error('Please pass the path to the project, not the workspace')
+      def ruby_prefix
+    RbConfig::CONFIG['prefix']
+  end
+    
+            def validate!
+          super
+          if @pod_name.nil? && !@wipe_all
+            # Security measure, to avoid removing the pod cache too agressively by mistake
+            help! 'You should either specify a pod name or use the --all flag'
+          end
+        end
+    
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
+        end
       end
     end
   end
 end
 
     
-        version '1' do
-      self.release = '1.12.6'
-      self.base_url = 'http://coffeescript.org/v1/'
+            self.arguments = [
+          CLAide::Argument.new(%w(NAME DIRECTORY), false),
+        ]
     
-          options[:fix_urls] = ->(url) do
-        url.sub! %r{/blob/master/readme.md}i, ''
-        url
+    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
+
+    
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
       end
     end
+  end
+end
     
-        def entries_as_json
-      @entries.sort! { |a, b| sort_fn(a.name, b.name) }.map(&:as_json)
-    end
+          if File.symlink?(code_path)
+        return 'Code directory '#{code_path}' cannot be a symlink'
+      end
     
-        def insert_after(index, *names)
-      insert assert_index(index) + 1, *names
-    end
-    
-        def initialize(name = nil, path = nil, type = nil)
-      self.name = name
-      self.path = path
-      self.type = type
-    
-    module Docs
-  class PageDb
-    attr_reader :pages
-    
+          Dir.chdir(file_path) do
+        contents = file.read
+        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
+          contents = $1.lstrip
         end
-    
-      out = File.join(output, site + '.txt')
-  File.unlink(out) if File.exist?(out)
-    
-            when :err
-          case s[:last]
-            when :pass
-              # Oops got a -ERR after a pass so its crap ignore the pass
-              # But report it, might be helpfull for guessing :-)
-    
-    
-    {	if ln =~ /;(read|write)_(handle|filename)=/
-		parts = ln.split(' ')
-		if (parts[0] == 'mov')
-			parts2 = parts[2].split('=')
-			label = parts2[0]
-			label.slice!(0,1)
-			old = parts2[1]
-			new = addrs[label]
-			#puts '%32s: %s -> %x' % [label, old, new]
-			replaces << [label, old, new.to_s(16)]
-		end
-	end
-}
-    
-    p meterp.sys.config.sysinfo
-    
-    parser = Parser.new(filename)
-parser.parse
-print parser.get_result
-    
-          if app.config.respond_to?(:paperclip_defaults)
-        Paperclip::Attachment.default_options.merge!(app.config.paperclip_defaults)
-      end
-    end
-    
-          def validate_blacklist(record, attribute, value)
-        if forbidden_types.present? && forbidden_types.any? { |type| type === value }
-          mark_invalid record, attribute, forbidden_types
+        contents = pre_filter(contents)
+        if @raw
+          contents
+        else
+          partial = Liquid::Template.parse(contents)
+          context.stack do
+            partial.render(context)
+          end
         end
       end
+    end
+  end
+end
