@@ -1,74 +1,122 @@
 
         
-            # Get rid of any info 'dir' files, so they don't conflict at the link stage
-    info_dir_file = @f.info + 'dir'
-    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
-      observe_file_removal info_dir_file
+              html_filters.push 'd3/clean_html', 'd3/entries_v3', 'title'
+    
+        def filter_const(name)
+      if name.is_a? Array
+        name.map &method(:filter_const)
+      else
+        Docs.const_get '#{name}_filter'.camelize
+      end
     end
     
-          # Find commands in Homebrew/dev-cmd
-      if ARGV.homebrew_developer?
-        puts
-        puts 'Built-in development commands'
-        puts_columns internal_development_commands
-      end
+    module Docs
+  class Entry
+    class Invalid < StandardError; end
     
-      def updated?
-    initial_revision != current_revision
+            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
+          next if node.previous.try(:content).present? || node.next.try(:content).present?
+          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
+          node.content = node.content.strip
+          node.name = 'pre' if node.content =~ /\s/
+          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
+        end
+    
+        if false then ; end.should == nil
   end
     
-          it 'get HG revision number' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          get_build_number_repository(
-            use_hg_revision_number: true
-          )
-        end').runner.execute(:test)
+        assert_match %r% patchlevel 5\)%, ua
+  ensure
+    util_restore_version
+  end
     
-        def matching_domain
-      if domain.nil?
-        Account.where(domain: nil)
+          pid = spawn(EnvUtil.rubybin, 'test-script')
+      ps = nil
+      now = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      stop = now + 30
+      begin
+        sleep 0.1
+        ps = `#{PSCMD.join(' ')} #{pid}`
+        break if /hello world/ =~ ps
+        now = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      end until Process.wait(pid, Process::WNOHANG) || now > stop
+      assert_match(/hello world/, ps)
+      assert_operator now, :<, stop
+      Process.kill :KILL, pid
+      Timeout.timeout(5) { Process.wait(pid) }
+    end
+  end
+    
+            candidates = Symbol.instance_methods.collect{|m| m.to_s}
+        select_message(receiver, message, candidates, sep)
+    
+    def exec_test(pathes)
+  @count = 0
+  @error = 0
+  @errbuf = []
+  @location = nil
+  @columns = 0
+  @width = pathes.map {|path| File.basename(path).size}.max + 2
+  pathes.each do |path|
+    @basename = File.basename(path)
+    $stderr.printf('%s%-*s ', erase(@quiet), @width, @basename)
+    $stderr.flush
+    @columns = @width + 1
+    $stderr.puts if @verbose
+    count = @count
+    error = @error
+    load File.expand_path(path)
+    if @tty
+      if @error == error
+        msg = 'PASS #{@count-count}'
+        @columns += msg.size - 1
+        $stderr.print '#{@progress_bs}#{@passed}#{msg}#{@reset}'
       else
-        Account.where(Account.arel_table[:domain].lower.eq domain.to_s.downcase)
+        msg = 'FAIL #{@error-error}/#{@count-count}'
+        $stderr.print '#{@progress_bs}#{@failed}#{msg}#{@reset}'
+        @columns = 0
       end
     end
+    $stderr.puts unless @quiet and @tty and @error == error
+  end
+  $stderr.print(erase) if @quiet
+  if @error == 0
+    if @count == 0
+      $stderr.puts 'No tests, no problem'
+    else
+      $stderr.puts '#{@passed}PASS#{@reset} all #{@count} tests'
+    end
+    exit true
+  else
+    @errbuf.each do |msg|
+      $stderr.puts msg
+    end
+    $stderr.puts '#{@failed}FAIL#{@reset} #{@error}/#{@count} tests failed'
+    exit false
   end
 end
-
     
-    def each_schema_load_environment
-  # If we're in development, also run this for the test environment.
-  # This is a somewhat hacky way to do this, so here's why:
-  # 1. We have to define this before we load the schema, or we won't
-  #    have a timestamp_id function when we get to it in the schema.
-  # 2. db:setup calls db:schema:load_if_ruby, which calls
-  #    db:schema:load, which we define above as having a prerequisite
-  #    of this task.
-  # 3. db:schema:load ends up running
-  #    ActiveRecord::Tasks::DatabaseTasks.load_schema_current, which
-  #    calls a private method `each_current_configuration`, which
-  #    explicitly also does the loading for the `test` environment
-  #    if the current environment is `development`, so we end up
-  #    needing to do the same, and we can't even use the same method
-  #    to do it.
+        # wait untl all threads have finished
+    sleep 0.01 until prod_threads.find_all{|t| t.status}.count == 0
     
-          it 'sets the regeneration marker to expire' do
-        allow(RegenerationWorker).to receive(:perform_async)
-        get :show
-        expect(Redis.current.ttl('account:#{user.account_id}:regeneration')).to be >= 0
-      end
+        t = Thread.new { tester.sync_lock(:EX) }
     
-      def provider
-    'facebook'
-  end
+      ## Constants For Hangul
+  # for details such as the meaning of the identifiers below, please see
+  # http://www.unicode.org/versions/Unicode7.0.0/ch03.pdf, pp. 144/145
+  SBASE = 0xAC00
+  LBASE = 0x1100
+  VBASE = 0x1161
+  TBASE = 0x11A7
+  LCOUNT = 19
+  VCOUNT = 21
+  TCOUNT = 28
+  NCOUNT = VCOUNT * TCOUNT
+  SCOUNT = LCOUNT * NCOUNT
     
-            def failure_message_when_negated
-          'Should not have an attachment named #{@attachment_name}'
-        end
-        alias negative_failure_message failure_message_when_negated
+        def find_remote!(username, domain)
+      find_remote(username, domain) || raise(ActiveRecord::RecordNotFound)
+    end
     
-            required = directories.map do |directory|
-          pathname = File.expand_path(Rails.root.join(directory, filename))
-          file_exists = File.exist?(pathname)
-          require pathname if file_exists
-          file_exists
-        end
+    class ActivityPub::EmojiSerializer < ActiveModel::Serializer
+  include RoutingHelper
