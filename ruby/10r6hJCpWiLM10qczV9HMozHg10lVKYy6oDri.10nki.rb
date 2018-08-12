@@ -1,73 +1,79 @@
 
         
-              def self.required_fields(klass)
-        required_methods = [:confirmation_token, :confirmed_at, :confirmation_sent_at]
-        required_methods << :unconfirmed_email if klass.reconfirmable
-        required_methods
-      end
+                @connection_class = -> { ActionCable::Connection::Base }
+        @worker_pool_size = 4
     
-        # The path used after confirmation.
-    def after_confirmation_path_for(resource_name, resource)
-      if signed_in?(resource_name)
-        signed_in_root_path(resource)
+            # change column default to see that column doesn't lose its not null definition
+        person_klass.connection.change_column_default 'testings', 'wealth', 100
+        person_klass.reset_column_information
+        assert_equal 100, person_klass.column_defaults['wealth']
+        assert_equal false, person_klass.columns_hash['wealth'].null
+    
+        def add_to_config(str)
+      environment = File.read('#{app_path}/config/application.rb')
+      if environment =~ /(\n\s*end\s*end\s*)\z/
+        File.open('#{app_path}/config/application.rb', 'w') do |f|
+          f.puts $` + '\n#{str}\n' + $1
+        end
+      end
+    end
+    
+      test 'should subscribe to a channel' do
+    @channel.subscribe_to_channel
+    assert_equal 1, @channel.room.id
+  end
+    
+          assert_equal [ connection ], @server.connections
+      assert connection.connected
+    end
+  end
+    
+          assert_called(channel1, :unsubscribe_from_channel) do
+        assert_called(channel2, :unsubscribe_from_channel) do
+          @subscriptions.unsubscribe_from_all
+        end
+      end
+    end
+  end
+    
+    require 'test_helper'
+require_relative 'common'
+require_relative 'channel_prefix'
+    
+        def create_event(event)
+      return super unless dry_run?
+      if can_create_events?
+        event = build_event(event)
+        @dry_run_results[:events] << event.payload
+        event
       else
-        new_session_path(resource_name)
+        error 'This Agent cannot create events!'
       end
     end
-    
-        def translation_scope
-      'devise.passwords'
-    end
+  end
 end
 
     
-      def serialize_options(resource)
-    methods = resource_class.authentication_keys.dup
-    methods = methods.keys if methods.is_a?(Hash)
-    methods << :password if resource.respond_to?(:password)
-    { methods: methods, only: [:password] }
+      def tumblr_oauth_token
+    service.token
   end
     
-    def process_args
-  if ARGV.first =~ %r{^-+h(?:elp)?$}
-    puts usage
-    exit 0
-  elsif ARGV.length == 1
-    $app_path = ARGV.first
-  else
-    puts usage
-    exit 1
-  end
-end
-    
-      def parse(pkt)
-    # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 110 and pkt.tcp_dport != 110)
-    s = find_session((pkt.tcp_sport == 110) ? get_session_src(pkt) : get_session_dst(pkt))
-    
-    require 'rubygems'
-require 'rjb'
-    
-    class Source < Template
-  attr_accessor :__CAL
-  attr_accessor :__NR_execve
-  attr_accessor :__NR_getpeername
-  attr_accessor :__NR_accept
-  attr_accessor :__NR_listen
-  attr_accessor :__NR_bind
-  attr_accessor :__NR_socket
-  attr_accessor :__NR_connect
-  attr_accessor :__NR_close
-  attr_accessor :__NR_kfcntl
-  attr_accessor :__cal
-  attr_accessor :_cal
-  attr_accessor :cal
-  attr_accessor :ver
-    
-            def address_params
-          params.require(:address).permit(permitted_address_attributes)
+          respond_to do |format|
+        if new_credentials.map(&:save).all?
+          format.html { redirect_to user_credentials_path, notice: 'The file was successfully uploaded.'}
+        else
+          format.html { redirect_to user_credentials_path, notice: 'One or more of the uploaded credentials was not imported due to an error. Perhaps an existing credential had the same name?'}
         end
+      end
+    else
+      redirect_to user_credentials_path, notice: 'No file was chosen to be uploaded.' 
+    end
+  end
+    
+            def autocorrect(node)
+          # Regexp#match can take a second argument, but this cop doesn't
+          # register an offense in that case
+          return unless node.first_argument.regexp_type?
     
     module RuboCop
   module Cop
@@ -99,27 +105,26 @@ require 'rjb'
       class DuplicateCaseCondition < Cop
         MSG = 'Duplicate `when` condition detected.'.freeze
     
-            def autocorrect(node)
-          center = multiple_compare?(node)
-          new_center = '#{center.source} && #{center.source}'
-    
     module RuboCop
   module Cop
     module Style
-      # This cop check for uses of Object#freeze on immutable objects.
+      # This cop checks for optional arguments to methods
+      # that do not come at the end of the argument list
       #
       # @example
       #   # bad
-      #   CONST = 1.freeze
+      #   def foo(a = 1, b, c)
+      #   end
       #
       #   # good
-      #   CONST = 1
-      class RedundantFreeze < Cop
-        include FrozenStringLiteral
-    
-          # Checks whether this node body is a void context.
+      #   def baz(a, b, c = 1)
+      #   end
       #
-      # @return [Boolean] whether the `def` node body is a void context
-      def void_context?
-        method?(:initialize) || assignment_method?
-      end
+      #   def foobar(a = 1, b = 2, c = 3)
+      #   end
+      class OptionalArguments < Cop
+        MSG = 'Optional arguments should appear at the end ' \
+              'of the argument list.'.freeze
+    
+            MSG = 'Do not freeze immutable objects, as freezing them has no ' \
+              'effect.'.freeze
