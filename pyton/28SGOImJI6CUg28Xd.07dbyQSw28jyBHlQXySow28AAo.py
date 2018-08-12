@@ -1,70 +1,111 @@
 
         
-                self.assertEqual(parsed, parsed_new)
-        self.assertEqual(parsed_new, [
-            ['#', ' Use bar.conf when it's a full moon!'],
-            ['include', 'foo.conf'],
-            ['#', ' Kilroy was here'],
-            ['check_status'],
-            [['server'],
-             [['#', ''],
-              ['#', ' Don't forget to open up your firewall!'],
-              ['#', ''],
-              ['listen', '1234'],
-              ['#', ' listen 80;']]],
-        ])
+            Models: `flatpages.flatpages`
+    Templates: Uses the template defined by the ``template_name`` field,
+        or :template:`flatpages/default.html` if template_name is not defined.
+    Context:
+        flatpage
+            `flatpages.flatpages` object
+    '''
+    if not url.startswith('/'):
+        url = '/' + url
+    site_id = get_current_site(request).id
+    try:
+        f = get_object_or_404(FlatPage, url=url, sites=site_id)
+    except Http404:
+        if not url.endswith('/') and settings.APPEND_SLASH:
+            url += '/'
+            f = get_object_or_404(FlatPage, url=url, sites=site_id)
+            return HttpResponsePermanentRedirect('%s/' % request.path)
+        else:
+            raise
+    return render_flatpage(request, f)
     
-        def has_more_configs(self):
-        '''Returns true if there are more configs to test'''
-        return bool(self._configs)
+        Uses the last ([-1]) value of other fields
+    '''
+    column_width = max(max(len(k) for k in formats) + 1, 8)
+    first_width = max(len(k) for k in metrics)
+    head_fmt = ('{:<{fw}s}' + '{:>{cw}s}' * len(formats))
+    row_fmt = ('{:<{fw}s}' + '{:>{cw}.3f}' * len(formats))
+    print(head_fmt.format('Metric', *formats,
+                          cw=column_width, fw=first_width))
+    for metric, row in zip(metrics, results[:, :, -1, -1, -1]):
+        print(row_fmt.format(metric, *row,
+                             cw=column_width, fw=first_width))
     
-        @mock.patch(
-        'certbot_compatibility_test.validator.crypto_util.probe_sni')
-    def test_certificate_success(self, mock_probe_sni):
-        cert = OpenSSL.crypto.X509()
-        mock_probe_sni.return_value = cert
-        self.assertTrue(self.validator.certificate(
-            cert, 'test.com', '127.0.0.1'))
+    import time
+    
+        ###########################################################################
+    # List sampling algorithm
+    ###########################################################################
+    # We assume that sampling algorithm has the following signature:
+    #   sample(n_population, n_sample)
+    #
+    sampling_algorithm = {}
+    
+        short_text_lang_folder = os.path.join(short_text_folder, lang)
+    if not os.path.exists(short_text_lang_folder):
+        os.makedirs(short_text_lang_folder)
+    
+        # Print and plot the confusion matrix
+    cm = metrics.confusion_matrix(y_test, y_predicted)
+    print(cm)
+    
+    import sys
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.svm import LinearSVC
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.datasets import load_files
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+    
+    import numpy as np
+from sklearn.covariance import EllipticEnvelope
+from sklearn.svm import OneClassSVM
+import matplotlib.pyplot as plt
+import matplotlib.font_manager
+from sklearn.datasets import load_boston
+    
+            self.assertEqual(set([CANCELLED_AND_NOTIFIED_FUTURE,
+                              EXCEPTION_FUTURE,
+                              SUCCESSFUL_FUTURE,
+                              future1]), finished)
+        self.assertEqual(set([future2]), pending)
     
     
-# -- Options for manual page output ---------------------------------------
+class BufferDict( dict ):
+    
+      AssertBuffersAreEqualAsBytes( [ 'aAa',
+                                  'aEb',
+                                  'bFb',
+                                  'bGCa',
+                                  'aDe' ], result_buffer )
     
     
-class RedirectTest(unittest.TestCase):
-    '''Test the redirect_by_default method.'''
-    @classmethod
-    def _call(cls):
-        from certbot.display.enhancements import redirect_by_default
-        return redirect_by_default()
-    
-    from concurrent.futures import _base
-    
-    
-def _GetRequiredNamespaceImport( completion ):
-  if ( 'extra_data' not in completion
-       or 'required_namespace_import' not in completion[ 'extra_data' ] ):
-    return None
-  return completion[ 'extra_data' ][ 'required_namespace_import' ]
+# Both |line| and |column| need to be 1-based
+def TryJumpLocationInTab( tab, filename, line, column ):
+  for win in tab.windows:
+    if GetBufferFilepath( win.buffer ) == filename:
+      vim.current.tabpage = tab
+      vim.current.window = win
+      vim.current.window.cursor = ( line, column - 1 )
     
     
-  def _HandleGotoResponse( self, modifiers ):
-    if isinstance( self._response, list ):
-      vimsupport.SetQuickFixList(
-        [ _BuildQfListItem( x ) for x in self._response ] )
-      vimsupport.OpenQuickFixList( focus = True, autoclose = True )
-    else:
-      vimsupport.JumpToLocation( self._response[ 'filepath' ],
-                                 self._response[ 'line_num' ],
-                                 self._response[ 'column_num' ],
-                                 modifiers )
+  def ToggleLogs( self, *filenames ):
+    logfiles = self.GetLogfiles()
+    if not filenames:
+      sorted_logfiles = sorted( list( logfiles ) )
+      try:
+        logfile_index = vimsupport.SelectFromList(
+          'Which logfile do you wish to open (or close if already open)?',
+          sorted_logfiles )
+      except RuntimeError as e:
+        vimsupport.PostVimMessage( str( e ) )
+        return
     
     
-def CurrentLineAndColumn():
-  '''Returns the 0-based current line and 0-based current column.'''
-  # See the comment in CurrentColumn about the calculation for the line and
-  # column number
-  line, column = vim.current.window.cursor
-  line -= 1
-  return line, column
-    
-      return FilterLevel
+class OmniCompletionRequest( CompletionRequest ):
+  def __init__( self, omni_completer, request_data ):
+    super( OmniCompletionRequest, self ).__init__( request_data )
+    self._omni_completer = omni_completer
