@@ -1,97 +1,122 @@
 
         
-        DEFAULT_TEMPLATE = 'flatpages/default.html'
-    
-    print('Vectorizing sequence data...')
-tokenizer = Tokenizer(num_words=max_words)
-x_train = tokenizer.sequences_to_matrix(x_train, mode='binary')
-x_test = tokenizer.sequences_to_matrix(x_test, mode='binary')
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
-    
-    
-@keras_test
-def test_min_max_norm():
-    array = get_example_array()
-    for m in get_test_values():
-        norm_instance = constraints.min_max_norm(min_value=m, max_value=m * 2)
-        normed = norm_instance(K.variable(array))
-        value = K.eval(normed)
-        l2 = np.sqrt(np.sum(np.square(value), axis=0))
-        assert not l2[l2 < m]
-        assert not l2[l2 > m * 2 + 1e-5]
-    
-        # Test with Sequential API
-    model = Sequential([
-        layers.Dense(16, input_shape=(x_train.shape[-1],), activation='relu'),
-        layers.Dense(8),
-        layers.Activation('relu'),
-        layers.Dense(num_classes, activation='softmax')
-    ])
-    model.compile(loss='categorical_crossentropy',
-                  optimizer='rmsprop',
-                  metrics=['accuracy'])
-    model.summary()
-    history = model.fit(x_train, y_train, epochs=15, batch_size=16,
-                        validation_data=(x_test, y_test),
-                        verbose=0)
-    assert(history.history['val_acc'][-1] > 0.8)
-    config = model.get_config()
-    model = Sequential.from_config(config)
-    
-    print('Pad sequences (samples x time)')
-x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
-x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
-    
-        x_train = np.array(x[:int(len(x) * (1 - test_split))])
-    y_train = np.array(y[:int(len(x) * (1 - test_split))])
-    x_test = np.array(x[int(len(x) * (1 - test_split)):])
-    y_test = np.array(y[int(len(x) * (1 - test_split)):])
-    return (x_train, y_train), (x_test, y_test)
-
-    
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-    '''
-    dirname = 'cifar-10-batches-py'
-    origin = 'https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
-    path = get_file(dirname, origin=origin, untar=True)
+        
+def test_follow_all_output_options_used_for_redirects(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 3
+    assert HTTP_OK not in r
     
     
-def load_data(label_mode='fine'):
-    '''Loads CIFAR100 dataset.
+class DigestAuthPlugin(BuiltinAuthPlugin):
     
-    # (c) 2016 Red Hat, Inc.
-#
-# This file is part of Ansible
-#
-# Ansible is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Ansible is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
-'''CLI tool for starting new Shippable CI runs.'''
+    content_type.add_argument(
+    '--json', '-j',
+    action='store_true',
+    help='''
+    (default) Data items from the command line are serialized as a JSON object.
+    The Content-Type and Accept headers are set to application/json
+    (if not specified).
     
-        terminal_stderr_re = [
-        re.compile(r'% ?Error: '),
-        re.compile(r'^% \w+', re.M),
-        re.compile(r'% ?Bad secret'),
-        re.compile(r'invalid input', re.I),
-        re.compile(r'(?:incomplete|ambiguous) command', re.I),
-        re.compile(r'connection timed out', re.I),
-        re.compile(r'[^\r\n]+ not found', re.I),
-        re.compile(r''[^']' +returned error code: ?\d+'),
-        re.compile(r'syntax error'),
-        re.compile(r'unknown command'),
-        re.compile(r'Error\[\d+\]: ', re.I),
-        re.compile(r'Error:', re.I)
-    ]
+    
+class TestBinaryRequestData:
+    
+    
+def test_default_options_overwrite(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['json'] == {'foo': 'bar'}
+    
+                exists.attempt = 0
+            return exists
+    
+    
+class _BenchServer(object):
+    
+            dfd = mustbe_deferred(process_spider_input, response)
+        dfd.addErrback(process_spider_exception)
+        dfd.addCallback(process_spider_output)
+        return dfd
+    
+        @classmethod
+    def from_crawler(cls, crawler):
+        headers = without_none_values(crawler.settings['DEFAULT_REQUEST_HEADERS'])
+        return cls(headers.items())
+    
+        def __init__(self, user_agent='Scrapy'):
+        self.user_agent = user_agent
+    
+        def spider_closed(self, spider, reason):
+        self.stats.set_value('finish_time', datetime.datetime.utcnow(), spider=spider)
+        self.stats.set_value('finish_reason', reason, spider=spider)
+    
+        def setUp(self):
+        from certbot_apache.obj import Addr
+        from certbot_apache.obj import VirtualHost
+    
+    # If true, the index is split into individual pages for each letter.
+#html_split_index = False
+    
+    # If true, do not generate a @detailmenu in the 'Top' node's menu.
+#texinfo_no_detailmenu = False
+    
+        def __init__(self, name, msg_center):
+        self.name = name
+        self.provider = msg_center
+    
+        def test_display_current_time_at_current_time(self):
+        '''
+        Just as justification for working example. (Will always pass.)
+        '''
+        production_code_time_provider = ProductionCodeTimeProvider()
+        class_under_test = TimeDisplay(production_code_time_provider)
+        current_time = datetime.datetime.now()
+        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+    
+        '''catalog of multiple methods that are executed depending on an init
+    
+        def setDB(self, db):
+        self._db = db
+    
+        logging.info('Listening on http://localhost:%d' % options.port)
+    IOLoop.current().start()
+    
+    
+class PostModule(tornado.web.UIModule):
+    def render(self, post):
+        return self.render_string('modules/post.html', post=post)
+    
+    
+def main():
+    parse_command_line()
+    t = Timer(e1)
+    results = t.timeit(options.num) / options.num
+    print('engine: %0.3f ms per iteration' % (results * 1000))
+    t = Timer(c1)
+    results = t.timeit(options.num) / options.num
+    print('coroutine: %0.3f ms per iteration' % (results * 1000))
+    
+    
+def find_circular_references(garbage=None):
+    def inner(level):
+        for item in level:
+            item_id = id(item)
+            if item_id not in garbage_ids:
+                continue
+            if item_id in visited_ids:
+                continue
+            if item_id in stack_ids:
+                candidate = stack[stack.index(item):]
+                candidate.append(item)
+                found.append(candidate)
+                continue
+    
+    
+if __name__ == '__main__':
+    IOLoop.instance().run_sync(main)
