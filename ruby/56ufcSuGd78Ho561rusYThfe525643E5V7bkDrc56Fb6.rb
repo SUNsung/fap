@@ -1,24 +1,61 @@
 
         
-            context 'Mercurial repository' do
-      before do
-        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_svn?).and_return(false)
-        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git_svn?).and_return(false)
-        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git?).and_return(false)
-        expect(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_hg?).and_return(true)
+              options[:fix_urls] = ->(url) do
+        url.sub! %r{/blob/master/readme.md}i, ''
+        url
+      end
+    end
+    
+        options[:skip] = %w(book/first-edition/README.html)
+    options[:skip_patterns] = [/(?<!\.html)\z/]
+    
+        delegate :empty?, :blank?, to: :pages
+    
+      def icons
+    [
+      {
+        src: '/android-chrome-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+    ]
+  end
+    
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
       end
     
-          it 'raises an exception when xcode project path wasn't found' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            increment_version_number(xcodeproj: '/nothere')
-          end').runner.execute(:test)
-        end.to raise_error('Could not find Xcode project')
-      end
+      class VideoTag < Liquid::Tag
+    @video = nil
+    @poster = ''
+    @height = ''
+    @width = ''
     
-            def on_case(case_node)
-          case_node.when_branches.each_with_object([]) do |when_node, previous|
-            when_node.each_condition do |condition|
-              next unless repeated_condition?(previous, condition)
-    
-            private
+    module RuboCop
+  module Cop
+    module Lint
+      # In math and Python, we can use `x < y < z` style comparison to compare
+      # multiple value. However, we can't use the comparison in Ruby. However,
+      # the comparison is not syntax error. This cop checks the bad usage of
+      # comparison operators.
+      #
+      # @example
+      #
+      #   # bad
+      #
+      #   x < y < z
+      #   10 <= x <= 20
+      #
+      # @example
+      #
+      #   # good
+      #
+      #   x < y && y < z
+      #   10 <= x && x <= 20
+      class MultipleCompare < Cop
+        MSG = 'Use the `&&` operator to compare multiple values.'.freeze
