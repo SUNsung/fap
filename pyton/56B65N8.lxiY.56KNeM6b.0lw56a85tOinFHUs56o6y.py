@@ -1,91 +1,77 @@
 
         
-        import io
-import sys
-import re
-    
-        params = {
-        'age_limit': age,
-        'skip_download': True,
-        'writeinfojson': True,
-        'outtmpl': '%(id)s.%(ext)s',
-    }
-    ydl = YoutubeDL(params)
-    ydl.add_default_info_extractors()
-    json_filename = os.path.splitext(filename)[0] + '.info.json'
-    try_rm(json_filename)
-    ydl.download([url])
-    res = os.path.exists(json_filename)
-    try_rm(json_filename)
-    return res
-    
-        def test_youtube_matching(self):
-        self.assertTrue(YoutubeIE.suitable('PLtS2H6bU1M'))
-        self.assertFalse(YoutubeIE.suitable('https://www.youtube.com/watch?v=AV6J6_AeFEQ&playnext=1&list=PL4023E734DA416012'))  # 668
-        self.assertMatch('http://youtu.be/BaW_jenozKc', ['youtube'])
-        self.assertMatch('http://www.youtube.com/v/BaW_jenozKc', ['youtube'])
-        self.assertMatch('https://youtube.googleapis.com/v/BaW_jenozKc', ['youtube'])
-        self.assertMatch('http://www.cleanvideosearch.com/media/action/yt/watch?videoId=8v_4O44sfjM', ['youtube'])
+                X_test = X[-n_test_samples:]
+        Y_test = Y[-n_test_samples:]
+        X = X[:(i * step)]
+        Y = Y[:(i * step)]
     
     
-class AcademicEarthCourseIE(InfoExtractor):
-    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
-    IE_NAME = 'AcademicEarth:Course'
-    _TEST = {
-        'url': 'http://academicearth.org/playlists/laws-of-nature/',
-        'info_dict': {
-            'id': 'laws-of-nature',
-            'title': 'Laws of Nature',
-            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
-        },
-        'playlist_count': 3,
-    }
+def type_auto_or_int(val):
+    if val == 'auto':
+        return 'auto'
+    else:
+        return int(val)
     
-            webpage = self._download_webpage(url, video_id)
+    import numpy as np
+import matplotlib.pyplot as plt
     
-            title = metadata['Title']
-        description = metadata.get('Description')
-        duration = float_or_none(metadata.get('Duration'))
-        timestamp = parse_iso8601(metadata.get('DateCreated'))
-    
-        def get_converter(self, mime):
-        if is_valid_mime(mime):
-            for converter_class in plugin_manager.get_converters():
-                if converter_class.supports(mime):
-                    return converter_class(mime)
-    
-        def iter_body(self):
-        # Read the whole body before prettifying it,
-        # but bail out immediately if the body is binary.
-        converter = None
-        body = bytearray()
+        for filename in filenames:
+        fd = codecs.open(filename, mode='r', encoding='utf-8')
+        for line in fd.readlines():
+            refs = re.findall(r'(?<=<a href=')[^']*', markdown.markdown(line))
+            for ref in refs:
+                if ref not in urls:
+                    urls.append(ref)
     
     
-FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
-FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
-JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
-BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
-    
-        exc = Timeout('Request timed out')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR_TIMEOUT
-    assert error_msg == 'Request timed out (30s).'
-
-    
-        @staticmethod
-    def make_header(username, password):
-        credentials = u'%s:%s' % (username, password)
-        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
-        return 'Basic %s' % token
-    
-        def _get_path(self):
-        return os.path.join(self.directory, self.name + '.json')
+def _whctrs(anchor):
+    '''Return width, height, x center, and y center for an anchor (window).'''
+    w = anchor[2] - anchor[0] + 1
+    h = anchor[3] - anchor[1] + 1
+    x_ctr = anchor[0] + 0.5 * (w - 1)
+    y_ctr = anchor[1] + 0.5 * (h - 1)
+    return w, h, x_ctr, y_ctr
     
     
-class ExitStatus:
-    '''Exit status code constants.'''
-    OK = 0
-    ERROR = 1
-    PLUGIN_ERROR = 7
+def build_generic_retinanet_model(
+    model, add_conv_body_func, freeze_conv_body=False
+):
+    # TODO(rbg): fold this function into build_generic_detection_model
+    def _single_gpu_build_func(model):
+        '''Builds the model on a single GPU. Can be called in a loop over GPUs
+        with name and device scoping to create a data parallel model.'''
+        blobs, dim, spatial_scales = add_conv_body_func(model)
+        if not model.train:
+            model.conv_body_net = model.net.Clone('conv_body_net')
+        retinanet_heads.add_fpn_retinanet_outputs(
+            model, blobs, dim, spatial_scales
+        )
+        if model.train:
+            loss_gradients = retinanet_heads.add_fpn_retinanet_losses(
+                model
+            )
+        return loss_gradients if model.train else None
+    
+    
+def build_data_parallel_model(model, single_gpu_build_func):
+    '''Build a data parallel model given a function that builds the model on a
+    single GPU.
+    '''
+    if model.only_build_forward_pass:
+        single_gpu_build_func(model)
+    elif model.train:
+        all_loss_gradients = _build_forward_graph(model, single_gpu_build_func)
+        # Add backward pass on all GPUs
+        model.AddGradientOperators(all_loss_gradients)
+        if cfg.NUM_GPUS > 1:
+            _add_allreduce_graph(model)
+        for gpu_id in range(cfg.NUM_GPUS):
+            # After allreduce, all GPUs perform SGD updates on their identical
+            # params and gradients in parallel
+            with c2_utils.NamedCudaScope(gpu_id):
+                add_single_gpu_param_update_ops(model, gpu_id)
+    else:
+        # Test-time network operates on single GPU
+        # Test-time parallelism is implemented through multiprocessing
+        with c2_utils.NamedCudaScope(model.target_gpu_id):
+            single_gpu_build_func(model)
