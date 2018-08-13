@@ -1,104 +1,131 @@
 
         
-        
-def get_config(env_var, config_var):
-    result = os.getenv(env_var)
-    if not result:
-        result = get_from_rhc_config(config_var)
-    if not result:
-        sys.exit('failed=True msg='missing %s'' % env_var)
-    return result
+                # because special names such as Name.Class, Name.Function, etc.
+        # are not recognized as such later in the parsing, we choose them
+        # to look the same as ordinary variables.
+        Name:                      '#000000',        # class: 'n'
+        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
+        Name.Builtin:              '#004461',        # class: 'nb'
+        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
+        Name.Class:                '#000000',        # class: 'nc' - to be revised
+        Name.Constant:             '#000000',        # class: 'no' - to be revised
+        Name.Decorator:            '#888',           # class: 'nd' - to be revised
+        Name.Entity:               '#ce5c00',        # class: 'ni'
+        Name.Exception:            'bold #cc0000',   # class: 'ne'
+        Name.Function:             '#000000',        # class: 'nf'
+        Name.Property:             '#000000',        # class: 'py'
+        Name.Label:                '#f57900',        # class: 'nl'
+        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
+        Name.Other:                '#000000',        # class: 'nx'
+        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
+        Name.Variable:             '#000000',        # class: 'nv' - to be revised
+        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
+        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
+        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
     
-        try:
-        s1 = os.lstat(path)
-    except OSError:
-        # the OSError should be handled with more care
-        # it could be a 'permission denied' but path is still a mount
-        return False
-    else:
-        # A symlink can never be a mount point
-        if os.path.stat.S_ISLNK(s1.st_mode):
-            return False
+        @classmethod
+    def text_response_server(cls, text, request_timeout=0.5, **kwargs):
+        def text_response_handler(sock):
+            request_content = consume_socket_content(sock, timeout=request_timeout)
+            sock.send(text.encode('utf-8'))
     
-        result = response.json()
-    
-        indent = None
-    if format:
-        indent = 4
+    elif is_py3:
+    from urllib.parse import urlparse, urlunparse, urljoin, urlsplit, urlencode, quote, unquote, quote_plus, unquote_plus, urldefrag
+    from urllib.request import parse_http_list, getproxies, proxy_bypass, proxy_bypass_environment, getproxies_environment
+    from http import cookiejar as cookielib
+    from http.cookies import Morsel
+    from io import StringIO
+    from collections import OrderedDict
+    from collections.abc import Callable, Mapping, MutableMapping
     
     
-def sort_groups(groups):
-    return sorted(groups, key=lambda g: (g.depth, g.priority, g.name))
+def patch(url, data=None, **kwargs):
+    r'''Sends a PATCH request.
     
-        def construct_mapping(self, node, deep=False):
-        # Most of this is from yaml.constructor.SafeConstructor.  We replicate
-        # it here so that we can warn users when they have duplicate dict keys
-        # (pyyaml silently allows overwriting keys)
-        if not isinstance(node, MappingNode):
-            raise ConstructorError(None, None,
-                                   'expected a mapping node, but found %s' % node.id,
-                                   node.start_mark)
-        self.flatten_mapping(node)
-        mapping = AnsibleMapping()
+    import io
+import requests
+import pytest
+from requests.adapters import HTTPAdapter
+from requests.auth import HTTPDigestAuth, _basic_auth_str
+from requests.compat import (
+    Morsel, cookielib, getproxies, str, urlparse,
+    builtin_str, OrderedDict)
+from requests.cookies import (
+    cookiejar_from_dict, morsel_to_cookie)
+from requests.exceptions import (
+    ConnectionError, ConnectTimeout, InvalidSchema, InvalidURL,
+    MissingSchema, ReadTimeout, Timeout, RetryError, TooManyRedirects,
+    ProxyError, InvalidHeader, UnrewindableBodyError, SSLError, InvalidProxyURL)
+from requests.models import PreparedRequest
+from requests.structures import CaseInsensitiveDict
+from requests.sessions import SessionRedirectMixin
+from requests.models import urlencode
+from requests.hooks import default_hooks
+from requests.compat import MutableMapping
     
-        def getChild(self, request, name):
-        return self
+            expected = {
+            'description': 'foo_url_map description',
+            'hostRules': [
+                {
+                    'description': 'host rules description',
+                    'hosts': [
+                        'www.example.com',
+                        'www2.example.com'
+                    ],
+                    'pathMatcher': 'host_rules_path_matcher'
+                }
+            ],
+            'name': 'foo_url_map_name',
+            'pathMatchers': [
+                {
+                    'defaultService': 'bes-pathmatcher-one-default',
+                    'description': 'path matcher one',
+                    'name': 'path_matcher_one',
+                    'pathRules': [
+                        {
+                            'paths': [
+                                '/',
+                                '/aboutus'
+                            ],
+                            'service': 'my-one-bes'
+                        }
+                    ]
+                },
+                {
+                    'defaultService': 'bes-pathmatcher-two-default',
+                    'description': 'path matcher two',
+                    'name': 'path_matcher_two',
+                    'pathRules': [
+                        {
+                            'paths': [
+                                '/webapp',
+                                '/graphs'
+                            ],
+                            'service': 'my-two-bes'
+                        }
+                    ]
+                }
+            ]
+        }
     
-        # default settings to be used for this command instead of global defaults
-    default_settings = {}
+        def construct_yaml_map(self, node):
+        data = AnsibleMapping()
+        yield data
+        value = self.construct_mapping(node)
+        data.update(value)
+        data.ansible_pos = self._node_position_info(node)
     
-        default_settings = {
-        'LOG_LEVEL': 'INFO',
-        'LOGSTATS_INTERVAL': 1,
-        'CLOSESPIDER_TIMEOUT': 10,
+    
+class TestVars(unittest.TestCase):
+    def setUp(self):
+        self.mock_templar = MagicMock(name='mock_templar')
+    
+        # uninstalled ---------------------------- {{{
+    def _uninstall_current_package(self):
+        if not self.valid_package(self.current_package):
+            self.failed = True
+            self.message = 'Invalid package: {0}.'.format(self.current_package)
+            raise HomebrewException(self.message)
     }
-    
-    
-def _create_testcase(method, desc):
-    spider = method.__self__.name
-    
-        def handleResponse(self, response):
-        if self.factory.method.upper() == b'HEAD':
-            self.factory.page(b'')
-        elif self.length is not None and self.length > 0:
-            self.factory.noPage(self._connection_lost_reason)
-        else:
-            self.factory.page(response)
-        self.transport.loseConnection()
-    
-        def process_request(self, request, spider):
-        auth = getattr(self, 'auth', None)
-        if auth and b'Authorization' not in request.headers:
-            request.headers[b'Authorization'] = auth
-
-    
-        def spider_opened(self, spider):
-        self.user_agent = getattr(spider, 'user_agent', self.user_agent)
-    
-        def close(self, reason):  # can return a deferred
-        pass
-    
-    
-class Scientist(AbstractExpert):
-    
-        def test_a_observer_list_shall_be_empty_initially(cls):
-        cls.assertEqual(len(cls.s._observers), 0)
-    
-        def test_items_recoil(self):
-        with ObjectPool(self.sample_queue, True) as pool:
-            self.assertEqual(pool, 'first')
-        self.assertTrue(self.sample_queue.get() == 'second')
-        self.assertFalse(self.sample_queue.empty())
-        self.assertTrue(self.sample_queue.get() == 'first')
-        self.assertTrue(self.sample_queue.empty())
-    
-    from __future__ import print_function
-    
-        @property
-    def data(self):
-        return self._data
-    
-        return True
-
-    
-        pass
+    }
+    }
