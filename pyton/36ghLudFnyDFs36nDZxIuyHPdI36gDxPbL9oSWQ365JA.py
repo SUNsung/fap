@@ -1,192 +1,164 @@
 
         
-        import datetime
-import io
-import json
-import textwrap
-    
-    import io
-import sys
-import re
-    
-        def expect_warning(self, regex):
-        # Silence an expected warning matching a regex
-        old_report_warning = self.report_warning
-    
-    
-class RtspFD(FileDownloader):
-    def real_download(self, filename, info_dict):
-        url = info_dict['url']
-        self.report_destination(filename)
-        tmpfilename = self.temp_name(filename)
-    
-    
-class C56IE(InfoExtractor):
-    _VALID_URL = r'https?://(?:(?:www|player)\.)?56\.com/(?:.+?/)?(?:v_|(?:play_album.+-))(?P<textid>.+?)\.(?:html|swf)'
-    IE_NAME = '56.com'
-    _TESTS = [{
-        'url': 'http://www.56.com/u39/v_OTM0NDA3MTY.html',
-        'md5': 'e59995ac63d0457783ea05f93f12a866',
-        'info_dict': {
-            'id': '93440716',
-            'ext': 'flv',
-            'title': '网事知多少 第32期：车怒',
-            'duration': 283.813,
-        },
-    }, {
-        'url': 'http://www.56.com/u47/v_MTM5NjQ5ODc2.html',
-        'md5': '',
-        'info_dict': {
-            'id': '82247482',
-            'title': '爱的诅咒之杜鹃花开',
-        },
-        'playlist_count': 7,
-        'add_ie': ['Sohu'],
-    }]
-    
-            title = metadata['Title']
-        description = metadata.get('Description')
-        duration = float_or_none(metadata.get('Duration'))
-        timestamp = parse_iso8601(metadata.get('DateCreated'))
-    
-    
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'tcsh')
-    proc.sendline(u'setenv PYTHONIOENCODING utf8')
-    proc.sendline(u'eval `thefuck --alias`')
-    return proc
-    
-    
-def test_auth_plugin_parse_auth_false(httpbin):
-    
-    
-def test_follow_all_redirects_shown(httpbin):
-    r = http('--follow', '--all', httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 3
-    assert r.count('HTTP/1.1 302 FOUND', 2)
-    assert HTTP_OK in r
-    
-        '''
-    abbrevs = [
-        (1 << 50, 'PB'),
-        (1 << 40, 'TB'),
-        (1 << 30, 'GB'),
-        (1 << 20, 'MB'),
-        (1 << 10, 'kB'),
-        (1, 'B')
-    ]
-    
-    
-class PluginManager(object):
-    
-        def test_binary_file_form(self, httpbin):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('--print=B', '--form', 'POST', httpbin.url + '/post',
-                 'test@' + BIN_FILE_PATH_ARG, env=env)
-        assert bytes(BIN_FILE_CONTENT) in bytes(r)
-    
-        config['implicit_content_type'] = 'form'
-    config.save()
-    config.load()
-    assert 'implicit_content_type' not in config
-    assert config['default_options'] == ['--form']
-    
-    # The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# The short X.Y version.
-version = u'0'
-# The full version, including alpha/beta/rc tags.
-release = u'0'
-    
-        @classmethod
-    def add_parser_arguments(cls, add):  # pylint: disable=arguments-differ
-        super(Authenticator, cls).add_parser_arguments(add)
-        add('credentials', help='DigitalOcean credentials INI file.')
-    
-        @mock.patch('certbot_compatibility_test.validator.requests.get')
-    def test_succesful_redirect(self, mock_get_request):
-        mock_get_request.return_value = create_response(
-            301, {'location': 'https://test.com'})
-        self.assertTrue(self.validator.redirect('test.com'))
-    
-        # Additional stuff for the LaTeX preamble.
-    #'preamble': '',
-    
-    def main():
-    for name, fn in [('sequential',
-                      functools.partial(download_urls_sequential, URLS)),
-                     ('processes',
-                      functools.partial(download_urls_with_executor,
-                                        URLS,
-                                        ProcessPoolExecutor(10))),
-                     ('threads',
-                      functools.partial(download_urls_with_executor,
-                                        URLS,
-                                        ThreadPoolExecutor(10)))]:
-        sys.stdout.write('%s: ' % name.ljust(12))
-        start = time.time()
-        url_map = fn()
-        sys.stdout.write('%.2f seconds (%d of %d downloaded)\n' %
-                         (time.time() - start, len(url_map), len(URLS)))
-    
-    # If true, an OpenSearch description file will be output, and all pages will
-# contain a <link> tag referring to it.  The value of this option must be the
-# base URL from which the finished HTML is served.
-#html_use_opensearch = ''
-    
-      def FilterRegex( diagnostic ):
-    return pattern.search( diagnostic[ 'text' ] ) is not None
-    
-    
-def LastEnteredCharIsIdentifierChar():
-  line, current_column = vimsupport.CurrentLineContentsAndCodepointColumn()
-  if current_column - 1 < 0:
-    return False
-  filetype = vimsupport.CurrentFiletypes()[ 0 ]
-  return (
-    identifier_utils.StartOfLongestIdentifierEndingAtIndex(
-        line, current_column, filetype ) != current_column )
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-class ChatSocketHandler(tornado.websocket.WebSocketHandler):
-    waiters = set()
-    cache = []
-    cache_size = 200
-    
-            self.assertEqual(len(warnings) + len(errors), 0,
-                         'Had %d unexpected warnings and %d errors' %
-                         (len(warnings), len(errors)))
-    
-    
-# Making this a non-singleton is left as an exercise for the reader.
-global_message_buffer = MessageBuffer()
-    
-    
-if __name__ == '__main__':
-    io_loop = ioloop.IOLoop.current()
-    io_loop.run_sync(main)
+        versions_info['signature'] = signature
+with open('update/versions.json', 'w') as versionsf:
+    json.dump(versions_info, versionsf, indent=4, sort_keys=True)
 
     
     
-class S3Application(web.Application):
-    '''Implementation of an S3-like storage server based on local files.
+total_bytes = 0
+    
+    
+class AcademicEarthCourseIE(InfoExtractor):
+    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
+    IE_NAME = 'AcademicEarth:Course'
+    _TEST = {
+        'url': 'http://academicearth.org/playlists/laws-of-nature/',
+        'info_dict': {
+            'id': 'laws-of-nature',
+            'title': 'Laws of Nature',
+            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
+        },
+        'playlist_count': 3,
+    }
+    
+            return info_dict
+
+    
+    
+def basic_auth(header=BASIC_AUTH_HEADER_VALUE):
+    
+    from httpie.plugins import plugin_manager
+from httpie.context import Environment
+    
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
+    
+        # Auth
+    def get_auth_plugins(self):
+        return [plugin for plugin in self if issubclass(plugin, AuthPlugin)]
+    
+    
+def test_credentials_in_url_auth_flag_has_priority(httpbin_both):
+    '''When credentials are passed in URL and via -a at the same time,
+     then the ones from -a are used.'''
+    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
+                   auth='user:wrong')
+    r = http('--auth=user:password', 'GET', url)
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
+    
+        # a Model inside a Sequential
+    x = Input(shape=(1,))
+    y = Dense(2)(x)
+    inner_model = Model(x, y)
+    outer_model = Sequential()
+    outer_model.add(inner_model)
+    assert outer_model.trainable_weights == inner_model.trainable_weights
+    inner_model.trainable = False
+    assert outer_model.trainable_weights == []
+    inner_model.trainable = True
+    inner_model.layers[-1].trainable = False
+    assert outer_model.trainable_weights == []
+    
+    from keras.layers import Lambda, Input, Dense
+from keras.models import Model
+from keras.datasets import mnist
+from keras.losses import mse, binary_crossentropy
+from keras.utils import plot_model
+from keras import backend as K
+    
+    max_words = 1000
+batch_size = 32
+epochs = 5
+    
+    Compares the performance of a simple MLP using two
+different activation functions: RELU and SELU
+on the Reuters newswire topic classification task.
+    
+        # Arguments
+        path: path where to cache the dataset locally
+            (relative to ~/.keras/datasets).
+        test_split: fraction of the data to reserve as test set.
+        seed: Random seed for shuffling the data
+            before computing the test split.
+    
+        fpath = os.path.join(path, 'test_batch')
+    x_test, y_test = load_batch(fpath)
+    
+        dirname = 'cifar-100-python'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
+    
+            if response.status_code != 200:
+            path += '.error'
+    
+            # global, resource
+        input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/global/urlMaps'
+        actual = GCPUtils.parse_gcp_url(input_url)
+        self.assertEquals('compute', actual['service'])
+        self.assertEquals('v1', actual['api_version'])
+        self.assertEquals('myproject', actual['project'])
+        self.assertTrue('global' in actual)
+        self.assertTrue(actual['global'])
+        self.assertEquals('urlMaps', actual['resource_name'])
+    
+    from ansible.utils.vars import combine_vars
+    
+    AnsibleConstructor.add_constructor(
+    u'!unsafe',
+    AnsibleConstructor.construct_yaml_unsafe)
+    
+        def start_requests(self):
+        qargs = {'total': self.total, 'show': self.show}
+        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
+        return [scrapy.Request(url, dont_filter=True)]
+    
+        def adjust_request_args(self, args):
+        args['url'] = self.args[0]
+        return args
+    
+    
+class UserAgentMiddleware(object):
+    '''This middleware allows spiders to override the user_agent'''
+    
+    class ScrapyDeprecationWarning(Warning):
+    '''Warning category for deprecated features, since the default
+    DeprecationWarning is silenced on Python 2.7+
+    '''
+    pass
+    
+    from scrapy import signals
+    
+    
+class MissingNonceTest(unittest.TestCase):
+    '''Tests for acme.errors.MissingNonce.'''
+    
+    # Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+latex_documents = [
+    (master_doc, 'certbot-apache.tex', u'certbot-apache Documentation',
+     u'Certbot Project', 'manual'),
+]
+    
+        def __init__(self, args):
+        '''Initializes the plugin with the given command line args'''
+        self._temp_dir = tempfile.mkdtemp()
+        self.le_config = util.create_le_config(self._temp_dir)
+        config_dir = util.extract_configs(args.configs, self._temp_dir)
+        self._configs = [
+            os.path.join(config_dir, config)
+            for config in os.listdir(config_dir)]
+    
+    # Theme options are theme-specific and customize the look and feel of a theme
+# further.  For a list of options available for each theme, see the
+# documentation.
+#html_theme_options = {}
