@@ -1,269 +1,276 @@
 
         
-        
-    {  return 0;
-}
-
-    
-      ClientConfig client_config;
-  client_config.set_client_type(SYNC_CLIENT);
-  client_config.set_outstanding_rpcs_per_channel(1);
-  client_config.set_client_channels(1);
-  client_config.set_rpc_type(UNARY);
-  client_config.mutable_load_params()->mutable_closed_loop();
-    
-    namespace grpc {
-namespace testing {
-    }
-    }
-    
-    static void get_cpu_usage(unsigned long long* total_cpu_time,
-                          unsigned long long* idle_cpu_time) {
-#ifdef __linux__
-  std::ifstream proc_stat('/proc/stat');
-  proc_stat.ignore(5);
-  std::string cpu_time_str;
-  std::string first_line;
-  std::getline(proc_stat, first_line);
-  std::stringstream first_line_s(first_line);
-  for (int i = 0; i < 10; ++i) {
-    std::getline(first_line_s, cpu_time_str, ' ');
-    *total_cpu_time += std::stol(cpu_time_str);
-    if (i == 3) {
-      *idle_cpu_time = std::stol(cpu_time_str);
-    }
-  }
-#else
-  gpr_log(GPR_INFO, 'get_cpu_usage(): Non-linux platform is not supported.');
-#endif
+        uint32_t swap_endian(uint32_t val) {
+    val = ((val << 8) & 0xFF00FF00) | ((val >> 8) & 0xFF00FF);
+    return (val << 16) | (val >> 16);
 }
     
-    grpc::string DescribeServiceList(std::vector<grpc::string> service_list,
-                                 grpc::protobuf::DescriptorPool& desc_pool) {
-  std::stringstream result;
-  for (auto it = service_list.begin(); it != service_list.end(); it++) {
-    auto const& service = *it;
-    const grpc::protobuf::ServiceDescriptor* service_desc =
-        desc_pool.FindServiceByName(service);
-    if (service_desc != nullptr) {
-      result << DescribeService(service_desc);
-    }
-  }
-  return result.str();
-}
+     private:
+  // Layer registry should never be instantiated - everything is done with its
+  // static variables.
+  LayerRegistry() {}
     
-    #include <grpc/support/log.h>
-    
-    static int set_ifname(struct ifaddrs* ifaddr, int interface) {
-	char buf[IFNAMSIZ] = {0};
-	char* name = if_indextoname(interface, buf);
-	if (name == NULL) {
-		return -1;
-	}
-	ifaddr->ifa_name = new char[strlen(name) + 1];
-	strncpy(ifaddr->ifa_name, name, strlen(name) + 1);
-	return 0;
-}
-    
-    OS::PowerState PowerIphone::get_power_state() {
-	if (UpdatePowerInfo()) {
-		return power_state;
-	} else {
-		return OS::POWERSTATE_UNKNOWN;
-	}
-}
-    
-    // store all colliding object
-struct GodotAllConvexResultCallback : public btCollisionWorld::ConvexResultCallback {
-public:
-	PhysicsDirectSpaceState::ShapeResult *m_results;
-	int m_resultMax;
-	int count;
-	const Set<RID> *m_exclude;
-    }
+     protected:
+  /// @copydoc AbsValLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
     /**
- * oc_ilog32 - Integer binary logarithm of a 32-bit value.
- * @_v: A 32-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * The OC_ILOG_32() or OC_ILOGNZ_32() macros may be able to use a builtin
- *  function instead, which should be faster.
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
  */
-int oc_ilog32(ogg_uint32_t _v);
-/**
- * oc_ilog64 - Integer binary logarithm of a 64-bit value.
- * @_v: A 64-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * The OC_ILOG_64() or OC_ILOGNZ_64() macros may be able to use a builtin
- *  function instead, which should be faster.
- */
-int oc_ilog64(ogg_int64_t _v);
-    
-    /** 16x32 multiplication, followed by a 16-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q16
-static OPUS_INLINE opus_val32 MULT16_32_Q16_armv4(opus_val16 a, opus_val32 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      '#MULT16_32_Q16\n\t'
-      'smull %0, %1, %2, %3\n\t'
-      : '=&r'(rd_lo), '=&r'(rd_hi)
-      : '%r'(b),'r'(a<<16)
-  );
-  return rd_hi;
-}
-#define MULT16_32_Q16(a, b) (MULT16_32_Q16_armv4(a, b))
-    
-    #elif (defined(OPUS_X86_MAY_HAVE_SSE) && !defined(OPUS_X86_PRESUME_SSE)) || \
-  (defined(OPUS_X86_MAY_HAVE_SSE2) && !defined(OPUS_X86_PRESUME_SSE2)) || \
-  (defined(OPUS_X86_MAY_HAVE_SSE4_1) && !defined(OPUS_X86_PRESUME_SSE4_1)) || \
-  (defined(OPUS_X86_MAY_HAVE_AVX) && !defined(OPUS_X86_PRESUME_AVX))
-    
-    /* (a32 * (opus_int32)((opus_int16)(b32))) >> 16 output have to be 32bit int */
-#undef silk_SMULWB
-static OPUS_INLINE opus_int32 silk_SMULWB_armv4(opus_int32 a, opus_int16 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      '#silk_SMULWB\n\t'
-      'smull %0, %1, %2, %3\n\t'
-      : '=&r'(rd_lo), '=&r'(rd_hi)
-      : '%r'(a), 'r'(b<<16)
-  );
-  return rd_hi;
-}
-#define silk_SMULWB(a, b) (silk_SMULWB_armv4(a, b))
-    
-    template<typename T>
-inline void
-emitTLSLoad(Vout& v, TLSDatum<ThreadLocalNoCheck<T>> datum, Vreg d) {
-  auto const off = ThreadLocalNoCheck<T>::node_ptr_offset();
-  v << load{emitTLSAddr(v, datum) + safe_cast<int32_t>(off), d};
-}
-    
-    namespace HPHP { namespace jit {
-///////////////////////////////////////////////////////////////////////////////
-    }
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    #include <cstdint>
-#include <vector>
-#include <numa.h>
+     protected:
+  // Helper functions that abstract away the column buffer and gemm arguments.
+  // The last argument in forward_cpu_gemm is so that we can skip the im2col if
+  // we just called weight_cpu_gemm with the same input.
+  void forward_cpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* output, bool skip_im2col = false);
+  void forward_cpu_bias(Dtype* output, const Dtype* bias);
+  void backward_cpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* output);
+  void weight_cpu_gemm(const Dtype* input, const Dtype* output, Dtype*
+      weights);
+  void backward_cpu_bias(Dtype* bias, const Dtype* input);
     
-    void APCObject::Delete(APCHandle* handle) {
-  auto const obj = fromHandle(handle);
-  auto const allocSize = sizeof(APCObject) + obj->m_propCount *
-    (obj->m_persistent ? sizeof(APCHandle*) : sizeof(Prop));
-  obj->~APCObject();
-  // No need to run Prop destructors.
-  apc_sized_free(obj, allocSize);
-}
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    Variant *get_intercept_handler(const String& name, int8_t* flag) {
-  TRACE(1, 'get_intercept_handler %s flag is %d\n',
-        name.get()->data(), (int)*flag);
-  if (*flag == -1) {
-    Lock lock(s_mutex);
-    if (*flag == -1) {
-      auto sd = makeStaticString(name.get());
-      auto &entry = s_registered_flags[StrNR(sd)];
-      entry.second.push_back(flag);
-      *flag = entry.first;
-    }
-    if (!*flag) return nullptr;
-  }
+    namespace caffe {
     }
     
-        std::wstring m_trainCriterionNodeName;
-    std::wstring m_evalCriterionNodeName;
-    
-    
-    {        // perform the operation on one long vector
-        msra::math::float4 threshold4(threshold);
-        foreach_index (i, us4)
-        {
-            us4[i] &= ((refs4[i] <= threshold4) & (refs4[i] >= -threshold4));
-        }
-    }
-    
-    
-    {
-    {            // nodeToDelete is a child
-            if (child == nodeToDelete)
-            {
-                // this used to call DetatchInputs(), but it's better for MEL to retain other inputs
-                node->SetInput(i, nullptr);
-                break;
-            }
-        }
-    }
-    
-    
-        // for every single bn node, the statistics is the average of mean and variance for several times in forward prop
-        // the forward prop is from the feature to the current bn node
-        for (int iter = 0; iter < iters; iter++)
-        {
-            // during the bn stat, dataRead must be ensured
-            bool wasDataRead = DataReaderHelpers::GetMinibatchIntoNetwork<ElemType>(*dataReader, m_net,
-                nullptr, useDistributedMBReading, useParallelTrain, inputMatrices, actualMBSize, m_mpi);
-    }
-    
-    // Data Writer class
-// interface for clients of the Data Writer
-// mirrors the IDataWriter interface, except the Init method is private (use the constructor)
-class DataWriter : public IDataWriter, protected Plugin
-{
-    IDataWriter* m_dataWriter; // writer
-    }
-    
-    
-    {
-    {
-    {    void setverbosity(int veb)
-    {
-        verbosity = veb;
-        numlattices.setverbosity(veb);
-        denlattices.setverbosity(veb);
-    }
-};
-} }
+    #endif  // CAFFE_CUDNN_POOLING_LAYER_HPP_
 
     
-    #pragma once
+    	// Check for machine-specific then user config source file.
+	PathCombine(cpuCfgPath, userConfigDirPath, L'ConEmu-%COMPUTERNAME%.xml');
+	ExpandEnvironmentStrings(cpuCfgPath, cpuCfgPath, sizeof(cpuCfgPath) / sizeof(cpuCfgPath[0]));
     
-    #if DMLC_ENABLE_STD_THREAD
-#include './sparse_page_source.h'
-#include '../common/common.h'
+    #include <boost/asio/detail/config.hpp>
     
-      iter->BeforeFirst();
-  while (iter->Next()) {
-     auto batch = iter->Value();
-    #pragma omp parallel for schedule(static)
-    for (long i = 0; i < static_cast<long>(batch.Size()); ++i) { // NOLINT(*)
-      int tid = omp_get_thread_num();
-      auto inst = batch[i];
-      for (bst_uint j = 0; j < inst.length; ++j) {
-        builder.Push(
-            inst[j].index,
-            Entry(static_cast<bst_uint>(batch.base_rowid + i), inst[j].fvalue),
-            tid);
-      }
+    template <typename ConstBufferSequence, typename Handler>
+class descriptor_write_op
+  : public descriptor_write_op_base<ConstBufferSequence>
+{
+public:
+  BOOST_ASIO_DEFINE_HANDLER_PTR(descriptor_write_op);
     }
+    
+    #endif // BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
+
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS) \
+  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
+# include <boost/asio/detail/null_fenced_block.hpp>
+#elif defined(__MACH__) && defined(__APPLE__)
+# include <boost/asio/detail/macos_fenced_block.hpp>
+#elif defined(__sun)
+# include <boost/asio/detail/solaris_fenced_block.hpp>
+#elif defined(__GNUC__) && defined(__arm__) \
+  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
+# include <boost/asio/detail/gcc_arm_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
+# include <boost/asio/detail/gcc_hppa_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+# include <boost/asio/detail/gcc_x86_fenced_block.hpp>
+#elif defined(__GNUC__) \
+  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
+# include <boost/asio/detail/gcc_sync_fenced_block.hpp>
+#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+# include <boost/asio/detail/win_fenced_block.hpp>
+#else
+# include <boost/asio/detail/null_fenced_block.hpp>
+#endif
+    
+      STDMETHODIMP get_Capacity(UINT32* value)
+  {
+    *value = capacity_;
+    return S_OK;
   }
     
+    template <typename Time_Traits>
+void epoll_reactor::schedule_timer(timer_queue<Time_Traits>& queue,
+    const typename Time_Traits::time_type& time,
+    typename timer_queue<Time_Traits>::per_timer_data& timer, wait_op* op)
+{
+  mutex::scoped_lock lock(mutex_);
+    }
     
+    bool js_cocos2dx_physics3d_Physics3DComponent_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DComponent_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DComponent(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DComponent_syncNodeToPhysics(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_addToPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_syncPhysicsToNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_setPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_setTransformInPhysics(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DComponentName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_Physics3DComponent(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    bool js_cocos2dx_studio_ArmatureAnimation_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_ArmatureAnimation_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_ArmatureAnimation(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_ArmatureAnimation_getSpeedScale(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ArmatureAnimation_play(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ArmatureAnimation_gotoAndPause(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ArmatureAnimation_playWithIndexes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ArmatureAnimation_setAnimationData(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ArmatureAnimation_setSpeedScale(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ArmatureAnimation_getAnimationData(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ArmatureAnimation_gotoAndPlay(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ArmatureAnimation_init(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ArmatureAnimation_playWithNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ArmatureAnimation_getMovementCount(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ArmatureAnimation_playWithIndex(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ArmatureAnimation_getCurrentMovementID(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ArmatureAnimation_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ArmatureAnimation_ArmatureAnimation(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+    
+    class AddPair : public Test
+{
+public:
+    }
+    
+    			//m_x = RandomFloat(-1.0f, 1.0f);
+			m_x = 0.20352793f;
+			bd.position.Set(m_x, 10.0f);
+			bd.bullet = true;
+    
+    			b2WeldJointDef jd;
+			jd.frequencyHz = 8.0f;
+			jd.dampingRatio = 0.7f;
+    
+    #ifdef IMGUI_VULKAN_DEBUG_REPORT
+        // Enabling multiple validation layers grouped as LunarG standard validation
+        const char* layers[] = { 'VK_LAYER_LUNARG_standard_validation' };
+        create_info.enabledLayerCount = 1;
+        create_info.ppEnabledLayerNames = layers;
+    
+    
+    {    switch (msg)
     {
-    {
-    {  // internal function to make one batch from row iter.
-  void MakeOneBatch(
-    SparsePage *pcol, bool sorted);
+    case WM_SIZE:
+        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
+        {
+            ImGui_ImplDX10_InvalidateDeviceObjects();
+            CleanupRenderTarget();
+            g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
+            CreateRenderTarget();
+            ImGui_ImplDX10_CreateDeviceObjects();
+        }
+        return 0;
+    case WM_SYSCOMMAND:
+        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+            return 0;
+        break;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hWnd, msg, wParam, lParam);
+}
+    
+     public:
+  HazptrLockFreeLIFO() : head_(nullptr) {}
+    
+      Atom<Node*> node_;
+    
+    
+    { private:
+  LifoSem sem_;
+  UMPMCQueue<T, false, 6> queue_;
 };
-}  // namespace data
-}  // namespace xgboost
-#endif  // XGBOOST_DATA_SIMPLE_DMATRIX_H_
+    
+    
+    {  template <class... Args>
+  SettingContents(std::string _reason, Args&&... args)
+      : updateReason(std::move(_reason)), value(std::forward<Args>(args)...) {}
+};
+    
+    #include <algorithm>
+#include <atomic>
+#include <vector>
+    
+    AbstractBtMessage::AbstractBtMessage(uint8_t id, const char* name)
+    : BtMessage(id),
+      invalidate_(false),
+      uploading_(false),
+      cuid_(0),
+      name_(name),
+      pieceStorage_(nullptr),
+      dispatcher_(nullptr),
+      messageFactory_(nullptr),
+      requestFactory_(nullptr),
+      peerConnection_(nullptr),
+      metadataGetMode_(false)
+{
+}
+    
+    namespace aria2 {
+    }
+    
+    void AnnounceList::setCurrentTier(
+    std::deque<std::shared_ptr<AnnounceTier>>::iterator itr)
+{
+  if (itr != std::end(tiers_)) {
+    currentTier_ = std::move(itr);
+    currentTracker_ = std::begin((*currentTier_)->urls);
+  }
+}
+    
+    void AnnounceTier::nextEventIfAfterStarted()
+{
+  switch (event) {
+  case STOPPED:
+    event = HALTED;
+    break;
+  case COMPLETED:
+    event = SEEDING;
+    break;
+  default:
+    break;
+  }
+}
