@@ -1,138 +1,206 @@
 
         
-                # This returns all the config classes for the various pushes.
-        #
-        # @return [Registry]
-        def push_configs
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.configs[:push])
+        require 'abstract_unit'
+    
+      def test_redirect_with_null_bytes
+    get :redirect_with_null_bytes
+    assert_response :redirect
+    assert_equal 'http://test.host/lolwat', redirect_to_url
+  end
+    
+            adapter = adapter.camelize
+        adapter = 'PostgreSQL' if adapter == 'Postgresql'
+        'ActionCable::SubscriptionAdapter::#{adapter}'.constantize
+      end
+    end
+  end
+end
+
+    
+      def test_assert_called_with_returns
+    assert_called_with(@object, :increment, returns: 1) do
+      @object.increment
+    end
+  end
+    
+    class ActionCable::Channel::BroadcastingTest < ActionCable::TestCase
+  class ChatChannel < ActionCable::Channel::Base
+  end
+    
+        timers.each_with_index do |timer, i|
+      assert_kind_of Proc, timer[0]
+      assert_equal i + 1, timer[1][:every]
+    end
+  end
+    
+            # Internal hax = :(
+        client = connection.websocket.send(:websocket)
+        rack_hijack_io = client.instance_variable_get('@stream').instance_variable_get('@rack_hijack_io')
+        rack_hijack_io.stub(:write, proc { raise(closed_exception, 'foo') }) do
+          assert_called(client, :client_gone) do
+            client.write('boo')
+          end
+        end
+        assert_equal [], connection.errors
+      end
+    end
+  end
+    
+      test 'broadcaster from broadcaster_for generates notification' do
+    begin
+      server = TestServer.new
+    
+          if valid_type?(type)
+        type.constantize.new(attributes).tap do |instance|
+          instance.user = user if instance.respond_to?(:user=)
+        end
+      else
+        const_get(:BASE_CLASS_NAME).constantize.new(attributes).tap do |instance|
+          instance.type = type
+          instance.user = user if instance.respond_to?(:user=)
+        end
+      end
+    end
+  end
+end
+    
+      def evernote_consumer_key
+    (config = Devise.omniauth_configs[:evernote]) && config.strategy.consumer_key
+  end
+    
+        if params[:sort].present?
+      attribute, direction = params[:sort].downcase.split('.')
+      unless valid_sorts.include?(attribute)
+        attribute, direction = default.to_a.first
+      end
+    else
+      attribute, direction = default.to_a.first
+    end
+    
+        respond_to do |format|
+      if @user_credential.save
+        format.html { redirect_to user_credentials_path, notice: 'Your credential was successfully created.' }
+        format.json { render json: @user_credential, status: :created, location: @user_credential }
+      else
+        format.html { render action: 'new' }
+        format.json { render json: @user_credential.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+    
+          def key?(key)
+        super(convert_key(key))
+      end
+    
+                  # Read!
+              data << io.readpartial(READ_CHUNK_SIZE).encode('UTF-8', Encoding.default_external)
+            else
+              # Do a simple non-blocking read on the IO object
+              data << io.read_nonblock(READ_CHUNK_SIZE)
             end
-          end
+          rescue Exception => e
+            # The catch-all rescue here is to support multiple Ruby versions,
+            # since we use some Ruby 1.9 specific exceptions.
+    
+          # This returns the keys (or ids) that are in the string.
+      #
+      # @return [<Array<String>]
+      def keys
+        regexp = /^#\s*VAGRANT-BEGIN:\s*(.+?)$\r?\n?(.*)$\r?\n?^#\s*VAGRANT-END:\s(\1)$/m
+        @value.scan(regexp).map do |match|
+          match[0]
+        end
+      end
+    
+            # Parse the options
+        argv = parse_options(opts)
+        return if !argv
+        if argv.length < 2
+          raise Vagrant::Errors::CLIInvalidUsage,
+            help: opts.help.chomp
         end
     
-              # Verify the box exists that we want to repackage
-          box = @env.boxes.find(box_name, box_provider, '= #{box_version}')
-          if !box
-            raise Vagrant::Errors::BoxNotFoundWithProviderAndVersion,
-              name: box_name,
-              provider: box_provider.to_s,
-              version: box_version
-          end
-    
-      def test_exit_status
-    Open3.popen3(RUBY, '-e', 'exit true') {|i,o,e,t|
-      assert_equal(true, t.value.success?)
+      it 'makes the receiver metaclass the scoped class when used with a string' do
+    obj = Object.new
+    obj.instance_eval %{
+      class B; end
+      B
     }
-    Open3.popen3(RUBY, '-e', 'exit false') {|i,o,e,t|
-      assert_equal(false, t.value.success?)
-    }
+    obj.singleton_class.const_get(:B).should be_an_instance_of(Class)
   end
     
-        klass = Class.new do
-      const_set(:X, 123)
-    end
-    assert_equal(false, klass.class_eval { Module.constants }.include?(:X))
+      ruby_version_is '2.4' do
+    describe 'full Unicode case mapping' do
+      it 'modifies self in place for all of Unicode with no option' do
+        a = 'äÖü'
+        a.swapcase!
+        a.should == 'ÄöÜ'
+      end
     
-      describe 'with -n and a Fixnum range' do
-    before :each do
-      @script = '-W0 -ne 'print if %s' #{fixture(__FILE__, 'conditional_range.txt')}'
-    end
+        describe 'as the last parameter' do
+      it 'passes without curly braces' do
+        specs.fooM3('abc', 123, rbx: 'cool', specs: :fail_sometimes, non_sym: 1234).should ==
+          ['abc', 123, { rbx: 'cool', specs: :fail_sometimes, non_sym: 1234 }]
+      end
     
-      it 'evaluates elsif-body in containing scope' do
-    a = 123
-    if false
-      b = a+1
-    elsif false
-      b = a+2
-    elsif true
-      b = a+3
-    else
-      b = a+4
+        class B
     end
-    b.should == 126
   end
 end
 
     
-      def test_memsize
-    # Time objects are common in some code, try to keep them small
-    skip 'Time object size test' if /^(?:i.?86|x86_64)-linux/ !~ RUBY_PLATFORM
-    require 'objspace'
-    t = Time.at(0)
-    size = GC::INTERNAL_CONSTANTS[:RVALUE_SIZE]
-    case size
-    when 20 then expect = 50
-    when 40 then expect = 86
-    else
-      flunk 'Unsupported RVALUE_SIZE=#{size}, update test_memsize'
-    end
-    assert_equal expect, ObjectSpace.memsize_of(t)
-  rescue LoadError => e
-    skip 'failed to load objspace: #{e.message}'
-  end
-end
-
+        @save_to.each { |_, v| FileUtils.mkdir_p(v) }
     
-    describe :string_unpack_16bit_le, shared: true do
-  it 'decodes one short for a single format character' do
-    'ab'.unpack(unpack_format).should == [25185]
+    namespace :bower do
+    
+    @@ login
+<form action='/'>
+  <label for='user'>User Name:</label>
+  <input name='user' value='' />
+  <input type='submit' value='GO!' />
+</form>
+    
+        expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('ALLOW-FROM foo')
   end
     
-    describe :string_unpack_unicode, shared: true do
-  it 'decodes Unicode codepoints as ASCII values' do
-    [ ['\x00',      [0]],
-      ['\x01',      [1]],
-      ['\x08',      [8]],
-      ['\x0f',      [15]],
-      ['\x18',      [24]],
-      ['\x1f',      [31]],
-      ['\x7f',      [127]],
-      ['\xc2\x80',  [128]],
-      ['\xc2\x81',  [129]],
-      ['\xc3\xbf',  [255]]
-    ].should be_computed_by(:unpack, 'U')
+      it 'accepts a session without changes to tracked parameters' do
+    session = {:foo => :bar}
+    get '/', {}, 'rack.session' => session
+    get '/', {}, 'rack.session' => session
+    expect(session[:foo]).to eq(:bar)
   end
     
-      class SubclassX < Struct
+      # GET /books/1/edit
+  def edit
   end
     
-          # Prints a table for a given array of records. For each record, the block
-      # is yielded two arguments: the record and a Row object. To print values
-      # for that record, add values using `row << 'some value'`. A row can
-      # optionally be highlighted in yellow using `row.yellow`.
-      def table(records, &block)
-        return if records.empty?
-        rows = collect_rows(records, &block)
-        col_widths = calculate_column_widths(rows)
+              new_source =
+            node.receiver.source + ' =~ ' + node.first_argument.source
     
-        def after(task, post_task, *args, &block)
-      Rake::Task.define_task(post_task, *args, &block) if block_given?
-      task = Rake::Task[task]
-      task.enhance do
-        post = Rake.application.lookup(post_task, task.scope)
-        raise ArgumentError, 'Task #{post_task.inspect} not found' unless post
-        post.invoke
-      end
-    end
-    
-      deploy_rb = File.expand_path('../../templates/deploy.rb.erb', __FILE__)
-  stage_rb = File.expand_path('../../templates/stage.rb.erb', __FILE__)
-  capfile = File.expand_path('../../templates/Capfile', __FILE__)
-    
-        def blank_name?
-      @filepath.nil? || @filepath.empty?
-    end
-    
-          @klass.send :define_method, @name do |*args|
-        ivar = '@attachment_#{name}'
-        attachment = instance_variable_get(ivar)
-    
-            def rejected_types_rejected?
-          @missing_rejected_types ||= @rejected_types.select { |type| type_allowed?(type) }
-          @missing_rejected_types.none?
+              add_offense(node)
         end
+    
+            def on_block(node)
+          on_body_of_reduce(node) do |body|
+            void_next = body.each_node(:next).find do |n|
+              n.children.empty? && parent_block_node(n) == node
+            end
+    
+            # Annotate the source code with the RuboCop offenses provided
+        #
+        # @param offenses [Array<RuboCop::Cop::Offense>]
+        #
+        # @return [self]
+        def with_offense_annotations(offenses)
+          offense_annotations =
+            offenses.map do |offense|
+              indent     = ' ' * offense.column
+              carets     = '^' * offense.column_length
+    
+          # Returns the keyword of the `if` statement as a string. Returns an empty
+      # string for ternary operators.
+      #
+      # @return [String] the keyword of the `if` statement
+      def keyword
+        ternary? ? '' : loc.keyword.source
       end
-    end
-  end
-end
