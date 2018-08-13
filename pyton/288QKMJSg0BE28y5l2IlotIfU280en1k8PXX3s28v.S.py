@@ -1,136 +1,235 @@
 
         
-        import rsa
-import json
-from binascii import hexlify
+        header = oldreadme[:oldreadme.index('# OPTIONS')]
+footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
     
-            return self._extract_nuevo(
-            'http://www.anitube.se/nuevo/econfig.php?key=%s' % key, video_id)
+        for release in releases:
+        compat_print(release['name'])
+        for asset in release['assets']:
+            asset_name = asset['name']
+            total_bytes += asset['download_count'] * asset['size']
+            if all(not re.match(p, asset_name) for p in (
+                    r'^youtube-dl$',
+                    r'^youtube-dl-\d{4}\.\d{2}\.\d{2}(?:\.\d+)?\.tar\.gz$',
+                    r'^youtube-dl\.exe$')):
+                continue
+            compat_print(
+                ' %s size: %s downloads: %d'
+                % (asset_name, format_size(asset['size']), asset['download_count']))
+    
+    
+def gen_extractors():
+    ''' Return a list of an instance of every supported extractor.
+    The order does matter; the first extractor matched is the one handling the URL.
+    '''
+    return [klass() for klass in gen_extractor_classes()]
+    
+    
+class AcademicEarthCourseIE(InfoExtractor):
+    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
+    IE_NAME = 'AcademicEarth:Course'
+    _TEST = {
+        'url': 'http://academicearth.org/playlists/laws-of-nature/',
+        'info_dict': {
+            'id': 'laws-of-nature',
+            'title': 'Laws of Nature',
+            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
+        },
+        'playlist_count': 3,
+    }
+    
+            return info_dict
 
     
-    from .common import InfoExtractor
     
-      If a FeedForwardNetwork is configured with no hidden units, this component
-  acts as a 'bulk softmax' component.
-  '''
+class CloserToTruthIE(InfoExtractor):
+    _VALID_URL = r'https?://(?:www\.)?closertotruth\.com/(?:[^/]+/)*(?P<id>[^/?#&]+)'
+    _TESTS = [{
+        'url': 'http://closertotruth.com/series/solutions-the-mind-body-problem#video-3688',
+        'info_dict': {
+            'id': '0_zof1ktre',
+            'display_id': 'solutions-the-mind-body-problem',
+            'ext': 'mov',
+            'title': 'Solutions to the Mind-Body Problem?',
+            'upload_date': '20140221',
+            'timestamp': 1392956007,
+            'uploader_id': 'CTTXML'
+        },
+        'params': {
+            'skip_download': True,
+        },
+    }, {
+        'url': 'http://closertotruth.com/episodes/how-do-brains-work',
+        'info_dict': {
+            'id': '0_iuxai6g6',
+            'display_id': 'how-do-brains-work',
+            'ext': 'mov',
+            'title': 'How do Brains Work?',
+            'upload_date': '20140221',
+            'timestamp': 1392956024,
+            'uploader_id': 'CTTXML'
+        },
+        'params': {
+            'skip_download': True,
+        },
+    }, {
+        'url': 'http://closertotruth.com/interviews/1725',
+        'info_dict': {
+            'id': '1725',
+            'title': 'AyaFr-002',
+        },
+        'playlist_mincount': 2,
+    }]
     
-      Args:
-    master_spec_path: Path to a proto-text master spec.
-    params_path: Path to the parameters file to export.
-    export_path: Path to export the SavedModel to.
-    export_moving_averages: Whether to export the moving average parameters.
-    build_runtime_graph: Whether to build a graph for use by the runtime.
-  '''
+    autodoc_member_order = 'bysource'
+autodoc_default_flags = ['show-inheritance', 'private-members']
     
-      Returns:
-    [B] vector Z of log partition function values, where
-      Z[b] = log(
-          \sum_{tree spanning batch item b}
-              score(root_of(tree)) \prod_{arc in tree} score(arc))
-  '''
-  orig_dtype = scores.dtype.base_dtype
-  scores_bxmxm = tf.to_double(scores)  # use doubles to reduce under/overflow
-  shape_bxmxm = tf.shape(scores_bxmxm)
-  batch_size = shape_bxmxm[0]
-  max_nodes = shape_bxmxm[1]
-  total_nodes = batch_size * max_nodes
+            self.eg_order.authorizations = authzr
+        self.client.auth_handler.handle_authorizations.return_value = authzr
     
-    https://en.wikipedia.org/wiki/Blackboard_system
-'''
+        def test_ne(self):
+        self.assertTrue(self.vhost1 != self.vhost2)
+        self.assertFalse(self.vhost1 != self.vhost1b)
     
-        def __init__(self, HierachicalStateMachine):
-        self._hsm = HierachicalStateMachine
     
-        def test_frozen_pool(self):
-        with ObjectPool(self.sample_queue) as pool:
-            self.assertEqual(pool, 'first')
-            self.assertEqual(pool, 'first')
-        self.assertTrue(self.sample_queue.get() == 'second')
-        self.assertFalse(self.sample_queue.empty())
-        self.assertTrue(self.sample_queue.get() == 'first')
-        self.assertTrue(self.sample_queue.empty())
+def create_response(status_code=200, headers=None):
+    '''Creates a requests.Response object for testing'''
+    response = requests.Response()
+    response.status_code = status_code
     
-        def test_bunch_launch(self):
-        self.runner.runAll()
-        output = self.out.getvalue().strip()
-        self.assertEqual(output, str(self.average_result_tc1 + '\n\n' +
-                         self.average_result_tc2 + '\n\n' +
-                         self.average_result_tc3))
+        # Some tests need more than one block of uncompressed data. Since one block
+    # is at least 100,000 bytes, we gather some data dynamically and compress it.
+    # Note that this assumes that compression works correctly, so we cannot
+    # simply use the bigger test data for all tests.
+    test_size = 0
+    BIG_TEXT = bytearray(128*1024)
+    for fname in glob.glob(os.path.join(os.path.dirname(__file__), '*.py')):
+        with open(fname, 'rb') as fh:
+            test_size += fh.readinto(memoryview(BIG_TEXT)[test_size:])
+        if test_size > 128*1024:
+            break
+    BIG_DATA = bz2.compress(BIG_TEXT, compresslevel=1)
+    
+        def test_ctor(self):
+        fut = asyncio.Future(loop=self.loop)
+        tr = self.socket_transport(waiter=fut)
+        test_utils.run_briefly(self.loop)
+        self.assertIsNone(fut.result())
+        self.protocol.connection_made(tr)
+        self.proactor.recv_into.assert_called_with(self.sock, self.buf)
+    
+            try:
+            idg_groups = set(int(g) for g in groups.split())
+        except ValueError:
+            idg_groups = set()
+        if ret is not None or not idg_groups:
+            raise unittest.SkipTest('need working 'id -G'')
+    
+    def _is_import_binding(node, name, package=None):
+    ''' Will reuturn node if node will import name, or node
+        will import * from package.  None is returned otherwise.
+        See test cases for examples. '''
+    
+    # By Taek Joo Kim and Benjamin Peterson
+    
+        def test_lltrace_does_not_crash_on_subscript_operator(self):
+        # If this test fails, it will reproduce a crash reported as
+        # bpo-34113. The crash happened at the command line console of
+        # debug Python builds with __ltrace__ enabled (only possible in console),
+        # when the interal Python stack was negatively adjusted
+        with open(support.TESTFN, 'w') as fd:
+            self.addCleanup(os.unlink, support.TESTFN)
+            fd.write(textwrap.dedent('''\
+            import code
+    
+    
+def main():
+    tornado.options.parse_command_line()
+    application = tornado.web.Application([
+        (r'/', MainHandler),
+    ])
+    http_server = tornado.httpserver.HTTPServer(application)
+    http_server.listen(options.port)
+    tornado.ioloop.IOLoop.current().start()
+    
+        $ sudo dnf install gcc python-devel
+    
+        def create_blobs_queues(self):
+        '''Create one BlobsQueue for each GPU to hold mini-batches.'''
+        for gpu_id in range(self._num_gpus):
+            with c2_utils.GpuNameScope(gpu_id):
+                workspace.RunOperatorOnce(
+                    core.CreateOperator(
+                        'CreateBlobsQueue', [], [self._blobs_queue_name],
+                        num_blobs=len(self.get_output_names()),
+                        capacity=self._blobs_queue_capacity
+                    )
+                )
+        return self.create_enqueue_blobs()
+    
+    
+def remove_layers_without_parameters(caffenet, caffenet_weights):
+    for i in reversed(range(len(caffenet_weights.layer))):
+        if len(caffenet_weights.layer[i].blobs) == 0:
+            # Search for the corresponding layer in caffenet and remove it
+            name = caffenet_weights.layer[i].name
+            found = False
+            for j in range(len(caffenet.layer)):
+                if caffenet.layer[j].name == name:
+                    caffenet.layer.pop(j)
+                    found = True
+                    break
+            if not found and name[-len('_split'):] != '_split':
+                print('Warning: layer {} not found in caffenet'.format(name))
+            caffenet_weights.layer.pop(i)
+    
+            # and sum (\Delta recall) * prec
+        ap = np.sum((mrec[i + 1] - mrec[i]) * mpre[i + 1])
+    return ap
+    
+    
+def _scale_enum(anchor, scales):
+    '''Enumerate a set of anchors for each scale wrt an anchor.'''
+    w, h, x_ctr, y_ctr = _whctrs(anchor)
+    ws = w * scales
+    hs = h * scales
+    anchors = _mkanchors(ws, hs, x_ctr, y_ctr)
+    return anchors
 
     
-    from dft.setter_injection import TimeDisplay, MidnightTimeProvider, ProductionCodeTimeProvider, datetime
+    '''Handle mapping from old network building function names to new names.
     
-        def test_display_current_time_at_midnight(self):
-        '''
-        Would almost always fail (despite of right at/after midnight) if
-        untestable production code would have been used.
-        '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay()
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(time_provider_stub), expected_time)
-    
-        def __init__(self, param):
-    
-        def __init__(self, radio):
-        self.radio = radio
-        self.stations = ['81.3', '89.1', '103.9']
-        self.pos = 0
-        self.name = 'FM'
-    
-    define('debug', default=False, group='application',
-       help='run in debug mode (with automatic reloading)')
-# The following settings should probably be defined in secrets.cfg
-define('twitter_consumer_key', type=str, group='application')
-define('twitter_consumer_secret', type=str, group='application')
-define('cookie_secret', type=str, group='application',
-       default='__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE__',
-       help='signing key for secure cookies')
+        if cfg.MODEL.FASTER_RCNN:
+        if model.train:
+            # Add op that generates training labels for in-network RPN proposals
+            model.GenerateProposalLabels(['rpn_rois', 'roidb', 'im_info'])
+        else:
+            # Alias rois to rpn_rois for inference
+            model.net.Alias('rpn_rois', 'rois')
     
     
-class AuthLoginHandler(BaseHandler, tornado.auth.FacebookGraphMixin):
-    async def get(self):
-        my_url = (self.request.protocol + '://' + self.request.host +
-                  '/auth/login?next=' +
-                  tornado.escape.url_escape(self.get_argument('next', '/')))
-        if self.get_argument('code', False):
-            user = await self.get_authenticated_user(
-                redirect_uri=my_url,
-                client_id=self.settings['facebook_api_key'],
-                client_secret=self.settings['facebook_secret'],
-                code=self.get_argument('code'))
-            self.set_secure_cookie('fbdemo_user', tornado.escape.json_encode(user))
-            self.redirect(self.get_argument('next', '/'))
-            return
-        self.authorize_redirect(redirect_uri=my_url,
-                                client_id=self.settings['facebook_api_key'],
-                                extra_params={'scope': 'user_posts'})
+def _filter_boxes(boxes, min_size, im_info):
+    '''Only keep boxes with both sides >= min_size and center within the image.
+    '''
+    # Scale min_size to match image scale
+    min_size *= im_info[2]
+    ws = boxes[:, 2] - boxes[:, 0] + 1
+    hs = boxes[:, 3] - boxes[:, 1] + 1
+    x_ctr = boxes[:, 0] + ws / 2.
+    y_ctr = boxes[:, 1] + hs / 2.
+    keep = np.where(
+        (ws >= min_size) & (hs >= min_size) &
+        (x_ctr < im_info[1]) & (y_ctr < im_info[0]))[0]
+    return keep
+
     
-    from tornado.ioloop import IOLoop
-from tornado.options import define, options, parse_command_line
-from tornado.web import RequestHandler, Application
+        sampled_fg_rois *= im_scale
+    repeated_batch_idx = batch_idx * blob_utils.ones(
+        (sampled_fg_rois.shape[0], 1)
+    )
+    sampled_fg_rois = np.hstack((repeated_batch_idx, sampled_fg_rois))
     
-    
-# Using HTTP PUT, upload one raw file. This is preferred for large files since
-# the server can stream the data instead of buffering it entirely in memory.
-@gen.coroutine
-def post(filenames):
-    client = httpclient.AsyncHTTPClient()
-    boundary = uuid4().hex
-    headers = {'Content-Type': 'multipart/form-data; boundary=%s' % boundary}
-    producer = partial(multipart_producer, boundary, filenames)
-    response = yield client.fetch('http://localhost:8888/post',
-                                  method='POST',
-                                  headers=headers,
-                                  body_producer=producer)
-    
-        # Do a little work. Alternately, could leave this script running and
-    # poke at it with a browser.
-    client = httpclient.AsyncHTTPClient()
-    yield client.fetch('http://127.0.0.1:8888/dummy/')
-    yield client.fetch('http://127.0.0.1:8888/dummyasync/', raise_error=False)
-    
-    define('family', default='unspec',
-       help='Address family to query: unspec, inet, or inet6')
-    
-    TMPDIR = r'c:\tornado_bootstrap'
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
