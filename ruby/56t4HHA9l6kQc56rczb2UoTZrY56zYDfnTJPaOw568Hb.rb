@@ -1,91 +1,145 @@
-        # rubocop:disable Metrics/AbcSize
-        def process(args, opts)
-          if !args || args.empty?
-            raise Jekyll::Errors::InvalidThemeName, 'You must specify a theme name.'
-          end
+
+        
+            def container
+      @container ||= site.config['collections_dir']
+    end
     
-          def fallback_data
-        @fallback_data ||= {}
+              theme.create!
+          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+                             ' is ready for you in #{theme.path.to_s.cyan}!'
+          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+        end
+        # rubocop:enable Metrics/AbcSize
       end
     end
   end
 end
 
     
-    module Jekyll
-  module External
-    class << self
+            def connect(websocket, handshake)
+          @connections_count += 1
+          if @connections_count == 1
+            message = 'Browser connected'
+            message += ' over SSL/TLS' if handshake.secure?
+            Jekyll.logger.info 'LiveReload:', message
+          end
+          websocket.send(
+            JSON.dump(
+              :command    => 'hello',
+              :protocols  => ['http://livereload.com/protocols/official-7'],
+              :serverName => 'jekyll'
+            )
+          )
+    
+          # Private: Determine whether a class name is an allowed custom
+      #   markdown class name.
       #
-      # Gems that, if installed, should be loaded.
-      # Usually contain subcommands.
+      # parser_name - the name of the parser class
       #
-      def blessed_gems
-        %w(
-          jekyll-compose
-          jekyll-docs
-          jekyll-import
+      # Returns true if the parser name contains only alphanumeric
+      # characters and is defined within Jekyll::Converters::Markdown
+      def custom_class_allowed?(parser_name)
+        parser_name !~ %r![^A-Za-z0-9_]! && self.class.constants.include?(
+          parser_name.to_sym
         )
       end
-    
-        class CreateKeychainAction < Action
-      def self.run(params)
-        escaped_password = params[:password].shellescape
-    
-          def initialize(gradle_path: nil)
-        self.gradle_path = gradle_path
-      end
-    
-    # A logger that delays messages until they're explicitly flushed to an inner
-# logger.
-#
-# This can be installed around the current logger by calling \{#install!}, and
-# the original logger can be replaced by calling \{#uninstall!}. The log
-# messages can be flushed by calling \{#flush}.
-class Sass::Logger::Delayed < Sass::Logger::Base
-  # Installs a new delayed logger as the current Sass logger, wrapping the
-  # original logger.
-  #
-  # This can be undone by calling \{#uninstall!}.
-  #
-  # @return [Sass::Logger::Delayed] The newly-created logger.
-  def self.install!
-    logger = Sass::Logger::Delayed.new(Sass.logger)
-    Sass.logger = logger
-    logger
-  end
-    
-            def define_logger(name, options = {})
-          class_eval <<-RUBY, __FILE__, __LINE__ + 1
-            def #{name}(message)
-              #{options.fetch(:to, :log)}(#{name.inspect}, message)
-            end
-          RUBY
-        end
-      end
     end
   end
 end
 
     
-          res = ''
-      res << @before.to_sass(opts) if @before
-      res << ' ' if @before && @whitespace_before
-      res << '#{' unless @originally_text
-      res << @mid.to_sass(opts)
-      res << '}' unless @originally_text
-      res << ' ' if @after && @whitespace_after
-      res << @after.to_sass(opts) if @after
-      res
-    end
+          #
+      # Require a gem or file if it's present, otherwise silently fail.
+      #
+      # names - a string gem name or array of gem names
+      #
+      def require_if_present(names)
+        Array(names).each do |name|
+          begin
+            require name
+          rescue LoadError
+            Jekyll.logger.debug 'Couldn't load #{name}. Skipping.'
+            yield(name, version_constraint(name)) if block_given?
+            false
+          end
+        end
+      end
     
-        def possible_types
-      MIME::Types.type_for(@filepath).collect(&:content_type)
-    end
+    See CONTRIBUTING.md for more information.
     
-    module Paperclip
-  class << self
-    attr_writer :registered_attachments_styles_path
-    def registered_attachments_styles_path
-      @registered_attachments_styles_path ||= Rails.root.join('public/system/paperclip_attachments.yml').to_s
-    end
+    def load_apps
+  out, err, status = Open3.capture3('/usr/bin/osascript', '-e', 'tell application 'System Events' to get (name, bundle identifier, unix id) of every process')
+  if status.exitstatus > 0
+    puts err
+    exit status.exitstatus
   end
+  out = out.split(', ')
+  one_third   = out.length / 3
+  @app_names  = out.shift(one_third)
+  @bundle_ids = out.shift(one_third)
+  @unix_ids   = out.shift(one_third)
+end
+    
+    desc 'Dumps output to a CSS file for testing'
+task :debug do
+  require 'sass'
+  path = Bootstrap.stylesheets_path
+  %w(bootstrap).each do |file|
+    engine = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
+    File.open('./#{file}.css', 'w') { |f| f.write(engine.render) }
+  end
+end
+    
+              if @address.update_attributes(address_params)
+            respond_with(@address, default_template: :show)
+          else
+            invalid_resource!(@address)
+          end
+        end
+    
+            def assign(node)
+          @assignments << Assignment.new(node, self)
+        end
+    
+    module RuboCop
+  module Cop
+    module Performance
+      # This cop identifies the use of `Regexp#match` or `String#match`, which
+      # returns `#<MatchData>`/`nil`. The return value of `=~` is an integral
+      # index/`nil` and is more performant.
+      #
+      # @example
+      #   # bad
+      #   do_something if str.match(/regex/)
+      #   while regex.match('str')
+      #     do_something
+      #   end
+      #
+      #   # good
+      #   method(str =~ /regex/)
+      #   return value unless regex =~ 'str'
+      class RedundantMatch < Cop
+        MSG = 'Use `=~` in places where the `MatchData` returned by ' \
+              '`#match` will not be used.'.freeze
+    
+          # Checks whether this node body is a void context.
+      #
+      # @return [Boolean] whether the `def` node body is a void context
+      def void_context?
+        method?(:initialize) || assignment_method?
+      end
+    
+        if as == :json
+      if api_error?(data)
+        data = generate_error_hash(data)
+      else
+        selected_fields = extract_fields(filter.to_s.strip)
+        data.select! { |k,v| selected_fields.include?(k) } unless selected_fields.empty?
+        unless options.include?(:exclude_default_metadata)
+          data = data.to_hash
+          if data.values.size == 0 && selected_fields.size > 0
+            raise LogStash::Api::NotFoundError
+          end
+          data = default_metadata.merge(data)
+        end
+      end
