@@ -1,231 +1,321 @@
 
         
-          static void ClearCache(content::RenderProcessHost* render_view_host);
-  static void SetProxyConfig(content::RenderProcessHost* render_process_host,
-                             const std::string& proxy_config);
-    
-      scoped_ptr<base::Value> value_args(
-      converter->FromV8Value(args, isolate->GetCurrentContext()));
-  if (!value_args.get() ||
-      !value_args->IsType(base::Value::TYPE_LIST))
-    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
-        'Unable to convert 'args' passed to CallObjectMethodSync')));
-    
-       void Call(const std::string& method,
-                    const base::ListValue& arguments) override;
-   void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) override;
-    
-    namespace ui {
-    }
+        #endif  // GOOGLE_CUDA
+
     
     
-    {}  // namespace nwapi
-    
-    
-    {  helper->DeleteAppCacheGroup(manifest_url);
-  return true;
+    {  return call;
 }
     
-        bool ReadHTML(ClipboardData& data) {
-      DCHECK(data.type == TYPE_HTML);
-      base::string16 text;
-      std::string src_url;
-      uint32_t fragment_start, fragment_end;
-      clipboard_->ReadHTML(ui::CLIPBOARD_TYPE_COPY_PASTE, &text, &src_url, &fragment_start, &fragment_end);
-      data.data.reset(new std::string(base::UTF16ToUTF8(text)));
-      return true;
+    #ifndef TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_RPC_GRPC_MASTER_SERVICE_IMPL_H_
+#define TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_RPC_GRPC_MASTER_SERVICE_IMPL_H_
+    
+    #include 'tensorflow/core/distributed_runtime/partial_run_mgr.h'
+    
+    
+    {    io::RecordReaderOptions options =
+        io::RecordReaderOptions::CreateRecordReaderOptions(compression_type_);
+    reader_.reset(new io::RecordReader(file_.get(), options));
+    return Status::OK();
+  }
+    
+    #define REGISTER_GPU(T)                                           \
+  template void DynamicStitchGPUImpl(                             \
+      const Eigen::GpuDevice& gpu_device, const int32 slice_size, \
+      const int32 first_dim_size,                                 \
+      const CudaDeviceArrayStruct<int32>& input_indices,          \
+      const CudaDeviceArrayStruct<const T*>& input_ptrs, T* output);
+    
+    void convert_dataset(const char* image_filename, const char* label_filename,
+        const char* db_path, const string& db_backend) {
+  // Open files
+  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
+  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
+  CHECK(image_file) << 'Unable to open file ' << image_filename;
+  CHECK(label_file) << 'Unable to open file ' << label_filename;
+  // Read the magic and the meta data
+  uint32_t magic;
+  uint32_t num_items;
+  uint32_t num_labels;
+  uint32_t rows;
+  uint32_t cols;
     }
     
+      caffe::Datum datum;
+  datum.set_channels(2);  // one channel for each image in the pair
+  datum.set_height(rows);
+  datum.set_width(cols);
+  LOG(INFO) << 'A total of ' << num_items << ' items.';
+  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
+  for (int itemid = 0; itemid < num_items; ++itemid) {
+    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
+    int j = caffe::caffe_rng_rand() % num_items;
+    read_image(&image_file, &label_file, i, rows, cols,
+        pixels, &label_i);
+    read_image(&image_file, &label_file, j, rows, cols,
+        pixels + (rows * cols), &label_j);
+    datum.set_data(pixels, 2*rows*cols);
+    if (label_i  == label_j) {
+      datum.set_label(1);
+    } else {
+      datum.set_label(0);
+    }
+    datum.SerializeToString(&value);
+    std::string key_str = caffe::format_int(itemid, 8);
+    db->Put(leveldb::WriteOptions(), key_str, value);
+  }
+    
+      /**
+   * @brief Initialize the Random number generations if needed by the
+   *    transformation.
+   */
+  void InitRand();
+    
+    #endif  // CAFFE_BASE_CONVOLUTION_LAYER_HPP_
+
     
     
-    #define opus_fft_free_arch(_st, arch) \
-   ((void)(arch), opus_fft_free_arm_neon(_st))
+    { private:
+  struct pair_sort_first {
+    bool operator()(const std::pair<int, int> &left,
+                    const std::pair<int, int> &right) {
+      return left.first < right.first;
+    }
+  };
+  void check_batch_reindex(int initial_num, int final_num,
+                           const Dtype* ridx_data);
+};
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-    
-    #if (defined(__GNUC__) && defined(__STDC__) && __STDC__ && __STDC_VERSION__ >= 199901L)
-        /* supported by gcc in C99 mode, but not by all other compilers */
-        #warning 'Don't have the functions lrint() and lrintf ().'
-        #warning 'Replacing these functions with a standard C cast.'
-#endif /* __STDC_VERSION__ >= 199901L */
-        #include <math.h>
-        #define float2int(flt) ((int)(floor(.5+flt)))
-#endif
-    
-    #ifdef  __cplusplus
-extern 'C'
-{
-#endif
+    /**
+ * @brief Convolves the input image with a bank of learned filters,
+ *        and (optionally) adds biases.
+ *
+ *   Caffe convolves by reduction to matrix multiplication. This achieves
+ *   high-throughput and generality of input and filter dimensions but comes at
+ *   the cost of memory for matrices. This makes use of efficiency in BLAS.
+ *
+ *   The input is 'im2col' transformed to a channel K' x H x W data matrix
+ *   for multiplication with the N x K' x H x W filter matrix to yield a
+ *   N' x H x W output matrix that is then 'col2im' restored. K' is the
+ *   input channel * kernel height * kernel width dimension of the unrolled
+ *   inputs so that the im2col matrix has a column for each input region to
+ *   be filtered. col2im restores the output spatial structure by rolling up
+ *   the output channel N' columns of the output matrix.
+ */
+template <typename Dtype>
+class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
+ public:
+  /**
+   * @param param provides ConvolutionParameter convolution_param,
+   *    with ConvolutionLayer options:
+   *  - num_output. The number of filters.
+   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
+   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
+   *  filters.
+   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
+   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
+   *  for different strides. By default the convolution is dense with stride 1.
+   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
+   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
+   *  different padding. Input padding is computed implicitly instead of
+   *  actually padding.
+   *  - dilation (\b optional, default 1). The filter
+   *  dilation, given by dilation_size for equal dimensions for different
+   *  dilation. By default the convolution has dilation 1.
+   *  - group (\b optional, default 1). The number of filter groups. Group
+   *  convolution is a method for reducing parameterization by selectively
+   *  connecting input and output channels. The input and output channel dimensions must be divisible
+   *  by the number of groups. For group @f$ \geq 1 @f$, the
+   *  convolutional filters' input and output channels are separated s.t. each
+   *  group takes 1 / group of the input channels and makes 1 / group of the
+   *  output channels. Concretely 4 input channels, 8 output channels, and
+   *  2 groups separate input channels 1-2 and output channels 1-4 into the
+   *  first group and input channels 3-4 and output channels 5-8 into the second
+   *  group.
+   *  - bias_term (\b optional, default true). Whether to have a bias.
+   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
+   *    kernels + stream parallelism) engines.
+   */
+  explicit ConvolutionLayer(const LayerParameter& param)
+      : BaseConvolutionLayer<Dtype>(param) {}
     }
     
-    /* Compute reflection coefficients from input signal */
-void silk_burg_modified_c(
-    opus_int32                  *res_nrg,           /* O    Residual energy                                             */
-    opus_int                    *res_nrg_Q,         /* O    Residual energy Q value                                     */
-    opus_int32                  A_Q16[],            /* O    Prediction coefficients (length order)                      */
-    const opus_int16            x[],                /* I    Input signal, length: nb_subfr * ( D + subfr_length )       */
-    const opus_int32            minInvGain_Q30,     /* I    Inverse of max prediction gain                              */
-    const opus_int              subfr_length,       /* I    Input signal subframe length (incl. D preceding samples)    */
-    const opus_int              nb_subfr,           /* I    Number of subframes stacked in x                            */
-    const opus_int              D,                  /* I    Order                                                       */
-    int                         arch                /* I    Run-time architecture                                       */
-);
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    /* (a32 * b32) >> 16 */
-#undef silk_SMULWW
-static OPUS_INLINE opus_int32 silk_SMULWW_armv4(opus_int32 a, opus_int32 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-    '#silk_SMULWW\n\t'
-    'smull %0, %1, %2, %3\n\t'
-    : '=&r'(rd_lo), '=&r'(rd_hi)
-    : '%r'(a), 'r'(b)
-  );
-  return (rd_hi<<16)+(rd_lo>>16);
+    /**
+ * @brief Takes two+ Blobs, interprets last Blob as a selector and
+ *  filter remaining Blobs accordingly with selector data (0 means that
+ * the corresponding item has to be filtered, non-zero means that corresponding
+ * item needs to stay).
+ */
+template <typename Dtype>
+class FilterLayer : public Layer<Dtype> {
+ public:
+  explicit FilterLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    				gjk_input.m_transformA = area->get_transform__bullet() * area->get_compound_shape()->getChildTransform(y);
+				area_shape = static_cast<btConvexShape *>(area->get_compound_shape()->getChildShape(y));
+    
+    
+    {	ADD_PROPERTY(PropertyInfo(Variant::REAL, 'friction'), 'set_friction', 'get_friction');
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, 'rough'), 'set_rough', 'is_rough');
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, 'bounce'), 'set_bounce', 'get_bounce');
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, 'absorbent'), 'set_absorbent', 'is_absorbent');
 }
-#define silk_SMULWW(a, b) (silk_SMULWW_armv4(a, b))
+    
+    	_FORCE_INLINE_ void apply_bias_impulse(const Vector2 &p_pos, const Vector2 &p_j) {
+    }
+    
+    		c.active = true;
+#ifdef DEBUG_ENABLED
+		if (space->is_debugging_contacts()) {
+			space->add_debug_contact(global_A + offset_A);
+			space->add_debug_contact(global_B + offset_A);
+		}
+#endif
+		int gather_A = A->can_report_contacts();
+		int gather_B = B->can_report_contacts();
+    
+    	virtual Variant area_get_param(RID p_area, AreaParameter p_param) const;
+	virtual Transform2D area_get_transform(RID p_area) const;
+	virtual void area_set_monitorable(RID p_area, bool p_monitorable);
+	virtual void area_set_collision_mask(RID p_area, uint32_t p_mask);
+	virtual void area_set_collision_layer(RID p_area, uint32_t p_layer);
+    
+    	bool body_collide_shape(RID p_body, int p_body_shape, RID p_shape, const Transform2D &p_shape_xform, const Vector2 &p_motion, Vector2 *r_results, int p_result_max, int &r_result_count) {
+		return physics_2d_server->body_collide_shape(p_body, p_body_shape, p_shape, p_shape_xform, p_motion, r_results, p_result_max, r_result_count);
+	}
+    
+    class Physics2DTestMotionResult;
+    
+    	ground_horizon_color = p_ground_horizon;
+	_queue_update();
+}
+Color ProceduralSky::get_ground_horizon_color() const {
+    
+    	bool push_back(const T &p_elem);
+    
+      virtual void onAbortOutstandingRequestEvent(
+      const BtAbortOutstandingRequestEvent& event) CXX11_OVERRIDE
+  {
+  }
+    
+    bool AbstractOptionHandler::getChangeOptionForReserved() const
+{
+  return flags_ & FLAG_CHANGE_OPTION_FOR_RESERVED;
+}
+    
+    class HttpConnection;
+class SocketCore;
+    
+    public:
+  AbstractProxyResponseCommand(
+      cuid_t cuid, const std::shared_ptr<Request>& req,
+      const std::shared_ptr<FileEntry>& fileEntry, RequestGroup* requestGroup,
+      const std::shared_ptr<HttpConnection>& httpConnection, DownloadEngine* e,
+      const std::shared_ptr<SocketCore>& s);
+    
+    class ActivePeerConnectionCommand : public Command {
+private:
+  RequestGroup* requestGroup_;
+  std::shared_ptr<BtRuntime> btRuntime_;
+  std::shared_ptr<PieceStorage> pieceStorage_;
+  std::shared_ptr<PeerStorage> peerStorage_;
+  std::shared_ptr<BtAnnounce> btAnnounce_;
+    }
+    
+      int64_t totalLength_;
+    
+    AnnounceTier::~AnnounceTier() = default;
+    
+    class ApiCallbackDownloadEventListener : public DownloadEventListener {
+public:
+  ApiCallbackDownloadEventListener(Session* session,
+                                   DownloadEventCallback callback,
+                                   void* userData);
+  virtual ~ApiCallbackDownloadEventListener();
+  virtual void onEvent(DownloadEvent event,
+                       const RequestGroup* group) CXX11_OVERRIDE;
+    }
     
     
-    {    return r;
+    {} // namespace aria2
+    
+    
+    {  return true;
 }
     
     
     {
-    {// use R's PRNG to replacd
-CustomGlobalRandomEngine::result_type
-CustomGlobalRandomEngine::operator()() {
-  return static_cast<result_type>(
-      std::floor(unif_rand() * CustomGlobalRandomEngine::max()));
-}
+    {
+    {}  // namespace math
 }  // namespace common
-}  // namespace xgboost
-
+}  // namespace apollo
     
-      jsize jlen = (jsize) len;
-  jobjectArray jinfos = jenv->NewObjectArray(jlen, jenv->FindClass('java/lang/String'), jenv->NewStringUTF(''));
-  for(int i=0 ; i<jlen; i++) {
-    jenv->SetObjectArrayElement(jinfos, i, jenv->NewStringUTF((const char*) result[i]));
+      std::vector<const Obstacle*> obstacles_;
+    
+      bool HaveHighConfidence(std::shared_ptr<VisualObject> obj_ptr);
+    
+     private:
+  void BuildPredictedEnvironment(
+      const std::vector<const Obstacle*>& obstacles,
+      const double ego_vehicle_s,
+      const double ego_vehicle_d,
+      const std::vector<common::PathPoint>& discretized_reference_line);
+    
+      const double dx1 = cos_heading_ * half_length_;
+  const double dy1 = sin_heading_ * half_length_;
+  const double dx2 = sin_heading_ * half_width_;
+  const double dy2 = -cos_heading_ * half_width_;
+  const double dx3 = box.cos_heading() * box.half_length();
+  const double dy3 = box.sin_heading() * box.half_length();
+  const double dx4 = box.sin_heading() * box.half_width();
+  const double dy4 = -box.cos_heading() * box.half_width();
+    
+    bool Polygon2d::HasOverlap(const LineSegment2d &line_segment) const {
+  CHECK_GE(points_.size(), 3);
+  if ((line_segment.start().x() < min_x_ && line_segment.end().x() < min_x_) ||
+      (line_segment.start().x() > max_x_ && line_segment.end().x() > max_x_) ||
+      (line_segment.start().y() < min_y_ && line_segment.end().y() < min_y_) ||
+      (line_segment.start().y() > max_y_ && line_segment.end().y() > max_y_)) {
+    return false;
   }
-  jenv->SetObjectArrayElement(jout, 0, jinfos);
+  Vec2d first;
+  Vec2d last;
+  return GetOverlap(line_segment, &first, &last);
+}
     
-      /*!
-   * \brief Push row block into the page.
-   * \param batch the row batch.
-   */
-  inline void Push(const dmlc::RowBlock<uint32_t>& batch) {
-    data.reserve(data.size() + batch.offset[batch.size] - batch.offset[0]);
-    offset.reserve(offset.size() + batch.size);
-    CHECK(batch.index != nullptr);
-    for (size_t i = 0; i < batch.size; ++i) {
-      offset.push_back(offset.back() + batch.offset[i + 1] - batch.offset[i]);
-    }
-    for (size_t i = batch.offset[0]; i < batch.offset[batch.size]; ++i) {
-      uint32_t index = batch.index[i];
-      bst_float fvalue = batch.value == nullptr ? 1.0f : batch.value[i];
-      data.emplace_back(index, fvalue);
-    }
-    CHECK_EQ(offset.back(), data.size());
-  }
-  /*!
-   * \brief Push a sparse page
-   * \param batch the row page
-   */
-  inline void Push(const SparsePage &batch) {
-    size_t top = offset.back();
-    data.resize(top + batch.data.size());
-    std::memcpy(dmlc::BeginPtr(data) + top,
-                dmlc::BeginPtr(batch.data),
-                sizeof(Entry) * batch.data.size());
-    size_t begin = offset.size();
-    offset.resize(begin + batch.Size());
-    for (size_t i = 0; i < batch.Size(); ++i) {
-      offset[i + begin] = top + batch.offset[i + 1];
-    }
-  }
-  /*!
-   * \brief Push one instance into page
-   *  \param inst an instance row
-   */
-  inline void Push(const Inst &inst) {
-    offset.push_back(offset.back() + inst.length);
-    size_t begin = data.size();
-    data.resize(begin + inst.length);
-    if (inst.length != 0) {
-      std::memcpy(dmlc::BeginPtr(data) + begin, inst.data,
-                  sizeof(Entry) * inst.length);
-    }
-  }
-    
-    void SimpleCSRSource::CopyFrom(dmlc::Parser<uint32_t>* parser) {
-  // use qid to get group info
-  const uint64_t default_max = std::numeric_limits<uint64_t>::max();
-  uint64_t last_group_id = default_max;
-  bst_uint group_size = 0;
-  this->Clear();
-  while (parser->Next()) {
-    const dmlc::RowBlock<uint32_t>& batch = parser->Value();
-    if (batch.label != nullptr) {
-      info.labels_.insert(info.labels_.end(), batch.label, batch.label + batch.size);
-    }
-    if (batch.weight != nullptr) {
-      info.weights_.insert(info.weights_.end(), batch.weight, batch.weight + batch.size);
-    }
-    if (batch.qid != nullptr) {
-      info.qids_.insert(info.qids_.end(), batch.qid, batch.qid + batch.size);
-      // get group
-      for (size_t i = 0; i < batch.size; ++i) {
-        const uint64_t cur_group_id = batch.qid[i];
-        if (last_group_id == default_max || last_group_id != cur_group_id) {
-          info.group_ptr_.push_back(group_size);
-        }
-        last_group_id = cur_group_id;
-        ++group_size;
-      }
-    }
-    }
+    bool MultiCamerasProjection::Project(const CarPose &pose,
+                                     const ProjectOption &option,
+                                     Light *light) const {
+  const Eigen::Matrix4d mpose = pose.pose();
+  const apollo::hdmap::Signal &tl_info = light->info;
+  bool ret = true;
     }
     
     
-    {  // read in the cache files.
-  for (size_t i = 0; i < cache_shards.size(); ++i) {
-    std::string name_row = cache_shards[i] + '.row.page';
-    files_[i].reset(dmlc::SeekStream::CreateForRead(name_row.c_str()));
-    dmlc::SeekStream* fi = files_[i].get();
-    std::string format;
-    CHECK(fi->Read(&format)) << 'Invalid page format';
-    formats_[i].reset(SparsePageFormat::Create(format));
-    SparsePageFormat* fmt = formats_[i].get();
-    size_t fbegin = fi->Tell();
-    prefetchers_[i].reset(new dmlc::ThreadedIter<SparsePage>(4));
-    prefetchers_[i]->Init([fi, fmt] (SparsePage** dptr) {
-        if (*dptr == nullptr) {
-          *dptr = new SparsePage();
-        }
-        return fmt->Read(*dptr, fi);
-      }, [fi, fbegin] () { fi->Seek(fbegin); });
+    {  ReviseOption option(100);
+  for (size_t i = 0; i < color_list.size(); ++i) {
+    std::vector<LightPtr> light;
+    light.emplace_back(new Light);
+    light[0]->status.color = TLColor(color_list[i]);
+    reviser_->Revise(option, &light);
+    option.ts = ts_list[i];
+    ASSERT_TRUE(TLColor(gt_list[i]) == light[0]->status.color) << ' i: ' << i;
   }
 }
     
-    SEXP XGDMatrixSaveBinary_R(SEXP handle, SEXP fname, SEXP silent) {
-  R_API_BEGIN();
-  CHECK_CALL(XGDMatrixSaveBinary(R_ExternalPtrAddr(handle),
-                                 CHAR(asChar(fname)),
-                                 asInteger(silent)));
-  R_API_END();
-  return R_NilValue;
-}
+      /**
+   * @brief Destructor
+   */
+  virtual ~Planner() = default;
