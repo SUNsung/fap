@@ -1,172 +1,216 @@
 
         
-        namespace tensorflow {
-REGISTER2(BinaryOp, CPU, 'Mod', functor::safe_mod, int32, int64);
-REGISTER2(BinaryOp, CPU, 'Mod', functor::fmod, float, double);
-REGISTER2(BinaryOp, CPU, 'TruncateMod', functor::safe_mod, int32, int64);
-REGISTER2(BinaryOp, CPU, 'TruncateMod', functor::fmod, float, double);
-    }
-    
-    Status BatchNormExpanderVisitor::HandleBatchNormGrad(
-    HloInstruction* batch_norm) {
-  // Use the following formulas to calculate gradients:
-  // scale_grad =
-  //   sum(output_grad * (activation - mean(activation))) * rsqrt(var + epsilon)
-  //
-  // offset_grad =
-  //   sum(output_grad)
-  //
-  // activation_grad =
-  //   1/N * scale * rsqrt(var + epsilon) *
-  //   (N * output_grad - sum(output_grad) - (activation - mean(activation)) *
-  //   sum(output_grad * (activation - mean(activation))) / (variance +
-  //   epsilon))
-  if (!rewrite_grad_op_) {
-    return Status::OK();
-  }
-  std::vector<HloInstruction*> added_instructions;
-  auto add = [&](std::unique_ptr<HloInstruction> inst) {
-    HloInstruction* added_inst = computation_->AddInstruction(std::move(inst));
-    added_inst->set_metadata(batch_norm->metadata());
-    added_instructions.push_back(added_inst);
-    return added_inst;
-  };
-  auto add_binary = [&](const Shape& shape, const HloOpcode opcode,
-                        HloInstruction* a, HloInstruction* b) {
-    return add(HloInstruction::CreateBinary(shape, opcode, a, b));
-  };
-  int64 instruction_count_before = computation_->instruction_count();
-    }
-    
-    TfLiteRegistration* Register_ARG_MIN() {
-  static TfLiteRegistration r = {nullptr, nullptr, arg_min_max::Prepare,
-                                 arg_min_max::ArgMinEval};
-  return &r;
+        void leveldb_iter_seek_to_last(leveldb_iterator_t* iter) {
+  iter->rep->SeekToLast();
 }
     
-      partial_run_mgr_.ExecutorDone(step_id, param.executor_status);
-  partial_run_mgr_.PartialRunDone(step_id,
-                                  [this](Status status) { set_status(status); },
-                                  param.partial_run_status);
-    
-    // Prefetching support
-//
-// Defined behavior on some of the uarchs:
-// PREFETCH_HINT_T0:
-//   prefetch to all levels of the hierarchy (except on p4: prefetch to L2)
-// PREFETCH_HINT_NTA:
-//   p4: fetch to L2, but limit to 1 way (out of the 8 ways)
-//   core: skip L2, go directly to L1
-//   k8 rev E and later: skip L2, can go to either of the 2-ways in L1
-enum PrefetchHint {
-  PREFETCH_HINT_T0 = 3,  // More temporal locality
-  PREFETCH_HINT_T1 = 2,
-  PREFETCH_HINT_T2 = 1,  // Less temporal locality
-  PREFETCH_HINT_NTA = 0  // No temporal locality
-};
-template <PrefetchHint hint>
-void prefetch(const void* x);
-    
-    template <typename T>
-__global__ void DynamicStitchKernel(const int32 slice_size,
-                                    const int32 output_size,
-                                    CudaDeviceArrayStruct<int32> input_indices,
-                                    CudaDeviceArrayStruct<const T*> input_ptrs,
-                                    T* output) {
-  int32* data_indices = GetCudaDeviceArrayOnDevice(&input_indices);
-  const T** data_ptrs = GetCudaDeviceArrayOnDevice(&input_ptrs);
-  CUDA_1D_KERNEL_LOOP(output_index, output_size) {
-    const int32 slice_id = output_index / slice_size;
-    const int32 slice_offset = output_index % slice_size;
-    const int32 input_index = data_indices[slice_id];
-    if (input_index != -1) {
-      output[output_index] = ldg(data_ptrs[input_index] + slice_offset);
+    struct FileMetaData {
+  int refs;
+  int allowed_seeks;          // Seeks allowed until compaction
+  uint64_t number;
+  uint64_t file_size;         // File size in bytes
+  InternalKey smallest;       // Smallest internal key served by table
+  InternalKey largest;        // Largest internal key served by table
     }
+    
+    int main(int argc, char** argv) {
+  if (argc != 4) {
+    printf('This script converts the MNIST dataset to the leveldb format used\n'
+           'by caffe to train a siamese network.\n'
+           'Usage:\n'
+           '    convert_mnist_data input_image_file input_label_file '
+           'output_db_file\n'
+           'The MNIST dataset could be downloaded at\n'
+           '    http://yann.lecun.com/exdb/mnist/\n'
+           'You should gunzip them after downloading.\n');
+  } else {
+    google::InitGoogleLogging(argv[0]);
+    convert_dataset(argv[1], argv[2], argv[3]);
   }
+  return 0;
 }
-    
-        NodeDef* const_node1 = graph_def.add_node();
-    const_node1->set_name('const_node1');
-    const_node1->set_op('Const');
-    
-    namespace tensorflow {
-#define REGISTER_COMPLEX(D, R, C)                         \
-  REGISTER_KERNEL_BUILDER(Name('Angle')                   \
-                              .Device(DEVICE_##D)         \
-                              .TypeConstraint<C>('T')     \
-                              .TypeConstraint<R>('Tout'), \
-                          UnaryOp<D##Device, functor::get_angle<C>>);
-    }
-    
-    enum RecordType {
-  // Zero is reserved for preallocated files
-  kZeroType = 0,
-    }
-    
-      static size_t ByteSize(const WriteBatch* batch) {
-    return batch->rep_.size();
-  }
-    
-      for (size_t i = 0; i < 3; ++i) {
-    std::string res;
-    ASSERT_OK(db->Get(ReadOptions(), keys[i], &res));
-    ASSERT_TRUE(res == vals[i]);
-  }
-    
-    
-    {}  // anonymous namespace
-    
-    
-    {
-    {    // Check false positive rate
-    double rate = FalsePositiveRate();
-    if (kVerbose >= 1) {
-      fprintf(stderr, 'False positives: %5.2f%% @ length = %6d ; bytes = %6d\n',
-              rate*100.0, length, static_cast<int>(FilterSize()));
-    }
-    ASSERT_LE(rate, 0.02);   // Must not be over 2%
-    if (rate > 0.0125) mediocre_filters++;  // Allowed, but not too often
-    else good_filters++;
-  }
-  if (kVerbose >= 1) {
-    fprintf(stderr, 'Filters: %d good, %d mediocre\n',
-            good_filters, mediocre_filters);
-  }
-  ASSERT_LE(mediocre_filters, good_filters/5);
+#else
+int main(int argc, char** argv) {
+  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
 }
+#endif  // USE_LEVELDB
+
     
-    // Helper class that locks a mutex on construction and unlocks the mutex when
-// the destructor of the MutexLock object is invoked.
-//
-// Typical usage:
-//
-//   void MyClass::MyMethod() {
-//     MutexLock l(&mu_);       // mu_ is an instance variable
-//     ... some complex code, possibly with multiple return paths ...
-//   }
+     protected:
+  /// @copydoc AbsValLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-    static std::string ShortSuccessor(const std::string& s) {
-  std::string result = s;
-  InternalKeyComparator(BytewiseComparator()).FindShortSuccessor(&result);
-  return result;
-}
-    
-        RecordType type;
-    const bool end = (left == fragment_length);
-    if (begin && end) {
-      type = kFullType;
-    } else if (begin) {
-      type = kFirstType;
-    } else if (end) {
-      type = kLastType;
+     private:
+  // wrap im2col/col2im so we don't have to remember the (long) argument lists
+  inline void conv_im2col_cpu(const Dtype* data, Dtype* col_buff) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      im2col_cpu(data, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
     } else {
-      type = kMiddleType;
+      im2col_nd_cpu(data, num_spatial_axes_, conv_input_shape_.cpu_data(),
+          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
+          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), col_buff);
+    }
+  }
+  inline void conv_col2im_cpu(const Dtype* col_buff, Dtype* data) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      col2im_cpu(col_buff, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
+    } else {
+      col2im_nd_cpu(col_buff, num_spatial_axes_, conv_input_shape_.cpu_data(),
+          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
+          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), data);
+    }
+  }
+#ifndef CPU_ONLY
+  inline void conv_im2col_gpu(const Dtype* data, Dtype* col_buff) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      im2col_gpu(data, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
+    } else {
+      im2col_nd_gpu(data, num_spatial_axes_, num_kernels_im2col_,
+          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
+          kernel_shape_.gpu_data(), pad_.gpu_data(),
+          stride_.gpu_data(), dilation_.gpu_data(), col_buff);
+    }
+  }
+  inline void conv_col2im_gpu(const Dtype* col_buff, Dtype* data) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      col2im_gpu(col_buff, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
+    } else {
+      col2im_nd_gpu(col_buff, num_spatial_axes_, num_kernels_col2im_,
+          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
+          kernel_shape_.gpu_data(), pad_.gpu_data(), stride_.gpu_data(),
+          dilation_.gpu_data(), data);
+    }
+  }
+#endif
+    
+      virtual inline const char* type() const { return 'BNLL'; }
+    
+    namespace caffe {
     }
     
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+      virtual inline const char* type() const { return 'Eltwise'; }
+  virtual inline int MinBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the computed outputs @f$
+   *        y = \left\{
+   *        \begin{array}{lr}
+   *            x                  & \mathrm{if} \; x > 0 \\
+   *            \alpha (\exp(x)-1) & \mathrm{if} \; x \le 0
+   *        \end{array} \right.
+   *      @f$.  
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    namespace osquery {
+    }
+    
+      constraint = Constraint(EQUALS);
+  constraint.expr = 'some_other';
+  cl.add(constraint);
     
     
+    {  BSTR* pData = nullptr;
+  SafeArrayAccessData(value.parray, (void**)&pData);
+  ret.reserve(count);
+  for (long i = 0; i < count; i++) {
+    ret.push_back(bstrToString(pData[i]));
+  }
+  SafeArrayUnaccessData(value.parray);
+  VariantClear(&value);
+  return Status(0);
+}
     
+    TEST_F(RocksDBDatabasePluginTests, test_corruption) {
+  ASSERT_TRUE(pathExists(path_));
+  ASSERT_FALSE(pathExists(path_ + '.backup'));
+    }
     
-    			b2FixtureDef sd2;
-			sd2.shape = &poly2;
-			sd2.density = 2.0f;
+    class PrinterTests : public testing::Test {
+ public:
+  QueryData q;
+  std::vector<std::string> order;
+  void SetUp() {
+    order = {'name', 'age', 'food', 'number'};
+    q = {
+        {
+         {'name', 'Mike Jones'},
+         {'age', '39'},
+         {'food', 'mac and cheese'},
+         {'number', '1'},
+        },
+        {
+         {'name', 'John Smith'},
+         {'age', '44'},
+         {'food', 'peanut butter and jelly'},
+         {'number', '2'},
+        },
+        {
+         {'name', 'Doctor Who'},
+         {'age', '2000'},
+         {'food', 'fish sticks and custard'},
+         {'number', '11'},
+        },
+    };
+  }
+};
+    
+    #include <osquery/events.h>
+#include <osquery/status.h>
+    
+    class ExampleTable : public TablePlugin {
+ private:
+  TableColumns columns() const {
+    return {
+        std::make_tuple('example_text', TEXT_TYPE, ColumnOptions::DEFAULT),
+        std::make_tuple(
+            'example_integer', INTEGER_TYPE, ColumnOptions::DEFAULT),
+    };
+  }
+    }
+    
+    #include 'osquery/core/process.h'
+#include 'osquery/logger/plugins/aws_kinesis.h'
+    
+    #include <aws/kinesis/KinesisClient.h>
+#include <aws/kinesis/model/PutRecordsRequestEntry.h>
