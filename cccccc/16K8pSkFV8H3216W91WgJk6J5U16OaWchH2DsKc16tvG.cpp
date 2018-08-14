@@ -1,243 +1,428 @@
 
         
         
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(URLRequestAsyncAsarJob);
-};
+    {
+    {
+    {
+    {
+    {}  // namespace
+}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
     
-    #ifndef ATOM_RENDERER_PREFERENCES_MANAGER_H_
-#define ATOM_RENDERER_PREFERENCES_MANAGER_H_
+    #include <string>
     
-    // Attempts to send the current command line to an already running instance of
-// Chrome via a WM_COPYDATA message.
-// Returns true if a running Chrome is found and successfully notified.
-// |fast_start| is true when this is being called on the window fast start path.
-NotifyChromeResult AttemptToNotifyRunningChrome(HWND remote_window,
-                                                bool fast_start);
-    
-    namespace extensions {
-    }
-    
-    
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(Net);
-};
-    
-    template <class T>
-struct DereferencingComparator { bool operator()(const T a, const T b) const { return *a < *b; } };
-    
-    
-    {}  // anonymous namespace
-    
-      // When start user key is prefix of limit user key
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foobar', 200, kTypeValue)));
-    
-    Status SetCurrentFile(Env* env, const std::string& dbname,
-                      uint64_t descriptor_number) {
-  // Remove leading 'dbname/' and add newline to manifest file name
-  std::string manifest = DescriptorFileName(dbname, descriptor_number);
-  Slice contents = manifest;
-  assert(contents.starts_with(dbname + '/'));
-  contents.remove_prefix(dbname.size() + 1);
-  std::string tmp = TempFileName(dbname, descriptor_number);
-  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
-  if (s.ok()) {
-    s = env->RenameFile(tmp, CurrentFileName(dbname));
-  }
-  if (!s.ok()) {
-    env->DeleteFile(tmp);
-  }
-  return s;
+    void RepeatedEnumFieldGenerator::GenerateSerializedSizeCode(io::Printer* printer) {  
+  printer->Print(
+    variables_,
+    'size += $name$_.CalculateSize(_repeated_$name$_codec);\n');
 }
     
-      // Return an iterator for the specified file number (the corresponding
-  // file length must be exactly 'file_size' bytes).  If 'tableptr' is
-  // non-NULL, also sets '*tableptr' to point to the Table object
-  // underlying the returned iterator, or NULL if no Table object underlies
-  // the returned iterator.  The returned '*tableptr' object is owned by
-  // the cache and should not be deleted, and is valid for as long as the
-  // returned iterator is live.
-  Iterator* NewIterator(const ReadOptions& options,
-                        uint64_t file_number,
-                        uint64_t file_size,
-                        Table** tableptr = NULL);
+    #include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_repeated_primitive_field.h>
     
-    static Slice TrimSpace(Slice s) {
-  int start = 0;
-  while (start < s.size() && isspace(s[start])) {
-    start++;
-  }
-  int limit = s.size();
-  while (limit > start && isspace(s[limit-1])) {
-    limit--;
-  }
-  return Slice(s.data() + start, limit - start);
-}
-    
-      // Advanced functions: these are used to reduce the space requirements
-  // for internal data structures like index blocks.
-    
-    	std::copy(cfgRoot.begin(), cfgRoot.end(), userConfigDirPath);
-	userConfigDirPath[cfgRoot.length()] = 0;
-    
-      // Check the crc of the type and the block contents
-  const char* data = contents.data();    // Pointer to where Read put the data
-  if (options.verify_checksums) {
-    const uint32_t crc = crc32c::Unmask(DecodeFixed32(data + n + 1));
-    const uint32_t actual = crc32c::Value(data, n + 1);
-    if (actual != crc) {
-      delete[] buf;
-      s = Status::Corruption('block checksum mismatch');
-      return s;
-    }
-  }
-    
-    
-    {  unsigned char data[48] = {
-    0x01, 0xc0, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x14, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x04, 0x00,
-    0x00, 0x00, 0x00, 0x14,
-    0x00, 0x00, 0x00, 0x18,
-    0x28, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x02, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-  };
-  ASSERT_EQ(0xd9963a56, Value(reinterpret_cast<char*>(data), sizeof(data)));
-}
-    
-    TEST(HASH, SignedUnsignedIssue) {
-  const unsigned char data1[1] = {0x62};
-  const unsigned char data2[2] = {0xc3, 0x97};
-  const unsigned char data3[3] = {0xe2, 0x99, 0xa5};
-  const unsigned char data4[4] = {0xe1, 0x80, 0xb9, 0x32};
-  const unsigned char data5[48] = {
-    0x01, 0xc0, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x14, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x04, 0x00,
-    0x00, 0x00, 0x00, 0x14,
-    0x00, 0x00, 0x00, 0x18,
-    0x28, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x02, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-  };
-    }
-    
-    namespace leveldb {
-    }
-    
-    #include <stdint.h>
-    
-    static std::string Shorten(const std::string& s, const std::string& l) {
-  std::string result = s;
-  InternalKeyComparator(BytewiseComparator()).FindShortestSeparator(&result, l);
-  return result;
-}
+    #include <sstream>
     
     
     {
-    {}  // namespace log
-}  // namespace leveldb
+    {
+    {
+    {
+    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ExtensionGenerator);
+};
+}  // namespace objectivec
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+#endif  // GOOGLE_PROTOBUF_COMPILER_OBJECTIVEC_MESSAGE_H__
 
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    class RepeatedPrimitiveFieldGenerator : public RepeatedFieldGenerator {
+  friend FieldGenerator* FieldGenerator::Make(const FieldDescriptor* field,
+                                              const Options& options);
+    }
     
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+    namespace {
+    }
+    
+    #undef GOOGLE_COMPILE_ASSERT
+#if __cplusplus >= 201103L
+#define GOOGLE_COMPILE_ASSERT(expr, msg) static_assert(expr, #msg)
+#else
+#define GOOGLE_COMPILE_ASSERT(expr, msg) \
+  ::google::protobuf::internal::CompileAssert<(bool(expr))> \
+          msg[bool(expr) ? 1 : -1]; \
+  (void)msg
+// Implementation details of COMPILE_ASSERT:
+//
+// - COMPILE_ASSERT works by defining an array type that has -1
+//   elements (and thus is invalid) when the expression is false.
+//
+// - The simpler definition
+//
+//     #define COMPILE_ASSERT(expr, msg) typedef char msg[(expr) ? 1 : -1]
+//
+//   does not work, as gcc supports variable-length arrays whose sizes
+//   are determined at run-time (this is gcc's extension and not part
+//   of the C++ standard).  As a result, gcc fails to reject the
+//   following code with the simple definition:
+//
+//     int foo;
+//     COMPILE_ASSERT(foo, msg); // not supposed to compile as foo is
+//                               // not a compile-time constant.
+//
+// - By using the type CompileAssert<(bool(expr))>, we ensures that
+//   expr is a compile-time constant.  (Template arguments must be
+//   determined at compile-time.)
+//
+// - The outter parentheses in CompileAssert<(bool(expr))> are necessary
+//   to work around a bug in gcc 3.4.4 and 4.0.1.  If we had written
+//
+//     CompileAssert<bool(expr)>
+//
+//   instead, these compilers will refuse to compile
+//
+//     COMPILE_ASSERT(5 > 0, some_message);
+//
+//   (They seem to think the '>' in '5 > 0' marks the end of the
+//   template argument list.)
+//
+// - The array size is (bool(expr) ? 1 : -1), instead of simply
+//
+//     ((expr) ? 1 : -1).
+//
+//   This is to avoid running into a bug in MS VC 7.1, which
+//   causes ((0.0) ? 1 : -1) to incorrectly evaluate to 1.
+#endif  // __cplusplus >= 201103L
+    
+    // Run a command that returns a util::Status.  If the called code returns an
+// error status, return that status up out of this method too.
+//
+// Example:
+//   RETURN_IF_ERROR(DoThings(4));
+#define RETURN_IF_ERROR(expr) \
+  do { \
+    /* Using _status below to avoid capture problems if expr is 'status'. */ \
+    const ::google::protobuf::util::Status _status = (expr); \
+    if (GOOGLE_PREDICT_FALSE(!_status.ok())) return _status; \
+  } while (0)
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times ...) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (M) @f$
+   *      the inputs @f$ x_2 @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (M \times ...) @f$:
+   *      the reindexed array @f$
+   *        y = x_1[x_2]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #endif  // CAFFE_DECONV_LAYER_HPP_
+
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs to be filtered @f$ x_1 @f$
+   *   -# ...
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs to be filtered @f$ x_K @f$
+   *   -# @f$ (N \times 1 \times 1 \times 1) @f$
+   *      the selector blob
+   * @param top output Blob vector (length 1+)
+   *   -# @f$ (S \times C \times H \times W) @f$ ()
+   *        the filtered output @f$ x_1 @f$
+   *        where S is the number of items
+   *        that haven't been filtered
+   *      @f$ (S \times C \times H \times W) @f$
+   *        the filtered output @f$ x_K @f$
+   *        where S is the number of items
+   *        that haven't been filtered
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+    const vector<Blob<Dtype>*>& top);
+    
+    namespace mxnet {
+namespace R {
+/*! \brief The Rcpp Symbol class of MXNet */
+class Executor : public MXNetMovable<Executor> {
+ public:
+  /*! \return typename from R side. */
+  inline static const char* TypeName() {
+    return 'MXExecutor';
+  }
+  /*!
+   * \return Get reference of the arg arrays of executor.
+   */
+  const Rcpp::List& arg_arrays() const {
+    return *arg_arrays_;
+  }
+  /*!
+   * \return Get reference of the aux arrays of executor.
+   */
+  const Rcpp::List& aux_arrays() const {
+    return *aux_arrays_;
+  }
+  /*!
+   * \return Get reference of gradient arrays of executor.
+   */
+  const Rcpp::List& grad_arrays() const {
+    return *grad_arrays_;
+  }
+  /*!
+   * \return Get reference of gradient arrays of executor.
+   */
+  const Rcpp::List& out_arrays() const {
+    return *out_arrays_;
+  }
+  /*!
+   * \return Get the arg arrays of executor.
+   */
+  Rcpp::List GetArgArrays() const {
+    return CloneArray(*arg_arrays_);
+  }
+  /*!
+   * \return Get the grad arrays of executor.
+   */
+  Rcpp::List GetGradArrays() const {
+    return CloneArray(*grad_arrays_);
+  }
+  /*!
+   * \return Get the auxiliary arrays of executor.
+   */
+  Rcpp::List GetAuxArrays() const {
+    return CloneArray(*aux_arrays_);
+  }
+  /*!
+   * \return Get the outputx arrays of executor.
+   */
+  Rcpp::List GetOuputArrays() const {
+    return CloneArray(*out_arrays_);
+  }
+  /*!
+   * \brief Update the arg_arrays of executor, based on name-matching.
+   * \param array The array to update
+   * \param match_name whether to use name to match the input, instead of index.
+   * \param skip_null Whether null is allowed, when there is NULL in the array, simply ignore.
+   * \return a result executor, moved from exec.
+   */
+  void UpdateArgArray(const Rcpp::List& array,
+                      bool match_name,
+                      bool allow_null);
+  /*!
+   * \brief Update the aux_arrays of executor, based on name-matching.
+   * \param array The array to update
+   * \param match_name whether to use name to match the input, instead of index.
+   * \param skip_null Whether null is allowed, when there is NULL in the array, simply ignore.
+   * \return a result executor, moved from exec.
+   */
+  void UpdateAuxArray(const Rcpp::List& array,
+                      bool match_name,
+                      bool allow_null);
+  /*!
+   * \brief Update the grad_arrays of executor, based on name-matching.
+   * \param array The array to update
+   * \param match_name whether to use name to match the input, instead of index.
+   * \param skip_null Whether null is allowed, when there is NULL in the array, simply ignore.
+   * \return a result executor, moved from exec.
+   */
+  void UpdateGradArray(const Rcpp::List& array,
+                      bool match_name,
+                      bool allow_null);
+  /*!
+   * \brief Peform a forward operation on exec, this will set the out_arrays.
+   * \param is_train whether it is training phase.
+   * \param kwargs additional parameters.
+   * \return a result executor, moved from exec.
+   */
+  void Forward(bool is_train,
+               const Rcpp::List& kwargs);
+  /*!
+   * \brief Peform a backward operation on exec, this will set the grad_arrays.
+   * \param output_grads the gradient on outputs, to be propagated back.
+   * \return a result executor, moved from exec.
+   */
+  void Backward(const Rcpp::List& output_grads);
+  /*!
+   * \brief Create a new R Executor by bind on symbol
+   * \param symbol The R symbol to bind.
+   * \param context The device to bind.
+   * \param arg_arrays The argument arrays giving the initial value of arguments.
+   * \param aux_arrays The auxiliary state arrays giving the initial value of auxiliary states.
+   * \param grad_reqs Array of booleans, giving the requirements of gradient.
+   */
+  static RObjectType Bind(const Symbol::RObjectType& symbol,
+                          const Context::RObjectType& context,
+                          const Rcpp::List& arg_arrays,
+                          const Rcpp::List& aux_arrays,
+                          const Rcpp::List& grad_reqs);
+  /*! \brief static function to initialize the Rcpp functions */
+  static void InitRcppModule();
+  // destructor
+  ~Executor() {
+    delete out_arrays_;
+    delete arg_arrays_;
+    delete grad_arrays_;
+    delete aux_arrays_;
+    }
+    }
+    }
+    }
+    
+    typedef long long int64;
+typedef unsigned long long uint64;
     
     
-    {    __DelOlderTouchTime(now);
-    touch_times_.push_back(now);
-    return true;
-}
+    { private:
+  // make constructor private
+  explicit NDArrayFunction(OpHandle handle, std::string name);
+  /*! \brief internal functioon handle. */
+  OpHandle handle_;
+  // name of the function
+  std::string name_;
+  // keyword arguments.
+  std::string key_var_num_args_;
+  // name of arguments
+  std::vector<std::string> arg_names_;
+  // check
+  std::vector<bool> arg_nd_array_;
+  // ther formals of arguments
+  Rcpp::List formals_;
+};
     
+    /*!
+ * \brief Protected CUDA call.
+ * \param func Expression to call.
+ *
+ * It checks for CUDA errors after invocation of the expression.
+ */
+#define CUDA_CALL(func)                                            \
+  {                                                                \
+    cudaError_t e = (func);                                        \
+    CHECK(e == cudaSuccess || e == cudaErrorCudartUnloading)       \
+        << 'CUDA: ' << cudaGetErrorString(e);                      \
+  }
     
-    {        return NULL;
+      // internal instance counter
+  unsigned inst_counter_{0};
+  // at end
+  bool end_{false};
+    
+     public:
+  /*!
+   * \brief Rsp-op-Rsp operation which produces a dense result
+   * \param attrs Attributes
+   * \param dev_mask Device mask
+   * \param dispatch_mode Dispatch Mode
+   * \param in_attrs Input storage attributes
+   * \param out_attrs Output storage attributes
+   * \return true if handled
+   */
+  static bool SparseSparseWithDenseResult(const nnvm::NodeAttrs& attrs,
+                                          int dev_mask,
+                                          DispatchMode* dispatch_mode,
+                                          std::vector<int> *in_attrs,
+                                          std::vector<int> *out_attrs);
+    
+      MSHADOW_SGL_DBL_TYPE_SWITCH(data_r.type_flag_, DType, {     // data type
+    MSHADOW_IDX_TYPE_SWITCH(indptr_r.type_flag_, IType, {     // indptr type
+      MSHADOW_IDX_TYPE_SWITCH(col_idx_r.type_flag_, CType, {  // colidx type
+        /* Allocate workspace */
+        CType num_cols_out = out.shape()[1];
+        CType rhs_data_size = static_cast<CType>(col_idx_r.shape_.Size());
+        size_t workspace_size = 2 * num_cols_out * sizeof(CType);
+        Tensor<cpu, 1, char> workspace =
+            ctx.requested[0].get_space_typed<cpu, 1, char>(
+                Shape1(workspace_size), s);
+        CType* col_flg = reinterpret_cast<dim_t*>(workspace.dptr_);
+    }
+    }
+    }
+    
+    /*!
+ * Copyright (c) 2018 by Contributors
+ * \file LogUniformGenerator.h
+ * \brief log uniform distribution generator
+*/
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
     }
     
     
-    {  protected:
-    std::string   m_servicename;
-    TServicesMap m_dependservices;
-};
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+    {
+    {} // namespace posix_time
+} // namespace boost
     
     
-    static bool SpyHookLogFunc(struct XLoggerInfo_t& _info, std::string& _log);
-    void TestFun0();
-    int __TestFun1(int i);
+    {    // Make the upcall if required.
+    if (owner)
+    {
+      fenced_block b(fenced_block::half);
+      BOOST_ASIO_HANDLER_INVOCATION_BEGIN((handler.arg1_, handler.arg2_));
+      boost_asio_handler_invoke_helpers::invoke(handler, handler.handler_);
+      BOOST_ASIO_HANDLER_INVOCATION_END;
+    }
+  }
     
+    #endif // BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
+
     
-/*
- * scop_jenv.h
- *
- *  Created on: 2012-8-21
- *      Author: yanguoyue
- */
+    #include <boost/asio/detail/push_options.hpp>
     
-        jint        (*RegisterNatives)(JNIEnv*, jclass, const JNINativeMethod*,
-                        jint);
-    jint        (*UnregisterNatives)(JNIEnv*, jclass);
-    jint        (*MonitorEnter)(JNIEnv*, jobject);
-    jint        (*MonitorExit)(JNIEnv*, jobject);
-    jint        (*GetJavaVM)(JNIEnv*, JavaVM**);
+    #endif  // GUETZLI_FDCT_H_
+
     
+    #include <stdint.h>
     
-/**
- * Captures and symbolicates a stack trace
- *
- * Beware of a bug on some platforms, which makes the trace loop until the
- * buffer is full when it reaches a noexpr function. It seems to be fixed in
- * newer versions of gcc. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56846
- *
- * @param skip The number of frames before capturing the trace
- *
- * @param limit The maximum number of frames captured
- */
-FBEXPORT inline std::vector<StackTraceElement> getStackTraceSymbols(
-    size_t skip = 0,
-    size_t limit = kDefaultLimit) {
-  return getStackTraceSymbols(getStackTrace(skip + 1, limit));
+    void AddApp0Data(JPEGData* jpg) {
+  const unsigned char kApp0Data[] = {
+      0xe0, 0x00, 0x10,              // APP0
+      0x4a, 0x46, 0x49, 0x46, 0x00,  // 'JFIF'
+      0x01, 0x01,                    // v1.01
+      0x00, 0x00, 0x01, 0x00, 0x01,  // aspect ratio = 1:1
+      0x00, 0x00                     // thumbnail width/height
+  };
+  jpg->app_data.push_back(
+      std::string(reinterpret_cast<const char*>(kApp0Data),
+                                 sizeof(kApp0Data)));
 }
     
-      // TODO? Create reusable interface for Allocatable classes and use it to
-  // strengthen type-checking (and possibly provide a default
-  // implementation of allocate().)
-  template <typename... Args>
-  static local_ref<jhybridobject> allocateWithCxxArgs(Args&&... args) {
-    auto hybridData = makeCxxInstance(std::forward<Args>(args)...);
-    static auto allocateMethod =
-        javaClassStatic()->template getStaticMethod<jhybridobject(jhybriddata)>('allocate');
-    return allocateMethod(javaClassStatic(), hybridData.get());
+    #endif  // GUETZLI_JPEG_ERROR_H_
+
+    
+      // Make a local copy of the input bit length histogram.
+  int count[kJpegHuffmanMaxBitLength + 1] = { 0 };
+  int total_count = 0;
+  for (len = 1; len <= kJpegHuffmanMaxBitLength; ++len) {
+    count[len] = count_in[len];
+    total_count += count[len];
   }
     
-      bool hasOnlyOneRef() const {
-    return m_refcount == 1;
-  }
-    
-      // Only allow implicit upcasts. A downcast will result in a compile error
-  // unless you use static_cast (which will end up invoking the explicit
-  // operator below).
-  template <typename U>
-  RefPtr(RefPtr<U>&& ref, typename std::enable_if<std::is_base_of<T,U>::value, U>::type* = nullptr) :
-    m_ptr(nullptr)
-  {
-    *this = std::move(ref);
-  }
+      // Requires that comp is not downsampled.
+  void CopyFromJpegComponent(const JPEGComponent& comp,
+                             int factor_x, int factor_y,
+                             const int* quant);
