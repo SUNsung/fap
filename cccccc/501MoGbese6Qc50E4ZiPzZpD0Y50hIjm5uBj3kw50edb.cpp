@@ -1,192 +1,345 @@
 
         
-        // Implements printing a reference type T&.
-template <typename T>
-class UniversalPrinter<T&> {
- public:
-  // MSVC warns about adding const to a function type, so we want to
-  // disable the warning.
-#ifdef _MSC_VER
-# pragma warning(push)          // Saves the current warning state.
-# pragma warning(disable:4180)  // Temporarily disables warning 4180.
-#endif  // _MSC_VER
+        namespace swift {
+namespace syntax {
+    }
     }
     
-      // Gets the summary of the failure message by omitting the stack
-  // trace in it.
-  static std::string ExtractSummary(const char* message);
+      virtual void handleDiagnostic(SourceManager &SM, SourceLoc Loc,
+                                DiagnosticKind Kind,
+                                StringRef FormatString,
+                                ArrayRef<DiagnosticArgument> FormatArgs,
+                                const DiagnosticInfo &Info) override;
     
-      // Adds a test property to the list. The property is validated and may add
-  // a non-fatal failure if invalid (e.g., if it conflicts with reserved
-  // key names). If a property is already recorded for the same key, the
-  // value will be updated, rather than storing multiple values for the same
-  // key.  xml_element specifies the element for which the property is being
-  // recorded and is used for validation.
-  void RecordProperty(const std::string& xml_element,
-                      const TestProperty& test_property);
-    
-      // Copy an existing linked_ptr<>, adding ourselves to the list of references.
-  template <typename U> linked_ptr(linked_ptr<U> const& ptr) { copy(&ptr); }
-  linked_ptr(linked_ptr const& ptr) {  // NOLINT
-    assert(&ptr != this);
-    copy(&ptr);
-  }
-    
-    
-template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7>
-class CartesianProductGenerator7
-    : public ParamGeneratorInterface< ::std::tr1::tuple<T1, T2, T3, T4, T5, T6,
-        T7> > {
- public:
-  typedef ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7> ParamType;
-    }
-    
-    // 6.1.3.2 Tuple creation functions.
-    
-    // Known limitations: we don't support passing an
-// std::tr1::reference_wrapper<T> to make_tuple().  And we don't
-// implement tie().
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42, typename T43, typename T44>
-struct Types44 {
-  typedef T1 Head;
-  typedef Types43<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
-      T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
-      T44> Tail;
-};
-    
-    // A sample program demonstrating using Google C++ testing framework.
-//
-// Author: wan@google.com (Zhanyong Wan)
-    
-      // Sets up the network for training. Initializes weights using weights of
-  // scale `range` picked according to the random number generator `randomizer`.
-  int InitWeights(float range, TRand* randomizer) override;
-  // Recursively searches the network for softmaxes with old_no outputs,
-  // and remaps their outputs according to code_map. See network.h for details.
-  int RemapOutputs(int old_no, const std::vector<int>& code_map) override;
-    
-    const char *kApostropheLikeUTF8[] = {
-  ''',       // ASCII apostrophe
-  '`',       // ASCII backtick
-  '\u2018',  // opening single quote
-  '\u2019',  // closing single quote
-  '\u2032',  // mathematical prime mark
-  nullptr,      // end of our list.
-};
-    
-    
-    {  // Top-level iteration. Shape index in sparse charset_map space.
-  int shape_index_;
-  int num_shapes_;
-  // Index to the character class within a shape.
-  int shape_char_index_;
-  int num_shape_chars_;
-  // Index to the font within a shape/class pair.
-  int shape_font_index_;
-  int num_shape_fonts_;
-  // The lowest level iteration. sample_index_/num_samples_ counts samples
-  // in the current shape/class/font combination.
-  int sample_index_;
-  int num_samples_;
-};
-    
-    #endif
-
-    
-    #endif  // STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
+    #endif // SWIFT_INDEX_INDEXSYMBOL_H
 
     
     
-    {  // Check that deleting works.
-  ASSERT_TRUE(!env_->DeleteFile('/dir/non_existent').ok());
-  ASSERT_OK(env_->DeleteFile('/dir/g'));
-  ASSERT_TRUE(!env_->FileExists('/dir/g'));
-  ASSERT_OK(env_->GetChildren('/dir', &children));
-  ASSERT_EQ(0, children.size());
-  ASSERT_OK(env_->DeleteDir('/dir'));
-}
+    {} // end namespace swift
     
-    TEST(FilterBlockTest, MultiChunk) {
-  FilterBlockBuilder builder(&policy_);
+    // On non-Darwin platforms we do not assume any barrier-free inline path
+// and SwiftTargetInfo.OnceDonePredicateValue is unset in the compiler.
+    
+    /// This represents one part of a #if block.  If the condition field is
+/// non-null, then this represents a #if or a #elseif, otherwise it represents
+/// an #else block.
+struct IfConfigClause {
+  /// The location of the #if, #elseif, or #else keyword.
+  SourceLoc Loc;
+  
+  /// The condition guarding this #if or #elseif block.  If this is null, this
+  /// is a #else clause.
+  Expr *Cond;
+  
+  /// Elements inside the clause
+  ArrayRef<ASTNode> Elements;
     }
     
-    namespace leveldb {
-    }
     
-    namespace leveldb {
-    }
+    {    // passthrough
+    bool empty() const              { return m.empty(); }
+    size_type size() const          { return m.size(); }
+    size_type max_size() const      { return m.max_size(); }
+    void clear()                    { m.clear(); }
+    iterator begin()                { return m.begin(); }
+    iterator end()                  { return m.end(); }
+    const_iterator begin() const    { return m.begin(); }
+    const_iterator end() const      { return m.end(); }
+    const_iterator cbegin() const   { return m.cbegin(); }
+    const_iterator cend() const     { return m.cend(); }
+};
     
-    XGB_DLL int XGDMatrixGetFloatInfo(const DMatrixHandle handle,
-                                  const char* field,
-                                  xgboost::bst_ulong* out_len,
-                                  const bst_float** out_dptr) {
-  API_BEGIN();
-  CHECK_HANDLE();
-  const MetaInfo& info = static_cast<std::shared_ptr<DMatrix>*>(handle)->get()->Info();
-  const std::vector<bst_float>* vec = nullptr;
-  if (!std::strcmp(field, 'label')) {
-    vec = &info.labels_;
-  } else if (!std::strcmp(field, 'weight')) {
-    vec = &info.weights_;
-  } else if (!std::strcmp(field, 'base_margin')) {
-    vec = &info.base_margin_;
+    class Env;
+class Iterator;
+class TableCache;
+class VersionEdit;
+    
+    // Called on every log record (each one of which is a WriteBatch)
+// found in a kDescriptorFile.
+static void VersionEditPrinter(uint64_t pos, Slice record, WritableFile* dst) {
+  std::string r = '--- offset ';
+  AppendNumberTo(&r, pos);
+  r += '; ';
+  VersionEdit edit;
+  Status s = edit.DecodeFrom(record);
+  if (!s.ok()) {
+    r += s.ToString();
+    r.push_back('\n');
   } else {
-    LOG(FATAL) << 'Unknown float field name ' << field;
+    r += edit.DebugString();
   }
-  *out_len = static_cast<xgboost::bst_ulong>(vec->size());  // NOLINT
-  *out_dptr = dmlc::BeginPtr(*vec);
-  API_END();
+  dst->Append(r);
 }
     
-    template<>
-inline XGBOOST_DEVICE float GradientPairInternal<int64_t>::GetGrad() const {
-  return grad_ * 1e-4f;
-}
-template<>
-inline XGBOOST_DEVICE float GradientPairInternal<int64_t>::GetHess() const {
-  return hess_ * 1e-4f;
-}
-template<>
-inline XGBOOST_DEVICE void GradientPairInternal<int64_t>::SetGrad(float g) {
-  grad_ = static_cast<int64_t>(std::round(g * 1e4));
-}
-template<>
-inline XGBOOST_DEVICE void GradientPairInternal<int64_t>::SetHess(float h) {
-  hess_ = static_cast<int64_t>(std::round(h * 1e4));
+    
+    {  // Errors
+  static const char* errors[] = {
+    '',
+    'foo',
+    'foo-dx-100.log',
+    '.log',
+    '',
+    'manifest',
+    'CURREN',
+    'CURRENTX',
+    'MANIFES',
+    'MANIFEST',
+    'MANIFEST-',
+    'XMANIFEST-3',
+    'MANIFEST-3x',
+    'LOC',
+    'LOCKx',
+    'LO',
+    'LOGx',
+    '18446744073709551616.log',
+    '184467440737095516150.log',
+    '100',
+    '100.',
+    '100.lop'
+  };
+  for (int i = 0; i < sizeof(errors) / sizeof(errors[0]); i++) {
+    std::string f = errors[i];
+    ASSERT_TRUE(!ParseFileName(f, &number, &type)) << f;
+  }
 }
     
-    XGBOOST_REGISTER_TREE_UPDATER(LocalHistMaker, 'grow_local_histmaker')
-.describe('Tree constructor that uses approximate histogram construction.')
-.set_body([]() {
-    return new CQHistMaker<GradStats>();
-  });
+    void TableCache::Evict(uint64_t file_number) {
+  char buf[sizeof(file_number)];
+  EncodeFixed64(buf, file_number);
+  cache_->Erase(Slice(buf, sizeof(buf)));
+}
+    
+      // If a seek to internal key 'k' in specified file finds an entry,
+  // call (*handle_result)(arg, found_key, found_value).
+  Status Get(const ReadOptions& options,
+             uint64_t file_number,
+             uint64_t file_size,
+             const Slice& k,
+             void* arg,
+             void (*handle_result)(void*, const Slice&, const Slice&));
+    
+    TEST_F(UnicharcompressTest, DoesChinese) {
+  LOG(INFO) << 'Testing chi_tra';
+  LoadUnicharset('chi_tra.unicharset');
+  ExpectCorrect('chi_tra');
+  LOG(INFO) << 'Testing chi_sim';
+  LoadUnicharset('chi_sim.unicharset');
+  ExpectCorrect('chi_sim');
+}
     
     
-/*! \brief Cut configuration for one feature */
-struct HistCutUnit {
-  /*! \brief the index pointer of each histunit */
-  const bst_float* cut;
-  /*! \brief number of cutting point, containing the maximum point */
-  uint32_t size;
-  // default constructor
-  HistCutUnit() = default;
-  // constructor
-  HistCutUnit(const bst_float* cut, uint32_t size)
-      : cut(cut), size(size) {}
+    {  if (unicode < 0x80) {
+    chars[UNICHAR_LEN - 1] = 1;
+    chars[2] = 0;
+    chars[1] = 0;
+    chars[0] = static_cast<char>(unicode);
+  } else if (unicode < 0x800) {
+    chars[UNICHAR_LEN - 1] = 2;
+    chars[2] = 0;
+    chars[1] = static_cast<char>((unicode | bytemark) & bytemask);
+    unicode >>= 6;
+    chars[0] = static_cast<char>(unicode | 0xc0);
+  } else if (unicode < 0x10000) {
+    chars[UNICHAR_LEN - 1] = 3;
+    chars[2] = static_cast<char>((unicode | bytemark) & bytemask);
+    unicode >>= 6;
+    chars[1] = static_cast<char>((unicode | bytemark) & bytemask);
+    unicode >>= 6;
+    chars[0] = static_cast<char>(unicode | 0xe0);
+  } else if (unicode <= UNI_MAX_LEGAL_UTF32) {
+    chars[UNICHAR_LEN - 1] = 4;
+    chars[3] = static_cast<char>((unicode | bytemark) & bytemask);
+    unicode >>= 6;
+    chars[2] = static_cast<char>((unicode | bytemark) & bytemask);
+    unicode >>= 6;
+    chars[1] = static_cast<char>((unicode | bytemark) & bytemask);
+    unicode >>= 6;
+    chars[0] = static_cast<char>(unicode | 0xf0);
+  } else {
+    memset(chars, 0, UNICHAR_LEN);
+  }
+}
+    
+    void OptimizerBase::add_parameters(const ParameterCursor& cursor) {
+  std::vector<Tensor> tensors(cursor.size());
+  cursor.map(tensors.begin(), [](const Tensor& tensor) { return tensor; });
+  add_parameters(tensors);
+}
+    
+      nDimension_ = 0;
+  for (size_t d = 0; d < nDimension; d++) {
+    if (size[d] > 0) {
+      nDimension_++;
+      if ((self->nDimension > d) && (size[d] != self->size[d]))
+        hasRequiredSize = false;
+      if ((self->nDimension > d) && stride && (stride[d] >= 0) && (stride[d] != self->stride[d]))
+        hasRequiredSize = false;
+    } else {
+      break;
+    }
+  }
+  nDimension = nDimension_;
+    
+    #include 'override_macros.h'
+    
+    bool maybeThrowBackCompatKeepdimWarn(char *func) {
+  if(getBackCompatKeepdimWarn()) {
+     std::ostringstream ss;
+     ss << 'backwards compatibility: call to \'' << func
+        << '\' uses default value for keepdim which has changed default to False.  Consider passing as kwarg.',
+    PyErr_WarnEx(PyExc_UserWarning, ss.str().c_str(), 1);
+  }
+  return true;
+}
+    
+    
+    { private:
+  TIndex dense_last_dim_;
+  T default_value_;
+  INPUT_TAGS(LENGTHS, INDICES, VALUES);
 };
+    
+    template<typename T>
+inline void _appendData(ByteArray& str, const std::vector<T>& arg) {
+  int l = arg.size();
+  _appendData(str, l);
+  for (size_t i = 0; i < l; i++)
+    __appendData(
+        str,
+        arg[i],
+        is_any_of<T, THDGeneratorPtrTypes>(),
+        is_any_of<T, THDTensorPtrTypes>(),
+        is_any_of<T, THDStoragePtrTypes>()
+    );
+}
+    
+      ByteArray& bytes(); // Raw data.
+  const char* data() const; // Offset data.
+  bool isEmpty() const;
+  size_type remaining() const; // Length of the msg left to read.
+  const char* read(size_t num_bytes);
+    
+    /**
+ * @brief Run an interactive SQL query shell.
+ *
+ * @code{.cpp}
+ *   // Copyright 2004-present Facebook. All Rights Reserved.
+ *   #include <osquery/core.h>
+ *   #include <osquery/devtools.h>
+ *
+ *   int main(int argc, char *argv[]) {
+ *     osquery::initOsquery(argc, argv);
+ *     return osquery::launchIntoShell(argc, argv);
+ *   }
+ * @endcode
+ *
+ * @param argc the number of elements in argv
+ * @param argv the command-line flags
+ *
+ * @return an int which represents the 'return code'
+ */
+int launchIntoShell(int argc, char** argv);
+    
+    TEST_F(PrinterTests, test_generate_header) {
+  std::map<std::string, size_t> lengths;
+  for (const auto& row : q) {
+    computeRowLengths(row, lengths);
+  }
+    }
+    
+    size_t FirehoseLogForwarder::getMaxRetryCount() const {
+  return 100U;
+}
+    
+     private:
+  std::string genIndexPrefix(bool results);
+    
+    #include 'guetzli/idct.h'
+#include 'guetzli/color_transform.h'
+#include 'guetzli/dct_double.h'
+#include 'guetzli/gamma_correct.h'
+#include 'guetzli/preprocess_downsample.h'
+#include 'guetzli/quantize.h'
+    
+    using std::size_t;
+    
+    
+    {}  // namespace guetzli
+    
+    
+    {}  // namespace guetzli
+
+    
+    //****************************
+// Deprecated function names
+//****************************
+// The following translations are provided to ease code transition
+// You are encouraged to no longer this function names
+#define XXH32_feed   XXH32_update
+#define XXH32_result XXH32_digest
+#define XXH32_getIntermediateResult XXH32_intermediateDigest
+    
+      virtual const char* Name() const override;
+    
+      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
+    if (type >= HISTOGRAM_ENUM_MAX) {
+      return false;
+    }
+    
+    if (m_ignore_histograms.count(type) > 0) {
+        return false;
+    }
+    }
+    
+    namespace rocksdb {
+/* GLOBAL DIFINE */
+// #define DEBUG
+#ifdef DEBUG
+#include <cstdio>
+#include <sys/syscall.h>
+#include <unistd.h>
+#define LOG_DEBUG(...)  do{\
+    printf('[%ld:%s:%i:%s]', syscall(SYS_gettid), __FILE__, __LINE__, __FUNCTION__);\
+    printf(__VA_ARGS__);\
+  }while(0)
+#else
+#define LOG_DEBUG(...)
+#endif
+    }
+    
+    
+    { private:
+  const size_t lookahead_;
+};
+    
+    #include <jni.h>
+#include <memory>
+    
+    
+    { protected:
+    jobject m_jSliceA;
+    jobject m_jSliceB;
+    jobject m_jSliceLimit;
+};
+    
+    size_t HistogramBucketMapper::IndexForValue(const uint64_t value) const {
+  if (value >= maxBucketValue_) {
+    return bucketValues_.size() - 1;
+  } else if ( value >= minBucketValue_ ) {
+    std::map<uint64_t, uint64_t>::const_iterator lowerBound =
+      valueIndexMap_.lower_bound(value);
+    if (lowerBound != valueIndexMap_.end()) {
+      return static_cast<size_t>(lowerBound->second);
+    } else {
+      return 0;
+    }
+  } else {
+    return 0;
+  }
+}
+    
+    #ifndef ROCKSDB_LITE
+#include 'db/compacted_db_impl.h'
+#include 'db/db_impl.h'
+#include 'db/version_set.h'
+#include 'table/get_context.h'
