@@ -1,213 +1,169 @@
 
         
-            prune
-  end
-    
-      def self.path(name)
-    Formulary.core_path(name)
-  end
-    
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
-  end
-  alias_method :standard_install, :install
-    
-        version '3' do
-      self.release = '3.3.7'
-      self.base_url = 'https://getbootstrap.com/docs/3.3/'
-      self.root_path = 'getting-started/'
-    
-        options[:attribution] = <<-HTML
-      &copy; 2009&ndash;2018 Jeremy Ashkenas<br>
-      Licensed under the MIT License.
-    HTML
-    
-        options[:container] = ->(filter) {
-      filter.current_url.path.start_with?('/getting-started') ? '#main' : '#content'
-    }
-    options[:title] = false
-    options[:root_title] = 'Elixir'
-    
-        options[:only_patterns] = [
-      /\Alanguage\./,
-      /\Aclass\./,
-      /\Afunctions?\./,
-      /\Acontrol-structures/,
-      /\Aregexp\./,
-      /\Areserved\.exceptions/,
-      /\Areserved\.interfaces/,
-      /\Areserved\.variables/]
-    
-        REDIRECT_RGX = /http-equiv='refresh'/i
-    NOT_FOUND_RGX = /<title>Not Found<\/title>/
-    
-        def to_json
-      JSON.generate(as_json)
-    end
-  end
+        # No trailing slash
+Benchmark.ips do |x|
+  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
+  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
+  x.compare!
 end
 
     
-          if options && options[:ignore_case]
-        base = base.downcase
-        dest = dest.downcase
-      end
-    
-            doc
-      end
-    end
-  end
-end
-
-    
-      def apply
-    dir = Pathname.pwd
-    resource.unpack do
-      patch_dir = Pathname.pwd
-      if patch_files.empty?
-        children = patch_dir.children
-        if children.length != 1 || !children.first.file?
-          raise MissingApplyError, <<~EOS
-            There should be exactly one patch file in the staging directory unless
-            the 'apply' method was used one or more times in the patch-do block.
-          EOS
-        end
-        patch_files << children.first.basename
-      end
-      dir.cd do
-        patch_files.each do |patch_file|
-          ohai 'Applying #{patch_file}'
-          patch_file = patch_dir/patch_file
-          safe_system 'patch', '-g', '0', '-f', '-#{strip}', '-i', patch_file
-        end
+        # Override of method_missing to check in @data for the key.
+    def method_missing(method, *args, &blck)
+      if docs.respond_to?(method.to_sym)
+        Jekyll.logger.warn 'Deprecation:',
+                           '#{label}.#{method} should be changed to #{label}.docs.#{method}.'
+        Jekyll.logger.warn '', 'Called by #{caller(0..0)}.'
+        docs.public_send(method.to_sym, *args, &blck)
+      else
+        super
       end
     end
-  end
     
-      etag_match = details[:etag] &&
-               details[:etag] == secure_details[:etag]
-  content_length_match =
-    details[:content_length] &&
-    details[:content_length] == secure_details[:content_length]
-  file_match = details[:file_hash] == secure_details[:file_hash]
+            # Build your jekyll site
+        # Continuously watch if `watch` is set to true in the config.
+        def process(options)
+          # Adjust verbosity quickly
+          Jekyll.logger.adjust_verbosity(options)
     
-              cpan_ftp_pattern = %r{^ftp://ftp\.cpan\.org/pub/CPAN(.*)}i
-          audit_urls(urls, cpan_ftp_pattern) do |match_obj, url|
-            problem '#{url} should be `http://search.cpan.org/CPAN#{match_obj[1]}`'
+            def case_insensitive_urls(things, destination)
+          things.each_with_object({}) do |thing, memo|
+            dest = thing.destination(destination)
+            (memo[dest.downcase] ||= []) << dest
           end
+        end
     
-    # A logger that delays messages until they're explicitly flushed to an inner
-# logger.
-#
-# This can be installed around the current logger by calling \{#install!}, and
-# the original logger can be replaced by calling \{#uninstall!}. The log
-# messages can be flushed by calling \{#flush}.
-class Sass::Logger::Delayed < Sass::Logger::Base
-  # Installs a new delayed logger as the current Sass logger, wrapping the
-  # original logger.
+            def initialize
+          @websockets = []
+          @connections_count = 0
+          @started_event = Utils::ThreadEvent.new
+          @stopped_event = Utils::ThreadEvent.new
+        end
+    
+    module Kramdown
+  module Parser
+    class SmartyPants < Kramdown::Parser::Kramdown
+      def initialize(source, options)
+        super
+        @block_parsers = [:block_html, :content]
+        @span_parsers =  [:smart_quotes, :html_entity, :typographic_syms, :span_html]
+      end
+    
+        # --
+    # Check if an entry matches a specific pattern and return true,false.
+    # Returns true if path matches against any glob pattern.
+    # --
+    def glob_include?(enum, entry)
+      entry_path = Pathutil.new(site.in_source_dir).join(entry)
+      enum.any? do |exp|
+        # Users who send a Regexp knows what they want to
+        # exclude, so let them send a Regexp to exclude files,
+        # we will not bother caring if it works or not, it's
+        # on them at this point.
+    
+      # Creates a delayed logger wrapping `inner`.
   #
-  # This can be undone by calling \{#uninstall!}.
-  #
-  # @return [Sass::Logger::Delayed] The newly-created logger.
-  def self.install!
-    logger = Sass::Logger::Delayed.new(Sass.logger)
-    Sass.logger = logger
-    logger
+  # @param inner [Sass::Logger::Base] The wrapped logger.
+  def initialize(inner)
+    self.log_level = inner.log_level
+    @inner = inner
+    @messages = []
   end
     
-      Sass::Plugin.options.merge!(config)
+        # Starts the read-eval-print loop.
+    def run
+      environment = Environment.new
+      @line = 0
+      loop do
+        @line += 1
+        unless (text = Readline.readline('>> '))
+          puts
+          return
+        end
     
-    module Capistrano
-  module Doctor
-    # Prints table of all Capistrano-related gems and their version numbers. If
-    # there is a newer version of a gem available, call attention to it.
-    class GemsDoctor
-      include Capistrano::Doctor::OutputHelpers
-    
-    module Capistrano
-  module TaskEnhancements
-    def before(task, prerequisite, *args, &block)
-      prerequisite = Rake::Task.define_task(prerequisite, *args, &block) if block_given?
-      Rake::Task[task].enhance [prerequisite]
+            raise t('error.invalid_stage_name', name: invalid, path: stage_config_path.join('#{invalid}.rb'))
+      end
     end
-    
-      # Implemented by subclasses to hook into Capistrano's deployment flow using
-  # using the `before` and `after` DSL methods. Note that `register_hooks` will
-  # not be called if the user has opted-out of hooks when installing the plugin.
-  #
-  # Example:
-  #
-  #   def register_hooks
-  #     after 'deploy:updated', 'my_plugin:do_something'
-  #   end
-  #
-  def register_hooks; end
+  end
+end
+
     
         # @abstract
     #
-    # Update the clone on the deployment target
+    # Identify the SHA of the commit that will be deployed.  This will most likely involve SshKit's capture method.
     #
     # @return void
     #
-    def update
-      raise NotImplementedError, 'Your SCM strategy module should provide a #update method'
+    def fetch_revision
+      raise NotImplementedError, 'Your SCM strategy module should provide a #fetch_revision method'
     end
-    
-      puts I18n.t :capified, scope: :capistrano
+  end
 end
 
     
-      it 'enables printing all config variables on command line parameter' do
-    capture_io do
-      flags '--print-config-variables', '-p'
-    end
-    expect(Capistrano::Configuration.fetch(:print_config_variables)).to be true
-  end
-    
-    # include would include the module in Object
-# extend only extends the `main` object
-extend Sinatra::Delegator
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   Cookie Tossing
-    # Supported browsers:: all
-    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
-    #
-    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
-    # session cookie. This does not protect against a cookie overflow attack.
-    #
-    # Options:
-    #
-    # session_key:: The name of the session cookie (default: 'rack.session')
-    class CookieTossing < Base
-      default_reaction :deny
-    
-      context 'escaping' do
-    it 'escapes html entities' do
-      mock_app do |env|
-        request = Rack::Request.new(env)
-        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
+      entries.each do |entry|
+    if File.exist?(entry[:file])
+      warn '[skip] #{entry[:file]} already exists'
+    else
+      File.open(entry[:file], 'w+') do |f|
+        f.write(ERB.new(File.read(entry[:template])).result(binding))
+        puts I18n.t(:written_file, scope: :capistrano, file: entry[:file])
       end
-      get '/', :foo => '<bar>'
-      expect(body).to eq('&lt;bar&gt;')
     end
-    
-      it 'should set the X-Frame-Options' do
-    expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('SAMEORIGIN')
   end
     
+          describe 'setting an internal host filter' do
+        subject { dsl.roles(:app) }
+        it 'is ignored' do
+          dsl.set :filter, host: 'example3.com'
+          expect(subject.map(&:hostname)).to eq(['example3.com', 'example4.com'])
+        end
+      end
     
-  it 'should allow changing the nosniff-mode off' do
-    mock_app do
-      use Rack::Protection::XSSHeader, :nosniff => false
-      run DummyApp
+      it 'overrides the rake method, but still prints the rake version' do
+    out, _err = capture_io do
+      flags '--version', '-V'
     end
+    expect(out).to match(/\bCapistrano Version\b/)
+    expect(out).to match(/\b#{Capistrano::VERSION}\b/)
+    expect(out).to match(/\bRake Version\b/)
+    expect(out).to match(/\b#{Rake::VERSION}\b/)
+  end
+    
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
+      end
+      super
+    end
+    
+        def script_url_for(gist_id, filename)
+      url = 'https://gist.github.com/#{gist_id}.js'
+      url = '#{url}?file=#{filename}' unless filename.nil? or filename.empty?
+      url
+    end
+    
+        def initialize(tag_name, markup, tokens)
+      attributes = ['class', 'src', 'width', 'height', 'title']
+    
+      # Summary is used on the Archive pages to return the first block of content from a post.
+  def summary(input)
+    if input.index(/\n\n/)
+      input.split(/\n\n/)[0]
+    else
+      input
+    end
+  end
