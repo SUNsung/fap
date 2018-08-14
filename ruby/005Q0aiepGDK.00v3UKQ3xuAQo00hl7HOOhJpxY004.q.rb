@@ -1,86 +1,53 @@
 
         
-          </body>
-</html>
-HTML
+        map = {}
+dups = []
     
-            def print_message(json_message)
-          msg = JSON.parse(json_message)
-          # Not sure what the 'url' command even does in LiveReload.  The spec is silent
-          # on its purpose.
-          Jekyll.logger.info 'LiveReload:', 'Browser URL: #{msg['url']}' if msg['command'] == 'url'
-        end
-    
-                processor = BodyProcessor.new(res.body, @jekyll_opts)
-            processor.process!
-            res.body = processor.new_body
-            res.content_length = processor.content_length.to_s
-    
-          def key?(key)
-        (@obj.collections.key?(key) && key != 'posts') || super
-      end
-    
-                  If you run into trouble, you can find helpful resources at https://jekyllrb.com/help/!
-            MSG
-            raise Jekyll::Errors::MissingDependencyException, name
-          end
-        end
+        def matching_domain
+      if domain.nil?
+        Account.where(domain: nil)
+      else
+        Account.where(Account.arel_table[:domain].lower.eq domain.to_s.downcase)
       end
     end
   end
 end
 
     
-        brew cask install mactex
-    EOS
-  when 'pip' then <<-EOS.undent
-    Homebrew provides pip via: `brew install python`. However you will then
-    have two Pythons installed on your Mac, so alternatively you can install
-    pip via the instructions at:
-    
-    module Homebrew
-  def build_env_keys(env)
-    %w[
-      CC CXX LD OBJC OBJCXX
-      HOMEBREW_CC HOMEBREW_CXX
-      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
-      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
-      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
-      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
-      HOMEBREW_SVN HOMEBREW_GIT
-      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
-      MAKE GIT CPP
-      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
+      def perform(user_id)
+    @user = User.find(user_id)
+    deliver_digest if @user.allows_digest_emails?
   end
     
-            $stderr.puts
-        opoo out
-        Homebrew.failed = true
-        first_warning = false
-      end
-    end
+    class NotificationMailerPreview < ActionMailer::Preview
+  # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/mention
+  def mention
+    m = Mention.last
+    NotificationMailer.mention(m.account, Notification.find_by(activity: m))
+  end
     
-        root.children.sort.each do |pn|
-      if pn.directory?
-        dirs << pn
-      elsif block_given? && yield(pn)
-        puts pn
-        other = 'other '
-      else
-        remaining_root_files << pn unless pn.basename.to_s == '.DS_Store'
-      end
-    end
+          private
     
-            def find_address
-          if @order.bill_address_id == params[:id].to_i
-            @order.bill_address
-          elsif @order.ship_address_id == params[:id].to_i
-            @order.ship_address
-          else
-            raise CanCan::AccessDenied
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
           end
         end
-      end
-    end
-  end
-end
+    
+                validator = Source::HealthReporter.new(source.repo)
+            validator.pre_check do |_name, _version|
+              UI.print '.'
+            end
+            report = validator.analyze
+            UI.puts
+            UI.puts
