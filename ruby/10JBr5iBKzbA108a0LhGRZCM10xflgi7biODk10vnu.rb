@@ -1,166 +1,89 @@
 
         
-              https://pip.readthedocs.org/en/stable/installing/#install-pip
-    EOS
-  when 'pil' then <<-EOS.undent
-    Instead of PIL, consider `pip install pillow` or `brew install Homebrew/python/pillow`.
-    EOS
-  when 'macruby' then <<-EOS.undent
-    MacRuby works better when you install their package:
-      http://www.macruby.org/
-    EOS
-  when /(lib)?lzma/
-    'lzma is now part of the xz formula.'
-  when 'xcode'
-    if MacOS.version >= :lion
-      <<-EOS.undent
-      Xcode can be installed from the App Store.
-      EOS
-    else
-      <<-EOS.undent
-      Xcode can be installed from https://developer.apple.com/xcode/downloads/
-      EOS
+            keys.each do |key|
+      value = env[key]
+      s = '#{key}: #{value}'
+      case key
+      when 'CC', 'CXX', 'LD'
+        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
+      end
+      f.puts s
     end
-  when 'gtest', 'googletest', 'google-test' then <<-EOS.undent
-    Installing gtest system-wide is not recommended; it should be vendored
-    in your projects that use it.
-    EOS
-  when 'gmock', 'googlemock', 'google-mock' then <<-EOS.undent
-    Installing gmock system-wide is not recommended; it should be vendored
-    in your projects that use it.
-    EOS
-  when 'sshpass' then <<-EOS.undent
-    We won't add sshpass because it makes it too easy for novice SSH users to
-    ruin SSH's security.
-    EOS
-  when 'gsutil' then <<-EOS.undent
-    Install gsutil with `pip install gsutil`
-    EOS
-  when 'clojure' then <<-EOS.undent
-    Clojure isn't really a program but a library managed as part of a
-    project and Leiningen is the user interface to that library.
+  end
+end
+
     
-      # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
-  # permissions and removing .la files, unless the files (or parent
-  # directories) are protected by skip_clean.
-  #
-  # bin and sbin should not have any subdirectories; if either do that is
-  # caught as an audit warning
-  #
-  # lib may have a large directory tree (see Erlang for instance), and
-  # clean_dir applies cleaning rules to the entire tree
-  def clean_dir(d)
-    d.find do |path|
-      path.extend(ObserverPathnameExtension)
-    
-        def matching_domain
-      if domain.nil?
-        Account.where(domain: nil)
+      def plist_caveats
+    s = []
+    if f.plist || (keg && keg.plist_installed?)
+      destination = if f.plist_startup
+        '/Library/LaunchDaemons'
       else
-        Account.where(Account.arel_table[:domain].lower.eq domain.to_s.downcase)
+        '~/Library/LaunchAgents'
       end
+    
+        # Many formulae include 'lib/charset.alias', but it is not strictly needed
+    # and will conflict if more than one formula provides it
+    observe_file_removal @f.lib/'charset.alias'
+    
+          # Find commands in Homebrew/dev-cmd
+      if ARGV.homebrew_developer?
+        puts
+        puts 'Built-in development commands'
+        puts_columns internal_development_commands
+      end
+    
+      attributes :id, :type, :name, :updated
+    
+        def expect_updated_sign_in_at(user)
+      expect(user.reload.current_sign_in_at).to be_within(1.0).of(Time.now.utc)
     end
   end
 end
 
     
-    def codepoints_to_unicode(codepoints)
-  if codepoints.include?(' ')
-    codepoints.split(' ').map(&:hex).pack('U*')
-  else
-    [codepoints.hex].pack('U')
-  end
+    unless $LOAD_PATH.include? lib_path
+  $LOAD_PATH.unshift lib_path
 end
+
     
-      private
+                end
     
-              s[:pass] = ''
-          return
+          when :banner
+        # Because some ftp server send multiple banner we take only the first one and ignore the rest
+        if not (s[:info])
+          s[:info] = matches
+          report_service(s)
         end
     
-                  s[:proto] = 'tcp'
-              s[:name]  = 'pop3'
-              s[:extra] = 'Successful Login. Banner: #{s[:banner]}'
-              report_auth_info(s)
-              print_status('Successful POP3 Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]} (#{s[:banner].strip})')
+    # This is a completely hackish way to do this, and could break with future
+# versions of the JDK.  Need to find a better way to use sun.security.tools.KeyTool
+# and .JarSigner than modifying the source.  These rely on internal APIs that may
+# change.
+signer = Rjb::import('javaCompile.SignJar')
+#clsKeyTool = Rjb::import('sun.security.tools.KeyTool')
+#clsKeyTool = Rjb::import('sun.security.tools.KeyToolMSF')
+#clsJarSigner = Rjb::import('javaCompile.SignJar.JarSignerMSF')
+#clsJarSigner = Rjb::import('sun.security.tools.JarSigner')
+#clsJarSigner = Rjb::import('sun.security.tools.JarSignerMSF')
     
-    sock = TCPSocket.new(ip, port)
+      when '6.1.1'
+    __NR_execve      = 7
+    __NR_getpeername = 202
+    __NR_accept      = 229
+    __NR_listen      = 232
+    __NR_bind        = 234
+    __NR_socket      = 235
+    __NR_connect     = 236
+    __NR_close       = 269
+    __NR_kfcntl      = 614
     
-    unless STDIN.tty?
-	p = ::Parser.new('')
-	p.parse
-	p.dump_all
-else
-	print 'Tested with:\n'
-	print '\tGNU objdump 2.9-aix51-020209\n'
-	print '\tGNU objdump 2.15.92.0.2 20040927\n'
-	print 'Usage: objdump -dM suffix <file(s)> | ruby objdumptoc.rb\n'
-end
-
-    
-        def read(file)
-      if file.respond_to?(:read)
-        file.read
-      else
-        open(file, 'rb') {|f| f.read}
-      end
-    end
-  end
-end
-
-    
-            def log_level(name, options = {})
-          if options[:prepend]
-            level = log_levels.values.min
-            level = level.nil? ? 0 : level - 1
-          else
-            level = log_levels.values.max
-            level = level.nil? ? 0 : level + 1
-          end
-          log_levels.update(name => level)
-          define_logger(name)
-        end
-    
-        # @see \{MediaQuery#to\_a}
-    def to_a
-      res = []
-      res += modifier
-      res << ' ' unless modifier.empty?
-      res += type
-      res << ' and ' unless type.empty? || expressions.empty?
-      res += Sass::Util.intersperse(expressions, ' and ').flatten
-      res
-    end
-    
-          private
-    
-      entries.each do |entry|
-    if File.exist?(entry[:file])
-      warn '[skip] #{entry[:file]} already exists'
-    else
-      File.open(entry[:file], 'w+') do |f|
-        f.write(ERB.new(File.read(entry[:template])).result(binding))
-        puts I18n.t(:written_file, scope: :capistrano, file: entry[:file])
-      end
-    end
-  end
-    
-      def render(source)
-    template = File.read(source)
-    renderer = ERB.new(template)
-    context  = LogStash::PluginManager::RenderContext.new(options)
-    renderer.result(context.get_binding)
-  end
-    
-        def add_paperclip_callbacks
-      @klass.send(
-        :define_paperclip_callbacks,
-        :post_process, :'#{@name}_post_process')
-    end
-    
-            def rejected_types_rejected?
-          @missing_rejected_types ||= @rejected_types.select { |type| type_allowed?(type) }
-          @missing_rejected_types.none?
+            # Checks if a template URL is given else returns the TEMPLATE_REPO URL
+        #
+        # @return String
+        #
+        def template_repo_url
+          @template_url || TEMPLATE_REPO
         end
       end
     end
@@ -168,14 +91,14 @@ end
 end
 
     
+          it 'sets the input as the variable' do
+        expect(dsl.fetch(:scm)).to eq 'git'
+      end
+    end
     
-    {  # Returns hash with styles missing from recent run of rake paperclip:refresh:missing_styles
-  #   {
-  #     :User => {:avatar => [:big]},
-  #     :Book => {
-  #       :cover => [:croppable]},
-  #     }
-  #   }
-  def self.missing_attachments_styles
-    current_styles = current_attachments_styles
-    registered_styles = get_registered_attachments_styles
+        orig_stdout = $stdout
+    orig_stderr = $stderr
+    captured_stdout = StringIO.new
+    captured_stderr = StringIO.new
+    $stdout = captured_stdout
+    $stderr = captured_stderr
