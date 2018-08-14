@@ -1,238 +1,218 @@
 
-    {	virtual btScalar addSingleResult(btManifoldPoint &cp, const btCollisionObjectWrapper *colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper *colObj1Wrap, int partId1, int index1);
-};
+        
+        /*! \brief LOG INFO to report message to R console, need to append newline */
+#define RLOG_INFO ::Rcpp::Rcout
     
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
+    void Executor::UpdateAuxArray(const Rcpp::List& array,
+                              bool match_name,
+                              bool skip_null) {
+  UpdateArray('aux.arrays', array, aux_arrays_, match_name, skip_null);
+}
     
-      m_expanded_blocks_per_component = m_comp_h_samp[0] * m_comp_v_samp[0];
-  m_expanded_blocks_per_mcu = m_expanded_blocks_per_component * m_comps_in_frame;
-  m_expanded_blocks_per_row = m_max_mcus_per_row * m_expanded_blocks_per_mcu;
-	// Freq. domain chroma upsampling is only supported for H2V2 subsampling factor (the most common one I've seen).
-  m_freq_domain_chroma_upsample = false;
-#if JPGD_SUPPORT_FREQ_DOMAIN_UPSAMPLING
-  m_freq_domain_chroma_upsample = (m_expanded_blocks_per_mcu == 4*3);
-#endif
+      virtual void Forward(const OpContext &ctx,
+                       const std::vector<TBlob> &in_data,
+                       const std::vector<OpReqType> &req,
+                       const std::vector<TBlob> &out_data,
+                       const std::vector<TBlob> &aux_states) {
+    using namespace mshadow;
+    using namespace mshadow::expr;
+    CHECK_EQ(in_data.size(), 3);
+    CHECK_EQ(out_data.size(), 2);
+    CHECK_GT(req.size(), 1);
+    CHECK_EQ(req[proposal::kOut], kWriteTo);
+    CHECK_EQ(in_data[proposal::kClsProb].shape_[0], 1)
+      << 'Sorry, multiple images each device is not implemented.';
+    }
+    
+    void MKLDNNConcatForward(const nnvm::NodeAttrs& attrs, const OpContext &ctx,
+                         const std::vector<NDArray> &in_data,
+                         const std::vector<OpReqType> &req,
+                         const std::vector<NDArray> &out_data) {
+  TmpMemMgr::Get()->Init(ctx.requested[concat_enum::kTempSpace]);
+  const ConcatParam& param = nnvm::get<ConcatParam>(attrs.parsed);
+  int num_in_data = param.num_args;
+  int concat_dim = param.dim;
+  std::vector<mkldnn::memory::primitive_desc> data_md;
+  std::vector<const mkldnn::memory *> data_mem;
+  data_md.reserve(num_in_data);
+  data_mem.reserve(num_in_data);
+  for (int i = 0; i < num_in_data; i++) {
+    const mkldnn::memory *tmp_mem = in_data[i].GetMKLDNNData();
+    mkldnn::memory::primitive_desc tmp_pd = tmp_mem->get_primitive_desc();
+    data_md.push_back(tmp_pd);
+    data_mem.push_back(tmp_mem);
+  }
+  MKLDNNConcatFwd &fwd = GetConcatForward(concat_dim, in_data, data_md);
+  mxnet::mkldnn_output_t out_mem = CreateMKLDNNMem(out_data[concat_enum::kOut],
+                                                   fwd.fwd_pd.dst_primitive_desc(),
+                                                   req[concat_enum::kOut]);
+  fwd.SetNewMem(data_mem, *out_mem.second);
+  MKLDNNStream::Get()->RegisterPrim(fwd.GetFwd());
+  CommitOutput(out_data[concat_enum::kOut], out_mem);
+  MKLDNNStream::Get()->Submit();
+}
     
     
     {
-    {    void free_all_blocks();
-    JPGD_NORETURN void stop_decoding(jpgd_status status);
-    void *alloc(size_t n, bool zero = false);
-    void word_clear(void *p, uint16 c, uint n);
-    void prep_in_buffer();
-    void read_dht_marker();
-    void read_dqt_marker();
-    void read_sof_marker();
-    void skip_variable_marker();
-    void read_dri_marker();
-    void read_sos_marker();
-    int next_marker();
-    int process_markers();
-    void locate_soi_marker();
-    void locate_sof_marker();
-    int locate_sos_marker();
-    void init(jpeg_decoder_stream * pStream);
-    void create_look_ups();
-    void fix_in_buffer();
-    void transform_mcu(int mcu_row);
-    void transform_mcu_expand(int mcu_row);
-    coeff_buf* coeff_buf_open(int block_num_x, int block_num_y, int block_len_x, int block_len_y);
-    inline jpgd_block_t *coeff_buf_getp(coeff_buf *cb, int block_x, int block_y);
-    void load_next_row();
-    void decode_next_row();
-    void make_huff_table(int index, huff_tables *pH);
-    void check_quant_tables();
-    void check_huff_tables();
-    void calc_mcu_block_order();
-    int init_scan();
-    void init_frame();
-    void process_restart();
-    void decode_scan(pDecode_block_func decode_block_func);
-    void init_progressive();
-    void init_sequential();
-    void decode_start();
-    void decode_init(jpeg_decoder_stream * pStream);
-    void H2V2Convert();
-    void H2V1Convert();
-    void H1V2Convert();
-    void H1V1Convert();
-    void gray_convert();
-    void expanded_convert();
-    void find_eoi();
-    inline uint get_char();
-    inline uint get_char(bool *pPadding_flag);
-    inline void stuff_char(uint8 q);
-    inline uint8 get_octet();
-    inline uint get_bits(int num_bits);
-    inline uint get_bits_no_markers(int numbits);
-    inline int huff_decode(huff_tables *pH);
-    inline int huff_decode(huff_tables *pH, int& extrabits);
-    static inline uint8 clamp(int i);
-    static void decode_block_dc_first(jpeg_decoder *pD, int component_id, int block_x, int block_y);
-    static void decode_block_dc_refine(jpeg_decoder *pD, int component_id, int block_x, int block_y);
-    static void decode_block_ac_first(jpeg_decoder *pD, int component_id, int block_x, int block_y);
-    static void decode_block_ac_refine(jpeg_decoder *pD, int component_id, int block_x, int block_y);
-  };
-  
-} // namespace jpgd
-    
-    # if defined(CLZ64)
-/**
- * OC_ILOGNZ_64 - Integer binary logarithm of a non-zero 64-bit value.
- * @_v: A non-zero 64-bit value.
- * Returns floor(log2(_v))+1.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * If _v is zero, the return value is undefined; use OC_ILOG_64() instead.
- */
-#  define OC_ILOGNZ_64(_v) (CLZ64_OFFS-CLZ64(_v))
-/**
- * OC_ILOG_64 - Integer binary logarithm of a 64-bit value.
- * @_v: A 64-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- */
-#  define OC_ILOG_64(_v)   (OC_ILOGNZ_64(_v)&-!!(_v))
-# else
-#  define OC_ILOGNZ_64(_v) (oc_ilog64(_v))
-#  define OC_ILOG_64(_v)   (oc_ilog64(_v))
-# endif
-    
-    
-    
-    #elif (defined(OPUS_X86_MAY_HAVE_SSE) && !defined(OPUS_X86_PRESUME_SSE)) || \
-  (defined(OPUS_X86_MAY_HAVE_SSE2) && !defined(OPUS_X86_PRESUME_SSE2)) || \
-  (defined(OPUS_X86_MAY_HAVE_SSE4_1) && !defined(OPUS_X86_PRESUME_SSE4_1)) || \
-  (defined(OPUS_X86_MAY_HAVE_AVX) && !defined(OPUS_X86_PRESUME_AVX))
-    
-    #undef silk_SMLAWW
-static OPUS_INLINE opus_int32 silk_SMLAWW_armv4(opus_int32 a, opus_int32 b,
- opus_int32 c)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-    '#silk_SMLAWW\n\t'
-    'smull %0, %1, %2, %3\n\t'
-    : '=&r'(rd_lo), '=&r'(rd_hi)
-    : '%r'(b), 'r'(c)
-  );
-  return a+(rd_hi<<16)+(rd_lo>>16);
-}
-#define silk_SMLAWW(a, b, c) (silk_SMLAWW_armv4(a, b, c))
-    
-      // Returns true if the argument of the last Compare() call (or the baseline
-  // image, if Compare() was not called yet) meets the image acceptance
-  // criteria. The target_mul modifies the acceptance criteria used in this call
-  // the following way:
-  //    = 1.0 : the original acceptance criteria is used,
-  //    < 1.0 : a more strict acceptance criteria is used,
-  //    > 1.0 : a less strict acceptance criteria is used.
-  virtual bool DistanceOK(double target_mul) const = 0;
-    
-    #endif  // GUETZLI_DCT_DOUBLE_H_
-
-    
-    #ifndef GUETZLI_ENTROPY_ENCODE_H_
-#define GUETZLI_ENTROPY_ENCODE_H_
-    
-    struct HuffmanCodeTable {
-  uint8_t depth[256];
-  int code[256];
+    {
+    {
+    {        for (dim_t l = 0; l < num_cols; ++l) {
+          out[offset_out+l] += data_r[offset_r+l] * val;
+        }
+      }
+    }
+  }
 };
     
-    #ifndef GUETZLI_OUTPUT_IMAGE_H_
-#define GUETZLI_OUTPUT_IMAGE_H_
     
-    // Butteraugli scores that correspond to JPEG quality levels, starting at
-// kLowestQuality. They were computed by taking median BA scores of JPEGs
-// generated using libjpeg-turbo at given quality from a set of PNGs.
-// The scores above quality level 100 are just linearly decreased so that score
-// for 110 is 90% of the score for 100.
-const double kScoreForQuality[] = {
-  2.810761,  // 70
-  2.729300,
-  2.689687,
-  2.636811,
-  2.547863,
-  2.525400,
-  2.473416,
-  2.366133,
-  2.338078,
-  2.318654,
-  2.201674,  // 80
-  2.145517,
-  2.087322,
-  2.009328,
-  1.945456,
-  1.900112,
-  1.805701,
-  1.750194,
-  1.644175,
-  1.562165,
-  1.473608,  // 90
-  1.382021,
-  1.294298,
-  1.185402,
-  1.066781,
-  0.971769,  // 95
-  0.852901,
-  0.724544,
-  0.611302,
-  0.443185,
-  0.211578,  // 100
-  0.209462,
-  0.207346,
-  0.205230,
-  0.203114,
-  0.200999,  // 105
-  0.198883,
-  0.196767,
-  0.194651,
-  0.192535,
-  0.190420,  // 110
-  0.190420,
-};
+    {
+    {}  // namespace op
+}  // namespace mxnet
     
-    #include <algorithm>
-    
-      std::shared_ptr<HttpConnection> httpConnection_;
-    
-      std::chrono::seconds interval_;
-  DownloadEngine* e_;
-  Timer checkPoint_;
-  int numNewConnection_; // the number of the connection to establish.
-public:
-  ActivePeerConnectionCommand(cuid_t cuid, RequestGroup* requestGroup,
-                              DownloadEngine* e, std::chrono::seconds interval);
-    
-      /**
-   * The internal announce URL pointer points to next URL.
-   * If the current URL is the last element of its group, then the first
-   * element of the next group is pointed.
-   */
-  void announceFailure();
-    
-    namespace aria2 {
+        // transpose rows [i0,i1) to columns [i0,i1) of 'to'
+    // CURRENTLY, i0 must be aligned to 4. (If this is ever not OK, fix it then.)
+    void transposerows(ssematrixbase &to, size_t i0, size_t i1) const
+    {
+        transposepatch(to, i0, i1, 0, cols());
     }
     
-    #include 'DiskWriterFactory.h'
-#include 'a2functional.h'
+        InvalidateCompiledNetwork();
     
-    #include 'common.h'
+    // SectionString - section to hold variable length zero terminated UTF8 strings
+// supports mapping tables
+// for faster access, a section with offsets to the beginning of the strings can be saved as well
+class SectionString : public Section
+{
+public:
+    typedef std::string LabelType; // TODO: are these supposed to be the same as the DataReader's?
+    typedef unsigned LabelIdType;
+    }
+    
+    GPUDataTransferer::GPUDataTransferer(int deviceId, bool useConcurrentStreams) 
+{
+#pragma warning(disable : 4127)
+    if (useConcurrentStreams && (s_fetchStream == NULL))
+    {
+        cudaStreamCreateWithFlags(&s_fetchStream, cudaStreamNonBlocking) || 'cudaStreamCreateWithFlags failed';
+        cudaStreamCreateWithFlags(&s_assignStream, cudaStreamNonBlocking) || 'cudaStreamCreateWithFlags failed';
+    }
+    }
+    
+    using namespace std;
+using namespace Microsoft::MSR::ScriptableObjects;
+    
+        static void SetTimestampingFlag()
+    {
+        auto& us = GetStaticInstance();
+        us.m_timestampFlag = true;
+    }
+    
+    vector<wstring> /*IConfigRecord::*/ ComputationNodeBase::GetMemberIds() const
+{
+    return vector<wstring>{ L'name', L'operation', L'dim', L'dims', /*L'tag', */L'inputs', OperationName() + L'Args' };
+}
+    
+    #endif // BOOST_ASIO_BASIC_WAITABLE_TIMER_HPP
+
+    
+      /// Close the stream.
+  boost::system::error_code close(boost::system::error_code& ec)
+  {
+    return next_layer_.close(ec);
+  }
+    
+      BOOST_ASIO_DECL static void init_native_buffer(
+      native_buffer_type& buf,
+      const boost::asio::const_buffer& buffer);
+#elif defined(BOOST_ASIO_WINDOWS) || defined(__CYGWIN__)
+  // The maximum number of buffers to support in a single operation.
+  enum { max_buffers = 64 < max_iov_len ? 64 : max_iov_len };
+    
+    #endif // BOOST_ASIO_DETAIL_GCC_ARM_FENCED_BLOCK_HPP
+
+    
+    #include <boost/asio/detail/config.hpp>
+    
+    /**
+ * Get current exceptions being handled.  front() is the most recent exception.
+ * There should be at most one unless rethrowing.
+ */
+std::vector<ExceptionInfo> getCurrentExceptions();
+    
+      if (state_ != SingletonHolderState::NotRegistered) {
+    /* Possible causes:
+     *
+     * You have two instances of the same
+     * folly::Singleton<Class>. Probably because you define the
+     * singleton in a header included in multiple places? In general,
+     * folly::Singleton shouldn't be in the header, only off in some
+     * anonymous namespace in a cpp file. Code needing the singleton
+     * will find it when that code references folly::Singleton<Class>.
+     *
+     * Alternatively, you could have 2 singletons with the same type
+     * defined with a different name in a .cpp (source) file. For
+     * example:
+     *
+     * Singleton<int> a([] { return new int(3); });
+     * Singleton<int> b([] { return new int(4); });
+     *
+     */
+    singletonWarnDoubleRegistrationAndAbort(type());
+  }
+    
+    namespace folly {
+    }
+    
+      static size_t controlBlockSize(size_t n) {
+    return offsetof(ControlBlockAndPromise, promises) + n * sizeof(BoolPromise);
+  }
     
     
-    {  std::shared_ptr<AsyncNameResolver> asyncNameResolver_[2];
-  size_t numResolver_;
-  int resolverCheck_;
-  bool ipv4_;
-  bool ipv6_;
+    {  friend bool operator==(Self const& a, Self const& b) noexcept {
+    return std::addressof(a.ref_.get()) == std::addressof(b.ref_.get());
+  }
+  friend bool operator!=(Self const& a, Self const& b) noexcept {
+    return std::addressof(a.ref_.get()) != std::addressof(b.ref_.get());
+  }
 };
+    
+    TEST(AlignedSysAllocator, bad_alloc_default) {
+  using Alloc = AlignedSysAllocator<float>;
+  Alloc const alloc(1024);
+  std::vector<float, Alloc> nums(alloc);
+  if (!kIsSanitize) {
+    EXPECT_THROW(nums.reserve(kTooBig), std::bad_alloc);
+  }
+}
+    
+      Function<int(int) const> callback = [](int x) { return x + 1; };
+    
+      vector<Future<LargeReturn>> futures;
+  for (auto idx = 0; idx < 40; ++idx) {
+    futures.emplace_back(futures::retrying(
+        [&executor](size_t, const exception_wrapper&) {
+          return via(&executor).then([] { return true; });
+        },
+        func));
+  }
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+        if (IsLocking())
+        ::wakeupLock_Unlock(object_);
+    
+    
+    {    SPY_DETACH_VARIABLE('TestFun0 i');
+}
+    
+    #include 'comm/debugger/spy.inl'
+    
+    bool JNU_JbyteArray2Buffer(JNIEnv* _env, const jbyteArray bytes, AutoBuffer& ab);
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
