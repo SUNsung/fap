@@ -1,209 +1,176 @@
 
         
-            print('20 newsgroups')
-    print('=============')
-    print('X_train.shape = {0}'.format(X_train.shape))
-    print('X_train.format = {0}'.format(X_train.format))
-    print('X_train.dtype = {0}'.format(X_train.dtype))
-    print('X_train density = {0}'
-          ''.format(X_train.nnz / np.product(X_train.shape)))
-    print('y_train {0}'.format(y_train.shape))
-    print('X_test {0}'.format(X_test.shape))
-    print('X_test.format = {0}'.format(X_test.format))
-    print('X_test.dtype = {0}'.format(X_test.dtype))
-    print('y_test {0}'.format(y_test.shape))
-    print()
+        
+atom_template = textwrap.dedent('''\
+    <?xml version='1.0' encoding='utf-8'?>
+    <feed xmlns='http://www.w3.org/2005/Atom'>
+        <link rel='self' href='http://rg3.github.io/youtube-dl/update/releases.atom' />
+        <title>youtube-dl releases</title>
+        <id>https://yt-dl.org/feed/youtube-dl-updates-feed</id>
+        <updated>@TIMESTAMP@</updated>
+        @ENTRIES@
+    </feed>''')
+    
+    options = helptext[helptext.index('  General Options:') + 19:]
+options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
+options = '# OPTIONS\n' + options + '\n'
+    
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
     
-def _tabulate(results, metrics, formats):
-    '''Prints results by metric and format
-    
-    
-def get_data(N, D, dataset='dense'):
-    if dataset == 'dense':
-        np.random.seed(0)
-        return np.random.random((N, D))
-    elif dataset == 'digits':
-        X = datasets.load_digits().data
-        i = np.argsort(X[0])[::-1]
-        X = X[:, i]
-        return X[:N, :D]
-    else:
-        raise ValueError('invalid dataset: %s' % dataset)
-    
-    import matplotlib.pyplot as plt
-    
-    try:
-    from urllib import urlopen
-except ImportError:
-    from urllib.request import urlopen
-    
-            if event == 'clear':
-            self.ax.clear()
-            self.ax.set_xticks([])
-            self.ax.set_yticks([])
-            self.contours = []
-            self.c_labels = None
-            self.plot_kernels()
-    
-    data, rows, columns = make_biclusters(
-    shape=(300, 300), n_clusters=5, noise=5,
-    shuffle=False, random_state=0)
-    
-    
-n_train = 20  # samples for training
-n_test = 200  # samples for testing
-n_averages = 50  # how often to repeat classification
-n_features_max = 75  # maximum number of features
-step = 4  # step size for the calculation
-    
-    plots = []
-names = []
-for score_func in score_funcs:
-    print('Computing %s for %d values of n_clusters and n_samples=%d'
-          % (score_func.__name__, len(n_clusters_range), n_samples))
-    
-    
-# Plot clustering results
-for index, metric in enumerate(['cosine', 'euclidean', 'cityblock']):
-    model = AgglomerativeClustering(n_clusters=n_clusters,
-                                    linkage='average', affinity=metric)
-    model.fit(X)
-    plt.figure()
-    plt.axes([0, 0, 1, 1])
-    for l, c in zip(np.arange(model.n_clusters), 'rgbk'):
-        plt.plot(X[model.labels_ == l].T, c=c, alpha=.5)
-    plt.axis('tight')
-    plt.axis('off')
-    plt.suptitle('AgglomerativeClustering(affinity=%s)' % metric, size=20)
-    
-            self.running = False
-    
-        def put(self, sn, data):
-        self.lock.acquire()
-        try:
-            if sn < self.next_sn:
-                # xlog.warn('recv_pool put timeout sn:%d', sn)
-                return False
-            elif sn > self.next_sn:
-                # xlog.debug('recv_pool put unorder sn:%d', sn)
-                if sn in self.block_list:
-                    # xlog.warn('recv_pool put sn:%d exist', sn)
-                    return False
-                else:
-                    self.block_list.append(sn)
-                    self.process_callback(data)
-                    return True
-            else:
-                # xlog.debug('recv_pool put sn:%d in order', sn)
-                self.process_callback(data)
-                self.next_sn = sn + 1
-    
-            # http 1.1 worker
-        self.set_var('http1_first_ping_wait', 300)
-        self.set_var('http1_ping_interval', 300)
-        self.set_var('http1_idle_time', 360)
-        self.set_var('http1_max_process_tasks', 99999999)
-    
-            self.create_more_connection()
-    
-                ret += [v] * n
-    
-            1. error occurs
-        2. enter recovery mode, report error
-        3. consume until token found in resynch set
-        4. try to resume parsing
-        5. next match() will reset errorRecovery mode
-    
-    
-############################################################################
-#
-# token implementations
-#
-# Token
-# +- CommonToken
-# \- ClassicToken
-#
-############################################################################
-    
-    # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.viewcode',
-]
-    
-    # If true, an OpenSearch description file will be output, and all pages will
-# contain a <link> tag referring to it.  The value of this option must be the
-# base URL from which the finished HTML is served.
-#html_use_opensearch = ''
-    
-      # There are three ways we might decide not to print an error message:
-  # a 'NOLINT(category)' comment appears in the source,
-  # the verbosity level isn't high enough, or the filters filter it out.
-  if IsErrorSuppressedByNolint(category, linenum):
-    return False
-    
-        # sample_queue.put('sam')
-    # test_object(sample_queue)
-    # print('Outside func: {}'.format(sample_queue.get()))
-    
+def report_warning(message):
     '''
-Port of the Java example of 'Parameter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
+    Print the message to stderr, it will be prefixed with 'WARNING:'
+    If stderr is a tty file the 'WARNING:' will be colored
+    '''
+    if sys.stderr.isatty() and compat_os_name != 'nt':
+        _msg_header = '\033[0;33mWARNING:\033[0m'
+    else:
+        _msg_header = 'WARNING:'
+    output = '%s %s\n' % (_msg_header, message)
+    if 'b' in getattr(sys.stderr, 'mode', '') or sys.version_info[0] < 3:
+        output = output.encode(preferredencoding())
+    sys.stderr.write(output)
     
-        def execute(self):
-        self.rename(self.src, self.dest)
+        def test_func(self):
+        as_file = os.path.join(TEST_DIR, testfile)
+        swf_file = os.path.join(TEST_DIR, test_id + '.swf')
+        if ((not os.path.exists(swf_file)) or
+                os.path.getmtime(swf_file) < os.path.getmtime(as_file)):
+            # Recompile
+            try:
+                subprocess.check_call([
+                    'mxmlc', '-output', swf_file,
+                    '-static-link-runtime-shared-libraries', as_file])
+            except OSError as ose:
+                if ose.errno == errno.ENOENT:
+                    print('mxmlc not found! Skipping test.')
+                    return
+                raise
     
-        def setProblem(self, value):
-        self._bProblem = value
+    import io
+import re
     
-        def attach(self, observer):
-        if observer not in self._observers:
-            self._observers.append(observer)
+            if check_executable('mplayer', ['-h']):
+            args = [
+                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
+                '-dumpstream', '-dumpfile', tmpfilename, url]
+        elif check_executable('mpv', ['-h']):
+            args = [
+                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
+        else:
+            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
+            return False
     
-    ### OUTPUT ###
-# Scanning... Station is 1380 AM
-# Scanning... Station is 1510 AM
-# Switching to FM
-# Scanning... Station is 89.1 FM
-# Scanning... Station is 103.9 FM
-# Scanning... Station is 81.3 FM
-# Scanning... Station is 89.1 FM
-# Switching to AM
-# Scanning... Station is 1250 AM
-# Scanning... Station is 1380 AM
+            formats = [
+            {
+                'format_id': f['type'],
+                'filesize': int(f['filesize']),
+                'url': f['url']
+            } for f in info['rfiles']
+        ]
+        self._sort_formats(formats)
+    
+        _TESTS = [{
+        'url': 'http://edition.cnn.com/video/?/video/sports/2013/06/09/nadal-1-on-1.cnn',
+        'md5': '3e6121ea48df7e2259fe73a0628605c4',
+        'info_dict': {
+            'id': 'sports/2013/06/09/nadal-1-on-1.cnn',
+            'ext': 'mp4',
+            'title': 'Nadal wins 8th French Open title',
+            'description': 'World Sport\'s Amanda Davies chats with 2013 French Open champion Rafael Nadal.',
+            'duration': 135,
+            'upload_date': '20130609',
+        },
+        'expected_warnings': ['Failed to download m3u8 information'],
+    }, {
+        'url': 'http://edition.cnn.com/video/?/video/us/2013/08/21/sot-student-gives-epic-speech.georgia-institute-of-technology&utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+rss%2Fcnn_topstories+%28RSS%3A+Top+Stories%29',
+        'md5': 'b5cc60c60a3477d185af8f19a2a26f4e',
+        'info_dict': {
+            'id': 'us/2013/08/21/sot-student-gives-epic-speech.georgia-institute-of-technology',
+            'ext': 'mp4',
+            'title': 'Student's epic speech stuns new freshmen',
+            'description': 'A Georgia Tech student welcomes the incoming freshmen with an epic speech backed by music from \'2001: A Space Odyssey.\'',
+            'upload_date': '20130821',
+        },
+        'expected_warnings': ['Failed to download m3u8 information'],
+    }, {
+        'url': 'http://www.cnn.com/video/data/2.0/video/living/2014/12/22/growing-america-nashville-salemtown-board-episode-1.hln.html',
+        'md5': 'f14d02ebd264df951feb2400e2c25a1b',
+        'info_dict': {
+            'id': 'living/2014/12/22/growing-america-nashville-salemtown-board-episode-1.hln',
+            'ext': 'mp4',
+            'title': 'Nashville Ep. 1: Hand crafted skateboards',
+            'description': 'md5:e7223a503315c9f150acac52e76de086',
+            'upload_date': '20141222',
+        },
+        'expected_warnings': ['Failed to download m3u8 information'],
+    }, {
+        'url': 'http://money.cnn.com/video/news/2016/08/19/netflix-stunning-stats.cnnmoney/index.html',
+        'md5': '52a515dc1b0f001cd82e4ceda32be9d1',
+        'info_dict': {
+            'id': '/video/news/2016/08/19/netflix-stunning-stats.cnnmoney',
+            'ext': 'mp4',
+            'title': '5 stunning stats about Netflix',
+            'description': 'Did you know that Netflix has more than 80 million members? Here are five facts about the online video distributor that you probably didn\'t know.',
+            'upload_date': '20160819',
+        },
+        'params': {
+            # m3u8 download
+            'skip_download': True,
+        },
+    }, {
+        'url': 'http://cnn.com/video/?/video/politics/2015/03/27/pkg-arizona-senator-church-attendance-mandatory.ktvk',
+        'only_matching': True,
+    }, {
+        'url': 'http://cnn.com/video/?/video/us/2015/04/06/dnt-baker-refuses-anti-gay-order.wkmg',
+        'only_matching': True,
+    }, {
+        'url': 'http://edition.cnn.com/videos/arts/2016/04/21/olympic-games-cultural-a-z-brazil.cnn',
+        'only_matching': True,
+    }]
+    
+    import pytest
+    
+        # noinspection PyUnboundLocalVariable
+    return '%.*f %s' % (precision, n / factor, suffix)
 
     
+        def test_binary_file_path(self, httpbin):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('--print=B', 'POST', httpbin.url + '/post',
+                 '@' + BIN_FILE_PATH_ARG, env=env, )
+        assert r == BIN_FILE_CONTENT
     
-@tornado.web.stream_request_body
-class PUTHandler(tornado.web.RequestHandler):
-    def initialize(self):
-        self.bytes_read = 0
     
-    try:
-    xrange
-except NameError:
-    xrange = range
+def test_migrate_implicit_content_type():
+    config = MockEnvironment().config
     
-    extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.coverage',
-    'sphinx.ext.doctest',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.viewcode',
-]
+    from httpie.compat import urlopen
+from httpie.downloads import (
+    parse_content_range, filename_from_content_disposition, filename_from_url,
+    get_unique_filename, ContentRangeError, Downloader,
+)
+from utils import http, MockEnvironment
     
-        warning_message = '''
-********************************************************************
-WARNING: %s could not
-be compiled. No C extensions are essential for Tornado to run,
-although they do result in significant speed improvements for
-websockets.
-%s
+        def test_colors_option(self, httpbin):
+        env = MockEnvironment(colors=256)
+        r = http('--print=B', '--pretty=colors',
+                 'GET', httpbin.url + '/get', 'a=b',
+                 env=env)
+        # Tests that the JSON data isn't formatted.
+        assert not r.strip().count('\n')
+        assert COLOR in r
+    
+    
+class MismatchedNotSetException(MismatchedSetException):
+    '''@brief Used for remote debugger deserialization'''
+    
+    def __str__(self):
+        return 'MismatchedNotSetException(%r!=%r)' % (
+            self.getUnexpectedType(), self.expecting
+            )
+    __repr__ = __str__
+    
+        def getText(self):
+        '''@brief Get the text of the token.
