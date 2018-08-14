@@ -1,36 +1,40 @@
-class BuildEnvironment
-  def initialize(*settings)
-    @settings = Set.new(*settings)
-  end
-    
-            def on_case(case_node)
-          case_node.when_branches.each_with_object([]) do |when_node, previous|
-            when_node.each_condition do |condition|
-              next unless repeated_condition?(previous, condition)
-    
-              expect(new_source)
-            .to eq('#{prefix}#{open}#{a}, # a\n#{b},#{close} # b\n#{suffix}')
+
+        
+              def render!(*args)
+        measure_time do
+          measure_bytes do
+            @template.render!(*args)
+          end
         end
       end
+    
+        keys.each do |key|
+      value = env[key]
+      s = '#{key}: #{value}'
+      case key
+      when 'CC', 'CXX', 'LD'
+        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
+      end
+      f.puts s
     end
   end
 end
 
     
-    module RuboCop
-  module AST
-    # A node extension for `def` nodes. This will be used in place of a plain
-    # node when the builder constructs the AST, making its methods available
-    # to all `def` nodes within RuboCop.
-    class DefNode < Node
-      include ParameterizedNode
-      include MethodIdentifierPredicates
-    
-        begin
-      create_scaffold(source, @target_path)
-    rescue Errno::EACCES => exception
-      report_exception('Permission denied when executing the plugin manager', exception)
-    rescue => exception
-      report_exception('Plugin creation Aborted', exception)
+        def self.cleanup_formula(formula)
+      formula.eligible_kegs_for_cleanup.each do |keg|
+        cleanup_path(keg) { keg.uninstall }
+      end
     end
+    
+      def updated?
+    initial_revision != current_revision
   end
+    
+          export JAVA_HOME='$(/usr/libexec/java_home)'
+      export AWS_ACCESS_KEY='<Your AWS Access ID>'
+      export AWS_SECRET_KEY='<Your AWS Secret Key>'
+      export #{home_name}='#{home_value}'
+    EOS
+  end
+end
