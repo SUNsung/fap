@@ -1,21 +1,28 @@
 
         
-              def handle_prompt_none
-        if params[:prompt] == 'none'
-          if user_signed_in?
-            handle_prompt_with_signed_in_user
-          else
-            handle_params_error('login_required', 'User must already be logged in when `prompt` is `none`')
-          end
-        else
-          handle_params_error('invalid_request', 'The 'none' value cannot be used with any other prompt value')
-        end
-      end
+          private
     
-        set :run, Proc.new { File.expand_path($0) == File.expand_path(app_file) }
+          topic = Topic.find_by(id: topic_id)
     
-        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      subject.options[:allow_empty_referrer] = false
-      expect(subject.referrer(env)).to be_nil
-    end
+    class ApplicationSerializer < ActiveModel::Serializer
+  embed :ids, include: true
+    
+            # Unregisters a SIGINT handler.
+        def unregister(sig_callback)
+          @@mutex.synchronize do
+            registered.delete(sig_callback)
+    
+            while true
+          begin
+            if Platform.windows?
+              # Windows doesn't support non-blocking reads on
+              # file descriptors or pipes so we have to get
+              # a bit more creative.
+    
+        formulae = ARGV.include?('--installed') ? Formula.installed : Formula
+    recursive = ARGV.flag? '--recursive'
+    only_installed_arg = ARGV.include?('--installed') &&
+                         !ARGV.include?('--include-build') &&
+                         !ARGV.include?('--include-test') &&
+                         !ARGV.include?('--include-optional') &&
+                         !ARGV.include?('--skip-recommended')
