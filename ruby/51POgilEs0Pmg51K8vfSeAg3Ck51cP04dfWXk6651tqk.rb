@@ -1,114 +1,93 @@
 
         
-          # Clean the keg of formula @f
-  def clean
-    ObserverPathnameExtension.reset_counts!
+          end
     
-        first_warning = true
-    methods.each do |method|
-      unless checks.respond_to?(method)
-        Homebrew.failed = true
-        puts 'No check available by the name: #{method}'
-        next
-      end
+      def set_permission(permission_name, value)
+    self.send('#{permission_name}=', value)
+    save_and_refresh_staff_groups!
+  end
     
-          # This returns the keys (or ids) that are in the string.
-      #
-      # @return [<Array<String>]
-      def keys
-        regexp = /^#\s*VAGRANT-BEGIN:\s*(.+?)$\r?\n?(.*)$\r?\n?^#\s*VAGRANT-END:\s(\1)$/m
-        @value.scan(regexp).map do |match|
-          match[0]
-        end
-      end
+      def is_form_configurable?
+    true
+  end
     
-        # use Feedbag as a backup to Google Feeds Api
-    if rss_url.nil?
-      rss_url = Feedbag.find(web_url).first
-      if rss_url.nil?
-        suggested_paths = ['/rss', '/feed', '/feeds', '/atom.xml', '/feed.xml', '/rss.xml', '.atom']
-        suggested_paths.each do |suggested_path|
-          rss_url = Feedbag.find('#{web_url.chomp('/')}#{suggested_path}').first
-          break if rss_url
-        end
+        def terminate_thread!
+      if thread
+        thread.instance_eval { ActiveRecord::Base.connection_pool.release_connection }
+        thread.wakeup if thread.status == 'sleep'
+        thread.terminate
       end
     end
-  end
     
-      def ruby_prefix
-    RbConfig::CONFIG['prefix']
-  end
+      included do
+    include Oauthable
     
-            def validate!
-          super
-          if @pod_name.nil? && !@wipe_all
-            # Security measure, to avoid removing the pod cache too agressively by mistake
-            help! 'You should either specify a pod name or use the --all flag'
-          end
-        end
+      def destroy
+    @event.destroy
     
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-            self.arguments = [
-          CLAide::Argument.new(%w(NAME DIRECTORY), false),
-        ]
-    
-    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
-
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+        respond_to do |format|
+      if @user_credential.update_attributes(user_credential_params)
+        format.html { redirect_to user_credentials_path, notice: 'Your credential was successfully updated.' }
+        format.json { head :no_content }
       else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+        format.html { render action: 'edit' }
+        format.json { render json: @user_credential.errors, status: :unprocessable_entity }
       end
     end
   end
-end
     
-          if File.symlink?(code_path)
-        return 'Code directory '#{code_path}' cannot be a symlink'
+            while true
+          begin
+            if Platform.windows?
+              # Windows doesn't support non-blocking reads on
+              # file descriptors or pipes so we have to get
+              # a bit more creative.
+    
+              if argv.length == 2
+            # @deprecated
+            @env.ui.warn('WARNING: The second argument to `vagrant box remove`')
+            @env.ui.warn('is deprecated. Please use the --provider flag. This')
+            @env.ui.warn('feature will stop working in the next version.')
+            options[:provider] = argv[1]
+          end
+    
+          def execute
+        options = {}
+        options[:check] = false
+    
+      # Uninstalls this logger from \{Sass.logger\}. This should only be called if
+  # the logger was installed using \{#install!}
+  def uninstall!
+    if Sass.logger != self
+      throw Exception.new('Can't uninstall a logger that's not currently installed.')
+    end
+    
+            {
+          :always_update     => false,
+          :template_location => root + '/public/stylesheets/sass',
+          :css_location      => root + '/public/stylesheets',
+          :cache_location    => root + '/tmp/sass-cache',
+          :always_check      => env != 'production',
+          :quiet             => env != 'production',
+          :full_exception    => env != 'production'
+        }.freeze
       end
+    end
+  end
     
-          Dir.chdir(file_path) do
-        contents = file.read
-        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
-          contents = $1.lstrip
-        end
-        contents = pre_filter(contents)
-        if @raw
-          contents
-        else
-          partial = Liquid::Template.parse(contents)
-          context.stack do
-            partial.render(context)
+              if @address.update_attributes(address_params)
+            respond_with(@address, default_template: :show)
+          else
+            invalid_resource!(@address)
           end
         end
-      end
-    end
-  end
-end
+    
+            def stock_location
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:id])
+        end
+    
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
+        end
