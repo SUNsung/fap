@@ -1,149 +1,140 @@
 
         
         
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(URLRequestAsyncAsarJob);
-};
+    {}  // namespace internal
     
-    #ifndef ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
-#define ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
+      void OnUpdatePreferences(const base::ListValue& preferences);
     
-    #endif  // ATOM_COMMON_DRAGGABLE_REGION_H_
+    #endif  // CHROME_BROWSER_CHROME_PROCESS_FINDER_WIN_H_
 
     
-    #ifndef ATOM_RENDERER_PREFERENCES_MANAGER_H_
-#define ATOM_RENDERER_PREFERENCES_MANAGER_H_
+      // Sets time interval between updates. By default list of sources and their
+  // thumbnail are updated once per second. If called after StartUpdating() then
+  // it will take effect only after the next update.
+  virtual void SetUpdatePeriod(base::TimeDelta period) = 0;
     
-    // filenames
-const base::FilePath::CharType kCacheDirname[] = FPL('Cache');
-const base::FilePath::CharType kChannelIDFilename[] = FPL('Origin Bound Certs');
-const base::FilePath::CharType kCookieFilename[] = FPL('Cookies');
-const base::FilePath::CharType kCRLSetFilename[] =
-    FPL('Certificate Revocation Lists');
-const base::FilePath::CharType kCustomDictionaryFileName[] =
-    FPL('Custom Dictionary.txt');
-const base::FilePath::CharType kExtensionActivityLogFilename[] =
-    FPL('Extension Activity');
-const base::FilePath::CharType kExtensionsCookieFilename[] =
-    FPL('Extension Cookies');
-const base::FilePath::CharType kFirstRunSentinel[] = FPL('First Run');
-const base::FilePath::CharType kGCMStoreDirname[] = FPL('GCM Store');
-const base::FilePath::CharType kLocalStateFilename[] = FPL('Local State');
-const base::FilePath::CharType kLocalStorePoolName[] = FPL('LocalStorePool');
-const base::FilePath::CharType kMediaCacheDirname[] = FPL('Media Cache');
-const base::FilePath::CharType kNetworkPersistentStateFilename[] =
-    FPL('Network Persistent State');
-const base::FilePath::CharType kOfflinePageArchviesDirname[] =
-    FPL('Offline Pages/archives');
-const base::FilePath::CharType kOfflinePageMetadataDirname[] =
-    FPL('Offline Pages/metadata');
-const base::FilePath::CharType kPreferencesFilename[] = FPL('Preferences');
-const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[] =
-    FPL('Protected Preferences');
-const base::FilePath::CharType kReadmeFilename[] = FPL('README');
-const base::FilePath::CharType kResetPromptMementoFilename[] =
-    FPL('Reset Prompt Memento');
-const base::FilePath::CharType kSafeBrowsingBaseFilename[] =
-    FPL('Safe Browsing');
-const base::FilePath::CharType kSecurePreferencesFilename[] =
-    FPL('Secure Preferences');
-const base::FilePath::CharType kServiceStateFileName[] = FPL('Service State');
-const base::FilePath::CharType kSingletonCookieFilename[] =
-    FPL('SingletonCookie');
-const base::FilePath::CharType kSingletonLockFilename[] = FPL('SingletonLock');
-const base::FilePath::CharType kSingletonSocketFilename[] =
-    FPL('SingletonSocket');
-const base::FilePath::CharType kSupervisedUserSettingsFilename[] =
-    FPL('Managed Mode Settings');
-const base::FilePath::CharType kThemePackFilename[] = FPL('Cached Theme.pak');
-const base::FilePath::CharType kThemePackMaterialDesignFilename[] =
-    FPL('Cached Theme Material Design.pak');
-const base::FilePath::CharType kWebAppDirname[] = FPL('Web Applications');
+    #ifndef EXTENSIONS_BROWSER_APP_WINDOW_SIZE_CONSTRAINTS_H_
+#define EXTENSIONS_BROWSER_APP_WINDOW_SIZE_CONSTRAINTS_H_
     
-    // This flag controls the style of death tests.  Valid values are 'threadsafe',
-// meaning that the death test child process will re-execute the test binary
-// from the start, running only a single death test, or 'fast',
-// meaning that the child process will execute the test logic immediately
-// after forking.
-GTEST_DECLARE_string_(death_test_style);
     
-    // Prints the given number of elements in an array, without printing
-// the curly braces.
-template <typename T>
-void PrintRawArrayTo(const T a[], size_t count, ::std::ostream* os) {
-  UniversalPrint(a[0], os);
-  for (size_t i = 1; i != count; i++) {
-    *os << ', ';
-    UniversalPrint(a[i], os);
+    {}  // namespace atom
+    
+      bool thrown = false;
+  try {
+    thpp::IntTensor &a = dynamic_cast<thpp::IntTensor&>(*tensor);
+  } catch(std::bad_cast &e) {
+    thrown = true;
   }
+  assert(thrown);
+    
+    Tensor ifft(const Tensor& self, const int64_t signal_ndim, const bool normalized) {
+  return _fft(self, signal_ndim, /* complex_input */ true,
+              /* complex_output */ true, /* inverse */ true, {}, normalized,
+              /* onesided */ false);
 }
     
-    // An Environment object is capable of setting up and tearing down an
-// environment.  The user should subclass this to define his own
-// environment(s).
-//
-// An Environment object does the set-up and tear-down in virtual
-// methods SetUp() and TearDown() instead of the constructor and the
-// destructor, as:
-//
-//   1. You cannot safely throw from a destructor.  This is a problem
-//      as in some cases Google Test is used where exceptions are enabled, and
-//      we may want to implement ASSERT_* using exceptions where they are
-//      available.
-//   2. You cannot use ASSERT_* directly in a constructor or
-//      destructor.
-class Environment {
+    template <typename T, class Context>
+class SparseFunHashGradientOp : public Operator<Context> {
  public:
-  // The d'tor is virtual as we need to subclass Environment.
-  virtual ~Environment() {}
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  SparseFunHashGradientOp(const OperatorDef& operator_def, Workspace* ws)
+      : Operator<Context>(operator_def, ws),
+        num_outputs_(
+            OperatorBase::GetSingleArgument<TIndex>('num_outputs', -1)),
+        seed_(OperatorBase::GetSingleArgument<uint64_t>('seed', 0)) {
+    adaptive_ = (InputSize() == 6);
+  }
     }
     
-    #endif  // GTEST_HAS_DEATH_TEST
-    
-    /*
- * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
- * Method:    XGBoosterFree
- * Signature: (J)V
- */
-JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGBoosterFree
-  (JNIEnv *jenv, jclass jcls, jlong jhandle) {
-    BoosterHandle handle = (BoosterHandle) jhandle;
-    return XGBoosterFree(handle);
+    PyObject * THPWrapper_New(void *data, void (*destructor)(void*))
+{
+  PyObject *args = PyTuple_New(0);
+  if (!args) {
+    return NULL;
+  }
+  PyObject *result = PyObject_Call(THPWrapperClass, args, NULL);
+  if (result) {
+    THPWrapper* wrapper = (THPWrapper*) result;
+    wrapper->data = data;
+    wrapper->destructor = destructor;
+  }
+  Py_DECREF(args);
+  return result;
 }
     
-    // macro to dispatch according to specified pointer types
-#define DISPATCH_CONST_PTR(dtype, old_ptr, cast_ptr, proc)              \
-  switch (dtype) {                                                      \
-    case kFloat32: {                                                    \
-      auto cast_ptr = reinterpret_cast<const float*>(old_ptr); proc; break; \
-    }                                                                   \
-    case kDouble: {                                                     \
-      auto cast_ptr = reinterpret_cast<const double*>(old_ptr); proc; break; \
-    }                                                                   \
-    case kUInt32: {                                                     \
-      auto cast_ptr = reinterpret_cast<const uint32_t*>(old_ptr); proc; break; \
-    }                                                                   \
-    case kUInt64: {                                                     \
-      auto cast_ptr = reinterpret_cast<const uint64_t*>(old_ptr); proc; break; \
-    }                                                                   \
-    default: LOG(FATAL) << 'Unknown data type' << dtype;                \
-  }                                                                     \
     
-    // prediction
-#include '../src/predictor/predictor.cc'
-#include '../src/predictor/cpu_predictor.cc'
+    {////////////////////////////////////////////////////////////////////////////////
+} // namespace detail
     
-    #include <dmlc/base.h>
-#include <dmlc/omp.h>
-#include <cmath>
-#include <iostream>
+    /** Returns the benchmark Reporter instance.
+ *
+ * The returned instance will take care of generating reports for all the actual
+ * reporters configured via the 'enable_*_reporter' command line flags (see
+ * benchmark_config.cc). */
+std::shared_ptr<Reporter> GetReporter();
     
-    TEST(Metric, MAE) {
-  xgboost::Metric * metric = xgboost::Metric::Create('mae');
-  ASSERT_STREQ(metric->Name(), 'mae');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0.5f, 0.001f);
+    namespace grpc {
+namespace testing {
+    }
+    }
+    
+    
+    {  auto it = fwds.find(key);
+  if (it == fwds.end()) {
+    MKLDNNConcatFwd fwd(concat_dim, data_md);
+    auto ins_ret = fwds.insert(std::pair<OpSignature, MKLDNNConcatFwd>(
+            key, fwd));
+    CHECK(ins_ret.second);
+    it = ins_ret.first;
+  }
+  return it->second;
 }
+    
+    // Transfer gradient and output to FGradient function
+struct ElemwiseGradUseOut {
+  const char *op_name;
+  std::vector<nnvm::NodeEntry> operator()(const nnvm::NodePtr& n,
+                                          const std::vector<nnvm::NodeEntry>& ograds) const {
+    std::vector<nnvm::NodeEntry> heads;
+    index_t n_out = n->num_outputs();
+    for (index_t i = 0; i < n_out; ++i) {
+      heads.emplace_back(nnvm::NodeEntry{n, i, 0});
+    }
+    return MakeNonlossGradNode(op_name, n, ograds, heads, n->attrs.dict);
+  }
+};
+    
+    std::vector<nnvm::NodeEntry> ElementWiseSumGrad(
+    const nnvm::NodePtr& n,
+    const std::vector<nnvm::NodeEntry>& ograds) {
+  // identity constraints in the beginning for easier shape inference.
+  const nnvm::Op* copy_op =
+      nnvm::Op::Get('identity');
+  CHECK_EQ(ograds.size(), 1);
+  std::vector<nnvm::NodeEntry> ret;
+  nnvm::NodeEntry n_out{n, 0, 0};
+  for (size_t i = 0; i < n->inputs.size(); i++) {
+    nnvm::NodePtr id_node = nnvm::Node::Create();
+    id_node->attrs.op = copy_op;
+    id_node->inputs = {ograds[0]};
+    ret.push_back(nnvm::NodeEntry{id_node, 0, 0});
+  }
+  return ret;
+}
+    
+    #include <unordered_set>
+#include <utility>
+#include <random>
+    
+    #include <stdint.h>
+#include <cstddef>
+#include <list>
+    
+      private:
+    SpyCore() {}
+    ~SpyCore() {}
+    
+    
+    
+    #ifndef _COMM_FUNCTION_H_
+#define _COMM_FUNCTION_H_
