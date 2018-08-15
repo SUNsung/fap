@@ -1,96 +1,87 @@
 
         
-            def test_facebook_matching(self):
-        self.assertTrue(FacebookIE.suitable('https://www.facebook.com/Shiniknoh#!/photo.php?v=10153317450565268'))
-        self.assertTrue(FacebookIE.suitable('https://www.facebook.com/cindyweather?fref=ts#!/photo.php?v=10152183998945793'))
+        
+def format_size(bytes):
+    return '%s (%d bytes)' % (format_bytes(bytes), bytes)
     
-        def test_secondary_proxy_http(self):
-        params = self._check_params(['secondary_proxy', 'secondary_server_ip'])
-        if params is None:
-            return
-        ydl = FakeYDL()
-        req = compat_urllib_request.Request('http://yt-dl.org/ip')
-        req.add_header('Ytdl-request-proxy', params['secondary_proxy'])
-        self.assertEqual(
-            ydl.urlopen(req).read().decode('utf-8'),
-            params['secondary_server_ip'])
+        # Are checkable fields missing from the test case definition?
+    test_info_dict = dict((key, value if not isinstance(value, compat_str) or len(value) < 250 else 'md5:' + md5(value))
+                          for key, value in got_dict.items()
+                          if value and key in ('id', 'title', 'description', 'uploader', 'upload_date', 'timestamp', 'uploader_id', 'location', 'age_limit'))
+    missing_keys = set(test_info_dict.keys()) - set(expected_dict.keys())
+    if missing_keys:
+        def _repr(v):
+            if isinstance(v, compat_str):
+                return ''%s'' % v.replace('\\', '\\\\').replace(''', '\\'').replace('\n', '\\n')
+            else:
+                return repr(v)
+        info_dict_str = ''
+        if len(missing_keys) != len(expected_dict):
+            info_dict_str += ''.join(
+                '    %s: %s,\n' % (_repr(k), _repr(v))
+                for k, v in test_info_dict.items() if k not in missing_keys)
     
-            info_dict = self._extract_from_id(mvp_id, webpage)
-        info_dict['display_id'] = display_id
+            return {
+            '_type': 'url_transparent',
+            'display_id': display_id,
+            'url': 'kaltura:%s:%s' % (partner_id, entry_id),
+            'ie_key': 'Kaltura',
+            'title': title
+        }
+
     
-            # XXX not implemented yet
-        entdig = None
-        p_parsed = urlparse(url)
-        #: path is request-uri defined in RFC 2616 which should not be empty
-        path = p_parsed.path or '/'
-        if p_parsed.query:
-            path += '?' + p_parsed.query
+        _TEST = {
+        'url': 'http://www.defense.gouv.fr/layout/set/ligthboxvideo/base-de-medias/webtv/attaque-chimique-syrienne-du-21-aout-2013-1',
+        'md5': '75bba6124da7e63d2d60b5244ec9430c',
+        'info_dict': {
+            'id': '11213',
+            'ext': 'mp4',
+            'title': 'attaque-chimique-syrienne-du-21-aout-2013-1'
+        }
+    }
+    
+    from twisted import version as _txv
+twisted_version = (_txv.major, _txv.minor, _txv.micro)
+    
+                tested_methods = conman.tested_methods_from_spidercls(spidercls)
+            if opts.list:
+                for method in tested_methods:
+                    contract_reqs[spidercls.name].append(method)
+            elif tested_methods:
+                self.crawler_process.crawl(spidercls)
+    
+    from . import Contract
+    
+        def handleHeader(self, key, value):
+        self.headers.appendlist(key, value)
     
     
-class CookieConflictError(RuntimeError):
-    '''There are two cookies that meet the criteria specified in the cookie jar.
-    Use .get and .set and include domain and path args in order to be more specific.
-    '''
+class Application(tornado.web.Application):
+    def __init__(self):
+        handlers = [
+            (r'/', MainHandler),
+            (r'/auth/login', AuthLoginHandler),
+            (r'/auth/logout', AuthLogoutHandler),
+        ]
+        settings = dict(
+            cookie_secret='__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__',
+            login_url='/auth/login',
+            template_path=os.path.join(os.path.dirname(__file__), 'templates'),
+            static_path=os.path.join(os.path.dirname(__file__), 'static'),
+            xsrf_cookies=True,
+            facebook_api_key=options.facebook_api_key,
+            facebook_secret=options.facebook_secret,
+            ui_modules={'Post': PostModule},
+            debug=True,
+            autoescape=None,
+        )
+        tornado.web.Application.__init__(self, handlers, **settings)
     
-        def get(self, url, **kwargs):
-        r'''Sends a GET request. Returns :class:`Response` object.
+    # Repeat the entire benchmark this many times (on different ports)
+# This gives JITs time to warm up, etc.  Pypy needs 3-5 runs at
+# --n=15000 for its JIT to reach full effectiveness
+define('num_runs', type=int, default=1)
     
-        def _advance(self):
-        ''' Return the value of the current token and read the next one into
-            self.cur_token.
-        '''
-        cur_val = None if self.cur_token is None else self.cur_token.value
-        try:
-            self.cur_token = next(self._tokenizer)
-        except StopIteration:
-            self.cur_token = None
-        return cur_val
-    
-    
-def main(root=ROOT_DIR, filename=GLOBALS_FILE,
-         filters=None, columns=COLUMN_NAMES, sort=None, group=None,
-         verbosity=VERBOSITY, rc=1):
-    
-    def run_latency_tests(max_threads):
-    for task in latency_tasks:
-        print('Background CPU task:', task.__doc__)
-        print()
-        func, args = task()
-        nthreads = 0
-        while nthreads <= max_threads:
-            results = run_latency_test(func, args, nthreads)
-            n = len(results)
-            # We print out milliseconds
-            lats = [1000 * (t2 - t1) for (t1, t2) in results]
-            #print(list(map(int, lats)))
-            avg = sum(lats) / n
-            dev = (sum((x - avg) ** 2 for x in lats) / n) ** 0.5
-            print('CPU threads=%d: %d ms. (std dev: %d ms.)' % (nthreads, avg, dev), end='')
-            print()
-            #print('    [... from %d samples]' % n)
-            nthreads += 1
-        print()
-    
-    By Guido van Rossum, demystified after a version by Fredrik Lundh.
-'''
-    
-            total_count = 0
-        translated_count = 0
-        with open(fn) as f:
-            catalog = read_po(f)
-            for msg in catalog:
-                total_count += 1
-                if is_translated(msg):
-                    translated_count += 1
-        pct = translated_count / float(total_count) * 100
-        click.echo('% -7s % 2d%%' % (
-            locale,
-            pct,
-        ), err=True)
-        if pct >= MINIMUM and locale not in rv:
-            rv.append(locale)
-    with open(catalog_file, 'w') as f:
-        json.dump({
-            'supported_locales': sorted(rv)
-        }, f, indent=2)
-        f.write('\n')
+        # tornado.gen
+    'Multi',
+]
