@@ -1,41 +1,51 @@
 
         
-        def check_link(uri)
-  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
-    if (400..422).include?(status)
-      if status != 403 && !uri.exclude?('udemy.com')
-        raise 'Request had status #{status}'
-      else
-        putc('S')
-      end
-    end
-  end
-end
-    
-      # DELETE /resource/sign_out
-  def destroy
-    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
-    set_flash_message! :notice, :signed_out if signed_out
-    yield if block_given?
-    respond_to_on_destroy
+          def worker_id(config = nil)
+    '#{self.class.to_s}-#{id}-#{Digest::SHA1.hexdigest((config.presence || options).to_json)}'
   end
     
-        def self.find_by_path!(path, path_type=:fullpath)
-      Devise.mappings.each_value { |m| return m if path.include?(m.send(path_type)) }
-      raise 'Could not find a valid mapping for path #{path.inspect}'
+      def reemit
+    @event.reemit!
+    respond_to do |format|
+      format.html { redirect_back event_path(@event), notice: 'Event re-emitted.' }
+    end
+  end
+    
+    class ActivityPub::EmojiSerializer < ActiveModel::Serializer
+  include RoutingHelper
+    
+      private
+    
+    (allow file-ioctl)
+(allow sysctl-read)
+(allow mach-lookup)
+(allow ipc-posix-shm)
+(allow process-fork)
+(allow system-socket)
+    
+            # Runs the template configuration utilities.
+        #
+        # @return [void]
+        #
+        def print_info
+          UI.puts '\nTo learn more about the template see `#{template_repo_url}`.'
+          UI.puts 'To learn more about creating a new pod, see `#{CREATE_NEW_POD_INFO_URL}`.'
+        end
+    
+        # Extracts the Geometry from a 'WxH,O' string
+    # Where W is the width, H is the height,
+    # and O is the EXIF orientation
+    def self.parse(string)
+      GeometryParser.new(string).make
     end
     
-            def show
-          authorize! :read, @order, order_token
-          @address = find_address
-          respond_with(@address)
+            def responds?
+          methods = @subject.instance_methods.map(&:to_s)
+          methods.include?('#{@attachment_name}') &&
+            methods.include?('#{@attachment_name}=') &&
+            methods.include?('#{@attachment_name}?')
         end
     
-            def update
-          authorize! :update, stock_location
-          if stock_location.update_attributes(stock_location_params)
-            respond_with(stock_location, status: 200, default_template: :show)
-          else
-            invalid_resource!(stock_location)
-          end
-        end
+      class Railtie
+    def self.insert
+      Paperclip.options[:logger] = Rails.logger
