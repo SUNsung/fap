@@ -1,218 +1,349 @@
 
         
-        bool NwCurrentWindowInternalSetTitleInternalFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  EXTENSION_FUNCTION_VALIDATE(args_);
-  std::string title;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(0, &title));
-  AppWindow* window = getAppWindow(this);
-  window->set_title_override(title);
-  window->GetBaseWindow()->UpdateWindowTitle();
-  return true;
+        // Tests that GetEncodingAsString returns the right result for a trivial
+// unicharset.
+TEST_F(UnicharcompressTest, GetEncodingAsString) {
+  LoadUnicharset('trivial.unicharset');
+  ExpectCorrect('trivial');
+  STRING encoding = compressed_.GetEncodingAsString(unicharset_);
+  string encoding_str(&encoding[0], encoding.length());
+  std::vector<string> lines =
+      strings::Split(encoding_str, '\n', strings::SkipEmpty());
+  EXPECT_EQ(5, lines.size());
+  // The first line is always space.
+  EXPECT_EQ('0\t ', lines[0]);
+  // Next we have i.
+  EXPECT_EQ('1\ti', lines[1]);
+  // Next we have f.
+  EXPECT_EQ('2\tf', lines[2]);
+  // Next we have the fi ligature: ﬁ. There are no nulls in it, as there are no
+  // repeated letter ligatures in this unicharset, unlike por.unicharset above.
+  EXPECT_EQ('2,1\tﬁ', lines[3]);
+  // Finally the null character.
+  EXPECT_EQ('3\t<nul>', lines[4]);
 }
     
-    namespace nw {
+     public:
+  inline _ConstTessMemberResultCallback_4_4(const T* object, MemberSignature member, P1 p1, P2 p2, P3 p3, P4 p4)
+    : object_(object),
+      member_(member),      p1_(p1),      p2_(p2),      p3_(p3),      p4_(p4) { }
+    
+      // Adjust the weights of all the samples to be uniform in the given charset.
+  // Returns the number of samples in the iterator.
+  int UniformSamples();
+    
+      // Helper functions for TransformToBlocks.
+  // Add the part to the temp list in the correct order.
+  void AddToTempPartList(ColPartition* part, ColPartition_CLIST* temp_list);
+  // Add everything from the temp list to the work_set assuming correct order.
+  void EmptyTempPartList(ColPartition_CLIST* temp_list,
+                         WorkingPartSet_LIST* work_set);
+    
+    
+    {  if (colour == ScrollView::RED || colour == ScrollView::BLUE) {
+    looplength = loop_bounding_box (start, botleft, topright);
+    outline = new C_OUTLINE (start, botleft, topright, looplength);
+                                 //add to list
+    outline_it->add_after_then_move (outline);
+  }
+}
+    
+    namespace tesseract {
     }
     
-    namespace content {
-class RenderFrameHost;
-}
-    
-    
-    {}
-    
-     protected:
-  ~NwObjCallObjectMethodFunction() override;
-    
-    
-    {  }
-    
-    NwShellOpenItemFunction::NwShellOpenItemFunction() {
-}
+    namespace grpc {
+namespace testing {
+    }
+    }
     
     
     {
-    {    Token token;
-    // Accept Comment after last item in the array.
-    ok = readToken(token);
-    while (token.type_ == tokenComment && ok) {
-      ok = readToken(token);
+    {}  // namespace testing
+}  // namespace grpc
+    
+    void grpc_ares_ev_driver_start_locked(grpc_ares_ev_driver* ev_driver) {
+  if (!ev_driver->working) {
+    ev_driver->working = true;
+    grpc_ares_notify_on_event_locked(ev_driver);
+  }
+}
+    
+    void (*grpc_resolve_address_ares)(
+    const char* name, const char* default_port,
+    grpc_pollset_set* interested_parties, grpc_closure* on_done,
+    grpc_resolved_addresses** addrs) = grpc_resolve_address_ares_impl;
+    
+    void RunResolvesRelevantRecordsTest(void (*OnDoneLocked)(void* arg,
+                                                         grpc_error* error)) {
+  grpc_core::ExecCtx exec_ctx;
+  ArgsStruct args;
+  ArgsInit(&args);
+  args.expected_addrs = ParseExpectedAddrs(FLAGS_expected_addrs);
+  args.expected_service_config_string = FLAGS_expected_chosen_service_config;
+  args.expected_lb_policy = FLAGS_expected_lb_policy;
+  // maybe build the address with an authority
+  char* whole_uri = nullptr;
+  GPR_ASSERT(gpr_asprintf(&whole_uri, 'dns://%s/%s',
+                          FLAGS_local_dns_server_address.c_str(),
+                          FLAGS_target_name.c_str()));
+  // create resolver and resolve
+  grpc_core::OrphanablePtr<grpc_core::Resolver> resolver =
+      grpc_core::ResolverRegistry::CreateResolver(whole_uri, nullptr,
+                                                  args.pollset_set, args.lock);
+  gpr_free(whole_uri);
+  grpc_closure on_resolver_result_changed;
+  GRPC_CLOSURE_INIT(&on_resolver_result_changed, OnDoneLocked, (void*)&args,
+                    grpc_combiner_scheduler(args.lock));
+  resolver->NextLocked(&args.channel_args, &on_resolver_result_changed);
+  grpc_core::ExecCtx::Get()->Flush();
+  PollPollsetUntilRequestDone(&args);
+  ArgsFinish(&args);
+}
+    
+    /* Destructor for call_data */
+static void destroy_call_elem(grpc_call_element* elem,
+                              const grpc_call_final_info* final_info,
+                              grpc_closure* ignored) {
+  call_data* calld = static_cast<call_data*>(elem->call_data);
+  grpc_credentials_mdelem_array_destroy(&calld->md_array);
+  grpc_call_credentials_unref(calld->creds);
+  grpc_slice_unref_internal(calld->host);
+  grpc_slice_unref_internal(calld->method);
+  grpc_auth_metadata_context_reset(&calld->auth_md_context);
+}
+    
+    #include 'src/core/lib/security/context/security_context.h'
+#include 'src/core/lib/security/credentials/credentials.h'
+#include 'src/core/lib/security/transport/auth_filters.h'
+#include 'src/core/lib/slice/slice_internal.h'
+    
+    #ifndef GPR_LINUX
+    
+    template<typename T>
+inline Vptr emitTLSAddr(Vout& v, TLSDatum<T> datum) {
+  switch (arch()) {
+    case Arch::X64:
+      return x64::detail::emitTLSAddr(v, datum);
+    case Arch::ARM:
+      return arm::detail::emitTLSAddr(v, datum);
+    case Arch::PPC64:
+      return ppc64::detail::emitTLSAddr(v, datum);
+  }
+  not_reached();
+}
+    
+      /**
+   * Create a task. This returns a task handle, or null object
+   * if there are no worker threads.
+   */
+  static Resource TaskStart(
+    const String& url, const Array& headers,
+    const String& remote_host,
+    const String& post_data = null_string,
+    const Array& files = null_array,
+    int timeoutSeconds = -1,
+    PageletServerTaskEvent *event = nullptr
+  );
+    
+      /*
+   * Create a sub-string from start with specified length.
+   *
+   * If the start is outside the bounds of the string, or the length is
+   * negative, the empty string is returned.  The range [start, start+length]
+   * gets clamped to [start, size()].
+   */
+  StringData* substr(int start, int length = StringData::MaxSize);
+    
+    struct hphp_string_isame {
+  bool operator()(const String& s1, const String& s2) const {
+    return s1.get()->isame(s2.get());
+  }
+};
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    namespace HPHP {
     }
-    bool badTokenType =
-        (token.type_ != tokenArraySeparator && token.type_ != tokenArrayEnd);
-    if (!ok || badTokenType) {
-      return addErrorAndRecover(
-          'Missing ',' or ']' in array declaration', token, tokenArrayEnd);
+    
+    void* BumpExtentAllocator::
+extent_alloc(extent_hooks_t* extent_hooks, void* addr,
+             size_t size, size_t alignment, bool* zero,
+             bool* commit, unsigned arena_ind) {
+  assert(extent_hooks == &BumpExtentAllocator::s_hooks);
+  if (addr != nullptr) return nullptr;
+  assert(folly::isPowTwo(alignment));
+  const uintptr_t mask = ~(alignment - 1);
     }
-    if (token.type_ == tokenArrayEnd)
+    
+      using BumpAllocState::mappedSize;
+  using BumpAllocState::allocatedSize;
+  using BumpAllocState::maxCapacity;
+    
+    
+    {  return ret;
+}
+    
+      if (num_req == 1) {
+    // Iterating through the counter is correct but a bit inefficient
+    // compared to being able to access the right offset into array data,
+    // but necessary for this code to be agnostic to the array's internal
+    // representation.  Assuming uniform distribution, we'll expect to
+    // iterate through half of the array's data.
+    ssize_t index = HHVM_FN(rand)(0, count-1);
+    ssize_t pos = input->iter_begin();
+    while (index--) {
+      pos = input->iter_advance(pos);
+    }
+    return input->getKey(pos);
+  }
+    
+      // Check that opening non-existent file fails.
+  SequentialFile* seq_file;
+  RandomAccessFile* rand_file;
+  ASSERT_TRUE(!env_->NewSequentialFile('/dir/non_existent', &seq_file).ok());
+  ASSERT_TRUE(!seq_file);
+  ASSERT_TRUE(!env_->NewRandomAccessFile('/dir/non_existent', &rand_file).ok());
+  ASSERT_TRUE(!rand_file);
+    
+    // Test for issue 178: a manual compaction causes deleted data to reappear.
+#include <iostream>
+#include <sstream>
+#include <cstdlib>
+    
+      // Add string delta to buffer_ followed by value
+  buffer_.append(key.data() + shared, non_shared);
+  buffer_.append(value.data(), value.size());
+    
+      // Read the block contents as well as the type/crc footer.
+  // See table_builder.cc for the code that built this structure.
+  size_t n = static_cast<size_t>(handle.size());
+  char* buf = new char[n + kBlockTrailerSize];
+  Slice contents;
+  Status s = file->Read(handle.offset(), n + kBlockTrailerSize, &contents, buf);
+  if (!s.ok()) {
+    delete[] buf;
+    return s;
+  }
+  if (contents.size() != n + kBlockTrailerSize) {
+    delete[] buf;
+    return Status::Corruption('truncated block read');
+  }
+    
+      size_t FilterSize() const {
+    return filter_.size();
+  }
+    
+    
+    {  // Pick up remaining bytes
+  switch (limit - data) {
+    case 3:
+      h += static_cast<unsigned char>(data[2]) << 16;
+      FALLTHROUGH_INTENDED;
+    case 2:
+      h += static_cast<unsigned char>(data[1]) << 8;
+      FALLTHROUGH_INTENDED;
+    case 1:
+      h += static_cast<unsigned char>(data[0]);
+      h *= m;
+      h ^= (h >> r);
       break;
   }
-  return true;
+  return h;
 }
     
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
+      ~AutoCompactTest() {
+    delete db_;
+    DestroyDB(dbname_, Options());
+    delete tiny_cache_;
+  }
     
-    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
-  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
-  // Identifiers can't start with digits
-  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
-  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
-}
-    
-    
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-      // Write any attributes used to decorate generated function members (methods and properties).
-  // Should not be used to decorate types.
-  void WriteGeneratedCodeAttributes(io::Printer* printer);
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
+    namespace leveldb {
 namespace {
     }
     }
+    
+      // Returns true if the argument of the last Compare() call (or the baseline
+  // image, if Compare() was not called yet) meets the image acceptance
+  // criteria. The target_mul modifies the acceptance criteria used in this call
+  // the following way:
+  //    = 1.0 : the original acceptance criteria is used,
+  //    < 1.0 : a more strict acceptance criteria is used,
+  //    > 1.0 : a less strict acceptance criteria is used.
+  virtual bool DistanceOK(double target_mul) const = 0;
+    
+    // TODO(user) Use linear->SRGB conversion and a lookup-table.
+inline float LinearToGamma(float x) {
+  return 255.0 * std::pow(x, 1.0 / 2.2);
+}
+    
+    // This function will create a Huffman tree.
+//
+// The (data,length) contains the population counts.
+// The tree_limit is the maximum bit depth of the Huffman codes.
+//
+// The depth contains the tree, i.e., how many bits are used for
+// the symbol.
+//
+// The actual Huffman tree is constructed in the tree[] array, which has to
+// be at least 2 * length + 1 long.
+//
+// See http://en.wikipedia.org/wiki/Huffman_coding
+void CreateHuffmanTree(const uint32_t *data,
+                       const size_t length,
+                       const int tree_limit,
+                       HuffmanTree* tree,
+                       uint8_t *depth);
+    
+    #include 'guetzli/gamma_correct.h'
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    
+    {}  // namespace guetzli
+
+    
+      // Special case code with only one value.
+  if (total_count == 1) {
+    code.bits = 0;
+    code.value = symbols[0];
+    for (key = 0; key < total_size; ++key) {
+      table[key] = code;
     }
-    }
-    }
-    
-    enum RecordType {
-  // Zero is reserved for preallocated files
-  kZeroType = 0,
-    }
-    
-    struct FileMetaData {
-  int refs;
-  int allowed_seeks;          // Seeks allowed until compaction
-  uint64_t number;
-  uint64_t file_size;         // File size in bytes
-  InternalKey smallest;       // Smallest internal key served by table
-  InternalKey largest;        // Largest internal key served by table
-    }
-    
-      ReadOptions read_options;
-  Iterator *iter = db->NewIterator(read_options);
-    
-      memset(buf, 0, sizeof(buf));
-  ASSERT_EQ(0x8a9136aa, Value(buf, sizeof(buf)));
-    
-      std::string ToString() const;
-    
-    class SCOPED_LOCKABLE MutexLock {
- public:
-  explicit MutexLock(port::Mutex *mu) EXCLUSIVE_LOCK_FUNCTION(mu)
-      : mu_(mu)  {
-    this->mu_->Lock();
+    return total_size;
   }
-  ~MutexLock() UNLOCK_FUNCTION() { this->mu_->Unlock(); }
-    }
     
-    // A very simple random number generator.  Not especially good at
-// generating truly random bits, but good enough for our needs in this
-// package.
-class Random {
- private:
-  uint32_t seed_;
- public:
-  explicit Random(uint32_t s) : seed_(s & 0x7fffffffu) {
-    // Avoid bad seeds.
-    if (seed_ == 0 || seed_ == 2147483647L) {
-      seed_ = 1;
-    }
+      if (state_ != SingletonHolderState::NotRegistered) {
+    /* Possible causes:
+     *
+     * You have two instances of the same
+     * folly::Singleton<Class>. Probably because you define the
+     * singleton in a header included in multiple places? In general,
+     * folly::Singleton shouldn't be in the header, only off in some
+     * anonymous namespace in a cpp file. Code needing the singleton
+     * will find it when that code references folly::Singleton<Class>.
+     *
+     * Alternatively, you could have 2 singletons with the same type
+     * defined with a different name in a .cpp (source) file. For
+     * example:
+     *
+     * Singleton<int> a([] { return new int(3); });
+     * Singleton<int> b([] { return new int(4); });
+     *
+     */
+    singletonWarnDoubleRegistrationAndAbort(type());
   }
-  uint32_t Next() {
-    static const uint32_t M = 2147483647L;   // 2^31-1
-    static const uint64_t A = 16807;  // bits 14, 8, 7, 5, 2, 1, 0
-    // We are computing
-    //       seed_ = (seed_ * A) % M,    where M = 2^31-1
-    //
-    // seed_ must not be zero or M, or else all subsequent computed values
-    // will be zero or M respectively.  For all other values, seed_ will end
-    // up cycling through every number in [1,M-1]
-    uint64_t product = seed_ * A;
-    }
-    }
     
-      // Format the header
-  char buf[kHeaderSize];
-  buf[4] = static_cast<char>(n & 0xff);
-  buf[5] = static_cast<char>(n >> 8);
-  buf[6] = static_cast<char>(t);
+     public:
+  HazptrSWMRSet() : head_(nullptr) {}
     
+      // Bump the value and record ourselves as reader.
+  // This ensures that block stays allocated, as the reader count is > 0.
+  auto prev = block->valueAndReaderCount.fetch_add(kReader + 1,
+                                                   std::memory_order_acquire);
     
-    
-    
-    
-    #ifndef APPLY_FORCE_H
-#define APPLY_FORCE_H
-    
-    		if (b2_toiCalls > 0)
-		{
-			m_debugDraw.DrawString(5, m_textLine, 'toi calls = %d, ave toi iters = %3.1f, max toi iters = %d',
-				b2_toiCalls, b2_toiIters / float32(b2_toiCalls), b2_toiMaxRootIters);
-			m_textLine += DRAW_STRING_NEW_LINE;
-    }
-    
-    //---- Don't implement some functions to reduce linkage requirements.
-//#define IMGUI_DISABLE_WIN32_DEFAULT_CLIPBOARD_FUNCTIONS   // [Win32] Don't implement default clipboard handler. Won't use and link with OpenClipboard/GetClipboardData/CloseClipboard etc.
-//#define IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS         // [Win32] Don't implement default IME handler. Won't use and link with ImmGetContext/ImmSetCompositionWindow.
-//#define IMGUI_DISABLE_FORMAT_STRING_FUNCTIONS             // Don't implement ImFormatString/ImFormatStringV so you can implement them yourself if you don't want to link with vsnprintf.
-//#define IMGUI_DISABLE_MATH_FUNCTIONS                      // Don't implement ImFabs/ImSqrt/ImPow/ImFmod/ImCos/ImSin/ImAcos/ImAtan2 wrapper so you can implement them yourself. Declare your prototypes in imconfig.h.
-//#define IMGUI_DISABLE_DEFAULT_ALLOCATORS                  // Don't implement default allocators calling malloc()/free(). You will need to call ImGui::SetAllocatorFunctions().
-    
-        // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
-    // If you would like to use this DX11 sample code but remove this dependency you can: 
-    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
-    //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL. 
-    // See https://github.com/ocornut/imgui/pull/638 for sources and details.
-    
-        my_display_code();
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-                ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our windows open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
-    
-        // Upload texture to graphics system
-    g_FontTexture = new CIwTexture();
-    g_FontTexture->SetModifiable(true);
-    CIwImage& image = g_FontTexture->GetImage();
-    image.SetFormat(CIwImage::ARGB_8888);
-    image.SetWidth(width);
-    image.SetHeight(height);
-    image.SetBuffers();                                    // allocates and own buffers
-    image.ReadTexels(pixels);
-    g_FontTexture->SetMipMapping(false);
-    g_FontTexture->SetFiltering(false);
-    g_FontTexture->Upload();
+    TEST(to_weak_ptr, example) {
+  auto s = std::make_shared<int>(17);
+  EXPECT_EQ(1, s.use_count());
+  EXPECT_EQ(2, (to_weak_ptr(s).lock(), s.use_count())) << 'lvalue';
+  EXPECT_EQ(3, (to_weak_ptr(decltype(s)(s)).lock(), s.use_count())) << 'rvalue';
+}
