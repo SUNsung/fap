@@ -1,210 +1,141 @@
 
         
-                    return request_content
+        
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
+    
+        def test_self_signed_server_cert_by_default_raises_ssl_error(
+            self,
+            httpbin_secure_untrusted):
+        with pytest.raises(SSLError):
+            http(httpbin_secure_untrusted.url + '/get')
     
     
-def to_native_string(string, encoding='ascii'):
-    '''Given a string object, regardless of type, returns a representation of
-    that string in the native string type, encoding and decoding where
-    necessary. This assumes ASCII unless told otherwise.
-    '''
-    if isinstance(string, builtin_str):
-        out = string
-    else:
-        if is_py2:
-            out = string.encode(encoding)
+def _get_git_revision():
+    try:
+        revision = subprocess.check_output(REVISION_CMD.split()).strip()
+    except (subprocess.CalledProcessError, OSError):
+        print('Failed to execute git to get revision')
+        return None
+    return revision.decode('utf-8')
+    
+        input_file = open(os.path.join(exercise_dir, f))
+    output_file = open(os.path.join(skeleton_dir, f), 'w')
+    
+    # Author: Kemal Eren <kemal@kemaleren.com>
+# License: BSD 3 clause
+    
+    The left and right examples highlight the ``n_labels`` parameter:
+more of the samples in the right plot have 2 or 3 labels.
+    
+    import os, json, imp
+here = os.path.abspath(os.path.dirname(__file__))
+proj_info = json.loads(open(os.path.join(here, PROJ_METADATA), encoding='utf-8').read())
+try:
+    README = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
+except:
+    README = ''
+CHANGELOG = open(os.path.join(here, 'CHANGELOG.rst'), encoding='utf-8').read()
+VERSION = imp.load_source('version', os.path.join(here, 'src/%s/version.py' % PACKAGE_NAME)).__version__
+    
+    import json
+    
+    def ehow_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+	
+	assert re.search(r'http://www.ehow.com/video_', url), 'URL you entered is not supported'
+    
+    __all__ = ['mtv81_download']
+    
+            self.title = match1(content,
+                            r'setup\[\'title\'\] = '([^']+)';')
+    
+    # line 20
+class StupidGit:
+    '''A longer,
+    
+            # Remove all the selected tests that precede start if it's set.
+        if self.ns.start:
+            try:
+                del self.selected[:self.selected.index(self.ns.start)]
+            except ValueError:
+                print('Couldn't find starting test (%s), using all tests'
+                      % self.ns.start, file=sys.stderr)
+    
+                orig_stdout = sys.stdout
+            orig_stderr = sys.stderr
+            try:
+                sys.stdout = stream
+                sys.stderr = stream
+                result = runtest_inner(ns, test, display_failure=False)
+                if result[0] != PASSED:
+                    output = stream.getvalue()
+                    orig_stderr.write(output)
+                    orig_stderr.flush()
+            finally:
+                sys.stdout = orig_stdout
+                sys.stderr = orig_stderr
         else:
-            out = string.decode(encoding)
+            support.verbose = ns.verbose  # Tell tests to be moderately quiet
+            result = runtest_inner(ns, test, display_failure=not ns.verbose)
+        return result
+    finally:
+        if use_timeout:
+            faulthandler.cancel_dump_traceback_later()
+        cleanup_test_droppings(test, ns.verbose)
+runtest.stringio = None
     
-            if algorithm is None:
-            _algorithm = 'MD5'
-        else:
-            _algorithm = algorithm.upper()
-        # lambdas assume digest modules are imported at the top level
-        if _algorithm == 'MD5' or _algorithm == 'MD5-SESS':
-            def md5_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.md5(x).hexdigest()
-            hash_utf8 = md5_utf8
-        elif _algorithm == 'SHA':
-            def sha_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.sha1(x).hexdigest()
-            hash_utf8 = sha_utf8
-        elif _algorithm == 'SHA-256':
-            def sha256_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.sha256(x).hexdigest()
-            hash_utf8 = sha256_utf8
-        elif _algorithm == 'SHA-512':
-            def sha512_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.sha512(x).hexdigest()
-            hash_utf8 = sha512_utf8
+    # Load an image with an unknown face
+unknown_image = face_recognition.load_image_file('two_people.jpg')
     
-        def values(self):
-        '''Dict-like values() that returns a list of values of cookies from the
-        jar.
+    setup(
+    name='face_recognition',
+    version='1.2.2',
+    description='Recognize faces from Python or from the command line',
+    long_description=readme + '\n\n' + history,
+    author='Adam Geitgey',
+    author_email='ageitgey@gmail.com',
+    url='https://github.com/ageitgey/face_recognition',
+    packages=[
+        'face_recognition',
+    ],
+    package_dir={'face_recognition': 'face_recognition'},
+    package_data={
+        'face_recognition': ['models/*.dat']
+    },
+    entry_points={
+        'console_scripts': [
+            'face_recognition=face_recognition.face_recognition_cli:main',
+            'face_detection=face_recognition.face_detection_cli:main'
+        ]
+    },
+    install_requires=requirements,
+    license='MIT license',
+    zip_safe=False,
+    keywords='face_recognition',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+    ],
+    test_suite='tests',
+    tests_require=test_requirements
+)
+
     
-        For example, ``headers['content-encoding']`` will return the
-    value of a ``'Content-Encoding'`` response header, regardless
-    of how the header name was originally stored.
-    
-            model = keras.models.Model(inputs, outputs)
-        model.compile('sgd', 'mse')
-    
-        # Arguments:
-        models (tuple): encoder and decoder models
-        data (tuple): test data and label
-        batch_size (int): prediction batch size
-        model_name (string): which model is using this function
+        :param img: A list of images (each as a numpy array)
+    :param number_of_times_to_upsample: How many times to upsample the image looking for faces. Higher numbers find smaller faces.
+    :return: A list of dlib 'rect' objects of found face locations
     '''
-    
-    
-@keras_test
-def test_locallyconnected_2d():
-    num_samples = 5
-    filters = 3
-    stack_size = 4
-    num_row = 6
-    num_col = 8
-    padding = 'valid'
-    
-    
-def get_standard_values():
-    '''A set of floats used for testing the activations.
-    '''
-    return np.array([[0, 0.1, 0.5, 0.9, 1.0]], dtype=K.floatx())
-    
-    # set parameters:
-max_features = 5000
-maxlen = 400
-batch_size = 32
-embedding_dims = 50
-filters = 250
-kernel_size = 3
-hidden_dims = 250
-epochs = 2
-    
-    print('Convert class vector to binary class matrix '
-      '(for use with categorical_crossentropy)')
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
-print('y_train shape:', y_train.shape)
-print('y_test shape:', y_test.shape)
-    
-        with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
-        loaded_model = keras.models.load_model(model_filename)
-        loaded_model.predict(np.random.rand(128, 2))
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
-    
-            self.charPositionInLine = None
-    
-            ## # if we've already reported an error and have not matched a token
-        ## # yet successfully, don't report any errors.
-        ## if self.errorRecovery:
-        ##     #System.err.print('[SPURIOUS] ');
-        ##     return;
-        ## 
-        ## self.errorRecovery = True
-    
-            raise NotImplementedError
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
-    
-        Note that as of Java 1.4, you can access the stack trace, which means
-    that you can compute the complete trace of rules from the start symbol.
-    This gives you considerable context information with which to generate
-    useful error messages.
-    
-            return link_list
-    
-        html = get_content(url)
-    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
-    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
-    
-        t = r1(r'type=(\w+)', flashvars)
-    id = r1(r'vid=([^']+)', flashvars)
-    if t == 'youku':
-        youku_download_by_vid(id, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
-    elif t == 'tudou':
-        tudou_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    elif t == 'sina' or t == 'video':
-        fake_headers['Referer'] = url
-        url = 'http://www.miomio.tv/mioplayer/mioplayerconfigfiles/sina.php?vid=' + id
-        xml_data = get_content(url, headers=fake_headers, decoded=True)
-        url_list = sina_xml_to_url_list(xml_data)
-    
-    
-    {    # Check that closing brace is aligned with beginning of the class.
-    # Only do this if the closing brace is indented by only whitespaces.
-    # This means we will not check single-line class definitions.
-    indent = Match(r'^( *)\}', clean_lines.elided[linenum])
-    if indent and len(indent.group(1)) != self.class_indent:
-      if self.is_struct:
-        parent = 'struct ' + self.name
-      else:
-        parent = 'class ' + self.name
-      error(filename, linenum, 'whitespace/indent', 3,
-            'Closing brace should be aligned with beginning of %s' % parent)
+    return cnn_face_detector(images, number_of_times_to_upsample, batch_size=batch_size)
