@@ -1,159 +1,127 @@
 
         
-            entry = entry_template.replace('@TIMESTAMP@', timestamp)
-    entry = entry.replace('@VERSION@', v)
-    entries.append(entry)
+        def plot(func):
+    random_state = check_random_state(0)
+    one_core = []
+    multi_core = []
+    sample_sizes = range(1000, 6000, 1000)
     
-        def test_facebook_matching(self):
-        self.assertTrue(FacebookIE.suitable('https://www.facebook.com/Shiniknoh#!/photo.php?v=10153317450565268'))
-        self.assertTrue(FacebookIE.suitable('https://www.facebook.com/cindyweather?fref=ts#!/photo.php?v=10152183998945793'))
+        xx = range(0, n * step, step)
+    plt.figure('scikit-learn tree benchmark results')
+    plt.subplot(211)
+    plt.title('Learning with varying number of samples')
+    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
+    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
+    plt.legend(loc='upper left')
+    plt.xlabel('number of samples')
+    plt.ylabel('Time (s)')
     
-    try:
-    from .lazy_extractors import *
-    from .lazy_extractors import _ALL_CLASSES
-    _LAZY_LOADER = True
-except ImportError:
-    _LAZY_LOADER = False
-    from .extractors import *
-    
-    
-    {        webpage = self._download_webpage(url, text_id)
-        sohu_video_info_str = self._search_regex(
-            r'var\s+sohuVideoInfo\s*=\s*({[^}]+});', webpage, 'Sohu video info', default=None)
-        if sohu_video_info_str:
-            sohu_video_info = self._parse_json(
-                sohu_video_info_str, text_id, transform_source=js_to_json)
-            return self.url_result(sohu_video_info['url'], 'Sohu')
-    
-    cc_library(
-    name = 'dragnn_ops_cc',
-    srcs = [
-        'ops/dragnn_op_kernels.cc',
-        'ops/dragnn_ops.cc',
-    ],
-    deps = [
-        ':compute_session',
-        ':compute_session_op',
-        ':compute_session_pool',
-        ':resource_container',
-        ':shape_helpers',
-        '//dragnn/core/util:label',
-        '//dragnn/protos:data_proto_cc',
-        '//dragnn/protos:spec_proto_cc',
-        '//syntaxnet:base',
-        '@org_tensorflow//third_party/eigen3',
-    ],
-    alwayslink = 1,
-)
-    
-    cc_test(
-    name = 'mst_solver_random_comparison_test',
-    size = 'small',
-    timeout = 'long',
-    srcs = ['mst_solver_random_comparison_test.cc'],
-    tags = [
-        'manual',  # exclude from :all, since this is expensive
-    ],
-    deps = [
-        ':mst_solver',
-        ':spanning_tree_iterator',
-        '//syntaxnet:base',
-        '//syntaxnet:test_main',
-        '@org_tensorflow//tensorflow/core:lib',
-        '@org_tensorflow//tensorflow/core:test',
-    ],
-)
-    
-        return [tf.reshape(adjacency_bxnxn, [-1, num_tokens])]
-    
-      # Filter out entries where gold <= -1, which are batch padding entries.
-  valid = tf.greater(gold, -1)
-  valid_ix = tf.reshape(tf.where(valid), [-1])
-  valid_gold = tf.gather(gold, valid_ix)
-  valid_indices = tf.gather(indices, valid_ix)
-  valid_probs = tf.gather(probs, valid_ix)
-    
-    
-class MockNetworkUnit(object):
-    
-    
-if __name__ == '__main__':
-  tf.test.main()
-
-    
-        Returns:
-      A dictionary of input and output nodes.
-    '''
-    with tf.name_scope(name_scope):
-      handle, input_batch = self._get_session_with_reader(enable_tracing)
-      handle = self.build_inference(
-          handle,
-          use_moving_average=True,
-          build_runtime_graph=build_runtime_graph)
-    
-    
-@keras_test
-def test_layer_trainability_switch():
-    # with constructor argument, in Sequential
-    model = Sequential()
-    model.add(Dense(2, trainable=False, input_dim=1))
-    assert model.trainable_weights == []
-    
-        bi_convlstm_layer = model.layers[2]
-    weight_tensor_bi_convlstm_new = saving.preprocess_weights_for_loading(
-        bi_convlstm_layer,
-        weight_tensor_bi_convlstm_old,
-        original_keras_version='1')
-    
-    
-def get_example_array():
-    np.random.seed(3537)
-    example_array = np.random.random((100, 100)) * 100. - 50.
-    example_array[0, 0] = 0.  # 0 could possibly cause trouble
-    return example_array
-    
-                    # Make it more robust by adding noise.
-                # The idea is that if during inference,
-                # the value of the pixel is not exactly one,
-                # we need to train the network to be robust and still
-                # consider it as a pixel belonging to a square.
-                if np.random.randint(0, 2):
-                    noise_f = (-1)**np.random.randint(0, 2)
-                    noisy_movies[i, t,
-                                 x_shift - w - 1: x_shift + w + 1,
-                                 y_shift - w - 1: y_shift + w + 1,
-                                 0] += noise_f * 0.1
-    
-    def evalString(s):
-    assert s.startswith(''') or s.startswith('''), repr(s[:1])
-    q = s[0]
-    if s[:3] == q*3:
-        q = q*3
-    assert s.endswith(q), repr(s[-len(q):])
-    assert len(s) >= 2*len(q)
-    s = s[len(q):-len(q)]
-    return re.sub(r'\\(\'|\'|\\|[abfnrtv]|x.{0,2}|[0-7]{1,3})', escape, s)
-    
-        def test_varargs17_kw(self):
-        msg = r'^print\(\) takes at most 4 keyword arguments \(5 given\)$'
-        self.assertRaisesRegex(TypeError, msg,
-                               print, 0, sep=1, end=2, file=3, flush=4, foo=5)
-    
-            Values that cannot be determined are returned as given by the
-        parameter presets. If bits is given as '', the sizeof(pointer)
-        (or sizeof(long) on Python version < 1.5.2) is used as
-        indicator for the supported pointer size.
-    
-        def setFeature(self, name, state):
-        if self.supportsFeature(name):
-            state = state and 1 or 0
-            try:
-                settings = self._settings[(_name_xform(name), state)]
-            except KeyError:
-                raise xml.dom.NotSupportedErr(
-                    'unsupported feature: %r' % (name,)) from None
-            else:
-                for name, value in settings:
-                    setattr(self._options, name, value)
+            C = float(self.complexity.get())
+        gamma = float(self.gamma.get())
+        coef0 = float(self.coef0.get())
+        degree = int(self.degree.get())
+        kernel_map = {0: 'linear', 1: 'rbf', 2: 'poly'}
+        if len(np.unique(y)) == 1:
+            clf = svm.OneClassSVM(kernel=kernel_map[self.kernel.get()],
+                                  gamma=gamma, coef0=coef0, degree=degree)
+            clf.fit(X)
         else:
-            raise xml.dom.NotFoundErr('unknown feature: ' + repr(name))
+            clf = svm.SVC(kernel=kernel_map[self.kernel.get()], C=C,
+                          gamma=gamma, coef0=coef0, degree=degree)
+            clf.fit(X, y)
+        if hasattr(clf, 'score'):
+            print('Accuracy:', clf.score(X, y) * 100)
+        X1, X2, Z = self.decision_surface(clf)
+        self.model.clf = clf
+        self.model.set_surface((X1, X2, Z))
+        self.model.surface_type = self.surface_type.get()
+        self.fitted = True
+        self.model.changed('surface')
+    
+    calibrated_classifier = sig_clf.calibrated_classifiers_[0]
+prediction = np.vstack([calibrator.predict(this_p)
+                        for calibrator, this_p in
+                        zip(calibrated_classifier.calibrators_, p.T)]).T
+prediction /= prediction.sum(axis=1)[:, None]
+    
+            oa = OAS(store_precision=False, assume_centered=True)
+        oa.fit(X)
+        oa_mse[i, j] = oa.error_norm(real_cov, scaling=False)
+        oa_shrinkage[i, j] = oa.shrinkage_
+    
+        def __exit__(self, exc_type, exc_value, traceback):
+        self.proc.kill()
+        self.proc.wait()
+        time.sleep(0.2)
+    
+    from scrapy.commands import ScrapyCommand
+from scrapy.contracts import ContractsManager
+from scrapy.utils.misc import load_object
+from scrapy.utils.conf import build_component_list
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-l', '--list', dest='list', action='store_true',
+            help='List available templates')
+        parser.add_option('-e', '--edit', dest='edit', action='store_true',
+            help='Edit spider after creating it')
+        parser.add_option('-d', '--dump', dest='dump', metavar='TEMPLATE',
+            help='Dump template to standard output')
+        parser.add_option('-t', '--template', dest='template', default='basic',
+            help='Uses a custom template.')
+        parser.add_option('--force', dest='force', action='store_true',
+            help='If the spider already exists, overwrite it with the template')
+    
+        @classmethod
+    def _get_mwlist_from_settings(cls, settings):
+        return build_component_list(
+            settings.getwithbase('DOWNLOADER_MIDDLEWARES'))
+    
+        def __init__(self, timeout=180):
+        self._timeout = timeout
+    
+    class CloseSpider(Exception):
+    '''Raise this from callbacks to request the spider to be closed'''
+    
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
+    
+            If current token is consistent with what could come after
+        ttype then it is ok to 'insert' the missing token, else throw
+        exception For example, Input 'i=(3;' is clearly missing the
+        ')'.  When the parser returns from the nested call to expr, it
+        will have call chain:
+    
+    
+runtime_version_str = __version__
+runtime_version = version_str_to_tuple(runtime_version_str)
+    
+                    else:
+                    self.c = self.input.LA(1)
