@@ -1,93 +1,152 @@
 
         
-        puts 'Deduping #{links.size} links...'
+        module Vagrant
+  module Util
+    class IO
+      # The chunk size for reading from subprocess IO.
+      READ_CHUNK_SIZE = 4096
     
-      def serialize_options(resource)
-    methods = resource_class.authentication_keys.dup
-    methods = methods.keys if methods.is_a?(Hash)
-    methods << :password if resource.respond_to?(:password)
-    { methods: methods, only: [:password] }
+          # This deletes the block with the given key if it exists.
+      def delete(key)
+        key    = Regexp.quote(key)
+        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$.*^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
+        @value.gsub!(regexp, '')
+      end
+    
+            # Get the proper capability host to check
+        cap_host = nil
+        if type == :host
+          cap_host = @env.host
+        else
+          with_target_vms([]) do |vm|
+            cap_host = case type
+                       when :provider
+                         vm.provider
+                       when :guest
+                         vm.guest
+                       else
+                         raise Vagrant::Errors::CLIInvalidUsage,
+                           help: opts.help.chomp
+                       end
+          end
+        end
+    
+      def test_input_line_number_range
+    bug12947 = '[ruby-core:78162] [Bug #12947]'
+    ary = b1 = b2 = nil
+    EnvUtil.suppress_warning do
+      b1 = eval('proc {|i| i if 2..4}')
+      b2 = eval('proc {|i| if 2..4; i; end}')
+    end
+    IO.pipe {|r, w|
+      th = Thread.start {(1..5).each {|i| w.puts i};w.close}
+      ary = r.map {|i| b1.call(i.chomp)}
+      th.join
+    }
+    assert_equal([nil, '2', '3', '4', nil], ary, bug12947)
+    IO.pipe {|r, w|
+      th = Thread.start {(1..5).each {|i| w.puts i};w.close}
+      ary = r.map {|i| b2.call(i.chomp)}
+      th.join
+    }
+    assert_equal([nil, '2', '3', '4', nil], ary, bug12947)
+  end
+end
+
+    
+        assert_equal Gem::Security::HighSecurity, @cmd.options[:security_policy]
   end
     
-    module Devise
-  module Controllers
-    # A module that may be optionally included in a controller in order
-    # to provide remember me behavior. Useful when signing in is done
-    # through a callback, like in OmniAuth.
-    module Rememberable
-      # Return default cookie values retrieved from session options.
-      def self.cookie_values
-        Rails.configuration.session_options.slice(:path, :domain, :secure)
-      end
+        dns = MiniTest::Mock.new
+    dns.expect :getresource, target, [String, Object]
     
-          # Configure default email options
-      def devise_mail(record, action, opts = {}, &block)
-        initialize_from_record(record)
-        mail headers_for(action, opts), &block
-      end
+        warning = /mswin|mingw/ =~ RUBY_PLATFORM ? [] : /shebang line ending with \\r/
+    assert_in_out_err([{'RUBYOPT' => nil}], '#!ruby -KU -Eutf-8\r\np \'\u3042\'\r\n',
+                      ['\'\u3042\''], warning,
+                      encoding: Encoding::UTF_8)
     
-          # Find a Sass file, if it exists.
-      #
-      # This is the primary entry point of the Importer.
-      # It corresponds directly to an `@import` statement in Sass.
-      # It should do three basic things:
-      #
-      # * Determine if the URI is in this importer's format.
-      #   If not, return nil.
-      # * Determine if the file indicated by the URI actually exists and is readable.
-      #   If not, return nil.
-      # * Read the file and place the contents in a {Sass::Engine}.
-      #   Return that engine.
-      #
-      # If this importer's format allows for file extensions,
-      # it should treat them the same way as the default {Filesystem} importer.
-      # If the URI explicitly has a `.sass` or `.scss` filename,
-      # the importer should look for that exact file
-      # and import it as the syntax indicated.
-      # If it doesn't exist, the importer should return nil.
-      #
-      # If the URI doesn't have either of these extensions,
-      # the importer should look for files with the extensions.
-      # If no such files exist, it should return nil.
-      #
-      # The {Sass::Engine} to be returned should be passed `options`,
-      # with a few modifications. `:syntax` should be set appropriately,
-      # `:filename` should be set to `uri`,
-      # and `:importer` should be set to this importer.
-      #
-      # @param uri [String] The URI to import.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` that's currently being resolved.
-      #   This is safe for subclasses to modify destructively.
-      #   Callers should only pass in a value they don't mind being destructively modified.
-      # @return [Sass::Engine, nil] An Engine containing the imported file,
-      #   or nil if it couldn't be found or was in the wrong format.
-      def find(uri, options)
-        Sass::Util.abstract(self)
-      end
+          AuthScheme = 'Basic' # :nodoc:
     
-        # Merges this query list with another. The returned query list
-    # queries for the intersection between the two inputs.
-    #
-    # Both query lists should be resolved.
-    #
-    # @param other [QueryList]
-    # @return [QueryList?] The merged list, or nil if there is no intersection.
-    def merge(other)
-      new_queries = queries.map {|q1| other.queries.map {|q2| q1.merge(q2)}}.flatten.compact
-      return if new_queries.empty?
-      QueryList.new(new_queries)
+        def parse(uri) # :nodoc:
+      scheme, userinfo, host, port,
+        registry, path, opaque, query, fragment = self.split(uri)
+      scheme_list = URI.scheme_list
+      if scheme && scheme_list.include?(uc = scheme.upcase)
+        scheme_list[uc].new(scheme, userinfo, host, port,
+                            registry, path, opaque, query,
+                            fragment, self)
+      else
+        Generic.new(scheme, userinfo, host, port,
+                    registry, path, opaque, query,
+                    fragment, self)
+      end
     end
     
-      module Sass::Plugin::Configuration
-    # Different default options in a m environment.
-    def default_options
-      @default_options ||= begin
-        version = Merb::VERSION.split('.').map {|n| n.to_i}
-        if version[0] <= 0 && version[1] < 5
-          root = MERB_ROOT
-          env  = MERB_ENV
-        else
-          root = Merb.root.to_s
-          env  = Merb.environment
+      ## Hangul Algorithm
+  def self.hangul_decomp_one(target)
+    syllable_index = target.ord - SBASE
+    return target if syllable_index < 0 || syllable_index >= SCOUNT
+    l = LBASE + syllable_index / NCOUNT
+    v = VBASE + (syllable_index % NCOUNT) / TCOUNT
+    t = TBASE + syllable_index % TCOUNT
+    (t==TBASE ? [l, v] : [l, v, t]).pack('U*') + target[1..-1]
+  end
+    
+      has_one :icon, serializer: ActivityPub::ImageSerializer
+    
+      describe 'when signed in' do
+    let(:user) { Fabricate(:user) }
+    
+              @assignments = []
+          @references = []
+          @captured_by_block = false
         end
+    
+            def each_unnecessary_space_match(node, &blk)
+          each_match_range(
+            contents_range(node),
+            MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX,
+            &blk
+          )
+        end
+      end
+    end
+  end
+end
+
+    
+              new_source =
+            node.receiver.source + ' =~ ' + node.first_argument.source
+    
+            private
+    
+            def argument_positions(arguments)
+          optarg_positions = []
+          arg_positions = []
+    
+            # @param lines [Array<String>]
+        # @param annotations [Array<(Integer, String)>]
+        #   each entry is the annotated line number and the annotation text
+        #
+        # @note annotations are sorted so that reconstructing the annotation
+        #   text via {#to_s} is deterministic
+        def initialize(lines, annotations)
+          @lines       = lines.freeze
+          @annotations = annotations.sort.freeze
+        end
+    
+        def register(klass, attachment_name, attachment_options)
+      @attachments ||= {}
+      @attachments[klass] ||= {}
+      @attachments[klass][attachment_name] = attachment_options
+    end
+    
+          class ValidateAttachmentSizeMatcher
+        def initialize attachment_name
+          @attachment_name = attachment_name
+        end
+    
+          def validate_each(record, attribute, value)
+        base_attribute = attribute.to_sym
+        attribute = '#{attribute}_content_type'.to_sym
+        value = record.send :read_attribute_for_validation, attribute
