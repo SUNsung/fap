@@ -1,222 +1,195 @@
 
         
-        cc_test(
-    name = 'syntaxnet_link_feature_extractor_test',
-    srcs = ['syntaxnet_link_feature_extractor_test.cc'],
-    deps = [
-        ':syntaxnet_link_feature_extractor',
-        '//dragnn/core/test:generic',
-        '//dragnn/protos:spec_proto_cc',
-        '//syntaxnet:task_context',
-        '//syntaxnet:test_main',
-    ],
-)
+        
+def expect_value(self, got, expected, field):
+    if isinstance(expected, compat_str) and expected.startswith('re:'):
+        match_str = expected[len('re:'):]
+        match_rex = re.compile(match_str)
     
-    flags.DEFINE_string('spec_file', 'parser_spec.textproto',
-                    'Filename to save the spec to.')
+        def test_youtube_matching(self):
+        self.assertTrue(YoutubeIE.suitable('PLtS2H6bU1M'))
+        self.assertFalse(YoutubeIE.suitable('https://www.youtube.com/watch?v=AV6J6_AeFEQ&playnext=1&list=PL4023E734DA416012'))  # 668
+        self.assertMatch('http://youtu.be/BaW_jenozKc', ['youtube'])
+        self.assertMatch('http://www.youtube.com/v/BaW_jenozKc', ['youtube'])
+        self.assertMatch('https://youtube.googleapis.com/v/BaW_jenozKc', ['youtube'])
+        self.assertMatch('http://www.cleanvideosearch.com/media/action/yt/watch?videoId=8v_4O44sfjM', ['youtube'])
     
-    cc_test(
-    name = 'resource_container_test',
-    srcs = ['resource_container_test.cc'],
-    deps = [
-        ':resource_container',
-        '//syntaxnet:base',
-        '//syntaxnet:test_main',
-    ],
-)
+        def test_secondary_proxy_http(self):
+        params = self._check_params(['secondary_proxy', 'secondary_server_ip'])
+        if params is None:
+            return
+        ydl = FakeYDL()
+        req = compat_urllib_request.Request('http://yt-dl.org/ip')
+        req.add_header('Ytdl-request-proxy', params['secondary_proxy'])
+        self.assertEqual(
+            ydl.urlopen(req).read().decode('utf-8'),
+            params['secondary_server_ip'])
     
-    # Don't use this library directly; instead use 'dragnn/python:mst_ops'.
-tf_gen_op_wrapper_py(
-    name = 'mst_ops',
-    visibility = ['//dragnn/python:__pkg__'],
-    deps = [':mst_ops_op_lib'],
-)
     
-    tf_proto_library_py(
-    name = 'export_pb2',
-    srcs = ['export.proto'],
-)
-
+class AcademicEarthCourseIE(InfoExtractor):
+    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
+    IE_NAME = 'AcademicEarth:Course'
+    _TEST = {
+        'url': 'http://academicearth.org/playlists/laws-of-nature/',
+        'info_dict': {
+            'id': 'laws-of-nature',
+            'title': 'Laws of Nature',
+            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
+        },
+        'playlist_count': 3,
+    }
     
-      def testNormalFixedFeaturesAreDifferentiable(self):
-    component_spec = spec_pb2.ComponentSpec()
-    text_format.Parse('''
-        name: 'test'
-        network_unit {
-          registered_name: 'IdentityNetwork'
-        }
-        fixed_feature {
-          name: 'fixed' embedding_dim: 32 size: 1
-          pretrained_embedding_matrix { part {} }
-          vocab { part {} }
-        }
-        component_builder {
-          registered_name: 'bulk_component.BulkFeatureExtractorComponentBuilder'
-        }
-        ''', component_spec)
-    comp = bulk_component.BulkFeatureExtractorComponentBuilder(
-        self.master, component_spec)
+            title = self._search_regex(
+            r'<title>(.+?)\s*\|\s*.+?</title>', webpage, 'video title')
     
-        with tf.variable_scope(self.name):
-      # Raises ValueError if not found.
-      return network_units.NetworkUnitInterface.Create(network_type, self)
     
-        with self.test_session() as sess:
-      cost, correct, total, gold_labels = (
-          sess.run([cost, correct, total, gold_labels]))
+class CNNIE(TurnerBaseIE):
+    _VALID_URL = r'''(?x)https?://(?:(?P<sub_domain>edition|www|money)\.)?cnn\.com/(?:video/(?:data/.+?|\?)/)?videos?/
+        (?P<path>.+?/(?P<title>[^/]+?)(?:\.(?:[a-z\-]+)|(?=&)))'''
     
-        dragnn_model_saver_lib.export_to_graph(
-        master_spec,
-        params_path,
-        export_path,
-        saver_graph,
-        export_moving_averages=False,
-        build_runtime_graph=False)
+    # TODO: response is the only one
     
-        Returns:
-      handle: handle to a new ComputeSession returned by the AttachReader op.
-      input_batch: InputBatch placeholder.
     '''
-    with tf.name_scope('ComputeSession'):
-      input_batch = tf.placeholder(
-          dtype=tf.string, shape=[None], name='InputBatch')
+requests._internal_utils
+~~~~~~~~~~~~~~
     
-    import tensorflow as tf
+        @pytest.fixture(autouse=True)
+    def setup(self):
+        '''LookupDict instance with 'bad_gateway' attribute.'''
+        self.lookup_dict = LookupDict('test')
+        self.lookup_dict.bad_gateway = 502
     
-        By default this will get the strings from the blns.txt file
-    
-        quiet
-      Supress output other than linting errors, such as information about
-      which files have been processed and excluded.
-    
-    def is_prime(n):
-    if n % 2 == 0:
-        return False
-    
-    
-def FormatDebugInfoResponse_Completer_ServerRunningWithHost_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'Completer name completer debug information:\n'
-      '  Server name running at: http://127.0.0.1:1234\n'
-      '  Server name process ID: 12345\n'
-      '  Server name executable: /path/to/executable\n'
-      '  Server name logfiles:\n'
-      '    /path/to/stdout/logfile\n'
-      '    /path/to/stderr/logfile\n'
-      '  Server name key: value\n'
-      '  Key: value\n'
-    )
-  )
+        def test_server_finishes_when_no_connections(self):
+        '''the server thread exits even if there are no connections'''
+        server = Server.basic_response_server()
+        with server:
+            pass
     
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    if self._extra_data:
-      request_data.update( self._extra_data )
-    request_data.update( {
-      'completer_target': self._completer_target,
-      'command_arguments': self._arguments
-    } )
-    self._response = self.PostDataToHandler( request_data,
-                                             'run_completer_command' )
+@pytest.mark.skipif(sys.version_info[:2] != (2,6), reason='Only run on Python 2.6')
+def test_system_ssl_py26():
+    '''OPENSSL_VERSION_NUMBER isn't provided in Python 2.6, verify we don't
+    blow up in this case.
+    '''
+    assert info()['system_ssl'] == {'version': ''}
     
-        @classmethod
-    def _restore_configuration(cls, saved):
-        # type: (Tuple[type, Dict[str, Any]]) -> None
-        base = cls.configurable_base()
-        base.__impl_class = saved[0]
-        base.__impl_kwargs = saved[1]
-    
-        def test_plain_error(self):
-        e = HTTPError(403)
-        self.assertEqual(str(e), 'HTTP 403: Forbidden')
-        self.assertEqual(repr(e), 'HTTP 403: Forbidden')
+            This should not be called from user code, and is only exposed for use
+        when subclassing the
+        :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`.
     
     
-class HTTPMessageDelegate(object):
-    '''Implement this interface to handle an HTTP request or response.
+class ChunkedEncodingError(RequestException):
+    '''The server declared chunked encoding but sent an invalid chunk.'''
     
-            .. versionchanged:: 5.1
-           Added the ability to set options via strings in config files.
+        def digest_response_handler(sock):
+        # Respond to initial GET with a challenge.
+        request_content = consume_socket_content(sock, timeout=0.5)
+        assert request_content.startswith(b'GET / HTTP/1.1')
+        sock.send(text_401)
     
-            class Delegate(HTTPMessageDelegate):
-            def headers_received(self, start_line, headers):
-                test.code = start_line.code
+        Provide both the name and the version of the Python implementation
+    currently running. For example, on CPython 2.7.5 it will return
+    {'name': 'CPython', 'version': '2.7.5'}.
     
-        This solves a nasty problem with Futures and Tasks that have an
-    exception set: if nobody asks for the exception, the exception is
-    never logged.  This violates the Zen of Python: 'Errors should
-    never pass silently.  Unless explicitly silenced.'
+    # Syntax sugar.
+_ver = sys.version_info
     
-    
-# Convert Awaitables into Futures.
-try:
-    import asyncio
-except ImportError:
-    # Py2-compatible version for use with Cython.
-    # Copied from PEP 380.
-    @coroutine
-    def _wrap_awaitable(x):
-        if hasattr(x, '__await__'):
-            _i = x.__await__()
+        @property
+    def value(self):
+        if self[0].token_type == 'quoted-string':
+            return self[0].quoted_value
         else:
-            _i = iter(x)
+            return self[0].value
+    
+        def setUp(self):
+        self.file_name = support.TESTFN.lower()
+        self.file_path = FakePath(support.TESTFN)
+        self.addCleanup(support.unlink, self.file_name)
+        with open(self.file_name, 'xb', 0) as file:
+            file.write(b'test_ntpath.PathLikeTests')
+    
+            if 'peername' not in self._extra:
+            try:
+                self._extra['peername'] = sock.getpeername()
+            except (socket.error, AttributeError):
+                if self._loop.get_debug():
+                    logger.warning('getpeername() failed on %r',
+                                   sock, exc_info=True)
+    
+            # write a large chunk which completes immediately,
+        # it should not pause writing
+        fut = asyncio.Future(loop=self.loop)
+        fut.set_result(None)
+        self.loop._proactor.send.return_value = fut
+        tr.write(b'very large data')
+        self.loop._run_once()
+        self.assertEqual(tr.get_write_buffer_size(), 0)
+        self.assertFalse(self.protocol.pause_writing.called)
+    
+        def test_delete_hook(self):
+        # Testing __del__ hook...
+        log = []
+        class C(object):
+            def __del__(self):
+                log.append(1)
+        c = C()
+        self.assertEqual(log, [])
+        del c
+        support.gc_collect()
+        self.assertEqual(log, [1])
+    
+        def transform_xrange(self, node, results):
+        name = results['name']
+        name.replace(Name('range', prefix=name.prefix))
+        # This prevents the new range call from being wrapped in a list later.
+        self.transformed_xranges.add(id(node))
+    
+            for i in range(0, 256):
+            constructor(fanout=i)
+        self.assertRaises(ValueError, constructor, fanout=-1)
+        self.assertRaises(ValueError, constructor, fanout=256)
+    
+            if machine:
+            # Override automatic configuration to facilitate testing.
+            define_macros = config[machine]
+        elif host_platform == 'darwin':
+            # Universal here means: build with the same options Python
+            # was built with.
+            define_macros = config['universal']
+        elif sizeof_size_t == 8:
+            if sysconfig.get_config_var('HAVE_GCC_ASM_FOR_X64'):
+                define_macros = config['x64']
+            elif sysconfig.get_config_var('HAVE_GCC_UINT128_T'):
+                define_macros = config['uint128']
+            else:
+                define_macros = config['ansi64']
+        elif sizeof_size_t == 4:
+            ppro = sysconfig.get_config_var('HAVE_GCC_ASM_FOR_X87')
+            if ppro and ('gcc' in cc or 'clang' in cc) and \
+               not 'sunos' in host_platform:
+                # solaris: problems with register allocation.
+                # icc >= 11.0 works as well.
+                define_macros = config['ppro']
+                extra_compile_args.append('-Wno-unknown-pragmas')
+            else:
+                define_macros = config['ansi32']
+        else:
+            raise DistutilsError('_decimal: unsupported architecture')
+    
+    
+# Find a suitable Perl installation for OpenSSL.
+# cygwin perl does *not* work.  ActivePerl does.
+# Being a Perl dummy, the simplest way I can check is if the 'Win32' package
+# is available.
+def find_working_perl(perls):
+    for perl in perls:
         try:
-            _y = next(_i)
-        except StopIteration as _e:
-            _r = _value_from_stopiteration(_e)
+            subprocess.check_output([perl, '-e', 'use Win32;'])
+        except subprocess.CalledProcessError:
+            continue
         else:
-            while 1:
-                try:
-                    _s = yield _y
-                except GeneratorExit as _e:
-                    try:
-                        _m = _i.close
-                    except AttributeError:
-                        pass
-                    else:
-                        _m()
-                    raise _e
-                except BaseException as _e:
-                    _x = sys.exc_info()
-                    try:
-                        _m = _i.throw
-                    except AttributeError:
-                        raise _e
-                    else:
-                        try:
-                            _y = _m(*_x)
-                        except StopIteration as _e:
-                            _r = _value_from_stopiteration(_e)
-                            break
-                else:
-                    try:
-                        if _s is None:
-                            _y = next(_i)
-                        else:
-                            _y = _i.send(_s)
-                    except StopIteration as _e:
-                        _r = _value_from_stopiteration(_e)
-                        break
-        raise Return(_r)
-else:
-    try:
-        _wrap_awaitable = asyncio.ensure_future
-    except AttributeError:
-        # asyncio.ensure_future was introduced in Python 3.4.4, but
-        # Debian jessie still ships with 3.4.2 so try the old name.
-        _wrap_awaitable = getattr(asyncio, 'async')
+            return perl
     
-        def setUp(self):  # pylint: disable=invalid-name
-        '''Setup things to be run when tests are started.'''
-        self.hass = get_test_home_assistant()
-    
-        hass.services.register(DOMAIN, SERVICE_MEDIA_NEXT_TRACK,
-                           lambda service:
-                           keyboard.tap_key(keyboard.media_next_track_key),
-                           schema=TAP_KEY_SCHEMA)
-    
-        pass
+            #Creating a list of all md files in the current directory
+        for temp in glob.glob(os.path.join(loc, operating_sys, '*.md')):
+            allmd.append(temp)
