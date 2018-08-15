@@ -1,52 +1,41 @@
 
         
-        # For this pull request, which changes Page#dir
-# https://github.com/jekyll/jekyll/pull/4403
+        def check_link(uri)
+  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
+    if (400..422).include?(status)
+      if status != 403 && !uri.exclude?('udemy.com')
+        raise 'Request had status #{status}'
+      else
+        putc('S')
+      end
+    end
+  end
+end
     
-        options[:skip_patterns] = [
-      /\Afaq\//,
-      /\Ainternals\//,
-      /\Amisc\//,
-      /\Areleases\//,
-      /\A_/,
-      /flattened\-index\.html/]
-    
-    class ActivityPub::EmojiSerializer < ActiveModel::Serializer
-  include RoutingHelper
-    
-    namespace :emojis do
-  desc 'Generate a unicode to filename mapping'
-  task :generate do
-    source = 'http://www.unicode.org/Public/emoji/5.0/emoji-test.txt'
-    codes  = []
-    dest   = Rails.root.join('app', 'javascript', 'mastodon', 'features', 'emoji', 'emoji_map.json')
-    
-      def perform(user_id)
-    @user = User.find(user_id)
-    deliver_digest if @user.allows_digest_emails?
+      # DELETE /resource/sign_out
+  def destroy
+    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
+    set_flash_message! :notice, :signed_out if signed_out
+    yield if block_given?
+    respond_to_on_destroy
   end
     
-        def any_searchfield_present?
-      if %w(username email guid under13).all? { |attr| public_send(attr).blank? }
-        errors.add :base, 'no fields for search set'
-      end
+        def self.find_by_path!(path, path_type=:fullpath)
+      Devise.mappings.each_value { |m| return m if path.include?(m.send(path_type)) }
+      raise 'Could not find a valid mapping for path #{path.inspect}'
     end
     
-          def process_authorization_consent(approved_string)
-        endpoint = Api::OpenidConnect::AuthorizationPoint::EndpointConfirmationPoint.new(
-          current_user, to_boolean(approved_string))
-        handle_confirmation_endpoint_response(endpoint)
-      end
+            def show
+          authorize! :read, @order, order_token
+          @address = find_address
+          respond_with(@address)
+        end
     
-          def redirect(env)
-        request = Request.new(env)
-        warn env, 'attack prevented by #{self.class}'
-        [302, {'Content-Type' => 'text/html', 'Location' => request.path}, []]
-      end
-    
-    
-  it 'should allow changing the nosniff-mode off' do
-    mock_app do
-      use Rack::Protection::XSSHeader, :nosniff => false
-      run DummyApp
-    end
+            def update
+          authorize! :update, stock_location
+          if stock_location.update_attributes(stock_location_params)
+            respond_with(stock_location, status: 200, default_template: :show)
+          else
+            invalid_resource!(stock_location)
+          end
+        end
