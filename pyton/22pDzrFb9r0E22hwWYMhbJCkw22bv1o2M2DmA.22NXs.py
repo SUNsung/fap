@@ -1,69 +1,49 @@
 
         
-            def to_json(self, value):
-        # JSON objects may only have string keys, so don't bother tagging the
-        # key here.
-        return dict((k, self.serializer.tag(v)) for k, v in iteritems(value))
+            def get_protocol(self):
+        return self._protocol
+    
+        def test_loop_reading(self):
+        tr = self.socket_transport()
+        tr._loop_reading()
+        self.loop._proactor.recv.assert_called_with(self.sock, 32768)
+        self.assertFalse(self.protocol.data_received.called)
+        self.assertFalse(self.protocol.eof_received.called)
     
     
-def explain_ignored_app_run():
-    if os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
-        warn(Warning('Silently ignoring app.run() because the '
-                     'application is run from the flask command line '
-                     'executable.  Consider putting app.run() behind an '
-                     'if __name__ == '__main__' guard to silence this '
-                     'warning.'), stacklevel=3)
+for __func_name in __always_supported:
+    # try them all, some may not work due to the OpenSSL
+    # version not supporting that algorithm.
+    try:
+        globals()[__func_name] = __get_hash(__func_name)
+    except ValueError:
+        import logging
+        logging.exception('code for hash %s was not found.', __func_name)
+    
+    # We will immediately double the length up to MAX_PATH, but the
+# path may be longer, so we retry until the returned string is
+# shorter than our buffer.
+name_len = actual_len = 130
+while actual_len == name_len:
+    name_len *= 2
+    name = create_unicode_buffer(name_len)
+    actual_len = kernel32.GetModuleFileNameW(HANDLE(ucrtbased._handle),
+                                             name, len(name))
+    if not actual_len:
+        print('Failed to get full module name.')
+        sys.exit(2)
+    
+    from concurrent.futures import _base
+    
+    if __name__ == '__main__':
+    main()
 
     
-            def __init__(self, name, doc=None):
-            self.name = name
-            self.__doc__ = doc
-        def _fail(self, *args, **kwargs):
-            raise RuntimeError('signalling support is unavailable '
-                               'because the blinker library is '
-                               'not installed.')
-        send = lambda *a, **kw: None
-        connect = disconnect = has_receivers_for = receivers_for = \
-            temporarily_connected_to = connected_to = _fail
-        del _fail
     
-        app.testing = False
-    stream = StringIO()
-    rv = client.get('/', errors_stream=stream)
-    assert rv.status_code == 500
-    assert rv.data
-    err = stream.getvalue()
-    assert 'Exception on / [GET]' in err
-    assert 'Exception: test' in err
-
-    
-        def fire():
-        with app.test_client() as c:
-            rv = c.get('/')
-            assert rv.status_code == 200
-            assert rv.data == b'<h1>42</h1>'
-    
-        if address_family == socket.AF_INET:
-        if len(packed_ip) != ctypes.sizeof(addr.ipv4_addr):
-            raise socket.error('packed IP wrong length for inet_ntoa')
-        ctypes.memmove(addr.ipv4_addr, packed_ip, 4)
-    elif address_family == socket.AF_INET6:
-        if len(packed_ip) != ctypes.sizeof(addr.ipv6_addr):
-            raise socket.error('packed IP wrong length for inet_ntoa')
-        ctypes.memmove(addr.ipv6_addr, packed_ip, 16)
-    else:
-        raise socket.error('unknown address family')
-    
-    def version_str_to_tuple(version_str):
-    import re
-    import sys
-    
-    EOF = -1
-    
-                else:
-                raise RuntimeError('DFA bang!')
-            
-        finally:
-            input.rewind(mark)
-    
-    MIN_TOKEN_TYPE = UP+1
+def ExtractKeywordsFromGroup_Commas_test():
+  assert_that( syntax_parse._ExtractKeywordsFromGroup(
+                 syntax_parse.SyntaxGroup( '', [
+                   'foo, bar,',
+                   'zoo goo',
+                 ] ) ),
+               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
