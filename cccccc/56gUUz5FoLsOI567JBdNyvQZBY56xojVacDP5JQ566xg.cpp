@@ -1,381 +1,378 @@
 
         
-        #endif  // ATOM_BROWSER_API_ATOM_API_GLOBAL_SHORTCUT_H_
-
+        #if GOOGLE_CUDA
     
-    void DragFileItems(const std::vector<base::FilePath>& files,
-                   const gfx::Image& icon,
-                   gfx::NativeView view);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    #ifndef ATOM_BROWSER_UI_X_EVENT_DISABLER_H_
-#define ATOM_BROWSER_UI_X_EVENT_DISABLER_H_
-    
-    
-    {}  // namespace atom
-    
-    
-    {}  // namespace mate
-    
-      // This is sent when authentication credentials have been supplied (either
-  // by the user or by an automation service), but before we've actually
-  // received another response from the server.  The source is the
-  // Source<NavigationController> for the tab in which the prompt was shown.
-  // Details are an AuthSuppliedLoginNotificationDetails which provide the
-  // LoginHandler that should be given authentication as well as the supplied
-  // username and password.
-  NOTIFICATION_AUTH_SUPPLIED,
-    
-    #include 'base/time/time.h'
-    
-    // An interface the PrintViewManager uses to notify an observer when the print
-// dialog is shown. Register the observer via PrintViewManager::set_observer.
-class PrintViewManagerObserver {
- public:
-  // Notifies the observer that the print dialog was shown.
-  virtual void OnPrintDialogShown() = 0;
-    }
-    
-    // Wrapper used to keep track of the lifetime of a WebContents.
-// Lives on the UI thread.
-class PrintingUIWebContentsObserver : public content::WebContentsObserver {
- public:
-  explicit PrintingUIWebContentsObserver(content::WebContents* web_contents);
-    }
-    
-    void TtsPlatformImpl::clear_error() {
-  error_ = std::string();
-}
-    
-    // Generate param traits write methods.
-#include 'ipc/param_traits_write_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
-    
-    Clipboard::Clipboard(int id,
-           const base::WeakPtr<DispatcherHost>& dispatcher_host,
-           const base::DictionaryValue& option)
-    : Base(id, dispatcher_host, option) {
-}
-    
-    static KeyMap keymap = {
-  {'`'    , 'Backquote'},
-  {'\\'   , 'Backslash'},
-  {'['    , 'BracketLeft'},
-  {']'    , 'BracketRight'},
-  {','    , 'Comma'},
-  {'='    , 'Equal'},
-  {'-'    , 'Minus'},
-  {'.'    , 'Period'},
-  {'''    , 'Quote'},
-  {';'    , 'Semicolon'},
-  {'/'    , 'Slash'},
-  {'\n'   , 'Enter'},
-  {'\t'   , 'Tab'},
-  {'UP'   , 'ArrowUp'},
-  {'DOWN' , 'ArrowDown'},
-  {'LEFT' , 'ArrowLeft'},
-  {'RIGHT', 'ArrowRight'},
-  {'ESC'  , 'Escape'},
-  {'MEDIANEXTTRACK', 'MediaTrackNext'},
-  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
-};
-    
-      std::string key;
-  std::string modifiers;
-  option.GetString('key',&key);
-  option.GetString('modifiers',&modifiers);
-    
-    bool NwClipboardReadAvailableTypesFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  bool contains_filenames;
-  std::vector<base::string16> types;
-  clipboard->ReadAvailableTypes(ui::CLIPBOARD_TYPE_COPY_PASTE, &types, &contains_filenames);
-  for(std::vector<base::string16>::iterator it = types.begin(); it != types.end(); it++) {
-    if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypeText)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_TEXT))));
-    } else if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypeHTML)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_HTML))));
-    } else if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypeRTF)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_RTF))));
-    } else if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypePNG)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_PNG))));
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_JPEG))));
+    void SYCLDeviceContext::CopyDeviceTensorToCPU(const Tensor *device_tensor,
+                                              StringPiece edge_name,
+                                              Device *device,
+                                              Tensor *cpu_tensor,
+                                              StatusCallback done) {
+  const int64 total_bytes = device_tensor->TotalBytes();
+  if (total_bytes > 0) {
+    const void *src_ptr = DMAHelper::base(device_tensor);
+    void *dst_ptr = DMAHelper::base(cpu_tensor);
+    switch (device_tensor->dtype()) {
+      case DT_FLOAT:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_DOUBLE:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<double *>(dst_ptr),
+            static_cast<const double *>(src_ptr), total_bytes);
+        break;
+      case DT_INT32:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_INT64:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_HALF:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<Eigen::half *>(dst_ptr),
+            static_cast<const Eigen::half *>(src_ptr), total_bytes);
+        break;
+      case DT_COMPLEX64:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<std::complex<float> *>(dst_ptr),
+            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
+        break;
+      case DT_COMPLEX128:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<std::complex<double> *>(dst_ptr),
+            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
+        break;
+      case DT_INT8:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_INT16:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_UINT8:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_UINT16:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<uint16 *>(dst_ptr),
+            static_cast<const uint16 *>(src_ptr), total_bytes);
+        break;
+      case DT_BOOL:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
+            total_bytes);
+        break;
+      default:
+        assert(false && 'unsupported type');
     }
   }
-  return true;
+  device->eigen_sycl_device()->synchronize();
+  done(Status::OK());
+}
+    
+    
+    {    Encode(context, contents, file_format_, bits_per_second_,
+           samples_per_second_);
+  }
+    
+    #include <string>
+#include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
+#include 'tensorflow/core/framework/tensor_shape.h'
+#include 'tensorflow/core/framework/tensor_slice.pb.h'
+#include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/lib/core/stringpiece.h'
+#include 'tensorflow/core/lib/gtl/inlined_vector.h'
+#include 'tensorflow/core/platform/logging.h'
+    
+    
+    {    return S_OK;
+}
+    
+    
+    {    IntrinsicParams();
+    IntrinsicParams(Vec2d f, Vec2d c, Vec4d k, double alpha = 0);
+    IntrinsicParams operator+(const Mat& a);
+    IntrinsicParams& operator =(const Mat& a);
+    void Init(const cv::Vec2d& f, const cv::Vec2d& c, const cv::Vec4d& k = Vec4d(0,0,0,0), const double& alpha = 0);
+};
+    
+    
+    {            ptr[tid] = partial = partial + ptr[tid + 16];
+            ptr[tid] = partial = partial + ptr[tid + 8];
+            ptr[tid] = partial = partial + ptr[tid + 4];
+            ptr[tid] = partial = partial + ptr[tid + 2];
+            ptr[tid] = partial = partial + ptr[tid + 1];
+        }
+    
+            // Version: 1.5
+        BUFFER_SIZE                      = 0x8764,
+        BUFFER_USAGE                     = 0x8765,
+        QUERY_COUNTER_BITS               = 0x8864,
+        CURRENT_QUERY                    = 0x8865,
+        QUERY_RESULT                     = 0x8866,
+        QUERY_RESULT_AVAILABLE           = 0x8867,
+        ARRAY_BUFFER                     = 0x8892,
+        ELEMENT_ARRAY_BUFFER             = 0x8893,
+        ARRAY_BUFFER_BINDING             = 0x8894,
+        ELEMENT_ARRAY_BUFFER_BINDING     = 0x8895,
+        VERTEX_ATTRIB_ARRAY_BUFFER_BINDING = 0x889F,
+        READ_ONLY                        = 0x88B8,
+        WRITE_ONLY                       = 0x88B9,
+        READ_WRITE                       = 0x88BA,
+        BUFFER_ACCESS                    = 0x88BB,
+        BUFFER_MAPPED                    = 0x88BC,
+        BUFFER_MAP_POINTER               = 0x88BD,
+        STREAM_DRAW                      = 0x88E0,
+        STREAM_READ                      = 0x88E1,
+        STREAM_COPY                      = 0x88E2,
+        STATIC_DRAW                      = 0x88E4,
+        STATIC_READ                      = 0x88E5,
+        STATIC_COPY                      = 0x88E6,
+        DYNAMIC_DRAW                     = 0x88E8,
+        DYNAMIC_READ                     = 0x88E9,
+        DYNAMIC_COPY                     = 0x88EA,
+        SAMPLES_PASSED                   = 0x8914,
+        SRC1_ALPHA                       = 0x8589,
+    
+    
+    {  delete db;
+  delete [] pixels;
 }
     
      protected:
-  ~NwClipboardReadAvailableTypesFunction() override;
+  /// @copydoc AbsValLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-      // These two overloads allow streaming a wide C string to a Message
-  // using the UTF-8 encoding.
-  Message& operator <<(const wchar_t* wide_c_str);
-  Message& operator <<(wchar_t* wide_c_str);
+     protected:
+  /// @copydoc BNLLLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-    # if GTEST_HAS_COMBINE
-// Combine() allows the user to combine two or more sequences to produce
-// values of a Cartesian product of those sequences' elements.
-//
-// Synopsis:
-// Combine(gen1, gen2, ..., genN)
-//   - returns a generator producing sequences with elements coming from
-//     the Cartesian product of elements from the sequences generated by
-//     gen1, gen2, ..., genN. The sequence elements will have a type of
-//     tuple<T1, T2, ..., TN> where T1, T2, ..., TN are the types
-//     of elements from sequences produces by gen1, gen2, ..., genN.
-//
-// Combine can have up to 10 arguments. This number is currently limited
-// by the maximum number of elements in the tuple implementation used by Google
-// Test.
-//
-// Example:
-//
-// This will instantiate tests in test case AnimalTest each one with
-// the parameter values tuple('cat', BLACK), tuple('cat', WHITE),
-// tuple('dog', BLACK), and tuple('dog', WHITE):
-//
-// enum Color { BLACK, GRAY, WHITE };
-// class AnimalTest
-//     : public testing::TestWithParam<tuple<const char*, Color> > {...};
-//
-// TEST_P(AnimalTest, AnimalLooksNice) {...}
-//
-// INSTANTIATE_TEST_CASE_P(AnimalVariations, AnimalTest,
-//                         Combine(Values('cat', 'dog'),
-//                                 Values(BLACK, WHITE)));
-//
-// This will instantiate tests in FlagDependentTest with all variations of two
-// Boolean flags:
-//
-// class FlagDependentTest
-//     : public testing::TestWithParam<tuple<bool, bool> > {
-//   virtual void SetUp() {
-//     // Assigns external_flag_1 and external_flag_2 values from the tuple.
-//     tie(external_flag_1, external_flag_2) = GetParam();
-//   }
-// };
-//
-// TEST_P(FlagDependentTest, TestFeature1) {
-//   // Test your code using external_flag_1 and external_flag_2 here.
-// }
-// INSTANTIATE_TEST_CASE_P(TwoBoolSequence, FlagDependentTest,
-//                         Combine(Bool(), Bool()));
-//
-template <typename Generator1, typename Generator2>
-internal::CartesianProductHolder2<Generator1, Generator2> Combine(
-    const Generator1& g1, const Generator2& g2) {
-  return internal::CartesianProductHolder2<Generator1, Generator2>(
-      g1, g2);
-}
+    /**
+ * @brief Takes at least two Blob%s and concatenates them along either the num
+ *        or channel dimension, outputting the result.
+ */
+template <typename Dtype>
+class ConcatLayer : public Layer<Dtype> {
+ public:
+  explicit ConcatLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
-    TEST_P(DerivedTest, DoesBlah) {
-  // GetParam works just the same here as if you inherit from TestWithParam.
-  EXPECT_TRUE(foo.Blah(GetParam()));
-}
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    template <typename T>
-void UniversalTersePrint(const T& value, ::std::ostream* os) {
-  UniversalTersePrinter<T>::Print(value, os);
-}
+    #else // HAVE_NUMA undefined
+namespace HPHP {
+    }
     
-    // The 'Types' template argument below must have spaces around it
-// since some compilers may choke on '>>' when passing a template
-// instance (e.g. Types<int>)
-# define INSTANTIATE_TYPED_TEST_CASE_P(Prefix, CaseName, Types) \
-  bool gtest_##Prefix##_##CaseName GTEST_ATTRIBUTE_UNUSED_ = \
-      ::testing::internal::TypeParameterizedTestCase<CaseName, \
-          GTEST_CASE_NAMESPACE_(CaseName)::gtest_AllTests_, \
-          ::testing::internal::TypeList< Types >::type>::Register(\
-              #Prefix, #CaseName, GTEST_REGISTERED_TEST_NAMES_(CaseName))
+    #endif
+
+    
+      explicit File(bool nonblocking = true,
+                const String& wrapper_type = null_string,
+                const String& stream_type = empty_string_ref);
+  ~File() override;
+    
+      /**
+   * set preferred TLS/SSL version
+   * (default) CURL_SSLVERSION_DEFAULT, CURL_SSLVERSION_TLSv1,
+   *           CURL_SSLVERSION_SSLv3
+   */
+  void setSSLVersion (const long version) {
+    m_sslversion = version;
+  }
     
     
-    {#if GTEST_HAS_RTTI
-  // RTTI: debug mode only!
-  GTEST_CHECK_(f == NULL || dynamic_cast<To>(f) != NULL);
-#endif
-  return static_cast<To>(f);
-}
+    
+    
+    
+    
+    
+    	m_world->SetAllowSleeping(settings->enableSleep > 0);
+	m_world->SetWarmStarting(settings->enableWarmStarting > 0);
+	m_world->SetContinuousPhysics(settings->enableContinuous > 0);
+	m_world->SetSubStepping(settings->enableSubStepping > 0);
+    
+    	b2Body* m_groundBody;
+	b2AABB m_worldAABB;
+	ContactPoint m_points[k_maxContactPoints];
+	int32 m_pointCount;
+	DestructionListener m_destructionListener;
+	GLESDebugDraw m_debugDraw;
+	int32 m_textLine;
+	b2World* m_world;
+	b2Body* m_bomb;
+	b2MouseJoint* m_mouseJoint;
+	b2Vec2 m_bombSpawnPoint;
+	bool m_bombSpawning;
+	b2Vec2 m_mouseWorld;
+	int32 m_stepCount;
     
     
     {
-    {}  // namespace internal
-}  // namespace testing
+    {			float minX = -6.0f;
+			float maxX = 0.0f;
+			float minY = 4.0f;
+			float maxY = 6.0f;
+			
+			for (int32 i = 0; i < 400; ++i)
+			{
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
+				bd.position = b2Vec2(RandomFloat(minX,maxX),RandomFloat(minY,maxY));
+				b2Body* body = m_world->CreateBody(&bd);
+				body->CreateFixture(&shape, 0.01f);
+			}
+		}
+		
+		{
+			b2PolygonShape shape;
+			shape.SetAsBox(1.5f, 1.5f);
+			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.position.Set(-40.0f,5.0f);
+			bd.bullet = true;
+			b2Body* body = m_world->CreateBody(&bd);
+			body->CreateFixture(&shape, 1.0f);
+			body->SetLinearVelocity(b2Vec2(150.0f, 0.0f));
+		}
+	}
     
-    #ifdef USE_CUDA
-std::vector <THCStream*> THPUtils_PySequence_to_THCStreamList(PyObject *obj) {
-  if (!PySequence_Check(obj)) {
-    throw std::runtime_error('Expected a sequence in THPUtils_PySequence_to_THCStreamList');
-  }
-  THPObjectPtr seq = THPObjectPtr(PySequence_Fast(obj, NULL));
-  if (seq.get() == NULL) {
-    throw std::runtime_error('expected PySequence, but got ' + std::string(THPUtils_typename(obj)));
-  }
-    }
     
-    bool THPUtils_tryUnpackLongVarArgs(PyObject *args, int ignore_first, THLongStoragePtr& result) {
-  Py_ssize_t length = PyTuple_Size(args) - ignore_first;
-  if (length < 1) {
-    return false;
-  }
-    }
+    {			b2EdgeShape shape;
+			shape.Set(b2Vec2(-40.0f, 0.0f), b2Vec2(40.0f, 0.0f));
+			ground->CreateFixture(&shape, 0.0f);
+		}
     
-    template <typename T, class Context>
-class HeatmapMaxKeypointOp final : public Operator<Context> {
- public:
-  HeatmapMaxKeypointOp(const OperatorDef& operator_def, Workspace* ws)
-      : Operator<Context>(operator_def, ws),
-        should_output_softmax_(OperatorBase::GetSingleArgument<bool>(
-            'should_output_softmax',
-            false)) {}
-  USE_OPERATOR_CONTEXT_FUNCTIONS;
-    }
-    
-        auto& indicesInput = Input(INDICES);
-    CAFFE_ENFORCE_EQ(
-        2, Input(SCALE_BIAS).ndim(), 'scale_bias has to be matrix');
-    CAFFE_ENFORCE_EQ(
-        dataInput.dim(0),
-        Input(SCALE_BIAS).dim(0),
-        'scale_bias must have the same first dim as data');
-    CAFFE_ENFORCE_EQ(
-        2,
-        Input(SCALE_BIAS).dim(1),
-        'the second dim of scale_bias has to be equal to 2');
-    CAFFE_ENFORCE_EQ(1, indicesInput.ndim(), 'INDICES must be a vector');
-    const IndexType* indices = indicesInput.template data<IndexType>();
-    TIndex dataToReduceSize = indicesInput.dim(0);
-    
-    static PyObject * THPWrapper_pynew(PyTypeObject *type, PyObject *args, PyObject *kwargs)
+    // It is difficult to make a cantilever made of links completely rigid with weld joints.
+// You will have to use a high number of iterations to make them stiff.
+// So why not go ahead and use soft weld joints? They behave like a revolute
+// joint with a rotational spring.
+class Cantilever : public Test
 {
-  PyObject* self = type->tp_alloc(type, 0);
-  THPWrapper* wrapper = (THPWrapper*) self;
-  wrapper->data = NULL;
-  wrapper->destructor = NULL;
-  return self;
+public:
+    }
+    
+        // Count glyphs/ranges, initialize font
+    int total_glyphs_count = 0;
+    int total_ranges_count = 0;
+    for (int input_i = 0; input_i < atlas->ConfigData.Size; input_i++) 
+    {
+        ImFontConfig& cfg = atlas->ConfigData[input_i];
+        FreeTypeFont& font_face = fonts[input_i];
+        IM_ASSERT(cfg.DstFont && (!cfg.DstFont->IsLoaded() || cfg.DstFont->ContainerAtlas == atlas));
+    }
+    
+                ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
+    
+        // Setup style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+    
+        // Create Logical Device (with 1 queue)
+    {
+        int device_extension_count = 1;
+        const char* device_extensions[] = { 'VK_KHR_swapchain' };
+        const float queue_priority[] = { 1.0f };
+        VkDeviceQueueCreateInfo queue_info[1] = {};
+        queue_info[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+        queue_info[0].queueFamilyIndex = g_QueueFamily;
+        queue_info[0].queueCount = 1;
+        queue_info[0].pQueuePriorities = queue_priority;
+        VkDeviceCreateInfo create_info = {};
+        create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+        create_info.queueCreateInfoCount = sizeof(queue_info) / sizeof(queue_info[0]);
+        create_info.pQueueCreateInfos = queue_info;
+        create_info.enabledExtensionCount = device_extension_count;
+        create_info.ppEnabledExtensionNames = device_extensions;
+        err = vkCreateDevice(g_PhysicalDevice, &create_info, g_Allocator, &g_Device);
+        check_vk_result(err);
+        vkGetDeviceQueue(g_Device, g_QueueFamily, 0, &g_Queue);
+    }
+    
+    
+    {    ImGuiIO& io = ImGui::GetIO();
+    switch (msg)
+    {
+    case WM_LBUTTONDOWN: case WM_LBUTTONDBLCLK:
+    case WM_RBUTTONDOWN: case WM_RBUTTONDBLCLK:
+    case WM_MBUTTONDOWN: case WM_MBUTTONDBLCLK:
+    {
+        int button = 0;
+        if (msg == WM_LBUTTONDOWN || msg == WM_LBUTTONDBLCLK) button = 0;
+        if (msg == WM_RBUTTONDOWN || msg == WM_RBUTTONDBLCLK) button = 1;
+        if (msg == WM_MBUTTONDOWN || msg == WM_MBUTTONDBLCLK) button = 2;
+        if (!ImGui::IsAnyMouseDown() && ::GetCapture() == NULL)
+            ::SetCapture(hwnd);
+        io.MouseDown[button] = true;
+        return 0;
+    }
+    case WM_LBUTTONUP:
+    case WM_RBUTTONUP:
+    case WM_MBUTTONUP:
+    {
+        int button = 0;
+        if (msg == WM_LBUTTONUP) button = 0;
+        if (msg == WM_RBUTTONUP) button = 1;
+        if (msg == WM_MBUTTONUP) button = 2;
+        io.MouseDown[button] = false;
+        if (!ImGui::IsAnyMouseDown() && ::GetCapture() == hwnd)
+            ::ReleaseCapture();
+        return 0;
+    }
+    case WM_MOUSEWHEEL:
+        io.MouseWheel += (float)GET_WHEEL_DELTA_WPARAM(wParam) / (float)WHEEL_DELTA;
+        return 0;
+    case WM_MOUSEHWHEEL:
+        io.MouseWheelH += (float)GET_WHEEL_DELTA_WPARAM(wParam) / (float)WHEEL_DELTA;
+        return 0;
+    case WM_KEYDOWN:
+    case WM_SYSKEYDOWN:
+        if (wParam < 256)
+            io.KeysDown[wParam] = 1;
+        return 0;
+    case WM_KEYUP:
+    case WM_SYSKEYUP:
+        if (wParam < 256)
+            io.KeysDown[wParam] = 0;
+        return 0;
+    case WM_CHAR:
+        // You can also use ToAscii()+GetKeyboardState() to retrieve characters.
+        if (wParam > 0 && wParam < 0x10000)
+            io.AddInputCharacter((unsigned short)wParam);
+        return 0;
+    case WM_SETCURSOR:
+        if (LOWORD(lParam) == HTCLIENT && ImGui_ImplWin32_UpdateMouseCursor())
+            return 1;
+        return 0;
+    }
+    return 0;
 }
-    
-    
-    {////////////////////////////////////////////////////////////////////////////////
-} // namespace detail
-    
-    #include <cstdint>
-#include <memory>
-#include <string>
-    
-    #include <iostream>
-#include <chrono>
-#include <sstream>
-    
-    /*
- * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
- * Method:    XGBoosterLoadRabitCheckpoint
- * Signature: (J[I)I
- */
-JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGBoosterLoadRabitCheckpoint
-  (JNIEnv *jenv , jclass jcls, jlong jhandle, jintArray jout) {
-  BoosterHandle handle = (BoosterHandle) jhandle;
-  int version;
-  int ret = XGBoosterLoadRabitCheckpoint(handle, &version);
-  jint jversion = version;
-  jenv->SetIntArrayRegion(jout, 0, 1, &jversion);
-  return ret;
-}
-    
-      if (npart != 1) {
-    LOG(CONSOLE) << 'Load part of data ' << partid
-                 << ' of ' << npart << ' parts';
-  }
-  // legacy handling of binary data loading
-  if (file_format == 'auto' && npart == 1) {
-    int magic;
-    std::unique_ptr<dmlc::Stream> fi(dmlc::Stream::Create(fname.c_str(), 'r', true));
-    if (fi != nullptr) {
-      common::PeekableInStream is(fi.get());
-      if (is.PeekRead(&magic, sizeof(magic)) == sizeof(magic) &&
-          magic == data::SimpleCSRSource::kMagic) {
-        std::unique_ptr<data::SimpleCSRSource> source(new data::SimpleCSRSource());
-        source->LoadBinary(&is);
-        DMatrix* dmat = DMatrix::Create(std::move(source), cache_file);
-        if (!silent) {
-          LOG(CONSOLE) << dmat->Info().num_row_ << 'x' << dmat->Info().num_col_ << ' matrix with '
-                       << dmat->Info().num_nonzero_ << ' entries loaded from ' << uri;
-        }
-        return dmat;
-      }
-    }
-  }
-    
-      // Copy constructor if of same value type
-  XGBOOST_DEVICE GradientPairInternal(const GradientPairInternal<T> &g)
-      : grad_(g.grad_), hess_(g.hess_) {}  // NOLINT
-    
-    namespace xgboost {
-namespace tree {
-// List of files that will be force linked in static links.
-DMLC_REGISTRY_LINK_TAG(updater_colmaker);
-DMLC_REGISTRY_LINK_TAG(updater_skmaker);
-DMLC_REGISTRY_LINK_TAG(updater_refresh);
-DMLC_REGISTRY_LINK_TAG(updater_prune);
-DMLC_REGISTRY_LINK_TAG(updater_fast_hist);
-DMLC_REGISTRY_LINK_TAG(updater_histmaker);
-DMLC_REGISTRY_LINK_TAG(updater_sync);
-#ifdef XGBOOST_USE_CUDA
-DMLC_REGISTRY_LINK_TAG(updater_gpu);
-DMLC_REGISTRY_LINK_TAG(updater_gpu_hist);
-#endif
-}  // namespace tree
-}  // namespace xgboost
-
-    
-    enum NDK_CRASH_PARSER_STATE {
-    EXPECTS_CRASH_DUMP,
-    EXPECTS_CRASH_DUMP_HEADER,
-    EXPECTS_CRASH_DUMP_CONTENT,
-    EXPECTS_CRASH_DUMP_END,
-};
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    
-    {  private:
-    void* object_;
-};
-    
-    
-/*
- *      Author: yerungui
- */
-    
-      private:
-    CommFrequencyLimit(CommFrequencyLimit&);
-    CommFrequencyLimit& operator=(CommFrequencyLimit&);
-    
-    namespace design_patterns {
-    }
-    
-    class ServiceBase {
-  public:
-    virtual ~ServiceBase() {}
-    void DependServices(const TServicesMap& _dependservices) { m_dependservices = _dependservices;}
-    const char* ServiceName() const { return m_servicename.c_str();}
-    }
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    #ifndef _COMM_FUNCTION_H_
-#define _COMM_FUNCTION_H_
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-        ~ScopedJstring();
