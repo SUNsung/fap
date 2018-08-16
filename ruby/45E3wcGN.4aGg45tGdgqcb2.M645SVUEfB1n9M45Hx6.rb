@@ -1,91 +1,69 @@
 
         
-                def scaffold_post_content
-          ERB.new(File.read(File.expand_path(scaffold_path, site_template))).result
-        end
+              def load_all_tasks
+        self.tasks = []
     
-            def processed?
-          @processed
-        end
+    module Capistrano
+  module TaskEnhancements
+    def before(task, prerequisite, *args, &block)
+      prerequisite = Rake::Task.define_task(prerequisite, *args, &block) if block_given?
+      Rake::Task[task].enhance [prerequisite]
+    end
     
-          def site
-        @site_drop ||= SiteDrop.new(@obj)
-      end
-    
-          def_delegator :@obj, :cleaned_relative_path, :path
-      def_delegator :@obj, :output_ext, :output_ext
-    
-        def excluded?(entry)
-      glob_include?(site.exclude, relative_to_source(entry)).tap do |excluded|
-        if excluded
-          Jekyll.logger.debug(
-            'EntryFilter:',
-            'excluded #{relative_to_source(entry)}'
-          )
+          describe 'setting an internal roles filter' do
+        subject { dsl.roles(:app) }
+        it 'ignores it' do
+          dsl.set :filter, roles: :web
+          expect(subject.map(&:hostname)).to eq(['example3.com', 'example4.com'])
         end
       end
-    end
     
-        sidekiq_options queue: 'critical'
-    
-        version '5' do
-      self.release = '5.4.0'
-      self.base_url = 'https://github.com/d3/'
-      self.root_path = 'd3/blob/master/API.md'
-    
-        version '1.3' do
-      self.release = '1.3.4'
-      self.base_urls = [
-        'https://hexdocs.pm/elixir/#{release}/',
-        'https://hexdocs.pm/eex/#{release}/',
-        'https://hexdocs.pm/ex_unit/#{release}/',
-        'https://hexdocs.pm/iex/#{release}/',
-        'https://hexdocs.pm/logger/#{release}/',
-        'https://hexdocs.pm/mix/#{release}/',
-        'https://elixir-lang.org/getting-started/'
-      ]
-    end
-  end
+    desc 'Clean out caches: .pygments-cache, .gist-cache, .sass-cache'
+task :clean do
+  rm_rf [Dir.glob('.pygments-cache/**'), Dir.glob('.gist-cache/**'), Dir.glob('.sass-cache/**'), 'source/stylesheets/screen.css']
 end
-
     
-        private
-    
-        def as_json
-      { name: name, path: path, type: type }
-    end
-  end
-end
-
-    
-          users = User.arel_table
-      people = Person.arel_table
-      profiles = Profile.arel_table
-      res = User.joins(person: :profile)
-      res = res.where(users[:username].matches('%#{username}%')) unless username.blank?
-      res = res.where(users[:email].matches('%#{email}%')) unless email.blank?
-      res = res.where(people[:guid].matches('%#{guid}%')) unless guid.blank?
-      res = res.where(profiles[:birthday].gt(Date.today-13.years)) if under13 == '1'
-      res
-    end
-  end
-end
-
-    
-          def stages
-        names = Dir[stage_definitions].map { |f| File.basename(f, '.rb') }
-        assert_valid_stage_names(names)
-        names
       end
     
-    desc 'Deploy a new release.'
-task :deploy do
-  set(:deploying, true)
-  %w{ starting started
-      updating updated
-      publishing published
-      finishing finished }.each do |task|
-    invoke 'deploy:#{task}'
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
+    end
+    
+    
+    {
+    {  # Returns hash with styles for all classes using Paperclip.
+  # Unfortunately current version does not work with lambda styles:(
+  #   {
+  #     :User => {:avatar => [:small, :big]},
+  #     :Book => {
+  #       :cover => [:thumb, :croppable]},
+  #       :sample => [:thumb, :big]},
+  #     }
+  #   }
+  def self.current_attachments_styles
+    Hash.new.tap do |current_styles|
+      Paperclip::AttachmentRegistry.each_definition do |klass, attachment_name, attachment_attributes|
+        # TODO: is it even possible to take into account Procs?
+        next if attachment_attributes[:styles].kind_of?(Proc)
+        attachment_attributes[:styles].try(:keys).try(:each) do |style_name|
+          klass_sym = klass.to_s.to_sym
+          current_styles[klass_sym] ||= Hash.new
+          current_styles[klass_sym][attachment_name.to_sym] ||= Array.new
+          current_styles[klass_sym][attachment_name.to_sym] << style_name.to_sym
+          current_styles[klass_sym][attachment_name.to_sym].map!(&:to_s).sort!.map!(&:to_sym).uniq!
+        end
+      end
+    end
   end
-end
-task default: :deploy
+  private_class_method :current_attachments_styles
