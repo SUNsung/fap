@@ -1,129 +1,157 @@
 
         
-        map = {}
-dups = []
+              def controller_path=(path)
+        self.class.controller_path = (path)
+      end
     
-    unless $LOAD_PATH.include? lib_path
-  $LOAD_PATH.unshift lib_path
-end
-
+      def test_serialized_column_should_unserialize_after_update_attribute
+    t = Topic.create(content: 'first')
+    assert_equal('first', t.content)
     
-      # Strip out the value
-  form.search('//input') do |inp|
-    
-      def parse(pkt)
-    # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 21 and pkt.tcp_dport != 21)
-    s = find_session((pkt.tcp_sport == 21) ? get_session_src(pkt) : get_session_dst(pkt))
-    s[:sname] ||= 'ftp'
-    
-        _cal[ver] = {
-      :execve      => __cal + [__NC_execve].pack('n'),
-      :getpeername => __cal + [__NC_getpeername].pack('n'),
-      :accept      => __cal + [__NC_accept].pack('n'),
-      :listen      => __cal + [__NC_listen].pack('n'),
-      :bind        => __cal + [__NC_bind].pack('n'),
-      :socket      => __cal + [__NC_socket].pack('n'),
-      :connect     => __cal + [__NC_connect].pack('n'),
-      :close       => __cal + [__NC_close].pack('n'),
-      :kfcntl      => __cal + [__NC_kfcntl].pack('n'),
-    }
-    
-        def puts(*args)
-      STDERR.puts *args unless @silence
-    end
-    
-      def test_font_helper_without_suffix
-    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
+        assert client.save
+    assert_not_predicate client.firm, :persisted?
   end
     
-    (allow file-read-metadata)
-(allow file-read*
-  ; This is currenly only added because using `xcodebuild` to build a resource
-  ; bundle target starts a FSEvents stream on `/`. No idea why that would be
-  ; needed, but for now it doesn’t seem like a real problem.
-  (literal '/')
-  (regex
-    ; TODO see if we can restrict this more, but it's going to be hard
-    #'^/Users/[^.]+/*'
-    ;#'^/Users/[^.]+/.netrc'
-    ;#'^/Users/[^.]+/.gemrc'
-    ;#'^/Users/[^.]+/.gem/*'
-    ;#'^/Users/[^.]+/Library/.*'
-    #'^/Library/*'
-    #'^/System/Library/*'
-    #'^/usr/lib/*'
-    #'^/usr/share/*'
-    #'^/private/*'
-    #'^/dev/*'
-    #'^<%= ruby_prefix %>'
-    #'^<%= pod_prefix %>'
-    #'^<%= xcode_app_path %>'
-    #'^<%= Pod::Config.instance.repos_dir %>'
-<% prefixes.each do |prefix| %>
-    #'^<%= prefix %>/*'
-<% end %>
-  )
-)
+          expected = { 'identifier' => '{id: 1}', 'type' => 'reject_subscription' }
+      assert_equal expected, @connection.last_transmission
+      assert_equal 1, @connection.transmissions.size
     
-            self.arguments = [
-          CLAide::Argument.new('NAME', false),
-        ]
+        if !Language::Python.in_sys_path?('python', homebrew_site_packages)
+      s = <<-EOS.undent
+        Python modules have been installed and Homebrew's site-packages is not
+        in your Python sys.path, so you will not be able to import the modules
+        this formula installed. If you plan to develop with these modules,
+        please run:
+      EOS
+      s += instructions
+    elsif keg.python_pth_files_installed?
+      s = <<-EOS.undent
+        This formula installed .pth files to Homebrew's site-packages and your
+        Python isn't configured to process them, so you will not be able to
+        import the modules this formula installed. If you plan to develop
+        with these modules, please run:
+      EOS
+      s += instructions
+    end
+    s
+  end
     
-          def actual_path
-        $PROGRAM_NAME
+            $stderr.puts
+        opoo out
+        Homebrew.failed = true
+        first_warning = false
       end
     end
+    
+          if $stdout.tty?
+        count = local_results.length + tap_results.length
+    
+        if !updated
+      puts 'Already up-to-date.'
+    elsif hub.empty?
+      puts 'No changes to formulae.'
+    else
+      hub.dump
+      hub.reporters.each(&:migrate_tap_migration)
+      hub.reporters.each(&:migrate_formula_rename)
+      Descriptions.update_cache(hub)
+    end
+    
+          export JAVA_HOME='$(/usr/libexec/java_home)'
+      export AWS_ACCESS_KEY='<Your AWS Access ID>'
+      export AWS_SECRET_KEY='<Your AWS Secret Key>'
+      export #{home_name}='#{home_value}'
+    EOS
   end
 end
 
     
-            self.summary = 'The repl listens to commands on standard input'
-        self.description = <<-DESC
-          The repl listens to commands on standard input and prints their
-          result to standard output.
-          It accepts all the other ipc subcommands. The repl will signal the
-          end of output with the the ASCII CR+LF `\\n\\r`.
-        DESC
-    
-    module Jekyll
-    
-          locations = Array.new
-      while (data.code.to_i == 301 || data.code.to_i == 302)
-        data = handle_gist_redirecting(data)
-        break if locations.include? data.header['Location']
-        locations << data.header['Location']
+          # Run a certain action
+      def trigger(task: nil, flags: nil, serial: nil, print_command: true, print_command_output: true)
+        android_serial = (serial != '') ? 'ANDROID_SERIAL=#{serial}' : nil
+        command = [android_serial, escaped_gradle_path, task, flags].compact.join(' ')
+        Action.sh(command, print_command: print_command, print_command_output: print_command_output)
       end
     
-        def render(context)
-      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
-      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
-      file = code_path + @file
+          it 'pass a custom version number' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number(version_number: '1.4.3')
+        end').runner.execute(:test)
     
-          Dir.chdir(file_path) do
-        contents = file.read
-        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
-          contents = $1.lstrip
-        end
-        contents = pre_filter(contents)
-        if @raw
-          contents
-        else
-          partial = Liquid::Template.parse(contents)
-          context.stack do
-            partial.render(context)
-          end
-        end
+        version '4' do
+      self.release = '4.1.1'
+      self.base_url = 'https://getbootstrap.com/docs/4.1/'
+      self.root_path = 'getting-started/introduction/'
+    
+        version '1.6' do
+      self.release = '1.6.5'
+      self.base_urls = [
+        'https://hexdocs.pm/elixir/#{release}/',
+        'https://hexdocs.pm/eex/#{release}/',
+        'https://hexdocs.pm/ex_unit/#{release}/',
+        'https://hexdocs.pm/iex/#{release}/',
+        'https://hexdocs.pm/logger/#{release}/',
+        'https://hexdocs.pm/mix/#{release}/',
+        'https://elixir-lang.org/getting-started/'
+      ]
+    end
+    
+        REDIRECT_RGX = /http-equiv='refresh'/i
+    NOT_FOUND_RGX = /<title>Not Found<\/title>/
+    
+        def origin
+      if scheme && host
+        origin = '#{scheme}://#{host}'
+        origin.downcase!
+        origin << ':#{port}' if port
+        origin
+      else
+        nil
       end
     end
-  end
-end
     
-        def sizes
-      attrs = 'width='#{@sizes[0]}'' if @sizes[0]
-      attrs += ' height='#{@sizes[1]}'' if @sizes[1]
-      attrs
+      # Version of your assets, change this if you want to expire all your assets.
+  config.assets.version = '1.0'
+    
+          # Get the cache key pair for the given Sass URI.
+      # The URI need not be checked for validity.
+      #
+      # The only strict requirement is that the returned pair of strings
+      # uniquely identify the file at the given URI.
+      # However, the first component generally corresponds roughly to the directory,
+      # and the second to the basename, of the URI.
+      #
+      # Note that keys must be unique *across importers*.
+      # Thus it's probably a good idea to include the importer name
+      # at the beginning of the first component.
+      #
+      # @param uri [String] A URI known to be valid for this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [(String, String)] The key pair which uniquely identifies
+      #   the file at the given URI.
+      def key(uri, options)
+        Sass::Util.abstract(self)
+      end
+    
+            def log_level?(level, min_level)
+          log_levels[level] >= log_levels[min_level]
+        end
+    
+        # Returns the CSS for the media query.
+    #
+    # @return [String]
+    def to_css
+      css = ''
+      css << resolved_modifier
+      css << ' ' unless resolved_modifier.empty?
+      css << resolved_type
+      css << ' and ' unless resolved_type.empty? || expressions.empty?
+      css << expressions.map do |e|
+        # It's possible for there to be script nodes in Expressions even when
+        # we're converting to CSS in the case where we parsed the document as
+        # CSS originally (as in css_test.rb).
+        e.map {|c| c.is_a?(Sass::Script::Tree::Node) ? c.to_sass : c.to_s}.join
+      end.join(' and ')
+      css
     end
-  end
-end
