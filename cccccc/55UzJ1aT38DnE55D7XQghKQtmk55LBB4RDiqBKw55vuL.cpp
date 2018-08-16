@@ -1,241 +1,338 @@
-#endif  // STORAGE_LEVELDB_DB_DB_ITER_H_
+
+        
+        #include 'atom/browser/api/trackable_object.h'
+#include 'base/callback.h'
+#include 'chrome/browser/extensions/global_shortcut_listener.h'
+#include 'native_mate/handle.h'
+#include 'ui/base/accelerators/accelerator.h'
+    
+    #ifndef ATOM_BROWSER_UI_X_EVENT_DISABLER_H_
+#define ATOM_BROWSER_UI_X_EVENT_DISABLER_H_
+    
+    namespace {
+    }
+    
+    class UnresponsiveSuppressor {
+ public:
+  UnresponsiveSuppressor();
+  ~UnresponsiveSuppressor();
+    }
+    
+    #endif  // ATOM_COMMON_API_LOCKER_H_
 
     
-    static std::string IKey(const std::string& user_key,
-                        uint64_t seq,
-                        ValueType vt) {
-  std::string encoded;
-  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
-  return encoded;
+    // filenames
+const base::FilePath::CharType kCacheDirname[] = FPL('Cache');
+const base::FilePath::CharType kChannelIDFilename[] = FPL('Origin Bound Certs');
+const base::FilePath::CharType kCookieFilename[] = FPL('Cookies');
+const base::FilePath::CharType kCRLSetFilename[] =
+    FPL('Certificate Revocation Lists');
+const base::FilePath::CharType kCustomDictionaryFileName[] =
+    FPL('Custom Dictionary.txt');
+const base::FilePath::CharType kExtensionActivityLogFilename[] =
+    FPL('Extension Activity');
+const base::FilePath::CharType kExtensionsCookieFilename[] =
+    FPL('Extension Cookies');
+const base::FilePath::CharType kFirstRunSentinel[] = FPL('First Run');
+const base::FilePath::CharType kGCMStoreDirname[] = FPL('GCM Store');
+const base::FilePath::CharType kLocalStateFilename[] = FPL('Local State');
+const base::FilePath::CharType kLocalStorePoolName[] = FPL('LocalStorePool');
+const base::FilePath::CharType kMediaCacheDirname[] = FPL('Media Cache');
+const base::FilePath::CharType kNetworkPersistentStateFilename[] =
+    FPL('Network Persistent State');
+const base::FilePath::CharType kOfflinePageArchviesDirname[] =
+    FPL('Offline Pages/archives');
+const base::FilePath::CharType kOfflinePageMetadataDirname[] =
+    FPL('Offline Pages/metadata');
+const base::FilePath::CharType kPreferencesFilename[] = FPL('Preferences');
+const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[] =
+    FPL('Protected Preferences');
+const base::FilePath::CharType kReadmeFilename[] = FPL('README');
+const base::FilePath::CharType kResetPromptMementoFilename[] =
+    FPL('Reset Prompt Memento');
+const base::FilePath::CharType kSafeBrowsingBaseFilename[] =
+    FPL('Safe Browsing');
+const base::FilePath::CharType kSecurePreferencesFilename[] =
+    FPL('Secure Preferences');
+const base::FilePath::CharType kServiceStateFileName[] = FPL('Service State');
+const base::FilePath::CharType kSingletonCookieFilename[] =
+    FPL('SingletonCookie');
+const base::FilePath::CharType kSingletonLockFilename[] = FPL('SingletonLock');
+const base::FilePath::CharType kSingletonSocketFilename[] =
+    FPL('SingletonSocket');
+const base::FilePath::CharType kSupervisedUserSettingsFilename[] =
+    FPL('Managed Mode Settings');
+const base::FilePath::CharType kThemePackFilename[] = FPL('Cached Theme.pak');
+const base::FilePath::CharType kThemePackMaterialDesignFilename[] =
+    FPL('Cached Theme Material Design.pak');
+const base::FilePath::CharType kWebAppDirname[] = FPL('Web Applications');
+    
+    
+    {}  // namespace chrome
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+          typename T6, typename T7, typename T8>
+void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8>& t,
+             ::std::ostream* os) {
+  PrintTupleTo(t, os);
 }
     
-    // If filename is a leveldb file, store the type of the file in *type.
-// The number encoded in the filename is stored in *number.  If the
-// filename was successfully parsed, returns true.  Else return false.
-extern bool ParseFileName(const std::string& filename,
-                          uint64_t* number,
-                          FileType* type);
+    #endif  // 0
     
-    TEST(FileNameTest, Construction) {
-  uint64_t number;
-  FileType type;
-  std::string fname;
-    }
     
-    namespace leveldb {
-    }
-    
-    TEST(FindFileTest, Empty) {
-  ASSERT_EQ(0, Find('foo'));
-  ASSERT_TRUE(! Overlaps('a', 'z'));
-  ASSERT_TRUE(! Overlaps(NULL, 'z'));
-  ASSERT_TRUE(! Overlaps('a', NULL));
-  ASSERT_TRUE(! Overlaps(NULL, NULL));
+    {  return EqFailure(expected_expression,
+                   actual_expression,
+                   FormatForComparisonFailureMessage(expected, actual),
+                   FormatForComparisonFailureMessage(actual, expected),
+                   false);
 }
     
-        bool transaction = (entries_per_batch > 1);
-    for (int i = 0; i < reads_; i += entries_per_batch) {
-      // Begin read transaction
-      if (FLAGS_transaction && transaction) {
-        status = sqlite3_step(begin_trans_stmt);
-        StepErrorCheck(status);
-        status = sqlite3_reset(begin_trans_stmt);
-        ErrorCheck(status);
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT5.
+// Don't use this in your code.
+#define GTEST_PRED_FORMAT5_(pred_format, v1, v2, v3, v4, v5, on_failure)\
+  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, #v4, #v5, v1, v2, v3, v4, v5), \
+                on_failure)
+    
+    // This is used internally by all instances of linked_ptr<>.  It needs to be
+// a non-template class because different types of linked_ptr<> can refer to
+// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
+// So, it needs to be possible for different types of linked_ptr to participate
+// in the same circular linked list, so we need a single class type here.
+//
+// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
+class linked_ptr_internal {
+ public:
+  // Create a new circle that includes only this instance.
+  void join_new() {
+    next_ = this;
+  }
+    }
+    
+      // Compares two wide C strings, ignoring case.  Returns true iff they
+  // have the same content.
+  //
+  // Unlike wcscasecmp(), this function can handle NULL argument(s).
+  // A NULL C string is considered different to any non-NULL wide C string,
+  // including the empty string.
+  // NB: The implementations on different platforms slightly differ.
+  // On windows, this method uses _wcsicmp which compares according to LC_CTYPE
+  // environment variable. On GNU platform this method uses wcscasecmp
+  // which compares according to LC_CTYPE category of the current locale.
+  // On MacOS X, it uses towlower, which also uses LC_CTYPE category of the
+  // current locale.
+  static bool CaseInsensitiveWideCStringEquals(const wchar_t* lhs,
+                                               const wchar_t* rhs);
+    
+      // Trivial case 2: even numbers
+  if (n % 2 == 0) return n == 2;
+    
+    // Tests negative input.
+TEST(IsPrimeTest, Negative) {
+  // This test belongs to the IsPrimeTest test case.
+    }
+    
+        // decide if/how often we measure and show sync performance stats (seconds spend on sync, seconds since last sync etc.) ?
+    // 0: No sync perfomance stats
+    // 1: Show stats on every sync
+    // n > 1: Show stats after every n sync
+    int m_syncStatsTrace;
+    
+        // this performs the operation on a row stripe, rows [beginrow,endrow) of M -> rows[beginrow,endrow) of result
+    // Rows outside [beginrow,endrow) are not touched, and can e.g. be computed by another thread.
+    void matprod_mtm(const ssematrixbase &Mt, size_t beginrow /*first row in M*/, size_t endrow /*end row in M*/, const ssematrixbase &V)
+    {
+        auto &us = *this;
+        assert(V.rows() == Mt.rows()); // remember: Mt is the transpose of M
+        assert(us.rows() == Mt.cols());
+        assert(us.cols() == V.cols());
+        assert(beginrow < endrow && endrow <= Mt.cols()); // remember that cols of Mt are the rows of M
+    }
+    
+                // push the statistics results of mean and variance of bn nodes into mpi updating vector
+            std::vector<Matrix<ElemType>*> learnParamsValues(2, nullptr);
+    
+    #ifndef let
+#define let const auto
+#endif
+    
+        // call SetStepOffset() at start of a multi-epoch training to set the index of the first epoch in that training
+    // This value is added to the local epoch index in TraceProgress().
+    static void SetStepOffset(size_t currentStepOffset)
+    {
+        GetStaticInstance().m_currentStepOffset = currentStepOffset;
+    }
+    
+    namespace Microsoft { namespace MSR { namespace CNTK {
+    }
+    }
+    }
+    
+    	// Record Imgui Draw Data and draw funcs into command buffer
+	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), fd->CommandBuffer);
+    
+    #include 'imgui.h'
+#include 'imgui_impl_win32.h'
+#include 'imgui_impl_dx10.h'
+#include <d3d10_1.h>
+#include <d3d10.h>
+#define DIRECTINPUT_VERSION 0x0800
+#include <dinput.h>
+#include <tchar.h>
+    
+    //---- Define constructor and implicit cast operators to convert back<>forth between your math types and ImVec2/ImVec4.
+// This will be inlined as part of ImVec2 and ImVec4 class declarations.
+/*
+#define IM_VEC2_CLASS_EXTRA                                                 \
+        ImVec2(const MyVec2& f) { x = f.x; y = f.y; }                       \
+        operator MyVec2() const { return MyVec2(x,y); }
+    
+    #include <algorithm>
+#include <stdio.h>
+#include <string.h>
+    
+      // Compares the 8x8 block with offsets (off_x, off_y) within the current
+  // macro-block of the baseline image with the same block of img and returns
+  // the resulting per-block distance. The interpretation of the returned
+  // distance depends on the comparator used.
+  virtual double CompareBlock(const OutputImage& img,
+                              int off_x, int off_y) const = 0;
+    
+      // Bring in range 0.0-1.0 for Y, -0.5 - 0.5 for U and V
+  auto yuv = image;
+  for (size_t i = 0; i < yuv[0].size(); i++) {
+    yuv[0][i] /= 255.0;
+    yuv[1][i] = yuv[1][i] / 255.0f - 0.5f;
+    yuv[2][i] = yuv[2][i] / 255.0f - 0.5f;
+  }
+    
+    void IDCT1d(const double* in, int stride, double* out) {
+  for (int x = 0; x < 8; ++x) {
+    out[x * stride] = 0.0;
+    for (int u = 0; u < 8; ++u) {
+      out[x * stride] += kDCTMatrix[8 * u + x] * in[u * stride];
+    }
+  }
+}
+    
+    // Entropy encoding (Huffman) utilities.
+    
+    #endif  // GUETZLI_FAST_LOG_H_
+
+    
+    
+    {  tmp0 = in[7 * stride];
+  tmp1 = kIDCTMatrix[ 7] * tmp0;
+  tmp2 = kIDCTMatrix[15] * tmp0;
+  tmp3 = kIDCTMatrix[23] * tmp0;
+  tmp4 = kIDCTMatrix[31] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] += tmp3;
+  out[3] += tmp4;
+  out[4] -= tmp4;
+  out[5] -= tmp3;
+  out[6] -= tmp2;
+  out[7] -= tmp1;
+}
+    
+    // Fills in 'result' with the inverse DCT of 'block'.
+// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
+// a row-by-row memory layout.
+void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
+    
+    namespace guetzli {
+    }
+    
+      OutputImageComponent& component(int c) { return components_[c]; }
+  const OutputImageComponent& component(int c) const { return components_[c]; }
+    
+    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
+std::vector<std::vector<float>> PreProcessChannel(
+    int w, int h, int channel, float sigma, float amount, bool blur,
+    bool sharpen, const std::vector<std::vector<float>>& image);
+    
+    namespace folly {
+    }
+    
+      /* Used by readers */
+  bool contains(const T& val) const {
+    /* Two hazard pointers for hand-over-hand traversal. */
+    hazptr_local<2, Atom> hptr;
+    hazptr_holder<Atom>* hptr_prev = &hptr[0];
+    hazptr_holder<Atom>* hptr_curr = &hptr[1];
+    while (true) {
+      auto prev = &head_;
+      auto curr = prev->load(std::memory_order_acquire);
+      while (true) {
+        if (!curr) {
+          return false;
+        }
+        if (!hptr_curr->try_protect(curr, *prev)) {
+          break;
+        }
+        auto next = curr->next_.load(std::memory_order_acquire);
+        if (prev->load(std::memory_order_acquire) != curr) {
+          break;
+        }
+        if (curr->elem_ == val) {
+          return true;
+        } else if (!(curr->elem_ < val)) {
+          return false; // because the list is sorted
+        }
+        prev = &(curr->next_);
+        curr = next;
+        std::swap(hptr_curr, hptr_prev);
       }
     }
+  }
+    
+    #include <string>
     
     
-    {}  // namespace leveldb
+    {} // namespace folly
+
     
-    // Returns a Boolean value indicating whether the caller is currently
-// executing in the context of the death test child process.  Tools such as
-// Valgrind heap checkers may need this to modify their behavior in death
-// tests.  IMPORTANT: This is an internal utility.  Using it may break the
-// implementation of death tests.  User code MUST NOT use it.
-GTEST_API_ bool InDeathTestChild();
+      if (prevValue + 1 == size_) {
+    // Need to reset the barrier before fulfilling any futures. This is
+    // when the epoch is flipped to the next.
+    controlBlock_.store(allocateControlBlock(), std::memory_order_release);
+    }
     
-    // Google Test - The Google C++ Testing Framework
-//
-// This file implements a universal value printer that can print a
-// value of any type T:
-//
-//   void ::testing::internal::UniversalPrinter<T>::Print(value, ostream_ptr);
-//
-// A user can teach this function how to print a class type T by
-// defining either operator<<() or PrintTo() in the namespace that
-// defines T.  More specifically, the FIRST defined function in the
-// following list will be used (assuming T is defined in namespace
-// foo):
-//
-//   1. foo::PrintTo(const T&, ostream*)
-//   2. operator<<(ostream&, const T&) defined in either foo or the
-//      global namespace.
-//
-// If none of the above is defined, it will print the debug string of
-// the value if it is a protocol buffer, or print the raw bytes in the
-// value otherwise.
-//
-// To aid debugging: when T is a reference type, the address of the
-// value is also printed; when T is a (const) char pointer, both the
-// pointer value and the NUL-terminated string it points to are
-// printed.
-//
-// We also provide some convenient wrappers:
-//
-//   // Prints a value to a string.  For a (const or not) char
-//   // pointer, the NUL-terminated string (but not the pointer) is
-//   // printed.
-//   std::string ::testing::PrintToString(const T& value);
-//
-//   // Prints a value tersely: for a reference type, the referenced
-//   // value (but not the address) is printed; for a (const or not) char
-//   // pointer, the NUL-terminated string (but not the pointer) is
-//   // printed.
-//   void ::testing::internal::UniversalTersePrint(const T& value, ostream*);
-//
-//   // Prints value using the type inferred by the compiler.  The difference
-//   // from UniversalTersePrint() is that this function prints both the
-//   // pointer and the NUL-terminated string for a (const or not) char pointer.
-//   void ::testing::internal::UniversalPrint(const T& value, ostream*);
-//
-//   // Prints the fields of a tuple tersely to a string vector, one
-//   // element for each field. Tuple support must be enabled in
-//   // gtest-port.h.
-//   std::vector<string> UniversalTersePrintTupleFieldsToStrings(
-//       const Tuple& value);
-//
-// Known limitation:
-//
-// The print primitives print the elements of an STL-style container
-// using the compiler-inferred type of *iter where iter is a
-// const_iterator of the container.  When const_iterator is an input
-// iterator but not a forward iterator, this inferred type may not
-// match value_type, and the print output may be incorrect.  In
-// practice, this is rarely a problem as for most containers
-// const_iterator is a forward iterator.  We'll fix this if there's an
-// actual need for it.  Note that this fix cannot rely on value_type
-// being defined as many user-defined container types don't have
-// value_type.
     
-    // This file is AUTOMATICALLY GENERATED on 10/31/2011 by command
-// 'gen_gtest_pred_impl.py 5'.  DO NOT EDIT BY HAND!
-//
-// Implements a family of generic predicate assertion macros.
-    
-    # else
-#  define GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, death_test) \
-  GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement)
-    
-    // This exception is thrown by (and only by) a failed Google Test
-// assertion when GTEST_FLAG(throw_on_failure) is true (if exceptions
-// are enabled).  We derive it from std::runtime_error, which is for
-// errors presumably detectable only at run time.  Since
-// std::runtime_error inherits from std::exception, many testing
-// frameworks know how to extract and print the message inside it.
-class GTEST_API_ GoogleTestFailureException : public ::std::runtime_error {
- public:
-  explicit GoogleTestFailureException(const TestPartResult& failure);
+    { private:
+  SettingMetadata meta_;
+  SettingCore<Type> core_;
 };
     
-    template <typename T>
-class linked_ptr {
- public:
-  typedef T element_type;
-    }
-    
-        void ComputeCurrentValue() {
-      if (!AtEnd())
-        current_value_ = ParamType(*current1_, *current2_, *current3_,
-            *current4_, *current5_, *current6_);
-    }
-    bool AtEnd() const {
-      // We must report iterator past the end of the range when either of the
-      // component iterators has reached the end of its range.
-      return
-          current1_ == end1_ ||
-          current2_ == end2_ ||
-          current3_ == end3_ ||
-          current4_ == end4_ ||
-          current5_ == end5_ ||
-          current6_ == end6_;
-    }
-    
-      static bool FullMatch(const ::string& str, const RE& re) {
-    return FullMatch(str.c_str(), re);
-  }
-  static bool PartialMatch(const ::string& str, const RE& re) {
-    return PartialMatch(str.c_str(), re);
+      {
+    auto meta = folly::settings::getSettingsMeta('follytest_public_flag_to_a');
+    EXPECT_TRUE(meta.hasValue());
+    const auto& md = meta.value();
+    EXPECT_EQ(md.project, 'follytest');
+    EXPECT_EQ(md.name, 'public_flag_to_a');
+    EXPECT_EQ(md.typeStr, 'int');
+    EXPECT_EQ(md.typeId, typeid(int));
   }
     
-    
-    {
-    {}  // namespace testing
-}  // namespace grpc
-    
-    namespace grpc {
-namespace testing {
-    }
+    TEST(Ensure, mutableLambda) {
+  auto set = std::make_shared<std::unordered_set<int>>();
+  set->insert(1);
+  set->insert(2);
     }
     
-      grpc::testing::RunServer();
-    
-    #include <ares.h>
-#include 'src/core/ext/filters/client_channel/resolver/dns/c_ares/grpc_ares_wrapper.h'
-#include 'src/core/lib/gprpp/abstract.h'
-#include 'src/core/lib/iomgr/pollset_set.h'
-    
-      static ares_ssize_t RecvFrom(ares_socket_t as, void* data, size_t data_len,
-                               int flags, struct sockaddr* from,
-                               ares_socklen_t* from_len, void* user_data) {
-    SockToPolledFdMap* map = static_cast<SockToPolledFdMap*>(user_data);
-    GrpcPolledFdWindows* polled_fd = map->LookupPolledFd(as);
-    return polled_fd->RecvFrom(data, data_len, flags, from, from_len);
-  }
-    
-    static void destroy_hostbyname_request_locked(
-    grpc_ares_hostbyname_request* hr) {
-  grpc_ares_request_unref_locked(hr->parent_request);
-  gpr_free(hr->host);
-  gpr_free(hr);
+    TEST(RetryingTest, policy_capped_jittered_exponential_backoff) {
+  multiAttemptExpectDurationWithin(5, milliseconds(200), milliseconds(400), []{
+    using ms = milliseconds;
+    auto r = futures::retrying(
+        futures::retryingPolicyCappedJitteredExponentialBackoff(
+          3, ms(100), ms(1000), 0.1, mt19937_64(0),
+          [](size_t, const exception_wrapper&) { return true; }),
+        [](size_t n) {
+            return n < 2
+              ? makeFuture<size_t>(runtime_error('ha'))
+              : makeFuture(n);
+        }
+    ).wait();
+    EXPECT_EQ(2, r.value());
+  });
 }
-    
-    static HANDLE g_iocp;
-    
-    typedef struct {
-  gpr_atm size;  // size_t, num closures in queue or currently executing
-  gpr_mpscq queue;
-  // Either 0 (if not cancelled and no cancellation closure set),
-  // a grpc_closure* (if the lowest bit is 0),
-  // or a grpc_error* (if the lowest bit is 1).
-  gpr_atm cancel_state;
-} grpc_call_combiner;
-    
-    const grpc_channel_filter grpc_server_auth_filter = {
-    auth_start_transport_stream_op_batch,
-    grpc_channel_next_op,
-    sizeof(call_data),
-    init_call_elem,
-    grpc_call_stack_ignore_set_pollset_or_pollset_set,
-    destroy_call_elem,
-    sizeof(channel_data),
-    init_channel_elem,
-    destroy_channel_elem,
-    grpc_channel_next_get_info,
-    'server-auth'};
-
-    
-    int main(int argc, char** argv) {
-  grpc_test_init(argc, argv);
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
-#else
-int main() {
-  printf('*** WARNING: this test is only supported on Linux systems ***\n');
-  return 0;
-}
-#endif  // GPR_LINUX
-
-    
-      rpeer = grpc_shallow_peer_from_ssl_auth_context(ctx);
-  GPR_ASSERT(check_ssl_peer_equivalence(&peer, &rpeer));
