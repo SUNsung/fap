@@ -1,80 +1,53 @@
 
         
-          it 'does not evaluate else-body if expression is true' do
-    a = []
-    if true
-      a << 123
-    else
-      a << 456
-    end
-    a.should == [123]
-  end
+                entries = []
     
-      describe 'DATA_PTR' do
-    it 'returns the struct data' do
-      a = @s.wrap_struct(1024)
-      @s.get_struct_data_ptr(a).should == 1024
-    end
-  end
-end
-
+        options[:only_patterns] = [
+      /\Abook\/first-edition\//,
+      /\Areference\//,
+      /\Acollections\//,
+      /\Astd\// ]
     
-      ##
-  # Adds +name+ with permissions +mode+ to the tar, yielding +io+ for writing
-  # the file.  The +digest_algorithm+ is written to a read-only +name+.sum
-  # file following the given file contents containing the digest name and
-  # hexdigest separated by a tab.
-  #
-  # The created digest object is returned.
-    
-      DIGEST_NAME = # :nodoc:
-    if DIGEST_ALGORITHM.method_defined? :name then
-      DIGEST_ALGORITHM.new.name
-    else
-      DIGEST_ALGORITHM.name[/::([^:]+)\z/, 1]
-    end
-    
-        assert_predicate set2, :frozen?
-    assert_raise(FrozenError) {
-      set2.add 5
-    }
-  end
-end
-    
-      it 'ignores spaces between directives' do
-    '\x01\x02'.unpack('U U').should == [1, 2]
-  end
-end
-
-    
-          case entity
-      when DiasporaFederation::Entities::AccountDeletion
-        Diaspora::Federation::Receive.account_deletion(entity)
-      when DiasporaFederation::Entities::Retraction
-        Diaspora::Federation::Receive.retraction(entity, recipient_id)
-      else
-        persisted = Diaspora::Federation::Receive.perform(entity)
-        Workers::ReceiveLocal.perform_async(persisted.class.to_s, persisted.id, [recipient_id].compact) if persisted
-      end
-    end
-    
-              lambda do |corrector|
-            corrector.replace(center.source_range, new_center)
-          end
+            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
+          next if node.previous.try(:content).present? || node.next.try(:content).present?
+          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
+          node.content = node.content.strip
+          node.name = 'pre' if node.content =~ /\s/
+          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
         end
-      end
-    end
+    
+    all_environments = [
+    :development,
+    :production,
+    :test
+]
+    
+      # Extract the form
+  res = '<form'
+  form.attributes.each do |attr|
+    res << ' #{attr[0]}='#{attr[1].gsub(''', '')}''
   end
-end
-
+  res << '> '
     
-            MSG = 'Do not freeze immutable objects, as freezing them has no ' \
-              'effect.'.freeze
+    File.readlines(sitelist).each do |site|
+  site.strip!
+  next if site.length == 0
+  next if site =~ /^#/
     
-        context 'opening brace on same line as first element' do
-      context 'last element has a trailing comma' do
-        it 'autocorrects closing brace on different line from last element' do
-          new_source = autocorrect_source(['#{prefix}#{open}#{a}, # a',
-                                           '#{b}, # b',
-                                           close,
-                                           suffix])
+            # Remove it form the session objects so freeup
+        sessions.delete(s[:session])
+    
+    
+    {	if ln =~ /;(read|write)_(handle|filename)=/
+		parts = ln.split(' ')
+		if (parts[0] == 'mov')
+			parts2 = parts[2].split('=')
+			label = parts2[0]
+			label.slice!(0,1)
+			old = parts2[1]
+			new = addrs[label]
+			#puts '%32s: %s -> %x' % [label, old, new]
+			replaces << [label, old, new.to_s(16)]
+		end
+	end
+}
