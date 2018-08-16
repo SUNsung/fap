@@ -1,108 +1,162 @@
-from sklearn.datasets import fetch_20newsgroups_vectorized
-from sklearn.metrics import accuracy_score
-from sklearn.utils.validation import check_array
+
+        
+            def reducer(self, key, values):
+        total = sum(values)
+        if total == 1:
+            yield key, total
     
-        print('duration: %0.3fs' % delta)
-    print('rmse: %f' % rmse(Y_test, clf.predict(X_test)))
-    print('mean coef abs diff: %f' % abs(ref_coef - clf.coef_.ravel()).mean())
-    return delta
+        def __init__(self, operators, supervisors, directors):
+        self.operators = operators
+        self.supervisors = supervisors
+        self.directors = directors
+        self.queued_calls = deque()
+    
+        def mapper(self, _, line):
+        '''Parse each log line, extract and transform relevant lines.
+    
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer),
+            self.mr(mapper=self.mapper_sort,
+                    reducer=self.reducer_identity),
+        ]
+    
+        def __init__(self, user_id, name, pass_hash):
+        self.user_id = user_id
+        self.name = name
+        self.pass_hash = pass_hash
+        self.friends_by_id = {}  # key: friend id, value: User
+        self.friend_ids_to_private_chats = {}  # key: friend id, value: private chats
+        self.group_chats_by_id = {}  # key: chat id, value: GroupChat
+        self.received_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
+        self.sent_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
+    
+            Accessing a node updates its position to the front of the LRU list.
+        '''
+        node = self.lookup[query]
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
     
     
-def plot_batch_errors(all_errors, n_features, all_batch_sizes, data):
-    plt.figure()
-    plot_results(all_batch_sizes, all_errors['pca'], label='PCA')
-    plot_results(all_batch_sizes, all_errors['ipca'], label='IncrementalPCA')
-    plt.legend(loc='lower left')
-    plt.suptitle('Algorithm error vs. batch_size for n_components %i\n \
-                 LFW, size %i x %i' % (
-                 n_features, data.shape[0], data.shape[1]))
-    plt.xlabel('Batch size')
-    plt.ylabel('Mean absolute error')
-    
+def flatpage(request, url):
     '''
-from __future__ import division
-from __future__ import print_function
+    Public interface to the flat page view.
     
-    from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import Perceptron
-from sklearn.pipeline import Pipeline
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
+        assert_allclose(result, true_result)
     
-    In this examples we will use a movie review dataset.
+        toplot = track[i, ::, ::, 0]
     
-    calibrated_classifier = sig_clf.calibrated_classifiers_[0]
-prediction = np.vstack([calibrator.predict(this_p)
-                        for calibrator, this_p in
-                        zip(calibrated_classifier.calibrators_, p.T)]).T
-prediction /= prediction.sum(axis=1)[:, None]
+        np.random.seed(seed)
+    indices = np.arange(len(x))
+    np.random.shuffle(indices)
+    x = x[indices]
+    y = y[indices]
     
-        # View probabilities=
-    probas = classifier.predict_proba(Xfull)
-    n_classes = np.unique(y_pred).size
-    for k in range(n_classes):
-        plt.subplot(n_classifiers, n_classes, index * n_classes + k + 1)
-        plt.title('Class %d' % k)
-        if k == 0:
-            plt.ylabel(name)
-        imshow_handle = plt.imshow(probas[:, k].reshape((100, 100)),
-                                   extent=(3, 9, 1, 5), origin='lower')
-        plt.xticks(())
-        plt.yticks(())
-        idx = (y_pred == k)
-        if idx.any():
-            plt.scatter(X[idx, 0], X[idx, 1], marker='o', c='k')
+        for i in range(1, 6):
+        fpath = os.path.join(path, 'data_batch_' + str(i))
+        (x_train[(i - 1) * 10000: i * 10000, :, :, :],
+         y_train[(i - 1) * 10000: i * 10000]) = load_batch(fpath)
     
-    n_samples_range = np.arange(6, 31, 1)
-repeat = 100
-lw_mse = np.zeros((n_samples_range.size, repeat))
-oa_mse = np.zeros((n_samples_range.size, repeat))
-lw_shrinkage = np.zeros((n_samples_range.size, repeat))
-oa_shrinkage = np.zeros((n_samples_range.size, repeat))
-for i, n_samples in enumerate(n_samples_range):
-    for j in range(repeat):
-        X = np.dot(
-            np.random.normal(size=(n_samples, n_features)), coloring_matrix.T)
+        y_train = np.reshape(y_train, (len(y_train), 1))
+    y_test = np.reshape(y_test, (len(y_test), 1))
     
-            I.i.u I.j.v                           leave alone, nonoverlapping
-        I.i.u I.i.v                           combine: Iivu
+            plt.gcf().suptitle('%s data set' % dataset.capitalize(), fontsize=16)
     
     
-runtime_version_str = __version__
-runtime_version = version_str_to_tuple(runtime_version_str)
+def euclidean_distances(X, n_jobs):
+    return pairwise_distances(X, metric='euclidean', n_jobs=n_jobs)
     
-    class ConstructorInjectionTest(unittest.TestCase):
+    import time
     
-    print('Counting to five...')
-for number in count_to_five():
-    print(number, end=' ')
+        ###########################################################################
+    # Set GaussianRandomProjection input
+    gaussian_matrix_params = {
+        'n_components': opts.n_components,
+        'random_state': opts.random_seed
+    }
+    transformers['GaussianRandomProjection'] = \
+        GaussianRandomProjection(**gaussian_matrix_params)
     
-        return restore
+        try:
+        fn = inspect.getsourcefile(obj)
+    except Exception:
+        fn = None
+    if not fn:
+        try:
+            fn = inspect.getsourcefile(sys.modules[obj.__module__])
+        except Exception:
+            fn = None
+    if not fn:
+        return
     
-        Usage::
+        opener = build_opener()
+    html_filename = os.path.join(html_folder, lang + '.html')
+    if not os.path.exists(html_filename):
+        print('Downloading %s' % page)
+        request = Request(page)
+        # change the User Agent to avoid being blocked by Wikipedia
+        # downloading a couple of articles should not be considered abusive
+        request.add_header('User-Agent', 'OpenAnything/1.0')
+        html_content = opener.open(request).read()
+        open(html_filename, 'wb').write(html_content)
     
-            def sync_func(self_event, other_event):
-            self_event.set()
-            other_event.wait()
-            # Note that return value doesn't actually do anything,
-            # it is just passed through to our final assertion to
-            # make sure it is passed through properly.
-            return self_event
+    # Predict the result on some short new sentences:
+sentences = [
+    u'This is a language detection test.',
+    u'Ceci est un test de d\xe9tection de la langue.',
+    u'Dies ist ein Test, um die Sprache zu erkennen.',
+]
+predicted = clf.predict(sentences)
     
+        def plot_decision_surface(self, surface, type):
+        X1, X2, Z = surface
+        if type == 0:
+            levels = [-1.0, 0.0, 1.0]
+            linestyles = ['dashed', 'solid', 'dashed']
+            colors = 'k'
+            self.contours.append(self.ax.contour(X1, X2, Z, levels,
+                                                 colors=colors,
+                                                 linestyles=linestyles))
+        elif type == 1:
+            self.contours.append(self.ax.contourf(X1, X2, Z, 10,
+                                                  cmap=matplotlib.cm.bone,
+                                                  origin='lower', alpha=0.85))
+            self.contours.append(self.ax.contour(X1, X2, Z, [0.0], colors='k',
+                                                 linestyles=['solid']))
+        else:
+            raise ValueError('surface type unknown')
     
-@unittest.skipIf(not hasattr(socket, 'AF_UNIX') or sys.platform == 'cygwin',
-                 'unix sockets not supported on this platform')
-class UnixSocketTest(AsyncTestCase):
-    '''HTTPServers can listen on Unix sockets too.
+    COLORS = np.array(['!',
+                   '#FF3333',  # red
+                   '#0198E1',  # blue
+                   '#BF5FFF',  # purple
+                   '#FCD116',  # yellow
+                   '#FF7216',  # orange
+                   '#4DBD33',  # green
+                   '#87421F'   # brown
+                   ])
     
-        def test_date_header(self):
-        response = self.fetch('/')
-        header_date = datetime.datetime(
-            *email.utils.parsedate(response.headers['Date'])[:6])
-        self.assertTrue(header_date - datetime.datetime.utcnow() <
-                        datetime.timedelta(seconds=2))
+    import os
+import unittest
     
-    SCAN_INTERVAL = timedelta(minutes=2)
+            self.addr1 = Addr.fromstring('127.0.0.1')
+        self.addr2 = Addr.fromstring('127.0.0.1:*')
     
-    import homeassistant.config as config_util
+    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
+    
+	from xml.dom.minidom import parseString
+	doc = parseString(xml)
+	tab = doc.getElementsByTagName('related')[0].firstChild
+    
+        # mgid%3Auma%3Avideo%3Amtv81.com%3A897974
+    vid = match1(html, r'getTheVideo\('(.*?)'')
+    xml = parseString(
+        get_content('http://intl.esperanto.mtvi.com/www/xml/media/mediaGen.jhtml?uri={}&flashPlayer=LNX%2013,0,0,206&geo=CN&sid=123456'.format(vid)))
+    
+            # construct available streams
+        if orig_img: self.streams['original'] = {'url': orig_img}
+        if twit_img: self.streams['small'] = {'url': twit_img}
