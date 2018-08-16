@@ -1,55 +1,65 @@
 
         
-          def post_superenv_hacks
-    # Only allow Homebrew-approved directories into the PATH, unless
-    # a formula opts-in to allowing the user's path.
-    if formula.env.userpaths? || reqs.any? { |rq| rq.env.userpaths? }
-      ENV.userpaths!
+                if base_url.path == '/spec/'
+          index = css('.subnav li a').to_a.index(at_css('.subnav li a[href='#{result[:path]}']')) + 1
+          name.prepend '#{index}. '
+        end
+    
+        options[:attribution] = <<-HTML
+      &copy; 2011&ndash;2018 Twitter, Inc.<br>
+      &copy; 2011&ndash;2018 The Bootstrap Authors<br>
+      Code licensed under the MIT License.<br>
+      Documentation licensed under the Creative Commons Attribution License v3.0.
+    HTML
+    
+          html_filters.push 'd3/clean_html', 'd3/entries_v3', 'title'
+    
+        def parse(response)
+      unless response.url == root_url || self.class.version == 'Guide'
+        response.body.sub!(/<nav class='devsite-nav-responsive-sidebar.+?<\/nav>/m, '')
+        response.body.gsub!(/<li class='devsite-nav-item'>.+?<\/li>/m, '')
+      end
+    
+        def add_entry(entry)
+      if @index.add?(entry.as_json.to_s)
+        @entries << entry.dup
+        @types[entry.type].count += 1 if entry.type
+      end
+    end
+    
+        def as_json
+      { name: name, path: path, type: type }
     end
   end
+end
+
     
-      def elisp_caveats
-    return if f.keg_only?
-    if keg && keg.elisp_installed?
-      <<-EOS.undent
-        Emacs Lisp files have been installed to:
-          #{HOMEBREW_PREFIX}/share/emacs/site-lisp/#{f.name}
-      EOS
+    module Homebrew
+  module_function
+    
+              # Check pypi urls
+          @pypi_pattern = %r{^https?://pypi.python.org/(.*)}
+          audit_urls(urls, @pypi_pattern) do |match, url|
+            problem '#{url} should be `https://files.pythonhosted.org/#{match[1]}`'
+          end
+        end
+    
+        def self.definitions_for(klass)
+      instance.definitions_for(klass)
     end
-  end
     
-        # Get rid of any info 'dir' files, so they don't conflict at the link stage
-    info_dir_file = @f.info + 'dir'
-    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
-      observe_file_removal info_dir_file
+        # True if the dimensions represent a vertical rectangle
+    def vertical?
+      height > width
     end
     
-      def describe_path(path)
-    return 'N/A' if path.nil?
-    realpath = path.realpath
-    if realpath == path
-      path
-    else
-      '#{path} => #{realpath}'
+            def failure_message
+          'Should have an attachment named #{@attachment_name}'
+        end
+    
+          def check_validity!
+        unless options.has_key?(:matches) || options.has_key?(:not)
+          raise ArgumentError, 'You must pass in either :matches or :not to the validator'
+        end
+      end
     end
-  end
-    
-      def updated
-    object.updated_at.iso8601
-  end
-    
-      # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/reblog
-  def reblog
-    r = Status.where.not(reblog_of_id: nil).first
-    NotificationMailer.reblog(r.reblog.account, Notification.find_by(activity: r))
-  end
-    
-    Print a list of currently running Applications and associated
-Bundle IDs, which may be useful in a Cask uninstall stanza, eg
-    
-    input = ARGV.shift() || usage()
-    
-    meterp.core.use('Stdapi')
-    
-    require 'rubygems'
-require 'rjb'
