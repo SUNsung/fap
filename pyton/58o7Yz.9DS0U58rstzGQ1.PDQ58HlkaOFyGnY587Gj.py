@@ -1,68 +1,50 @@
 
         
-            def contribute(self):
-        self.blackboard.common_state['problems'] += random.randint(1, 10)
-        self.blackboard.common_state['suggestions'] += random.randint(1, 10)
-        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
-        self.blackboard.common_state['progress'] += random.randint(1, 2)
+        cc_library(
+    name = 'mst_ops_cc',
+    srcs = [
+        'ops/mst_op_kernels.cc',
+        'ops/mst_ops.cc',
+    ],
+    deps = [
+        ':mst_solver',
+        '//syntaxnet:base',
+        '@org_tensorflow//tensorflow/core:framework_headers_lib',
+        '@org_tensorflow//tensorflow/core:lib',
+    ],
+    alwayslink = 1,
+)
+
     
-        def test_c_observers_shall_be_detachable(cls):
-        cls.s.detach(cls.dec_obs)
-        # hex viewer shall be remaining if dec viewer is detached first
-        cls.assertEqual(isinstance(cls.s._observers[0], HexViewer), True)
-        cls.assertEqual(len(cls.s._observers), 1)
-        cls.s.detach(cls.hex_obs)
-        cls.assertEqual(len(cls.s._observers), 0)
+          # Cost = -2 + ln(1 + exp(2) + exp(-1))
+      #        -1 + ln(exp(3) + exp(1) + exp(-2))
+      self.assertAlmostEqual(cost, 2.3027, 4)
+      self.assertEqual(correct, 1)
+      self.assertEqual(total, 2)
     
-        def test_sales_manager_shall_not_talk_through_proxy_with_delay(cls):
-        cls.ntp.busy = 'No'
-        start_time = time()
-        cls.ntp.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-This Sales Manager will not talk to you whether he/she is busy or not\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
+      Args:
+    arcs: [B,N,N] tensor of batched arc potentials.
+    roots: [B,N] matrix of batched root potentials.
     
-        # sample_queue.put('sam')
-    # test_object(sample_queue)
-    # print('Outside func: {}'.format(sample_queue.get()))
+        n_iter = 40
     
-    '''
-Port of the Java example of 'Setter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
+    import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import ticker
     
-        def get_current_time_as_html_fragment(self, time_provider):
-        current_time = time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
+    html_folder = u'html'
+text_folder = u'paragraphs'
+short_text_folder = u'short_paragraphs'
+n_words_per_short_text = 5
     
-        # verify that none of the target files exist
-    assert(not lexists('foo.txt'))
-    assert(not lexists('bar.txt'))
-    assert(not lexists('baz.txt'))
-    try:
-        with open('foo.txt', 'w'):  # Creating the file
-            pass
+        print('Decompressing %s' % ARCHIVE_NAME)
+    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
+        archive.extractall(path='.')
+    os.remove(ARCHIVE_NAME)
+
     
+    # TASK: Predict the outcome on the testing set in a variable named y_predicted
     
-# Example usage...
-def main():
-    data1 = Data('Data 1')
-    data2 = Data('Data 2')
-    view1 = DecimalViewer()
-    view2 = HexViewer()
-    data1.attach(view1)
-    data1.attach(view2)
-    data2.attach(view2)
-    data2.attach(view1)
-    
-        def and_specification(self, candidate):
-        raise NotImplementedError()
-    
-        '''Base state. This is to share functionality'''
+        # import matplotlib.pyplot as plt
+    # plt.matshow(cm)
+    # plt.show()
