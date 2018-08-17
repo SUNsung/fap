@@ -1,323 +1,233 @@
 
         
-          GraphemeClusterBreakProperty GCBForC0 = getGraphemeClusterBreakProperty(C[0]);
-  while (true) {
-    if (isExtendedGraphemeClusterBoundaryAfter(GCBForC0))
-      return S.slice(0, SourceNext - SourceStart);
+        namespace tensorflow {
+namespace functor {
+    }
     }
     
-    /// Index the given source file and store the results to \p indexStorePath.
-///
-/// \param primarySourceFile The source file to index.
-///
-/// \param indexUnitToken A unique identifier for this translation unit in the
-/// form of a file path.
-///
-/// \param indexStorePath The location to write the indexing data to.
-///
-/// \param indexSystemModules If true, emit index data for imported serialized
-/// swift system modules.
-///
-/// \param isDebugCompilation true for non-optimized compiler invocation.
-///
-/// \param targetTriple The target for this compilation.
-///
-/// \param dependencyTracker The set of dependencies seen while building.
-bool indexAndRecord(SourceFile *primarySourceFile, StringRef indexUnitToken,
-                    StringRef indexStorePath, bool indexSystemModules,
-                    bool isDebugCompilation, StringRef targetTriple,
-                    const DependencyTracker &dependencyTracker);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-      ArrayRef<const MarkupASTNode *> getChildren() const {
-    return {getTrailingObjects<MarkupASTNode *>(), NumChildren};
-  }
-    
-      /// Creates a copy of a \c MemoryBuffer and adds it to the \c SourceManager,
-  /// taking ownership of the copy.
-  unsigned addMemBufferCopy(llvm::MemoryBuffer *Buffer);
-    
-    #ifndef SWIFT_SYNTAX_REFERENCES_H
-#define SWIFT_SYNTAX_REFERENCES_H
-    
-    /// Runs the given function with the given context argument exactly once.
-/// The predicate argument must point to a global or static variable of static
-/// extent of type swift_once_t.
-SWIFT_RUNTIME_EXPORT
-void swift_once(swift_once_t *predicate, void (*fn)(void *), void *context);
-    
-    // The compiler generates the swift_once_t values as word-sized zero-initialized
-// variables, so we want to make sure swift_once_t isn't larger than the
-// platform word or the function below might overwrite something it shouldn't.
-static_assert(sizeof(swift_once_t) <= sizeof(void*),
-              'swift_once_t must be no larger than the platform word');
-    
-    #ifndef SWIFT_INDEX_INDEX_H
-#define SWIFT_INDEX_INDEX_H
-    
-      ResultPlanBuilder(SILGenFunction &SGF, SILLocation loc,
-                    const CalleeTypeInfo &calleeTypeInfo)
-      : SGF(SGF), loc(loc), calleeTypeInfo(calleeTypeInfo),
-        // We reverse the order so we can pop values off the back.
-        allResults(reversed(calleeTypeInfo.substFnType->getResults())) {}
-    
-    
-    {    auto I = std::lower_bound(Children.begin(), Children.end(), Idx,
-                              [](IndexTrieNode *a, unsigned i) {
-                                return a->Index < i;
-                              });
-    if (I != Children.end() && (*I)->Index == Idx)
-      return *I;
-    auto *N = new IndexTrieNode(Idx, this);
-    Children.insert(I, N);
-    return N;
-  }
-    
-    
-    {} // end namespace swift
-    
-    
-    {  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method(
-      routing_id,
-      object_id,
-      type,
-      method,
-      *static_cast<base::ListValue*>(value_args.get())));
-  return v8::Undefined(isolate);
-}
-    
-     private:
-  void SetText(std::string& text);
-  std::string GetText();
-  void Clear();
-    
-    #endif //CONTENT_NW_SRC_API_EVENT_EVENT_H_
-
-    
-    typedef std::map<std::string,std::string> KeyMap;
-    
-    bool NwObjCallObjectMethodFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::ListValue* arguments = nullptr;
-  int id = 0;
-  std::string type, method;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
-    }
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.callObjectMethodAsync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjCallObjectMethodAsyncFunction);
-};
-    
-        NwDesktopCaptureMonitor();
-    void Start(bool screens, bool windows);
-    void Stop();
-    bool IsStarted();
-    
-    #include <memory>
-    
-    
-    {  return 0;
-}
-
-    
-    static void RunSynchronousUnaryPingPong() {
-  gpr_log(GPR_INFO, 'Running Synchronous Unary Ping Pong');
-    }
-    
-    // A simple parser for the json db file. It requires the db file to have the
-// exact form of [{'location': { 'latitude': 123, 'longitude': 456}, 'name':
-// 'the name can be empty' }, { ... } ... The spaces will be stripped.
-class Parser {
+    class DebuggerState : public DebuggerStateInterface {
  public:
-  explicit Parser(const std::string& db) : db_(db) {
-    // Remove all spaces.
-    db_.erase(
-        std::remove_if(db_.begin(), db_.end(), isspace),
-        db_.end());
-    if (!Match('[')) {
-      SetFailedAndReturnFalse();
+  DebuggerState(const DebugOptions& debug_options);
+  virtual ~DebuggerState();
     }
+    
+    class TFRecordReader : public ReaderBase {
+ public:
+  TFRecordReader(const string& node_name, const string& compression_type,
+                 Env* env)
+      : ReaderBase(strings::StrCat('TFRecordReader '', node_name, ''')),
+        env_(env),
+        offset_(0),
+        compression_type_(compression_type) {}
+    }
+    
+    #define REGISTER_GPU(T)                                           \
+  template void DynamicStitchGPUImpl(                             \
+      const Eigen::GpuDevice& gpu_device, const int32 slice_size, \
+      const int32 first_dim_size,                                 \
+      const CudaDeviceArrayStruct<int32>& input_indices,          \
+      const CudaDeviceArrayStruct<const T*>& input_ptrs, T* output);
+    
+    namespace testing {
+    }
+    
+    #define EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
+  do {\
+    ::testing::TestPartResultArray gtest_failures;\
+    ::testing::internal::SingleFailureChecker gtest_checker(\
+        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
+        (substr));\
+    {\
+      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
+          ::testing::ScopedFakeTestPartResultReporter::INTERCEPT_ALL_THREADS, \
+          &gtest_failures);\
+      if (::testing::internal::AlwaysTrue()) { statement; }\
+    }\
+  } while (::testing::internal::AlwaysFalse())
+    
+    // A copyable object representing the result of a test part (i.e. an
+// assertion or an explicit FAIL(), ADD_FAILURE(), or SUCCESS()).
+//
+// Don't inherit from TestPartResult as its destructor is not virtual.
+class GTEST_API_ TestPartResult {
+ public:
+  // The possible outcomes of a test part (i.e. an assertion or an
+  // explicit SUCCEED(), FAIL(), or ADD_FAILURE()).
+  enum Type {
+    kSuccess,          // Succeeded.
+    kNonFatalFailure,  // Failed but the test can continue.
+    kFatalFailure      // Failed and the test should be terminated.
+  };
+    }
+    
+      // Fired after each iteration of tests finishes.
+  virtual void OnTestIterationEnd(const UnitTest& unit_test,
+                                  int iteration) = 0;
+    
+      template <GTEST_1_TYPENAMES_(U)>
+  tuple& operator=(const GTEST_1_TUPLE_(U)& t) {
+    return CopyFrom(t);
   }
+    
+    // Type utilities needed for implementing typed and type-parameterized
+// tests.  This file is generated by a SCRIPT.  DO NOT EDIT BY HAND!
+//
+// Currently we support at most 50 types in a list, and at most 50
+// type-parameterized tests in one type-parameterized test case.
+// Please contact googletestframework@googlegroups.com if you need
+// more.
+    
+    // Search fd in the fd_node list head. This is an O(n) search, the max possible
+// value of n is ARES_GETSOCK_MAXNUM (16). n is typically 1 - 2 in our tests.
+static fd_node* pop_fd_node_locked(fd_node** head, ares_socket_t as) {
+  fd_node dummy_head;
+  dummy_head.next = *head;
+  fd_node* node = &dummy_head;
+  while (node->next != nullptr) {
+    if (node->next->grpc_polled_fd->GetWrappedAresSocketLocked() == as) {
+      fd_node* ret = node->next;
+      node->next = node->next->next;
+      *head = dummy_head.next;
+      return ret;
     }
-    
-    #include 'src/compiler/python_generator.h'
-#include 'src/compiler/schema_interface.h'
-    
-      static double Now();
-    
-    TEST_F(MockEnvTest, FakeSleeping) {
-  int64_t now = 0;
-  auto s = env_->GetCurrentTime(&now);
-  ASSERT_OK(s);
-  env_->FakeSleepForMicroseconds(3 * 1000 * 1000);
-  int64_t after_sleep = 0;
-  s = env_->GetCurrentTime(&after_sleep);
-  ASSERT_OK(s);
-  auto delta = after_sleep - now;
-  // this will be true unless test runs for 2 seconds
-  ASSERT_TRUE(delta == 3 || delta == 4);
+    node = node->next;
+  }
+  return nullptr;
 }
     
-      virtual bool Merge(const Slice& key,
-                     const Slice* existing_value,
-                     const Slice& value,
-                     std::string* new_value,
-                     Logger* logger) const override;
+      void RegisterForOnReadableLocked(grpc_closure* read_closure) override {
+    grpc_fd_notify_on_read(fd_, read_closure);
+  }
+    
+    // Gets the absolute file path needed to load a certificate file.
+// Populates path_buffer, which must be of size MAXPATHLEN.
+// Exposed for testing purposes only.
+void GetAbsoluteFilePath(const char* valid_file_dir,
+                         const char* file_entry_name, char* path_buffer);
+    
+    #include <grpcpp/ext/server_load_reporting.h>
+    
+    #include <grpcpp/impl/codegen/config.h>
+#include <grpcpp/impl/codegen/grpc_library.h>
+    
+    inline float YUVToR(float y, float u, float v) {
+  return y + 1.402f * (v - 128.0f);
+}
+    
+    namespace guetzli {
+    }
+    
+          // The sentinel node becomes the parent node.
+      size_t j_end = 2 * n - k;
+      tree[j_end].total_count_ =
+          tree[left].total_count_ + tree[right].total_count_;
+      tree[j_end].index_left_ = static_cast<int16_t>(left);
+      tree[j_end].index_right_or_value_ = static_cast<int16_t>(right);
+    
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
+    
+    
+    {}  // namespace
+    
+    namespace guetzli {
+    }
+    
+    
+    {  return scope.Close(v);
+}
+    
+    #endif
+
     
     JNIEnv* JniCallback::getJniEnv(jboolean* attached) const {
   return JniUtil::getJniEnv(m_jvm, attached);
 }
     
-    void SyncPoint::ClearAllCallBacks() {
-  impl_->ClearAllCallBacks();
-}
     
-      // Insert key into the collection. (The caller will pack key and value into a
-  // single buffer and pass that in as the parameter to Insert).
-  // REQUIRES: nothing that compares equal to key is currently in the
-  // collection, and no concurrent modifications to the table in progress
-  virtual void Insert(KeyHandle handle) = 0;
+    {}  //namespace rocksdb
     
-      std::mutex              mutex_;
-  std::condition_variable cv_;
-  // sync points that have been passed through
-  std::unordered_set<std::string> cleared_points_;
-  std::atomic<bool> enabled_;
-  int num_callbacks_running_ = 0;
-    
-      pthread_key_t k = TlsAlloc();
-  if (TLS_OUT_OF_INDEXES == k) {
-    return ENOMEM;
-  }
-    
-      // BlobDB specific stats
-  // # of Put/PutTTL/PutUntil to BlobDB.
-  BLOB_DB_NUM_PUT,
-  // # of Write to BlobDB.
-  BLOB_DB_NUM_WRITE,
-  // # of Get to BlobDB.
-  BLOB_DB_NUM_GET,
-  // # of MultiGet to BlobDB.
-  BLOB_DB_NUM_MULTIGET,
-  // # of Seek/SeekToFirst/SeekToLast/SeekForPrev to BlobDB iterator.
-  BLOB_DB_NUM_SEEK,
-  // # of Next to BlobDB iterator.
-  BLOB_DB_NUM_NEXT,
-  // # of Prev to BlobDB iterator.
-  BLOB_DB_NUM_PREV,
-  // # of keys written to BlobDB.
-  BLOB_DB_NUM_KEYS_WRITTEN,
-  // # of keys read from BlobDB.
-  BLOB_DB_NUM_KEYS_READ,
-  // # of bytes (key + value) written to BlobDB.
-  BLOB_DB_BYTES_WRITTEN,
-  // # of bytes (keys + value) read from BlobDB.
-  BLOB_DB_BYTES_READ,
-  // # of keys written by BlobDB as non-TTL inlined value.
-  BLOB_DB_WRITE_INLINED,
-  // # of keys written by BlobDB as TTL inlined value.
-  BLOB_DB_WRITE_INLINED_TTL,
-  // # of keys written by BlobDB as non-TTL blob value.
-  BLOB_DB_WRITE_BLOB,
-  // # of keys written by BlobDB as TTL blob value.
-  BLOB_DB_WRITE_BLOB_TTL,
-  // # of bytes written to blob file.
-  BLOB_DB_BLOB_FILE_BYTES_WRITTEN,
-  // # of bytes read from blob file.
-  BLOB_DB_BLOB_FILE_BYTES_READ,
-  // # of times a blob files being synced.
-  BLOB_DB_BLOB_FILE_SYNCED,
-  // # of blob index evicted from base DB by BlobDB compaction filter because
-  // of expiration.
-  BLOB_DB_BLOB_INDEX_EXPIRED_COUNT,
-  // size of blob index evicted from base DB by BlobDB compaction filter
-  // because of expiration.
-  BLOB_DB_BLOB_INDEX_EXPIRED_SIZE,
-  // # of blob index evicted from base DB by BlobDB compaction filter because
-  // of corresponding file deleted.
-  BLOB_DB_BLOB_INDEX_EVICTED_COUNT,
-  // size of blob index evicted from base DB by BlobDB compaction filter
-  // because of corresponding file deleted.
-  BLOB_DB_BLOB_INDEX_EVICTED_SIZE,
-  // # of blob files being garbage collected.
-  BLOB_DB_GC_NUM_FILES,
-  // # of blob files generated by garbage collection.
-  BLOB_DB_GC_NUM_NEW_FILES,
-  // # of BlobDB garbage collection failures.
-  BLOB_DB_GC_FAILURES,
-  // # of keys drop by BlobDB garbage collection because they had been
-  // overwritten.
-  BLOB_DB_GC_NUM_KEYS_OVERWRITTEN,
-  // # of keys drop by BlobDB garbage collection because of expiration.
-  BLOB_DB_GC_NUM_KEYS_EXPIRED,
-  // # of keys relocated to new blob file by garbage collection.
-  BLOB_DB_GC_NUM_KEYS_RELOCATED,
-  // # of bytes drop by BlobDB garbage collection because they had been
-  // overwritten.
-  BLOB_DB_GC_BYTES_OVERWRITTEN,
-  // # of bytes drop by BlobDB garbage collection because of expiration.
-  BLOB_DB_GC_BYTES_EXPIRED,
-  // # of bytes relocated to new blob file by garbage collection.
-  BLOB_DB_GC_BYTES_RELOCATED,
-  // # of blob files evicted because of BlobDB is full.
-  BLOB_DB_FIFO_NUM_FILES_EVICTED,
-  // # of keys in the blob files evicted because of BlobDB is full.
-  BLOB_DB_FIFO_NUM_KEYS_EVICTED,
-  // # of bytes in the blob files evicted because of BlobDB is full.
-  BLOB_DB_FIFO_BYTES_EVICTED,
-    
-    size_t HistogramBucketMapper::IndexForValue(const uint64_t value) const {
-  if (value >= maxBucketValue_) {
-    return bucketValues_.size() - 1;
-  } else if ( value >= minBucketValue_ ) {
-    std::map<uint64_t, uint64_t>::const_iterator lowerBound =
-      valueIndexMap_.lower_bound(value);
-    if (lowerBound != valueIndexMap_.end()) {
-      return static_cast<size_t>(lowerBound->second);
-    } else {
-      return 0;
-    }
-  } else {
-    return 0;
-  }
-}
-    
-    // See portability/Unistd.h for why these need to be in a namespace
-// rather then extern 'C'.
-namespace folly {
-namespace portability {
-namespace fcntl {
-int creat(char const* fn, int pm);
-int fcntl(int fd, int cmd, ...);
-int posix_fallocate(int fd, off_t offset, off_t len);
-int open(char const* fn, int of, int pm = 0);
-}
-}
-}
-    
-      folly::Optional<T> try_take_for(std::chrono::milliseconds time) override {
-    T item;
-    while (true) {
-      if (nonBlockingTake(item)) {
-        return std::move(item);
+      if (jsResultStart != nullptr) {
+    // update start with result
+    jboolean has_exception = JNI_FALSE;
+    std::unique_ptr<const char[]> result_start = JniUtil::copyString(env, jsResultStart,
+        &has_exception);  // also releases jsResultStart
+    if (has_exception == JNI_TRUE) {
+      if (env->ExceptionCheck()) {
+        env->ExceptionDescribe();  // print out exception to stderr
       }
-      if (!sem_.try_wait_for(time)) {
-        return folly::none;
-      }
+      releaseJniEnv(attached_thread);
+      return;
+    }
+    }
+    
+         using Logger::SetInfoLogLevel;
+     using Logger::GetInfoLogLevel;
+     // Write an entry to the log file with the specified format.
+     virtual void Logv(const char* format, va_list ap);
+     // Write an entry to the log file with the specified log level
+     // and format.  Any log with level under the internal log level
+     // of *this (see @SetInfoLogLevel and @GetInfoLogLevel) will not be
+     // printed.
+     virtual void Logv(const InfoLogLevel log_level,
+         const char* format, va_list ap);
+    
+      // The argument to the callback is passed through from
+  // TEST_SYNC_POINT_CALLBACK(); nullptr if TEST_SYNC_POINT or
+  // TEST_IDX_SYNC_POINT was used.
+  void SetCallBack(const std::string& point,
+                   const std::function<void(void*)>& callback);
+    
+      void SeekToLast() override {
+    StopWatch seek_sw(env_, statistics_, BLOB_DB_SEEK_MICROS);
+    RecordTick(statistics_, BLOB_DB_NUM_SEEK);
+    iter_->SeekToLast();
+    while (UpdateBlobValue()) {
+      iter_->Prev();
     }
   }
     
-    namespace folly {
+    
+    {  return cond_.TimedWait(abs_time_us);
+}
+    
+    // For non linux platform, the following macros are used only as place
+// holder.
+#if !(defined OS_LINUX) && !(defined CYGWIN) && !(defined OS_AIX)
+#define POSIX_FADV_NORMAL 0     /* [MC1] no further special treatment */
+#define POSIX_FADV_RANDOM 1     /* [MC1] expect random page refs */
+#define POSIX_FADV_SEQUENTIAL 2 /* [MC1] expect sequential page refs */
+#define POSIX_FADV_WILLNEED 3   /* [MC1] will need these pages */
+#define POSIX_FADV_DONTNEED 4   /* [MC1] dont need these pages */
+#endif
+    
+    void AbstractBtMessage::setPeer(const std::shared_ptr<Peer>& peer)
+{
+  peer_ = peer;
+}
+    
+      char shortName_;
+    
+      virtual bool execute() CXX11_OVERRIDE;
+    
+    class AdaptiveFileAllocationIterator : public FileAllocationIterator {
+private:
+  std::unique_ptr<FileAllocationIterator> allocator_;
     }
     
-      /**
-   * Are notifications for one pipe to/from child enabled?  Throws if the
-   * childFd is not known.
-   */
-  bool notificationsEnabled(int childFd) const;
     
-      ControlBlock* allocateControlBlock();
-  void freeControlBlock(ControlBlock* b);
+    {} // namespace aria2
+    
+    
+    {} // namespace aria2
