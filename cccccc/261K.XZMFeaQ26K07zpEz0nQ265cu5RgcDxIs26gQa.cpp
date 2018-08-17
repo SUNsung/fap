@@ -1,266 +1,142 @@
 
         
-        base::StringPiece GetStringResource(int resource_id) {
-  return ResourceBundle::GetSharedInstance().GetRawDataResource(resource_id);
-}
-    
-    std::string Clipboard::GetText() {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  base::string16 text;
-  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-  return base::UTF16ToUTF8(text);
-}
-    
-    #include 'base/compiler_specific.h'
-#include 'content/nw/src/api/base/base.h'
-    
-    
-bool MenuDelegate::GetAcceleratorForCommandId(
-      int command_id,
-      ui::Accelerator* accelerator) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-    }
-    
-      // implement nw.Screen.initEventListeners()
-  class NwScreenInitEventListenersFunction: public NWSyncExtensionFunction {
-    public:
-      NwScreenInitEventListenersFunction();
-      bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-        // allocate memory for all bnNodes evalOrder
-    m_net->AllocateAllMatrices(bnNodes, std::vector<ComputationNodeBasePtr>(), nullptr);
-    
-    // helper to remove all existing Output nodes and replace them by a new given set
-static void PatchOutputNodes(const ComputationNetworkPtr& net, const ConfigArray& outputNodeNames, vector<wstring>& outputNodeNamesVector)
-{
-    // clear out current list of outputNodes
-    while (!net->OutputNodes().empty())
-        net->RemoveFromNodeGroup(L'output', net->OutputNodes().back());
-    // and insert the desired nodes instead
-    for (wstring name : outputNodeNames)
-    {
-        if (!net->NodeNameExists(name))
-        {
-            fprintf(stderr, 'PatchOutputNodes: No node named '%ls'; skipping\n', name.c_str());
-            continue;
-        }
-        outputNodeNamesVector.push_back (name);
-        let& node = net->GetNodeFromName(name);
-        net->AddToNodeGroup(L'output', node);
-    }
-}
-    
-        static void SetTimestampingFlag()
-    {
-        auto& us = GetStaticInstance();
-        us.m_timestampFlag = true;
+        namespace atom {
     }
     
     
-    {public:
-    inline array_ref(_T* ptr, size_t size) throw()
-        : data(ptr), n(size)
-    {
-    }
-    inline array_ref() throw()
-        : data(NULL), n(0)
-    {
-    } // in case we have a vector of this
-    inline _T& operator[](size_t i) throw()
-    {
-        check_index(i);
-        return data[i];
-    }
-    inline const _T& operator[](size_t i) const throw()
-    {
-        check_index(i);
-        return data[i];
-    }
-    inline size_t size() const throw()
-    {
-        return n;
-    }
-    inline _T* begin()
-    {
-        return data;
-    }
-    inline _T* end()
-    {
-        return data + n;
-    }
-    inline void resize(size_t sz)
-    {
-        sz;
-        assert(n == sz);
-    } // allow compatibility with some functions
-    // construct from other vector types
-    template <class _V>
-    inline array_ref(_V& v)
-        : data(v.size() > 0 ? &v[0] : NULL), n((size_t) v.size())
-    {
-    }
-};
+    {}  // namespace
     
-        // transpose a 4x4 matrix
-    // Passing input as const ref to ensure aligned-ness
-    static void transpose(const float4& col0, const float4& col1, const float4& col2, const float4& col3,
-                          float4& row0, float4& row1, float4& row2, float4& row3)
-    { // note: the temp variable here gets completely eliminated by optimization
-        float4 m0 = col0;
-        float4 m1 = col1;
-        float4 m2 = col2;
-        float4 m3 = col3;
-        _MM_TRANSPOSE4_PS(m0, m1, m2, m3); // 8 instructions for 16 elements
-        row0 = m0;
-        row1 = m1;
-        row2 = m2;
-        row3 = m3;
-    }
+    #ifndef ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
+#define ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
     
-        virtual void GetSections(std::map<std::wstring, SectionType, nocase_compare>& /*sections*/)
-    {
-        assert(false);
-        NOT_IMPLEMENTED;
-    }
-    virtual bool SaveData(size_t /*recordStart*/, const std::map<std::wstring, void*, nocase_compare>& matrices, size_t numRecords, size_t /*datasetSize*/, size_t /*byteVariableSized*/)
-    {
-        // loop through all the output vectors to copy the data over
-        for (auto iter = m_outputs->begin(); iter != m_outputs->end(); ++iter)
-        {
-            // figure out the dimension of the data
-            std::wstring val = iter->first;
-            size_t rows = (*m_dimensions)[val];
-            // size_t count = rows*numRecords;
-    }
-    }
+      void OnUpdatePreferences(const base::ListValue& preferences);
     
-      /// Cancels one asynchronous operation that is waiting on the timer.
-  /**
-   * This function forces the completion of one pending asynchronous wait
-   * operation against the timer. Handlers are cancelled in FIFO order. The
-   * handler for the cancelled operation will be invoked with the
-   * boost::asio::error::operation_aborted error code.
-   *
-   * Cancelling the timer does not change the expiry time.
-   *
-   * @param ec Set to indicate what error occurred, if any.
-   *
-   * @return The number of asynchronous operations that were cancelled. That is,
-   * either 0 or 1.
-   *
-   * @note If the timer has already expired when cancel_one() is called, then
-   * the handlers for asynchronous wait operations will:
-   *
-   * @li have already been invoked; or
-   *
-   * @li have been queued for invocation in the near future.
-   *
-   * These handlers can no longer be cancelled, and therefore are passed an
-   * error code that indicates the successful completion of the wait operation.
-   */
-  std::size_t cancel_one(boost::system::error_code& ec)
-  {
-    return this->service.cancel_one(this->implementation, ec);
-  }
-    
-    #ifndef BOOST_ASIO_BUFFERED_READ_STREAM_HPP
-#define BOOST_ASIO_BUFFERED_READ_STREAM_HPP
-    
-    template <typename Stream>
-class buffered_stream;
-    
-    namespace boost {
-    }
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    #include <boost/asio/detail/push_options.hpp>
-    
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS) \
-  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
-typedef null_fenced_block fenced_block;
-#elif defined(__MACH__) && defined(__APPLE__)
-typedef macos_fenced_block fenced_block;
-#elif defined(__sun)
-typedef solaris_fenced_block fenced_block;
-#elif defined(__GNUC__) && defined(__arm__) \
-  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
-typedef gcc_arm_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
-typedef gcc_hppa_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-typedef gcc_x86_fenced_block fenced_block;
-#elif defined(__GNUC__) \
-  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
-  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
-typedef gcc_sync_fenced_block fenced_block;
-#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
-typedef win_fenced_block fenced_block;
-#else
-typedef null_fenced_block fenced_block;
+    #if defined(OS_POSIX) && !defined(OS_MACOSX) && !defined(OS_ANDROID)
+  // On Linux maximize can be an asynchronous operation. This notification
+  // indicates that the window has been maximized. The source is
+  // a Source<BrowserWindow> containing the BrowserWindow that was maximized.
+  // No details are expected.
+  NOTIFICATION_BROWSER_WINDOW_MAXIMIZED,
 #endif
     
-      /*
-  bool predict_velocity(
-      const cv::Mat &frame, const std::vector<std::shared_ptr<VisualObject>>
-  &objects,
-      double timestamp, const CameraTrackerOptions &options,
-      std::vector<std::shared_ptr<VisualObject>> *tracked_objects) override {
-    *tracked_objects = objects;
-    this->trans_object_to_world(options, tracked_objects);
-    return true;
+      // Sets time interval between updates. By default list of sources and their
+  // thumbnail are updated once per second. If called after StartUpdating() then
+  // it will take effect only after the next update.
+  virtual void SetUpdatePeriod(base::TimeDelta period) = 0;
+    
+    #endif  // CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
+
+    
+    void TtsPlatformImpl::clear_error() {
+  error_ = std::string();
+}
+    
+      SizeConstraints();
+  SizeConstraints(const gfx::Size& min_size, const gfx::Size& max_size);
+  ~SizeConstraints();
+    
+    
+    {}  // namespace tesseract.
+    
+    // Sums the given 5 n-vectors putting the result into sum.
+inline void SumVectors(int n, const double* v1, const double* v2,
+                       const double* v3, const double* v4, const double* v5,
+                       double* sum) {
+  for (int i = 0; i < n; ++i) {
+    sum[i] = v1[i] + v2[i] + v3[i] + v4[i] + v5[i];
   }
+}
     
-    // The base class of transforming camera space objects into other defined
-// 3D spaces, like world space or ego-car space
+      // Parses the given string and returns a network according to the following
+  // language:
+  //  ============ Syntax of description below: ============
+  // <d> represents a number.
+  // <net> represents any single network element, including (recursively) a
+  //   [...] series or (...) parallel construct.
+  // (s|t|r|l|m) (regex notation) represents a single required letter.
+  // NOTE THAT THROUGHOUT, x and y are REVERSED from conventional mathematics,
+  // to use the same convention as Tensor Flow. The reason TF adopts this
+  // convention is to eliminate the need to transpose images on input, since
+  // adjacent memory locations in images increase x and then y, while adjacent
+  // memory locations in tensors in TF, and NetworkIO in tesseract increase the
+  // rightmost index first, then the next-left and so-on, like C arrays.
+  // ============ INPUTS ============
+  // <b>,<h>,<w>,<d> A batch of b images with height h, width w, and depth d.
+  //   b, h and/or w may be zero, to indicate variable size. Some network layer
+  //   (summarizing LSTM) must be used to make a variable h known.
+  //   d may be 1 for greyscale, 3 for color.
+  // NOTE that throughout the constructed network, the inputs/outputs are all of
+  // the same [batch,height,width,depth] dimensions, even if a different size.
+  // ============ PLUMBING ============
+  // [...] Execute ... networks in series (layers).
+  // (...) Execute ... networks in parallel, with their output depths added.
+  // R<d><net> Execute d replicas of net in parallel, with their output depths
+  //   added.
+  // Rx<net> Execute <net> with x-dimension reversal.
+  // Ry<net> Execute <net> with y-dimension reversal.
+  // S<y>,<x> Rescale 2-D input by shrink factor x,y, rearranging the data by
+  //   increasing the depth of the input by factor xy.
+  // Mp<y>,<x> Maxpool the input, reducing the size by an (x,y) rectangle.
+  // ============ FUNCTIONAL UNITS ============
+  // C(s|t|r|l|m)<y>,<x>,<d> Convolves using a (x,y) window, with no shrinkage,
+  //   random infill, producing d outputs, then applies a non-linearity:
+  //   s: Sigmoid, t: Tanh, r: Relu, l: Linear, m: Softmax.
+  // F(s|t|r|l|m)<d> Truly fully-connected with s|t|r|l|m non-linearity and d
+  //   outputs. Connects to every x,y,depth position of the input, reducing
+  //   height, width to 1, producing a single <d> vector as the output.
+  //   Input height and width must be constant.
+  //   For a sliding-window linear or non-linear map that connects just to the
+  //   input depth, and leaves the input image size as-is, use a 1x1 convolution
+  //   eg. Cr1,1,64 instead of Fr64.
+  // L(f|r|b)(x|y)[s]<n> LSTM cell with n states/outputs.
+  //   The LSTM must have one of:
+  //    f runs the LSTM forward only.
+  //    r runs the LSTM reversed only.
+  //    b runs the LSTM bidirectionally.
+  //   It will operate on either the x- or y-dimension, treating the other
+  //     dimension independently (as if part of the batch).
+  //   s (optional) summarizes the output in the requested dimension,
+  //     outputting only the final step, collapsing the dimension to a
+  //     single element.
+  // LS<n> Forward-only LSTM cell in the x-direction, with built-in Softmax.
+  // LE<n> Forward-only LSTM cell in the x-direction, with built-in softmax,
+  //       with binary Encoding.
+  // L2xy<n> Full 2-d LSTM operating in quad-directions (bidi in x and y) and
+  //   all the output depths added.
+  // ============ OUTPUTS ============
+  // The network description must finish with an output specification:
+  // O(2|1|0)(l|s|c)<n> output layer with n classes
+  //  2 (heatmap) Output is a 2-d vector map of the input (possibly at
+  //    different scale).
+  //  1 (sequence) Output is a 1-d sequence of vector values.
+  //  0 (category) Output is a 0-d single vector value.
+  //  l uses a logistic non-linearity on the output, allowing multiple
+  //    hot elements in any output vector value.
+  //  s uses a softmax non-linearity, with one-hot output in each value.
+  //  c uses a softmax with CTC. Can only be used with s (sequence).
+  //  NOTE1: Only O1s and O1c are currently supported.
+  //  NOTE2: n is totally ignored, and for compatibility purposes only. The
+  //         output number of classes is obtained automatically from the
+  //         unicharset.
+  Network* BuildFromString(const StaticShape& input_shape, char** str);
     
-    #ifndef MODULES_COMMON_MATH_MATRIX_OPERATIONS_H_
-#define MODULES_COMMON_MATH_MATRIX_OPERATIONS_H_
-    
-      Eigen::Matrix<float, 1, 2> m_c = Eigen::MatrixXf::Ones(1, 2);
-    
-      auto matched_it = std::lower_bound(trajectory.trajectory_point().begin(),
-      trajectory.trajectory_point().end(), t,
-      [](const common::TrajectoryPoint& p, const double t)
-      { return p.relative_time() < t; });
-    
-    class PredictionQuerier {
- public:
-  explicit PredictionQuerier(
-      const std::vector<const Obstacle*>& obstacles,
-      const std::shared_ptr<std::vector<common::PathPoint>>&
-      ptr_reference_line);
-    }
-    
-    namespace apollo {
-namespace perception {
-namespace traffic_light {
-    }
-    }
-    }
-    
-    #include 'modules/perception/onboard/common_shared_data.h'
-#include 'modules/perception/onboard/subnode.h'
-#include 'modules/perception/traffic_light/interface/base_recognizer.h'
-#include 'modules/perception/traffic_light/interface/base_rectifier.h'
-#include 'modules/perception/traffic_light/interface/base_reviser.h'
-#include 'modules/perception/traffic_light/interface/green_interface.h'
-#include 'modules/perception/traffic_light/projection/multi_camera_projection.h'
+    // Creates and returns a Pix distorted by various means according to the bool
+// flags. If boxes is not nullptr, the boxes are resized/positioned according to
+// any spatial distortion and also by the integer reduction factor box_scale
+// so they will match what the network will output.
+// Returns nullptr on error. The returned Pix must be pixDestroyed.
+Pix* PrepareDistortedPix(const Pix* pix, bool perspective, bool invert,
+                         bool white_noise, bool smooth_noise, bool blur,
+                         int box_reduction, TRand* randomizer,
+                         GenericVector<TBOX>* boxes);
+// Distorts anything that has a non-null pointer with the same pseudo-random
+// perspective distortion. Width and height only need to be set if there
+// is no pix. If there is a pix, then they will be taken from there.
+void GeneratePerspectiveDistortion(int width, int height, TRand* randomizer,
+                                   Pix** pix, GenericVector<TBOX>* boxes);
+// Computes the coefficients of a randomized projective transformation.
+// The image transform requires backward transformation coefficient, and the
+// box transform the forward coefficients.
+// Returns the incolor arg to pixProjective.
+int ProjectiveCoeffs(int width, int height, TRand* randomizer,
+                     float** im_coeffs, float** box_coeffs);
