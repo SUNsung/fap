@@ -1,145 +1,162 @@
 
         
-            def container
-      @container ||= site.config['collections_dir']
-    end
-    
-              theme.create!
-          Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-                             ' is ready for you in #{theme.path.to_s.cyan}!'
-          Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
-        end
-        # rubocop:enable Metrics/AbcSize
-      end
-    end
-  end
-end
-
-    
-            def connect(websocket, handshake)
-          @connections_count += 1
-          if @connections_count == 1
-            message = 'Browser connected'
-            message += ' over SSL/TLS' if handshake.secure?
-            Jekyll.logger.info 'LiveReload:', message
-          end
-          websocket.send(
-            JSON.dump(
-              :command    => 'hello',
-              :protocols  => ['http://livereload.com/protocols/official-7'],
-              :serverName => 'jekyll'
-            )
-          )
-    
-          # Private: Determine whether a class name is an allowed custom
-      #   markdown class name.
-      #
-      # parser_name - the name of the parser class
-      #
-      # Returns true if the parser name contains only alphanumeric
-      # characters and is defined within Jekyll::Converters::Markdown
-      def custom_class_allowed?(parser_name)
-        parser_name !~ %r![^A-Za-z0-9_]! && self.class.constants.include?(
-          parser_name.to_sym
-        )
-      end
-    end
-  end
-end
-
-    
-          #
-      # Require a gem or file if it's present, otherwise silently fail.
-      #
-      # names - a string gem name or array of gem names
-      #
-      def require_if_present(names)
-        Array(names).each do |name|
-          begin
-            require name
-          rescue LoadError
-            Jekyll.logger.debug 'Couldn't load #{name}. Skipping.'
-            yield(name, version_constraint(name)) if block_given?
-            false
-          end
-        end
-      end
-    
-    See CONTRIBUTING.md for more information.
-    
-    def load_apps
-  out, err, status = Open3.capture3('/usr/bin/osascript', '-e', 'tell application 'System Events' to get (name, bundle identifier, unix id) of every process')
-  if status.exitstatus > 0
-    puts err
-    exit status.exitstatus
-  end
-  out = out.split(', ')
-  one_third   = out.length / 3
-  @app_names  = out.shift(one_third)
-  @bundle_ids = out.shift(one_third)
-  @unix_ids   = out.shift(one_third)
-end
-    
-    desc 'Dumps output to a CSS file for testing'
-task :debug do
-  require 'sass'
-  path = Bootstrap.stylesheets_path
-  %w(bootstrap).each do |file|
-    engine = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
-    File.open('./#{file}.css', 'w') { |f| f.write(engine.render) }
-  end
-end
-    
-              if @address.update_attributes(address_params)
-            respond_with(@address, default_template: :show)
+                  # Bubbled up from the adapter require. Prefix the exception message
+          # with some guidance about how to address it and reraise.
           else
-            invalid_resource!(@address)
+            raise e.class, 'Error loading the '#{adapter}' Action Cable pubsub adapter. Missing a gem it depends on? #{e.message}', e.backtrace
           end
         end
     
-            def assign(node)
-          @assignments << Assignment.new(node, self)
+            def test_spec_name_on_key_lookup
+          spec = spec(:readonly, 'readonly' => { 'adapter' => 'sqlite3' })
+          assert_equal 'readonly', spec.name
         end
     
-    module RuboCop
-  module Cop
-    module Performance
-      # This cop identifies the use of `Regexp#match` or `String#match`, which
-      # returns `#<MatchData>`/`nil`. The return value of `=~` is an integral
-      # index/`nil` and is more performant.
-      #
-      # @example
-      #   # bad
-      #   do_something if str.match(/regex/)
-      #   while regex.match('str')
-      #     do_something
-      #   end
-      #
-      #   # good
-      #   method(str =~ /regex/)
-      #   return value unless regex =~ 'str'
-      class RedundantMatch < Cop
-        MSG = 'Use `=~` in places where the `MatchData` returned by ' \
-              '`#match` will not be used.'.freeze
+        def build_bind_attribute(column_name, value)
+      attr = Relation::QueryAttribute.new(column_name.to_s, value, table.type(column_name))
+      Arel::Nodes::BindParam.new(attr)
+    end
     
-          # Checks whether this node body is a void context.
-      #
-      # @return [Boolean] whether the `def` node body is a void context
-      def void_context?
-        method?(:initialize) || assignment_method?
+        company.save!
+    assert_equal company, contract_a.reload.company
+    assert_equal company, contract_b.reload.company
+  end
+    
+      validate :check_empty_title
+  validate :check_content_mismatch, on: :create
+  validate :check_wrong_update, on: :update
+  validate :check_author_name_is_secret, on: :special_case
+    
+      test 'disallow negative and zero periods' do
+    [ 0, 0.0, 0.seconds, -1, -1.seconds, 'foo', :foo, Object.new ].each do |invalid|
+      e = assert_raise ArgumentError do
+        ChatChannel.periodically :send_updates, every: invalid
       end
+      assert_match(/Expected every:/, e.message)
+    end
+  end
     
-        if as == :json
-      if api_error?(data)
-        data = generate_error_hash(data)
-      else
-        selected_fields = extract_fields(filter.to_s.strip)
-        data.select! { |k,v| selected_fields.include?(k) } unless selected_fields.empty?
-        unless options.include?(:exclude_default_metadata)
-          data = data.to_hash
-          if data.values.size == 0 && selected_fields.size > 0
-            raise LogStash::Api::NotFoundError
-          end
-          data = default_metadata.merge(data)
-        end
+          expected = { 'identifier' => '{id: 1}', 'type' => 'reject_subscription' }
+      assert_equal expected, @connection.last_transmission
+      assert_equal 1, @connection.transmissions.size
+    
+      def test_unsubscribe_client
+    with_puma_server do |port|
+      app = ActionCable.server
+      identifier = JSON.generate(channel: 'ClientTest::EchoChannel')
+    
+      private
+    def open_connection
+      env = Rack::MockRequest.env_for '/test', 'HTTP_CONNECTION' => 'upgrade', 'HTTP_UPGRADE' => 'websocket',
+        'HTTP_HOST' => 'localhost', 'HTTP_ORIGIN' => 'http://rubyonrails.com'
+    
+      test 'connection identifier' do
+    run_in_eventmachine do
+      open_connection
+      assert_equal 'User#lifo', @connection.connection_identifier
+    end
+  end
+    
+    require 'test_helper'
+require 'stubs/test_server'
+require 'active_support/core_ext/hash/indifferent_access'
+    
+    class RedisAdapterTest::AlternateConfiguration < RedisAdapterTest
+  def cable_config
+    alt_cable_config = super.dup
+    alt_cable_config.delete(:url)
+    alt_cable_config.merge(host: '127.0.0.1', port: 6379, db: 12)
+  end
+end
+    
+        brew cask install mactex
+    EOS
+  when 'pip' then <<-EOS.undent
+    Homebrew provides pip via: `brew install python`. However you will then
+    have two Pythons installed on your Mac, so alternatively you can install
+    pip via the instructions at:
+    
+        return if Language::Python.reads_brewed_pth_files?('python')
+    
+        def self.cleanup_lockfiles
+      return unless HOMEBREW_CACHE_FORMULA.directory?
+      candidates = HOMEBREW_CACHE_FORMULA.children
+      lockfiles  = candidates.select { |f| f.file? && f.extname == '.brewing' }
+      lockfiles.each do |file|
+        next unless file.readable?
+        file.open.flock(File::LOCK_EX | File::LOCK_NB) && file.unlink
+      end
+    end
+    
+          renamed_formulae << [old_full_name, new_full_name] if @report[:A].include? new_full_name
+    end
+    
+      def self.require_universal_deps
+    define_method(:require_universal_deps?) { true }
+  end
+    
+    # See browser for an example
+class GithubGistFormula < ScriptFileFormula
+  def self.url(val)
+    super
+    version File.basename(File.dirname(val))[0, 6]
+  end
+end
+    
+      # Finds the groups of the source user, optionally limited to those visible to
+  # the current user.
+  def execute(current_user = nil)
+    segments = all_groups(current_user)
+    
+            @value << new_block
+      end
+    end
+  end
+end
+
+    
+    #
+# Project
+#
+    
+    def usage
+  $stderr.puts '#{$0} [site list] [output-dir]'
+  exit(0)
+end
+    
+        # We want to return immediatly if we do not have a packet which is handled by us
+    return unless pkt.is_tcp?
+    return if (pkt.tcp_sport != 143 and pkt.tcp_dport != 143)
+    s = find_session((pkt.tcp_sport == 143) ? get_session_src(pkt) : get_session_dst(pkt))
+    s[:sname] ||= 'imap4'
+    
+    #compileOpts = ['']
+#outputDir		= system.getProperty('java.io.tmpdir')
+outputDir		= 'testoutdir'
+compileOpts 	= [ '-target', '1.3', '-source', '1.3', '-d', outputDir ]
+    
+    #certCN cannot contain commas
+certCN 		= 'Metasploit Inc.'
+#keytoolOpts 	= '-genkey -alias signFiles -keystore msfkeystore ' +
+#		  '-storepass msfstorepass -dname \'cn=#{certCN}\' ' +
+#		  '-keypass msfkeypass'
+    
+    		self.block = Array.new
+		self.block_size = 0
+	end
+    
+        export LANG=en_US.UTF-8
+    \e[0m
+    DOC
+  end
+    
+        # From asking people, it seems MacPorts does not have a `prefix` command, like
+    # Homebrew does, so make an educated guess:
+    if port_prefix = prefix_from_bin('port')
+      prefixes << port_prefix
+    end
+    
+            sets = config.sources_manager.aggregate.all_sets
+        sets.each { |set| UI.pod(set, :name_and_version) }
+        UI.puts '\n#{sets.count} pods were found'
       end
