@@ -1,225 +1,181 @@
 
         
-        - BaseRecognizer: Base class with common recognizer functionality.
-- Lexer: Base class for lexers.
-- Parser: Base class for parsers.
-- tree.TreeParser: Base class for %tree parser.
+            before_render_template.send(app, template=template, context=context)
+    rv = template.render(context)
+    template_rendered.send(app, template=template, context=context)
+    return rv
+    
+                def post(self):
+                session['counter'] = session.get('counter', 0) + 1
+                return 'OK'
+    
+        sys.meta_path.append(Loader())
+    request.addfinalizer(sys.meta_path.pop)
+    
+        # This test only works on CPython 2.7.
+    if sys.version_info >= (2, 7) and \
+            not hasattr(sys, 'pypy_translation_info'):
+        with assert_no_leak():
+            for x in range(10):
+                fire()
+    
+            assert calls == ['before-signal', 'before-handler', 'handler',
+                         'after-handler', 'after-signal']
+    finally:
+        flask.request_started.disconnect(before_request_signal, app)
+        flask.request_finished.disconnect(after_request_signal, app)
+    
+            with server as (host, port):
+            server_url = 'http://{0}:{1}'.format(host, port)
+            for _ in range(requests_to_handle):
+                r = requests.get(server_url)
+                assert r.status_code == 200
     
     
-    def getErrorMessage(self, e, tokenNames):
-        '''
-        What error message should be generated for the various
-        exception types?
-        
-        Not very object-oriented code, but I like having all error message
-        generation within one method rather than spread among all of the
-        exception classes. This also makes it much easier for the exception
-        handling because the exception classes do not have to have pointers back
-        to this object to access utility routines and so on. Also, changing
-        the message for an exception type would be difficult because you
-        would have to subclassing exception, but then somehow get ANTLR
-        to make those kinds of exception objects instead of the default.
-        This looks weird, but trust me--it makes the most sense in terms
-        of flexibility.
-    
-        def LT(self, i):
-        if i == 0:
-            return 0 # undefined
-    
-        def setText(self, text):
-        self.text = text
-    
-                                s = self.eot[s]
-                            input.consume()
-                            # TODO: I had this as return accept[eot[s]]
-                            # which assumed here that the EOT edge always
-                            # went to an accept...faster to do this, but
-                            # what about predicated edges coming from EOT
-                            # target?
-                            continue
-    
-        def _close_self_pipe(self):
-        if self._self_reading_future is not None:
-            self._self_reading_future.cancel()
-            self._self_reading_future = None
-        self._ssock.close()
-        self._ssock = None
-        self._csock.close()
-        self._csock = None
-        self._internal_fds -= 1
-    
-    
-def parse_args():
-    p = argparse.ArgumentParser()
-    p.add_argument('-v', '--verbose', action='store_true')
-    p.add_argument('-b', '--binary', action='store_true',
-                   help='Is the dependency in the binary repo?')
-    p.add_argument('-O', '--organization',
-                   help='Organization owning the deps repos', default='python')
-    p.add_argument('-e', '--externals-dir', type=pathlib.Path,
-                   help='Directory in which to store dependencies',
-                   default=pathlib.Path(__file__).parent.parent / 'externals')
-    p.add_argument('tag',
-                   help='tag of the dependency')
-    return p.parse_args()
-    
-        print('Creating the makefiles...')
-    sys.stdout.flush()
-    # run configure, copy includes, patch files
-    run_configure(configure, do_script)
-    makefile = makefile_template.format(suffix)
-    try:
-        os.unlink(makefile)
-    except FileNotFoundError:
-        pass
-    os.rename(generated_makefile, makefile)
-    copy_includes(makefile, suffix)
-    
-        # Print the location of each face in this image
-    top, right, bottom, left = face_location
-    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
-    
-        # Loop through each face in this frame of video
-    for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
-        # See if the face is a match for the known face(s)
-        matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-    
-    
-@click.command()
-@click.argument('image_to_check')
-@click.option('--cpus', default=1, help='number of CPU cores to use in parallel. -1 means 'use all in system'')
-@click.option('--model', default='hog', help='Which face detection model to use. Options are 'hog' or 'cnn'.')
-def main(image_to_check, cpus, model):
-    # Multi-core processing only supported on Python 3.4 or greater
-    if (sys.version_info < (3, 4)) and cpus != 1:
-        click.echo('WARNING: Multi-processing support requires Python 3.4 or greater. Falling back to single-threaded processing!')
-        cpus = 1
-    
-    face_recognition_model = face_recognition_models.face_recognition_model_location()
-face_encoder = dlib.face_recognition_model_v1(face_recognition_model)
-    
-    
-def pickle_weights(out_file_name, weights):
-    blobs = {
-        normalize_resnet_name(blob.name): utils.Caffe2TensorToNumpyArray(blob)
-        for blob in weights.protos
-    }
-    with open(out_file_name, 'w') as f:
-        pickle.dump(blobs, f, protocol=pickle.HIGHEST_PROTOCOL)
-    print('Wrote blobs:')
-    print(sorted(blobs.keys()))
-    
-    
-def initialize_model_from_cfg(weights_file, gpu_id=0):
-    '''Initialize a model from the global cfg. Loads test-time weights and
-    creates the networks in the Caffe2 workspace.
+def test_idna_without_version_attribute(mocker):
+    '''Older versions of IDNA don't provide a __version__ attribute, verify
+    that if we have such a package, we don't blow up.
     '''
-    model = model_builder.create(cfg.MODEL.TYPE, train=False, gpu_id=gpu_id)
-    net_utils.initialize_gpu_from_weights_file(
-        model, weights_file, gpu_id=gpu_id,
-    )
-    model_builder.add_inference_inputs(model)
-    workspace.CreateNet(model.net)
-    workspace.CreateNet(model.conv_body_net)
-    if cfg.MODEL.MASK_ON:
-        workspace.CreateNet(model.mask_net)
-    if cfg.MODEL.KEYPOINTS_ON:
-        workspace.CreateNet(model.keypoint_net)
-    return model
+    mocker.patch('requests.help.idna', new=None)
+    assert info()['idna'] == {'version': ''}
     
-                if use_box_score:
-                kps_score = scores[j]
-            else:
-                kps_score /= kps_dets[j].shape[1]
-    
-            if BBGT.size > 0:
-            # compute overlaps
-            # intersection
-            ixmin = np.maximum(BBGT[:, 0], bb[0])
-            iymin = np.maximum(BBGT[:, 1], bb[1])
-            ixmax = np.minimum(BBGT[:, 2], bb[2])
-            iymax = np.minimum(BBGT[:, 3], bb[3])
-            iw = np.maximum(ixmax - ixmin + 1., 0.)
-            ih = np.maximum(iymax - iymin + 1., 0.)
-            inters = iw * ih
-    
-    
-# ---------------------------------------------------------------------------- #
-# Helper functions for working with multilevel FPN RoIs
-# ---------------------------------------------------------------------------- #
-    
-        for i in range(cfg.KRCNN.NUM_STACKED_CONVS):
-        current = model.Conv(
-            current,
-            'conv_fcn' + str(i + 1),
-            dim_in,
-            hidden_dim,
-            kernel_size,
-            stride=1,
-            pad=pad_size,
-            weight_init=(cfg.KRCNN.CONV_INIT, {'std': 0.01}),
-            bias_init=('ConstantFill', {'value': 0.})
+        def lower_items(self):
+        '''Like iteritems(), but with all lowercase keys.'''
+        return (
+            (lowerkey, keyval[1])
+            for (lowerkey, keyval)
+            in self._store.items()
         )
-        current = model.Relu(current, current)
-        dim_in = hidden_dim
     
+        # Informational.
+    100: ('continue',),
+    101: ('switching_protocols',),
+    102: ('processing',),
+    103: ('checkpoint',),
+    122: ('uri_too_long', 'request_uri_too_long'),
+    200: ('ok', 'okay', 'all_ok', 'all_okay', 'all_good', '\\o/', '✓'),
+    201: ('created',),
+    202: ('accepted',),
+    203: ('non_authoritative_info', 'non_authoritative_information'),
+    204: ('no_content',),
+    205: ('reset_content', 'reset'),
+    206: ('partial_content', 'partial'),
+    207: ('multi_status', 'multiple_status', 'multi_stati', 'multiple_stati'),
+    208: ('already_reported',),
+    226: ('im_used',),
     
-_RENAME = {
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up4convs':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up4convs',
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v1up':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v1up',
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0upshare':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v0upshare',
-    # Removed 'ResNet_' from the name because it wasn't relevent
-    'mask_rcnn_heads.ResNet_mask_rcnn_fcn_head_v0up':
-        'mask_rcnn_heads.mask_rcnn_fcn_head_v0up',
-    # Removed head_builder module in favor of the more specific fast_rcnn name
-    'head_builder.add_roi_2mlp_head':
-        'fast_rcnn_heads.add_roi_2mlp_head',
-}
+        def test_headers_on_session_with_None_are_not_sent(self, httpbin):
+        '''Do not send headers in Session.headers with None values.'''
+        ses = requests.Session()
+        ses.headers['Accept-Encoding'] = None
+        req = requests.Request('GET', httpbin('get'))
+        prep = ses.prepare_request(req)
+        assert 'Accept-Encoding' not in prep.headers
     
+        author = proj_info['author'],
+    author_email = proj_info['author_email'],
+    url = proj_info['url'],
+    license = proj_info['license'],
     
-def build_data_parallel_model(model, single_gpu_build_func):
-    '''Build a data parallel model given a function that builds the model on a
-    single GPU.
+    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    '''Downloads CBS videos by URL.
     '''
-    if model.only_build_forward_pass:
-        single_gpu_build_func(model)
-    elif model.train:
-        all_loss_gradients = _build_forward_graph(model, single_gpu_build_func)
-        # Add backward pass on all GPUs
-        model.AddGradientOperators(all_loss_gradients)
-        if cfg.NUM_GPUS > 1:
-            _add_allreduce_graph(model)
-        for gpu_id in range(cfg.NUM_GPUS):
-            # After allreduce, all GPUs perform SGD updates on their identical
-            # params and gradients in parallel
-            with c2_utils.NamedCudaScope(gpu_id):
-                add_single_gpu_param_update_ops(model, gpu_id)
-    else:
-        # Test-time network operates on single GPU
-        # Test-time parallelism is implemented through multiprocessing
-        with c2_utils.NamedCudaScope(model.target_gpu_id):
-            single_gpu_build_func(model)
     
-            rois = np.empty((0, 5), dtype=np.float32)
-        roi_probs = np.empty((0, 1), dtype=np.float32)
-        for im_i in range(num_images):
-            im_i_boxes, im_i_probs = self.proposals_for_one_image(
-                im_info[im_i, :], all_anchors, bbox_deltas[im_i, :, :, :],
-                scores[im_i, :, :, :]
-            )
-            batch_inds = im_i * np.ones(
-                (im_i_boxes.shape[0], 1), dtype=np.float32
-            )
-            im_i_rois = np.hstack((batch_inds, im_i_boxes))
-            rois = np.append(rois, im_i_rois, axis=0)
-            roi_probs = np.append(roi_probs, im_i_probs, axis=0)
+    #----------------------------------------------------------------------
+def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    '''wrapper'''
+    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
+    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
+    hostname = urlparse(url).hostname
+    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
+        return False
+    upid = match1(url, r'.+/content/(\w+)')
     
-    import detectron.utils.boxes as box_utils
-import detectron.roi_data.data_utils as data_utils
-from detectron.core.config import cfg
+    
+def huaban_download_board(url, output_dir, **kwargs):
+    kwargs['merge'] = False
+    board = extract_board_data(url)
+    output_dir = os.path.join(output_dir, board.title)
+    print_info(site_info, board.title, 'jpg', float('Inf'))
+    for pin in board.pins:
+        download_urls([pin.url], pin.id, pin.ext, float('Inf'),
+                      output_dir=output_dir, faker=True, **kwargs)
+    
+    def kuwo_playlist_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    html=get_content(url)
+    matched=set(re.compile('yinyue/(\d+)').findall(html))#reduce duplicated
+    for rid in matched:
+        kuwo_download_by_rid(rid,output_dir,merge,info_only)
+    
+        t = r1(r'type=(\w+)', flashvars)
+    id = r1(r'vid=([^']+)', flashvars)
+    if t == 'youku':
+        youku_download_by_vid(id, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
+    elif t == 'tudou':
+        tudou_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    elif t == 'sina' or t == 'video':
+        fake_headers['Referer'] = url
+        url = 'http://www.miomio.tv/mioplayer/mioplayerconfigfiles/sina.php?vid=' + id
+        xml_data = get_content(url, headers=fake_headers, decoded=True)
+        url_list = sina_xml_to_url_list(xml_data)
+    
+        mediatype, ext, size = 'mp4', 'mp4', 0
+    print_info(site_info, title, mediatype, size)
+    #
+    # rtmpdump  -r 'rtmpe://cp30865.edgefcs.net/ondemand/mtviestor/_!/intlod/MTVInternational/MBUS/GeoLocals/00JP/VIAMTVI/PYC/201304/7122HVAQ4/00JPVIAMTVIPYC7122HVAQ4_640x_360_1200_m30.mp4' -o 'title.mp4' --swfVfy http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf
+    #
+    # because rtmpdump is unstable,may try serveral times
+    #
+    if not info_only:
+        # import pdb
+        # pdb.set_trace()
+        download_rtmp_url(url=url, title=title, ext=ext, params={
+                          '--swfVfy': 'http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf'}, output_dir=output_dir)
+    
+        def prepare(self, **kwargs):
+        # scrape the html
+        content = get_content(self.url)
+    
+        def append(self, full, file, logical):
+        if os.path.isdir(full):
+            return
+        if not logical:
+            logical = self.gen_id(file)
+        self.index += 1
+        self.files.append((full, logical))
+        return self.index, logical
+    
+            tester('ntpath.join('a/b', '/x/y')', '/x/y')
+        tester('ntpath.join('/a/b', '/x/y')', '/x/y')
+        tester('ntpath.join('c:', '/x/y')', 'c:/x/y')
+        tester('ntpath.join('c:a/b', '/x/y')', 'c:/x/y')
+        tester('ntpath.join('c:/', '/x/y')', 'c:/x/y')
+        tester('ntpath.join('c:/a/b', '/x/y')', 'c:/x/y')
+        tester('ntpath.join('//computer/share', '/x/y')', '//computer/share/x/y')
+        tester('ntpath.join('//computer/share/', '/x/y')', '//computer/share/x/y')
+        tester('ntpath.join('//computer/share/a', '/x/y')', '//computer/share/x/y')
+    
+        def _make_self_pipe(self):
+        # A self-socket, really. :-)
+        self._ssock, self._csock = socket.socketpair()
+        self._ssock.setblocking(False)
+        self._csock.setblocking(False)
+        self._internal_fds += 1
+        self.call_soon(self._loop_self_reading)
+    
+                class X(Checker):
+                pass
+            for attr, obj in env.items():
+                setattr(X, attr, obj)
+            setattr(X, name, ErrDescr())
+            self.assertRaises(MyException, runner, X())
+    
+    This converts ``[x for x in 1, 2]`` to ``[x for x in (1, 2)]``.'''
+    
+    
+def extract_zip(externals_dir, zip_path):
+    with zipfile.ZipFile(os.fspath(zip_path)) as zf:
+        zf.extractall(os.fspath(externals_dir))
+        return externals_dir / zf.namelist()[0].split('/')[0]
