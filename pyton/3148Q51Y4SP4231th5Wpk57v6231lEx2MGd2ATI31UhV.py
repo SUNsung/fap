@@ -1,110 +1,125 @@
 
         
-            def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer),
-            self.mr(mapper=self.mapper_sort,
-                    reducer=self.reducer_identity),
-        ]
+        
+def main():
+    if len(sys.argv) < 2:
+        print('No file passed (file should contain Markdown table syntax)')
+        sys.exit(1)
+    check_format(sys.argv[1])
+    if len(errors) > 0:
+        for err in errors:
+            print(err)
+        sys.exit(1)
     
-        def __init__(self, seller_category_map, seller_category_overrides_map):
-        self.seller_category_map = seller_category_map
-        self.seller_category_overrides_map = seller_category_overrides_map
+    tf_proto_library_py(
+    name = 'trace_pb2',
+    srcs = ['trace.proto'],
+    protodeps = [':data_pb2'],
+)
     
-        history = model.fit(x_train, y_train, batch_size=batch_size,
-                        epochs=epochs // 3, verbose=0,
-                        sample_weight=sample_weight)
+    py_test(
+    name = 'component_test',
+    srcs = [
+        'component_test.py',
+    ],
+    deps = [
+        ':components',
+        '//dragnn/protos:spec_pb2_py',
+        '@org_tensorflow//tensorflow:tensorflow_py',
+    ],
+)
     
-        old_layer = keras.layers.AveragePooling3D((2, 2, 2), padding='valid', dim_ordering='th', name='avgpooling3d')
-    new_layer = keras.layers.AvgPool3D(pool_size=(2, 2, 2), padding='valid', data_format='channels_first', name='avgpooling3d')
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
-    
-        x = Input(shape=(1,))
-    y = inner_model(x)
-    outer_model = Model(x, y)
-    assert outer_model.trainable_weights == inner_model.trainable_weights
-    inner_model.trainable = False
-    assert outer_model.trainable_weights == []
-    inner_model.trainable = True
-    inner_model.layers[-1].trainable = False
-    assert outer_model.trainable_weights == []
-    
-        # Arguments:
-        models (tuple): encoder and decoder models
-        data (tuple): test data and label
-        batch_size (int): prediction batch size
-        model_name (string): which model is using this function
-    '''
-    
-    from __future__ import print_function
-import numpy as np
-    
-    from keras.preprocessing import sequence
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation
-from keras.layers import Embedding
-from keras.layers import Conv1D, GlobalMaxPooling1D
-from keras.datasets import imdb
-    
-    - RNNs are tricky. Choice of batch size is important,
-choice of loss and optimizer is critical, etc.
-Some configurations won't converge.
+      def testCombineArcAndRootPotentials(self):
+    with self.test_session():
+      arcs = tf.constant([[[1, 2, 3],
+                           [2, 3, 4],
+                           [3, 4, 5]],
+                          [[3, 4, 5],
+                           [2, 3, 4],
+                           [1, 2, 3]]], tf.float32)  # pyformat: disable
+      roots = tf.constant([[6, 7, 8],
+                           [8, 7, 6]], tf.float32)  # pyformat: disable
     
     
-def create_network(n_dense=6,
-                   dense_units=16,
-                   activation='selu',
-                   dropout=AlphaDropout,
-                   dropout_rate=0.1,
-                   kernel_initializer='lecun_normal',
-                   optimizer='adam',
-                   num_classes=1,
-                   max_words=max_words):
-    '''Generic function to create a fully-connected neural network.
-    
-    __all__ = ['cbs_download']
-    
-    
-def huaban_download(url, output_dir='.', **kwargs):
-    if re.match(r'http://huaban\.com/boards/\d+/', url):
-        huaban_download_board(url, output_dir, **kwargs)
-    else:
-        print('Only board (画板) pages are supported currently')
-        print('ex: http://huaban.com/boards/12345678/')
-    
-        def extract(self, **kwargs):
-        for i in self.streams:
-            # for each available stream
-            s = self.streams[i]
-            # fill in 'container' field and 'size' field (optional)
-            _, s['container'], s['size'] = url_info(s['url'])
-            # 'src' field is a list of processed urls for direct downloading
-            # usually derived from 'url'
-            s['src'] = [s['url']]
-    
-        def test_weak_etag_match(self):
-        computed_etag = ''xyzzy1''
-        etags = 'W/'xyzzy1''
-        self.check_url(
-            '/cache/' + computed_etag, method='GET',
-            headers=[('If-None-Match', etags)],
-            expected_status=304)
-    
-    from tornado.options import define, options, parse_command_line
+def export_to_graph(master_spec,
+                    params_path,
+                    export_path,
+                    external_graph,
+                    export_moving_averages,
+                    build_runtime_graph,
+                    signature_name='model'):
+  '''Restores a model and exports it in SavedModel form.
     
     
 if __name__ == '__main__':
-    main()
+  tf.test.main()
 
     
+        # Construct optimizer.
+    self.optimizer = _create_optimizer(self.hyperparams,
+                                       self.master_vars['learning_rate'],
+                                       self.master_vars['step'])
     
-def main():
-    parse_command_line()
-    t = Timer(e1)
-    results = t.timeit(options.num) / options.num
-    print('engine: %0.3f ms per iteration' % (results * 1000))
-    t = Timer(c1)
-    results = t.timeit(options.num) / options.num
-    print('coroutine: %0.3f ms per iteration' % (results * 1000))
+    
+if __name__ == '__main__':
+  tf.test.main()
+
+    
+      # Locally-normalize and optionally clip the scores.
+  max_scores_bxmx1 = tf.reshape(max_scores_bm, [batch_size, max_nodes, 1])
+  scores_bxmxm -= max_scores_bxmx1
+  if max_dynamic_range is not None:
+    # After normalization, the scores are non-positive with max=0, so the
+    # |max_dynamic_range| can be applied directly.
+    #
+    # PyLint thinks '-max_dynamic_range' is invalid because it defaults to None.
+    
+    
+@pytest.mark.functional
+def test_refuse_with_confirmation(proc, TIMEOUT):
+    refuse_with_confirmation(proc, TIMEOUT)
+    
+            if job_number:
+            if args.job_number:
+                exit('ERROR: job number found in url and specified with --job-number')
+    
+        parser.add_argument('--key',
+                        metavar='KEY',
+                        default=api_key,
+                        required=not api_key,
+                        help='Shippable API key')
+    
+    # Make coding more python3-ish
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
+    
+                if self.desired_state in self.enabled_values:
+                if not is_enabled:
+                    if self.module.check_mode:
+                        self.module.exit_json(changed=True)
+    
+                record_id = result['domain_record']['id']
+    
+            :param domains: domains in certificate request
+        :type domains: `list` of `str`
+        :param certname: requested name of lineage
+        :type certname: `str` or `None`
+    
+        def test_no_tos(self):
+        with mock.patch('certbot.client.acme_client.BackwardsCompatibleClientV2') as mock_client:
+            mock_client.new_account_and_tos().terms_of_service = 'http://tos'
+            with mock.patch('certbot.eff.handle_subscription') as mock_handle:
+                with mock.patch('certbot.account.report_new_account'):
+                    mock_client().new_account_and_tos.side_effect = errors.Error
+                    self.assertRaises(errors.Error, self._call)
+                    self.assertFalse(mock_handle.called)
+    
+            self.assertTrue(self.addr_default.conflicts(self.addr))
+        self.assertTrue(self.addr_default.conflicts(self.addr1))
+        self.assertTrue(self.addr_default.conflicts(self.addr_defined))
+    
+        @mock.patch('certbot_compatibility_test.validator.requests.get')
+    def test_hsts_malformed(self, mock_get_request):
+        mock_get_request.return_value = create_response(
+            headers={'strict-transport-security': 'sdfal'})
+        self.assertFalse(self.validator.hsts('test.com'))
