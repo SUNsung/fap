@@ -1,58 +1,62 @@
 
         
-            def to_python(self, value):
-        return b64decode(value)
+            # Create and fill-in the class template
+    numfields = len(field_names)
+    argtxt = repr(field_names).replace(''', '')[1:-1]   # tuple repr without parens or quotes
+    reprtxt = ', '.join('%s=%%r' % name for name in field_names)
+    dicttxt = ', '.join('%r: t[%d]' % (name, pos) for pos, name in enumerate(field_names))
+    template = '''class %(typename)s(tuple):
+        '%(typename)s(%(argtxt)s)' \n
+        __slots__ = () \n
+        _fields = %(field_names)r \n
+        def __new__(_cls, %(argtxt)s):
+            return _tuple.__new__(_cls, (%(argtxt)s)) \n
+        @classmethod
+        def _make(cls, iterable, new=tuple.__new__, len=len):
+            'Make a new %(typename)s object from a sequence or iterable'
+            result = new(cls, iterable)
+            if len(result) != %(numfields)d:
+                raise TypeError('Expected %(numfields)d arguments, got %%d' %% len(result))
+            return result \n
+        def __repr__(self):
+            return '%(typename)s(%(reprtxt)s)' %% self \n
+        def _asdict(t):
+            'Return a new dict which maps field names to their values'
+            return {%(dicttxt)s} \n
+        def _replace(_self, **kwds):
+            'Return a new %(typename)s object replacing specified fields with new values'
+            result = _self._make(map(kwds.pop, %(field_names)r, _self))
+            if kwds:
+                raise ValueError('Got unexpected field names: %%r' %% kwds.keys())
+            return result \n
+        def __getnewargs__(self):
+            return tuple(self) \n\n''' % locals()
+    for i, name in enumerate(field_names):
+        template += '        %s = _property(_itemgetter(%d))\n' % (name, i)
     
-        s.register(Tag1, index=-1)
-    assert isinstance(s.order[-2], Tag1)
+    # If false, no module index is generated.
+#html_use_modindex = True
     
-        def reraise(tp, value, tb=None):
-        if value.__traceback__ is not tb:
-            raise value.with_traceback(tb)
-        raise value
+    def main():
+    for name, fn in [('sequential', sequential),
+                     ('processes', with_process_pool_executor),
+                     ('threads', with_thread_pool_executor)]:
+        sys.stdout.write('%s: ' % name.ljust(12))
+        start = time.time()
+        if fn() != [True] * len(PRIMES):
+            sys.stdout.write('failed\n')
+        else:
+            sys.stdout.write('%.2f seconds\n' % (time.time() - start))
     
-        def get_namespace(self, namespace, lowercase=True, trim_namespace=True):
-        '''Returns a dictionary containing a subset of configuration options
-        that match the specified namespace/prefix. Example usage::
+        # If not a dictionary or a list, the response is necessarily a
+    # scalar: boolean, number, string, etc. In this case, we print
+    # it to the user.
+    if not isinstance( self._response, ( dict, list ) ):
+      return self._HandleBasicResponse()
     
-        :copyright: © 2010 by the Pallets team.
-    :license: BSD, see LICENSE for more details.
-'''
-    
-    
-def get_git_tags():
-    return set(
-        Popen(['git', 'tag'], stdout=PIPE).communicate()[0].splitlines()
-    )
-    
-    
-def test_config_from_object():
-    app = flask.Flask(__name__)
-    app.config.from_object(__name__)
-    common_object_test(app)
-    
-    
-def test_logger_debug(app):
-    app.debug = True
-    assert app.logger.level == logging.DEBUG
-    assert app.logger.handlers == [default_handler]
-    
-        def __enter__(self):
-        gc.disable()
-        _gc_lock.acquire()
-        loc = flask._request_ctx_stack._local
-    
-        @property
-    def body(self):
-        '''Return a `bytes` with the message's body.'''
-        raise NotImplementedError()
-    
-        def get_converter(self, mime):
-        if is_valid_mime(mime):
-            for converter_class in plugin_manager.get_converters():
-                if converter_class.supports(mime):
-                    return converter_class(mime)
-    
-    
-class BaseStream(object):
-    '''Base HTTP message output stream class.'''
+        if not self._message_poll_request.Poll( self ):
+      # Don't poll again until some event which might change the server's mind
+      # about whether to provide messages for the current buffer (e.g. buffer
+      # visit, file ready to parse, etc.)
+      self._message_poll_request = None
+      return False
