@@ -1,206 +1,220 @@
 
         
-        // A macro for testing Google Test assertions or code that's expected to
-// generate Google Test non-fatal failures.  It asserts that the given
-// statement will cause exactly one non-fatal Google Test failure with 'substr'
-// being part of the failure message.
-//
-// There are two different versions of this macro. EXPECT_NONFATAL_FAILURE only
-// affects and considers failures generated in the current thread and
-// EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS does the same but for all threads.
-//
-// 'statement' is allowed to reference local variables and members of
-// the current object.
-//
-// The verification of the assertion is done correctly even when the statement
-// throws an exception or aborts the current function.
-//
-// Known restrictions:
-//   - You cannot stream a failure message to this macro.
-//
-// Note that even though the implementations of the following two
-// macros are much alike, we cannot refactor them to use a common
-// helper macro, due to some peculiarity in how the preprocessor
-// works.  If we do that, the code won't compile when the user gives
-// EXPECT_NONFATAL_FAILURE() a statement that contains a macro that
-// expands to code containing an unprotected comma.  The
-// AcceptsMacroThatExpandsToUnprotectedComma test in gtest_unittest.cc
-// catches that.
-//
-// For the same reason, we have to write
-//   if (::testing::internal::AlwaysTrue()) { statement; }
-// instead of
-//   GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement)
-// to avoid an MSVC warning on unreachable code.
-#define EXPECT_NONFATAL_FAILURE(statement, substr) \
-  do {\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
-        (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter:: \
-          INTERCEPT_ONLY_CURRENT_THREAD, &gtest_failures);\
-      if (::testing::internal::AlwaysTrue()) { statement; }\
-    }\
-  } while (::testing::internal::AlwaysFalse())
-    
-    // First, define a fixture class template.  It should be parameterized
-// by a type.  Remember to derive it from testing::Test.
-template <typename T>
-class FooTest : public testing::Test {
- public:
-  ...
-  typedef std::list<T> List;
-  static T shared_;
-  T value_;
-};
-    
-      // Given directory = 'dir', base_name = 'test', number = 0,
-  // extension = 'xml', returns 'dir/test.xml'. If number is greater
-  // than zero (e.g., 12), returns 'dir/test_12.xml'.
-  // On Windows platform, uses \ as the separator rather than /.
-  static FilePath MakeFileName(const FilePath& directory,
-                               const FilePath& base_name,
-                               int number,
-                               const char* extension);
-    
-    // This is used internally by all instances of linked_ptr<>.  It needs to be
-// a non-template class because different types of linked_ptr<> can refer to
-// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
-// So, it needs to be possible for different types of linked_ptr to participate
-// in the same circular linked list, so we need a single class type here.
-//
-// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
-class linked_ptr_internal {
- public:
-  // Create a new circle that includes only this instance.
-  void join_new() {
-    next_ = this;
-  }
-    }
-    
-    # if GTEST_HAS_COMBINE
-// INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
-//
-// Generates values from the Cartesian product of values produced
-// by the argument generators.
-//
-template <typename T1, typename T2>
-class CartesianProductGenerator2
-    : public ParamGeneratorInterface< ::std::tr1::tuple<T1, T2> > {
- public:
-  typedef ::std::tr1::tuple<T1, T2> ParamType;
-    }
-    
-      // Creates a UTF-16 wide string from the given ANSI string, allocating
-  // memory using new. The caller is responsible for deleting the return
-  // value using delete[]. Returns the wide string, or NULL if the
-  // input is NULL.
-  //
-  // The wide string is created using the ANSI codepage (CP_ACP) to
-  // match the behaviour of the ANSI versions of Win32 calls and the
-  // C runtime.
-  static LPCWSTR AnsiToUtf16(const char* c_str);
-    
-      template <GTEST_6_TYPENAMES_(U)>
-  tuple& CopyFrom(const GTEST_6_TUPLE_(U)& t) {
-    f0_ = t.f0_;
-    f1_ = t.f1_;
-    f2_ = t.f2_;
-    f3_ = t.f3_;
-    f4_ = t.f4_;
-    f5_ = t.f5_;
-    return *this;
-  }
-    
-    TEST(ListenersTest, DoesNotLeak) {
-  Water* water = new Water;
-  delete water;
+        bool IsUnresponsiveEventSuppressed() {
+  return g_suppress_level > 0;
 }
     
-        // Parallel training
-    MPIWrapperPtr m_mpi;
-    
-        // this = A * B where B is passed as its transposed form B'
-    void matprod_mmt(const ssematrixbase &A, const ssematrixbase &Bt)
-    {
-        auto &us = *this;
-        assert(us.rows() == A.rows());
-        assert(us.cols() == Bt.rows()); // Bt.rows() == B.cols()
-        assert(A.cols() == Bt.cols());  // Bt.cols() == B.rows()
-        // fprintf (stderr, '0x%x(%d,%d) x 0x%x(%d,%d)' -> 0x%x(%d,%d)\n', A.p, A.rows(), A.cols(), Bt.p, Bt.rows(), Bt.cols(), us.p, us.rows(), us.cols());
+    namespace atom {
     }
     
-        // change all inputs of this new node to share the old one's inputs
-    for (int i = 0; i < oldNode->GetNumInputs(); i++)
-    {
-        newNode->SetInput(i, oldNode->GetInputs()[i]); // TODO: use AttachInput()?
-        //oldNode->SetInput(i, nullptr); // BUGBUG: old node should no longer point into the network
+      // A new extension RenderViewHost has been registered. The details are
+  // the RenderViewHost*.
+  NOTIFICATION_EXTENSION_VIEW_REGISTERED,
+    
+     private:
+  // The following methods are implemented by platform-specific implementations
+  // of this class.
+  //
+  // Start/StopListening are called when transitioning between zero and nonzero
+  // registered accelerators. StartListening will be called after
+  // RegisterAcceleratorImpl and StopListening will be called after
+  // UnregisterAcceleratorImpl.
+  //
+  // For RegisterAcceleratorImpl, implementations return false if registration
+  // did not complete successfully.
+  virtual void StartListening() = 0;
+  virtual void StopListening() = 0;
+  virtual bool RegisterAcceleratorImpl(const ui::Accelerator& accelerator) = 0;
+  virtual void UnregisterAcceleratorImpl(
+      const ui::Accelerator& accelerator) = 0;
+    
+    // An interface the PrintViewManager uses to notify an observer when the print
+// dialog is shown. Register the observer via PrintViewManager::set_observer.
+class PrintViewManagerObserver {
+ public:
+  // Notifies the observer that the print dialog was shown.
+  virtual void OnPrintDialogShown() = 0;
     }
     
+    // Parse hex color like '#FFF' or '#EFEFEF'
+SkColor ParseHexColor(const std::string& name);
     
-    {
-    {
-    {}}}
-
+    void OutputImageComponent::ToFloatPixels(float* out, int stride) const {
+  assert(factor_x_ == 1);
+  assert(factor_y_ == 1);
+  for (int block_y = 0; block_y < height_in_blocks_; ++block_y) {
+    for (int block_x = 0; block_x < width_in_blocks_; ++block_x) {
+      coeff_t block[kDCTBlockSize];
+      GetCoeffBlock(block_x, block_y, block);
+      double blockd[kDCTBlockSize];
+      for (int k = 0; k < kDCTBlockSize; ++k) {
+        blockd[k] = block[k];
+      }
+      ComputeBlockIDCTDouble(blockd);
+      for (int iy = 0; iy < 8; ++iy) {
+        for (int ix = 0; ix < 8; ++ix) {
+          int y = block_y * 8 + iy;
+          int x = block_x * 8 + ix;
+          if (y >= height_ || x >= width_) continue;
+          out[(y * width_ + x) * stride] = static_cast<float>(blockd[8 * iy + ix] + 128.0);
+        }
+      }
+    }
+  }
+}
     
-    template <class ConfigRecordType, typename ElemType>
-bool TryGetNetworkFactory(const ConfigRecordType& config, function<ComputationNetworkPtr(DEVICEID_TYPE)>& createNetworkFn)
-{
-    DEVICEID_TYPE deviceId = DeviceFromConfig(config);
+    inline void ColorTransformYCbCrToRGB(uint8_t* pixel) {
+  int y  = pixel[0];
+  int cb = pixel[1];
+  int cr = pixel[2];
+  pixel[0] = kRangeLimit[y + kCrToRedTable[cr]];
+  pixel[1] = kRangeLimit[y +
+                         ((kCrToGreenTable[cr] + kCbToGreenTable[cb]) >> 16)];
+  pixel[2] = kRangeLimit[y + kCbToBlueTable[cb]];
+}
+    
+        size_t i = 0;      // Points to the next leaf node.
+    size_t j = n + 1;  // Points to the next non-leaf node.
+    for (size_t k = n - 1; k != 0; --k) {
+      size_t left, right;
+      if (tree[i].total_count_ <= tree[j].total_count_) {
+        left = i;
+        ++i;
+      } else {
+        left = j;
+        ++j;
+      }
+      if (tree[i].total_count_ <= tree[j].total_count_) {
+        right = i;
+        ++i;
+      } else {
+        right = j;
+        ++j;
+      }
     }
     
+    // Computes the DCT (Discrete Cosine Transform) of the 8x8 array in 'block',
+// scaled up by a factor of 16. The values in 'block' are laid out row-by-row
+// and the result is written to the same memory area.
+void ComputeBlockDCT(coeff_t* block);
     
-    {
-    {
-    {}}} // end namespaces
-
+    double ButteraugliScoreForQuality(double quality) {
+  if (quality < kLowestQuality) quality = kLowestQuality;
+  if (quality > kHighestQuality) quality = kHighestQuality;
+  int index = static_cast<int>(quality);
+  double mix = quality - index;
+  return kScoreForQuality[index - kLowestQuality] * (1 - mix) +
+      kScoreForQuality[index - kLowestQuality + 1] * mix;
+}
     
-      /// Gets the non-blocking mode of the acceptor.
-  /**
-   * @returns @c true if the acceptor's synchronous operations will fail with
-   * boost::asio::error::would_block if they are unable to perform the requested
-   * operation immediately. If @c false, synchronous operations will block
-   * until complete.
-   *
-   * @note The non-blocking mode has no effect on the behaviour of asynchronous
-   * operations. Asynchronous operations will never fail with the error
-   * boost::asio::error::would_block.
+      // Sync + corrupt => no change
+  ASSERT_OK(writable_file->Fsync());
+  ASSERT_OK(dynamic_cast<MockEnv*>(env_)->CorruptBuffer(kFileName));
+  result.clear();
+  ASSERT_OK(rand_file->Read(0, kGood.size(), &result, &(scratch[0])));
+  ASSERT_EQ(result.compare(kGood), 0);
+    
+    namespace rocksdb {
+    }
+    
+     private:
+  // A version of PartialMerge that actually performs 'partial merging'.
+  // Use this to simulate the exact behaviour of the StringAppendOperator.
+  bool _AssocPartialMergeMulti(const Slice& key,
+                               const std::deque<Slice>& operand_list,
+                               std::string* new_value, Logger* logger) const;
+    
+      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
+    if (type >= HISTOGRAM_ENUM_MAX) {
+      return false;
+    }
+    
+    if (m_ignore_histograms.count(type) > 0) {
+        return false;
+    }
+    }
+    
+      class StatisticsJni : public StatisticsImpl {
+   public:
+     StatisticsJni(std::shared_ptr<Statistics> stats);
+     StatisticsJni(std::shared_ptr<Statistics> stats,
+         const std::set<uint32_t> ignore_histograms);
+     virtual bool HistEnabledForType(uint32_t type) const override;
+    }
+    
+      // 7. create wal_pool_ioctx
+  ret = _rados.ioctx_create(_wal_pool_name.c_str(), _wal_pool_ioctx);
+  if (ret < 0) {
+    std::cerr << 'couldn't set up ioctx! error ' << ret << std::endl;
+    ret = EXIT_FAILURE;
+    goto out;
+  }
+    
+    #include <jni.h>
+#include <memory>
+#include <string>
+#include 'rocksjni/jnicallback.h'
+#include 'port/port.h'
+#include 'rocksdb/env.h'
+    
+      void Seek(const Slice& target) override {
+    StopWatch seek_sw(env_, statistics_, BLOB_DB_SEEK_MICROS);
+    RecordTick(statistics_, BLOB_DB_NUM_SEEK);
+    iter_->Seek(target);
+    while (UpdateBlobValue()) {
+      iter_->Next();
+    }
+  }
+    
+    void InstrumentedCondVar::WaitInternal() {
+#ifndef NDEBUG
+  ThreadStatusUtil::TEST_StateDelay(ThreadStatus::STATE_MUTEX_WAIT);
+#endif
+  cond_.Wait();
+}
+    
+    // Register plugin
+REGISTER_CAMERA_TRANSFORMER(FlatCameraTransformer);
+    
+      // Make sure the points are in ccw order.
+  area_ = 0.0;
+  for (int i = 1; i < num_points_; ++i) {
+    area_ += CrossProd(points_[0], points_[i - 1], points_[i]);
+  }
+  if (area_ < 0) {
+    area_ = -area_;
+    std::reverse(points_.begin(), points_.end());
+  }
+  area_ /= 2.0;
+  CHECK_GT(area_, kMathEpsilon);
+    
+    PathObstacle *PathDecision::AddPathObstacle(const PathObstacle &path_obstacle) {
+  std::lock_guard<std::mutex> lock(obstacle_mutex_);
+  return path_obstacles_.Add(path_obstacle.Id(), path_obstacle);
+}
+    
+      /**
+   * @brief Override function Plan in parent class Planner.
+   * @param planning_init_point The trajectory point where planning starts.
+   * @param frame Current planning frame.
+   * @param reference_line_info The computed reference line.
+   * @return OK if planning succeeds; error otherwise.
    */
-  bool non_blocking() const
-  {
-    return this->get_service().non_blocking(this->get_implementation());
-  }
+  apollo::common::Status PlanOnReferenceLine(
+      const common::TrajectoryPoint& planning_init_point, Frame* frame,
+      ReferenceLineInfo* reference_line_info) override;
+  /**
+   * @brief Read the recorded trajectory file.
+   * @param filename The name of the trajectory file.
+   */
+  void ReadTrajectoryFile(const std::string& filename);
     
-    #endif // BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    template <typename CompletionCondition>
-class base_from_completion_cond
-{
-protected:
-  explicit base_from_completion_cond(CompletionCondition completion_condition)
-    : completion_condition_(completion_condition)
-  {
-  }
-    }
-    
-    #endif // BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
-
-    
-    #endif // BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
-
-    
-    #ifndef BOOST_ASIO_DETAIL_FUNCTION_HPP
-#define BOOST_ASIO_DETAIL_FUNCTION_HPP
-    
-    
-    {} // namespace boost_asio_handler_alloc_helpers
-    
-    #include <boost/asio/detail/pop_options.hpp>
+      /**
+   * @brief Set lane feature vector
+   * @param Obstacle pointer
+   *        Lane sequence pointer
+   *        Feature container in a vector for receiving the feature values
+   */
+  void SetLaneFeatureValues(Obstacle* obstacle_ptr,
+                            LaneSequence* lane_sequence_ptr,
+                            std::vector<double>* feature_values);
