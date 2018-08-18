@@ -1,119 +1,153 @@
 
         
-            @value.setter
-    def value(self, new_value):
-        if 1 <= new_value <= 13:
-            self._value = new_value
-        else:
-            raise ValueError('Invalid card value: {}'.format(new_value))
+        tf_proto_library_cc(
+    name = 'export_proto',
+    srcs = ['export.proto'],
+    protodeps = [':spec_proto'],
+)
     
-        def extract_url(self, line):
-        '''Extract the generated url from the log line.'''
-        pass
+    py_test(
+    name = 'spec_builder_test',
+    srcs = ['spec_builder_test.py'],
+    deps = [
+        ':spec_builder',
+        '//dragnn/protos:spec_pb2_py',
+        '//syntaxnet:load_parser_ops_py',
+        '//syntaxnet:parser_ops',
+        '//syntaxnet:parser_trainer',
+        '@org_tensorflow//tensorflow:tensorflow_py',
+    ],
+)
     
-        def __init__(self, pages, data_store, reverse_index_queue, doc_index_queue):
-        self.pages = pages
-        self.data_store = data_store
-        self.reverse_index_queue = reverse_index_queue
-        self.doc_index_queue = doc_index_queue
+      Raises:
+    NotImplementedError: if a linked feature with source translator other than
+        'identity' is configured.
+    RuntimeError: if a recurrent linked feature is configured.
+  '''
+  if feature_spec.source_translator != 'identity':
+    raise NotImplementedError(feature_spec.source_translator)
+  if feature_spec.source_component == comp.name:
+    raise RuntimeError(
+        'Recurrent linked features are not supported in bulk extraction.')
+  tf.logging.info('[%s] Adding linked feature '%s'', comp.name,
+                  feature_spec.name)
+  source = comp.master.lookup_component[feature_spec.source_component]
     
-    with io.open('update/releases.atom', 'w', encoding='utf-8') as atom_file:
-    atom_file.write(atom_template)
-
+    Verifies that:
+1. BulkFeatureExtractor and BulkAnnotator both raise NotImplementedError when
+   non-identity translator configured.
+2. BulkFeatureExtractor and BulkAnnotator both raise RuntimeError when
+   recurrent linked features are configured.
+3. BulkAnnotator raises RuntimeError when fixed features are configured.
+4. BulkFeatureIdExtractor raises ValueError when linked features are configured,
+   or when the fixed features are invalid.
+'''
     
-    import io
-import sys
-import re
+    '''Converter for DRAGNN checkpoint+master-spec files to TF SavedModels.
     
-    from test.helper import try_rm
+      Returns:
+    Dict mapping from shortened resource path to original resource path.
+  '''
+  for component_spec in master_spec.component:
+    for feature_spec in component_spec.fixed_feature:
+      feature_spec.ClearField('pretrained_embedding_matrix')
+      feature_spec.ClearField('vocab')
     
-            title = self._html_search_regex(r'<title>(.*?)</title>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<div class='description'[^>]*>([^<]+)</div>', webpage, 'description', fatal=False)
-        thumbnail = self._html_search_regex(
-            r'preview_url\s*:\s*\'(.*?)\'', webpage, 'thumbnail', fatal=False)
+      def testSimpleTaggerLSTM(self):
+    self.RunFullTrainingAndInference('simple-tagger-lstm',
+                                     'simple_tagger_lstm_master_spec.textproto')
     
-    
-class C56IE(InfoExtractor):
-    _VALID_URL = r'https?://(?:(?:www|player)\.)?56\.com/(?:.+?/)?(?:v_|(?:play_album.+-))(?P<textid>.+?)\.(?:html|swf)'
-    IE_NAME = '56.com'
-    _TESTS = [{
-        'url': 'http://www.56.com/u39/v_OTM0NDA3MTY.html',
-        'md5': 'e59995ac63d0457783ea05f93f12a866',
-        'info_dict': {
-            'id': '93440716',
-            'ext': 'flv',
-            'title': '网事知多少 第32期：车怒',
-            'duration': 283.813,
-        },
-    }, {
-        'url': 'http://www.56.com/u47/v_MTM5NjQ5ODc2.html',
-        'md5': '',
-        'info_dict': {
-            'id': '82247482',
-            'title': '爱的诅咒之杜鹃花开',
-        },
-        'playlist_count': 7,
-        'add_ie': ['Sohu'],
-    }]
-    
-    
-def has_docutils():
-    try:
-        # noinspection PyUnresolvedReferences
-        import docutils
-        return True
-    except ImportError:
-        return False
-    
-    
-def test_unicode_basic_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--verbose', '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/basic-auth/test/' + UNICODE)
-    
-        # noinspection PyMethodOverriding
-    def get_auth(self, username, password):
-        return requests.auth.HTTPDigestAuth(username, password)
-
-    
-    content_type.add_argument(
-    '--json', '-j',
-    action='store_true',
-    help='''
-    (default) Data items from the command line are serialized as a JSON object.
-    The Content-Type and Accept headers are set to application/json
-    (if not specified).
-    
-    
-@pytest.mark.parametrize('ssl_version', SSL_VERSION_ARG_MAPPING.keys())
-def test_ssl_version(httpbin_secure, ssl_version):
-    try:
-        r = http(
-            '--ssl', ssl_version,
-            httpbin_secure + '/get'
-        )
-        assert HTTP_OK in r
-    except SSLError as e:
-        if ssl_version == 'ssl3':
-            # pytest-httpbin doesn't support ssl3
-            assert 'SSLV3_ALERT_HANDSHAKE_FAILURE' in str(e)
-        else:
-            raise
-    
-    
-    def setText(self, text):
+        def __init__(self, **kwargs):
         '''
-        Override the text for this token.  getText() will return this text
-        rather than pulling from the buffer.  Note that this does not mean
-        that start/stop indexes are not valid.  It means that that input
-        was converted to a new string in the token object.
-	'''
-        self._text = text
+        Use keyword arguments to overwrite
+        any of the class attributes for this instance.
+    
+        package_name = '(builtin)'
+    
+        def load(self):
+        super(Config, self).load()
+        self._migrate_implicit_content_type()
+    
+        # noinspection PyUnboundLocalVariable
+    return '%.*f %s' % (precision, n / factor, suffix)
+
+    
+        '''
+    def _validate_crlf(self, msg):
+        lines = iter(msg.splitlines(True))
+        for header in lines:
+            if header == CRLF:
+                break
+            assert header.endswith(CRLF), repr(header)
+        else:
+            assert 0, 'CRLF between headers and body not found in %r' % msg
+        body = ''.join(lines)
+        assert CRLF not in body
+        return body
+    
+    from __future__ import print_function
     
     
-@section Exceptions
+class FullJitterBackoffStrategyTestCase(unittest.TestCase):
+    def test_no_retries(self):
+        strategy = _full_jitter_backoff(retries=0)
+        result = list(strategy())
+        self.assertEquals(result, [], 'list should be empty')
     
-                else:
-                raise RuntimeError('DFA bang!')
+                        self.action_handler(
+                        self.set_disabled_immediate,
+                        self.action_args
+                    )
+                    self.changed = True
+                if self.changed and self.disabled_msg:
+                    self.msgs.append(self.disabled_msg)
+    
+        def update_on_device(self):
+        params = self.changes.api_params()
+        resource = self.client.api.tm.sys.management_routes.management_route.load(
+            name=self.want.name,
+            partition=self.want.partition
+        )
+        resource.modify(**params)
+    
+    
+if __name__ == '__main__':
+    unittest.main()  # pragma: no cover
+
+    
+        def test_str(self):
+        self.assertTrue('FOO' in str(self.error))
+        self.assertTrue('{}' in str(self.error))
+    
+        def copy_certs_and_keys(self, cert_path, key_path, chain_path=None):
+        '''Copies certs and keys into the temporary directory'''
+        cert_and_key_dir = os.path.join(self._temp_dir, 'certs_and_keys')
+        if not os.path.isdir(cert_and_key_dir):
+            os.mkdir(cert_and_key_dir)
+    
+    # The name of the Pygments (syntax highlighting) style to use.
+pygments_style = 'sphinx'
+    
+    
+MINIMUM = 80
+    
+    
+def make_app():
+    return tornado.web.Application([
+        (r'/post', POSTHandler),
+        (r'/(.*)', PUTHandler),
+    ])
+    
+    
+class PostModule(tornado.web.UIModule):
+    def render(self, post):
+        return self.render_string('modules/post.html', post=post)
+    
+    
+@gen.coroutine
+def c1():
+    for i in range(10):
+        yield c2()
+    
+    from tornado.options import options, define, parse_command_line
+from tornado.template import Template
