@@ -1,196 +1,99 @@
 
         
-                const float max_dist = 10.0f;
-        if(black_order[0].second > max_dist || black_order[1].second > max_dist ||
-           white_order[0].second > max_dist || white_order[1].second > max_dist)
-        {
-            continue; // there will be no improvement in this corner position
-        }
-    
-    template<typename Op>
-folly::Optional<Type> key_type_or_fixup(ISS& env, Op op) {
-  auto fixup = [&] (Type ty, bool isProp) -> folly::Optional<Type> {
-    if (auto const val = tv(ty)) {
-      if (isStringType(val->m_type)) {
-        op.mkey.mcode = isProp ? MPT : MET;
-        op.mkey.litstr = val->m_data.pstr;
-        reduce(env, op);
-        return folly::none;
-      }
-      if (!isProp && val->m_type == KindOfInt64) {
-        op.mkey.mcode = MEI;
-        op.mkey.int64 = val->m_data.num;
-        reduce(env, op);
-        return folly::none;
-      }
-    }
-    return std::move(ty);
-  };
-  switch (op.mkey.mcode) {
-    case MEC: case MPC:
-      return fixup(topC(env, op.mkey.idx), op.mkey.mcode == MPC);
-    case MEL: case MPL:
-      return fixup(locAsCell(env, op.mkey.local), op.mkey.mcode == MPL);
-    case MW:
-      return TBottom;
-    case MEI:
-      return ival(op.mkey.int64);
-    case MET: case MPT: case MQT:
-      return sval(op.mkey.litstr);
-  }
-  not_reached();
-}
-    
-      /**
-   * StreamContext settings for this connection
-   */
-  void setStreamContextOptions(const Array &opts) {
-    m_stream_context_options = opts;
-  }
-  /**
-   * require SLS/TLS
-   * (default) CURLUSESSL_NONE, CURLUSESSL_TRY, CURLUSESSL_CONTROL,
-   *           CURLUSESSL_ALL
-   */
-    
-    /*!
- * \brief Check whether the value is simple parameter
- * \param val The value to check.
- */
-inline bool isSimple(const Rcpp::RObject& val) {
-  switch (TYPEOF(val)) {
-    case STRSXP:
-    case INTSXP:
-    case REALSXP:
-    case LGLSXP: return true;
-    default: return false;
-  }
-}
-    
-    void ArrayDataIter::Convert(const Rcpp::NumericVector& src,
-                            const std::vector<size_t>& order,
-                            size_t batch_size,
-                            std::vector<NDArray> *out) {
-  Rcpp::RObject dim = src.attr('dim');
-  Rcpp::Dimension rshape(dim);
-  size_t ndim = rshape.size();
-  std::vector<mx_float> temp(src.size()), batch;
-  std::copy(src.begin(), src.end(), temp.begin());
-  out->clear();
-  out->reserve(rshape[ndim - 1] / batch_size + 1);
-  size_t line_size = 1;
-  for (size_t i = 0; i < rshape.size() - 1; ++i) {
-    line_size *= rshape[i];
-  }
-  rshape[ndim - 1] = batch_size;
-  batch.resize(batch_size * line_size, 0.0f);
-    }
+        #define REGISTER_LAYER_CLASS(type)                                             \
+  template <typename Dtype>                                                    \
+  shared_ptr<Layer<Dtype> > Creator_##type##Layer(const LayerParameter& param) \
+  {                                                                            \
+    return shared_ptr<Layer<Dtype> >(new type##Layer<Dtype>(param));           \
+  }                                                                            \
+  REGISTER_LAYER_CREATOR(type, Creator_##type##Layer)
     
     
     { private:
-  // make constructor private
-  explicit NDArrayFunction(OpHandle handle, std::string name);
-  /*! \brief internal functioon handle. */
-  OpHandle handle_;
-  // name of the function
-  std::string name_;
-  // keyword arguments.
-  std::string key_var_num_args_;
-  // name of arguments
-  std::vector<std::string> arg_names_;
-  // check
-  std::vector<bool> arg_nd_array_;
-  // ther formals of arguments
-  Rcpp::List formals_;
+  struct pair_sort_first {
+    bool operator()(const std::pair<int, int> &left,
+                    const std::pair<int, int> &right) {
+      return left.first < right.first;
+    }
+  };
+  void check_batch_reindex(int initial_num, int final_num,
+                           const Dtype* ridx_data);
 };
     
-    /*!
- * \brief All the possible information needed by Operator.Forward and Backward
- *  This is the superset of RunContext.
- *  We use this data structure to bookkeep everything needed by Forward and Backward.
- * \sa Resource
- */
-struct OpContext {
-  /*! \brief whether there is a backward phase to compute gradients. */
-  bool need_grad;
-  /*! \brief whether it is training phase */
-  bool is_train;
-  /*! \brief RunContext related resources */
-  RunContext run_ctx;
-  /*! \brief the callback when operation completes, used by asynchronize ops */
-  engine::CallbackOnComplete async_on_complete;
-  /*! \brief Resources requested by the operator */
-  std::vector<Resource> requested;
-  /*!
-   * \brief get mshadow stream from Context
-   * \return the mshadow stream
-   * \tparam xpu the device type of the stream
-   */
-  template<typename xpu>
-  inline mshadow::Stream<xpu>* get_stream() const {
-    return run_ctx.get_stream<xpu>();
-  }
-};
+    namespace caffe {
+    }
     
+    #include 'caffe/layers/lrn_layer.hpp'
+#include 'caffe/layers/power_layer.hpp'
     
-    {  if (map_key_var_args.count(op) != 0) {
-    *key_var_num_args = map_key_var_args[op].c_str();
-  } else {
-    *key_var_num_args = ret->ret_str.c_str();
-  }
-  return NNGetOpInfo(
-      creator, name, description,
-      num_args, arg_names, arg_type_infos,
-      arg_descriptions, return_type);
-}
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    nnvm::NodeEntry AggregateGradient(std::vector<nnvm::NodeEntry>&& v);
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    void ElementwiseSumDnsCsrDnsImpl(mshadow::Stream<cpu>* s,
-                                 const Resource& rsc,
-                                 const std::vector<NDArray>& nds,
-                                 NDArray* out) {
-  using namespace mxnet::op;
-  using namespace mxnet::op::mxnet_op;
-  const TBlob& out_data = out->data();
-  MSHADOW_TYPE_SWITCH(out->dtype(), DType, {  // data type
-    Kernel<Sum, cpu>::Launch(
-      s, out_data.Size(), out_data.dptr<DType>(), kWriteTo, nds[0].data().dptr<DType>(),
-      nds[2].data().dptr<DType>());
-    const TBlob& csr_data = nds[1].data();
-    const TBlob& csr_indices = nds[1].aux_data(csr::kIdx);
-    const TBlob& csr_indptr = nds[1].aux_data(csr::kIndPtr);
-    const nnvm::dim_t num_rows = nds[1].shape()[0];
-    const nnvm::dim_t num_cols = nds[1].shape()[1];
-    MSHADOW_IDX_TYPE_SWITCH(csr_indices.type_flag_, IType, {  // indices type
-      MSHADOW_IDX_TYPE_SWITCH(csr_indptr.type_flag_, CType, {  // indptr type
-        if (nds[1].storage_initialized()) {
-          Kernel<ElemwiseDnsCsrDnsKernel<kWriteTo, mshadow_op::plus>, cpu>::Launch(
-            s, num_rows, out_data.dptr<DType>(), out_data.dptr<DType>(),
-            csr_data.dptr<DType>(), csr_indices.dptr<IType>(),
-            csr_indptr.dptr<CType>(), num_rows, num_cols);
-        }
+    template <typename T>
+template <typename Tag, typename VaultTag>
+SingletonHolder<T>& SingletonHolder<T>::singleton() {
+  /* library-local */ static auto entry =
+      createGlobal<SingletonHolder<T>, std::pair<Tag, VaultTag>>([]() {
+        return new SingletonHolder<T>({typeid(T), typeid(Tag)},
+                                      *SingletonVault::singleton<VaultTag>());
       });
-    });
-  });
+  return *entry;
 }
     
-    bool ElementWiseSumForwardInferStorageType(const nnvm::NodeAttrs& attrs,
-                                           const int dev_mask,
-                                           DispatchMode* dispatch_mode,
-                                           std::vector<int> *in_attrs,
-                                           std::vector<int> *out_attrs) {
-  CHECK(!in_attrs->empty());
-  CHECK_EQ(out_attrs->size(), 1U);
-  bool ret = ElemwiseStorageAttr<false, true, false>(attrs, dev_mask, dispatch_mode,
-                                                     in_attrs, out_attrs);
-#if MXNET_USE_MKLDNN == 1
-  // We should always use FComputeEx.
-  if (dev_mask == mshadow::cpu::kDevMask
-      && common::ContainsOnlyStorage(*in_attrs, kDefaultStorage)
-      && out_attrs->at(0) == kDefaultStorage) {
-    *dispatch_mode = DispatchMode::kFComputeEx;
-  }
-#endif
-  return ret;
+      void registerSingleton(CreateFunc c, TeardownFunc t);
+  void registerSingletonMock(CreateFunc c, TeardownFunc t);
+  bool hasLiveInstance() override;
+  void createInstance() override;
+  bool creationStarted() override;
+  void preDestroyInstance(ReadMostlyMainPtrDeleter<>&) override;
+  void destroyInstance() override;
+    
+    Init::Init(int* argc, char*** argv, bool removeFlags) {
+  init(argc, argv, removeFlags);
 }
+    
+      int curErrNo = errno;
+  if (lseek(fd, origLoc, SEEK_SET) == (off_t)-1) {
+    if (res == -1) {
+      errno = curErrNo;
+    }
+    return -1;
+  }
+  errno = curErrNo;
+    
+    // If we are targeting a mobile device, do not use thread caching as a
+// precaution. Performance is potentially suboptimal without thread
+// local support
+#if FOLLY_MOBILE
+#define HAZPTR_TC false
+#else
+#define HAZPTR_TC true
+#endif
+#endif
+    
+    /**
+ * AllocatorHasTrivialDeallocate
+ *
+ * Unambiguously inherits std::integral_constant<bool, V> for some bool V.
+ *
+ * Describes whether a C++ Aallocator has trivial, i.e. no-op, deallocate().
+ *
+ * Also may be used to describe types which may be used with
+ * CxxAllocatorAdaptor.
+ */
+template <typename Alloc>
+struct AllocatorHasTrivialDeallocate : std::false_type {};
+    
+    using namespace folly;
+    
+    TEST(NonCopyableLambda, unique_ptr) {
+  Promise<Unit> promise;
+  auto int_ptr = std::make_unique<int>(1);
+    }
