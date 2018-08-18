@@ -1,101 +1,71 @@
-    def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
-    
-        def remove(self, key):
-        hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
-            if item.key == key:
-                del self.table[hash_index][index]
-                return
-        raise KeyError('Key not found')
 
+        
+            for filename in filenames:
+        fd = codecs.open(filename, mode='r', encoding='utf-8')
+        for line in fd.readlines():
+            refs = re.findall(r'(?<=<a href=')[^']*', markdown.markdown(line))
+            for ref in refs:
+                if ref not in urls:
+                    urls.append(ref)
     
-        def process_query(self, query):
-        query = self.parse_query(query)
-        results = self.memory_cache.get(query)
-        if results is None:
-            results = self.reverse_index_cluster.process_search(query)
-            self.memory_cache.set(query, results)
-        return results
+        # Execute the template string in a temporary namespace and
+    # support tracing utilities by setting a value for frame.f_globals['__name__']
+    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
+                     _property=property, _tuple=tuple)
+    try:
+        exec(template, namespace)
+    except SyntaxError:
+        e = _sys.exc_info()[1]
+        raise SyntaxError(e.message + ':\n' + template)
+    result = namespace[typename]
     
-    from sklearn.utils import check_random_state
-from sklearn.metrics.pairwise import pairwise_distances
-from sklearn.metrics.pairwise import pairwise_kernels
+    # The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+#
+# The short X.Y version.
+version = '2.1.3'
+# The full version, including alpha/beta/rc tags.
+release = '2.1.3'
     
-        # the training data folder must be passed as first argument
-    movie_reviews_data_folder = sys.argv[1]
-    dataset = load_files(movie_reviews_data_folder, shuffle=False)
-    print('n_samples: %d' % len(dataset.data))
     
-    plots = []
-names = []
-for score_func in score_funcs:
-    print('Computing %s for %d values of n_clusters and n_samples=%d'
-          % (score_func.__name__, len(n_clusters_range), n_samples))
+  def MarkResponseHandled( self ):
+    self._handled_tick = self._parse_tick
     
-            self.concurrent -= 1
-        return ''
+        if completed_item[ 'user_data' ]:
+      completions = self.RawResponse()[ 'completions' ]
+      return [ completions[ int( completed_item[ 'user_data' ] ) ] ]
     
-    # Scrapy version
-import pkgutil
-__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
-version_info = tuple(int(v) if v.isdigit() else v
-                     for v in __version__.split('.'))
-del pkgutil
+      # We don't want the event to actually be sent to the server, just have it
+  # return success
+  with patch( 'ycm.client.event_notification.EventNotification.'
+              'PostDataToHandlerAsync',
+              return_value = MagicMock( return_value=True ) ):
     
-            try:
-            self.max_bound = int(self.args[2])
-        except IndexError:
-            self.max_bound = float('inf')
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-        def download_request(self, request, spider):
-        p = urlparse_cached(request)
-        scheme = 'https' if request.meta.get('is_secure') else 'http'
-        bucket = p.hostname
-        path = p.path + '?' + p.query if p.query else p.path
-        url = '%s://%s.s3.amazonaws.com%s' % (scheme, bucket, path)
-        if self.anon:
-            request = request.replace(url=url)
-        elif self._signer is not None:
-            import botocore.awsrequest
-            awsrequest = botocore.awsrequest.AWSRequest(
-                method=request.method,
-                url='%s://s3.amazonaws.com/%s%s' % (scheme, bucket, path),
-                headers=request.headers.to_unicode_dict(),
-                data=request.body)
-            self._signer.add_auth(awsrequest)
-            request = request.replace(
-                url=url, headers=awsrequest.headers.items())
-        else:
-            signed_headers = self.conn.make_request(
-                    method=request.method,
-                    bucket=bucket,
-                    key=unquote(p.path),
-                    query_args=unquote(p.query),
-                    headers=request.headers,
-                    data=request.body)
-            request = request.replace(url=url, headers=signed_headers)
-        return self._download_http(request, spider)
-
+    from ycm.tests import YouCompleteMeInstance
     
-            # XXX: Google parses at least first 100k bytes; scrapy's redirect
-        # middleware parses first 4k. 4k turns out to be insufficient
-        # for this middleware, and parsing 100k could be slow.
-        # We use something in between (32K) by default.
-        self.lookup_bytes = settings.getint('AJAXCRAWL_MAXSIZE', 32768)
     
-        def __init__(self):
-        self._formats = {
-            'tar': self._is_tar,
-            'zip': self._is_zip,
-            'gz': self._is_gzip,
-            'bz2': self._is_bzip2
-        }
+  def _CloseLogfile( self, logfile ):
+    vimsupport.CloseBuffersForFilename( logfile )
     
-        def process_request(self, request, spider):
-        if self._timeout:
-            request.meta.setdefault('download_timeout', self._timeout)
+    
+def FormatDebugInfoResponse_ExtraConfFoundButNotLoaded_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'extra_conf' ].update( {
+    'is_loaded': False,
+    'path': '/path/to/extra/conf'
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Extra configuration file found but not loaded\n'
+      'Extra configuration path: /path/to/extra/conf\n'
+    )
+  )
