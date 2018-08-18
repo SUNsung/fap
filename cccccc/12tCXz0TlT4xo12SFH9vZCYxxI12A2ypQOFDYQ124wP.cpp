@@ -1,427 +1,395 @@
 
         
-            http://www.apache.org/licenses/LICENSE-2.0
+        Base::Base(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+	   const std::string& extension_id)
+    : extension_id_(extension_id),
+      id_(id),
+      delay_destruction_(false),
+      pending_destruction_(false),
+      object_manager_(object_manager) {
+}
     
-      // Publish metadata about the debugged Session::Run() call.
-  //
-  // See the doc string of DebuggerStateInterface::PublishDebugMetadata() for
-  // details.
-  Status PublishDebugMetadata(const int64 global_step,
-                              const int64 session_run_count,
-                              const int64 executor_step_count,
-                              const std::vector<string>& input_names,
-                              const std::vector<string>& output_names,
-                              const std::vector<string>& target_names) override;
+    v8::Handle<v8::Value> DeallocateObject(int routing_id,
+                                       int object_id) {
+  RenderThread::Get()->Send(new ShellViewHostMsg_Deallocate_Object(
+      routing_id, object_id));
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  return v8::Undefined(isolate);
+}
     
-      void Compute(OpKernelContext* context) override {
-    // Get and verify the input data.
-    OP_REQUIRES(
-        context, context->num_inputs() == 1,
-        errors::InvalidArgument('EncodeAudio requires exactly one input.'));
-    const Tensor& contents = context->input(0);
-    OP_REQUIRES(context, TensorShapeUtils::IsMatrix(contents.shape()),
-                errors::InvalidArgument(
-                    'sampled_audio must be a rank 2 tensor but got shape ',
-                    contents.shape().DebugString()));
-    OP_REQUIRES(
-        context, contents.NumElements() <= std::numeric_limits<int32>::max(),
-        errors::InvalidArgument(
-            'sampled_audio cannot have more than 2^31 entries. Shape = ',
-            contents.shape().DebugString()));
+    namespace remote {
     }
     
-    #include 'tensorflow/core/kernels/cwise_ops_gpu_common.cu.h'
-    
-    void leveldb_compact_range(
-    leveldb_t* db,
-    const char* start_key, size_t start_key_len,
-    const char* limit_key, size_t limit_key_len) {
-  Slice a, b;
-  db->rep->CompactRange(
-      // Pass NULL Slice if corresponding 'const char*' is NULL
-      (start_key ? (a = Slice(start_key, start_key_len), &a) : NULL),
-      (limit_key ? (b = Slice(limit_key, limit_key_len), &b) : NULL));
+    Menu::Menu(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+           const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
+  Create(option);
 }
     
+      GtkRequisition menu_req;
+  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
+  GdkScreen* screen;
+  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
+  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
     
-    {}  // namespace leveldb
+     protected:
+  ~NwClipboardSetListSyncFunction() override;
     
-    static std::string IKey(const std::string& user_key,
-                        uint64_t seq,
-                        ValueType vt) {
-  std::string encoded;
-  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
-  return encoded;
-}
+     protected:
+  ResponseAction Run() override;
+  ~NwObjCallObjectMethodAsyncFunction() override;
     
-    Status DumpFile(Env* env, const std::string& fname, WritableFile* dst) {
-  FileType ftype;
-  if (!GuessType(fname, &ftype)) {
-    return Status::InvalidArgument(fname + ': unknown file type');
-  }
-  switch (ftype) {
-    case kLogFile:         return DumpLog(env, fname, dst);
-    case kDescriptorFile:  return DumpDescriptor(env, fname, dst);
-    case kTableFile:       return DumpTable(env, fname, dst);
-    default:
-      break;
-  }
-  return Status::InvalidArgument(fname + ': not a dump-able file type');
-}
-    
-    std::string InfoLogFileName(const std::string& dbname) {
-  return dbname + '/LOG';
-}
-    
-    // Return the name of the current file.  This file contains the name
-// of the current manifest file.  The result will be prefixed with
-// 'dbname'.
-extern std::string CurrentFileName(const std::string& dbname);
-    
-      fname = CurrentFileName('foo');
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(0, number);
-  ASSERT_EQ(kCurrentFile, type);
-    
-    namespace leveldb {
+    void Classifier::Preprocess(const cv::Mat& img,
+                            std::vector<cv::Mat>* input_channels) {
+  /* Convert the input image to the input image format of the network. */
+  cv::Mat sample;
+  if (img.channels() == 3 && num_channels_ == 1)
+    cv::cvtColor(img, sample, cv::COLOR_BGR2GRAY);
+  else if (img.channels() == 4 && num_channels_ == 1)
+    cv::cvtColor(img, sample, cv::COLOR_BGRA2GRAY);
+  else if (img.channels() == 4 && num_channels_ == 3)
+    cv::cvtColor(img, sample, cv::COLOR_BGRA2BGR);
+  else if (img.channels() == 1 && num_channels_ == 3)
+    cv::cvtColor(img, sample, cv::COLOR_GRAY2BGR);
+  else
+    sample = img;
     }
-    
-    #endif  // STORAGE_LEVELDB_INCLUDE_DUMPFILE_H_
-
-    
-    #endif
-
-    
-    inline bool is_smaller(const std::pair<int, float>& p1, const std::pair<int, float>& p2)
-{
-    return p1.second < p2.second;
-}
-    
-    #include 'test_precomp.hpp'
-    
-    namespace cv
-{
-    }
-    
-    #ifndef GL_NV_vdpau_interop
-    typedef GLintptr GLvdpauSurfaceNV;
-#endif
-    
-    #if defined(__linux__)
-    #include <dlfcn.h>
-    #include <stdio.h>
-    
-    static void* openclamdfft_check_fn(int ID)
-{
-    assert(ID >= 0 && ID < (int)(sizeof(openclamdfft_fn)/sizeof(openclamdfft_fn[0])));
-    const struct DynamicFnEntry* e = openclamdfft_fn[ID];
-    void* func = CV_CL_GET_PROC_ADDRESS(e->fnName);
-    if (!func)
-    {
-        throw cv::Exception(cv::Error::OpenCLApiCallError,
-                cv::format('OpenCL AMD FFT function is not available: [%s]', e->fnName),
-                CV_Func, __FILE__, __LINE__);
-    }
-    *(e->ppFn) = func;
-    return func;
-}
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
-    
-    #else
-    
-    /*! \file silk_Inlines.h
- *  \brief silk_Inlines.h defines OPUS_INLINE signal processing functions.
- */
     
     
     {
-    {}  // namespace log
-}  // namespace leveldb
-    
-    class VersionEditTest { };
-    
-    TEST(MemEnvTest, Misc) {
-  std::string test_dir;
-  ASSERT_OK(env_->GetTestDirectory(&test_dir));
-  ASSERT_TRUE(!test_dir.empty());
-    }
-    
-    void BlockBuilder::Add(const Slice& key, const Slice& value) {
-  Slice last_key_piece(last_key_);
-  assert(!finished_);
-  assert(counter_ <= options_->block_restart_interval);
-  assert(buffer_.empty() // No values yet?
-         || options_->comparator->Compare(key, last_key_piece) > 0);
-  size_t shared = 0;
-  if (counter_ < options_->block_restart_interval) {
-    // See how much sharing to do with previous string
-    const size_t min_length = std::min(last_key_piece.size(), key.size());
-    while ((shared < min_length) && (last_key_piece[shared] == key[shared])) {
-      shared++;
-    }
-  } else {
-    // Restart compression
-    restarts_.push_back(buffer_.size());
-    counter_ = 0;
-  }
-  const size_t non_shared = key.size() - shared;
-    }
-    
-    
-    {  // No copying allowed
-  FilterBlockBuilder(const FilterBlockBuilder&);
-  void operator=(const FilterBlockBuilder&);
-};
-    
-    uint32_t Hash(const char* data, size_t n, uint32_t seed) {
-  // Similar to murmur hash
-  const uint32_t m = 0xc6a4a793;
-  const uint32_t r = 24;
-  const char* limit = data + n;
-  uint32_t h = seed ^ (n * m);
-    }
-    
-    #ifndef STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
-#define STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
-    
-    // A very simple random number generator.  Not especially good at
-// generating truly random bits, but good enough for our needs in this
-// package.
-class Random {
- private:
-  uint32_t seed_;
- public:
-  explicit Random(uint32_t s) : seed_(s & 0x7fffffffu) {
-    // Avoid bad seeds.
-    if (seed_ == 0 || seed_ == 2147483647L) {
-      seed_ = 1;
+    {    if (++count % 1000 == 0) {
+      txn->Commit();
     }
   }
-  uint32_t Next() {
-    static const uint32_t M = 2147483647L;   // 2^31-1
-    static const uint64_t A = 16807;  // bits 14, 8, 7, 5, 2, 1, 0
-    // We are computing
-    //       seed_ = (seed_ * A) % M,    where M = 2^31-1
-    //
-    // seed_ must not be zero or M, or else all subsequent computed values
-    // will be zero or M respectively.  For all other values, seed_ will end
-    // up cycling through every number in [1,M-1]
-    uint64_t product = seed_ * A;
-    }
-    }
-    
-    
-    {  vault_.creationOrder_.wlock()->push_back(type());
-}
-    
-      BlockingQueueAddResult addWithPriority(T item, int8_t priority) override {
-    int mid = getNumPriorities() / 2;
-    size_t queue = priority < 0
-        ? std::max(0, mid + priority)
-        : std::min(getNumPriorities() - 1, mid + priority);
-    CHECK_LT(queue, queues_.size());
-    switch (kBehavior) { // static
-      case QueueBehaviorIfFull::THROW:
-        if (!queues_[queue].write(std::move(item))) {
-          throw QueueFullException('LifoSemMPMCQueue full, can't add item');
-        }
-        break;
-      case QueueBehaviorIfFull::BLOCK:
-        queues_[queue].blockingWrite(std::move(item));
-        break;
-    }
-    return sem_.post();
+  // write the last batch
+  if (count % 1000 != 0) {
+      txn->Commit();
   }
-    
-    #if FOLLY_USE_SYMBOLIZER
-#include <folly/experimental/symbolizer/SignalHandler.h> // @manual
-#endif
-#include <folly/portability/GFlags.h>
-    
-    
-    {
-    {    // If we were to just call _close on the descriptor, it would
-    // close the HANDLE, but it wouldn't free any of the resources
-    // associated to the SOCKET, and we can't call _close after
-    // calling closesocket, because closesocket has already closed
-    // the HANDLE, and _close would attempt to close the HANDLE
-    // again, resulting in a double free.
-    // We can however protect the HANDLE from actually being closed
-    // long enough to close the file descriptor, then close the
-    // socket itself.
-    constexpr DWORD protectFlag = HANDLE_FLAG_PROTECT_FROM_CLOSE;
-    DWORD handleFlags = 0;
-    if (!GetHandleInformation((HANDLE)h, &handleFlags)) {
-      return -1;
-    }
-    if (!SetHandleInformation((HANDLE)h, protectFlag, protectFlag)) {
-      return -1;
-    }
-    int c = 0;
-    __try {
-      // We expect this to fail. It still closes the file descriptor though.
-      c = _close(fh);
-      // We just have to catch the SEH exception that gets thrown when we do
-      // this with a debugger attached -_-....
-    } __except (
-        GetExceptionCode() == STATUS_HANDLE_NOT_CLOSABLE
-            ? EXCEPTION_CONTINUE_EXECUTION
-            : EXCEPTION_CONTINUE_SEARCH) {
-      // We told it to continue execution, so there's nothing here would
-      // be run anyways.
-    }
-    // We're at the core, we don't get the luxery of SCOPE_EXIT because
-    // of circular dependencies.
-    if (!SetHandleInformation((HANDLE)h, protectFlag, handleFlags)) {
-      return -1;
-    }
-    if (c != -1) {
-      return -1;
-    }
-    return closesocket(h);
-  }
-  return _close(fh);
+  LOG(INFO) << 'Processed ' << count << ' files.';
+  delete[] pixels;
+  db->Close();
 }
     
     /**
- *  Helper classes and functions
+ * @brief Index into the input blob along its first axis.
+ *
+ * This layer can be used to select, reorder, and even replicate examples in a
+ * batch.  The second blob is cast to int and treated as an index into the
+ * first axis of the first blob.
  */
-    
-      auto estimates = estimator.estimateQuantiles(
-      std::array<double, 5>{{.001, .01, .5, .99, .999}});
-    
-    
-    {    bool operator<(const Pipe& other) const {
-      return childFd < other.childFd;
+template <typename Dtype>
+class BatchReindexLayer : public Layer<Dtype> {
+ public:
+  explicit BatchReindexLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
-    bool operator==(const Pipe& other) const {
-      return childFd == other.childFd;
+    
+    #include 'caffe/layers/base_conv_layer.hpp'
+    
+    #include 'caffe/layers/neuron_layer.hpp'
+#include 'caffe/layers/sigmoid_layer.hpp'
+    
+    
+    {  /// when divided by UINT_MAX, the randomly generated values @f$u\sim U(0,1)@f$
+  Blob<unsigned int> rand_vec_;
+  /// the probability @f$ p @f$ of dropping any input
+  Dtype threshold_;
+  /// the scale for undropped inputs at train time @f$ 1 / (1 - p) @f$
+  Dtype scale_;
+  unsigned int uint_thres_;
+};
+    
+    
+    {  int                  image_width_;    //< Width of source pix_.
+  int                  image_height_;   //< Height of source pix_.
+  int                  pix_channels_;   //< Number of 8-bit channels in pix_.
+  int                  pix_wpl_;        //< Words per line of pix_.
+  // Limits of image rectangle to be processed.
+  int                  scale_;          //< Scale factor from original image.
+  int                  yres_;           //< y pixels/inch in source image.
+  int                  estimated_res_;  //< Resolution estimate from text size.
+  int                  rect_left_;
+  int                  rect_top_;
+  int                  rect_width_;
+  int                  rect_height_;
+};
+    
+    
+    {  low = 0;
+  if (fc.y () == 0) {
+    if (fc.x () >= 0)
+      dir = 0;
+    else
+      dir = MODULUS / 2;
+    return;
+  }
+  high = MODULUS;
+  do {
+    current = (high + low) / 2;
+    if (dirtab[current] * fc >= 0)
+      low = current;
+    else
+      high = current;
+  }
+  while (high - low > 1);
+  dir = low;
+}
+
+    
+      tesseract::ParagraphJustification justification() const {
+    return justification_;
+  }
+  int margin() const { return margin_; }
+  int first_indent() const { return first_indent_; }
+  int body_indent() const { return body_indent_; }
+  int tolerance() const { return tolerance_; }
+  bool is_flush() const {
+    return (justification_ == tesseract::JUSTIFICATION_LEFT ||
+            justification_ == tesseract::JUSTIFICATION_RIGHT) &&
+        abs(first_indent_ - body_indent_) <= tolerance_;
+  }
+    
+    namespace tesseract {
+/**********************************************************************
+ * main_setup
+ *
+ * Main for mithras demo program. Read the arguments and set up globals.
+ **********************************************************************/
     }
+    
+     public:
+  inline _ConstTessMemberResultCallback_2_0(const T* object, MemberSignature member, P1 p1, P2 p2)
+    : object_(object),
+      member_(member),      p1_(p1),      p2_(p2) { }
+    
+    // Helper to expand a box in one of the 4 directions by the given pad,
+// provided it does not expand into any cell with a zero noise density.
+// If that is not possible, try expanding all round by a small constant.
+static TBOX AttemptBoxExpansion(const TBOX& box, const IntGrid& noise_density,
+                                int pad) {
+  TBOX expanded_box(box);
+  expanded_box.set_right(box.right() + pad);
+  if (!noise_density.AnyZeroInRect(expanded_box))
+    return expanded_box;
+  expanded_box = box;
+  expanded_box.set_left(box.left() - pad);
+  if (!noise_density.AnyZeroInRect(expanded_box))
+    return expanded_box;
+  expanded_box = box;
+  expanded_box.set_top(box.top() + pad);
+  if (!noise_density.AnyZeroInRect(expanded_box))
+    return expanded_box;
+  expanded_box = box;
+  expanded_box.set_bottom(box.bottom() + pad);
+  if (!noise_density.AnyZeroInRect(expanded_box))
+    return expanded_box;
+  expanded_box = box;
+  expanded_box.pad(kNoisePadding, kNoisePadding);
+  if (!noise_density.AnyZeroInRect(expanded_box))
+    return expanded_box;
+  return box;
+}
+    
+    
+    {
+    {
+    {
+    {        // In addition to the same type, the next box must not be above the
+        // current box, nor (if image) too far below.
+        PolyBlockType type = part->type(), next_type = next_block_part->type();
+        if (ColPartition::TypesSimilar(type, next_type) &&
+            !part->IsLineType() && !next_block_part->IsLineType() &&
+            next_box.bottom() <= part_box.top() &&
+            (text_block || part_box.bottom() <= next_box.top()))
+          next_part = next_block_part;
+      }
+    } while (!part_it_.empty() && next_part != nullptr);
+    if (!text_block) {
+      TO_BLOCK* to_block = ColPartition::MakeBlock(bleft, tright,
+                                                   &block_parts, used_parts);
+      if (to_block != nullptr) {
+        TO_BLOCK_IT to_block_it(&to_blocks_);
+        to_block_it.add_to_end(to_block);
+        BLOCK_IT block_it(&completed_blocks_);
+        block_it.add_to_end(to_block->block);
+      }
+    } else {
+      // Further sub-divide text blocks where linespacing changes.
+      ColPartition::LineSpacingBlocks(bleft, tright, resolution, &block_parts,
+                                      used_parts,
+                                      &completed_blocks_, &to_blocks_);
+    }
+  }
+  part_it_.set_to_list(&part_set_);
+  latest_part_ = nullptr;
+  ASSERT_HOST(completed_blocks_.length() == to_blocks_.length());
+}
+    
+            // get data as long vectors
+        // ... why do I need to explicitly use operator T ()?
+        array_ref<msra::math::float4> us4(us.operator array_ref<msra::math::float4>());
+        array_ref<msra::math::float4> refs4(refs.operator array_ref<msra::math::float4>());
+    
+        if (!NodeNameExists(toName))
+    {
+        pToNode = pFromNode->Duplicate(toName, flags);
+        AddNodeToNet(pToNode);
+    }
+    else
+    {
+        // node already exists
+        pToNode = GetNodeFromName(toName);
+    }
+    
+        // find all the  BN nodes by evalOrder
+    std::vector<ComputationNodeBasePtr> bnNodes;
+    std::set<ComputationNodeBasePtr> bnNodesLogged; // (avoid double record of batch normalization nodes)
+    for (auto& evalNode : evalNodes)
+    {
+        for (auto& node : m_net->GetEvalOrder(evalNode))
+        {
+            let bnNode = dynamic_pointer_cast<BatchNormalizationNode<ElemType>>(node);
+            if (bnNode)
+            {
+                if (bnNodesLogged.insert(node).second)
+                {
+                    // reset the statistics states of bn nodes
+                    bnNode->ResetStatisticsState();
+                    bnNode->SetNormalizationTimeConstants(-1, bnNode->NormalizationTimeConstant(),
+                        0, bnNode->BlendTimeConstant());
+                    bnNodes.push_back(node);
+                    // add BN nodes into the evaluation group, then they will be added into root nodes when
+                    // the network re-compile
+                    m_net->AddToNodeGroup(L'evaluation', bnNode);
+                }
+            }
+        }
+    }
+    
+    // ---------------------------------------------------------------------------
+// latticesource -- manages loading of lattices for MMI (in pairs for numer and denom)
+// ---------------------------------------------------------------------------
+    
+    public:
+    // Method to setup the data for the reader
+    void SetData(std::map<std::wstring, std::vector<ElemType>*>* outputs, std::map<std::wstring, size_t>* dimensions)
+    {
+        m_outputs = outputs;
+        m_dimensions = dimensions;
+        m_currentRecord = 0;
+        m_recordCount = 0;
+        for (auto iter = outputs->begin(); iter != outputs->end(); ++iter)
+        {
+            // figure out the dimension of the data
+            const std::wstring& val = iter->first;
+            size_t count = (*outputs)[val]->size();
+    }
+    }
+    
+    
+    {// Enable LOG(CONSOLE) for print messages to console.
+#define LOG_CONSOLE ::xgboost::ConsoleLogger()
+// Enable LOG(TRACKER) for print messages to tracker
+#define LOG_TRACKER ::xgboost::TrackerLogger()
+}  // namespace xgboost.
+#endif  // XGBOOST_LOGGING_H_
+
+    
+    /*!
+ * \brief Whether always log console message with time.
+ *  It will display like, with timestamp appended to head of the message.
+ *  '[21:47:50] 6513x126 matrix with 143286 entries loaded from
+ * ../data/agaricus.txt.train'
+ */
+#ifndef XGBOOST_LOG_WITH_TIME
+#define XGBOOST_LOG_WITH_TIME 1
+#endif
+    
+    #include '../common/host_device_vector.h'
+    
+      for (auto alphabet_size : test_cases) {
+    for (int i = 0; i < repetitions; i++) {
+      std::vector<int> input(num_elements);
+      std::generate(input.begin(), input.end(),
+        [=]() { return rand() % alphabet_size; });
+      CompressedBufferWriter cbw(alphabet_size);
+    }
+    }
+    
+    class TLSConfigPlugin;
+    
+    
+    {  /// The observed uptime of the system at event time.
+  uint32_t uptime{0};
+};
+    
+      // The read call finished without reading the requested number of bytes.
+  if (total_read != length) {
+    return Status(1, 'Read incorrect number of bytes');
+  }
+    
+                ImGui::Text('PushItemWidth(GetContentRegionAvailWidth() * 0.5f)');
+            ImGui::SameLine(); ShowHelpMarker('Half of available width.\n(~ right-cursor_pos)\n(works within a column set)');
+            ImGui::PushItemWidth(ImGui::GetContentRegionAvailWidth() * 0.5f);
+            ImGui::DragFloat('float##3', &f);
+            ImGui::PopItemWidth();
+    
+    void ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow*, int button, int action, int /*mods*/)
+{
+    if (action == GLFW_PRESS && button >= 0 && button < IM_ARRAYSIZE(g_MouseJustPressed))
+        g_MouseJustPressed[button] = true;
+}
+    
+    
+    {    // Destroy SDL mouse cursors
+    for (ImGuiMouseCursor cursor_n = 0; cursor_n < ImGuiMouseCursor_COUNT; cursor_n++)
+        SDL_FreeCursor(g_MouseCursors[cursor_n]);
+    memset(g_MouseCursors, 0, sizeof(g_MouseCursors));
+}
+    
+    static void ImGui_ImplWin32_UpdateMousePos()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    }
+    
+    [[noreturn]] void singletonWarnDoubleRegistrationAndAbort(
+    const TypeDescriptor& type);
+    
+    /** Wide CAS.
+ */
+template <typename T, template <typename> class Atom = std::atomic>
+class HazptrWideCAS {
+  struct Node : public hazptr_obj_base<Node, Atom> {
+    T val_;
+    explicit Node(T v = {}) : val_(v) {}
+  };
+    }
+    
+    
+    {    queues_.reserve(capacities.size());
+    for (auto capacity : capacities) {
+      queues_.emplace_back(capacity);
+    }
+  }
+    
+    hazptr_tc* hazptr_tc_tls();
+void hazptr_tc_init(hazptr_tc& tc);
+void hazptr_tc_shutdown(hazptr_tc& tc);
+hazptr_rec* hazptr_tc_try_get();
+bool hazptr_tc_try_put(hazptr_rec* hprec);
+    
+      struct ControlBlock {
+    // Reader count in most significant 32 bits
+    // Value in least significant 32 bits
+    std::atomic<uint64_t> valueAndReaderCount{0};
   };
     
-    // A folly::Future-istic Barrier synchronization primitive
-//
-// The barrier is initialized with a count N.
-//
-// The first N-1 calls to wait() return uncompleted futures.
-//
-// The Nth call to wait() completes the previous N-1 futures successfully,
-// returns a future that is already completed successfully, and resets the
-// barrier; the barrier may be reused immediately, as soon as at least one
-// of the future completions has been observed.
-//
-// Of these N futures, exactly one is completed with true, while the others are
-// completed with false; it is unspecified which future completes with true.
-// (This may be used to elect a 'leader' among a group of threads.)
-//
-// If the barrier is destroyed, any futures already returned by wait() will
-// complete with an error.
-class Barrier {
- public:
-  explicit Barrier(uint32_t n);
-  ~Barrier();
-    }
     
-    
-    {
-    {
-    {} // namespace detail
-} // namespace f14
-} // namespace folly
-    
-      std::unique_ptr<AuthConfig> getUserDefinedAuthConfig() const;
-    
-    AbstractHttpServerResponseCommand::AbstractHttpServerResponseCommand(
-    cuid_t cuid, const std::shared_ptr<HttpServer>& httpServer,
-    DownloadEngine* e, const std::shared_ptr<SocketCore>& socket)
-    : Command(cuid),
-      e_(e),
-      socket_(socket),
-      httpServer_(httpServer),
-      readCheck_(false),
-      writeCheck_(true)
-{
-  setStatus(Command::STATUS_ONESHOT_REALTIME);
-  e_->addSocketForWriteCheck(socket_, this);
+    {  EXPECT_FALSE(folly::settings::resetToDefault('follytest_nonexisting'));
 }
-    
-    void AbstractOptionHandler::setCumulative(bool f)
-{
-  updateFlags(FLAG_CUMULATIVE, f);
-}
-    
-    class AbstractOptionHandler : public OptionHandler {
-protected:
-  PrefPtr pref_;
-    }
-    
-    class AbstractProxyResponseCommand : public AbstractCommand {
-private:
-  std::shared_ptr<HttpConnection> httpConnection_;
-    }
-    
-    namespace aria2 {
-    }
-    
-      void nextEvent();
-    
-    /*
- * C++ object wrapper.
- *
- * This is usually overlaid on a C struct whose first element is a
- * JNINativeInterface*.  We rely somewhat on compiler behavior.
- */
-struct _JNIEnv {
-    /* do not rename this; it does not seem to be entirely opaque */
-    const struct JNINativeInterface* functions;
-    }
-    
-    template <typename T, typename B>
-/* static */ inline std::string HybridClass<T, B>::JavaPart::get_instantiated_base_name() {
-  auto name = get_instantiated_java_descriptor();
-  return name.substr(1, name.size() - 2);
-}
-    
-    
-template<typename T>
-enable_if_t<IsPlainJniReference<T>(), alias_ref<T>> wrap_alias(T ref) noexcept;
-    
-    Config::~Config(void)
-{
-    YGConfigFree(m_config);
-}
-    
-        method(getAlignContent);
-    method(getAlignItems);
-    method(getAlignSelf);
-    method(getFlexDirection);
-    method(getFlexWrap);
-    method(getJustifyContent);
-    
-    namespace facebook {
-namespace alog {
-    }
-    }
-    
-    namespace facebook {
-    }
-    
-      static inline void refIfNecessary(T* ptr) {
-    if (ptr) {
-      ptr->ref();
-    }
-  }
-  static inline void unrefIfNecessary(T* ptr) {
-    if (ptr) {
-      ptr->unref();
-    }
-  }
