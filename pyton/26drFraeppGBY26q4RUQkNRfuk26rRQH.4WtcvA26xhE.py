@@ -1,192 +1,161 @@
 
         
-        with open('update/LATEST_VERSION', 'w') as f:
-    f.write(version)
-    
-    signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
-print('signature: ' + signature)
+            with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
     
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
-    
-    
-class TestSWFInterpreter(unittest.TestCase):
-    pass
-    
-            retval = subprocess.call(args)
-        if retval == 0:
-            fsize = os.path.getsize(encodeFilename(tmpfilename))
-            self.to_screen('\r[%s] %s bytes' % (args[0], fsize))
-            self.try_rename(tmpfilename, filename)
-            self._hook_progress({
-                'downloaded_bytes': fsize,
-                'total_bytes': fsize,
-                'filename': filename,
-                'status': 'finished',
-            })
-            return True
-        else:
-            self.to_stderr('\n')
-            self.report_error('%s exited with code %d' % (args[0], retval))
-            return False
-
-    
-        _TESTS = [{
-        'url': 'http://camwithher.tv/view_video.php?viewkey=6e9a24e2c0e842e1f177&page=&viewtype=&category=',
-        'info_dict': {
-            'id': '5644',
-            'ext': 'flv',
-            'title': 'Periscope Tease',
-            'description': 'In the clouds teasing on periscope to my favorite song',
-            'duration': 240,
-            'view_count': int,
-            'comment_count': int,
-            'uploader': 'MileenaK',
-            'upload_date': '20160322',
-        },
-        'params': {
-            'skip_download': True,
-        }
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?viewkey=6dfd8b7c97531a459937',
-        'only_matching': True,
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?page=&viewkey=6e9a24e2c0e842e1f177&viewtype=&category=',
-        'only_matching': True,
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?viewkey=b6c3b5bea9515d1a1fc4&page=&viewtype=&category=mv',
-        'only_matching': True,
-    }]
-    
-        s = TaggedJSONSerializer()
-    pytest.raises(KeyError, s.register, TagDict)
-    s.register(TagDict, force=True, index=0)
-    assert isinstance(s.tags[' d'], TagDict)
-    assert isinstance(s.order[0], TagDict)
-    
-            :param filename: the filename of the config.  This can either be an
-                         absolute filename or a filename relative to the
-                         root path.
-        :param silent: set to ``True`` if you want silent failure for missing
-                       files.
-    
-    from .globals import request
-    
-        def make_null_session(self, app):
-        '''Creates a null session which acts as a replacement object if the
-        real session support could not be loaded due to a configuration
-        error.  This mainly aids the user experience because the job of the
-        null session is to still support lookup without complaining but
-        modifications are answered with a helpful error message of what
-        failed.
-    
-            def __init__(self, name, doc=None):
-            self.name = name
-            self.__doc__ = doc
-        def _fail(self, *args, **kwargs):
-            raise RuntimeError('signalling support is unavailable '
-                               'because the blinker library is '
-                               'not installed.')
-        send = lambda *a, **kw: None
-        connect = disconnect = has_receivers_for = receivers_for = \
-            temporarily_connected_to = connected_to = _fail
-        del _fail
-    
-    
-def test_config_from_object():
-    app = flask.Flask(__name__)
-    app.config.from_object(__name__)
-    common_object_test(app)
-    
-    
-def test_logger_debug(app):
-    app.debug = True
-    assert app.logger.level == logging.DEBUG
-    assert app.logger.handlers == [default_handler]
-    
-    
-def _convert(value, T):
-    '''Convert value to given numeric type T.'''
-    if type(value) is T:
-        # This covers the cases where T is Fraction, or where value is
-        # a NAN or INF (Decimal or float).
-        return value
-    if issubclass(T, int) and value.denominator != 1:
-        T = float
-    try:
-        # FIXME: what do we do if this overflows?
-        return T(value)
-    except TypeError:
-        if issubclass(T, Decimal):
-            return T(value.numerator)/T(value.denominator)
-        else:
-            raise
-    
-        def discard(self, key):
-        '''If the keyed message exists, remove it.'''
-        try:
-            self.remove(key)
-        except KeyError:
-            pass
-    
-    # Other changes from the 2.x/3.1 nntplib:
-# - automatic querying of capabilities at connect
-# - New method NNTP.getcapabilities()
-# - New method NNTP.over()
-# - New helper function decode_header()
-# - NNTP.post() and NNTP.ihave() accept file objects, bytes-like objects and
-#   arbitrary iterables yielding lines.
-# - An extensive test suite :-)
-    
-            for func, args, expected in self.CALLS_POSARGS:
-            with self.subTest(func=func, args=args):
-                # kwargs=NULL
-                result = _testcapi.pyobject_fastcalldict(func, args, None)
-                self.check_result(result, expected)
-    
-        Note that not all entries are resources.  Specifically, directories are
-    not considered resources.  Use `is_resource()` on each entry returned here
-    to check if it is a resource or not.
-    '''
-    package = _get_package(package)
-    reader = _get_resource_reader(package)
-    if reader is not None:
-        return reader.contents()
-    # Is the package a namespace package?  By definition, namespace packages
-    # cannot have resources.  We could use _check_location() and catch the
-    # exception, but that's extra work, so just inline the check.
-    elif package.__spec__.origin is None or not package.__spec__.has_location:
-        return ()
+def assertRegexpMatches(self, text, regexp, msg=None):
+    if hasattr(self, 'assertRegexp'):
+        return self.assertRegexp(text, regexp, msg)
     else:
-        package_directory = Path(package.__spec__.origin).parent
-        return os.listdir(package_directory)
+        m = re.match(regexp, text)
+        if not m:
+            note = 'Regexp didn\'t match: %r not found' % (regexp)
+            if len(text) < 1000:
+                note += ' in %r' % text
+            if msg is None:
+                msg = note
+            else:
+                msg = note + ', ' + msg
+            self.assertTrue(m, msg)
     
-        def test_parent(self):
-        # Anchored
-        P = self.cls
-        p = P('z:a/b/c')
-        self.assertEqual(p.parent, P('z:a/b'))
-        self.assertEqual(p.parent.parent, P('z:a'))
-        self.assertEqual(p.parent.parent.parent, P('z:'))
-        self.assertEqual(p.parent.parent.parent.parent, P('z:'))
-        p = P('z:/a/b/c')
-        self.assertEqual(p.parent, P('z:/a/b'))
-        self.assertEqual(p.parent.parent, P('z:/a'))
-        self.assertEqual(p.parent.parent.parent, P('z:/'))
-        self.assertEqual(p.parent.parent.parent.parent, P('z:/'))
-        p = P('//a/b/c/d')
-        self.assertEqual(p.parent, P('//a/b/c'))
-        self.assertEqual(p.parent.parent, P('//a/b'))
-        self.assertEqual(p.parent.parent.parent, P('//a/b'))
+            formats = [
+            {
+                'format_id': f['type'],
+                'filesize': int(f['filesize']),
+                'url': f['url']
+            } for f in info['rfiles']
+        ]
+        self._sort_formats(formats)
     
-        def test_help_flag(self):
-        rc, out, err = assert_python_ok('-m', 'json.tool', '-h')
-        self.assertEqual(rc, 0)
-        self.assertTrue(out.startswith(b'usage: '))
-        self.assertEqual(err, b'')
+        self._source_dim = self._linked_feature_dims['sources']
+    self._target_dim = self._linked_feature_dims['targets']
+    
+      def testNormalFixedFeaturesAreDifferentiable(self):
+    component_spec = spec_pb2.ComponentSpec()
+    text_format.Parse('''
+        name: 'test'
+        network_unit {
+          registered_name: 'IdentityNetwork'
+        }
+        fixed_feature {
+          name: 'fixed' embedding_dim: 32 size: 1
+          pretrained_embedding_matrix { part {} }
+          vocab { part {} }
+        }
+        component_builder {
+          registered_name: 'bulk_component.BulkFeatureExtractorComponentBuilder'
+        }
+        ''', component_spec)
+    comp = bulk_component.BulkFeatureExtractorComponentBuilder(
+        self.master, component_spec)
+    
+      def testGraphConstructionWithSigmoidLoss(self):
+    component_spec = spec_pb2.ComponentSpec()
+    text_format.Parse('''
+        name: 'test'
+        network_unit {
+          registered_name: 'IdentityNetwork'
+        }
+        fixed_feature {
+          name: 'fixed' embedding_dim: 32 size: 1
+        }
+        component_builder {
+          registered_name: 'component.DynamicComponentBuilder'
+          parameters {
+            key: 'loss_function'
+            value: 'sigmoid_cross_entropy'
+          }
+        }
+        ''', component_spec)
+    comp = component.DynamicComponentBuilder(self.master, component_spec)
+    comp.build_greedy_training(self.master_state, self.network_states)
+    
+      # Compute matrices of 0/1 indicators for valid arcs as the outer product of
+  # the valid token indicator vector with itself.
+  valid_arc_bxmxm = tf.matmul(
+      tf.expand_dims(valid_token_bxm, 2), tf.expand_dims(valid_token_bxm, 1))
+    
+        # Restore the graph from the checkpoint into a new Graph object.
+    restored_graph = tf.Graph()
+    restoration_config = tf.ConfigProto(
+        log_device_placement=False,
+        intra_op_parallelism_threads=10,
+        inter_op_parallelism_threads=10)
+    
+      Args:
+    hyperparams: a GridPoint proto containing optimizer spec, particularly
+      learning_method to determine optimizer class to use.
+    learning_rate_var: a `tf.Tensor`, the learning rate.
+    step_var: a `tf.Variable`, global training step.
+    
+      def testCreateLexiconContext(self):
+    expected_context = task_spec_pb2.TaskSpec()
+    text_format.Parse(_EXPECTED_CONTEXT, expected_context)
+    self.assertProtoEquals(
+        lexicon.create_lexicon_context('/tmp'), expected_context)
+    
+        return inner
+    
+                sock2.connect(address)
+            sock2.sendall(second_request)
+            sock2.close()
+    
+    
+class TooManyRedirects(RequestException):
+    '''Too many redirects.'''
+    
+        from urllib3.packages.ordered_dict import OrderedDict
+    
+            # .netrc might have more auth for us on our new host.
+        new_auth = get_netrc_auth(url) if self.trust_env else None
+        if new_auth is not None:
+            prepared_request.prepare_auth(new_auth)
+    
+        def test_conflicting_post_params(self, httpbin):
+        url = httpbin('post')
+        with open('Pipfile') as f:
+            pytest.raises(ValueError, 'requests.post(url, data='[{\'some\': \'data\'}]', files={'some': f})')
+            pytest.raises(ValueError, 'requests.post(url, data=u('[{\'some\': \'data\'}]'), files={'some': f})')
+    
+    
+class ExponentialBackoffStrategyTestCase(unittest.TestCase):
+    def test_no_retries(self):
+        strategy = _exponential_backoff(retries=0)
+        result = list(strategy())
+        self.assertEquals(result, [], 'list should be empty')
+    
+        def test(self):
+        ajvars = AnsibleJ2Vars(None, None)
+        print(ajvars)
+    
+    
+class ArgumentSpec(object):
+    def __init__(self):
+        self.supports_check_mode = True
+        argument_spec = dict(
+            name=dict(required=True),
+            gateway=dict(),
+            network=dict(),
+            description=dict(),
+            partition=dict(
+                default='Common',
+                fallback=(env_fallback, ['F5_PARTITION'])
+            ),
+            state=dict(
+                default='present',
+                choices=['present', 'absent']
+            )
+        )
+        self.argument_spec = {}
+        self.argument_spec.update(f5_argument_spec)
+        self.argument_spec.update(argument_spec)
+    
+        fixture_data[path] = data
+    return data
+    
+        filenames = []
+    for (dirpath, dnames, fnames) in os.walk(path):
+        for fname in fnames:
+            if fname.endswith('.md'):
+                filenames.append(os.sep.join([dirpath, fname]))
