@@ -1,181 +1,123 @@
 
         
-            before_render_template.send(app, template=template, context=context)
-    rv = template.render(context)
-    template_rendered.send(app, template=template, context=context)
-    return rv
-    
-                def post(self):
-                session['counter'] = session.get('counter', 0) + 1
-                return 'OK'
-    
-        sys.meta_path.append(Loader())
-    request.addfinalizer(sys.meta_path.pop)
-    
-        # This test only works on CPython 2.7.
-    if sys.version_info >= (2, 7) and \
-            not hasattr(sys, 'pypy_translation_info'):
-        with assert_no_leak():
-            for x in range(10):
-                fire()
-    
-            assert calls == ['before-signal', 'before-handler', 'handler',
-                         'after-handler', 'after-signal']
-    finally:
-        flask.request_started.disconnect(before_request_signal, app)
-        flask.request_finished.disconnect(after_request_signal, app)
-    
-            with server as (host, port):
-            server_url = 'http://{0}:{1}'.format(host, port)
-            for _ in range(requests_to_handle):
-                r = requests.get(server_url)
-                assert r.status_code == 200
+                cert = ssl_sock.get_peer_certificate()
+        if not cert:
+            raise socket.error('certificate is none')
     
     
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
-    '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
+def naughty_strings(filepath=FILEPATH):
+    '''Get the list of naughty_strings.
     
-        def lower_items(self):
-        '''Like iteritems(), but with all lowercase keys.'''
-        return (
-            (lowerkey, keyval[1])
-            for (lowerkey, keyval)
-            in self._store.items()
-        )
+            # variable weirdness
+        parsed = loads('directive $var;')
+        self.assertEqual(parsed, [['directive', '$var']])
+        self.assertRaises(ParseException, loads, 'server {server_name test.com};')
+        self.assertRaises(ParseException, loads, 'directive ${var};')
+        self.assertEqual(loads('blag${dfgdfg};'), [['blag${dfgdfg}']])
+        self.assertRaises(ParseException, loads, 'blag${dfgdf{g};')
+    }
     
-        # Informational.
-    100: ('continue',),
-    101: ('switching_protocols',),
-    102: ('processing',),
-    103: ('checkpoint',),
-    122: ('uri_too_long', 'request_uri_too_long'),
-    200: ('ok', 'okay', 'all_ok', 'all_okay', 'all_good', '\\o/', '✓'),
-    201: ('created',),
-    202: ('accepted',),
-    203: ('non_authoritative_info', 'non_authoritative_information'),
-    204: ('no_content',),
-    205: ('reset_content', 'reset'),
-    206: ('partial_content', 'partial'),
-    207: ('multi_status', 'multiple_status', 'multi_stati', 'multiple_stati'),
-    208: ('already_reported',),
-    226: ('im_used',),
     
-        def test_headers_on_session_with_None_are_not_sent(self, httpbin):
-        '''Do not send headers in Session.headers with None values.'''
-        ses = requests.Session()
-        ses.headers['Accept-Encoding'] = None
-        req = requests.Request('GET', httpbin('get'))
-        prep = ses.prepare_request(req)
-        assert 'Accept-Encoding' not in prep.headers
+class PollErrorTest(unittest.TestCase):
+    '''Tests for acme.errors.PollError.'''
     
-        author = proj_info['author'],
-    author_email = proj_info['author_email'],
-    url = proj_info['url'],
-    license = proj_info['license'],
-    
-    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads CBS videos by URL.
-    '''
+    __all__ = ['cbs_download']
     
     #----------------------------------------------------------------------
-def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    '''wrapper'''
-    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
-    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
-    hostname = urlparse(url).hostname
-    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
-        return False
-    upid = match1(url, r'.+/content/(\w+)')
+def makeMimi(upid):
+    '''From http://cdn37.atwikiimg.com/sitescript/pub/dksitescript/FC2.site.js
+    Also com.hps.util.fc2.FC2EncrptUtil.makeMimiLocal
+    L110'''
+    strSeed = 'gGddgPfeaf_gzyr'
+    prehash = upid + '_' + strSeed
+    return md5(prehash.encode('utf-8')).hexdigest()
     
     
-def huaban_download_board(url, output_dir, **kwargs):
-    kwargs['merge'] = False
-    board = extract_board_data(url)
-    output_dir = os.path.join(output_dir, board.title)
-    print_info(site_info, board.title, 'jpg', float('Inf'))
-    for pin in board.pins:
-        download_urls([pin.url], pin.id, pin.ext, float('Inf'),
-                      output_dir=output_dir, faker=True, **kwargs)
+download = huaban_download
+download_playlist = playlist_not_supported('huaban')
+
     
-    def kuwo_playlist_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    html=get_content(url)
-    matched=set(re.compile('yinyue/(\d+)').findall(html))#reduce duplicated
-    for rid in matched:
-        kuwo_download_by_rid(rid,output_dir,merge,info_only)
+    __all__ = ['kuwo_download']
     
-        t = r1(r'type=(\w+)', flashvars)
-    id = r1(r'vid=([^']+)', flashvars)
-    if t == 'youku':
-        youku_download_by_vid(id, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
-    elif t == 'tudou':
-        tudou_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    elif t == 'sina' or t == 'video':
-        fake_headers['Referer'] = url
-        url = 'http://www.miomio.tv/mioplayer/mioplayerconfigfiles/sina.php?vid=' + id
-        xml_data = get_content(url, headers=fake_headers, decoded=True)
-        url_list = sina_xml_to_url_list(xml_data)
+    from xml.dom.minidom import parseString
     
-        mediatype, ext, size = 'mp4', 'mp4', 0
-    print_info(site_info, title, mediatype, size)
-    #
-    # rtmpdump  -r 'rtmpe://cp30865.edgefcs.net/ondemand/mtviestor/_!/intlod/MTVInternational/MBUS/GeoLocals/00JP/VIAMTVI/PYC/201304/7122HVAQ4/00JPVIAMTVIPYC7122HVAQ4_640x_360_1200_m30.mp4' -o 'title.mp4' --swfVfy http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf
-    #
-    # because rtmpdump is unstable,may try serveral times
-    #
-    if not info_only:
-        # import pdb
-        # pdb.set_trace()
-        download_rtmp_url(url=url, title=title, ext=ext, params={
-                          '--swfVfy': 'http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf'}, output_dir=output_dir)
+    import os
+import json
+import click
     
-        def prepare(self, **kwargs):
-        # scrape the html
-        content = get_content(self.url)
+        def test_sequential_execution(self):
+        self.command_stack[0].execute()
+        output_after_first_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_first_execution[0], 'bar.txt')
+        self.command_stack[1].execute()
+        output_after_second_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_second_execution[0], 'baz.txt')
     
-        def append(self, full, file, logical):
-        if os.path.isdir(full):
-            return
-        if not logical:
-            logical = self.gen_id(file)
-        self.index += 1
-        self.files.append((full, logical))
-        return self.index, logical
+        def test_sales_manager_shall_not_respond_through_proxy_with_delay(cls):
+        cls.ntp.busy = 'Yes'
+        start_time = time()
+        cls.ntp.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+This Sales Manager will not talk to you whether he/she is busy or not\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+
     
-            tester('ntpath.join('a/b', '/x/y')', '/x/y')
-        tester('ntpath.join('/a/b', '/x/y')', '/x/y')
-        tester('ntpath.join('c:', '/x/y')', 'c:/x/y')
-        tester('ntpath.join('c:a/b', '/x/y')', 'c:/x/y')
-        tester('ntpath.join('c:/', '/x/y')', 'c:/x/y')
-        tester('ntpath.join('c:/a/b', '/x/y')', 'c:/x/y')
-        tester('ntpath.join('//computer/share', '/x/y')', '//computer/share/x/y')
-        tester('ntpath.join('//computer/share/', '/x/y')', '//computer/share/x/y')
-        tester('ntpath.join('//computer/share/a', '/x/y')', '//computer/share/x/y')
-    
-        def _make_self_pipe(self):
-        # A self-socket, really. :-)
-        self._ssock, self._csock = socket.socketpair()
-        self._ssock.setblocking(False)
-        self._csock.setblocking(False)
-        self._internal_fds += 1
-        self.call_soon(self._loop_self_reading)
-    
-                class X(Checker):
-                pass
-            for attr, obj in env.items():
-                setattr(X, attr, obj)
-            setattr(X, name, ErrDescr())
-            self.assertRaises(MyException, runner, X())
-    
-    This converts ``[x for x in 1, 2]`` to ``[x for x in (1, 2)]``.'''
+    from __future__ import print_function
     
     
-def extract_zip(externals_dir, zip_path):
-    with zipfile.ZipFile(os.fspath(zip_path)) as zf:
-        zf.extractall(os.fspath(externals_dir))
-        return externals_dir / zf.namelist()[0].split('/')[0]
+def main():
+    message_center = Provider()
+    
+        class ClassRegistree(BaseRegisteredClass):
+    
+        def test_display_current_time_at_midnight(self):
+        '''
+        Would almost always fail (despite of right at/after midnight) if
+        untestable production code would have been used.
+        '''
+        time_provider_stub = MidnightTimeProvider()
+        class_under_test = TimeDisplay()
+        class_under_test.set_time_provider(time_provider_stub)
+        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+    
+    print('Counting to five...')
+for number in count_to_five():
+    print(number, end=' ')
+    
+        def __init__(self, radio):
+        self.radio = radio
+        self.stations = ['1250', '1380', '1510']
+        self.pos = 0
+        self.name = 'AM'
+    
+    # Note: This isn't exactly the same as a 'percent match'. The scale isn't linear. But you can assume that images with a
+# smaller distance are more similar to each other than ones with a larger distance.
+    
+        # Every 128 frames (the default batch size), batch process the list of frames to find faces
+    if len(frames) == 128:
+        batch_of_face_locations = face_recognition.batch_face_locations(frames, number_of_times_to_upsample=0)
+    
+        # Only process every other frame of video to save time
+    if process_this_frame:
+        # Find all the faces and face encodings in the current frame of video
+        face_locations = face_recognition.face_locations(rgb_small_frame)
+        face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+    
+        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
+    context = multiprocessing
+    if 'forkserver' in multiprocessing.get_all_start_methods():
+        context = multiprocessing.get_context('forkserver')
+    
+        # Print the location of each facial feature in this image
+    for facial_feature in face_landmarks.keys():
+        print('The {} in this face has the following points: {}'.format(facial_feature, face_landmarks[facial_feature]))
+    
+        def test_fd_command_line_interface_folder(self):
+        runner = CliRunner()
+        image_file = os.path.join(os.path.dirname(__file__), 'test_images')
