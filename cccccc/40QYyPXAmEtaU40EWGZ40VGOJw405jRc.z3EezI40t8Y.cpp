@@ -1,101 +1,83 @@
 
         
-        struct Options;
-struct FileMetaData;
+        #pragma mark - NSNumber verification
     
-    void leveldb_writebatch_iterate(
-    leveldb_writebatch_t* b,
-    void* state,
-    void (*put)(void*, const char* k, size_t klen, const char* v, size_t vlen),
-    void (*deleted)(void*, const char* k, size_t klen)) {
-  class H : public WriteBatch::Handler {
-   public:
-    void* state_;
-    void (*put_)(void*, const char* k, size_t klen, const char* v, size_t vlen);
-    void (*deleted_)(void*, const char* k, size_t klen);
-    virtual void Put(const Slice& key, const Slice& value) {
-      (*put_)(state_, key.data(), key.size(), value.data(), value.size());
-    }
-    virtual void Delete(const Slice& key) {
-      (*deleted_)(state_, key.data(), key.size());
-    }
-  };
-  H handler;
-  handler.state_ = state;
-  handler.put_ = put;
-  handler.deleted_ = deleted;
-  b->rep.Iterate(&handler);
-}
+    /// Attempt to get a doc comment from the declaration, or other inherited
+/// sources, like from base classes or protocols.
+Optional<DocComment *> getCascadingDocComment(swift::markup::MarkupContext &MC,
+                                             const Decl *D);
     
     
-    {}  // namespace leveldb
+    {
+    {} // end namespace index
+} // end namespace swift
     
-    bool GuessType(const std::string& fname, FileType* type) {
-  size_t pos = fname.rfind('/');
-  std::string basename;
-  if (pos == std::string::npos) {
-    basename = fname;
-  } else {
-    basename = std::string(fname.data() + pos + 1, fname.size() - pos - 1);
-  }
-  uint64_t ignored;
-  return ParseFileName(basename, &ignored, type);
-}
+    class AbstractionPattern;
+class Initialization;
+class RValue;
+class SILGenFunction;
+class SGFContext;
+class CalleeTypeInfo;
     
-      fname = DescriptorFileName('bar', 100);
-  ASSERT_EQ('bar/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(100, number);
-  ASSERT_EQ(kDescriptorFile, type);
+      StringRef getRuntimeLibPath() const { return RuntimeLibPath; }
     
-        const char* benchmarks = FLAGS_benchmarks;
-    while (benchmarks != NULL) {
-      const char* sep = strchr(benchmarks, ',');
-      Slice name;
-      if (sep == NULL) {
-        name = benchmarks;
-        benchmarks = NULL;
-      } else {
-        name = Slice(benchmarks, sep - benchmarks);
-        benchmarks = sep + 1;
-      }
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
+IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
+
+    
+    int main(int, char**)
+{
+    // Setup Allegro
+    al_init();
+    al_install_keyboard();
+    al_install_mouse();
+    al_init_primitives_addon();
+    al_set_new_display_flags(ALLEGRO_RESIZABLE);
+    ALLEGRO_DISPLAY* display = al_create_display(1280, 720);
+    al_set_window_title(display, 'Dear ImGui Allegro 5 example');
+    ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
+    al_register_event_source(queue, al_get_display_event_source(display));
+    al_register_event_source(queue, al_get_keyboard_event_source());
+    al_register_event_source(queue, al_get_mouse_event_source());
     }
     
     
-    {    done_++;
-    if (done_ >= next_report_) {
-      if      (next_report_ < 1000)   next_report_ += 100;
-      else if (next_report_ < 5000)   next_report_ += 500;
-      else if (next_report_ < 10000)  next_report_ += 1000;
-      else if (next_report_ < 50000)  next_report_ += 5000;
-      else if (next_report_ < 100000) next_report_ += 10000;
-      else if (next_report_ < 500000) next_report_ += 50000;
-      else                            next_report_ += 100000;
-      fprintf(stderr, '... finished %d ops%30s\r', done_, '');
-      fflush(stderr);
-    }
-  }
-    
-    // A Comparator object provides a total order across slices that are
-// used as keys in an sstable or a database.  A Comparator implementation
-// must be thread-safe since leveldb may invoke its methods concurrently
-// from multiple threads.
-class Comparator {
- public:
-  virtual ~Comparator();
+    {        // If a number >1 of GPUs got reported, you should find the best fit GPU for your purpose
+        // e.g. VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU if available, or with the greatest memory available, etc.
+        // for sake of simplicity we'll just take the first one, assuming it has a graphics queue family.
+        g_PhysicalDevice = gpus[0];
+        free(gpus);
     }
     
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
     
-    {  return false;
-}
+      void setDefaultCred(std::string user, std::string password);
     
-    Type typeAddO(Type t1, Type t2) {
-  if (auto t = eval_const(t1, t2, cellAddO))          return *t;
-  if (t1.subtypeOf(BInt) && t2.subtypeOf(BInt))       return TNum;
-  if (auto t = usual_arith_conversions(t1, t2))       return *t;
-  if (t1.subtypeOf(BArr) && t2.subtypeOf(BArr))       return TArr;
-  if (t1.subtypeOf(BVec) && t2.subtypeOf(BVec))       return TVec;
-  if (t1.subtypeOf(BDict) && t2.subtypeOf(BDict))     return TDict;
-  if (t1.subtypeOf(BKeyset) && t2.subtypeOf(BKeyset)) return TKeyset;
-  return TInitCell;
-}
+      virtual void validate() CXX11_OVERRIDE;
+    
+    bool AbstractProxyRequestCommand::executeInternal()
+{
+  // socket->setBlockingMode();
+  if (httpConnection_->sendBufferIsEmpty()) {
+    auto httpRequest = make_unique<HttpRequest>();
+    httpRequest->setUserAgent(getOption()->get(PREF_USER_AGENT));
+    httpRequest->setRequest(getRequest());
+    httpRequest->setProxyRequest(proxyRequest_);
+    }
+    }
+    
+    public:
+  AdaptiveFileAllocationIterator(BinaryStream* stream, int64_t offset,
+                                 int64_t totalLength);
+    
+    namespace aria2 {
+    }
