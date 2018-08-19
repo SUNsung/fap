@@ -1,168 +1,226 @@
 
         
-          static int getUID() {
-    static int id = 0;
-    return ++id;
-  }
+        namespace tensorflow {
+    }
     
-    void MenuItem::Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh) {
-  if (method == 'SetLabel') {
-    std::string label;
-    arguments.GetString(0, &label);
-    SetLabel(label);
-  } else if (method == 'SetIcon') {
-    std::string icon;
-    arguments.GetString(0, &icon);
-    SetIcon(icon);
-  } else if (method == 'SetIconIsTemplate') {
-    bool isTemplate;
-    arguments.GetBoolean(0, &isTemplate);
-    SetIconIsTemplate(isTemplate);
-  } else if (method == 'SetTooltip') {
-    std::string tooltip;
-    arguments.GetString(0, &tooltip);
-    SetTooltip(tooltip);
-  } else if (method == 'SetEnabled') {
-    bool enabled = true;
-    arguments.GetBoolean(0, &enabled);
-    SetEnabled(enabled);
-  } else if (method == 'SetChecked') {
-    bool checked = false;
-    arguments.GetBoolean(0, &checked);
-    SetChecked(checked);
-  } else if (method == 'SetSubmenu') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    SetSubmenu(object_manager()->GetApiObject<Menu>(object_id));
-#if defined(OS_MACOSX)
-  } else if (method == 'SetKey') {
-    std::string key;
-    arguments.GetString(0, &key);
-    SetKey(key);
-  } else if (method == 'SetModifiers') {
-    std::string mod;
-    arguments.GetString(0, &mod);
-    SetModifiers(mod);
-#endif
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    class NwClipboardClearSyncFunction : public NWSyncExtensionFunction {
+    // Implementation of `tensorflow.MasterService`, based on the
+// definition in '//tensorflow/core/protobuf/master_service.proto',
+// and the gRPC generated stub and service classes.
+// See that file for the definition of methods and messages.
+class MasterService final {
  public:
-  NwClipboardClearSyncFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
+  class StubInterface {
+   public:
+    virtual ~StubInterface() {}
+    virtual ::grpc::Status CreateSession(::grpc::ClientContext* context,
+                                         const CreateSessionRequest& request,
+                                         CreateSessionResponse* response) = 0;
+    virtual ::grpc::Status ExtendSession(::grpc::ClientContext* context,
+                                         const ExtendSessionRequest& request,
+                                         ExtendSessionResponse* response) = 0;
+    virtual ::grpc::Status PartialRunSetup(
+        ::grpc::ClientContext* context, const PartialRunSetupRequest& request,
+        PartialRunSetupResponse* response) = 0;
+    virtual ::grpc::Status RunStep(::grpc::ClientContext* context,
+                                   const RunStepRequest& request,
+                                   RunStepResponse* response) = 0;
+    virtual ::grpc::Status CloseSession(::grpc::ClientContext* context,
+                                        const CloseSessionRequest& request,
+                                        CloseSessionResponse* response) = 0;
+    virtual ::grpc::Status ListDevices(::grpc::ClientContext* context,
+                                       const ListDevicesRequest& request,
+                                       ListDevicesResponse* response) = 0;
+    virtual ::grpc::Status Reset(::grpc::ClientContext* context,
+                                 const ResetRequest& request,
+                                 ResetResponse* response) = 0;
+    virtual ::grpc::Status MakeCallable(::grpc::ClientContext* context,
+                                        const MakeCallableRequest& request,
+                                        MakeCallableResponse* response) = 0;
+    virtual ::grpc::Status RunCallable(::grpc::ClientContext* context,
+                                       const RunCallableRequest& request,
+                                       RunCallableResponse* response) = 0;
+    virtual ::grpc::Status ReleaseCallable(
+        ::grpc::ClientContext* context, const ReleaseCallableRequest& request,
+        ReleaseCallableResponse* response) = 0;
+  };
+  class Stub final : public StubInterface {
+   public:
+    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel);
+    ::grpc::Status CreateSession(::grpc::ClientContext* context,
+                                 const CreateSessionRequest& request,
+                                 CreateSessionResponse* response) override;
+    ::grpc::Status ExtendSession(::grpc::ClientContext* context,
+                                 const ExtendSessionRequest& request,
+                                 ExtendSessionResponse* response) override;
+    ::grpc::Status PartialRunSetup(::grpc::ClientContext* context,
+                                   const PartialRunSetupRequest& request,
+                                   PartialRunSetupResponse* response) override;
+    ::grpc::Status RunStep(::grpc::ClientContext* context,
+                           const RunStepRequest& request,
+                           RunStepResponse* response) override;
+    ::grpc::Status CloseSession(::grpc::ClientContext* context,
+                                const CloseSessionRequest& request,
+                                CloseSessionResponse* response) override;
+    ::grpc::Status ListDevices(::grpc::ClientContext* context,
+                               const ListDevicesRequest& request,
+                               ListDevicesResponse* response) override;
+    ::grpc::Status Reset(::grpc::ClientContext* context,
+                         const ResetRequest& request,
+                         ResetResponse* response) override;
+    ::grpc::Status MakeCallable(::grpc::ClientContext* context,
+                                const MakeCallableRequest& request,
+                                MakeCallableResponse* response) override;
+    ::grpc::Status RunCallable(::grpc::ClientContext* context,
+                               const RunCallableRequest& request,
+                               RunCallableResponse* response) override;
+    ::grpc::Status ReleaseCallable(::grpc::ClientContext* context,
+                                   const ReleaseCallableRequest& request,
+                                   ReleaseCallableResponse* response) override;
+    }
     }
     
-    void NwDesktopCaptureMonitor::OnSourceNameChanged(DesktopMediaList* list, int index) {
-    DesktopMediaList::Source src = list->GetSource(index);
-    std::unique_ptr<base::ListValue> args = nwapi::nw__screen::OnSourceNameChanged::Create(
-      src.id.ToString(),
-      base::UTF16ToUTF8(src.name));
-    DispatchEvent(
-      events::HistogramValue::UNKNOWN, 
-      nwapi::nw__screen::OnSourceNameChanged::kEventName,
-      std::move(args));    
+      Status ListDevices(CallOptions* call_options,
+                     const ListDevicesRequest* request,
+                     ListDevicesResponse* response) override {
+    ::grpc::ClientContext ctx;
+    return Call(&ctx, call_options, request, response,
+                &MasterServiceStub::ListDevices);
   }
     
-      std::vector<std::string> cfs = { rocksdb::kDefaultColumnFamilyName };
+      const auto input_tensor_name = relu_input_op->inputs[0];
+  const auto output_tensor_name = add_op->outputs[0];
+    
+    REGISTER_OP('EncodeAudioV2')
+    .Input('sampled_audio: float')
+    .Input('file_format: string')
+    .Input('samples_per_second: int32')
+    .Input('bits_per_second: int32')
+    .Output('contents: string')
+    .SetShapeFn(shape_inference::ScalarShape)
+    .Doc(R'doc(
+Processes a `Tensor` containing sampled audio with the number of channels
+and length of the audio specified by the dimensions of the `Tensor`. The
+audio is converted into a string that, when saved to disk, will be equivalent
+to the audio in the specified audio format.
+    
+    namespace {
+    }
+    
+        D3D_FEATURE_LEVEL featureLevels[] =
+    {
+        D3D_FEATURE_LEVEL_11_0,
+        D3D_FEATURE_LEVEL_10_1,
+        D3D_FEATURE_LEVEL_10_0,
+    };
+    UINT numFeatureLevels = ARRAYSIZE(featureLevels);
+    
+    void compose_motion(InputArray _om1, InputArray _T1, InputArray _om2, InputArray _T2,
+                    Mat& om3, Mat& T3, Mat& dom3dom1, Mat& dom3dT1, Mat& dom3dom2,
+                    Mat& dom3dT2, Mat& dT3dom1, Mat& dT3dT1, Mat& dT3dom2, Mat& dT3dT2);
+    
+        virtual int runKernel( const CvMat*, const CvMat*, CvMat* );
+    virtual void computeReprojError( const CvMat*, const CvMat*,
+                                     const CvMat*, CvMat* );
+    
+    #undef cv_hal_Cholesky32f
+#define cv_hal_Cholesky32f lapack_Cholesky32f
+#undef cv_hal_Cholesky64f
+#define cv_hal_Cholesky64f lapack_Cholesky64f
+    
+    using namespace cv::ocl::runtime;
+    
+      // Gets the samples ready for training. Use after both
+  // ReadTrainingSamples+PostLoadCleanup or DeSerialize.
+  // Re-indexes the features and computes canonical and cloud features.
+  void PreTrainingSetup();
+    
+    
+    {
+    {      datadir = drive;
+      datadir += dir;
+      datadir += '/tessdata';
+    }
+#endif /* _WIN32 */
+#if defined(TESSDATA_PREFIX)
+  } else {
+/* Use tessdata prefix which was compiled in. */
+#define _STR(a) #a
+#define _XSTR(a) _STR(a)
+    datadir = _XSTR(TESSDATA_PREFIX) '/tessdata';
+#undef _XSTR
+#undef _STR
+#endif
+  }
+    
+        // Non-serialized cache data.
+    // Indexed features of the canonical sample.
+    GenericVector<int> canonical_features;
+    // The mapped features of all the samples.
+    BitVector cloud_features;
+    
+    #ifdef HAVE_CONFIG_H
+#include 'config_auto.h'
+#endif
+    
+        template <typename ElementType>
+    /*static*/ ValuePtr Value::CreateSequence(size_t dimension, const std::vector<size_t>& sequenceData, bool sequenceStartFlag, const DeviceDescriptor& device, bool readOnly/* = false*/)
+    {
+        //TODO: avoid data copy.
+        std::vector<std::vector<size_t>> input = { sequenceData };
+        return Create<ElementType>(dimension, input, {sequenceStartFlag}, device, readOnly);
+    }
+    
+        // operator += (vector)
+    // applied to each column
+    // This is a weird interface, as it makes also sense for a matrix. TODO: Fix this.
+    void operator+=(const ssematrixbase /*vector*/ &other)
+    {
+        auto &us = *this;
+        assert(other.cols() == 1);
+        foreach_coord (i, j, us)
+            us(i, j) += other[i];
+    }
+    
+        // prepare features
+    auto& featureNodes = m_net->FeatureNodes();
+    
+    using namespace std;
+using namespace Microsoft::MSR::ScriptableObjects;
+    
+        void getlattices(const std::wstring& key, std::shared_ptr<const latticepair>& L, size_t expectedframes) const
+    {
+        std::shared_ptr<latticepair> LP(new latticepair);
+        denlattices.getlattice(key, LP->second, expectedframes); // this loads the lattice from disk, using the existing L.second object
+        L = LP;
+    }
+    
+    
+    {    // CreateNetwork - create a network based on the network description
+    // networkDescription - network description
+    virtual void CreateNetwork(const std::string& networkDescription);
+    virtual void Init(const std::string& config);
+    virtual void Destroy();
+};
+    
+      virtual ~MemTableRep() { }
+    
+    const char* CompactionFilterFactoryJniCallback::Name() const {
+  return m_name.get();
+}
     
     namespace rocksdb {
-    }
-    
-    namespace rocksdb {
-    }
-    
-    #include <assert.h>
-#include 'rocksjni/jnicallback.h'
-#include 'rocksjni/portal.h'
-    
-      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
-    if (type >= HISTOGRAM_ENUM_MAX) {
-      return false;
-    }
-    
-    if (m_ignore_histograms.count(type) > 0) {
-        return false;
+BaseComparatorJniCallback::BaseComparatorJniCallback(
+    JNIEnv* env, jobject jComparator,
+    const ComparatorJniCallbackOptions* copt)
+    : JniCallback(env, jComparator),
+    mtx_compare(new port::Mutex(copt->use_adaptive_mutex)),
+    mtx_findShortestSeparator(new port::Mutex(copt->use_adaptive_mutex)) {
     }
     }
     
-      /**
-   * @brief flush file,
-   * @details initiate an aio write and not wait
-   *
-   * @return [description]
-   */
-  Status Flush() {
-    librados::AioCompletion *write_completion = librados::Rados::aio_create_completion();
-    int r = 0;
-    }
-    
-    
-    {  ComparatorJniCallbackOptions() : use_adaptive_mutex(false) {
-  }
-};
-    
-         using Logger::SetInfoLogLevel;
-     using Logger::GetInfoLogLevel;
-     // Write an entry to the log file with the specified format.
-     virtual void Logv(const char* format, va_list ap);
-     // Write an entry to the log file with the specified log level
-     // and format.  Any log with level under the internal log level
-     // of *this (see @SetInfoLogLevel and @GetInfoLogLevel) will not be
-     // printed.
-     virtual void Logv(const InfoLogLevel log_level,
-         const char* format, va_list ap);
-    
-    double HistogramImpl::Average() const {
-  return stats_.Average();
-}
-    
-    std::shared_ptr<Statistics> CreateDBStatistics() {
-  return std::make_shared<StatisticsImpl>(nullptr, false);
-}
-    
-    Status CompactedDBImpl::Get(const ReadOptions& options, ColumnFamilyHandle*,
-                            const Slice& key, PinnableSlice* value) {
-  GetContext get_context(user_comparator_, nullptr, nullptr, nullptr,
-                         GetContext::kNotFound, key, value, nullptr, nullptr,
-                         nullptr, nullptr);
-  LookupKey lkey(key, kMaxSequenceNumber);
-  files_.files[FindFile(key)].fd.table_reader->Get(options, lkey.internal_key(),
-                                                   &get_context, nullptr);
-  if (get_context.State() == GetContext::kFound) {
-    return Status::OK();
-  }
-  return Status::NotFound();
-}
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    
-    {  private:
-    void* object_;
-};
-    
-    
-    {  private:
-    void* m_this;
-    std::map<const std::string, boost::any> m_variablemap;
-};
-    
-    // bool JNU_Jstring2Wstring( JNIEnv* _env, const jstring jstr, std::wstring& wstr); //in linux sizeof(wchar_t)==4 but sizeof(jchar)==2
-wchar_t* JNU_Jstring2Wchar(JNIEnv* _env, const jstring jstr);
-void JNU_FreeWchar(JNIEnv* _env, jstring str, wchar_t* wchar);
-jstring JNU_Wstring2Jstring(JNIEnv* _env, const std::wstring& wstr);
-jstring JNU_Wchar2JString(JNIEnv* _env, wchar_t* wchar);
+      // call once at the beginning of a test to setup the dependency between
+  // sync points and setup markers indicating the successor is only enabled
+  // when it is processed on the same thread as the predecessor.
+  // When adding a marker, it implicitly adds a dependency for the marker pair.
+  void LoadDependencyAndMarkers(const std::vector<SyncPointPair>& dependencies,
+                                const std::vector<SyncPointPair>& markers);
