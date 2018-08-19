@@ -1,119 +1,163 @@
 
         
-        def check_link(uri)
-  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
-    if (400..422).include?(status)
-      if status != 403 && !uri.exclude?('udemy.com')
-        raise 'Request had status #{status}'
-      else
-        putc('S')
+            # Checks whether the directory 'exists' for this collection.
+    # The directory must exist on the filesystem and must not be a symlink
+    #   if in safe mode.
+    #
+    # Returns false if the directory doesn't exist or if it's a symlink
+    #   and we're in safe mode.
+    def exists?
+      File.directory?(directory) && !entry_filter.symlink?(directory)
+    end
+    
+              External.require_with_graceful_fail 'jekyll-watch'
+          watch_method = Jekyll::Watcher.method(:watch)
+          if watch_method.parameters.size == 1
+            watch_method.call(
+              options
+            )
+          else
+            watch_method.call(
+              options, site
+            )
+          end
+        end
       end
     end
   end
 end
+
     
-      def set_table_sort(sort_options)
-    valid_sorts = sort_options[:sorts] or raise ArgumentError.new('You must specify :sorts as an array of valid sort attributes.')
-    default = sort_options[:default] || { valid_sorts.first.to_sym => :desc }
-    
-        respond_to do |format|
-      format.html
-      format.json { render json: @events }
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
     end
   end
+end
+
     
-          class << self
-        # Mark a given block of code as a 'busy' block of code, which will
-        # register a SIGINT handler for the duration of the block. When a
-        # SIGINT occurs, the `sig_callback` proc will be called. It is up
-        # to the callback to behave properly and exit the application.
-        def busy(sig_callback)
-          register(sig_callback)
-          return yield
-        ensure
-          unregister(sig_callback)
+          def y_day
+        @obj.date.strftime('%j')
+      end
+    
+    class Devise::PasswordsController < DeviseController
+  prepend_before_action :require_no_authentication
+  # Render the #edit only if coming from a reset password email link
+  append_before_action :assert_reset_token_passed, only: :edit
+    
+        def unlock_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :unlock_instructions, opts)
+    end
+    
+    module Devise
+  module Controllers
+    # Create url helpers to be used with resource/scope configuration. Acts as
+    # proxies to the generated routes created by devise.
+    # Resource param can be a string or symbol, a class, or an instance object.
+    # Example using a :user resource:
+    #
+    #   new_session_path(:user)      => new_user_session_path
+    #   session_path(:user)          => user_session_path
+    #   destroy_session_path(:user)  => destroy_user_session_path
+    #
+    #   new_password_path(:user)     => new_user_password_path
+    #   password_path(:user)         => user_password_path
+    #   edit_password_path(:user)    => edit_user_password_path
+    #
+    #   new_confirmation_path(:user) => new_user_confirmation_path
+    #   confirmation_path(:user)     => user_confirmation_path
+    #
+    # Those helpers are included by default to ActionController::Base.
+    #
+    # In case you want to add such helpers to another class, you can do
+    # that as long as this new class includes both url_helpers and
+    # mounted_helpers. Example:
+    #
+    #     include Rails.application.routes.url_helpers
+    #     include Rails.application.routes.mounted_helpers
+    #
+    module UrlHelpers
+      def self.remove_helpers!
+        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
+          remove_method method
+        end
+      end
+    
+        def lotus?
+      defined?(::Lotus)
+    end
+    
+      config.active_support.deprecation = :stderr
+end
+
+    
+      context 'escaping' do
+    it 'escapes html entities' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
+      end
+      get '/', :foo => '<bar>'
+      expect(body).to eq('&lt;bar&gt;')
+    end
+    
+        expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('DENY')
+  end
+    
+          cache(gist, file, data.body) unless @cache_disabled
+      data.body
+    end
+    
+            def stock_movement_params
+          params.require(:stock_movement).permit(permitted_stock_movement_attributes)
+        end
+      end
+    end
+  end
+end
+
+    
+        def type_from_mime_magic
+      @type_from_mime_magic ||= File.open(@filepath) do |file|
+        MimeMagic.by_magic(file).try(:type)
+      end
+    end
+    
+            def description
+          'have an attachment named #{@attachment_name}'
         end
     
-          # This deletes the block with the given key if it exists.
-      def delete(key)
-        key    = Regexp.quote(key)
-        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$.*^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
-        @value.gsub!(regexp, '')
-      end
+            def allowing *types
+          @allowed_types = types.flatten
+          self
+        end
     
-    def each_schema_load_environment
-  # If we're in development, also run this for the test environment.
-  # This is a somewhat hacky way to do this, so here's why:
-  # 1. We have to define this before we load the schema, or we won't
-  #    have a timestamp_id function when we get to it in the schema.
-  # 2. db:setup calls db:schema:load_if_ruby, which calls
-  #    db:schema:load, which we define above as having a prerequisite
-  #    of this task.
-  # 3. db:schema:load ends up running
-  #    ActiveRecord::Tasks::DatabaseTasks.load_schema_current, which
-  #    calls a private method `each_current_configuration`, which
-  #    explicitly also does the loading for the `test` environment
-  #    if the current environment is `development`, so we end up
-  #    needing to do the same, and we can't even use the same method
-  #    to do it.
-    
-        # Paths
-    def gem_path
-      @gem_path ||= File.expand_path '..', File.dirname(__FILE__)
-    end
-    
-          # move bootstrap/_bootstrap.scss to _bootstrap.scss adjusting import paths
-      main_from = '#{save_to}/_bootstrap.scss'
-      main_to   = File.expand_path('#{save_to}/../_bootstrap.scss')
-      save_file main_to, File.read(main_from).gsub(/ '/, ' 'bootstrap/')
-      File.delete(main_from)
-    
-          def stage_set?
-        !!fetch(:stage, false)
-      end
-    
-    # usage rake new_page[my-new-page] or rake new_page[my-new-page.html] or rake new_page (defaults to 'new-page.markdown')
-desc 'Create a new page in #{source_dir}/(filename)/index.#{new_page_ext}'
-task :new_page, :filename do |t, args|
-  raise '### You haven't set anything up yet. First run `rake install` to set up an Octopress theme.' unless File.directory?(source_dir)
-  args.with_defaults(:filename => 'new-page')
-  page_dir = [source_dir]
-  if args.filename.downcase =~ /(^.+\/)?(.+)/
-    filename, dot, extension = $2.rpartition('.').reject(&:empty?)         # Get filename and extension
-    title = filename
-    page_dir.concat($1.downcase.sub(/^\//, '').split('/')) unless $1.nil?  # Add path to page_dir Array
-    if extension.nil?
-      page_dir << filename
-      filename = 'index'
-    end
-    extension ||= new_page_ext
-    page_dir = page_dir.map! { |d| d = d.to_url }.join('/')                # Sanitize path
-    filename = filename.downcase.to_url
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+        Hash.new.tap do |missing_styles|
+      current_styles.each do |klass, attachment_definitions|
+        attachment_definitions.each do |attachment_name, styles|
+          registered = registered_styles[klass][attachment_name] || [] rescue []
+          missed = styles - registered
+          if missed.present?
+            klass_sym = klass.to_s.to_sym
+            missing_styles[klass_sym] ||= Hash.new
+            missing_styles[klass_sym][attachment_name.to_sym] ||= Array.new
+            missing_styles[klass_sym][attachment_name.to_sym].concat(missed.to_a)
+            missing_styles[klass_sym][attachment_name.to_sym].map!(&:to_s).sort!.map!(&:to_sym).uniq!
+          end
+        end
       end
     end
   end
 end
+
     
-    module Jekyll
-    
-      # Summary is used on the Archive pages to return the first block of content from a post.
-  def summary(input)
-    if input.index(/\n\n/)
-      input.split(/\n\n/)[0]
-    else
-      input
-    end
-  end
-    
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
-    end
+          def validate_before_processing(validator_class, options)
+        options = options.dup
+        attributes = options.delete(:attributes)
+        attributes.each do |attribute|
+          options[:attributes] = [attribute]
+          create_validating_before_filter(attribute, validator_class, options)
+        end
+      end
