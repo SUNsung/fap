@@ -1,98 +1,60 @@
-    This worker is run in a separate process.
-    
-                self._work_queue.put(w)
-            self._adjust_thread_count()
-            return f
-    submit.__doc__ = _base.Executor.submit.__doc__
-    
-    # Output file base name for HTML help builder.
-htmlhelp_basename = 'futuresdoc'
-    
-    
-def FormatDebugInfoResponse_Completer_ServerRunningWithHost_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'Completer name completer debug information:\n'
-      '  Server name running at: http://127.0.0.1:1234\n'
-      '  Server name process ID: 12345\n'
-      '  Server name executable: /path/to/executable\n'
-      '  Server name logfiles:\n'
-      '    /path/to/stdout/logfile\n'
-      '    /path/to/stderr/logfile\n'
-      '  Server name key: value\n'
-      '  Key: value\n'
-    )
-  )
-    
-    # Can't import these from setup.py because it makes nosetests go crazy.
-DIR_OF_CURRENT_SCRIPT = os.path.dirname( os.path.abspath( __file__ ) )
-DIR_OF_YCMD = os.path.join( DIR_OF_CURRENT_SCRIPT, '..', '..', 'third_party',
-                            'ycmd' )
-WIN_PYTHON_PATH = os.path.join( sys.exec_prefix, 'python.exe' )
-PYTHON_BINARY_REGEX = re.compile(
-  r'python((2(\.[67])?)|(3(\.[3-9])?))?(.exe)?$', re.IGNORECASE )
-    
-    from ycm.tests.test_utils import MockVimModule
-MockVimModule()
-    
-    
-  def Extra_Info_No_Doc_String_test( self ):
-    self._Check( 0, {
-      'insertion_text':  'INSERTION TEXT',
-      'menu_text':       'MENU TEXT',
-      'extra_menu_info': 'EXTRA MENU INFO',
-      'kind':            'K',
-      'extra_data': {
-      },
-    }, {
-      'word'     : 'INSERTION TEXT',
-      'abbr'     : 'MENU TEXT',
-      'menu'     : 'EXTRA MENU INFO',
-      'kind'     : 'k',
-      'dup'      : 1,
-      'empty'    : 1,
-      'user_data': '0',
-    } )
-    
-    
-def SendCompleterAvailableRequest( filetypes ):
-  request = CompleterAvailableRequest( filetypes )
-  # This is a blocking call.
-  request.Start()
-  return request.Response()
+
+        
+        
+def dispatch_hook(key, hooks, hook_data, **kwargs):
+    '''Dispatches a hook dictionary on a given piece of data.'''
+    hooks = hooks or dict()
+    hooks = hooks.get(key)
+    if hooks:
+        if hasattr(hooks, '__call__'):
+            hooks = [hooks]
+        for hook in hooks:
+            _hook_data = hook(hook_data, **kwargs)
+            if _hook_data is not None:
+                hook_data = _hook_data
+    return hook_data
 
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+                handler_result = self.handler(sock)
     
-        # Print the location of each face in this image
-    top, right, bottom, left = face_location
-    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+        @pytest.mark.parametrize(
+        'other, result', (
+            ({'AccePT': 'application/json'}, True),
+            ({}, False),
+            (None, False)
+        )
+    )
+    def test_instance_equality(self, other, result):
+        assert (self.case_insensitive_dict == other) is result
     
-    # This is a demo of blurring faces in video.
+    import pytest
     
-    Algorithm Description:
-The knn classifier is first trained on a set of labeled (known) faces and can then predict the person
-in an unknown image by finding the k most similar faces (images with closet face-features under eucledian distance)
-in its training set, and performing a majority vote (possibly weighted) on their label.
+        .. warning:: dictionary operations that are normally O(1) may be O(n).
+    '''
     
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('biden.jpg')
+        By default this will get the strings from the blns.txt file
     
-            self.assertEqual(
-            set(face_landmarks[0].keys()),
-            set(['chin', 'left_eyebrow', 'right_eyebrow', 'nose_bridge',
-                 'nose_tip', 'left_eye', 'right_eye', 'top_lip',
-                 'bottom_lip']))
-        self.assertEqual(
-            face_landmarks[0]['chin'],
-            [(369, 220), (372, 254), (378, 289), (384, 322), (395, 353),
-             (414, 382), (437, 407), (464, 424), (495, 428), (527, 420),
-             (552, 399), (576, 372), (594, 344), (604, 314), (610, 282),
-             (613, 250), (615, 219)])
+    
+class AuthenticatorTest(test_util.TempDirTestCase,
+                        dns_test_common_lexicon.BaseLexiconAuthenticatorTest):
+    
+        @mock.patch.dict(os.environ, {})
+    def test_real_values(self):
+        self._test(expect_doc_values=False)
+    
+        def test_str(self):
+        self.assertEqual('Invalid nonce ('xxx'): error', str(self.error))
+    
+            self.vhost1b = VirtualHost(
+            'filep', 'vh_path', set([self.addr1]), False, False, 'localhost')
+    
+            return cert, key, chain
+    
+    def shorten_title(title):
+    m1 = re.search('[[0-9]*]', title)
+    m2 = re.search(''.*'', title)
+    if m1:
+        title = m1.group(0)
+    if m2:
+        title = ' '.join((title, m2.group(0)))   
+    return title[:50] + ' [...]'    
