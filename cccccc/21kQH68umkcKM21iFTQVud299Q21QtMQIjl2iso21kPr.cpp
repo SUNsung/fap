@@ -1,254 +1,181 @@
 
         
-        // Generate param traits write methods.
-#include 'ipc/param_traits_write_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
+        #if defined(OS_WIN)
+StringType GetWaitEventName(base::ProcessId pid);
     
+    namespace atom {
+    }
     
-    {  DISALLOW_COPY_AND_ASSIGN(MenuDelegate);
+      // Protocol Handler Registry -----------------------------------------------
+  // Sent when a ProtocolHandlerRegistry is changed. The source is the profile.
+  NOTIFICATION_PROTOCOL_HANDLER_REGISTRY_CHANGED,
+    
+    enum NotifyChromeResult {
+  NOTIFY_SUCCESS,
+  NOTIFY_FAILED,
+  NOTIFY_WINDOW_HUNG,
 };
     
-    #include 'content/nw/src/api/menu/menu.h'
+    #include <string>
     
+      kFullType = 1,
     
-    {  return RespondNow(NoArguments());
+      // Add the specified file at the specified number.
+  // REQUIRES: This version has not been saved (see VersionSet::SaveTo)
+  // REQUIRES: 'smallest' and 'largest' are smallest and largest keys in file
+  void AddFile(int level, uint64_t file,
+               uint64_t file_size,
+               const InternalKey& smallest,
+               const InternalKey& largest) {
+    FileMetaData f;
+    f.number = file;
+    f.file_size = file_size;
+    f.smallest = smallest;
+    f.largest = largest;
+    new_files_.push_back(std::make_pair(level, f));
+  }
+    
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
 }
     
-      class ClipboardWriter {
-  public:
-    ClipboardWriter() {
-      scw_.reset(new ui::ScopedClipboardWriter(ui::CLIPBOARD_TYPE_COPY_PASTE));
+      for (size_t i = 0; i < 3; ++i) {
+    std::string res;
+    ASSERT_OK(db->Get(ReadOptions(), keys[i], &res));
+    ASSERT_TRUE(res == vals[i]);
+  }
+    
+    
+    {}  // namespace leveldb
+    
+    #include <stdio.h>
+#include 'leveldb/dumpfile.h'
+#include 'leveldb/env.h'
+#include 'leveldb/status.h'
+    
+    
+    {  // Write the header and the payload
+  Status s = dest_->Append(Slice(buf, kHeaderSize));
+  if (s.ok()) {
+    s = dest_->Append(Slice(ptr, n));
+    if (s.ok()) {
+      s = dest_->Flush();
     }
-    }
-    
-    
-    {
-    {  private:
-    DISALLOW_COPY_AND_ASSIGN(NwScreenRegisterStreamFunction);
-  };
-} // extensions
-    
-    
-    {  /* Copy the output layer to a std::vector */
-  Blob<float>* output_layer = net_->output_blobs()[0];
-  const float* begin = output_layer->cpu_data();
-  const float* end = begin + output_layer->channels();
-  return std::vector<float>(begin, end);
+  }
+  block_offset_ += kHeaderSize + n;
+  return s;
 }
     
+    extern JSClass  *jsb_cocosbuilder_CCBReader_class;
+extern JSObject *jsb_cocosbuilder_CCBReader_prototype;
     
-    { protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual inline bool reverse_dimensions() { return false; }
-  virtual void compute_output_shape();
-};
+    bool js_cocos2dx_physics3d_Physics3DSliderConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DSliderConstraint_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DSliderConstraint(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredAngMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getLinearPos(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredLinMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getAngularPos(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredAngMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredLinMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirLin(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimAng(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DSliderConstraint_Physics3DSliderConstraint(JSContext *cx, uint32_t argc, jsval *vp);
     
-    #endif  // CAFFE_CUDNN_TANH_LAYER_HPP_
-
-    
-    #include <vector>
-    
-    TEST_P(DerivedTest, DoesBlah) {
-  // GetParam works just the same here as if you inherit from TestWithParam.
-  EXPECT_TRUE(foo.Blah(GetParam()));
+        return 0;
 }
-    
-    // A helper class for implementing EXPECT_FATAL_FAILURE() and
-// EXPECT_NONFATAL_FAILURE().  Its destructor verifies that the given
-// TestPartResultArray contains exactly one failure that has the given
-// type and contains the given substring.  If that's not the case, a
-// non-fatal failure will be generated.
-class GTEST_API_ SingleFailureChecker {
- public:
-  // The constructor remembers the arguments.
-  SingleFailureChecker(const TestPartResultArray* results,
-                       TestPartResult::Type type,
-                       const string& substr);
-  ~SingleFailureChecker();
- private:
-  const TestPartResultArray* const results_;
-  const TestPartResult::Type type_;
-  const string substr_;
-    }
-    
-    
-    {  return AssertionFailure() << pred_text << '('
-                            << e1 << ', '
-                            << e2 << ', '
-                            << e3 << ', '
-                            << e4 << ', '
-                            << e5 << ') evaluates to false, where'
-                            << '\n' << e1 << ' evaluates to ' << v1
-                            << '\n' << e2 << ' evaluates to ' << v2
-                            << '\n' << e3 << ' evaluates to ' << v3
-                            << '\n' << e4 << ' evaluates to ' << v4
-                            << '\n' << e5 << ' evaluates to ' << v5;
-}
-    
-    
-    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(DeathTest);
-};
-    
-    // GetTypeName<T>() returns a human-readable name of type T.
-// NB: This function is also used in Google Mock, so don't move it inside of
-// the typed-test-only section below.
-template <typename T>
-std::string GetTypeName() {
-# if GTEST_HAS_RTTI
-    }
-    
-    
-    {}  // namespace
-
-    
-    /**
- * @brief CCUtil::main_setup - set location of tessdata and name of image
- *
- * @param argv0 - paths to the directory with language files and config files.
- * An actual value of argv0 is used if not nullptr, otherwise TESSDATA_PREFIX is
- * used if not nullptr, next try to use compiled in -DTESSDATA_PREFIX. If previous
- * is not successful - use current directory.
- * @param basename - name of image
- */
-void CCUtil::main_setup(const char *argv0, const char *basename) {
-  imagebasename = basename;      /**< name of image */
-    }
-    
-    // The ColumnFinder class finds columns in the grid.
-class ColumnFinder : public TabFind {
- public:
-  // Gridsize is an estimate of the text size in the image. A suitable value
-  // is in TO_BLOCK::line_size after find_components has been used to make
-  // the blobs.
-  // bleft and tright are the bounds of the image (rectangle) being processed.
-  // vlines is a (possibly empty) list of TabVector and vertical_x and y are
-  // the sum logical vertical vector produced by LineFinder::FindVerticalLines.
-  // If cjk_script is true, then broken CJK characters are fixed during
-  // layout analysis to assist in detecting horizontal vs vertically written
-  // textlines.
-  ColumnFinder(int gridsize, const ICOORD& bleft, const ICOORD& tright,
-               int resolution, bool cjk_script, double aligned_gap_fraction,
-               TabVector_LIST* vlines, TabVector_LIST* hlines,
-               int vertical_x, int vertical_y);
-  virtual ~ColumnFinder();
-    }
-    
-    // Insert the given blocks at the front of the completed_blocks_ list so
-// they can be kept in the correct reading order.
-void WorkingPartSet::InsertCompletedBlocks(BLOCK_LIST* blocks,
-                                           TO_BLOCK_LIST* to_blocks) {
-  BLOCK_IT block_it(&completed_blocks_);
-  block_it.add_list_before(blocks);
-  TO_BLOCK_IT to_block_it(&to_blocks_);
-  to_block_it.add_list_before(to_blocks);
-}
-    
-    int PowerIphone::get_power_percent_left() {
-	if (UpdatePowerInfo()) {
-		return percent_left;
-	} else {
-		return -1;
-	}
-}
-    
-      m_max_mcus_per_row = (m_image_x_size + (m_max_mcu_x_size - 1)) / m_max_mcu_x_size;
-  m_max_mcus_per_col = (m_image_y_size + (m_max_mcu_y_size - 1)) / m_max_mcu_y_size;
-    
-    #if (defined(__GNUC__) && defined(__STDC__) && __STDC__ && __STDC_VERSION__ >= 199901L)
-        /* supported by gcc in C99 mode, but not by all other compilers */
-        #warning 'Don't have the functions lrint() and lrintf ().'
-        #warning 'Replacing these functions with a standard C cast.'
-#endif /* __STDC_VERSION__ >= 199901L */
-        #include <math.h>
-        #define float2int(flt) ((int)(floor(.5+flt)))
-#endif
-    
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-    
-    /* get number of leading zeros and fractional part (the bits right after the leading one */
-static OPUS_INLINE void silk_CLZ_FRAC(
-    opus_int32 in,            /* I  input                               */
-    opus_int32 *lz,           /* O  number of leading zeros             */
-    opus_int32 *frac_Q7       /* O  the 7 bits right after the leading one */
-)
+int lua_cocos2dx_physics_PhysicsJointRatchet_setAngle(lua_State* tolua_S)
 {
-    opus_int32 lzeros = silk_CLZ32(in);
+    int argc = 0;
+    cocos2d::PhysicsJointRatchet* cobj = nullptr;
+    bool ok  = true;
+    
+    	b2WorldManifold worldManifold;
+	contact->GetWorldManifold(&worldManifold);
+    
+    			b2FixtureDef sd1;
+			sd1.shape = &poly1;
+			sd1.density = 4.0f;
+    
+    #ifndef BREAKABLE_TEST_H
+#define BREAKABLE_TEST_H
+    
+    		for (int32 i = 0; i < 2; ++i)
+		{
+			b2Vec2 vertices[3];
+			vertices[0].Set(-0.5f, 0.0f);
+			vertices[1].Set(0.5f, 0.0f);
+			vertices[2].Set(0.0f, 1.5f);
     }
     
-      // Compares img with the baseline image and saves the resulting distance map
-  // inside the object. The provided image must have the same dimensions as the
-  // baseline image.
-  virtual void Compare(const OutputImage& img) = 0;
-    
-    
-    {
-    {    // Apply the fancy upsampler on the subsampled block.
-    for (int y = ymin; y <= ymax; ++y) {
-      const int y0 = ((y & ~1) / 2 - block_y * 8 + 1) * kSubsampledEdgeSize;
-      const int dy = ((y & 1) * 2 - 1) * kSubsampledEdgeSize;
-      uint16_t* rowptr = &pixels_[y * width_];
-      for (int x = xmin; x <= xmax; ++x) {
-        const int x0 = (x & ~1) / 2 - block_x * 8 + 1;
-        const int dx = (x & 1) * 2 - 1;
-        const int ix = x0 + y0;
-        rowptr[x] = (subsampled[ix] * 9 + subsampled[ix + dy] * 3 +
-                     subsampled[ix + dx] * 3 + subsampled[ix + dx + dy]) >> 4;
-      }
+    		for (int32 i = 0; i < 2; ++i)
+		{
+			b2Vec2 vertices[3];
+			vertices[0].Set(-0.5f, 0.0f);
+			vertices[1].Set(0.5f, 0.0f);
+			vertices[2].Set(0.0f, 1.5f);
     }
-  } else {
-    printf('Sampling ratio not supported: factor_x = %d factor_y = %d\n',
-           factor_x_, factor_y_);
-    exit(1);
-  }
-}
-    
-          // The sentinel node becomes the parent node.
-      size_t j_end = 2 * n - k;
-      tree[j_end].total_count_ =
-          tree[left].total_count_ + tree[right].total_count_;
-      tree[j_end].index_left_ = static_cast<int16_t>(left);
-      tree[j_end].index_right_or_value_ = static_cast<int16_t>(right);
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    // Decodes the parsed jpeg coefficients into an RGB image.
-// There can be only either 1 or 3 image components, in either case, an RGB
-// output image will be generated.
-// Only YUV420 and YUV444 sampling factors are supported.
-// Vector will be empty if a decoding error occurred.
-std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
-    
-    bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     const int* quant, JPEGData* jpg) {
-  if (w < 0 || w >= 1 << 16 || h < 0 || h >= 1 << 16 ||
-      rgb.size() != 3 * w * h) {
-    return false;
-  }
-  InitJPEGDataForYUV444(w, h, jpg);
-  AddApp0Data(jpg);
-    }
-    
-    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
-// quantization table must have 3 * kDCTBlockSize values.
-bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     const int* quant, JPEGData* jpg);
