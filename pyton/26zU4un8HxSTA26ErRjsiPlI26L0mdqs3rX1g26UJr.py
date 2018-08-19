@@ -1,58 +1,76 @@
 
         
-            def mapper(self, _, line):
-        yield line, 1
+                raise NotImplementedError
     
-        def dispatch_queued_call_to_newly_freed_employee(self, call, employee):
-        pass
+    
+        ANTLR generates code that throws exceptions upon recognition error and
+    also generates code to catch these exceptions in each rule.  If you
+    want to quit upon first error, you can turn off the automatic error
+    handling mechanism using rulecatch action, but you still need to
+    override methods mismatch and recoverFromMismatchSet.
+    
+        @classmethod
+    def __get_test_directory(self):
+        '''
+        Get the temporary directory for the tests.
+        '''
+        self.test_dir = os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), 'test_command')
+    
+        def test_items_recoil(self):
+        with ObjectPool(self.sample_queue, True) as pool:
+            self.assertEqual(pool, 'first')
+        self.assertTrue(self.sample_queue.get() == 'second')
+        self.assertFalse(self.sample_queue.empty())
+        self.assertTrue(self.sample_queue.get() == 'first')
+        self.assertTrue(self.sample_queue.empty())
+    
+        def test_display_current_time_at_midnight(self):
+        class_under_test = TimeDisplay()
+        expected_time = '24:01'
+        result = class_under_test.get_current_time_as_as_html_fragment()
+        self.assertEqual(result, expected_time)
+'''
+    
+    ### OUTPUT ###
+# executed method 2!
+# Value x1
+# Value x2
+# executed method 1!
 
     
-        def insert_crawled_link(self, url, signature):
-        '''Add the given link to `crawled_links`.'''
-        pass
+        # Loop over each face found in the frame to see if it's someone we know.
+    for face_encoding in face_encodings:
+        # See if the face is a match for the known face(s)
+        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
+        name = '<Unknown Person>'
     
+    print('I found {} face(s) in this photograph.'.format(len(face_locations)))
     
-@pytest.fixture(params=containers)
-def proc(request, spawnu, TIMEOUT):
-    proc = spawnu(*request.param)
-    proc.sendline(u'pip install /src')
-    assert proc.expect([TIMEOUT, u'Successfully installed'])
-    proc.sendline(u'tcsh')
-    proc.sendline(u'setenv PYTHONIOENCODING utf8')
-    proc.sendline(u'eval `thefuck --alias`')
-    return proc
+    while True:
+    # Grab a single frame of video
+    ret, frame = input_movie.read()
+    frame_number += 1
     
-        def __init__(self, msg_center):
-        self.provider = msg_center
+    # Load a sample picture and learn how to recognize it.
+obama_image = face_recognition.load_image_file('obama.jpg')
+obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
     
-        def __new__(cls, name, bases, attrs):
-        new_cls = type.__new__(cls, name, bases, attrs)
-        '''
-            Here the name of the class is used as key but it could be any class
-            parameter.
-        '''
-        cls.REGISTRY[new_cls.__name__] = new_cls
-        return new_cls
+        if len(unknown_face_encodings) > 0:
+        face_found = True
+        # See if the first face in the uploaded image matches the known face of Obama
+        match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encodings[0])
+        if match_results[0]:
+            is_obama = True
     
-        def __init__(self, queue, auto_get=False):
-        self._queue = queue
-        self.item = self._queue.get() if auto_get else None
+    # If true, SmartyPants will be used to convert quotes and dashes to
+# typographically correct entities.
+#html_use_smartypants = True
     
-        def test_display_current_time_at_midnight(self):
-        '''
-        Will almost always fail (despite of right at/after midnight).
-        '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay(time_provider_stub)
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+    with open('README.rst') as readme_file:
+    readme = readme_file.read()
     
-        def test_display_current_time_at_midnight(self):
-        '''
-        Would almost always fail (despite of right at/after midnight) if
-        untestable production code would have been used.
-        '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay()
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(time_provider_stub), expected_time)
+        :param rect: a dlib 'rect' object
+    :return: a plain tuple representation of the rect in (top, right, bottom, left) order
+    '''
+    return rect.top(), rect.right(), rect.bottom(), rect.left()
