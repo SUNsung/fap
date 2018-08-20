@@ -1,133 +1,125 @@
 
         
-                Keyword:                   'bold #004461',   # class: 'k'
-        Keyword.Constant:          'bold #004461',   # class: 'kc'
-        Keyword.Declaration:       'bold #004461',   # class: 'kd'
-        Keyword.Namespace:         'bold #004461',   # class: 'kn'
-        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
-        Keyword.Reserved:          'bold #004461',   # class: 'kr'
-        Keyword.Type:              'bold #004461',   # class: 'kt'
-    
-    
-class TestLookupDict:
-    
-        @pytest.mark.skip(reason='this fails non-deterministically under pytest-xdist')
-    def test_request_recovery(self):
-        '''can check the requests content'''
-        # TODO: figure out why this sometimes fails when using pytest-xdist.
-        server = Server.basic_response_server(requests_to_handle=2)
-        first_request = b'put your hands up in the air'
-        second_request = b'put your hand down in the floor'
-    
-            return dict(
-            (attr, getattr(self, attr, None))
-            for attr in self.__attrs__
-        )
-    
-            :param url: URL for the new :class:`Request` object.
-        :param data: (optional) Dictionary, list of tuples, bytes, or file-like
-            object to send in the body of the :class:`Request`.
-        :param \*\*kwargs: Optional arguments that ``request`` takes.
-        :rtype: requests.Response
+                :param obj: an import name or object
         '''
+        if isinstance(obj, string_types):
+            obj = import_string(obj)
+        for key in dir(obj):
+            if key.isupper():
+                self[key] = getattr(obj, key)
     
-    Executor.submit() called:
-- creates a uniquely numbered _WorkItem and adds it to the 'Work Items' dict
-- adds the id of the _WorkItem to the 'Work Ids' queue
+        If you configure your own :class:`logging.StreamHandler`, you may want to
+    use this for the stream. If you are using file or dict configuration and
+    can't import this directly, you can refer to it as
+    ``ext://flask.logging.wsgi_errors_stream``.
+    '''
+    return request.environ['wsgi.errors'] if request else sys.stderr
     
-        def test_cancel(self):
-        f1 = create_future(state=PENDING)
-        f2 = create_future(state=RUNNING)
-        f3 = create_future(state=CANCELLED)
-        f4 = create_future(state=CANCELLED_AND_NOTIFIED)
-        f5 = create_future(state=FINISHED, exception=IOError())
-        f6 = create_future(state=FINISHED, result=5)
+            def __init__(self, name, doc=None):
+            self.name = name
+            self.__doc__ = doc
+        def _fail(self, *args, **kwargs):
+            raise RuntimeError('signalling support is unavailable '
+                               'because the blinker library is '
+                               'not installed.')
+        send = lambda *a, **kw: None
+        connect = disconnect = has_receivers_for = receivers_for = \
+            temporarily_connected_to = connected_to = _fail
+        del _fail
     
+        def test_repr(self):
+        assert repr(self.lookup_dict) == '<lookup 'test'>'
     
-GENERIC_RESPONSE = {
-  'clang': {
-    'has_support': True,
-    'version': 'Clang version'
-  },
-  'completer': {
-    'items': [
-      {
-        'key': 'key',
-        'value': 'value'
-      }
-    ],
-    'name': 'Completer name',
-    'servers': [
-      {
-        'address': '127.0.0.1',
-        'executable': '/path/to/executable',
-        'extras': [
-          {
-            'key': 'key',
-            'value': 'value'
-          }
-        ],
-        'is_running': True,
-        'logfiles': [
-          '/path/to/stdout/logfile',
-          '/path/to/stderr/logfile'
-        ],
-        'name': 'Server name',
-        'pid': 12345,
-        'port': 1234
-      }
-    ]
-  },
-  'extra_conf': {
-    'is_loaded': False,
-    'path': '/path/to/extra/conf'
-  },
-  'python': {
-    'executable': '/path/to/python/interpreter',
-    'version': 'Python version'
-  }
-}
+            with server as address:
+            sock = socket.socket()
+            sock.connect(address)
+            time.sleep(1.5)
+            sock.sendall(data)
+            sock.close()
+    
+            p = PreparedRequest()
+        p.prepare(
+            method=request.method.upper(),
+            url=request.url,
+            files=request.files,
+            data=request.data,
+            json=request.json,
+            headers=merge_setting(request.headers, self.headers, dict_class=CaseInsensitiveDict),
+            params=merge_setting(request.params, self.params),
+            auth=merge_setting(auth, self.auth),
+            cookies=merged_cookies,
+            hooks=merge_hooks(request.hooks, self.hooks),
+        )
+        return p
+    
+    def sample_user_agent():
+    'Document what this Certbot's user agent string will be like.'
     
     
-def _EndsWithPython( path ):
-  '''Check if given path ends with a python 2.7 or 3.4+ name.'''
-  return path and PYTHON_BINARY_REGEX.search( path ) is not None
+class AddrTest(unittest.TestCase):
+    '''Test obj.Addr.'''
+    def setUp(self):
+        from certbot_apache.obj import Addr
+        self.addr = Addr.fromstring('*:443')
     
-    TIMEOUT_SECONDS = 0.1
-    
-    
-  def Start( self ):
-    self._keepalive_thread.start()
-    
-    
-class LoginHandler(BaseHandler, TwitterMixin):
-    @gen.coroutine
-    def get(self):
-        if self.get_argument('oauth_token', None):
-            user = yield self.get_authenticated_user()
-            del user['description']
-            self.set_secure_cookie(self.COOKIE_NAME, json_encode(user))
-            self.redirect(self.get_argument('next', '/'))
+            cert = os.path.join(cert_and_key_dir, 'cert')
+        shutil.copy(cert_path, cert)
+        key = os.path.join(cert_and_key_dir, 'key')
+        shutil.copy(key_path, key)
+        if chain_path:
+            chain = os.path.join(cert_and_key_dir, 'chain')
+            shutil.copy(chain_path, chain)
         else:
-            yield self.authorize_redirect(callback_uri=self.request.full_url())
+            chain = None
     
-        def delete(self, bucket, object_name):
-        object_name = urllib.unquote(object_name)
-        path = self._object_path(bucket, object_name)
-        if not path.startswith(self.application.directory) or \
-           not os.path.isfile(path):
-            raise web.HTTPError(404)
-        os.unlink(path)
-        self.set_status(204)
-        self.finish()
     
-    coverage_skip_undoc_in_source = True
-coverage_ignore_modules = [
-    'tornado.platform.asyncio',
-    'tornado.platform.caresresolver',
-    'tornado.platform.twisted',
-]
-# I wish this could go in a per-module file...
-coverage_ignore_classes = [
-    # tornado.gen
-    'Runner',
+class ValidatorTest(unittest.TestCase):
+    def setUp(self):
+        self.validator = validator.Validator()
+    
+            return link_list
+    
+    
+    {
+def extract_json_data(url, **params):
+    url = construct_url(url, **params)
+    html = get_content(url, headers=fake_headers)
+    json_string = match1(html, r'app.page\['board'\] = (.*?});')
+    json_data = json.loads(json_string)
+    return json_data
+    
+    from ..common import *
+from ..extractor import VideoExtractor
+    
+        for i in range(10, 30):
+        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
+            i = i,
+            p = preview
+        )
+        try:
+            mime, ext, size = url_info(url)
+            break
+        except: continue
+    
+        stream_types = [
+        {'id': '720p HD'},
+        {'id': '360p SD'},
+    ]
+    
+        #title
+    title = ''
+    profile_api = 'https://www.showroom-live.com/api/room/profile?room_id={room_id}'.format(room_id = room_id)
+    html = loads(get_content(profile_api))
+    try:
+        title = html['main_name']
+    except KeyError:
+        title = 'Showroom_{room_id}'.format(room_id = room_id)
+    
+    
+def is_translated(msg):
+    if isinstance(msg.string, basestring):
+        return bool(msg.string)
+    for item in msg.string:
+        if not item:
+            return False
+    return True
