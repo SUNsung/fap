@@ -1,122 +1,75 @@
 
         
-              html_filters.push 'd3/clean_html', 'd3/entries_v3', 'title'
+        map = {}
+dups = []
     
-        def filter_const(name)
-      if name.is_a? Array
-        name.map &method(:filter_const)
-      else
-        Docs.const_get '#{name}_filter'.camelize
+            while true
+          begin
+            if Platform.windows?
+              # Windows doesn't support non-blocking reads on
+              # file descriptors or pipes so we have to get
+              # a bit more creative.
+    
+        # Merges this query with another. The returned query queries for
+    # the intersection between the two inputs.
+    #
+    # Both queries should be resolved.
+    #
+    # @param other [Query]
+    # @return [Query?] The merged query, or nil if there is no intersection.
+    def merge(other)
+      m1, t1 = resolved_modifier.downcase, resolved_type.downcase
+      m2, t2 = other.resolved_modifier.downcase, other.resolved_type.downcase
+      t1 = t2 if t1.empty?
+      t2 = t1 if t2.empty?
+      if (m1 == 'not') ^ (m2 == 'not')
+        return if t1 == t2
+        type = m1 == 'not' ? t2 : t1
+        mod = m1 == 'not' ? m2 : m1
+      elsif m1 == 'not' && m2 == 'not'
+        # CSS has no way of representing 'neither screen nor print'
+        return unless t1 == t2
+        type = t1
+        mod = 'not'
+      elsif t1 != t2
+        return
+      else # t1 == t2, neither m1 nor m2 are 'not'
+        type = t1
+        mod = m1.empty? ? m2 : m1
       end
+      Query.new([mod], [type], other.expressions + expressions)
     end
     
-    module Docs
-  class Entry
-    class Invalid < StandardError; end
+          val = @mid.perform(environment)
+      if @warn_for_color && val.is_a?(Sass::Script::Value::Color) && val.name
+        alternative = Operation.new(Sass::Script::Value::String.new('', :string), @mid, :plus)
+        Sass::Util.sass_warn <<MESSAGE
+WARNING on line #{line}, column #{source_range.start_pos.offset}#{' of #{filename}' if filename}:
+You probably don't mean to use the color value `#{val}' in interpolation here.
+It may end up represented as #{val.inspect}, which will likely produce invalid CSS.
+Always quote color names when using them as strings (for example, '#{val}').
+If you really want to use the color value here, use `#{alternative.to_sass}'.
+MESSAGE
+      end
     
-            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
-          next if node.previous.try(:content).present? || node.next.try(:content).present?
-          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
-          node.content = node.content.strip
-          node.name = 'pre' if node.content =~ /\s/
-          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
+              def find_plugins_gem_specs
+            @specs ||= ::Gem::Specification.find_all.select{|spec| logstash_plugin_gem_spec?(spec)}
+          end
+    
+          class ValidateAttachmentPresenceMatcher
+        def initialize attachment_name
+          @attachment_name = attachment_name
         end
     
-        if false then ; end.should == nil
-  end
-    
-        assert_match %r% patchlevel 5\)%, ua
-  ensure
-    util_restore_version
-  end
-    
-          pid = spawn(EnvUtil.rubybin, 'test-script')
-      ps = nil
-      now = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-      stop = now + 30
-      begin
-        sleep 0.1
-        ps = `#{PSCMD.join(' ')} #{pid}`
-        break if /hello world/ =~ ps
-        now = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-      end until Process.wait(pid, Process::WNOHANG) || now > stop
-      assert_match(/hello world/, ps)
-      assert_operator now, :<, stop
-      Process.kill :KILL, pid
-      Timeout.timeout(5) { Process.wait(pid) }
-    end
-  end
-    
-            candidates = Symbol.instance_methods.collect{|m| m.to_s}
-        select_message(receiver, message, candidates, sep)
-    
-    def exec_test(pathes)
-  @count = 0
-  @error = 0
-  @errbuf = []
-  @location = nil
-  @columns = 0
-  @width = pathes.map {|path| File.basename(path).size}.max + 2
-  pathes.each do |path|
-    @basename = File.basename(path)
-    $stderr.printf('%s%-*s ', erase(@quiet), @width, @basename)
-    $stderr.flush
-    @columns = @width + 1
-    $stderr.puts if @verbose
-    count = @count
-    error = @error
-    load File.expand_path(path)
-    if @tty
-      if @error == error
-        msg = 'PASS #{@count-count}'
-        @columns += msg.size - 1
-        $stderr.print '#{@progress_bs}#{@passed}#{msg}#{@reset}'
-      else
-        msg = 'FAIL #{@error-error}/#{@count-count}'
-        $stderr.print '#{@progress_bs}#{@failed}#{msg}#{@reset}'
-        @columns = 0
+            def higher_than_high?
+          @high.nil? || @high == Float::INFINITY || !passes_validation_with_size(@high + 1)
+        end
       end
     end
-    $stderr.puts unless @quiet and @tty and @error == error
-  end
-  $stderr.print(erase) if @quiet
-  if @error == 0
-    if @count == 0
-      $stderr.puts 'No tests, no problem'
-    else
-      $stderr.puts '#{@passed}PASS#{@reset} all #{@count} tests'
-    end
-    exit true
-  else
-    @errbuf.each do |msg|
-      $stderr.puts msg
-    end
-    $stderr.puts '#{@failed}FAIL#{@reset} #{@error}/#{@count} tests failed'
-    exit false
   end
 end
+
     
-        # wait untl all threads have finished
-    sleep 0.01 until prod_threads.find_all{|t| t.status}.count == 0
-    
-        t = Thread.new { tester.sync_lock(:EX) }
-    
-      ## Constants For Hangul
-  # for details such as the meaning of the identifiers below, please see
-  # http://www.unicode.org/versions/Unicode7.0.0/ch03.pdf, pp. 144/145
-  SBASE = 0xAC00
-  LBASE = 0x1100
-  VBASE = 0x1161
-  TBASE = 0x11A7
-  LCOUNT = 19
-  VCOUNT = 21
-  TCOUNT = 28
-  NCOUNT = VCOUNT * TCOUNT
-  SCOUNT = LCOUNT * NCOUNT
-    
-        def find_remote!(username, domain)
-      find_remote(username, domain) || raise(ActiveRecord::RecordNotFound)
-    end
-    
-    class ActivityPub::EmojiSerializer < ActiveModel::Serializer
-  include RoutingHelper
+          def self.helper_method_name
+        :validates_attachment_file_name
+      end
