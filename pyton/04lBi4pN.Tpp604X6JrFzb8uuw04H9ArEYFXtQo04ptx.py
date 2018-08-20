@@ -1,136 +1,96 @@
 
         
-        def main():
-    # First, we load the current README into memory as an array of lines
-    with open('README.md', 'r') as read_me_file:
-        read_me = read_me_file.readlines()
+            def test_filter_gcp_fields(self):
+        input_data = {
+            u'kind': u'compute#httpsHealthCheck',
+            u'description': u'',
+            u'timeoutSec': 5,
+            u'checkIntervalSec': 5,
+            u'port': 443,
+            u'healthyThreshold': 2,
+            u'host': u'',
+            u'requestPath': u'/',
+            u'unhealthyThreshold': 2,
+            u'creationTimestamp': u'2017-05-16T15:09:36.546-07:00',
+            u'id': u'8727093129334146639',
+            u'selfLink': u'https://www.googleapis.com/compute/v1/projects/myproject/global/httpsHealthChecks/myhealthcheck',
+            u'name': u'myhealthcheck'}
     
-    errors = []
-title_links = []
-previous_links = []
-anchor_re = re.compile(anchor + '\s(.+)')
-section_title_re = re.compile('\*\s\[(.*)\]')
+        def test_max_delay(self):
+        strategy = _exponential_backoff(retries=7, delay=1, backoff=2, max_delay=60)
+        result = list(strategy())
+        self.assertEquals(result, [1, 2, 4, 8, 16, 32, 60])
     
+        def _dicts(self, ajvars):
+        print(ajvars)
+        res28 = self._dict_jinja28(ajvars)
+        res29 = self._dict_jinja29(ajvars)
+        # res28_other = self._dict_jinja28(ajvars, {'other_key': 'other_value'})
+        # other = {'other_key': 'other_value'}
+        # res29_other = self._dict_jinja29(ajvars, *other)
+        print('res28: %s' % res28)
+        print('res29: %s' % res29)
+        # print('res28_other: %s' % res28_other)
+        # print('res29_other: %s' % res29_other)
+        # return (res28, res29, res28_other, res29_other)
+        # assert ajvars == res28
+        # assert ajvars == res29
+        return (res28, res29)
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+    ATTR_URL = 'url'
+ATTR_URL_DEFAULT = 'https://www.google.com'
     
-    if isinstance(helptext, bytes):
-    helptext = helptext.decode('utf-8')
-    
-    
-def assertRegexpMatches(self, text, regexp, msg=None):
-    if hasattr(self, 'assertRegexp'):
-        return self.assertRegexp(text, regexp, msg)
-    else:
-        m = re.match(regexp, text)
-        if not m:
-            note = 'Regexp didn\'t match: %r not found' % (regexp)
-            if len(text) < 1000:
-                note += ' in %r' % text
-            if msg is None:
-                msg = note
-            else:
-                msg = note + ', ' + msg
-            self.assertTrue(m, msg)
-    
-        def test_pbs(self):
-        # https://github.com/rg3/youtube-dl/issues/2350
-        self.assertMatch('http://video.pbs.org/viralplayer/2365173446/', ['pbs'])
-        self.assertMatch('http://video.pbs.org/widget/partnerplayer/980042464/', ['pbs'])
-    
-        def test_func(self):
-        as_file = os.path.join(TEST_DIR, testfile)
-        swf_file = os.path.join(TEST_DIR, test_id + '.swf')
-        if ((not os.path.exists(swf_file)) or
-                os.path.getmtime(swf_file) < os.path.getmtime(as_file)):
-            # Recompile
-            try:
-                subprocess.check_call([
-                    'mxmlc', '-output', swf_file,
-                    '-static-link-runtime-shared-libraries', as_file])
-            except OSError as ose:
-                if ose.errno == errno.ENOENT:
-                    print('mxmlc not found! Skipping test.')
-                    return
-                raise
-    
-    
-if __name__ == '__main__':
-    unittest.main()
+        config_path = config_util.ensure_config_exists(config_dir)
+    print('Configuration file:', config_path)
+    return 0
 
     
+    parser = ArgumentParser(usage='%s -m jieba [options] filename' % sys.executable, description='Jieba command line interface.', epilog='If no filename specified, use STDIN instead.')
+parser.add_argument('-d', '--delimiter', metavar='DELIM', default=' / ',
+                    nargs='?', const=' ',
+                    help='use DELIM instead of ' / ' for word delimiter; or a space if it is used without DELIM')
+parser.add_argument('-p', '--pos', metavar='DELIM', nargs='?', const='_',
+                    help='enable POS tagging; if DELIM is specified, use DELIM instead of '_' for POS delimiter')
+parser.add_argument('-D', '--dict', help='use DICT as dictionary')
+parser.add_argument('-u', '--user-dict',
+                    help='use USER_DICT together with the default dictionary or DICT (if specified)')
+parser.add_argument('-a', '--cut-all',
+                    action='store_true', dest='cutall', default=False,
+                    help='full pattern cutting (ignored with POS tagging)')
+parser.add_argument('-n', '--no-hmm', dest='hmm', action='store_false',
+                    default=True, help='don't use the Hidden Markov Model')
+parser.add_argument('-q', '--quiet', action='store_true', default=False,
+                    help='don't print loading messages to stderr')
+parser.add_argument('-V', '--version', action='version',
+                    version='Jieba ' + jieba.__version__)
+parser.add_argument('filename', nargs='?', help='input file')
     
-    {        webpage = self._download_webpage(url, text_id)
-        sohu_video_info_str = self._search_regex(
-            r'var\s+sohuVideoInfo\s*=\s*({[^}]+});', webpage, 'Sohu video info', default=None)
-        if sohu_video_info_str:
-            sohu_video_info = self._parse_json(
-                sohu_video_info_str, text_id, transform_source=js_to_json)
-            return self.url_result(sohu_video_info['url'], 'Sohu')
+            for terms, w in cm.items():
+            g.addEdge(terms[0], terms[1], w)
+        nodes_rank = g.rank()
+        if withWeight:
+            tags = sorted(nodes_rank.items(), key=itemgetter(1), reverse=True)
+        else:
+            tags = sorted(nodes_rank, key=nodes_rank.__getitem__, reverse=True)
+    
+    import jieba
+import jieba.analyse
+from optparse import OptionParser
+    
+    # Inverse the vectorizer vocabulary to be able
+feature_names = count_vect.get_feature_names()
+    
+        def testDefaultCut_NOHMM(self):
+        for content in test_contents:
+            result = jieba.cut(content,HMM=False)
+            assert isinstance(result, types.GeneratorType), 'Test DefaultCut Generator error'
+            result = list(result)
+            assert isinstance(result, list), 'Test DefaultCut error on content: %s' % content
+            print(' , '.join(result), file=sys.stderr)
+        print('testDefaultCut_NOHMM', file=sys.stderr)
     
     
-class CloserToTruthIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?closertotruth\.com/(?:[^/]+/)*(?P<id>[^/?#&]+)'
-    _TESTS = [{
-        'url': 'http://closertotruth.com/series/solutions-the-mind-body-problem#video-3688',
-        'info_dict': {
-            'id': '0_zof1ktre',
-            'display_id': 'solutions-the-mind-body-problem',
-            'ext': 'mov',
-            'title': 'Solutions to the Mind-Body Problem?',
-            'upload_date': '20140221',
-            'timestamp': 1392956007,
-            'uploader_id': 'CTTXML'
-        },
-        'params': {
-            'skip_download': True,
-        },
-    }, {
-        'url': 'http://closertotruth.com/episodes/how-do-brains-work',
-        'info_dict': {
-            'id': '0_iuxai6g6',
-            'display_id': 'how-do-brains-work',
-            'ext': 'mov',
-            'title': 'How do Brains Work?',
-            'upload_date': '20140221',
-            'timestamp': 1392956024,
-            'uploader_id': 'CTTXML'
-        },
-        'params': {
-            'skip_download': True,
-        },
-    }, {
-        'url': 'http://closertotruth.com/interviews/1725',
-        'info_dict': {
-            'id': '1725',
-            'title': 'AyaFr-002',
-        },
-        'playlist_mincount': 2,
-    }]
+content = open(file_name,'rb').read()
     
-    import os, json, imp
-here = os.path.abspath(os.path.dirname(__file__))
-proj_info = json.loads(open(os.path.join(here, PROJ_METADATA), encoding='utf-8').read())
-try:
-    README = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
-except:
-    README = ''
-CHANGELOG = open(os.path.join(here, 'CHANGELOG.rst'), encoding='utf-8').read()
-VERSION = imp.load_source('version', os.path.join(here, 'src/%s/version.py' % PACKAGE_NAME)).__version__
-    
-        url = sorted(
-        map(lambda x: x.firstChild.nodeValue, xml.getElementsByTagName('src')),
-        key=lambda x: int(match1(x, r'_(\d+?)_')))[-1]
-    
-        #title
-    title = ''
-    profile_api = 'https://www.showroom-live.com/api/room/profile?room_id={room_id}'.format(room_id = room_id)
-    html = loads(get_content(profile_api))
-    try:
-        title = html['main_name']
-    except KeyError:
-        title = 'Showroom_{room_id}'.format(room_id = room_id)
+    log_f = open('1.log','w')
+log_f.write(' / '.join(map(str, words)))
