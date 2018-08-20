@@ -1,87 +1,72 @@
 
         
-            def setUp(self):
-        if self._SKIP_SOCKS_TEST:
-            return
+                def to_json(self, value):
+            return self.serializer.tag(value.data)
     
-                    fn = os.path.join(dirpath, basename)
-                with io.open(fn, encoding='utf-8') as inf:
-                    code = inf.read()
-    
-    
-class RtspFD(FileDownloader):
-    def real_download(self, filename, info_dict):
-        url = info_dict['url']
-        self.report_destination(filename)
-        tmpfilename = self.temp_name(filename)
-    
-    try:
-    from .lazy_extractors import *
-    from .lazy_extractors import _ALL_CLASSES
-    _LAZY_LOADER = True
+    signals_available = False
+try:
+    from blinker import Namespace
+    signals_available = True
 except ImportError:
-    _LAZY_LOADER = False
-    from .extractors import *
+    class Namespace(object):
+        def signal(self, name, doc=None):
+            return _FakeSignal(name, doc)
     
-    from .onet import OnetBaseIE
-    
-    from .common import InfoExtractor
-from .turner import TurnerBaseIE
-from ..utils import url_basename
-    
-        You can insert stuff, replace, and delete chunks.  Note that the
-    operations are done lazily--only if you convert the buffer to a
-    String.  This is very efficient because you are not moving data around
-    all the time.  As the buffer of tokens is converted to strings, the
-    toString() method(s) check to see if there is an operation at the
-    current index.  If so, the operation is done and then normal String
-    rendering continues on the buffer.  This is like having multiple Turing
-    machine instruction streams (programs) operating on a single input tape. :)
-    
-        def pushbutton(self, name, x, y, w, h, attr, text, next):
-        return self.control(name, 'PushButton', x, y, w, h, attr, None, text, next, None)
-    
-        token_type = 'header'
-    
-        def test_default_exc_handler_coro(self):
-        self.loop._process_events = mock.Mock()
-    
-        def testSin(self):
-        self.assertRaises(TypeError, math.sin)
-        self.ftest('sin(0)', math.sin(0), 0)
-        self.ftest('sin(pi/2)', math.sin(math.pi/2), 1)
-        self.ftest('sin(-pi/2)', math.sin(-math.pi/2), -1)
-        try:
-            self.assertTrue(math.isnan(math.sin(INF)))
-            self.assertTrue(math.isnan(math.sin(NINF)))
-        except ValueError:
-            self.assertRaises(ValueError, math.sin, INF)
-            self.assertRaises(ValueError, math.sin, NINF)
-        self.assertTrue(math.isnan(math.sin(NAN)))
+        if rv is None:
+        fail('Could not parse changelog')
     
     
-class FixXrange(fixer_base.BaseFix):
-    BM_compatible = True
-    PATTERN = '''
-              power<
-                 (name='range'|name='xrange') trailer< '(' args=any ')' >
-              rest=any* >
-              '''
+def test_config_missing():
+    app = flask.Flask(__name__)
+    with pytest.raises(IOError) as e:
+        app.config.from_pyfile('missing.cfg')
+    msg = str(e.value)
+    assert msg.startswith('[Errno 2] Unable to load configuration '
+                          'file (No such file or directory):')
+    assert msg.endswith('missing.cfg'')
+    assert not app.config.from_pyfile('missing.cfg', silent=True)
     
     
-class TestLLTrace(unittest.TestCase):
+def test_log_view_exception(app, client):
+    @app.route('/')
+    def index():
+        raise Exception('test')
     
-            ffi_inc = [sysconfig.get_config_var('LIBFFI_INCLUDEDIR')]
-        if not ffi_inc or ffi_inc[0] == '':
-            ffi_inc = find_file('ffi.h', [], inc_dirs)
-        if ffi_inc is not None:
-            ffi_h = ffi_inc[0] + '/ffi.h'
-            if not os.path.exists(ffi_h):
-                ffi_inc = None
-                print('Header file {} does not exist'.format(ffi_h))
-        ffi_lib = None
-        if ffi_inc is not None:
-            for lib_name in ('ffi', 'ffi_pic'):
-                if (self.compiler.find_library_file(lib_dirs, lib_name)):
-                    ffi_lib = lib_name
-                    break
+            # Force Python to track this dictionary at all times.
+        # This is necessary since Python only starts tracking
+        # dicts if they contain mutable objects.  It's a horrible,
+        # horrible hack but makes this kinda testable.
+        loc.__storage__['FOOO'] = [1, 2, 3]
+    
+        html = get_content(url)
+    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
+    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
+    
+    
+def huaban_download_board(url, output_dir, **kwargs):
+    kwargs['merge'] = False
+    board = extract_board_data(url)
+    output_dir = os.path.join(output_dir, board.title)
+    print_info(site_info, board.title, 'jpg', float('Inf'))
+    for pin in board.pins:
+        download_urls([pin.url], pin.id, pin.ext, float('Inf'),
+                      output_dir=output_dir, faker=True, **kwargs)
+    
+            pdf = match1(content, r'name='filename'\s*value='([^']+\.pdf)'')
+        if pdf: pdf = 'http://res.infoq.com/downloads/pdfdownloads/%s' % pdf
+    
+    def mixcloud_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url, faker=True)
+    title = r1(r'<meta property='og:title' content='([^']*)'', html)
+    preview_url = r1(r'm-preview=\'([^\']+)\'', html)
+    preview = r1(r'previews(.*)\.mp3$', preview_url)
+    
+    site = MusicPlayOn()
+download = site.download_by_url
+# TBD: implement download_playlist
+
+    
+    from ..common import *
+import urllib.error
+from json import loads
+from time import time, sleep
