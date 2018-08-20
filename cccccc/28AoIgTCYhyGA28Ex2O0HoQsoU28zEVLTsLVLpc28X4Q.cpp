@@ -1,367 +1,378 @@
 
         
-          /// This is the second time DebuggerClient is consulted:
-  /// after all names in external Modules are checked, the client
-  /// gets a chance to add names to the list of candidates that
-  /// have been found in the external module lookup.
+        #if defined(OS_WIN)
+#include 'base/strings/utf_string_conversions.h'
+#include 'base/files/file_path.h'
+#include 'base/files/file_util.h'
+#include 'base/win/shortcut.h'
+#include 'base/path_service.h'
+#include 'content/nw/src/common/shell_switches.h'
+#endif
     
-    
-llvm::Optional<ASTNode>
-SyntaxASTMap::getNodeForSyntax(syntax::Syntax SyntaxNode) const {
-  auto Found = SyntaxMap.find(SyntaxNode.Root);
-  if (Found == SyntaxMap.end()) {
-    return None;
-  }
-  return Found->getSecond();
+    void Clipboard::SetText(std::string& text) {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  ui::Clipboard::ObjectMap map;
+  map[ui::Clipboard::CBF_TEXT].push_back(
+      std::vector<char>(text.begin(), text.end()));
+  clipboard->WriteObjects(ui::CLIPBOARD_TYPE_COPY_PASTE, map);
 }
     
-    #include 'swift/Basic/LLVM.h'
-#include 'llvm/ADT/ArrayRef.h'
-#include 'llvm/ADT/StringRef.h'
+       void ExecuteCommand(int command_id, int event_flags) override;
     
-    /// A SyntaxRewriter for applying a set of formatting rules to a Syntax tree.
-struct FormatSyntaxRewriter : public SyntaxRewriter {
-  virtual StructDeclSyntax
-  rewriteStructDecl(StructDeclSyntax Struct) override;
+    MenuItem::MenuItem(int id,
+                   const base::WeakPtr<ObjectManager>& object_manager,
+                   const base::DictionaryValue& option,
+                   const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id) {
+  Create(option);
+}
+    
+    namespace nwapi {
+    }
+    
+    using namespace extensions::nwapi::nw__app;
+    
+    NwObjCallObjectMethodAsyncFunction::NwObjCallObjectMethodAsyncFunction() {
+}
+    
+     protected:
+  ~NwObjAllocateIdFunction() override;
+    
+        UINT createDeviceFlags = 0;
+    
+    void ComputeJacobians(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
+                      const IntrinsicParams& param,  InputArray omc, InputArray Tc,
+                      const int& check_cond, const double& thresh_cond, Mat& JJ2_inv, Mat& ex3);
+    
+    
+    {        findLinesCrossPoint(origin1, dir1, origin2, dir2, corners[i]);
+    }
+    
+    int lapack_LU32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, int* info);
+int lapack_LU64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, int* info);
+int lapack_Cholesky32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, bool* info);
+int lapack_Cholesky64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, bool* info);
+int lapack_SVD32f(float* a, size_t a_step, float* w, float* u, size_t u_step, float* vt, size_t v_step, int m, int n, int flags);
+int lapack_SVD64f(double* a, size_t a_step, double* w, double* u, size_t u_step, double* vt, size_t v_step, int m, int n, int flags);
+int lapack_QR32f(float* src1, size_t src1_step, int m, int n, int k, float* src2, size_t src2_step, float* dst, int* info);
+int lapack_QR64f(double* src1, size_t src1_step, int m, int n, int k, double* src2, size_t src2_step, double* dst, int* info);
+int lapack_gemm32f(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
+                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
+                   int m, int n, int k, int flags);
+int lapack_gemm64f(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
+                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
+                   int m, int n, int k, int flags);
+int lapack_gemm32fc(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
+                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
+                   int m, int n, int k, int flags);
+int lapack_gemm64fc(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
+                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
+                   int m, int n, int k, int flags);
+    
+    static void* openclamdblas_check_fn(int ID)
+{
+    assert(ID >= 0 && ID < (int)(sizeof(openclamdblas_fn)/sizeof(openclamdblas_fn[0])));
+    const struct DynamicFnEntry* e = openclamdblas_fn[ID];
+    void* func = CV_CL_GET_PROC_ADDRESS(e->fnName);
+    if (!func)
+    {
+        throw cv::Exception(cv::Error::OpenCLApiCallError,
+                cv::format('OpenCL AMD BLAS function is not available: [%s]', e->fnName),
+                CV_Func, __FILE__, __LINE__);
+    }
+    *(e->ppFn) = func;
+    return func;
+}
+    
+    struct DynamicFnEntry
+{
+    const char* fnName; // 'clCreateContext'
+    void** ppFn; // &clCreateContext_pfn
 };
     
-      /// Tracks previous replacements so we don't pump the rewrite buffer with
-  /// multiple equivalent replacements, which can result in weird behavior.
-  llvm::SmallSet<Replacement, 32> Replacements;
+    const uchar g_Saturate8u[] =
+{
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
+     16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
+     32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
+     48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
+     64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
+     80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
+     96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
+    112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
+    144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
+    160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
+    176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
+    192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
+    208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
+    224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
+    240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255
+};
+    
+    // taken from TH (generic/THTensor.c)
+// with a little fixes done so as to allocate
+// and free memory the way it is done in THDTensor
+static void THDTensor_(_resize)(THDTensor *self, int nDimension, int64_t *size, int64_t *stride) {
+  int nDimension_;
+  ptrdiff_t totalSize;
+  bool hasRequiredSize = true;
+    }
     
     
     {
-    {    rph->Send(new ShellViewMsg_Reopen());
+    {    if (PyObject_IsInstance(stream, THCPStreamClass)) {
+      streams.push_back( ((THCPStream *)stream)->cdata);
+    } else if (stream == Py_None) {
+      streams.push_back(NULL);
+    } else {
+      std::runtime_error('Unknown data type found in stream list. Need THCStream or None');
+    }
   }
+  return streams;
 }
     
-      // Post 'reopen' event.
-  // (This event is received when the user clicked the icon in the Dock).
-  static void EmitReopenEvent();
     
-    // Call method of an object in browser and return the result.
-// function CallObjectMethod(id, type, method, args);
-v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
-                                           int object_id,
-                                           const std::string& type,
-                                           const std::string& method,
-                                           v8::Handle<v8::Value> args);
-    
-    void MenuItem::CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) {
-  if (method == 'GetChecked') {
-    result->AppendBoolean(GetChecked());
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    #include 'content/nw/src/api/menuitem/menuitem.h'
-    
-     protected:
-  ~NwAppClearAppCacheFunction() override;
-    
-     protected:
-  ~NwObjCreateFunction() override;
-    
-     protected:
-   /**
-   * @brief Generates a random integer from Uniform({0, 1, ..., n-1}).
-   *
-   * @param n
-   *    The upperbound (exclusive) value of the random number.
-   * @return
-   *    A uniformly random integer value from ({0, 1, ..., n-1}).
-   */
-  virtual int Rand(int n);
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of ConvolutionLayer.
- *        Fallback to ConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates convolution through forward kernels for filtering and bias
- * plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
- *
- * The CUDNN engine does not have memory overhead for matrix buffers. For many
- * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
- * but for fully-convolutional models and large inputs the CAFFE engine can be
- * faster as long as it fits in memory.
-*/
-template <typename Dtype>
-class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
- public:
-  explicit CuDNNConvolutionLayer(const LayerParameter& param)
-      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNConvolutionLayer();
-    }
-    
-      EltwiseParameter_EltwiseOp op_;
-  vector<Dtype> coeffs_;
-  Blob<int> max_idx_;
-    
-    #include 'network.h'
-#include 'fullyconnected.h'
-    
-      /**
-   * Returns true if the iterator is at the start of an object at the given
-   * level.
-   *
-   * For instance, suppose an iterator it is pointed to the first symbol of the
-   * first word of the third line of the second paragraph of the first block in
-   * a page, then:
-   *   it.IsAtBeginningOf(RIL_BLOCK) = false
-   *   it.IsAtBeginningOf(RIL_PARA) = false
-   *   it.IsAtBeginningOf(RIL_TEXTLINE) = true
-   *   it.IsAtBeginningOf(RIL_WORD) = true
-   *   it.IsAtBeginningOf(RIL_SYMBOL) = true
-   */
-  virtual bool IsAtBeginningOf(PageIteratorLevel level) const;
-    
-      /// Return true if we are processing the full image.
-  bool IsFullImage() const {
-    return rect_left_ == 0 && rect_top_ == 0 &&
-           rect_width_ == image_width_ && rect_height_ == image_height_;
-  }
-    
-    namespace tesseract {
-    }
-    
-      // Returns the average (in some sense) distance between the two given
-  // shapes, which may contain multiple fonts and/or unichars.
-  // This function is public to facilitate testing.
-  float ShapeDistance(const ShapeTable& shapes, int s1, int s2);
-    
-    struct CrackPos {
-  CRACKEDGE** free_cracks;   // Freelist for fast allocation.
-  int x;                     // Position of new edge.
-  int y;
-};
-    
-    class PythonGrpcGenerator : public grpc::protobuf::compiler::CodeGenerator {
- public:
-  PythonGrpcGenerator(const GeneratorConfiguration& config);
-  ~PythonGrpcGenerator();
-    }
-    
-    
-    {  const Result start_;
-};
-    
-    #include 'src/compiler/python_generator.h'
-    
-        private:
-        void EnumerateStatefulNodesForRoot(ComputationNetwork& net, ComputationNodeBasePtr root, std::map<wstring, shared_ptr<IStatefulNode>>& statefulNodes)
-        {
-            for (const auto& node : net.GetAllNodesForRoot(root))
+    {            // for sequence training
+            if (!criterionNodes.empty() && criterionNodes[0]->OperationName() == L'SequenceWithSoftmax')
             {
-                const auto& name = node->GetName();
-                if (statefulNodes.find(name) != statefulNodes.end())
-                    continue; // already in the list  --TODO: use insert()
-                shared_ptr<IStatefulNode> pNode = dynamic_pointer_cast<IStatefulNode>(node);
-                if (pNode) // if it is an IStatefulNode then report it
-                    statefulNodes[name] = pNode;
+                auto node = dynamic_pointer_cast<SequenceWithSoftmaxNode<ElemType>>(criterionNodes[0]);
+                assert(node);
+                m_netLatticePtr = node->getLatticePtr();
+                m_netExtrauttMapPtr = node->getextrauttmap();
+                m_netUidPtr = node->getuidprt();
+                m_netBoundariesPtr = node->getboundaryprt();
+                m_hasLattices = true;
+            }
+            else
+            {
+                m_netLatticePtr = nullptr;
+                m_netExtrauttMapPtr = nullptr;
+                m_netUidPtr = nullptr;
+                m_netBoundariesPtr = nullptr;
+                m_hasLattices = false;
             }
         }
     
-    // -----------------------------------------------------------------------
-// network editing
-// -----------------------------------------------------------------------
+        template <typename ElementType>
+    /*static*/ ValuePtr Value::CreateBatch(size_t dimension, const std::vector<size_t>& batchData, const DeviceDescriptor& device, bool readOnly/* = false*/)
+    {
+        //TODO: avoid data copy.
+        std::vector<std::vector<size_t>> input(batchData.size());
+        for (size_t i = 0; i < batchData.size(); i++)
+        {
+            input[i] = {batchData[i]};
+        }
+        // Pass the empty seqStartFlags means all sequences have the start flag with true.
+        return Create<ElementType>(dimension, input, {}, device, readOnly);
+    }
     
-        bool transposeA = false, transposeB = false;
-    float alpha = 0.3f;
-    float beta = 0.0f;
-    Matrix<float>::MultiplyAndWeightedAdd(alpha, mB, transposeA, mAdense, transposeB, beta, mC);
-    Matrix<float>::MultiplyAndWeightedAdd(alpha, mB, transposeA, mAsparse, transposeB, beta, mD);
+        bool empty() const
+    {
+#ifndef NONUMLATTICEMMI // TODO:set NUM lattice to null so as to save memory
+        if (numlattices.empty() ^ denlattices.empty())
+            RuntimeError('latticesource: numerator and denominator lattices must be either both empty or both not empty');
+#endif
+        return denlattices.empty();
+    }
     
-    template void DoConvertFromDbn<float>(const ConfigParameters& config);
-template void DoConvertFromDbn<double>(const ConfigParameters& config);
-template void DoExportToDbn<float>(const ConfigParameters& config);
-template void DoExportToDbn<double>(const ConfigParameters& config);
+    // ===================================================================
+// behave like a config
+// This allows to access nodes inside a network as if it was an IConfigRecord.
+// This is meant to be used by whatever we will replace MEL.
+// ===================================================================
+    
+    
+    
+    
+    {
+    {
+    {
+    {
+    {        // return the 'done with all records' value
+        return (m_currentRecord >= m_recordCount);
+    }
+    virtual void SaveMapping(std::wstring saveId, const std::map<typename EvalWriter<ElemType>::LabelIdType, typename EvalWriter<ElemType>::LabelType>& /*labelMapping*/){};
+    virtual bool SupportMultiUtterances() const
+    {
+        return false;
+    };
+};
+} } }
 
     
-    #include <memory> // for shared_ptr
+    int register_all_cocos2dx_csloader(lua_State* tolua_S);
     
-    public:
-    // DataWriter Constructor
-    // config - [in] configuration parameters for the datareader
-    template <class ConfigRecordType>
-    DataWriter(const ConfigRecordType& config);
-    // constructor from Scripting
-    DataWriter(const ScriptableObjects::IConfigRecordPtr configp)
-        : DataWriter(*configp)
-    {
+    
+    
+    
+    
+    	void Keyboard(unsigned char key)
+	{
+		switch (key)
+		{
+		case 'd':
+			m_platform->SetType(b2_dynamicBody);
+			break;
     }
-    virtual ~DataWriter();
-    
-        // This prints a PROGRESS message with a percentage value of 0 to prevent timeouts on Philly
-    // when executing long running non-training operations like PreCompute, CV, Eval, and Write
-    static size_t TraceFakeProgress(size_t numIterationsBeforePrintingProgress, size_t numItersSinceLastPrintOfProgress)
-    {
-        size_t newNumItersSinceLastPrintOfProgress = numItersSinceLastPrintOfProgress;
-        if (GetTracingFlag())
-        {
-            newNumItersSinceLastPrintOfProgress++;
-            if (newNumItersSinceLastPrintOfProgress >= numIterationsBeforePrintingProgress)
-            {
-                printf('PROGRESS: %.2f%%\n', 0.0f);
-                newNumItersSinceLastPrintOfProgress = 0;
-            }
-        }
     }
     
-    // ---------------------------------------------------------------------------
-// array_ref -- wraps a C pointer to an array together with its size.
-//
-// Called _ref because this is a reference to the array rather than the array
-// itself (since it wraps a pointer). No need to pass an array_ref by reference.
-//
-// operator[] checks index bounds in Debug builds. size() is provided such
-// that this class can be substituted for STL vector in many cases.
-// ---------------------------------------------------------------------------
+    			b2FixtureDef fd;
+			fd.shape = &shape;
+			fd.density = 1.0f;
     
-        template<template<typename> class ValueContainer> 
-    void ForwardPassT(const std::vector < ValueBuffer<ElemType, ValueContainer> >& inputs,
-                      std::vector < ValueBuffer<ElemType, ValueContainer> >& outputs, bool resetRNN);
+        ImFontAtlasBuildRegisterDefaultCustomRects(atlas);
+    
+            static float f = 0.0f;
+        ImGui::Text('Hello, world!');
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
+        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
+        ImGui::ShowDemoWindow(NULL);
+    
+    // Copyright (C) 2015 by Giovanni Zito
+// This file is part of ImGui
+    
+    static bool show_demo_window = true;
+static bool show_another_window = false;
+static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    
+        // Main loop
+    while (!glfwWindowShouldClose(window))
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        glfwPollEvents();
+    }
     
     //****************************
 // Simple Hash Functions
 //****************************
     
+      virtual bool PartialMergeMulti(const Slice& key,
+                                 const std::deque<Slice>& operand_list,
+                                 std::string* new_value, Logger* logger) const
+      override;
+    
+    namespace rocksdb {
+JniCallback::JniCallback(JNIEnv* env, jobject jcallback_obj) {
+  // Note: jcallback_obj may be accessed by multiple threads,
+  // so we ref the jvm not the env
+  const jint rs = env->GetJavaVM(&m_jvm);
+  if(rs != JNI_OK) {
+    // exception thrown
+    return;
+  }
+    }
+    }
+    
+    #include 'rocksjni/statisticsjni.h'
+    
+    // @lint-ignore TXT4 T25377293 Grandfathered in
+#endif  // JAVA_ROCKSJNI_STATISTICSJNI_H_
+    
+    #ifndef JAVA_ROCKSJNI_COMPACTION_FILTER_FACTORY_JNICALLBACK_H_
+#define JAVA_ROCKSJNI_COMPACTION_FILTER_FACTORY_JNICALLBACK_H_
+    
     namespace rocksdb {
     }
     
-      // Offset of the file position indicator within the last block when an
-  // EOF was detected.
-  size_t eof_offset_;
-    
-    JNIEnv* JniCallback::getJniEnv(jboolean* attached) const {
-  return JniUtil::getJniEnv(m_jvm, attached);
+    Env::~Env() {
 }
     
-      /**
-   * @brief [brief description]
-   * @details [long description]
-   * @return true if Sync() and Fsync() are safe to call concurrently with Append()and Flush().
-   */
-  bool IsSyncThreadSafe() const {
-    return true;
-  }
     
-    // The factory is to create memtables based on a hash table:
-// it contains a fixed array of buckets, each pointing to either a linked list
-// or a skip list if number of entries inside the bucket exceeds
-// threshold_use_skiplist.
-// @bucket_count: number of fixed array buckets
-// @huge_page_tlb_size: if <=0, allocate the hash table bytes from malloc.
-//                      Otherwise from huge page TLB. The user needs to reserve
-//                      huge pages for it to be allocated, like:
-//                          sysctl -w vm.nr_hugepages=20
-//                      See linux doc Documentation/vm/hugetlbpage.txt
-// @bucket_entries_logging_threshold: if number of entries in one bucket
-//                                    exceeds this number, log about it.
-// @if_log_bucket_dist_when_flash: if true, log distribution of number of
-//                                 entries when flushing.
-// @threshold_use_skiplist: a bucket switches to skip list if number of
-//                          entries exceed this parameter.
-extern MemTableRepFactory* NewHashLinkListRepFactory(
-    size_t bucket_count = 50000, size_t huge_page_tlb_size = 0,
-    int bucket_entries_logging_threshold = 4096,
-    bool if_log_bucket_dist_when_flash = true,
-    uint32_t threshold_use_skiplist = 256);
+    {        return NULL;
+    }
     
-      if(m_jSliceA != nullptr) {
-    env->DeleteGlobalRef(m_jSliceA);
-  }
+    jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const AutoBuffer& ab);
+jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const void* _buffer, size_t _length);
+void JNU_FreeJbyteArray(JNIEnv* _env, jbyteArray bytes);
+    
+            JavaVMAttachArgs args;
+        args.group = NULL;
+        args.name = 'default';
+        args.version = JNI_VERSION_1_6;
+        status_ = vm_->AttachCurrentThread(&env_, &args);
     
     
-    {  ComparatorJniCallbackOptions() : use_adaptive_mutex(false) {
-  }
+    {  private:
+    JavaVM* vm_;
+    JNIEnv* env_;
+    bool we_attach_;
+    int status_;
 };
     
-    void TestKillRandom(std::string kill_point, int odds,
-                    const std::string& srcfile, int srcline) {
-  for (auto& p : rocksdb_kill_prefix_blacklist) {
-    if (kill_point.substr(0, p.length()) == p) {
-      return;
-    }
-  }
-    }
-    
-    
-    {// Instantiate the most common Future types to save compile time
-template class SemiFuture<Unit>;
-template class SemiFuture<bool>;
-template class SemiFuture<int>;
-template class SemiFuture<int64_t>;
-template class SemiFuture<std::string>;
-template class SemiFuture<double>;
-template class Future<Unit>;
-template class Future<bool>;
-template class Future<int>;
-template class Future<int64_t>;
-template class Future<std::string>;
-template class Future<double>;
-} // namespace folly
-    
-      ThreadPtr makeThread() override;
-  std::shared_ptr<IOThread> pickThread();
-  void threadRun(ThreadPtr thread) override;
-  void stopThreads(size_t n) override;
-  size_t getPendingTaskCountImpl() override;
-    
-    #include <folly/stats/detail/BufferedStat.h>
-    
-      // Not yet built.  Is it currently in progress?
-  if (creating_thread_.load(std::memory_order_acquire) != std::thread::id()) {
-    return true;
-  }
-    
-      TypeDescriptor type() const {
-    return type_;
-  }
-  virtual bool hasLiveInstance() = 0;
-  virtual void createInstance() = 0;
-  virtual bool creationStarted() = 0;
-  virtual void preDestroyInstance(ReadMostlyMainPtrDeleter<>&) = 0;
-  virtual void destroyInstance() = 0;
-    
-      BENCHMARK_DEPRECATED_MSG('use 'range(1)' instead')
-  int range_y() const { return range(1); }
-    
-    #endif  // BENCHMARK_COLORPRINT_H_
-
-    
-    // Reads and returns the string environment variable corresponding to
-// the given flag; if it's not set, returns default_value.
-const char* StringFromEnv(const char* flag, const char* default_value) {
-  const std::string env_var = FlagToEnvVar(flag);
-  const char* const value = getenv(env_var.c_str());
-  return value == nullptr ? default_value : value;
+    void AbstractBtMessage::setPieceStorage(PieceStorage* pieceStorage)
+{
+  pieceStorage_ = pieceStorage;
 }
     
+      virtual void enableReadOnly() CXX11_OVERRIDE;
     
-    {    // Compute all possible fitting curves and stick to the best one
-    for (const auto& fit : fit_curves) {
-      LeastSq current_fit = MinimalLeastSq(n, time, FittingCurve(fit));
-      if (current_fit.rms < best_fit.rms) {
-        best_fit = current_fit;
-        best_fit.complexity = fit;
-      }
+    namespace aria2 {
     }
-  } else {
-    best_fit = MinimalLeastSq(n, time, FittingCurve(complexity));
-    best_fit.complexity = complexity;
-  }
+    
+    
+    {} // namespace aria2
+    
+    #endif // D_ABSTRACT_PROXY_RESPONSE_COMMAND_H
+
+    
+      BinaryStream* stream_;
+    
+    class AnnounceList {
+public:
+private:
+  std::deque<std::shared_ptr<AnnounceTier>> tiers_;
+  std::deque<std::shared_ptr<AnnounceTier>>::iterator currentTier_;
+  std::deque<std::string>::iterator currentTracker_;
+  bool currentTrackerInitialized_;
+    }
+    
+    
+    {} // namespace aria2
+    
+    class ApiCallbackDownloadEventListener : public DownloadEventListener {
+public:
+  ApiCallbackDownloadEventListener(Session* session,
+                                   DownloadEventCallback callback,
+                                   void* userData);
+  virtual ~ApiCallbackDownloadEventListener();
+  virtual void onEvent(DownloadEvent event,
+                       const RequestGroup* group) CXX11_OVERRIDE;
+    }
