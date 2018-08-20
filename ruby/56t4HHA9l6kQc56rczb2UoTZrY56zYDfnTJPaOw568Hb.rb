@@ -1,162 +1,149 @@
 
         
-                  # Bubbled up from the adapter require. Prefix the exception message
-          # with some guidance about how to address it and reraise.
-          else
-            raise e.class, 'Error loading the '#{adapter}' Action Cable pubsub adapter. Missing a gem it depends on? #{e.message}', e.backtrace
+              # Run ::process method in a given set of Jekyll::Command subclasses and suggest
+      # re-running the associated command with --trace switch to obtain any additional
+      # information or backtrace regarding the encountered Exception.
+      #
+      # cmd     - the Jekyll::Command to be handled
+      # options - configuration overrides
+      # klass   - an array of Jekyll::Command subclasses associated with the command
+      #
+      # Note that all exceptions are rescued..
+      # rubocop: disable RescueException
+      def process_with_graceful_fail(cmd, options, *klass)
+        klass.each { |k| k.process(options) if k.respond_to?(:process) }
+      rescue Exception => e
+        raise e if cmd.trace
+    
+            def collect_urls(urls, things, destination)
+          things.each do |thing|
+            dest = thing.destination(destination)
+            if urls[dest]
+              urls[dest] << thing.path
+            else
+              urls[dest] = [thing.path]
+            end
           end
+          urls
         end
     
-            def test_spec_name_on_key_lookup
-          spec = spec(:readonly, 'readonly' => { 'adapter' => 'sqlite3' })
-          assert_equal 'readonly', spec.name
+          def html_pages
+        @site_html_pages ||= @obj.pages.select do |page|
+          page.html? || page.url.end_with?('/')
         end
-    
-        def build_bind_attribute(column_name, value)
-      attr = Relation::QueryAttribute.new(column_name.to_s, value, table.type(column_name))
-      Arel::Nodes::BindParam.new(attr)
-    end
-    
-        company.save!
-    assert_equal company, contract_a.reload.company
-    assert_equal company, contract_b.reload.company
-  end
-    
-      validate :check_empty_title
-  validate :check_content_mismatch, on: :create
-  validate :check_wrong_update, on: :update
-  validate :check_author_name_is_secret, on: :special_case
-    
-      test 'disallow negative and zero periods' do
-    [ 0, 0.0, 0.seconds, -1, -1.seconds, 'foo', :foo, Object.new ].each do |invalid|
-      e = assert_raise ArgumentError do
-        ChatChannel.periodically :send_updates, every: invalid
       end
-      assert_match(/Expected every:/, e.message)
-    end
+    
+      included do
+    self.validate :validate_email_options
   end
     
-          expected = { 'identifier' => '{id: 1}', 'type' => 'reject_subscription' }
-      assert_equal expected, @connection.last_transmission
-      assert_equal 1, @connection.transmissions.size
+      def destroy
+    @event.destroy
     
-      def test_unsubscribe_client
-    with_puma_server do |port|
-      app = ActionCable.server
-      identifier = JSON.generate(channel: 'ClientTest::EchoChannel')
-    
-      private
-    def open_connection
-      env = Rack::MockRequest.env_for '/test', 'HTTP_CONNECTION' => 'upgrade', 'HTTP_UPGRADE' => 'websocket',
-        'HTTP_HOST' => 'localhost', 'HTTP_ORIGIN' => 'http://rubyonrails.com'
-    
-      test 'connection identifier' do
-    run_in_eventmachine do
-      open_connection
-      assert_equal 'User#lifo', @connection.connection_identifier
-    end
-  end
-    
-    require 'test_helper'
-require 'stubs/test_server'
-require 'active_support/core_ext/hash/indifferent_access'
-    
-    class RedisAdapterTest::AlternateConfiguration < RedisAdapterTest
-  def cable_config
-    alt_cable_config = super.dup
-    alt_cable_config.delete(:url)
-    alt_cable_config.merge(host: '127.0.0.1', port: 6379, db: 12)
-  end
-end
-    
-        brew cask install mactex
-    EOS
-  when 'pip' then <<-EOS.undent
-    Homebrew provides pip via: `brew install python`. However you will then
-    have two Pythons installed on your Mac, so alternatively you can install
-    pip via the instructions at:
-    
-        return if Language::Python.reads_brewed_pth_files?('python')
-    
-        def self.cleanup_lockfiles
-      return unless HOMEBREW_CACHE_FORMULA.directory?
-      candidates = HOMEBREW_CACHE_FORMULA.children
-      lockfiles  = candidates.select { |f| f.file? && f.extname == '.brewing' }
-      lockfiles.each do |file|
-        next unless file.readable?
-        file.open.flock(File::LOCK_EX | File::LOCK_NB) && file.unlink
-      end
-    end
-    
-          renamed_formulae << [old_full_name, new_full_name] if @report[:A].include? new_full_name
-    end
-    
-      def self.require_universal_deps
-    define_method(:require_universal_deps?) { true }
-  end
-    
-    # See browser for an example
-class GithubGistFormula < ScriptFileFormula
-  def self.url(val)
-    super
-    version File.basename(File.dirname(val))[0, 6]
-  end
-end
-    
-      # Finds the groups of the source user, optionally limited to those visible to
-  # the current user.
-  def execute(current_user = nil)
-    segments = all_groups(current_user)
-    
-            @value << new_block
-      end
-    end
+      def user_credential_params
+    params.require(:user_credential).permit(:credential_name, :credential_value, :mode)
   end
 end
 
     
+        #
+    # Instance Methods
     #
-# Project
-#
     
-    def usage
-  $stderr.puts '#{$0} [site list] [output-dir]'
-  exit(0)
-end
+    # Copyright (C) 2008 Rapid7, Inc.
     
-        # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 143 and pkt.tcp_dport != 143)
-    s = find_session((pkt.tcp_sport == 143) ? get_session_src(pkt) : get_session_dst(pkt))
-    s[:sname] ||= 'imap4'
+                end
     
-    #compileOpts = ['']
-#outputDir		= system.getProperty('java.io.tmpdir')
-outputDir		= 'testoutdir'
-compileOpts 	= [ '-target', '1.3', '-source', '1.3', '-d', outputDir ]
+          when :login_fail
+        if(s[:user] and s[:pass])
+          report_auth_info(s.merge({:active => false}))
+          print_status('Failed FTP Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]}')
     
-    #certCN cannot contain commas
-certCN 		= 'Metasploit Inc.'
-#keytoolOpts 	= '-genkey -alias signFiles -keystore msfkeystore ' +
-#		  '-storepass msfstorepass -dname \'cn=#{certCN}\' ' +
-#		  '-keypass msfkeypass'
+    require_relative 'converter/fonts_conversion'
+require_relative 'converter/less_conversion'
+require_relative 'converter/js_conversion'
+require_relative 'converter/logger'
+require_relative 'converter/network'
     
-    		self.block = Array.new
-		self.block_size = 0
-	end
+        # margin: a -b
+    # LESS: sets 2 values
+    # Sass: sets 1 value (a-b)
+    # This wraps a and -b so they evaluates to 2 values in Sass
+    def replace_calculation_semantics(file)
+      # split_prop_val.call('(@navbar-padding-vertical / 2) -@navbar-padding-horizontal')
+      # #=> ['(navbar-padding-vertical / 2)', '-navbar-padding-horizontal']
+      split_prop_val = proc { |val|
+        s         = CharStringScanner.new(val)
+        r         = []
+        buff      = ''
+        d         = 0
+        prop_char = %r([\$\w\-/\*\+%!])
+        while (token = s.scan_next(/([\)\(]|\s+|#{prop_char}+)/))
+          buff << token
+          case token
+            when '('
+              d += 1
+            when ')'
+              d -= 1
+              if d == 0
+                r << buff
+                buff = ''
+              end
+            when /\s/
+              if d == 0 && !buff.strip.empty?
+                r << buff
+                buff = ''
+              end
+          end
+        end
+        r << buff unless buff.empty?
+        r.map(&:strip)
+      }
     
-        export LANG=en_US.UTF-8
-    \e[0m
-    DOC
-  end
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
     
-        # From asking people, it seems MacPorts does not have a `prefix` command, like
-    # Homebrew does, so make an educated guess:
-    if port_prefix = prefix_from_bin('port')
-      prefixes << port_prefix
-    end
+          private
     
-            sets = config.sources_manager.aggregate.all_sets
-        sets.each { |set| UI.pod(set, :name_and_version) }
-        UI.puts '\n#{sets.count} pods were found'
+            rows.each do |row|
+          line = row.values.each_with_index.map do |value, col|
+            value.to_s.ljust(col_widths[col])
+          end.join(' ').rstrip
+          line = color.colorize(line, row.color) if row.color
+          puts line
+        end
       end
+    
+      # Implemented by subclasses to define Rake tasks. Typically a plugin will call
+  # `eval_rakefile` to load Rake tasks from a separate .rake file.
+  #
+  # Example:
+  #
+  #   def define_tasks
+  #     eval_rakefile File.expand_path('../tasks.rake', __FILE__)
+  #   end
+  #
+  # For simple tasks, you can define them inline. No need for a separate file.
+  #
+  #   def define_tasks
+  #     desc 'Do something fantastic.'
+  #     task 'my_plugin:fantastic' do
+  #       ...
+  #     end
+  #   end
+  #
+  def define_tasks; end
+    
+    desc 'Deploy a new release.'
+task :deploy do
+  set(:deploying, true)
+  %w{ starting started
+      updating updated
+      publishing published
+      finishing finished }.each do |task|
+    invoke 'deploy:#{task}'
+  end
+end
+task default: :deploy
