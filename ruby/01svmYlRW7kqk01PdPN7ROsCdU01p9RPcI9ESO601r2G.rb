@@ -1,23 +1,30 @@
 
         
-          def self.fragment_cache
-    @cache ||= DistributedCache.new('am_serializer_fragment_cache')
+        namespace :emojis do
+  desc 'Generate a unicode to filename mapping'
+  task :generate do
+    source = 'http://www.unicode.org/Public/emoji/5.0/emoji-test.txt'
+    codes  = []
+    dest   = Rails.root.join('app', 'javascript', 'mastodon', 'features', 'emoji', 'emoji_map.json')
+    
+    class NotificationMailerPreview < ActionMailer::Preview
+  # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/mention
+  def mention
+    m = Mention.last
+    NotificationMailer.mention(m.account, Notification.find_by(activity: m))
   end
     
-      before do
-    Spaceship::Portal::Key.client = mock_client
-  end
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
     
-            expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::VERSION_NUMBER]).to match(/cd .* && agvtool new-marketing-version 2.0.0/)
-      end
-    
-      def id
-    object.id.to_s
-  end
-    
-        HTTP.get(source).to_s.split('\n').each do |line|
-      next if line.start_with? '#'
-      parts = line.split(';').map(&:strip)
-      next if parts.size < 2
-      codes << [parts[0], parts[1].start_with?('fully-qualified')]
-    end
+    module RuboCop
+  module AST
+    # A node extension for `def` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `def` nodes within RuboCop.
+    class DefNode < Node
+      include ParameterizedNode
+      include MethodIdentifierPredicates
