@@ -1,146 +1,221 @@
 
         
-        bool js_cocos2dx_builder_CCBAnimationManager_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBAnimationManager_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBAnimationManager(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBAnimationManager_moveAnimationsFromNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_actionForSoundChannel(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setBaseValue(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getLastCompletedSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setRootNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamedTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_actionForCallbackChannel(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getKeyframeCallbacks(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceIdTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRunningSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRootNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setDelegate(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getSequenceDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getSequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setSequences(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_debug(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_CCBAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
+        void PartialRunMgr::PartialRunDone(int step_id, StatusCallback done,
+                                   const Status& status) {
+  Status callback_status;
+  {
+    mutex_lock l(mu_);
+    auto run_it = step_id_to_partial_run_.find(step_id);
+    if (run_it == step_id_to_partial_run_.end()) {
+      return;
+    }
+    run_it->second->final_status.Update(status);
+    if (!run_it->second->executor_done) {
+      // If we found the partial_run, we set the final callback to call only
+      // when the executor is completely done.
+      run_it->second->final_callback = std::move(done);
+      return;
+    }
+    callback_status = run_it->second->final_status;
+  }
+  // Otherwise we call the callback immediately.
+  done(callback_status);
+  mutex_lock l(mu_);
+  step_id_to_partial_run_.erase(step_id);
+}
     
-    extern JSClass  *jsb_cocos2d_Physics3D6DofConstraint_class;
-extern JSObject *jsb_cocos2d_Physics3D6DofConstraint_prototype;
+    #define EIGEN_USE_GPU
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
+    // To distinguish different instances of the pattern, (yes, you
+// can instantiate it more then once) the first argument to the
+// INSTANTIATE_TEST_CASE_P macro is a prefix that will be added to the
+// actual test case name. Remember to pick unique prefixes for different
+// instantiations. The tests from the instantiation above will have
+// these names:
+//
+//    * InstantiationName/FooTest.DoesBlah/0 for 'meeny'
+//    * InstantiationName/FooTest.DoesBlah/1 for 'miny'
+//    * InstantiationName/FooTest.DoesBlah/2 for 'moe'
+//    * InstantiationName/FooTest.HasBlahBlah/0 for 'meeny'
+//    * InstantiationName/FooTest.HasBlahBlah/1 for 'miny'
+//    * InstantiationName/FooTest.HasBlahBlah/2 for 'moe'
+//
+// You can use these names in --gtest_filter.
+//
+// This statement will instantiate all tests from FooTest again, each
+// with parameter values 'cat' and 'dog':
     
-    int lua_register_cocos2dx_cocosdenshion_SimpleAudioEngine(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,'cc.SimpleAudioEngine');
-    tolua_cclass(tolua_S,'SimpleAudioEngine','cc.SimpleAudioEngine','',nullptr);
+    // Then, use the TEST_P macro to define as many parameterized tests
+// for this fixture as you want. The _P suffix is for 'parameterized'
+// or 'pattern', whichever you prefer to think.
+    
+    // A helper class for implementing EXPECT_FATAL_FAILURE() and
+// EXPECT_NONFATAL_FAILURE().  Its destructor verifies that the given
+// TestPartResultArray contains exactly one failure that has the given
+// type and contains the given substring.  If that's not the case, a
+// non-fatal failure will be generated.
+class GTEST_API_ SingleFailureChecker {
+ public:
+  // The constructor remembers the arguments.
+  SingleFailureChecker(const TestPartResultArray* results,
+                       TestPartResult::Type type,
+                       const string& substr);
+  ~SingleFailureChecker();
+ private:
+  const TestPartResultArray* const results_;
+  const TestPartResult::Type type_;
+  const string substr_;
     }
     
-    
-    
-    
-    
-    
-    
-    	void Keyboard(unsigned char key)
-	{
-		switch (key)
-		{
-		case 'w':
-			{
-				b2Vec2 f = m_body->GetWorldVector(b2Vec2(0.0f, -200.0f));
-				b2Vec2 p = m_body->GetWorldPoint(b2Vec2(0.0f, 2.0f));
-				m_body->ApplyForce(f, p, true);
-			}
-			break;
-    }
-    }
-    
-    		// Bridge
-		{
-			int32 N = 20;
-			b2PolygonShape shape;
-			shape.SetAsBox(1.0f, 0.125f);
-    }
-    
-    // Check that __COUNTER__ is defined and that __COUNTER__ increases by 1
-// every time it is expanded. X + 1 == X + 0 is used in case X is defined to be
-// empty. If X is empty the expression becomes (+1 == +0).
-#if defined(__COUNTER__) && (__COUNTER__ + 1 == __COUNTER__ + 0)
-#define BENCHMARK_PRIVATE_UNIQUE_ID __COUNTER__
-#else
-#define BENCHMARK_PRIVATE_UNIQUE_ID __LINE__
-#endif
-    
-    // That gcc wants both of these prototypes seems mysterious. VC, for
-// its part, can't decide which to use (another mystery). Matching of
-// template overloads: the final frontier.
-#ifndef COMPILER_MSVC
-template <typename T, size_t N>
-char (&ArraySizeHelper(const T (&array)[N]))[N];
-#endif
-    
-    Benchmark* Benchmark::ThreadRange(int min_threads, int max_threads) {
-  CHECK_GT(min_threads, 0);
-  CHECK_GE(max_threads, min_threads);
-    }
-    
-    bool IsColorTerminal() {
-#if BENCHMARK_OS_WINDOWS
-  // On Windows the TERM variable is usually not set, but the
-  // console there does support colors.
-  return 0 != _isatty(_fileno(stdout));
-#else
-  // On non-Windows platforms, we rely on the TERM variable. This list of
-  // supported TERM values is copied from Google Test:
-  // <https://github.com/google/googletest/blob/master/googletest/src/gtest.cc#L2925>.
-  const char* const SUPPORTED_TERM_VALUES[] = {
-      'xterm',         'xterm-color',     'xterm-256color',
-      'screen',        'screen-256color', 'tmux',
-      'tmux-256color', 'rxvt-unicode',    'rxvt-unicode-256color',
-      'linux',         'cygwin',
+    // A copyable object representing the result of a test part (i.e. an
+// assertion or an explicit FAIL(), ADD_FAILURE(), or SUCCESS()).
+//
+// Don't inherit from TestPartResult as its destructor is not virtual.
+class GTEST_API_ TestPartResult {
+ public:
+  // The possible outcomes of a test part (i.e. an assertion or an
+  // explicit SUCCEED(), FAIL(), or ADD_FAILURE()).
+  enum Type {
+    kSuccess,          // Succeeded.
+    kNonFatalFailure,  // Failed but the test can continue.
+    kFatalFailure      // Failed and the test should be terminated.
   };
     }
     
-    // Parses a string for an Int32 flag, in the form of
-// '--flag=value'.
-//
-// On success, stores the value of the flag in *value, and returns
-// true.  On failure, returns false without changing *value.
-bool ParseInt32Flag(const char* str, const char* flag, int32_t* value);
+    // A concrete DeathTestFactory implementation for normal use.
+class DefaultDeathTestFactory : public DeathTestFactory {
+ public:
+  virtual bool Create(const char* statement, const RE* regex,
+                      const char* file, int line, DeathTest** test);
+};
     
-    bool SameNames(UserCounters const& l, UserCounters const& r) {
-  if (&l == &r) return true;
-  if (l.size() != r.size()) {
-    return false;
-  }
-  for (auto const& c : l) {
-    if (r.find(c.first) == r.end()) {
-      return false;
+      // Clones a 0-terminated C string, allocating memory using new.  The
+  // caller is responsible for deleting the return value using
+  // delete[].  Returns the cloned string, or NULL if the input is
+  // NULL.
+  //
+  // This is different from strdup() in string.h, which allocates
+  // memory using malloc().
+  static const char* CloneCString(const char* c_str);
+    
+    	virtual void joint_set_solver_priority(RID p_joint, int p_priority);
+	virtual int joint_get_solver_priority(RID p_joint) const;
+    
+    	bool read_only;
+	bool checkable;
+	bool checked;
+	bool draw_red;
+	bool keying;
+    
+    #endif // SHADERCOMPILERGLES3_H
+
+    
+    #endif // BOOST_ASIO_BASIC_WAITABLE_TIMER_HPP
+
+    
+    /// Create a new non-modifiable buffer that represents the given POD array.
+/**
+ * @returns A const_buffers_1 value equivalent to:
+ * @code const_buffers_1(
+ *     data.data(),
+ *     data.size() * sizeof(PodType)); @endcode
+ */
+template <typename PodType, std::size_t N>
+inline const_buffers_1 buffer(const boost::array<PodType, N>& data)
+{
+  return const_buffers_1(
+      const_buffer(data.data(), data.size() * sizeof(PodType)));
+}
+    
+    #ifndef BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+#define BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+typedef long atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef std::atomic<long> atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef boost::detail::atomic_count atomic_count;
+inline void increment(atomic_count& a, long b) { while (b > 0) ++a, --b; }
+#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+    
+        // Pop the key/value pair from the stack.
+    ~context()
+    {
+      call_stack<Key, Value>::top_ = next_;
+    }
+    
+    
+    {    // Make the upcall if required.
+    if (owner)
+    {
+      fenced_block b(fenced_block::half);
+      BOOST_ASIO_HANDLER_INVOCATION_BEGIN((handler.arg1_, handler.arg2_));
+      boost_asio_handler_invoke_helpers::invoke(handler, handler.handler_);
+      BOOST_ASIO_HANDLER_INVOCATION_END;
     }
   }
-  return true;
+    
+    #ifndef BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
+#define BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
+    
+      // Remove all entries from the map.
+  void clear()
+  {
+    // Clear the values.
+    values_.clear();
+    size_ = 0;
+    }
+    
+    #pragma once
+    
+     private:
+  /// udev handle (socket descriptor contained within).
+  struct udev* handle_{nullptr};
+    
+    class ExampleTable : public TablePlugin {
+ private:
+  TableColumns columns() const {
+    return {
+        std::make_tuple('example_text', TEXT_TYPE, ColumnOptions::DEFAULT),
+        std::make_tuple(
+            'example_integer', INTEGER_TYPE, ColumnOptions::DEFAULT),
+    };
+  }
+    }
+    
+    Status readRawMem(size_t base, size_t length, void** buffer) {
+  *buffer = 0;
+    }
+    
+    Status FirehoseLoggerPlugin::logStatus(const std::vector<StatusLogLine>& log) {
+  return forwarder_->logStatus(log);
 }
     
+      Status logString(const std::string& s) override;
     
-    {  const double avg_squares = SumSquares(v) * (1.0 / v.size());
-  return Sqrt(v.size() / (v.size() - 1.0) * (avg_squares - Sqr(mean)));
-}
+    class KinesisLoggerPlugin : public LoggerPlugin {
+ public:
+  KinesisLoggerPlugin() : LoggerPlugin() {}
+    }
+    
+      virtual bool GetAdjustedExtrinsics(
+    Eigen::Matrix<double, 4, 4>* extrinsics) = 0;
+    
+      const double dx1 = cos_heading_ * half_length_;
+  const double dy1 = sin_heading_ * half_length_;
+  const double dx2 = sin_heading_ * half_width_;
+  const double dy2 = -cos_heading_ * half_width_;
+  const double dx3 = box.cos_heading() * box.half_length();
+  const double dy3 = box.sin_heading() * box.half_length();
+  const double dx4 = box.sin_heading() * box.half_width();
+  const double dy4 = -box.cos_heading() * box.half_width();
