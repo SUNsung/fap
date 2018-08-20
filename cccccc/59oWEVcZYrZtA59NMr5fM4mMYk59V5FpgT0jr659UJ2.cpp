@@ -1,200 +1,284 @@
 
         
-        
-    {    IntrinsicParams();
-    IntrinsicParams(Vec2d f, Vec2d c, Vec4d k, double alpha = 0);
-    IntrinsicParams operator+(const Mat& a);
-    IntrinsicParams& operator =(const Mat& a);
-    void Init(const cv::Vec2d& f, const cv::Vec2d& c, const cv::Vec4d& k = Vec4d(0,0,0,0), const double& alpha = 0);
-};
+        /*!
+ * \brief Create a Layer style, forward/backward operator.
+ *  This is easy to write code that contains state.
+ *  OpStatePtr is a pointer type, it's content is mutable even if
+ *  OpStatePtr is constant.
+ *
+ *
+ *  This is not the only way to register an op execution function.
+ *  More simpler or specialized operator form can be registered
+ *
+ *  \note Register under 'FCreateLayerOp'
+ */
+using FCreateOpState = std::function<OpStatePtr (const NodeAttrs& attrs,
+                                                 Context ctx,
+                                                 const std::vector<TShape>& in_shape,
+                                                 const std::vector<int>& in_type)>;
+/*!
+ * \brief Execution mode of this operator.
+ */
+using FExecType = std::function<ExecType (const NodeAttrs& attrs)>;
+/*!
+ * \brief Resiger a compute function for stateful operator.
+ *  OpStatePtr is a pointer type, it's content is mutable even if
+ *  OpStatePtr is constant.
+ *
+ * \note Register under 'FStatefulCompute<cpu>' and 'FStatefulCompute<gpu>'
+ */
+using FStatefulCompute = std::function<void (const OpStatePtr& state,
+                                             const OpContext& ctx,
+                                             const std::vector<TBlob>& inputs,
+                                             const std::vector<OpReqType>& req,
+                                             const std::vector<TBlob>& outputs)>;
+/*!
+ * \brief Resiger a compute function for stateful operator using NDArray interface.
+ *  OpStatePtr is a pointer type, it's content is mutable even if
+ *  OpStatePtr is constant.
+ *
+ * \note Register under 'FStatefulComputeEx<cpu>' and 'FStatefulComputeEx<gpu>'
+ */
+using FStatefulComputeEx = std::function<void (const OpStatePtr& state,
+                                               const OpContext& ctx,
+                                               const std::vector<NDArray>& inputs,
+                                               const std::vector<OpReqType>& req,
+                                               const std::vector<NDArray>& outputs)>;
+/*!
+ * \brief The resource request from the operator.
+ *        An operator could register ResourceRequestEx, or ResourceRequest, or neither.
+ *
+ * \note Register under 'FResourceRequest'
+ */
+using FResourceRequest = std::function<
+  std::vector<ResourceRequest> (const NodeAttrs& n)>;
+/*!
+ * \brief The resource request from the operator.
+ *        An operator could register ResourceRequestEx, or ResourceRequest, or neither.
+ *
+ * \note Register under 'FResourceRequestEx'
+ */
+using FResourceRequestEx = std::function<
+  std::vector<ResourceRequest> (const NodeAttrs& n,
+                                const int dev_mask,
+                                const DispatchMode dispatch_mode)>;
+/*!
+ * \brief Register an operator called as a NDArray function
+ *
+ * \note Register under 'FNDArrayFunction'
+ */
+using FNDArrayFunction = std::function<void (const nnvm::NodeAttrs& attrs,
+                                             const std::vector<NDArray>& inputs,
+                                             std::vector<NDArray>* outputs)>;
+/*!
+ * \brief Resiger a compute function for simple stateless forward only operator
+ *
+ * \note Register under 'FCompute<cpu>' and 'FCompute<gpu>'
+ */
+using FCompute = std::function<void (const nnvm::NodeAttrs& attrs,
+                                     const OpContext& ctx,
+                                     const std::vector<TBlob>& inputs,
+                                     const std::vector<OpReqType>& req,
+                                     const std::vector<TBlob>& outputs)>;
+/*!
+ * \brief Resiger an NDArray compute function for simple stateless forward only operator
+ * \note Register under 'FComputeEx<xpu>' and 'FComputeEx<xpu>'
+ *       Dispatched only when inferred dispatch_mode is FDispatchComputeEx
+ */
+using FComputeEx = std::function<void (const nnvm::NodeAttrs& attrs,
+                                       const OpContext& ctx,
+                                       const std::vector<NDArray>& inputs,
+                                       const std::vector<OpReqType>& req,
+                                       const std::vector<NDArray>& outputs)>;
     
-    #if defined(__gl_h_) || defined(__GL_H__)
-#error Attempt to include auto-generated header after including gl.h
-#endif
-#if defined(__glext_h_) || defined(__GLEXT_H_)
-#error Attempt to include auto-generated header after including glext.h
-#endif
-#if defined(__gl_ATI_h_)
-#error Attempt to include auto-generated header after including glATI.h
-#endif
-    
-    #ifndef OPENCV_CORE_HAL_INTERNAL_HPP
-#define OPENCV_CORE_HAL_INTERNAL_HPP
-    
-    #if !defined (HAVE_CUDA) || defined (CUDA_DISABLER)
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41>
-internal::ValueArray41<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40,
-    T41> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
-    T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
-    T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
-    T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31, T32 v32, T33 v33,
-    T34 v34, T35 v35, T36 v36, T37 v37, T38 v38, T39 v39, T40 v40, T41 v41) {
-  return internal::ValueArray41<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39,
-      T40, T41>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14,
-      v15, v16, v17, v18, v19, v20, v21, v22, v23, v24, v25, v26, v27, v28,
-      v29, v30, v31, v32, v33, v34, v35, v36, v37, v38, v39, v40, v41);
-}
-    
-    TYPED_TEST(FooTest, HasPropertyA) { ... }
-    
-      // Waits for the death test to finish and returns its status.
-  virtual int Wait() = 0;
-    
-      // Create the directory so that path exists. Returns true if successful or
-  // if the directory already exists; returns false if unable to create the
-  // directory for any reason, including if the parent directory does not
-  // exist. Not named 'CreateDirectory' because that's a macro on Windows.
-  bool CreateFolder() const;
-    
-    
-    {  static const bool value =
-      sizeof(Helper(ImplicitlyConvertible::MakeFrom())) == 1;
-# pragma warning(pop)           // Restores the warning state.
-#elif defined(__BORLANDC__)
-  // C++Builder cannot use member overload resolution during template
-  // instantiation.  The simplest workaround is to use its C++0x type traits
-  // functions (C++Builder 2009 and above only).
-  static const bool value = __is_convertible(From, To);
-#else
-  static const bool value =
-      sizeof(Helper(ImplicitlyConvertible::MakeFrom())) == 1;
-#endif  // _MSV_VER
-};
-template <typename From, typename To>
-const bool ImplicitlyConvertible<From, To>::value;
-    
-      // Many linked_ptr operations may change p.link_ for some linked_ptr
-  // variable p in the same circle as this object.  Therefore we need
-  // to prevent two such operations from occurring concurrently.
-  //
-  // Note that different types of linked_ptr objects can coexist in a
-  // circle (e.g. linked_ptr<Base>, linked_ptr<Derived1>, and
-  // linked_ptr<Derived2>).  Therefore we must use a single mutex to
-  // protect all linked_ptr objects.  This can create serious
-  // contention in production code, but is acceptable in a testing
-  // framework.
-    
-       private:
-    Iterator(const Iterator& other)
-        : base_(other.base_),
-        begin1_(other.begin1_),
-        end1_(other.end1_),
-        current1_(other.current1_),
-        begin2_(other.begin2_),
-        end2_(other.end2_),
-        current2_(other.current2_),
-        begin3_(other.begin3_),
-        end3_(other.end3_),
-        current3_(other.current3_),
-        begin4_(other.begin4_),
-        end4_(other.end4_),
-        current4_(other.current4_),
-        begin5_(other.begin5_),
-        end5_(other.end5_),
-        current5_(other.current5_),
-        begin6_(other.begin6_),
-        end6_(other.end6_),
-        current6_(other.current6_),
-        begin7_(other.begin7_),
-        end7_(other.end7_),
-        current7_(other.current7_),
-        begin8_(other.begin8_),
-        end8_(other.end8_),
-        current8_(other.current8_) {
-      ComputeCurrentValue();
-    }
-    
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
-    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
-    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
-    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32, GTEST_TEMPLATE_ T33,
-    GTEST_TEMPLATE_ T34, GTEST_TEMPLATE_ T35, GTEST_TEMPLATE_ T36,
-    GTEST_TEMPLATE_ T37, GTEST_TEMPLATE_ T38>
-struct Templates38 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates37<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-      T29, T30, T31, T32, T33, T34, T35, T36, T37, T38> Tail;
-};
-    
-    template <>
-struct Types<$for i, [[internal::None]]> {
-  typedef internal::Types0 type;
-};
-    
-      virtual int GetNextPrime(int p) const {
-    for (int n = p + 1; n < is_prime_size_; n++) {
-      if (is_prime_[n]) return n;
+              T output_val = 0.;
+          for (int iy = 0; iy < roi_bin_grid_h; iy++) {
+            for (int ix = 0; ix < roi_bin_grid_w; ix++) {
+              PreCalc<T> pc = pre_calc[pre_calc_index];
+              output_val += pc.w1 * offset_bottom_data[pc.pos1] +
+                  pc.w2 * offset_bottom_data[pc.pos2] +
+                  pc.w3 * offset_bottom_data[pc.pos3] +
+                  pc.w4 * offset_bottom_data[pc.pos4];
     }
     }
     
-    // Returns true iff n is a prime number.
-bool IsPrime(int n) {
-  // Trivial case 1: small numbers
-  if (n <= 1) return false;
+    static const int kBlockSize = 32768;
+    
+      VersionEdit edit;
+  for (int i = 0; i < 4; i++) {
+    TestEncodeDecode(edit);
+    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
+                 InternalKey('foo', kBig + 500 + i, kTypeValue),
+                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
+    edit.DeleteFile(4, kBig + 700 + i);
+    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
+  }
+    
+      // create first key range
+  leveldb::WriteBatch batch;
+  for (size_t i = 0; i < kNumKeys; i++) {
+    batch.Put(Key1(i), 'value for range 1 key');
+  }
+  ASSERT_OK(db->Write(leveldb::WriteOptions(), &batch));
+    
+    namespace leveldb {
     }
     
-    // A sample program demonstrating using Google C++ testing framework.
+    // A FilterBlockBuilder is used to construct all of the filters for a
+// particular Table.  It generates a single string which is stored as
+// a special block in the Table.
 //
-// Author: wan@google.com (Zhanyong Wan)
+// The sequence of calls to FilterBlockBuilder must match the regexp:
+//      (StartBlock AddKey*)* Finish
+class FilterBlockBuilder {
+ public:
+  explicit FilterBlockBuilder(const FilterPolicy*);
+    }
     
-    #pragma pack(1)
-struct LongLinkPack {
-    unsigned char   magic;
-    unsigned char   ver;
-    unsigned char   head_length;
-    unsigned char   url_length;
-    unsigned int    total_length;
-    unsigned int    sequence;
-    unsigned int    hash;
+      // Check the crc of the type and the block contents
+  const char* data = contents.data();    // Pointer to where Read put the data
+  if (options.verify_checksums) {
+    const uint32_t crc = crc32c::Unmask(DecodeFixed32(data + n + 1));
+    const uint32_t actual = crc32c::Value(data, n + 1);
+    if (actual != crc) {
+      delete[] buf;
+      s = Status::Corruption('block checksum mismatch');
+      return s;
+    }
+  }
+    
+    // Different bits-per-byte
+    
+    
+    {}  // namespace leveldb
+    
+     private:
+  double min_;
+  double max_;
+  double num_;
+  double sum_;
+  double sum_squares_;
+    
+    class StdoutPrinter : public WritableFile {
+ public:
+  virtual Status Append(const Slice& data) {
+    fwrite(data.data(), 1, data.size(), stdout);
+    return Status::OK();
+  }
+  virtual Status Close() { return Status::OK(); }
+  virtual Status Flush() { return Status::OK(); }
+  virtual Status Sync() { return Status::OK(); }
 };
     
-    #ifdef ANDROID
-#include 'comm/android/callstack.h'
+      // Reset the contents as if the BlockBuilder was just constructed.
+  void Reset();
+    
+    bool js_cocos2dx_studio_ActionTimeline_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_ActionTimeline_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_ActionTimeline(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_ActionTimeline_setFrameEventCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_clearFrameEndCallFuncs(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_setAnimationEndCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_addTimeline(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_getCurrentFrame(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_getStartFrame(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_pause(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_start(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_init(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_removeTimeline(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_setLastFrameCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_IsAnimationInfoExists(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_getTimelines(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_play(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_getAnimationInfo(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_resume(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_addFrameEndCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_removeAnimationInfo(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_getTimeSpeed(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_addAnimationInfo(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_getDuration(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_gotoFrameAndPause(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_isPlaying(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_removeFrameEndCallFuncs(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_gotoFrameAndPlay(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_clearFrameEventCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_getEndFrame(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_setTimeSpeed(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_clearLastFrameCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_setDuration(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_setCurrentFrame(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_removeFrameEndCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ActionTimeline_ActionTimeline(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    #if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_getBackgroundMusicVolume'', nullptr);
+        return 0;
+    }
 #endif
     
-      public:
-    template<typename T>
-    T* Service() {
-        if (m_publicservices.end() != m_publicservices.find(T::ServiceName()))
-            return (T*)m_publicservices[T::ServiceName()];
+    
+    
+    
+    mShaderProgram->setUniformLocationWith4f(mColorLocation, color.r, color.g, color.b, 1);
+    glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
+    
+        virtual void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color);
+    
+    		// Define attachment
+		{
+			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.position.Set(0.0f, 3.0f);
+			m_attachment = m_world->CreateBody(&bd);
+    }
+    
+    class Bridge : public Test
+{
+public:
     }
     
     
-    {}
+    {} // namespace folly
+
     
-    int TSpy::__TestFun1(int i)
-{
-    return reinterpret_cast<Test_Spy_Sample*>(This())->__TestFun1(i);
+    Init::Init(int* argc, char*** argv, bool removeFlags) {
+  init(argc, argv, removeFlags);
 }
     
-      std::unique_ptr<AuthConfig> getDefaultAuthConfig() const;
+      QuantileEstimates estimateQuantiles(
+      Range<const double*> quantiles,
+      TimePoint now = ClockT::now());
+  void addValue(double value, TimePoint now = ClockT::now());
     
-    public:
-  AbstractProxyResponseCommand(
-      cuid_t cuid, const std::shared_ptr<Request>& req,
-      const std::shared_ptr<FileEntry>& fileEntry, RequestGroup* requestGroup,
-      const std::shared_ptr<HttpConnection>& httpConnection, DownloadEngine* e,
-      const std::shared_ptr<SocketCore>& s);
+      rlimit newMemLimit;
+  newMemLimit.rlim_cur =
+      std::min(static_cast<rlim_t>(1UL << 30), oldMemLimit.rlim_max);
+  newMemLimit.rlim_max = oldMemLimit.rlim_max;
+  if (!folly::kIsSanitizeAddress) { // ASAN reserves outside of the rlimit
+    PCHECK(setrlimit(RLIMIT_AS, &newMemLimit) == 0);
+  }
+  SCOPE_EXIT {
+    PCHECK(setrlimit(RLIMIT_AS, &oldMemLimit) == 0);
+  };
     
-    AuthConfig::~AuthConfig() = default;
+      private:
+    CommFrequencyLimit(CommFrequencyLimit&);
+    CommFrequencyLimit& operator=(CommFrequencyLimit&);
+    
+      protected:
+    ServiceBase(const char* _servicename) : m_servicename(_servicename) {}
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+        const char* GetChar() const;
+    jstring GetJstr() const;
