@@ -1,524 +1,307 @@
 
         
-        
-    {
-    {
-    {      // Restore invariant for the next iteration of the loop.
-      substitution_base_cost = scratch[j - 1];  // = cost(i - 1, j)
-      scratch[j - 1] = cheapest;                // = cost(i, j)
-      insertion_cost = cheapest + 1;            // = cost(i, j) + 1
-    }
-  }
-  return scratch[t_size - 1];
+        template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25>
+internal::ValueArray25<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25> Values(T1 v1,
+    T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11,
+    T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19,
+    T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25) {
+  return internal::ValueArray25<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25>(v1,
+      v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17,
+      v18, v19, v20, v21, v22, v23, v24, v25);
 }
     
-    #include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
-#include 'tensorflow/core/framework/tensor_types.h'
-#include 'tensorflow/core/framework/types.h'
-#include 'tensorflow/core/kernels/scatter_functor.h'
+    const char* pets[] = {'cat', 'dog'};
+INSTANTIATE_TEST_CASE_P(AnotherInstantiationName, FooTest, ValuesIn(pets));
     
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // Sent by the renderer when the draggable regions are updated.
-IPC_MESSAGE_ROUTED1(ShellViewHostMsg_UpdateDraggableRegions,
-                    std::vector<extensions::DraggableRegion> /* regions */)
-    
-      // Post 'open' event.
-  static void EmitOpenEvent(const std::string& path);
-    
-    v8::Handle<v8::Value> AllocateId(int routing_id);
+    // Implements the helper function for {ASSERT|EXPECT}_NE
+GTEST_IMPL_CMP_HELPER_(NE, !=);
+// Implements the helper function for {ASSERT|EXPECT}_LE
+GTEST_IMPL_CMP_HELPER_(LE, <=);
+// Implements the helper function for {ASSERT|EXPECT}_LT
+GTEST_IMPL_CMP_HELPER_(LT, <);
+// Implements the helper function for {ASSERT|EXPECT}_GE
+GTEST_IMPL_CMP_HELPER_(GE, >=);
+// Implements the helper function for {ASSERT|EXPECT}_GT
+GTEST_IMPL_CMP_HELPER_(GT, >);
     
     
-bool MenuDelegate::GetAcceleratorForCommandId(
-      int command_id,
-      ui::Accelerator* accelerator) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-    }
+    {  const T1 v1_;
+};
+    
+      // Compares two wide C strings.  Returns true iff they have the same
+  // content.
+  //
+  // Unlike wcscmp(), this function can handle NULL argument(s).  A
+  // NULL C string is considered different to any non-NULL C string,
+  // including the empty string.
+  static bool WideCStringEquals(const wchar_t* lhs, const wchar_t* rhs);
+    
+    template <GTEST_10_TYPENAMES_(T), GTEST_10_TYPENAMES_(U)>
+inline bool operator==(const GTEST_10_TUPLE_(T)& t,
+                       const GTEST_10_TUPLE_(U)& u) {
+  return gtest_internal::SameSizeTuplePrefixComparator<
+      tuple_size<GTEST_10_TUPLE_(T) >::value,
+      tuple_size<GTEST_10_TUPLE_(U) >::value>::Eq(t, u);
+}
     
     
-    {}  // namespace nwapi
+$for i [[
+template <GTEST_$(n)_TYPENAMES_(T)>
+struct TupleElement<true, $i, GTEST_$(n)_TUPLE_(T) > {
+  typedef T$i type;
+};
+    
+    
+    {  // n has no integer factor in the range (1, n), and thus is prime.
+  return true;
+}
 
     
-    void MenuItem::SetIconIsTemplate(bool isTemplate) {
-}
+    #include <memory>
     
-    #include 'base/command_line.h'
-#include 'base/memory/ptr_util.h'
-#include 'chrome/browser/browsing_data/browsing_data_appcache_helper.h'
-#include 'chrome/browser/browsing_data/browsing_data_helper.h'
-#include 'chrome/browser/devtools/devtools_window.h'
-#include 'chrome/browser/extensions/devtools_util.h'
-#include 'chrome/browser/extensions/extension_service.h'
-#include 'content/nw/src/api/nw_app.h'
-#include 'content/nw/src/nw_base.h'
-#include 'content/public/browser/render_frame_host.h'
-#include 'content/public/browser/render_process_host.h'
-#include 'content/public/browser/render_view_host.h'
-#include 'content/public/browser/storage_partition.h'
-#include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/app_window/app_window.h'
-#include 'extensions/browser/app_window/app_window_registry.h'
-#include 'extensions/browser/app_window/native_app_window.h'
-#include 'extensions/browser/extension_system.h'
-#include 'extensions/common/error_utils.h'
-#include 'net/proxy_resolution/proxy_config.h'
-#include 'net/proxy_resolution/proxy_config_service_fixed.h'
-#include 'net/proxy_resolution/proxy_resolution_service.h'
-#include 'net/url_request/url_request_context.h'
-#include 'net/url_request/url_request_context_getter.h'
-#include 'net/traffic_annotation/network_traffic_annotation_test_helper.h'
+    #include <memory>
     
-    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardReadAvailableTypesFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    DEFINE_int32(driver_port, 0, 'Port for communication with driver');
+DEFINE_int32(server_port, 0, 'Port for operation as a server');
+DEFINE_string(credential_type, grpc::testing::kInsecureCredentialsType,
+              'Credential type for communication with driver');
+    
+    #include <grpc/support/alloc.h>
+#include <grpc/support/log.h>
+#include <grpc/support/log_windows.h>
+#include <grpc/support/string_util.h>
+#include <grpc/support/time.h>
+#include <string.h>
+#include 'src/core/lib/gpr/string.h'
+#include 'src/core/lib/gprpp/memory.h'
+#include 'src/core/lib/iomgr/combiner.h'
+#include 'src/core/lib/iomgr/socket_windows.h'
+#include 'src/core/lib/iomgr/tcp_windows.h'
+#include 'src/core/lib/slice/slice_internal.h'
+    
+    /* Asynchronous callback from the IOCP, or the background thread. */
+static void on_write(void* tcpp, grpc_error* error) {
+  grpc_tcp* tcp = (grpc_tcp*)tcpp;
+  grpc_winsocket* handle = tcp->socket;
+  grpc_winsocket_callback_info* info = &handle->write_info;
+  grpc_closure* cb;
     }
     
+    DOT_GRAPH_MAX_NODES    = 50
     
-    {    for (auto& media_list : media_list_) {
-      media_list->StartUpdating(this);
+    #define CALL_ELEM_FROM_CALL(call, idx) \
+  grpc_call_stack_element(CALL_STACK_FROM_CALL(call), idx)
+#define CALL_FROM_TOP_ELEM(top_elem) \
+  CALL_FROM_CALL_STACK(grpc_call_stack_from_top_element(top_elem))
+    
+    void GetAbsoluteFilePath(const char* valid_file_dir,
+                         const char* file_entry_name, char* path_buffer) {
+  if (valid_file_dir != nullptr && file_entry_name != nullptr) {
+    int path_len = snprintf(path_buffer, MAXPATHLEN, '%s/%s', valid_file_dir,
+                            file_entry_name);
+    if (path_len == 0) {
+      gpr_log(GPR_ERROR, 'failed to get absolute path for file: %s',
+              file_entry_name);
     }
   }
+}
     
-    int main(int argc, char** argv) {
-#ifndef GFLAGS_GFLAGS_H_
-  namespace gflags = google;
+    namespace boost {
+namespace asio {
+    }
+    }
+    
+      // Return a pointer to the beginning of the unread data.
+  const_buffer data() const
+  {
+    return boost::asio::buffer(buffer_) + begin_offset_;
+  }
+    
+    #include <boost/asio/detail/push_options.hpp>
+    
+    // Calls to asio_handler_invoke must be made from a namespace that does not
+// contain overloads of this function. The boost_asio_handler_invoke_helpers
+// namespace is defined here for that purpose.
+namespace boost_asio_handler_invoke_helpers {
+    }
+    
+    
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+      // Erase an entry from the map.
+  void erase(iterator it)
+  {
+    BOOST_ASIO_ASSERT(it != values_.end());
+    BOOST_ASIO_ASSERT(num_buckets_ != 0);
+    }
+    
+    #endif // BOOST_ASIO_DETAIL_IMPL_DEV_POLL_REACTOR_HPP
+
+    
+    
+    
+    #ifdef __cplusplus
+extern 'C' {
 #endif
-    }
-    
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the absolute value inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} =
-   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-    #include <vector>
-    
-    
-    {  /// when divided by UINT_MAX, the randomly generated values @f$u\sim U(0,1)@f$
-  Blob<unsigned int> rand_vec_;
-  /// the probability @f$ p @f$ of dropping any input
-  Dtype threshold_;
-  /// the scale for undropped inputs at train time @f$ 1 / (1 - p) @f$
-  Dtype scale_;
-  unsigned int uint_thres_;
-};
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6>
-internal::ValueArray6<T1, T2, T3, T4, T5, T6> Values(T1 v1, T2 v2, T3 v3,
-    T4 v4, T5 v5, T6 v6) {
-  return internal::ValueArray6<T1, T2, T3, T4, T5, T6>(v1, v2, v3, v4, v5, v6);
+#include 'tolua++.h'
+#ifdef __cplusplus
 }
+#endif
     
+    #if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
     
-    {  virtual void ReportTestPartResult(const TestPartResult& result) = 0;
-};
-    
-    $for k [[
-      if (current$(i+2-k)_ == end$(i+2-k)_) {
-        current$(i+2-k)_ = begin$(i+2-k)_;
-        ++current$(i+2-k-1)_;
-      }
-    
-    
-    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(ParameterizedTestFactory);
-};
-    
-      template <GTEST_7_TYPENAMES_(U)>
-  tuple(const GTEST_7_TUPLE_(U)& t) : f0_(t.f0_), f1_(t.f1_), f2_(t.f2_),
-      f3_(t.f3_), f4_(t.f4_), f5_(t.f5_), f6_(t.f6_) {}
-    
-    // ByRef<T>::type is T if T is a reference; otherwise it's const T&.
-template <typename T>
-struct ByRef { typedef const T& type; };  // NOLINT
-template <typename T>
-struct ByRef<T&> { typedef T& type; };  // NOLINT
-    
-      // Returns true iff n is a prime number.
-  virtual bool IsPrime(int n) const = 0;
-    
-      bool check_for_leaks = false;
-  if (argc > 1 && strcmp(argv[1], '--check_for_leaks') == 0 )
-    check_for_leaks = true;
-  else
-    printf('%s\n', 'Run this program with --check_for_leaks to enable '
-           'custom leak checking in the tests.');
-    
-      // Expects the appropriate results from the compressed_  unicharset_.
-  void ExpectCorrect(const string& lang) {
-    // Count the number of times each code is used in each element of
-    // RecodedCharID.
-    RecodedCharID zeros;
-    for (int i = 0; i < RecodedCharID::kMaxCodeLen; ++i) zeros.Set(i, 0);
-    int code_range = compressed_.code_range();
-    std::vector<RecodedCharID> times_seen(code_range, zeros);
-    for (int u = 0; u <= unicharset_.size(); ++u) {
-      if (u != UNICHAR_SPACE && u != null_char_ &&
-          (u == unicharset_.size() || (unicharset_.has_special_codes() &&
-                                       u < SPECIAL_UNICHAR_CODES_COUNT))) {
-        continue;  // Not used so not encoded.
-      }
-      RecodedCharID code;
-      int len = compressed_.EncodeUnichar(u, &code);
-      // Check round-trip encoding.
-      int unichar_id;
-      GenericVector<UNICHAR_ID> normed_ids;
-      if (u == null_char_ || u == unicharset_.size()) {
-        unichar_id = null_char_;
-      } else {
-        unichar_id = u;
-      }
-      EXPECT_EQ(unichar_id, compressed_.DecodeUnichar(code));
-      // Check that the codes are valid.
-      for (int i = 0; i < len; ++i) {
-        int code_val = code(i);
-        EXPECT_GE(code_val, 0);
-        EXPECT_LT(code_val, code_range);
-        times_seen[code_val].Set(i, times_seen[code_val](i) + 1);
-      }
-    }
-    // Check that each code is used in at least one position.
-    for (int c = 0; c < code_range; ++c) {
-      int num_used = 0;
-      for (int i = 0; i < RecodedCharID::kMaxCodeLen; ++i) {
-        if (times_seen[c](i) != 0) ++num_used;
-      }
-      EXPECT_GE(num_used, 1) << 'c=' << c << '/' << code_range;
-    }
-    // Check that GetNextCodes/GetFinalCodes lists match the times_seen,
-    // and create valid codes.
-    RecodedCharID code;
-    CheckCodeExtensions(code, times_seen);
-    // Finally, we achieved all that using a codebook < 10% of the size of
-    // the original unicharset, for CK or Indic, and 20% with J, but just
-    // no bigger for all others.
-    if (IsCJKLang(lang) || IsIndicLang(lang)) {
-      EXPECT_LT(code_range, unicharset_.size() / (lang == 'jpn' ? 5 : 10));
-    } else {
-      EXPECT_LE(code_range, unicharset_.size() + 1);
-    }
-    LOG(INFO) << 'Compressed unicharset of ' << unicharset_.size() << ' to '
-              << code_range;
-  }
-  // Checks for extensions of the current code that either finish a code, or
-  // extend it and checks those extensions recursively.
-  void CheckCodeExtensions(const RecodedCharID& code,
-                           const std::vector<RecodedCharID>& times_seen) {
-    RecodedCharID extended = code;
-    int length = code.length();
-    const GenericVector<int>* final_codes = compressed_.GetFinalCodes(code);
-    if (final_codes != nullptr) {
-      for (int i = 0; i < final_codes->size(); ++i) {
-        int ending = (*final_codes)[i];
-        EXPECT_GT(times_seen[ending](length), 0);
-        extended.Set(length, ending);
-        int unichar_id = compressed_.DecodeUnichar(extended);
-        EXPECT_NE(INVALID_UNICHAR_ID, unichar_id);
-      }
-    }
-    const GenericVector<int>* next_codes = compressed_.GetNextCodes(code);
-    if (next_codes != nullptr) {
-      for (int i = 0; i < next_codes->size(); ++i) {
-        int extension = (*next_codes)[i];
-        EXPECT_GT(times_seen[extension](length), 0);
-        extended.Set(length, extension);
-        CheckCodeExtensions(extended, times_seen);
-      }
-    }
-  }
-    
-    // Replicates the samples and perturbs them if the enable_replication_ flag
-// is set. MUST be used after the last call to OrganizeByFontAndClass on
-// the training samples, ie after IncludeJunk if it is going to be used, as
-// OrganizeByFontAndClass will eat the replicated samples into the regular
-// samples.
-void MasterTrainer::ReplicateAndRandomizeSamplesIfRequired() {
-  if (enable_replication_) {
-    if (debug_level_ > 0)
-      tprintf('ReplicateAndRandomize...\n');
-    verify_samples_.ReplicateAndRandomizeSamples();
-    samples_.ReplicateAndRandomizeSamples();
-    samples_.IndexFeatures(feature_space_);
-  }
-}
-    
-      // Find the next adjacent (to left or right) blob on this text line,
-  // with the constraint that it must vertically significantly overlap
-  // the [top_y, bottom_y] range.
-  // If ignore_images is true, then blobs with aligned_text() < 0 are treated
-  // as if they do not exist.
-  BLOBNBOX* AdjacentBlob(const BLOBNBOX* bbox,
-                         bool look_left, bool ignore_images,
-                         double min_overlap_fraction,
-                         int gap_limit, int top_y, int bottom_y);
-    
-    #include 'matrix.h'
-#include 'include_gunit.h'
-#include 'genericvector.h'
-#include 'tprintf.h'
-    
-    DIR128::DIR128(                 //from fcoord
-               const FCOORD fc  //vector to quantize
-              ) {
-  int high, low, current;        //binary search
-    }
-    
-    // A smart pointer class that implements a double-ended pointer. Each end
-// points to the other end. The copy constructor and operator= have MOVE
-// semantics, meaning that the relationship with the other end moves to the
-// destination of the copy, leaving the source unattached.
-// For this reason both the copy constructor and the operator= take a non-const
-// reference argument, and the const reference versions cannot be used.
-// DoublePtr is useful to incorporate into structures that are part of a
-// collection such as GenericVector or STL containers, where reallocs can
-// relocate the members. DoublePtr is also useful in a GenericHeap, where it
-// can correctly maintain the pointer to an element of the heap despite it
-// getting moved around on the heap.
-class DoublePtr {
- public:
-  DoublePtr() : other_end_(nullptr) {}
-  // Copy constructor steals the partner off src and is therefore a non
-  // const reference arg.
-  // Copying a const DoublePtr generates a compiler error.
-  DoublePtr(DoublePtr& src) {
-    other_end_ = src.other_end_;
-    if (other_end_ != nullptr) {
-      other_end_->other_end_ = this;
-      src.other_end_ = nullptr;
-    }
-  }
-  // Operator= steals the partner off src, and therefore needs src to be a non-
-  // const reference.
-  // Assigning from a const DoublePtr generates a compiler error.
-  void operator=(DoublePtr& src) {
-    Disconnect();
-    other_end_ = src.other_end_;
-    if (other_end_ != nullptr) {
-      other_end_->other_end_ = this;
-      src.other_end_ = nullptr;
-    }
-  }
-    }
-    
-      // See class comment for arguments.
-  void Init(const IndexMapBiDi* charset_map,
-            const ShapeTable* shape_table,
-            bool randomize,
-            TrainingSampleSet* sample_set);
-    
-    /** Returns the benchmark Reporter instance.
- *
- * The returned instance will take care of generating reports for all the actual
- * reporters configured via the 'enable_*_reporter' command line flags (see
- * benchmark_config.cc). */
-std::shared_ptr<Reporter> GetReporter();
-    
-      ClientConfig client_config;
-  client_config.set_client_type(ASYNC_CLIENT);
-  client_config.set_outstanding_rpcs_per_channel(1000);
-  client_config.set_client_channels(8);
-  client_config.set_async_client_threads(8);
-  client_config.set_rpc_type(STREAMING);
-  client_config.mutable_load_params()->mutable_poisson()->set_offered_load(
-      1000.0 / grpc_test_slowdown_factor());
-    
-    
-    {  return 0;
-}
-
-    
-    /* A GrpcPolledFdFactory is 1-to-1 with and owned by the
- * ares event driver. It knows how to create GrpcPolledFd's
- * for the current platform, and the ares driver uses it for all of
- * its fd's. */
-class GrpcPolledFdFactory {
- public:
-  virtual ~GrpcPolledFdFactory() {}
-  /* Creates a new wrapped fd for the current platform */
-  virtual GrpcPolledFd* NewGrpcPolledFdLocked(
-      ares_socket_t as, grpc_pollset_set* driver_pollset_set,
-      grpc_combiner* combiner) GRPC_ABSTRACT;
-  /* Optionally configures the ares channel after creation */
-  virtual void ConfigureAresChannelLocked(ares_channel channel) GRPC_ABSTRACT;
-    }
-    
-    #include <ares.h>
-    
-    static bool check_destroyable(grpc_winsocket* winsocket) {
-  return winsocket->destroy_called == true &&
-         winsocket->write_info.closure == NULL &&
-         winsocket->read_info.closure == NULL;
-}
-    
-    const grpc_channel_filter grpc_client_auth_filter = {
-    auth_start_transport_stream_op_batch,
-    grpc_channel_next_op,
-    sizeof(call_data),
-    init_call_elem,
-    set_pollset_or_pollset_set,
-    destroy_call_elem,
-    sizeof(channel_data),
-    init_channel_elem,
-    destroy_channel_elem,
-    grpc_channel_next_get_info,
-    'client-auth'};
-
-    
-    gpr_arena* grpc_call_get_arena(grpc_call* call) { return call->arena; }
-    
-    int main(int argc, char** argv) {
-  grpc_test_init(argc, argv);
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
-#else
-int main() {
-  printf('*** WARNING: this test is only supported on Linux systems ***\n');
-  return 0;
-}
-#endif  // GPR_LINUX
-
-    
-    grpc::string GetServiceAccountJsonKey() {
-  static grpc::string json_key;
-  if (json_key.empty()) {
-    std::ifstream json_key_file(FLAGS_service_account_key_file);
-    std::stringstream key_stream;
-    key_stream << json_key_file.rdbuf();
-    json_key = key_stream.str();
-  }
-  return json_key;
-}
-    
-    	FlagScopeGuard(bool &p_flag) :
-			flag(p_flag) {
-		flag = !flag;
-	}
-    
-    
-    {	return klass;
-}
-    
-    	// Let's use the no-namespace format for these too
-	GDMonoClass *class_MonoObject;
-	GDMonoClass *class_bool;
-	GDMonoClass *class_int8_t;
-	GDMonoClass *class_int16_t;
-	GDMonoClass *class_int32_t;
-	GDMonoClass *class_int64_t;
-	GDMonoClass *class_uint8_t;
-	GDMonoClass *class_uint16_t;
-	GDMonoClass *class_uint32_t;
-	GDMonoClass *class_uint64_t;
-	GDMonoClass *class_float;
-	GDMonoClass *class_double;
-	GDMonoClass *class_String;
-	GDMonoClass *class_IntPtr;
-    
-    
-    {			for (int i = 0; i < indices_map_size; ++i) {
-				bt_vertices.write[3 * i + 0] = p_vertices_read[indices_table[i][0]].x;
-				bt_vertices.write[3 * i + 1] = p_vertices_read[indices_table[i][0]].y;
-				bt_vertices.write[3 * i + 2] = p_vertices_read[indices_table[i][0]].z;
+    	void Keyboard(unsigned char key)
+	{
+		switch (key)
+		{
+		case 'w':
+			{
+				b2Vec2 f = m_body->GetWorldVector(b2Vec2(0.0f, -200.0f));
+				b2Vec2 p = m_body->GetWorldPoint(b2Vec2(0.0f, 2.0f));
+				m_body->ApplyForce(f, p, true);
 			}
+			break;
+    }
+    }
+    
+    
+    {
+    {		case 'k':
+			m_platform->SetType(b2_kinematicBody);
+			m_platform->SetLinearVelocity(b2Vec2(-m_speed, 0.0f));
+			m_platform->SetAngularVelocity(0.0f);
+			break;
 		}
-    
-    	if ('point_index' == p_what) {
-		r_ret = r[p_item].point_index;
-	} else if ('spatial_attachment_path' == p_what) {
-		r_ret = r[p_item].spatial_attachment_path;
-	} else if ('offset' == p_what) {
-		r_ret = r[p_item].offset;
-	} else {
-		return false;
 	}
     
-    	Node *_get_node(const NodePath &p_path) const;
-	Node *_get_child_by_name(const StringName &p_name) const;
+    // Reads the Start of Scan (SOS) marker segment and fills in *scan_info with the
+// parsed data.
+bool ProcessSOS(const uint8_t* data, const size_t len, size_t* pos,
+                JPEGData* jpg) {
+  const size_t start_pos = *pos;
+  VERIFY_LEN(3);
+  size_t marker_len = ReadUint16(data, pos);
+  int comps_in_scan = ReadUint8(data, pos);
+  VERIFY_INPUT(comps_in_scan, 1, static_cast<int>(jpg->components.size()),
+               COMPS_IN_SCAN);
+    }
     
-    static int set_addresses(struct ifaddrs* ifaddr, ifaddrmsg* msg, void* data,
-		  size_t len) {
-	if (msg->ifa_family == AF_INET) {
-		sockaddr_in* sa = new sockaddr_in;
-		sa->sin_family = AF_INET;
-		memcpy(&sa->sin_addr, data, len);
-		ifaddr->ifa_addr = reinterpret_cast<sockaddr*>(sa);
-	} else if (msg->ifa_family == AF_INET6) {
-		sockaddr_in6* sa = new sockaddr_in6;
-		sa->sin6_family = AF_INET6;
-		sa->sin6_scope_id = msg->ifa_index;
-		memcpy(&sa->sin6_addr, data, len);
-		ifaddr->ifa_addr = reinterpret_cast<sockaddr*>(sa);
-	} else {
-		return -1;
-	}
-	return 0;
+    #endif  // GUETZLI_DCT_DOUBLE_H_
+
+    
+    #ifndef GUETZLI_FAST_LOG_H_
+#define GUETZLI_FAST_LOG_H_
+    
+    
+    {}  // namespace guetzli
+
+    
+    // Definition of error codes for parsing jpeg files.
+    
+    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
+std::vector<std::vector<float>> PreProcessChannel(
+    int w, int h, int channel, float sigma, float amount, bool blur,
+    bool sharpen, const std::vector<std::vector<float>>& image);
+    
+    TEST_F(MockEnvTest, Corrupt) {
+  const std::string kGood = 'this is a good string, synced to disk';
+  const std::string kCorrupted = 'this part may be corrupted';
+  const std::string kFileName = '/dir/f';
+  unique_ptr<WritableFile> writable_file;
+  ASSERT_OK(env_->NewWritableFile(kFileName, &writable_file, soptions_));
+  ASSERT_OK(writable_file->Append(kGood));
+  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size());
+    }
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    
+     private:
+  // A version of PartialMerge that actually performs 'partial merging'.
+  // Use this to simulate the exact behaviour of the StringAppendOperator.
+  bool _AssocPartialMergeMulti(const Slice& key,
+                               const std::deque<Slice>& operand_list,
+                               std::string* new_value, Logger* logger) const;
+    
+      ~Reader();
+    
+      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
+    if (type >= HISTOGRAM_ENUM_MAX) {
+      return false;
+    }
+    
+    if (m_ignore_histograms.count(type) > 0) {
+        return false;
+    }
+    }
+    
+    namespace rocksdb {
+    }
+    
+    #include <windows.h>
+#include <string>
+#include <string.h>
+#include <mutex>
+#include <limits>
+#include <condition_variable>
+#include <malloc.h>
+#include <intrin.h>
+    
+    Status StatisticsImpl::Reset() {
+  MutexLock lock(&aggregate_lock_);
+  for (uint32_t i = 0; i < TICKER_ENUM_MAX; ++i) {
+    setTickerCountLocked(i, 0);
+  }
+  for (uint32_t i = 0; i < HISTOGRAM_ENUM_MAX; ++i) {
+    for (size_t core_idx = 0; core_idx < per_core_stats_.Size(); ++core_idx) {
+      per_core_stats_.AccessAtCore(core_idx)->histograms_[i].Clear();
+    }
+  }
+  return Status::OK();
 }
     
+    #ifndef COMM_COMM_FREQUENCY_LIMIT_H_
+#define COMM_COMM_FREQUENCY_LIMIT_H_
+    
+        template<typename T>
+    T* _Service() {
+        if (m_dependservices.end() != m_dependservices.find(T::ServiceName()))
+            return (T*)m_dependservices[T::ServiceName()];
+    }
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
     
     
-    /*All of these macros should expect floats as arguments.*/
-#define OC_MAXF(_a,_b)      ((_a)<(_b)?(_b):(_a))
-#define OC_MINF(_a,_b)      ((_a)>(_b)?(_b):(_a))
-#define OC_CLAMPF(_a,_b,_c) (OC_MINF(_a,OC_MAXF(_b,_c)))
-#define OC_FABSF(_f)        ((float)fabs(_f))
-#define OC_SQRTF(_f)        ((float)sqrt(_f))
-#define OC_POWF(_b,_e)      ((float)pow(_b,_e))
-#define OC_LOGF(_f)         ((float)log(_f))
-#define OC_IFLOORF(_f)      ((int)floor(_f))
-#define OC_ICEILF(_f)       ((int)ceil(_f))
+#define SPY_DEF_CLASS_NAME TSpy
+#define SPY_DEF_XLOGGER_HOOK TSpy::SpyHookLogFunc
     
-    void ImGui_ImplFreeGLUT_Shutdown()
-{
-}
-    
-    // Copyright (C) 2015 by Giovanni Zito
-// This file is part of ImGui
-    
-            // Get the function pointer (required for any extensions)
-        auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, 'vkCreateDebugReportCallbackEXT');
-        IM_ASSERT(vkCreateDebugReportCallbackEXT != NULL);
-    
-        // Setup style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsClassic();
-    
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
+    jvalue JNU_CallMethodByName(JNIEnv* _env, jobject obj, const char* _name, const char* descriptor, ...);
+jvalue JNU_CallStaticMethodByName(JNIEnv* _env, jclass clazz, const char* _name, const char* descriptor, ...);
+jvalue JNU_CallStaticMethodByName(JNIEnv* _env, const char* _class_name, const char* _name, const char* descriptor, ...);
+jvalue JNU_CallStaticMethodByMethodInfo(JNIEnv* _env, JniMethodInfo _method_info, ...);
+jvalue JNU_GetStaticField(JNIEnv* _env, jclass clazz, const char* _name, const char* sig);
+jvalue JNU_GetField(JNIEnv* _env, jobject obj, const char* _name, const char* sig);
