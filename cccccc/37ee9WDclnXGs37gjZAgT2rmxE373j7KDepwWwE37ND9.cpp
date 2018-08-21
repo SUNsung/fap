@@ -1,315 +1,250 @@
 
         
-        namespace index {
+        // NOTE: this class is NOT meant to be used in threaded contexts.
+@interface ObjectBehaviorVerifier : NSObject
+@property (readonly) BOOL wasRetained;
+@property (readonly) BOOL wasCopied;
+@property (readonly) BOOL wasMutableCopied;
+    
+    #ifndef SWIFT_AST_COMMENT_H
+#define SWIFT_AST_COMMENT_H
+    
+    /// A shorthand to clearly indicate that a value is a reference counted and
+/// heap-allocated.
+template <typename Inner>
+using RC = llvm::IntrusiveRefCntPtr<Inner>;
+    
+    /// Runs the given function with the given context argument exactly once.
+/// The predicate argument must point to a global or static variable of static
+/// extent of type swift_once_t.
+void swift::swift_once(swift_once_t *predicate, void (*fn)(void *),
+                       void *context) {
+#if defined(__APPLE__)
+  dispatch_once_f(predicate, context, fn);
+#elif defined(__CYGWIN__)
+  _swift_once_f(predicate, context, fn);
+#else
+  std::call_once(*predicate, [fn, context]() { fn(context); });
+#endif
+}
+
+    
+    #include <stdint.h>
+#include 'leveldb/db.h'
+#include 'db/dbformat.h'
+    
+    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
+  size_t usize = user_key.size();
+  size_t needed = usize + 13;  // A conservative estimate
+  char* dst;
+  if (needed <= sizeof(space_)) {
+    dst = space_;
+  } else {
+    dst = new char[needed];
+  }
+  start_ = dst;
+  dst = EncodeVarint32(dst, usize + 8);
+  kstart_ = dst;
+  memcpy(dst, user_key.data(), usize);
+  dst += usize;
+  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
+  dst += 8;
+  end_ = dst;
+}
+    
+    TEST(FindFileTest, MultipleNullBoundaries) {
+  Add('150', '200');
+  Add('200', '250');
+  Add('300', '350');
+  Add('400', '450');
+  ASSERT_TRUE(! Overlaps(NULL, '149'));
+  ASSERT_TRUE(! Overlaps('451', NULL));
+  ASSERT_TRUE(Overlaps(NULL, NULL));
+  ASSERT_TRUE(Overlaps(NULL, '150'));
+  ASSERT_TRUE(Overlaps(NULL, '199'));
+  ASSERT_TRUE(Overlaps(NULL, '200'));
+  ASSERT_TRUE(Overlaps(NULL, '201'));
+  ASSERT_TRUE(Overlaps(NULL, '400'));
+  ASSERT_TRUE(Overlaps(NULL, '800'));
+  ASSERT_TRUE(Overlaps('100', NULL));
+  ASSERT_TRUE(Overlaps('200', NULL));
+  ASSERT_TRUE(Overlaps('449', NULL));
+  ASSERT_TRUE(Overlaps('450', NULL));
+}
+    
+    // Size of each value
+static int FLAGS_value_size = 100;
+    
+    
+    {}  // namespace leveldb
+    
+    
+    {}  // namespace leveldb
+    
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
+}
+    
+    // TODO(jonskeet): Refactor repeated field support; all the implementations are *really* similar. We
+// should probably have a RepeatedFieldGeneratorBase.
+class RepeatedEnumFieldGenerator : public FieldGeneratorBase {
+ public:
+  RepeatedEnumFieldGenerator(const FieldDescriptor* descriptor,
+                             int fieldOrdinal,
+                             const Options *options);
+  ~RepeatedEnumFieldGenerator();
     }
     
-      size_t NumChildren;
-    
-      virtual void handleDiagnostic(SourceManager &SM, SourceLoc Loc,
-                                DiagnosticKind Kind,
-                                StringRef FormatString,
-                                ArrayRef<DiagnosticArgument> FormatArgs,
-                                const DiagnosticInfo &Info) override;
-    
-      /// Returns true if range \c R contains the location \c Loc.  The location
-  /// \c Loc should point at the beginning of the token.
-  bool rangeContainsTokenLoc(SourceRange R, SourceLoc Loc) const {
-    return Loc == R.Start || Loc == R.End ||
-           (isBeforeInBuffer(R.Start, Loc) && isBeforeInBuffer(Loc, R.End));
-  }
-    
-    // On OS X and iOS, swift_once_t matches dispatch_once_t.
-typedef long swift_once_t;
-    
-    // On macOS and iOS, swift_once is implemented using GCD.
-// The compiler emits an inline check matching the barrier-free inline fast
-// path of dispatch_once(). See SwiftTargetInfo.OnceDonePredicateValue.
-    
-    void indexDeclContext(DeclContext *DC, IndexDataConsumer &consumer);
-void indexSourceFile(SourceFile *SF, StringRef hash,
-                     IndexDataConsumer &consumer);
-void indexModule(ModuleDecl *module, StringRef hash,
-                 IndexDataConsumer &consumer);
-    
-    #include 'Callee.h'
-#include 'ManagedValue.h'
-#include 'swift/AST/Types.h'
-#include 'swift/Basic/LLVM.h'
-#include 'swift/SIL/SILLocation.h'
-#include <memory>
-    
-      /// Return true if the RHS have identical projection paths.
-  ///
-  /// If both LSBase have empty paths, they are treated as having
-  /// identical projection path.
-  bool hasIdenticalProjectionPath(const LSBase &RHS) const {
-    // If both Paths have no value, then the 2 LSBases are
-    // different.
-    if (!Path.hasValue() && !RHS.Path.hasValue())
-      return false;
-    // If 1 Path has value while the other does not, then the 2
-    // LSBases are different.
-    if (Path.hasValue() != RHS.Path.hasValue())
-      return false;
-    // If both Paths are empty, then the 2 LSBases are the same.
-    if (Path.getValue().empty() && RHS.Path.getValue().empty())
-      return true;
-    // If both Paths have different values, then the 2 LSBases are
-    // different.
-    if (Path.getValue() != RHS.Path.getValue())
-      return false;
-    // Otherwise, the 2 LSBases are the same.
-    return true;
-  }
-    
-      /// The entire text of the input file.
-  const StringRef Text;
-    
-    
-    {    auto I = std::lower_bound(Children.begin(), Children.end(), Idx,
-                              [](IndexTrieNode *a, unsigned i) {
-                                return a->Index < i;
-                              });
-    if (I != Children.end() && (*I)->Index == Idx)
-      return *I;
-    auto *N = new IndexTrieNode(Idx, this);
-    Children.insert(I, N);
-    return N;
-  }
-    
-    
-    {} // end namespace swift
-    
-    // Get basic type definitions.
-#define IPC_MESSAGE_IMPL
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    namespace base {
-class ListValue;
+    void RepeatedPrimitiveFieldGenerator::GenerateMergingCode(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    '$name$_.Add(other.$name$_);\n');
 }
+    
+      virtual void WriteHash(io::Printer* printer);
+  virtual void WriteEquals(io::Printer* printer);
+  virtual void WriteToString(io::Printer* printer);
+    
+    #include <google/protobuf/compiler/java/java_context.h>
+#include <google/protobuf/compiler/java/java_enum_field.h>
+#include <google/protobuf/compiler/java/java_extension.h>
+#include <google/protobuf/compiler/java/java_extension_lite.h>
+#include <google/protobuf/compiler/java/java_field.h>
+#include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_message.h>
+#include <google/protobuf/compiler/java/java_message_lite.h>
+#include <google/protobuf/compiler/java/java_service.h>
     
     
     {
-    {    if (zoom_controller) {
-      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
-      if (zoom_factor > content::kMaximumZoomFactor) {
-        zoom_factor = content::kMaximumZoomFactor;
-      }
-      if (zoom_factor < content::kMinimumZoomFactor) {
-        zoom_factor = content::kMinimumZoomFactor;
-      }
-      x *= zoom_factor;
-      y *= zoom_factor;
-    }
-    
-    Popup(x, y, rvh);
-  } else if (method == 'EnableShowEvent') {
-    arguments.GetBoolean(0, &enable_show_event_);
-  } else {
-    NOTREACHED() << 'Invalid call to Menu method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    bool MenuDelegate::GetIconForCommandId(int command_id,
-                                       gfx::Image* icon) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  if (item->icon_.IsEmpty())
-    return false;
-    }
-    
-     protected:
-  ~NwClipboardGetListSyncFunction() override;
-    
-    /**********************************************************************
- * DIR128::DIR128
- *
- * Quantize the direction of an FCOORD to make a DIR128.
- **********************************************************************/
-    
-    namespace tesseract {
-    }
-    
-    #ifndef SWIG
-template <class T1, class T2, class R, class P1, class P2, class P3, class A1, class A2>
-inline typename _ConstTessMemberResultCallback_3_2<true,R,T1,P1,P2,P3,A1,A2>::base*
-NewTessCallback(const T1* obj, R (T2::*member)(P1,P2,P3,A1,A2) const, typename Identity<P1>::type p1, typename Identity<P2>::type p2, typename Identity<P3>::type p3) {
-  return new _ConstTessMemberResultCallback_3_2<true,R,T1,P1,P2,P3,A1,A2>(obj, member, p1, p2, p3);
-}
-#endif
-    
-    
-    {  if (debugfp == nullptr && strlen(debug_file.string()) > 0) {
-    debugfp = fopen(debug_file.string(), 'wb');
-  } else if (debugfp != nullptr && strlen(debug_file.string()) == 0) {
-    fclose(debugfp);
-    debugfp = nullptr;
-  }
-  if (debugfp != nullptr)
-    fprintf(debugfp, '%s', msg);
-  else
-    fprintf(stderr, '%s', msg);
-  tesseract::tprintfMutex.Unlock();
-}
+    {
+    {
+    {
+    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ExtensionGenerator);
+};
+}  // namespace objectivec
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+#endif  // GOOGLE_PROTOBUF_COMPILER_OBJECTIVEC_MESSAGE_H__
 
     
-    #include 'unicodes.h'
-#include 'host.h'  // for nullptr
+    // Executes an expression that returns a util::StatusOr, extracting its value
+// into the variable defined by lhs (or returning on error).
+//
+// Example: Assigning to an existing value
+//   ValueType value;
+//   ASSIGN_OR_RETURN(value, MaybeGetValue(arg));
+//
+// WARNING: ASSIGN_OR_RETURN expands into multiple statements; it cannot be used
+//  in a single statement (e.g. as the body of an if statement without {})!
+#define ASSIGN_OR_RETURN(lhs, rexpr) \
+  ASSIGN_OR_RETURN_IMPL( \
+      STATUS_MACROS_CONCAT_NAME(_status_or_value, __COUNTER__), lhs, rexpr);
     
-      // Returns the average (in some sense) distance between the two given
-  // shapes, which may contain multiple fonts and/or unichars.
-  // This function is public to facilitate testing.
-  float ShapeDistance(const ShapeTable& shapes, int s1, int s2);
-    
-      // Returns the number of canonical features of font/class 2 for which
-  // neither the feature nor any of its near neighbors occurs in the cloud
-  // of font/class 1. Each such feature is a reliable separation between
-  // the classes, ASSUMING that the canonical sample is sufficiently
-  // representative that every sample has a feature near that particular
-  // feature. To check that this is so on the fly would be prohibitively
-  // expensive, but it might be possible to pre-qualify the canonical features
-  // to include only those for which this assumption is true.
-  // ComputeCanonicalFeatures and ComputeCloudFeatures must have been called
-  // first, or the results will be nonsense.
-  int ReliablySeparable(int font_id1, int class_id1,
-                        int font_id2, int class_id2,
-                        const IntFeatureMap& feature_map,
-                        bool thorough) const;
-    
-    static int set_flags(struct ifaddrs* ifaddr) {
-	int fd = socket(AF_INET, SOCK_DGRAM, 0);
-	if (fd == -1) {
-		return -1;
-	}
-	ifreq ifr;
-	memset(&ifr, 0, sizeof(ifr));
-	strncpy(ifr.ifr_name, ifaddr->ifa_name, IFNAMSIZ - 1);
-	int rc = ioctl(fd, SIOCGIFFLAGS, &ifr);
-	close(fd);
-	if (rc == -1) {
-		return -1;
-	}
-	ifaddr->ifa_flags = ifr.ifr_flags;
-	return 0;
-}
-    
-    
-    {	virtual btScalar addSingleResult(btCollisionWorld::LocalConvexResult &convexResult, bool normalInWorldSpace);
-};
-    
-            int rc = m_crr[cr];
-        int gc = ((m_crg[cr] + m_cbg[cb]) >> 16);
-        int bc = m_cbb[cb];
-    
-        // Call this method after constructing the object to begin decompression.
-    // If JPGD_SUCCESS is returned you may then call decode() on each scanline.
-    int begin_decoding();
-    
-    
-# if defined(OC_CLZ32)
-/**
- * OC_ILOGNZ_32 - Integer binary logarithm of a non-zero 32-bit value.
- * @_v: A non-zero 32-bit value.
- * Returns floor(log2(_v))+1.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * If _v is zero, the return value is undefined; use OC_ILOG_32() instead.
- */
-#  define OC_ILOGNZ_32(_v) (OC_CLZ32_OFFS-OC_CLZ32(_v))
-/**
- * OC_ILOG_32 - Integer binary logarithm of a 32-bit value.
- * @_v: A 32-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- */
-#  define OC_ILOG_32(_v)   (OC_ILOGNZ_32(_v)&-!!(_v))
-# else
-#  define OC_ILOGNZ_32(_v) (oc_ilog32(_v))
-#  define OC_ILOG_32(_v)   (oc_ilog32(_v))
-# endif
-    
-    /*All of these macros should expect floats as arguments.*/
-#define OC_MAXF(_a,_b)      ((_a)<(_b)?(_b):(_a))
-#define OC_MINF(_a,_b)      ((_a)>(_b)?(_b):(_a))
-#define OC_CLAMPF(_a,_b,_c) (OC_MINF(_a,OC_MAXF(_b,_c)))
-#define OC_FABSF(_f)        ((float)fabs(_f))
-#define OC_SQRTF(_f)        ((float)sqrt(_f))
-#define OC_POWF(_b,_e)      ((float)pow(_b,_e))
-#define OC_LOGF(_f)         ((float)log(_f))
-#define OC_IFLOORF(_f)      ((int)floor(_f))
-#define OC_ICEILF(_f)       ((int)ceil(_f))
-    
-    #endif /* OPUS_HAVE_RTCD */
-    
-    #define _ISOC9X_SOURCE 1
-#define _ISOC99_SOURCE 1
-    
-    #include <folly/Format.h>
+    #include <stdio.h>
     
     /*
- * Returns an IR block corresponding to the given bytecode offset. If the block
- * starts with a DefLabel expecting a StkPtr, this function will return an
- * intermediate block that passes the current sp.
+ * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
+ * Method:    XGBoosterPredict
+ * Signature: (JJIJ)[F
  */
-Block* getBlock(IRGS& env, Offset offset);
-    
-    #include 'hphp/util/disasm.h'
-    
-    using ClusterArcSet = std::unordered_set<ClusterArc, ClusterArcHash>;
-    
-      typedef std::function<void(pid_t)> LostChildHandler;
-  static void SetLostChildHandler(const LostChildHandler& handler);
-    
-    #endif // incl_HPHP_SYNCHRONIZABLE_MULTI_H_
-
-    
-    namespace HPHP { namespace jit { namespace arm {
-    }
-    }
-    }
-    
-    bool find_hugetlbfs_path() {
-#ifdef __linux__
-  auto mounts = fopen('/proc/mounts', 'r');
-  if (!mounts) return false;
-  // Search the file for lines like the following
-  // none /dev/hugepages hugetlbfs seclabel,relatime...
-  char line[4096];
-  char path[4096];
-  char option[4096];
-  while (fgets(line, sizeof(line), mounts)) {
-    if (sscanf(line, '%*s %s hugetlbfs %s', path, option) == 2) {
-      // It matches hugetlbfs, check page size and save results.
-      if (set_hugetlbfs_path(path)) {
-        fclose(mounts);
-        return true;
-      }
-    }
+JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGBoosterPredict
+  (JNIEnv *jenv, jclass jcls, jlong jhandle, jlong jdmat, jint joption_mask, jint jntree_limit, jobjectArray jout) {
+  BoosterHandle handle = (BoosterHandle) jhandle;
+  DMatrixHandle dmat = (DMatrixHandle) jdmat;
+  bst_ulong len;
+  float *result;
+  int ret = XGBoosterPredict(handle, dmat, joption_mask, (unsigned int) jntree_limit, &len, (const float **) &result);
+  if (len) {
+    jsize jlen = (jsize) len;
+    jfloatArray jarray = jenv->NewFloatArray(jlen);
+    jenv->SetFloatArrayRegion(jarray, 0, jlen, (jfloat *) result);
+    jenv->SetObjectArrayElement(jout, 0, jarray);
   }
-  fclose(mounts);
-#endif
-  return false;
+  return ret;
 }
     
-     protected:
-  /// Calculate the URL once and cache the result.
-  std::string uri_;
+    void MetaInfo::SaveBinary(dmlc::Stream *fo) const {
+  int32_t version = kVersion;
+  fo->Write(&version, sizeof(version));
+  fo->Write(&num_row_, sizeof(num_row_));
+  fo->Write(&num_col_, sizeof(num_col_));
+  fo->Write(&num_nonzero_, sizeof(num_nonzero_));
+  fo->Write(labels_);
+  fo->Write(group_ptr_);
+  fo->Write(qids_);
+  fo->Write(weights_);
+  fo->Write(root_index_);
+  fo->Write(base_margin_);
+}
     
-      struct tm result;
-  gmtime_r((time_t*)&epoch, &result);
+      void GetGradient(HostDeviceVector<bst_float> *preds,
+                   const MetaInfo &info,
+                   int iter,
+                   HostDeviceVector<GradientPair> *out_gpair) override {
+    CHECK_NE(info.labels_.size(), 0U) << 'label set cannot be empty';
+    CHECK_EQ(preds->Size(), info.labels_.size())
+        << 'labels are not correctly provided'
+        << 'preds.size=' << preds->Size()
+        << ', label.size=' << info.labels_.size();
+    auto& preds_h = preds->HostVector();
+    }
     
-     public:
-  bool shouldFire(const SCNetworkSubscriptionContextRef& sc,
-                  const SCNetworkEventContextRef& ec) const override;
+    TreeUpdater* TreeUpdater::Create(const std::string& name) {
+  auto *e = ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->Find(name);
+  if (e == nullptr) {
+    LOG(FATAL) << 'Unknown tree updater ' << name;
+  }
+  return (e->body)();
+}
     
-    /// Kernel shared buffer size in bytes.
-static const size_t kKernelQueueSize = (20 * (1 << 20));
+    SEXP XGBoosterPredict_R(SEXP handle, SEXP dmat, SEXP option_mask, SEXP ntree_limit) {
+  SEXP ret;
+  R_API_BEGIN();
+  bst_ulong olen;
+  const float *res;
+  CHECK_CALL(XGBoosterPredict(R_ExternalPtrAddr(handle),
+                            R_ExternalPtrAddr(dmat),
+                            asInteger(option_mask),
+                            asInteger(ntree_limit),
+                            &olen, &res));
+  ret = PROTECT(allocVector(REALSXP, olen));
+  for (size_t i = 0; i < olen; ++i) {
+    REAL(ret)[i] = res[i];
+  }
+  R_API_END();
+  UNPROTECT(1);
+  return ret;
+}
     
-    
-    {  template <typename EventType>
-  KernelEventContextRef createEventContextFrom(osquery_event_t event_type,
-                                               CQueue::event *event) const;
-};
+    namespace xgboost {
+/*!
+ * \brief interface of linear updater
+ */
+class LinearUpdater {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~LinearUpdater() = default;
+  /*!
+   * \brief Initialize the updater with given arguments.
+   * \param args arguments to the objective function.
+   */
+  virtual void Init(
+      const std::vector<std::pair<std::string, std::string> >& args) = 0;
+    }
+    }
