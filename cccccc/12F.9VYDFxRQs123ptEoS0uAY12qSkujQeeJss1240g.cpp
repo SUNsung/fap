@@ -1,281 +1,303 @@
 
         
-          image_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
-  label_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
-  image_file.read(reinterpret_cast<char*>(&num_items), 4);
-  num_items = swap_endian(num_items);
-  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
-  num_labels = swap_endian(num_labels);
-  CHECK_EQ(num_items, num_labels);
-  image_file.read(reinterpret_cast<char*>(&rows), 4);
-  rows = swap_endian(rows);
-  image_file.read(reinterpret_cast<char*>(&cols), 4);
-  cols = swap_endian(cols);
+        
+    {    // passthrough
+    bool empty() const              { return m.empty(); }
+    size_type size() const          { return m.size(); }
+    size_type max_size() const      { return m.max_size(); }
+    void clear()                    { m.clear(); }
+    iterator begin()                { return m.begin(); }
+    iterator end()                  { return m.end(); }
+    const_iterator begin() const    { return m.begin(); }
+    const_iterator end() const      { return m.end(); }
+    const_iterator cbegin() const   { return m.cbegin(); }
+    const_iterator cend() const     { return m.cend(); }
+};
     
-    #endif  // CAFFE_ARGMAX_LAYER_HPP_
-
+    void DBIter::Prev() {
+  assert(valid_);
+    }
     
-    /**
- * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
- *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$
- *      y = \left\{
- *         \begin{array}{ll}
- *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
- *            \log(1 + \exp(x)) & \mbox{otherwise}
- *         \end{array} \right.
- *      @f$
+    void AppendInternalKey(std::string* result, const ParsedInternalKey& key) {
+  result->append(key.user_key.data(), key.user_key.size());
+  PutFixed64(result, PackSequenceAndType(key.sequence, key.type));
+}
+    
+    // Return the legacy file name for an sstable with the specified number
+// in the db named by 'dbname'. The result will be prefixed with
+// 'dbname'.
+extern std::string SSTTableFileName(const std::string& dbname, uint64_t number);
+    
+      // Evict any entry for the specified file number
+  void Evict(uint64_t file_number);
+    
+    
+    {}  // namespace leveldb
+    
+    TEST(FindFileTest, OverlappingFiles) {
+  Add('150', '600');
+  Add('400', '500');
+  disjoint_sorted_files_ = false;
+  ASSERT_TRUE(! Overlaps('100', '149'));
+  ASSERT_TRUE(! Overlaps('601', '700'));
+  ASSERT_TRUE(Overlaps('100', '150'));
+  ASSERT_TRUE(Overlaps('100', '200'));
+  ASSERT_TRUE(Overlaps('100', '300'));
+  ASSERT_TRUE(Overlaps('100', '400'));
+  ASSERT_TRUE(Overlaps('100', '500'));
+  ASSERT_TRUE(Overlaps('375', '400'));
+  ASSERT_TRUE(Overlaps('450', '450'));
+  ASSERT_TRUE(Overlaps('450', '500'));
+  ASSERT_TRUE(Overlaps('450', '700'));
+  ASSERT_TRUE(Overlaps('600', '700'));
+}
+    
+    // Return a builtin comparator that uses lexicographic byte-wise
+// ordering.  The result remains the property of this module and
+// must not be deleted.
+extern const Comparator* BytewiseComparator();
+    
+    inline bool operator==(const Slice& x, const Slice& y) {
+  return ((x.size() == y.size()) &&
+          (memcmp(x.data(), y.data(), x.size()) == 0));
+}
+    
+      N = std::min<int>(labels_.size(), N);
+  std::vector<int> maxN = Argmax(output, N);
+  std::vector<Prediction> predictions;
+  for (int i = 0; i < N; ++i) {
+    int idx = maxN[i];
+    predictions.push_back(std::make_pair(labels_[idx], output[idx]));
+  }
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of SigmoidLayer.
  */
 template <typename Dtype>
-class BNLLLayer : public NeuronLayer<Dtype> {
+class CuDNNSigmoidLayer : public SigmoidLayer<Dtype> {
  public:
-  explicit BNLLLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-    }
-    }
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+  explicit CuDNNSigmoidLayer(const LayerParameter& param)
+      : SigmoidLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_;
-  cudnnTensorDescriptor_t top_desc_;
-  cudnnActivationDescriptor_t activ_desc_;
-};
-#endif
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_;
-  cudnnTensorDescriptor_t top_desc_;
-};
-#endif
-    
-    namespace caffe {
+  virtual ~CuDNNSigmoidLayer();
     }
     
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-      /**
-   * @brief Computes the error gradient w.r.t. the exp inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} =
-   *            \frac{\partial E}{\partial y} y \alpha \log_e(gamma)
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
     
-    {}  // namespace caffe
+    {  delete tensor;
+  delete tensor2;
+  cout << 'OK' << endl;
+  return 0;
+}
+
     
+        SECTION('Iterates in the correct order') {
+      auto iterator = cursor.begin();
+      REQUIRE(iterator->value.equal(first->tensor1));
+      REQUIRE((++iterator)->value.equal(first->tensor2));
+      REQUIRE((++iterator)->value.equal(second->tensor1));
+      REQUIRE((++iterator)->value.equal(second->tensor2));
+    }
     
-    {} // namespace cuda
+    Tensor irfft(const Tensor& self, const int64_t signal_ndim, const bool normalized,
+             const bool onesided,  IntList signal_sizes) {
+  return _fft(self, signal_ndim, /* complex_input */ true,
+              /* complex_output */ false, /* inverse */ true, signal_sizes,
+              normalized, onesided);
+}
     
-    struct Handle {
-  cudnnHandle_t handle;
-  Handle() : handle(NULL) {
-    AT_CUDNN_CHECK(cudnnCreate(&handle));
+    bool THPUtils_tryUnpackLongVarArgs(PyObject *args, int ignore_first, THLongStoragePtr& result) {
+  Py_ssize_t length = PyTuple_Size(args) - ignore_first;
+  if (length < 1) {
+    return false;
   }
-  ~Handle() {
-    if (handle) {
-// this is because of something dumb in the ordering of
-// destruction. Sometimes atexit, the cuda context (or something)
-// would already be destroyed by the time this gets destroyed. It
-// happens in fbcode setting. @colesbury and I decided to not destroy
-// the handle as a workaround.
-//   - @soumith
-#ifdef NO_CUDNN_DESTROY_HANDLE
+    }
+    
+    static PyObject* THPWrapperClass = NULL;
+    
+    
+    {}
+    
+    template <typename ...Args>
+inline std::unique_ptr<RPCMessage> packMessage(
+    function_id_type fid,
+    const Args&... args
+) {
+  ByteArray msg(detail::INITIAL_BUFFER_SIZE);
+  detail::_appendScalar<function_id_type>(msg, fid);
+  detail::_packIntoString(msg, args...);
+  return std::unique_ptr<RPCMessage>(new RPCMessage(std::move(msg)));
+}
+    
+    using function_id_type = uint16_t;
+    
+    #if defined(TH_REAL_IS_BYTE) || defined(TH_REAL_IS_CHAR)
+  memcpy(THWStorage_(data)(storage), src + offset, count);
+#elif defined(TH_REAL_IS_SHORT)
+  THP_decodeInt16Buffer(THWStorage_(data)(storage), src + offset, byte_order, count);
+#elif defined(TH_REAL_IS_INT)
+  THP_decodeInt32Buffer(THWStorage_(data)(storage), src + offset, byte_order, count);
+#elif defined(TH_REAL_IS_LONG)
+  // TODO: remove the cast
+  THP_decodeInt64Buffer((int64_t*) THWStorage_(data)(storage), src + offset, byte_order, count);
+#elif defined(TH_REAL_IS_HALF)
+  THP_decodeHalfBuffer(THWStorage_(data)(storage), src + offset, byte_order, count);
+#elif defined(TH_REAL_IS_FLOAT)
+  THP_decodeFloatBuffer(THWStorage_(data)(storage), src + offset, byte_order, count);
+#elif defined(TH_REAL_IS_DOUBLE)
+  THP_decodeDoubleBuffer(THWStorage_(data)(storage), src + offset, byte_order, count);
 #else
-      cudnnDestroy(handle);
+#error 'Unknown type'
 #endif
-    }
-  }
-};
     
-        // Checks if input strides can be viewed as embedded.
-    // See NOTE [ cuFFT Embedded Strides ].
-    //
-    // TODO: Figure out why windows fails to compile
-    //         at::optional<std::vector<long long int>> inembed_opt = at::nullopt;
-    //       Then move the following to a helper function.
-    std::vector<long long int> inembed(signal_ndim);
-    if (!clone_input) {
-      auto istrides = input.strides();
-      auto last_istride = istrides[signal_ndim];
-      clone_input = last_istride <= 0;
-      for (auto i = signal_ndim - 1; !clone_input && i > 0 /* inembed[0] doesn't matteer */; i--) {
-        auto istride = istrides[i];
-        if (istride > 0 && istride % last_istride == 0) {
-          inembed[i] = istride / last_istride;
-          last_istride = istride;
-        } else {
-          clone_input = true;
+    NodeProto MakeNode(
+    const std::string& type,
+    const std::vector<std::string>& inputs,
+    const std::vector<std::string>& outputs,
+    const std::vector<AttributeProto>& attributes,
+    const std::string& name = '');
+    
+    
+    {			btBody->setCollisionFlags(clearedCurrentFlags | btCollisionObject::CF_CHARACTER_OBJECT);
+		}
+    
+    	Body2DSW *B = body_owner.get(p_body_b);
+	ERR_FAIL_COND_V(!B, RID());
+    
+    
+    {		int tm = GLOBAL_DEF('physics/2d/thread_model', 1);
+		if (tm == 0) //single unsafe
+			return memnew(T);
+		else if (tm == 1) //single saef
+			return memnew(Physics2DServerWrapMT(memnew(T), false));
+		else //single unsafe
+			return memnew(Physics2DServerWrapMT(memnew(T), true));
+	}
+    
+    	virtual void body_attach_object_instance_id(RID p_body, uint32_t p_ID) = 0;
+	virtual uint32_t body_get_object_instance_id(RID p_body) const = 0;
+    
+    	/* MESH API */
+    
+    
+    {	editor = p_node;
+	play_btn = memnew(Button);
+	play_btn->set_icon(editor->get_gui_base()->get_icon('Play', 'EditorIcons'));
+	play_btn->set_text(TTR('Play IK'));
+	play_btn->set_toggle_mode(true);
+	play_btn->hide();
+	play_btn->connect('pressed', this, '_play');
+	add_control_to_container(CONTAINER_SPATIAL_EDITOR_MENU, play_btn);
+	skeleton_ik = NULL;
+}
+    
+    
+    {        // perform the operation on one long vector
+        msra::math::float4 threshold4(threshold);
+        foreach_index (i, us4)
+        {
+            us4[i] &= ((refs4[i] >= threshold4) | (refs4[i] <= -threshold4));
         }
-      }
     }
     
-    void setSamplerDescriptor(SpatialTransformerDescriptor& desc,
-                          cudnnDataType_t dataType,
-                          int N, int C, int H, int W)
+    public:
+    // DataWriter Constructor
+    // config - [in] configuration parameters for the datareader
+    template <class ConfigRecordType>
+    DataWriter(const ConfigRecordType& config);
+    // constructor from Scripting
+    DataWriter(const ScriptableObjects::IConfigRecordPtr configp)
+        : DataWriter(*configp)
+    {
+    }
+    virtual ~DataWriter();
+    
+    void ImGui_ImplFreeGLUT_ReshapeFunc(int w, int h)
 {
-  int inputSize[4] = {N, C, H, W};
-  desc.set(dataType, 4, inputSize);
+    ImGuiIO& io = ImGui::GetIO();
+    io.DisplaySize = ImVec2((float)w, (float)h);
 }
     
-    Tensor expandScale(const Tensor& t, int64_t dim) {
-  std::vector<int64_t> size{ 1, t.numel() };
-  while (static_cast<int64_t>(size.size()) < dim) {
-    size.emplace_back(1);
-  }
-  return t.view(size);
-}
+            // Rendering
+        ImGui::Render();
+        IwGxSetColClear(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255);
+        IwGxClear();
+        ImGui_Marmalade_RenderDrawData(ImGui::GetDrawData());
+        IwGxSwapBuffers();
     
-    // ---------------------------------------------------------------------
-//
-// Bias addition
-//
-// ---------------------------------------------------------------------
+            ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
+        ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
+        ImGui::Checkbox('Another Window', &show_another_window);
     
-      TensorDescriptor idesc{ *input };  // input descriptor
-  TensorDescriptor odesc{ *grad_output };  // grad_output descriptor
-  TensorDescriptor gdesc{ grad_input_t };  // grad_input descriptor
-  SpatialTransformerDescriptor desc; // sampler descriptor
+            // Start the Dear ImGui frame
+        ImGui_ImplOpenGL2_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
     
-        std::set<THCStreamPtr> streams(std::move(block->stream_uses));
-    THAssert(block->stream_uses.empty());
-    for (auto it = streams.begin(); it != streams.end(); ++it) {
-      auto& stream = *it;
+        UINT createDeviceFlags = 0;
+    //createDeviceFlags |= D3D10_CREATE_DEVICE_DEBUG;
+    if (D3D10CreateDeviceAndSwapChain(NULL, D3D10_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, D3D10_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice) != S_OK)
+        return E_FAIL;
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+    void ImGui_ImplSDL2_NewFrame(SDL_Window* window)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    IM_ASSERT(io.Fonts->IsBuilt());     // Font atlas needs to be built, call renderer _NewFrame() function e.g. ImGui_ImplOpenGL3_NewFrame() 
     }
     
-      // p2pAccessEnabled records if p2p copies are allowed between pairs of
-  // devices. Values include '1' (copy allowed), '0' (copy not allowed), and
-  // '-1' (unknown).
-  // Currently the max number of gpus in P2P group is 8, so if there are more
-  // we enable P2P in groups of 8
-  state->p2pAccessEnabled = (int**) malloc(sizeof(int*) * numDevices);
-  for (int i = 0; i < numDevices; ++i) {
-    state->p2pAccessEnabled[i] = (int*) malloc(sizeof(int) * numDevices);
-    for (int j = 0; j < numDevices; ++j)
-      if (i == j)
-        state->p2pAccessEnabled[i][j] = 1;
-      else if (j / THC_CUDA_MAX_PEER_SIZE != i / THC_CUDA_MAX_PEER_SIZE)
-        state->p2pAccessEnabled[i][j] = 0;
-      else
-        state->p2pAccessEnabled[i][j] = -1;
-  }
-    
-    THC_API int THCStream_device(THCStream* stream) { 
-  return at::cuda::detail::CUDAStream_device(stream);
-}
-    
-    // Create the pybind11 module
-PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
-  // Use the same name as the check functions so error messages make sense
-  m.def(cudnn_relu_name, &cudnn_relu, 'CuDNN ReLU');
-}
-
-    
-    // This is a pass-through wrapper function that does the size check and
-// inferences. The actual forward implementation function is called
-// at::_fft_with_size which dispatches to _fft_cufft (CUDA) or _fft_mkl (CPU).
-static inline Tensor _fft(const Tensor &self, const int64_t signal_ndim,
-           const bool complex_input, const bool complex_output,
-           const bool inverse, IntList signal_sizes, const bool normalized,
-           const bool onesided) {
+      if (options->Has(String::NewSymbol('target_level')) &&
+      options->Get(String::NewSymbol('target_level'))->IsInt32()) {
+    target_level = (int)(options->Get(
+        String::NewSymbol('target_level'))->ToInt32()->Value());
     }
     
-      /* storageOffset */
-  if (storageOffset < 0)
-    THError('can't set negative storage offset');
-  self->storageOffset = storageOffset;
+    TEST_F(MockEnvTest, Corrupt) {
+  const std::string kGood = 'this is a good string, synced to disk';
+  const std::string kCorrupted = 'this part may be corrupted';
+  const std::string kFileName = '/dir/f';
+  unique_ptr<WritableFile> writable_file;
+  ASSERT_OK(env_->NewWritableFile(kFileName, &writable_file, soptions_));
+  ASSERT_OK(writable_file->Append(kGood));
+  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size());
+    }
     
     
-    {} // namespace at
+    {} // namespace rocksdb
 
     
-    inline half float16ToHalf(const float16 x) {
-  __half_raw hr;
-  hr.x = x.x;
-  half r(hr);
-  return r;
+    #include <jni.h>
+#include <memory>
+    
+      // # persistent cache hit
+  PERSISTENT_CACHE_HIT,
+  // # persistent cache miss
+  PERSISTENT_CACHE_MISS,
+    
+    CompactedDBImpl::CompactedDBImpl(
+  const DBOptions& options, const std::string& dbname)
+  : DBImpl(options, dbname), cfd_(nullptr), version_(nullptr),
+    user_comparator_(nullptr) {
 }
-    
-      /**
-   * @brief Gets a human-readable description of the box
-   * @return A debug-string
-   */
-  std::string DebugString() const;
-    
-      /**
-   * @brief Get the extreme points along a heading direction.
-   * @param heading The specified heading.
-   * @param first The point on the boundary of this polygon with the minimal
-   *        projection onto the heading direction.
-   * @param last The point on the boundary of this polygon with the maximal
-   *        projection onto the heading direction.
-   */
-  void ExtremePoints(const double heading, Vec2d *const first,
-                     Vec2d *const last) const;
-    
-    
-    {  /**
-   * @brief Compute a trajectory for execution.
-   * @param planning_init_point The trajectory point where planning starts.
-   * @param frame Current planning frame.
-   * @param reference_line_info The computed reference line.
-   * @return OK if planning succeeds; error otherwise.
-   */
-  virtual apollo::common::Status PlanOnReferenceLine(
-      const common::TrajectoryPoint& planning_init_point, Frame* frame,
-      ReferenceLineInfo* reference_line_info) = 0;
-};
-    
-      EXPECT_TRUE(
-      PathObstacle::MergeLongitudinalDecision(decision_follow, decision_ignore)
-          .has_follow());
-  EXPECT_TRUE(PathObstacle::MergeLongitudinalDecision(decision_follow,
-                                                      decision_overtake)
-                  .has_follow());
