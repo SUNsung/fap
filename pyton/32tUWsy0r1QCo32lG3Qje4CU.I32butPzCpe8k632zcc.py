@@ -1,96 +1,96 @@
 
         
-            def reducer(self, key, values):
-        total = sum(values)
-        if total == 1:
-            yield key, total
+            print('Classifier Training')
+    print('===================')
+    accuracy, train_time, test_time = {}, {}, {}
+    for name in sorted(args['estimators']):
+        clf = ESTIMATORS[name]
+        try:
+            clf.set_params(random_state=0)
+        except (TypeError, ValueError):
+            pass
     
-        def _find_available_spot(self, vehicle):
-        '''Find an available spot where vehicle can fit, or return None'''
-        pass
+        X = get_data(N, DD, dataset)
     
-        def message_group(self, group_id, message):
-        pass
+        class_name = info['fullname'].split('.')[0]
+    if type(class_name) != str:
+        # Python 2 only
+        class_name = class_name.encode('utf-8')
+    module = __import__(info['module'], fromlist=[class_name])
+    obj = attrgetter(info['fullname'])(module)
     
-    from mrjob.job import MRJob
+    import codecs
     
-            # Keyword arguments > stream.encoding > default utf8
-        if self.stdin_encoding is None:
-            self.stdin_encoding = getattr(
-                self.stdin, 'encoding', None) or 'utf8'
-        if self.stdout_encoding is None:
-            actual_stdout = self.stdout
-            if is_windows:
-                # noinspection PyUnresolvedReferences
-                from colorama import AnsiToWin32
-                if isinstance(self.stdout, AnsiToWin32):
-                    actual_stdout = self.stdout.wrapped
-            self.stdout_encoding = getattr(
-                actual_stdout, 'encoding', None) or 'utf8'
+        # the training data folder must be passed as first argument
+    movie_reviews_data_folder = sys.argv[1]
+    dataset = load_files(movie_reviews_data_folder, shuffle=False)
+    print('n_samples: %d' % len(dataset.data))
     
+        # the training data folder must be passed as first argument
+    movie_reviews_data_folder = sys.argv[1]
+    dataset = load_files(movie_reviews_data_folder, shuffle=False)
+    print('n_samples: %d' % len(dataset.data))
     
-FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
-FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
-JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
-BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
+    # Author: Peter Prettenhoer <peter.prettenhofer@gmail.com>
+#
+# License: BSD 3 clause
     
-    import pytest
+    The usual covariance maximum likelihood estimate can be regularized
+using shrinkage. Ledoit and Wolf proposed a close formula to compute
+the asymptotically optimal shrinkage parameter (minimizing a MSE
+criterion), yielding the Ledoit-Wolf covariance estimate.
     
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
-    
-    
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
-    
-        # If both `auth_parse` and `prompt_password` are set to `True`,
-    # and the value of `-a` lacks the password part,
-    # then the user will be prompted to type the password in.
-    prompt_password = True
+        =====  =====  =====  ======
+      1      2      3    Color
+    =====  =====  =====  ======
+      Y      N      N    Red
+      N      Y      N    Blue
+      N      N      Y    Yellow
+      Y      Y      N    Purple
+      Y      N      Y    Orange
+      Y      Y      N    Green
+      Y      Y      Y    Brown
+    =====  =====  =====  ======
     
     
-CLIENT_CERT = os.path.join(TESTS_ROOT, 'client_certs', 'client.crt')
-CLIENT_KEY = os.path.join(TESTS_ROOT, 'client_certs', 'client.key')
-CLIENT_PEM = os.path.join(TESTS_ROOT, 'client_certs', 'client.pem')
-    
-        # 128+2 SIGINT <http://www.tldp.org/LDP/abs/html/exitcodes.html>
-    ERROR_CTRL_C = 130
+# -- Options for LaTeX output --------------------------------------------------
     
     
-def test_credentials_in_url(httpbin_both):
-    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
-                   auth='user:password')
-    r = http('GET', url)
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
+  def _AddSyntaxDataIfNeeded( self, extra_data ):
+    if not self._user_options[ 'seed_identifiers_with_syntax' ]:
+      return
+    filetype = vimsupport.CurrentFiletypes()[ 0 ]
+    if filetype in self._filetypes_with_keywords_loaded:
+      return
     
-        def test_CRLF_ugly_response(self, httpbin):
-        r = http('--pretty=none', 'GET', httpbin.url + '/get')
-        self._validate_crlf(r)
     
-        Each code snipped should get additional C++ code around it to help compile the line in context, with
-    some heuristic guessing of what is needed around. The wrapping code should have a token in each line allowing
-    other tools to filter out these lines
+# Emulates Vim buffer
+# Used to store buffer related information like diagnostics, latest parse
+# request. Stores buffer change tick at the parse request moment, allowing
+# to effectively determine whether reparse is needed for the buffer.
+class Buffer( object ):
     
-      if Search(r'\busing namespace\b', line):
-    if Search(r'\bliterals\b', line):
-      error(filename, linenum, 'build/namespaces_literals', 5,
-            'Do not use namespace using-directives.  '
-            'Use using-declarations instead.')
-    else:
-      error(filename, linenum, 'build/namespaces', 5,
-            'Do not use namespace using-directives.  '
-            'Use using-declarations instead.')
+    from copy import deepcopy
+from hamcrest import assert_that, contains_string, equal_to
+    
+    
+def BuildServerConf():
+  '''Builds a dictionary mapping YCM Vim user options to values. Option names
+  don't have the 'ycm_' prefix.'''
+  # We only evaluate the keys of the vim globals and not the whole dictionary
+  # to avoid unicode issues.
+  # See https://github.com/Valloric/YouCompleteMe/pull/2151 for details.
+  keys = vimsupport.GetVimGlobalsKeys()
+  server_conf = {}
+  for key in keys:
+    if not key.startswith( YCM_VAR_PREFIX ):
+      continue
+    new_key = key[ len( YCM_VAR_PREFIX ): ]
+    new_value = vimsupport.VimExpressionToPythonType( 'g:' + key )
+    server_conf[ new_key ] = new_value
+    
+      python_interpreter = vim.eval( 'g:ycm_server_python_interpreter' )
+  if python_interpreter:
+    python_interpreter = utils.FindExecutable( python_interpreter )
+    if python_interpreter:
+      return python_interpreter
