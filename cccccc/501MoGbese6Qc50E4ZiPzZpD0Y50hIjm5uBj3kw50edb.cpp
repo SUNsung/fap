@@ -1,345 +1,321 @@
 
         
-        namespace swift {
-namespace syntax {
-    }
-    }
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-      virtual void handleDiagnostic(SourceManager &SM, SourceLoc Loc,
-                                DiagnosticKind Kind,
-                                StringRef FormatString,
-                                ArrayRef<DiagnosticArgument> FormatArgs,
-                                const DiagnosticInfo &Info) override;
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    #endif // SWIFT_INDEX_INDEXSYMBOL_H
-
-    
-    
-    {} // end namespace swift
-    
-    // On non-Darwin platforms we do not assume any barrier-free inline path
-// and SwiftTargetInfo.OnceDonePredicateValue is unset in the compiler.
-    
-    /// This represents one part of a #if block.  If the condition field is
-/// non-null, then this represents a #if or a #elseif, otherwise it represents
-/// an #else block.
-struct IfConfigClause {
-  /// The location of the #if, #elseif, or #else keyword.
-  SourceLoc Loc;
-  
-  /// The condition guarding this #if or #elseif block.  If this is null, this
-  /// is a #else clause.
-  Expr *Cond;
-  
-  /// Elements inside the clause
-  ArrayRef<ASTNode> Elements;
-    }
-    
-    
-    {    // passthrough
-    bool empty() const              { return m.empty(); }
-    size_type size() const          { return m.size(); }
-    size_type max_size() const      { return m.max_size(); }
-    void clear()                    { m.clear(); }
-    iterator begin()                { return m.begin(); }
-    iterator end()                  { return m.end(); }
-    const_iterator begin() const    { return m.begin(); }
-    const_iterator end() const      { return m.end(); }
-    const_iterator cbegin() const   { return m.cbegin(); }
-    const_iterator cend() const     { return m.cend(); }
+    template <typename T>
+class ArgMinOpModel : public ArgBaseOpModel<T> {
+ public:
+  ArgMinOpModel(std::initializer_list<int> input_shape, TensorType input_type,
+                TensorType output_type, TensorType index_output_type)
+      : ArgBaseOpModel<T>(input_shape, input_type, output_type,
+                          index_output_type) {
+    ArgBaseOpModel<T>::SetBuiltinOp(
+        BuiltinOperator_ARG_MIN, BuiltinOptions_ArgMinOptions,
+        CreateArgMinOptions(ArgBaseOpModel<T>::builder_, index_output_type)
+            .Union());
+    ArgBaseOpModel<T>::BuildInterpreter({input_shape, {1, 1, 1, 1}});
+  }
 };
     
-    class Env;
-class Iterator;
-class TableCache;
-class VersionEdit;
+    #include 'tensorflow/core/lib/core/notification.h'
+#include 'tensorflow/core/platform/test.h'
     
-    // Called on every log record (each one of which is a WriteBatch)
-// found in a kDescriptorFile.
-static void VersionEditPrinter(uint64_t pos, Slice record, WritableFile* dst) {
-  std::string r = '--- offset ';
-  AppendNumberTo(&r, pos);
-  r += '; ';
-  VersionEdit edit;
-  Status s = edit.DecodeFrom(record);
-  if (!s.ok()) {
-    r += s.ToString();
-    r.push_back('\n');
-  } else {
-    r += edit.DebugString();
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+      void set_length(int d, int64 x) {
+    DCHECK_GE(d, 0);
+    DCHECK_LT(d, dims());
+    lengths_[d] = x;
   }
-  dst->Append(r);
-}
     
     
-    {  // Errors
-  static const char* errors[] = {
-    '',
-    'foo',
-    'foo-dx-100.log',
-    '.log',
-    '',
-    'manifest',
-    'CURREN',
-    'CURRENTX',
-    'MANIFES',
-    'MANIFEST',
-    'MANIFEST-',
-    'XMANIFEST-3',
-    'MANIFEST-3x',
-    'LOC',
-    'LOCKx',
-    'LO',
-    'LOGx',
-    '18446744073709551616.log',
-    '184467440737095516150.log',
-    '100',
-    '100.',
-    '100.lop'
-  };
-  for (int i = 0; i < sizeof(errors) / sizeof(errors[0]); i++) {
-    std::string f = errors[i];
-    ASSERT_TRUE(!ParseFileName(f, &number, &type)) << f;
-  }
-}
+    {}  // namespace atom
     
-    void TableCache::Evict(uint64_t file_number) {
-  char buf[sizeof(file_number)];
-  EncodeFixed64(buf, file_number);
-  cache_->Erase(Slice(buf, sizeof(buf)));
-}
+    #endif  // CHROME_BROWSER_EXTENSIONS_GLOBAL_SHORTCUT_LISTENER_H_
+
     
-      // If a seek to internal key 'k' in specified file finds an entry,
-  // call (*handle_result)(arg, found_key, found_value).
-  Status Get(const ReadOptions& options,
-             uint64_t file_number,
-             uint64_t file_size,
-             const Slice& k,
-             void* arg,
-             void (*handle_result)(void*, const Slice&, const Slice&));
+    #ifndef CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
+#define CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
     
-    TEST_F(UnicharcompressTest, DoesChinese) {
-  LOG(INFO) << 'Testing chi_tra';
-  LoadUnicharset('chi_tra.unicharset');
-  ExpectCorrect('chi_tra');
-  LOG(INFO) << 'Testing chi_sim';
-  LoadUnicharset('chi_sim.unicharset');
-  ExpectCorrect('chi_sim');
-}
+    // filenames
+extern const base::FilePath::CharType kCacheDirname[];
+extern const base::FilePath::CharType kChannelIDFilename[];
+extern const base::FilePath::CharType kCookieFilename[];
+extern const base::FilePath::CharType kCRLSetFilename[];
+extern const base::FilePath::CharType kCustomDictionaryFileName[];
+extern const base::FilePath::CharType kExtensionActivityLogFilename[];
+extern const base::FilePath::CharType kExtensionsCookieFilename[];
+extern const base::FilePath::CharType kFirstRunSentinel[];
+extern const base::FilePath::CharType kGCMStoreDirname[];
+extern const base::FilePath::CharType kLocalStateFilename[];
+extern const base::FilePath::CharType kLocalStorePoolName[];
+extern const base::FilePath::CharType kMediaCacheDirname[];
+extern const base::FilePath::CharType kNetworkPersistentStateFilename[];
+extern const base::FilePath::CharType kOfflinePageArchviesDirname[];
+extern const base::FilePath::CharType kOfflinePageMetadataDirname[];
+extern const base::FilePath::CharType kPreferencesFilename[];
+extern const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[];
+extern const base::FilePath::CharType kReadmeFilename[];
+extern const base::FilePath::CharType kResetPromptMementoFilename[];
+extern const base::FilePath::CharType kSafeBrowsingBaseFilename[];
+extern const base::FilePath::CharType kSecurePreferencesFilename[];
+extern const base::FilePath::CharType kServiceStateFileName[];
+extern const base::FilePath::CharType kSingletonCookieFilename[];
+extern const base::FilePath::CharType kSingletonLockFilename[];
+extern const base::FilePath::CharType kSingletonSocketFilename[];
+extern const base::FilePath::CharType kSupervisedUserSettingsFilename[];
+extern const base::FilePath::CharType kThemePackFilename[];
+extern const base::FilePath::CharType kThemePackMaterialDesignFilename[];
+extern const base::FilePath::CharType kWebAppDirname[];
     
+    IPC_SYNC_MESSAGE_ROUTED3_1(ShellViewHostMsg_Call_Static_Method_Sync,
+                           std::string /* type name */,
+                           std::string /* method name */,
+                           base::ListValue /* arguments */,
+                           base::ListValue /* result */)
     
-    {  if (unicode < 0x80) {
-    chars[UNICHAR_LEN - 1] = 1;
-    chars[2] = 0;
-    chars[1] = 0;
-    chars[0] = static_cast<char>(unicode);
-  } else if (unicode < 0x800) {
-    chars[UNICHAR_LEN - 1] = 2;
-    chars[2] = 0;
-    chars[1] = static_cast<char>((unicode | bytemark) & bytemask);
-    unicode >>= 6;
-    chars[0] = static_cast<char>(unicode | 0xc0);
-  } else if (unicode < 0x10000) {
-    chars[UNICHAR_LEN - 1] = 3;
-    chars[2] = static_cast<char>((unicode | bytemark) & bytemask);
-    unicode >>= 6;
-    chars[1] = static_cast<char>((unicode | bytemark) & bytemask);
-    unicode >>= 6;
-    chars[0] = static_cast<char>(unicode | 0xe0);
-  } else if (unicode <= UNI_MAX_LEGAL_UTF32) {
-    chars[UNICHAR_LEN - 1] = 4;
-    chars[3] = static_cast<char>((unicode | bytemark) & bytemask);
-    unicode >>= 6;
-    chars[2] = static_cast<char>((unicode | bytemark) & bytemask);
-    unicode >>= 6;
-    chars[1] = static_cast<char>((unicode | bytemark) & bytemask);
-    unicode >>= 6;
-    chars[0] = static_cast<char>(unicode | 0xf0);
-  } else {
-    memset(chars, 0, UNICHAR_LEN);
-  }
-}
-    
-    void OptimizerBase::add_parameters(const ParameterCursor& cursor) {
-  std::vector<Tensor> tensors(cursor.size());
-  cursor.map(tensors.begin(), [](const Tensor& tensor) { return tensor; });
-  add_parameters(tensors);
-}
-    
-      nDimension_ = 0;
-  for (size_t d = 0; d < nDimension; d++) {
-    if (size[d] > 0) {
-      nDimension_++;
-      if ((self->nDimension > d) && (size[d] != self->size[d]))
-        hasRequiredSize = false;
-      if ((self->nDimension > d) && stride && (stride[d] >= 0) && (stride[d] != self->stride[d]))
-        hasRequiredSize = false;
-    } else {
+    // Get render process host.
+RenderProcessHost* GetRenderProcessHost() {
+  RenderProcessHost* render_process_host = NULL;
+  std::vector<Shell*> windows = Shell::windows();
+  for (size_t i = 0; i < windows.size(); ++i) {
+    if (!windows[i]->is_devtools()) {
+      render_process_host = windows[i]->web_contents()->GetRenderProcessHost();
       break;
     }
   }
-  nDimension = nDimension_;
+    }
     
-    #include 'override_macros.h'
+      static void ClearCache(content::RenderProcessHost* render_view_host);
+  static void SetProxyConfig(content::RenderProcessHost* render_process_host,
+                             const std::string& proxy_config);
     
-    bool maybeThrowBackCompatKeepdimWarn(char *func) {
-  if(getBackCompatKeepdimWarn()) {
-     std::ostringstream ss;
-     ss << 'backwards compatibility: call to \'' << func
-        << '\' uses default value for keepdim which has changed default to False.  Consider passing as kwarg.',
-    PyErr_WarnEx(PyExc_UserWarning, ss.str().c_str(), 1);
+    Base::Base(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+	   const std::string& extension_id)
+    : extension_id_(extension_id),
+      id_(id),
+      delay_destruction_(false),
+      pending_destruction_(false),
+      object_manager_(object_manager) {
+}
+    
+    Menu::Menu(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+           const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
+  Create(option);
+}
+    
+    void Menu::UpdateKeys(GtkAccelGroup *gtk_accel_group){
+  this->gtk_accel_group = gtk_accel_group;
+  if (!GTK_IS_ACCEL_GROUP(gtk_accel_group)){
+    return ;
+  } else {
+    std::vector<MenuItem*>::iterator menu_item_iterator = menu_items.begin();
+    std::vector<MenuItem*>::iterator menu_item_end = menu_items.end();
+    while (menu_item_iterator != menu_item_end){
+      MenuItem *menu_item = *menu_item_iterator;
+      if (menu_item!=NULL && GTK_IS_MENU_ITEM(menu_item->menu_item_)){
+        menu_item->UpdateKeys(gtk_accel_group);
+      }
+      ++menu_item_iterator;
+    }
   }
+}
+    
+    
+    {  // Convert from content coordinates to window coordinates.
+  // This code copied from chrome_web_contents_view_delegate_views.cc
+  aura::Window* target_window = GetActiveNativeView(rfh);
+  aura::Window* root_window = target_window->GetRootWindow();
+  views::Widget* top_level_widget =
+    views::Widget::GetTopLevelWidgetForNativeView(target_window);
+  aura::client::ScreenPositionClient* screen_position_client =
+        aura::client::GetScreenPositionClient(root_window);
+  if (screen_position_client) {
+    screen_position_client->ConvertPointToScreen(target_window,
+             &screen_point);
+  }
+  set_delay_destruction(true);
+  menu_runner_.reset(new views::MenuRunner(menu_model_.get(), views::MenuRunner::CONTEXT_MENU,
+                                           base::Bind(&Menu::OnMenuClosed, base::Unretained(this))));
+  menu_runner_->RunMenuAt(top_level_widget,
+                       nullptr,
+                       gfx::Rect(screen_point, gfx::Size()),
+                       views::MENU_ANCHOR_TOPRIGHT,
+                       ui::MENU_SOURCE_NONE);
+  // It is possible for the same MenuMessageLoopAura to start a nested
+  // message-loop while it is already running a nested loop. So make
+  // sure the quit-closure gets reset to the outer loop's quit-closure
+  // once the innermost loop terminates.
+  {
+    base::AutoReset<base::Closure> reset_quit_closure(&message_loop_quit_,
+                                                      base::Closure());
+  
+    //base::MessageLoop* loop = base::MessageLoop::current();
+    base::MessageLoopCurrent::ScopedNestableTaskAllower allow;
+    base::RunLoop run_loop;
+    message_loop_quit_ = run_loop.QuitClosure();
+  
+    run_loop.Run();
+  }
+  set_delay_destruction(false);
+  if (pending_destruction())
+    object_manager_->OnDeallocateObject(id_);
+}
+    
+    void MenuItem::SetLabel(const std::string& label) {
+  is_modified_ = true;
+  label_ = base::UTF8ToUTF16(label);
+    }
+    
+    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringWithFixupFunction(){}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
+};
+    
+    
+    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
+  manager->OnCallObjectMethodSync(render_frame_host(), id, type, method, *arguments, response);
   return true;
 }
     
     
-    { private:
-  TIndex dense_last_dim_;
-  T default_value_;
-  INPUT_TAGS(LENGTHS, INDICES, VALUES);
-};
-    
-    template<typename T>
-inline void _appendData(ByteArray& str, const std::vector<T>& arg) {
-  int l = arg.size();
-  _appendData(str, l);
-  for (size_t i = 0; i < l; i++)
-    __appendData(
-        str,
-        arg[i],
-        is_any_of<T, THDGeneratorPtrTypes>(),
-        is_any_of<T, THDTensorPtrTypes>(),
-        is_any_of<T, THDStoragePtrTypes>()
-    );
+    {  // When limit user key is prefix of start user key
+  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
+            Shorten(IKey('foobar', 100, kTypeValue),
+                    IKey('foo', 200, kTypeValue)));
 }
     
-      ByteArray& bytes(); // Raw data.
-  const char* data() const; // Offset data.
-  bool isEmpty() const;
-  size_type remaining() const; // Length of the msg left to read.
-  const char* read(size_t num_bytes);
-    
-    /**
- * @brief Run an interactive SQL query shell.
- *
- * @code{.cpp}
- *   // Copyright 2004-present Facebook. All Rights Reserved.
- *   #include <osquery/core.h>
- *   #include <osquery/devtools.h>
- *
- *   int main(int argc, char *argv[]) {
- *     osquery::initOsquery(argc, argv);
- *     return osquery::launchIntoShell(argc, argv);
- *   }
- * @endcode
- *
- * @param argc the number of elements in argv
- * @param argv the command-line flags
- *
- * @return an int which represents the 'return code'
- */
-int launchIntoShell(int argc, char** argv);
-    
-    TEST_F(PrinterTests, test_generate_header) {
-  std::map<std::string, size_t> lengths;
-  for (const auto& row : q) {
-    computeRowLengths(row, lengths);
+    Iterator* TableCache::NewIterator(const ReadOptions& options,
+                                  uint64_t file_number,
+                                  uint64_t file_size,
+                                  Table** tableptr) {
+  if (tableptr != NULL) {
+    *tableptr = NULL;
   }
     }
     
-    size_t FirehoseLogForwarder::getMaxRetryCount() const {
-  return 100U;
+          case kDeletedFile:
+        if (GetLevel(&input, &level) &&
+            GetVarint64(&input, &number)) {
+          deleted_files_.insert(std::make_pair(level, number));
+        } else {
+          msg = 'deleted file';
+        }
+        break;
+    
+    TEST(FindFileTest, OverlapSequenceChecks) {
+  Add('200', '200', 5000, 3000);
+  ASSERT_TRUE(! Overlaps('199', '199'));
+  ASSERT_TRUE(! Overlaps('201', '300'));
+  ASSERT_TRUE(Overlaps('200', '200'));
+  ASSERT_TRUE(Overlaps('190', '200'));
+  ASSERT_TRUE(Overlaps('200', '210'));
 }
     
-     private:
-  std::string genIndexPrefix(bool results);
-    
-    #include 'guetzli/idct.h'
-#include 'guetzli/color_transform.h'
-#include 'guetzli/dct_double.h'
-#include 'guetzli/gamma_correct.h'
-#include 'guetzli/preprocess_downsample.h'
-#include 'guetzli/quantize.h'
-    
-    using std::size_t;
-    
-    
-    {}  // namespace guetzli
-    
-    
-    {}  // namespace guetzli
-
-    
-    //****************************
-// Deprecated function names
-//****************************
-// The following translations are provided to ease code transition
-// You are encouraged to no longer this function names
-#define XXH32_feed   XXH32_update
-#define XXH32_result XXH32_digest
-#define XXH32_getIntermediateResult XXH32_intermediateDigest
-    
-      virtual const char* Name() const override;
-    
-      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
-    if (type >= HISTOGRAM_ENUM_MAX) {
-      return false;
-    }
-    
-    if (m_ignore_histograms.count(type) > 0) {
-        return false;
-    }
-    }
-    
-    namespace rocksdb {
-/* GLOBAL DIFINE */
-// #define DEBUG
-#ifdef DEBUG
-#include <cstdio>
-#include <sys/syscall.h>
-#include <unistd.h>
-#define LOG_DEBUG(...)  do{\
-    printf('[%ld:%s:%i:%s]', syscall(SYS_gettid), __FILE__, __LINE__, __FUNCTION__);\
-    printf(__VA_ARGS__);\
-  }while(0)
-#else
-#define LOG_DEBUG(...)
-#endif
-    }
-    
-    
-    { private:
-  const size_t lookahead_;
-};
-    
-    #include <jni.h>
-#include <memory>
-    
-    
-    { protected:
-    jobject m_jSliceA;
-    jobject m_jSliceB;
-    jobject m_jSliceLimit;
-};
-    
-    size_t HistogramBucketMapper::IndexForValue(const uint64_t value) const {
-  if (value >= maxBucketValue_) {
-    return bucketValues_.size() - 1;
-  } else if ( value >= minBucketValue_ ) {
-    std::map<uint64_t, uint64_t>::const_iterator lowerBound =
-      valueIndexMap_.lower_bound(value);
-    if (lowerBound != valueIndexMap_.end()) {
-      return static_cast<size_t>(lowerBound->second);
-    } else {
-      return 0;
-    }
-  } else {
-    return 0;
+      // Choose a location for the test database if none given with --db=<path>
+  if (FLAGS_db == NULL) {
+      leveldb::Env::Default()->GetTestDirectory(&default_db_path);
+      default_db_path += '/dbbench';
+      FLAGS_db = default_db_path.c_str();
   }
+    
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+      virtual void WriteHash(io::Printer* printer);
+  virtual void WriteEquals(io::Printer* printer);
+  virtual void WriteToString(io::Printer* printer);
+    
+    #include <google/protobuf/compiler/java/java_context.h>
+#include <google/protobuf/compiler/java/java_enum_field.h>
+#include <google/protobuf/compiler/java/java_extension.h>
+#include <google/protobuf/compiler/java/java_extension_lite.h>
+#include <google/protobuf/compiler/java/java_field.h>
+#include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_message.h>
+#include <google/protobuf/compiler/java/java_message_lite.h>
+#include <google/protobuf/compiler/java/java_service.h>
+    
+      desired_output_for_decode = 'ABCD__EfghI_j';
+  expected = string('\x64\x80\xC5\xA1\x0', 5);
+  result = TextFormatDecodeData::DecodeDataForString(input_for_decode,
+                                                     desired_output_for_decode);
+  EXPECT_EQ(expected, result);
+    
+      virtual int ExtraRuntimeHasBitsNeeded(void) const;
+  virtual void SetExtraRuntimeHasBitsBase(int index_base);
+    
+    class VersionEditTest { };
+    
+      void StartBlock(uint64_t block_offset);
+  void AddKey(const Slice& key);
+  Slice Finish();
+    
+    TEST(CRC, Mask) {
+  uint32_t crc = Value('foo', 3);
+  ASSERT_NE(crc, Mask(crc));
+  ASSERT_NE(crc, Mask(Mask(crc)));
+  ASSERT_EQ(crc, Unmask(Mask(crc)));
+  ASSERT_EQ(crc, Unmask(Unmask(Mask(Mask(crc)))));
 }
     
-    #ifndef ROCKSDB_LITE
-#include 'db/compacted_db_impl.h'
-#include 'db/db_impl.h'
-#include 'db/version_set.h'
-#include 'table/get_context.h'
+    static void Usage() {
+  fprintf(
+      stderr,
+      'Usage: leveldbutil command...\n'
+      '   dump files...         -- dump contents of specified files\n'
+      );
+}
+    
+    struct Options;
+    
+      DBWrapper* db_wrapper = ObjectWrap::Unwrap<DBWrapper>(args.This());
+  std::string key       = *v8::String::Utf8Value(args[0]->ToString());
+  std::string value     = *v8::String::Utf8Value(args[1]->ToString());
+  std::string cf        = *v8::String::Utf8Value(args[2]->ToString());
+    
+     private: // Private Functions
+  /// Calls InsertBefore or InsertAfter
+  int Insert(const std::string& key, const std::string& pivot,
+             const std::string& value, bool insert_after);
+ private:
+  std::string db_name_;       // The actual database name/path
+  WriteOptions put_option_;
+  ReadOptions get_option_;
+    
+    
+    {}  //namespace rocksdb
+    
+    #endif  // JAVA_ROCKSJNI_COMPARATORJNICALLBACK_H_
