@@ -1,93 +1,78 @@
 
         
-          end
+        def pre_pr(url)
+  url[-1, 1] == FORWARD_SLASH ? url : File.dirname(url)
+end
     
-      def set_permission(permission_name, value)
-    self.send('#{permission_name}=', value)
-    save_and_refresh_staff_groups!
-  end
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-      def is_form_configurable?
-    true
-  end
-    
-        def terminate_thread!
-      if thread
-        thread.instance_eval { ActiveRecord::Base.connection_pool.release_connection }
-        thread.wakeup if thread.status == 'sleep'
-        thread.terminate
-      end
-    end
-    
-      included do
-    include Oauthable
-    
-      def destroy
-    @event.destroy
-    
-        respond_to do |format|
-      if @user_credential.update_attributes(user_credential_params)
-        format.html { redirect_to user_credentials_path, notice: 'Your credential was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @user_credential.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-    
-            while true
-          begin
-            if Platform.windows?
-              # Windows doesn't support non-blocking reads on
-              # file descriptors or pipes so we have to get
-              # a bit more creative.
-    
-              if argv.length == 2
-            # @deprecated
-            @env.ui.warn('WARNING: The second argument to `vagrant box remove`')
-            @env.ui.warn('is deprecated. Please use the --provider flag. This')
-            @env.ui.warn('feature will stop working in the next version.')
-            options[:provider] = argv[1]
-          end
-    
-          def execute
-        options = {}
-        options[:check] = false
-    
-      # Uninstalls this logger from \{Sass.logger\}. This should only be called if
-  # the logger was installed using \{#install!}
-  def uninstall!
-    if Sass.logger != self
-      throw Exception.new('Can't uninstall a logger that's not currently installed.')
-    end
-    
-            {
-          :always_update     => false,
-          :template_location => root + '/public/stylesheets/sass',
-          :css_location      => root + '/public/stylesheets',
-          :cache_location    => root + '/tmp/sass-cache',
-          :always_check      => env != 'production',
-          :quiet             => env != 'production',
-          :full_exception    => env != 'production'
-        }.freeze
-      end
-    end
-  end
-    
-              if @address.update_attributes(address_params)
-            respond_with(@address, default_template: :show)
+              if options.fetch('skip_initial_build', false)
+            Jekyll.logger.warn 'Build Warning:', 'Skipping the initial build.' \
+                               ' This may result in an out-of-date site.'
           else
-            invalid_resource!(@address)
+            build(site, options)
           end
+    
+              after_install(new_blog_path, options)
         end
     
-            def stock_location
-          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:id])
-        end
+          def matches(_)
+        false
+      end
     
-            def index
-          authorize! :read, StockMovement
-          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
-          respond_with(@stock_movements)
+          def day
+        @obj.date.strftime('%d')
+      end
+    
+          #
+      # The version constraint required to activate a given gem.
+      # Usually the gem version requirement is '> 0,' because any version
+      # will do. In the case of jekyll-docs, however, we require the exact
+      # same version as Jekyll.
+      #
+      # Returns a String version constraint in a parseable form for
+      # RubyGems.
+      def version_constraint(gem_name)
+        return '= #{Jekyll::VERSION}' if gem_name.to_s.eql?('jekyll-docs')
+        '> 0'
+      end
+    
+        describe '#download' do
+      it 'returns the p8 file' do
+        mock_client_response(:download_key) do
+          %{
+-----BEGIN PRIVATE KEY-----
+this is the encoded private key contents
+-----END PRIVATE KEY-----
+          }
         end
+        p8_string = key.download
+        expect(p8_string).to include('PRIVATE KEY')
+      end
+    end
+    
+      # spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+  spec.require_paths = Dir['*/lib']
+    
+        # get the pos of css def at pos (search backwards)
+    def css_def_pos(css, pos, depth = -1)
+      to       = open_brace_pos(css, pos, depth)
+      prev_def = to - (css[0..to].reverse.index(RULE_CLOSE_BRACE_RE_REVERSE) || to) + 1
+      from     = prev_def + 1 + (css[prev_def + 1..-1] =~ %r(^\s*[^\s/]))
+      (from..to - 1)
+    end
+    
+      # Show full error reports and disable caching.
+  config.consider_all_requests_local       = true
+  config.action_controller.perform_caching = false
