@@ -1,186 +1,198 @@
 
         
-            def remove_from_tail(self):
-        pass
-    
-        def can_fit_in_spot(self, spot):
-        return True
-    
-        def __init__(self, user_id, name, pass_hash):
-        self.user_id = user_id
-        self.name = name
-        self.pass_hash = pass_hash
-        self.friends_by_id = {}  # key: friend id, value: User
-        self.friend_ids_to_private_chats = {}  # key: friend id, value: private chats
-        self.group_chats_by_id = {}  # key: chat id, value: GroupChat
-        self.received_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
-        self.sent_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
-    
-        def __init__(self, seller_category_map, seller_category_overrides_map):
-        self.seller_category_map = seller_category_map
-        self.seller_category_overrides_map = seller_category_overrides_map
+            @property
+    def config(self):
+        if not hasattr(self, '_config'):
+            self._config = Config(directory=self.config_dir)
+            if self._config.is_new():
+                self._config.save()
+            else:
+                self._config.load()
+        return self._config
     
     
-class Person(object):
+def test_unicode_digest_auth(httpbin):
+    # it doesn't really authenticate us because httpbin
+    # doesn't interpret the utf8-encoded auth
+    http('--auth-type=digest',
+         '--auth', u'test:%s' % UNICODE,
+         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
+
     
-        def __init__(self, msg, with_headers=True, with_body=True,
-                 on_body_chunk_downloaded=None):
+        # The URL prefix the adapter should be mount to.
+    prefix = None
+    
         '''
-        :param msg: a :class:`models.HTTPMessage` subclass
-        :param with_headers: if `True`, headers will be included
-        :param with_body: if `True`, body will be included
+    abbrevs = [
+        (1 << 50, 'PB'),
+        (1 << 40, 'TB'),
+        (1 << 30, 'GB'),
+        (1 << 20, 'MB'),
+        (1 << 10, 'kB'),
+        (1, 'B')
+    ]
+    
+        # 128+2 SIGINT <http://www.tldp.org/LDP/abs/html/exitcodes.html>
+    ERROR_CTRL_C = 130
     
     
-with codecs.open(JSON_FILE_PATH, encoding='utf8') as f:
-    JSON_FILE_CONTENT = f.read()
+def test_POST_JSON_data(httpbin_both):
+    r = http('POST', httpbin_both + '/post', 'foo=bar')
+    assert HTTP_OK in r
+    assert r.json['json']['foo'] == 'bar'
     
+            parser.add_option_group(group)
     
-@pytest.mark.parametrize('ssl_version', SSL_VERSION_ARG_MAPPING.keys())
-def test_ssl_version(httpbin_secure, ssl_version):
-    try:
-        r = http(
-            '--ssl', ssl_version,
-            httpbin_secure + '/get'
-        )
-        assert HTTP_OK in r
-    except SSLError as e:
-        if ssl_version == 'ssl3':
-            # pytest-httpbin doesn't support ssl3
-            assert 'SSLV3_ALERT_HANDSHAKE_FAILURE' in str(e)
-        else:
-            raise
+            self.factory.noPage(\
+                defer.TimeoutError('Getting %s took longer than %s seconds.' % \
+                (self.factory.url, self.factory.timeout)))
     
+            # scrapy already handles #! links properly
+        ajax_crawl_request = request.replace(url=request.url+'#!')
+        logger.debug('Downloading AJAX crawlable %(ajax_crawl_request)s instead of %(request)s',
+                     {'ajax_crawl_request': ajax_crawl_request, 'request': request},
+                     extra={'spider': spider})
     
-def repr_dict_nice(d):
-    def prepare_dict(d):
-        for k, v in d.items():
-            if isinstance(v, dict):
-                v = dict(prepare_dict(v))
-            elif isinstance(v, bytes):
-                v = v.decode('utf8')
-            elif not isinstance(v, (int, str)):
-                v = repr(v)
-            yield k, v
-    return json.dumps(
-        dict(prepare_dict(d)),
-        indent=4, sort_keys=True,
-    )
+    from scrapy import signals
     
-        config['implicit_content_type'] = 'json'
-    config.save()
-    config.load()
-    assert 'implicit_content_type' not in config
-    assert not config['default_options']
+        @classmethod
+    def from_crawler(cls, crawler):
+        o = cls(crawler.settings['USER_AGENT'])
+        crawler.signals.connect(o.spider_opened, signal=signals.spider_opened)
+        return o
     
-                c_bar = plt.bar(xvals, build_time[alg] - bottom,
-                            width, bottom, color='r')
-            q_bar = plt.bar(xvals, query_time[alg],
-                            width, build_time[alg], color='b')
-    
-        print('============================================')
-    print('Warning: this is going to take a looong time')
-    print('============================================')
-    
-    REVISION_CMD = 'git rev-parse --short HEAD'
-    
-        text_lang_folder = os.path.join(text_folder, lang)
-    if not os.path.exists(text_lang_folder):
-        os.makedirs(text_lang_folder)
-    
-    First example
--------------
-The first example illustrates how robust covariance estimation can help
-concentrating on a relevant cluster when another one exists. Here, many
-observations are confounded into one and break down the empirical covariance
-estimation.
-Of course, some screening tools would have pointed out the presence of two
-clusters (Support Vector Machines, Gaussian Mixture Models, univariate
-outlier detection, ...). But had it been a high-dimensional example, none
-of these could be applied that easily.
-    
-        def set_surface(self, surface):
-        self.surface = surface
-    
-    acc_clf1, acc_clf2 = [], []
-n_features_range = range(1, n_features_max + 1, step)
-for n_features in n_features_range:
-    score_clf1, score_clf2 = 0, 0
-    for _ in range(n_averages):
-        X, y = generate_data(n_train, n_features)
-    
-        LOGIN_ERROR = HTTPError('401 Client Error: Unauthorized for url: ...')
-    
-    
-if __name__ == '__main__':
-    unittest.main()  # pragma: no cover
-
-    
-        @staticmethod
-    def _compute_record_name(domain, full_record_name):
-        # The domain, from DigitalOcean's point of view, is automatically appended.
-        return full_record_name.rpartition('.' + domain.name)[0]
-
-    
-    # Language to be used for generating the HTML full-text search index.
-# Sphinx supports the following languages:
-#   'da', 'de', 'en', 'es', 'fi', 'fr', 'hu', 'it', 'ja'
-#   'nl', 'no', 'pt', 'ro', 'ru', 'sv', 'tr'
-#html_search_language = 'en'
-    
-    
-# -- Options for manual page output ---------------------------------------
-    
-        PATTERN = '''import_from< 'from' module_name='__future__' 'import' any >'''
-    
-    
-class AuthLogoutHandler(BaseHandler, tornado.auth.FacebookGraphMixin):
-    def get(self):
-        self.clear_cookie('fbdemo_user')
-        self.redirect(self.get_argument('next', '/'))
-    
-    
-def run():
-    io_loop = IOLoop(make_current=True)
-    app = Application([('/', RootHandler)])
-    port = random.randrange(options.min_port, options.max_port)
-    app.listen(port, address='127.0.0.1')
-    signal.signal(signal.SIGCHLD, handle_sigchld)
-    args = ['ab']
-    args.extend(['-n', str(options.n)])
-    args.extend(['-c', str(options.c)])
-    if options.keepalive:
-        args.append('-k')
-    if options.quiet:
-        # just stops the progress messages printed to stderr
-        args.append('-q')
-    args.append('http://127.0.0.1:%d/' % port)
-    subprocess.Popen(args)
-    io_loop.start()
-    io_loop.close()
-    io_loop.clear_current()
-    
-        logging.warning('Starting fetch with simple client')
-    simple_client = SimpleAsyncHTTPClient()
-    simple_client.fetch('http://localhost:%d/' % options.port,
-                        callback=callback)
-    IOLoop.current().start()
-    
-    
-def im_detect_bbox_aspect_ratio(
-    model, im, aspect_ratio, box_proposals=None, hflip=False
-):
-    '''Computes bbox detections at the given width-relative aspect ratio.
-    Returns predictions in the original image space.
     '''
-    # Compute predictions on the transformed image
-    im_ar = image_utils.aspect_ratio_rel(im, aspect_ratio)
+Logging package for Python. Based on PEP 282 and comments thereto in
+comp.lang.python.
     
-        if upsample_heatmap:
-        blob_name = 'kps_score_lowres'
-    else:
-        blob_name = 'kps_score'
+        def test_invalid_cb_for_4bytes_seq(self):
+        '''
+        Test that an 'invalid continuation byte' error is raised when the
+        continuation byte(s) of a 4-bytes sequence are invalid.  When
+        errors='replace',the start byte and all the following valid
+        continuation bytes are replaced with a single U+FFFD, and all the bytes
+        starting from the first invalid continuation bytes (included) are
+        handled separately.
+        E.g. in the sequence <E1 80 41>, E1 is the start byte of a 3-bytes
+        sequence, 80 is a valid continuation byte, but 41 is not a valid cb
+        because it's the ASCII letter 'A'.
+        Note: when the start byte is E0 or ED, the valid ranges for the first
+        continuation byte are limited to A0..BF and 80..9F respectively.
+        However, when the start byte is ED, Python 2 considers all the bytes
+        in range 80..BF valid.  This is fixed in Python 3.
+        '''
+        FFFD = '\ufffd'
+        FFFDx2 = FFFD * 2
+        sequences = [
+            ('F0 00', FFFD+'\x00'), ('F0 7F', FFFD+'\x7f'), ('F0 80', FFFDx2),
+            ('F0 8F', FFFDx2), ('F0 C0', FFFDx2), ('F0 FF', FFFDx2),
+            ('F0 90 00', FFFD+'\x00'), ('F0 90 7F', FFFD+'\x7f'),
+            ('F0 90 C0', FFFDx2), ('F0 90 FF', FFFDx2),
+            ('F0 BF 00', FFFD+'\x00'), ('F0 BF 7F', FFFD+'\x7f'),
+            ('F0 BF C0', FFFDx2), ('F0 BF FF', FFFDx2),
+            ('F0 90 80 00', FFFD+'\x00'), ('F0 90 80 7F', FFFD+'\x7f'),
+            ('F0 90 80 C0', FFFDx2), ('F0 90 80 FF', FFFDx2),
+            ('F0 90 BF 00', FFFD+'\x00'), ('F0 90 BF 7F', FFFD+'\x7f'),
+            ('F0 90 BF C0', FFFDx2), ('F0 90 BF FF', FFFDx2),
+            ('F0 BF 80 00', FFFD+'\x00'), ('F0 BF 80 7F', FFFD+'\x7f'),
+            ('F0 BF 80 C0', FFFDx2), ('F0 BF 80 FF', FFFDx2),
+            ('F0 BF BF 00', FFFD+'\x00'), ('F0 BF BF 7F', FFFD+'\x7f'),
+            ('F0 BF BF C0', FFFDx2), ('F0 BF BF FF', FFFDx2),
+            ('F1 00', FFFD+'\x00'), ('F1 7F', FFFD+'\x7f'), ('F1 C0', FFFDx2),
+            ('F1 FF', FFFDx2), ('F1 80 00', FFFD+'\x00'),
+            ('F1 80 7F', FFFD+'\x7f'), ('F1 80 C0', FFFDx2),
+            ('F1 80 FF', FFFDx2), ('F1 BF 00', FFFD+'\x00'),
+            ('F1 BF 7F', FFFD+'\x7f'), ('F1 BF C0', FFFDx2),
+            ('F1 BF FF', FFFDx2), ('F1 80 80 00', FFFD+'\x00'),
+            ('F1 80 80 7F', FFFD+'\x7f'), ('F1 80 80 C0', FFFDx2),
+            ('F1 80 80 FF', FFFDx2), ('F1 80 BF 00', FFFD+'\x00'),
+            ('F1 80 BF 7F', FFFD+'\x7f'), ('F1 80 BF C0', FFFDx2),
+            ('F1 80 BF FF', FFFDx2), ('F1 BF 80 00', FFFD+'\x00'),
+            ('F1 BF 80 7F', FFFD+'\x7f'), ('F1 BF 80 C0', FFFDx2),
+            ('F1 BF 80 FF', FFFDx2), ('F1 BF BF 00', FFFD+'\x00'),
+            ('F1 BF BF 7F', FFFD+'\x7f'), ('F1 BF BF C0', FFFDx2),
+            ('F1 BF BF FF', FFFDx2), ('F3 00', FFFD+'\x00'),
+            ('F3 7F', FFFD+'\x7f'), ('F3 C0', FFFDx2), ('F3 FF', FFFDx2),
+            ('F3 80 00', FFFD+'\x00'), ('F3 80 7F', FFFD+'\x7f'),
+            ('F3 80 C0', FFFDx2), ('F3 80 FF', FFFDx2),
+            ('F3 BF 00', FFFD+'\x00'), ('F3 BF 7F', FFFD+'\x7f'),
+            ('F3 BF C0', FFFDx2), ('F3 BF FF', FFFDx2),
+            ('F3 80 80 00', FFFD+'\x00'), ('F3 80 80 7F', FFFD+'\x7f'),
+            ('F3 80 80 C0', FFFDx2), ('F3 80 80 FF', FFFDx2),
+            ('F3 80 BF 00', FFFD+'\x00'), ('F3 80 BF 7F', FFFD+'\x7f'),
+            ('F3 80 BF C0', FFFDx2), ('F3 80 BF FF', FFFDx2),
+            ('F3 BF 80 00', FFFD+'\x00'), ('F3 BF 80 7F', FFFD+'\x7f'),
+            ('F3 BF 80 C0', FFFDx2), ('F3 BF 80 FF', FFFDx2),
+            ('F3 BF BF 00', FFFD+'\x00'), ('F3 BF BF 7F', FFFD+'\x7f'),
+            ('F3 BF BF C0', FFFDx2), ('F3 BF BF FF', FFFDx2),
+            ('F4 00', FFFD+'\x00'), ('F4 7F', FFFD+'\x7f'), ('F4 90', FFFDx2),
+            ('F4 BF', FFFDx2), ('F4 C0', FFFDx2), ('F4 FF', FFFDx2),
+            ('F4 80 00', FFFD+'\x00'), ('F4 80 7F', FFFD+'\x7f'),
+            ('F4 80 C0', FFFDx2), ('F4 80 FF', FFFDx2),
+            ('F4 8F 00', FFFD+'\x00'), ('F4 8F 7F', FFFD+'\x7f'),
+            ('F4 8F C0', FFFDx2), ('F4 8F FF', FFFDx2),
+            ('F4 80 80 00', FFFD+'\x00'), ('F4 80 80 7F', FFFD+'\x7f'),
+            ('F4 80 80 C0', FFFDx2), ('F4 80 80 FF', FFFDx2),
+            ('F4 80 BF 00', FFFD+'\x00'), ('F4 80 BF 7F', FFFD+'\x7f'),
+            ('F4 80 BF C0', FFFDx2), ('F4 80 BF FF', FFFDx2),
+            ('F4 8F 80 00', FFFD+'\x00'), ('F4 8F 80 7F', FFFD+'\x7f'),
+            ('F4 8F 80 C0', FFFDx2), ('F4 8F 80 FF', FFFDx2),
+            ('F4 8F BF 00', FFFD+'\x00'), ('F4 8F BF 7F', FFFD+'\x7f'),
+            ('F4 8F BF C0', FFFDx2), ('F4 8F BF FF', FFFDx2)
+        ]
+        for seq, res in sequences:
+            self.assertCorrectUTF8Decoding(bytes.fromhex(seq), res,
+                                           'invalid continuation byte')
     
-        optim.build_data_parallel_model(model, _single_gpu_build_func)
-    return model
+        def commit(self, db):
+        from tempfile import mktemp
+        filename = mktemp()
+        FCICreate(filename, self.files)
+        add_data(db, 'Media',
+                [(1, self.index, None, '#'+self.name, None, None)])
+        add_stream(db, self.name, filename)
+        os.unlink(filename)
+        db.Commit()
     
-    '''RetinaNet model heads and losses. See: https://arxiv.org/abs/1708.02002.'''
+        def testPeekBytesIO(self):
+        with BytesIO(self.DATA) as bio:
+            with BZ2File(bio) as bz2f:
+                pdata = bz2f.peek()
+                self.assertNotEqual(len(pdata), 0)
+                self.assertTrue(self.TEXT.startswith(pdata))
+                self.assertEqual(bz2f.read(), self.TEXT)
+    
+        def test_field_order_for_named_tuples(self):
+        Person = namedtuple('Person', ['nickname', 'firstname', 'agegroup'])
+        s = pydoc.render_doc(Person)
+        self.assertLess(s.index('nickname'), s.index('firstname'))
+        self.assertLess(s.index('firstname'), s.index('agegroup'))
+    
+            # Test lookup leaks [SF bug 572567]
+        if hasattr(gc, 'get_objects'):
+            class G(object):
+                def __eq__(self, other):
+                    return False
+            g = G()
+            orig_objects = len(gc.get_objects())
+            for i in range(10):
+                g==g
+            new_objects = len(gc.get_objects())
+            self.assertEqual(orig_objects, new_objects)
+    
+    Note: iter(d.keys()) could be written as iter(d) but since the
+original d.iterkeys() was also redundant we don't fix this.  And there
+are (rare) contexts where it makes a difference (e.g. when passing it
+as an argument to a function that introspects the argument).
+'''
+    
+        def test_async_with(self):
+        self.validate('''async def foo():
+                             async for a in b: pass''')
+    
+        def test_case_sha512_2(self):
+        self.check('sha512',
+                   b'abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmn'+
+                   b'hijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu',
+          '8e959b75dae313da8cf4f72814fc143f8f7779c6eb9f7fa17299aeadb6889018'+
+          '501d289e4900f7e4331b99dec4b5433ac7d329eeb6dd26545e96e55b874be909')
