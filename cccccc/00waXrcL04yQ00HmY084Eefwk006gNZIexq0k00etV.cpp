@@ -1,460 +1,302 @@
-- (void)appendAction:(ObjectBehaviorAction)action;
-- (void)enumerate:(void (^)(ObjectBehaviorAction))block;
-- (void)reset;
-- (void)dump;
-@end
+
+        
+        #include 'db/builder.h'
     
-    /// Index the given source file and store the results to \p indexStorePath.
-///
-/// \param primarySourceFile The source file to index.
-///
-/// \param indexUnitToken A unique identifier for this translation unit in the
-/// form of a file path.
-///
-/// \param indexStorePath The location to write the indexing data to.
-///
-/// \param indexSystemModules If true, emit index data for imported serialized
-/// swift system modules.
-///
-/// \param isDebugCompilation true for non-optimized compiler invocation.
-///
-/// \param targetTriple The target for this compilation.
-///
-/// \param dependencyTracker The set of dependencies seen while building.
-bool indexAndRecord(SourceFile *primarySourceFile, StringRef indexUnitToken,
-                    StringRef indexStorePath, bool indexSystemModules,
-                    bool isDebugCompilation, StringRef targetTriple,
-                    const DependencyTracker &dependencyTracker);
-    
-    public:
-  static Header *create(MarkupContext &MC, unsigned Level,
-                        ArrayRef<MarkupASTNode *> Children);
-    
-    SymbolInfo getSymbolInfoForDecl(const Decl *D);
-SymbolSubKind getSubKindForAccessor(AccessorKind AK);
-bool isLocalSymbol(const Decl *D);
-    
-      virtual bool recordHash(StringRef hash, bool isKnown) = 0;
-  virtual bool startDependency(StringRef name, StringRef path, bool isClangModule,
-                               bool isSystem, StringRef hash) = 0;
-  virtual bool finishDependency(bool isClangModule) = 0;
-  virtual Action startSourceEntity(const IndexSymbol &symbol) = 0;
-  virtual bool finishSourceEntity(SymbolInfo symInfo, SymbolRoleSet roles) = 0;
-    
-      bool isRoot() const { return Index == RootIdx; }
-    
-      /** \brief Add a semantic error message.
-   * \param value JSON Value location associated with the error
-   * \param message The error message.
-   * \return \c true if the error was successfully added, \c false if the
-   * Value offset exceeds the document size.
-   */
-  bool pushError(const Value& value, const std::string& message);
-    
-    bool Value::isInt64() const {
-#if defined(JSON_HAS_INT64)
-  switch (type_) {
-  case intValue:
-    return true;
-  case uintValue:
-    return value_.uint_ <= UInt64(maxInt64);
-  case realValue:
-    // Note that maxInt64 (= 2^63 - 1) is not exactly representable as a
-    // double, so double(maxInt64) will be rounded up to 2^63. Therefore we
-    // require the value to be strictly less than the limit.
-    return value_.real_ >= double(minInt64) &&
-           value_.real_ < double(maxInt64) && IsIntegral(value_.real_);
-  default:
-    break;
+    inline bool DBIter::ParseKey(ParsedInternalKey* ikey) {
+  Slice k = iter_->key();
+  ssize_t n = k.size() + iter_->value().size();
+  bytes_counter_ -= n;
+  while (bytes_counter_ < 0) {
+    bytes_counter_ += RandomPeriod();
+    db_->RecordReadSample(k);
   }
-#endif // JSON_HAS_INT64
-  return false;
+  if (!ParseInternalKey(k, ikey)) {
+    status_ = Status::Corruption('corrupted internal key in DBIter');
+    return false;
+  } else {
+    return true;
+  }
 }
     
-    // This file defines a C++ DescriptorDatabase, which wraps a Python Database
-// and delegate all its operations to Python methods.
+    #endif  // STORAGE_LEVELDB_DB_DB_ITER_H_
+
     
-    #include <string>
-#include <google/protobuf/compiler/code_generator.h>
-    
-    void RepeatedEnumFieldGenerator::GenerateMembers(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
-    '    = pb::FieldCodec.ForEnum($tag$, x => (int) x, x => ($type_name$) x);\n');
-  printer->Print(variables_,
-    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
-  WritePropertyDocComment(printer, descriptor_);
-  AddPublicMemberAttributes(printer);
-  printer->Print(
-    variables_,
-    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
-    '  get { return $name$_; }\n'
-    '}\n');
+    TEST(FormatTest, InternalKeyShortestSuccessor) {
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            ShortSuccessor(IKey('foo', 100, kTypeValue)));
+  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
+            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
 }
     
-    SourceGeneratorBase::SourceGeneratorBase(const FileDescriptor* descriptor,
-                                         const Options *options)
-    : descriptor_(descriptor), options_(options) {
+    // Called on every log record (each one of which is a WriteBatch)
+// found in a kDescriptorFile.
+static void VersionEditPrinter(uint64_t pos, Slice record, WritableFile* dst) {
+  std::string r = '--- offset ';
+  AppendNumberTo(&r, pos);
+  r += '; ';
+  VersionEdit edit;
+  Status s = edit.DecodeFrom(record);
+  if (!s.ok()) {
+    r += s.ToString();
+    r.push_back('\n');
+  } else {
+    r += edit.DebugString();
+  }
+  dst->Append(r);
 }
     
-    namespace protobuf {
-namespace compiler {
-namespace java {
-    }
-    }
+    // Tag numbers for serialized VersionEdit.  These numbers are written to
+// disk and should not be changed.
+enum Tag {
+  kComparator           = 1,
+  kLogNumber            = 2,
+  kNextFileNumber       = 3,
+  kLastSequence         = 4,
+  kCompactPointer       = 5,
+  kDeletedFile          = 6,
+  kNewFile              = 7,
+  // 8 was used for large value refs
+  kPrevLogNumber        = 9
+};
+    
+    
+TEST(FindFileTest, Multiple) {
+  Add('150', '200');
+  Add('200', '250');
+  Add('300', '350');
+  Add('400', '450');
+  ASSERT_EQ(0, Find('100'));
+  ASSERT_EQ(0, Find('150'));
+  ASSERT_EQ(0, Find('151'));
+  ASSERT_EQ(0, Find('199'));
+  ASSERT_EQ(0, Find('200'));
+  ASSERT_EQ(1, Find('201'));
+  ASSERT_EQ(1, Find('249'));
+  ASSERT_EQ(1, Find('250'));
+  ASSERT_EQ(2, Find('251'));
+  ASSERT_EQ(2, Find('299'));
+  ASSERT_EQ(2, Find('300'));
+  ASSERT_EQ(2, Find('349'));
+  ASSERT_EQ(2, Find('350'));
+  ASSERT_EQ(3, Find('351'));
+  ASSERT_EQ(3, Find('400'));
+  ASSERT_EQ(3, Find('450'));
+  ASSERT_EQ(4, Find('451'));
     }
     
-      void GenerateBuilder(io::Printer* printer);
-  void GenerateIsInitialized(io::Printer* printer);
-  void GenerateDescriptorMethods(io::Printer* printer);
-  void GenerateInitializers(io::Printer* printer);
-  void GenerateEqualsAndHashCode(io::Printer* printer);
-  void GenerateParser(io::Printer* printer);
-  void GenerateParsingConstructor(io::Printer* printer);
-  void GenerateAnyMethods(io::Printer* printer);
+    void WriteBatchInternal::SetContents(WriteBatch* b, const Slice& contents) {
+  assert(contents.size() >= kHeader);
+  b->rep_.assign(contents.data(), contents.size());
+}
+    
+    inline
+static void WalCheckpoint(sqlite3* db_) {
+  // Flush all writes to disk
+  if (FLAGS_WAL_enabled) {
+    sqlite3_wal_checkpoint_v2(db_, NULL, SQLITE_CHECKPOINT_FULL, NULL, NULL);
+  }
+}
+    
+    
+    {}
+    
+    #endif  // GRPC_TEST_CPP_UTIL_BENCHMARK_CONFIG_H
+
     
       const auto result =
       RunScenario(client_config, 1, server_config, 1, WARMUP, BENCHMARK, -2, '',
-                  kInsecureCredentialsType, true);
+                  kInsecureCredentialsType, false);
     
-    #ifndef GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
-#define GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
+    #include <gflags/gflags.h>
+#include <grpc/grpc.h>
+#include <grpc/support/time.h>
     
-    #ifndef GRPC_INTERNAL_COMPILER_NODE_GENERATOR_HELPERS_H
-#define GRPC_INTERNAL_COMPILER_NODE_GENERATOR_HELPERS_H
-    
-    // Data pertaining to configuration of the generator with respect to anything
-// that may be used internally at Google.
-struct GeneratorConfiguration {
-  GeneratorConfiguration();
-  grpc::string grpc_package_root;
-  // TODO(https://github.com/grpc/grpc/issues/8622): Drop this.
-  grpc::string beta_package_root;
-  // TODO(https://github.com/google/protobuf/issues/888): Drop this.
-  grpc::string import_prefix;
-};
-    
-    grpc::string DescribeMethod(const grpc::protobuf::MethodDescriptor* method) {
-  std::stringstream result;
-  result << '  rpc ' << method->name()
-         << (method->client_streaming() ? '(stream ' : '(')
-         << method->input_type()->full_name() << ') returns '
-         << (method->server_streaming() ? '(stream ' : '(')
-         << method->output_type()->full_name() << ') {}\n';
-  if (method->options().deprecated()) {
-    result << ' DEPRECATED';
-  }
-  return result.str();
-}
-    
-    int PowerIphone::get_power_percent_left() {
-	if (UpdatePowerInfo()) {
-		return percent_left;
-	} else {
-		return -1;
-	}
-}
-    
-    WebSocketClient::WebSocketClient() {
-    }
-    
-    #include 'core/error_list.h'
-#include 'websocket_multiplayer.h'
-#include 'websocket_peer.h'
-    
-    FT_END_HEADER
-    
-            d[0] = clamp(y + m_crr[cr]);
-        d[1] = clamp(y + ((m_crg[cr] + m_cbg[cb]) >> 16));
-        d[2] = clamp(y + m_cbb[cb]);
-        d[3] = 255;
-    
-    #endif /* OPUS_HAVE_RTCD */
-    
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-    
-      We can insert an explicit MOVD or MOVQ using _mm_cvtsi32_si128() or
-  _mm_loadl_epi64(), which should have the same semantics as an m32 or m64
-  reference in the PMOVSXWD instruction itself, but gcc is not smart enough to
-  optimize this out when optimizations ARE enabled.
-    
-    #if defined(OPUS_X86_MAY_HAVE_SSE4_1)
-#include 'x86/SigProc_FIX_sse.h'
-#endif
-    
-    #endif // BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    
-    {  // The offset to the end of the unread data.
-  size_type end_offset_;
-  
-  // The data in the buffer.
-  std::vector<byte_type> buffer_;
-};
-    
-    namespace boost {
-namespace date_time {
-    }
-    }
-    
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-    #endif // BOOST_ASIO_DETAIL_GCC_ARM_FENCED_BLOCK_HPP
-
-    
-    // Calls to asio_handler_invoke must be made from a namespace that does not
-// contain overloads of this function. The boost_asio_handler_invoke_helpers
-// namespace is defined here for that purpose.
-namespace boost_asio_handler_invoke_helpers {
-    }
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    /*
- * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
- * Method:    XGBoosterFree
- * Signature: (J)V
- */
-JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGBoosterFree
-  (JNIEnv *jenv, jclass jcls, jlong jhandle) {
-    BoosterHandle handle = (BoosterHandle) jhandle;
-    return XGBoosterFree(handle);
-}
-    
-    
-    {    return label_order_cache_;
-  }
-  /*! \brief clear all the information */
-  void Clear();
-  /*!
-   * \brief Load the Meta info from binary stream.
-   * \param fi The input stream
-   */
-  void LoadBinary(dmlc::Stream* fi);
-  /*!
-   * \brief Save the Meta info to binary stream
-   * \param fo The output stream.
-   */
-  void SaveBinary(dmlc::Stream* fo) const;
-  /*!
-   * \brief Set information in the meta info.
-   * \param key The key of the information.
-   * \param dptr The data pointer of the source array.
-   * \param dtype The type of the source data.
-   * \param num Number of elements in the source array.
-   */
-  void SetInfo(const char* key, const void* dptr, DataType dtype, size_t num);
-    
-    
-    {  const std::vector<size_t> expected_offset{
-    0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
-  };
-  const std::vector<xgboost::Entry> expected_data{
-    {1, 1}, {2, 1}, {3, 0}, {4, 0.2}, {5, 0},
-    {1, 0}, {2, 0}, {3, 1}, {4, 0.1}, {5, 1},
-    {1, 0}, {2, 1}, {3, 0}, {4, 0.4}, {5, 0},
-    {1, 0}, {2, 0}, {3, 1}, {4, 0.3}, {5, 0},
-    {1, 0}, {2, 0}, {3, 1}, {4, 0.2}, {5, 0},
-    {1, 1}, {2, 0}, {3, 1}, {4, 0.4}, {5, 0},
-    {1, 0}, {2, 0}, {3, 1}, {4, 0.1}, {5, 0},
-    {1, 0}, {2, 0}, {3, 1}, {4, 0.2}, {5, 0},
-    {1, 0}, {2, 0}, {3, 1}, {4, 0.1}, {5, 1},
-    {1, 1}, {2, 1}, {3, 0}, {4, 0.3}, {5, 0},
-    {1, 1}, {2, 0}, {3, 0}, {4, 0.4}, {5, 1},
-    {1, 0}, {2, 1}, {3, 1}, {4, 0.5}, {5, 0}
-  };
-  dmlc::DataIter<xgboost::SparsePage>* iter = dmat->RowIterator();
-  iter->BeforeFirst();
-  CHECK(iter->Next());
-  const xgboost::SparsePage& batch = iter->Value();
-  CHECK_EQ(batch.base_rowid, 0);
-  CHECK(batch.offset == expected_offset);
-  CHECK(batch.data == expected_data);
-  CHECK(!iter->Next());
-}
-
-    
-    TEST(Metric, RMSE) {
-  xgboost::Metric * metric = xgboost::Metric::Create('rmse');
-  ASSERT_STREQ(metric->Name(), 'rmse');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0.6403f, 0.001f);
-}
-    
-    #endif  // XGBOOST_OBJECTIVE_REGRESSION_LOSS_H_
-
-    
-    
-    {
-    {    std::ostringstream oss;
-    std::copy(line.begin() + options_index,
-              line.end(),
-              std::ostream_iterator<std::string>(oss, ' '));
-    r['options'] = oss.str();
-    results.push_back(r);
-  }
-}
-    
-    #ifdef WIN32
-  pid = (int)::GetCurrentProcessId();
-#else
-  pid = getpid();
-#endif
-    
-    
-    {  BSTR* pData = nullptr;
-  SafeArrayAccessData(value.parray, (void**)&pData);
-  ret.reserve(count);
-  for (long i = 0; i < count; i++) {
-    ret.push_back(bstrToString(pData[i]));
-  }
-  SafeArrayUnaccessData(value.parray);
-  VariantClear(&value);
-  return Status(0);
-}
-    
-    Status KernelEventPublisher::setUp() {
-  // A daemon should attempt to autoload kernel extensions.
-  if (Initializer::isDaemon()) {
-    loadKernelExtension();
-  }
-    }
-    
-    struct ExceptionInfo {
-  const std::type_info* type{nullptr};
-  // The values in frames are IP (instruction pointer) addresses.
-  // They are only filled if the low-level exception tracer library is
-  // linked in or LD_PRELOADed.
-  std::vector<uintptr_t> frames; // front() is top of stack
-};
-    
-    #include <algorithm>
-#include <atomic>
-#include <condition_variable>
-#include <functional>
-#include <memory>
-#include <mutex>
-#include <string>
-#include <thread>
-#include <typeindex>
-#include <typeinfo>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
-    
-    
-    {} // namespace folly
-
-    
-      bool remove(const T& v) {
-    auto prev = &head_;
-    locate_lower_bound(v, prev);
-    auto curr = prev->load(std::memory_order_relaxed);
-    if (!curr || curr->elem_ != v) {
-      return false;
-    }
-    Node* curr_next = curr->next_.load();
-    // Patch up the actual list...
-    prev->store(curr_next, std::memory_order_release);
-    // ...and only then null out the removed node.
-    curr->next_.store(nullptr, std::memory_order_release);
-    curr->retire();
-    return true;
-  }
-    
-    template <class T, QueueBehaviorIfFull kBehavior = QueueBehaviorIfFull::THROW>
-class LifoSemMPMCQueue : public BlockingQueue<T> {
+    /* A GrpcPolledFdFactory is 1-to-1 with and owned by the
+ * ares event driver. It knows how to create GrpcPolledFd's
+ * for the current platform, and the ares driver uses it for all of
+ * its fd's. */
+class GrpcPolledFdFactory {
  public:
-  // Note: The queue pre-allocates all memory for max_capacity
-  explicit LifoSemMPMCQueue(size_t max_capacity) : queue_(max_capacity) {}
+  virtual ~GrpcPolledFdFactory() {}
+  /* Creates a new wrapped fd for the current platform */
+  virtual GrpcPolledFd* NewGrpcPolledFdLocked(
+      ares_socket_t as, grpc_pollset_set* driver_pollset_set,
+      grpc_combiner* combiner) GRPC_ABSTRACT;
+  /* Optionally configures the ares channel after creation */
+  virtual void ConfigureAresChannelLocked(ares_channel channel) GRPC_ABSTRACT;
     }
     
-    #include <folly/Executor.h>
-#include <folly/MPMCQueue.h>
-#include <folly/Range.h>
-#include <folly/executors/task_queue/BlockingQueue.h>
-#include <folly/synchronization/LifoSem.h>
-#include <glog/logging.h>
-    
-    Init::Init(int* argc, char*** argv, bool removeFlags) {
-  init(argc, argv, removeFlags);
+    void CheckResolvedWithoutErrorLocked(void* argsp, grpc_error* err) {
+  EXPECT_EQ(err, GRPC_ERROR_NONE);
+  ArgsStruct* args = (ArgsStruct*)argsp;
+  gpr_atm_rel_store(&args->done_atm, 1);
+  gpr_mu_lock(args->mu);
+  GRPC_LOG_IF_ERROR('pollset_kick', grpc_pollset_kick(args->pollset, nullptr));
+  gpr_mu_unlock(args->mu);
 }
     
-      static size_t controlBlockSize(size_t n) {
-    return offsetof(ControlBlockAndPromise, promises) + n * sizeof(BoolPromise);
+    /// Indicates that the call has been cancelled.
+void grpc_call_combiner_cancel(grpc_call_combiner* call_combiner,
+                               grpc_error* error);
+    
+    #include <grpc/slice_buffer.h>
+#include 'src/core/lib/security/security_connector/load_system_roots.h'
+    
+    grpc_slice CreateRootCertsBundle(const char* certs_directory) {
+  grpc_slice bundle_slice = grpc_empty_slice();
+  if (certs_directory == nullptr) {
+    return bundle_slice;
   }
-    
-    #if defined(__APPLE__) || defined(_MSC_VER)
-#define FOLLY_STATIC_CTOR_PRIORITY_MAX
-#else
-// 101 is the highest priority allowed by the init_priority attribute.
-// This priority is already used by JEMalloc and other memory allocators so
-// we will take the next one.
-#define FOLLY_STATIC_CTOR_PRIORITY_MAX __attribute__((__init_priority__(102)))
-#endif
-    
-    namespace folly {
-namespace f14 {
-namespace detail {
+  DIR* ca_directory = opendir(certs_directory);
+  if (ca_directory == nullptr) {
+    return bundle_slice;
+  }
+  struct FileData {
+    char path[MAXPATHLEN];
+    off_t size;
+  };
+  InlinedVector<FileData, 2> roots_filenames;
+  size_t total_bundle_size = 0;
+  struct dirent* directory_entry;
+  while ((directory_entry = readdir(ca_directory)) != nullptr) {
+    struct stat dir_entry_stat;
+    const char* file_entry_name = directory_entry->d_name;
+    FileData file_data;
+    GetAbsoluteFilePath(certs_directory, file_entry_name, file_data.path);
+    int stat_return = stat(file_data.path, &dir_entry_stat);
+    if (stat_return == -1 || !S_ISREG(dir_entry_stat.st_mode)) {
+      // no subdirectories.
+      if (stat_return == -1) {
+        gpr_log(GPR_ERROR, 'failed to get status for file: %s', file_data.path);
+      }
+      continue;
     }
+    file_data.size = dir_entry_stat.st_size;
+    total_bundle_size += file_data.size;
+    roots_filenames.push_back(file_data);
+  }
+  closedir(ca_directory);
+  char* bundle_string = static_cast<char*>(gpr_zalloc(total_bundle_size + 1));
+  size_t bytes_read = 0;
+  for (size_t i = 0; i < roots_filenames.size(); i++) {
+    int file_descriptor = open(roots_filenames[i].path, O_RDONLY);
+    if (file_descriptor != -1) {
+      // Read file into bundle.
+      size_t cert_file_size = roots_filenames[i].size;
+      int read_ret =
+          read(file_descriptor, bundle_string + bytes_read, cert_file_size);
+      if (read_ret != -1) {
+        bytes_read += read_ret;
+      } else {
+        gpr_log(GPR_ERROR, 'failed to read file: %s', roots_filenames[i].path);
+      }
     }
-    }
-    
-    
-    {  // Test shared_from_this() and weak_from_this() on object not owned by a
-  // shared_ptr. Undefined in C++14 but well-defined in C++17. Also known to
-  // work with libstdc++ >= 20150123. Feel free to add other standard library
-  // versions where the behavior is known.
-#if __cplusplus >= 201700L || __GLIBCXX__ >= 20150123L
-  C stack_resident;
-  ASSERT_THROW(stack_resident.shared_from_this(), std::bad_weak_ptr);
-  ASSERT_TRUE(stack_resident.weak_from_this().expired());
-#endif
+  }
+  bundle_slice = grpc_slice_new(bundle_string, bytes_read, gpr_free);
+  return bundle_slice;
 }
     
-     private:
-  void BuildPredictedEnvironment(
-      const std::vector<const Obstacle*>& obstacles,
-      const double ego_vehicle_s,
-      const double ego_vehicle_d,
-      const std::vector<common::PathPoint>& discretized_reference_line);
+    namespace grpc {
+namespace {
+    }
+    }
     
-      std::vector<Vec2d> new_points;
-  for (int i = 0; i < n; ++i) {
-    if (side[i] >= 0) {
-      new_points.push_back((*points)[i]);
-    }
-    const int j = ((i == n - 1) ? 0 : (i + 1));
-    if (side[i] * side[j] < 0) {
-      const double ratio = prod[j] / (prod[j] - prod[i]);
-      new_points.emplace_back(
-          (*points)[i].x() * ratio + (*points)[j].x() * (1.0 - ratio),
-          (*points)[i].y() * ratio + (*points)[j].y() * (1.0 - ratio));
-    }
+    #include 'hphp/runtime/vm/jit/timer.h'
+    
+    #endif
+#endif
+
+    
+      // DataBlock can track an alternate pseudo-frontier to support clients that
+  // wish to emit code to one location while keeping memory references relative
+  // to a separate location. The actual writes will be to m_dest.
+  Address m_destBase{nullptr};
+    
+      /*
+   * root is the address of the top-level APCHandle which contains this string
+   * register {allocation, root} with APCGCManager
+   */
+  void registerUncountedAllocation(APCHandle* rootAPCHandle);
+    
+      // Add usable mappings (possibly backed by huge pages) to the usable range of
+  // memory.  Return false if it failed.
+  bool addMapping(BumpAllocState& state, size_t newSize) {
+    if (trivial(state, newSize)) return true;
+    if (infeasible(state, newSize)) return false;
+    if (!m_failed && addMappingImpl(state, newSize)) return true;
+    return m_fallback && m_fallback->addMapping(state, newSize);
   }
     
-    namespace apollo {
-namespace planning {
+    // redirect the messages to R's console.
+namespace dmlc {
+void CustomLogMessage::Log(const std::string& msg) {
+  Rprintf('%s\n', msg.c_str());
+}
+}  // namespace dmlc
+    
+    
+    {  std::unique_ptr<dmlc::Parser<uint32_t> > parser(
+      dmlc::Parser<uint32_t>::Create(fname.c_str(), partid, npart, file_format.c_str()));
+  DMatrix* dmat = DMatrix::Create(parser.get(), cache_file);
+  if (!silent) {
+    LOG(CONSOLE) << dmat->Info().num_row_ << 'x' << dmat->Info().num_col_ << ' matrix with '
+                 << dmat->Info().num_nonzero_ << ' entries loaded from ' << uri;
+  }
+  /* sync up number of features after matrix loaded.
+   * partitioned data will fail the train/val validation check 
+   * since partitioned data not knowing the real number of features. */
+  rabit::Allreduce<rabit::op::Max>(&dmat->Info().num_col_, 1);
+  // backward compatiblity code.
+  if (!load_row_split) {
+    MetaInfo& info = dmat->Info();
+    if (MetaTryLoadGroup(fname + '.group', &info.group_ptr_) && !silent) {
+      LOG(CONSOLE) << info.group_ptr_.size() - 1
+                   << ' groups are loaded from ' << fname << '.group';
+    }
+    if (MetaTryLoadFloatInfo(fname + '.base_margin', &info.base_margin_) && !silent) {
+      LOG(CONSOLE) << info.base_margin_.size()
+                   << ' base_margin are loaded from ' << fname << '.base_margin';
+    }
+    if (MetaTryLoadFloatInfo(fname + '.weight', &info.weights_) && !silent) {
+      LOG(CONSOLE) << info.weights_.size()
+                   << ' weights are loaded from ' << fname << '.weight';
+    }
+  }
+  return dmat;
+}
+    
+    // metrics
+#include '../src/metric/metric.cc'
+#include '../src/metric/elementwise_metric.cc'
+#include '../src/metric/multiclass_metric.cc'
+#include '../src/metric/rank_metric.cc'
+    
+    TreeUpdater* TreeUpdater::Create(const std::string& name) {
+  auto *e = ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->Find(name);
+  if (e == nullptr) {
+    LOG(FATAL) << 'Unknown tree updater ' << name;
+  }
+  return (e->body)();
+}
+    
+    namespace xgboost {
+namespace common {
+TEST(CompressedIterator, Test) {
+  ASSERT_TRUE(detail::SymbolBits(256) == 8);
+  ASSERT_TRUE(detail::SymbolBits(150) == 8);
+  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
+  int num_elements = 1000;
+  int repetitions = 1000;
+  srand(9);
     }
     }
+    }
+    
+      /*! \return the default evaluation metric for the objective */
+  virtual const char* DefaultEvalMetric() const = 0;
+  // the following functions are optional, most of time default implementation is good enough
+  /*!
+   * \brief transform prediction values, this is only called when Prediction is called
+   * \param io_preds prediction values, saves to this vector as well
+   */
+  virtual void PredTransform(HostDeviceVector<bst_float> *io_preds) {}
