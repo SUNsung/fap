@@ -1,295 +1,105 @@
-  if (t_size == 0) return s_size;
-  if (s == t) return 0;
+
+        
+                struct smem
+        {
+            enum { TAG_MASK = (1U << ( (sizeof(unsigned int) << 3) - 5U)) - 1U };
+    }
     
-    #include 'tensorflow/core/distributed_runtime/partial_run_mgr.h'
+    static void* openclamdblas_check_fn(int ID);
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    const float g_8x32fTab[] =
+{
+    -128.f, -127.f, -126.f, -125.f, -124.f, -123.f, -122.f, -121.f,
+    -120.f, -119.f, -118.f, -117.f, -116.f, -115.f, -114.f, -113.f,
+    -112.f, -111.f, -110.f, -109.f, -108.f, -107.f, -106.f, -105.f,
+    -104.f, -103.f, -102.f, -101.f, -100.f,  -99.f,  -98.f,  -97.f,
+     -96.f,  -95.f,  -94.f,  -93.f,  -92.f,  -91.f,  -90.f,  -89.f,
+     -88.f,  -87.f,  -86.f,  -85.f,  -84.f,  -83.f,  -82.f,  -81.f,
+     -80.f,  -79.f,  -78.f,  -77.f,  -76.f,  -75.f,  -74.f,  -73.f,
+     -72.f,  -71.f,  -70.f,  -69.f,  -68.f,  -67.f,  -66.f,  -65.f,
+     -64.f,  -63.f,  -62.f,  -61.f,  -60.f,  -59.f,  -58.f,  -57.f,
+     -56.f,  -55.f,  -54.f,  -53.f,  -52.f,  -51.f,  -50.f,  -49.f,
+     -48.f,  -47.f,  -46.f,  -45.f,  -44.f,  -43.f,  -42.f,  -41.f,
+     -40.f,  -39.f,  -38.f,  -37.f,  -36.f,  -35.f,  -34.f,  -33.f,
+     -32.f,  -31.f,  -30.f,  -29.f,  -28.f,  -27.f,  -26.f,  -25.f,
+     -24.f,  -23.f,  -22.f,  -21.f,  -20.f,  -19.f,  -18.f,  -17.f,
+     -16.f,  -15.f,  -14.f,  -13.f,  -12.f,  -11.f,  -10.f,   -9.f,
+      -8.f,   -7.f,   -6.f,   -5.f,   -4.f,   -3.f,   -2.f,   -1.f,
+       0.f,    1.f,    2.f,    3.f,    4.f,    5.f,    6.f,    7.f,
+       8.f,    9.f,   10.f,   11.f,   12.f,   13.f,   14.f,   15.f,
+      16.f,   17.f,   18.f,   19.f,   20.f,   21.f,   22.f,   23.f,
+      24.f,   25.f,   26.f,   27.f,   28.f,   29.f,   30.f,   31.f,
+      32.f,   33.f,   34.f,   35.f,   36.f,   37.f,   38.f,   39.f,
+      40.f,   41.f,   42.f,   43.f,   44.f,   45.f,   46.f,   47.f,
+      48.f,   49.f,   50.f,   51.f,   52.f,   53.f,   54.f,   55.f,
+      56.f,   57.f,   58.f,   59.f,   60.f,   61.f,   62.f,   63.f,
+      64.f,   65.f,   66.f,   67.f,   68.f,   69.f,   70.f,   71.f,
+      72.f,   73.f,   74.f,   75.f,   76.f,   77.f,   78.f,   79.f,
+      80.f,   81.f,   82.f,   83.f,   84.f,   85.f,   86.f,   87.f,
+      88.f,   89.f,   90.f,   91.f,   92.f,   93.f,   94.f,   95.f,
+      96.f,   97.f,   98.f,   99.f,  100.f,  101.f,  102.f,  103.f,
+     104.f,  105.f,  106.f,  107.f,  108.f,  109.f,  110.f,  111.f,
+     112.f,  113.f,  114.f,  115.f,  116.f,  117.f,  118.f,  119.f,
+     120.f,  121.f,  122.f,  123.f,  124.f,  125.f,  126.f,  127.f,
+     128.f,  129.f,  130.f,  131.f,  132.f,  133.f,  134.f,  135.f,
+     136.f,  137.f,  138.f,  139.f,  140.f,  141.f,  142.f,  143.f,
+     144.f,  145.f,  146.f,  147.f,  148.f,  149.f,  150.f,  151.f,
+     152.f,  153.f,  154.f,  155.f,  156.f,  157.f,  158.f,  159.f,
+     160.f,  161.f,  162.f,  163.f,  164.f,  165.f,  166.f,  167.f,
+     168.f,  169.f,  170.f,  171.f,  172.f,  173.f,  174.f,  175.f,
+     176.f,  177.f,  178.f,  179.f,  180.f,  181.f,  182.f,  183.f,
+     184.f,  185.f,  186.f,  187.f,  188.f,  189.f,  190.f,  191.f,
+     192.f,  193.f,  194.f,  195.f,  196.f,  197.f,  198.f,  199.f,
+     200.f,  201.f,  202.f,  203.f,  204.f,  205.f,  206.f,  207.f,
+     208.f,  209.f,  210.f,  211.f,  212.f,  213.f,  214.f,  215.f,
+     216.f,  217.f,  218.f,  219.f,  220.f,  221.f,  222.f,  223.f,
+     224.f,  225.f,  226.f,  227.f,  228.f,  229.f,  230.f,  231.f,
+     232.f,  233.f,  234.f,  235.f,  236.f,  237.f,  238.f,  239.f,
+     240.f,  241.f,  242.f,  243.f,  244.f,  245.f,  246.f,  247.f,
+     248.f,  249.f,  250.f,  251.f,  252.f,  253.f,  254.f,  255.f
+};
     
-    /*
- * Encoding implementation, shared across V1 and V2 ops. Creates a new
- * output in the context.
+    
+int main() {
+  thpp::FloatTensor *tensor = new thpp::THTensor<float>();
+  thpp::FloatTensor *tensor2 = new thpp::THTensor<float>();
+  assert(tensor->nDim() == 0);
+    }
+    
+    #endif
+
+    
+    THC_API void THCStorage_resize(THCState *state, THCStorage *storage, ptrdiff_t size);
+THC_API int THCStorage_getDevice(THCState* state, const THCStorage* storage);
+    
+                if (EXPECTS_CRASH_DUMP_CONTENT == _state) {
+                _state = EXPECTS_CRASH_DUMP_HEADER;
+                return 0;
+            }
+    
+    #endif /* DUMPCRASHSTACK_H_ */
+
+    
+    
+/*
+ * CoreServiceBase.h
+ *
+ *  Created on: 2013-6-20
+ *      Author: yerungui
  */
-void Encode(OpKernelContext* context, const Tensor& contents,
-            const string& file_format, const int32 bits_per_second,
-            const int32 samples_per_second) {
-  std::vector<float> samples;
-  samples.reserve(contents.NumElements());
-  for (int32 i = 0; i < contents.NumElements(); ++i) {
-    samples.push_back(contents.flat<float>()(i));
-  }
-  const int32 channel_count = contents.dim_size(1);
-  string encoded_audio;
-  OP_REQUIRES_OK(
-      context, CreateAudioFile(file_format, bits_per_second, samples_per_second,
-                               channel_count, samples, &encoded_audio));
-    }
     
-    // TODO: Enable GPU support for angle op after resolving
-// build failures on GPU (See #10643 for context).
-#if 0 && GOOGLE_CUDA
+      private:
+    int __TestFun1(int i);
     
-    Status BuildTable(const std::string& dbname,
-                  Env* env,
-                  const Options& options,
-                  TableCache* table_cache,
-                  Iterator* iter,
-                  FileMetaData* meta) {
-  Status s;
-  meta->file_size = 0;
-  iter->SeekToFirst();
-    }
-    
-    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
-  size_t usize = user_key.size();
-  size_t needed = usize + 13;  // A conservative estimate
-  char* dst;
-  if (needed <= sizeof(space_)) {
-    dst = space_;
-  } else {
-    dst = new char[needed];
-  }
-  start_ = dst;
-  dst = EncodeVarint32(dst, usize + 8);
-  kstart_ = dst;
-  memcpy(dst, user_key.data(), usize);
-  dst += usize;
-  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
-  dst += 8;
-  end_ = dst;
-}
-    
-      const Comparator* user_comparator() const { return user_comparator_; }
-    
-    static std::string ShortSuccessor(const std::string& s) {
-  std::string result = s;
-  InternalKeyComparator(BytewiseComparator()).FindShortSuccessor(&result);
-  return result;
-}
+    //
+//  testspy_spy.cpp
+//  PublicComponent
+//
+//  Created by yerungui on 14-5-13.
+//
     
     
-    {  bool Overlaps(const char* smallest, const char* largest) {
-    InternalKeyComparator cmp(BytewiseComparator());
-    Slice s(smallest != NULL ? smallest : '');
-    Slice l(largest != NULL ? largest : '');
-    return SomeFileOverlapsRange(cmp, disjoint_sorted_files_, files_,
-                                 (smallest != NULL ? &s : NULL),
-                                 (largest != NULL ? &l : NULL));
-  }
-};
-    
-    #include 'db/memtable.h'
-#include 'db/write_batch_internal.h'
-#include 'leveldb/env.h'
-#include 'util/logging.h'
-#include 'util/testharness.h'
-    
-    
-    {    FILE* cpuinfo = fopen('/proc/cpuinfo', 'r');
-    if (cpuinfo != NULL) {
-      char line[1000];
-      int num_cpus = 0;
-      std::string cpu_type;
-      std::string cache_size;
-      while (fgets(line, sizeof(line), cpuinfo) != NULL) {
-        const char* sep = strchr(line, ':');
-        if (sep == NULL) {
-          continue;
-        }
-        Slice key = TrimSpace(Slice(line, sep - 1 - line));
-        Slice val = TrimSpace(Slice(sep + 1));
-        if (key == 'model name') {
-          ++num_cpus;
-          cpu_type = val.ToString();
-        } else if (key == 'cache size') {
-          cache_size = val.ToString();
-        }
-      }
-      fclose(cpuinfo);
-      fprintf(stderr, 'CPU:        %d * %s\n', num_cpus, cpu_type.c_str());
-      fprintf(stderr, 'CPUCache:   %s\n', cache_size.c_str());
-    }
-#endif
-  }
-    
-      // Streams a pointer value to this object.
-  //
-  // This function is an overload of the previous one.  When you
-  // stream a pointer to a Message, this definition will be used as it
-  // is more specialized.  (The C++ Standard, section
-  // [temp.func.order].)  If you stream a non-pointer, then the
-  // previous definition will be used.
-  //
-  // The reason for this overload is that streaming a NULL pointer to
-  // ostream is undefined behavior.  Depending on the compiler, you
-  // may get '0', '(nil)', '(null)', or an access violation.  To
-  // ensure consistent result across compilers, we always treat NULL
-  // as '(null)'.
-  template <typename T>
-  inline Message& operator <<(T* const& pointer) {  // NOLINT
-    if (pointer == NULL) {
-      *ss_ << '(null)';
-    } else {
-      *ss_ << pointer;
-    }
-    return *this;
-  }
-#endif  // GTEST_OS_SYMBIAN
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11>
-internal::ValueArray11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
-    T11> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
-    T10 v10, T11 v11) {
-  return internal::ValueArray11<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
-      T11>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11);
-}
-    
-    // Then, use TYPED_TEST_P() to define as many type-parameterized tests
-// for this type-parameterized test case as you want.
-TYPED_TEST_P(FooTest, DoesBlah) {
-  // Inside a test, refer to TypeParam to get the type parameter.
-  TypeParam n = 0;
-  ...
-}
-    
-    # else
-#  define GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, death_test) \
-  GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement)
-    
-    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PARAM_UTIL_GENERATED_H_
+#endif /* SCOP_JENV_H_ */
 
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20>
-struct Types20 {
-  typedef T1 Head;
-  typedef Types19<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20> Tail;
-};
-    
-    struct hphp_string_hash {
-  size_t operator()(const String& s) const {
-    return s.get()->hash();
-  }
-};
-    
-    
-    {}
-
-    
-    bool Bump2MMapper::addMappingImpl(BumpAllocState& state, size_t newSize) {
-  // Check quota and alignment before trying to map.  Note that m_maxNumPages
-  // may be initialized later for this mapper, so don't fail permanently before
-  // it is initialized.
-  if (m_currNumPages >= m_maxNumPages) {
-    if (m_maxNumPages) {
-      m_failed = true;
-    }
-    return false;
-  }
-  auto newPageBase = state.frontier();
-  // Add some 4K pages before madvise()
-  if (!Bump4KMapper::addMappingImpl(state, newSize)) {
-    return false;
-  }
-  auto const nHugePages =
-    std::min(static_cast<unsigned>(kChunkSize / size2m),
-             m_maxNumPages - m_currNumPages);
-  hintHuge(reinterpret_cast<void*>(newPageBase), nHugePages * size2m);
-  m_currNumPages += nHugePages;
-  return true;
-}
-    
-    namespace HPHP { namespace alloc {
-    }
-    }
-    
-    namespace HPHP { namespace alloc {
-    }
-    }
-    
-    void* mmap_1g(void* addr, int node, bool map_fixed) {
-#ifdef __linux__
-  if (s_num1GPages >= kMaxNum1GPages) return nullptr;
-  if (get_huge1g_info(node).free_hugepages <= 0) return nullptr;
-  if (node >= 0 && !numa_node_allowed(node)) return nullptr;
-#ifdef HAVE_NUMA
-  SavedNumaPolicy numaPolicy;
-  if (node >= 0 && numa_num_nodes > 1) {
-    numaPolicy.save();
-    unsigned long singleNodeMask = 1ul << node;
-    set_mempolicy(MPOL_BIND, &singleNodeMask, sizeof(singleNodeMask));
-  }
-#endif
-  void* ret = mmap_1g_impl(addr, map_fixed);
-  if (ret != nullptr) {
-    s_1GPages[s_num1GPages++] = ret;
-  }
-  return ret;
-#else
-  return nullptr;
-#endif
-}
-    
-    void cgLdArrFuncCtx(IRLS& env, const IRInstruction* inst) {
-  auto const args = argGroup(env, inst)
-    .ssa(0)
-    .addr(srcLoc(env, inst, 1).reg(),
-          cellsToBytes(inst->extra<LdArrFuncCtx>()->offset.offset))
-    .ssa(2);
-    }
-    
-    #endif // incl_HPHP_ARRAY_UTIL_H_
-
-    
-    TEST_F(ViewsConfigParserPluginTests, test_add_view) {
-  Config c;
-  auto s = c.update(getTestConfigMap());
-  EXPECT_TRUE(s.ok());
-    }
-    
-    #include <osquery/config.h>
-#include <osquery/dispatcher.h>
-    
-    
-    {TEST_F(SyslogTests, test_csv_separator) {
-  ASSERT_EQ(std::vector<std::string>({'', '', '', '', ''}), splitCsv(',,,,'));
-  ASSERT_EQ(std::vector<std::string>({' ', ' ', ' ', ' ', ' '}),
-            splitCsv(' , , , , '));
-  ASSERT_EQ(std::vector<std::string>({'foo', 'bar', 'baz'}),
-            splitCsv('foo,bar,baz'));
-  ASSERT_EQ(std::vector<std::string>({'foo', 'bar', 'baz'}),
-            splitCsv('\'foo\',\'bar\',\'baz\''));
-  ASSERT_EQ(std::vector<std::string>({',foo,', ',bar', 'baz,'}),
-            splitCsv('\',foo,\',\',bar\',\'baz,\''));
-  ASSERT_EQ(std::vector<std::string>({',f\\oo,', ',ba\\'r', 'baz\\,'}),
-            splitCsv('\',f\\oo,\',\',ba\\'r\',\'baz\\,\''));
-  ASSERT_EQ(std::vector<std::string>({'\',f\\o\'o,', '\',ba\\'r', 'baz\\,\''}),
-            splitCsv('\'\'\',f\\o\'\'o,\',\'\'\',ba\\'r\',\'baz\\,\'\'\''));
-  ASSERT_EQ(std::vector<std::string>({'\',f\\ø\'o,', '\',bá\\'r', 'baz\\,\''}),
-            splitCsv('\'\'\',f\\ø\'\'o,\',\'\'\',bá\\'r\',\'baz\\,\'\'\''));
-}
-}
-
-    
-      /**
-   * @brief Return a string representation of a udev property.
-   *
-   * @param device the udev device pointer.
-   * @param property the udev property identifier string.
-   * @return string representation of the property or empty if null.
-   */
-  static std::string getValue(struct udev_device* device,
-                              const std::string& property);
-    
-    FLAG(uint64,
-     aws_firehose_period,
-     10,
-     'Seconds between flushing logs to Firehose (default 10)');
-    
-    FLAG(string, aws_kinesis_stream, '', 'Name of Kinesis stream for logging')
+    #include <jni.h>
