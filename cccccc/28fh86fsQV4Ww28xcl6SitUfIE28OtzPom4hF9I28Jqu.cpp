@@ -1,276 +1,154 @@
 
         
-        uint32_t swap_endian(uint32_t val) {
-    val = ((val << 8) & 0xFF00FF00) | ((val >> 8) & 0xFF00FF);
-    return (val << 16) | (val >> 16);
+        
+    {  if (argc != 4) {
+    printf('This script converts the CIFAR dataset to the leveldb format used\n'
+           'by caffe to perform classification.\n'
+           'Usage:\n'
+           '    convert_cifar_data input_folder output_folder db_type\n'
+           'Where the input folder should contain the binary batch files.\n'
+           'The CIFAR dataset could be downloaded at\n'
+           '    http://www.cs.toronto.edu/~kriz/cifar.html\n'
+           'You should gunzip them after downloading.\n');
+  } else {
+    google::InitGoogleLogging(argv[0]);
+    convert_dataset(string(argv[1]), string(argv[2]), string(argv[3]));
+  }
+  return 0;
 }
+
     
-     private:
-  // Layer registry should never be instantiated - everything is done with its
-  // static variables.
-  LayerRegistry() {}
+      /* Merge the separate channels into a single image. */
+  cv::Mat mean;
+  cv::merge(channels, mean);
+    
+      FLAGS_alsologtostderr = 1;
     
      protected:
-  /// @copydoc AbsValLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
   virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    /**
- * @brief Compute the index of the @f$ K @f$ max values for each datum across
- *        all dimensions @f$ (C \times H \times W) @f$.
- *
- * Intended for use after a classification layer to produce a prediction.
- * If parameter out_max_val is set to true, output is a vector of pairs
- * (max_ind, max_val) for each image. The axis parameter specifies an axis
- * along which to maximise.
- *
- * NOTE: does not implement Backwards operation.
- */
-template <typename Dtype>
-class ArgMaxLayer : public Layer<Dtype> {
- public:
-  /**
-   * @param param provides ArgMaxParameter argmax_param,
-   *     with ArgMaxLayer options:
-   *   - top_k (\b optional uint, default 1).
-   *     the number @f$ K @f$ of maximal items to output.
-   *   - out_max_val (\b optional bool, default false).
-   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
-   *     output max_val along the specified axis.
-   *   - axis (\b optional int).
-   *     if set, maximise along the specified axis else maximise the flattened
-   *     trailing dimensions for each index of the first / num dimension.
+    #include <vector>
+    
+    #include <vector>
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the ELU inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x} = \left\{
+   *        \begin{array}{lr}
+   *            1           & \mathrm{if} \; x > 0 \\
+   *            y + \alpha  & \mathrm{if} \; x \le 0
+   *        \end{array} \right.
+   *      @f$ if propagate_down[0].
    */
-  explicit ArgMaxLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-     protected:
-  // Helper functions that abstract away the column buffer and gemm arguments.
-  // The last argument in forward_cpu_gemm is so that we can skip the im2col if
-  // we just called weight_cpu_gemm with the same input.
-  void forward_cpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* output, bool skip_im2col = false);
-  void forward_cpu_bias(Dtype* output, const Dtype* bias);
-  void backward_cpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* output);
-  void weight_cpu_gemm(const Dtype* input, const Dtype* output, Dtype*
-      weights);
-  void backward_cpu_bias(Dtype* bias, const Dtype* input);
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    namespace caffe {
-    }
-    
-    #endif  // CAFFE_CUDNN_POOLING_LAYER_HPP_
-
-    
-    	// Check for machine-specific then user config source file.
-	PathCombine(cpuCfgPath, userConfigDirPath, L'ConEmu-%COMPUTERNAME%.xml');
-	ExpandEnvironmentStrings(cpuCfgPath, cpuCfgPath, sizeof(cpuCfgPath) / sizeof(cpuCfgPath[0]));
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    template <typename ConstBufferSequence, typename Handler>
-class descriptor_write_op
-  : public descriptor_write_op_base<ConstBufferSequence>
-{
-public:
-  BOOST_ASIO_DEFINE_HANDLER_PTR(descriptor_write_op);
-    }
-    
-    #endif // BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
-
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS) \
-  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
-# include <boost/asio/detail/null_fenced_block.hpp>
-#elif defined(__MACH__) && defined(__APPLE__)
-# include <boost/asio/detail/macos_fenced_block.hpp>
-#elif defined(__sun)
-# include <boost/asio/detail/solaris_fenced_block.hpp>
-#elif defined(__GNUC__) && defined(__arm__) \
-  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
-# include <boost/asio/detail/gcc_arm_fenced_block.hpp>
-#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
-# include <boost/asio/detail/gcc_hppa_fenced_block.hpp>
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-# include <boost/asio/detail/gcc_x86_fenced_block.hpp>
-#elif defined(__GNUC__) \
-  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
-  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
-# include <boost/asio/detail/gcc_sync_fenced_block.hpp>
-#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
-# include <boost/asio/detail/win_fenced_block.hpp>
-#else
-# include <boost/asio/detail/null_fenced_block.hpp>
-#endif
-    
-      STDMETHODIMP get_Capacity(UINT32* value)
-  {
-    *value = capacity_;
-    return S_OK;
-  }
-    
-    template <typename Time_Traits>
-void epoll_reactor::schedule_timer(timer_queue<Time_Traits>& queue,
-    const typename Time_Traits::time_type& time,
-    typename timer_queue<Time_Traits>::per_timer_data& timer, wait_op* op)
-{
-  mutex::scoped_lock lock(mutex_);
-    }
-    
-    bool js_cocos2dx_physics3d_Physics3DComponent_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DComponent_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DComponent(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DComponent_syncNodeToPhysics(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_addToPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_syncPhysicsToNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_setPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_setTransformInPhysics(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DComponentName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_Physics3DComponent(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    bool js_cocos2dx_studio_ArmatureAnimation_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_ArmatureAnimation_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_ArmatureAnimation(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_ArmatureAnimation_getSpeedScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_play(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_gotoAndPause(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_playWithIndexes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_setAnimationData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_setSpeedScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_getAnimationData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_gotoAndPlay(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_playWithNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_getMovementCount(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_playWithIndex(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_getCurrentMovementID(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ArmatureAnimation_ArmatureAnimation(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    
-    
-    class AddPair : public Test
-{
-public:
-    }
-    
-    			//m_x = RandomFloat(-1.0f, 1.0f);
-			m_x = 0.20352793f;
-			bd.position.Set(m_x, 10.0f);
-			bd.bullet = true;
-    
-    			b2WeldJointDef jd;
-			jd.frequencyHz = 8.0f;
-			jd.dampingRatio = 0.7f;
-    
-    #ifdef IMGUI_VULKAN_DEBUG_REPORT
-        // Enabling multiple validation layers grouped as LunarG standard validation
-        const char* layers[] = { 'VK_LAYER_LUNARG_standard_validation' };
-        create_info.enabledLayerCount = 1;
-        create_info.ppEnabledLayerNames = layers;
-    
-    
-    {    switch (msg)
-    {
-    case WM_SIZE:
-        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
-        {
-            ImGui_ImplDX10_InvalidateDeviceObjects();
-            CleanupRenderTarget();
-            g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
-            CreateRenderTarget();
-            ImGui_ImplDX10_CreateDeviceObjects();
-        }
-        return 0;
-    case WM_SYSCOMMAND:
-        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
-            return 0;
-        break;
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        return 0;
-    }
-    return DefWindowProc(hWnd, msg, wParam, lParam);
-}
-    
-     public:
-  HazptrLockFreeLIFO() : head_(nullptr) {}
-    
-      Atom<Node*> node_;
-    
-    
-    { private:
-  LifoSem sem_;
-  UMPMCQueue<T, false, 6> queue_;
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 };
     
+      virtual inline const char* type() const { return 'Filter'; }
+  virtual inline int MinBottomBlobs() const { return 2; }
+  virtual inline int MinTopBlobs() const { return 1; }
     
-    {  template <class... Args>
-  SettingContents(std::string _reason, Args&&... args)
-      : updateReason(std::move(_reason)), value(std::forward<Args>(args)...) {}
-};
+    #ifndef TESSERACT_TRAINING_MASTERTRAINER_H_
+#define TESSERACT_TRAINING_MASTERTRAINER_H_
     
-    #include <algorithm>
-#include <atomic>
-#include <vector>
-    
-    AbstractBtMessage::AbstractBtMessage(uint8_t id, const char* name)
-    : BtMessage(id),
-      invalidate_(false),
-      uploading_(false),
-      cuid_(0),
-      name_(name),
-      pieceStorage_(nullptr),
-      dispatcher_(nullptr),
-      messageFactory_(nullptr),
-      requestFactory_(nullptr),
-      peerConnection_(nullptr),
-      metadataGetMode_(false)
-{
+    // dims=[5, 4, 3, 2]->[3, 5, 4, 2]
+TEST_F(MatrixTest, RotatingTranspose_2_0) {
+  GENERIC_2D_ARRAY<int> m;
+  src_.RotatingTranspose(dims_, kNumDims_, 2, 0, &m);
+  m.ResizeNoInit(kInputSize_ / 2, 2);
+  // Verify that the result is:
+  // output tensor=[[[[0, 1][6, 7][12, 13][18, 19]]
+  //                 [[24, 25][30, 31][36, 37][42, 43]]
+  //                 [[48, 49][54, 55][60, 61][66, 67]]
+  //                 [[72, 73][78, 79][84, 85][90, 91]]
+  //                 [[96, 97][102, 103][108, 109][114, 115]]]
+  //                [[[2,3]...
+  EXPECT_EQ(0, m(0, 0));
+  EXPECT_EQ(1, m(0, 1));
+  EXPECT_EQ(6, m(1, 0));
+  EXPECT_EQ(7, m(1, 1));
+  EXPECT_EQ(24, m(4, 0));
+  EXPECT_EQ(25, m(4, 1));
+  EXPECT_EQ(30, m(5, 0));
+  EXPECT_EQ(2, m(20, 0));
 }
     
-    namespace aria2 {
+    // Helper to compute an offset index feature. In this context an offset
+// feature with a dir of +/-1 is a feature of a similar direction,
+// but shifted perpendicular to the direction of the feature. An offset
+// feature with a dir of +/-2 is feature at the same position, but rotated
+// by +/- one [compact] quantum. Returns the index of the generated offset
+// feature, or -1 if it doesn't exist. Dir should be in
+// [-kNumOffsetMaps, kNumOffsetMaps] to indicate the relative direction.
+// A dir of 0 is an identity transformation.
+// Both input and output are from the index(sparse) feature space, not
+// the mapped/compact feature space, but the offset feature is the minimum
+// distance moved from the input to guarantee that it maps to the next
+// available quantum in the mapped/compact space.
+int IntFeatureMap::ComputeOffsetFeature(int index_feature, int dir) const {
+  INT_FEATURE_STRUCT f = InverseIndexFeature(index_feature);
+  ASSERT_HOST(IndexFeature(f) == index_feature);
+  if (dir == 0) {
+    return index_feature;
+  } else if (dir == 1 || dir == -1) {
+    FCOORD feature_dir = FeatureDirection(f.Theta);
+    FCOORD rotation90(0.0f, 1.0f);
+    feature_dir.rotate(rotation90);
+    // Find the nearest existing feature.
+    for (int m = 1; m < kMaxOffsetDist; ++m) {
+      double x_pos = f.X + feature_dir.x() * (m * dir);
+      double y_pos = f.Y + feature_dir.y() * (m * dir);
+      int x = IntCastRounded(x_pos);
+      int y = IntCastRounded(y_pos);
+      if (x >= 0 && x <= UINT8_MAX && y >= 0 && y <= UINT8_MAX) {
+        INT_FEATURE_STRUCT offset_f;
+        offset_f.X = x;
+        offset_f.Y = y;
+        offset_f.Theta = f.Theta;
+        int offset_index = IndexFeature(offset_f);
+        if (offset_index != index_feature && offset_index >= 0)
+          return offset_index;  // Found one.
+      } else {
+        return -1;  // Hit the edge of feature space.
+      }
     }
-    
-    void AnnounceList::setCurrentTier(
-    std::deque<std::shared_ptr<AnnounceTier>>::iterator itr)
-{
-  if (itr != std::end(tiers_)) {
-    currentTier_ = std::move(itr);
-    currentTracker_ = std::begin((*currentTier_)->urls);
+  } else if (dir == 2 || dir == -2) {
+    // Find the nearest existing index_feature.
+    for (int m = 1; m < kMaxOffsetDist; ++m) {
+      int theta = f.Theta + m * dir / 2;
+      INT_FEATURE_STRUCT offset_f;
+      offset_f.X = f.X;
+      offset_f.Y = f.Y;
+      offset_f.Theta = Modulo(theta, 256);
+      int offset_index = IndexFeature(offset_f);
+      if (offset_index != index_feature && offset_index >= 0)
+        return offset_index;  // Found one.
+    }
   }
+  return -1;  // Nothing within the max distance.
 }
     
-    void AnnounceTier::nextEventIfAfterStarted()
-{
-  switch (event) {
-  case STOPPED:
-    event = HALTED;
-    break;
-  case COMPLETED:
-    event = SEEDING;
-    break;
-  default:
-    break;
-  }
-}
+    // The CCNonTextDetect class contains grid-based operations on blobs to create
+// a full-resolution image mask analogous yet complementary to
+// pixGenHalftoneMask as it is better at line-drawings, graphs and charts.
+class CCNonTextDetect : public BlobGrid {
+ public:
+  CCNonTextDetect(int gridsize, const ICOORD& bleft, const ICOORD& tright);
+  virtual ~CCNonTextDetect();
+    }
