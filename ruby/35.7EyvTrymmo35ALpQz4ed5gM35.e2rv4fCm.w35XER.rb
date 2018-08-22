@@ -1,165 +1,167 @@
 
         
-        class PostgresqlAdapterTest < ActionCable::TestCase
-  include CommonSubscriptionAdapterTest
+                      # Notify blocked threads that EventMachine has started or shutdown
+              EM.schedule { @started_event.set }
+              EM.add_shutdown_hook { @stopped_event.set }
     
-      test 'broadcasting_for with an object' do
-    assert_equal 'Room#1-Campfire', ChatChannel.broadcasting_for(Room.new(1))
-  end
-    
-      test 'timer start and stop' do
-    mock = Minitest::Mock.new
-    3.times { mock.expect(:shutdown, nil) }
-    
-    WebSocket::Frame::Data.prepend Module.new {
-  def initialize(*)
-    @masking_key = nil
-    super
-  end
-}
-#
-####
-    
-          env = Rack::MockRequest.env_for '/test', 'HTTP_HOST' => 'localhost', 'HTTP_CONNECTION' => 'upgrade', 'HTTP_UPGRADE' => 'websocket'
-      @connection = Connection.new(server, env)
-    
-          Connection.new(@server, env).tap do |connection|
-        connection.process
-        connection.send :handle_open
-        assert connection.connected
+    module Kramdown
+  module Parser
+    class SmartyPants < Kramdown::Parser::Kramdown
+      def initialize(source, options)
+        super
+        @block_parsers = [:block_html, :content]
+        @span_parsers =  [:smart_quotes, :html_entity, :typographic_syms, :span_html]
       end
+    
+        def arg_is_present?(args, deprecated_argument, message)
+      deprecation_message(message) if args.include?(deprecated_argument)
     end
-end
-
-    
-          # Filtering Content
-      'show_drafts'         => nil,
-      'limit_posts'         => 0,
-      'future'              => false,
-      'unpublished'         => false,
-    
-    module Jekyll
-  module Deprecator
-    extend self
     
     module Jekyll
   module Drops
     class UnifiedPayloadDrop < Drop
       mutable true
     
-            # With reconfirmable, notify the original email when the user first
-        # requests the email change, instead of when the change is confirmed.
-        def send_email_changed_notification?
-          if self.class.reconfirmable
-            self.class.send_email_changed_notification && reconfirmation_required?
-          else
-            super
-          end
-        end
-    
-        # The path used after unlocking the resource
-    def after_unlock_path_for(resource)
-      new_session_path(resource)  if is_navigational_format?
+        def backup?(entry)
+      entry[-1..-1] == '~'
     end
     
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
-    end
+    desc 'Increment the version number of this gem, after generating new Swift API'
+lane :bump do |options|
+  verify_env_variables
+  ensure_git_branch(branch: 'master')
+  ensure_git_status_clean
     
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
-    end
+        options[:attribution] = <<-HTML
+      &copy; 2018 The TensorFlow Authors. All rights reserved.<br>
+      Licensed under the Creative Commons Attribution License 3.0.<br>
+      Code samples licensed under the Apache 2.0 License.
+    HTML
     
-          # Prints a table for a given array of records. For each record, the block
-      # is yielded two arguments: the record and a Row object. To print values
-      # for that record, add values using `row << 'some value'`. A row can
-      # optionally be highlighted in yellow using `row.yellow`.
-      def table(records, &block)
-        return if records.empty?
-        rows = collect_rows(records, &block)
-        col_widths = calculate_column_widths(rows)
-    
-          def stages
-        names = Dir[stage_definitions].map { |f| File.basename(f, '.rb') }
-        assert_valid_stage_names(names)
-        names
-      end
-    
-      # Implemented by subclasses to define Rake tasks. Typically a plugin will call
-  # `eval_rakefile` to load Rake tasks from a separate .rake file.
-  #
-  # Example:
-  #
-  #   def define_tasks
-  #     eval_rakefile File.expand_path('../tasks.rake', __FILE__)
-  #   end
-  #
-  # For simple tasks, you can define them inline. No need for a separate file.
-  #
-  #   def define_tasks
-  #     desc 'Do something fantastic.'
-  #     task 'my_plugin:fantastic' do
-  #       ...
-  #     end
-  #   end
-  #
-  def define_tasks; end
-    
-      desc 'Rollback to previous release.'
-  task :rollback do
-    %w{ starting started
-        reverting reverted
-        publishing published
-        finishing_rollback finished }.each do |task|
-      invoke 'deploy:#{task}'
-    end
-  end
-end
-    
-            def stock_location
-          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
-          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
+            if b_length > a_length
+          (b_length - a_length).times { a_split.insert(-2, 0) }
+        elsif a_length > b_length
+          (a_length - b_length).times { b_split.insert(-2, 0) }
         end
     
-    module WithinHelpers
-  def with_scope(locator)
-    locator ? within(*selector_for(locator)) { yield } : yield
-  end
-end
-World(WithinHelpers)
-    
-      # Defines the geometry of an image.
-  class Geometry
-    attr_accessor :height, :width, :modifier
-    
-            def type_allowed?(type)
-          @subject.send('#{@attachment_name}_content_type=', type)
-          @subject.valid?
-          @subject.errors[:'#{@attachment_name}_content_type'].blank?
-        end
-    
-            def no_error_when_valid?
-          @file = StringIO.new('.')
-          @subject.send(@attachment_name).assign(@file)
-          @subject.valid?
-          expected_message = [
-            @attachment_name.to_s.titleize,
-            I18n.t(:blank, scope: [:errors, :messages])
-          ].join(' ')
-          @subject.errors.full_messages.exclude?(expected_message)
-        end
-      end
+        def relative_path_from(url)
+      self.class.parse(url).relative_path_to(self)
     end
   end
 end
 
     
-          def validate_blacklist(record, attribute, value)
-        if forbidden.present? && forbidden.any? { |type| type === value }
-          mark_invalid record, attribute, forbidden
+            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
+          next if node.previous.try(:content).present? || node.next.try(:content).present?
+          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
+          node.content = node.content.strip
+          node.name = 'pre' if node.content =~ /\s/
+          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
         end
-      end
+    
+              entries << [name, node['id'], type]
+        end
+    
+          class << self
+        # Mark a given block of code as a 'busy' block of code, which will
+        # register a SIGINT handler for the duration of the block. When a
+        # SIGINT occurs, the `sig_callback` proc will be called. It is up
+        # to the callback to behave properly and exit the application.
+        def busy(sig_callback)
+          register(sig_callback)
+          return yield
+        ensure
+          unregister(sig_callback)
+        end
+    
+              # Parse the options
+          argv = parse_options(opts)
+          return if !argv
+          if argv.empty? || argv.length > 2
+            raise Vagrant::Errors::CLIInvalidUsage,
+              help: opts.help.chomp
+          end
+    
+        if extension_pathname.readable?
+      ENV['BUNDLE_GEMFILE'] = extension_pathname.to_path
+      break
+    end
+  end
+end
+    
+    # Copyright (C) 2008 Rapid7, Inc.
+    
+    
+    {	if ln =~ /;(read|write)_(handle|filename)=/
+		parts = ln.split(' ')
+		if (parts[0] == 'mov')
+			parts2 = parts[2].split('=')
+			label = parts2[0]
+			label.slice!(0,1)
+			old = parts2[1]
+			new = addrs[label]
+			#puts '%32s: %s -> %x' % [label, old, new]
+			replaces << [label, old, new.to_s(16)]
+		end
+	end
+}
+    
+    vers.each do |ver|
+  case ver
+  when '6.1.4'
+    __NR_execve      = 7
+    __NR_getpeername = 211
+    __NR_accept      = 237
+    __NR_listen      = 240
+    __NR_bind        = 242
+    __NR_socket      = 243
+    __NR_connect     = 244
+    __NR_close       = 278
+    __NR_kfcntl      = 658
+    
+    class Parser
+    
+    module RuboCop
+  module Cop
+    module Lint
+      # This cop checks that there are no repeated conditions
+      # used in case 'when' expressions.
+      #
+      # @example
+      #
+      #   # bad
+      #
+      #   case x
+      #   when 'first'
+      #     do_something
+      #   when 'first'
+      #     do_something_else
+      #   end
+      #
+      # @example
+      #
+      #   # good
+      #
+      #   case x
+      #   when 'first'
+      #     do_something
+      #   when 'second'
+      #     do_something_else
+      #   end
+      class DuplicateCaseCondition < Cop
+        MSG = 'Duplicate `when` condition detected.'.freeze
+    
+            def on_block(node)
+          on_body_of_reduce(node) do |body|
+            void_next = body.each_node(:next).find do |n|
+              n.children.empty? && parent_block_node(n) == node
+            end
+    
+    module RuboCop
+  module AST
+    # A node extension for `def` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `def` nodes within RuboCop.
+    class DefNode < Node
+      include ParameterizedNode
+      include MethodIdentifierPredicates
