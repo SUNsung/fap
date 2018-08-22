@@ -1,133 +1,216 @@
 
         
-            def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
+        header = oldreadme[:oldreadme.index('# OPTIONS')]
+footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
     
-        def __init__(self, operators, supervisors, directors):
-        self.operators = operators
-        self.supervisors = supervisors
-        self.directors = directors
-        self.queued_calls = deque()
-    
-        def remove(self, key):
-        hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
-            if item.key == key:
-                del self.table[hash_index][index]
-                return
-        raise KeyError('Key not found')
-
+        def test_youporn(self):
+        self._assert_restricted(
+            'http://www.youporn.com/watch/505835/sex-ed-is-it-safe-to-masturbate-daily/',
+            '505835.mp4', 2, old_age=25)
     
     
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
-
+def gen_extractors():
+    ''' Return a list of an instance of every supported extractor.
+    The order does matter; the first extractor matched is the one handling the URL.
+    '''
+    return [klass() for klass in gen_extractor_classes()]
     
+        def _real_extract(self, url):
+        webpage = self._download_webpage(url, url_basename(url))
+        cnn_url = self._html_search_regex(r'data-url='(.+?)'', webpage, 'cnn url')
+        return {
+            '_type': 'url',
+            'url': cnn_url,
+            'ie_key': CNNIE.ie_key(),
+        }
+    
+        Models: `flatpages.flatpages`
+    Templates: Uses the template defined by the ``template_name`` field,
+        or :template:`flatpages/default.html` if template_name is not defined.
+    Context:
+        flatpage
+            `flatpages.flatpages` object
+    '''
+    if not url.startswith('/'):
+        url = '/' + url
+    site_id = get_current_site(request).id
     try:
-    import simplejson as json
-except ImportError:
-    import json
+        f = get_object_or_404(FlatPage, url=url, sites=site_id)
+    except Http404:
+        if not url.endswith('/') and settings.APPEND_SLASH:
+            url += '/'
+            f = get_object_or_404(FlatPage, url=url, sites=site_id)
+            return HttpResponsePermanentRedirect('%s/' % request.path)
+        else:
+            raise
+    return render_flatpage(request, f)
     
-            .. seealso:: values() and items().
-        '''
-        return list(self.iterkeys())
+            link_list = []
     
-            p = PreparedRequest()
-        p.prepare(
-            method=request.method.upper(),
-            url=request.url,
-            files=request.files,
-            data=request.data,
-            json=request.json,
-            headers=merge_setting(request.headers, self.headers, dict_class=CaseInsensitiveDict),
-            params=merge_setting(request.params, self.params),
-            auth=merge_setting(auth, self.auth),
-            cookies=merged_cookies,
-            hooks=merge_hooks(request.hooks, self.hooks),
-        )
-        return p
+    	title = video.attributes['title'].value
+	assert title 
     
-    def get_marker(line):
-    matchlist = TAG_REGEX.findall(line)
-    if matchlist:
-        namematch = NAMED_A_TAG_REGEX.match(line)
-        if namematch:
-            return namematch.group(1) # group 0 is full match
+        stream_types = [
+        {'id': 'video'},
+        {'id': 'audio'},
+        {'id': 'slides'}
+    ]
     
-        >>> Point = namedtuple('Point', 'x y')
-    >>> Point.__doc__                   # docstring for the new class
-    'Point(x, y)'
-    >>> p = Point(11, y=22)             # instantiate with positional args or keywords
-    >>> p[0] + p[1]                     # indexable like a plain tuple
-    33
-    >>> x, y = p                        # unpack like a regular tuple
-    >>> x, y
-    (11, 22)
-    >>> p.x + p.y                       # fields also accessable by name
-    33
-    >>> d = p._asdict()                 # convert to a dictionary
-    >>> d['x']
-    11
-    >>> Point(**d)                      # convert from a dictionary
-    Point(x=11, y=22)
-    >>> p._replace(x=100)               # _replace() is like str.replace() but targets named fields
-    Point(x=100, y=22)
+    site_info = 'Mixcloud.com'
+download = mixcloud_download
+download_playlist = playlist_not_supported('mixcloud')
+
     
-    _threads_queues = weakref.WeakKeyDictionary()
-_shutdown = False
+            # extract title
+        self.title = match1(content,
+                            r'<meta property='og:description' name='og:description' content='([^']+)'')
     
-        def _adjust_thread_count(self):
-        # When the executor gets lost, the weakref callback will wake up
-        # the worker threads.
-        def weakref_cb(_, q=self._work_queue):
-            q.put(None)
-        # TODO(bquinlan): Should avoid creating new threads if there are more
-        # idle threads than items in the work queue.
-        if len(self._threads) < self._max_workers:
-            t = threading.Thread(target=_worker,
-                                 args=(weakref.ref(self, weakref_cb),
-                                       self._work_queue))
-            t.daemon = True
-            t.start()
-            self._threads.add(t)
-            _threads_queues[t] = self._work_queue
+            if (return_when == FIRST_COMPLETED) and done:
+            return DoneAndNotDoneFutures(done, not_done)
+        elif (return_when == FIRST_EXCEPTION) and done:
+            if any(f for f in done
+                   if not f.cancelled() and f.exception() is not None):
+                return DoneAndNotDoneFutures(done, not_done)
+    
+                f = _base.Future()
+            w = _WorkItem(f, fn, args, kwargs)
     
     
-  @staticmethod
-  def CreateFromOptions( user_options ):
-    all_filters = dict( user_options.get( 'filter_diagnostics', {} ) )
-    compiled_by_type = {}
-    for type_spec, filter_value in iteritems( dict( all_filters ) ):
-      filetypes = [ type_spec ]
-      if type_spec.find( ',' ) != -1:
-        filetypes = type_spec.split( ',' )
-      for filetype in filetypes:
-        compiled_by_type[ filetype ] = _CompileFilters( filter_value )
+  def Detailed_Info_test( self ):
+    # Ensures we correctly detect and handle detailed_info responses which are
+    # used to display information in the preview window
     
-          if 'abbr' not in new_candidate:
-        new_candidate[ 'abbr' ] = new_candidate[ 'word' ]
     
-    # The model was trained in a way that faces with a distance of 0.6 or less should be a match. But if you want to
-# be more strict, you can look for a smaller face distance. For example, using a 0.55 cutoff would reduce false
-# positive matches at the risk of more false negatives.
+  def NotifyUserIfServerCrashed( self ):
+    if ( not self._server_popen or self._user_notified_about_crash or
+         self.IsServerAlive() ):
+      return
+    self._user_notified_about_crash = True
     
-        # Make the eyebrows into a nightmare
-    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
-    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
-    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
-    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-    setup_encode_face = '''
-import face_recognition
+        if len( namespaces ) > 1:
+      choices = [ '{0} {1}'.format( i + 1, n )
+                  for i, n in enumerate( namespaces ) ]
+      choice = vimsupport.PresentDialog( 'Insert which namespace:', choices )
+      if choice < 0:
+        return
+      namespace = namespaces[ choice ]
+    else:
+      namespace = namespaces[ 0 ]
     
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('biden.jpg')
     
-    import sys
-import os
-from unittest.mock import MagicMock
+  def Response( self ):
+    return {
+      'completions': self._results,
+      'completion_start_column': self.request_data[ 'start_column' ]
+    }
+    
+    
+def Main():
+  ( parsed_args, nosetests_args ) = ParseArguments()
+  if not parsed_args.no_flake8:
+    RunFlake8()
+  BuildYcmdLibs( parsed_args )
+  NoseTests( parsed_args, nosetests_args )
+    
+            self.assertEqual(noise, expected_noise)
+
+    
+    
+class CommandTest(unittest.TestCase):
+    
+        jim = Subscriber('jim', message_center)
+    jim.subscribe('cartoon')
+    jack = Subscriber('jack', message_center)
+    jack.subscribe('music')
+    gee = Subscriber('gee', message_center)
+    gee.subscribe('movie')
+    vani = Subscriber('vani', message_center)
+    vani.subscribe('movie')
+    vani.unsubscribe('movie')
+    
+        def test_frozen_pool(self):
+        with ObjectPool(self.sample_queue) as pool:
+            self.assertEqual(pool, 'first')
+            self.assertEqual(pool, 'first')
+        self.assertTrue(self.sample_queue.get() == 'second')
+        self.assertFalse(self.sample_queue.empty())
+        self.assertTrue(self.sample_queue.get() == 'first')
+        self.assertTrue(self.sample_queue.empty())
+    
+        def test_tc3_output(self):
+        self.tc3.run()
+        output = self.out.getvalue().strip()
+        self.assertEqual(output, self.average_result_tc3)
+    
+    '''
+Port of the Java example of 'Parameter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
+    
+    
+def main():
+    command_stack = []
+    
+    *TL;DR80
+Traverses a container and accesses the container's elements.
+'''
+    
+        def setDB(self, db):
+        self._db = db
+    
+    
+if __name__ == '__main__':
+    main()
+
+    
+        def new_future_import(self, old):
+        new = FromImport('__future__',
+                         [Name('absolute_import', prefix=' '), Comma(),
+                          Name('division', prefix=' '), Comma(),
+                          Name('print_function', prefix=' ')])
+        if old is not None:
+            new.prefix = old.prefix
+        return new
+    
+        def get_allowed_errors(self):
+        return []
+    
+    
+if __name__ == '__main__':
+    main()
+
+    
+        def delete(self, bucket_name):
+        path = os.path.abspath(os.path.join(
+            self.application.directory, bucket_name))
+        if not path.startswith(self.application.directory) or \
+           not os.path.isdir(path):
+            raise web.HTTPError(404)
+        if len(os.listdir(path)) > 0:
+            raise web.HTTPError(403)
+        os.rmdir(path)
+        self.set_status(204)
+        self.finish()
+    
+    
+def find_circular_references(garbage=None):
+    def inner(level):
+        for item in level:
+            item_id = id(item)
+            if item_id not in garbage_ids:
+                continue
+            if item_id in visited_ids:
+                continue
+            if item_id in stack_ids:
+                candidate = stack[stack.index(item):]
+                candidate.append(item)
+                found.append(candidate)
+                continue
