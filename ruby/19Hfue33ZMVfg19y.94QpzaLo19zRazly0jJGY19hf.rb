@@ -1,77 +1,48 @@
 
         
-              def initialize
-        @log_tags = []
-    
-            def test_url_memory_db_for_sqlite3
-          spec = resolve 'sqlite3::memory:'
-          assert_equal(':memory:', spec['database'])
-        end
-    
-      def test_should_validation_the_associated_models_on_create
-    assert_no_difference('#{ @association_name == :birds ? 'Bird' : 'Parrot' }.count') do
-      2.times { @pirate.send(@association_name).build }
-      @pirate.save
-    end
+          def use_sandbox?
+    ENV['USE_EVERNOTE_SANDBOX'] == 'true'
   end
     
-    require 'models/topic'
-    
-    require 'active_support/hash_with_indifferent_access'
-    
-        assert_called(conn, :close) do
-      @server.restart
+        def subscribe
+      authorize @account, :subscribe?
+      Pubsubhubbub::SubscribeWorker.perform_async(@account.id)
+      redirect_to admin_account_path(@account.id)
     end
+    
+      def perform(user_id)
+    @user = User.find(user_id)
+    deliver_digest if @user.allows_digest_emails?
   end
     
-        def initial_urls
-      [ 'https://hexdocs.pm/elixir/#{self.class.release}/api-reference.html',
-        'https://hexdocs.pm/eex/#{self.class.release}/EEx.html',
-        'https://hexdocs.pm/ex_unit/#{self.class.release}/ExUnit.html',
-        'https://hexdocs.pm/iex/#{self.class.release}/IEx.html',
-        'https://hexdocs.pm/logger/#{self.class.release}/Logger.html',
-        'https://hexdocs.pm/mix/#{self.class.release}/Mix.html',
-        'https://elixir-lang.org/getting-started/introduction.html' ]
-    end
+    # Use this to fill in an entire form with data from a table. Example:
+#
+#   When I fill in the following:
+#     | Account Number | 5002       |
+#     | Expiry date    | 2009-11-01 |
+#     | Note           | Nice guy   |
+#     | Wants Email?   |            |
+#
+# TODO: Add support for checkbox, select og option
+# based on naming conventions.
+#
+When /^(?:|I )fill in the following:$/ do |fields|
+  fields.rows_hash.each do |name, value|
+    When %{I fill in '#{name}' with '#{value}'}
+  end
+end
     
-        options[:only_patterns] = [
-      /\Alanguage\./,
-      /\Aclass\./,
-      /\Afunctions?\./,
-      /\Acontrol-structures/,
-      /\Aregexp\./,
-      /\Areserved\.exceptions/,
-      /\Areserved\.interfaces/,
-      /\Areserved\.variables/]
-    
-            while true
-          begin
-            if Platform.windows?
-              # Windows doesn't support non-blocking reads on
-              # file descriptors or pipes so we have to get
-              # a bit more creative.
-    
-        # @abstract
-    #
-    # Your implementation should check if the specified remote-repository is
-    # available.
-    #
-    # @return [Boolean]
-    #
-    def check
-      raise NotImplementedError, 'Your SCM strategy module should provide a #check method'
-    end
-    
-            it 'returns all servers' do
-          expect(subject.map(&:hostname)).to eq %w{example1.com example2.com example3.com example4.com example5.com}
-        end
+        def add_required_validations
+      options = Paperclip::Attachment.default_options.deep_merge(@options)
+      if options[:validate_media_type] != false
+        name = @name
+        @klass.validates_media_type_spoof_detection name,
+          :if => ->(instance){ instance.send(name).dirty? }
       end
-    
-      def command_line(*options)
-    options.each { |opt| ARGV << opt }
-    subject.define_singleton_method(:exit) do |*_args|
-      throw(:system_exit, :exit)
     end
-    subject.run
-    subject.options
-  end
+    
+            def matches? subject
+          @subject = subject
+          @subject = @subject.class unless Class === @subject
+          responds? && has_column?
+        end
