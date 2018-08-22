@@ -1,132 +1,83 @@
 
         
-          # Asynchronously send an email
-  class TestEmail < Jobs::Base
-    
-          if valid_type?(type)
-        type.constantize.new(attributes).tap do |instance|
-          instance.user = user if instance.respond_to?(:user=)
-        end
-      else
-        const_get(:BASE_CLASS_NAME).constantize.new(attributes).tap do |instance|
-          instance.type = type
-          instance.user = user if instance.respond_to?(:user=)
-        end
-      end
-    end
-  end
-end
-    
-      def use_sandbox?
-    ENV['USE_EVERNOTE_SANDBOX'] == 'true'
-  end
-    
-          html_filters.push 'd3/clean_html', 'd3/entries_v3', 'title'
-    
-        version '1.5' do
-      self.release = '1.5.3'
-      self.base_urls = [
-        'https://hexdocs.pm/elixir/#{release}/',
-        'https://hexdocs.pm/eex/#{release}/',
-        'https://hexdocs.pm/ex_unit/#{release}/',
-        'https://hexdocs.pm/iex/#{release}/',
-        'https://hexdocs.pm/logger/#{release}/',
-        'https://hexdocs.pm/mix/#{release}/',
-        'https://elixir-lang.org/getting-started/'
-      ]
-    end
-    
-        options[:container] = '.span9'
-    
-        html_filters.push 'tensorflow/entries', 'tensorflow/clean_html'
-    
-        def initialize(*args)
-      if args.empty?
-        super(*Array.new(9))
-      elsif args.length == 1 && args.first.is_a?(Hash)
-        args.first.assert_valid_keys URI::Generic::COMPONENT
-        super(*args.first.values_at(*URI::Generic::COMPONENT))
-      else
-        super
-      end
+          describe 'instance methods' do
+    let(:key_attributes) do # these keys are intentionally strings.
+      {
+        'canDownload' => false,
+        'canRevoke' => true,
+        'keyId' => 'some-key-id',
+        'keyName' => 'fastlane',
+        'servicesCount' => 3,
+        'services' => [
+          {
+            'name' => 'APNS',
+            'id' => 'U27F4V844T',
+            'configurations' => []
+          },
+          {
+            'name' => 'MusicKit',
+            'id' => '6A7HVUVQ3M',
+            'configurations' => [
+              {
+                'name' => 'music id test',
+                'identifier' => 'music.com.snatchev.test',
+                'type' => 'music',
+                'prefix' => 'some-prefix-id',
+                'id' => 'some-music-kit-id'
+              }
+            ]
+          },
+          {
+            'name' => 'DeviceCheck',
+            'id' => 'DQ8HTZ7739',
+            'configurations' => []
+          }
+        ]
+      }
     end
     
-            # This returns all the registered configuration classes.
-        #
-        # @return [Hash]
-        def config
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.configs[:top])
-            end
+        def test_app
+      # We call this method, to be sure that all other simulators are killed
+      # And a correct one is freshly launched. Switching between multiple simulator
+      # in case the user specified multiple targets works with no issues
+      # This way it's okay to just call it for the first simulator we're using for
+      # the first test run
+      open_simulator_for_device(Scan.devices.first) if Scan.devices
+      command = @test_command_generator.generate
+      prefix_hash = [
+        {
+          prefix: 'Running Tests: ',
+          block: proc do |value|
+            value.include?('Touching')
           end
-        end
+        }
+      ]
+      exit_status = 0
+      FastlaneCore::CommandExecutor.execute(command: command,
+                                          print_all: true,
+                                      print_command: true,
+                                             prefix: prefix_hash,
+                                            loading: 'Loading...',
+                                              error: proc do |error_output|
+                                                begin
+                                                  exit_status = $?.exitstatus
+                                                  ErrorHandler.handle_build_error(error_output)
+                                                rescue => ex
+                                                  SlackPoster.new.run({
+                                                    build_errors: 1
+                                                  })
+                                                  raise ex
+                                                end
+                                              end)
+      exit_status
+    end
     
-          # Reads data from an IO object while it can, returning the data it reads.
-      # When it encounters a case when it can't read anymore, it returns the
-      # data.
-      #
-      # @return [String]
-      def self.read_until_block(io)
-        data = ''
-    
-          # This returns the keys (or ids) that are in the string.
-      #
-      # @return [<Array<String>]
-      def keys
-        regexp = /^#\s*VAGRANT-BEGIN:\s*(.+?)$\r?\n?(.*)$\r?\n?^#\s*VAGRANT-END:\s(\1)$/m
-        @value.scan(regexp).map do |match|
-          match[0]
-        end
+          def task_available?(task)
+        load_all_tasks
+        return tasks.collect(&:title).include?(task)
       end
     
-              # Repackage the box
-          output_name = @env.vagrantfile.config.package.name || 'package.box'
-          output_path = Pathname.new(File.expand_path(output_name, FileUtils.pwd))
-          box.repackage(output_path)
-    
-    require 'open3'
-require 'set'
-    
-        #
-    # Instance Methods
-    #
-    
-                  if(inp.attributes[ikey] =~ /^http/i)
-                inp[ikey] = ''
-                next
-              end
-    
-      def register_sigs
-    self.sigs = {
-      :banner		=> /^(220\s*[^\r\n]+)/i,
-      :user		=> /^USER\s+([^\s]+)/i,
-      :pass		=> /^PASS\s+([^\s]+)/i,
-      :login_pass => /^(230\s*[^\n]+)/i,
-      :login_fail => /^(5\d\d\s*[^\n]+)/i,
-      :bye      => /^221/
-    }
-  end
-    
-    
-    {	if ln =~ /;(read|write)_(handle|filename)=/
-		parts = ln.split(' ')
-		if (parts[0] == 'mov')
-			parts2 = parts[2].split('=')
-			label = parts2[0]
-			label.slice!(0,1)
-			old = parts2[1]
-			new = addrs[label]
-			#puts '%32s: %s -> %x' % [label, old, new]
-			replaces << [label, old, new.to_s(16)]
-		end
-	end
-}
-    
-    	def block_end
-		# Insert the block size
-		self.block[-1][0] = block[-1][0].ljust(SIZE1)
-		self.block[-1][0] << '/*  '
-		self.block[-1][0] << '#{block_size} bytes'
-		self.block[-1][0] = block[-1][0].ljust(SIZE2)
-		self.block[-1][0] << '  */'
+            person_entity = Person.find_by(diaspora_handle: person.diaspora_id)
+        expect(person_entity.guid).to eq(person.guid)
+        expect(person_entity.serialized_public_key).to eq(person.exported_key)
+        expect(person_entity.url).to eq(person.url)
