@@ -1,153 +1,152 @@
 
         
-                app.config.from_pyfile('yourconfig.cfg')
+                :param variable_name: name of the environment variable
+        :param silent: set to ``True`` if you want silent failure for missing
+                       files.
+        :return: bool. ``True`` if able to load config, ``False`` otherwise.
+        '''
+        rv = os.environ.get(variable_name)
+        if not rv:
+            if silent:
+                return False
+            raise RuntimeError('The environment variable %r is not set '
+                               'and as such configuration could not be '
+                               'loaded.  Set this variable and make it '
+                               'point to a configuration file' %
+                               variable_name)
+        return self.from_pyfile(rv, silent=silent)
     
-        if blueprint is not None and seems_fishy:
-        info.append('  The template was looked up from an endpoint that '
-                    'belongs to the blueprint '%s'.' % blueprint)
-        info.append('  Maybe you did not place a template in the right folder?')
-        info.append('  See http://flask.pocoo.org/docs/blueprints/#templates')
+        for idx, (loader, srcobj, triple) in enumerate(attempts):
+        if isinstance(srcobj, Flask):
+            src_info = 'application '%s'' % srcobj.import_name
+        elif isinstance(srcobj, Blueprint):
+            src_info = 'blueprint '%s' (%s)' % (srcobj.name,
+                                                srcobj.import_name)
+        else:
+            src_info = repr(srcobj)
     
-    :copyright: © 2010 by the Pallets team.
-:license: BSD, see LICENSE for more details.
-'''
+                # If we have no method at all in there we don't want to add a
+            # method list. This is for instance the case for the base class
+            # or another subclass of a base method view that does not introduce
+            # new methods.
+            if methods:
+                cls.methods = methods
     
+        rv = parse_changelog()
     
-class SessionMixin(MutableMapping):
-    '''Expands a basic dictionary with session attributes.'''
+        sys.meta_path.append(Loader())
+    request.addfinalizer(sys.meta_path.pop)
     
-        def inject_version(match):
-        before, old, after = match.groups()
-        changed.append(True)
-        return before + version_number + after
+        logging.root.handlers[:] = root_handlers
+    logging.root.setLevel(root_level)
     
+            gc.collect()
+        self.old_objects = len(gc.get_objects())
     
-@pytest.mark.skipif(not PY2, reason='This only works under Python 2.')
-def test_meta_path_loader_without_is_package(request, modules_tmpdir):
-    app = modules_tmpdir.join('unimportable.py')
-    app.write('import flask\napp = flask.Flask(__name__)')
-    
-        response = HttpResponse(template.render({'flatpage': f}, request))
-    return response
+    history = model.fit(x_train, y_train,
+                    batch_size=batch_size,
+                    epochs=epochs,
+                    verbose=1,
+                    validation_split=0.1)
+score = model.evaluate(x_test, y_test,
+                       batch_size=batch_size, verbose=1)
+print('Test score:', score[0])
+print('Test accuracy:', score[1])
 
     
+        In this task, there are variable length inputs of integers from 1-9, and a random
+    subset of unmasked outputs. Each of these outputs has a 50% probability of being
+    the input number unchanged, and a 50% probability of being 2*input%10.
     
-###############################################################################
-# Data
+    model1 = create_network(num_classes=num_classes, **network1)
+history_model1 = model1.fit(x_train,
+                            y_train,
+                            batch_size=batch_size,
+                            epochs=epochs,
+                            verbose=1,
+                            validation_split=0.1)
     
-    from sklearn.utils import check_random_state
-from sklearn.metrics.pairwise import pairwise_distances
-from sklearn.metrics.pairwise import pairwise_kernels
-    
-    import numpy as np
-from scipy.cluster import hierarchy
-import matplotlib.pyplot as plt
-    
-    Benchmarks for random projections.
-    
-    for f in solutions:
-    if not f.endswith('.py'):
-        continue
-    
-    '''
-print(__doc__)
-    
-    acc_clf1, acc_clf2 = [], []
-n_features_range = range(1, n_features_max + 1, step)
-for n_features in n_features_range:
-    score_clf1, score_clf2 = 0, 0
-    for _ in range(n_averages):
-        X, y = generate_data(n_train, n_features)
-    
-        def _list_templates(self):
-        print('Available templates:')
-        for filename in sorted(os.listdir(self.templates_dir)):
-            if filename.endswith('.tmpl'):
-                print('  %s' % splitext(filename)[0])
-    
-        def _add_middleware(self, mw):
-        if hasattr(mw, 'process_request'):
-            self.methods['process_request'].append(mw.process_request)
-        if hasattr(mw, 'process_response'):
-            self.methods['process_response'].insert(0, mw.process_response)
-        if hasattr(mw, 'process_exception'):
-            self.methods['process_exception'].insert(0, mw.process_exception)
-    
-        def log(self, request, spider):
-        if self.debug:
-            msg = 'Filtered duplicate request: %(request)s'
-            self.logger.debug(msg, {'request': request}, extra={'spider': spider})
-        elif self.logdupes:
-            msg = ('Filtered duplicate request: %(request)s'
-                   ' - no more duplicates will be shown'
-                   ' (see DUPEFILTER_DEBUG to show all duplicates)')
-            self.logger.debug(msg, {'request': request}, extra={'spider': spider})
-            self.logdupes = False
-    
-        # Gloss the lips
-    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
-    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
-    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
-    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
-    
-    print('I found {} face(s) in this photograph.'.format(len(face_locations)))
-    
-        # If no valid image file was uploaded, show the file upload form:
-    return '''
-    <!doctype html>
-    <title>Is this a picture of Obama?</title>
-    <h1>Upload a picture and see if it's a picture of Obama!</h1>
-    <form method='POST' enctype='multipart/form-data'>
-      <input type='file' name='file'>
-      <input type='submit' value='Upload'>
-    </form>
-    '''
-    
-        # Find encodings for faces in the test iamge
-    faces_encodings = face_recognition.face_encodings(X_img, known_face_locations=X_face_locations)
-    
-    setup(
-    name='face_recognition',
-    version='1.2.2',
-    description='Recognize faces from Python or from the command line',
-    long_description=readme + '\n\n' + history,
-    author='Adam Geitgey',
-    author_email='ageitgey@gmail.com',
-    url='https://github.com/ageitgey/face_recognition',
-    packages=[
-        'face_recognition',
-    ],
-    package_dir={'face_recognition': 'face_recognition'},
-    package_data={
-        'face_recognition': ['models/*.dat']
-    },
-    entry_points={
-        'console_scripts': [
-            'face_recognition=face_recognition.face_recognition_cli:main',
-            'face_detection=face_recognition.face_detection_cli:main'
-        ]
-    },
-    install_requires=requirements,
-    license='MIT license',
-    zip_safe=False,
-    keywords='face_recognition',
-    classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-    ],
-    test_suite='tests',
-    tests_require=test_requirements
-)
+        x_train = np.array(x[:int(len(x) * (1 - test_split))])
+    y_train = np.array(y[:int(len(x) * (1 - test_split))])
+    x_test = np.array(x[int(len(x) * (1 - test_split)):])
+    y_test = np.array(y[int(len(x) * (1 - test_split)):])
+    return (x_train, y_train), (x_test, y_test)
 
     
-            result = runner.invoke(face_recognition_cli.main, args=[image_folder, image_file, '--tolerance', '0.55'])
+    # Since the output is a moving average of the input,
+# the first few points of output will be NaN
+# and will be dropped from the generated data
+# before training the LSTM.
+# Also, when lahead > 1,
+# the preprocessing step later of 'rolling window view'
+# will also cause some points to be lost.
+# For aesthetic reasons,
+# in order to maintain generated data length = input_len after pre-processing,
+# add a few points to account for the values that will be lost.
+to_drop = max(tsteps - 1, lahead - 1)
+data_input = gen_uniform_amp(amp=0.1, xn=input_len + to_drop)
+    
+        def format(self, record):
+        return self._fmt % record.__dict__
+    
+    # Being true for dangling symbolic links is also useful.
+    
+            self.loop._close_self_pipe.reset_mock()
+        self.loop.close()
+        self.assertFalse(self.loop._close_self_pipe.called)
+    
+        def test_empty_file_actions(self):
+        pid = posix.posix_spawn(
+            sys.executable,
+            [sys.executable, '-c', 'pass'],
+            os.environ,
+            []
+        )
+        self.assertEqual(os.waitpid(pid, 0), (pid, 0))
+    
+    # Were we compiled --with-pydebug or with #define Py_DEBUG?
+COMPILED_WITH_PYDEBUG = hasattr(sys, 'gettotalrefcount')
+    
+        for url in urls:
+        if not url.startswith('http'):
+            print('markdown file name: ' + url)
+            continue
+        if check_live_url(url):
+            print(url)
+        else:
+            print(url, file=sys.stderr)
+    
+    from babel.messages.pofile import read_po
+    
+        def test_fd_command_line_interface_hog_model(self):
+        target_string = 'obama.jpg'
+        runner = CliRunner()
+        image_file = os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg')
+    
+    # Load a sample picture and learn how to recognize it.
+print('Loading known face image(s)')
+obama_image = face_recognition.load_image_file('obama_small.jpg')
+obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+    
+    
+def run_test(setup, test, iterations_per_test=5, tests_to_run=10):
+    fastest_execution = min(timeit.Timer(test, setup=setup).repeat(tests_to_run, iterations_per_test))
+    execution_time = fastest_execution / iterations_per_test
+    fps = 1.0 / execution_time
+    return execution_time, fps
+    
+    while True:
+    # Grab a single frame of video
+    ret, frame = video_capture.read()
+    
+    # Convert the image to a PIL-format image so that we can draw on top of it with the Pillow library
+# See http://pillow.readthedocs.io/ for more about PIL/Pillow
+pil_image = Image.fromarray(unknown_image)
+# Create a Pillow ImageDraw Draw instance to draw with
+draw = ImageDraw.Draw(pil_image)
+    
+    
+# -- Options for HTML output -------------------------------------------
+    
+    # Load the jpg file into a numpy array
+image = face_recognition.load_image_file('two_people.jpg')
