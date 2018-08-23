@@ -1,152 +1,168 @@
 
         
-        // redirect the messages to R's console.
-namespace dmlc {
-void CustomLogMessage::Log(const std::string& msg) {
-  Rprintf('%s\n', msg.c_str());
-}
-}  // namespace dmlc
+        struct PageletTransport final : Transport, Synchronizable {
+  PageletTransport(
+    const String& url, const Array& headers, const String& postData,
+    const String& remoteHost,
+    const std::set<std::string> &rfc1867UploadedFiles,
+    const Array& files, int timeoutSeconds);
+    }
     
+      if (!inname && !stream) {
+    return NULL;
+  }
     
+      struct Key final {
+    Array extract() const;
+    void insert(const ActRec* fp, int32_t prevPc);
+    }
+    
+    struct StreamContext;
+struct StreamFilter;
+    
+    /*! \brief Applies an elastic net penalty and per-leaf penalty. */
+class ElasticNet final : public SplitEvaluator {
+ public:
+  explicit ElasticNet(std::unique_ptr<SplitEvaluator> inner) {
+    if (inner) {
+      LOG(FATAL) << 'ElasticNet does not accept an inner SplitEvaluator';
+    }
+  }
+  void Init(
+      const std::vector<std::pair<std::string, std::string> >& args) override {
+    params_.InitAllowUnknown(args);
+  }
+    }
+    
+    // array to help compression of decompression.
+template<typename DType>
+class CompressArray {
+ public:
+  // the data content.
+  std::vector<DType> data;
+  // Decompression helper
+  // number of chunks
+  inline int num_chunk() const {
+    CHECK_GT(raw_chunks_.size(), 1);
+    return static_cast<int>(raw_chunks_.size() - 1);
+  }
+  // raw bytes
+  inline size_t RawBytes() const {
+    return raw_chunks_.back() * sizeof(DType);
+  }
+  // encoded bytes
+  inline size_t EncodedBytes() const {
+    return encoded_chunks_.back() +
+        (encoded_chunks_.size() + raw_chunks_.size()) * sizeof(bst_uint);
+  }
+  // load the array from file.
+  inline void Read(dmlc::SeekStream* fi);
+  // run decode on chunk_id
+  inline void Decompress(int chunk_id);
+  // Compression helper
+  // initialize the compression chunks
+  inline void InitCompressChunks(const std::vector<bst_uint>& chunk_ptr);
+  // initialize the compression chunks
+  inline void InitCompressChunks(size_t chunk_size, size_t max_nchunk);
+  // run decode on chunk_id, level = -1 means default.
+  inline void Compress(int chunk_id, bool use_hc);
+  // save the output buffer into file.
+  inline void Write(dmlc::Stream* fo);
+    }
+    
+    #if DMLC_ENABLE_STD_THREAD
+/*!
+ * \brief A threaded writer to write sparse batch page to sharded files.
+ */
+class SparsePageWriter {
+ public:
+  /*!
+   * \brief constructor
+   * \param name_shards name of shard files.
+   * \param format_shards format of each shard.
+   * \param extra_buffer_capacity Extra buffer capacity before block.
+   */
+  explicit SparsePageWriter(
+      const std::vector<std::string>& name_shards,
+      const std::vector<std::string>& format_shards,
+      size_t extra_buffer_capacity);
+  /*! \brief destructor, will close the files automatically */
+  ~SparsePageWriter();
+  /*!
+   * \brief Push a write job to the writer.
+   * This function won't block,
+   * writing is done by another thread inside writer.
+   * \param page The page to be written
+   */
+  void PushWrite(std::shared_ptr<SparsePage>&& page);
+  /*!
+   * \brief Allocate a page to store results.
+   *  This function can block when the writer is too slow and buffer pages
+   *  have not yet been recycled.
+   * \param out_page Used to store the allocated pages.
+   */
+  void Alloc(std::shared_ptr<SparsePage>* out_page);
+    }
+    
+    #pragma once
+    
+      /**
+   * @brief Return a string representation of a udev property.
+   *
+   * @param device the udev device pointer.
+   * @param property the udev property identifier string.
+   * @return string representation of the property or empty if null.
+   */
+  static std::string getValue(struct udev_device* device,
+                              const std::string& property);
+    
+        // Use the basic 'force' flag to check implicit SQL usage.
+    auto flags =
+        SQL('select default_value from osquery_flags where name = 'force'');
+    if (flags.rows().size() > 0) {
+      r['flag_test'] = flags.rows().back().at('default_value');
+    }
+    
+    using IFirehoseLogForwarder = AwsLogForwarder<
+    Aws::Firehose::Model::Record,
+    Aws::Firehose::FirehoseClient,
+    Aws::Firehose::Model::PutRecordBatchOutcome,
+    Aws::Vector<Aws::Firehose::Model::PutRecordBatchResponseEntry>>;
+    
+    // Changelog:
+// - v0.50: (2017/08/16) imported from https://github.com/Vuhdo/imgui_freetype into http://www.github.com/ocornut/imgui_club, updated for latest changes in ImFontAtlas, minor tweaks.
+// - v0.51: (2017/08/26) cleanup, optimizations, support for ImFontConfig::RasterizerFlags, ImFontConfig::RasterizerMultiply.
+// - v0.52: (2017/09/26) fixes for imgui internal changes
+// - v0.53: (2017/10/22) minor inconsequential change to match change in master (removed an unnecessary statement)
+// - v0.54: (2018/01/22) fix for addition of ImFontAtlas::TexUvscale member
+// - v0.55: (2018/02/04) moved to main imgui repository (away from http://www.github.com/ocornut/imgui_club)
+// - v0.56: (2018/06/08) added support for ImFontConfig::GlyphMinAdvanceX, GlyphMaxAdvanceX
+    
+    // GLFW callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// Provided here if you want to chain callbacks.
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_IMPL_API void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_IMPL_API void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+
+    
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+    
+        FrameContext* frameCtxt = &g_frameContext[nextFrameIndex % NUM_FRAMES_IN_FLIGHT];
+    UINT64 fenceValue = frameCtxt->FenceValue;
+    if (fenceValue != 0) // means no fence was signaled
     {
-    {    // update information
-    this->info.num_row_ += batch.size;
-    // copy the data over
-    for (size_t i = batch.offset[0]; i < batch.offset[batch.size]; ++i) {
-      uint32_t index = batch.index[i];
-      bst_float fvalue = batch.value == nullptr ? 1.0f : batch.value[i];
-      page_.data.emplace_back(index, fvalue);
-      this->info.num_col_ = std::max(this->info.num_col_,
-                                    static_cast<uint64_t>(index + 1));
-    }
-    size_t top = page_.offset.size();
-    for (size_t i = 0; i < batch.size; ++i) {
-      page_.offset.push_back(page_.offset[top - 1] + batch.offset[i + 1] - batch.offset[0]);
-    }
-  }
-  if (last_group_id != default_max) {
-    if (group_size > info.group_ptr_.back()) {
-      info.group_ptr_.push_back(group_size);
-    }
-  }
-  this->info.num_nonzero_ = static_cast<uint64_t>(page_.data.size());
-  // Either every row has query ID or none at all
-  CHECK(info.qids_.empty() || info.qids_.size() == info.num_row_);
-}
-    
-    
-    {    for (size_t i = 0; i < preds_h.size(); ++i) {
-      auto y = info.labels_[i] * 2.0 - 1.0;
-      bst_float p = preds_h[i];
-      bst_float w = info.GetWeight(i);
-      bst_float g, h;
-      if (p * y < 1.0) {
-        g = -y * w;
-        h = w;
-      } else {
-        g = 0.0;
-        h = std::numeric_limits<bst_float>::min();
-      }
-      gpair[i] = GradientPair(g, h);
-    }
-  }
-    
-    TEST(Metric, RMSE) {
-  xgboost::Metric * metric = xgboost::Metric::Create('rmse');
-  ASSERT_STREQ(metric->Name(), 'rmse');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0.6403f, 0.001f);
-}
-    
-    #include <map>
-#include <node.h>
-    
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    
-      virtual const char* Name() const override;
-    
-      /// Push / Insert value at beginning/end of the list. Return the length.
-  /// May throw RedisListException
-  int PushLeft(const std::string& key, const std::string& value);
-  int PushRight(const std::string& key, const std::string& value);
-    
-    #ifndef STORAGE_LEVELDB_PORT_PORT_WIN_H_
-#define STORAGE_LEVELDB_PORT_PORT_WIN_H_
-    
-    uint64_t StatisticsImpl::getTickerCountLocked(uint32_t tickerType) const {
-  assert(
-    enable_internal_stats_ ?
-      tickerType < INTERNAL_TICKER_ENUM_MAX :
-      tickerType < TICKER_ENUM_MAX);
-  uint64_t res = 0;
-  for (size_t core_idx = 0; core_idx < per_core_stats_.Size(); ++core_idx) {
-    res += per_core_stats_.AccessAtCore(core_idx)->tickers_[tickerType];
-  }
-  return res;
-}
-    
-    #include <folly/portability/GTest.h>
-    
-    template <typename T>
-std::shared_ptr<T> SingletonHolder<T>::try_get() {
-  if (UNLIKELY(state_.load(std::memory_order_acquire) !=
-               SingletonHolderState::Living)) {
-    createInstance();
-  }
+        frameCtxt->FenceValue = 0;
+        g_fence->SetEventOnCompletion(fenceValue, g_fenceEvent);
+        waitableObjects[1] = g_fenceEvent;
+        numWaitableObjects = 2;
     }
     
-    
-    { private:
-  detail::BufferedSlidingWindow<TDigest, ClockT> bufferedSlidingWindow_;
-};
-    
-    MockClock::time_point MockClock::Now = MockClock::time_point{};
-    
-      static BoolPromise* promises(ControlBlock* cb) {
-    return reinterpret_cast<ControlBlockAndPromise*>(cb)->promises;
-  }
-    
-      static_assert(
-      folly::AllocatorHasDefaultObjectConstruct<TestAlloc4<S>, S, S>::value,
-      '');
-  static_assert(
-      folly::AllocatorHasDefaultObjectDestroy<TestAlloc4<S>, S>::value, '');
-    
-      {
-    auto meta = folly::settings::getSettingsMeta('follytest_public_flag_to_a');
-    EXPECT_TRUE(meta.hasValue());
-    const auto& md = meta.value();
-    EXPECT_EQ(md.project, 'follytest');
-    EXPECT_EQ(md.name, 'public_flag_to_a');
-    EXPECT_EQ(md.typeStr, 'int');
-    EXPECT_EQ(md.typeId, typeid(int));
-  }
-    
-    
-    {  EXPECT_TRUE(allf.isReady());
-  int i = 0;
-  for (auto val : allf.value()) {
-    EXPECT_EQ(i, val.i);
-    i++;
-  }
-}
-    
-      auto future = promise.getFuture().then(std::bind(
-      [](std::unique_ptr<int>& p) mutable {
-        ++*p;
-        return std::move(p);
-      },
-      std::move(int_ptr)));
+    // Win32 Data
+static HWND                 g_hWnd = 0;
+static INT64                g_Time = 0;
+static INT64                g_TicksPerSecond = 0;
+static ImGuiMouseCursor     g_LastMouseCursor = ImGuiMouseCursor_COUNT;
