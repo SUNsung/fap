@@ -1,337 +1,184 @@
-  virtual bool lookupAdditions(DeclBaseName Name, DeclContext *DC,
-                               SourceLoc Loc, bool IsTypeLookup,
-                               ResultVector &RV) = 0;
-    
-    void SyntaxASTMap::dumpSyntaxMap() const {
-  for (const auto &SyntaxAndSemaNode : SyntaxMap) {
-    auto SyntaxNode = SyntaxAndSemaNode.getFirst();
-    auto SemanticNode = SyntaxAndSemaNode.getSecond();
-    }
+
+        
+        namespace tensorflow {
     }
     
-    namespace swift {
-class DependencyTracker;
-class ModuleDecl;
-class SourceFile;
-    }
     
-    /// Get a parsed documentation comment for the declaration, if there is one.
-Optional<DocComment *>getSingleDocComment(swift::markup::MarkupContext &Context,
-                                          const Decl *D);
-    
-      /// Indicates whether diagnostic passes should be skipped.
-  bool SkipDiagnosticPasses = false;
-    
-    namespace swift {
-    }
-    
-      /// Returns true if the LSBase has a non-empty projection path.
-  bool hasEmptyProjectionPath() const { return !Path.getValue().size(); }
-    
-            void DoneWithCurrentMinibatch()
-        {
-            for (auto& x : m_cachedGradient)
-            {
-                const wstring& name  = x.first;
-                auto& accumulategrad = m_cachedGradient.GetInputMatrix<ElemType>(name);
-    }
-    }
-    
-    template<> inline
-dnnError_t
-    dnnBatchNormalizationCreateBackwardScaleShift<float>(
-        dnnPrimitive_t* pBatchNormalization,
-        dnnPrimitiveAttributes_t attributes,
-        const dnnLayout_t dataLayout,
-        float eps)
-{
-    return dnnBatchNormalizationCreateBackwardScaleShift_F32(
-        pBatchNormalization, attributes, dataLayout, eps);
-}
-template<> inline
-dnnError_t
-    dnnBatchNormalizationCreateBackwardScaleShift<double>(
-        dnnPrimitive_t* pBatchNormalization,
-        dnnPrimitiveAttributes_t attributes,
-        const dnnLayout_t dataLayout,
-        double eps)
-{
-    return dnnBatchNormalizationCreateBackwardScaleShift_F64(
-        pBatchNormalization, attributes, dataLayout, eps);
-}
-    
-        Matrix<float>::MultiplyAndWeightedAdd(alpha, mAdense, transposeA, mBdense, transposeB, beta, mCdense);
-    Matrix<float>::MultiplyAndWeightedAdd(alpha, mAsparse, transposeA, mBsparse, transposeB, beta, mCsparse);
-    mCsparse.SwitchToMatrixType(MatrixType::DENSE, matrixFormatDense, true);
-    BOOST_CHECK(mCsparse.IsEqualTo(mCdense, c_epsilonFloatE4));
-    
-    // helper to remove all existing Output nodes and replace them by a new given set
-static void PatchOutputNodes(const ComputationNetworkPtr& net, const ConfigArray& outputNodeNames, vector<wstring>& outputNodeNamesVector)
-{
-    // clear out current list of outputNodes
-    while (!net->OutputNodes().empty())
-        net->RemoveFromNodeGroup(L'output', net->OutputNodes().back());
-    // and insert the desired nodes instead
-    for (wstring name : outputNodeNames)
     {
-        if (!net->NodeNameExists(name))
-        {
-            fprintf(stderr, 'PatchOutputNodes: No node named '%ls'; skipping\n', name.c_str());
-            continue;
-        }
-        outputNodeNamesVector.push_back (name);
-        let& node = net->GetNodeFromName(name);
-        net->AddToNodeGroup(L'output', node);
+    {}  // namespace python_op_gen_internal
+}  // namespace tensorflow
+    
+      for (const auto& node : item_.MainOpsFanin()) {
+    PrintNodeInfo(node, properties, debug, os);
+  }
+  for (const auto& node : item_.EnqueueOpsFanin()) {
+    PrintNodeInfo(node, properties, debug, os);
+  }
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    void PyExceptionRegistry::Init(PyObject* code_to_exc_type_map) {
+  DCHECK(singleton_ == nullptr) << 'PyExceptionRegistry::Init() already called';
+  singleton_ = new PyExceptionRegistry;
     }
+    
+    // Creates a numpy array in 'ret' and copies the content of tensor 't'
+// into 'ret'.
+Status ConvertTensorToNdarray(const Tensor& t, PyObject** ret);
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+double DotProductSSE(const double* u, const double* v, int n);
+// Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n);
+    
+    // Computes one set of 4x8 products of inputs and weights, adding to result.
+// Horizontally adds 4 adjacent results, making 8x32-bit results.
+// rep_input is assumed to be an 8x replicated set of 4x8-bit signed integers.
+// Note that wi must previously have been re-organized with blocks of 4x8
+// weights in contiguous memory.
+// ones is a register of 16x16-bit values all equal to 1.
+// Note: wi is incremented by the amount of data read.
+// weights and reps are scratch registers.
+// This function must be inlined with references in order for the compiler to
+// correctly use the registers declared in the caller.
+inline void MultiplyGroup(const __m256i& rep_input, const __m256i& ones,
+                          const int8_t*& wi, __m256i& weights, __m256i& reps,
+                          __m256i& result) {
+  // Load a 4x8 block of weights.
+  weights = _mm256_loadu_si256(reinterpret_cast<const __m256i*>(wi));
+  wi += kNumInputsPerRegister;
+  // Normalize the signs on rep_input, weights, so weights is always +ve.
+  reps = _mm256_sign_epi8(rep_input, weights);
+  weights = _mm256_sign_epi8(weights, weights);
+  // Multiply 32x8-bit reps by 32x8-bit weights to make 16x16-bit results,
+  // with adjacent pairs added.
+  weights = _mm256_maddubs_epi16(weights, reps);
+  // Multiply 16x16-bit result by 16x16-bit ones to make 8x32-bit results,
+  // with  adjacent pairs added. What we really want is a horizontal add of
+  // 16+16=32 bit result, but there is no such instruction, so multiply by
+  // 16-bit ones instead. It is probably faster than all the sign-extending,
+  // permuting and adding that would otherwise be required.
+  weights = _mm256_madd_epi16(weights, ones);
+  result = _mm256_add_epi32(result, weights);
 }
     
-        // emit a trace message for the train loss value
-    // The value is printed in percent.
-    static void TraceTrainLoss(double err)
-    {
-        auto& us = GetStaticInstance();
+    // Returns the null terminated UTF-8 encoded text string for the current
+// object at the given level. Use delete [] to free after use.
+char* LTRResultIterator::GetUTF8Text(PageIteratorLevel level) const {
+  if (it_->word() == nullptr) return nullptr;  // Already at the end!
+  STRING text;
+  PAGE_RES_IT res_it(*it_);
+  WERD_CHOICE* best_choice = res_it.word()->best_choice;
+  ASSERT_HOST(best_choice != nullptr);
+  if (level == RIL_SYMBOL) {
+    text = res_it.word()->BestUTF8(blob_index_, false);
+  } else if (level == RIL_WORD) {
+    text = best_choice->unichar_string();
+  } else {
+    bool eol = false;  // end of line?
+    bool eop = false;  // end of paragraph?
+    do {  // for each paragraph in a block
+      do {  // for each text line in a paragraph
+        do {  // for each word in a text line
+          best_choice = res_it.word()->best_choice;
+          ASSERT_HOST(best_choice != nullptr);
+          text += best_choice->unichar_string();
+          text += ' ';
+          res_it.forward();
+          eol = res_it.row() != res_it.prev_row();
+        } while (!eol);
+        text.truncate_at(text.length() - 1);
+        text += line_separator_;
+        eop = res_it.block() != res_it.prev_block() ||
+            res_it.row()->row->para() != res_it.prev_row()->row->para();
+      } while (level != RIL_TEXTLINE && !eop);
+      if (eop) text += paragraph_separator_;
+    } while (level == RIL_BLOCK && res_it.block() == res_it.prev_block());
+  }
+  int length = text.length() + 1;
+  char* result = new char[length];
+  strncpy(result, text.string(), length);
+  return result;
+}
+    
+    class MutableIterator : public ResultIterator {
+ public:
+  // See argument descriptions in ResultIterator()
+  MutableIterator(PAGE_RES* page_res, Tesseract* tesseract,
+                  int scale, int scaled_yres,
+                  int rect_left, int rect_top,
+                  int rect_width, int rect_height)
+      : ResultIterator(
+          LTRResultIterator(page_res, tesseract, scale, scaled_yres, rect_left,
+                            rect_top, rect_width, rect_height)) {}
+  virtual ~MutableIterator() = default;
     }
     
-    // Returns the divisor for a conflict-free transpose.
-template<int X, int NumBanks = 32> struct sBankConflictDivisor {
-	enum { value = 
-		(1 & X) ? 0 : 
-		(sIsPow2<X>::value ? NumBanks :
-		(1<< sNumFactorsOf2<X>::value)) }; 
-	enum { log_value = sLogPow2<value>::value };
+    extern BLOCK_LIST *current_block_list;
+extern STRING_VAR_H (editor_image_win_name, 'EditorImage',
+'Editor image window name');
+extern INT_VAR_H (editor_image_xpos, 590, 'Editor image X Pos');
+extern INT_VAR_H (editor_image_ypos, 10, 'Editor image Y Pos');
+extern INT_VAR_H (editor_image_height, 680, 'Editor image height');
+extern INT_VAR_H (editor_image_width, 655, 'Editor image width');
+extern INT_VAR_H (editor_image_word_bb_color, BLUE,
+'Word bounding box colour');
+extern INT_VAR_H (editor_image_blob_bb_color, YELLOW,
+'Blob bounding box colour');
+extern INT_VAR_H (editor_image_text_color, WHITE, 'Correct text colour');
+extern STRING_VAR_H (editor_dbwin_name, 'EditorDBWin',
+'Editor debug window name');
+extern INT_VAR_H (editor_dbwin_xpos, 50, 'Editor debug window X Pos');
+extern INT_VAR_H (editor_dbwin_ypos, 500, 'Editor debug window Y Pos');
+extern INT_VAR_H (editor_dbwin_height, 24, 'Editor debug window height');
+extern INT_VAR_H (editor_dbwin_width, 80, 'Editor debug window width');
+extern STRING_VAR_H (editor_word_name, 'BlnWords',
+'BL normalised word window');
+extern INT_VAR_H (editor_word_xpos, 60, 'Word window X Pos');
+extern INT_VAR_H (editor_word_ypos, 510, 'Word window Y Pos');
+extern INT_VAR_H (editor_word_height, 240, 'Word window height');
+extern INT_VAR_H (editor_word_width, 655, 'Word window width');
+extern double_VAR_H (editor_smd_scale_factor, 1.0, 'Scaling for smd image');
+    
+    REGISTER_CPU_OPERATOR(
+    SubGradient,
+    BinaryElementwiseGradientOp<
+        NumericTypes,
+        CPUContext,
+        SubFunctor<CPUContext>>);
+    
+    </details>
+    
+    
+    {
+    {}}
+    
+    void APCCollection::Delete(APCHandle* h) {
+  assertx(offsetof(APCCollection, m_handle) == 0);
+  delete reinterpret_cast<APCCollection*>(h);
+}
+    
+      const char* data = filename.data();
+  int data_len = filename.length();
+  bool base64 = false;
+  if (strncmp(data, 'data:', sizeof('data:') - 1)) {
+    return nullptr;
+  }
+  data += sizeof('data:') - 1;
+  data_len -= sizeof('data:') - 1;
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    struct RequestCPUTimeoutException : ResourceExceededException {
+  RequestCPUTimeoutException(const std::string& msg, const Array& backtrace)
+    : ResourceExceededException(msg, backtrace)
+  {}
+  EXCEPTION_COMMON_IMPL(RequestCPUTimeoutException);
 };
     
-    /*!
- * \brief Rcpp NDArray object of MXNet.
- *  We use lightweight Rcpp external ptr and S3 type object.
- *  For efficiently expose the object to R side.
- */
-class NDArray  {
- public:
-  /*! \return typename from R side. */
-  inline static const char* TypeName() {
-    return 'MXNDArray';
-  }
-  /*! \brief The returning type of new NDArray */
-  typedef Rcpp::XPtr<NDBlob> RObjectType;
-  /*!
-   * \brief copy constructor
-   * \param other Another NDArray to be copied from.
-   */
-  NDArray(const NDArray& other)
-      : ptr_(other.ptr_) {}
-  /*!
-   * \brief constructor from R SEXP
-   * \param src The source SEXP
-   */
-  explicit NDArray(SEXP src)
-      : ptr_(src) {}
-  /*!
-   * \brief Constructor
-   * \param handle The handle
-   */
-  NDArray(NDArrayHandle handle, bool writable)
-      : ptr_(new NDBlob(handle, writable)) {
-    ptr_.attr('class') = 'MXNDArray';
-  }
-  /*! \return RObject representation */
-  inline RObjectType RObject()  const {
-    return ptr_;
-  }
-  /*!
-   * \brief Create a new moved NDArray
-   */
-  inline NDArray Move() const {
-    RCHECK(ptr_->writable && !ptr_->moved)
-        << 'Passing a read only NDArray to mutate function';
-    ptr_->moved = true;
-    return NDArray(ptr_->handle, ptr_->writable);
-  }
-  // operator overloading
-  inline NDArray& operator=(const NDArray& other) {
-    ptr_ = other.ptr_;
-    return *this;
-  }
-  inline NDBlob* operator->() {
-    return ptr_.get();
-  }
-  inline const NDBlob* operator->() const {
-    return ptr_.get();
-  }
-  /*!
-   * \param src The source array.
-   * \return The dimension of the array
-   */
-  Rcpp::Dimension dim() const;
-  /*!
-   * \brief Return a clone of NDArray.
-   *  Do not expose this to R side.
-   * \return src The source NDArray.
-   * \return a new cloned NDArray.
-   */
-  NDArray Clone() const;
-  /*!
-   * \return The context of NDArray.
-   */
-  Context ctx() const;
-  /*!
-   * \brief Return a slice of NDArray.
-   * \param begin The begin of the slice.
-   * \param end The end of the slice.
-   * \return a sliced NDArray.
-   */
-  NDArray Slice(mx_uint begin, mx_uint end) const;
-  /*!
-   * \return The number of elements in the array
-   */
-  size_t Size() const;
-  /*!
-   * \return convert the NDArray to R's Array
-   */
-  Rcpp::NumericVector AsNumericVector() const;
-  /*!
-   * \brief Create NDArray from RObject
-   * \param src Source object.
-   * \return The created NDArray
-   */
-  inline static NDArray FromRObject(const Rcpp::RObject& src) {
-    return NDArray(src);
-  }
-  /*!
-   * \brief Create RObject NDArray.
-   * \param handle The source handle.
-   * \param writable Whether the NDArray is writable.
-   * \return The created NDArray
-   */
-  inline static RObjectType RObject(NDArrayHandle handle, bool writable) {
-    return NDArray(handle, writable).RObject();
-  }
-  /*!
-   * \brief Move the NDArray.
-   * \param src The source RObject.
-   * \return The moved NDArray
-   */
-  inline static RObjectType Move(const Rcpp::RObject& src) {
-    return NDArray(src).Move().RObject();
-  }
-  /*!
-   * \brief function to create an empty array
-   * \param shape The shape of the Array
-   * \return a new created MX.NDArray
-   */
-  static RObjectType Empty(const Rcpp::Dimension& shape,
-                           const Context::RObjectType& ctx);
-  /*!
-   * \brief Create a MX.NDArray by copy data from src R array.
-   * \param src the source R array
-   * \param ctx The context where
-   */
-  static RObjectType Array(const Rcpp::RObject& src,
-                           const Context::RObjectType& ctx);
-  /*!
-   * \brief internal function to copy NDArray from to to
-   *  Do not expose this to R side.
-   * \param from The source NDArray.
-   * \param to The target NDArray.
-   */
-  static void CopyFromTo(const NDArray& from, NDArray *to);
-  /*!
-   * \brief Load a list of ndarray from the file.
-   * \param filename the name of the file.
-   * \return R List of NDArrays
-   */
-  static Rcpp::List Load(const std::string& filename);
-  /*!
-   * \brief Save a list of NDArray to file.
-   * \param data R List of NDArrays
-   * \param filename The name of the file to be saved.
-   */
-  static void Save(const Rcpp::List& data,
-                   const std::string& filename);
-  /*!
-   * \brief Extract NDArrayHandles from List.
-   * \param array_list The NDArray list.
-   * \param list_name The name of the list, used for error message.
-   * \param allow_null If set to True, allow null in the list.
-   * \param move_old_array If set to true, move the old ndarrays
-   */
-  static std::vector<NDArrayHandle> GetHandles(const Rcpp::List& array_list,
-                                               const std::string& list_name,
-                                               bool allow_null = false,
-                                               bool move_old_array = false);
-  /*! \brief static function to initialize the Rcpp functions */
-  static void InitRcppModule();
-    }
     
-    
-    {  MSHADOW_TYPE_SWITCH(in_data.type_flag_, DType, {
-    Kernel<FillBinBoundsKernel, cpu>::Launch(
-      s, bin_cnt+1, out_bins.dptr<DType>(), bin_cnt, min, max);
-    Kernel<ComputeBinKernel, cpu>::Launch(
-      s, in_data.Size(), in_data.dptr<DType>(), out_bins.dptr<DType>(), bin_indices.dptr_,
-      bin_cnt, min, max);
-  });
-  MSHADOW_TYPE_SWITCH(out_data.type_flag_, CType, {
-    Kernel<set_zero, cpu>::Launch(s, bin_cnt, out_data.dptr<CType>());
-    ComputeHistogram(bin_indices.dptr_, out_data.dptr<CType>(), in_data.Size());
-  });
-}
-    
-    #if MXNET_USE_MKLDNN == 1
-static void ConcatGradComputeExCPU(const nnvm::NodeAttrs& attrs,
-                                   const OpContext& ctx,
-                                   const std::vector<NDArray>& inputs,
-                                   const std::vector<OpReqType>& req,
-                                   const std::vector<NDArray>& outputs) {
-  if (SupportMKLDNNConcat(inputs)) {
-    MKLDNN_OPCHECK_INIT(true, outputs.size(), inputs, outputs);
-    MKLDNNConcatBackward(attrs, ctx, inputs, req, outputs);
-    MKLDNN_OPCHECK_RUN(ConcatGradCompute<cpu>, attrs, ctx, inputs, req, outputs);
-    return;
-  }
-  FallBackCompute(ConcatGradCompute<cpu>, attrs, ctx, inputs, req, outputs);
-}
-#endif
-    
-    /*!
- *  Copyright (c) 2015 by Contributors
- * \file image_aug_default.cc
- * \brief Default augmenter.
- */
-#include <mxnet/base.h>
-#include <dmlc/optional.h>
-#include <utility>
-#include <string>
-#include <algorithm>
-#include <vector>
-#include './image_augmenter.h'
-#include '../common/utils.h'
-    
-    bool ElementWiseSumShape(const nnvm::NodeAttrs& attrs,
-                         std::vector<TShape> *in_attrs,
-                         std::vector<TShape> *out_attrs) {
-  CHECK_EQ(out_attrs->size(), 1);
-  return ElemwiseAttr<TShape, shape_is_none, shape_assign, true, shape_string>(
-    attrs, in_attrs, out_attrs, TShape());
-}
-    
-    /*
- * \brief Impl of dot(dns, csr) = csr
- */
-inline void DotDnsCsrCsrImpl(const OpContext& ctx, const cpu& cpu_dev,
-                             const TBlob& lhs, const NDArray& rhs,
-                             const OpReqType req, NDArray* ret) {
-  if (kNullOp == req) return;
-    }
-    
-    template<typename ParamType>
-inline bool InitShape(const nnvm::NodeAttrs& attrs,
-                      std::vector<TShape> *in_attrs,
-                      std::vector<TShape> *out_attrs) {
-  const ParamType& param = nnvm::get<ParamType>(attrs.parsed);
-  CHECK_EQ(in_attrs->size(), 0U);
-  CHECK_EQ(out_attrs->size(), 1U);
-  if ((*out_attrs)[0].ndim() != 0 && param.shape.ndim() == 0) return true;
-  SHAPE_ASSIGN_CHECK(*out_attrs, 0, param.shape);
-  return true;
-}
+    {} // namespace mars_boost
