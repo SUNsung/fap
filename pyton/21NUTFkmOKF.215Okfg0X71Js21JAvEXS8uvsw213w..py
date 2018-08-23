@@ -1,95 +1,215 @@
 
         
-        signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
-print('signature: ' + signature)
+        cc_library(
+    name = 'syntaxnet_link_feature_extractor',
+    srcs = ['syntaxnet_link_feature_extractor.cc'],
+    hdrs = ['syntaxnet_link_feature_extractor.h'],
+    deps = [
+        '//dragnn/protos:spec_proto_cc',
+        '//syntaxnet:base',
+        '//syntaxnet:embedding_feature_extractor',
+        '//syntaxnet:parser_transitions',
+        '//syntaxnet:task_context',
+    ],
+)
     
-    with io.open(README_FILE, encoding='utf-8') as f:
-    oldreadme = f.read()
+    # Don't use this library directly; instead use 'dragnn/python:mst_ops'.
+tf_gen_op_wrapper_py(
+    name = 'mst_ops',
+    visibility = ['//dragnn/python:__pkg__'],
+    deps = [':mst_ops_op_lib'],
+)
     
-        def _real_extract(self, url):
-        video_id = self._match_id(url)
+    tf_proto_library_py(
+    name = 'data_pb2',
+    srcs = ['data.proto'],
+)
     
-        def test_parse_gcp_url(self):
-        # region, resource, entity, method
-        input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/regions/us-east1/instanceGroupManagers/my-mig/recreateInstances'
-        actual = GCPUtils.parse_gcp_url(input_url)
-        self.assertEquals('compute', actual['service'])
-        self.assertEquals('v1', actual['api_version'])
-        self.assertEquals('myproject', actual['project'])
-        self.assertEquals('us-east1', actual['region'])
-        self.assertEquals('instanceGroupManagers', actual['resource_name'])
-        self.assertEquals('my-mig', actual['entity_name'])
-        self.assertEquals('recreateInstances', actual['method_name'])
+      def __init__(self, master, component_spec):
+    self.master = master
+    self.spec = component_spec
+    self.name = component_spec.name
+    self.network = MockNetwork()
+    self.beam_size = 1
+    self.num_actions = 45
+    self._attrs = {}
     
-    from ansible.module_utils._text import to_bytes
-from ansible.parsing.yaml.objects import AnsibleMapping, AnsibleSequence, AnsibleUnicode
-from ansible.parsing.yaml.objects import AnsibleVaultEncryptedUnicode
-from ansible.utils.unsafe_proxy import wrap_var
-from ansible.parsing.vault import VaultLib
     
-        def test_data_name_shall_be_changeable(cls):
-        cls.sub.name = 'New Data Name'
-        cls.assertEqual(cls.sub.name, 'New Data Name')
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
 
     
-    
-class TestRunnerFacilities(unittest.TestCase):
-    
-        def test_display_current_time_at_midnight(self):
+        def get_auth(self, username=None, password=None):
         '''
-        Will almost always fail (despite of right at/after midnight).
+        If `auth_parse` is set to `True`, then `username`
+        and `password` contain the parsed credentials.
+    
+    import requests.auth
+    
+    First, we fix a training set and increase the number of
+samples. Then we plot the computation time as function of
+the number of samples.
+    
+    
+@ignore_warnings
+def benchmark(metrics=tuple(v for k, v in sorted(METRICS.items())),
+              formats=tuple(v for k, v in sorted(FORMATS.items())),
+              samples=1000, classes=4, density=.2,
+              n_times=5):
+    '''Times metric calculations for a number of inputs
+    
+                c_bar = plt.bar(xvals, build_time[alg] - bottom,
+                            width, bottom, color='r')
+            q_bar = plt.bar(xvals, query_time[alg],
+                            width, build_time[alg], color='b')
+    
+            start = time.time()
+        func(X, n_jobs=1)
+        one_core.append(time.time() - start)
+    
+       ###########################################################################
+    # Set custom automatic method selection
+    sampling_algorithm['custom-auto'] = \
+        lambda n_population, n_samples, random_state=None: \
+            sample_without_replacement(n_population,
+                                       n_samples,
+                                       method='auto',
+                                       random_state=random_state)
+    
+    
+if not os.path.exists(html_folder):
+    os.makedirs(html_folder)
+    
+    '''
+print(__doc__)
+    
+    This illustrates the `datasets.make_multilabel_classification` dataset
+generator. Each sample consists of counts of two features (up to 50 in
+total), which are differently distributed in each of two classes.
+    
+        def __init__(self, expecting, input):
+        RecognitionException.__init__(self, input)
+        
+        self.expecting = expecting
+    
+    
+    def getRuleInvocationStack(self):
         '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay(time_provider_stub)
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+        Return List<String> of the rules in your parser instance
+        leading up to a call to this method.  You could override if
+        you want more details such as the file/line info of where
+        in the parser java code a rule is invoked.
     
     
-def main():
-    command_stack = []
+    def insertAfter(self, *args):
+        if len(args) == 2:
+            programName = self.DEFAULT_PROGRAM_NAME
+            index = args[0]
+            text = args[1]
+            
+        elif len(args) == 3:
+            programName = args[0]
+            index = args[1]
+            text = args[2]
     
-        def __init__(self):
-        self._tm = None
-        self._bProblem = 0
-    
-    Demonstrates a server that receives a multipart-form-encoded set of files in an
-HTTP POST, or streams in the raw data of a single file in an HTTP PUT.
-    
-        # Start workers, then wait for the work queue to be empty.
-    workers = gen.multi([worker() for _ in range(concurrency)])
-    await q.join(timeout=timedelta(seconds=300))
-    assert fetching == fetched
-    print('Done in %d seconds, fetched %s URLs.' % (
-        time.time() - start, len(fetched)))
-    
-    # Increasing --n without --keepalive will eventually run into problems
-# due to TIME_WAIT sockets
-define('n', type=int, default=15000)
-define('c', type=int, default=25)
-define('keepalive', type=bool, default=False)
-define('quiet', type=bool, default=False)
-    
-    define('port', default=8888)
-define('num_chunks', default=1000)
-define('chunk_size', default=2048)
+    # Output file base name for HTML help builder.
+htmlhelp_basename = 'futuresdoc'
     
     
-def main():
-    parse_command_line()
-    t = Timer(e1)
-    results = t.timeit(options.num) / options.num
-    print('engine: %0.3f ms per iteration' % (results * 1000))
-    t = Timer(c1)
-    results = t.timeit(options.num) / options.num
-    print('coroutine: %0.3f ms per iteration' % (results * 1000))
+@contextlib.contextmanager
+def MockEventNotification( response_method, native_filetype_completer = True ):
+  '''Mock out the EventNotification client request object, replacing the
+  Response handler's JsonFromFuture with the supplied |response_method|.
+  Additionally mock out YouCompleteMe's FiletypeCompleterExistsForFiletype
+  method to return the supplied |native_filetype_completer| parameter, rather
+  than querying the server'''
     
     
-def download_to_cache(url, local_name=None):
-    if local_name is None:
-        local_name = url.split('/')[-1]
-    filename = os.path.join(TMPDIR, local_name)
-    if not os.path.exists(filename):
-        data = urllib.urlopen(url).read()
-        with open(filename, 'wb') as f:
-            f.write(data)
-    return filename
+  def ShowDetailedDiagnostic( self ):
+    detailed_diagnostic = BaseRequest().PostDataToHandler(
+        BuildRequestData(), 'detailed_diagnostic' )
+    
+    
+def _MockGetBufferVariable( buffer_number, option ):
+  for vim_buffer in VIM_MOCK.buffers:
+    if vim_buffer.number == buffer_number:
+      if option == '&mod':
+        return vim_buffer.modified
+      if option == '&ft':
+        return vim_buffer.filetype
+      if option == 'changedtick':
+        return vim_buffer.changedtick
+      if option == '&bh':
+        return vim_buffer.bufhidden
+      return ''
+  return ''
+    
+      vim_command.assert_has_exact_calls( [
+    call( '12split {0}'.format( __file__ ) ),
+    call( 'exec '
+          ''au BufEnter <buffer> :silent! checktime {0}''.format( __file__ ) ),
+    call( 'silent! normal! Gzz' ),
+    call( 'silent! wincmd p' )
+  ] )
+    
+    
+def GetCurrentBufferFilepath():
+  return GetBufferFilepath( vim.current.buffer )
+    
+      return FilterLevel
+    
+    
+GENERIC_RESPONSE = {
+  'clang': {
+    'has_support': True,
+    'version': 'Clang version'
+  },
+  'completer': {
+    'items': [
+      {
+        'key': 'key',
+        'value': 'value'
+      }
+    ],
+    'name': 'Completer name',
+    'servers': [
+      {
+        'address': '127.0.0.1',
+        'executable': '/path/to/executable',
+        'extras': [
+          {
+            'key': 'key',
+            'value': 'value'
+          }
+        ],
+        'is_running': True,
+        'logfiles': [
+          '/path/to/stdout/logfile',
+          '/path/to/stderr/logfile'
+        ],
+        'name': 'Server name',
+        'pid': 12345,
+        'port': 1234
+      }
+    ]
+  },
+  'extra_conf': {
+    'is_loaded': False,
+    'path': '/path/to/extra/conf'
+  },
+  'python': {
+    'executable': '/path/to/python/interpreter',
+    'version': 'Python version'
+  }
+}
+    
+    
+def ExtractKeywordsFromGroup_KeywordWithoutNextgroup_test():
+  assert_that( syntax_parse._ExtractKeywordsFromGroup(
+                 syntax_parse.SyntaxGroup( '', [
+                   'skipempty foo bar',
+                   'zoo goo',
+                 ] ) ),
+               contains_inanyorder( 'skipempty', 'foo', 'bar', 'zoo', 'goo' ) )
