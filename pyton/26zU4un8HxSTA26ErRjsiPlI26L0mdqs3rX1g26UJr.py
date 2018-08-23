@@ -1,76 +1,78 @@
 
         
-                raise NotImplementedError
+        
+class _BenchServer(object):
     
+            path = self._schemes[scheme]
+        try:
+            dhcls = load_object(path)
+            dh = dhcls(self._crawler.settings)
+        except NotConfigured as ex:
+            self._notconfigured[scheme] = str(ex)
+            return None
+        except Exception as ex:
+            logger.error('Loading '%(clspath)s' for scheme '%(scheme)s'',
+                         {'clspath': path, 'scheme': scheme},
+                         exc_info=True,  extra={'crawler': self._crawler})
+            self._notconfigured[scheme] = str(ex)
+            return None
+        else:
+            self._handlers[scheme] = dh
+        return self._handlers[scheme]
     
-        ANTLR generates code that throws exceptions upon recognition error and
-    also generates code to catch these exceptions in each rule.  If you
-    want to quit upon first error, you can turn off the automatic error
-    handling mechanism using rulecatch action, but you still need to
-    override methods mismatch and recoverFromMismatchSet.
+        class _v20_S3Connection(S3Connection):
+        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
+        def _mexe(self, http_request, *args, **kwargs):
+            http_request.authorize(connection=self)
+            return http_request.headers
     
-        @classmethod
-    def __get_test_directory(self):
+            # set Content-Length based len of body
+        if self.body is not None:
+            self.headers['Content-Length'] = len(self.body)
+            # just in case a broken http/1.1 decides to keep connection alive
+            self.headers.setdefault('Connection', 'close')
+        # Content-Length must be specified in POST method even with no body
+        elif self.method == b'POST':
+            self.headers['Content-Length'] = 0
+    
+        def _has_ajax_crawlable_variant(self, response):
         '''
-        Get the temporary directory for the tests.
+        Return True if a page without hash fragment could be 'AJAX crawlable'
+        according to https://developers.google.com/webmasters/ajax-crawling/docs/getting-started.
         '''
-        self.test_dir = os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), 'test_command')
+        body = response.text[:self.lookup_bytes]
+        return _has_ajaxcrawlable_meta(body)
     
-        def test_items_recoil(self):
-        with ObjectPool(self.sample_queue, True) as pool:
-            self.assertEqual(pool, 'first')
-        self.assertTrue(self.sample_queue.get() == 'second')
-        self.assertFalse(self.sample_queue.empty())
-        self.assertTrue(self.sample_queue.get() == 'first')
-        self.assertTrue(self.sample_queue.empty())
-    
-        def test_display_current_time_at_midnight(self):
-        class_under_test = TimeDisplay()
-        expected_time = '24:01'
-        result = class_under_test.get_current_time_as_as_html_fragment()
-        self.assertEqual(result, expected_time)
-'''
-    
-    ### OUTPUT ###
-# executed method 2!
-# Value x1
-# Value x2
-# executed method 1!
+        def process_request(self, request, spider):
+        if self.user_agent:
+            request.headers.setdefault(b'User-Agent', self.user_agent)
 
     
-        # Loop over each face found in the frame to see if it's someone we know.
-    for face_encoding in face_encodings:
-        # See if the face is a match for the known face(s)
-        match = face_recognition.compare_faces([obama_face_encoding], face_encoding)
-        name = '<Unknown Person>'
+    ##
+# imaginary tree navigation type; traverse 'get child' link
+DOWN = 2
+##
+#imaginary tree navigation type; finish with a child list
+UP = 3
     
-    print('I found {} face(s) in this photograph.'.format(len(face_locations)))
+    # The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+#
+# The short X.Y version.
+version = u'0'
+# The full version, including alpha/beta/rc tags.
+release = u'0'
     
-    while True:
-    # Grab a single frame of video
-    ret, frame = input_movie.read()
-    frame_number += 1
+            self.vhost1b = VirtualHost(
+            'filep', 'vh_path', set([self.addr1]), False, False, 'localhost')
     
-    # Load a sample picture and learn how to recognize it.
-obama_image = face_recognition.load_image_file('obama.jpg')
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
     
-        if len(unknown_face_encodings) > 0:
-        face_found = True
-        # See if the first face in the uploaded image matches the known face of Obama
-        match_results = face_recognition.compare_faces([known_face_encoding], unknown_face_encodings[0])
-        if match_results[0]:
-            is_obama = True
+# -- Options for manual page output ---------------------------------------
     
-    # If true, SmartyPants will be used to convert quotes and dashes to
-# typographically correct entities.
-#html_use_smartypants = True
-    
-    with open('README.rst') as readme_file:
-    readme = readme_file.read()
-    
-        :param rect: a dlib 'rect' object
-    :return: a plain tuple representation of the rect in (top, right, bottom, left) order
-    '''
-    return rect.top(), rect.right(), rect.bottom(), rect.left()
+    # The language for content autogenerated by Sphinx. Refer to documentation
+# for a list of supported languages.
+#
+# This is also used if you do content translation via gettext catalogs.
+# Usually you set 'language' from the command line for these cases.
+language = 'en'
