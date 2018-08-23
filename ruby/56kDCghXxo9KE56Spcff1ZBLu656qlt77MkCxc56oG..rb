@@ -1,24 +1,73 @@
 
         
-              it 'splits correctly' do
-        expected = [
-          'One',
-          'Two',
-          'Three',
-          'Four Token',
-          'Or',
-          'Newlines',
-          'Everywhere'
-        ]
-        expect(generator.split_keywords(keywords)).to eq(expected)
+              def serialize(value)
+        return if value.nil?
+        unless default_value?(value)
+          super coder.dump(value)
+        end
+      end
+    
+      def setup
+    super
+    @association_name = :autosaved_parrots
+    @associated_model_name = :parrot
+    @habtm = true
+    
+    class DependentFirm < Company
+  has_one :account, foreign_key: 'firm_id', dependent: :nullify
+  has_many :companies, foreign_key: 'client_of', dependent: :nullify
+  has_one :company, foreign_key: 'client_of', dependent: :nullify
+end
+    
+      test 'invalid action on Channel' do
+    assert_logged('Unable to process ActionCable::Channel::BaseTest::ChatChannel#invalid_action') do
+      @channel.perform_action 'action' => :invalid_action
+    end
+  end
+    
+      test 'disallow unknown args' do
+    [ 'send_updates', Object.new, nil ].each do |invalid|
+      e = assert_raise ArgumentError do
+        ChatChannel.periodically invalid, every: 1
+      end
+      assert_match(/Expected a Symbol/, e.message)
+    end
+  end
+    
+        thread = server.run
+    
+          %w[subscribe unsubscribe].each do |method|
+        pubsub_call = server.pubsub.class.class_variable_get '@@#{method}_called'
+    
+      private
+    def open_connection
+      env = Rack::MockRequest.env_for '/test',
+        'HTTP_CONNECTION' => 'upgrade', 'HTTP_UPGRADE' => 'websocket',
+        'HTTP_HOST' => 'localhost', 'HTTP_ORIGIN' => 'http://rubyonrails.com'
+      env['rack.hijack'] = -> { env['rack.hijack_io'] = StringIO.new }
+    
+          # Topic may be hard deleted due to spam, no point complaining
+      # we would have to look at the topics table id sequence to find cases
+      # where this was called with an invalid id, no point really
+      return unless topic.present?
+    
+      def cache_fragment(name)
+    ApplicationSerializer.fragment_cache[name] ||= yield
+  end
+end
+
+    
+            key.revoke!
       end
     end
   end
 end
 
     
-            expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=/tmp/cloc.xml')
-      end
+          it 'does set the output directory' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            cloc(output_directory: '/tmp')
+          end').runner.execute(:test)
     
         context 'Mercurial repository' do
       before do
@@ -28,99 +77,26 @@ end
         expect(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_hg?).and_return(true)
       end
     
-        begin
-      raise '#{short_type} does not support dry-run' unless can_dry_run?
-      readonly!
-      @dry_run_started_at = Time.zone.now
-      @dry_run_logger.info('Dry Run started')
-      if event
-        raise 'This agent cannot receive an event!' unless can_receive_events?
-        receive([event])
-      else
-        check
-      end
-      @dry_run_logger.info('Dry Run finished')
-    rescue => e
-      @dry_run_logger.info('Dry Run failed')
-      error 'Exception during dry-run. #{e.message}: #{e.backtrace.join('\n')}'
-    end
+    Liquid::Template.register_tag('gist', Jekyll::GistTag)
+Liquid::Template.register_tag('gistnocache', Jekyll::GistTagNoCache)
+
     
-        def form_configurable_attributes
-      form_configurable_fields.keys
+    module Jekyll
+    
+    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
+
+    
+    desc 'Generates a dummy app for testing for every Spree engine'
+task :test_app do
+  SPREE_GEMS.each do |gem_name|
+    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
+      sh 'rake test_app'
     end
   end
 end
-
     
-      module SortableTableHelper
-    # :call-seq:
-    #   sortable_column(attribute, default_direction = 'desc', name: attribute.humanize)
-    def sortable_column(attribute, default_direction = nil, options = nil)
-      if options.nil? && (options = Hash.try_convert(default_direction))
-        default_direction = nil
-      end
-      default_direction ||= 'desc'
-      options ||= {}
-      name = options[:name] || attribute.humanize
-      selected = @table_sort_info[:attribute].to_s == attribute
-      if selected
-        direction = @table_sort_info[:direction]
-        new_direction = direction.to_s == 'desc' ? 'asc' : 'desc'
-        classes = 'selected #{direction}'
-      else
-        classes = ''
-        new_direction = default_direction
-      end
-      link_to(name, url_for(sort: '#{attribute}.#{new_direction}'), class: classes)
-    end
-  end
-end
-
-    
-        def unknown_action!(action)
-      raise NotImplementedError, <<-MESSAGE.strip_heredoc
-        'Devise doesn't know how to sanitize parameters for '#{action}''.
-        If you want to define a new set of parameters to be sanitized use the
-        `permit` method first:
-    
-    module Devise
-  module Controllers
-    # A module that may be optionally included in a controller in order
-    # to provide remember me behavior. Useful when signing in is done
-    # through a callback, like in OmniAuth.
-    module Rememberable
-      # Return default cookie values retrieved from session options.
-      def self.cookie_values
-        Rails.configuration.session_options.slice(:path, :domain, :secure)
-      end
-    
-            # This returns all the config classes for the various providers.
-        #
-        # @return [Hash]
-        def provider_configs
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.configs[:provider])
-            end
-          end
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
         end
-    
-          class << self
-        # Mark a given block of code as a 'busy' block of code, which will
-        # register a SIGINT handler for the duration of the block. When a
-        # SIGINT occurs, the `sig_callback` proc will be called. It is up
-        # to the callback to behave properly and exit the application.
-        def busy(sig_callback)
-          register(sig_callback)
-          return yield
-        ensure
-          unregister(sig_callback)
-        end
-    
-              @env.action_runner.run(Vagrant::Action.action_box_remove, {
-            box_name:     argv[0],
-            box_provider: options[:provider],
-            box_version:  options[:version],
-            force_confirm_box_remove: options[:force],
-            box_remove_all_versions: options[:all],
-          })
