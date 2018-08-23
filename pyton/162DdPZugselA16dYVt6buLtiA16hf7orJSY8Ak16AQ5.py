@@ -1,198 +1,155 @@
 
         
-            @property
-    def config(self):
-        if not hasattr(self, '_config'):
-            self._config = Config(directory=self.config_dir)
-            if self._config.is_new():
-                self._config.save()
-            else:
-                self._config.load()
-        return self._config
+        
+class MockMaster(object):
+    
+        self.setUp()
+    builder = bulk_component.BulkFeatureIdExtractorComponentBuilder(
+        self.master, component_spec)
+    builder.network = AssertPreCreateBeforeCreateNetwork(builder, self)
+    builder.build_greedy_inference(
+        component.MasterState(['foo', 'bar'], 2), self.network_states)
+    
+          labels = digraph_ops.LabelPotentialsFromTokenPairs(sources, targets,
+                                                         weights)
     
     
-def test_unicode_digest_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--auth-type=digest',
-         '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
+@mock.patch('httpie.input.AuthCredentials._getpass',
+            new=lambda self, prompt: 'UNEXPECTED_PROMPT_RESPONSE')
+def test_auth_plugin_prompt_password_false(httpbin):
+    
+        def __init__(self, env=Environment(), **kwargs):
+    
+            Use `self.raw_auth` to access the raw value passed through
+        `--auth, -a`.
+    
+        '''
+)
+positional.add_argument(
+    'url',
+    metavar='URL',
+    help='''
+    The scheme defaults to 'http://' if the URL does not include one.
+    (You can override this with: --default-scheme=https)
+    
+    # FIXME:
+# We test against a local httpbin instance which uses a self-signed cert.
+# Requests without --verify=<CA_BUNDLE> will fail with a verification error.
+# See: https://github.com/kevin1024/pytest-httpbin#https-support
+CA_BUNDLE = pytest_httpbin.certs.where()
+    
+    
+def humanize_bytes(n, precision=2):
+    # Author: Doug Latornell
+    # Licence: MIT
+    # URL: http://code.activestate.com/recipes/577081/
+    '''Return a humanized string representation of a number of bytes.
+    
+        def test_download_interrupted(self, httpbin_both):
+        devnull = open(os.devnull, 'w')
+        downloader = Downloader(output_file=devnull, progress_file=devnull)
+        downloader.start(Response(
+            url=httpbin_both.url + '/',
+            headers={'Content-Length': 5}
+        ))
+        downloader.chunk_downloaded(b'1234')
+        downloader.finish()
+        assert downloader.interrupted
 
     
-        # The URL prefix the adapter should be mount to.
-    prefix = None
+        def test_verbose_implies_all(self, httpbin):
+        r = http('--verbose', '--follow', httpbin + '/redirect/1')
+        assert 'GET /redirect/1 HTTP/1.1' in r
+        assert 'HTTP/1.1 302 FOUND' in r
+        assert 'GET /get HTTP/1.1' in r
+        assert HTTP_OK in r
     
+            String:                    '#4e9a06',        # class: 's'
+        String.Backtick:           '#4e9a06',        # class: 'sb'
+        String.Char:               '#4e9a06',        # class: 'sc'
+        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
+        String.Double:             '#4e9a06',        # class: 's2'
+        String.Escape:             '#4e9a06',        # class: 'se'
+        String.Heredoc:            '#4e9a06',        # class: 'sh'
+        String.Interpol:           '#4e9a06',        # class: 'si'
+        String.Other:              '#4e9a06',        # class: 'sx'
+        String.Regex:              '#4e9a06',        # class: 'sr'
+        String.Single:             '#4e9a06',        # class: 's1'
+        String.Symbol:             '#4e9a06',        # class: 'ss'
+    
+            self.cert_verify(conn, request.url, verify, cert)
+        url = self.request_url(request, proxies)
+        self.add_headers(request, stream=stream, timeout=timeout, verify=verify, cert=cert, proxies=proxies)
+    
+        # OPENSSL_VERSION_NUMBER doesn't exist in the Python 2.6 ssl module.
+    system_ssl = getattr(ssl, 'OPENSSL_VERSION_NUMBER', None)
+    system_ssl_info = {
+        'version': '%x' % system_ssl if system_ssl is not None else ''
+    }
+    
+            The encoding of the response content is determined based solely on HTTP
+        headers, following RFC 2616 to the letter. If you can take advantage of
+        non-HTTP knowledge to make a better guess at the encoding, you should
+        set ``r.encoding`` appropriately before accessing this property.
         '''
-    abbrevs = [
-        (1 << 50, 'PB'),
-        (1 << 40, 'TB'),
-        (1 << 30, 'GB'),
-        (1 << 20, 'MB'),
-        (1 << 10, 'kB'),
-        (1, 'B')
+    
+            # Resolve redirects if allowed.
+        history = [resp for resp in gen] if allow_redirects else []
+    
+    # (c) 2016 Red Hat, Inc.
+#
+# This file is part of Ansible
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
+'''CLI tool for starting new Shippable CI runs.'''
+    
+        terminal_stdout_re = [
+        re.compile(r'[\r\n]?<.+>(?:\s*)$'),
+        re.compile(r'[\r\n]?\[.+\](?:\s*)$'),
     ]
     
-        # 128+2 SIGINT <http://www.tldp.org/LDP/abs/html/exitcodes.html>
-    ERROR_CTRL_C = 130
+    from ansible.plugins.terminal import TerminalBase
+from ansible.errors import AnsibleConnectionFailure
+    
+            task_data = self._task_data[task_uuid]
+    
+    from sklearn.utils import check_random_state
+from sklearn.metrics.pairwise import pairwise_distances
+from sklearn.metrics.pairwise import pairwise_kernels
+    
+    n_samples = np.logspace(.5, 3, 9)
+n_features = np.logspace(1, 3.5, 7)
+N_samples, N_features = np.meshgrid(n_samples,
+                                    n_features)
+scikits_time = np.zeros(N_samples.shape)
+scipy_time = np.zeros(N_samples.shape)
     
     
-def test_POST_JSON_data(httpbin_both):
-    r = http('POST', httpbin_both + '/post', 'foo=bar')
-    assert HTTP_OK in r
-    assert r.json['json']['foo'] == 'bar'
+if not os.path.exists(TRAIN_FOLDER) or not os.path.exists(TEST_FOLDER):
     
-            parser.add_option_group(group)
+        # import matplotlib.pyplot as plt
+    # plt.matshow(cm)
+    # plt.show()
+
     
-            self.factory.noPage(\
-                defer.TimeoutError('Getting %s took longer than %s seconds.' % \
-                (self.factory.url, self.factory.timeout)))
+    # Train uncalibrated random forest classifier on whole train and validation
+# data and evaluate on test data
+clf = RandomForestClassifier(n_estimators=25)
+clf.fit(X_train_valid, y_train_valid)
+clf_probs = clf.predict_proba(X_test)
+score = log_loss(y_test, clf_probs)
     
-            # scrapy already handles #! links properly
-        ajax_crawl_request = request.replace(url=request.url+'#!')
-        logger.debug('Downloading AJAX crawlable %(ajax_crawl_request)s instead of %(request)s',
-                     {'ajax_crawl_request': ajax_crawl_request, 'request': request},
-                     extra={'spider': spider})
-    
-    from scrapy import signals
-    
-        @classmethod
-    def from_crawler(cls, crawler):
-        o = cls(crawler.settings['USER_AGENT'])
-        crawler.signals.connect(o.spider_opened, signal=signals.spider_opened)
-        return o
-    
-    '''
-Logging package for Python. Based on PEP 282 and comments thereto in
-comp.lang.python.
-    
-        def test_invalid_cb_for_4bytes_seq(self):
-        '''
-        Test that an 'invalid continuation byte' error is raised when the
-        continuation byte(s) of a 4-bytes sequence are invalid.  When
-        errors='replace',the start byte and all the following valid
-        continuation bytes are replaced with a single U+FFFD, and all the bytes
-        starting from the first invalid continuation bytes (included) are
-        handled separately.
-        E.g. in the sequence <E1 80 41>, E1 is the start byte of a 3-bytes
-        sequence, 80 is a valid continuation byte, but 41 is not a valid cb
-        because it's the ASCII letter 'A'.
-        Note: when the start byte is E0 or ED, the valid ranges for the first
-        continuation byte are limited to A0..BF and 80..9F respectively.
-        However, when the start byte is ED, Python 2 considers all the bytes
-        in range 80..BF valid.  This is fixed in Python 3.
-        '''
-        FFFD = '\ufffd'
-        FFFDx2 = FFFD * 2
-        sequences = [
-            ('F0 00', FFFD+'\x00'), ('F0 7F', FFFD+'\x7f'), ('F0 80', FFFDx2),
-            ('F0 8F', FFFDx2), ('F0 C0', FFFDx2), ('F0 FF', FFFDx2),
-            ('F0 90 00', FFFD+'\x00'), ('F0 90 7F', FFFD+'\x7f'),
-            ('F0 90 C0', FFFDx2), ('F0 90 FF', FFFDx2),
-            ('F0 BF 00', FFFD+'\x00'), ('F0 BF 7F', FFFD+'\x7f'),
-            ('F0 BF C0', FFFDx2), ('F0 BF FF', FFFDx2),
-            ('F0 90 80 00', FFFD+'\x00'), ('F0 90 80 7F', FFFD+'\x7f'),
-            ('F0 90 80 C0', FFFDx2), ('F0 90 80 FF', FFFDx2),
-            ('F0 90 BF 00', FFFD+'\x00'), ('F0 90 BF 7F', FFFD+'\x7f'),
-            ('F0 90 BF C0', FFFDx2), ('F0 90 BF FF', FFFDx2),
-            ('F0 BF 80 00', FFFD+'\x00'), ('F0 BF 80 7F', FFFD+'\x7f'),
-            ('F0 BF 80 C0', FFFDx2), ('F0 BF 80 FF', FFFDx2),
-            ('F0 BF BF 00', FFFD+'\x00'), ('F0 BF BF 7F', FFFD+'\x7f'),
-            ('F0 BF BF C0', FFFDx2), ('F0 BF BF FF', FFFDx2),
-            ('F1 00', FFFD+'\x00'), ('F1 7F', FFFD+'\x7f'), ('F1 C0', FFFDx2),
-            ('F1 FF', FFFDx2), ('F1 80 00', FFFD+'\x00'),
-            ('F1 80 7F', FFFD+'\x7f'), ('F1 80 C0', FFFDx2),
-            ('F1 80 FF', FFFDx2), ('F1 BF 00', FFFD+'\x00'),
-            ('F1 BF 7F', FFFD+'\x7f'), ('F1 BF C0', FFFDx2),
-            ('F1 BF FF', FFFDx2), ('F1 80 80 00', FFFD+'\x00'),
-            ('F1 80 80 7F', FFFD+'\x7f'), ('F1 80 80 C0', FFFDx2),
-            ('F1 80 80 FF', FFFDx2), ('F1 80 BF 00', FFFD+'\x00'),
-            ('F1 80 BF 7F', FFFD+'\x7f'), ('F1 80 BF C0', FFFDx2),
-            ('F1 80 BF FF', FFFDx2), ('F1 BF 80 00', FFFD+'\x00'),
-            ('F1 BF 80 7F', FFFD+'\x7f'), ('F1 BF 80 C0', FFFDx2),
-            ('F1 BF 80 FF', FFFDx2), ('F1 BF BF 00', FFFD+'\x00'),
-            ('F1 BF BF 7F', FFFD+'\x7f'), ('F1 BF BF C0', FFFDx2),
-            ('F1 BF BF FF', FFFDx2), ('F3 00', FFFD+'\x00'),
-            ('F3 7F', FFFD+'\x7f'), ('F3 C0', FFFDx2), ('F3 FF', FFFDx2),
-            ('F3 80 00', FFFD+'\x00'), ('F3 80 7F', FFFD+'\x7f'),
-            ('F3 80 C0', FFFDx2), ('F3 80 FF', FFFDx2),
-            ('F3 BF 00', FFFD+'\x00'), ('F3 BF 7F', FFFD+'\x7f'),
-            ('F3 BF C0', FFFDx2), ('F3 BF FF', FFFDx2),
-            ('F3 80 80 00', FFFD+'\x00'), ('F3 80 80 7F', FFFD+'\x7f'),
-            ('F3 80 80 C0', FFFDx2), ('F3 80 80 FF', FFFDx2),
-            ('F3 80 BF 00', FFFD+'\x00'), ('F3 80 BF 7F', FFFD+'\x7f'),
-            ('F3 80 BF C0', FFFDx2), ('F3 80 BF FF', FFFDx2),
-            ('F3 BF 80 00', FFFD+'\x00'), ('F3 BF 80 7F', FFFD+'\x7f'),
-            ('F3 BF 80 C0', FFFDx2), ('F3 BF 80 FF', FFFDx2),
-            ('F3 BF BF 00', FFFD+'\x00'), ('F3 BF BF 7F', FFFD+'\x7f'),
-            ('F3 BF BF C0', FFFDx2), ('F3 BF BF FF', FFFDx2),
-            ('F4 00', FFFD+'\x00'), ('F4 7F', FFFD+'\x7f'), ('F4 90', FFFDx2),
-            ('F4 BF', FFFDx2), ('F4 C0', FFFDx2), ('F4 FF', FFFDx2),
-            ('F4 80 00', FFFD+'\x00'), ('F4 80 7F', FFFD+'\x7f'),
-            ('F4 80 C0', FFFDx2), ('F4 80 FF', FFFDx2),
-            ('F4 8F 00', FFFD+'\x00'), ('F4 8F 7F', FFFD+'\x7f'),
-            ('F4 8F C0', FFFDx2), ('F4 8F FF', FFFDx2),
-            ('F4 80 80 00', FFFD+'\x00'), ('F4 80 80 7F', FFFD+'\x7f'),
-            ('F4 80 80 C0', FFFDx2), ('F4 80 80 FF', FFFDx2),
-            ('F4 80 BF 00', FFFD+'\x00'), ('F4 80 BF 7F', FFFD+'\x7f'),
-            ('F4 80 BF C0', FFFDx2), ('F4 80 BF FF', FFFDx2),
-            ('F4 8F 80 00', FFFD+'\x00'), ('F4 8F 80 7F', FFFD+'\x7f'),
-            ('F4 8F 80 C0', FFFDx2), ('F4 8F 80 FF', FFFDx2),
-            ('F4 8F BF 00', FFFD+'\x00'), ('F4 8F BF 7F', FFFD+'\x7f'),
-            ('F4 8F BF C0', FFFDx2), ('F4 8F BF FF', FFFDx2)
-        ]
-        for seq, res in sequences:
-            self.assertCorrectUTF8Decoding(bytes.fromhex(seq), res,
-                                           'invalid continuation byte')
-    
-        def commit(self, db):
-        from tempfile import mktemp
-        filename = mktemp()
-        FCICreate(filename, self.files)
-        add_data(db, 'Media',
-                [(1, self.index, None, '#'+self.name, None, None)])
-        add_stream(db, self.name, filename)
-        os.unlink(filename)
-        db.Commit()
-    
-        def testPeekBytesIO(self):
-        with BytesIO(self.DATA) as bio:
-            with BZ2File(bio) as bz2f:
-                pdata = bz2f.peek()
-                self.assertNotEqual(len(pdata), 0)
-                self.assertTrue(self.TEXT.startswith(pdata))
-                self.assertEqual(bz2f.read(), self.TEXT)
-    
-        def test_field_order_for_named_tuples(self):
-        Person = namedtuple('Person', ['nickname', 'firstname', 'agegroup'])
-        s = pydoc.render_doc(Person)
-        self.assertLess(s.index('nickname'), s.index('firstname'))
-        self.assertLess(s.index('firstname'), s.index('agegroup'))
-    
-            # Test lookup leaks [SF bug 572567]
-        if hasattr(gc, 'get_objects'):
-            class G(object):
-                def __eq__(self, other):
-                    return False
-            g = G()
-            orig_objects = len(gc.get_objects())
-            for i in range(10):
-                g==g
-            new_objects = len(gc.get_objects())
-            self.assertEqual(orig_objects, new_objects)
-    
-    Note: iter(d.keys()) could be written as iter(d) but since the
-original d.iterkeys() was also redundant we don't fix this.  And there
-are (rare) contexts where it makes a difference (e.g. when passing it
-as an argument to a function that introspects the argument).
-'''
-    
-        def test_async_with(self):
-        self.validate('''async def foo():
-                             async for a in b: pass''')
-    
-        def test_case_sha512_2(self):
-        self.check('sha512',
-                   b'abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmn'+
-                   b'hijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu',
-          '8e959b75dae313da8cf4f72814fc143f8f7779c6eb9f7fa17299aeadb6889018'+
-          '501d289e4900f7e4331b99dec4b5433ac7d329eeb6dd26545e96e55b874be909')
+    plt.axis('tight')
+plt.axis('off')
+plt.suptitle('Ground truth', size=20)
