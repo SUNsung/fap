@@ -1,80 +1,100 @@
 
         
-        import pytest
-from requests.compat import urljoin
+            if not args.test:
+        response = requests.get(url, headers=headers)
     
-        @possible_keys
-    def test_delitem(self, key):
-        del self.case_insensitive_dict[key]
-        assert key not in self.case_insensitive_dict
+        def test(self):
+        ajvars = AnsibleJ2Vars(None, None)
+        print(ajvars)
     
-        def test_text_response(self):
-        '''the text_response_server sends the given text'''
-        server = Server.text_response_server(
-            'HTTP/1.1 200 OK\r\n' +
-            'Content-Length: 6\r\n' +
-            '\r\nroflol'
-        )
+        if not opts and not args:
+        # Display help.
+        print(_help)
+        # Enter GUI mode.
+        #from .gui import gui_main
+        #gui_main()
+    else:
+        conf = {}
+        for opt, arg in opts:
+            if opt in ('-h', '--help'):
+                # Display help.
+                print(_help)
     
-    # A dictionary with options for the search language support, empty by default.
-# Now only 'ja' uses this config value
-#html_search_options = {'type': 'default'}
+    site_info = '花瓣 (Huaban)'
     
-    ESTIMATORS = {
-    'dummy': DummyClassifier(),
-    'random_forest': RandomForestClassifier(n_estimators=100,
-                                            max_features='sqrt',
-                                            min_samples_split=10),
-    'extra_trees': ExtraTreesClassifier(n_estimators=100,
-                                        max_features='sqrt',
-                                        min_samples_split=10),
-    'logistic_regression': LogisticRegression(),
-    'naive_bayes': MultinomialNB(),
-    'adaboost': AdaBoostClassifier(n_estimators=10),
-}
+            for s in self.stream_types:
+            quality = s['id']
+            src = match1(content,
+                         r'src: '([^']+)', 'data-res': '%s'' % quality)
+            if src is not None:
+                url = 'http://en.musicplayon.com%s' % src
+                self.streams[quality] = {'url': url}
+    
+    def _worker(executor_reference, work_queue):
+    try:
+        while True:
+            work_item = work_queue.get(block=True)
+            if work_item is not None:
+                work_item.run()
+                continue
+            executor = executor_reference()
+            # Exit if:
+            #   - The interpreter is shutting down OR
+            #   - The executor that owns the worker has been collected OR
+            #   - The executor that owns the worker has been shutdown.
+            if _shutdown or executor is None or executor._shutdown:
+                # Notice other workers
+                work_queue.put(None)
+                return
+            del executor
+    except BaseException:
+        _base.LOGGER.critical('Exception in worker', exc_info=True)
+    
+        def _prime_executor(self):
+        # Make sure that the executor is ready to do work before running the
+        # tests. This should reduce the probability of timeouts in the tests.
+        futures = [self.executor.submit(time.sleep, 0.1)
+                   for _ in range(self.worker_count)]
     
     
-if __name__ == '__main__':
-    ###########################################################################
-    # Option parser
-    ###########################################################################
-    op = optparse.OptionParser()
-    op.add_option('--n-times',
-                  dest='n_times', default=5, type=int,
-                  help='Benchmark results are average over n_times experiments')
+def SendCommandRequest( arguments, completer, modifiers, extra_data = None ):
+  request = CommandRequest( arguments, completer, extra_data )
+  # This is a blocking call.
+  request.Start()
+  request.RunPostCommandActionsIfNeeded( modifiers )
+  return request.Response()
     
-    import os
-import tarfile
-from contextlib import closing
-try:
-    from urllib import urlopen
-except ImportError:
-    from urllib.request import urlopen
-    
-        in_exercise_region = False
+      for folder in os.listdir( DIR_OF_THIRD_PARTY ):
+    sys_path.insert( 0, os.path.realpath( os.path.join( DIR_OF_THIRD_PARTY,
+                                                        folder ) ) )
     
     
-class View(object):
-    '''Test docstring. '''
-    def __init__(self, root, controller):
-        f = Figure()
-        ax = f.add_subplot(111)
-        ax.set_xticks([])
-        ax.set_yticks([])
-        ax.set_xlim((x_min, x_max))
-        ax.set_ylim((y_min, y_max))
-        canvas = FigureCanvasTkAgg(f, master=root)
-        canvas.show()
-        canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
-        canvas._tkcanvas.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
-        canvas.mpl_connect('button_press_event', self.onclick)
-        toolbar = NavigationToolbar2TkAgg(canvas, root)
-        toolbar.update()
-        self.controllbar = ControllBar(root, controller)
-        self.f = f
-        self.ax = ax
-        self.canvas = canvas
-        self.controller = controller
-        self.contours = []
-        self.c_labels = None
-        self.plot_kernels()
+def ReplaceChunk_MultipleLinesToMoreMultipleLines_test():
+  result_buffer = VimBuffer( 'buffer', contents = [ 'aAa',
+                                                    'aBa',
+                                                    'aCa',
+                                                    'aDe' ] )
+  start, end = _BuildLocations( 2, 2, 3, 2 )
+  vimsupport.ReplaceChunk( start, end, 'Eb\nbFb\nbG', result_buffer )
+    
+    
+def FormatDebugInfoResponse_Completer_ServerRunningWithoutHost_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'address': None,
+    'port': None
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name running\n'
+      '  Server name process ID: 12345\n'
+      '  Server name executable: /path/to/executable\n'
+      '  Server name logfiles:\n'
+      '    /path/to/stdout/logfile\n'
+      '    /path/to/stderr/logfile\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
