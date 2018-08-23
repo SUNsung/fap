@@ -1,195 +1,241 @@
 
         
+            data_train = fetch_20newsgroups_vectorized(subset='train')
+    data_test = fetch_20newsgroups_vectorized(subset='test')
+    X_train = check_array(data_train.data, dtype=np.float32,
+                          accept_sparse='csc')
+    X_test = check_array(data_test.data, dtype=np.float32, accept_sparse='csr')
+    y_train = data_train.target
+    y_test = data_test.target
+    
+        for ns in n_samples:
+        for nf in n_features:
+            it += 1
+            print('==================')
+            print('Iteration %s of %s' % (it, max(len(n_samples),
+                                          len(n_features))))
+            print('==================')
+            n_informative = nf // 10
+            X, Y, coef_ = make_regression(n_samples=ns, n_features=nf,
+                                          n_informative=n_informative,
+                                          noise=0.1, coef=True)
+    
+        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
+    plt.plot(sample_sizes, one_core, label='one core')
+    plt.plot(sample_sizes, multi_core, label='multi core')
+    plt.xlabel('n_samples')
+    plt.ylabel('Time (s)')
+    plt.title('Parallel %s' % func.__name__)
+    plt.legend()
+    
+    plt.figure('scikit-learn Ward's method benchmark results')
+plt.imshow(np.log(ratio), aspect='auto', origin='lower')
+plt.colorbar()
+plt.contour(ratio, levels=[1, ], colors='k')
+plt.yticks(range(len(n_features)), n_features.astype(np.int))
+plt.ylabel('N features')
+plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
+plt.xlabel('N samples')
+plt.title('Scikit's time, in units of scipy time (log)')
+plt.show()
+
+    
+    from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import Perceptron
+from sklearn.pipeline import Pipeline
+from sklearn.datasets import load_files
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+    
+    Sentiment analysis can be casted as a binary text classification problem,
+that is fitting a linear classifier on features extracted from the text
+of the user messages so as to guess wether the opinion of the author is
+positive or negative.
+    
+    plt.grid('off')
+for x in [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]:
+    plt.plot([0, x], [x, 0], 'k', alpha=0.2)
+    plt.plot([0, 0 + (1-x)/2], [x, x + (1-x)/2], 'k', alpha=0.2)
+    plt.plot([x, x + (1-x)/2], [0, 0 + (1-x)/2], 'k', alpha=0.2)
+    
+    # [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    
+        def extractInformationFromTreeNodeStream(self, nodes):
+        from antlr3.tree import Tree, CommonTree
+        from antlr3.tokens import CommonToken
         
-def expect_value(self, got, expected, field):
-    if isinstance(expected, compat_str) and expected.startswith('re:'):
-        match_str = expected[len('re:'):]
-        match_rex = re.compile(match_str)
-    
-        def test_youtube_matching(self):
-        self.assertTrue(YoutubeIE.suitable('PLtS2H6bU1M'))
-        self.assertFalse(YoutubeIE.suitable('https://www.youtube.com/watch?v=AV6J6_AeFEQ&playnext=1&list=PL4023E734DA416012'))  # 668
-        self.assertMatch('http://youtu.be/BaW_jenozKc', ['youtube'])
-        self.assertMatch('http://www.youtube.com/v/BaW_jenozKc', ['youtube'])
-        self.assertMatch('https://youtube.googleapis.com/v/BaW_jenozKc', ['youtube'])
-        self.assertMatch('http://www.cleanvideosearch.com/media/action/yt/watch?videoId=8v_4O44sfjM', ['youtube'])
-    
-        def test_secondary_proxy_http(self):
-        params = self._check_params(['secondary_proxy', 'secondary_server_ip'])
-        if params is None:
-            return
-        ydl = FakeYDL()
-        req = compat_urllib_request.Request('http://yt-dl.org/ip')
-        req.add_header('Ytdl-request-proxy', params['secondary_proxy'])
-        self.assertEqual(
-            ydl.urlopen(req).read().decode('utf-8'),
-            params['secondary_server_ip'])
-    
-    
-class AcademicEarthCourseIE(InfoExtractor):
-    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
-    IE_NAME = 'AcademicEarth:Course'
-    _TEST = {
-        'url': 'http://academicearth.org/playlists/laws-of-nature/',
-        'info_dict': {
-            'id': 'laws-of-nature',
-            'title': 'Laws of Nature',
-            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
-        },
-        'playlist_count': 3,
-    }
-    
-            title = self._search_regex(
-            r'<title>(.+?)\s*\|\s*.+?</title>', webpage, 'video title')
+        self.node = nodes.LT(1)
+        adaptor = nodes.adaptor
+        payload = adaptor.getToken(self.node)
+        if payload is not None:
+            self.token = payload
+            if payload.line <= 0:
+                # imaginary node; no line/pos info; scan backwards
+                i = -1
+                priorNode = nodes.LT(i)
+                while priorNode is not None:
+                    priorPayload = adaptor.getToken(priorNode)
+                    if priorPayload is not None and priorPayload.line > 0:
+                        # we found the most recent real line / pos info
+                        self.line = priorPayload.line
+                        self.charPositionInLine = priorPayload.charPositionInLine
+                        self.approximateLineInfo = True
+                        break
+                    
+                    i -= 1
+                    priorNode = nodes.LT(i)
+                    
+            else: # node created from real token
+                self.line = payload.line
+                self.charPositionInLine = payload.charPositionInLine
+                
+        elif isinstance(self.node, Tree):
+            self.line = self.node.line
+            self.charPositionInLine = self.node.charPositionInLine
+            if isinstance(self.node, CommonTree):
+                self.token = self.node.token
     
     
-class CNNIE(TurnerBaseIE):
-    _VALID_URL = r'''(?x)https?://(?:(?P<sub_domain>edition|www|money)\.)?cnn\.com/(?:video/(?:data/.+?|\?)/)?videos?/
-        (?P<path>.+?/(?P<title>[^/]+?)(?:\.(?:[a-z\-]+)|(?=&)))'''
+class FailedPredicateException(RecognitionException):
+    '''@brief A semantic predicate failed during validation.
     
-    # TODO: response is the only one
+        @staticmethod
+    def get_streams_by_id(account_number, video_id):
+        '''
+        int, int->list
+        
+        Get the height of the videos.
+        
+        Since brightcove is using 3 kinds of links: rtmp, http and https,
+        we will be using the HTTPS one to make it secure.
+        
+        If somehow akamaihd.net is blocked by the Great Fucking Wall,
+        change the 'startswith https' to http.
+        '''
+        endpoint = 'https://edge.api.brightcove.com/playback/v1/accounts/{account_number}/videos/{video_id}'.format(account_number = account_number, video_id = video_id)
+        fake_header_id = fake_headers
+        #is this somehow related to the time? Magic....
+        fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
     
-    '''
-requests._internal_utils
-~~~~~~~~~~~~~~
+    from .theplatform import theplatform_download_by_pid
     
-        @pytest.fixture(autouse=True)
-    def setup(self):
-        '''LookupDict instance with 'bad_gateway' attribute.'''
-        self.lookup_dict = LookupDict('test')
-        self.lookup_dict.bad_gateway = 502
+    __all__ = ['ehow_download']
     
-        def test_server_finishes_when_no_connections(self):
-        '''the server thread exits even if there are no connections'''
-        server = Server.basic_response_server()
-        with server:
-            pass
-    
-    
-@pytest.mark.skipif(sys.version_info[:2] != (2,6), reason='Only run on Python 2.6')
-def test_system_ssl_py26():
-    '''OPENSSL_VERSION_NUMBER isn't provided in Python 2.6, verify we don't
-    blow up in this case.
-    '''
-    assert info()['system_ssl'] == {'version': ''}
-    
-            This should not be called from user code, and is only exposed for use
-        when subclassing the
-        :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`.
-    
-    
-class ChunkedEncodingError(RequestException):
-    '''The server declared chunked encoding but sent an invalid chunk.'''
-    
-        def digest_response_handler(sock):
-        # Respond to initial GET with a challenge.
-        request_content = consume_socket_content(sock, timeout=0.5)
-        assert request_content.startswith(b'GET / HTTP/1.1')
-        sock.send(text_401)
-    
-        Provide both the name and the version of the Python implementation
-    currently running. For example, on CPython 2.7.5 it will return
-    {'name': 'CPython', 'version': '2.7.5'}.
-    
-    # Syntax sugar.
-_ver = sys.version_info
-    
-        @property
-    def value(self):
-        if self[0].token_type == 'quoted-string':
-            return self[0].quoted_value
-        else:
-            return self[0].value
-    
-        def setUp(self):
-        self.file_name = support.TESTFN.lower()
-        self.file_path = FakePath(support.TESTFN)
-        self.addCleanup(support.unlink, self.file_name)
-        with open(self.file_name, 'xb', 0) as file:
-            file.write(b'test_ntpath.PathLikeTests')
-    
-            if 'peername' not in self._extra:
-            try:
-                self._extra['peername'] = sock.getpeername()
-            except (socket.error, AttributeError):
-                if self._loop.get_debug():
-                    logger.warning('getpeername() failed on %r',
-                                   sock, exc_info=True)
-    
-            # write a large chunk which completes immediately,
-        # it should not pause writing
-        fut = asyncio.Future(loop=self.loop)
-        fut.set_result(None)
-        self.loop._proactor.send.return_value = fut
-        tr.write(b'very large data')
-        self.loop._run_once()
-        self.assertEqual(tr.get_write_buffer_size(), 0)
-        self.assertFalse(self.protocol.pause_writing.called)
-    
-        def test_delete_hook(self):
-        # Testing __del__ hook...
-        log = []
-        class C(object):
-            def __del__(self):
-                log.append(1)
-        c = C()
-        self.assertEqual(log, [])
-        del c
-        support.gc_collect()
-        self.assertEqual(log, [1])
-    
-        def transform_xrange(self, node, results):
-        name = results['name']
-        name.replace(Name('range', prefix=name.prefix))
-        # This prevents the new range call from being wrapped in a list later.
-        self.transformed_xranges.add(id(node))
-    
-            for i in range(0, 256):
-            constructor(fanout=i)
-        self.assertRaises(ValueError, constructor, fanout=-1)
-        self.assertRaises(ValueError, constructor, fanout=256)
-    
-            if machine:
-            # Override automatic configuration to facilitate testing.
-            define_macros = config[machine]
-        elif host_platform == 'darwin':
-            # Universal here means: build with the same options Python
-            # was built with.
-            define_macros = config['universal']
-        elif sizeof_size_t == 8:
-            if sysconfig.get_config_var('HAVE_GCC_ASM_FOR_X64'):
-                define_macros = config['x64']
-            elif sysconfig.get_config_var('HAVE_GCC_UINT128_T'):
-                define_macros = config['uint128']
-            else:
-                define_macros = config['ansi64']
-        elif sizeof_size_t == 4:
-            ppro = sysconfig.get_config_var('HAVE_GCC_ASM_FOR_X87')
-            if ppro and ('gcc' in cc or 'clang' in cc) and \
-               not 'sunos' in host_platform:
-                # solaris: problems with register allocation.
-                # icc >= 11.0 works as well.
-                define_macros = config['ppro']
-                extra_compile_args.append('-Wno-unknown-pragmas')
-            else:
-                define_macros = config['ansi32']
-        else:
-            raise DistutilsError('_decimal: unsupported architecture')
-    
-    
-# Find a suitable Perl installation for OpenSSL.
-# cygwin perl does *not* work.  ActivePerl does.
-# Being a Perl dummy, the simplest way I can check is if the 'Win32' package
-# is available.
-def find_working_perl(perls):
-    for perl in perls:
+        for i in range(10, 30):
+        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
+            i = i,
+            p = preview
+        )
         try:
-            subprocess.check_output([perl, '-e', 'use Win32;'])
-        except subprocess.CalledProcessError:
-            continue
-        else:
-            return perl
+            mime, ext, size = url_info(url)
+            break
+        except: continue
     
-            #Creating a list of all md files in the current directory
-        for temp in glob.glob(os.path.join(loc, operating_sys, '*.md')):
-            allmd.append(temp)
+    import json
+    
+        __metaclass__ = abc.ABCMeta
+    
+    
+class Active(Inservice):
+    
+    
+class TestData(unittest.TestCase):
+    
+        def test_sales_manager_shall_not_talk_through_proxy_with_delay(cls):
+        cls.ntp.busy = 'No'
+        start_time = time()
+        cls.ntp.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+This Sales Manager will not talk to you whether he/she is busy or not\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    
+        def test_pool_behavior_with_single_object_inside(self):
+        sample_queue = queue.Queue()
+        sample_queue.put('yam')
+        with ObjectPool(sample_queue) as obj:
+            # print('Inside with: {}'.format(obj))
+            self.assertEqual(obj, 'yam')
+        self.assertFalse(sample_queue.empty())
+        self.assertTrue(sample_queue.get() == 'yam')
+        self.assertTrue(sample_queue.empty())
+        
+    
+        def test_display_current_time_at_midnight(self):
+        class_under_test = TimeDisplay()
+        expected_time = '24:01'
+        result = class_under_test.get_current_time_as_as_html_fragment()
+        self.assertEqual(result, expected_time)
+'''
+    
+    
+if __name__ == '__main__':
+    reporter = Reporter()
+    db = DB()
+    tm = TestManager()
+    tm.setReporter(reporter)
+    tm.setDB(db)
+    reporter.setTM(tm)
+    db.setTM(tm)
+    # For simplification we are looping on the same test.
+    # Practically, it could be about various unique test classes and their
+    # objects
+    for i in range(3):
+        tc = TC()
+        tc.setTM(tm)
+        tm.setTC(tc)
+        tc.setup()
+        tc.execute()
+        tc.tearDown()
+    
+        '''Base state. This is to share functionality'''
+    
+    # This is a very simple benchmark to give you an idea of how fast each step of face recognition will run on your system.
+# Notice that face detection gets very slow at large image sizes. So you might consider running face detection on a
+# scaled down version of your image and then running face encodings on the the full size image.
+    
+        # Find all the faces and face encodings in the current frame of video
+    face_locations = face_recognition.face_locations(rgb_frame)
+    face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+    
+        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
+    rgb_small_frame = small_frame[:, :, ::-1]
+    
+            if file.filename == '':
+            return redirect(request.url)
+    
+    # How to display URL addresses: 'footnote', 'no', or 'inline'.
+#texinfo_show_urls = 'footnote'
+    
+    
+def test_image(image_to_check, model):
+    unknown_image = face_recognition.load_image_file(image_to_check)
+    face_locations = face_recognition.face_locations(unknown_image, number_of_times_to_upsample=0, model=model)
