@@ -1,161 +1,102 @@
 
         
-            with io.open(outfile, 'w', encoding='utf-8') as outf:
-        outf.write(out)
+        def sort_blocks():
+    # First, we load the current README into memory
+    with open('README.md', 'r') as read_me_file:
+        read_me = read_me_file.read()
     
     
-def assertRegexpMatches(self, text, regexp, msg=None):
-    if hasattr(self, 'assertRegexp'):
-        return self.assertRegexp(text, regexp, msg)
-    else:
-        m = re.match(regexp, text)
-        if not m:
-            note = 'Regexp didn\'t match: %r not found' % (regexp)
-            if len(text) < 1000:
-                note += ' in %r' % text
-            if msg is None:
-                msg = note
-            else:
-                msg = note + ', ' + msg
-            self.assertTrue(m, msg)
+python_3 = (u'thefuck/python3-bash',
+            u'FROM python:3',
+            u'sh')
     
-            formats = [
-            {
-                'format_id': f['type'],
-                'filesize': int(f['filesize']),
-                'url': f['url']
-            } for f in info['rfiles']
-        ]
-        self._sort_formats(formats)
+    containers = (('thefuck/python3-fish',
+               u'''FROM python:3
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'),
+              ('thefuck/python2-fish',
+               u'''FROM python:2
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'))
     
-        self._source_dim = self._linked_feature_dims['sources']
-    self._target_dim = self._linked_feature_dims['targets']
-    
-      def testNormalFixedFeaturesAreDifferentiable(self):
-    component_spec = spec_pb2.ComponentSpec()
-    text_format.Parse('''
-        name: 'test'
-        network_unit {
-          registered_name: 'IdentityNetwork'
-        }
-        fixed_feature {
-          name: 'fixed' embedding_dim: 32 size: 1
-          pretrained_embedding_matrix { part {} }
-          vocab { part {} }
-        }
-        component_builder {
-          registered_name: 'bulk_component.BulkFeatureExtractorComponentBuilder'
-        }
-        ''', component_spec)
-    comp = bulk_component.BulkFeatureExtractorComponentBuilder(
-        self.master, component_spec)
-    
-      def testGraphConstructionWithSigmoidLoss(self):
-    component_spec = spec_pb2.ComponentSpec()
-    text_format.Parse('''
-        name: 'test'
-        network_unit {
-          registered_name: 'IdentityNetwork'
-        }
-        fixed_feature {
-          name: 'fixed' embedding_dim: 32 size: 1
-        }
-        component_builder {
-          registered_name: 'component.DynamicComponentBuilder'
-          parameters {
-            key: 'loss_function'
-            value: 'sigmoid_cross_entropy'
-          }
-        }
-        ''', component_spec)
-    comp = component.DynamicComponentBuilder(self.master, component_spec)
-    comp.build_greedy_training(self.master_state, self.network_states)
-    
-      # Compute matrices of 0/1 indicators for valid arcs as the outer product of
-  # the valid token indicator vector with itself.
-  valid_arc_bxmxm = tf.matmul(
-      tf.expand_dims(valid_token_bxm, 2), tf.expand_dims(valid_token_bxm, 1))
-    
-        # Restore the graph from the checkpoint into a new Graph object.
-    restored_graph = tf.Graph()
-    restoration_config = tf.ConfigProto(
-        log_device_placement=False,
-        intra_op_parallelism_threads=10,
-        inter_op_parallelism_threads=10)
-    
-      Args:
-    hyperparams: a GridPoint proto containing optimizer spec, particularly
-      learning_method to determine optimizer class to use.
-    learning_rate_var: a `tf.Tensor`, the learning rate.
-    step_var: a `tf.Variable`, global training step.
-    
-      def testCreateLexiconContext(self):
-    expected_context = task_spec_pb2.TaskSpec()
-    text_format.Parse(_EXPECTED_CONTEXT, expected_context)
-    self.assertProtoEquals(
-        lexicon.create_lexicon_context('/tmp'), expected_context)
-    
-        return inner
-    
-                sock2.connect(address)
-            sock2.sendall(second_request)
-            sock2.close()
+        assert match(command)
     
     
-class TooManyRedirects(RequestException):
-    '''Too many redirects.'''
+class RedirectFallbackMiddleware(MiddlewareMixin):
+    # Defined as class-level attributes to be subclassing-friendly.
+    response_gone_class = HttpResponseGone
+    response_redirect_class = HttpResponsePermanentRedirect
     
-        from urllib3.packages.ordered_dict import OrderedDict
+            if isinstance(expiry, datetime):
+            return expiry
+        expiry = expiry or settings.SESSION_COOKIE_AGE   # Checks both None and 0 cases
+        return modification + timedelta(seconds=expiry)
     
-            # .netrc might have more auth for us on our new host.
-        new_auth = get_netrc_auth(url) if self.trust_env else None
-        if new_auth is not None:
-            prepared_request.prepare_auth(new_auth)
+        def save(self, must_create=False):
+        if self.session_key is None:
+            return self.create()
+        if must_create:
+            func = self._cache.add
+        elif self._cache.get(self.cache_key) is not None:
+            func = self._cache.set
+        else:
+            raise UpdateError
+        result = func(self.cache_key,
+                      self._get_session(no_load=must_create),
+                      self.get_expiry_age())
+        if must_create and not result:
+            raise CreateError
     
-        def test_conflicting_post_params(self, httpbin):
-        url = httpbin('post')
-        with open('Pipfile') as f:
-            pytest.raises(ValueError, 'requests.post(url, data='[{\'some\': \'data\'}]', files={'some': f})')
-            pytest.raises(ValueError, 'requests.post(url, data=u('[{\'some\': \'data\'}]'), files={'some': f})')
+        def load(self):
+        s = self._get_session_from_db()
+        return self.decode(s.session_data) if s else {}
     
+        def delete(self, session_key=None):
+        '''
+        To delete, clear the session key and the underlying data structure
+        and set the modified flag so that the cookie is set on the client for
+        the current request.
+        '''
+        self._session_key = ''
+        self._session_cache = {}
+        self.modified = True
     
-class ExponentialBackoffStrategyTestCase(unittest.TestCase):
-    def test_no_retries(self):
-        strategy = _exponential_backoff(retries=0)
-        result = list(strategy())
-        self.assertEquals(result, [], 'list should be empty')
+                tested_methods = conman.tested_methods_from_spidercls(spidercls)
+            if opts.list:
+                for method in tested_methods:
+                    contract_reqs[spidercls.name].append(method)
+            elif tested_methods:
+                self.crawler_process.crawl(spidercls)
     
-        def test(self):
-        ajvars = AnsibleJ2Vars(None, None)
-        print(ajvars)
+            editor = self.settings['EDITOR']
+        try:
+            spidercls = self.crawler_process.spider_loader.load(args[0])
+        except KeyError:
+            return self._err('Spider not found: %s' % args[0])
     
+    # If we want to print a preview of the message content, we can extract whatever
+# the least formatted payload is and print the first three lines.  Of course,
+# if the message has no plain text part printing the first three lines of html
+# is probably useless, but this is just a conceptual example.
+simplest = msg.get_body(preferencelist=('plain', 'html'))
+print()
+print(''.join(simplest.get_content().splitlines(keepends=True)[:3]))
     
-class ArgumentSpec(object):
-    def __init__(self):
-        self.supports_check_mode = True
-        argument_spec = dict(
-            name=dict(required=True),
-            gateway=dict(),
-            network=dict(),
-            description=dict(),
-            partition=dict(
-                default='Common',
-                fallback=(env_fallback, ['F5_PARTITION'])
-            ),
-            state=dict(
-                default='present',
-                choices=['present', 'absent']
-            )
-        )
-        self.argument_spec = {}
-        self.argument_spec.update(f5_argument_spec)
-        self.argument_spec.update(argument_spec)
+    document = '''\
+<slideshow>
+<title>Demo slideshow</title>
+<slide><title>Slide title</title>
+<point>This is a demo</point>
+<point>Of a program for processing slides</point>
+</slide>
     
-        fixture_data[path] = data
-    return data
-    
-        filenames = []
-    for (dirpath, dnames, fnames) in os.walk(path):
-        for fname in fnames:
-            if fname.endswith('.md'):
-                filenames.append(os.sep.join([dirpath, fname]))
+    # register get_operator_module(); make public functions accessible via proxy
+MyManager.register('operator', get_operator_module)
