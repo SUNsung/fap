@@ -1,86 +1,81 @@
 
         
-        
-def test_when_already_configured(usage_tracker_io, shell_pid,
-                                 shell, shell_config, logs):
-    shell.get_history.return_value = ['fuck']
-    shell_pid.return_value = 12
-    _change_tracker(usage_tracker_io, 12)
-    shell_config.read.return_value = 'eval $(thefuck --alias)'
-    main()
-    logs.already_configured.assert_called_once()
+            def _call(self, req):
+        if isinstance(req, compat_basestring):
+            req = sanitized_Request(req)
+        # Authorizing manually since GitHub does not response with 401 with
+        # WWW-Authenticate header set (see
+        # https://developer.github.com/v3/#basic-authentication)
+        b64 = base64.b64encode(
+            ('%s:%s' % (self._username, self._password)).encode('utf-8')).decode('ascii')
+        req.add_header('Authorization', 'Basic %s' % b64)
+        response = self._opener.open(req).read().decode('utf-8')
+        return json.loads(response)
+    
+        with open(FISH_COMPLETION_TEMPLATE) as f:
+        template = f.read()
+    filled_template = template.replace('{{commands}}', '\n'.join(commands))
+    with open(FISH_COMPLETION_FILE, 'w') as f:
+        f.write(filled_template)
+    
+        infile, outfile = args
+    
+        with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
     
-@pytest.mark.functional
-def test_how_to_configure_alias(proc, TIMEOUT):
-    proc.sendline('unset -f fuck')
-    how_to_configure(proc, TIMEOUT)
+def get_base_name(base):
+    if base is InfoExtractor:
+        return 'LazyLoadExtractor'
+    elif base is SearchInfoExtractor:
+        return 'LazyLoadSearchExtractor'
+    else:
+        return base.__name__
+    
+    with io.open(README_FILE, 'w', encoding='utf-8') as f:
+    f.write(header)
+    f.write(options)
+    f.write(footer)
 
     
-    containers = (('thefuck/python3-fish',
-               u'''FROM python:3
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'),
-              ('thefuck/python2-fish',
-               u'''FROM python:2
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'))
+        return ret
     
-    containers = (('thefuck/python3-tcsh',
-               u'''FROM python:3
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'),
-              ('thefuck/python2-tcsh',
-               u'''FROM python:2
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'))
+        if not releases:
+        break
     
+    py2exe_console = [{
+    'script': './youtube_dl/__main__.py',
+    'dest_base': 'youtube-dl',
+    'version': __version__,
+    'description': DESCRIPTION,
+    'comments': LONG_DESCRIPTION,
+    'product_name': 'youtube-dl',
+    'product_version': __version__,
+}]
     
-init_zshrc = u'''echo '
-export SHELL=/usr/bin/zsh
-export HISTFILE=~/.zsh_history
-echo > $HISTFILE
-export SAVEHIST=100
-export HISTSIZE=100
-eval $(thefuck --alias {})
-setopt INC_APPEND_HISTORY
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.zshrc'''
+                # XXX: In real cases InfoExtractor._parse_mpd_formats() fills up 'acodec'
+            # and 'vcodec', while in tests such information is incomplete since
+            # commit a6c2c24479e5f4827ceb06f64d855329c0a6f593
+            # test_YoutubeDL.test_youtube_format_selection is broken without
+            # this fix
+            if 'acodec' in info and 'vcodec' not in info:
+                info['vcodec'] = 'none'
+            elif 'vcodec' in info and 'acodec' not in info:
+                info['acodec'] = 'none'
     
+        def test_decrypt_text(self):
+        password = intlist_to_bytes(self.key).decode('utf-8')
+        encrypted = base64.b64encode(
+            intlist_to_bytes(self.iv[:8]) +
+            b'\x17\x15\x93\xab\x8d\x80V\xcdV\xe0\t\xcdo\xc2\xa5\xd8ksM\r\xe27N\xae'
+        ).decode('utf-8')
+        decrypted = (aes_decrypt_text(encrypted, password, 16))
+        self.assertEqual(decrypted, self.secret_msg)
     
-@pytest.mark.parametrize('command, packages', [
-    (Command('vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('sudo vim', 'vim: command not found'),
-     [('vim', 'main'), ('vim-tiny', 'main')]),
-    (Command('vim', 'The program 'vim' is currently not installed. You can install it by typing: sudo apt install vim'),
-     [('vim', 'main'), ('vim-tiny', 'main')])])
-def test_match(mocker, command, packages):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=None)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
+        def test_youtube_feeds(self):
+        self.assertMatch('https://www.youtube.com/feed/watch_later', ['youtube:watchlater'])
+        self.assertMatch('https://www.youtube.com/feed/subscriptions', ['youtube:subscriptions'])
+        self.assertMatch('https://www.youtube.com/feed/recommended', ['youtube:recommended'])
+        self.assertMatch('https://www.youtube.com/my_favorites', ['youtube:favorites'])
     
-    match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
-Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
-Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Fetched 89.2 kB in 0s (122 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-8 packages can be upgraded. Run 'apt list --upgradable' to see them.
-'''
+        #print(len(urls))
