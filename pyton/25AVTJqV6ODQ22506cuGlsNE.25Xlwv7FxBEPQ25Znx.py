@@ -1,75 +1,131 @@
 
         
-            def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
+        
+class ReadTimeout(Timeout):
+    '''The server did not send any data in the allotted amount of time.'''
     
-        def _escalate_call(self):
-        self.call.state = CallState.READY
-        call = self.call
-        self.call = None
-        self.call_center.notify_call_escalated(call)
+        return {
+        'platform': platform_info,
+        'implementation': implementation_info,
+        'system_ssl': system_ssl_info,
+        'using_pyopenssl': pyopenssl is not None,
+        'pyOpenSSL': pyopenssl_info,
+        'urllib3': urllib3_info,
+        'chardet': chardet_info,
+        'cryptography': cryptography_info,
+        'idna': idna_info,
+        'requests': {
+            'version': requests_version,
+        },
+    }
     
-        def categorize(self, transaction):
-        if transaction.seller in self.seller_category_map:
-            return self.seller_category_map[transaction.seller]
-        if transaction.seller in self.seller_category_overrides_map:
-            seller_category_map[transaction.seller] = \
-                self.manual_overrides[transaction.seller].peek_min()
-            return self.seller_category_map[transaction.seller]
-        return None
+        def test_basic(self):
+        '''messages are sent and received properly'''
+        question = b'success?'
+        answer = b'yeah, success'
     
-            self.args = args
-        self.http_port = 80
-        self.https_port = 443
-        self._configurator = self._all_names = self._test_names = None
+            try:
+            if not chunked:
+                resp = conn.urlopen(
+                    method=request.method,
+                    url=url,
+                    body=request.body,
+                    headers=request.headers,
+                    redirect=False,
+                    assert_same_host=False,
+                    preload_content=False,
+                    decode_content=False,
+                    retries=self.max_retries,
+                    timeout=timeout
+                )
     
-    	for video in tab.childNodes:
-		if re.search(contentid, video.attributes['link'].value):
-			url = video.attributes['flv'].value
-			break
+    Some codes have multiple names, and both upper- and lower-case versions of
+the names are allowed. For example, ``codes.ok``, ``codes.OK``, and
+``codes.okay`` all correspond to the HTTP status code 200.
+'''
     
-    def kuwo_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    if 'www.kuwo.cn/yinyue' in url:
-        rid=match1(url,'yinyue/(\d+)')
-        kuwo_download_by_rid(rid,output_dir, merge, info_only)
-    else:
-        kuwo_playlist_download(url,output_dir,merge,info_only)
+        def __init__(self):
+        #: HTTP verb to send to the server.
+        self.method = None
+        #: HTTP URL to send the request to.
+        self.url = None
+        #: dictionary of HTTP headers.
+        self.headers = None
+        # The `CookieJar` used to create the Cookie header will be stored here
+        # after prepare_cookies is called
+        self._cookies = None
+        #: request body to send to the server.
+        self.body = None
+        #: dictionary of callback hooks, for internal usage.
+        self.hooks = default_hooks()
+        #: integer denoting starting position of a readable file-like body.
+        self._body_position = None
     
-    from html.parser import HTMLParser
+            output = StringIO()
+        helper = pydoc.Helper(output=output)
+        helper('modules')
+        result = output.getvalue().strip()
+        num_lines = len(result.splitlines())
     
-    def showroom_download_by_room_id(room_id, output_dir = '.', merge = False, info_only = False, **kwargs):
-    '''Source: Android mobile'''
-    while True:
-        timestamp = str(int(time() * 1000))
-        api_endpoint = 'https://www.showroom-live.com/api/live/streaming_url?room_id={room_id}&_={timestamp}'.format(room_id = room_id, timestamp = timestamp)
-        html = get_content(api_endpoint)
-        html = json.loads(html)
-        #{'streaming_url_list': [{'url': 'rtmp://52.197.69.198:1935/liveedge', 'id': 1, 'label': 'original spec(low latency)', 'is_default': True, 'type': 'rtmp', 'stream_name': '7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed'}, {'url': 'http://52.197.69.198:1935/liveedge/7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed/playlist.m3u8', 'is_default': True, 'id': 2, 'type': 'hls', 'label': 'original spec'}, {'url': 'rtmp://52.197.69.198:1935/liveedge', 'id': 3, 'label': 'low spec(low latency)', 'is_default': False, 'type': 'rtmp', 'stream_name': '7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed_low'}, {'url': 'http://52.197.69.198:1935/liveedge/7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed_low/playlist.m3u8', 'is_default': False, 'id': 4, 'type': 'hls', 'label': 'low spec'}]}
-        if len(html) >= 1:
-            break
-        log.w('The live show is currently offline.')
-        sleep(1)
+        print('Pickled records:')
+    pprint.pprint(memos)
     
-            print('I see someone named {}!'.format(name))
+    # Now add the related image to the html part.
+with open('roasted-asparagus.jpg', 'rb') as img:
+    msg.get_payload()[1].add_related(img.read(), 'image', 'jpeg',
+                                     cid=asparagus_cid)
+    
+    from argparse import ArgumentParser
+    
+    
+if __name__ == '__main__':
+    freeze_support()
+    test()
 
     
-        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
-    rgb_frame = frame[:, :, ::-1]
     
-                for face_location in face_locations:
-                # Print the location of each face in this frame
-                top, right, bottom, left = face_location
-                print(' - A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+# Example usage...
+def main():
+    data1 = Data('Data 1')
+    data2 = Data('Data 2')
+    view1 = DecimalViewer()
+    view2 = HexViewer()
+    data1.attach(view1)
+    data1.attach(view2)
+    data2.attach(view2)
+    data2.attach(view1)
     
-        # If no faces are found in the image, return an empty result.
-    if len(X_face_locations) == 0:
-        return []
+        def update(self):
+        for msg in self.msg_queue:
+            for sub in self.subscribers.get(msg, []):
+                sub.run(msg)
+        self.msg_queue = []
     
-            face_encoding_a1 = api.face_encodings(img_a1)[0]
-        face_encoding_a2 = api.face_encodings(img_a2)[0]
-        face_encoding_a3 = api.face_encodings(img_a3)[0]
-        face_encoding_b1 = api.face_encodings(img_b1)[0]
+    
+class Node(object):
+    pass
+    
+    *What does this example do?
+    
+    *TL;DR80
+Creates objects without having to specify the exact class.
+'''
+    
+        def __del__(self):
+        if self.item is not None:
+            self._queue.put(self.item)
+            self.item = None
+    
+    '''
+*What is this pattern about?
+This patterns aims to reduce the number of classes required by an
+application. Instead of relying on subclasses it creates objects by
+copying a prototypical instance at run-time.
+    
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
+'''
+    
+    production code which is untestable:
