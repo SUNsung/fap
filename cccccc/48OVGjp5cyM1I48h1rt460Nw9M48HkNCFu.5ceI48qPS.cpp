@@ -1,209 +1,468 @@
 
         
-        /// Sets up a ScrollView window, depending on the constructor variables.
-void ScrollView::Initialize(const char* name, int x_pos, int y_pos, int x_size,
-                            int y_size, int x_canvas_size, int y_canvas_size,
-                            bool y_axis_reversed, const char* server_name) {
-  // If this is the first ScrollView Window which gets created, there is no
-  // network connection yet and we have to set it up in a different thread.
-  if (stream_ == nullptr) {
-    nr_created_windows_ = 0;
-    stream_ = new SVNetwork(server_name, kSvPort);
-    waiting_for_events_mu = new SVMutex();
-    svmap_mu = new SVMutex();
-    SendRawMessage(
-        'svmain = luajava.bindClass('com.google.scrollview.ScrollView')\n');
-    SVSync::StartThread(MessageReceiver, nullptr);
-  }
+        #include <QComboBox>
+#include <QVariant>
+    
+        /* Check all NULLs are detected */
+    CHECK(secp256k1_ecdh(tctx, res, &point, s_one) == 1);
+    CHECK(ecount == 0);
+    CHECK(secp256k1_ecdh(tctx, NULL, &point, s_one) == 0);
+    CHECK(ecount == 1);
+    CHECK(secp256k1_ecdh(tctx, res, NULL, s_one) == 0);
+    CHECK(ecount == 2);
+    CHECK(secp256k1_ecdh(tctx, res, &point, NULL) == 0);
+    CHECK(ecount == 3);
+    CHECK(secp256k1_ecdh(tctx, res, &point, s_one) == 1);
+    CHECK(ecount == 3);
+    
+    int secp256k1_ecdsa_recover(const secp256k1_context* ctx, secp256k1_pubkey *pubkey, const secp256k1_ecdsa_recoverable_signature *signature, const unsigned char *msg32) {
+    secp256k1_ge q;
+    secp256k1_scalar r, s;
+    secp256k1_scalar m;
+    int recid;
+    VERIFY_CHECK(ctx != NULL);
+    ARG_CHECK(secp256k1_ecmult_context_is_built(&ctx->ecmult_ctx));
+    ARG_CHECK(msg32 != NULL);
+    ARG_CHECK(signature != NULL);
+    ARG_CHECK(pubkey != NULL);
     }
     
-      // We do not own the model, we just reference it.
-  // model may be nullptr if there is not a good model for this paragraph.
-  const ParagraphModel *model;
+    #include <dmlc/base.h>
+#include <dmlc/json.h>
+#include <dmlc/logging.h>
+#include <dmlc/registry.h>
+#include <nnvm/node.h>
+#include <vector>
+#include <map>
+#include <string>
+#include <utility>
+#include './base.h'
+#include './resource.h'
+#include './op_attr_types.h'
     
-      // datadir may still be empty:
-  if (datadir.length() == 0) {
-    datadir = './';
+      /*! \brief default constructor, default copy assign will work */
+  TBlob(void)
+      : dptr_(NULL),
+        type_flag_(mshadow::DataType<real_t>::kFlag) {
+    SetDLTensor(cpu::kDevMask, 0);
+  }
+  /*!
+   * \brief constructor that construct TBlob from contiguous memory
+   * \param dptr the pointer to the memory
+   * \param shape the shape of the data
+   * \param dev_mask the device mask, can be cpu::kDevMask or gpu::kDevMask
+   * \param dev_id the device id
+   */
+  template<typename DType>
+  TBlob(DType *dptr, const TShape &shape, int dev_mask, int dev_id = -1)
+      : dptr_(dptr), shape_(shape),
+        type_flag_(mshadow::DataType<DType>::kFlag) {
+    SetDLTensor(dev_mask, dev_id);
+  }
+  /*!
+   * \brief constructor that construct TBlob from contiguous memory
+   * \param dptr the pointer to the memory
+   * \param shape the shape of the data
+   * \param dev_mask the device mask, can be cpu::kDevMask or gpu::kDevMask
+   * \param type_flag the type flag. Can be one of enum mshadow::dtype
+   * \param dev_id the device id
+   */
+  TBlob(void *dptr, const TShape &shape, int dev_mask, int type_flag, int dev_id = -1)
+      : dptr_(dptr), shape_(shape), type_flag_(type_flag) {
+    SetDLTensor(dev_mask, dev_id);
+  }
+  /*!
+   * \brief constructor from tensor
+   * \param src source tensor
+   * \tparam Device which device the tensor is on
+   * \tparam dim tensor dimension
+   * \tparam DType the type of elements in the tensor
+   */
+  template<typename Device, int dim, typename DType>
+  TBlob(const mshadow::Tensor<Device, dim, DType> &src) {  // NOLINT(*)
+    *this = src;
+  }
+  /*!
+   * \brief assignment from tensor
+   * \param src source tensor
+   * \tparam Device which device the tensor is on
+   * \tparam dim tensor dimension
+   * \tparam DType the type of elements in the tensor
+   * \return reference of self
+   */
+  template<typename Device, int dim, typename DType>
+  inline TBlob &operator=(const mshadow::Tensor<Device, dim, DType> &src) {
+    dptr_ = src.dptr_;
+    shape_ = src.shape_;
+    type_flag_ = mshadow::DataType<DType>::kFlag;
+    SetDLTensor(Device::kDevMask, -1);
+    return *this;
+  }
+  /*!
+   * \return whether the tensor's memory is continuous
+   */
+  inline bool CheckContiguous(void) const {
+    return true;
+  }
+  /*!
+   * \brief reshape to shape
+   * \param shape desired shape
+   * \return reshaped blob
+   */
+  inline TBlob reshape(const TShape& shape) const {
+    CHECK_EQ(this->shape_.Size(), shape.Size()) << 'Shape size mismatch '
+    << this->shape_.Size() << ' v.s. '  << shape.Size();
+    TBlob ret(this->dptr_, shape, this->dev_mask(), this->type_flag_, this->dev_id());
+    return ret;
+  }
+  /*!
+   * \brief flatten the tensor to 2 dimension, collapse the higher dimensions together
+   * \param stream the possible stream target tensor should reside on
+   * \tparam Device which device the tensor is on
+   * \tparam DType the type of elements in the tensor
+   * \return tensor after flatten
+   */
+  template<typename Device, typename DType>
+  inline mshadow::Tensor<Device, 2, DType> FlatTo2D(
+    mshadow::Stream<Device> *stream = NULL) const {
+    CHECK(Device::kDevMask == this->dev_mask())
+      << 'TBlob.get: device type do not match specified type';
+    CHECK(mshadow::DataType<DType>::kFlag == type_flag_)
+      << 'TBlob.get_with_shape: data type do not match specified type.'
+      << 'Expected: ' << type_flag_ << ' v.s. given ' << mshadow::DataType<DType>::kFlag;
+    return mshadow::Tensor<Device, 2, DType>(static_cast<DType*>(dptr_),
+                                             shape_.FlatTo2D(),
+                                             shape_[shape_.ndim() - 1],
+                                             stream);
+  }
+  /*!
+   * \brief flatten the tensor to 1 dimension, collapse all the dimensions together.
+   * \param stream the possible stream target tensor should reside on
+   * \tparam Device which device the tensor is on
+   * \tparam DType the type of elements in the tensor
+   * \return tensor after flatten
+   */
+  template<typename Device, typename DType>
+  inline mshadow::Tensor<Device, 1, DType> FlatTo1D(
+      mshadow::Stream<Device> *stream = NULL) const {
+    return this->get_with_shape<Device, 1, DType>(
+        mshadow::Shape1(shape_.Size()), stream);
+  }
+  /*! \brief return number of dimension of the tensor inside */
+  inline int ndim(void) const {
+    return shape_.ndim();
+  }
+  /*!
+   * \brief return size of i-th dimension, start counting from highest dimension
+   * \param idx the dimension count from the highest dimensin
+   * \return the size
+   */
+  inline index_t size(index_t idx) const {
+    return shape_[idx];
+  }
+  /*! \brief total number of elements in the tensor */
+  inline index_t Size(void) const {
+    return shape_.Size();
+  }
+  /*! \brief get pointer in dtype */
+  template<typename DType>
+  inline DType* dptr() const {
+    CHECK(mshadow::DataType<DType>::kFlag == type_flag_)
+      << 'TBlob.get_with_shape: data type do not match specified type.'
+      << 'Expected: ' << type_flag_ << ' v.s. given ' << mshadow::DataType<DType>::kFlag;
+    return static_cast<DType*>(dptr_);
+  }
+  /*! \brief device mask of the corresponding device */
+  inline int dev_mask() const {
+    return dltensor_.ctx.device_type;
+  }
+  /*! \brief device index of the corresponding device */
+  inline int dev_id() const {
+    return dltensor_.ctx.device_id;
+  }
+  /*!
+   * \brief return the corresponding DLTensor
+   * \return the address of internal DLTensor
+   */
+  inline const DLTensor& dltensor() const {
+    return dltensor_;
   }
     
-    // Pseudo-accessors.
-int IntFeatureMap::IndexFeature(const INT_FEATURE_STRUCT& f) const {
-  return feature_space_.Index(f);
-}
-int IntFeatureMap::MapFeature(const INT_FEATURE_STRUCT& f) const {
-  return feature_map_.SparseToCompact(feature_space_.Index(f));
-}
-int IntFeatureMap::MapIndexFeature(int index_feature) const {
-  return feature_map_.SparseToCompact(index_feature);
-}
-INT_FEATURE_STRUCT IntFeatureMap::InverseIndexFeature(int index_feature) const {
-  return feature_space_.PositionFromIndex(index_feature);
-}
-INT_FEATURE_STRUCT IntFeatureMap::InverseMapFeature(int map_feature) const {
-  int index = feature_map_.CompactToSparse(map_feature);
-  return feature_space_.PositionFromIndex(index);
-}
-void IntFeatureMap::DeleteMapFeature(int map_feature) {
-  feature_map_.Merge(-1, map_feature);
-  mapping_changed_ = true;
-}
-bool IntFeatureMap::IsMapFeatureDeleted(int map_feature) const {
-  return feature_map_.IsCompactDeleted(map_feature);
+    template<>
+void SetDataGradToBlob<mshadow::cpu, float>(caffeMemoryTypes memType,
+                            std::vector<::caffe::Blob<float>*>::iterator blob,
+                            std::vector<TBlob>::const_iterator itr) {
+  float *data_ptr = reinterpret_cast<float*>((*itr).dptr_);
+  if (memType == Data)
+    (*blob)->set_cpu_data(data_ptr);
+  else
+    MXCAFFEBLOB(*blob, float)->set_cpu_diff(data_ptr);
 }
     
-    #ifndef incl_HPHP_WORKLOAD_STATS_H_
-#define incl_HPHP_WORKLOAD_STATS_H_
+    #include <caffe/proto/caffe.pb.h>
+#include <dmlc/parameter.h>
+#include <dmlc/base.h>
+#include <dmlc/json.h>
+#include <dmlc/logging.h>
+#include <dmlc/type_traits.h>
+#include <google/protobuf/message.h>
+#include <google/protobuf/text_format.h>
+    
+    MXNET_REGISTER_OP_PROPERTY(CaffeOp, CaffeOpProp)
+.describe('Apply caffe operator')
+.add_argument('data', 'Symbol[]', 'List of tensors')
+.add_arguments(CaffeOpParam::__FIELDS__());
+    
+    // implementation of threaded engine
+ThreadedVar* ThreadedEngine::NewVariable() {
+  return ThreadedVar::New(VersionedVarBlock::New());
+}
+    
+        TableBuilder* builder = new TableBuilder(options, file);
+    meta->smallest.DecodeFrom(iter->key());
+    for (; iter->Valid(); iter->Next()) {
+      Slice key = iter->key();
+      meta->largest.DecodeFrom(key);
+      builder->Add(key, iter->value());
+    }
+    
+    // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+Status BuildTable(const std::string& dbname,
+                  Env* env,
+                  const Options& options,
+                  TableCache* table_cache,
+                  Iterator* iter,
+                  FileMetaData* meta);
+    
+    void DBImpl::CompactMemTable() {
+  mutex_.AssertHeld();
+  assert(imm_ != nullptr);
+    }
+    
+    static bool Between(uint64_t val, uint64_t low, uint64_t high) {
+  bool result = (val >= low) && (val <= high);
+  if (!result) {
+    fprintf(stderr, 'Value %llu is not in range [%llu, %llu]\n',
+            (unsigned long long)(val),
+            (unsigned long long)(low),
+            (unsigned long long)(high));
+  }
+  return result;
+}
+    
+    std::string LockFileName(const std::string& dbname) {
+  return dbname + '/LOCK';
+}
+    
+        // Invariant: we never leave < kHeaderSize bytes in a block.
+    assert(kBlockSize - block_offset_ - kHeaderSize >= 0);
+    
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::unwind_slow_dot_repeat(bool r)
+{
+   saved_single_repeat<BidiIterator>* pmp = static_cast<saved_single_repeat<BidiIterator>*>(m_backup_state);
+    }
+    
+    #ifndef BOOST_REGEX_V4_PROTECTED_CALL_HPP
+#define BOOST_REGEX_V4_PROTECTED_CALL_HPP
     
     
-    {}
     
-    String getWrapperProtocol(const char* url, int* pathIndex = nullptr);
-Wrapper* getWrapper(const String& scheme, bool warn = true);
-Wrapper* getWrapperFromURI(const String& uri,
-                           int* pathIndex = nullptr, bool warn = true);
+    template <class OutputIterator, class Results, class traits, class ForwardIter>
+void basic_regex_formatter<OutputIterator, Results, traits, ForwardIter>::put(const sub_match_type& sub)
+{
+   typedef typename sub_match_type::iterator iterator_type;
+   iterator_type i = sub.first;
+   while(i != sub.second)
+   {
+      put(*i);
+      ++i;
+   }
+}
     
-    #include 'hphp/runtime/base/req-memory.h'
-#include 'hphp/runtime/base/typed-value.h'
+    namespace boost{
+    }
     
-    bool js_cocos2dx_studio_ActionTimeline_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_ActionTimeline_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_ActionTimeline(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_ActionTimeline_setFrameEventCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_clearFrameEndCallFuncs(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_setAnimationEndCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_addTimeline(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getCurrentFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getStartFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_pause(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_start(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_removeTimeline(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_setLastFrameCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_IsAnimationInfoExists(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getTimelines(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_play(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getAnimationInfo(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_resume(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_addFrameEndCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_removeAnimationInfo(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getTimeSpeed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_addAnimationInfo(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_gotoFrameAndPause(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_isPlaying(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_removeFrameEndCallFuncs(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_gotoFrameAndPlay(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_clearFrameEventCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getEndFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_setTimeSpeed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_clearLastFrameCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_setDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_setCurrentFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_removeFrameEndCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_ActionTimeline(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    #endif // __cocos2dx_csloader_h__
-
-    
-    #if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_physics_PhysicsJoint_getBodyA'.',&tolua_err);
+    #ifndef BOOST_NO_WREGEX
+inline bool regex_search(const wchar_t* str, 
+                        wcmatch& m, 
+                        const wregex& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_search(str, str + wregex::traits_type::length(str), m, e, flags);
+}
+inline bool regex_search(const wchar_t* first, const wchar_t* last, 
+                  const wregex& e, 
+                  match_flag_type flags = match_default)
+{
+   wcmatch m;
+   return regex_search(first, last, m, e, flags | regex_constants::match_any);
+}
+#endif
+inline bool regex_search(const std::string& s, 
+                        smatch& m,
+                        const regex& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_search(s.begin(), s.end(), m, e, flags);
+}
+#if !defined(BOOST_NO_WREGEX)
+inline bool regex_search(const std::basic_string<wchar_t>& s, 
+                        wsmatch& m,
+                        const wregex& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_search(s.begin(), s.end(), m, e, flags);
+}
 #endif
     
-    void GLESDebugDraw::DrawAABB(b2AABB* aabb, const b2Color& color)
-{
-    mShaderProgram->use();
-    mShaderProgram->setUniformsForBuiltins();
-    }
     
+// TRACED_FORRANGE(type, var, low, high) expands to a loop that assigns |var|
+// every value in the range |low| to (including) |high| and adds a
+// SCOPED_TRACE() message for the |var| while inside the loop body.
+// TODO(bmeurer): Migrate to C++11 once we're ready.
+#define TRACED_FORRANGE(_type, _var, _low, _high)                          \
+  for (_type _i = _low; _i <= _high; ++_i)                                 \
+    for (bool _done = false; !_done;)                                      \
+      for (_type const _var = _i; !_done;)                                 \
+        for (SCOPED_TRACE(::testing::Message() << #_var << ' = ' << _var); \
+             !_done; _done = true)
     
-    {	const float multiplier = 30.0f;
-	b2Vec2 vel = m_bombSpawnPoint - p;
-	vel *= multiplier;
-	LaunchBomb(m_bombSpawnPoint,vel);
-	m_bombSpawning = false;
+     private:
+  // Calculates and returns the the frame pointer, argument count and formal
+  // parameter count to be used to access a function's parameters, taking
+  // argument adapter frames into account. The tuple is of the form:
+  // <frame_ptr, # parameters actually passed, formal parameter count>
+  std::tuple<Node*, Node*, Node*> GetArgumentsFrameAndCount(Node* function,
+                                                            ParameterMode mode);
+    
+      // Perform steps to resume generator after `value` is resolved.
+  // `on_reject_context_index` is an index into the Native Context, which should
+  // point to a SharedFunctioninfo instance used to create the closure. The
+  // value following the reject index should be a similar value for the resolve
+  // closure. Returns the Promise-wrapped `value`.
+  Node* Await(Node* context, Node* generator, Node* value, Node* outer_promise,
+              int context_length,
+              const ContextInitializer& init_closure_context,
+              Node* on_resolve_context_index, Node* on_reject_context_index,
+              Node* is_predicted_as_caught);
+  Node* AwaitOptimized(Node* context, Node* generator, Node* value,
+                       Node* outer_promise, int context_length,
+                       const ContextInitializer& init_closure_context,
+                       Node* on_resolve_context_index,
+                       Node* on_reject_context_index,
+                       Node* is_predicted_as_caught);
+  Node* Await(Node* context, Node* generator, Node* value, Node* outer_promise,
+              int context_length,
+              const ContextInitializer& init_closure_context,
+              int on_resolve_context_index, int on_reject_context_index,
+              Node* is_predicted_as_caught) {
+    return Await(context, generator, value, outer_promise, context_length,
+                 init_closure_context, IntPtrConstant(on_resolve_context_index),
+                 IntPtrConstant(on_reject_context_index),
+                 is_predicted_as_caught);
+  }
+  Node* AwaitOptimized(Node* context, Node* generator, Node* value,
+                       Node* outer_promise, int context_length,
+                       const ContextInitializer& init_closure_context,
+                       int on_resolve_context_index,
+                       int on_reject_context_index,
+                       Node* is_predicted_as_caught) {
+    return AwaitOptimized(
+        context, generator, value, outer_promise, context_length,
+        init_closure_context, IntPtrConstant(on_resolve_context_index),
+        IntPtrConstant(on_reject_context_index), is_predicted_as_caught);
+  }
+  Node* Await(Node* context, Node* generator, Node* value, Node* outer_promise,
+              int context_length,
+              const ContextInitializer& init_closure_context,
+              int on_resolve_context_index, int on_reject_context_index,
+              bool is_predicted_as_caught) {
+    return Await(context, generator, value, outer_promise, context_length,
+                 init_closure_context, on_resolve_context_index,
+                 on_reject_context_index,
+                 BooleanConstant(is_predicted_as_caught));
+  }
+  Node* AwaitOptimized(Node* context, Node* generator, Node* value,
+                       Node* outer_promise, int context_length,
+                       const ContextInitializer& init_closure_context,
+                       int on_resolve_context_index,
+                       int on_reject_context_index,
+                       bool is_predicted_as_caught) {
+    return AwaitOptimized(context, generator, value, outer_promise,
+                          context_length, init_closure_context,
+                          on_resolve_context_index, on_reject_context_index,
+                          BooleanConstant(is_predicted_as_caught));
+  }
+    
+    #include 'src/builtins/builtins-utils-gen.h'
+#include 'src/builtins/builtins.h'
+#include 'src/code-stub-assembler.h'
+#include 'src/frame-constants.h'
+    
+      Node* EmitFastNewObject(Node* context, Node* target, Node* new_target);
+    
+    TF_BUILTIN(DatePrototypeGetFullYear, DateBuiltinsAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Generate_DatePrototype_GetField(context, receiver, JSDate::kYear);
 }
     
-    	void Keyboard(unsigned char key)
-	{
-		switch (key)
-		{
-		case 'd':
-			m_platform->SetType(b2_dynamicBody);
-			break;
+    void Builtins::Generate_KeyedStoreIC_Megamorphic(
+    compiler::CodeAssemblerState* state) {
+  KeyedStoreGenericGenerator::Generate(state);
+}
+    
+      void GenerateStringAt(const char* method_name, TNode<Context> context,
+                        Node* receiver, TNode<Object> maybe_position,
+                        TNode<Object> default_return,
+                        StringAtAccessor accessor);
+    
+    // ES6 #sec-symbol.prototype-@@toprimitive
+TF_BUILTIN(SymbolPrototypeToPrimitive, CodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
     }
-    }
     
-    		b2BodyDef bd;
-		bd.type = b2_dynamicBody;
-		bd.position = body1->GetPosition();
-		bd.angle = body1->GetAngle();
+      std::string message = greeter.SayHello(name);
+  std::cerr << 'Greeter received: ' << message << std::endl;
     
+    #include 'monster_test.grpc.fb.h'
+#include 'monster_test_generated.h'
     
-    {
-    {			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(-6.0f + 6.0f * i, 10.0f);
-			b2Body* body = m_world->CreateBody(&bd);
-			body->CreateFixture(&fd);
-		}
-	}
+      flatbuffers::FlatBufferBuilder builder;
+  auto name = builder.CreateString('Dog');
+  auto sound = builder.CreateString('Bark');
+  auto animal_buffer = sample::CreateAnimal(builder, name, sound);
+  builder.Finish(animal_buffer);
     
-    #include 'util/sync_point.h'
-#include 'util/sync_point_impl.h'
+    bool GenerateFBS(const Parser &parser, const std::string &path,
+                 const std::string &file_name) {
+  return SaveFile((path + file_name + '.fbs').c_str(),
+                  GenerateFBS(parser, file_name), false);
+}
     
+    static bool GenStruct(const StructDef &struct_def, const Table *table,
+                      int indent, const IDLOptions &opts, std::string *_text);
     
-    { private:
-  const size_t lookahead_;
-};
-    
-         using Logger::SetInfoLogLevel;
-     using Logger::GetInfoLogLevel;
-     // Write an entry to the log file with the specified format.
-     virtual void Logv(const char* format, va_list ap);
-     // Write an entry to the log file with the specified log level
-     // and format.  Any log with level under the internal log level
-     // of *this (see @SetInfoLogLevel and @GetInfoLogLevel) will not be
-     // printed.
-     virtual void Logv(const InfoLogLevel log_level,
-         const char* format, va_list ap);
-    
-    #include 'modules/common/log.h'
-#include 'modules/perception/obstacle/camera/common/camera.h'
-#include 'modules/perception/obstacle/camera/common/visual_object.h'
-#include 'modules/perception/obstacle/camera/interface/base_camera_transformer.h'
+      cv::Mat element = cv::getStructuringElement( erosion_type,
+                                       cv::Size( 2*erosion_size + 1, 2*erosion_size+1 ),
+                                       cv::Point( erosion_size, erosion_size ) );
     
     
-    {
-    {}  // namespace planning
-}  // namespace apollo
+    {    return 0;
+}
 
     
-      /**
-   * @brief Getter of the heading
-   * @return The counter-clockwise angle between the x-axis and the heading-axis
-   */
-  double heading() const { return heading_; }
     
-    namespace apollo {
-namespace perception {
-namespace traffic_light {
-// @brief 2 Camera Projection project the Light into the image.
-class MultiCamerasProjection {
- public:
-  MultiCamerasProjection() = default;
-    }
-    }
-    }
+    {        return true;
     }
     
-    class TLProcSubnode : public Subnode {
- public:
-  TLProcSubnode() = default;
-  ~TLProcSubnode();
-  apollo::common::Status ProcEvents() override;
-    }
+            int currentSum = 0;
+        for (size_t j = 0; j < size; ++j)
+            if (i & (1 << j))
+                currentSum += v[j];
