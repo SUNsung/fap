@@ -1,154 +1,167 @@
 
         
-        
-    {  if (argc != 4) {
-    printf('This script converts the CIFAR dataset to the leveldb format used\n'
-           'by caffe to perform classification.\n'
-           'Usage:\n'
-           '    convert_cifar_data input_folder output_folder db_type\n'
-           'Where the input folder should contain the binary batch files.\n'
-           'The CIFAR dataset could be downloaded at\n'
-           '    http://www.cs.toronto.edu/~kriz/cifar.html\n'
-           'You should gunzip them after downloading.\n');
-  } else {
-    google::InitGoogleLogging(argv[0]);
-    convert_dataset(string(argv[1]), string(argv[2]), string(argv[3]));
-  }
-  return 0;
+        template <class Context>
+class ExtendTensorOp final : public Operator<Context> {
+ public:
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  ExtendTensorOp(const OperatorDef& operator_def, Workspace* ws)
+      : Operator<Context>(operator_def, ws),
+        growthPct_(OperatorBase::GetSingleArgument<int>('growthPct', 40)) {}
+    }
+    
+    
+    {  vector<int> y_shape(in[0].dims().begin(), in[0].dims().end());
+  CAFFE_ENFORCE_LE(canonical_axis + 1, y_shape.size());
+  y_shape.resize(canonical_axis + 1);
+  y_shape[canonical_axis] = N;
+  out[0] = CreateTensorShape(y_shape, in[0].data_type());
+  return out;
 }
-
     
-      /* Merge the separate channels into a single image. */
-  cv::Mat mean;
-  cv::merge(channels, mean);
     
-      FLAGS_alsologtostderr = 1;
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include <vector>
-    
-    #include <vector>
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the ELU inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} = \left\{
-   *        \begin{array}{lr}
-   *            1           & \mathrm{if} \; x > 0 \\
-   *            y + \alpha  & \mathrm{if} \; x \le 0
-   *        \end{array} \right.
-   *      @f$ if propagate_down[0].
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    {
+    {    return SingleGradientDef(
+        'MergeSingleMapFeatureTensorsGradient',
+        '',
+        input_blob_names,
+        output_blob_names);
+  }
 };
     
-      virtual inline const char* type() const { return 'Filter'; }
-  virtual inline int MinBottomBlobs() const { return 2; }
-  virtual inline int MinTopBlobs() const { return 1; }
+      template <typename T>
+  bool DoRunWithType() {
+    const auto& data = Input(0);
+    CAFFE_ENFORCE(data.ndim() == 1, 'data should be 1-D.');
+    }
     
-    #ifndef TESSERACT_TRAINING_MASTERTRAINER_H_
-#define TESSERACT_TRAINING_MASTERTRAINER_H_
+    ```
     
-    // dims=[5, 4, 3, 2]->[3, 5, 4, 2]
-TEST_F(MatrixTest, RotatingTranspose_2_0) {
-  GENERIC_2D_ARRAY<int> m;
-  src_.RotatingTranspose(dims_, kNumDims_, 2, 0, &m);
-  m.ResizeNoInit(kInputSize_ / 2, 2);
-  // Verify that the result is:
-  // output tensor=[[[[0, 1][6, 7][12, 13][18, 19]]
-  //                 [[24, 25][30, 31][36, 37][42, 43]]
-  //                 [[48, 49][54, 55][60, 61][66, 67]]
-  //                 [[72, 73][78, 79][84, 85][90, 91]]
-  //                 [[96, 97][102, 103][108, 109][114, 115]]]
-  //                [[[2,3]...
-  EXPECT_EQ(0, m(0, 0));
-  EXPECT_EQ(1, m(0, 1));
-  EXPECT_EQ(6, m(1, 0));
-  EXPECT_EQ(7, m(1, 1));
-  EXPECT_EQ(24, m(4, 0));
-  EXPECT_EQ(25, m(4, 1));
-  EXPECT_EQ(30, m(5, 0));
-  EXPECT_EQ(2, m(20, 0));
+    #include 'caffe2/core/common_omp.h'
+#include 'caffe2/core/context.h'
+#include 'caffe2/core/logging.h'
+#include 'caffe2/core/operator.h'
+    
+        PrintEnv();
+    SharedState shared(this);
+    std::vector<ThreadState*> threads(num_threads_);
+    for (uint32_t i = 0; i < num_threads_; i++) {
+      threads[i] = new ThreadState(i, &shared);
+      env->StartThread(ThreadBody, threads[i]);
+    }
+    {
+      MutexLock l(shared.GetMutex());
+      while (!shared.AllInitialized()) {
+        shared.GetCondVar()->Wait();
+      }
+      // Record start time
+      uint64_t start_time = env->NowMicros();
+    }
+    
+    #ifndef ROCKSDB_LITE
+#include 'db/compacted_db_impl.h'
+#include 'db/db_impl.h'
+#include 'db/version_set.h'
+#include 'table/get_context.h'
+    
+      using DBImpl::Put;
+  virtual Status Put(const WriteOptions& /*options*/,
+                     ColumnFamilyHandle* /*column_family*/,
+                     const Slice& /*key*/, const Slice& /*value*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DBImpl::Merge;
+  virtual Status Merge(const WriteOptions& /*options*/,
+                       ColumnFamilyHandle* /*column_family*/,
+                       const Slice& /*key*/, const Slice& /*value*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DBImpl::Delete;
+  virtual Status Delete(const WriteOptions& /*options*/,
+                        ColumnFamilyHandle* /*column_family*/,
+                        const Slice& /*key*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  virtual Status Write(const WriteOptions& /*options*/,
+                       WriteBatch* /*updates*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DBImpl::CompactRange;
+  virtual Status CompactRange(const CompactRangeOptions& /*options*/,
+                              ColumnFamilyHandle* /*column_family*/,
+                              const Slice* /*begin*/,
+                              const Slice* /*end*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+    
+    #pragma once
+    
+    
+    {   private:
+    const Compaction* compaction_;
+  };
+    
+    int DBImpl::IsFileDeletionsEnabled() const {
+  return !disable_delete_obsolete_files_;
 }
     
-    // Helper to compute an offset index feature. In this context an offset
-// feature with a dir of +/-1 is a feature of a similar direction,
-// but shifted perpendicular to the direction of the feature. An offset
-// feature with a dir of +/-2 is feature at the same position, but rotated
-// by +/- one [compact] quantum. Returns the index of the generated offset
-// feature, or -1 if it doesn't exist. Dir should be in
-// [-kNumOffsetMaps, kNumOffsetMaps] to indicate the relative direction.
-// A dir of 0 is an identity transformation.
-// Both input and output are from the index(sparse) feature space, not
-// the mapped/compact feature space, but the offset feature is the minimum
-// distance moved from the input to guarantee that it maps to the next
-// available quantum in the mapped/compact space.
-int IntFeatureMap::ComputeOffsetFeature(int index_feature, int dir) const {
-  INT_FEATURE_STRUCT f = InverseIndexFeature(index_feature);
-  ASSERT_HOST(IndexFeature(f) == index_feature);
-  if (dir == 0) {
-    return index_feature;
-  } else if (dir == 1 || dir == -1) {
-    FCOORD feature_dir = FeatureDirection(f.Theta);
-    FCOORD rotation90(0.0f, 1.0f);
-    feature_dir.rotate(rotation90);
-    // Find the nearest existing feature.
-    for (int m = 1; m < kMaxOffsetDist; ++m) {
-      double x_pos = f.X + feature_dir.x() * (m * dir);
-      double y_pos = f.Y + feature_dir.y() * (m * dir);
-      int x = IntCastRounded(x_pos);
-      int y = IntCastRounded(y_pos);
-      if (x >= 0 && x <= UINT8_MAX && y >= 0 && y <= UINT8_MAX) {
-        INT_FEATURE_STRUCT offset_f;
-        offset_f.X = x;
-        offset_f.Y = y;
-        offset_f.Theta = f.Theta;
-        int offset_index = IndexFeature(offset_f);
-        if (offset_index != index_feature && offset_index >= 0)
-          return offset_index;  // Found one.
-      } else {
-        return -1;  // Hit the edge of feature space.
+    #include 'rocksdb/env.h'
+#include 'util/filename.h'
+    
+      uint64_t sleep_debt = 0;
+  uint64_t time_since_last_refill = 0;
+  if (last_refill_time_ != 0) {
+    if (last_refill_time_ > time_now) {
+      sleep_debt = last_refill_time_ - time_now;
+    } else {
+      time_since_last_refill = time_now - last_refill_time_;
+      bytes_left_ +=
+          static_cast<uint64_t>(static_cast<double>(time_since_last_refill) /
+                                kMicrosPerSecond * delayed_write_rate_);
+      if (time_since_last_refill >= kRefillInterval &&
+          bytes_left_ > num_bytes) {
+        // If refill interval already passed and we have enough bytes
+        // return without extra sleeping.
+        last_refill_time_ = time_now;
+        bytes_left_ -= num_bytes;
+        return 0;
       }
     }
-  } else if (dir == 2 || dir == -2) {
-    // Find the nearest existing index_feature.
-    for (int m = 1; m < kMaxOffsetDist; ++m) {
-      int theta = f.Theta + m * dir / 2;
-      INT_FEATURE_STRUCT offset_f;
-      offset_f.X = f.X;
-      offset_f.Y = f.Y;
-      offset_f.Theta = Modulo(theta, 256);
-      int offset_index = IndexFeature(offset_f);
-      if (offset_index != index_feature && offset_index >= 0)
-        return offset_index;  // Found one.
-    }
   }
-  return -1;  // Nothing within the max distance.
-}
     
-    // The CCNonTextDetect class contains grid-based operations on blobs to create
-// a full-resolution image mask analogous yet complementary to
-// pixGenHalftoneMask as it is better at line-drawings, graphs and charts.
-class CCNonTextDetect : public BlobGrid {
+    class StopWriteToken : public WriteControllerToken {
  public:
-  CCNonTextDetect(int gridsize, const ICOORD& bleft, const ICOORD& tright);
-  virtual ~CCNonTextDetect();
+  explicit StopWriteToken(WriteController* controller)
+      : WriteControllerToken(controller) {}
+  virtual ~StopWriteToken();
+};
+    
+      env.now_micros_ += 100u;  // sleep credit 100
+  // 1000 used, 7240 left
+  ASSERT_EQ(static_cast<uint64_t>(0), controller.GetDelay(&env, 1000u));
+    
+    class PosixRandomRWFile : public RandomRWFile {
+ public:
+  explicit PosixRandomRWFile(const std::string& fname, int fd,
+                             const EnvOptions& options);
+  virtual ~PosixRandomRWFile();
     }
+    
+    Status MockEnv::RenameFile(const std::string& src, const std::string& dest) {
+  auto s = NormalizePath(src);
+  auto t = NormalizePath(dest);
+  MutexLock lock(&mutex_);
+  if (file_map_.find(s) == file_map_.end()) {
+    return Status::IOError(s, 'File not found');
+  }
+    }
+    
+      virtual Status NewDirectory(const std::string& name,
+                              unique_ptr<Directory>* result) override;
+    
+    #ifdef OS_LINUX
+#ifndef FALLOC_FL_KEEP_SIZE
+#include <linux/falloc.h>
+#endif
+#endif
+    
+    std::string kDBPath = '/tmp/rocksdb_column_families_example';
