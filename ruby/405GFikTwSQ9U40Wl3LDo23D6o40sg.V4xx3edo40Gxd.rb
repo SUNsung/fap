@@ -1,206 +1,107 @@
 
         
-        require 'abstract_unit'
-    
-      def test_redirect_with_null_bytes
-    get :redirect_with_null_bytes
-    assert_response :redirect
-    assert_equal 'http://test.host/lolwat', redirect_to_url
-  end
-    
-            adapter = adapter.camelize
-        adapter = 'PostgreSQL' if adapter == 'Postgresql'
-        'ActionCable::SubscriptionAdapter::#{adapter}'.constantize
-      end
-    end
-  end
-end
-
-    
-      def test_assert_called_with_returns
-    assert_called_with(@object, :increment, returns: 1) do
-      @object.increment
-    end
-  end
-    
-    class ActionCable::Channel::BroadcastingTest < ActionCable::TestCase
-  class ChatChannel < ActionCable::Channel::Base
-  end
-    
-        timers.each_with_index do |timer, i|
-      assert_kind_of Proc, timer[0]
-      assert_equal i + 1, timer[1][:every]
-    end
-  end
-    
-            # Internal hax = :(
-        client = connection.websocket.send(:websocket)
-        rack_hijack_io = client.instance_variable_get('@stream').instance_variable_get('@rack_hijack_io')
-        rack_hijack_io.stub(:write, proc { raise(closed_exception, 'foo') }) do
-          assert_called(client, :client_gone) do
-            client.write('boo')
+                  if Regexp.last_match
+            @generate_indexed_names = true
+            @auto_index = retrieve_autoindex(Regexp.last_match.pre_match)
+          else
+            @generate_indexed_names = false
+            @auto_index = nil
           end
         end
-        assert_equal [], connection.errors
-      end
-    end
-  end
     
-      test 'broadcaster from broadcaster_for generates notification' do
-    begin
-      server = TestServer.new
-    
-          if valid_type?(type)
-        type.constantize.new(attributes).tap do |instance|
-          instance.user = user if instance.respond_to?(:user=)
-        end
-      else
-        const_get(:BASE_CLASS_NAME).constantize.new(attributes).tap do |instance|
-          instance.type = type
-          instance.user = user if instance.respond_to?(:user=)
-        end
-      end
-    end
-  end
+      DB.exec 'DELETE FROM site_settings where name = 'uncategorized_category_id''
+  DB.exec 'INSERT INTO site_settings(name, data_type, value, created_at, updated_at)
+           VALUES ('uncategorized_category_id', 3, #{category_id}, now(), now())'
 end
+
     
-      def evernote_consumer_key
-    (config = Devise.omniauth_configs[:evernote]) && config.strategy.consumer_key
-  end
+        # The category for users with trust level 3 has been created.
+    # Add initial permissions and description. They can be changed later.
     
-        if params[:sort].present?
-      attribute, direction = params[:sort].downcase.split('.')
-      unless valid_sorts.include?(attribute)
-        attribute, direction = default.to_a.first
-      end
-    else
-      attribute, direction = default.to_a.first
-    end
-    
-        respond_to do |format|
-      if @user_credential.save
-        format.html { redirect_to user_credentials_path, notice: 'Your credential was successfully created.' }
-        format.json { render json: @user_credential, status: :created, location: @user_credential }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @user_credential.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-    
-          def key?(key)
-        super(convert_key(key))
-      end
-    
-                  # Read!
-              data << io.readpartial(READ_CHUNK_SIZE).encode('UTF-8', Encoding.default_external)
-            else
-              # Do a simple non-blocking read on the IO object
-              data << io.read_nonblock(READ_CHUNK_SIZE)
-            end
-          rescue Exception => e
-            # The catch-all rescue here is to support multiple Ruby versions,
-            # since we use some Ruby 1.9 specific exceptions.
-    
-          # This returns the keys (or ids) that are in the string.
-      #
-      # @return [<Array<String>]
-      def keys
-        regexp = /^#\s*VAGRANT-BEGIN:\s*(.+?)$\r?\n?(.*)$\r?\n?^#\s*VAGRANT-END:\s(\1)$/m
-        @value.scan(regexp).map do |match|
-          match[0]
-        end
-      end
-    
-            # Parse the options
-        argv = parse_options(opts)
-        return if !argv
-        if argv.length < 2
-          raise Vagrant::Errors::CLIInvalidUsage,
-            help: opts.help.chomp
+            staff.topic_id = post.topic.id
+        unless staff.save
+          puts staff.errors.full_messages
+          puts 'Failed to set the Staff category description topic!'
         end
     
-      it 'makes the receiver metaclass the scoped class when used with a string' do
-    obj = Object.new
-    obj.instance_eval %{
-      class B; end
-      B
-    }
-    obj.singleton_class.const_get(:B).should be_an_instance_of(Class)
+      def index
+    @filters = current_account.custom_filters
   end
     
-      ruby_version_is '2.4' do
-    describe 'full Unicode case mapping' do
-      it 'modifies self in place for all of Unicode with no option' do
-        a = 'äÖü'
-        a.swapcase!
-        a.should == 'ÄöÜ'
-      end
+      def upgrade_account
+    if signed_request_account.ostatus?
+      signed_request_account.update(last_webfingered_at: nil)
+      ResolveAccountWorker.perform_async(signed_request_account.acct)
+    end
     
-        describe 'as the last parameter' do
-      it 'passes without curly braces' do
-        specs.fooM3('abc', 123, rbx: 'cool', specs: :fail_sometimes, non_sym: 1234).should ==
-          ['abc', 123, { rbx: 'cool', specs: :fail_sometimes, non_sym: 1234 }]
+        def check_confirmation
+      if @user.confirmed?
+        flash[:error] = I18n.t('admin.accounts.resend_confirmation.already_confirmed')
+        redirect_to admin_accounts_path
       end
-    
-        class B
     end
   end
 end
 
     
-        @save_to.each { |_, v| FileUtils.mkdir_p(v) }
+        def set_email_domain_block
+      @email_domain_block = EmailDomainBlock.find(params[:id])
+    end
     
-    namespace :bower do
+      def update
+    if subscription.verify(body, request.headers['HTTP_X_HUB_SIGNATURE'])
+      ProcessingWorker.perform_async(@account.id, body.force_encoding('UTF-8'))
+    end
     
-    @@ login
-<form action='/'>
-  <label for='user'>User Name:</label>
-  <input name='user' value='' />
-  <input type='submit' value='GO!' />
-</form>
-    
-        expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('ALLOW-FROM foo')
+      # True if a {Formula} is being built with {Formula.devel} instead of {Formula.stable}.
+  # <pre>args << '--some-beta' if build.devel?</pre>
+  def devel?
+    include? 'devel'
   end
     
-      it 'accepts a session without changes to tracked parameters' do
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session
-    get '/', {}, 'rack.session' => session
-    expect(session[:foo]).to eq(:bar)
-  end
+          attr_reader :directives
     
-      # GET /books/1/edit
-  def edit
-  end
-    
-              new_source =
-            node.receiver.source + ' =~ ' + node.first_argument.source
-    
-              add_offense(node)
+          def link(**options)
+        unless source.exist?
+          raise CaskError, 'It seems the #{self.class.link_type_english_name.downcase} source '#{source}' is not there.'
         end
     
-            def on_block(node)
-          on_body_of_reduce(node) do |body|
-            void_next = body.each_node(:next).find do |n|
-              n.children.empty? && parent_block_node(n) == node
-            end
+        def hostfilter
+      ['--hosts HOSTS', '-z',
+       'Run SSH commands only on matching hosts',
+       lambda do |value|
+         Configuration.env.add_cmdline_filter(:host, value)
+       end]
+    end
     
-            # Annotate the source code with the RuboCop offenses provided
-        #
-        # @param offenses [Array<RuboCop::Cop::Offense>]
-        #
-        # @return [self]
-        def with_offense_annotations(offenses)
-          offense_annotations =
-            offenses.map do |offense|
-              indent     = ' ' * offense.column
-              carets     = '^' * offense.column_length
-    
-          # Returns the keyword of the `if` statement as a string. Returns an empty
-      # string for ternary operators.
-      #
-      # @return [String] the keyword of the `if` statement
-      def keyword
-        ternary? ? '' : loc.keyword.source
+          def load_built_in_scm
+        require 'capistrano/scm/#{scm_name}'
+        scm_class = Object.const_get(built_in_scm_plugin_class_name)
+        # We use :load_immediately because we are initializing the SCM plugin
+        # late in the load process and therefore can't use the standard
+        # load:defaults technique.
+        install_plugin(scm_class, load_immediately: true)
       end
+    
+          class ValidatedQuestion < Question
+        def initialize(validator)
+          @validator = validator
+        end
+    
+    
+===============================================
+ Error for category_generator.rb plugin
+-----------------------------------------------
+ No 'category_index.html' in source/_layouts/
+ Perhaps you haven't installed a theme yet.
+===============================================
+    
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+      end
+    end
+  end
+end
