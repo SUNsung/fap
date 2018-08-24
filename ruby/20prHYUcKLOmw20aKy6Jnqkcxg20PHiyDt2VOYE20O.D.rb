@@ -1,190 +1,123 @@
 
         
-              https://pip.readthedocs.org/en/stable/installing/#install-pip
-    EOS
-  when 'pil' then <<-EOS.undent
-    Instead of PIL, consider `pip install pillow` or `brew install Homebrew/python/pillow`.
-    EOS
-  when 'macruby' then <<-EOS.undent
-    MacRuby works better when you install their package:
-      http://www.macruby.org/
-    EOS
-  when /(lib)?lzma/
-    'lzma is now part of the xz formula.'
-  when 'xcode'
-    if MacOS.version >= :lion
-      <<-EOS.undent
-      Xcode can be installed from the App Store.
-      EOS
-    else
-      <<-EOS.undent
-      Xcode can be installed from https://developer.apple.com/xcode/downloads/
-      EOS
-    end
-  when 'gtest', 'googletest', 'google-test' then <<-EOS.undent
-    Installing gtest system-wide is not recommended; it should be vendored
-    in your projects that use it.
-    EOS
-  when 'gmock', 'googlemock', 'google-mock' then <<-EOS.undent
-    Installing gmock system-wide is not recommended; it should be vendored
-    in your projects that use it.
-    EOS
-  when 'sshpass' then <<-EOS.undent
-    We won't add sshpass because it makes it too easy for novice SSH users to
-    ruin SSH's security.
-    EOS
-  when 'gsutil' then <<-EOS.undent
-    Install gsutil with `pip install gsutil`
-    EOS
-  when 'clojure' then <<-EOS.undent
-    Clojure isn't really a program but a library managed as part of a
-    project and Leiningen is the user interface to that library.
-    
-        keys.find do |key|
-      if key.to_s.end_with?('_or_later')
-        later_tag = key.to_s[/(\w+)_or_later$/, 1].to_sym
-        MacOS::Version.from_symbol(later_tag) <= tag_version
-      end
-    end
-  end
-end
-
-    
-            if file_is_stale || ARGV.switch?('s') && !f.installed? || bottle_file_outdated?(f, file)
-          cleanup_path(file) { file.unlink }
-        end
-      end
-    end
-    
-      def describe_python
-    python = which 'python'
-    return 'N/A' if python.nil?
-    python_binary = Utils.popen_read python, '-c', 'import sys; sys.stdout.write(sys.executable)'
-    python_binary = Pathname.new(python_binary).realpath
-    if python == python_binary
-      python
-    else
-      '#{python} => #{python_binary}'
-    end
+            check_100()
   end
     
-        unless formulae.empty?
-      # Dump formula list.
-      ohai title
-      puts_columns(formulae)
-    end
-  end
     
-    PROFILE_ERB_TEMPLATE = <<-EOS
-(version 1)
-(debug allow)
+  #
+  # Payload types were copied from xCAT-server source code (IPMI.pm)
+  #
+  RMCP_ERRORS = {
+    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
+    2 => 'Invalid Session ID', #this shouldn't occur...
+    3 => 'Invalid payload type',#shouldn't occur..
+    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
+    5 => 'Invalid integrity algorithm', #same as above
+    6 => 'No matching authentication payload',
+    7 => 'No matching integrity payload',
+    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
+    9 => 'Invalid role',
+    0xa => 'Unauthorised role or privilege level requested',
+    0xb => 'Insufficient resources to create a session at the requested role',
+    0xc => 'Invalid username length',
+    0xd => 'Unauthorized name',
+    0xe => 'Unauthorized GUID',
+    0xf => 'Invalid integrity check value',
+    0x10 => 'Invalid confidentiality algorithm',
+    0x11 => 'No cipher suite match with proposed security algorithms',
+    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
+  }
     
-            def run
-          if @pod_name.nil?
-            # Note: at that point, @wipe_all is always true (thanks to `validate!`)
-            # Remove all
-            clear_cache
-          else
-            # Remove only cache for this pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            elsif cache_descriptors.count > 1 && !@wipe_all
-              # Ask which to remove
-              choices = cache_descriptors.map { |c| '#{@pod_name} v#{c[:version]} (#{pod_type(c)})' }
-              index = UI.choose_from_array(choices, 'Which pod cache do you want to remove?')
-              remove_caches([cache_descriptors[index]])
-            else
-              # Remove all found cache of this pod
-              remove_caches(cache_descriptors)
+    module Rex
+  module Proto
+    module Kerberos
+      module Model
+        class EncKdcResponse < Element
+          # @!attribute key
+          #   @return [Rex::Proto::Kerberos::Model::EncryptionKey] The session key
+          attr_accessor :key
+          # @!attribute last_req
+          #   @return [Array<Rex::Proto::Kerberos::Model::LastRequest>] This field is returned by the KDC and specifies the time(s)
+          #   of the last request by a principal
+          attr_accessor :last_req
+          # @!attribute nonce
+          #   @return [Integer] random number
+          attr_accessor :nonce
+          # @!attribute key_expiration
+          #   @return [Time] The key-expiration field is part of the response from the
+          #   KDC and specifies the time that the client's secret key is due to expire
+          attr_accessor :key_expiration
+          # @!attribute flags
+          #   @return [Integer] This field indicates which of various options were used or
+          #   requested when the ticket was issued
+          attr_accessor :flags
+          # @!attribute auth_time
+          #   @return [Time] the time of initial authentication for the named principal
+          attr_accessor :auth_time
+          # @!attribute start_time
+          #   @return [Time] Specifies the time after which the ticket is valid
+          attr_accessor :start_time
+          # @!attribute end_time
+          #   @return [Time] This field contains the time after which the ticket will
+          #   not be honored (its expiration time)
+          attr_accessor :end_time
+          # @!attribute renew_till
+          #   @return [Time] This field is only present in tickets that have the
+          #   RENEWABLE flag set in the flags field.  It indicates the maximum
+          #   endtime that may be included in a renewal
+          attr_accessor :renew_till
+          # @!attribute srealm
+          #   @return [String] The realm part of the server's principal identifier
+          attr_accessor :srealm
+          # @!attribute sname
+          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the server's identity
+          attr_accessor :sname
+    
+              # Decodes the pa_data from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Array<Rex::Proto::Kerberos::Model::PreAuthData>]
+          def decode_asn1_pa_data(input)
+            pre_auth = []
+            input.value[0].value.each do |pre_auth_data|
+              pre_auth << Rex::Proto::Kerberos::Model::PreAuthData.decode(pre_auth_data)
             end
-          end
-        end
     
-            def self.options
-          [[
-            '--short', 'Only print the path relative to the cache root'
-          ]].concat(super)
-        end
-    
-          def update_if_necessary!
-        if @update && config.verbose?
-          UI.section('\nUpdating Spec Repositories\n'.yellow) do
-            Repo.new(ARGV.new(['update'])).run
+              # Decodes the msg_type from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Integer]
+          def decode_msg_type(input)
+            input.value[0].value.to_i
           end
-        end
+    
+        set :run, Proc.new { File.expand_path($0) == File.expand_path(app_file) }
+    
+          attr_reader :app, :options
+    
+          def has_vector?(request, headers)
+        return false if request.xhr?
+        return false if options[:allow_if] && options[:allow_if].call(request.env)
+        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
+        origin(request.env).nil? and referrer(request.env) != request.host
       end
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   Cookie Tossing
-    # Supported browsers:: all
-    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
-    #
-    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
-    # session cookie. This does not protect against a cookie overflow attack.
-    #
-    # Options:
-    #
-    # session_key:: The name of the session cookie (default: 'rack.session')
-    class CookieTossing < Base
-      default_reaction :deny
+    # Exit cleanly from an early interrupt
+Signal.trap('INT') { exit 1 }
     
-          def escape_string(str)
-        str = @escaper.escape_url(str)        if @url
-        str = @escaper.escape_html(str)       if @html
-        str = @escaper.escape_javascript(str) if @javascript
-        str
+        filtered_specs.sort_by{|spec| spec.name}.each do |spec|
+      line = '#{spec.name}'
+      line += ' (#{spec.version})' if verbose?
+      puts(line)
+    end
+  end
+    
+          post_install_messages.compact.each do |message|
+        PluginManager.ui.info(message)
       end
-    end
-  end
-end
-
     
-      it 'should not set the X-Frame-Options for other content types' do
-    expect(get('/', {}, 'wants' => 'text/foo').headers['X-Frame-Options']).to be_nil
-  end
-    
-      # Run specs in random order to surface order dependencies. If you find an
-  # order dependency and want to debug it, you can fix the order by providing
-  # the seed, which is printed after each run.
-  #     --seed 1234
-  config.order = :random
-    
-        expect(get('/')).to be_ok
-  end
-end
-
-    
-        # Returns a String describing the file's content type
-    def detect
-      if blank_name?
-        SENSIBLE_DEFAULT
-      elsif empty_file?
-        EMPTY_TYPE
-      elsif calculated_type_matches.any?
-        calculated_type_matches.first
-      else
-        type_from_file_contents || SENSIBLE_DEFAULT
-      end.to_s
-    end
-    
-          class ValidateAttachmentContentTypeMatcher
-        def initialize attachment_name
-          @attachment_name = attachment_name
-          @allowed_types = []
-          @rejected_types = []
-        end
-    
-        module Statements
-      def add_attachment(table_name, *attachment_names)
-        raise ArgumentError, 'Please specify attachment name in your add_attachment call in your migration.' if attachment_names.empty?
-    
-            Paperclip::Validators.constants.each do |constant|
-          if constant.to_s =~ /\AAttachment(.+)Validator\z/
-            validator_kind = $1.underscore.to_sym
-    
-          def forbidden_types
-        [options[:not]].flatten.compact
+        context 'without a specific plugin' do
+      it 'display a list of plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list')
+        expect(result.stdout.split('\n').size).to be > 1
       end
