@@ -1,289 +1,185 @@
 
         
-            This could be extended by having nested blocks, sorting them recursively
-    and flattening the end structure into a list of lines. Revision 2 maybe ^.^.
-'''
+        
+class RequestStatus(Enum):
     
-        def set(self, results, query):
-        '''Set the result for the given query key in the cache.
+        def extract_year_month(self, line):
+        '''Return the year and month portions of the timestamp.'''
+        pass
     
-    print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer),
+            self.mr(mapper=self.mapper_sort,
+                    reducer=self.reducer_identity),
+        ]
     
-    tf_proto_library_cc(
-    name = 'runtime_proto',
-    srcs = ['runtime.proto'],
-    protodeps = [':spec_proto'],
-)
+        def set(self, key, value):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                item.value = value
+                return
+        self.table[hash_index].append(Item(key, value))
     
-    
-class MasterState(object):
-  '''Simple utility to encapsulate tensors associated with the master state.
-    
-      Returns:
-    [B,M,M] tensor L with the Laplacian of each digraph, padded with an identity
-    matrix.  More concretely, the padding entries (t or s >= lengths[b]) are:
-      L_{b,t,t} = 1.0
-      L_{b,t,s} = 0.0
-    Note that this 'identity matrix padding' ensures that the determinant of
-    each padded matrix equals the determinant of the unpadded matrix.  The
-    non-padding entries (t,s < lengths[b]) depend on whether the Laplacian is
-    constructed for trees or forests.  For trees:
-      L_{b,t,0} = arcs[b,t,t]
-      L_{b,t,t} = \sum_{s < lengths[b], t != s} arcs[b,t,s]
-      L_{b,t,s} = -arcs[b,t,s]
-    For forests:
-      L_{b,t,t} = \sum_{s < lengths[b]} arcs[b,t,s]
-      L_{b,t,s} = -arcs[b,t,s]
-    See http://www.aclweb.org/anthology/D/D07/D07-1015.pdf for details, though
-    note that our matrices are transposed from their notation.
-  '''
-  check.Eq(arcs.get_shape().ndims, 3, 'arcs must be rank 3')
-  dtype = arcs.dtype.base_dtype
-    
-        Raises:
-      IndexError: if max_index is positive but out of bounds.
     '''
-    check.IsFalse(compute_gradients and use_moving_average,
-                  'It is not possible to make gradient updates when reading '
-                  'from the moving average variables.')
+This script employs a VERY basic heuristic ('porn' in webpage.lower()) to check
+if we are not 'age_limit' tagging some porn site
     
-    from dragnn.python import lexicon
-    
-        class _FakeSignal(object):
-        '''If blinker is unavailable, create a fake class with the same
-        interface that allows sending of signals but will fail with an
-        error on anything else.  Instead of doing anything on send, it
-        will just ignore the arguments and do nothing instead.
-        '''
-    
-        def _get_source_fast(self, environment, template):
-        for srcobj, loader in self._iter_loaders(template):
-            try:
-                return loader.get_source(environment, template)
-            except TemplateNotFound:
-                continue
-        raise TemplateNotFound(template)
+    filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
     
     
-def test_aborting(app):
-    class Foo(Exception):
-        whatever = 42
+atom_template = textwrap.dedent('''\
+    <?xml version='1.0' encoding='utf-8'?>
+    <feed xmlns='http://www.w3.org/2005/Atom'>
+        <link rel='self' href='http://rg3.github.io/youtube-dl/update/releases.atom' />
+        <title>youtube-dl releases</title>
+        <id>https://yt-dl.org/feed/youtube-dl-updates-feed</id>
+        <updated>@TIMESTAMP@</updated>
+        @ENTRIES@
+    </feed>''')
     
-        rv = client.get('/')
-    assert rv.data == b'dcba'
+        ie_htmls = []
+    for ie in youtube_dl.list_extractors(age_limit=None):
+        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
+        ie_desc = getattr(ie, 'IE_DESC', None)
+        if ie_desc is False:
+            continue
+        elif ie_desc is not None:
+            ie_html += ': {}'.format(ie.IE_DESC)
+        if not ie.working():
+            ie_html += ' (Currently broken)'
+        ie_htmls.append('<li>{}</li>'.format(ie_html))
     
-                gc.collect()
-            print('- benchmarking LassoLars')
-            clf = LassoLars(alpha=alpha, fit_intercept=False,
-                            normalize=False, precompute=precompute)
-            tstart = time()
-            clf.fit(X, Y)
-            lars_lasso_results.append(time() - tstart)
-    
-    
-METRICS = {
-    'f1': partial(f1_score, average='micro'),
-    'f1-by-sample': partial(f1_score, average='samples'),
-    'accuracy': accuracy_score,
-    'hamming': hamming_loss,
-    'jaccard': jaccard_similarity_score,
-}
-    
-        selected_algorithm = opts.selected_algorithm.split(',')
-    for key in selected_algorithm:
-        if key not in default_algorithms.split(','):
-            raise ValueError('Unknown sampling algorithm \'%s\' not in (%s).'
-                             % (key, default_algorithms))
-    
-    for lang, page in pages.items():
-    
-        # TASK: Predict the outcome on the testing set and store it in a variable
-    # named y_predicted
-    
-    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
-                             random_state=0)
-model.fit(data)
-score = consensus_score(model.biclusters_,
-                        (rows[:, row_idx], columns[:, col_idx]))
-    
-    from __future__ import print_function
-import numpy as np
-import matplotlib.pyplot as plt
-    
-        def __init__(self):
-        self.settings = None  # set in scrapy.cmdline
-    
-        def short_desc(self):
-        return 'Run quick benchmark test'
-    
-            infos = []
-        if not self.wasSuccessful():
-            write('FAILED')
-            failed, errored = map(len, (self.failures, self.errors))
-            if failed:
-                infos.append('failures=%d' % failed)
-            if errored:
-                infos.append('errors=%d' % errored)
-        else:
-            write('OK')
-    
-        def post_process(self, output):
-        occurrences = 0
-        for x in output:
-            if isinstance(x, self.obj_type):
-                occurrences += 1
-    
-            # 2. Notify response_downloaded listeners about the recent download
-        # before querying queue for next request
-        def _downloaded(response):
-            self.signals.send_catch_log(signal=signals.response_downloaded,
-                                        response=response,
-                                        request=request,
-                                        spider=spider)
-            return response
-        dfd.addCallback(_downloaded)
-    
-        def connectionLost(self, reason):
-        self._connection_lost_reason = reason
-        HTTPClient.connectionLost(self, reason)
-        self.factory.noPage(reason)
-    
-            def process_spider_exception(_failure):
-            exception = _failure.value
-            for method in self.methods['process_spider_exception']:
-                result = method(response=response, exception=exception, spider=spider)
-                assert result is None or _isiterable(result), \
-                    'Middleware %s must returns None, or an iterable object, got %s ' % \
-                    (fname(method), type(result))
-                if result is not None:
-                    return result
-            return _failure
-    
-            if not isinstance(response, HtmlResponse) or response.status != 200:
-            return response
-    
-        def process_request(self, request, spider):
-        if self.user_agent:
-            request.headers.setdefault(b'User-Agent', self.user_agent)
+    if __name__ == '__main__':
+    main()
 
     
-        @classmethod
-    def from_crawler(cls, crawler):
-        return cls(crawler)
     
-    # The reST default role (used for this markup: `text`) to use for all
-# documents.
-default_role = 'py:obj'
+if __name__ == '__main__':
+    main()
+
     
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    @mock.patch('certbot.notify.subprocess.Popen')
-    def test_everything_fails(self, mock_popen, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        lmtp_obj.sendmail.side_effect = socket.error(17)
-        proc = mock.MagicMock()
-        mock_popen.return_value = proc
-        proc.communicate.side_effect = OSError('What we have here is a '
-                                               'failure to communicate.')
-        self.assertFalse(notify('Goose', 'auntrhody@example.com',
-                                'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
-        self.assertEqual(proc.communicate.call_count, 1)
+    PREFIX = r'''%YOUTUBE-DL(1)
     
-    import tornado.httpserver
-import tornado.ioloop
-import tornado.options
-import tornado.web
+        ydl.report_warning = _report_warning
+
+    
+        def test_decrypt_text(self):
+        password = intlist_to_bytes(self.key).decode('utf-8')
+        encrypted = base64.b64encode(
+            intlist_to_bytes(self.iv[:8]) +
+            b'\x17\x15\x93\xab\x8d\x80V\xcdV\xe0\t\xcdo\xc2\xa5\xd8ksM\r\xe27N\xae'
+        ).decode('utf-8')
+        decrypted = (aes_decrypt_text(encrypted, password, 16))
+        self.assertEqual(decrypted, self.secret_msg)
     
     
-class FixFutureImports(fixer_base.BaseFix):
-    BM_compatible = True
+class TestAgeRestriction(unittest.TestCase):
+    def _assert_restricted(self, url, filename, age, old_age=None):
+        self.assertTrue(_download_restricted(url, filename, old_age))
+        self.assertFalse(_download_restricted(url, filename, age))
     
+    from . import utils
+from . import packages
+from .models import Request, Response, PreparedRequest
+from .api import request, get, head, post, patch, put, delete, options
+from .sessions import session, Session
+from .status_codes import codes
+from .exceptions import (
+    RequestException, Timeout, URLRequired,
+    TooManyRedirects, HTTPError, ConnectionError,
+    FileModeWarning, ConnectTimeout, ReadTimeout
+)
     
-class MainHandler(BaseHandler, TwitterMixin):
-    @authenticated
-    @gen.coroutine
-    def get(self):
-        timeline = yield self.twitter_request(
-            '/statuses/home_timeline',
-            access_token=self.current_user['access_token'])
-        self.render('home.html', timeline=timeline)
+        def __init__(self, data=None, **kwargs):
+        self._store = OrderedDict()
+        if data is None:
+            data = {}
+        self.update(data, **kwargs)
     
+        text_302 = (b'HTTP/1.1 302 FOUND\r\n'
+                b'Content-Length: 0\r\n'
+                b'Location: /\r\n\r\n')
     
-def run():
-    io_loop = IOLoop(make_current=True)
-    app = Application([('/', RootHandler)])
-    port = random.randrange(options.min_port, options.max_port)
-    app.listen(port, address='127.0.0.1')
-    signal.signal(signal.SIGCHLD, handle_sigchld)
-    args = ['ab']
-    args.extend(['-n', str(options.n)])
-    args.extend(['-c', str(options.c)])
-    if options.keepalive:
-        args.append('-k')
-    if options.quiet:
-        # just stops the progress messages printed to stderr
-        args.append('-q')
-    args.append('http://127.0.0.1:%d/' % port)
-    subprocess.Popen(args)
-    io_loop.start()
-    io_loop.close()
-    io_loop.clear_current()
+        possible_keys = pytest.mark.parametrize('key', ('accept', 'ACCEPT', 'aCcEpT', 'Accept'))
     
-    import sys
-from timeit import Timer
+      For example:
+    >>> _ClassifyInclude(FileInfo('foo/foo.cc'), 'stdio.h', True)
+    _C_SYS_HEADER
+    >>> _ClassifyInclude(FileInfo('foo/foo.cc'), 'string', True)
+    _CPP_SYS_HEADER
+    >>> _ClassifyInclude(FileInfo('foo/foo.cc'), 'foo/foo.h', False)
+    _LIKELY_MY_HEADER
+    >>> _ClassifyInclude(FileInfo('foo/foo_unknown_extension.cc'),
+    ...                  'bar/foo_other_ext.h', False)
+    _POSSIBLE_MY_HEADER
+    >>> _ClassifyInclude(FileInfo('foo/foo.cc'), 'foo/bar.h', False)
+    _OTHER_HEADER
+  '''
+  # This is a list of all standard c++ header files, except
+  # those already checked for above.
+  is_cpp_h = include in _CPP_HEADERS
     
-    coverage_ignore_functions = [
-    # various modules
-    'doctests',
-    'main',
+        forbidden_extensions = ['html', 'htm'] if results.nohtml else []
     
-    if (platform.python_implementation() == 'CPython' and
-        os.environ.get('TORNADO_EXTENSION') != '0'):
-    # This extension builds and works on pypy as well, although pypy's jit
-    # produces equivalent performance.
-    kwargs['ext_modules'] = [
-        Extension('tornado.speedups',
-                  sources=['tornado/speedups.c']),
-    ]
+        def backwards(self, orm):
+        # Removing unique constraint on 'GroupCommitResolution', fields ['group_id', 'commit_id']
+        db.delete_unique('sentry_groupcommitresolution', ['group_id', 'commit_id'])
     
-    # Often instead of just checking if two faces match or not (True or False), it's helpful to see how similar they are.
-# You can do that by using the face_distance function.
-    
-        # Gloss the lips
-    d.polygon(face_landmarks['top_lip'], fill=(150, 0, 0, 128))
-    d.polygon(face_landmarks['bottom_lip'], fill=(150, 0, 0, 128))
-    d.line(face_landmarks['top_lip'], fill=(150, 0, 0, 64), width=8)
-    d.line(face_landmarks['bottom_lip'], fill=(150, 0, 0, 64), width=8)
-    
-                for face_location in face_locations:
-                # Print the location of each face in this frame
-                top, right, bottom, left = face_location
-                print(' - A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
-    
-        # Display the resulting image
-    cv2.imshow('Video', frame)
-    
-    
-# -- Options for Texinfo output ----------------------------------------
-    
-        if os.path.isdir(image_to_check):
-        if cpus == 1:
-            [test_image(image_file, known_names, known_face_encodings, tolerance, show_distance) for image_file in image_files_in_folder(image_to_check)]
+            # Changing field 'Environment.project_id'
+        if is_postgres():
+            db.execute('ALTER TABLE sentry_environment ALTER COLUMN project_id DROP NOT NULL')
         else:
-            process_images_in_process_pool(image_files_in_folder(image_to_check), known_names, known_face_encodings, cpus, tolerance, show_distance)
-    else:
-        test_image(image_to_check, known_names, known_face_encodings, tolerance, show_distance)
+            db.alter_column(
+                'sentry_environment',
+                'project_id',
+                self.gf('sentry.db.models.fields.bounded.BoundedPositiveIntegerField')(null=True)
+            )
     
-            img_b1 = api.load_image_file(os.path.join(os.path.dirname(__file__), 'test_images', 'biden.jpg'))
+            for release_project in RangeQuerySetWrapperWithProgressBar(
+            orm.ReleaseProject.objects.all()
+        ):
+            orm.ReleaseProject.objects.filter(id=release_project.id).update(
+                new_groups=orm.Group.objects.filter(
+                    project_id=release_project.project_id,
+                    first_release_id=release_project.release_id,
+                ).count()
+            )
+    
+            # Adding field 'ApiAuthorization.scope_list'
+        db.add_column(
+            'sentry_apiauthorization',
+            'scope_list',
+            self.gf('sentry.db.models.fields.array.ArrayField')(
+                of=('django.db.models.fields.TextField', [], {})
+            ),
+            keep_default=False
+        )
+    
+    
+def main():
+    tornado.options.parse_command_line()
+    application = tornado.web.Application([
+        (r'/', MainHandler),
+    ])
+    http_server = tornado.httpserver.HTTPServer(application)
+    http_server.listen(options.port)
+    tornado.ioloop.IOLoop.current().start()
+    
+    '''Usage: python file_uploader.py [--put] file1.txt file2.png ...
