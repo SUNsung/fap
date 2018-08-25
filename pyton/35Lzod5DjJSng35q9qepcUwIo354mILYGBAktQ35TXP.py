@@ -1,149 +1,67 @@
 
         
-        ``response``:
-    The response generated from a Request.
-'''
-HOOKS = ['response']
+            def __init__(self, cards):
+        self.cards = cards
     
+        def __init__(self, template_categories_to_budget_map):
+        self.categories_to_budget_map = template_categories_to_budget_map
     
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
-
+    from mrjob.job import MRJob
     
-        def _close_server_sock_ignore_errors(self):
-        try:
-            self.server_sock.close()
-        except IOError:
-            pass
+      def _get_sentence(self, forever=True):
+    while True:
+      ids = self._load_random_shard()
+      for current_ids in ids:
+        yield current_ids
+      if not forever:
+        break
     
+        elif (FLAGS.discriminator_model == 'bidirectional_zaremba' or
+          FLAGS.discriminator_model == 'bidirectional_vd'):
+      assert FLAGS.language_model_ckpt_dir_reversed is not None, (
+          'Need a reversed directory to fill in the backward components.')
+      load_fwd_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
+      load_bwd_ckpt = tf.train.latest_checkpoint(
+          FLAGS.language_model_ckpt_dir_reversed)
+      print('Restoring Discriminator from %s and %s.' % (load_fwd_ckpt,
+                                                         load_bwd_ckpt))
+      tf.logging.info('Restoring Discriminator from %s and %s.' %
+                      (load_fwd_ckpt, load_bwd_ckpt))
+      dis_fwd_init_saver = init_savers['dis_fwd_init_saver']
+      dis_bwd_init_saver = init_savers['dis_bwd_init_saver']
+      dis_fwd_init_saver.restore(sess, load_fwd_ckpt)
+      dis_bwd_init_saver.restore(sess, load_bwd_ckpt)
     
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
-
+                gc.collect()
+            print('benchmarking lasso_path (without Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            lasso_path(X, y, precompute=False)
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            results['lasso_path (without Gram)'].append(delta)
     
-            This method should not be called from user code, and is only
-        exposed for use when subclassing the
-        :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`.
+                gc.collect()
+            print('benchmarking lars_path (with Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            G = np.dot(X.T, X)  # precomputed Gram matrix
+            Xy = np.dot(X.T, y)
+            lars_path(X, y, Xy=Xy, Gram=G, max_iter=n_informative)
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            lars_gram[i_f, i_s] = delta
     
-            return self.__dict__.get(key, None)
+        results = defaultdict(lambda: [])
     
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
+                gc.collect()
+            print('- benchmarking RidgeRegression')
+            clf = Ridge(alpha=alpha, fit_intercept=False)
+            tstart = time()
+            clf.fit(X_train, y_train)
+            ridge_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
+                                                        y_test)
+            ridge_results[i, j, 1] = time() - tstart
     
-       ###########################################################################
-    # Set custom automatic method selection
-    sampling_algorithm['custom-auto'] = \
-        lambda n_population, n_samples, random_state=None: \
-            sample_without_replacement(n_population,
-                                       n_samples,
-                                       method='auto',
-                                       random_state=random_state)
-    
-    
-URL = ('http://www.cs.cornell.edu/people/pabo/'
-       'movie-review-data/review_polarity.tar.gz')
-    
-    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
-TRAIN_FOLDER = '20news-bydate-train'
-TEST_FOLDER = '20news-bydate-test'
-    
-    '''
-# Author: Olivier Grisel <olivier.grisel@ensta.org>
-# License: Simplified BSD
-    
-    plt.matshow(fit_data, cmap=plt.cm.Blues)
-plt.title('After biclustering; rearranged to show biclusters')
-    
-    # Plot boundaries of unit simplex
-plt.plot([0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], 'k', label='Simplex')
-    
-    A Lexer emits Token objects which are usually buffered by a TokenStream. A
-Parser can build a Tree, if the output=AST option has been set in the grammar.
-    
-    MIN_TOKEN_TYPE = UP+1
-    
-            :param str domain_name: The domain to use to associate the record with.
-        :param str record_name: The record name (typically beginning with '_acme-challenge.').
-        :param str record_content: The record content (typically the challenge validation).
-        :raises certbot.errors.PluginError: if an error occurs communicating with the DigitalOcean
-                                            API
-        '''
-    
-    import mock
-    
-            self.assertFalse(self.vhost1.same_server(no_name1))
-        self.assertFalse(no_name1.same_server(no_name3))
-        self.assertFalse(no_name1.same_server(no_name4))
-    
-    # Language to be used for generating the HTML full-text search index.
-# Sphinx supports the following languages:
-#   'da', 'de', 'en', 'es', 'fi', 'fr', 'hu', 'it', 'ja'
-#   'nl', 'no', 'pt', 'ro', 'ru', 'sv', 'tr'
-#html_search_language = 'en'
-    
-    from acme import errors as acme_errors
-from certbot_compatibility_test import validator
-    
-    Local worker thread:
-- reads work ids from the 'Work Ids' queue and looks up the corresponding
-  WorkItem from the 'Work Items' dict: if the work item has been cancelled then
-  it is simply removed from the dict, otherwise it is repackaged as a
-  _CallItem and put in the 'Call Q'. New _CallItems are put in the 'Call Q'
-  until 'Call Q' is full. NOTE: the size of the 'Call Q' is kept small because
-  calls placed in the 'Call Q' can no longer be cancelled with Future.cancel().
-- reads _ResultItems from 'Result Q', updates the future stored in the
-  'Work Items' dict and deletes the dict entry
-    
-            for future in as_completed(future_to_url):
-            try:
-                url_to_content[future_to_url[future]] = future.result()
-            except:
-                pass
-        return url_to_content
-    finally:
-        executor.shutdown()
-    
-    # Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title, author, documentclass [howto/manual]).
-latex_documents = [
-  ('index', 'futures.tex', u'futures Documentation',
-   u'Brian Quinlan', 'manual'),
-]
-    
-    def sequential():
-    return list(map(is_prime, PRIMES))
-    
-            # When there are multiple fixit suggestions, present them as a list to
-        # the user hand have her choose which one to apply.
-        if len( self._response[ 'fixits' ] ) > 1:
-          fixit_index = vimsupport.SelectFromList(
-            'Multiple FixIt suggestions are available at this location. '
-            'Which one would you like to apply?',
-            [ fixit[ 'text' ] for fixit in self._response[ 'fixits' ] ] )
-    
-        vimsupport.JumpToLocation( os.path.realpath( u'different_uni¢𐍈d€' ),
-                               2, 5, 'belowright' )
-    
-        if len( namespaces ) > 1:
-      choices = [ '{0} {1}'.format( i + 1, n )
-                  for i, n in enumerate( namespaces ) ]
-      choice = vimsupport.PresentDialog( 'Insert which namespace:', choices )
-      if choice < 0:
-        return
-      namespace = namespaces[ choice ]
-    else:
-      namespace = namespaces[ 0 ]
-    
-        elif isinstance( candidate, str ) or isinstance( candidate, bytes ):
-      new_candidates.append(
-        { 'abbr': candidate,
-          'word': NewCandidateInsertionText( candidate, text_after_cursor ) } )
-  return new_candidates
+        if path_details['type'] == 'symlink':
+        symlinks[name] = json_urlread(path_details['_links']['self'])['target']
