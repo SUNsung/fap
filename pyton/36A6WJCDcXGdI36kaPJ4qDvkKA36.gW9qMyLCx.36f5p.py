@@ -1,176 +1,157 @@
 
         
-            @get_item_parameters
-    def test_getitem(self, key, value):
-        assert self.lookup_dict[key] == value
+        r = openssl_encode('aes-128-cbc', key, iv)
+print('aes_cbc_decrypt')
+print(repr(r))
+    
+        ie_htmls = []
+    for ie in youtube_dl.list_extractors(age_limit=None):
+        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
+        ie_desc = getattr(ie, 'IE_DESC', None)
+        if ie_desc is False:
+            continue
+        elif ie_desc is not None:
+            ie_html += ': {}'.format(ie.IE_DESC)
+        if not ie.working():
+            ie_html += ' (Currently broken)'
+        ie_htmls.append('<li>{}</li>'.format(ie_html))
     
     
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
+# Import youtube_dl
+ROOT_DIR = os.path.join(os.path.dirname(__file__), '..')
+sys.path.insert(0, ROOT_DIR)
+import youtube_dl
+    
+        # Are checkable fields missing from the test case definition?
+    test_info_dict = dict((key, value if not isinstance(value, compat_str) or len(value) < 250 else 'md5:' + md5(value))
+                          for key, value in got_dict.items()
+                          if value and key in ('id', 'title', 'description', 'uploader', 'upload_date', 'timestamp', 'uploader_id', 'location', 'age_limit'))
+    missing_keys = set(test_info_dict.keys()) - set(expected_dict.keys())
+    if missing_keys:
+        def _repr(v):
+            if isinstance(v, compat_str):
+                return ''%s'' % v.replace('\\', '\\\\').replace(''', '\\'').replace('\n', '\\n')
+            else:
+                return repr(v)
+        info_dict_str = ''
+        if len(missing_keys) != len(expected_dict):
+            info_dict_str += ''.join(
+                '    %s: %s,\n' % (_repr(k), _repr(v))
+                for k, v in test_info_dict.items() if k not in missing_keys)
+    
+        def test_html_search_regex(self):
+        html = '<p id='foo'>Watch this <a href='http://www.youtube.com/watch?v=BaW_jenozKc'>video</a></p>'
+        search = lambda re, *args: self.ie._html_search_regex(re, html, *args)
+        self.assertEqual(search(r'<p id='foo'>(.+?)</p>', 'foo'), 'Watch this video')
+    
+        def test_youtube_matching(self):
+        self.assertTrue(YoutubeIE.suitable('PLtS2H6bU1M'))
+        self.assertFalse(YoutubeIE.suitable('https://www.youtube.com/watch?v=AV6J6_AeFEQ&playnext=1&list=PL4023E734DA416012'))  # 668
+        self.assertMatch('http://youtu.be/BaW_jenozKc', ['youtube'])
+        self.assertMatch('http://www.youtube.com/v/BaW_jenozKc', ['youtube'])
+        self.assertMatch('https://youtube.googleapis.com/v/BaW_jenozKc', ['youtube'])
+        self.assertMatch('http://www.cleanvideosearch.com/media/action/yt/watch?videoId=8v_4O44sfjM', ['youtube'])
+    
+        from docutils.nodes import reference
+    from docutils.parsers.rst.roles import set_classes
+    options = options or {}
+    set_classes(options)
+    node = reference(rawtext, words, refuri=url, **options)
+    return [node], []
+    
+        @app.route('/hello')
+    def hello():
+        return 'Hello, World!'
+    
+        Ensures that the post exists and that the logged in user is the
+    author of the post.
+    '''
+    get_post(id)
+    db = get_db()
+    db.execute('DELETE FROM post WHERE id = ?', (id,))
+    db.commit()
+    return redirect(url_for('blog.index'))
 
     
-    # Add any extra paths that contain custom files (such as robots.txt or
-# .htaccess) here, relative to this directory. These files are copied
-# directly to the root of the documentation.
-#html_extra_path = []
+        auth.login()
+    response = client.get('/')
+    assert b'test title' in response.data
+    assert b'by test on 2018-01-01' in response.data
+    assert b'test\nbody' in response.data
+    assert b'href='/1/update'' in response.data
     
-        For example, ``headers['content-encoding']`` will return the
-    value of a ``'Content-Encoding'`` response header, regardless
-    of how the header name was originally stored.
+        def from_pyfile(self, filename, silent=False):
+        '''Updates the values in the config from a Python file.  This function
+        behaves as if the file was imported as module with the
+        :meth:`from_object` function.
     
-            # Merge all the kwargs.
-        proxies = merge_setting(proxies, self.proxies)
-        stream = merge_setting(stream, self.stream)
-        verify = merge_setting(verify, self.verify)
-        cert = merge_setting(cert, self.cert)
+        Example usage::
     
-        def setUp(self):
-        super(AuthenticatorTest, self).setUp()
+    # next, compare with an equivalent network
+# with2x bigger Dense layers and ReLU
+
     
-        def _get_digitalocean_client(self):
-        return _DigitalOceanClient(self.credentials.conf('token'))
+        def __init__(self, units,
+                 kernel_initializer='glorot_uniform',
+                 recurrent_initializer='orthogonal',
+                 bias_initializer='zeros',
+                 kernel_regularizer=None,
+                 recurrent_regularizer=None,
+                 bias_regularizer=None,
+                 activity_regularizer=None,
+                 kernel_constraint=None,
+                 recurrent_constraint=None,
+                 bias_constraint=None,
+                 return_sequences=False,
+                 return_state=False,
+                 stateful=False,
+                 **kwargs):
+        self.units = units
+        super(CuDNNGRU, self).__init__(
+            return_sequences=return_sequences,
+            return_state=return_state,
+            stateful=stateful,
+            **kwargs)
     
-        def __init__(self, config, account_, auth, installer, acme=None):
-        '''Initialize a client.'''
-        self.config = config
-        self.account = account_
-        self.auth = auth
-        self.installer = installer
+    To run this benchmark, you will need,
     
-        def setUp(self):
-        from acme.errors import PollError
-        self.timeout = PollError(
-            exhausted=set([mock.sentinel.AR]),
-            updated={})
-        self.invalid = PollError(exhausted=set(), updated={
-            mock.sentinel.AR: mock.sentinel.AR2})
+        n = 10
+    step = 10000
+    n_samples = 10000
+    dim = 10
+    n_classes = 10
+    for i in range(n):
+        print('============================================')
+        print('Entering iteration %s of %s' % (i, n))
+        print('============================================')
+        n_samples += step
+        X = np.random.randn(n_samples, dim)
+        Y = np.random.randint(0, n_classes, (n_samples,))
+        bench_scikit_tree_classifier(X, Y)
+        Y = np.random.randn(n_samples)
+        bench_scikit_tree_regressor(X, Y)
     
-        @staticmethod
-    def get_streams_by_id(account_number, video_id):
-        '''
-        int, int->list
-        
-        Get the height of the videos.
-        
-        Since brightcove is using 3 kinds of links: rtmp, http and https,
-        we will be using the HTTPS one to make it secure.
-        
-        If somehow akamaihd.net is blocked by the Great Fucking Wall,
-        change the 'startswith https' to http.
-        '''
-        endpoint = 'https://edge.api.brightcove.com/playback/v1/accounts/{account_number}/videos/{video_id}'.format(account_number = account_number, video_id = video_id)
-        fake_header_id = fake_headers
-        #is this somehow related to the time? Magic....
-        fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
+    setup_encode_face = '''
+import face_recognition
     
-    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
+    import math
+from sklearn import neighbors
+import os
+import os.path
+import pickle
+from PIL import Image, ImageDraw
+import face_recognition
+from face_recognition.face_recognition_cli import image_files_in_folder
     
-	from xml.dom.minidom import parseString
-	doc = parseString(xml)
-	tab = doc.getElementsByTagName('related')[0].firstChild
+            # Draw a label with a name below the face
+        cv2.rectangle(frame, (left, bottom - 25), (right, bottom), (0, 0, 255), cv2.FILLED)
+        font = cv2.FONT_HERSHEY_DUPLEX
+        cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.5, (255, 255, 255), 1)
     
+            # Now let's list all the faces we found in all 128 frames
+        for frame_number_in_batch, face_locations in enumerate(batch_of_face_locations):
+            number_of_faces_in_frame = len(face_locations)
     
-def huaban_download_board(url, output_dir, **kwargs):
-    kwargs['merge'] = False
-    board = extract_board_data(url)
-    output_dir = os.path.join(output_dir, board.title)
-    print_info(site_info, board.title, 'jpg', float('Inf'))
-    for pin in board.pins:
-        download_urls([pin.url], pin.id, pin.ext, float('Inf'),
-                      output_dir=output_dir, faker=True, **kwargs)
-    
-            print_info(site_info, title, type_, size_full)
-        if not info_only:
-            download_urls(url_list, title, ext, total_size=size_full, output_dir=output_dir, merge=merge, headers=fake_headers)
-    else:
-        raise NotImplementedError(flashvars)
-    
-        # ordered list of supported stream types / qualities on this site
-    # order: high quality -> low quality
-    stream_types = [
-        {'id': 'original'}, # contains an 'id' or 'itag' field at minimum
-        {'id': 'small'},
-    ]
-    
-        assert stream_url
-    
-      matched = Match(r'\s*(public|protected|private):', clean_lines.lines[linenum])
-  if matched:
-    # Issue warning if the line before public/protected/private was
-    # not a blank line, but don't do this if the previous line contains
-    # 'class' or 'struct'.  This can happen two ways:
-    #  - We are at the beginning of the class.
-    #  - We are forward-declaring an inner class that is semantically
-    #    private, but needed to be public for implementation reasons.
-    # Also ignores cases where the previous line ends with a backslash as can be
-    # common when defining classes in C macros.
-    prev_line = clean_lines.lines[linenum - 1]
-    if (not IsBlankLine(prev_line) and
-        not Search(r'\b(class|struct)\b', prev_line) and
-        not Search(r'\\$', prev_line)):
-      # Try a bit harder to find the beginning of the class.  This is to
-      # account for multi-line base-specifier lists, e.g.:
-      #   class Derived
-      #       : public Base {
-      end_class_head = class_info.starting_linenum
-      for i in range(class_info.starting_linenum, linenum):
-        if Search(r'\{\s*$', clean_lines.lines[i]):
-          end_class_head = i
-          break
-      if end_class_head < linenum - 1:
-        error(filename, linenum, 'whitespace/blank_line', 3,
-              ''%s:' should be preceded by a blank line' % matched.group(1))
-    }
-    }
-    
-    
-def keypoint_rcnn_frozen_features(model):
-    logger.warn('Deprecated: use `TRAIN.FREEZE_CONV_BODY: True` instead')
-    return build_generic_detection_model(
-        model,
-        get_func(cfg.MODEL.CONV_BODY),
-        add_roi_box_head_func=get_func(cfg.FAST_RCNN.ROI_BOX_HEAD),
-        add_roi_keypoint_head_func=get_func(cfg.KRCNN.ROI_KEYPOINTS_HEAD),
-        freeze_conv_body=True
-    )
-    
-            retinanet_blobs, fg_num, bg_num = _get_retinanet_blobs(
-            foas, all_anchors, gt_rois, gt_classes, image_width, image_height)
-        for i, foa in enumerate(foas):
-            for k, v in retinanet_blobs[i].items():
-                # the way it stacks is:
-                # [[anchors for image1] + [anchors for images 2]]
-                level = int(np.log2(foa.stride))
-                key = '{}_fpn{}'.format(k, level)
-                if k == 'retnet_roi_fg_bbox_locs':
-                    v[:, 0] = im_i
-                    # loc_stride: 80 * 4 if cls_specific else 4
-                    loc_stride = 4  # 4 coordinate corresponding to bbox prediction
-                    if cfg.RETINANET.CLASS_SPECIFIC_BBOX:
-                        loc_stride *= (cfg.MODEL.NUM_CLASSES - 1)
-                    anchor_ind = foa.octave * num_aspect_ratios + foa.aspect
-                    # v[:, 1] is the class label [range 0-80] if we do
-                    # class-specfic bbox otherwise it is 0. In case of class
-                    # specific, based on the label, the location of current
-                    # anchor is class_label * 4 and then we take into account
-                    # the anchor_ind if the anchors
-                    v[:, 1] *= 4
-                    v[:, 1] += loc_stride * anchor_ind
-                blobs[key].append(v)
-        blobs['retnet_fg_num'] += fg_num
-        blobs['retnet_bg_num'] += bg_num
-    
-            # Test bigger boxes
-        b1 = random_boxes([10, 10, 110, 20], 20, 10)
-        b2 = random_boxes([10, 10, 110, 20], 20, 10)
-        _do_test(b1, b2)
-    
-            # Test: merge with converted type
-        cfg2 = AttrDict()
-        cfg2.TRAIN = AttrDict()
-        cfg2.TRAIN.SCALES = [1]
-        core_config.merge_cfg_from_cfg(cfg2)
-        assert type(cfg.TRAIN.SCALES) is tuple
-        assert cfg.TRAIN.SCALES[0] == 1
+        for unknown_encoding in unknown_encodings:
+        distances = face_recognition.face_distance(known_face_encodings, unknown_encoding)
+        result = list(distances <= tolerance)
