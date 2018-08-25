@@ -1,293 +1,221 @@
 
         
-        bool MenuDelegate::IsCommandIdChecked(int command_id) const {
-  if (command_id < 0)
-    return false;
+        bool Speed::initWithAction(ActionInterval *action, float speed)
+{
+    CCASSERT(action != nullptr, 'action must not be NULL');
+    if (action == nullptr)
+    {
+        log('Speed::initWithAction error: action is nullptr!');
+        return false;
     }
     
-    void PointMenuPositionFunc(GtkMenu* menu,
-                           int* x,
-                           int* y,
-                           gboolean* push_in,
-                           gpointer userdata) {
-  *push_in = TRUE;
-    }
-    
-    MenuItem::~MenuItem() {
-  Destroy();
-}
-    
-    
-void MenuItem::UpdateKeys(GtkAccelGroup *gtk_accel_group){
-  this->gtk_accel_group = gtk_accel_group;
-  if (enable_shortcut && GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    gtk_widget_add_accelerator(
-      menu_item_,
-      'activate',
-      gtk_accel_group,
-      keyval,
-      modifiers_mask,
-      GTK_ACCEL_VISIBLE);
-  }
-  if (submenu_ != NULL){
-    submenu_->UpdateKeys(gtk_accel_group);
-  }
-  return;
-}
-    
-    #include 'gtest/internal/gtest-death-test-internal.h'
-    
-      // Copy constructor.
-  Message(const Message& msg) : ss_(new ::std::stringstream) {  // NOLINT
-    *ss_ << msg.GetString();
-  }
-    
-      // Same as above, but you can choose the interception scope of this object.
-  ScopedFakeTestPartResultReporter(InterceptMode intercept_mode,
-                                   TestPartResultArray* result);
-    
-      // Adds the given test name to defined_test_names_ and return true
-  // if the test case hasn't been registered; otherwise aborts the
-  // program.
-  bool AddTestName(const char* file, int line, const char* case_name,
-                   const char* test_name) {
-    if (registered_) {
-      fprintf(stderr, '%s Test %s must be defined before '
-              'REGISTER_TYPED_TEST_CASE_P(%s, ...).\n',
-              FormatFileLocation(file, line).c_str(), test_name, case_name);
-      fflush(stderr);
-      posix::Abort();
-    }
-    defined_test_names_.insert(test_name);
+    action->retain();
+    _innerAction = action;
+    _speed = speed;
     return true;
-  }
-    
-      // No implementation - assignment is unsupported.
-  void operator=(const CartesianProductGenerator$i& other);
-    
-      explicit tuple(GTEST_BY_REF_(T0) f0, GTEST_BY_REF_(T1) f1,
-      GTEST_BY_REF_(T2) f2, GTEST_BY_REF_(T3) f3, GTEST_BY_REF_(T4) f4,
-      GTEST_BY_REF_(T5) f5, GTEST_BY_REF_(T6) f6, GTEST_BY_REF_(T7) f7,
-      GTEST_BY_REF_(T8) f8, GTEST_BY_REF_(T9) f9) : f0_(f0), f1_(f1), f2_(f2),
-      f3_(f3), f4_(f4), f5_(f5), f6_(f6), f7_(f7), f8_(f8), f9_(f9) {}
-    
-    
-    {    return -1;
-  }
-    
-    
-// Step 2. Use the TEST macro to define your tests.
-//
-// TEST has two parameters: the test case name and the test name.
-// After using the macro, you should define your test logic between a
-// pair of braces.  You can use a bunch of macros to indicate the
-// success or failure of a test.  EXPECT_TRUE and EXPECT_EQ are
-// examples of such macros.  For a complete list, see gtest.h.
-//
-// <TechnicalDetails>
-//
-// In Google Test, tests are grouped into test cases.  This is how we
-// keep test code organized.  You should put logically related tests
-// into the same test case.
-//
-// The test case name and the test name should both be valid C++
-// identifiers.  And you should not use underscore (_) in the names.
-//
-// Google Test guarantees that each test you define is run exactly
-// once, but it makes no guarantee on the order the tests are
-// executed.  Therefore, you should write your tests in such a way
-// that their results don't depend on their order.
-//
-// </TechnicalDetails>
-    
-    // WorkloadStats is used to track per request timing for different states
-// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
-// should be made to guard the state change with appropriate timers and
-// counters.
-//
-// The states tracked are:
-//  - In a request (this is a superset of the interpreter state)
-//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
-//  - In the JIT (currently tracks time inside the translate routine)
-//
-// Note the time in the TC is not tracked.  This is roughly:
-//   Time in request - Time in interp
-//
-// This gives us the relative interp time formula of:
-//   Relative interp time = Time in interp / Time in request
-struct WorkloadStats final {
-  enum State {
-    InRequest,
-    // -> InInterp   Okay (entering Dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InInterp,
-    // -> InRequest  Okay (leaving the dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InTrans,
-    // -> InRequest  Okay (leaving translate)
-    // -> InInterp   Okay (leaving translate)
-  };
-    }
-    
-    
-    {///////////////////////////////////////////////////////////////////////////////
 }
     
-    const StaticString s_pagelet('pagelet');
+    CC_CONSTRUCTOR_ACCESS:
+    Action();
+    virtual ~Action();
     
-    void Vunit::freeScratchBlock(Vlabel l) {
-  // This will leak blocks if anything's been added since the corresponding
-  // call to makeScratchBlock(), but it's harmless.
-  if (l == blocks.size() - 1) blocks.pop_back();
+        // Overrides
+    OrbitCamera *clone() const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    /**
+     * @js ctor
+     */
+    OrbitCamera();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~OrbitCamera();
+    
+    /** Initializes a OrbitCamera action with radius, delta-radius,  z, deltaZ, x, deltaX. */
+    bool initWithDuration(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX);
+    
+    
+    {    delete action;
+    return nullptr;
 }
     
-      // fields useful for both reads and writes
-  bool m_eof{false};
-  int64_t m_position{0}; // the current cursor position
+                if (_horizontal)
+            {
+                v.y = (v.y + (sinf(time * (float)M_PI * _waves * 2 + v.x * .01f) * _amplitude * _amplitudeRate));
+            }
     
-      size_t slab_index(const void* h) {
-    assertx((char*)h >= (char*)slabs_range_.ptr &&
-           (char*)h < (char*)slabs_range_.ptr + slabs_range_.size);
-    return (uintptr_t(h) - uintptr_t(slabs_range_.ptr)) >> kLgSlabSize;
-  }
-    
-    Variant preg_match(const String& pattern, const String& subject,
-                   Variant* matches = nullptr,
-                   int flags = 0, int offset = 0);
-    
-    
-    {  private:
-    std::shared_ptr<T> m_std_ptr;
-    std::size_t m_scan_size = 0;
-    type_scan::Index m_scan_index = type_scan::kIndexUnknownNoPtrs;
-    template<class Y>
-    shared_ptr(const std::shared_ptr<Y>& r, std::size_t size,
-        type_scan::Index index)
-      : m_std_ptr(r), m_scan_size(size), m_scan_index(index) {
+    /** @class Spawn
+ * @brief Spawn a new action immediately
+ */
+class CC_DLL Spawn : public ActionInterval
+{
+public:
+    /** Helper constructor to create an array of spawned actions.
+     * @code
+     * When this function bound to the js or lua, the input params changed.
+     * in js  :var   create(var   object1,var   object2, ...)
+     * in lua :local create(local object1,local object2, ...)
+     * @endcode
+     *
+     * @return An autoreleased Spawn object.
+     */
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    // VS2013 does not support nullptr in variable args lists and variadic templates are also not supported.
+    typedef FiniteTimeAction* M;
+    static Spawn* create(M m1, std::nullptr_t listEnd) { return variadicCreate(m1, NULL); }
+    static Spawn* create(M m1, M m2, std::nullptr_t listEnd) { return variadicCreate(m1, m2, NULL); }
+    static Spawn* create(M m1, M m2, M m3, std::nullptr_t listEnd) { return variadicCreate(m1, m2, m3, NULL); }
+    static Spawn* create(M m1, M m2, M m3, M m4, std::nullptr_t listEnd) { return variadicCreate(m1, m2, m3, m4, NULL); }
+    static Spawn* create(M m1, M m2, M m3, M m4, M m5, std::nullptr_t listEnd) { return variadicCreate(m1, m2, m3, m4, m5, NULL); }
+    static Spawn* create(M m1, M m2, M m3, M m4, M m5, M m6, std::nullptr_t listEnd) { return variadicCreate(m1, m2, m3, m4, m5, m6, NULL); }
+    static Spawn* create(M m1, M m2, M m3, M m4, M m5, M m6, M m7, std::nullptr_t listEnd) { return variadicCreate(m1, m2, m3, m4, m5, m6, m7, NULL); }
+    static Spawn* create(M m1, M m2, M m3, M m4, M m5, M m6, M m7, M m8, std::nullptr_t listEnd) { return variadicCreate(m1, m2, m3, m4, m5, m6, m7, m8, NULL); }
+    static Spawn* create(M m1, M m2, M m3, M m4, M m5, M m6, M m7, M m8, M m9, std::nullptr_t listEnd) { return variadicCreate(m1, m2, m3, m4, m5, m6, m7, m8, m9, NULL); }
+    static Spawn* create(M m1, M m2, M m3, M m4, M m5, M m6, M m7, M m8, M m9, M m10, std::nullptr_t listEnd) { return variadicCreate(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10,  NULL); }
     }
+    
+        /** Returns the numbers of actions that are running in a certain target. 
+     * Composable actions are counted as 1 action. Example:
+     * - If you are running 1 Sequence of 7 actions, it will return 1.
+     * - If you are running 7 Sequences of 2 actions, it will return 7.
+     *
+     * @param target    A certain target.
+     * @return  The numbers of actions that are running in a certain target.
+     * @js NA
+     */
+    virtual ssize_t getNumberOfRunningActionsInTarget(const Node *target) const;
+    
+    /** Returns the numbers of actions that are running in all targets.
+     * @return  The numbers of actions that are running in all target.
+     * @js NA
+     */
+    virtual ssize_t getNumberOfRunningActions() const;
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+#ifndef __ACTION_CCPAGETURN3D_ACTION_H__
+#define __ACTION_CCPAGETURN3D_ACTION_H__
+    
+    NS_CC_BEGIN
+    
+        void shuffle(unsigned int *array, unsigned int len);
+    Size getDelta(const Size& pos) const;
+    void placeTile(const Vec2& pos, Tile *t);
+    
+    bool Animation::initWithAnimationFrames(const Vector<AnimationFrame*>& arrayOfAnimationFrames, float delayPerUnit, unsigned int loops)
+{
+    _delayPerUnit = delayPerUnit;
+    _loops = loops;
+    }
+    
+    /** Singleton that manages the Animations.
+It saves in a cache the animations. You should use this class if you want to save your animations in a cache.
+    
+    // A node of a Huffman tree.
+struct HuffmanTree {
+  HuffmanTree() {}
+  HuffmanTree(uint32_t count, int16_t left, int16_t right)
+      : total_count_(count),
+        index_left_(left),
+        index_right_or_value_(right) {
+  }
+  uint32_t total_count_;
+  int16_t index_left_;
+  int16_t index_right_or_value_;
 };
     
-    #endif // HPHP_STREAM_WRAPPER_REGISTRY_H
-
-    
-    // redirect the nath functions.
-bool CheckNAN(double v) {
-  return ISNAN(v);
-}
-double LogGamma(double v) {
-  return lgammafn(v);
-}
+    #include 'guetzli/gamma_correct.h'
     
     
-    {
-    {}  // namespace data
-}  // namespace xgboost
-
-    
-    
-    {
-    {}  // namespace data
-}  // namespace xgboost
-#endif
-
-    
-    
-    {// Enable LOG(CONSOLE) for print messages to console.
-#define LOG_CONSOLE ::xgboost::ConsoleLogger()
-// Enable LOG(TRACKER) for print messages to tracker
-#define LOG_TRACKER ::xgboost::TrackerLogger()
-}  // namespace xgboost.
-#endif  // XGBOOST_LOGGING_H_
-
-    
-    /*! \brief gradient statistics pair usually needed in gradient boosting */
-using GradientPair = detail::GradientPairInternal<float>;
-    
-    // logistic loss for probability regression task
-struct LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return common::Sigmoid(x); }
-  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return x >= 0.0f && x <= 1.0f; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    return predt - label;
+    {  FILE* f = write_to_stdout ? stdout : fopen(filename, 'wb');
+  if (!f) {
+    perror('Can't open output file for writing');
+    exit(1);
   }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    return fmaxf(predt * (1.0f - predt), eps);
+  if (fwrite(contents.data(), 1, contents.size(), f) != contents.size()) {
+    perror('fwrite');
+    exit(1);
   }
-  template <typename T>
-  static T PredTransform(T x) { return common::Sigmoid(x); }
-  template <typename T>
-  static T FirstOrderGradient(T predt, T label) { return predt - label; }
-  template <typename T>
-  static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    return std::max(predt * (T(1.0f) - predt), eps);
+  if (fclose(f) < 0) {
+    perror('fclose');
+    exit(1);
   }
-  static bst_float ProbToMargin(bst_float base_score) {
-    CHECK(base_score > 0.0f && base_score < 1.0f)
-      << 'base_score must be in (0,1) for logistic loss';
-    return -logf(1.0f / base_score - 1.0f);
-  }
-  static const char* LabelErrorMsg() {
-    return 'label must be in [0,1] for logistic regression';
-  }
-  static const char* DefaultEvalMetric() { return 'rmse'; }
-};
-    
-    namespace {
-    }
-    
-      // Returns the distance map between the baseline image and the image in the
-  // last Compare() call (or the baseline image, if Compare() was not called
-  // yet).
-  // The dimensions of the distance map are the same as the baseline image.
-  // The interpretation of the distance values depend on the comparator used.
-  virtual const std::vector<float> distmap() const = 0;
-    
-    inline int Log2FloorNonZero(uint32_t n) {
-#ifdef __GNUC__
-  return 31 ^ __builtin_clz(n);
-#else
-  unsigned int result = 0;
-  while (n >>= 1) result++;
-  return result;
-#endif
 }
     
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg) {
-  bool has_Adobe_marker = false;
-  uint8_t Adobe_transform = 0;
-  for (const std::string& app : jpg.app_data) {
-    if (static_cast<uint8_t>(app[0]) == 0xe0) {
-      return true;
-    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
-      has_Adobe_marker = true;
-      Adobe_transform = app[14];
+    // Returns non-zero if and only if x has a zero byte, i.e. one of
+// x & 0xff, x & 0xff00, ..., x & 0xff00000000000000 is zero.
+inline uint64_t HasZeroByte(uint64_t x) {
+  return (x - 0x0101010101010101ULL) & ~x & 0x8080808080808080ULL;
+}
+    
+    #include <stdint.h>
+    
+    
+    {  // We have checked above that none of the sampling factors are 0, so the max
+  // sampling factors can not be 0.
+  jpg->MCU_rows = DivCeil(jpg->height, jpg->max_v_samp_factor * 8);
+  jpg->MCU_cols = DivCeil(jpg->width, jpg->max_h_samp_factor * 8);
+  // Compute the block dimensions for each component.
+  if (mode == JPEG_READ_ALL) {
+    for (size_t i = 0; i < jpg->components.size(); ++i) {
+      JPEGComponent* c = &jpg->components[i];
+      if (jpg->max_h_samp_factor % c->h_samp_factor != 0 ||
+          jpg->max_v_samp_factor % c->v_samp_factor != 0) {
+        fprintf(stderr, 'Non-integral subsampling ratios.\n');
+        jpg->error = JPEG_INVALID_SAMPLING_FACTORS;
+        return false;
+      }
+      c->width_in_blocks = jpg->MCU_cols * c->h_samp_factor;
+      c->height_in_blocks = jpg->MCU_rows * c->v_samp_factor;
+      const uint64_t num_blocks =
+          static_cast<uint64_t>(c->width_in_blocks) * c->height_in_blocks;
+      if (num_blocks > (1ull << 21)) {
+        // Refuse to allocate more than 1 GB of memory for the coefficients,
+        // that is 2M blocks x 64 coeffs x 2 bytes per coeff x max 4 components.
+        // TODO(user) Add this limit to a GuetzliParams struct.
+        fprintf(stderr, 'Image too large.\n');
+        jpg->error = JPEG_IMAGE_TOO_LARGE;
+        return false;
+      }
+      c->num_blocks = static_cast<int>(num_blocks);
+      c->coeffs.resize(c->num_blocks * kDCTBlockSize);
     }
   }
-  if (has_Adobe_marker) {
-    return (Adobe_transform != 0);
-  }
-  const int cid0 = jpg.components[0].id;
-  const int cid1 = jpg.components[1].id;
-  const int cid2 = jpg.components[2].id;
-  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
+  VERIFY_MARKER_END();
+  return true;
 }
     
-    // Output callback function with associated data.
-struct JPEGOutput {
-  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
-  bool Write(const uint8_t* buf, size_t len) const {
-    return (len == 0) || (cb(data, buf, len) == len);
-  }
- private:
-  JPEGOutputHook cb;
-  void* data;
-};
+    #include 'DHTAbstractMessage.h'
+#include 'A2STR.h'
+#include 'ValueBase.h'
+    
+      int numBucket_;
+    
+      virtual void startup() = 0;
+    
+    public:
+  DHTTaskExecutor(int numConcurrent);
     
     
-    {}  // namespace guetzli
+    {} // namespace aria2
+
+    
+      std::string generateToken(const unsigned char* infoHash,
+                            const std::string& ipaddr, uint16_t port,
+                            const unsigned char* secret) const;
+    
+    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
+                                             std::chrono::seconds interval)
+    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
+{
+}
