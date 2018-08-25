@@ -1,177 +1,107 @@
 
         
-                    processor = BodyProcessor.new(res.body, @jekyll_opts)
-            processor.process!
-            res.body = processor.new_body
-            res.content_length = processor.content_length.to_s
-    
-          def initialize(config)
-        Jekyll::External.require_with_graceful_fail 'kramdown' unless defined?(Kramdown)
-        @config = config['kramdown'].dup || {}
-        @config[:input] = :SmartyPants
-      end
-    
-        # --
-    # Check if a file is a symlink.
-    # NOTE: This can be converted to allowing even in safe,
-    #   since we use Pathutil#in_path? now.
-    # --
-    def symlink?(entry)
-      site.safe && File.symlink?(entry) && symlink_outside_site_source?(entry)
-    end
-    
-          #
-      # Require a gem or file if it's present, otherwise silently fail.
+            # An entry in the MachineIndex.
+    class Entry
+      # The unique ID for this entry. This is _not_ the ID for the
+      # machine itself (which is provider-specific and in the data directory).
       #
-      # names - a string gem name or array of gem names
-      #
-      def require_if_present(names)
-        Array(names).each do |name|
-          begin
-            require name
-          rescue LoadError
-            Jekyll.logger.debug 'Couldn't load #{name}. Skipping.'
-            yield(name, version_constraint(name)) if block_given?
-            false
-          end
-        end
-      end
+      # @return [String]
+      attr_reader :id
     
-      # True if a {Formula} is being built universally.
-  # e.g. on newer Intel Macs this means a combined x86_64/x86 binary/library.
-  # <pre>args << '--universal-binary' if build.universal?</pre>
-  def universal?
-    include?('universal') && option_defined?('universal')
-  end
+            protected
     
-    class PrettyListing
-  def initialize(path)
-    Pathname.new(path).children.sort_by { |p| p.to_s.downcase }.each do |pn|
-      case pn.basename.to_s
-      when 'bin', 'sbin'
-        pn.find { |pnn| puts pnn unless pnn.directory? }
-      when 'lib'
-        print_dir pn do |pnn|
-          # dylibs have multiple symlinks and we don't care about them
-          (pnn.extname == '.dylib' || pnn.extname == '.pc') && !pnn.symlink?
+            # This contains all the registered guest capabilities.
+        #
+        # @return [Hash<Symbol, Registry>]
+        attr_reader :guest_capabilities
+    
+              format('% e', 109.52).should == ' 1.095200e+02'
+          format('% E', 109.52).should == ' 1.095200E+02'
+          format('% f', 10.952).should == ' 10.952000'
+          format('% g', 12.1234).should == ' 12.1234'
+          format('% G', 12.1234).should == ' 12.1234'
+          format('% a', 196).should == ' 0x1.88p+7'
+          format('% A', 196).should == ' 0X1.88P+7'
         end
-      else
-        if pn.directory?
-          if pn.symlink?
-            puts '#{pn} -> #{pn.readlink}'
-          else
-            print_dir pn
-          end
-        elsif Metafiles.list?(pn.basename.to_s)
-          puts pn
+    
+            if tap_path = CaskLoader.tap_paths(token).first
+          CaskLoader::FromTapPathLoader.new(tap_path).load
+        elsif caskroom_path = Pathname.glob(path.join('.metadata/*/*/*/*.rb')).first
+          CaskLoader::FromPathLoader.new(caskroom_path).load
+        else
+          CaskLoader.load(token)
         end
       end
     end
-  end
-    
-          export JAVA_HOME='$(/usr/libexec/java_home)'
-      export AWS_ACCESS_KEY='<Your AWS Access ID>'
-      export AWS_SECRET_KEY='<Your AWS Secret Key>'
-      export #{home_name}='#{home_value}'
-    EOS
   end
 end
 
     
-      def present(payload)
-    if payload.is_a?(Hash)
-      payload = ActiveSupport::HashWithIndifferentAccess.new(payload)
-      MAIN_KEYS.each do |key|
-        return { :title => payload[key].to_s, :entries => present_hash(payload, key) } if payload.has_key?(key)
+          # If the `:filename` option is passed in without an importer,
+      # assume it's using the default filesystem importer.
+      options[:importer] ||= options[:filesystem_importer].new('.') if options[:filename]
+    
+          super
+      input = @options[:input]
+      if File.directory?(input)
+        raise 'Error: '#{input.path}' is a directory (did you mean to use --recursive?)'
       end
-    
-      def evernote_client
-    EvernoteOAuth::Client.new(
-      token:           evernote_oauth_token,
-      consumer_key:    evernote_consumer_key,
-      consumer_secret: evernote_consumer_secret,
-      sandbox:         use_sandbox?
-    )
-  end
-    
-        respond_to do |format|
-      if @user_credential.update_attributes(user_credential_params)
-        format.html { redirect_to user_credentials_path, notice: 'Your credential was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @user_credential.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-    
-          class << self
-        # Mark a given block of code as a 'busy' block of code, which will
-        # register a SIGINT handler for the duration of the block. When a
-        # SIGINT occurs, the `sig_callback` proc will be called. It is up
-        # to the callback to behave properly and exit the application.
-        def busy(sig_callback)
-          register(sig_callback)
-          return yield
-        ensure
-          unregister(sig_callback)
-        end
-    
-          # Reads data from an IO object while it can, returning the data it reads.
-      # When it encounters a case when it can't read anymore, it returns the
-      # data.
-      #
-      # @return [String]
-      def self.read_until_block(io)
-        data = ''
-    
-    
-===============================================
- Error for category_generator.rb plugin
------------------------------------------------
- No 'category_index.html' in source/_layouts/
- Perhaps you haven't installed a theme yet.
-===============================================
-    
-          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
-        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
-        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
-          @img['title']  = title
-          @img['alt']    = alt
-        else
-          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
-        end
-        @img['class'].gsub!(/'/, '') if @img['class']
-      end
-      super
+      output = @options[:output]
+      output = input if @options[:in_place]
+      process_file(input, output)
     end
     
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
-        end
-    
-          unless file.file?
-        return 'File #{file} could not be found'
-      end
-    
-            def operator_assignment_node
-          return nil unless node.parent
-          return nil unless OPERATOR_ASSIGNMENT_TYPES.include?(node.parent.type)
-          return nil unless node.sibling_index.zero?
-          node.parent
-        end
-    
-            def on_block(node)
-          on_body_of_reduce(node) do |body|
-            void_next = body.each_node(:next).find do |n|
-              n.children.empty? && parent_block_node(n) == node
-            end
-    
-          # Checks whether the `if` node is a ternary operator.
+          # Find a Sass file, if it exists.
       #
-      # @return [Boolean] whether the `if` node is a ternary operator
-      def ternary?
-        loc.respond_to?(:question)
+      # This is the primary entry point of the Importer.
+      # It corresponds directly to an `@import` statement in Sass.
+      # It should do three basic things:
+      #
+      # * Determine if the URI is in this importer's format.
+      #   If not, return nil.
+      # * Determine if the file indicated by the URI actually exists and is readable.
+      #   If not, return nil.
+      # * Read the file and place the contents in a {Sass::Engine}.
+      #   Return that engine.
+      #
+      # If this importer's format allows for file extensions,
+      # it should treat them the same way as the default {Filesystem} importer.
+      # If the URI explicitly has a `.sass` or `.scss` filename,
+      # the importer should look for that exact file
+      # and import it as the syntax indicated.
+      # If it doesn't exist, the importer should return nil.
+      #
+      # If the URI doesn't have either of these extensions,
+      # the importer should look for files with the extensions.
+      # If no such files exist, it should return nil.
+      #
+      # The {Sass::Engine} to be returned should be passed `options`,
+      # with a few modifications. `:syntax` should be set appropriately,
+      # `:filename` should be set to `uri`,
+      # and `:importer` should be set to this importer.
+      #
+      # @param uri [String] The URI to import.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` that's currently being resolved.
+      #   This is safe for subclasses to modify destructively.
+      #   Callers should only pass in a value they don't mind being destructively modified.
+      # @return [Sass::Engine, nil] An Engine containing the imported file,
+      #   or nil if it couldn't be found or was in the wrong format.
+      def find(uri, options)
+        Sass::Util.abstract(self)
       end
+    
+        # Check requiring libraries successfully.
+    # See https://github.com/rubocop-hq/rubocop/pull/4523#issuecomment-309136113
+    def check_requiring_libraries
+      sh!('ruby -I lib -r rubocop -e 'exit 0'')
+    end
+    
+        it 'when using an explicit early return from a block' do
+      expect_no_offenses(<<-RUBY.strip_indent)
+        objects.each do |object|
+          next object.#{method} if do_the_save
+          do_something_else
+        end
+      RUBY
+    end
