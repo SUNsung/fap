@@ -1,186 +1,140 @@
 
         
-        /**
- * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
- *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$
- *      y = \left\{
- *         \begin{array}{ll}
- *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
- *            \log(1 + \exp(x)) & \mbox{otherwise}
- *         \end{array} \right.
- *      @f$
- */
-template <typename Dtype>
-class BNLLLayer : public NeuronLayer<Dtype> {
- public:
-  explicit BNLLLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-    }
+        namespace mxnet {
     }
     
-    namespace caffe {
-    }
+    #define CHECK_NEXT_TIMING
     
-    #endif  // CAFFE_CUDNN_LRN_LAYER_HPP_
-
-    
-    #endif  // CAFFE_CUDNN_SOFTMAX_LAYER_HPP_
-
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of TanHLayer.
- */
-template <typename Dtype>
-class CuDNNTanHLayer : public TanHLayer<Dtype> {
- public:
-  explicit CuDNNTanHLayer(const LayerParameter& param)
-      : TanHLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNTanHLayer();
-    }
-    
-    
-    { protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual inline bool reverse_dimensions() { return true; }
-  virtual void compute_output_shape();
-};
-    
-    
-    {  bool stable_prod_grad_;
-};
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the computed outputs @f$
-   *        y = \gamma ^ {\alpha x + \beta}
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    static const int WARMUP = 5;
-static const int BENCHMARK = 5;
-    
-    #include 'src/core/lib/iomgr/network_status_tracker.h'
-#include 'src/core/lib/iomgr/sockaddr_windows.h'
-    
-    static void on_credentials_metadata(void* arg, grpc_error* input_error) {
-  grpc_transport_stream_op_batch* batch =
-      static_cast<grpc_transport_stream_op_batch*>(arg);
-  grpc_call_element* elem =
-      static_cast<grpc_call_element*>(batch->handler_private.extra_arg);
-  call_data* calld = static_cast<call_data*>(elem->call_data);
-  grpc_auth_metadata_context_reset(&calld->auth_md_context);
-  grpc_error* error = GRPC_ERROR_REF(input_error);
-  if (error == GRPC_ERROR_NONE) {
-    GPR_ASSERT(calld->md_array.size <= MAX_CREDENTIALS_METADATA_COUNT);
-    GPR_ASSERT(batch->send_initial_metadata);
-    grpc_metadata_batch* mdb =
-        batch->payload->send_initial_metadata.send_initial_metadata;
-    for (size_t i = 0; i < calld->md_array.size; ++i) {
-      add_error(&error, grpc_metadata_batch_add_tail(
-                            mdb, &calld->md_links[i],
-                            GRPC_MDELEM_REF(calld->md_array.md[i])));
-    }
-  }
-  if (error == GRPC_ERROR_NONE) {
-    grpc_call_next_op(elem, batch);
+    void OpenMP::set_reserve_cores(int cores) {
+  CHECK_GE(cores, 0);
+  reserve_cores_ = cores;
+#ifdef _OPENMP
+  if (reserve_cores_ >= omp_thread_max_) {
+    omp_set_num_threads(1);
   } else {
-    error = grpc_error_set_int(error, GRPC_ERROR_INT_GRPC_STATUS,
-                               GRPC_STATUS_UNAVAILABLE);
-    grpc_transport_stream_op_batch_finish_with_failure(batch, error,
-                                                       calld->call_combiner);
+    omp_set_num_threads(omp_thread_max_ - reserve_cores_);
   }
-  GRPC_CALL_STACK_UNREF(calld->owning_call, 'get_request_metadata');
+#endif
 }
     
-    #include <string.h>
     
-    static void add_batch_error(batch_control* bctl, grpc_error* error,
-                            bool has_cancelled) {
-  if (error == GRPC_ERROR_NONE) return;
-  int idx = static_cast<int>(gpr_atm_full_fetch_add(&bctl->num_errors, 1));
-  if (idx == 0 && !has_cancelled) {
-    cancel_with_error(bctl->call, STATUS_FROM_CORE, GRPC_ERROR_REF(error));
+    { private:
+  /*! \brief Concurrency for thread pool */
+  static constexpr std::size_t kNumWorkingThreads = 16;
+  /*! \brief Maximum number of GPUs */
+  static constexpr std::size_t kMaxNumGpus = 16;
+  /*!\brief number of streams allocated for each GPU */
+  static constexpr std::size_t kNumStreamsPerGpu = 16;
+  /*!
+   * \brief Streams.
+   */
+  std::unique_ptr<StreamManager<kMaxNumGpus, kNumStreamsPerGpu>> streams_;
+  /*!
+   * \brief Task queues.
+   */
+  std::shared_ptr<dmlc::ConcurrentBlockingQueue<OprBlock*>> task_queue_;
+  std::shared_ptr<dmlc::ConcurrentBlockingQueue<OprBlock*>> io_task_queue_;
+  /*!
+   * \brief Thread pools.
+   */
+  std::unique_ptr<ThreadPool> thread_pool_;
+  std::unique_ptr<ThreadPool> io_thread_pool_;
+  /*!
+   * \brief Worker.
+   * \param task_queue Queue to work on.
+   *
+   * The method to pass to thread pool to parallelize.
+   */
+  void ThreadWorker(std::shared_ptr<dmlc::ConcurrentBlockingQueue<OprBlock*>> task_queue,
+                    const std::shared_ptr<dmlc::ManualEvent>& ready_event) {
+    OprBlock* opr_block;
+    ready_event->signal();
+    while (task_queue->Pop(&opr_block)) {
+      DoExecute(opr_block);
+    }
   }
-  bctl->errors[idx] = error;
+  /*!
+   * \brief Execute an operation.
+   * \param opr_block The operator block.
+   */
+  void DoExecute(OprBlock* opr_block) {
+    assert(opr_block->wait.load() == 0);
+    if (opr_block->ctx.dev_mask() == gpu::kDevMask) {
+      #if MXNET_USE_CUDA
+      CUDA_CALL(cudaSetDevice(opr_block->ctx.dev_id));
+      #else   // MXNET_USE_CUDA
+      LOG(FATAL) << 'Please compile with CUDA enabled';
+      #endif  // MXNET_USE_CUDA
+    }
+    bool is_copy = (opr_block->opr->prop == FnProperty::kCopyFromGPU ||
+                    opr_block->opr->prop == FnProperty::kCopyToGPU);
+    auto&& rctx = is_copy
+        ? streams_->GetIORunContext(opr_block->ctx)
+        : streams_->GetRunContext(opr_block->ctx);
+    this->ExecuteOprBlock(rctx, opr_block);
+  }
+  /*!
+   * \brief Push the operation to the queue.
+   * \param opr_block The operator block.
+   */
+  void DoPushToQueue(OprBlock* opr_block) {
+    switch (opr_block->opr->prop) {
+      case FnProperty::kCopyFromGPU:
+      case FnProperty::kCopyToGPU: {
+        io_task_queue_->Push(opr_block);
+        break;
+      }
+      default: {
+        task_queue_->Push(opr_block);
+        break;
+      }
+    }
+  }
+};
+    
+      // get the shape hints
+  std::string shape_hints_key = std::string(attr_name) + '_hints';
+  if (ret.attrs.count(shape_hints_key)) {
+    nnvm::NodeEntryMap<AttrType> shape_hints =
+      ret.GetAttr<nnvm::NodeEntryMap<AttrType>>(shape_hints_key);
+    for (const auto& kv : shape_hints) {
+      nnvm::NodeEntry e = kv.first;
+      if (idx.exist(e.node.get())) {
+        rshape[idx.entry_id(kv.first)] = kv.second;
+      }
+    }
+  }
+    
+    
+    {private:
+    CC_DISALLOW_COPY_AND_ASSIGN(Liquid);
+};
+    
+    
+    {    return nullptr;
 }
     
-    namespace grpc {
-namespace load_reporter {
-namespace experimental {
-    }
-    }
-    }
+    The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
     
-    /// ResourceQuota represents a bound on memory and thread usage by the gRPC
-/// library. A ResourceQuota can be attached to a server (via \a ServerBuilder),
-/// or a client channel (via \a ChannelArguments).
-/// gRPC will attempt to keep memory and threads used by all attached entities
-/// below the ResourceQuota bound.
-class ResourceQuota final : private GrpcLibraryCodegen {
- public:
-  /// \param name - a unique name for this ResourceQuota.
-  explicit ResourceQuota(const grpc::string& name);
-  ResourceQuota();
-  ~ResourceQuota();
-    }
+                // We scale z here to avoid the animation being
+            // too much bigger than the screen due to perspective transform
     
-    int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
-	_In_opt_ HINSTANCE hPrevInstance,
-	_In_ LPTSTR    lpCmdLine,
-	_In_ int       nCmdShow)
+    bool ShuffleTiles::initWithDuration(float duration, const Size& gridSize, unsigned int seed)
 {
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
-	UNREFERENCED_PARAMETER(nCmdShow);
+    if (TiledGrid3DAction::initWithDuration(duration, gridSize))
+    {
+        _seed = seed;
+        _tilesOrder = nullptr;
+        _tiles = nullptr;
+    }
     }
     
-      // Returns true if the argument of the last Compare() call (or the baseline
-  // image, if Compare() was not called yet) meets the image acceptance
-  // criteria. The target_mul modifies the acceptance criteria used in this call
-  // the following way:
-  //    = 1.0 : the original acceptance criteria is used,
-  //    < 1.0 : a more strict acceptance criteria is used,
-  //    > 1.0 : a less strict acceptance criteria is used.
-  virtual bool DistanceOK(double target_mul) const = 0;
+    protected:
+    unsigned int _cols;
+    Size _winSize;
     
-    // Performs in-place floating point 8x8 DCT on block[0..63].
-// Note that the DCT used here is the DCT-2 with the first term multiplied by
-// 1/sqrt(2) and the result scaled by 1/2.
-void ComputeBlockDCTDouble(double block[64]);
-    
-    #endif  // GUETZLI_FAST_LOG_H_
-
-    
-    #include <inttypes.h>
+    void AnimationCache::parseVersion2(const ValueMap& animations)
+{
+    SpriteFrameCache *frameCache = SpriteFrameCache::getInstance();
+    }
