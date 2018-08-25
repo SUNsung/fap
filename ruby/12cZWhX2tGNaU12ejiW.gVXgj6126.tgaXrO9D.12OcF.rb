@@ -1,136 +1,113 @@
 
         
-          def notification_setting_params
-    allowed_fields = NotificationSetting::EMAIL_EVENTS.dup
-    allowed_fields << :level
-    params.require(:notification_setting).permit(allowed_fields)
+                  External.require_with_graceful_fail 'jekyll-watch'
+          watch_method = Jekyll::Watcher.method(:watch)
+          if watch_method.parameters.size == 1
+            watch_method.call(
+              options
+            )
+          else
+            watch_method.call(
+              options, site
+            )
+          end
+        end
+      end
+    end
   end
 end
 
     
-      def all_projects(current_user)
-    projects = []
+        A binary installer is available:
+      https://www.haskell.org/platform/mac.html
+    EOS
+  when 'mysqldump-secure' then <<-EOS.undent
+    The creator of mysqldump-secure tried to game our popularity metrics.
+    EOS
+  when 'ngrok' then <<-EOS.undent
+    Upstream sunsetted 1.x in March 2016 and 2.x is not open-source.
     
-      def test_stat_slave
-    PTY.open {|master, slave|
-      s =  File.stat(slave.path)
-      assert_equal(Process.uid, s.uid)
-      assert_equal(0600, s.mode & 0777)
-    }
-  rescue RuntimeError
-    skip $!
+        option_names.any? do |name|
+      if option_defined? 'with-#{name}'
+        include? 'with-#{name}'
+      elsif option_defined? 'without-#{name}'
+        !include? 'without-#{name}'
+      else
+        false
+      end
+    end
   end
     
-        old_self = prc.call
-    
-      def self.normal_file
-    touch(@file)
-    yield @file
-  ensure
-    rm_r @file
-  end
-    
-      it 'returns 1 if the first argument is a point in time after the second argument (down to a microsecond)' do
-    (Time.at(0, 100) <=> Time.at(0, 0)).should == 1
-    (Time.at(1202778512, 100) <=> Time.at(1202778512, 99)).should == 1
-  end
-    
-      class CVars
-    @@cvar  = :cvar
-    @c_ivar = :c_ivar
-    
-      trap('INT') {
-    [jekyllPid, compassPid].each { |pid| Process.kill(9, pid) rescue Errno::ESRCH }
-    exit 0
-  }
-    
-        # Creates an instance of CategoryIndex for each category page, renders it, and
-    # writes the output to a file.
-    #
-    #  +category_dir+ is the String path to the category folder.
-    #  +category+     is the category currently being processed.
-    def write_category_index(category_dir, category)
-      index = CategoryIndex.new(self, self.source, category_dir, category)
-      index.render(self.layouts, site_payload)
-      index.write(self.dest)
-      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
-      self.pages << index
-    
-      def render(context)
-    config_tag(context.registers[:site].config, @key, @tag, @classname)
+      def print_remaining_files(files, root, other = '')
+    case files.length
+    when 0
+      # noop
+    when 1
+      puts files
+    else
+      puts '#{root}/ (#{files.length} #{other}files)'
+    end
   end
 end
+
     
-        def get_cached_gist(gist, file)
-      return nil if @cache_disabled
-      cache_file = get_cache_file_for gist, file
-      File.read cache_file if File.exist? cache_file
+      def search_taps(rx)
+    SEARCHABLE_TAPS.map do |user, repo|
+      Thread.new { search_tap(user, repo, rx) }
+    end.inject([]) do |results, t|
+      results.concat(t.value)
+    end
+  end
+    
+      def updated?
+    initial_revision != current_revision
+  end
+    
+        # This will detect the proper guest OS for the machine and set up
+    # the class to actually execute capabilities.
+    def detect!
+      guest_name = @machine.config.vm.guest
+      initialize_capabilities!(guest_name, @guests, @capabilities, @machine)
+    rescue Errors::CapabilityHostExplicitNotDetected => e
+      raise Errors::GuestExplicitNotDetected, value: e.extra_data[:value]
+    rescue Errors::CapabilityHostNotDetected
+      raise Errors::GuestNotDetected
     end
     
-      class IncludeCodeTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      @title = nil
-      @file = nil
-      if markup.strip =~ /\s*lang:(\S+)/i
-        @filetype = $1
-        markup = markup.strip.sub(/lang:\S+/i,'')
-      end
-      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
-        @title = $1 || nil
-        @file = $3
-      end
-      super
-    end
+              # Handle the case that argv was empty or didn't contain any subcommand
+          main_args = argv.dup if main_args.nil?
     
-    module LogStash
-  module Api
-    module Commands
-      module System
-        class Plugins < Commands::Base
-          def run
-            { :total => plugins.count, :plugins => plugins }
+              @registered.each do |plugin|
+            hosts.merge!(plugin.host.to_hash)
           end
     
-      def file_fetch(url, sha1, target)
-    filename = File.basename( URI(url).path )
-    output = '#{target}/#{filename}'
-    begin
-      actual_sha1 = file_sha1(output)
-      if actual_sha1 != sha1
-        fetch(url, sha1, output)
-      end
-    rescue Errno::ENOENT
-      fetch(url, sha1, output)
-    end
-    return output
-  end
-    
-        # True if the dimensions represent a vertical rectangle
-    def vertical?
-      height > width
-    end
-    
-            def rejecting *types
-          @rejected_types = types.flatten
-          self
+              @commands = Registry.new
+          @configs = Hash.new { |h, k| h[k] = Registry.new }
+          @guests  = Registry.new
+          @guest_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @hosts   = Registry.new
+          @host_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @providers = Registry.new
+          @provider_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @pushes = Registry.new
+          @synced_folders = Registry.new
         end
-    
-        # You can add your own processor via the Paperclip configuration. Normally
-    # Paperclip will load all processors from the
-    # Rails.root/lib/paperclip_processors directory, but here you can add any
-    # existing class using this mechanism.
-    #
-    #   Paperclip.configure do |c|
-    #     c.register_processor :watermarker, WatermarkingProcessor.new
-    #   end
-    def register_processor(name, processor)
-      @known_processors ||= {}
-      @known_processors[name.to_s] = processor
+      end
     end
   end
 end
 
     
-      class Railtie
-    def self.insert
-      Paperclip.options[:logger] = Rails.logger
+        remove_duplicates
+    remove_index :share_visibilities, name: :shareable_and_user_id
+    add_index :share_visibilities, %i(shareable_id shareable_type user_id), name: :shareable_and_user_id, unique: true
+    
+    describe ContactsController, :type => :controller do
+  describe '#index' do
+    before do
+      AppConfig.chat.enabled = true
+      @aspect = bob.aspects.create(:name => 'another aspect')
+      bob.share_with alice.person, @aspect
+      bob.share_with eve.person, @aspect
+      sign_in bob, scope: :user
+    end
