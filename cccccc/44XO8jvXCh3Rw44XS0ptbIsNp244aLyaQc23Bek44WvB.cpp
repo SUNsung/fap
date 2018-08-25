@@ -1,252 +1,268 @@
 
         
-        namespace tensorflow {
-namespace functor {
-// TODO(b/32239807) No GPU ops for mod yet.
-}  // namespace functor
-}  // namespace tensorflow
+            if (info.bytes > buf.size()) {
+      llvm::dbgs() << 'AST section too small.\n';
+      return false;
+    }
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    
-    {
-    {}  // namespace gtl
-}  // namespace tensorflow
-    
-    TEST_F(GrpcDebugTest, SendSingleDebugTensorViaGrpcTest) {
-  Tensor tensor(DT_FLOAT, TensorShape({1, 1}));
-  tensor.flat<float>()(0) = 42.0;
-  const DebugNodeKey kDebugNodeKey('/job:localhost/replica:0/task:0/cpu:0',
-                                   'foo_tensor', 0, 'DebugIdentity');
-  TF_ASSERT_OK(DebugIO::PublishDebugTensor(
-      kDebugNodeKey, tensor, Env::Default()->NowMicros(), {server_data_.url}));
-  TF_ASSERT_OK(DebugIO::CloseDebugURL(server_data_.url));
+    bool LangOptions::
+checkPlatformCondition(PlatformConditionKind Kind, StringRef Value) const {
+  // Check a special case that 'macOS' is an alias of 'OSX'.
+  if (Kind == PlatformConditionKind::OS && Value == 'macOS')
+    return checkPlatformCondition(Kind, 'OSX');
     }
     
     
-llvm::Optional<ASTNode>
-SyntaxASTMap::getNodeForSyntax(syntax::Syntax SyntaxNode) const {
-  auto Found = SyntaxMap.find(SyntaxNode.Root);
-  if (Found == SyntaxMap.end()) {
-    return None;
-  }
-  return Found->getSecond();
-}
-    
-    namespace swift {
-    }
-    
-    #include <dispatch/dispatch.h>
-static_assert(std::is_same<swift_once_t, dispatch_once_t>::value,
-              'swift_once_t and dispatch_once_t must stay in sync');
-#else
-    
-    #ifndef SWIFT_INDEX_INDEX_H
-#define SWIFT_INDEX_INDEX_H
-    
-      /// Returns true when the sequence of indices represented by this
-  /// node is a prefix of the sequence represented by the passed-in node.
-  bool isPrefixOf(const IndexTrieNode *Other) const {
-    const IndexTrieNode *I = Other;
-    }
-    
-    		Node *parent;
-		Node *owner;
-		Vector<Node *> children; // list of children
-		int pos;
-		int depth;
-		int blocked; // safeguard that throws an error when attempting to modify the tree in a harmful way while being traversed.
-		StringName name;
-		SceneTree *tree;
-		bool inside_tree;
-		bool ready_notified; //this is a small hack, so if a node is added during _ready() to the tree, it correctly gets the _ready() notification
-		bool ready_first;
-#ifdef TOOLS_ENABLED
-		NodePath import_path; //path used when imported, used by scene editors to keep tracking
-#endif
-    
-    #include 'ifaddrs_android.h'
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/utsname.h>
-#include <sys/ioctl.h>
-#include <netinet/in.h>
-#include <net/if.h>
-#include <unistd.h>
-#include <errno.h>
-#include <linux/netlink.h>
-#include <linux/rtnetlink.h>
-    
-    
-# if defined(OC_CLZ32)
-/**
- * OC_ILOGNZ_32 - Integer binary logarithm of a non-zero 32-bit value.
- * @_v: A non-zero 32-bit value.
- * Returns floor(log2(_v))+1.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * If _v is zero, the return value is undefined; use OC_ILOG_32() instead.
- */
-#  define OC_ILOGNZ_32(_v) (OC_CLZ32_OFFS-OC_CLZ32(_v))
-/**
- * OC_ILOG_32 - Integer binary logarithm of a 32-bit value.
- * @_v: A 32-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- */
-#  define OC_ILOG_32(_v)   (OC_ILOGNZ_32(_v)&-!!(_v))
-# else
-#  define OC_ILOGNZ_32(_v) (oc_ilog32(_v))
-#  define OC_ILOG_32(_v)   (oc_ilog32(_v))
-# endif
-    
-    /*The number of extra bits of precision at which to store rate metrics.*/
-# define OC_BIT_SCALE  (6)
-/*The number of extra bits of precision at which to store RMSE metrics.
-  This must be at least half OC_BIT_SCALE (rounded up).*/
-# define OC_RMSE_SCALE (5)
-/*The number of bins to partition statistics into.*/
-# define OC_SAD_BINS   (24)
-/*The number of bits of precision to drop from SAD scores to assign them to a
-   bin.*/
-# define OC_SAD_SHIFT  (9)
-    
-      {
-    auto dropper = DropPrivileges::get();
-    EXPECT_TRUE(dropper->dropTo(std::to_string(nobody->pw_uid),
-                                std::to_string(nobody->pw_gid)));
-    EXPECT_EQ(geteuid(), nobody->pw_uid);
+    {    // If there is a repeated letter at the back, drop that second
+    // instance of that letter and try again.
+    unsigned count = possibleVerb.size();
+    if (possibleVerb[count-1] == possibleVerb[count-2] &&
+        getPartOfSpeech(possibleVerb.substr(0, count-1)) == PartOfSpeech::Verb)
+      return PartOfSpeech::Gerund;
   }
     
-      // Test existence checks based on flags.
-  EXPECT_TRUE(cl.exists());
-  EXPECT_TRUE(cl.exists(EQUALS));
-  EXPECT_TRUE(cl.exists(EQUALS | LESS_THAN));
-  EXPECT_FALSE(cl.exists(LESS_THAN));
+    #include 'swift/Basic/TaskQueue.h'
     
-    #include <gtest/gtest.h>
-    
-    
-    {/**
- * @brief Generate a row string for query results
- *
- * @param r A row to analyze
- * @param lengths The data returned from computeQueryDataLengths
- * @param columns The order of the keys (since maps are unordered)
- *
- * @return A string, with a newline, representing your row
- */
-std::string generateRow(const Row& r,
-                        const std::map<std::string, size_t>& lengths,
-                        const std::vector<std::string>& columns);
+    // HACK: Allow support for many newer emoji by overriding behavior of ZWJ and
+// emoji modifiers. This does not make the breaks correct for any version of
+// Unicode, but shifts the ways in which it is incorrect to be less harmful.
+//
+// TODO: Remove this hack and reevaluate whether we should have any static
+// notion of what a grapheme is.
+//
+// Returns true if lhs and rhs shouldn't be considered as having a grapheme
+// break between them. That is, whether we're overriding the behavior of the
+// hard coded Unicode 8 rules surrounding ZWJ and emoji modifiers.
+static inline bool graphemeBreakOverride(llvm::UTF32 lhs, llvm::UTF32 rhs) {
+  return lhs == 0x200D || (rhs >= 0x1F3FB && rhs <= 0x1F3FF);
 }
-
     
     
-    {  /// Optional category passed to the callback.
-  std::string category;
+    {}%
+    
+    /// The list of known CF types.  We use 'constexpr' to verify that this is
+/// emitted as a constant.  Note that this is expected to be sorted in
+/// quasi-lexicographic order.
+static constexpr const llvm::StringLiteral KnownCFTypes[] = {
+#define CF_TYPE(NAME) #NAME,
+#define NON_CF_TYPE(NAME)
+#include 'SortedCFDatabase.def'
+};
+const size_t NumKnownCFTypes = sizeof(KnownCFTypes) / sizeof(*KnownCFTypes);
+    
+    #include 'base/basictypes.h'
+#include '../dispatcher_host.h'
+    
+      bool delay_destruction() { return delay_destruction_; }
+  void set_delay_destruction(bool val) { delay_destruction_ = val; }
+  bool pending_destruction() { return pending_destruction_; }
+  void set_pending_destruction (bool val) { pending_destruction_ = val; }
+ protected:
+  int id_;
+  bool delay_destruction_;
+  bool pending_destruction_;
+  base::WeakPtr<ObjectManager> object_manager_;
+    
+    // Tell browser to allocate a new object.
+// function AllocateObject(id, name, options);
+v8::Handle<v8::Value> AllocateObject(int routing_id,
+                                     int object_id,
+                                     const std::string& type,
+                                     v8::Handle<v8::Value> options);
+    
+    void Menu::Create(const base::DictionaryValue& option) {
+  gtk_accel_group = NULL;
+  std::string type;
+  if (option.GetString('type', &type) && type == 'menubar')
+    menu_ = gtk_menu_bar_new();
+  else
+    menu_ = gtk_menu_new();
+    }
+    
+    NwMenuModel::NwMenuModel(Delegate* delegate) : SimpleMenuModel(delegate) {
+}
+    
+    
+    {      }
+      keyval = gdk_keyval_from_name(key.c_str());
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.destroy', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwObjDestroyFunction);
 };
     
-    #include <aws/core/client/AWSError.h>
-#include <aws/core/utils/Outcome.h>
-#include <aws/firehose/model/PutRecordBatchRequest.h>
-#include <aws/firehose/model/PutRecordBatchResult.h>
-    
-      size_t getFailedRecordCount(Outcome& outcome) const override;
-  Result getResult(Outcome& outcome) const override;
-    
-    bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    bool js_cocos2dx_navmesh_NavMesh_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_navmesh_NavMesh_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_navmesh_NavMesh(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_navmesh_NavMesh_removeNavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_removeNavMeshAgent(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_update(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_isDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_addNavMeshAgent(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_addNavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_setDebugDrawEnable(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_debugDraw(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_NavMesh(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    bool js_cocos2dx_physics3d_Physics3DObject_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DObject_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DObject(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DObject_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getObjType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_setPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getWorldTransform(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_setMask(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getMask(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_needCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
+        // Lazy initialize screen event listeners until first call
+    base::LazyInstance<NwScreenDisplayObserver>::Leaky
+      g_display_observer = LAZY_INSTANCE_INITIALIZER;
     
     
+    {  private:
+    DISALLOW_COPY_AND_ASSIGN(NwScreenStopMonitorFunction);
+  };
     
+    void GeneratorContext::ListParsedFiles(
+    std::vector<const FileDescriptor*>* output) {
+  GOOGLE_LOG(FATAL) << 'This GeneratorContext does not support ListParsedFiles';
+}
     
-#endif // __cocos2dx_experimental_h__
-
+    #include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_names.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/wire_format.h>
+#include <google/protobuf/stubs/strutil.h>
+#include <google/protobuf/stubs/substitute.h>
     
+    // Requires:
+//   descriptor != NULL
+//
+// Returns:
+//   The namespace to use for given file descriptor.
+string LIBPROTOC_EXPORT GetFileNamespace(const FileDescriptor* descriptor);
     
-    {
-    {			float minX = -6.0f;
-			float maxX = 0.0f;
-			float minY = 4.0f;
-			float maxY = 6.0f;
-			
-			for (int32 i = 0; i < 400; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position = b2Vec2(RandomFloat(minX,maxX),RandomFloat(minY,maxY));
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&shape, 0.01f);
-			}
-		}
-		
-		{
-			b2PolygonShape shape;
-			shape.SetAsBox(1.5f, 1.5f);
-			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(-40.0f,5.0f);
-			bd.bullet = true;
-			b2Body* body = m_world->CreateBody(&bd);
-			body->CreateFixture(&shape, 1.0f);
-			body->SetLinearVelocity(b2Vec2(150.0f, 0.0f));
-		}
-	}
+    class PrimitiveFieldGenerator : public FieldGeneratorBase {
+ public:
+  PrimitiveFieldGenerator(const FieldDescriptor* descriptor,
+                          int fieldOrdinal,
+                          const Options *options);
+  ~PrimitiveFieldGenerator();
+    }
+    
+    #include 'port/port.h'
+#include 'rocksdb/cache.h'
+#include 'rocksdb/db.h'
+#include 'rocksdb/env.h'
+#include 'util/gflags_compat.h'
+#include 'util/mutexlock.h'
+#include 'util/random.h'
+    
+      // Implementations of the DB interface
+  using DB::Get;
+  virtual Status Get(const ReadOptions& options,
+                     ColumnFamilyHandle* column_family, const Slice& key,
+                     PinnableSlice* value) override;
+  using DB::MultiGet;
+  virtual std::vector<Status> MultiGet(
+      const ReadOptions& options,
+      const std::vector<ColumnFamilyHandle*>&,
+      const std::vector<Slice>& keys, std::vector<std::string>* values)
+    override;
+    
+    class SkipEvenFilterFactory : public CompactionFilterFactory {
+ public:
+  virtual std::unique_ptr<CompactionFilter> CreateCompactionFilter(
+      const CompactionFilter::Context& context) override {
+    if (context.is_manual_compaction) {
+      return std::unique_ptr<CompactionFilter>(new SkipEvenFilter());
+    } else {
+      return std::unique_ptr<CompactionFilter>(nullptr);
+    }
+  }
+    }
+    
+    Status WriteBatchBase::DeleteRange(ColumnFamilyHandle* column_family,
+                                   const SliceParts& begin_key,
+                                   const SliceParts& end_key) {
+  std::string begin_key_buf, end_key_buf;
+  Slice begin_key_slice(begin_key, &begin_key_buf);
+  Slice end_key_slice(end_key, &end_key_buf);
+  return DeleteRange(column_family, begin_key_slice, end_key_slice);
+}
+    
+      // these three metods are querying the state of the WriteController
+  bool IsStopped() const;
+  bool NeedsDelay() const { return total_delayed_.load() > 0; }
+  bool NeedSpeedupCompaction() const {
+    return IsStopped() || NeedsDelay() || total_compaction_pressure_ > 0;
+  }
+  // return how many microseconds the caller needs to sleep after the call
+  // num_bytes: how many number of bytes to put into the DB.
+  // Prerequisite: DB mutex held.
+  uint64_t GetDelay(Env* env, uint64_t num_bytes);
+  void set_delayed_write_rate(uint64_t write_rate) {
+    // avoid divide 0
+    if (write_rate == 0) {
+      write_rate = 1u;
+    } else if (write_rate > max_delayed_write_rate()) {
+      write_rate = max_delayed_write_rate();
+    }
+    delayed_write_rate_ = write_rate;
+  }
+    
+          // Print the message
+      if (p < limit) {
+        va_list backup_ap;
+        va_copy(backup_ap, ap);
+        p += vsnprintf(p, limit - p, format, backup_ap);
+        va_end(backup_ap);
+      }
+    
+    #include <memory>
+#include <string>
+    
+      // When flush happens, it determines whether to trigger compaction. If
+  // triggered_writes_stop is true, it will also set the retry flag of
+  // compaction-task to true.
+  void OnFlushCompleted(
+      DB* db, const FlushJobInfo& info) override {
+    CompactionTask* task = PickCompaction(db, info.cf_name);
+    if (task != nullptr) {
+      if (info.triggered_writes_stop) {
+        task->retry_on_fail = true;
+      }
+      // Schedule compaction in a different thread.
+      ScheduleCompaction(task);
+    }
+  }
+    
+      void SendThreadFunc() {
+    using common::time::Clock;
+    using common::time::AsInt64;
+    using common::time::micros;
+    using common::ErrorCode;
+    AINFO << 'Send thread starting...';
+    TestCanParam *param = param_ptr();
+    CanClient *client = param->can_client;
+    std::vector<CanFrame> frames;
+    frames.resize(MAX_CAN_SEND_FRAME_LEN);
+    }
+    
+    template <typename SensorType>
+void CanReceiver<SensorType>::Stop() {
+  if (IsRunning()) {
+    AINFO << 'Stopping can client receiver ...';
+    is_running_ = false;
+    if (thread_ != nullptr && thread_->joinable()) {
+      thread_->join();
+    }
+    thread_.reset();
+  } else {
+    AINFO << 'Can client receiver is not running.';
+  }
+  AINFO << 'Can client receiver stopped [ok].';
+}
+    
+      /*
+   * @brief parse received data
+   * @param bytes a pointer to the input bytes
+   * @param length the length of the input bytes
+   * @param sensor_data the parsed sensor_data
+   */
+  virtual void Parse(const uint8_t *bytes, int32_t length,
+                     SensorType *sensor_data) const;
+    
+    TEST(ByteTest, SetGetHighLowBit) {
+  unsigned char byte_value = 0x37;
+  Byte value(&byte_value);
+  value.set_value_high_4_bits(0x0B);
+  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
+  EXPECT_EQ(0x07, value.get_byte_low_4_bits());
+  value.set_value_low_4_bits(0x0B);
+  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
+  EXPECT_EQ(0x0B, value.get_byte_low_4_bits());
+}
+    
+    // System gflags
+DECLARE_string(node_name);
+DECLARE_string(canbus_driver_name);
