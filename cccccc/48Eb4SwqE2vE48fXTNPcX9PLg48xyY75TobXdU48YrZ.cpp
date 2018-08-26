@@ -1,449 +1,290 @@
 
         
-        
-    {
-    {
-    {            static __device__ __forceinline__ int atomicMax(int* address, int val)
-            {
-                return ::atomicMax(address, val);
-            }
-            static __device__ __forceinline__ float atomicMax(float* address, float val)
-            {
-            #if __CUDA_ARCH__ >= 120
-                int* address_as_i = (int*) address;
-                int old = *address_as_i, assumed;
-                do {
-                    assumed = old;
-                    old = ::atomicCAS(address_as_i, assumed,
-                        __float_as_int(::fmaxf(val, __int_as_float(assumed))));
-                } while (assumed != old);
-                return __int_as_float(old);
-            #else
-                (void) address;
-                (void) val;
-                return 0.0f;
-            #endif
-            }
-            static __device__ __forceinline__ double atomicMax(double* address, double val)
-            {
-            #if __CUDA_ARCH__ >= 130
-                unsigned long long int* address_as_ull = (unsigned long long int*) address;
-                unsigned long long int old = *address_as_ull, assumed;
-                do {
-                    assumed = old;
-                    old = ::atomicCAS(address_as_ull, assumed,
-                        __double_as_longlong(::fmax(val, __longlong_as_double(assumed))));
-                } while (assumed != old);
-                return __longlong_as_double(old);
-            #else
-                (void) address;
-                (void) val;
-                return 0.0;
-            #endif
-            }
-        };
-    }; //struct Emulation
-}}} // namespace cv { namespace cuda { namespace cudev
+        static bool anyMutable(ArrayRef<SILField> Fields) {
+  for (auto &field : Fields) {
+    if (field.isMutable())
+      return true;
+  }
+  return false;
+}
     
-    #undef cv_hal_QR32f
-#define cv_hal_QR32f lapack_QR32f
-#undef cv_hal_QR64f
-#define cv_hal_QR64f lapack_QR64f
+      /// Retrieve the generic signature that describes the shape of this
+  /// storage.
+  GenericSignature *getGenericSignature() const { return genericSig; }
     
-    #if defined(__linux__)
-    #include <dlfcn.h>
-    #include <stdio.h>
+    void CacheImpl::removeAll() {
+  cache_remove_all(static_cast<cache_t*>(Impl));
+}
     
-        static void* WinGetProcAddress(const char* name)
-    {
-        static HMODULE opencl_module = NULL;
-        if (!opencl_module)
-        {
-            opencl_module = GetModuleHandleA('clAmdFft.Runtime.dll');
-            if (!opencl_module)
-            {
-                opencl_module = LoadLibraryA('clAmdFft.Runtime.dll');
-                if (!opencl_module)
-                    return NULL;
-            }
-        }
-        return (void*)GetProcAddress(opencl_module, name);
-    }
-    #define CV_CL_GET_PROC_ADDRESS(name) WinGetProcAddress(name)
-#endif // _WIN32
-    
-    namespace cv { namespace ocl { namespace runtime {
-    }
-    }
+        bool ExecutionFailed = false;
+    ProcessInfo PI = ExecuteNoWait(T->ExecPath, Argv.data(),
+                                   (const char **)envp,
+                                   /*redirects*/None, /*memoryLimit*/0,
+                                   /*ErrMsg*/nullptr, &ExecutionFailed);
+    if (ExecutionFailed) {
+      return true;
     }
     
-    const uchar g_Saturate8u[] =
+    #undef VERB
+#undef DIRECTIONAL_PREPOSITION
+#undef PREPOSITION
+
+    
+      ConvertUTF8toUTF32(&SourceNext, SourceStart + S.size(), &TargetStart, C + 1,
+                     llvm::lenientConversion);
+  if (TargetStart == C) {
+    // The source string contains an ill-formed subsequence at the end.
+    return S;
+  }
+    
+    public Q_SLOTS:
+    void updateRates();
+    void setGraphRangeMins(int mins);
+    void clear();
+    
+    /** Check bounds on a command line confirm target */
+unsigned int ParseConfirmTarget(const UniValue& value);
+    
+    static void secp256k1_ge_to_storage(secp256k1_ge_storage *r, const secp256k1_ge *a) {
+    secp256k1_fe x, y;
+    VERIFY_CHECK(!a->infinity);
+    x = a->x;
+    secp256k1_fe_normalize(&x);
+    y = a->y;
+    secp256k1_fe_normalize(&y);
+    secp256k1_fe_to_storage(&r->x, &x);
+    secp256k1_fe_to_storage(&r->y, &y);
+}
+    
+    void run_ecdh_tests(void) {
+    test_ecdh_api();
+    test_ecdh_generator_basepoint();
+    test_bad_scalar();
+}
+    
+    
+    {    /* Serialize/parse compact and verify/recover. */
+    extra[0] = 0;
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[0], message, privkey, NULL, NULL) == 1);
+    CHECK(secp256k1_ecdsa_sign(ctx, &signature[0], message, privkey, NULL, NULL) == 1);
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[4], message, privkey, NULL, NULL) == 1);
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[1], message, privkey, NULL, extra) == 1);
+    extra[31] = 1;
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[2], message, privkey, NULL, extra) == 1);
+    extra[31] = 0;
+    extra[0] = 1;
+    CHECK(secp256k1_ecdsa_sign_recoverable(ctx, &rsignature[3], message, privkey, NULL, extra) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(ctx, sig, &recid, &rsignature[4]) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
+    CHECK(memcmp(&signature[4], &signature[0], 64) == 0);
+    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 1);
+    memset(&rsignature[4], 0, sizeof(rsignature[4]));
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
+    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 1);
+    /* Parse compact (with recovery id) and recover. */
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
+    CHECK(secp256k1_ecdsa_recover(ctx, &recpubkey, &rsignature[4], message) == 1);
+    CHECK(memcmp(&pubkey, &recpubkey, sizeof(pubkey)) == 0);
+    /* Serialize/destroy/parse signature and verify again. */
+    CHECK(secp256k1_ecdsa_recoverable_signature_serialize_compact(ctx, sig, &recid, &rsignature[4]) == 1);
+    sig[secp256k1_rand_bits(6)] += 1 + secp256k1_rand_int(255);
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsignature[4], sig, recid) == 1);
+    CHECK(secp256k1_ecdsa_recoverable_signature_convert(ctx, &signature[4], &rsignature[4]) == 1);
+    CHECK(secp256k1_ecdsa_verify(ctx, &signature[4], message, &pubkey) == 0);
+    /* Recover again */
+    CHECK(secp256k1_ecdsa_recover(ctx, &recpubkey, &rsignature[4], message) == 0 ||
+          memcmp(&pubkey, &recpubkey, sizeof(pubkey)) != 0);
+}
+    
+    
+    {    RejectDifficultyMismatch(difficulty, expected_difficulty);
+}
+    
+    
+    {    BOOST_CHECK_EQUAL(sub.m_expected_tip, chainActive.Tip()->GetBlockHash());
+}
+    
+    #define TegraUnaryOpScale_Invoker(name, func, scale_cnt, ...) TegraGenOp_Invoker(name, func, 1, 1, scale_cnt, \
+                                                                                 RANGE_DATA(ST, src1_data, src1_step), src1_step, \
+                                                                                 RANGE_DATA(DT, dst1_data, dst1_step), dst1_step, __VA_ARGS__)
+    
+    void absDiff(const Size2D &size,
+             const u8 *src0Base, ptrdiff_t src0Stride,
+             const u8 *src1Base, ptrdiff_t src1Stride,
+             u8 *dstBase, ptrdiff_t dstStride)
 {
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
-     16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
-     32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
-     48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
-     64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
-     80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
-     96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
-    112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
-    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
-    144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
-    160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
-    176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
-    192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
-    208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
-    224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
-    240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255
-};
-    
-    		type.type_encoding = mono_type_get_type(ret_type);
-		MonoClass *ret_type_class = mono_class_from_mono_type(ret_type);
-		type.type_class = GDMono::get_singleton()->get_class(ret_type_class);
-	} else {
-		prop_method = mono_property_get_set_method(mono_property);
-    
-    protected:
-	static void _bind_methods();
-    
-    	void set_bounce(real_t p_bounce);
-	real_t get_bounce() const;
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, AbsDiff<u8>());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
 #endif
+}
     
-    	struct ChainTip {
-		ChainItem *chain_item;
-		const EndEffector *end_effector;
+    #ifdef CAROTENE_NEON
+    // in this case we can use the following scheme:
+    // dst[p] = (src[p] + dst[p]) >> 1
+    // which is faster
+    if (alpha == 0.5f)
+    {
+        internal::vtransform(size,
+                             srcBase, srcStride,
+                             dstBase, dstStride,
+                             dstBase, dstStride,
+                             AccumulateWeightedHalf());
     }
     
-    	// used by editors, to save what has changed only
-	void set_scene_instance_state(const Ref<SceneState> &p_state);
-	Ref<SceneState> get_scene_instance_state() const;
+    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 6 && !defined(__clang__)
+CVT_FUNC(s32, s8, 8,
+,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         __asm__ (
+             'vld1.32 {d0-d1}, [%[src1]]                              \n\t'
+             'vld1.32 {d2-d3}, [%[src2]]                              \n\t'
+             'vqmovn.s32 d4, q0                                       \n\t'
+             'vqmovn.s32 d5, q1                                       \n\t'
+             'vqmovn.s16  d6, q2                                      \n\t'
+             'vst1.8 {d6}, [%[dst]]                                   \n\t'
+             : /*no output*/
+             : [src1] 'r' (_src + i + 0),
+               [src2] 'r' (_src + i + 4),
+               [dst] 'r' (_dst + i)
+             : 'd0','d1','d2','d3','d4','d5','d6'
+         );
+     }
+})
+#else
+CVT_FUNC(s32, s8, 8,
+,
+{
+     for (size_t i = 0; i < w; i += 8)
+     {
+         internal::prefetch(_src + i);
+         int32x4_t vline1_s32 = vld1q_s32(_src + i);
+         int32x4_t vline2_s32 = vld1q_s32(_src + i + 4);
+    }
+    }
     
-    				yy = y[j+8];
-				d1[0] = clamp(yy+rc);
-				d1[1] = clamp(yy+gc);
-				d1[2] = clamp(yy+bc);
-				d1[3] = 255;
+    #include 'common.hpp'
+#include 'saturate_cast.hpp'
     
+    // It is possible to accumulate up to 131071 schar multiplication results in sint32 without overflow
+// We process 16 elements and accumulate two new elements per step. So we could handle 131071/2*16 elements
+#define DOT_INT_BLOCKSIZE 131070*8
+    f64 result = 0.0;
+    for (size_t row = 0; row < size.height; ++row)
+    {
+        const s8 * src0 = internal::getRowPtr(src0Base, src0Stride, row);
+        const s8 * src1 = internal::getRowPtr(src1Base, src1Stride, row);
+    }
     
-    {  if (shuffle) {
-    RCHECK(unif_rnds.size() == num_data);
-    for (size_t i = order.size() - 1; i != 0; --i) {
-      size_t idx = static_cast<size_t>(unif_rnds[i] * (i + 1));
-      if (idx < i) {
-        std::swap(order[i], order[idx]);
+    namespace leveldb {
+    }
+    
+      void DoWrite(ThreadState* thread, bool seq) {
+    if (num_ != FLAGS_num) {
+      char msg[100];
+      snprintf(msg, sizeof(msg), '(%d ops)', num_);
+      thread->stats.AddMessage(msg);
+    }
+    }
+    
+      FileState(const std::string& filename)
+      : filename_(filename),
+        pos_(-1),
+        pos_at_last_sync_(-1),
+        pos_at_last_flush_(-1) { }
+    
+    TEST(LogTest, ReadPastEnd) {
+  CheckOffsetPastEndReturnsNoRecords(5);
+}
+    
+        ArchiveFile(src);
+    if (counter == 0) {
+      builder->Abandon();  // Nothing to save
+    } else {
+      s = builder->Finish();
+      if (s.ok()) {
+        t.meta.file_size = builder->FileSize();
       }
     }
-  }
-  ArrayDataIter::Convert(data, order, batch_size, &data_);
-  ArrayDataIter::Convert(label, order, batch_size, &label_);
-  num_pad_ = (batch_size - (order.size() % batch_size)) % batch_size;
-  RCHECK(label_.size() == data_.size())
-      << 'Datasize not consistent';
-}
+    delete builder;
+    builder = nullptr;
     
-    // Transfer only gradient to FGradient function
-struct ElemwiseGradUseNone {
-  const char *op_name;
-  std::vector<nnvm::NodeEntry> operator()(const nnvm::NodePtr& n,
-                                          const std::vector<nnvm::NodeEntry>& ograds) const {
-    return MakeNonlossGradNode(op_name, n, ograds, {}, n->attrs.dict);
-  }
-};
-    
-    
-    {  MSHADOW_REAL_TYPE_SWITCH(data_r.type_flag_, DType, {  // data type
-    MSHADOW_IDX_TYPE_SWITCH(indptr_r.type_flag_, IType, {  // indptr type
-      MSHADOW_IDX_TYPE_SWITCH(col_idx_r.type_flag_, CType, {  // col idx type
-        dim_t num_threads;
-        if (req == kWriteTo || req == kWriteInplace) {
-          num_threads = data_out.Size();
-          mxnet_op::Kernel<mxnet_op::set_zero, cpu>::Launch(
-              s, num_threads, data_out.dptr<DType>());
-        }
-        num_threads = mxnet_op::get_num_threads<cpu>(data_out.shape_[0]);
-        // seg by output row
-        dim_t seg_len = (data_out.shape_[0] + num_threads - 1) / num_threads;
-        if (transpose_b) {
-          mxnet_op::Kernel<DotDnsCsrTransDnsByRowBlocks, cpu>::Launch(s, num_threads,
-              data_out.dptr<DType>(), data_l.dptr<DType>(),
-              data_r.dptr<DType>(), indptr_r.dptr<IType>(),
-              col_idx_r.dptr<CType>(), seg_len,
-              dns.shape_[0], dns.shape_[1],
-              rhs.shape()[0], rhs.shape()[1]);
-        } else {
-          mxnet_op::Kernel<DotDnsCsrDnsByRowBlocks, cpu>::Launch(s, num_threads,
-              data_out.dptr<DType>(), data_l.dptr<DType>(),
-              data_r.dptr<DType>(), indptr_r.dptr<IType>(),
-              col_idx_r.dptr<CType>(), seg_len,
-              dns.shape_[0], dns.shape_[1],
-              rhs.shape()[0], rhs.shape()[1]);
-        }
-      });
-    });
-  });
-}
-    
-      /// Close the acceptor.
-  /**
-   * This function is used to close the acceptor. Any asynchronous accept
-   * operations will be cancelled immediately.
-   *
-   * A subsequent call to open() is required before the acceptor can again be
-   * used to again perform socket accept operations.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   */
-  void close()
-  {
-    boost::system::error_code ec;
-    this->get_service().close(this->get_implementation(), ec);
-    boost::asio::detail::throw_error(ec, 'close');
-  }
-    
-    template <typename CompletionCondition>
-class base_from_completion_cond
-{
-protected:
-  explicit base_from_completion_cond(CompletionCondition completion_condition)
-    : completion_condition_(completion_condition)
-  {
-  }
-    }
-    
-        // Make a copy of the handler so that the memory can be deallocated before
-    // the upcall is made. Even if we're not about to make an upcall, a
-    // sub-object of the handler may be the true owner of the memory associated
-    // with the handler. Consequently, a local copy of the handler is required
-    // to ensure that any owning sub-object remains valid until after we have
-    // deallocated the memory here.
-    detail::binder2<Handler, boost::system::error_code, std::size_t>
-      handler(o->handler_, o->ec_, o->bytes_transferred_);
-    p.h = boost::asio::detail::addressof(handler.handler_);
-    p.reset();
-    
-    #if defined(BOOST_ASIO_WINDOWS) || defined(__CYGWIN__)
-typedef win_fd_set_adapter fd_set_adapter;
-#else
-typedef posix_fd_set_adapter fd_set_adapter;
-#endif
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    namespace xgboost {
-namespace common {
-    }
+    TEST(CanClientFactoryTest, CreateCanClient) {
+  auto *can_factory = CanClientFactory::instance();
+  EXPECT_TRUE(can_factory != nullptr);
     }
     
     
-    { private:
-  /*! \brief the underlying stream */
-  dmlc::Stream *stream_;
-  /*! \brief buffer to hold data */
-  std::string buffer_;
-  /*! \brief length of valid data in buffer */
-  size_t read_len_;
-  /*! \brief pointer in the buffer */
-  size_t read_ptr_;
-};
-    
-    void MetaInfo::SaveBinary(dmlc::Stream *fo) const {
-  int32_t version = kVersion;
-  fo->Write(&version, sizeof(version));
-  fo->Write(&num_row_, sizeof(num_row_));
-  fo->Write(&num_col_, sizeof(num_col_));
-  fo->Write(&num_nonzero_, sizeof(num_nonzero_));
-  fo->Write(labels_);
-  fo->Write(group_ptr_);
-  fo->Write(qids_);
-  fo->Write(weights_);
-  fo->Write(root_index_);
-  fo->Write(base_margin_);
-}
-    
-    void SimpleCSRSource::Clear() {
-  page_.Clear();
-  this->info.Clear();
-}
-    
-    /*
- * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
- * Method:    XGBoosterEvalOneIter
- * Signature: (JI[J[Ljava/lang/String;)Ljava/lang/String;
- */
-JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGBoosterEvalOneIter
-  (JNIEnv *jenv, jclass jcls, jlong jhandle, jint jiter, jlongArray jdmats, jobjectArray jevnames, jobjectArray jout) {
-  BoosterHandle handle = (BoosterHandle) jhandle;
-  std::vector<DMatrixHandle> dmats;
-  std::vector<std::string> evnames;
-  std::vector<const char*> evchars;
+    {    bool first = true;
+    while (!other_agent()->is_sending_finish()) {
+      is_receiving(true);
+      int32_t len = MAX_CAN_RECV_FRAME_LEN;
+      ErrorCode ret = client->Receive(&buf, &len);
+      if (len == 0) {
+        AINFO << 'recv frame:0';
+        continue;
+      }
+      if (first) {
+        start = AsInt64<micros>(Clock::Now());
+        first = false;
+      }
+      if (ret != ErrorCode::OK || len == 0) {
+        // AINFO << 'channel:' << param->conf.channel_id()
+        //      << ', recv frame:failed, code:' << ret;
+        AINFO << 'recv error:' << ret;
+        continue;
+      }
+      for (int32_t i = 0; i < len; ++i) {
+        param->recv_cnt = param->recv_cnt + 1;
+        AINFO << 'recv_frame#' << buf[i].CanFrameString()
+              << ' conf:' << param->conf.ShortDebugString()
+              << ',recv_cnt: ' << param->recv_cnt;
+      }
     }
-    
-    // tress
-#include '../src/tree/split_evaluator.cc'
-#include '../src/tree/tree_model.cc'
-#include '../src/tree/tree_updater.cc'
-#include '../src/tree/updater_colmaker.cc'
-#include '../src/tree/updater_fast_hist.cc'
-#include '../src/tree/updater_prune.cc'
-#include '../src/tree/updater_refresh.cc'
-#include '../src/tree/updater_sync.cc'
-#include '../src/tree/updater_histmaker.cc'
-#include '../src/tree/updater_skmaker.cc'
-    
-    /**
- * \class CompressedBufferWriter
- *
- * \brief Writes bit compressed symbols to a memory buffer. Use
- * CompressedIterator to read symbols back from buffer. Currently limited to a
- * maximum symbol size of 28 bits.
- *
- * \author  Rory
- * \date  7/9/2017
- */
-    
-    XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(lz4)
-.describe('Apply LZ4 binary data compression for ext memory.')
-.set_body([]() {
-    return new SparsePageLZ4Format<bst_uint>(false);
-  });
-    
-    namespace xgboost {
-namespace data {
-/*!
- * \brief Format specification of SparsePage.
- */
-class SparsePageFormat {
- public:
-  /*! \brief virtual destructor */
-  virtual ~SparsePageFormat() = default;
-  /*!
-   * \brief Load all the segments into page, advance fi to end of the block.
-   * \param page The data to read page into.
-   * \param fi the input stream of the file
-   * \return true of the loading as successful, false if end of file was reached
-   */
-  virtual bool Read(SparsePage* page, dmlc::SeekStream* fi) = 0;
-  /*!
-   * \brief read only the segments we are interested in, advance fi to end of the block.
-   * \param page The page to load the data into.
-   * \param fi the input stream of the file
-   * \param sorted_index_set sorted index of segments we are interested in
-   * \return true of the loading as successful, false if end of file was reached
-   */
-  virtual bool Read(SparsePage* page,
-                    dmlc::SeekStream* fi,
-                    const std::vector<bst_uint>& sorted_index_set) = 0;
-  /*!
-   * \brief save the data to fo, when a page was written.
-   * \param fo output stream
-   */
-  virtual void Write(const SparsePage& page, dmlc::Stream* fo) = 0;
-  /*!
-   * \brief Create sparse page of format.
-   * \return The created format functors.
-   */
-  static SparsePageFormat* Create(const std::string& name);
-  /*!
-   * \brief decide the format from cache prefix.
-   * \return pair of row format, column format type of the cache prefix.
-   */
-  static std::pair<std::string, std::string> DecideFormat(const std::string& cache_prefix);
-};
-    }
-    }
-    
-      virtual const char* Name() const override;
-    
-      // Returns the physical offset of the last record returned by ReadRecord.
-  //
-  // Undefined before the first call to ReadRecord.
-  uint64_t LastRecordOffset();
-    
-    
-    {   private:
-     const std::set<uint32_t> m_ignore_histograms;
- };
-    
-    void SyncPoint::ClearTrace() {
-  impl_->ClearTrace();
-}
-    
-      // Report an approximation of how much memory has been used other than memory
-  // that was allocated through the allocator.  Safe to call from any thread.
-  virtual size_t ApproximateMemoryUsage() = 0;
-    
-    
-    {  m_jFindShortSuccessorMethodId =
-    AbstractComparatorJni::getFindShortSuccessorMethodId(env);
-  if(m_jFindShortSuccessorMethodId == nullptr) {
-    // exception thrown: NoSuchMethodException or OutOfMemoryError
+    int64_t end = AsInt64<micros>(Clock::Now());
+    param->recv_time = end - start;
+    AINFO << 'Recv thread stopping..., conf:' << param->conf.ShortDebugString();
     return;
   }
-}
     
-    double HistogramStat::Percentile(double p) const {
-  double threshold = num() * (p / 100.0);
-  uint64_t cumulative_sum = 0;
-  for (unsigned int b = 0; b < num_buckets_; b++) {
-    uint64_t bucket_value = bucket_at(b);
-    cumulative_sum += bucket_value;
-    if (cumulative_sum >= threshold) {
-      // Scale linearly within this bucket
-      uint64_t left_point = (b == 0) ? 0 : bucketMapper.BucketLimit(b-1);
-      uint64_t right_point = bucketMapper.BucketLimit(b);
-      uint64_t left_sum = cumulative_sum - bucket_value;
-      uint64_t right_sum = cumulative_sum;
-      double pos = 0;
-      uint64_t right_left_diff = right_sum - left_sum;
-      if (right_left_diff != 0) {
-       pos = (threshold - left_sum) / right_left_diff;
-      }
-      double r = left_point + (right_point - left_point) * pos;
-      uint64_t cur_min = min();
-      uint64_t cur_max = max();
-      if (r < cur_min) r = static_cast<double>(cur_min);
-      if (r > cur_max) r = static_cast<double>(cur_max);
-      return r;
-    }
-  }
-  return static_cast<double>(max());
-}
+      /**
+   * @brief Receive messages
+   * @param frames The messages to receive.
+   * @param frame_num The amount of messages to receive.
+   * @return The status of the receiving action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  apollo::common::ErrorCode Receive(std::vector<CanFrame> *frames,
+                                    int32_t *const frame_num) override;
     
-    // a buffer size used for temp string buffers
-const int kTmpStrBufferSize = 200;
+    #endif  // MODULES_DRIVERS_CANBUS_CAN_COMM_CAN_RECEIVER_H_
+
+    
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+#include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
+#include 'modules/drivers/canbus/can_comm/protocol_data.h'
+    
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+    
+    std::string Byte::to_hex_string() const { return byte_to_hex(*value_); }
+    
+    #ifndef MODULES_DRIVERS_CANBUS_COMMON_CANBUS_CONSTS_H_
+#define MODULES_DRIVERS_CANBUS_COMMON_CANBUS_CONSTS_H_
+    
+    #include 'modules/drivers/canbus/sensor_gflags.h'
