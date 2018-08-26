@@ -1,344 +1,285 @@
 
         
         
-    {    QWidget *m_dummyWidget;
-    QMenu *m_dockMenu;
-    QMainWindow *mainWindow;
-};
-    
-    
-    {private:
-    Ui::OpenURIDialog *ui;
-};
-    
-    #undef cv_hal_cmp8u
-#define cv_hal_cmp8u(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::u8, src1, sz1, src2, sz2, dst, sz, w, h, op)
-#undef cv_hal_cmp8s
-#define cv_hal_cmp8s(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::s8, src1, sz1, src2, sz2, dst, sz, w, h, op)
-#undef cv_hal_cmp16u
-#define cv_hal_cmp16u(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::u16, src1, sz1, src2, sz2, dst, sz, w, h, op)
-#undef cv_hal_cmp16s
-#define cv_hal_cmp16s(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::s16, src1, sz1, src2, sz2, dst, sz, w, h, op)
-#undef cv_hal_cmp32s
-#define cv_hal_cmp32s(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::s32, src1, sz1, src2, sz2, dst, sz, w, h, op)
-#undef cv_hal_cmp32f
-#define cv_hal_cmp32f(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::f32, src1, sz1, src2, sz2, dst, sz, w, h, op)
-//#undef cv_hal_cmp64f
-//#define cv_hal_cmp64f(src1, sz1, src2, sz2, dst, sz, w, h, op) TEGRA_CMP(CAROTENE_NS::f64, src1, sz1, src2, sz2, dst, sz, w, h, op)
-    
-        enum FLIP_MODE
-    {
-        FLIP_HORIZONTAL_MODE = 1,
-        FLIP_VERTICAL_MODE = 2,
-        FLIP_BOTH_MODE = FLIP_HORIZONTAL_MODE | FLIP_VERTICAL_MODE
-    };
-    
-            for (; j < roiw32; j += 32)
-        {
-            internal::prefetch(src0 + j);
-            internal::prefetch(src1 + j);
-            uint8x16_t v_src00 = vld1q_u8(src0 + j), v_src01 = vld1q_u8(src0 + j + 16);
-            uint8x16_t v_src10 = vld1q_u8(src1 + j), v_src11 = vld1q_u8(src1 + j + 16);
-            vst1q_u16(dst + j, vaddl_u8(vget_low_u8(v_src00), vget_low_u8(v_src10)));
-            vst1q_u16(dst + j + 8, vaddl_u8(vget_high_u8(v_src00), vget_high_u8(v_src10)));
-            vst1q_u16(dst + j + 16, vaddl_u8(vget_low_u8(v_src01), vget_low_u8(v_src11)));
-            vst1q_u16(dst + j + 24, vaddl_u8(vget_high_u8(v_src01), vget_high_u8(v_src11)));
-        }
-        for (; j < roiw8; j += 8)
-        {
-            uint8x8_t v_src0 = vld1_u8(src0 + j);
-            uint8x8_t v_src1 = vld1_u8(src1 + j);
-            vst1q_u16(dst + j, vaddl_u8(v_src0, v_src1));
-        }
-    
-    /*!
- *  Aligns pointer by the certain number of bytes
- *
- *  This small inline function aligns the pointer by the certain number of bytes by shifting
- *  it forward by 0 or a positive offset.
- */
-template<typename T> inline T* alignPtr(T* ptr, size_t n=sizeof(T))
-{
-    return (T*)(((size_t)ptr + n-1) & -n);
+    {  // Assuming T is defined in namespace foo, in the next statement,
+  // the compiler will consider all of:
+  //
+  //   1. foo::operator<< (thanks to Koenig look-up),
+  //   2. ::operator<< (as the current namespace is enclosed in ::),
+  //   3. testing::internal2::operator<< (thanks to the using statement above).
+  //
+  // The operator<< whose type matches T best will be picked.
+  //
+  // We deliberately allow #2 to be a candidate, as sometimes it's
+  // impossible to define #1 (e.g. when foo is ::std, defining
+  // anything in it is undefined behavior unless you are a compiler
+  // vendor.).
+  *os << value;
 }
     
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(u16, u8, 16,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.8 {d4-d5}, [%[src1]]                             \n\t'
-            'vmovl.u16 q3, d4                                      \n\t'
-            'vmovl.u16 q4, d5                                      \n\t'
-            'vcvt.f32.u32 q5, q3                                   \n\t'
-            'vcvt.f32.u32 q6, q4                                   \n\t'
-            'vmul.f32 q7, q5, q0                                   \n\t'
-            'vmul.f32 q8, q6, q0                                   \n\t'
-            'vadd.f32 q9, q7, q1                                   \n\t'
-            'vadd.f32 q10, q8, q1                                  \n\t'
-            'vcvt.s32.f32 q11, q9                                  \n\t'
-            'vcvt.s32.f32 q12, q10                                 \n\t'
-            'vqmovn.s32 d26, q11                                   \n\t'
-            'vqmovn.s32 d27, q12                                   \n\t'
-            'vqmovun.s16 d28, q13                                  \n\t'
-             'vst1.8 {d28}, [%[dst]]                               \n\t'
-            : /*no output*/
-            : [src1] 'r' (_src + i),
-              [dst] 'r' (_dst + i + 0),
-               'w'  (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28'
-        );
-    }
-})
-#else
-CVTS_FUNC(u16, u8, 16,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 8)
-    {
-        internal::prefetch(_src + i);
-        uint16x8_t vline = vld1q_u16(_src + i);
-        uint32x4_t vline1_u32 = vmovl_u16(vget_low_u16 (vline));
-        uint32x4_t vline2_u32 = vmovl_u16(vget_high_u16(vline));
-        float32x4_t vline1_f32 = vcvtq_f32_u32(vline1_u32);
-        float32x4_t vline2_f32 = vcvtq_f32_u32(vline2_u32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        int16x4_t vRes1 = vqmovn_s32(vline1_s32);
-        int16x4_t vRes2 = vqmovn_s32(vline2_s32);
-        uint8x8_t vRes = vqmovun_s16(vcombine_s16(vRes1, vRes2));
-        vst1_u8(_dst + i, vRes);
-    }
-})
-#endif
     
+    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(SingleFailureChecker);
+};
     
-    {} // namespace CAROTENE_NS
-
-    
-    #include 'common.hpp'
-    
-            const u8* prev = buf[(i - 4 + 3)%3];
-        const u8* pprev = buf[(i - 5 + 3)%3];
-        cornerpos = cpbuf[(i - 4 + 3)%3];
-        ncorners = cornerpos[-1];
-    
-    #endif
-    
-    #include <condition_variable>
-#include <mutex>
-#include <string>
-#include <system_error>
-#include <vector>
-    
-    X before running op:
-[[0.5821691  0.07719802 0.50159824]
- [0.40952456 0.36788362 0.84887683]
- [0.02472685 0.65730894 0.9066397 ]]
-X after running op:
-[[1.7899168 1.080256  1.6513585]
- [1.5061016 1.4446739 2.3370204]
- [1.0250351 1.9295927 2.4759884]]
-    
-      const auto& X = in[0];
-  const auto& W = in[1];
-  const auto& b = in[2];
-  auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
-  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
-  const int M = size_to_dim_(canonical_axis, GetDimsVector(in[0]));
-  const int K = size_from_dim_(canonical_axis, GetDimsVector(in[0]));
-  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
-  const int canonical_axis_w =
-      canonical_axis_index_(axis_w, in[1].dims().size());
-  const int N = size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
-    
-    
-    {
-    {SHOULD_NOT_DO_GRADIENT(FindDuplicateElements);
-} // namespace
-} // namespace caffe2
-
-    
-            template <typename GradType, typename AccumType>
-        void Update(const Parameter& parameter, const NDArrayViewPtr& gradientValue, const NDArrayViewPtr& smoothedGradientValue, size_t trainingSampleCount);
-    
-                tensorView = new TensorView<double>(slicedMatrixView, AsTensorViewShape(sliceViewShape));
-            break;
-        }
-        case DataType::Float16:
-        {
-            auto currentMatrix = GetMatrix<half>();
-            std::pair<size_t, size_t> currentMatrixDims = { currentMatrix->GetNumRows(), currentMatrix->GetNumCols() };
-            std::shared_ptr<Matrix<half>> slicedMatrixView;
-            if (sliceViewMatrixDims.first != currentMatrixDims.first)
-                slicedMatrixView = make_shared<Matrix<half>>(currentMatrix->Reshaped(1, currentMatrix->GetNumElements()).ColumnSlice(flatBufferOffset, sliceViewShape.TotalSize()));
-            else
-                slicedMatrixView = make_shared<Matrix<half>>(currentMatrix->ColumnSlice(sliceMatrixColumnOffset, sliceViewMatrixDims.second));
-    
-        template <typename T> 
-    inline std::string GetVersionsString(size_t currentVersion, size_t dictVersion)
-    {
-        std::stringstream info;
-        info << 'Current ' << Typename<T>() << ' version = ' << currentVersion 
-             << ', Dictionary version = ' << dictVersion;
-        return info.str();
+    // This helper class is used by {ASSERT|EXPECT}_NO_FATAL_FAILURE to check if a
+// statement generates new fatal failures. To do so it registers itself as the
+// current test part result reporter. Besides checking if fatal failures were
+// reported, it only delegates the reporting to the former result reporter.
+// The original result reporter is restored in the destructor.
+// INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
+class GTEST_API_ HasNewFatalFailureHelper
+    : public TestPartResultReporterInterface {
+ public:
+  HasNewFatalFailureHelper();
+  virtual ~HasNewFatalFailureHelper();
+  virtual void ReportTestPartResult(const TestPartResult& result);
+  bool has_new_fatal_failure() const { return has_new_fatal_failure_; }
+ private:
+  bool has_new_fatal_failure_;
+  TestPartResultReporterInterface* original_reporter_;
     }
     
+      // Gets the user supplied key.
+  const char* key() const {
+    return key_.c_str();
+  }
     
-    {            m_parameterLearners->DoAggregateMetricsIfNeededLambda(localLossValue, localEvalCriterion);
-        }
-    
-        template <typename ElementType>
-    void Value::CopyVariableValueToVector(const Variable& outputVariable, std::vector<std::vector<size_t>>& sequences)
-    {
-        if (outputVariable.Shape()[0] != outputVariable.Shape().TotalSize())
-            InvalidArgument('For sparse data, the outputVariable's leading axis dimensionality (%zu) must equal the total size (%zu) of the Variable '%S'.',
-                            outputVariable.Shape()[0], outputVariable.Shape().TotalSize(), outputVariable.AsString().c_str());
+    // Helper function for implementing {EXPECT|ASSERT}_PRED4.  Don't use
+// this in your code.
+template <typename Pred,
+          typename T1,
+          typename T2,
+          typename T3,
+          typename T4>
+AssertionResult AssertPred4Helper(const char* pred_text,
+                                  const char* e1,
+                                  const char* e2,
+                                  const char* e3,
+                                  const char* e4,
+                                  Pred pred,
+                                  const T1& v1,
+                                  const T2& v2,
+                                  const T3& v3,
+                                  const T4& v4) {
+  if (pred(v1, v2, v3, v4)) return AssertionSuccess();
     }
     
+    // This macro is for implementing ASSERT/EXPECT_DEBUG_DEATH when compiled in
+// NDEBUG mode. In this case we need the statements to be executed, the regex is
+// ignored, and the macro must accept a streamed message even though the message
+// is never printed.
+# define GTEST_EXECUTE_STATEMENT_(statement, regex) \
+  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
+  if (::testing::internal::AlwaysTrue()) { \
+     GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
+  } else \
+    ::testing::Message()
     
-    {            if ((m_varKind == VariableKind::Parameter) || (m_varKind == VariableKind::Constant))
-            {
-                if (m_shape.HasFreeDimension())
-                    InvalidArgument('Parameter/Constant '%S' has invalid shape '%S'; it is illegal for a Parameter/Constant to have a FreeDimension.', AsString().c_str(), m_shape.AsString().c_str());
-            }
-        }
-    
-    
-    {    std::string GetCallStack(size_t skipLevels = 0, bool makeFunctionNamesStandOut = false);
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23>
+struct Templates23 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates22<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22, T23> Tail;
 };
     
     
-    {/*!
- * \brief Macro to register objective function.
- *
- * \code
- * // example of registering a objective
- * XGBOOST_REGISTER_OBJECTIVE(LinearRegression, 'reg:linear')
- * .describe('Linear regression objective')
- * .set_body([]() {
- *     return new RegLossObj(LossType::kLinearSquare);
- *   });
- * \endcode
+    {  int initially_allocated_;
+};
+    
+    // Tests the c'tor that accepts a C string.
+TEST(MyString, ConstructorFromCString) {
+  const MyString s(kHelloString);
+  EXPECT_EQ(0, strcmp(s.c_string(), kHelloString));
+  EXPECT_EQ(sizeof(kHelloString)/sizeof(kHelloString[0]) - 1,
+            s.Length());
+}
+    
+    
+    {    return element;
+  }
+    
+    private:
+  void push_back(const Bytecode& op, bool is_concat = false);
+  void squash();
+    
+    namespace HPHP { namespace HHBBC {
+    }
+    }
+    
+    enum class LinkReg {
+  Save,
+  DoNotTouch
+};
+    
+    namespace HPHP {
+    }
+    
+    // This method must return a char* which is owned by the IniSettingMap
+// to avoid issues with the lifetime of the char*
+const char* Config::Get(const IniSettingMap &ini, const Hdf& config,
+                        const std::string& name /* = '' */,
+                        const char *defValue /* = nullptr */,
+                        const bool prepend_hhvm /* = true */) {
+  auto ini_name = IniName(name, prepend_hhvm);
+  Hdf hdf = name != '' ? config[name] : config;
+  auto value = ini_iterate(ini, ini_name);
+  if (value.isString()) {
+    // See generic Get##METHOD below for why we are doing this
+    // Note that value is a string, so value.toString() is not
+    // a temporary.
+    const char* ini_ret = value.toString().data();
+    const char* hdf_ret = hdf.configGet(ini_ret);
+    if (hdf_ret != ini_ret) {
+      ini_ret = hdf_ret;
+      IniSetting::SetSystem(ini_name, ini_ret);
+    }
+    return ini_ret;
+  }
+  return hdf.configGet(defValue);
+}
+    
+    /**
+ * Implement this interface to report information to debugger or execute
+ * debugger commands.
  */
-#define XGBOOST_REGISTER_OBJECTIVE(UniqueId, Name)                      \
-  static DMLC_ATTRIBUTE_UNUSED ::xgboost::ObjFunctionReg &              \
-  __make_ ## ObjFunctionReg ## _ ## UniqueId ## __ =                    \
-      ::dmlc::Registry< ::xgboost::ObjFunctionReg>::Get()->__REGISTER__(Name)
-}  // namespace xgboost
-#endif  // XGBOOST_OBJECTIVE_H_
-
+struct IDebuggable {
+  enum Support {
+    SupportInfo = 1,
+    SupportDump = 2,
+    SupportVerb = 4,
+  };
+    }
     
-    XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(lz4i16hc)
-.describe('Apply LZ4 binary data compression(16 bit index mode) for ext memory.')
-.set_body([]() {
-    return new SparsePageLZ4Format<uint16_t>(true);
-  });
+    void PlainDirectory::rewind() {
+  ::rewinddir(m_dir);
+}
     
-      size_t Read(void* dptr, size_t size) override {
-    size_t nbuffer = buffer_.length() - buffer_ptr_;
-    if (nbuffer == 0) return strm_->Read(dptr, size);
-    if (nbuffer < size) {
-      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, nbuffer);
-      buffer_ptr_ += nbuffer;
-      return nbuffer + strm_->Read(reinterpret_cast<char*>(dptr) + nbuffer,
-                                   size - nbuffer);
-    } else {
-      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, size);
-      buffer_ptr_ += size;
-      return size;
+    namespace HPHP {
+    }
+    
+    #define ERROR_RAISE_WARNING(exp)        \
+  int ret = (exp);                      \
+  if (ret != 0) {                       \
+    raise_warning(                      \
+      '%s(): %s',                       \
+      __FUNCTION__,                     \
+      folly::errnoStr(errno).c_str()    \
+    );                                  \
+  }                                     \
+    
+    
+    {}  // namespace leveldb
+    
+    Status BuildTable(const std::string& dbname,
+                  Env* env,
+                  const Options& options,
+                  TableCache* table_cache,
+                  Iterator* iter,
+                  FileMetaData* meta) {
+  Status s;
+  meta->file_size = 0;
+  iter->SeekToFirst();
+    }
+    
+    TEST(CorruptionTest, NewFileErrorDuringWrite) {
+  // Do enough writing to force minor compaction
+  env_.writable_file_error_ = true;
+  const int num = 3 + (Options().write_buffer_size / kValueSize);
+  std::string value_storage;
+  Status s;
+  for (int i = 0; s.ok() && i < num; i++) {
+    WriteBatch batch;
+    batch.Put('a', Value(100, &value_storage));
+    s = db_->Write(WriteOptions(), &batch);
+  }
+  ASSERT_TRUE(!s.ok());
+  ASSERT_GE(env_.num_writable_file_errors_, 1);
+  env_.writable_file_error_ = false;
+  Reopen();
+}
+    
+    #include 'db/filename.h'
+#include 'db/db_impl.h'
+#include 'db/dbformat.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
+#include 'port/port.h'
+#include 'util/logging.h'
+#include 'util/mutexlock.h'
+#include 'util/random.h'
+    
+    static std::string IKey(const std::string& user_key,
+                        uint64_t seq,
+                        ValueType vt) {
+  std::string encoded;
+  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
+  return encoded;
+}
+    
+      char* scratch = new char[length];
+  leveldb::Slice result;
+  s = orig_file->Read(length, &result, scratch);
+  delete orig_file;
+  if (s.ok()) {
+    std::string tmp_name = GetDirName(filename) + '/truncate.tmp';
+    WritableFile* tmp_file;
+    s = env->NewWritableFile(tmp_name, &tmp_file);
+    if (s.ok()) {
+      s = tmp_file->Append(result);
+      delete tmp_file;
+      if (s.ok()) {
+        s = env->RenameFile(tmp_name, filename);
+      } else {
+        env->DeleteFile(tmp_name);
+      }
     }
   }
     
-    namespace xgboost {
-namespace common {
-/*!
- * \brief calculate the sigmoid of the input.
- * \param x input parameter
- * \return the transformed value.
- */
-XGBOOST_DEVICE inline float Sigmoid(float x) {
-  return 1.0f / (1.0f + expf(-x));
-}
-    }
-    }
+      fname = LockFileName('foo');
+  ASSERT_EQ('foo/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(0, number);
+  ASSERT_EQ(kDBLockFile, type);
     
-      ~Monitor() {
-    if (!debug_verbose) return;
-    }
+    static const int kBlockSize = 32768;
     
-    SparsePageWriter::SparsePageWriter(
-    const std::vector<std::string>& name_shards,
-    const std::vector<std::string>& format_shards,
-    size_t extra_buffer_capacity)
-    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
-      clock_ptr_(0),
-      workers_(name_shards.size()),
-      qworkers_(name_shards.size()) {
-  CHECK_EQ(name_shards.size(), format_shards.size());
-  // start writer threads
-  for (size_t i = 0; i < name_shards.size(); ++i) {
-    std::string name_shard = name_shards[i];
-    std::string format_shard = format_shards[i];
-    auto* wqueue = &qworkers_[i];
-    workers_[i].reset(new std::thread(
-        [this, name_shard, format_shard, wqueue] () {
-          std::unique_ptr<dmlc::Stream> fo(
-              dmlc::Stream::Create(name_shard.c_str(), 'w'));
-          std::unique_ptr<SparsePageFormat> fmt(
-              SparsePageFormat::Create(format_shard));
-          fo->Write(format_shard);
-          std::shared_ptr<SparsePage> page;
-          while (wqueue->Pop(&page)) {
-            if (page == nullptr) break;
-            fmt->Write(*page, fo.get());
-            qrecycle_.Push(std::move(page));
-          }
-          fo.reset(nullptr);
-          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
-        }));
+    
+    {  // No copying allowed
+  MemTableIterator(const MemTableIterator&);
+  void operator=(const MemTableIterator&);
+};
+    
+      // Drop reference count.  Delete if no more references exist.
+  void Unref() {
+    --refs_;
+    assert(refs_ >= 0);
+    if (refs_ <= 0) {
+      delete this;
+    }
   }
-}
     
-            static float f = 0.0f;
-        ImGui::Text('Hello, world!');
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
-        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
-        ImGui::ShowDemoWindow(NULL);
+      // Pad with zeroes to make manifest file very big.
+  {
+    uint64_t len = FileSize(old_manifest);
+    WritableFile* file;
+    ASSERT_OK(env()->NewAppendableFile(old_manifest, &file));
+    std::string zeroes(3*1048576 - static_cast<size_t>(len), 0);
+    ASSERT_OK(file->Append(zeroes));
+    ASSERT_OK(file->Flush());
+    delete file;
+  }
     
-    #include 'imgui.h'
-#include 'imgui_impl_marmalade.h'
-#include <stdio.h>
-    
-    
-    {    return 0;
-}
-
-    
-    static void CleanupVulkan()
-{
-    ImGui_ImplVulkanH_WindowData* wd = &g_WindowData;
-    ImGui_ImplVulkanH_DestroyWindowData(g_Instance, g_Device, wd, g_Allocator);
-    vkDestroyDescriptorPool(g_Device, g_DescriptorPool, g_Allocator);
-    }
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-            ID3D11Texture2D *pTexture = NULL;
-        D3D11_SUBRESOURCE_DATA subResource;
-        subResource.pSysMem = pixels;
-        subResource.SysMemPitch = desc.Width * 4;
-        subResource.SysMemSlicePitch = 0;
-        g_pd3dDevice->CreateTexture2D(&desc, &subResource, &pTexture);
+      Iterator* NewTableIterator(const FileMetaData& meta) {
+    // Same as compaction iterators: if paranoid_checks are on, turn
+    // on checksum verification.
+    ReadOptions r;
+    r.verify_checksums = options_.paranoid_checks;
+    return table_cache_->NewIterator(r, meta.number, meta.file_size);
+  }
