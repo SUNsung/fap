@@ -1,176 +1,120 @@
 
         
         
-atom_template = textwrap.dedent('''\
-    <?xml version='1.0' encoding='utf-8'?>
-    <feed xmlns='http://www.w3.org/2005/Atom'>
-        <link rel='self' href='http://rg3.github.io/youtube-dl/update/releases.atom' />
-        <title>youtube-dl releases</title>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed</id>
-        <updated>@TIMESTAMP@</updated>
-        @ENTRIES@
-    </feed>''')
+class BlackJackCard(Card):
     
-    options = helptext[helptext.index('  General Options:') + 19:]
-options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
-options = '# OPTIONS\n' + options + '\n'
-    
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        def __init__(self, chat_id):
+        self.chat_id = chat_id
+        self.users = []
+        self.messages = []
     
     
-def report_warning(message):
-    '''
-    Print the message to stderr, it will be prefixed with 'WARNING:'
-    If stderr is a tty file the 'WARNING:' will be colored
-    '''
-    if sys.stderr.isatty() and compat_os_name != 'nt':
-        _msg_header = '\033[0;33mWARNING:\033[0m'
-    else:
-        _msg_header = 'WARNING:'
-    output = '%s %s\n' % (_msg_header, message)
-    if 'b' in getattr(sys.stderr, 'mode', '') or sys.version_info[0] < 3:
-        output = output.encode(preferredencoding())
-    sys.stderr.write(output)
+class RemoveDuplicateUrls(MRJob):
     
-        def test_func(self):
-        as_file = os.path.join(TEST_DIR, testfile)
-        swf_file = os.path.join(TEST_DIR, test_id + '.swf')
-        if ((not os.path.exists(swf_file)) or
-                os.path.getmtime(swf_file) < os.path.getmtime(as_file)):
-            # Recompile
-            try:
-                subprocess.check_call([
-                    'mxmlc', '-output', swf_file,
-                    '-static-link-runtime-shared-libraries', as_file])
-            except OSError as ose:
-                if ose.errno == errno.ENOENT:
-                    print('mxmlc not found! Skipping test.')
-                    return
-                raise
+        def __init__(self):
+        self.people = {}  # key: person_id, value: person
     
-    import io
-import re
+            env.scrapy_all_settings.append({
+            'docname': env.docname,
+            'setting_name': setting_name,
+            'refid': refid,
+        })
     
-            if check_executable('mplayer', ['-h']):
-            args = [
-                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
-                '-dumpstream', '-dumpfile', tmpfilename, url]
-        elif check_executable('mpv', ['-h']):
-            args = [
-                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
-        else:
-            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
-            return False
+    # A regex that matches standard linkcheck output lines
+line_re = re.compile(u'(.*)\:\d+\:\s\[(.*)\]\s(?:(.*)\sto\s(.*)|(.*))')
     
-            formats = [
-            {
-                'format_id': f['type'],
-                'filesize': int(f['filesize']),
-                'url': f['url']
-            } for f in info['rfiles']
-        ]
-        self._sort_formats(formats)
+    # Apply monkey patches to fix issues in external libraries
+from . import _monkeypatches
+del _monkeypatches
     
-        _TESTS = [{
-        'url': 'http://edition.cnn.com/video/?/video/sports/2013/06/09/nadal-1-on-1.cnn',
-        'md5': '3e6121ea48df7e2259fe73a0628605c4',
-        'info_dict': {
-            'id': 'sports/2013/06/09/nadal-1-on-1.cnn',
-            'ext': 'mp4',
-            'title': 'Nadal wins 8th French Open title',
-            'description': 'World Sport\'s Amanda Davies chats with 2013 French Open champion Rafael Nadal.',
-            'duration': 135,
-            'upload_date': '20130609',
-        },
-        'expected_warnings': ['Failed to download m3u8 information'],
-    }, {
-        'url': 'http://edition.cnn.com/video/?/video/us/2013/08/21/sot-student-gives-epic-speech.georgia-institute-of-technology&utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+rss%2Fcnn_topstories+%28RSS%3A+Top+Stories%29',
-        'md5': 'b5cc60c60a3477d185af8f19a2a26f4e',
-        'info_dict': {
-            'id': 'us/2013/08/21/sot-student-gives-epic-speech.georgia-institute-of-technology',
-            'ext': 'mp4',
-            'title': 'Student's epic speech stuns new freshmen',
-            'description': 'A Georgia Tech student welcomes the incoming freshmen with an epic speech backed by music from \'2001: A Space Odyssey.\'',
-            'upload_date': '20130821',
-        },
-        'expected_warnings': ['Failed to download m3u8 information'],
-    }, {
-        'url': 'http://www.cnn.com/video/data/2.0/video/living/2014/12/22/growing-america-nashville-salemtown-board-episode-1.hln.html',
-        'md5': 'f14d02ebd264df951feb2400e2c25a1b',
-        'info_dict': {
-            'id': 'living/2014/12/22/growing-america-nashville-salemtown-board-episode-1.hln',
-            'ext': 'mp4',
-            'title': 'Nashville Ep. 1: Hand crafted skateboards',
-            'description': 'md5:e7223a503315c9f150acac52e76de086',
-            'upload_date': '20141222',
-        },
-        'expected_warnings': ['Failed to download m3u8 information'],
-    }, {
-        'url': 'http://money.cnn.com/video/news/2016/08/19/netflix-stunning-stats.cnnmoney/index.html',
-        'md5': '52a515dc1b0f001cd82e4ceda32be9d1',
-        'info_dict': {
-            'id': '/video/news/2016/08/19/netflix-stunning-stats.cnnmoney',
-            'ext': 'mp4',
-            'title': '5 stunning stats about Netflix',
-            'description': 'Did you know that Netflix has more than 80 million members? Here are five facts about the online video distributor that you probably didn\'t know.',
-            'upload_date': '20160819',
-        },
-        'params': {
-            # m3u8 download
-            'skip_download': True,
-        },
-    }, {
-        'url': 'http://cnn.com/video/?/video/politics/2015/03/27/pkg-arizona-senator-church-attendance-mandatory.ktvk',
-        'only_matching': True,
-    }, {
-        'url': 'http://cnn.com/video/?/video/us/2015/04/06/dnt-baker-refuses-anti-gay-order.wkmg',
-        'only_matching': True,
-    }, {
-        'url': 'http://edition.cnn.com/videos/arts/2016/04/21/olympic-games-cultural-a-z-brazil.cnn',
-        'only_matching': True,
-    }]
+        def _err(self, msg):
+        sys.stderr.write(msg + os.linesep)
+        self.exitcode = 1
     
-    import pytest
+    from scrapy.commands import ScrapyCommand
+from scrapy.shell import Shell
+from scrapy.http import Request
+from scrapy.utils.spider import spidercls_for_request, DefaultSpider
+from scrapy.utils.url import guess_scheme
     
-        # noinspection PyUnboundLocalVariable
-    return '%.*f %s' % (precision, n / factor, suffix)
-
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--verbose', '-v', dest='verbose', action='store_true',
+            help='also display twisted/python/platform info (useful for bug reports)')
     
-        def test_binary_file_path(self, httpbin):
-        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
-        r = http('--print=B', 'POST', httpbin.url + '/post',
-                 '@' + BIN_FILE_PATH_ARG, env=env, )
-        assert r == BIN_FILE_CONTENT
+        def __init__(self, *args, **kwargs):
+        super(ReturnsContract, self).__init__(*args, **kwargs)
+    
+    from scrapy.utils.defer import mustbe_deferred
+from scrapy.utils.httpobj import urlparse_cached
+from scrapy.resolver import dnscache
+from scrapy import signals
+from .middleware import DownloaderMiddlewareManager
+from .handlers import DownloadHandlers
+    
+    import logging
+from twisted.internet import defer
+import six
+from scrapy.exceptions import NotSupported, NotConfigured
+from scrapy.utils.httpobj import urlparse_cached
+from scrapy.utils.misc import load_object
+from scrapy.utils.python import without_none_values
+from scrapy import signals
+    
+            elif stream_id == []:
+            print('streams:             # Available quality and codecs')
+            # Print DASH streams
+            if self.dash_streams:
+                print('    [ DASH ] %s' % ('_' * 36))
+                itags = sorted(self.dash_streams,
+                               key=lambda i: -self.dash_streams[i]['size'])
+                for stream in itags:
+                    self.p_stream(stream)
+            # Print all other available streams
+            print('    [ DEFAULT ] %s' % ('_' * 33))
+            for stream in self.streams_sorted:
+                self.p_stream(stream['id'] if 'id' in stream else stream['itag'])
     
     
-def test_migrate_implicit_content_type():
-    config = MockEnvironment().config
+def get_loop_file_path(title, output_dir):
+    return os.path.join(output_dir, get_output_filename([], title, 'txt', None, False))
     
-    from httpie.compat import urlopen
-from httpie.downloads import (
-    parse_content_range, filename_from_content_disposition, filename_from_url,
-    get_unique_filename, ContentRangeError, Downloader,
-)
-from utils import http, MockEnvironment
+    headers = {
+    'DNT': '1',
+    'Accept-Encoding': 'gzip, deflate, sdch, br',
+    'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Cache-Control': 'max-age=0',
+    'Referer': 'http://www.dilidili.com/',
+    'Connection': 'keep-alive',
+    'Save-Data': 'on',
+}
     
-        def test_colors_option(self, httpbin):
-        env = MockEnvironment(colors=256)
-        r = http('--print=B', '--pretty=colors',
-                 'GET', httpbin.url + '/get', 'a=b',
-                 env=env)
-        # Tests that the JSON data isn't formatted.
-        assert not r.strip().count('\n')
-        assert COLOR in r
+    def ehow_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+	
+	assert re.search(r'http://www.ehow.com/video_', url), 'URL you entered is not supported'
+    
+    if __name__ == '__main__':
+    
+        def run(self, msg):
+        print('{} got {}'.format(self.name, msg))
+    
+        def __init__(self, radio):
+        self.radio = radio
+        self.stations = ['81.3', '89.1', '103.9']
+        self.pos = 0
+        self.name = 'FM'
+    
+    *What does this example do?
+    
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
+'''
     
     
-class MismatchedNotSetException(MismatchedSetException):
-    '''@brief Used for remote debugger deserialization'''
-    
-    def __str__(self):
-        return 'MismatchedNotSetException(%r!=%r)' % (
-            self.getUnexpectedType(), self.expecting
-            )
-    __repr__ = __str__
-    
-        def getText(self):
-        '''@brief Get the text of the token.
+# ConcreteImplementor 1/2
+class DrawingAPI1(object):
