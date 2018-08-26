@@ -1,61 +1,165 @@
 
         
-          spec.add_dependency('slack-notifier', '>= 2.0.0', '< 3.0.0') # Slack notifications
-  spec.add_dependency('xcodeproj', '>= 1.5.7', '< 2.0.0') # Needed for commit_version_bump action and gym code_signing_mapping
-  spec.add_dependency('xcpretty', '~> 0.2.8') # prettify xcodebuild output
-  spec.add_dependency('terminal-notifier', '>= 1.6.2', '< 2.0.0') # macOS notifications
-  spec.add_dependency('terminal-table', '>= 1.4.5', '< 2.0.0') # Actions documentation
-  spec.add_dependency('plist', '>= 3.1.0', '< 4.0.0') # Needed for set_build_number_repository and get_info_plist_value actions
-  spec.add_dependency('CFPropertyList', '>= 2.3', '< 4.0.0') # Needed to be able to read binary plist format
-  spec.add_dependency('addressable', '>= 2.3', '< 3.0.0') # Support for URI templates
-  spec.add_dependency('multipart-post', '~> 2.0.0') # Needed for uploading builds to appetize
-  spec.add_dependency('word_wrap', '~> 1.0.0') # to add line breaks for tables with long strings
+                  if include_hidden
+            hidden = hidden_field_for_checkbox(options)
+            hidden + checkbox
+          else
+            checkbox
+          end
+        end
     
-          File.expand_path(current_output_path) # to make sure we commit the change
-    end
-    
-          path = File.join(containing, '#{apk_listing.apk_version_code}.txt')
-      UI.message('Writing to #{path}...')
-      File.write(path, apk_listing.recent_changes)
-    end
-    
-            expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=build/cloc.xml')
+              def field_type
+            self.class.field_type
+          end
       end
+    end
+  end
+end
+
     
-          it 'get HG build number' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            get_build_number_repository
-        end').runner.execute(:test)
+        # Tests if the index has the given UUID.
+    #
+    # @param [String] uuid
+    # @return [Boolean]
+    def include?(uuid)
+      @lock.synchronize do
+        with_index_lock do
+          unlocked_reload
+          return !!find_by_prefix(uuid)
+        end
+      end
+    end
     
-        i0 = index
-    s1, i1 = [], index
-    loop do
-      if has_terminal?('\G[A-Za-z0-9_-]', true, index)
-        r2 = true
-        @index += 1
+            # Initializes the communicator with the machine that we will be
+        # communicating with. This base method does nothing (it doesn't
+        # even store the machine in an instance variable for you), so you're
+        # expected to override this and do something with the machine if
+        # you care about it.
+        #
+        # @param [Machine] machine The machine this instance is expected to
+        #   communicate with.
+        def initialize(machine)
+        end
+    
+              # Set all of our instance variables on the new class
+          [self, other].each do |obj|
+            obj.instance_variables.each do |key|
+              # Ignore keys that start with a double underscore. This allows
+              # configuration classes to still hold around internal state
+              # that isn't propagated.
+              if !key.to_s.start_with?('@__')
+                result.instance_variable_set(key, obj.instance_variable_get(key))
+              end
+            end
+          end
+    
+            # Sentinel value denoting that a value has not been set.
+        UNSET_VALUE = Object.new
+    
+              @commands = Registry.new
+          @configs = Hash.new { |h, k| h[k] = Registry.new }
+          @guests  = Registry.new
+          @guest_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @hosts   = Registry.new
+          @host_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @providers = Registry.new
+          @provider_capabilities = Hash.new { |h, k| h[k] = Registry.new }
+          @pushes = Registry.new
+          @synced_folders = Registry.new
+        end
+      end
+    end
+  end
+end
+
+    
+              nil
+        end
+    
+        Pubsubhubbub::UnsubscribeWorker.perform_async(signed_request_account.id) if signed_request_account.subscribed?
+    DeliveryFailureTracker.track_inverse_success!(signed_request_account)
+  end
+    
+          if new_email != @user.email
+        @user.update!(
+          unconfirmed_email: new_email,
+          # Regenerate the confirmation token:
+          confirmation_token: nil
+        )
+    
+              redirect_to admin_reports_path, notice: I18n.t('admin.reports.resolved_msg')
+          return
+        end
+    
+        change.down do
+      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
+      Mention.where(mentions_container_type: 'Comment').destroy_all
+      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
+    end
+  end
+end
+
+    
+        it 'generates the aspects_manage_contacts_json fixture', fixture: true do
+      # adds one not mutual contact
+      bob.share_with(FactoryGirl.create(:person), @aspect)
+    
+        it 'generates a jasmine fixture', :fixture => true do
+      get :bookmarklet
+      save_fixture(html_for('body'), 'bookmarklet')
+    end
+    
+      describe '#index' do
+    before do
+      @message = alice.post(:status_message, text: 'hey', to: @alices_aspect.id)
+    end
+    
+        set :run, Proc.new { File.expand_path($0) == File.expand_path(app_file) }
+    
+      # escape unicode
+  content.gsub!(/./) { |c| c.bytesize > 1 ? '\\u{#{c.codepoints.first.to_s(16)}}' : c }
+    
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
+          end
+        end
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
+      end
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
       else
-        r2 = nil
+        '#{quote}<footer>#{author}</footer>'
       end
-      if r2
-        s1 << r2
-      else
-        break
-      end
+      '<blockquote>#{blockquote}</blockquote>'
     end
-    if s1.empty?
-      @index = i1
-      r1 = nil
-    else
-      r1 = instantiate_node(LogStash::Config::AST::Name,input, i1...index, s1)
+    
+    module Jekyll
+  class GistTag < Liquid::Tag
+    def initialize(tag_name, text, token)
+      super
+      @text           = text
+      @cache_disabled = false
+      @cache_folder   = File.expand_path '../.gist-cache', File.dirname(__FILE__)
+      FileUtils.mkdir_p @cache_folder
     end
-    if r1
-      r0 = r1
-    else
-      r3 = _nt_string
-      if r3
-        r0 = r3
-      else
-        @index = i0
-        r0 = nil
-      end
-    end
+    
+    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
+
+    
+    require 'pathname'
+require './plugins/octopress_filters'
