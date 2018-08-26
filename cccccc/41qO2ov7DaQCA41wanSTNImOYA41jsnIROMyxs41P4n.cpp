@@ -1,297 +1,560 @@
 
         
-        #ifndef ATOM_COMMON_API_LOCKER_H_
-#define ATOM_COMMON_API_LOCKER_H_
-    
-    struct DraggableRegion {
-  bool draggable;
-  gfx::Rect bounds;
-    }
-    
-    #include 'base/time/time.h'
-    
-    // An interface the PrintViewManager uses to notify an observer when the print
-// dialog is shown. Register the observer via PrintViewManager::set_observer.
-class PrintViewManagerObserver {
- public:
-  // Notifies the observer that the print dialog was shown.
-  virtual void OnPrintDialogShown() = 0;
-    }
-    
-    namespace chrome {
-    }
-    
-    #if defined(OS_MACOSX)
-// NOTE: if you change the value of kFrameworkName, please don't forget to
-// update components/test/run_all_unittests.cc as well.
-// TODO(tfarina): Remove the comment above, when you fix components to use plist
-// on Mac.
-extern const base::FilePath::CharType kFrameworkName[];
-#endif  // OS_MACOSX
+        REGISTER_OP('ShapelessOp');
     
     
-    { private:
-  gfx::Size minimum_size_;
-  gfx::Size maximum_size_;
-};
-    
-    const char *kApostropheLikeUTF8[] = {
-  ''',       // ASCII apostrophe
-  '`',       // ASCII backtick
-  '\u2018',  // opening single quote
-  '\u2019',  // closing single quote
-  '\u2032',  // mathematical prime mark
-  nullptr,      // end of our list.
-};
-    
-    #endif  // TESSERACT_CLASSIFY_SAMPLEITERATOR_H_
+    {}  // namespace tensorflow
 
     
-      // Gets the canonical sample for the given font, class pair.
-  // ComputeCanonicalSamples must have been called first.
-  const TrainingSample* GetCanonicalSample(int font_id, int class_id) const;
-  // Gets the max distance for the given canonical sample.
-  // ComputeCanonicalSamples must have been called first.
-  float GetCanonicalDist(int font_id, int class_id) const;
+        http://www.apache.org/licenses/LICENSE-2.0
     
-      // Hoovers up all un-owned blobs and deletes them.
-  // The rest get released from the block so the ColPartitions can pass
-  // ownership to the output blocks.
-  void ReleaseBlobsAndCleanupUnused(TO_BLOCK* block);
-  // Splits partitions that cross columns where they have nothing in the gap.
-  void GridSplitPartitions();
-  // Merges partitions where there is vertical overlap, within a single column,
-  // and the horizontal gap is small enough.
-  void GridMergePartitions();
-  // Inserts remaining noise blobs into the most applicable partition if any.
-  // If there is no applicable partition, then the blobs are deleted.
-  void InsertRemainingNoise(TO_BLOCK* block);
-  // Remove partitions that come from horizontal lines that look like
-  // underlines, but are not part of a table.
-  void GridRemoveUnderlinePartitions();
-  // Add horizontal line separators as partitions.
-  void GridInsertHLinePartitions();
-  // Add vertical line separators as partitions.
-  void GridInsertVLinePartitions();
-  // For every ColPartition in the grid, sets its type based on position
-  // in the columns.
-  void SetPartitionTypes();
-  // Only images remain with multiple types in a run of partners.
-  // Sets the type of all in the group to the maximum of the group.
-  void SmoothPartnerRuns();
     
-    // Make a block using lines parallel to the given vector that fit between
-// the min and max coordinates specified by the ColPartitions.
-// Construct a block from the given list of partitions.
-void WorkingPartSet::MakeBlocks(const ICOORD& bleft, const ICOORD& tright,
-                                int resolution, ColPartition_LIST* used_parts) {
-  part_it_.move_to_first();
-  while (!part_it_.empty()) {
-    // Gather a list of ColPartitions in block_parts that will be split
-    // by linespacing into smaller blocks.
-    ColPartition_LIST block_parts;
-    ColPartition_IT block_it(&block_parts);
-    ColPartition* next_part = nullptr;
-    bool text_block = false;
-    do {
-      ColPartition* part = part_it_.extract();
-      if (part->blob_type() == BRT_UNKNOWN ||
-          (part->IsTextType() && part->type() != PT_TABLE))
-        text_block = true;
-      part->set_working_set(nullptr);
-      part_it_.forward();
-      block_it.add_after_then_move(part);
-      next_part = part->SingletonPartner(false);
-      if (part_it_.empty() || next_part != part_it_.data()) {
-        // Sequences of partitions can get split by titles.
-        next_part = nullptr;
-      }
-      // Merge adjacent blocks that are of the same type and let the
-      // linespacing determine the real boundaries.
-      if (next_part == nullptr && !part_it_.empty()) {
-        ColPartition* next_block_part = part_it_.data();
-        const TBOX& part_box = part->bounding_box();
-        const TBOX& next_box = next_block_part->bounding_box();
+    {}  // namespace tensorflow
+
+    
+    PyExceptionRegistry* PyExceptionRegistry::singleton_ = nullptr;
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    // Safe containers for an owned TF_Tensor. On destruction, the tensor will be
+// deleted by TF_DeleteTensor.
+using Safe_TF_TensorPtr = std::unique_ptr<TF_Tensor, detail::TFTensorDeleter>;
+Safe_TF_TensorPtr make_safe(TF_Tensor* tensor);
+    
+    // ValuesIn() function allows generation of tests with parameters coming from
+// a container.
+//
+// Synopsis:
+// ValuesIn(const T (&array)[N])
+//   - returns a generator producing sequences with elements from
+//     a C-style array.
+// ValuesIn(const Container& container)
+//   - returns a generator producing sequences with elements from
+//     an STL-style container.
+// ValuesIn(Iterator begin, Iterator end)
+//   - returns a generator producing sequences with elements from
+//     a range [begin, end) defined by a pair of STL-style iterators. These
+//     iterators can also be plain C pointers.
+//
+// Please note that ValuesIn copies the values from the containers
+// passed in and keeps them to generate tests in RUN_ALL_TESTS().
+//
+// Examples:
+//
+// This instantiates tests from test case StringTest
+// each with C-string values of 'foo', 'bar', and 'baz':
+//
+// const char* strings[] = {'foo', 'bar', 'baz'};
+// INSTANTIATE_TEST_CASE_P(StringSequence, SrtingTest, ValuesIn(strings));
+//
+// This instantiates tests from test case StlStringTest
+// each with STL strings with values 'a' and 'b':
+//
+// ::std::vector< ::std::string> GetParameterStrings() {
+//   ::std::vector< ::std::string> v;
+//   v.push_back('a');
+//   v.push_back('b');
+//   return v;
+// }
+//
+// INSTANTIATE_TEST_CASE_P(CharSequence,
+//                         StlStringTest,
+//                         ValuesIn(GetParameterStrings()));
+//
+//
+// This will also instantiate tests from CharTest
+// each with parameter values 'a' and 'b':
+//
+// ::std::list<char> GetParameterChars() {
+//   ::std::list<char> list;
+//   list.push_back('a');
+//   list.push_back('b');
+//   return list;
+// }
+// ::std::list<char> l = GetParameterChars();
+// INSTANTIATE_TEST_CASE_P(CharSequence2,
+//                         CharTest,
+//                         ValuesIn(l.begin(), l.end()));
+//
+template <typename ForwardIterator>
+internal::ParamGenerator<
+  typename ::testing::internal::IteratorTraits<ForwardIterator>::value_type>
+ValuesIn(ForwardIterator begin, ForwardIterator end) {
+  typedef typename ::testing::internal::IteratorTraits<ForwardIterator>
+      ::value_type ParamType;
+  return internal::ParamGenerator<ParamType>(
+      new internal::ValuesInIteratorRangeGenerator<ParamType>(begin, end));
+}
+    
+    #include <stdio.h>
+#include <stdlib.h>
+    
+      ////////////////////////////////////////////////////////////
+  //
+  // D'tor.  MyString is intended to be a final class, so the d'tor
+  // doesn't need to be virtual.
+  ~MyString() { delete[] c_string_; }
+    
+    **Result**
+    
+      [[0.87226421 0.49045439]
+   [0.92470531 0.30935077]]]]
+Y: [[0.53432311 0.23734561 0.56481598 0.52152617 0.33662627 0.32472711
+  0.17939016 0.97175851 0.87226421 0.49045439 0.92470531 0.30935077]]
+```
+    
+            virtual Dictionary GetCheckpointState() const override;
+        virtual void RestoreFromCheckpoint(const Dictionary& checkpoint) override;
+    
+            for (const auto& key : requiredKeys)
+        {
+            if (!dict.Contains(key))
+            {
+                 LogicError('Required key '%ls' is not found in the dictionary (%s).',
+                            key.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
+            }
+        }
+    
+        public:
+        template <typename ElementType>
+        PackedValue(const NDShape& sampleShape, const std::vector<Axis>& sampleDynamicAxes, const std::shared_ptr<Microsoft::MSR::CNTK::Matrix<ElementType>>& packedDataMatrix, const std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>& packedDataLayout, bool isReadOnly)
+            : Value(nullptr), m_isPacked(true), m_sampleShape(sampleShape), m_sampleDynamicAxes(sampleDynamicAxes), m_packedData(nullptr), m_packedDataLayout(packedDataLayout), m_isReadOnly(isReadOnly)
+        {
+            NDShape packedMatrixShape({ packedDataMatrix->GetNumRows(), packedDataMatrix->GetNumCols() });
+            auto tensorView = new Microsoft::MSR::CNTK::TensorView<ElementType>(packedDataMatrix, AsTensorViewShape(packedMatrixShape));
+            m_packedData = MakeSharedObject<NDArrayView>(AsDataType<ElementType>(), AsDeviceDescriptor(packedDataMatrix->GetDeviceId()), AsStorageFormat(packedDataMatrix->GetFormat()), packedMatrixShape, m_isReadOnly, tensorView);
     }
-    }
-    }
-    }
     
-    #define WIDEN2(x) L ## x
-#define WIDEN(x) WIDEN2(x)
-#define __WFUNCTION__ WIDEN(__FUNCTION__)
-    
-      // Add '<shared><non_shared><value_size>' to buffer_
-  PutVarint32(&buffer_, shared);
-  PutVarint32(&buffer_, non_shared);
-  PutVarint32(&buffer_, value.size());
-    
-      // Last filter
-  builder.StartBlock(9000);
-  builder.AddKey('box');
-  builder.AddKey('hello');
-    
-      for (int length = 1; length <= 10000; length = NextLength(length)) {
-    Reset();
-    for (int i = 0; i < length; i++) {
-      Add(Key(i, buffer));
-    }
-    Build();
+        void VariableFields::SetValueInitialization(const ParameterInitializer& initializationConfig, const DeviceDescriptor& device)
+    {
+        if (m_value != nullptr)
+            LogicError('Variable '%S': Value initialization config cannot be set if a value already exists', AsString().c_str());
     }
     
-      enum { kNumBuckets = 154 };
-  static const double kBucketLimit[kNumBuckets];
-  double buckets_[kNumBuckets];
+    public:
+    ScopeTimer(size_t verbosity, const std::string& message)
+        : m_verbosity(verbosity), m_message(message)
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Start();
+        }
+    }
     
-      DBIter(DBImpl* db, const Comparator* cmp, Iterator* iter, SequenceNumber s,
-         uint32_t seed)
-      : db_(db),
-        user_comparator_(cmp),
-        iter_(iter),
-        sequence_(s),
-        direction_(kForward),
-        valid_(false),
-        rnd_(seed),
-        bytes_counter_(RandomPeriod()) {
+            // all cloned nodes' inputs must be redirected if they reference a node that has been cloned as well
+        size_t numRelinks = 0; // (statistics: how many inputs have we relinked?)
+        for (let& clonedNodesKV : clonedNodes)
+        {
+            let& node = clonedNodesKV.second;
+            let& inputs2 = node->GetInputs();
+            for (size_t i = 0; i < inputs2.size(); i++)
+            {
+                fprintf(stderr, '%ls.inputs[%d] = %ls (%d)', node->NodeName().c_str(), (int)i, inputs2[i]->NodeName().c_str(), (int)inputs2[i]->m_uniqueNumericId);
+                let iter = clonedNodes.find(inputs2[i]);
+                if (iter == clonedNodes.end())
+                    continue;
+                // input is also a cloned node: relink
+                node->SetInput(i, iter->second);
+                fprintf(stderr, ' ==>  %ls (%d)\n', inputs2[i]->NodeName().c_str(), (int)inputs2[i]->m_uniqueNumericId);
+                numRelinks++;
+            }
+        }
+    
+    
+    {        SetDims(sampleLayout, HasMBLayout()); // also called when reloading a file. Then we have an MBLayout, otherwise not yet
+        UpdateFunctionValuesSize();           // we must allocate the matrix so that the readers get objects with valid row dimensions (some readers expect that)
+        SetLearningRateMultiplier(learningRateMultiplier);
+        m_dynamicAxisNodeName = axisName;
+    }
+    
+       file_iterator();
+   file_iterator(const char* wild);
+   ~file_iterator();
+   file_iterator(const file_iterator&);
+   file_iterator& operator=(const file_iterator&);
+   const char* root()const { return _root; }
+   const char* path()const { return _path; }
+   const char* name()const { return ptr; }
+   _fi_find_data* data() { return &(ref->_data); }
+   void next();
+   file_iterator& operator++() { next(); return *this; }
+   file_iterator operator++(int);
+   const char* operator*() { return path(); }
+    
+    #  ifndef BOOST_REGEX_INSTANTIATE
+#     ifdef __GNUC__
+#        define template __extension__ extern template
+#     else
+#        if BOOST_MSVC > 1310
+#           define BOOST_REGEX_TEMPLATE_DECL
+#        endif
+#        define template extern template
+#     endif
+#  endif
+    
+    template <class I>
+struct is_random_imp
+{
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
+private:
+   typedef typename std::iterator_traits<I>::iterator_category cat;
+public:
+   BOOST_STATIC_CONSTANT(bool, value = (::boost::is_convertible<cat*, std::random_access_iterator_tag*>::value));
+#else
+   BOOST_STATIC_CONSTANT(bool, value = false);
+#endif
+};
+    
+    struct mem_block_cache
+{
+   // this member has to be statically initialsed:
+   mem_block_node* next;
+   unsigned cached_blocks;
+#ifdef BOOST_HAS_THREADS
+   boost::static_mutex mut;
+#endif
+    }
+    
+    template <class BidiIterator, class Allocator, class traits>
+inline void perl_matcher<BidiIterator, Allocator, traits>::push_assertion(const re_syntax_base* ps, bool positive)
+{
+   saved_assertion<BidiIterator>* pmp = static_cast<saved_assertion<BidiIterator>*>(m_backup_state);
+   --pmp;
+   if(pmp < m_stack_base)
+   {
+      extend_stack();
+      pmp = static_cast<saved_assertion<BidiIterator>*>(m_backup_state);
+      --pmp;
+   }
+   (void) new (pmp)saved_assertion<BidiIterator>(positive, ps, position);
+   m_backup_state = pmp;
+}
+    
+    #ifdef BOOST_REGEX_USE_WIN32_LOCALE
+template <class charT, class implementationT = w32_regex_traits<charT> >
+struct regex_traits;
+#elif defined(BOOST_REGEX_USE_CPP_LOCALE)
+template <class charT, class implementationT = cpp_regex_traits<charT> >
+struct regex_traits;
+#else
+template <class charT, class implementationT = c_regex_traits<charT> >
+struct regex_traits;
+#endif
+    
+    template <class ST, class SA, class charT, class traits>
+inline bool regex_match(const std::basic_string<charT, ST, SA>& s, 
+                 const basic_regex<charT, traits>& e, 
+                 match_flag_type flags = match_default)
+{
+   typedef typename std::basic_string<charT, ST, SA>::const_iterator iterator;
+   match_results<iterator> m;
+   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
+}
+#else  // partial ordering
+inline bool regex_match(const char* str, 
+                        cmatch& m, 
+                        const regex& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(str, str + regex::traits_type::length(str), m, e, flags);
+}
+inline bool regex_match(const char* str, 
+                        const regex& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<const char*> m;
+   return regex_match(str, str + regex::traits_type::length(str), m, e, flags | regex_constants::match_any);
+}
+#ifndef BOOST_NO_STD_LOCALE
+inline bool regex_match(const char* str, 
+                        cmatch& m, 
+                        const basic_regex<char, cpp_regex_traits<char> >& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(str, str + regex::traits_type::length(str), m, e, flags);
+}
+inline bool regex_match(const char* str, 
+                        const basic_regex<char, cpp_regex_traits<char> >& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<const char*> m;
+   return regex_match(str, str + regex::traits_type::length(str), m, e, flags | regex_constants::match_any);
+}
+#endif
+inline bool regex_match(const char* str, 
+                        cmatch& m, 
+                        const basic_regex<char, c_regex_traits<char> >& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(str, str + regex::traits_type::length(str), m, e, flags);
+}
+inline bool regex_match(const char* str, 
+                        const basic_regex<char, c_regex_traits<char> >& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<const char*> m;
+   return regex_match(str, str + regex::traits_type::length(str), m, e, flags | regex_constants::match_any);
+}
+#if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
+inline bool regex_match(const char* str, 
+                        cmatch& m, 
+                        const basic_regex<char, w32_regex_traits<char> >& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(str, str + regex::traits_type::length(str), m, e, flags);
+}
+inline bool regex_match(const char* str, 
+                        const basic_regex<char, w32_regex_traits<char> >& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<const char*> m;
+   return regex_match(str, str + regex::traits_type::length(str), m, e, flags | regex_constants::match_any);
+}
+#endif
+#ifndef BOOST_NO_WREGEX
+inline bool regex_match(const wchar_t* str, 
+                        wcmatch& m, 
+                        const wregex& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags);
+}
+inline bool regex_match(const wchar_t* str, 
+                        const wregex& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<const wchar_t*> m;
+   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags | regex_constants::match_any);
+}
+#ifndef BOOST_NO_STD_LOCALE
+inline bool regex_match(const wchar_t* str, 
+                        wcmatch& m, 
+                        const basic_regex<wchar_t, cpp_regex_traits<wchar_t> >& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags);
+}
+inline bool regex_match(const wchar_t* str, 
+                        const basic_regex<wchar_t, cpp_regex_traits<wchar_t> >& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<const wchar_t*> m;
+   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags | regex_constants::match_any);
+}
+#endif
+inline bool regex_match(const wchar_t* str, 
+                        wcmatch& m, 
+                        const basic_regex<wchar_t, c_regex_traits<wchar_t> >& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags);
+}
+inline bool regex_match(const wchar_t* str, 
+                        const basic_regex<wchar_t, c_regex_traits<wchar_t> >& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<const wchar_t*> m;
+   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags | regex_constants::match_any);
+}
+#if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
+inline bool regex_match(const wchar_t* str, 
+                        wcmatch& m, 
+                        const basic_regex<wchar_t, w32_regex_traits<wchar_t> >& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags);
+}
+inline bool regex_match(const wchar_t* str, 
+                        const basic_regex<wchar_t, w32_regex_traits<wchar_t> >& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<const wchar_t*> m;
+   return regex_match(str, str + wregex::traits_type::length(str), m, e, flags | regex_constants::match_any);
+}
+#endif
+#endif
+inline bool regex_match(const std::string& s, 
+                        smatch& m,
+                        const regex& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(s.begin(), s.end(), m, e, flags);
+}
+inline bool regex_match(const std::string& s, 
+                        const regex& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<std::string::const_iterator> m;
+   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
+}
+#ifndef BOOST_NO_STD_LOCALE
+inline bool regex_match(const std::string& s, 
+                        smatch& m,
+                        const basic_regex<char, cpp_regex_traits<char> >& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(s.begin(), s.end(), m, e, flags);
+}
+inline bool regex_match(const std::string& s, 
+                        const basic_regex<char, cpp_regex_traits<char> >& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<std::string::const_iterator> m;
+   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
+}
+#endif
+inline bool regex_match(const std::string& s, 
+                        smatch& m,
+                        const basic_regex<char, c_regex_traits<char> >& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(s.begin(), s.end(), m, e, flags);
+}
+inline bool regex_match(const std::string& s, 
+                        const basic_regex<char, c_regex_traits<char> >& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<std::string::const_iterator> m;
+   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
+}
+#if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
+inline bool regex_match(const std::string& s, 
+                        smatch& m,
+                        const basic_regex<char, w32_regex_traits<char> >& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(s.begin(), s.end(), m, e, flags);
+}
+inline bool regex_match(const std::string& s, 
+                        const basic_regex<char, w32_regex_traits<char> >& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<std::string::const_iterator> m;
+   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
+}
+#endif
+#if !defined(BOOST_NO_WREGEX)
+inline bool regex_match(const std::basic_string<wchar_t>& s, 
+                        match_results<std::basic_string<wchar_t>::const_iterator>& m,
+                        const wregex& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(s.begin(), s.end(), m, e, flags);
+}
+inline bool regex_match(const std::basic_string<wchar_t>& s, 
+                        const wregex& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<std::basic_string<wchar_t>::const_iterator> m;
+   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
+}
+#ifndef BOOST_NO_STD_LOCALE
+inline bool regex_match(const std::basic_string<wchar_t>& s, 
+                        match_results<std::basic_string<wchar_t>::const_iterator>& m,
+                        const basic_regex<wchar_t, cpp_regex_traits<wchar_t> >& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(s.begin(), s.end(), m, e, flags);
+}
+inline bool regex_match(const std::basic_string<wchar_t>& s, 
+                        const basic_regex<wchar_t, cpp_regex_traits<wchar_t> >& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<std::basic_string<wchar_t>::const_iterator> m;
+   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
+}
+#endif
+inline bool regex_match(const std::basic_string<wchar_t>& s, 
+                        match_results<std::basic_string<wchar_t>::const_iterator>& m,
+                        const basic_regex<wchar_t, c_regex_traits<wchar_t> >& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(s.begin(), s.end(), m, e, flags);
+}
+inline bool regex_match(const std::basic_string<wchar_t>& s, 
+                        const basic_regex<wchar_t, c_regex_traits<wchar_t> >& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<std::basic_string<wchar_t>::const_iterator> m;
+   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
+}
+#if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
+inline bool regex_match(const std::basic_string<wchar_t>& s, 
+                        match_results<std::basic_string<wchar_t>::const_iterator>& m,
+                        const basic_regex<wchar_t, w32_regex_traits<wchar_t> >& e, 
+                        match_flag_type flags = match_default)
+{
+   return regex_match(s.begin(), s.end(), m, e, flags);
+}
+inline bool regex_match(const std::basic_string<wchar_t>& s, 
+                        const basic_regex<wchar_t, w32_regex_traits<wchar_t> >& e, 
+                        match_flag_type flags = match_default)
+{
+   match_results<std::basic_string<wchar_t>::const_iterator> m;
+   return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);
+}
+#endif
+#endif
+    
+      TestCanParam() = default;
+    
+    
+    {  thread_.reset(new std::thread([this] { RecvThreadFunc(); }));
+  if (thread_ == nullptr) {
+    AERROR << 'Unable to create can client receiver thread.';
+    return ::apollo::common::ErrorCode::CANBUS_ERROR;
   }
-  virtual ~DBIter() {
-    delete iter_;
-  }
-  virtual bool Valid() const { return valid_; }
-  virtual Slice key() const {
-    assert(valid_);
-    return (direction_ == kForward) ? ExtractUserKey(iter_->key()) : saved_key_;
-  }
-  virtual Slice value() const {
-    assert(valid_);
-    return (direction_ == kForward) ? iter_->value() : saved_value_;
-  }
-  virtual Status status() const {
-    if (status_.ok()) {
-      return iter_->status();
-    } else {
-      return status_;
-    }
-  }
+  return ::apollo::common::ErrorCode::OK;
+}
     
-      /// Get the local endpoint of the acceptor.
-  /**
-   * This function is used to obtain the locally bound endpoint of the acceptor.
-   *
-   * @returns An object that represents the local endpoint of the acceptor.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   *
-   * @par Example
-   * @code
-   * boost::asio::ip::tcp::acceptor acceptor(io_service);
-   * ...
-   * boost::asio::ip::tcp::endpoint endpoint = acceptor.local_endpoint();
-   * @endcode
-   */
-  endpoint_type local_endpoint() const
-  {
-    boost::system::error_code ec;
-    endpoint_type ep = this->get_service().local_endpoint(
-        this->get_implementation(), ec);
-    boost::asio::detail::throw_error(ec, 'local_endpoint');
-    return ep;
-  }
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+#include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
+#include 'modules/drivers/canbus/can_comm/protocol_data.h'
     
-      void* data_;
-  std::size_t size_;
+    class MockMessageManager
+    : public MessageManager<::apollo::canbus::ChassisDetail> {
+ public:
+  MockMessageManager() {
+    AddRecvProtocolData<MockProtocolData, true>();
+    AddSendProtocolData<MockProtocolData, true>();
+  }
+};
     
     
     {
-    {} // namespace asio
-} // namespace boost
-    
-    #endif // BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
+    {
+    {}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
 
     
-    } // namespace date_time
-namespace posix_time {
-    
-    #include <boost/asio/detail/addressof.hpp>
-#include <boost/asio/detail/bind_handler.hpp>
-#include <boost/asio/detail/buffer_sequence_adapter.hpp>
-#include <boost/asio/detail/descriptor_ops.hpp>
-#include <boost/asio/detail/fenced_block.hpp>
-#include <boost/asio/detail/reactor_op.hpp>
-    
-    #ifndef BOOST_ASIO_DETAIL_FENCED_BLOCK_HPP
-#define BOOST_ASIO_DETAIL_FENCED_BLOCK_HPP
-    
-    template <typename Time_Traits>
-std::size_t epoll_reactor::cancel_timer(timer_queue<Time_Traits>& queue,
-    typename timer_queue<Time_Traits>::per_timer_data& timer,
-    std::size_t max_cancelled)
-{
-  mutex::scoped_lock lock(mutex_);
-  op_queue<operation> ops;
-  std::size_t n = queue.cancel_timer(timer, ops, max_cancelled);
-  lock.unlock();
-  io_service_.post_deferred_completions(ops);
-  return n;
+    TEST(ByteTest, SetValue) {
+  unsigned char byte_value = 0x1A;
+  Byte value(&byte_value);
+  value.set_value(0x06, 3, 3);
+  EXPECT_EQ(0x32, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 0, 8);
+  EXPECT_EQ(0x06, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 0, 10);
+  EXPECT_EQ(0x06, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x06, 1, 7);
+  EXPECT_EQ(0x0C, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x07, 1, 1);
+  EXPECT_EQ(0x1A, value.get_byte());
+  value.set_value(0x1A);
+  value.set_value(0x07, -1, 1);
+  EXPECT_EQ(0x1A, value.get_byte());
 }
     
-    namespace xgboost {
-ConsoleLogger::~ConsoleLogger() {
-  dmlc::CustomLogMessage::Log(log_stream_.str());
-}
-TrackerLogger::~TrackerLogger() {
-  dmlc::CustomLogMessage::Log(log_stream_.str());
-}
-}  // namespace xgboost
-    
-    inline void RowSet::Save(dmlc::Stream* fo) const {
-  fo->Write(rows_);
-  fo->Write(&size_, sizeof(size_));
-}
-    
-    void SimpleCSRSource::SaveBinary(dmlc::Stream* fo) const {
-  int tmagic = kMagic;
-  fo->Write(&tmagic, sizeof(tmagic));
-  info.SaveBinary(fo);
-  fo->Write(page_.offset);
-  fo->Write(page_.data);
-}
-    
-    
-    {  delete metric;
-  metric = xgboost::Metric::Create('ndcg@2-');
-  ASSERT_STREQ(metric->Name(), 'ndcg@2-');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 1, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0.3868f, 0.001f);
-}
-    
-    struct ExceptionInfo {
-  const std::type_info* type{nullptr};
-  // The values in frames are IP (instruction pointer) addresses.
-  // They are only filled if the low-level exception tracer library is
-  // linked in or LD_PRELOADed.
-  std::vector<uintptr_t> frames; // front() is top of stack
-};
-    
-    #include <folly/synchronization/Hazptr.h>
-    
-        uint64_t origAllocated = *counter;
-    
-      EXPECT_EQ(5050, estimates.sum);
-  EXPECT_EQ(100, estimates.count);
-    
-    
-    {  return block;
-}
-    
-      EXPECT_TRUE(folly::settings::setFromString(
-      'follytest_public_flag_to_a', '300', 'from_string'));
-  EXPECT_EQ(*a_ns::FOLLY_SETTING(follytest, public_flag_to_a), 300);
-  EXPECT_EQ(a_ns::getRemote(), 300);
-  res = folly::settings::getAsString('follytest_public_flag_to_a');
-  EXPECT_TRUE(res.hasValue());
-  EXPECT_EQ(res->first, '300');
-  EXPECT_EQ(res->second, 'from_string');
+    // data file
+DEFINE_string(sensor_conf_file, '', 'Sensor conf file');
