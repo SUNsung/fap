@@ -1,135 +1,204 @@
 
         
-          const llvm::UTF8 *SourceStart =
-    reinterpret_cast<const llvm::UTF8 *>(S.data());
+        namespace tensorflow {
+    }
     
-    #elif defined(__CYGWIN__)
+    void CostAnalyzer::GatherCosts() {
+  CostGraphDef cost_graph_measured;
+  PredictCosts(&measure_estimator_, &cost_graph_measured,
+               &total_time_measured_);
+  VLOG(1) << 'Graph size: ' << item_->graph.node_size();
+  VLOG(1) << 'cost_graph_measured size: ' << cost_graph_measured.node_size();
+    }
+    
+    int NPyBfloat16_Fill(void* buffer_raw, npy_intp length, void* ignored) {
+  bfloat16* const buffer = reinterpret_cast<bfloat16*>(buffer_raw);
+  const float start(buffer[0]);
+  const float delta = static_cast<float>(buffer[1]) - start;
+  for (npy_intp i = 2; i < length; ++i) {
+    buffer[i] = static_cast<bfloat16>(start + i * delta);
+  }
+  return 0;
+}
+    
+    namespace tensorflow {
+    }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    #include 'base/logging.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/api_messages.h'
+#include 'content/public/renderer/render_view.h'
+#include 'content/public/renderer/render_thread.h'
+#include 'content/public/renderer/v8_value_converter.h'
+#include 'third_party/WebKit/public/web/WebView.h'
+#include 'third_party/WebKit/public/web/WebLocalFrame.h'
+#include 'ui/base/resource/resource_bundle.h'
+    
+    #endif  // CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
+
+    
+    EventListener::EventListener(int id,
+  const base::WeakPtr<DispatcherHost>& dispatcher_host,
+  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
+    }
+    
+    void Menu::Append(MenuItem* menu_item) {
+  if (menu_item->submenu_)
+    menu_model_->AddSubMenu(menu_item->id(), menu_item->label_,
+                            menu_item->submenu_->menu_model_.get());
+  else if (menu_item->type_ == 'normal')
+    menu_model_->AddItem(menu_item->id(), menu_item->label_);
+  else if (menu_item->type_ == 'checkbox')
+    menu_model_->AddCheckItem(menu_item->id(), menu_item->label_);
+  else if (menu_item->type_ == 'separator')
+    menu_model_->AddSeparator(ui::NORMAL_SEPARATOR);
+    }
+    
+    class NwClipboardSetListSyncFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardSetListSyncFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    class NwObjCallObjectMethodFunction : public NWSyncExtensionFunction {
+ public:
+  NwObjCallObjectMethodFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    	while (true) {
+    }
+    
+    
+    {		String name;
+		Map<String, Variant> fields;
+	};
+    
+    #ifndef SEMAPHORE_POSIX_H
+#define SEMAPHORE_POSIX_H
+    
+    class SyslogLogger : public Logger {
+public:
+	virtual void logv(const char *p_format, va_list p_list, bool p_err);
+	virtual void print_error(const char *p_function, const char *p_file, int p_line, const char *p_code, const char *p_rationale, ErrorType p_type);
+    }
+    
+    	int listen_sockfd;
+	IP::Type sock_type;
+    
+    
+    {	pthread_join(tp->pthread, NULL);
+	tp->pthread = 0;
+}
+    
+    #include 'os/dir_access.h'
+    
+    
+    {	create_func = create_func_windows;
+}
+    
+    #ifdef WINDOWS_USE_MUTEX
+	HANDLE mutex;
+#else
+	CRITICAL_SECTION mutex;
+#endif
+    
+    #ifdef WINDOWS_ENABLED
+    
+    TCPServerWinsock::TCPServerWinsock() {
+    }
+    
+    	virtual void stop(); //stop listening
+    
+    template <class charT, class traits>
+basic_regex_parser<charT, traits>::basic_regex_parser(regex_data<charT, traits>* data)
+   : basic_regex_creator<charT, traits>(data), m_mark_count(0), m_mark_reset(-1), m_max_mark(0), m_paren_start(0), m_alt_insert_point(0), m_has_case_change(false)
+{
+}
     
     
     {
-    {} // end namespace index
-} // end namespace swift
+    {}
+} // namespace boost
     
     
-    {private:
-  ResultPlanPtr buildTopLevelResult(Initialization *init, SILLocation loc);
-};
-    
-    namespace swift {
+namespace boost{
+#ifdef BOOST_REGEX_NO_FWD
+typedef basic_regex<char, regex_traits<char> > regex;
+#ifndef BOOST_NO_WREGEX
+typedef basic_regex<wchar_t, regex_traits<wchar_t> > wregex;
+#endif
+#endif
     }
     
+    #ifdef BOOST_REGEX_USE_WIN32_LOCALE
+template <class charT, class implementationT = w32_regex_traits<charT> >
+struct regex_traits;
+#elif defined(BOOST_REGEX_USE_CPP_LOCALE)
+template <class charT, class implementationT = cpp_regex_traits<charT> >
+struct regex_traits;
+#else
+template <class charT, class implementationT = c_regex_traits<charT> >
+struct regex_traits;
+#endif
     
-    {  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method(
-      routing_id,
-      object_id,
-      type,
-      method,
-      *static_cast<base::ListValue*>(value_args.get())));
-  return v8::Undefined(isolate);
+    #ifndef BOOST_REGEX_V4_REGEX_GREP_HPP
+#define BOOST_REGEX_V4_REGEX_GREP_HPP
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex_format.hpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Provides formatting output routines for search and replace
+  *                operations.  Note this is an internal header file included
+  *                by regex.hpp, do not include on its own.
+  */
+    
+    #endif  // BOOST_REGEX_V4_REGEX_SEARCH_HPP
+    
+    template <class OutputIterator, class charT, class Traits1, class Alloc1, class Traits2>
+std::size_t regex_split(OutputIterator out,
+                   std::basic_string<charT, Traits1, Alloc1>& s, 
+                   const basic_regex<charT, Traits2>& e,
+                   match_flag_type flags,
+                   std::size_t max_split)
+{
+   typedef typename std::basic_string<charT, Traits1, Alloc1>::const_iterator  ci_t;
+   //typedef typename match_results<ci_t>::allocator_type                        match_allocator;
+   ci_t last = s.begin();
+   std::size_t init_size = max_split;
+   BOOST_REGEX_DETAIL_NS::split_pred<OutputIterator, charT, Traits1, Alloc1> pred(&last, &out, &max_split);
+   ci_t i, j;
+   i = s.begin();
+   j = s.end();
+   regex_grep(pred, i, j, e, flags);
+   //
+   // if there is still input left, do a final push as long as max_split
+   // is not exhausted, and we're not splitting sub-expressions rather 
+   // than whitespace:
+   if(max_split && (last != s.end()) && (e.mark_count() == 0))
+   {
+      *out = std::basic_string<charT, Traits1, Alloc1>((ci_t)last, (ci_t)s.end());
+      ++out;
+      last = s.end();
+      --max_split;
+   }
+   //
+   // delete from the string everything that has been processed so far:
+   s.erase(0, last - s.begin());
+   //
+   // return the number of new records pushed:
+   return init_size - max_split;
 }
     
-    void Clipboard::Clear() {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  clipboard->Clear(ui::CLIPBOARD_TYPE_COPY_PASTE);
-}
-    
-    
-    {protected:
-  BaseEvent(){}
-  virtual ~BaseEvent(){}
-};
-    
-    bool MenuDelegate::GetIconForCommandId(int command_id,
-                                       gfx::Image* icon) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  if (item->icon_.IsEmpty())
-    return false;
+    namespace boost{
     }
-    
-    
-    {  gfx::Image originImage;
-  nw::Package* package = nw::InitNWPackage();
-  if (nw::GetImage(package, base::FilePath::FromUTF8Unsafe(icon), &originImage)) {
-    const gfx::ImageSkia* originImageSkia = originImage.ToImageSkia();
-    gfx::ImageSkia resizedImageSkia = gfx::ImageSkiaOperations::CreateResizedImage(*originImageSkia,
-                                                                                   skia::ImageOperations::RESIZE_GOOD,
-                                                                                   gfx::Size(kIconWidth, kIconHeight));
-    icon_ = gfx::Image(resizedImageSkia);
-  }
-}
-    
-     protected:
-  ~NwAppSetProxyConfigFunction() override;
-    
-    
-    {    for (size_t i=0; i<displays.size(); i++) {
-      response->Append(ConvertGfxDisplay(displays[i])->ToValue());
-    }
-    
-    return true;
-  }
-    
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT3.
-// Don't use this in your code.
-#define GTEST_PRED_FORMAT3_(pred_format, v1, v2, v3, on_failure)\
-  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, v1, v2, v3), \
-                on_failure)
-    
-    // We only implement == and !=, as we don't have a need for the rest yet.
-    
-    #endif  // GTEST_HAS_TYPED_TEST || GTEST_HAS_TYPED_TEST_P
-    
-    #include <algorithm>
-    
-    using ::testing::EmptyTestEventListener;
-using ::testing::InitGoogleTest;
-using ::testing::Test;
-using ::testing::TestCase;
-using ::testing::TestEventListeners;
-using ::testing::TestInfo;
-using ::testing::TestPartResult;
-using ::testing::UnitTest;
-    
-      // Start looping through starting at the first options
-  // (so skip the exports)
-  for (auto iter = line.begin() + options_index; iter != line.end(); ++iter) {
-    if (iter->compare('-ro') == 0 || iter->compare('-o') == 0) {
-      readonly = 1;
-    }
-  }
-    
-    /**
- * @brief Iterate the discovered decorators for a given point type.
- *
- * The configuration maintains various sources, each may contain a set of
- * decorators. The source tracking is abstracted for the decorator iterator.
- *
- * @param point request execution of decorators for this given point.
- * @param time an optional time for points using intervals.
- * @param source restrict run to a specific config source.
- */
-void runDecorators(DecorationPoint point,
-                   size_t time = 0,
-                   const std::string& source = '');
-    
-    #include <gtest/gtest.h>
-    
-    Status WmiResultItem::GetUnsignedShort(const std::string& name,
-                                       unsigned short& ret) const {
-  std::wstring property_name = stringToWstring(name);
-  VARIANT value;
-  HRESULT hr = result_->Get(property_name.c_str(), 0, &value, nullptr, nullptr);
-    }
-    
-    // Define the default set of database plugin operation tests.
-CREATE_DATABASE_TESTS(RocksDBDatabasePluginTests);
-    
-    #include <osquery/filesystem.h>
-#include <osquery/flags.h>
-#include <osquery/logger.h>
-    
-     private:
-  void init(const std::string& name,
-            const std::vector<StatusLogLine>& log) override;
