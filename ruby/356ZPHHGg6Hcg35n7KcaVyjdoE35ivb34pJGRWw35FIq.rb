@@ -1,127 +1,117 @@
 
         
-                def form_tag_with_body(html_options, content)
-          output = form_tag_html(html_options)
-          output << content
-          output.safe_concat('</form>')
+            Category.transaction do
+      staff.group_names = ['staff']
+      unless staff.save
+        puts staff.errors.full_messages
+        raise 'Failed to set permissions on the Staff category!'
+      end
+    
+                scenario_import.merges = {
+              '0' => {
+                'name' => 'a new name',
+                'schedule' => '6pm',
+                'keep_events_for' => 2.days.to_i.to_s,
+                'disabled' => 'true',
+                'options' => weather_agent_options.merge('api_key' => 'foo').to_json
+              }
+            }
+    
+        it 'outputs control links to agents within the incoming set, but not outside it' do
+      agents(:jane_rain_notifier_agent).control_targets = [agents(:jane_weather_agent), agents(:jane_basecamp_agent)]
+      agents(:jane_rain_notifier_agent).save!
+    
+          Utils.sort_tuples!(tuples, orders)
+      expect(tuples).to eq expected
+    end
+  end
+    
+      let :reverted_extract do
+    old_extract
+  end
+    
+          # Store the ID locally
+      @id = value.nil? ? nil : value.to_s
+    
+        # Finds a machine where the UUID is prefixed by the given string.
+    #
+    # @return [Hash]
+    def find_by_prefix(prefix)
+      @machines.each do |uuid, data|
+        return data.merge('id' => uuid) if uuid.start_with?(prefix)
+      end
+    
+              # First determine the proper array of VMs.
+          vms = []
+          if names.length > 0
+            names.each do |name|
+              if pattern = name[/^\/(.+?)\/$/, 1]
+                # This is a regular expression name, so we convert to a regular
+                # expression and allow that sort of matching.
+                regex = Regexp.new(pattern)
+    
+            # Called after the configuration is finalized and loaded to validate
+        # this object.
+        #
+        # @param [Environment] env Vagrant::Environment object of the
+        #   environment that this configuration has been loaded into. This
+        #   gives you convenient access to things like the the root path
+        #   and so on.
+        # @param [ErrorRecorder] errors
+        def validate(env, errors)
         end
-    
-              add_default_name_and_id_for_value(tag_value, name_and_id)
-          options.delete('index')
-          options.delete('namespace')
-          options['for'] = name_and_id['id'] unless options.key?('for')
-    
-        def unsupported_browser?
-      browser.ie? && UNSUPPORTED_IE_VERSIONS.include?(browser.version)
-    end
-    
-      def self.all
-    Dir['#{root_path}/docs/scrapers/**/*.rb'].
-      map { |file| File.basename(file, '.rb') }.
-      map { |name| const_get(name.camelize) }.
-      sort { |a, b| a.name.casecmp(b.name) }.
-      reject(&:abstract)
-  end
-    
-        def empty?
-      @entries.empty?
-    end
-    
-        def insert(index, *names)
-      @filters.insert assert_index(index), *filter_const(names)
-    end
-    
-        DOCUMENT_RGX = /\A(?:\s|(?:<!--.*?-->))*<(?:\!doctype|html)/i
-    
-        def build_and_queue_request(url, options, &block)
-      request = Request.new(url, request_options.merge(options))
-      request.on_complete(&block) if block
-      queue(request)
-      request
-    end
-    
-        class << self
-      attr_accessor :dir
-    
-        def merge(hash)
-      return super unless hash.is_a? Hash
-      dup.merge!(hash)
-    end
-    
-              node['data-language'] = 'typescript' if node['path'].try(:ends_with?, '.ts')
-          node['data-language'] = 'html' if node['path'].try(:ends_with?, '.html')
-          node['data-language'] = 'css' if node['path'].try(:ends_with?, '.css')
-          node['data-language'] = 'js' if node['path'].try(:ends_with?, '.js')
-          node['data-language'] = 'json' if node['path'].try(:ends_with?, '.json')
-          node['data-language'] = node['language'].sub(/\Ats/, 'typescript').strip if node['language']
-          node['data-language'] ||= 'typescript' if node.content.start_with?('@')
-    
-    class ActivityPub::OutboxesController < Api::BaseController
-  LIMIT = 20
-    
-      def to_str
-    @paths.join(File::PATH_SEPARATOR)
-  end
-  alias to_s to_str
-    
-          def summarize
-        directives.keys.map(&:to_s).join(', ')
       end
     end
   end
 end
 
     
-          def install_phase(**options)
-        move(**options)
-      end
+            # Configures the given list of networks on the virtual machine.
+        #
+        # The networks parameter will be an array of hashes where the hashes
+        # represent the configuration of a network interface. The structure
+        # of the hash will be roughly the following:
+        #
+        # {
+        #   type:      :static,
+        #   ip:        '192.168.33.10',
+        #   netmask:   '255.255.255.0',
+        #   interface: 1
+        # }
+        #
+        def configure_networks(networks)
+          raise BaseError, _key: :unsupported_configure_networks
+        end
     
-        file package(gem, '.tar.gz') => ['pkg/'] do |f|
-      sh <<-SH
-        git archive \
-          --prefix=#{gem}-#{source_version}/ \
-          --format=tar \
-          HEAD -- #{directory} | gzip > #{f.name}
-      SH
+      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
+  gem.executables   = %w(cap capify)
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ['lib']
+    
+    Given(/^a task which executes as root$/) do
+  TestApp.copy_task_to_test_app('spec/support/tasks/root.rake')
+end
+    
+      def exists?(type, path)
+    %Q{[ -#{type} '#{path}' ]}
+  end
+    
+          def echo?
+        (options || {}).fetch(:echo, true)
+      end
     end
   end
+end
+
     
-      task :index do
-    doc = File.read('README.md')
-    file = 'doc/rack-protection-readme.md'
-    Dir.mkdir 'doc' unless File.directory? 'doc'
-    puts 'writing #{file}'
-    File.open(file, 'w') { |f| f << doc }
-  end
-    
-              react_and_close(env, body) or [status, headers, body]
-        else
-          [status, headers, body]
-        end
+    MESSAGE
       end
+    end
+  end
+end
+
     
-            # Should be overriden if you have areas of your checkout that don't match
-        # up to a step within checkout_steps, such as a registration step
-        def skip_state_validation?
-          false
-        end
-    
-            def destroy
-          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
-          @option_type.destroy
-          render plain: nil, status: 204
-        end
-    
-            def scope
-          @scope ||= if params[:option_type_id]
-                       Spree::OptionType.find(params[:option_type_id]).option_values.accessible_by(current_ability, :read)
-                     else
-                       Spree::OptionValue.accessible_by(current_ability, :read).load
-                     end
-        end
-    
-            def perform_payment_action(action, *args)
-          authorize! action, Payment
-          @payment.send('#{action}!', *args)
-          respond_with(@payment, default_template: :show)
-        end
+          def fetch_primary(role)
+        hosts = roles_for([role])
+        hosts.find(&:primary) || hosts.first
+      end
