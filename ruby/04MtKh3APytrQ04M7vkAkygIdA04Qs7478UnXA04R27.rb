@@ -1,91 +1,144 @@
 
         
-              key = Spaceship::Portal::Key.find('some-key-id')
-      expect(key).to be_instance_of(Spaceship::Portal::Key)
-      expect(key.id).to eq('some-key-id')
-    end
+          def userpaths?
+    @settings.include? :userpaths
   end
+end
     
-            if params[:add_to_search_list]
-          keychains = Action.sh('security list-keychains -d user').shellsplit
-          keychains << File.expand_path(keychain_path)
-          commands << Fastlane::Actions.sh('security list-keychains -s #{keychains.shelljoin}', log: false)
-        end
-    
-          it 'raises an exception when xcode project path wasn't found' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            increment_version_number(xcodeproj: '/nothere')
-          end').runner.execute(:test)
-        end.to raise_error('Could not find Xcode project')
+      # Removes any empty directories in the formula's prefix subtree
+  # Keeps any empty directions projected by skip_clean
+  # Removes any unresolved symlinks
+  def prune
+    dirs = []
+    symlinks = []
+    @f.prefix.find do |path|
+      if path == @f.libexec || @f.skip_clean?(path)
+        Find.prune
+      elsif path.symlink?
+        symlinks << path
+      elsif path.directory?
+        dirs << path
       end
+    end
     
-      protected
-    
-          included do
-        include Devise::Controllers::ScopedViews
+            $stderr.puts
+        opoo out
+        Homebrew.failed = true
+        first_warning = false
       end
+    end
     
-    (allow file-write*
-  (literal
-    '/dev/dtracehelper'
-    '/dev/null'
-  )
-  (regex
-    #'^<%= Pod::Config.instance.project_root %>'
-    #'^<%= Pod::Config.instance.repos_dir %>'
-    #'^/Users/[^.]+/Library/Caches/CocoaPods/*'
-    #'^/dev/tty'
-    #'^/private/var'
-  )
-)
+    end
     
-            def initialize(argv)
-          @name = argv.shift_argument
-          @template_url = argv.option('template-url', TEMPLATE_REPO)
-          super
-          @additional_args = argv.remainder!
-        end
+        # /%3faaa=bbbbb
+    # which could possibly decode to '/?aaa=bbbbb', which if the IDS normalizes first, then splits the URI on ?, then it can be bypassed
+    if self.junk_param_start
+      str.sub!(/\//, '/%3f' + Rex::Text.rand_text_alpha(rand(5) + 1) + '=' + Rex::Text.rand_text_alpha(rand(10) + 1) + '/../')
+    end
     
-            self.description = <<-DESC
-          Lints the spec-repo `NAME`. If a directory is provided it is assumed
-          to be the root of a repo. Finally, if `NAME` is not provided this
-          will lint all the spec-repos known to CocoaPods.
-        DESC
+            # Receives a kerberos response through the connection
+        #
+        # @return [<Rex::Proto::Kerberos::Model::KrbError, Rex::Proto::Kerberos::Model::KdcResponse>] the kerberos
+        #   response message
+        # @raise [RuntimeError] if the connection isn't established, the transport protocol is unknown, not supported
+        #   or the response can't be parsed
+        # @raise [NotImplementedError] if the transport protocol isn't supported
+        def recv_response
+          if connection.nil?
+            raise ::RuntimeError, 'Kerberos Client: connection not established'
+          end
     
-    # The project root directory
-$root = ::File.dirname(__FILE__)
+              # Encodes the realm field
+          #
+          # @return [String]
+          def encode_realm
+            encoded = ''
+            encoded << [realm.length].pack('N')
+            encoded << realm
     
-    module Jekyll
-    
-            Dir.chdir(includes_dir) do
-          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
-          if choices.include?(file)
-            source = File.read(file)
-            partial = Liquid::Template.parse(source)
-            context.stack do
-              rtn = rtn + partial.render(context)
-            end
-          else
-            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+              # Encodes the data
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_data(data)
+            OpenSSL::ASN1::OctetString.new(data)
           end
         end
       end
-      rtn
     end
   end
+end
     
-            # 'match' is a fairly generic name, so we don't flag it unless we see
-        # a string or regexp literal on one side or the other
-        def_node_matcher :match_call?, <<-PATTERN
-          {(send {str regexp} :match _)
-           (send !nil? :match {str regexp})}
-        PATTERN
+              # Rex::Proto::Kerberos::Model::KdcResponse encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'KdcResponse encoding not supported'
+          end
     
-            def on_case(case_node)
-          case_node.when_branches.each_with_object([]) do |when_node, previous|
-            when_node.each_condition do |condition|
-              next unless repeated_condition?(previous, condition)
+              # Rex::Proto::Kerberos::Model::LastRequest encoding isn't supported
+          #
+          # @raise [NotImplementedError]
+          def encode
+            raise ::NotImplementedError, 'LastRequest encoding not supported'
+          end
     
-      context 'symmetrical style' do
-    let(:cop_config) { { 'EnforcedStyle' => 'symmetrical' } }
+      desc 'update main and version in bower.json'
+  task :generate do
+    require 'bootstrap-sass'
+    Dir.chdir Bootstrap.gem_path do
+      spec       = JSON.parse(File.read 'bower.json')
+    
+        def initialize(*args)
+      @s = StringScanner.new(*args)
+    end
+    
+    group :debugging do
+  gem 'cocoapods_debug'
+    
+        pod 'ObjCPod', path: 'ObjCPod'
+    pod 'SwiftPod', path: 'SwiftPod'
+    pod 'MixedPod', path: 'MixedPod'
+    pod 'CustomModuleMapPod', path: 'CustomModuleMapPod'
+    
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
+          end
+        end
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
+      end
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
+      else
+        '#{quote}<footer>#{author}</footer>'
+      end
+      '<blockquote>#{blockquote}</blockquote>'
+    end
+    
+          get_web_content(redirected_url)
+    end
+    
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+      end
+    
+    module Jekyll
