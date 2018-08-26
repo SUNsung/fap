@@ -1,103 +1,31 @@
 
         
-              class << self
-        # Mark a given block of code as a 'busy' block of code, which will
-        # register a SIGINT handler for the duration of the block. When a
-        # SIGINT occurs, the `sig_callback` proc will be called. It is up
-        # to the callback to behave properly and exit the application.
-        def busy(sig_callback)
-          register(sig_callback)
-          return yield
-        ensure
-          unregister(sig_callback)
+                def self.find_by_uid(uid, adapter)
+          uid = Net::LDAP::Filter.escape(uid)
+          adapter.user(adapter.config.uid, uid)
         end
     
-          protected
+            def has_attribute?(attribute)
+          if attribute == :location
+            get_info(:address).present?
+          else
+            get_info(attribute).present?
+          end
+        end
     
-        HTTP.get(source).to_s.split('\n').each do |line|
-      next if line.start_with? '#'
-      parts = line.split(';').map(&:strip)
-      next if parts.size < 2
-      codes << [parts[0], parts[1].start_with?('fully-qualified')]
-    end
+            def initialize(project, ref, job = nil)
+          @project = project
+          @ref = ref
+          @job = job
     
-    describe ApplicationController, type: :controller do
-  controller do
-    include UserTrackingConcern
-    
-    begin
-  require 'bundler/setup'
-rescue LoadError
-  $stderr.puts '[*] Metasploit requires the Bundler gem to be installed'
-  $stderr.puts '    $ gem install bundler'
-  exit(1)
-end
-    
-          when nil
-        # No matches, no saved state
-      else
-        sessions[s[:session]].merge!({k => matches})
-      end # end case matched
-    end # end of each_key
-  end # end of parse
-end
-    
-    classNames = [ 'HelloWorld1', 'HelloWorld2' ]
-    
-    class Parser
-  def initialize(filename)
-    @src = Source.new(filename)
-  end
-    
-        # Returns the CSS for the media query.
-    #
-    # @return [String]
-    def to_css
-      css = ''
-      css << resolved_modifier
-      css << ' ' unless resolved_modifier.empty?
-      css << resolved_type
-      css << ' and ' unless resolved_type.empty? || expressions.empty?
-      css << expressions.map do |e|
-        # It's possible for there to be script nodes in Expressions even when
-        # we're converting to CSS in the case where we parsed the document as
-        # CSS originally (as in css_test.rb).
-        e.map {|c| c.is_a?(Sass::Script::Tree::Node) ? c.to_sass : c.to_s}.join
-      end.join(' and ')
-      css
-    end
-    
-      Sass::Plugin.options.merge!(config)
-    
-    if profile_filename = ENV['PROFILE']
-  require 'ruby-prof'
-  reporter =
-    case (profile_extname = File.extname(profile_filename))
-    when '.txt'
-      RubyProf::FlatPrinterWithLineNumbers
-    when '.html'
-      RubyProf::GraphHtmlPrinter
-    when '.callgrind'
-      RubyProf::CallTreePrinter
-    else
-      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
-    end
-  File.open(profile_filename, 'w') do |io|
-    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
-  end
-else
-  Pod::Command.run(ARGV)
-end
-
-    
-            def execute_repl_command(repl_command)
-          unless repl_command == '\n'
-            repl_commands = repl_command.split
-            subcommand = repl_commands.shift.capitalize
-            arguments = repl_commands
-            subcommand_class = Pod::Command::IPC.const_get(subcommand)
-            subcommand_class.new(CLAide::ARGV.new(arguments)).run
-            signal_end_of_output
+            def value_color
+          case @status
+          when 95..100 then STATUS_COLOR[:good]
+          when 90..95 then STATUS_COLOR[:acceptable]
+          when 75..90 then STATUS_COLOR[:medium]
+          when 0..75 then STATUS_COLOR[:low]
+          else
+            STATUS_COLOR[:unknown]
           end
         end
       end
@@ -106,7 +34,51 @@ end
 end
 
     
-      module InExpression0
-    def rvalue1
-      elements[0]
+            def value_width
+          54
+        end
+    
+        file = File.read(scope('test/sass/templates/#{file || 'complex'}.sass'))
+    result = RubyProf.profile { times.times { Sass::Engine.new(file).render } }
+    
+        # Converts the CSS template into Sass or SCSS code.
+    #
+    # @param fmt [Symbol] `:sass` or `:scss`, designating the format to return.
+    # @return [String] The resulting Sass or SCSS code
+    # @raise [Sass::SyntaxError] if there's an error parsing the CSS template
+    def render(fmt = :sass)
+      check_encoding!
+      build_tree.send('to_#{fmt}', @options).strip + '\n'
+    rescue Sass::SyntaxError => err
+      err.modify_backtrace(:filename => @options[:filename] || '(css)')
+      raise err
     end
+    
+          def self.options
+        options = []
+        options.concat(super.reject { |option, _| option == '--silent' })
+      end
+    
+      [jekyllPid, compassPid, rackupPid].each { |pid| Process.wait(pid) }
+end
+    
+    module Jekyll
+    
+    class ConfigTag < Liquid::Tag
+  def initialize(tag_name, options, tokens)
+    super
+    options = options.split(' ').map {|i| i.strip }
+    @key = options.slice!(0)
+    @tag = nil
+    @classname = nil
+    options.each do |option|
+      @tag = $1 if option =~ /tag:(\S+)/ 
+      @classname = $1 if option =~ /classname:(\S+)/
+    end
+  end
+    
+          rtn = ''
+      (context.environments.first['site'][@array_name] || []).each do |file|
+        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
+          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+        end
