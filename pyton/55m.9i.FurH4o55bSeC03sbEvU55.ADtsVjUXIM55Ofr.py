@@ -1,60 +1,72 @@
 
         
-        
-def dispatch_hook(key, hooks, hook_data, **kwargs):
-    '''Dispatches a hook dictionary on a given piece of data.'''
-    hooks = hooks or dict()
-    hooks = hooks.get(key)
-    if hooks:
-        if hasattr(hooks, '__call__'):
-            hooks = [hooks]
-        for hook in hooks:
-            _hook_data = hook(hook_data, **kwargs)
-            if _hook_data is not None:
-                hook_data = _hook_data
-    return hook_data
-
+        intersphinx_mapping = {
+    'python': ('https://docs.python.org/3/', None),
+    'werkzeug': ('http://werkzeug.pocoo.org/docs/', None),
+    'click': ('http://click.pocoo.org/', None),
+    'jinja': ('http://jinja.pocoo.org/docs/', None),
+    'itsdangerous': ('https://pythonhosted.org/itsdangerous', None),
+    'sqlalchemy': ('https://docs.sqlalchemy.org/en/latest/', None),
+    'wtforms': ('https://wtforms.readthedocs.io/en/latest/', None),
+    'blinker': ('https://pythonhosted.org/blinker/', None),
+}
     
-                handler_result = self.handler(sock)
+    bp = Blueprint('auth', __name__, url_prefix='/auth')
     
-        @pytest.mark.parametrize(
-        'other, result', (
-            ({'AccePT': 'application/json'}, True),
-            ({}, False),
-            (None, False)
-        )
-    )
-    def test_instance_equality(self, other, result):
-        assert (self.case_insensitive_dict == other) is result
+    import click
+from flask import current_app, g
+from flask.cli import with_appcontext
     
-    import pytest
+        # test that the user was inserted into the database
+    with app.app_context():
+        assert get_db().execute(
+            'select * from user where username = 'a'',
+        ).fetchone() is not None
     
-        .. warning:: dictionary operations that are normally O(1) may be O(n).
-    '''
+        with app.app_context():
+        db = get_db()
+        post = db.execute('SELECT * FROM post WHERE id = 1').fetchone()
+        assert post['title'] == 'updated'
     
-        By default this will get the strings from the blns.txt file
+            :param obj: an import name or object
+        '''
+        if isinstance(obj, string_types):
+            obj = import_string(obj)
+        for key in dir(obj):
+            if key.isupper():
+                self[key] = getattr(obj, key)
+    
+        for idx, (loader, srcobj, triple) in enumerate(attempts):
+        if isinstance(srcobj, Flask):
+            src_info = 'application '%s'' % srcobj.import_name
+        elif isinstance(srcobj, Blueprint):
+            src_info = 'blueprint '%s' (%s)' % (srcobj.name,
+                                                srcobj.import_name)
+        else:
+            src_info = repr(srcobj)
     
     
-class AuthenticatorTest(test_util.TempDirTestCase,
-                        dns_test_common_lexicon.BaseLexiconAuthenticatorTest):
+class CreateExtension(Operation):
+    reversible = True
     
-        @mock.patch.dict(os.environ, {})
-    def test_real_values(self):
-        self._test(expect_doc_values=False)
+        def exists(self, session_key):
+        return session_key and (self.cache_key_prefix + session_key) in self._cache or super().exists(session_key)
     
-        def test_str(self):
-        self.assertEqual('Invalid nonce ('xxx'): error', str(self.error))
+        def exists(self, session_key=None):
+        '''
+        This method makes sense when you're talking to a shared resource, but
+        it doesn't matter when you're storing the information in the client's
+        cookie.
+        '''
+        return False
     
-            self.vhost1b = VirtualHost(
-            'filep', 'vh_path', set([self.addr1]), False, False, 'localhost')
     
-            return cert, key, chain
+@x_robots_tag
+def sitemap(request, sitemaps, section=None,
+            template_name='sitemap.xml', content_type='application/xml'):
     
-    def shorten_title(title):
-    m1 = re.search('[[0-9]*]', title)
-    m2 = re.search(''.*'', title)
-    if m1:
-        title = m1.group(0)
-    if m2:
-        title = ' '.join((title, m2.group(0)))   
-    return title[:50] + ' [...]'    
+        parser = argparse.ArgumentParser(description = 'Download all the PDF/HTML links into README.md')
+    parser.add_argument('-d', action='store', dest='directory')
+    parser.add_argument('--no-html', action='store_true', dest='nohtml', default = False)
+    parser.add_argument('--overwrite', action='store_true', default = False)    
+    results = parser.parse_args()
