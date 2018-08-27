@@ -1,67 +1,82 @@
 
         
-            def __init__(self, cards):
+            def __init__(self, operators, supervisors, directors):
+        self.operators = operators
+        self.supervisors = supervisors
+        self.directors = directors
+        self.queued_calls = deque()
+    
+        def __init__(self, cards):
         self.cards = cards
     
-        def __init__(self, template_categories_to_budget_map):
-        self.categories_to_budget_map = template_categories_to_budget_map
+        def categorize(self, transaction):
+        if transaction.seller in self.seller_category_map:
+            return self.seller_category_map[transaction.seller]
+        if transaction.seller in self.seller_category_overrides_map:
+            seller_category_map[transaction.seller] = \
+                self.manual_overrides[transaction.seller].peek_min()
+            return self.seller_category_map[transaction.seller]
+        return None
     
-    from mrjob.job import MRJob
     
-      def _get_sentence(self, forever=True):
-    while True:
-      ids = self._load_random_shard()
-      for current_ids in ids:
-        yield current_ids
-      if not forever:
-        break
+def is_valid_mime(mime):
+    return mime and MIME_RE.match(mime)
     
-        elif (FLAGS.discriminator_model == 'bidirectional_zaremba' or
-          FLAGS.discriminator_model == 'bidirectional_vd'):
-      assert FLAGS.language_model_ckpt_dir_reversed is not None, (
-          'Need a reversed directory to fill in the backward components.')
-      load_fwd_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
-      load_bwd_ckpt = tf.train.latest_checkpoint(
-          FLAGS.language_model_ckpt_dir_reversed)
-      print('Restoring Discriminator from %s and %s.' % (load_fwd_ckpt,
-                                                         load_bwd_ckpt))
-      tf.logging.info('Restoring Discriminator from %s and %s.' %
-                      (load_fwd_ckpt, load_bwd_ckpt))
-      dis_fwd_init_saver = init_savers['dis_fwd_init_saver']
-      dis_bwd_init_saver = init_savers['dis_bwd_init_saver']
-      dis_fwd_init_saver.restore(sess, load_fwd_ckpt)
-      dis_bwd_init_saver.restore(sess, load_bwd_ckpt)
+        Useful for long-lived HTTP responses that stream by lines
+    such as the Twitter streaming API.
     
-                gc.collect()
-            print('benchmarking lasso_path (without Gram):', end='')
-            sys.stdout.flush()
-            tstart = time()
-            lasso_path(X, y, precompute=False)
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            results['lasso_path (without Gram)'].append(delta)
     
-                gc.collect()
-            print('benchmarking lars_path (with Gram):', end='')
-            sys.stdout.flush()
-            tstart = time()
-            G = np.dot(X.T, X)  # precomputed Gram matrix
-            Xy = np.dot(X.T, y)
-            lars_path(X, y, Xy=Xy, Gram=G, max_iter=n_informative)
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            lars_gram[i_f, i_s] = delta
+def repr_dict_nice(d):
+    def prepare_dict(d):
+        for k, v in d.items():
+            if isinstance(v, dict):
+                v = dict(prepare_dict(v))
+            elif isinstance(v, bytes):
+                v = v.decode('utf8')
+            elif not isinstance(v, (int, str)):
+                v = repr(v)
+            yield k, v
+    return json.dumps(
+        dict(prepare_dict(d)),
+        indent=4, sort_keys=True,
+    )
     
-        results = defaultdict(lambda: [])
     
-                gc.collect()
-            print('- benchmarking RidgeRegression')
-            clf = Ridge(alpha=alpha, fit_intercept=False)
-            tstart = time()
-            clf.fit(X_train, y_train)
-            ridge_results[i, j, 0] = mean_squared_error(clf.predict(X_test),
-                                                        y_test)
-            ridge_results[i, j, 1] = time() - tstart
+def test_credentials_in_url(httpbin_both):
+    url = add_auth(httpbin_both.url + '/basic-auth/user/password',
+                   auth='user:password')
+    r = http('GET', url)
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-        if path_details['type'] == 'symlink':
-        symlinks[name] = json_urlread(path_details['_links']['self'])['target']
+        def test_POST_form_auto_Content_Type(self, httpbin):
+        r = http('--form', 'POST', httpbin.url + '/post')
+        assert HTTP_OK in r
+        assert ''Content-Type': 'application/x-www-form-urlencoded' in r
+    
+        def test_download_no_Content_Length(self, httpbin_both):
+        devnull = open(os.devnull, 'w')
+        downloader = Downloader(output_file=devnull, progress_file=devnull)
+        downloader.start(Response(url=httpbin_both.url + '/'))
+        time.sleep(1.1)
+        downloader.chunk_downloaded(b'12345')
+        downloader.finish()
+        assert not downloader.interrupted
+    
+    In Java and other languages, the Abstract Factory Pattern serves to provide an interface for
+creating related/dependent objects without need to specify their
+actual class.
+    
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
+'''
+    
+        @property
+    def is_eager_to_contribute(self):
+        return True
+    
+    *TL;DR80
+Decouples an abstraction from its implementation.
+'''
