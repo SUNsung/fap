@@ -1,110 +1,149 @@
 
         
-        module Homebrew
-  def build_env_keys(env)
-    %w[
-      CC CXX LD OBJC OBJCXX
-      HOMEBREW_CC HOMEBREW_CXX
-      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
-      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
-      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
-      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
-      HOMEBREW_SVN HOMEBREW_GIT
-      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
-      MAKE GIT CPP
-      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
-  end
+                private
     
-      # True if a {Formula} is being built universally.
-  # e.g. on newer Intel Macs this means a combined x86_64/x86 binary/library.
-  # <pre>args << '--universal-binary' if build.universal?</pre>
-  def universal?
-    include?('universal') && option_defined?('universal')
-  end
+              builder = LabelBuilder.new(@template_object, @object_name, @method_name, @object, tag_value)
     
-        prune
-  end
-    
-      def macports_or_fink
-    @ponk ||= MacOS.macports_or_fink
-    @ponk.join(', ') unless @ponk.empty?
-  end
-    
-      UNBREWED_EXCLUDE_FILES = %w[.DS_Store]
-  UNBREWED_EXCLUDE_PATHS = %w[
-    .github/*
-    bin/brew
-    lib/gdk-pixbuf-2.0/*
-    lib/gio/*
-    lib/node_modules/*
-    lib/python[23].[0-9]/*
-    lib/pypy/*
-    lib/pypy3/*
-    lib/ruby/gems/[12].*
-    lib/ruby/site_ruby/[12].*
-    lib/ruby/vendor_ruby/[12].*
-    share/pypy/*
-    share/pypy3/*
-    share/doc/homebrew/*
-    share/info/dir
-    share/man/man1/brew.1
-    share/man/whatis
-  ]
-    
-      def dump_formula_report(key, title)
-    formulae = select_formula(key).sort.map do |name, new_name|
-      # Format list items of renamed formulae
-      if key == :R
-        name = pretty_installed(name) if installed?(name)
-        new_name = pretty_installed(new_name) if installed?(new_name)
-        '#{name} -> #{new_name}'
-      else
-        installed?(name) ? pretty_installed(name) : name
+        def render_template(event)
+      info do
+        message = '  Rendered #{from_rails_root(event.payload[:identifier])}'.dup
+        message << ' within #{from_rails_root(event.payload[:layout])}' if event.payload[:layout]
+        message << ' (#{event.duration.round(1)}ms)'
       end
     end
     
-        def valid_type?(type)
-      const_get(:TYPES).include?(type)
+        %w(<< concat push insert unshift).each do |method|
+      class_eval <<-METHOD, __FILE__, __LINE__ + 1
+        def #{method}(*args)
+          paths.#{method}(*typecast(args))
+        end
+      METHOD
     end
     
-      def present_hash(hash, skip_key = nil)
-    hash.to_a.sort_by {|a| a.first.to_s }.map { |k, v| '#{k}: #{v}' unless k.to_s == skip_key.to_s }.compact
+        keys.each do |key|
+      value = env[key]
+      s = '#{key}: #{value}'
+      case key
+      when 'CC', 'CXX', 'LD'
+        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
+      end
+      f.puts s
+    end
   end
 end
 
     
-      included do
-    include Oauthable
+      def observe_file_removal(path)
+    path.extend(ObserverPathnameExtension).unlink if path.exist?
+  end
+    
+      def self.bottle_sha1(*)
+  end
+    
+      # Use this method to generate standard caveats.
+  def standard_instructions(home_name, home_value = libexec)
+    <<-EOS.undent
+      Before you can use these tools you must export some variables to your $SHELL.
+    
+        def comments
+      'comments'
+    end
+    
+            def uid
+          @uid ||= Gitlab::Utils.force_utf8(auth_hash.uid.to_s)
+        end
+    
+          def find_sessionless_user
+        find_user_from_access_token || find_user_from_feed_token
+      rescue Gitlab::Auth::AuthenticationError
+        nil
+      end
+    
+          private
+    
+            def value_text
+          @status ? ('%.2f%%' % @status) : 'unknown'
+        end
     
       def index
-    if params[:agent_id]
-      @agent = current_user.agents.find(params[:agent_id])
-      @events = @agent.events.page(params[:page])
+    @filters = current_account.custom_filters
+  end
+    
+        Pubsubhubbub::UnsubscribeWorker.perform_async(signed_request_account.id) if signed_request_account.subscribed?
+    DeliveryFailureTracker.track_inverse_success!(signed_request_account)
+  end
+    
+        private
+    
+        def paginated_instances
+      filtered_instances.page(params[:page])
+    end
+    
+      def process_push_request
+    case hub_mode
+    when 'subscribe'
+      Pubsubhubbub::SubscribeService.new.call(account_from_topic, hub_callback, hub_secret, hub_lease_seconds, verified_domain)
+    when 'unsubscribe'
+      Pubsubhubbub::UnsubscribeService.new.call(account_from_topic, hub_callback)
     else
-      @events = current_user.events.preload(:agent).page(params[:page])
+      ['Unknown mode: #{hub_mode}', 422]
+    end
+  end
+    
+      def verify_payload?
+    payload.present? && VerifySalmonService.new.call(payload)
+  end
+    
+      #
+  # Updates the various parts of the HTTP response command string.
+  #
+  def update_cmd_parts(str)
+    if (md = str.match(/HTTP\/(.+?)\s+(\d+)\s?(.+?)\r?\n?$/))
+      self.message = md[3].gsub(/\r/, '')
+      self.code    = md[2].to_i
+      self.proto   = md[1]
+    else
+      raise RuntimeError, 'Invalid response command string', caller
     end
     
-      attributes :id, :type, :name, :updated
+        # Return the first {Sass::Selector::Simple} in a {Sass::Tree::RuleNode},
+    # unless the rule begins with a combinator.
+    #
+    # @param rule [Sass::Tree::RuleNode]
+    # @return [Sass::Selector::Simple?]
+    def first_simple_sel(rule)
+      sseq = first_sseq(rule)
+      return unless sseq.is_a?(Sass::Selector::SimpleSequence)
+      sseq.members.first
+    end
+  end
+end
+
     
-        it 'does not track when there is a recent sign in' do
-      user.update(current_sign_in_at: 60.minutes.ago)
-      prior = user.current_sign_in_at
-      sign_in user, scope: :user
-      get :show
-    
-        def log_http_get_file(url, cached = false)
-      s = '  #{'CACHED ' if cached}GET #{url}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
+        # Render the template to CSS and return the source map.
+    #
+    # @param sourcemap_uri [String] The sourcemap URI to use in the
+    #   `@sourceMappingURL` comment. If this is relative, it should be relative
+    #   to the location of the CSS file.
+    # @return [(String, Sass::Source::Map)] The rendered CSS and the associated
+    #   source map
+    # @raise [Sass::SyntaxError] if there's an error in the document, or if the
+    #   public URL for this document couldn't be determined.
+    # @raise [Encoding::UndefinedConversionError] if the source encoding
+    #   cannot be converted to UTF-8
+    # @raise [ArgumentError] if the document uses an unknown encoding with `@charset`
+    def render_with_sourcemap(sourcemap_uri)
+      return _render_with_sourcemap(sourcemap_uri) unless @options[:quiet]
+      Sass::Util.silence_sass_warnings {_render_with_sourcemap(sourcemap_uri)}
     end
     
-      entries = [{ template: deploy_rb, file: config_dir.join('deploy.rb') }]
-  entries += envs.split(',').map { |stage| { template: stage_rb, file: deploy_dir.join('#{stage}.rb') } }
+      def execute
+    signal_deprecation_warning_for_pack
     
-      describe 'setting and fetching variables' do
-    before do
-      dsl.set :scm, :git
-    end
+    class LogStash::PluginManager::Unpack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'unpack a packaged tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'unpack a packaged  zip file', :default => LogStash::Environment.windows?
+    
+      it 'returns the source' do
+    expect(subject.source).to eq(source)
+  end
