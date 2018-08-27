@@ -1,241 +1,373 @@
 
         
-        #undef cv_hal_split8u
-#define cv_hal_split8u TEGRA_SPLIT
-#undef cv_hal_split16u
-#define cv_hal_split16u TEGRA_SPLIT
-#undef cv_hal_split32s
-#define cv_hal_split32s TEGRA_SPLIT
-#undef cv_hal_split64s
-#define cv_hal_split64s(src, dst, len, cn) TEGRA_SPLIT64S(CAROTENE_NS::s64, src, dst, len, cn)
-    
-    
-    {    struct KeypointStore {
-        virtual void push(f32 kpX, f32 kpY, f32 kpSize, f32 kpAngle=-1, f32 kpResponse=0, s32 kpOctave=0, s32 kpClass_id=-1) = 0;
-        virtual ~KeypointStore() {};
-    };
-}
-    
-    void add(const Size2D &size,
-         const u8 * src0Base, ptrdiff_t src0Stride,
-         const u8 * src1Base, ptrdiff_t src1Stride,
-         s16 *dstBase, ptrdiff_t dstStride,
-         CONVERT_POLICY)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
-    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+        // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel AVX intrinsics to access the SIMD instruction set.
+double DotProductAVX(const double* u, const double* v, int n) {
+  int max_offset = n - 4;
+  int offset = 0;
+  // Accumulate a set of 4 sums in sum, by loading pairs of 4 values from u and
+  // v, and multiplying them together in parallel.
+  __m256d sum = _mm256_setzero_pd();
+  if (offset <= max_offset) {
+    offset = 4;
+    // Aligned load is reputedly faster but requires 32 byte aligned input.
+    if ((reinterpret_cast<uintptr_t>(u) & 31) == 0 &&
+        (reinterpret_cast<uintptr_t>(v) & 31) == 0) {
+      // Use aligned load.
+      __m256d floats1 = _mm256_load_pd(u);
+      __m256d floats2 = _mm256_load_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_load_pd(u + offset);
+        floats2 = _mm256_load_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
+      }
+    } else {
+      // Use unaligned load.
+      __m256d floats1 = _mm256_loadu_pd(u);
+      __m256d floats2 = _mm256_loadu_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_loadu_pd(u + offset);
+        floats2 = _mm256_loadu_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
+      }
     }
-    
-            for (; j < roiw32; j += 32)
-        {
-            internal::prefetch(src + j);
-            uint8x16_t v_src0 = vld1q_u8(src + j), v_src1 = vld1q_u8(src + j + 16);
-            uint8x16_t v_dst0 = vmvnq_u8(v_src0), v_dst1 = vmvnq_u8(v_src1);
-            vst1q_u8(dst + j, v_dst0);
-            vst1q_u8(dst + j + 16, v_dst1);
-        }
-        for (; j < roiw8; j += 8)
-        {
-            uint8x8_t v_src = vld1_u8(src + j);
-            uint8x8_t v_dst = vmvn_u8(v_src);
-            vst1_u8(dst + j, v_dst);
-        }
-    
-    #define MERGE_ASM2(sgn, bits) __asm__ ( \
-                                          'vld1.' #bits ' {d0-d1}, [%[in0]]             \n\t' \
-                                          'vld1.' #bits ' {d2-d3}, [%[in1]]             \n\t' \
-                                          'vst2.' #bits ' {d0, d2}, [%[out0]]           \n\t' \
-                                          'vst2.' #bits ' {d1, d3}, [%[out1]]           \n\t' \
-                                          : \
-                                          : [in0] 'r' (src0 + sj), [in1] 'r' (src1 + sj), \
-                                            [out0]  'r' (dst + dj), [out1]  'r' (dst + dj + MUL2(8)/sizeof(sgn##bits)) \
-                                          : 'd0','d1','d2','d3' \
-                                      );
-#define MERGE_ASM3(sgn, bits) __asm__ ( \
-                                          'vld1.' #bits ' {d0-d1}, [%[in0]]             \n\t' \
-                                          'vld1.' #bits ' {d2-d3}, [%[in1]]             \n\t' \
-                                          'vld1.' #bits ' {d4-d5}, [%[in2]]             \n\t' \
-                                          'vst3.' #bits ' {d0, d2, d4}, [%[out0]]       \n\t' \
-                                          'vst3.' #bits ' {d1, d3, d5}, [%[out1]]       \n\t' \
-                                          : \
-                                          : [in0] 'r' (src0 + sj), [in1] 'r' (src1 + sj), [in2] 'r' (src2 + sj), \
-                                            [out0]  'r' (dst + dj), [out1]  'r' (dst + dj + MUL3(8)/sizeof(sgn##bits)) \
-                                          : 'd0','d1','d2','d3','d4','d5' \
-                                      );
-#define MERGE_ASM4(sgn, bits) __asm__ ( \
-                                          'vld1.' #bits ' {d0-d1}, [%[in0]]             \n\t' \
-                                          'vld1.' #bits ' {d2-d3}, [%[in1]]             \n\t' \
-                                          'vld1.' #bits ' {d4-d5}, [%[in2]]             \n\t' \
-                                          'vld1.' #bits ' {d6-d7}, [%[in3]]             \n\t' \
-                                          'vst4.' #bits ' {d0, d2, d4, d6}, [%[out0]]   \n\t' \
-                                          'vst4.' #bits ' {d1, d3, d5, d7}, [%[out1]]   \n\t' \
-                                          : \
-                                          : [in0] 'r' (src0 + sj), [in1] 'r' (src1 + sj), [in2] 'r' (src2 + sj), [in3] 'r' (src3 + sj), \
-                                            [out0]  'r' (dst + dj), [out1]  'r' (dst + dj + MUL4(8)/sizeof(sgn##bits)) \
-                                          : 'd0','d1','d2','d3','d4','d5','d6','d7' \
-                                      );
-    
-    
-    {            vst1q_s16(dst + j, v_dst0);
-            vst1q_s16(dst + j + 8, v_dst1);
-        }
-        for (; j < roiw8; j += 8)
-        {
-            int16x8_t v_dst = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(src + j)));
-            vst1q_s16(dst + j, v_dst);
-        }
-    
-    #if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-CVTS_FUNC(s8, s32, 16,
-    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
-    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 16)
-    {
-        internal::prefetch(_src + i);
-        __asm__ (
-            'vld1.8 {d4-d5}, [%[src]]                              \n\t'
-            'vmovl.s8 q3, d4                                       \n\t'
-            'vmovl.s8 q4, d5                                       \n\t'
-            'vmovl.s16 q5, d6                                      \n\t'
-            'vmovl.s16 q6, d7                                      \n\t'
-            'vmovl.s16 q7, d8                                      \n\t'
-            'vmovl.s16 q8, d9                                      \n\t'
-            'vcvt.f32.s32 q9, q5                                   \n\t'
-            'vcvt.f32.s32 q10, q6                                  \n\t'
-            'vcvt.f32.s32 q11, q7                                  \n\t'
-            'vcvt.f32.s32 q12, q8                                  \n\t'
-            'vmul.f32 q13, q9, q0                                  \n\t'
-            'vmul.f32 q14, q10, q0                                 \n\t'
-            'vmul.f32 q15, q11, q0                                 \n\t'
-            'vmul.f32 q2, q12, q0                                  \n\t'
-            'vadd.f32 q3, q13, q1                                  \n\t'
-            'vadd.f32 q4, q14, q1                                  \n\t'
-            'vadd.f32 q5, q15, q1                                  \n\t'
-            'vadd.f32 q6, q2, q1                                   \n\t'
-            'vcvt.s32.f32 q7, q3                                   \n\t'
-            'vcvt.s32.f32 q8, q4                                   \n\t'
-            'vcvt.s32.f32 q9, q5                                   \n\t'
-            'vcvt.s32.f32 q10, q6                                  \n\t'
-            'vst1.32 {d14-d15}, [%[dst1]]                          \n\t'
-            'vst1.32 {d16-d17}, [%[dst2]]                          \n\t'
-            'vst1.32 {d18-d19}, [%[dst3]]                          \n\t'
-            'vst1.32 {d20-d21}, [%[dst4]]                          \n\t'
-            : /*no output*/
-            : [src] 'r' (_src + i),
-              [dst1] 'r' (_dst + i + 0),
-              [dst2] 'r' (_dst + i + 4),
-              [dst3] 'r' (_dst + i + 8),
-              [dst4] 'r' (_dst + i + 12),
-              'w'  (vscale), 'w' (vshift)
-            : 'd4','d5','d6','d7','d8','d9','d10',
-            'd11','d12','d13','d14','d15','d16','d17',
-            'd18','d19','d20','d21','d22','d23','d24',
-            'd25','d26','d27','d28','d29','d30','d31'
-        );
-    }
-})
+  }
+  // Add the 4 product sums together horizontally. Not so easy as with sse, as
+  // there is no add across the upper/lower 128 bit boundary, so permute to
+  // move the upper 128 bits to lower in another register.
+  __m256d sum2 = _mm256_permute2f128_pd(sum, sum, 1);
+  sum = _mm256_hadd_pd(sum, sum2);
+  sum = _mm256_hadd_pd(sum, sum);
+  double result;
+  // _mm256_extract_f64 doesn't exist, but resist the temptation to use an sse
+  // instruction, as that introduces a 70 cycle delay. All this casting is to
+  // fool the intrinsics into thinking we are extracting the bottom int64.
+  auto cast_sum = _mm256_castpd_si256(sum);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored '-Wstrict-aliasing'
+  *(reinterpret_cast<int64_t*>(&result)) =
+#if defined(_WIN32) || defined(__i386__)
+      // This is a very simple workaround that is activated
+      // for all platforms that do not have _mm256_extract_epi64.
+      // _mm256_extract_epi64(X, Y) == ((uint64_t*)&X)[Y]
+      ((uint64_t*)&cast_sum)[0]
 #else
-CVTS_FUNC(s8, s32, 16,
-    float32x4_t vscale = vdupq_n_f32((f32)alpha);
-    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
-{
-    for (size_t i = 0; i < w; i += 16)
-    {
-        internal::prefetch(_src + i);
-        int8x16_t vline = vld1q_s8(_src + i);
-        int16x8_t vline1_s16 = vmovl_s8(vget_low_s8 (vline));
-        int16x8_t vline2_s16 = vmovl_s8(vget_high_s8(vline));
-        int32x4_t vline1_s32 = vmovl_s16(vget_low_s16 (vline1_s16));
-        int32x4_t vline2_s32 = vmovl_s16(vget_high_s16(vline1_s16));
-        int32x4_t vline3_s32 = vmovl_s16(vget_low_s16 (vline2_s16));
-        int32x4_t vline4_s32 = vmovl_s16(vget_high_s16(vline2_s16));
-        float32x4_t vline1_f32 = vcvtq_f32_s32(vline1_s32);
-        float32x4_t vline2_f32 = vcvtq_f32_s32(vline2_s32);
-        float32x4_t vline3_f32 = vcvtq_f32_s32(vline3_s32);
-        float32x4_t vline4_f32 = vcvtq_f32_s32(vline4_s32);
-        vline1_f32 = vmulq_f32(vline1_f32, vscale);
-        vline2_f32 = vmulq_f32(vline2_f32, vscale);
-        vline3_f32 = vmulq_f32(vline3_f32, vscale);
-        vline4_f32 = vmulq_f32(vline4_f32, vscale);
-        vline1_f32 = vaddq_f32(vline1_f32, vshift);
-        vline2_f32 = vaddq_f32(vline2_f32, vshift);
-        vline3_f32 = vaddq_f32(vline3_f32, vshift);
-        vline4_f32 = vaddq_f32(vline4_f32, vshift);
-        vline1_s32 = vcvtq_s32_f32(vline1_f32);
-        vline2_s32 = vcvtq_s32_f32(vline2_f32);
-        vline3_s32 = vcvtq_s32_f32(vline3_f32);
-        vline4_s32 = vcvtq_s32_f32(vline4_f32);
-        vst1q_s32(_dst + i + 0,  vline1_s32);
-        vst1q_s32(_dst + i + 4,  vline2_s32);
-        vst1q_s32(_dst + i + 8,  vline3_s32);
-        vst1q_s32(_dst + i + 12, vline4_s32);
-    }
-})
+      _mm256_extract_epi64(cast_sum, 0)
 #endif
+      ;
+#pragma GCC diagnostic pop
+  while (offset < n) {
+    result += u[offset] * v[offset];
+    ++offset;
+  }
+  return result;
+}
     
-    bool isConvolutionSupported(const Size2D &size, const Size2D &ksize,
-                            BORDER_MODE border)
-{
-    return isSupportedConfiguration() && size.width >= 8 &&
-        (border == BORDER_MODE_CONSTANT ||
-            border == BORDER_MODE_REPLICATE) &&
-        (ksize.width == 3) && (ksize.height == 3);
+    // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+double DotProductSSE(const double* u, const double* v, int n) {
+  int max_offset = n - 2;
+  int offset = 0;
+  // Accumulate a set of 2 sums in sum, by loading pairs of 2 values from u and
+  // v, and multiplying them together in parallel.
+  __m128d sum = _mm_setzero_pd();
+  if (offset <= max_offset) {
+    offset = 2;
+    // Aligned load is reputedly faster but requires 16 byte aligned input.
+    if ((reinterpret_cast<uintptr_t>(u) & 15) == 0 &&
+        (reinterpret_cast<uintptr_t>(v) & 15) == 0) {
+      // Use aligned load.
+      sum = _mm_load_pd(u);
+      __m128d floats2 = _mm_load_pd(v);
+      // Multiply.
+      sum = _mm_mul_pd(sum, floats2);
+      while (offset <= max_offset) {
+        __m128d floats1 = _mm_load_pd(u + offset);
+        floats2 = _mm_load_pd(v + offset);
+        offset += 2;
+        floats1 = _mm_mul_pd(floats1, floats2);
+        sum = _mm_add_pd(sum, floats1);
+      }
+    } else {
+      // Use unaligned load.
+      sum = _mm_loadu_pd(u);
+      __m128d floats2 = _mm_loadu_pd(v);
+      // Multiply.
+      sum = _mm_mul_pd(sum, floats2);
+      while (offset <= max_offset) {
+        __m128d floats1 = _mm_loadu_pd(u + offset);
+        floats2 = _mm_loadu_pd(v + offset);
+        offset += 2;
+        floats1 = _mm_mul_pd(floats1, floats2);
+        sum = _mm_add_pd(sum, floats1);
+      }
+    }
+  }
+  // Add the 2 sums in sum horizontally.
+  sum = _mm_hadd_pd(sum, sum);
+  // Extract the low result.
+  double result = _mm_cvtsd_f64(sum);
+  // Add on any left-over products.
+  while (offset < n) {
+    result += u[offset] * v[offset];
+    ++offset;
+  }
+  return result;
+}
+    
+    // Computes part of matrix.vector v = Wu. Computes N=32 results.
+// For details see PartialMatrixDotVector64 with N=32.
+static void PartialMatrixDotVector32(const int8_t* wi, const double* scales,
+                                     const int8_t* u, int num_in, int num_out,
+                                     double* v) {
+  // Register containing 16-bit ones for horizontal add with 16->32 bit
+  // conversion.
+  __m256i ones =
+      _mm256_set_epi16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+  __m256i shift_id = _mm256_set_epi32(0, 7, 6, 5, 4, 3, 2, 1);
+  // Initialize all the results to 0.
+  __m256i result0 = _mm256_setzero_si256();
+  __m256i result1 = _mm256_setzero_si256();
+  __m256i result2 = _mm256_setzero_si256();
+  __m256i result3 = _mm256_setzero_si256();
+  // Iterate over the input (u), one registerful at a time.
+  for (int j = 0; j < num_in;) {
+    __m256i inputs =
+        _mm256_loadu_si256(reinterpret_cast<const __m256i*>(u + j));
+    // Inputs are processed in groups of kNumInputsPerGroup, replicated
+    // kNumInputGroups times.
+    for (int ig = 0; ig < kNumInputGroups && j < num_in;
+         ++ig, j += kNumInputsPerGroup) {
+      // Replicate the low 32 bits (4 inputs) 8 times.
+      __m256i rep_input =
+          _mm256_broadcastd_epi32(_mm256_castsi256_si128(inputs));
+      // Rotate the inputs in groups of 4, so the next 4 inputs are ready.
+      inputs = _mm256_permutevar8x32_epi32(inputs, shift_id);
+      __m256i weights, reps;
+      // Mul-add, with horizontal add of the 4 inputs to each of the results.
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result0);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result1);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result2);
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result3);
+    }
+  }
+  ExtractResults(result0, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  ExtractResults(result1, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  ExtractResults(result2, shift_id, wi, scales, kNumOutputsPerRegister, v);
+  num_out -= kNumOutputsPerRegister * 3;
+  ExtractResults(result3, shift_id, wi, scales,
+                 std::min(kNumOutputsPerRegister, num_out), v);
 }
     
     namespace tesseract {
     }
     
-      // Computes matrix.vector v = Wu.
-  // u is of size W.dim2() - 1 and the output v is of size W.dim1().
-  // u is imagined to have an extra element at the end with value 1, to
-  // implement the bias, but it doesn't actually have it.
-  // Computes the base C++ implementation, if there are no partial_funcs_.
-  // NOTE: The size of the input vector (u) must be padded using
-  // RoundInputs above.
-  // The input will be over-read to the extent of the padding. There are no
-  // alignment requirements.
-  void MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
-                       const GenericVector<double>& scales, const int8_t* u,
-                       double* v) const;
+    void Tesseract::tilde_delete(PAGE_RES_IT &page_res_it) {
+  WERD_RES *word;
+  PAGE_RES_IT copy_it;
+  bool deleting_from_bol = false;
+  bool marked_delete_point = false;
+  int16_t debug_delete_mode;
+  CRUNCH_MODE delete_mode;
+  int16_t x_debug_delete_mode;
+  CRUNCH_MODE x_delete_mode;
+    }
+    
+    #include <cstdint>  // for int16_t
+    
+      // ============= Accessing data ==============.
+    
+      // Constructors for the various ParamTypes.
+  ParamContent() = default;
+  explicit ParamContent(tesseract::StringParam* it);
+  explicit ParamContent(tesseract::IntParam* it);
+  explicit ParamContent(tesseract::BoolParam* it);
+  explicit ParamContent(tesseract::DoubleParam* it);
+    
+        for (int fd: to_add)
+      register_fd(fd);
+    to_add.clear();
+    
+      bool RunOnDevice() override {
+    auto& old_tensor = Input(0);
+    auto& indices = Input(1);
+    auto* new_tensor = Output(0);
+    CAFFE_ENFORCE(indices.ndim() >= 1);
+    CAFFE_ENFORCE(
+        &old_tensor == new_tensor, 'First argument must be in-place.');
+    CAFFE_ENFORCE(new_tensor->ndim() == indices.ndim());
+    CAFFE_ENFORCE(indices.ndim() == new_tensor->ndim());
+    }
+    
+    OpSchema::Cost CostInferenceForFC(
+    const OperatorDef& def,
+    const vector<TensorShape>& in) {
+  CAFFE_ENFORCE_EQ(in.size(), 3, 'FC requires three inputs');
+  struct OpSchema::Cost c;
+  ArgumentHelper helper(def);
+    }
+    
+        const auto* data_ptr = data.template data<T>();
+    std::unordered_map<T, int64_t> dict;
+    std::vector<int64_t> dupIndices;
+    // i is the index of unique elements, j is the index of all elements
+    for (int64_t i = 0, j = 0; j < data.dims()[0]; ++i, ++j) {
+      bool retVal = dict.insert({data_ptr[j], i}).second;
+      if (!retVal) {
+        --i;
+        dupIndices.push_back(j);
+      }
+    }
+    
+    **Code**
     
     
-    {  return count;
+    {
+    {    const float* Xdata = X.template data<float>();
+    float* Ydata = Y->template mutable_data<float>();
+    for (int i = 0; i < X.size(); ++i) {
+      Ydata[i] = std::floor(Xdata[i]);
+    }
+    return true;
+  }
+};
+    
+      void SetStart() {
+    start_ = true;
+  }
+    
+      ASSERT_TRUE(db_->GetIntProperty('rocksdb.base-level', &int_prop));
+  ASSERT_EQ(3U, int_prop);
+  ASSERT_TRUE(db_->GetProperty('rocksdb.num-files-at-level1', &str_prop));
+  ASSERT_EQ('0', str_prop);
+  ASSERT_TRUE(db_->GetProperty('rocksdb.num-files-at-level2', &str_prop));
+  ASSERT_EQ('0', str_prop);
+    
+    TEST_F(DBEncryptionTest, CheckEncrypted) {
+  ASSERT_OK(Put('foo567', 'v1.fetdq'));
+  ASSERT_OK(Put('bar123', 'v2.dfgkjdfghsd'));
+  Close();
+    }
+    
+    class CompactionPressureToken : public WriteControllerToken {
+ public:
+  explicit CompactionPressureToken(WriteController* controller)
+      : WriteControllerToken(controller) {}
+  virtual ~CompactionPressureToken();
+};
+    
+    TEST_F(WriteControllerTest, ChangeDelayRateTest) {
+  TimeSetEnv env;
+  WriteController controller(40000000u);  // also set max delayed rate
+  controller.set_delayed_write_rate(10000000u);
+  auto delay_token_0 =
+      controller.GetDelayToken(controller.delayed_write_rate());
+  ASSERT_EQ(static_cast<uint64_t>(2000000),
+            controller.GetDelay(&env, 20000000u));
+  auto delay_token_1 = controller.GetDelayToken(2000000u);
+  ASSERT_EQ(static_cast<uint64_t>(10000000),
+            controller.GetDelay(&env, 20000000u));
+  auto delay_token_2 = controller.GetDelayToken(1000000u);
+  ASSERT_EQ(static_cast<uint64_t>(20000000),
+            controller.GetDelay(&env, 20000000u));
+  auto delay_token_3 = controller.GetDelayToken(20000000u);
+  ASSERT_EQ(static_cast<uint64_t>(1000000),
+            controller.GetDelay(&env, 20000000u));
+  // This is more than max rate. Max delayed rate will be used.
+  auto delay_token_4 =
+      controller.GetDelayToken(controller.delayed_write_rate() * 3);
+  ASSERT_EQ(static_cast<uint64_t>(500000),
+            controller.GetDelay(&env, 20000000u));
 }
     
-      // Check if part from seed2 label: with low math density and left indented. We
-  // are using two checks:
-  // 1. If its left is aligned with any coordinates in indented_texts_left,
-  // which we assume have been sorted.
-  // 2. If its foreground density is over foreground_density_th.
-  bool CheckForSeed2(
-      const GenericVector<int>& indented_texts_left,
-      const float foreground_density_th,
-      ColPartition* part);
+    #if !defined(ROCKSDB_LITE) && !defined(OS_WIN)
     
-    void LTRResultIterator::RowAttributes(float* row_height, float* descenders,
-                                      float* ascenders) const {
-  *row_height = it_->row()->row->x_height() + it_->row()->row->ascenders() -
-                it_->row()->row->descenders();
-  *descenders = it_->row()->row->descenders();
-  *ascenders = it_->row()->row->ascenders();
+    void PosixWritableFile::SetWriteLifeTimeHint(Env::WriteLifeTimeHint hint) {
+#ifdef OS_LINUX
+// Suppress Valgrind 'Unimplemented functionality' error.
+#ifndef ROCKSDB_VALGRIND_RUN
+  if (hint == write_hint_) {
+    return;
+  }
+  if (fcntl(fd_, F_SET_RW_HINT, &hint) == 0) {
+    write_hint_ = hint;
+  }
+#else
+  (void)hint;
+#endif // ROCKSDB_VALGRIND_RUN
+#else
+  (void)hint;
+#endif // OS_LINUX
 }
     
-    #ifndef TESSERACT_CCMAIN_MUTABLEITERATOR_H_
-#define TESSERACT_CCMAIN_MUTABLEITERATOR_H_
+      Status Write(uint64_t offset, const Slice& data) {
+    MutexLock lock(&mutex_);
+    size_t offset_ = static_cast<size_t>(offset);
+    if (offset + data.size() > data_.size()) {
+      data_.resize(offset_ + data.size());
+    }
+    data_.replace(offset_, data.size(), data.data(), data.size());
+    size_ = data_.size();
+    modified_time_ = Now();
+    return Status::OK();
+  }
     
-    // Given a MutableIterator to the start of a block, run DetectParagraphs on
-// that block and commit the results to the underlying ROW and BLOCK structs,
-// saving the ParagraphModels in models.  Caller owns the models.
-// We use unicharset during the function to answer questions such as 'is the
-// first letter of this word upper case?'
-void DetectParagraphs(int debug_level,
-                      bool after_text_recognition,
-                      const MutableIterator *block_start,
-                      GenericVector<ParagraphModel *> *models);
+      virtual Status DeleteDir(const std::string& dirname) override;
     
-    namespace tesseract {
-  class Tesseract;
+    using namespace rocksdb;
+    
+    /**
+ * @class CanClientFactory
+ * @brief CanClientFactory inherites apollo::common::util::Facotory.
+ */
+class CanClientFactory
+    : public apollo::common::util::Factory<CANCardParameter::CANCardBrand,
+                                           CanClient> {
+ public:
+  /**
+   * @brief Register the CAN clients of all brands. This function call the
+   *        Function apollo::common::util::Factory::Register() for all of the
+   *        CAN clients.
+   */
+  void RegisterCanClients();
+    }
+    
+    class HermesCanClient : public CanClient {
+ public:
+  /**
+   * @brief Initialize the BCAN client by specified CAN card parameters.
+   * @param parameter CAN card parameters to initialize the CAN client.
+   */
+  // explicit HermesCanClient(const CANCardParameter &parameter);
+    }
+    
+    TEST(HermesCanClient, receiver) {
+  CANCardParameter param;
+  param.set_brand(CANCardParameter::HERMES_CAN);
+  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+  HermesCanClient hermes_can;
+  EXPECT_TRUE(hermes_can.Init(param));
+    }
+    
+    
+    { private:
+  const int32_t data_length_ = CANBUS_MESSAGE_LENGTH;
+};
+    
+    TEST(ByteTest, GetValue) {
+  unsigned char byte_value = 0x1A;
+  Byte value(&byte_value);
+  EXPECT_EQ(0x05, value.get_byte(1, 3));
+  EXPECT_EQ(0x01, value.get_byte(1, 1));
+  EXPECT_EQ(0x00, value.get_byte(8, 1));
+  EXPECT_EQ(0x00, value.get_byte(-1, 1));
+  EXPECT_EQ(0x1A, value.get_byte(0, 10));
 }
