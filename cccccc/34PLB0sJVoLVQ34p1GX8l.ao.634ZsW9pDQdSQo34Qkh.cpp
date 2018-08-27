@@ -1,398 +1,297 @@
 
         
-        #include 'tensorflow/c/eager/c_api.h'
-#include 'tensorflow/core/framework/types.pb.h'
-#include 'tensorflow/core/platform/types.h'
-#include 'tensorflow/python/lib/core/numpy.h'
-    
-    // Execute a tensorflow operation assuming that all provided inputs are
-// correctly formatted (i.e. EagerTensors). If it doesn't find EagerTensors,
-// it will simply fail with a NotImplementedError.
-//
-// The first PyObject* is unused.
-// The 'args' PyObject* is meant to be a tuple with the following structure:
-//  Item 1: The TFE Context
-//  Item 2: device_name: Name of the device on which to execute the operation,
-//          or NULL for automatic selection.
-//  Item 3: op_name: Name of the TensorFlow op to execute.
-//  Item 4: name: An optional name for the operation.
-//  Item 5: List representing all callbacks to execute after successful
-//  op execute.
-//  Item 6 onwards: inputs - This is a list of inputs followed by a list of
-//        attrs. It is not necessary for type attrs to be present.
-//
-// This is named _C since there doesn't seem to be any way to make it visible
-// in the SWIG interface without renaming due to the use of the %native
-// directive.
-PyObject* TFE_Py_FastPathExecute_C(PyObject*, PyObject* args);
-    
-    
-    {}  // namespace tensorflow
-    
-      // Get original parameter name.
-  string GetName() const { return name_; }
-    
-    #include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-    
-    REGISTER_OP('Invalid')
-    .Attr('invalid attr: int32')  // invalid since the name has a space.
-    .Doc(R'doc(
-An op to test that invalid ops do not successfully generate invalid python code.
-)doc');
-    
-    // Creates a numpy array in 'ret' and copies the content of tensor 't'
-// into 'ret'.
-Status ConvertTensorToNdarray(const Tensor& t, PyObject** ret);
-    
-      std::vector<std::string> flash_version_numbers = base::SplitString(
-      version, '.', base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
-  if (flash_version_numbers.empty())
-    flash_version_numbers.push_back('11');
-  // |SplitString()| puts in an empty string given an empty string. :(
-  else if (flash_version_numbers[0].empty())
-    flash_version_numbers[0] = '11';
-  if (flash_version_numbers.size() < 2)
-    flash_version_numbers.push_back('2');
-  if (flash_version_numbers.size() < 3)
-    flash_version_numbers.push_back('999');
-  if (flash_version_numbers.size() < 4)
-    flash_version_numbers.push_back('999');
-  // E.g., 'Shockwave Flash 10.2 r154':
-  plugin.description = plugin.name + ' ' + flash_version_numbers[0] + '.' +
-                       flash_version_numbers[1] + ' r' +
-                       flash_version_numbers[2];
-  plugin.version = base::JoinString(flash_version_numbers, '.');
-  content::WebPluginMimeType swf_mime_type(content::kFlashPluginSwfMimeType,
-                                           content::kFlashPluginSwfExtension,
-                                           content::kFlashPluginSwfDescription);
-  plugin.mime_types.push_back(swf_mime_type);
-  content::WebPluginMimeType spl_mime_type(content::kFlashPluginSplMimeType,
-                                           content::kFlashPluginSplExtension,
-                                           content::kFlashPluginSplDescription);
-  plugin.mime_types.push_back(spl_mime_type);
-    
-    int NodeMain(int argc, char* argv[]);
-    
-    class BoxLayout : public LayoutManager {
- public:
-  static mate::WrappableBase* New(mate::Arguments* args,
-                                  views::BoxLayout::Orientation orientation);
+        /* Coin network-specific GUI style information */
+class NetworkStyle
+{
+public:
+    /** Get style associated with provided BIP70 network id, or 0 if not known */
+    static const NetworkStyle *instantiate(const QString &networkId);
     }
     
-    #include 'atom/browser/api/atom_api_web_contents.h'
-#include 'atom/browser/browser.h'
-#include 'atom/browser/native_browser_view.h'
-#include 'atom/common/color_util.h'
-#include 'atom/common/native_mate_converters/gfx_converter.h'
-#include 'atom/common/native_mate_converters/value_converter.h'
-#include 'atom/common/node_includes.h'
-#include 'atom/common/options_switches.h'
-#include 'native_mate/constructor.h'
-#include 'native_mate/dictionary.h'
-#include 'ui/gfx/geometry/rect.h'
+        /** Colorize an icon (given filename) with the text color */
+    QIcon TextColorIcon(const QString& filename) const;
     
-    #endif  // ATOM_BROWSER_API_ATOM_API_BROWSER_VIEW_H_
-
+    public:
+    explicit SignVerifyMessageDialog(const PlatformStyle *platformStyle, QWidget *parent);
+    ~SignVerifyMessageDialog();
     
-    #include 'atom/browser/api/atom_api_browser_window.h'
     
-    #include 'atom/browser/api/atom_api_view.h'
-#include 'native_mate/handle.h'
-#include 'ui/views/controls/button/button.h'
-    
-    template <>
-struct Converter<in_app_purchase::Payment> {
-  static v8::Local<v8::Value> ToV8(v8::Isolate* isolate,
-                                   const in_app_purchase::Payment& payment) {
-    mate::Dictionary dict = mate::Dictionary::CreateEmpty(isolate);
-    dict.SetHidden('simple', true);
-    dict.Set('productIdentifier', payment.productIdentifier);
-    dict.Set('quantity', payment.quantity);
-    return dict.GetHandle();
-  }
-};
-    
-    #include 'atom/common/node_includes.h'
-    
-    // Get render process host.
-RenderProcessHost* GetRenderProcessHost() {
-  RenderProcessHost* render_process_host = NULL;
-  std::vector<Shell*> windows = Shell::windows();
-  for (size_t i = 0; i < windows.size(); ++i) {
-    if (!windows[i]->is_devtools()) {
-      render_process_host = windows[i]->web_contents()->GetRenderProcessHost();
-      break;
+    {    count = 0;
+    for (i = 0; i < len; i++) {
+        r[i].infinity = a[i].infinity;
+        if (!a[i].infinity) {
+            secp256k1_ge_set_gej_zinv(&r[i], &a[i], &azi[count++]);
+        }
     }
-  }
-    }
-    
-      bool delay_destruction() { return delay_destruction_; }
-  void set_delay_destruction(bool val) { delay_destruction_ = val; }
-  bool pending_destruction() { return pending_destruction_; }
-  void set_pending_destruction (bool val) { pending_destruction_ = val; }
- protected:
-  int id_;
-  bool delay_destruction_;
-  bool pending_destruction_;
-  base::WeakPtr<ObjectManager> object_manager_;
-    
-    
-    
-    
-    {}  // namespace nwapi
-
-    
-    #include <map>
-    
-       bool GetAcceleratorForCommandId(
-      int command_id,
-      ui::Accelerator* accelerator) const override;
-    
-    #include 'base/run_loop.h'
-#include 'base/values.h'
-#include 'base/strings/utf_string_conversions.h'
-#include 'base/message_loop/message_loop_current.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/render_frame_host.h'
-#include 'content/public/browser/render_view_host.h'
-#include 'content/public/browser/render_widget_host_view.h'
-#include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/app_window/app_window.h'
-#include 'skia/ext/image_operations.h'
-#include 'ui/aura/client/screen_position_client.h'
-#include 'ui/aura/window.h'
-#include 'ui/aura/window_tree_host.h'
-#include 'ui/events/platform/platform_event_source.h'
-#include 'ui/views/controls/menu/menu_runner.h'
-#include 'ui/views/widget/widget.h'
-#include 'ui/views/focus/focus_manager.h'
-#include 'vector'
-    
-    void MenuItem::OnClick() {
-  // Automatically flip checkbox.
-  if (type_ == 'checkbox')
-    is_checked_ = !is_checked_;
-    }
-    
-    void NwDesktopCaptureMonitor::OnSourceNameChanged(DesktopMediaList* list, int index) {
-    DesktopMediaList::Source src = list->GetSource(index);
-    std::unique_ptr<base::ListValue> args = nwapi::nw__screen::OnSourceNameChanged::Create(
-      src.id.ToString(),
-      base::UTF16ToUTF8(src.name));
-    DispatchEvent(
-      events::HistogramValue::UNKNOWN, 
-      nwapi::nw__screen::OnSourceNameChanged::kEventName,
-      std::move(args));    
-  }
-    
-    class DescriptorProto : public ::upb::reffed_ptr<const ::upb::MessageDef> {
- public:
-  DescriptorProto(const ::upb::MessageDef* m, const void *ref_donor = NULL)
-      : reffed_ptr(m, ref_donor) {
-    UPB_ASSERT(upbdefs_google_protobuf_DescriptorProto_is(m));
-  }
-    }
-    
-    
-    {  // Moving to a message on the arena should lead to a copy.
-  *message2_on_arena = std::move(message1);
-  EXPECT_NE(nested, &message2_on_arena->optional_nested_message());
-  TestUtil::ExpectAllFieldsSet(message1);
-  TestUtil::ExpectAllFieldsSet(*message2_on_arena);
+    free(azi);
 }
     
-        case FieldDescriptor::TYPE_MESSAGE:
-    case FieldDescriptor::TYPE_GROUP:
-    case FieldDescriptor::TYPE_STRING:
-    case FieldDescriptor::TYPE_BYTES:
-      return true;
+        /* Check bad contexts and NULLs for recovery */
+    ecount = 0;
+    CHECK(secp256k1_ecdsa_recover(none, &recpubkey, &recsig, message) == 0);
+    CHECK(ecount == 1);
+    CHECK(secp256k1_ecdsa_recover(sign, &recpubkey, &recsig, message) == 0);
+    CHECK(ecount == 2);
+    CHECK(secp256k1_ecdsa_recover(vrfy, &recpubkey, &recsig, message) == 1);
+    CHECK(ecount == 2);
+    CHECK(secp256k1_ecdsa_recover(both, &recpubkey, &recsig, message) == 1);
+    CHECK(ecount == 2);
+    CHECK(secp256k1_ecdsa_recover(both, NULL, &recsig, message) == 0);
+    CHECK(ecount == 3);
+    CHECK(secp256k1_ecdsa_recover(both, &recpubkey, NULL, message) == 0);
+    CHECK(ecount == 4);
+    CHECK(secp256k1_ecdsa_recover(both, &recpubkey, &recsig, NULL) == 0);
+    CHECK(ecount == 5);
     
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/csharp/csharp_field_base.h>
+    #include <bech32.h>
+#include <test/test_bitcoin.h>
     
-    #include <string>
+    cog.outl()
+makeCommaSepLists('#define TINYFORMAT_PASSARGS_%(j)d %(list)s', 'v%(i)d')
     
-      // Getters for boost rng, curand, and cublas handles
-  inline static RNG& rng_stream() {
-    if (!Get().random_generator_) {
-      Get().random_generator_.reset(new RNG());
+    // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel AVX intrinsics to access the SIMD instruction set.
+double DotProductAVX(const double* u, const double* v, int n) {
+  int max_offset = n - 4;
+  int offset = 0;
+  // Accumulate a set of 4 sums in sum, by loading pairs of 4 values from u and
+  // v, and multiplying them together in parallel.
+  __m256d sum = _mm256_setzero_pd();
+  if (offset <= max_offset) {
+    offset = 4;
+    // Aligned load is reputedly faster but requires 32 byte aligned input.
+    if ((reinterpret_cast<uintptr_t>(u) & 31) == 0 &&
+        (reinterpret_cast<uintptr_t>(v) & 31) == 0) {
+      // Use aligned load.
+      __m256d floats1 = _mm256_load_pd(u);
+      __m256d floats2 = _mm256_load_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_load_pd(u + offset);
+        floats2 = _mm256_load_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
+      }
+    } else {
+      // Use unaligned load.
+      __m256d floats1 = _mm256_loadu_pd(u);
+      __m256d floats2 = _mm256_loadu_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_loadu_pd(u + offset);
+        floats2 = _mm256_loadu_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
+      }
     }
-    return *(Get().random_generator_);
   }
-#ifndef CPU_ONLY
-  inline static cublasHandle_t cublas_handle() { return Get().cublas_handle_; }
-  inline static curandGenerator_t curand_generator() {
-    return Get().curand_generator_;
+  // Add the 4 product sums together horizontally. Not so easy as with sse, as
+  // there is no add across the upper/lower 128 bit boundary, so permute to
+  // move the upper 128 bits to lower in another register.
+  __m256d sum2 = _mm256_permute2f128_pd(sum, sum, 1);
+  sum = _mm256_hadd_pd(sum, sum2);
+  sum = _mm256_hadd_pd(sum, sum);
+  double result;
+  // _mm256_extract_f64 doesn't exist, but resist the temptation to use an sse
+  // instruction, as that introduces a 70 cycle delay. All this casting is to
+  // fool the intrinsics into thinking we are extracting the bottom int64.
+  auto cast_sum = _mm256_castpd_si256(sum);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored '-Wstrict-aliasing'
+  *(reinterpret_cast<int64_t*>(&result)) =
+#if defined(_WIN32) || defined(__i386__)
+      // This is a very simple workaround that is activated
+      // for all platforms that do not have _mm256_extract_epi64.
+      // _mm256_extract_epi64(X, Y) == ((uint64_t*)&X)[Y]
+      ((uint64_t*)&cast_sum)[0]
+#else
+      _mm256_extract_epi64(cast_sum, 0)
+#endif
+      ;
+#pragma GCC diagnostic pop
+  while (offset < n) {
+    result += u[offset] * v[offset];
+    ++offset;
   }
+  return result;
+}
+    
+    // Computes matrix.vector v = Wu.
+// u is of size W.dim2() - 1 and the output v is of size W.dim1().
+// u is imagined to have an extra element at the end with value 1, to
+// implement the bias, but it doesn't actually have it.
+void IntSimdMatrix::MatrixDotVector(const GENERIC_2D_ARRAY<int8_t>& w,
+                                    const GenericVector<double>& scales,
+                                    const int8_t* u, double* v) const {
+  int num_out = w.dim1();
+  int num_in = w.dim2() - 1;
+  if (partial_funcs_.empty()) {
+    // Base implementation.
+    for (int i = 0; i < num_out; ++i) {
+      const int8_t* wi = w[i];
+      int total = 0;
+      for (int j = 0; j < num_in; ++j) total += wi[j] * u[j];
+      // Add in the bias and correct for integer values.
+      v[i] = (static_cast<double>(total) / INT8_MAX + wi[num_in]) * scales[i];
+    }
+  } else {
+    const int8_t* w_data = shaped_w_.data();
+    const double* scales_data = &scales[0];
+    // Each call to a partial_func_ produces group_size outputs, except the
+    // last one, which can produce less.
+    int group_size = num_outputs_per_register_ * max_output_registers_;
+    int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
+    int rounded_num_out = RoundOutputs(num_out);
+    int output = 0;
+    for (auto fn : partial_funcs_) {
+      // The amount of w_data consumed by each call to fn.
+      int w_step = (rounded_num_in + 1) * group_size;
+      // Run with this group size, until it would produce too much output, then
+      // switch to a smaller size.
+      for (; output + group_size <= rounded_num_out; output += group_size) {
+        (*fn)(w_data, scales_data, u, rounded_num_in, num_out - output, v);
+        w_data += w_step;
+        scales_data += group_size;
+        v += group_size;
+      }
+      group_size /= 2;
+    }
+  }
+}
+    
+    #if defined(X86_BUILD)
+#if defined(__GNUC__)
+#include <cpuid.h>
+#elif defined(_WIN32)
+#include <intrin.h>
+#endif
 #endif
     
     
-    { protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
-   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
-   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
-   *      the computed outputs @f$
-   *       y_n = \arg\max\limits_i x_{ni}
-   *      @f$ (for @f$ K = 1 @f$).
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  /// @brief Not implemented (non-differentiable function)
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    NOT_IMPLEMENTED;
+    {}  // namespace tesseract.
+
+    
+    namespace grpc {
+    }
+    
+    Alarm::Alarm() : alarm_(new internal::AlarmImpl()) {
+  g_gli_initializer.summon();
+}
+    
+    AuthPropertyIterator::AuthPropertyIterator(
+    const grpc_auth_property* property, const grpc_auth_property_iterator* iter)
+    : property_(property),
+      ctx_(iter->ctx),
+      index_(iter->index),
+      name_(iter->name) {}
+    
+    void ChannelArguments::SetString(const grpc::string& key,
+                                 const grpc::string& value) {
+  grpc_arg arg;
+  arg.type = GRPC_ARG_STRING;
+  strings_.push_back(key);
+  arg.key = const_cast<char*>(strings_.back().c_str());
+  strings_.push_back(value);
+  arg.value.string = const_cast<char*>(strings_.back().c_str());
+    }
+    
+    size_t ServerStatsSerialize(uint64_t server_elapsed_time, char* buf,
+                            size_t buf_size) {
+  return RpcServerStatsEncoding::Encode(server_elapsed_time, buf, buf_size);
+}
+    
+    grpc_error* CensusServerCallData::Init(grpc_call_element* elem,
+                                       const grpc_call_element_args* args) {
+  start_time_ = absl::Now();
+  gc_ =
+      grpc_call_from_top_element(grpc_call_stack_element(args->call_stack, 0));
+  GRPC_CLOSURE_INIT(&on_done_recv_initial_metadata_,
+                    OnDoneRecvInitialMetadataCb, elem,
+                    grpc_schedule_on_exec_ctx);
+  GRPC_CLOSURE_INIT(&on_done_recv_message_, OnDoneRecvMessageCb, elem,
+                    grpc_schedule_on_exec_ctx);
+  auth_context_ = grpc_call_auth_context(gc_);
+  return GRPC_ERROR_NONE;
+}
+    
+    using folly::dynamic;
+using folly::TypeError;
+    
+    #include <folly/FBVector.h>
+#include <folly/Traits.h>
+#include <folly/container/Foreach.h>
+#include <folly/portability/GFlags.h>
+#include <folly/small_vector.h>
+#include <folly/test/FBVectorTestUtil.h>
+    
+    BENCHMARK_PARAM(BENCHFUN(insertFront), 16)
+BENCHMARK_PARAM(BENCHFUN(insertFront), 128)
+BENCHMARK_PARAM(BENCHFUN(insertFront), 1024)
+BENCHMARK_PARAM(BENCHFUN(insertFront), 10240)
+BENCHMARK_PARAM(BENCHFUN(insertFront), 102400)
+BENCHMARK_PARAM(BENCHFUN(insertFront), 1024000)
+    
+    #include <folly/FBString.h>
+#include <folly/Random.h>
+#include <folly/Traits.h>
+#include <folly/container/Foreach.h>
+#include <folly/portability/GTest.h>
+#include <folly/test/FBVectorTestUtil.h>
+    
+    TEST(File, Simple) {
+  // Open a file, ensure it's indeed open for reading
+  char buf = 'x';
+  {
+    File f('/etc/hosts');
+    EXPECT_NE(-1, f.fd());
+    EXPECT_EQ(1, ::read(f.fd(), &buf, 1));
+    f.close();
+    EXPECT_EQ(-1, f.fd());
   }
-  bool out_max_val_;
-  size_t top_k_;
-  bool has_axis_;
-  int axis_;
-};
-    
-    template <typename Dtype>
-class BasePrefetchingDataLayer :
-    public BaseDataLayer<Dtype>, public InternalThread {
- public:
-  explicit BasePrefetchingDataLayer(const LayerParameter& param);
-  // LayerSetUp: implements common data layer setup functionality, and calls
-  // DataLayerSetUp to do special data layer setup for individual layer types.
-  // This method may not be overridden.
-  void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {}  // namespace caffe
-    
-    
-    {}  // namespace caffe
-    
-    OPERATOR_SCHEMA(Squeeze)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .SetDoc(R'DOC(
-The *Squeeze* op removes single-dimensional entries from the shape of the input tensor *data,* and produces a single output tensor *squeezed*. The op also takes an argument *dims* with a list of dimensions to squeeze. If the same blob is provided as input and output, the operation is copy-free. This is the exact inverse operation of *ExpandDims* given the same *dims* argument.
-    
-    
-    {  bool RunOnDevice() override;
-};
-    
-    // FreeOp frees the content of the output blob. We allow it to take in input
-// blobs purely for the reason that it can 'wait' on the input blobs to be
-// produced by some of the earlier operators before a free is called.
-template <class Context>
-class FreeOp : public Operator<Context> {
- public:
-  FreeOp(const OperatorDef& def, Workspace* ws) : Operator<Context>(def, ws) {}
-    }
-    
-    
-    {		String name;
-		Map<String, Variant> fields;
-	};
-    
-    public:
-	Error compile(VS::ShaderMode p_mode, const String &p_code, IdentifierActions *p_actions, const String &p_path, GeneratedCode &r_gen_code);
-    
-    	void set_socket(int p_sockfd, IP_Address p_host, int p_port, IP::Type p_sock_type);
-    
-    
-    {	~ThreadPosix();
-};
-    
-    	fileAttr = GetFileAttributesW(p_file.c_str());
-	if (INVALID_FILE_ATTRIBUTES == fileAttr)
-		return false;
-    
-    /**
-	@author Juan Linietsky <reduz@gmail.com>
-*/
-    
-    
-    {	return memnew(MutexWindows);
 }
     
-    	virtual void write_lock();
-	virtual void write_unlock();
-	virtual Error write_try_lock();
+      EXPECT_EQ(u8[0], u32[0]);
+  EXPECT_EQ(u8[1], u32[1]);
+  EXPECT_EQ(u8[0], u64[0]);
+  EXPECT_EQ(u8[1], u64[1]);
+  EXPECT_EQ(u8[0], usp[0]);
+  EXPECT_EQ(u8[1], usp[1]);
+  EXPECT_EQ(u8[0], uconv[0]);
+  EXPECT_EQ(u8[1], uconv[1]);
     
-    
-    {		return true;
-	};
-    
-    
-    {	return memnew(ThreadWindows);
+    TEST(FormatOther, fbvector) {
+  testFormatSeq<fbvector<int>>();
 }
     
-    	static DWORD WINAPI thread_callback(LPVOID userdata);
+      // Test booleans
+  EXPECT_EQ('true', sformat('{}', true));
+  EXPECT_EQ('1', sformat('{:d}', true));
+  EXPECT_EQ('false', sformat('{}', false));
+  EXPECT_EQ('0', sformat('{:d}', false));
     
-        void FreeTypeFont::SetPixelHeight(int pixel_height) 
-    {
-        // I'm not sure how to deal with font sizes properly.
-        // As far as I understand, currently ImGui assumes that the 'pixel_height' is a maximum height of an any given glyph,
-        // i.e. it's the sum of font's ascender and descender. Seems strange to me.
-        FT_Size_RequestRec req;
-        req.type = FT_SIZE_REQUEST_TYPE_REAL_DIM;
-        req.width = 0;
-        req.height = (uint32_t)pixel_height * 64;
-        req.horiResolution = 0;
-        req.vertResolution = 0;
-        FT_Request_Size(FreetypeFace, &req);
+      FunctionRef<int(int)> const cfref = lambda;
+  EXPECT_EQ(1023, cfref(5));
+  EXPECT_EQ(1029, cfref(6));
+  EXPECT_EQ(1036, cfref(7));
+    
+    template <template <typename> class Atom>
+void run_wake_blocked_test() {
+  for (auto delay = std::chrono::milliseconds(1);; delay *= 2) {
+    bool success = false;
+    Futex<Atom> f(0);
+    auto thr = DSched::thread(
+        [&] { success = FutexResult::AWOKEN == f.futexWait(0); });
+    /* sleep override */ std::this_thread::sleep_for(delay);
+    f.store(1);
+    f.futexWake(1);
+    DSched::join(thr);
+    LOG(INFO) << 'delay=' << delay.count() << '_ms, success=' << success;
+    if (success) {
+      break;
     }
-    
-        my_display_code();
-    
-                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    
-        // Setup Vulkan binding
-    ImGui_ImplVulkan_InitInfo init_info = {};
-    init_info.Instance = g_Instance;
-    init_info.PhysicalDevice = g_PhysicalDevice;
-    init_info.Device = g_Device;
-    init_info.QueueFamily = g_QueueFamily;
-    init_info.Queue = g_Queue;
-    init_info.PipelineCache = g_PipelineCache;
-    init_info.DescriptorPool = g_DescriptorPool;
-    init_info.Allocator = g_Allocator;
-    init_info.CheckVkResultFn = check_vk_result;
-    ImGui_ImplVulkan_Init(&init_info, wd->RenderPass);
-    
-    void ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow*, int button, int action, int /*mods*/)
-{
-    if (action == GLFW_PRESS && button >= 0 && button < IM_ARRAYSIZE(g_MouseJustPressed))
-        g_MouseJustPressed[button] = true;
-}
-    
-    BOOST_FORCEINLINE void signal_fence(memory_order order) BOOST_NOEXCEPT
-{
-    if (order != memory_order_relaxed)
-        BOOST_ATOMIC_DETAIL_COMPILER_BARRIER();
+  }
 }
