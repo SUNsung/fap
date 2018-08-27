@@ -1,236 +1,182 @@
 
         
-        FORWARD_SLASH = '/'.freeze
+            # The stdlib recorded in the install receipt is used during dependency
+    # compatibility checks, so we only care about the stdlib that libraries
+    # link against.
+    keg.detect_cxx_stdlibs(:skip_executables => true)
+  end
     
-      </body>
-</html>
-HTML
-CONTENT_NOT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+      # True if a {Formula} is being built with {Formula.head} instead of {Formula.stable}.
+  # <pre>args << '--some-new-stuff' if build.head?</pre>
+  # <pre># If there are multiple conditional arguments use a block instead of lines.
+  #  if build.head?
+  #    args << '--i-want-pizza'
+  #    args << '--and-a-cold-beer' if build.with? 'cold-beer'
+  #  end</pre>
+  def head?
+    include? 'HEAD'
+  end
     
-            msg = ' Please append `--trace` to the `#{cmd.name}` command '
-        dashes = '-' * msg.length
-        Jekyll.logger.error '', dashes
-        Jekyll.logger.error 'Jekyll #{Jekyll::VERSION} ', msg
-        Jekyll.logger.error '', ' for any additional information or backtrace. '
-        Jekyll.logger.abort_with '', dashes
+        # Many formulae include 'lib/charset.alias', but it is not strictly needed
+    # and will conflict if more than one formula provides it
+    observe_file_removal @f.lib/'charset.alias'
+    
+        def self.cleanup_cellar
+      Formula.installed.each do |formula|
+        cleanup_formula formula
       end
-      # rubocop: enable RescueException
+    end
+    
+      def describe_python
+    python = which 'python'
+    return 'N/A' if python.nil?
+    python_binary = Utils.popen_read python, '-c', 'import sys; sys.stdout.write(sys.executable)'
+    python_binary = Pathname.new(python_binary).realpath
+    if python == python_binary
+      python
+    else
+      '#{python} => #{python_binary}'
+    end
+  end
+    
+      def self.class_s(name)
+    Formulary.class_s(name)
+  end
+    
+        context '(de)activating users' do
+      it 'does not show deactivation buttons for the current user' do
+        visit admin_users_path
+        expect(page).to have_no_css('a[href='/admin/users/#{users(:jane).id}/deactivate']')
+      end
+    
+        it 'works for running jobs' do
+      job.locked_at = Time.now
+      job.locked_by = 'test'
+      expect(status(job)).to eq('<span class='label label-info'>running</span>')
+    end
+    
+        it 'defauls foreground and background colors' do
+      scenario.tag_fg_color = nil
+      scenario.tag_bg_color = nil
+      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
+    end
+  end
+    
+      context '#set_traps' do
+    it 'sets traps for INT TERM and QUIT' do
+      agent_runner = AgentRunner.new
+      mock(Signal).trap('INT')
+      mock(Signal).trap('TERM')
+      mock(Signal).trap('QUIT')
+      agent_runner.set_traps
+    
+    describe AgentsExporter do
+  describe '#as_json' do
+    let(:name) { 'My set of Agents' }
+    let(:description) { 'These Agents work together nicely!' }
+    let(:guid) { 'some-guid' }
+    let(:tag_fg_color) { '#ffffff' }
+    let(:tag_bg_color) { '#000000' }
+    let(:icon) { 'Camera' }
+    let(:source_url) { 'http://yourhuginn.com/scenarios/2/export.json' }
+    let(:agent_list) { [agents(:jane_weather_agent), agents(:jane_rain_notifier_agent)] }
+    let(:exporter) { AgentsExporter.new(
+      agents: agent_list, name: name, description: description,
+      source_url: source_url, guid: guid, tag_fg_color: tag_fg_color,
+      tag_bg_color: tag_bg_color, icon: icon) }
+    
+    describe HuginnScheduler do
+  before(:each) do
+    @rufus_scheduler = Rufus::Scheduler.new
+    @scheduler = HuginnScheduler.new
+    stub(@scheduler).setup {}
+    @scheduler.setup!(@rufus_scheduler, Mutex.new)
+  end
+    
+      context '#if_present' do
+    it 'returns nil when passed nil' do
+      expect(Utils.if_present(nil, :to_i)).to be_nil
+    end
+    
+      let :old_template do
+    {
+      'url' => '{{url}}',
+      'title' => '{{ title }}',
+      'description' => '{{ hovertext }}',
+      'comment' => '{{ comment }}'
+    }
+  end
+    
+      it 'replaces invalid byte sequences in a message' do
+    log = AgentLog.new(:agent => agents(:jane_website_agent), level: 3)
+    log.message = '\u{3042}\xffA\x95'
+    expect { log.save! }.not_to raise_error
+    expect(log.message).to eq('\u{3042}<ff>A\<95>')
+  end
+    
+      describe 'changes to type' do
+    it 'validates types' do
+      source = Agent.new
+      source.type = 'Agents::WeatherAgent'
+      expect(source).to have(0).errors_on(:type)
+      source.type = 'Agents::WebsiteAgent'
+      expect(source).to have(0).errors_on(:type)
+      source.type = 'Agents::Fake'
+      expect(source).to have(1).error_on(:type)
+    end
+    
+          def version=(value)
+        @version = value.to_s
+      end
+    
+        def name=(value)
+      @name = value.try :strip
+    end
+    
+    module Docs
+  class PageDb
+    attr_reader :pages
+    
+        def build_and_queue_request(url, options, &block)
+      request = Request.new(url, request_options.merge(options))
+      request.on_complete(&block) if block
+      queue(request)
+      request
+    end
+    
+          def root
+        css('.nav-index-group').each do |node|
+          if heading = node.at_css('.nav-index-group-heading')
+            heading.name = 'h2'
+          end
+          node.parent.before(node.children)
+        end
+    
+    if Encoding.default_external != Encoding::UTF_8
+    
+        # Checks that the git version is at least 1.8.5
+    #
+    # @raise If the git version is older than 1.8.5
+    #
+    # @return [void]
+    #
+    def self.verify_minimum_git_version!
+      if git_version < Gem::Version.new('1.8.5')
+        raise Informative, 'You need at least git version 1.8.5 to use CocoaPods'
+      end
+    end
+    
+    gem 'twitter-text', '1.14.7'
+    
+          def call(env)
+        status, headers, body = @app.call(env)
+        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
+        headers[header] ||= csp_policy if html? headers
+        [status, headers, body]
+      end
     end
   end
 end
 
     
-              External.require_with_graceful_fail 'jekyll-watch'
-          watch_method = Jekyll::Watcher.method(:watch)
-          if watch_method.parameters.size == 1
-            watch_method.call(
-              options
-            )
-          else
-            watch_method.call(
-              options, site
-            )
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-          def matches(ext)
-        extname_list.include?(ext.downcase)
-      end
-    
-          def initialize(config)
-        Jekyll::External.require_with_graceful_fail 'kramdown' unless defined?(Kramdown)
-        @config = config['kramdown'].dup || {}
-        @config[:input] = :SmartyPants
-      end
-    
-          html_filters.push 'bootstrap/entries_v3', 'bootstrap/clean_html_v3'
-    
-        def assert_index(index)
-      i = index.is_a?(Integer) ? index : @filters.index(filter_const(index))
-      raise 'No such filter to insert: #{index}' unless i
-      i
-    end
-  end
-end
-
-    
-          unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
-      end
-    end
-    
-        delegate :empty?, :blank?, to: :pages
-    
-            rows.each do |row|
-          line = row.values.each_with_index.map do |value, col|
-            value.to_s.ljust(col_widths[col])
-          end.join(' ').rstrip
-          line = color.colorize(line, row.color) if row.color
-          puts line
-        end
-      end
-    
-      it 'enables printing all config variables on command line parameter' do
-    capture_io do
-      flags '--print-config-variables', '-p'
-    end
-    expect(Capistrano::Configuration.fetch(:print_config_variables)).to be true
-  end
-    
-            def autocorrect(node)
-          lambda do |corrector|
-            each_unnecessary_space_match(node) do |range|
-              corrector.replace(range, ' ')
-            end
-          end
-        end
-    
-            # @param lines [Array<String>]
-        # @param annotations [Array<(Integer, String)>]
-        #   each entry is the annotated line number and the annotation text
-        #
-        # @note annotations are sorted so that reconstructing the annotation
-        #   text via {#to_s} is deterministic
-        def initialize(lines, annotations)
-          @lines       = lines.freeze
-          @annotations = annotations.sort.freeze
-        end
-    
-          # Skip this file if the output file is the same size
-      if entry.directory?
-        FileUtils.mkdir_p(path) unless File.directory?(path)
-      else
-        entry_mode = entry.instance_eval { @mode } & 0777
-        if File.exists?(path)
-          stat = File.stat(path)
-          # TODO(sissel): Submit a patch to archive-tar-minitar upstream to
-          # expose headers in the entry.
-          entry_size = entry.instance_eval { @size }
-          # If file sizes are same, skip writing.
-          next if stat.size == entry_size && (stat.mode & 0777) == entry_mode
-        end
-        puts 'Extracting #{entry.full_name} from #{tarball} #{entry_mode.to_s(8)}'
-        File.open(path, 'w') do |fd|
-          # eof? check lets us skip empty files. Necessary because the API provided by
-          # Archive::Tar::Minitar::Reader::EntryStream only mostly acts like an
-          # IO object. Something about empty files in this EntryStream causes
-          # IO.copy_stream to throw 'can't convert nil into String' on JRuby
-          # TODO(sissel): File a bug about this.
-          while !entry.eof?
-            chunk = entry.read(16384)
-            fd.write(chunk)
-          end
-            #IO.copy_stream(entry, fd)
-        end
-        File.chmod(entry_mode, path)
-      end
-    end
-    tar.close
-    File.unlink(tarball) if File.file?(tarball)
-  end # def untar
-    
-            def responds?
-          methods = @subject.instance_methods.map(&:to_s)
-          methods.include?('#{@attachment_name}') &&
-            methods.include?('#{@attachment_name}=') &&
-            methods.include?('#{@attachment_name}?')
-        end
-    
-        module ClassMethods
-      # This method is a shortcut to validator classes that is in
-      # 'Attachment...Validator' format. It is almost the same thing as the
-      # +validates+ method that shipped with Rails, but this is customized to
-      # be using with attachment validators. This is helpful when you're using
-      # multiple attachment validators on a single attachment.
-      #
-      # Example of using the validator:
-      #
-      #   validates_attachment :avatar, :presence => true,
-      #      :content_type => { :content_type => 'image/jpg' },
-      #      :size => { :in => 0..10.kilobytes }
-      #
-      def validates_attachment(*attributes)
-        options = attributes.extract_options!.dup
-    
-            return if (value.nil? && options[:allow_nil]) || (value.blank? && options[:allow_blank])
-    
-            if record.errors.include? attribute
-          record.errors[attribute].each do |error|
-            record.errors.add base_attribute, error
-          end
-        end
-      end
-    
-      option '--lint' , :flag, 'Check manifest with pkglint',
-    :default => true
-    
-        # do channel-update if requested
-    if attributes[:pear_channel_update?]
-      channel = attributes[:pear_channel] || 'pear'
-      logger.info('Updating the channel', :channel => channel)
-      safesystem('pear', '-c', config, 'channel-update', channel)
-    end
-    
-      def build!(params)
-    # TODO(sissel): Support these somehow, perhaps with execs and files.
-    self.scripts.each do |name, path|
-      case name
-        when 'pre-install'
-        when 'post-install'
-        when 'pre-uninstall'
-        when 'post-uninstall'
-      end # case name
-    end # self.scripts.each
-    
-      def specfile(builddir)
-    '#{builddir}/pkginfo'
-  end
-    
-        before do
-      $stdout = null
-    end
-    
-          it 'should have the correct 'after_target_uninstall' trigger script' do
-        insist { @rpm.tags[:triggername][3] } == 'test'
-        insist { @rpm.tags[:triggerversion][3] } == ''
-        insist { @rpm.tags[:triggerflags][3] & (1 << 18)} == ( 1 << 18) # See FPM::Package::RPM#rpm_get_trigger_type
-        insist { @rpm.tags[:triggerindex][3] } == 3
-        insist { @rpm.tags[:triggerscriptprog][3] } == '/bin/sh'
-        insist { @rpm.tags[:triggerscripts][3] } == '#!/bin/sh\necho after_target_uninstall trigger executed'
-      end
-    
-    describe FPM::Package::Sh do
-  describe '#output', :if => shell_is_bash do
-    def make_sh_package
-      # output a package, use it as the input, set the subject to that input
-      # package. This helps ensure that we can write and read packages
-      # properly.
-      tmpfile = Tempfile.new('fpm-test-sh')
-      target = tmpfile.path
-      # The target file must not exist.
-      tmpfile.unlink
-    
-        it 'executes FPM::Command with the appropriate arguments' do
-      command = instance_double(FPM::Command)
-      expected = %W(-t tar -s dir -C #{Dir.tmpdir} --cpan-mirror-only
-                    --no-cpan-test --config-files foo --config-files bar
-                    --name awesome --cpan-mirror-only --url http://example.com
-                    bin/)
+            close_body(body) if reaction
