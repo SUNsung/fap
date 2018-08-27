@@ -1,308 +1,332 @@
 
         
-          LOG(INFO) << 'Writing Training data';
-  for (int fileid = 0; fileid < kCIFARTrainBatches; ++fileid) {
-    // Open files
-    LOG(INFO) << 'Training Batch ' << fileid + 1;
-    string batchFileName = input_folder + '/data_batch_'
-      + caffe::format_int(fileid+1) + '.bin';
-    std::ifstream data_file(batchFileName.c_str(),
-        std::ios::in | std::ios::binary);
-    CHECK(data_file) << 'Unable to open train file #' << fileid + 1;
-    for (int itemid = 0; itemid < kCIFARBatchSize; ++itemid) {
-      read_image(&data_file, &label, str_buffer);
-      datum.set_label(label);
-      datum.set_data(str_buffer, kCIFARImageNBytes);
-      string out;
-      CHECK(datum.SerializeToString(&out));
-      txn->Put(caffe::format_int(fileid * kCIFARBatchSize + itemid, 5), out);
+        
+    {
+    {    rph->Send(new ShellViewMsg_Reopen());
+  }
+}
+    
+    namespace nw {
+    }
+    
+    class Base {
+ public:
+  Base(int id,
+       const base::WeakPtr<ObjectManager>& manager,
+       const base::DictionaryValue& option,
+       const std::string& extension_id);
+  virtual ~Base();
+    }
+    
+    void Clipboard::CallSync(const std::string& method,
+                         const base::ListValue& arguments,
+                         base::ListValue* result) {
+  if (method == 'Get') {
+    result->AppendString(GetText());
+  } else {
+    NOTREACHED() << 'Invalid call to Clipboard method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+    #endif //CONTENT_NW_SRC_API_EVENT_EVENT_H_
+
+    
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
+    }
+    }
+    
+    namespace nw {
+    }
+    
+    void MenuItem::SetIcon(const std::string& icon) {
+  if (icon.empty()) {
+    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_), NULL); 
+  } else {
+    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_),
+                                  gtk_image_new_from_file(icon.c_str()));
+    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menu_item_),
+                                              TRUE);
+  }
+}
+    
+    
+    {} // namespace extensions
+#endif
+
+    
+        bool ReadRTF(ClipboardData& data) {
+      DCHECK(data.type == TYPE_RTF);
+      std::string text;
+      clipboard_->ReadRTF(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+      data.data.reset(new std::string(text));
+      return true;
+    }
+    
+    NwObjCallObjectMethodSyncFunction::~NwObjCallObjectMethodSyncFunction() {
+}
+    
+    TEST(AutoCompactTest, ReadAll) {
+  DoReads(kCount);
+}
+    
+      // When user keys are misordered
+  ASSERT_EQ(IKey('foo', 100, kTypeValue),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('bar', 99, kTypeValue)));
+    
+    std::string InfoLogFileName(const std::string& dbname) {
+  return dbname + '/LOG';
+}
+    
+    // Return the name of a temporary file owned by the db named 'dbname'.
+// The result will be prefixed with 'dbname'.
+std::string TempFileName(const std::string& dbname, uint64_t number);
+    
+    class FileNameTest { };
+    
+    
+    {
+    {}  // namespace log
+}  // namespace leveldb
+    
+      Status AddRecord(const Slice& slice);
+    
+    
+    {}  // namespace leveldb
+
+    
+        /* Sets the Eye value of the Camera. 
+     * 
+     * @param eye The Eye value of the Camera.
+     * @js NA
+     */
+    void setEye(const Vec3 &eye);
+    void setEye(float x, float y, float z);
+    /* Returns the Eye value of the Camera. 
+     *
+     * @return The Eye value of the Camera.
+     * @js NA
+     */
+    const Vec3& getEye() const { return _eye; }
+    /* Sets the Center value of the Camera. 
+     *
+     * @param center The Center value of the Camera.
+     * @js NA
+     */
+    void setCenter(const Vec3 &center);
+    /* Returns the Center value of the Camera. 
+     *
+     * @return The Center value of the Camera.
+     * @js NA
+     */
+    const Vec3& getCenter() const { return _center; }
+    /* Sets the Up value of the Camera. 
+     *
+     * @param up The Up value of the Camera.
+     * @js NA
+     */
+    void setUp(const Vec3 &up);
+    /* Returns the Up value of the Camera. 
+     *
+     * @return The Up value of the Camera.
+     * @js NA
+     */
+    const Vec3& getUp() const { return _up; }
+    
+    
+    {    return false;
+}
+    
+        /**
+    @brief Get the amplitude rate of the effect.
+    @return Return the amplitude rate of the effect.
+    */
+    float getAmplitudeRate() const { return _amplitudeRate; }
+    /**
+    @brief Set the amplitude rate of the effect.
+    @param amplitudeRate The value of amplitude rate will be set.
+    */
+    void setAmplitudeRate(float amplitudeRate) { _amplitudeRate = amplitudeRate; }
+    
+        if( _selectorTarget)
+    {
+        a->initWithTarget(_selectorTarget, _callFuncN);
+    }
+    else if( _functionN ){
+        a->initWithFunction(_functionN);
+    }
+    
+    
+    {// end of actions group
+/// @}
+    
+    // implementation of ShakyTiles3D
+    
+    #include '2d/CCNode.h'
+#include 'base/CCProtocols.h'
+#include 'base/ccTypes.h'
+#include 'renderer/CCQuadCommand.h'
+    
+        std::sort(tree, tree + n, SortHuffmanTree);
+    
+    
+    {}  // namespace guetzli
+
+    
+      std::istringstream memstream(data, std::ios::in | std::ios::binary);
+  png_set_read_fn(png_ptr, static_cast<void*>(&memstream), [](png_structp png_ptr, png_bytep outBytes, png_size_t byteCountToRead) {
+    std::istringstream& memstream = *static_cast<std::istringstream*>(png_get_io_ptr(png_ptr));
+    
+    memstream.read(reinterpret_cast<char*>(outBytes), byteCountToRead);
+    }
+    
+      void JumpToByteBoundary() {
+    while (put_bits <= 56) {
+      int c = (put_buffer >> 56) & 0xff;
+      EmitByte(c);
+      put_buffer <<= 8;
+      put_bits += 8;
+    }
+    if (put_bits < 64) {
+      int padmask = 0xff >> (64 - put_bits);
+      int c = ((put_buffer >> 56) & ~padmask) | padmask;
+      EmitByte(c);
+    }
+    put_buffer = 0;
+    put_bits = 64;
+  }
+    
+    std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg) {
+  if (jpg.components.size() == 1 ||
+      (jpg.components.size() == 3 &&
+       HasYCbCrColorSpace(jpg) && (jpg.Is420() || jpg.Is444()))) {
+    OutputImage img(jpg.width, jpg.height);
+    img.CopyFromJpegData(jpg);
+    return img.ToSRGB();
+  }
+  return std::vector<uint8_t>();
+}
+    
+    static const int kIQuantBits = 16;
+// Output of the DCT is upscaled by 16.
+static const int kDCTBits = kIQuantBits + 4;
+static const int kBias = 0x80 << (kDCTBits - 8);
+    
+    DEFINE_bool(populate_cache, false, 'Populate cache before operations');
+DEFINE_int32(insert_percent, 40,
+             'Ratio of insert to total workload (expressed as a percentage)');
+DEFINE_int32(lookup_percent, 50,
+             'Ratio of lookup to total workload (expressed as a percentage)');
+DEFINE_int32(erase_percent, 10,
+             'Ratio of erase to total workload (expressed as a percentage)');
+    
+      ColumnFamilyData* cfd_;
+  Version* version_;
+  const Comparator* user_comparator_;
+  LevelFilesBrief files_;
+    
+      DestroyAndReopen(options);
+    
+    Status DBImpl::DisableFileDeletions() {
+  InstrumentedMutexLock l(&mutex_);
+  ++disable_delete_obsolete_files_;
+  if (disable_delete_obsolete_files_ == 1) {
+    ROCKS_LOG_INFO(immutable_db_options_.info_log, 'File Deletions Disabled');
+  } else {
+    ROCKS_LOG_WARN(immutable_db_options_.info_log,
+                   'File Deletions Disabled, but already disabled. Counter: %d',
+                   disable_delete_obsolete_files_);
+  }
+  return Status::OK();
+}
+    
+      virtual Status NewIterators(
+      const ReadOptions& options,
+      const std::vector<ColumnFamilyHandle*>& column_families,
+      std::vector<Iterator*>* iterators) override;
+    
+    namespace rocksdb {
+    }
+    
+    Status WriteBatchBase::SingleDelete(ColumnFamilyHandle* column_family,
+                                    const SliceParts& key) {
+  std::string key_buf;
+  Slice key_slice(key, &key_buf);
+  return SingleDelete(column_family, key_slice);
+}
+    
+      // When flush happens, it determines whether to trigger compaction. If
+  // triggered_writes_stop is true, it will also set the retry flag of
+  // compaction-task to true.
+  void OnFlushCompleted(
+      DB* db, const FlushJobInfo& info) override {
+    CompactionTask* task = PickCompaction(db, info.cf_name);
+    if (task != nullptr) {
+      if (info.triggered_writes_stop) {
+        task->retry_on_fail = true;
+      }
+      // Schedule compaction in a different thread.
+      ScheduleCompaction(task);
     }
   }
-  txn->Commit();
-  train_db->Close();
+    
+    #ifndef MODULES_DRIVERS_CANBUS_CAN_CLIENT_CLIENT_ESD_CAN_CLIENT_H_
+#define MODULES_DRIVERS_CANBUS_CAN_CLIENT_CLIENT_ESD_CAN_CLIENT_H_
+    
+    
+    {
+    {
+    {
+    {}  // namespace can
+}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
     
       /**
-   * @brief Applies the same transformation defined in the data layer's
-   * transform_param block to all the num images in a input_blob.
-   *
-   * @param input_blob
-   *    A Blob containing the data to be transformed. It applies the same
-   *    transformation to all the num images in the blob.
-   * @param transformed_blob
-   *    This is destination blob, it will contain as many images as the
-   *    input blob. It can be part of top blob's data.
+   * @brief Start the ESD CAN client.
+   * @return The status of the start action which is defined by
+   *         apollo::common::ErrorCode.
    */
-  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
+  apollo::common::ErrorCode Start() override;
     
     
-    { protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
-   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
-   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
-   *      the computed outputs @f$
-   *       y_n = \arg\max\limits_i x_{ni}
-   *      @f$ (for @f$ K = 1 @f$).
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  /// @brief Not implemented (non-differentiable function)
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    NOT_IMPLEMENTED;
-  }
-  bool out_max_val_;
-  size_t top_k_;
-  bool has_axis_;
-  int axis_;
-};
-    
-    
-    {  int size_;
-  Dtype alpha_, beta_, k_;
-};
-#endif
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the computed outputs @f$
-   *        y = \gamma ^ {\alpha x + \beta}
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-      /// Peek at the incoming data on the stream. Returns the number of bytes read.
-  /// Throws an exception on failure.
-  template <typename MutableBufferSequence>
-  std::size_t peek(const MutableBufferSequence& buffers);
-    
-    #endif // BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-
-    
-    // Standard library components can't be forward declared, so we'll have to
-// include the array header. Fortunately, it's fairly lightweight and doesn't
-// add significantly to the compile time.
-#if defined(BOOST_ASIO_HAS_STD_ARRAY)
-# include <array>
-#endif // defined(BOOST_ASIO_HAS_STD_ARRAY)
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-# include <boost/asio/detail/null_event.hpp>
-#elif defined(BOOST_ASIO_WINDOWS)
-# include <boost/asio/detail/win_event.hpp>
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-# include <boost/asio/detail/posix_event.hpp>
-#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-# include <boost/asio/detail/std_event.hpp>
-#else
-# error Only Windows, POSIX and std::condition_variable are supported!
-#endif
-    
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-    
-    {private:
-  static void barrier()
-  {
-#if defined(__ARM_ARCH_4__) \
-    || defined(__ARM_ARCH_4T__) \
-    || defined(__ARM_ARCH_5__) \
-    || defined(__ARM_ARCH_5E__) \
-    || defined(__ARM_ARCH_5T__) \
-    || defined(__ARM_ARCH_5TE__) \
-    || defined(__ARM_ARCH_5TEJ__) \
-    || defined(__ARM_ARCH_6__) \
-    || defined(__ARM_ARCH_6J__) \
-    || defined(__ARM_ARCH_6K__) \
-    || defined(__ARM_ARCH_6Z__) \
-    || defined(__ARM_ARCH_6ZK__) \
-    || defined(__ARM_ARCH_6T2__)
-# if defined(__thumb__)
-    // This is just a placeholder and almost certainly not sufficient.
-    __asm__ __volatile__ ('' : : : 'memory');
-# else // defined(__thumb__)
-    int a = 0, b = 0;
-    __asm__ __volatile__ ('swp %0, %1, [%2]'
-        : '=&r'(a) : 'r'(1), 'r'(&b) : 'memory', 'cc');
-# endif // defined(__thumb__)
-#else
-    // ARMv7 and later.
-    __asm__ __volatile__ ('dmb' : : : 'memory');
-#endif
-  }
-};
-    
-    template <typename Time_Traits>
-std::size_t dev_poll_reactor::cancel_timer(timer_queue<Time_Traits>& queue,
-    typename timer_queue<Time_Traits>::per_timer_data& timer,
-    std::size_t max_cancelled)
-{
-  boost::asio::detail::mutex::scoped_lock lock(mutex_);
-  op_queue<operation> ops;
-  std::size_t n = queue.cancel_timer(timer, ops, max_cancelled);
-  lock.unlock();
-  io_service_.post_deferred_completions(ops);
-  return n;
-}
-    
-    
-    { private:
-  /*! \brief the underlying stream */
-  dmlc::Stream *stream_;
-  /*! \brief buffer to hold data */
-  std::string buffer_;
-  /*! \brief length of valid data in buffer */
-  size_t read_len_;
-  /*! \brief pointer in the buffer */
-  size_t read_ptr_;
-};
-    
-    const SparsePage& SimpleCSRSource::Value() const {
-  return page_;
-}
-    
-    
-    {    for (size_t i = 0; i < preds_h.size(); ++i) {
-      auto y = info.labels_[i] * 2.0 - 1.0;
-      bst_float p = preds_h[i];
-      bst_float w = info.GetWeight(i);
-      bst_float g, h;
-      if (p * y < 1.0) {
-        g = -y * w;
-        h = w;
-      } else {
-        g = 0.0;
-        h = std::numeric_limits<bst_float>::min();
-      }
-      gpair[i] = GradientPair(g, h);
-    }
-  }
-    
-      /*!
-   * \brief generate predictions for given feature matrix
-   * \param dmat feature matrix
-   * \param out_preds output vector to hold the predictions
-   * \param ntree_limit limit the number of trees used in prediction, when it equals 0, this means
-   *    we do not limit number of trees, this parameter is only valid for gbtree, but not for gblinear
-   */
-  virtual void PredictBatch(DMatrix* dmat,
-                            HostDeviceVector<bst_float>* out_preds,
-                            unsigned ntree_limit = 0) = 0;
-  /*!
-   * \brief online prediction function, predict score for one instance at a time
-   *  NOTE: use the batch prediction interface if possible, batch prediction is usually
-   *        more efficient than online prediction
-   *        This function is NOT threadsafe, make sure you only call from one thread
-   *
-   * \param inst the instance you want to predict
-   * \param out_preds output vector to hold the predictions
-   * \param ntree_limit limit the number of trees used in prediction
-   * \param root_index the root index
-   * \sa Predict
-   */
-  virtual void PredictInstance(const SparsePage::Inst& inst,
-                       std::vector<bst_float>* out_preds,
-                       unsigned ntree_limit = 0,
-                       unsigned root_index = 0) = 0;
-  /*!
-   * \brief predict the leaf index of each tree, the output will be nsample * ntree vector
-   *        this is only valid in gbtree predictor
-   * \param dmat feature matrix
-   * \param out_preds output vector to hold the predictions
-   * \param ntree_limit limit the number of trees used in prediction, when it equals 0, this means
-   *    we do not limit number of trees, this parameter is only valid for gbtree, but not for gblinear
-   */
-  virtual void PredictLeaf(DMatrix* dmat,
-                           std::vector<bst_float>* out_preds,
-                           unsigned ntree_limit = 0) = 0;
-    
-    bool js_cocos2dx_studio_ComAudio_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_ComAudio_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_ComAudio(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_ComAudio_stopAllEffects(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_getEffectsVolume(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_stopEffect(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_getBackgroundMusicVolume(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_willPlayBackgroundMusic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_setBackgroundMusicVolume(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_end(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_start(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_stopBackgroundMusic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_pauseBackgroundMusic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_isBackgroundMusicPlaying(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_isLoop(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_resumeAllEffects(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_pauseAllEffects(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_preloadBackgroundMusic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_playBackgroundMusic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_stop(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_playEffect(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_preloadEffect(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_setLoop(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_unloadEffect(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_rewindBackgroundMusic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_pauseEffect(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_resumeBackgroundMusic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_setFile(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_setEffectsVolume(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_getFile(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_resumeEffect(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_ComAudio(JSContext *cx, uint32_t argc, jsval *vp);
-    
-        argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
     {
-        double arg0;
-    }
-    
-    #endif // __cocos2dx_csloader_h__
+    {
+    {}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
 
     
+    using ::apollo::canbus::ChassisDetail;
     
-    
-    
-    
-    
-    
-        CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1,1);
-    
-        GLESDebugDraw( float32 ratio );
-    
-    	static Test* Create()
-	{
-		return new ApplyForce;
-	}
-    
-    		// Breakable dynamic body
-		{
-			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(0.0f, 40.0f);
-			bd.angle = 0.25f * b2_pi;
-			m_body1 = m_world->CreateBody(&bd);
-    }
-    
-    
-    {			b2EdgeShape shape;
-			shape.Set(b2Vec2(-40.0f, 0.0f), b2Vec2(40.0f, 0.0f));
-			ground->CreateFixture(&shape, 0.0f);
-		}
+    // Canbus gflags
+DEFINE_double(sensor_freq, 100,
+              'Sensor feedback timer frequency -- 0 means event trigger.');
