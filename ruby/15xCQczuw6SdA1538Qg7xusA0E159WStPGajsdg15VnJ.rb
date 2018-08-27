@@ -1,122 +1,180 @@
 
         
-          def url_redirect_with_status_hash
-    redirect_to('http://www.example.com', status: 301)
+            You can read more about this change at:
+      https://www.playframework.com/documentation/2.3.x/Migration23
+      https://www.playframework.com/documentation/2.3.x/Highlights23
+    EOS
+  when 'haskell-platform' then <<-EOS.undent
+    We no longer package haskell-platform. Consider installing ghc
+    and cabal-install instead:
+      brew install ghc cabal-install
+    
+      # True if a {Formula} is being built in 32-bit/x86 mode.
+  # This is needed for some use-cases though we prefer to build Universal
+  # when a 32-bit version is needed.
+  def build_32_bit?
+    include?('32-bit') && option_defined?('32-bit')
   end
     
-          def initialize
-        @log_tags = []
-    
-      validate do
-    firm
-  end
-    
-      class ChatChannel < BasicChannel
-    attr_reader :room, :last_action
-    after_subscribe :toggle_subscribed
-    after_unsubscribe :toggle_subscribed
-    
-      test 'broadcasting_for with an object' do
-    assert_equal 'Room#1-Campfire', ChatChannel.broadcasting_for(Room.new(1))
-  end
-    
-      test 'disallow unknown args' do
-    [ 'send_updates', Object.new, nil ].each do |invalid|
-      e = assert_raise ArgumentError do
-        ChatChannel.periodically invalid, every: 1
+      def plist_caveats
+    s = []
+    if f.plist || (keg && keg.plist_installed?)
+      destination = if f.plist_startup
+        '/Library/LaunchDaemons'
+      else
+        '~/Library/LaunchAgents'
       end
-      assert_match(/Expected a Symbol/, e.message)
+    
+          # Find commands in Homebrew/dev-cmd
+      if ARGV.homebrew_developer?
+        puts
+        puts 'Built-in development commands'
+        puts_columns internal_development_commands
+      end
+    
+        if ARGV.named.empty?
+      slow_checks = %w[
+        check_for_broken_symlinks
+        check_missing_deps
+        check_for_outdated_homebrew
+        check_for_linked_keg_only_brews
+      ]
+      methods = (checks.all.sort - slow_checks) + slow_checks
+    else
+      methods = ARGV.named
+    end
+    
+      class Mention < ApplicationRecord
+  end
+    
+      count.times do
+    person = FactoryGirl.create(:person)
+    people << person
+  end
+    
+      # create the default testing aspects for a given user
+  def add_standard_aspects(user)
+    user.aspects.create(:name => 'Besties')
+    user.aspects.create(:name => 'Unicorns')
+  end
+    
+        it 'generates a jasmine fixture', fixture: true do
+      session[:mobile_view] = true
+      get :new, format: :mobile
+      save_fixture(html_for('body'), 'conversations_new_mobile')
     end
   end
+end
+
     
-      test 'subscription rejection' do
-    subscriptions = Minitest::Mock.new
-    subscriptions.expect(:remove_subscription, SecretChannel, [SecretChannel])
+    describe StatusMessagesController, :type => :controller do
+  describe '#bookmarklet' do
+    before do
+      sign_in bob, scope: :user
+    end
     
-              wait_for_async
-          assert_predicate connection.websocket, :alive?
+        it 'returns likes for a public post without login' do
+      post = alice.post(:status_message, text: 'hey', public: true)
+      bob.like!(post)
+      sign_out :user
+      get :index, params: {post_id: post.id}, format: :json
+      expect(JSON.parse(response.body).map {|h| h['id'] }).to match_array(post.likes.map(&:id))
+    end
+    
+        %w[iOS macOS].each do |platform|
+        abstract_target '#{platform} Pods' do
+            project '#{platform} Modules.xcodeproj'
+    
+            def scope
+          @scope ||= if params[:option_type_id]
+                       Spree::OptionType.find(params[:option_type_id]).option_values.accessible_by(current_ability, :read)
+                     else
+                       Spree::OptionValue.accessible_by(current_ability, :read).load
+                     end
         end
-      end
     
-    class ClientTest < ActionCable::TestCase
-  WAIT_WHEN_EXPECTING_EVENT = 2
-  WAIT_WHEN_NOT_EXPECTING_EVENT = 0.5
-    
-      def failure
-    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
-    redirect_to after_omniauth_failure_path_for(resource_name)
-  end
-    
-        # The path used after sending unlock password instructions
-    def after_sending_unlock_instructions_path_for(resource)
-      new_session_path(resource) if is_navigational_format?
-    end
-    
-    module Sass::Exec
-  # The `sass-convert` executable.
-  class SassConvert < Base
-    # @param args [Array<String>] The command-line arguments
-    def initialize(args)
-      super
-      require 'sass'
-      @options[:for_tree] = {}
-      @options[:for_engine] = {:cache => false, :read_cache => true}
-    end
-    
-            def log_levels
-          @log_levels ||= {}
+            def create
+          authorize! :create, ProductProperty
+          @product_property = @product.product_properties.new(product_property_params)
+          if @product_property.save
+            respond_with(@product_property, status: 201, default_template: :show)
+          else
+            invalid_resource!(@product_property)
+          end
         end
     
-        # @return [Boolean] Whether there was whitespace between `before` and `#{`
-    attr_reader :whitespace_before
-    }
+            def update
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
+          if @return_authorization.update_attributes(return_authorization_params)
+            respond_with(@return_authorization, default_template: :show)
+          else
+            invalid_resource!(@return_authorization)
+          end
+        end
     
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
-    end
-  end
+              error =
+            if @quantity < 0 && @target_shipment == @original_shipment
+              '#{Spree.t(:negative_quantity, scope: 'api')}, \n#{Spree.t('wrong_shipment_target', scope: 'api')}'
+            elsif @target_shipment == @original_shipment
+              Spree.t(:wrong_shipment_target, scope: 'api')
+            elsif @quantity < 0
+              Spree.t(:negative_quantity, scope: 'api')
+            end
     
-        it 'redirects requests with duplicate session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
-      expect(last_response).to be_redirect
-      expect(last_response.location).to eq('/')
-    end
+            def scope
+          includes = { variant: [{ option_values: :option_type }, :product] }
+          @stock_location.stock_items.accessible_by(current_ability, :read).includes(includes)
+        end
     
-      it 'comparison of Accept-Language header is not case sensitive' do
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'A'
-    expect(session).not_to be_empty
-  end
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
+        end
     
-      # rspec-expectations config goes here. You can use an alternate
-  # assertion/expectation library such as wrong or the stdlib/minitest
-  # assertions if you prefer.
-  config.expect_with :rspec do |expectations|
-    # Enable only the newer, non-monkey-patching expect syntax.
-    # For more details, see:
-    #   - http://myronmars.to/n/dev-blog/2012/06/rspecs-new-expectation-syntax
-    expectations.syntax = :expect
-  end
-    
-      it 'allows passing on values in env' do
-    klass    = described_class
-    changer  = Struct.new(:app) do
-      def call(env)
-        env['foo.bar'] = 42
-        app.call(env)
+          # This method depends on the fact that we have guarded
+      # against implicit and empty literals.
+      def closing_brace_on_same_line?(node)
+        node.loc.end.line == children(node).last.last_line
       end
-    end
-    detector = Struct.new(:app) do
-      def call(env)
-        app.call(env)
+    
+          # Calls the given block for each `key` node in the `hash` literal.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_key
+        return pairs.map(&:key).to_enum unless block_given?
+    
+    desc 'Start an IRB session with all necessary files required.'
+task :shell do |t|
+  chdir File.dirname(__FILE__)
+  exec 'irb -I lib/ -I lib/paperclip -r rubygems -r active_record -r tempfile -r init'
+end
+    
+        # resize to a new geometry
+    # @param geometry [String] the Paperclip geometry definition to resize to
+    # @example
+    #   Paperclip::Geometry.new(150, 150).resize_to('50x50!')
+    #   #=> Paperclip::Geometry(50, 50)
+    def resize_to(geometry)
+      new_geometry = Paperclip::Geometry.parse geometry
+      case new_geometry.modifier
+      when '!', '#'
+        new_geometry
+      when '>'
+        if new_geometry.width >= self.width && new_geometry.height >= self.height
+          self
+        else
+          scale_to new_geometry
+        end
+      when '<'
+        if new_geometry.width <= self.width || new_geometry.height <= self.height
+          self
+        else
+          scale_to new_geometry
+        end
+      else
+        scale_to new_geometry
       end
     end
