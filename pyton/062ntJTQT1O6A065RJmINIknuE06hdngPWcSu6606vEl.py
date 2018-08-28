@@ -1,176 +1,147 @@
 
         
-        
-def attach_enctype_error_multidict(request):
-    '''Since Flask 0.8 we're monkeypatching the files object in case a
-    request is detected that does not use multipart form data but the files
-    object is accessed.
-    '''
-    oldcls = request.files.__class__
-    class newcls(oldcls):
-        def __getitem__(self, key):
-            try:
-                return oldcls.__getitem__(self, key)
-            except KeyError:
-                if key not in request.form:
-                    raise
-                raise DebugFilesKeyError(request, key)
-    newcls.__name__ = oldcls.__name__
-    newcls.__module__ = oldcls.__module__
-    request.files.__class__ = newcls
+        entry_template = textwrap.dedent('''
+    <entry>
+        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
+        <title>New version @VERSION@</title>
+        <link href='http://rg3.github.io/youtube-dl' />
+        <content type='xhtml'>
+            <div xmlns='http://www.w3.org/1999/xhtml'>
+                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
+            </div>
+        </content>
+        <author>
+            <name>The youtube-dl maintainers</name>
+        </author>
+        <updated>@TIMESTAMP@</updated>
+    </entry>
+    ''')
+    
+        ie_htmls = []
+    for ie in youtube_dl.list_extractors(age_limit=None):
+        ie_html = '<b>{}</b>'.format(ie.IE_NAME)
+        ie_desc = getattr(ie, 'IE_DESC', None)
+        if ie_desc is False:
+            continue
+        elif ie_desc is not None:
+            ie_html += ': {}'.format(ie.IE_DESC)
+        if not ie.working():
+            ie_html += ' (Currently broken)'
+        ie_htmls.append('<li>{}</li>'.format(ie_html))
+    
+        bug_text = re.search(
+        r'(?s)#\s*BUGS\s*[^\n]*\s*(.*?)#\s*COPYRIGHT', readme).group(1)
+    dev_text = re.search(
+        r'(?s)(#\s*DEVELOPER INSTRUCTIONS.*?)#\s*EMBEDDING YOUTUBE-DL',
+        readme).group(1)
+    
+        return ret
+    
+        for release in releases:
+        compat_print(release['name'])
+        for asset in release['assets']:
+            asset_name = asset['name']
+            total_bytes += asset['download_count'] * asset['size']
+            if all(not re.match(p, asset_name) for p in (
+                    r'^youtube-dl$',
+                    r'^youtube-dl-\d{4}\.\d{2}\.\d{2}(?:\.\d+)?\.tar\.gz$',
+                    r'^youtube-dl\.exe$')):
+                continue
+            compat_print(
+                ' %s size: %s downloads: %d'
+                % (asset_name, format_size(asset['size']), asset['download_count']))
+    
+            # from http://www.indiedb.com/games/king-machine/videos
+        expect_dict(
+            self,
+            self.ie._extract_jwplayer_data(r'''
+<script>
+jwplayer('mediaplayer').setup({'abouttext':'Visit Indie DB','aboutlink':'http:\/\/www.indiedb.com\/','displaytitle':false,'autostart':false,'repeat':false,'title':'king machine trailer 1','sharing':{'link':'http:\/\/www.indiedb.com\/games\/king-machine\/videos\/king-machine-trailer-1','code':'<iframe width=\'560\' height=\'315\' src=\'http:\/\/www.indiedb.com\/media\/iframe\/1522983\' frameborder=\'0\' allowfullscreen><\/iframe><br><a href=\'http:\/\/www.indiedb.com\/games\/king-machine\/videos\/king-machine-trailer-1\'>king machine trailer 1 - Indie DB<\/a>'},'related':{'file':'http:\/\/rss.indiedb.com\/media\/recommended\/1522983\/feed\/rss.xml','dimensions':'160x120','onclick':'link'},'sources':[{'file':'http:\/\/cdn.dbolical.com\/cache\/videos\/games\/1\/50\/49678\/encode_mp4\/king-machine-trailer.mp4','label':'360p SD','default':'true'},{'file':'http:\/\/cdn.dbolical.com\/cache\/videos\/games\/1\/50\/49678\/encode720p_mp4\/king-machine-trailer.mp4','label':'720p HD'}],'image':'http:\/\/media.indiedb.com\/cache\/images\/games\/1\/50\/49678\/thumb_620x2000\/king-machine-trailer.mp4.jpg','advertising':{'client':'vast','tag':'http:\/\/ads.intergi.com\/adrawdata\/3.0\/5205\/4251742\/0\/1013\/ADTECH;cors=yes;width=560;height=315;referring_url=http:\/\/www.indiedb.com\/games\/king-machine\/videos\/king-machine-trailer-1;content_url=http:\/\/www.indiedb.com\/games\/king-machine\/videos\/king-machine-trailer-1;media_id=1522983;title=king+machine+trailer+1;device=__DEVICE__;model=__MODEL__;os=Windows+OS;osversion=__OSVERSION__;ua=__UA__;ip=109.171.17.81;uniqueid=1522983;tags=__TAGS__;number=58cac25928151;time=1489683033'},'width':620,'height':349}).once('play', function(event) {
+            videoAnalytics('play');
+}).once('complete', function(event) {
+    videoAnalytics('completed');
+});
+</script>
+                ''', 'dummy'),
+            {
+                'title': 'king machine trailer 1',
+                'thumbnail': 'http://media.indiedb.com/cache/images/games/1/50/49678/thumb_620x2000/king-machine-trailer.mp4.jpg',
+                'formats': [{
+                    'url': 'http://cdn.dbolical.com/cache/videos/games/1/50/49678/encode_mp4/king-machine-trailer.mp4',
+                    'height': 360,
+                    'ext': 'mp4'
+                }, {
+                    'url': 'http://cdn.dbolical.com/cache/videos/games/1/50/49678/encode720p_mp4/king-machine-trailer.mp4',
+                    'height': 720,
+                    'ext': 'mp4'
+                }]
+            })
+    
+        def test_keywords(self):
+        self.assertMatch(':ytsubs', ['youtube:subscriptions'])
+        self.assertMatch(':ytsubscriptions', ['youtube:subscriptions'])
+        self.assertMatch(':ythistory', ['youtube:history'])
     
     
-#: Log messages to :func:`~flask.logging.wsgi_errors_stream` with the format
-#: ``[%(asctime)s] %(levelname)s in %(module)s: %(message)s``.
-default_handler = logging.StreamHandler(wsgi_errors_stream)
-default_handler.setFormatter(logging.Formatter(
-    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
-))
+class CheckIp(front_base.check_ip.CheckIp):
+    def check_response(self, response):
+        server_type = response.headers.get('Server', '')
+        self.logger.debug('status:%d', response.status)
+        self.logger.debug('Server type:%s', server_type)
     
-    signals_available = False
-try:
-    from blinker import Namespace
-    signals_available = True
-except ImportError:
-    class Namespace(object):
-        def signal(self, name, doc=None):
-            return _FakeSignal(name, doc)
+    - tree.CommonTreeNodeStream: A basic and most commonly used tree.TreeNodeStream
+  implementation.
+  
     
-        :param template_name_or_list: the name of the template to be
-                                  rendered, or an iterable with template names
-                                  the first one existing will be rendered
-    :param context: the variables that should be available in the
-                    context of the template.
-    '''
-    ctx = _app_ctx_stack.top
-    ctx.app.update_template_context(context)
-    return _render(ctx.app.jinja_env.get_or_select_template(template_name_or_list),
-                   context, ctx.app)
-    
-        @app.route('/test')
-    def test():
-        raise Foo()
-    
-        def move_to_front(self, node):
-        ...
-    
-        def __init__(self):
-        self.people = {}  # key: person_id, value: person
-    
-        def mapper(self, _, line):
-        '''Parse each log line, extract and transform relevant lines.
-    
-            (foo, p1), 2
-        (bar, p1), 2
-        (bar, p1), 1
-        (foo, p2), 3
-        (bar, p3), 10
-        (foo, p4), 1
-        '''
-        timestamp, product_id, category, quantity = line.split('\t')
-        if self.within_past_week(timestamp):
-            yield (category, product_id), quantity
-    
-        def override_category_budget(self, category, amount):
-        self.categories_to_budget_map[category] = amount
-
+            for i in self.tree.iterfind('video/quality'):
+            quality = i.attrib ['value']
+            url = i[0].attrib['playurl']
+            self.stream_types.append({'id': quality,
+                                      'video_profile': i.attrib ['desp']})
+            self.streams[quality] = {'url': url,
+                                     'video_profile': i.attrib ['desp']}
+            self.streams_sorted = [dict([('id', stream_type['id'])] + list(self.streams[stream_type['id']].items())) for stream_type in self.__class__.stream_types if stream_type['id'] in self.streams]
     
     
-def compute_bench(alpha, n_samples, n_features, precompute):
-    lasso_results = []
-    lars_lasso_results = []
+def cntv_download(url, **kwargs):
+    if re.match(r'http://tv\.cntv\.cn/video/(\w+)/(\w+)', url):
+        rid = match1(url, r'http://tv\.cntv\.cn/video/\w+/(\w+)')
+    elif re.match(r'http://tv\.cctv\.com/\d+/\d+/\d+/\w+.shtml', url):
+        rid = r1(r'var guid = '(\w+)'', get_content(url))
+    elif re.match(r'http://\w+\.cntv\.cn/(\w+/\w+/(classpage/video/)?)?\d+/\d+\.shtml', url) or \
+         re.match(r'http://\w+.cntv.cn/(\w+/)*VIDE\d+.shtml', url) or \
+         re.match(r'http://(\w+).cntv.cn/(\w+)/classpage/video/(\d+)/(\d+).shtml', url) or \
+         re.match(r'http://\w+.cctv.com/\d+/\d+/\d+/\w+.shtml', url) or \
+         re.match(r'http://\w+.cntv.cn/\d+/\d+/\d+/\w+.shtml', url): 
+        page = get_content(url)
+        rid = r1(r'videoCenterId','(\w+)'', page)
+        if rid is None:
+            guid = re.search(r'guid\s*=\s*'([0-9a-z]+)'', page).group(1)
+            rid = guid
+    elif re.match(r'http://xiyou.cntv.cn/v-[\w-]+\.html', url):
+        rid = r1(r'http://xiyou.cntv.cn/v-([\w-]+)\.html', url)
+    else:
+        raise NotImplementedError(url)
     
-        #------------------------------------------------------------
-    # varying N
-    N_results_build = dict([(alg, np.zeros(len(Nrange)))
-                            for alg in algorithms])
-    N_results_query = dict([(alg, np.zeros(len(Nrange)))
-                            for alg in algorithms])
+                    ffmpeg.ffmpeg_concat_audio_and_video([loop_file_path, single_file_path], title + '_full', 'mp4')
+                cleanup_files([video_file_path, audio_file_path, loop_file_path])
+            except EnvironmentError as err:
+                print('Error preparing full coub video. {}'.format(err))
+    except Exception as err:
+        print('Error while downloading files. {}'.format(err))
     
-    
-if not os.path.exists(html_folder):
-    os.makedirs(html_folder)
-    
-    try:
-    from urllib import urlopen
-except ImportError:
-    from urllib.request import urlopen
-    
-    exercise_dir = os.path.dirname(__file__)
-if exercise_dir == '':
-    exercise_dir = '.'
-    
-    # Author: Kemal Eren <kemal@kemaleren.com>
-# License: BSD 3 clause
-    
-        plt.imshow(avg_dist, interpolation='nearest', cmap=plt.cm.gnuplot2,
-               vmin=0)
-    plt.xticks(range(n_clusters), labels, rotation=45)
-    plt.yticks(range(n_clusters), labels)
-    plt.colorbar()
-    plt.suptitle('Interclass %s distances' % metric, size=18)
-    plt.tight_layout()
-    
-        def syntax(self):
-        return '[options] <spider>'
-    
-            try:
-            self.min_bound = int(self.args[1])
-        except IndexError:
-            self.min_bound = 1
-    
-        def download_request(self, request, spider):
-        p = urlparse_cached(request)
-        scheme = 'https' if request.meta.get('is_secure') else 'http'
-        bucket = p.hostname
-        path = p.path + '?' + p.query if p.query else p.path
-        url = '%s://%s.s3.amazonaws.com%s' % (scheme, bucket, path)
-        if self.anon:
-            request = request.replace(url=url)
-        elif self._signer is not None:
-            import botocore.awsrequest
-            awsrequest = botocore.awsrequest.AWSRequest(
-                method=request.method,
-                url='%s://s3.amazonaws.com/%s%s' % (scheme, bucket, path),
-                headers=request.headers.to_unicode_dict(),
-                data=request.body)
-            self._signer.add_auth(awsrequest)
-            request = request.replace(
-                url=url, headers=awsrequest.headers.items())
-        else:
-            signed_headers = self.conn.make_request(
-                    method=request.method,
-                    bucket=bucket,
-                    key=unquote(p.path),
-                    query_args=unquote(p.query),
-                    headers=request.headers,
-                    data=request.body)
-            request = request.replace(url=url, headers=signed_headers)
-        return self._download_http(request, spider)
-
-    
-    
-class DownloaderMiddlewareManager(MiddlewareManager):
-    
-    from scrapy.http import Headers
-from scrapy.utils.httpobj import urlparse_cached
-from scrapy.utils.python import to_bytes
-from scrapy.responsetypes import responsetypes
-    
-        def _debug_set_cookie(self, response, spider):
-        if self.debug:
-            cl = [to_native_str(c, errors='replace')
-                  for c in response.headers.getlist('Set-Cookie')]
-            if cl:
-                cookies = '\n'.join('Set-Cookie: {}\n'.format(c) for c in cl)
-                msg = 'Received cookies from: {}\n{}'.format(response, cookies)
-                logger.debug(msg, extra={'spider': spider})
-    
-        def __init__(self, user_agent='Scrapy'):
-        self.user_agent = user_agent
-    
-        raise socket.error('unknown address family')
-    
-    A tree.RewriteCardinalityException is raised, when the parsers hits a
-cardinality mismatch during AST construction. Although this is basically a
-bug in your grammar, it can only be detected at runtime.
+    # (api_key, method, ext, page)
+tmpl_api_call = (
+    'https://api.flickr.com/services/rest?'
+    '&format=json&nojsoncallback=1'
+    # UNCOMMENT FOR TESTING
+    #'&per_page=5'
+    '&per_page=500'
+    # this parameter CANNOT take control of 'flickr.galleries.getPhotos'
+    # though the doc said it should.
+    # it's always considered to be 500
+    '&api_key=%s'
+    '&method=flickr.%s'
+    '&extras=url_sq,url_q,url_t,url_s,url_n,url_m,url_z,url_c,url_l,url_h,url_k,url_o,media'
+    '%s&page=%d'
+)
