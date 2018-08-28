@@ -1,72 +1,105 @@
 
         
-        # For this pull request, which changes Page#dir
-# https://github.com/jekyll/jekyll/pull/4403
-    
-            def disconnect(websocket)
-          @websockets.delete(websocket)
-        end
-    
-          def month
-        @obj.date.strftime('%m')
-      end
-    
-        # --
-    # NOTE: Pathutil#in_path? gets the realpath.
-    # @param [<Anything>] entry the entry you want to validate.
-    # Check if a path is outside of our given root.
-    # --
-    def symlink_outside_site_source?(entry)
-      !Pathutil.new(entry).in_path?(
-        site.in_source_dir
-      )
-    end
-    
-        def to_json
-      JSON.generate(as_json)
-    end
-    
-        def contains?(url, options = nil)
-      !!subpath_to(url, options)
-    end
-    
-    def codepoints_to_unicode(codepoints)
-  if codepoints.include?(' ')
-    codepoints.split(' ').map(&:hex).pack('U*')
-  else
-    [codepoints.hex].pack('U')
-  end
-end
-    
-          expect {
-        DiasporaFederation.callbacks.trigger(:fetch_person_url_to, diaspora_id, '/path/on/pod')
-      }.to raise_error DiasporaFederation::Discovery::DiscoveryError
+          def search_taps(rx)
+    SEARCHABLE_TAPS.map do |user, repo|
+      Thread.new { search_tap(user, repo, rx) }
+    end.inject([]) do |results, t|
+      results.concat(t.value)
     end
   end
     
-            def autocorrect(node)
-          lambda do |corrector|
-            each_unnecessary_space_match(node) do |range|
-              corrector.replace(range, ' ')
-            end
-          end
-        end
+          options[:minimum], options[:maximum] = range.begin, range.end
+      options[:maximum] -= 1 if range.exclude_end?
+    end
     
-            def repeated_condition?(previous, condition)
-          previous.any? { |c| c.include?(condition) }
-        end
+          attr_reader :request
+    
+            def initialize(project, ref, job = nil)
+          @project = project
+          @ref = ref
+          @job = job
+    
+      it 'requires a URL or file uplaod' do
+    visit new_scenario_imports_path
+    click_on 'Start Import'
+    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
+  end
+    
+      describe 'DotHelper::DotDrawer' do
+    describe '#id' do
+      it 'properly escapes double quotaion and backslash' do
+        expect(DotHelper::DotDrawer.draw(foo: '') {
+          id('hello\\'')
+        }).to eq(''hello\\\\\\''')
       end
     end
   end
 end
 
     
-            def on_block(node)
-          on_body_of_reduce(node) do |body|
-            void_next = body.each_node(:next).find do |n|
-              n.children.empty? && parent_block_node(n) == node
+        it 'defauls foreground and background colors' do
+      scenario.tag_fg_color = nil
+      scenario.tag_bg_color = nil
+      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
+    end
+  end
+    
+            it 'adds errors on validation when updated options are unparsable' do
+          scenario_import.merges = {
+            '0' => {
+              'options' => '{'
+            }
+          }
+          expect(scenario_import).not_to be_valid
+          expect(scenario_import).to have(1).error_on(:base)
+        end
+      end
+    end
+    }
+    
+      describe 'migrating the 'make_message' format' do
+    it 'should work' do
+      expect(LiquidMigrator.convert_make_message('<message>')).to eq('{{message}}')
+      expect(LiquidMigrator.convert_make_message('<new.message>')).to eq('{{new.message}}')
+      expect(LiquidMigrator.convert_make_message('Hello <world>. How is <nested.life>')).to eq('Hello {{world}}. How is {{nested.life}}')
+    end
+  end
+    
+            def find_order
+          @order = Spree::Order.find_by!(number: order_id)
+        end
+    
+            def update
+          authorize! :update, @product_property
+    
+              error =
+            if @quantity < 0 && @target_shipment == @original_shipment
+              '#{Spree.t(:negative_quantity, scope: 'api')}, \n#{Spree.t('wrong_shipment_target', scope: 'api')}'
+            elsif @target_shipment == @original_shipment
+              Spree.t(:wrong_shipment_target, scope: 'api')
+            elsif @quantity < 0
+              Spree.t(:negative_quantity, scope: 'api')
             end
     
-            def on_send(node)
-          return unless node.receiver && node.method?(:freeze) &&
-                        immutable_literal?(node.receiver)
+              state = @states.last
+          respond_with(@states) if stale?(state)
+        end
+    
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
+        end
+    
+            PluginManager.ui.debug('Looking if package named: #{plugin_name} exists at #{uri}')
+    
+        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
+    validate_cache_location
+    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
+    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
+    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
+  end
+    
+      it 'returns the sorted config parts' do
+    expect(subject.config_parts).to eq(ordered_config_parts)
+  end
