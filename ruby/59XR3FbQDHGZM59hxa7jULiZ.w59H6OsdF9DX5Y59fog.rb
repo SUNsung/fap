@@ -1,168 +1,182 @@
 
         
-        require 'abstract_unit'
-    
-    class TestResponseTest < ActiveSupport::TestCase
-  def assert_response_code_range(range, predicate)
-    response = ActionDispatch::TestResponse.new
-    (0..599).each do |status|
-      response.status = status
-      assert_equal range.include?(status), response.send(predicate),
-                   'ActionDispatch::TestResponse.new(#{status}).#{predicate}'
-    end
-  end
-    
-    class WebServiceTest < ActionDispatch::IntegrationTest
-  class TestController < ActionController::Base
-    def assign_parameters
-      if params[:full]
-        render plain: dump_params_keys
-      else
-        render plain: (params.keys - ['controller', 'action']).sort.join(', ')
-      end
-    end
-    
-        # An email was generated.
-    def process(event)
-      debug do
-        mailer = event.payload[:mailer]
-        action = event.payload[:action]
-        '#{mailer}##{action}: processed outbound mail in #{event.duration.round(1)}ms'
-      end
-    end
-    
-        def with_translation(locale, data)
-      I18n.backend.store_translations(locale, data)
-      yield
-    ensure
-      I18n.backend.reload!
-    end
-end
-
-    
-      class TestMailer < ActionMailer::Base
-    def receive(mail)
-      # Do nothing
-    end
-  end
-    
-        log = StringIO.new
-    @dry_run_started_at = Time.zone.now
-    @dry_run_logger = Logger.new(log).tap { |logger|
-      logger.formatter = proc { |severity, datetime, progname, message|
-        elapsed_time = '%02d:%02d:%02d' % 2.times.inject([datetime - @dry_run_started_at]) { |(x, *xs)|
-          [*x.divmod(60), *xs]
-        }
-    }
-    }
-    
-      def tumblr_consumer_secret
-    ENV['TUMBLR_OAUTH_SECRET']
-  end
-    
-        respond_to do |format|
-      format.html { render layout: !request.xhr? }
-      format.json { render json: @jobs }
-    end
-  end
-    
-      def translation_scope
-    'devise.omniauth_callbacks'
-  end
-end
-
-    
-        # The path used after confirmation.
-    def after_confirmation_path_for(resource_name, resource)
-      if signed_in?(resource_name)
-        signed_in_root_path(resource)
-      else
-        new_session_path(resource_name)
-      end
-    end
-    
-    (allow file-read-metadata)
-(allow file-read*
-  ; This is currenly only added because using `xcodebuild` to build a resource
-  ; bundle target starts a FSEvents stream on `/`. No idea why that would be
-  ; needed, but for now it doesn’t seem like a real problem.
-  (literal '/')
-  (regex
-    ; TODO see if we can restrict this more, but it's going to be hard
-    #'^/Users/[^.]+/*'
-    ;#'^/Users/[^.]+/.netrc'
-    ;#'^/Users/[^.]+/.gemrc'
-    ;#'^/Users/[^.]+/.gem/*'
-    ;#'^/Users/[^.]+/Library/.*'
-    #'^/Library/*'
-    #'^/System/Library/*'
-    #'^/usr/lib/*'
-    #'^/usr/share/*'
-    #'^/private/*'
-    #'^/dev/*'
-    #'^<%= ruby_prefix %>'
-    #'^<%= pod_prefix %>'
-    #'^<%= xcode_app_path %>'
-    #'^<%= Pod::Config.instance.repos_dir %>'
-<% prefixes.each do |prefix| %>
-    #'^<%= prefix %>/*'
-<% end %>
-  )
-)
-    
-          def actual_path
-        $PROGRAM_NAME
-      end
-    end
-  end
-end
-
-    
-            self.summary = 'The repl listens to commands on standard input'
-        self.description = <<-DESC
-          The repl listens to commands on standard input and prints their
-          result to standard output.
-          It accepts all the other ipc subcommands. The repl will signal the
-          end of output with the the ASCII CR+LF `\\n\\r`.
-        DESC
-    
-            def initialize(node, variable)
-          unless VARIABLE_ASSIGNMENT_TYPES.include?(node.type)
-            raise ArgumentError,
-                  'Node type must be any of #{VARIABLE_ASSIGNMENT_TYPES}, ' \
-                  'passed #{node.type}'
+                def has_attribute?(attribute)
+          if attribute == :location
+            get_info(:address).present?
+          else
+            get_info(attribute).present?
           end
-    
-                break if !assignment.branch || assignment.branch == reference.branch
-    
-            # 'match' is a fairly generic name, so we don't flag it unless we see
-        # a string or regexp literal on one side or the other
-        def_node_matcher :match_call?, <<-PATTERN
-          {(send {str regexp} :match _)
-           (send !nil? :match {str regexp})}
-        PATTERN
-    
-            def on_case(case_node)
-          case_node.when_branches.each_with_object([]) do |when_node, previous|
-            when_node.each_condition do |condition|
-              next unless repeated_condition?(previous, condition)
-    
-            def on_block(node)
-          on_body_of_reduce(node) do |body|
-            void_next = body.each_node(:next).find do |n|
-              n.children.empty? && parent_block_node(n) == node
-            end
-    
-            def variables_in_simple_node(node)
-          simple_double_comparison?(node) do |var1, var2|
-            return [variable_name(var1), variable_name(var2)]
-          end
-          simple_comparison?(node) do |var|
-            return [variable_name(var)]
-          end
-          []
         end
     
-            def on_send(node)
-          return unless node.receiver && node.method?(:freeze) &&
-                        immutable_literal?(node.receiver)
+          def link
+        save if identity.new_record?
+      end
+    
+          def to_markdown
+        '[![#{title}](#{image_url})](#{link_url})'
+      end
+    
+            def value_color
+          STATUS_COLOR[@status.to_sym] || STATUS_COLOR[:unknown]
+        end
+      end
+    end
+  end
+end
+
+    
+      #
+  # Brings in from an array like yo.
+  #
+  def from_a(ary)
+    ary.each { |e|
+      self[e[0]] = e[1]
+    }
+  end
+    
+      #
+  # If there were CGI parameters in the URI, this will hold a hash of each
+  # variable to value.  If there is more than one value for a given variable,
+  # an array of each value is returned.
+  #
+  def qstring
+    self.uri_parts['QueryString']
+  end
+    
+    module Rex
+  module Proto
+    module Kerberos
+      # This class is a representation of a kerberos client.
+      class Client
+        # @!attribute host
+        #   @return [String] The kerberos server host
+        attr_accessor :host
+        # @!attribute port
+        #   @return [Integer] The kerberos server port
+        attr_accessor :port
+        # @!attribute timeout
+        #   @return [Integer] The connect / read timeout
+        attr_accessor :timeout
+        # @todo Support UDP
+        # @!attribute protocol
+        #   @return [String] The transport protocol used (tcp/udp)
+        attr_accessor :protocol
+        # @!attribute connection
+        #   @return [IO] The connection established through Rex sockets
+        attr_accessor :connection
+        # @!attribute context
+        #   @return [Hash] The Msf context where the connection belongs to
+        attr_accessor :context
+    
+    module Rex
+  module Proto
+    module Kerberos
+      module CredentialCache
+        # This class provides a representation of credential times stored in the Kerberos Credential Cache.
+        class Time < Element
+          # @!attribute auth_time
+          #   @return [Integer]
+          attr_accessor :auth_time
+          # @!attribute start_time
+          #   @return [Integer]
+          attr_accessor :start_time
+          # @!attribute end_time
+          #   @return [Integer]
+          attr_accessor :end_time
+          # @!attribute renew_till
+          #   @return [Integer]
+          attr_accessor :renew_till
+    
+              # Encodes the data
+          #
+          # @return [OpenSSL::ASN1::OctetString]
+          def encode_data(data)
+            OpenSSL::ASN1::OctetString.new(data)
+          end
+        end
+      end
+    end
+  end
+end
+    
+              # Decodes the key from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [EncryptionKey]
+          def decode_key(input)
+            Rex::Proto::Kerberos::Model::EncryptionKey.decode(input.value[0])
+          end
+    
+    RUBY_ENGINE = 'ruby' unless defined? RUBY_ENGINE
+source 'https://rubygems.org' unless ENV['QUICK']
+gemspec
+    
+        <div id='backtrace' class='condensed'>
+      <h3>BACKTRACE</h3>
+      <p><a href='#' id='expando'
+            onclick='toggleBacktrace(); return false'>(expand)</a></p>
+      <p id='nav'><strong>JUMP TO:</strong>
+         <% unless bad_request?(exception) %>
+            <a href='#get-info'>GET</a>
+            <a href='#post-info'>POST</a>
+         <% end %>
+         <a href='#cookie-info'>COOKIES</a>
+         <a href='#env-info'>ENV</a>
+      </p>
+      <div class='clear'></div>
+    
+    Liquid::Template.register_tag('include_array', Jekyll::IncludeArrayTag)
+
+    
+        def initialize(tag_name, markup, tokens)
+      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
+      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
+      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
+      super
+    end
+    
+    After do
+  ORIGINAL_BUNDLE_VARS.each_pair do |key, value|
+    ENV[key] = value
+  end
+end
+    
+    # This stuff needs to be run after Paperclip is defined.
+require 'paperclip/io_adapters/registry'
+require 'paperclip/io_adapters/abstract_adapter'
+require 'paperclip/io_adapters/empty_string_adapter'
+require 'paperclip/io_adapters/identity_adapter'
+require 'paperclip/io_adapters/file_adapter'
+require 'paperclip/io_adapters/stringio_adapter'
+require 'paperclip/io_adapters/data_uri_adapter'
+require 'paperclip/io_adapters/nil_adapter'
+require 'paperclip/io_adapters/attachment_adapter'
+require 'paperclip/io_adapters/uploaded_file_adapter'
+require 'paperclip/io_adapters/uri_adapter'
+require 'paperclip/io_adapters/http_url_proxy_adapter'
+
+    
+        def make
+      geometry = GeometryParser.new(geometry_string.strip).make
+      geometry || raise(Errors::NotIdentifiedByImageMagickError.new)
+    end
+    
+        def define
+      define_flush_errors
+      define_getters
+      define_setter
+      define_query
+      register_new_attachment
+      add_active_record_callbacks
+      add_paperclip_callbacks
+      add_required_validations
+    end
+    
+        # Returns the underscored, pluralized version of the class name.
+    # e.g. 'users' for the User class.
+    # NOTE: The arguments need to be optional, because some tools fetch
+    # all class names. Calling #class will return the expected class.
+    def class attachment = nil, style_name = nil
+      return super() if attachment.nil? && style_name.nil?
+      plural_cache.underscore_and_pluralize_class(attachment.instance.class)
+    end
