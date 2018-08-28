@@ -1,130 +1,104 @@
 
         
-            def create_event(event)
-      return super unless dry_run?
-      if can_create_events?
-        event = build_event(event)
-        @dry_run_results[:events] << event.payload
-        event
+          # True if a {Formula} is being built with {Formula.head} instead of {Formula.stable}.
+  # <pre>args << '--some-new-stuff' if build.head?</pre>
+  # <pre># If there are multiple conditional arguments use a block instead of lines.
+  #  if build.head?
+  #    args << '--i-want-pizza'
+  #    args << '--and-a-cold-beer' if build.with? 'cold-beer'
+  #  end</pre>
+  def head?
+    include? 'HEAD'
+  end
+    
+          # Find commands in Homebrew/dev-cmd
+      if ARGV.homebrew_developer?
+        puts
+        puts 'Built-in development commands'
+        puts_columns internal_development_commands
+      end
+    
+        root.children.sort.each do |pn|
+      if pn.directory?
+        dirs << pn
+      elsif block_given? && yield(pn)
+        puts pn
+        other = 'other '
       else
-        error 'This Agent cannot create events!'
+        remaining_root_files << pn unless pn.basename.to_s == '.DS_Store'
       end
     end
+    
+      def shorten_revision(revision)
+    Utils.popen_read('git', '-C', HOMEBREW_REPOSITORY, 'rev-parse', '--short', revision).chomp
+  end
+    
+        context 'with keywords' do
+      let(:options) do
+        {
+          name: { 'en-US' => 'Fastlane Demo' },
+          description: { 'en-US' => 'Demo description' },
+          keywords: { 'en-US' => 'Some, key, words' }
+        }
+      end
+    
+        describe 'with an IPA file for iOS' do
+      it 'uploads the IPA for the iOS platform' do
+        expect_any_instance_of(FastlaneCore::IpaUploadPackageBuilder).to receive(:generate)
+          .with(app_id: 'YI8C2AS', ipa_path: 'ACME.ipa', package_path: '/tmp', platform: 'ios')
+          .and_return('path')
+        expect(transporter).to receive(:upload).with('YI8C2AS', 'path').and_return(true)
+        runner.upload_binary
+      end
+    end
+    
+          before do
+        base_dir = FileUtils.mkdir_p(File.join(tmpdir, 'review_information'))
+        {
+          first_name: 'Alice',
+          last_name: 'Smith',
+          phone_number: '+819012345678',
+          email_address: 'deliver@example.com',
+          demo_user: 'user',
+          demo_password: 'password',
+          notes: 'This is a note from file'
+        }.each do |prefix, text|
+          create_metadata(File.join(base_dir, '#{prefix}.txt'), text)
+        end
+      end
+    
+            return link + '?' + url_params.join('&')
+      end
+    
+          it 'requires the passwords to match' do
+        visit new_admin_user_path
+        fill_in 'Email', with: 'test@test.com'
+        fill_in 'Username', with: 'usertest'
+        fill_in 'Password', with: '12345678'
+        fill_in 'Password confirmation', with: 'no_match'
+        click_on 'Create User'
+        expect(page).to have_text('Password confirmation doesn't match')
+      end
+    end
+    
+      it 'imports a scenario which requires a service' do
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'spec/data_fixtures/twitter_scenario.json'))
+    click_on 'Start Import'
+    check('I confirm that I want to import these Agents.')
+    expect { click_on 'Finish Import' }.to change(Scenario, :count).by(1)
+    expect(page).to have_text('Import successful!')
   end
 end
 
     
-          if options[:type] == :array && (options[:values].blank? || !options[:values].is_a?(Array))
-        raise ArgumentError.new('When using :array as :type you need to provide the :values as an Array')
-      end
-    
-        def boolify(value)
-      agent.send(:boolify, value)
-    end
-    
-      def index
-    if params[:agent_id]
-      @agent = current_user.agents.find(params[:agent_id])
-      @events = @agent.events.page(params[:page])
-    else
-      @events = current_user.events.preload(:agent).page(params[:page])
-    end
-    
-          # The message to be shown if the account is inactive.
-      def inactive_message
-        !confirmed? ? :unconfirmed : super
-      end
-    
-          def remember_cookie_values(resource)
-        options = { httponly: true }
-        options.merge!(forget_cookie_values(resource))
-        options.merge!(
-          value: resource.class.serialize_into_cookie(resource),
-          expires: resource.remember_expires_at
-        )
-      end
-    
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
-    
-      def create_gist(files, description)
-    url = 'https://api.github.com/gists'
-    data = { 'public' => true, 'files' => files, 'description' => description }
-    scopes = GitHub::CREATE_GIST_SCOPES
-    GitHub.open_api(url, data: data, scopes: scopes)['html_url']
-  end
-    
-        used_formulae_missing = false
-    used_formulae = begin
-      ARGV.formulae
-    rescue FormulaUnavailableError => e
-      opoo e
-      used_formulae_missing = true
-      # If the formula doesn't exist: fake the needed formula object name.
-      ARGV.named.map { |name| OpenStruct.new name: name, full_name: name }
-    end
-    
-            def define_logger(name, options = {})
-          class_eval <<-RUBY, __FILE__, __LINE__ + 1
-            def #{name}(message)
-              #{options.fetch(:to, :log)}(#{name.inspect}, message)
-            end
-          RUBY
-        end
-      end
+      describe 'up' do
+    it 'should update extract and template options for an existing WebsiteAgent' do
+      expect(agent.options).to include('extract' => old_extract,
+                                       'template' => old_template)
+      ConvertWebsiteAgentTemplateForMerge.new.up
+      agent.reload
+      expect(agent.options).to include('extract' => new_extract,
+                                       'template' => new_template)
     end
   end
-end
-
-    
-        def parse_input(environment, text)
-      case text
-      when Script::MATCH
-        name = $1
-        guarded = !!$3
-        val = Script::Parser.parse($2, @line, text.size - ($3 || '').size - $2.size)
-    
-      def generate_error_hash(error)
-    {
-      :path => request.path,
-      :status => error.status_code,
-      :error => error.to_hash
-    }
-  end
-    
-    module LogStash
-  module Api
-    module Commands
-      module System
-        class Plugins < Commands::Base
-          def run
-            { :total => plugins.count, :plugins => plugins }
-          end
-    
-        r0
-  end
-    
-        # Returns the width and height in a format suitable to be passed to Geometry.parse
-    def to_s
-      s = ''
-      s << width.to_i.to_s if width > 0
-      s << 'x#{height.to_i}' if height > 0
-      s << modifier.to_s
-      s
-    end
-    
-            def no_error_when_valid?
-          @file = StringIO.new('.')
-          @subject.send(@attachment_name).assign(@file)
-          @subject.valid?
-          expected_message = [
-            @attachment_name.to_s.titleize,
-            I18n.t(:blank, scope: [:errors, :messages])
-          ].join(' ')
-          @subject.errors.full_messages.exclude?(expected_message)
-        end
-      end
-    end
-  end
-end
