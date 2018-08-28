@@ -1,57 +1,50 @@
 
         
-            # Separating the 'table of contents' from the contents (blocks)
-    table_of_contents = ''.join(read_me.split('- - -')[0])
-    blocks = ''.join(read_me.split('- - -')[1]).split('\n# ')
-    for i in range(len(blocks)):
-        if i == 0:
-            blocks[i] = blocks[i] + '\n'
-        else:
-            blocks[i] = '# ' + blocks[i] + '\n'
+            if self._response_future is None:
+      # First poll
+      self._SendRequest()
+      return True
     
     
-def init_app(app):
-    '''Register database functions with the Flask app. This is called by
-    the application factory.
-    '''
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
+def SendShutdownRequest():
+  request = ShutdownRequest()
+  # This is a blocking call.
+  request.Start()
 
     
-    
-@pytest.fixture
-def client(app):
-    '''A test client for the app.'''
-    return app.test_client()
-    
-            -   a string: in this case the object with that name will be imported
-        -   an actual object reference: that object is used directly
-    
-        def get_cookie_samesite(self, app):
-        '''Return ``'Strict'`` or ``'Lax'`` if the cookie should use the
-        ``SameSite`` attribute. This currently just returns the value of
-        the :data:`SESSION_COOKIE_SAMESITE` setting.
-        '''
-        return app.config['SESSION_COOKIE_SAMESITE']
+        # build a new DiagnosticFilter merging all filters
+    #  for the provided filetypes
+    spec = []
+    for filetype in filetypes:
+      type_specific = self._all_filters.get( filetype, [] )
+      spec.extend( type_specific )
     
     
-class Node(object):
-    pass
+def LastEnteredCharIsIdentifierChar_FiletypeHtml_test():
+  with MockCurrentFiletypes( [ 'html' ] ):
+    with MockCurrentColumnAndLineContents( 3, 'ab-' ):
+      ok_( base.LastEnteredCharIsIdentifierChar() )
     
-        def get_product_information(self, product):
-        product_info = self.business_logic.product_information(product)
-        if product_info:
-            print('PRODUCT INFORMATION:')
-            print('Name: {0}, Price: {1:.2f}, Quantity: {2:}'.format(
-                product.title(), product_info.get('price', 0),
-                product_info.get('quantity', 0)))
-        else:
-            print('That product '{0}' does not exist in the records'.format(
-                product))
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
     
-def main():
-    shapes = (
-        CircleShape(1, 2, 3, DrawingAPI1()),
-        CircleShape(5, 7, 11, DrawingAPI2())
-    )
+def MockAsyncServerResponseDone( response ):
+  '''Return a fake future object that is complete with the supplied response
+  message. Suitable for mocking a response future within a client request. For
+  example:
+    
+        open_filename.assert_has_exact_calls( [
+      call( ycm._server_stdout, { 'size': 12,
+                                  'watch': True,
+                                  'fix': True,
+                                  'focus': False,
+                                  'position': 'end' } )
+    ] )
+    close_buffers_for_filename.assert_has_exact_calls( [
+      call( ycm._client_logfile )
+    ] )
