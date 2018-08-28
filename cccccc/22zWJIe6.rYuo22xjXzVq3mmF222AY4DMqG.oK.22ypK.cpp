@@ -1,184 +1,306 @@
 
         
-        #include 'ui/gfx/image/image.h'
+        
+    {// TODO(nareshmodi): Move EagerCast and ReadVariableOp (which use the C API to
+// execute TFE Ops) to a separate common library.
+TFE_TensorHandle* EagerCast(TFE_Context* ctx, TFE_TensorHandle* handle,
+                            TF_DataType src_type_enum,
+                            TF_DataType dst_type_enum, TF_Status* out_status);
+}
     
-    #include 'atom/browser/unresponsive_suppressor.h'
+    // Add a _ to the end of s if necessary to avoid a Python keyword or built-in.
+string AvoidPythonReserved(const string& s);
     
-      // Sent when a browser action's visibility has changed. The source is the
-  // ExtensionPrefs* that changed, and the details are a std::string with the
-  // extension's ID.
-  NOTIFICATION_EXTENSION_BROWSER_ACTION_VISIBILITY_CHANGED,
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    #ifndef CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
-#define CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
+    REGISTER_OP('Invalid')
+    .Attr('invalid attr: int32')  // invalid since the name has a space.
+    .Doc(R'doc(
+An op to test that invalid ops do not successfully generate invalid python code.
+)doc');
     
-    // File name of the Pepper Flash plugin on different platforms.
-const base::FilePath::CharType kPepperFlashPluginFilename[] =
-#if defined(OS_MACOSX)
-    FPL('PepperFlashPlayer.plugin');
-#elif defined(OS_WIN)
-    FPL('pepflashplayer.dll');
-#else  // OS_LINUX, etc.
-    FPL('libpepflashplayer.so');
-#endif
+    // Register the bfloat16 numpy type.
+void RegisterNumpyBfloat16();
     
-      void set_minimum_size(const gfx::Size& min_size);
-  void set_maximum_size(const gfx::Size& max_size);
+    // Creates a numpy array in 'ret' which either aliases the content of 't' or has
+// a copy.
+Status TensorToNdarray(const Tensor& t, PyObject** ret);
     
-    #endif  // ATOM_COMMON_COLOR_UTIL_H_
+    Safe_TFE_TensorHandlePtr make_safe(TFE_TensorHandle* handle) {
+  return Safe_TFE_TensorHandlePtr(handle);
+}
+    
+      // Return the current record contents.  Only valid after the preceding call
+  // to GetNext() returned true
+  string record() const { return record_; }
+  // Return the current offset in the file.
+  uint64 offset() const { return offset_; }
+    
+    string SideString(Side s) {
+  switch (s) {
+    case Side::kLeft:
+      return 'Left';
+    case Side::kRight:
+      return 'Right';
+    default:
+      LOG(FATAL) << 'Unknown side ' << static_cast<int32>(s);
+  }
+}
+    
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
+    
+    #include <string>
+    
+    
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(Button);
+};
+    
+    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_browser_content_tracing, Initialize)
 
     
-    // Get basic type definitions.
-#define IPC_MESSAGE_IMPL
-#include 'content/nw/src/common/common_message_generator.h'
+    template <>
+struct Converter<file_dialog::Filter> {
+  static bool FromV8(v8::Isolate* isolate,
+                     v8::Local<v8::Value> val,
+                     file_dialog::Filter* out) {
+    mate::Dictionary dict;
+    if (!ConvertFromV8(isolate, val, &dict))
+      return false;
+    if (!dict.Get('name', &(out->first)))
+      return false;
+    if (!dict.Get('extensions', &(out->second)))
+      return false;
+    return true;
+  }
+};
+    
+    template <>
+struct Converter<download::DownloadItem::DownloadState> {
+  static v8::Local<v8::Value> ToV8(
+      v8::Isolate* isolate,
+      download::DownloadItem::DownloadState state) {
+    std::string download_state;
+    switch (state) {
+      case download::DownloadItem::IN_PROGRESS:
+        download_state = 'progressing';
+        break;
+      case download::DownloadItem::COMPLETE:
+        download_state = 'completed';
+        break;
+      case download::DownloadItem::CANCELLED:
+        download_state = 'cancelled';
+        break;
+      case download::DownloadItem::INTERRUPTED:
+        download_state = 'interrupted';
+        break;
+      default:
+        break;
+    }
+    return ConvertToV8(isolate, download_state);
+  }
+};
+    
+    ```
+    
+    Given two equivalent values, this operator uses the indices along the last dim-
+ension as a tiebreaker. That is, the element with the lower index will appear
+first.
+    )DOC')
+    .Input(0, 'X', 'Tensor of shape [a_1, a_2, ..., a_n, r]')
+    .Input(1, 'K', 'Tensor of shape [a_1, a_2, ..., a_n, 1]')
+    .Output(
+        0,
+        'Flatten values',
+        'Tensor of shape [ \\sum_i K[i, 1] ] containing'
+        ' top K[..., 1] values from the input tensor')
+    .Output(
+        1,
+        'Flatten indices',
+        'Tensor of shape [ \\sum_i K[i, 1] ] containing the indices '
+        'into the flatten input');
+    
+    template <typename T, class Context>
+class FlexibleTopKOp : public Operator<Context> {
+ public:
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+    }
+    
+    // FreeOp frees the content of the output blob. We allow it to take in input
+// blobs purely for the reason that it can 'wait' on the input blobs to be
+// produced by some of the earlier operators before a free is called.
+template <class Context>
+class FreeOp : public Operator<Context> {
+ public:
+  FreeOp(const OperatorDef& def, Workspace* ws) : Operator<Context>(def, ws) {}
+    }
+    
+    namespace {
+class InsecureChannelCredentialsImpl final : public ChannelCredentials {
+ public:
+  std::shared_ptr<grpc::Channel> CreateChannel(
+      const string& target, const grpc::ChannelArguments& args) override {
+    grpc_channel_args channel_args;
+    args.SetChannelArgs(&channel_args);
+    return CreateChannelInternal(
+        '',
+        grpc_insecure_channel_create(target.c_str(), &channel_args, nullptr));
+  }
+    }
+    }
+    
+    CompletionQueue::NextStatus CompletionQueue::AsyncNextInternal(
+    void** tag, bool* ok, gpr_timespec deadline) {
+  for (;;) {
+    auto ev = grpc_completion_queue_next(cq_, deadline, nullptr);
+    switch (ev.type) {
+      case GRPC_QUEUE_TIMEOUT:
+        return TIMEOUT;
+      case GRPC_QUEUE_SHUTDOWN:
+        return SHUTDOWN;
+      case GRPC_OP_COMPLETE:
+        auto cq_tag = static_cast<internal::CompletionQueueTag*>(ev.tag);
+        *ok = ev.success != 0;
+        *tag = cq_tag;
+        if (cq_tag->FinalizeResult(tag, ok)) {
+          return GOT_EVENT;
+        }
+        break;
+    }
+  }
+}
+    
+    void CensusClientCallData::Destroy(grpc_call_element* elem,
+                                   const grpc_call_final_info* final_info,
+                                   grpc_closure* then_call_closure) {
+  const uint64_t request_size = GetOutgoingDataSize(final_info);
+  const uint64_t response_size = GetIncomingDataSize(final_info);
+  double latency_ms = absl::ToDoubleMilliseconds(absl::Now() - start_time_);
+  ::opencensus::stats::Record(
+      {{RpcClientSentBytesPerRpc(), static_cast<double>(request_size)},
+       {RpcClientReceivedBytesPerRpc(), static_cast<double>(response_size)},
+       {RpcClientRoundtripLatency(), latency_ms},
+       {RpcClientServerLatency(),
+        ToDoubleMilliseconds(absl::Nanoseconds(elapsed_time_))},
+       {RpcClientSentMessagesPerRpc(), sent_message_count_},
+       {RpcClientReceivedMessagesPerRpc(), recv_message_count_}},
+      {{ClientMethodTagKey(), method_},
+       {ClientStatusTagKey(), StatusCodeToString(final_info->final_status)}});
+  grpc_slice_unref_internal(path_);
+  context_.EndSpan();
+}
+    
+    #include <grpc/status.h>
+#include 'absl/memory/memory.h'
+#include 'absl/strings/string_view.h'
+#include 'absl/strings/strip.h'
+#include 'opencensus/trace/span.h'
+#include 'opencensus/trace/span_context.h'
+#include 'opencensus/trace/trace_params.h'
+#include 'src/core/lib/slice/slice_internal.h'
+#include 'src/cpp/common/channel_filter.h'
+#include 'src/cpp/ext/filters/census/rpc_encoding.h'
+    
+    #include 'src/cpp/ext/filters/census/rpc_encoding.h'
+    
+      // Deserializes rpc server stats from the incoming 'buf' into *time.  Returns
+  // number of bytes decoded. If the buffer is of insufficient size (it must be
+  // at least kRpcServerStatsSize bytes) or the encoding version or field ID are
+  // unrecognized, *time will be set to 0 and it will return
+  // kEncodeDecodeFailure. Inlined for performance reasons.
+  static size_t Decode(absl::string_view buf, uint64_t* time) {
+    if (buf.size() < kRpcServerStatsSize) {
+      *time = 0;
+      return kEncodeDecodeFailure;
+    }
+    }
+    
+    #ifdef UNIX_ENABLED
+    
+    #include 'drivers/unix/socket_helpers.h'
     
     public:
-  EventListener(int id,
-                const base::WeakPtr<DispatcherHost>& dispatcher_host,
-                const base::DictionaryValue& option);
+	virtual Error listen(uint16_t p_port, const IP_Address &p_bind_address = IP_Address('*'));
+	virtual bool is_connection_available() const;
+	virtual Ref<StreamPeerTCP> take_connection();
     
-          std::string encoded_image_base64;
-      std::string encoded_image_str(encoded_image.data(), encoded_image.data() + encoded_image.size());
-      base::Base64Encode(encoded_image_str, &encoded_image_base64);
+    Error MutexWindows::try_lock() {
+    }
     
-     protected:
-  ~NwClipboardReadAvailableTypesFunction() override;
+    	void _set_sock_blocking(bool p_blocking);
     
-      void NwDesktopCaptureMonitor::Stop() {
-    started_ = false;
-    media_list_.clear();
+    	static TCP_Server *_create();
+    
+    #include 'modules/common/log.h'
+#include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/common/byte.h'
+#include 'modules/drivers/canbus/proto/can_card_parameter.pb.h'
+    
+    #include <memory>
+#include <unordered_map>
+    
+      /**
+   * @brief Send messages
+   * @param frames The messages to send.
+   * @param frame_num The amount of messages to send.
+   * @return The status of the sending action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames,
+                                 int32_t *const frame_num) override;
+    
+      virtual void SetUp() {
+    send_time_ = 0;
+    recv_time_ = 0;
+    send_succ_count_ = 0;
+    recv_succ_count_ = 0;
+    send_err_count_ = 0;
+    recv_err_count_ = 0;
+    param_.set_brand(CANCardParameter::ESD_CAN);
+    param_.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+    send_client_ = std::unique_ptr<FakeCanClient>(new FakeCanClient());
+    send_client_->Init(param_);
+    send_client_->Start();
+    recv_client_ = std::unique_ptr<FakeCanClient>(new FakeCanClient());
+    recv_client_->Init(param_);
+    recv_client_->Start();
   }
     
-    // dims=[5, 4, 3, 2]->[5, 3, 2, 4]
-TEST_F(MatrixTest, RotatingTranspose_1_3) {
-  GENERIC_2D_ARRAY<int> m;
-  src_.RotatingTranspose(dims_, kNumDims_, 1, 3, &m);
-  m.ResizeNoInit(kInputSize_ / 4, 4);
-  // Verify that the result is:
-  // output tensor=[[[[0, 6, 12, 18][1, 7, 13, 19]]
-  //                 [[2, 8, 14, 20][3, 9, 15, 21]]
-  //                 [[4, 10, 16, 22][5, 11, 17, 23]]]
-  //                [[[24, 30, 36, 42]...
-  EXPECT_EQ(0, m(0, 0));
-  EXPECT_EQ(6, m(0, 1));
-  EXPECT_EQ(1, m(1, 0));
-  EXPECT_EQ(2, m(2, 0));
-  EXPECT_EQ(3, m(3, 0));
-  EXPECT_EQ(4, m(4, 0));
-  EXPECT_EQ(5, m(5, 0));
-  EXPECT_EQ(24, m(6, 0));
-  EXPECT_EQ(30, m(6, 1));
+      // init config and state
+  // 1. set receive message_id filter, ie white list
+  struct can_filter filter[2048];
+  for (int i = 0; i < 2048; ++i) {
+    filter[i].can_id = 0x000 + i;
+    filter[i].can_mask = CAN_SFF_MASK;
+  }
+    
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+#include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
+#include 'modules/drivers/canbus/can_comm/message_manager.h'
+    
+    
+    {
+    {
+    {}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
+    
+    std::string Byte::byte_to_binary(const uint8_t value) {
+  return std::bitset<8 * sizeof(uint8_t)>(value).to_string();
 }
     
       /**
-   * Returns the baseline of the current object at the given level.
-   * The baseline is the line that passes through (x1, y1) and (x2, y2).
-   * WARNING: with vertical text, baselines may be vertical!
-   * Returns false if there is no baseline at the current position.
+   * @brief Transform an integer with the size of one byte to its hexadecimal
+   *        represented by a string.
+   * @param value The target integer to transform.
+   * @return Hexadecimal representing the target integer.
    */
-  bool Baseline(PageIteratorLevel level,
-                int* x1, int* y1, int* x2, int* y2) const;
+  static std::string byte_to_hex(const uint8_t value);
     
-    struct PARA : public ELIST_LINK {
- public:
-  PARA() : model(nullptr), is_list_item(false),
-           is_very_first_or_continuation(false), has_drop_cap(false) {}
-    }
-    
-    #ifndef TESSERACT_CCUTIL_DOUBLEPTR_H_
-#define TESSERACT_CCUTIL_DOUBLEPTR_H_
-    
-      // Replicates the samples to a minimum frequency defined by
-  // 2 * kSampleRandomSize, or for larger counts duplicates all samples.
-  // After replication, the replicated samples are perturbed slightly, but
-  // in a predictable and repeatable way.
-  // Use after OrganizeByFontAndClass().
-  void ReplicateAndRandomizeSamples();
-    
-    // Generic weight matrix for network layers. Can store the matrix as either
-// an array of floats or int8_t. Provides functions to compute the forward and
-// backward steps with the matrix and updates to the weights.
-class WeightMatrix {
- public:
-  WeightMatrix() : int_mode_(false), use_adam_(false) {}
-  // Sets up the network for training. Initializes weights using weights of
-  // scale `range` picked according to the random number generator `randomizer`.
-  // Note the order is outputs, inputs, as this is the order of indices to
-  // the matrix, so the adjacent elements are multiplied by the input during
-  // a forward operation.
-  int InitWeightsFloat(int no, int ni, bool use_adam, float weight_range,
-                       TRand* randomizer);
-  // Changes the number of outputs to the size of the given code_map, copying
-  // the old weight matrix entries for each output from code_map[output] where
-  // non-negative, and uses the mean (over all outputs) of the existing weights
-  // for all outputs with negative code_map entries. Returns the new number of
-  // weights.
-  int RemapOutputs(const std::vector<int>& code_map);
-    }
-    
-    // The CCNonTextDetect class contains grid-based operations on blobs to create
-// a full-resolution image mask analogous yet complementary to
-// pixGenHalftoneMask as it is better at line-drawings, graphs and charts.
-class CCNonTextDetect : public BlobGrid {
- public:
-  CCNonTextDetect(int gridsize, const ICOORD& bleft, const ICOORD& tright);
-  virtual ~CCNonTextDetect();
-    }
-    
-      // Hoovers up all un-owned blobs and deletes them.
-  // The rest get released from the block so the ColPartitions can pass
-  // ownership to the output blocks.
-  void ReleaseBlobsAndCleanupUnused(TO_BLOCK* block);
-  // Splits partitions that cross columns where they have nothing in the gap.
-  void GridSplitPartitions();
-  // Merges partitions where there is vertical overlap, within a single column,
-  // and the horizontal gap is small enough.
-  void GridMergePartitions();
-  // Inserts remaining noise blobs into the most applicable partition if any.
-  // If there is no applicable partition, then the blobs are deleted.
-  void InsertRemainingNoise(TO_BLOCK* block);
-  // Remove partitions that come from horizontal lines that look like
-  // underlines, but are not part of a table.
-  void GridRemoveUnderlinePartitions();
-  // Add horizontal line separators as partitions.
-  void GridInsertHLinePartitions();
-  // Add vertical line separators as partitions.
-  void GridInsertVLinePartitions();
-  // For every ColPartition in the grid, sets its type based on position
-  // in the columns.
-  void SetPartitionTypes();
-  // Only images remain with multiple types in a run of partners.
-  // Sets the type of all in the group to the maximum of the group.
-  void SmoothPartnerRuns();
-    
-      // Returns the input image provided to the object. This object is owned by
-  // this class. Callers may want to clone the returned pix to work with it.
-  Pix* orig_pix() {
-    return orig_pix_;
-  }
-    
-    /**********************************************************************
- * loop_bounding_box
- *
- * Find the bounding box of the edge loop.
- **********************************************************************/
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    #define opus_fft_alloc_arch(_st, arch) \
-   ((void)(arch), opus_fft_alloc_arm_neon(_st))
-    
-    /* get number of leading zeros and fractional part (the bits right after the leading one */
-static OPUS_INLINE void silk_CLZ_FRAC(
-    opus_int32 in,            /* I  input                               */
-    opus_int32 *lz,           /* O  number of leading zeros             */
-    opus_int32 *frac_Q7       /* O  the 7 bits right after the leading one */
-)
-{
-    opus_int32 lzeros = silk_CLZ32(in);
-    }
+    DEFINE_string(adapter_config_filename, 'modules/canbus/conf/adapter.conf',
+              'The adapter config file');
