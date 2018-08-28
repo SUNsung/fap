@@ -1,78 +1,191 @@
 
         
-            def every(*args, &blk)
-      schedule(:every, args, &blk)
+        group :production do
+  gem 'uglifier'
+  gem 'newrelic_rpm'
+end
+    
+        SCHEME_RGX = /\A[^:\/?#]+:/
+    
+        def path
+      @path ||= url.path
     end
     
-        valid_oauth_providers :tumblr
-  end
+        html_filters.push 'apply_base_url', 'container', 'clean_html', 'normalize_urls', 'internal_urls', 'normalize_paths', 'parse_cf_email'
+    text_filters.push 'images' # ensure the images filter runs after all html filters
+    text_filters.push 'inner_html', 'clean_text', 'attribution'
     
-        respond_to do |format|
-      format.html { redirect_to services_path }
-      format.json { render json: @service }
+            def with_redirections
+          @redirections = new.fetch_redirections
+          yield
+        ensure
+          @redirections = nil
+        end
+      end
+    
+          @terminal_width = if !tty?
+        nil
+      elsif ENV['COLUMNS']
+        ENV['COLUMNS'].to_i
+      else
+        `stty size`.scan(/\d+/).last.to_i
+      end
+    rescue
+      @terminal_width = nil
     end
   end
 end
 
     
-          def key?(key)
-        super(convert_key(key))
-      end
-    
-          # Reads data from an IO object while it can, returning the data it reads.
-      # When it encounters a case when it can't read anymore, it returns the
-      # data.
-      #
-      # @return [String]
-      def self.read_until_block(io)
-        data = ''
-    
-              # Repackage the box
-          output_name = @env.vagrantfile.config.package.name || 'package.box'
-          output_path = Pathname.new(File.expand_path(output_name, FileUtils.pwd))
-          box.repackage(output_path)
-    
-            type = argv.shift.to_sym
-        name = argv.shift.to_sym
-    
-      # Before we load the schema, define the timestamp_id function.
-  # Idiomatically, we might do this in a migration, but then it
-  # wouldn't end up in schema.rb, so we'd need to figure out a way to
-  # get it in before doing db:setup as well. This is simpler, and
-  # ensures it's always in place.
-  Rake::Task['db:schema:load'].enhance ['db:define_timestamp_id']
-    
-          it 'regenerates feed when sign in is older than two weeks' do
-        get :show
-    
-          encoding_option(opts)
-    
-      Sass::Plugin.options.merge!(config)
-    
-        # Starts the read-eval-print loop.
-    def run
-      environment = Environment.new
-      @line = 0
-      loop do
-        @line += 1
-        unless (text = Readline.readline('>> '))
-          puts
-          return
+            css('.filetree').each do |node|
+          node.content = node.css('.file').map(&:inner_html).join('\n')
+          node.name = 'pre'
+          node.remove_attribute('class')
         end
     
-            def on_case(case_node)
-          case_node.when_branches.each_with_object([]) do |when_node, previous|
-            when_node.each_condition do |condition|
-              next unless repeated_condition?(previous, condition)
+            if mod
+          if name == 'Index'
+            return slug.split('/')[1..-2].join('/')
+          elsif name == 'Angular'
+            return slug.split('/').last.split('-').first
+          end
+        end
     
-        context '#{type} with constant and child #{type}' do
-      let(:source) do
-        <<-RUBY.strip_indent
-          #{type} Parent
-            URL = %q(http://example.com)
-            #{type} SomeObject
-              def do_something; end
+          # @see Base#\_retrieve
+      def _retrieve(key, version, sha)
+        return unless File.readable?(path_to(key))
+        begin
+          File.open(path_to(key), 'rb') do |f|
+            if f.readline('\n').strip == version && f.readline('\n').strip == sha
+              return f.read
             end
           end
-        RUBY
+          File.unlink path_to(key)
+        rescue Errno::ENOENT
+          # Already deleted. Race condition?
+        end
+        nil
+      rescue EOFError, TypeError, ArgumentError => e
+        Sass::Util.sass_warn 'Warning. Error encountered while reading cache #{path_to(key)}: #{e}'
+      end
+    
+        def parse_extend_directive(parent, line, root, value, offset)
+      raise SyntaxError.new('Invalid extend directive '@extend': expected expression.') unless value
+      raise SyntaxError.new('Illegal nesting: Nothing may be nested beneath extend directives.',
+        :line => @line + 1) unless line.children.empty?
+      optional = !!value.gsub!(/\s+#{Sass::SCSS::RX::OPTIONAL}$/, '')
+      offset = line.offset + line.text.index(value).to_i
+      interp_parsed = parse_interp(value, offset)
+      selector_range = Sass::Source::Range.new(
+        Sass::Source::Position.new(@line, to_parser_offset(offset)),
+        Sass::Source::Position.new(@line, to_parser_offset(line.offset) + line.text.length),
+        @options[:filename], @options[:importer]
+      )
+      Tree::ExtendNode.new(interp_parsed, optional, selector_range)
+    end
+    
+          # Find a Sass file, if it exists.
+      #
+      # This is the primary entry point of the Importer.
+      # It corresponds directly to an `@import` statement in Sass.
+      # It should do three basic things:
+      #
+      # * Determine if the URI is in this importer's format.
+      #   If not, return nil.
+      # * Determine if the file indicated by the URI actually exists and is readable.
+      #   If not, return nil.
+      # * Read the file and place the contents in a {Sass::Engine}.
+      #   Return that engine.
+      #
+      # If this importer's format allows for file extensions,
+      # it should treat them the same way as the default {Filesystem} importer.
+      # If the URI explicitly has a `.sass` or `.scss` filename,
+      # the importer should look for that exact file
+      # and import it as the syntax indicated.
+      # If it doesn't exist, the importer should return nil.
+      #
+      # If the URI doesn't have either of these extensions,
+      # the importer should look for files with the extensions.
+      # If no such files exist, it should return nil.
+      #
+      # The {Sass::Engine} to be returned should be passed `options`,
+      # with a few modifications. `:syntax` should be set appropriately,
+      # `:filename` should be set to `uri`,
+      # and `:importer` should be set to this importer.
+      #
+      # @param uri [String] The URI to import.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` that's currently being resolved.
+      #   This is safe for subclasses to modify destructively.
+      #   Callers should only pass in a value they don't mind being destructively modified.
+      # @return [Sass::Engine, nil] An Engine containing the imported file,
+      #   or nil if it couldn't be found or was in the wrong format.
+      def find(uri, options)
+        Sass::Util.abstract(self)
+      end
+    
+            def advance
+          authorize! :update, @order, order_token
+          while @order.next; end
+          respond_with(@order, default_template: 'spree/api/v1/orders/show', status: 200)
+        end
+    
+              if Cart::Update.call(order: @order, params: order_params).success?
+            user_id = params[:order][:user_id]
+            if current_api_user.has_spree_role?('admin') && user_id
+              @order.associate_user!(Spree.user_class.find(user_id))
+            end
+            respond_with(@order, default_template: :show)
+          else
+            invalid_resource!(@order)
+          end
+        end
+    
+    module RuboCop
+  module Cop
+    module Style
+      # This cop looks for uses of the *for* keyword, or *each* method. The
+      # preferred alternative is set in the EnforcedStyle configuration
+      # parameter. An *each* call with a block on a single line is always
+      # allowed, however.
+      #
+      # @example EnforcedStyle: each (default)
+      #   # bad
+      #   def foo
+      #     for n in [1, 2, 3] do
+      #       puts n
+      #     end
+      #   end
+      #
+      #   # good
+      #   def foo
+      #     [1, 2, 3].each do |n|
+      #       puts n
+      #     end
+      #   end
+      #
+      # @example EnforcedStyle: for
+      #   # bad
+      #   def foo
+      #     [1, 2, 3].each do |n|
+      #       puts n
+      #     end
+      #   end
+      #
+      #   # good
+      #   def foo
+      #     for n in [1, 2, 3] do
+      #       puts n
+      #     end
+      #   end
+      #
+      class For < Cop
+        include ConfigurableEnforcedStyle
+        include RangeHelp
+    
+          # Returns the iteration variable of the `for` loop.
+      #
+      # @return [Node] The iteration variable of the `for` loop
+      def variable
+        node_parts[0]
       end
