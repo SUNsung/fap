@@ -1,43 +1,39 @@
 
         
-          def recipients(payload = {})
-    emails = interpolated(payload)['recipients']
-    if emails.present?
-      if emails.is_a?(String)
-        [emails]
-      else
-        emails
+        STDOUT.sync = true
+    
+          Utils.safe_glob(site.in_dest_dir, ['**', '*'], File::FNM_DOTMATCH).each do |file|
+        next if file =~ HIDDEN_FILE_REGEX || file =~ regex || dirs.include?(file)
+        files << file
       end
-    else
-      [user.email]
-    end
-  end
     
-      private
-    
-        respond_to do |format|
-      format.html { redirect_back events_path, notice: 'Event deleted.' }
-      format.json { head :no_content }
-    end
-  end
-    
-              # Parse the options
-          argv = parse_options(opts)
-          return if !argv
-          if argv.empty? || argv.length > 2
-            raise Vagrant::Errors::CLIInvalidUsage,
-              help: opts.help.chomp
-          end
-    
-            def on_send(node)
-          return unless match_call?(node) &&
-                        (!node.value_used? || only_truthiness_matters?(node)) &&
-                        !(node.parent && node.parent.block_type?)
-    
-            context 'source with blank lines' do
-          let(:source) do
-            <<-RUBY.strip_indent
-              #{type} Parent
-    
-      context 'same_line style' do
-    let(:cop_config) { { 'EnforcedStyle' => 'same_line' } }
+          # Add common options to a command for building configuration
+      #
+      # cmd - the Jekyll::Command to add these options to
+      #
+      # Returns nothing
+      # rubocop:disable Metrics/MethodLength
+      def add_build_options(cmd)
+        cmd.option 'config', '--config CONFIG_FILE[,CONFIG_FILE2,...]',
+                   Array, 'Custom configuration file'
+        cmd.option 'destination', '-d', '--destination DESTINATION',
+                   'The current folder will be generated into DESTINATION'
+        cmd.option 'source', '-s', '--source SOURCE', 'Custom source directory'
+        cmd.option 'future', '--future', 'Publishes posts with a future date'
+        cmd.option 'limit_posts', '--limit_posts MAX_POSTS', Integer,
+                   'Limits the number of posts to parse and publish'
+        cmd.option 'watch', '-w', '--[no-]watch', 'Watch for changes and rebuild'
+        cmd.option 'baseurl', '-b', '--baseurl URL',
+                   'Serve the website from the given base URL'
+        cmd.option 'force_polling', '--force_polling', 'Force watch to use polling'
+        cmd.option 'lsi', '--lsi', 'Use LSI for improved related posts'
+        cmd.option 'show_drafts', '-D', '--drafts', 'Render posts in the _drafts folder'
+        cmd.option 'unpublished', '--unpublished',
+                   'Render posts that were marked as unpublished'
+        cmd.option 'quiet', '-q', '--quiet', 'Silence output.'
+        cmd.option 'verbose', '-V', '--verbose', 'Print verbose output.'
+        cmd.option 'incremental', '-I', '--incremental', 'Enable incremental rebuild.'
+        cmd.option 'strict_front_matter', '--strict_front_matter',
+                   'Fail if errors are present in front matter'
+      end
+      # rubocop:enable Metrics/MethodLength
