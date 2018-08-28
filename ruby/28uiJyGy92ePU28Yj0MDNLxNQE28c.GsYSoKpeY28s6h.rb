@@ -1,41 +1,10 @@
 
         
-        puts('[WARNING] You are calling #{tool_name} directly. Usage of the tool name without the `fastlane` prefix is deprecated in fastlane 2.0'.yellow)
-puts('Please update your scripts to use `fastlane #{tool_name} #{full_params}` instead.'.yellow)
-    
-        def run
-      program :name, 'cert'
-      program :version, Fastlane::VERSION
-      program :description, 'CLI for \'cert\' - Create new iOS code signing certificates'
-      program :help, 'Author', 'Felix Krause <cert@krausefx.com>'
-      program :help, 'Website', 'https://fastlane.tools'
-      program :help, 'Documentation', 'https://docs.fastlane.tools/actions/cert/'
-      program :help_formatter, :compact
-    
-        context 'with keywords' do
-      let(:options) do
-        {
-          name: { 'en-US' => 'Fastlane Demo' },
-          description: { 'en-US' => 'Demo description' },
-          keywords: { 'en-US' => 'Some, key, words' }
-        }
-      end
-    
-    describe Deliver::Runner do
-  let(:runner) do
-    allow(Spaceship::Tunes).to receive(:login).and_return(true)
-    allow(Spaceship::Tunes).to receive(:select_team).and_return(true)
-    allow_any_instance_of(Deliver::DetectValues).to receive(:run!) { |opt| opt }
-    Deliver::Runner.new(options)
-  end
-    
-      it 'allows to click on on the agent name in select2 tags' do
-    visit new_agent_path
-    select_agent_type('Website Agent scrapes')
-    select2('SF Weather', from: 'Sources')
-    click_on 'SF Weather'
-    expect(page).to have_content 'Editing your WeatherAgent'
-  end
+        describe 'Dry running an Agent', js: true do
+  let(:agent)   { agents(:bob_website_agent) }
+  let(:formatting_agent) { agents(:bob_formatting_agent) }
+  let(:user)    { users(:bob) }
+  let(:emitter) { agents(:bob_weather_agent) }
     
       it 'asks to accept conflicts when the scenario was modified' do
     DefaultScenarioImporter.seed(user)
@@ -52,56 +21,166 @@ puts('Please update your scripts to use `fastlane #{tool_name} #{full_params}` i
     expect(page).to have_text('Import successful!')
   end
     
-          it 'generates a richer DOT script' do
-        expect(agents_dot(@agents, rich: true)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            (graph \[ [^\]]+ \];)?
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo,tooltip='Dot \x20 Foo',URL='#{Regexp.quote(agent_path(@foo))}'\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar1))}'\];
-            \k<bar2> \[label=bar2,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar2))}',style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar3))}'\];
-          \}
-          \z
-        }x)
+        describe 'with block' do
+      it 'returns a nav link with menu' do
+        stub(self).current_page?('/things') { false }
+        stub(self).current_page?('/things/stuff') { false }
+        nav = nav_link('Things', '/things') { nav_link('Stuff', '/things/stuff') }
+        expect(nav).to be_html_safe
+        a0 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > a[href='/things']')
+        expect(a0).to be_a Nokogiri::XML::Element
+        expect(a0.text.strip).to eq('Things')
+        a1 = Nokogiri(nav).at('li.dropdown.dropdown-hover:not(.active) > li:not(.active) > a[href='/things/stuff']')
+        expect(a1).to be_a Nokogiri::XML::Element
+        expect(a1.text.strip).to eq('Stuff')
+      end
+    
+        describe '#agents_dot' do
+      before do
+        @agents = [
+          @foo = Agents::DotFoo.new(name: 'foo').tap { |agent|
+            agent.user = users(:bob)
+            agent.save!
+          },
+    
+        it 'should work with nested hashes' do
+      @agent.options['very'] = {'nested' => '$.value'}
+      LiquidMigrator.convert_all_agent_options(@agent)
+      expect(@agent.reload.options).to eq({'auth_token' => 'token', 'color' => 'yellow', 'very' => {'nested' => '{{value}}'}, 'notify' => false, 'room_name' => 'test', 'username' => '{{username}}', 'message' => '{{message}}'})
+    end
+    
+    describe Location do
+  let(:location) {
+    Location.new(
+      lat: BigDecimal.new('2.0'),
+      lng: BigDecimal.new('3.0'),
+      radius: 300,
+      speed: 2,
+      course: 30)
+  }
+    
+        it 'requires a message' do
+      @log.message = ''
+      expect(@log).not_to be_valid
+      @log.message = nil
+      expect(@log).not_to be_valid
+      expect(@log).to have(1).error_on(:message)
+    end
+    
+    # SPECS ===============================================================
+    
+          def accepts?(env)
+        raise NotImplementedError, '#{self.class} implementation pending'
+      end
+    
+          def empty_cookie(host, path)
+        {:value => '', :domain => host, :path => path, :expires => Time.at(0)}
+      end
+    
+      it 'ignores empty arrays' do
+    expect_no_offenses('[]')
+  end
+    
+        context 'and a comment after the last element' do
+      let(:b_comment) { ' # comment b' }
+    
+    module RuboCop
+  module Cop
+    module Style
+      # This cop checks for redundant `begin` blocks.
+      #
+      # Currently it checks for code like this:
+      #
+      # @example
+      #
+      #   # bad
+      #   def redundant
+      #     begin
+      #       ala
+      #       bala
+      #     rescue StandardError => e
+      #       something
+      #     end
+      #   end
+      #
+      #   # good
+      #   def preferred
+      #     ala
+      #     bala
+      #   rescue StandardError => e
+      #     something
+      #   end
+      #
+      #   # bad
+      #   # When using Ruby 2.5 or later.
+      #   do_something do
+      #     begin
+      #       something
+      #     rescue => ex
+      #       anything
+      #     end
+      #   end
+      #
+      #   # good
+      #   # In Ruby 2.5 or later, you can omit `begin` in `do-end` block.
+      #   do_something do
+      #     something
+      #   rescue => ex
+      #     anything
+      #   end
+      #
+      #   # good
+      #   # Stabby lambdas don't support implicit `begin` in `do-end` blocks.
+      #   -> do
+      #     begin
+      #       foo
+      #     rescue Bar
+      #       baz
+      #     end
+      #   end
+      class RedundantBegin < Cop
+        MSG = 'Redundant `begin` block detected.'.freeze
+    
+        examples.each do |example|
+      begin
+        buffer = Parser::Source::Buffer.new('<code>', 1)
+        buffer.source = example.text
+        parser = Parser::Ruby25.new(RuboCop::AST::Builder.new)
+        parser.diagnostics.all_errors_are_fatal = true
+        parser.parse(buffer)
+      rescue Parser::SyntaxError => ex
+        path = example.object.file
+        puts '#{path}: Syntax Error in an example. #{ex}'
+        ok = false
       end
     end
   end
+  abort unless ok
+end
+
     
-          expect(data[:agents][guid_order(agent_list, :jane_weather_agent)]).not_to have_key(:propagate_immediately) # can't receive events
-      expect(data[:agents][guid_order(agent_list, :jane_rain_notifier_agent)]).not_to have_key(:schedule) # can't be scheduled
-    end
+    module RuboCop
+  module AST
+    # A node extension for `case` nodes. This will be used in place of a plain
+    # node when the builder constructs the AST, making its methods available
+    # to all `case` nodes within RuboCop.
+    class CaseNode < Node
+      include ConditionalNode
     
-          servers.add_role(name, hosts, options)
-    end
-    
-          private
-    
-          def load_built_in_scm
-        require 'capistrano/scm/#{scm_name}'
-        scm_class = Object.const_get(built_in_scm_plugin_class_name)
-        # We use :load_immediately because we are initializing the SCM plugin
-        # late in the load process and therefore can't use the standard
-        # load:defaults technique.
-        install_plugin(scm_class, load_immediately: true)
+          # Checks whether the `if` node has an `else` clause.
+      #
+      # @note This returns `true` for nodes containing an `elsif` clause.
+      #       This is legacy behavior, and many cops rely on it.
+      #
+      # @return [Boolean] whether the node has an `else` clause
+      def else?
+        loc.respond_to?(:else) && loc.else
       end
     
-          def self.[](host)
-        host.is_a?(Server) ? host : new(host)
-      end
-    
-          private
-    
-        attr_reader :local_file
-    
-        context 'with a specific plugin' do
-      let(:plugin_name) { 'logstash-input-stdin' }
-      it 'list the plugin and display the plugin name' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name}$/)
+          # This is used for duck typing with `pair` nodes which also appear as
+      # `hash` elements.
+      #
+      # @return [false]
+      def hash_rocket?
+        false
       end
