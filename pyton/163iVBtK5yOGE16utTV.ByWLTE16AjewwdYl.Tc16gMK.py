@@ -1,166 +1,104 @@
 
         
-                (2016-01, url0), 1
-        (2016-01, url0), 1
-        (2016-01, url1), 1
         '''
-        url = self.extract_url(line)
-        period = self.extract_year_month(line)
-        yield (period, url), 1
+    The approach taken is explained below. I decided to do it simply.
+    Initially I was considering parsing the data into some sort of
+    structure and then generating an appropriate README. I am still
+    considering doing it - but for now this should work. The only issue
+    I see is that it only sorts the entries at the lowest level, and that
+    the order of the top-level contents do not match the order of the actual
+    entries.
+    
+    import re
+    
+    __all__ = ['__version__', 'version_info', 'twisted_version',
+           'Spider', 'Request', 'FormRequest', 'Selector', 'Item', 'Field']
+    
+    def _print_header(settings, inproject):
+    if inproject:
+        print('Scrapy %s - project: %s\n' % (scrapy.__version__, \
+            settings['BOT_NAME']))
+    else:
+        print('Scrapy %s - no active project\n' % scrapy.__version__)
     
     
-class UserService(object):
+class _BenchServer(object):
     
-        def remove(self, key):
-        hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
-            if item.key == key:
-                del self.table[hash_index][index]
-                return
-        raise KeyError('Key not found')
-
+        def _find_template(self, template):
+        template_file = join(self.templates_dir, '%s.tmpl' % template)
+        if exists(template_file):
+            return template_file
+        print('Unable to find template: %s\n' % template)
+        print('Use 'scrapy genspider --list' to see all available templates.')
     
-            Accessing a node updates its position to the front of the LRU list.
+        def process_options(self, args, opts):
+        ScrapyCommand.process_options(self, args, opts)
+        try:
+            opts.spargs = arglist_to_dict(opts.spargs)
+        except ValueError:
+            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
+        if opts.output:
+            if opts.output == '-':
+                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
+            else:
+                self.settings.set('FEED_URI', opts.output, priority='cmdline')
+            feed_exporters = without_none_values(self.settings.getwithbase('FEED_EXPORTERS'))
+            valid_output_formats = feed_exporters.keys()
+            if not opts.output_format:
+                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
+            if opts.output_format not in valid_output_formats:
+                raise UsageError('Unrecognized output format '%s', set one'
+                                 ' using the '-t' switch or as a file extension'
+                                 ' from the supported list %s' % (opts.output_format,
+                                                                  tuple(valid_output_formats)))
+            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
+    
+        requires_project = False
+    default_settings = {
+        'KEEP_ALIVE': True,
+        'LOGSTATS_INTERVAL': 0,
+        'DUPEFILTER_CLASS': 'scrapy.dupefilters.BaseDupeFilter',
+    }
+    
+            Default OpenSSL method is TLS_METHOD (also called SSLv23_METHOD)
+        which allows TLS protocol negotiation.
         '''
-        node = self.lookup[query]
-        if node is None:
+        def creatorForNetloc(self, hostname, port):
+    
+        def _get_handler(self, scheme):
+        '''Lazy-load the downloadhandler for a scheme
+        only on the first request for that scheme.
+        '''
+        if scheme in self._handlers:
+            return self._handlers[scheme]
+        if scheme in self._notconfigured:
             return None
-        self.linked_list.move_to_front(node)
-        return node.results
+        if scheme not in self._schemes:
+            self._notconfigured[scheme] = 'no handler available for that scheme'
+            return None
     
     
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
-
+def main():
+    tornado.options.parse_command_line()
+    app = Application()
+    app.listen(options.port)
+    tornado.ioloop.IOLoop.current().start()
     
-    from .models import Response
-from .compat import urlparse, basestring
-from .utils import (DEFAULT_CA_BUNDLE_PATH, extract_zipped_paths,
-                    get_encoding_from_headers, prepend_scheme_if_needed,
-                    get_auth_from_url, urldefragauth, select_proxy)
-from .structures import CaseInsensitiveDict
-from .cookies import extract_cookies_to_jar
-from .exceptions import (ConnectionError, ConnectTimeout, ReadTimeout, SSLError,
-                         ProxyError, RetryError, InvalidSchema, InvalidProxyURL)
-from .auth import _basic_auth_str
+    import random
+import signal
+import subprocess
     
-    # The reST default role (used for this markup: `text`) to use for all
-# documents.
-#default_role = None
-    
-            :param name: a string containing name of cookie
-        :param domain: (optional) string containing domain of cookie
-        :param path: (optional) string containing path of cookie
-        :raises KeyError: if cookie is not found
-        :raises CookieConflictError: if there are multiple cookies
-            that match name and optionally domain and path
-        :return: cookie.value
-        '''
-        toReturn = None
-        for cookie in iter(self):
-            if cookie.name == name:
-                if domain is None or cookie.domain == domain:
-                    if path is None or cookie.path == path:
-                        if toReturn is not None:  # if there are multiple cookies that meet passed in criteria
-                            raise CookieConflictError('There are multiple cookies with name, %r' % (name))
-                        toReturn = cookie.value  # we will eventually return this as long as no cookie conflict
-    
-        If the constructor, ``.update``, or equality comparison
-    operations are given keys that have equal ``.lower()``s, the
-    behavior is undefined.
-    '''
-    
-        # Informational.
-    100: ('continue',),
-    101: ('switching_protocols',),
-    102: ('processing',),
-    103: ('checkpoint',),
-    122: ('uri_too_long', 'request_uri_too_long'),
-    200: ('ok', 'okay', 'all_ok', 'all_okay', 'all_good', '\\o/', '✓'),
-    201: ('created',),
-    202: ('accepted',),
-    203: ('non_authoritative_info', 'non_authoritative_information'),
-    204: ('no_content',),
-    205: ('reset_content', 'reset'),
-    206: ('partial_content', 'partial'),
-    207: ('multi_status', 'multiple_status', 'multi_stati', 'multiple_stati'),
-    208: ('already_reported',),
-    226: ('im_used',),
-    
-            if is_py2:
-            if isinstance(scheme, str):
-                scheme = scheme.encode('utf-8')
-            if isinstance(netloc, str):
-                netloc = netloc.encode('utf-8')
-            if isinstance(path, str):
-                path = path.encode('utf-8')
-            if isinstance(query, str):
-                query = query.encode('utf-8')
-            if isinstance(fragment, str):
-                fragment = fragment.encode('utf-8')
-    
-        if WSAStringToAddressA(
-            ip_string,
-            address_family,
-            None,
-            ctypes.byref(addr),
-            ctypes.byref(addr_size)
-    ) != 0:
-        raise socket.error(ctypes.FormatError())
-    
-    ## All tokens go to the parser (unless skip() is called in that rule)
-# on a particular 'channel'.  The parser tunes to a particular channel
-# so that whitespace etc... can go to the parser on a 'hidden' channel.
-DEFAULT_CHANNEL = 0
-    
-                if isinstance(self.input, TreeNodeStream):
-                self.extractInformationFromTreeNodeStream(self.input)
-    
-        # Parse and validate the field names.  Validation serves two purposes,
-    # generating informative error messages and preventing template injection attacks.
-    if isinstance(field_names, basestring):
-        field_names = field_names.replace(',', ' ').split() # names separated by whitespace and/or commas
-    field_names = tuple(map(str, field_names))
-    for name in (typename,) + field_names:
-        if not all(c.isalnum() or c=='_' for c in name):
-            raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
-        if _iskeyword(name):
-            raise ValueError('Type names and field names cannot be a keyword: %r' % name)
-        if name[0].isdigit():
-            raise ValueError('Type names and field names cannot start with a number: %r' % name)
-    seen_names = set()
-    for name in field_names:
-        if name.startswith('_'):
-            raise ValueError('Field names cannot start with an underscore: %r' % name)
-        if name in seen_names:
-            raise ValueError('Encountered duplicate field name: %r' % name)
-        seen_names.add(name)
-    
-            for future in as_completed(future_to_url):
-            try:
-                url_to_content[future_to_url[future]] = future.result()
-            except:
-                pass
-        return url_to_content
-    finally:
-        executor.shutdown()
+        url = options.url + '/updateReports?agent=%s' % options.name
+    update_ws = yield websocket_connect(url, None)
+    msg = yield update_ws.read_message()
+    assert msg is None
+    IOLoop.instance().stop()
     
     
-  @staticmethod
-  def CreateFromOptions( user_options ):
-    all_filters = dict( user_options.get( 'filter_diagnostics', {} ) )
-    compiled_by_type = {}
-    for type_spec, filter_value in iteritems( dict( all_filters ) ):
-      filetypes = [ type_spec ]
-      if type_spec.find( ',' ) != -1:
-        filetypes = type_spec.split( ',' )
-      for filetype in filetypes:
-        compiled_by_type[ filetype ] = _CompileFilters( filter_value )
+application = web.Application([
+    (r'/dummy/', DummyHandler),
+    (r'/dummyasync/', DummyAsyncHandler),
+    (r'/collect/', CollectHandler),
+], debug=True)
     
-    
-class OmniCompletionRequest( CompletionRequest ):
-  def __init__( self, omni_completer, request_data ):
-    super( OmniCompletionRequest, self ).__init__( request_data )
-    self._omni_completer = omni_completer
+        subprocess.check_call([EASY_INSTALL] + PY_PACKAGES)
