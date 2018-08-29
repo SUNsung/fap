@@ -1,182 +1,138 @@
 
         
-            # The stdlib recorded in the install receipt is used during dependency
-    # compatibility checks, so we only care about the stdlib that libraries
-    # link against.
-    keg.detect_cxx_stdlibs(:skip_executables => true)
-  end
+            # Add permissions and a description to the Staff category.
     
-      # True if a {Formula} is being built with {Formula.head} instead of {Formula.stable}.
-  # <pre>args << '--some-new-stuff' if build.head?</pre>
-  # <pre># If there are multiple conditional arguments use a block instead of lines.
-  #  if build.head?
-  #    args << '--i-want-pizza'
-  #    args << '--and-a-cold-beer' if build.with? 'cold-beer'
-  #  end</pre>
-  def head?
-    include? 'HEAD'
-  end
+    puts 'Deduping #{links.size} links...'
     
-        # Many formulae include 'lib/charset.alias', but it is not strictly needed
-    # and will conflict if more than one formula provides it
-    observe_file_removal @f.lib/'charset.alias'
+        it 'shows the dry run pop up without previous events and selects the events tab when a event was created' do
+      open_dry_run_modal(agent)
+      click_on('Dry Run')
+      expect(page).to have_text('Biologists play reverse')
+      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
+    end
     
-        def self.cleanup_cellar
-      Formula.installed.each do |formula|
-        cleanup_formula formula
+          it 'generates a richer DOT script' do
+        expect(agents_dot(@agents, rich: true)).to match(%r{
+          \A
+          digraph \x20 'Agent \x20 Event \x20 Flow' \{
+            (graph \[ [^\]]+ \];)?
+            node \[ [^\]]+ \];
+            edge \[ [^\]]+ \];
+            (?<foo>\w+) \[label=foo,tooltip='Dot \x20 Foo',URL='#{Regexp.quote(agent_path(@foo))}'\];
+            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
+            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
+            \k<bar1> \[label=bar1,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar1))}'\];
+            \k<bar2> \[label=bar2,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar2))}',style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
+            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
+            \k<bar3> \[label=bar3,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar3))}'\];
+          \}
+          \z
+        }x)
       end
     end
-    
-      def describe_python
-    python = which 'python'
-    return 'N/A' if python.nil?
-    python_binary = Utils.popen_read python, '-c', 'import sys; sys.stdout.write(sys.executable)'
-    python_binary = Pathname.new(python_binary).realpath
-    if python == python_binary
-      python
-    else
-      '#{python} => #{python_binary}'
-    end
   end
     
-      def self.class_s(name)
-    Formulary.class_s(name)
-  end
-    
-        context '(de)activating users' do
-      it 'does not show deactivation buttons for the current user' do
-        visit admin_users_path
-        expect(page).to have_no_css('a[href='/admin/users/#{users(:jane).id}/deactivate']')
-      end
-    
-        it 'works for running jobs' do
-      job.locked_at = Time.now
-      job.locked_by = 'test'
-      expect(status(job)).to eq('<span class='label label-info'>running</span>')
-    end
-    
-        it 'defauls foreground and background colors' do
-      scenario.tag_fg_color = nil
-      scenario.tag_bg_color = nil
-      expect(style_colors(scenario)).to eq('color:#FFFFFF;background-color:#5BC0DE')
-    end
-  end
-    
-      context '#set_traps' do
-    it 'sets traps for INT TERM and QUIT' do
-      agent_runner = AgentRunner.new
-      mock(Signal).trap('INT')
-      mock(Signal).trap('TERM')
-      mock(Signal).trap('QUIT')
-      agent_runner.set_traps
-    
-    describe AgentsExporter do
-  describe '#as_json' do
-    let(:name) { 'My set of Agents' }
-    let(:description) { 'These Agents work together nicely!' }
-    let(:guid) { 'some-guid' }
-    let(:tag_fg_color) { '#ffffff' }
-    let(:tag_bg_color) { '#000000' }
-    let(:icon) { 'Camera' }
-    let(:source_url) { 'http://yourhuginn.com/scenarios/2/export.json' }
-    let(:agent_list) { [agents(:jane_weather_agent), agents(:jane_rain_notifier_agent)] }
-    let(:exporter) { AgentsExporter.new(
-      agents: agent_list, name: name, description: description,
-      source_url: source_url, guid: guid, tag_fg_color: tag_fg_color,
-      tag_bg_color: tag_bg_color, icon: icon) }
-    
-    describe HuginnScheduler do
-  before(:each) do
-    @rufus_scheduler = Rufus::Scheduler.new
-    @scheduler = HuginnScheduler.new
-    stub(@scheduler).setup {}
-    @scheduler.setup!(@rufus_scheduler, Mutex.new)
-  end
-    
-      context '#if_present' do
-    it 'returns nil when passed nil' do
-      expect(Utils.if_present(nil, :to_i)).to be_nil
-    end
-    
-      let :old_template do
-    {
-      'url' => '{{url}}',
-      'title' => '{{ title }}',
-      'description' => '{{ hovertext }}',
-      'comment' => '{{ comment }}'
-    }
-  end
-    
-      it 'replaces invalid byte sequences in a message' do
-    log = AgentLog.new(:agent => agents(:jane_website_agent), level: 3)
-    log.message = '\u{3042}\xffA\x95'
-    expect { log.save! }.not_to raise_error
-    expect(log.message).to eq('\u{3042}<ff>A\<95>')
-  end
-    
-      describe 'changes to type' do
-    it 'validates types' do
-      source = Agent.new
-      source.type = 'Agents::WeatherAgent'
-      expect(source).to have(0).errors_on(:type)
-      source.type = 'Agents::WebsiteAgent'
-      expect(source).to have(0).errors_on(:type)
-      source.type = 'Agents::Fake'
-      expect(source).to have(1).error_on(:type)
-    end
-    
-          def version=(value)
-        @version = value.to_s
-      end
-    
-        def name=(value)
-      @name = value.try :strip
-    end
-    
-    module Docs
-  class PageDb
-    attr_reader :pages
-    
-        def build_and_queue_request(url, options, &block)
-      request = Request.new(url, request_options.merge(options))
-      request.on_complete(&block) if block
-      queue(request)
-      request
-    end
-    
-          def root
-        css('.nav-index-group').each do |node|
-          if heading = node.at_css('.nav-index-group-heading')
-            heading.name = 'h2'
-          end
-          node.parent.before(node.children)
-        end
-    
-    if Encoding.default_external != Encoding::UTF_8
-    
-        # Checks that the git version is at least 1.8.5
-    #
-    # @raise If the git version is older than 1.8.5
-    #
-    # @return [void]
-    #
-    def self.verify_minimum_git_version!
-      if git_version < Gem::Version.new('1.8.5')
-        raise Informative, 'You need at least git version 1.8.5 to use CocoaPods'
-      end
-    end
-    
-    gem 'twitter-text', '1.14.7'
-    
-          def call(env)
-        status, headers, body = @app.call(env)
-        header = options[:report_only] ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy'
-        headers[header] ||= csp_policy if html? headers
-        [status, headers, body]
-      end
+        it 'in the future' do
+      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
     end
   end
 end
 
     
-            close_body(body) if reaction
+        context 'running workers' do
+      before do
+        AgentRunner.class_variable_set(:@@agents, [HuginnScheduler, DelayedJobWorker])
+        stub.instance_of(HuginnScheduler).setup
+        stub.instance_of(DelayedJobWorker).setup
+      end
+    
+      describe '#pretty_jsonify' do
+    it 'escapes </script> tags in the output JSON' do
+      cleaned_json = Utils.pretty_jsonify(:foo => 'bar', :xss => '</script><script>alert('oh no!')</script>')
+      expect(cleaned_json).not_to include('</script>')
+      expect(cleaned_json).to include('<\\/script>')
+    end
+  end
+    
+      let :reverted_template do
+    old_template.merge('url' => '{{ url }}')
+  end
+    
+    gem 'activemodel-serializers-xml', github: 'rails/activemodel-serializers-xml'
+    
+      def sign_in_params
+    devise_parameter_sanitizer.sanitize(:sign_in)
+  end
+    
+          # Forgets the given resource by deleting a cookie
+      def forget_me(resource)
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.forget_me!
+        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+      end
+    
+    # Each time a record is set we check whether its session has already timed out
+# or not, based on last request time. If so, the record is logged out and
+# redirected to the sign in page. Also, each time the request comes and the
+# record is set, we set the last request time inside its scoped session to
+# verify timeout in the following request.
+Warden::Manager.after_set_user do |record, warden, options|
+  scope = options[:scope]
+  env   = warden.request.env
+    
+        def set_account
+      @account = Account.find(params[:id])
+    end
+    
+          flash[:notice] = I18n.t('admin.accounts.resend_confirmation.success')
+      redirect_to admin_accounts_path
+    end
+    
+        private
+    
+    class Api::SubscriptionsController < Api::BaseController
+  before_action :set_account
+  respond_to :txt
+    
+    end
+    
+      end
+    
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
+    end
+    
+      def target_file
+    target_file = File.join(LogStash::Environment::LOGSTASH_HOME, 'plugins_package')
+    '#{target_file}#{file_extension}'
+  end
+end
+
+    
+          def get_installer_for(plugin_name)
+        uri = pack_uri(plugin_name)
+    
+        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
+    validate_cache_location
+    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
+    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
+    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
+  end
+    
+            it 'should raise a configuration error' do
+          expect do
+            plugin_class.new('oneString' => '${NoSuchVariable}')
+          end.to raise_error(LogStash::ConfigurationError)
+        end
+      end
