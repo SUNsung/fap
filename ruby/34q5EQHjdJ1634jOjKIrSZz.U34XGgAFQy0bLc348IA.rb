@@ -1,162 +1,285 @@
 
         
-                  # Set all of our instance variables on the new class
-          [self, other].each do |obj|
-            obj.instance_variables.each do |key|
-              # Ignore keys that start with a double underscore. This allows
-              # configuration classes to still hold around internal state
-              # that isn't propagated.
-              if !key.to_s.start_with?('@__')
-                result.instance_variable_set(key, obj.instance_variable_get(key))
-              end
-            end
-          end
-    
-            # Configures the given list of networks on the virtual machine.
-        #
-        # The networks parameter will be an array of hashes where the hashes
-        # represent the configuration of a network interface. The structure
-        # of the hash will be roughly the following:
-        #
-        # {
-        #   type:      :static,
-        #   ip:        '192.168.33.10',
-        #   netmask:   '255.255.255.0',
-        #   interface: 1
-        # }
-        #
-        def configure_networks(networks)
-          raise BaseError, _key: :unsupported_configure_networks
-        end
-    
-      before_action :set_filters, only: :index
-  before_action :set_filter, only: [:edit, :update, :destroy]
-    
-          if @custom_emoji.update(resource_params)
-        log_action :update, @custom_emoji
-        flash[:notice] = I18n.t('admin.custom_emojis.updated_msg')
-      else
-        flash[:alert] =  I18n.t('admin.custom_emojis.update_failed_msg')
-      end
-      redirect_to admin_custom_emojis_path(page: params[:page], **@filter_params)
-    end
-    
-    module Admin
-  class DomainBlocksController < BaseController
-    before_action :set_domain_block, only: [:show, :destroy]
-    
-        def destroy
-      authorize @email_domain_block, :destroy?
-      @email_domain_block.destroy!
-      log_action :destroy, @email_domain_block
-      redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.destroyed_msg')
-    end
-    
-      def hub_secret
-    params['hub.secret']
-  end
-    
-    desc 'Start a dummy (test) Rails app server'
-task :dummy_rails do
-  require 'rack'
-  require 'term/ansicolor'
-  port = ENV['PORT'] || 9292
-  puts %Q(Starting on #{Term::ANSIColor.cyan 'http://localhost:#{port}'})
-  Rack::Server.start(
-    config: 'test/dummy_rails/config.ru',
-    Port: port)
+        def local_require
+  require 'json'
+  JSON.pretty_generate(DATA)
 end
     
-      # Precompile additional assets.
-  # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-  # config.assets.precompile += %w( search.js )
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-            # JRuby chokes when trying to import files from JARs when the path starts with './'.
-        ret.map {|f, s| [f.sub(%r{^\./}, ''), s]}
+      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
+  p.option 'destination', '-d', '--destination [DIR]',
+    'Destination directory (defaults to ./_site)'
+  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
+  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
+    'Plugins directory (defaults to ./_plugins)'
+  p.option 'layouts_dir', '--layouts DIR', String,
+    'Layouts directory (defaults to ./_layouts)'
+  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
+    
+          #
+    
+    # Helper method for Windows
+def dst_active?
+  config = Jekyll.configuration('quiet' => true)
+  ENV['TZ'] = config['timezone']
+  dst = Time.now.isdst
+    
+        # All the entries in this collection.
+    #
+    # Returns an Array of file paths to the documents in this collection
+    #   relative to the collection's directory
+    def entries
+      return [] unless exists?
+      @entries ||=
+        Utils.safe_glob(collection_dir, ['**', '*'], File::FNM_DOTMATCH).map do |entry|
+          entry['#{collection_dir}/'] = ''
+          entry
+        end
+    end
+    
+          # Run Site#process and catch errors
+      #
+      # site - the Jekyll::Site object
+      #
+      # Returns nothing
+      def process_site(site)
+        site.process
+      rescue Jekyll::Errors::FatalException => e
+        Jekyll.logger.error 'ERROR:', 'YOUR SITE COULD NOT BE BUILT:'
+        Jekyll.logger.error '', '------------------------------------'
+        Jekyll.logger.error '', e.message
+        exit(1)
       end
     
-    # This is the version that ships with OS X 10.10, so be sure we test against it.
-# At the same time, the 1.7.7 version won't install cleanly on Ruby > 2.2,
-# so we use a fork that makes a trivial change to a macro invocation.
-gem 'json', :git => 'https://github.com/segiddins/json.git', :branch => 'seg-1.7.7-ruby-2.2'
+    module Jekyll
+  module Commands
+    class Build < Command
+      class << self
+        # Create the Mercenary command for the Jekyll CLI for this Command
+        def init_with_program(prog)
+          prog.command(:build) do |c|
+            c.syntax      'build [options]'
+            c.description 'Build your site'
+            c.alias :b
     
-        %w[iOS macOS].each do |platform|
-        abstract_target '#{platform} Pods' do
-            project '#{platform} Modules.xcodeproj'
+        def absolute_url_string?(str)
+      str =~ SCHEME_RGX
+    end
+    
+        def add(path, content)
+      @pages[path] = content
+    end
+    
+        def on_response(&block)
+      @on_response ||= []
+      @on_response << block if block
+      @on_response
+    end
+    
+        def error?
+      code == 0 || code != 404 && code != 403 && code >= 400 && code <= 599
+    end
+    
+          def process_response(response)
+        original_scheme = self.base_url.scheme
+        original_host = self.base_url.host
+        original_path = self.base_url.path
+    
+        def normalized_path
+      path == '' ? '/' : path
+    end
+    
+          private
+    
+          it 'raises KeyError when there is no matching key' do
+        -> () {
+          format('%{foo}', {})
+        }.should raise_error(KeyError)
+      end
+    
+    describe 'Kernel.sleep' do
+  it 'needs to be reviewed for spec completeness'
+end
+
+    
+      after :each do
+    ENV.delete('TEST_SH_EXPANSION')
+  end
+    
+      # Fetches cached values in persistent storage according to the type of data
+  # stored
+  #
+  # @abstract
+  def fetch_type(*)
+    raise NotImplementedError
+  end
+    
+          def self.uninstall_dsl_key
+        dsl_key.to_s.prepend('uninstall_').to_sym
+      end
+    
+        def graph_dependencies(cask = self.cask, acc = TopologicalHash.new)
+      return acc if acc.key?(cask)
+      deps = cask.depends_on.cask.map(&CaskLoader.public_method(:load))
+      acc[cask] = deps
+      deps.each do |dep|
+        graph_dependencies(dep, acc)
+      end
+      acc
+    end
+    
+            if tap_path = CaskLoader.tap_paths(token).first
+          CaskLoader::FromTapPathLoader.new(tap_path).load
+        elsif caskroom_path = Pathname.glob(path.join('.metadata/*/*/*/*.rb')).first
+          CaskLoader::FromPathLoader.new(caskroom_path).load
+        else
+          CaskLoader.load(token)
+        end
+      end
+    end
+  end
+end
+
+    
+      failure_message_for_should do |actual|
+    'expected #{actual.inspect} to have path in #{expected.inspect} but was #{actual.current_path.inspect}'
+  end
+  failure_message_for_should_not do |actual|
+    'expected #{actual.inspect} to not have path in #{expected.inspect} but it had'
+  end
+end
+    
+    #   Copyright (c) 2010-2011, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+    
+      describe '#new' do
+    before do
+      sign_in alice, scope: :user
+    end
+    
+          def authorize_for_order
+        @order = Spree::Order.find_by(number: order_id)
+        authorize! :read, @order, order_token
+      end
+    end
+  end
+end
+
+    
+            def find_address
+          if @order.bill_address_id == params[:id].to_i
+            @order.bill_address
+          elsif @order.ship_address_id == params[:id].to_i
+            @order.ship_address
+          else
+            raise CanCan::AccessDenied
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+            def log_state_changes
+          if @order.previous_changes[:state]
+            @order.log_state_changes(
+              state_name: 'order',
+              old_state: @order.previous_changes[:state].first,
+              new_state: @order.previous_changes[:state].last
+            )
+          end
+        end
     
             def update
-          @option_type = Spree::OptionType.accessible_by(current_ability, :update).find(params[:id])
-          if @option_type.update_attributes(option_type_params)
-            render :show
+          @image = scope.images.accessible_by(current_ability, :update).find(params[:id])
+          if @image.update_attributes(image_params)
+            respond_with(@image, default_template: :show)
           else
-            invalid_resource!(@option_type)
+            invalid_resource!(@image)
           end
         end
     
-            def create
-          authorize! :create, Spree::OptionValue
-          @option_value = scope.new(option_value_params)
-          if @option_value.save
-            render :show, status: 201
+            def prepare_event
+          return unless @event = params[:fire]
+    
+              if @product_property.update_attributes(product_property_params)
+            respond_with(@product_property, status: 200, default_template: :show)
           else
-            invalid_resource!(@option_value)
+            invalid_resource!(@product_property)
           end
         end
     
-            def authorize
-          perform_payment_action(:authorize)
+              params.require(:product).permit(
+            variants_key => [permitted_variant_attributes, :id]
+          ).delete(variants_key) || []
         end
     
-              Spree::Cart::AddItem.call(order: @shipment.order,
-                                    variant: variant,
-                                    quantity: quantity,
-                                    options: { shipment: @shipment })
-    
-            def destroy
-          authorize! :destroy, stock_location
-          stock_location.destroy
-          respond_with(stock_location, status: 204)
+            def show
+          authorize! :admin, ReturnAuthorization
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :read).find(params[:id])
+          respond_with(@return_authorization)
         end
     
-          arguments.flatten
+              @line_item = Spree::Cart::AddItem.call(order: @order,
+                                                 variant: variant,
+                                                 quantity: quantity,
+                                                 options: { shipment: @shipment }).value
+    
+        def debug?
+      ENV['DEBUG']
     end
     
-        def prepare_package(explicit_plugins, temp_path)
-      FileUtils.mkdir_p(::File.join(temp_path, LOGSTASH_DIR))
-      FileUtils.mkdir_p(::File.join(temp_path, DEPENDENCIES_DIR))
-    
-      def execute
-    signal_deprecation_warning_for_pack
-    
-    project_versions_yaml_path = File.expand_path('../versions.yml', File.dirname(__FILE__))
-if File.exist?(project_versions_yaml_path)
-  # we need to copy the project level versions.yml into the gem root
-  # to be able to package it into the gems file structure
-  # as the require 'logstash-core-plugin-api/version' loads the yaml file from within the gem root.
-  #
-  # we ignore the copy in git and we overwrite an existing file
-  # each time we build the logstash-core gem
-  original_lines = IO.readlines(project_versions_yaml_path)
-  original_lines << ''
-  original_lines << '# This is a copy the project level versions.yml into this gem's root and it is created when the gemspec is evaluated.'
-  gem_versions_yaml_path = File.expand_path('./versions-gem-copy.yml', File.dirname(__FILE__))
-  File.open(gem_versions_yaml_path, 'w') do |new_file|
-    # create or overwrite
-    new_file.puts(original_lines)
-  end
-end
-    
-          options = {:debug => ENV['LS_QA_DEBUG']}
-      puts 'Destroying #{machines}'
-      LogStash::VagrantHelpers.destroy(machines, options)
-      puts 'Bootstrapping #{machines}'
-      LogStash::VagrantHelpers.bootstrap(machines, options)
-    end
-    
-          it 'list the plugin with his version' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose #{plugin_name}')
-        expect(result).to run_successfully_and_output(/^#{plugin_name} \(\d+\.\d+.\d+\)/)
+      def validate_target_file
+    if File.exist?(target_file)
+      if  delete_target_file?
+        File.delete(target_file)
+      else
+        signal_error('Package creation cancelled, a previously generated package exist at location: #{target_file}, move this file to safe place and run the command again')
       end
     end
   end
-end
+    
+        def execute
+      raise PluginManager::FileNotFoundError, 'Can't file local file #{local_file}' unless ::File.exist?(local_file)
+      raise PluginManager::InvalidPackError, 'Invalid format, the pack must be in zip format' unless valid_format?(local_file)
+    
+    describe LogStash::Config::PipelineConfig do
+  let(:source) { LogStash::Config::Source::Local }
+  let(:pipeline_id) { :main }
+  let(:ordered_config_parts) do
+    [
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/1', 0, 0, 'input { generator1 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/2', 0, 0,  'input { generator2 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/3', 0, 0, 'input { generator3 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/4', 0, 0, 'input { generator4 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/5', 0, 0, 'input { generator5 }'),
+      org.logstash.common.SourceWithMetadata.new('file', '/tmp/6', 0, 0, 'input { generator6 }'),
+      org.logstash.common.SourceWithMetadata.new('string', 'config_string', 0, 0, 'input { generator1 }'),
+    ]
+  end
+    
+              it 'successfully install the plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install #{gem_path_on_vagrant}')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-dns')
+          end
+        end
+    
+          it 'display a list of installed plugins' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --installed')
+        expect(result.stdout.split('\n').size).to be > 1
+      end
