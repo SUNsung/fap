@@ -1,138 +1,103 @@
 
         
-                def properly_gathered_posts?(site)
-          return true if site.config['collections_dir'].empty?
-          posts_at_root = site.in_source_dir('_posts')
-          return true unless File.directory?(posts_at_root)
-          Jekyll.logger.warn 'Warning:',
-                             'Detected '_posts' directory outside custom `collections_dir`!'
-          Jekyll.logger.warn '',
-                             'Please move '#{posts_at_root}' into the custom directory at ' \
-            ''#{site.in_source_dir(site.config['collections_dir'])}''
-          false
-        end
+          it 'correctly sets notification level' do
+    moderator = Fabricate(:moderator)
     
-          mutable false
+            FastlaneCore::CommanderGenerator.new.generate(Cert::Options.available_options, command: c)
     
-          #
-      # Require a gem or gems. If it's not present, show a very nice error
-      # message that explains everything and is much more helpful than the
-      # normal LoadError.
-      #
-      # names - a string gem name or array of gem names
-      #
-      def require_with_graceful_fail(names)
-        Array(names).each do |name|
-          begin
-            Jekyll.logger.debug 'Requiring:', name.to_s
-            require name
-          rescue LoadError => e
-            Jekyll.logger.error 'Dependency Error:', <<~MSG
-              Yikes! It looks like you don't have #{name} or one of its dependencies installed.
-              In order to use Jekyll as currently configured, you'll need to install this gem.
-    
-    # puts '\nDone.'
+            expect(options[:release_notes]['en-US']).to eql('something else')
+        expect(options[:release_notes]['es-MX']).to eql('something else else')
+        expect(options[:release_notes]['en-AU']).to eql('something')
+        expect(options[:release_notes]['en-CA']).to eql('something')
+        expect(options[:release_notes]['en-GB']).to eql('something')
+        expect(options[:release_notes]['de-DE']).to eql('something')
+        expect(options[:release_notes]['el']).to eql('something')
+      end
+    end
+  end
+end
 
     
-      class Worker < LongRunnable::Worker
-    # Optional
-    #   Called after initialization of the Worker class, use this method as an initializer.
-    def setup; end
-    
-      def tumblr_oauth_token
-    service.token
-  end
-    
-        direction = direction.to_s == 'desc' ? 'desc' : 'asc'
-    
-      it 'uses '-e' as file' do
-    ruby_exe('puts __FILE__', escape: false).chomp.should == '-e'
-  end
-    
-        # This spec is probably system-dependent.
-    it 'doesn't block if no child is available when WNOHANG is used' do
-      read, write = IO.pipe
-      pid = Process.fork do
-        read.close
-        Signal.trap('TERM') { Process.exit! }
-        write << 1
-        write.close
-        sleep
+          def self.available_options
+        [
+          FastlaneCore::ConfigItem.new(key: :adb_path,
+                                       env_name: 'FL_ADB_PATH',
+                                       description: 'The path to your `adb` binary (can be left blank if the ANDROID_SDK_ROOT environment variable is set)',
+                                       is_string: true,
+                                       optional: true,
+                                       default_value: 'adb')
+        ]
       end
     
-      ##
-  # Closes the TarWriter
+          def self.wait_for_appium_server(params)
+        loop.with_index do |_, count|
+          break if `lsof -i:#{params[:port]}`.to_s.length != 0
     
-          ##
-      # Flush the password database.  If +output+ is given the database will
-      # be written there instead of to the original path.
-    
-            candidates = Regexp.instance_methods.collect{|m| m.to_s}
-        select_message(receiver, message, candidates)
-    
-    def assert_finish(timeout_seconds, testsrc, message = '')
-  newtest
-  show_progress(message) {
-    faildesc = nil
-    filename = make_srcfile(testsrc)
-    io = IO.popen('#{@ruby} -W0 #{filename}')
-    pid = io.pid
-    waited = false
-    tlimit = Time.now + timeout_seconds
-    diff = timeout_seconds
-    while diff > 0
-      if Process.waitpid pid, Process::WNOHANG
-        waited = true
-        break
-      end
-      if io.respond_to?(:read_nonblock)
-        if IO.select([io], nil, nil, diff)
-          begin
-            io.read_nonblock(1024)
-          rescue Errno::EAGAIN, EOFError
-            break
-          end while true
+          def self.connect_to_artifactory(params)
+        config_keys = [:endpoint, :username, :password, :ssl_pem_file, :ssl_verify, :proxy_username, :proxy_password, :proxy_address, :proxy_port]
+        config = params.values.select do |key|
+          config_keys.include?(key)
         end
-      else
-        sleep 0.1
+        Artifactory::Client.new(config)
       end
-      diff = tlimit - Time.now
+    
+            # Defines additional command line commands available by key. The key
+        # becomes the subcommand, so if you register a command 'foo' then
+        # 'vagrant foo' becomes available.
+        #
+        # @param [String] name Subcommand key.
+        def self.command(name=UNSET_VALUE, &block)
+          data[:command] ||= Registry.new
+    
+            # Download a file from the remote machine to the local machine.
+        #
+        # @param [String] from Path of the file on the remote machine.
+        # @param [String] to Path of where to save the file locally.
+        def download(from, to)
+        end
+    
+              nil
+        end
+    
+            # This is an internal initialize function that should never be
+        # overridden. It is used to initialize some common internal state
+        # that is used in a provider.
+        def _initialize(name, machine)
+          initialize_capabilities!(
+            name.to_sym,
+            { name.to_sym => [Class.new, nil] },
+            Vagrant.plugin('2').manager.provider_capabilities,
+            machine,
+          )
+        end
+      end
     end
-    if !waited
-      Process.kill(:KILL, pid)
-      Process.waitpid pid
-      faildesc = pretty(testsrc, 'not finished in #{timeout_seconds} seconds', nil)
-    end
-    io.close
-    faildesc
-  }
+  end
 end
+
     
-        t = Thread.new { tester.sync_lock(:EX) }
+      def append(*paths)
+    @paths = parse(*@paths, *paths)
+    self
+  end
     
-    module Paperclip
-  class AttachmentRegistry
-    include Singleton
+          def delete(target, force: false, command: nil, **_)
+        ohai 'Removing #{self.class.english_name} '#{target}'.'
+        raise CaskError, 'Cannot remove undeletable #{self.class.english_name}.' if MacOS.undeletable?(target)
     
-        # Returns a String describing the file's content type
-    def detect
-      if blank_name?
-        SENSIBLE_DEFAULT
-      elsif empty_file?
-        EMPTY_TYPE
-      elsif calculated_type_matches.any?
-        calculated_type_matches.first
-      else
-        type_from_file_contents || SENSIBLE_DEFAULT
-      end.to_s
+        def add_error(message)
+      errors << message
     end
     
-            def responds?
-          methods = @subject.instance_methods.map(&:to_s)
-          methods.include?('#{@attachment_name}') &&
-            methods.include?('#{@attachment_name}=') &&
-            methods.include?('#{@attachment_name}?')
+          rtn = ''
+      (context.environments.first['site'][@array_name] || []).each do |file|
+        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
+          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
         end
     
-        rake_tasks { load 'tasks/paperclip.rake' }
-  end
+        def initialize(tag_name, markup, tokens)
+      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
+      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
+      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
+      super
+    end
