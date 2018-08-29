@@ -1,265 +1,151 @@
 
         
-        
-def build_completion(opt_parser):
-    commands = []
+            def __init__(self, num_levels):
+        self.num_levels = num_levels
+        self.levels = []  # List of Levels
+    
+        def handle_budget_notifications(self, key, total):
+        '''Call notification API if nearing or exceeded budget.'''
+        ...
+    
+        def __init__(self, timestamp, seller, amount):
+        self.timestamp = timestamp
+        self.seller = seller
+        self.amount = amount
+    
+        def extract_year_month(self, line):
+        '''Return the year and month portions of the timestamp.'''
+        pass
+    
+    from mrjob.job import MRJob
     
     
-def hex_str(int_list):
-    return codecs.encode(intlist_to_bytes(int_list), 'hex')
+# Used for determining if the system is running a new enough python version
+# and should only restrict on our documented minimum versions
+_PY3_MIN = sys.version_info[:2] >= (3, 5)
+_PY2_MIN = (2, 6) <= sys.version_info[:2] < (3,)
+_PY_MIN = _PY3_MIN or _PY2_MIN
+if not _PY_MIN:
+    raise SystemExit('ERROR: Ansible requires a minimum of Python2 version 2.6 or Python3 version 3.5. Current version: %s' % ''.join(sys.version.splitlines()))
     
-    new_version = {}
+        return_fields = ['name', 'view', 'extattrs', 'ipv4addrs']
     
-        with io.open(infile, encoding='utf-8') as inf:
-        readme = inf.read()
+            # Retrieve only guest VMs, or include host systems?
+        if guests_only is not None:
+            self.guests_only = guests_only
+        elif self.config.has_option('defaults', 'guests_only'):
+            self.guests_only = self.config.getboolean('defaults', 'guests_only')
+        else:
+            self.guests_only = True
     
+    # -- Options for LaTeX output ---------------------------------------------
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+        # WIth no action/subcommand
+    # shared opts set
+    # instantiate each cli and ask its options
+    cli_klass = getattr(__import__('ansible.cli.%s' % cli_module_name,
+                                   fromlist=[cli_class_name]), cli_class_name)
+    cli = cli_klass([])
     
-        # Are checkable fields missing from the test case definition?
-    test_info_dict = dict((key, value if not isinstance(value, compat_str) or len(value) < 250 else 'md5:' + md5(value))
-                          for key, value in got_dict.items()
-                          if value and key in ('id', 'title', 'description', 'uploader', 'upload_date', 'timestamp', 'uploader_id', 'location', 'age_limit'))
-    missing_keys = set(test_info_dict.keys()) - set(expected_dict.keys())
-    if missing_keys:
-        def _repr(v):
-            if isinstance(v, compat_str):
-                return ''%s'' % v.replace('\\', '\\\\').replace(''', '\\'').replace('\n', '\\n')
-            else:
-                return repr(v)
-        info_dict_str = ''
-        if len(missing_keys) != len(expected_dict):
-            info_dict_str += ''.join(
-                '    %s: %s,\n' % (_repr(k), _repr(v))
-                for k, v in test_info_dict.items() if k not in missing_keys)
+        populate_data(dict(
+        modules=dict(
+            rows=modules_rows,
+            schema=(
+                ('module', 'TEXT'),
+                ('namespace', 'TEXT'),
+                ('path', 'TEXT'),
+                ('supported_by', 'TEXT'),
+            )),
+        module_statuses=dict(
+            rows=module_statuses_rows,
+            schema=(
+                ('module', 'TEXT'),
+                ('status', 'TEXT'),
+            )),
+    ))
     
-        def test_parse_f4m_formats(self):
-        _TEST_CASES = [
-            (
-                # https://github.com/rg3/youtube-dl/issues/14660
-                'custom_base_url',
-                'http://api.new.livestream.com/accounts/6115179/events/6764928/videos/144884262.f4m',
-                [{
-                    'manifest_url': 'http://api.new.livestream.com/accounts/6115179/events/6764928/videos/144884262.f4m',
-                    'ext': 'flv',
-                    'format_id': '2148',
-                    'protocol': 'f4m',
-                    'tbr': 2148,
-                    'width': 1280,
-                    'height': 720,
-                }]
-            ),
-        ]
+    for f in filelist:
+    if os.path.exists(f):
+        s = os.path.getsize(f)
+        if s > 0 and s < 10000:
+            with open(f) as fh:
+                fcont[f] = fh.read()
     
-        if hps.ic_dim > 0:
-      prior_g0_mean = np.zeros([E_to_process, hps.ic_dim])
-      prior_g0_logvar = np.zeros([E_to_process, hps.ic_dim])
-      post_g0_mean = np.zeros([E_to_process, hps.ic_dim])
-      post_g0_logvar = np.zeros([E_to_process, hps.ic_dim])
+            if self.options.host:
+            hosts = self.inventory.get_hosts(self.options.host)
+            if len(hosts) != 1:
+                raise AnsibleOptionsError('You must pass a single valid host to --host parameter')
     
-      # Load data set.
-  if FLAGS.data_set == 'ptb':
-    raw_data = ptb_loader.ptb_raw_data(FLAGS.data_dir)
-    train_data, valid_data, _, _ = raw_data
-  elif FLAGS.data_set == 'imdb':
-    raw_data = imdb_loader.imdb_raw_data(FLAGS.data_dir)
-    train_data, valid_data = raw_data
-  else:
-    raise NotImplementedError
+    if __name__ == '__main__':
     
-        elif FLAGS.discriminator_model == 'seq2seq_vd':
-      load_ckpt = tf.train.latest_checkpoint(FLAGS.language_model_ckpt_dir)
-      print('Restoring Discriminator from %s.' % load_ckpt)
-      tf.logging.info('Restoring Discriminator from %s.' % load_ckpt)
-      dis_encoder_init_saver = init_savers['dis_encoder_init_saver']
-      dis_decoder_init_saver = init_savers['dis_decoder_init_saver']
-      dis_encoder_init_saver.restore(sess, load_ckpt)
-      dis_decoder_init_saver.restore(sess, load_ckpt)
-    
-        elif args.form and not args.files:
-        # If sending files, `requests` will set
-        # the `Content-Type` for us.
-        default_headers['Content-Type'] = FORM_CONTENT_TYPE
-    return default_headers
-    
-        '''
-    BASE03 = '#1c1c1c'
-    BASE02 = '#262626'
-    BASE01 = '#4e4e4e'
-    BASE00 = '#585858'
-    BASE0 = '#808080'
-    BASE1 = '#8a8a8a'
-    BASE2 = '#d7d7af'
-    BASE3 = '#ffffd7'
-    YELLOW = '#af8700'
-    ORANGE = '#d75f00'
-    RED = '#af0000'
-    MAGENTA = '#af005f'
-    VIOLET = '#5f5faf'
-    BLUE = '#0087ff'
-    CYAN = '#00afaf'
-    GREEN = '#5f8700'
-    
-        def format_body(self, content, mime):
-        if is_valid_mime(mime):
-            for p in self.enabled_plugins:
-                content = p.format_body(content, mime)
-        return content
-
-    
-        name = 'Digest HTTP auth'
-    auth_type = 'digest'
-    
-    import httpie
-    
-        class Plugin(AuthPlugin):
-        auth_type = 'test-prompt-false'
-        prompt_password = False
-    
-        '''
-    
-    
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
-    '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
-    
-        def test_repr(self):
-        assert repr(self.case_insensitive_dict) == '{'Accept': 'application/json'}'
-    
-            String:                    '#4e9a06',        # class: 's'
-        String.Backtick:           '#4e9a06',        # class: 'sb'
-        String.Char:               '#4e9a06',        # class: 'sc'
-        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
-        String.Double:             '#4e9a06',        # class: 's2'
-        String.Escape:             '#4e9a06',        # class: 'se'
-        String.Heredoc:            '#4e9a06',        # class: 'sh'
-        String.Interpol:           '#4e9a06',        # class: 'si'
-        String.Other:              '#4e9a06',        # class: 'sx'
-        String.Regex:              '#4e9a06',        # class: 'sr'
-        String.Single:             '#4e9a06',        # class: 's1'
-        String.Symbol:             '#4e9a06',        # class: 'ss'
-    
-    
-def request(method, url, **kwargs):
-    '''Constructs and sends a :class:`Request <Request>`.
-    
-                if getattr(body, 'tell', None) is not None:
-                # Record the current file position before reading.
-                # This will allow us to rewind a file in the event
-                # of a redirect.
-                try:
-                    self._body_position = body.tell()
-                except (IOError, OSError):
-                    # This differentiates from None, allowing us to catch
-                    # a failed `tell()` later when trying to rewind the body
-                    self._body_position = object()
-    
-    import keras
-from keras.callbacks import TensorBoard
-from keras.datasets import mnist
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
-from keras.layers import Conv2D, MaxPooling2D
-from keras import backend as K
-    
-        with gzip.open(paths[1], 'rb') as imgpath:
-        x_train = np.frombuffer(imgpath.read(), np.uint8,
-                                offset=16).reshape(len(y_train), 28, 28)
-    
-        def call(self, inputs, mask=None, training=None, initial_state=None):
-        if isinstance(mask, list):
-            mask = mask[0]
-        if mask is not None:
-            raise ValueError('Masking is not supported for CuDNN RNNs.')
-    
-    
-def sparse_categorical_accuracy(y_true, y_pred):
-    return K.cast(K.equal(K.max(y_true, axis=-1),
-                          K.cast(K.argmax(y_pred, axis=-1), K.floatx())),
-                  K.floatx())
-    
-    
-def l1(l=0.01):
-    return L1L2(l1=l)
-    
-        def setUp(self):
-        from acme.fields import Fixed
-        self.field = Fixed('name', 'x')
-    
-        def test_nonce_decoder(self):
-        from acme.jws import Header
-        nonce_field = Header._fields['nonce']
-    
-    
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return (self.filep == other.filep and self.path == other.path and
-                    self.addrs == other.addrs and
-                    self.get_names() == other.get_names() and
-                    self.ssl == other.ssl and
-                    self.enabled == other.enabled and
-                    self.modmacro == other.modmacro)
-    
-        def test_bad_save_checkpoint(self):
-        self.config.reverter.add_to_checkpoint = mock.Mock(
-            side_effect=errors.ReverterError)
-        self.config.parser.add_dir(
-            self.vh_truth[0].path, 'Test', 'bad_save_ckpt')
-        self.assertRaises(errors.PluginError, self.config.save)
-    
-        def setUp(self):
-        self.base_dir = '/example_path'
-        self.vhosts = util.get_vh_truth(
-            self.base_dir, 'debian_apache_2_4/multiple_vhosts')
-    
-            self.vhost1b = VirtualHost(
-            'filep', 'vh_path', set([self.addr1]), False, False, 'localhost')
-    
-        @mock.patch('certbot.util.exe_exists')
-    @mock.patch('certbot.util.run_script')
-    def test_perform1(self, _, mock_exists):
-        self.sni.configurator.parser.modules.add('socache_shmcb_module')
-        self.sni.configurator.parser.modules.add('ssl_module')
-    
-        '''
-    
-            # Put the blurred face region back into the frame image
-        frame[top:bottom, left:right] = face_image
-    
-        pil_image.show()
-
-    
-    # Often instead of just checking if two faces match or not (True or False), it's helpful to see how similar they are.
-# You can do that by using the face_distance function.
-    
-    for face_location in face_locations:
-    
-    print('I found {} face(s) in this photograph.'.format(len(face_locations)))
-    
-        face_found = False
-    is_obama = False
-    
-            # Draw a box around the face
-        cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-    
-    # You can also save a copy of the new image to disk if you want by uncommenting this line
-# pil_image.save('image_with_boxes.jpg')
+        plt.legend(['Ridge', 'OLS', 'LassoLars'], loc='upper left')
+    plt.axis('tight')
+    plt.show()
 
     
     
-def print_result(filename, name, distance, show_distance=False):
-    if show_distance:
-        print('{},{},{}'.format(filename, name, distance))
-    else:
-        print('{},{}'.format(filename, name))
+def compute_bench(alpha, n_samples, n_features, precompute):
+    lasso_results = []
+    lars_lasso_results = []
     
-            self.assertEqual(len(detected_faces), 1)
-        self.assertEqual(detected_faces[0].top(), 142)
-        self.assertEqual(detected_faces[0].bottom(), 409)
+    ward = AgglomerativeClustering(n_clusters=3, linkage='ward')
+    
+        ###########################################################################
+    # Set GaussianRandomProjection input
+    gaussian_matrix_params = {
+        'n_components': opts.n_components,
+        'random_state': opts.random_seed
+    }
+    transformers['GaussianRandomProjection'] = \
+        GaussianRandomProjection(**gaussian_matrix_params)
+    
+    Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    56                                           @profile
+    57                                           def benchmark_sparse_predict():
+    58         1        10854  10854.0      2.8      X_test_sparse = csr_matrix(X_test)
+    59       301          477      1.6      0.1      for _ in range(300):
+    60       300       381409   1271.4     97.1          clf.predict(X_test_sparse)
+'''
+    
+    from scrapy.utils.conf import arglist_to_dict
+from scrapy.exceptions import UsageError
+    
+            infos = []
+        if not self.wasSuccessful():
+            write('FAILED')
+            failed, errored = map(len, (self.failures, self.errors))
+            if failed:
+                infos.append('failures=%d' % failed)
+            if errored:
+                infos.append('errors=%d' % errored)
+        else:
+            write('OK')
+    
+        def process_request_meta(self, opts):
+    
+            # The crawler is created this way since the Shell manually handles the
+        # crawling engine, so the set up in the crawl method won't work
+        crawler = self.crawler_process._create_crawler(spidercls)
+        # The Shell class needs a persistent engine in the crawler
+        crawler.engine = crawler._create_engine()
+        crawler.engine.start()
+    
+      else:
+    # Found DISALLOW* macro outside a class declaration, or perhaps it
+    # was used inside a function when it should have been part of the
+    # class declaration.  We could issue a warning here, but it
+    # probably resulted in a compiler error already.
+    pass
+    
+        # Loop through each person in the training set
+    for class_dir in os.listdir(train_dir):
+        if not os.path.isdir(os.path.join(train_dir, class_dir)):
+            continue
+    
+    while True:
+    # Grab a single frame of video
+    ret, frame = video_capture.read()
+    
+    # Open video file
+video_capture = cv2.VideoCapture('short_hamilton_clip.mp4')
