@@ -1,373 +1,202 @@
 
         
-            You can read more about this change at:
-      https://www.playframework.com/documentation/2.3.x/Migration23
-      https://www.playframework.com/documentation/2.3.x/Highlights23
-    EOS
-  when 'haskell-platform' then <<-EOS.undent
-    We no longer package haskell-platform. Consider installing ghc
-    and cabal-install instead:
-      brew install ghc cabal-install
+            Group.refresh_automatic_groups!(:moderators)
+    gu = GroupUser.find_by(user_id: moderator.id, group_id: Group::AUTO_GROUPS[:moderators])
     
-      def find_matching_tag(tag)
-    if key?(tag)
-      tag
-    else
-      find_altivec_tag(tag) || find_or_later_tag(tag)
-    end
+      end
+    
+    [
+ [Badge::PopularLink, 'Popular Link', BadgeType::Bronze, 50],
+ [Badge::HotLink,     'Hot Link',     BadgeType::Silver, 300],
+ [Badge::FamousLink,  'Famous Link',  BadgeType::Gold,   1000],
+].each do |id, name, level, count|
+  Badge.seed do |b|
+    b.id = id
+    b.name = name
+    b.badge_type_id = level
+    b.multiple_grant = true
+    b.target_posts = true
+    b.show_posts = true
+    b.query = BadgeQueries.linking_badge(count)
+    b.badge_grouping_id = BadgeGrouping::Posting
+    b.default_badge_grouping_id = BadgeGrouping::Posting
+    # don't trigger for now, its too expensive
+    b.trigger = Badge::Trigger::None
+    b.system = true
+  end
+end
+    
+            unless post && post.id
+          puts post.errors.full_messages if post
+          puts creator.errors.inspect
+          raise 'Failed to create description for trust level 3 lounge!'
+        end
+    
+        Category.transaction do
+      staff.group_names = ['staff']
+      unless staff.save
+        puts staff.errors.full_messages
+        raise 'Failed to set permissions on the Staff category!'
+      end
+    
+      # POST /resource/confirmation
+  def create
+    self.resource = resource_class.send_confirmation_instructions(resource_params)
+    yield resource if block_given?
+    
+      def passthru
+    render status: 404, plain: 'Not found. Authentication passthru.'
   end
     
-          # we readlink because this path probably doesn't exist since caveats
-      # occurs before the link step of installation
-      # Yosemite security measures mildly tighter rules:
-      # https://github.com/Homebrew/homebrew/issues/33815
-      if !plist_path.file? || !plist_path.symlink?
-        if f.plist_startup
-          s << 'To have launchd start #{f.full_name} at startup:'
-          s << '  sudo mkdir -p #{destination}' unless destination_path.directory?
-          s << '  sudo cp -fv #{f.opt_prefix}/*.plist #{destination}'
-          s << '  sudo chown root #{plist_link}'
-        else
-          s << 'To have launchd start #{f.full_name} at login:'
-          s << '  mkdir -p #{destination}' unless destination_path.directory?
-          s << '  ln -sfv #{f.opt_prefix}/*.plist #{destination}'
+    1) You forgot to wrap your route inside the scope block. For example:
+    
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
         end
-        s << 'Then to load #{f.full_name} now:'
-        if f.plist_startup
-          s << '  sudo launchctl load #{plist_link}'
-        else
-          s << '  launchctl load #{plist_link}'
-        end
-      # For startup plists, we cannot tell whether it's running on launchd,
-      # as it requires for `sudo launchctl list` to get real result.
-      elsif f.plist_startup
-        s << 'To reload #{f.full_name} after an upgrade:'
-        s << '  sudo launchctl unload #{plist_link}'
-        s << '  sudo cp -fv #{f.opt_prefix}/*.plist #{destination}'
-        s << '  sudo chown root #{plist_link}'
-        s << '  sudo launchctl load #{plist_link}'
-      elsif Kernel.system '/bin/launchctl list #{plist_domain} &>/dev/null'
-        s << 'To reload #{f.full_name} after an upgrade:'
-        s << '  launchctl unload #{plist_link}'
-        s << '  launchctl load #{plist_link}'
-      else
-        s << 'To load #{f.full_name}:'
-        s << '  launchctl load #{plist_link}'
-      end
     
-        root.children.sort.each do |pn|
-      if pn.directory?
-        dirs << pn
-      elsif block_given? && yield(pn)
-        puts pn
-        other = 'other '
-      else
-        remaining_root_files << pn unless pn.basename.to_s == '.DS_Store'
-      end
-    end
-    
-          puts_columns Array(result)
-    else
-      query = ARGV.first
-      rx = query_regexp(query)
-      local_results = search_formulae(rx)
-      puts_columns(local_results)
-      tap_results = search_taps(rx)
-      puts_columns(tap_results)
-    
-      # Use this method to generate standard caveats.
-  def standard_instructions(home_name, home_value = libexec)
-    <<-EOS.undent
-      Before you can use these tools you must export some variables to your $SHELL.
-    
-              entry.public_send(selected_attr) # rubocop:disable GitlabSecurity/PublicSend
-        end
-      end
+        # This returns whether the guest is ready to work. If this returns
+    # `false`, then {#detect!} should be called in order to detect the
+    # guest OS.
+    #
+    # @return [Boolean]
+    def ready?
+      !!capability_host_chain
     end
   end
 end
 
     
-            # Get the first part of the email address (before @)
-        # In addtion in removes illegal characters
-        def generate_username(email)
-          email.match(/^[^@]*/)[0].mb_chars.normalize(:kd).gsub(/[^\x00-\x7F]/, '').to_s
+              # First determine the proper array of VMs.
+          vms = []
+          if names.length > 0
+            names.each do |name|
+              if pattern = name[/^\/(.+?)\/$/, 1]
+                # This is a regular expression name, so we convert to a regular
+                # expression and allow that sort of matching.
+                regex = Regexp.new(pattern)
+    
+            # This is called as a last-minute hook that allows the configuration
+        # object to finalize itself before it will be put into use. This is
+        # a useful place to do some defaults in the case the user didn't
+        # configure something or so on.
+        #
+        # An example of where this sort of thing is used or has been used:
+        # the 'vm' configuration key uses this to make sure that at least
+        # one sub-VM has been defined: the default VM.
+        #
+        # The configuration object is expected to mutate itself.
+        def finalize!
+          # Default implementation is to do nothing.
         end
     
-          def find_oauth_access_token
-        token = Doorkeeper::OAuth::Token.from_request(current_request, *Doorkeeper.configuration.access_token_methods)
-        return unless token
+              @registered.each do |plugin|
+            plugin.components.host_capabilities.each do |host, caps|
+              results[host].merge!(caps)
+            end
+          end
     
-              <<-SQL.strip_heredoc
-            (CASE
-              WHEN (#{builds}) = (#{skipped}) AND (#{warnings}) THEN #{STATUSES[:success]}
-              WHEN (#{builds}) = (#{skipped}) THEN #{STATUSES[:skipped]}
-              WHEN (#{builds}) = (#{success}) THEN #{STATUSES[:success]}
-              WHEN (#{builds}) = (#{created}) THEN #{STATUSES[:created]}
-              WHEN (#{builds}) = (#{success}) + (#{skipped}) THEN #{STATUSES[:success]}
-              WHEN (#{builds}) = (#{success}) + (#{skipped}) + (#{canceled}) THEN #{STATUSES[:canceled]}
-              WHEN (#{builds}) = (#{created}) + (#{skipped}) + (#{pending}) THEN #{STATUSES[:pending]}
-              WHEN (#{running}) + (#{pending}) > 0 THEN #{STATUSES[:running]}
-              WHEN (#{manual}) > 0 THEN #{STATUSES[:manual]}
-              WHEN (#{created}) > 0 THEN #{STATUSES[:running]}
-              ELSE #{STATUSES[:failed]}
-            END)
-          SQL
+      def collection_presenter
+    ActivityPub::CollectionPresenter.new(
+      id: account_collection_url(@account, params[:id]),
+      type: :ordered,
+      size: @size,
+      items: @statuses
+    )
+  end
+end
+
+    
+          redirect_to admin_account_path(@account.id), notice: I18n.t('admin.accounts.change_email.changed_msg')
+    end
+    
+        def set_email_domain_block
+      @email_domain_block = EmailDomainBlock.find(params[:id])
+    end
+    
+        head 200
+  end
+    
+      #
+  # Initializes an HTTP packet header class that inherits from a Hash base
+  # class.
+  #
+  def initialize
+    self.dcase_hash = {}
+    
+      #
+  # The current request context.
+  #
+  attr_accessor :request
+  #
+  # Boolean that indicates whether or not the connection supports keep-alive.
+  #
+  attr_accessor :keepalive
+  #
+  # A reference to the server the client is associated with.
+  #
+  attr_accessor :server
+    
+                k3 = OpenSSL::HMAC.digest('MD5', k1, checksum)
+    
+              # Encodes the type
+          #
+          # @return [OpenSSL::ASN1::Integer]
+          def encode_type(type)
+            bn = OpenSSL::BN.new(type.to_s)
+            int = OpenSSL::ASN1::Integer.new(bn)
+    
+        def read_cached_files(path, files)
+      full_path = '#@cache_path/#@branch_sha/#{path}'
+      contents  = {}
+      if File.directory?(full_path)
+        files.each do |name|
+          path = '#{full_path}/#{name}'
+          contents[name] = File.read(path, mode: 'rb') if File.exists?(path)
         end
       end
+      contents
+    end
     
-            def metadata
-          @metadata ||= Coverage::Metadata.new(self)
-        end
-    
-    unless dups.empty?
-  puts '\nDuplicate links:'
-  dups.each do |link|
-    puts '- #{link}'
-    puts `grep -nr '#{link}' README.md`
-  end
-  puts '\nDone with errors.'
-  exit(1)
+    # It is very likely that we'll need these and as some of those paths will atm
+# result in a I18n deprecation warning, we load those here now so that we can
+# get rid of that warning.
+require 'active_support/core_ext/string/strip'
+require 'active_support/core_ext/string/inflections'
+require 'active_support/core_ext/array/conversions'
+# TODO: check what this actually does by the time we're going to add support for
+# other locales.
+require 'i18n'
+if I18n.respond_to?(:enforce_available_locales=)
+  I18n.enforce_available_locales = false
 end
     
-      def self.installed
-    Dir['#{store_path}/**/index.json'].
-      map { |file| file[%r{/([^/]*)/index\.json\z}, 1] }.
-      sort!.
-      map { |path| all_versions.find { |doc| doc.path == path } }.
-      compact
-  end
-    
-    module Docs
-  class EntryIndex
-    attr_reader :entries, :types
-    
-        def links
-      context[:links]
-    end
-    
-          def base_urls
-        @base_urls ||= self.class.base_urls.map { |url| URL.parse(url) }
-      end
-    
-        def merge!(hash)
-      return super unless hash.is_a? Hash
-      hash.assert_valid_keys URI::Generic::COMPONENT
-      hash.each_pair do |key, value|
-        send '#{key}=', value
-      end
-      self
-    end
-    
-            if at_css('.api-type-label.module')
-          at_css('h1').content = subpath.remove('api/')
-        end
-    
-            # Checks if the target machine is ready for communication. If this
-        # returns true, then all the other methods for communicating with
-        # the machine are expected to be functional.
-        #
-        # @return [Boolean]
-        def ready?
-          false
-        end
-    
-            # This method is automatically called when the system is available (when
-        # Vagrant can successfully SSH into the machine) to give the system a chance
-        # to determine the distro and return a distro-specific system.
-        #
-        # If this method returns nil, then this instance is assumed to be
-        # the most specific guest implementation.
-        def distro_dispatch
-        end
-    
-            # This is the method called to 'prepare' the provisioner. This is called
-        # before any actions are run by the action runner (see {Vagrant::Actions::Runner}).
-        # This can be used to setup shared folders, forward ports, etc. Whatever is
-        # necessary on a 'meta' level.
-        #
-        # No return value is expected.
-        def prepare
-        end
-    
-            # Yields a VM for each target VM for the command.
-        #
-        # This is a convenience method for easily implementing methods that
-        # take a target VM (in the case of multi-VM) or every VM if no
-        # specific VM name is specified.
-        #
-        # @param [String] name The name of the VM. Nil if every VM.
-        # @param [Hash] options Additional tweakable settings.
-        # @option options [Symbol] :provider The provider to back the
-        #   machines with. All machines will be backed with this
-        #   provider. If none is given, a sensible default is chosen.
-        # @option options [Boolean] :reverse If true, the resulting order
-        #   of machines is reversed.
-        # @option options [Boolean] :single_target If true, then an
-        #   exception will be raised if more than one target is found.
-        def with_target_vms(names=nil, options=nil)
-          @logger.debug('Getting target VMs for command. Arguments:')
-          @logger.debug(' -- names: #{names.inspect}')
-          @logger.debug(' -- options: #{options.inspect}')
-    
-            # This contains all the guests and their parents.
-        #
-        # @return [Registry<Symbol, Array<Class, Symbol>>]
-        attr_reader :guests
-    
-            # This returns all registered pushes.
-        #
-        # @return [Registry]
-        def pushes
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.pushes)
+            def run
+          if @pod_name.nil?
+            # Note: at that point, @wipe_all is always true (thanks to `validate!`)
+            # Remove all
+            clear_cache
+          else
+            # Remove only cache for this pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            elsif cache_descriptors.count > 1 && !@wipe_all
+              # Ask which to remove
+              choices = cache_descriptors.map { |c| '#{@pod_name} v#{c[:version]} (#{pod_type(c)})' }
+              index = UI.choose_from_array(choices, 'Which pod cache do you want to remove?')
+              remove_caches([cache_descriptors[index]])
+            else
+              # Remove all found cache of this pod
+              remove_caches(cache_descriptors)
             end
           end
         end
     
-                [block.call, parent]
-          end
-          nil
-        end
+        # also set the env LOGSTASH_HOME
+    LOGSTASH_HOME = ENV['LOGSTASH_HOME'] = ::File.expand_path(::File.join(__FILE__, '..', '..', '..'))
     
-        self.method    = method
-    self.raw_uri   = uri
-    self.uri_parts = {}
-    self.proto     = proto || DefaultProtocol
-    self.chunk_min_size = 1
-    self.chunk_max_size = 10
-    self.uri_encode_mode = 'hex-normal'
-    
-              # Encodes the authenticator field
-          #
-          # @return [String]
-          def encode_authenticator
-            authenticator.encode
-          end
-        end
-      end
-    end
+      def warn_local_gems(plugins_with_path)
+    puts('Update is not supported for manually defined plugins or local .gem plugin installations, skipping: #{plugins_with_path.join(', ')}')
   end
-end
-    
-              # Encodes the type field
-          #
-          # @return [OpenSSL::ASN1::Integer]
-          def encode_type
-            bn = OpenSSL::BN.new(type.to_s)
-            int = OpenSSL::ASN1::Integer.new(bn)
-    
-                decode_asn1(asn1)
-          end
-    
-          def value_or_default
-        if response.empty?
-          default
-        else
-          response
-        end
-      end
-    
-            def roles
-          @roles ||= Set.new
-        end
-    
-            def extra_left_space?(hash_node)
-          @extra_left_space ||= begin
-            top_line = hash_node.source_range.source_line
-            top_line.delete(' ') == '{'
-          end
-        end
-    }
-    
-          private
-    
-      include_examples 'multiline literal brace layout method argument' do
-    let(:open) { '[' }
-    let(:close) { ']' }
-  end
-    
-      include_examples 'multiline literal brace layout trailing comma' do
-    let(:open) { '{' }
-    let(:close) { '}' }
-    let(:a) { 'a: 1' }
-    let(:b) { 'b: 2' }
-  end
-end
-
-    
-        # Running YARD under jruby crashes so skip checking the manual.
-    def documentation
-      return if jruby?
-      sh!('bundle exec rake documentation_syntax_check ' \
-          'generate_cops_documentation')
-    end
-    
-        def match_path?(pattern, path)
-      case pattern
-      when String
-        File.fnmatch?(pattern, path, File::FNM_PATHNAME | File::FNM_EXTGLOB) ||
-          hidden_file_in_not_hidden_dir?(pattern, path)
-      when Regexp
-        begin
-          path =~ pattern
-        rescue ArgumentError => e
-          return false if e.message.start_with?('invalid byte sequence')
-          raise e
-        end
-      end
-    end
-    
-      context '>= ruby 2.5', :ruby25 do
-    it 'registers an offense for a do-end block with redundant begin-end' do
-      expect_offense(<<-RUBY.strip_indent)
-        do_something do
-          begin
-          ^^^^^ Redundant `begin` block detected.
-            foo
-          rescue => e
-            bar
-          end
-        end
-      RUBY
-    end
-    
-          # Calls the given block for each `when` node in the `case` statement.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_when
-        return when_branches.to_enum(__method__) unless block_given?
-    
-          # Custom destructuring method. This can be used to normalize
-      # destructuring for different variations of the node.
-      #
-      # In this case, the `def` node destructures into:
-      #
-      #   `method_name, arguments, body`
-      #
-      # while the `defs` node destructures into:
-      #
-      #   `receiver, method_name, arguments, body`
-      #
-      # so we reverse the destructured array to get the optional receiver
-      # at the end, where it can be discarded.
-      #
-      # @return [Array] the different parts of the `def` or `defs` node
-      def node_parts
-        to_a.reverse
-      end
-    end
-  end
-end
-
-    
-          # Calls the given block for each `value` node in the `hash` literal.
-      # If no block is given, an `Enumerator` is returned.
-      #
-      # @return [self] if a block is given
-      # @return [Enumerator] if no block is given
-      def each_value
-        return pairs.map(&:value).to_enum unless block_given?
