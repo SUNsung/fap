@@ -1,60 +1,28 @@
 
         
-            def test_write_eof_duplex_pipe(self):
-        tr = _ProactorDuplexPipeTransport(
-            self.loop, self.sock, self.protocol)
-        self.assertFalse(tr.can_write_eof())
-        with self.assertRaises(NotImplementedError):
-            tr.write_eof()
-        close_transport(tr)
+            def __init__(self, license_plate):
+        super(Car, self).__init__(VehicleSize.COMPACT, license_plate, spot_size=1)
     
-        def test_object_class_assignment_between_heaptypes_and_nonheaptypes(self):
-        class SubType(types.ModuleType):
-            a = 1
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+                          help='set spider argument (may be repeated)')
+        parser.add_option('-o', '--output', metavar='FILE',
+                          help='dump scraped items into FILE (use - for stdout)')
+        parser.add_option('-t', '--output-format', metavar='FORMAT',
+                          help='format to use for dumping items with -o')
+    
+        def _find_template(self, template):
+        template_file = join(self.templates_dir, '%s.tmpl' % template)
+        if exists(template_file):
+            return template_file
+        print('Unable to find template: %s\n' % template)
+        print('Use 'scrapy genspider --list' to see all available templates.')
+    
+        def add_items(self, lvl, new_items):
+        old_items = self.items.get(lvl, [])
+        self.items[lvl] = old_items + new_items
     
     
-try:
-    import _hashlib
-    new = __hash_new
-    __get_hash = __get_openssl_constructor
-    algorithms_available = algorithms_available.union(
-            _hashlib.openssl_md_meth_names)
-except ImportError:
-    new = __py_new
-    __get_hash = __get_builtin_constructor
-    
-        print('Creating the makefiles...')
-    sys.stdout.flush()
-    # run configure, copy includes, patch files
-    run_configure(configure, do_script)
-    makefile = makefile_template.format(suffix)
-    try:
-        os.unlink(makefile)
-    except FileNotFoundError:
-        pass
-    os.rename(generated_makefile, makefile)
-    copy_includes(makefile, suffix)
-    
-        def tearDown(cls):
-        ''' Function/test case scope teardown. '''
-        cls.output.close()
-        sys.stdout = cls.saved_stdout
-    
-        def amount(self, val):
-        print(val, end=' ')
-        return self
-    
-    '''
-Port of the Java example of 'Parameter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
-    
-    '''
-Port of the Java example of 'Parameter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
-    
-        _static_method_choices = {'param_value_1': _static_method_1,
-                              'param_value_2': _static_method_2}
+class Slot(object):
+    '''Downloader slot'''
