@@ -1,127 +1,89 @@
 
         
-            data_train = fetch_20newsgroups_vectorized(subset='train')
-    data_test = fetch_20newsgroups_vectorized(subset='test')
-    X_train = check_array(data_train.data, dtype=np.float32,
-                          accept_sparse='csc')
-    X_test = check_array(data_test.data, dtype=np.float32, accept_sparse='csr')
-    y_train = data_train.target
-    y_test = data_test.target
-    
-        for ns in n_samples:
-        for nf in n_features:
-            it += 1
-            print('==================')
-            print('Iteration %s of %s' % (it, max(len(n_samples),
-                                          len(n_features))))
-            print('==================')
-            n_informative = nf // 10
-            X, Y, coef_ = make_regression(n_samples=ns, n_features=nf,
-                                          n_informative=n_informative,
-                                          noise=0.1, coef=True)
-    
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
-    
-    plt.figure('scikit-learn Ward's method benchmark results')
-plt.imshow(np.log(ratio), aspect='auto', origin='lower')
-plt.colorbar()
-plt.contour(ratio, levels=[1, ], colors='k')
-plt.yticks(range(len(n_features)), n_features.astype(np.int))
-plt.ylabel('N features')
-plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
-plt.xlabel('N samples')
-plt.title('Scikit's time, in units of scipy time (log)')
-plt.show()
-
-    
-    from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import Perceptron
-from sklearn.pipeline import Pipeline
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
-    
-    Sentiment analysis can be casted as a binary text classification problem,
-that is fitting a linear classifier on features extracted from the text
-of the user messages so as to guess wether the opinion of the author is
-positive or negative.
-    
-    plt.grid('off')
-for x in [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]:
-    plt.plot([0, x], [x, 0], 'k', alpha=0.2)
-    plt.plot([0, 0 + (1-x)/2], [x, x + (1-x)/2], 'k', alpha=0.2)
-    plt.plot([x, x + (1-x)/2], [0, 0 + (1-x)/2], 'k', alpha=0.2)
-    
-    # [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    
-        def extractInformationFromTreeNodeStream(self, nodes):
-        from antlr3.tree import Tree, CommonTree
-        from antlr3.tokens import CommonToken
         
-        self.node = nodes.LT(1)
-        adaptor = nodes.adaptor
-        payload = adaptor.getToken(self.node)
-        if payload is not None:
-            self.token = payload
-            if payload.line <= 0:
-                # imaginary node; no line/pos info; scan backwards
-                i = -1
-                priorNode = nodes.LT(i)
-                while priorNode is not None:
-                    priorPayload = adaptor.getToken(priorNode)
-                    if priorPayload is not None and priorPayload.line > 0:
-                        # we found the most recent real line / pos info
-                        self.line = priorPayload.line
-                        self.charPositionInLine = priorPayload.charPositionInLine
-                        self.approximateLineInfo = True
-                        break
-                    
-                    i -= 1
-                    priorNode = nodes.LT(i)
-                    
-            else: # node created from real token
-                self.line = payload.line
-                self.charPositionInLine = payload.charPositionInLine
-                
-        elif isinstance(self.node, Tree):
-            self.line = self.node.line
-            self.charPositionInLine = self.node.charPositionInLine
-            if isinstance(self.node, CommonTree):
-                self.token = self.node.token
+DEFAULT_CONFIG_DIR = str(os.environ.get(
+    'HTTPIE_CONFIG_DIR',
+    os.path.expanduser('~/.httpie') if not is_windows else
+    os.path.expandvars(r'%APPDATA%\\httpie')
+))
     
     
-class FailedPredicateException(RecognitionException):
-    '''@brief A semantic predicate failed during validation.
+with codecs.open(JSON_FILE_PATH, encoding='utf8') as f:
+    JSON_FILE_CONTENT = f.read()
+    
+        return inner
+    
+        def test_binary_stdin(self, httpbin):
+        with open(BIN_FILE_PATH, 'rb') as stdin:
+            env = MockEnvironment(
+                stdin=stdin,
+                stdin_isatty=False,
+                stdout_isatty=False
+            )
+            r = http('--print=B', 'POST', httpbin.url + '/post', env=env)
+            assert r == BIN_FILE_CONTENT
+    
+        def test_implicit_POST_stdin(self, httpbin):
+        with open(FILE_PATH) as f:
+            env = MockEnvironment(stdin_isatty=False, stdin=f)
+            r = http('--form', httpbin.url + '/post', env=env)
+        assert HTTP_OK in r
+    
+    
+def load_rsa_private_key(*names):
+    '''Load RSA private key.'''
+    loader = _guess_loader(names[-1], serialization.load_pem_private_key,
+                           serialization.load_der_private_key)
+    return jose.ComparableRSAKey(loader(
+        load_vector(*names), password=None, backend=default_backend()))
+    
+    from acme import client
+from acme import messages
+    
+        :param str filepath: Path of file to parse
+    :param str varname: Name of the variable
+    
+            '''
+        super(AugeasConfigurator, self).recovery_routine()
+        # Need to reload configuration after these changes take effect
+        self.aug.load()
+    
+    UIR_ARGS = ['always', 'set', 'Content-Security-Policy',
+            'upgrade-insecure-requests']
+    
+        def test_rollback_error(self):
+        self.config.reverter.rollback_checkpoints = mock.Mock(
+            side_effect=errors.ReverterError)
+        self.assertRaises(errors.PluginError, self.config.rollback_checkpoints)
+    
+        def test_load_modules(self):
+        '''If only first is found, there is bad variable parsing.'''
+        self.assertTrue('status_module' in self.parser.modules)
+        self.assertTrue('mod_status.c' in self.parser.modules)
+    
+            self.assertEqual(
+            len(self.sni.configurator.parser.find_dir(
+                'Include', self.sni.challenge_conf)),
+            1)
+        self.assertEqual(len(sni_responses), 2)
+        for i in xrange(2):
+            self.assertEqual(sni_responses[i], acme_responses[i])
+    
+        def perform(self):
+        '''Perform a TLS-SNI-01 challenge.'''
+        if not self.achalls:
+            return []
+        # Save any changes to the configuration as a precaution
+        # About to make temporary changes to the config
+        self.configurator.save('Changes before challenge setup', True)
+    
+    def baomihua_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url)
+    title = r1(r'<title>(.*)</title>', html)
+    assert title
+    id = r1(r'flvid\s*=\s*(\d+)', html)
+    assert id
+    baomihua_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
     
         @staticmethod
     def get_streams_by_id(account_number, video_id):
@@ -141,101 +103,166 @@ class FailedPredicateException(RecognitionException):
         #is this somehow related to the time? Magic....
         fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
     
-    from .theplatform import theplatform_download_by_pid
-    
-    __all__ = ['ehow_download']
-    
-        for i in range(10, 30):
-        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
-            i = i,
-            p = preview
-        )
-        try:
-            mime, ext, size = url_info(url)
-            break
-        except: continue
-    
-    import json
-    
-        __metaclass__ = abc.ABCMeta
+    site_info = 'CBS.com'
+download = cbs_download
+download_playlist = playlist_not_supported('cbs')
+
     
     
-class Active(Inservice):
+class CNTV(VideoExtractor):
+    name = 'CNTV.com'
+    stream_types = [
+        {'id': '1', 'video_profile': '1280x720_2000kb/s', 'map_to': 'chapters4'},
+        {'id': '2', 'video_profile': '1280x720_1200kb/s', 'map_to': 'chapters3'},
+        {'id': '3', 'video_profile': '640x360_850kb/s', 'map_to': 'chapters2'},
+        {'id': '4', 'video_profile': '480x270_450kb/s', 'map_to': 'chapters'},
+        {'id': '5', 'video_profile': '320x180_200kb/s', 'map_to': 'lowChapters'},
+    ]
     
-    
-class TestData(unittest.TestCase):
-    
-        def test_sales_manager_shall_not_talk_through_proxy_with_delay(cls):
-        cls.ntp.busy = 'No'
-        start_time = time()
-        cls.ntp.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-This Sales Manager will not talk to you whether he/she is busy or not\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
-    
-        def test_pool_behavior_with_single_object_inside(self):
-        sample_queue = queue.Queue()
-        sample_queue.put('yam')
-        with ObjectPool(sample_queue) as obj:
-            # print('Inside with: {}'.format(obj))
-            self.assertEqual(obj, 'yam')
-        self.assertFalse(sample_queue.empty())
-        self.assertTrue(sample_queue.get() == 'yam')
-        self.assertTrue(sample_queue.empty())
+        if re.match(re_str, url):
+        html = get_content(url)
+        title = match1(html, r'<title>(.+)丨(.+)</title>')  #title
         
+        # player loaded via internal iframe
+        frame_url = re.search(r'<iframe src=\'(.+?)\'', html).group(1)
+        logging.debug('dilidili_download: %s' % frame_url)
+        
+        #https://player.005.tv:60000/?vid=a8760f03fd:a04808d307&v=yun&sign=a68f8110cacd892bc5b094c8e5348432
+        html = get_content(frame_url, headers=headers, decoded=False).decode('utf-8')
+        
+        match = re.search(r'(.+?)var video =(.+?);', html)
+        vid = match1(html, r'var vid='(.+)'')
+        hd2 = match1(html, r'var hd2='(.+)'')
+        typ = match1(html, r'var typ='(.+)'')
+        sign = match1(html, r'var sign='(.+)'')
+        tmsign = match1(html, r'tmsign=([A-Za-z0-9]+)')
+        ulk =  match1(html, r'var ulk='(.+)'')
     
-        def test_display_current_time_at_midnight(self):
-        class_under_test = TimeDisplay()
-        expected_time = '24:01'
-        result = class_under_test.get_current_time_as_as_html_fragment()
-        self.assertEqual(result, expected_time)
+    from ..common import *
+    
+        print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls(urls, title, ext, size, output_dir, merge=False)
+    
+    #----------------------------------------------------------------------
+def fc2video_download_by_upid(upid, output_dir = '.', merge = True, info_only = False, **kwargs):
+    ''''''
+    fake_headers = {
+        'DNT': '1',
+        'Accept-Encoding': 'gzip, deflate, sdch',
+        'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.58 Safari/537.36',
+        'Accept': '*/*',
+        'X-Requested-With': 'ShockwaveFlash/19.0.0.245',
+        'Connection': 'keep-alive',
+    }
+    api_base = 'http://video.fc2.com/ginfo.php?upid={upid}&mimi={mimi}'.format(upid = upid, mimi = makeMimi(upid))
+    html = get_content(api_base, headers=fake_headers)
+    
+      CheckCall( [ sys.executable, build_file ] + sys.argv[ 1: ] )
+    
+    
+def FormatDebugInfoResponse( response ):
+  if not response:
+    return 'Server errored, no debug info from server\n'
+  message = _FormatYcmdDebugInfo( response )
+  completer = response[ 'completer' ]
+  if completer:
+    message += _FormatCompleterDebugInfo( completer )
+  return message
+    
+    
+  def Poll( self, diagnostics_handler ):
+    '''This should be called regularly to check for new messages in this buffer.
+    Returns True if Poll should be called again in a while. Returns False when
+    the completer or server indicated that further polling should not be done
+    for the requested file.'''
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+    
+  def _ConvertDiagListToDict( self ):
+    self._line_to_diags = defaultdict( list )
+    for diag in self._diagnostics:
+      location = diag[ 'location' ]
+      bufnr = vimsupport.GetBufferNumberForFilename( location[ 'filepath' ] )
+      if bufnr == self._bufnr:
+        line_number = location[ 'line_num' ]
+        self._line_to_diags[ line_number ].append( diag )
+    
+      # On UNIX platforms, we use sys.executable as the Python interpreter path.
+  # We cannot use sys.executable on Windows because for unknown reasons, it
+  # returns the Vim executable. Instead, we use sys.exec_prefix to deduce the
+  # interpreter path.
+  python_interpreter = ( WIN_PYTHON_PATH if utils.OnWindows() else
+                         sys.executable )
+  if _EndsWithPython( python_interpreter ):
+    return python_interpreter
+    
+      post_vim_message.assert_has_exact_calls( [
+    call( 'On the first day of Christmas, my VimScript gave to me',
+          warning=False,
+          truncate=True ),
+    call( 'A test file in a Command-T', warning=False, truncate=True ),
+    call( 'On the second day of Christmas, my VimScript gave to me',
+          warning=False,
+          truncate=True ),
+    call( 'Two popup menus, and a test file in a Command-T',
+          warning=False,
+          truncate=True ),
+  ] )
+
+    
+    
+def KeywordsFromSyntaxListOutput_StatementHierarchy_test():
+  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
+baa xxx foo bar
+        links to Foo
+Foo xxx zoo goo
+        links to Bar
+Bar xxx qux moo
+        links to Statement''' ),
+               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo', 'qux', 'moo' ) )
+    
+    from concurrent.futures import _base
+    
+        def __init__(self, param):
+        # simple test to validate param value
+        if param in self._static_method_choices:
+            self.param = param
+        else:
+            raise ValueError('Invalid Value for Param: {0}'.format(param))
+    
+        def __repr__(self):
+        return '<%s: %r>' % (self.__class__.__name__, self.value)
+    
+    
+class NotSpecification(CompositeSpecification):
+    _wrapped = Specification()
+    
+        def scan(self):
+        '''Scan the dial to the next station'''
+        self.pos += 1
+        if self.pos == len(self.stations):
+            self.pos = 0
+        print(u'Scanning... Station is %s %s' %
+              (self.stations[self.pos], self.name))
+    
+    *What does this example do?
+This particular implementation abstracts the creation of a pet and
+does so depending on the factory we chose (Dog or Cat, or random_animal)
+This works because both Dog/Cat and random_animal respect a common
+interface (callable for creation and .speak()).
+Now my application can create pets abstractly and decide later,
+based on my own criteria, dogs over cats.
+    
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
 '''
-    
-    
-if __name__ == '__main__':
-    reporter = Reporter()
-    db = DB()
-    tm = TestManager()
-    tm.setReporter(reporter)
-    tm.setDB(db)
-    reporter.setTM(tm)
-    db.setTM(tm)
-    # For simplification we are looping on the same test.
-    # Practically, it could be about various unique test classes and their
-    # objects
-    for i in range(3):
-        tc = TC()
-        tc.setTM(tm)
-        tm.setTC(tc)
-        tc.setup()
-        tc.execute()
-        tc.tearDown()
-    
-        '''Base state. This is to share functionality'''
-    
-    # This is a very simple benchmark to give you an idea of how fast each step of face recognition will run on your system.
-# Notice that face detection gets very slow at large image sizes. So you might consider running face detection on a
-# scaled down version of your image and then running face encodings on the the full size image.
-    
-        # Find all the faces and face encodings in the current frame of video
-    face_locations = face_recognition.face_locations(rgb_frame)
-    face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
-    
-        # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
-    rgb_small_frame = small_frame[:, :, ::-1]
-    
-            if file.filename == '':
-            return redirect(request.url)
-    
-    # How to display URL addresses: 'footnote', 'no', or 'inline'.
-#texinfo_show_urls = 'footnote'
-    
-    
-def test_image(image_to_check, model):
-    unknown_image = face_recognition.load_image_file(image_to_check)
-    face_locations = face_recognition.face_locations(unknown_image, number_of_times_to_upsample=0, model=model)
