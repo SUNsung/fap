@@ -1,160 +1,113 @@
 
         
-          formula = ARGV.formulae.first
-  options = Options.create(ARGV.flags_only)
-  build   = Build.new(formula, options)
-  build.install
-rescue Exception => e
-  Marshal.dump(e, error_pipe)
-  error_pipe.close
-  exit! 1
-end
-
-    
-        version '3' do
-      self.release = '3.5.17'
-      self.base_url = 'https://github.com/d3/d3-3.x-api-reference/blob/master/'
-      self.root_path = 'API-Reference.md'
-    
-        def initialize(filters = nil)
-      @filters = filters ? filters.dup : []
-    end
-    
-          base = path
-      dest = url.path
-    
-          def values_at(*indices)
-        indices.collect { |key| self[convert_key(key)] }
-      end
-    
-            @value << new_block
-      end
-    end
-  end
-end
-
-    
-              # Parse the options
-          argv = parse_options(opts)
-          return if !argv
-          raise Vagrant::Errors::CLIInvalidUsage, help: opts.help.chomp if argv.length != 3
-    
-            # If we're just checking, then just return exit codes
-        if options[:check]
-          return 0 if cap_host.capability?(name)
-          return 1
+                # Allows setting options from a hash. By default this simply calls
+        # the `#{key}=` method on the config class with the value, which is
+        # the expected behavior most of the time.
+        #
+        # This is expected to mutate itself.
+        #
+        # @param [Hash] options A hash of options to set on this configuration
+        #   key.
+        def set_options(options)
+          options.each do |key, value|
+            send('#{key}=', value)
+          end
         end
     
-        header = Gem::Package::TarHeader.new :name => name, :mode => mode,
-                                         :size => size, :prefix => prefix,
-                                         :mtime => ENV['SOURCE_DATE_EPOCH'] ? Time.at(ENV['SOURCE_DATE_EPOCH'].to_i).utc : Time.now
+            # This is called early, before a machine is instantiated, to check
+        # if this provider is installed. This should return true or false.
+        #
+        # If the provider is not installed and Vagrant determines it is
+        # able to install this provider, then it will do so. Installation
+        # is done by calling Environment.install_provider.
+        #
+        # If Environment.can_install_provider? returns false, then an error
+        # will be shown to the user.
+        def self.installed?
+          # By default return true for backwards compat so all providers
+          # continue to work.
+          true
+        end
     
-        def stop_servers
-      if @normal_server
-        @normal_server.kill.join
-        @normal_server = nil
-      end
-      if @proxy_server
-        @proxy_server.kill.join
-        @proxy_server = nil
-      end
-      if @ssl_server
-        @ssl_server.stop
-        @ssl_server = nil
-      end
-      if @ssl_server_thread
-        @ssl_server_thread.kill.join
-        @ssl_server_thread = nil
-      end
-      utils = WEBrick::Utils    # TimeoutHandler is since 1.9
-      utils::TimeoutHandler.terminate if defined?(utils::TimeoutHandler.terminate)
-    end
-    
-        ##
-    # Basic authentication for proxy servers.  See BasicAuth for details.
-    
-          def get_passwd(realm, user, reload_db)
-        reload() if reload_db
-        @passwd[user]
+          it 'allows closing brace on different line from multi-line element' do
+        expect_no_offenses(construct(false, a, make_multi(multi), true))
       end
     
-        # check that consumer threads with values match producers that called push before close
-    assert_equal successful_prod_threads.map{|thr| thr[:pc]}, popped_values.compact.sort
-    assert_nil q.pop
-  end
-    
-        def default_regexp # :nodoc:
-      {
-        SCHEME: /\A[A-Za-z][A-Za-z0-9+\-.]*\z/,
-        USERINFO: /\A(?:%\h\h|[!$&-.0-;=A-Z_a-z~])*\z/,
-        HOST: /\A(?:(?<IP-literal>\[(?:(?<IPv6address>(?:\h{1,4}:){6}(?<ls32>\h{1,4}:\h{1,4}|(?<IPv4address>(?<dec-octet>[1-9]\d|1\d{2}|2[0-4]\d|25[0-5]|\d)\.\g<dec-octet>\.\g<dec-octet>\.\g<dec-octet>))|::(?:\h{1,4}:){5}\g<ls32>|\h{,4}::(?:\h{1,4}:){4}\g<ls32>|(?:(?:\h{1,4}:)?\h{1,4})?::(?:\h{1,4}:){3}\g<ls32>|(?:(?:\h{1,4}:){,2}\h{1,4})?::(?:\h{1,4}:){2}\g<ls32>|(?:(?:\h{1,4}:){,3}\h{1,4})?::\h{1,4}:\g<ls32>|(?:(?:\h{1,4}:){,4}\h{1,4})?::\g<ls32>|(?:(?:\h{1,4}:){,5}\h{1,4})?::\h{1,4}|(?:(?:\h{1,4}:){,6}\h{1,4})?::)|(?<IPvFuture>v\h+\.[!$&-.0-;=A-Z_a-z~]+))\])|\g<IPv4address>|(?<reg-name>(?:%\h\h|[!$&-.0-9;=A-Z_a-z~])*))\z/,
-        ABS_PATH: /\A\/(?:%\h\h|[!$&-.0-;=@-Z_a-z~])*(?:\/(?:%\h\h|[!$&-.0-;=@-Z_a-z~])*)*\z/,
-        REL_PATH: /\A(?:%\h\h|[!$&-.0-;=@-Z_a-z~])+(?:\/(?:%\h\h|[!$&-.0-;=@-Z_a-z~])*)*\z/,
-        QUERY: /\A(?:%\h\h|[!$&-.0-;=@-Z_a-z~\/?])*\z/,
-        FRAGMENT: /\A(?:%\h\h|[!$&-.0-;=@-Z_a-z~\/?])*\z/,
-        OPAQUE: /\A(?:[^\/].*)?\z/,
-        PORT: /\A[\x09\x0a\x0c\x0d ]*\d*[\x09\x0a\x0c\x0d ]*\z/,
-      }
-    end
-    
-          expect_updated_sign_in_at(user)
-    end
-    
-      def theme_color
-    '#282c37'
-  end
-    
-    require 'rubygems'  # install rubygems
-require 'hpricot'   # gem install hpricot
-require 'uri'
-require 'timeout'
-    
-    
-    
-            when :err
-          case s[:last]
-            when :pass
-              # Oops got a -ERR after a pass so its crap ignore the pass
-              # But report it, might be helpfull for guessing :-)
-    
-        _cal[ver].each_pair do |key, value|
-      cal[ver][key] = Array.new
-      cal[ver][key] << String.new
-      cal[ver][key][-1] << '#ifdef AIX%s' % ver.delete('.')
-      cal[ver][key][-1] << '\n'
-      cal[ver][key][-1] << '''.rjust(5)
-      value.each_byte do |c|
-        cal[ver][key][-1] << '\x%02x' % c
-      end
-      cal[ver][key][-1] << '''.ljust(7)
-      cal[ver][key][-1] << '/*  cal     r2,-%d(r29)' %
-          (65536 - value.unpack('nn')[1])
-      cal[ver][key][-1] << '*/'.rjust(15)
-      cal[ver][key][-1] << '\n'
-      cal[ver][key][-1] << '#endif'
-      cal[ver][key][-1] << '\n'
+        def hidden_file_in_not_hidden_dir?(pattern, path)
+      File.fnmatch?(
+        pattern, path,
+        File::FNM_PATHNAME | File::FNM_EXTGLOB | File::FNM_DOTMATCH
+      ) && File.basename(path).start_with?('.') && !hidden_dir?(path)
     end
     
     module RuboCop
   module Cop
-    module Performance
-      # This cop identifies the use of `Regexp#match` or `String#match`, which
-      # returns `#<MatchData>`/`nil`. The return value of `=~` is an integral
-      # index/`nil` and is more performant.
+    module Style
+      # This cop looks for uses of the *for* keyword, or *each* method. The
+      # preferred alternative is set in the EnforcedStyle configuration
+      # parameter. An *each* call with a block on a single line is always
+      # allowed, however.
       #
-      # @example
+      # @example EnforcedStyle: each (default)
       #   # bad
-      #   do_something if str.match(/regex/)
-      #   while regex.match('str')
-      #     do_something
+      #   def foo
+      #     for n in [1, 2, 3] do
+      #       puts n
+      #     end
       #   end
       #
       #   # good
-      #   method(str =~ /regex/)
-      #   return value unless regex =~ 'str'
-      class RedundantMatch < Cop
-        MSG = 'Use `=~` in places where the `MatchData` returned by ' \
-              '`#match` will not be used.'.freeze
+      #   def foo
+      #     [1, 2, 3].each do |n|
+      #       puts n
+      #     end
+      #   end
+      #
+      # @example EnforcedStyle: for
+      #   # bad
+      #   def foo
+      #     [1, 2, 3].each do |n|
+      #       puts n
+      #     end
+      #   end
+      #
+      #   # good
+      #   def foo
+      #     for n in [1, 2, 3] do
+      #       puts n
+      #     end
+      #   end
+      #
+      class For < Cop
+        include ConfigurableEnforcedStyle
+        include RangeHelp
     
-            expect(cop.offenses).to be_empty
-      end
+      desc 'Run RSpec in parallel with ASCII encoding'
+  task :ascii_spec do
+    sh('RUBYOPT='$RUBYOPT -E ASCII' rspec-queue spec/')
+  end
+end
+    
+          ::Gem.clear_paths
+      ENV['GEM_HOME'] = ENV['GEM_PATH'] = LogStash::Environment.logstash_gem_home
+      ::Gem.paths = ENV
+      # set BUNDLE_GEMFILE ENV before requiring bundler to avoid bundler recurse and load unrelated Gemfile(s).
+      # in the context of calling Bundler::CLI this is not really required since Bundler::CLI will look at
+      # Bundler.settings[:gemfile] unlike Bundler.setup. For the sake of consistency and defensive/future proofing, let's keep it here.
+      ENV['BUNDLE_GEMFILE'] = LogStash::Environment::GEMFILE_PATH
+    
+      gem.files         = Dir.glob(['logstash-core-plugin-api.gemspec', 'lib/**/*.rb', 'spec/**/*.rb'])
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.name          = 'logstash-core-plugin-api'
+  gem.require_paths = ['lib']
+  gem.version       = LOGSTASH_CORE_PLUGIN_API
+    
+      describe '#system?' do
+    context 'when the pipeline is a system pipeline' do
+      let(:settings) { mock_settings({ 'pipeline.system' => true })}
+    
+              it 'successfully install the plugin when verification is disabled' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest')
+          end
