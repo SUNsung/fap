@@ -1,256 +1,336 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        namespace tensorflow {
+TFE_TensorHandle* ConvertToEagerTensor(PyObject* value, PyObject* dtype);
+    }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
+    // Get the python wrappers for a list of ops in a OpList.
+// `op_list_buf` should be a pointer to a buffer containing
+// the binary encoded OpList proto, and `op_list_len` should be the
+// length of that buffer.
+string GetPythonWrappers(const char* op_list_buf, size_t op_list_len);
     
-    {
-    {}  // namespace functor
-}  // namespace tensorflow
+    void CostAnalyzer::GatherCosts() {
+  CostGraphDef cost_graph_measured;
+  PredictCosts(&measure_estimator_, &cost_graph_measured,
+               &total_time_measured_);
+  VLOG(1) << 'Graph size: ' << item_->graph.node_size();
+  VLOG(1) << 'cost_graph_measured size: ' << cost_graph_measured.node_size();
+    }
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
     namespace tensorflow {
-namespace port {
-    }
     }
     
         http://www.apache.org/licenses/LICENSE-2.0
     
-      CHECK(worker_name.size() < max_worker_name_length)
-      << 'Specified worker name is too long.';
-  snprintf(my_name, max_worker_name_length, worker_name.c_str());
-  std::vector<char> worker_names(number_of_procs * max_worker_name_length);
-  MPI_CHECK(MPI_Allgather(my_name, max_worker_name_length, MPI_CHAR,
-                          &worker_names[0], max_worker_name_length, MPI_CHAR,
-                          MPI_COMM_WORLD));
+    // Safe container for an owned PyObject. On destruction, the reference count of
+// the contained object will be decremented.
+using Safe_PyObjectPtr = std::unique_ptr<PyObject, detail::PyDecrefDeleter>;
+Safe_PyObjectPtr make_safe(PyObject* o);
     
-    // HACK: Allow support for many newer emoji by overriding behavior of ZWJ and
-// emoji modifiers. This does not make the breaks correct for any version of
-// Unicode, but shifts the ways in which it is incorrect to be less harmful.
-//
-// TODO: Remove this hack and reevaluate whether we should have any static
-// notion of what a grapheme is.
-//
-// Returns true if lhs and rhs shouldn't be considered as having a grapheme
-// break between them. That is, whether we're overriding the behavior of the
-// hard coded Unicode 8 rules surrounding ZWJ and emoji modifiers.
-static inline bool graphemeBreakOverride(llvm::UTF32 lhs, llvm::UTF32 rhs) {
-  return lhs == 0x200D || (rhs >= 0x1F3FB && rhs <= 0x1F3FF);
-}
-    
-    class Text final : public InlineContent {
-  StringRef LiteralContent;
-  Text(StringRef LiteralContent)
-    : InlineContent(ASTNodeKind::Text),
-      LiteralContent(LiteralContent) {}
-public:
-  static Text *create(MarkupContext &MC, StringRef LiteralContent);
-  StringRef getLiteralContent() const { return LiteralContent; };
-  void setLiteralContent(StringRef LC) {
-    LiteralContent = LC;
-  }
+    namespace tensorflow {
+namespace swig {
+    }
     }
     
-      /// Indicates whether to allow diagnostics for \c <unknown> locations if
-  /// \c VerifyMode is not \c NoVerify.
-  bool VerifyIgnoreUnknown = false;
-    
-      void forceColors() {
-    ForceColors = true;
-  }
-    
-      IndexSymbol() = default;
-    
-    #endif
-    
-    class FixitApplyDiagnosticConsumer final
-  : public DiagnosticConsumer, public FixitFilter {
-  clang::RewriteBuffer RewriteBuf;
+    void convert_dataset(const char* image_filename, const char* label_filename,
+        const char* db_filename) {
+  // Open files
+  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
+  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
+  CHECK(image_file) << 'Unable to open file ' << image_filename;
+  CHECK(label_file) << 'Unable to open file ' << label_filename;
+  // Read the magic and the meta data
+  uint32_t magic;
+  uint32_t num_items;
+  uint32_t num_labels;
+  uint32_t rows;
+  uint32_t cols;
     }
     
-    #  define EXPECT_DEBUG_DEATH(statement, regex) \
-  GTEST_EXECUTE_STATEMENT_(statement, regex)
-    
-    ]]
-    
-      // Create the directory so that path exists. Returns true if successful or
-  // if the directory already exists; returns false if unable to create the
-  // directory for any reason, including if the parent directory does not
-  // exist. Not named 'CreateDirectory' because that's a macro on Windows.
-  bool CreateFolder() const;
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24>
-class ValueArray24 {
- public:
-  ValueArray24(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
-      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
-      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24) : v1_(v1),
-      v2_(v2), v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7), v8_(v8), v9_(v9),
-      v10_(v10), v11_(v11), v12_(v12), v13_(v13), v14_(v14), v15_(v15),
-      v16_(v16), v17_(v17), v18_(v18), v19_(v19), v20_(v20), v21_(v21),
-      v22_(v22), v23_(v23), v24_(v24) {}
-    }
-    
-    template <GTEST_2_TYPENAMES_(T)>
-struct tuple_size<GTEST_2_TUPLE_(T) > {
-  static const int value = 2;
-};
-    
-    // Anything in namespace gtest_internal is Google Test's INTERNAL
-// IMPLEMENTATION DETAIL and MUST NOT BE USED DIRECTLY in user code.
-namespace gtest_internal {
-    }
-    
-    #include 'gtest/internal/gtest-port.h'
-    
-    
-    {  // n has no integer factor in the range (1, n), and thus is prime.
-  return true;
-}
-
-    
-    /**
- * @brief Generate the separator string for query results
- *
- * @param lengths The data returned from computeQueryDataLengths
- * @param columns The order of the keys (since maps are unordered)
- *
- * @return A string, with a newline, representing your separator
- */
-std::string generateToken(const std::map<std::string, size_t>& lengths,
-                          const std::vector<std::string>& columns);
-    
-     protected:
-  Status internalSetup() override;
-  Outcome internalSend(const Batch& batch) override;
-  void initializeRecord(Record& record,
-                        Aws::Utils::ByteBuffer& buffer) const override;
-    
-     protected:
-  // These constructors are made available for subclasses to use, but
-  // subclasses should expose appropriate constructors to their users.
-  explicit BufferedLogForwarder(const std::string& service_name,
-                                const std::string& name)
-      : InternalRunnable(service_name),
-        log_period_(kLogPeriod),
-        max_log_lines_(kMaxLogLines),
-        index_name_(name) {}
-    
-        ImFontAtlasBuildRegisterDefaultCustomRects(atlas);
-    
-        al_get_mouse_state(&mouse);
-    io.MouseDown[0] = mouse.buttons & (1 << 0);
-    io.MouseDown[1] = mouse.buttons & (1 << 1);
-    io.MouseDown[2] = mouse.buttons & (1 << 2);
-    
-    void ImGui_ImplFreeGLUT_NewFrame()
-{
-    // Setup time step
-    ImGuiIO& io = ImGui::GetIO();
-    int current_time = glutGet(GLUT_ELAPSED_TIME);
-    io.DeltaTime = (current_time - g_Time) / 1000.0f;
-    g_Time = current_time;
-    }
-    
-    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
-
-    
-            // Poll and handle inputs
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        s3eKeyboardUpdate();
-        s3ePointerUpdate();
-    
-    
-    {        // Rendering
-        ImGui::Render();
-        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
-        ImGui_ImplAllegro5_RenderDrawData(ImGui::GetDrawData());
-        al_flip_display();
-    }
-    
-    #include 'imgui.h'
-#include '../imgui_impl_freeglut.h'
-#include '../imgui_impl_opengl2.h'
-#include <GL/freeglut.h>
-    
-    
-    {        FramePresent(wd);
-    }
-    
-        // Main loop
-    bool done = false;
-    while (!done)
-    {
-        // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-            ImGui_ImplSDL2_ProcessEvent(&event);
-            if (event.type == SDL_QUIT)
-                done = true;
-            if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
-                done = true;
-        }
-    }
-    
-    #ifdef _WIN32
-    SDL_SysWMinfo wmInfo;
-    SDL_VERSION(&wmInfo.version);
-    SDL_GetWindowWMInfo(window, &wmInfo);
-    io.ImeWindowHandle = wmInfo.info.win.window;
-#else
-    (void)window;
+    #ifndef CPU_ONLY
+  void forward_gpu_gemm(const Dtype* col_input, const Dtype* weights,
+      Dtype* output, bool skip_im2col = false);
+  void forward_gpu_bias(Dtype* output, const Dtype* bias);
+  void backward_gpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* col_output);
+  void weight_gpu_gemm(const Dtype* col_input, const Dtype* output, Dtype*
+      weights);
+  void backward_gpu_bias(Dtype* bias, const Dtype* input);
 #endif
     
-        // Helpers to build glyph ranges from text data. Feed your application strings/characters to it then call BuildRanges().
-    struct GlyphRangesBuilder
+    
+    { private:
+  struct pair_sort_first {
+    bool operator()(const std::pair<int, int> &left,
+                    const std::pair<int, int> &right) {
+      return left.first < right.first;
+    }
+  };
+  void check_batch_reindex(int initial_num, int final_num,
+                           const Dtype* ridx_data);
+};
+    
+    #include <vector>
+    
+    /**
+ * @brief Takes a Blob and crop it, to the shape specified by the second input
+ *  Blob, across all dimensions after the specified axis.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+    
+    #endif  // CAFFE_CUDNN_DECONV_LAYER_HPP_
+
+    
+    
+    {}  // namespace grpc
+
+    
+    std::shared_ptr<ChannelCredentials> InsecureChannelCredentials() {
+  return std::shared_ptr<ChannelCredentials>(
+      new InsecureChannelCredentialsImpl());
+}
+    
+    grpc::string SecureAuthContext::GetPeerIdentityPropertyName() const {
+  if (!ctx_) {
+    return '';
+  }
+  const char* name = grpc_auth_context_peer_identity_property_name(ctx_);
+  return name == nullptr ? '' : name;
+}
+    
+    #include <grpc/grpc_security.h>
+#include 'src/core/lib/channel/channel_args.h'
+    
+    size_t TraceContextSerialize(const ::opencensus::trace::SpanContext& context,
+                             char* tracing_buf, size_t tracing_buf_size) {
+  GrpcTraceContext trace_ctxt(context);
+  return TraceContextEncoding::Encode(trace_ctxt, tracing_buf,
+                                      tracing_buf_size);
+}
+    
+    #include <vector>
+#include <memory>
+    
+      private:
+    
+    
+    {  if (base64) {
+    decoded = string_base64_decode(data, data_len, true);
+    if (decoded.isNull()) {
+      raise_warning('unable to decode base64 data');
+      return nullptr;
+    }
+  } else {
+    decoded = url_decode(data, data_len);
+  }
+  return req::make<MemFile>(decoded.data(), decoded.size());
+}
+    
+    #include <folly/portability/Fcntl.h>
+#include <folly/portability/Stdlib.h>
+#include <folly/portability/Unistd.h>
+    
+        // skipping emacs leftovers
+    char last = ename[strlen(ename) - 1];
+    if (last == '~' || last == '#') {
+      continue;
+    }
+    
+    	if (hFile != INVALID_HANDLE_VALUE)
+	{
+		CloseHandle(hFile);
+		return true;
+	}
+    
+        TableBuilder* builder = new TableBuilder(options, file);
+    meta->smallest.DecodeFrom(iter->key());
+    for (; iter->Valid(); iter->Next()) {
+      Slice key = iter->key();
+      meta->largest.DecodeFrom(key);
+      builder->Add(key, iter->value());
+    }
+    
+    // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+Status BuildTable(const std::string& dbname,
+                  Env* env,
+                  const Options& options,
+                  TableCache* table_cache,
+                  Iterator* iter,
+                  FileMetaData* meta);
+    
+      // Record a sample of bytes read at the specified internal key.
+  // Samples are taken approximately once every config::kReadBytesPeriod
+  // bytes.
+  void RecordReadSample(Slice key);
+    
+    
+    {}  // namespace leveldb
+    
+      // Return the current option configuration.
+  Options CurrentOptions() {
+    Options options;
+    options.reuse_logs = false;
+    switch (option_config_) {
+      case kReuse:
+        options.reuse_logs = true;
+        break;
+      case kFilter:
+        options.filter_policy = filter_policy_;
+        break;
+      case kUncompressed:
+        options.compression = kNoCompression;
+        break;
+      default:
+        break;
+    }
+    return options;
+  }
+    
+    bool InternalFilterPolicy::KeyMayMatch(const Slice& key, const Slice& f) const {
+  return user_policy_->KeyMayMatch(ExtractUserKey(key), f);
+}
+    
+    class FormatTest { };
+    
+    Status SetCurrentFile(Env* env, const std::string& dbname,
+                      uint64_t descriptor_number) {
+  // Remove leading 'dbname/' and add newline to manifest file name
+  std::string manifest = DescriptorFileName(dbname, descriptor_number);
+  Slice contents = manifest;
+  assert(contents.starts_with(dbname + '/'));
+  contents.remove_prefix(dbname.size() + 1);
+  std::string tmp = TempFileName(dbname, descriptor_number);
+  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
+  if (s.ok()) {
+    s = env->RenameFile(tmp, CurrentFileName(dbname));
+  }
+  if (!s.ok()) {
+    env->DeleteFile(tmp);
+  }
+  return s;
+}
+    
+    int main(int argc, char** argv) {
+  leveldb::Env* env = leveldb::Env::Default();
+  bool ok = true;
+  if (argc < 2) {
+    Usage();
+    ok = false;
+  } else {
+    std::string command = argv[1];
+    if (command == 'dump') {
+      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
+    } else {
+      Usage();
+      ok = false;
+    }
+  }
+  return (ok ? 0 : 1);
+}
+
+    
+    namespace log {
+    }
+    
+     private:
+  MemTable::Table::Iterator iter_;
+  std::string tmp_;       // For passing to EncodeKey
+    
+    #include 'db/db_impl.h'
+#include 'db/filename.h'
+#include 'db/version_set.h'
+#include 'db/write_batch_internal.h'
+#include 'leveldb/db.h'
+#include 'leveldb/env.h'
+#include 'leveldb/write_batch.h'
+#include 'util/logging.h'
+#include 'util/testharness.h'
+#include 'util/testutil.h'
+    
+    
+    {  x = NewNode(key, height);
+  for (int i = 0; i < height; i++) {
+    // NoBarrier_SetNext() suffices since we will add a barrier when
+    // we publish a pointer to 'x' in prev[i].
+    x->NoBarrier_SetNext(i, prev[i]->NoBarrier_Next(i));
+    prev[i]->SetNext(i, x);
+  }
+}
+    
+    #ifdef BOOST_REGEX_FI_WIN32_MAP // win32 mapfile
+    
+    template class BOOST_REGEX_TEMPLATE_DECL basic_regex< BOOST_REGEX_CHAR_T BOOST_REGEX_TRAITS_T >;
+    
+    #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+template <class I>
+const bool is_random_access_iterator<I>::value;
+#endif
+    
+    
     {
-        ImVector<unsigned char> UsedChars;  // Store 1-bit per Unicode code point (0=unused, 1=used)
-        GlyphRangesBuilder()                { UsedChars.resize(0x10000 / 8); memset(UsedChars.Data, 0, 0x10000 / 8); }
-        bool           GetBit(int n) const  { return (UsedChars[n >> 3] & (1 << (n & 7))) != 0; }
-        void           SetBit(int n)        { UsedChars[n >> 3] |= 1 << (n & 7); }  // Set bit 'c' in the array
-        void           AddChar(ImWchar c)   { SetBit(c); }                          // Add character
-        IMGUI_API void AddText(const char* text, const char* text_end = NULL);      // Add string (each character of the UTF-8 string are added)
-        IMGUI_API void AddRanges(const ImWchar* ranges);                            // Add ranges, e.g. builder.AddRanges(ImFontAtlas::GetGlyphRangesDefault()) to force add all of ASCII/Latin+Ext
-        IMGUI_API void BuildRanges(ImVector<ImWchar>* out_ranges);                  // Output new ranges
-    };
+    {}
+} // namespace boost
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    #ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
     
-    #ifndef COMM_HAS_MEMBER_H_
-#define COMM_HAS_MEMBER_H_
     
-    jvalue JNU_CallMethodByName(JNIEnv* _env, jobject obj, const char* _name, const char* descriptor, ...);
-jvalue JNU_CallStaticMethodByName(JNIEnv* _env, jclass clazz, const char* _name, const char* descriptor, ...);
-jvalue JNU_CallStaticMethodByName(JNIEnv* _env, const char* _class_name, const char* _name, const char* descriptor, ...);
-jvalue JNU_CallStaticMethodByMethodInfo(JNIEnv* _env, JniMethodInfo _method_info, ...);
-jvalue JNU_GetStaticField(JNIEnv* _env, jclass clazz, const char* _name, const char* sig);
-jvalue JNU_GetField(JNIEnv* _env, jobject obj, const char* _name, const char* sig);
+    {
+      basic = basic_syntax_group | collate | no_escape_in_lists,
+      extended = no_bk_refs | collate | no_perl_ex | no_escape_in_lists,
+      normal = 0,
+      emacs = basic_syntax_group | collate | emacs_ex | bk_vbar,
+      awk = no_bk_refs | collate | no_perl_ex,
+      grep = basic | newline_alt,
+      egrep = extended | newline_alt,
+      sed = basic,
+      perl = normal,
+      ECMAScript = normal,
+      JavaScript = normal,
+      JScript = normal
+   };
+   typedef unsigned int flag_type;
+    
+    template <class charT>
+class cpp_regex_traits;
+template <class charT>
+struct c_regex_traits;
+template <class charT>
+class w32_regex_traits;
+    
+    template <int N>
+struct padding3
+{
+   enum{
+      padding_size = 8,
+      padding_mask = 7
+   };
+};
+    
+        // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
+    // If you would like to use this DX11 sample code but remove this dependency you can: 
+    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
+    //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL. 
+    // See https://github.com/ocornut/imgui/pull/638 for sources and details.
