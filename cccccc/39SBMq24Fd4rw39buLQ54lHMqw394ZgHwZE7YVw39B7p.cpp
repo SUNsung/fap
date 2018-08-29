@@ -1,404 +1,569 @@
 
         
-        #endif  // STORAGE_LEVELDB_DB_BUILDER_H_
+         private:
+#if defined(OS_MACOSX)
+  void SetUpBundleOverrides();
+#endif
+    
+    
+    {}  // namespace
+    
+      v8::V8::Dispose();
+    
+    namespace atom {
+    }
+    
+    #include 'base/callback.h'
+#include 'base/location.h'
+#include 'base/single_thread_task_runner.h'
+#include 'uv.h'  // NOLINT(build/include)
+    
+    namespace atom {
+    }
+    
+    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_browser_button, Initialize)
 
     
-    const char* InternalKeyComparator::Name() const {
-  return 'leveldb.InternalKeyComparator';
+    std::string DownloadItem::GetFilename() const {
+  return base::UTF16ToUTF8(
+      net::GenerateFileName(GetURL(), GetContentDisposition(), std::string(),
+                            download_item_->GetSuggestedFilename(),
+                            GetMimeType(), 'download')
+          .LossyDisplayName());
 }
     
-    // Called on every item found in a WriteBatch.
-class WriteBatchItemPrinter : public WriteBatch::Handler {
+    #endif  // PYTHON_PROTO2_PYTHON_IMPL
+#endif  // PYTHON_PROTO2_CPP_IMPL_V2
+#endif  // PYTHON_PROTO2_CPP_IMPL_V1
+    
+    
+    {
+    {
+    {}  // namespace python
+}  // namespace protobuf
+}  // namespace google
+#endif  // GOOGLE_PROTOBUF_PYTHON_CPP_SCOPED_PYOBJECT_PTR_H__
+
+    
+    const GeneratedCodeInfo::Annotation* FindAnnotationOnPath(
+    const GeneratedCodeInfo& info, const string& source_file,
+    const std::vector<int>& path) {
+  std::vector<const GeneratedCodeInfo::Annotation*> annotations;
+  FindAnnotationsOnPath(info, source_file, path, &annotations);
+  if (annotations.empty()) {
+    return NULL;
+  }
+  return annotations[0];
+}
+    
+    // Functions to create C# XML documentation comments.
+// Currently this only includes documentation comments containing text specified as comments
+// in the .proto file; documentation comments generated just from field/message/enum/proto names
+// is inlined in the relevant code. If more control is required, that code can be moved here.
+    
+    void EnumGenerator::Generate(io::Printer* printer) {
+  WriteEnumDocComment(printer, descriptor_);
+  printer->Print('$access_level$ enum $name$ {\n',
+                 'access_level', class_access_level(),
+                 'name', descriptor_->name());
+  printer->Indent();
+  std::set<string> used_names;
+  std::set<int> used_number;
+  for (int i = 0; i < descriptor_->value_count(); i++) {
+      WriteEnumValueDocComment(printer, descriptor_->value(i));
+      string original_name = descriptor_->value(i)->name();
+      string name = GetEnumValueName(descriptor_->name(), descriptor_->value(i)->name());
+      // Make sure we don't get any duplicate names due to prefix removal.
+      while (!used_names.insert(name).second) {
+        // It's possible we'll end up giving this warning multiple times, but that's better than not at all.
+        GOOGLE_LOG(WARNING) << 'Duplicate enum value ' << name << ' (originally ' << original_name
+          << ') in ' << descriptor_->name() << '; adding underscore to distinguish';
+        name += '_';
+      }
+      int number = descriptor_->value(i)->number();
+      if (!used_number.insert(number).second) {
+          printer->Print('[pbr::OriginalName(\'$original_name$\', PreferredAlias = false)] $name$ = $number$,\n',
+             'original_name', original_name,
+             'name', name,
+             'number', SimpleItoa(number));
+      } else {
+          printer->Print('[pbr::OriginalName(\'$original_name$\')] $name$ = $number$,\n',
+             'original_name', original_name,
+             'name', name,
+             'number', SimpleItoa(number));
+      }
+  }
+  printer->Outdent();
+  printer->Print('}\n');
+  printer->Print('\n');
+}
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+    
+    
+    {
+    {
+    {
+    {
+    {}  // namespace
+}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+    void MessageGenerator::Generate(io::Printer* printer) {
+  std::map<string, string> vars;
+  vars['class_name'] = class_name();
+  vars['access_level'] = class_access_level();
+    }
+    
+    void PrimitiveFieldGenerator::GenerateMergingCode(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'if ($other_has_property_check$) {\n'
+    '  $property_name$ = other.$property_name$;\n'
+    '}\n');
+}
+    
+    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_PRIMITIVE_FIELD_H__
+    
+    bool object_exists(const char *name) {
+  int fd = shm_open(name, O_RDONLY, 0);
+  if (fd >= 0) {
+    close(fd);
+    return true;
+  } else {
+    return false;
+  }
+}
+    
+    namespace {
+    }
+    
+    X before running op:
+[[0.5821691  0.07719802 0.50159824]
+ [0.40952456 0.36788362 0.84887683]
+ [0.02472685 0.65730894 0.9066397 ]]
+X after running op:
+[[1.7899168 1.080256  1.6513585]
+ [1.5061016 1.4446739 2.3370204]
+ [1.0250351 1.9295927 2.4759884]]
+    
+    REGISTER_CPU_OPERATOR(
+    MergeSingleScalarFeatureTensorsGradient,
+    MergeSingleScalarFeatureTensorsGradientOp<CPUContext>);
+OPERATOR_SCHEMA(MergeSingleScalarFeatureTensorsGradient)
+    .SetDoc(
+        'Explode multi-feature tensor of scalar features into one or more'
+        'single-feature tensors' +
+        doc)
+    .NumInputs([](int n) { return n >= 2; })
+    .NumOutputs([](int n) { return n >= 1; })
+    .Input(0, 'in1_presence', '.presence')
+    .Input(1, '.values_grad', '.values_grad')
+    .Output(0, 'in1_grad', '_grad of inputs');
+REGISTER_GRADIENT(
+    MergeSingleScalarFeatureTensors,
+    GetMergeSingleScalarFeatureTensorsGradient);
+    
+    
+    {
+    {SHOULD_NOT_DO_GRADIENT(FindDuplicateElements);
+} // namespace
+} // namespace caffe2
+
+    
+    <details>
+    
+    template <typename T, class Context>
+class FloorOp final : public Operator<Context> {
  public:
-  WritableFile* dst_;
-  virtual void Put(const Slice& key, const Slice& value) {
-    std::string r = '  put '';
-    AppendEscapedStringTo(&r, key);
-    r += '' '';
-    AppendEscapedStringTo(&r, value);
-    r += ''\n';
-    dst_->Append(r);
-  }
-  virtual void Delete(const Slice& key) {
-    std::string r = '  del '';
-    AppendEscapedStringTo(&r, key);
-    r += ''\n';
-    dst_->Append(r);
-  }
-};
-    
-      fname = LogFileName('foo', 192);
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(192, number);
-  ASSERT_EQ(kLogFile, type);
-    
-    #ifndef STORAGE_LEVELDB_DB_TABLE_CACHE_H_
-#define STORAGE_LEVELDB_DB_TABLE_CACHE_H_
-    
-    class VersionSet;
-    
-    
-    {}  // namespace leveldb
-    
-    namespace leveldb {
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  USE_SIMPLE_CTOR_DTOR(FloorOp);
     }
     
-    // Add new checkboxmenuentry to menubar.
-void ScrollView::MenuItem(const char* parent, const char* name,
-                          int cmdEvent, bool flag) {
-  if (parent == nullptr) { parent = ''; }
-  if (flag) { SendMsg('addMenuBarItem('%s','%s',%d,true)',
-                      parent, name, cmdEvent);
-  } else { SendMsg('addMenuBarItem('%s','%s',%d,false)',
-                   parent, name, cmdEvent); }
-}
-    
-    /**
- * Sets up auto page segmentation, determines the orientation, and corrects it.
- * Somewhat arbitrary chunk of functionality, factored out of AutoPageSeg to
- * facilitate testing.
- * photo_mask_pix is a pointer to a nullptr pointer that will be filled on return
- * with the leptonica photo mask, which must be pixDestroyed by the caller.
- * to_blocks is an empty list that will be filled with (usually a single)
- * block that is used during layout analysis. This ugly API is required
- * because of the possibility of a unlv zone file.
- * TODO(rays) clean this up.
- * See AutoPageSeg for other arguments.
- * The returned ColumnFinder must be deleted after use.
- */
-ColumnFinder* Tesseract::SetupPageSegAndDetectOrientation(
-    PageSegMode pageseg_mode, BLOCK_LIST* blocks, Tesseract* osd_tess,
-    OSResults* osr, TO_BLOCK_LIST* to_blocks, Pix** photo_mask_pix,
-    Pix** music_mask_pix) {
-  int vertical_x = 0;
-  int vertical_y = 1;
-  TabVector_LIST v_lines;
-  TabVector_LIST h_lines;
-  ICOORD bleft(0, 0);
+    // FreeOp frees the content of the output blob. We allow it to take in input
+// blobs purely for the reason that it can 'wait' on the input blobs to be
+// produced by some of the earlier operators before a free is called.
+template <class Context>
+class FreeOp : public Operator<Context> {
+ public:
+  FreeOp(const OperatorDef& def, Workspace* ws) : Operator<Context>(def, ws) {}
     }
     
-      /// Returns true if the source image is binary.
-  bool IsBinary() const {
-    return pix_channels_ == 0;
-  }
-    
-    
-    { private:
-  tesseract::ParagraphJustification justification_;
-  int margin_;
-  int first_indent_;
-  int body_indent_;
-  int tolerance_;
-};
-    
-    
-    {  virtual void Run(A1 a1,A2 a2,A3 a3) {
-    if (!del) {
-      (*function_)(p1_,p2_,p3_,a1,a2,a3);
+    template <class FullyConnectedOp>
+bool RunFullyConnectedOpOnCUDADevice(
+    const bool float16_compute,
+    FullyConnectedOp* op) {
+  if (op->Input(0).template IsType<float>()) {
+    return op->template DoRunWithType<
+        float, // X
+        float, // W
+        float, // B
+        float, // Y
+        float>(); // Math
+  } else if (op->Input(0).template IsType<float16>()) {
+    if (float16_compute) {
+      const cudaDeviceProp& prop = GetDeviceProperty(0);
+      if (prop.major >= kFp16CUDADevicePropMajor) {
+        return op->template DoRunWithType<
+            float16, // X
+            float16, // W
+            float16, // B
+            float16, // Y
+            float16>(); // Math
+      } else {
+        LOG(INFO) << 'CUDA Device does not support FP16 computation, '
+                     'falling back to FP32.';
+        return op->template DoRunWithType<
+            float16, // X
+            float16, // W
+            float16, // B
+            float16, // Y
+            float>(); // Math
+      }
     } else {
-      (*function_)(p1_,p2_,p3_,a1,a2,a3);
-      //  zero out the pointer to ensure segfault if used again
-      function_ = nullptr;
-      delete this;
+      return op->template DoRunWithType<
+          float16, // X
+          float16, // W
+          float16, // B
+          float16, // Y
+          float>(); // Math
     }
+  } else {
+    CAFFE_THROW('Unsupported type');
   }
-};
-    
-    // Helper to compute an offset index feature. In this context an offset
-// feature with a dir of +/-1 is a feature of a similar direction,
-// but shifted perpendicular to the direction of the feature. An offset
-// feature with a dir of +/-2 is feature at the same position, but rotated
-// by +/- one [compact] quantum. Returns the index of the generated offset
-// feature, or -1 if it doesn't exist. Dir should be in
-// [-kNumOffsetMaps, kNumOffsetMaps] to indicate the relative direction.
-// A dir of 0 is an identity transformation.
-// Both input and output are from the index(sparse) feature space, not
-// the mapped/compact feature space, but the offset feature is the minimum
-// distance moved from the input to guarantee that it maps to the next
-// available quantum in the mapped/compact space.
-int IntFeatureMap::ComputeOffsetFeature(int index_feature, int dir) const {
-  INT_FEATURE_STRUCT f = InverseIndexFeature(index_feature);
-  ASSERT_HOST(IndexFeature(f) == index_feature);
-  if (dir == 0) {
-    return index_feature;
-  } else if (dir == 1 || dir == -1) {
-    FCOORD feature_dir = FeatureDirection(f.Theta);
-    FCOORD rotation90(0.0f, 1.0f);
-    feature_dir.rotate(rotation90);
-    // Find the nearest existing feature.
-    for (int m = 1; m < kMaxOffsetDist; ++m) {
-      double x_pos = f.X + feature_dir.x() * (m * dir);
-      double y_pos = f.Y + feature_dir.y() * (m * dir);
-      int x = IntCastRounded(x_pos);
-      int y = IntCastRounded(y_pos);
-      if (x >= 0 && x <= UINT8_MAX && y >= 0 && y <= UINT8_MAX) {
-        INT_FEATURE_STRUCT offset_f;
-        offset_f.X = x;
-        offset_f.Y = y;
-        offset_f.Theta = f.Theta;
-        int offset_index = IndexFeature(offset_f);
-        if (offset_index != index_feature && offset_index >= 0)
-          return offset_index;  // Found one.
-      } else {
-        return -1;  // Hit the edge of feature space.
-      }
-    }
-  } else if (dir == 2 || dir == -2) {
-    // Find the nearest existing index_feature.
-    for (int m = 1; m < kMaxOffsetDist; ++m) {
-      int theta = f.Theta + m * dir / 2;
-      INT_FEATURE_STRUCT offset_f;
-      offset_f.X = f.X;
-      offset_f.Y = f.Y;
-      offset_f.Theta = Modulo(theta, 256);
-      int offset_index = IndexFeature(offset_f);
-      if (offset_index != index_feature && offset_index >= 0)
-        return offset_index;  // Found one.
-    }
-  }
-  return -1;  // Nothing within the max distance.
+  return false;
 }
     
-        SECTION('at(index) throws when given an invalid index') {
-      REQUIRE_THROWS_WITH(
-          cursor.at(5),
-          StartsWith('Index 5 is out of range for cursor of size 3'));
-      REQUIRE_THROWS_WITH(
-          cursor.at(123),
-          StartsWith('Index 123 is out of range for cursor of size 3'));
-    }
+    #define TEMPL_MAKE_ENUM_TYPE_INFO(m_enum, m_impl)                                                                                                                                 \
+	template <>                                                                                                                                                                   \
+	struct GetTypeInfo<m_impl> {                                                                                                                                                  \
+		static const Variant::Type VARIANT_TYPE = Variant::INT;                                                                                                                   \
+		static inline PropertyInfo get_class_info() {                                                                                                                             \
+			return PropertyInfo(Variant::INT, String(), PROPERTY_HINT_NONE, String(), PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_CLASS_IS_ENUM, String(#m_enum).replace('::', '.')); \
+		}                                                                                                                                                                         \
+	};
     
-    #define THC_GENERIC_FILE 'torch/csrc/generic/utils.cpp'
-#include <THC/THCGenerateAllTypes.h>
     
-    THLongStoragePtr THPUtils_unpackSize(PyObject *arg) {
-  THLongStoragePtr result;
-  if (!THPUtils_tryUnpackLongs(arg, result)) {
-    std::string msg = 'THPUtils_unpackSize() expects a torch.Size (got '';
-    msg += Py_TYPE(arg)->tp_name;
-    msg += '')';
-    throw std::runtime_error(msg);
-  }
-  return result;
+    {		Map<StringName, ShaderLanguage::ShaderNode::Uniform> *uniforms;
+	};
+    
+    	virtual void canvas_render_items(Item *p_item_list, int p_z, const Color &p_modulate, Light *p_light, const Transform2D &p_transform);
+	virtual void canvas_debug_viewport_shadows(Light *p_lights_with_shadow);
+    
+    
+    {	return memnew(SemaphorePosix);
 }
     
+    	static Error set_name_func_posix(const String &p_name);
     
-    {
-    {      // Solve Ax=b
-      const float div = A.determinant();
-      EVecXf delta(2);
-      float deltaScore;
-      const float MAX_DELTA = 1.5;
-      if (std::abs(div) < 1e-4f) {
-        delta << 0.0f, 0.0f;
-        deltaScore = maxScore;
-      } else {
-        delta = A.ldlt().solve(b);
-        // clip delta if going out-of-range of 3x3 grid
-        if (std::abs(delta(0)) > MAX_DELTA || std::abs(delta(1)) > MAX_DELTA) {
-          float larger_delta = std::max(std::abs(delta(0)), std::abs(delta(1)));
-          delta(0) = delta(0) / larger_delta * MAX_DELTA;
-          delta(1) = delta(1) / larger_delta * MAX_DELTA;
-        }
-        deltaScore = fmax(1, 1) - b.transpose() * delta +
-            1.0 / 2.0 * delta.transpose() * A * delta;
-      }
-      assert(std::abs(delta(0)) <= MAX_DELTA);
-      assert(std::abs(delta(1)) <= MAX_DELTA);
-      // find maximum of detla scores
-      keypoints(k, 0 * keypoint_count + j) =
-          x0 + (0.5 + maxX + delta(0)) * xLen / heatmap_size;
-      keypoints(k, 1 * keypoint_count + j) =
-          y0 + (0.5 + maxY + delta(1)) * yLen / heatmap_size;
-      keypoints(k, 2 * keypoint_count + j) = deltaScore;
-      if (should_output_softmax_) {
-        keypoints(k, 3 * keypoint_count + j) = probs(heatmap_index, maxIndex);
-      } else {
-        keypoints(k, 3 * keypoint_count + j) = .0f;
-      }
+    	if (worked) {
     }
-  }
     
-    template<typename real,
-         typename = typename std::enable_if<std::is_arithmetic<real>::value>::type>
-inline void _appendScalar(ByteArray& str, real data) {
-  str.append(reinterpret_cast<char*>(&data), sizeof(data));
-}
-    
-    
-    {
-    {}} // namespace rpc, thd
-    
-      if (arg.has_i()) {
-    const auto it = kBlackListInt.find(arg.name());
-    if (it != kBlackListInt.end()) {
-      return it->second.count(arg.i());
-    }
-  } else if (arg.has_s()) {
-    const auto it = kBlackListString.find(arg.name());
-    if (it != kBlackListString.end()) {
-      return it->second.count(arg.s());
-    }
-  }
-    
-    
-    {
-    {// use R's PRNG to replacd
-CustomGlobalRandomEngine::result_type
-CustomGlobalRandomEngine::operator()() {
-  return static_cast<result_type>(
-      std::floor(unif_rand() * CustomGlobalRandomEngine::max()));
-}
-}  // namespace common
-}  // namespace xgboost
+    #endif
 
     
-    // try to load weight information from file, if exists
-inline bool MetaTryLoadFloatInfo(const std::string& fname,
-                                 std::vector<bst_float>* data) {
-  std::unique_ptr<dmlc::Stream> fi(dmlc::Stream::Create(fname.c_str(), 'r', true));
-  if (fi == nullptr) return false;
-  dmlc::istream is(fi.get());
-  data->clear();
-  bst_float value;
-  while (is >> value) {
-    data->push_back(value);
-  }
-  return true;
+    #include 'os/mutex.h'
+#include <windows.h>
+/**
+	@author Juan Linietsky <reduzio@gmail.com>
+*/
+class MutexWindows : public Mutex {
+    }
+    
+    
+    {	if (sockfd != -1)
+		::closesocket(sockfd);
+	sockfd = -1;
+	sock_type = IP::TYPE_NONE;
+	rb.resize(16);
+	queue_count = 0;
 }
     
-        MetaInfo info;
-    size_t bytes_write = 0;
-    double tstart = dmlc::GetTime();
-    // print every 4 sec.
-    constexpr double kStep = 4.0;
-    size_t tick_expected = static_cast<double>(kStep);
+    #endif
+
     
-        out_gpair->Resize(preds_h.size());
-    auto& gpair = out_gpair->HostVector();
-    
-    /*! \brief Enforces that the tree is monotonically increasing/decreasing with respect to a user specified set of
-      features.
-*/
-class MonotonicConstraint final : public SplitEvaluator {
- public:
-  explicit MonotonicConstraint(std::unique_ptr<SplitEvaluator> inner) {
-    if (!inner) {
-      LOG(FATAL) << 'MonotonicConstraint must be given an inner evaluator';
+    void TCPServerWinsock::stop() {
     }
-    inner_ = std::move(inner);
-  }
+    
+    DWORD ThreadWindows::thread_callback(LPVOID userdata) {
     }
     
      public:
-  CompressedIterator() : buffer_(nullptr), symbol_bits_(0), offset_(0) {}
-  CompressedIterator(CompressedByteT *buffer, int num_symbols)
-      : buffer_(buffer), offset_(0) {
-    symbol_bits_ = detail::SymbolBits(num_symbols);
+  /*! \brief cuda kernel argument descriptor */
+  struct ArgType {
+    /*! \brief whether argument is NDArray */
+    bool is_ndarray;
+    /*! \brief whether argument is constant (input) */
+    bool is_const;
+    /*! \brief data type of argument */
+    mshadow::TypeFlag dtype;
+  };
+  /*! \brief Cuda kernel */
+  class Kernel {
+   public:
+    /*! \brief Launch the kernel */
+    void Launch(const Context& ctx, const std::vector<dmlc::any>& args,
+                uint32_t grid_dim_x, uint32_t grid_dim_y, uint32_t grid_dim_z,
+                uint32_t block_dim_x, uint32_t block_dim_y, uint32_t block_dim_z,
+                uint32_t shared_mem);
+    /*! \brief kernel interface signature */
+    const std::vector<ArgType>& signature() { return signature_; }
+    }
+    
+    template <typename Dtype>
+class LayerRegistry {
+ public:
+  static ::caffe::Layer<Dtype> * CreateLayer(const ::caffe::LayerParameter& param) {
+    ::caffe::shared_ptr< ::caffe::Layer<Dtype> > ptr =
+      ::caffe::LayerRegistry<Dtype>::CreateLayer(param);
+    // avoid caffe::layer destructor, which deletes the weights layer owns
+    new ::caffe::shared_ptr< ::caffe::Layer<Dtype> >(ptr);
+    return ptr.get();
   }
+};
     
-      /*!
-   * \brief Set additional attribute to the Booster.
-   *  The property will be saved along the booster.
-   * \param key The key of the property.
-   * \param value The value of the property.
-   */
-  virtual void SetAttr(const std::string& key, const std::string& value) = 0;
-  /*!
-   * \brief Get attribute from the booster.
-   *  The property will be saved along the booster.
-   * \param key The key of the attribute.
-   * \param out The output value.
-   * \return Whether the key exists among booster's attributes.
-   */
-  virtual bool GetAttr(const std::string& key, std::string* out) const = 0;
-  /*!
-   * \brief Delete an attribute from the booster.
-   * \param key The key of the attribute.
-   * \return Whether the key was found among booster's attributes.
-   */
-  virtual bool DelAttr(const std::string& key) = 0;
-  /*!
-   * \brief Get a vector of attribute names from the booster.
-   * \return vector of attribute name strings.
-   */
-  virtual std::vector<std::string> GetAttrNames() const = 0;
-  /*!
-   * \return whether the model allow lazy checkpoint in rabit.
-   */
-  bool AllowLazyCheckPoint() const;
-  /*!
-   * \brief dump the model in the requested format
-   * \param fmap feature map that may help give interpretations of feature
-   * \param with_stats extra statistics while dumping model
-   * \param format the format to dump the model in
-   * \return a vector of dump for boosters.
-   */
-  std::vector<std::string> DumpModel(const FeatureMap& fmap,
-                                     bool with_stats,
-                                     std::string format) const;
-  /*!
-   * \brief online prediction function, predict score for one instance at a time
-   *  NOTE: use the batch prediction interface if possible, batch prediction is usually
-   *        more efficient than online prediction
-   *        This function is NOT threadsafe, make sure you only call from one thread.
-   *
-   * \param inst the instance you want to predict
-   * \param output_margin whether to only predict margin value instead of transformed prediction
-   * \param out_preds output vector to hold the predictions
-   * \param ntree_limit limit the number of trees used in prediction
-   */
-  inline void Predict(const SparsePage::Inst &inst,
-                      bool output_margin,
-                      HostDeviceVector<bst_float> *out_preds,
-                      unsigned ntree_limit = 0) const;
-  /*!
-   * \brief Create a new instance of learner.
-   * \param cache_data The matrix to cache the prediction.
-   * \return Created learner.
-   */
-  static Learner* Create(const std::vector<std::shared_ptr<DMatrix> >& cache_data);
-    
-    // Forward declarations
-namespace xgboost {
-class TreeUpdater;
+    static inline bool is_env_set(const char *var) {
+  return dmlc::GetEnv(var, INT_MIN) != INT_MIN;
 }
     
-    #include <folly/Executor.h>
-#include <folly/MPMCQueue.h>
-#include <folly/Range.h>
-#include <folly/executors/task_queue/BlockingQueue.h>
-#include <folly/synchronization/LifoSem.h>
-#include <glog/logging.h>
-    
-    /** hazptr_tc_entry */
-    
-    /**
- * Accesses a defined setting.
- * Rationale for the macro:
- *  1) Searchability, all settings access is done via FOLLY_SETTING(...)
- *  2) Prevents omitting trailing () by accident, which could
- *     lead to bugs like `auto value = *FOLLY_SETTING_project_name;`,
- *     which compiles but dereferences the function pointer instead of
- *     the setting itself.
- */
-#define FOLLY_SETTING(_project, _name) \
-  FOLLY_SETTINGS_FUNC__##_project##_##_name()
-    
-      SettingCore(const SettingMetadata& meta, Type defaultValue)
-      : meta_(meta),
-        defaultValue_(std::move(defaultValue)),
-        globalValue_(std::make_shared<Contents>('default', defaultValue_)),
-        localValue_([]() {
-          return new CachelinePadded<
-              Indestructible<std::pair<size_t, std::shared_ptr<Contents>>>>(
-              0, nullptr);
-        }) {
-    registerSetting(*this);
+    template <std::size_t kNumGpus, std::size_t kStreams>
+StreamManager<kNumGpus, kStreams>::StreamManager() {
+#if MXNET_USE_CUDA
+  for (std::size_t i = 0; i < kNumGpus; ++i) {
+    gpu_cnt_.at(i) = -1;
   }
+  for (auto&& i : gpu_io_streams_) {
+    i = nullptr;
+  }
+#endif  // MXNET_USE_CUDA
+}
+    
+    ThreadedOpr* ThreadedEngine::NewOperator(
+    ThreadedEngine::AsyncFn fn,
+    std::vector<VarHandle> const& const_vars,
+    std::vector<VarHandle> const& mutable_vars,
+    FnProperty prop,
+    const char* opr_name,
+    bool wait) {
+  auto ret = ThreadedOpr::New();
+  ret->opr_name = opr_name;
+  ret->fn = std::move(fn);
+  ret->prop = prop;
+  ret->const_vars.resize(const_vars.size());
+  ret->mutable_vars.resize(mutable_vars.size());
+  ret->wait = wait;
+  std::transform(const_vars.begin(), const_vars.end(),
+                 ret->const_vars.begin(), ThreadedVar::CastFromBase);
+  std::transform(mutable_vars.begin(), mutable_vars.end(),
+                 ret->mutable_vars.begin(), ThreadedVar::CastFromBase);
+  if (ENGINE_DEBUG != 0) {
+    CheckDuplicate(const_vars, mutable_vars);
+  }
+  return ret;
+}
+    
+    template<typename AttrType, typename FInfer>
+bool ApplyOpInferAttr(const nnvm::Graph& g,
+                      const FInfer& finfer,
+                      const NodeAttrs& attrs,
+                      const uint32_t nid,
+                      std::vector<AttrType>* in_attrs,
+                      std::vector<AttrType>* out_attrs,
+                      DispatchMode* dispatch_mode) {
+  return finfer(attrs, in_attrs, out_attrs);
+}
+    
+    namespace guetzli {
+    }
     
     
-    {  EXPECT_TRUE(future.isReady());
-  EXPECT_EQ(std::move(future).get(), 123);
+    {  // Returns a heuristic cutoff on block errors in the sense that we won't
+  // consider distortions where a block error is greater than this.
+  virtual float BlockErrorLimit() const = 0;
+  // Given the search direction (+1 for upwards and -1 for downwards) and the
+  // current distance map, fills in *block_weight image with the relative block
+  // error adjustment weights.
+  // The target_mul param has the same semantics as in DistanceOK().
+  // Note that this is essentially a static function in the sense that it does
+  // not depend on the last Compare() call.
+  virtual void ComputeBlockErrorAdjustmentWeights(
+      int direction, int max_block_dist, double target_mul, int factor_x,
+      int factor_y, const std::vector<float>& distmap,
+      std::vector<float>* block_weight) = 0;
+};
+    
+      tmp0 = in[4 * stride];
+  tmp1 = kIDCTMatrix[ 4] * tmp0;
+  out[0] += tmp1;
+  out[1] -= tmp1;
+  out[2] -= tmp1;
+  out[3] += tmp1;
+  out[4] += tmp1;
+  out[5] -= tmp1;
+  out[6] -= tmp1;
+  out[7] += tmp1;
+    
+    // Represents one component of a jpeg file.
+struct JPEGComponent {
+  JPEGComponent() : id(0),
+                    h_samp_factor(1),
+                    v_samp_factor(1),
+                    quant_idx(0),
+                    width_in_blocks(0),
+                    height_in_blocks(0) {}
+    }
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    // Keep this data global and non-const, so the compiler cannot make
+// any assumptions about the actual values at compile time
+    
+    BENCHMARK(exception_ptr_create_and_throw_concurrent, iters) {
+  std::atomic<bool> go(false);
+  std::vector<std::thread> threads;
+  BENCHMARK_SUSPEND {
+    for (int t = 0; t < FLAGS_num_threads; ++t) {
+      threads.emplace_back([&go, iters] {
+        while (!go) { }
+        std::runtime_error e('payload');
+        for (size_t i = 0; i < iters; ++i) {
+          auto ep = std::make_exception_ptr(e);
+          try {
+            std::rethrow_exception(ep);
+          } catch (std::runtime_error&) {
+          }
+        }
+      });
+    }
+  }
+  go.store(true);
+  for (auto& t : threads) {
+    t.join();
+  }
+}
+    
+    #include <atomic>
+    
+    void BENCHFUN(short_append)(size_t iters, size_t arg) {
+  FOR_EACH_RANGE (i, 0, iters) {
+    STRING s;
+    FOR_EACH_RANGE (j, 0, arg) {
+      s += '012';
+    }
+  }
+}
+BENCHMARK_PARAM(BENCHFUN(short_append), 23)
+BENCHMARK_PARAM(BENCHFUN(short_append), 1024)
+    
+    #include <boost/random.hpp>
+    
+    void BENCHFUN(insertFront)(int iters, int initialSize) {
+  BenchmarkSuspender braces;
+  auto const obj = randomObject<VECTOR::value_type>();
+  VECTOR v(initialSize, obj);
+  braces.dismissing([&]() {
+    FOR_EACH_RANGE (i, 0, iters) { v.insert(v.begin(), obj); }
+  });
+}
+    
+    TEST(fbvector, clause_23_3_6_1_3_ambiguity) {
+  fbvector<int> v(10, 20);
+  EXPECT_EQ(v.size(), 10);
+  FOR_EACH (i, v) {
+    EXPECT_EQ(*i, 20);
+  }
+}
+    
+      // write-like
+  ssize_t operator()(int fd, void* buf, size_t count);
+    
+    void initialize() {
+  std::mt19937 rng;
+  for (int i = 0; i < kMaxIds; i++) {
+    ids[i] = (((uint64_t)rng()) << 32) | rng();
+  }
+  // Use randomly generated words.  These numbers are out of my hat and
+  // probably wrong.
+  // word length = uniformly distributed between 1 and 10
+  // charset = 0x20 - 0x7f
+  std::uniform_int_distribution<size_t> term_len(1, 10);
+  std::uniform_int_distribution<uint16_t> term_char(0x20, 0x7f);
+  for (int i = 0; i < kMaxTerms; i++) {
+    std::string& term = terms[i];
+    int len = term_len(rng);
+    term.reserve(len);
+    for (int j = 0; j < len; j++) {
+      term.append(1, (char)term_char(rng));
+    }
+  }
+}
+    
+    TEST(FunctionRef, Traits) {
+  static_assert(std::is_literal_type<FunctionRef<int(int)>>::value, '');
+// Some earlier versions of libstdc++ lack these traits. Frustrating that
+// the value of __GLIBCXX__ doesn't increase with version, but rather reflects
+// release date, so some larger values of __GLIBCXX__ lack the traits while
+// some smaller values have them. Can't figure out how to reliably test for the
+// presence or absence of the traits. :-(
+#if !defined(__GLIBCXX__) || __GNUC__ >= 5
+  static_assert(
+      std::is_trivially_copy_constructible<FunctionRef<int(int)>>::value, '');
+  static_assert(
+      std::is_trivially_move_constructible<FunctionRef<int(int)>>::value, '');
+  static_assert(
+      std::is_trivially_constructible<
+          FunctionRef<int(int)>,
+          FunctionRef<int(int)>&>::value,
+      '');
+  static_assert(
+      std::is_trivially_copy_assignable<FunctionRef<int(int)>>::value, '');
+  static_assert(
+      std::is_trivially_move_assignable<FunctionRef<int(int)>>::value, '');
+  static_assert(
+      std::is_trivially_assignable<
+          FunctionRef<int(int)>,
+          FunctionRef<int(int)>&>::value,
+      '');
+#endif
+  static_assert(
+      std::is_nothrow_copy_constructible<FunctionRef<int(int)>>::value, '');
+  static_assert(
+      std::is_nothrow_move_constructible<FunctionRef<int(int)>>::value, '');
+  static_assert(
+      std::is_nothrow_constructible<
+          FunctionRef<int(int)>,
+          FunctionRef<int(int)>&>::value,
+      '');
+  static_assert(
+      std::is_nothrow_copy_assignable<FunctionRef<int(int)>>::value, '');
+  static_assert(
+      std::is_nothrow_move_assignable<FunctionRef<int(int)>>::value, '');
+  static_assert(
+      std::is_nothrow_assignable<
+          FunctionRef<int(int)>,
+          FunctionRef<int(int)>&>::value,
+      '');
+}
+    
+    int main(int argc, char** argv) {
+  gflags::ParseCommandLineFlags(&argc, &argv, true);
+  folly::runBenchmarks();
+  return 0;
 }
