@@ -1,139 +1,115 @@
-        def test_url_port
-          spec = resolve 'abstract://foo:123?encoding=utf8'
-          assert_equal({
-            'adapter'  => 'abstract',
-            'port'     => 123,
-            'host'     => 'foo',
-            'encoding' => 'utf8' }, spec)
+
+        
+                  method_tag = \
+            case method
+            when 'get'
+              html_options['method'] = 'get'
+              ''
+            when 'post', ''
+              html_options['method'] = 'post'
+              token_tag(authenticity_token, form_options: {
+                action: html_options['action'],
+                method: 'post'
+              })
+            else
+              html_options['method'] = 'post'
+              method_tag(method) + token_tag(authenticity_token, form_options: {
+                action: html_options['action'],
+                method: method
+              })
+            end
+    
+            def render(&block)
+          render_collection_for(RadioButtonBuilder, &block)
         end
     
-    require 'test_helper'
-require 'stubs/test_server'
+            def render
+          options = @options.stringify_keys
+          options['size'] = options['maxlength'] unless options.key?('size')
+          options['type'] ||= field_type
+          options['value'] = options.fetch('value') { value_before_type_cast } unless field_type == 'file'
+          add_default_name_and_id(options)
+          tag('input', options)
+        end
     
-      test 'on connection close' do
-    run_in_eventmachine do
-      connection = open_connection
-      connection.process
-    
-        def close_connection
-      @connection.send :handle_close
+        def log_rendering_start(payload)
+      info do
+        message = '  Rendering #{from_rails_root(payload[:identifier])}'.dup
+        message << ' within #{from_rails_root(payload[:layout])}' if payload[:layout]
+        message
+      end
     end
-end
-
-    
-        def connect
-      @connected = true
-    end
-    
-        def setup_connection
-      env = Rack::MockRequest.env_for '/test', 'HTTP_HOST' => 'localhost', 'HTTP_CONNECTION' => 'upgrade', 'HTTP_UPGRADE' => 'websocket'
-      @connection = Connection.new(@server, env)
-    
-      def connect(config)
-    ActionCable::SubscriptionAdapter::Redis.redis_connector.call(config)
   end
 end
-
     
-      if final_pid = Process.fork
-    # middle process
-    open(pidfile, 'w') { |f| f.puts final_pid }
-    exit
+          # Calculate the details key. Remove the handlers from calculation to improve performance
+      # since the user cannot modify it explicitly.
+      def details_key #:nodoc:
+        @details_key ||= DetailsKey.get(@details) if @cache
+      end
+    
+      it 'expands shell variables when given a single string argument' do
+    lambda { @object.system('echo #{@shell_var}') }.should output_to_fd('foo\n')
   end
     
-      def validate_evernote_options
-    unless evernote_consumer_key.present? &&
-      evernote_consumer_secret.present? &&
-      evernote_oauth_token.present?
-      errors.add(:base, 'Evernote ENV variables and a Service are required')
-    end
-  end
-    
-      def load_event
-    @event = current_user.events.find(params[:id])
-  end
-end
-
-    
-        respond_to do |format|
-      format.html { redirect_to services_path }
-      format.json { head :no_content }
-    end
-  end
-    
-    require_relative '../../../spec_helper'
-    
-      it 'does copy the message' do
-    @obj.dup.message.should == @obj.message
-  end
-    
-    module NoMethodErrorSpecs
-  class NoMethodErrorA; end
-    
-      with_feature :encoding do
-    before :each do
-      @external = Encoding.default_external
-      @internal = Encoding.default_internal
-    
-        it 'dumps a Range exclusive of end (with indeterminant order)' do
-      dump = Marshal.dump(1...2)
-      load = Marshal.load(dump)
-      load.should == (1...2)
+        after :each do
+      @tmp_file.close
+      rm_r @tmp_file
     end
     
-      it 'raises a #{frozen_error_class} when self is frozen' do
-    lambda { 'HeLlo'.freeze.downcase! }.should raise_error(frozen_error_class)
-    lambda { 'hello'.freeze.downcase! }.should raise_error(frozen_error_class)
-  end
+      it 'accepts a proc argument instead of a block' do
+    captured = nil
     
-        it 'does not allow invalid options' do
-      lambda { 'abc'.swapcase(:invalid_option) }.should raise_error(ArgumentError)
+        def add_warning(message)
+      warnings << message
     end
+    
+      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
+    @logger     = Logger.new
+    @repo       = repo
+    @branch     = branch || 'master'
+    @branch_sha = get_branch_sha
+    @cache_path = cache_path
+    @repo_url   = 'https://github.com/#@repo'
+    @save_to    = {
+        js:    'assets/javascripts/bootstrap',
+        scss:  'assets/stylesheets/bootstrap',
+        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
   end
     
-          def update_if_necessary!
-        if @update && config.verbose?
-          UI.section('\nUpdating Spec Repositories\n'.yellow) do
-            Repo.new(ARGV.new(['update'])).run
+        def shared_mixins
+      @shared_mixins ||= begin
+        log_status '  Reading shared mixins from mixins.less'
+        CLASSES_TO_MIXINS + read_mixins(read_files('less', bootstrap_less_files.grep(/mixins\//)).values.join('\n'),
+                                        nested: NESTED_MIXINS)
+      end
+    end
+    
+      # Full error reports are disabled and caching is turned on.
+  config.consider_all_requests_local       = false
+  config.action_controller.perform_caching = true
+    
+      # Disable request forgery protection in test environment.
+  config.action_controller.allow_forgery_protection = false
+    
+            def run
+          if @pod_name.nil?
+            # Note: at that point, @wipe_all is always true (thanks to `validate!`)
+            # Remove all
+            clear_cache
+          else
+            # Remove only cache for this pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            elsif cache_descriptors.count > 1 && !@wipe_all
+              # Ask which to remove
+              choices = cache_descriptors.map { |c| '#{@pod_name} v#{c[:version]} (#{pod_type(c)})' }
+              index = UI.choose_from_array(choices, 'Which pod cache do you want to remove?')
+              remove_caches([cache_descriptors[index]])
+            else
+              # Remove all found cache of this pod
+              remove_caches(cache_descriptors)
+            end
           end
         end
-      end
-    
-    end
-    
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
-          end
-        end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
-      end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
-      else
-        '#{quote}<footer>#{author}</footer>'
-      end
-      '<blockquote>#{blockquote}</blockquote>'
-    end
-    
-    Liquid::Template.register_tag('gist', Jekyll::GistTag)
-Liquid::Template.register_tag('gistnocache', Jekyll::GistTagNoCache)
-
-    
-          if File.symlink?(code_path)
-        return 'Code directory '#{code_path}' cannot be a symlink'
-      end
