@@ -1,63 +1,74 @@
 
         
-              out = checks.send(method)
-      unless out.nil? || out.empty?
-        if first_warning
-          $stderr.puts <<-EOS.undent
-            #{Tty.white}Please note that these warnings are just used to help the Homebrew maintainers
-            with debugging if you file an issue. If everything you use Homebrew for is
-            working fine: please don't worry and just ignore them. Thanks!#{Tty.reset}
-          EOS
-        end
+              it 'requires the passwords to match when changing them' do
+        visit edit_admin_user_path(users(:bob))
+        fill_in 'Password', with: '12345678'
+        fill_in 'Password confirmation', with: 'no_match'
+        click_on 'Update User'
+        expect(page).to have_text('Password confirmation doesn't match')
+      end
+    end
     
-        dump_formula_report :A, 'New Formulae'
-    dump_formula_report :M, 'Updated Formulae'
-    dump_formula_report :R, 'Renamed Formulae'
-    dump_formula_report :D, 'Deleted Formulae'
+      end
+    
+    describe AgentsExporter do
+  describe '#as_json' do
+    let(:name) { 'My set of Agents' }
+    let(:description) { 'These Agents work together nicely!' }
+    let(:guid) { 'some-guid' }
+    let(:tag_fg_color) { '#ffffff' }
+    let(:tag_bg_color) { '#000000' }
+    let(:icon) { 'Camera' }
+    let(:source_url) { 'http://yourhuginn.com/scenarios/2/export.json' }
+    let(:agent_list) { [agents(:jane_weather_agent), agents(:jane_rain_notifier_agent)] }
+    let(:exporter) { AgentsExporter.new(
+      agents: agent_list, name: name, description: description,
+      source_url: source_url, guid: guid, tag_fg_color: tag_fg_color,
+      tag_bg_color: tag_bg_color, icon: icon) }
+    
+      after :each do
+    @scheduler.shutdown(:wait)
+    
+      it 'replaces invalid byte sequences in a message' do
+    log = AgentLog.new(:agent => agents(:jane_website_agent), level: 3)
+    log.message = '\u{3042}\xffA\x95'
+    expect { log.save! }.not_to raise_error
+    expect(log.message).to eq('\u{3042}<ff>A\<95>')
   end
     
-    class NotificationMailerPreview < ActionMailer::Preview
-  # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/mention
-  def mention
-    m = Mention.last
-    NotificationMailer.mention(m.account, Notification.find_by(activity: m))
+    describe 'Kernel#trace_var' do
+  before :each do
+    $Kernel_trace_var_global = nil
   end
     
-      def theme_color
-    '#282c37'
+      # Closes the underlying database (if it created and open).
+  def close_if_open!
+    @db&.close
   end
     
-    File.readlines(sitelist).each do |site|
-  site.strip!
-  next if site.length == 0
-  next if site =~ /^#/
+        class << self
+      def elastic_pack_base_uri
+        env_url = ENV['LOGSTASH_PACK_URL']
+        (env_url.nil? || env_url.empty?) ? DEFAULT_PACK_URL : env_url
+      end
     
+        private
+    def uncompress(source)
+      temporary_directory = Stud::Temporary.pathname
+      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
+      temporary_directory
+    rescue Zip::Error => e
+      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
+      # a `Zip::Error` exception with a file not found message...
+      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
+    end
     
+      subject { described_class.new(source, pipeline_id, unordered_config_parts, settings) }
     
-    
-# extract label addresses
-addrs = {}
-dtrans.each_line { |ln|
-	if ln =~ /;[^ ].*:/
-		parts = ln.split(' ')
-		label = parts[1]
-		label = label.slice(1,label.index(':')-1)
-		addr = parts[0].split(':')[1].to_i(16)
-		#puts '%s => %x' % [label, addr]
-		one = { label => addr }
-		addrs.merge!(one)
-	end
-}
-#puts addrs.inspect
-    
-    meterp = Rex::Post::Meterpreter::Client.new(sock)
-    
-          origin = caller[1]
-      if origin =~ /rubygems\/custom_require/
-        origin = caller[3]
-        if origin.nil?
-          STDERR.puts 'Unknown origin'
-          STDERR.puts caller.join('\n')
+          it 'list the plugins with their versions' do
+        result = logstash.run_command_in_path('bin/logstash-plugin list --verbose')
+        result.stdout.split('\n').each do |plugin|
+          expect(plugin).to match(/^logstash-\w+-\w+\s\(\d+\.\d+.\d+(.\w+)?\)/)
         end
       end
-      origin = origin.gsub(/:[0-9]+:in .*/, '') if origin
+    end
