@@ -1,154 +1,97 @@
 
         
-        print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
+        
+def generate_pathological_dataset(size):
+    # Triggers O(n^2) complexity on the original implementation.
+    return np.r_[np.arange(size),
+                 np.arange(-(size - 1), size),
+                 np.arange(-(size - 1), 1)]
     
-        params = {
-        'age_limit': age,
-        'skip_download': True,
-        'writeinfojson': True,
-        'outtmpl': '%(id)s.%(ext)s',
-    }
-    ydl = YoutubeDL(params)
-    ydl.add_default_info_extractors()
-    json_filename = os.path.splitext(filename)[0] + '.info.json'
-    try_rm(json_filename)
-    ydl.download([url])
-    res = os.path.exists(json_filename)
-    try_rm(json_filename)
-    return res
+        if dataset_name == 'shuttle':
+        dataset = fetch_mldata('shuttle')
+        X = dataset.data
+        y = dataset.target
+        # we remove data with label 4
+        # normal data are then those of class 1
+        s = (y != 4)
+        X = X[s, :]
+        y = y[s]
+        y = (y != 1).astype(int)
     
-        def test_youtube_feeds(self):
-        self.assertMatch('https://www.youtube.com/feed/watch_later', ['youtube:watchlater'])
-        self.assertMatch('https://www.youtube.com/feed/subscriptions', ['youtube:subscriptions'])
-        self.assertMatch('https://www.youtube.com/feed/recommended', ['youtube:recommended'])
-        self.assertMatch('https://www.youtube.com/my_favorites', ['youtube:favorites'])
-    
-    try:
-    from .lazy_extractors import *
-    from .lazy_extractors import _ALL_CLASSES
-    _LAZY_LOADER = True
-except ImportError:
-    _LAZY_LOADER = False
-    from .extractors import *
-    
-            return {
-            '_type': 'playlist',
-            'id': playlist_id,
-            'title': title,
-            'description': description,
-            'entries': entries,
-        }
+    fixed_batch_size_comparison(X)
+variable_batch_size_comparison(X)
+plt.show()
 
     
-    
-def extract_contents(args, path, output_dir):
-    '''
-    :type args: any
-    :type path: str
-    :type output_dir: str
-    '''
-    if not args.test:
-        if not os.path.exists(path):
-            return
-    
-    
-class GCPUtilsTestCase(unittest.TestCase):
-    params_dict = {
-        'url_map_name': 'foo_url_map_name',
-        'description': 'foo_url_map description',
-        'host_rules': [
-            {
-                'description': 'host rules description',
-                'hosts': [
-                        'www.example.com',
-                        'www2.example.com'
-                ],
-                'path_matcher': 'host_rules_path_matcher'
+        max_it = len(samples_range) * len(features_range)
+    for n_samples in samples_range:
+        for n_features in features_range:
+            it += 1
+            print('====================')
+            print('Iteration %03d of %03d' % (it, max_it))
+            print('====================')
+            dataset_kwargs = {
+                'n_samples': n_samples,
+                'n_features': n_features,
+                'n_informative': n_features // 10,
+                'effective_rank': min(n_samples, n_features) / 10,
+                #'effective_rank': None,
+                'bias': 0.0,
             }
-        ],
-        'path_matchers': [
-            {
-                'name': 'path_matcher_one',
-                'description': 'path matcher one',
-                'defaultService': 'bes-pathmatcher-one-default',
-                'pathRules': [
-                        {
-                            'service': 'my-one-bes',
-                            'paths': [
-                                '/',
-                                '/aboutus'
-                            ]
-                        }
-                ]
-            },
-            {
-                'name': 'path_matcher_two',
-                'description': 'path matcher two',
-                'defaultService': 'bes-pathmatcher-two-default',
-                'pathRules': [
-                        {
-                            'service': 'my-two-bes',
-                            'paths': [
-                                '/webapp',
-                                '/graphs'
-                            ]
-                        }
-                ]
-            }
-        ]
-    }
-    
-        def test_max_delay_none(self):
-        strategy = _exponential_backoff(retries=7, delay=1, backoff=2, max_delay=None)
-        result = list(strategy())
-        self.assertEquals(result, [1, 2, 4, 8, 16, 32, 64])
-    
-        def _assert_globals(self, res):
-        self.assertIsInstance(res, dict)
-        self.assertIn('foo', res)
-        self.assertEqual(res['foo'], 'bar')
-    
-        ec2_metadata_facts = Ec2Metadata(module).run()
-    ec2_metadata_facts_result = dict(changed=False, ansible_facts=ec2_metadata_facts)
+            print('n_samples: %d' % n_samples)
+            print('n_features: %d' % n_features)
+            X, y = make_regression(**dataset_kwargs)
     
     
-class WhiteSpaceTokenList(TokenList):
+def barplot_neighbors(Nrange=2 ** np.arange(1, 11),
+                      Drange=2 ** np.arange(7),
+                      krange=2 ** np.arange(10),
+                      N=1000,
+                      D=64,
+                      k=5,
+                      leaf_size=30,
+                      dataset='digits'):
+    algorithms = ('kd_tree', 'brute', 'ball_tree')
+    fiducial_values = {'N': N,
+                       'D': D,
+                       'k': k}
     
-        def assertEqualCI(self, s1, s2):
-        '''Assert that two strings are equal ignoring case differences.'''
-        self.assertEqual(s1.lower(), s2.lower())
+    # Split data in train set and test set
+n_samples = X.shape[0]
+X_train, y_train = X[:n_samples // 2], y[:n_samples // 2]
+X_test, y_test = X[n_samples // 2:], y[n_samples // 2:]
+print('test data sparsity: %f' % sparsity_ratio(X_test))
     
-        @unittest.skipUnless(hasattr(posix, 'O_EXLOCK'),
-                         'test needs posix.O_EXLOCK')
-    def test_osexlock(self):
-        fd = os.open(support.TESTFN,
-                     os.O_WRONLY|os.O_EXLOCK|os.O_CREAT)
-        self.assertRaises(OSError, os.open, support.TESTFN,
-                          os.O_WRONLY|os.O_EXLOCK|os.O_NONBLOCK)
-        os.close(fd)
     
-        def in_special_context(self, node):
-        if node.parent is None:
-            return False
-        results = {}
-        if (node.parent.parent is not None and
-               self.p1.match(node.parent.parent, results) and
-               results['node'] is node):
-            # list(d.keys()) -> list(d.keys()), etc.
-            return results['func'].value in consuming_calls
-        # for ... in d.iterkeys() -> for ... in d.keys(), etc.
-        return self.p2.match(node.parent, results) and results['node'] is node
-
+def issue_role(name, rawtext, text, lineno,
+               inliner, options=None, content=None):
+    '''Sphinx role for linking to an issue. Must have
+    `issues_uri` or `issues_github_path` configured in ``conf.py``.
     
-        def test_3x_style_invalid_3(self):
-        self.invalid_syntax('raise from E1, E2')
+        # clean up the extra text formatting that pydoc performs
+    patt = re.compile('\b.')
+    output = patt.sub('', output)
+    return output.strip(), loc
+    
+    dom = xml.dom.minidom.parseString(document)
+    
+    
+  # These two methods exist to avoid importing the requests module at startup;
+  # reducing loading time since this module is slow to import.
+  @classmethod
+  def Requests( cls ):
+    try:
+      return cls.requests
+    except AttributeError:
+      import requests
+      cls.requests = requests
+      return requests
+    
+    from ycm.client.completion_request import CompletionRequest
+    
+    from future.utils import iterkeys, iteritems
+from ycm import vimsupport
+import re
+    
+    from nose.tools import ok_
+from ycm.paths import _EndsWithPython
