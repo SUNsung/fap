@@ -1,187 +1,193 @@
 
         
-          LOG(INFO) << 'Writing Training data';
-  for (int fileid = 0; fileid < kCIFARTrainBatches; ++fileid) {
-    // Open files
-    LOG(INFO) << 'Training Batch ' << fileid + 1;
-    string batchFileName = input_folder + '/data_batch_'
-      + caffe::format_int(fileid+1) + '.bin';
-    std::ifstream data_file(batchFileName.c_str(),
-        std::ios::in | std::ios::binary);
-    CHECK(data_file) << 'Unable to open train file #' << fileid + 1;
-    for (int itemid = 0; itemid < kCIFARBatchSize; ++itemid) {
-      read_image(&data_file, &label, str_buffer);
-      datum.set_label(label);
-      datum.set_data(str_buffer, kCIFARImageNBytes);
-      string out;
-      CHECK(datum.SerializeToString(&out));
-      txn->Put(caffe::format_int(fileid * kCIFARBatchSize + itemid, 5), out);
+        /*
+ * Call a function on each element of `inputs', in parallel.
+ *
+ * If `func' throws an exception, some of the work will not be
+ * attempted.
+ */
+template<class Func, class Item>
+void for_each(const std::vector<Item>& inputs, Func func) {
+  std::atomic<bool> failed{false};
+  std::atomic<size_t> index{0};
+    }
+    
+    
+    {  LineNumber line;
+  ColNumber col;
+};
+    
+    
+    {    assertx(data == comma || data == semi);
+    // eat parameters, and figure out if we have ';base64'
+    while (semi && (data == semi)) {
+      data++;
+      meta_len--;
+      char* equals = (char*)memchr(data, '=', meta_len);
+      semi = (char*)memchr(data, ';', meta_len);
+      if (!equals || (semi && semi < data)) {
+        // no equals, so either 'base64' or its bad
+        if (meta_len != sizeof('base64') - 1 ||
+            memcmp(data, 'base64', sizeof('base64')-1)) {
+          raise_warning('rfc2396: invalid parameter');
+          return nullptr;
+        }
+        // it's 'base64', we're done
+        base64 = true;
+        meta_len -= sizeof('base64') - 1;
+        data += sizeof('base64') - 1;
+        break;
+      }
+      // there's a parameter
+      if (semi) {
+        meta_len -= semi - data + 1;
+        data = semi;
+      } /* else, we're done with meta */
     }
   }
-  txn->Commit();
-  train_db->Close();
+  data = comma + 1;
+  data_len -= 1;
+  String decoded;
+    
+    //////////////////////////////////////////////////////////////////////
+    
+      using DBImpl::Put;
+  virtual Status Put(const WriteOptions& /*options*/,
+                     ColumnFamilyHandle* /*column_family*/,
+                     const Slice& /*key*/, const Slice& /*value*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DBImpl::Merge;
+  virtual Status Merge(const WriteOptions& /*options*/,
+                       ColumnFamilyHandle* /*column_family*/,
+                       const Slice& /*key*/, const Slice& /*value*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DBImpl::Delete;
+  virtual Status Delete(const WriteOptions& /*options*/,
+                        ColumnFamilyHandle* /*column_family*/,
+                        const Slice& /*key*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  virtual Status Write(const WriteOptions& /*options*/,
+                       WriteBatch* /*updates*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
+  using DBImpl::CompactRange;
+  virtual Status CompactRange(const CompactRangeOptions& /*options*/,
+                              ColumnFamilyHandle* /*column_family*/,
+                              const Slice* /*begin*/,
+                              const Slice* /*end*/) override {
+    return Status::NotSupported('Not supported in compacted db mode.');
+  }
     
     
-    {  /* Compute the global mean pixel value and create a mean image
-   * filled with this value. */
-  cv::Scalar channel_mean = cv::mean(mean);
-  mean_ = cv::Mat(input_geometry_, mean.type(), channel_mean);
+    {
+    {    if (data.ToString().find('foo567') != std::string::npos) {
+      hits++; 
+      //std::cout << 'Hit in ' << filePath << '\n';
+    }
+    if (data.ToString().find('v1.fetdq') != std::string::npos) {
+      hits++; 
+      //std::cout << 'Hit in ' << filePath << '\n';
+    }
+    if (data.ToString().find('bar123') != std::string::npos) {
+      hits++; 
+      //std::cout << 'Hit in ' << filePath << '\n';
+    }
+    if (data.ToString().find('v2.dfgkjdfghsd') != std::string::npos) {
+      hits++; 
+      //std::cout << 'Hit in ' << filePath << '\n';
+    }
+    if (data.ToString().find('dfgk') != std::string::npos) {
+      hits++; 
+      //std::cout << 'Hit in ' << filePath << '\n';
+    }
+  }
+  if (encrypted_env_) {
+    ASSERT_EQ(hits, 0);
+  } else {
+    ASSERT_GE(hits, 4);
+  }
 }
     
-    #define REGISTER_LAYER_CLASS(type)                                             \
-  template <typename Dtype>                                                    \
-  shared_ptr<Layer<Dtype> > Creator_##type##Layer(const LayerParameter& param) \
-  {                                                                            \
-    return shared_ptr<Layer<Dtype> >(new type##Layer<Dtype>(param));           \
-  }                                                                            \
-  REGISTER_LAYER_CREATOR(type, Creator_##type##Layer)
-    
-      /// @brief The spatial dimensions of the input.
-  inline int input_shape(int i) {
-    return (*bottom_shape_)[channel_axis_ + i];
+      using DBImpl::Flush;
+  virtual Status Flush(const FlushOptions& /*options*/,
+                       ColumnFamilyHandle* /*column_family*/) override {
+    return Status::NotSupported('Not supported operation in read only mode.');
   }
-  // reverse_dimensions should return true iff we are implementing deconv, so
-  // that conv helpers know which dimensions are which.
-  virtual bool reverse_dimensions() = 0;
-  // Compute height_out_ and width_out_ from other parameters.
-  virtual void compute_output_shape() = 0;
+    
+    std::unique_ptr<WriteControllerToken>
+WriteController::GetCompactionPressureToken() {
+  ++total_compaction_pressure_;
+  return std::unique_ptr<WriteControllerToken>(
+      new CompactionPressureToken(this));
+}
+    
+    class EncryptedSequentialFile : public SequentialFile {
+  private:
+    std::unique_ptr<SequentialFile> file_;
+    std::unique_ptr<BlockAccessCipherStream> stream_;
+    uint64_t offset_;
+    size_t prefixLength_;
+    }
+    
+      virtual Status NewRandomAccessFile(const std::string& fname,
+                                     unique_ptr<RandomAccessFile>* result,
+                                     const EnvOptions& soptions) override;
+    
+    #include 'rocksdb/env.h'
+#include 'util/testharness.h'
     
     
-    {}  // namespace caffe
+    {    ret = fclose(file_);
+    if (ret) {
+      return IOError('Unable to close log file', '', ret);
+    }
+    return Status::OK();
+  }
+  FILE* file_;
+  uint64_t (*gettid_)();  // Return the thread id for the current thread
+  std::atomic_size_t log_size_;
+  int fd_;
+  const static uint64_t flush_every_seconds_ = 5;
+  std::atomic_uint_fast64_t last_flush_micros_;
+  Env* env_;
+  std::atomic<bool> flush_pending_;
     
-     protected:
-  /// @copydoc ContrastiveLossLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-      int size_, pre_pad_;
-  Dtype alpha_, beta_, k_;
-    
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLRNLayer : public LRNLayer<Dtype> {
+    // This is an example interface of external-compaction algorithm.
+// Compaction algorithm can be implemented outside the core-RocksDB
+// code by using the pluggable compaction APIs that RocksDb provides.
+class Compactor : public EventListener {
  public:
-  explicit CuDNNLRNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLRNLayer();
+  // Picks and returns a compaction task given the specified DB
+  // and column family.  It is the caller's responsibility to
+  // destroy the returned CompactionTask.  Returns 'nullptr'
+  // if it cannot find a proper compaction task.
+  virtual CompactionTask* PickCompaction(
+      DB* db, const std::string& cf_name) = 0;
     }
     
-     protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the computed outputs @f$
-   *        y = \left\{
-   *        \begin{array}{lr}
-   *            x                  & \mathrm{if} \; x > 0 \\
-   *            \alpha (\exp(x)-1) & \mathrm{if} \; x \le 0
-   *        \end{array} \right.
-   *      @f$.  
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+            // We don't care for comparison result here; the previous value will be stored into value anyway.
+        // Also we don't care for rbx and rcx values, they just have to be equal to rax and rdx before cmpxchg16b.
+        __asm__ __volatile__
+        (
+            'movq %%rbx, %%rax\n\t'
+            'movq %%rcx, %%rdx\n\t'
+            'lock; cmpxchg16b %[storage]\n\t'
+            : '=&A' (value)
+            : [storage] 'm' (storage)
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'memory'
+        );
+    
+    template< bool Signed >
+struct operations< 1u, Signed > :
+    public msvc_arm_operations< typename make_storage_type< 1u, Signed >::type, operations< 1u, Signed > >
+{
+    typedef msvc_arm_operations< typename make_storage_type< 1u, Signed >::type, operations< 1u, Signed > > base_type;
+    typedef typename base_type::storage_type storage_type;
+    typedef typename make_storage_type< 1u, Signed >::aligned aligned_storage_type;
     }
     
-    class TLSConfigPlugin : public ConfigPlugin,
-                        public std::enable_shared_from_this<TLSConfigPlugin> {
- public:
-  Status setUp() override;
-  Status genConfig(std::map<std::string, std::string>& config) override;
-    }
-    
-    Status WmiResultItem::GetString(const std::string& name,
-                                std::string& ret) const {
-  std::wstring property_name = stringToWstring(name);
-  VARIANT value;
-  HRESULT hr = result_->Get(property_name.c_str(), 0, &value, nullptr, nullptr);
-  if (hr != S_OK) {
-    ret = '';
-    return Status(-1, 'Error retrieving data from WMI query.');
-  }
-  if (value.vt != VT_BSTR) {
-    ret = '';
-    VariantClear(&value);
-    return Status(-1, 'Invalid data type returned.');
-  }
-  ret = bstrToString(value.bstrVal);
-  VariantClear(&value);
-  return Status(0);
-}
-    
-    
-    {  // Too many fields
-  bad_line = R'('2016-03-22T21:17:01.701882+00:00','','6','','','','')';
-  ec = pub.createEventContext();
-  status = pub.populateEventContext(bad_line, ec);
-  ASSERT_FALSE(status.ok());
-  ASSERT_NE(std::string::npos, status.getMessage().find('more'));
-}
-    
-      /// Action as a string (as given by udev).
-  std::string action_string;
-    
-      forwarder_ = std::make_shared<FirehoseLogForwarder>(
-      'aws_firehose', FLAGS_aws_firehose_period, 500);
-  Status s = forwarder_->setUp();
-  if (!s.ok()) {
-    LOG(ERROR) << 'Error initializing Firehose logger: ' << s.getMessage();
-    return s;
-  }
-    
-    #ifdef ANDROID
-    
-        void Lock(int64_t _timelock);  // ms
-    void Lock();
-    void Unlock();
-    bool IsLocking();
-    
-        if (0 != st.hash && st.hash != adler32(0, (const unsigned char*)_rawbuf + st.head_length,  st.total_length - st.head_length)) return __LINE__;
-    
-    
-    {    void throw_exception( std::exception const & e ) {
-        xfatal2(TSF'boost exception:%_', e.what());
-        
-#ifdef ANDROID
-        char stack[4096] = {0};
-        android_callstack(stack, sizeof(stack));
-        xfatal2(TSF'%_', stack);
-#endif
-    }
-}
-
-    
-    
-    {    __DelOlderTouchTime(now);
-    touch_times_.push_back(now);
-    return true;
-}
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    
-    static bool SpyHookLogFunc(struct XLoggerInfo_t& _info, std::string& _log);
-    void TestFun0();
-    int __TestFun1(int i);
-    
-    JNIEnv* ScopeJEnv::GetEnv() {
-    return env_;
-}
-    
-      private:
-    ScopedJstring();
-    ScopedJstring(const ScopedJstring&);
-    ScopedJstring& operator=(const ScopedJstring&);
+    #ifndef BOOST_ATOMIC_FENCES_HPP_INCLUDED_
+#define BOOST_ATOMIC_FENCES_HPP_INCLUDED_
