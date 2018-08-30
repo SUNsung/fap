@@ -1,164 +1,208 @@
 
         
-            target.add_argument('--run',
-                        metavar='ID',
-                        help='Shippable run ID')
+        
+class Person(object):
     
-            expected = {
-            'name': 'myhealthcheck',
-            'checkIntervalSec': 5,
-            'port': 443,
-            'unhealthyThreshold': 2,
-            'healthyThreshold': 2,
-            'host': '',
-            'timeoutSec': 5,
-            'requestPath': '/'}
+        else:
+        sys.stdout.write('.')
+    sys.stdout.flush()
     
-        terminal_stdout_re = [
-        re.compile(br'[\r\n]?[\w+\-\.:\/\[\]]+(?:\([^\)]+\)){,3}(?:>|#) ?$'),
-        re.compile(br'\@[\w\-\.]+:\S+?[>#\$] ?$')
-    ]
-    
-        return results
+    versions_info['signature'] = signature
+with open('update/versions.json', 'w') as versionsf:
+    json.dump(versions_info, versionsf, indent=4, sort_keys=True)
 
     
-        def construct_mapping(self, node, deep=False):
-        # Most of this is from yaml.constructor.SafeConstructor.  We replicate
-        # it here so that we can warn users when they have duplicate dict keys
-        # (pyyaml silently allows overwriting keys)
-        if not isinstance(node, MappingNode):
-            raise ConstructorError(None, None,
-                                   'expected a mapping node, but found %s' % node.id,
-                                   node.start_mark)
-        self.flatten_mapping(node)
-        mapping = AnsibleMapping()
+    import sys
+import os
+import textwrap
     
-    RETURN = r'''
-description:
-  description: The new description of the management route.
-  returned: changed
-  type: string
-  sample: Route to TACACS
-gateway:
-  description: The new gateway of the management route.
-  returned: changed
-  type: string
-  sample: 10.10.10.10
-network:
-  description: The new network to use for the management route.
-  returned: changed
-  type: string
-  sample: default
-'''
+        out = bug_text + dev_text
     
-        def test_create_monitor(self, *args):
-        set_module_args(dict(
-            name='foo',
-            gateway='1.1.1.1',
-            network='default',
-            description='my description',
-            partition='Common',
-            server='localhost',
-            password='password',
-            user='admin'
-        ))
+        with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
-    EOF = -1
+        with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(readme)
     
-            1. error occurs
-        2. enter recovery mode, report error
-        3. consume until token found in resynch set
-        4. try to resume parsing
-        5. next match() will reset errorRecovery mode
+        def test_parse_xspf(self):
+        _TEST_CASES = [
+            (
+                'foo_xspf',
+                'https://example.org/src/foo_xspf.xspf',
+                [{
+                    'id': 'foo_xspf',
+                    'title': 'Pandemonium',
+                    'description': 'Visit http://bigbrother404.bandcamp.com',
+                    'duration': 202.416,
+                    'formats': [{
+                        'manifest_url': 'https://example.org/src/foo_xspf.xspf',
+                        'url': 'https://example.org/src/cd1/track%201.mp3',
+                    }],
+                }, {
+                    'id': 'foo_xspf',
+                    'title': 'Final Cartridge (Nichico Twelve Remix)',
+                    'description': 'Visit http://bigbrother404.bandcamp.com',
+                    'duration': 255.857,
+                    'formats': [{
+                        'manifest_url': 'https://example.org/src/foo_xspf.xspf',
+                        'url': 'https://example.org/%E3%83%88%E3%83%A9%E3%83%83%E3%82%AF%E3%80%80%EF%BC%92.mp3',
+                    }],
+                }, {
+                    'id': 'foo_xspf',
+                    'title': 'Rebuilding Nightingale',
+                    'description': 'Visit http://bigbrother404.bandcamp.com',
+                    'duration': 287.915,
+                    'formats': [{
+                        'manifest_url': 'https://example.org/src/foo_xspf.xspf',
+                        'url': 'https://example.org/src/track3.mp3',
+                    }, {
+                        'manifest_url': 'https://example.org/src/foo_xspf.xspf',
+                        'url': 'https://example.com/track3.mp3',
+                    }]
+                }]
+            ),
+        ]
     
-            I.i.u R.x-y.v   | i in x-y            delete I
-        I.i.u R.x-y.v   | i not in x-y        leave alone, nonoverlapping
-        R.x-y.v I.i.u   | i in x-y            ERROR
-        R.x-y.v I.x.u                         R.x-y.uv (combine, delete I)
-        R.x-y.v I.i.u   | i not in x-y        leave alone, nonoverlapping
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        proc.sendline(u'ehco test')
     
     
-  def Done( self ):
-    return True
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
+    history_changed(proc, TIMEOUT, u'git help')
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+    containers = (('thefuck/python3-tcsh',
+               u'''FROM python:3
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'),
+              ('thefuck/python2-tcsh',
+               u'''FROM python:2
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'))
     
-    
-def EndsWithPython_BadPaths_test():
-  not_python_paths = [
-    None,
-    '',
-    '/opt/local/bin/vim',
-    r'C:\Program Files\Vim\vim74\gvim.exe',
-    '/usr/bin/python2.5',
-    '/home/user/.pyenv/shims/python3.2',
-  ]
+        assert match(command)
     
     
-if __name__ == '__main__':
-    blackboard = Blackboard()
-    
-        def test_dog_adapter_shall_make_noise(self):
-        dog = Dog()
-        dog_adapter = Adapter(dog, make_noise=dog.bark)
-        noise = dog_adapter.make_noise()
-        expected_noise = 'woof!'
-        self.assertEqual(noise, expected_noise)
-    
-        fftv.publish('cartoon')
-    fftv.publish('music')
-    fftv.publish('ads')
-    fftv.publish('movie')
-    fftv.publish('cartoon')
-    fftv.publish('cartoon')
-    fftv.publish('movie')
-    fftv.publish('blank')
+output = '''sshfs: OsxfuseRequirement unsatisfied!
     
     
-    
-        def __init__(self, param):
-    
-        def add_message(self, message):
-        self.cache.append(message)
-        if len(self.cache) > self.cache_size:
-            self.cache = self.cache[-self.cache_size:]
-        self.cond.notify_all()
+class ReadTimeout(Timeout):
+    '''The server did not send any data in the allotted amount of time.'''
     
     
-class MainHandler(BaseHandler, tornado.auth.FacebookGraphMixin):
-    @tornado.web.authenticated
-    async def get(self):
-        stream = await self.facebook_request('/me/home', self._on_stream,
-                                             access_token=self.current_user['access_token'])
-        if stream is None:
-            # Session may have expired
-            self.redirect('/auth/login')
-            return
-        self.render('stream.html', stream=stream)
+@pytest.mark.parametrize('var,scheme', _proxy_combos)
+def test_use_proxy_from_environment(httpbin, var, scheme):
+    url = '{0}://httpbin.org'.format(scheme)
+    fake_proxy = Server()  # do nothing with the requests; just close the socket
+    with fake_proxy as (host, port):
+        proxy_url = 'socks5://{0}:{1}'.format(host, port)
+        kwargs = {var: proxy_url}
+        with override_environ(**kwargs):
+            # fake proxy's lack of response will cause a ConnectionError
+            with pytest.raises(requests.exceptions.ConnectionError):
+                requests.get(url)
     
-    from tornado.options import options, define, parse_command_line
-from tornado.template import Template
     
-        def render_xml(self, value):
-        assert isinstance(value, dict) and len(value) == 1
-        self.set_header('Content-Type', 'application/xml; charset=UTF-8')
-        name = list(value.keys())[0]
-        parts = []
-        parts.append('<' + name +
-                     ' xmlns='http://doc.s3.amazonaws.com/2006-03-01'>')
-        self._render_parts(value[name], parts)
-        parts.append('</' + name + '>')
-        self.finish('<?xml version='1.0' encoding='UTF-8'?>\n' +
-                    ''.join(parts))
+class TestLookupDict:
+    
+    import threading
+import socket
+import time
+    
+            Keyword:                   'bold #004461',   # class: 'k'
+        Keyword.Constant:          'bold #004461',   # class: 'kc'
+        Keyword.Declaration:       'bold #004461',   # class: 'kd'
+        Keyword.Namespace:         'bold #004461',   # class: 'kn'
+        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
+        Keyword.Reserved:          'bold #004461',   # class: 'kr'
+        Keyword.Type:              'bold #004461',   # class: 'kt'
+    
+            This should not be called from user code, and is only exposed for use
+        when subclassing the
+        :class:`HTTPAdapter <requests.adapters.HTTPAdapter>`.
+    
+        :param url: URL for the new :class:`Request` object.
+    :param data: (optional) Dictionary, list of tuples, bytes, or file-like
+        object to send in the body of the :class:`Request`.
+    :param json: (optional) json data to send in the body of the :class:`Request`.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
+    '''
+    
+            def generate():
+            # Special case for urllib3.
+            if hasattr(self.raw, 'stream'):
+                try:
+                    for chunk in self.raw.stream(chunk_size, decode_content=True):
+                        yield chunk
+                except ProtocolError as e:
+                    raise ChunkedEncodingError(e)
+                except DecodeError as e:
+                    raise ContentDecodingError(e)
+                except ReadTimeoutError as e:
+                    raise ConnectionError(e)
+            else:
+                # Standard file-like object.
+                while True:
+                    chunk = self.raw.read(chunk_size)
+                    if not chunk:
+                        break
+                    yield chunk
+    
+            for authtype in self.digest_auth_algo:
+            url = httpbin('digest-auth', 'auth', 'user', 'pass', authtype)
+            auth = HTTPDigestAuth('user', 'pass')
+            r = requests.get(url)
+            assert r.cookies['fake'] == 'fake_value'
+    
+    # Read lines from the linkcheck output file
+try:
+    with open('build/linkcheck/output.txt') as out:
+        output_lines = out.readlines()
+except IOError:
+    print('linkcheck output not found; please run linkcheck first.')
+    exit(1)
+    
+            if now - self.lastmark >= 3:
+            self.lastmark = now
+            qps = len(self.tail) / sum(self.tail)
+            print('samplesize={0} concurrent={1} qps={2:0.2f}'.format(len(self.tail), self.concurrent, qps))
+    
+    
+class QPSSpider(Spider):
+    
+    del sys
+
+    
+    
+class Command(ScrapyCommand):
+    
+            e.g.:
+        @returns request
+        @returns request 2
+        @returns request 2 10
+        @returns request 0 10
+    '''
+    
+        # Load the records from the pickle data stream.
+    file.seek(0)
+    memos = DBUnpickler(file, conn).load()
+    
+    import os
+import smtplib
+# For guessing MIME type based on file name extension
+import mimetypes
+    
+    # Now the header items can be accessed as a dictionary, and any non-ASCII will
+# be converted to unicode:
+print('To:', msg['to'])
+print('From:', msg['from'])
+print('Subject:', msg['subject'])
+    
+    # A simple generator function
+def baz():
+    for i in range(10):
+        yield i*i
