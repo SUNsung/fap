@@ -1,123 +1,141 @@
 
         
-        module Devise
-  module Models
-    # Confirmable is responsible to verify if an account is already confirmed to
-    # sign in, and to send emails with confirmation instructions.
-    # Confirmation instructions are sent to the user email after creating a
-    # record and when manually requested by a new confirmation instruction request.
-    #
-    # Confirmable tracks the following columns:
-    #
-    # * confirmation_token   - A unique random token
-    # * confirmed_at         - A timestamp when the user clicked the confirmation link
-    # * confirmation_sent_at - A timestamp when the confirmation_token was generated (not sent)
-    # * unconfirmed_email    - An email address copied from the email attr. After confirmation
-    #                          this value is copied to the email attr then cleared
-    #
-    # == Options
-    #
-    # Confirmable adds the following options to +devise+:
-    #
-    #   * +allow_unconfirmed_access_for+: the time you want to allow the user to access their account
-    #     before confirming it. After this period, the user access is denied. You can
-    #     use this to let your user access some features of your application without
-    #     confirming the account, but blocking it after a certain period (ie 7 days).
-    #     By default allow_unconfirmed_access_for is zero, it means users always have to confirm to sign in.
-    #   * +reconfirmable+: requires any email changes to be confirmed (exactly the same way as
-    #     initial account confirmation) to be applied. Requires additional unconfirmed_email
-    #     db field to be set up (t.reconfirmable in migrations). Until confirmed, new email is
-    #     stored in unconfirmed email column, and copied to email column on successful
-    #     confirmation. Also, when used in conjunction with `send_email_changed_notification`,
-    #     the notification is sent to the original email when the change is requested,
-    #     not when the unconfirmed email is confirmed.
-    #   * +confirm_within+: the time before a sent confirmation token becomes invalid.
-    #     You can use this to force the user to confirm within a set period of time.
-    #     Confirmable will not generate a new token if a repeat confirmation is requested
-    #     during this time frame, unless the user's email changed too.
-    #
-    # == Examples
-    #
-    #   User.find(1).confirm       # returns true unless it's already confirmed
-    #   User.find(1).confirmed?    # true/false
-    #   User.find(1).send_confirmation_instructions # manually send instructions
-    #
-    module Confirmable
-      extend ActiveSupport::Concern
+            Category.transaction do
+      staff.group_names = ['staff']
+      unless staff.save
+        puts staff.errors.full_messages
+        raise 'Failed to set permissions on the Staff category!'
+      end
     
-      # GET /resource/unlock/new
-  def new
-    self.resource = resource_class.new
+        def password_change(record, opts={})
+      devise_mail(record, :password_change, opts)
+    end
   end
+end
+
     
-              # Don't use GitHub codeload URLs
-          codeload_gh_pattern = %r{https?://codeload\.github\.com/(.+)/(.+)/(?:tar\.gz|zip)/(.+)}
-          audit_urls(urls, codeload_gh_pattern) do |match, url|
-            problem <<~EOS
-              Use GitHub archive URLs:
-                https://github.com/#{match[1]}/#{match[2]}/archive/#{match[3]}.tar.gz
-              Rather than codeload:
-                #{url}
-            EOS
-          end
+    class TestApp < Rails::Application
+  config.root = File.dirname(__FILE__)
+  config.session_store :cookie_store, key: 'cookie_store_key'
+  secrets.secret_token    = 'secret_token'
+  secrets.secret_key_base = 'secret_key_base'
+  config.eager_load = false
     
-            def autocorrect(node)
-          lambda do |corrector|
-            each_unnecessary_space_match(node) do |range|
-              corrector.replace(range, ' ')
-            end
-          end
+            # If this action doesn't exist on the provider, then an exception
+        # must be raised.
+        if callable.nil?
+          raise Errors::UnimplementedProviderAction,
+            action: name,
+            provider: @provider.to_s
         end
     
-    module RuboCop
-  module Cop
-    module Lint
-      # In math and Python, we can use `x < y < z` style comparison to compare
-      # multiple value. However, we can't use the comparison in Ruby. However,
-      # the comparison is not syntax error. This cop checks the bad usage of
-      # comparison operators.
-      #
-      # @example
-      #
-      #   # bad
-      #
-      #   x < y < z
-      #   10 <= x <= 20
-      #
-      # @example
-      #
-      #   # good
-      #
-      #   x < y && y < z
-      #   10 <= x && x <= 20
-      class MultipleCompare < Cop
-        MSG = 'Use the `&&` operator to compare multiple values.'.freeze
+            @id               = id
+        @local_data_path  = raw['local_data_path']
+        @name             = raw['name']
+        @provider         = raw['provider']
+        @state            = raw['state']
+        @vagrantfile_name = raw['vagrantfile_name']
+        @vagrantfile_path = raw['vagrantfile_path']
+        # TODO(mitchellh): parse into a proper datetime
+        @updated_at       = raw['updated_at']
+        @extra_data       = raw['extra_data'] || {}
     
-    module RuboCop
-  module Cop
-    module Lint
-      # Don't omit the accumulator when calling `next` in a `reduce` block.
-      #
-      # @example
-      #
-      #   # bad
-      #
-      #   result = (1..4).reduce(0) do |acc, i|
-      #     next if i.odd?
-      #     acc + i
-      #   end
-      #
-      # @example
-      #
-      #   # good
-      #
-      #   result = (1..4).reduce(0) do |acc, i|
-      #     next acc if i.odd?
-      #     acc + i
-      #   end
-      class NextWithoutAccumulator < Cop
-        MSG = 'Use `next` with an accumulator argument in a `reduce`.'.freeze
+            # Download a file from the remote machine to the local machine.
+        #
+        # @param [String] from Path of the file on the remote machine.
+        # @param [String] to Path of where to save the file locally.
+        def download(from, to)
+        end
     
-            def each_misplaced_optional_arg(arguments)
-          optarg_positions, arg_positions = argument_positions(arguments)
-          return if optarg_positions.empty? || arg_positions.empty?
+              # Otherwise set the value
+          data[key] = value
+        end
+      end
+    end
+  end
+end
+
+    
+                  # Create an environment for this location and yield the
+              # machine in that environment. We silence warnings here because
+              # Vagrantfiles often have constants, so people would otherwise
+              # constantly (heh) get 'already initialized constant' warnings.
+              begin
+                env = entry.vagrant_env(
+                  @env.home_path, ui_class: @env.ui_class)
+              rescue Vagrant::Errors::EnvironmentNonExistentCWD
+                # This means that this environment working directory
+                # no longer exists, so delete this entry.
+                entry = @env.machine_index.get(name.to_s)
+                @env.machine_index.delete(entry) if entry
+                raise
+              end
+    
+    class PolymorphicMentions < ActiveRecord::Migration[4.2]
+  def change
+    remove_index :mentions, column: %i(post_id)
+    remove_index :mentions, column: %i(person_id post_id), unique: true
+    rename_column :mentions, :post_id, :mentions_container_id
+    add_column :mentions, :mentions_container_type, :string
+    add_index :mentions,
+              %i(mentions_container_id mentions_container_type),
+              name:   'index_mentions_on_mc_id_and_mc_type',
+              length: {mentions_container_type: 191}
+    add_index :mentions,
+              %i(person_id mentions_container_id mentions_container_type),
+              name:   'index_mentions_on_person_and_mc_id_and_mc_type',
+              length: {mentions_container_type: 191},
+              unique: true
+    
+    When /^I fill in the new user form/ do
+  fill_in_new_user_form
+end
+    
+    require 'rubygems'
+    
+      def login_page
+    path_to 'the new user session page'
+  end
+    
+      namespace :package do
+    GEMS_AND_ROOT_DIRECTORIES.each do |gem, directory|
+      desc 'Build #{gem} packages'
+      task gem => %w[.gem .tar.gz].map { |e| package(gem, e) }
+    end
+    
+          def self.token(session)
+        self.new(nil).mask_authenticity_token(session)
+      end
+    
+          DIRECTIVES = %i(base_uri child_src connect_src default_src
+                      font_src form_action frame_ancestors frame_src
+                      img_src manifest_src media_src object_src
+                      plugin_types referrer reflected_xss report_to
+                      report_uri require_sri_for sandbox script_src
+                      style_src worker_src).freeze
+    
+          def cookie_paths(path)
+        path = '/' if path.to_s.empty?
+        paths = []
+        Pathname.new(path).descend { |p| paths << p.to_s }
+        paths
+      end
+    
+              react_and_close(env, body) or [status, headers, body]
+        else
+          [status, headers, body]
+        end
+      end
+    
+          def authenticate_user
+        return if @current_api_user
+    
+            def address_params
+          params.require(:address).permit(permitted_address_attributes)
+        end
+    
+            def approve
+          authorize! :approve, @order, params[:token]
+          @order.approved_by(current_api_user)
+          respond_with(@order, default_template: :show)
+        end
