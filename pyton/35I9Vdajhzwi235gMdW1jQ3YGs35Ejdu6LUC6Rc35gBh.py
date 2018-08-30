@@ -1,95 +1,39 @@
 
         
-            def load(self):
-        try:
-            with open(self.path, 'rt') as f:
-                try:
-                    data = json.load(f)
-                except ValueError as e:
-                    raise ValueError(
-                        'Invalid %s JSON: %s [%s]' %
-                        (type(self).__name__, str(e), self.path)
-                    )
-                self.update(data)
-        except IOError as e:
-            if e.errno != errno.ENOENT:
-                raise
+        FISH_COMPLETION_FILE = 'youtube-dl.fish'
+FISH_COMPLETION_TEMPLATE = 'devscripts/fish-completion.in'
     
-        @property
-    def config(self):
-        if not hasattr(self, '_config'):
-            self._config = Config(directory=self.config_dir)
-            if self._config.is_new():
-                self._config.save()
-            else:
-                self._config.load()
-        return self._config
+    password = key + 16 * [0]
+new_key = aes_encrypt(password, key_expansion(password)) * (32 // 16)
+r = openssl_encode('aes-256-ctr', new_key, iv)
+print('aes_decrypt_text 32')
+print(repr(r))
+
     
-        def iter_lines(self, chunk_size):
-        return ((line, b'\n') for line in self._orig.iter_lines(chunk_size))
+    filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
     
-        def __init__(self, groups, env=Environment(), **kwargs):
-        '''
-        :param groups: names of processor groups to be applied
-        :param env: Environment
-        :param kwargs: additional keyword arguments for processors
+    atom_template = atom_template.replace('@TIMESTAMP@', now_iso)
     
     
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
-            # invalid instance-length
-        pytest.raises(ContentRangeError, parse, 'bytes 100-199/199', 100)
-    
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
-    
-    
-@pytest.mark.skip('unimplemented')
-def test_unset_host_header(httpbin_both):
-    r = http('GET', httpbin_both + '/headers')
-    assert 'Host' in r.json['headers']  # default Host present
-    
-    print('Counting to two...')
-for number in count_to_two():
-    print(number, end=' ')
-    
-        REGISTRY = {}
-    
-    
-def reverse_item(item):
-    print(item[::-1])
-    
-        def visit(self, node, *args, **kwargs):
-        meth = None
-        for cls in node.__class__.__mro__:
-            meth_name = 'visit_' + cls.__name__
-            meth = getattr(self, meth_name, None)
-            if meth:
-                break
-    
-    *What does this example do?
-In this example queue.Queue is used to create the pool (wrapped in a
-custom ObjectPool object to use with the with statement), and it is
-populated with strings.
-As we can see, the first string object put in 'yam' is USED by the
-with statement. But because it is released back into the pool
-afterwards it is reused by the explicit call to sample_queue.get().
-Same thing happens with 'sam', when the ObjectPool created insided the
-function is deleted (by the GC) and the object is returned.
-    
-    
-class MidnightTimeProvider(object):
-    '''
-    Class implemented as hard-coded stub (in contrast to configurable stub).
-    '''
+    # Get the version from youtube_dl/version.py without importing the package
+exec(compile(open('youtube_dl/version.py').read(),
+             'youtube_dl/version.py', 'exec'))
