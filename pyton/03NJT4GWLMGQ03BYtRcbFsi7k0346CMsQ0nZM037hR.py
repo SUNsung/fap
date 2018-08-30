@@ -1,60 +1,49 @@
 
         
-            def start_requests(self):
-        qargs = {'total': self.total, 'show': self.show}
-        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
-        return [scrapy.Request(url, dont_filter=True)]
-    
-        def syntax(self):
-        return '[-v]'
-    
-                    # EOF Transition to accept state?
-                if c == EOF and self.eof[s] >= 0:
-                    #print 'EOF Transition to accept state %d' \
-                    #  % self.accept[self.eof[s]]
-                    return self.accept[self.eof[s]]
-    
-        Note text is not an actual property of the return value, it is computed
-    from start and stop using the input stream's toString() method.  I
-    could add a ctor to this so that we can pass in and store the input
-    stream, but I'm not sure we want to do that.  It would seem to be undefined
-    to get the .text property anyway if the rule matches tokens from multiple
-    input streams.
+        
+@pytest.fixture(autouse=True)
+def logs(mocker):
+    return mocker.patch('thefuck.entrypoints.not_configured.logs',
+                        new_callable=MagicMock)
     
     
-    def setCharPositionInLine(self, pos):
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
+    history_changed(proc, TIMEOUT, u'echo test')
+    
+    CLI for apt.
+Basic commands:
+ list - list packages based on package names
+ search - search in package descriptions
+ show - show package details
+    
+        def _test_host(self, url):
+        try:
+            header = {
+                'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36',
+                'accept': 'application/json, text/javascript, */*; q=0.01',
+                'accept-encoding': 'gzip, deflate, sdch',
+                'accept-language': 'en-US,en;q=0.8,ja;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+                'connection': 'keep-alive'
+                }
+            response = self.http_client.request('HEAD', url, header, '', read_payload=False)
+            if response:
+                return True
+        except Exception as e:
+            if __name__ == '__main__':
+                xlog.exception('test %s e:%r', url, e)
+    
+    A Parser needs a TokenStream as input (which in turn is usually fed by a
+Lexer):
+    
+            raise NotImplementedError
+        
+    
+    def LT(self, i):
         '''
-        Using setter/getter methods is deprecated. Use o.charPositionInLine
-        instead.
+        Get the ith character of lookahead.  This is the same usually as
+        LA(i).  This will be used for labels in the generated
+        lexer code.  I'd prefer to return a char here type-wise, but it's
+        probably better to be 32-bit clean and be consistent with LA.
         '''
-        self.charPositionInLine = pos
-    
-    def _save_cheatsheet(topic_name, cheatsheet):
-    '''
-    Save posted cheat sheet `cheatsheet` with `topic_name`
-    in the spool directory
-    '''
-    
-        if 'topic' in request.args:
-        return redirect('/%s' % request.args.get('topic'))
-    
-        def read(self, filename):
-        '''
-        Read template from `filename`
-        '''
-        with open(filename) as f:
-            self._mode = 'page'
-            for line in f.readlines():
-                line = line.rstrip('\n')
-                if line.startswith('==[') and line.endswith(']=='):
-                    self._process_line(line[3:-3].strip())
-                    continue
-    
-        @staticmethod
-    def _cut_block(block, start_block=False):
-        answer = block[2:-1]
-        if answer[0].split() == '':
-            answer = answer[1:]
-        if answer[-1].split() == '':
-            answer = answer[:1]
-        return answer
