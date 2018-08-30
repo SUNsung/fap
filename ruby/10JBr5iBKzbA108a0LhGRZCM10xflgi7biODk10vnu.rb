@@ -1,104 +1,198 @@
 
         
-            keys.each do |key|
-      value = env[key]
-      s = '#{key}: #{value}'
-      case key
-      when 'CC', 'CXX', 'LD'
-        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
+                array.flatten.map! { |i| ERB::Util.unwrapped_html_escape(i) }.join(sep).html_safe
       end
-      f.puts s
-    end
-  end
-end
-
     
-      def plist_caveats
-    s = []
-    if f.plist || (keg && keg.plist_installed?)
-      destination = if f.plist_startup
-        '/Library/LaunchDaemons'
+        option_names.any? do |name|
+      if option_defined? 'with-#{name}'
+        include? 'with-#{name}'
+      elsif option_defined? 'without-#{name}'
+        !include? 'without-#{name}'
       else
-        '~/Library/LaunchAgents'
-      end
-    
-        # Many formulae include 'lib/charset.alias', but it is not strictly needed
-    # and will conflict if more than one formula provides it
-    observe_file_removal @f.lib/'charset.alias'
-    
-          # Find commands in Homebrew/dev-cmd
-      if ARGV.homebrew_developer?
-        puts
-        puts 'Built-in development commands'
-        puts_columns internal_development_commands
-      end
-    
-      attributes :id, :type, :name, :updated
-    
-        def expect_updated_sign_in_at(user)
-      expect(user.reload.current_sign_in_at).to be_within(1.0).of(Time.now.utc)
-    end
-  end
-end
-
-    
-    unless $LOAD_PATH.include? lib_path
-  $LOAD_PATH.unshift lib_path
-end
-
-    
-                end
-    
-          when :banner
-        # Because some ftp server send multiple banner we take only the first one and ignore the rest
-        if not (s[:info])
-          s[:info] = matches
-          report_service(s)
-        end
-    
-    # This is a completely hackish way to do this, and could break with future
-# versions of the JDK.  Need to find a better way to use sun.security.tools.KeyTool
-# and .JarSigner than modifying the source.  These rely on internal APIs that may
-# change.
-signer = Rjb::import('javaCompile.SignJar')
-#clsKeyTool = Rjb::import('sun.security.tools.KeyTool')
-#clsKeyTool = Rjb::import('sun.security.tools.KeyToolMSF')
-#clsJarSigner = Rjb::import('javaCompile.SignJar.JarSignerMSF')
-#clsJarSigner = Rjb::import('sun.security.tools.JarSigner')
-#clsJarSigner = Rjb::import('sun.security.tools.JarSignerMSF')
-    
-      when '6.1.1'
-    __NR_execve      = 7
-    __NR_getpeername = 202
-    __NR_accept      = 229
-    __NR_listen      = 232
-    __NR_bind        = 234
-    __NR_socket      = 235
-    __NR_connect     = 236
-    __NR_close       = 269
-    __NR_kfcntl      = 614
-    
-            # Checks if a template URL is given else returns the TEMPLATE_REPO URL
-        #
-        # @return String
-        #
-        def template_repo_url
-          @template_url || TEMPLATE_REPO
-        end
+        false
       end
     end
   end
+    
+        first_warning = true
+    methods.each do |method|
+      unless checks.respond_to?(method)
+        Homebrew.failed = true
+        puts 'No check available by the name: #{method}'
+        next
+      end
+    
+      def search_tap(user, repo, rx)
+    if (HOMEBREW_LIBRARY/'Taps/#{user.downcase}/homebrew-#{repo.downcase}').directory? && \
+       user != 'Caskroom'
+      return []
+    end
+    
+      def python(_options = {}, &block)
+    opoo 'Formula#python is deprecated and will go away shortly.'
+    block.call if block_given?
+    PythonRequirement.new
+  end
+  alias_method :python2, :python
+  alias_method :python3, :python
 end
 
     
-          it 'sets the input as the variable' do
-        expect(dsl.fetch(:scm)).to eq 'git'
+            def status
+          @project.pipelines
+            .where(sha: @sha)
+            .latest_status(@ref) || 'unknown'
+        end
+    
+      # Sets the flash message with :key, using I18n. By default you are able
+  # to set up your messages using specific resource scope, and if no message is
+  # found we look to the default scope. Set the 'now' options key to a true
+  # value to populate the flash.now hash in lieu of the default flash hash (so
+  # the flash message will be available to the current action instead of the
+  # next action).
+  # Example (i18n locale file):
+  #
+  #   en:
+  #     devise:
+  #       passwords:
+  #         #default_scope_messages - only if resource_scope is not found
+  #         user:
+  #           #resource_scope_messages
+  #
+  # Please refer to README or en.yml locale file to check what messages are
+  # available.
+  def set_flash_message(key, kind, options = {})
+    message = find_message(kind, options)
+    if options[:now]
+      flash.now[key] = message if message.present?
+    else
+      flash[key] = message if message.present?
+    end
+  end
+    
+        def email_changed(record, opts={})
+      devise_mail(record, :email_changed, opts)
+    end
+    
+      def self.activerecord51? # :nodoc:
+    defined?(ActiveRecord) && ActiveRecord.gem_version >= Gem::Version.new('5.1.x')
+  end
+    
+          # Sign out all active users or scopes. This helper is useful for signing out all roles
+      # in one click. This signs out ALL scopes in warden. Returns true if there was at least one logout
+      # and false if there was no user logged in on all scopes.
+      def sign_out_all_scopes(lock=true)
+        users = Devise.mappings.keys.map { |s| warden.user(scope: s, run_callbacks: false) }
+    
+            self.description = <<-DESC
+          Remove the cache for a given pod, or clear the cache completely.
+    
+            self.description = <<-DESC
+          Shows the content of the pods cache as a YAML tree output, organized by pod.
+          If `NAME` is given, only the caches for that pod will be included in the output.
+        DESC
+    
+    module Pod
+  class Command
+    class Env < Command
+      self.summary = 'Display pod environment'
+      self.description = 'Display pod environment.'
+    
+        # Outputs a list of categories as comma-separated <a> links. This is used
+    # to output the category list for each post on a category page.
+    #
+    #  +categories+ is the list of categories to format.
+    #
+    # Returns string
+    #
+    def category_links(categories)
+      categories.sort.map { |c| category_link c }.join(', ')
+    end
+    
+        def get_web_content(url)
+      raw_uri           = URI.parse url
+      proxy             = ENV['http_proxy']
+      if proxy
+        proxy_uri       = URI.parse(proxy)
+        https           = Net::HTTP::Proxy(proxy_uri.host, proxy_uri.port).new raw_uri.host, raw_uri.port
+      else
+        https           = Net::HTTP.new raw_uri.host, raw_uri.port
+      end
+      https.use_ssl     = true
+      https.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request           = Net::HTTP::Get.new raw_uri.request_uri
+      data              = https.request request
+    end
+  end
+    
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
+      end
+    end
+  end
+    
+    Liquid::Template.register_tag('render_partial', Jekyll::RenderPartialTag)
+
+    
+      include_examples 'multiline literal brace layout' do
+    let(:open) { '{' }
+    let(:close) { '}' }
+    let(:a) { 'a: 1' }
+    let(:b) { 'b: 2' }
+    let(:multi_prefix) { 'b: ' }
+    let(:multi) do
+      <<-RUBY.strip_indent.chomp
+        [
+        1
+        ]
+      RUBY
+    end
+  end
+    
+        def smart_path(path)
+      # Ideally, we calculate this relative to the project root.
+      base_dir = PathUtil.pwd
+    
+            expect(new_source).to eq(<<-RUBY.strip_indent)
+          def func
+            for (a, b) in {a: 1, b: 2, c: 3} do
+              puts a, b
+            end
+          end
+        RUBY
       end
     end
     
-        orig_stdout = $stdout
-    orig_stderr = $stderr
-    captured_stdout = StringIO.new
-    captured_stderr = StringIO.new
-    $stdout = captured_stdout
-    $stderr = captured_stderr
+      cop_name = args[:cop]
+  src_path = args[:srcpath]
+  iterations = args[:times] ? Integer(args[:times]) : 1
+    
+          # Calls the given block for each `when` node in the `case` statement.
+      # If no block is given, an `Enumerator` is returned.
+      #
+      # @return [self] if a block is given
+      # @return [Enumerator] if no block is given
+      def each_when
+        return when_branches.to_enum(__method__) unless block_given?
+    
+          # Checks whether this node body is a void context.
+      # Always `true` for `for`.
+      #
+      # @return [true] whether the `for` node body is a void context
+      def void_context?
+        true
+      end
+    
+          # This is used for duck typing with `pair` nodes which also appear as
+      # `hash` elements.
+      #
+      # @return [false]
+      def hash_rocket?
+        false
+      end
