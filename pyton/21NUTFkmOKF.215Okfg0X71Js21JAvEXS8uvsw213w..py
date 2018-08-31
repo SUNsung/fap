@@ -1,215 +1,195 @@
 
         
-        cc_library(
-    name = 'syntaxnet_link_feature_extractor',
-    srcs = ['syntaxnet_link_feature_extractor.cc'],
-    hdrs = ['syntaxnet_link_feature_extractor.h'],
-    deps = [
-        '//dragnn/protos:spec_proto_cc',
-        '//syntaxnet:base',
-        '//syntaxnet:embedding_feature_extractor',
-        '//syntaxnet:parser_transitions',
-        '//syntaxnet:task_context',
-    ],
-)
-    
-    # Don't use this library directly; instead use 'dragnn/python:mst_ops'.
-tf_gen_op_wrapper_py(
-    name = 'mst_ops',
-    visibility = ['//dragnn/python:__pkg__'],
-    deps = [':mst_ops_op_lib'],
-)
-    
-    tf_proto_library_py(
-    name = 'data_pb2',
-    srcs = ['data.proto'],
-)
-    
-      def __init__(self, master, component_spec):
-    self.master = master
-    self.spec = component_spec
-    self.name = component_spec.name
-    self.network = MockNetwork()
-    self.beam_size = 1
-    self.num_actions = 45
-    self._attrs = {}
-    
-    
-def test_max_redirects(httpbin):
-    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
-             error_exit_ok=True)
-    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+        
+if __name__ == '__main__':
+    main()
 
     
-        def get_auth(self, username=None, password=None):
-        '''
-        If `auth_parse` is set to `True`, then `username`
-        and `password` contain the parsed credentials.
+    new_version = {}
     
-    import requests.auth
+    import rsa
+import json
+from binascii import hexlify
     
-    First, we fix a training set and increase the number of
-samples. Then we plot the computation time as function of
-the number of samples.
+        ies = sorted(youtube_dl.gen_extractors(), key=lambda i: i.IE_NAME.lower())
+    out = '# Supported sites\n' + ''.join(
+        ' - ' + md + '\n'
+        for md in gen_ies_md(ies))
     
-    
-@ignore_warnings
-def benchmark(metrics=tuple(v for k, v in sorted(METRICS.items())),
-              formats=tuple(v for k, v in sorted(FORMATS.items())),
-              samples=1000, classes=4, density=.2,
-              n_times=5):
-    '''Times metric calculations for a number of inputs
-    
-                c_bar = plt.bar(xvals, build_time[alg] - bottom,
-                            width, bottom, color='r')
-            q_bar = plt.bar(xvals, query_time[alg],
-                            width, build_time[alg], color='b')
-    
-            start = time.time()
-        func(X, n_jobs=1)
-        one_core.append(time.time() - start)
-    
-       ###########################################################################
-    # Set custom automatic method selection
-    sampling_algorithm['custom-auto'] = \
-        lambda n_population, n_samples, random_state=None: \
-            sample_without_replacement(n_population,
-                                       n_samples,
-                                       method='auto',
-                                       random_state=random_state)
-    
-    
-if not os.path.exists(html_folder):
-    os.makedirs(html_folder)
-    
-    '''
-print(__doc__)
-    
-    This illustrates the `datasets.make_multilabel_classification` dataset
-generator. Each sample consists of counts of two features (up to 50 in
-total), which are differently distributed in each of two classes.
-    
-        def __init__(self, expecting, input):
-        RecognitionException.__init__(self, input)
-        
-        self.expecting = expecting
-    
-    
-    def getRuleInvocationStack(self):
-        '''
-        Return List<String> of the rules in your parser instance
-        leading up to a call to this method.  You could override if
-        you want more details such as the file/line info of where
-        in the parser java code a rule is invoked.
-    
-    
-    def insertAfter(self, *args):
-        if len(args) == 2:
-            programName = self.DEFAULT_PROGRAM_NAME
-            index = args[0]
-            text = args[1]
-            
-        elif len(args) == 3:
-            programName = args[0]
-            index = args[1]
-            text = args[2]
-    
-    # Output file base name for HTML help builder.
-htmlhelp_basename = 'futuresdoc'
-    
-    
-@contextlib.contextmanager
-def MockEventNotification( response_method, native_filetype_completer = True ):
-  '''Mock out the EventNotification client request object, replacing the
-  Response handler's JsonFromFuture with the supplied |response_method|.
-  Additionally mock out YouCompleteMe's FiletypeCompleterExistsForFiletype
-  method to return the supplied |native_filetype_completer| parameter, rather
-  than querying the server'''
-    
-    
-  def ShowDetailedDiagnostic( self ):
-    detailed_diagnostic = BaseRequest().PostDataToHandler(
-        BuildRequestData(), 'detailed_diagnostic' )
-    
-    
-def _MockGetBufferVariable( buffer_number, option ):
-  for vim_buffer in VIM_MOCK.buffers:
-    if vim_buffer.number == buffer_number:
-      if option == '&mod':
-        return vim_buffer.modified
-      if option == '&ft':
-        return vim_buffer.filetype
-      if option == 'changedtick':
-        return vim_buffer.changedtick
-      if option == '&bh':
-        return vim_buffer.bufhidden
-      return ''
-  return ''
-    
-      vim_command.assert_has_exact_calls( [
-    call( '12split {0}'.format( __file__ ) ),
-    call( 'exec '
-          ''au BufEnter <buffer> :silent! checktime {0}''.format( __file__ ) ),
-    call( 'silent! normal! Gzz' ),
-    call( 'silent! wincmd p' )
-  ] )
-    
-    
-def GetCurrentBufferFilepath():
-  return GetBufferFilepath( vim.current.buffer )
-    
-      return FilterLevel
-    
-    
-GENERIC_RESPONSE = {
-  'clang': {
-    'has_support': True,
-    'version': 'Clang version'
-  },
-  'completer': {
-    'items': [
-      {
-        'key': 'key',
-        'value': 'value'
-      }
-    ],
-    'name': 'Completer name',
-    'servers': [
-      {
-        'address': '127.0.0.1',
-        'executable': '/path/to/executable',
-        'extras': [
-          {
-            'key': 'key',
-            'value': 'value'
-          }
-        ],
-        'is_running': True,
-        'logfiles': [
-          '/path/to/stdout/logfile',
-          '/path/to/stderr/logfile'
-        ],
-        'name': 'Server name',
-        'pid': 12345,
-        'port': 1234
-      }
+    if len(sys.argv) >= 2 and sys.argv[1] == 'py2exe':
+    params = py2exe_params
+else:
+    files_spec = [
+        ('etc/bash_completion.d', ['youtube-dl.bash-completion']),
+        ('etc/fish/completions', ['youtube-dl.fish']),
+        ('share/doc/youtube_dl', ['README.txt']),
+        ('share/man/man1', ['youtube-dl.1'])
     ]
-  },
-  'extra_conf': {
-    'is_loaded': False,
-    'path': '/path/to/extra/conf'
-  },
-  'python': {
-    'executable': '/path/to/python/interpreter',
-    'version': 'Python version'
-  }
-}
+    root = os.path.dirname(os.path.abspath(__file__))
+    data_files = []
+    for dirname, files in files_spec:
+        resfiles = []
+        for fn in files:
+            if not os.path.exists(fn):
+                warnings.warn('Skipping file %s since it is not present. Type  make  to build all automatically generated files.' % fn)
+            else:
+                resfiles.append(fn)
+        data_files.append((dirname, resfiles))
     
     
-def ExtractKeywordsFromGroup_KeywordWithoutNextgroup_test():
-  assert_that( syntax_parse._ExtractKeywordsFromGroup(
-                 syntax_parse.SyntaxGroup( '', [
-                   'skipempty foo bar',
-                   'zoo goo',
-                 ] ) ),
-               contains_inanyorder( 'skipempty', 'foo', 'bar', 'zoo', 'goo' ) )
+def assertGreaterEqual(self, got, expected, msg=None):
+    if not (got >= expected):
+        if msg is None:
+            msg = '%r not greater than or equal to %r' % (got, expected)
+        self.assertTrue(got >= expected, msg)
+    
+            for mpd_file, mpd_url, expected_formats in _TEST_CASES:
+            with io.open('./test/testdata/mpd/%s.mpd' % mpd_file,
+                         mode='r', encoding='utf-8') as f:
+                formats = self.ie._parse_mpd_formats(
+                    compat_etree_fromstring(f.read().encode('utf-8')),
+                    mpd_url=mpd_url)
+                self.ie._sort_formats(formats)
+                expect_value(self, formats, expected_formats, None)
+    
+        def test_youtube_extract(self):
+        assertExtractId = lambda url, id: self.assertEqual(YoutubeIE.extract_id(url), id)
+        assertExtractId('http://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('https://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('https://www.youtube.com/watch?feature=player_embedded&v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('https://www.youtube.com/watch_popup?v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('http://www.youtube.com/watch?v=BaW_jenozKcsharePLED17F32AD9753930', 'BaW_jenozKc')
+        assertExtractId('BaW_jenozKc', 'BaW_jenozKc')
+    
+        Args:
+      session: The current TensorFlow session,
+      instances: The instances for which to load the labels.
+    
+        # Convert to full tensors, not lists of tensors in time dim.
+    gen_states = list_t_bxn_to_tensor_bxtxn(gen_states)
+    factors = list_t_bxn_to_tensor_bxtxn(factors)
+    out_dist_params = list_t_bxn_to_tensor_bxtxn(out_dist_params)
+    if self.hps.ic_dim > 0:
+      # select first time point
+      prior_g0_mean = prior_g0_mean[0]
+      prior_g0_logvar = prior_g0_logvar[0]
+      post_g0_mean = post_g0_mean[0]
+      post_g0_logvar = post_g0_logvar[0]
+    if self.hps.co_dim > 0:
+      controller_outputs = list_t_bxn_to_tensor_bxtxn(controller_outputs)
+    
+    
+def generate_data(rnn, T, E, x0s=None, P_sxn=None, input_magnitude=0.0,
+                  input_times=None):
+  ''' Generates data from an randomly initialized RNN.
+  Args:
+    rnn: the rnn
+    T: Time in seconds to run (divided by rnn['dt'] to get steps, rounded down.
+    E: total number of examples
+    S: number of samples (subsampling N)
+  Returns:
+    A list of length E of NxT tensors of the network being run.
+  '''
+  N = rnn['N']
+  def run_rnn(rnn, x0, ntime_steps, input_time=None):
+    rs = np.zeros([N,ntime_steps])
+    x_tm1 = x0
+    r_tm1 = np.tanh(x0)
+    tau = rnn['tau']
+    dt = rnn['dt']
+    alpha = (1.0-dt/tau)
+    W = dt/tau*rnn['W']*rnn['g']
+    Bin = dt/tau*rnn['Bin']
+    Bin2 = dt/tau*rnn['Bin2']
+    b = dt/tau*rnn['b']
+    
+      Returns:
+    The length B list of TxN numpy tensors.
+  '''
+  T = len(values_t_bxn)
+  B, N = values_t_bxn[0].shape
+  values_b_txn = []
+  for b in range(B):
+    values_pb_txn = np.zeros([T,N])
+    for t in range(T):
+      values_pb_txn[t,:] = values_t_bxn[t][b,:]
+    values_b_txn.append(values_pb_txn)
+    
+        self.bos_char = free_ids[0]  # <begin sentence>
+    self.eos_char = free_ids[1]  # <end sentence>
+    self.bow_char = free_ids[2]  # <begin word>
+    self.eow_char = free_ids[3]  # <end word>
+    self.pad_char = free_ids[4]  # <padding>
+    
+    
+def _convert_to_partial(scoring1, scoring2):
+  '''Convert full scoring into partial scoring.'''
+  mask1, mask2 = _substitution_mask(
+      scoring1['sentence'], scoring2['sentence'])
+    
+      '''
+  zero_tensor = tf.constant(0., dtype=tf.float32, shape=[])
+    
+      for t in ngrams_list:
+    key = hash_function(t)
+    if key in counts:
+      counts[key] += 1
+    else:
+      counts[key] = 1
+  return counts
+    
+      ## Encoder forward variables.
+  encoder_lstm_w_0 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'dis/encoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/kernel'
+  ][0]
+  encoder_lstm_b_0 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'dis/encoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/bias'
+  ][0]
+  encoder_lstm_w_1 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'dis/encoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/kernel'
+  ][0]
+  encoder_lstm_b_1 = [
+      v for v in tf.trainable_variables() if v.op.name ==
+      'dis/encoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/bias'
+  ][0]
+    
+        old_update_wrapper = functools.update_wrapper
+    def update_wrapper(wrapper, wrapped, *a, **kw):
+        rv = old_update_wrapper(wrapper, wrapped, *a, **kw)
+        rv._original_function = wrapped
+        return rv
+    functools.update_wrapper = update_wrapper
+    
+        if db is not None:
+        db.close()
+    
+        assert 'closed' in str(e)
+    
+    This typically means that you attempted to use functionality that needed
+an active HTTP request.  Consult the documentation on testing for
+information about how to avoid this problem.\
+'''
+_app_ctx_err_msg = '''\
+Working outside of application context.
+    
+            @app.route('/stream')
+        def streamed_response():
+            def generate():
+                yield 'Hello '
+                yield request.args['name']
+                yield '!'
+            return Response(stream_with_context(generate()))
+    
+    containers = (('thefuck/python3-tcsh',
+               u'''FROM python:3
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'),
+              ('thefuck/python2-tcsh',
+               u'''FROM python:2
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'))
