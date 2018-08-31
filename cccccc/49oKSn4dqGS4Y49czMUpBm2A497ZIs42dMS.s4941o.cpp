@@ -1,262 +1,201 @@
 
         
-        void ProtoFromShapeHandle(tensorflow::shape_inference::ShapeHandle s,
-                          tensorflow::shape_inference::InferenceContext* c,
-                          TensorShapeProto* out) {
-  if (c->RankKnown(s)) {
-    const int32 rank = c->Rank(s);
-    for (int i = 0; i < rank; ++i) {
-      shape_inference::DimensionHandle d = c->Dim(s, i);
-      auto* out_dim = out->add_dim();
-      if (c->ValueKnown(d)) {
-        out_dim->set_size(c->Value(d));
-      } else {
-        out_dim->set_size(-1);
-      }
-    }
-  } else {
-    out->set_unknown_rank(true);
-  }
-}
-    
-    #include 'tensorflow/core/platform/env.h'
-#include 'tensorflow/core/platform/null_file_system.h'
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    void CostAnalyzer::PreprocessCosts() {
-  for (int i = 0; i < op_perf_.op_performance_size(); i++) {
-    OpPerformance* perf = op_perf_.mutable_op_performance(i);
-    const OpPerformance& analytical = op_perf_analytical_.op_performance(i);
-    perf->set_compute_time(analytical.compute_time());
-    perf->set_memory_time(analytical.memory_time());
-    double measured_cost = perf->compute_cost();
-    }
-    }
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    // Returns the id number of the bfloat16 numpy type.
-int Bfloat16NumpyType();
-    
-    // Creates a tensor in 'ret' from the input Ndarray.
-Status NdarrayToTensor(PyObject* obj, Tensor* ret);
-    
-    Status ArrayFromMemory(int dim_size, npy_intp* dims, void* data, DataType dtype,
-                       std::function<void()> destructor, PyObject** result) {
-  int size = 1;
-  for (int i = 0; i < dim_size; ++i) {
-    size *= dims[i];
-  }
-  if (dtype == DT_STRING || dtype == DT_RESOURCE || size == 0) {
-    return errors::FailedPrecondition(
-        'Cannot convert strings, resources, or empty Tensors.');
-  }
-    }
-    
-    #ifndef TENSORFLOW_PYTHON_LIB_CORE_PY_FUNC_H_
-#define TENSORFLOW_PYTHON_LIB_CORE_PY_FUNC_H_
-    
-    namespace tensorflow {
-    }
-    
-    void PyRecordReader::Close() {
-  delete reader_;
-  delete file_;
-  file_ = nullptr;
-  reader_ = nullptr;
-}
-    
-    
-    {}  // namespace atom
-    
-    bool UvTaskRunner::PostNonNestableDelayedTask(const base::Location& from_here,
+        bool UvTaskRunner::PostNonNestableDelayedTask(const base::Location& from_here,
                                               base::OnceClosure task,
                                               base::TimeDelta delay) {
   return PostDelayedTask(from_here, std::move(task), delay);
 }
     
-    // static
-void AutoUpdater::BuildPrototype(v8::Isolate* isolate,
-                                 v8::Local<v8::FunctionTemplate> prototype) {
-  prototype->SetClassName(mate::StringToV8(isolate, 'AutoUpdater'));
-  mate::ObjectTemplateBuilder(isolate, prototype->PrototypeTemplate())
-      .SetMethod('checkForUpdates', &auto_updater::AutoUpdater::CheckForUpdates)
-      .SetMethod('getFeedURL', &auto_updater::AutoUpdater::GetFeedURL)
-      .SetMethod('setFeedURL', &AutoUpdater::SetFeedURL)
-      .SetMethod('quitAndInstall', &AutoUpdater::QuitAndInstall);
-}
+      web_contents_.Reset(isolate, web_contents.ToV8());
+  api_web_contents_ = web_contents.get();
     
       static void BuildPrototype(v8::Isolate* isolate,
                              v8::Local<v8::FunctionTemplate> prototype);
     
-    NODE_BUILTIN_MODULE_CONTEXT_AWARE(atom_browser_browser_view, Initialize)
-
-    
-      v8::Local<v8::Value> GetWebContents();
-    
-    #include 'atom/browser/api/atom_api_browser_window.h'
-    
-    namespace api {
-    }
-    
-    #include 'atom/browser/atom_browser_main_parts.h'
-#include 'atom/common/native_mate_converters/callback.h'
-#include 'atom/common/native_mate_converters/value_converter.h'
-#include 'base/json/json_reader.h'
-#include 'base/json/json_writer.h'
-#include 'base/memory/ptr_util.h'
-#include 'content/public/browser/devtools_agent_host.h'
-#include 'content/public/browser/web_contents.h'
-#include 'native_mate/dictionary.h'
-#include 'native_mate/object_template_builder.h'
-    
-    #include <string>
-#include <utility>
-#include <vector>
-    
-    std::string MessageGenerator::full_class_name() {
-  return GetClassName(descriptor_);
+    const std::vector<GURL>& DownloadItem::GetURLChain() const {
+  return download_item_->GetUrlChain();
 }
     
-    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_PRIMITIVE_FIELD_H__
     
-    #ifndef UINT32_MAX
-    #define UINT32_MAX (4294967295U)
-#endif
+    {
+    {    return dict.GetHandle();
+  }
+};
     
-    void absDiff(const Size2D &size,
-             const f32 * src0Base, ptrdiff_t src0Stride,
-             const f32 * src1Base, ptrdiff_t src1Stride,
-             f32 * dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiff<f32>());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-    void bitwiseXor(const Size2D &size,
-                const u8 *src0Base, ptrdiff_t src0Stride,
-                const u8 *src1Base, ptrdiff_t src1Stride,
-                u8 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, BitwiseXor());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-    #include <cstddef>
-#include <cstdlib>
-#include <algorithm>
-    
-    
-    {} // namespace CAROTENE_NS
-
-    
-            size_t i = 0;
-        while(i + 4 <= size.width)
-        {
-            size_t lim = std::min(i + DOT_FLOAT_BLOCKSIZE, size.width) - 4;
-            float32x4_t v_sum = vdupq_n_f32(0.0f);
-    }
-    
-    
-    {            u32 buf[8];
-            vst1_u32(buf, vget_low_u32(el8shr01l));
-            vst1_u32(buf+2, el2l);
-            vst1_u32(buf+4, el2hl);
-            vst1_u32(buf+6, el2hh);
-            for(u32 k=0; k < 8; k++)
-                sqsum[j+k] = prev + prevSqSum[j+k] + buf[k];
-            prev += buf[7];
-        }
-    
-    TEST(Dynamic, FormattedIO) {
-  std::ostringstream out;
-  dynamic doubl = 123.33;
-  dynamic dint = 12;
-  out << '0x' << std::hex << ++dint << ' ' << std::setprecision(1)
-      << doubl << '\n';
-  EXPECT_EQ(out.str(), '0xd 1e+02\n');
-    }
-    
-    void BENCHFUN(pushBack)(int iters, int initialSize) {
-  BenchmarkSuspender braces;
-  auto const obj = randomObject<VECTOR::value_type>();
-  VECTOR v(initialSize, obj);
-  braces.dismissing([&]() {
-    FOR_EACH_RANGE (i, 0, iters) { v.push_back(obj); }
-  });
-}
-    
-      EXPECT_TRUE(bool(temp));
-    
-      template <size_t K, class Callback>
-  void doFormatArg(FormatArg& arg, Callback& cb) const {
-    std::string result;
-    auto appender = [&result](StringPiece s) {
-      result.append(s.data(), s.size());
-    };
-    this->template getFormatValue<K>().format(arg, appender);
-    result = sformat('{{{}}}', result);
-    cb(StringPiece(result));
+      std::shared_ptr<grpc::Channel> CreateChannel(
+      const string& target, const grpc::ChannelArguments& args) override {
+    grpc_channel_args channel_args;
+    args.SetChannelArgs(&channel_args);
+    return CreateChannelInternal(
+        '', grpc_cronet_secure_channel_create(engine_, target.c_str(),
+                                              &channel_args, nullptr));
   }
     
-      void sendMessage();
+    #include <grpc/grpc.h>
+#include <grpc/support/log.h>
+#include <grpcpp/channel.h>
+#include <grpcpp/support/channel_arguments.h>
+#include <grpcpp/support/config.h>
+#include 'src/cpp/client/create_channel_internal.h'
     
-    std::shared_ptr<DHTBucket>
-DHTRoutingTable::getBucketFor(const unsigned char* nodeID) const
-{
-  return dht::findBucketFor(root_.get(), nodeID);
+    #include 'src/cpp/server/thread_pool_interface.h'
+    
+    AuthPropertyIterator SecureAuthContext::begin() const {
+  if (ctx_) {
+    grpc_auth_property_iterator iter =
+        grpc_auth_context_property_iterator(ctx_);
+    const grpc_auth_property* property =
+        grpc_auth_property_iterator_next(&iter);
+    return AuthPropertyIterator(property, &iter);
+  } else {
+    return end();
+  }
 }
     
+    #endif /* GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_CHANNEL_FILTER_H */
+
     
-    {} // namespace aria2
+    #include 'absl/strings/str_cat.h'
+#include 'absl/strings/string_view.h'
+#include 'opencensus/stats/stats.h'
+#include 'src/core/lib/surface/call.h'
+#include 'src/cpp/ext/filters/census/grpc_plugin.h'
+#include 'src/cpp/ext/filters/census/measures.h'
     
-    DHTRoutingTableDeserializer::~DHTRoutingTableDeserializer() = default;
+    absl::string_view StatusCodeToString(grpc_status_code code) {
+  switch (code) {
+    case GRPC_STATUS_OK:
+      return 'OK';
+    case GRPC_STATUS_CANCELLED:
+      return 'CANCELLED';
+    case GRPC_STATUS_UNKNOWN:
+      return 'UNKNOWN';
+    case GRPC_STATUS_INVALID_ARGUMENT:
+      return 'INVALID_ARGUMENT';
+    case GRPC_STATUS_DEADLINE_EXCEEDED:
+      return 'DEADLINE_EXCEEDED';
+    case GRPC_STATUS_NOT_FOUND:
+      return 'NOT_FOUND';
+    case GRPC_STATUS_ALREADY_EXISTS:
+      return 'ALREADY_EXISTS';
+    case GRPC_STATUS_PERMISSION_DENIED:
+      return 'PERMISSION_DENIED';
+    case GRPC_STATUS_UNAUTHENTICATED:
+      return 'UNAUTHENTICATED';
+    case GRPC_STATUS_RESOURCE_EXHAUSTED:
+      return 'RESOURCE_EXHAUSTED';
+    case GRPC_STATUS_FAILED_PRECONDITION:
+      return 'FAILED_PRECONDITION';
+    case GRPC_STATUS_ABORTED:
+      return 'ABORTED';
+    case GRPC_STATUS_OUT_OF_RANGE:
+      return 'OUT_OF_RANGE';
+    case GRPC_STATUS_UNIMPLEMENTED:
+      return 'UNIMPLEMENTED';
+    case GRPC_STATUS_INTERNAL:
+      return 'INTERNAL';
+    case GRPC_STATUS_UNAVAILABLE:
+      return 'UNAVAILABLE';
+    case GRPC_STATUS_DATA_LOSS:
+      return 'DATA_LOSS';
+    default:
+      // gRPC wants users of this enum to include a default branch so that
+      // adding values is not a breaking change.
+      return 'UNKNOWN_STATUS';
+  }
+}
     
-        taskFactory->setLocalNode(localNode);
-    taskFactory->setRoutingTable(routingTable.get());
-    taskFactory->setMessageDispatcher(dispatcher.get());
-    taskFactory->setMessageFactory(factory.get());
-    taskFactory->setTaskQueue(taskQueue.get());
-    taskFactory->setTimeout(std::chrono::seconds(messageTimeout));
+      ::opencensus::trace::SpanContext ToSpanContext() const {
+    return ::opencensus::trace::SpanContext(
+        ::opencensus::trace::TraceId(trace_id),
+        ::opencensus::trace::SpanId(span_id),
+        ::opencensus::trace::TraceOptions(trace_options));
+  }
     
-    #include 'common.h'
     
-      size_t getExecutingTaskSize() const { return execTasks_.size(); }
+    { private:
+  static const std::string kLoggerKey;
+};
+    
+    #include <iostream>
+    
+      const auto& parser = c.getParser('options')->getData();
+  ASSERT_TRUE(parser.doc().HasMember('options'));
+  EXPECT_TRUE(JSON::valueToBool(parser.doc()['options']['enable_monitor']));
+    
+    #include <gtest/gtest.h>
+    
+    
+    {  Pack fpack('discovery_pack', getPackWithDiscovery().doc());
+  EXPECT_TRUE(fpack.checkVersion());
+}
+    
+    TEST_F(TablesTests, test_caching) {
+  TestTablePlugin test;
+  // By default the interval and step is 0, so a step of 5 will not be cached.
+  EXPECT_FALSE(test.testIsCached(5));
+    }
+    
+      /// Mutex and lock around extensions access.
+  Mutex mutex_;
+    
+    class ExampleConfigPlugin : public ConfigPlugin {
+ public:
+  Status setUp() {
+    LOG(WARNING) << 'ExampleConfigPlugin setting up';
+    return Status(0, 'OK');
+  }
+    }
+    
+    #include 'DHTAbstractMessage.h'
+#include 'A2STR.h'
+#include 'ValueBase.h'
+    
+    namespace aria2 {
+    }
+    
+        factory->setRoutingTable(routingTable.get());
+    factory->setConnection(connection.get());
+    factory->setMessageDispatcher(dispatcher.get());
+    factory->setPeerAnnounceStorage(peerAnnounceStorage.get());
+    factory->setTokenTracker(tokenTracker.get());
+    factory->setLocalNode(localNode);
+    factory->setBtRegistry(e->getBtRegistry().get());
+    
+    namespace aria2 {
+    }
+    
+    #endif // D_DHT_TASK_EXECUTOR_H
+
+    
+      virtual std::shared_ptr<DHTTask>
+  createPeerAnnounceTask(const unsigned char* infoHash) CXX11_OVERRIDE;
+    
+    void DHTTaskQueueImpl::executeTask()
+{
+  A2_LOG_DEBUG('Updating periodicTaskQueue1');
+  periodicTaskQueue1_.update();
+  A2_LOG_DEBUG('Updating periodicTaskQueue2');
+  periodicTaskQueue2_.update();
+  A2_LOG_DEBUG('Updating immediateTaskQueue');
+  immediateTaskQueue_.update();
+}
+    
+      virtual void process() CXX11_OVERRIDE;
+    
+    DHTUnknownMessage::DHTUnknownMessage(const std::shared_ptr<DHTNode>& localNode,
+                                     const unsigned char* data, size_t length,
+                                     const std::string& ipaddr, uint16_t port)
+    : DHTMessage(localNode, std::shared_ptr<DHTNode>()),
+      length_(length),
+      ipaddr_(ipaddr),
+      port_(port)
+{
+  if (length_ == 0) {
+    data_ = nullptr;
+  }
+  else {
+    data_ = new unsigned char[length];
+    memcpy(data_, data, length);
+  }
+}
