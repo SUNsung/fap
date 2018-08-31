@@ -1,298 +1,385 @@
 
         
-          void GetDeviceLocalityAsync(const string& device, DeviceLocality* locality,
-                              StatusCallback) override;
+        #endif // BITCOIN_QT_MACDOCKICONHANDLER_H
+
     
-      // (X - E[X]) / Sqrt[Var[X] + epsilon].
-  auto normalized = add_binary(operand_shape, HloOpcode::kMultiply,
-                               operand_minus_mean, rsqrt_var_add_epsilon);
+    private:
+    PlatformStyle(const QString &name, bool imagesOnButtons, bool colorizeIcons, bool useExtraSpacing);
     
-      std::vector<T> GetOutput() { return ExtractVector<T>(output_); }
-  std::vector<int> GetOutputShape() { return GetTensorShape(output_); }
+        void setModel(WalletModel *model);
+    void setAddress_SM(const QString &address);
+    void setAddress_VM(const QString &address);
     
-      ::tensorflow::NodeDef output_node_def;
-  output_node_def.ParseFromString(output_toco_op->tensorflow_node_def);
-  const auto& output_attr = output_node_def.attr();
-  EXPECT_EQ(2.0, output_attr.at('float_attr').f());
-  EXPECT_EQ('Hello World', output_attr.at('str_attr').s());
-  EXPECT_EQ(17, output_attr.at('int_attr').i());
-  EXPECT_EQ(true, output_attr.at('bool_attr').b());
+    /**
+ * An RAII-style reverse lock. Unlocks on construction and locks on destruction.
+ */
+template<typename Lock>
+class reverse_lock
+{
+public:
+    }
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    /** Generate blocks (mine) */
+UniValue generateBlocks(std::shared_ptr<CReserveScript> coinbaseScript, int nGenerate, uint64_t nMaxTries, bool keepScript);
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
     
-    #include <memory>
-#include 'tensorflow/core/framework/reader_base.h'
-#include 'tensorflow/core/framework/reader_op_kernel.h'
-#include 'tensorflow/core/lib/core/errors.h'
-#include 'tensorflow/core/lib/io/record_reader.h'
-#include 'tensorflow/core/lib/strings/strcat.h'
-#include 'tensorflow/core/platform/env.h'
+    {        secp256k1_sha256_initialize(&sha);
+        secp256k1_sha256_write(&sha, y, sizeof(y));
+        secp256k1_sha256_write(&sha, x, sizeof(x));
+        secp256k1_sha256_finalize(&sha, result);
+        ret = 1;
+    }
     
-        const string file_format =
-        str_util::Lowercase(file_format_tensor.scalar<string>()());
-    const int32 samples_per_second =
-        samples_per_second_tensor.scalar<int32>()();
-    const int32 bits_per_second = bits_per_second_tensor.scalar<int32>()();
+    #ifndef SECP256K1_MODULE_RECOVERY_TESTS_H
+#define SECP256K1_MODULE_RECOVERY_TESTS_H
     
-    namespace content {
-class RenderView;
+    BOOST_AUTO_TEST_SUITE_END()
+
+    
+    static void CheckParseTorReplyMapping(std::string input, std::map<std::string,std::string> expected)
+{
+    BOOST_TEST_MESSAGE(std::string('CheckParseTorReplyMapping(') + input + ')');
+    auto ret = ParseTorReplyMapping(input);
+    BOOST_CHECK_EQUAL(ret.size(), expected.size());
+    auto r_it = ret.begin();
+    auto e_it = expected.begin();
+    while (r_it != ret.end() && e_it != expected.end()) {
+        BOOST_CHECK_EQUAL(r_it->first, e_it->first);
+        BOOST_CHECK_EQUAL(r_it->second, e_it->second);
+        r_it++;
+        e_it++;
+    }
 }
     
-        int menu_id;
-    if (option.GetInteger('submenu', &menu_id))
-      SetSubmenu(dispatcher_host()->GetApiObject<Menu>(menu_id));
-    std::string key;
-    if (option.GetString('key',&key)){
-      enable_shortcut = true;
-      std::string modifiers = '';
-      option.GetString('modifiers',&modifiers);
-      modifiers_mask = GdkModifierType(0);
-      if (modifiers.size() != 0){
-        if (modifiers.find('ctrl') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_CONTROL_MASK);
-        }
-        if (modifiers.find('alt') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_MOD1_MASK);
-        }
-        if (modifiers.find('super') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SUPER_MASK);
-        }
-        if (modifiers.find('meta') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_META_MASK);
-        }
-        
-        if (modifiers.find('shift') != std::string::npos){
-          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SHIFT_MASK);
-        }
-    }
-    }
+        bool getBool() const { return isTrue(); }
+    void getObjMap(std::map<std::string,UniValue>& kv) const;
+    bool checkObject(const std::map<std::string,UniValue::VType>& memberTypes) const;
+    const UniValue& operator[](const std::string& key) const;
+    const UniValue& operator[](size_t index) const;
+    bool exists(const std::string& key) const { size_t i; return findKey(key, i); }
     
-    #include 'generic/THTensorCopy.cpp'
-#include 'THGenerateAllTypes.h'
-    
-    TEST_CASE('cursor/non-const-to-const-conversion') {
-  torch::manual_seed(0);
-  auto first = std::make_shared<TestModule>(1);
-  auto second = std::make_shared<TestModule>(2);
-  Container model(first, second);
-    }
-    
-    void OptimizerBase::add_parameters(const ParameterCursor& cursor) {
-  std::vector<Tensor> tensors(cursor.size());
-  cursor.map(tensors.begin(), [](const Tensor& tensor) { return tensor; });
-  add_parameters(tensors);
-}
+      SecureChannelCredentials* AsSecureCredentials() override { return nullptr; }
     
     
     {
-    {    if (totalSize + self->storageOffset > 0) {
-      if (!self->storage)
-        self->storage = THDStorage_(new)();
-      if (totalSize + self->storageOffset > self->storage->size)
-        THDStorage_(resize)(self->storage, totalSize+self->storageOffset);
-    }
-  } else {
-    self->nDimension = 0;
-  }
+    {  SecureChannelCredentials* AsSecureCredentials() override { return nullptr; }
+};
+}  // namespace
+    
+    AuthPropertyIterator& AuthPropertyIterator::operator++() {
+  grpc_auth_property_iterator iter = {ctx_, index_, name_};
+  property_ = grpc_auth_property_iterator_next(&iter);
+  ctx_ = iter.ctx;
+  index_ = iter.index;
+  name_ = iter.name;
+  return *this;
 }
     
-    Tensor fft(const Tensor& self, const int64_t signal_ndim, const bool normalized) {
-  return _fft(self, signal_ndim, /* complex_input */ true,
-              /* complex_output */ true, /* inverse */ false, {}, normalized,
-              /* onesided */ false);
+    #include <grpcpp/security/auth_context.h>
+    
+    void ChannelArguments::SetSslTargetNameOverride(const grpc::string& name) {
+  SetString(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG, name);
 }
     
-      template <typename F>
-  auto read(F&& readFunc) -> typename std::result_of<F(const T&)>::type {
-    auto localCounterIndex = counterIndex_.load();
-    ++counters_[localCounterIndex];
-    try {
-      auto r = readFunc(data_[dataIndex_.load()]);
-      --counters_[localCounterIndex];
-      return r;
-    } catch (const std::exception& e) {
-      --counters_[localCounterIndex];
-      throw;
-    }
-  }
+    // Returns a string representation of the StatusCode enum.
+absl::string_view StatusCodeToString(grpc_status_code code);
     
-    /* Can we use 32 bit math for indexing? */
-THC_API bool THCTensor_canUse32BitIndexMath(THCState* state, const THCTensor* t, ptrdiff_t max_elem=INT32_MAX);
-/* Are all tensors 32-bit indexable? */
-THC_API bool THCTensor_all32BitIndexable(THCState* state, THCTensor** inputs, int numInputs);
-THC_API void THCTensor_preserveReduceDimSemantics(THCState *state, THCTensor *tensor, int in_dims,
-                                                  int64_t dimension, int keepdim);
-/* Returns false if there is no possibility that the tensor    */
-/* has more than one index that references the same datapoint, */
-/* true otherwise.                                             */
-THC_API bool THCTensor_maybeOverlappingIndices(THCState* state, const THCTensor* t);
-
+    MeasureInt64 RpcClientReceivedMessagesPerRpc() {
+  static const auto measure =
+      MeasureInt64::Register(kRpcClientReceivedMessagesPerRpcMeasureName,
+                             'Number of messages received per RPC', kCount);
+  return measure;
+}
     
-      std::vector<THCStream*> streams;
-  Py_ssize_t length = PySequence_Fast_GET_SIZE(seq.get());
-  for (Py_ssize_t i = 0; i < length; i++) {
-    PyObject *stream = PySequence_Fast_GET_ITEM(seq.get(), i);
+    //////////////////////////////////////////////////////////////////////
+    
+    struct Label {
+  Label() : m_a(nullptr) , m_address(nullptr) {}
+  /* implicit */ Label(CodeAddress predefined) : m_a(nullptr) ,
+                                                 m_address(predefined) {}
     }
     
-        for (int i = 0; i < nnz; ++i) {
-      TIndex offset = old_row_data[i] * old_stride_ + old_col_data[i];
-      new_row_data[i] = offset / new_stride_;
-      new_col_data[i] = offset % new_stride_;
-    }
+    #include 'hphp/runtime/base/apc-local-array.h'
+#include 'hphp/runtime/base/mixed-array-defs.h'
+#include 'hphp/runtime/base/memory-manager.h'
     
-    int jpeg_decoder_mem_stream::read(uint8 *pBuf, int max_bytes_to_read, bool *pEOF_flag)
-{
-  *pEOF_flag = false;
+      if (comma != data) {
+    // we have meta
+    ssize_t meta_len = comma - data;
+    data_len -= meta_len;
+    char* semi = (char*)memchr(data, ';', meta_len);
+    char* slash = (char*)memchr(data, '/', meta_len);
     }
     
     
-int             oc_has_mode_metrics;
-oc_mode_metrics OC_MODE_METRICS[64][3][2][OC_SAD_BINS];
-# endif
+    {///////////////////////////////////////////////////////////////////////////////
+}
     
-    /*      These defines enable functionality introduced with the 1999 ISO C
-**      standard. They must be defined before the inclusion of math.h to
-**      engage them. If optimisation is enabled, these functions will be
-**      inlined. With optimisation switched off, you have to link in the
-**      maths library using -lm.
-*/
-    
-    
-    {}  // namespace leveldb
-    
-    TEST(HASH, SignedUnsignedIssue) {
-  const unsigned char data1[1] = {0x62};
-  const unsigned char data2[2] = {0xc3, 0x97};
-  const unsigned char data3[3] = {0xe2, 0x99, 0xa5};
-  const unsigned char data4[4] = {0xe1, 0x80, 0xb9, 0x32};
-  const unsigned char data5[48] = {
-    0x01, 0xc0, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x14, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x04, 0x00,
-    0x00, 0x00, 0x00, 0x14,
-    0x00, 0x00, 0x00, 0x18,
-    0x28, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x02, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-  };
-    }
-    
-    class SCOPED_LOCKABLE MutexLock {
+    namespace mxnet {
+/*!
+ * \brief iterator type
+ * \tparam DType data type
+ */
+template<typename DType>
+class IIterator : public dmlc::DataIter<DType> {
  public:
-  explicit MutexLock(port::Mutex *mu) EXCLUSIVE_LOCK_FUNCTION(mu)
-      : mu_(mu)  {
-    this->mu_->Lock();
+  /*!
+   * \brief set the parameters and init iter
+   * \param kwargs key-value pairs
+   */
+  virtual void Init(const std::vector<std::pair<std::string, std::string> >& kwargs) = 0;
+  /*! \brief reset the iterator */
+  virtual void BeforeFirst(void) = 0;
+  /*! \brief move to next item */
+  virtual bool Next(void) = 0;
+  /*! \brief get current data */
+  virtual const DType &Value(void) const = 0;
+  /*! \brief constructor */
+  virtual ~IIterator(void) {}
+  /*! \brief store the name of each data, it could be used for making NDArrays */
+  std::vector<std::string> data_names;
+  /*! \brief set data name to each attribute of data */
+  inline void SetDataName(const std::string data_name) {
+    data_names.push_back(data_name);
   }
-  ~MutexLock() UNLOCK_FUNCTION() { this->mu_->Unlock(); }
+};  // class IIterator
     }
     
-    #ifndef STORAGE_LEVELDB_UTIL_RANDOM_H_
-#define STORAGE_LEVELDB_UTIL_RANDOM_H_
     
-    namespace leveldb {
-    }
-    
-        // Glut has 1 function for characters and one for 'special keys'. We map the characters in the 0..255 range and the keys above.
-    io.KeyMap[ImGuiKey_Tab]         = '\t'; // == 9 == CTRL+I
-    io.KeyMap[ImGuiKey_LeftArrow]   = 256 + GLUT_KEY_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow]  = 256 + GLUT_KEY_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow]     = 256 + GLUT_KEY_UP;
-    io.KeyMap[ImGuiKey_DownArrow]   = 256 + GLUT_KEY_DOWN;
-    io.KeyMap[ImGuiKey_PageUp]      = 256 + GLUT_KEY_PAGE_UP;
-    io.KeyMap[ImGuiKey_PageDown]    = 256 + GLUT_KEY_PAGE_DOWN;
-    io.KeyMap[ImGuiKey_Home]        = 256 + GLUT_KEY_HOME;
-    io.KeyMap[ImGuiKey_End]         = 256 + GLUT_KEY_END;
-    io.KeyMap[ImGuiKey_Insert]      = 256 + GLUT_KEY_INSERT;
-    io.KeyMap[ImGuiKey_Delete]      = 127;
-    io.KeyMap[ImGuiKey_Backspace]   = 8;  // == CTRL+H
-    io.KeyMap[ImGuiKey_Space]       = ' ';
-    io.KeyMap[ImGuiKey_Enter]       = 13; // == CTRL+M
-    io.KeyMap[ImGuiKey_Escape]      = 27;
-    io.KeyMap[ImGuiKey_A]           = 'A';
-    io.KeyMap[ImGuiKey_C]           = 'C';
-    io.KeyMap[ImGuiKey_V]           = 'V';
-    io.KeyMap[ImGuiKey_X]           = 'X';
-    io.KeyMap[ImGuiKey_Y]           = 'Y';
-    io.KeyMap[ImGuiKey_Z]           = 'Z';
-    
-        // Setup Dear ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    ImGui_ImplAllegro5_Init(display);
-    
-            // Start the Dear ImGui frame
-        ImGui_ImplOpenGL2_NewFrame();
-        ImGui_ImplSDL2_NewFrame(window);
-        ImGui::NewFrame();
-    
-    
-    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
-    
-    /* using override */ using namespace folly::portability::fcntl;
-#endif
-
-    
-      BlockingQueueAddResult add(T item) override {
-    switch (kBehavior) { // static
-      case QueueBehaviorIfFull::THROW:
-        if (!queue_.write(std::move(item))) {
-          throw QueueFullException('LifoSemMPMCQueue full, can't add item');
-        }
-        break;
-      case QueueBehaviorIfFull::BLOCK:
-        queue_.blockingWrite(std::move(item));
-        break;
-    }
-    return sem_.post();
+    {    int n_aux = this->ListAuxiliaryStates().size();
+    aux_type->clear();
+    for (int i = 0; i < n_aux; ++i ) aux_type->push_back(mshadow::default_type_flag);
+    return true;
   }
+  /*!
+   * \brief Copy this OperatorProperty.
+   * \return a pointer to the copied OperatorProperty
+   */
+  virtual OperatorProperty* Copy() const = 0;
+  /*!
+   * \brief Create a Operator on specific context
+   */
+  virtual Operator* CreateOperator(Context ctx) const = 0;
+  /*!
+   * \brief Create a Operator on specific context and input shape/type
+   * \param ctx context of this operator
+   * \param in_shape shape of the input ndarrays
+   * \param in_type dtype of the input ndarrays
+   * \return the created operator
+   */
+  virtual Operator* CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
+                                     std::vector<int> *in_type) const {
+    std::vector<int> out_type, aux_type;
+    std::vector<TShape> out_shape, aux_shape;
+    out_type.resize(this->ListOutputs().size());
+    out_shape.resize(this->ListOutputs().size());
+    aux_type.resize(this->ListAuxiliaryStates().size());
+    aux_shape.resize(this->ListAuxiliaryStates().size());
+    CHECK(InferType(in_type, &out_type, &aux_type));
+    CHECK(InferShape(in_shape, &out_shape, &aux_shape));
+    return CreateOperator(ctx);
+  }
+  /*!
+   * \brief return the type string of the Operator
+   *  subclasses override this function.
+   * \return The type string.
+   */
+  virtual std::string TypeString() const = 0;
+  //--------------------------------------------------------
+  // All the below functions are optional to override.
+  //--------------------------------------------------------
+  /*!
+   * \brief Declare additional resource required in forward pass.
+   *  These additional resources will be presented in OpContext.requested
+   *  in the same order of the returned Resource.
+   * \param in_shape The input shape to the operator, corresponds to shapes of in_data.
+   * \return Additional resource request
+   */
+  virtual std::vector<ResourceRequest> ForwardResource(
+      const std::vector<TShape> &in_shape) const {
+    return std::vector<ResourceRequest>();
+  }
+  /*!
+   * \brief Declare additional resource required in backward pass.
+   *  These additional resources will be presented in OpContext.requested
+   *  in the same order of the returned Resource.
+   * \param in_shape The input shape to the operator, corresponds to shapes of in_data.
+   * \return Additional resource request
+   */
+  virtual std::vector<ResourceRequest> BackwardResource(
+      const std::vector<TShape> &in_shape) const {
+    return std::vector<ResourceRequest>();
+  }
+  /*!
+   * \brief Declare the input requirement of Backward pass.
+   *
+   *  Only the returned list of variables will be used in Backward.
+   *  This function is used for memory optimization.
+   *  It is advised to override and only return what is actually needed.
+   *  If this function is not overriden, all the variables will be valid in Backward.
+   *
+   * \code
+   *  // The following code declares Backward need out_grad[0], in_data[0],in_data[1]
+   *  vector<int> BackwardInputs(const vector<int> &out_grad,
+   *                             const vector<int> &in_data,
+   *                             const vector<int> &out_data) const {
+   *    return {out_grad[0], in_data[0], in_data[1]};
+   *  }
+   * \endcode
+   * \param out_grad gradient of outputs in backward pass.
+   * \param in_data the input data in forward pass.
+   * \param out_data the output data in forward pass.
+   * \return an integer vector indicating the input requirments
+   * \sa BackwardInputs
+   */
+  virtual std::vector<int> DeclareBackwardDependency(
+      const std::vector<int> &out_grad,
+      const std::vector<int> &in_data,
+      const std::vector<int> &out_data) const {
+    // By default requires to see all the things.
+    // remember to override this function to get a better performance.
+    std::vector<int> ret = out_grad;
+    ret.insert(ret.end(), in_data.begin(), in_data.end());
+    ret.insert(ret.end(), out_data.begin(), out_data.end());
+    return ret;
+  }
+  /*!
+   * \brief Get possible forward inplace options.
+   *  This function enables optimization to reuse memory of inputs in output.
+   *  Only override when necessary, by default in-place is disabled.
+   *
+   *  The reason for void* type in the out_data is to distinguish the order
+   *  of mappings between the two, compiler will report error when
+   *  in_data and out_data's order in the pair get reversed.
+   *
+   * \code
+   *  // The following code says out_data[0] can share data with in_data[0]
+   *  vector<pair<int, void*> > ForwardInplaceOption(const vector<int> &in_data,
+   *                                                 const vector<void*> &out_data) const {
+   *    return {{in_data[0], out_data[0]}};
+   *  }
+   * \endcode
+   * \param in_data The input data in forward pass.
+   * \param out_data The output data in forward pass.
+   * \return list of pair of that maps input->output,
+   *   indicating possible in place operations.
+   */
+  virtual std::vector<std::pair<int, void*> > ForwardInplaceOption(
+      const std::vector<int> &in_data,
+      const std::vector<void*> &out_data) const {
+    return std::vector<std::pair<int, void*> >();
+  }
+  /*!
+   * \brief Get possible backward inplace options.
+   *  This function enables optimization to reuse memory of inputs in output.
+   *  Only override when necessary, by default in-place is disabled.
+   *
+   *  The reason for void* type in the in_grad is to distinguish the order
+   *  of mappings between the two, compiler will report error when
+   *  in_data and out_data's order in the pair get reversed.
+   *
+   * \code
+   *  // The following code says in_grad[0] can share data with in_data[0]
+   *  vector<pair<int,int> > BackwardInplaceOption(
+   *                 const std::vector<int> &out_grad,
+   *                 const std::vector<int> &in_data,
+   *                 const std::vector<int> &out_data,
+   *                 const std::vector<int> &in_grad) const {
+   *    return {in_data[0], in_grad[0]}};
+   *  }
+   * \endcode
+   * \param in_data The input data in forward pass.
+   * \param out_data The output data in forward pass.
+   * \param in_grad Gradient of inputs in backward pass.
+   * \param out_grad Gradient of outputs in backward pass.
+   * \return list of pair of that maps input->output,
+   *   indicating possible in place operations.
+   */
+  virtual std::vector<std::pair<int, void*> > BackwardInplaceOption(
+      const std::vector<int> &out_grad,
+      const std::vector<int> &in_data,
+      const std::vector<int> &out_data,
+      const std::vector<void*> &in_grad) const {
+    return std::vector<std::pair<int, void*> >();
+  }
+  /*!
+   * \brief Get Backward Input Dependency for generic types of data.
+   *  Normally T can be pointer of Symbol::DataEntry, or NDArray.
+   *  This function will select the result list of T according to DeclareBackwardDependency.
+   *
+   * \param in_data the input data in forward pass.
+   * \param out_data the output data in forward pass.
+   * \param out_grad gradient of outputs in backward pass.
+   * \tparam T the generic type parameter.
+   * \return vector of inputs the Backward Operation depends on.
+   * \sa DeclareBackwardDependency
+   */
+  template<typename T>
+  inline std::vector<T> BackwardInputs(const std::vector<T> &out_grad,
+                                       const std::vector<T> &in_data,
+                                       const std::vector<T> &out_data) const {
+    int counter = 0;
+    std::vector<int> out_grad_index(out_grad.size());
+    std::vector<int> in_data_index(in_data.size());
+    std::vector<int> out_data_index(out_data.size());
+    for (size_t i = 0; i < out_grad_index.size(); ++i) {
+      out_grad_index[i] = counter++;
+    }
+    for (size_t i = 0; i < in_data_index.size(); ++i) {
+      in_data_index[i] = counter++;
+    }
+    for (size_t i = 0; i < out_data_index.size(); ++i) {
+      out_data_index[i] = counter++;
+    }
+    std::vector<T> all_data;
+    all_data.insert(all_data.end(), out_grad.begin(), out_grad.end());
+    all_data.insert(all_data.end(), in_data.begin(), in_data.end());
+    all_data.insert(all_data.end(), out_data.begin(), out_data.end());
     
-    namespace folly {
+     public:
+  /*! \brief cuda kernel argument descriptor */
+  struct ArgType {
+    /*! \brief whether argument is NDArray */
+    bool is_ndarray;
+    /*! \brief whether argument is constant (input) */
+    bool is_const;
+    /*! \brief data type of argument */
+    mshadow::TypeFlag dtype;
+  };
+  /*! \brief Cuda kernel */
+  class Kernel {
+   public:
+    /*! \brief Launch the kernel */
+    void Launch(const Context& ctx, const std::vector<dmlc::any>& args,
+                uint32_t grid_dim_x, uint32_t grid_dim_y, uint32_t grid_dim_z,
+                uint32_t block_dim_x, uint32_t block_dim_y, uint32_t block_dim_z,
+                uint32_t shared_mem);
+    /*! \brief kernel interface signature */
+    const std::vector<ArgType>& signature() { return signature_; }
     }
     
-    #if FOLLY_USE_SYMBOLIZER
-  // Don't use glog's DumpStackTraceAndExit; rely on our signal handler.
-  google::InstallFailureFunction(abort);
+    /*!
+ *  Copyright (c) 2016 by Contributors
+ * \file cv_api.h
+ * \brief C API for opencv
+ * \author Junyuan Xie
+ */
+#include <dmlc/base.h>
+#include <mxnet/base.h>
+#include <mxnet/ndarray.h>
+#include <opencv2/opencv.hpp>
+#include 'cv_api.h'
+#include '../../src/c_api/c_api_common.h'
     
-    #include <folly/logging/example/lib.h>
-    
-      // more complex conditional expressions
-  std::array<bool, 2> conds = {{false, true}};
-  for (unsigned i = 0; i < conds.size(); i++) {
-    for (unsigned j = 0; j < conds.size(); j++) {
-      argumentEvaluated = false;
-      XLOGC_IF(
-          DBG1, conds[i] && conds[j], 'testing conditional %d', getValue());
-      EXPECT_EQ((conds[i] && conds[j]) ? 1 : 0, messages.size());
-      messages.clear();
-      if (conds[i] && conds[j]) {
-        EXPECT_TRUE(argumentEvaluated);
-      } else {
-        EXPECT_FALSE(argumentEvaluated);
+      // get the shape hints
+  std::string shape_hints_key = std::string(attr_name) + '_hints';
+  if (ret.attrs.count(shape_hints_key)) {
+    nnvm::NodeEntryMap<AttrType> shape_hints =
+      ret.GetAttr<nnvm::NodeEntryMap<AttrType>>(shape_hints_key);
+    for (const auto& kv : shape_hints) {
+      nnvm::NodeEntry e = kv.first;
+      if (idx.exist(e.node.get())) {
+        rshape[idx.entry_id(kv.first)] = kv.second;
       }
     }
-    }
-    
-    void Barrier::freeControlBlock(ControlBlock* block) {
-  auto p = promises(block);
-  for (uint32_t i = size_; i != 0; --i) {
-    p[i - 1].~BoolPromise();
   }
-  free(block);
-}
