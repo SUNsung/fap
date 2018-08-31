@@ -1,184 +1,83 @@
 
         
-                When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
-        '''
-        node = self.map[query]
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
-        else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(query, results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
-
+        containers = (('thefuck/python3-fish',
+               u'''FROM python:3
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'),
+              ('thefuck/python2-fish',
+               u'''FROM python:2
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'))
     
     
-class Crawler(object):
+@pytest.fixture(params=[(python_3, False),
+                        (python_3, True),
+                        (python_2, False)])
+def proc(request, spawnu, TIMEOUT):
+    container, instant_mode = request.param
+    proc = spawnu(*container)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(init_zshrc.format(
+        u'--enable-experimental-instant-mode' if instant_mode else ''))
+    proc.sendline(u'zsh')
+    if instant_mode:
+        assert proc.expect([TIMEOUT, u'instant mode ready: True'])
+    return proc
     
     
-init_zshrc = u'''echo '
-export SHELL=/usr/bin/zsh
-export HISTFILE=~/.zsh_history
-echo > $HISTFILE
-export SAVEHIST=100
-export HISTSIZE=100
-eval $(thefuck --alias {})
-setopt INC_APPEND_HISTORY
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.zshrc'''
-    
-    
-@pytest.mark.parametrize('command, packages, which', [
-    (Command('a_bad_cmd', 'a_bad_cmd: command not found'),
-     [], None),
-    (Command('vim', ''), [], None),
-    (Command('', ''), [], None),
-    (Command('vim', 'vim: command not found'),
-     ['vim'], '/usr/bin/vim'),
-    (Command('sudo vim', 'vim: command not found'),
-     ['vim'], '/usr/bin/vim')])
-def test_not_match(mocker, command, packages, which):
-    mocker.patch('thefuck.rules.apt_get.which', return_value=which)
-    mocker.patch('thefuck.rules.apt_get._get_packages',
-                 create=True, return_value=packages)
-    
-     edit-sources - edit the source information file
-'''
-apt_operations = ['list', 'search', 'show', 'update', 'install', 'remove',
-                  'upgrade', 'full-upgrade', 'edit-sources']
-    
-    
-@pytest.mark.parametrize('script, output', [
-    ('brew link sshfs', output),
-    ('cat output', output),
-    ('brew install sshfs', '')])
-def test_not_match(script, output):
-    command = Command(script, output)
+@pytest.mark.parametrize('command', [
+    Command('apt list --upgradable', no_match_output),
+    Command('sudo apt list --upgradable', no_match_output)
+])
+def test_not_match(command):
     assert not match(command)
     
-        DEFAULTS = {
-        'default_options': []
-    }
+            self.assertEqual(jws, JWS.from_json(jws.to_json()))
     
-        def __str__(self):
-        defaults = dict(type(self).__dict__)
-        actual = dict(defaults)
-        actual.update(self.__dict__)
-        actual['config'] = self.config
-        return repr_dict_nice(dict(
-            (key, value)
-            for key, value in actual.items()
-            if not key.startswith('_'))
+    
+# If extensions (or modules to document with autodoc) are in another directory,
+# add these directories to sys.path here. If the directory is relative to the
+# documentation root, use os.path.abspath to make it absolute, like shown here.
+sys.path.insert(0, os.path.abspath(os.path.join(here, '..')))
+    
+            with mock.patch('certbot.util.get_os_info') as mock_info:
+            for distro in entrypoint.OVERRIDE_CLASSES.keys():
+                mock_info.return_value = (distro, 'whatever')
+                self.assertEqual(entrypoint.get_configurator(),
+                                 entrypoint.OVERRIDE_CLASSES[distro])
+    
+        def _get_addrs(self, achall):
+        '''Return the Apache addresses needed for TLS-SNI-01.'''
+        # TODO: Checkout _default_ rules.
+        addrs = set()
+        default_addr = obj.Addr(('*', str(
+            self.configurator.config.tls_sni_01_port)))
+    
+                # if multiple releases have files, just rename them
+            # instead of trying to merge
+            if len(releases_with_files) > 1:
+                for release in releases:
+                    update_version(release, orm)
+                continue
+    
+            # Adding field 'ApiToken.scope_list'
+        db.add_column(
+            'sentry_apitoken',
+            'scope_list',
+            self.gf('sentry.db.models.fields.array.ArrayField')(
+                of=('django.db.models.fields.TextField', [], {})
+            ),
+            keep_default=False
         )
     
-        It only operates on headers and provides a stronger contrast between
-    their names and values than the original one bundled with Pygments
-    (:class:`pygments.lexers.text import HttpLexer`), especially when
-    Solarized color scheme is used.
-    
-    
-class BaseStream(object):
-    '''Base HTTP message output stream class.'''
-    
-    
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
-    
-    
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['--ignore-stdin', '--traceback', 'www.google.com'])
-    
-        json_kwargs = {}
-    if options.pretty:
-        json_kwargs.update({'indent': 4, 'sort_keys': True})
-    json.dump(inventory, sys.stdout, **json_kwargs)
-    
-            try:
-            cli.parse()
-        except:
-            pass
-    
-    filelist = [
-    '/etc/oracle-release',
-    '/etc/slackware-version',
-    '/etc/redhat-release',
-    '/etc/vmware-release',
-    '/etc/openwrt_release',
-    '/etc/system-release',
-    '/etc/alpine-release',
-    '/etc/release',
-    '/etc/arch-release',
-    '/etc/os-release',
-    '/etc/SuSE-release',
-    '/etc/gentoo-release',
-    '/etc/os-release',
-    '/etc/lsb-release',
-    '/etc/altlinux-release',
-    '/etc/os-release',
-    '/etc/coreos/update.conf',
-    '/usr/lib/os-release',
-]
-    
-            # create the playbook executor, which manages running the plays via a task queue manager
-        pbex = PlaybookExecutor(playbooks=self.args, inventory=inventory, variable_manager=variable_manager, loader=loader, options=self.options,
-                                passwords=passwords)
-    
-    # Load some images to compare against
-known_obama_image = face_recognition.load_image_file('obama.jpg')
-known_biden_image = face_recognition.load_image_file('biden.jpg')
-    
-        # Loop through each person in the training set
-    for class_dir in os.listdir(train_dir):
-        if not os.path.isdir(os.path.join(train_dir, class_dir)):
-            continue
-    
-        # Print the location of each face in this image
-    top, right, bottom, left = face_location
-    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
-    
-    import face_recognition
-from flask import Flask, jsonify, request, redirect
-    
-        :param face_image: image to search
-    :param face_locations: Optionally provide a list of face locations to check.
-    :param model: Optional - which model to use. 'large' (default) or 'small' which only returns 5 points but is faster.
-    :return: A list of dicts of face feature locations (eyes, nose, etc)
-    '''
-    landmarks = _raw_face_landmarks(face_image, face_locations, model)
-    landmarks_as_tuples = [[(p.x, p.y) for p in landmark.parts()] for landmark in landmarks]
-    
-    # Load a second sample picture and learn how to recognize it.
-biden_image = face_recognition.load_image_file('biden.jpg')
-biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
-    
-        # Find all the faces and face encodings in the current frame of video
-    face_locations = face_recognition.face_locations(output)
-    print('Found {} faces in image.'.format(len(face_locations)))
-    face_encodings = face_recognition.face_encodings(output, face_locations)
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('two_people.jpg')
+            # Adding unique constraint on 'VersionDSymFile', fields ['dsym_file', 'version', 'build']
+        db.create_unique('sentry_versiondsymfile', ['dsym_file_id', 'version', 'build'])
