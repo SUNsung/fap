@@ -1,80 +1,138 @@
 
         
-        Available hooks:
+            Args:
+      zs: posterior z ~ q(z|x)
+      prior_zs: prior zs
+    '''
+    # L = -KL + log p(x|z), to maximize bound on likelihood
+    # -L = KL - log p(x|z), to minimize bound on NLL
+    # so 'KL cost' is postive KL divergence
+    kl_b = 0.0
+    for z, prior_z in zip(zs, prior_zs):
+      assert isinstance(z, Gaussian)
+      assert isinstance(prior_z, Gaussian)
+      # ln(2pi) terms cancel
+      kl_b += 0.5 * tf.reduce_sum(
+          prior_z.logvar - z.logvar
+          + tf.exp(z.logvar - prior_z.logvar)
+          + tf.square((z.mean - prior_z.mean) / tf.exp(0.5 * prior_z.logvar))
+          - 1.0, [1])
     
     
-_schemes_by_var_prefix = [
-    ('http', ['http']),
-    ('https', ['https']),
-    ('all', ['http', 'https']),
-]
+def plot_lfads_timeseries(data_bxtxn, model_vals, ext_input_bxtxi=None,
+                          truth_bxtxn=None, bidx=None, output_dist='poisson',
+                          conversion_factor=1.0, subplot_cidx=0,
+                          col_title=None):
     
-            HA1 = hash_utf8(A1)
-        HA2 = hash_utf8(A2)
+        if np.isnan(log_perp):
+      sys.stderr.error('log_perplexity is Nan.\n')
+    else:
+      sum_num += log_perp * weights.mean()
+      sum_den += weights.mean()
+    if sum_den > 0:
+      perplexity = np.exp(sum_num / sum_den)
     
-    def shorten_title(title):
-    m1 = re.search('[[0-9]*]', title)
-    m2 = re.search(''.*'', title)
-    if m1:
-        title = m1.group(0)
-    if m2:
-        title = ' '.join((title, m2.group(0)))   
-    return title[:50] + ' [...]'    
-    
-    define('port', default=8888, help='run on the given port', type=int)
+          else:
+        to_fill_in = num_steps - len(example)
+        final_x = example + [EOS_INDEX] * to_fill_in
+        final_y = final_x[1:] + [EOS_INDEX]
+        w[i] = [1] * len(example) + [0] * to_fill_in
     
     
-if __name__ == '__main__':
-    main()
+def _file_to_word_ids(filename, word_to_id):
+  data = _read_words(filename)
+  return [word_to_id[word] for word in data if word in word_to_id]
+    
+    
+def generate_logs(sess, model, log, id_to_word, feed):
+  '''Impute Sequences using the model for a particular feed and send it to
+  logs.
+  '''
+  # Impute Sequences.
+  [p, inputs_eval, sequence_eval] = sess.run(
+      [model.present, model.inputs, model.fake_sequence], feed_dict=feed)
+    
+      # Exponential Moving Average baseline.
+  elif FLAGS.baseline_method == 'ema':
+    # TODO(liamfedus): Recheck.
+    # Lists of rewards and Log probabilities of the actions taken only for
+    # missing tokens.
+    ema = tf.train.ExponentialMovingAverage(decay=hparams.baseline_decay)
+    maintain_averages_op = ema.apply(rewards_list)
+    
+    
+def create_gen_pretrain_op(hparams, cross_entropy_loss, global_step):
+  '''Create a train op for pretraining.'''
+  with tf.name_scope('pretrain_generator'):
+    optimizer = tf.train.AdamOptimizer(hparams.gen_pretrain_learning_rate)
+    gen_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
+    ]
+    gen_grads = tf.gradients(cross_entropy_loss, gen_vars)
+    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
+                                                  FLAGS.grad_clipping)
+    gen_pretrain_op = optimizer.apply_gradients(
+        zip(gen_grads_clipped, gen_vars), global_step=global_step)
+    return gen_pretrain_op
+    
+    
+# keys: [batch_size, attention_length, attn_size]
+# query: [batch_size, 1, attn_size]
+# return weights [batch_size, attention_length]
+@function.Defun(func_name='attn_add_fun', noinline=True)
+def _attn_add_fun(v, keys, query):
+  return tf.reduce_sum(v * tf.tanh(keys + query), [2])
+    
+    
+@functools.lru_cache()
+def get_hstore_oids(connection_alias):
+    '''Return hstore and hstore array OIDs.'''
+    with connections[connection_alias].cursor() as cursor:
+        cursor.execute(
+            'SELECT t.oid, typarray '
+            'FROM pg_type t '
+            'JOIN pg_namespace ns ON typnamespace = ns.oid '
+            'WHERE typname = 'hstore''
+        )
+        oids = []
+        array_oids = []
+        for row in cursor:
+            oids.append(row[0])
+            array_oids.append(row[1])
+        return tuple(oids), tuple(array_oids)
+    
+        def load(self):
+        try:
+            session_data = self._cache.get(self.cache_key)
+        except Exception:
+            # Some backends (e.g. memcache) raise an exception on invalid
+            # cache keys. If this happens, reset the session. See #17810.
+            session_data = None
+        if session_data is not None:
+            return session_data
+        self._session_key = None
+        return {}
+    
+        class Meta(AbstractBaseSession.Meta):
+        db_table = 'django_session'
 
     
-        html = response.body.decode(errors='ignore')
-    return [urljoin(url, remove_fragment(new_url))
-            for new_url in get_links(html)]
+        sites = []  # all sections' sitemap URLs
+    for section, site in sitemaps.items():
+        # For each section label, add links of all pages of its sitemap
+        # (usually generated by the `sitemap` view).
+        if callable(site):
+            site = site()
+        protocol = req_protocol if site.protocol is None else site.protocol
+        sitemap_url = reverse(sitemap_url_name, kwargs={'section': section})
+        absolute_url = '%s://%s%s' % (protocol, req_site.domain, sitemap_url)
+        sites.append(absolute_url)
+        # Add links to all pages of the sitemap.
+        for page in range(2, site.paginator.num_pages + 1):
+            sites.append('%s?p=%s' % (absolute_url, page))
     
-    # These benchmarks are delicate.  They hit various fast-paths in the gen
-# machinery in order to stay synchronous so we don't need an IOLoop.
-# This removes noise from the results, but it's easy to change things
-# in a way that completely invalidates the results.
-    
-        def put(self, bucket_name):
-        path = os.path.abspath(os.path.join(
-            self.application.directory, bucket_name))
-        if not path.startswith(self.application.directory) or \
-           os.path.exists(path):
-            raise web.HTTPError(403)
-        os.makedirs(path)
-        self.finish()
-    
-    
-@gen.coroutine
-def put(filenames):
-    client = httpclient.AsyncHTTPClient()
-    for filename in filenames:
-        mtype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
-        headers = {'Content-Type': mtype}
-        producer = partial(raw_producer, filename)
-        url_path = quote(os.path.basename(filename))
-        response = yield client.fetch('http://localhost:8888/%s' % url_path,
-                                      method='PUT',
-                                      headers=headers,
-                                      body_producer=producer)
-        print(response)
-    
-    define('family', default='unspec',
-       help='Address family to query: unspec, inet, or inet6')
-    
-    
-def main():
-    if not os.path.exists(TMPDIR):
-        os.mkdir(TMPDIR)
-    os.chdir(TMPDIR)
-    for exe, url in PYTHON_VERSIONS:
-        if os.path.exists(exe):
-            print('%s already exists, skipping' % exe)
-            continue
-        print('Installing %s' % url)
-        filename = download_to_cache(url)
-        # http://blog.jaraco.com/2012/01/how-i-install-python-on-windows.html
-        subprocess.check_call(['msiexec', '/i', filename,
-                               'ALLUSERS=1', '/passive'])
+                group.append(HTML('htmlout.html').render())
+            print('Rendered page {} of the directory {}'.format(str(i), operating_sys))
+            i += 1
+        
+        allmd.clear()
