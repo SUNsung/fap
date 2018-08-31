@@ -1,138 +1,114 @@
 
         
-            Args:
-      zs: posterior z ~ q(z|x)
-      prior_zs: prior zs
-    '''
-    # L = -KL + log p(x|z), to maximize bound on likelihood
-    # -L = KL - log p(x|z), to minimize bound on NLL
-    # so 'KL cost' is postive KL divergence
-    kl_b = 0.0
-    for z, prior_z in zip(zs, prior_zs):
-      assert isinstance(z, Gaussian)
-      assert isinstance(prior_z, Gaussian)
-      # ln(2pi) terms cancel
-      kl_b += 0.5 * tf.reduce_sum(
-          prior_z.logvar - z.logvar
-          + tf.exp(z.logvar - prior_z.logvar)
-          + tf.square((z.mean - prior_z.mean) / tf.exp(0.5 * prior_z.logvar))
-          - 1.0, [1])
+        if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    help_ = 'Load h5 model trained weights'
+    parser.add_argument('-w', '--weights', help=help_)
+    help_ = 'Use mse loss instead of binary cross entropy (default)'
+    parser.add_argument('-m', '--mse', help=help_, action='store_true')
+    args = parser.parse_args()
+    models = (encoder, decoder)
+    data = (x_test, y_test)
     
+        def __init__(self, max_value=2, axis=0):
+        self.max_value = max_value
+        self.axis = axis
     
-def plot_lfads_timeseries(data_bxtxn, model_vals, ext_input_bxtxi=None,
-                          truth_bxtxn=None, bidx=None, output_dist='poisson',
-                          conversion_factor=1.0, subplot_cidx=0,
-                          col_title=None):
+        y_train = np.reshape(y_train, (len(y_train), 1))
+    y_test = np.reshape(y_test, (len(y_test), 1))
     
-        if np.isnan(log_perp):
-      sys.stderr.error('log_perplexity is Nan.\n')
+        with gzip.open(paths[1], 'rb') as imgpath:
+        x_train = np.frombuffer(imgpath.read(), np.uint8,
+                                offset=16).reshape(len(y_train), 28, 28)
+    
+    mse = MSE = mean_squared_error
+mae = MAE = mean_absolute_error
+mape = MAPE = mean_absolute_percentage_error
+msle = MSLE = mean_squared_logarithmic_error
+cosine = cosine_proximity
+    
+        layer_map = {}  # Cache for created layers.
+    tensor_map = {}  # Map {reference_tensor: (corresponding_tensor, mask)}
+    if input_tensors is None:
+        # Create placeholders to build the model on top of.
+        input_layers = []
+        input_tensors = []
+        for layer in model._input_layers:
+            input_tensor = Input(batch_shape=layer.batch_input_shape,
+                                 dtype=layer.dtype,
+                                 sparse=layer.sparse,
+                                 name=layer.name)
+            input_tensors.append(input_tensor)
+            # Cache newly created input layer.
+            newly_created_input_layer = input_tensor._keras_history[0]
+            layer_map[layer] = newly_created_input_layer
+        for original_input_layer, cloned_input_layer in zip(model._input_layers, input_layers):
+            layer_map[original_input_layer] = cloned_input_layer
     else:
-      sum_num += log_perp * weights.mean()
-      sum_den += weights.mean()
-    if sum_den > 0:
-      perplexity = np.exp(sum_num / sum_den)
-    
-          else:
-        to_fill_in = num_steps - len(example)
-        final_x = example + [EOS_INDEX] * to_fill_in
-        final_y = final_x[1:] + [EOS_INDEX]
-        w[i] = [1] * len(example) + [0] * to_fill_in
-    
-    
-def _file_to_word_ids(filename, word_to_id):
-  data = _read_words(filename)
-  return [word_to_id[word] for word in data if word in word_to_id]
-    
-    
-def generate_logs(sess, model, log, id_to_word, feed):
-  '''Impute Sequences using the model for a particular feed and send it to
-  logs.
-  '''
-  # Impute Sequences.
-  [p, inputs_eval, sequence_eval] = sess.run(
-      [model.present, model.inputs, model.fake_sequence], feed_dict=feed)
-    
-      # Exponential Moving Average baseline.
-  elif FLAGS.baseline_method == 'ema':
-    # TODO(liamfedus): Recheck.
-    # Lists of rewards and Log probabilities of the actions taken only for
-    # missing tokens.
-    ema = tf.train.ExponentialMovingAverage(decay=hparams.baseline_decay)
-    maintain_averages_op = ema.apply(rewards_list)
+        # Make sure that all input tensors come from a Keras layer.
+        # If tensor comes from an input layer: cache the input layer.
+        input_tensors = to_list(input_tensors)
+        _input_tensors = []
+        for i, x in enumerate(input_tensors):
+            if not K.is_keras_tensor(x):
+                name = model._input_layers[i].name
+                input_tensor = Input(tensor=x,
+                                     name='input_wrapper_for_' + name)
+                _input_tensors.append(input_tensor)
+                # Cache newly created input layer.
+                original_input_layer = x._keras_history[0]
+                newly_created_input_layer = input_tensor._keras_history[0]
+                layer_map[original_input_layer] = newly_created_input_layer
+            else:
+                _input_tensors.append(x)
+        input_tensors = _input_tensors
     
     
-def create_gen_pretrain_op(hparams, cross_entropy_loss, global_step):
-  '''Create a train op for pretraining.'''
-  with tf.name_scope('pretrain_generator'):
-    optimizer = tf.train.AdamOptimizer(hparams.gen_pretrain_learning_rate)
-    gen_vars = [
-        v for v in tf.trainable_variables() if v.op.name.startswith('gen')
-    ]
-    gen_grads = tf.gradients(cross_entropy_loss, gen_vars)
-    gen_grads_clipped, _ = tf.clip_by_global_norm(gen_grads,
-                                                  FLAGS.grad_clipping)
-    gen_pretrain_op = optimizer.apply_gradients(
-        zip(gen_grads_clipped, gen_vars), global_step=global_step)
-    return gen_pretrain_op
+def test_reuters():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = reuters.load_data()
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
+        assert len(x_train) + len(x_test) == 11228
+        (x_train, y_train), (x_test, y_test) = reuters.load_data(maxlen=10)
+        assert len(x_train) == len(y_train)
+        assert len(x_test) == len(y_test)
+        word_index = reuters.get_word_index()
+        assert isinstance(word_index, dict)
     
     
-# keys: [batch_size, attention_length, attn_size]
-# query: [batch_size, 1, attn_size]
-# return weights [batch_size, attention_length]
-@function.Defun(func_name='attn_add_fun', noinline=True)
-def _attn_add_fun(v, keys, query):
-  return tf.reduce_sum(v * tf.tanh(keys + query), [2])
+def test_time_distributed_softmax():
+    x = K.placeholder(shape=(1, 1, 5))
+    f = K.function([x], [activations.softmax(x)])
+    test_values = get_standard_values()
+    test_values = np.reshape(test_values, (1, 1, np.size(test_values)))
+    f([test_values])[0]
     
+    def get_pydoc_html(module):
+    'Returns pydoc generated output as html'
+    doc = pydoc.HTMLDoc()
+    output = doc.docmodule(module)
+    loc = doc.getdocloc(pydoc_mod) or ''
+    if loc:
+        loc = '<br><a href=\'' + loc + '\'>Module Docs</a>'
+    return output.strip(), loc
     
-@functools.lru_cache()
-def get_hstore_oids(connection_alias):
-    '''Return hstore and hstore array OIDs.'''
-    with connections[connection_alias].cursor() as cursor:
-        cursor.execute(
-            'SELECT t.oid, typarray '
-            'FROM pg_type t '
-            'JOIN pg_namespace ns ON typnamespace = ns.oid '
-            'WHERE typname = 'hstore''
-        )
-        oids = []
-        array_oids = []
-        for row in cursor:
-            oids.append(row[0])
-            array_oids.append(row[1])
-        return tuple(oids), tuple(array_oids)
+            # Retrieve more data while providing more input
+        out.append(bzd.decompress(self.BIG_DATA[len_:],
+                                  max_length=max_length))
+        self.assertLessEqual(len(out[-1]), max_length)
     
-        def load(self):
-        try:
-            session_data = self._cache.get(self.cache_key)
-        except Exception:
-            # Some backends (e.g. memcache) raise an exception on invalid
-            # cache keys. If this happens, reset the session. See #17810.
-            session_data = None
-        if session_data is not None:
-            return session_data
-        self._session_key = None
-        return {}
+    import pickle
+import sqlite3
+from collections import namedtuple
     
-        class Meta(AbstractBaseSession.Meta):
-        db_table = 'django_session'
-
+            #
+        # Testing timeouts
+        #
     
-        sites = []  # all sections' sitemap URLs
-    for section, site in sitemaps.items():
-        # For each section label, add links of all pages of its sitemap
-        # (usually generated by the `sitemap` view).
-        if callable(site):
-            site = site()
-        protocol = req_protocol if site.protocol is None else site.protocol
-        sitemap_url = reverse(sitemap_url_name, kwargs={'section': section})
-        absolute_url = '%s://%s%s' % (protocol, req_site.domain, sitemap_url)
-        sites.append(absolute_url)
-        # Add links to all pages of the sitemap.
-        for page in range(2, site.paginator.num_pages + 1):
-            sites.append('%s?p=%s' % (absolute_url, page))
-    
-                group.append(HTML('htmlout.html').render())
-            print('Rendered page {} of the directory {}'.format(str(i), operating_sys))
-            i += 1
-        
-        allmd.clear()
+    #
+# Function used to calculate result
+#
