@@ -1,143 +1,137 @@
 
         
-        CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+                  # Add the help option, which must be on every command.
+          opts.on_tail('-h', '--help', 'Print this help') do
+            safe_puts(opts.help)
+            return nil
+          end
     
-      require 'pp'
-  define_method :mu_pp, &:pretty_inspect
+            # Initializes the system. Any subclasses MUST make sure this
+        # method is called on the parent. Therefore, if a subclass overrides
+        # `initialize`, then you must call `super`.
+        def initialize(vm)
+          @vm = vm
+        end
     
-    Jekyll::PluginManager.require_from_bundler
+            # This method is expected to return a class that is used for
+        # configuring the provisioner. This return value is expected to be
+        # a subclass of {Config}.
+        #
+        # @return [Config]
+        def self.config_class
+        end
     
-    #
+            # Executes a command on the remote machine with administrative
+        # privileges. See {#execute} for documentation, as the API is the
+        # same.
+        #
+        # @see #execute
+        def sudo(command, opts=nil)
+        end
     
-    describe 'Creating a new agent', js: true do
-  before(:each) do
-    login_as(users(:bob))
-  end
+            # This contains all the hosts and their parents.
+        #
+        # @return [Registry<Symbol, Array<Class, Symbol>>]
+        attr_reader :hosts
     
-        it 'returns a label 'Yes' if a given agent is working' do
-      stub(@agent).working? { true }
-      label = working(@agent)
-      expect(label).to be_html_safe
-      expect(Nokogiri(label).text).to eq 'Yes'
+              result
+        end
+    
+    Then(/^the specified stage files are created$/) do
+  qa = TestApp.test_app_path.join('config/deploy/qa.rb')
+  production = TestApp.test_app_path.join('config/deploy/production.rb')
+  expect(File.exist?(qa)).to be true
+  expect(File.exist?(production)).to be true
+end
+    
+    Given(/^file '(.*?)' exists in shared path$/) do |file|
+  file_shared_path = TestApp.shared_path.join(file)
+  run_vagrant_command('mkdir -p #{file_shared_path.dirname}')
+  run_vagrant_command('touch #{file_shared_path}')
+end
+    
+          super
     end
     
-    describe JobsHelper do
-  let(:job) { Delayed::Job.new }
+          def initialize(values={})
+        @trusted_keys = []
+        @fetched_keys = []
+        @locations = {}
+        @values = values
+        @trusted = true
+      end
     
-      describe '#style_colors' do
-    it 'returns a css style-formated version of the scenario foreground and background colors' do
-      expect(style_colors(scenario)).to eq('color:#AAAAAA;background-color:#000000')
-    end
+                respond_with(@order, default_template: :show, status: 201)
+          else
+            @order = Spree::Order.create!(user: current_api_user, store: current_store)
+            if Cart::Update.call(order: @order, params: order_params).success?
+              respond_with(@order, default_template: :show, status: 201)
+            else
+              invalid_resource!(@order)
+            end
+          end
+        end
     
-    describe AgentsExporter do
-  describe '#as_json' do
-    let(:name) { 'My set of Agents' }
-    let(:description) { 'These Agents work together nicely!' }
-    let(:guid) { 'some-guid' }
-    let(:tag_fg_color) { '#ffffff' }
-    let(:tag_bg_color) { '#000000' }
-    let(:icon) { 'Camera' }
-    let(:source_url) { 'http://yourhuginn.com/scenarios/2/export.json' }
-    let(:agent_list) { [agents(:jane_weather_agent), agents(:jane_rain_notifier_agent)] }
-    let(:exporter) { AgentsExporter.new(
-      agents: agent_list, name: name, description: description,
-      source_url: source_url, guid: guid, tag_fg_color: tag_fg_color,
-      tag_bg_color: tag_bg_color, icon: icon) }
+            def capture
+          perform_payment_action(:capture)
+        end
     
-      context '#setup_worker' do
-    it 'should return an array with an instance of itself' do
-      workers = HuginnScheduler.setup_worker
-      expect(workers).to be_a(Array)
-      expect(workers.first).to be_a(HuginnScheduler)
-      expect(workers.first.id).to eq('HuginnScheduler')
+            def property_params
+          params.require(:property).permit(permitted_property_attributes)
+        end
+      end
     end
   end
 end
+
     
-        it 'should raise an exception when encountering complex JSONPaths' do
-      expect { LiquidMigrator.convert_string('Received <$.content.text.*> from <$.content.name> .') }.
-        to raise_error('JSONPath '$.content.text.*' is too complex, please check your migration.')
-    end
-  end
-    
-      describe '#sort_tuples!' do
-    let(:tuples) {
-      time = Time.now
-      [
-        [2, 'a', time - 1],  # 0
-        [2, 'b', time - 1],  # 1
-        [1, 'b', time - 1],  # 2
-        [1, 'b', time],      # 3
-        [1, 'a', time],      # 4
-        [2, 'a', time + 1],  # 5
-        [2, 'a', time],      # 6
-      ]
-    }
-    
-    # The module that contains everything Sass-related:
-#
-# * {Sass::Engine} is the class used to render Sass/SCSS within Ruby code.
-# * {Sass::Plugin} is interfaces with web frameworks (Rails and Merb in particular).
-# * {Sass::SyntaxError} is raised when Sass encounters an error.
-# * {Sass::CSS} handles conversion of CSS to Sass.
-#
-# Also see the {file:SASS_REFERENCE.md full Sass reference}.
-module Sass
-  class << self
-    # @private
-    attr_accessor :tests_running
-  end
-    
-    module Sass
-  module CacheStores
-    # A backend for the Sass cache using the filesystem.
-    class Filesystem < Base
-      # The directory where the cached files will be stored.
-      #
-      # @return [String]
-      attr_accessor :cache_location
-    
-        # The content passed to this environment. If the content's environment isn't already
-    # read-only, it's made read-only.
-    #
-    # @see BaseEnvironment#content
-    #
-    # @return {[Array<Sass::Tree::Node>, ReadOnlyEnvironment]?} The content nodes and
-    #   the lexical environment of the content block.
-    #   Returns `nil` when there is no content in this environment.
-    def content
-      # Return the cached content from a previous invocation if any
-      return @content if @content_cached
-      # get the content with a read-write environment from the superclass
-      read_write_content = super
-      if read_write_content
-        tree, env = read_write_content
-        # make the content's environment read-only
-        if env && !env.is_a?(ReadOnlyEnvironment)
-          env = ReadOnlyEnvironment.new(env, env.options)
+            def scope
+          if params[:country_id]
+            @country = Country.accessible_by(current_ability, :read).find(params[:country_id])
+            @country.states.accessible_by(current_ability, :read).order('name ASC')
+          else
+            State.accessible_by(current_ability, :read).order('name ASC')
+          end
         end
-        @content_cached = true
-        @content = [tree, env]
-      else
-        @content_cached = true
-        @content = nil
       end
     end
   end
+end
+
     
-          opts.on('-s', '--stdin', :NONE,
-              'Read input from standard input instead of an input file.',
-              'This is the default if no input file is specified.') do
-        @options[:input] = $stdin
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
+        end
+    
+          if !debug?
+        # Will deal with transient network errors
+        execute_bundler_with_retry(options)
+      else
+        options[:verbose] = true
+        execute_bundler(options)
       end
+    end
+    
+                              specs
+                        end
+  end
+end # class Logstash::PluginManager
+
+    
+          PluginManager.ui.info('Install successful')
+    rescue ::Bundler::BundlerError => e
+      raise PluginManager::InstallError.new(e), 'An error occurred went installing plugins'
+    ensure
+      FileUtils.rm_rf(uncompressed_path) if uncompressed_path && Dir.exist?(uncompressed_path)
+    end
+    
+          include_examples('safe URI')
+    end
+    
+              it 'successfully install the plugin' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest')
+          end
