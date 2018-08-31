@@ -1,43 +1,27 @@
 
         
-        #include <unordered_map>
+        // Convert an AttrValue with type `type` to the Python representation for
+// that value.
+string AttrValueToPython(const string& type, const AttrValue& value,
+                         const string& dtype_module = 'tf.');
     
-    class TestFileSystem : public NullFileSystem {
- public:
-  Status NewRandomAccessFile(
-      const string& fname, std::unique_ptr<RandomAccessFile>* result) override {
-    result->reset(new TestRandomAccessFile);
-    return Status::OK();
+      for (const auto& node : item_.MainOpsFanin()) {
+    PrintNodeInfo(node, properties, debug, os);
   }
-  // Always return size of 10
-  Status GetFileSize(const string& fname, uint64* file_size) override {
-    *file_size = 10;
-    return Status::OK();
+  for (const auto& node : item_.EnqueueOpsFanin()) {
+    PrintNodeInfo(node, properties, debug, os);
   }
-};
     
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    {  PyObject* np_array =
-      PyArray_SimpleNewFromData(dim_size, dims, type_num, data);
-  if (PyType_Ready(&TensorReleaserType) == -1) {
-    return errors::Unknown('Python type initialization failed.');
-  }
-  TensorReleaser* releaser = reinterpret_cast<TensorReleaser*>(
-      TensorReleaserType.tp_alloc(&TensorReleaserType, 0));
-  releaser->destructor = new std::function<void()>(std::move(destructor));
-  if (PyArray_SetBaseObject(reinterpret_cast<PyArrayObject*>(np_array),
-                            reinterpret_cast<PyObject*>(releaser)) == -1) {
-    Py_DECREF(releaser);
-    return errors::Unknown('Python array refused to use memory.');
-  }
-  *result = PyArray_Return(reinterpret_cast<PyArrayObject*>(np_array));
-  return Status::OK();
-}
-    
-    // Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
-// pointer to the pyobj in a buffer to be dereferenced later when we're actually
-// holding the GIL. Data and len are ignored.
-void DelayedNumpyDecref(void* data, size_t len, void* obj);
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
     // Global registry mapping C API error codes to the corresponding custom Python
 // exception type. This is used to expose the exception types to C extension
@@ -69,194 +53,263 @@ class PyExceptionRegistry {
   static void Init(PyObject* code_to_exc_type_map);
     }
     
-        http://www.apache.org/licenses/LICENSE-2.0
+    // Called by python code on initialization.
+//
+// 'trampoline' must represent a python function which has the
+// following signature:
+//   (string, list(ndarray)) | (string, list(EagerTensor)) ->
+//     ndarray | list(ndarray) | python scalar |
+//     EagerTensor | list(EagerTensor) | None
+//
+// The trampoline takes two arguments, the first is a string token
+// used by the python frontend's dispatching logic; the second is a
+// list of numpy ndarrays or EagerTensor objects. It can return a
+// single numpy ndarray, a list of numpy ndarrays, a python scalar, an
+// EagerTensor, a list of EagerTensors, or None.
+//
+// PyFunc requires inputs and outputs to be ndarrays. EagerPyFunc requires
+// inputs to be a list of EagerTensors and outputs to be an EagerTensor, a list
+// of EagerTensors, or None.
+//
+// The C++ runtime converts outputs back to Tensor objects.
+//
+// This function is called by script_ops.py during its module initialization.
+//
+// TODO(zhifengc): Support distributed runtime.
+void InitializePyTrampoline(PyObject* trampoline);
     
-    // Safe containers for an owned TFE_TensorHandle. On destruction, the handle
-// will be deleted by TFE_DeleteTensorHandle.
-using Safe_TFE_TensorHandlePtr =
-    std::unique_ptr<TFE_TensorHandle, detail::TFETensorHandleDeleter>;
-Safe_TFE_TensorHandlePtr make_safe(TFE_TensorHandle* handle);
     
-    #include 'intsimdmatrix.h'
-#include 'genericvector.h'      // for GenericVector
-#include 'intsimdmatrixavx2.h'  // for IntSimdMatrixAVX2
-#include 'intsimdmatrixsse.h'   // for IntSimdMatrixSSE
-#include 'matrix.h'             // for GENERIC_2D_ARRAY
-#include 'simddetect.h'         // for SIMDDetect
+    {}  // namespace tensorflow
     
-    ScrollView* bln_word_window_handle();  //return handle
-void build_image_window(int width, int height);
-void display_bln_lines(ScrollView window,
-                       ScrollView::Color colour,
-                       float scale_factor,
-                       float y_offset,
-                       float minx,
-                       float maxx);
-                                 //function to call
-void pgeditor_msg(  //message display
-                  const char *msg);
-void pgeditor_show_point(  //display coords
-                         SVEvent *event);
-                                 //put bln word in       box
-void show_point(PAGE_RES* page_res, float x, float y);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    namespace grpc {
+    #include 'tensorflow/core/framework/node_def.pb.h'
+#include 'tensorflow/core/framework/node_def_util.h'
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/op_kernel.h'
+#include 'tensorflow/core/framework/types.h'
+#include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/util/device_name_utils.h'
+    
+    #include 'glog/logging.h'
+#include 'google/protobuf/text_format.h'
+#include 'stdint.h'
+    
+      /**
+   * @brief Applies the same transformation defined in the data layer's
+   * transform_param block to all the num images in a input_blob.
+   *
+   * @param input_blob
+   *    A Blob containing the data to be transformed. It applies the same
+   *    transformation to all the num images in the blob.
+   * @param transformed_blob
+   *    This is destination blob, it will contain as many images as the
+   *    input blob. It can be part of top blob's data.
+   */
+  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
+    
+      /**
+   * @brief Return whether to allow force_backward for a given bottom blob
+   *        index.
+   *
+   * If AllowForceBackward(i) == false, we will ignore the force_backward
+   * setting and backpropagate to blob i only if it needs gradient information
+   * (as is done when force_backward == false).
+   */
+  virtual inline bool AllowForceBackward(const int bottom_index) const {
+    return true;
+  }
+    
+      static CreatorRegistry& Registry() {
+    static CreatorRegistry* g_registry_ = new CreatorRegistry();
+    return *g_registry_;
+  }
+    
+      virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
+    
+    #include <vector>
+    
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of PoolingLayer.
+ *        Fallback to PoolingLayer for CPU mode.
+*/
+template <typename Dtype>
+class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
+ public:
+  explicit CuDNNPoolingLayer(const LayerParameter& param)
+      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNPoolingLayer();
+  // Currently, cuDNN does not support the extra top blob.
+  virtual inline int MinTopBlobs() const { return -1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     }
     
-    Alarm::Alarm() : alarm_(new internal::AlarmImpl()) {
-  g_gli_initializer.summon();
-}
+    #ifdef USE_CUDNN
+/**
+ * @brief cuDNN implementation of SoftmaxLayer.
+ *        Fallback to SoftmaxLayer for CPU mode.
+ */
+template <typename Dtype>
+class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
+ public:
+  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
+      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSoftmaxLayer();
+    }
     
-    bool AuthPropertyIterator::operator==(const AuthPropertyIterator& rhs) const {
-  if (property_ == nullptr || rhs.property_ == nullptr) {
-    return property_ == rhs.property_;
-  } else {
-    return index_ == rhs.index_;
+    #if !defined(__AVX__)
+// Implementation for non-avx archs.
+    
+    void EquationDetect::ComputeCPsSuperBBox() {
+  ColPartitionGridSearch gsearch(part_grid_);
+  ColPartition *part = nullptr;
+  gsearch.StartFullSearch();
+  delete cps_super_bbox_;
+  cps_super_bbox_ = new TBOX();
+  while ((part = gsearch.NextFullSearch()) != nullptr) {
+    (*cps_super_bbox_) += part->bounding_box();
   }
 }
     
-    #include <grpc/impl/codegen/grpc_types.h>
-#include <grpc/support/log.h>
-#include <grpcpp/grpcpp.h>
-#include <grpcpp/resource_quota.h>
-#include 'src/core/lib/channel/channel_args.h'
-#include 'src/core/lib/iomgr/exec_ctx.h'
-#include 'src/core/lib/iomgr/socket_mutator.h'
+      // Input statistics
+  // TODO(noetzli): The stats are incomplete. They are lacking everything
+  // consumed by MergeHelper.
+  uint64_t num_input_records = 0;
+  uint64_t num_input_deletion_records = 0;
+  uint64_t num_input_corrupt_records = 0;
+  uint64_t total_input_raw_key_bytes = 0;
+  uint64_t total_input_raw_value_bytes = 0;
     
-      AuthPropertyIterator end() const override;
-    
-    //
-// this header can be included multiple times, each time with
-// a different character type, BOOST_REGEX_CHAR_T must be defined
-// first:
-//
-#ifndef BOOST_REGEX_CHAR_T
-#  error 'BOOST_REGEX_CHAR_T not defined'
-#endif
-    
-    template<>
-struct regex_iterator_traits<char*> : pointer_iterator_traits<char>{};
-template<>
-struct regex_iterator_traits<const char*> : const_pointer_iterator_traits<char>{};
-template<>
-struct regex_iterator_traits<wchar_t*> : pointer_iterator_traits<wchar_t>{};
-template<>
-struct regex_iterator_traits<const wchar_t*> : const_pointer_iterator_traits<wchar_t>{};
-//
-// the follwoing are needed for ICU support:
-//
-template<>
-struct regex_iterator_traits<unsigned char*> : pointer_iterator_traits<char>{};
-template<>
-struct regex_iterator_traits<const unsigned char*> : const_pointer_iterator_traits<char>{};
-template<>
-struct regex_iterator_traits<int*> : pointer_iterator_traits<int>{};
-template<>
-struct regex_iterator_traits<const int*> : const_pointer_iterator_traits<int>{};
+      InternalIterator* input_;
+  const Comparator* cmp_;
+  MergeHelper* merge_helper_;
+  const std::vector<SequenceNumber>* snapshots_;
+  const SequenceNumber earliest_write_conflict_snapshot_;
+  const SnapshotChecker* const snapshot_checker_;
+  Env* env_;
+  bool report_detailed_time_;
+  bool expect_valid_internal_key_;
+  RangeDelAggregator* range_del_agg_;
+  std::unique_ptr<CompactionProxy> compaction_;
+  const CompactionFilter* compaction_filter_;
+  const std::atomic<bool>* shutting_down_;
+  const SequenceNumber preserve_deletes_seqnum_;
+  bool bottommost_level_;
+  bool valid_ = false;
+  bool visible_at_tip_;
+  SequenceNumber earliest_snapshot_;
+  SequenceNumber latest_snapshot_;
+  bool ignore_snapshots_;
     
     
-    {
-   vector_type            m_subs;                      // subexpressions
-   BidiIterator   m_base;                              // where the search started from
-   sub_match<BidiIterator> m_null;                     // a null match
-   boost::shared_ptr<named_sub_type> m_named_subs;     // Shared copy of named subs in the regex object
-   int m_last_closed_paren;                            // Last ) to be seen - used for formatting
-   bool m_is_singular;                                 // True if our stored iterators are singular
-};
-    
-       if(next == last) return next;
-    
-    no_type check_is_formatter(unary_type, binary_type, ternary_type);
-template<typename T>
-unary_type check_is_formatter(T const &, binary_type, ternary_type);
-template<typename T>
-binary_type check_is_formatter(unary_type, T const &, ternary_type);
-template<typename T, typename U>
-binary_type check_is_formatter(T const &, U const &, ternary_type);
-template<typename T>
-ternary_type check_is_formatter(unary_type, binary_type, T const &);
-template<typename T, typename U>
-ternary_type check_is_formatter(T const &, binary_type, U const &);
-template<typename T, typename U>
-ternary_type check_is_formatter(unary_type, T const &, U const &);
-template<typename T, typename U, typename V>
-ternary_type check_is_formatter(T const &, U const &, V const &);
-    
-       pimpl pdata;
-    
-       ~raw_storage()
-   {
-      ::operator delete(start);
-   }
-    
-    
-    {   bool operator()(const match_results<iterator_type>& what);
-};
-    
-    
-    
-    // Implemented features:
-//  [X] Platform: Clipboard support.
-//  [X] Platform: Gamepad navigation mapping. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
-//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
-//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
-    
-    // Callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_IMPL_API int32    ImGui_Marmalade_PointerButtonEventCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_KeyCallback(void* system_data, void* user_data);
-IMGUI_IMPL_API int32    ImGui_Marmalade_CharCallback(void* system_data, void* user_data);
-
-    
-        for (UINT i = 0; i < NUM_FRAMES_IN_FLIGHT; i++)
-        if (g_pd3dDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&g_frameContext[i].CommandAllocator)) != S_OK)
-            return E_FAIL;
-    
-    bool ImGui_ImplSDL2_InitForVulkan(SDL_Window* window)
-{
-    #if !SDL_HAS_VULKAN
-    IM_ASSERT(0 && 'Unsupported');
-    #endif
-    return ImGui_ImplSDL2_Init(window);
-}
-    
-        // Backup the DX9 state
-    IDirect3DStateBlock9* d3d9_state_block = NULL;
-    if (g_pd3dDevice->CreateStateBlock(D3DSBT_ALL, &d3d9_state_block) < 0)
-        return;
-    
-      typedef DiscriminatedPtr<int, Foo> Ptr;
-  Ptr p;
-    
-    
-    {  out.str('');
-  dynamic objy2 = dynamic::array(objy,
-                                 dynamic::object(12, 'str'),
-                                 dynamic::object(true, false));
-  out << objy2;
-  EXPECT_EQ(out.str(), R'([{'a':12},{12:'str'},{true:false}])');
-}
-    
-    namespace {
-    }
-    
-    // insertThousandsGroupingUnsafe requires non-const params
-static void testGrouping(const char* a_str, const char* expected) {
-  char str[256];
-  char* end_ptr = str + snprintf(str, sizeof(str), '%s', a_str);
-  ASSERT_LT(end_ptr, str + sizeof(str));
-  folly::detail::insertThousandsGroupingUnsafe(str, &end_ptr);
-  ASSERT_STREQ(expected, str);
-}
-    
-    
-    {  bool atLeastOneIsGood = false;
-  for (size_t i = 0; i < hist.size() - 1; ++i) {
-    auto delta = hist[i + 1] - hist[i];
-    if (delta > std::chrono::milliseconds(5) &&
-        delta < std::chrono::milliseconds(15)) {
-      atLeastOneIsGood = true;
+    {    if (table == 0) {
+      snapshot = db_->GetSnapshot();
     }
   }
-  EXPECT_TRUE(atLeastOneIsGood);
+  assert(snapshot != nullptr);
+    
+      auto defaultEnv = Env::Default();
+  int hits = 0;
+  for (auto it = fileNames.begin() ; it != fileNames.end(); ++it) {
+    if ((*it == '..') || (*it == '.')) {
+      continue;
+    }
+    auto filePath = dbname_ + '/' + *it;
+    unique_ptr<SequentialFile> seqFile;
+    auto envOptions = EnvOptions(CurrentOptions());
+    status = defaultEnv->NewSequentialFile(filePath, &seqFile, envOptions);
+    ASSERT_OK(status);
+    }
+    
+    
+    {  mutex_.Unlock();
+  return Status::OK();
 }
+    
+      using DBImpl::CompactFiles;
+  virtual Status CompactFiles(
+      const CompactionOptions& /*compact_options*/,
+      ColumnFamilyHandle* /*column_family*/,
+      const std::vector<std::string>& /*input_file_names*/,
+      const int /*output_level*/, const int /*output_path_id*/ = -1,
+      std::vector<std::string>* const /*output_file_names*/ = nullptr
+      ) override {
+    return Status::NotSupported('Not supported operation in read only mode.');
+  }
+    
+    void TransformBlock(double block[64], Transform1d f) {
+  double tmp[64];
+  for (int x = 0; x < 8; ++x) {
+    f(&block[x], 8, &tmp[x]);
+  }
+  for (int y = 0; y < 8; ++y) {
+    f(&tmp[8 * y], 1, &block[8 * y]);
+  }
+}
+    
+    // Fills in 'result' with the inverse DCT of 'block'.
+// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
+// a row-by-row memory layout.
+void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
+    
+      // Writes the given byte to the output, writes an extra zero if byte is 0xff.
+  void EmitByte(int byte) {
+    if (pos < len) {
+      data[pos++] = byte;
+    } else {
+      overflow = true;
+    }
+    if (byte == 0xff) {
+      EmitByte(0);
+    }
+  }
+    
+    bool JPEGData::Is420() const {
+  return (components.size() == 3 &&
+          max_h_samp_factor == 2 &&
+          max_v_samp_factor == 2 &&
+          components[0].h_samp_factor == 2 &&
+          components[0].v_samp_factor == 2 &&
+          components[1].h_samp_factor == 1 &&
+          components[1].v_samp_factor == 1 &&
+          components[2].h_samp_factor == 1 &&
+          components[2].v_samp_factor == 1);
+}
+    
+    #ifndef GUETZLI_JPEG_DATA_ENCODER_H_
+#define GUETZLI_JPEG_DATA_ENCODER_H_
+    
+    // Saves the APP marker segment as a string to *jpg.
+bool ProcessAPP(const uint8_t* data, const size_t len, size_t* pos,
+                JPEGData* jpg) {
+  VERIFY_LEN(2);
+  size_t marker_len = ReadUint16(data, pos);
+  VERIFY_INPUT(marker_len, 2, 65535, MARKER_LEN);
+  VERIFY_LEN(marker_len - 2);
+  // Save the marker type together with the app data.
+  std::string app_str(reinterpret_cast<const char*>(
+      &data[*pos - 3]), marker_len + 1);
+  *pos += marker_len - 2;
+  jpg->app_data.push_back(app_str);
+  return true;
+}
+    
+    
+    {}  // namespace
