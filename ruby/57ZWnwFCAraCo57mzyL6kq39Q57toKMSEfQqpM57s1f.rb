@@ -1,85 +1,112 @@
 
         
-          [name, full_name]
+        def site
+  @site ||= Jekyll::Site.new(
+    Jekyll.configuration('source' => File.expand_path('../docs', __dir__))
+  ).tap(&:reset).tap(&:read)
 end
     
-        # Remove directories opposite from traversal, so that a subtree with no
-    # actual files gets removed correctly.
-    dirs.reverse_each do |d|
-      if d.children.empty?
-        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
-        d.rmdir
+      p.option 'source', '-s', '--source [DIR]', 'Source directory (defaults to ./)'
+  p.option 'destination', '-d', '--destination [DIR]',
+    'Destination directory (defaults to ./_site)'
+  p.option 'safe', '--safe', 'Safe mode (defaults to false)'
+  p.option 'plugins_dir', '-p', '--plugins PLUGINS_DIR1[,PLUGINS_DIR2[,...]]', Array,
+    'Plugins directory (defaults to ./_plugins)'
+  p.option 'layouts_dir', '--layouts DIR', String,
+    'Layouts directory (defaults to ./_layouts)'
+  p.option 'profile', '--profile', 'Generate a Liquid rendering profile'
+    
+          def initialize(runtime, path_or_io, options)
+        @runtime = runtime
+        @snippets_input = []
+        @io = ensure_io(path_or_io)
+        @prefixes = options[:prefixes] || {}
+        @delayed_messages = []
+        @options = options
+        @exceptions = []
+        @indent = 0
+        @timings = {}
       end
-    end
     
-    module Homebrew
-  def list
-    # Use of exec means we don't explicitly exit
-    list_unbrewed if ARGV.flag? '--unbrewed'
+            def site_template
+          File.expand_path('../../site_template', __dir__)
+        end
     
-      def add(reporter)
-    @reporters << reporter
-    report = reporter.report.delete_if { |k,v| v.empty? }
-    @hash.update(report) { |_key, oldval, newval| oldval.concat(newval) }
-  end
+            def username
+          @username ||= username_and_email[:username].to_s
+        end
     
-      def python(_options = {}, &block)
-    opoo 'Formula#python is deprecated and will go away shortly.'
-    block.call if block_given?
-    PythonRequirement.new
-  end
-  alias_method :python2, :python
-  alias_method :python3, :python
-end
-
-    
-    class Devise::OmniauthCallbacksController < DeviseController
-  prepend_before_action { request.env['devise.skip_timeout'] = true }
-    
-          def _devise_route_context
-        @_devise_route_context ||= send(Devise.available_router_name)
+          def identity
+        @identity ||= current_user.identities
+                                  .with_extern_uid(provider, uid)
+                                  .first_or_initialize(extern_uid: uid)
       end
-    end
+    
+    module Gitlab
+  module BackgroundMigration
+    class PopulateMergeRequestsLatestMergeRequestDiffId
+      BATCH_SIZE = 1_000
+    
+            def key_text
+          @entity.to_s
+        end
+    
+    puts 'Deduping #{links.size} links...'
+    
+      def set_filter
+    @filter = current_account.custom_filters.find(params[:id])
   end
-end
-
     
-          protected
-    
-      def meta
-    object.file.meta
-  end
-end
-
-    
-      def type
-    'Emoji'
+      def set_account
+    @account = Account.find_local!(params[:account_username]) if params[:account_username]
   end
     
       private
     
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
-    end
+    module Admin
+  class ReportedStatusesController < BaseController
+    before_action :set_report
     
-      def test_image_helper
-    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
+      def account_from_topic
+    if hub_topic.present? && local_domain? && account_feed_path?
+      Account.find_local(hub_topic_params[:username])
+    end
   end
     
-          spec['main'] =
-          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
-          find_files.(Bootstrap.fonts_path) +
-          %w(assets/javascripts/bootstrap.js)
+      it 'no raises a RuntimeError on symbols' do
+    v = :sym
+    lambda { v.taint }.should_not raise_error(RuntimeError)
+    v.tainted?.should == false
+  end
     
-            private
+          errors.each do |error|
+        summary << ' #{Formatter.error('-')} #{error}'
+      end
     
-            def stock_location
-          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
-          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
-        end
+        # Scrub the high bits out of the call IDs
+    src_call ^= 0x8000 if (src_call & 0x8000 != 0)
+    dst_call ^= 0x8000 if (dst_call & 0x8000 != 0)
+    
+              case protocol
+          when 'tcp'
+            self.connection = create_tcp_connection
+          when 'udp'
+            raise ::NotImplementedError, 'Kerberos Client: UDP not supported'
+          else
+            raise ::RuntimeError, 'Kerberos Client: unknown transport protocol'
+          end
+    
+            end
+      end
+    end
+  end
+end
+
+    
+              # Decodes the realm field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [String]
+          def decode_realm(input)
+            input.value[0].value
+          end
