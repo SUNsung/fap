@@ -1,126 +1,152 @@
 
         
-                :param filename: the filename of the config.  This can either be an
-                         absolute filename or a filename relative to the
-                         root path.
-        :param silent: set to ``True`` if you want silent failure for missing
-                       files.
-    
-        if app.debug and logger.level == logging.NOTSET:
-        logger.setLevel(logging.DEBUG)
-    
-        #: Some implementations can detect whether a session is newly
-    #: created, but that is not guaranteed. Use with caution. The mixin
-    # default is hard-coded ``False``.
-    new = False
-    
-        def dispatch_request(self):
-        '''Subclasses have to override this method to implement the
-        actual view function code.  This method is called with all
-        the arguments from the URL rule.
-        '''
-        raise NotImplementedError()
-    
-        logging_plugin = pytestconfig.pluginmanager.unregister(
-        name='logging-plugin')
-    
-    
-@ignore_warnings
-def benchmark(metrics=tuple(v for k, v in sorted(METRICS.items())),
-              formats=tuple(v for k, v in sorted(FORMATS.items())),
-              samples=1000, classes=4, density=.2,
-              n_times=5):
-    '''Times metric calculations for a number of inputs
-    
-    ratio = scikits_time / scipy_time
-    
-        print('Dataset statics')
-    print('===========================')
-    print('n_samples \t= %s' % opts.n_samples)
-    print('n_features \t= %s' % opts.n_features)
-    if opts.n_components == 'auto':
-        print('n_components \t= %s (auto)' %
-              johnson_lindenstrauss_min_dim(n_samples=opts.n_samples,
-                                            eps=opts.eps))
-    else:
-        print('n_components \t= %s' % opts.n_components)
-    print('n_elements \t= %s' % (opts.n_features * opts.n_samples))
-    print('n_nonzeros \t= %s per feature' % n_nonzeros)
-    print('ratio_nonzeros \t= %s' % opts.ratio_nonzeros)
-    print('')
-    
-        # start time
-    tstart = datetime.now()
-    clf = DecisionTreeRegressor()
-    clf.fit(X, Y).predict(X)
-    delta = (datetime.now() - tstart)
-    # stop time
-    
-    
-if __name__ == '__main__':
-    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
-    # block to be able to use a multi-core grid search that also works under
-    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
-    # The multiprocessing module is used as the backend of joblib.Parallel
-    # that is used when n_jobs != 1 in GridSearchCV
-    
-    legend2_values_list = list(legend2.values())
-legend2_keys_list = list(legend2.keys())
-    
-    # Author: Kemal Eren <kemal@kemaleren.com>
-# License: BSD 3 clause
-    
-    # Annotate points on the simplex
-plt.annotate(r'($\frac{1}{3}$, $\frac{1}{3}$, $\frac{1}{3}$)',
-             xy=(1.0/3, 1.0/3), xytext=(1.0/3, .23), xycoords='data',
-             arrowprops=dict(facecolor='black', shrink=0.05),
-             horizontalalignment='center', verticalalignment='center')
-plt.plot([1.0/3], [1.0/3], 'ko', ms=5)
-plt.annotate(r'($\frac{1}{2}$, $0$, $\frac{1}{2}$)',
-             xy=(.5, .0), xytext=(.5, .1), xycoords='data',
-             arrowprops=dict(facecolor='black', shrink=0.05),
-             horizontalalignment='center', verticalalignment='center')
-plt.annotate(r'($0$, $\frac{1}{2}$, $\frac{1}{2}$)',
-             xy=(.0, .5), xytext=(.1, .5), xycoords='data',
-             arrowprops=dict(facecolor='black', shrink=0.05),
-             horizontalalignment='center', verticalalignment='center')
-plt.annotate(r'($\frac{1}{2}$, $\frac{1}{2}$, $0$)',
-             xy=(.5, .5), xytext=(.6, .6), xycoords='data',
-             arrowprops=dict(facecolor='black', shrink=0.05),
-             horizontalalignment='center', verticalalignment='center')
-plt.annotate(r'($0$, $0$, $1$)',
-             xy=(0, 0), xytext=(.1, .1), xycoords='data',
-             arrowprops=dict(facecolor='black', shrink=0.05),
-             horizontalalignment='center', verticalalignment='center')
-plt.annotate(r'($1$, $0$, $0$)',
-             xy=(1, 0), xytext=(1, .1), xycoords='data',
-             arrowprops=dict(facecolor='black', shrink=0.05),
-             horizontalalignment='center', verticalalignment='center')
-plt.annotate(r'($0$, $1$, $0$)',
-             xy=(0, 1), xytext=(.1, 1), xycoords='data',
-             arrowprops=dict(facecolor='black', shrink=0.05),
-             horizontalalignment='center', verticalalignment='center')
-# Add grid
-plt.grid('off')
-for x in [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]:
-    plt.plot([0, x], [x, 0], 'k', alpha=0.2)
-    plt.plot([0, 0 + (1-x)/2], [x, x + (1-x)/2], 'k', alpha=0.2)
-    plt.plot([x, x + (1-x)/2], [0, 0 + (1-x)/2], 'k', alpha=0.2)
-    
+            Validates that the username is not already taken. Hashes the
+    password for security.
     '''
-print(__doc__)
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        db = get_db()
+        error = None
     
-    plt.show()
+            :param obj: an import name or object
+        '''
+        if isinstance(obj, string_types):
+            obj = import_string(obj)
+        for key in dir(obj):
+            if key.isupper():
+                self[key] = getattr(obj, key)
     
-        def test_repr(self):
-        self.assertEqual('PollError(exhausted=%s, updated={sentinel.AR: '
-                         'sentinel.AR2})' % repr(set()), repr(self.invalid))
+    This typically means that you attempted to use functionality that needed
+an active HTTP request.  Consult the documentation on testing for
+information about how to avoid this problem.\
+'''
+_app_ctx_err_msg = '''\
+Working outside of application context.
     
-    # If true, '()' will be appended to :func: etc. cross-reference text.
-#add_function_parentheses = True
+            from flask import jsonify
+    
+        tag = to_json
+    
+        def open_session(self, app, request):
+        s = self.get_signing_serializer(app)
+        if s is None:
+            return None
+        val = request.cookies.get(app.session_cookie_name)
+        if not val:
+            return self.session_class()
+        max_age = total_seconds(app.permanent_session_lifetime)
+        try:
+            data = s.loads(val, max_age=max_age)
+            return self.session_class(data)
+        except BadSignature:
+            return self.session_class()
     
     
-class AskTest(unittest.TestCase):
-    '''Test the ask method.'''
-    def setUp(self):
-        logging.disable(logging.CRITICAL)
+if len(sys.argv) == 2 and sys.argv[1] == '--list':
+    inv_json = get_guests()
+    print(json.dumps(inv_json, sort_keys=True))
+elif len(sys.argv) == 3 and sys.argv[1] == '--host':
+    print(json.dumps({}))
+else:
+    print('Need an argument, either --list or --host <host>')
+
+    
+        allvars = {}
+    output = {}
+    cli_list = []
+    cli_bin_name_list = []
+    
+    #__requires__ = ['ansible']
+try:
+    import pkg_resources
+except Exception:
+    # Use pkg_resources to find the correct versions of libraries and set
+    # sys.path appropriately when there are multiversion installs.  But we
+    # have code that better expresses the errors in the places where the code
+    # is actually used (the deps are optional for many code paths) so we don't
+    # want to fail here.
+    pass
+    
+            # Actions
+        action_group = optparse.OptionGroup(self.parser, 'Actions', 'One of following must be used on invocation, ONLY ONE!')
+        action_group.add_option('--list', action='store_true', default=False, dest='list', help='Output all hosts info, works as inventory script')
+        action_group.add_option('--host', action='store', default=None, dest='host', help='Output specific host info, works as inventory script')
+        action_group.add_option('--graph', action='store_true', default=False, dest='graph',
+                                help='create inventory graph, if supplying pattern it must be a valid group name')
+        self.parser.add_option_group(action_group)
+    
+                tested_methods = conman.tested_methods_from_spidercls(spidercls)
+            if opts.list:
+                for method in tested_methods:
+                    contract_reqs[spidercls.name].append(method)
+            elif tested_methods:
+                self.crawler_process.crawl(spidercls)
+    
+        def print_results(self, opts):
+        colour = not opts.nocolour
+    
+            if not assertion:
+            if self.min_bound == self.max_bound:
+                expected = self.min_bound
+            else:
+                expected = '%s..%s' % (self.min_bound, self.max_bound)
+    
+    from setuptools import setup, find_packages
+setup(
+    name = proj_info['name'],
+    version = VERSION,
+    
+    
+    def extract(self, **kwargs):
+        for i in self.streams:
+            s = self.streams[i]
+            _, s['container'], s['size'] = url_info(s['url'])
+            s['src'] = [s['url']]
+        if 'stream_id' in kwargs and kwargs['stream_id']:
+            # Extract the stream
+            stream_id = kwargs['stream_id']
+    
+    from xml.etree import cElementTree as ET
+from copy import copy
+from ..common import *
+#----------------------------------------------------------------------
+def ckplayer_get_info_by_xml(ckinfo):
+    '''str->dict
+    Information for CKPlayer API content.'''
+    e = ET.XML(ckinfo)
+    video_dict = {'title': '',
+                  #'duration': 0,
+                  'links': [],
+                  'size': 0,
+                  'flashvars': '',}
+    dictified = dictify(e)['ckplayer']
+    if 'info' in dictified:
+        if '_text' in dictified['info'][0]['title'][0]:  #title
+            video_dict['title'] = dictified['info'][0]['title'][0]['_text'].strip()
+    
+        def prepare(self, **kwargs):
+        self.api_data = json.loads(get_content(self.__class__.ep.format(self.vid)))
+        self.title = self.api_data['title']
+        for s in self.api_data['video']:
+            for st in self.__class__.stream_types:
+                if st['map_to'] == s:
+                    urls = self.api_data['video'][s]
+                    src = [u['url'] for u in urls]
+                    stream_data = dict(src=src, size=0, container='mp4', video_profile=st['video_profile'])
+                    self.streams[st['id']] = stream_data
+    
+            #type_, ext, size = url_info(url)
+        #print_info(site_info, title, type_, size)
+        #if not info_only:
+            #download_urls([url], title, ext, total_size=None, output_dir=output_dir, merge=merge)
+    
+        sd_urls = list(set([
+        unicodize(str.replace(i, '\\/', '/'))
+        for i in re.findall(r'sd_src_no_ratelimit:'([^']*)'', html)
+    ]))
+    hd_urls = list(set([
+        unicodize(str.replace(i, '\\/', '/'))
+        for i in re.findall(r'hd_src_no_ratelimit:'([^']*)'', html)
+    ]))
+    urls = hd_urls if hd_urls else sd_urls
