@@ -1,94 +1,205 @@
 
         
-        
-    { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
+            // Define a new address (which should add to the address book successfully).
+    QString new_address;
+    
+    /**
+ * Changelog:
+ * - March 2013, Diederik Huys:    original version
+ * - November 2014, Pieter Wuille: updated to use Peter Dettman's parallel multiplication algorithm
+ * - December 2014, Pieter Wuille: converted from YASM to GCC inline assembly
+ */
+    
+        /* Create random point */
+    random_scalar_order(&rand);
+    secp256k1_scalar_get_b32(s_rand, &rand);
+    CHECK(secp256k1_ec_pubkey_create(ctx, &point, s_rand) == 1);
+    
+        // Escapes
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\ Baz\'', {
+            {'Foo', 'Bar Baz'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\Baz\'', {
+            {'Foo', 'BarBaz'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\@Baz\'', {
+            {'Foo', 'Bar@Baz'},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\\'Baz\' Spam=\'\\\'Eggs\\\'\'', {
+            {'Foo', 'Bar\'Baz'},
+            {'Spam', '\'Eggs\''},
+        });
+    CheckParseTorReplyMapping(
+        'Foo=\'Bar\\\\Baz\'', {
+            {'Foo', 'Bar\\Baz'},
+        });
+    
+      int timeout = -1;
+  std::vector<int> to_add;
+  std::vector<int> to_remove;
+  for (;;) {
+    int nevents;
+    if (client_sessions.size() == 0)
+      timeout = SHUTDOWN_TIMEOUT;
+    SYSCHECK(nevents = poll(pollfds.data(), pollfds.size(), timeout));
+    timeout = -1;
+    if (nevents == 0 && client_sessions.size() == 0)
+      break;
     }
-  };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
-};
     
-      virtual inline const char* type() const { return 'BNLL'; }
-    
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    DIR128::DIR128(                 //from fcoord
-               const FCOORD fc  //vector to quantize
-              ) {
-  int high, low, current;        //binary search
+      template <typename T>
+  bool DoRunWithType() {
+    const auto& data = Input(0);
+    CAFFE_ENFORCE(data.ndim() == 1, 'data should be 1-D.');
     }
     
-    template <bool del, class R, class P1, class A1, class A2>
-class _TessFunctionResultCallback_1_2 : public TessResultCallback2<R,A1,A2> {
+    template <typename T, class Context>
+class FlexibleTopKGradientOp : public Operator<Context> {
  public:
-  typedef TessResultCallback2<R,A1,A2> base;
-  typedef R (*FunctionSignature)(P1,A1,A2);
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
     }
     
-     protected:
-  // Converters to generate indices for individual feature dimensions.
-  int XBucket(int x) const {
-    int bucket = x * x_buckets_ / kIntFeatureExtent;
-    return ClipToRange(bucket, 0, static_cast<int>(x_buckets_) - 1);
-  }
-  int YBucket(int y) const {
-    int bucket = y * y_buckets_ / kIntFeatureExtent;
-    return ClipToRange(bucket, 0, static_cast<int>(y_buckets_) - 1);
-  }
-  // Use DivRounded for theta so that exactly vertical and horizontal are in
-  // the middle of a bucket. The Modulo takes care of the wrap-around.
-  int ThetaBucket(int theta) const {
-    int bucket = DivRounded(theta * theta_buckets_, kIntFeatureExtent);
-    return Modulo(bucket, theta_buckets_);
-  }
-  // Returns an INT_FEATURE_STRUCT corresponding to the given buckets.
-  INT_FEATURE_STRUCT PositionFromBuckets(int x, int y, int theta) const;
+    workspace.FeedBlob('X', (np.random.uniform(-10, 10, (5,5))).astype(np.float32))
+print('X before running op:', workspace.FetchBlob('X'))
+workspace.RunOperatorOnce(op)
+print('X after running op:', workspace.FetchBlob('X'))
     
-      // Displays the labels and cuts at the corresponding xcoords.
-  // Size of labels should match xcoords.
-  void DisplayLSTMOutput(const GenericVector<int>& labels,
-                         const GenericVector<int>& xcoords,
-                         int height, ScrollView* window);
     
-      // Performs forward-backward on the given trainingdata.
-  // Returns the sample that was used or nullptr if the next sample was deemed
-  // unusable. samples_trainer could be this or an alternative trainer that
-  // holds the training samples.
-  const ImageData* TrainOnLine(LSTMTrainer* samples_trainer, bool batch) {
-    int sample_index = sample_iteration();
-    const ImageData* image =
-        samples_trainer->training_data_.GetPageBySerial(sample_index);
-    if (image != nullptr) {
-      Trainability trainable = TrainOnLine(image, batch);
-      if (trainable == UNENCODABLE || trainable == NOT_BOXED) {
-        return nullptr;  // Sample was unusable.
-      }
-    } else {
-      ++sample_iteration_;
+    {} // namespace caffe2
+    
+    struct SrcLoc {
+  SrcLoc()
+    : start{0,0}
+    , past{0,0}
+  {}
     }
-    return image;
-  }
-  Trainability TrainOnLine(const ImageData* trainingdata, bool batch);
     
-    CCNonTextDetect::CCNonTextDetect(int gridsize,
-                             const ICOORD& bleft, const ICOORD& tright)
-  : BlobGrid(gridsize, bleft, tright),
-    max_noise_count_(static_cast<int>(kMaxSmallNeighboursPerPix *
-                                      gridsize * gridsize)),
-    noise_density_(nullptr) {
-  // TODO(rays) break max_noise_count_ out into an area-proportional
-  // value, as now plus an additive constant for the number of text blobs
-  // in the 3x3 neighbourhood - maybe 9.
+    void Assembler::sth(const Reg64& rt, MemoryRef m) {
+  assertx(Reg64(-1) == m.r.index);  // doesn't support base+index
+  EmitDForm(44, rn(rt), rn(m.r.base), m.r.disp);
 }
+    
+       void EmitAForm(const uint8_t op,
+                  const RegNumber rt,
+                  const RegNumber ra,
+                  const RegNumber rb,
+                  const RegNumber bc,
+                  const uint16_t xop,
+                  const bool rc = 0) {
+    }
+    
+    #include 'hphp/runtime/base/apc-object.h'
+#include 'hphp/runtime/base/apc-array.h'
+#include 'hphp/runtime/base/apc-stats.h'
+#include 'hphp/runtime/base/object-data.h'
+#include 'hphp/runtime/base/type-object.h'
+#include 'hphp/runtime/ext/apc/ext_apc.h'
+#include 'hphp/runtime/base/collections.h'
+#include 'hphp/runtime/ext/collections/ext_collections-map.h'
+#include 'hphp/runtime/ext/collections/ext_collections-set.h'
+#include 'hphp/runtime/ext/collections/ext_collections-vector.h'
+#include 'hphp/runtime/base/data-walker.h'
+    
+      /**
+   * Use the Iterate method for iterating over options that are stored as
+   * objects in runtime options (e.g. FilesMatch). This function iterates over
+   * the settings passed as ini/hdf, calls back to, generally, the constructor
+   * of the object in question.
+   *
+   * Note: For now, we are not `ini_get()` enabling these type of options as
+   * it is not trivial to come up with a non-hacky and workable way to store
+   * the data correctly. Also, as usual, Hdf takes priority.
+   */
+  static void Iterate(std::function<void (const IniSettingMap&,
+                                          const Hdf&,
+                                          const std::string&)> cb,
+                      const IniSettingMap &ini, const Hdf& config,
+                      const std::string &name, const bool prepend_hhvm = true);
+    
+    #include <string>
+#include <utility>
+#include <vector>
+    
+    
+    {}
+    
+    
+    {    if (memcmp(from_start, to_start, seg_len + 1)) {
+      break;
+    }
+    from_start += seg_len + 1;
+    to_start += seg_len + 1;
+  }
+    
+    #include <dmlc/registry.h>
+#include <functional>
+#include <vector>
+#include <utility>
+#include <string>
+#include './base.h'
+#include './data.h'
+#include './tree_model.h'
+#include '../../src/common/host_device_vector.h'
+    
+    /*!
+ * \brief an iterator that iterates over a configure file and gets the configures
+ */
+class ConfigIterator: public ConfigStreamReader {
+ public:
+  /*!
+   * \brief constructor
+   * \param fname name of configure file
+   */
+  explicit ConfigIterator(const char *fname) : ConfigStreamReader(fi_) {
+    fi_.open(fname);
+    if (fi_.fail()) {
+      LOG(FATAL) << 'cannot open file ' << fname;
+    }
+    ConfigReaderBase::Init();
+  }
+  /*! \brief destructor */
+  ~ConfigIterator() {
+    fi_.close();
+  }
+    }
+    
+            static float f = 0.0f;
+        ImGui::Text('Hello, world!');
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
+        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
+        ImGui::ShowDemoWindow(NULL);
+    
+        void FreeTypeFont::SetPixelHeight(int pixel_height) 
+    {
+        // I'm not sure how to deal with font sizes properly.
+        // As far as I understand, currently ImGui assumes that the 'pixel_height' is a maximum height of an any given glyph,
+        // i.e. it's the sum of font's ascender and descender. Seems strange to me.
+        FT_Size_RequestRec req;
+        req.type = FT_SIZE_REQUEST_TYPE_REAL_DIM;
+        req.width = 0;
+        req.height = (uint32_t)pixel_height * 64;
+        req.horiResolution = 0;
+        req.vertResolution = 0;
+        FT_Request_Size(FreetypeFace, &req);
+    }
+    
+                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    
+        if (!g_pIB || g_IndexBufferSize < draw_data->TotalIdxCount)
+    {
+        if (g_pIB) { g_pIB->Release(); g_pIB = NULL; }
+        g_IndexBufferSize = draw_data->TotalIdxCount + 10000;
+        D3D10_BUFFER_DESC desc;
+        memset(&desc, 0, sizeof(D3D10_BUFFER_DESC));
+        desc.Usage = D3D10_USAGE_DYNAMIC;
+        desc.ByteWidth = g_IndexBufferSize * sizeof(ImDrawIdx);
+        desc.BindFlags = D3D10_BIND_INDEX_BUFFER;
+        desc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
+        if (ctx->CreateBuffer(&desc, NULL, &g_pIB) < 0)
+            return;
+    }
