@@ -1,99 +1,172 @@
 
         
-                            resp = HTTPResponse.from_httplib(
-                        r,
-                        pool=conn,
-                        connection=low_conn,
-                        preload_content=False,
-                        decode_content=False
-                    )
-                except:
-                    # If we hit any problems here, clean up the connection.
-                    # Then, reraise so that we can handle the actual exception.
-                    low_conn.close()
-                    raise
+        
+class Hand(object):
     
-        def digest_response_handler(sock):
-        # Respond to GET with a 200 containing www-authenticate header.
-        request_content = consume_socket_content(sock, timeout=0.5)
-        assert request_content.startswith(b'GET / HTTP/1.1')
-        sock.send(text_200_chal)
+        def add_user(self, user):
+        pass
     
-        :param cookie_dict: Dict of key/values to insert into CookieJar.
-    :param cookiejar: (optional) A cookiejar to add the cookies to.
-    :param overwrite: (optional) If False, will not replace cookies
-        already in the jar with new ones.
-    :rtype: CookieJar
+    
+class ParkingLot(object):
+    
+    from enum import Enum
+    
+    from {0} import {1}
+    
+    
+init_zshrc = u'''echo '
+export SHELL=/usr/bin/zsh
+export HISTFILE=~/.zsh_history
+echo > $HISTFILE
+export SAVEHIST=100
+export HISTSIZE=100
+eval $(thefuck --alias {})
+setopt INC_APPEND_HISTORY
+echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
+' > ~/.zshrc'''
+    
+    apt_get_help = b'''apt 1.0.10.2ubuntu1 for amd64 compiled on Oct  5 2015 15:55:05
+Usage: apt-get [options] command
+       apt-get [options] install|remove pkg1 [pkg2 ...]
+       apt-get [options] source pkg1 [pkg2 ...]
+    
+            # If we're not plotting, dump the timing to stdout
+        if not args.show_plot:
+            print(n, np.mean(time_per_iteration))
+    
+    Note that LocalOutlierFactor is not meant to predict on a test set and its
+performance is assessed in an outlier detection context:
+1. The model is trained on the whole dataset which is assumed to contain
+outliers.
+2. The ROC curve is computed on the same dataset using the knowledge of the
+labels.
+In this context there is no need to shuffle the dataset because the model
+is trained and tested on the whole dataset. The randomness of this benchmark
+is only caused by the random selection of anomalies in the SA dataset.
+    
+    
+def compute_bench(samples_range, features_range):
+    
+    import numpy as np
+import scipy.sparse as sp
+    
+        ###########################################################################
+    # List sampling algorithm
+    ###########################################################################
+    # We assume that sampling algorithm has the following signature:
+    #   sample(n_population, n_sample)
+    #
+    sampling_algorithm = {}
+    
+    # Split data in train set and test set
+n_samples = X.shape[0]
+X_train, y_train = X[:n_samples // 2], y[:n_samples // 2]
+X_test, y_test = X[n_samples // 2:], y[n_samples // 2:]
+print('test data sparsity: %f' % sparsity_ratio(X_test))
+    
+    
+print(':orphan:')
+print()
+heading = 'Available documentation for Scikit-learn'
+print(heading)
+print('=' * len(heading))
+print()
+print('Web-based documentation is available for versions listed below:')
+print()
+    
+    
+def issue_role(name, rawtext, text, lineno,
+               inliner, options=None, content=None):
+    '''Sphinx role for linking to an issue. Must have
+    `issues_uri` or `issues_github_path` configured in ``conf.py``.
+    
+    
+def commit_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    ref = 'https://github.com/scrapy/scrapy/commit/' + text
+    set_classes(options)
+    node = nodes.reference(rawtext, 'commit ' + text, refuri=ref, **options)
+    return [node], []
+    
     '''
-    if cookiejar is None:
-        cookiejar = RequestsCookieJar()
     
-      return filtered
+    if __name__ == '__main__':
+    try:
+        execute()
+    finally:
+        # Twisted prints errors in DebugInfo.__del__, but PyPy does not run gc.collect()
+        # on exit: http://doc.pypy.org/en/latest/cpython_differences.html?highlight=gc.collect#differences-related-to-garbage-collection-strategies
+        garbage_collect()
+
     
-        app = Application(
-        [
-            ('/', MainHandler),
-            ('/login', LoginHandler),
-            ('/logout', LogoutHandler),
-        ],
-        login_url='/login',
-        **options.group_dict('application'))
-    app.listen(options.port)
+        def _find_template(self, template):
+        template_file = join(self.templates_dir, '%s.tmpl' % template)
+        if exists(template_file):
+            return template_file
+        print('Unable to find template: %s\n' % template)
+        print('Use 'scrapy genspider --list' to see all available templates.')
     
-    from html.parser import HTMLParser
-from urllib.parse import urljoin, urldefrag
+                if depth < opts.depth:
+                for req in requests:
+                    req.meta['_depth'] = depth + 1
+                    req.meta['_callback'] = req.callback
+                    req.callback = callback
+                return requests
     
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-c', dest='code',
+            help='evaluate the code in the shell, print the result and exit')
+        parser.add_option('--spider', dest='spider',
+            help='use this spider')
+        parser.add_option('--no-redirect', dest='no_redirect', action='store_true', \
+            default=False, help='do not handle HTTP 3xx status codes and print response as-is')
     
-def main():
-    parse_command_line()
-    app = Application([('/', ChunkHandler)])
-    app.listen(options.port, address='127.0.0.1')
-    
-        def put(self, bucket, object_name):
-        object_name = urllib.unquote(object_name)
-        bucket_dir = os.path.abspath(os.path.join(
-            self.application.directory, bucket))
-        if not bucket_dir.startswith(self.application.directory) or \
-           not os.path.isdir(bucket_dir):
-            raise web.HTTPError(404)
-        path = self._object_path(bucket, object_name)
-        if not path.startswith(bucket_dir) or os.path.isdir(path):
-            raise web.HTTPError(403)
-        directory = os.path.dirname(path)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        object_file = open(path, 'w')
-        object_file.write(self.request.body)
-        object_file.close()
-        self.finish()
-    
-    See also file_receiver.py in this directory, a server that receives uploads.
-'''
-    
-        # tornado.web
-    'ChunkedTransferEncoding',
-    'GZipContentEncoding',
-    'OutputTransform',
-    'TemplateModule',
-    'url',
+        jim = Subscriber('jim', message_center)
+    jim.subscribe('cartoon')
+    jack = Subscriber('jack', message_center)
+    jack.subscribe('music')
+    gee = Subscriber('gee', message_center)
+    gee.subscribe('movie')
+    vani = Subscriber('vani', message_center)
+    vani.subscribe('movie')
+    vani.unsubscribe('movie')
     
     
-@gen.coroutine
-def main():
-    gc.disable()
-    gc.collect()
-    gc.set_debug(gc.DEBUG_STATS | gc.DEBUG_SAVEALL)
-    print('GC disabled')
+class RegistryHolder(type):
     
-    known_encodings = [
-    obama_face_encoding,
-    biden_face_encoding
-]
     
-        # Apply some eyeliner
-    d.line(face_landmarks['left_eye'] + [face_landmarks['left_eye'][0]], fill=(0, 0, 0, 110), width=6)
-    d.line(face_landmarks['right_eye'] + [face_landmarks['right_eye'][0]], fill=(0, 0, 0, 110), width=6)
+class ComplexHouse(ComplexBuilding):
+    def build_floor(self):
+        self.floor = 'One'
     
-        # Use the KNN model to find the best matches for the test face
-    closest_distances = knn_clf.kneighbors(faces_encodings, n_neighbors=1)
-    are_matches = [closest_distances[0][i][0] <= distance_threshold for i in range(len(X_face_locations))]
+    
+class EnglishGetter(object):
+    
+    *What does this example do?
+When the number of prototypes in an application can vary, it can be
+useful to keep a Dispatcher (aka, Registry or Manager). This allows
+clients to query the Dispatcher for a prototype before cloning a new
+instance.
+    
+        def __getattr__(self, name):
+        def wrapper(*args, **kwargs):
+            if hasattr(self.delegate, name):
+                attr = getattr(self.delegate, name)
+                if callable(attr):
+                    return attr(*args, **kwargs)
+        return wrapper
+    
+            path.append(start)
+        if start == end:
+            return path
+        for node in self.graph.get(start, []):
+            if node not in path:
+                newpath = self.find_path(node, end, path[:])
+                if newpath:
+                    return newpath
+    
+        def on_diagnostics_failed(self):
+        raise UnsupportedTransition
+    
+    
+class Cat(object):
