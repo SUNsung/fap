@@ -1,85 +1,68 @@
 
         
-        class BottleCollector
-  def initialize
-    @checksums = {}
-  end
+        describe JobsHelper do
+  let(:job) { Delayed::Job.new }
     
-      def install
-    formula_deps = deps.map(&:to_formula)
-    keg_only_deps = formula_deps.select(&:keg_only?)
-    
-      def describe_system_ruby
-    s = ''
-    case RUBY_VERSION
-    when /^1\.[89]/, /^2\.0/
-      s << '#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}'
-    else
-      s << RUBY_VERSION
+        it 'strips punctuation' do
+      expect(AgentsExporter.new(:name => 'foo,bar').filename).to eq('foo-bar.json')
     end
     
-    module Homebrew
-  def doctor
-    checks = Diagnostic::Checks.new
-    
-        dump_formula_report :A, 'New Formulae'
-    dump_formula_report :M, 'Updated Formulae'
-    dump_formula_report :R, 'Renamed Formulae'
-    dump_formula_report :D, 'Deleted Formulae'
+      describe 'up' do
+    it 'should update extract and template options for an existing WebsiteAgent' do
+      expect(agent.options).to include('extract' => old_extract,
+                                       'template' => old_template)
+      ConvertWebsiteAgentTemplateForMerge.new.up
+      agent.reload
+      expect(agent.options).to include('extract' => new_extract,
+                                       'template' => new_template)
+    end
   end
     
-      DATA = :DATA
-    
-      class Worker < LongRunnable::Worker
-    # Optional
-    #   Called after initialization of the Worker class, use this method as an initializer.
-    def setup; end
-    
-      def tumblr
-    Tumblr.configure do |config|
-      config.consumer_key = tumblr_consumer_key
-      config.consumer_secret = tumblr_consumer_secret
-      config.oauth_token = tumblr_oauth_token
-      config.oauth_token_secret = tumblr_oauth_token_secret
+          AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 4, :outbound_event => events(:jane_website_agent_event))
+      expect(agents(:jane_website_agent).reload.last_error_log_at.to_i).to be_within(2).of(Time.now.to_i)
     end
     
-    Tumblr::Client.new
+      it 'calls #to_path on second argument when passed ?d and a directory' do
+    p = mock('path')
+    p.should_receive(:to_path).and_return @dir
+    Kernel.test(?d, p)
   end
 end
     
-        def find_local(username)
-      find_remote(username, nil)
-    end
-    
-        puts 'Downloading emojos from source... (#{source})'
-    
-            user.update(last_sign_in_at: 'Tue, 04 Jul 2017 14:45:56 UTC +00:00', current_sign_in_at: 'Wed, 05 Jul 2017 22:10:52 UTC +00:00')
-    
-      # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/follow_request
-  def follow_request
-    f = Follow.last
-    NotificationMailer.follow_request(f.target_account, Notification.find_by(activity: f))
+        $Kernel_trace_var_global = 'foo'
+    captured.should == 'foo'
   end
     
-          def stage_definitions
-        stage_config_path.join('*.rb')
+      it 'does not append line-end if last character is line-end' do
+    lambda {
+      $VERBOSE = true
+      warn('this is some simple text with line-end\n')
+    }.should output(nil, 'this is some simple text with line-end\n')
+  end
+    
+      def append(*paths)
+    @paths = parse(*@paths, *paths)
+    self
+  end
+    
+          Pathname.glob(path.join('*')).sort.select(&:directory?).map do |path|
+        token = path.basename.to_s
+    
+          errors.each do |error|
+        summary << ' #{Formatter.error('-')} #{error}'
       end
     
-        # @abstract
+        # Outputs the post.date as formatted html, with hooks for CSS styling.
     #
-    # Your implementation should check if the specified remote-repository is
-    # available.
+    #  +date+ is the date object to format as HTML.
     #
-    # @return [Boolean]
-    #
-    def check
-      raise NotImplementedError, 'Your SCM strategy module should provide a #check method'
+    # Returns string
+    def date_to_html_string(date)
+      result = '<span class='month'>' + date.strftime('%b').upcase + '</span> '
+      result << date.strftime('<span class='day'>%d</span> ')
+      result << date.strftime('<span class='year'>%Y</span> ')
+      result
     end
     
-      desc 'Reverted'
-  task :reverted do
-  end
-    
-      tasks_dir = Pathname.new('lib/capistrano/tasks')
-  config_dir = Pathname.new('config')
-  deploy_dir = config_dir.join('deploy')
+        def initialize(tag_name, markup, tokens)
+      attributes = ['class', 'src', 'width', 'height', 'title']
