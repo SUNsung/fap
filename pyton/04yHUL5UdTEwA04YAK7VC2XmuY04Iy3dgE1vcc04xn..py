@@ -1,128 +1,134 @@
 
         
-            def __init__(self):
-        Resource.__init__(self)
-        self.concurrent = 0
-        self.tail = deque(maxlen=100)
-        self._reset_stats()
+          path_counts = tf.to_float(features['counts'])
+  seq_lengths = features['pathlens']
     
-    from twisted import version as _txv
-twisted_version = (_txv.major, _txv.minor, _txv.micro)
+      input_title = ''
+  if 'controller_outputs' in model_vals.keys():
+    input_title += ' Controller Output'
+    plt.subplot(nrows,2,3+subplot_cidx)
+    u_t = model_vals['controller_outputs'][0:-1]
+    plot_time_series(u_t, bidx, n_to_plot=n_to_plot, color='c', scale=1.0,
+                     title=col_title + input_title)
     
+      Returns:
+    values_bxtxn: The BxTxN numpy tensor.
+  '''
     
-# contracts
-class UrlContract(Contract):
-    ''' Contract to set the url of the request (mandatory)
-        @url http://scrapy.org
-    '''
+    from google.protobuf import text_format
+import data_utils
     
-        class _v19_S3Connection(S3Connection):
-        '''A dummy S3Connection wrapper that doesn't do any synchronous download'''
-        def _mexe(self, method, bucket, key, headers, *args, **kwargs):
-            return headers
+    ## Sample Generation.
+## Binary and setup FLAGS.
+tf.app.flags.DEFINE_enum('sample_mode', 'TRAIN',
+                         [SAMPLE_TRAIN, SAMPLE_VALIDATION],
+                         'Dataset to sample from.')
+tf.app.flags.DEFINE_string('output_path', '/tmp', 'Model output directory.')
+tf.app.flags.DEFINE_boolean(
+    'output_masked_logs', False,
+    'Whether to display for human evaluation (show masking).')
+tf.app.flags.DEFINE_integer('number_epochs', 1,
+                            'The number of epochs to produce.')
     
-        def process_request(self, request, spider):
-        auth = getattr(self, 'auth', None)
-        if auth and b'Authorization' not in request.headers:
-            request.headers[b'Authorization'] = auth
+      '''
+  loss = tf.losses.sigmoid_cross_entropy(labels,
+                                         predictions,
+                                         weights=missing_tokens)
+  loss = tf.Print(
+      loss, [loss, labels, missing_tokens],
+      message='loss, labels, missing_tokens',
+      summarize=25,
+      first_n=25)
+  return loss
+    
+      for key, _ in gen_ngrams_dict.iteritems():
+    if key in train_ngrams_dict:
+      unique_ngrams_in_train += 1
+  return float(unique_ngrams_in_train) / float(total_ngrams_produced)
 
     
-            # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
     
-            ret = []
-        for i in range(len(string) / 2):
-            (n, v) = ord(string[i*2]), ord(string[i*2+1])
+class Unaccent(Transform):
+    bilateral = True
+    lookup_name = 'unaccent'
+    function = 'UNACCENT'
     
-                if point.name == 'p':
-                link = point.find('a')
-                if link is not None:
-                    link = clean_pdf_link(link.attrs['href'])
-                    ext = get_extension(link)
-                    print(ext)
-                    if not ext in forbidden_extensions:
-                        print(shorten_title(point.text) + ' (' + link + ')')
-                        try:
-                            name = clean_text(point.text.split('[' + ext + ']')[0])
-                            fullname = '.'.join((name, ext))
-                            if not os.path.exists('/'.join((current_directory, fullname)) ):
-                                download_pdf(link, current_directory, '.'.join((name, ext)))
-                        except KeyboardInterrupt:
-                            try:
-                                print('Press Ctrl-C in 1 second to quit')
-                                time.sleep(1)
-                            except KeyboardInterrupt:
-                                print('Cancelling..')
-                                break
-                        except:
-                            failures.append(point.text)
-                        
-        point = point.next_sibling          
+        def __call__(self, value):
+        keys = set(value)
+        missing_keys = self.keys - keys
+        if missing_keys:
+            raise ValidationError(
+                self.messages['missing_keys'],
+                code='missing_keys',
+                params={'keys': ', '.join(missing_keys)},
+            )
+        if self.strict:
+            extra_keys = keys - self.keys
+            if extra_keys:
+                raise ValidationError(
+                    self.messages['extra_keys'],
+                    code='extra_keys',
+                    params={'keys': ', '.join(extra_keys)},
+                )
     
-            for future in as_completed(future_to_url):
-            try:
-                url_to_content[future_to_url[future]] = future.result()
-            except:
-                pass
-        return url_to_content
-    finally:
-        executor.shutdown()
+        def __init__(self, get_response=None):
+        if not apps.is_installed('django.contrib.sites'):
+            raise ImproperlyConfigured(
+                'You cannot use RedirectFallbackMiddleware when '
+                'django.contrib.sites is not installed.'
+            )
+        super().__init__(get_response)
     
-    def sequential():
-    return list(map(is_prime, PRIMES))
+        def save(self, must_create=False):
+        if self.session_key is None:
+            return self.create()
+        if must_create:
+            func = self._cache.add
+        elif self._cache.get(self.cache_key) is not None:
+            func = self._cache.set
+        else:
+            raise UpdateError
+        result = func(self.cache_key,
+                      self._get_session(no_load=must_create),
+                      self.get_expiry_age())
+        if must_create and not result:
+            raise CreateError
     
-        vim_eval.assert_has_exact_calls( [
-      call( 'setqflist( {0} )'.format( json.dumps( expected_qf_list ) ) )
-    ] )
-    vim_command.assert_has_exact_calls( [
-      call( 'botright copen' ),
-      call( 'au WinLeave <buffer> q' ),
-      call( 'doautocmd User YcmQuickFixOpened' )
-    ] )
-    set_fitting_height.assert_called_once_with()
+        def flush(self):
+        '''
+        Remove the current session data from the database and regenerate the
+        key.
+        '''
+        self.clear()
+        self.delete(self.session_key)
+        self._session_key = None
+
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        if section is not None:
+        if section not in sitemaps:
+            raise Http404('No sitemap available for section: %r' % section)
+        maps = [sitemaps[section]]
+    else:
+        maps = sitemaps.values()
+    page = request.GET.get('p', 1)
     
+    try:
+    import face_recognition_models
+except Exception:
+    print('Please install `face_recognition_models` with this command before using `face_recognition`:\n')
+    print('pip install git+https://github.com/ageitgey/face_recognition_models')
+    quit()
     
-  @staticmethod
-  def CreateFromOptions( user_options ):
-    all_filters = dict( user_options.get( 'filter_diagnostics', {} ) )
-    compiled_by_type = {}
-    for type_spec, filter_value in iteritems( dict( all_filters ) ):
-      filetypes = [ type_spec ]
-      if type_spec.find( ',' ) != -1:
-        filetypes = type_spec.split( ',' )
-      for filetype in filetypes:
-        compiled_by_type[ filetype ] = _CompileFilters( filter_value )
+        function_parameters = zip(
+        images_to_check,
+        itertools.repeat(model),
+    )
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        def test_load_image_file(self):
+        img = api.load_image_file(os.path.join(os.path.dirname(__file__), 'test_images', 'obama.jpg'))
+        self.assertEqual(img.shape, (1137, 910, 3))
     
-      if 'word' in vim_data:
-    completion_data[ 'insertion_text' ] = vim_data[ 'word' ]
-  if 'abbr' in vim_data:
-    completion_data[ 'menu_text' ] = vim_data[ 'abbr' ]
-  if 'menu' in vim_data:
-    completion_data[ 'extra_menu_info' ] = vim_data[ 'menu' ]
-  if 'kind' in vim_data:
-    completion_data[ 'kind' ] = [ vim_data[ 'kind' ] ]
-  if 'info' in vim_data:
-    completion_data[ 'detailed_info' ] = vim_data[ 'info' ]
+    test_requirements = [
+    'tox',
+    'flake8==2.6.0'
+]
