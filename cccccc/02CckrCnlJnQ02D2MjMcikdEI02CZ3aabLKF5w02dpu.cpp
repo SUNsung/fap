@@ -1,214 +1,182 @@
 
         
-        
-    {
-    {    SECTION('children() returns only the first level of submodules') {
-      auto children = model.children();
-      REQUIRE(children.size() == 3);
-      REQUIRE(&children.at('0') == &model[0]);
-      REQUIRE(&children.at('1') == &model[1]);
-      REQUIRE(&children.at('2') == &model[2]);
-      REQUIRE(!children.contains('0.0'));
-      size_t count = 0;
-      for (auto& child : children) {
-        REQUIRE(child.key == std::to_string(count));
-        REQUIRE(&child.value == &model[count]);
-        count += 1;
+        /*!
+ * \brief Registry entry for linear updater.
+ */
+struct LinearUpdaterReg
+    : public dmlc::FunctionRegEntryBase<LinearUpdaterReg,
+                                        std::function<LinearUpdater*()> > {};
+    
+      virtual void PredictInstance(const SparsePage::Inst& inst,
+                               std::vector<bst_float>* out_preds,
+                               const gbm::GBTreeModel& model,
+                               unsigned ntree_limit = 0,
+                               unsigned root_index = 0) = 0;
+    
+    #include <dmlc/registry.h>
+#include <functional>
+#include <vector>
+#include <utility>
+#include <string>
+#include './base.h'
+#include './data.h'
+#include './tree_model.h'
+#include '../../src/common/host_device_vector.h'
+    
+    
+    {    for (size_t i = 0; i < batch.size; ++i) {
+      offset_[i + 1] = (i + 1) * num_col_;
+      Row<IndexType> row = batch[i];
+      for (uint32_t j = 0; j < num_col_; ++j) {
+        dense_index_[i * num_col_ + j] = j;
+      }
+      for (unsigned k = 0; k < row.length; ++k) {
+        uint32_t index = row.get_index(k);
+        CHECK_LT(index, num_col_)
+            << 'Featuere index larger than num_col';
+        dense_value_[i * num_col_ + index]  = row.get_value(k);
       }
     }
-  }
-}
-    
-    void OptimizerBase::zero_grad() {
-  for (auto& parameter : parameters_) {
-    auto& grad = parameter.grad();
-    if (grad.defined()) {
-      grad = grad.detach();
-      Tensor(grad).data().zero_();
-    }
-  }
-}
-    
-    
-    {  // unflatten the batch dims
-  if (batch_ndim == 0) {
-    // slightly faster path for non-batch mode
-    output = output.squeeze(0);
-  } else if (batch_ndim > 1) {
-    auto output_ndim = self.dim() + static_cast<int64_t>(complex_output) - static_cast<int64_t>(complex_input);
-    std::vector<int64_t> unflatten_output_shape(output_ndim);
-    std::copy(self_shape.begin(), self_shape.begin() + batch_ndim, unflatten_output_shape.begin());
-    std::copy(output_sizes.begin() + 1, output_sizes.end(), unflatten_output_shape.begin() + batch_ndim);
-    output = output.reshape(unflatten_output_shape);
-  }
-  return output;
-}
-    
-    std::vector<int64_t> THPUtils_unpackLongs(PyObject *arg) {
-  bool tuple = PyTuple_Check(arg);
-  bool list = PyList_Check(arg);
-  if (tuple || list) {
-    int nDim = tuple ? PyTuple_GET_SIZE(arg) : PyList_GET_SIZE(arg);
-    std::vector<int64_t> sizes(nDim);
-    for (int i = 0; i != nDim; ++i) {
-      PyObject* item = tuple ? PyTuple_GET_ITEM(arg, i) : PyList_GET_ITEM(arg, i);
-      if (!THPUtils_checkLong(item)) {
-        std::ostringstream oss;
-        oss << 'expected int at position ' << i << ', but got: ' << THPUtils_typename(item);
-        throw std::runtime_error(oss.str());
-      }
-      sizes[i] = THPUtils_unpackLong(item);
-    }
-    return sizes;
-  }
-  throw std::runtime_error('Expected tuple or list');
-}
-    
-        const auto* grad_out_data = grad_out.template data<T>();
-    const auto* weight_data = weight.template data<T>();
-    const auto* alpha_data = adaptive_ ? Input(5).template data<T>() : 0;
-    const auto* val_data = val.template data<T>();
-    const auto* key_data = key.template data<TIndex>();
-    
-    
-    {    for (size_t i = 0; i < n_blocks; ++i) {
-      ConstEigenVectorArrayMap<uint8_t> input_row(
-          input_data + i * block_size, block_size);
-      EigenVectorArrayMap<float> output_row(
-          output_data + i * block_size, block_size);
-      output_row = input_row.template cast<float>() * scale_bias_data[2 * i] +
-          scale_bias_data[2 * i + 1];
-    }
+    out_ = batch;
+    out_.index = dmlc::BeginPtr(dense_index_);
+    out_.value = dmlc::BeginPtr(dense_value_);
+    out_.offset = dmlc::BeginPtr(offset_);
     return true;
   }
     
-    PyObject * THPWrapper_New(void *data, void (*destructor)(void*))
-{
-  PyObject *args = PyTuple_New(0);
-  if (!args) {
-    return NULL;
-  }
-  PyObject *result = PyObject_Call(THPWrapperClass, args, NULL);
-  if (result) {
-    THPWrapper* wrapper = (THPWrapper*) result;
-    wrapper->data = data;
-    wrapper->destructor = destructor;
-  }
-  Py_DECREF(args);
-  return result;
-}
+      // Taylor coefficients
+  const float P0expf = 1.f / 2.f;
+  const float P1expf = 1.f / 6.f;
+  const float P2expf = 1.f / 24.f;
+  const float P3expf = 1.f / 120.f;
+  const float P4expf = 1.f / 720.f;
+  const float P5expf = 1.f / 5040.f;
     
-    #include 'THCStorage.h'
-// Should work with THStorageClass
-#include <TH/THStorageFunctions.hpp>
-    
-    template<typename real,
-         typename = typename std::enable_if<std::is_arithmetic<real>::value>::type>
-inline void _appendScalar(ByteArray& str, real data) {
-  str.append(reinterpret_cast<char*>(&data), sizeof(data));
-}
-    
-    #include 'dispatch/Communication.cpp'
-#include 'dispatch/Generator.cpp'
-#include 'dispatch/Storage.cpp'
-#include 'dispatch/Tensor.cpp'
-#include 'dispatch/TensorCopy.cpp'
-#include 'dispatch/TensorMath.cpp'
-#include 'dispatch/TensorRandom.cpp'
-#include 'dispatch/TensorLapack.cpp'
-    
-    #include '../master_worker/common/RPC.hpp'
-#include 'TH/THStorageFunctions.h'
-    
-      ReadOptions read_options;
-  Iterator *iter = db->NewIterator(read_options);
-    
-      // Add '<shared><non_shared><value_size>' to buffer_
-  PutVarint32(&buffer_, shared);
-  PutVarint32(&buffer_, non_shared);
-  PutVarint32(&buffer_, value.size());
+    #include <xgboost/logging.h>
+#include <cctype>
+#include <cstdio>
+#include <string>
+#include './io.h'
     
     
     {
-    {}  // namespace crc32c
-}  // namespace leveldb
+    {
+    { private:
+  std::ifstream fi_;
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_CONFIG_H_
+
     
-    uint32_t Hash(const char* data, size_t n, uint32_t seed) {
-  // Similar to murmur hash
-  const uint32_t m = 0xc6a4a793;
-  const uint32_t r = 24;
-  const char* limit = data + n;
-  uint32_t h = seed ^ (n * m);
+    namespace xgboost {
+namespace data {
+/*!
+ * \brief Format specification of SparsePage.
+ */
+class SparsePageFormat {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~SparsePageFormat() = default;
+  /*!
+   * \brief Load all the segments into page, advance fi to end of the block.
+   * \param page The data to read page into.
+   * \param fi the input stream of the file
+   * \return true of the loading as successful, false if end of file was reached
+   */
+  virtual bool Read(SparsePage* page, dmlc::SeekStream* fi) = 0;
+  /*!
+   * \brief read only the segments we are interested in, advance fi to end of the block.
+   * \param page The page to load the data into.
+   * \param fi the input stream of the file
+   * \param sorted_index_set sorted index of segments we are interested in
+   * \return true of the loading as successful, false if end of file was reached
+   */
+  virtual bool Read(SparsePage* page,
+                    dmlc::SeekStream* fi,
+                    const std::vector<bst_uint>& sorted_index_set) = 0;
+  /*!
+   * \brief save the data to fo, when a page was written.
+   * \param fo output stream
+   */
+  virtual void Write(const SparsePage& page, dmlc::Stream* fo) = 0;
+  /*!
+   * \brief Create sparse page of format.
+   * \return The created format functors.
+   */
+  static SparsePageFormat* Create(const std::string& name);
+  /*!
+   * \brief decide the format from cache prefix.
+   * \return pair of row format, column format type of the cache prefix.
+   */
+  static std::pair<std::string, std::string> DecideFormat(const std::string& cache_prefix);
+};
+    }
     }
     
+            // Convert to freetype flags (nb: Bold and Oblique are processed separately)
+        UserFlags = cfg.RasterizerFlags | extra_user_flags;
+        FreetypeLoadFlags = FT_LOAD_NO_BITMAP;
+        if (UserFlags & ImGuiFreeType::NoHinting)      FreetypeLoadFlags |= FT_LOAD_NO_HINTING;
+        if (UserFlags & ImGuiFreeType::NoAutoHint)     FreetypeLoadFlags |= FT_LOAD_NO_AUTOHINT;
+        if (UserFlags & ImGuiFreeType::ForceAutoHint)  FreetypeLoadFlags |= FT_LOAD_FORCE_AUTOHINT;
+        if (UserFlags & ImGuiFreeType::LightHinting)   
+            FreetypeLoadFlags |= FT_LOAD_TARGET_LIGHT;
+        else if (UserFlags & ImGuiFreeType::MonoHinting)   
+            FreetypeLoadFlags |= FT_LOAD_TARGET_MONO;
+        else                                                
+            FreetypeLoadFlags |= FT_LOAD_TARGET_NORMAL;
     
-    {  ASSERT_EQ(Hash(0, 0, 0xbc9f1d34), 0xbc9f1d34);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data1), sizeof(data1), 0xbc9f1d34),
-      0xef1345c4);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data2), sizeof(data2), 0xbc9f1d34),
-      0x5b663814);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data3), sizeof(data3), 0xbc9f1d34),
-      0x323c078f);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data4), sizeof(data4), 0xbc9f1d34),
-      0xed21633a);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data5), sizeof(data5), 0x12345678),
-      0xf333dabb);
+    static void ImGui_ImplFreeGLUT_UpdateKeyboardMods()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    int mods = glutGetModifiers();
+    io.KeyCtrl = (mods & GLUT_ACTIVE_CTRL) != 0;
+    io.KeyShift = (mods & GLUT_ACTIVE_SHIFT) != 0;
+    io.KeyAlt = (mods & GLUT_ACTIVE_ALT) != 0;
 }
     
-      AutoCompactTest() {
-    dbname_ = test::TmpDir() + '/autocompact_test';
-    tiny_cache_ = NewLRUCache(100);
-    options_.block_cache = tiny_cache_;
-    DestroyDB(dbname_, options_);
-    options_.create_if_missing = true;
-    options_.compression = kNoCompression;
-    ASSERT_OK(DB::Open(options_, dbname_, &db_));
-  }
+    // Implemented features:
+//  [X] Renderer: User texture binding. Use 'CIwTexture*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
     
-    std::string InternalKey::DebugString() const {
-  std::string result;
-  ParsedInternalKey parsed;
-  if (ParseInternalKey(rep_, &parsed)) {
-    result = parsed.DebugString();
-  } else {
-    result = '(bad)';
-    result.append(EscapeString(rep_));
-  }
-  return result;
-}
+        // Setup Dear ImGui binding
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    ImGui_Marmalade_Init(true);
     
-    namespace leveldb {
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    HRESULT CreateDeviceD3D(HWND hWnd)
+{
+    // Setup swap chain
+    DXGI_SWAP_CHAIN_DESC sd;
+    ZeroMemory(&sd, sizeof(sd));
+    sd.BufferCount = 2;
+    sd.BufferDesc.Width = 0;
+    sd.BufferDesc.Height = 0;
+    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    sd.BufferDesc.RefreshRate.Numerator = 60;
+    sd.BufferDesc.RefreshRate.Denominator = 1;
+    sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    sd.OutputWindow = hWnd;
+    sd.SampleDesc.Count = 1;
+    sd.SampleDesc.Quality = 0;
+    sd.Windowed = TRUE;
+    sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
     }
     
-        // Glut has 1 function for characters and one for 'special keys'. We map the characters in the 0..255 range and the keys above.
-    io.KeyMap[ImGuiKey_Tab]         = '\t'; // == 9 == CTRL+I
-    io.KeyMap[ImGuiKey_LeftArrow]   = 256 + GLUT_KEY_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow]  = 256 + GLUT_KEY_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow]     = 256 + GLUT_KEY_UP;
-    io.KeyMap[ImGuiKey_DownArrow]   = 256 + GLUT_KEY_DOWN;
-    io.KeyMap[ImGuiKey_PageUp]      = 256 + GLUT_KEY_PAGE_UP;
-    io.KeyMap[ImGuiKey_PageDown]    = 256 + GLUT_KEY_PAGE_DOWN;
-    io.KeyMap[ImGuiKey_Home]        = 256 + GLUT_KEY_HOME;
-    io.KeyMap[ImGuiKey_End]         = 256 + GLUT_KEY_END;
-    io.KeyMap[ImGuiKey_Insert]      = 256 + GLUT_KEY_INSERT;
-    io.KeyMap[ImGuiKey_Delete]      = 127;
-    io.KeyMap[ImGuiKey_Backspace]   = 8;  // == CTRL+H
-    io.KeyMap[ImGuiKey_Space]       = ' ';
-    io.KeyMap[ImGuiKey_Enter]       = 13; // == CTRL+M
-    io.KeyMap[ImGuiKey_Escape]      = 27;
-    io.KeyMap[ImGuiKey_A]           = 'A';
-    io.KeyMap[ImGuiKey_C]           = 'C';
-    io.KeyMap[ImGuiKey_V]           = 'V';
-    io.KeyMap[ImGuiKey_X]           = 'X';
-    io.KeyMap[ImGuiKey_Y]           = 'Y';
-    io.KeyMap[ImGuiKey_Z]           = 'Z';
+    #include 'imgui.h'
+#include 'imgui_impl_dx9.h'
+#include 'imgui_impl_win32.h'
+#include <d3d9.h>
+#define DIRECTINPUT_VERSION 0x0800
+#include <dinput.h>
+#include <tchar.h>
     
-    
-    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
+    #endif // BOOST_ATOMIC_FENCES_HPP_INCLUDED_
