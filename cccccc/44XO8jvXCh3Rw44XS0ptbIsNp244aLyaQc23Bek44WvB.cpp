@@ -1,268 +1,182 @@
 
         
-            if (info.bytes > buf.size()) {
-      llvm::dbgs() << 'AST section too small.\n';
-      return false;
-    }
-    
-    bool LangOptions::
-checkPlatformCondition(PlatformConditionKind Kind, StringRef Value) const {
-  // Check a special case that 'macOS' is an alias of 'OSX'.
-  if (Kind == PlatformConditionKind::OS && Value == 'macOS')
-    return checkPlatformCondition(Kind, 'OSX');
-    }
+        #endif // BITCOIN_QT_SIGNVERIFYMESSAGEDIALOG_H
+
     
     
-    {    // If there is a repeated letter at the back, drop that second
-    // instance of that letter and try again.
-    unsigned count = possibleVerb.size();
-    if (possibleVerb[count-1] == possibleVerb[count-2] &&
-        getPartOfSpeech(possibleVerb.substr(0, count-1)) == PartOfSpeech::Verb)
-      return PartOfSpeech::Gerund;
-  }
+    {    Lock& lock;
+    Lock templock;
+};
     
-    #include 'swift/Basic/TaskQueue.h'
+        (void)ctx;
+    ARG_CHECK(sig != NULL);
+    ARG_CHECK(sigin != NULL);
     
-    // HACK: Allow support for many newer emoji by overriding behavior of ZWJ and
-// emoji modifiers. This does not make the breaks correct for any version of
-// Unicode, but shifts the ways in which it is incorrect to be less harmful.
-//
-// TODO: Remove this hack and reevaluate whether we should have any static
-// notion of what a grapheme is.
-//
-// Returns true if lhs and rhs shouldn't be considered as having a grapheme
-// break between them. That is, whether we're overriding the behavior of the
-// hard coded Unicode 8 rules surrounding ZWJ and emoji modifiers.
-static inline bool graphemeBreakOverride(llvm::UTF32 lhs, llvm::UTF32 rhs) {
-  return lhs == 0x200D || (rhs >= 0x1F3FB && rhs <= 0x1F3FF);
+        // A more complex valid grammar. PROTOCOLINFO accepts a VersionLine that
+    // takes a key=value pair followed by an OptArguments, making this valid.
+    // Because an OptArguments contains no semantic data, there is no point in
+    // parsing it.
+    CheckParseTorReplyMapping(
+        'SOME=args,here MORE optional=arguments  here', {
+            {'SOME', 'args,here'},
+        });
+    
+    
+    {
+    {	printf(	'};\n'
+		'#endif // BITCOIN_UNIVALUE_UNIVALUE_ESCAPES_H\n');
 }
     
     
-    {}%
-    
-    /// The list of known CF types.  We use 'constexpr' to verify that this is
-/// emitted as a constant.  Note that this is expected to be sorted in
-/// quasi-lexicographic order.
-static constexpr const llvm::StringLiteral KnownCFTypes[] = {
-#define CF_TYPE(NAME) #NAME,
-#define NON_CF_TYPE(NAME)
-#include 'SortedCFDatabase.def'
+    {    enum VType type() const { return getType(); }
+    bool push_back(std::pair<std::string,UniValue> pear) {
+        return pushKV(pear.first, pear.second);
+    }
+    friend const UniValue& find_value( const UniValue& obj, const std::string& name);
 };
-const size_t NumKnownCFTypes = sizeof(KnownCFTypes) / sizeof(*KnownCFTypes);
     
-    #include 'base/basictypes.h'
-#include '../dispatcher_host.h'
+    //---------------------------------------------------------------------------------
+// The following part are API Registration of Operators
+// See also MXNET_REGISTER_SIMPLE_OP in operator_util.h for registering simple ops.
+//---------------------------------------------------------------------------------
+/*!
+ * \brief Macro to register OperatorProperty
+ *
+ * \code
+ * // example of registering a fully connected operator
+ * REGISTER_OP_PROPERTY(FullyConnected, FullyConnectedOpProp)
+ * .describe('Fully connected layer');
+ *
+ * \endcode
+ */
+#define MXNET_REGISTER_OP_PROPERTY(name, OperatorPropertyType)          \
+  DMLC_REGISTRY_REGISTER(::mxnet::OperatorPropertyReg, OperatorPropertyReg, name) \
+  .set_body([]() { return new OperatorPropertyType(); })                \
+  .set_return_type('NDArray-or-Symbol') \
+  .check_name()
     
-      bool delay_destruction() { return delay_destruction_; }
-  void set_delay_destruction(bool val) { delay_destruction_ = val; }
-  bool pending_destruction() { return pending_destruction_; }
-  void set_pending_destruction (bool val) { pending_destruction_ = val; }
- protected:
-  int id_;
-  bool delay_destruction_;
-  bool pending_destruction_;
-  base::WeakPtr<ObjectManager> object_manager_;
+    #ifdef _MSC_VER
+#pragma warning(disable:4503)  // disable warning: decorated name length exceeded.
+#endif
     
-    // Tell browser to allocate a new object.
-// function AllocateObject(id, name, options);
-v8::Handle<v8::Value> AllocateObject(int routing_id,
-                                     int object_id,
-                                     const std::string& type,
-                                     v8::Handle<v8::Value> options);
-    
-    void Menu::Create(const base::DictionaryValue& option) {
-  gtk_accel_group = NULL;
-  std::string type;
-  if (option.GetString('type', &type) && type == 'menubar')
-    menu_ = gtk_menu_bar_new();
+    template<>
+void SetDataGradToBlob<mshadow::gpu, float>(caffeMemoryTypes memType,
+                            std::vector<::caffe::Blob<float>*>::iterator blob,
+                            std::vector<TBlob>::const_iterator itr) {
+  float *data_ptr = reinterpret_cast<float*>((*itr).dptr_);
+  if (memType == Data)
+    (*blob)->set_gpu_data(data_ptr);
   else
-    menu_ = gtk_menu_new();
-    }
-    
-    NwMenuModel::NwMenuModel(Delegate* delegate) : SimpleMenuModel(delegate) {
+    MXCAFFEBLOB(*blob, float)->set_gpu_diff(data_ptr);
 }
     
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file caffe_loss.cc
+ * \brief caffe loss
+ * \author Haoran Wang
+*/
+#include './caffe_loss-inl.h'
     
-    {      }
-      keyval = gdk_keyval_from_name(key.c_str());
+    template <std::size_t kNumGpus, std::size_t kStreams>
+StreamManager<kNumGpus, kStreams>::StreamManager() {
+#if MXNET_USE_CUDA
+  for (std::size_t i = 0; i < kNumGpus; ++i) {
+    gpu_cnt_.at(i) = -1;
+  }
+  for (auto&& i : gpu_io_streams_) {
+    i = nullptr;
+  }
+#endif  // MXNET_USE_CUDA
+}
+    
+    #endif  // STORAGE_LEVELDB_DB_BUILDER_H_
+
     
     
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.destroy', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjDestroyFunction);
+    {    db_ = nullptr;
+    options_.create_if_missing = true;
+    Reopen();
+    options_.create_if_missing = false;
+  }
+    
+    
+    {}  // namespace leveldb
+    
+      Random rnd_;
+  ssize_t bytes_counter_;
+    
+      ASSERT_TRUE(ParseInternalKey(in, &decoded));
+  ASSERT_EQ(key, decoded.user_key.ToString());
+  ASSERT_EQ(seq, decoded.sequence);
+  ASSERT_EQ(vt, decoded.type);
+    
+     private:
+  FileState state_;
+  WritableFile* target_;
+  bool writable_file_opened_;
+  FaultInjectionTestEnv* env_;
+    
+    namespace leveldb {
+    }
+    
+    class StdoutPrinter : public WritableFile {
+ public:
+  virtual Status Append(const Slice& data) {
+    fwrite(data.data(), 1, data.size(), stdout);
+    return Status::OK();
+  }
+  virtual Status Close() { return Status::OK(); }
+  virtual Status Flush() { return Status::OK(); }
+  virtual Status Sync() { return Status::OK(); }
 };
     
-        // Lazy initialize screen event listeners until first call
-    base::LazyInstance<NwScreenDisplayObserver>::Leaky
-      g_display_observer = LAZY_INSTANCE_INITIALIZER;
+      end_of_buffer_offset_ = block_start_location;
     
-    
-    {  private:
-    DISALLOW_COPY_AND_ASSIGN(NwScreenStopMonitorFunction);
-  };
-    
-    void GeneratorContext::ListParsedFiles(
-    std::vector<const FileDescriptor*>* output) {
-  GOOGLE_LOG(FATAL) << 'This GeneratorContext does not support ListParsedFiles';
+    TEST(LogTest, UnexpectedMiddleType) {
+  Write('foo');
+  SetByte(6, kMiddleType);
+  FixChecksum(0, 3);
+  ASSERT_EQ('EOF', Read());
+  ASSERT_EQ(3, DroppedBytes());
+  ASSERT_EQ('OK', MatchError('missing start'));
 }
     
-    #include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/compiler/csharp/csharp_names.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/wire_format.h>
-#include <google/protobuf/stubs/strutil.h>
-#include <google/protobuf/stubs/substitute.h>
-    
-    // Requires:
-//   descriptor != NULL
-//
-// Returns:
-//   The namespace to use for given file descriptor.
-string LIBPROTOC_EXPORT GetFileNamespace(const FileDescriptor* descriptor);
-    
-    class PrimitiveFieldGenerator : public FieldGeneratorBase {
- public:
-  PrimitiveFieldGenerator(const FieldDescriptor* descriptor,
-                          int fieldOrdinal,
-                          const Options *options);
-  ~PrimitiveFieldGenerator();
-    }
-    
-    #include 'port/port.h'
-#include 'rocksdb/cache.h'
-#include 'rocksdb/db.h'
-#include 'rocksdb/env.h'
-#include 'util/gflags_compat.h'
-#include 'util/mutexlock.h'
-#include 'util/random.h'
-    
-      // Implementations of the DB interface
-  using DB::Get;
-  virtual Status Get(const ReadOptions& options,
-                     ColumnFamilyHandle* column_family, const Slice& key,
-                     PinnableSlice* value) override;
-  using DB::MultiGet;
-  virtual std::vector<Status> MultiGet(
-      const ReadOptions& options,
-      const std::vector<ColumnFamilyHandle*>&,
-      const std::vector<Slice>& keys, std::vector<std::string>* values)
-    override;
-    
-    class SkipEvenFilterFactory : public CompactionFilterFactory {
- public:
-  virtual std::unique_ptr<CompactionFilter> CreateCompactionFilter(
-      const CompactionFilter::Context& context) override {
-    if (context.is_manual_compaction) {
-      return std::unique_ptr<CompactionFilter>(new SkipEvenFilter());
+      Status OpenWithStatus(Options* options = nullptr) {
+    Close();
+    Options opts;
+    if (options != nullptr) {
+      opts = *options;
     } else {
-      return std::unique_ptr<CompactionFilter>(nullptr);
+      opts.reuse_logs = true;  // TODO(sanjay): test both ways
+      opts.create_if_missing = true;
     }
-  }
+    if (opts.env == nullptr) {
+      opts.env = env_;
     }
-    
-    Status WriteBatchBase::DeleteRange(ColumnFamilyHandle* column_family,
-                                   const SliceParts& begin_key,
-                                   const SliceParts& end_key) {
-  std::string begin_key_buf, end_key_buf;
-  Slice begin_key_slice(begin_key, &begin_key_buf);
-  Slice end_key_slice(end_key, &end_key_buf);
-  return DeleteRange(column_family, begin_key_slice, end_key_slice);
-}
-    
-      // these three metods are querying the state of the WriteController
-  bool IsStopped() const;
-  bool NeedsDelay() const { return total_delayed_.load() > 0; }
-  bool NeedSpeedupCompaction() const {
-    return IsStopped() || NeedsDelay() || total_compaction_pressure_ > 0;
-  }
-  // return how many microseconds the caller needs to sleep after the call
-  // num_bytes: how many number of bytes to put into the DB.
-  // Prerequisite: DB mutex held.
-  uint64_t GetDelay(Env* env, uint64_t num_bytes);
-  void set_delayed_write_rate(uint64_t write_rate) {
-    // avoid divide 0
-    if (write_rate == 0) {
-      write_rate = 1u;
-    } else if (write_rate > max_delayed_write_rate()) {
-      write_rate = max_delayed_write_rate();
-    }
-    delayed_write_rate_ = write_rate;
+    return DB::Open(opts, dbname_, &db_);
   }
     
-          // Print the message
-      if (p < limit) {
-        va_list backup_ap;
-        va_copy(backup_ap, ap);
-        p += vsnprintf(p, limit - p, format, backup_ap);
-        va_end(backup_ap);
+        // Extract metadata by scanning through table.
+    int counter = 0;
+    Iterator* iter = NewTableIterator(t.meta);
+    bool empty = true;
+    ParsedInternalKey parsed;
+    t.max_sequence = 0;
+    for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+      Slice key = iter->key();
+      if (!ParseInternalKey(key, &parsed)) {
+        Log(options_.info_log, 'Table #%llu: unparsable key %s',
+            (unsigned long long) t.meta.number,
+            EscapeString(key).c_str());
+        continue;
       }
-    
-    #include <memory>
-#include <string>
-    
-      // When flush happens, it determines whether to trigger compaction. If
-  // triggered_writes_stop is true, it will also set the retry flag of
-  // compaction-task to true.
-  void OnFlushCompleted(
-      DB* db, const FlushJobInfo& info) override {
-    CompactionTask* task = PickCompaction(db, info.cf_name);
-    if (task != nullptr) {
-      if (info.triggered_writes_stop) {
-        task->retry_on_fail = true;
-      }
-      // Schedule compaction in a different thread.
-      ScheduleCompaction(task);
-    }
-  }
-    
-      void SendThreadFunc() {
-    using common::time::Clock;
-    using common::time::AsInt64;
-    using common::time::micros;
-    using common::ErrorCode;
-    AINFO << 'Send thread starting...';
-    TestCanParam *param = param_ptr();
-    CanClient *client = param->can_client;
-    std::vector<CanFrame> frames;
-    frames.resize(MAX_CAN_SEND_FRAME_LEN);
     }
     
-    template <typename SensorType>
-void CanReceiver<SensorType>::Stop() {
-  if (IsRunning()) {
-    AINFO << 'Stopping can client receiver ...';
-    is_running_ = false;
-    if (thread_ != nullptr && thread_->joinable()) {
-      thread_->join();
+      // Iteration over the contents of a skip list
+  class Iterator {
+   public:
+    // Initialize an iterator over the specified list.
+    // The returned iterator is not valid.
+    explicit Iterator(const SkipList* list);
     }
-    thread_.reset();
-  } else {
-    AINFO << 'Can client receiver is not running.';
-  }
-  AINFO << 'Can client receiver stopped [ok].';
-}
-    
-      /*
-   * @brief parse received data
-   * @param bytes a pointer to the input bytes
-   * @param length the length of the input bytes
-   * @param sensor_data the parsed sensor_data
-   */
-  virtual void Parse(const uint8_t *bytes, int32_t length,
-                     SensorType *sensor_data) const;
-    
-    TEST(ByteTest, SetGetHighLowBit) {
-  unsigned char byte_value = 0x37;
-  Byte value(&byte_value);
-  value.set_value_high_4_bits(0x0B);
-  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
-  EXPECT_EQ(0x07, value.get_byte_low_4_bits());
-  value.set_value_low_4_bits(0x0B);
-  EXPECT_EQ(0x0B, value.get_byte_high_4_bits());
-  EXPECT_EQ(0x0B, value.get_byte_low_4_bits());
-}
-    
-    // System gflags
-DECLARE_string(node_name);
-DECLARE_string(canbus_driver_name);
