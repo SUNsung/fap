@@ -1,284 +1,236 @@
 
         
-        /*!
- * \brief Create a Layer style, forward/backward operator.
- *  This is easy to write code that contains state.
- *  OpStatePtr is a pointer type, it's content is mutable even if
- *  OpStatePtr is constant.
- *
- *
- *  This is not the only way to register an op execution function.
- *  More simpler or specialized operator form can be registered
- *
- *  \note Register under 'FCreateLayerOp'
- */
-using FCreateOpState = std::function<OpStatePtr (const NodeAttrs& attrs,
-                                                 Context ctx,
-                                                 const std::vector<TShape>& in_shape,
-                                                 const std::vector<int>& in_type)>;
-/*!
- * \brief Execution mode of this operator.
- */
-using FExecType = std::function<ExecType (const NodeAttrs& attrs)>;
-/*!
- * \brief Resiger a compute function for stateful operator.
- *  OpStatePtr is a pointer type, it's content is mutable even if
- *  OpStatePtr is constant.
- *
- * \note Register under 'FStatefulCompute<cpu>' and 'FStatefulCompute<gpu>'
- */
-using FStatefulCompute = std::function<void (const OpStatePtr& state,
-                                             const OpContext& ctx,
-                                             const std::vector<TBlob>& inputs,
-                                             const std::vector<OpReqType>& req,
-                                             const std::vector<TBlob>& outputs)>;
-/*!
- * \brief Resiger a compute function for stateful operator using NDArray interface.
- *  OpStatePtr is a pointer type, it's content is mutable even if
- *  OpStatePtr is constant.
- *
- * \note Register under 'FStatefulComputeEx<cpu>' and 'FStatefulComputeEx<gpu>'
- */
-using FStatefulComputeEx = std::function<void (const OpStatePtr& state,
-                                               const OpContext& ctx,
-                                               const std::vector<NDArray>& inputs,
-                                               const std::vector<OpReqType>& req,
-                                               const std::vector<NDArray>& outputs)>;
-/*!
- * \brief The resource request from the operator.
- *        An operator could register ResourceRequestEx, or ResourceRequest, or neither.
- *
- * \note Register under 'FResourceRequest'
- */
-using FResourceRequest = std::function<
-  std::vector<ResourceRequest> (const NodeAttrs& n)>;
-/*!
- * \brief The resource request from the operator.
- *        An operator could register ResourceRequestEx, or ResourceRequest, or neither.
- *
- * \note Register under 'FResourceRequestEx'
- */
-using FResourceRequestEx = std::function<
-  std::vector<ResourceRequest> (const NodeAttrs& n,
-                                const int dev_mask,
-                                const DispatchMode dispatch_mode)>;
-/*!
- * \brief Register an operator called as a NDArray function
- *
- * \note Register under 'FNDArrayFunction'
- */
-using FNDArrayFunction = std::function<void (const nnvm::NodeAttrs& attrs,
-                                             const std::vector<NDArray>& inputs,
-                                             std::vector<NDArray>* outputs)>;
-/*!
- * \brief Resiger a compute function for simple stateless forward only operator
- *
- * \note Register under 'FCompute<cpu>' and 'FCompute<gpu>'
- */
-using FCompute = std::function<void (const nnvm::NodeAttrs& attrs,
-                                     const OpContext& ctx,
-                                     const std::vector<TBlob>& inputs,
-                                     const std::vector<OpReqType>& req,
-                                     const std::vector<TBlob>& outputs)>;
-/*!
- * \brief Resiger an NDArray compute function for simple stateless forward only operator
- * \note Register under 'FComputeEx<xpu>' and 'FComputeEx<xpu>'
- *       Dispatched only when inferred dispatch_mode is FDispatchComputeEx
- */
-using FComputeEx = std::function<void (const nnvm::NodeAttrs& attrs,
-                                       const OpContext& ctx,
-                                       const std::vector<NDArray>& inputs,
-                                       const std::vector<OpReqType>& req,
-                                       const std::vector<NDArray>& outputs)>;
-    
-              T output_val = 0.;
-          for (int iy = 0; iy < roi_bin_grid_h; iy++) {
-            for (int ix = 0; ix < roi_bin_grid_w; ix++) {
-              PreCalc<T> pc = pre_calc[pre_calc_index];
-              output_val += pc.w1 * offset_bottom_data[pc.pos1] +
-                  pc.w2 * offset_bottom_data[pc.pos2] +
-                  pc.w3 * offset_bottom_data[pc.pos3] +
-                  pc.w4 * offset_bottom_data[pc.pos4];
-    }
-    }
-    
-    static const int kBlockSize = 32768;
-    
-      VersionEdit edit;
-  for (int i = 0; i < 4; i++) {
-    TestEncodeDecode(edit);
-    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
-                 InternalKey('foo', kBig + 500 + i, kTypeValue),
-                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
-    edit.DeleteFile(4, kBig + 700 + i);
-    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
-  }
-    
-      // create first key range
-  leveldb::WriteBatch batch;
-  for (size_t i = 0; i < kNumKeys; i++) {
-    batch.Put(Key1(i), 'value for range 1 key');
-  }
-  ASSERT_OK(db->Write(leveldb::WriteOptions(), &batch));
-    
-    namespace leveldb {
-    }
-    
-    // A FilterBlockBuilder is used to construct all of the filters for a
-// particular Table.  It generates a single string which is stored as
-// a special block in the Table.
-//
-// The sequence of calls to FilterBlockBuilder must match the regexp:
-//      (StartBlock AddKey*)* Finish
-class FilterBlockBuilder {
- public:
-  explicit FilterBlockBuilder(const FilterPolicy*);
-    }
-    
-      // Check the crc of the type and the block contents
-  const char* data = contents.data();    // Pointer to where Read put the data
-  if (options.verify_checksums) {
-    const uint32_t crc = crc32c::Unmask(DecodeFixed32(data + n + 1));
-    const uint32_t actual = crc32c::Value(data, n + 1);
-    if (actual != crc) {
-      delete[] buf;
-      s = Status::Corruption('block checksum mismatch');
-      return s;
-    }
-  }
-    
-    // Different bits-per-byte
-    
-    
-    {}  // namespace leveldb
-    
-     private:
-  double min_;
-  double max_;
-  double num_;
-  double sum_;
-  double sum_squares_;
-    
-    class StdoutPrinter : public WritableFile {
- public:
-  virtual Status Append(const Slice& data) {
-    fwrite(data.data(), 1, data.size(), stdout);
-    return Status::OK();
-  }
-  virtual Status Close() { return Status::OK(); }
-  virtual Status Flush() { return Status::OK(); }
-  virtual Status Sync() { return Status::OK(); }
+        
+    {    QString name;
+    bool imagesOnButtons;
+    bool colorizeIcons;
+    bool useExtraSpacing;
+    QColor singleColor;
+    QColor textColor;
+    /* ... more to come later */
 };
     
-      // Reset the contents as if the BlockBuilder was just constructed.
-  void Reset();
+        EditAddressAndSubmit(
+        &editAddressDialog, QString('uhoh'), preexisting_r_address,
+        QString(
+            'Address \'%1\' already exists as a receiving address with label '
+            '\'%2\' and so cannot be added as a sending address.'
+            ).arg(preexisting_r_address).arg(r_label));
     
-    bool js_cocos2dx_studio_ActionTimeline_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_ActionTimeline_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_ActionTimeline(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_ActionTimeline_setFrameEventCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_clearFrameEndCallFuncs(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_setAnimationEndCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_addTimeline(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getCurrentFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getStartFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_pause(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_start(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_removeTimeline(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_setLastFrameCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_IsAnimationInfoExists(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getTimelines(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_play(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getAnimationInfo(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_resume(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_addFrameEndCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_removeAnimationInfo(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getTimeSpeed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_addAnimationInfo(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_gotoFrameAndPause(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_isPlaying(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_removeFrameEndCallFuncs(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_gotoFrameAndPlay(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_clearFrameEventCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_getEndFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_setTimeSpeed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_clearLastFrameCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_setDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_setCurrentFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_removeFrameEndCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ActionTimeline_ActionTimeline(JSContext *cx, uint32_t argc, jsval *vp);
+    #ifndef BITCOIN_QT_TRAFFICGRAPHWIDGET_H
+#define BITCOIN_QT_TRAFFICGRAPHWIDGET_H
     
-    #if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_getBackgroundMusicVolume'', nullptr);
-        return 0;
-    }
-#endif
-    
-    
-    
-    
-    mShaderProgram->setUniformLocationWith4f(mColorLocation, color.r, color.g, color.b, 1);
-    glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
-    
-        virtual void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color);
-    
-    		// Define attachment
-		{
-			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(0.0f, 3.0f);
-			m_attachment = m_world->CreateBody(&bd);
+    static int secp256k1_ecdsa_sig_recover(const secp256k1_ecmult_context *ctx, const secp256k1_scalar *sigr, const secp256k1_scalar* sigs, secp256k1_ge *pubkey, const secp256k1_scalar *message, int recid) {
+    unsigned char brx[32];
+    secp256k1_fe fx;
+    secp256k1_ge x;
+    secp256k1_gej xj;
+    secp256k1_scalar rn, u1, u2;
+    secp256k1_gej qj;
+    int r;
     }
     
-    class Bridge : public Test
-{
-public:
+    namespace c10d {
+namespace test {
+    }
     }
     
+    namespace caffe2 {
+    }
     
-    {} // namespace folly
+    Github Link:
+- https://github.com/pytorch/pytorch/blob/master/caffe2/operators/floor_op.cc
+    
+    #endif // CAFFE2_OPERATORS_FLOOR_OP_H_
 
     
-    Init::Init(int* argc, char*** argv, bool removeFlags) {
-  init(argc, argv, removeFlags);
+    
+    {  bool RunOnDevice() override {
+    for (Blob* output : OperatorBase::Outputs()) {
+      output->Reset();
+    }
+    return true;
+  }
+};
+    
+    // implementing configure.
+template<typename PairIter>
+inline void Learner::Configure(PairIter begin, PairIter end) {
+  std::vector<std::pair<std::string, std::string> > vec(begin, end);
+  this->Configure(vec);
 }
     
-      QuantileEstimates estimateQuantiles(
-      Range<const double*> quantiles,
-      TimePoint now = ClockT::now());
-  void addValue(double value, TimePoint now = ClockT::now());
+      /**
+   * \fn  virtual void Predictor::PredictInstance( const SparsePage::Inst&
+   * inst, std::vector<bst_float>* out_preds, const gbm::GBTreeModel& model,
+   * unsigned ntree_limit = 0, unsigned root_index = 0) = 0;
+   *
+   * \brief online prediction function, predict score for one instance at a time
+   * NOTE: use the batch prediction interface if possible, batch prediction is
+   * usually more efficient than online prediction This function is NOT
+   * threadsafe, make sure you only call from one thread.
+   *
+   * \param           inst        The instance to predict.
+   * \param [in,out]  out_preds   The output preds.
+   * \param           model       The model to predict from
+   * \param           ntree_limit (Optional) The ntree limit.
+   * \param           root_index  (Optional) Zero-based index of the root.
+   */
     
-      rlimit newMemLimit;
-  newMemLimit.rlim_cur =
-      std::min(static_cast<rlim_t>(1UL << 30), oldMemLimit.rlim_max);
-  newMemLimit.rlim_max = oldMemLimit.rlim_max;
-  if (!folly::kIsSanitizeAddress) { // ASAN reserves outside of the rlimit
-    PCHECK(setrlimit(RLIMIT_AS, &newMemLimit) == 0);
+     private:
+  StreamBufferReader reader_;
+  int tmp_ch;
+  int num_prev;
+  unsigned char buf_prev[2];
+  // whether we need to do strict check
+  static const bool kStrictCheck = false;
+};
+/*! \brief the stream that write to base64, note we take from file pointers */
+class Base64OutStream: public dmlc::Stream {
+ public:
+  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
+    buf_top = 0;
   }
-  SCOPE_EXIT {
-    PCHECK(setrlimit(RLIMIT_AS, &oldMemLimit) == 0);
-  };
+  virtual void Write(const void *ptr, size_t size) {
+    using base64::EncodeTable;
+    size_t tlen = size;
+    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
+    while (tlen) {
+      while (buf_top < 3  && tlen != 0) {
+        buf[++buf_top] = *cptr++; --tlen;
+      }
+      if (buf_top == 3) {
+        // flush 4 bytes out
+        PutChar(EncodeTable[buf[1] >> 2]);
+        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
+        PutChar(EncodeTable[buf[3] & 0x3F]);
+        buf_top = 0;
+      }
+    }
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64OutStream do not support read';
+    return 0;
+  }
+  /*!
+   * \brief finish writing of all current base64 stream, do some post processing
+   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
+   */
+  inline void Finish(char endch = EOF) {
+    using base64::EncodeTable;
+    if (buf_top == 1) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
+      PutChar('=');
+      PutChar('=');
+    }
+    if (buf_top == 2) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
+      PutChar('=');
+    }
+    buf_top = 0;
+    if (endch != EOF) PutChar(endch);
+    this->Flush();
+  }
     
-      private:
-    CommFrequencyLimit(CommFrequencyLimit&);
-    CommFrequencyLimit& operator=(CommFrequencyLimit&);
+      bool HaveColAccess(bool sorted) const override {
+    return col_iter_ != nullptr && col_iter_->sorted == sorted;
+  }
     
-      protected:
-    ServiceBase(const char* _servicename) : m_servicename(_servicename) {}
     
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+    {
+    {void SparsePageWriter::Alloc(std::shared_ptr<SparsePage>* out_page) {
+  CHECK(*out_page == nullptr);
+  if (num_free_buffer_ != 0) {
+    out_page->reset(new SparsePage());
+    --num_free_buffer_;
+  } else {
+    CHECK(qrecycle_.Pop(out_page));
+  }
+}
+}  // namespace data
+}  // namespace xgboost
     
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+      EXPECT_THROW(dStr.getInt(), TypeError);
+  EXPECT_THROW(dStr.getDouble(), TypeError);
+  EXPECT_THROW(dStr.getBool(), TypeError);
     
-        const char* GetChar() const;
-    jstring GetJstr() const;
+    template <class String> void clause11_21_4_7_9_e(String & test) {
+  String str;
+  randomString(&str, maxString);
+  int tristate = test.compare(
+    random(0, test.size()),
+    random(0, test.size()),
+    str.c_str(),
+    random(0, str.size()));
+  if (tristate > 0) {
+    tristate = 1;
+  } else if (tristate < 0) {
+    tristate = 2;
+  }
+  Num2String(test, tristate);
+}
+    
+    void BENCHFUN(pushBack)(int iters, int initialSize) {
+  BenchmarkSuspender braces;
+  auto const obj = randomObject<VECTOR::value_type>();
+  VECTOR v(initialSize, obj);
+  braces.dismissing([&]() {
+    FOR_EACH_RANGE (i, 0, iters) { v.push_back(obj); }
+  });
+}
+    
+    TEST(FixedStringExamples, Examples) {
+  // Example from the docs:
+  using namespace folly;
+  constexpr auto hello = makeFixedString('hello'); // a FixedString<5>
+  constexpr auto world = makeFixedString('world'); // another FixedString<5>
+  constexpr auto hello_world = hello + ' ' + world + '!';
+  static_assert(hello_world == 'hello world!', 'w00t');
+  EXPECT_STREQ('hello world!', hello_world.c_str());
+    }
+    
+      for (int i = 0; i < 10; ++i) {
+    FB_LOG_EVERY_MS(INFO, 0)
+      << 'test msg ' << ++count;
+  }
+    
+        static BOOST_FORCEINLINE void store(storage_type volatile& storage, storage_type v, memory_order) BOOST_NOEXCEPT
+    {
+        uint64_t const* p_value = (uint64_t const*)&v;
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+        __asm__ __volatile__
+        (
+            'movq %[dest], %%rax\n\t'
+            'movq 8+%[dest], %%rdx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg16b %[dest]\n\t'
+            'jne 1b\n\t'
+            : [dest] '=o' (storage)
+            : 'b' (p_value[0]), 'c' (p_value[1])
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'rax', 'rdx', 'memory'
+        );
+#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+        __asm__ __volatile__
+        (
+            'movq 0(%[dest]), %%rax\n\t'
+            'movq 8(%[dest]), %%rdx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg16b 0(%[dest])\n\t'
+            'jne 1b\n\t'
+            :
+            : 'b' (p_value[0]), 'c' (p_value[1]), [dest] 'r' (&storage)
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'rax', 'rdx', 'memory'
+        );
+#endif // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+    }
+    
+    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
+namespace atomics {
+namespace detail {
+    }
+    }
+    }
