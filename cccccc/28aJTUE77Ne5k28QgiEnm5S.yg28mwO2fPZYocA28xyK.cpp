@@ -1,146 +1,250 @@
 
         
-        static HRESULT InitDevice()
-{
-    HRESULT hr = S_OK;
-    }
+            QMenu *dockMenu();
+    void setIcon(const QIcon &icon);
+    void setMainWindow(QMainWindow *window);
+    static MacDockIconHandler *instance();
+    static void cleanup();
+    void handleDockIconClickEvent();
     
-    namespace cv { namespace cuda { namespace device
-{
-    template <class T>
-    __device__ __forceinline__ T warp_reduce(volatile T *ptr , const unsigned int tid = threadIdx.x)
-    {
-        const unsigned int lane = tid & 31; // index of thread in warp (0..31)
-    }
-    }
-    }
-    }
-    
-    constexpr ptrdiff_t STORAGE_SIZE = 10;
-constexpr size_t VEC_SIZE = 3;
-    
-    #define THDPDoubleStorage_CData(obj)  (obj)->cdata
-#define THDPFloatStorage_CData(obj)   (obj)->cdata
-#define THDPLongStorage_CData(obj)    (obj)->cdata
-#define THDPIntStorage_CData(obj)     (obj)->cdata
-#define THDPShortStorage_CData(obj)   (obj)->cdata
-#define THDPCharStorage_CData(obj)    (obj)->cdata
-#define THDPByteStorage_CData(obj)    (obj)->cdata
-    
-    #define THPStorage TH_CONCAT_3(THP,Real,Storage)
-#define THPStorageStr TH_CONCAT_STRING_3(torch.,Real,Storage)
-#define THPStorageClass TH_CONCAT_3(THP,Real,StorageClass)
-#define THPStorage_(NAME) TH_CONCAT_4(THP,Real,Storage_,NAME)
-    
-      std::unique_ptr<ManagerServerSocket> srv_socket;
-  try {
-    char tmpfile[L_tmpnam];
-    if (std::tmpnam(tmpfile) == NULL)
-      throw std::runtime_error('could not generate a random filename for manager socket');
-    // TODO: better strategy for generating tmp names
-    // TODO: retry on collisions - this can easily fail
-    srv_socket.reset(new ManagerServerSocket(std::string(tmpfile)));
-    register_fd(srv_socket->socket_fd);
-    print_init_message(tmpfile);
-    DEBUG('opened socket %s', tmpfile);
-  } catch(...) {
-    print_init_message('ERROR');
-    throw;
-  }
-    
-    static inline uint64_t decodeUInt64LE(const uint8_t *data) {
-  return (((uint64_t)data[0])<< 0) | (((uint64_t)data[1])<< 8) |
-         (((uint64_t)data[2])<<16) | (((uint64_t)data[3])<<24) |
-         (((uint64_t)data[4])<<32) | (((uint64_t)data[5])<<40) |
-         (((uint64_t)data[6])<<48) | (((uint64_t)data[7])<<56);
-}
-    
-    #endif
+    #endif // BITCOIN_QT_OPENURIDIALOG_H
 
     
-    std::string sockaddrToString(struct sockaddr *addr) {
-  char address[INET6_ADDRSTRLEN + 1];
-  if (addr->sa_family == AF_INET) {
-    struct sockaddr_in *s = reinterpret_cast<struct sockaddr_in*>(addr);
-    SYSCHECK(::inet_ntop(AF_INET, &(s->sin_addr), address, INET_ADDRSTRLEN))
-    address[INET_ADDRSTRLEN] = '\0';
-  } else if (addr->sa_family == AF_INET6) {
-    struct sockaddr_in6 *s = reinterpret_cast<struct sockaddr_in6*>(addr);
-    SYSCHECK(::inet_ntop(AF_INET6, &(s->sin6_addr), address, INET6_ADDRSTRLEN))
-    address[INET6_ADDRSTRLEN] = '\0';
-  } else {
-    throw std::runtime_error('unsupported protocol');
-  }
-  return address;
+        auto check_addbook_size = [&wallet](int expected_size) {
+        QCOMPARE(static_cast<int>(wallet->mapAddressBook.size()), expected_size);
+    };
+    
+    class ClientModel;
+    
+    #include <univalue.h>
+    
+    
+    {    return setNumStr(oss.str());
 }
     
-    
-    {	virtual bool needsCollision(btBroadphaseProxy *proxy0) const;
-};
-    
-      Copyright 2003 by
-  Francesco Zappa Nardelli
-    
-      public:
-    jpeg_decoder_mem_stream() : m_pSrc_data(NULL), m_ofs(0), m_size(0) { }
-    jpeg_decoder_mem_stream(const uint8 *pSrc_data, uint size) : m_pSrc_data(pSrc_data), m_ofs(0), m_size(size) { }
-    
-    # if defined(OC_COLLECT_METRICS)
-struct oc_mode_metrics{
-  double fragw;
-  double satd;
-  double rate;
-  double rmse;
-  double satd2;
-  double satdrate;
-  double rate2;
-  double satdrmse;
-  double rmse2;
-};
-    
-       - Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
-    
-    
-    {  delete metric;
-  metric = xgboost::Metric::Create('error@0.1');
-  ASSERT_STREQ(metric->Name(), 'error@0.1');
-  EXPECT_STREQ(metric->Name(), 'error@0.1');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.2f, 0.1f, 0.2f},
-                            {  0,   0,   1,   1}),
-              0.5f, 0.001f);
-}
-    
-      XGBOOST_DEVICE GradientPairInternal<T> &operator-=(
-      const GradientPairInternal<T> &rhs) {
-    grad_ -= rhs.grad_;
-    hess_ -= rhs.hess_;
-    return *this;
-  }
-    
-    DMLC_REGISTER_PARAMETER(MyLogisticParam);
-    
-    namespace guetzli {
+    template<>
+class char_regex_traits_i<char> : public regex_traits<char>
+{
+public:
+   typedef char char_type;
+   typedef unsigned char uchar_type;
+   typedef unsigned int size_type;
+   typedef regex_traits<char> base_type;
     }
     
-      tmp0 = in[2 * stride];
-  tmp1 = kIDCTMatrix[ 2] * tmp0;
-  tmp2 = kIDCTMatrix[10] * tmp0;
-  out[0] += tmp1;
-  out[1] += tmp2;
-  out[2] -= tmp2;
-  out[3] -= tmp1;
-  out[4] -= tmp1;
-  out[5] -= tmp2;
-  out[6] += tmp2;
-  out[7] += tmp1;
+    typedef enum _match_flags
+{
+   match_default = 0,
+   match_not_bol = 1,                                /* first is not start of line */
+   match_not_eol = match_not_bol << 1,               /* last is not end of line */
+   match_not_bob = match_not_eol << 1,               /* first is not start of buffer */
+   match_not_eob = match_not_bob << 1,               /* last is not end of buffer */
+   match_not_bow = match_not_eob << 1,               /* first is not start of word */
+   match_not_eow = match_not_bow << 1,               /* last is not end of word */
+   match_not_dot_newline = match_not_eow << 1,       /* \n is not matched by '.' */
+   match_not_dot_null = match_not_dot_newline << 1,  /* '\0' is not matched by '.' */
+   match_prev_avail = match_not_dot_null << 1,       /* *--first is a valid expression */
+   match_init = match_prev_avail << 1,               /* internal use */
+   match_any = match_init << 1,                      /* don't care what we match */
+   match_not_null = match_any << 1,                  /* string can't be null */
+   match_continuous = match_not_null << 1,           /* each grep match must continue from */
+                                                     /* uninterupted from the previous one */
+   match_partial = match_continuous << 1,            /* find partial matches */
+   
+   match_stop = match_partial << 1,                  /* stop after first match (grep) V3 only */
+   match_not_initial_null = match_stop,              /* don't match initial null, V4 only */
+   match_all = match_stop << 1,                      /* must find the whole of input even if match_any is set */
+   match_perl = match_all << 1,                      /* Use perl matching rules */
+   match_posix = match_perl << 1,                    /* Use POSIX matching rules */
+   match_nosubs = match_posix << 1,                  /* don't trap marked subs */
+   match_extra = match_nosubs << 1,                  /* include full capture information for repeated captures */
+   match_single_line = match_extra << 1,             /* treat text as single line and ignor any \n's when matching ^ and $. */
+   match_unused1 = match_single_line << 1,           /* unused */
+   match_unused2 = match_unused1 << 1,               /* unused */
+   match_unused3 = match_unused2 << 1,               /* unused */
+   match_max = match_unused3,
+    }
     
-    #include 'guetzli/jpeg_data.h'
+    #ifndef BOOST_REGEX_V4_PERL_MATCHER_RECURSIVE_HPP
+#define BOOST_REGEX_V4_PERL_MATCHER_RECURSIVE_HPP
+    
+    #ifndef BOOST_REGEX_CONFIG_HPP
+#include <boost/regex/config.hpp>
+#endif
+#ifndef BOOST_REGEX_WORKAROUND_HPP
+#include <boost/regex/v4/regex_workaround.hpp>
+#endif
     
     
-// Adds APP0 header data.
-void AddApp0Data(JPEGData* jpg);
+    {   typedef typename mpl::if_<
+      ::boost::is_same<tag, mpl::int_<0> >, format_functor_c_string<maybe_char_type, Match, Traits>,
+      typename mpl::if_<
+         ::boost::is_same<tag, mpl::int_<1> >, format_functor_container<Func, Match, Traits>,
+         typename mpl::if_<
+            ::boost::is_same<tag, mpl::int_<2> >, format_functor1<Func, Match>,
+            typename mpl::if_<
+               ::boost::is_same<tag, mpl::int_<3> >, format_functor2<Func, Match>, 
+               format_functor3<Func, Match>
+            >::type
+         >::type
+      >::type
+   >::type type;
+};
     
-    // Functions for reading a jpeg byte stream into a JPEGData object.
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex_match.hpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Regular expression matching algorithms.
+  *                Note this is an internal header file included
+  *                by regex.hpp, do not include on its own.
+  */
+    
+    #include <dmlc/registry.h>
+#include <xgboost/base.h>
+#include <xgboost/data.h>
+#include <functional>
+#include <string>
+#include <utility>
+#include <vector>
+#include '../../src/gbm/gblinear_model.h'
+#include '../../src/common/host_device_vector.h'
+    
+    
+    {    for (size_t i = 0; i < batch.size; ++i) {
+      offset_[i + 1] = (i + 1) * num_col_;
+      Row<IndexType> row = batch[i];
+      for (uint32_t j = 0; j < num_col_; ++j) {
+        dense_index_[i * num_col_ + j] = j;
+      }
+      for (unsigned k = 0; k < row.length; ++k) {
+        uint32_t index = row.get_index(k);
+        CHECK_LT(index, num_col_)
+            << 'Featuere index larger than num_col';
+        dense_value_[i * num_col_ + index]  = row.get_value(k);
+      }
+    }
+    out_ = batch;
+    out_.index = dmlc::BeginPtr(dense_index_);
+    out_.value = dmlc::BeginPtr(dense_value_);
+    out_.offset = dmlc::BeginPtr(offset_);
+    return true;
+  }
+    
+    /*! \brief collection of rowset */
+class RowSetCollection {
+ public:
+  /*! \brief data structure to store an instance set, a subset of
+   *  rows (instances) associated with a particular node in a decision
+   *  tree. */
+  struct Elem {
+    const size_t* begin{nullptr};
+    const size_t* end{nullptr};
+    int node_id{-1};
+      // id of node associated with this instance set; -1 means uninitialized
+    Elem()
+         = default;
+    Elem(const size_t* begin,
+         const size_t* end,
+         int node_id)
+        : begin(begin), end(end), node_id(node_id) {}
+    }
+    }
+    
+    SparsePageWriter::SparsePageWriter(
+    const std::vector<std::string>& name_shards,
+    const std::vector<std::string>& format_shards,
+    size_t extra_buffer_capacity)
+    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
+      clock_ptr_(0),
+      workers_(name_shards.size()),
+      qworkers_(name_shards.size()) {
+  CHECK_EQ(name_shards.size(), format_shards.size());
+  // start writer threads
+  for (size_t i = 0; i < name_shards.size(); ++i) {
+    std::string name_shard = name_shards[i];
+    std::string format_shard = format_shards[i];
+    auto* wqueue = &qworkers_[i];
+    workers_[i].reset(new std::thread(
+        [this, name_shard, format_shard, wqueue] () {
+          std::unique_ptr<dmlc::Stream> fo(
+              dmlc::Stream::Create(name_shard.c_str(), 'w'));
+          std::unique_ptr<SparsePageFormat> fmt(
+              SparsePageFormat::Create(format_shard));
+          fo->Write(format_shard);
+          std::shared_ptr<SparsePage> page;
+          while (wqueue->Pop(&page)) {
+            if (page == nullptr) break;
+            fmt->Write(*page, fo.get());
+            qrecycle_.Push(std::move(page));
+          }
+          fo.reset(nullptr);
+          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
+        }));
+  }
+}
+    
+        for (int n = 0; n < 50; n++)
+    {
+        printf('NewFrame() %d\n', n);
+        io.DisplaySize = ImVec2(1920, 1080);
+        io.DeltaTime = 1.0f / 60.0f;
+        ImGui::NewFrame();
+    }
+    
+    // Implemented features:
+//  [X] Platform: Clipboard support.
+//  [X] Platform: Gamepad navigation mapping. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
+//  [x] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'. FIXME: 3 cursors types are missing from GLFW.
+//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).
+    
+    
+    {    // 3. Show another simple window.
+    if (show_another_window)
+    {
+        ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+        ImGui::Text('Hello from another window!');
+        if (ImGui::Button('Close Me'))
+            show_another_window = false;
+        ImGui::End();
+    }
+}
+    
+        // Main loop
+    bool done = false;
+    while (!done)
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            ImGui_ImplSDL2_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                done = true;
+            if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED && event.window.windowID == SDL_GetWindowID(window)) 
+                ImGui_ImplVulkanH_CreateWindowDataSwapChainAndFramebuffer(g_PhysicalDevice, g_Device, &g_WindowData, g_Allocator, (int)event.window.data1, (int)event.window.data2);
+        }
+    }
+    
+        // Setup Dear ImGui binding
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    
+    void ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow*, int button, int action, int /*mods*/)
+{
+    if (action == GLFW_PRESS && button >= 0 && button < IM_ARRAYSIZE(g_MouseJustPressed))
+        g_MouseJustPressed[button] = true;
+}
+    
+    #define SDL_HAS_CAPTURE_MOUSE               SDL_VERSION_ATLEAST(2,0,4)
+#define SDL_HAS_VULKAN                      SDL_VERSION_ATLEAST(2,0,6)
+#define SDL_HAS_MOUSE_FOCUS_CLICKTHROUGH    SDL_VERSION_ATLEAST(2,0,5)
+#if !SDL_HAS_VULKAN
+static const Uint32 SDL_WINDOW_VULKAN = 0x10000000;
+#endif
