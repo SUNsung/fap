@@ -1,154 +1,170 @@
 
         
-          platform_is_not :solaris do # See https://github.com/ruby/spec/issues/134
-    it 'returns Infinity for Rational(0, 1) passed a negative Float' do
-      [-1.0, -3.0, -3.14].each do |exponent|
-        (Rational(0, 1) ** exponent).infinite?.should == 1
+        
+def pathutil_relative
+  Pathutil.new(DOC_PATH).relative_path_from(COL_PATH).to_s
+end
+    
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+    def site
+  @site ||= Jekyll::Site.new(
+    Jekyll.configuration('source' => File.expand_path('../docs', __dir__))
+  ).tap(&:reset).tap(&:read)
+end
+    
+            msg = ' Please append `--trace` to the `#{cmd.name}` command '
+        dashes = '-' * msg.length
+        Jekyll.logger.error '', dashes
+        Jekyll.logger.error 'Jekyll #{Jekyll::VERSION} ', msg
+        Jekyll.logger.error '', ' for any additional information or backtrace. '
+        Jekyll.logger.abort_with '', dashes
+      end
+      # rubocop: enable RescueException
+    end
+  end
+end
+
+    
+            def case_insensitive_urls(things, destination)
+          things.each_with_object({}) do |thing, memo|
+            dest = thing.destination(destination)
+            (memo[dest.downcase] ||= []) << dest
+          end
+        end
+    
+          run!
+    end
+  end
+end
+
+    
+          it 'fails forcing overwriting metadata if DELIVER_FORCE_OVERWRITE isn't set, force isn't set and user answers no in interactive mode' do
+        options = FastlaneCore::Configuration.create(Deliver::Options.available_options, {
+          force: false
+        })
+        expect(UI).to receive(:interactive?).and_return(true)
+        expect(UI).to receive(:confirm).and_return(false)
+        expect(Deliver::CommandsGenerator.force_overwrite_metadata?(options, 'an/ignored/path')).to be_falsy
+      end
+    
+          def self.author
+        'yonekawa'
+      end
+    
+      it 'raises a TypeError when passed nil' do
+    lambda { sleep(nil)   }.should raise_error(TypeError)
+  end
+    
+    ENV['RAILS_ENV'] ||= 'test'
+    
+    RSpec::Matchers.define :have_value do |expected|
+  match do |actual|
+    await_condition { actual.value && actual.value.include?(expected) }
+  end
+    
+      end
+    
+      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
+  gem.executables   = %w(cap capify)
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ['lib']
+    
+        def print_config_variables
+      ['--print-config-variables', '-p',
+       'Display the defined config variables before starting the deployment tasks.',
+       lambda do |_value|
+         Configuration.env.set(:print_config_variables, true)
+       end]
+    end
+  end
+end
+
+    
+        def any?(key)
+      value = fetch(key)
+      if value && value.respond_to?(:any?)
+        begin
+          return value.any?
+        rescue ArgumentError # rubocop:disable Lint/HandleExceptions
+          # Gracefully ignore values whose `any?` method doesn't accept 0 args
+        end
+      end
+    
+          ServerKey = Struct.new(:hostname, :port)
+    
+            def call
+          @validator.call
+        end
       end
     end
   end
 end
 
     
-    def grammar(f, out)
-  while line = f.gets
-    case line
-    when %r</\*% *ripper(?:\[(.*?)\])?: *(.*?) *%\*/>
-      out << DSL.new($2, ($1 || '').split(',')).generate << $/
-    when %r</\*%%%\*/>
-      out << '#if 0' << $/
-    when %r</\*%>
-      out << '#endif' << $/
-    when %r<%\*/>
-      out << $/
-    when /\A%%/
-      out << '%%' << $/
-      return
-    else
-      out << line
+        def vendor_path(path)
+      return ::File.join(LOGSTASH_HOME, 'vendor', path)
     end
-  end
+    
+    class LogStash::PluginManager::List < LogStash::PluginManager::Command
+    
+          PluginManager.ui.info('Installing file: #{local_file}')
+      uncompressed_path = uncompress(local_file)
+      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
+      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
+      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
+    
+        desc 'Halt all VM's involved in the acceptance test round'
+    task :halt, :platform do |t, args|
+      config   = PlatformConfig.new
+      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
+      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
+    
+    # Single-line step scoper
+When /^(.*) within (.*[^:])$/ do |step, parent|
+  with_scope(parent) { When step }
 end
     
-      def with_script_lines
-    script_lines = nil
-    debug_lines = {}
-    Object.class_eval do
-      if defined?(SCRIPT_LINES__)
-        script_lines = SCRIPT_LINES__
-        remove_const :SCRIPT_LINES__
-      end
-      const_set(:SCRIPT_LINES__, debug_lines)
-    end
-    yield debug_lines
-  ensure
-    Object.class_eval do
-      remove_const :SCRIPT_LINES__
-      const_set(:SCRIPT_LINES__, script_lines) if script_lines
-    end
-  end
-    
-      it 'adds the directory after directories added by -I within RUBYOPT' do
-    rubyopt_dir = tmp('rubyopt_include')
-    rubylib_dir = tmp('rubylib_include')
-    ENV['RUBYLIB'] = @pre + rubylib_dir
-    paths = ruby_exe('puts $LOAD_PATH', env: { 'RUBYOPT' => '-I#{rubyopt_dir}' }).lines.map(&:chomp)
-    paths.should include(rubyopt_dir)
-    paths.should include(rubylib_dir)
-    paths.index(rubyopt_dir).should < paths.index(rubylib_dir)
-  end
-    
-        @cmd.handle_options %w[-P HighSecurity]
-    
-      def test_basic_auth_md5
-    Tempfile.create('test_webrick_auth') {|tmpfile|
-      tmpfile.puts('webrick:$apr1$IOVMD/..$rmnOSPXr0.wwrLPZHBQZy0')
-      tmpfile.flush
-      assert_raise(NotImplementedError){
-        WEBrick::HTTPAuth::Htpasswd.new(tmpfile.path)
-      }
+      # Provides configurability to Paperclip. The options available are:
+  # * whiny: Will raise an error if Paperclip cannot process thumbnails of
+  #   an uploaded image. Defaults to true.
+  # * log: Logs progress to the Rails log. Uses ActiveRecord's logger, so honors
+  #   log levels, etc. Defaults to true.
+  # * command_path: Defines the path at which to find the command line
+  #   programs if they are not visible to Rails the system's search path. Defaults to
+  #   nil, which uses the first executable found in the user's search path.
+  # * use_exif_orientation: Whether to inspect EXIF data to determine an
+  #   image's orientation. Defaults to true.
+  def self.options
+    @options ||= {
+      command_path: nil,
+      content_type_mappings: {},
+      log: true,
+      log_command: true,
+      read_timeout: nil,
+      swallow_stderr: true,
+      use_exif_orientation: true,
+      whiny: true,
+      is_windows: Gem.win_platform?
     }
   end
     
-    if !Dir.respond_to?(:mktmpdir)
-  # copied from lib/tmpdir.rb
-  def Dir.mktmpdir(prefix_suffix=nil, tmpdir=nil)
-    case prefix_suffix
-    when nil
-      prefix = 'd'
-      suffix = ''
-    when String
-      prefix = prefix_suffix
-      suffix = ''
-    when Array
-      prefix = prefix_suffix[0]
-      suffix = prefix_suffix[1]
-    else
-      raise ArgumentError, 'unexpected prefix_suffix: #{prefix_suffix.inspect}'
-    end
-    tmpdir ||= Dir.tmpdir
-    t = Time.now.strftime('%Y%m%d')
-    n = nil
-    begin
-      path = '#{tmpdir}/#{prefix}#{t}-#{$$}-#{rand(0x100000000).to_s(36)}'
-      path << '-#{n}' if n
-      path << suffix
-      Dir.mkdir(path, 0700)
-    rescue Errno::EEXIST
-      n ||= 0
-      n += 1
-      retry
-    end
-    
-      def test_queue_push_return_value
-    q = Queue.new
-    retval = q.push(1)
-    assert_same q, retval
-  end
-    
-    # This file, the companion file tables.rb (autogenerated), and the module,
-# constants, and method defined herein are part of the implementation of the
-# built-in String class, not part of the standard library. They should
-# therefore never be gemified. They implement the methods
-# String#unicode_normalize, String#unicode_normalize!, and String#unicode_normalized?.
-#
-# They are placed here because they are written in Ruby. They are loaded on
-# demand when any of the three methods mentioned above is executed for the
-# first time. This reduces the memory footprint and startup time for scripts
-# and applications that do not use those methods.
-#
-# The name and even the existence of the module UnicodeNormalize and all of its
-# content are purely an implementation detail, and should not be exposed in
-# any test or spec or otherwise.
-    
-      # Clean the keg of formula @f
-  def clean
-    ObserverPathnameExtension.reset_counts!
-    
-        formulae = ARGV.include?('--installed') ? Formula.installed : Formula
-    recursive = ARGV.flag? '--recursive'
-    only_installed_arg = ARGV.include?('--installed') &&
-                         !ARGV.include?('--include-build') &&
-                         !ARGV.include?('--include-test') &&
-                         !ARGV.include?('--include-optional') &&
-                         !ARGV.include?('--skip-recommended')
-    
-    desc 'Creates a sandbox application for simulating the Spree code in a deployed Rails app'
-task :sandbox do
-  Bundler.with_clean_env do
-    exec('lib/sandbox.sh')
-  end
-end
-
-    
-            def address_params
-          params.require(:address).permit(permitted_address_attributes)
-        end
-    
-            def stock_location_params
-          params.require(:stock_location).permit(permitted_stock_location_attributes)
-        end
+        def add_required_validations
+      options = Paperclip::Attachment.default_options.deep_merge(@options)
+      if options[:validate_media_type] != false
+        name = @name
+        @klass.validates_media_type_spoof_detection name,
+          :if => ->(instance){ instance.send(name).dirty? }
       end
     end
-  end
-end
