@@ -1,138 +1,145 @@
 
         
-            # Add permissions and a description to the Staff category.
-    
-    puts 'Deduping #{links.size} links...'
-    
-        it 'shows the dry run pop up without previous events and selects the events tab when a event was created' do
-      open_dry_run_modal(agent)
-      click_on('Dry Run')
-      expect(page).to have_text('Biologists play reverse')
-      expect(page).to have_selector(:css, 'li[role='presentation'].active a[href='#tabEvents']')
-    end
-    
-          it 'generates a richer DOT script' do
-        expect(agents_dot(@agents, rich: true)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            (graph \[ [^\]]+ \];)?
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo,tooltip='Dot \x20 Foo',URL='#{Regexp.quote(agent_path(@foo))}'\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar1))}'\];
-            \k<bar2> \[label=bar2,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar2))}',style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3,tooltip='Dot \x20 Bar',URL='#{Regexp.quote(agent_path(@bar3))}'\];
-          \}
-          \z
-        }x)
-      end
-    end
-  end
-    
-        it 'in the future' do
-      expect(relative_distance_of_time_in_words(Time.now+5.minutes)).to eq('in 5m')
-    end
-  end
+        group :app do
+  gem 'rack'
+  gem 'sinatra'
+  gem 'sinatra-contrib'
+  gem 'thin'
+  gem 'sprockets'
+  gem 'sprockets-helpers'
+  gem 'erubi'
+  gem 'browser'
+  gem 'sass'
+  gem 'coffee-script'
 end
-
     
-        context 'running workers' do
-      before do
-        AgentRunner.class_variable_set(:@@agents, [HuginnScheduler, DelayedJobWorker])
-        stub.instance_of(HuginnScheduler).setup
-        stub.instance_of(DelayedJobWorker).setup
-      end
-    
-      describe '#pretty_jsonify' do
-    it 'escapes </script> tags in the output JSON' do
-      cleaned_json = Utils.pretty_jsonify(:foo => 'bar', :xss => '</script><script>alert('oh no!')</script>')
-      expect(cleaned_json).not_to include('</script>')
-      expect(cleaned_json).to include('<\\/script>')
-    end
-  end
-    
-      let :reverted_template do
-    old_template.merge('url' => '{{ url }}')
-  end
-    
-    gem 'activemodel-serializers-xml', github: 'rails/activemodel-serializers-xml'
-    
-      def sign_in_params
-    devise_parameter_sanitizer.sanitize(:sign_in)
-  end
-    
-          # Forgets the given resource by deleting a cookie
-      def forget_me(resource)
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.forget_me!
-        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
-      end
-    
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
-    
-        def set_account
-      @account = Account.find(params[:id])
-    end
-    
-          flash[:notice] = I18n.t('admin.accounts.resend_confirmation.success')
-      redirect_to admin_accounts_path
-    end
+          private
     
         private
     
-    class Api::SubscriptionsController < Api::BaseController
-  before_action :set_account
-  respond_to :txt
+            @counter += 1
     
+        def merge(hash)
+      return super unless hash.is_a? Hash
+      dup.merge!(hash)
     end
     
-      end
+            css('.l-sub-section', '.alert', '.banner').each do |node|
+          node.name = 'blockquote'
+        end
     
-      class IncludeCodeTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      @title = nil
-      @file = nil
-      if markup.strip =~ /\s*lang:(\S+)/i
-        @filetype = $1
-        markup = markup.strip.sub(/lang:\S+/i,'')
-      end
-      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
-        @title = $1 || nil
-        @file = $3
-      end
-      super
+              # Add the help option, which must be on every command.
+          opts.on_tail('-h', '--help', 'Print this help') do
+            safe_puts(opts.help)
+            return nil
+          end
+    
+            # Yields a VM for each target VM for the command.
+        #
+        # This is a convenience method for easily implementing methods that
+        # take a target VM (in the case of multi-VM) or every VM if no
+        # specific VM name is specified.
+        #
+        # @param [String] name The name of the VM. Nil if every VM.
+        # @param [Hash] options Additional tweakable settings.
+        # @option options [Symbol] :provider The provider to back the
+        #   machines with. All machines will be backed with this
+        #   provider. If none is given, a sensible default is chosen.
+        # @option options [Boolean] :reverse If true, the resulting order
+        #   of machines is reversed.
+        # @option options [Boolean] :single_target If true, then an
+        #   exception will be raised if more than one target is found.
+        def with_target_vms(names=nil, options=nil)
+          @logger.debug('Getting target VMs for command. Arguments:')
+          @logger.debug(' -- names: #{names.inspect}')
+          @logger.debug(' -- options: #{options.inspect}')
+    
+            # This is called as a last-minute hook that allows the configuration
+        # object to finalize itself before it will be put into use. This is
+        # a useful place to do some defaults in the case the user didn't
+        # configure something or so on.
+        #
+        # An example of where this sort of thing is used or has been used:
+        # the 'vm' configuration key uses this to make sure that at least
+        # one sub-VM has been defined: the default VM.
+        #
+        # The configuration object is expected to mutate itself.
+        def finalize!
+          # Default implementation is to do nothing.
+        end
+    
+            # This returns all the registered provider capabilities.
+        #
+        # @return [Hash]
+        def provider_capabilities
+          results = Hash.new { |h, k| h[k] = Registry.new }
+    
+      it 'defaults number to a random value' do
+    lambda { srand }.should_not raise_error
+    srand.should_not == 0
+  end
+    
+    script_binding = binding
+    
+        false
+  end
+    
+        def path
+      @path ||= HOMEBREW_PREFIX.join('Caskroom')
     end
     
-      def target_file
-    target_file = File.join(LogStash::Environment::LOGSTASH_HOME, 'plugins_package')
-    '#{target_file}#{file_extension}'
+        pod 'ObjCPod', path: 'ObjCPod'
+    pod 'SwiftPod', path: 'SwiftPod'
+    pod 'MixedPod', path: 'MixedPod'
+    pod 'CustomModuleMapPod', path: 'CustomModuleMapPod'
+    
+        # Ensure that the master spec repo exists
+    #
+    # @return [void]
+    #
+    def ensure_master_spec_repo_exists!
+      unless config.sources_manager.master_repo_functional?
+        Setup.new(CLAide::ARGV.new([])).run
+      end
+    end
+    
+            self.description = <<-DESC
+          Shows the content of the pods cache as a YAML tree output, organized by pod.
+          If `NAME` is given, only the caches for that pod will be included in the output.
+        DESC
+    
+    ```
+Executable Path: #{actual_path}
+```
+EOS
+      end
+    
+    Before do
+  gemfile = ENV['BUNDLE_GEMFILE'].to_s
+  ENV['BUNDLE_GEMFILE'] = File.join(Dir.pwd, gemfile) unless gemfile.start_with?(Dir.pwd)
+  @framework_version = nil
+end
+    
+    class PaperclipGenerator < ActiveRecord::Generators::Base
+  desc 'Create a migration to add paperclip-specific fields to your model. ' +
+       'The NAME argument is the name of your model, and the following ' +
+       'arguments are the name of the attachments'
+    
+        def clear
+      @attachments = Hash.new { |h,k| h[k] = {} }
+    end
+    
+        # scale to the requested geometry and preserve the aspect ratio
+    def scale_to(new_geometry)
+      scale = [new_geometry.width.to_f / self.width.to_f , new_geometry.height.to_f / self.height.to_f].min
+      Paperclip::Geometry.new((self.width * scale).round, (self.height * scale).round)
+    end
   end
 end
 
     
-          def get_installer_for(plugin_name)
-        uri = pack_uri(plugin_name)
-    
-        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
-    validate_cache_location
-    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
-    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
-    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
-  end
-    
-            it 'should raise a configuration error' do
-          expect do
-            plugin_class.new('oneString' => '${NoSuchVariable}')
-          end.to raise_error(LogStash::ConfigurationError)
-        end
+        def raise_if_blank_file
+      if path.blank?
+        raise Errors::NotIdentifiedByImageMagickError.new('Cannot find the geometry of a file with a blank name')
       end
+    end
