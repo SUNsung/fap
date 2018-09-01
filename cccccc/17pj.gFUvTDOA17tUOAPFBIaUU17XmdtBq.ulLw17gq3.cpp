@@ -1,431 +1,439 @@
 
         
-        #include 'swift/Markup/Markup.h'
-#include 'llvm/ADT/Optional.h'
-    
-    #ifdef __APPLE__
+        		if (b == h.first)
+			h.first = b->next;
     
     
-    {
-    {} // end namespace index
-} // end namespace swift
-    
-    class IndexDataConsumer {
-  virtual void anchor();
-    }
+    {	Translation();
+};
     
     
-    {
-    {} // end namespace Lowering
-} // end namespace swift
+    {	return false;
+};
     
     
-    {
-    {}  // namespace testing
-}  // namespace grpc
+    {		} else {
+			// WARN_PRINT('Ignoring packet with unknown address family');
+			uint8_t type = (uint8_t)IP::TYPE_NONE;
+			rb.write(&type, 1);
+		};
     
-    #include 'test/cpp/qps/benchmark_config.h'
-#include 'test/cpp/qps/driver.h'
-#include 'test/cpp/qps/report.h'
-#include 'test/cpp/qps/server.h'
-#include 'test/cpp/util/test_config.h'
-#include 'test/cpp/util/test_credentials_provider.h'
+    	t->id = (ID)GetCurrentThreadId(); // must implement
+	t->callback(t->user);
     
-    #include 'src/compiler/config.h'
-#include 'src/compiler/generator_helpers.h'
-    
-    
-    {}  // namespace grpc_python_generator
-    
-    namespace grpc {
-namespace {
-    }
-    }
-    
-    static double time_double(struct timeval* tv) {
-  return tv->tv_sec + 1e-6 * tv->tv_usec;
-}
-#endif
-    
-    #include 'src/compiler/python_generator.h'
-    
-    /*
- * Determine the next NUMA node according to state maintained in `curr_node`.
- */
-int next_numa_node(std::atomic_int& curr_node);
-/*
- * The number of numa nodes in the system
- */
-inline int num_numa_nodes() {
-  return use_numa ? numa_num_nodes : 1;
-}
-/*
- * Enable numa interleaving for the specified address range
- */
-void numa_interleave(void* start, size_t size);
-/*
- * Allocate the specified address range on the given node
- */
-void numa_bind_to(void* start, size_t size, int node);
-/*
- * Return true if node is part of the allowed set of numa nodes
- */
-inline bool numa_node_allowed(int node) {
-  if (numa_node_set == 0) return true;
-  return numa_node_set & (1u << node);
+    void ImGui_ImplFreeGLUT_ReshapeFunc(int w, int h)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.DisplaySize = ImVec2((float)w, (float)h);
 }
     
-    /**
- * DataBlock is a simple bump-allocating wrapper around a chunk of memory, with
- * basic tracking for unused memory and a simple interface to allocate it.
- *
- * Memory is allocated from the end of the block unless specifically allocated
- * using allocInner.
- *
- * Unused memory can be freed using free(). If the memory is at the end of the
- * block, the frontier will be moved back.
- *
- * Free memory is coalesced and allocation is done by best-fit.
- */
-struct DataBlock {
-  DataBlock() = default;
-    }
-    
-    namespace HPHP {
-    }
-    
-    void WeakRefData::invalidateWeakRef(uintptr_t ptr) {
-  auto weakmap = s_weakref_data.get();
-  auto map_entry = weakmap->find(ptr);
-  if (map_entry != weakmap->end()) {
-    map_entry->second.lock()->pointee = make_tv<KindOfUninit>();
-    weakmap->erase(map_entry);
-  }
-}
-    
-    size_t remap_interleaved_2m_pages(void* addr, size_t pages, int prot,
-                                  bool shared /* = false */) {
-#ifdef __linux__
-  assert(reinterpret_cast<uintptr_t>(addr) % size2m == 0);
-  assert(addr != nullptr);
-    }
-    
-    // For 2M pages, we want more control over protection and mapping flags.  Note
-// that MAP_FIXED can overwrite the existing mapping without checking/failing.
-void* mmap_2m(void* addr, int prot, int node, bool map_shared, bool map_fixed);
-    
-        // Font parameters and metrics.
-    struct FontInfo 
+        // Main loop
+    bool done = false;
+    while (!done)
     {
-        uint32_t    PixelHeight;        // Size this font was generated with.
-        float       Ascender;           // The pixel extents above the baseline in pixels (typically positive).
-        float       Descender;          // The extents below the baseline in pixels (typically negative).
-        float       LineSpacing;        // The baseline-to-baseline distance. Note that it usually is larger than the sum of the ascender and descender taken as absolute values. There is also no guarantee that no glyphs extend above or below subsequent baselines when using this distance. Think of it as a value the designer of the font finds appropriate.
-        float       LineGap;            // The spacing in pixels between one row's descent and the next row's ascent.
-        float       MaxAdvanceWidth;    // This field gives the maximum horizontal cursor advance for all glyphs in the font.
-    };
-    
-    
-    {     // Show/hide OSD keyboard
-    if (io.WantTextInput)
-    {
-        // Some text input widget is active?
-        if (!g_osdKeyboardEnabled)
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
         {
-            g_osdKeyboardEnabled = true;
-            s3eKeyboardSetInt(S3E_KEYBOARD_GET_CHAR, 1);    // show OSD keyboard
+            ImGui_ImplSDL2_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                done = true;
         }
     }
-    else
-    {
-        // No text input widget is active
-        if (g_osdKeyboardEnabled)
-        {
-            g_osdKeyboardEnabled = false;
-            s3eKeyboardSetInt(S3E_KEYBOARD_GET_CHAR, 0);    // hide OSD keyboard
-        }
-    }
-}
-
     
-    #include <stdint.h>
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
-#include 'imgui.h'
-#include 'imgui_impl_allegro5.h'
+    // Data
+static ID3D10Device*            g_pd3dDevice = NULL;
+static IDXGISwapChain*          g_pSwapChain = NULL;
+static ID3D10RenderTargetView*  g_mainRenderTargetView = NULL;
     
-    #include <GL/gl3w.h>    // This example is using gl3w to access OpenGL functions. You may use another OpenGL loader/header such as: glew, glext, glad, glLoadGen, etc.
-//#include <glew.h>
-//#include <glext.h>
-//#include <glad/glad.h>
-    
-                ImGui::Text('This is some useful text.');               // Display some text (you can use a format strings too)
-            ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
-    
-            // Rendering
-        ImGui::Render();
-        g_pd3dDevice->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
-        g_pd3dDevice->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
-        ImGui_ImplDX10_RenderDrawData(ImGui::GetDrawData());
-    
-        // Initialize Direct3D
-    if (CreateDeviceD3D(hwnd) < 0)
-    {
-        CleanupDeviceD3D();
-        UnregisterClass(_T('ImGui Example'), wc.hInstance);
-        return 1;
+    extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+        return true;
     }
     
-    // Returns the next Huffman-coded symbol.
-int ReadSymbol(const HuffmanTableEntry* table, BitReaderState* br) {
-  int nbits;
-  br->FillBitWindow();
-  int val = (br->val_ >> (br->bits_left_ - 8)) & 0xff;
-  table += val;
-  nbits = table->bits - 8;
-  if (nbits > 0) {
-    br->bits_left_ -= 8;
-    table += table->value;
-    val = (br->val_ >> (br->bits_left_ - nbits)) & ((1 << nbits) - 1);
-    table += val;
-  }
-  br->bits_left_ -= table->bits;
-  return table->value;
-}
+    static const int kCbToBlueTable[256] = {
+  -227, -225, -223, -222, -220, -218, -216, -214, -213, -211, -209, -207,
+  -206, -204, -202, -200, -198, -197, -195, -193, -191, -190, -188, -186,
+  -184, -183, -181, -179, -177, -175, -174, -172, -170, -168, -167, -165,
+  -163, -161, -159, -158, -156, -154, -152, -151, -149, -147, -145, -144,
+  -142, -140, -138, -136, -135, -133, -131, -129, -128, -126, -124, -122,
+  -120, -119, -117, -115, -113, -112, -110, -108, -106, -105, -103, -101,
+   -99,  -97,  -96,  -94,  -92,  -90,  -89,  -87,  -85,  -83,  -82,  -80,
+   -78,  -76,  -74,  -73,  -71,  -69,  -67,  -66,  -64,  -62,  -60,  -58,
+   -57,  -55,  -53,  -51,  -50,  -48,  -46,  -44,  -43,  -41,  -39,  -37,
+   -35,  -34,  -32,  -30,  -28,  -27,  -25,  -23,  -21,  -19,  -18,  -16,
+   -14,  -12,  -11,   -9,   -7,   -5,   -4,   -2,    0,    2,    4,    5,
+     7,    9,   11,   12,   14,   16,   18,   19,   21,   23,   25,   27,
+    28,   30,   32,   34,   35,   37,   39,   41,   43,   44,   46,   48,
+    50,   51,   53,   55,   57,   58,   60,   62,   64,   66,   67,   69,
+    71,   73,   74,   76,   78,   80,   82,   83,   85,   87,   89,   90,
+    92,   94,   96,   97,   99,  101,  103,  105,  106,  108,  110,  112,
+   113,  115,  117,  119,  120,  122,  124,  126,  128,  129,  131,  133,
+   135,  136,  138,  140,  142,  144,  145,  147,  149,  151,  152,  154,
+   156,  158,  159,  161,  163,  165,  167,  168,  170,  172,  174,  175,
+   177,  179,  181,  183,  184,  186,  188,  190,  191,  193,  195,  197,
+   198,  200,  202,  204,  206,  207,  209,  211,  213,  214,  216,  218,
+   220,  222,  223,  225,
+};
     
-    // Builds a JPEG-style huffman code from the given bit depths.
-void BuildHuffmanCode(uint8_t* depth, int* counts, int* values) {
-  for (int i = 0; i < JpegHistogram::kSize; ++i) {
-    if (depth[i] > 0) {
-      ++counts[depth[i]];
-    }
-  }
-  int offset[kJpegHuffmanMaxBitLength + 1] = { 0 };
-  for (int i = 1; i <= kJpegHuffmanMaxBitLength; ++i) {
-    offset[i] = offset[i - 1] + counts[i - 1];
-  }
-  for (int i = 0; i < JpegHistogram::kSize; ++i) {
-    if (depth[i] > 0) {
-      values[offset[depth[i]]++] = i;
+      // Sets the coordinates of the current macro-block for the purpose of
+  // CompareBlock() calls.
+  virtual void SwitchBlock(int block_x, int block_y,
+                           int factor_x, int factor_y) = 0;
+    
+    void DCT1d(const double* in, int stride, double* out) {
+  for (int x = 0; x < 8; ++x) {
+    out[x * stride] = 0.0;
+    for (int u = 0; u < 8; ++u) {
+      out[x * stride] += kDCTMatrix[8 * x + u] * in[u * stride];
     }
   }
 }
-    
-    static const uint8_t* kRangeLimit = kRangeLimitLut + 384;
-    
-    #endif  // GUETZLI_FDCT_H_
-
     
     namespace guetzli {
     }
     
-    // Output callback function with associated data.
-struct JPEGOutput {
-  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
-  bool Write(const uint8_t* buf, size_t len) const {
-    return (len == 0) || (cb(data, buf, len) == len);
-  }
- private:
-  JPEGOutputHook cb;
-  void* data;
+    
+    {  size_t len;
+  std::unique_ptr<uint8_t[]> data;
+  size_t pos;
+  uint64_t put_buffer;
+  int put_bits;
+  bool overflow;
 };
     
-      if (args[1]->IsUndefined()) {
-    db_wrapper->status_ = db_wrapper->db_->Delete(
-        rocksdb::WriteOptions(), arg0);
-  } else {
-    if (!db_wrapper->HasFamilyNamed(arg1, db_wrapper)) {
-      return scope.Close(Boolean::New(false));
-    }
-    db_wrapper->status_ = db_wrapper->db_->Delete(
-        rocksdb::WriteOptions(), db_wrapper->columnFamilies_[arg1], arg0);
+    void InitJPEGDataForYUV444(int w, int h, JPEGData* jpg) {
+  jpg->width = w;
+  jpg->height = h;
+  jpg->max_h_samp_factor = 1;
+  jpg->max_v_samp_factor = 1;
+  jpg->MCU_rows = (h + 7) >> 3;
+  jpg->MCU_cols = (w + 7) >> 3;
+  jpg->quant.resize(3);
+  jpg->components.resize(3);
+  for (int i = 0; i < 3; ++i) {
+    JPEGComponent* c = &jpg->components[i];
+    c->id = i;
+    c->h_samp_factor = 1;
+    c->v_samp_factor = 1;
+    c->quant_idx = i;
+    c->width_in_blocks = jpg->MCU_cols;
+    c->height_in_blocks = jpg->MCU_rows;
+    c->num_blocks = c->width_in_blocks * c->height_in_blocks;
+    c->coeffs.resize(c->num_blocks * kDCTBlockSize);
   }
-    
-    class StringAppendOperator : public AssociativeMergeOperator {
- public:
-  // Constructor: specify delimiter
-  explicit StringAppendOperator(char delim_char);
-    }
-    
-     private: // Private Functions
-  /// Calls InsertBefore or InsertAfter
-  int Insert(const std::string& key, const std::string& pivot,
-             const std::string& value, bool insert_after);
- private:
-  std::string db_name_;       // The actual database name/path
-  WriteOptions put_option_;
-  ReadOptions get_option_;
-    
-    namespace rocksdb {
-    }
-    
-    
-    {    int ret = _GetIoctx(fpath)->stat(fid, &file_size, &mtime);
-    if (ret < 0) {
-      if (Status::NotFound() == err_to_status(ret)) {
-        *file_mtime = static_cast<uint64_t>(mtime);
-        s = Status::OK();
-      } else {
-        s = err_to_status(ret);
-      }
-    } else {
-      s = Status::OK();
-    }
-  } while (0);
-    
-    void SyncPoint::SetCallBack(const std::string& point,
-  const std::function<void(void*)>& callback) {
-  impl_->SetCallBack(point, callback);
 }
     
-    // This class contains a fixed array of buckets, each
-// pointing to a skiplist (null if the bucket is empty).
-// bucket_count: number of fixed array buckets
-// skiplist_height: the max height of the skiplist
-// skiplist_branching_factor: probabilistic size ratio between adjacent
-//                            link lists in the skiplist
-extern MemTableRepFactory* NewHashSkipListRepFactory(
-    size_t bucket_count = 1000000, int32_t skiplist_height = 4,
-    int32_t skiplist_branching_factor = 4
-);
+    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
+// quantization table must have 3 * kDCTBlockSize values.
+bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     const int* quant, JPEGData* jpg);
     
-    #include 'rocksjni/compaction_filter_factory_jnicallback.h'
-#include 'rocksjni/portal.h'
-    
-    
-    {}  //namespace rocksdb
-    
-    #ifndef JAVA_ROCKSJNI_COMPARATORJNICALLBACK_H_
-#define JAVA_ROCKSJNI_COMPARATORJNICALLBACK_H_
-    
-    void SyncPoint::Data::ClearCallBack(const std::string& point) {
-  std::unique_lock<std::mutex> lock(mutex_);
-  while (num_callbacks_running_ > 0) {
-    cv_.wait(lock);
-  }
-  callbacks_.erase(point);
-}
+      void PrintCallGraph() {
+    for (Callgraph::const_iterator i = callgraph_.begin(), e = callgraph_.end();
+         i != e;
+         ++i) {
+      std::cout << i->first << '\n';
+    }
+    }
     
     
     {
-    {  void ClearCallBack(const std::string& point);
-  void ClearAllCallBacks();
-  void EnableProcessing() {
-    enabled_ = true;
-  }
-  void DisableProcessing() {
-    enabled_ = false;
-  }
-  void ClearTrace() {
-    std::lock_guard<std::mutex> lock(mutex_);
-    cleared_points_.clear();
-  }
-  bool DisabledByMarker(const std::string& point,
-                        std::thread::id thread_id) {
-    auto marked_point_iter = marked_thread_id_.find(point);
-    return marked_point_iter != marked_thread_id_.end() &&
-           thread_id != marked_point_iter->second;
-  }
-  void Process(const std::string& point, void* cb_arg);
-};
-}
-#endif // NDEBUG
+    {}  // namespace internal
+}  // namespace v8
+    
+    namespace v8 {
+namespace internal {
+    }
+    }
+    
+      Node* EmitCreateShallowObjectLiteral(Node* feedback_vector, Node* slot,
+                                       Label* call_runtime);
+  Node* EmitCreateEmptyObjectLiteral(Node* context);
+    
+    #endif  // V8_BUILTINS_BUILTINS_LAZY_GEN_H_
 
     
-    // Wrapper around the platform efficient
-// or otherwise preferrable implementation
-using Thread = WindowsThread;
+    #include 'torque-generated/builtins-base-from-dsl-gen.h'
     
-    HistogramBucketMapper::HistogramBucketMapper() {
-  // If you change this, you also need to change
-  // size of array buckets_ in HistogramImpl
-  bucketValues_ = {1, 2};
-  valueIndexMap_ = {{1, 0}, {2, 1}};
-  double bucket_val = static_cast<double>(bucketValues_.back());
-  while ((bucket_val = 1.5 * bucket_val) <= static_cast<double>(port::kMaxUint64)) {
-    bucketValues_.push_back(static_cast<uint64_t>(bucket_val));
-    // Extracts two most significant digits to make histogram buckets more
-    // human-readable. E.g., 172 becomes 170.
-    uint64_t pow_of_ten = 1;
-    while (bucketValues_.back() / 10 > 10) {
-      bucketValues_.back() /= 10;
-      pow_of_ten *= 10;
-    }
-    bucketValues_.back() *= pow_of_ten;
-    valueIndexMap_[bucketValues_.back()] = bucketValues_.size() - 1;
+      // Client side
+  printer->Print(
+      'class StubInterface {\n'
+      ' public:\n');
+  printer->Indent();
+  printer->Print('virtual ~StubInterface() {}\n');
+  for (int i = 0; i < service->method_count(); ++i) {
+    printer->Print(service->method(i)->GetLeadingComments('//').c_str());
+    PrintHeaderClientMethodInterfaces(printer, service->method(i).get(), vars,
+                                      true);
+    printer->Print(service->method(i)->GetTrailingComments('//').c_str());
   }
-  maxBucketValue_ = bucketValues_.back();
-  minBucketValue_ = bucketValues_.front();
-}
-    
-    
-    {  s_rule_factory.Register(TrafficRuleConfig::DESTINATION,
-                          [](const TrafficRuleConfig &config) -> TrafficRule * {
-                            return new Destination(config);
-                          });
-  s_rule_factory.Register(TrafficRuleConfig::FRONT_VEHICLE,
-                          [](const TrafficRuleConfig &config) -> TrafficRule * {
-                            return new FrontVehicle(config);
-                          });
-  s_rule_factory.Register(TrafficRuleConfig::KEEP_CLEAR,
-                          [](const TrafficRuleConfig &config) -> TrafficRule * {
-                            return new KeepClear(config);
-                          });
-  s_rule_factory.Register(TrafficRuleConfig::PULL_OVER,
-                          [](const TrafficRuleConfig &config) -> TrafficRule * {
-                            return new PullOver(config);
-                          });
-  s_rule_factory.Register(TrafficRuleConfig::REFERENCE_LINE_END,
-                          [](const TrafficRuleConfig &config) -> TrafficRule * {
-                            return new ReferenceLineEnd(config);
-                          });
-  s_rule_factory.Register(TrafficRuleConfig::REROUTING,
-                          [](const TrafficRuleConfig &config) -> TrafficRule * {
-                            return new Rerouting(config);
-                          });
-  s_rule_factory.Register(TrafficRuleConfig::SIGNAL_LIGHT,
-                          [](const TrafficRuleConfig &config) -> TrafficRule * {
-                            return new SignalLight(config);
-                          });
-  s_rule_factory.Register(TrafficRuleConfig::STOP_SIGN,
-                          [](const TrafficRuleConfig &config) -> TrafficRule * {
-                            return new StopSign(config);
-                          });
-}
-    
-      // @brief: Transform 3D position of objects into targeted space
-  // @param [in/out] objects : object lists with 3D positions in camera space,
-  // which get transformed into targeted 3D space
-  virtual bool Transform(
-      std::vector<std::shared_ptr<VisualObject>>* objects) = 0;
-    
-    
-    {  double relative_time = 0.0;
-  while (relative_time < FLAGS_trajectory_time_length) {
-    std::vector<Box2d> predicted_env;
-    for (const Obstacle* obstacle : obstacles_considered) {
-      // If an obstacle has no trajectory, it is considered as static.
-      // Obstacle::GetPointAtTime has handled this case.
-      TrajectoryPoint point = obstacle->GetPointAtTime(relative_time);
-      Box2d box = obstacle->GetBoundingBox(point);
-      box.LongitudinalExtend(2.0 * FLAGS_lon_collision_buffer);
-      box.LateralExtend(2.0 * FLAGS_lat_collision_buffer);
-      predicted_env.push_back(std::move(box));
-    }
-    predicted_bounding_rectangles_.push_back(std::move(predicted_env));
-    relative_time += FLAGS_trajectory_time_resolution;
+  printer->Outdent();
+  printer->Print('private:\n');
+  printer->Indent();
+  for (int i = 0; i < service->method_count(); ++i) {
+    PrintHeaderClientMethodInterfaces(printer, service->method(i).get(), vars,
+                                      false);
   }
+  printer->Outdent();
+  printer->Print('};\n');
+  printer->Print(
+      'class Stub final : public StubInterface'
+      ' {\n public:\n');
+  printer->Indent();
+  printer->Print(
+      'Stub(const std::shared_ptr< ::grpc::ChannelInterface>& '
+      'channel);\n');
+  for (int i = 0; i < service->method_count(); ++i) {
+    PrintHeaderClientMethod(printer, service->method(i).get(), vars, true);
+  }
+  printer->Outdent();
+  printer->Print('\n private:\n');
+  printer->Indent();
+  printer->Print('std::shared_ptr< ::grpc::ChannelInterface> channel_;\n');
+  for (int i = 0; i < service->method_count(); ++i) {
+    PrintHeaderClientMethod(printer, service->method(i).get(), vars, false);
+  }
+  for (int i = 0; i < service->method_count(); ++i) {
+    PrintHeaderClientMethodData(printer, service->method(i).get(), vars);
+  }
+  printer->Outdent();
+  printer->Print('};\n');
+  printer->Print(
+      'static std::unique_ptr<Stub> NewStub(const std::shared_ptr< '
+      '::grpc::ChannelInterface>& channel, '
+      'const ::grpc::StubOptions& options = ::grpc::StubOptions());\n');
+    
+    template <typename T> struct NamedHashFunction {
+  const char *name;
+    }
+    
+      // If schemas used contain include statements, call this function for every
+  // directory the parser should search them for.
+  void AddIncludeDirectory(const char *path) { include_paths_.push_back(path); }
+    
+      // Get access to the root:
+  auto monster = GetMonster(builder.GetBufferPointer());
+    
+    // Generate text for non-scalar field.
+static bool GenFieldOffset(const FieldDef &fd, const Table *table, bool fixed,
+                           int indent, Type *union_type, const IDLOptions &opts,
+                           std::string *_text) {
+  const void *val = nullptr;
+  if (fixed) {
+    // The only non-scalar fields in structs are structs.
+    FLATBUFFERS_ASSERT(IsStruct(fd.value.type));
+    val = reinterpret_cast<const Struct *>(table)->GetStruct<const void *>(
+        fd.value.offset);
+  } else if (fd.flexbuffer) {
+    auto vec = table->GetPointer<const Vector<uint8_t> *>(fd.value.offset);
+    auto root = flexbuffers::GetRoot(vec->data(), vec->size());
+    root.ToString(true, opts.strict_json, *_text);
+    return true;
+  } else if (fd.nested_flatbuffer) {
+    auto vec = table->GetPointer<const Vector<uint8_t> *>(fd.value.offset);
+    auto root = GetRoot<Table>(vec->data());
+    return GenStruct(*fd.nested_flatbuffer, root, indent, opts, _text);
+  } else {
+    val = IsStruct(fd.value.type)
+              ? table->GetStruct<const void *>(fd.value.offset)
+              : table->GetPointer<const void *>(fd.value.offset);
+  }
+  return Print(val, fd.value.type, indent, union_type, opts, _text);
 }
     
-      /**
-   * @brief Determines whether this box overlaps a given line segment
-   * @param line_segment The line-segment
-   * @return True if they overlap
-   */
-  bool HasOverlap(const LineSegment2d &line_segment) const;
-    
-     private:
-  std::uint32_t QueryPositionMatchedPoint(
-      const common::TrajectoryPoint& start_point,
-      const std::vector<common::TrajectoryPoint>& trajectory) const;
+    class MonsterStorage final {
+ public:
+  static constexpr char const* service_full_name() {
+    return 'MyGame.Example.MonsterStorage';
+  }
+  class StubInterface {
+   public:
+    virtual ~StubInterface() {}
+    virtual ::grpc::Status Store(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, flatbuffers::grpc::Message<Stat>* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>> AsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>>(AsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>> PrepareAsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>>(PrepareAsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>> Retrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) {
+      return std::unique_ptr< ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>>(RetrieveRaw(context, request));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>> AsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>>(AsyncRetrieveRaw(context, request, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>> PrepareAsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>>(PrepareAsyncRetrieveRaw(context, request, cq));
+    }
+  private:
+    virtual ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>* AsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>* PrepareAsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>* RetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>* AsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>* PrepareAsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) = 0;
+  };
+  class Stub final : public StubInterface {
+   public:
+    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel);
+    ::grpc::Status Store(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, flatbuffers::grpc::Message<Stat>* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>> AsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>>(AsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>> PrepareAsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>>(PrepareAsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>> Retrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) {
+      return std::unique_ptr< ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>>(RetrieveRaw(context, request));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>> AsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>>(AsyncRetrieveRaw(context, request, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>> PrepareAsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>>(PrepareAsyncRetrieveRaw(context, request, cq));
+    }
+  
+   private:
+    std::shared_ptr< ::grpc::ChannelInterface> channel_;
+    ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>* AsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>* PrepareAsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>* RetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) override;
+    ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>* AsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) override;
+    ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>* PrepareAsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) override;
+    const ::grpc::internal::RpcMethod rpcmethod_Store_;
+    const ::grpc::internal::RpcMethod rpcmethod_Retrieve_;
+  };
+  static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
+  
+  class Service : public ::grpc::Service {
+   public:
+    Service();
+    virtual ~Service();
+    virtual ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response);
+    virtual ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer);
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_Store : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithAsyncMethod_Store() {
+      ::grpc::Service::MarkMethodAsync(0);
+    }
+    ~WithAsyncMethod_Store() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    void RequestStore(::grpc::ServerContext* context, flatbuffers::grpc::Message<Monster>* request, ::grpc::ServerAsyncResponseWriter< flatbuffers::grpc::Message<Stat>>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_Retrieve : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithAsyncMethod_Retrieve() {
+      ::grpc::Service::MarkMethodAsync(1);
+    }
+    ~WithAsyncMethod_Retrieve() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    void RequestRetrieve(::grpc::ServerContext* context, flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerAsyncWriter< flatbuffers::grpc::Message<Monster>>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncServerStreaming(1, context, request, writer, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef   WithAsyncMethod_Store<  WithAsyncMethod_Retrieve<  Service   >   >   AsyncService;
+  template <class BaseClass>
+  class WithGenericMethod_Store : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithGenericMethod_Store() {
+      ::grpc::Service::MarkMethodGeneric(0);
+    }
+    ~WithGenericMethod_Store() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_Retrieve : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithGenericMethod_Retrieve() {
+      ::grpc::Service::MarkMethodGeneric(1);
+    }
+    ~WithGenericMethod_Retrieve() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_Store : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithStreamedUnaryMethod_Store() {
+      ::grpc::Service::MarkMethodStreamed(0,
+        new ::grpc::internal::StreamedUnaryHandler< flatbuffers::grpc::Message<Monster>, flatbuffers::grpc::Message<Stat>>(std::bind(&WithStreamedUnaryMethod_Store<BaseClass>::StreamedStore, this, std::placeholders::_1, std::placeholders::_2)));
+    }
+    ~WithStreamedUnaryMethod_Store() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedStore(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< flatbuffers::grpc::Message<Monster>,flatbuffers::grpc::Message<Stat>>* server_unary_streamer) = 0;
+  };
+  typedef   WithStreamedUnaryMethod_Store<  Service   >   StreamedUnaryService;
+  template <class BaseClass>
+  class WithSplitStreamingMethod_Retrieve : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithSplitStreamingMethod_Retrieve() {
+      ::grpc::Service::MarkMethodStreamed(1,
+        new ::grpc::internal::SplitServerStreamingHandler< flatbuffers::grpc::Message<Stat>, flatbuffers::grpc::Message<Monster>>(std::bind(&WithSplitStreamingMethod_Retrieve<BaseClass>::StreamedRetrieve, this, std::placeholders::_1, std::placeholders::_2)));
+    }
+    ~WithSplitStreamingMethod_Retrieve() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    // replace default version of method with split streamed
+    virtual ::grpc::Status StreamedRetrieve(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< flatbuffers::grpc::Message<Stat>,flatbuffers::grpc::Message<Monster>>* server_split_streamer) = 0;
+  };
+  typedef   WithSplitStreamingMethod_Retrieve<  Service   >   SplitStreamedService;
+  typedef   WithStreamedUnaryMethod_Store<  WithSplitStreamingMethod_Retrieve<  Service   >   >   StreamedService;
+};
