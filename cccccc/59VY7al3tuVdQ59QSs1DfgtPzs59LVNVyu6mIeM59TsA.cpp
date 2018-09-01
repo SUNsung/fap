@@ -1,233 +1,151 @@
 
         
-        class DocComment {
-  const Decl *D;
-  const swift::markup::Document *Doc = nullptr;
-  const swift::markup::CommentParts Parts;
-    }
-    
-    namespace swift {
-    }
-    
-      IndexSymbol() = default;
-    
-    
-    {
-    {
-    {  unsigned getNumFixitsApplied() const {
-    return NumFixitsApplied;
-  }
-};
-} // end namespace migrator
-} // end namespace swift
-    
-    
-    {} // namespace SourceKit
-    
-    // Tests that the RotatingTranspose function does the right thing for various
-// transformations.
-// dims=[5, 4, 3, 2]->[5, 2, 4, 3]
-TEST_F(MatrixTest, RotatingTranspose_3_1) {
-  GENERIC_2D_ARRAY<int> m;
-  src_.RotatingTranspose(dims_, kNumDims_, 3, 1, &m);
-  m.ResizeNoInit(kInputSize_ / 3, 3);
-  // Verify that the result is:
-  // output tensor=[[[[0, 2, 4][6, 8, 10][12, 14, 16][18, 20, 22]]
-  //                 [[1, 3, 5][7, 9, 11][13, 15, 17][19, 21, 23]]]
-  //                [[[24, 26, 28]...
-  EXPECT_EQ(0, m(0, 0));
-  EXPECT_EQ(2, m(0, 1));
-  EXPECT_EQ(4, m(0, 2));
-  EXPECT_EQ(6, m(1, 0));
-  EXPECT_EQ(1, m(4, 0));
-  EXPECT_EQ(24, m(8, 0));
-  EXPECT_EQ(26, m(8, 1));
-  EXPECT_EQ(25, m(12, 0));
-}
-    
-      // Constructor for NT_LSTM (regular 1 or 2-d LSTM), NT_LSTM_SOFTMAX (LSTM with
-  // additional softmax layer included and fed back into the input at the next
-  // timestep), or NT_LSTM_SOFTMAX_ENCODED (as LSTM_SOFTMAX, but the feedback
-  // is binary encoded instead of categorical) only.
-  // 2-d and bidi softmax LSTMs are not rejected, but are impossible to build
-  // in the conventional way because the output feedback both forwards and
-  // backwards in time does become impossible.
-  LSTM(const STRING& name, int num_inputs, int num_states, int num_outputs,
-       bool two_dimensional, NetworkType type);
-  virtual ~LSTM();
-    
-    template <bool del, class R, class T, class A1, class A2>
-class _ConstTessMemberResultCallback_0_2 : public TessResultCallback2<R,A1,A2> {
+        /// @brief Fills a Blob with constant or randomly-generated data.
+template <typename Dtype>
+class Filler {
  public:
-  typedef TessResultCallback2<R,A1,A2> base;
-  typedef R (T::*MemberSignature)(A1,A2) const;
-    }
+  explicit Filler(const FillerParameter& param) : filler_param_(param) {}
+  virtual ~Filler() {}
+  virtual void Fill(Blob<Dtype>* blob) = 0;
+ protected:
+  FillerParameter filler_param_;
+};  // class Filler
     
-    const char *kHyphenLikeUTF8[] = {
-  '-',       // ASCII hyphen-minus
-  '\u05BE',  // word hyphen in hybrew
-  '\u2010',  // hyphen
-  '\u2011',  // non-breaking hyphen
-  '\u2012',  // a hyphen the same width as digits
-  '\u2013',  // en dash
-  '\u2014',  // em dash
-  '\u2015',  // horizontal bar
-  '\u2212',  // arithmetic minus sign
-  '\uFE58',  // small em dash
-  '\uFE63',  // small hyphen-minus
-  '\uFF0D',  // fullwidth hyphen-minus
-  nullptr,      // end of our list
-};
-    
-    // Returns true if the given blob overlaps more than max_overlaps blobs
-// in the current grid.
-bool CCNonTextDetect::BlobOverlapsTooMuch(BLOBNBOX* blob, int max_overlaps) {
-  // Search the grid to see what intersects it.
-  // Setup a Rectangle search for overlapping this blob.
-  BlobGridSearch rsearch(this);
-  const TBOX& box = blob->bounding_box();
-  rsearch.StartRectSearch(box);
-  rsearch.SetUniqueMode(true);
-  BLOBNBOX* neighbour;
-  int overlap_count = 0;
-  while (overlap_count <= max_overlaps &&
-         (neighbour = rsearch.NextRectSearch()) != nullptr) {
-    if (box.major_overlap(neighbour->bounding_box())) {
-      ++overlap_count;
-      if (overlap_count > max_overlaps)
-        return true;
-    }
-  }
-  return false;
-}
-    
-    #include <memory>
+     protected:
+  /* Implement this method in your subclass
+      with the code you want your thread to run. */
+  virtual void InternalThreadEntry() {}
     
       /**
-   * Invoked when there is no data to be read or written and the stream is
-   * closed successfully remotely and locally. Once invoked, no further callback
-   * methods will be invoked.
+   * @brief Implements common layer setup functionality.
+   *
+   * @param bottom the preshaped input blobs
+   * @param top
+   *     the allocated but unshaped output blobs, to be shaped by Reshape
+   *
+   * Checks that the number of bottom and top blobs is correct.
+   * Calls LayerSetUp to do special layer setup for individual layer types,
+   * followed by Reshape to set up sizes of top blobs and internal buffers.
+   * Sets up the loss weight multiplier blobs for any non-zero loss weights.
+   * This method may not be overridden.
    */
-  void (*on_succeded)(bidirectional_stream* stream);
+  void SetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top) {
+    CheckBlobCounts(bottom, top);
+    LayerSetUp(bottom, top);
+    Reshape(bottom, top);
+    SetLossWeights(top);
+  }
     
-    #include 'test/core/util/test_config.h'
-#include 'test/cpp/qps/benchmark_config.h'
-#include 'test/cpp/qps/driver.h'
-#include 'test/cpp/qps/report.h'
-#include 'test/cpp/qps/server.h'
-#include 'test/cpp/util/test_config.h'
-#include 'test/cpp/util/test_credentials_provider.h'
-    
-    #include <grpc/support/alloc.h>
-#include <grpc/support/log.h>
-#include <grpc/support/string_util.h>
-#include <grpc/support/time.h>
-#include 'src/core/ext/filters/client_channel/resolver/dns/c_ares/grpc_ares_wrapper.h'
-#include 'src/core/lib/gpr/string.h'
-#include 'src/core/lib/iomgr/iomgr_internal.h'
-#include 'src/core/lib/iomgr/sockaddr_utils.h'
-    
-    #include <grpc/support/alloc.h>
-#include <grpc/support/log.h>
-#include <grpc/support/log_windows.h>
-#include <grpc/support/string_util.h>
-#include <grpc/support/time.h>
-#include <string.h>
-#include 'src/core/lib/gpr/string.h'
-#include 'src/core/lib/gprpp/memory.h'
-#include 'src/core/lib/iomgr/combiner.h'
-#include 'src/core/lib/iomgr/socket_windows.h'
-#include 'src/core/lib/iomgr/tcp_windows.h'
-#include 'src/core/lib/slice/slice_internal.h'
-    
-    static void on_txt_done_locked(void* arg, int status, int timeouts,
-                               unsigned char* buf, int len) {
-  gpr_log(GPR_DEBUG, 'on_txt_done_locked');
-  char* error_msg;
-  grpc_ares_request* r = static_cast<grpc_ares_request*>(arg);
-  const size_t prefix_len = sizeof(g_service_config_attribute_prefix) - 1;
-  struct ares_txt_ext* result = nullptr;
-  struct ares_txt_ext* reply = nullptr;
-  grpc_error* error = GRPC_ERROR_NONE;
-  if (status != ARES_SUCCESS) goto fail;
-  status = ares_parse_txt_reply_ext(buf, len, &reply);
-  if (status != ARES_SUCCESS) goto fail;
-  // Find service config in TXT record.
-  for (result = reply; result != nullptr; result = result->next) {
-    if (result->record_start &&
-        memcmp(result->txt, g_service_config_attribute_prefix, prefix_len) ==
-            0) {
-      break;
+    template <typename Dtype>
+class BasePrefetchingDataLayer :
+    public BaseDataLayer<Dtype>, public InternalThread {
+ public:
+  explicit BasePrefetchingDataLayer(const LayerParameter& param);
+  // LayerSetUp: implements common data layer setup functionality, and calls
+  // DataLayerSetUp to do special data layer setup for individual layer types.
+  // This method may not be overridden.
+  void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
-  }
-  // Found a service config record.
-  if (result != nullptr) {
-    size_t service_config_len = result->length - prefix_len;
-    *r->service_config_json_out =
-        static_cast<char*>(gpr_malloc(service_config_len + 1));
-    memcpy(*r->service_config_json_out, result->txt + prefix_len,
-           service_config_len);
-    for (result = result->next; result != nullptr && !result->record_start;
-         result = result->next) {
-      *r->service_config_json_out = static_cast<char*>(
-          gpr_realloc(*r->service_config_json_out,
-                      service_config_len + result->length + 1));
-      memcpy(*r->service_config_json_out + service_config_len, result->txt,
-             result->length);
-      service_config_len += result->length;
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    namespace caffe {
     }
-    (*r->service_config_json_out)[service_config_len] = '\0';
-    gpr_log(GPR_INFO, 'found service config: %s', *r->service_config_json_out);
-  }
-  // Clean up.
-  ares_free_data(reply);
-  goto done;
-fail:
-  gpr_asprintf(&error_msg, 'C-ares TXT lookup status is not ARES_SUCCESS: %s',
-               ares_strerror(status));
-  error = GRPC_ERROR_CREATE_FROM_COPIED_STRING(error_msg);
-  gpr_free(error_msg);
-  if (r->error == GRPC_ERROR_NONE) {
-    r->error = error;
-  } else {
-    r->error = grpc_error_add_child(error, r->error);
-  }
-done:
-  grpc_ares_request_unref_locked(r);
+    
+    	static Semaphore *create_semaphore_posix();
+    
+    	IP::Type sock_type;
+	int sockfd;
+    
+    
+    {	TCPServerPosix();
+	~TCPServerPosix();
+};
+    
+    	struct sockaddr_storage addr = { 0 };
+	size_t addr_size = _set_listen_sockaddr(&addr, p_port, sock_type, IP_Address());
+    
+    	sockfd = _socket_create(sock_type, SOCK_STREAM, IPPROTO_TCP);
+	ERR_FAIL_COND_V(sockfd == INVALID_SOCKET, FAILED);
+    
+    
+    {#ifndef BOOST_NO_EXCEPTIONS
+   if(0 == (this->flags() & regex_constants::no_except))
+   {
+      boost::regex_error e(message, error_code, position);
+      e.raise();
+   }
+#else
+   (void)position; // suppress warnings.
+#endif
 }
     
-    #endif
-
+       unsigned short translate(unsigned short c) const 
+   { 
+      return c; 
+   }
+   unsigned short translate_nocase(unsigned short c) const 
+   { 
+      return (std::towlower)((wchar_t)c); 
+   }
     
-    ///////////////////////////////////////////////////////////////////////////////
+    template <class T>
+bool concrete_protected_call<T>::call()const
+{
+   return (obj->*proc)();
+}
     
-      // ref counting
-  void incRefCount();
-  void decRefCount();
+    //
+// define BOOST_REGEX_NO_FWD if this
+// header doesn't work!
+//
+#ifdef BOOST_REGEX_NO_FWD
+#  ifndef BOOST_RE_REGEX_HPP
+#     include <boost/regex.hpp>
+#  endif
+#else
     
-    inline void initNuma() {}
-inline constexpr int next_numa_node(std::atomic_int& curr_node) { return 0; }
-inline constexpr int num_numa_nodes() { return 1; }
-inline void numa_interleave(void* start, size_t size) {}
-inline void numa_bind_to(void* start, size_t size, int node) {}
-inline constexpr bool numa_node_allowed(int node) { return true; }
     
-      Address dest() const { return m_destBase + (m_frontier - m_base); }
-    
-    void BumpMapper::append(BumpMapper* m) {
-  // add things one by one so that we can easily avoid loops in the chain.
-  assert(!m->m_fallback);
-  assert(m != this);
-  if (m_fallback) {
-    return m_fallback->append(m);
+    {   void BOOST_REGEX_CALL align()
+   {
+      // move end up to a boundary:
+      end = start + (((end - start) + padding_mask) & ~padding_mask);
+   }
+   void swap(raw_storage& that)
+   {
+      std::swap(start, that.start);
+      std::swap(end, that.end);
+      std::swap(last, that.last);
   }
-  m_fallback = m;
+};
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex_format.hpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Provides formatting output routines for search and replace
+  *                operations.  Note this is an internal header file included
+  *                by regex.hpp, do not include on its own.
+  */
+    
+    template <class BidiIterator, class Allocator, class charT, class traits>
+bool regex_search(BidiIterator first, BidiIterator last, 
+                  match_results<BidiIterator, Allocator>& m, 
+                  const basic_regex<charT, traits>& e, 
+                  match_flag_type flags = match_default)
+{
+   return regex_search(first, last, m, e, flags, first);
 }
     
-    #include 'hphp/util/alloc.h'
-    
-    #include 'hphp/runtime/vm/jit/irlower-internal.h'
-    
-    arr_lval SetArray::LvalStrRef(ArrayData* ad, StringData*, bool) {
-  throwRefInvalidArrayValueException(ad);
-}
+    typedef regex_token_iterator<const char*> cregex_token_iterator;
+typedef regex_token_iterator<std::string::const_iterator> sregex_token_iterator;
+#ifndef BOOST_NO_WREGEX
+typedef regex_token_iterator<const wchar_t*> wcregex_token_iterator;
+typedef regex_token_iterator<std::wstring::const_iterator> wsregex_token_iterator;
+#endif
