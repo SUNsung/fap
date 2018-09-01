@@ -1,340 +1,264 @@
 
         
-        using base::MessageLoop;
-using base::CommandLine;
-using content::BrowserThread;
-using content::Shell;
-using content::ShellBrowserContext;
-using content::RenderProcessHost;
-    
-      int id() const { return id_; }
-  std::string extension_id_;
-  ObjectManager* object_manager() const { return object_manager_.get(); }
-    
-    
-    
-    #include 'base/strings/string_piece.h'
-#include 'v8/include/v8.h'
-    
-    void Clipboard::SetText(std::string& text) {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  ui::Clipboard::ObjectMap map;
-  map[ui::Clipboard::CBF_TEXT].push_back(
-      std::vector<char>(text.begin(), text.end()));
-  clipboard->WriteObjects(ui::CLIPBOARD_TYPE_COPY_PASTE, map);
-}
-    
-    void MenuItem::SetEnabled(bool enabled) {
-  is_enabled_ = enabled;
-  if (menu_)
-    menu_->UpdateStates();
-}
-    
-     protected:
-  ~NwAppClearAppCacheFunction() override;
-    
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
-};
-    
-    void dAB(cv::InputArray A, InputArray B, OutputArray dABdA, OutputArray dABdB);
-    
-    
-    {    sizes[OUTPUT][0] = sizes[REF_OUTPUT][0] = cvSize(1, 1);
-    types[OUTPUT][0] = types[REF_OUTPUT][0] = CV_8UC1;
-}
-    
-                static __device__ __forceinline__ int atomicMin(int* address, int val)
-            {
-                return ::atomicMin(address, val);
-            }
-            static __device__ __forceinline__ float atomicMin(float* address, float val)
-            {
-            #if __CUDA_ARCH__ >= 120
-                int* address_as_i = (int*) address;
-                int old = *address_as_i, assumed;
-                do {
-                    assumed = old;
-                    old = ::atomicCAS(address_as_i, assumed,
-                        __float_as_int(::fminf(val, __int_as_float(assumed))));
-                } while (assumed != old);
-                return __int_as_float(old);
-            #else
-                (void) address;
-                (void) val;
-                return 0.0f;
-            #endif
-            }
-            static __device__ __forceinline__ double atomicMin(double* address, double val)
-            {
-            #if __CUDA_ARCH__ >= 130
-                unsigned long long int* address_as_ull = (unsigned long long int*) address;
-                unsigned long long int old = *address_as_ull, assumed;
-                do {
-                    assumed = old;
-                    old = ::atomicCAS(address_as_ull, assumed,
-                        __double_as_longlong(::fmin(val, __longlong_as_double(assumed))));
-                } while (assumed != old);
-                return __longlong_as_double(old);
-            #else
-                (void) address;
-                (void) val;
-                return 0.0;
-            #endif
-            }
-    
-    
-    {    // Legacy
-    extern void (CODEGEN_FUNCPTR *EnableClientState)(GLenum cap);
-    extern void (CODEGEN_FUNCPTR *DisableClientState)(GLenum cap);
-    extern void (CODEGEN_FUNCPTR *VertexPointer)(GLint size, GLenum type, GLsizei stride, const GLvoid *ptr);
-    extern void (CODEGEN_FUNCPTR *NormalPointer)(GLenum type, GLsizei stride, const GLvoid *ptr);
-    extern void (CODEGEN_FUNCPTR *ColorPointer)(GLint size, GLenum type, GLsizei stride, const GLvoid *ptr);
-    extern void (CODEGEN_FUNCPTR *TexCoordPointer)(GLint size, GLenum type, GLsizei stride, const GLvoid *ptr);
-    extern void (CODEGEN_FUNCPTR *TexEnvi)(GLenum target, GLenum pname, GLint param);
-    extern void (CODEGEN_FUNCPTR *MatrixMode)(GLenum mode);
-    extern void (CODEGEN_FUNCPTR *LoadIdentity)(void);
-    extern void (CODEGEN_FUNCPTR *Ortho)(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble near_val, GLdouble far_val);
-    extern void (CODEGEN_FUNCPTR *Color3d)(GLdouble red, GLdouble green, GLdouble blue);
-}
-    
-    #ifndef CV_CL_GET_PROC_ADDRESS
-#ifdef __GNUC__
-#warning('OPENCV: OpenCL FFT dynamic library loader: check configuration')
-#else
-#pragma message('WARNING: OPENCV: OpenCL FFT dynamic library loader: check configuration')
-#endif
-#define CV_CL_GET_PROC_ADDRESS(name) NULL
-#endif
-    
-    /* ////////////////////////////////////////////////////////////////////
-//
-//  CvMat helper tables
-//
-// */
-    
-      /// Set the timer's expiry time as an absolute time.
-  /**
-   * This function sets the expiry time. Any pending asynchronous wait
-   * operations will be cancelled. The handler for each cancelled operation will
-   * be invoked with the boost::asio::error::operation_aborted error code.
-   *
-   * @param expiry_time The expiry time to be used for the timer.
-   *
-   * @return The number of asynchronous operations that were cancelled.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   *
-   * @note If the timer has already expired when expires_at() is called, then
-   * the handlers for asynchronous wait operations will:
-   *
-   * @li have already been invoked; or
-   *
-   * @li have been queued for invocation in the near future.
-   *
-   * These handlers can no longer be cancelled, and therefore are passed an
-   * error code that indicates the successful completion of the wait operation.
-   */
-  std::size_t expires_at(const time_point& expiry_time)
-  {
-    boost::system::error_code ec;
-    std::size_t s = this->service.expires_at(
-        this->implementation, expiry_time, ec);
-    boost::asio::detail::throw_error(ec, 'expires_at');
-    return s;
-  }
-    
-      /// Determine the amount of data that may be read without blocking.
-  std::size_t in_avail(boost::system::error_code& ec)
-  {
-    ec = boost::system::error_code();
-    return storage_.size();
-  }
-    
-    #ifndef BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-#define BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-typedef long atomic_count;
-inline void increment(atomic_count& a, long b) { a += b; }
-#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
-typedef std::atomic<long> atomic_count;
-inline void increment(atomic_count& a, long b) { a += b; }
-#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
-typedef boost::detail::atomic_count atomic_count;
-inline void increment(atomic_count& a, long b) { while (b > 0) ++a, --b; }
-#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
-    
-        // Find the next context with the same key.
-    Value* next_by_key() const
-    {
-      context* elem = next_;
-      while (elem)
-      {
-        if (elem->key_ == key_)
-          return elem->value_;
-        elem = elem->next_;
+        // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel AVX intrinsics to access the SIMD instruction set.
+double DotProductAVX(const double* u, const double* v, int n) {
+  int max_offset = n - 4;
+  int offset = 0;
+  // Accumulate a set of 4 sums in sum, by loading pairs of 4 values from u and
+  // v, and multiplying them together in parallel.
+  __m256d sum = _mm256_setzero_pd();
+  if (offset <= max_offset) {
+    offset = 4;
+    // Aligned load is reputedly faster but requires 32 byte aligned input.
+    if ((reinterpret_cast<uintptr_t>(u) & 31) == 0 &&
+        (reinterpret_cast<uintptr_t>(v) & 31) == 0) {
+      // Use aligned load.
+      __m256d floats1 = _mm256_load_pd(u);
+      __m256d floats2 = _mm256_load_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_load_pd(u + offset);
+        floats2 = _mm256_load_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
       }
-      return 0;
+    } else {
+      // Use unaligned load.
+      __m256d floats1 = _mm256_loadu_pd(u);
+      __m256d floats2 = _mm256_loadu_pd(v);
+      // Multiply.
+      sum = _mm256_mul_pd(floats1, floats2);
+      while (offset <= max_offset) {
+        floats1 = _mm256_loadu_pd(u + offset);
+        floats2 = _mm256_loadu_pd(v + offset);
+        offset += 4;
+        __m256d product = _mm256_mul_pd(floats1, floats2);
+        sum = _mm256_add_pd(sum, product);
+      }
     }
-    
-      static void do_complete(io_service_impl* owner, operation* base,
-      const boost::system::error_code& /*ec*/,
-      std::size_t /*bytes_transferred*/)
-  {
-    // Take ownership of the handler object.
-    descriptor_read_op* o(static_cast<descriptor_read_op*>(base));
-    ptr p = { boost::asio::detail::addressof(o->handler_), o, o };
-    }
-    
-    
-    {private:
-  int descriptor_;
-  ConstBufferSequence buffers_;
-};
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-typedef null_event event;
-#elif defined(BOOST_ASIO_WINDOWS)
-typedef win_event event;
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-typedef posix_event event;
-#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-typedef std_event event;
-#endif
-    
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    bool js_cocos2dx_physics3d_Physics3DWorld_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DWorld_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DWorld(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DWorld_setGravity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_stepSimulate(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_needCollisionChecking(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_collisionChecking(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_setGhostPairCallback(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_removeAllPhysics3DObjects(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_isDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_removeAllPhysics3DConstraints(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_getGravity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_removePhysics3DConstraint(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_addPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_setDebugDrawEnable(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_removePhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_getPhysicsObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_addPhysics3DConstraint(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_debugDraw(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_sweepShape(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DWorld_Physics3DWorld(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    bool js_cocos2dx_studio_BatchNode_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_BatchNode_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_BatchNode(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_BatchNode_create(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    
-    
-        argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsShape_getMoment'', nullptr);
-            return 0;
-        }
-        double ret = cobj->getMoment();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.PhysicsShape:getMoment',argc, 0);
-    return 0;
-    
-    
-    
-        b2Vec2* vertices = new b2Vec2[vertexCount];
-    for( int i=0;i<vertexCount;i++) 
-    {
-        vertices[i] = old_vertices[i];
-        vertices[i] *= mRatio;
-    }
-    
-    
-    {
-    {				// We are done, terminate the query.
-				return false;
-			}
-		}
-    
-    
-    {	static Test* Create()
-	{
-		return new AddPair;
-	}
-};
-    
-    		// Cache velocities to improve movement on breakage.
-		if (m_broke == false)
-		{
-			m_velocity = m_body1->GetLinearVelocity();
-			m_angularVelocity = m_body1->GetAngularVelocity();
-		}
-    
-    apollo::common::util::Factory<TrafficRuleConfig::RuleId, TrafficRule,
-                              TrafficRule *(*)(const TrafficRuleConfig &config)>
-    TrafficDecider::s_rule_factory;
-    
-      ts = 1;
-    
-      const auto& trajectory = id_obstacle_map_.at(obstacle_id)->Trajectory();
-  int num_traj_point = trajectory.trajectory_point_size();
-  if (num_traj_point < 2) {
-    return 0.0;
   }
-    
-      virtual bool Init() = 0;
-    
-    void Box2d::Shift(const Vec2d &shift_vec) {
-  center_ += shift_vec;
-  InitCorners();
+  // Add the 4 product sums together horizontally. Not so easy as with sse, as
+  // there is no add across the upper/lower 128 bit boundary, so permute to
+  // move the upper 128 bits to lower in another register.
+  __m256d sum2 = _mm256_permute2f128_pd(sum, sum, 1);
+  sum = _mm256_hadd_pd(sum, sum2);
+  sum = _mm256_hadd_pd(sum, sum);
+  double result;
+  // _mm256_extract_f64 doesn't exist, but resist the temptation to use an sse
+  // instruction, as that introduces a 70 cycle delay. All this casting is to
+  // fool the intrinsics into thinking we are extracting the bottom int64.
+  auto cast_sum = _mm256_castpd_si256(sum);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored '-Wstrict-aliasing'
+  *(reinterpret_cast<int64_t*>(&result)) =
+#if defined(_WIN32) || defined(__i386__)
+      // This is a very simple workaround that is activated
+      // for all platforms that do not have _mm256_extract_epi64.
+      // _mm256_extract_epi64(X, Y) == ((uint64_t*)&X)[Y]
+      ((uint64_t*)&cast_sum)[0]
+#else
+      _mm256_extract_epi64(cast_sum, 0)
+#endif
+      ;
+#pragma GCC diagnostic pop
+  while (offset < n) {
+    result += u[offset] * v[offset];
+    ++offset;
+  }
+  return result;
 }
     
-      /**
-   * @brief Compute the square of distance from a point to the polygon.
-   *        If the point is within the polygon, return 0. Otherwise,
-   *        this square of distance is the minimal square of distance from
-   *        the point to the edges of the polygon.
-   * @param point The point to compute whose square of distance to the polygon.
-   * @return The square of distance from the point to the polygon.
-   */
-  double DistanceSquareTo(const Vec2d &point) const;
+    // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n) {
+  int max_offset = n - 8;
+  int offset = 0;
+  // Accumulate a set of 4 32-bit sums in sum, by loading 8 pairs of 8-bit
+  // values, extending to 16 bit, multiplying to make 32 bit results.
+  __m128i sum = _mm_setzero_si128();
+  if (offset <= max_offset) {
+    offset = 8;
+    __m128i packed1 = _mm_loadl_epi64(reinterpret_cast<const __m128i*>(u));
+    __m128i packed2 = _mm_loadl_epi64(reinterpret_cast<const __m128i*>(v));
+    sum = _mm_cvtepi8_epi16(packed1);
+    packed2 = _mm_cvtepi8_epi16(packed2);
+    // The magic _mm_add_epi16 is perfect here. It multiplies 8 pairs of 16 bit
+    // ints to make 32 bit results, which are then horizontally added in pairs
+    // to make 4 32 bit results that still fit in a 128 bit register.
+    sum = _mm_madd_epi16(sum, packed2);
+    while (offset <= max_offset) {
+      packed1 = _mm_loadl_epi64(reinterpret_cast<const __m128i*>(u + offset));
+      packed2 = _mm_loadl_epi64(reinterpret_cast<const __m128i*>(v + offset));
+      offset += 8;
+      packed1 = _mm_cvtepi8_epi16(packed1);
+      packed2 = _mm_cvtepi8_epi16(packed2);
+      packed1 = _mm_madd_epi16(packed1, packed2);
+      sum = _mm_add_epi32(sum, packed1);
+    }
+  }
+  // Sum the 4 packed 32 bit sums and extract the low result.
+  sum = _mm_hadd_epi32(sum, sum);
+  sum = _mm_hadd_epi32(sum, sum);
+  int32_t result = _mm_cvtsi128_si32(sum);
+  while (offset < n) {
+    result += u[offset] * v[offset];
+    ++offset;
+  }
+  return result;
+}
     
-    #include 'modules/perception/traffic_light/interface/base_projection.h'
+    #include <cstdint>
+#include <vector>
     
-    #ifndef MODULES_PLANNING_PLANNER_PLANNER_H_
-#define MODULES_PLANNING_PLANNER_PLANNER_H_
+      //   The text of a paragraph typically starts with the start of an idea and
+  // ends with the end of an idea.  Here we define paragraph as something that
+  // may have a first line indent and a body indent which may be different.
+  // Typical words that start an idea are:
+  //   1. Words in western scripts that start with
+  //      a capital letter, for example 'The'
+  //   2. Bulleted or numbered list items, for
+  //      example '2.'
+  // Typical words which end an idea are words ending in punctuation marks. In
+  // this vocabulary, each list item is represented as a paragraph.
+  bool lword_indicates_list_item;
+  bool lword_likely_starts_idea;
+  bool lword_likely_ends_idea;
     
-    #endif  // MODULES_PREDICTION_EVALUATOR_VEHICLE_MLP_EVALUATOR_H_
+     private:
+  // The unique ID of this VC object.
+  int my_id_;
+  // Whether the parameter was changed_ and thus needs to be rewritten.
+  bool changed_;
+  // The actual ParamType of this VC object.
+  ParamType param_type_;
+    
+    /**
+ * @brief A simple ConfigParserPlugin for feature vector dictionary keys.
+ */
+class FeatureVectorsConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override;
+    }
+    
+    #include <osquery/config.h>
+#include <osquery/registry_factory.h>
+    
+    #include <string>
+#include <vector>
+    
+      // Retrieve a basic events parser.
+  auto plugin = Config::get().getParser('events');
+  EXPECT_TRUE(plugin != nullptr);
+  const auto& data = plugin->getData();
+    
+      update['awesome'] = R'raw({
+    'options': {
+      'custom_nested_json': 
+        {'foo':1,'bar':'baz'}
+    }
+  })raw';
+  auto s = c.update(update);
+  EXPECT_TRUE(s.ok());
+  EXPECT_EQ(s.toString(), 'OK');
+    
+    class ExampleTable : public TablePlugin {
+ private:
+  TableColumns columns() const {
+    return {
+        std::make_tuple('example_text', TEXT_TYPE, ColumnOptions::DEFAULT),
+        std::make_tuple(
+            'example_integer', INTEGER_TYPE, ColumnOptions::DEFAULT),
+    };
+  }
+    }
+    
+    void Waves3D::update(float time)
+{
+    int i, j;
+    for (i = 0; i < _gridSize.width + 1; ++i)
+    {
+        for (j = 0; j < _gridSize.height + 1; ++j)
+        {
+            Vec3 v = getOriginalVertex(Vec2(i ,j));
+            v.z += (sinf((float)M_PI * time * _waves * 2 + (v.y+v.x) * 0.01f) * _amplitude * _amplitudeRate);
+            //CCLOG('v.z offset is %f\n', (sinf((float)M_PI * time * _waves * 2 + (v.y+v.x) * .01f) * _amplitude * _amplitudeRate));
+            setVertex(Vec2(i, j), v);
+        }
+    }
+}
+    
+    #endif // __ACTION_CCPAGETURN3D_ACTION_H__
+
+    
+    Animation* Animation::create(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops /* = 1 */)
+{
+    Animation *animation = new (std::nothrow) Animation();
+    animation->initWithAnimationFrames(arrayOfAnimationFrameNames, delayPerUnit, loops);
+    animation->autorelease();
+    return animation;
+}
+    
+        /** Purges the cache. It releases all the Animation objects and the shared instance.
+		@js NA
+     */
+    static void destroyInstance();
+    
+    void AtlasNode::setBlendFunc(const BlendFunc &blendFunc)
+{
+    _blendFunc = blendFunc;
+}
+    
+    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+bool ImGui_ImplAllegro5_ProcessEvent(ALLEGRO_EVENT *ev)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    }
+    
+    void ImGui_ImplFreeGLUT_SpecialUpFunc(int key, int x, int y)
+{
+    //printf('key_up_func %d\n', key);
+    ImGuiIO& io = ImGui::GetIO();
+    if (key + 256 < IM_ARRAYSIZE(io.KeysDown))
+        io.KeysDown[key + 256] = false;
+    ImGui_ImplFreeGLUT_UpdateKeyboardMods();
+    (void)x; (void)y; // Unused
+}
+    
+                ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
+    
+    void CleanupRenderTarget()
+{
+    WaitForLastSubmittedFrame();
+    }
+    
+    #include 'imgui.h'
+#include 'imgui_impl_dx10.h'
+    
+    void ImGui_ImplDX11_NewFrame()
+{
+    if (!g_pFontSampler)
+        ImGui_ImplDX11_CreateDeviceObjects();
+}
+
+    
+    #include 'common.h'
+    
+    
+    {} // namespace aria2
+
+    
+    void DHTRoutingTable::setTaskQueue(DHTTaskQueue* taskQueue)
+{
+  taskQueue_ = taskQueue;
+}
+    
+    #include 'common.h'
+    
+      virtual std::shared_ptr<DHTTask>
+  createNodeLookupTask(const unsigned char* targetID) = 0;
