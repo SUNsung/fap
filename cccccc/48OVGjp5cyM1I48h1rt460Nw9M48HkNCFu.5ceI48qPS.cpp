@@ -1,468 +1,381 @@
 
         
-        #include <QComboBox>
-#include <QVariant>
+        // Version constant.
+// This is either 0 for python, 1 for CPP V1, 2 for CPP V2.
+//
+// 0 is default and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+//
+// 1 is set with -DPYTHON_PROTO2_CPP_IMPL_V1 and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+// and
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=1
+//
+// 2 is set with -DPYTHON_PROTO2_CPP_IMPL_V2 and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+// and
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
+#ifdef PYTHON_PROTO2_CPP_IMPL_V1
+#error 'PYTHON_PROTO2_CPP_IMPL_V1 is no longer supported.'
+#else
+#ifdef PYTHON_PROTO2_CPP_IMPL_V2
+static int kImplVersion = 2;
+#else
+#ifdef PYTHON_PROTO2_PYTHON_IMPL
+static int kImplVersion = 0;
+#else
     
-        /* Check all NULLs are detected */
-    CHECK(secp256k1_ecdh(tctx, res, &point, s_one) == 1);
-    CHECK(ecount == 0);
-    CHECK(secp256k1_ecdh(tctx, NULL, &point, s_one) == 0);
-    CHECK(ecount == 1);
-    CHECK(secp256k1_ecdh(tctx, res, NULL, s_one) == 0);
-    CHECK(ecount == 2);
-    CHECK(secp256k1_ecdh(tctx, res, &point, NULL) == 0);
-    CHECK(ecount == 3);
-    CHECK(secp256k1_ecdh(tctx, res, &point, s_one) == 1);
-    CHECK(ecount == 3);
+      // True when a ScopedPyObjectPtr and a raw pointer refer to the same object.
+  // Comparison operators are non reflexive.
+  bool operator==(const PyObjectStruct* p) const { return ptr_ == p; }
+  bool operator!=(const PyObjectStruct* p) const { return ptr_ != p; }
     
-    int secp256k1_ecdsa_recover(const secp256k1_context* ctx, secp256k1_pubkey *pubkey, const secp256k1_ecdsa_recoverable_signature *signature, const unsigned char *msg32) {
-    secp256k1_ge q;
-    secp256k1_scalar r, s;
-    secp256k1_scalar m;
-    int recid;
-    VERIFY_CHECK(ctx != NULL);
-    ARG_CHECK(secp256k1_ecmult_context_is_built(&ctx->ecmult_ctx));
-    ARG_CHECK(msg32 != NULL);
-    ARG_CHECK(signature != NULL);
-    ARG_CHECK(pubkey != NULL);
+    io::ZeroCopyOutputStream*
+GeneratorContext::OpenForAppend(const string& filename) {
+  return NULL;
+}
+    
+    
+    {  // Check if the optional_nested_message was actually moved (and not just
+  // copied).
+  EXPECT_EQ(nested, &message2.optional_nested_message());
+  EXPECT_NE(nested, &message1.optional_nested_message());
+}
+    
+    void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enumDescriptor) {
+    WriteDocCommentBody(printer, enumDescriptor);
+}
+void WriteEnumValueDocComment(io::Printer* printer, const EnumValueDescriptor* value) {
+    WriteDocCommentBody(printer, value);
+}
+    
+    void EnumOneofFieldGenerator::GenerateParsingCode(io::Printer* printer) {
+  // TODO(jonskeet): What about if we read the default value?
+  printer->Print(
+    variables_,
+    '$oneof_name$_ = input.ReadEnum();\n'
+    '$oneof_name$Case_ = $oneof_property_name$OneofCase.$property_name$;\n');
+}
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
     }
     
-    #include <dmlc/base.h>
-#include <dmlc/json.h>
-#include <dmlc/logging.h>
-#include <dmlc/registry.h>
-#include <nnvm/node.h>
-#include <vector>
-#include <map>
-#include <string>
-#include <utility>
-#include './base.h'
-#include './resource.h'
-#include './op_attr_types.h'
-    
-      /*! \brief default constructor, default copy assign will work */
-  TBlob(void)
-      : dptr_(NULL),
-        type_flag_(mshadow::DataType<real_t>::kFlag) {
-    SetDLTensor(cpu::kDevMask, 0);
-  }
-  /*!
-   * \brief constructor that construct TBlob from contiguous memory
-   * \param dptr the pointer to the memory
-   * \param shape the shape of the data
-   * \param dev_mask the device mask, can be cpu::kDevMask or gpu::kDevMask
-   * \param dev_id the device id
-   */
-  template<typename DType>
-  TBlob(DType *dptr, const TShape &shape, int dev_mask, int dev_id = -1)
-      : dptr_(dptr), shape_(shape),
-        type_flag_(mshadow::DataType<DType>::kFlag) {
-    SetDLTensor(dev_mask, dev_id);
-  }
-  /*!
-   * \brief constructor that construct TBlob from contiguous memory
-   * \param dptr the pointer to the memory
-   * \param shape the shape of the data
-   * \param dev_mask the device mask, can be cpu::kDevMask or gpu::kDevMask
-   * \param type_flag the type flag. Can be one of enum mshadow::dtype
-   * \param dev_id the device id
-   */
-  TBlob(void *dptr, const TShape &shape, int dev_mask, int type_flag, int dev_id = -1)
-      : dptr_(dptr), shape_(shape), type_flag_(type_flag) {
-    SetDLTensor(dev_mask, dev_id);
-  }
-  /*!
-   * \brief constructor from tensor
-   * \param src source tensor
-   * \tparam Device which device the tensor is on
-   * \tparam dim tensor dimension
-   * \tparam DType the type of elements in the tensor
-   */
-  template<typename Device, int dim, typename DType>
-  TBlob(const mshadow::Tensor<Device, dim, DType> &src) {  // NOLINT(*)
-    *this = src;
-  }
-  /*!
-   * \brief assignment from tensor
-   * \param src source tensor
-   * \tparam Device which device the tensor is on
-   * \tparam dim tensor dimension
-   * \tparam DType the type of elements in the tensor
-   * \return reference of self
-   */
-  template<typename Device, int dim, typename DType>
-  inline TBlob &operator=(const mshadow::Tensor<Device, dim, DType> &src) {
-    dptr_ = src.dptr_;
-    shape_ = src.shape_;
-    type_flag_ = mshadow::DataType<DType>::kFlag;
-    SetDLTensor(Device::kDevMask, -1);
-    return *this;
-  }
-  /*!
-   * \return whether the tensor's memory is continuous
-   */
-  inline bool CheckContiguous(void) const {
-    return true;
-  }
-  /*!
-   * \brief reshape to shape
-   * \param shape desired shape
-   * \return reshaped blob
-   */
-  inline TBlob reshape(const TShape& shape) const {
-    CHECK_EQ(this->shape_.Size(), shape.Size()) << 'Shape size mismatch '
-    << this->shape_.Size() << ' v.s. '  << shape.Size();
-    TBlob ret(this->dptr_, shape, this->dev_mask(), this->type_flag_, this->dev_id());
-    return ret;
-  }
-  /*!
-   * \brief flatten the tensor to 2 dimension, collapse the higher dimensions together
-   * \param stream the possible stream target tensor should reside on
-   * \tparam Device which device the tensor is on
-   * \tparam DType the type of elements in the tensor
-   * \return tensor after flatten
-   */
-  template<typename Device, typename DType>
-  inline mshadow::Tensor<Device, 2, DType> FlatTo2D(
-    mshadow::Stream<Device> *stream = NULL) const {
-    CHECK(Device::kDevMask == this->dev_mask())
-      << 'TBlob.get: device type do not match specified type';
-    CHECK(mshadow::DataType<DType>::kFlag == type_flag_)
-      << 'TBlob.get_with_shape: data type do not match specified type.'
-      << 'Expected: ' << type_flag_ << ' v.s. given ' << mshadow::DataType<DType>::kFlag;
-    return mshadow::Tensor<Device, 2, DType>(static_cast<DType*>(dptr_),
-                                             shape_.FlatTo2D(),
-                                             shape_[shape_.ndim() - 1],
-                                             stream);
-  }
-  /*!
-   * \brief flatten the tensor to 1 dimension, collapse all the dimensions together.
-   * \param stream the possible stream target tensor should reside on
-   * \tparam Device which device the tensor is on
-   * \tparam DType the type of elements in the tensor
-   * \return tensor after flatten
-   */
-  template<typename Device, typename DType>
-  inline mshadow::Tensor<Device, 1, DType> FlatTo1D(
-      mshadow::Stream<Device> *stream = NULL) const {
-    return this->get_with_shape<Device, 1, DType>(
-        mshadow::Shape1(shape_.Size()), stream);
-  }
-  /*! \brief return number of dimension of the tensor inside */
-  inline int ndim(void) const {
-    return shape_.ndim();
-  }
-  /*!
-   * \brief return size of i-th dimension, start counting from highest dimension
-   * \param idx the dimension count from the highest dimensin
-   * \return the size
-   */
-  inline index_t size(index_t idx) const {
-    return shape_[idx];
-  }
-  /*! \brief total number of elements in the tensor */
-  inline index_t Size(void) const {
-    return shape_.Size();
-  }
-  /*! \brief get pointer in dtype */
-  template<typename DType>
-  inline DType* dptr() const {
-    CHECK(mshadow::DataType<DType>::kFlag == type_flag_)
-      << 'TBlob.get_with_shape: data type do not match specified type.'
-      << 'Expected: ' << type_flag_ << ' v.s. given ' << mshadow::DataType<DType>::kFlag;
-    return static_cast<DType*>(dptr_);
-  }
-  /*! \brief device mask of the corresponding device */
-  inline int dev_mask() const {
-    return dltensor_.ctx.device_type;
-  }
-  /*! \brief device index of the corresponding device */
-  inline int dev_id() const {
-    return dltensor_.ctx.device_id;
-  }
-  /*!
-   * \brief return the corresponding DLTensor
-   * \return the address of internal DLTensor
-   */
-  inline const DLTensor& dltensor() const {
-    return dltensor_;
-  }
-    
-    template<>
-void SetDataGradToBlob<mshadow::cpu, float>(caffeMemoryTypes memType,
-                            std::vector<::caffe::Blob<float>*>::iterator blob,
-                            std::vector<TBlob>::const_iterator itr) {
-  float *data_ptr = reinterpret_cast<float*>((*itr).dptr_);
-  if (memType == Data)
-    (*blob)->set_cpu_data(data_ptr);
-  else
-    MXCAFFEBLOB(*blob, float)->set_cpu_diff(data_ptr);
+    std::string GetReflectionClassUnqualifiedName(const FileDescriptor* descriptor) {
+  // TODO: Detect collisions with existing messages,
+  // and append an underscore if necessary.
+  return GetFileNameBase(descriptor) + 'Reflection';
 }
     
-    #include <caffe/proto/caffe.pb.h>
-#include <dmlc/parameter.h>
-#include <dmlc/base.h>
-#include <dmlc/json.h>
-#include <dmlc/logging.h>
-#include <dmlc/type_traits.h>
-#include <google/protobuf/message.h>
-#include <google/protobuf/text_format.h>
     
-    MXNET_REGISTER_OP_PROPERTY(CaffeOp, CaffeOpProp)
-.describe('Apply caffe operator')
-.add_argument('data', 'Symbol[]', 'List of tensors')
-.add_arguments(CaffeOpParam::__FIELDS__());
+    {
+}  // namespace google
+#endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
+
     
-    // implementation of threaded engine
-ThreadedVar* ThreadedEngine::NewVariable() {
-  return ThreadedVar::New(VersionedVarBlock::New());
-}
-    
-        TableBuilder* builder = new TableBuilder(options, file);
-    meta->smallest.DecodeFrom(iter->key());
-    for (; iter->Valid(); iter->Next()) {
-      Slice key = iter->key();
-      meta->largest.DecodeFrom(key);
-      builder->Add(key, iter->value());
+    class PrimitiveOneofFieldGenerator : public PrimitiveFieldGenerator {
+ public:
+  PrimitiveOneofFieldGenerator(const FieldDescriptor* descriptor,
+                               int fieldOrdinal,
+                               const Options *options);
+  ~PrimitiveOneofFieldGenerator();
     }
     
-    // Build a Table file from the contents of *iter.  The generated file
-// will be named according to meta->number.  On success, the rest of
-// *meta will be filled with metadata about the generated table.
-// If no data is present in *iter, meta->file_size will be set to
-// zero, and no Table file will be produced.
-Status BuildTable(const std::string& dbname,
-                  Env* env,
-                  const Options& options,
-                  TableCache* table_cache,
-                  Iterator* iter,
-                  FileMetaData* meta);
+    #include 'dotproductsse.h'
+#include <cstdio>
+#include <cstdlib>
     
-    void DBImpl::CompactMemTable() {
-  mutex_.AssertHeld();
-  assert(imm_ != nullptr);
+    #endif
+
+    
+    void PageIterator::ParagraphInfo(tesseract::ParagraphJustification *just,
+                                 bool *is_list_item,
+                                 bool *is_crown,
+                                 int *first_line_indent) const {
+  *just = tesseract::JUSTIFICATION_UNKNOWN;
+  if (!it_->row() || !it_->row()->row || !it_->row()->row->para() ||
+      !it_->row()->row->para()->model)
+    return;
     }
     
-    static bool Between(uint64_t val, uint64_t low, uint64_t high) {
-  bool result = (val >= low) && (val <= high);
-  if (!result) {
-    fprintf(stderr, 'Value %llu is not in range [%llu, %llu]\n',
-            (unsigned long long)(val),
-            (unsigned long long)(low),
-            (unsigned long long)(high));
+    #include 'tesseractclass.h'
+#ifdef _OPENMP
+#include <omp.h>
+#endif  // _OPENMP
+    
+    ScrollView* bln_word_window_handle();  //return handle
+void build_image_window(int width, int height);
+void display_bln_lines(ScrollView window,
+                       ScrollView::Color colour,
+                       float scale_factor,
+                       float y_offset,
+                       float minx,
+                       float maxx);
+                                 //function to call
+void pgeditor_msg(  //message display
+                  const char *msg);
+void pgeditor_show_point(  //display coords
+                         SVEvent *event);
+                                 //put bln word in       box
+void show_point(PAGE_RES* page_res, float x, float y);
+    
+    
+    {  ~TemporaryFile() {
+    unlink(path.c_str());
   }
-  return result;
-}
+};
     
-    std::string LockFileName(const std::string& dbname) {
-  return dbname + '/LOCK';
-}
     
-        // Invariant: we never leave < kHeaderSize bytes in a block.
-    assert(kBlockSize - block_offset_ - kHeaderSize >= 0);
+    {} // namespace
     
-    template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::unwind_slow_dot_repeat(bool r)
-{
-   saved_single_repeat<BidiIterator>* pmp = static_cast<saved_single_repeat<BidiIterator>*>(m_backup_state);
+    
+    {} // namespace caffe2
+
+    
+    OPERATOR_SCHEMA(Squeeze)
+    .NumInputs(1)
+    .NumOutputs(1)
+    .AllowInplace({{0, 0}})
+    .SetDoc(R'DOC(
+The *Squeeze* op removes single-dimensional entries from the shape of the input tensor *data,* and produces a single output tensor *squeezed*. The op also takes an argument *dims* with a list of dimensions to squeeze. If the same blob is provided as input and output, the operation is copy-free. This is the exact inverse operation of *ExpandDims* given the same *dims* argument.
+    
+      bool RunOnDevice() override {
+    auto& old_tensor = Input(0);
+    auto& indices = Input(1);
+    auto* new_tensor = Output(0);
+    CAFFE_ENFORCE(indices.ndim() >= 1);
+    CAFFE_ENFORCE(
+        &old_tensor == new_tensor, 'First argument must be in-place.');
+    CAFFE_ENFORCE(new_tensor->ndim() == indices.ndim());
+    CAFFE_ENFORCE(indices.ndim() == new_tensor->ndim());
     }
     
-    #ifndef BOOST_REGEX_V4_PROTECTED_CALL_HPP
-#define BOOST_REGEX_V4_PROTECTED_CALL_HPP
+      const auto& X = in[0];
+  const auto& W = in[1];
+  const auto& b = in[2];
+  auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
+  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
+  const int M = size_to_dim_(canonical_axis, GetDimsVector(in[0]));
+  const int K = size_from_dim_(canonical_axis, GetDimsVector(in[0]));
+  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
+  const int canonical_axis_w =
+      canonical_axis_index_(axis_w, in[1].dims().size());
+  const int N = size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
     
+    #include 'caffe2/core/context.h'
+#include 'caffe2/core/operator.h'
+#include 'caffe2/core/tensor.h'
     
-    
-    template <class OutputIterator, class Results, class traits, class ForwardIter>
-void basic_regex_formatter<OutputIterator, Results, traits, ForwardIter>::put(const sub_match_type& sub)
+    namespace CNTK
 {
-   typedef typename sub_match_type::iterator iterator_type;
-   iterator_type i = sub.first;
-   while(i != sub.second)
-   {
-      put(*i);
-      ++i;
-   }
-}
-    
-    namespace boost{
+    static Matrix<char>* AllocateMatrix(const NDShape& viewShape, const DeviceDescriptor& device)
+    {
+        auto matrixDims = GetMatrixDimensions(viewShape);
+        return new Matrix<char>(matrixDims.first, matrixDims.second, AsCNTKImplDeviceId(device));
+    }
     }
     
-    #ifndef BOOST_NO_WREGEX
-inline bool regex_search(const wchar_t* str, 
-                        wcmatch& m, 
-                        const wregex& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_search(str, str + wregex::traits_type::length(str), m, e, flags);
-}
-inline bool regex_search(const wchar_t* first, const wchar_t* last, 
-                  const wregex& e, 
-                  match_flag_type flags = match_default)
-{
-   wcmatch m;
-   return regex_search(first, last, m, e, flags | regex_constants::match_any);
-}
-#endif
-inline bool regex_search(const std::string& s, 
-                        smatch& m,
-                        const regex& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_search(s.begin(), s.end(), m, e, flags);
-}
-#if !defined(BOOST_NO_WREGEX)
-inline bool regex_search(const std::basic_string<wchar_t>& s, 
-                        wsmatch& m,
-                        const wregex& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_search(s.begin(), s.end(), m, e, flags);
-}
-#endif
-    
-    
-// TRACED_FORRANGE(type, var, low, high) expands to a loop that assigns |var|
-// every value in the range |low| to (including) |high| and adds a
-// SCOPED_TRACE() message for the |var| while inside the loop body.
-// TODO(bmeurer): Migrate to C++11 once we're ready.
-#define TRACED_FORRANGE(_type, _var, _low, _high)                          \
-  for (_type _i = _low; _i <= _high; ++_i)                                 \
-    for (bool _done = false; !_done;)                                      \
-      for (_type const _var = _i; !_done;)                                 \
-        for (SCOPED_TRACE(::testing::Message() << #_var << ' = ' << _var); \
-             !_done; _done = true)
-    
-     private:
-  // Calculates and returns the the frame pointer, argument count and formal
-  // parameter count to be used to access a function's parameters, taking
-  // argument adapter frames into account. The tuple is of the form:
-  // <frame_ptr, # parameters actually passed, formal parameter count>
-  std::tuple<Node*, Node*, Node*> GetArgumentsFrameAndCount(Node* function,
-                                                            ParameterMode mode);
-    
-      // Perform steps to resume generator after `value` is resolved.
-  // `on_reject_context_index` is an index into the Native Context, which should
-  // point to a SharedFunctioninfo instance used to create the closure. The
-  // value following the reject index should be a similar value for the resolve
-  // closure. Returns the Promise-wrapped `value`.
-  Node* Await(Node* context, Node* generator, Node* value, Node* outer_promise,
-              int context_length,
-              const ContextInitializer& init_closure_context,
-              Node* on_resolve_context_index, Node* on_reject_context_index,
-              Node* is_predicted_as_caught);
-  Node* AwaitOptimized(Node* context, Node* generator, Node* value,
-                       Node* outer_promise, int context_length,
-                       const ContextInitializer& init_closure_context,
-                       Node* on_resolve_context_index,
-                       Node* on_reject_context_index,
-                       Node* is_predicted_as_caught);
-  Node* Await(Node* context, Node* generator, Node* value, Node* outer_promise,
-              int context_length,
-              const ContextInitializer& init_closure_context,
-              int on_resolve_context_index, int on_reject_context_index,
-              Node* is_predicted_as_caught) {
-    return Await(context, generator, value, outer_promise, context_length,
-                 init_closure_context, IntPtrConstant(on_resolve_context_index),
-                 IntPtrConstant(on_reject_context_index),
-                 is_predicted_as_caught);
-  }
-  Node* AwaitOptimized(Node* context, Node* generator, Node* value,
-                       Node* outer_promise, int context_length,
-                       const ContextInitializer& init_closure_context,
-                       int on_resolve_context_index,
-                       int on_reject_context_index,
-                       Node* is_predicted_as_caught) {
-    return AwaitOptimized(
-        context, generator, value, outer_promise, context_length,
-        init_closure_context, IntPtrConstant(on_resolve_context_index),
-        IntPtrConstant(on_reject_context_index), is_predicted_as_caught);
-  }
-  Node* Await(Node* context, Node* generator, Node* value, Node* outer_promise,
-              int context_length,
-              const ContextInitializer& init_closure_context,
-              int on_resolve_context_index, int on_reject_context_index,
-              bool is_predicted_as_caught) {
-    return Await(context, generator, value, outer_promise, context_length,
-                 init_closure_context, on_resolve_context_index,
-                 on_reject_context_index,
-                 BooleanConstant(is_predicted_as_caught));
-  }
-  Node* AwaitOptimized(Node* context, Node* generator, Node* value,
-                       Node* outer_promise, int context_length,
-                       const ContextInitializer& init_closure_context,
-                       int on_resolve_context_index,
-                       int on_reject_context_index,
-                       bool is_predicted_as_caught) {
-    return AwaitOptimized(context, generator, value, outer_promise,
-                          context_length, init_closure_context,
-                          on_resolve_context_index, on_reject_context_index,
-                          BooleanConstant(is_predicted_as_caught));
-  }
-    
-    #include 'src/builtins/builtins-utils-gen.h'
-#include 'src/builtins/builtins.h'
-#include 'src/code-stub-assembler.h'
-#include 'src/frame-constants.h'
-    
-      Node* EmitFastNewObject(Node* context, Node* target, Node* new_target);
-    
-    TF_BUILTIN(DatePrototypeGetFullYear, DateBuiltinsAssembler) {
-  Node* context = Parameter(Descriptor::kContext);
-  Node* receiver = Parameter(Descriptor::kReceiver);
-  Generate_DatePrototype_GetField(context, receiver, JSDate::kYear);
-}
-    
-    void Builtins::Generate_KeyedStoreIC_Megamorphic(
-    compiler::CodeAssemblerState* state) {
-  KeyedStoreGenericGenerator::Generate(state);
-}
-    
-      void GenerateStringAt(const char* method_name, TNode<Context> context,
-                        Node* receiver, TNode<Object> maybe_position,
-                        TNode<Object> default_return,
-                        StringAtAccessor accessor);
-    
-    // ES6 #sec-symbol.prototype-@@toprimitive
-TF_BUILTIN(SymbolPrototypeToPrimitive, CodeStubAssembler) {
-  Node* context = Parameter(Descriptor::kContext);
-  Node* receiver = Parameter(Descriptor::kReceiver);
+        std::wstring Value::AsString() const
+    {
+        wstringstream wss;
+        if (IsValid())
+            wss << L'Value(' << Shape().AsString() << ', ' << DeviceKindName(Device().Type()) << L')';
+        else
+            wss << L'Value(###)';
+        return wss.str();
     }
     
-      std::string message = greeter.SayHello(name);
-  std::cerr << 'Greeter received: ' << message << std::endl;
     
-    #include 'monster_test.grpc.fb.h'
-#include 'monster_test_generated.h'
-    
-      flatbuffers::FlatBufferBuilder builder;
-  auto name = builder.CreateString('Dog');
-  auto sound = builder.CreateString('Bark');
-  auto animal_buffer = sample::CreateAnimal(builder, name, sound);
-  builder.Finish(animal_buffer);
-    
-    bool GenerateFBS(const Parser &parser, const std::string &path,
-                 const std::string &file_name) {
-  return SaveFile((path + file_name + '.fbs').c_str(),
-                  GenerateFBS(parser, file_name), false);
-}
-    
-    static bool GenStruct(const StructDef &struct_def, const Table *table,
-                      int indent, const IDLOptions &opts, std::string *_text);
-    
-      cv::Mat element = cv::getStructuringElement( erosion_type,
-                                       cv::Size( 2*erosion_size + 1, 2*erosion_size+1 ),
-                                       cv::Point( erosion_size, erosion_size ) );
+    {        auto originalConstantValue = Value();
+        auto constantValueCPU = originalConstantValue->DeepClone(DeviceDescriptor::CPUDevice(), true);
+        NDArrayViewPtr newConstantValue = CloneAsDataType(constantValueCPU, dataType, true);
+        return Constant(newConstantValue->DeepClone(originalConstantValue->Device(), originalConstantValue->IsReadOnly()), Name());
+    }
     
     
-    {    return 0;
+    {
+    {    private:
+        // Disallow copy and move construction and assignment
+        VariableFields(const VariableFields&) = delete; VariableFields& operator=(const VariableFields& other) = delete; VariableFields(VariableFields&&) = delete; VariableFields& operator=(VariableFields&&) = delete;
+    };
 }
 
     
-    
-    {        return true;
+    public:
+    ScopeTimer(size_t verbosity, const std::string& message)
+        : m_verbosity(verbosity), m_message(message)
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Start();
+        }
     }
     
-            int currentSum = 0;
-        for (size_t j = 0; j < size; ++j)
-            if (i & (1 << j))
-                currentSum += v[j];
+    
+    {  // Return the value to associate with the specified key
+  Slice Value(int k, std::string* storage) {
+    Random r(k);
+    return test::RandomString(&r, kValueSize, storage);
+  }
+};
+    
+    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
+  // Order by:
+  //    increasing user key (according to user-supplied comparator)
+  //    decreasing sequence number
+  //    decreasing type (though sequence# should be enough to disambiguate)
+  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
+  if (r == 0) {
+    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
+    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
+    if (anum > bnum) {
+      r = -1;
+    } else if (anum < bnum) {
+      r = +1;
+    }
+  }
+  return r;
+}
+    
+    #endif  // STORAGE_LEVELDB_DB_DBFORMAT_H_
+
+    
+    
+    {}  // namespace leveldb
+    
+    Status DumpFile(Env* env, const std::string& fname, WritableFile* dst) {
+  FileType ftype;
+  if (!GuessType(fname, &ftype)) {
+    return Status::InvalidArgument(fname + ': unknown file type');
+  }
+  switch (ftype) {
+    case kLogFile:         return DumpLog(env, fname, dst);
+    case kDescriptorFile:  return DumpDescriptor(env, fname, dst);
+    case kTableFile:       return DumpTable(env, fname, dst);
+    default:
+      break;
+  }
+  return Status::InvalidArgument(fname + ': not a dump-able file type');
+}
+    
+    
+// Owned filenames have the form:
+//    dbname/CURRENT
+//    dbname/LOCK
+//    dbname/LOG
+//    dbname/LOG.old
+//    dbname/MANIFEST-[0-9]+
+//    dbname/[0-9]+.(log|sst|ldb)
+bool ParseFileName(const std::string& filename,
+                   uint64_t* number,
+                   FileType* type) {
+  Slice rest(filename);
+  if (rest == 'CURRENT') {
+    *number = 0;
+    *type = kCurrentFile;
+  } else if (rest == 'LOCK') {
+    *number = 0;
+    *type = kDBLockFile;
+  } else if (rest == 'LOG' || rest == 'LOG.old') {
+    *number = 0;
+    *type = kInfoLogFile;
+  } else if (rest.starts_with('MANIFEST-')) {
+    rest.remove_prefix(strlen('MANIFEST-'));
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
+      return false;
+    }
+    if (!rest.empty()) {
+      return false;
+    }
+    *type = kDescriptorFile;
+    *number = num;
+  } else {
+    // Avoid strtoull() to keep filename format independent of the
+    // current locale
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
+      return false;
+    }
+    Slice suffix = rest;
+    if (suffix == Slice('.log')) {
+      *type = kLogFile;
+    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
+      *type = kTableFile;
+    } else if (suffix == Slice('.dbtmp')) {
+      *type = kTempFile;
+    } else {
+      return false;
+    }
+    *number = num;
+  }
+  return true;
+}
+    
+    #include <stdint.h>
+#include 'db/log_format.h'
+#include 'leveldb/slice.h'
+#include 'leveldb/status.h'
+    
+    #ifndef STORAGE_LEVELDB_DB_MEMTABLE_H_
+#define STORAGE_LEVELDB_DB_MEMTABLE_H_
+    
+    namespace osquery {
+    }
+    
+    TEST_F(TablesTests, test_constraint) {
+  auto constraint = Constraint(EQUALS);
+  constraint.expr = 'none';
+    }
+    
+    #include 'osquery/events/pathset.h'
+    
+    
+    {  // When the hex fails to decode the input value is returned as the result.
+  auto decoded_fail = DecodeAuditPathValues('7');
+  EXPECT_EQ(decoded_fail, '7');
+}
+    
+      // Registering the event type initializes inotify.
+  auto status = EventFactory::registerEventPublisher(event_pub);
+  EXPECT_TRUE(status.ok());
+  EXPECT_TRUE(event_pub->isHandleOpen());
+    
+    TEST(CanClientFactoryTest, CreateCanClient) {
+  auto *can_factory = CanClientFactory::instance();
+  EXPECT_TRUE(can_factory != nullptr);
+    }
+    
+    #ifndef MODULES_DRIVERS_CANBUS_CAN_CLIENT_FAKE_FAKE_CAN_CLIENT_H_
+#define MODULES_DRIVERS_CANBUS_CAN_CLIENT_FAKE_FAKE_CAN_CLIENT_H_
+    
+      /**
+   * @brief Send messages
+   * @param frames The messages to send.
+   * @param frame_num The amount of messages to send.
+   * @return The status of the sending action which is defined by
+   *         apollo::common::ErrorCode.
+   */
+  virtual apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames,
+                                         int32_t *const frame_num);
+    
+    #ifndef MODULES_DRIVERS_CANBUS_CAN_CLIENT_CLIENT_SOCKET_CAN_CLIENT_RAW_H_
+#define MODULES_DRIVERS_CANBUS_CAN_CLIENT_CLIENT_SOCKET_CAN_CLIENT_RAW_H_
+    
+    
+    {  ::apollo::canbus::ChassisDetail chassis_detail;
+  chassis_detail.set_car_type(::apollo::canbus::ChassisDetail::QIRUI_EQ_15);
+  EXPECT_EQ(manager.GetSensorData(&chassis_detail), ErrorCode::OK);
+  EXPECT_EQ(manager.GetSensorData(nullptr), ErrorCode::CANBUS_ERROR);
+}
+    
+      /**
+   * @brief Get a one-byte unsigned integer representing the higher 4 bits.
+   * @return The one-byte unsigned integer representing the higher 4 bits.
+   */
+  uint8_t get_byte_high_4_bits() const;
