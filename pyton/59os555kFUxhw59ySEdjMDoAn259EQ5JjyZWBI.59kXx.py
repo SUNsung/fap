@@ -1,102 +1,38 @@
 
         
-        
-class Supervisor(Employee):
+            By default this will get the strings from the blns.txt file
     
-            (foo, 2), p1
-        (bar, 3), p1
-        (foo, 3), p2
-        (bar, 10), p3
-        (foo, 1), p4
-    
-                        return
-    
-    Here is a little overview over the most commonly used classes provided by
-this runtime:
+        def run(self, msg):
+        print('{} got {}'.format(self.name, msg))
     
     
-##     def specialTransition(self, state, symbol):
-##         return 0
+class OrSpecification(CompositeSpecification):
+    _one = Specification()
+    _other = Specification()
     
-        if not opts and not args:
-        # Display help.
-        print(_help)
-        # Enter GUI mode.
-        #from .gui import gui_main
-        #gui_main()
-    else:
-        conf = {}
-        for opt, arg in opts:
-            if opt in ('-h', '--help'):
-                # Display help.
-                print(_help)
+    http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
     
-    __all__ = ['miomio_download']
+    # Create our template functions
+templates = [make_template(s, g, a)
+             for g in (get_list, get_lists)
+             for a in (print_item, reverse_item)
+             for s in (iter_elements, rev_elements)]
     
-        def extract(self, **kwargs):
-        for i in self.streams:
-            s = self.streams[i]
-            _, s['container'], s['size'] = url_info(s['url'])
-            s['src'] = [s['url']]
+        def build_floor(self):
+        raise NotImplementedError
     
+    *TL;DR80
+Delays the eval of an expr until its value is needed and avoids repeated evals.
+'''
     
-#----------------------------------------------------------------------
-def showroom_download(url, output_dir = '.', merge = False, info_only = False, **kwargs):
-    ''''''
-    if re.match( r'(\w+)://www.showroom-live.com/([-\w]+)', url):
-        room_url_key = match1(url, r'\w+://www.showroom-live.com/([-\w]+)')
-        room_id = showroom_get_roomid_by_room_url_key(room_url_key)
-        showroom_download_by_room_id(room_id, output_dir, merge,
-                                    info_only)
+        def __init__(self):
+        self.time_provider = datetime.datetime
     
-    
-# Emulates Vim buffer
-# Used to store buffer related information like diagnostics, latest parse
-# request. Stores buffer change tick at the parse request moment, allowing
-# to effectively determine whether reparse is needed for the buffer.
-class Buffer( object ):
-    
-    
-  def OnCompleteDone( self ):
-    if not self.Done():
-      return
-    
-        basic_goto = {
-      'filepath': 'test',
-      'line_num': 10,
-      'column_num': 100,
-    }
-    
-    
-def KeywordsFromSyntaxListOutput_Function_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
-foogroup xxx foo bar
-             zoo goo
-             links to Function''' ),
-               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
-    
-      python_interpreter = vim.eval( 'g:ycm_server_python_interpreter' )
-  if python_interpreter:
-    python_interpreter = utils.FindExecutable( python_interpreter )
-    if python_interpreter:
-      return python_interpreter
-    
-        def _send_diagnostics_request(self):
-        return 'send diagnostic request'
-    
-        def test_car_adapter_shall_make_very_loud_noise(self):
-        car = Car()
-        car_adapter = Adapter(car, make_noise=car.make_noise)
-        noise = car_adapter.make_noise(10)
-        expected_noise = 'vroom!!!!!!!!!!'
-    
-    '''
-http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
-Implementation of the iterator pattern with a generator
-    
-        def insert(self):
-        print('Inserting the execution begin status in the Database')
-        time.sleep(0.1)
-        # Following code is to simulate a communication from DB to TC
-        if random.randrange(1, 4) == 3:
-            return -1
+    # example of graph usage
+graph = {'A': ['B', 'C'],
+         'B': ['C', 'D'],
+         'C': ['D'],
+         'D': ['C'],
+         'E': ['F'],
+         'F': ['C']
+         }
