@@ -1,402 +1,421 @@
 
         
-        /* Return the indices of the top N values of vector v. */
-static std::vector<int> Argmax(const std::vector<float>& v, int N) {
-  std::vector<std::pair<float, int> > pairs;
-  for (size_t i = 0; i < v.size(); ++i)
-    pairs.push_back(std::make_pair(v[i], i));
-  std::partial_sort(pairs.begin(), pairs.begin() + N, pairs.end(), PairCompare);
-    }
+        
+    {
+    {}  // namespace swig
+}  // namespace tensorflow
+
     
-    /**
- * @brief Applies common transformations to the input data, such as
- * scaling, mirroring, substracting the image mean...
- */
-template <typename Dtype>
-class DataTransformer {
+    // Creates a numpy array with shapes specified by dim_size and dims and content
+// in data. The array does not own the memory, and destructor will be called to
+// release it. If the status is not ok the caller is responsible for releasing
+// the memory.
+Status ArrayFromMemory(int dim_size, npy_intp* dims, void* data, DataType dtype,
+                       std::function<void()> destructor, PyObject** result);
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    #include <Python.h>
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    class Clipboard : public Base {
  public:
-  explicit DataTransformer(const TransformationParameter& param, Phase phase);
-  virtual ~DataTransformer() {}
+  Clipboard(int id,
+            const base::WeakPtr<DispatcherHost>& dispatcher_host,
+            const base::DictionaryValue& option);
+  ~Clipboard() override;
     }
     
     
-    {  static string LayerTypeListString() {
-    vector<string> layer_types = LayerTypeList();
-    string layer_types_str;
-    for (vector<string>::iterator iter = layer_types.begin();
-         iter != layer_types.end(); ++iter) {
-      if (iter != layer_types.begin()) {
-        layer_types_str += ', ';
-      }
-      layer_types_str += *iter;
-    }
-    return layer_types_str;
-  }
-};
+#include 'content/nw/src/api/event/event.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/dispatcher_host.h'
+#include 'ui/gfx/screen.h'
     
-     private:
-  // wrap im2col/col2im so we don't have to remember the (long) argument lists
-  inline void conv_im2col_cpu(const Dtype* data, Dtype* col_buff) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      im2col_cpu(data, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
-    } else {
-      im2col_nd_cpu(data, num_spatial_axes_, conv_input_shape_.cpu_data(),
-          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
-          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), col_buff);
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
     }
-  }
-  inline void conv_col2im_cpu(const Dtype* col_buff, Dtype* data) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      col2im_cpu(col_buff, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
-    } else {
-      col2im_nd_cpu(col_buff, num_spatial_axes_, conv_input_shape_.cpu_data(),
-          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
-          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), data);
     }
-  }
-#ifndef CPU_ONLY
-  inline void conv_im2col_gpu(const Dtype* data, Dtype* col_buff) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      im2col_gpu(data, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
-    } else {
-      im2col_nd_gpu(data, num_spatial_axes_, num_kernels_im2col_,
-          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
-          kernel_shape_.gpu_data(), pad_.gpu_data(),
-          stride_.gpu_data(), dilation_.gpu_data(), col_buff);
+    
+    class NwClipboardGetListSyncFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardGetListSyncFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     }
-  }
-  inline void conv_col2im_gpu(const Dtype* col_buff, Dtype* data) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      col2im_gpu(col_buff, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
-    } else {
-      col2im_nd_gpu(col_buff, num_spatial_axes_, num_kernels_col2im_,
-          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
-          kernel_shape_.gpu_data(), pad_.gpu_data(), stride_.gpu_data(),
-          dilation_.gpu_data(), data);
+    
+      bool NwScreenRegisterStreamFunction::RunNWSync(base::ListValue* response, std::string* error) {
+    std::string id;
+    EXTENSION_FUNCTION_VALIDATE(args_->GetString(0, &id));
     }
-  }
+    
+    		lock();
+		for (int i = 0; i < SYNC_SEMAPHORES; i++) {
+    }
+    
+    MAKE_TEMPLATE_TYPE_INFO(Vector, uint8_t, Variant::POOL_BYTE_ARRAY)
+MAKE_TEMPLATE_TYPE_INFO(Vector, int, Variant::POOL_INT_ARRAY)
+MAKE_TEMPLATE_TYPE_INFO(Vector, float, Variant::POOL_REAL_ARRAY)
+MAKE_TEMPLATE_TYPE_INFO(Vector, String, Variant::POOL_STRING_ARRAY)
+MAKE_TEMPLATE_TYPE_INFO(Vector, Vector2, Variant::POOL_VECTOR2_ARRAY)
+MAKE_TEMPLATE_TYPE_INFO(Vector, Vector3, Variant::POOL_VECTOR3_ARRAY)
+MAKE_TEMPLATE_TYPE_INFO(Vector, Color, Variant::POOL_COLOR_ARRAY)
+    
+    class VariantParser {
+public:
+	struct Stream {
+    }
+    }
+    
+    	virtual void canvas_render_items(Item *p_item_list, int p_z, const Color &p_modulate, Light *p_light, const Transform2D &p_transform);
+	virtual void canvas_debug_viewport_shadows(Light *p_lights_with_shadow);
+    
+    		int read = recv(sockfd, p_buffer + total_read, to_read, 0);
+    
+    	return tr;
+}
+Thread::ID ThreadPosix::get_thread_id_func_posix() {
+    
+    
+    {#ifdef WINDOWS_USE_MUTEX
+	mutex = CreateMutex(NULL, FALSE, NULL);
+#else
+#ifdef UWP_ENABLED
+	InitializeCriticalSectionEx(&mutex, 0, 0);
+#else
+	InitializeCriticalSection(&mutex);
 #endif
+#endif
+}
+    
+    	if (ret == SOCKET_ERROR) {
+		int error = WSAGetLastError();
+    }
+    
+    #ifndef PACKET_PEER_UDP_WINSOCK_H
+#define PACKET_PEER_UDP_WINSOCK_H
     
     
-    {  int count_;
-  int num_concats_;
-  int concat_input_size_;
-  int concat_axis_;
+    {	if (TryAcquireSRWLockShared(&lock) == 0) {
+		return ERR_BUSY;
+	} else {
+		return OK;
+	}
+}
+    
+    #include 'os/rw_lock.h'
+#include <windows.h>
+    
+    //////////////////////////////////////////////////////////////////////
+    
+            for (;;) {
+          auto start = index.fetch_add(work_chunk);
+          auto const stop = std::min(start + work_chunk, inputs.size());
+          if (start >= stop) break;
+    }
+    
+      if (UNLIKELY(m_arrayHandle->kind() == APCKind::SerializedVec ||
+               m_arrayHandle->kind() == APCKind::SerializedDict)) {
+    return createFromSerialized(m_colType, m_arrayHandle);
+  }
+    
+    struct ExecutionProfiler {
+  ExecutionProfiler(ThreadInfo *info, bool builtin) : m_info(info) {
+    m_executing = m_info->m_executing;
+    m_info->m_executing =
+      builtin ? ThreadInfo::ExtensionFunctions : ThreadInfo::UserFunctions;
+  }
+  explicit ExecutionProfiler(ThreadInfo::Executing executing) {
+    m_info = ThreadInfo::s_threadInfo.getNoCheck();
+    m_executing = m_info->m_executing;
+    m_info->m_executing = executing;
+  }
+  ~ExecutionProfiler() {
+    m_info->m_executing = m_executing;
+  }
+private:
+  ThreadInfo *m_info;
+  ThreadInfo::Executing m_executing;
 };
     
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of ConvolutionLayer.
- *        Fallback to ConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates convolution through forward kernels for filtering and bias
- * plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
- *
- * The CUDNN engine does not have memory overhead for matrix buffers. For many
- * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
- * but for fully-convolutional models and large inputs the CAFFE engine can be
- * faster as long as it fits in memory.
+      req::ptr<Directory> opendir(const String& path) override;
+    
+    #define MXCAFFELAYER(__object$, __type$) \
+  (static_cast<mxnet::op::caffe::CaffeLayerFriend<__type$> *>(__object$))
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file caffe_common.h
+ * \brief Common functions for caffeOp and caffeLoss symbols
+ * \author Haoran Wang
 */
-template <typename Dtype>
-class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
- public:
-  explicit CuDNNConvolutionLayer(const LayerParameter& param)
-      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNConvolutionLayer();
-    }
     
-    namespace caffe {
-    }
-    
-    #endif  // CAFFE_CUDNN_SOFTMAX_LAYER_HPP_
-
-    
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    OptimizerBase::OptimizerBase(const ParameterCursor& cursor) {
-  add_parameters(cursor);
-}
-    
-    void THDTensor_(_resize3d)(THDTensor *tensor, int64_t size0, int64_t size1, int64_t size2) {
-  int64_t sizes[] = {size0, size1, size2};
-  THDTensor_(_resize)(tensor, 2, sizes, nullptr);
-}
-    
-      auto signal_tensor_ndim = signal_ndim + static_cast<int64_t>(complex_input);  // add complex dim
-  if (self.dim() < signal_tensor_ndim) {
-    std::ostringstream ss;
-    ss << 'Given signal_ndim=' << signal_ndim << ', expected an input tensor '
-       << 'of at least' << signal_tensor_ndim << 'D';
-    if (complex_input) {
-      ss << ' (complex input adds an extra dimension)';
-    }
-    ss << ', but got input=' << self.type() << self.sizes();
-    throw std::runtime_error(ss.str());
-  }
-    
-    REGISTER_CPU_OPERATOR(
-    HeatmapMaxKeypoint,
-    HeatmapMaxKeypointOp<float, CPUContext>);
-    
-    #endif // HEATMAP_MAX_KEYPOINT_OP_H_
-
-    
-     AT_ERROR('both arguments to matmul need to be at least 1D, but they are ',
-          dim_tensor1, 'D and ', dim_tensor2, 'D');
-    
-    /* On fail throws exceptions which should be caught in worker's loop and reported
- * to master.
+    /*!
+ * Copyright (c) 2015 by Contributors
  */
-void execute(std::unique_ptr<rpc::RPCMessage> raw_message_ptr) {
-  auto &raw_message = *raw_message_ptr;
-  rpc::function_id_type fid = rpc::unpackFunctionId(raw_message);
-  auto iter = detail::functions.find(fid);
-  if (iter != detail::functions.end()) {
-    (*iter->second)(raw_message);
-  } else {
-    throw std::invalid_argument('invalid function id: ' + std::to_string(fid));
-  }
-}
+#ifndef MXNET_ENGINE_THREAD_POOL_H_
+#define MXNET_ENGINE_THREAD_POOL_H_
     
-    static void RunSynchronousUnaryPingPong() {
-  gpr_log(GPR_INFO, 'Running Synchronous Unary Ping Pong');
+            if (sectionOffset.size() > m_maskShape.Rank())
+            LogicError('NDMask::MaskSection: The sectionOffset dimensionality (%d) must be <= rank (%d) of 'this' mask.', (int)sectionOffset.size(), (int)m_maskShape.Rank());
+    
+            const ElementType *currentp = source;
+        const ElementType *lastp = source + sampleCount * sampleSize;
+        size_t destIndex = 0;
+        while (currentp < lastp)
+        {
+            size_t index = sampleSize;
+            bool found = false;
+            for (size_t i = 0; i < sampleSize; i++)
+            {
+                if (*currentp == (ElementType)1)
+                {
+                    if (found)
+                        RuntimeError('CopyDenseToOneHot: Cannot convert to onehot vector; more than one non-zero value in the sample.');
     }
-    
-    #include <string>
-#include <vector>
-    
-    // Data pertaining to configuration of the generator with respect to anything
-// that may be used internally at Google.
-struct GeneratorConfiguration {
-  GeneratorConfiguration();
-  grpc::string grpc_package_root;
-  // TODO(https://github.com/grpc/grpc/issues/8622): Drop this.
-  grpc::string beta_package_root;
-  // TODO(https://github.com/google/protobuf/issues/888): Drop this.
-  grpc::string import_prefix;
-};
-    
-    TEST_F(CodegenTestMinimal, Build) {}
-    
-    UsageTimer::UsageTimer() : start_(Sample()) {}
-    
-      struct Result {
-    double wall;
-    double user;
-    double system;
-    unsigned long long total_cpu_time;
-    unsigned long long idle_cpu_time;
-  };
-    
-    
-    {  WorkloadStats (const WorkloadStats&) = delete;
-  WorkloadStats& operator=(const WorkloadStats&) = delete;
-};
-    
-    SlowTimer::SlowTimer(int64_t msThreshold, const char *location, const char *info)
-  : m_timer(Timer::WallTime), m_msThreshold(msThreshold) {
-  if (location) m_location = location;
-  if (info) m_info = info;
-}
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
-    }
-    
-    
-public int
-magic_list(struct magic_set *ms, const char *magicfile)
-{
-  if (ms == NULL)
-    return -1;
-  return file_apprentice(ms, magicfile, FILE_LIST);
-}
-    
-    namespace irgen {
-    }
-    
-      bool more (const char* v2) const = delete;
-  bool more (const StringData *v2) const;
-  bool more (const String& v2) const;
-  bool more (const Array& v2) const = delete;
-  bool more (const Object& v2) const = delete;
-  bool more (const Resource& v2) const = delete;
-    
-    std::vector<SlabManager*> SlabManager::s_slabManagers;
-    
-      /// Constructor.
-  /**
-   * This constructor creates a timer without setting an expiry time. The
-   * expires_at() or expires_from_now() functions must be called to set an
-   * expiry time before the timer can be waited on.
-   *
-   * @param io_service The io_service object that the timer will use to dispatch
-   * handlers for any asynchronous operations performed on the timer.
-   */
-  explicit basic_waitable_timer(boost::asio::io_service& io_service)
-    : basic_io_object<WaitableTimerService>(io_service)
-  {
-  }
-    
-    namespace boost {
-namespace date_time {
     }
     }
     
-    #if defined(BOOST_ASIO_HAS_STD_FUNCTION)
-using std::function;
-#else // defined(BOOST_ASIO_HAS_STD_FUNCTION)
-using boost::function;
-#endif // defined(BOOST_ASIO_HAS_STD_FUNCTION)
+            size_t MaskedCount() const override
+        {
+            if (m_isPacked)
+                // Compute the number of masked samples after the data will be unpacked
+                return m_packedDataLayout ? ((m_packedDataLayout->GetNumTimeSteps() * m_packedDataLayout->GetNumSequences()) - m_packedDataLayout->GetActualNumSamples()) : 0;
+            else
+                return Value::MaskedCount();
+        }
     
-      // Constructor for a full fenced block.
-  explicit gcc_arm_fenced_block(full_t)
-  {
-    barrier();
-  }
     
-    #define BOOST_ASIO_WAIT_HANDLER_CHECK( \
-    handler_type, handler) \
-  \
-  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
-      void(boost::system::error_code)) \
-    asio_true_handler_type; \
-  \
-  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
-      sizeof(boost::asio::detail::one_arg_handler_test( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>(), \
-          static_cast<const boost::system::error_code*>(0))) == 1, \
-      'WaitHandler type requirements not met') \
-  \
-  typedef boost::asio::detail::handler_type_requirements< \
-      sizeof( \
-        boost::asio::detail::argbyv( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>())) + \
-      sizeof( \
-        boost::asio::detail::lvref< \
-          asio_true_handler_type>()( \
-            boost::asio::detail::lvref<const boost::system::error_code>()), \
-        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
+    {        // Creating Composite Data Reader that allow to combine deserializers.
+        // This should be changed to link statically when SGD uses the new interfaces.
+        wstring ioName = L'ioName';
+        GetReaderProc getReaderProc = (GetReaderProc)Plugin::Load(readerType, GetReaderName(precision));
+        m_ioNames.push_back(ioName);
+        assert(getReaderProc != nullptr);
+        getReaderProc(&m_dataReaders[ioName]);
+    }
+    else
+    {
+        wstring readerType = config(L'readerType', L'Cntk.Deserializers.TextFormat');
+        wstring ioName = L'ioName';
+        // backward support to use only one type of data reader
+        // get the name for the reader we want to use, default to CNTKTextFormatReader
+        GetReaderProc getReaderProc = (GetReaderProc)Plugin::Load(readerType, GetReaderName(precision));
+        m_ioNames.push_back(ioName);
+        assert(getReaderProc != nullptr);
+        getReaderProc(&m_dataReaders[ioName]);
+    }
     
-    class winrt_buffer_impl :
-  public Microsoft::WRL::RuntimeClass<
-    Microsoft::WRL::RuntimeClassFlags<
-      Microsoft::WRL::RuntimeClassType::WinRtClassicComMix>,
-    ABI::Windows::Storage::Streams::IBuffer,
-    Windows::Storage::Streams::IBufferByteAccess>
+    class Timer
 {
 public:
-  explicit winrt_buffer_impl(const boost::asio::const_buffer& b)
-  {
-    bytes_ = const_cast<byte*>(boost::asio::buffer_cast<const byte*>(b));
-    length_ = boost::asio::buffer_size(b);
-    capacity_ = boost::asio::buffer_size(b);
-  }
+    Timer()
+        : m_start(0), m_end(0)
+    {
+    }
     }
     
-      errno = 0;
-  int result = error_wrapper(::ioctl(d, cmd, arg), ec);
-    
-    #include <boost/asio/detail/pop_options.hpp>
-    
     
     {
     {
-    {      if ((events[i].events & (POLLERR | POLLHUP)) != 0
-            && !more_except && !more_reads && !more_writes)
+    {};
+#endif
+} // namespace deprecated
+} // namespace boost
+    
+    
+    
+    
+    {   ~mem_block_cache()
+   {
+      while(next)
       {
-        // If we have an event and no operations associated with the
-        // descriptor then we need to delete the descriptor from /dev/poll.
-        // The poll operation can produce POLLHUP or POLLERR events when there
-        // is no operation pending, so if we do not remove the descriptor we
-        // can end up in a tight polling loop.
-        ::pollfd ev = { 0, 0, 0 };
-        ev.fd = descriptor;
-        ev.events = POLLREMOVE;
-        ev.revents = 0;
-        ::write(dev_poll_fd_, &ev, sizeof(ev));
+         mem_block_node* old = next;
+         next = next->next;
+         ::operator delete(old);
+      }
+   }
+   void* get()
+   {
+#ifdef BOOST_HAS_THREADS
+      boost::static_mutex::scoped_lock g(mut);
+#endif
+     if(next)
+      {
+         mem_block_node* result = next;
+         next = next->next;
+         --cached_blocks;
+         return result;
+      }
+      return ::operator new(BOOST_REGEX_BLOCKSIZE);
+   }
+   void put(void* p)
+   {
+#ifdef BOOST_HAS_THREADS
+      boost::static_mutex::scoped_lock g(mut);
+#endif
+      if(cached_blocks >= BOOST_REGEX_MAX_CACHE_BLOCKS)
+      {
+         ::operator delete(p);
       }
       else
       {
-        ::pollfd ev = { 0, 0, 0 };
-        ev.fd = descriptor;
-        ev.events = POLLERR | POLLHUP;
-        if (more_reads)
-          ev.events |= POLLIN;
-        if (more_writes)
-          ev.events |= POLLOUT;
-        if (more_except)
-          ev.events |= POLLPRI;
-        ev.revents = 0;
-        int result = ::write(dev_poll_fd_, &ev, sizeof(ev));
-        if (result != sizeof(ev))
-        {
-          boost::system::error_code ec(errno,
-              boost::asio::error::get_system_category());
-          for (int j = 0; j < max_ops; ++j)
-            op_queue_[j].cancel_operations(descriptor, ops, ec);
-        }
+         mem_block_node* old = static_cast<mem_block_node*>(p);
+         old->next = next;
+         next = old;
+         ++cached_blocks;
       }
-    }
-  }
-  timer_queues_.get_ready_timers(ops);
+   }
+};
+    
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::match_within_word()
+{
+   if(position == last)
+      return false;
+   // both prev and this character must be m_word_mask:
+   bool prev = traits_inst.isctype(*position, m_word_mask);
+   {
+      bool b;
+      if((position == backstop) && ((m_match_flags & match_prev_avail) == 0)) 
+         return false;
+      else
+      {
+         --position;
+         b = traits_inst.isctype(*position, m_word_mask);
+         ++position;
+      }
+      if(b == prev)
+      {
+         pstate = pstate->next.p;
+         return true;
+      }
+   }
+   return false;
 }
     
-    bool js_cocos2dx_studio_SkewFrame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_SkewFrame_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_SkewFrame(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_SkewFrame_getSkewY(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_SkewFrame_setSkewX(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_SkewFrame_setSkewY(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_SkewFrame_getSkewX(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_SkewFrame_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_SkewFrame_SkewFrame(JSContext *cx, uint32_t argc, jsval *vp);
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex_grep.hpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Provides regex_grep implementation.
+  */
+    
+    /**
+ * @brief A simple ConfigParserPlugin for feature vector dictionary keys.
+ */
+class FeatureVectorsConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override;
+    }
     
     
+    {} // namespace osquery
+
+    
+      // Simulate results from several schedule runs, calculate differentials.
+  uint64_t expected_counter = counter + 1;
+  for (auto result : getTestDBResultStream()) {
+    // Get the results from the previous query execution (from the DB).
+    QueryDataSet previous_qd;
+    status = cf.getPreviousQueryResults(previous_qd);
+    EXPECT_TRUE(status.ok());
+    EXPECT_EQ(status.toString(), 'OK');
+    }
+    
+      /**
+   * @brief Return the state of autoloadable extensions.
+   *
+   * Some initialization decisions are made based on waiting for plugins to
+   * broadcast from potentially-loaded extensions. If no extensions are loaded
+   * and an active (selected at command line) plugin is missing, fail quickly.
+   */
+  bool hasManagedExtensions() const;
     
     
+    {
+    { public:
+  friend class INotifyTests;
+  FRIEND_TEST(INotifyTests, test_inotify_init);
+  FRIEND_TEST(INotifyTests, test_inotify_optimization);
+  FRIEND_TEST(INotifyTests, test_inotify_recursion);
+  FRIEND_TEST(INotifyTests, test_inotify_match_subscription);
+  FRIEND_TEST(INotifyTests, test_inotify_embedded_wildcards);
+};
+}
+
     
+    bool SimpleUpdate(size_t t, const StringMap& f, StringMap& m) {
+  kAuditCounter++;
+  for (const auto& i : f) {
+    m[i.first] = i.second;
+  }
+  return true;
+}
     
+      if (!apollo::common::util::GetProtoFromFile(FLAGS_can_client_conf_file_a,
+                                              &can_client_conf_a)) {
+    AERROR << 'Unable to load canbus conf file: '
+           << FLAGS_can_client_conf_file_a;
+    return 1;
+  } else {
+    AINFO << 'Conf file is loaded: ' << FLAGS_can_client_conf_file_a;
+  }
+  AINFO << can_client_conf_a.ShortDebugString();
+  auto client_a = can_client_factory->CreateObject(can_client_conf_a.brand());
+  if (!client_a || !client_a->Init(can_client_conf_a) ||
+      client_a->Start() != ErrorCode::OK) {
+    AERROR << 'Create can client a failed.';
+    return 1;
+  }
+  param_ptr_a->can_client = client_a.get();
+  param_ptr_a->is_first_agent = true;
+  param_ptr_a->conf = can_client_conf_a;
     
+    #include <iostream>
     
-    {			b2PolygonShape shape;
-			shape.SetAsBox(0.5f, 2.0f);
-			m_attachment->CreateFixture(&shape, 2.0f);
-		}
+    TEST(HermesCanClient, init) {
+  CANCardParameter param;
+  param.set_brand(CANCardParameter::HERMES_CAN);
+  param.set_channel_id(CANCardParameter::CHANNEL_ID_ZERO);
+  HermesCanClient hermes_can;
+  EXPECT_TRUE(hermes_can.Init(param));
+  //    EXPECT_EQ(hermes_can.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
+  //      EXPECT_EQ(hermes_can.Start(), ErrorCode::OK);
+}
