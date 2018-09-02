@@ -1,307 +1,308 @@
 
         
-        template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25>
-internal::ValueArray25<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25> Values(T1 v1,
-    T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11,
-    T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19,
-    T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25) {
-  return internal::ValueArray25<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25>(v1,
-      v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17,
-      v18, v19, v20, v21, v22, v23, v24, v25);
-}
+            // Retrieve the generic environment to use for the mapping.
+    auto found = ctx.DelayedPatternContexts.find(this);
+    assert(found != ctx.DelayedPatternContexts.end());
+    auto dc = found->second;
     
-    const char* pets[] = {'cat', 'dog'};
-INSTANTIATE_TEST_CASE_P(AnotherInstantiationName, FooTest, ValuesIn(pets));
-    
-    // Implements the helper function for {ASSERT|EXPECT}_NE
-GTEST_IMPL_CMP_HELPER_(NE, !=);
-// Implements the helper function for {ASSERT|EXPECT}_LE
-GTEST_IMPL_CMP_HELPER_(LE, <=);
-// Implements the helper function for {ASSERT|EXPECT}_LT
-GTEST_IMPL_CMP_HELPER_(LT, <);
-// Implements the helper function for {ASSERT|EXPECT}_GE
-GTEST_IMPL_CMP_HELPER_(GE, >=);
-// Implements the helper function for {ASSERT|EXPECT}_GT
-GTEST_IMPL_CMP_HELPER_(GT, >);
+    #include 'swift/AST/PlatformKind.h'
+#include 'swift/Basic/LangOptions.h'
+#include 'llvm/ADT/StringSwitch.h'
+#include 'llvm/Support/ErrorHandling.h'
     
     
-    {  const T1 v1_;
+    {    return GenericTypeParamType::get(genericParam->getDepth(),
+                                     genericParam->getIndex(), ctx);
+  };
+  auto conformanceToSyntheticConformanceFn =
+      MakeAbstractConformanceForGenericType();
+    
+      bool visitUnboundGenericType(UnboundGenericType *ty) {
+    if (auto parent = ty->getParent())
+      return doIt(parent);
+    return false;
+  }
+    
+      // An AST section consists of one or more AST modules, optionally with
+  // headers. Iterate over all AST modules.
+  while (!buf.empty()) {
+    auto info = serialization::validateSerializedAST(buf);
+    }
+    
+    /// The list of known CF types.  We use 'constexpr' to verify that this is
+/// emitted as a constant.  Note that this is expected to be sorted in
+/// quasi-lexicographic order.
+static constexpr const llvm::StringLiteral KnownCFTypes[] = {
+#define CF_TYPE(NAME) #NAME,
+#define NON_CF_TYPE(NAME)
+#include 'SortedCFDatabase.def'
 };
+const size_t NumKnownCFTypes = sizeof(KnownCFTypes) / sizeof(*KnownCFTypes);
     
-      // Compares two wide C strings.  Returns true iff they have the same
-  // content.
-  //
-  // Unlike wcscmp(), this function can handle NULL argument(s).  A
-  // NULL C string is considered different to any non-NULL C string,
-  // including the empty string.
-  static bool WideCStringEquals(const wchar_t* lhs, const wchar_t* rhs);
-    
-    template <GTEST_10_TYPENAMES_(T), GTEST_10_TYPENAMES_(U)>
-inline bool operator==(const GTEST_10_TUPLE_(T)& t,
-                       const GTEST_10_TUPLE_(U)& u) {
-  return gtest_internal::SameSizeTuplePrefixComparator<
-      tuple_size<GTEST_10_TUPLE_(T) >::value,
-      tuple_size<GTEST_10_TUPLE_(U) >::value>::Eq(t, u);
-}
+      bool isRecord() const {
+    assert(isValid());
+    return !Decl.isNull() && Decl.is<const clang::RecordDecl *>();
+  }
+  const clang::RecordDecl *getRecord() const {
+    assert(isRecord());
+    return Decl.get<const clang::RecordDecl *>();
+  }
     
     
-$for i [[
-template <GTEST_$(n)_TYPENAMES_(T)>
-struct TupleElement<true, $i, GTEST_$(n)_TUPLE_(T) > {
-  typedef T$i type;
+    {  virtual void ReportTestPartResult(const TestPartResult& result) = 0;
 };
     
     
-    {  // n has no integer factor in the range (1, n), and thus is prime.
-  return true;
+    {  // To refer to typedefs in the fixture, add the 'typename
+  // TestFixture::' prefix.
+  typename TestFixture::List values;
+  values.push_back(n);
+  ...
 }
-
     
-    #include <memory>
+    // DeathTest is a class that hides much of the complexity of the
+// GTEST_DEATH_TEST_ macro.  It is abstract; its static Create method
+// returns a concrete class that depends on the prevailing death test
+// style, as defined by the --gtest_death_test_style and/or
+// --gtest_internal_run_death_test flags.
     
-    #include <memory>
+    // The following family of struct and struct templates are used to
+// represent type lists.  In particular, TypesN<T1, T2, ..., TN>
+// represents a type list with N types (T1, T2, ..., and TN) in it.
+// Except for Types0, every struct in the family has two member types:
+// Head for the first type in the list, and Tail for the rest of the
+// list.
     
-    DEFINE_int32(driver_port, 0, 'Port for communication with driver');
-DEFINE_int32(server_port, 0, 'Port for operation as a server');
-DEFINE_string(credential_type, grpc::testing::kInsecureCredentialsType,
-              'Credential type for communication with driver');
     
-    #include <grpc/support/alloc.h>
-#include <grpc/support/log.h>
-#include <grpc/support/log_windows.h>
-#include <grpc/support/string_util.h>
-#include <grpc/support/time.h>
-#include <string.h>
-#include 'src/core/lib/gpr/string.h'
-#include 'src/core/lib/gprpp/memory.h'
-#include 'src/core/lib/iomgr/combiner.h'
-#include 'src/core/lib/iomgr/socket_windows.h'
-#include 'src/core/lib/iomgr/tcp_windows.h'
-#include 'src/core/lib/slice/slice_internal.h'
+    {    return true;
+  }
     
-    /* Asynchronous callback from the IOCP, or the background thread. */
-static void on_write(void* tcpp, grpc_error* error) {
-  grpc_tcp* tcp = (grpc_tcp*)tcpp;
-  grpc_winsocket* handle = tcp->socket;
-  grpc_winsocket_callback_info* info = &handle->write_info;
-  grpc_closure* cb;
-    }
+    namespace tesseract {
+double DotProductSSE(const double* u, const double* v, int n) {
+  fprintf(stderr, 'DotProductSSE can't be used on Android\n');
+  abort();
+}
+int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n) {
+  fprintf(stderr, 'IntDotProductSSE can't be used on Android\n');
+  abort();
+}
+}  // namespace tesseract
     
-    DOT_GRAPH_MAX_NODES    = 50
-    
-    #define CALL_ELEM_FROM_CALL(call, idx) \
-  grpc_call_stack_element(CALL_STACK_FROM_CALL(call), idx)
-#define CALL_FROM_TOP_ELEM(top_elem) \
-  CALL_FROM_CALL_STACK(grpc_call_stack_from_top_element(top_elem))
-    
-    void GetAbsoluteFilePath(const char* valid_file_dir,
-                         const char* file_entry_name, char* path_buffer) {
-  if (valid_file_dir != nullptr && file_entry_name != nullptr) {
-    int path_len = snprintf(path_buffer, MAXPATHLEN, '%s/%s', valid_file_dir,
-                            file_entry_name);
-    if (path_len == 0) {
-      gpr_log(GPR_ERROR, 'failed to get absolute path for file: %s',
-              file_entry_name);
+    // Computes a reshaped copy of the weight matrix w. If there are no
+// partial_funcs_, it does nothing.
+void IntSimdMatrix::Init(const GENERIC_2D_ARRAY<int8_t>& w) {
+  if (partial_funcs_.empty()) return;
+  int num_out = w.dim1();
+  int num_in = w.dim2() - 1;
+  // The rounded-up sizes of the reshaped weight matrix, excluding biases.
+  int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
+  int rounded_num_out = RoundOutputs(num_out);
+  // Add the bias and compute the required size.
+  shaped_w_.resize((rounded_num_in + 1) * rounded_num_out, 0);
+  int shaped_index = 0;
+  int output = 0;
+  // Each number of registers needs a different format! Iterates over the
+  // different numbers of registers (each a power of 2).
+  for (int num_registers = max_output_registers_; num_registers >= 1;
+       num_registers /= 2) {
+    // The number of outputs that we will generate with this many registers.
+    int num_outputs_per_register_set =
+        num_registers * num_outputs_per_register_;
+    // Use the max number of registers until we have to go fewer.
+    while (output + num_outputs_per_register_set <= rounded_num_out) {
+      // Accumulating outputs in registers saves iterating over the inputs, so
+      // we only have to do it once per output register set.
+      for (int input = 0; input < num_in; input += num_inputs_per_group_) {
+        // Iterate over the number of outputs in a register set.
+        for (int j = 0; j < num_outputs_per_register_set; ++j) {
+          // Inner-most loop corresponds to the number of inputs in an input
+          // group.
+          for (int i = 0; i < num_inputs_per_group_; ++i) {
+            int8_t weight = 0;
+            if (output + j < num_out && input + i < num_in)
+              weight = w(output + j, input + i);
+            shaped_w_[shaped_index++] = weight;
+          }
+        }
+      }
+      // Append the bias weights for the register set.
+      for (int j = 0; j < num_outputs_per_register_set; ++j) {
+        int8_t weight = 0;
+        if (output + j < num_out) weight = w(output + j, num_in);
+        shaped_w_[shaped_index++] = weight;
+      }
+      output += num_outputs_per_register_set;
     }
   }
 }
     
-    namespace boost {
-namespace asio {
-    }
+    template <class T> class GENERIC_2D_ARRAY;
+template <typename T> class GenericVector;
+    
+    namespace tesseract {
     }
     
-      // Return a pointer to the beginning of the unread data.
-  const_buffer data() const
-  {
-    return boost::asio::buffer(buffer_) + begin_offset_;
+      // Returns a pointer to serialized choice lattice.
+  // Fills lattice_size with the number of bytes in lattice data.
+  const char *WordLattice(int *lattice_size) const;
+    
+    class MutableIterator : public ResultIterator {
+ public:
+  // See argument descriptions in ResultIterator()
+  MutableIterator(PAGE_RES* page_res, Tesseract* tesseract,
+                  int scale, int scaled_yres,
+                  int rect_left, int rect_top,
+                  int rect_width, int rect_height)
+      : ResultIterator(
+          LTRResultIterator(page_res, tesseract, scale, scaled_yres, rect_left,
+                            rect_top, rect_width, rect_height)) {}
+  virtual ~MutableIterator() = default;
+    }
+    
+    class OrientationDetector {
+ public:
+  OrientationDetector(const GenericVector<int>* allowed_scripts,
+                      OSResults* results);
+  bool detect_blob(BLOB_CHOICE_LIST* scores);
+  int get_orientation();
+ private:
+  OSResults* osr_;
+  const GenericVector<int>* allowed_scripts_;
+};
+    
+    ScrollView* bln_word_window_handle();  //return handle
+void build_image_window(int width, int height);
+void display_bln_lines(ScrollView window,
+                       ScrollView::Color colour,
+                       float scale_factor,
+                       float y_offset,
+                       float minx,
+                       float maxx);
+                                 //function to call
+void pgeditor_msg(  //message display
+                  const char *msg);
+void pgeditor_show_point(  //display coords
+                         SVEvent *event);
+                                 //put bln word in       box
+void show_point(PAGE_RES* page_res, float x, float y);
+    
+    #include <grpcpp/security/credentials.h>
+#include <grpcpp/support/config.h>
+    
+    const AuthProperty AuthPropertyIterator::operator*() {
+  return std::pair<grpc::string_ref, grpc::string_ref>(
+      property_->name,
+      grpc::string_ref(property_->value, property_->value_length));
+}
+    
+    // Note: a second call to this will add in front the result of the first call.
+// An example is calling this on a copy of ChannelArguments which already has a
+// prefix. The user can build up a prefix string by calling this multiple times,
+// each with more significant identifier.
+void ChannelArguments::SetUserAgentPrefix(
+    const grpc::string& user_agent_prefix) {
+  if (user_agent_prefix.empty()) {
+    return;
   }
-    
-    #include <boost/asio/detail/push_options.hpp>
-    
-    // Calls to asio_handler_invoke must be made from a namespace that does not
-// contain overloads of this function. The boost_asio_handler_invoke_helpers
-// namespace is defined here for that purpose.
-namespace boost_asio_handler_invoke_helpers {
+  bool replaced = false;
+  auto strings_it = strings_.begin();
+  for (auto it = args_.begin(); it != args_.end(); ++it) {
+    const grpc_arg& arg = *it;
+    ++strings_it;
+    if (arg.type == GRPC_ARG_STRING) {
+      if (grpc::string(arg.key) == GRPC_ARG_PRIMARY_USER_AGENT_STRING) {
+        GPR_ASSERT(arg.value.string == strings_it->c_str());
+        *(strings_it) = user_agent_prefix + ' ' + arg.value.string;
+        it->value.string = const_cast<char*>(strings_it->c_str());
+        replaced = true;
+        break;
+      }
+      ++strings_it;
     }
+  }
+  if (!replaced) {
+    SetString(GRPC_ARG_PRIMARY_USER_AGENT_STRING, user_agent_prefix);
+  }
+}
     
+    bool CompletionQueue::CompletionQueueTLSCache::Flush(void** tag, bool* ok) {
+  int res = 0;
+  void* res_tag;
+  flushed_ = true;
+  if (grpc_completion_queue_thread_local_cache_flush(cq_->cq_, &res_tag,
+                                                     &res)) {
+    auto cq_tag = static_cast<internal::CompletionQueueTag*>(res_tag);
+    *ok = res == 1;
+    if (cq_tag->FinalizeResult(tag, ok)) {
+      return true;
+    }
+  }
+  return false;
+}
     
+    void SecureAuthContext::AddProperty(const grpc::string& key,
+                                    const grpc::string_ref& value) {
+  if (!ctx_) return;
+  grpc_auth_context_add_property(ctx_, key.c_str(), value.data(), value.size());
+}
+    
+    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
+  for (unsigned int i = 0; i < args_.size(); i++) {
+    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
+      return args_[i].value.string;
+    }
+  }
+  return '';
+}
+    
+    ::opencensus::stats::MeasureInt64 RpcServerSentMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcServerSentBytesPerRpc();
+::opencensus::stats::MeasureInt64 RpcServerReceivedMessagesPerRpc();
+::opencensus::stats::MeasureDouble RpcServerReceivedBytesPerRpc();
+::opencensus::stats::MeasureDouble RpcServerServerLatency();
+::opencensus::stats::MeasureInt64 RpcServerCompletedRpcs();
+    
+    constexpr size_t RpcServerStatsEncoding::kRpcServerStatsSize;
+constexpr size_t RpcServerStatsEncoding::kEncodeDecodeFailure;
+constexpr size_t RpcServerStatsEncoding::kVersionIdSize;
+constexpr size_t RpcServerStatsEncoding::kFieldIdSize;
+constexpr size_t RpcServerStatsEncoding::kVersionIdOffset;
+constexpr size_t RpcServerStatsEncoding::kVersionId;
+    
+        std::shared_ptr<const MatrixBase> NDArrayView::GetMatrixBase(size_t rowColSplitPoint/* = AutoSelectRowColSplitPoint*/) const
     {
+        switch (m_dataType)
+        {
+        case DataType::Float:
+            return GetMatrixImpl<float>(GetTensorView<float>(), rowColSplitPoint);
+        case DataType::Double:
+            return GetMatrixImpl<double>(GetTensorView<double>(), rowColSplitPoint);
+        case DataType::Float16:
+            return GetMatrixImpl<half>(GetTensorView<half>(), rowColSplitPoint);
+        case DataType::Int8:
+            return GetMatrixImpl<char>(GetTensorView<char>(), rowColSplitPoint);
+        case DataType::Int16:
+            return GetMatrixImpl<short>(GetTensorView<short>(), rowColSplitPoint);
+        default:
+            LogicError('Unknown m_dataType %d', (int)m_dataType);
+        }
+        return nullptr;
+    }
+    
+            NDShape shape = sectionShape.AppendShape(NDShape(m_maskShape.Rank() - sectionShape.Rank(), NDShape::InferredDimension));
+    
+            ValidateType<T>(dict, typeValue, currentVersion);
+    
+            static bool IsUDF(const FunctionPtr& f);
+    
+        ConfigValuePtr NodeToConfigValuePtr(ComputationNodeBasePtr node)
     {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-      // Erase an entry from the map.
-  void erase(iterator it)
-  {
-    BOOST_ASIO_ASSERT(it != values_.end());
-    BOOST_ASIO_ASSERT(num_buckets_ != 0);
-    }
-    
-    #endif // BOOST_ASIO_DETAIL_IMPL_DEV_POLL_REACTOR_HPP
-
-    
-    
-    
-    #ifdef __cplusplus
-extern 'C' {
-#endif
-#include 'tolua++.h'
-#ifdef __cplusplus
-}
-#endif
-    
-    #if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-    
-    	void Keyboard(unsigned char key)
-	{
-		switch (key)
-		{
-		case 'w':
-			{
-				b2Vec2 f = m_body->GetWorldVector(b2Vec2(0.0f, -200.0f));
-				b2Vec2 p = m_body->GetWorldPoint(b2Vec2(0.0f, 2.0f));
-				m_body->ApplyForce(f, p, true);
-			}
-			break;
-    }
+        assert(node);
+        auto valuep = ConfigValuePtr(node, [](const std::wstring& msg) { LogicError('CloneFunction (NodeToConfigValuePtr): Unexpected failure: %ls', msg.c_str()); }, node->NodeName());
+        return valuep;
     }
     
     
-    {
-    {		case 'k':
-			m_platform->SetType(b2_kinematicBody);
-			m_platform->SetLinearVelocity(b2Vec2(-m_speed, 0.0f));
-			m_platform->SetAngularVelocity(0.0f);
-			break;
-		}
-	}
-    
-    // Reads the Start of Scan (SOS) marker segment and fills in *scan_info with the
-// parsed data.
-bool ProcessSOS(const uint8_t* data, const size_t len, size_t* pos,
-                JPEGData* jpg) {
-  const size_t start_pos = *pos;
-  VERIFY_LEN(3);
-  size_t marker_len = ReadUint16(data, pos);
-  int comps_in_scan = ReadUint8(data, pos);
-  VERIFY_INPUT(comps_in_scan, 1, static_cast<int>(jpg->components.size()),
-               COMPS_IN_SCAN);
+    {        // TODO: Should this add a tensor dimension?
+        SetDims(TensorShape(Input(0)->GetAsMatrixNumRows() * wordsInEachSample), true);
     }
-    
-    #endif  // GUETZLI_DCT_DOUBLE_H_
-
-    
-    #ifndef GUETZLI_FAST_LOG_H_
-#define GUETZLI_FAST_LOG_H_
-    
-    
-    {}  // namespace guetzli
-
-    
-    // Definition of error codes for parsing jpeg files.
-    
-    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
-std::vector<std::vector<float>> PreProcessChannel(
-    int w, int h, int channel, float sigma, float amount, bool blur,
-    bool sharpen, const std::vector<std::vector<float>>& image);
-    
-    TEST_F(MockEnvTest, Corrupt) {
-  const std::string kGood = 'this is a good string, synced to disk';
-  const std::string kCorrupted = 'this part may be corrupted';
-  const std::string kFileName = '/dir/f';
-  unique_ptr<WritableFile> writable_file;
-  ASSERT_OK(env_->NewWritableFile(kFileName, &writable_file, soptions_));
-  ASSERT_OK(writable_file->Append(kGood));
-  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size());
-    }
-    
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    
-     private:
-  // A version of PartialMerge that actually performs 'partial merging'.
-  // Use this to simulate the exact behaviour of the StringAppendOperator.
-  bool _AssocPartialMergeMulti(const Slice& key,
-                               const std::deque<Slice>& operand_list,
-                               std::string* new_value, Logger* logger) const;
-    
-      ~Reader();
-    
-      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
-    if (type >= HISTOGRAM_ENUM_MAX) {
-      return false;
-    }
-    
-    if (m_ignore_histograms.count(type) > 0) {
-        return false;
-    }
-    }
-    
-    namespace rocksdb {
-    }
-    
-    #include <windows.h>
-#include <string>
-#include <string.h>
-#include <mutex>
-#include <limits>
-#include <condition_variable>
-#include <malloc.h>
-#include <intrin.h>
-    
-    Status StatisticsImpl::Reset() {
-  MutexLock lock(&aggregate_lock_);
-  for (uint32_t i = 0; i < TICKER_ENUM_MAX; ++i) {
-    setTickerCountLocked(i, 0);
-  }
-  for (uint32_t i = 0; i < HISTOGRAM_ENUM_MAX; ++i) {
-    for (size_t core_idx = 0; core_idx < per_core_stats_.Size(); ++core_idx) {
-      per_core_stats_.AccessAtCore(core_idx)->histograms_[i].Clear();
-    }
-  }
-  return Status::OK();
-}
-    
-    #ifndef COMM_COMM_FREQUENCY_LIMIT_H_
-#define COMM_COMM_FREQUENCY_LIMIT_H_
-    
-        template<typename T>
-    T* _Service() {
-        if (m_dependservices.end() != m_dependservices.find(T::ServiceName()))
-            return (T*)m_dependservices[T::ServiceName()];
-    }
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    
-#define SPY_DEF_CLASS_NAME TSpy
-#define SPY_DEF_XLOGGER_HOOK TSpy::SpyHookLogFunc
-    
-    jvalue JNU_CallMethodByName(JNIEnv* _env, jobject obj, const char* _name, const char* descriptor, ...);
-jvalue JNU_CallStaticMethodByName(JNIEnv* _env, jclass clazz, const char* _name, const char* descriptor, ...);
-jvalue JNU_CallStaticMethodByName(JNIEnv* _env, const char* _class_name, const char* _name, const char* descriptor, ...);
-jvalue JNU_CallStaticMethodByMethodInfo(JNIEnv* _env, JniMethodInfo _method_info, ...);
-jvalue JNU_GetStaticField(JNIEnv* _env, jclass clazz, const char* _name, const char* sig);
-jvalue JNU_GetField(JNIEnv* _env, jobject obj, const char* _name, const char* sig);
