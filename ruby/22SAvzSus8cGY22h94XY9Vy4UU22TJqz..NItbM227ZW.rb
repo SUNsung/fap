@@ -1,101 +1,122 @@
 
         
-              # Creates a _layout method to be called by _default_layout .
+              # This method returns an HTML safe string similar to what <tt>Array#join</tt>
+      # would return. The array is flattened, and all items, including
+      # the supplied separator, are HTML escaped unless they are HTML
+      # safe, and the returned string is marked as HTML safe.
       #
-      # If a layout is not explicitly mentioned then look for a layout with the controller's name.
-      # if nothing is found then try same procedure to find super class's layout.
-      def _write_layout_method # :nodoc:
-        silence_redefinition_of_method(:_layout)
+      #   safe_join([raw('<p>foo</p>'), '<p>bar</p>'], '<br />')
+      #   # => '<p>foo</p>&lt;br /&gt;&lt;p&gt;bar&lt;/p&gt;'
+      #
+      #   safe_join([raw('<p>foo</p>'), raw('<p>bar</p>')], raw('<br />'))
+      #   # => '<p>foo</p><br /><p>bar</p>'
+      #
+      def safe_join(array, sep = $,)
+        sep = ERB::Util.unwrapped_html_escape(sep)
     
-        def start(name, id, payload)
-      if name == 'render_template.action_view'
-        log_rendering_start(payload)
+                # Prepend a hidden field to make sure something will be sent back to the
+            # server if all radio buttons are unchecked.
+            if options.fetch('include_hidden', true)
+              hidden_field + rendered_collection
+            else
+              rendered_collection
+            end
+          end
+    
+                case options[:default]
+            when nil
+              Time.current
+            when Date, Time
+              options[:default]
+            else
+              default = options[:default].dup
+    
+            def initialize(object_name, method_name, template_object, content_or_options = nil, options = nil)
+          options ||= {}
+    
+            private
+    
+          def install_phase(**options)
+        link(**options)
       end
     
-        def find_all_with_query(query) # :nodoc:
-      paths.each do |resolver|
-        templates = resolver.find_all_with_query(query)
-        return templates unless templates.empty?
-      end
-    
-    if git.modified_files.include?('snapshot/lib/assets/SnapshotHelper.swift')
-  warn('You modified `SnapshotHelper.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
+        def register_sprockets
+      Sprockets.append_path(stylesheets_path)
+      Sprockets.append_path(fonts_path)
+      Sprockets.append_path(javascripts_path)
+    end
+  end
 end
     
-    puts('[WARNING] You are calling #{tool_name} directly. Usage of the tool name without the `fastlane` prefix is deprecated in fastlane 2.0'.yellow)
-puts('Please update your scripts to use `fastlane #{tool_name} #{full_params}` instead.'.yellow)
+      find_files = ->(path) {
+    Find.find(Pathname.new(path).relative_path_from(Pathname.new Dir.pwd).to_s).map do |path|
+      path if File.file?(path)
+    end.compact
+  }
     
-        class [[NAME_CLASS]] < Action
-      def self.run(params)
-        # fastlane will take care of reading in the parameter and fetching the environment variable:
-        UI.message 'Parameter API Token: #{params[:api_token]}'
-    
-        def self.reset_aliases
-      @alias_actions = nil
+        def str_to_byte_pos(pos)
+      @s.string.slice(0, pos).bytesize
     end
+  end
+end
     
-            [
-          'This will automatically tag your build with the following format: `<grouping>/<lane>/<prefix><build_number>`, where:'.markdown_preserve_newlines,
-          list,
-          'For example, for build 1234 in the 'appstore' lane, it will tag the commit with `builds/appstore/1234`.'
-        ].join('\n')
+        def process_file(input, output)
+      input_path, output_path = path_for(input), path_for(output)
+      if input_path
+        @options[:from] ||=
+          case input_path
+          when /\.scss$/; :scss
+          when /\.sass$/; :sass
+          when /\.less$/; raise 'sass-convert no longer supports LessCSS.'
+          when /\.css$/; :css
+          end
+      elsif @options[:in_place]
+        raise 'Error: the --in-place option requires a filename.'
       end
     
-            if params[:scale].nil? # sensible default values for scaling
-          case params[:device].downcase.to_sym
-          when :iphone6splus, :iphone6plus
-            params[:scale] = '50'
-          when :ipadair, :ipadair2
-            params[:scale] = '50'
+    if Encoding.default_external != Encoding::UTF_8
+    
+            def run
+          if @pod_name.nil?
+            # Note: at that point, @wipe_all is always true (thanks to `validate!`)
+            # Remove all
+            clear_cache
           else
-            params[:scale] = '75'
+            # Remove only cache for this pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            elsif cache_descriptors.count > 1 && !@wipe_all
+              # Ask which to remove
+              choices = cache_descriptors.map { |c| '#{@pod_name} v#{c[:version]} (#{pod_type(c)})' }
+              index = UI.choose_from_array(choices, 'Which pod cache do you want to remove?')
+              remove_caches([cache_descriptors[index]])
+            else
+              # Remove all found cache of this pod
+              remove_caches(cache_descriptors)
+            end
           end
         end
     
-          def self.description
-        'This action uploads an artifact to artifactory'
-      end
-    
-    html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
-readme_doctree = REXML::Document.new(html_readme)
-links = REXML::XPath.match(readme_doctree, '//a')
-    
-        # This will detect the proper guest OS for the machine and set up
-    # the class to actually execute capabilities.
-    def detect!
-      guest_name = @machine.config.vm.guest
-      initialize_capabilities!(guest_name, @guests, @capabilities, @machine)
-    rescue Errors::CapabilityHostExplicitNotDetected => e
-      raise Errors::GuestExplicitNotDetected, value: e.extra_data[:value]
-    rescue Errors::CapabilityHostNotDetected
-      raise Errors::GuestNotDetected
-    end
-    
-            # This is called as a last-minute hook that allows the configuration
-        # object to finalize itself before it will be put into use. This is
-        # a useful place to do some defaults in the case the user didn't
-        # configure something or so on.
+            # Prints the list of specs & pod cache dirs for a single pod name.
         #
-        # An example of where this sort of thing is used or has been used:
-        # the 'vm' configuration key uses this to make sure that at least
-        # one sub-VM has been defined: the default VM.
+        # This output is valid YAML so it can be parsed with 3rd party tools
         #
-        # The configuration object is expected to mutate itself.
-        def finalize!
-          # Default implementation is to do nothing.
-        end
-    
-            # Returns the internal data associated with this plugin. This
-        # should NOT be called by the general public.
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
         #
-        # @return [Hash]
-        def self.data
-          @data ||= {}
-        end
-    
-            # This is the method called to when the system is being destroyed
-        # and allows the provisioners to engage in any cleanup tasks necessary.
-        def cleanup
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
         end
       end
     end
@@ -103,53 +124,40 @@ links = REXML::XPath.match(readme_doctree, '//a')
 end
 
     
-            # Defines a capability for the given provider. The block should return
-        # a class/module that has a method with the capability name, ready
-        # to be executed. This means that if it is an instance method,
-        # the block should return an instance of the class.
-        #
-        # @param [String] provider The name of the provider
-        # @param [String] cap The name of the capability
-        def self.provider_capability(provider, cap, &block)
-          components.provider_capabilities[provider.to_sym].register(cap.to_sym, &block)
-          nil
-        end
-    
-            firsts, rest = [sseq.members.first], sseq.members[1..-1]
-        firsts.push rest.shift if firsts.first.is_a?(Sass::Selector::Parent)
-    
-          # @see Base#mtime
-      def mtime(name, options)
-        file, _ = Sass::Util.destructure(find_real_file(@root, name, options))
-        File.mtime(file) if file
-      rescue Errno::ENOENT
-        nil
+          # This method depends on the fact that we have guarded
+      # against implicit and empty literals.
+      def closing_brace_on_same_line?(node)
+        node.loc.end.line == children(node).last.last_line
       end
     
-          it 'registers an offense for two hash parameters with braces' do
-        expect_offense(<<-RUBY.strip_indent)
-          where({ x: 1 }, { y: 2 })
-                          ^^^^^^^^ Redundant curly braces around a hash parameter.
-        RUBY
-      end
-    end
-    
-            last_element_commented =
-          processed_source.comments.any? { |c| c.loc.line == last_element_line }
-    
-      include_examples 'multiline literal brace layout method argument' do
-    let(:open) { '[' }
-    let(:close) { ']' }
+      it 'ignores empty arrays' do
+    expect_no_offenses('[]')
   end
     
-              if variables.nil?
-            replacement_range = replacement_range(node, node.loc.begin.end_pos)
-            correction = 'for _ in #{enumerable.source} do'
+            def on_for(node)
+          if style == :each
+            add_offense(node, message: PREFER_EACH) do
+              opposite_style_detected
+            end
           else
-            replacement_range = replacement_range(node,
-                                                  items.loc.expression.end_pos)
-            correction = 'for #{variables.source} in #{enumerable.source} do'
+            correct_style_detected
           end
+        end
     
-              return if node.send_node.stabby_lambda?
-          return if node.braces?
+          # Checks whether the `for` node has a `do` keyword.
+      #
+      # @return [Boolean] whether the `for` node has a `do` keyword
+      def do?
+        loc.begin && loc.begin.is?('do')
+      end
+    
+          # Custom destructuring method. This is used to normalize the branches
+      # for `pair` and `kwsplat` nodes, to add duck typing to `hash` elements.
+      #
+      # @return [Array<KeywordSplatNode>] the different parts of the `kwsplat`
+      def node_parts
+        [self, self]
+      end
+    end
+  end
+end
