@@ -1,65 +1,96 @@
 
         
-        else:
-    text_type = unicode
-    string_types = (str, unicode)
-    integer_types = (int, long)
-    
-        def from_envvar(self, variable_name, silent=False):
-        '''Loads a configuration from an environment variable pointing to
-        a configuration file.  This is basically just a shortcut with nicer
-        error messages for this line of code::
-    
-        recorded = []
-    
-      def PrintErrorCounts(self):
-    '''Print a summary of errors by category, and the total.'''
-    for category, count in sorted(iteritems(self.errors_by_category)):
-      self.PrintInfo('Category \'%s\' errors found: %d\n' %
-                       (category, count))
-    if self.error_count > 0:
-      self.PrintInfo('Total errors found: %d\n' % self.error_count)
-    
-        '''
-    
-    # Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = []
-    
-    from hamcrest import assert_that, contains, has_entries
-from mock import patch
+        LPTSTR = ctypes.c_wchar_p
+START_CALLBACK = ctypes.WINFUNCTYPE(None, ctypes.c_int, ctypes.POINTER(LPTSTR))
     
     
-def FormatDebugInfoResponse_Completer_ServerNotRunningWithNoLogfiles_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  response[ 'completer' ][ 'servers' ][ 0 ].update( {
-    'is_running': False,
-    'logfiles': []
-  } )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'Completer name completer debug information:\n'
-      '  Server name not running\n'
-      '  Server name executable: /path/to/executable\n'
-      '  No logfiles available\n'
-      '  Server name key: value\n'
-      '  Key: value\n'
-    )
-  )
+def openssl_encode(algo, key, iv):
+    cmd = ['openssl', 'enc', '-e', '-' + algo, '-K', hex_str(key), '-iv', hex_str(iv)]
+    prog = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    out, _ = prog.communicate(secret_msg)
+    return out
+    
+    with open('update/versions.json', 'w') as jsonf:
+    json.dump(versions_info, jsonf, indent=4, sort_keys=True)
 
     
+    print('WARNING: Lazy loading extractors is an experimental feature that may not always work', file=sys.stderr)
     
-def ConvertVimDataToCompletionData( vim_data ):
-  # see :h complete-items for a description of the dictionary fields
-  completion_data = {}
+    import io
+import sys
+import re
     
-      # As a last resort, we search python in the PATH. We prefer Python 2 over 3
-  # for the sake of backwards compatibility with ycm_extra_conf.py files out
-  # there; few people wrote theirs to work on py3.
-  # So we check 'python2' before 'python' because on some distributions (Arch
-  # Linux for example), python refers to python3.
-  python_interpreter = utils.PathToFirstExistingExecutable( [ 'python2',
-                                                              'python',
-                                                              'python3' ] )
-  if python_interpreter:
-    return python_interpreter
+    youtube\-dl \- download videos from youtube.com or other video platforms
+    
+            self.assertEqual(ie._html_search_meta('a', html), '1')
+        self.assertEqual(ie._html_search_meta('b', html), '2')
+        self.assertEqual(ie._html_search_meta('c', html), '3')
+        self.assertEqual(ie._html_search_meta('d', html), '4')
+        self.assertEqual(ie._html_search_meta('e', html), '5')
+        self.assertEqual(ie._html_search_meta('f', html), '6')
+        self.assertEqual(ie._html_search_meta(('a', 'b', 'c'), html), '1')
+        self.assertEqual(ie._html_search_meta(('c', 'b', 'a'), html), '3')
+        self.assertEqual(ie._html_search_meta(('z', 'x', 'c'), html), '3')
+        self.assertRaises(RegexNotFoundError, ie._html_search_meta, 'z', html, None, fatal=True)
+        self.assertRaises(RegexNotFoundError, ie._html_search_meta, ('z', 'x'), html, None, fatal=True)
+    
+        def test_vimeo_matching(self):
+        self.assertMatch('https://vimeo.com/channels/tributes', ['vimeo:channel'])
+        self.assertMatch('https://vimeo.com/channels/31259', ['vimeo:channel'])
+        self.assertMatch('https://vimeo.com/channels/31259/53576664', ['vimeo'])
+        self.assertMatch('https://vimeo.com/user7108434', ['vimeo:user'])
+        self.assertMatch('https://vimeo.com/user7108434/videos', ['vimeo:user'])
+        self.assertMatch('https://vimeo.com/user21297594/review/75524534/3c257a1b5d', ['vimeo:review'])
+    
+    
+def issue_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    ref = 'https://github.com/scrapy/scrapy/issues/' + text
+    set_classes(options)
+    node = nodes.reference(rawtext, 'issue ' + text, refuri=ref, **options)
+    return [node], []
+    
+    '''
+    
+            editor = self.settings['EDITOR']
+        try:
+            spidercls = self.crawler_process.spider_loader.load(args[0])
+        except KeyError:
+            return self._err('Spider not found: %s' % args[0])
+    
+        def run(self, args, opts):
+        settings = self.crawler_process.settings
+        if opts.get:
+            s = settings.get(opts.get)
+            if isinstance(s, BaseSettings):
+                print(json.dumps(s.copy_to_dict()))
+            else:
+                print(s)
+        elif opts.getbool:
+            print(settings.getbool(opts.getbool))
+        elif opts.getint:
+            print(settings.getint(opts.getint))
+        elif opts.getfloat:
+            print(settings.getfloat(opts.getfloat))
+        elif opts.getlist:
+            print(settings.getlist(opts.getlist))
+
+    
+        description = proj_info['description'],
+    keywords = proj_info['keywords'],
+    
+            link_list = []
+    
+        def __init__(self):
+        super().__init__()
+        self.api_data = None
+    
+    # encoding=utf8  
+import sys  
+try:
+    reload(sys)
+except NameError:
+    pass
+try:
+    sys.setdefaultencoding('utf8')
+except AttributeError:
+    pass
