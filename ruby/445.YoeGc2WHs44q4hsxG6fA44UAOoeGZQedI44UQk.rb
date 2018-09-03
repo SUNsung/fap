@@ -1,44 +1,132 @@
 
         
-        def main(pidfile, cmd)
-  if middle_pid = Process.fork
-    # outer process
-    # Do not exit the outer process before the middle process finishes
-    Process.waitpid(middle_pid)
-    exit $?.exitstatus
+          def index
+    @filters = current_account.custom_filters
   end
     
-        def show
-      authorize @account, :show?
-      @account_moderation_note = current_account.account_moderation_notes.new(target_account: @account)
-      @moderation_notes = @account.targeted_moderation_notes.latest
-    end
-    
-      def url
-    if object.needs_redownload?
-      media_proxy_url(object.id, :original)
-    else
-      full_asset_url(object.file.url(:original))
-    end
+      def set_account
+    @account = Account.find_local!(params[:account_username])
   end
     
-      # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/digest
-  def digest
-    NotificationMailer.digest(Account.first, since: 90.days.ago)
+        Pubsubhubbub::UnsubscribeWorker.perform_async(signed_request_account.id) if signed_request_account.subscribed?
+    DeliveryFailureTracker.track_inverse_success!(signed_request_account)
+  end
+    
+      def prev_page
+    account_outbox_url(@account, page: true, min_id: @statuses.first.id) unless @statuses.empty?
+  end
+    
+        def index
+      authorize :domain_block, :index?
+      @domain_blocks = DomainBlock.page(params[:page])
+    end
+    
+        def resource_params
+      params.require(:email_domain_block).permit(:domain)
+    end
   end
 end
 
     
-            expect_updated_sign_in_at(user)
-        expect(Redis.current.zcard(FeedManager.instance.key(:home, user.account_id))).to eq 3
-        expect(Redis.current.get('account:#{user.account_id}:regeneration')).to be_nil
+        def paginated_instances
+      filtered_instances.page(params[:page])
+    end
+    
+        def create
+      authorize ReportNote, :create?
+    
+      private
+    
+        if (p)
+      # Create an instance of the handler for this resource
+      handler = p[0].new(self, *p[2])
+    
+    =begin
+   +-------------+---------------+-------------------------------------+
+   | VALUE       | Name          | Description                         |
+   +-------------+---------------+-------------------------------------+
+   | 0x01        | Hangup        | The call has been hungup at the     |
+   |             |               | remote end                          |
+   |             |               |                                     |
+   | 0x02        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x03        | Ringing       | Remote end is ringing (ring-back)   |
+   |             |               |                                     |
+   | 0x04        | Answer        | Remote end has answered             |
+   |             |               |                                     |
+   | 0x05        | Busy          | Remote end is busy                  |
+   |             |               |                                     |
+   | 0x06        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x07        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x08        | Congestion    | The call is congested               |
+   |             |               |                                     |
+   | 0x09        | Flash Hook    | Flash hook                          |
+   |             |               |                                     |
+   | 0x0a        | Reserved      | Reserved for future use             |
+   |             |               |                                     |
+   | 0x0b        | Option        | Device-specific options are being   |
+   |             |               | transmitted                         |
+   |             |               |                                     |
+   | 0x0c        | Key Radio     | Key Radio                           |
+   |             |               |                                     |
+   | 0x0d        | Unkey Radio   | Unkey Radio                         |
+   |             |               |                                     |
+   | 0x0e        | Call Progress | Call is in progress                 |
+   |             |               |                                     |
+   | 0x0f        | Call          | Call is proceeding                  |
+   |             | Proceeding    |                                     |
+   |             |               |                                     |
+   | 0x10        | Hold          | Call is placed on hold              |
+   |             |               |                                     |
+   | 0x11        | Unhold        | Call is taken off hold              |
+   +-------------+---------------+-------------------------------------+
+=end
+    
+              # Decodes the value from an OpenSSL::ASN1::ASN1Data
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_value(input)
+            input.value[0].value
+          end
+        end
+      end
+    end
+  end
+end
+    
+        def configure_sass
+      require 'sass'
+    
+        @save_to.each { |_, v| FileUtils.mkdir_p(v) }
+    
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
       end
     end
     
-      def user_search
-    if params[:admins_controller_user_search]
-      search_params = params.require(:admins_controller_user_search)
-                            .permit(:username, :email, :guid, :under13)
-      @search = UserSearch.new(search_params)
-      @users = @search.perform
+      # Code is not reloaded between requests.
+  config.cache_classes = true
+    
+        if rbenv_prefix = prefix_from_bin('rbenv')
+      prefixes << rbenv_prefix
+    end
+    
+        # Checks that the lockfile exists.
+    #
+    # @raise  If the lockfile does not exists.
+    #
+    # @return [void]
+    #
+    def verify_lockfile_exists!
+      unless config.lockfile
+        raise Informative, 'No `Podfile.lock' found in the project directory, run `pod install'.'
+      end
     end
