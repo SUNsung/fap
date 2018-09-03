@@ -1,94 +1,112 @@
 
         
         
-class ExitStatus:
-    '''Exit status code constants.'''
-    OK = 0
-    ERROR = 1
-    PLUGIN_ERROR = 7
+def create_app(test_config=None):
+    '''Create and configure an instance of the Flask application.'''
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_mapping(
+        # a default secret that should be overridden by instance config
+        SECRET_KEY='dev',
+        # store the database in the instance folder
+        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+    )
     
-        def iter_body(self, chunk_size):
-        '''Return an iterator over the body.'''
-        raise NotImplementedError()
+        # test that the user was inserted into the database
+    with app.app_context():
+        assert get_db().execute(
+            'select * from user where username = 'a'',
+        ).fetchone() is not None
+    
+    from werkzeug.local import LocalProxy
+    
+        # Used only when requested with --check-status:
+    ERROR_HTTP_3XX = 3
+    ERROR_HTTP_4XX = 4
+    ERROR_HTTP_5XX = 5
+    
+        @staticmethod
+    def make_header(username, password):
+        credentials = u'%s:%s' % (username, password)
+        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
+        return 'Basic %s' % token
     
     
 with codecs.open(JSON_FILE_PATH, encoding='utf8') as f:
     JSON_FILE_CONTENT = f.read()
     
     
-def test_default_options_overwrite(httpbin):
-    env = MockEnvironment()
-    env.config['default_options'] = ['--form']
-    env.config.save()
-    r = http('--json', httpbin.url + '/post', 'foo=bar', env=env)
-    assert r.json['json'] == {'foo': 'bar'}
+@pytest.mark.parametrize('argument_name', ['--auth-type', '-A'])
+def test_digest_auth(httpbin_both, argument_name):
+    r = http(argument_name + '=digest', '--auth=user:password',
+             'GET', httpbin_both.url + '/digest-auth/auth/user/password')
+    assert HTTP_OK in r
+    assert r.json == {'authenticated': True, 'user': 'user'}
     
-    from httpie.compat import urlopen
-from httpie.downloads import (
-    parse_content_range, filename_from_content_disposition, filename_from_url,
-    get_unique_filename, ContentRangeError, Downloader,
-)
-from utils import http, MockEnvironment
+    import httpie
     
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
+        try:  # bad ANSIBLE_CONFIG or config options can force ugly stacktrace
+        import ansible.constants as C
+        from ansible.utils.display import Display
+    except AnsibleOptionsError as e:
+        display.error(to_text(e), wrap_text=False)
+        sys.exit(5)
     
-        # we start from a gray image with some random noise
-    if K.image_data_format() == 'channels_first':
-        input_img_data = np.random.random((1, 3, img_width, img_height))
+        Returns: Dict of Host vars if found else None
+    '''
+    try:
+        result = api.Command.host_show(u(host))['result']
+        if 'usercertificate' in result:
+            del result['usercertificate']
+        return json.dumps(result, indent=1)
+    except errors.NotFound as e:
+        return {}
+    
+        for config_file in CONFIG_FILES:
+        if os.path.exists(config_file):
+            break
     else:
-        input_img_data = np.random.random((1, img_width, img_height, 3))
-    input_img_data = (input_img_data - 0.5) * 20 + 128
+        sys.stdout.write('unable to locate config file at /etc/ansible/infoblox.yaml\n')
+        sys.exit(-1)
     
-    from __future__ import print_function
-    
-        for i in range(1, 6):
-        fpath = os.path.join(path, 'data_batch_' + str(i))
-        (x_train[(i - 1) * 10000: i * 10000, :, :, :],
-         y_train[(i - 1) * 10000: i * 10000]) = load_batch(fpath)
-    
-    import six
-from . import backend as K
-from .losses import mean_squared_error
-from .losses import mean_absolute_error
-from .losses import mean_absolute_percentage_error
-from .losses import mean_squared_logarithmic_error
-from .losses import hinge
-from .losses import logcosh
-from .losses import squared_hinge
-from .losses import categorical_crossentropy
-from .losses import sparse_categorical_crossentropy
-from .losses import binary_crossentropy
-from .losses import kullback_leibler_divergence
-from .losses import poisson
-from .losses import cosine_proximity
-from .utils.generic_utils import deserialize_keras_object
-from .utils.generic_utils import serialize_keras_object
+    if ANSIBLE_TEST_PATH not in sys.path:
+    sys.path.insert(0, ANSIBLE_TEST_PATH)
     
     
-def test_decode_predictions():
-    x = np.zeros((2, 1000))
-    x[0, 372] = 1.0
-    x[1, 549] = 1.0
-    outs = utils.decode_predictions(x, top=1)
-    scores = [out[0][2] for out in outs]
-    assert scores[0] == scores[1]
+def is_ok(ip=None):
+    if not ip:
+        return IPv4.is_ok() or IPv6.is_ok()
+    elif '.' in ip:
+        return IPv4.is_ok()
+    else:
+        return IPv6.is_ok()
     
-            # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
+    
+# called by launcher/module/stop
+def terminate():
+    global ready, proxy_server
+    
+    EOF = -1
+    
+    HSTS_ARGS = ['\'max-age=31536000\'', ' ', 'always']
+    
+        def setUp(self):
+        from acme.errors import BadNonce
+        self.error = BadNonce(nonce='xxx', error='error')
+    
+            from acme.messages import Registration
+        self.reg = Registration(key=key, contact=contact, agreement=agreement)
+        self.reg_none = Registration()
+    
+    
+def unique_id():
+    ''' Returns an unique id to be used as a VirtualHost identifier'''
+    return binascii.hexlify(os.urandom(16)).decode('utf-8')
+
+    
+            # This is in an IfDefine
+        self.assertTrue('ssl_module' in self.parser.modules)
+        self.assertTrue('mod_ssl.c' in self.parser.modules)
+    
+        def test_perform0(self):
+        resp = self.sni.perform()
+        self.assertEqual(len(resp), 0)
