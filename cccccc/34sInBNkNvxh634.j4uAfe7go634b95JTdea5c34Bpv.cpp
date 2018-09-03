@@ -1,249 +1,121 @@
 
         
-        void AtomContentClient::AddPepperPlugins(
-    std::vector<content::PepperPluginInfo>* plugins) {
-  AddPepperFlashFromCommandLine(plugins);
-#if defined(WIDEVINE_CDM_AVAILABLE) && BUILDFLAG(ENABLE_LIBRARY_CDMS)
-  AddWidevineCdmFromCommandLine(plugins);
-#endif  // defined(WIDEVINE_CDM_AVAILABLE) && BUILDFLAG(ENABLE_LIBRARY_CDMS)
-#if defined(ENABLE_PDF_VIEWER)
-  ComputeBuiltInPlugins(plugins);
-#endif  // defined(ENABLE_PDF_VIEWER)
+        
+    {  // Assuming T is defined in namespace foo, in the next statement,
+  // the compiler will consider all of:
+  //
+  //   1. foo::operator<< (thanks to Koenig look-up),
+  //   2. ::operator<< (as the current namespace is enclosed in ::),
+  //   3. testing::internal2::operator<< (thanks to the using statement above).
+  //
+  // The operator<< whose type matches T best will be picked.
+  //
+  // We deliberately allow #2 to be a candidate, as sometimes it's
+  // impossible to define #1 (e.g. when foo is ::std, defining
+  // anything in it is undefined behavior unless you are a compiler
+  // vendor.).
+  *os << value;
 }
     
-    // static
-void UvTaskRunner::OnClose(uv_handle_t* handle) {
-  delete reinterpret_cast<uv_timer_t*>(handle);
+    
+    {  return AssertionFailure() << pred_text << '('
+                            << e1 << ', '
+                            << e2 << ') evaluates to false, where'
+                            << '\n' << e1 << ' evaluates to ' << v1
+                            << '\n' << e2 << ' evaluates to ' << v2;
 }
     
+      // Create the directory so that path exists. Returns true if successful or
+  // if the directory already exists; returns false if unable to create the
+  // directory for any reason, including if the parent directory does not
+  // exist. Not named 'CreateDirectory' because that's a macro on Windows.
+  bool CreateFolder() const;
     
-    {}  // namespace mate
+    #include <algorithm>
     
-    #endif  // ATOM_BROWSER_API_ATOM_API_BOX_LAYOUT_H_
+    // Sets the 0-terminated C string this MyString object
+// represents.
+void MyString::Set(const char* a_c_string) {
+  // Makes sure this works when c_string == c_string_
+  const char* const temp = MyString::CloneCString(a_c_string);
+  delete[] c_string_;
+  c_string_ = temp;
+}
 
     
-      // views::ButtonListener:
-  void ButtonPressed(views::Button* sender, const ui::Event& event) override;
+      // Gets the first element of the queue, or NULL if the queue is empty.
+  QueueNode<E>* Head() { return head_; }
+  const QueueNode<E>* Head() const { return head_; }
     
-    #endif  // ATOM_BROWSER_API_ATOM_API_DOWNLOAD_ITEM_H_
+      /*
+   * @brief a variable tracking all of the paths we attempt to carve
+   *
+   * This is a globbed set of file paths that we're expecting will be
+   * carved.
+   */
+  std::set<boost::filesystem::path> carvePaths_;
+    
+    std::vector<std::string> KafkaTopicsConfigParserPlugin::keys() const {
+  return {kKafkaTopicParserRootKey};
+}
+    
+    
+    {} // namespace osquery
 
     
-      void PurchaseProduct(const std::string& product_id, mate::Arguments* args);
     
-    
-    {private Q_SLOTS:
-    /* sign message */
-    void on_addressBookButton_SM_clicked();
-    void on_pasteButton_SM_clicked();
-    void on_signMessageButton_SM_clicked();
-    void on_copySignatureButton_SM_clicked();
-    void on_clearButton_SM_clicked();
-    /* verify message */
-    void on_addressBookButton_VM_clicked();
-    void on_verifyMessageButton_VM_clicked();
-    void on_clearButton_VM_clicked();
-};
-    
-    private:
-    reverse_lock(reverse_lock const&);
-    reverse_lock& operator=(reverse_lock const&);
-    
-        if (len > 0) {
-        /* Compute the inverse of the last z coordinate, and use it to compute the last affine output. */
-        secp256k1_fe_inv(&zi, &a[i].z);
-        secp256k1_ge_set_gej_zinv(&r[i], &a[i], &zi);
-    }
-    
-    #include <boost/test/unit_test.hpp>
-    
-    #endif  // ANDROID_BUILD
-
-    
-    #ifndef TESSERACT_ARCH_DOTPRODUCTSSE_H_
-#define TESSERACT_ARCH_DOTPRODUCTSSE_H_
-    
-    // Number of outputs held in each register. 8 x 32 bit ints.
-constexpr int kNumOutputsPerRegister = 8;
-// Maximum number of registers that we will use.
-constexpr int kMaxOutputRegisters = 8;
-// Number of inputs in the inputs register.
-constexpr int kNumInputsPerRegister = 32;
-// Number of inputs in each weight group.
-constexpr int kNumInputsPerGroup = 4;
-// Number of groups of inputs to be broadcast.
-constexpr int kNumInputGroups = kNumInputsPerRegister / kNumInputsPerGroup;
-    
-    // Copy the first N words from the source string to the target string.
-// Words are delimited by '_'.
-void ParamsEditor::GetFirstWords(
-                     const char *s,  // source string
-                     int n,          // number of words
-                     char *t         // target string
-                    ) {
-  int full_length = strlen(s);
-  int reqd_len = 0;              // No. of chars requird
-  const char *next_word = s;
-    }
-    
-    
-    {    _radZ = (float)CC_DEGREES_TO_RADIANS(_angleZ);
-    _radX = (float)CC_DEGREES_TO_RADIANS(_angleX);
+    {  QueryLogItem second_item;
+  getDecorations(second_item.decorations);
+  ASSERT_EQ(second_item.decorations.size(), 2U);
 }
     
-        /** Initializes a Catmull Rom config with a capacity hint.
-     *
-     * @js NA
-     * @param capacity The size of the array.
-     * @return True.
-     */
-    bool initWithCapacity(ssize_t capacity);
+    Status serializeDistributedQueryResultJSON(const DistributedQueryResult& r,
+                                           std::string& json) {
+  auto doc = JSON::newObject();
+  auto s = serializeDistributedQueryResult(r, doc, doc.doc());
+  if (!s.ok()) {
+    return s;
+  }
+    }
     
-    void ActionEase::stop(void)
-{
-    if (_inner)
-        _inner->stop();
+      status = EventFactory::deregisterEventPublisher(basic_pub->type());
+  EXPECT_TRUE(status.ok());
+  status = EventFactory::deregisterEventPublisher(fake_pub->type());
+  EXPECT_TRUE(status.ok());
+  status = EventFactory::deregisterEventPublisher(another_fake_pub->type());
+  EXPECT_TRUE(status.ok());
     
-    ActionInterval::stop();
+    #include <folly/portability/GTest.h>
+    
+    template <class String>
+void randomString(String* toFill, size_t size = 1000) {
+  assert(toFill);
+  toFill->resize(size);
+  FOR_EACH (i, *toFill) {
+    *i = random('a', 'z');
+  }
 }
     
-    //
-// CallFunc
-//
+      // Use our stubbed out fchmod() function to force a failure when setting up
+  // the temporary file.
+  //
+  // First try when creating the file for the first time.
+  {
+    FChmodFailure fail;
+    EXPECT_THROW(writeFileAtomic(path, 'foobar'), std::system_error);
+  }
+  EXPECT_EQ(set<string>{}, listTmpDir());
     
-    
-    {    return false;
+    TEST(FixedStringReplaceTest, RuntimeReplaceString) {
+  folly::FixedString<10> tmp{'abcdefghij'};
+  tmp.replace(1, 5, FS('XX'));
+  EXPECT_EQ(7u, tmp.size());
+  EXPECT_STREQ('aXXghij', tmp.c_str());
 }
     
-    #endif // __ACTION_CCPAGETURN3D_ACTION_H__
-
-    
-        bool init(void);
-    
-    ssize_t AtlasNode::getQuadsToDraw() const
-{
-    return _quadsToDraw;
-}
-    
-    TEST_F(DBTestCompactionFilter, SkipUntilWithBloomFilter) {
-  BlockBasedTableOptions table_options;
-  table_options.whole_key_filtering = false;
-  table_options.filter_policy.reset(NewBloomFilterPolicy(100, false));
-    }
-    
-    // Simple implementation of SlicePart variants of Put().  Child classes
-// can override these method with more performant solutions if they choose.
-Status WriteBatchBase::Put(ColumnFamilyHandle* column_family,
-                           const SliceParts& key, const SliceParts& value) {
-  std::string key_buf, value_buf;
-  Slice key_slice(key, &key_buf);
-  Slice value_slice(value, &value_buf);
-    }
-    
-      // When an actor (column family) requests a stop token, all writes will be
-  // stopped until the stop token is released (deleted)
-  std::unique_ptr<WriteControllerToken> GetStopToken();
-  // When an actor (column family) requests a delay token, total delay for all
-  // writes to the DB will be controlled under the delayed write rate. Every
-  // write needs to call GetDelay() with number of bytes writing to the DB,
-  // which returns number of microseconds to sleep.
-  std::unique_ptr<WriteControllerToken> GetDelayToken(
-      uint64_t delayed_write_rate);
-  // When an actor (column family) requests a moderate token, compaction
-  // threads will be increased
-  std::unique_ptr<WriteControllerToken> GetCompactionPressureToken();
-    
-    class PosixHelper {
- public:
-  static size_t GetUniqueIdFromFile(int fd, char* id, size_t max_size);
-};
-    
-    class DHTNode;
-class DHTRoutingTable;
-class DHTTaskQueue;
-class DHTTaskFactory;
-class DHTPeerAnnounceStorage;
-class DHTTokenTracker;
-class DHTMessageDispatcher;
-class DHTMessageReceiver;
-class DHTMessageFactory;
-    
-      void onReceived(const DHTPingReplyMessage* message);
-    
-      virtual void fillMessage(Dict* msgDict) CXX11_OVERRIDE;
-    
-    
-    {} // namespace aria2
-
-    
-        taskFactory->setLocalNode(localNode);
-    taskFactory->setRoutingTable(routingTable.get());
-    taskFactory->setMessageDispatcher(dispatcher.get());
-    taskFactory->setMessageFactory(factory.get());
-    taskFactory->setTaskQueue(taskQueue.get());
-    taskFactory->setTimeout(std::chrono::seconds(messageTimeout));
-    
-      int getNumConcurrent() const { return numConcurrent_; }
-    
-    namespace aria2 {
-    }
-    
-    DHTTaskQueueImpl::DHTTaskQueueImpl()
-    : periodicTaskQueue1_(NUM_CONCURRENT_TASK),
-      periodicTaskQueue2_(NUM_CONCURRENT_TASK),
-      immediateTaskQueue_(NUM_CONCURRENT_TASK)
-{
-}
-    
-    namespace aria2 {
-    }
-    
-    DHTTokenUpdateCommand::DHTTokenUpdateCommand(cuid_t cuid, DownloadEngine* e,
-                                             std::chrono::seconds interval)
-    : TimeBasedCommand{cuid, e, std::move(interval)}, tokenTracker_{nullptr}
-{
-}
-    
-    #endif // D_DHT_TOKEN_UPDATE_COMMAND_H
-
-    
-    DNSCache::CacheEntry::CacheEntry(const CacheEntry& c) = default;
-    
-    
-    {  // For Rest parameters and Strict arguments, the copying of parameters from
-  // the stack into the arguments object is straight-forward and shares much of
-  // the same underlying logic, which is encapsulated by this function. It
-  // allocates an arguments-like object of size |base_size| with the map |map|,
-  // and then copies |rest_count| arguments from the stack frame pointed to by
-  // |frame_ptr| starting from |first_arg|. |arg_count| == |first_arg| +
-  // |rest_count|.
-  Node* ConstructParametersObjectFromArgs(Node* map, Node* frame_ptr,
-                                          Node* arg_count, Node* first_arg,
-                                          Node* rest_count,
-                                          ParameterMode param_mode,
-                                          int base_size);
-};
-    
-    namespace v8 {
-namespace internal {
-    }
-    }
-    
-    // ES6 #sec-boolean.prototype.tostring
-TF_BUILTIN(BooleanPrototypeToString, CodeStubAssembler) {
-  Node* context = Parameter(Descriptor::kContext);
-  Node* receiver = Parameter(Descriptor::kReceiver);
-    }
-    
-    namespace v8 {
-namespace internal {
-    }
-    }
-    
-    #if DEBUG
-  DebugSanityCheckAtomicIndex(array, index_word32, context);
-#endif
-    
-      TNode<Int32T> LoadSurrogatePairAt(SloppyTNode<String> string,
-                                    SloppyTNode<IntPtrT> length,
-                                    SloppyTNode<IntPtrT> index,
-                                    UnicodeEncoding encoding);
+      EXPECT_TRUE(LOG_VALUE((has_test<Bar, int()>::value)));
+  EXPECT_FALSE(LOG_VALUE((has_test<Bar, int() const>::value)));
+  EXPECT_TRUE(LOG_VALUE((has_test<Bar, double(int, long)>::value)));
+  EXPECT_FALSE(LOG_VALUE((has_test<Bar, string(const string&) const>::value)));
+  EXPECT_TRUE(LOG_VALUE((has_test<Bar, long(int) const>::value)));
+  EXPECT_FALSE(LOG_VALUE((has_test<Bar, string(string) const>::value)));
