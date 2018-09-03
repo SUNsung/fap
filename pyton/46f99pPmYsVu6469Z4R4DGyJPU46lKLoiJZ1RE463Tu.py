@@ -1,207 +1,139 @@
 
         
-        entry_template = textwrap.dedent('''
-    <entry>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
-        <title>New version @VERSION@</title>
-        <link href='http://rg3.github.io/youtube-dl' />
-        <content type='xhtml'>
-            <div xmlns='http://www.w3.org/1999/xhtml'>
-                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
-            </div>
-        </content>
-        <author>
-            <name>The youtube-dl maintainers</name>
-        </author>
-        <updated>@TIMESTAMP@</updated>
-    </entry>
-    ''')
-    
-    options = helptext[helptext.index('  General Options:') + 19:]
-options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
-options = '# OPTIONS\n' + options + '\n'
-    
-    
-if __name__ == '__main__':
-    unittest.main()
-
-    
-    from __future__ import unicode_literals
-    
-    from test.helper import assertRegexpMatches
-    
-            self._debug_cmd(args)
-    
-        _ALL_CLASSES = [
-        klass
-        for name, klass in globals().items()
-        if name.endswith('IE') and name != 'GenericIE'
-    ]
-    _ALL_CLASSES.append(GenericIE)
-    
-            return {
-            'id': video_id,
-            'url': video_url,
-            'ext': 'mp4',
-            'title': title,
-            'description': description,
-            'thumbnail': thumbnail,
-            'categories': categories,
-            'duration': duration,
-            'view_count': view_count,
-            'age_limit': 18,
-        }
-
-    
-            runtime = self._search_regex(
-            r'Runtime\s*:\s*(.+?) \|', webpage, 'duration', default=None)
-        if runtime:
-            runtime = re.sub(r'[\s-]', '', runtime)
-        duration = parse_duration(runtime)
-        view_count = int_or_none(self._search_regex(
-            r'Views\s*:\s*(\d+)', webpage, 'view count', default=None))
-        comment_count = int_or_none(self._search_regex(
-            r'Comments\s*:\s*(\d+)', webpage, 'comment count', default=None))
-    
-    
-class ClipRsIE(OnetBaseIE):
-    _VALID_URL = r'https?://(?:www\.)?clip\.rs/(?P<id>[^/]+)/\d+'
-    _TEST = {
-        'url': 'http://www.clip.rs/premijera-frajle-predstavljaju-novi-spot-za-pesmu-moli-me-moli/3732',
-        'md5': 'c412d57815ba07b56f9edc7b5d6a14e5',
-        'info_dict': {
-            'id': '1488842.1399140381',
-            'ext': 'mp4',
-            'title': 'PREMIJERA Frajle predstavljaju novi spot za pesmu Moli me, moli',
-            'description': 'md5:56ce2c3b4ab31c5a2e0b17cb9a453026',
-            'duration': 229,
-            'timestamp': 1459850243,
-            'upload_date': '20160405',
-        }
-    }
-    
-            # Also run the annotation graph with tracing enabled.
-        annotations_with_trace, traces = sess.run(
-            [trace['annotations'], trace['traces']],
-            feed_dict={trace['input_batch']: test_reader_strings})
-    
-          self.assertAllEqual(network_tensors[0].eval(), [3])
-      self.assertAllEqual(network_tensors[1].eval(),
-                          [[[1.0, 0.5, 0.5],
-                            [2.0, 0.5, 0.5],
-                            [0.5, 3.0, 0.5]]])  # pyformat: disable
-      self.assertAllEqual(network_tensors[2].eval(),
-                          [[1.0, 0.5, 0.5],
-                           [2.0, 0.5, 0.5],
-                           [0.5, 3.0, 0.5]])  # pyformat: disable
-      self.assertAllEqual(network_tensors[3].eval(),
-                          [[1.0, 0.0, 0.0],
-                           [1.0, 0.0, 0.0],
-                           [0.0, 1.0, 0.0]])  # pyformat: disable
-    
-      Given a MasterSpec that defines the DRAGNN architecture, completes the spec so
-  that it can be used to build a DRAGNN graph and run training/inference.
-    
-      Returns:
-    List of created variables.
-  '''
-  # Use a dict to dedupe captured variables.
-  created_vars = {}
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-    
-    
-if __name__ == '__main__':
-  tf.app.run()
-
-    
-                app.config['IMAGE_STORE_TYPE'] = 'fs'
-            app.config['IMAGE_STORE_PATH'] = '/var/app/images'
-            app.config['IMAGE_STORE_BASE_URL'] = 'http://img.website.com'
-            image_store_config = app.config.get_namespace('IMAGE_STORE_')
-    
-        def _fail(self, *args, **kwargs):
-        raise RuntimeError('The session is unavailable because no secret '
-                           'key was set.  Set the secret_key on the '
-                           'application to something unique and secret.')
-    __setitem__ = __delitem__ = clear = pop = popitem = \
-        update = setdefault = _fail
-    del _fail
-    
-        class Test(Base):
-        SECRET_KEY = 'config'
-    
-    
-def test_installed_package_paths(limit_loader, modules_tmpdir,
-                                 modules_tmpdir_prefix, purge_module,
-                                 monkeypatch):
-    installed_path = modules_tmpdir.mkdir('path')
-    monkeypatch.syspath_prepend(installed_path)
-    
-        flask.before_render_template.connect(record, app)
-    try:
-        rv = app.test_client().get('/')
-        assert len(recorded) == 1
-        template, context = recorded[0]
-        assert template.name == 'simple_template.html'
-        assert context['whiskey'] == 43
-        assert rv.data == b'<h1>43</h1>'
-    finally:
-        flask.before_render_template.disconnect(record, app)
-    
-        def test_binary_put(self):
-        request = requests.Request('PUT', 'http://example.com',
-                                   data=u'ööö'.encode('utf-8')).prepare()
-        assert isinstance(request.body, bytes)
-    
-        text_302 = (b'HTTP/1.1 302 FOUND\r\n'
-                b'Content-Length: 0\r\n'
-                b'Location: /\r\n\r\n')
-    
-    # Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-html_theme_options = {
-    'show_powered_by': False,
-    'github_user': 'requests',
-    'github_repo': 'requests',
-    'github_banner': True,
-    'show_related': False,
-    'note_bg': '#FFF59C'
+        latex_documents = [
+    (master_doc, 'Flask.tex', 'Flask Documentation', 'Pallets Team', 'manual'),
+]
+latex_use_modindex = False
+latex_elements = {
+    'papersize': 'a4paper',
+    'pointsize': '12pt',
+    'fontpkg': r'\usepackage{mathpazo}',
+    'preamble': r'\usepackage{flaskstyle}',
 }
+latex_use_parts = True
+latex_additional_files = ['flaskstyle.sty', 'logo.pdf']
     
-            return r
+        # make url_for('index') == url_for('blog.index')
+    # in another app, you might define a separate main index here with
+    # app.route, while giving the blog blueprint a url_prefix, but for
+    # the tutorial the blog will be the main index
+    app.add_url_rule('/', endpoint='index')
     
-            cid = CaseInsensitiveDict()
-        cid['Accept'] = 'application/json'
-        cid['aCCEPT'] == 'application/json'  # True
-        list(cid) == ['Accept']  # True
+            if not title:
+            error = 'Title is required.'
     
-    _init()
+            @app.route('/')
+        def index():
+            @copy_current_request_context
+            def do_some_work():
+                # do some work here, it can access flask.request like you
+                # would otherwise in the view function.
+                ...
+            gevent.spawn(do_some_work)
+            return 'Regular response'
+    
+    import logging
+import sys
+    
+    from .search import SearchVector, SearchVectorExact, SearchVectorField
+    
+        def pop(self, key, default=__not_given):
+        self.modified = self.modified or key in self._session
+        args = () if default is self.__not_given else (default,)
+        return self._session.pop(key, *args)
+    
+        objects = BaseSessionManager()
+    
+    
+@x_robots_tag
+def index(request, sitemaps,
+          template_name='sitemap_index.xml', content_type='application/xml',
+          sitemap_url_name='django.contrib.sitemaps.views.sitemap'):
+    
+    try:
+    # compatible for python2
+    from urllib2 import urlopen
+    from urllib2 import HTTPError
+    from urllib2 import URLError
+except ImportError:
+    # compatible for python3
+    from urllib.request import urlopen
+    from urllib.error import HTTPError
+    from urllib.error import URLError
+    
+    
+class TestManager:
+    
+        def update(self, subject):
+        print(u'HexViewer: Subject %s has data 0x%x' %
+              (subject.name, subject.data))
+    
+    ###  OUTPUT ###
+# Before subclassing:
+# BaseRegisteredClass
+# After subclassing:
+# BaseRegisteredClass
+# ClassRegistree
 
     
-        def test_setup_config_defaults(self):
-        '''Test setup with defaults.'''
-        config = {
-            'splunk': {
-                'host': 'host',
-                'token': 'secret',
-            }
-        }
+        '''A radio.     It has a scan button, and an AM/FM toggle switch.'''
     
-        hass.services.register(DOMAIN, SERVICE_VOLUME_MUTE,
-                           lambda service:
-                           keyboard.tap_key(keyboard.volume_mute_key),
-                           schema=TAP_KEY_SCHEMA)
+    *Where is the pattern used practically?
     
-        @patch('{}._get_homehub_data'.format(patch_file), new=_get_homehub_data)
-    def test_config_minimal(self):
-        '''Test the setup with minimal configuration.'''
-        config = {
-            'device_tracker': {
-                CONF_HOST: 'foo'
-            }
-        }
-        result = bt_home_hub_5.get_scanner(None, config)
+    
+class lazy_property(object):
+    
+        def find_path(self, start, end, path=None):
+        path = path or []
+    
+        def draw_circle(self, x, y, radius):
+        print('API2.circle at {}:{} radius {}'.format(x, y, radius))
+    
+    
+__licence__ = 'BSD (3 clause)'
+    
+    # A dictionary with options for the search language support, empty by default.
+# 'ja' uses this config value.
+# 'zh' user can custom change `jieba` dictionary path.
+#
+# html_search_options = {'type': 'default'}
+    
+        try:
+        smart_home_config = config[CONF_SMART_HOME]
+    except KeyError:
+        pass
+    else:
+        smart_home_config = smart_home_config or SMART_HOME_SCHEMA({})
+        smart_home.async_setup(hass, smart_home_config)
+    
+        @callback
+    def state_automation_listener(entity, from_s, to_s):
+        '''Listen for state changes and calls action.'''
+        @callback
+        def call_action():
+            '''Call action with right context.'''
+            hass.async_run_job(action, {
+                'trigger': {
+                    'platform': 'numeric_state',
+                    'entity_id': entity,
+                    'below': below,
+                    'above': above,
+                    'from_state': from_s,
+                    'to_state': to_s,
+                }
+            })
+    
+    from homeassistant.core import callback
+from homeassistant.const import (
+    CONF_EVENT, CONF_OFFSET, CONF_PLATFORM, SUN_EVENT_SUNRISE)
+from homeassistant.helpers.event import async_track_sunrise, async_track_sunset
+import homeassistant.helpers.config_validation as cv
+    
+            statsd.event(
+            title='Home Assistant',
+            text='%%% \n **{}** {} \n %%%'.format(name, message),
+            tags=[
+                'entity:{}'.format(event.data.get('entity_id')),
+                'domain:{}'.format(event.data.get('domain'))
+            ]
+        )
