@@ -1,95 +1,150 @@
 
         
-            # The font size ('10pt', '11pt' or '12pt').
-    #
-    # 'pointsize': '10pt',
+            try:
+        citext_oids = get_citext_oids(connection.alias)
+        array_type = psycopg2.extensions.new_array_type(citext_oids, 'citext[]', psycopg2.STRING)
+        psycopg2.extensions.register_type(array_type, None)
+    except ProgrammingError:
+        # citext is not available on the database.
+        #
+        # The same comments in the except block of the above call to
+        # register_hstore() also apply here.
+        pass
+
     
-            :param str domain_name: The domain name for which to find the corresponding Domain.
-        :returns: The Domain, if found.
-        :rtype: `~digitalocean.Domain`
-        :raises certbot.errors.PluginError: if no matching Domain is found.
-        '''
+        def __eq__(self, other):
+        return (
+            isinstance(other, self.__class__) and
+            self.keys == other.keys and
+            self.messages == other.messages and
+            self.strict == other.strict
+        )
     
-        eff.handle_subscription(config)
+        def has_key(self, key):
+        return key in self._session
     
-    # The name of a javascript file (relative to the configuration directory) that
-# implements a search results scorer. If empty, the default will be used.
-#html_search_scorer = 'scorer.js'
+        @property
+    def cache_key(self):
+        return self.cache_key_prefix + self._get_or_create_session_key()
     
-        def load_config(self):
-        '''Returns the next config directory to be tested'''
-        shutil.rmtree(self.le_config.work_dir, ignore_errors=True)
-        backup = os.path.join(self.le_config.work_dir, constants.BACKUP_DIR)
-        os.makedirs(backup)
-        return self._configs.pop()
+        @classmethod
+    def get_session_store_class(cls):
+        raise NotImplementedError
     
-    import sys
-import os
-import shlex
+        plt.legend(['Ridge', 'OLS', 'LassoLars'], loc='upper left')
+    plt.axis('tight')
+    plt.show()
+
     
-        def test_sales_manager_shall_not_talk_through_proxy_with_delay(cls):
-        cls.ntp.busy = 'No'
-        start_time = time()
-        cls.ntp.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-This Sales Manager will not talk to you whether he/she is busy or not\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
+        if args.show_plot:
+        plt.plot(*zip(*timings))
+        plt.title('Average time taken running isotonic regression')
+        plt.xlabel('Number of observations')
+        plt.ylabel('Time (s)')
+        plt.axis('tight')
+        plt.loglog()
+        plt.show()
+
     
-        fftv.publish('cartoon')
-    fftv.publish('music')
-    fftv.publish('ads')
-    fftv.publish('movie')
-    fftv.publish('cartoon')
-    fftv.publish('cartoon')
-    fftv.publish('movie')
-    fftv.publish('blank')
+                print('Fast K-Means')
+            # let's prepare the data in small chunks
+            mbkmeans = MiniBatchKMeans(init='k-means++',
+                                       n_clusters=10,
+                                       batch_size=chunk)
+            tstart = time()
+            mbkmeans.fit(data)
+            delta = time() - tstart
+            print('Speed: %0.3fs' % delta)
+            print('Inertia: %f' % mbkmeans.inertia_)
+            print()
+            print()
     
-        def setUp(self):
-        self.tc1 = TC1()
-        self.tc2 = TC2()
-        self.tc3 = TC3()
-        self.average_result_tc1 = '###### In Test 1 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.average_result_tc2 = '###### In Test 2 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.average_result_tc3 = '###### In Test 3 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.runner = TestRunner()
-        self.out = StringIO()
-        self.saved_stdout = sys.stdout
-        sys.stdout = self.out
+                gc.collect()
+            print('benchmarking orthogonal_mp (with Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            orthogonal_mp(X, y, precompute=True,
+                          n_nonzero_coefs=n_informative)
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            omp_gram[i_f, i_s] = delta
     
+      * scikit-learn
     
+        fn = os.path.relpath(fn,
+                         start=os.path.dirname(__import__(package).__file__))
+    try:
+        lineno = inspect.getsourcelines(obj)[1]
+    except Exception:
+        lineno = ''
+    return url_fmt.format(revision=revision, package=package,
+                          path=fn, lineno=lineno)
     
-        def test_display_current_time_at_midnight(self):
-        '''
-        Would almost always fail (despite of right at/after midnight) if
-        untestable production code would have been used.
-        '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay()
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(time_provider_stub), expected_time)
+        Examples: ::
     
-            return transaction
+            env.scrapy_all_settings.append({
+            'docname': env.docname,
+            'setting_name': setting_name,
+            'refid': refid,
+        })
     
+    def _print_header(settings, inproject):
+    if inproject:
+        print('Scrapy %s - project: %s\n' % (scrapy.__version__, \
+            settings['BOT_NAME']))
+    else:
+        print('Scrapy %s - no active project\n' % scrapy.__version__)
     
-if __name__ == '__main__':
-    print('Specification')
-    andrey = User()
-    ivan = User(super_user=True)
-    vasiliy = 'not User instance'
+            name, domain = args[0:2]
+        module = sanitize_module_name(name)
+    
+            if network_ok:
+            self.last_check_time = time.time()
+            self.report_ok()
+            xlog.debug('network %s is ok, cost:%d ms', self.type, 1000 * (time.time() - time_now))
+        else:
+            xlog.warn('network %s fail', self.type)
+            self.network_stat = 'Fail'
+            self.last_check_time = time.time()
+    
+        def __init__(self, logger):
+        self.logger = logger
+    
+    - tree.CommonTree: A basic and most commonly used Tree implementation.
+    
+        def prepare(self, **kwargs):
+    
+            assert vid
+    
+        def __init__(self):
+        super().__init__()
+        self.api_data = None
+    
+    headers = {
+    'DNT': '1',
+    'Accept-Encoding': 'gzip, deflate, sdch, br',
+    'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Cache-Control': 'max-age=0',
+    'Referer': 'http://www.dilidili.com/',
+    'Connection': 'keep-alive',
+    'Save-Data': 'on',
+}
+    
+            for i in range(len(titles)):
+            title = titles[i]
+            datas = {
+                'sid': song_id[i],
+                'ssid': song_ssid[i]
+            }
+            post_params = urllib.parse.urlencode(datas).encode('utf-8')
+            try:
+                resp = urllib.request.urlopen(get_song_url, post_params)
+                resp_data = json.loads(resp.read().decode('utf-8'))
+                real_url = resp_data['r']
+                type, ext, size = url_info(real_url)
+                print_info(site_info, title, type, size)
+            except:
+                pass
