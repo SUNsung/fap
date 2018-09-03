@@ -1,381 +1,215 @@
 
         
-        // Version constant.
-// This is either 0 for python, 1 for CPP V1, 2 for CPP V2.
-//
-// 0 is default and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
-//
-// 1 is set with -DPYTHON_PROTO2_CPP_IMPL_V1 and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-// and
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=1
-//
-// 2 is set with -DPYTHON_PROTO2_CPP_IMPL_V2 and is equivalent to
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-// and
-//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
-#ifdef PYTHON_PROTO2_CPP_IMPL_V1
-#error 'PYTHON_PROTO2_CPP_IMPL_V1 is no longer supported.'
-#else
-#ifdef PYTHON_PROTO2_CPP_IMPL_V2
-static int kImplVersion = 2;
-#else
-#ifdef PYTHON_PROTO2_PYTHON_IMPL
-static int kImplVersion = 0;
-#else
-    
-      // True when a ScopedPyObjectPtr and a raw pointer refer to the same object.
-  // Comparison operators are non reflexive.
-  bool operator==(const PyObjectStruct* p) const { return ptr_ == p; }
-  bool operator!=(const PyObjectStruct* p) const { return ptr_ != p; }
-    
-    io::ZeroCopyOutputStream*
-GeneratorContext::OpenForAppend(const string& filename) {
-  return NULL;
-}
-    
-    
-    {  // Check if the optional_nested_message was actually moved (and not just
-  // copied).
-  EXPECT_EQ(nested, &message2.optional_nested_message());
-  EXPECT_NE(nested, &message1.optional_nested_message());
-}
-    
-    void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enumDescriptor) {
-    WriteDocCommentBody(printer, enumDescriptor);
-}
-void WriteEnumValueDocComment(io::Printer* printer, const EnumValueDescriptor* value) {
-    WriteDocCommentBody(printer, value);
-}
-    
-    void EnumOneofFieldGenerator::GenerateParsingCode(io::Printer* printer) {
-  // TODO(jonskeet): What about if we read the default value?
-  printer->Print(
-    variables_,
-    '$oneof_name$_ = input.ReadEnum();\n'
-    '$oneof_name$Case_ = $oneof_property_name$OneofCase.$property_name$;\n');
-}
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    std::string GetReflectionClassUnqualifiedName(const FileDescriptor* descriptor) {
-  // TODO: Detect collisions with existing messages,
-  // and append an underscore if necessary.
-  return GetFileNameBase(descriptor) + 'Reflection';
-}
-    
-    
+            for (size_t i = 0; i < size.height; ++i)
     {
-}  // namespace google
-#endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
-
-    
-    class PrimitiveOneofFieldGenerator : public PrimitiveFieldGenerator {
- public:
-  PrimitiveOneofFieldGenerator(const FieldDescriptor* descriptor,
-                               int fieldOrdinal,
-                               const Options *options);
-  ~PrimitiveOneofFieldGenerator();
+        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
+        s16* dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t j = 0;
     }
     
-    #include 'dotproductsse.h'
-#include <cstdio>
-#include <cstdlib>
     
-    #endif
+    {} // namespace CAROTENE_NS
 
     
-    void PageIterator::ParagraphInfo(tesseract::ParagraphJustification *just,
-                                 bool *is_list_item,
-                                 bool *is_crown,
-                                 int *first_line_indent) const {
-  *just = tesseract::JUSTIFICATION_UNKNOWN;
-  if (!it_->row() || !it_->row()->row || !it_->row()->row->para() ||
-      !it_->row()->row->para()->model)
-    return;
+                    if(cn==2)
+                    t0 = vextq_u16(tprev, tcurr, 6);
+                else if(cn==3)
+                    t0 = vextq_u16(tprev, tcurr, 5);
+                else if(cn==4)
+                    t0 = vextq_u16(tprev, tcurr, 4);
+    
+    #include 'saturate_cast.hpp'
+#include <vector>
+#include <cstring>
+    
+                for (; i <= lim; i+= 16)
+            {
+                internal::prefetch(src + i);
+                uint8x16_t vln = vld1q_u8(src + i);
+                uint8x16_t vnz = vminq_u8(vln, vc1);
+                vs = vaddq_u8(vs, vnz);
+            }
+    
+        for (size_t i = 0; i < size.height; ++i)
+    {
+        const T * src0 = internal::getRowPtr(src0Base, src0Stride, i);
+        const T * src1 = internal::getRowPtr(src1Base, src1Stride, i);
+        T * dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t j = 0;
     }
     
-    #include 'tesseractclass.h'
-#ifdef _OPENMP
-#include <omp.h>
-#endif  // _OPENMP
     
-    ScrollView* bln_word_window_handle();  //return handle
-void build_image_window(int width, int height);
-void display_bln_lines(ScrollView window,
-                       ScrollView::Color colour,
-                       float scale_factor,
-                       float y_offset,
-                       float minx,
-                       float maxx);
-                                 //function to call
-void pgeditor_msg(  //message display
-                  const char *msg);
-void pgeditor_show_point(  //display coords
-                         SVEvent *event);
-                                 //put bln word in       box
-void show_point(PAGE_RES* page_res, float x, float y);
+    {    minLocCount >>= 1;
+    maxLocCount >>= 1;
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)minVal;
+    (void)minLocPtr;
+    (void)minLocCount;
+    (void)minLocCapacity;
+    (void)maxVal;
+    (void)maxLocPtr;
+    (void)maxLocCount;
+    (void)maxLocCapacity;
+#endif
+}
     
+        u32 step_base = 16 / sizeof(T), step_tail = 8 / sizeof(T);
+    size_t roiw_base = size.width >= (step_base - 1) ? size.width - step_base + 1 : 0;
+    size_t roiw_tail = size.width >= (step_tail - 1) ? size.width - step_tail + 1 : 0;
     
-    {  ~TemporaryFile() {
-    unlink(path.c_str());
-  }
-};
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         iterator_traits.cpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Declares iterator traits workarounds.
+  */
     
+       const_reference prefix() const
+   {
+      if(m_is_singular)
+         raise_logic_error();
+      return (*this)[-1];
+   }
     
-    {} // namespace
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         basic_regex_creator.cpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Declares template class basic_regex_creator which fills in
+  *                the data members of a regex_data object.
+  */
     
-    
-    {} // namespace caffe2
-
-    
-    OPERATOR_SCHEMA(Squeeze)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .SetDoc(R'DOC(
-The *Squeeze* op removes single-dimensional entries from the shape of the input tensor *data,* and produces a single output tensor *squeezed*. The op also takes an argument *dims* with a list of dimensions to squeeze. If the same blob is provided as input and output, the operation is copy-free. This is the exact inverse operation of *ExpandDims* given the same *dims* argument.
-    
-      bool RunOnDevice() override {
-    auto& old_tensor = Input(0);
-    auto& indices = Input(1);
-    auto* new_tensor = Output(0);
-    CAFFE_ENFORCE(indices.ndim() >= 1);
-    CAFFE_ENFORCE(
-        &old_tensor == new_tensor, 'First argument must be in-place.');
-    CAFFE_ENFORCE(new_tensor->ndim() == indices.ndim());
-    CAFFE_ENFORCE(indices.ndim() == new_tensor->ndim());
-    }
-    
-      const auto& X = in[0];
-  const auto& W = in[1];
-  const auto& b = in[2];
-  auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
-  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
-  const int M = size_to_dim_(canonical_axis, GetDimsVector(in[0]));
-  const int K = size_from_dim_(canonical_axis, GetDimsVector(in[0]));
-  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
-  const int canonical_axis_w =
-      canonical_axis_index_(axis_w, in[1].dims().size());
-  const int N = size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
-    
-    #include 'caffe2/core/context.h'
-#include 'caffe2/core/operator.h'
-#include 'caffe2/core/tensor.h'
-    
-    namespace CNTK
+    template <class OutputIterator, class Iterator, class traits, class charT>
+inline OutputIterator regex_merge(OutputIterator out,
+                         Iterator first,
+                         Iterator last,
+                         const basic_regex<charT, traits>& e, 
+                         const std::basic_string<charT>& fmt,
+                         match_flag_type flags = match_default)
 {
-    static Matrix<char>* AllocateMatrix(const NDShape& viewShape, const DeviceDescriptor& device)
-    {
-        auto matrixDims = GetMatrixDimensions(viewShape);
-        return new Matrix<char>(matrixDims.first, matrixDims.second, AsCNTKImplDeviceId(device));
-    }
-    }
-    
-        std::wstring Value::AsString() const
-    {
-        wstringstream wss;
-        if (IsValid())
-            wss << L'Value(' << Shape().AsString() << ', ' << DeviceKindName(Device().Type()) << L')';
-        else
-            wss << L'Value(###)';
-        return wss.str();
-    }
-    
-    
-    {        auto originalConstantValue = Value();
-        auto constantValueCPU = originalConstantValue->DeepClone(DeviceDescriptor::CPUDevice(), true);
-        NDArrayViewPtr newConstantValue = CloneAsDataType(constantValueCPU, dataType, true);
-        return Constant(newConstantValue->DeepClone(originalConstantValue->Device(), originalConstantValue->IsReadOnly()), Name());
-    }
-    
-    
-    {
-    {    private:
-        // Disallow copy and move construction and assignment
-        VariableFields(const VariableFields&) = delete; VariableFields& operator=(const VariableFields& other) = delete; VariableFields(VariableFields&&) = delete; VariableFields& operator=(VariableFields&&) = delete;
-    };
+   return regex_merge(out, first, last, e, fmt.c_str(), flags);
 }
-
     
-    public:
-    ScopeTimer(size_t verbosity, const std::string& message)
-        : m_verbosity(verbosity), m_message(message)
+    bool Follow::initWithTarget(Node *followedNode, const Rect& rect /*= Rect::ZERO*/){
+    
+    return initWithTargetAndOffset(followedNode, 0.0, 0.0,rect);
+    
+}
+void Follow::step(float /*dt*/)
+{
+    if(_boundarySet)
     {
-        if (m_verbosity > 2)
+        // whole map fits inside a single screen, no need to modify the position - unless map boundaries are increased
+        if(_boundaryFullyCovered)
         {
-            m_aggregateTimer.Start();
+            return;
         }
     }
+    }
+    
+    //
+// NOTE: Converting these macros into Templates is desirable, but please see
+// issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
+//
+#define EASERATE_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC) \
+CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval *action, float rate) \
+{ \
+    CLASSNAME *ease = new (std::nothrow) CLASSNAME(); \
+    if (ease) \
+    { \
+        if (ease->initWithAction(action, rate)) \
+            ease->autorelease(); \
+        else \
+            CC_SAFE_RELEASE_NULL(ease); \
+    } \
+    return ease; \
+} \
+CLASSNAME* CLASSNAME::clone() const \
+{ \
+    if(_inner) return CLASSNAME::create(_inner->clone(), _rate); \
+    return nullptr; \
+} \
+void CLASSNAME::update(float time) { \
+    _inner->update(TWEEN_FUNC(time, _rate)); \
+} \
+EaseRateAction* CLASSNAME::reverse() const { \
+    return CLASSNAME::create(_inner->reverse(), 1.f / _rate); \
+}
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the 'Software'), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+    
+    http://www.cocos2d-x.org
+    
+    void BENCHFUN(pushBack)(int iters, int initialSize) {
+  BenchmarkSuspender braces;
+  auto const obj = randomObject<VECTOR::value_type>();
+  VECTOR v(initialSize, obj);
+  braces.dismissing([&]() {
+    FOR_EACH_RANGE (i, 0, iters) { v.push_back(obj); }
+  });
+}
+    
+    //
+// Author: andrei.alexandrescu@fb.com
+    
+      EXPECT_EQ(u8[0], u32[0]);
+  EXPECT_EQ(u8[1], u32[1]);
+  EXPECT_EQ(u8[0], u64[0]);
+  EXPECT_EQ(u8[1], u64[1]);
+  EXPECT_EQ(u8[0], usp[0]);
+  EXPECT_EQ(u8[1], usp[1]);
+  EXPECT_EQ(u8[0], uconv[0]);
+  EXPECT_EQ(u8[1], uconv[1]);
+    
+      int64_t max_int64_t = std::numeric_limits<int64_t>::max();
+  int64_t min_int64_t = std::numeric_limits<int64_t>::min();
+  uint64_t max_uint64_t = std::numeric_limits<uint64_t>::max();
+  EXPECT_EQ('9223372036854775807', sformat('{:n}', max_int64_t));
+  EXPECT_EQ('-9223372036854775808', sformat('{:n}', min_int64_t));
+  EXPECT_EQ('18446744073709551615', sformat('{:n}', max_uint64_t));
     
     
-    {  // Return the value to associate with the specified key
-  Slice Value(int k, std::string* storage) {
-    Random r(k);
-    return test::RandomString(&r, kValueSize, storage);
+    {    // variant 6 (const only)
+    int operator()(int x, std::vector<int> const&) const {
+      return 100 + 6 * x;
+    }
+  };
+  OverloadedFunctor of;
+  auto const& cof = of;
+    
+      if (!is_started_) {
+    AERROR << 'Nvidia can client has not been initiated! Please init first!';
+    return ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED;
   }
+  for (size_t i = 0; i < frames.size() && i < MAX_CAN_SEND_FRAME_LEN; ++i) {
+    if (frames[i].len != CANBUS_MESSAGE_LENGTH) {
+      AERROR << 'frames[' << i << '].len = ' << frames[i].len
+             << ', which is not equal to can message data length ('
+             << CANBUS_MESSAGE_LENGTH << ').';
+      return ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED;
+    }
+    send_frames_[i].can_id = frames[i].id;
+    send_frames_[i].can_dlc = frames[i].len;
+    std::memcpy(send_frames_[i].data, frames[i].data, frames[i].len);
+    }
+    
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+#include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
+#include 'modules/drivers/canbus/can_comm/message_manager.h'
+    
+    #include 'modules/drivers/canbus/can_comm/can_sender.h'
+    
+    
+    {  std::condition_variable cvar_;
 };
     
-    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
-  // Order by:
-  //    increasing user key (according to user-supplied comparator)
-  //    decreasing sequence number
-  //    decreasing type (though sequence# should be enough to disambiguate)
-  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
-  if (r == 0) {
-    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
-    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
-    if (anum > bnum) {
-      r = -1;
-    } else if (anum < bnum) {
-      r = +1;
-    }
-  }
-  return r;
-}
-    
-    #endif  // STORAGE_LEVELDB_DB_DBFORMAT_H_
-
-    
-    
-    {}  // namespace leveldb
-    
-    Status DumpFile(Env* env, const std::string& fname, WritableFile* dst) {
-  FileType ftype;
-  if (!GuessType(fname, &ftype)) {
-    return Status::InvalidArgument(fname + ': unknown file type');
-  }
-  switch (ftype) {
-    case kLogFile:         return DumpLog(env, fname, dst);
-    case kDescriptorFile:  return DumpDescriptor(env, fname, dst);
-    case kTableFile:       return DumpTable(env, fname, dst);
-    default:
-      break;
-  }
-  return Status::InvalidArgument(fname + ': not a dump-able file type');
-}
-    
-    
-// Owned filenames have the form:
-//    dbname/CURRENT
-//    dbname/LOCK
-//    dbname/LOG
-//    dbname/LOG.old
-//    dbname/MANIFEST-[0-9]+
-//    dbname/[0-9]+.(log|sst|ldb)
-bool ParseFileName(const std::string& filename,
-                   uint64_t* number,
-                   FileType* type) {
-  Slice rest(filename);
-  if (rest == 'CURRENT') {
-    *number = 0;
-    *type = kCurrentFile;
-  } else if (rest == 'LOCK') {
-    *number = 0;
-    *type = kDBLockFile;
-  } else if (rest == 'LOG' || rest == 'LOG.old') {
-    *number = 0;
-    *type = kInfoLogFile;
-  } else if (rest.starts_with('MANIFEST-')) {
-    rest.remove_prefix(strlen('MANIFEST-'));
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    if (!rest.empty()) {
-      return false;
-    }
-    *type = kDescriptorFile;
-    *number = num;
-  } else {
-    // Avoid strtoull() to keep filename format independent of the
-    // current locale
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
-    }
-    Slice suffix = rest;
-    if (suffix == Slice('.log')) {
-      *type = kLogFile;
-    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
-      *type = kTableFile;
-    } else if (suffix == Slice('.dbtmp')) {
-      *type = kTempFile;
-    } else {
-      return false;
-    }
-    *number = num;
-  }
-  return true;
-}
-    
-    #include <stdint.h>
-#include 'db/log_format.h'
-#include 'leveldb/slice.h'
-#include 'leveldb/status.h'
-    
-    #ifndef STORAGE_LEVELDB_DB_MEMTABLE_H_
-#define STORAGE_LEVELDB_DB_MEMTABLE_H_
-    
-    namespace osquery {
-    }
-    
-    TEST_F(TablesTests, test_constraint) {
-  auto constraint = Constraint(EQUALS);
-  constraint.expr = 'none';
-    }
-    
-    #include 'osquery/events/pathset.h'
-    
-    
-    {  // When the hex fails to decode the input value is returned as the result.
-  auto decoded_fail = DecodeAuditPathValues('7');
-  EXPECT_EQ(decoded_fail, '7');
-}
-    
-      // Registering the event type initializes inotify.
-  auto status = EventFactory::registerEventPublisher(event_pub);
-  EXPECT_TRUE(status.ok());
-  EXPECT_TRUE(event_pub->isHandleOpen());
-    
-    TEST(CanClientFactoryTest, CreateCanClient) {
-  auto *can_factory = CanClientFactory::instance();
-  EXPECT_TRUE(can_factory != nullptr);
-    }
-    
-    #ifndef MODULES_DRIVERS_CANBUS_CAN_CLIENT_FAKE_FAKE_CAN_CLIENT_H_
-#define MODULES_DRIVERS_CANBUS_CAN_CLIENT_FAKE_FAKE_CAN_CLIENT_H_
-    
-      /**
-   * @brief Send messages
-   * @param frames The messages to send.
-   * @param frame_num The amount of messages to send.
-   * @return The status of the sending action which is defined by
-   *         apollo::common::ErrorCode.
-   */
-  virtual apollo::common::ErrorCode Send(const std::vector<CanFrame> &frames,
-                                         int32_t *const frame_num);
-    
-    #ifndef MODULES_DRIVERS_CANBUS_CAN_CLIENT_CLIENT_SOCKET_CAN_CLIENT_RAW_H_
-#define MODULES_DRIVERS_CANBUS_CAN_CLIENT_CLIENT_SOCKET_CAN_CLIENT_RAW_H_
-    
-    
-    {  ::apollo::canbus::ChassisDetail chassis_detail;
-  chassis_detail.set_car_type(::apollo::canbus::ChassisDetail::QIRUI_EQ_15);
-  EXPECT_EQ(manager.GetSensorData(&chassis_detail), ErrorCode::OK);
-  EXPECT_EQ(manager.GetSensorData(nullptr), ErrorCode::CANBUS_ERROR);
-}
-    
-      /**
-   * @brief Get a one-byte unsigned integer representing the higher 4 bits.
-   * @return The one-byte unsigned integer representing the higher 4 bits.
-   */
-  uint8_t get_byte_high_4_bits() const;
+    #include 'modules/drivers/canbus/can_comm/message_manager.h'
