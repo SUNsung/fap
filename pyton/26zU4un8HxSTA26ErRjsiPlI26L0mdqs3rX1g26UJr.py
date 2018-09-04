@@ -1,162 +1,172 @@
 
         
+            dirname = 'cifar-100-python'
+    origin = 'https://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz'
+    path = get_file(dirname, origin=origin, untar=True)
+    
+    import gzip
+import os
+    
+        def get_config(self):
+        return {'l1': float(self.l1),
+                'l2': float(self.l2)}
+    
+        # Test single image
+    x = np.random.uniform(0, 255, (10, 10, 3))
+    inputs = Input(shape=x.shape)
+    outputs = Lambda(utils.preprocess_input, output_shape=x.shape)(inputs)
+    model = Model(inputs, outputs)
+    assert model.predict(x[np.newaxis])[0].shape == x.shape
+    
+    
+@keras_test
+def test_prelu():
+    layer_test(layers.PReLU, kwargs={},
+               input_shape=(2, 3, 4))
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('--get', dest='get', metavar='SETTING',
+            help='print raw setting value')
+        parser.add_option('--getbool', dest='getbool', metavar='SETTING',
+            help='print setting value, interpreted as a boolean')
+        parser.add_option('--getint', dest='getint', metavar='SETTING',
+            help='print setting value, interpreted as an integer')
+        parser.add_option('--getfloat', dest='getfloat', metavar='SETTING',
+            help='print setting value, interpreted as a float')
+        parser.add_option('--getlist', dest='getlist', metavar='SETTING',
+            help='print setting value, interpreted as a list')
+    
+    See documentation in docs/topics/shell.rst
+'''
+from threading import Thread
+    
+            if config.PROXY_ENABLE:
+            if config.PROXY_USER:
+                self.proxy = '%s://%s:%s@%s:%d' % \
+                    (config.PROXY_TYPE, config.PROXY_USER, config.PROXY_PASSWD, config.PROXY_HOST, config.PROXY_PORT)
+            else:
+                self.proxy = '%s://%s:%d' % \
+                    (config.PROXY_TYPE, config.PROXY_HOST, config.PROXY_PORT)
+        else:
+            self.proxy = None
+    
+            Python does not have any size restrictions, but the compilation of
+        such large source files seems to be pretty memory hungry. The memory
+        consumption of the python process grew to >1.5GB when importing a
+        15MB lexer, eating all my swap space and I was to impacient to see,
+        if it could finish at all. With packed initializers that are unpacked
+        at import time of the lexer module, everything works like a charm.
         
-def check_entry(line_num, segments):
-    # START Title
-    title = segments[index_title].upper()
-    if title.endswith(' API'):
-        add_error(line_num, 'Title should not contain 'API'')
-    # END Title
-    # START Description
-    # first character should be capitalized
-    char = segments[index_desc][0]
-    if char.upper() != char:
-        add_error(line_num, 'first character of description is not capitalized')
-    # last character should not punctuation
-    char = segments[index_desc][-1]
-    if char in punctuation:
-        add_error(line_num, 'description should not end with {}'.format(char))
-    desc_length = len(segments[index_desc])
-    if desc_length > 100:
-        add_error(line_num, 'description should not exceed 100 characters (currently {})'.format(desc_length))
-    # END Description
-    # START Auth
-    # values should conform to valid options only
-    auth = segments[index_auth]
-    if auth != 'No' and (not auth.startswith('`') or not auth.endswith('`')):
-        add_error(line_num, 'auth value is not enclosed with `backticks`')
-    if auth.replace('`', '') not in auth_keys:
-        add_error(line_num, '{} is not a valid Auth option'.format(auth))
-    # END Auth
-    # START HTTPS
-    # values should conform to valid options only
-    https = segments[index_https]
-    if https not in https_keys:
-        add_error(line_num, '{} is not a valid HTTPS option'.format(https))
-    # END HTTPS
-    # START CORS
-    # values should conform to valid options only
-    cors = segments[index_cors]
-    if cors not in cors_keys:
-        add_error(line_num, '{} is not a valid CORS option'.format(cors))
-    # END CORS
-    # START Link
-    # url should be wrapped in '[Go!]()' Markdown syntax
-    link = segments[index_link]
-    if not link.startswith('[Go!](http') or not link.endswith(')'):
-        add_error(line_num, 'link syntax should be '[Go!](LINK)'')
-    if link in previous_links:
-        add_error(line_num, 'duplicate link - entries should only be included in one section')
+        '''
+        
+        ret = []
+        for i in range(len(string) / 2):
+            (n, v) = ord(string[i*2]), ord(string[i*2+1])
+    
+    
+    def matchAny(self, input):
+        '''Match the wildcard: in a symbol'''
+    
+    
+class PollErrorTest(unittest.TestCase):
+    '''Tests for acme.errors.PollError.'''
+    
+        def test_default_decoder_raises_deserialization_error(self):
+        from acme.fields import RFC3339Field
+        self.assertRaises(
+            jose.DeserializationError, RFC3339Field.default_decoder, '')
+    
+            ip_addr:* == ip_addr
+    
+        @unittest.skip('causes undesirable side-effects (#20128)')
+    def test_modules(self):
+        # See Helper.listmodules().
+        num_header_lines = 2
+        num_module_lines_min = 5  # Playing it safe.
+        num_footer_lines = 3
+        expected = num_header_lines + num_module_lines_min + num_footer_lines
+    
+    def ext_decompress(data):
+    global has_cmdline_bunzip2
+    if has_cmdline_bunzip2 is None:
+        has_cmdline_bunzip2 = bool(shutil.which('bunzip2'))
+    if has_cmdline_bunzip2:
+        return subprocess.check_output(['bunzip2'], input=data)
     else:
-        previous_links.append(link)
-    # END Link
+        return bz2.decompress(data)
     
-    install_requires = ['psutil', 'colorama', 'six', 'decorator', 'pyte']
-extras_require = {':python_version<'3.4'': ['pathlib2'],
-                  ':python_version<'3.3'': ['backports.shutil_get_terminal_size'],
-                  ':sys_platform=='win32'': ['win_unicode_console']}
+    --Pepé
+''')
     
+    def test():
+    manager = MyManager()
+    manager.start()
     
-@pytest.fixture(autouse=True)
-def shell_config(mocker):
-    path_mock = mocker.patch('thefuck.entrypoints.not_configured.Path',
-                             new_callable=MagicMock)
-    return path_mock.return_value \
-        .expanduser.return_value \
-        .open.return_value \
-        .__enter__.return_value
-    
-        proc.sendline(u'ehco test')
-    
-    # TODO: ensure that history changes.
+    con.close()
 
     
+            depending on self.param value
+        '''
+        self._instance_method_choices[self.param].__get__(self)()
     
-init_zshrc = u'''echo '
-export SHELL=/usr/bin/zsh
-export HISTFILE=~/.zsh_history
-echo > $HISTFILE
-export SAVEHIST=100
-export HISTSIZE=100
-eval $(thefuck --alias {})
-setopt INC_APPEND_HISTORY
-echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
-' > ~/.zshrc'''
+        def setDB(self, db):
+        self._db = db
     
-    
-@pytest.mark.parametrize('command', [
-    Command('apt list --upgradable', no_match_output),
-    Command('sudo apt list --upgradable', no_match_output)
-])
-def test_not_match(command):
-    assert not match(command)
-    
-      aws help
-  aws <command> help
-  aws <command> <subcommand> help
-aws: error: argument operation: Invalid choice, valid choices are:
-    
-    
-output = '''sshfs: OsxfuseRequirement unsatisfied!
-    
-    
-@pytest.mark.parametrize('command, new_command', [
-    (Command('cargo buid', no_such_subcommand_old), 'cargo build'),
-    (Command('cargo buils', no_such_subcommand), 'cargo build')])
-def test_get_new_command(command, new_command):
-    assert get_new_command(command) == new_command
+    ### OUTPUT ###
+# Setting Data 1 = 10
+# DecimalViewer: Subject Data 1 has data 10
+# HexViewer: Subject Data 1 has data 0xa
+# Setting Data 2 = 15
+# HexViewer: Subject Data 2 has data 0xf
+# DecimalViewer: Subject Data 2 has data 15
+# Setting Data 1 = 3
+# DecimalViewer: Subject Data 1 has data 3
+# HexViewer: Subject Data 1 has data 0x3
+# Setting Data 2 = 5
+# HexViewer: Subject Data 2 has data 0x5
+# DecimalViewer: Subject Data 2 has data 5
+# Detach HexViewer from data1 and data2.
+# Setting Data 1 = 10
+# DecimalViewer: Subject Data 1 has data 10
+# Setting Data 2 = 15
+# DecimalViewer: Subject Data 2 has data 15
 
     
-        def call(self, inputs):
-        inputs -= K.mean(inputs, axis=1, keepdims=True)
-        inputs = K.l2_normalize(inputs, axis=1)
-        pos = K.relu(inputs)
-        neg = K.relu(-inputs)
-        return K.concatenate([pos, neg], axis=1)
+        def __init__(self):
+        self.msg_queue = []
+        self.subscribers = {}
     
-    The test data is embedded using the weights of the final dense layer, just
-before the classification head. This embedding can then be visualized using
-TensorBoard's Embedding Projector.
-'''
+        @abstractmethod
+    def is_satisfied_by(self, candidate):
+        pass
     
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
-    '''
-    assert 0 <= test_split < 1
-    path = get_file(path,
-                    origin='https://s3.amazonaws.com/keras-datasets/boston_housing.npz',
-                    file_hash='f553886a1f8d56431e820c5b82552d9d95cfcb96d1e678153f8839538947dff5')
-    f = np.load(path)
-    x = f['x']
-    y = f['y']
-    f.close()
+        def __enter__(self):
+        if self.item is None:
+            self.item = self._queue.get()
+        return self.item
     
-        with gzip.open(paths[1], 'rb') as imgpath:
-        x_train = np.frombuffer(imgpath.read(), np.uint8,
-                                offset=16).reshape(len(y_train), 28, 28)
-    
-            self.kernel_constraint = constraints.get(kernel_constraint)
-        self.recurrent_constraint = constraints.get(recurrent_constraint)
-        self.bias_constraint = constraints.get(bias_constraint)
-    
-        plt.legend(['Ridge', 'OLS', 'LassoLars'], loc='upper left')
-    plt.axis('tight')
-    plt.show()
-
-    
-        n_features = 10
-    list_n_samples = np.linspace(100, 1000000, 5).astype(np.int)
-    lasso_results, lars_lasso_results = compute_bench(alpha, list_n_samples,
-                                            [n_features], precompute=True)
-    
-    The input data is mostly low rank but is a fat infinite tail.
-'''
-from __future__ import print_function
-    
-    import time
-    
-        if path_details['type'] == 'symlink':
-        symlinks[name] = json_urlread(path_details['_links']['self'])['target']
+        def set_time_provider(self, time_provider):
+        self.time_provider = time_provider
     
     
-if __name__ == '__main__':
+class Unit(object):
+    
+    ### OUTPUT ###
+# PRODUCT LIST:
+# (Fetching from Data Store)
+# cheese
+# eggs
+# milk
+#
+# (Fetching from Data Store)
+# PRODUCT INFORMATION:
+# Name: Cheese, Price: 2.00, Quantity: 10
+# (Fetching from Data Store)
+# PRODUCT INFORMATION:
+# Name: Eggs, Price: 0.20, Quantity: 100
+# (Fetching from Data Store)
+# PRODUCT INFORMATION:
+# Name: Milk, Price: 1.50, Quantity: 10
+# (Fetching from Data Store)
+# That product 'arepas' does not exist in the records
