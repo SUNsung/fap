@@ -1,191 +1,209 @@
 
         
-                size_t varRank = outputVariable.Shape().Rank();
-        size_t maxSequenceLength = 1;
-        size_t numSequences = 1;
-        std::tie(maxSequenceLength, numSequences) = GetNumTimeStepsAndSequences(Shape().SubShape(varRank), outputVariable.DynamicAxes().size());
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+#ifndef TENSORFLOW_PYTHON_EAGER_PYWRAP_TENSOR_H_
+#define TENSORFLOW_PYTHON_EAGER_PYWRAP_TENSOR_H_
     
-        // make sure (dense * sparse -> dense) == (dense * dense -> dense)
-    mD.Resize(dim1, dim1);
-    mD.SetValue(0.0f);
-    Matrix<float>::MultiplyAndAdd(mAdense, transposeA, mA1sparseCSC, transposeB, mD);
-    Matrix<float>::MultiplyAndWeightedAdd(alpha, mAdense, transposeA, mA2sparseCSC, transposeB, beta, mD);
+    #include <iomanip>
+#include 'tensorflow/core/framework/op.h'
+#include 'tensorflow/core/framework/tensor_shape.pb.h'
+#include 'tensorflow/core/grappler/costs/graph_properties.h'
+#include 'tensorflow/core/grappler/grappler_item.h'
     
-    // -----------------------------------------------------------------------
-// functions exposed by this module
-// -----------------------------------------------------------------------
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-        // This prints a PROGRESS message with a percentage value of 0 to prevent timeouts on Philly
-    // when executing long running non-training operations like PreCompute, CV, Eval, and Write
-    static size_t TraceFakeProgress(size_t numIterationsBeforePrintingProgress, size_t numItersSinceLastPrintOfProgress)
-    {
-        size_t newNumItersSinceLastPrintOfProgress = numItersSinceLastPrintOfProgress;
-        if (GetTracingFlag())
-        {
-            newNumItersSinceLastPrintOfProgress++;
-            if (newNumItersSinceLastPrintOfProgress >= numIterationsBeforePrintingProgress)
-            {
-                printf('PROGRESS: %.2f%%\n', 0.0f);
-                newNumItersSinceLastPrintOfProgress = 0;
-            }
-        }
+    
+    {  if (PyBfloat16_Check(arg)) {
+    Py_INCREF(arg);
+    return arg;
+  } else {
+    bfloat16 value;
+    if (!AsBfloat16(arg, &value)) {
+      return nullptr;
     }
-    
-    
-    {    virtual void ResetState() override
-    {
-        m_start = 1 - m_start;
-    }
-};
-    
-    
-    {TEST_F(SyslogTests, test_csv_separator) {
-  ASSERT_EQ(std::vector<std::string>({'', '', '', '', ''}), splitCsv(',,,,'));
-  ASSERT_EQ(std::vector<std::string>({' ', ' ', ' ', ' ', ' '}),
-            splitCsv(' , , , , '));
-  ASSERT_EQ(std::vector<std::string>({'foo', 'bar', 'baz'}),
-            splitCsv('foo,bar,baz'));
-  ASSERT_EQ(std::vector<std::string>({'foo', 'bar', 'baz'}),
-            splitCsv('\'foo\',\'bar\',\'baz\''));
-  ASSERT_EQ(std::vector<std::string>({',foo,', ',bar', 'baz,'}),
-            splitCsv('\',foo,\',\',bar\',\'baz,\''));
-  ASSERT_EQ(std::vector<std::string>({',f\\oo,', ',ba\\'r', 'baz\\,'}),
-            splitCsv('\',f\\oo,\',\',ba\\'r\',\'baz\\,\''));
-  ASSERT_EQ(std::vector<std::string>({'\',f\\o\'o,', '\',ba\\'r', 'baz\\,\''}),
-            splitCsv('\'\'\',f\\o\'\'o,\',\'\'\',ba\\'r\',\'baz\\,\'\'\''));
-  ASSERT_EQ(std::vector<std::string>({'\',f\\ø\'o,', '\',bá\\'r', 'baz\\,\''}),
-            splitCsv('\'\'\',f\\ø\'\'o,\',\'\'\',bá\\'r\',\'baz\\,\'\'\''));
-}
-}
-
-    
-        std::string content;
-    setDatabaseValue(kPersistentSettings, 'complex_example', '1');
-    if (getDatabaseValue(kPersistentSettings, 'complex_example', content)) {
-      r['database_test'] = content;
-    }
-    
-    using IFirehoseLogForwarder = AwsLogForwarder<
-    Aws::Firehose::Model::Record,
-    Aws::Firehose::FirehoseClient,
-    Aws::Firehose::Model::PutRecordBatchOutcome,
-    Aws::Vector<Aws::Firehose::Model::PutRecordBatchResponseEntry>>;
-    
-    extern JSClass  *jsb_cocos2d_NavMeshAgent_class;
-extern JSObject *jsb_cocos2d_NavMeshAgent_prototype;
-    
-        argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_resumeAllEffects'', nullptr);
-            return 0;
-        }
-        cobj->resumeAllEffects();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:resumeAllEffects',argc, 0);
-    return 0;
-    
-    
-    
-      // Returns true if the argument of the last Compare() call (or the baseline
-  // image, if Compare() was not called yet) meets the image acceptance
-  // criteria. The target_mul modifies the acceptance criteria used in this call
-  // the following way:
-  //    = 1.0 : the original acceptance criteria is used,
-  //    < 1.0 : a more strict acceptance criteria is used,
-  //    > 1.0 : a less strict acceptance criteria is used.
-  virtual bool DistanceOK(double target_mul) const = 0;
-    
-    inline void ColorTransformYCbCrToRGB(uint8_t* pixel) {
-  int y  = pixel[0];
-  int cb = pixel[1];
-  int cr = pixel[2];
-  pixel[0] = kRangeLimit[y + kCrToRedTable[cr]];
-  pixel[1] = kRangeLimit[y +
-                         ((kCrToGreenTable[cr] + kCbToGreenTable[cb]) >> 16)];
-  pixel[2] = kRangeLimit[y + kCbToBlueTable[cb]];
+    return PyBfloat16_FromBfloat16(value).release();
+  }
 }
     
-    // Performs in-place floating point 8x8 inverse DCT on block[0..63].
-void ComputeBlockIDCTDouble(double block[64]);
+    #include <Python.h>
     
-    #include 'guetzli/gamma_correct.h'
-    
-      tmp1 = kIDCTMatrix[0] * in[0];
-  out[0] = out[1] = out[2] = out[3] = out[4] = out[5] = out[6] = out[7] = tmp1;
-    
-      // Fills in out[] array with the floating-point precision pixel view of the
-  // component.
-  // REQUIRES: factor_x() == 1 and factor_y() == 1.
-  void ToFloatPixels(float* out, int stride) const;
-    
-    template <class T, QueueBehaviorIfFull kBehavior = QueueBehaviorIfFull::THROW>
-class PriorityLifoSemMPMCQueue : public BlockingQueue<T> {
- public:
-  // Note A: The queue pre-allocates all memory for max_capacity
-  // Note B: To use folly::Executor::*_PRI, for numPriorities == 2
-  //         MID_PRI and HI_PRI are treated at the same priority level.
-  PriorityLifoSemMPMCQueue(uint8_t numPriorities, size_t max_capacity) {
-    queues_.reserve(numPriorities);
-    for (int8_t i = 0; i < numPriorities; i++) {
-      queues_.emplace_back(max_capacity);
-    }
+    Status ArrayFromMemory(int dim_size, npy_intp* dims, void* data, DataType dtype,
+                       std::function<void()> destructor, PyObject** result) {
+  int size = 1;
+  for (int i = 0; i < dim_size; ++i) {
+    size *= dims[i];
+  }
+  if (dtype == DT_STRING || dtype == DT_RESOURCE || size == 0) {
+    return errors::FailedPrecondition(
+        'Cannot convert strings, resources, or empty Tensors.');
   }
     }
     
-      void reset(const std::shared_ptr<T>& p = nullptr) {
-    // Allocate each Holder in a different CoreRawAllocator stripe to
-    // prevent false sharing. Their control blocks will be adjacent
-    // thanks to allocate_shared().
-    for (auto slot : folly::enumerate(slots_)) {
-      auto alloc = getCoreAllocator<Holder, kNumSlots>(slot.index);
-      auto holder = std::allocate_shared<Holder>(alloc, p);
-      *slot = std::shared_ptr<T>(holder, p.get());
-    }
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    // Safe containers for an owned TF_Tensor. On destruction, the tensor will be
+// deleted by TF_DeleteTensor.
+using Safe_TF_TensorPtr = std::unique_ptr<TF_Tensor, detail::TFTensorDeleter>;
+Safe_TF_TensorPtr make_safe(TF_Tensor* tensor);
+    
+    class RandomAccessFile;
+    
+    string SideString(Side s) {
+  switch (s) {
+    case Side::kLeft:
+      return 'Left';
+    case Side::kRight:
+      return 'Right';
+    default:
+      LOG(FATAL) << 'Unknown side ' << static_cast<int32>(s);
+  }
+}
+    
+    #endif  /* UPB_H_ */
+/*
+** upb_decode: parsing into a upb_msg using a upb_msglayout.
+*/
+    
+      auto* message1_on_arena =
+      Arena::CreateMessage<protobuf_unittest::TestAllTypes>(&arena);
+  TestUtil::SetAllFields(message1_on_arena);
+  const auto* nested = &message1_on_arena->optional_nested_message();
+    
+    EnumOneofFieldGenerator::EnumOneofFieldGenerator(
+    const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options)
+  : PrimitiveOneofFieldGenerator(descriptor, fieldOrdinal, options) {
+}
+    
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
+}
+    
+    #include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_names.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/wire_format.h>
+#include <google/protobuf/stubs/strutil.h>
+#include <google/protobuf/stubs/substitute.h>
+    
+    
+    {  printer->Print(
+    variables_,
+    'private static readonly pbc::MapField<$key_type_name$, $value_type_name$>.Codec _map_$name$_codec\n'
+    '    = new pbc::MapField<$key_type_name$, $value_type_name$>.Codec(');
+  key_generator->GenerateCodecCode(printer);
+  printer->Print(', ');
+  value_generator->GenerateCodecCode(printer);
+  printer->Print(
+    variables_,
+    ', $tag$);\n'
+    'private readonly pbc::MapField<$key_type_name$, $value_type_name$> $name$_ = new pbc::MapField<$key_type_name$, $value_type_name$>();\n');
+  WritePropertyDocComment(printer, descriptor_);
+  AddPublicMemberAttributes(printer);
+  printer->Print(
+    variables_,
+    '$access_level$ pbc::MapField<$key_type_name$, $value_type_name$> $property_name$ {\n'
+    '  get { return $name$_; }\n'
+    '}\n');
+}
+    
+      // TODO(jonskeet): Memoize size of frozen messages?
+  printer->Outdent();
+  printer->Print(
+    '}\n'
+    '\n');
+  WriteGeneratedCodeAttributes(printer);
+  printer->Print(
+    'public int CalculateSize() {\n');
+  printer->Indent();
+  printer->Print('int size = 0;\n');
+  for (int i = 0; i < descriptor_->field_count(); i++) {
+    std::unique_ptr<FieldGeneratorBase> generator(
+        CreateFieldGeneratorInternal(descriptor_->field(i)));
+    generator->GenerateSerializedSizeCode(printer);
   }
     
-      explicit Singleton(typename Singleton::CreateFunc c,
-                     typename Singleton::TeardownFunc t = nullptr) {
-    if (c == nullptr) {
-      detail::singletonThrowNullCreator(typeid(T));
-    }
-    }
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void WriteToString(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
     
       /**
-   * communicate() callbacks can use this to temporarily enable/disable
-   * notifications (callbacks) for a pipe to/from the child.  By default,
-   * all are enabled.  Useful for 'chatty' communication -- you want to
-   * disable write callbacks until you receive the expected message.
-   *
-   * Disabling a pipe does not free you from the requirement to consume all
-   * incoming data.  Failing to do so will easily create deadlock bugs.
-   *
-   * Throws if the childFd is not known.
+   * @brief Initialize the CAN client by specified CAN card parameters.
+   * @param parameter CAN card parameters to initialize the CAN client.
+   * @return If the initialization is successful.
    */
-  void enableNotifications(int childFd, bool enabled);
+  virtual bool Init(const CANCardParameter &parameter) = 0;
     
-    #include <memory>
-#include <unordered_set>
+      /**
+   * @brief Destructor
+   */
+  virtual ~EsdCanClient();
     
-    TEST(Window, parallel) {
-  std::vector<int> input;
-  std::vector<Promise<int>> ps(10);
-  for (size_t i = 0; i < ps.size(); i++) {
-    input.emplace_back(i);
-  }
-  auto f = collect(window(input, [&](int i) {
-    return ps[i].getFuture();
-  }, 3));
+    
+    {
+    {    int ret = close(dev_handler_);
+    if (ret < 0) {
+      AERROR << 'close error code:' << ret << ', ' << GetErrorString(ret);
+    } else {
+      AINFO << 'close socket can ok. port:' << port_;
     }
-    
-    
-    {    __DelOlderTouchTime(now);
-    touch_times_.push_back(now);
-    return true;
+  }
 }
     
-        bool Check();  // true pass, false limit
+    
+    {
+    {
+    {}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+
+    
+    #include 'modules/canbus/proto/chassis_detail.pb.h'
+#include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
+#include 'modules/drivers/canbus/can_comm/protocol_data.h'
+    
+    template <typename SensorType>
+int32_t ProtocolData<SensorType>::GetLength() const {
+  return data_length_;
+}
+    
+    TEST(ByteTest, ByteToString) {
+  unsigned char value = 0x34;
+  EXPECT_EQ('34', Byte::byte_to_hex(value));
+  EXPECT_EQ('00110100', Byte::byte_to_binary(value));
+  uint32_t int_value = 0xE13A;
+  EXPECT_EQ('E13A', Byte::byte_to_hex(int_value));
+}
+    
+    // Canbus gflags
+DEFINE_double(sensor_freq, 100,
+              'Sensor feedback timer frequency -- 0 means event trigger.');
