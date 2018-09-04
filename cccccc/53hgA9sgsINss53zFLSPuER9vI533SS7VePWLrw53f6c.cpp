@@ -1,427 +1,900 @@
 
         
-        #define IPC_MESSAGE_START ShellMsgStart
-    
-    #ifndef CONTENT_NW_SRC_API_BASE_BASE_H_
-#define CONTENT_NW_SRC_API_BASE_BASE_H_
-    
-    namespace nw {
+        /// Return true if this is a non-resolved ExprPattern which is syntactically
+/// irrefutable.
+static bool isIrrefutableExprPattern(const ExprPattern *EP) {
+  // If the pattern has a registered match expression, it's
+  // a type-checked ExprPattern.
+  if (EP->getMatchExpr()) return false;
     }
     
-    bool NwObjCreateFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::DictionaryValue* options = nullptr;
-  int id = 0;
-  std::string type;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetDictionary(2, &options));
-    }
     
-      int NwDesktopCaptureMonitor::GetPrimaryMonitorIndex() {
-  #ifdef _WIN32 
-    int count=0;
-    for (int i = 0;; ++i) {
-      DISPLAY_DEVICE device;
-      device.cb = sizeof(device);
-      BOOL ret = EnumDisplayDevices(NULL, i, &device, 0);
-      if(!ret)
-        break;
-      if (device.StateFlags & DISPLAY_DEVICE_ACTIVE){
-        if (device.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE){
-          return count;
-        }
-        count++;
-      }
-    }
-  #endif
-    return -1;
+    {  // Produce the generic signature and environment.
+  // FIXME: Pass in a source location for the conformance, perhaps? It seems
+  // like this could fail.
+  syntheticSignature =
+    std::move(builder).computeGenericSignature(SourceLoc());
+  syntheticEnvironment = syntheticSignature->createGenericEnvironment();
+}
+
+    
+    static bool anyMutable(ArrayRef<SILField> Fields) {
+  for (auto &field : Fields) {
+    if (field.isMutable())
+      return true;
   }
-    
-      // Releases ownership of the object without decrementing the reference count.
-  // The caller now owns the returned reference.
-  PyObjectStruct* release() {
-    PyObject* p = ptr_;
-    ptr_ = NULL;
-    return p;
-  }
-    
-      const char* argv[] = {'protoc', proto_path.c_str(),
-                        plugin_specific_args.c_str(), capture_out.c_str(),
-                        filename.c_str()};
-    
-    io::ZeroCopyOutputStream*
-GeneratorContext::OpenForAppend(const string& filename) {
-  return NULL;
+  return false;
 }
     
-    // Functions to create C# XML documentation comments.
-// Currently this only includes documentation comments containing text specified as comments
-// in the .proto file; documentation comments generated just from field/message/enum/proto names
-// is inlined in the relevant code. If more control is required, that code can be moved here.
-    
-    std::string FieldGeneratorBase::name() {
-  return UnderscoresToCamelCase(GetFieldName(descriptor_), false);
-}
-    
-    
-    {
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-    struct Options;
-    
-    OPERATOR_SCHEMA(Exp)
-    .NumInputs(1)
-    .NumOutputs(1)
-    .AllowInplace({{0, 0}})
-    .IdenticalTypeAndShape()
-    .SetDoc(R'DOC(
-Calculates the exponential of the given input tensor ($exp(x)$), element-wise. This
-operation can be done in an in-place fashion too, by providing the same input
-and output blobs.
-    
-    
-    {      vector<TensorShape> out(1);
-      std::vector<int> newDims =
-          SqueezeOp<CPUContext>::ComputeDims(GetDimsVector(in[0]), dims);
-      out[0] = CreateTensorShape(newDims, in[0].data_type());
-      return out;
-    })
-    .InheritOnnxSchema('Squeeze');
-    
-    
-    {    auto extendSize = (TIndex)maxElem - oldSize;
-    if (extendSize > 0) {
-      new_tensor->Extend(extendSize, growthPct_, &context_);
-      if (!new_tensor->meta().ctor()) {
-        auto oldSizeBytes = oldSize * new_tensor->meta().itemsize();
-        auto* dst = (char*)new_tensor->raw_mutable_data() + oldSizeBytes;
-        math::Set<char, Context>(
-            new_tensor->nbytes() - oldSizeBytes, 0, dst, &context_);
-      }
-    }
-    return true;
-  }
-    
-    
-    {  vector<int> y_shape(in[0].dims().begin(), in[0].dims().end());
-  CAFFE_ENFORCE_LE(canonical_axis + 1, y_shape.size());
-  y_shape.resize(canonical_axis + 1);
-  y_shape[canonical_axis] = N;
-  out[0] = CreateTensorShape(y_shape, in[0].data_type());
-  return out;
-}
-    
-    // TODO: Write gradient for this when needed
-GRADIENT_NOT_IMPLEMENTED_YET(Floor);
-    
-    template <typename B, typename D>
-struct TypeInherits {
+      // An AST section consists of one or more AST modules, optionally with
+  // headers. Iterate over all AST modules.
+  while (!buf.empty()) {
+    auto info = serialization::validateSerializedAST(buf);
     }
     
-    				StringBuffer<> color_str;
-				color_str += '#';
-				while (true) {
-					CharType ch = p_stream->get_char();
-					if (p_stream->is_eof()) {
-						r_token.type = TK_EOF;
-						return OK;
-					} else if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F')) {
-						color_str += ch;
-    }
-    }
+    VERB(abbreviate)
+VERB(accept)
+VERB(activate)
+VERB(add)
+VERB(adjust)
+VERB(admire)
+VERB(admit)
+VERB(advise)
+VERB(afford)
+VERB(agree)
+VERB(alert)
+VERB(allow)
+VERB(alter)
+VERB(amuse)
+VERB(analyse)
+VERB(analyze)
+VERB(animate)
+VERB(announce)
+VERB(annoy)
+VERB(answer)
+VERB(apologise)
+VERB(appear)
+VERB(append)
+VERB(applaud)
+VERB(apply)
+VERB(apportion)
+VERB(appreciate)
+VERB(approve)
+VERB(argue)
+VERB(arrange)
+VERB(arrest)
+VERB(arrive)
+VERB(ask)
+VERB(assign)
+VERB(attach)
+VERB(attack)
+VERB(attempt)
+VERB(attend)
+VERB(attract)
+VERB(avoid)
+VERB(awake)
+VERB(back)
+VERB(bake)
+VERB(balance)
+VERB(ban)
+VERB(bang)
+VERB(bare)
+VERB(bat)
+VERB(bathe)
+VERB(battle)
+VERB(be)
+VERB(beat)
+VERB(become)
+VERB(beg)
+VERB(begin)
+VERB(behave)
+VERB(belong)
+VERB(bend)
+VERB(bet)
+VERB(bid)
+VERB(bite)
+VERB(bleach)
+VERB(bless)
+VERB(blind)
+VERB(blink)
+VERB(blot)
+VERB(blow)
+VERB(blush)
+VERB(boast)
+VERB(boil)
+VERB(bolt)
+VERB(bomb)
+VERB(book)
+VERB(bore)
+VERB(borrow)
+VERB(bounce)
+VERB(bow)
+VERB(box)
+VERB(brake)
+VERB(branch)
+VERB(break)
+VERB(breathe)
+VERB(bring)
+VERB(broadcast)
+VERB(bruise)
+VERB(brush)
+VERB(bubble)
+VERB(build)
+VERB(bump)
+VERB(burn)
+VERB(bury)
+VERB(buy)
+VERB(buzz)
+VERB(calculate)
+VERB(call)
+VERB(camp)
+VERB(cancel)
+VERB(capture)
+VERB(care)
+VERB(carry)
+VERB(carve)
+VERB(cast)
+VERB(catch)
+VERB(cause)
+VERB(center)
+VERB(challenge)
+VERB(change)
+VERB(charge)
+VERB(chase)
+VERB(cheat)
+VERB(check)
+VERB(cheer)
+VERB(chew)
+VERB(choke)
+VERB(choose)
+VERB(chop)
+VERB(claim)
+VERB(clap)
+VERB(clean)
+VERB(clear)
+VERB(click)
+VERB(close)
+VERB(coach)
+VERB(coil)
+VERB(collect)
+VERB(collapse)
+VERB(colour)
+VERB(comb)
+VERB(come)
+VERB(command)
+VERB(commit)
+VERB(communicate)
+VERB(compare)
+VERB(compete)
+VERB(complain)
+VERB(complete)
+VERB(concentrate)
+VERB(concern)
+VERB(confess)
+VERB(confuse)
+VERB(connect)
+VERB(consider)
+VERB(consist)
+VERB(contain)
+VERB(contains)
+VERB(continue)
+VERB(convert)
+VERB(copy)
+VERB(correct)
+VERB(cough)
+VERB(cost)
+VERB(count)
+VERB(cover)
+VERB(crack)
+VERB(crash)
+VERB(crawl)
+VERB(cross)
+VERB(crush)
+VERB(cry)
+VERB(cure)
+VERB(curl)
+VERB(curve)
+VERB(customize)
+VERB(cut)
+VERB(cycle)
+VERB(dam)
+VERB(damage)
+VERB(dance)
+VERB(dare)
+VERB(decay)
+VERB(deceive)
+VERB(decide)
+VERB(decode)
+VERB(decorate)
+VERB(defer)
+VERB(define)
+VERB(delay)
+VERB(delete)
+VERB(delight)
+VERB(deliver)
+VERB(depend)
+VERB(describe)
+VERB(deselect)
+VERB(desert)
+VERB(deserve)
+VERB(destroy)
+VERB(detach)
+VERB(detect)
+VERB(develop)
+VERB(dig)
+VERB(dim)
+VERB(disagree)
+VERB(disappear)
+VERB(disapprove)
+VERB(disarm)
+VERB(discover)
+VERB(dislike)
+VERB(dismiss)
+VERB(display)
+VERB(divide)
+VERB(do)
+VERB(double)
+VERB(doubt)
+VERB(drag)
+VERB(drain)
+VERB(draw)
+VERB(dream)
+VERB(dress)
+VERB(drink)
+VERB(drip)
+VERB(drive)
+VERB(drop)
+VERB(drown)
+VERB(drum)
+VERB(dry)
+VERB(duplicate)
+VERB(dust)
+VERB(earn)
+VERB(eat)
+VERB(echo)
+VERB(edit)
+VERB(educate)
+VERB(embarrass)
+VERB(employ)
+VERB(empty)
+VERB(enable)
+VERB(encode)
+VERB(encourage)
+VERB(end)
+VERB(enjoy)
+VERB(enter)
+VERB(entertain)
+VERB(enumerate)
+VERB(enqueue)
+VERB(escape)
+VERB(examine)
+VERB(excite)
+VERB(excuse)
+VERB(execute)
+VERB(exercise)
+VERB(exist)
+VERB(expand)
+VERB(expect)
+VERB(explain)
+VERB(explode)
+VERB(export)
+VERB(extend)
+VERB(face)
+VERB(fade)
+VERB(fail)
+VERB(fancy)
+VERB(fasten)
+VERB(fax)
+VERB(fear)
+VERB(feel)
+VERB(fence)
+VERB(fetch)
+VERB(fight)
+VERB(fill)
+VERB(film)
+VERB(find)
+VERB(finish)
+VERB(fire)
+VERB(fit)
+VERB(fix)
+VERB(flap)
+VERB(flash)
+VERB(flatten)
+VERB(flip)
+VERB(float)
+VERB(flood)
+VERB(flow)
+VERB(flower)
+VERB(fly)
+VERB(focus)
+VERB(fold)
+VERB(follow)
+VERB(fool)
+VERB(force)
+VERB(forget)
+VERB(forgive)
+VERB(form)
+VERB(found)
+VERB(freeze)
+VERB(frighten)
+VERB(fry)
+VERB(gain)
+VERB(gather)
+VERB(gaze)
+VERB(generate)
+VERB(get)
+VERB(give)
+VERB(glow)
+VERB(glue)
+VERB(go)
+VERB(grab)
+VERB(grate)
+VERB(grease)
+VERB(greet)
+VERB(grin)
+VERB(grip)
+VERB(groan)
+VERB(grow)
+VERB(guarantee)
+VERB(guard)
+VERB(guess)
+VERB(guide)
+VERB(hammer)
+VERB(hand)
+VERB(handle)
+VERB(hang)
+VERB(happen)
+VERB(harass)
+VERB(harm)
+VERB(hate)
+VERB(haunt)
+VERB(head)
+VERB(heal)
+VERB(heap)
+VERB(hear)
+VERB(heat)
+VERB(help)
+VERB(hide)
+VERB(highlight)
+VERB(hit)
+VERB(hold)
+VERB(hook)
+VERB(hop)
+VERB(hope)
+VERB(hover)
+VERB(hug)
+VERB(hum)
+VERB(hunt)
+VERB(hurry)
+VERB(hurt)
+VERB(identify)
+VERB(ignore)
+VERB(imagine)
+VERB(import)
+VERB(impress)
+VERB(improve)
+VERB(include)
+VERB(increase)
+VERB(influence)
+VERB(inform)
+VERB(inject)
+VERB(injure)
+VERB(insert)
+VERB(instruct)
+VERB(intend)
+VERB(interest)
+VERB(interfere)
+VERB(interrupt)
+VERB(intersect)
+VERB(intersects)
+VERB(introduce)
+VERB(invent)
+VERB(invite)
+VERB(irritate)
+VERB(itch)
+VERB(jail)
+VERB(jam)
+VERB(jog)
+VERB(join)
+VERB(joke)
+VERB(judge)
+VERB(juggle)
+VERB(jump)
+VERB(keep)
+VERB(kick)
+VERB(kill)
+VERB(kiss)
+VERB(kneel)
+VERB(knit)
+VERB(knock)
+VERB(knot)
+VERB(know)
+VERB(label)
+VERB(land)
+VERB(last)
+VERB(laugh)
+VERB(launch)
+VERB(lay)
+VERB(lead)
+VERB(learn)
+VERB(leave)
+VERB(lend)
+VERB(let)
+VERB(level)
+VERB(license)
+VERB(lick)
+VERB(lie)
+VERB(lighten)
+VERB(like)
+VERB(listen)
+VERB(live)
+VERB(load)
+VERB(localize)
+VERB(lock)
+VERB(long)
+VERB(look)
+VERB(lose)
+VERB(love)
+VERB(maintain)
+VERB(make)
+VERB(man)
+VERB(manage)
+VERB(march)
+VERB(mark)
+VERB(marry)
+VERB(match)
+VERB(mate)
+VERB(matter)
+VERB(mean)
+VERB(measure)
+VERB(meddle)
+VERB(meet)
+VERB(melt)
+VERB(memorise)
+VERB(mend)
+VERB(merge)
+VERB(mess)
+VERB(milk)
+VERB(mine)
+VERB(miss)
+VERB(minus)
+VERB(mix)
+VERB(moan)
+VERB(moor)
+VERB(mourn)
+VERB(move)
+VERB(muddle)
+VERB(mug)
+VERB(multiply)
+VERB(murder)
+VERB(nail)
+VERB(nest)
+VERB(nod)
+VERB(normalize)
+VERB(note)
+VERB(notice)
+VERB(notify)
+VERB(number)
+VERB(obey)
+VERB(observe)
+VERB(obtain)
+VERB(occur)
+VERB(offend)
+VERB(offer)
+VERB(open)
+VERB(order)
+VERB(overflow)
+VERB(owe)
+VERB(own)
+VERB(pack)
+VERB(paddle)
+VERB(paint)
+VERB(park)
+VERB(part)
+VERB(pass)
+VERB(paste)
+VERB(pat)
+VERB(pause)
+VERB(pay)
+VERB(peck)
+VERB(pedal)
+VERB(peel)
+VERB(peep)
+VERB(perform)
+VERB(permit)
+VERB(phone)
+VERB(pick)
+VERB(pinch)
+VERB(pine)
+VERB(place)
+VERB(plan)
+VERB(plant)
+VERB(play)
+VERB(please)
+VERB(plug)
+VERB(poke)
+VERB(polish)
+VERB(pop)
+VERB(possess)
+VERB(post)
+VERB(pour)
+VERB(practice)
+VERB(practise)
+VERB(pray)
+VERB(preach)
+VERB(precede)
+VERB(prefer)
+VERB(preload)
+VERB(prepare)
+VERB(prepend)
+VERB(present)
+VERB(preserve)
+VERB(press)
+VERB(pretend)
+VERB(prevent)
+VERB(prick)
+VERB(print)
+VERB(produce)
+VERB(program)
+VERB(promise)
+VERB(protect)
+VERB(provide)
+VERB(pull)
+VERB(pump)
+VERB(punch)
+VERB(puncture)
+VERB(punish)
+VERB(push)
+VERB(put)
+VERB(question)
+VERB(queue)
+VERB(race)
+VERB(radiate)
+VERB(rain)
+VERB(raise)
+VERB(reach)
+VERB(read)
+VERB(realise)
+VERB(receive)
+VERB(recognise)
+VERB(record)
+VERB(reduce)
+VERB(reflect)
+VERB(refuse)
+VERB(register)
+VERB(regret)
+VERB(reign)
+VERB(reject)
+VERB(rejoice)
+VERB(relax)
+VERB(release)
+VERB(rely)
+VERB(remain)
+VERB(remember)
+VERB(remind)
+VERB(remove)
+VERB(repair)
+VERB(repeat)
+VERB(replace)
+VERB(reply)
+VERB(report)
+VERB(request)
+VERB(require)
+VERB(resize)
+VERB(rescue)
+VERB(resolve)
+VERB(retain)
+VERB(retire)
+VERB(return)
+VERB(reverse)
+VERB(review)
+VERB(rhyme)
+VERB(ride)
+VERB(ring)
+VERB(rinse)
+VERB(rise)
+VERB(risk)
+VERB(rob)
+VERB(rock)
+VERB(roll)
+VERB(rot)
+VERB(rub)
+VERB(ruin)
+VERB(rule)
+VERB(run)
+VERB(rush)
+VERB(sack)
+VERB(sail)
+VERB(satisfy)
+VERB(save)
+VERB(saw)
+VERB(say)
+VERB(scale)
+VERB(scare)
+VERB(scatter)
+VERB(scold)
+VERB(scorch)
+VERB(scrape)
+VERB(scratch)
+VERB(scream)
+VERB(screw)
+VERB(scribble)
+VERB(scroll)
+VERB(scrub)
+VERB(seal)
+VERB(search)
+VERB(see)
+VERB(select)
+VERB(sell)
+VERB(send)
+VERB(separate)
+VERB(serve)
+VERB(settle)
+VERB(shade)
+VERB(share)
+VERB(shave)
+VERB(shelter)
+VERB(shiver)
+VERB(shock)
+VERB(shop)
+VERB(show)
+VERB(shrug)
+VERB(shut)
+VERB(sigh)
+VERB(sign)
+VERB(signal)
+VERB(sin)
+VERB(sing)
+VERB(sip)
+VERB(sit)
+VERB(ski)
+VERB(skip)
+VERB(slap)
+VERB(sleep)
+VERB(slip)
+VERB(slow)
+VERB(smash)
+VERB(smell)
+VERB(smile)
+VERB(smoke)
+VERB(snatch)
+VERB(sneeze)
+VERB(sniff)
+VERB(snore)
+VERB(snow)
+VERB(soak)
+VERB(soothe)
+VERB(sound)
+VERB(spare)
+VERB(spark)
+VERB(sparkle)
+VERB(speak)
+VERB(spell)
+VERB(spend)
+VERB(spill)
+VERB(spoil)
+VERB(spot)
+VERB(spray)
+VERB(sprout)
+VERB(squash)
+VERB(squeak)
+VERB(squeal)
+VERB(squeeze)
+VERB(stain)
+VERB(stamp)
+VERB(stand)
+VERB(standardise)
+VERB(standardize)
+VERB(stare)
+VERB(start)
+VERB(stay)
+VERB(steer)
+VERB(step)
+VERB(stir)
+VERB(stitch)
+VERB(stop)
+VERB(store)
+VERB(strap)
+VERB(strengthen)
+VERB(stretch)
+VERB(strip)
+VERB(stroke)
+VERB(stuff)
+VERB(subtract)
+VERB(succeed)
+VERB(suck)
+VERB(suffer)
+VERB(suggest)
+VERB(suit)
+VERB(supply)
+VERB(support)
+VERB(suppose)
+VERB(suppress)
+VERB(surprise)
+VERB(surround)
+VERB(suspect)
+VERB(suspend)
+VERB(swim)
+VERB(switch)
+VERB(take)
+VERB(talk)
+VERB(tame)
+VERB(tap)
+VERB(taste)
+VERB(teach)
+VERB(tear)
+VERB(tease)
+VERB(telephone)
+VERB(tell)
+VERB(tempt)
+VERB(terrify)
+VERB(test)
+VERB(thank)
+VERB(thaw)
+VERB(think)
+VERB(throw)
+VERB(tick)
+VERB(tickle)
+VERB(tie)
+VERB(time)
+VERB(tip)
+VERB(tire)
+VERB(toggle)
+VERB(touch)
+VERB(tour)
+VERB(tow)
+VERB(trace)
+VERB(trade)
+VERB(train)
+VERB(translate)
+VERB(transform)
+VERB(transport)
+VERB(trap)
+VERB(travel)
+VERB(traverse)
+VERB(treat)
+VERB(tremble)
+VERB(trick)
+VERB(trip)
+VERB(trot)
+VERB(trouble)
+VERB(truncate)
+VERB(trust)
+VERB(try)
+VERB(tug)
+VERB(tumble)
+VERB(turn)
+VERB(twist)
+VERB(understand)
+VERB(undress)
+VERB(unfasten)
+VERB(union)
+VERB(unite)
+VERB(unload)
+VERB(unlock)
+VERB(unpack)
+VERB(untidy)
+VERB(up)
+VERB(update)
+VERB(use)
+VERB(validate)
+VERB(vanish)
+VERB(visit)
+VERB(wail)
+VERB(wait)
+VERB(wake)
+VERB(walk)
+VERB(wander)
+VERB(want)
+VERB(warm)
+VERB(warn)
+VERB(wash)
+VERB(waste)
+VERB(watch)
+VERB(water)
+VERB(wave)
+VERB(wear)
+VERB(weigh)
+VERB(welcome)
+VERB(whine)
+VERB(whip)
+VERB(whirl)
+VERB(whisper)
+VERB(whistle)
+VERB(win)
+VERB(wink)
+VERB(wipe)
+VERB(wish)
+VERB(wobble)
+VERB(wonder)
+VERB(work)
+VERB(worry)
+VERB(wrap)
+VERB(wreck)
+VERB(wrestle)
+VERB(wriggle)
+VERB(write)
+VERB(yawn)
+VERB(yell)
+VERB(zip)
+VERB(zoom)
     
-    	_FORCE_INLINE_ void _draw_gui_primitive(int p_points, const Vector2 *p_vertices, const Color *p_colors, const Vector2 *p_uvs);
-	_FORCE_INLINE_ void _draw_polygon(const int *p_indices, int p_index_count, int p_vertex_count, const Vector2 *p_vertices, const Vector2 *p_uvs, const Color *p_colors, bool p_singlecolor, const int *p_bones, const float *p_weights);
-	_FORCE_INLINE_ void _draw_generic(GLuint p_primitive, int p_vertex_count, const Vector2 *p_vertices, const Vector2 *p_uvs, const Color *p_colors, bool p_singlecolor);
-    
-    #endif
-
-    
-    	IP::Type sock_type;
-	int sockfd;
-    
-    	if (bind(sockfd, (struct sockaddr *)&addr, addr_size) != -1) {
-    }
-    
-    	virtual Error listen(int p_port, const IP_Address &p_bind_address = IP_Address('*'), int p_recv_buffer_size = 65536);
-	virtual void close();
-	virtual Error wait();
-	virtual bool is_listening() const;
-    
-    	if (ret && (FD_ISSET(listen_sockfd, &pfd))) {
-    }
-    
-    	static void make_default();
-	static void cleanup();
-    
-    
-    {
-    {        // For now reusing the shim to allow prefetch.
-        // Please only use a subset of the shim interface that includes
-        // Init()/StartEpoch()/GetMinibatch()/IsEndOfEpoch()
-        // Shim will be deleted in the future versions.
-        std::shared_ptr<ReaderShim<float>> m_shim;
-        Microsoft::MSR::CNTK::StreamMinibatchInputs m_matrices;
-    };
-}
-
-    
-    #include 'stdafx.h'
-#include 'CNTKLibrary.h'
-#include 'Utils.h'
-    
-            NDShape m_shape;
-        VariableKind m_varKind;
-        ::CNTK::DataType m_dataType;
-        std::weak_ptr<Function> m_ownerFunction;
-        std::unique_ptr<std::once_flag> m_initValueFlag;
-        NDArrayViewPtr m_value;
-        std::unique_ptr<ParameterInitializer> m_valueInitializer;
-        std::unique_ptr<DeviceDescriptor> m_valueInitializationDevice;
-        bool m_needsGradient;
-        std::wstring m_name;
-        std::vector<Axis> m_dynamicAxes;
-        bool m_isSparse;
-        std::wstring m_uid;
-        std::atomic<size_t> m_valueTimeStamp;
-        Variable m_blockFunctionVariableMapping;
-    
-    
-    {
-    {
-    {}}}
-
-    
-    public:
-    // subPen - substitution penalty
-    // delPen - deletion penalty
-    // insPen - insertion penalty
-    // squashInputs - whether to merge sequences of identical samples.
-    // tokensToIgnore - list of indices of samples to ignore during edit distance evaluation
-    EditDistanceErrorNode(DEVICEID_TYPE deviceId, const wstring & name, float subPen = 1.0f, float delPen = 1.0f, float insPen = 1.0f, bool squashInputs = false, vector<size_t> tokensToIgnore = {})
-        : Base(deviceId, name), m_subPen(subPen), m_delPen(delPen), m_insPen(insPen), m_squashInputs(squashInputs), m_tokensToIgnore(tokensToIgnore)
-    {
-    }
-    
-    template <class charT, class traits>
-digraph<charT> basic_regex_parser<charT, traits>::get_next_set_literal(basic_char_set<charT, traits>& char_set)
-{
-   digraph<charT> result;
-   switch(this->m_traits.syntax_type(*m_position))
-   {
-   case regex_constants::syntax_dash:
-      if(!char_set.empty())
-      {
-         // see if we are at the end of the set:
-         if((++m_position == m_end) || (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_set))
-         {
-            fail(regex_constants::error_range, m_position - m_base);
-            return result;
-         }
-         --m_position;
+          if (node->Further) {
+        // Further indent, and include the line to the right child if
+        // there is one.
+        IndentScope is(this, node->Right ? '|   ' : '    ');
+        print(node->Further, ChildKind::Further);
       }
-      result.first = *m_position++;
-      return result;
-   case regex_constants::syntax_escape:
-      // check to see if escapes are supported first:
-      if(this->flags() & regex_constants::no_escape_in_lists)
-      {
-         result = *m_position++;
-         break;
-      }
-      ++m_position;
-      result = unescape_character();
-      break;
-   case regex_constants::syntax_open_set:
-   {
-      if(m_end == ++m_position)
-      {
-         fail(regex_constants::error_collate, m_position - m_base);
-         return result;
-      }
-      if(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_dot)
-      {
-         --m_position;
-         result.first = *m_position;
-         ++m_position;
-         return result;
-      }
-      if(m_end == ++m_position)
-      {
-         fail(regex_constants::error_collate, m_position - m_base);
-         return result;
-      }
-      const charT* name_first = m_position;
-      // skip at least one character, then find the matching ':]'
-      if(m_end == ++m_position)
-      {
-         fail(regex_constants::error_collate, name_first - m_base);
-         return result;
-      }
-      while((m_position != m_end) 
-         && (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_dot)) 
-         ++m_position;
-      const charT* name_last = m_position;
-      if(m_end == m_position)
-      {
-         fail(regex_constants::error_collate, name_first - m_base);
-         return result;
-      }
-      if((m_end == ++m_position) 
-         || (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_close_set))
-      {
-         fail(regex_constants::error_collate, name_first - m_base);
-         return result;
-      }
-      ++m_position;
-      string_type s = this->m_traits.lookup_collatename(name_first, name_last);
-      if(s.empty() || (s.size() > 2))
-      {
-         fail(regex_constants::error_collate, name_first - m_base);
-         return result;
-      }
-      result.first = s[0];
-      if(s.size() > 1)
-         result.second = s[1];
-      else
-         result.second = 0;
-      return result;
-   }
-   default:
-      result = *m_position++;
-   }
-   return result;
-}
     
-    #ifndef BOOST_REGEX_V4_MATCH_FLAGS
-#define BOOST_REGEX_V4_MATCH_FLAGS
+    from GYBUnicodeDataUtils import GraphemeClusterBreakPropertyTable, get_extended_grapheme_cluster_rules_matrix
     
-    #endif
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         iterator_traits.cpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Declares iterator traits workarounds.
+  */
     
-          no_except = ::boost::regbase::no_except,
-      failbit = ::boost::regbase::failbit,
-      literal = ::boost::regbase::literal,
-      icase = ::boost::regbase::icase,
-      nocollate = ::boost::regbase::nocollate,
-      collate = ::boost::regbase::collate,
-      nosubs = ::boost::regbase::nosubs,
-      optimize = ::boost::regbase::optimize,
-      bk_plus_qm = ::boost::regbase::bk_plus_qm,
-      bk_vbar = ::boost::regbase::bk_vbar,
-      no_intervals = ::boost::regbase::no_intervals,
-      no_char_classes = ::boost::regbase::no_char_classes,
-      no_escape_in_lists = ::boost::regbase::no_escape_in_lists,
-      no_mod_m = ::boost::regbase::no_mod_m,
-      mod_x = ::boost::regbase::mod_x,
-      mod_s = ::boost::regbase::mod_s,
-      no_mod_s = ::boost::regbase::no_mod_s,
-      save_subexpression_location = ::boost::regbase::save_subexpression_location,
-      no_empty_expressions = ::boost::regbase::no_empty_expressions,
+       repeater_count<BidiIterator>* saved = next_count;
+   repeater_count<BidiIterator> r(&next_count); // resets all repeat counts since we're recursing and starting fresh on those
+   next_count = &r;
+   bool can_backtrack = m_can_backtrack;
+   bool result = match_all_states();
+   m_can_backtrack = can_backtrack;
+   next_count = saved;
     
-    //
-// proc regex_match
-// returns true if the specified regular expression matches
-// the whole of the input.  Fills in what matched in m.
-//
-template <class BidiIterator, class Allocator, class charT, class traits>
-bool regex_match(BidiIterator first, BidiIterator last, 
-                 match_results<BidiIterator, Allocator>& m, 
-                 const basic_regex<charT, traits>& e, 
-                 match_flag_type flags = match_default)
-{
-   BOOST_REGEX_DETAIL_NS::perl_matcher<BidiIterator, Allocator, traits> matcher(first, last, m, e, flags, first);
-   return matcher.match();
-}
-template <class iterator, class charT, class traits>
-bool regex_match(iterator first, iterator last, 
-                 const basic_regex<charT, traits>& e, 
-                 match_flag_type flags = match_default)
-{
-   match_results<iterator> m;
-   return regex_match(first, last, m, e, flags | regex_constants::match_any);
-}
-//
-// query_match convenience interfaces:
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-//
-// this isn't really a partial specialisation, but template function
-// overloading - if the compiler doesn't support partial specialisation
-// then it really won't support this either:
-template <class charT, class Allocator, class traits>
-inline bool regex_match(const charT* str, 
-                        match_results<const charT*, Allocator>& m, 
-                        const basic_regex<charT, traits>& e, 
-                        match_flag_type flags = match_default)
-{
-   return regex_match(str, str + traits::length(str), m, e, flags);
-}
-    
-    template <class OutputIterator, class BidirectionalIterator, class traits, class charT, class Formatter>
-OutputIterator regex_replace(OutputIterator out,
-                         BidirectionalIterator first,
-                         BidirectionalIterator last,
-                         const basic_regex<charT, traits>& e, 
-                         Formatter fmt, 
-                         match_flag_type flags = match_default)
-{
-   regex_iterator<BidirectionalIterator, charT, traits> i(first, last, e, flags);
-   regex_iterator<BidirectionalIterator, charT, traits> j;
-   if(i == j)
-   {
-      if(!(flags & regex_constants::format_no_copy))
-         out = BOOST_REGEX_DETAIL_NS::copy(first, last, out);
-   }
-   else
-   {
-      BidirectionalIterator last_m(first);
-      while(i != j)
-      {
-         if(!(flags & regex_constants::format_no_copy))
-            out = BOOST_REGEX_DETAIL_NS::copy(i->prefix().first, i->prefix().second, out); 
-         out = i->format(out, fmt, flags, e);
-         last_m = (*i)[0].second;
-         if(flags & regex_constants::format_first_only)
-            break;
-         ++i;
-      }
-      if(!(flags & regex_constants::format_no_copy))
-         out = BOOST_REGEX_DETAIL_NS::copy(last_m, last, out);
-   }
-   return out;
-}
-    
-    template <class BidirectionalIterator,
-          class charT,
-          class traits>
-class regex_token_iterator_implementation 
-{
-   typedef basic_regex<charT, traits> regex_type;
-   typedef sub_match<BidirectionalIterator>      value_type;
-    }
-    
-    //
-// class regex_traits_wrapper.
-// this is what our implementation will actually store;
-// it provides default implementations of the 'optional'
-// interfaces that we support, in addition to the
-// required 'standard' ones:
-//
+    namespace boost{
 namespace BOOST_REGEX_DETAIL_NS{
-#if !BOOST_WORKAROUND(__HP_aCC, < 60000)
-BOOST_MPL_HAS_XXX_TRAIT_DEF(boost_extensions_tag)
-#else
-template<class T>
-struct has_boost_extensions_tag
-{
-   BOOST_STATIC_CONSTANT(bool, value = false);
-};
+    }
+    }
+    
+    #ifndef BOOST_REGEX_FWD_HPP
+#include <boost/regex_fwd.hpp>
 #endif
+#ifndef BOOST_REGEX_TRAITS_HPP
+#include <boost/regex/regex_traits.hpp>
+#endif
+#ifndef BOOST_REGEX_RAW_BUFFER_HPP
+#include <boost/regex/v4/error_type.hpp>
+#endif
+#ifndef BOOST_REGEX_V4_MATCH_FLAGS
+#include <boost/regex/v4/match_flags.hpp>
+#endif
+#ifndef BOOST_REGEX_RAW_BUFFER_HPP
+#include <boost/regex/v4/regex_raw_buffer.hpp>
+#endif
+#ifndef BOOST_RE_PAT_EXCEPT_HPP
+#include <boost/regex/pattern_except.hpp>
+#endif
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex_grep.hpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Provides regex_grep implementation.
+  */
+    
+    
+    {   void BOOST_REGEX_CALL align()
+   {
+      // move end up to a boundary:
+      end = start + (((end - start) + padding_mask) & ~padding_mask);
+   }
+   void swap(raw_storage& that)
+   {
+      std::swap(start, that.start);
+      std::swap(end, that.end);
+      std::swap(last, that.last);
+  }
+};
+    
+    template <class BidiIterator, class Allocator, class charT, class traits>
+bool regex_search(BidiIterator first, BidiIterator last, 
+                  match_results<BidiIterator, Allocator>& m, 
+                  const basic_regex<charT, traits>& e, 
+                  match_flag_type flags,
+                  BidiIterator base)
+{
+   if(e.flags() & regex_constants::failbit)
+      return false;
     }
