@@ -1,82 +1,81 @@
-'''
-    The approach taken is explained below. I decided to do it simply.
-    Initially I was considering parsing the data into some sort of
-    structure and then generating an appropriate README. I am still
-    considering doing it - but for now this should work. The only issue
-    I see is that it only sorts the entries at the lowest level, and that
-    the order of the top-level contents do not match the order of the actual
-    entries.
+
+        
+            def __init__(self, num_levels):
+        self.num_levels = num_levels
+        self.levels = []  # List of Levels
     
-    versions_info['versions'][version] = new_version
-versions_info['latest'] = version
+        def __init__(self):
+        self.people = {}  # key: person_id, value: person
+    
+            Accessing a node updates its position to the front of the LRU list.
+        '''
+        node = self.lookup[query]
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
+    
+        def process_response(self, request, response):
+        # No need to check for a redirect for non-404 responses.
+        if response.status_code != 404:
+            return response
+    
+        def _get_session_key(self):
+        '''
+        Instead of generating a random string, generate a secure url-safe
+        base64-encoded string of data as our session key.
+        '''
+        return signing.dumps(
+            self._session, compress=True,
+            salt='django.contrib.sessions.backends.signed_cookies',
+            serializer=self.serializer,
+        )
+    
+    from django.contrib.sites.shortcuts import get_current_site
+from django.core.paginator import EmptyPage, PageNotAnInteger
+from django.http import Http404
+from django.template.response import TemplateResponse
+from django.urls import reverse
+from django.utils.http import http_date
+    
+        return result
+    
+    # See how far apart the test image is from the known faces
+face_distances = face_recognition.face_distance(known_encodings, image_to_test_encoding)
     
     
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+def _css_to_rect(css):
+    '''
+    Convert a tuple in (top, right, bottom, left) order to a dlib `rect` object
     
-        def test_vimeo_matching(self):
-        self.assertMatch('https://vimeo.com/channels/tributes', ['vimeo:channel'])
-        self.assertMatch('https://vimeo.com/channels/31259', ['vimeo:channel'])
-        self.assertMatch('https://vimeo.com/channels/31259/53576664', ['vimeo'])
-        self.assertMatch('https://vimeo.com/user7108434', ['vimeo:user'])
-        self.assertMatch('https://vimeo.com/user7108434/videos', ['vimeo:user'])
-        self.assertMatch('https://vimeo.com/user21297594/review/75524534/3c257a1b5d', ['vimeo:review'])
+    # Create arrays of known face encodings and their names
+known_face_encodings = [
+    obama_face_encoding,
+    biden_face_encoding
+]
+known_face_names = [
+    'Barack Obama',
+    'Joe Biden'
+]
+    
+        # Only process every other frame of video to save time
+    if process_this_frame:
+        # Find all the faces and face encodings in the current frame of video
+        face_locations = face_recognition.face_locations(rgb_small_frame)
+        face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+    
+    # Display the resulting image
+pil_image.show()
     
     
-from test.helper import FakeYDL
-from youtube_dl.cache import Cache
+@click.command()
+@click.argument('known_people_folder')
+@click.argument('image_to_check')
+@click.option('--cpus', default=1, help='number of CPU cores to use in parallel (can speed up processing lots of images). -1 means 'use all in system'')
+@click.option('--tolerance', default=0.6, help='Tolerance for face comparisons. Default is 0.6. Lower this if you get multiple matches for the same person.')
+@click.option('--show-distance', default=False, type=bool, help='Output face distance. Useful for tweaking tolerance setting.')
+def main(known_people_folder, image_to_check, cpus, tolerance, show_distance):
+    known_names, known_face_encodings = scan_known_people(known_people_folder)
     
-        def test_socks4a(self):
-        self.assertTrue(isinstance(self._get_ip('socks4a'), compat_str))
-    
-                    m = re.search(r'(?<=\s)u[\''](?!\)|,|$)', code)
-                if m is not None:
-                    self.assertTrue(
-                        m is None,
-                        'u present in %s, around %s' % (
-                            fn, code[m.start() - 10:m.end() + 10]))
-    
-            if check_executable('mplayer', ['-h']):
-            args = [
-                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
-                '-dumpstream', '-dumpfile', tmpfilename, url]
-        elif check_executable('mpv', ['-h']):
-            args = [
-                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
-        else:
-            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
-            return False
-    
-        def _real_extract(self, url):
-        title = self._match_id(url)
-        webpage = self._download_webpage(url, title)
-    
-        code_block_index = 0
-    last_header = ''
-    linenum = 0
-    with io.open(args.sourcefile, 'r') as read_filehandle:
-        with io.open(args.targetfile, 'w') as text_filehandle:
-            for line in read_filehandle:
-                linenum += 1
-                indent_depth = is_code(line)
-                if indent_depth:
-                    (line, linenum) = process_code(read_filehandle,
-                                                    text_filehandle,
-                                                    line, linenum,
-                                                    args.sourcefile, args.codedir,
-                                                    last_header, code_block_index,
-                                                    indent_depth)
-                    code_block_index += 1
-                # reach here either line was not code, or was code
-                # and we dealt with n code lines
-                if indent_depth < 4 or not is_code(line, indent_depth):
-                    # store header id for codeblock
-                    section_id = get_marker(line)
-                    if section_id is not None:
-                        code_block_index = 0
-                        last_header = section_id
-                    sline = stripped(line)
-                    text_filehandle.write(sline)
+    # Load the jpg file into a numpy array
+image = face_recognition.load_image_file('two_people.jpg')
