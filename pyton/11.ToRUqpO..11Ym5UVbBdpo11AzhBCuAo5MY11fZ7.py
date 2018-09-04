@@ -1,150 +1,126 @@
 
         
-            def iter_lines(self, chunk_size):
-        return ((line, b'\n') for line in self._orig.iter_lines(chunk_size))
+            data_train = fetch_20newsgroups_vectorized(subset='train')
+    data_test = fetch_20newsgroups_vectorized(subset='test')
+    X_train = check_array(data_train.data, dtype=np.float32,
+                          accept_sparse='csc')
+    X_test = check_array(data_test.data, dtype=np.float32, accept_sparse='csr')
+    y_train = data_train.target
+    y_test = data_test.target
+    
+        alpha = 0.01  # regularization parameter
     
     
-MIME_RE = re.compile(r'^[^/]+/[^/]+$')
+def compute_bench_2(chunks):
+    results = defaultdict(lambda: [])
+    n_features = 50000
+    means = np.array([[1, 1], [-1, -1], [1, -1], [-1, 1],
+                      [0.5, 0.5], [0.75, -0.5], [-1, 0.75], [1, 0]])
+    X = np.empty((0, 2))
+    for i in range(8):
+        X = np.r_[X, means[i] + 0.8 * np.random.randn(n_features, 2)]
+    max_it = len(chunks)
+    it = 0
+    for chunk in chunks:
+        it += 1
+        print('==============================')
+        print('Iteration %03d of %03d' % (it, max_it))
+        print('==============================')
+        print()
     
-            yield self.process_body(body)
+            start = time.time()
+        func(X, n_jobs=1)
+        one_core.append(time.time() - start)
+    
+        ###########################################################################
+    # Set GaussianRandomProjection input
+    gaussian_matrix_params = {
+        'n_components': opts.n_components,
+        'random_state': opts.random_seed
+    }
+    transformers['GaussianRandomProjection'] = \
+        GaussianRandomProjection(**gaussian_matrix_params)
+    
+    Typical output
+--------------
+    
+    PROJ_NAME = 'you-get'
+PACKAGE_NAME = 'you_get'
+    
+            elif stream_id == []:
+            print('streams:             # Available quality and codecs')
+            # Print DASH streams
+            if self.dash_streams:
+                print('    [ DASH ] %s' % ('_' * 36))
+                itags = sorted(self.dash_streams,
+                               key=lambda i: -self.dash_streams[i]['size'])
+                for stream in itags:
+                    self.p_stream(stream)
+            # Print all other available streams
+            print('    [ DEFAULT ] %s' % ('_' * 33))
+            for stream in self.streams_sorted:
+                self.p_stream(stream['id'] if 'id' in stream else stream['itag'])
+    
+    site = Bigthink()
+download = site.download_by_url
 
     
-            '''
-        return headers
+        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
     
-        @pytest.mark.parametrize('verify_value', ['false', 'fALse'])
-    def test_verify_false_OK(self, httpbin_secure, verify_value):
-        r = http(httpbin_secure.url + '/get', '--verify', verify_value)
-        assert HTTP_OK in r
+            #type_, ext, size = url_info(url)
+        #print_info(site_info, title, type_, size)
+        #if not info_only:
+            #download_urls([url], title, ext, total_size=None, output_dir=output_dir, merge=merge)
     
-        >>> humanize_bytes(1)
-    '1 B'
-    >>> humanize_bytes(1024, precision=1)
-    '1.0 kB'
-    >>> humanize_bytes(1024 * 123, precision=1)
-    '123.0 kB'
-    >>> humanize_bytes(1024 * 12342, precision=1)
-    '12.1 MB'
-    >>> humanize_bytes(1024 * 12342, precision=2)
-    '12.05 MB'
-    >>> humanize_bytes(1024 * 1234, precision=2)
-    '1.21 MB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
-    '1.31 GB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
-    '1.3 GB'
+    def facebook_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url)
     
-        # Used only when requested with --check-status:
-    ERROR_HTTP_3XX = 3
-    ERROR_HTTP_4XX = 4
-    ERROR_HTTP_5XX = 5
-    
-    
-@pytest.mark.parametrize('argument_name', ['--auth-type', '-A'])
-def test_digest_auth(httpbin_both, argument_name):
-    r = http(argument_name + '=digest', '--auth=user:password',
-             'GET', httpbin_both.url + '/digest-auth/auth/user/password')
-    assert HTTP_OK in r
-    assert r.json == {'authenticated': True, 'user': 'user'}
-    
-    This module provides the capabilities for the Requests hooks system.
-    
-    
-def consume_socket_content(sock, timeout=0.5):
-    chunks = 65536
-    content = b''
-    
-        return out
-    
-    #: Python 2.x?
-is_py2 = (_ver[0] == 2)
-    
-        def __getitem__(self, key):
-        # We allow fall-through here, so values default to None
-    
-    # pyOpenSSL version 18.0.0 dropped support for Python 2.6
-if sys.version_info < (2, 7):
-    PYOPENSSL_VERSION = 'pyOpenSSL >= 0.14, < 18.0.0'
-else:
-    PYOPENSSL_VERSION = 'pyOpenSSL >= 0.14'
-    
-        def extractInformationFromTreeNodeStream(self, nodes):
-        from antlr3.tree import Tree, CommonTree
-        from antlr3.tokens import CommonToken
-        
-        self.node = nodes.LT(1)
-        adaptor = nodes.adaptor
-        payload = adaptor.getToken(self.node)
-        if payload is not None:
-            self.token = payload
-            if payload.line <= 0:
-                # imaginary node; no line/pos info; scan backwards
-                i = -1
-                priorNode = nodes.LT(i)
-                while priorNode is not None:
-                    priorPayload = adaptor.getToken(priorNode)
-                    if priorPayload is not None and priorPayload.line > 0:
-                        # we found the most recent real line / pos info
-                        self.line = priorPayload.line
-                        self.charPositionInLine = priorPayload.charPositionInLine
-                        self.approximateLineInfo = True
-                        break
-                    
-                    i -= 1
-                    priorNode = nodes.LT(i)
-                    
-            else: # node created from real token
-                self.line = payload.line
-                self.charPositionInLine = payload.charPositionInLine
-                
-        elif isinstance(self.node, Tree):
-            self.line = self.node.line
-            self.charPositionInLine = self.node.charPositionInLine
-            if isinstance(self.node, CommonTree):
-                self.token = self.node.token
-    
-    
-    def substring(self, start, stop):
-        '''
-        For infinite streams, you don't need this; primarily I'm providing
-        a useful interface for action code.  Just make sure actions don't
-        use this on streams that don't support it.
-        '''
-    
-    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads CBS videos by URL.
-    '''
-    
-    from ..common import *
-    
-        #title
-    title = ''
-    profile_api = 'https://www.showroom-live.com/api/room/profile?room_id={room_id}'.format(room_id = room_id)
-    html = loads(get_content(profile_api))
-    try:
-        title = html['main_name']
+        try:
+        smart_home_config = config[CONF_SMART_HOME]
     except KeyError:
-        title = 'Showroom_{room_id}'.format(room_id = room_id)
+        pass
+    else:
+        smart_home_config = smart_home_config or SMART_HOME_SCHEMA({})
+        smart_home.async_setup(hass, smart_home_config)
     
-        # Make the eyebrows into a nightmare
-    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
-    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
-    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
-    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
+            # Ignore changes to state attributes if from/to is in use
+        if (not match_all and from_s is not None and to_s is not None and
+                from_s.state == to_s.state):
+            return
     
-    setup_end_to_end = '''
-import face_recognition
+    import voluptuous as vol
     
-    # Find all the faces in the image using the default HOG-based model.
-# This method is fairly accurate, but not as accurate as the CNN model and not GPU accelerated.
-# See also: find_faces_in_picture_cnn.py
-face_locations = face_recognition.face_locations(image)
+            zone_state = hass.states.get(zone_entity_id)
+        if from_s:
+            from_match = condition.zone(hass, zone_state, from_s)
+        else:
+            from_match = False
+        to_match = condition.zone(hass, zone_state, to_s)
     
-    # Load the jpg file into a numpy array
-image = face_recognition.load_image_file('biden.jpg')
+            if was_queued and self._queued_event_check(click_type, time_diff):
+            return
     
-    # Get a reference to webcam #0 (the default one)
-video_capture = cv2.VideoCapture(0)
+        @_handle_cloud_errors
+    @RequestDataValidator(vol.Schema({
+        vol.Required('email'): str,
+        vol.Required('password'): vol.All(str, vol.Length(min=6)),
+    }))
+    async def post(self, request, data):
+        '''Handle registration request.'''
+        hass = request.app['hass']
+        cloud = hass.data[DOMAIN]
     
-        if model == 'small':
-        pose_predictor = pose_predictor_5_point
+        @asyncio.coroutine
+    def post(self, request):
+        '''Validate configuration and return results.'''
+        errors = yield from async_check_ha_config_file(request.app['hass'])
+    
+    CONFIG_PATH = 'customize.yaml'
+    
+    
+@asyncio.coroutine
+def async_setup(hass):
+    '''Set up the Hassbian config.'''
+    # Test if is Hassbian
+    test_mode = 'FORCE_HASSBIAN' in os.environ
+    is_hassbian = test_mode
