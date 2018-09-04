@@ -1,371 +1,413 @@
 
         
-        using base::MessageLoop;
-using base::CommandLine;
-using content::BrowserThread;
-using content::Shell;
-using content::ShellBrowserContext;
-using content::RenderProcessHost;
-    
-      bool delay_destruction() { return delay_destruction_; }
-  void set_delay_destruction(bool val) { delay_destruction_ = val; }
-  bool pending_destruction() { return pending_destruction_; }
-  void set_pending_destruction (bool val) { pending_destruction_ = val; }
- protected:
-  int id_;
-  bool delay_destruction_;
-  bool pending_destruction_;
-  base::WeakPtr<ObjectManager> object_manager_;
-    
-    // Call method of an object in browser.
-// function CallObjectMethod(id, type, method, args);
-v8::Handle<v8::Value> CallObjectMethod(int routing_id,
-                                       int object_id,
-                                       const std::string& type,
-                                       const std::string& method,
-                                       v8::Handle<v8::Value> args);
-    
-    namespace nw {
-    }
-    
-    void Menu::Create(const base::DictionaryValue& option) {
-  gtk_accel_group = NULL;
-  std::string type;
-  if (option.GetString('type', &type) && type == 'menubar')
-    menu_ = gtk_menu_bar_new();
-  else
-    menu_ = gtk_menu_new();
-    }
-    
-        bool Write(ClipboardData& data) {
-      switch(data.type) {
-        case TYPE_TEXT:
-        return WriteText(data);
-        break;
-        case TYPE_HTML:
-        return WriteHTML(data);
-        break;
-        case TYPE_RTF:
-        return WriteRTF(data);
-        break;
-        case TYPE_PNG:
-        case TYPE_JPEG:
-        return WriteImage(data);
-        break;
-        case TYPE_NONE:
-        NOTREACHED();
-        return false;
-      }
-      NOTREACHED();
-      return false;
-    }
-    
-        TableBuilder* builder = new TableBuilder(options, file);
-    meta->smallest.DecodeFrom(iter->key());
-    for (; iter->Valid(); iter->Next()) {
-      Slice key = iter->key();
-      meta->largest.DecodeFrom(key);
-      builder->Add(key, iter->value());
-    }
-    
-    Status DumpDescriptor(Env* env, const std::string& fname, WritableFile* dst) {
-  return PrintLogContents(env, fname, VersionEditPrinter, dst);
+        std::string AtomContentClient::GetUserAgent() const {
+  return content::BuildUserAgentFromProduct('Chrome/' CHROME_VERSION_STRING
+                                            ' ' ATOM_PRODUCT_NAME
+                                            '/' ATOM_VERSION_STRING);
 }
     
-          case kPrevLogNumber:
-        if (GetVarint64(&input, &prev_log_number_)) {
-          has_prev_log_number_ = true;
-        } else {
-          msg = 'previous log number';
-        }
-        break;
-    
-        // Initialize db_
-    db_ = new kyotocabinet::TreeDB();
-    char file_name[100];
-    db_num_++;
-    std::string test_dir;
-    Env::Default()->GetTestDirectory(&test_dir);
-    snprintf(file_name, sizeof(file_name),
-             '%s/dbbench_polyDB-%d.kct',
-             test_dir.c_str(),
-             db_num_);
-    
-    
-    {}  // namespace leveldb
-    
-    struct TraceInfo;                      // Information about a trace point.
-class ScopedTrace;                     // Implements scoped trace.
-class TestInfoImpl;                    // Opaque implementation of TestInfo
-class UnitTestImpl;                    // Opaque implementation of UnitTest
-    
-        virtual const ParamGeneratorInterface<ParamType>* BaseGenerator() const {
-      return base_;
-    }
-    // Advance should not be called on beyond-of-range iterators
-    // so no component iterators must be beyond end of range, either.
-    virtual void Advance() {
-      assert(!AtEnd());
-      ++current$(i)_;
+    namespace atom {
     }
     
-    // The user can define the following macros in the build script to
-// control Google Test's behavior.  If the user doesn't define a macro
-// in this list, Google Test will define it.
-//
-//   GTEST_HAS_CLONE          - Define it to 1/0 to indicate that clone(2)
-//                              is/isn't available.
-//   GTEST_HAS_EXCEPTIONS     - Define it to 1/0 to indicate that exceptions
-//                              are enabled.
-//   GTEST_HAS_GLOBAL_STRING  - Define it to 1/0 to indicate that ::string
-//                              is/isn't available (some systems define
-//                              ::string, which is different to std::string).
-//   GTEST_HAS_GLOBAL_WSTRING - Define it to 1/0 to indicate that ::string
-//                              is/isn't available (some systems define
-//                              ::wstring, which is different to std::wstring).
-//   GTEST_HAS_POSIX_RE       - Define it to 1/0 to indicate that POSIX regular
-//                              expressions are/aren't available.
-//   GTEST_HAS_PTHREAD        - Define it to 1/0 to indicate that <pthread.h>
-//                              is/isn't available.
-//   GTEST_HAS_RTTI           - Define it to 1/0 to indicate that RTTI is/isn't
-//                              enabled.
-//   GTEST_HAS_STD_WSTRING    - Define it to 1/0 to indicate that
-//                              std::wstring does/doesn't work (Google Test can
-//                              be used where std::wstring is unavailable).
-//   GTEST_HAS_TR1_TUPLE      - Define it to 1/0 to indicate tr1::tuple
-//                              is/isn't available.
-//   GTEST_HAS_SEH            - Define it to 1/0 to indicate whether the
-//                              compiler supports Microsoft's 'Structured
-//                              Exception Handling'.
-//   GTEST_HAS_STREAM_REDIRECTION
-//                            - Define it to 1/0 to indicate whether the
-//                              platform supports I/O stream redirection using
-//                              dup() and dup2().
-//   GTEST_USE_OWN_TR1_TUPLE  - Define it to 1/0 to indicate whether Google
-//                              Test's own tr1 tuple implementation should be
-//                              used.  Unused when the user sets
-//                              GTEST_HAS_TR1_TUPLE to 0.
-//   GTEST_LANG_CXX11         - Define it to 1/0 to indicate that Google Test
-//                              is building in C++11/C++98 mode.
-//   GTEST_LINKED_AS_SHARED_LIBRARY
-//                            - Define to 1 when compiling tests that use
-//                              Google Test as a shared library (known as
-//                              DLL on Windows).
-//   GTEST_CREATE_SHARED_LIBRARY
-//                            - Define to 1 when compiling Google Test itself
-//                              as a shared library.
+        mate::Dictionary process(gin_env.isolate(), env->process_object());
+#if defined(OS_WIN)
+    process.SetMethod('log', &AtomBindings::Log);
+#endif
+    process.SetMethod('crash', &AtomBindings::Crash);
     
      private:
-  void CalculatePrimesUpTo(int max) {
-    ::std::fill(is_prime_, is_prime_ + is_prime_size_, true);
-    is_prime_[0] = is_prime_[1] = false;
-    }
-    
-    #include 'sample1.h'
+  std::string GetFeedURL();
+  void SetFeedURL(mate::Arguments* args);
+  void QuitAndInstall();
     
     
-// Step 2. Use the TEST macro to define your tests.
-//
-// TEST has two parameters: the test case name and the test name.
-// After using the macro, you should define your test logic between a
-// pair of braces.  You can use a bunch of macros to indicate the
-// success or failure of a test.  EXPECT_TRUE and EXPECT_EQ are
-// examples of such macros.  For a complete list, see gtest.h.
-//
-// <TechnicalDetails>
-//
-// In Google Test, tests are grouped into test cases.  This is how we
-// keep test code organized.  You should put logically related tests
-// into the same test case.
-//
-// The test case name and the test name should both be valid C++
-// identifiers.  And you should not use underscore (_) in the names.
-//
-// Google Test guarantees that each test you define is run exactly
-// once, but it makes no guarantee on the order the tests are
-// executed.  Therefore, you should write your tests in such a way
-// that their results don't depend on their order.
-//
-// </TechnicalDetails>
-    
-      /**
-   * Returns true if the iterator is at the start of an object at the given
-   * level.
-   *
-   * For instance, suppose an iterator it is pointed to the first symbol of the
-   * first word of the third line of the second paragraph of the first block in
-   * a page, then:
-   *   it.IsAtBeginningOf(RIL_BLOCK) = false
-   *   it.IsAtBeginningOf(RIL_PARA) = false
-   *   it.IsAtBeginningOf(RIL_TEXTLINE) = true
-   *   it.IsAtBeginningOf(RIL_WORD) = true
-   *   it.IsAtBeginningOf(RIL_SYMBOL) = true
-   */
-  virtual bool IsAtBeginningOf(PageIteratorLevel level) const;
-    
-    const ICOORD *dirtab = (ICOORD *) idirtab;
-    
-      const IndexMapBiDi& charset_map() const {
-    return *charset_map_;
-  }
-  const ShapeTable* shape_table() const {
-    return shape_table_;
-  }
-  // Sample set operations.
-  const TrainingSampleSet* sample_set() const {
-    return sample_set_;
-  }
-    
-      // Computes and returns the dot product of the two n-vectors u and v.
-  static double DotProduct(const double* u, const double* v, int n);
-  // Utility function converts an array of float to the corresponding array
-  // of double.
-  static void FloatToDouble(const GENERIC_2D_ARRAY<float>& wf,
-                            GENERIC_2D_ARRAY<double>* wd);
-    
-    /** Returns the benchmark Reporter instance.
- *
- * The returned instance will take care of generating reports for all the actual
- * reporters configured via the 'enable_*_reporter' command line flags (see
- * benchmark_config.cc). */
-std::shared_ptr<Reporter> GetReporter();
+    {}  // namespace api
     
     
-    {  GetReporter()->ReportQPS(*result);
-  GetReporter()->ReportLatency(*result);
+    {  accelerator_callback_map_[accelerator] = callback;
+  return true;
 }
     
-      // Set up security params
-  SecurityParams security;
-  security.set_use_test_ca(true);
-  security.set_server_host_override('foo.test.google.fr');
-  client_config.mutable_security_params()->CopyFrom(security);
-  server_config.mutable_security_params()->CopyFrom(security);
     
-    // Data pertaining to configuration of the generator with respect to anything
-// that may be used internally at Google.
-struct GeneratorConfiguration {
-  GeneratorConfiguration();
-  grpc::string grpc_package_root;
-  // TODO(https://github.com/grpc/grpc/issues/8622): Drop this.
-  grpc::string beta_package_root;
-  // TODO(https://github.com/google/protobuf/issues/888): Drop this.
-  grpc::string import_prefix;
-};
+    {}  // namespace atom
     
-    SecureAuthContext::~SecureAuthContext() {
-  if (take_ownership_) grpc_auth_context_release(ctx_);
-}
     
-    /*
- * Global litstr Id's are all above this mark.
- */
-constexpr int kGlobalLitstrOffset = 0x40000000;
+    {}  // namespace
     
-    extent_hooks_t BumpExtentAllocator::s_hooks {
-  BumpExtentAllocator::extent_alloc,
-  nullptr,                              // dalloc
-  nullptr,                              // destroy
-  extent_commit,
-  nullptr,                              // decommit
-  extent_purge,                         // purge_lazy
-  nullptr,                              // purge_forced
-  extent_split,
-  extent_merge
-};
-    
-    #include 'hphp/runtime/vm/jit/block.h'
-#include 'hphp/runtime/vm/jit/check.h'
-#include 'hphp/runtime/vm/jit/containers.h'
-#include 'hphp/runtime/vm/jit/ir-instr-table.h'
-#include 'hphp/runtime/vm/jit/ir-opcode.h'
-#include 'hphp/runtime/vm/jit/region-selection.h'
-#include 'hphp/runtime/vm/jit/translator.h'
-    
-      if (num_req == 1) {
-    // Iterating through the counter is correct but a bit inefficient
-    // compared to being able to access the right offset into array data,
-    // but necessary for this code to be agnostic to the array's internal
-    // representation.  Assuming uniform distribution, we'll expect to
-    // iterate through half of the array's data.
-    ssize_t index = HHVM_FN(rand)(0, count-1);
-    ssize_t pos = input->iter_begin();
-    while (index--) {
-      pos = input->iter_advance(pos);
+    namespace swift {
     }
-    return input->getKey(pos);
+    
+    #include 'swift/AST/TypeWalker.h'
+#include 'swift/AST/TypeVisitor.h'
+    
+        if (node->Further || node->Right) {
+      IndentScope ms(this, (childKind == ChildKind::Right ||
+                            childKind == ChildKind::Further ||
+                            childKind == ChildKind::Root) ? '  ' : '| ');
+    }
+    
+    
+    {    RawText = RawText.drop_front(Pos);
+    unsigned NewlineBytes = measureNewline(RawText);
+    RawText = RawText.drop_front(NewlineBytes);
   }
     
-    	szArgList = CommandLineToArgvW(GetCommandLine(), &argCount);
-    
-    
-    {        vecdump_.push_back(strstack);
-        strstack.clear();
-    }
-    
-    class CommFrequencyLimit {
-  public:
-    CommFrequencyLimit(size_t _count, uint64_t _time_span);
-    ~CommFrequencyLimit();
-    }
-    
-    
-#define DEFINE_HAS_MEMBER_WITH_TYPE(member_name, member_type) \
-    template <typename T>\
-    class has_##member_name {\
-      private:\
-        struct yes_type { char x[1]; };\
-        struct no_type { char x[2]; };\
-        template <member_type (T::*)> struct tester;\
-        template <typename U> static yes_type test(tester<&U::member_name>*);\
-        template <typename U> static no_type test(...);\
-      public:\
-        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
-    };
-    
-      private:
-    ScopedJstring();
-    ScopedJstring(const ScopedJstring&);
-    ScopedJstring& operator=(const ScopedJstring&);
-    
-    
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(DummyCameraDetector);
-};
-    
-    /**
- * @brief Computes the Moore-Penrose pseudo-inverse of a given square matrix,
- * rounding all eigenvalues with absolute value bounded by epsilon to zero.
- *
- * @param m The square matrix to be pseudo-inverted
- * @param epsilon A small positive real number (optional; default is 1.0e-6).
- *
- * @return Moore-Penrose pseudo-inverse of the given matrix.
- */
-template <typename T, unsigned int N>
-Eigen::Matrix<T, N, N> PseudoInverse(const Eigen::Matrix<T, N, N> &m,
-                                     const double epsilon = 1.0e-6) {
-  Eigen::JacobiSVD<Eigen::Matrix<T, N, N>> svd(
-      m, Eigen::ComputeFullU | Eigen::ComputeFullV);
-  return svd.matrixV() *
-         (svd.singularValues().array().abs() > epsilon)
-             .select(svd.singularValues().array().inverse(), 0)
-             .matrix()
-             .asDiagonal() *
-         svd.matrixU().adjoint();
-}
-    
-      /**
-   * @brief Get all vertices of the polygon
-   * @param All vertices of the polygon
-   */
-  void GetAllVertices(std::vector<Vec2d> *const vertices) const;
-    
-    #include <memory>
+    // WIN32 doesn't natively support <uuid/uuid.h>. Instead, we use Win32 APIs.
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <objbase.h>
 #include <string>
+#else
+#include <uuid/uuid.h>
+#endif
     
-      std::vector<int> gt_list = {
-      3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+    // EXPECT_DEBUG_DEATH asserts that the given statements die in debug mode.
+// The death testing framework causes this to have interesting semantics,
+// since the sideeffects of the call are only visible in opt mode, and not
+// in debug mode.
+//
+// In practice, this can be used to test functions that utilize the
+// LOG(DFATAL) macro using the following style:
+//
+// int DieInDebugOr12(int* sideeffect) {
+//   if (sideeffect) {
+//     *sideeffect = 12;
+//   }
+//   LOG(DFATAL) << 'death';
+//   return 12;
+// }
+//
+// TEST(TestCase, TestDieOr12WorksInDgbAndOpt) {
+//   int sideeffect = 0;
+//   // Only asserts in dbg.
+//   EXPECT_DEBUG_DEATH(DieInDebugOr12(&sideeffect), 'death');
+//
+// #ifdef NDEBUG
+//   // opt-mode has sideeffect visible.
+//   EXPECT_EQ(12, sideeffect);
+// #else
+//   // dbg-mode no visible sideeffect.
+//   EXPECT_EQ(0, sideeffect);
+// #endif
+// }
+//
+// This will assert that DieInDebugReturn12InOpt() crashes in debug
+// mode, usually due to a DCHECK or LOG(DFATAL), but returns the
+// appropriate fallback value (12 in this case) in opt mode. If you
+// need to test that a function has appropriate side-effects in opt
+// mode, include assertions against the side-effects.  A general
+// pattern for this is:
+//
+// EXPECT_DEBUG_DEATH({
+//   // Side-effects here will have an effect after this statement in
+//   // opt mode, but none in debug mode.
+//   EXPECT_EQ(12, DieInDebugOr12(&sideeffect));
+// }, 'death');
+//
+# ifdef NDEBUG
+    
+    template <typename Generator1, typename Generator2, typename Generator3,
+    typename Generator4, typename Generator5>
+internal::CartesianProductHolder5<Generator1, Generator2, Generator3,
+    Generator4, Generator5> Combine(
+    const Generator1& g1, const Generator2& g2, const Generator3& g3,
+        const Generator4& g4, const Generator5& g5) {
+  return internal::CartesianProductHolder5<Generator1, Generator2, Generator3,
+      Generator4, Generator5>(
+      g1, g2, g3, g4, g5);
+}
+    
+    // ValuesIn() function allows generation of tests with parameters coming from
+// a container.
+//
+// Synopsis:
+// ValuesIn(const T (&array)[N])
+//   - returns a generator producing sequences with elements from
+//     a C-style array.
+// ValuesIn(const Container& container)
+//   - returns a generator producing sequences with elements from
+//     an STL-style container.
+// ValuesIn(Iterator begin, Iterator end)
+//   - returns a generator producing sequences with elements from
+//     a range [begin, end) defined by a pair of STL-style iterators. These
+//     iterators can also be plain C pointers.
+//
+// Please note that ValuesIn copies the values from the containers
+// passed in and keeps them to generate tests in RUN_ALL_TESTS().
+//
+// Examples:
+//
+// This instantiates tests from test case StringTest
+// each with C-string values of 'foo', 'bar', and 'baz':
+//
+// const char* strings[] = {'foo', 'bar', 'baz'};
+// INSTANTIATE_TEST_CASE_P(StringSequence, SrtingTest, ValuesIn(strings));
+//
+// This instantiates tests from test case StlStringTest
+// each with STL strings with values 'a' and 'b':
+//
+// ::std::vector< ::std::string> GetParameterStrings() {
+//   ::std::vector< ::std::string> v;
+//   v.push_back('a');
+//   v.push_back('b');
+//   return v;
+// }
+//
+// INSTANTIATE_TEST_CASE_P(CharSequence,
+//                         StlStringTest,
+//                         ValuesIn(GetParameterStrings()));
+//
+//
+// This will also instantiate tests from CharTest
+// each with parameter values 'a' and 'b':
+//
+// ::std::list<char> GetParameterChars() {
+//   ::std::list<char> list;
+//   list.push_back('a');
+//   list.push_back('b');
+//   return list;
+// }
+// ::std::list<char> l = GetParameterChars();
+// INSTANTIATE_TEST_CASE_P(CharSequence2,
+//                         CharTest,
+//                         ValuesIn(l.begin(), l.end()));
+//
+template <typename ForwardIterator>
+internal::ParamGenerator<
+  typename ::testing::internal::IteratorTraits<ForwardIterator>::value_type>
+ValuesIn(ForwardIterator begin, ForwardIterator end) {
+  typedef typename ::testing::internal::IteratorTraits<ForwardIterator>
+      ::value_type ParamType;
+  return internal::ParamGenerator<ParamType>(
+      new internal::ValuesInIteratorRangeGenerator<ParamType>(begin, end));
+}
+    
+    template <class Generator1, class Generator2, class Generator3,
+    class Generator4, class Generator5, class Generator6>
+class CartesianProductHolder6 {
+ public:
+CartesianProductHolder6(const Generator1& g1, const Generator2& g2,
+    const Generator3& g3, const Generator4& g4, const Generator5& g5,
+    const Generator6& g6)
+      : g1_(g1), g2_(g2), g3_(g3), g4_(g4), g5_(g5), g6_(g6) {}
+  template <typename T1, typename T2, typename T3, typename T4, typename T5,
+      typename T6>
+  operator ParamGenerator< ::std::tr1::tuple<T1, T2, T3, T4, T5, T6> >() const {
+    return ParamGenerator< ::std::tr1::tuple<T1, T2, T3, T4, T5, T6> >(
+        new CartesianProductGenerator6<T1, T2, T3, T4, T5, T6>(
+        static_cast<ParamGenerator<T1> >(g1_),
+        static_cast<ParamGenerator<T2> >(g2_),
+        static_cast<ParamGenerator<T3> >(g3_),
+        static_cast<ParamGenerator<T4> >(g4_),
+        static_cast<ParamGenerator<T5> >(g5_),
+        static_cast<ParamGenerator<T6> >(g6_)));
+  }
+    }
+    
+      // Creates a UTF-16 wide string from the given ANSI string, allocating
+  // memory using new. The caller is responsible for deleting the return
+  // value using delete[]. Returns the wide string, or NULL if the
+  // input is NULL.
+  //
+  // The wide string is created using the ANSI codepage (CP_ACP) to
+  // match the behaviour of the ANSI versions of Win32 calls and the
+  // C runtime.
+  static LPCWSTR AnsiToUtf16(const char* c_str);
+    
+      template <GTEST_1_TYPENAMES_(U)>
+  tuple& operator=(const GTEST_1_TUPLE_(U)& t) {
+    return CopyFrom(t);
+  }
+    
+    // Type utilities needed for implementing typed and type-parameterized
+// tests.  This file is generated by a SCRIPT.  DO NOT EDIT BY HAND!
+//
+// Currently we support at most $n types in a list, and at most $n
+// type-parameterized tests in one type-parameterized test case.
+// Please contact googletestframework@googlegroups.com if you need
+// more.
+    
+    
+    {  // We disallow copying a queue.
+  Queue(const Queue&);
+  const Queue& operator = (const Queue&);
+};
+    
+    #include 'caffe2/core/context.h'
+#include 'caffe2/core/operator.h'
+    
+    	void add_translation(const Ref<Translation> &p_translation);
+	void remove_translation(const Ref<Translation> &p_translation);
+    
+    #else
+    
+    			String type = token.value;
+    
+    	void _dump_function_deps(ShaderLanguage::ShaderNode *p_node, const StringName &p_for_func, const Map<StringName, String> &p_func_code, StringBuilder &r_to_add, Set<StringName> &r_added);
+	String _dump_node_code(ShaderLanguage::Node *p_node, int p_level, GeneratedCode &r_gen_code, IdentifierActions &p_actions, const DefaultIdentifierActions &p_default_actions, bool p_assigning);
+    
+    	char drives[MAX_DRIVES]; // a-z:
+	int drive_count;
+    
+    void MutexWindows::lock() {
+    }
+    
+    
+    {	MutexWindows();
+	~MutexWindows();
+};
+    
+    	IP_Address peer_addr;
+	int peer_port;
+    
+    void RWLockWindows::read_unlock() {
+    }
+    
+    	int ret = select(listen_sockfd + 1, &pfd, NULL, NULL, &timeout);
+	ERR_FAIL_COND_V(ret < 0, 0);
+    
+    template BOOST_REGEX_DECL basic_regex<BOOST_REGEX_CHAR_T BOOST_REGEX_TRAITS_T >& 
+   basic_regex<BOOST_REGEX_CHAR_T BOOST_REGEX_TRAITS_T >::do_assign(
+      const BOOST_REGEX_CHAR_T* p1, 
+      const BOOST_REGEX_CHAR_T* p2, 
+      flag_type f);
+template BOOST_REGEX_DECL basic_regex<BOOST_REGEX_CHAR_T BOOST_REGEX_TRAITS_T >::locale_type BOOST_REGEX_CALL 
+   basic_regex<BOOST_REGEX_CHAR_T BOOST_REGEX_TRAITS_T >::imbue(locale_type l);
+    
+    
+    {   BOOST_ASSERT(rep->type == syntax_element_short_set_rep);
+   BOOST_ASSERT(rep->next.p != 0);
+   BOOST_ASSERT(rep->alt.p != 0);
+   BOOST_ASSERT(rep->next.p->type == syntax_element_set);
+   BOOST_ASSERT(count < rep->max);
+   
+   if(position != last)
+   {
+      // wind forward until we can skip out of the repeat:
+      do
+      {
+         if(!map[static_cast<unsigned char>(traits_inst.translate(*position, icase))])
+         {
+            // failed repeat match, discard this state and look for another:
+            destroy_single_repeat();
+            return true;
+         }
+         ++count;
+         ++ position;
+         ++state_count;
+         pstate = rep->next.p;
+      }while((count < rep->max) && (position != last) && !can_start(*position, rep->_map, mask_skip));
+   }   
+   // remember where we got to if this is a leading repeat:
+   if((rep->leading) && (count < rep->max))
+      restart = position;
+   if(position == last)
+   {
+      // can't repeat any more, remove the pushed state: 
+      destroy_single_repeat();
+      if((m_match_flags & match_partial) && (position == last) && (position != search_base))
+         m_has_partial_match = true;
+      if(0 == (rep->can_be_null & mask_skip))
+         return true;
+   }
+   else if(count == rep->max)
+   {
+      // can't repeat any more, remove the pushed state: 
+      destroy_single_repeat();
+      if(!can_start(*position, rep->_map, mask_skip))
+         return true;
+   }
+   else
+   {
+      pmp->count = count;
+      pmp->last_position = position;
+   }
+   pstate = rep->alt.p;
+   return false;
+}
+    
+    template <class T>
+class concrete_protected_call
+   : public abstract_protected_call
+{
+public:
+   typedef bool (T::*proc_type)();
+   concrete_protected_call(T* o, proc_type p)
+      : obj(o), proc(p) {}
+private:
+   virtual bool call()const;
+   T* obj;
+   proc_type proc;
+};
+    
+    
+    {      basic = ::boost::regbase::basic,
+      extended = ::boost::regbase::extended,
+      normal = ::boost::regbase::normal,
+      emacs = ::boost::regbase::emacs,
+      awk = ::boost::regbase::awk,
+      grep = ::boost::regbase::grep,
+      egrep = ::boost::regbase::egrep,
+      sed = basic,
+      perl = normal,
+      ECMAScript = normal,
+      JavaScript = normal,
+      JScript = normal
+   };
+   typedef ::boost::regbase::flag_type syntax_option_type;
+    
+    template <class OutputIterator, class charT, class Traits1, class Alloc1, class Traits2>
+std::size_t regex_split(OutputIterator out,
+                   std::basic_string<charT, Traits1, Alloc1>& s, 
+                   const basic_regex<charT, Traits2>& e,
+                   match_flag_type flags,
+                   std::size_t max_split)
+{
+   typedef typename std::basic_string<charT, Traits1, Alloc1>::const_iterator  ci_t;
+   //typedef typename match_results<ci_t>::allocator_type                        match_allocator;
+   ci_t last = s.begin();
+   std::size_t init_size = max_split;
+   BOOST_REGEX_DETAIL_NS::split_pred<OutputIterator, charT, Traits1, Alloc1> pred(&last, &out, &max_split);
+   ci_t i, j;
+   i = s.begin();
+   j = s.end();
+   regex_grep(pred, i, j, e, flags);
+   //
+   // if there is still input left, do a final push as long as max_split
+   // is not exhausted, and we're not splitting sub-expressions rather 
+   // than whitespace:
+   if(max_split && (last != s.end()) && (e.mark_count() == 0))
+   {
+      *out = std::basic_string<charT, Traits1, Alloc1>((ci_t)last, (ci_t)s.end());
+      ++out;
+      last = s.end();
+      --max_split;
+   }
+   //
+   // delete from the string everything that has been processed so far:
+   s.erase(0, last - s.begin());
+   //
+   // return the number of new records pushed:
+   return init_size - max_split;
+}
+    
+    #include <boost/shared_ptr.hpp>
+#include <boost/detail/workaround.hpp>
+#if (BOOST_WORKAROUND(__BORLANDC__, >= 0x560) && BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)))\
+      || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
+//
+// Borland C++ Builder 6, and Visual C++ 6,
+// can't cope with the array template constructor
+// so we have a template member that will accept any type as 
+// argument, and then assert that is really is an array:
+//
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/is_array.hpp>
+#endif
+    
+    template <class charT, class implementationT >
+struct regex_traits : public implementationT
+{
+   regex_traits() : implementationT() {}
+};
