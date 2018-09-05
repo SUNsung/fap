@@ -1,68 +1,68 @@
 
         
-        describe JobsHelper do
+            fill_in(:agent_options, with: '{
+      'expected_receive_period_in_days': '2'
+      'keep_event': 'false'
+    }')
+    expect(get_alert_text_from { click_on 'Save' }).to have_text('Sorry, there appears to be an error in your JSON input. Please fix it before continuing.')
+  end
+    
+        it 'opens the dry run modal even when clicking on the refresh icon' do
+      visit edit_agent_path(agent)
+      find('.agent-dry-run-button span.glyphicon').click
+      expect(page).to have_text('Event to send (Optional)')
+    end
+    
+      it 'requires a URL or file uplaod' do
+    visit new_scenario_imports_path
+    click_on 'Start Import'
+    expect(page).to have_text('Please provide either a Scenario JSON File or a Public Scenario URL.')
+  end
+    
+        it 'returns a FontAwesome icon element' do
+      icon = icon_tag('fa-copy', class: 'text-info')
+      expect(icon).to be_html_safe
+      expect(Nokogiri(icon).at('i.fa.fa-copy.text-info')).to be_a Nokogiri::XML::Element
+    end
+  end
+    
+    describe JobsHelper do
   let(:job) { Delayed::Job.new }
     
-        it 'strips punctuation' do
-      expect(AgentsExporter.new(:name => 'foo,bar').filename).to eq('foo-bar.json')
+      describe '#scenario_label' do
+    it 'creates a scenario label with the scenario name' do
+      expect(scenario_label(scenario)).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Scene</span>'
+      )
     end
     
-      describe 'up' do
-    it 'should update extract and template options for an existing WebsiteAgent' do
-      expect(agent.options).to include('extract' => old_extract,
-                                       'template' => old_template)
-      ConvertWebsiteAgentTemplateForMerge.new.up
-      agent.reload
-      expect(agent.options).to include('extract' => new_extract,
-                                       'template' => new_template)
-    end
-  end
-    
-          AgentLog.log_for_agent(agents(:jane_website_agent), 'some message', :level => 4, :outbound_event => events(:jane_website_agent_event))
-      expect(agents(:jane_website_agent).reload.last_error_log_at.to_i).to be_within(2).of(Time.now.to_i)
+        it 'work with set FAILED_JOBS_TO_KEEP env variable' do
+      expect { @scheduler.send(:cleanup_failed_jobs!) }.to change(Delayed::Job, :count).by(-1)
+      expect { @scheduler.send(:cleanup_failed_jobs!) }.to change(Delayed::Job, :count).by(0)
+      expect(@keep.id).to eq(Delayed::Job.order(:failed_at)[0].id)
     end
     
-      it 'calls #to_path on second argument when passed ?d and a directory' do
-    p = mock('path')
-    p.should_receive(:to_path).and_return @dir
-    Kernel.test(?d, p)
+        it 'always succeeds in sorting even if it finds pairs of incomparable objects' do
+      time = Time.now
+      tuples = [
+        [2,   'a', time - 1],  # 0
+        [1,   'b', nil],       # 1
+        [1,   'b', time],      # 2
+        ['2', nil, time],      # 3
+        [1,   nil, time],      # 4
+        [nil, 'a', time + 1],  # 5
+        [2,   'a', time],      # 6
+      ]
+      orders = [true, false, true]
+      expected = tuples.values_at(3, 6, 0, 4, 2, 1, 5)
+    
+    describe ConvertWebsiteAgentTemplateForMerge do
+  let :old_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title' }
+    }
   end
-end
     
-        $Kernel_trace_var_global = 'foo'
-    captured.should == 'foo'
-  end
-    
-      it 'does not append line-end if last character is line-end' do
-    lambda {
-      $VERBOSE = true
-      warn('this is some simple text with line-end\n')
-    }.should output(nil, 'this is some simple text with line-end\n')
-  end
-    
-      def append(*paths)
-    @paths = parse(*@paths, *paths)
-    self
-  end
-    
-          Pathname.glob(path.join('*')).sort.select(&:directory?).map do |path|
-        token = path.basename.to_s
-    
-          errors.each do |error|
-        summary << ' #{Formatter.error('-')} #{error}'
-      end
-    
-        # Outputs the post.date as formatted html, with hooks for CSS styling.
-    #
-    #  +date+ is the date object to format as HTML.
-    #
-    # Returns string
-    def date_to_html_string(date)
-      result = '<span class='month'>' + date.strftime('%b').upcase + '</span> '
-      result << date.strftime('<span class='day'>%d</span> ')
-      result << date.strftime('<span class='year'>%Y</span> ')
-      result
     end
-    
-        def initialize(tag_name, markup, tokens)
-      attributes = ['class', 'src', 'width', 'height', 'title']
