@@ -1,197 +1,214 @@
 
         
-        #include <set>
-#include <string>
-#include <vector>
-    
-      // brightray::MainDelegate:
-  std::unique_ptr<brightray::ContentClient> CreateContentClient() override;
-#if defined(OS_MACOSX)
-  void OverrideChildProcessPath() override;
-  void OverrideFrameworkBundlePath() override;
-#endif
-    
-    #include 'base/command_line.h'
-    
-      // Delegate implementations.
-  void OnError(const std::string& error) override;
-  void OnError(const std::string& message,
-               const int code,
-               const std::string& domain) override;
-  void OnCheckingForUpdate() override;
-  void OnUpdateAvailable() override;
-  void OnUpdateNotAvailable() override;
-  void OnUpdateDownloaded(const std::string& release_notes,
-                          const std::string& release_name,
-                          const base::Time& release_date,
-                          const std::string& update_url) override;
-    
-    BoxLayout::~BoxLayout() {}
-    
-    void BrowserWindow::UpdateDraggableRegions(
-    content::RenderFrameHost* rfh,
-    const std::vector<DraggableRegion>& regions) {
-  if (window_->has_frame())
-    return;
-  static_cast<NativeWindowViews*>(window_.get())
-      ->UpdateDraggableRegions(DraggableRegionsToSkRegion(regions));
+        
+    {  // Produce the generic signature and environment.
+  // FIXME: Pass in a source location for the conformance, perhaps? It seems
+  // like this could fail.
+  syntheticSignature =
+    std::move(builder).computeGenericSignature(SourceLoc());
+  syntheticEnvironment = syntheticSignature->createGenericEnvironment();
 }
-    
-      // content::DevToolsAgentHostClient:
-  void AgentHostClosed(content::DevToolsAgentHost* agent_host) override;
-  void DispatchProtocolMessage(content::DevToolsAgentHost* agent_host,
-                               const std::string& message) override;
-    
-      AcceleratorCallbackMap accelerator_callback_map_;
-    
-    #ifdef DEBUG_LOG
-#define COLOR '\033[31;1m'
-#define RESET '\033[0m'
-#define __DEBUG(msg, ...) fprintf(stderr, COLOR msg '%c' RESET, __VA_ARGS__);
-#define DEBUG(...) __DEBUG(__VA_ARGS__, '\n')
-#else
-#define DEBUG(...) (void)0
-#endif
-    
-    
-    {} // namespace caffe2
 
     
-      auto axis = helper.GetSingleArgument<int32_t>('axis', 1);
-  const auto canonical_axis = canonical_axis_index_(axis, in[0].dims().size());
-  auto axis_w = helper.GetSingleArgument<int32_t>('axis_w', 1);
-  const int canonical_axis_w =
-      canonical_axis_index_(axis_w, in[1].dims().size());
-  const int N = pretransposed_weight
-      ? size_from_dim_(canonical_axis_w, GetDimsVector(in[1]))
-      : size_to_dim_(canonical_axis_w, GetDimsVector(in[1]));
-    
-    #include 'caffe2/core/context.h'
-#include 'caffe2/core/operator.h'
-#include 'caffe2/core/tensor.h'
+      friend class SubstitutionMap;
     
     
-    {} // namespace caffe2
-
-    
-    
-    {} // namespace caffe2
-    
-    
-    {} // namespace caffe2
-
-    
-    	PathRemoveFileSpec(exeDir);
-    
-    Follow* Follow::create(Node *followedNode, const Rect& rect/* = Rect::ZERO*/)
-{
-    return createWithOffset(followedNode, 0.0, 0.0,rect);
-}
-    
-    #include '2d/CCActionCamera.h'
-#include '2d/CCNode.h'
-#include 'platform/CCStdC.h'
-    
-    
-    {    return ret;
-}
-    
-    void ActionManager::resumeTargets(const Vector<Node*>& targetsToResume)
-{
-    for(const auto &node : targetsToResume)
     {
-        this->resumeTarget(node);
+    {    if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Decl *>()) {
+      SemanticNode.get<Decl *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else {
+      llvm_unreachable('ASTNode has pointer to unknown thing!');
     }
+    llvm::errs() << '\n=====================================================\n';
+  }
+}
+
+    
+    void swift::printOpaquePrefixMap(raw_ostream &out, void *_root,
+                         void (*printNodeData)(raw_ostream &out, void *node)) {
+  auto root = reinterpret_cast<Node*>(_root);
+  if (!root) {
+    out << '(empty)\n';
+    return;
+  }
+  TreePrinter(out, *printNodeData).print(root, ChildKind::Root);
 }
     
-    NS_CC_BEGIN
+    /// Determine whether the word preceding the preposition is part of an
+/// 'extended' preposition, such as 'compatible with'.
+static bool priorWordExtendsPreposition(StringRef preceding,
+                                        StringRef preposition) {
+  // compatible with
+  if (camel_case::sameWordIgnoreFirstCase(preceding, 'compatible') &&
+      camel_case::sameWordIgnoreFirstCase(preposition, 'with'))
+    return true;
+    }
     
-    void ProgressFromTo::update(float time)
-{
-    ((kProgressTimerCast)(_target))->setPercentage(_from + (_to - _from) * time);
+    
+    {  return forInvalid();
 }
     
-    /**
- * @addtogroup actions
- * @{
- */
+      StringRef presumedFile = presumedLoc.getFilename();
+  SourceLoc startOfLine = loc.getAdvancedLoc(-presumedLoc.getColumn() + 1);
+  bool isNewVirtualFile =
+    swiftSrcMgr.openVirtualFile(startOfLine, presumedFile,
+                                presumedLoc.getLine() - bufferLineNumber);
+  if (isNewVirtualFile) {
+    SourceLoc endOfLine = findEndOfLine(swiftSrcMgr, loc, mirrorID);
+    swiftSrcMgr.closeVirtualFile(endOfLine);
+  }
+    
+    // Version constant.
+// This is either 0 for python, 1 for CPP V1, 2 for CPP V2.
+//
+// 0 is default and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+//
+// 1 is set with -DPYTHON_PROTO2_CPP_IMPL_V1 and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+// and
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=1
+//
+// 2 is set with -DPYTHON_PROTO2_CPP_IMPL_V2 and is equivalent to
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+// and
+//   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
+#ifdef PYTHON_PROTO2_CPP_IMPL_V1
+#error 'PYTHON_PROTO2_CPP_IMPL_V1 is no longer supported.'
+#else
+#ifdef PYTHON_PROTO2_CPP_IMPL_V2
+static int kImplVersion = 2;
+#else
+#ifdef PYTHON_PROTO2_PYTHON_IMPL
+static int kImplVersion = 0;
+#else
+    
+    void FieldGeneratorBase::AddDeprecatedFlag(io::Printer* printer) {
+  if (descriptor_->options().deprecated()) {
+    printer->Print('[global::System.ObsoleteAttribute]\n');
+  } else if (descriptor_->type() == FieldDescriptor::TYPE_MESSAGE &&
+           descriptor_->message_type()->options().deprecated()) {
+    printer->Print('[global::System.ObsoleteAttribute]\n');
+  }
+}
+    
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
+}
+    
+     private:
+  const Descriptor* descriptor_;
+  std::vector<std::string> field_names_;
+  std::vector<const FieldDescriptor*> fields_by_number_;
+    
+    // A helper class for implementing EXPECT_FATAL_FAILURE() and
+// EXPECT_NONFATAL_FAILURE().  Its destructor verifies that the given
+// TestPartResultArray contains exactly one failure that has the given
+// type and contains the given substring.  If that's not the case, a
+// non-fatal failure will be generated.
+class GTEST_API_ SingleFailureChecker {
+ public:
+  // The constructor remembers the arguments.
+  SingleFailureChecker(const TestPartResultArray* results,
+                       TestPartResult::Type type,
+                       const string& substr);
+  ~SingleFailureChecker();
+ private:
+  const TestPartResultArray* const results_;
+  const TestPartResult::Type type_;
+  const string substr_;
     }
     
-    Animation* Animation::createWithSpriteFrames(const Vector<SpriteFrame*>& frames, float delay/* = 0.0f*/, unsigned int loops/* = 1*/)
-{
-    Animation *animation = new (std::nothrow) Animation();
-    animation->initWithSpriteFrames(frames, delay, loops);
-    animation->autorelease();
+    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE DIRECTLY.
+//
+// Expands to the name of the variable used to remember the names of
+// the registered tests in the given test case.
+# define GTEST_REGISTERED_TEST_NAMES_(TestCaseName) \
+  gtest_registered_test_names_##TestCaseName##_
+    
+    // Gets the content of the stringstream's buffer as an std::string.  Each '\0'
+// character in the buffer is replaced with '\\0'.
+GTEST_API_ std::string StringStreamToString(::std::stringstream* stream);
+    
+    // The template 'selector' struct TemplateSel<Tmpl> is used to
+// represent Tmpl, which must be a class template with one type
+// parameter, as a type.  TemplateSel<Tmpl>::Bind<T>::type is defined
+// as the type Tmpl<T>.  This allows us to actually instantiate the
+// template 'selected' by TemplateSel<Tmpl>.
+//
+// This trick is necessary for simulating typedef for class templates,
+// which C++ doesn't support directly.
+template <GTEST_TEMPLATE_ Tmpl>
+struct TemplateSel {
+  template <typename T>
+  struct Bind {
+    typedef Tmpl<T> type;
+  };
+};
+    
+    
+void print_init_message(const char *message) {
+  size_t unused;
+  unused = write(1, message, strlen(message));
+  unused = write(1, '\n', 1);
+}
+    
+    data.shape: (100, 100)
+expanded.shape: (1, 1, 100, 100)
+    
+    class GetMergeMultiMapFeatureTensorsGradient : public GradientMakerBase {
+  using GradientMakerBase::GradientMakerBase;
+  vector<OperatorDef> GetGradientDefs() override {
+    vector<string> input_blob_names{};
+    vector<string> output_blob_names{};
+    }
     }
     
-    /** Read an NSDictionary from a plist file and parse it automatically for animations */
-void AnimationCache::addAnimationsWithFile(const std::string& plist)
-{
-    CCASSERT(!plist.empty(), 'Invalid texture file name');
-    if (plist.empty()) {
-        log('%s error:file name is empty!', __FUNCTION__);
-        return;
-    }
     
-    ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(plist);
-    }
+    {	static Error parse_value(Token &token, Variant &value, Stream *p_stream, int &line, String &r_err_str, ResourceParser *p_res_parser = NULL);
+	static Error get_token(Stream *p_stream, Token &r_token, int &line, String &r_err_str);
+	static Error parse(Stream *p_stream, Variant &r_ret, String &r_err_str, int &r_err_line, ResourceParser *p_res_parser = NULL);
+};
     
-    /** @brief AtlasNode is a subclass of Node that implements the RGBAProtocol and TextureProtocol protocol.
- * It knows how to render a TextureAtlas object.
- * If you are going to render a TextureAtlas consider subclassing AtlasNode (or a subclass of AtlasNode).
- * All features from Node are valid, plus the following features:
- * - opacity and RGB colors.
- */
-class CC_DLL AtlasNode : public Node, public TextureProtocol
-{    
-public:
-	/** creates a AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render.
-     *
-     * @param filename The path of Atlas file.
-     * @param tileWidth The width of the item.
-     * @param tileHeight The height of the item.
-     * @param itemsToRender The quantity of items to render.
-     */
-	static AtlasNode * create(const std::string& filename, int tileWidth, int tileHeight, int itemsToRender);
-    }
+    	void _dump_function_deps(ShaderLanguage::ShaderNode *p_node, const StringName &p_for_func, const Map<StringName, String> &p_func_code, StringBuilder &r_to_add, Set<StringName> &r_added);
+	String _dump_node_code(ShaderLanguage::Node *p_node, int p_level, GeneratedCode &r_gen_code, IdentifierActions &p_actions, const DefaultIdentifierActions &p_default_actions, bool p_assigning);
     
     
-    {        ImGui::Render();
-    }
+    {	vsyslog(p_err ? LOG_ERR : LOG_INFO, p_format, p_list);
+}
     
-            // Allegro's implementation of al_draw_indexed_prim() for DX9 is completely broken. Unindex our buffers ourselves.
-        // FIXME-OPT: Unfortunately Allegro doesn't support 32-bits packed colors so we have to convert them to 4 float as well..
-        static ImVector<ImDrawVertAllegro> vertices;
-        vertices.resize(cmd_list->IdxBuffer.Size);
-        for (int i = 0; i < cmd_list->IdxBuffer.Size; i++)
-        {
-            const ImDrawVert* src_v = &cmd_list->VtxBuffer[cmd_list->IdxBuffer[i]];
-            ImDrawVertAllegro* dst_v = &vertices[i];
-            dst_v->pos = src_v->pos;
-            dst_v->uv = src_v->uv;
-            unsigned char* c = (unsigned char*)&src_v->col;
-            dst_v->col = al_map_rgba(c[0], c[1], c[2], c[3]);
-        }
+    #if (defined(UNIX_ENABLED) || defined(PTHREAD_ENABLED)) && !defined(NO_THREADS)
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
+    	enum {
+		MAX_DRIVES = 26
+	};
     
-            if (ImGui::Button('Button'))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text('counter = %d', counter);
+    public:
+	virtual void read_lock();
+	virtual void read_unlock();
+	virtual Error read_try_lock();
     
-    static void FramePresent(ImGui_ImplVulkanH_WindowData* wd)
-{
-    ImGui_ImplVulkanH_FrameData* fd = &wd->Frames[wd->FrameIndex];
-    VkPresentInfoKHR info = {};
-    info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-    info.waitSemaphoreCount = 1;
-    info.pWaitSemaphores = &fd->RenderCompleteSemaphore;
-    info.swapchainCount = 1;
-    info.pSwapchains = &wd->Swapchain;
-	info.pImageIndices = &wd->FrameIndex;
-	VkResult err = vkQueuePresentKHR(g_Queue, &info);
-    check_vk_result(err);
+    #endif
+    
+    
+    {	MessageBox(NULL, message, MB_TITLE, MB_OK | MB_ICONERROR);
+	exit(1);
 }
