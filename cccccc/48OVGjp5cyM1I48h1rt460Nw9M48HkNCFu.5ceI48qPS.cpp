@@ -1,215 +1,145 @@
 
         
-            for (size_t i = 0; i < size.height; ++i)
-    {
-        const u8* src = internal::getRowPtr(srcBase, srcStride, i);
-        s16* dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
+        namespace parallel {
     }
     
-    
-    {} // namespace CAROTENE_NS
+    #endif
 
     
-                    if(cn==2)
-                    t0 = vextq_u16(tprev, tcurr, 6);
-                else if(cn==3)
-                    t0 = vextq_u16(tprev, tcurr, 5);
-                else if(cn==4)
-                    t0 = vextq_u16(tprev, tcurr, 4);
+    //////////////////////////////////////////////////////////////////////
     
-    #include 'saturate_cast.hpp'
-#include <vector>
-#include <cstring>
+    PlainDirectory::PlainDirectory(const String& path) {
+  m_dir = ::opendir(path.data());
+}
     
-                for (; i <= lim; i+= 16)
-            {
-                internal::prefetch(src + i);
-                uint8x16_t vln = vld1q_u8(src + i);
-                uint8x16_t vnz = vminq_u8(vln, vc1);
-                vs = vaddq_u8(vs, vnz);
-            }
+    inline void* ExecutionContext::operator new(size_t /*s*/, void* p) {
+  return p;
+}
     
-        for (size_t i = 0; i < size.height; ++i)
-    {
-        const T * src0 = internal::getRowPtr(src0Base, src0Stride, i);
-        const T * src1 = internal::getRowPtr(src1Base, src1Stride, i);
-        T * dst = internal::getRowPtr(dstBase, dstStride, i);
-        size_t j = 0;
+    //////////////////////////////////////////////////////////////////////
+    
+    template <class Action>
+bool runRelative(std::string suffix, String cmd,
+                 const char* currentDir, Action action) {
+  suffix = '/' + suffix;
+  auto cwd = resolve_include(
+    cmd,
+    currentDir,
+    [] (const String& f, void*) { return access(f.data(), R_OK) == 0; },
+    nullptr
+  );
+  if (cwd.isNull()) return false;
+  do {
+    cwd = f_dirname(cwd);
+    auto const f = String::attach(
+      StringData::Make(cwd.data(), suffix.data())
+    );
+    if (action(f)) return true;
+  } while (!cwd.empty() && !cwd.equal(s_slash));
+  return false;
+}
+    
+      // insert new ones
+  while ((e = readdir(dsrc))) {
+    string fdest = dest + e->d_name;
+    if (access(fdest.c_str(), F_OK) < 0) {
+      Logger::Info('sync: updating %s', fdest.c_str());
+      if (keepSrc) {
+        ssystem((string('cp -R ') + src + e->d_name + ' ' + dest).c_str());
+      } else {
+        rename((src + e->d_name).c_str(), (dest + e->d_name).c_str());
+      }
     }
-    
-    
-    {    minLocCount >>= 1;
-    maxLocCount >>= 1;
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)minVal;
-    (void)minLocPtr;
-    (void)minLocCount;
-    (void)minLocCapacity;
-    (void)maxVal;
-    (void)maxLocPtr;
-    (void)maxLocCount;
-    (void)maxLocCapacity;
-#endif
-}
-    
-        u32 step_base = 16 / sizeof(T), step_tail = 8 / sizeof(T);
-    size_t roiw_base = size.width >= (step_base - 1) ? size.width - step_base + 1 : 0;
-    size_t roiw_tail = size.width >= (step_tail - 1) ? size.width - step_tail + 1 : 0;
-    
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         iterator_traits.cpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Declares iterator traits workarounds.
-  */
-    
-       const_reference prefix() const
-   {
-      if(m_is_singular)
-         raise_logic_error();
-      return (*this)[-1];
-   }
-    
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         basic_regex_creator.cpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Declares template class basic_regex_creator which fills in
-  *                the data members of a regex_data object.
-  */
-    
-    template <class OutputIterator, class Iterator, class traits, class charT>
-inline OutputIterator regex_merge(OutputIterator out,
-                         Iterator first,
-                         Iterator last,
-                         const basic_regex<charT, traits>& e, 
-                         const std::basic_string<charT>& fmt,
-                         match_flag_type flags = match_default)
-{
-   return regex_merge(out, first, last, e, fmt.c_str(), flags);
-}
-    
-    bool Follow::initWithTarget(Node *followedNode, const Rect& rect /*= Rect::ZERO*/){
-    
-    return initWithTargetAndOffset(followedNode, 0.0, 0.0,rect);
-    
-}
-void Follow::step(float /*dt*/)
-{
-    if(_boundarySet)
-    {
-        // whole map fits inside a single screen, no need to modify the position - unless map boundaries are increased
-        if(_boundaryFullyCovered)
-        {
-            return;
-        }
-    }
-    }
-    
-    //
-// NOTE: Converting these macros into Templates is desirable, but please see
-// issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
-//
-#define EASERATE_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC) \
-CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval *action, float rate) \
-{ \
-    CLASSNAME *ease = new (std::nothrow) CLASSNAME(); \
-    if (ease) \
-    { \
-        if (ease->initWithAction(action, rate)) \
-            ease->autorelease(); \
-        else \
-            CC_SAFE_RELEASE_NULL(ease); \
-    } \
-    return ease; \
-} \
-CLASSNAME* CLASSNAME::clone() const \
-{ \
-    if(_inner) return CLASSNAME::create(_inner->clone(), _rate); \
-    return nullptr; \
-} \
-void CLASSNAME::update(float time) { \
-    _inner->update(TWEEN_FUNC(time, _rate)); \
-} \
-EaseRateAction* CLASSNAME::reverse() const { \
-    return CLASSNAME::create(_inner->reverse(), 1.f / _rate); \
-}
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    http://www.cocos2d-x.org
-    
-    void BENCHFUN(pushBack)(int iters, int initialSize) {
-  BenchmarkSuspender braces;
-  auto const obj = randomObject<VECTOR::value_type>();
-  VECTOR v(initialSize, obj);
-  braces.dismissing([&]() {
-    FOR_EACH_RANGE (i, 0, iters) { v.push_back(obj); }
-  });
-}
-    
-    //
-// Author: andrei.alexandrescu@fb.com
-    
-      EXPECT_EQ(u8[0], u32[0]);
-  EXPECT_EQ(u8[1], u32[1]);
-  EXPECT_EQ(u8[0], u64[0]);
-  EXPECT_EQ(u8[1], u64[1]);
-  EXPECT_EQ(u8[0], usp[0]);
-  EXPECT_EQ(u8[1], usp[1]);
-  EXPECT_EQ(u8[0], uconv[0]);
-  EXPECT_EQ(u8[1], uconv[1]);
-    
-      int64_t max_int64_t = std::numeric_limits<int64_t>::max();
-  int64_t min_int64_t = std::numeric_limits<int64_t>::min();
-  uint64_t max_uint64_t = std::numeric_limits<uint64_t>::max();
-  EXPECT_EQ('9223372036854775807', sformat('{:n}', max_int64_t));
-  EXPECT_EQ('-9223372036854775808', sformat('{:n}', min_int64_t));
-  EXPECT_EQ('18446744073709551615', sformat('{:n}', max_uint64_t));
-    
-    
-    {    // variant 6 (const only)
-    int operator()(int x, std::vector<int> const&) const {
-      return 100 + 6 * x;
-    }
-  };
-  OverloadedFunctor of;
-  auto const& cof = of;
-    
-      if (!is_started_) {
-    AERROR << 'Nvidia can client has not been initiated! Please init first!';
-    return ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED;
   }
-  for (size_t i = 0; i < frames.size() && i < MAX_CAN_SEND_FRAME_LEN; ++i) {
-    if (frames[i].len != CANBUS_MESSAGE_LENGTH) {
-      AERROR << 'frames[' << i << '].len = ' << frames[i].len
-             << ', which is not equal to can message data length ('
-             << CANBUS_MESSAGE_LENGTH << ').';
-      return ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED;
+    
+    /** @class Follow
+ * @brief Follow is an action that 'follows' a node.
+ * Eg:
+ * @code
+ * layer->runAction(Follow::create(hero));
+ * @endcode
+ * Instead of using Camera as a 'follower', use this action instead.
+ * @since v0.99.2
+ */
+class CC_DLL Follow : public Action
+{
+public:
+    /**
+     * Creates the action with a set boundary or with no boundary.
+     *
+     * @param followedNode  The node to be followed.
+     * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
+     *              with no boundary.
+    */
+    
+    static Follow* create(Node *followedNode, const Rect& rect = Rect::ZERO);
+    
+    /**
+     * Creates the action with a set boundary or with no boundary with offsets.
+     *
+     * @param followedNode  The node to be followed.
+     * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
+     *              with no boundary.
+     * @param xOffset The horizontal offset from the center of the screen from which the
+     *               node  is to be followed.It can be positive,negative or zero.If
+     *               set to zero the node will be horizontally centered followed.
+     *  @param yOffset The vertical offset from the center of the screen from which the
+     *                 node is to be followed.It can be positive,negative or zero.
+     *                 If set to zero the node will be vertically centered followed.
+     *   If both xOffset and yOffset are set to zero,then the node will be horizontally and vertically centered followed.
+     */
     }
-    send_frames_[i].can_id = frames[i].id;
-    send_frames_[i].can_dlc = frames[i].len;
-    std::memcpy(send_frames_[i].data, frames[i].data, frames[i].len);
+    
+    
+    {    delete action;
+    return nullptr;
+}
+    
+    bool ProgressTo::initWithDuration(float duration, float percent)
+{
+    if (ActionInterval::initWithDuration(duration))
+    {
+        _to = percent;
+    }
     }
     
-    #include 'modules/canbus/proto/chassis_detail.pb.h'
-#include 'modules/common/proto/error_code.pb.h'
-#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
-#include 'modules/drivers/canbus/can_comm/message_manager.h'
     
-    #include 'modules/drivers/canbus/can_comm/can_sender.h'
+NS_CC_END
+
+    
+     Another example: ScaleTo action could be rewritten using PropertyAction:
+    
+    AnimationFrame::~AnimationFrame()
+{    
+    CCLOGINFO( 'deallocing AnimationFrame: %p', this);
+    }
+    
+            animation = Animation::create(frames, delay, 1);
+    
+    void AtlasNode::updateOpacityModifyRGB()
+{
+    _isOpacityModifyRGB = _textureAtlas->getTexture()->hasPremultipliedAlpha();
+}
     
     
-    {  std::condition_variable cvar_;
-};
+    {};
     
-    #include 'modules/drivers/canbus/can_comm/message_manager.h'
+    inline void ColorTransformYCbCrToRGB(uint8_t* pixel) {
+  int y  = pixel[0];
+  int cb = pixel[1];
+  int cr = pixel[2];
+  pixel[0] = kRangeLimit[y + kCrToRedTable[cr]];
+  pixel[1] = kRangeLimit[y +
+                         ((kCrToGreenTable[cr] + kCbToGreenTable[cb]) >> 16)];
+  pixel[2] = kRangeLimit[y + kCbToBlueTable[cb]];
+}
+    
+    // Computes the DCT (Discrete Cosine Transform) of the 8x8 array in 'block',
+// scaled up by a factor of 16. The values in 'block' are laid out row-by-row
+// and the result is written to the same memory area.
+void ComputeBlockDCT(coeff_t* block);
+    
+    namespace guetzli {
+    }
+    
+    #include <stdint.h>
