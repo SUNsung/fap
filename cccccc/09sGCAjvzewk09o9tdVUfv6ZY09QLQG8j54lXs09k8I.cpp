@@ -1,99 +1,107 @@
 
         
-        void Clipboard::Call(const std::string& method,
-                     const base::ListValue& arguments) {
-  if (method == 'Set') {
-    std::string text, type;
-    arguments.GetString(0, &text);
-    arguments.GetString(1, &type);
-    SetText(text);
-  } else if (method == 'Clear') {
-    Clear();
-  } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    class MenuDelegate : public ui::SimpleMenuModel::Delegate {
- public:
-  MenuDelegate(ObjectManager* object_manager);
-  ~MenuDelegate() override;
-    }
-    
-    
-    {  gtk_widget_show(menu_);
-  g_object_ref_sink(G_OBJECT(menu_));
-}
-    
-    
+        
     {
-    {    // build keyboard code
-    ui::DomCode domCode = ui::KeycodeConverter::CodeStringToDomCode(keyName.c_str());
-    retval = ui::DomCodeToUsLayoutKeyboardCode(domCode);
-  }
-  return retval;
+    { private:
+  /*! \brief corresponding DLTensor of this TBlob */
+  DLTensor dltensor_;
+};
+}  // namespace mxnet
+    
+    /*!
+ * Copyright (c) 2016 by Contributors
+ * \file caffe_blob.cc
+ * \brief Implementations of SetDataGradToBlob given various device/dimension
+ * \author Haoran Wang
+*/
+#include 'caffe_blob.h'
+namespace mxnet {
+namespace op {
+namespace caffe {
+    }
+    }
+    }
+    
+    #include './exec_pass.h'
+    
+    void StopGrid::startWithTarget(Node *target)
+{
+    ActionInstant::startWithTarget(target);
+    cacheTargetAsGridNode();
+    GridBase *grid = _gridNodeTarget->getGrid();
+    if (grid && grid->isActive())
+    {
+        grid->setActive(false);
+    }
 }
     
-    void MenuItem::UpdateKeys(views::FocusManager *focus_manager){
-  if (focus_manager == NULL){
-    return ;
-  } else {
-    focus_manager_ = focus_manager;
-    if (enable_shortcut_){
-      focus_manager->RegisterAccelerator(
-        accelerator_,
-        ui::AcceleratorManager::kHighPriority,
-        this);
-    }
-    if (submenu_ != NULL){
-      submenu_->UpdateKeys(focus_manager);
-    }
-  }
-}
+        /**
+    @brief Initializes the action with center position, number of twirls, amplitude, a grid size and duration.
+    @param duration Specify the duration of the Twirl action. It's a value in seconds.
+    @param gridSize Specify the size of the grid.
+    @param position Specify the center position of the twirl action.
+    @param twirls Specify the twirls count of the Twirl action.
+    @param amplitude Specify the amplitude of the Twirl action.
+    @return If the initialization success, return true; otherwise, return false.
+    */
+    bool initWithDuration(float duration, const Size& gridSize, const Vec2& position, unsigned int twirls, float amplitude);
     
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         match_results.cpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Declares template class match_results.
-  */
-    
-    template <class T>
-class concrete_protected_call
-   : public abstract_protected_call
+    /** @class BezierBy
+ * @brief An action that moves the target with a cubic Bezier curve by a certain distance.
+ */
+class CC_DLL BezierBy : public ActionInterval
 {
 public:
-   typedef bool (T::*proc_type)();
-   concrete_protected_call(T* o, proc_type p)
-      : obj(o), proc(p) {}
-private:
-   virtual bool call()const;
-   T* obj;
-   proc_type proc;
-};
+    /** Creates the action with a duration and a bezier configuration.
+     * @param t Duration time, in seconds.
+     * @param c Bezier config.
+     * @return An autoreleased BezierBy object.
+     * @code
+     * When this function bound to js or lua,the input params are changed.
+     * in js: var create(var t,var table)
+     * in lua: local create(local t, local table)
+     * @endcode
+     */
+    static BezierBy* create(float t, const ccBezierConfig& c);
+    }
+    
+        tHashElement *element = nullptr;
+    HASH_FIND_PTR(_targets, &target, element);
+    if (element)
+    {
+        if (ccArrayContainsObject(element->actions, element->currentAction) && (! element->currentActionSalvaged))
+        {
+            element->currentAction->retain();
+            element->currentActionSalvaged = true;
+        }
+    }
+    
+    The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+    
+    protected:
+    float _to;
+    float _from;
+    
+     @since v0.99.2
+ */
+class CC_DLL ActionTween : public ActionInterval
+{
+public:
+    /** 
+     * @brief Create and initializes the action with the property name (key), and the from and to parameters.
+     * @param duration The duration of the ActionTween. It's a value in seconds.
+     * @param key The key of property which should be updated.
+     * @param from The value of the specified property when the action begin.
+     * @param to The value of the specified property when the action end.
+     * @return If the creation success, return a pointer of ActionTween; otherwise, return nil.
+     */
+    static ActionTween* create(float duration, const std::string& key, float from, float to);
+    }
     
     
+    {    // update duration
+    _totalDelayUnits++;
+}
     
-    
-    {#ifdef BOOST_NO_STD_ITERATOR
-   typedef std::ptrdiff_t difference_type;
-   typedef typename S::value_type value_type;
-   typedef value_type* pointer;
-   typedef value_type& reference;
-   typedef std::output_iterator_tag iterator_category;
-#endif
-};
-    
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         regex_fwd.cpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Forward declares boost::basic_regex<> and
-  *                associated typedefs.
-  */
-    
-    
-
-    
-    #endif  // BOOST_REGEX_V4_REGEX_REPLACE_HPP
+        bool init(void);
