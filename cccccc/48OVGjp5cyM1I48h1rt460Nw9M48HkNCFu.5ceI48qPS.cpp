@@ -1,145 +1,117 @@
 
         
-        namespace parallel {
+        namespace atom {
     }
     
-    #endif
-
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    PlainDirectory::PlainDirectory(const String& path) {
-  m_dir = ::opendir(path.data());
+    void AutoUpdater::SetFeedURL(mate::Arguments* args) {
+  auto_updater::AutoUpdater::SetFeedURL(args);
 }
     
-    inline void* ExecutionContext::operator new(size_t /*s*/, void* p) {
-  return p;
+    
+    {}  // namespace api
+    
+    
+    {}  // namespace
+    
+    void Initialize(v8::Local<v8::Object> exports,
+                v8::Local<v8::Value> unused,
+                v8::Local<v8::Context> context,
+                void* priv) {
+  v8::Isolate* isolate = context->GetIsolate();
+  mate::Dictionary dict(isolate, exports);
+  dict.Set('Button',
+           mate::CreateConstructor<Button>(isolate, base::Bind(&Button::New)));
 }
     
-    //////////////////////////////////////////////////////////////////////
-    
-    template <class Action>
-bool runRelative(std::string suffix, String cmd,
-                 const char* currentDir, Action action) {
-  suffix = '/' + suffix;
-  auto cwd = resolve_include(
-    cmd,
-    currentDir,
-    [] (const String& f, void*) { return access(f.data(), R_OK) == 0; },
-    nullptr
-  );
-  if (cwd.isNull()) return false;
-  do {
-    cwd = f_dirname(cwd);
-    auto const f = String::attach(
-      StringData::Make(cwd.data(), suffix.data())
-    );
-    if (action(f)) return true;
-  } while (!cwd.empty() && !cwd.equal(s_slash));
-  return false;
+    void Initialize(v8::Local<v8::Object> exports,
+                v8::Local<v8::Value> unused,
+                v8::Local<v8::Context> context,
+                void* priv) {
+  mate::Dictionary dict(context->GetIsolate(), exports);
+  dict.SetMethod('showMessageBox', &ShowMessageBox);
+  dict.SetMethod('showErrorBox', &atom::ShowErrorBox);
+  dict.SetMethod('showOpenDialog', &ShowOpenDialog);
+  dict.SetMethod('showSaveDialog', &ShowSaveDialog);
+#if defined(OS_MACOSX) || defined(OS_WIN)
+  dict.SetMethod('showCertificateTrustDialog',
+                 &certificate_trust::ShowCertificateTrust);
+#endif
 }
     
-      // insert new ones
-  while ((e = readdir(dsrc))) {
-    string fdest = dest + e->d_name;
-    if (access(fdest.c_str(), F_OK) < 0) {
-      Logger::Info('sync: updating %s', fdest.c_str());
-      if (keepSrc) {
-        ssystem((string('cp -R ') + src + e->d_name + ' ' + dest).c_str());
-      } else {
-        rename((src + e->d_name).c_str(), (dest + e->d_name).c_str());
-      }
-    }
-  }
+    void Initialize(v8::Local<v8::Object> exports,
+                v8::Local<v8::Value> unused,
+                v8::Local<v8::Context> context,
+                void* priv) {
+  v8::Isolate* isolate = context->GetIsolate();
+  mate::Dictionary(isolate, exports)
+      .Set('DownloadItem',
+           atom::api::DownloadItem::GetConstructor(isolate)->GetFunction());
+}
     
-    /** @class Follow
- * @brief Follow is an action that 'follows' a node.
- * Eg:
- * @code
- * layer->runAction(Follow::create(hero));
- * @endcode
- * Instead of using Camera as a 'follower', use this action instead.
- * @since v0.99.2
- */
-class CC_DLL Follow : public Action
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
+    
+     protected:
+  explicit LabelButton(const std::string& text);
+  ~LabelButton() override;
+    
+      static void clearData();
+    
+    DHTReplaceNodeTask::DHTReplaceNodeTask(const std::shared_ptr<DHTBucket>& bucket,
+                                       const std::shared_ptr<DHTNode>& newNode)
+    : bucket_(bucket),
+      newNode_(newNode),
+      numRetry_(0),
+      timeout_(DHT_MESSAGE_TIMEOUT)
 {
-public:
-    /**
-     * Creates the action with a set boundary or with no boundary.
-     *
-     * @param followedNode  The node to be followed.
-     * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
-     *              with no boundary.
-    */
-    
-    static Follow* create(Node *followedNode, const Rect& rect = Rect::ZERO);
-    
-    /**
-     * Creates the action with a set boundary or with no boundary with offsets.
-     *
-     * @param followedNode  The node to be followed.
-     * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
-     *              with no boundary.
-     * @param xOffset The horizontal offset from the center of the screen from which the
-     *               node  is to be followed.It can be positive,negative or zero.If
-     *               set to zero the node will be horizontally centered followed.
-     *  @param yOffset The vertical offset from the center of the screen from which the
-     *                 node is to be followed.It can be positive,negative or zero.
-     *                 If set to zero the node will be vertically centered followed.
-     *   If both xOffset and yOffset are set to zero,then the node will be horizontally and vertically centered followed.
-     */
-    }
-    
-    
-    {    delete action;
-    return nullptr;
 }
     
-    bool ProgressTo::initWithDuration(float duration, float percent)
+    std::string DHTResponseMessage::toString() const
 {
-    if (ActionInterval::initWithDuration(duration))
+  return fmt('dht response %s TransactionID=%s Remote:%s(%u), id=%s, v=%s, %s',
+             getMessageType().c_str(), util::toHex(getTransactionID()).c_str(),
+             getRemoteNode()->getIPAddress().c_str(),
+             getRemoteNode()->getPort(),
+             util::toHex(getRemoteNode()->getID(), DHT_ID_LENGTH).c_str(),
+             util::torrentPercentEncode(getVersion()).c_str(),
+             toStringOptional().c_str());
+}
+    
+      void getBuckets(std::vector<std::shared_ptr<DHTBucket>>& buckets) const;
+    
+      const std::shared_ptr<DHTNode>& getLocalNode() const { return localNode_; }
+    
+    
+    {  // Returns two vector of Commands.  First one contains regular
+  // commands.  Secod one contains so called routine commands, which
+  // executed once per event poll returns.
+  std::pair<std::vector<std::unique_ptr<Command>>,
+            std::vector<std::unique_ptr<Command>>>
+  setup(DownloadEngine* e, int family);
+};
+    
+    DHTTaskExecutor::DHTTaskExecutor(int numConcurrent)
+    : numConcurrent_(numConcurrent)
+{
+}
+    
+    
+    {} // namespace aria2
+    
+    DHTTokenTracker::DHTTokenTracker(const unsigned char* initialSecret)
+{
+  memcpy(secret_[0], initialSecret, SECRET_SIZE);
+  memcpy(secret_[1], initialSecret, SECRET_SIZE);
+}
+    
+    #include 'common.h'
+#include <string>
+    
+        static BOOST_FORCEINLINE void store(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
     {
-        _to = percent;
-    }
-    }
-    
-    
-NS_CC_END
-
-    
-     Another example: ScaleTo action could be rewritten using PropertyAction:
-    
-    AnimationFrame::~AnimationFrame()
-{    
-    CCLOGINFO( 'deallocing AnimationFrame: %p', this);
+        base_type::fence_before_store(order);
+        BOOST_ATOMIC_DETAIL_ARM_STORE64(&storage, v);
+        base_type::fence_after_store(order);
     }
     
-            animation = Animation::create(frames, delay, 1);
-    
-    void AtlasNode::updateOpacityModifyRGB()
-{
-    _isOpacityModifyRGB = _textureAtlas->getTexture()->hasPremultipliedAlpha();
-}
-    
-    
-    {};
-    
-    inline void ColorTransformYCbCrToRGB(uint8_t* pixel) {
-  int y  = pixel[0];
-  int cb = pixel[1];
-  int cr = pixel[2];
-  pixel[0] = kRangeLimit[y + kCrToRedTable[cr]];
-  pixel[1] = kRangeLimit[y +
-                         ((kCrToGreenTable[cr] + kCbToGreenTable[cb]) >> 16)];
-  pixel[2] = kRangeLimit[y + kCbToBlueTable[cb]];
-}
-    
-    // Computes the DCT (Discrete Cosine Transform) of the 8x8 array in 'block',
-// scaled up by a factor of 16. The values in 'block' are laid out row-by-row
-// and the result is written to the same memory area.
-void ComputeBlockDCT(coeff_t* block);
-    
-    namespace guetzli {
-    }
-    
-    #include <stdint.h>
+    #endif // BOOST_ATOMIC_DETAIL_PAUSE_HPP_INCLUDED_
