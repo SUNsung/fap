@@ -1,111 +1,117 @@
 
         
-                            if callbacks = @subscribe_callbacks[chan]
-                      next_callback = callbacks.shift
-                      @event_loop.post(&next_callback) if next_callback
-                      @subscribe_callbacks.delete(chan) if callbacks.empty?
-                    end
-                  end
+              it 'deactivates an existing user' do
+        visit admin_users_path
+        expect(page).to have_no_text('inactive')
+        find(:css, 'a[href='/admin/users/#{users(:bob).id}/deactivate']').click
+        expect(page).to have_text('inactive')
+        users(:bob).reload
+        expect(users(:bob)).not_to be_active
+      end
+    
+      before do
+    login_as(user)
+  end
+    
+          it 'generates a DOT script' do
+        expect(agents_dot(@agents)).to match(%r{
+          \A
+          digraph \x20 'Agent \x20 Event \x20 Flow' \{
+            node \[ [^\]]+ \];
+            edge \[ [^\]]+ \];
+            (?<foo>\w+) \[label=foo\];
+            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
+            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
+            \k<bar1> \[label=bar1\];
+            \k<bar2> \[label=bar2,style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
+            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
+            \k<bar3> \[label=bar3\];
+          \}
+          \z
+        }x)
+      end
+    
+        it 'works for queued jobs' do
+      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
+    end
+  end
+    
+        it 'creates a scenario label with the given text' do
+      expect(scenario_label(scenario, 'Other')).to eq(
+        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
+      )
+    end
+  end
+    
+      context '#set_traps' do
+    it 'sets traps for INT TERM and QUIT' do
+      agent_runner = AgentRunner.new
+      mock(Signal).trap('INT')
+      mock(Signal).trap('TERM')
+      mock(Signal).trap('QUIT')
+      agent_runner.set_traps
+    
+      protected
+    
+        # The path used after sending reset password instructions
+    def after_sending_reset_password_instructions_path_for(resource_name)
+      new_session_path(resource_name) if is_navigational_format?
+    end
+    
+        def confirmation_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :confirmation_instructions, opts)
+    end
+    
+              class_eval <<-METHODS, __FILE__, __LINE__ + 1
+            def authenticate_#{group_name}!(favourite=nil, opts={})
+              unless #{group_name}_signed_in?
+                mappings = #{mappings}
+                mappings.unshift mappings.delete(favourite.to_sym) if favourite
+                mappings.each do |mapping|
+                  opts[:scope] = mapping
+                  warden.authenticate!(opts) if !devise_controller? || opts.delete(:force)
                 end
+              end
+            end
     
-    class TestDefaultAutosaveAssociationOnNewRecord < ActiveRecord::TestCase
-  def test_autosave_new_record_on_belongs_to_can_be_disabled_per_relationship
-    new_account = Account.new('credit_limit' => 1000)
-    new_firm = Firm.new('name' => 'some firm')
-    
-    require 'models/topic'
-    
-      after_touch do
-    self.after_touch_called += 1
-  end
-    
-      test 'broadcasts_to' do
-    assert_called_with(
-      ActionCable.server,
-      :broadcast,
-      [
-        'action_cable:channel:broadcasting_test:chat:Room#1-Campfire',
-        'Hello World'
-      ]
-    ) do
-      ChatChannel.broadcast_to(Room.new(1), 'Hello World')
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
     end
-  end
     
-      setup do
-    @user = User.new 'lifo'
-    @connection = TestConnection.new(@user)
-  end
-    
-      setup do
-    @server = TestServer.new
-    @server.config.allowed_request_origins = %w( http://rubyonrails.com )
-  end
-    
-    class RedisAdapterTest::AlternateConfiguration < RedisAdapterTest
-  def cable_config
-    alt_cable_config = super.dup
-    alt_cable_config.delete(:url)
-    alt_cable_config.merge(host: '127.0.0.1', port: 6379, db: 12)
-  end
-end
-    
-    
-# replace calls, jmps, and read/write handle/filename references
-replaces = []
-asm.each_line { |ln|
-	if ln =~ /call /
-		parts = ln.split(' ')
-		if (parts[0] == 'call' and parts[2] == ';call')
-			old = parts[1]
-			func = parts[3]
-			new = addrs[func]
-			#puts '%32s: %s -> %x' % [func, old, new]
-			replaces << [func, old, new.to_s(16)]
-		end
-	end
-    }
-    
-    meterp.sock.close
-
-    
-      def get_result
-    @src.get_result
-  end
-end
-    
-    def config_tag(config, key, tag=nil, classname=nil)
-  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
-  tag       ||= 'div'
-  classname ||= key.sub(/_/, '-').sub(/\./, '-')
-  output      = '<#{tag} class='#{classname}''
-    
-        def render(context)
-      includes_dir = File.join(context.registers[:site].source, '_includes')
-    
-      class IncludeCodeTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      @title = nil
-      @file = nil
-      if markup.strip =~ /\s*lang:(\S+)/i
-        @filetype = $1
-        markup = markup.strip.sub(/lang:\S+/i,'')
+          it 'supports Unicode characters' do
+        format('%c', 1286).should == 'Ԇ'
+        format('%c', 'ش').should == 'ش'
       end
-      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
-        @title = $1 || nil
-        @file = $3
+    end
+    
+      it 'raises ArgumentError if 3 or more arguments provided' do
+    lambda {
+      catch :blah do
+        throw :blah, :return_value, 2
       end
-      super
+    }.should raise_error(ArgumentError)
+    
+        def initialize(*args)
+      @s = StringScanner.new(*args)
     end
     
-      class PageFilters < Octopress::Hooks::Page
-    def pre_render(page)
-      OctopressFilters::pre_filter(page)
+      # Use a different cache store in production.
+  # config.cache_store = :mem_cache_store
+    
+      config.active_support.test_order = :random
+    
+      def test_symlink_exists(path)
+    exists?('L', path)
+  end
+    
+        def install_plugin(plugin, load_hooks: true, load_immediately: false)
+      installer.install(plugin,
+                        load_hooks: load_hooks,
+                        load_immediately: load_immediately)
     end
     
-              if @address.update_attributes(address_params)
-            respond_with(@address, default_template: :show)
-          else
-            invalid_resource!(@address)
-          end
-        end
+          attr_reader :key, :default, :options
