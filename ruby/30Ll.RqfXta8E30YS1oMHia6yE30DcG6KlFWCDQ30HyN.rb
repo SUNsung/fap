@@ -1,97 +1,92 @@
 
         
-          def test_assert_not_called
-    assert_not_called(@object, :decrement) do
-      @object.increment
+            You can read more about this change at:
+      https://www.playframework.com/documentation/2.3.x/Migration23
+      https://www.playframework.com/documentation/2.3.x/Highlights23
+    EOS
+  when 'haskell-platform' then <<-EOS.undent
+    We no longer package haskell-platform. Consider installing ghc
+    and cabal-install instead:
+      brew install ghc cabal-install
+    
+      # True if a {Formula} is being built without a specific option.
+  # <pre>args << '--no-spam-plz' if build.without? 'spam'
+  def without?(val)
+    !with?(val)
+  end
+    
+        if ARGV.named.empty?
+      slow_checks = %w[
+        check_for_broken_symlinks
+        check_missing_deps
+        check_for_outdated_homebrew
+        check_for_linked_keg_only_brews
+      ]
+      methods = (checks.all.sort - slow_checks) + slow_checks
+    else
+      methods = ARGV.named
     end
-  end
     
-        def assert_welcome(resp)
-      resp = Array(resp)
+          GitHub.open 'https://api.github.com/repos/#{user}/homebrew-#{repo}/git/trees/HEAD?recursive=1' do |json|
+        json['tree'].each do |object|
+          next unless object['type'] == 'blob'
     
-          begin
-        thread.join
+          command :revoke_expired do |c|
+        c.syntax = 'fastlane cert revoke_expired'
+        c.description = 'Revoke expired iOS code signing certificates'
     
-          broadcaster = server.broadcaster_for(broadcasting)
-      broadcaster.broadcast(message)
+      describe ':run option handling' do
+    it 'can use the username short flag from tool options' do
+      # leaving out the command name defaults to 'run'
+      stub_commander_runner_args(['--description', 'My description', '-u', 'me@it.com'])
     
-      def cable_config
-    { adapter: 'redis', driver: 'ruby' }
-  end
-end
-    
-            msg = ' Please append `--trace` to the `#{cmd.name}` command '
-        dashes = '-' * msg.length
-        Jekyll.logger.error '', dashes
-        Jekyll.logger.error 'Jekyll #{Jekyll::VERSION} ', msg
-        Jekyll.logger.error '', ' for any additional information or backtrace. '
-        Jekyll.logger.abort_with '', dashes
+            [
+          'This will automatically tag your build with the following format: `<grouping>/<lane>/<prefix><build_number>`, where:'.markdown_preserve_newlines,
+          list,
+          'For example, for build 1234 in the 'appstore' lane, it will tag the commit with `builds/appstore/1234`.'
+        ].join('\n')
       end
-      # rubocop: enable RescueException
-    end
-  end
-end
-
     
-          # Public: A list of processors that you provide via plugins.
-      # This is really only available if you are not in safe mode, if you are
-      # in safe mode (re: GitHub) then there will be none.
-    
-        def excluded?(entry)
-      glob_include?(site.exclude, relative_to_source(entry)).tap do |excluded|
-        if excluded
-          Jekyll.logger.debug(
-            'EntryFilter:',
-            'excluded #{relative_to_source(entry)}'
-          )
+            unless File.exist?(appium_path)
+          UI.user_error!('You have to install Appium using `npm install -g appium`')
         end
+    
+              style_value = params[:use_automatic_signing] ? 'Automatic' : 'Manual'
+          build_configuration_list = found_target[:build_configuration_list]
+          build_configuration_list.set_setting('CODE_SIGN_STYLE', style_value)
+          sett['ProvisioningStyle'] = style_value
+    
+    require 'rake/testtask'
+Rake::TestTask.new do |t|
+  t.libs << 'test'
+  t.test_files = FileList['test/**/*_test.rb']
+  t.verbose = true
+end
+    
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
       end
     end
     
-            expect(result).to eq('/usr/local/bin/cloc --exclude-dir=test1,test2,build --by-file --xml  --out=build/cloc.xml')
+      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
+  gem.executables   = %w(cap capify)
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ['lib']
+    
+          def warn_third_party_scm_must_be_upgraded
+        $stderr.puts(<<-MESSAGE)
+[Deprecation Notice] `set :scm, #{scm_name.inspect}` is deprecated.
+To ensure this custom SCM will work with future versions of Capistrano,
+please upgrade it to a version that uses the new SCM plugin mechanism
+documented here:
+    
+          def primary
+        self if fetch(:primary)
       end
     
-    Applications attributed to Apple are excluded from the output.
-    
-      desc 'update main and version in bower.json'
-  task :generate do
-    require 'bootstrap-sass'
-    Dir.chdir Bootstrap.gem_path do
-      spec       = JSON.parse(File.read 'bower.json')
-    
-          def request_authorization_consent_form
-        add_claims_to_scopes
-        endpoint = Api::OpenidConnect::AuthorizationPoint::EndpointStartPoint.new(current_user)
-        handle_start_point_response(endpoint)
-      end
-    
-          rescue_from OpenIDConnect::ValidationFailed,
-                  ActiveRecord::RecordInvalid, Api::OpenidConnect::Error::InvalidSectorIdentifierUri do |e|
-        validation_fail_as_json(e)
-      end
-    
-            def initialize(node, variable)
-          unless VARIABLE_ASSIGNMENT_TYPES.include?(node.type)
-            raise ArgumentError,
-                  'Node type must be any of #{VARIABLE_ASSIGNMENT_TYPES}, ' \
-                  'passed #{node.type}'
-          end
-    
-            def on_case(case_node)
-          case_node.when_branches.each_with_object([]) do |when_node, previous|
-            when_node.each_condition do |condition|
-              next unless repeated_condition?(previous, condition)
-    
-          def expect_no_offenses(source, file = nil)
-        inspect_source(source, file)
-    
-          # The body of the method definition.
-      #
-      # @note this can be either a `begin` node, if the method body contains
-      #       multiple expressions, or any other node, if it contains a single
-      #       expression.
-      #
-      # @return [Node] the body of the method definition
-      def body
-        node_parts[0]
-      end
+          private
