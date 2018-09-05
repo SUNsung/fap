@@ -1,142 +1,91 @@
 
         
-        signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
-print('signature: ' + signature)
+            # Then we cluster the lines together as blocks
+    # Each block represents a collection of lines that should be sorted
+    # This was done by assuming only links ([...](...)) are meant to be sorted
+    # Clustering is done by indentation
+    blocks = []
+    last_indent = None
+    for line in read_me:
+        s_line = line.lstrip()
+        indent = len(line) - len(s_line)
     
-    for page in itertools.count(1):
-    releases = json.loads(compat_urllib_request.urlopen(
-        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
-    ).read().decode('utf-8'))
     
-        def test_proxy_https(self):
-        params = self._check_params(['primary_proxy', 'primary_server_ip'])
-        if params is None:
+@pytest.mark.parametrize('path', (
+    '/create',
+    '/1/update',
+    '/1/delete',
+))
+def test_login_required(client, path):
+    response = client.post(path)
+    assert response.headers['Location'] == 'http://localhost/auth/login'
+    
+    import pytest
+from flaskr.db import get_db
+    
+        The name of the package is used to resolve resources from inside the
+    package or the folder the module is contained in depending on if the
+    package parameter resolves to an actual python package (a folder with
+    an :file:`__init__.py` file inside) or a standard module (just a ``.py`` file).
+    
+        .. versionadded:: 0.2
+    
+        tag = to_json
+    
+            def __init__(self, name, doc=None):
+            self.name = name
+            self.__doc__ = doc
+        def _fail(self, *args, **kwargs):
+            raise RuntimeError('signalling support is unavailable '
+                               'because the blinker library is '
+                               'not installed.')
+        send = lambda *a, **kw: None
+        connect = disconnect = has_receivers_for = receivers_for = \
+            temporarily_connected_to = connected_to = _fail
+        del _fail
+    
+        def create(self):
+        while True:
+            self._session_key = self._get_new_session_key()
+            try:
+                # Save immediately to ensure we have a unique entry in the
+                # database.
+                self.save(must_create=True)
+            except CreateError:
+                # Key wasn't unique. Try again.
+                continue
+            self.modified = True
             return
-        ydl = FakeYDL({
-            'proxy': params['primary_proxy']
-        })
-        self.assertEqual(
-            ydl.urlopen('https://yt-dl.org/ip').read().decode('utf-8'),
-            params['primary_server_ip'])
-    
-        _ALL_CLASSES = [
-        klass
-        for name, klass in globals().items()
-        if name.endswith('IE') and name != 'GenericIE'
-    ]
-    _ALL_CLASSES.append(GenericIE)
     
     
-class AnySexIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?anysex\.com/(?P<id>\d+)'
-    _TEST = {
-        'url': 'http://anysex.com/156592/',
-        'md5': '023e9fbb7f7987f5529a394c34ad3d3d',
-        'info_dict': {
-            'id': '156592',
-            'ext': 'mp4',
-            'title': 'Busty and sexy blondie in her bikini strips for you',
-            'description': 'md5:de9e418178e2931c10b62966474e1383',
-            'categories': ['Erotic'],
-            'duration': 270,
-            'age_limit': 18,
-        }
-    }
+class Session(AbstractBaseSession):
+    '''
+    Django provides full support for anonymous sessions. The session
+    framework lets you store and retrieve arbitrary data on a
+    per-site-visitor basis. It stores data on the server side and
+    abstracts the sending and receiving of cookies. Cookies contain a
+    session ID -- not the data itself.
     
-            return {
-            'id': info['vid'],
-            'title': info['Subject'],
-            'duration': int(info['duration']) / 1000.0,
-            'formats': formats,
-            'thumbnail': info.get('bimg') or info.get('img'),
-        }
-
+        def __init__(self, info_dict, priority=None, changefreq=None, protocol=None):
+        self.queryset = info_dict['queryset']
+        self.date_field = info_dict.get('date_field')
+        self.priority = priority
+        self.changefreq = changefreq
+        self.protocol = protocol
     
-        def reducer(self, key, values):
-        total = sum(values)
-        if total == 1:
-            yield key, total
+        f2 = manager.Foo2()
+    f2.g()
+    f2._h()
+    assert not hasattr(f2, 'f')
+    assert sorted(f2._exposed_) == sorted(['g', '_h'])
     
-        @abstractmethod
-    def escalate_call(self):
-        pass
+    buffer = ''
     
-        def __init__(self, results):
-        self.results = results
-        self.next = next
+    cur.execute('insert into test(p) values (?)', (p,))
+cur.execute('select p from test')
+print('with declared types:', cur.fetchone()[0])
+cur.close()
+con.close()
     
-        def can_fit_in_spot(self, spot):
-        return True
-    
-        def get_person(self, person_id):
-        person_server = self.lookup[person_id]
-        return person_server.people[person_id]
-    
-    # (c) 2015, Marc Abramowitz <marca@surveymonkey.com>
-#
-# This file is part of Ansible.
-#
-# Ansible is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Ansible is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible. If not, see <http://www.gnu.org/licenses/>.
-    
-            with open(path, 'w') as content_fd:
-            content_fd.write(content)
-    
-    
-class GCPUtilsTestCase(unittest.TestCase):
-    params_dict = {
-        'url_map_name': 'foo_url_map_name',
-        'description': 'foo_url_map description',
-        'host_rules': [
-            {
-                'description': 'host rules description',
-                'hosts': [
-                        'www.example.com',
-                        'www2.example.com'
-                ],
-                'path_matcher': 'host_rules_path_matcher'
-            }
-        ],
-        'path_matchers': [
-            {
-                'name': 'path_matcher_one',
-                'description': 'path matcher one',
-                'defaultService': 'bes-pathmatcher-one-default',
-                'pathRules': [
-                        {
-                            'service': 'my-one-bes',
-                            'paths': [
-                                '/',
-                                '/aboutus'
-                            ]
-                        }
-                ]
-            },
-            {
-                'name': 'path_matcher_two',
-                'description': 'path matcher two',
-                'defaultService': 'bes-pathmatcher-two-default',
-                'pathRules': [
-                        {
-                            'service': 'my-two-bes',
-                            'paths': [
-                                '/webapp',
-                                '/graphs'
-                            ]
-                        }
-                ]
-            }
-        ]
-    }
-    
-    import re
+    if os.path.exists(DB_FILE):
+    os.remove(DB_FILE)
