@@ -1,151 +1,147 @@
 
         
         
-def assertGreaterEqual(self, got, expected, msg=None):
-    if not (got >= expected):
-        if msg is None:
-            msg = '%r not greater than or equal to %r' % (got, expected)
-        self.assertTrue(got >= expected, msg)
+class BuildHTTPRequestHandler(compat_http_server.BaseHTTPRequestHandler):
+    actionDict = {'build': Builder, 'download': Builder}  # They're the same, no more caching.
     
+    filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
     
-def _download_restricted(url, filename, age):
-    ''' Returns true if the file has been downloaded '''
-    
-    
-if __name__ == '__main__':
-    unittest.main()
-
-    
-        _TEST = {
-        'url': 'http://www.anitube.se/video/36621',
-        'md5': '59d0eeae28ea0bc8c05e7af429998d43',
-        'info_dict': {
-            'id': '36621',
-            'ext': 'mp4',
-            'title': 'Recorder to Randoseru 01',
-            'duration': 180.19,
-        },
-        'skip': 'Blocked in the US',
-    }
-    
-        def _real_extract(self, url):
-        webpage = self._download_webpage(url, url_basename(url))
-        cnn_url = self._html_search_regex(r'data-url='(.+?)'', webpage, 'cnn url')
-        return {
-            '_type': 'url',
-            'url': cnn_url,
-            'ie_key': CNNIE.ie_key(),
-        }
-    
-    from mrjob.job import MRJob
-    
-        def set(self, key, value):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                item.value = value
-                return
-        self.table[hash_index].append(Item(key, value))
-    
-    
-class PagesDataStore(object):
-    
-        class Plugin(AuthPlugin):
-        auth_type = 'test-require-false'
-        auth_require = False
-    
-    
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
-    
-        '''
-)
-
-    
-        config['implicit_content_type'] = 'json'
-    config.save()
-    config.load()
-    assert 'implicit_content_type' not in config
-    assert not config['default_options']
-    
-        def test_verbose_implies_all(self, httpbin):
-        r = http('--verbose', '--follow', httpbin + '/redirect/1')
-        assert 'GET /redirect/1 HTTP/1.1' in r
-        assert 'HTTP/1.1 302 FOUND' in r
-        assert 'GET /get HTTP/1.1' in r
-        assert HTTP_OK in r
-    
-        The host identifier may be a hostname (qualified or not), an IPv4 address,
-    or an IPv6 address. If allow_ranges is True, then any of those may contain
-    [x:y] range specifications, e.g. foo[1:3] or foo[0:5]-bar[x-z].
-    
-        def on_open_shell(self):
-        try:
-            self._exec_cli_command('screen-length 0 temporary')
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
-
-    
-        text = html.remove_tags_with_content(text, ('script', 'noscript'))
-    text = html.replace_entities(text)
-    text = html.remove_comments(text)
-    return _ajax_crawlable_re.search(text) is not None
+    with io.open('update/releases.atom', 'w', encoding='utf-8') as atom_file:
+    atom_file.write(atom_template)
 
     
     
-class CookiesMiddleware(object):
-    '''This middleware enables working with sites that need cookies'''
+def main():
+    with open('supportedsites.html.in', 'r', encoding='utf-8') as tmplf:
+        template = tmplf.read()
     
-        def process_request(self, request, spider):
-        for k, v in self._headers:
-            request.headers.setdefault(k, v)
+    if isinstance(helptext, bytes):
+    helptext = helptext.decode('utf-8')
+    
+    
+total_bytes = 0
+    
+        def test_youtube_playlist_matching(self):
+        assertPlaylist = lambda url: self.assertMatch(url, ['youtube:playlist'])
+        assertPlaylist('ECUl4u3cNGP61MdtwGTqZA0MreSaDybji8')
+        assertPlaylist('UUBABnxM4Ar9ten8Mdjj1j0Q')  # 585
+        assertPlaylist('PL63F0C78739B09958')
+        assertPlaylist('https://www.youtube.com/playlist?list=UUBABnxM4Ar9ten8Mdjj1j0Q')
+        assertPlaylist('https://www.youtube.com/course?list=ECUl4u3cNGP61MdtwGTqZA0MreSaDybji8')
+        assertPlaylist('https://www.youtube.com/playlist?list=PLwP_SiAcdui0KVebT0mU9Apz359a4ubsC')
+        assertPlaylist('https://www.youtube.com/watch?v=AV6J6_AeFEQ&playnext=1&list=PL4023E734DA416012')  # 668
+        self.assertFalse('youtube:playlist' in self.matching_ies('PLtS2H6bU1M'))
+        # Top tracks
+        assertPlaylist('https://www.youtube.com/playlist?list=MCUS.20142101')
+    
+    
+def skip_internal(app, what, name, obj, skip, options):
+    docstring = inspect.getdoc(obj) or ''
+    
+        if request.method == 'POST':
+        title = request.form['title']
+        body = request.form['body']
+        error = None
+    
+        # test that the user was inserted into the database
+    with app.app_context():
+        assert get_db().execute(
+            'select * from user where username = 'a'',
+        ).fetchone() is not None
+    
+        with pytest.raises(sqlite3.ProgrammingError) as e:
+        db.execute('SELECT 1')
+    
+        def implements_to_string(cls):
+        cls.__unicode__ = cls.__str__
+        cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
+        return cls
+    
+    
+def _dump_loader_info(loader):
+    yield 'class: %s.%s' % (type(loader).__module__, type(loader).__name__)
+    for key, value in sorted(loader.__dict__.items()):
+        if key.startswith('_'):
+            continue
+        if isinstance(value, (tuple, list)):
+            if not all(isinstance(x, (str, text_type)) for x in value):
+                continue
+            yield '%s:' % key
+            for item in value:
+                yield '  - %s' % item
+            continue
+        elif not isinstance(value, (str, text_type, int, float, bool)):
+            continue
+        yield '%s: %r' % (key, value)
+    
+            self.charPositionInLine = None
+    
+    
+class ANTLRStringStream(CharStream):
+    '''
+    @brief CharStream that pull data from a unicode string.
+    
+    A pretty quick CharStream that pulls all data from an array
+    directly.  Every method call counts in the lexer.
+    
+    
+    def getChannel(self):
+        return self.channel
+    
+    def setChannel(self, channel):
+        self.channel = channel
+    
+    
+    
+@asyncio.coroutine
+def async_setup(hass):
+    '''Set up the Hassbian config.'''
+    hass.http.register_view(CheckConfigView)
+    return True
+    
+            states = dict(state.attributes)
+        metric = '{}.{}'.format(prefix, state.domain)
+        tags = ['entity:{}'.format(state.entity_id)]
+    
+                    else:
+                    # If this light didn't happen to be turned on yet so
+                    # will all the following then, break.
+                    break
+    
+            devices = {}
+        for lease in leases_result:
+            match = _LEASES_REGEX.search(lease.decode('utf-8'))
+            if match is not None:
+                devices[match.group('ip')] = {
+                    'ip': match.group('ip'),
+                    'mac': match.group('mac').upper(),
+                    'timevalid': int(match.group('timevalid'))
+                    }
+        return devices
 
     
-        def __init__(self, path=None, debug=False):
-        self.file = None
-        self.fingerprints = set()
-        self.logdupes = True
-        self.debug = debug
-        self.logger = logging.getLogger(__name__)
-        if path:
-            self.file = open(os.path.join(path, 'requests.seen'), 'a+')
-            self.file.seek(0)
-            self.fingerprints.update(x.rstrip() for x in self.file)
+    REQUIREMENTS = ['pybbox==0.0.5-alpha']
     
-        if results.overwrite and os.path.exists(output_directory):
-        shutil.rmtree(output_directory)
-    
-    
-  def IsAllowed( self, diagnostic ):
-    # NOTE: a diagnostic IsAllowed() ONLY if NO filters match it
-    for filterMatches in self._filters:
-      if filterMatches( diagnostic ):
-        return False
-    
-    
-def RunFlake8():
-  print( 'Running flake8' )
-  subprocess.check_call( [
-    sys.executable, '-m', 'flake8', p.join( DIR_OF_THIS_SCRIPT, 'python' )
-  ] )
-    
-        with patch.object( ycm._message_poll_request,
-                       '_response_future',
-                       new = MockAsyncServerResponseInProgress() ):
-      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
-  '''
-  return mock.MagicMock( wraps = FakeFuture( False ) )
-    
-    
-class CommandRequest( BaseRequest ):
-  def __init__( self, arguments, completer_target = None, extra_data = None ):
-    super( CommandRequest, self ).__init__()
-    self._arguments = _EnsureBackwardsCompatibility( arguments )
-    self._command = arguments and arguments[ 0 ]
-    self._completer_target = ( completer_target if completer_target
-                               else 'filetype_default' )
-    self._extra_data = extra_data
-    self._response = None
+        def random_see(dev_id, name):
+        '''Randomize a sighting.'''
+        see(
+            dev_id=dev_id,
+            host_name=name,
+            gps=(hass.config.latitude + offset(),
+                 hass.config.longitude + offset()),
+            gps_accuracy=random.randrange(50, 150),
+            battery=random.randrange(10, 90)
+        )
