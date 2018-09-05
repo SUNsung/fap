@@ -1,79 +1,53 @@
 
         
-        # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-
-    
-          def site
-        @site_drop ||= SiteDrop.new(@obj)
+              if rest.start_with?('/window.')
+        return redirect '/dom#{rest.sub('window.', 'window/')}', 301
       end
     
-    module Jekyll
-  module External
-    class << self
-      #
-      # Gems that, if installed, should be loaded.
-      # Usually contain subcommands.
-      #
-      def blessed_gems
-        %w(
-          jekyll-compose
-          jekyll-docs
-          jekyll-import
-        )
-      end
+    module Docs
+  require 'docs/core/autoload_helper'
+  extend AutoloadHelper
     
-          key = Spaceship::Portal::Key.create(name: 'New Key', apns: true, device_check: true, music_id: 'some-music-id')
-      expect(key).to be_instance_of(Spaceship::Portal::Key)
-      expect(key.id).to eq('a-new-key-id')
+        private
+    
+        def filter_const(name)
+      if name.is_a? Array
+        name.map &method(:filter_const)
+      else
+        Docs.const_get '#{name}_filter'.camelize
+      end
     end
+    
+            css('pre.prettyprint').each do |node|
+          node.content = node.content.strip
+          node['data-language'] = 'dart' if node['class'].include?('dart')
+          node['data-language'] = 'html' if node.content.start_with?('<')
+          node.remove_attribute('class')
+        end
+    
+            css('header').each do |node|
+          node.before(node.children).remove
+        end
+    
+      def set_statuses
+    @statuses = scope_for_collection
+    @statuses = cache_collection(@statuses, Status)
   end
     
-        alias :empty? :empty_file?
+        def create
+      authorize AccountModerationNote, :create?
     
-        # Extracts the Geometry from a 'WxH,O' string
-    # Where W is the width, H is the height,
-    # and O is the EXIF orientation
-    def self.parse(string)
-      GeometryParser.new(string).make
+    module Admin
+  class ChangeEmailsController < BaseController
+    before_action :set_account
+    before_action :require_local_account!
+    
+        def destroy
+      authorize @email_domain_block, :destroy?
+      @email_domain_block.destroy!
+      log_action :destroy, @email_domain_block
+      redirect_to admin_email_domain_blocks_path, notice: I18n.t('admin.email_domain_blocks.destroyed_msg')
     end
     
-        def define_query
-      name = @name
-      @klass.send :define_method, '#{@name}?' do
-        send(name).file?
-      end
-    end
-    
-            def has_column?
-          @subject.column_names.include?('#{@attachment_name}_file_name')
-        end
-      end
-    end
+        head 200
   end
-end
-
-    
-            def failure_message_when_negated
-          'Attachment #{@attachment_name} cannot be between #{@low} and #{@high} bytes'
-        end
-        alias negative_failure_message failure_message_when_negated
-    
-          if defined?(ActiveRecord)
-        Paperclip.options[:logger] = ActiveRecord::Base.logger
-        ActiveRecord::Base.send(:include, Paperclip::Glue)
-      end
-    end
-  end
-end
-
-    
-          def validate_blacklist(record, attribute, value)
-        if forbidden.present? && forbidden.any? { |type| type === value }
-          mark_invalid record, attribute, forbidden
-        end
-      end
