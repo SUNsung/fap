@@ -1,195 +1,121 @@
 
         
-        
-@bp.route('/create', methods=('GET', 'POST'))
-@login_required
-def create():
-    '''Create a new post for the current user.'''
-    if request.method == 'POST':
-        title = request.form['title']
-        body = request.form['body']
-        error = None
+        for page in itertools.count(1):
+    releases = json.loads(compat_urllib_request.urlopen(
+        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
+    ).read().decode('utf-8'))
     
+            # from https://www.pornoxo.com/videos/7564/striptease-from-sexy-secretary/
+        expect_dict(
+            self,
+            self.ie._extract_jwplayer_data(r'''
+<script type='text/javascript'>
+    jwplayer('mediaplayer').setup({
+        'videoid': '7564',
+        'width': '100%',
+        'aspectratio': '16:9',
+        'stretching': 'exactfit',
+        'autostart': 'false',
+        'flashplayer': 'https://t04.vipstreamservice.com/jwplayer/v5.10/player.swf',
+        'file': 'https://cdn.pornoxo.com/key=MF+oEbaxqTKb50P-w9G3nA,end=1489689259,ip=104.199.146.27/ip=104.199.146.27/speed=6573765/buffer=3.0/2009-12/4b2157147afe5efa93ce1978e0265289c193874e02597.flv',
+        'image': 'https://t03.vipstreamservice.com/thumbs/pxo-full/2009-12/14/a4b2157147afe5efa93ce1978e0265289c193874e02597.flv-full-13.jpg',
+        'filefallback': 'https://cdn.pornoxo.com/key=9ZPsTR5EvPLQrBaak2MUGA,end=1489689259,ip=104.199.146.27/ip=104.199.146.27/speed=6573765/buffer=3.0/2009-12/m_4b2157147afe5efa93ce1978e0265289c193874e02597.mp4',
+        'logo.hide': true,
+        'skin': 'https://t04.vipstreamservice.com/jwplayer/skin/modieus-blk.zip',
+        'plugins': 'https://t04.vipstreamservice.com/jwplayer/dock/dockableskinnableplugin.swf',
+        'dockableskinnableplugin.piclink': '/index.php?key=ajax-videothumbsn&vid=7564&data=2009-12--14--4b2157147afe5efa93ce1978e0265289c193874e02597.flv--17370',
+        'controlbar': 'bottom',
+        'modes': [
+            {type: 'flash', src: 'https://t04.vipstreamservice.com/jwplayer/v5.10/player.swf'}
+        ],
+        'provider': 'http'
+    });
+    //noinspection JSAnnotator
+    invideo.setup({
+        adsUrl: '/banner-iframe/?zoneId=32',
+        adsUrl2: '',
+        autostart: false
+    });
+</script>
+            ''', 'dummy', require_title=False),
+            {
+                'thumbnail': 'https://t03.vipstreamservice.com/thumbs/pxo-full/2009-12/14/a4b2157147afe5efa93ce1978e0265289c193874e02597.flv-full-13.jpg',
+                'formats': [{
+                    'url': 'https://cdn.pornoxo.com/key=MF+oEbaxqTKb50P-w9G3nA,end=1489689259,ip=104.199.146.27/ip=104.199.146.27/speed=6573765/buffer=3.0/2009-12/4b2157147afe5efa93ce1978e0265289c193874e02597.flv',
+                    'ext': 'flv'
+                }]
+            })
     
-def init_app(app):
-    '''Register database functions with the Flask app. This is called by
-    the application factory.
-    '''
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
-
+        params = {
+        'age_limit': age,
+        'skip_download': True,
+        'writeinfojson': True,
+        'outtmpl': '%(id)s.%(ext)s',
+    }
+    ydl = YoutubeDL(params)
+    ydl.add_default_info_extractors()
+    json_filename = os.path.splitext(filename)[0] + '.info.json'
+    try_rm(json_filename)
+    ydl.download([url])
+    res = os.path.exists(json_filename)
+    try_rm(json_filename)
+    return res
     
+            if error is None:
+            # store the user id in a new session and return to the index
+            session.clear()
+            session['user_id'] = user['id']
+            return redirect(url_for('index'))
     
-# Certain versions of pypy have a bug where clearing the exception stack
-# breaks the __exit__ function in a very peculiar way.  The second level of
-# exception blocks is necessary because pypy seems to forget to check if an
-# exception happened until the next bytecode instruction?
-#
-# Relevant PyPy bugfix commit:
-# https://bitbucket.org/pypy/pypy/commits/77ecf91c635a287e88e60d8ddb0f4e9df4003301
-# According to ronan on #pypy IRC, it is released in PyPy2 2.3 and later
-# versions.
-#
-# Ubuntu 14.04 has PyPy 2.2.1, which does exhibit this bug.
-BROKEN_PYPY_CTXMGR_EXIT = False
-if hasattr(sys, 'pypy_version_info'):
-    class _Mgr(object):
-        def __enter__(self):
-            return self
-        def __exit__(self, *args):
-            if hasattr(sys, 'exc_clear'):
-                # Python 3 (PyPy3) doesn't have exc_clear
-                sys.exc_clear()
-    try:
-        try:
-            with _Mgr():
-                raise AssertionError()
-        except:
-            raise
-    except TypeError:
-        BROKEN_PYPY_CTXMGR_EXIT = True
-    except AssertionError:
-        pass
-
-    
-            :param name: the optional name of the filter, otherwise the
-                     function name will be used.
-        '''
-        def decorator(f):
-            self.add_app_template_filter(f, name=name)
-            return f
-        return decorator
-    
-        1. Single argument: Passed straight through to :func:`dumps`.
-    2. Multiple arguments: Converted to an array before being passed to
-       :func:`dumps`.
-    3. Multiple keyword arguments: Converted to a dict before being passed to
-       :func:`dumps`.
-    4. Both args and kwargs: Behavior undefined and will throw an exception.
-    
-        def save_session(self, app, session, response):
-        domain = self.get_cookie_domain(app)
-        path = self.get_cookie_path(app)
-    
-    # Use the nodeid specified in the environment to limit the data returned
-# or return data for all available nodes
-nodeids = []
-    
-            if self.filter_clusters:
-            # Loop through clusters and find hosts:
-            hosts = []
-            for cluster in ClusterComputeResource.all(self.client):
-                if cluster.name in self.filter_clusters:
-                    for host in cluster.host:
-                        hosts.append(host)
+            if error is not None:
+            flash(error)
         else:
-            # Get list of all physical hosts
-            hosts = HostSystem.all(self.client)
+            db = get_db()
+            db.execute(
+                'UPDATE post SET title = ?, body = ? WHERE id = ?',
+                (title, body, id)
+            )
+            db.commit()
+            return redirect(url_for('blog.index'))
     
-    import argparse
-import sys
-import getpass
-import keyring
+    This typically means that you attempted to use functionality that needed
+to interface with the current application object in some way. To solve
+this, set up an application context with app.app_context().  See the
+documentation for more information.\
+'''
     
-    #__requires__ = ['ansible']
-try:
-    import pkg_resources
-except Exception:
-    # Use pkg_resources to find the correct versions of libraries and set
-    # sys.path appropriately when there are multiversion installs.  But we
-    # have code that better expresses the errors in the places where the code
-    # is actually used (the deps are optional for many code paths) so we don't
-    # want to fail here.
-    pass
-    
-        Print out all the modules that have metadata and all the ones that do not.
-    
-            def format_group(group):
-            results = {}
-            results[group.name] = {}
-            if group.name != 'all':
-                results[group.name]['hosts'] = [h.name for h in sorted(group.hosts, key=attrgetter('name'))]
-            results[group.name]['children'] = []
-            for subgroup in sorted(group.child_groups, key=attrgetter('name')):
-                results[group.name]['children'].append(subgroup.name)
-                results.update(format_group(subgroup))
-            if self.options.export:
-                results[group.name]['vars'] = self._get_group_variables(group)
-    
-    CLI_DEFAULTS = dict(
-    server_root=server_root_tmp,
-    ctl='nginx',
-)
-'''CLI defaults.'''
-    
-        def test_timeout(self):
-        self.assertTrue(self.timeout.timeout)
-        self.assertFalse(self.invalid.timeout)
-    
-        def decode(self, value):
-        if value != self.resource_type:
-            raise jose.DeserializationError(
-                'Wrong resource type: {0} instead of {1}'.format(
-                    value, self.resource_type))
-        return value
-
-    
-        def setUp(self):
-        from acme.messages import CertificateResource
-        self.certr = CertificateResource(
-            body=CERT, uri=mock.sentinel.uri, authzrs=(),
-            cert_chain_uri=mock.sentinel.cert_chain_uri)
-    
-    authzr = acme.request_challenges(
-    identifier=messages.Identifier(typ=messages.IDENTIFIER_FQDN, value=DOMAIN))
-logging.debug(authzr)
-    
-        :returns: Dict of Define:Value pairs
-    :rtype: `dict`
-    
-            # Both sets of names are empty.
-    
-        def test_recovery_routine_error(self):
-        self.config.reverter.recovery_routine = mock.Mock(
-            side_effect=errors.ReverterError)
-    
-    import getopt
-import os
-import platform
-import sys
-from .version import script_name, __version__
-from .util import git, log
-    
-            for i in link_list:
-            self.stream_types.append({'id': str(i[0])})
-            self.streams[i[0]] = {'url': i[1]}
+    :copyright: © 2010 by the Pallets team.
+:license: BSD, see LICENSE for more details.
+'''
+import codecs
+import io
+import uuid
+from datetime import date, datetime
+from flask.globals import current_app, request
+from flask._compat import text_type, PY2
     
     
-    def extract(self, **kwargs):
-        for i in self.streams:
-            s = self.streams[i]
-            _, s['container'], s['size'] = url_info(s['url'])
-            s['src'] = [s['url']]
-        if 'stream_id' in kwargs and kwargs['stream_id']:
-            # Extract the stream
-            stream_id = kwargs['stream_id']
+def test_when_already_configured(usage_tracker_io, shell_pid,
+                                 shell, shell_config, logs):
+    shell.get_history.return_value = ['fuck']
+    shell_pid.return_value = 12
+    _change_tracker(usage_tracker_io, 12)
+    shell_config.read.return_value = 'eval $(thefuck --alias)'
+    main()
+    logs.already_configured.assert_called_once()
     
-            ckplayer_download(another_url, output_dir, merge, info_only, is_xml = True, title = title, headers = headers)
     
-    site_info = 'Facebook.com'
-download = facebook_download
-download_playlist = playlist_not_supported('facebook')
-
+python_3 = ('thefuck/python3-zsh',
+            u'''FROM python:3
+                RUN apt-get update
+                RUN apt-get install -yy zsh''',
+            u'sh')
     
-    def get_single_photo_url(url):
-    page = get_html(url)
-    pid = get_photo_id(url, page)
-    title = match1(page, pattern_inline_title)
-    if match1(page, pattern_inline_video_mark):
-        api_key = get_api_key(page)
-        reply = get_content(tmpl_api_call_photo_info % (api_key, get_photo_id(url, page)))
-        secret = json.loads(reply)['photo']['secret']
-        return get_orig_video_source(api_key, pid, secret), title
-    #last match always has the best resolution
-    match = match1(page, pattern_inline_img_url)
-    return 'https:' + match.replace('\\', ''), title
+    
+@pytest.fixture
+def brew_install_no_argument():
+    return '''This command requires a formula argument'''
+    
+    import re, cgi
+TAG_REGEX = re.compile(r'(<!--.*?-->|<[^>]*>)')
+NAMED_A_TAG_REGEX = re.compile(r'.*name ?= ?'([^']*)'')
