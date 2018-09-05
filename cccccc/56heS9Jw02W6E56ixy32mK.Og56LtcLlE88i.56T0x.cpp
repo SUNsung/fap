@@ -1,399 +1,540 @@
 
         
-          char label_i;
-  char label_j;
-  char* pixels = new char[2 * rows * cols];
-  std::string value;
+        
+    {  delete db;
+  delete [] pixels;
+}
     
-    /**
- * @brief Applies common transformations to the input data, such as
- * scaling, mirroring, substracting the image mean...
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include 'caffe/layers/conv_layer.hpp'
+    
+    
+    {}  // namespace caffe
+    
+    #endif  // CAFFE_CUDNN_RELU_LAYER_HPP_
+
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief cuDNN implementation of SoftmaxLayer.
+ *        Fallback to SoftmaxLayer for CPU mode.
  */
 template <typename Dtype>
-class DataTransformer {
+class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
  public:
-  explicit DataTransformer(const TransformationParameter& param, Phase phase);
-  virtual ~DataTransformer() {}
-    }
-    
-    /**
- * @brief Computes @f$ y = |x| @f$
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class AbsValLayer : public NeuronLayer<Dtype> {
- public:
-  explicit AbsValLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
+  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
+      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
   virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSoftmaxLayer();
     }
     
+    #include <condition_variable>
+#include <mutex>
+#include <string>
+#include <system_error>
+#include <vector>
     
-    { protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
-   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
-   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
-   *      the computed outputs @f$
-   *       y_n = \arg\max\limits_i x_{ni}
-   *      @f$ (for @f$ K = 1 @f$).
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  /// @brief Not implemented (non-differentiable function)
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    NOT_IMPLEMENTED;
-  }
-  bool out_max_val_;
-  size_t top_k_;
-  bool has_axis_;
-  int axis_;
-};
+    OPERATOR_SCHEMA(EnforceFinite)
+    .NumInputs(1)
+    .NumOutputs(0)
+    .SetDoc(R'DOC(
+Raise if there is NaN or Inf values in the input tensor.
+)DOC')
+    .Input(0, 'input', 'Input tensor');
     
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    /**
- * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
- *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$
- *      y = \left\{
- *         \begin{array}{ll}
- *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
- *            \log(1 + \exp(x)) & \mbox{otherwise}
- *         \end{array} \right.
- *      @f$
- */
-template <typename Dtype>
-class BNLLLayer : public NeuronLayer<Dtype> {
+    template <class Context>
+class FindDuplicateElementsOp final : public Operator<Context> {
  public:
-  explicit BNLLLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
+  USE_OPERATOR_CONTEXT_FUNCTIONS;
+  USE_SIMPLE_CTOR_DTOR(FindDuplicateElementsOp);
+  USE_DISPATCH_HELPER;
     }
-    }
-    
-     protected:
-  /// @copydoc ContrastiveLossLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-      bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnLRNDescriptor_t norm_desc_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_;
-  cudnnTensorDescriptor_t top_desc_;
-  cudnnActivationDescriptor_t activ_desc_;
-};
-#endif
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #include <vector>
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the forwarded inputs.
-   *
-   * @param top output Blob vector (length 1+), providing the error gradient with
-   *        respect to the outputs
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2+), into which the top error
-   *        gradient is copied
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-    const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include <torch/nn/cursor.h>
-#include <torch/tensor.h>
-    
-      // Calculate the softmax
-  ERArrXXf probs(
-      heatmaps_in.dim32(0) * heatmaps_in.dim32(1),
-      heatmaps_in.dim32(2) * heatmaps_in.dim32(3));
-  if (should_output_softmax_) {
-    // softmax output is expensive to compute, if should_output_softmax is not
-    // specified, don't populate it
-    ERArrXXf heatmap_exp = heatmaps.exp();
-    for (int r = 0; r < N * keypoint_count; r++) {
-      probs.row(r) = heatmap_exp.row(r) / heatmap_exp.row(r).sum();
-    }
-  } /* otherwise not initialized */
     
     
     {} // namespace caffe2
     
-    // NB: Device is NOT tested for here; a CUDA nullptr is as much a nullptr as a
-// CPU nullptr
+    ChannelCredentials::~ChannelCredentials() {}
     
-    static int set_flags(struct ifaddrs* ifaddr) {
-	int fd = socket(AF_INET, SOCK_DGRAM, 0);
-	if (fd == -1) {
-		return -1;
-	}
-	ifreq ifr;
-	memset(&ifr, 0, sizeof(ifr));
-	strncpy(ifr.ifr_name, ifaddr->ifa_name, IFNAMSIZ - 1);
-	int rc = ioctl(fd, SIOCGIFFLAGS, &ifr);
-	close(fd);
-	if (rc == -1) {
-		return -1;
-	}
-	ifaddr->ifa_flags = ifr.ifr_flags;
-	return 0;
+    std::shared_ptr<ChannelCredentials> CronetChannelCredentials(void* engine) {
+  return std::shared_ptr<ChannelCredentials>(
+      new CronetChannelCredentialsImpl(engine));
 }
     
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
     
-        /* Compute number of bits head room and normalize inputs */
-    a_headrm = silk_CLZ32( silk_abs(a32) ) - 1;
-    a32_nrm = silk_LSHIFT(a32, a_headrm);                                       /* Q: a_headrm                  */
-    b_headrm = silk_CLZ32( silk_abs(b32) ) - 1;
-    b32_nrm = silk_LSHIFT(b32, b_headrm);                                       /* Q: b_headrm                  */
+    {
+    {  SecureChannelCredentials* AsSecureCredentials() override { return nullptr; }
+};
+}  // namespace
     
-    #include <dmlc/logging.h>
-#include <dmlc/thread_local.h>
-#include <sstream>
-#include './base.h'
-    
-    SEXP XGBoosterGetAttrNames_R(SEXP handle) {
-  SEXP out;
-  R_API_BEGIN();
-  bst_ulong len;
-  const char **res;
-  CHECK_CALL(XGBoosterGetAttrNames(R_ExternalPtrAddr(handle),
-                                   &len, &res));
-  if (len > 0) {
-    out = PROTECT(allocVector(STRSXP, len));
-    for (size_t i = 0; i < len; ++i) {
-      SET_STRING_ELT(out, i, mkChar(res[i]));
+    namespace grpc {
     }
-  } else {
-    out = PROTECT(R_NilValue);
-  }
-  R_API_END();
-  UNPROTECT(1);
-  return out;
-}
-
     
+    #include 'src/cpp/common/secure_auth_context.h'
     
-    {
-    {
-    {      // Test write Symbol
-      std::vector<unsigned char> buffer2(
-        CompressedBufferWriter::CalculateBufferSize(input.size(),
-          alphabet_size));
-      for (int i = 0; i < input.size(); i++) {
-        cbw.WriteSymbol(buffer2.data(), input[i], i);
-      }
-      CompressedIterator<int> ci2(buffer.data(), alphabet_size);
-      std::vector<int> output2(input.size());
-      for (int i = 0; i < input.size(); i++) {
-        output2[i] = ci2[i];
-      }
-      ASSERT_TRUE(input == output2);
+    struct grpc_auth_context;
+    
+    namespace grpc {
     }
+    
+    void FilterTrailingMetadata(grpc_metadata_batch* b, uint64_t* elapsed_time) {
+  if (b->idx.named.grpc_server_stats_bin != nullptr) {
+    ServerStatsDeserialize(
+        reinterpret_cast<const char*>(GRPC_SLICE_START_PTR(
+            GRPC_MDVALUE(b->idx.named.grpc_server_stats_bin->md))),
+        GRPC_SLICE_LENGTH(GRPC_MDVALUE(b->idx.named.grpc_server_stats_bin->md)),
+        elapsed_time);
+    grpc_metadata_batch_remove(b, b->idx.named.grpc_server_stats_bin);
   }
 }
     
-    bool js_cocos2dx_navmesh_NavMeshObstacle_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_navmesh_NavMeshObstacle_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_navmesh_NavMeshObstacle(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_initWith(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_syncToObstacle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_syncToNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getHeight(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getRadius(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_NavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
+    size_t TraceContextSerialize(const ::opencensus::trace::SpanContext& context,
+                             char* tracing_buf, size_t tracing_buf_size) {
+  GrpcTraceContext trace_ctxt(context);
+  return TraceContextEncoding::Encode(trace_ctxt, tracing_buf,
+                                      tracing_buf_size);
+}
     
-    bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DConeTwistConstraint_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DConeTwistConstraint(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getBFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistAngle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistSpan(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setDamping(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getAFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_enableMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_Physics3DConeTwistConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+      // Serializes a GrpcTraceContext into the provided buffer. Returns the number
+  // of bytes serialized into the buffer. If the buffer is not of sufficient
+  // size (it must be at least kGrpcTraceContextSize bytes) it will drop
+  // everything and return 0 bytes serialized. Inlined for performance reasons.
+  static size_t Encode(const GrpcTraceContext& tc, char* buf, size_t buf_size) {
+    if (buf_size < kGrpcTraceContextSize) {
+      return kEncodeDecodeFailure;
+    }
+    buf[kVersionIdOffset] = kVersionId;
+    buf[kTraceIdOffset] = kTraceIdField;
+    memcpy(&buf[kTraceIdOffset + 1], tc.trace_id,
+           opencensus::trace::TraceId::kSize);
+    buf[kSpanIdOffset] = kSpanIdField;
+    memcpy(&buf[kSpanIdOffset + 1], tc.span_id,
+           opencensus::trace::SpanId::kSize);
+    buf[kTraceOptionsOffset] = kTraceOptionsField;
+    memcpy(&buf[kTraceOptionsOffset + 1], tc.trace_options,
+           opencensus::trace::TraceOptions::kSize);
+    return kGrpcTraceContextSize;
+  }
     
+    		pick->next = h.first;
+		h.first->prev = pick;
+		pick->prev = NULL;
+		h.first = pick;
+		h.used++;
+		pick->hand |= USED_FLAG;
     
+    	StringName current_func_name;
+	StringName vertex_name;
+	StringName fragment_name;
+	StringName light_name;
+	StringName time_name;
     
+    #include 'os/semaphore.h'
     
+    		int read = recv(sockfd, p_buffer + total_read, to_read, 0);
     
-    		b2Profile aveProfile;
-		memset(&aveProfile, 0, sizeof(b2Profile));
-		if (m_stepCount > 0)
-		{
-			float32 scale = 1.0f / m_stepCount;
-			aveProfile.step = scale * m_totalProfile.step;
-			aveProfile.collide = scale * m_totalProfile.collide;
-			aveProfile.solve = scale * m_totalProfile.solve;
-			aveProfile.solveInit = scale * m_totalProfile.solveInit;
-			aveProfile.solveVelocity = scale * m_totalProfile.solveVelocity;
-			aveProfile.solvePosition = scale * m_totalProfile.solvePosition;
-			aveProfile.solveTOI = scale * m_totalProfile.solveTOI;
-			aveProfile.broadphase = scale * m_totalProfile.broadphase;
-		}
+    	static Mutex *create_func_windows(bool p_recursive);
     
-    			b2FixtureDef fd;
-			fd.shape = &shape;
-			fd.friction = 0.6f;
-			fd.density = 2.0f;
+    void RWLockWindows::write_unlock() {
+    }
     
-    			b2EdgeShape shape;
+    #if defined(WINDOWS_ENABLED)
     
+    #include 'thread_windows.h'
     
+                tensorView = new TensorView<char>(slicedMatrixView, AsTensorViewShape(sliceViewShape));
+            break;
+        }
+        case DataType::Int16:
+        {
+            auto currentMatrix = GetMatrix<short>();
+            std::pair<size_t, size_t> currentMatrixDims = { currentMatrix->GetNumRows(), currentMatrix->GetNumCols() };
+            std::shared_ptr<Matrix<short>> slicedMatrixView;
+            if (sliceViewMatrixDims.first != currentMatrixDims.first)
+                slicedMatrixView =
+                make_shared<Matrix<short>>(currentMatrix->Reshaped(1, currentMatrix->GetNumElements())
+                    .ColumnSlice(flatBufferOffset, sliceViewShape.TotalSize()));
+            else
+                slicedMatrixView = make_shared<Matrix<short>>(
+                    currentMatrix->ColumnSlice(sliceMatrixColumnOffset, sliceViewMatrixDims.second));
+    
+        void ProgressWriter::UpdateTest(size_t samples, const ValuePtr& accumulatedMetric)
     {
-    {}  // namespace planning
-}  // namespace apollo
-
+        m_test->Update(samples, nullptr, accumulatedMetric,
+            [this](const std::pair<size_t, size_t> samples, std::pair<size_t, size_t> updates,
+                   const std::pair<double, double> /*aggregateLoss*/, std::pair<double, double> aggregateMetric)
+            {
+                OnWriteTestUpdate(samples, updates, aggregateMetric);
+            });
+    }
     
-      bool Associate(const cv::Mat& img, const double timestamp,
-                 std::vector<std::shared_ptr<VisualObject>>* objects) override {
-    return true;
+            const NDShape& Shape() const override { return m_unpackedShape; }
+        DeviceDescriptor Device() const override { return m_isPacked ? m_packedData->Device() : Value::Device(); }
+        DataType GetDataType() const override { return m_isPacked ? m_packedData->GetDataType() : Value::GetDataType(); }
+        StorageFormat GetStorageFormat() const override { return m_isPacked? m_packedData->GetStorageFormat() : Value::GetStorageFormat(); }
+        bool IsReadOnly() const override { return m_isPacked ? m_packedData->IsReadOnly() : Value::IsReadOnly(); }
+    
+                    if (outputRank == SentinelValueForInferParamInitRank)
+                    outputRank = DefaultParamInitOutputRank;
+    
+    class Timer
+{
+public:
+    Timer()
+        : m_start(0), m_end(0)
+    {
+    }
+    }
+    
+    public:
+    DeclareConstructorFromConfigWithNumInputs(SumColumnElementsNode);
+    SumColumnElementsNode(DEVICEID_TYPE deviceId, const wstring& name)
+        : Base(deviceId, name)
+    {
+    }
+    
+        // Finish and check for file errors
+    if (s.ok()) {
+      s = file->Sync();
+    }
+    if (s.ok()) {
+      s = file->Close();
+    }
+    delete file;
+    file = nullptr;
+    
+      // Return an internal iterator over the current state of the database.
+  // The keys of this iterator are internal keys (see format.h).
+  // The returned iterator should be deleted when no longer needed.
+  Iterator* TEST_NewInternalIterator();
+    
+    static const int kBlockSize = 32768;
+    
+    unsigned int Reader::ReadPhysicalRecord(Slice* result) {
+  while (true) {
+    if (buffer_.size() < kHeaderSize) {
+      if (!eof_) {
+        // Last read was a full read, so this is a trailer to skip
+        buffer_.clear();
+        Status status = file_->Read(kBlockSize, &buffer_, backing_store_);
+        end_of_buffer_offset_ += buffer_.size();
+        if (!status.ok()) {
+          buffer_.clear();
+          ReportDrop(kBlockSize, status);
+          eof_ = true;
+          return kEof;
+        } else if (buffer_.size() < kBlockSize) {
+          eof_ = true;
+        }
+        continue;
+      } else {
+        // Note that if buffer_ is non-empty, we have a truncated header at the
+        // end of the file, which can be caused by the writer crashing in the
+        // middle of writing the header. Instead of considering this an error,
+        // just report EOF.
+        buffer_.clear();
+        return kEof;
+      }
+    }
+    }
+    }
+    
+    static Slice GetLengthPrefixedSlice(const char* data) {
+  uint32_t len;
+  const char* p = data;
+  p = GetVarint32Ptr(p, p + 5, &len);  // +5: we assume 'p' is not corrupted
+  return Slice(p, len);
+}
+    
+       typedef typename traits_type::string_type traits_string_type;
+   const ::boost::regex_traits_wrapper<traits_type>& traits_inst = *(e.m_ptraits);
+   
+   // dwa 9/13/00 suppress incorrect MSVC warning - it claims this is never
+   // referenced
+   (void)traits_inst;
+    
+    
+    {   if(next_count->get_count() < rep->min)
+   {
+      // we must take the repeat:
+      if(take_first)
+      {
+         // increase the counter:
+         ++(*next_count);
+         pstate = rep->next.p;
+         return match_all_states();
+      }
+      return false;
+   }
+   bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);   
+   if(greedy)
+   {
+      // try and take the repeat if we can:
+      if((next_count->get_count() < rep->max) && take_first)
+      {
+         // store position in case we fail:
+         BidiIterator pos = position;
+         // increase the counter:
+         ++(*next_count);
+         pstate = rep->next.p;
+         if(match_all_states())
+            return true;
+         if(!m_can_backtrack)
+            return false;
+         // failed repeat, reset posistion and fall through for alternative:
+         position = pos;
+      }
+      if(take_second)
+      {
+         pstate = rep->alt.p;
+         return true;
+      }
+      return false; // can't take anything, fail...
+   }
+   else // non-greedy
+   {
+      // try and skip the repeat if we can:
+      if(take_second)
+      {
+         // store position in case we fail:
+         BidiIterator pos = position;
+         pstate = rep->alt.p;
+         if(match_all_states())
+            return true;
+         if(!m_can_backtrack)
+            return false;
+         // failed alternative, reset posistion and fall through for repeat:
+         position = pos;
+      }
+      if((next_count->get_count() < rep->max) && take_first)
+      {
+         // increase the counter:
+         ++(*next_count);
+         pstate = rep->next.p;
+         return match_all_states();
+      }
+   }
+   return false;
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+}
+    
+    class BOOST_REGEX_DECL abstract_protected_call
+{
+public:
+   bool BOOST_REGEX_CALL execute()const;
+   // this stops gcc-4 from complaining:
+   virtual ~abstract_protected_call(){}
+private:
+   virtual bool call()const = 0;
+};
+    
+    
+    {      basic = ::boost::regbase::basic,
+      extended = ::boost::regbase::extended,
+      normal = ::boost::regbase::normal,
+      emacs = ::boost::regbase::emacs,
+      awk = ::boost::regbase::awk,
+      grep = ::boost::regbase::grep,
+      egrep = ::boost::regbase::egrep,
+      sed = basic,
+      perl = normal,
+      ECMAScript = normal,
+      JavaScript = normal,
+      JScript = normal
+   };
+   typedef ::boost::regbase::flag_type syntax_option_type;
+    
+    #endif
+    
+    #ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+    
+    #ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+    
+        // Build atlas
+    unsigned char* tex_pixels = NULL;
+    int tex_w, tex_h;
+    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
+    
+    
+    {    return S_OK;
+}
+    
+    static void ImGui_ImplGlfw_UpdateMousePosAndButtons()
+{
+    // Update buttons
+    ImGuiIO& io = ImGui::GetIO();
+    for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
+    {
+        // If a mouse press event came, always pass it as 'mouse held this frame', so we don't miss click-release events that are shorter than 1 frame.
+        io.MouseDown[i] = g_MouseJustPressed[i] || glfwGetMouseButton(g_Window, i) != 0;
+        g_MouseJustPressed[i] = false;
+    }
+    }
+    
+    #if SDL_HAS_CAPTURE_MOUSE && !defined(__EMSCRIPTEN__)
+    SDL_Window* focused_window = SDL_GetKeyboardFocus();
+    if (g_Window == focused_window)
+    {
+        // SDL_GetMouseState() gives mouse position seemingly based on the last window entered/focused(?)
+        // The creation of a new windows at runtime and SDL_CaptureMouse both seems to severely mess up with that, so we retrieve that position globally.
+        int wx, wy;
+        SDL_GetWindowPosition(focused_window, &wx, &wy);
+        SDL_GetGlobalMouseState(&mx, &my);
+        mx -= wx;
+        my -= wy;
+        io.MousePos = ImVec2((float)mx, (float)my);
+    }
+    
+        // Setup orthographic projection matrix
+    // Our visible imgui space lies from draw_data->DisplayPps (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right).
+    // Being agnostic of whether <d3dx9.h> or <DirectXMath.h> can be used, we aren't relying on D3DXMatrixIdentity()/D3DXMatrixOrthoOffCenterLH() or DirectX::XMMatrixIdentity()/DirectX::XMMatrixOrthographicOffCenterLH()
+    {
+        float L = draw_data->DisplayPos.x + 0.5f;
+        float R = draw_data->DisplayPos.x + draw_data->DisplaySize.x + 0.5f;
+        float T = draw_data->DisplayPos.y + 0.5f;
+        float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y + 0.5f;
+        D3DMATRIX mat_identity = { { 1.0f, 0.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f } };
+        D3DMATRIX mat_projection =
+        {
+            2.0f/(R-L),   0.0f,         0.0f,  0.0f,
+            0.0f,         2.0f/(T-B),   0.0f,  0.0f,
+            0.0f,         0.0f,         0.5f,  0.0f,
+            (L+R)/(L-R),  (T+B)/(B-T),  0.5f,  1.0f,
+        };
+        g_pd3dDevice->SetTransform(D3DTS_WORLD, &mat_identity);
+        g_pd3dDevice->SetTransform(D3DTS_VIEW, &mat_identity);
+        g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &mat_projection);
+    }
+    
+            for( int i=0; i < nVert; i++ )
+        {
+            // TODO: optimize multiplication on gpu using vertex shader/projection matrix.
+            pVertStream[i].x = cmd_list->VtxBuffer[i].pos.x * g_RenderScale.x;
+            pVertStream[i].y = cmd_list->VtxBuffer[i].pos.y * g_RenderScale.y;
+            pUVStream[i].x = cmd_list->VtxBuffer[i].uv.x;
+            pUVStream[i].y = cmd_list->VtxBuffer[i].uv.y;
+            pColStream[i] = cmd_list->VtxBuffer[i].col;
+        }
+    
+    #define GUETZLI_LOG(stats, ...)                                    \
+  do {                                                             \
+    char debug_string[1024];                                       \
+    int res = snprintf(debug_string, sizeof(debug_string),         \
+                       __VA_ARGS__);                               \
+    assert(res > 0 && 'expected successful printing');             \
+    (void)res;                                                     \
+    debug_string[sizeof(debug_string) - 1] = '\0';                 \
+    ::guetzli::PrintDebug(                      \
+         stats, std::string(debug_string));        \
+  } while (0)
+#define GUETZLI_LOG_QUANT(stats, q)                    \
+  for (int y = 0; y < 8; ++y) {                        \
+    for (int c = 0; c < 3; ++c) {                      \
+      for (int x = 0; x < 8; ++x)                      \
+        GUETZLI_LOG(stats, ' %2d', (q)[c][8 * y + x]); \
+      GUETZLI_LOG(stats, '   ');                       \
+    }                                                  \
+    GUETZLI_LOG(stats, '\n');                          \
   }
     
-    bool Box2d::HasOverlap(const LineSegment2d &line_segment) const {
-  if (line_segment.length() <= kMathEpsilon) {
-    return IsPointIn(line_segment.start());
-  }
-  if (std::fmax(line_segment.start().x(), line_segment.end().x()) < min_x() ||
-      std::fmin(line_segment.start().x(), line_segment.end().x()) > max_x() ||
-      std::fmax(line_segment.start().y(), line_segment.end().y()) < min_x() ||
-      std::fmin(line_segment.start().y(), line_segment.end().y()) > max_x()) {
+    
+    {}  // namespace guetzli
+    
+      png_infop info_ptr = png_create_info_struct(png_ptr);
+  if (!info_ptr) {
+    png_destroy_read_struct(&png_ptr, nullptr, nullptr);
     return false;
   }
-  return DistanceTo(line_segment) <= kMathEpsilon;
-}
     
-    
-    {
-    {    AINFO << 'Lidar to ' << camera_names_[i] << ' transform: ';
-    AINFO << camera_coeffient.camera_extrinsic;
-  }
-  camera_coeffient_.resize(camera_names_.size());
-  camera_coeffient_[kLongFocusIdx] = camera_coeffients['camera_25mm_focus'];
-  camera_coeffient_[kShortFocusIdx] = camera_coeffients['camera_6mm_focus'];
-  // auto &short_focus_camera_coeffient = camera_coeffients['camera_6mm_focus'];
-  // auto &long_focus_camera_coeffient = camera_coeffients['camera_25mm_focus'];
-  camera_coeffient_[kLongFocusIdx].camera_extrinsic =
-      camera_coeffient_[kLongFocusIdx].camera_extrinsic *
-      camera_coeffient_[kShortFocusIdx].camera_extrinsic;
-  AINFO << 'Lidar to long(25mm): ';
-  AINFO << camera_coeffient_[kLongFocusIdx].camera_extrinsic;
-  return true;
-}
-    
-    TEST_F(DecisionTest, green_flash) {
-  std::vector<int> color_list = {3, 3, 3, 0, 3, 0, 3, 3, 0, 3,
-                                 0, 3, 0, 3, 0, 0, 0, 0, 0, 3};
-  do_test(reviser_, color_list, GREEN);
-}
-    
-    bool PathDecision::AddLongitudinalDecision(const std::string &tag,
-                                           const std::string &object_id,
-                                           const ObjectDecisionType &decision) {
-  auto *path_obstacle = path_obstacles_.Find(object_id);
-  if (!path_obstacle) {
-    AERROR << 'failed to find obstacle';
-    return false;
-  }
-  path_obstacle->AddLongitudinalDecision(tag, decision);
-  return true;
-}
-    
-      /**
-   * @brief Override function Plan in parent class Planner.
-   * @param planning_init_point The trajectory point where planning starts.
-   * @param frame Current planning frame.
-   * @return OK if planning succeeds; error otherwise.
-   */
-  apollo::common::Status Plan(
-      const common::TrajectoryPoint& planning_init_point,
-      Frame* frame) override;
-    
-    class CurveMath {
- public:
-  CurveMath() = delete;
-  /**
-   * @brief Compute the curvature (kappa) given curve X = (x(t), y(t))
-   *        which t is an arbitrary parameter.
-   * @param dx dx / dt
-   * @param d2x d(dx) / dt
-   * @param dy dy / dt
-   * @param d2y d(dy) / dt
-   * @return the curvature
-   */
-  static double ComputeCurvature(const double dx, const double d2x,
-                                 const double dy, const double d2y);
+    void SaveQuantTables(const int q[3][kDCTBlockSize], JPEGData* jpg) {
+  const size_t kTableSize = kDCTBlockSize * sizeof(q[0][0]);
+  jpg->quant.clear();
+  int num_tables = 0;
+  for (size_t i = 0; i < jpg->components.size(); ++i) {
+    JPEGComponent* comp = &jpg->components[i];
+    // Check if we have this quant table already.
+    bool found = false;
+    for (int j = 0; j < num_tables; ++j) {
+      if (memcmp(&q[i][0], &jpg->quant[j].values[0], kTableSize) == 0) {
+        comp->quant_idx = j;
+        found = true;
+        break;
+      }
     }
+    if (!found) {
+      JPEGQuantTable table;
+      memcpy(&table.values[0], &q[i][0], kTableSize);
+      table.precision = 0;
+      for (int k = 0; k < kDCTBlockSize; ++k) {
+        assert(table.values[k] >= 0);
+        assert(table.values[k] < (1 << 16));
+        if (table.values[k] > 0xff) {
+          table.precision = 1;
+        }
+      }
+      table.index = num_tables;
+      comp->quant_idx = num_tables;
+      jpg->quant.push_back(table);
+      ++num_tables;
+    }
+  }
+}
+    
+    // Huffman code and decoding lookup table used for DC and AC coefficients.
+struct JPEGHuffmanCode {
+  JPEGHuffmanCode() : counts(kJpegHuffmanMaxBitLength + 1),
+                      values(kJpegHuffmanAlphabetSize + 1),
+                      slot_id(0),
+                      is_last(true) {}
+    }
+    
+    
+    {}  // namespace guetzli
+    
+      // Returns the next byte and skips the 0xff/0x00 escape sequences.
+  uint8_t GetNextByte() {
+    if (pos_ >= next_marker_pos_) {
+      ++pos_;
+      return 0;
+    }
+    uint8_t c = data_[pos_++];
+    if (c == 0xff) {
+      uint8_t escape = data_[pos_];
+      if (escape == 0) {
+        ++pos_;
+      } else {
+        // 0xff was followed by a non-zero byte, which means that we found the
+        // start of the next marker segment.
+        next_marker_pos_ = pos_ - 1;
+      }
+    }
+    return c;
+  }
+    
+    #include <stddef.h>
+#include <stdint.h>
