@@ -1,123 +1,113 @@
 
         
-            check_100()
+            s = 'This formula is keg-only, which means it was not symlinked into #{HOMEBREW_PREFIX}.'
+    s << '\n\n#{f.keg_only_reason}'
+    if f.lib.directory? || f.include.directory?
+      s <<
+        <<-EOS.undent_________________________________________________________72
+    
+          Find.prune if @f.skip_clean? path
+    
+        def self.cleanup_cache
+      return unless HOMEBREW_CACHE.directory?
+      HOMEBREW_CACHE.children.each do |path|
+        if path.to_s.end_with? '.incomplete'
+          cleanup_path(path) { path.unlink }
+          next
+        end
+        if path.basename.to_s == 'java_cache' && path.directory?
+          cleanup_path(path) { FileUtils.rm_rf path }
+          next
+        end
+        if prune?(path)
+          if path.file?
+            cleanup_path(path) { path.unlink }
+          elsif path.directory? && path.to_s.include?('--')
+            cleanup_path(path) { FileUtils.rm_rf path }
+          end
+          next
+        end
+    
+    group :debugging do
+  gem 'cocoapods_debug'
+    
+        export LANG=en_US.UTF-8
+    \e[0m
+    DOC
   end
     
-    
-  #
-  # Payload types were copied from xCAT-server source code (IPMI.pm)
-  #
-  RMCP_ERRORS = {
-    1 => 'Insufficient resources to create new session (wait for existing sessions to timeout)',
-    2 => 'Invalid Session ID', #this shouldn't occur...
-    3 => 'Invalid payload type',#shouldn't occur..
-    4 => 'Invalid authentication algorithm', #if this happens, we need to enhance our mechanism for detecting supported auth algorithms
-    5 => 'Invalid integrity algorithm', #same as above
-    6 => 'No matching authentication payload',
-    7 => 'No matching integrity payload',
-    8 => 'Inactive Session ID', #this suggests the session was timed out while trying to negotiate, shouldn't happen
-    9 => 'Invalid role',
-    0xa => 'Unauthorised role or privilege level requested',
-    0xb => 'Insufficient resources to create a session at the requested role',
-    0xc => 'Invalid username length',
-    0xd => 'Unauthorized name',
-    0xe => 'Unauthorized GUID',
-    0xf => 'Invalid integrity check value',
-    0x10 => 'Invalid confidentiality algorithm',
-    0x11 => 'No cipher suite match with proposed security algorithms',
-    0x12 => 'Illegal or unrecognized parameter', #have never observed this, would most likely mean a bug in xCAT or IPMI device
-  }
-    
-    module Rex
-  module Proto
-    module Kerberos
-      module Model
-        class EncKdcResponse < Element
-          # @!attribute key
-          #   @return [Rex::Proto::Kerberos::Model::EncryptionKey] The session key
-          attr_accessor :key
-          # @!attribute last_req
-          #   @return [Array<Rex::Proto::Kerberos::Model::LastRequest>] This field is returned by the KDC and specifies the time(s)
-          #   of the last request by a principal
-          attr_accessor :last_req
-          # @!attribute nonce
-          #   @return [Integer] random number
-          attr_accessor :nonce
-          # @!attribute key_expiration
-          #   @return [Time] The key-expiration field is part of the response from the
-          #   KDC and specifies the time that the client's secret key is due to expire
-          attr_accessor :key_expiration
-          # @!attribute flags
-          #   @return [Integer] This field indicates which of various options were used or
-          #   requested when the ticket was issued
-          attr_accessor :flags
-          # @!attribute auth_time
-          #   @return [Time] the time of initial authentication for the named principal
-          attr_accessor :auth_time
-          # @!attribute start_time
-          #   @return [Time] Specifies the time after which the ticket is valid
-          attr_accessor :start_time
-          # @!attribute end_time
-          #   @return [Time] This field contains the time after which the ticket will
-          #   not be honored (its expiration time)
-          attr_accessor :end_time
-          # @!attribute renew_till
-          #   @return [Time] This field is only present in tickets that have the
-          #   RENEWABLE flag set in the flags field.  It indicates the maximum
-          #   endtime that may be included in a renewal
-          attr_accessor :renew_till
-          # @!attribute srealm
-          #   @return [String] The realm part of the server's principal identifier
-          attr_accessor :srealm
-          # @!attribute sname
-          #   @return [Rex::Proto::Kerberos::Model::PrincipalName] The name part of the server's identity
-          attr_accessor :sname
-    
-              # Decodes the pa_data from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Array<Rex::Proto::Kerberos::Model::PreAuthData>]
-          def decode_asn1_pa_data(input)
-            pre_auth = []
-            input.value[0].value.each do |pre_auth_data|
-              pre_auth << Rex::Proto::Kerberos::Model::PreAuthData.decode(pre_auth_data)
+            # Removes the specified cache
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        An array of caches to remove, each specified with the same
+        #        hash as cache_descriptors_per_pod especially :spec_file and :slug
+        #
+        def remove_caches(cache_descriptors)
+          cache_descriptors.each do |desc|
+            UI.message('Removing spec #{desc[:spec_file]} (v#{desc[:version]})') do
+              FileUtils.rm(desc[:spec_file])
             end
-    
-              # Decodes the msg_type from an OpenSSL::ASN1::ASN1Data
-          #
-          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
-          # @return [Integer]
-          def decode_msg_type(input)
-            input.value[0].value.to_i
+            UI.message('Removing cache #{desc[:slug]}') do
+              FileUtils.rm_rf(desc[:slug])
+            end
           end
+        end
     
-        set :run, Proc.new { File.expand_path($0) == File.expand_path(app_file) }
-    
-          attr_reader :app, :options
-    
-          def has_vector?(request, headers)
-        return false if request.xhr?
-        return false if options[:allow_if] && options[:allow_if].call(request.env)
-        return false unless headers['Content-Type'].to_s.split(';', 2).first =~ /^\s*application\/json\s*$/
-        origin(request.env).nil? and referrer(request.env) != request.host
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
       end
     
-    # Exit cleanly from an early interrupt
-Signal.trap('INT') { exit 1 }
-    
-        filtered_specs.sort_by{|spec| spec.name}.each do |spec|
-      line = '#{spec.name}'
-      line += ' (#{spec.version})' if verbose?
-      puts(line)
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
+      end
     end
   end
     
-          post_install_messages.compact.each do |message|
-        PluginManager.ui.info(message)
-      end
+      # Used on the blog index to split posts on the <!--more--> marker
+  def excerpt(input)
+    if input.index(/<!--\s*more\s*-->/i)
+      input.split(/<!--\s*more\s*-->/i)[0]
+    else
+      input
+    end
+  end
     
-        context 'without a specific plugin' do
-      it 'display a list of plugins' do
-        result = logstash.run_command_in_path('bin/logstash-plugin list')
-        expect(result.stdout.split('\n').size).to be > 1
-      end
+        # Construct the list of dependencies to add to the current gemfile
+    specs.each_with_object([]) do |spec, install_list|
+      dependencies = spec.dependencies
+        .select { |dep| dep.type == :development }
+        .map { |dep| [dep.name] + dep.requirement.as_list }
+    
+    module LogStash module PluginManager
+  class SpecificationHelpers
+    WILDCARD = '*'
+    WILDCARD_INTO_RE = '.*'
+    
+    class LogStash::PluginManager::Pack < LogStash::PluginManager::PackCommand
+  option '--tgz', :flag, 'compress package as a tar.gz file', :default => !LogStash::Environment.windows?
+  option '--zip', :flag, 'compress package as a zip file', :default => LogStash::Environment.windows?
+  option '--[no-]clean', :flag, 'clean up the generated dump of plugins', :default => true
+  option '--overwrite', :flag, 'Overwrite a previously generated package file', :default => false
+    
+        # remove any version constrain from the Gemfile so the plugin(s) can be updated to latest version
+    # calling update without requirements will remove any previous requirements
+    plugins = plugins_to_update(previous_gem_specs_map)
+    # Skipping the major version validation when using a local cache as we can have situations
+    # without internet connection.
+    filtered_plugins = plugins.map { |plugin| gemfile.find(plugin) }
+      .compact
+      .reject { |plugin| REJECTED_OPTIONS.any? { |key| plugin.options.has_key?(key) } }
+      .each   { |plugin| gemfile.update(plugin.name) }
+    
+            context 'when fetching a gem from rubygems' do
