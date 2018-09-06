@@ -1,104 +1,186 @@
 
         
-        
-class SessionInterface(object):
-    '''The basic interface you have to implement in order to replace the
-    default session interface which uses werkzeug's securecookie
-    implementation.  The only methods you have to implement are
-    :meth:`open_session` and :meth:`save_session`, the others have
-    useful defaults which you don't need to change.
+        # Dependency labels used in the paths.
+DEPLABELS = [
+    'PAD',     'UNK',       'ROOT',    'abbrev',    'acomp', 'advcl',
+    'advmod',  'agent',     'amod',    'appos',     'attr',  'aux',
+    'auxpass', 'cc',        'ccomp',   'complm',    'conj',  'cop',
+    'csubj',   'csubjpass', 'dep',     'det',       'dobj',  'expl',
+    'infmod',  'iobj',      'mark',    'mwe',       'nc',    'neg',
+    'nn',      'npadvmod',  'nsubj',   'nsubjpass', 'num',   'number',
+    'p',       'parataxis', 'partmod', 'pcomp',     'pobj',  'poss',
+    'preconj', 'predet',    'prep',    'prepc',     'prt',   'ps',
+    'purpcl',  'quantmod',  'rcmod',   'ref',       'rel',   'suffix',
+    'title',   'tmod',      'xcomp',   'xsubj',
+]
+    
+      @classmethod
+  def default_hparams(cls):
+    '''Returns the default hyper-parameters.'''
+    return tf.contrib.training.HParams(
+        max_path_len=8,
+        num_classes=37,
+        num_epochs=30,
+        input_keep_prob=0.9,
+        learning_rate=0.001,
+        learn_lemmas=False,
+        random_seed=133,  # zero means no random seed
+        lemma_embeddings_file='glove/glove.6B.50d.bin',
+        num_pos=len(lexnet_common.POSTAGS),
+        num_dep=len(lexnet_common.DEPLABELS),
+        num_directions=len(lexnet_common.DIRS),
+        lemma_dim=50,
+        pos_dim=4,
+        dep_dim=5,
+        dir_dim=1)
+    
+    rates_train = nparray_and_transpose(rates_train)
+rates_valid = nparray_and_transpose(rates_valid)
+spikes_train = nparray_and_transpose(spikes_train)
+spikes_valid = nparray_and_transpose(spikes_valid)
+    
+        us = np.zeros([1, ntime_steps])
+    for t in range(ntime_steps):
+      x_t = alpha*x_tm1 + np.dot(W,r_tm1) + b
+      if input_time is not None and t == input_time:
+        us[0,t] = input_magnitude
+        x_t += Bin * us[0,t] # DCS is this what was used?
+      r_t = np.tanh(x_t)
+      x_tm1 = x_t
+      r_tm1 = r_t
+      rs[:,t] = r_t
+    return rs, us
+    
+        is_chief = FLAGS.task == 0
     
     
-def test_uninstalled_module_paths(modules_tmpdir, purge_module):
-    app = modules_tmpdir.join('config_module_app.py').write(
-        'import os\n'
-        'import flask\n'
-        'here = os.path.abspath(os.path.dirname(__file__))\n'
-        'app = flask.Flask(__name__)\n'
+def create_dis_pretrain_op(hparams, dis_loss, global_step):
+  '''Create a train op for pretraining.'''
+  with tf.name_scope('pretrain_generator'):
+    optimizer = tf.train.AdamOptimizer(hparams.dis_pretrain_learning_rate)
+    dis_vars = [
+        v for v in tf.trainable_variables() if v.op.name.startswith('dis')
+    ]
+    if FLAGS.dis_update_share_embedding and FLAGS.dis_share_embedding:
+      shared_embedding = [
+          v for v in tf.trainable_variables()
+          if v.op.name == 'gen/decoder/rnn/embedding'
+      ][0]
+      dis_vars.append(shared_embedding)
+    dis_grads = tf.gradients(dis_loss, dis_vars)
+    dis_grads_clipped, _ = tf.clip_by_global_norm(dis_grads,
+                                                  FLAGS.grad_clipping)
+    dis_pretrain_op = optimizer.apply_gradients(
+        zip(dis_grads_clipped, dis_vars), global_step=global_step)
+    return dis_pretrain_op
+    
+      Args:
+    session:  Current tf.Session.
+    lr_update: tf.assign operation.
+    lr_placeholder: tf.placeholder for the new learning rate.
+    new_lr: New learning rate to use.
+  '''
+  session.run(lr_update, feed_dict={lr_placeholder: new_lr})
+    
+        def iter_body(self, chunk_size):
+        yield self.body
+    
+    UNICODE = FILE_CONTENT
+
+    
+        def test_binary_file_form(self, httpbin):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('--print=B', '--form', 'POST', httpbin.url + '/post',
+                 'test@' + BIN_FILE_PATH_ARG, env=env)
+        assert bytes(BIN_FILE_CONTENT) in bytes(r)
+    
+    
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
     )
-    purge_module('config_module_app')
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
+
     
     
-def test_safe_join_toplevel_pardir():
-    from flask.helpers import safe_join
-    with pytest.raises(NotFound):
-        safe_join('/foo', '..')
+@mock.patch('httpie.core.get_response')
+def test_error_traceback(get_response):
+    exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    with raises(ConnectionError):
+        main(['--ignore-stdin', '--traceback', 'www.google.com'])
     
-        @app.route('/')
-    def index():
-        return None
+        # Raises
+        ValueError: in case of invalid `label_mode`.
+    '''
+    if label_mode not in ['fine', 'coarse']:
+        raise ValueError('`label_mode` must be one of `'fine'`, `'coarse'`.')
     
+        print_fn(
+        'Total params: {:,}'.format(trainable_count + non_trainable_count))
+    print_fn('Trainable params: {:,}'.format(trainable_count))
+    print_fn('Non-trainable params: {:,}'.format(non_trainable_count))
+    print_fn('_' * line_length)
     
-def test_appcontext_tearing_down_signal():
-    app = flask.Flask(__name__)
-    recorded = []
-    
-    
-def test_escaping(app, client):
-    text = '<p>Hello World!'
-    
-            # Run the tests in a context manager that temporarily changes the CWD to a
-        # temporary and writable directory.  If it's not possible to create or
-        # change the CWD, the original CWD will be used.  The original CWD is
-        # available from support.SAVEDCWD.
-        with support.temp_cwd(test_cwd, quiet=True):
-            self._main(tests, kwargs)
-    
-        use_timeout = (ns.timeout is not None)
-    if use_timeout:
-        faulthandler.dump_traceback_later(ns.timeout, exit=True)
-    try:
-        support.set_match_tests(ns.match_tests)
-        # reset the environment_altered flag to detect if a test altered
-        # the environment
-        support.environment_altered = False
-        if ns.failfast:
-            support.failfast = True
-        if output_on_failure:
-            support.verbose = True
-    
-    _threads_queues = weakref.WeakKeyDictionary()
-_shutdown = False
-    
-        # We set up a fake a Response (as called by EventNotification.Response)
-    # which calls the supplied callback method. Generally this callback just
-    # raises an apropriate exception, otherwise it would have to return a mock
-    # future object.
-    with patch( 'ycm.client.base_request._JsonFromFuture',
-                side_effect = response_method ):
+            layer_test(local.LocallyConnected2D,
+                   kwargs={'filters': filters,
+                           'kernel_size': (3, 3),
+                           'padding': padding,
+                           'kernel_regularizer': 'l2',
+                           'bias_regularizer': 'l2',
+                           'activity_regularizer': 'l2',
+                           'strides': strides,
+                           'data_format': 'channels_first'},
+                   input_shape=(num_samples, stack_size, num_row, num_col))
     
     
-  def tearDown( self ):
-    self._request = None
+def generate_logistic_dataset(size):
+    X = np.sort(np.random.normal(size=size))
+    return np.random.random(size=size) < 1.0 / (1.0 + np.exp(-X))
+    
+        for i, DD in enumerate(Drange):
+        print('D = %i (%i out of %i)' % (DD, i + 1, len(Drange)))
+        X = get_data(N, DD, dataset)
+        for algorithm in algorithms:
+            nbrs = neighbors.NearestNeighbors(n_neighbors=k,
+                                              algorithm=algorithm,
+                                              leaf_size=leaf_size)
+            t0 = time()
+            nbrs.fit(X)
+            t1 = time()
+            nbrs.kneighbors(X)
+            t2 = time()
+    
+                gc.collect()
+            print('benchmarking orthogonal_mp (without Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            orthogonal_mp(X, y, precompute=False,
+                          n_nonzero_coefs=n_informative)
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            omp[i_f, i_s] = delta
     
     
-@patch( 'ycmd.user_options_store._USER_OPTIONS',
-        { 'goto_buffer_command': 'same-buffer' } )
-@patch( 'vim.command', new_callable = ExtendedMock )
-def JumpToLocation_DifferentFile_SameBuffer_Modified_CannotHide_test(
-    vim_command ):
+def plot_power_iter_vs_s(power_iter, s, title):
+    plt.figure()
+    for l in sorted(s.keys()):
+        plt.plot(power_iter, s[l], label=l, marker='o')
+    plt.legend(loc='lower right', prop={'size': 10})
+    plt.suptitle(title)
+    plt.ylabel('norm discrepancy')
+    plt.xlabel('n_iter')
     
+    ratio = scikits_time / scipy_time
     
-def KeywordsFromSyntaxListOutput_StatementAndTypeGroups_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
-foogroup xxx foo bar
-             links to Statement
-bargroup xxx zoo goo
-             links to Type''' ),
-               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
-    
-    
-  def Response( self ):
-    return {
-      'completions': self._results,
-      'completion_start_column': self.request_data[ 'start_column' ]
-    }
-    
-      # On UNIX platforms, we use sys.executable as the Python interpreter path.
-  # We cannot use sys.executable on Windows because for unknown reasons, it
-  # returns the Vim executable. Instead, we use sys.exec_prefix to deduce the
-  # interpreter path.
-  python_interpreter = ( WIN_PYTHON_PATH if utils.OnWindows() else
-                         sys.executable )
-  if _EndsWithPython( python_interpreter ):
-    return python_interpreter
+        selected_algorithm = opts.selected_algorithm.split(',')
+    for key in selected_algorithm:
+        if key not in default_algorithms.split(','):
+            raise ValueError('Unknown sampling algorithm \'%s\' not in (%s).'
+                             % (key, default_algorithms))
