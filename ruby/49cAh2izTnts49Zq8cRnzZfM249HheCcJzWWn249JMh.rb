@@ -1,152 +1,199 @@
 
         
-        # Test if processing content string without any Liquid constructs, via Liquid,
-# is slower than checking whether constructs exist ( using `String#include?` )
-# and return-ing the 'plaintext' content string as is..
-#
-# Ref: https://github.com/jekyll/jekyll/pull/6735
+        require 'action_view/helpers/tags/checkable'
     
-    Before do
-  FileUtils.rm_rf(Paths.test_dir) if Paths.test_dir.exist?
-  FileUtils.mkdir_p(Paths.test_dir) unless Paths.test_dir.directory?
-  Dir.chdir(Paths.test_dir)
-  @timezone_before_scenario = ENV['TZ']
-end
-    
-      s.summary       = 'A simple, blog aware, static site generator.'
-  s.description   = 'Jekyll is a simple, blog aware, static site generator.'
-    
-            def url_valid?(url)
-          Addressable::URI.parse(url)
-          true
-        # Addressable::URI#parse only raises a TypeError
-        # https://git.io/vFfbx
-        rescue TypeError
-          Jekyll.logger.warn 'Warning:', 'The site URL does not seem to be valid, '\
-              'check the value of `url` in your config file.'
-          false
+            def render(&block)
+          render_collection_for(RadioButtonBuilder, &block)
         end
     
-    def check_link(uri)
-  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
-    if (400..422).include?(status)
-      if status != 403 && !uri.exclude?('udemy.com')
-        raise 'Request had status #{status}'
-      else
-        putc('S')
-      end
-    end
-  end
-end
+        To install Clojure you should install Leiningen:
+      brew install leiningen
+    and then follow the tutorial:
+      https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
+    EOS
+  when 'osmium' then <<-EOS.undent
+    The creator of Osmium requests that it not be packaged and that people
+    use the GitHub master branch instead.
+    EOS
+  when 'gfortran' then <<-EOS.undent
+    GNU Fortran is now provided as part of GCC, and can be installed with:
+      brew install gcc
+    EOS
+  when 'play' then <<-EOS.undent
+    Play 2.3 replaces the play command with activator:
+      brew install typesafe-activator
     
-    Then /^I should see an image in the publisher$/ do
-  photo_in_publisher.should be_present
-end
-    
-    Before do |scenario|
-  Devise.mailer.deliveries = []
-  page.driver.headers = if scenario.source_tag_names.include? '@mobile'
-                          {'User-Agent' => 'Mozilla/5.0 (Mobile; rv:18.0) Gecko/18.0 Firefox/18.0'}
-                        else
-                          {}
-                        end
-    
-      def navigate_to(page_name)
-    path = path_to(page_name)
-    if path.is_a?(Hash)
-      visit(path[:path])
-      await_elem = path[:special_elem]
-      find(await_elem.delete(:selector), await_elem)
+      def fixopt(f)
+    path = if f.linked_keg.directory? && f.linked_keg.symlink?
+      f.linked_keg.resolved_path
+    elsif f.prefix.directory?
+      f.prefix
+    elsif (kids = f.rack.children).size == 1 && kids.first.directory?
+      kids.first
     else
-      visit(path)
+      raise
     end
+    Keg.new(path).optlink
+  rescue StandardError
+    raise '#{f.opt_prefix} not present or broken\nPlease reinstall #{f.full_name}. Sorry :('
   end
+end
     
-        def render(context)
-      if parts = @text.match(/([a-zA-Z\d]*) (.*)/)
-        gist, file = parts[1].strip, parts[2].strip
-      else
-        gist, file = @text.strip, ''
-      end
-      if gist.empty?
-        ''
-      else
-        script_url = script_url_for gist, file
-        code       = get_cached_gist(gist, file) || get_gist_from_web(gist, file)
-        html_output_for script_url, code
+      # Removes any empty directories in the formula's prefix subtree
+  # Keeps any empty directions projected by skip_clean
+  # Removes any unresolved symlinks
+  def prune
+    dirs = []
+    symlinks = []
+    @f.prefix.find do |path|
+      if path == @f.libexec || @f.skip_clean?(path)
+        Find.prune
+      elsif path.symlink?
+        symlinks << path
+      elsif path.directory?
+        dirs << path
       end
     end
     
-    require 'pathname'
-require './plugins/octopress_filters'
-    
-          install_list.concat(dependencies)
-    end
-  end
-    
-        private
-    def uncompress(source)
-      temporary_directory = Stud::Temporary.pathname
-      LogStash::Util::Zip.extract(source, temporary_directory, LOGSTASH_PATTERN_RE)
-      temporary_directory
-    rescue Zip::Error => e
-      # OK Zip's handling of file is bit weird, if the file exist but is not a valid zip, it will raise
-      # a `Zip::Error` exception with a file not found message...
-      raise InvalidPackError, 'Cannot uncompress the zip: #{source}'
-    end
-    
-            it 'should raise a configuration error' do
-          expect do
-            plugin_class.new('oneString' => '${NoSuchVariable}')
-          end.to raise_error(LogStash::ConfigurationError)
-        end
+          # Find commands in Homebrew/dev-cmd
+      if ARGV.homebrew_developer?
+        puts
+        puts 'Built-in development commands'
+        puts_columns internal_development_commands
       end
     
-              it 'allow to install a specific version' do
-            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify --version 0.1.0 logstash-filter-qatest')
-            expect(command).to install_successfully
-            expect(logstash).to have_installed?('logstash-filter-qatest', '0.1.0')
-          end
-        end
+      def list_unbrewed
+    dirs  = HOMEBREW_PREFIX.subdirs.map { |dir| dir.basename.to_s }
+    dirs -= %w[Library Cellar .git]
+    
+    class Formula
+  include FormulaCompat
+  extend FormulaCompat
+    
+    class Devise::UnlocksController < DeviseController
+  prepend_before_action :require_no_authentication
+    
+    2) You are testing a Devise controller bypassing the router.
+   If so, you can explicitly tell Devise which mapping to use:
+    
+          ROUTES[module_name] = key
+    end
+    
+          # Forgets the given resource by deleting a cookie
+      def forget_me(resource)
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.forget_me!
+        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
       end
     
-        autoload :Cookies
-    autoload :Validations
-    autoload :ErrorFormatter
-    autoload :Formatter
-    autoload :Parser
-    autoload :Request
-    autoload :Env, 'grape/util/env'
-    autoload :Json, 'grape/util/json'
-    autoload :Xml, 'grape/util/xml'
-  end
-    
-          # (see #cascade?)
-      def cascade(value = nil)
-        if value.nil?
-          inheritable_setting.namespace_inheritable.keys.include?(:cascade) ? !namespace_inheritable(:cascade).nil? : true
+            if is_navigational_format?
+          session.delete(session_key)
         else
-          namespace_inheritable(:cascade, value)
+          session[session_key]
         end
       end
     
-            # Execute the given block after validations and coercions, but before
-        # any endpoint code.
-        def after_validation(&block)
-          namespace_stackable(:after_validations, block)
+          private
+    
+          if message.is_a?(Symbol)
+        options = {}
+        options[:resource_name] = scope
+        options[:scope] = 'devise.failure'
+        options[:default] = [message]
+        auth_keys = scope_class.authentication_keys
+        keys = (auth_keys.respond_to?(:keys) ? auth_keys.keys : auth_keys).map { |key| scope_class.human_attribute_name(key) }
+        options[:authentication_keys] = keys.join(I18n.translate(:'support.array.words_connector'))
+        options = i18n_options(options)
+    
+              opts.parse!(argv)
+          return argv
+        rescue OptionParser::InvalidOption, OptionParser::MissingArgument
+          raise Errors::CLIInvalidOptions, help: opts.help.chomp
         end
     
-              def config_context.success(*args)
-            entity(*args)
+            # This should return a hash of information that explains how to
+        # SSH into the machine. If the machine is not at a point where
+        # SSH is even possible, then `nil` should be returned.
+        #
+        # The general structure of this returned hash should be the
+        # following:
+        #
+        #     {
+        #       host: '1.2.3.4',
+        #       port: '22',
+        #       username: 'mitchellh',
+        #       private_key_path: '/path/to/my/key'
+        #     }
+        #
+        # **Note:** Vagrant only supports private key based authentication,
+        # mainly for the reason that there is no easy way to exec into an
+        # `ssh` prompt with a password, whereas we can pass a private key
+        # via commandline.
+        #
+        # @return [Hash] SSH information. For the structure of this hash
+        #   read the accompanying documentation for this method.
+        def ssh_info
+          nil
+        end
+    
+          # users should be able to set price when importing orders via api
+      def permitted_line_item_attributes
+        if @current_user_roles.include?('admin')
+          super + [:price, :variant_id, :sku]
+        else
+          super
+        end
+      end
+    
+            def load_order(lock = false)
+          @order = Spree::Order.lock(lock).find_by!(number: params[:id])
+          raise_insufficient_quantity and return if @order.insufficient_stock_lines.present?
+          @order.state = params[:state] if params[:state]
+          state_callback(:before)
+        end
+    
+            def prepare_event
+          return unless @event = params[:fire]
+    
+            def option_type_params
+          params.require(:option_type).permit(permitted_option_type_attributes)
+        end
+      end
+    end
+  end
+end
+
+    
+            def normalize_params
+          params[:order][:payments_attributes] = params[:order].delete(:payments) if params[:order][:payments]
+          params[:order][:shipments_attributes] = params[:order].delete(:shipments) if params[:order][:shipments]
+          params[:order][:line_items_attributes] = params[:order].delete(:line_items) if params[:order][:line_items]
+          params[:order][:ship_address_attributes] = params[:order].delete(:ship_address) if params[:order][:ship_address]
+          params[:order][:bill_address_attributes] = params[:order].delete(:bill_address) if params[:order][:bill_address]
+        end
+    
+            def destroy
+          if @property
+            authorize! :destroy, @property
+            @property.destroy
+            respond_with(@property, status: 204)
+          else
+            invalid_resource!(@property)
           end
-    
-                  in_setting = app.top_level_setting
-    
-            # Opens a root-level ParamsScope, defining parameter coercions and
-        # validations for the endpoint.
-        # @yield instance context of the new scope
-        def params(&block)
-          Grape::Validations::ParamsScope.new(api: self, type: Hash, &block)
         end
     
-          validators = validator_factories.map(&:create_validator)
+            def update
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :update).find(params[:id])
+          if @return_authorization.update_attributes(return_authorization_params)
+            respond_with(@return_authorization, default_template: :show)
+          else
+            invalid_resource!(@return_authorization)
+          end
+        end
+    
+            def remove
+          quantity = if params.key?(:quantity)
+                       params[:quantity].to_i
+                     else
+                       @shipment.inventory_units_for(variant).sum(:quantity)
+                     end
