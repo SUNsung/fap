@@ -1,422 +1,251 @@
-bool IsUrlArg(const base::CommandLine::CharType* arg) {
-  // the first character must be a letter for this to be a URL
-  auto c = *arg;
-  if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')) {
-    for (auto* p = arg + 1; *p; ++p) {
-      c = *p;
-    }
-    }
-    }
-    
-    namespace atom {
-    }
-    
-      // Delegate implementations.
-  void OnError(const std::string& error) override;
-  void OnError(const std::string& message,
-               const int code,
-               const std::string& domain) override;
-  void OnCheckingForUpdate() override;
-  void OnUpdateAvailable() override;
-  void OnUpdateNotAvailable() override;
-  void OnUpdateDownloaded(const std::string& release_notes,
-                          const std::string& release_name,
-                          const base::Time& release_date,
-                          const std::string& update_url) override;
-    
-    #include 'atom/common/native_mate_converters/callback.h'
-#include 'atom/common/native_mate_converters/file_path_converter.h'
-#include 'base/bind.h'
-#include 'base/files/file_util.h'
-#include 'content/public/browser/tracing_controller.h'
-#include 'native_mate/dictionary.h'
-    
-    void ShowSaveDialog(const file_dialog::DialogSettings& settings,
-                    mate::Arguments* args) {
-  v8::Local<v8::Value> peek = args->PeekNext();
-  file_dialog::SaveDialogCallback callback;
-  if (mate::Converter<file_dialog::SaveDialogCallback>::FromV8(
-          args->isolate(), peek, &callback)) {
-    file_dialog::ShowSaveDialog(settings, callback);
-  } else {
-    base::FilePath path;
-    if (file_dialog::ShowSaveDialog(settings, &path))
-      args->Return(path);
+
+        
+        namespace llvm {
+template<> struct DenseMapInfo<DefaultCacheKey> {
+  static inline DefaultCacheKey getEmptyKey() {
+    return { DenseMapInfo<void*>::getEmptyKey(), nullptr };
   }
-}
-    
-    using atom::api::LabelButton;
-    
-     protected:
-  explicit LabelButton(const std::string& text);
-  ~LabelButton() override;
-    
-    using namespace swift;
-    
-      image_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
-  label_file.read(reinterpret_cast<char*>(&magic), 4);
-  magic = swap_endian(magic);
-  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
-  image_file.read(reinterpret_cast<char*>(&num_items), 4);
-  num_items = swap_endian(num_items);
-  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
-  num_labels = swap_endian(num_labels);
-  CHECK_EQ(num_items, num_labels);
-  image_file.read(reinterpret_cast<char*>(&rows), 4);
-  rows = swap_endian(rows);
-  image_file.read(reinterpret_cast<char*>(&cols), 4);
-  cols = swap_endian(cols);
-    
-      inline Dtype data_at(const int n, const int c, const int h,
-      const int w) const {
-    return cpu_data()[offset(n, c, h, w)];
+  static inline DefaultCacheKey getTombstoneKey() {
+    return { DenseMapInfo<void*>::getTombstoneKey(), nullptr };
   }
-    
-     protected:
-  /// @copydoc AbsValLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-      Blob<Dtype> mean_, variance_, temp_, x_norm_;
-  bool use_global_stats_;
-  Dtype moving_average_fraction_;
-  int channels_;
-  Dtype eps_;
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of DeConvolutionLayer.
- *        Fallback to DeConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates deconvolution through forward kernels for filtering and
- * bias plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
-*/
-template <typename Dtype>
-class CuDNNDeconvolutionLayer : public DeconvolutionLayer<Dtype> {
- public:
-  explicit CuDNNDeconvolutionLayer(const LayerParameter& param)
-    : DeconvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-                          const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-                       const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNDeconvolutionLayer();
-    }
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
- */
-template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
- public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
-    }
-    
-    
-    {        return dict[versionKey].Value<size_t>();
-    }
-    
-        TrainerPtr CreateTrainer(const FunctionPtr& model, const FunctionPtr& lossFunction, const std::vector<LearnerPtr>& parameterLearners,
-                             const std::vector<ProgressWriterPtr>& progressWriters)
-    {
-        return MakeSharedObject<Trainer>(model, lossFunction, parameterLearners, progressWriters);
-    }
-    
-            static FunctionPtr Deserialize(const Dictionary& dictionary,
-            const std::unordered_map<std::wstring, Variable>& uidToVariableMap,
-            const CNTK::DeviceDescriptor& device);
-    
-    
-    {
-    {                valueData = MakeSharedObject<NDArrayView>(dataType, valueDataShape, colStarts.data(), rowIndices.data(), (void*)nonZeroValues.data(), totalNumNonZeroValues, device, readOnly);
-            }
-            else
-            {
-                valueData = MakeSharedObject<NDArrayView>(dataType, valueDataShape, DeviceDescriptor::CPUDevice());
-                auto maxSequenceSizeInElements = fullyDefinedSampleShape.TotalSize() * maxSequenceLength;
-                switch (dataType)
-                {
-                case DataType::Float:
-                {
-                    float* dataBuffer = valueData->WritableDataBuffer<float>();
-                    for (size_t i = 0; i < numSequences; ++i)
-                    {
-                        const float* currentSequenceBuffer = sequences[i]->DataBuffer<float>();
-                        auto currentSequenceSizeInElements = sequences[i]->Shape().TotalSize();
-                        std::copy(currentSequenceBuffer, currentSequenceBuffer + currentSequenceSizeInElements, dataBuffer + (maxSequenceSizeInElements * i));
-                    }
-                    break;
-                }
-                case DataType::Double:
-                {
-                    double* dataBuffer = valueData->WritableDataBuffer<double>();
-                    for (size_t i = 0; i < numSequences; ++i)
-                    {
-                        const double* currentSequenceBuffer = sequences[i]->DataBuffer<double>();
-                        auto currentSequenceSizeInElements = sequences[i]->Shape().TotalSize();
-                        std::copy(currentSequenceBuffer, currentSequenceBuffer + currentSequenceSizeInElements, dataBuffer + (maxSequenceSizeInElements * i));
-                    }
-                    break;
-                }
-                default:
-                    NOT_IMPLEMENTED;
-                }
-            }
-        }
-    
-        private:
-        bool m_isReadOnly;
-        NDShape m_sampleShape;
-        std::vector<Axis> m_sampleDynamicAxes;
-        NDShape m_unpackedShape;
-    
-    
-    {            if ((m_varKind == VariableKind::Parameter) || (m_varKind == VariableKind::Constant))
-            {
-                if (m_shape.HasFreeDimension())
-                    InvalidArgument('Parameter/Constant '%S' has invalid shape '%S'; it is illegal for a Parameter/Constant to have a FreeDimension.', AsString().c_str(), m_shape.AsString().c_str());
-            }
-        }
-    
-    template <>
-struct is_random_imp_selector<true>
-{
-   template <class I>
-   struct rebind
-   {
-      typedef is_random_pointer_imp<I> type;
-   };
-};
-    
-       void BOOST_REGEX_CALL set_named_subs(boost::shared_ptr<named_sub_type> subs)
-   {
-      m_named_subs = subs;
-   }
-    
-    
-    {
-    {#if defined(BOOST_REGEX_NON_RECURSIVE) && !defined(BOOST_NO_EXCEPTIONS)
-   }
-   catch(...)
-   {
-      // unwind all pushed states, apart from anything else this
-      // ensures that all the states are correctly destructed
-      // not just the memory freed.
-      while(unwind(true)){}
-      throw;
-   }
-#endif
-}
-    
-    template <class BidiIterator>
-struct saved_single_repeat : public saved_state
-{
-   std::size_t count;
-   const re_repeat* rep;
-   BidiIterator last_position;
-   saved_single_repeat(std::size_t c, const re_repeat* r, BidiIterator lp, int arg_id) 
-      : saved_state(arg_id), count(c), rep(r), last_position(lp){}
-};
-    
-          //
-      // options specific to basic group:
-      //
-      no_char_classes = 1 << 8,                   // [[:CLASS:]] not allowed
-      no_intervals = 1 << 9,                      // {x,y} not allowed
-      bk_plus_qm = 1 << 10,                       // uses \+ and \?
-      bk_vbar = 1 << 11,                          // use \| for alternatives
-      emacs_ex = 1 << 12,                         // enables emacs extensions
-    
-    template <class charT>
-class cpp_regex_traits;
-template <class charT>
-struct c_regex_traits;
-template <class charT>
-class w32_regex_traits;
-    
-       pimpl pdata;
-    
-    
-    
-    template <class BidiIterator, class Allocator, class charT, class traits>
-bool regex_search(BidiIterator first, BidiIterator last, 
-                  match_results<BidiIterator, Allocator>& m, 
-                  const basic_regex<charT, traits>& e, 
-                  match_flag_type flags,
-                  BidiIterator base)
-{
-   if(e.flags() & regex_constants::failbit)
+  static unsigned getHashValue(const DefaultCacheKey &Val) {
+    uintptr_t Hash = Val.CBs->keyHashCB(Val.Key, nullptr);
+    return DenseMapInfo<uintptr_t>::getHashValue(Hash);
+  }
+  static bool isEqual(const DefaultCacheKey &LHS, const DefaultCacheKey &RHS) {
+    if (LHS.Key == RHS.Key)
+      return true;
+    if (LHS.Key == DenseMapInfo<void*>::getEmptyKey() ||
+        LHS.Key == DenseMapInfo<void*>::getTombstoneKey() ||
+        RHS.Key == DenseMapInfo<void*>::getEmptyKey() ||
+        RHS.Key == DenseMapInfo<void*>::getTombstoneKey())
       return false;
-    }
-    
-      /**
-   * \brief Updates linear model given gradients.
-   *
-   * \param in_gpair            The gradient pair statistics of the data.
-   * \param data                Input data matrix.
-   * \param model               Model to be updated.
-   * \param sum_instance_weight The sum instance weights, used to normalise l1/l2 penalty.
-   */
-    
-      virtual void PredictBatch(DMatrix* dmat, HostDeviceVector<bst_float>* out_preds,
-                            const gbm::GBTreeModel& model, int tree_begin,
-                            unsigned ntree_limit = 0) = 0;
-    
-      size_t Read(void* dptr, size_t size) override {
-    size_t nbuffer = buffer_.length() - buffer_ptr_;
-    if (nbuffer == 0) return strm_->Read(dptr, size);
-    if (nbuffer < size) {
-      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, nbuffer);
-      buffer_ptr_ += nbuffer;
-      return nbuffer + strm_->Read(reinterpret_cast<char*>(dptr) + nbuffer,
-                                   size - nbuffer);
-    } else {
-      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, size);
-      buffer_ptr_ += size;
-      return size;
-    }
+    return LHS.CBs->keyIsEqualCB(LHS.Key, RHS.Key, nullptr);
   }
-    
-    /*!
- * \brief perform numerically safe logsum
- * \param begin The begining iterator.
- * \param end The end iterator.
- * \return the iterator point to the maximum value.
- * \tparam Iterator The type of the iterator.
- */
-template<typename Iterator>
-inline float LogSum(Iterator begin, Iterator end) {
-  float mx = *begin;
-  for (Iterator it = begin; it != end; ++it) {
-    mx = std::max(mx, *it);
-  }
-  float sum = 0.0f;
-  for (Iterator it = begin; it != end; ++it) {
-    sum += std::exp(*it - mx);
-  }
-  return mx + std::log(sum);
-}
-    
-    /*!
- * \brief Macro to register sparse page format.
- *
- * \code
- * // example of registering a objective
- * XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(raw)
- * .describe('Raw binary data format.')
- * .set_body([]() {
- *     return new RawFormat();
- *   });
- * \endcode
- */
-#define XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(Name)                       \
-  DMLC_REGISTRY_REGISTER(::xgboost::data::SparsePageFormatReg, SparsePageFormat, Name)
-    
-    
-    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
-/// configurations from Osquery's configurations.
-class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-  Status update(const std::string& source, const ParserConfig& config) override;
 };
-} // namespace osquery
+} // namespace llvm
+    
+    void DiverseStackBase::pushNewStorageSlow(std::size_t needed) {
+  bool wasInline = isAllocatedInline();
+    }
+    
+      if (auto subTypedef = type->getAs<clang::TypedefType>()) {
+    if (classifyTypedef(subTypedef->getDecl()))
+      return forTypedef(subTypedef->getDecl());
+    return forInvalid();
+  }
+    
+    #endif // SWIFT_IMPORTER_CFTYPEINFO_H
 
     
-    #include 'osquery/config/parsers/prometheus_targets.h'
     
+    {}  // namespace caffe
     
-    {
-    {      // View has been updated
-      osquery::query('DROP VIEW ' + name, r);
-      auto s = osquery::query('CREATE VIEW ' + name + ' AS ' + query, r);
-      if (s.ok()) {
-        setDatabaseValue(kQueries, kConfigViews + name, query);
-      } else {
-        LOG(INFO) << 'Error creating view (' << name << '): ' << s.getMessage();
-      }
+    A common use case is with the DeconvolutionLayer acting as upsampling.
+You can upsample a feature map with shape of (B, C, H, W) by any integer factor
+using the following proto.
+\code
+layer {
+  name: 'upsample', type: 'Deconvolution'
+  bottom: '{{bottom_name}}' top: '{{top_name}}'
+  convolution_param {
+    kernel_size: {{2 * factor - factor % 2}} stride: {{factor}}
+    num_output: {{C}} group: {{C}}
+    pad: {{ceil((factor - 1) / 2.)}}
+    weight_filler: { type: 'bilinear' } bias_term: false
+  }
+  param { lr_mult: 0 decay_mult: 0 }
+}
+\endcode
+Please use this by replacing `{{}}` with your values. By specifying
+`num_output: {{C}} group: {{C}}`, it behaves as
+channel-wise convolution. The filter shape of this deconvolution layer will be
+(C, 1, K, K) where K is `kernel_size`, and this filler will set a (K, K)
+interpolation kernel for every channel of the filter identically. The resulting
+shape of the top feature map will be (B, C, factor * H, factor * W).
+Note that the learning rate and the
+weight decay are set to 0 in order to keep coefficient values of bilinear
+interpolation unchanged during training. If you apply this to an image, this
+operation is equivalent to the following call in Python with Scikit.Image.
+\code{.py}
+out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
+\endcode
+ */
+template <typename Dtype>
+class BilinearFiller : public Filler<Dtype> {
+ public:
+  explicit BilinearFiller(const FillerParameter& param)
+      : Filler<Dtype>(param) {}
+  virtual void Fill(Blob<Dtype>* blob) {
+    CHECK_EQ(blob->num_axes(), 4) << 'Blob must be 4 dim.';
+    CHECK_EQ(blob->width(), blob->height()) << 'Filter must be square';
+    Dtype* data = blob->mutable_cpu_data();
+    int f = ceil(blob->width() / 2.);
+    Dtype c = (blob->width() - 1) / (2. * f);
+    for (int i = 0; i < blob->count(); ++i) {
+      Dtype x = i % blob->width();
+      Dtype y = (i / blob->width()) % blob->height();
+      data[i] = (1 - fabs(x / f - c)) * (1 - fabs(y / f - c));
     }
+    CHECK_EQ(this->filler_param_.sparse(), -1)
+         << 'Sparsity not supported by this Filler.';
   }
+};
     
-    TEST_F(PacksTests, test_discovery_cache) {
-  Config c;
-  // This pack and discovery query are valid, expect the SQL to execute.
-  c.addPack('valid_discovery_pack', '', getPackWithValidDiscovery().doc());
-  size_t query_count = 0U;
-  size_t query_attemts = 5U;
-  for (size_t i = 0; i < query_attemts; i++) {
-    c.scheduledQueries(
-        ([&query_count](std::string name, const ScheduledQuery& query) {
-          query_count++;
-        }));
-  }
-  EXPECT_EQ(query_count, query_attemts);
-    }
+      /**
+   * @brief Return whether 'anonymous' top blobs are created automatically
+   *        by the layer.
+   *
+   * If this method returns true, Net::Init will create enough 'anonymous' top
+   * blobs to fulfill the requirement specified by ExactNumTopBlobs() or
+   * MinTopBlobs().
+   */
+  virtual inline bool AutoTopBlobs() const { return false; }
     
-      if (WIFEXITED(process_status)) {
-    status = WEXITSTATUS(process_status);
-    return PROCESS_EXITED;
-  }
+     protected:
+  virtual void InternalThreadEntry();
+  virtual void load_batch(Batch<Dtype>* batch) = 0;
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
     
-    {  if (code != STILL_ACTIVE) {
-    exitCode = code;
-    return true;
-  }
-#else
-  int status = 0;
-  if (::waitpid(process.nativeHandle(), &status, 0) == -1) {
-    return false;
-  }
-  if (WIFEXITED(status)) {
-    exitCode = WEXITSTATUS(status);
-    return true;
-  }
+    {  size_t tempDataSize;
+  void *tempData1, *tempData2;
+};
 #endif
-  return false;
-}
     
-    TEST_F(QueryTests, test_add_and_get_current_results) {
-  // Test adding a 'current' set of results to a scheduled query instance.
-  auto query = getOsqueryScheduledQuery();
-  auto cf = Query('foobar', query);
-  uint64_t counter = 128;
-  auto status = cf.addNewResults(getTestDBExpectedResults(), 0, counter);
-  EXPECT_TRUE(status.ok());
-  EXPECT_EQ(status.toString(), 'OK');
-  EXPECT_EQ(counter, 0UL);
+    #endif  // CAFFE_CUDNN_POOLING_LAYER_HPP_
+
+    
+    
+    {}  // namespace caffe
+    
+    static const uint8_t kRangeLimitLut[4 * 256] = {
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
+  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
+  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
+  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
+  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
+  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
+  96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
+ 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+ 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
+ 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
+ 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
+ 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
+ 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
+ 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
+ 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
+ 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+};
+    
+    // Performs in-place floating point 8x8 DCT on block[0..63].
+// Note that the DCT used here is the DCT-2 with the first term multiplied by
+// 1/sqrt(2) and the result scaled by 1/2.
+void ComputeBlockDCTDouble(double block[64]);
+    
+    namespace guetzli {
     }
     
-    TEST_F(TablesTests, test_constraint_matching) {
-  struct ConstraintList cl;
-  // An empty constraint list has expectations.
-  EXPECT_FALSE(cl.exists());
-  EXPECT_FALSE(cl.exists(GREATER_THAN));
-  EXPECT_TRUE(cl.notExistsOrMatches('some'));
+      tmp0 = in[stride];
+  tmp1 = kIDCTMatrix[ 1] * tmp0;
+  tmp2 = kIDCTMatrix[ 9] * tmp0;
+  tmp3 = kIDCTMatrix[17] * tmp0;
+  tmp4 = kIDCTMatrix[25] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] += tmp3;
+  out[3] += tmp4;
+  out[4] -= tmp4;
+  out[5] -= tmp3;
+  out[6] -= tmp2;
+  out[7] -= tmp1;
+    
+    namespace guetzli {
     }
     
-    void DHTRoutingTable::setTaskQueue(DHTTaskQueue* taskQueue)
+    DHTResponseMessage::~DHTResponseMessage() = default;
+    
+    #endif // D_DHT_RESPONSE_MESSAGE_H
+
+    
+    void DHTRoutingTableDeserializer::deserialize(const std::string& filename)
 {
-  taskQueue_ = taskQueue;
-}
+  A2_LOG_INFO(fmt('Loading DHT routing table from %s.', filename.c_str()));
+  BufferedFile fp(filename.c_str(), BufferedFile::READ);
+  if (!fp) {
+    throw DL_ABORT_EX(
+        fmt('Failed to load DHT routing table from %s', filename.c_str()));
+  }
+  char header[8];
+  memset(header, 0, sizeof(header));
+  // magic
+  header[0] = 0xa1u;
+  header[1] = 0xa2u;
+  // format ID
+  header[2] = 0x02u;
+  // version
+  header[6] = 0;
+  header[7] = 0x03u;
+    }
     
-    public:
-  DHTTaskExecutor(int numConcurrent);
+    #include 'common.h'
     
-      virtual void executeTask() CXX11_OVERRIDE;
+      DHTMessageDispatcher* dispatcher_;
     
-    public:
-  DHTTokenTracker();
+      virtual void
+  addPeriodicTask2(const std::shared_ptr<DHTTask>& task) CXX11_OVERRIDE;
+    
+    bool DHTUnknownMessage::send() { return true; }
+    
+        bool add(const std::string& addr);
