@@ -1,123 +1,130 @@
 
         
-            parser = argparse.ArgumentParser()
-    parser.add_argument('-e', '--estimators', nargs='+', required=True,
-                        choices=ESTIMATORS)
-    args = vars(parser.parse_args())
+        import re
+import sys
     
-                gc.collect()
-            print('- benchmarking Lasso')
-            clf = Lasso(alpha=alpha, fit_intercept=False,
-                        precompute=precompute)
-            tstart = time()
-            clf.fit(X, Y)
-            lasso_results.append(time() - tstart)
+        if test_config is None:
+        # load the instance config, if it exists, when not testing
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        # load the test config if passed in
+        app.config.update(test_config)
     
-        print('Generating skeleton for %s' % f)
+        def fake_init_db():
+        Recorder.called = True
     
-    First example
--------------
-The first example illustrates how robust covariance estimation can help
-concentrating on a relevant cluster when another one exists. Here, many
-observations are confounded into one and break down the empirical covariance
-estimation.
-Of course, some screening tools would have pointed out the presence of two
-clusters (Support Vector Machines, Gaussian Mixture Models, univariate
-outlier detection, ...). But had it been a high-dimensional example, none
-of these could be applied that easily.
+            # indicator if the context was preserved.  Next time another context
+        # is pushed the preserved context is popped.
+        self.preserved = False
     
-    # plot shrinkage coefficient
-plt.subplot(2, 1, 2)
-plt.errorbar(n_samples_range, lw_shrinkage.mean(1), yerr=lw_shrinkage.std(1),
-             label='Ledoit-Wolf', color='navy', lw=2)
-plt.errorbar(n_samples_range, oa_shrinkage.mean(1), yerr=oa_shrinkage.std(1),
-             label='OAS', color='darkorange', lw=2)
-plt.xlabel('n_samples')
-plt.ylabel('Shrinkage')
-plt.legend(loc='lower right')
-plt.ylim(plt.ylim()[0], 1. + (plt.ylim()[1] - plt.ylim()[0]) / 10.)
-plt.xlim(5, 31)
-    
-    # -- General configuration -----------------------------------------------------
+            return session.modified or (
+            session.permanent and app.config['SESSION_REFRESH_EACH_REQUEST']
+        )
     
     
-  def NeedsReparse( self ):
-    return self._parse_tick != self._ChangedTick()
+# Core signals.  For usage examples grep the source code or consult
+# the API documentation in docs/api.rst as well as docs/signals.rst
+template_rendered = _signals.signal('template-rendered')
+before_render_template = _signals.signal('before-render-template')
+request_started = _signals.signal('request-started')
+request_finished = _signals.signal('request-finished')
+request_tearing_down = _signals.signal('request-tearing-down')
+got_request_exception = _signals.signal('got-request-exception')
+appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
+appcontext_pushed = _signals.signal('appcontext-pushed')
+appcontext_popped = _signals.signal('appcontext-popped')
+message_flashed = _signals.signal('message-flashed')
+
     
-              present_dialog.assert_has_exact_calls( [
-            PresentDialog_Confirm_Call( MESSAGE )
-          ] )
-          post_data_to_handler.assert_has_exact_calls( [
-            call( { 'filepath': FILE_NAME }, 'load_extra_conf_file' )
-          ] )
+            content = response.read()
+        if self.config.check_ip_content not in content:
+            self.logger.warn('app check content:%s', content)
+            return False
     
     
-GENERIC_RESPONSE = {
-  'clang': {
-    'has_support': True,
-    'version': 'Clang version'
-  },
-  'completer': {
-    'items': [
-      {
-        'key': 'key',
-        'value': 'value'
-      }
-    ],
-    'name': 'Completer name',
-    'servers': [
-      {
-        'address': '127.0.0.1',
-        'executable': '/path/to/executable',
-        'extras': [
-          {
-            'key': 'key',
-            'value': 'value'
-          }
-        ],
-        'is_running': True,
-        'logfiles': [
-          '/path/to/stdout/logfile',
-          '/path/to/stderr/logfile'
-        ],
-        'name': 'Server name',
-        'pid': 12345,
-        'port': 1234
-      }
-    ]
-  },
-  'extra_conf': {
-    'is_loaded': False,
-    'path': '/path/to/extra/conf'
-  },
-  'python': {
-    'executable': '/path/to/python/interpreter',
-    'version': 'Python version'
-  }
-}
+max_timeout = 5
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
     
-        elif isinstance( candidate, str ) or isinstance( candidate, bytes ):
-      new_candidates.append(
-        { 'abbr': candidate,
-          'word': NewCandidateInsertionText( candidate, text_after_cursor ) } )
-  return new_candidates
+class SniManager(object):
+    plus = ['-', '', '.']
+    end = ['com', 'net', 'ml', 'org', 'us']
     
-    # This code finds all faces in a list of images using the CNN model.
-#
-# This demo is for the _special case_ when you need to find faces in LOTS of images very quickly and all the images
-# are the exact same size. This is common in video processing applications where you have lots of video frames
-# to process.
-#
-# If you are processing a lot of images and using a GPU with CUDA, batch processing can be ~3x faster then processing
-# single images at a time. But if you aren't using a GPU, then batch processing isn't going to be very helpful.
-#
-# PLEASE NOTE: This example requires OpenCV (the `cv2` library) to be installed only to read the video file.
-# OpenCV is *not* required to use the face_recognition library. It's only required if you want to run this
-# specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
+    A Lexer emits Token objects which are usually buffered by a TokenStream. A
+Parser can build a Tree, if the output=AST option has been set in the grammar.
+    
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
+    
+                try:
+                self.mTokens()
+                
+                if self._state.token is None:
+                    self.emit()
+                    
+                elif self._state.token == SKIP_TOKEN:
+                    continue
+    
+            if stop is None:
+            stop = len(self.tokens) - 1
+        elif not isinstance(stop, int):
+            stop = stop.index
+        
+        if stop >= len(self.tokens):
+            stop = len(self.tokens) - 1
+    
+    # Create the base text message.
+msg = EmailMessage()
+msg['Subject'] = 'Ayons asperges pour le déjeuner'
+msg['From'] = Address('Pepé Le Pew', 'pepe', 'example.com')
+msg['To'] = (Address('Penelope Pussycat', 'penelope', 'example.com'),
+             Address('Fabrette Pussycat', 'fabrette', 'example.com'))
+msg.set_content('''\
+Salut!
+    
+      def NewCandidateInsertionText( to_insert, text_after_cursor ):
+    overlap_len = OverlapLength( to_insert, text_after_cursor )
+    if overlap_len:
+      return to_insert[ :-overlap_len ]
+    return to_insert
+    
+    
+  def Start( self ):
+    request_data = BuildRequestData( self._buffer_number )
+    if self._extra_data:
+      request_data.update( self._extra_data )
+    request_data[ 'event_name' ] = self._event_name
+    
+    
+  def Extra_Info_No_Doc_String_test( self ):
+    self._Check( 0, {
+      'insertion_text':  'INSERTION TEXT',
+      'menu_text':       'MENU TEXT',
+      'extra_menu_info': 'EXTRA MENU INFO',
+      'kind':            'K',
+      'extra_data': {
+      },
+    }, {
+      'word'     : 'INSERTION TEXT',
+      'abbr'     : 'MENU TEXT',
+      'menu'     : 'EXTRA MENU INFO',
+      'kind'     : 'k',
+      'dup'      : 1,
+      'empty'    : 1,
+      'user_data': '0',
+    } )
+    
+    
+@YouCompleteMeInstance( { 'g:ycm_open_loclist_on_ycm_diags': 1 } )
+@patch( 'ycm.youcompleteme.YouCompleteMe.FiletypeCompleterExistsForFiletype',
+        return_value = True )
+@patch( 'ycm.vimsupport.PostVimMessage', new_callable = ExtendedMock )
+@patch( 'ycm.vimsupport.SetLocationListForWindow', new_callable = ExtendedMock )
+@patch( 'ycm.vimsupport.OpenLocationList', new_callable = ExtendedMock )
+def YouCompleteMe_ShowDiagnostics_DiagnosticsFound_OpenLocationList_test(
+  ycm,
+  open_location_list,
+  set_location_list_for_window,
+  post_vim_message,
+  *args ):
