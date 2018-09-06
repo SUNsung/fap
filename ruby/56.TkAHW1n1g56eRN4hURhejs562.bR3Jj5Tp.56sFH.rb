@@ -1,141 +1,83 @@
 
         
-            it 'sends escape characters correctly to the backend' do
-      emitter.events << Event.new(payload: {data: 'Line 1\nLine 2\nLine 3'})
-      formatting_agent.sources << emitter
-      formatting_agent.options.merge!('instructions' => {'data' => '{{data | newline_to_br | strip_newlines | split: '<br />' | join: ','}}'})
-      formatting_agent.save!
+        source 'https://rubygems.org'
     
-        it 'returns a FontAwesome icon element' do
-      icon = icon_tag('fa-copy', class: 'text-info')
-      expect(icon).to be_html_safe
-      expect(Nokogiri(icon).at('i.fa.fa-copy.text-info')).to be_a Nokogiri::XML::Element
-    end
+      def resource_params
+    params.fetch(resource_name, {})
   end
     
-        it 'should ignore strings which just contain a JSONPath' do
-      expect(LiquidMigrator.convert_string('$.data')).to eq('$.data')
-      expect(LiquidMigrator.convert_string('$first_title')).to eq('$first_title')
-      expect(LiquidMigrator.convert_string(' $.data', true)).to eq(' $.data')
-      expect(LiquidMigrator.convert_string('lorem $.data', true)).to eq('lorem $.data')
+    class DeviseCreateUsers < ActiveRecord::Migration
+  def change
+    create_table(:users) do |t|
+      t.string :email,              null: false
+      t.string :encrypted_password, null: true
+      t.timestamps null: false
     end
-    it 'should raise an exception when encountering complex JSONPaths' do
-      expect { LiquidMigrator.convert_string('$.data.test.*', true) }.
-        to raise_error('JSONPath '$.data.test.*' is too complex, please check your migration.')
-    end
+    
+      def self.activerecord51? # :nodoc:
+    defined?(ActiveRecord) && ActiveRecord.gem_version >= Gem::Version.new('5.1.x')
   end
     
-      describe '#value_at' do
-    it 'returns the value at a JSON path' do
-      expect(Utils.value_at({ :foo => { :bar => :baz }}.to_json, 'foo.bar')).to eq('baz')
-      expect(Utils.value_at({ :foo => { :bar => { :bing => 2 } }}, 'foo.bar.bing')).to eq(2)
-      expect(Utils.value_at({ :foo => { :bar => { :bing => 2 } }}, 'foo.bar[?(@.bing == 2)].bing')).to eq(2)
-    end
-    
-    # TODO:
-# group :mongoid do
-#   gem 'mongoid', '~> 4.0.0'
-# end
-
-    
-    class Devise::PasswordsController < DeviseController
-  prepend_before_action :require_no_authentication
-  # Render the #edit only if coming from a reset password email link
-  append_before_action :assert_reset_token_passed, only: :edit
-    
-      private
-    
-      # Store scopes mappings.
-  mattr_reader :mappings
-  @@mappings = {}
-    
-          generate_helpers!(Devise::URL_HELPERS)
-    
-        unless env['devise.skip_trackable']
-      warden.session(scope)['last_request_at'] = Time.now.utc.to_i
-    end
-  end
-end
-
-    
-    group :app do
-  gem 'rack'
-  gem 'sinatra'
-  gem 'sinatra-contrib'
-  gem 'thin'
-  gem 'sprockets'
-  gem 'sprockets-helpers'
-  gem 'erubi'
-  gem 'browser'
-  gem 'sass'
-  gem 'coffee-script'
-end
-    
-      def self.defaults
-    %w(css dom dom_events html http javascript).map(&method(:find))
-  end
-    
-          def additional_options
-        if self.class.internal_urls
-          super.merge! \
-            only: self.class.internal_urls.to_set,
-            only_patterns: nil,
-            skip: nil,
-            skip_patterns: nil,
-            skip_links: nil,
-            fixed_internal_urls: true
-        else
-          super
-        end
+          # Sign in a user bypassing the warden callbacks and stores the user
+      # straight in session. This option is useful in cases the user is already
+      # signed in, but we want to refresh the credentials in session.
+      #
+      # Examples:
+      #
+      #   bypass_sign_in @user, scope: :user
+      #   bypass_sign_in @user
+      def bypass_sign_in(resource, scope: nil)
+        scope ||= Devise::Mapping.find_scope!(resource)
+        expire_data_after_sign_in!
+        warden.session_serializer.store(resource, scope)
       end
     
-        # This returns whether the guest is ready to work. If this returns
-    # `false`, then {#detect!} should be called in order to detect the
-    # guest OS.
-    #
-    # @return [Boolean]
-    def ready?
-      !!capability_host_chain
+        if last_request_at.is_a? Integer
+      last_request_at = Time.at(last_request_at).utc
+    elsif last_request_at.is_a? String
+      last_request_at = Time.parse(last_request_at)
+    end
+    
+      include SignatureVerification
+    
+        def set_account_moderation_note
+      @account_moderation_note = AccountModerationNote.find(params[:id])
     end
   end
 end
 
     
-            # Returns the instance variables as a hash of key-value pairs.
-        def instance_variables_hash
-          instance_variables.inject({}) do |acc, iv|
-            acc[iv.to_s[1..-1]] = instance_variable_get(iv)
-            acc
-          end
+        def filter_params
+      params.permit(
+        :domain_name
+      )
+    end
+  end
+end
+
+    
+            if params[:create_and_unresolve]
+          @report.unresolve!
+          log_action :reopen, @report
         end
     
-    Then(/the current symlink points to the previous release/) do
-  previous_release_path = @release_paths[-2]
+        def load_imports
+      if options.show_tasks && Rake::Task.task_defined?('load:defaults')
+        invoke 'load:defaults'
+        set(:stage, '')
+        Dir[deploy_config_path].each { |f| add_import f }
+      end
     
-        def configure_backend
-      backend.configure do |sshkit|
-        configure_sshkit_output(sshkit)
-        sshkit.output_verbosity = fetch(:log_level)
-        sshkit.default_env      = fetch(:default_env)
-        sshkit.backend          = fetch(:sshkit_backend, SSHKit::Backend::Netssh)
-        sshkit.backend.configure do |backend|
-          backend.pty                = fetch(:pty)
-          backend.connection_timeout = fetch(:connection_timeout)
-          backend.ssh_options        = (backend.ssh_options || {}).merge(fetch(:ssh_options, {}))
+          def built_in_scm_plugin_class_name
+        'Capistrano::SCM::#{scm_name.to_s.capitalize}'
+      end
+    
+          def self.[](host)
+        host.is_a?(Server) ? host : new(host)
+      end
+    
+    SPREE_GEMS = %w(core api cmd backend frontend sample).freeze
+    
+            def show
+          respond_with(@property)
         end
-      end
-    end
-    
-          def echo?
-        (options || {}).fetch(:echo, true)
-      end
-    end
-  end
-end
-
-    
-            print_deprecation_warnings_if_applicable
-    
-          def has_role?(role)
-        roles.include? role.to_sym
-      end
