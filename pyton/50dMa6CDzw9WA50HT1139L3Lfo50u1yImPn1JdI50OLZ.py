@@ -1,62 +1,129 @@
 
         
-            # Create and fill-in the class template
-    numfields = len(field_names)
-    argtxt = repr(field_names).replace(''', '')[1:-1]   # tuple repr without parens or quotes
-    reprtxt = ', '.join('%s=%%r' % name for name in field_names)
-    dicttxt = ', '.join('%r: t[%d]' % (name, pos) for pos, name in enumerate(field_names))
-    template = '''class %(typename)s(tuple):
-        '%(typename)s(%(argtxt)s)' \n
-        __slots__ = () \n
-        _fields = %(field_names)r \n
-        def __new__(_cls, %(argtxt)s):
-            return _tuple.__new__(_cls, (%(argtxt)s)) \n
-        @classmethod
-        def _make(cls, iterable, new=tuple.__new__, len=len):
-            'Make a new %(typename)s object from a sequence or iterable'
-            result = new(cls, iterable)
-            if len(result) != %(numfields)d:
-                raise TypeError('Expected %(numfields)d arguments, got %%d' %% len(result))
-            return result \n
-        def __repr__(self):
-            return '%(typename)s(%(reprtxt)s)' %% self \n
-        def _asdict(t):
-            'Return a new dict which maps field names to their values'
-            return {%(dicttxt)s} \n
-        def _replace(_self, **kwds):
-            'Return a new %(typename)s object replacing specified fields with new values'
-            result = _self._make(map(kwds.pop, %(field_names)r, _self))
-            if kwds:
-                raise ValueError('Got unexpected field names: %%r' %% kwds.keys())
-            return result \n
-        def __getnewargs__(self):
-            return tuple(self) \n\n''' % locals()
-    for i, name in enumerate(field_names):
-        template += '        %s = _property(_itemgetter(%d))\n' % (name, i)
+        
+class Unaccent(Transform):
+    bilateral = True
+    lookup_name = 'unaccent'
+    function = 'UNACCENT'
     
-    # If false, no module index is generated.
-#html_use_modindex = True
+        def exists(self, session_key):
+        '''
+        Return True if the given session_key already exists.
+        '''
+        raise NotImplementedError('subclasses of SessionBase must provide an exists() method')
     
-    def main():
-    for name, fn in [('sequential', sequential),
-                     ('processes', with_process_pool_executor),
-                     ('threads', with_thread_pool_executor)]:
-        sys.stdout.write('%s: ' % name.ljust(12))
-        start = time.time()
-        if fn() != [True] * len(PRIMES):
-            sys.stdout.write('failed\n')
-        else:
-            sys.stdout.write('%.2f seconds\n' % (time.time() - start))
+        def flush(self):
+        '''
+        Remove the current session data from the database and regenerate the
+        key.
+        '''
+        self.clear()
+        self.delete(self.session_key)
+        self._session_key = None
+
     
-        # If not a dictionary or a list, the response is necessarily a
-    # scalar: boolean, number, string, etc. In this case, we print
-    # it to the user.
-    if not isinstance( self._response, ( dict, list ) ):
-      return self._HandleBasicResponse()
     
-        if not self._message_poll_request.Poll( self ):
-      # Don't poll again until some event which might change the server's mind
-      # about whether to provide messages for the current buffer (e.g. buffer
-      # visit, file ready to parse, etc.)
-      self._message_poll_request = None
-      return False
+def _get_sitemap_full_url(sitemap_url):
+    if not django_apps.is_installed('django.contrib.sites'):
+        raise ImproperlyConfigured('ping_google requires django.contrib.sites, which isn't installed.')
+    
+    
+class Antirectifier(layers.Layer):
+    '''This is the combination of a sample-wise
+    L2 normalization with the concatenation of the
+    positive part of the input with the negative part
+    of the input. The result is a tensor of samples that are
+    twice as large as the input samples.
+    
+    
+def top_k_categorical_accuracy(y_true, y_pred, k=5):
+    return K.mean(K.in_top_k(y_pred, K.argmax(y_true, axis=-1), k), axis=-1)
+    
+    
+def get(identifier):
+    if identifier is None:
+        return None
+    if isinstance(identifier, dict):
+        return deserialize(identifier)
+    elif isinstance(identifier, six.string_types):
+        config = {'class_name': str(identifier), 'config': {}}
+        return deserialize(config)
+    elif callable(identifier):
+        return identifier
+    else:
+        raise ValueError('Could not interpret regularizer identifier: ' +
+                         str(identifier))
+
+    
+            return False
+    
+    def message_html(title, banner, detail=''):
+    MESSAGE_TEMPLATE = '''
+    <html><head>
+    <meta http-equiv='content-type' content='text/html;charset=utf-8'>
+    <title>$title</title>
+    <style><!--
+    body {font-family: arial,sans-serif}
+    div.nav {margin-top: 1ex}
+    div.nav A {font-size: 10pt; font-family: arial,sans-serif}
+    span.nav {font-size: 10pt; font-family: arial,sans-serif; font-weight: bold}
+    div.nav A,span.big {font-size: 12pt; color: #0000cc}
+    div.nav A {font-size: 10pt; color: black}
+    A.l:link {color: #6f6f6f}
+    A.u:link {color: green}
+    //--></style>
+    </head>
+    <body text=#000000 bgcolor=#ffffff>
+    <table border=0 cellpadding=2 cellspacing=0 width=100%>
+    <tr><td bgcolor=#3366cc><font face=arial,sans-serif color=#ffffff><b>Message</b></td></tr>
+    <tr><td> </td></tr></table>
+    <blockquote>
+    <H1>$banner</H1>
+    $detail
+    <p>
+    </blockquote>
+    <table width=100% cellpadding=0 cellspacing=0><tr><td bgcolor=#3366cc><img alt='' width=1 height=4></td></tr></table>
+    </body></html>
+    '''
+    return string.Template(MESSAGE_TEMPLATE).substitute(title=title, banner=banner, detail=detail)
+    
+    
+    def getText(self):
+        '''
+        Return the text matched so far for the current token or any
+        text override.
+        '''
+        if self._state.text is not None:
+            return self._state.text
+        
+        return self.input.substring(
+            self._state.tokenStartCharIndex,
+            self.getCharIndex()-1
+            )
+    
+        def test_iter_meta(self):
+        result = False
+        for k in self.dir.meta:
+            if k == 'terms_of_service':
+                result = self.dir.meta[k] == 'https://example.com/acme/terms'
+        self.assertTrue(result)
+    
+        Takes in Augeas path and returns the file name
+    
+                # If equal and set is not empty... assume same server
+            if self.name is not None or self.aliases:
+                return True
+        # If we're looking for a generic vhost,
+        # don't return one with a ServerName
+        elif self.name:
+            return False
+    
+        @certbot_util.patch_get_utility()
+    def test_multiple_names(self, mock_util):
+        mock_util().menu.return_value = (display_util.OK, 5)
+    
+        _multiprocess_can_split_ = True
+    
+            self.assertTrue(self.addr_default.conflicts(self.addr))
+        self.assertTrue(self.addr_default.conflicts(self.addr1))
+        self.assertTrue(self.addr_default.conflicts(self.addr_defined))
