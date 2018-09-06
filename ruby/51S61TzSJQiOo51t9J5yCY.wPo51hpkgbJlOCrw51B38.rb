@@ -1,64 +1,173 @@
 
         
-            def javascripts_path
-      File.join assets_path, 'javascripts'
-    end
+        describe 'Dry running an Agent', js: true do
+  let(:agent)   { agents(:bob_website_agent) }
+  let(:formatting_agent) { agents(:bob_formatting_agent) }
+  let(:user)    { users(:bob) }
+  let(:emitter) { agents(:bob_weather_agent) }
     
-          # generate variables template
-      save_file 'templates/project/_bootstrap-variables.sass',
-                '// Override Bootstrap variables here (defaults from bootstrap-sass v#{Bootstrap::VERSION}):\n\n' +
-                    File.read('#{save_to}/_variables.scss').lines[1..-1].join.gsub(/^(?=\$)/, '// ').gsub(/ !default;/, '')
-    end
-    
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
-    
-    desc 'Test all Gemfiles from test/*.gemfile'
-task :test_all_gemfiles do
-  require 'term/ansicolor'
-  require 'pty'
-  require 'shellwords'
-  cmd      = 'bundle install --quiet && bundle exec rake --trace'
-  statuses = Dir.glob('./test/gemfiles/*{[!.lock]}').map do |gemfile|
-    env = {'BUNDLE_GEMFILE' => gemfile}
-    cmd_with_env = '  (#{env.map { |k, v| 'export #{k}=#{Shellwords.escape v}' } * ' '}; #{cmd})'
-    $stderr.puts Term::ANSIColor.cyan('Testing\n#{cmd_with_env}')
-    PTY.spawn(env, cmd) do |r, _w, pid|
-      begin
-        r.each_line { |l| puts l }
-      rescue Errno::EIO
-        # Errno:EIO error means that the process has finished giving output.
-      ensure
-        ::Process.wait pid
-      end
-    end
-    [$? && $?.exitstatus == 0, cmd_with_env]
+      it 'asks to accept conflicts when the scenario was modified' do
+    DefaultScenarioImporter.seed(user)
+    agent = user.agents.where(name: 'Rain Notifier').first
+    agent.options['expected_receive_period_in_days'] = 9001
+    agent.save!
+    visit new_scenario_imports_path
+    attach_file('Option 2: Upload a Scenario JSON File', File.join(Rails.root, 'data/default_scenario.json'))
+    click_on 'Start Import'
+    expect(page).to have_text('This Scenario already exists in your system.')
+    expect(page).to have_text('9001')
+    check('I confirm that I want to import these Agents.')
+    click_on 'Finish Import'
+    expect(page).to have_text('Import successful!')
   end
-  failed_cmds = statuses.reject(&:first).map { |(_status, cmd_with_env)| cmd_with_env }
-  if failed_cmds.empty?
-    $stderr.puts Term::ANSIColor.green('Tests pass with all gemfiles')
-  else
-    $stderr.puts Term::ANSIColor.red('Failing (#{failed_cmds.size} / #{statuses.size})\n#{failed_cmds * '\n'}')
-    exit 1
+    
+      describe '#relative_distance_of_time_in_words' do
+    it 'in the past' do
+      expect(relative_distance_of_time_in_words(Time.now-5.minutes)).to eq('5m ago')
+    end
+    
+            it 'should add an error when no service is selected' do
+          expect(services_scenario_import.import).to eq(false)
+          expect(services_scenario_import.errors[:base].length).to eq(1)
+        end
+      end
+    
+      describe 'migrating the 'make_message' format' do
+    it 'should work' do
+      expect(LiquidMigrator.convert_make_message('<message>')).to eq('{{message}}')
+      expect(LiquidMigrator.convert_make_message('<new.message>')).to eq('{{new.message}}')
+      expect(LiquidMigrator.convert_make_message('Hello <world>. How is <nested.life>')).to eq('Hello {{world}}. How is {{nested.life}}')
+    end
+  end
+    
+        it 'always succeeds in sorting even if it finds pairs of incomparable objects' do
+      time = Time.now
+      tuples = [
+        [2,   'a', time - 1],  # 0
+        [1,   'b', nil],       # 1
+        [1,   'b', time],      # 2
+        ['2', nil, time],      # 3
+        [1,   nil, time],      # 4
+        [nil, 'a', time + 1],  # 5
+        [2,   'a', time],      # 6
+      ]
+      orders = [true, false, true]
+      expected = tuples.values_at(3, 6, 0, 4, 2, 1, 5)
+    
+    describe ConvertWebsiteAgentTemplateForMerge do
+  let :old_extract do
+    {
+      'url' => { 'css' => '#comic img', 'value' => '@src' },
+      'title' => { 'css' => '#comic img', 'value' => '@alt' },
+      'hovertext' => { 'css' => '#comic img', 'value' => '@title' }
+    }
+  end
+    
+        def as_json
+      { name: name, path: path, type: type }
+    end
   end
 end
+
     
-          def initialize(pairs = {})
-        @pairs = pairs
-        pairs.each do |key, value|
-          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
-          send(:'#{key}=', value)
+        def queue(request)
+      request.on_complete(&method(:handle_response))
+      super
+    end
+    
+        def file_path_for(url)
+      File.join self.class.dir, url.remove(base_url.to_s)
+    end
+    
+            css('.l-sub-section', '.alert', '.banner').each do |node|
+          node.name = 'blockquote'
         end
     
-      def inspect
-    '#<#{self.class.name}: #{name.inspect} #{tags.inspect}>'
+          def get_type
+        if slug.start_with?('guide/')
+          'Guide'
+        elsif slug.start_with?('cookbook/')
+          'Cookbook'
+        elsif slug == 'glossary'
+          'Guide'
+        else
+          type = at_css('.nav-title.is-selected').content.strip
+          type.remove! ' Reference'
+          type << ': #{mod}' if mod
+          type
+        end
+      end
+    
+        false
   end
     
-              if @address.update_attributes(address_params)
-            respond_with(@address, default_template: :show)
-          else
-            invalid_resource!(@address)
+        cmd_paths = PATH.new(ENV['PATH']).append(Tap.cmd_directories) unless path
+    path ||= which('brew-#{cmd}', cmd_paths)
+    path ||= which('brew-#{cmd}.rb', cmd_paths)
+    
+          spec['version'] = Bootstrap::VERSION
+    
+        def initialize(*args)
+      @s = StringScanner.new(*args)
+    end
+    
+        # Converts &-
+    def convert_less_ampersand(less)
+      regx = /^\.badge\s*\{[\s\/\w\(\)]+(&{1}-{1})\w.*?^}$/m
+    
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
+      end
+    end
+    
+        execute 'INSERT INTO share_visibilities (user_id, shareable_id, shareable_type) ' \
+            'SELECT post_visibility.user_id, photos.id, 'Photo' FROM photos ' \
+            'INNER JOIN posts ON posts.guid = photos.status_message_guid AND posts.type = 'StatusMessage' ' \
+            'LEFT OUTER JOIN share_visibilities ON share_visibilities.shareable_id = photos.id ' \
+            'INNER JOIN share_visibilities AS post_visibility ON post_visibility.shareable_id = posts.id ' \
+            'WHERE photos.public = false AND share_visibilities.shareable_id IS NULL ' \
+            'AND post_visibility.shareable_type = 'Post''
+  end
+    
+        change.down do
+      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
+      Mention.where(mentions_container_type: 'Comment').destroy_all
+      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
+    end
+  end
+end
+
+    
+    When /^I toggle nsfw posts$/ do
+  find('.toggle_nsfw_state', match: :first).click
+end
+    
+      # Indicates an user error. This is defined in cocoapods-core.
+  #
+  class Informative < PlainInformative
+    def message
+      '[!] #{super}'.red
+    end
+  end
+    
+          def unmasked_token?(token)
+        token.length == TOKEN_LENGTH
+      end
+    
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
           end
         end
+        bad_cookies.empty?
+      end
