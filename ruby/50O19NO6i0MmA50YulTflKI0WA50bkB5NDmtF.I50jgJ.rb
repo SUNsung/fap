@@ -1,206 +1,154 @@
 
         
-          def self.source_dir; SOURCE_DIR; end
-end
-    
-        # The URL template to render collection's documents at.
-    #
-    # Returns the URL template to render collection's documents at.
-    def url_template
-      @url_template ||= metadata.fetch('permalink') do
-        Utils.add_permalink_suffix('/:collection/:path', site.permalink_style)
-      end
-    end
-    
-            def url_absolute(url)
-          return true if Addressable::URI.parse(url).absolute?
-          Jekyll.logger.warn 'Warning:', 'Your site URL does not seem to be absolute, '\
-              'check the value of `url` in your config file.'
-          false
+                  @coverage.to_f.round(2)
         end
+    
+            def key_text
+          @entity.to_s
+        end
+    
+            # The logger for this class.
+        LOGGER = Log4r::Logger.new('vagrant::plugin::v1::plugin')
+    
+            def initialize(env, config)
+          @env    = env
+          @config = config
+        end
+    
+            # This returns all the registered provider capabilities.
+        #
+        # @return [Hash]
+        def provider_capabilities
+          results = Hash.new { |h, k| h[k] = Registry.new }
+    
+    @@ layout
+<html>
+  <head>
+    <title>Super Simple Chat with Sinatra</title>
+    <meta charset='utf-8' />
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
+  </head>
+  <body><%= yield %></body>
+</html>
+    
+        <% unless bad_request?(exception) %>
+      <div id='get'>
+        <h3 id='get-info'>GET</h3>
+        <% if req.GET and not req.GET.empty? %>
+          <table class='req'>
+            <tr>
+              <th>Variable</th>
+              <th>Value</th>
+            </tr>
+             <% req.GET.sort_by { |k, v| k.to_s }.each { |key, val| %>
+            <tr>
+              <td><%=h key %></td>
+              <td class='code'><div><%=h val.inspect %></div></td>
+            </tr>
+            <% } %>
+          </table>
+        <% else %>
+          <p class='no-data'>No GET data.</p>
+        <% end %>
+        <div class='clear'></div>
+      </div> <!-- /GET -->
+    
+          def compare_with_real_token(token, session)
+        secure_compare(token, real_token(session))
       end
-    end
-  end
-end
-
     
-              new_theme_name = args.join('_')
-          theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-          Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.' if theme.path.exist?
-    
-    BASE_URI = ENV['BASE_URI'] || 'https://github.com/jondot/awesome-react-native'
-    
-          Homebrew.failed = true
-      print '#{f}: ' if ff.size > 1
-      puts missing.join(' ')
-    end
-  end
-end
-
-    
-    module Homebrew
-  module_function
-    
-        change.down do
-      Notification.where(type: 'Notifications::MentionedInPost').update_all(type: 'Notifications::Mentioned')
-      Mention.where(mentions_container_type: 'Comment').destroy_all
-      Notification.where(type: 'Notifications::MentionedInComment').destroy_all
-    end
-  end
-end
-
-    
-    # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
-# order to ease the transition to Capybara we set the default here. If you'd
-# prefer to use XPath just remove this line and adjust any selectors in your
-# steps to use the XPath syntax.
-Capybara.default_selector = :css
-    
-    module NavigationHelpers
-  def path_to(page_name)
-    case page_name
-    when /^person_photos page$/
-      person_photos_path(@me.person)
-    when /^the home(?: )?page$/
-      stream_path
-    when /^the mobile path$/
-      force_mobile_path
-    when /^the user applications page$/
-      api_openid_connect_user_applications_path
-    when /^the tag page for '([^\']*)'$/
-      tag_path(Regexp.last_match(1))
-    when /^its ([\w ]+) page$/
-      send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', @it)
-    when /^the mobile ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path', format: 'mobile')
-    when /^the ([\w ]+) page$/
-      public_send('#{Regexp.last_match(1).gsub(/\W+/, '_')}_path')
-    when /^my edit profile page$/
-      edit_profile_path
-    when /^my profile page$/
-      person_path(@me.person)
-    when /^my acceptance form page$/
-      invite_code_path(InvitationCode.first)
-    when /^the requestors profile$/
-      person_path(Request.where(recipient_id: @me.person.id).first.sender)
-    when /^'([^\']*)''s page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      {path:         person_path(p),
-       # '#diaspora_handle' on desktop, '.description' on mobile
-       special_elem: {selector: '#diaspora_handle, .description', text: p.diaspora_handle}
-      }
-    when /^'([^\']*)''s photos page$/
-      p = User.find_by_email(Regexp.last_match(1)).person
-      person_photos_path p
-    when /^my account settings page$/
-      edit_user_path
-    when /^forgot password page$/
-      new_user_password_path
-    when %r{^'(/.*)'}
-      Regexp.last_match(1)
-    else
-      raise 'Can't find mapping from \'#{page_name}\' to a path.'
-    end
-  end
-    
-        # the username that was just entered for registration
-    expect(page).to have_field('profile_first_name', with: @username)
-  end
-end
-    
-          delete :destroy, params: {post_id: @message.id, id: like2.id}, format: :json
-      expect(response.status).to eq(404)
-      expect(response.body).to eq(I18n.t('likes.destroy.error'))
-      expect(Like.count).to eq(like_count)
-    end
-  end
-end
-
-    
-            Dir.chdir(includes_dir) do
-          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
-          if choices.include?(file)
-            source = File.read(file)
-            partial = Liquid::Template.parse(source)
-            context.stack do
-              rtn = rtn + partial.render(context)
-            end
-          else
-            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
           end
         end
+        bad_cookies.empty?
       end
-      rtn
-    end
-  end
     
-        def post_render(post)
-      OctopressFilters::post_filter(post)
-    end
-  end
-end
-    
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
-        end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
+      desc 'Install all spree gems'
+  task install: :build do
+    for_each_gem do |gem_path|
+      Bundler.with_clean_env do
+        sh 'gem install #{gem_path}'
       end
     end
-    
-    namespace :gem do
-  def version
-    require 'spree/core/version'
-    Spree.version
   end
     
-              scope = scope.not_deleted unless params[:show_deleted]
-          scope = scope.not_discontinued unless params[:show_discontinued]
-        else
-          scope = Product.accessible_by(current_ability, :read).active.includes(*product_includes)
-        end
-    
-            def destroy
-          @image = scope.images.accessible_by(current_ability, :destroy).find(params[:id])
-          @image.destroy
-          respond_with(@image, status: 204)
-        end
-    
-            def find_line_item
-          id = params[:id].to_i
-          order.line_items.detect { |line_item| line_item.id == id } or
-            raise ActiveRecord::RecordNotFound
-        end
-    
-            def update
-          authorize! params[:action], @payment
-          if !@payment.editable?
-            render 'update_forbidden', status: 403
-          elsif @payment.update_attributes(payment_params)
-            respond_with(@payment, default_template: :show)
+              if Spree::Cart::Update.call(order: @order, params: line_items_attributes).success?
+            @line_item.reload
+            respond_with(@line_item, default_template: :show)
           else
-            invalid_resource!(@payment)
+            invalid_resource!(@line_item)
           end
         end
     
-            def create
-          @order = Spree::Order.find_by!(number: params.fetch(:shipment).fetch(:order_id))
-          authorize! :read, @order
-          authorize! :create, Shipment
-          quantity = params[:quantity].to_i
-          @shipment = @order.shipments.create(stock_location_id: params.fetch(:stock_location_id))
+            def new; end
+    
+              if @product_property.update_attributes(product_property_params)
+            respond_with(@product_property, status: 200, default_template: :show)
+          else
+            invalid_resource!(@product_property)
+          end
+        end
     
             def show
-          @stock_movement = scope.find(params[:id])
-          respond_with(@stock_movement)
+          authorize! :admin, ReturnAuthorization
+          @return_authorization = order.return_authorizations.accessible_by(current_ability, :read).find(params[:id])
+          respond_with(@return_authorization)
         end
+    
+        output = LogStash::Bundler.invoke!(bundler_options)
+    
+        signal_error('No plugins found') if filtered_specs.empty?
+    
+            PluginManager.ui.debug('Looking if package named: #{plugin_name} exists at #{uri}')
+    
+        FileUtils.rm_rf(LogStash::Environment::CACHE_PATH)
+    validate_cache_location
+    archive_manager.extract(package_file, LogStash::Environment::CACHE_PATH)
+    puts('Unpacked at #{LogStash::Environment::CACHE_PATH}')
+    puts('The unpacked plugins can now be installed in local-only mode using bin/logstash-plugin install --local [plugin name]')
+  end
+    
+      # create list of plugins to update
+  def plugins_to_update(previous_gem_specs_map)
+    if update_all?
+      previous_gem_specs_map.values.map{|spec| spec.name}
+    else
+      # If the plugins isn't available in the gemspec or in 
+      # the gemfile defined with a local path, we assume the plugins is not
+      # installed.
+      not_installed = plugins_arg.select{|plugin| !previous_gem_specs_map.has_key?(plugin.downcase) && !gemfile.find(plugin) }
+      signal_error('Plugin #{not_installed.join(', ')} is not installed so it cannot be updated, aborting') unless not_installed.empty?
+      plugins_arg
+    end
+  end
+    
+    project_versions_yaml_path = File.expand_path('../versions.yml', File.dirname(__FILE__))
+if File.exist?(project_versions_yaml_path)
+  # we need to copy the project level versions.yml into the gem root
+  # to be able to package it into the gems file structure
+  # as the require 'logstash-core-plugin-api/version' loads the yaml file from within the gem root.
+  #
+  # we ignore the copy in git and we overwrite an existing file
+  # each time we build the logstash-core gem
+  original_lines = IO.readlines(project_versions_yaml_path)
+  original_lines << ''
+  original_lines << '# This is a copy the project level versions.yml into this gem's root and it is created when the gemspec is evaluated.'
+  gem_versions_yaml_path = File.expand_path('./versions-gem-copy.yml', File.dirname(__FILE__))
+  File.open(gem_versions_yaml_path, 'w') do |new_file|
+    # create or overwrite
+    new_file.puts(original_lines)
+  end
+end
+    
+              it 'successfully install the plugin when verification is disabled' do
+            command = logstash.run_command_in_path('bin/logstash-plugin install --no-verify logstash-filter-qatest')
+            expect(command).to install_successfully
+            expect(logstash).to have_installed?('logstash-filter-qatest')
+          end
