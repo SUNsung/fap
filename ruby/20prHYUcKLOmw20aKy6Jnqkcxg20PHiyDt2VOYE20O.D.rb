@@ -1,113 +1,100 @@
 
         
-            s = 'This formula is keg-only, which means it was not symlinked into #{HOMEBREW_PREFIX}.'
-    s << '\n\n#{f.keg_only_reason}'
-    if f.lib.directory? || f.include.directory?
-      s <<
-        <<-EOS.undent_________________________________________________________72
-    
-          Find.prune if @f.skip_clean? path
-    
-        def self.cleanup_cache
-      return unless HOMEBREW_CACHE.directory?
-      HOMEBREW_CACHE.children.each do |path|
-        if path.to_s.end_with? '.incomplete'
-          cleanup_path(path) { path.unlink }
-          next
-        end
-        if path.basename.to_s == 'java_cache' && path.directory?
-          cleanup_path(path) { FileUtils.rm_rf path }
-          next
-        end
-        if prune?(path)
-          if path.file?
-            cleanup_path(path) { path.unlink }
-          elsif path.directory? && path.to_s.include?('--')
-            cleanup_path(path) { FileUtils.rm_rf path }
-          end
-          next
-        end
-    
-    group :debugging do
-  gem 'cocoapods_debug'
-    
-        export LANG=en_US.UTF-8
-    \e[0m
-    DOC
-  end
-    
-            # Removes the specified cache
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        An array of caches to remove, each specified with the same
-        #        hash as cache_descriptors_per_pod especially :spec_file and :slug
-        #
-        def remove_caches(cache_descriptors)
-          cache_descriptors.each do |desc|
-            UI.message('Removing spec #{desc[:spec_file]} (v#{desc[:version]})') do
-              FileUtils.rm(desc[:spec_file])
-            end
-            UI.message('Removing cache #{desc[:slug]}') do
-              FileUtils.rm_rf(desc[:slug])
-            end
-          end
-        end
-    
-      class IncludeArrayTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedFragment}+)/
-    def initialize(tag_name, markup, tokens)
-      if markup =~ Syntax
-        @array_name = $1
-      else
-        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+                @io.puts
+        print_exception(exception, status, @indent)
+        @io.flush
       end
     
-          Dir.chdir(code_path) do
-        code = file.read
-        @filetype = file.extname.sub('.','') if @filetype.nil?
-        title = @title ? '#{@title} (#{file.basename})' : file.basename
-        url = '/#{code_dir}/#{@file}'
-        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
-        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
-        TemplateWrapper::safe_wrap(source)
+          Utils.safe_glob(site.in_dest_dir, ['**', '*'], File::FNM_DOTMATCH).each do |file|
+        next if file =~ HIDDEN_FILE_REGEX || file =~ regex || dirs.include?(file)
+        files << file
       end
-    end
+    
+                output.to_s.each_line do |line|
+              Jekyll.logger.info('Bundler:'.green, line.strip) unless line.to_s.empty?
+            end
+    
+      # DBM stores ruby objects as a ruby `String`. Hence, when fetching the data,
+  # to convert the ruby string back into a ruby `Hash`, the string is converted
+  # into a JSON compatible string in `ruby_hash_to_json_string`, where it may
+  # later be parsed by `JSON.parse` in the `json_string_to_ruby_hash` method
+  #
+  # @param  [Hash] ruby `Hash` to be converted to `JSON` string
+  # @return [String]
+  def ruby_hash_to_json_string(hash)
+    hash.to_json
   end
     
-      # Used on the blog index to split posts on the <!--more--> marker
-  def excerpt(input)
-    if input.index(/<!--\s*more\s*-->/i)
-      input.split(/<!--\s*more\s*-->/i)[0]
-    else
-      input
-    end
+              begin
+            lineno = frame.lineno-1
+            lines = ::File.readlines(frame.filename)
+            frame.pre_context_lineno = [lineno-CONTEXT, 0].max
+            frame.pre_context = lines[frame.pre_context_lineno...lineno]
+            frame.context_line = lines[lineno].chomp
+            frame.post_context_lineno = [lineno+CONTEXT, lines.size].min
+            frame.post_context = lines[lineno+1..frame.post_context_lineno]
+          rescue
+          end
+    
+          def mask_authenticity_token(session)
+        token = set_token(session)
+        mask_token(token)
+      end
+    
+          def referrer(env)
+        ref = env['HTTP_REFERER'].to_s
+        return if !options[:allow_empty_referrer] and ref.empty?
+        URI.parse(ref).host || Request.new(env).host
+      rescue URI::InvalidURIError
+      end
+    
+          def call(env)
+        request  = Request.new(env)
+        get_was  = handle(request.GET)
+        post_was = handle(request.POST) rescue nil
+        app.call env
+      ensure
+        request.GET.replace  get_was  if get_was
+        request.POST.replace post_was if post_was
+      end
+    
+        context 'opening brace on same line as first element' do
+      it 'allows closing brace on same line from last element' do
+        expect_no_offenses(construct(false, false))
+      end
+    
+            expect(new_source).to eq(<<-RUBY.strip_indent)
+          def func
+            for _ in [1, 2, 3] do
+              something
+            end
+          end
+        RUBY
+      end
+    
+            def check(node)
+          return unless node.body && node.body.kwbegin_type?
+    
+      it 'accepts a def with required begin block' do
+    expect_no_offenses(<<-RUBY.strip_indent)
+      def func
+        begin
+          ala
+        rescue => e
+          bala
+        end
+        something
+      end
+    RUBY
   end
     
-        # Construct the list of dependencies to add to the current gemfile
-    specs.each_with_object([]) do |spec, install_list|
-      dependencies = spec.dependencies
-        .select { |dep| dep.type == :development }
-        .map { |dep| [dep.name] + dep.requirement.as_list }
-    
-    module LogStash module PluginManager
-  class SpecificationHelpers
-    WILDCARD = '*'
-    WILDCARD_INTO_RE = '.*'
-    
-    class LogStash::PluginManager::Pack < LogStash::PluginManager::PackCommand
-  option '--tgz', :flag, 'compress package as a tar.gz file', :default => !LogStash::Environment.windows?
-  option '--zip', :flag, 'compress package as a zip file', :default => LogStash::Environment.windows?
-  option '--[no-]clean', :flag, 'clean up the generated dump of plugins', :default => true
-  option '--overwrite', :flag, 'Overwrite a previously generated package file', :default => false
-    
-        # remove any version constrain from the Gemfile so the plugin(s) can be updated to latest version
-    # calling update without requirements will remove any previous requirements
-    plugins = plugins_to_update(previous_gem_specs_map)
-    # Skipping the major version validation when using a local cache as we can have situations
-    # without internet connection.
-    filtered_plugins = plugins.map { |plugin| gemfile.find(plugin) }
-      .compact
-      .reject { |plugin| REJECTED_OPTIONS.any? { |key| plugin.options.has_key?(key) } }
-      .each   { |plugin| gemfile.update(plugin.name) }
-    
-            context 'when fetching a gem from rubygems' do
+          # The body of the method definition.
+      #
+      # @note this can be either a `begin` node, if the method body contains
+      #       multiple expressions, or any other node, if it contains a single
+      #       expression.
+      #
+      # @return [Node] the body of the method definition
+      def body
+        node_parts[0]
+      end
