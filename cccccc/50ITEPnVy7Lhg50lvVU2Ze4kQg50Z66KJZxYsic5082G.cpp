@@ -1,17 +1,64 @@
 
         
-        #include <cstdint>      // for int32_t
+        #include 'intsimdmatrix.h'
+#include 'genericvector.h'      // for GenericVector
+#include 'intsimdmatrixavx2.h'  // for IntSimdMatrixAVX2
+#include 'intsimdmatrixsse.h'   // for IntSimdMatrixSSE
+#include 'matrix.h'             // for GENERIC_2D_ARRAY
+#include 'simddetect.h'         // for SIMDDetect
     
-    #ifdef __SSE4_1__
-// Computes part of matrix.vector v = Wu. Computes 1 result.
-static void PartialMatrixDotVector1(const int8_t* wi, const double* scales,
-                                    const int8_t* u, int num_in, int num_out,
-                                    double* v) {
-  int total = IntDotProductSSE(u, wi, num_in);
-  // Add in the bias and correct for integer values.
-  *v = (static_cast<double>(total) / INT8_MAX + wi[num_in]) * *scales;
-}
+    // Base class for a SIMD function to multiply a matrix by a vector, with sources
+// of 8-bit signed integer, and result in a double, after appropriate scaling.
+// Assumes a specific method of multiplication that can be applied to any size
+// and number of SIMD registers as follows:
+// int32_t results are computed with num_outputs_per_register_ in each of
+// max_output_registers_ result registers, repeatedly until it would make too
+// many results, then the number of registers is halved, and so-on down to a
+// single result register. The last calculation only outputs the required number
+// of results instead of writing beyond the bounds. Eg: matrix has 75 outputs,
+//  num_outputs_per_register_ = 4, and max_output_registers_ = 8,
+// Step 1: 8x4=32 results are computed,
+// Step 2: 8x4=32 again, total 64,
+// Step 3: 2x4=8 (since 8x4 is too many, so is 4x4), total 72,
+// Step 4: 1x3, total 75.
+// Each step above is computed using a PartialFunc, which runs over the input
+// vector once. The input is read one registerful of num_inputs_per_register_
+// at a time (presumably 4x num_outputs_per_register_ since they are int8_t)
+// so the inputs MUST BE PADDED to a multiple of num_inputs_per_register_.
+// Since it is slow (on Intel at least) to horizontally add in a register,
+// provision is made to process num_inputs_per_group_ inputs at a time, with
+// the group being replicated num_input_groups_ times and multiplied by a
+// num_inputs_per_group_ by num_input_groups_ rectangle of the weights matrix.
+// This is most convenient if num_inputs_per_group_ is 4, and the product
+// sign-extends and sums 8x8=16 bit results to 32 bits, adding 4 adjacent
+// results in the process, but it doesn't have to be implemented that way.
+// The weights are re-ordered by Init() to be used sequentially by the above
+// algorithm, followed by the biases, so they can be added at the end.
+// The base class computes the base C++ implementation.
+// NOTE that, although the subclasses execute on different SIMD hardware, no
+// virtual methods are needed, as the constructor sets up everything that
+// is required to allow the base class implementation to do all the work.
+class IntSimdMatrix {
+ public:
+  // Constructor should set the data members to indicate the sizes.
+  // NOTE: Base constructor public only for test purposes.
+  IntSimdMatrix()
+      : num_outputs_per_register_(1),
+        max_output_registers_(1),
+        num_inputs_per_register_(1),
+        num_inputs_per_group_(1),
+        num_input_groups_(1) {}
+    }
+    
+    
+    {}  // namespace tesseract.
+
+    
+    IntSimdMatrixSSE::IntSimdMatrixSSE() {
+#ifdef __SSE4_1__
+  partial_funcs_ = {PartialMatrixDotVector1};
 #endif  // __SSE4_1__
+}
     
     // Constructor.
 // Tests the architecture in a system-dependent way to detect AVX, SSE and
@@ -52,218 +99,393 @@ SIMDDetect::SIMDDetect() {
 }
 
     
-      // Expand in four directions.
-  GenericVector<ColPartition*> parts_to_merge;
-  ExpandSeedHorizontal(true, seed, &parts_to_merge);
-  ExpandSeedHorizontal(false, seed, &parts_to_merge);
-  ExpandSeedVertical(true, seed, &parts_to_merge);
-  ExpandSeedVertical(false, seed, &parts_to_merge);
-  SearchByOverlap(seed, &parts_to_merge);
+    PageIterator::PageIterator(PAGE_RES* page_res, Tesseract* tesseract, int scale,
+                           int scaled_yres, int rect_left, int rect_top,
+                           int rect_width, int rect_height)
+    : page_res_(page_res),
+      tesseract_(tesseract),
+      word_(nullptr),
+      word_length_(0),
+      blob_index_(0),
+      cblob_it_(nullptr),
+      include_upper_dots_(false),
+      include_lower_dots_(false),
+      scale_(scale),
+      scaled_yres_(scaled_yres),
+      rect_left_(rect_left),
+      rect_top_(rect_top),
+      rect_width_(rect_width),
+      rect_height_(rect_height) {
+  it_ = new PAGE_RES_IT(page_res);
+  PageIterator::Begin();
+}
+    
+      // go through the list again and this time create the menu structure.
+  vc_it.move_to_first();
+  for (vc_it.mark_cycle_pt(); !vc_it.cycled_list(); vc_it.forward()) {
+    ParamContent* vc = vc_it.data();
+    STRING tag;
+    STRING tag2;
+    STRING tag3;
+    GetPrefixes(vc->GetName(), &tag, &tag2, &tag3);
+    }
+    
+      // Gets the first n words (split by _) and puts them in t.
+  // For example, tesseract_foo_bar with N=2 will yield tesseract_foo_.
+  void GetFirstWords(const char *s,  // source string
+                     int n,          // number of words
+                     char *t);       // target string
+    
+    template <typename B, typename D>
+struct TypeInherits {
+    }
     
     
-    {}  // namespace tesseract.
+    {		StreamFile() { f = NULL; }
+	};
+    
+    #include 'io/logger.h'
+    
+    	int listen_sockfd;
+	IP::Type sock_type;
+    
+    	return drive_count;
+}
+String DirAccessWindows::get_drive(int p_drive) {
+    
+    #endif
 
     
-    // This structure captures all information needed about a text line for the
-// purposes of paragraph detection.  It is meant to be exceedingly light-weight
-// so that we can easily test paragraph detection independent of the rest of
-// Tesseract.
-class RowInfo {
- public:
-  // Constant data derived from Tesseract output.
-  STRING text;        // the full UTF-8 text of the line.
-  bool ltr;           // whether the majority of the text is left-to-right
-                      // TODO(eger) make this more fine-grained.
+    void TCPServerWinsock::make_default() {
     }
     
-      // Gets a VC object identified by its ID.
-  static ParamContent* GetParamContentById(int id);
     
-    class ModelDB: public DB {
- public:
-  class ModelSnapshot : public Snapshot {
-   public:
-    KVMap map_;
-  };
-    }
-    
-      Slice in(encoded);
-  ParsedInternalKey decoded('', 0, kTypeValue);
-    
-      fname = LogFileName('foo', 192);
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(192, number);
-  ASSERT_EQ(kLogFile, type);
-    
-        if (resyncing_) {
-      if (record_type == kMiddleType) {
-        continue;
-      } else if (record_type == kLastType) {
-        resyncing_ = false;
-        continue;
-      } else {
-        resyncing_ = false;
-      }
-    }
-    
-      ~Writer();
-    
-      /**
-   * \fn  virtual void Predictor::Init(const std::vector<std::pair<std::string,
-   * std::string> >&cfg ,const std::vector<std::shared_ptr<DMatrix> > &cache);
-   *
-   * \brief Configure and register input matrices in prediction cache.
-   *
-   * \param cfg   The configuration.
-   * \param cache Vector of DMatrix's to be used in prediction.
-   */
-    
-     private:
-  char ch_buf_;
-  std::string s_name_, s_val_, s_buf_;
-    
-        if (action)
-    {
-        if (action->initWithDuration(duration, gridSize, position, radius))
-        {
-            action->autorelease();
-        }
-        else
-        {
-            CC_SAFE_RELEASE_NULL(action);
-        }
-    }
-    
-    /**
-@brief Twirl action.
-@details This action is used for take effect on the target node as twirl.
-        You can control the effect by these parameters:
-        duration, grid size, center position, twirls count, amplitude.
-*/
-class CC_DLL Twirl : public Grid3DAction
-{
-public:
-    /**
-    @brief Create the action with center position, number of twirls, amplitude, a grid size and duration.
-    @param duration Specify the duration of the Twirl action. It's a value in seconds.
-    @param gridSize Specify the size of the grid.
-    @param position Specify the center position of the twirl action.
-    @param twirls Specify the twirls count of the Twirl action.
-    @param amplitude Specify the amplitude of the Twirl action.
-    @return If the creation success, return a pointer of Twirl action; otherwise, return nil.
-    */
-    static Twirl* create(float duration, const Size& gridSize, const Vec2& position, unsigned int twirls, float amplitude);
-    }
-    
-    CC_CONSTRUCTOR_ACCESS:
-    Show(){}
-    virtual ~Show(){}
-    
-    GridBase* PageTurn3D::getGrid()
-{
-    auto result = Grid3D::create(_gridSize, _gridNodeTarget->getGridRect());
-    if (result)
-    {
-        result->setNeedDepthTestForBlit(true);
-    }
-    
-    return result;
-}
-    
-    void ProgressTo::startWithTarget(Node *target)
-{
-    ActionInterval::startWithTarget(target);
-    _from = ((kProgressTimerCast)(target))->getPercentage();
-}
-    
-        /**
-    @brief Get the amplitude rate of the effect.
-    @return Return the amplitude rate of the effect.
-    */
-    float getAmplitudeRate() const { return _amplitudeRate; }
-    /**
-    @brief Set the amplitude rate of the effect.
-    @param amplitudeRate The value of amplitude rate will be set.
-    */
-    void setAmplitudeRate(float amplitudeRate) { _amplitudeRate = amplitudeRate; }
-    
-        /** Initializes an AtlasNode  with an Atlas file the width and height of each item and the quantity of items to render*/
-    bool initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender);
-    
-    /** Initializes an AtlasNode  with a texture the width and height of each item measured in points and the quantity of items to render*/
-    bool initWithTexture(Texture2D* texture, int tileWidth, int tileHeight, int itemsToRender);
-    
-    inline void ColorTransformYCbCrToRGB(uint8_t* pixel) {
-  int y  = pixel[0];
-  int cb = pixel[1];
-  int cr = pixel[2];
-  pixel[0] = kRangeLimit[y + kCrToRedTable[cr]];
-  pixel[1] = kRangeLimit[y +
-                         ((kCrToGreenTable[cr] + kCbToGreenTable[cb]) >> 16)];
-  pixel[2] = kRangeLimit[y + kCbToBlueTable[cb]];
+    {	handle = NULL;
 }
     
     
-    {  // Returns a heuristic cutoff on block errors in the sense that we won't
-  // consider distortions where a block error is greater than this.
-  virtual float BlockErrorLimit() const = 0;
-  // Given the search direction (+1 for upwards and -1 for downwards) and the
-  // current distance map, fills in *block_weight image with the relative block
-  // error adjustment weights.
-  // The target_mul param has the same semantics as in DistanceOK().
-  // Note that this is essentially a static function in the sense that it does
-  // not depend on the last Compare() call.
-  virtual void ComputeBlockErrorAdjustmentWeights(
-      int direction, int max_block_dist, double target_mul, int factor_x,
-      int factor_y, const std::vector<float>& distmap,
-      std::vector<float>* block_weight) = 0;
+    {	~ThreadWindows();
 };
     
-    ///////////////////////////////////////////////////////////////////////////////
-// Cosine table: C(k) = cos(k.pi/16)/sqrt(2), k = 1..7 using 15 bits signed
-const coeff_t kTable04[7] = { 22725, 21407, 19266, 16384, 12873,  8867, 4520 };
-// rows #1 and #7 are pre-multiplied by 2.C(1) before the 2nd pass.
-// This multiply is merged in the table of constants used during 1st pass:
-const coeff_t kTable17[7] = { 31521, 29692, 26722, 22725, 17855, 12299, 6270 };
-// rows #2 and #6 are pre-multiplied by 2.C(2):
-const coeff_t kTable26[7] = { 29692, 27969, 25172, 21407, 16819, 11585, 5906 };
-// rows #3 and #5 are pre-multiplied by 2.C(3):
-const coeff_t kTable35[7] = { 26722, 25172, 22654, 19266, 15137, 10426, 5315 };
+    //////////////////////////////////////////////////////////////////////
     
-    // Fills in 'result' with the inverse DCT of 'block'.
-// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
-// a row-by-row memory layout.
-void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
+    struct APCCollection {
+  static APCHandle::Pair Make(const ObjectData*,
+                              APCHandleLevel level,
+                              bool unserializeObj);
+  static void Delete(APCHandle*);
+    }
     
-    // Returns non-zero if and only if x has a zero byte, i.e. one of
-// x & 0xff, x & 0xff00, ..., x & 0xff00000000000000 is zero.
-inline uint64_t HasZeroByte(uint64_t x) {
-  return (x - 0x0101010101010101ULL) & ~x & 0x8080808080808080ULL;
+    
+    {  static void
+  StringInsert(std::vector<std::string>& values, const std::string& /*key*/,
+               const std::string& value) {
+    values.push_back(value);
+  }
+  static void
+  StringInsert(boost::container::flat_set<std::string>& values,
+               const std::string& /*key*/, const std::string& value) {
+    values.insert(value);
+  }
+  static void
+  StringInsert(std::set<std::string, stdltistr>& values,
+               const std::string& /*key*/, const std::string& value) {
+    values.insert(value);
+  }
+  static void
+  StringInsert(std::set<std::string>& values, const std::string& /*key*/,
+               const std::string& value) {
+    values.insert(value);
+  }
+  static void StringInsert(std::map<std::string, std::string> &values,
+                           const std::string &key,
+                           const std::string &value) {
+    values[key] = value;
+  }
+  static void StringInsert(std::map<std::string, std::string,
+                           stdltistr> &values,
+                           const std::string &key,
+                           const std::string &value) {
+    values[key] = value;
+  }
+  static void StringInsert(hphp_string_imap<std::string> &values,
+                           const std::string &key,
+                           const std::string &value) {
+    values[key] = value;
+  }
+  static void ReplaceIncludesWithIni(const std::string& original_ini_filename,
+                                     const std::string& iniStr,
+                                     std::string& with_includes);
+};
+    
+      const char* data = filename.data();
+  int data_len = filename.length();
+  bool base64 = false;
+  if (strncmp(data, 'data:', sizeof('data:') - 1)) {
+    return nullptr;
+  }
+  data += sizeof('data:') - 1;
+  data_len -= sizeof('data:') - 1;
+    
+    struct DataStreamWrapper final : Stream::Wrapper {
+  DataStreamWrapper() {
+    m_isLocal = true;
+  }
+    }
+    
+    
+    {}
+
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    /*!
+ * \brief an iterator that iterates over a configure file and gets the configures
+ */
+class ConfigIterator: public ConfigStreamReader {
+ public:
+  /*!
+   * \brief constructor
+   * \param fname name of configure file
+   */
+  explicit ConfigIterator(const char *fname) : ConfigStreamReader(fi_) {
+    fi_.open(fname);
+    if (fi_.fail()) {
+      LOG(FATAL) << 'cannot open file ' << fname;
+    }
+    ConfigReaderBase::Init();
+  }
+  /*! \brief destructor */
+  ~ConfigIterator() {
+    fi_.close();
+  }
+    }
+    
+    namespace xgboost {
+namespace common {
+/*!
+ * \brief calculate the sigmoid of the input.
+ * \param x input parameter
+ * \return the transformed value.
+ */
+XGBOOST_DEVICE inline float Sigmoid(float x) {
+  return 1.0f / (1.0f + expf(-x));
+}
+    }
+    }
+    
+    #include <xgboost/base.h>
+#include <xgboost/data.h>
+#include <dmlc/threadediter.h>
+#include <utility>
+#include <vector>
+#include <algorithm>
+#include <string>
+#include '../common/common.h'
+#include './sparse_page_writer.h'
+    
+    
+    {
+    {  ThreadState(uint32_t index, SharedState* _shared)
+      : tid(index), rnd(1000 + index), shared(_shared) {}
+};
+}  // namespace
+    
+      if (allow_2pc_) {
+    autovector<MemTable*> empty_list;
+    auto imm_prep_log =
+        imm()->PrecomputeMinLogContainingPrepSection(empty_list);
+    auto mem_prep_log = mem()->GetMinLogContainingPrepSection();
+    }
+    
+      virtual bool IgnoreSnapshots() const override { return true; }
+    
+    
+    {
+    {  // Get wal file in wal_dir
+  if (dbname.compare(options.wal_dir) != 0) {
+    if (!env->GetChildren(options.wal_dir, &files).ok()) {
+      Error(options.info_log,
+          'Error when reading %s dir\n',
+          options.wal_dir.c_str());
+      return;
+    }
+    wal_info.clear();
+    for (std::string file : files) {
+      if (ParseFileName(file, &number, &type)) {
+        if (type == kLogFile) {
+          env->GetFileSize(options.wal_dir + '/' + file, &file_size);
+          char str[16];
+          snprintf(str, sizeof(str), '%' PRIu64, file_size);
+          wal_info.append(file).append(' size: ').
+              append(str).append(' ; ');
+        }
+      }
+    }
+  }
+  Header(options.info_log, 'Write Ahead Log file in %s: %s\n',
+         options.wal_dir.c_str(), wal_info.c_str());
+}
+}  // namespace rocksdb
+
+    
+    namespace rocksdb {
+    }
+    
+          // Truncate to available space if necessary
+      if (p >= limit) {
+        if (iter == 0) {
+          continue;       // Try again with larger buffer
+        } else {
+          p = limit - 1;
+        }
+      }
+    
+      // atomic write
+  WriteBatch batch;
+  batch.Put(handles[0], Slice('key2'), Slice('value2'));
+  batch.Put(handles[1], Slice('key3'), Slice('value3'));
+  batch.Delete(handles[0], Slice('key'));
+  s = db->Write(WriteOptions(), &batch);
+  assert(s.ok());
+    
+      // Returns the distance map between the baseline image and the image in the
+  // last Compare() call (or the baseline image, if Compare() was not called
+  // yet).
+  // The dimensions of the distance map are the same as the baseline image.
+  // The interpretation of the distance values depend on the comparator used.
+  virtual const std::vector<float> distmap() const = 0;
+    
+    // Performs in-place floating point 8x8 DCT on block[0..63].
+// Note that the DCT used here is the DCT-2 with the first term multiplied by
+// 1/sqrt(2) and the result scaled by 1/2.
+void ComputeBlockDCTDouble(double block[64]);
+    
+    #endif  // GUETZLI_DEBUG_PRINT_H_
+
+    
+    inline int Log2Floor(uint32_t n) {
+  return n == 0 ? -1 : Log2FloorNonZero(n);
 }
     
-    // Parses the jpeg stream contained in data[*pos ... len) and fills in *jpg with
-// the parsed information.
-// If mode is JPEG_READ_HEADER, it fills in only the image dimensions in *jpg.
-// Returns false if the data is not valid jpeg, or if it contains an unsupported
-// jpeg feature.
-bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
-              JPEGData* jpg);
-// string variant
-bool ReadJpeg(const std::string& data, JpegReadMode mode,
-              JPEGData* jpg);
+    #include <cmath>
     
-      virtual std::shared_ptr<DHTTask>
-  createPeerLookupTask(const std::shared_ptr<DownloadContext>& ctx,
-                       uint16_t tcpPort,
-                       const std::shared_ptr<PeerStorage>& peerStorage) = 0;
+    bool ReadPNG(const std::string& data, int* xsize, int* ysize,
+             std::vector<uint8_t>* rgb) {
+  png_structp png_ptr =
+      png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+  if (!png_ptr) {
+    return false;
+  }
+    }
     
+    #include <stdint.h>
     
-    {} // namespace aria2
-
+      bool is_progressive = false;   // default
+  do {
+    // Read next marker.
+    size_t num_skipped = FindNextMarker(data, len, pos);
+    if (num_skipped > 0) {
+      // Add a fake marker to indicate arbitrary in-between-markers data.
+      jpg->marker_order.push_back(0xff);
+      jpg->inter_marker_data.push_back(
+          std::string(reinterpret_cast<const char*>(&data[pos]),
+                                      num_skipped));
+      pos += num_skipped;
+    }
+    EXPECT_MARKER();
+    marker = data[pos + 1];
+    pos += 2;
+    bool ok = true;
+    switch (marker) {
+      case 0xc0:
+      case 0xc1:
+      case 0xc2:
+        is_progressive = (marker == 0xc2);
+        ok = ProcessSOF(data, len, mode, &pos, jpg);
+        found_sof = true;
+        break;
+      case 0xc4:
+        ok = ProcessDHT(data, len, mode, &dc_huff_lut, &ac_huff_lut, &pos, jpg);
+        break;
+      case 0xd0:
+      case 0xd1:
+      case 0xd2:
+      case 0xd3:
+      case 0xd4:
+      case 0xd5:
+      case 0xd6:
+      case 0xd7:
+        // RST markers do not have any data.
+        break;
+      case 0xd9:
+        // Found end marker.
+        break;
+      case 0xda:
+        if (mode == JPEG_READ_ALL) {
+          ok = ProcessScan(data, len, dc_huff_lut, ac_huff_lut,
+                           scan_progression, is_progressive, &pos, jpg);
+        }
+        break;
+      case 0xdb:
+        ok = ProcessDQT(data, len, &pos, jpg);
+        break;
+      case 0xdd:
+        ok = ProcessDRI(data, len, &pos, jpg);
+        break;
+      case 0xe0:
+      case 0xe1:
+      case 0xe2:
+      case 0xe3:
+      case 0xe4:
+      case 0xe5:
+      case 0xe6:
+      case 0xe7:
+      case 0xe8:
+      case 0xe9:
+      case 0xea:
+      case 0xeb:
+      case 0xec:
+      case 0xed:
+      case 0xee:
+      case 0xef:
+        if (mode != JPEG_READ_TABLES) {
+          ok = ProcessAPP(data, len, &pos, jpg);
+        }
+        break;
+      case 0xfe:
+        if (mode != JPEG_READ_TABLES) {
+          ok = ProcessCOM(data, len, &pos, jpg);
+        }
+        break;
+      default:
+        fprintf(stderr, 'Unsupported marker: %d pos=%d len=%d\n',
+                marker, static_cast<int>(pos), static_cast<int>(len));
+        jpg->error = JPEG_UNSUPPORTED_MARKER;
+        ok = false;
+        break;
+    }
+    if (!ok) {
+      return false;
+    }
+    jpg->marker_order.push_back(marker);
+    if (mode == JPEG_READ_HEADER && found_sof) {
+      break;
+    }
+  } while (marker != 0xd9);
     
+    // Output callback function with associated data.
+struct JPEGOutput {
+  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
+  bool Write(const uint8_t* buf, size_t len) const {
+    return (len == 0) || (cb(data, buf, len) == len);
+  }
+ private:
+  JPEGOutputHook cb;
+  void* data;
+};
     
-    {} // namespace aria2
-
-    
-    #include 'TimeBasedCommand.h'
+        static BOOST_FORCEINLINE storage_type fetch_add(storage_type volatile& storage, storage_type v, memory_order) BOOST_NOEXCEPT
+    {
+        return static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD8(&storage, v));
+    }
