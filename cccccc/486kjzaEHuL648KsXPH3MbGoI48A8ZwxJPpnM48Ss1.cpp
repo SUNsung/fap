@@ -1,276 +1,304 @@
 
         
-        #endif  // ATOM_BROWSER_API_ATOM_API_GLOBAL_SHORTCUT_H_
-
+        #include 'common.hpp'
+#include 'vtransform.hpp'
     
-    #include 'base/macros.h'
-#include 'ui/events/event_rewriter.h'
+    #include <carotene/functions.hpp>
+#include 'saturate_cast.hpp'
     
-      // Called when a window close is cancelled by beforeunload handler.
-  virtual void OnWindowCloseCancelled(NativeWindow* window) {}
-    
-     private:
-  // The following methods are implemented by platform-specific implementations
-  // of this class.
-  //
-  // Start/StopListening are called when transitioning between zero and nonzero
-  // registered accelerators. StartListening will be called after
-  // RegisterAcceleratorImpl and StopListening will be called after
-  // UnregisterAcceleratorImpl.
-  //
-  // For RegisterAcceleratorImpl, implementations return false if registration
-  // did not complete successfully.
-  virtual void StartListening() = 0;
-  virtual void StopListening() = 0;
-  virtual bool RegisterAcceleratorImpl(const ui::Accelerator& accelerator) = 0;
-  virtual void UnregisterAcceleratorImpl(
-      const ui::Accelerator& accelerator) = 0;
-    
-      // Sets size to which the thumbnails should be scaled. If called after
-  // StartUpdating() then some thumbnails may be still scaled to the old size
-  // until they are updated.
-  virtual void SetThumbnailSize(const gfx::Size& thumbnail_size) = 0;
-    
-    #endif  // CHROME_BROWSER_PRINTING_PRINT_VIEW_MANAGER_OBSERVER_H_
-
-    
-      /// Cancels one asynchronous operation that is waiting on the timer.
-  /**
-   * This function forces the completion of one pending asynchronous wait
-   * operation against the timer. Handlers are cancelled in FIFO order. The
-   * handler for the cancelled operation will be invoked with the
-   * boost::asio::error::operation_aborted error code.
-   *
-   * Cancelling the timer does not change the expiry time.
-   *
-   * @param ec Set to indicate what error occurred, if any.
-   *
-   * @return The number of asynchronous operations that were cancelled. That is,
-   * either 0 or 1.
-   *
-   * @note If the timer has already expired when cancel_one() is called, then
-   * the handlers for asynchronous wait operations will:
-   *
-   * @li have already been invoked; or
-   *
-   * @li have been queued for invocation in the near future.
-   *
-   * These handlers can no longer be cancelled, and therefore are passed an
-   * error code that indicates the successful completion of the wait operation.
-   */
-  std::size_t cancel_one(boost::system::error_code& ec)
-  {
-    return this->service.cancel_one(this->implementation, ec);
-  }
-    
-    #ifndef BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-#define BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-    
-    #ifndef BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-#define BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-    
-    #endif // BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-
-    
-    template <typename CompletionCondition>
-class base_from_completion_cond
+    CVT_FUNC(u8, s8, 16,
+     uint8x16_t v127 = vdupq_n_u8(127);,
 {
-protected:
-  explicit base_from_completion_cond(CompletionCondition completion_condition)
-    : completion_condition_(completion_condition)
-  {
-  }
+     for (size_t i = 0; i < w; i += 16)
+     {
+         internal::prefetch(_src + i);
+         uint8x16_t vu8 = vld1q_u8(_src + i);
+         int8x16_t vu1 = vreinterpretq_s8_u8(vminq_u8(vu8, v127));
+         vst1q_s8(_dst + i, vu1);
+     }
+})
+    
+    #define CVTS_FUNC1(T1, SIMD_SIZE, CVTSINIT, CVTSROW)                             \
+    void convertScale(const Size2D &,                                            \
+                      const T1 *, ptrdiff_t,                                     \
+                      T1 *, ptrdiff_t,                                           \
+                      f64, f64)                                                  \
+    {                                                                            \
+        internal::assertSupportedConfiguration();                                \
     }
     
     
-    {    // Make the upcall if required.
-    if (owner)
-    {
-      fenced_block b(fenced_block::half);
-      BOOST_ASIO_HANDLER_INVOCATION_BEGIN((handler.arg1_, handler.arg2_));
-      boost_asio_handler_invoke_helpers::invoke(handler, handler.handler_);
-      BOOST_ASIO_HANDLER_INVOCATION_END;
-    }
-  }
+    {                    for( k = 0; k < N; k++ )
+                    {
+                        s32 x = ptr[pixel[k]];
+                        if(x < vt)
+                        {
+                            if( ++count > K )
+                            {
+                                cornerpos[ncorners++] = j;
+                                if(nonmax_suppression)
+                                    curr[j] = cornerScore(ptr, pixel);
+                                break;
+                            }
+                        }
+                        else
+                            count = 0;
+                    }
+                }
     
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-    #ifndef BOOST_ASIO_DETAIL_FUNCTION_HPP
-#define BOOST_ASIO_DETAIL_FUNCTION_HPP
-    
-    class gcc_arm_fenced_block
-  : private noncopyable
-{
-public:
-  enum half_t { half };
-  enum full_t { full };
-    }
-    
-    // Newer gcc, clang need special treatment to suppress unused typedef warnings.
-#if defined(__clang__)
-# if defined(__apple_build_version__)
-#  if (__clang_major__ >= 7)
-#   define BOOST_ASIO_UNUSED_TYPEDEF __attribute__((__unused__))
-#  endif // (__clang_major__ >= 7)
-# elif ((__clang_major__ == 3) && (__clang_minor__ >= 6)) \
-    || (__clang_major__ > 3)
-#  define BOOST_ASIO_UNUSED_TYPEDEF __attribute__((__unused__))
-# endif // ((__clang_major__ == 3) && (__clang_minor__ >= 6))
-        //   || (__clang_major__ > 3)
-#elif defined(__GNUC__)
-# if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4)
-#  define BOOST_ASIO_UNUSED_TYPEDEF __attribute__((__unused__))
-# endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4)
-#endif // defined(__GNUC__)
-#if !defined(BOOST_ASIO_UNUSED_TYPEDEF)
-# define BOOST_ASIO_UNUSED_TYPEDEF
-#endif // !defined(BOOST_ASIO_UNUSED_TYPEDEF)
-    
-      // Remove the descriptor from /dev/poll. Since this function is only called
-  // during a fork, we can apply the change immediately.
-  ::pollfd ev = { 0, 0, 0 };
-  ev.fd = descriptor;
-  ev.events = POLLREMOVE;
-  ev.revents = 0;
-  ::write(dev_poll_fd_, &ev, sizeof(ev));
+      ~Carver();
     
     
-    
-    
-    
-    
-    
-      // Returns the combined score of the output image in the last Compare() call
-  // (or the baseline image, if Compare() was not called yet), based on output
-  // size and the similarity metric.
-  virtual double ScoreOutputSize(int size) const = 0;
-    
-    void OutputImage::SaveToJpegData(JPEGData* jpg) const {
-  assert(components_[0].factor_x() == 1);
-  assert(components_[0].factor_y() == 1);
-  jpg->width = width_;
-  jpg->height = height_;
-  jpg->max_h_samp_factor = 1;
-  jpg->max_v_samp_factor = 1;
-  jpg->MCU_cols = components_[0].width_in_blocks();
-  jpg->MCU_rows = components_[0].height_in_blocks();
-  int ncomp = components_[1].IsAllZero() && components_[2].IsAllZero() ? 1 : 3;
-  for (int i = 1; i < ncomp; ++i) {
-    jpg->max_h_samp_factor = std::max(jpg->max_h_samp_factor,
-                                      components_[i].factor_x());
-    jpg->max_v_samp_factor = std::max(jpg->max_h_samp_factor,
-                                      components_[i].factor_y());
-    jpg->MCU_cols = std::min(jpg->MCU_cols, components_[i].width_in_blocks());
-    jpg->MCU_rows = std::min(jpg->MCU_rows, components_[i].height_in_blocks());
-  }
-  jpg->components.resize(ncomp);
-  int q[3][kDCTBlockSize];
-  for (int c = 0; c < 3; ++c) {
-    memcpy(&q[c][0], components_[c].quant(), kDCTBlockSize * sizeof(q[0][0]));
-  }
-  for (int c = 0; c < ncomp; ++c) {
-    JPEGComponent* comp = &jpg->components[c];
-    assert(jpg->max_h_samp_factor % components_[c].factor_x() == 0);
-    assert(jpg->max_v_samp_factor % components_[c].factor_y() == 0);
-    comp->id = c;
-    comp->h_samp_factor = jpg->max_h_samp_factor / components_[c].factor_x();
-    comp->v_samp_factor = jpg->max_v_samp_factor / components_[c].factor_y();
-    comp->width_in_blocks = jpg->MCU_cols * comp->h_samp_factor;
-    comp->height_in_blocks = jpg->MCU_rows * comp->v_samp_factor;
-    comp->num_blocks = comp->width_in_blocks * comp->height_in_blocks;
-    comp->coeffs.resize(kDCTBlockSize * comp->num_blocks);
-    }
-    }
-    
-    static const int kCbToBlueTable[256] = {
-  -227, -225, -223, -222, -220, -218, -216, -214, -213, -211, -209, -207,
-  -206, -204, -202, -200, -198, -197, -195, -193, -191, -190, -188, -186,
-  -184, -183, -181, -179, -177, -175, -174, -172, -170, -168, -167, -165,
-  -163, -161, -159, -158, -156, -154, -152, -151, -149, -147, -145, -144,
-  -142, -140, -138, -136, -135, -133, -131, -129, -128, -126, -124, -122,
-  -120, -119, -117, -115, -113, -112, -110, -108, -106, -105, -103, -101,
-   -99,  -97,  -96,  -94,  -92,  -90,  -89,  -87,  -85,  -83,  -82,  -80,
-   -78,  -76,  -74,  -73,  -71,  -69,  -67,  -66,  -64,  -62,  -60,  -58,
-   -57,  -55,  -53,  -51,  -50,  -48,  -46,  -44,  -43,  -41,  -39,  -37,
-   -35,  -34,  -32,  -30,  -28,  -27,  -25,  -23,  -21,  -19,  -18,  -16,
-   -14,  -12,  -11,   -9,   -7,   -5,   -4,   -2,    0,    2,    4,    5,
-     7,    9,   11,   12,   14,   16,   18,   19,   21,   23,   25,   27,
-    28,   30,   32,   34,   35,   37,   39,   41,   43,   44,   46,   48,
-    50,   51,   53,   55,   57,   58,   60,   62,   64,   66,   67,   69,
-    71,   73,   74,   76,   78,   80,   82,   83,   85,   87,   89,   90,
-    92,   94,   96,   97,   99,  101,  103,  105,  106,  108,  110,  112,
-   113,  115,  117,  119,  120,  122,  124,  126,  128,  129,  131,  133,
-   135,  136,  138,  140,  142,  144,  145,  147,  149,  151,  152,  154,
-   156,  158,  159,  161,  163,  165,  167,  168,  170,  172,  174,  175,
-   177,  179,  181,  183,  184,  186,  188,  190,  191,  193,  195,  197,
-   198,  200,  202,  204,  206,  207,  209,  211,  213,  214,  216,  218,
-   220,  222,  223,  225,
+    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
+/// configurations from Osquery's configurations.
+class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override;
+  Status update(const std::string& source, const ParserConfig& config) override;
 };
+} // namespace osquery
+
+    
+    /**
+ * @brief Compute multiple hashes from a files contents simultaneously.
+ *
+ * @param mask Bitmask specifying target osquery-supported algorithms.
+ * @param path Filesystem path (the hash target).
+ * @return A struct containing string (hex) representations
+ *         of the hash digests.
+ */
+MultiHashes hashMultiFromFile(int mask, const std::string& path);
+    
+      /// Begin the worker-watcher process.
+  virtual bool watch(const PlatformProcess& child) const;
+    
+    void INotifyEventPublisher::removeSubscriptions(const std::string& subscriber) {
+  WriteLock lock(subscription_lock_);
+  std::for_each(subscriptions_.begin(),
+                subscriptions_.end(),
+                [&subscriber](const SubscriptionRef& sub) {
+                  if (sub->subscriber_name == subscriber) {
+                    getSubscriptionContext(sub->context)->mark_for_deletion =
+                        true;
+                  }
+                });
+}
+    
+    class ExampleTable : public TablePlugin {
+ private:
+  TableColumns columns() const {
+    return {
+        std::make_tuple('example_text', TEXT_TYPE, ColumnOptions::DEFAULT),
+        std::make_tuple(
+            'example_integer', INTEGER_TYPE, ColumnOptions::DEFAULT),
+    };
+  }
+    }
+    
+      t2 = t4 - t5;
+  t4 += t5;
+    
+    static const uint8_t* kRangeLimit = kRangeLimitLut + 384;
+    
+    bool ReadPNG(const std::string& data, int* xsize, int* ysize,
+             std::vector<uint8_t>* rgb) {
+  png_structp png_ptr =
+      png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+  if (!png_ptr) {
+    return false;
+  }
+    }
+    
+      void WriteBits(int nbits, uint64_t bits) {
+    put_bits -= nbits;
+    put_buffer |= (bits << put_bits);
+    if (put_bits <= 16) {
+      // At this point we are ready to emit the most significant 6 bytes of
+      // put_buffer_ to the output.
+      // The JPEG format requires that after every 0xff byte in the entropy
+      // coded section, there is a zero byte, therefore we first check if any of
+      // the 6 most significant bytes of put_buffer_ is 0xff.
+      if (HasZeroByte(~put_buffer | 0xffff)) {
+        // We have a 0xff byte somewhere, examine each byte and append a zero
+        // byte if necessary.
+        EmitByte((put_buffer >> 56) & 0xff);
+        EmitByte((put_buffer >> 48) & 0xff);
+        EmitByte((put_buffer >> 40) & 0xff);
+        EmitByte((put_buffer >> 32) & 0xff);
+        EmitByte((put_buffer >> 24) & 0xff);
+        EmitByte((put_buffer >> 16) & 0xff);
+      } else if (pos + 6 < len) {
+        // We don't have any 0xff bytes, output all 6 bytes without checking.
+        data[pos] = (put_buffer >> 56) & 0xff;
+        data[pos + 1] = (put_buffer >> 48) & 0xff;
+        data[pos + 2] = (put_buffer >> 40) & 0xff;
+        data[pos + 3] = (put_buffer >> 32) & 0xff;
+        data[pos + 4] = (put_buffer >> 24) & 0xff;
+        data[pos + 5] = (put_buffer >> 16) & 0xff;
+        pos += 6;
+      } else {
+        overflow = true;
+      }
+      put_buffer <<= 48;
+      put_bits += 48;
+    }
+  }
     
     namespace guetzli {
     }
     
-      // Special case code with only one value.
-  if (total_count == 1) {
-    code.bits = 0;
-    code.value = symbols[0];
-    for (key = 0; key < total_size; ++key) {
-      table[key] = code;
-    }
-    return total_size;
-  }
+    // Creates a JPEG from the rgb pixel data. Returns true on success.
+bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     JPEGData* jpg);
     
-    // Butteraugli scores that correspond to JPEG quality levels, starting at
-// kLowestQuality. They were computed by taking median BA scores of JPEGs
-// generated using libjpeg-turbo at given quality from a set of PNGs.
-// The scores above quality level 100 are just linearly decreased so that score
-// for 110 is 90% of the score for 100.
-const double kScoreForQuality[] = {
-  2.810761,  // 70
-  2.729300,
-  2.689687,
-  2.636811,
-  2.547863,
-  2.525400,
-  2.473416,
-  2.366133,
-  2.338078,
-  2.318654,
-  2.201674,  // 80
-  2.145517,
-  2.087322,
-  2.009328,
-  1.945456,
-  1.900112,
-  1.805701,
-  1.750194,
-  1.644175,
-  1.562165,
-  1.473608,  // 90
-  1.382021,
-  1.294298,
-  1.185402,
-  1.066781,
-  0.971769,  // 95
-  0.852901,
-  0.724544,
-  0.611302,
-  0.443185,
-  0.211578,  // 100
-  0.209462,
-  0.207346,
-  0.205230,
-  0.203114,
-  0.200999,  // 105
-  0.198883,
-  0.196767,
-  0.194651,
-  0.192535,
-  0.190420,  // 110
-  0.190420,
-};
+      static Data data_;
+  static Data data6_;
+    
+      void onReceived(const DHTPingReplyMessage* message);
+    
+    void DHTResponseMessage::fillMessage(Dict* msgDict)
+{
+  msgDict->put(R, getResponse());
+}
+    
+      std::shared_ptr<DHTBucket>
+  getBucketFor(const std::shared_ptr<DHTNode>& node) const;
+    
+    #include 'DHTNode.h'
+#include 'DlAbortEx.h'
+#include 'DHTConstants.h'
+#include 'bittorrent_helper.h'
+#include 'Logger.h'
+#include 'a2netcompat.h'
+#include 'util.h'
+#include 'TimeA2.h'
+#include 'fmt.h'
+#include 'File.h'
+#include 'LogFactory.h'
+#include 'BufferedFile.h'
+    
+    #include 'DHTTask.h'
+#include 'Logger.h'
+#include 'LogFactory.h'
+#include 'a2functional.h'
+#include 'fmt.h'
+    
+    namespace aria2 {
+    }
+    
+    #include 'common.h'
+    
+    std::shared_ptr<DHTTask>
+DHTTaskFactoryImpl::createNodeLookupTask(const unsigned char* targetID)
+{
+  auto task = std::make_shared<DHTNodeLookupTask>(targetID);
+  setCommonProperty(task);
+  return task;
+}
+    
+    std::string DHTTokenTracker::generateToken(const unsigned char* infoHash,
+                                           const std::string& ipaddr,
+                                           uint16_t port,
+                                           const unsigned char* secret) const
+{
+  unsigned char src[DHT_ID_LENGTH + COMPACT_LEN_IPV6 + SECRET_SIZE];
+  memset(src, 0, sizeof(src));
+  int compactlen = bittorrent::packcompact(src + DHT_ID_LENGTH, ipaddr, port);
+  if (compactlen == 0) {
+    throw DL_ABORT_EX(fmt('Token generation failed: ipaddr=%s, port=%u',
+                          ipaddr.c_str(), port));
+  }
+  memcpy(src, infoHash, DHT_ID_LENGTH);
+  memcpy(src + DHT_ID_LENGTH + COMPACT_LEN_IPV6, secret, SECRET_SIZE);
+  unsigned char md[20];
+  message_digest::digest(md, sizeof(md), MessageDigest::sha1().get(), src,
+                         sizeof(src));
+  return std::string(&md[0], &md[sizeof(md)]);
+}
+    
+      virtual ~DHTTokenUpdateCommand();
+    
+    bool DHTUnknownMessage::isReply() const { return false; }
+    
+        static BOOST_FORCEINLINE void store(storage_type volatile& storage, storage_type v, memory_order) BOOST_NOEXCEPT
+    {
+        uint64_t const* p_value = (uint64_t const*)&v;
+#if !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+        __asm__ __volatile__
+        (
+            'movq %[dest], %%rax\n\t'
+            'movq 8+%[dest], %%rdx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg16b %[dest]\n\t'
+            'jne 1b\n\t'
+            : [dest] '=o' (storage)
+            : 'b' (p_value[0]), 'c' (p_value[1])
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'rax', 'rdx', 'memory'
+        );
+#else // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+        __asm__ __volatile__
+        (
+            'movq 0(%[dest]), %%rax\n\t'
+            'movq 8(%[dest]), %%rdx\n\t'
+            '.align 16\n\t'
+            '1: lock; cmpxchg16b 0(%[dest])\n\t'
+            'jne 1b\n\t'
+            :
+            : 'b' (p_value[0]), 'c' (p_value[1]), [dest] 'r' (&storage)
+            : BOOST_ATOMIC_DETAIL_ASM_CLOBBER_CC_COMMA 'rax', 'rdx', 'memory'
+        );
+#endif // !defined(BOOST_ATOMIC_DETAIL_NO_ASM_IMPLIED_ZERO_DISPLACEMENTS)
+    }
+    
+            storage_type volatile* p = &storage;
+        if (((uint32_t)p & 0x00000007) == 0)
+        {
+#if defined(_M_IX86_FP) && _M_IX86_FP >= 2
+#if defined(__AVX__)
+            __asm
+            {
+                mov edx, p
+                vmovq xmm4, v
+                vmovq qword ptr [edx], xmm4
+            };
+#else
+            __asm
+            {
+                mov edx, p
+                movq xmm4, v
+                movq qword ptr [edx], xmm4
+            };
+#endif
+#else
+            __asm
+            {
+                mov edx, p
+                fild v
+                fistp qword ptr [edx]
+            };
+#endif
+        }
+        else
+        {
+            int backup;
+            __asm
+            {
+                mov backup, ebx
+                mov edi, p
+                mov ebx, dword ptr [v]
+                mov ecx, dword ptr [v + 4]
+                mov eax, dword ptr [edi]
+                mov edx, dword ptr [edi + 4]
+                align 16
+            again:
+                lock cmpxchg8b qword ptr [edi]
+                jne again
+                mov ebx, backup
+            };
+        }
+    
+    template< >
+struct make_storage_type< 4u, true >
+{
+    typedef mars_boost::int32_t type;
+    }
