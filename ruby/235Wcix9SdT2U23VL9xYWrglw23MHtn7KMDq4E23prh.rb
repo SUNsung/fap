@@ -1,64 +1,117 @@
 
         
-            def initial_urls
-      [ 'https://hexdocs.pm/elixir/#{self.class.release}/api-reference.html',
-        'https://hexdocs.pm/eex/#{self.class.release}/EEx.html',
-        'https://hexdocs.pm/ex_unit/#{self.class.release}/ExUnit.html',
-        'https://hexdocs.pm/iex/#{self.class.release}/IEx.html',
-        'https://hexdocs.pm/logger/#{self.class.release}/Logger.html',
-        'https://hexdocs.pm/mix/#{self.class.release}/Mix.html',
-        'https://elixir-lang.org/getting-started/introduction.html' ]
-    end
-    
-        BOOKS = %w(apache apc apcu array bc bzip2 calendar csprng classobj ctype curl
-      datetime dba dir dom ds eio errorfunc ev event exec exif fileinfo filesystem filter
-      ftp funchand gearman geoip gettext gmagick gmp hash ibase iconv iisfunc image
-      imagick imap info inotify intl json judy ldap libevent libxml lua mail mailparse
-      math mbstring mcrypt memcached misc mysqli network oauth openssl
-      outcontrol password pcntl pcre pdo pgsql phar posix proctitle pthreads quickhash regex runkit
-      reflection sca session sem session-pgsql shmop simplexml soap sockets solr sphinx spl
-      spl-types sqlite3 sqlsrv ssh2 stats stream strings sync taint tidy tokenizer uodbc url
-      v8js var varnish weakref xml xmlreader xmlrpc xmlwriter xsl yaf yar yaml zip zlib)
-    
-        html_filters.push 'tensorflow/entries', 'tensorflow/clean_html'
-    
-        delegate :empty?, :blank?, to: :pages
-    
-        # #gradient > { @mixin horizontal ... }
-    # to:
-    # @mixin gradient-horizontal
-    def flatten_mixins(file, container, prefix)
-      log_transform container, prefix
-      replace_rules file, Regexp.escape(container) do |mixins_css|
-        unindent unwrap_rule_block(mixins_css).gsub(/@mixin\s*([\w-]+)/, '@mixin #{prefix}-\\1')
-      end
-    end
-    
-          File.open('bower.json', 'w') do |f|
-        f.puts JSON.pretty_generate(spec)
-      end
-    end
-  end
-end
-
-    
-      def post_to_facebook(url, body)
-    Faraday.post(url, body)
+          def effective_build_options_for(dependent)
+    args  = dependent.build.used_options
+    args |= Tab.for_formula(dependent).used_options
+    BuildOptions.new(args, dependent.options)
   end
     
-        it 'sets the backend ssh_options' do
-      expect(backend.ssh_options[:keys]).to eq %w(/home/user/.ssh/id_rsa)
-      expect(backend.ssh_options[:forward_agent]).to eq false
-      expect(backend.ssh_options[:auth_methods]).to eq %w(publickey password)
+        if !Language::Python.in_sys_path?('python', homebrew_site_packages)
+      s = <<-EOS.undent
+        Python modules have been installed and Homebrew's site-packages is not
+        in your Python sys.path, so you will not be able to import the modules
+        this formula installed. If you plan to develop with these modules,
+        please run:
+      EOS
+      s += instructions
+    elsif keg.python_pth_files_installed?
+      s = <<-EOS.undent
+        This formula installed .pth files to Homebrew's site-packages and your
+        Python isn't configured to process them, so you will not be able to
+        import the modules this formula installed. If you plan to develop
+        with these modules, please run:
+      EOS
+      s += instructions
     end
+    s
   end
     
-      class Blockquote < Liquid::Block
-    FullCiteWithTitle = /(\S.*)\s+(https?:\/\/)(\S+)\s+(.+)/i
-    FullCite = /(\S.*)\s+(https?:\/\/)(\S+)/i
-    AuthorTitle = /([^,]+),([^,]+)/
-    Author =  /(.+)/
+      def kernel
+    `uname -m`.chomp
+  end
     
-          unless file.file?
-        return 'File #{file} could not be found'
+        args = dirs + %w[-type f (]
+    args.concat UNBREWED_EXCLUDE_FILES.flat_map { |f| %W[! -name #{f}] }
+    args.concat UNBREWED_EXCLUDE_PATHS.flat_map { |d| %W[! -path #{d}] }
+    args.concat %w[)]
+    
+      def search
+    if ARGV.empty?
+      puts_columns Formula.full_names
+    elsif ARGV.include? '--macports'
+      exec_browser 'https://www.macports.org/ports.php?by=name&substr=#{ARGV.next}'
+    elsif ARGV.include? '--fink'
+      exec_browser 'http://pdb.finkproject.org/pdb/browse.php?summary=#{ARGV.next}'
+    elsif ARGV.include? '--debian'
+      exec_browser 'https://packages.debian.org/search?keywords=#{ARGV.next}&searchon=names&suite=all&section=all'
+    elsif ARGV.include? '--opensuse'
+      exec_browser 'https://software.opensuse.org/search?q=#{ARGV.next}'
+    elsif ARGV.include? '--fedora'
+      exec_browser 'https://admin.fedoraproject.org/pkgdb/packages/%2A#{ARGV.next}%2A/'
+    elsif ARGV.include? '--ubuntu'
+      exec_browser 'http://packages.ubuntu.com/search?keywords=#{ARGV.next}&searchon=names&suite=all&section=all'
+    elsif ARGV.include? '--desc'
+      query = ARGV.next
+      rx = query_regexp(query)
+      Descriptions.search(rx, :desc).print
+    elsif ARGV.first =~ HOMEBREW_TAP_FORMULA_REGEX
+      query = ARGV.first
+      user, repo, name = query.split('/', 3)
+    
+      # Use this method to generate standard caveats.
+  def standard_instructions(home_name, home_value = libexec)
+    <<-EOS.undent
+      Before you can use these tools you must export some variables to your $SHELL.
+    
+          if staff.topic_id.nil?
+        creator = PostCreator.new(Discourse.system_user,
+          raw: I18n.t('staff_category_description'),
+          title: I18n.t('category.topic_prefix', category: staff.name),
+          category: staff.name,
+          archetype: Archetype.default
+        )
+        post = creator.create
+    
+          it 'does not load workers specified in the :except option' do
+        agent_runner = AgentRunner.new(except: HuginnScheduler)
+        workers = agent_runner.send(:load_workers)
+        expect(workers.keys).to eq(['DelayedJobWorker'])
+    
+      describe 'cleanup_failed_jobs!' do
+    before do
+      3.times do |i|
+        Delayed::Job.create(failed_at: Time.now - i.minutes)
       end
+      @keep = Delayed::Job.order(:failed_at)[1]
+    end
+    
+          Utils.sort_tuples!(tuples, orders)
+      expect(tuples).to eq expected
+    end
+    
+      def empty?
+    @paths.empty?
+  end
+    
+      def external_commands
+    cmd_paths = PATH.new(ENV['PATH']).append(Tap.cmd_directories)
+    cmd_paths.each_with_object([]) do |path, cmds|
+      Dir['#{path}/brew-*'].each do |file|
+        next unless File.executable?(file)
+        cmd = File.basename(file, '.rb')[5..-1]
+        next if cmd.include?('.')
+        cmds << cmd
+      end
+    end.sort
+  end
+    
+        if ARGV.include? '--deps'
+      bucket = []
+      ARGV.formulae.each do |f|
+        bucket << f
+        bucket.concat f.recursive_dependencies.map(&:to_formula)
+      end
+      bucket.uniq!
+    else
+      bucket = ARGV.formulae
+    end
