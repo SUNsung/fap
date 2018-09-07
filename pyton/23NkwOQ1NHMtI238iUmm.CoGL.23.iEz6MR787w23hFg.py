@@ -1,230 +1,116 @@
 
         
-        README_FILE = 'README.md'
-helptext = sys.stdin.read()
+            scrapy runspider qpsclient.py --loglevel=INFO --set RANDOMIZE_DOWNLOAD_DELAY=0 --set CONCURRENT_REQUESTS=50 -a qps=10 -a latency=0.3
     
-    
-from youtube_dl import YoutubeDL
-    
-        def test_secondary_proxy_http(self):
-        params = self._check_params(['secondary_proxy', 'secondary_server_ip'])
-        if params is None:
-            return
-        ydl = FakeYDL()
-        req = compat_urllib_request.Request('http://yt-dl.org/ip')
-        req.add_header('Ytdl-request-proxy', params['secondary_proxy'])
-        self.assertEqual(
-            ydl.urlopen(req).read().decode('utf-8'),
-            params['secondary_server_ip'])
-    
-            def _find_spec(key):
-            m = re.search(
-                r'(?m)^//\s*%s:\s*(.*?)\n' % re.escape(key), as_content)
-            if not m:
-                raise ValueError('Cannot find %s in %s' % (key, testfile))
-            return json.loads(m.group(1))
-    
-                    m = re.search(r'(?<=\s)u[\''](?!\)|,|$)', code)
-                if m is not None:
-                    self.assertTrue(
-                        m is None,
-                        'u present in %s, around %s' % (
-                            fn, code[m.start() - 10:m.end() + 10]))
-    
-            return {
-            'id': flv_id,
-            'url': rtmp_url,
-            'ext': 'flv',
-            'no_resume': True,
-            'title': title,
-            'description': description,
-            'duration': duration,
-            'view_count': view_count,
-            'comment_count': comment_count,
-            'uploader': uploader,
-            'upload_date': upload_date,
-        }
-
-    
-            title = self._search_regex(
-            r'<title>(.+?)\s*\|\s*.+?</title>', webpage, 'video title')
-    
-    containers = (('thefuck/python3-tcsh',
-               u'''FROM python:3
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'),
-              ('thefuck/python2-tcsh',
-               u'''FROM python:2
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'))
-    
-    Provides utility functions that are consumed internally by Requests
-which depend on extremely few external helpers (such as compat)
-'''
-    
-                        for i in request.body:
-                        low_conn.send(hex(len(i))[2:].encode('utf-8'))
-                        low_conn.send(b'\r\n')
-                        low_conn.send(i)
-                        low_conn.send(b'\r\n')
-                    low_conn.send(b'0\r\n\r\n')
-    
-            #: A list of :class:`Response <Response>` objects from
-        #: the history of the Request. Any redirect responses will end
-        #: up here. The list is sorted from the oldest to the most recent request.
-        self.history = []
-    
-        global __doc__
-    __doc__ = (__doc__ + '\n' +
-               '\n'.join(doc(code) for code in sorted(_codes))
-               if __doc__ is not None else None)
-    
-    with open('README.rst', 'r', 'utf-8') as f:
-    readme = f.read()
-with open('HISTORY.rst', 'r', 'utf-8') as f:
-    history = f.read()
-    
-    if hasattr(ctypes, 'windll'):
-    WSAStringToAddressA = ctypes.windll.ws2_32.WSAStringToAddressA
-    WSAAddressToStringA = ctypes.windll.ws2_32.WSAAddressToStringA
-else:
-    def not_windows():
-        raise SystemError(
-            'Invalid platform. ctypes.windll must be available.'
-        )
-    WSAStringToAddressA = not_windows
-    WSAAddressToStringA = not_windows
-    
-    
-    def getCharPositionInLine(self):
-        return self.charPositionInLine
-    
-    def setCharPositionInLine(self, pos):
-        self.charPositionInLine = pos
-    
-    INVALID_TOKEN_TYPE = 0
-    
-        def setUp(cls):
-        ''' Function/test case scope setup. '''
-        cls.output = StringIO()
-        cls.saved_stdout = sys.stdout
-        sys.stdout = cls.output
-    
-    
-class RegistryHolder(type):
-    
-        def test_bear_greek_localization(self):
-        self.assertEqual(self.g.get('bear'), 'bear')
-
-    
-        def tearDown(self):
-        self.out.close()
-        sys.stdout = self.saved_stdout
-    
-            # simple test to validate param value
-        if param in self._static_method_choices.keys():
-            self.param = param
-        else:
-            raise ValueError('Invalid Value for Param: {0}'.format(param))
-    
-    print()
-    
-        def setProblem(self, value):
-        self._bProblem = value
-    
-    
-### OUTPUT ###
-# <NumObj: -1>
-# <NumObj: 0>
-# <NumObj: 1>
-# <NumObj: 2>
-# -- committed
-# <NumObj: 3>
-# <NumObj: 4>
-# <NumObj: 5>
-# -- rolled back
-# <NumObj: 2>
-# -- now doing stuff ...
-# -> doing stuff failed!
-# Traceback (most recent call last):
-# File 'memento.py', line 97, in <module>
-#     num_obj.do_stuff()
-#   File 'memento.py', line 52, in transaction
-#     raise e
-#   File 'memento.py', line 49, in transaction
-#     return self.method(obj, *args, **kwargs)
-#   File 'memento.py', line 70, in do_stuff
-#     self.increment()     # <- will fail and rollback
-#   File 'memento.py', line 65, in increment
-#     self.value += 1
-# TypeError: Can't convert 'int' object to str implicitly
-# <NumObj: 2>
-
-    
-    *TL;DR80
-Provides recombination business logic by chaining together using boolean logic.
-'''
-    
-        app = Application(
-        [
-            ('/', MainHandler),
-            ('/login', LoginHandler),
-            ('/logout', LogoutHandler),
-        ],
-        login_url='/login',
-        **options.group_dict('application'))
-    app.listen(options.port)
-    
-    define('port', default=8888, help='run on the given port', type=int)
-    
-            ``cursor`` should be the ``id`` of the last message received.
+        def add_options(self, parser):
         '''
-        results = []
-        for msg in reversed(self.cache):
-            if msg['id'] == cursor:
-                break
-            results.append(msg)
-        results.reverse()
-        return results
+        Populate option parse with options available for this command
+        '''
+        group = OptionGroup(parser, 'Global Options')
+        group.add_option('--logfile', metavar='FILE',
+            help='log file. if omitted stderr will be used')
+        group.add_option('-L', '--loglevel', metavar='LEVEL', default=None,
+            help='log level (default: %s)' % self.settings['LOG_LEVEL'])
+        group.add_option('--nolog', action='store_true',
+            help='disable logging completely')
+        group.add_option('--profile', metavar='FILE', default=None,
+            help='write python cProfile stats to FILE')
+        group.add_option('--pidfile', metavar='FILE',
+            help='write process ID to FILE')
+        group.add_option('-s', '--set', action='append', default=[], metavar='NAME=VALUE',
+            help='set/override setting (may be repeated)')
+        group.add_option('--pdb', action='store_true', help='enable pdb on failure')
     
-    define('port', default=8888, help='run on the given port', type=int)
-define('facebook_api_key', help='your Facebook application API key', type=str)
-define('facebook_secret', help='your Facebook application secret', type=str)
+                if not callable(cb):
+                cb_method = getattr(spider, cb, None)
+                if callable(cb_method):
+                    cb = cb_method
+                else:
+                    logger.error('Cannot find callback %(callback)r in spider: %(spider)s',
+                                 {'callback': cb, 'spider': spider.name})
+                    return
     
-        logging.warning('Starting fetch with curl client')
-    curl_client = CurlAsyncHTTPClient()
-    curl_client.fetch('http://localhost:%d/' % options.port,
-                      callback=callback)
-    IOLoop.current().start()
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+                          help='set spider argument (may be repeated)')
+        parser.add_option('-o', '--output', metavar='FILE',
+                          help='dump scraped items into FILE (use - for stdout)')
+        parser.add_option('-t', '--output-format', metavar='FORMAT',
+                          help='format to use for dumping items with -o')
     
-    # These benchmarks are delicate.  They hit various fast-paths in the gen
-# machinery in order to stay synchronous so we don't need an IOLoop.
-# This removes noise from the results, but it's easy to change things
-# in a way that completely invalidates the results.
+        def short_desc(self):
+        return 'Get settings values'
+    
+        def run(self, args, opts):
+        if opts.verbose:
+            versions = scrapy_components_versions()
+            width = max(len(n) for (n, _) in versions)
+            patt = '%-{}s : %s'.format(width)
+            for name, version in versions:
+                print(patt % (name, version))
+        else:
+            print('Scrapy %s' % scrapy.__version__)
+    
+            #Creating directory title page for current directory
+        with open('dir_title.html', 'w') as os_html:
+            os_html.write(header + dir_title)
+        
+        group.append(HTML('dir_title.html').render())
     
     
-def start(port, root_directory, bucket_depth):
-    '''Starts the mock S3 server on the given port at the given path.'''
-    application = S3Application(root_directory, bucket_depth)
-    http_server = httpserver.HTTPServer(application)
-    http_server.listen(port)
-    ioloop.IOLoop.current().start()
+  def Start( self ):
+    request_data = BuildRequestData()
+    request_data.update( { 'filetypes': self.filetypes } )
+    self._response = self.PostDataToHandler( request_data,
+                                             'semantic_completion_available' )
     
-            yield write(b'\r\n')
+        poll_again = _HandlePollResponse( response, diagnostics_handler )
+    if poll_again:
+      self._SendRequest()
+      return True
     
-    extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.coverage',
-    'sphinx.ext.doctest',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.viewcode',
-]
     
-    Circular references are not leaks per se, because they will eventually
-be GC'd. However, on CPython, they prevent the reference-counting fast
-path from being used and instead rely on the slower full GC. This
-increases memory footprint and CPU overhead, so we try to eliminate
-circular references created by normal operation.
-'''
+  def Response( self ):
+    return {
+      'completions': self._results,
+      'completion_start_column': self.request_data[ 'start_column' ]
+    }
+    
+    
+  def _ConvertDiagListToDict( self ):
+    self._line_to_diags = defaultdict( list )
+    for diag in self._diagnostics:
+      location = diag[ 'location' ]
+      bufnr = vimsupport.GetBufferNumberForFilename( location[ 'filepath' ] )
+      if bufnr == self._bufnr:
+        line_number = location[ 'line_num' ]
+        self._line_to_diags[ line_number ].append( diag )
+    
+      return request
+    
+    
+def EndsWithPython_Python2Paths_test():
+  python_paths = [
+    'python',
+    'python2',
+    '/usr/bin/python2.7',
+    '/home/user/.pyenv/shims/python2.7',
+    r'C:\Python27\python.exe',
+    '/Contents/MacOS/Python'
+  ]
+    
+      def _adjust_thread_count( self ):
+    # When the executor gets lost, the weakref callback will wake up
+    # the worker threads.
+    def weakref_cb( _, q=self._work_queue ):
+      q.put( None )
+    # TODO(bquinlan): Should avoid creating new threads if there are more
+    # idle threads than items in the work queue.
+    if len( self._threads ) < self._max_workers:
+      t = threading.Thread( target=_worker,
+                            args=( weakref.ref( self, weakref_cb ),
+                                   self._work_queue ) )
+      t.daemon = True
+      t.start()
+      self._threads.add( t )
