@@ -1,170 +1,103 @@
 
         
-        
-def pathutil_relative
-  Pathutil.new(DOC_PATH).relative_path_from(COL_PATH).to_s
-end
+        require 'action_view/helpers/tags/checkable'
     
-    CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    Gem::Specification.new do |s|
+  s.specification_version = 2 if s.respond_to? :specification_version=
+  s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to? :required_rubygems_version=
+  s.rubygems_version = '2.2.2'
+  s.required_ruby_version = '>= 2.3.0'
     
-    def site
-  @site ||= Jekyll::Site.new(
-    Jekyll.configuration('source' => File.expand_path('../docs', __dir__))
-  ).tap(&:reset).tap(&:read)
-end
+        # Private: The list of existing files, apart from those included in
+    # keep_files and hidden files.
+    #
+    # Returns a Set with the file paths
+    def existing_files
+      files = Set.new
+      regex = keep_file_regex
+      dirs = keep_dirs
     
-            msg = ' Please append `--trace` to the `#{cmd.name}` command '
-        dashes = '-' * msg.length
-        Jekyll.logger.error '', dashes
-        Jekyll.logger.error 'Jekyll #{Jekyll::VERSION} ', msg
-        Jekyll.logger.error '', ' for any additional information or backtrace. '
-        Jekyll.logger.abort_with '', dashes
+          unless (value.is_a?(Integer) && value >= 0) || value.is_a?(Symbol)
+        raise ArgumentError, ':#{key} must be a nonnegative Integer or symbol'
       end
-      # rubocop: enable RescueException
     end
   end
-end
-
     
-            def case_insensitive_urls(things, destination)
-          things.each_with_object({}) do |thing, memo|
-            dest = thing.destination(destination)
-            (memo[dest.downcase] ||= []) << dest
-          end
+          def save
+        @changed = identity.save
+      end
+    
+            include ::EachBatch
+      end
+    
+            def value_text
+          @status ? ('%.2f%%' % @status) : 'unknown'
         end
     
-          run!
-    end
+      path = 'assets/stylesheets'
+  css_path = args.with_defaults(css_path: 'tmp')[:css_path]
+  puts Term::ANSIColor.bold 'Compiling SCSS in #{path}'
+  Dir.mkdir(css_path) unless File.directory?(css_path)
+  %w(_bootstrap bootstrap/_theme).each do |file|
+    save_path = '#{css_path}/#{file.sub(/(^|\/)?_+/, '\1').sub('/', '-')}.css'
+    puts Term::ANSIColor.cyan('  #{save_path}') + '...'
+    engine    = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
+    css       = engine.render
+    File.open(save_path, 'w') { |f| f.write css }
   end
 end
-
     
-          it 'fails forcing overwriting metadata if DELIVER_FORCE_OVERWRITE isn't set, force isn't set and user answers no in interactive mode' do
-        options = FastlaneCore::Configuration.create(Deliver::Options.available_options, {
-          force: false
-        })
-        expect(UI).to receive(:interactive?).and_return(true)
-        expect(UI).to receive(:confirm).and_return(false)
-        expect(Deliver::CommandsGenerator.force_overwrite_metadata?(options, 'an/ignored/path')).to be_falsy
-      end
-    
-          def self.author
-        'yonekawa'
-      end
-    
-      it 'raises a TypeError when passed nil' do
-    lambda { sleep(nil)   }.should raise_error(TypeError)
-  end
-    
-    ENV['RAILS_ENV'] ||= 'test'
-    
-    RSpec::Matchers.define :have_value do |expected|
-  match do |actual|
-    await_condition { actual.value && actual.value.include?(expected) }
-  end
-    
-      end
-    
-      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
-  gem.executables   = %w(cap capify)
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
-    
-        def print_config_variables
-      ['--print-config-variables', '-p',
-       'Display the defined config variables before starting the deployment tasks.',
-       lambda do |_value|
-         Configuration.env.set(:print_config_variables, true)
-       end]
-    end
-  end
-end
-
-    
-        def any?(key)
-      value = fetch(key)
-      if value && value.respond_to?(:any?)
-        begin
-          return value.any?
-        rescue ArgumentError # rubocop:disable Lint/HandleExceptions
-          # Gracefully ignore values whose `any?` method doesn't accept 0 args
-        end
-      end
-    
-          ServerKey = Struct.new(:hostname, :port)
-    
-            def call
-          @validator.call
-        end
-      end
-    end
-  end
-end
-
-    
-        def vendor_path(path)
-      return ::File.join(LOGSTASH_HOME, 'vendor', path)
+        def get_trees
+      @trees ||= get_tree(@branch_sha)
     end
     
-    class LogStash::PluginManager::List < LogStash::PluginManager::Command
-    
-          PluginManager.ui.info('Installing file: #{local_file}')
-      uncompressed_path = uncompress(local_file)
-      PluginManager.ui.debug('Pack uncompressed to #{uncompressed_path}')
-      pack = LogStash::PluginManager::PackInstaller::Pack.new(uncompressed_path)
-      raise PluginManager::InvalidPackError, 'The pack must contains at least one plugin' unless pack.valid?
-    
-        desc 'Halt all VM's involved in the acceptance test round'
-    task :halt, :platform do |t, args|
-      config   = PlatformConfig.new
-      experimental = (ENV['LS_QA_EXPERIMENTAL_OS'].to_s.downcase || 'false') == 'true'
-      machines = config.select_names_for(args[:platform], {'experimental' => experimental})
-    
-    # Single-line step scoper
-When /^(.*) within (.*[^:])$/ do |step, parent|
-  with_scope(parent) { When step }
-end
-    
-      # Provides configurability to Paperclip. The options available are:
-  # * whiny: Will raise an error if Paperclip cannot process thumbnails of
-  #   an uploaded image. Defaults to true.
-  # * log: Logs progress to the Rails log. Uses ActiveRecord's logger, so honors
-  #   log levels, etc. Defaults to true.
-  # * command_path: Defines the path at which to find the command line
-  #   programs if they are not visible to Rails the system's search path. Defaults to
-  #   nil, which uses the first executable found in the user's search path.
-  # * use_exif_orientation: Whether to inspect EXIF data to determine an
-  #   image's orientation. Defaults to true.
-  def self.options
-    @options ||= {
-      command_path: nil,
-      content_type_mappings: {},
-      log: true,
-      log_command: true,
-      read_timeout: nil,
-      swallow_stderr: true,
-      use_exif_orientation: true,
-      whiny: true,
-      is_windows: Gem.win_platform?
-    }
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
   end
+  config.static_cache_control = 'public, max-age=3600'
     
-        def add_required_validations
-      options = Paperclip::Attachment.default_options.deep_merge(@options)
-      if options[:validate_media_type] != false
-        name = @name
-        @klass.validates_media_type_spoof_detection name,
-          :if => ->(instance){ instance.send(name).dirty? }
+        # Returns a String describing the file's content type
+    def detect
+      if blank_name?
+        SENSIBLE_DEFAULT
+      elsif empty_file?
+        EMPTY_TYPE
+      elsif calculated_type_matches.any?
+        calculated_type_matches.first
+      else
+        type_from_file_contents || SENSIBLE_DEFAULT
+      end.to_s
+    end
+    
+        # Returns the width and height in a format suitable to be passed to Geometry.parse
+    def to_s
+      s = ''
+      s << width.to_i.to_s if width > 0
+      s << 'x#{height.to_i}' if height > 0
+      s << modifier.to_s
+      s
+    end
+    
+        def geometry_string
+      begin
+        orientation = Paperclip.options[:use_exif_orientation] ?
+          '%[exif:orientation]' : '1'
+        Paperclip.run(
+          Paperclip.options[:is_windows] ? 'magick identify' : 'identify',
+          '-format '%wx%h,#{orientation}' :file', {
+            :file => '#{path}[0]'
+          }, {
+            :swallow_stderr => true
+          }
+        )
+      rescue Terrapin::ExitStatusError
+        ''
+      rescue Terrapin::CommandNotFoundError => e
+        raise_because_imagemagick_missing
       end
     end
