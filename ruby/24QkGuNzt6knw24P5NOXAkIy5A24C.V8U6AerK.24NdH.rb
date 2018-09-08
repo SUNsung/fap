@@ -1,84 +1,148 @@
 
         
-                def self.find_by_uid(uid, adapter)
-          uid = Net::LDAP::Filter.escape(uid)
-          adapter.user(adapter.config.uid, uid)
-        end
+                # Find and link metafiles
+        formula.prefix.install_metafiles formula.buildpath
+        formula.prefix.install_metafiles formula.libexec if formula.libexec.exist?
+      end
+    end
+  end
     
-            def has_attribute?(attribute)
-          if attribute == :location
-            get_info(:address).present?
-          else
-            get_info(attribute).present?
-          end
-        end
+        def self.cleanup_lockfiles
+      return unless HOMEBREW_CACHE_FORMULA.directory?
+      candidates = HOMEBREW_CACHE_FORMULA.children
+      lockfiles  = candidates.select { |f| f.file? && f.extname == '.brewing' }
+      lockfiles.each do |file|
+        next unless file.readable?
+        file.open.flock(File::LOCK_EX | File::LOCK_NB) && file.unlink
+      end
+    end
     
-            def initialize(project, ref, job = nil)
-          @project = project
-          @ref = ref
-          @job = job
+      def migrate_tap_migration
+    report[:D].each do |full_name|
+      name = full_name.split('/').last
+      next unless (dir = HOMEBREW_CELLAR/name).exist? # skip if formula is not installed.
+      next unless new_tap_name = tap.tap_migrations[name] # skip if formula is not in tap_migrations list.
+      tabs = dir.subdirs.map { |d| Tab.for_keg(Keg.new(d)) }
+      next unless tabs.first.tap == tap # skip if installed formula is not from this tap.
+      new_tap = Tap.fetch(new_tap_name)
+      new_tap.install unless new_tap.installed?
+      # update tap for each Tab
+      tabs.each { |tab| tab.tap = new_tap }
+      tabs.each(&:write)
+    end
+  end
     
-            def value_color
-          case @status
-          when 95..100 then STATUS_COLOR[:good]
-          when 90..95 then STATUS_COLOR[:acceptable]
-          when 75..90 then STATUS_COLOR[:medium]
-          when 0..75 then STATUS_COLOR[:low]
-          else
-            STATUS_COLOR[:unknown]
-          end
-        end
+    # This formula serves as the base class for several very similar
+# formulae for Amazon Web Services related tools.
+class AmazonWebServicesFormula < Formula
+  # Use this method to peform a standard install for Java-based tools,
+  # keeping the .jars out of HOMEBREW_PREFIX/lib
+  def install
+    rm Dir['bin/*.cmd'] # Remove Windows versions
+    libexec.install Dir['*']
+    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
+  end
+  alias_method :standard_install, :install
+    
+    TEMPLATE = ERB.new <<-HTML # :nodoc:
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+  <title><%=h exception.class %> at <%=h path %></title>
+    
+    desc 'generate gemspec'
+task 'rack-protection.gemspec' do
+  require 'rack/protection/version'
+  content = File.binread 'rack-protection.gemspec'
+    
+          def session_key
+        @session_key ||= options[:session_key]
       end
     end
   end
 end
 
     
-            def value_width
-          54
-        end
+            if has_vector?(request, headers)
+          warn env, 'attack prevented by #{self.class}'
     
-        file = File.read(scope('test/sass/templates/#{file || 'complex'}.sass'))
-    result = RubyProf.profile { times.times { Sass::Engine.new(file).render } }
-    
-        # Converts the CSS template into Sass or SCSS code.
-    #
-    # @param fmt [Symbol] `:sass` or `:scss`, designating the format to return.
-    # @return [String] The resulting Sass or SCSS code
-    # @raise [Sass::SyntaxError] if there's an error parsing the CSS template
-    def render(fmt = :sass)
-      check_encoding!
-      build_tree.send('to_#{fmt}', @options).strip + '\n'
-    rescue Sass::SyntaxError => err
-      err.modify_backtrace(:filename => @options[:filename] || '(css)')
-      raise err
-    end
-    
-          def self.options
-        options = []
-        options.concat(super.reject { |option, _| option == '--silent' })
-      end
-    
-      [jekyllPid, compassPid, rackupPid].each { |pid| Process.wait(pid) }
-end
-    
-    module Jekyll
-    
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
-    end
+      it 'ignores single-line arrays' do
+    expect_no_offenses('[a, b, c]')
   end
     
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+      let(:prefix) { '' } # A prefix before the opening brace.
+  let(:suffix) { '' } # A suffix for the line after the closing brace.
+  let(:open) { nil } # The opening brace.
+  let(:close) { nil } # The closing brace.
+  let(:a) { 'a' } # The first element.
+  let(:b) { 'b' } # The second element.
+  let(:b_comment) { '' } # Comment after the second element.
+  let(:multi_prefix) { '' } # Prefix multi and heredoc with this.
+  let(:multi) do # A viable multi-line element.
+    <<-RUBY.strip_indent.chomp
+      {
+      foo: bar
+      }
+    RUBY
+  end
+  # This heredoc is unsafe to edit around because it ends on the same line as
+  # the node itself.
+  let(:heredoc) do
+    <<-RUBY.strip_indent.chomp
+      <<-EOM
+      baz
+      EOM
+    RUBY
+  end
+  # This heredoc is safe to edit around because it ends on a line before the
+  # last line of the node.
+  let(:safe_heredoc) do
+    <<-RUBY.strip_indent.chomp
+      {
+      a: <<-EOM
+      baz
+      EOM
+      }
+    RUBY
+  end
+    
+      context 'when arguments to a method' do
+    let(:prefix) { 'bar(' }
+    let(:suffix) { ')' }
+    let(:source) { construct(false, true) }
+    
+        it 'registers an offense for opposite + correct style' do
+      expect_offense(<<-RUBY.strip_indent)
+        def func
+          for n in [1, 2, 3] do
+          ^^^^^^^^^^^^^^^^^^^^^ Prefer `each` over `for`.
+            puts n
+          end
+          [1, 2, 3].each do |n|
+            puts n
+          end
         end
+      RUBY
+    end
+    
+            def on_block(node)
+          return if target_ruby_version < 2.5
+    
+          # An array containing the arguments of the method definition.
+      #
+      # @return [Array<Node>] the arguments of the method definition
+      def arguments
+        node_parts[1]
+      end
+    
+          # Returns the branch of the `if` node that gets evaluated when its
+      # condition is falsey.
+      #
+      # @note This is normalized for `unless` nodes.
+      #
+      # @return [Node] the falsey branch node of the `if` node
+      # @return [nil] when there is no else branch
+      def else_branch
+        node_parts[2]
+      end
