@@ -1,130 +1,239 @@
 
         
-          // Post 'reopen' event.
-  // (This event is received when the user clicked the icon in the Dock).
-  static void EmitReopenEvent();
-    
-    #include 'content/nw/src/api/clipboard/clipboard.h'
-    
-    class Clipboard : public Base {
- public:
-  Clipboard(int id,
-            const base::WeakPtr<DispatcherHost>& dispatcher_host,
-            const base::DictionaryValue& option);
-  ~Clipboard() override;
+        namespace api {
     }
     
-    void Menu::RemoveKeys() {
-  if (!focus_manager_) return;
+    namespace api {
     }
     
-    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardReadAvailableTypesFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-        // Extension: 1.4
-    extern void (CODEGEN_FUNCPTR *BlendFuncSeparate)(GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha);
-    extern void (CODEGEN_FUNCPTR *MultiDrawArrays)(GLenum mode, const GLint *first, const GLsizei *count, GLsizei drawcount);
-    extern void (CODEGEN_FUNCPTR *MultiDrawElements)(GLenum mode, const GLsizei *count, GLenum type, const GLvoid* const *indices, GLsizei drawcount);
-    extern void (CODEGEN_FUNCPTR *PointParameterf)(GLenum pname, GLfloat param);
-    extern void (CODEGEN_FUNCPTR *PointParameterfv)(GLenum pname, const GLfloat *params);
-    extern void (CODEGEN_FUNCPTR *PointParameteri)(GLenum pname, GLint param);
-    extern void (CODEGEN_FUNCPTR *PointParameteriv)(GLenum pname, const GLint *params);
-    
-    #ifndef OPENCV_CORE_HAL_INTERNAL_HPP
-#define OPENCV_CORE_HAL_INTERNAL_HPP
-    
-    const uchar g_Saturate8u[] =
-{
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
-     16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
-     32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
-     48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
-     64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
-     80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
-     96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
-    112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
-    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
-    144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
-    160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
-    176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
-    192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
-    208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
-    224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
-    240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255
-};
-    
-    // Finds the base-2 logarithm of X. value is -1 if X is not a power of 2.
-template<int X, bool roundUp = true> struct sLogPow2 { 
-	enum { extra = sIsPow2<X>::value ? 0 : (roundUp ? 1 : 0) };
-	enum { inner = sLogPow2<X / 2>::inner + 1 };
-	enum { value = inner + extra };
-};
-template<bool roundUp> struct sLogPow2<0, roundUp> {
-	enum { inner = 0 };
-	enum { value = 0 };
-};
-template<bool roundUp> struct sLogPow2<1, roundUp> { 
-	enum { inner = 0 };
-	enum { value = 0 };
-};
-    
-    
-    {  auto it = fwds.find(key);
-  if (it == fwds.end()) {
-    MKLDNNConcatFwd fwd(concat_dim, data_md);
-    auto ins_ret = fwds.insert(std::pair<OpSignature, MKLDNNConcatFwd>(
-            key, fwd));
-    CHECK(ins_ret.second);
-    it = ins_ret.first;
-  }
-  return it->second;
+    void BrowserWindow::UpdateDraggableRegions(
+    content::RenderFrameHost* rfh,
+    const std::vector<DraggableRegion>& regions) {
+  if (window_->has_frame())
+    return;
+  static_cast<NativeWindowViews*>(window_.get())
+      ->UpdateDraggableRegions(DraggableRegionsToSkRegion(regions));
 }
     
+    #include 'atom/browser/api/atom_api_button.h'
     
-    {} // namespace aria2
-    
-      void setPeerStorage(const std::shared_ptr<PeerStorage>& peerStorage);
-    
-      int64_t offset_;
-    
-    
-    {  void nextEventIfAfterStarted();
+    template <>
+struct Converter<base::trace_event::TraceConfig> {
+  static bool FromV8(v8::Isolate* isolate,
+                     v8::Local<v8::Value> val,
+                     base::trace_event::TraceConfig* out) {
+    Dictionary options;
+    if (!ConvertFromV8(isolate, val, &options))
+      return false;
+    std::string category_filter, trace_options;
+    if (!options.Get('categoryFilter', &category_filter) ||
+        !options.Get('traceOptions', &trace_options))
+      return false;
+    *out = base::trace_event::TraceConfig(category_filter, trace_options);
+    return true;
+  }
 };
     
-    #endif // D_ASYNC_NAME_RESOLVER_MAN_H
+    void ShowSaveDialog(const file_dialog::DialogSettings& settings,
+                    mate::Arguments* args) {
+  v8::Local<v8::Value> peek = args->PeekNext();
+  file_dialog::SaveDialogCallback callback;
+  if (mate::Converter<file_dialog::SaveDialogCallback>::FromV8(
+          args->isolate(), peek, &callback)) {
+    file_dialog::ShowSaveDialog(settings, callback);
+  } else {
+    base::FilePath path;
+    if (file_dialog::ShowSaveDialog(settings, &path))
+      args->Return(path);
+  }
+}
+    
+    void GlobalShortcut::OnKeyPressed(const ui::Accelerator& accelerator) {
+  if (accelerator_callback_map_.find(accelerator) ==
+      accelerator_callback_map_.end()) {
+    // This should never occur, because if it does, GlobalGlobalShortcutListener
+    // notifes us with wrong accelerator.
+    NOTREACHED();
+    return;
+  }
+  accelerator_callback_map_[accelerator].Run();
+}
+    
+    InAppPurchase::~InAppPurchase() {}
+    
+    class InAppPurchase : public mate::EventEmitter<InAppPurchase>,
+                      public in_app_purchase::TransactionObserver {
+ public:
+  static mate::Handle<InAppPurchase> Create(v8::Isolate* isolate);
+    }
+    
+    namespace {
+    }
+    
+    #endif /* SECP256K1_MODULE_ECDH_MAIN_H */
+
+    
+    
+    {    secp256k1_scalar_set_b32(&r, &input64[0], &overflow);
+    ret &= !overflow;
+    secp256k1_scalar_set_b32(&s, &input64[32], &overflow);
+    ret &= !overflow;
+    if (ret) {
+        secp256k1_ecdsa_recoverable_signature_save(sig, &r, &s, recid);
+    } else {
+        memset(sig, 0, sizeof(*sig));
+    }
+    return ret;
+}
+    
+    BOOST_AUTO_TEST_CASE(bip173_testvectors_invalid)
+{
+    static const std::string CASES[] = {
+        ' 1nwldj5',
+        '\x7f''1axkwrx',
+        '\x80''1eym55h',
+        'an84characterslonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1569pvx',
+        'pzry9x0s0muk',
+        '1pzry9x0s0muk',
+        'x1b4n0q5v',
+        'li1dgmt3',
+        'de1lg7wt\xff',
+        'A1G7SGD8',
+        '10a06t8',
+        '1qzzfhee',
+        'a12UEL5L',
+        'A12uEL5L',
+    };
+    for (const std::string& str : CASES) {
+        auto ret = bech32::Decode(str);
+        BOOST_CHECK(ret.first.empty());
+    }
+}
+    
+    public:
+    // Strict type-specific getters, these throw std::runtime_error if the
+    // value is of unexpected type
+    const std::vector<std::string>& getKeys() const;
+    const std::vector<UniValue>& getValues() const;
+    bool get_bool() const;
+    const std::string& get_str() const;
+    int get_int() const;
+    int64_t get_int64() const;
+    double get_real() const;
+    const UniValue& get_obj() const;
+    const UniValue& get_array() const;
+    
+    
+    {   mapfile(){ hfile = hmap = 0; _first = _last = 0; }
+   mapfile(const char* file){ hfile = hmap = 0; _first = _last = 0; open(file); }
+   ~mapfile(){ close(); }
+   void open(const char* file);
+   void close();
+   const char* begin(){ return _first; }
+   const char* end(){ return _last; }
+   size_t size(){ return _last - _first; }
+   bool valid(){ return (hfile != 0) && (hfile != INVALID_HANDLE_VALUE); }
+};
+    
+    #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+template <class I>
+const bool is_random_access_iterator<I>::value;
+#endif
+    
+    #ifndef BOOST_REGEX_V4_PROTECTED_CALL_HPP
+#define BOOST_REGEX_V4_PROTECTED_CALL_HPP
+    
+    //
+// define BOOST_REGEX_NO_FWD if this
+// header doesn't work!
+//
+#ifdef BOOST_REGEX_NO_FWD
+#  ifndef BOOST_RE_REGEX_HPP
+#     include <boost/regex.hpp>
+#  endif
+#else
+    
+    
+    {    {
+      MutexLock l(shared->GetMutex());
+      shared->IncDone();
+      if (shared->AllDone()) {
+        shared->GetCondVar()->SignalAll();
+      }
+    }
+  }
+    
+      ColumnFamilyData* cfd_;
+  Version* version_;
+  const Comparator* user_comparator_;
+  LevelFilesBrief files_;
+    
+    #ifndef ROCKSDB_LITE
+    
+    
+    {    if (!status.ok()) {
+      mutex_.Unlock();
+      ROCKS_LOG_ERROR(immutable_db_options_.info_log, 'Cannot Flush data %s\n',
+                      status.ToString().c_str());
+      return status;
+    }
+  }
+    
+    #include <string>
+    
+    class WriteCallback {
+ public:
+  virtual ~WriteCallback() {}
+    }
+    
+    Status HdfsEnv::LockFile(const std::string& fname, FileLock** lock) {
+  // there isn's a very good way to atomically check and create
+  // a file via libhdfs
+  *lock = nullptr;
+  return Status::OK();
+}
+    
+          assert(p <= limit);
+      const size_t write_size = p - base;
+    
+        static BOOST_FORCEINLINE storage_type exchange(storage_type volatile& storage, storage_type v, memory_order order) BOOST_NOEXCEPT
+    {
+        switch (order)
+        {
+        case memory_order_relaxed:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE8_RELAXED(&storage, v));
+            break;
+        case memory_order_consume:
+        case memory_order_acquire:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE8_ACQUIRE(&storage, v));
+            break;
+        case memory_order_release:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE8_RELEASE(&storage, v));
+            break;
+        case memory_order_acq_rel:
+        case memory_order_seq_cst:
+        default:
+            v = static_cast< storage_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE8(&storage, v));
+            break;
+        }
+        return v;
+    }
+    
+    
+    {
+    {        BOOST_DEFAULTED_FUNCTION(aligned(), {})
+        BOOST_FORCEINLINE BOOST_CONSTEXPR explicit aligned(type v) BOOST_NOEXCEPT : value(v) {}
+    };
+};
+    
+    #if BOOST_ATOMIC_THREAD_FENCE > 0
+BOOST_FORCEINLINE void atomic_thread_fence(memory_order order) BOOST_NOEXCEPT
+{
+    detail::thread_fence(order);
+}
+#else
+BOOST_FORCEINLINE void atomic_thread_fence(memory_order) BOOST_NOEXCEPT
+{
+    detail::lockpool::thread_fence();
+}
+#endif
