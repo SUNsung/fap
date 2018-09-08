@@ -1,117 +1,116 @@
 
         
-            Category.transaction do
-      staff.group_names = ['staff']
-      unless staff.save
-        puts staff.errors.full_messages
-        raise 'Failed to set permissions on the Staff category!'
+        if git.modified_files.include?('snapshot/lib/assets/SnapshotHelperXcode8.swift')
+  warn('You modified `SnapshotHelperXcode8.swift`, make sure to update the version number at the bottom of the file to notify users about the new helper file.')
+end
+    
+      let(:options) do
+    # A typical options hash expected from Deliver::DetectValues
+    {
+      username: 'bill@acme.com',
+      ipa: 'ACME.ipa',
+      app_identifier: 'com.acme.acme',
+      app_version: '1.0.7',
+      app: double('app', { apple_id: 'YI8C2AS' }),
+      platform: 'ios'
+    }
+  end
+    
+          def self.available_options
+        [
+          FastlaneCore::ConfigItem.new(key: :platforms,
+                                       optional: false,
+                                       type: Array,
+                                       default_value: '',
+                                       description: 'The optional extra platforms to support')
+        ]
       end
     
-                scenario_import.merges = {
-              '0' => {
-                'name' => 'a new name',
-                'schedule' => '6pm',
-                'keep_events_for' => 2.days.to_i.to_s,
-                'disabled' => 'true',
-                'options' => weather_agent_options.merge('api_key' => 'foo').to_json
-              }
-            }
+            cmd << ['-am #{message.shellescape}']
+        cmd << '--force' if options[:force]
+        cmd << '-s' if options[:sign]
+        cmd << ''#{tag}''
+        cmd << options[:commit].to_s if options[:commit]
     
-        it 'outputs control links to agents within the incoming set, but not outside it' do
-      agents(:jane_rain_notifier_agent).control_targets = [agents(:jane_weather_agent), agents(:jane_basecamp_agent)]
-      agents(:jane_rain_notifier_agent).save!
+              @registered.each do |plugin|
+            result.merge!(plugin.guest.to_hash)
+          end
     
-          Utils.sort_tuples!(tuples, orders)
-      expect(tuples).to eq expected
+            # Defines additional configuration keys to be available in the
+        # Vagrantfile. The configuration class should be returned by a
+        # block passed to this method. This is done to ensure that the class
+        # is lazy loaded, so if your class inherits from any classes that
+        # are specific to Vagrant 1.0, then the plugin can still be defined
+        # without breaking anything in future versions of Vagrant.
+        #
+        # @param [String] name Configuration key.
+        # @param [Boolean] upgrade_safe If this is true, then this configuration
+        #   key is safe to load during an upgrade, meaning that it depends
+        #   on NO Vagrant internal classes. Do _not_ set this to true unless
+        #   you really know what you're doing, since you can cause Vagrant
+        #   to crash (although Vagrant will output a user-friendly error
+        #   message if this were to happen).
+        def self.config(name=UNSET_VALUE, upgrade_safe=false, &block)
+          data[:config] ||= Registry.new
+    
+              # Determine if we require a local Vagrant environment. There are
+          # two cases that we require a local environment:
+          #
+          #   * We're asking for ANY/EVERY VM (no names given).
+          #
+          #   * We're asking for specific VMs, at least once of which
+          #     is NOT in the local machine index.
+          #
+          requires_local_env = false
+          requires_local_env = true if names.empty?
+          requires_local_env ||= names.any? { |n|
+            !@env.machine_index.include?(n)
+          }
+          raise Errors::NoEnvironmentError if requires_local_env && !@env.root_path
+    
+      #
+  # HTTP POST request class wrapper.
+  #
+  class Post < Request
+    def initialize(uri = '/', proto = DefaultProtocol)
+      super('POST', uri, proto)
     end
   end
     
-      let :reverted_extract do
-    old_extract
-  end
+          raise ::EOFError if not data
+      raise ::EOFError if data.empty?
     
-          # Store the ID locally
-      @id = value.nil? ? nil : value.to_s
+    # Supported
+IAX_SUPPORTED_CODECS  = IAX_CODEC_G711_MULAW | IAX_CODEC_G711_ALAW | IAX_CODEC_LINEAR_PCM
     
-        # Finds a machine where the UUID is prefixed by the given string.
-    #
-    # @return [Hash]
-    def find_by_prefix(prefix)
-      @machines.each do |uuid, data|
-        return data.merge('id' => uuid) if uuid.start_with?(prefix)
-      end
+              # Encodes a Rex::Proto::Kerberos::Model::AuthorizationData into an ASN.1 String
+          #
+          # @return [String]
+          def encode
+            seqs = []
+            elements.each do |elem|
+              elems = []
+              type_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_type(elem[:type])], 0, :CONTEXT_SPECIFIC)
+              elems << type_asn1
+              data_asn1 = OpenSSL::ASN1::ASN1Data.new([encode_data(elem[:data])], 1, :CONTEXT_SPECIFIC)
+              elems << data_asn1
+              seqs << OpenSSL::ASN1::Sequence.new(elems)
+            end
     
-              # First determine the proper array of VMs.
-          vms = []
-          if names.length > 0
-            names.each do |name|
-              if pattern = name[/^\/(.+?)\/$/, 1]
-                # This is a regular expression name, so we convert to a regular
-                # expression and allow that sort of matching.
-                regex = Regexp.new(pattern)
+              # @!attribute type
+          #   @return [Integer] The algorithm used to generate the checksum
+          attr_accessor :type
+          # @!attribute checksum
+          #   @return [String] The checksum itself
+          attr_accessor :checksum
     
-            # Called after the configuration is finalized and loaded to validate
-        # this object.
-        #
-        # @param [Environment] env Vagrant::Environment object of the
-        #   environment that this configuration has been loaded into. This
-        #   gives you convenient access to things like the the root path
-        #   and so on.
-        # @param [ErrorRecorder] errors
-        def validate(env, errors)
-        end
-      end
-    end
-  end
-end
-
+                self
+          end
     
-            # Configures the given list of networks on the virtual machine.
-        #
-        # The networks parameter will be an array of hashes where the hashes
-        # represent the configuration of a network interface. The structure
-        # of the hash will be roughly the following:
-        #
-        # {
-        #   type:      :static,
-        #   ip:        '192.168.33.10',
-        #   netmask:   '255.255.255.0',
-        #   interface: 1
-        # }
-        #
-        def configure_networks(networks)
-          raise BaseError, _key: :unsupported_configure_networks
-        end
-    
-      gem.files         = `git ls-files -z`.split('\x0').reject { |f| f =~ /^docs/ }
-  gem.executables   = %w(cap capify)
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ['lib']
-    
-    Given(/^a task which executes as root$/) do
-  TestApp.copy_task_to_test_app('spec/support/tasks/root.rake')
-end
-    
-      def exists?(type, path)
-    %Q{[ -#{type} '#{path}' ]}
-  end
-    
-          def echo?
-        (options || {}).fetch(:echo, true)
-      end
-    end
-  end
-end
-
-    
-    MESSAGE
-      end
-    end
-  end
-end
-
-    
-          def fetch_primary(role)
-        hosts = roles_for([role])
-        hosts.find(&:primary) || hosts.first
-      end
+              # Decodes the ctime field
+          #
+          # @param input [OpenSSL::ASN1::ASN1Data] the input to decode from
+          # @return [Time]
+          def decode_ctime(input)
+            input.value[0].value
+          end
