@@ -1,155 +1,100 @@
 
         
-        intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', None),
-    'werkzeug': ('http://werkzeug.pocoo.org/docs/', None),
-    'click': ('http://click.pocoo.org/', None),
-    'jinja': ('http://jinja.pocoo.org/docs/', None),
-    'itsdangerous': ('https://pythonhosted.org/itsdangerous', None),
-    'sqlalchemy': ('https://docs.sqlalchemy.org/en/latest/', None),
-    'wtforms': ('https://wtforms.readthedocs.io/en/latest/', None),
-    'blinker': ('https://pythonhosted.org/blinker/', None),
-}
+            def __init__(self, from_user_id, to_user_id, request_status, timestamp):
+        self.from_user_id = from_user_id
+        self.to_user_id = to_user_id
+        self.request_status = request_status
+        self.timestamp = timestamp
+    
+        '''
+)
+network.add_argument(
+    '--check-status',
+    default=False,
+    action='store_true',
+    help='''
+    By default, HTTPie exits with 0 when no network or other fatal errors
+    occur. This flag instructs HTTPie to also check the HTTP status code and
+    exit with an error if the status indicates one.
+    
+        # This be set automatically once the plugin has been loaded.
+    package_name = None
+    
+        name = 'Digest HTTP auth'
+    auth_type = 'digest'
     
     
-@bp.route('/create', methods=('GET', 'POST'))
-@login_required
-def create():
-    '''Create a new post for the current user.'''
-    if request.method == 'POST':
-        title = request.form['title']
-        body = request.form['body']
-        error = None
+def test_POST_form_multiple_values(httpbin_both):
+    r = http('--form', 'POST', httpbin_both + '/post', 'foo=bar', 'foo=baz')
+    assert HTTP_OK in r
+    assert r.json['form'] == {'foo': ['bar', 'baz']}
     
     
-def _lookup_req_object(name):
-    top = _request_ctx_stack.top
-    if top is None:
-        raise RuntimeError(_request_ctx_err_msg)
-    return getattr(top, name)
+class TestLineEndings:
+    '''
+    Test that CRLF is properly used in headers
+    and as the headers/body separator.
     
-        #: Tag classes to bind when creating the serializer. Other tags can be
-    #: added later using :meth:`~register`.
-    default_tags = [
-        TagDict, PassDict, TagTuple, PassList, TagBytes, TagMarkup, TagUUID,
-        TagDateTime,
-    ]
+        def __call__(self, w):
+        return w
     
-    Provides utility functions that are consumed internally by Requests
-which depend on extremely few external helpers (such as compat)
-'''
-    
-    # TODO: response is the only one
-    
-        def digest_failed_response_handler(sock):
-        # Respond to initial GET with a challenge.
-        request_content = consume_socket_content(sock, timeout=0.5)
-        assert request_content.startswith(b'GET / HTTP/1.1')
-        sock.send(text_401)
-    
-            with server as address:
-            sock1 = socket.socket()
-            sock2 = socket.socket()
-    
-    
-def consume_socket_content(sock, timeout=0.5):
-    chunks = 65536
-    content = b''
-    
-            except _ProxyError as e:
-            raise ProxyError(e)
-    
-    
-@pytest.mark.parametrize('var,url,proxy', [
-    ('http_proxy', 'http://example.com', 'socks5://proxy.com:9876'),
-    ('https_proxy', 'https://example.com', 'socks5://proxy.com:9876'),
-    ('all_proxy', 'http://example.com', 'socks5://proxy.com:9876'),
-    ('all_proxy', 'https://example.com', 'socks5://proxy.com:9876'),
-])
-def test_proxy_env_vars_override_default(var, url, proxy):
-    session = requests.Session()
-    prep = PreparedRequest()
-    prep.prepare(method='GET', url=url)
-    
-    
-try:
-    # check if rackhd url(ie:10.1.1.45:8080) is specified in the environment
-    RACKHD_URL = 'http://' + str(os.environ['RACKHD_URL'])
-except:
-    # use default values
-    pass
-    
-    pipe = Popen(['zoneadm', 'list', '-ip'], stdout=PIPE, universal_newlines=True)
-result['all']['hosts'] = []
-for l in pipe.stdout.readlines():
-    # 1:work:running:/zones/work:3126dc59-9a07-4829-cde9-a816e4c5040e:native:shared
-    s = l.split(':')
-    if s[1] != 'global':
-        result['all']['hosts'].append(s[1])
-    
-        # Fixes needed: docs/bin/plugin_formatter.py
-    # - t = _MODULE.sub(r':ref:`\1 <\1>`', t)
-    # + t = _MODULE.sub(r':ref:`\1 <module_\1>`', t)
-    #
-    # These have @{module}@ in the template and need to have something like module_@{module}@
-    # If any of these list plugins as well as modules, they will need to have a conditional or extra
-    # data passed in to handle that in a generic fashion:
-    #
-    # docs/templates/list_of_CATEGORY_modules.rst.j2
-    # docs/templates/list_of_CATEGORY_plugins.rst.j2
-    # docs/templates/modules_by_support.rst.j2
-    #
-    # These are just a simple manual fix:
-    # :ref:`command` matching plugin command was found in ./../docsite/rst/user_guide/intro_adhoc.rst
-    # :ref:`shell` matching plugin shell was found in ./../docsite/rst/user_guide/intro_adhoc.rst
-    # :ref:`config` matching plugin config was found in ./../docsite/rst/installation_guide/intro_configuration.rst
+        x_train = np.array(x[:int(len(x) * (1 - test_split))])
+    y_train = np.array(y[:int(len(x) * (1 - test_split))])
+    x_test = np.array(x[int(len(x) * (1 - test_split)):])
+    y_test = np.array(y[int(len(x) * (1 - test_split)):])
+    return (x_train, y_train), (x_test, y_test)
 
     
-    try:
-    args = [to_text(a, errors='surrogate_or_strict') for a in sys.argv]
-except UnicodeError:
-    sys.stderr.write(u'The full traceback was:\n\n%s' % to_text(traceback.format_exc()))
-    sys.exit(u'Command line args are parsable to utf-8')
+        for i in range(1, 6):
+        fpath = os.path.join(path, 'data_batch_' + str(i))
+        (x_train[(i - 1) * 10000: i * 10000, :, :, :],
+         y_train[(i - 1) * 10000: i * 10000]) = load_batch(fpath)
     
-        def test_post(self):
-        body = 'foo=bar'
-        # Without an explicit Content-Length redbot will try to send the
-        # request chunked.
-        self.check_url(
-            '/post', method='POST', body=body,
-            headers=[('Content-Length', str(len(body))),
-                     ('Content-Type', 'application/x-www-form-urlencoded')],
-            expected_status=303)
+        # Raises
+        ValueError: in case of invalid `label_mode`.
+    '''
+    if label_mode not in ['fine', 'coarse']:
+        raise ValueError('`label_mode` must be one of `'fine'`, `'coarse'`.')
     
-        def _object_path(self, bucket, object_name):
-        if self.application.bucket_depth < 1:
-            return os.path.abspath(os.path.join(
-                self.application.directory, bucket, object_name))
-        hash = hashlib.md5(object_name).hexdigest()
-        path = os.path.abspath(os.path.join(
-            self.application.directory, bucket))
-        for i in range(self.application.bucket_depth):
-            path = os.path.join(path, hash[:2 * (i + 1)])
-        return os.path.join(path, object_name)
+        def process_appid_not_exist(self, appid, ip):
+        ret = self.check_api(ip, 'xxnet-1')
+        if ret and ret.ok:
+            self.set_appid_not_exist(appid)
+        else:
+            self.logger.warn('process_appid_not_exist, remove ip:%s', ip)
+    
+            #Check Certs Dir
+        if not os.path.exists(CertUtil.ca_certdir):
+            os.makedirs(CertUtil.ca_certdir)
+    
+            if config.PROXY_ENABLE:
+            if config.PROXY_USER:
+                self.proxy = '%s://%s:%s@%s:%d' % \
+                    (config.PROXY_TYPE, config.PROXY_USER, config.PROXY_PASSWD, config.PROXY_HOST, config.PROXY_PORT)
+            else:
+                self.proxy = '%s://%s:%d' % \
+                    (config.PROXY_TYPE, config.PROXY_HOST, config.PROXY_PORT)
+        else:
+            self.proxy = None
+    
+            # put all lines in the file into a Python list
+        strings = f.readlines()
+        
+        # above line leaves trailing newline characters; strip them out
+        strings = [x.strip(u'\n') for x in strings]
+        
+        # remove empty-lines and comments
+        strings = [x for x in strings if x and not x.startswith(u'#')]
+        
+        # insert empty string since all are being removed
+        strings.insert(0, u'')
+    
+        def build_floor(self):
+        self.floor = 'More than One'
+    
+        def do_something(self, something):
+        return 'Doing %s' % something
     
     
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render('index.html', messages=ChatSocketHandler.cache)
-    
-    import random
-import signal
-import subprocess
-    
-    define('num', default=10000, help='number of iterations')
-    
-    define('num', default=100, help='number of iterations')
-define('dump', default=False, help='print template generated code and exit')
-    
-        for host in args:
-        print('Resolving %s' % host)
-        for resolver in resolvers:
-            addrinfo = yield resolver.resolve(host, 80, family)
-            print('%s: %s' % (resolver.__class__.__name__,
-                              pprint.pformat(addrinfo)))
-        print()
+class Ui(object):
+    ''' UI interaction class '''
