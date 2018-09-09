@@ -1,123 +1,111 @@
 
         
-        
-    {} // namespace caffe2
-
+        #ifndef BITCOIN_QT_OPENURIDIALOG_H
+#define BITCOIN_QT_OPENURIDIALOG_H
     
-    **Code**
-    
-    Github Links:
-    
-    		for (int i = 0; i < MAX_HANDS; i++) {
+    void test_ecdh_api(void) {
+    /* Setup context that just counts errors */
+    secp256k1_context *tctx = secp256k1_context_create(SECP256K1_CONTEXT_SIGN);
+    secp256k1_pubkey point;
+    unsigned char res[32];
+    unsigned char s_one[32] = { 0 };
+    int32_t ecount = 0;
+    s_one[31] = 1;
     }
     
-    class TCPServerPosix : public TCP_Server {
+    #include 'include/secp256k1_recovery.h'
+    
+        CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 0));
+    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 1));
+    CHECK(secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 2));
+    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
+    CHECK(secp256k1_ecdsa_recoverable_signature_parse_compact(ctx, &rsig, sig64, 3));
+    CHECK(!secp256k1_ecdsa_recover(ctx, &pubkey, &rsig, msg32));
+    
+    enum jtokentype {
+    JTOK_ERR        = -1,
+    JTOK_NONE       = 0,                           // eof
+    JTOK_OBJ_OPEN,
+    JTOK_OBJ_CLOSE,
+    JTOK_ARR_OPEN,
+    JTOK_ARR_CLOSE,
+    JTOK_COLON,
+    JTOK_COMMA,
+    JTOK_KW_NULL,
+    JTOK_KW_TRUE,
+    JTOK_KW_FALSE,
+    JTOK_NUMBER,
+    JTOK_STRING,
+};
+    
+    
+    {
+    {					b->prev = NULL;
+					h.last = b;
+					h.first = b;
+				}
+			}
+    
+    
+    {	ShaderCompilerGLES2();
+};
+    
+    #include 'syslog_logger.h'
+#include 'print_string.h'
+#include <syslog.h>
+    
+    	struct sockaddr_storage addr;
+	size_t addr_size = _set_listen_sockaddr(&addr, p_port, sock_type, p_bind_address);
+    
+    	//WIN32_FILE_ATTRIBUTE_DATA    fileInfo;
+    
+    
+    {#ifdef WINDOWS_USE_MUTEX
+	mutex = CreateMutex(NULL, FALSE, NULL);
+#else
+#ifdef UWP_ENABLED
+	InitializeCriticalSectionEx(&mutex, 0, 0);
+#else
+	InitializeCriticalSection(&mutex);
+#endif
+#endif
+}
+    
+    Error PacketPeerUDPWinsock::listen(int p_port, const IP_Address &p_bind_address, int p_recv_buffer_size) {
     }
     
-    	virtual bool file_exists(String p_file);
-	virtual bool dir_exists(String p_dir);
+    #ifdef WINDOWS_ENABLED
     
-    #endif
     
-    void ComputeBlockIDCTDouble(double block[64]) {
-  TransformBlock(block, IDCT1d);
+    {    return CardinalSplineBy::create(_duration, pReverse, _tension);
 }
     
-    // Performs in-place floating point 8x8 DCT on block[0..63].
-// Note that the DCT used here is the DCT-2 with the first term multiplied by
-// 1/sqrt(2) and the result scaled by 1/2.
-void ComputeBlockDCTDouble(double block[64]);
+        /**
+    @brief Set whether lens is concave.
+    @param concave Whether lens is concave.
+    */
+    void setConcave(bool concave) { _concave = concave; }
     
-    #ifndef GUETZLI_ENTROPY_ENCODE_H_
-#define GUETZLI_ENTROPY_ENCODE_H_
     
-    #include <math.h>
+    {    va_end(params);
     
-    const double* Srgb8ToLinearTable() {
-  static const double* const kSrgb8ToLinearTable = NewSrgb8ToLinearTable();
-  return kSrgb8ToLinearTable;
+    return ret;
 }
+#endif
     
-    #include 'guetzli/output_image.h'
+        /** Adds a frame with an image filename. Internally it will create a SpriteFrame and it will add it.
+     * The frame will be added with one 'delay unit'.
+     * Added to facilitate the migration from v0.8 to v0.9.
+     * @param filename The path of SpriteFrame.
+     */
+    void addSpriteFrameWithFile(const std::string& filename);
+    /**
+     * @deprecated. Use addSpriteFrameWithFile() instead.
+     @js NA
+     */
+    CC_DEPRECATED_ATTRIBUTE void addSpriteFrameWithFileName(const std::string& filename){ addSpriteFrameWithFile(filename);}
     
     
-// Adds APP0 header data.
-void AddApp0Data(JPEGData* jpg);
-    
-    #include 'guetzli/jpeg_data.h'
-    
-      JpegHistogram() { Clear(); }
-  void Clear() {
-    memset(counts, 0, sizeof(counts));
-    counts[kSize - 1] = 1;
-  }
-  void Add(int symbol) {
-    counts[symbol] += 2;
-  }
-  void Add(int symbol, int weight) {
-    counts[symbol] += 2 * weight;
-  }
-  void AddHistogram(const JpegHistogram& other) {
-    for (int i = 0; i + 1 < kSize; ++i) {
-      counts[i] += other.counts[i];
-    }
-    counts[kSize - 1] = 1;
-  }
-  int NumSymbols() const {
-    int n = 0;
-    for (int i = 0; i + 1 < kSize; ++i) {
-      n += (counts[i] > 0 ? 1 : 0);
-    }
-    return n;
-  }
-    
-      auto *can_client_factory = CanClientFactory::instance();
-  can_client_factory->RegisterCanClients();
-    
-      const int32_t ret = canRead(dev_handler_, recv_frames_, frame_num, nullptr);
-  // rx timeout not log
-  if (ret == NTCAN_RX_TIMEOUT) {
-    return ErrorCode::OK;
-  }
-  if (ret != NTCAN_SUCCESS) {
-    AERROR << 'receive message failed, error code: ' << ret << ', '
-           << GetErrorString(ret);
-    return ErrorCode::CAN_CLIENT_ERROR_BASE;
-  }
-    
-    bool HermesCanClient::Init(const CANCardParameter &parameter) {
-  if (!parameter.has_channel_id()) {
-    AERROR << 'Init CAN failed: parameter does not have channel id. The '
-              'parameter is '
-           << parameter.DebugString();
-    return false;
-  } else {
-    _card_port = parameter.channel_id();
-    return true;
-  }
-}
-    
-    TEST(ByteTest, SetValue) {
-  unsigned char byte_value = 0x1A;
-  Byte value(&byte_value);
-  value.set_value(0x06, 3, 3);
-  EXPECT_EQ(0x32, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 0, 8);
-  EXPECT_EQ(0x06, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 0, 10);
-  EXPECT_EQ(0x06, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x06, 1, 7);
-  EXPECT_EQ(0x0C, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x07, 1, 1);
-  EXPECT_EQ(0x1A, value.get_byte());
-  value.set_value(0x1A);
-  value.set_value(0x07, -1, 1);
-  EXPECT_EQ(0x1A, value.get_byte());
-}
-    
-    #ifndef MODULES_DRIVERS_CANBUS_COMMON_CANBUS_CONSTS_H_
-#define MODULES_DRIVERS_CANBUS_COMMON_CANBUS_CONSTS_H_
+    {}
