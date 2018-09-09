@@ -1,100 +1,142 @@
 
         
-            def __init__(self, from_user_id, to_user_id, request_status, timestamp):
-        self.from_user_id = from_user_id
-        self.to_user_id = to_user_id
-        self.request_status = request_status
-        self.timestamp = timestamp
+            var_names = vars_dict.keys()
+    nested_vars_dict = {}
+    current_dict = nested_vars_dict
+    for v, var_name in enumerate(var_names):
+      var_split_name_list = var_name.split('/')
+      split_name_list_len = len(var_split_name_list)
+      current_dict = nested_vars_dict
+      for p, part in enumerate(var_split_name_list):
+        if p < split_name_list_len - 1:
+          if part in current_dict:
+            current_dict = current_dict[part]
+          else:
+            current_dict[part] = {}
+            current_dict = current_dict[part]
+        else:
+          current_dict[part] = vars_dict[var_name]
+    
+      return datasets
+    
+      @property
+  def size(self):
+    return len(self._id_to_word)
+    
+    _START_SPECIAL_CHARS = ['.', ',', '?', '!', ';', ':', '[', ']', '\'', '+', '/',
+                        '\xc2\xa3', '$', '~', '*', '%', '{', '}', '#', '&', '-',
+                        ''', '(', ')', '='] + list(_SPECIAL_CHAR_MAP.keys())
+_SPECIAL_CHARS = _START_SPECIAL_CHARS + [
+    '\'s', '\'m', '\'t', '\'re', '\'d', '\'ve', '\'ll']
+    
+      for batch in range(num_batches):
+    x = np.zeros([batch_size, num_steps], dtype=np.int32)
+    y = np.zeros([batch_size, num_steps], dtype=np.int32)
+    w = np.zeros([batch_size, num_steps], dtype=np.float)
+    
+        baselines = []
+    for r in rewards_list:
+      baselines.append(ema.average(r))
     
         '''
-)
-network.add_argument(
-    '--check-status',
-    default=False,
-    action='store_true',
-    help='''
-    By default, HTTPie exits with 0 when no network or other fatal errors
-    occur. This flag instructs HTTPie to also check the HTTP status code and
-    exit with an error if the status indicates one.
+    is_windows = is_windows
+    config_dir = DEFAULT_CONFIG_DIR
+    stdin = sys.stdin
+    stdin_isatty = stdin.isatty()
+    stdin_encoding = None
+    stdout = sys.stdout
+    stdout_isatty = stdout.isatty()
+    stdout_encoding = None
+    stderr = sys.stderr
+    stderr_isatty = stderr.isatty()
+    colors = 256
+    if not is_windows:
+        if curses:
+            try:
+                curses.setupterm()
+                colors = curses.tigetnum('colors')
+            except curses.error:
+                pass
+    else:
+        # noinspection PyUnresolvedReferences
+        import colorama.initialise
+        stdout = colorama.initialise.wrap_stream(
+            stdout, convert=None, strip=None,
+            autoreset=True, wrap=True
+        )
+        stderr = colorama.initialise.wrap_stream(
+            stderr, convert=None, strip=None,
+            autoreset=True, wrap=True
+        )
+        del colorama
     
-        # This be set automatically once the plugin has been loaded.
-    package_name = None
+    
+AVAILABLE_STYLES = set(pygments.styles.get_all_styles())
+AVAILABLE_STYLES.add('solarized')
+    
+    
+MIME_RE = re.compile(r'^[^/]+/[^/]+$')
     
         name = 'Digest HTTP auth'
     auth_type = 'digest'
     
-    
-def test_POST_form_multiple_values(httpbin_both):
-    r = http('--form', 'POST', httpbin_both + '/post', 'foo=bar', 'foo=baz')
-    assert HTTP_OK in r
-    assert r.json['form'] == {'foo': ['bar', 'baz']}
-    
-    
-class TestLineEndings:
-    '''
-    Test that CRLF is properly used in headers
-    and as the headers/body separator.
-    
-        def __call__(self, w):
-        return w
-    
-        x_train = np.array(x[:int(len(x) * (1 - test_split))])
-    y_train = np.array(y[:int(len(x) * (1 - test_split))])
-    x_test = np.array(x[int(len(x) * (1 - test_split)):])
-    y_test = np.array(y[int(len(x) * (1 - test_split)):])
-    return (x_train, y_train), (x_test, y_test)
-
-    
-        for i in range(1, 6):
-        fpath = os.path.join(path, 'data_batch_' + str(i))
-        (x_train[(i - 1) * 10000: i * 10000, :, :, :],
-         y_train[(i - 1) * 10000: i * 10000]) = load_batch(fpath)
-    
-        # Raises
-        ValueError: in case of invalid `label_mode`.
-    '''
-    if label_mode not in ['fine', 'coarse']:
-        raise ValueError('`label_mode` must be one of `'fine'`, `'coarse'`.')
-    
-        def process_appid_not_exist(self, appid, ip):
-        ret = self.check_api(ip, 'xxnet-1')
-        if ret and ret.ok:
-            self.set_appid_not_exist(appid)
-        else:
-            self.logger.warn('process_appid_not_exist, remove ip:%s', ip)
-    
-            #Check Certs Dir
-        if not os.path.exists(CertUtil.ca_certdir):
-            os.makedirs(CertUtil.ca_certdir)
-    
-            if config.PROXY_ENABLE:
-            if config.PROXY_USER:
-                self.proxy = '%s://%s:%s@%s:%d' % \
-                    (config.PROXY_TYPE, config.PROXY_USER, config.PROXY_PASSWD, config.PROXY_HOST, config.PROXY_PORT)
-            else:
-                self.proxy = '%s://%s:%d' % \
-                    (config.PROXY_TYPE, config.PROXY_HOST, config.PROXY_PORT)
-        else:
-            self.proxy = None
-    
-            # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
-    
-        def build_floor(self):
-        self.floor = 'More than One'
-    
-        def do_something(self, something):
-        return 'Doing %s' % something
+        >>> humanize_bytes(1)
+    '1 B'
+    >>> humanize_bytes(1024, precision=1)
+    '1.0 kB'
+    >>> humanize_bytes(1024 * 123, precision=1)
+    '123.0 kB'
+    >>> humanize_bytes(1024 * 12342, precision=1)
+    '12.1 MB'
+    >>> humanize_bytes(1024 * 12342, precision=2)
+    '12.05 MB'
+    >>> humanize_bytes(1024 * 1234, precision=2)
+    '1.21 MB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
+    '1.31 GB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
+    '1.3 GB'
     
     
-class Ui(object):
-    ''' UI interaction class '''
+def test_default_options(httpbin):
+    env = MockEnvironment()
+    env.config['default_options'] = ['--form']
+    env.config.save()
+    r = http(httpbin.url + '/post', 'foo=bar', env=env)
+    assert r.json['form'] == {'foo': 'bar'}
+    
+    
+# Options for the link checker
+# ----------------------------
+    
+    # Now add the related image to the html part.
+with open('roasted-asparagus.jpg', 'rb') as img:
+    msg.get_payload()[1].add_related(img.read(), 'image', 'jpeg',
+                                     cid=asparagus_cid)
+    
+    import os
+import email
+import mimetypes
+    
+    while True:
+    line = input()
+    if line == '':
+        break
+    buffer += line
+    if sqlite3.complete_statement(buffer):
+        try:
+            buffer = buffer.strip()
+            cur.execute(buffer)
+    
+    # Register the converter
+sqlite3.register_converter('point', convert_point)
+    
+    con = sqlite3.connect(DB_FILE)
+cur = con.cursor()
+cur.execute('''
+        create table people
+        (
+          name_last      varchar(20),
+          age            integer
+        )
+        ''')
