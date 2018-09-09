@@ -1,68 +1,60 @@
 
         
-            def list_releases(self):
-        return self._call(self._API_URL)
+            def __init__(self, *args, **kwargs):
+        '''Initialize RequestException with `request` and `response` objects.'''
+        response = kwargs.pop('response', None)
+        self.response = response
+        self.request = kwargs.pop('request', None)
+        if (response is not None and not self.request and
+                hasattr(response, 'request')):
+            self.request = self.response.request
+        super(RequestException, self).__init__(*args, **kwargs)
     
-        for group in opt_parser.option_groups:
-        for option in group.option_list:
-            long_option = option.get_opt_string().strip('-')
-            complete_cmd = ['complete', '--command', 'youtube-dl', '--long-option', long_option]
-            if option._short_opts:
-                complete_cmd += ['--short-option', option._short_opts[0].strip('-')]
-            if option.help != optparse.SUPPRESS_HELP:
-                complete_cmd += ['--description', option.help]
-            complete_cmd.extend(EXTRA_ARGS.get(long_option, []))
-            commands.append(shell_quote(complete_cmd))
+            This attribute checks if the status code of the response is between
+        400 and 600 to see if there was a client error or a server error. If
+        the status code, is between 200 and 400, this will return True. This
+        is **not** a check to see if the response code is ``200 OK``.
+        '''
+        return self.ok
     
-    print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
+    # datasets available: ['http', 'smtp', 'SA', 'SF', 'shuttle', 'forestcover']
+datasets = ['http', 'smtp', 'SA', 'SF', 'shuttle', 'forestcover']
     
-    import youtube_dl
+        max_it = len(samples_range) * len(features_range)
+    for n_samples in samples_range:
+        for n_features in features_range:
+            it += 1
+            print('==============================')
+            print('Iteration %03d of %03d' % (it, max_it))
+            print('==============================')
+            print()
+            data = nr.randint(-50, 51, (n_samples, n_features))
     
-    
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
-    
-        diropts = []
-    for opt in opts_dir:
-        if opt._short_opts:
-            diropts.extend(opt._short_opts)
-        if opt._long_opts:
-            diropts.extend(opt._long_opts)
+    X -= X.mean(axis=0)
+X /= X.std(axis=0)
     
     
-def report_warning(message):
-    '''
-    Print the message to stderr, it will be prefixed with 'WARNING:'
-    If stderr is a tty file the 'WARNING:' will be colored
-    '''
-    if sys.stderr.isatty() and compat_os_name != 'nt':
-        _msg_header = '\033[0;33mWARNING:\033[0m'
-    else:
-        _msg_header = 'WARNING:'
-    output = '%s %s\n' % (_msg_header, message)
-    if 'b' in getattr(sys.stderr, 'mode', '') or sys.version_info[0] < 3:
-        output = output.encode(preferredencoding())
-    sys.stderr.write(output)
-    
-            f = match_filter_func('uploader = '變態妍字幕版 太妍 тест'')
-        res = get_videos(f)
-        self.assertEqual(res, ['1'])
+def compute_bench(samples_range, features_range):
     
     
-class TestAgeRestriction(unittest.TestCase):
-    def _assert_restricted(self, url, filename, age, old_age=None):
-        self.assertTrue(_download_restricted(url, filename, old_age))
-        self.assertFalse(_download_restricted(url, filename, age))
+def plot_time_vs_s(time, norm, point_labels, title):
+    plt.figure()
+    colors = ['g', 'b', 'y']
+    for i, l in enumerate(sorted(norm.keys())):
+        if l != 'fbpca':
+            plt.plot(time[l], norm[l], label=l, marker='o', c=colors.pop())
+        else:
+            plt.plot(time[l], norm[l], label=l, marker='^', c='red')
+    
+    # Split data in train set and test set
+n_samples = X.shape[0]
+X_train, y_train = X[:n_samples // 2], y[:n_samples // 2]
+X_test, y_test = X[n_samples // 2:], y[n_samples // 2:]
+print('test data sparsity: %f' % sparsity_ratio(X_test))
+    
+    print('='*80 + '\n#' + '    Text vectorizers benchmark' + '\n' + '='*80 + '\n')
+print('Using a subset of the 20 newsrgoups dataset ({} documents).'
+      .format(len(text)))
+print('This benchmarks runs in ~20 min ...')
+    
+    mu_second = 0.0 + 10 ** 6  # number of microseconds in a second
