@@ -1,223 +1,358 @@
 
         
-        #include 'atom/browser/api/trackable_object.h'
-#include 'base/callback.h'
-#include 'chrome/browser/extensions/global_shortcut_listener.h'
-#include 'native_mate/handle.h'
-#include 'ui/base/accelerators/accelerator.h'
-    
-    #ifndef ATOM_BROWSER_UI_X_EVENT_DISABLER_H_
-#define ATOM_BROWSER_UI_X_EVENT_DISABLER_H_
-    
-    namespace {
-    }
-    
-    class UnresponsiveSuppressor {
- public:
-  UnresponsiveSuppressor();
-  ~UnresponsiveSuppressor();
-    }
-    
-    #endif  // ATOM_COMMON_API_LOCKER_H_
+        #endif // SWIFT_AST_SUBSTITUTION_MAP_STORAGE_H
 
     
-    // filenames
-const base::FilePath::CharType kCacheDirname[] = FPL('Cache');
-const base::FilePath::CharType kChannelIDFilename[] = FPL('Origin Bound Certs');
-const base::FilePath::CharType kCookieFilename[] = FPL('Cookies');
-const base::FilePath::CharType kCRLSetFilename[] =
-    FPL('Certificate Revocation Lists');
-const base::FilePath::CharType kCustomDictionaryFileName[] =
-    FPL('Custom Dictionary.txt');
-const base::FilePath::CharType kExtensionActivityLogFilename[] =
-    FPL('Extension Activity');
-const base::FilePath::CharType kExtensionsCookieFilename[] =
-    FPL('Extension Cookies');
-const base::FilePath::CharType kFirstRunSentinel[] = FPL('First Run');
-const base::FilePath::CharType kGCMStoreDirname[] = FPL('GCM Store');
-const base::FilePath::CharType kLocalStateFilename[] = FPL('Local State');
-const base::FilePath::CharType kLocalStorePoolName[] = FPL('LocalStorePool');
-const base::FilePath::CharType kMediaCacheDirname[] = FPL('Media Cache');
-const base::FilePath::CharType kNetworkPersistentStateFilename[] =
-    FPL('Network Persistent State');
-const base::FilePath::CharType kOfflinePageArchviesDirname[] =
-    FPL('Offline Pages/archives');
-const base::FilePath::CharType kOfflinePageMetadataDirname[] =
-    FPL('Offline Pages/metadata');
-const base::FilePath::CharType kPreferencesFilename[] = FPL('Preferences');
-const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[] =
-    FPL('Protected Preferences');
-const base::FilePath::CharType kReadmeFilename[] = FPL('README');
-const base::FilePath::CharType kResetPromptMementoFilename[] =
-    FPL('Reset Prompt Memento');
-const base::FilePath::CharType kSafeBrowsingBaseFilename[] =
-    FPL('Safe Browsing');
-const base::FilePath::CharType kSecurePreferencesFilename[] =
-    FPL('Secure Preferences');
-const base::FilePath::CharType kServiceStateFileName[] = FPL('Service State');
-const base::FilePath::CharType kSingletonCookieFilename[] =
-    FPL('SingletonCookie');
-const base::FilePath::CharType kSingletonLockFilename[] = FPL('SingletonLock');
-const base::FilePath::CharType kSingletonSocketFilename[] =
-    FPL('SingletonSocket');
-const base::FilePath::CharType kSupervisedUserSettingsFilename[] =
-    FPL('Managed Mode Settings');
-const base::FilePath::CharType kThemePackFilename[] = FPL('Cached Theme.pak');
-const base::FilePath::CharType kThemePackMaterialDesignFilename[] =
-    FPL('Cached Theme Material Design.pak');
-const base::FilePath::CharType kWebAppDirname[] = FPL('Web Applications');
+        if (info.status == serialization::Status::Valid) {
+      assert(info.bytes != 0);
+      if (!info.name.empty()) {
+        StringRef moduleData = buf.substr(0, info.bytes);
+        std::unique_ptr<llvm::MemoryBuffer> bitstream(
+          llvm::MemoryBuffer::getMemBuffer(moduleData, info.name, false));
+    }
+    }
+    
+      char *oldAllocation = Allocated;
+  char *oldBegin = Begin;
+  std::size_t oldSize = (std::size_t) (End - oldBegin);
+    
+    static const StringRef SupportedConditionalCompilationOSs[] = {
+  'OSX',
+  'macOS',
+  'tvOS',
+  'watchOS',
+  'iOS',
+  'Linux',
+  'FreeBSD',
+  'Windows',
+  'Android',
+  'PS4',
+  'Cygwin',
+  'Haiku',
+};
     
     
-    {}  // namespace chrome
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-          typename T6, typename T7, typename T8>
-void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7, T8>& t,
-             ::std::ostream* os) {
-  PrintTupleTo(t, os);
+    {  PrevPosition = i;
+  PrevPositionValid = true;
 }
     
-    #endif  // 0
     
+    {      ExecutingTasks.push(PidTaskPair(Pid, std::move(T)));
+    }
     
-    {  return EqFailure(expected_expression,
-                   actual_expression,
-                   FormatForComparisonFailureMessage(expected, actual),
-                   FormatForComparisonFailureMessage(actual, expected),
-                   false);
-}
-    
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT5.
-// Don't use this in your code.
-#define GTEST_PRED_FORMAT5_(pred_format, v1, v2, v3, v4, v5, on_failure)\
-  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, #v4, #v5, v1, v2, v3, v4, v5), \
-                on_failure)
-    
-    // This is used internally by all instances of linked_ptr<>.  It needs to be
-// a non-template class because different types of linked_ptr<> can refer to
-// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
-// So, it needs to be possible for different types of linked_ptr to participate
-// in the same circular linked list, so we need a single class type here.
-//
-// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
-class linked_ptr_internal {
- public:
-  // Create a new circle that includes only this instance.
-  void join_new() {
-    next_ = this;
+      ConvertUTF8toUTF32(&SourceNext, SourceStart + S.size(), &TargetStart,
+                     TargetStart + 1, llvm::lenientConversion);
+  if (TargetStart == &C) {
+    // The source string contains an ill-formed subsequence at the end.
+    return false;
   }
+    
+    
+    {}%
+    
+    #endif // SWIFT_IMPORTER_CFTYPEINFO_H
+
+    
+    SourceLoc ClangDiagnosticConsumer::resolveSourceLocation(
+    const clang::SourceManager &clangSrcMgr,
+    clang::SourceLocation clangLoc) {
+  SourceManager &swiftSrcMgr = ImporterImpl.SwiftContext.SourceMgr;
+  SourceLoc loc;
     }
     
-      // Compares two wide C strings, ignoring case.  Returns true iff they
-  // have the same content.
-  //
-  // Unlike wcscasecmp(), this function can handle NULL argument(s).
-  // A NULL C string is considered different to any non-NULL wide C string,
-  // including the empty string.
-  // NB: The implementations on different platforms slightly differ.
-  // On windows, this method uses _wcsicmp which compares according to LC_CTYPE
-  // environment variable. On GNU platform this method uses wcscasecmp
-  // which compares according to LC_CTYPE category of the current locale.
-  // On MacOS X, it uses towlower, which also uses LC_CTYPE category of the
-  // current locale.
-  static bool CaseInsensitiveWideCStringEquals(const wchar_t* lhs,
-                                               const wchar_t* rhs);
+    namespace {
+string GetTypeUrl(const Descriptor* message,
+                  const string& type_url_prefix) {
+  if (!type_url_prefix.empty() &&
+      type_url_prefix[type_url_prefix.size() - 1] == '/') {
+    return type_url_prefix + message->full_name();
+  } else {
+    return type_url_prefix + '/' + message->full_name();
+  }
+}
+}  // namespace
     
-      // Trivial case 2: even numbers
-  if (n % 2 == 0) return n == 2;
-    
-    // Tests negative input.
-TEST(IsPrimeTest, Negative) {
-  // This test belongs to the IsPrimeTest test case.
+    TEST(MovableMessageTest, MoveSameArena) {
+  Arena arena;
     }
     
-        // decide if/how often we measure and show sync performance stats (seconds spend on sync, seconds since last sync etc.) ?
-    // 0: No sync perfomance stats
-    // 1: Show stats on every sync
-    // n > 1: Show stats after every n sync
-    int m_syncStatsTrace;
+    void WritePropertyDocComment(io::Printer* printer, const FieldDescriptor* field) {
+    WriteDocCommentBody(printer, field);
+}
     
-        // this performs the operation on a row stripe, rows [beginrow,endrow) of M -> rows[beginrow,endrow) of result
-    // Rows outside [beginrow,endrow) are not touched, and can e.g. be computed by another thread.
-    void matprod_mtm(const ssematrixbase &Mt, size_t beginrow /*first row in M*/, size_t endrow /*end row in M*/, const ssematrixbase &V)
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
+}
+    
+      printer->Print(
+      vars,
+      'public static pb::MessageParser<$class_name$> Parser { get { return _parser; } }\n\n');
+    
+    // Factory makes and returns an IntSimdMatrix (sub)class of the best
+// available type for the current architecture.
+/* static */
+IntSimdMatrix* IntSimdMatrix::GetFastestMultiplier() {
+  IntSimdMatrix* multiplier = nullptr;
+  if (SIMDDetect::IsAVX2Available()) {
+    multiplier = new IntSimdMatrixAVX2();
+  } else if (SIMDDetect::IsSSEAvailable()) {
+    multiplier = new IntSimdMatrixSSE();
+  } else {
+    // Default c++ implementation.
+    multiplier = new IntSimdMatrix();
+  }
+  return multiplier;
+}
+    
+      ColPartitionGridSearch search(part_grid_);
+  search.SetUniqueMode(true);
+  const TBOX& part_box(part->bounding_box());
+  int y = search_bottom ? part_box.bottom() : part_box.top();
+  search.StartVerticalSearch(part_box.left(), part_box.right(), y);
+  int min_y_gap = std::numeric_limits<int>::max();
+  while ((neighbor = search.NextVerticalSearch(search_bottom)) != nullptr) {
+    if (neighbor == part || !IsTextOrEquationType(neighbor->type())) {
+      continue;
+    }
+    const TBOX& neighbor_box(neighbor->bounding_box());
+    int y_gap = neighbor_box.y_gap(part_box);
+    if (y_gap > kYGapTh) {  // Out of scope.
+      break;
+    }
+    if (!neighbor_box.major_x_overlap(part_box) ||
+        (search_bottom && neighbor_box.bottom() > part_box.bottom()) ||
+        (!search_bottom && neighbor_box.top() < part_box.top())) {
+      continue;
+    }
+    if (y_gap < min_y_gap) {
+      min_y_gap = y_gap;
+      nearest_neighbor = neighbor;
+    }
+  }
+    
+      // Compute special text type for each blobs in part_grid_.
+  void IdentifySpecialText();
+    
+    void Tesseract::PrerecAllWordsPar(const GenericVector<WordData>& words) {
+  // Prepare all the blobs.
+  GenericVector<BlobData> blobs;
+  for (int w = 0; w < words.size(); ++w) {
+    if (words[w].word->ratings != nullptr &&
+        words[w].word->ratings->get(0, 0) == nullptr) {
+      for (int s = 0; s < words[w].lang_words.size(); ++s) {
+        Tesseract* sub = s < sub_langs_.size() ? sub_langs_[s] : this;
+        const WERD_RES& word = *words[w].lang_words[s];
+        for (int b = 0; b < word.chopped_word->NumBlobs(); ++b) {
+          blobs.push_back(BlobData(b, sub, word));
+        }
+      }
+    }
+  }
+  // Pre-classify all the blobs.
+  if (tessedit_parallelize > 1) {
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(10)
+#endif  // _OPENMP
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
+  } else {
+    // TODO(AMD) parallelize this.
+    for (int b = 0; b < blobs.size(); ++b) {
+      *blobs[b].choices =
+          blobs[b].tesseract->classify_blob(blobs[b].blob, 'par', White, nullptr);
+    }
+  }
+}
+    
+    struct Fork {
+  pid_t pid;
+    }
+    
+    SHOULD_NOT_DO_GRADIENT(EnforceFinite);
+    
+    
+    {} // namespace caffe2
+
+    
+    
     {
-        auto &us = *this;
-        assert(V.rows() == Mt.rows()); // remember: Mt is the transpose of M
-        assert(us.rows() == Mt.cols());
-        assert(us.cols() == V.cols());
-        assert(beginrow < endrow && endrow <= Mt.cols()); // remember that cols of Mt are the rows of M
+    {    const float* Xdata = X.template data<float>();
+    float* Ydata = Y->template mutable_data<float>();
+    for (int i = 0; i < X.size(); ++i) {
+      Ydata[i] = std::floor(Xdata[i]);
+    }
+    return true;
+  }
+};
+    
+       const char* root()const { return _root; }
+   const char* path()const { return _path; }
+   const char* name()const { return ptr; }
+   _fi_find_data* data() { return &(ref->_data); }
+   void next();
+   directory_iterator& operator++() { next(); return *this; }
+   directory_iterator operator++(int);
+   const char* operator*() { return path(); }
+    
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::unwind_short_set_repeat(bool r)
+{
+   saved_single_repeat<BidiIterator>* pmp = static_cast<saved_single_repeat<BidiIterator>*>(m_backup_state);
     }
     
-                // push the statistics results of mean and variance of bn nodes into mpi updating vector
-            std::vector<Matrix<ElemType>*> learnParamsValues(2, nullptr);
-    
-    #ifndef let
-#define let const auto
+    #ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
 #endif
     
-        // call SetStepOffset() at start of a multi-epoch training to set the index of the first epoch in that training
-    // This value is added to the local epoch index in TraceProgress().
-    static void SetStepOffset(size_t currentStepOffset)
+    
     {
-        GetStaticInstance().m_currentStepOffset = currentStepOffset;
+      basic = basic_syntax_group | collate | no_escape_in_lists,
+      extended = no_bk_refs | collate | no_perl_ex | no_escape_in_lists,
+      normal = 0,
+      emacs = basic_syntax_group | collate | emacs_ex | bk_vbar,
+      awk = no_bk_refs | collate | no_perl_ex,
+      grep = basic | newline_alt,
+      egrep = extended | newline_alt,
+      sed = basic,
+      perl = normal,
+      ECMAScript = normal,
+      JavaScript = normal,
+      JScript = normal
+   };
+   typedef unsigned int flag_type;
+    
+    //
+// struct trivial_format_traits:
+// defines minimum localisation support for formatting
+// in the case that the actual regex traits is unavailable.
+//
+template <class charT>
+struct trivial_format_traits
+{
+   typedef charT char_type;
     }
     
-    namespace Microsoft { namespace MSR { namespace CNTK {
-    }
-    }
-    }
+    #ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable: 4103)
+#endif
+#ifdef BOOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
     
-    	// Record Imgui Draw Data and draw funcs into command buffer
-	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), fd->CommandBuffer);
+       void BOOST_REGEX_CALL resize(size_type n);
+   
+   void* BOOST_REGEX_CALL extend(size_type n)
+   {
+      if(size_type(last - end) < n)
+         resize(n + (end - start));
+      pointer result = end;
+      end += n;
+      return result;
+   }
     
-    #include 'imgui.h'
-#include 'imgui_impl_win32.h'
-#include 'imgui_impl_dx10.h'
-#include <d3d10_1.h>
-#include <d3d10.h>
-#define DIRECTINPUT_VERSION 0x0800
-#include <dinput.h>
-#include <tchar.h>
+    #ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable: 4800)
+#endif
     
-    //---- Define constructor and implicit cast operators to convert back<>forth between your math types and ImVec2/ImVec4.
-// This will be inlined as part of ImVec2 and ImVec4 class declarations.
-/*
-#define IM_VEC2_CLASS_EXTRA                                                 \
-        ImVec2(const MyVec2& f) { x = f.x; y = f.y; }                       \
-        operator MyVec2() const { return MyVec2(x,y); }
+    #endif // BOOST_REGEX_V4_REGEX_TOKEN_ITERATOR_HPP
     
-    #include <algorithm>
-#include <stdio.h>
-#include <string.h>
+      void Compare(const OutputImage& img) override;
     
-      // Compares the 8x8 block with offsets (off_x, off_y) within the current
-  // macro-block of the baseline image with the same block of img and returns
-  // the resulting per-block distance. The interpretation of the returned
-  // distance depends on the comparator used.
-  virtual double CompareBlock(const OutputImage& img,
-                              int off_x, int off_y) const = 0;
+    static const int kCbToBlueTable[256] = {
+  -227, -225, -223, -222, -220, -218, -216, -214, -213, -211, -209, -207,
+  -206, -204, -202, -200, -198, -197, -195, -193, -191, -190, -188, -186,
+  -184, -183, -181, -179, -177, -175, -174, -172, -170, -168, -167, -165,
+  -163, -161, -159, -158, -156, -154, -152, -151, -149, -147, -145, -144,
+  -142, -140, -138, -136, -135, -133, -131, -129, -128, -126, -124, -122,
+  -120, -119, -117, -115, -113, -112, -110, -108, -106, -105, -103, -101,
+   -99,  -97,  -96,  -94,  -92,  -90,  -89,  -87,  -85,  -83,  -82,  -80,
+   -78,  -76,  -74,  -73,  -71,  -69,  -67,  -66,  -64,  -62,  -60,  -58,
+   -57,  -55,  -53,  -51,  -50,  -48,  -46,  -44,  -43,  -41,  -39,  -37,
+   -35,  -34,  -32,  -30,  -28,  -27,  -25,  -23,  -21,  -19,  -18,  -16,
+   -14,  -12,  -11,   -9,   -7,   -5,   -4,   -2,    0,    2,    4,    5,
+     7,    9,   11,   12,   14,   16,   18,   19,   21,   23,   25,   27,
+    28,   30,   32,   34,   35,   37,   39,   41,   43,   44,   46,   48,
+    50,   51,   53,   55,   57,   58,   60,   62,   64,   66,   67,   69,
+    71,   73,   74,   76,   78,   80,   82,   83,   85,   87,   89,   90,
+    92,   94,   96,   97,   99,  101,  103,  105,  106,  108,  110,  112,
+   113,  115,  117,  119,  120,  122,  124,  126,  128,  129,  131,  133,
+   135,  136,  138,  140,  142,  144,  145,  147,  149,  151,  152,  154,
+   156,  158,  159,  161,  163,  165,  167,  168,  170,  172,  174,  175,
+   177,  179,  181,  183,  184,  186,  188,  190,  191,  193,  195,  197,
+   198,  200,  202,  204,  206,  207,  209,  211,  213,  214,  216,  218,
+   220,  222,  223,  225,
+};
     
-      // Bring in range 0.0-1.0 for Y, -0.5 - 0.5 for U and V
-  auto yuv = image;
-  for (size_t i = 0; i < yuv[0].size(); i++) {
-    yuv[0][i] /= 255.0;
-    yuv[1][i] = yuv[1][i] / 255.0f - 0.5f;
-    yuv[2][i] = yuv[2][i] / 255.0f - 0.5f;
-  }
-    
-    void IDCT1d(const double* in, int stride, double* out) {
+    void DCT1d(const double* in, int stride, double* out) {
   for (int x = 0; x < 8; ++x) {
     out[x * stride] = 0.0;
     for (int u = 0; u < 8; ++u) {
-      out[x * stride] += kDCTMatrix[8 * u + x] * in[u * stride];
+      out[x * stride] += kDCTMatrix[8 * x + u] * in[u * stride];
     }
   }
 }
     
-    // Entropy encoding (Huffman) utilities.
+    #define GUETZLI_LOG(stats, ...)                                    \
+  do {                                                             \
+    char debug_string[1024];                                       \
+    int res = snprintf(debug_string, sizeof(debug_string),         \
+                       __VA_ARGS__);                               \
+    assert(res > 0 && 'expected successful printing');             \
+    (void)res;                                                     \
+    debug_string[sizeof(debug_string) - 1] = '\0';                 \
+    ::guetzli::PrintDebug(                      \
+         stats, std::string(debug_string));        \
+  } while (0)
+#define GUETZLI_LOG_QUANT(stats, q)                    \
+  for (int y = 0; y < 8; ++y) {                        \
+    for (int c = 0; c < 3; ++c) {                      \
+      for (int x = 0; x < 8; ++x)                      \
+        GUETZLI_LOG(stats, ' %2d', (q)[c][8 * y + x]); \
+      GUETZLI_LOG(stats, '   ');                       \
+    }                                                  \
+    GUETZLI_LOG(stats, '\n');                          \
+  }
     
-    #endif  // GUETZLI_FAST_LOG_H_
-
+    // Sort the root nodes, least popular first.
+static inline bool SortHuffmanTree(const HuffmanTree& v0,
+                                   const HuffmanTree& v1) {
+  if (v0.total_count_ != v1.total_count_) {
+    return v0.total_count_ < v1.total_count_;
+  }
+  return v0.index_right_or_value_ > v1.index_right_or_value_;
+}
+    
+    std::string ReadFileOrDie(const char* filename) {
+  bool read_from_stdin = strncmp(filename, '-', 2) == 0;
+    }
     
     
     {  tmp0 = in[7 * stride];
@@ -240,99 +375,15 @@ TEST(IsPrimeTest, Negative) {
 // a row-by-row memory layout.
 void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
     
-    namespace guetzli {
-    }
-    
-      OutputImageComponent& component(int c) { return components_[c]; }
-  const OutputImageComponent& component(int c) const { return components_[c]; }
-    
-    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
-std::vector<std::vector<float>> PreProcessChannel(
-    int w, int h, int channel, float sigma, float amount, bool blur,
-    bool sharpen, const std::vector<std::vector<float>>& image);
-    
-    namespace folly {
-    }
-    
-      /* Used by readers */
-  bool contains(const T& val) const {
-    /* Two hazard pointers for hand-over-hand traversal. */
-    hazptr_local<2, Atom> hptr;
-    hazptr_holder<Atom>* hptr_prev = &hptr[0];
-    hazptr_holder<Atom>* hptr_curr = &hptr[1];
-    while (true) {
-      auto prev = &head_;
-      auto curr = prev->load(std::memory_order_acquire);
-      while (true) {
-        if (!curr) {
-          return false;
-        }
-        if (!hptr_curr->try_protect(curr, *prev)) {
-          break;
-        }
-        auto next = curr->next_.load(std::memory_order_acquire);
-        if (prev->load(std::memory_order_acquire) != curr) {
-          break;
-        }
-        if (curr->elem_ == val) {
-          return true;
-        } else if (!(curr->elem_ < val)) {
-          return false; // because the list is sorted
-        }
-        prev = &(curr->next_);
-        curr = next;
-        std::swap(hptr_curr, hptr_prev);
-      }
-    }
-  }
-    
-    #include <string>
+    #include <assert.h>
+#include <string.h>
     
     
-    {} // namespace folly
-
+// Adds APP0 header data.
+void AddApp0Data(JPEGData* jpg);
     
-      if (prevValue + 1 == size_) {
-    // Need to reset the barrier before fulfilling any futures. This is
-    // when the epoch is flipped to the next.
-    controlBlock_.store(allocateControlBlock(), std::memory_order_release);
-    }
-    
-    
-    { private:
-  SettingMetadata meta_;
-  SettingCore<Type> core_;
-};
-    
-      {
-    auto meta = folly::settings::getSettingsMeta('follytest_public_flag_to_a');
-    EXPECT_TRUE(meta.hasValue());
-    const auto& md = meta.value();
-    EXPECT_EQ(md.project, 'follytest');
-    EXPECT_EQ(md.name, 'public_flag_to_a');
-    EXPECT_EQ(md.typeStr, 'int');
-    EXPECT_EQ(md.typeId, typeid(int));
-  }
-    
-    TEST(Ensure, mutableLambda) {
-  auto set = std::make_shared<std::unordered_set<int>>();
-  set->insert(1);
-  set->insert(2);
-    }
-    
-    TEST(RetryingTest, policy_capped_jittered_exponential_backoff) {
-  multiAttemptExpectDurationWithin(5, milliseconds(200), milliseconds(400), []{
-    using ms = milliseconds;
-    auto r = futures::retrying(
-        futures::retryingPolicyCappedJitteredExponentialBackoff(
-          3, ms(100), ms(1000), 0.1, mt19937_64(0),
-          [](size_t, const exception_wrapper&) { return true; }),
-        [](size_t n) {
-            return n < 2
-              ? makeFuture<size_t>(runtime_error('ha'))
-              : makeFuture(n);
-        }
-    ).wait();
-    EXPECT_EQ(2, r.value());
-  });
+    // Writes a string using the out callback.
+inline bool JPEGWrite(JPEGOutput out, const std::string& s) {
+  const uint8_t* data = reinterpret_cast<const uint8_t*>(&s[0]);
+  return JPEGWrite(out, data, s.size());
 }
