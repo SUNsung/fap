@@ -1,146 +1,113 @@
 
         
-          /// Get a reference to the lowest layer.
-  lowest_layer_type& lowest_layer()
-  {
-    return next_layer_.lowest_layer();
+        // static
+mate::WrappableBase* BoxLayout::New(mate::Arguments* args,
+                                    views::BoxLayout::Orientation orientation) {
+  auto* layout = new BoxLayout(orientation);
+  layout->InitWith(args->isolate(), args->GetThis());
+  return layout;
+}
+    
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
+    
+    #include 'atom/browser/api/trackable_object.h'
+#include 'atom/browser/native_browser_view.h'
+#include 'native_mate/handle.h'
+    
+    void DownloadItem::SetSavePath(const base::FilePath& path) {
+  save_path_ = path;
+}
+    
+    namespace api {
+    }
+    
+    #if !defined(__SSE4_1__)
+// This code can't compile with '-msse4.1', so use dummy stubs.
+    
+      // Rounds the input up to a multiple of the given factor.
+  static int Roundup(int input, int factor) {
+    return (input + factor - 1) / factor * factor;
   }
     
-    // Standard library components can't be forward declared, so we'll have to
-// include the array header. Fortunately, it's fairly lightweight and doesn't
-// add significantly to the compile time.
-#if defined(BOOST_ASIO_HAS_STD_ARRAY)
-# include <array>
-#endif // defined(BOOST_ASIO_HAS_STD_ARRAY)
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    
-    {private:
-  static void barrier()
-  {
-#if defined(__ARM_ARCH_4__) \
-    || defined(__ARM_ARCH_4T__) \
-    || defined(__ARM_ARCH_5__) \
-    || defined(__ARM_ARCH_5E__) \
-    || defined(__ARM_ARCH_5T__) \
-    || defined(__ARM_ARCH_5TE__) \
-    || defined(__ARM_ARCH_5TEJ__) \
-    || defined(__ARM_ARCH_6__) \
-    || defined(__ARM_ARCH_6J__) \
-    || defined(__ARM_ARCH_6K__) \
-    || defined(__ARM_ARCH_6Z__) \
-    || defined(__ARM_ARCH_6ZK__) \
-    || defined(__ARM_ARCH_6T2__)
-# if defined(__thumb__)
-    // This is just a placeholder and almost certainly not sufficient.
-    __asm__ __volatile__ ('' : : : 'memory');
-# else // defined(__thumb__)
-    int a = 0, b = 0;
-    __asm__ __volatile__ ('swp %0, %1, [%2]'
-        : '=&r'(a) : 'r'(1), 'r'(&b) : 'memory', 'cc');
-# endif // defined(__thumb__)
+    // Extracts and converts 8x32-bit results from result, adding the bias from wi
+// and scaling by scales, before storing in *v. Note that wi, scales and v are
+// expected to contain 8 consecutive elements or num_out if less.
+inline void ExtractResults(__m256i& result, __m256i& shift_id,
+                           const int8_t*& wi, const double*& scales,
+                           int num_out, double*& v) {
+  for (int out = 0; out < num_out; ++out) {
+    int32_t res =
+#ifndef _MSC_VER
+        _mm256_extract_epi32(result, 0)
 #else
-    // ARMv7 and later.
-    __asm__ __volatile__ ('dmb' : : : 'memory');
+        // Workaround MSVC's ICE
+        // _mm256_extract_epi32(X, Y) == ((int32_t*)&X)[Y]
+        ((int32_t*)&result)[0]
 #endif
+        ;
+    *v++ = (static_cast<double>(res) / INT8_MAX + *wi++) * *scales++;
+    // Rotate the results in int32_t units, so the next result is ready.
+    result = _mm256_permutevar8x32_epi32(result, shift_id);
   }
-};
-    
-    template <typename Time_Traits>
-std::size_t dev_poll_reactor::cancel_timer(timer_queue<Time_Traits>& queue,
-    typename timer_queue<Time_Traits>::per_timer_data& timer,
-    std::size_t max_cancelled)
-{
-  boost::asio::detail::mutex::scoped_lock lock(mutex_);
-  op_queue<operation> ops;
-  std::size_t n = queue.cancel_timer(timer, ops, max_cancelled);
-  lock.unlock();
-  io_service_.post_deferred_completions(ops);
-  return n;
 }
     
-      int timeout = block ? get_timeout() : 0;
-  lock.unlock();
     
-    template <typename C>
-struct compare_greater : detail::cmp_pred<C, ordering::gt, 0> {
-  using detail::cmp_pred<C, ordering::gt, 0>::cmp_pred;
-};
-    
-    
-    { private:
-  std::array<std::weak_ptr<T>, kNumSlots> slots_;
-};
-    
-    FOLLY_ALWAYS_INLINE int __builtin_clzll(unsigned long long x) {
-  unsigned long index;
-  return int(_BitScanReverse64(&index, x) ? 63 - index : 64);
-}
-    
-    /** TLS life state */
-    
-    TEST(allocateOverAligned, manualOverCustomAlloc) {
-  // allocates 6 byte with alignment 64 using non-standard allocator, which
-  // will result in an allocation of 64 + alignof(max_align_t) underneath.
-  ExpectingAlloc<short> a(
-      alignof(folly::max_align_t), 64 / alignof(folly::max_align_t) + 1);
-  auto p = folly::allocateOverAligned<decltype(a), 64>(a, 3);
-  EXPECT_EQ((reinterpret_cast<uintptr_t>(p) % 64), 0);
-  folly::deallocateOverAligned<decltype(a), 64>(a, p, 3);
-  EXPECT_EQ(
-      (folly::allocationBytesForOverAligned<decltype(a), 64>(3)),
-      64 + alignof(folly::max_align_t));
-}
-    
-    using namespace folly;
-    
-    void AbstractBtMessage::setBtMessageValidator(
-    std::unique_ptr<BtMessageValidator> validator)
-{
-  validator_ = std::move(validator);
-}
-    
-      const std::shared_ptr<SocketCore>& getSocket() const { return socket_; }
-    
-      char shortName_;
-    
-    bool AbstractProxyRequestCommand::executeInternal()
-{
-  // socket->setBlockingMode();
-  if (httpConnection_->sendBufferIsEmpty()) {
-    auto httpRequest = make_unique<HttpRequest>();
-    httpRequest->setUserAgent(getOption()->get(PREF_USER_AGENT));
-    httpRequest->setRequest(getRequest());
-    httpRequest->setProxyRequest(proxyRequest_);
+    {  if (garbage_level != G_OK) {
+    if (crunch_debug > 2) {
+      tprintf('Potential garbage on \'%s\'\n',
+              word->best_choice->unichar_string().string());
     }
-    }
-    
-    #endif // D_ABSTRACT_PROXY_REQUEST_COMMAND_H
-
-    
-    class AbstractProxyResponseCommand : public AbstractCommand {
-private:
-  std::shared_ptr<HttpConnection> httpConnection_;
-    }
-    
-      void setNumNewConnection(int numNewConnection)
-  {
-    numNewConnection_ = numNewConnection;
+    poor_indicator_count++;
   }
+  return poor_indicator_count >= crunch_pot_indicators;
+}
     
-      virtual ~AppleTLSContext();
+    #include <cstdint>  // for int16_t
     
-    namespace aria2 {
+      // Search the nearest neighbor of part in one vertical direction as defined in
+  // search_bottom. It returns the neighbor found that major x overlap with it,
+  // or nullptr when not found.
+  ColPartition* SearchNNVertical(const bool search_bottom,
+                                 const ColPartition* part);
+    
+    /**
+ * Returns an image of the current object at the given level in greyscale
+ * if available in the input. To guarantee a binary image use BinaryImage.
+ * NOTE that in order to give the best possible image, the bounds are
+ * expanded slightly over the binary connected component, by the supplied
+ * padding, so the top-left position of the returned image is returned
+ * in (left,top). These will most likely not match the coordinates
+ * returned by BoundingBox.
+ * If you do not supply an original image, you will get a binary one.
+ * Use pixDestroy to delete the image after use.
+ */
+Pix* PageIterator::GetImage(PageIteratorLevel level, int padding,
+                            Pix* original_img,
+                            int* left, int* top) const {
+  int right, bottom;
+  if (!BoundingBox(level, left, top, &right, &bottom))
+    return nullptr;
+  if (original_img == nullptr)
+    return GetBinaryImage(level);
     }
     
+    template <typename T> class GenericVector;
     
-    {  virtual std::unique_ptr<AuthConfig>
-  resolveAuthConfig(const std::string& hostname) = 0;
+    // A small event handler class to process incoming events to
+// this window.
+class PGEventHandler : public SVEventHandler {
+  public:
+   PGEventHandler(tesseract::Tesseract* tess) : tess_(tess) {
+   }
+   void Notify(const SVEvent* sve);
+  private:
+    tesseract::Tesseract* tess_;
 };
+    
+        for (int fd: to_add)
+      register_fd(fd);
+    to_add.clear();
+    
+    
+<details>
