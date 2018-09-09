@@ -1,122 +1,238 @@
 
         
-        #ifndef GRPC_INTERNAL_CPP_CLIENT_CREATE_CHANNEL_INTERNAL_H
-#define GRPC_INTERNAL_CPP_CLIENT_CREATE_CHANNEL_INTERNAL_H
+        TegraRowOp_Invoker(combine2, combine2, 2, 1, 0, RANGE_DATA(ST, src1_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(ST, src2_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(DT, dst1_data, 2*sizeof(DT)), range.end-range.start)
+TegraRowOp_Invoker(combine3, combine3, 3, 1, 0, RANGE_DATA(ST, src1_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(ST, src2_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(ST, src3_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(DT, dst1_data, 3*sizeof(DT)), range.end-range.start)
+TegraRowOp_Invoker(combine4, combine4, 4, 1, 0, RANGE_DATA(ST, src1_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(ST, src2_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(ST, src3_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(ST, src4_data, sizeof(ST)), range.end-range.start,
+                                                RANGE_DATA(DT, dst1_data, 4*sizeof(DT)), range.end-range.start)
+#define TEGRA_MERGE64S(type, src, dst, len, cn) \
+( \
+    CAROTENE_NS::isSupportedConfiguration() ? \
+        cn == 2 ? \
+        parallel_for_(Range(0, len), \
+        TegraRowOp_combine2_Invoker<const type, type>(src[0], src[1], dst), \
+        (len) / static_cast<double>(1<<16)), \
+        CV_HAL_ERROR_OK : \
+        cn == 3 ? \
+        parallel_for_(Range(0, len), \
+        TegraRowOp_combine3_Invoker<const type, type>(src[0], src[1], src[2], dst), \
+        (len) / static_cast<double>(1<<16)), \
+        CV_HAL_ERROR_OK : \
+        cn == 4 ? \
+        parallel_for_(Range(0, len), \
+        TegraRowOp_combine4_Invoker<const type, type>(src[0], src[1], src[2], src[3], dst), \
+        (len) / static_cast<double>(1<<16)), \
+        CV_HAL_ERROR_OK : \
+        CV_HAL_ERROR_NOT_IMPLEMENTED \
+    : CV_HAL_ERROR_NOT_IMPLEMENTED \
+)
     
-    namespace grpc {
+    void absDiff(const Size2D &size,
+             const s16 *src0Base, ptrdiff_t src0Stride,
+             const s16 *src1Base, ptrdiff_t src1Stride,
+             s16 *dstBase, ptrdiff_t dstStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    internal::vtransform(size,
+                         src0Base, src0Stride,
+                         src1Base, src1Stride,
+                         dstBase, dstStride, AbsDiffSigned<s16>());
+#else
+    (void)size;
+    (void)src0Base;
+    (void)src0Stride;
+    (void)src1Base;
+    (void)src1Stride;
+    (void)dstBase;
+    (void)dstStride;
+#endif
+}
+    
+    
+    {
+    {        for (; dj < size.width; sj += 3, ++dj)
+        {
+            dst[dj] = src[sj + coi];
+        }
+    }
+#else
+    (void)size;
+    (void)srcBase;
+    (void)srcStride;
+    (void)dstBase;
+    (void)dstStride;
+    (void)coi;
+#endif
+}
+    
+        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0, const typename internal::VecTraits<T>::vec64 & v_src1,
+              typename internal::VecTraits<T>::unsign::vec64 & v_dst) const
+    {
+        v_dst = internal::vmvn(internal::vceq(v_src0, v_src1));
     }
     
-    #include <grpcpp/security/credentials.h>
+            for (; j < roiw8; sj += 32, dj += 24, j += 8)
+        {
+            internal::prefetch(src + sj);
+#if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
+            CONVERT_TO_HSV_ASM(vld4.8 {d0-d3}, d0, d2)
+#else
+            uint8x8x4_t vRgb = vld4_u8(src + sj);
+            uint8x8x3_t vHsv = convertToHSV(vRgb.val[0], vRgb.val[1], vRgb.val[2], hrange);
+            vst3_u8(dst + dj, vHsv);
+#endif
+        }
+    
+            for (; j < roiw16; j += 16)
+        {
+            internal::prefetch(src + j);
+            uint8x16_t v_src = vld1q_u8(src + j);
+            int16x8_t v_dst0 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src)));
+            int16x8_t v_dst1 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src)));
+    }
+    
+        for (ptrdiff_t y = 0; y < height; ++y)
+    {
+        const u8 * srow0 = y == 0 && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::max<ptrdiff_t>(y - 1, 0));
+        const u8 * srow1 = internal::getRowPtr(srcBase, srcStride, y);
+        const u8 * srow2 = y + 1 == height && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::min(y + 1, height - 1));
+        u8 * drow = internal::getRowPtr(dstBase, dstStride, y);
+    }
+    
+            if (i < roiw4)
+        {
+            internal::prefetch(src + i + 2);
+            uint64x2_t vln1 = vld1q_u64((const u64*)(src + i));
+            uint64x2_t vln2 = vld1q_u64((const u64*)(src + i + 2));
+    }
+    
+    std::shared_ptr<Channel> CreateInsecureChannelFromFd(const grpc::string& target,
+                                                     int fd) {
+  internal::GrpcLibrary init_lib;
+  init_lib.init();
+  return CreateChannelInternal(
+      '', grpc_insecure_channel_create_from_fd(target.c_str(), fd, nullptr));
+}
+    
+    CallCredentials::~CallCredentials() {}
     
     
     {}  // namespace grpc
 
     
-    bool SecureAuthContext::SetPeerIdentityPropertyName(const grpc::string& name) {
-  if (!ctx_) return false;
-  return grpc_auth_context_set_peer_identity_property_name(ctx_,
-                                                           name.c_str()) != 0;
-}
-    
     void ChannelArguments::SetSslTargetNameOverride(const grpc::string& name) {
   SetString(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG, name);
 }
     
-    // Server
-MeasureDouble RpcServerSentBytesPerRpc() {
-  static const auto measure = MeasureDouble::Register(
-      kRpcServerSentBytesPerRpcMeasureName,
-      'Total bytes sent across all messages per RPC', kUnitBytes);
-  return measure;
-}
-    
-    
-    {
-    {    grpc_slice_unref_internal(sml.tracing_slice);
-    grpc_slice_unref_internal(sml.census_proto);
-    grpc_slice_unref_internal(sml.path);
-    grpc_census_call_set_context(
-        calld->gc_, reinterpret_cast<census_context*>(&calld->context_));
-  }
-  GRPC_CLOSURE_RUN(calld->initial_on_done_recv_initial_metadata_,
-                   GRPC_ERROR_REF(error));
-}
-    
-    /**
- * @file
- * @brief Defines the CanFrame struct and CanClient interface.
+    /*
+ * If Trace::hhbbc_time >= 1, print some stats about the program to a
+ * temporary file.  If it's greater than or equal to 2, also dump it
+ * to stdout.
  */
+void print_stats(const Index&, const php::Program&);
     
-      /**
-   * @brief Create a pointer to a specified brand of CAN client. The brand is
-   *        set in the parameter.
-   * @param parameter The parameter to create the CAN client.
-   * @return A pointer to the created CAN client.
-   */
-  std::unique_ptr<CanClient> CreateCANClient(const CANCardParameter &parameter);
-    
-    DEFINE_bool(only_one_send, false, 'only send test.');
-DEFINE_string(can_client_conf_file_a,
-              'modules/canbus/conf/can_client_conf_a.pb.txt',
-              'can client conf for client a');
-DEFINE_string(can_client_conf_file_b,
-              'modules/canbus/conf/can_client_conf_b.pb.txt',
-              'can client conf for client b');
-DEFINE_int64(agent_mutual_send_frames, 1000, 'Every agent send frame num');
-    
-    
-    {  return std::string((const char *)(str_buf));
-}
-    
-    
-    {  EsdCanClient esd_can_client;
-  EXPECT_TRUE(esd_can_client.Init(param));
-  EXPECT_EQ(esd_can_client.Start(), ErrorCode::CAN_CLIENT_ERROR_BASE);
-  std::vector<CanFrame> frames;
-  int32_t num = 0;
-  EXPECT_EQ(esd_can_client.Send(frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  EXPECT_EQ(esd_can_client.Receive(&frames, &num),
-            ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED);
-  CanFrame can_frame;
-  frames.push_back(can_frame);
-  EXPECT_EQ(esd_can_client.SendSingleFrame(frames),
-            ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED);
-  esd_can_client.Stop();
-}
-    
-    // buf size must be 8 bytes, every time, we receive only one frame
-ErrorCode SocketCanClientRaw::Receive(std::vector<CanFrame> *const frames,
-                                      int32_t *const frame_num) {
-  if (!is_started_) {
-    AERROR << 'Nvidia can client is not init! Please init first!';
-    return ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED;
+    void BranchParams::decodeInstr(const PPC64Instr* const pinstr) {
+  const DecoderInfo dinfo = Decoder::GetDecoder().decode(pinstr);
+  switch (dinfo.opcode_name()) {
+    case OpcodeNames::op_b:
+    case OpcodeNames::op_bl:
+      assert(dinfo.form() == Form::kI);
+      defineBoBi(BranchConditions::Always);
+      break;
+    case OpcodeNames::op_bc:
+      assert(dinfo.form() == Form::kB);
+      B_form_t bform;
+      bform.instruction = dinfo.instruction_image();
+      m_bo = BranchParams::BO(bform.BO);
+      m_bi = BranchParams::BI(bform.BI);
+      break;
+    case OpcodeNames::op_bcctr:
+    case OpcodeNames::op_bcctrl:
+      assert(dinfo.form() == Form::kXL);
+      XL_form_t xlform;
+      xlform.instruction = dinfo.instruction_image();
+      m_bo = BranchParams::BO(xlform.BT);
+      m_bi = BranchParams::BI(xlform.BA);
+      break;
+    default:
+      assert(false && 'Not a valid conditional branch instruction');
+      // also possible: defineBoBi(BranchConditions::Always);
+      break;
   }
     }
     
-    #include 'modules/canbus/proto/chassis_detail.pb.h'
-#include 'modules/common/proto/error_code.pb.h'
-#include 'modules/drivers/canbus/can_client/fake/fake_can_client.h'
-#include 'modules/drivers/canbus/can_comm/protocol_data.h'
-    
-    template <typename SensorType>
-ErrorCode MessageManager<SensorType>::GetSensorData(
-    SensorType *const sensor_data) {
-  if (sensor_data == nullptr) {
-    AERROR << 'Failed to get sensor_data due to nullptr.';
-    return ErrorCode::CANBUS_ERROR;
-  }
-  std::lock_guard<std::mutex> lock(sensor_data_mutex_);
-  sensor_data->CopyFrom(sensor_data_);
-  return ErrorCode::OK;
+    inline TypedValue* APCLocalArray::localCache() const {
+  return const_cast<TypedValue*>(
+    reinterpret_cast<const TypedValue*>(this + 1)
+  );
 }
     
-    TEST(ByteTest, GetValue) {
-  unsigned char byte_value = 0x1A;
-  Byte value(&byte_value);
-  EXPECT_EQ(0x05, value.get_byte(1, 3));
-  EXPECT_EQ(0x01, value.get_byte(1, 1));
-  EXPECT_EQ(0x00, value.get_byte(8, 1));
-  EXPECT_EQ(0x00, value.get_byte(-1, 1));
-  EXPECT_EQ(0x1A, value.get_byte(0, 10));
-}
+    struct FatalErrorException : ExtendedException {
+  explicit FatalErrorException(const char *msg)
+    : ExtendedException('%s', msg)
+  {}
+  FatalErrorException(int, ATTRIBUTE_PRINTF_STRING const char *msg, ...)
+    ATTRIBUTE_PRINTF(3,4);
+  FatalErrorException(const std::string&, const Array& backtrace,
+                      bool isRecoverable = false);
+    }
+    
+    /**
+ * Thread-safe dirname().
+ */
+String dirname(const String& path);
+    
+      /*
+   * @brief a unique ID identifying the 'carve'
+   *
+   * This unique generated GUID is used to identify the carve session from
+   * other carves. It is also used by our backend service to derive a
+   * session key for exfiltration.
+   */
+  std::string carveGuid_;
+    
+    /**
+ * @brief A simple ConfigParserPlugin for feature vector dictionary keys.
+ */
+class FeatureVectorsConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override;
+    }
+    
+    
+    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
+/// configurations from Osquery's configurations.
+class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
+ public:
+  std::vector<std::string> keys() const override;
+  Status update(const std::string& source, const ParserConfig& config) override;
+};
+} // namespace osquery
+
+    
+    /// A result structure for multiple hash requests.
+struct MultiHashes {
+  int mask;
+  std::string md5;
+  std::string sha1;
+  std::string sha256;
+};
+    
+    TEST_F(QueryTests, test_add_and_get_current_results) {
+  // Test adding a 'current' set of results to a scheduled query instance.
+  auto query = getOsqueryScheduledQuery();
+  auto cf = Query('foobar', query);
+  uint64_t counter = 128;
+  auto status = cf.addNewResults(getTestDBExpectedResults(), 0, counter);
+  EXPECT_TRUE(status.ok());
+  EXPECT_EQ(status.toString(), 'OK');
+  EXPECT_EQ(counter, 0UL);
+    }
