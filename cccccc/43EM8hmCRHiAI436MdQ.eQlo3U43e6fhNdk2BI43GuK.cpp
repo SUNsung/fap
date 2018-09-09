@@ -1,195 +1,329 @@
 
         
-          AcceleratorCallbackMap accelerator_callback_map_;
+          static void Call(content::Shell* shell,
+                   const std::string& method,
+                   const base::ListValue& arguments,
+                   base::ListValue* result,
+                   DispatcherHost* dispatcher_host);
     
-    // Like URLRequestAsarJob, but asks the JavaScript handler for file path.
-class URLRequestAsyncAsarJob : public JsAsker<asar::URLRequestAsarJob> {
- public:
-  URLRequestAsyncAsarJob(net::URLRequest*, net::NetworkDelegate*);
+    
+    {
+    {    if (zoom_controller) {
+      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
+      if (zoom_factor > content::kMaximumZoomFactor) {
+        zoom_factor = content::kMaximumZoomFactor;
+      }
+      if (zoom_factor < content::kMinimumZoomFactor) {
+        zoom_factor = content::kMinimumZoomFactor;
+      }
+      x *= zoom_factor;
+      y *= zoom_factor;
+    }
+    
+    Popup(x, y, rvh);
+  } else if (method == 'EnableShowEvent') {
+    arguments.GetBoolean(0, &enable_show_event_);
+  } else {
+    NOTREACHED() << 'Invalid call to Menu method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+    bool MenuDelegate::HasIcon(int command_id) {
+  if (command_id < 0)
+    return false;
     }
     
     
-    {  DISALLOW_COPY_AND_ASSIGN(Locker);
-};
-    
-      // Sent when extension render process ends (whether it crashes or closes).
-  // The details are an ExtensionHost* and the source is a Profile*. Not sent
-  // during browser shutdown.
-  NOTIFICATION_EXTENSION_PROCESS_TERMINATED,
-    
-    namespace base {
-class FilePath;
-}
-    
-    // Windows-specific implementation of the GlobalShortcutListener class that
-// listens for global shortcuts. Handles setting up a keyboard hook and
-// forwarding its output to the base class for processing.
-class GlobalShortcutListenerWin : public GlobalShortcutListener {
- public:
-  GlobalShortcutListenerWin();
-  virtual ~GlobalShortcutListenerWin();
-    }
-    
-      const int process_id_;
-  const int render_frame_id_;
-    
-    bool TtsPlatformImpl::LoadBuiltInTtsExtension(
-    content::BrowserContext* browser_context) {
-  return false;
-}
-    
-    TEST(AnyTest, TestPackAndUnpackAny) {
-  // We can pack a Any message inside another Any message.
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  google::protobuf::Any any;
-  any.PackFrom(submessage);
-  protobuf_unittest::TestAny message;
-  message.mutable_any_value()->PackFrom(any);
-    }
-    
-    
-    { private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RepeatedEnumFieldGenerator);
-};
-    
-    SourceGeneratorBase::SourceGeneratorBase(const FileDescriptor* descriptor,
-                                         const Options *options)
-    : descriptor_(descriptor), options_(options) {
-}
-    
-    #ifndef GOOGLE_PROTOBUF_COMPILER_JAVA_DOC_COMMENT_H__
-#define GOOGLE_PROTOBUF_COMPILER_JAVA_DOC_COMMENT_H__
-    
-    
-    { private:
-  Context* context_;
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ImmutableGeneratorFactory);
-};
-    
-    static void findCorner(const std::vector<Point2f>& contour, Point2f point, Point2f& corner)
-{
-    // find the nearest point
-    double min_dist = std::numeric_limits<double>::max();
-    int min_idx = -1;
-    }
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_ImplDX9_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_ImplDX9_CreateDeviceObjects();
-    
-    
-    {    return 0;
-}
+    {}  // namespace nwapi
 
     
+    MenuItem::MenuItem(int id,
+                   const base::WeakPtr<ObjectManager>& object_manager,
+                   const base::DictionaryValue& option,
+                   const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id) {
+  Create(option);
+}
     
-    {    switch (msg)
-    {
-    case WM_SIZE:
-        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
-        {
-            ImGui_ImplDX9_InvalidateDeviceObjects();
-            g_d3dpp.BackBufferWidth  = LOWORD(lParam);
-            g_d3dpp.BackBufferHeight = HIWORD(lParam);
-            HRESULT hr = g_pd3dDevice->Reset(&g_d3dpp);
-            if (hr == D3DERR_INVALIDCALL)
-                IM_ASSERT(0);
-            ImGui_ImplDX9_CreateDeviceObjects();
+    
+    {	if (mutex)
+		mutex->lock();
+}
+    
+    MAKE_TEMPLATE_TYPE_INFO(Vector, uint8_t, Variant::POOL_BYTE_ARRAY)
+MAKE_TEMPLATE_TYPE_INFO(Vector, int, Variant::POOL_INT_ARRAY)
+MAKE_TEMPLATE_TYPE_INFO(Vector, float, Variant::POOL_REAL_ARRAY)
+MAKE_TEMPLATE_TYPE_INFO(Vector, String, Variant::POOL_STRING_ARRAY)
+MAKE_TEMPLATE_TYPE_INFO(Vector, Vector2, Variant::POOL_VECTOR2_ARRAY)
+MAKE_TEMPLATE_TYPE_INFO(Vector, Vector3, Variant::POOL_VECTOR3_ARRAY)
+MAKE_TEMPLATE_TYPE_INFO(Vector, Color, Variant::POOL_COLOR_ARRAY)
+    
+    	struct StreamString : public Stream {
+    }
+    
+    SemaphorePosix::~SemaphorePosix() {
+    }
+    
+    #include 'os/semaphore.h'
+    
+    #endif // TCP_CLIENT_POSIX_H
+    
+    #ifdef WINDOWS_USE_MUTEX
+	CloseHandle(mutex);
+#else
+    
+    	SYSTEM_INFO sysInfo;
+	GetNativeSystemInfo(&sysInfo);
+	if (sysInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64) {
+		PathCombine(conEmuPath, exeDir, L'vendor\\conemu-maximus5\\ConEmu64.exe');
+	}
+	else {
+		PathCombine(conEmuPath, exeDir, L'vendor\\conemu-maximus5\\ConEmu.exe');
+	}
+    
+    #include 'db/builder.h'
+    
+    static const int kValueSize = 1000;
+    
+      // Check for iterator errors
+  Status s = input->status();
+  const uint64_t current_entries = compact->builder->NumEntries();
+  if (s.ok()) {
+    s = compact->builder->Finish();
+  } else {
+    compact->builder->Abandon();
+  }
+  const uint64_t current_bytes = compact->builder->FileSize();
+  compact->current_output()->file_size = current_bytes;
+  compact->total_bytes += current_bytes;
+  delete compact->builder;
+  compact->builder = nullptr;
+    
+    std::string InternalKey::DebugString() const {
+  std::string result;
+  ParsedInternalKey parsed;
+  if (ParseInternalKey(rep_, &parsed)) {
+    result = parsed.DebugString();
+  } else {
+    result = '(bad)';
+    result.append(EscapeString(rep_));
+  }
+  return result;
+}
+    
+    // Return the name of the sstable with the specified number
+// in the db named by 'dbname'.  The result will be prefixed with
+// 'dbname'.
+std::string TableFileName(const std::string& dbname, uint64_t number);
+    
+          case kBadRecord:
+        if (in_fragmented_record) {
+          ReportCorruption(scratch->size(), 'error in middle of record');
+          in_fragmented_record = false;
+          scratch->clear();
         }
-        return 0;
-    case WM_SYSCOMMAND:
-        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
-            return 0;
         break;
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        return 0;
+    
+      // Read the next record into *record.  Returns true if read
+  // successfully, false if we hit end of the input.  May use
+  // '*scratch' as temporary storage.  The contents filled in *record
+  // will only be valid until the next mutating operation on this
+  // reader or the next mutation to *scratch.
+  bool ReadRecord(Slice* record, std::string* scratch);
+    
+        RecordType type;
+    const bool end = (left == fragment_length);
+    if (begin && end) {
+      type = kFullType;
+    } else if (begin) {
+      type = kFirstType;
+    } else if (end) {
+      type = kLastType;
+    } else {
+      type = kMiddleType;
     }
-    return DefWindowProc(hWnd, msg, wParam, lParam);
+    
+    #ifdef BOOST_REGEX_HAS_OTHER_WCHAR_T
+//
+// Provide an unsigned short version as well, so the user can link to this
+// no matter whether they build with /Zc:wchar_t or not (MSVC specific).
+//
+template<>
+struct BOOST_REGEX_DECL c_regex_traits<unsigned short>
+{
+   c_regex_traits(){}
+   typedef unsigned short char_type;
+   typedef std::size_t size_type;
+   typedef std::basic_string<unsigned short> string_type;
+   struct locale_type{};
+   typedef boost::uint32_t char_class_type;
+    }
+    
+    //
+// note no include guard, we may include this multiple times:
+//
+#ifndef BOOST_REGEX_NO_EXTERNAL_TEMPLATES
+    
+    
+    {}
+    
+    
+    {   ~mem_block_cache()
+   {
+      while(next)
+      {
+         mem_block_node* old = next;
+         next = next->next;
+         ::operator delete(old);
+      }
+   }
+   void* get()
+   {
+#ifdef BOOST_HAS_THREADS
+      boost::static_mutex::scoped_lock g(mut);
+#endif
+     if(next)
+      {
+         mem_block_node* result = next;
+         next = next->next;
+         --cached_blocks;
+         return result;
+      }
+      return ::operator new(BOOST_REGEX_BLOCKSIZE);
+   }
+   void put(void* p)
+   {
+#ifdef BOOST_HAS_THREADS
+      boost::static_mutex::scoped_lock g(mut);
+#endif
+      if(cached_blocks >= BOOST_REGEX_MAX_CACHE_BLOCKS)
+      {
+         ::operator delete(p);
+      }
+      else
+      {
+         mem_block_node* old = static_cast<mem_block_node*>(p);
+         old->next = next;
+         next = old;
+         ++cached_blocks;
+      }
+   }
+};
+    
+    //
+// error checking API:
+//
+BOOST_REGEX_DECL void BOOST_REGEX_CALL verify_options(boost::regex_constants::syntax_option_type ef, match_flag_type mf);
+//
+// function can_start:
+//
+template <class charT>
+inline bool can_start(charT c, const unsigned char* map, unsigned char mask)
+{
+   return ((c < static_cast<charT>(0)) ? true : ((c >= static_cast<charT>(1 << CHAR_BIT)) ? true : map[c] & mask));
+}
+inline bool can_start(char c, const unsigned char* map, unsigned char mask)
+{
+   return map[(unsigned char)c] & mask;
+}
+inline bool can_start(signed char c, const unsigned char* map, unsigned char mask)
+{
+   return map[(unsigned char)c] & mask;
+}
+inline bool can_start(unsigned char c, const unsigned char* map, unsigned char mask)
+{
+   return map[c] & mask;
+}
+inline bool can_start(unsigned short c, const unsigned char* map, unsigned char mask)
+{
+   return ((c >= (1 << CHAR_BIT)) ? true : map[c] & mask);
+}
+#if !defined(__hpux) && !defined(__WINSCW__)// WCHAR_MIN not usable in pp-directives.
+#if defined(WCHAR_MIN) && (WCHAR_MIN == 0) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+inline bool can_start(wchar_t c, const unsigned char* map, unsigned char mask)
+{
+   return ((c >= static_cast<wchar_t>(1u << CHAR_BIT)) ? true : map[c] & mask);
+}
+#endif
+#endif
+#if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+inline bool can_start(unsigned int c, const unsigned char* map, unsigned char mask)
+{
+   return (((c >= static_cast<unsigned int>(1u << CHAR_BIT)) ? true : map[c] & mask));
+}
+#endif
+    
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::match_backstep()
+{
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4127)
+#endif
+   if( ::boost::is_random_access_iterator<BidiIterator>::value)
+   {
+      std::ptrdiff_t maxlen = ::boost::BOOST_REGEX_DETAIL_NS::distance(backstop, position);
+      if(maxlen < static_cast<const re_brace*>(pstate)->index)
+         return false;
+      std::advance(position, -static_cast<const re_brace*>(pstate)->index);
+   }
+   else
+   {
+      int c = static_cast<const re_brace*>(pstate)->index;
+      while(c--)
+      {
+         if(position == backstop)
+            return false;
+         --position;
+      }
+   }
+   pstate = pstate->next.p;
+   return true;
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 }
     
-            // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        s3eKeyboardUpdate();
-        s3ePointerUpdate();
-        ImGui_Marmalade_NewFrame();
-    
-        for (int n = 0; n < 50; n++)
-    {
-        printf('NewFrame() %d\n', n);
-        io.DisplaySize = ImVec2(1920, 1080);
-        io.DeltaTime = 1.0f / 60.0f;
-        ImGui::NewFrame();
-    }
-    
-            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-                if (ImGui::Button('Delete..'))
-                ImGui::OpenPopup('Delete?');
-            if (ImGui::BeginPopupModal('Delete?', NULL, ImGuiWindowFlags_AlwaysAutoResize))
-            {
-                ImGui::Text('All those beautiful files will be deleted.\nThis operation cannot be undone!\n\n');
-                ImGui::Separator();
-    }
-    
-    
-    {
-    {} // namespace exception_tracer
-} // namespace folly
-
-    
-    template <typename T>
-void SingletonHolder<T>::registerSingletonMock(CreateFunc c, TeardownFunc t) {
-  if (state_ == SingletonHolderState::NotRegistered) {
-    detail::singletonWarnRegisterMockEarlyAndAbort(type());
-  }
-  if (state_ == SingletonHolderState::Living) {
-    destroyInstance();
-  }
-    }
-    
-    /* using override */ using namespace folly::portability::fcntl;
+    #ifndef BOOST_REGEX_CONFIG_HPP
+#include <boost/regex/config.hpp>
 #endif
-
+#ifndef BOOST_REGEX_WORKAROUND_HPP
+#include <boost/regex/v4/regex_workaround.hpp>
+#endif
     
-    // Some queue implementations (for example, LifoSemMPMCQueue or
-// PriorityLifoSemMPMCQueue) support both blocking (BLOCK) and
-// non-blocking (THROW) behaviors.
-enum class QueueBehaviorIfFull { THROW, BLOCK };
     
-    template <class T>
-class UnboundedBlockingQueue : public BlockingQueue<T> {
- public:
-  virtual ~UnboundedBlockingQueue() {}
-    }
+    {} // namespace boost
     
-    TEST(ThreadPoolExecutorTest, AddWithPriority) {
-  std::atomic_int c{0};
-  auto f = [&] { c++; };
-    }
+    template <class traits, class charT, class Formatter>
+std::basic_string<charT> regex_replace(const std::basic_string<charT>& s,
+                         const basic_regex<charT, traits>& e, 
+                         Formatter fmt,
+                         match_flag_type flags = match_default)
+{
+   std::basic_string<charT> result;
+   BOOST_REGEX_DETAIL_NS::string_out_iterator<std::basic_string<charT> > i(result);
+   regex_replace(i, s.begin(), s.end(), e, fmt, flags);
+   return result;
+}
+    
+        // Build atlas
+    unsigned char* tex_pixels = NULL;
+    int tex_w, tex_h;
+    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
+    
+    void CleanupRenderTarget()
+{
+    if (g_mainRenderTargetView) { g_mainRenderTargetView->Release(); g_mainRenderTargetView = NULL; }
+}
+    
+    struct VERTEX_CONSTANT_BUFFER
+{
+    float   mvp[4][4];
+};
+    
+    static void ImGui_Marmalade_SetClipboardText(void* /*user_data*/, const char* text)
+{
+    if (s3eClipboardAvailable())
+        s3eClipboardSetText(text);
+}
