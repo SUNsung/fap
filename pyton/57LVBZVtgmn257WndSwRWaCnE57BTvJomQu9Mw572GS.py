@@ -1,123 +1,125 @@
 
         
-        import rsa
-import json
-from binascii import hexlify
+            if test_config is None:
+        # load the instance config, if it exists, when not testing
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        # load the test config if passed in
+        app.config.update(test_config)
     
     
-class TestUnicodeLiterals(unittest.TestCase):
-    def test_all_files(self):
-        for dirpath, dirnames, filenames in os.walk(rootDir):
-            for ignore_dir in IGNORED_DIRS:
-                if ignore_dir in dirnames:
-                    # If we remove the directory from dirnames os.walk won't
-                    # recurse into it
-                    dirnames.remove(ignore_dir)
-            for basename in filenames:
-                if not basename.endswith('.py'):
-                    continue
-                if basename in IGNORED_FILES:
-                    continue
+def login_required(view):
+    '''View decorator that redirects anonymous users to the login page.'''
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login'))
     
-            return info_dict
-
+        assert 'closed' in str(e)
     
-            formats = []
-        for secure in ('', 'Secure'):
-            for ext in ('Ogg', 'Mp3'):
-                format_id = '%s%s' % (secure, ext)
-                format_url = metadata.get('%sUrl' % format_id)
-                if format_url:
-                    formats.append({
-                        'url': format_url,
-                        'format_id': format_id,
-                        'vcodec': 'none',
-                    })
-        self._sort_formats(formats)
+                class MyFlask(flask.Flask):
+                def get_send_file_max_age(self, name):
+                    if name.lower().endswith('.js'):
+                        return 60
+                    return flask.Flask.get_send_file_max_age(self, name)
     
-        def format_headers(self, headers):
-        for p in self.enabled_plugins:
-            headers = p.format_headers(headers)
-        return headers
+    signals_available = False
+try:
+    from blinker import Namespace
+    signals_available = True
+except ImportError:
+    class Namespace(object):
+        def signal(self, name, doc=None):
+            return _FakeSignal(name, doc)
+    
+    version_added: '2.5'
     
     
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
-    
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
-    
-    
-def test_unicode_raw_json_item(httpbin):
-    r = http('--json', 'POST', httpbin.url + '/post',
-             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
-    assert HTTP_OK in r
-    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
-    
-        # noinspection PyMethodOverriding
-    def get_auth(self, username, password):
-        return HTTPBasicAuth(username, password)
+RETURN = '''
+addresses:
+  description: Properties of all Elastic IP addresses matching the provided filters. Each element is a dict with all the information related to an EIP.
+  returned: on success
+  type: list
+  sample: [{
+        'allocation_id': 'eipalloc-64de1b01',
+        'association_id': 'eipassoc-0fe9ce90d6e983e97',
+        'domain': 'vpc',
+        'instance_id': 'i-01020cfeb25b0c84f',
+        'network_interface_id': 'eni-02fdeadfd4beef9323b',
+        'network_interface_owner_id': '0123456789',
+        'private_ip_address': '10.0.0.1',
+        'public_ip': '54.81.104.1',
+        'tags': {
+            'Name': 'test-vm-54.81.104.1'
+        }
+    }]
     
     
-def test_missing_auth(httpbin):
-    r = http(
-        '--auth-type=basic',
-        'GET',
-        httpbin + '/basic-auth/user/password',
-        error_exit_ok=True
+DOCUMENTATION = '''
+---
+module: ec2_key
+version_added: '1.5'
+short_description: create or delete an ec2 key pair
+description:
+    - create or delete an ec2 key pair.
+options:
+  name:
+    description:
+      - Name of the key pair.
+    required: true
+  key_material:
+    description:
+      - Public key material.
+    required: false
+  force:
+    description:
+      - Force overwrite of already existing key pair if key has changed.
+    required: false
+    default: true
+    version_added: '2.3'
+  state:
+    description:
+      - create or delete keypair
+    required: false
+    choices: [ present, absent ]
+    default: 'present'
+  wait:
+    description:
+      - Wait for the specified action to complete before returning. This option has no effect since version 2.5.
+    required: false
+    default: false
+    version_added: '1.6'
+  wait_timeout:
+    description:
+      - How long before wait gives up, in seconds. This option has no effect since version 2.5.
+    required: false
+    default: 300
+    version_added: '1.6'
+    
+        if ebs_optimized is not None:
+        launch_config['EbsOptimized'] = ebs_optimized
+    
+    
+def main():
+    argument_spec = ec2_argument_spec()
+    argument_spec.update(dict(
+        region=dict(required=True, aliases=['aws_region', 'ec2_region']),
+        name_regex=dict(required=True),
+        sort_order=dict(required=False, default='ascending', choices=['ascending', 'descending']),
+        limit=dict(required=False, type='int'),
     )
-    assert HTTP_OK not in r
-    assert '--auth required' in r.stderr
-
+    )
     
+    For more details about this component, please refer to the documentation at
+https://home-assistant.io/components/alexa/
+'''
+import asyncio
+import logging
     
-class TestBinaryRequestData:
+            self._is_down = click_type == pyflic.ClickType.ButtonDown
+        self.schedule_update_ha_state()
     
-    
-    def predict(self, input):
-        '''
-        From the input stream, predict what alternative will succeed
-	using this DFA (representing the covering regular approximation
-	to the underlying CFL).  Return an alternative number 1..n.  Throw
-	 an exception upon error.
-	'''
-        mark = input.mark()
-        s = 0 # we always start at s0
-        try:
-            for _ in xrange(50000):
-                #print '***Current state = %d' % s
-    
-    
-        if input is not None:
-            self.input = input
-            self.index = input.index()
-    
-            self.auth = Authenticator(self.config, 'dnsimple')
-    
-    import os
-import unittest
-    
-    # Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, 'certbot-dns-nsone.tex', u'certbot-dns-nsone Documentation',
-     u'Certbot Project', 'manual'),
-]
-    
-        This function takes care of generating fresh private key,
-    registering the account, optionally accepting CA Terms of Service
-    and finally saving the account. It should be called prior to
-    initialization of `Client`, unless account has already been created.
-    
-    # -- General configuration ------------------------------------------------
+        def _get_value(self, hass, data, config_key):
+        '''Get value.'''
+        customize = hass.data.get(DATA_CUSTOMIZE, {}).get(config_key) or {}
+        return {'global': customize, 'local': data.get(config_key, {})}
