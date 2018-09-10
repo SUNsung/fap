@@ -1,105 +1,98 @@
 
         
-            def iter_body(self, chunk_size):
-        yield self.body
+        # Allow direct execution
+import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
-        exc = Timeout('Request timed out')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR_TIMEOUT
-    assert error_msg == 'Request timed out (30s).'
+    
+def build_lazy_ie(ie, name):
+    valid_url = getattr(ie, '_VALID_URL', None)
+    s = ie_template.format(
+        name=name,
+        bases=', '.join(map(get_base_name, ie.__bases__)),
+        valid_url=valid_url,
+        module=ie.__module__)
+    if ie.suitable.__func__ is not InfoExtractor.suitable.__func__:
+        s += '\n' + getsource(ie.suitable)
+    if hasattr(ie, '_make_valid_url'):
+        # search extractors
+        s += make_valid_template.format(valid_url=ie._make_valid_url())
+    return s
+    
+    with io.open(README_FILE, encoding='utf-8') as f:
+    oldreadme = f.read()
+    
+    
+if __name__ == '__main__':
+    main()
 
     
-        See also `test_auth_plugins.py`
-    
-    
-def humanize_bytes(n, precision=2):
-    # Author: Doug Latornell
-    # Licence: MIT
-    # URL: http://code.activestate.com/recipes/577081/
-    '''Return a humanized string representation of a number of bytes.
-    
-        def test_download_interrupted(self, httpbin_both):
-        devnull = open(os.devnull, 'w')
-        downloader = Downloader(output_file=devnull, progress_file=devnull)
-        downloader.start(Response(
-            url=httpbin_both.url + '/',
-            headers={'Content-Length': 5}
-        ))
-        downloader.chunk_downloaded(b'1234')
-        downloader.finish()
-        assert downloader.interrupted
-
-    
-            self.wait_to_close_event = wait_to_close_event
-        self.ready_event = threading.Event()
-        self.stop_event = threading.Event()
-    
-        @pytest.mark.parametrize(
-        'other, result', (
-            ({'AccePT': 'application/json'}, True),
-            ({}, False),
-            (None, False)
+        def test_cbc_decrypt(self):
+        data = bytes_to_intlist(
+            b'\x97\x92+\xe5\x0b\xc3\x18\x91ky9m&\xb3\xb5@\xe6'\xc2\x96.\xc8u\x88\xab9-[\x9e|\xf1\xcd'
         )
-    )
-    def test_instance_equality(self, other, result):
-        assert (self.case_insensitive_dict == other) is result
+        decrypted = intlist_to_bytes(aes_cbc_decrypt(data, self.key, self.iv))
+        self.assertEqual(decrypted.rstrip(b'\x08'), self.secret_msg)
     
-        See https://github.com/requests/requests/issues/1979.
-    '''
-    text_401 = (b'HTTP/1.1 401 UNAUTHORIZED\r\n'
-                b'Content-Length: 0\r\n'
-                b'WWW-Authenticate: Digest nonce='6bf5d6e4da1ce66918800195d6b9130d''
-                b', opaque='372825293d1c26955496c80ed6426e9e', '
-                b'realm='me@kennethreitz.com', qop=auth\r\n\r\n')
+        def setUp(self):
+        from acme.fields import Fixed
+        self.field = Fixed('name', 'x')
     
-        Provide both the name and the version of the Python implementation
-    currently running. For example, on CPython 2.7.5 it will return
-    {'name': 'CPython', 'version': '2.7.5'}.
+    # If true, the index is split into individual pages for each letter.
+#html_split_index = False
     
-        def add_header(self, key, val):
-        '''cookielib has no legitimate use for this method; add it back if you find one.'''
-        raise NotImplementedError('Cookie headers should be added with add_unredirected_header()')
+    authzr = acme.request_challenges(
+    identifier=messages.Identifier(typ=messages.IDENTIFIER_FQDN, value=DOMAIN))
+logging.debug(authzr)
     
-            prepared_request.method = method
+        '''
+    return _split_aug_path(vhost_path)[1]
     
-      # Look for the next opening parenthesis.  This is the start of the
-  # parameter list (possibly on the next line shortly after virtual).
-  # TODO(unknown): doesn't work if there are virtual functions with
-  # decltype() or other things that use parentheses, but csearch suggests
-  # that this is rare.
-  end_col = -1
-  end_line = -1
-  start_col = len(virtual.group(2))
-  for start_line in xrange(linenum, min(linenum + 3, clean_lines.NumLines())):
-    line = clean_lines.elided[start_line][start_col:]
-    parameter_list = Match(r'^([^(]*)\(', line)
-    if parameter_list:
-      # Match parentheses to find the end of the parameter list
-      (_, end_line, end_col) = CloseExpression(
-          clean_lines, start_line, start_col + len(parameter_list.group(1)))
-      break
-    start_col = 0
+    AUTOHSTS_PERMANENT = 31536000
+'''Value for the last max-age of HSTS'''
     
-    from types import *
-NoneType = type(None)
+            '''
+        if self.is_wildcard():
+            return self
     
-        def test_ludicrous(self):
-        self._test([['a1', 'a2', 'a3'], ['b1', 'b2']], ['c1'], [['d1', 'd2'], ['e1', 'e2', 'e3']],
-          (
-          ('c1',),
-          ('b1', 'b2', 'c1'),
-          ('b1', 'b2', 'c1', 'd1', 'd2'),
-          ('a1', 'a2', 'a3', 'b1', 'b2', 'c1'),
-          ('a1', 'a2', 'a3', 'b1', 'b2', 'c1', 'd1', 'd2'),
-          ('a1', 'a2', 'a3', 'b1', 'b2', 'c1', 'd1', 'd2', 'e1', 'e2', 'e3'),
-          ))
+        def setUp(self):
+        self.base_dir = '/example_path'
+        self.vhosts = util.get_vh_truth(
+            self.base_dir, 'debian_apache_2_4/multiple_vhosts')
     
-        def make_random(self):
-        'Fill the board with a random pattern'
-        self.state = {}
-        for i in range(0, self.X):
-            for j in range(0, self.Y):
-                if random.random() > 0.5:
-                    self.set(j, i)
+            complex_vh = VirtualHost(
+            'fp', 'vhp',
+            set([Addr.fromstring('*:443'), Addr.fromstring('1.2.3.4:443')]),
+            False, False)
+        self.assertTrue(complex_vh.conflicts([self.addr1]))
+        self.assertTrue(complex_vh.conflicts([self.addr2]))
+        self.assertFalse(complex_vh.conflicts([self.addr_default]))
+    
+            # Prepare the server for HTTPS
+        self.configurator.prepare_server_https(
+            str(self.configurator.config.tls_sni_01_port), True)
+    
+        # Make the eyebrows into a nightmare
+    d.polygon(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 128))
+    d.polygon(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 128))
+    d.line(face_landmarks['left_eyebrow'], fill=(68, 54, 39, 150), width=5)
+    d.line(face_landmarks['right_eyebrow'], fill=(68, 54, 39, 150), width=5)
+    
+                face_names.append(name)
+    
+        # Save each frame of the video to a list
+    frame_count += 1
+    frames.append(frame)
+    
+        # Draw a label with a name below the face
+    text_width, text_height = draw.textsize(name)
+    draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
+    draw.text((left + 6, bottom - text_height - 5), name, fill=(255, 255, 255, 255))
+    
+        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
+    context = multiprocessing
+    if 'forkserver' in multiprocessing.get_all_start_methods():
+        context = multiprocessing.get_context('forkserver')
+    
+            img_b1 = api.load_image_file(os.path.join(os.path.dirname(__file__), 'test_images', 'biden.jpg'))
