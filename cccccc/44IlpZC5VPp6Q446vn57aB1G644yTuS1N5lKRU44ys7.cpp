@@ -1,102 +1,280 @@
 
         
-        #include <grpcpp/security/credentials.h>
+          // brightray::MainDelegate:
+  std::unique_ptr<brightray::ContentClient> CreateContentClient() override;
+#if defined(OS_MACOSX)
+  void OverrideChildProcessPath() override;
+  void OverrideFrameworkBundlePath() override;
+#endif
     
-    // setup a unary call to a named method
-std::unique_ptr<GenericClientAsyncResponseReader> GenericStub::PrepareUnaryCall(
-    ClientContext* context, const grpc::string& method,
-    const ByteBuffer& request, CompletionQueue* cq) {
-  return std::unique_ptr<GenericClientAsyncResponseReader>(
-      internal::ClientAsyncResponseReaderFactory<ByteBuffer>::Create(
-          channel_.get(), cq,
-          internal::RpcMethod(method.c_str(), internal::RpcMethod::NORMAL_RPC),
-          context, request, false));
+    
+    {}  // namespace atom
+    
+    namespace api {
+    }
+    
+    
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(InAppPurchase);
+};
+    
+    #include 'atom/common/node_includes.h'
+    
+    // static
+mate::WrappableBase* LayoutManager::New(mate::Arguments* args) {
+  args->ThrowError('LayoutManager can not be created directly');
+  return nullptr;
 }
     
-    #include <grpcpp/security/credentials.h>
+       unsigned short translate(unsigned short c) const 
+   { 
+      return c; 
+   }
+   unsigned short translate_nocase(unsigned short c) const 
+   { 
+      return (std::towlower)((wchar_t)c); 
+   }
     
-    // 'CompletionQueue' constructor can safely call GrpcLibraryCodegen(false) here
-// i.e not have GrpcLibraryCodegen call grpc_init(). This is because, to create
-// a 'grpc_completion_queue' instance (which is being passed as the input to
-// this constructor), one must have already called grpc_init().
-CompletionQueue::CompletionQueue(grpc_completion_queue* take)
-    : GrpcLibraryCodegen(false), cq_(take) {
-  InitialAvalanching();
+       // match procs, stored in s_match_vtable:
+   bool match_startmark();
+   bool match_endmark();
+   bool match_literal();
+   bool match_start_line();
+   bool match_end_line();
+   bool match_wild();
+   bool match_match();
+   bool match_word_boundary();
+   bool match_within_word();
+   bool match_word_start();
+   bool match_word_end();
+   bool match_buffer_start();
+   bool match_buffer_end();
+   bool match_backref();
+   bool match_long_set();
+   bool match_set();
+   bool match_jump();
+   bool match_alt();
+   bool match_rep();
+   bool match_combining();
+   bool match_soft_buffer_end();
+   bool match_restart_continue();
+   bool match_long_set_repeat();
+   bool match_set_repeat();
+   bool match_char_repeat();
+   bool match_dot_repeat_fast();
+   bool match_dot_repeat_slow();
+   bool match_dot_repeat_dispatch()
+   {
+      return ::boost::is_random_access_iterator<BidiIterator>::value ? match_dot_repeat_fast() : match_dot_repeat_slow();
+   }
+   bool match_backstep();
+   bool match_assert_backref();
+   bool match_toggle_case();
+#ifdef BOOST_REGEX_RECURSIVE
+   bool backtrack_till_match(std::size_t count);
+#endif
+   bool match_recursion();
+   bool match_fail();
+   bool match_accept();
+   bool match_commit();
+   bool match_then();
+   bool skip_until_paren(int index, bool match = true);
+    
+    template <class BidiIterator, class Allocator, class traits>
+bool perl_matcher<BidiIterator, Allocator, traits>::unwind_char_repeat(bool r)
+{
+   saved_single_repeat<BidiIterator>* pmp = static_cast<saved_single_repeat<BidiIterator>*>(m_backup_state);
+    }
+    
+     /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex_format.hpp
+  *   VERSION      see <boost/version.hpp>
+  *   DESCRIPTION: Provides formatting output routines for search and replace
+  *                operations.  Note this is an internal header file included
+  *                by regex.hpp, do not include on its own.
+  */
+    
+    template <class BidiIterator, class Allocator, class charT, class traits>
+bool regex_search(BidiIterator first, BidiIterator last, 
+                  match_results<BidiIterator, Allocator>& m, 
+                  const basic_regex<charT, traits>& e, 
+                  match_flag_type flags = match_default)
+{
+   return regex_search(first, last, m, e, flags, first);
 }
     
-    void SecureAuthContext::AddProperty(const grpc::string& key,
-                                    const grpc::string_ref& value) {
-  if (!ctx_) return;
-  grpc_auth_context_add_property(ctx_, key.c_str(), value.data(), value.size());
+        //
+    // convert 'absolutes' to 'diffs'
+    //
+    Vec2 p = copyConfig->getControlPointAtIndex(0);
+    for (ssize_t i = 1; i < copyConfig->count(); ++i)
+    {
+        Vec2 current = copyConfig->getControlPointAtIndex(i);
+        Vec2 diff = current - p;
+        copyConfig->replaceControlPoint(diff, i);
+    }
+    
+    //
+// NOTE: Converting these macros into Templates is desirable, but please see
+// issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
+//
+#define EASERATE_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC) \
+CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval *action, float rate) \
+{ \
+    CLASSNAME *ease = new (std::nothrow) CLASSNAME(); \
+    if (ease) \
+    { \
+        if (ease->initWithAction(action, rate)) \
+            ease->autorelease(); \
+        else \
+            CC_SAFE_RELEASE_NULL(ease); \
+    } \
+    return ease; \
+} \
+CLASSNAME* CLASSNAME::clone() const \
+{ \
+    if(_inner) return CLASSNAME::create(_inner->clone(), _rate); \
+    return nullptr; \
+} \
+void CLASSNAME::update(float time) { \
+    _inner->update(TWEEN_FUNC(time, _rate)); \
+} \
+EaseRateAction* CLASSNAME::reverse() const { \
+    return CLASSNAME::create(_inner->reverse(), 1.f / _rate); \
 }
     
-    MeasureDouble RpcServerReceivedBytesPerRpc() {
-  static const auto measure = MeasureDouble::Register(
-      kRpcServerReceivedBytesPerRpcMeasureName,
-      'Total bytes received across all messages per RPC', kUnitBytes);
-  return measure;
+    FlipX * FlipX::clone() const
+{
+    // no copy constructor
+    return FlipX::create(_flipX);
+}
+//
+// FlipY
+//
+    
+            // fix for issue #1288, incorrect end value of repeat
+        if (std::abs(dt - 1.0f) < FLT_EPSILON && _total < _times)
+        {
+            if (!(sendUpdateEventToScript(1.0f, _innerAction)))
+                _innerAction->update(1.0f);
+            
+            _total++;
+        }
+    
+    
+    {        // only delete currentTarget if no actions were scheduled during the cycle (issue #481)
+        if (_currentTargetSalvaged && _currentTarget->actions->num == 0)
+        {
+            deleteHashElement(_currentTarget);
+        }
+        //if some node reference 'target', it's reference count >= 2 (issues #14050)
+        else if (_currentTarget->target->getReferenceCount() == 1)
+        {
+            deleteHashElement(_currentTarget);
+        }
+    }
+    
+        /** Removes all actions matching at least one bit in flags and the target.
+     *
+     * @param flags     The flag field to match the actions' flags based on bitwise AND.
+     * @param target    A certain target.
+     * @js NA
+     */
+    virtual void removeActionsByFlags(unsigned int flags, Node *target);
+    
+        if (action && action->initWithDuration(duration, gridSize, numberOfJumps, amplitude))
+    {
+        action->autorelease();
+        return action;
+    }
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+****************************************************************************/
+    
+    Animation* Animation::create(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops /* = 1 */)
+{
+    Animation *animation = new (std::nothrow) Animation();
+    animation->initWithAnimationFrames(arrayOfAnimationFrameNames, delayPerUnit, loops);
+    animation->autorelease();
+    return animation;
 }
     
-    BENCHFUN(defaultCtor)                  100000  1.426 s   14.26 us   68.5 k
-BM_copyCtor_string/32k                 100000  275.7 ms  2.757 us  354.2 k
-BM_ctorFromArray_string/32k            100000    270 ms    2.7 us  361.7 k
-BM_ctorFromChar_string/1M              100000  10.36 ms  103.6 ns  9.206 M
-BM_assignmentOp_string/256             100000  70.44 ms  704.3 ns  1.354 M
-BENCHFUN(assignmentFill)               100000  1.766 ms  17.66 ns     54 M
-BM_resize_string/512k                  100000  1.675 s   16.75 us  58.29 k
-BM_findSuccessful_string/512k          100000  90.89 ms  908.9 ns  1.049 M
-BM_findUnsuccessful_string/512k        100000  315.1 ms  3.151 us  309.9 k
-BM_replace_string/256                  100000  71.14 ms  711.4 ns  1.341 M
-BM_push_back_string/1k                 100000  425.1 ms  4.251 us  229.7 k
+        /** Gets the total Delay units of the Animation. 
+     *
+     * @return The total Delay units of the Animation.
+     */
+    float getTotalDelayUnits() const { return _totalDelayUnits; };
     
-    TEST(U16FBString, compareToStdU16String) {
-  using folly::basic_fbstring;
-  using namespace std::string_literals;
-  auto stdA = u'a's;
-  auto stdB = u'b's;
-  basic_fbstring<char16_t> fbA(u'a');
-  basic_fbstring<char16_t> fbB(u'b');
-  EXPECT_TRUE(stdA == fbA);
-  EXPECT_TRUE(fbB == stdB);
-  EXPECT_TRUE(stdA != fbB);
-  EXPECT_TRUE(fbA != stdB);
-  EXPECT_TRUE(stdA < fbB);
-  EXPECT_TRUE(fbA < stdB);
-  EXPECT_TRUE(stdB > fbA);
-  EXPECT_TRUE(fbB > stdA);
-  EXPECT_TRUE(stdA <= fbB);
-  EXPECT_TRUE(fbA <= stdB);
-  EXPECT_TRUE(stdA <= fbA);
-  EXPECT_TRUE(fbA <= stdA);
-  EXPECT_TRUE(stdB >= fbA);
-  EXPECT_TRUE(fbB >= stdA);
-  EXPECT_TRUE(stdB >= fbB);
-  EXPECT_TRUE(fbB >= stdB);
-}
+    /** Sets the delay in seconds of the 'delay unit'.
+     *
+     * @param delayPerUnit The delay in seconds of the 'delay unit'.
+     */
+    void setDelayPerUnit(float delayPerUnit) { _delayPerUnit = delayPerUnit; };
     
-    using FBStringVector = vector<folly::fbstring>;
-using FBStringFBVector = fbvector<folly::fbstring>;
+    /** Gets the delay in seconds of the 'delay unit'.
+     * 
+     * @return The delay in seconds of the 'delay unit'.
+     */
+    float getDelayPerUnit() const { return _delayPerUnit; };
     
-    TEST(Fingerprint, Alignment) {
-  // Test that update() gives the same result regardless of string alignment
-  const char test_str[] = 'hello world 12345';
-  int len = sizeof(test_str)-1;
-  std::unique_ptr<char[]> str(new char[len+8]);
-  uint64_t ref_fp;
-  SlowFingerprint<64>().update(StringPiece(test_str, len)).write(&ref_fp);
-  for (int i = 0; i < 8; i++) {
-    char* p = str.get();
-    char* q;
-    // Fill the string as !!hello??????
-    for (int j = 0; j < i; j++) {
-      *p++ = '!';
-    }
-    q = p;
-    for (int j = 0; j < len; j++) {
-      *p++ = test_str[j];
-    }
-    for (int j = i; j < 8; j++) {
-      *p++ = '?';
+        /** Adds a Animation with a name.
+     *
+     * @param animation An animation.
+     * @param name The name of animation.
+     */
+    void addAnimation(Animation *animation, const std::string& name);
+    
+    
+    { protected:
+  /// The CAN client is started.
+  bool is_started_ = false;
+};
+    
+    namespace apollo {
+namespace drivers {
+namespace canbus {
+namespace can {
     }
     }
     }
+    }
+    
+    
+    {
+    {
+    {
+    {}  // namespace can
+}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+    
+    #include <cstring>
+    
+      dev_handler_ = socket(PF_CAN, SOCK_RAW, CAN_RAW);
+  if (dev_handler_ < 0) {
+    AERROR << 'open device error code [' << dev_handler_ << ']: ';
+    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+  }
+    
+    template <typename SensorType>
+void CanReceiver<SensorType>::RecvThreadFunc() {
+  AINFO << 'Can client receiver thread starts.';
+  CHECK_NOTNULL(can_client_);
+  CHECK_NOTNULL(pt_manager_);
+    }
+    
+      ProtocolData<::apollo::canbus::ChassisDetail> mpd;
+  SenderMessage<::apollo::canbus::ChassisDetail> msg(1, &mpd);
+  EXPECT_FALSE(sender.NeedSend(msg, 1));
+  EXPECT_EQ(msg.message_id(), 1);
+  int32_t period = msg.curr_period();
+  msg.UpdateCurrPeriod(-50);
+  EXPECT_EQ(msg.curr_period(), period + 50);
+  EXPECT_EQ(msg.CanFrame().id, 1);
