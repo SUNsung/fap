@@ -1,147 +1,114 @@
 
         
-            # Separating the 'table of contents' from the contents (blocks)
-    table_of_contents = ''.join(read_me.split('- - -')[0])
-    blocks = ''.join(read_me.split('- - -')[1]).split('\n# ')
-    for i in range(len(blocks)):
-        if i == 0:
-            blocks[i] = blocks[i] + '\n'
-        else:
-            blocks[i] = '# ' + blocks[i] + '\n'
+            def __init__(self, floor, total_spots):
+        self.floor = floor
+        self.num_spots = total_spots
+        self.available_spots = 0
+        self.spots = []  # List of ParkingSpots
+    
+        def __init__(self, seller_category_map, seller_category_overrides_map):
+        self.seller_category_map = seller_category_map
+        self.seller_category_overrides_map = seller_category_overrides_map
+    
+            (2016-01, url0), 1
+        (2016-01, url0), 1
+        (2016-01, url1), 1
+        '''
+        url = self.extract_url(line)
+        period = self.extract_year_month(line)
+        yield (period, url), 1
+    
+        def mapper(self, _, line):
+        yield line, 1
     
     
-@classmethod
-def get_args(cls, dist, header=None):
-    '''
-    Yield write_script() argument tuples for a distribution's
-    console_scripts and gui_scripts entry points.
-    '''
-    if header is None:
-        header = cls.get_header()
-    spec = str(dist.as_requirement())
-    for type_ in 'console', 'gui':
-        group = type_ + '_scripts'
-        for name, ep in dist.get_entry_map(group).items():
-            # ensure_safe_name
-            if re.search(r'[\\/]', name):
-                raise ValueError('Path separators not allowed in script names')
-            script_text = TEMPLATE.format(
-                          ep.module_name, ep.attrs[0], '.'.join(ep.attrs),
-                          spec, group, name)
-            args = cls._get_script_args(type_, name, header, script_text)
-            for res in args:
-                yield res
+class PagesDataStore(object):
     
     
-@pytest.fixture(autouse=True)
-def functional(request):
-    if request.node.get_marker('functional') \
-            and not request.config.getoption('enable_functional'):
-        pytest.skip('functional tests are disabled')
+# noinspection PyAbstractClass
+class BuiltinAuthPlugin(AuthPlugin):
     
     
-def select_command_with_arrows(proc, TIMEOUT):
-    '''Ensures that command can be selected with arrow keys.'''
-    _set_confirmation(proc, True)
+class PyTest(TestCommand):
+    # `$ python setup.py test' simply installs minimal requirements
+    # and runs the tests with no fancy stuff like parallel execution.
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = [
+            '--doctest-modules', '--verbose',
+            './httpie', './tests'
+        ]
+        self.test_suite = True
     
-    
-@pytest.mark.functional
-def test_how_to_configure_alias(proc, TIMEOUT):
-    proc.sendline('unset -f fuck')
-    how_to_configure(proc, TIMEOUT)
+        def test_binary_included_and_correct_when_suitable(self):
+        env = MockEnvironment(stdin_isatty=True, stdout_isatty=False)
+        r = http('GET', self.url, env=env)
+        assert r == self.bindata
 
     
-        assert get_new_command(command) == new_command
-
+        config['implicit_content_type'] = 'json'
+    config.save()
+    config.load()
+    assert 'implicit_content_type' not in config
+    assert not config['default_options']
     
-    match_output = '''
-Hit:1 http://us.archive.ubuntu.com/ubuntu zesty InRelease
-Hit:2 http://us.archive.ubuntu.com/ubuntu zesty-updates InRelease
-Get:3 http://us.archive.ubuntu.com/ubuntu zesty-backports InRelease [89.2 kB]
-Hit:4 http://security.ubuntu.com/ubuntu zesty-security InRelease
-Hit:5 http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu zesty InRelease
-Hit:6 https://download.docker.com/linux/ubuntu zesty InRelease
-Hit:7 https://cli-assets.heroku.com/branches/stable/apt ./ InRelease
-Fetched 89.2 kB in 0s (122 kB/s)
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-8 packages can be upgraded. Run 'apt list --upgradable' to see them.
-'''
-    
-    match_output = '''
-Listing... Done
-heroku/stable 6.15.2-1 amd64 [upgradable from: 6.14.43-1]
-resolvconf/zesty-updates,zesty-updates 1.79ubuntu4.1 all [upgradable from: 1.79ubuntu4]
-squashfs-tools/zesty-updates 1:4.3-3ubuntu2.17.04.1 amd64 [upgradable from: 1:4.3-3ubuntu2]
-unattended-upgrades/zesty-updates,zesty-updates 0.93.1ubuntu2.4 all [upgradable from: 0.93.1ubuntu2.3]
-'''
-    
-        For example, ``headers['content-encoding']`` will return the
-    value of a ``'Content-Encoding'`` response header, regardless
-    of how the header name was originally stored.
-    
-            with Server.basic_response_server(wait_to_close_event=block_server) as (host, port):
-            sock = socket.socket()
-            sock.connect((host, port))
-            sock.sendall(b'send something')
-            time.sleep(2.5)
-            sock.sendall(b'still alive')
-            block_server.set()  # release server block
-    
-            # Make headers case-insensitive.
-        response.headers = CaseInsensitiveDict(getattr(resp, 'headers', {}))
-    
-        def stop(self):
-        print('then stop')
-    
-        def update(self):
-        for msg in self.msg_queue:
-            for sub in self.subscribers.get(msg, []):
-                sub.run(msg)
-        self.msg_queue = []
-    
-        def scan(self):
-        '''Scan the dial to the next station'''
-        self.pos += 1
-        if self.pos == len(self.stations):
-            self.pos = 0
-        print(u'Scanning... Station is %s %s' %
-              (self.stations[self.pos], self.name))
-    
-    # Execute them
-for template in templates:
-    template()
-    
-    ### OUTPUT ###
-# We have a lovely Cat
-# It says meow
-# 
-# We have a lovely Dog
-# It says woof
-# ====================
-# We have a lovely Cat
-# It says meow
-# ====================
-# We have a lovely Cat
-# It says meow
-# ====================
-
-    
-        def get_current_time_as_html_fragment(self):
-        current_time = self.time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-'''
-    
-            path.append(start)
-        if start == end:
-            return path
-        for node in self.graph.get(start, []):
-            if node not in path:
-                newpath = self.find_path(node, end, path[:])
-                if newpath:
-                    return newpath
+        def test_implicit_GET_with_headers(self, httpbin):
+        r = http(httpbin.url + '/headers', 'Foo:bar')
+        assert HTTP_OK in r
+        assert r.json['headers']['Foo'] == 'bar'
     
     
-class Suspect(OutOfService):
+def has_docutils():
+    try:
+        # noinspection PyUnresolvedReferences
+        import docutils
+        return True
+    except ImportError:
+        return False
+    
+    if is_py2:
+    from urllib import (
+        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
+        proxy_bypass, proxy_bypass_environment, getproxies_environment)
+    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
+    from urllib2 import parse_http_list
+    import cookielib
+    from Cookie import Morsel
+    from StringIO import StringIO
+    from collections import Callable, Mapping, MutableMapping
+    
+        def __init__(self, *args, **kwargs):
+        '''Initialize RequestException with `request` and `response` objects.'''
+        response = kwargs.pop('response', None)
+        self.response = response
+        self.request = kwargs.pop('request', None)
+        if (response is not None and not self.request and
+                hasattr(response, 'request')):
+            self.request = self.response.request
+        super(RequestException, self).__init__(*args, **kwargs)
+    
+        def test_lower_items(self):
+        assert list(self.case_insensitive_dict.lower_items()) == [('accept', 'application/json')]
+    
+            String:                    '#4e9a06',        # class: 's'
+        String.Backtick:           '#4e9a06',        # class: 'sb'
+        String.Char:               '#4e9a06',        # class: 'sc'
+        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
+        String.Double:             '#4e9a06',        # class: 's2'
+        String.Escape:             '#4e9a06',        # class: 'se'
+        String.Heredoc:            '#4e9a06',        # class: 'sh'
+        String.Interpol:           '#4e9a06',        # class: 'si'
+        String.Other:              '#4e9a06',        # class: 'sx'
+        String.Regex:              '#4e9a06',        # class: 'sr'
+        String.Single:             '#4e9a06',        # class: 's1'
+        String.Symbol:             '#4e9a06',        # class: 'ss'
+    
+            return headers
+    
+                # A failed tell() sets `_body_position` to `object()`. This non-None
+            # value ensures `rewindable` will be True, allowing us to raise an
+            # UnrewindableBodyError, instead of hanging the connection.
+            rewindable = (
+                prepared_request._body_position is not None and
+                ('Content-Length' in headers or 'Transfer-Encoding' in headers)
+            )
