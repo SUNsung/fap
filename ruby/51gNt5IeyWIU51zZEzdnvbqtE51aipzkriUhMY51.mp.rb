@@ -1,109 +1,141 @@
 
         
-        def check_with_builtin(content)
-  content.include?('{%') || content.include?('{{')
-end
-    }
-    }
-    }
+            set :root, Pathname.new(File.expand_path('../..', __FILE__))
+    set :sprockets, Sprockets::Environment.new(root)
     
-    if pathutil_relative == native_relative
-  Benchmark.ips do |x|
-    x.report('pathutil') { pathutil_relative }
-    x.report('native')   { native_relative }
-    x.compare!
+        def inheritable_copy
+      self.class.new @filters
+    end
+    
+        def request(urls, options = {}, &block)
+      requests = [urls].flatten.map do |url|
+        build_and_queue_request(url, options, &block)
+      end
+      requests.length == 1 ? requests.first : requests
+    end
+    
+          str.truncate(max_length).ljust(max_length) << tag.to_s
+    end
+    
+        def relative_path_from(url)
+      self.class.parse(url).relative_path_to(self)
+    end
   end
-else
-  print 'PATHUTIL: '
-  puts pathutil_relative
-  print 'NATIVE:   '
-  puts native_relative
 end
 
     
-    Benchmark.ips do |x|
-  x.report('no body include?') { CONTENT_NOT_CONTAINING.include?('<body') }
-  x.report('no body regexp')   { CONTENT_NOT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-    
-        def generate_metadata_files(v, path)
-      app_details = v.application.details
-    
-          expected_options = FastlaneCore::Configuration.create(Deliver::Options.available_options, {
-        description: 'My description',
-        username: 'me@it.com',
-        run_precheck_before_submit: false
-      })
-    
-          def self.available_options
-        [
-          FastlaneCore::ConfigItem.new(key: :platforms,
-                                       optional: false,
-                                       type: Array,
-                                       default_value: '',
-                                       description: 'The optional extra platforms to support')
-        ]
-      end
-    
-              # Setup the options hash
-          options ||= {}
-    
-            # This method is automatically called when the system is available (when
-        # Vagrant can successfully SSH into the machine) to give the system a chance
-        # to determine the distro and return a distro-specific system.
+            # This contains all the hosts and their parents.
         #
-        # If this method returns nil, then this instance is assumed to be
-        # the most specific guest implementation.
-        def distro_dispatch
-        end
+        # @return [Registry<Symbol, Array<Class, Symbol>>]
+        attr_reader :hosts
     
-            # This registers a plugin. This should _NEVER_ be called by the public
-        # and should only be called from within Vagrant. Vagrant will
-        # automatically register V1 plugins when a name is set on the
-        # plugin.
-        def register(plugin)
-          if !@registered.include?(plugin)
-            @logger.info('Registered plugin: #{plugin.name}')
-            @registered << plugin
+            # This returns all the registered commands.
+        #
+        # @return [Registry<Symbol, Array<Proc, Hash>>]
+        def commands
+          Registry.new.tap do |result|
+            @registered.each do |plugin|
+              result.merge!(plugin.components.commands)
+            end
           end
         end
     
-            # This contains all the push implementations by name.
+            # This should return the state of the machine within this provider.
+        # The state must be an instance of {MachineState}. Please read the
+        # documentation of that class for more information.
         #
-        # @return [Registry<Symbol, Array<Class, Hash>>]
-        attr_reader :pushes
+        # @return [MachineState]
+        def state
+          nil
+        end
     
-    namespace :bower do
+      layout 'admin'
     
-        # @include and @extend from LESS:
-    #  .mixin()             -> @include mixin()
-    #  #scope > .mixin()    -> @include scope-mixin()
-    #  &:extend(.mixin all) -> @include mixin()
-    def replace_mixins(less, mixin_names)
-      mixin_pattern = /(?<=^|\s)((?:[#|\.][\w-]+\s*>\s*)*)\.([\w-]+)\((.*)\)(?!\s\{)/
-    }
+          if new_email != @user.email
+        @user.update!(
+          unconfirmed_email: new_email,
+          # Regenerate the confirmation token:
+          confirmation_token: nil
+        )
     
-    Then(/^the failure task will not run$/) do
-  failed = TestApp.shared_path.join('failed')
-  expect { run_vagrant_command(test_file_exists(failed)) }
-    .to raise_error(VagrantHelpers::VagrantSSHCommandError)
-end
+        def create
+      authorize @user, :confirm?
+      @user.confirm!
+      log_action :confirm, @user
+      redirect_to admin_accounts_path
+    end
     
-      at_exit do
-    if ENV['KEEP_RUNNING']
-      puts 'Vagrant vm will be left up because KEEP_RUNNING is set.'
-      puts 'Rerun without KEEP_RUNNING set to cleanup the vm.'
-    else
-      vagrant_cli_command('destroy -f')
+        def index
+      authorize :domain_block, :index?
+      @domain_blocks = DomainBlock.page(params[:page])
+    end
+    
+        def set_email_domain_block
+      @email_domain_block = EmailDomainBlock.find(params[:id])
+    end
+    
+        def destroy
+      authorize @report_note, :destroy?
+      @report_note.destroy!
+      redirect_to admin_report_path(@report_note.report_id), notice: I18n.t('admin.report_notes.destroyed_msg')
+    end
+    
+        def create
+      authorize :status, :update?
+    
+      private
+    
+          def flag(name, description: nil, required_for: nil, depends_on: nil)
+        if name.end_with? '='
+          required = OptionParser::REQUIRED_ARGUMENT
+          name.chomp! '='
+        else
+          required = OptionParser::OPTIONAL_ARGUMENT
+        end
+        description = option_to_description(name) if description.nil?
+        @parser.on(name, description, required) do |option_value|
+          Homebrew.args[option_to_name(name)] = option_value
+        end
+    
+    module Homebrew
+  module_function
+    
+    module Homebrew
+  module_function
+    
+        file package(gem, '.tar.gz') => ['pkg/'] do |f|
+      sh <<-SH
+        git archive \
+          --prefix=#{gem}-#{source_version}/ \
+          --format=tar \
+          HEAD -- #{directory} | gzip > #{f.name}
+      SH
     end
   end
     
-          # Runs all validation rules registered for the given key against the
-      # user-supplied value for that variable. If no validator raises an
-      # exception, the value is assumed to be valid.
-      def assert_valid_now(key, value)
-        validators[key].each do |validator|
-          validator.call(key, value)
+      # insert data
+  fields.each do |field, values|
+    updated = '  s.#{field} = ['
+    updated << values.map { |v| '\n    %p' % v }.join(',')
+    updated << '\n  ]'
+    content.sub!(/  s\.#{field} = \[\n(    .*\n)*  \]/, updated)
+  end
+    
+          # Creates a masked version of the authenticity token that varies
+      # on each request. The masking is used to mitigate SSL attacks
+      # like BREACH.
+      def mask_token(token)
+        token = decode_token(token)
+        one_time_pad = SecureRandom.random_bytes(token.length)
+        encrypted_token = xor_byte_strings(one_time_pad, token)
+        masked_token = one_time_pad + encrypted_token
+        encode_token(masked_token)
+      end
+    
+          def remove_bad_cookies(request, response)
+        return if bad_cookies.empty?
+        paths = cookie_paths(request.path)
+        bad_cookies.each do |name|
+          paths.each { |path| response.set_cookie name, empty_cookie(request.host, path) }
         end
       end
