@@ -1,942 +1,274 @@
 
         
-            http://www.apache.org/licenses/LICENSE-2.0
-    
-    REGISTER_OP('Old')
-    .SetShapeFn(shape_inference::UnknownShape)
-    .Deprecated(8, 'For reasons');
-    
-    #include <iomanip>
-#include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/tensor_shape.pb.h'
-#include 'tensorflow/core/grappler/costs/graph_properties.h'
-#include 'tensorflow/core/grappler/grappler_item.h'
-    
-    #include <Python.h>
-    
-    // Destructor passed to TF_NewTensor when it reuses a numpy buffer. Stores a
-// pointer to the pyobj in a buffer to be dereferenced later when we're actually
-// holding the GIL.
-void DelayedNumpyDecref(void* data, size_t len, void* obj) {
-  mutex_lock ml(*DelayedDecrefLock());
-  DecrefCache()->push_back(obj);
-}
-    
-    string UpperLowerString(UpperLower ul) {
-  switch (ul) {
-    case UpperLower::kUpper:
-      return 'Upper';
-    case UpperLower::kLower:
-      return 'Lower';
-    default:
-      LOG(FATAL) << 'Unknown upperlower ' << static_cast<int32>(ul);
-  }
-}
-    
-    class SubstitutionMap::Storage final
-  : public llvm::FoldingSetNode,
-    llvm::TrailingObjects<Storage, Type, ProtocolConformanceRef>
+        
+struct MorphCtx
 {
-  friend TrailingObjects;
+    int operation;
+    int channels;
+    CAROTENE_NS::Size2D ksize;
+    int anchor_x, anchor_y;
+    CAROTENE_NS::BORDER_MODE border;
+    uchar borderValues[4];
+};
+inline int TEGRA_MORPHINIT(cvhalFilter2D **context, int operation, int src_type, int dst_type, int, int,
+                           int kernel_type, uchar *kernel_data, size_t kernel_step, int kernel_width, int kernel_height, int anchor_x, int anchor_y,
+                           int borderType, const double borderValue[4], int iterations, bool allowSubmatrix, bool allowInplace)
+{
+    if(!context || !kernel_data || src_type != dst_type ||
+       CV_MAT_DEPTH(src_type) != CV_8U || src_type < 0 || (src_type >> CV_CN_SHIFT) > 3 ||
     }
     
     
-    {  if (!lhs.hasOutOfLineData()) {
-    assert(lhs.Data == 0 || lhs.getLengthInChunks() == 1);
-    for (auto chunk : rhs.getOutOfLineChunks())
-      if (chunk != lhs.Data)
-        return false;
-    return true;
-  } else if (!rhs.hasOutOfLineData()) {
-    assert(rhs.Data == 0 || rhs.getLengthInChunks() == 1);
-    for (auto chunk : lhs.getOutOfLineChunks())
-      if (chunk != rhs.Data)
-        return false;
-    return true;
-  } else {
-    auto lhsChunks = lhs.getOutOfLineChunks();
-    auto rhsChunks = rhs.getOutOfLineChunks();
-    assert(lhsChunks.size() == rhsChunks.size());
-    return lhsChunks == rhsChunks;
-  }
-}
-    
-    VERB(abbreviate)
-VERB(accept)
-VERB(activate)
-VERB(add)
-VERB(adjust)
-VERB(admire)
-VERB(admit)
-VERB(advise)
-VERB(afford)
-VERB(agree)
-VERB(alert)
-VERB(allow)
-VERB(alter)
-VERB(amuse)
-VERB(analyse)
-VERB(analyze)
-VERB(animate)
-VERB(announce)
-VERB(annoy)
-VERB(answer)
-VERB(apologise)
-VERB(appear)
-VERB(append)
-VERB(applaud)
-VERB(apply)
-VERB(apportion)
-VERB(appreciate)
-VERB(approve)
-VERB(argue)
-VERB(arrange)
-VERB(arrest)
-VERB(arrive)
-VERB(ask)
-VERB(assign)
-VERB(attach)
-VERB(attack)
-VERB(attempt)
-VERB(attend)
-VERB(attract)
-VERB(avoid)
-VERB(awake)
-VERB(back)
-VERB(bake)
-VERB(balance)
-VERB(ban)
-VERB(bang)
-VERB(bare)
-VERB(bat)
-VERB(bathe)
-VERB(battle)
-VERB(be)
-VERB(beat)
-VERB(become)
-VERB(beg)
-VERB(begin)
-VERB(behave)
-VERB(belong)
-VERB(bend)
-VERB(bet)
-VERB(bid)
-VERB(bite)
-VERB(bleach)
-VERB(bless)
-VERB(blind)
-VERB(blink)
-VERB(blot)
-VERB(blow)
-VERB(blush)
-VERB(boast)
-VERB(boil)
-VERB(bolt)
-VERB(bomb)
-VERB(book)
-VERB(bore)
-VERB(borrow)
-VERB(bounce)
-VERB(bow)
-VERB(box)
-VERB(brake)
-VERB(branch)
-VERB(break)
-VERB(breathe)
-VERB(bring)
-VERB(broadcast)
-VERB(bruise)
-VERB(brush)
-VERB(bubble)
-VERB(build)
-VERB(bump)
-VERB(burn)
-VERB(bury)
-VERB(buy)
-VERB(buzz)
-VERB(calculate)
-VERB(call)
-VERB(camp)
-VERB(cancel)
-VERB(capture)
-VERB(care)
-VERB(carry)
-VERB(carve)
-VERB(cast)
-VERB(catch)
-VERB(cause)
-VERB(center)
-VERB(challenge)
-VERB(change)
-VERB(charge)
-VERB(chase)
-VERB(cheat)
-VERB(check)
-VERB(cheer)
-VERB(chew)
-VERB(choke)
-VERB(choose)
-VERB(chop)
-VERB(claim)
-VERB(clap)
-VERB(clean)
-VERB(clear)
-VERB(click)
-VERB(close)
-VERB(coach)
-VERB(coil)
-VERB(collect)
-VERB(collapse)
-VERB(colour)
-VERB(comb)
-VERB(come)
-VERB(command)
-VERB(commit)
-VERB(communicate)
-VERB(compare)
-VERB(compete)
-VERB(complain)
-VERB(complete)
-VERB(concentrate)
-VERB(concern)
-VERB(confess)
-VERB(confuse)
-VERB(connect)
-VERB(consider)
-VERB(consist)
-VERB(contain)
-VERB(contains)
-VERB(continue)
-VERB(convert)
-VERB(copy)
-VERB(correct)
-VERB(cough)
-VERB(cost)
-VERB(count)
-VERB(cover)
-VERB(crack)
-VERB(crash)
-VERB(crawl)
-VERB(cross)
-VERB(crush)
-VERB(cry)
-VERB(cure)
-VERB(curl)
-VERB(curve)
-VERB(customize)
-VERB(cut)
-VERB(cycle)
-VERB(dam)
-VERB(damage)
-VERB(dance)
-VERB(dare)
-VERB(decay)
-VERB(deceive)
-VERB(decide)
-VERB(decode)
-VERB(decorate)
-VERB(defer)
-VERB(define)
-VERB(delay)
-VERB(delete)
-VERB(delight)
-VERB(deliver)
-VERB(depend)
-VERB(describe)
-VERB(deselect)
-VERB(desert)
-VERB(deserve)
-VERB(destroy)
-VERB(detach)
-VERB(detect)
-VERB(develop)
-VERB(dig)
-VERB(dim)
-VERB(disagree)
-VERB(disappear)
-VERB(disapprove)
-VERB(disarm)
-VERB(discover)
-VERB(dislike)
-VERB(dismiss)
-VERB(display)
-VERB(divide)
-VERB(do)
-VERB(double)
-VERB(doubt)
-VERB(drag)
-VERB(drain)
-VERB(draw)
-VERB(dream)
-VERB(dress)
-VERB(drink)
-VERB(drip)
-VERB(drive)
-VERB(drop)
-VERB(drown)
-VERB(drum)
-VERB(dry)
-VERB(duplicate)
-VERB(dust)
-VERB(earn)
-VERB(eat)
-VERB(echo)
-VERB(edit)
-VERB(educate)
-VERB(embarrass)
-VERB(employ)
-VERB(empty)
-VERB(enable)
-VERB(encode)
-VERB(encourage)
-VERB(end)
-VERB(enjoy)
-VERB(enter)
-VERB(entertain)
-VERB(enumerate)
-VERB(enqueue)
-VERB(escape)
-VERB(examine)
-VERB(excite)
-VERB(excuse)
-VERB(execute)
-VERB(exercise)
-VERB(exist)
-VERB(expand)
-VERB(expect)
-VERB(explain)
-VERB(explode)
-VERB(export)
-VERB(extend)
-VERB(face)
-VERB(fade)
-VERB(fail)
-VERB(fancy)
-VERB(fasten)
-VERB(fax)
-VERB(fear)
-VERB(feel)
-VERB(fence)
-VERB(fetch)
-VERB(fight)
-VERB(fill)
-VERB(film)
-VERB(find)
-VERB(finish)
-VERB(fire)
-VERB(fit)
-VERB(fix)
-VERB(flap)
-VERB(flash)
-VERB(flatten)
-VERB(flip)
-VERB(float)
-VERB(flood)
-VERB(flow)
-VERB(flower)
-VERB(fly)
-VERB(focus)
-VERB(fold)
-VERB(follow)
-VERB(fool)
-VERB(force)
-VERB(forget)
-VERB(forgive)
-VERB(form)
-VERB(found)
-VERB(freeze)
-VERB(frighten)
-VERB(fry)
-VERB(gain)
-VERB(gather)
-VERB(gaze)
-VERB(generate)
-VERB(get)
-VERB(give)
-VERB(glow)
-VERB(glue)
-VERB(go)
-VERB(grab)
-VERB(grate)
-VERB(grease)
-VERB(greet)
-VERB(grin)
-VERB(grip)
-VERB(groan)
-VERB(grow)
-VERB(guarantee)
-VERB(guard)
-VERB(guess)
-VERB(guide)
-VERB(hammer)
-VERB(hand)
-VERB(handle)
-VERB(hang)
-VERB(happen)
-VERB(harass)
-VERB(harm)
-VERB(hate)
-VERB(haunt)
-VERB(head)
-VERB(heal)
-VERB(heap)
-VERB(hear)
-VERB(heat)
-VERB(help)
-VERB(hide)
-VERB(highlight)
-VERB(hit)
-VERB(hold)
-VERB(hook)
-VERB(hop)
-VERB(hope)
-VERB(hover)
-VERB(hug)
-VERB(hum)
-VERB(hunt)
-VERB(hurry)
-VERB(hurt)
-VERB(identify)
-VERB(ignore)
-VERB(imagine)
-VERB(import)
-VERB(impress)
-VERB(improve)
-VERB(include)
-VERB(increase)
-VERB(influence)
-VERB(inform)
-VERB(inject)
-VERB(injure)
-VERB(insert)
-VERB(instruct)
-VERB(intend)
-VERB(interest)
-VERB(interfere)
-VERB(interrupt)
-VERB(intersect)
-VERB(intersects)
-VERB(introduce)
-VERB(invent)
-VERB(invite)
-VERB(irritate)
-VERB(itch)
-VERB(jail)
-VERB(jam)
-VERB(jog)
-VERB(join)
-VERB(joke)
-VERB(judge)
-VERB(juggle)
-VERB(jump)
-VERB(keep)
-VERB(kick)
-VERB(kill)
-VERB(kiss)
-VERB(kneel)
-VERB(knit)
-VERB(knock)
-VERB(knot)
-VERB(know)
-VERB(label)
-VERB(land)
-VERB(last)
-VERB(laugh)
-VERB(launch)
-VERB(lay)
-VERB(lead)
-VERB(learn)
-VERB(leave)
-VERB(lend)
-VERB(let)
-VERB(level)
-VERB(license)
-VERB(lick)
-VERB(lie)
-VERB(lighten)
-VERB(like)
-VERB(listen)
-VERB(live)
-VERB(load)
-VERB(localize)
-VERB(lock)
-VERB(long)
-VERB(look)
-VERB(lose)
-VERB(love)
-VERB(maintain)
-VERB(make)
-VERB(man)
-VERB(manage)
-VERB(march)
-VERB(mark)
-VERB(marry)
-VERB(match)
-VERB(mate)
-VERB(matter)
-VERB(mean)
-VERB(measure)
-VERB(meddle)
-VERB(meet)
-VERB(melt)
-VERB(memorise)
-VERB(mend)
-VERB(merge)
-VERB(mess)
-VERB(milk)
-VERB(mine)
-VERB(miss)
-VERB(minus)
-VERB(mix)
-VERB(moan)
-VERB(moor)
-VERB(mourn)
-VERB(move)
-VERB(muddle)
-VERB(mug)
-VERB(multiply)
-VERB(murder)
-VERB(nail)
-VERB(nest)
-VERB(nod)
-VERB(normalize)
-VERB(note)
-VERB(notice)
-VERB(notify)
-VERB(number)
-VERB(obey)
-VERB(observe)
-VERB(obtain)
-VERB(occur)
-VERB(offend)
-VERB(offer)
-VERB(open)
-VERB(order)
-VERB(overflow)
-VERB(owe)
-VERB(own)
-VERB(pack)
-VERB(paddle)
-VERB(paint)
-VERB(park)
-VERB(part)
-VERB(pass)
-VERB(paste)
-VERB(pat)
-VERB(pause)
-VERB(pay)
-VERB(peck)
-VERB(pedal)
-VERB(peel)
-VERB(peep)
-VERB(perform)
-VERB(permit)
-VERB(phone)
-VERB(pick)
-VERB(pinch)
-VERB(pine)
-VERB(place)
-VERB(plan)
-VERB(plant)
-VERB(play)
-VERB(please)
-VERB(plug)
-VERB(poke)
-VERB(polish)
-VERB(pop)
-VERB(possess)
-VERB(post)
-VERB(pour)
-VERB(practice)
-VERB(practise)
-VERB(pray)
-VERB(preach)
-VERB(precede)
-VERB(prefer)
-VERB(preload)
-VERB(prepare)
-VERB(prepend)
-VERB(present)
-VERB(preserve)
-VERB(press)
-VERB(pretend)
-VERB(prevent)
-VERB(prick)
-VERB(print)
-VERB(produce)
-VERB(program)
-VERB(promise)
-VERB(protect)
-VERB(provide)
-VERB(pull)
-VERB(pump)
-VERB(punch)
-VERB(puncture)
-VERB(punish)
-VERB(push)
-VERB(put)
-VERB(question)
-VERB(queue)
-VERB(race)
-VERB(radiate)
-VERB(rain)
-VERB(raise)
-VERB(reach)
-VERB(read)
-VERB(realise)
-VERB(receive)
-VERB(recognise)
-VERB(record)
-VERB(reduce)
-VERB(reflect)
-VERB(refuse)
-VERB(register)
-VERB(regret)
-VERB(reign)
-VERB(reject)
-VERB(rejoice)
-VERB(relax)
-VERB(release)
-VERB(rely)
-VERB(remain)
-VERB(remember)
-VERB(remind)
-VERB(remove)
-VERB(repair)
-VERB(repeat)
-VERB(replace)
-VERB(reply)
-VERB(report)
-VERB(request)
-VERB(require)
-VERB(resize)
-VERB(rescue)
-VERB(resolve)
-VERB(retain)
-VERB(retire)
-VERB(return)
-VERB(reverse)
-VERB(review)
-VERB(rhyme)
-VERB(ride)
-VERB(ring)
-VERB(rinse)
-VERB(rise)
-VERB(risk)
-VERB(rob)
-VERB(rock)
-VERB(roll)
-VERB(rot)
-VERB(rub)
-VERB(ruin)
-VERB(rule)
-VERB(run)
-VERB(rush)
-VERB(sack)
-VERB(sail)
-VERB(satisfy)
-VERB(save)
-VERB(saw)
-VERB(say)
-VERB(scale)
-VERB(scare)
-VERB(scatter)
-VERB(scold)
-VERB(scorch)
-VERB(scrape)
-VERB(scratch)
-VERB(scream)
-VERB(screw)
-VERB(scribble)
-VERB(scroll)
-VERB(scrub)
-VERB(seal)
-VERB(search)
-VERB(see)
-VERB(select)
-VERB(sell)
-VERB(send)
-VERB(separate)
-VERB(serve)
-VERB(settle)
-VERB(shade)
-VERB(share)
-VERB(shave)
-VERB(shelter)
-VERB(shiver)
-VERB(shock)
-VERB(shop)
-VERB(show)
-VERB(shrug)
-VERB(shut)
-VERB(sigh)
-VERB(sign)
-VERB(signal)
-VERB(sin)
-VERB(sing)
-VERB(sip)
-VERB(sit)
-VERB(ski)
-VERB(skip)
-VERB(slap)
-VERB(sleep)
-VERB(slip)
-VERB(slow)
-VERB(smash)
-VERB(smell)
-VERB(smile)
-VERB(smoke)
-VERB(snatch)
-VERB(sneeze)
-VERB(sniff)
-VERB(snore)
-VERB(snow)
-VERB(soak)
-VERB(soothe)
-VERB(sound)
-VERB(spare)
-VERB(spark)
-VERB(sparkle)
-VERB(speak)
-VERB(spell)
-VERB(spend)
-VERB(spill)
-VERB(spoil)
-VERB(spot)
-VERB(spray)
-VERB(sprout)
-VERB(squash)
-VERB(squeak)
-VERB(squeal)
-VERB(squeeze)
-VERB(stain)
-VERB(stamp)
-VERB(stand)
-VERB(standardise)
-VERB(standardize)
-VERB(stare)
-VERB(start)
-VERB(stay)
-VERB(steer)
-VERB(step)
-VERB(stir)
-VERB(stitch)
-VERB(stop)
-VERB(store)
-VERB(strap)
-VERB(strengthen)
-VERB(stretch)
-VERB(strip)
-VERB(stroke)
-VERB(stuff)
-VERB(subtract)
-VERB(succeed)
-VERB(suck)
-VERB(suffer)
-VERB(suggest)
-VERB(suit)
-VERB(supply)
-VERB(support)
-VERB(suppose)
-VERB(suppress)
-VERB(surprise)
-VERB(surround)
-VERB(suspect)
-VERB(suspend)
-VERB(swim)
-VERB(switch)
-VERB(take)
-VERB(talk)
-VERB(tame)
-VERB(tap)
-VERB(taste)
-VERB(teach)
-VERB(tear)
-VERB(tease)
-VERB(telephone)
-VERB(tell)
-VERB(tempt)
-VERB(terrify)
-VERB(test)
-VERB(thank)
-VERB(thaw)
-VERB(think)
-VERB(throw)
-VERB(tick)
-VERB(tickle)
-VERB(tie)
-VERB(time)
-VERB(tip)
-VERB(tire)
-VERB(toggle)
-VERB(touch)
-VERB(tour)
-VERB(tow)
-VERB(trace)
-VERB(trade)
-VERB(train)
-VERB(translate)
-VERB(transform)
-VERB(transport)
-VERB(trap)
-VERB(travel)
-VERB(traverse)
-VERB(treat)
-VERB(tremble)
-VERB(trick)
-VERB(trip)
-VERB(trot)
-VERB(trouble)
-VERB(truncate)
-VERB(trust)
-VERB(try)
-VERB(tug)
-VERB(tumble)
-VERB(turn)
-VERB(twist)
-VERB(understand)
-VERB(undress)
-VERB(unfasten)
-VERB(union)
-VERB(unite)
-VERB(unload)
-VERB(unlock)
-VERB(unpack)
-VERB(untidy)
-VERB(up)
-VERB(update)
-VERB(use)
-VERB(validate)
-VERB(vanish)
-VERB(visit)
-VERB(wail)
-VERB(wait)
-VERB(wake)
-VERB(walk)
-VERB(wander)
-VERB(want)
-VERB(warm)
-VERB(warn)
-VERB(wash)
-VERB(waste)
-VERB(watch)
-VERB(water)
-VERB(wave)
-VERB(wear)
-VERB(weigh)
-VERB(welcome)
-VERB(whine)
-VERB(whip)
-VERB(whirl)
-VERB(whisper)
-VERB(whistle)
-VERB(win)
-VERB(wink)
-VERB(wipe)
-VERB(wish)
-VERB(wobble)
-VERB(wonder)
-VERB(work)
-VERB(worry)
-VERB(wrap)
-VERB(wreck)
-VERB(wrestle)
-VERB(wriggle)
-VERB(write)
-VERB(yawn)
-VERB(yell)
-VERB(zip)
-VERB(zoom)
-    
-    /// Determine whether this typedef is a CF type.
-bool isCFTypeDecl(const clang::TypedefNameDecl *Decl);
-    
-        private:
-        std::unordered_set<StreamInformation> m_streamInfos;
-        bool m_epochEndReached;
-        size_t m_numWorkers;
-        size_t m_workerRank;
-        size_t m_prevMinibatchSize;
-        size_t m_maxNumSamplesToRead;
-        size_t m_maxNumSweepsToRead;
-        size_t m_truncationLength;
-        size_t m_maxErrors;
-        std::unordered_map<StreamInformation, MinibatchData> m_minibatchData;
-    
-        template <>
-    /*static*/ NDArrayViewPtr NDArrayView::RandomUniform<float16>(const NDShape& shape, double rangeBegin, double rangeEnd, unsigned long seed, const DeviceDescriptor& device)
-    {
-        return NDArrayView::_RandomUniform<float16, half>(shape, rangeBegin, rangeEnd, seed, device);
-    }
-    
-        void NDMask::MarkSectionAs(const std::vector<size_t>& sectionOffset, const NDShape& sectionShape, MaskKind maskKind)
-    {
-        // TODO: Implement batching of masking operation for masks residing on GPUs to avoid making
-        // GPU invocations for each MaskSection call.
-    }
-    
-        template <typename T>
-    inline void ValidateType(const Dictionary& dict, const std::wstring& typeValue, size_t currentVersion)
-    {
-        if (!dict.Contains(typeKey))
+    {            vst1q_s16(dst + j, v_dst0);
+            vst1q_s16(dst + j + 8, v_dst1);
+        }
+        for (; j < roiw8; j += 8)
         {
-            const auto& version = GetVersion(dict);
-            LogicError('Required key '%ls' is not found in the dictionary (%s).',
-                       typeKey.c_str(), GetVersionsString<T>(currentVersion, version).c_str());
-        } 
-    }
-    
-        bool Trainer::TrainMinibatch(const std::unordered_map<Variable, MinibatchData>& arguments, std::unordered_map<Variable, ValuePtr>& outputsToFetch, const DeviceDescriptor& computeDevice /*= DeviceDescriptor::UseDefaultDevice()*/)
-    {
-#ifndef  CNTK_UWP
-        auto profMinibatch = Microsoft::MSR::CNTK::ScopeProfile(Microsoft::MSR::CNTK::profilerEvtMainMinibatch);
-#endif
-    }
-    
-        void Value::GetSequenceStartsAndLengths(const NDMaskPtr& mask, std::vector<ptrdiff_t>& sequenceBeginIndices, std::vector<size_t>& sequenceLengths, size_t numDynamicAxes)
-    {
-        if (!mask)
-            return;
-    }
-    
-            void CopyFrom(const Value& /*source*/) override
-        {
-            LogicError('Value::CopyFrom is currently unsupported for PackedValue objects');
+            int16x8_t v_src = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(src + j)));
+            int16x8_t v_dst = vld1q_s16(dst + j);
+            int16x4_t v_srclo = vget_low_s16(v_src), v_srchi = vget_high_s16(v_src);
+            v_dst = vcombine_s16(vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srclo, v_srclo), shift), vget_low_s16(v_dst))),
+                                 vqmovn_s32(vaddw_s16(vshrq_n_s32(vmull_s16(v_srchi, v_srchi), shift), vget_high_s16(v_dst))));
+            vst1q_s16(dst + j, v_dst);
         }
     
-    class Clock
+    void add(const Size2D &size,
+         const u8 * src0Base, ptrdiff_t src0Stride,
+         const u8 * src1Base, ptrdiff_t src1Stride,
+         s16 *dstBase, ptrdiff_t dstStride,
+         CONVERT_POLICY)
 {
-public:
-    static long long GetTimeStamp();
-    static long long GetTicksPerSecond();
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    }
+    
+    using namespace internal;
+    
+    #define SPLIT(sgn,bits,n) void split##n(const Size2D &_size,                                            \
+                                    const sgn##bits * srcBase, ptrdiff_t srcStride                      \
+                                    FILL_LINES##n(FARG, sgn##bits) )                                    \
+{                                                                                                       \
+    internal::assertSupportedConfiguration();                                                           \
+    Size2D size(_size);                                                                                 \
+    if (CONTDST##n                                                                                      \
+        dst0Stride == (ptrdiff_t)(size.width))                                                          \
+    {                                                                                                   \
+        size.width *= size.height;                                                                      \
+        size.height = 1;                                                                                \
+    }                                                                                                   \
+    typedef internal::VecTraits<sgn##bits, n>::vec128 vec128;                                           \
+    size_t roiw16 = size.width >= (16/sizeof(sgn##bits)-1) ? size.width - (16/sizeof(sgn##bits)-1) : 0; \
+    typedef internal::VecTraits<sgn##bits, n>::vec64 vec64;                                             \
+    size_t roiw8 = size.width >= (8/sizeof(sgn##bits)-1) ? size.width - (8/sizeof(sgn##bits)-1) : 0;    \
+                                                                                                        \
+    for (size_t i = 0u; i < size.height; ++i)                                                           \
+    {                                                                                                   \
+        const sgn##bits * src = internal::getRowPtr(srcBase, srcStride, i);                             \
+        FILL_LINES##n(VROW, sgn##bits)                                                                  \
+        size_t sj = 0u, dj = 0u;                                                                        \
+                                                                                                        \
+        for (; dj < roiw16; sj += MUL##n(16)/sizeof(sgn##bits), dj += 16/sizeof(sgn##bits))             \
+            SPLIT_QUAD(sgn, bits, n)                                                                    \
+                                                                                                        \
+        if (dj < roiw8)                                                                                 \
+        {                                                                                               \
+            vec64 v_src = vld##n##_##sgn##bits(src + sj);                                               \
+            FILL_LINES##n(VST1, sgn##bits)                                                              \
+            sj += MUL##n(8)/sizeof(sgn##bits);                                                          \
+            dj += 8/sizeof(sgn##bits);                                                                  \
+        }                                                                                               \
+                                                                                                        \
+        for (; dj < size.width; sj += n, ++dj)                                                          \
+        {                                                                                               \
+            FILL_LINES##n(SST, sgn##bits)                                                               \
+        }                                                                                               \
+    }                                                                                                   \
+}
+    
+    bool isConvolutionSupported(const Size2D &size, const Size2D &ksize,
+                            BORDER_MODE border)
+{
+    return isSupportedConfiguration() && size.width >= 8 &&
+        (border == BORDER_MODE_CONSTANT ||
+            border == BORDER_MODE_REPLICATE) &&
+        (ksize.width == 3) && (ksize.height == 3);
+}
+    
+    s32 countNonZero(const Size2D &_size,
+                 const u16 * srcBase, ptrdiff_t srcStride)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    Size2D size(_size);
+    if (srcStride == (ptrdiff_t)(size.width))
+    {
+        size.width *= size.height;
+        size.height = 1;
+    }
+    size_t roiw8 = size.width & ~7u;
+    s32 result = 0;
+    for(size_t k = 0; k < size.height; ++k)
+    {
+        const u16* src = internal::getRowPtr( srcBase,  srcStride, k);
+        size_t i = 0;
+    }
+    }
+    
+    
+    {            ws = vpadalq_s32(ws, vpaddlq_s16(vmull_s8(vs1, vs2)));
+            i += 8;
+        }
+    
+    template <typename T>
+inline void inRangeCheck(const Size2D &_size,
+                         const T * srcBase, ptrdiff_t srcStride,
+                         const T * rng1Base, ptrdiff_t rng1Stride,
+                         const T * rng2Base, ptrdiff_t rng2Stride,
+                         u8 * dstBase, ptrdiff_t dstStride)
+{
+    typedef typename internal::VecTraits<T>::vec128 vec128;
+    typedef typename internal::VecTraits<T>::unsign::vec128 uvec128;
+    }
+    
+    #include <dmlc/registry.h>
+#include <xgboost/base.h>
+#include <xgboost/data.h>
+#include <functional>
+#include <string>
+#include <utility>
+#include <vector>
+#include '../../src/gbm/gblinear_model.h'
+#include '../../src/common/host_device_vector.h'
+    
+    namespace std {
+inline avx::Float8 max(const avx::Float8& a, const avx::Float8& b) {  // NOLINT
+  avx::Float8 max;
+  for (int i = 0; i < 8; i++) {
+    max.x[i] = std::max(a.x[i], b.x[i]);
+  }
+  return max;
+}
+inline avx::Float8 min(const avx::Float8& a, const avx::Float8& b) {  // NOLINT
+  avx::Float8 min;
+  for (int i = 0; i < 8; i++) {
+    min.x[i] = std::min(a.x[i], b.x[i]);
+  }
+  return min;
+}
+}  // namespace std
+#endif
+
+    
+    namespace xgboost {
+namespace gbm {
+/*! \brief model parameters */
+struct GBTreeModelParam : public dmlc::Parameter<GBTreeModelParam> {
+  /*! \brief number of trees */
+  int num_trees;
+  /*! \brief number of roots */
+  int num_roots;
+  /*! \brief number of features to be used by trees */
+  int num_feature;
+  /*! \brief pad this space, for backward compatibility reason.*/
+  int pad_32bit;
+  /*! \brief deprecated padding space. */
+  int64_t num_pbuffer_deprecated;
+  /*!
+   * \brief how many output group a single instance can produce
+   *  this affects the behavior of number of output we have:
+   *    suppose we have n instance and k group, output will be k * n
+   */
+  int num_output_group;
+  /*! \brief size of leaf vector needed in tree */
+  int size_leaf_vector;
+  /*! \brief reserved parameters */
+  int reserved[32];
+  /*! \brief constructor */
+  GBTreeModelParam() {
+    std::memset(this, 0, sizeof(GBTreeModelParam));
+    static_assert(sizeof(GBTreeModelParam) == (4 + 2 + 2 + 32) * sizeof(int),
+                  '64/32 bit compatibility issue');
+  }
+  // declare parameters, only declare those that need to be set.
+  DMLC_DECLARE_PARAMETER(GBTreeModelParam) {
+    DMLC_DECLARE_FIELD(num_output_group)
+        .set_lower_bound(1)
+        .set_default(1)
+        .describe(
+            'Number of output groups to be predicted,'
+            ' used for multi-class classification.');
+    DMLC_DECLARE_FIELD(num_roots).set_lower_bound(1).set_default(1).describe(
+        'Tree updater sequence.');
+    DMLC_DECLARE_FIELD(num_feature)
+        .set_lower_bound(0)
+        .describe('Number of features used for training and prediction.');
+    DMLC_DECLARE_FIELD(size_leaf_vector)
+        .set_lower_bound(0)
+        .set_default(0)
+        .describe('Reserved option for vector tree.');
+  }
+};
+    }
+    }
+    
+    BENCHMARK(copy_long_string, iters) {
+  BenchmarkSuspender suspender;
+  auto const& longString = getLongString();
+  while (iters--) {
+    fbstring out;
+    suspender.dismissing([&] { out = longString; });
+  }
+}
+    
+    // Structure of note section for the probe.
+#define FOLLY_SDT_NOTE_CONTENT(provider, name, has_semaphore, arg_template)    \
+  FOLLY_SDT_ASM_1(990: FOLLY_SDT_NOP)                                          \
+  FOLLY_SDT_ASM_3(     .pushsection .note.stapsdt,'','note')                   \
+  FOLLY_SDT_ASM_1(     .balign 4)                                              \
+  FOLLY_SDT_ASM_3(     .4byte 992f-991f, 994f-993f, FOLLY_SDT_NOTE_TYPE)       \
+  FOLLY_SDT_ASM_1(991: .asciz FOLLY_SDT_NOTE_NAME)                             \
+  FOLLY_SDT_ASM_1(992: .balign 4)                                              \
+  FOLLY_SDT_ASM_1(993: FOLLY_SDT_ASM_ADDR 990b)                                \
+  FOLLY_SDT_ASM_1(     FOLLY_SDT_ASM_ADDR 0) /*Reserved for Base Address*/     \
+  FOLLY_SDT_SEMAPHORE_NOTE_##has_semaphore(provider, name)                     \
+  FOLLY_SDT_ASM_STRING(provider)                                               \
+  FOLLY_SDT_ASM_STRING(name)                                                   \
+  FOLLY_SDT_ASM_STRING(arg_template)                                           \
+  FOLLY_SDT_ASM_1(994: .balign 4)                                              \
+  FOLLY_SDT_ASM_1(     .popsection)
+    
+    namespace folly {
+    }
+    
+    [[noreturn]] void exception_wrapper::onNoExceptionError(
+    char const* const name) {
+  std::ios_base::Init ioinit_; // ensure std::cerr is alive
+  std::cerr << 'Cannot use `' << name
+            << '` with an empty folly::exception_wrapper' << std::endl;
+  std::terminate();
+}
+    
+    template <class UIntType, size_t w, size_t s, size_t r>
+struct StateSize<std::subtract_with_carry_engine<UIntType, w, s, r>> {
+  // [rand.eng.sub]: r * ceil(w / 32)
+  using type = std::integral_constant<size_t, r*((w + 31) / 32)>;
 };
     
-                    grid.Resize(firstSize + 1, secondSize + 1);
-                insMatrix.Resize(firstSize + 1, secondSize + 1);
-                delMatrix.Resize(firstSize + 1, secondSize + 1);
-                subMatrix.Resize(firstSize + 1, secondSize + 1);
-                insMatrix.SetValue(0.0f);
-                delMatrix.SetValue(0.0f);
-                subMatrix.SetValue(0.0f);
+    /*
+ * Decode a single unicode code point from UTF-8 byte sequence.
+ */
+char32_t utf8ToCodePoint(
+    const unsigned char*& p,
+    const unsigned char* const e,
+    bool skipOnError);
     
-    #include 'guetzli/gamma_correct.h'
     
-    #ifndef GUETZLI_IDCT_H_
-#define GUETZLI_IDCT_H_
-    
-    // Handles the packing of bits into output bytes.
-struct BitWriter {
-  explicit BitWriter(size_t length) : len(length),
-                                      data(new uint8_t[len]),
-                                      pos(0),
-                                      put_buffer(0),
-                                      put_bits(64),
-                                      overflow(false) {}
-    }
-    
-    namespace guetzli {
-    }
-    
-    #include <assert.h>
-#include <cstdlib>
-#include <string.h>
+    {
+    {
+    {
+    {} // namespace detail
+} // namespace compression
+} // namespace io
+} // namespace folly
