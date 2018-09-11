@@ -1,107 +1,94 @@
 
         
-                  if Regexp.last_match
-            @generate_indexed_names = true
-            @auto_index = retrieve_autoindex(Regexp.last_match.pre_match)
-          else
-            @generate_indexed_names = false
-            @auto_index = nil
-          end
+                def generate_temporarily_email(username)
+          'temp-email-for-oauth-#{username}@gitlab.localhost'
         end
-    
-      DB.exec 'DELETE FROM site_settings where name = 'uncategorized_category_id''
-  DB.exec 'INSERT INTO site_settings(name, data_type, value, created_at, updated_at)
-           VALUES ('uncategorized_category_id', 3, #{category_id}, now(), now())'
-end
-
-    
-        # The category for users with trust level 3 has been created.
-    # Add initial permissions and description. They can be changed later.
-    
-            staff.topic_id = post.topic.id
-        unless staff.save
-          puts staff.errors.full_messages
-          puts 'Failed to set the Staff category description topic!'
-        end
-    
-      def index
-    @filters = current_account.custom_filters
-  end
-    
-      def upgrade_account
-    if signed_request_account.ostatus?
-      signed_request_account.update(last_webfingered_at: nil)
-      ResolveAccountWorker.perform_async(signed_request_account.acct)
-    end
-    
-        def check_confirmation
-      if @user.confirmed?
-        flash[:error] = I18n.t('admin.accounts.resend_confirmation.already_confirmed')
-        redirect_to admin_accounts_path
       end
     end
   end
 end
 
     
-        def set_email_domain_block
-      @email_domain_block = EmailDomainBlock.find(params[:id])
+    module Gitlab
+  module BackgroundMigration
+    class MigrateStageStatus
+      STATUSES = { created: 0, pending: 1, running: 2, success: 3,
+                   failed: 4, canceled: 5, skipped: 6, manual: 7 }.freeze
+    
+    Bootstrap.load!
+
+    
+        def pos
+      byte_to_str_pos @s.pos
     end
     
-      def update
-    if subscription.verify(body, request.headers['HTTP_X_HUB_SIGNATURE'])
-      ProcessingWorker.perform_async(@account.id, body.force_encoding('UTF-8'))
+        def get_trees
+      @trees ||= get_tree(@branch_sha)
     end
     
-      # True if a {Formula} is being built with {Formula.devel} instead of {Formula.stable}.
-  # <pre>args << '--some-beta' if build.devel?</pre>
-  def devel?
-    include? 'devel'
-  end
+      # Pre release
+  #-----------------------------------------------------------------------------#
     
-          attr_reader :directives
+    STDOUT.sync = true if ENV['CP_STDOUT_SYNC'] == 'TRUE'
     
-          def link(**options)
-        unless source.exist?
-          raise CaskError, 'It seems the #{self.class.link_type_english_name.downcase} source '#{source}' is not there.'
-        end
-    
-        def hostfilter
-      ['--hosts HOSTS', '-z',
-       'Run SSH commands only on matching hosts',
-       lambda do |value|
-         Configuration.env.add_cmdline_filter(:host, value)
-       end]
-    end
-    
-          def load_built_in_scm
-        require 'capistrano/scm/#{scm_name}'
-        scm_class = Object.const_get(built_in_scm_plugin_class_name)
-        # We use :load_immediately because we are initializing the SCM plugin
-        # late in the load process and therefore can't use the standard
-        # load:defaults technique.
-        install_plugin(scm_class, load_immediately: true)
-      end
-    
-          class ValidatedQuestion < Question
-        def initialize(validator)
-          @validator = validator
-        end
-    
-    
-===============================================
- Error for category_generator.rb plugin
------------------------------------------------
- No 'category_index.html' in source/_layouts/
- Perhaps you haven't installed a theme yet.
-===============================================
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
-      end
-    end
-  end
+    # It is very likely that we'll need these and as some of those paths will atm
+# result in a I18n deprecation warning, we load those here now so that we can
+# get rid of that warning.
+require 'active_support/core_ext/string/strip'
+require 'active_support/core_ext/string/inflections'
+require 'active_support/core_ext/array/conversions'
+# TODO: check what this actually does by the time we're going to add support for
+# other locales.
+require 'i18n'
+if I18n.respond_to?(:enforce_available_locales=)
+  I18n.enforce_available_locales = false
 end
+    
+    namespace :doc do
+  task :readmes do
+    Dir.glob 'lib/rack/protection/*.rb' do |file|
+      excluded_files = %w[lib/rack/protection/base.rb lib/rack/protection/version.rb]
+      next if excluded_files.include?(file)
+      doc  = File.read(file)[/^  module Protection(\n)+(    #[^\n]*\n)*/m].scan(/^ *#(?!#) ?(.*)\n/).join('\n')
+      file = 'doc/#{file[4..-4].tr('/_', '-')}.rdoc'
+      Dir.mkdir 'doc' unless File.directory? 'doc'
+      puts 'writing #{file}'
+      File.open(file, 'w') { |f| f << doc }
+    end
+  end
+    
+            safe?(env) ||
+          valid_token?(session, env['HTTP_X_CSRF_TOKEN']) ||
+          valid_token?(session, Request.new(env).params[options[:authenticity_param]]) ||
+          ( options[:allow_if] && options[:allow_if].call(env) )
+      end
+    
+    module Jekyll
+    
+    class ConfigTag < Liquid::Tag
+  def initialize(tag_name, options, tokens)
+    super
+    options = options.split(' ').map {|i| i.strip }
+    @key = options.slice!(0)
+    @tag = nil
+    @classname = nil
+    options.each do |option|
+      @tag = $1 if option =~ /tag:(\S+)/ 
+      @classname = $1 if option =~ /classname:(\S+)/
+    end
+  end
+    
+    module OctopressFilters
+  def self.pre_filter(page)
+    if page.ext.match('html|textile|markdown|md|haml|slim|xml')
+      input = BacktickCodeBlock::render_code_block(page.content)
+      page.content = input.gsub /(<figure.+?>.+?<\/figure>)/m do
+        TemplateWrapper::safe_wrap($1)
+      end
+    end
+  end
+  def self.post_filter(page)
+    if page.ext.match('html|textile|markdown|md|haml|slim|xml')
+      page.output = TemplateWrapper::unwrap(page.output)
+    end
+  end
