@@ -1,267 +1,188 @@
 
         
-        #include 'stdafx.h'
-#include 'CNTKLibrary.h'
-#include 'Utils.h'
+          auto concreteType = conformanceDC->getSelfInterfaceType();
+  auto *conformanceSig = conformanceDC->getGenericSignatureOfContext();
     
-            static bool IsUDF(const Dictionary& dict);
+    using namespace swift;
+using namespace swift::syntax;
     
-                // Validate that each of the dynamic axes are unique
-            std::unordered_set<Axis> uniqueDynamicAxis;
-            for (auto& currentDynamicAxis : dynamicAxes)
-            {
-                auto retVal = uniqueDynamicAxis.insert(currentDynamicAxis);
-                if (!retVal.second)
-                    InvalidArgument('Dynamic axis named %S is specified more than once for Variable '%S'', currentDynamicAxis.Name().c_str(), AsString().c_str());
-            }
-    
-       BOOST_ASSERT(rep->type == syntax_element_char_rep);
-   BOOST_ASSERT(rep->next.p != 0);
-   BOOST_ASSERT(rep->alt.p != 0);
-   BOOST_ASSERT(rep->next.p->type == syntax_element_literal);
-   BOOST_ASSERT(count < rep->max);
+        StringRef Line = RawText.substr(0, Pos);
+    Lines.push_back(Line);
+    if (!IsFirstLine) {
+      size_t NonWhitespacePos = RawText.find_first_not_of(' ');
+      if (NonWhitespacePos != StringRef::npos)
+        WhitespaceToTrim =
+            std::min(WhitespaceToTrim,
+                     static_cast<unsigned>(NonWhitespacePos));
+    }
+    IsFirstLine = false;
     
     
-enum{
-   sort_C,
-   sort_fixed,
-   sort_delim,
-   sort_unknown
-};
-    
-    class BOOST_REGEX_DECL abstract_protected_call
-{
-public:
-   bool BOOST_REGEX_CALL execute()const;
-   // this stops gcc-4 from complaining:
-   virtual ~abstract_protected_call(){}
-private:
-   virtual bool call()const = 0;
-};
-    
-    template <class OutputIterator, class Iterator, class traits, class charT>
-inline OutputIterator regex_merge(OutputIterator out,
-                         Iterator first,
-                         Iterator last,
-                         const basic_regex<charT, traits>& e, 
-                         const std::basic_string<charT>& fmt,
-                         match_flag_type flags = match_default)
-{
-   return regex_merge(out, first, last, e, fmt.c_str(), flags);
+    {  memcpy(Value, &uuid, Size);
+#else
+  uuid_clear(Value);
+#endif
 }
     
-     /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         regex_search.hpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Provides regex_search implementation.
-  */
+      StringRef presumedFile = presumedLoc.getFilename();
+  SourceLoc startOfLine = loc.getAdvancedLoc(-presumedLoc.getColumn() + 1);
+  bool isNewVirtualFile =
+    swiftSrcMgr.openVirtualFile(startOfLine, presumedFile,
+                                presumedLoc.getLine() - bufferLineNumber);
+  if (isNewVirtualFile) {
+    SourceLoc endOfLine = findEndOfLine(swiftSrcMgr, loc, mirrorID);
+    swiftSrcMgr.closeVirtualFile(endOfLine);
+  }
     
-    template <class BidirectionalIterator,
-          class charT,
-          class traits>
-class regex_token_iterator_implementation 
-{
-   typedef basic_regex<charT, traits> regex_type;
-   typedef sub_match<BidirectionalIterator>      value_type;
+    void ButteraugliComparator::ComputeBlockErrorAdjustmentWeights(
+      int direction,
+      int max_block_dist,
+      double target_mul,
+      int factor_x, int factor_y,
+      const std::vector<float>& distmap,
+      std::vector<float>* block_weight) {
+  const double target_distance = target_distance_ * target_mul;
+  const int sizex = 8 * factor_x;
+  const int sizey = 8 * factor_y;
+  const int block_width = (width_ + sizex - 1) / sizex;
+  const int block_height = (height_ + sizey - 1) / sizey;
+  std::vector<float> max_dist_per_block(block_width * block_height);
+  for (int block_y = 0; block_y < block_height; ++block_y) {
+    for (int block_x = 0; block_x < block_width; ++block_x) {
+      int block_ix = block_y * block_width + block_x;
+      int x_max = std::min(width_, sizex * (block_x + 1));
+      int y_max = std::min(height_, sizey * (block_y + 1));
+      float max_dist = 0.0;
+      for (int y = sizey * block_y; y < y_max; ++y) {
+        for (int x = sizex * block_x; x < x_max; ++x) {
+          max_dist = std::max(max_dist, distmap[y * width_ + x]);
+        }
+      }
+      max_dist_per_block[block_ix] = max_dist;
     }
-    
-    void Action::startWithTarget(Node *aTarget)
-{
-    _originalTarget = _target = aTarget;
+  }
+  for (int block_y = 0; block_y < block_height; ++block_y) {
+    for (int block_x = 0; block_x < block_width; ++block_x) {
+      int block_ix = block_y * block_width + block_x;
+      float max_local_dist = static_cast<float>(target_distance);
+      int x_min = std::max(0, block_x - max_block_dist);
+      int y_min = std::max(0, block_y - max_block_dist);
+      int x_max = std::min(block_width, block_x + 1 + max_block_dist);
+      int y_max = std::min(block_height, block_y + 1 + max_block_dist);
+      for (int y = y_min; y < y_max; ++y) {
+        for (int x = x_min; x < x_max; ++x) {
+          max_local_dist =
+              std::max(max_local_dist, max_dist_per_block[y * block_width + x]);
+        }
+      }
+      if (direction > 0) {
+        if (max_dist_per_block[block_ix] <= target_distance &&
+            max_local_dist <= 1.1 * target_distance) {
+          (*block_weight)[block_ix] = 1.0;
+        }
+      } else {
+        constexpr double kLocalMaxWeight = 0.5;
+        if (max_dist_per_block[block_ix] <=
+            (1 - kLocalMaxWeight) * target_distance +
+            kLocalMaxWeight * max_local_dist) {
+          continue;
+        }
+        for (int y = y_min; y < y_max; ++y) {
+          for (int x = x_min; x < x_max; ++x) {
+            int d = std::max(std::abs(y - block_y), std::abs(x - block_x));
+            int ix = y * block_width + x;
+            (*block_weight)[ix] = std::max<float>(
+                (*block_weight)[ix], 1.0f / (d + 1.0f));
+          }
+        }
+      }
+    }
+  }
 }
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    // Performs in-place floating point 8x8 inverse DCT on block[0..63].
+void ComputeBlockIDCTDouble(double block[64]);
     
-    protected:
-    cocos2d::Size _sizeDelta;
-    cocos2d::Size _startSize;
-    cocos2d::Size _previousSize;
+    #define GUETZLI_LOG(stats, ...)                                    \
+  do {                                                             \
+    char debug_string[1024];                                       \
+    int res = snprintf(debug_string, sizeof(debug_string),         \
+                       __VA_ARGS__);                               \
+    assert(res > 0 && 'expected successful printing');             \
+    (void)res;                                                     \
+    debug_string[sizeof(debug_string) - 1] = '\0';                 \
+    ::guetzli::PrintDebug(                      \
+         stats, std::string(debug_string));        \
+  } while (0)
+#define GUETZLI_LOG_QUANT(stats, q)                    \
+  for (int y = 0; y < 8; ++y) {                        \
+    for (int c = 0; c < 3; ++c) {                      \
+      for (int x = 0; x < 8; ++x)                      \
+        GUETZLI_LOG(stats, ' %2d', (q)[c][8 * y + x]); \
+      GUETZLI_LOG(stats, '   ');                       \
+    }                                                  \
+    GUETZLI_LOG(stats, '\n');                          \
+  }
     
-        // actions
+    // Sort the root nodes, least popular first.
+static inline bool SortHuffmanTree(const HuffmanTree& v0,
+                                   const HuffmanTree& v1) {
+  if (v0.total_count_ != v1.total_count_) {
+    return v0.total_count_ < v1.total_count_;
+  }
+  return v0.index_right_or_value_ > v1.index_right_or_value_;
+}
     
-    /** Adds an action with a target. 
-     If the target is already present, then the action will be added to the existing target.
-     If the target is not present, a new instance of this target will be created either paused or not, and the action will be added to the newly created target.
-     When the target is paused, the queued actions won't be 'ticked'.
-     *
-     * @param action    A certain action.
-     * @param target    The target which need to be added an action.
-     * @param paused    Is the target paused or not.
-     */
-    virtual void addAction(Action *action, Node *target, bool paused);
+    // A node of a Huffman tree.
+struct HuffmanTree {
+  HuffmanTree() {}
+  HuffmanTree(uint32_t count, int16_t left, int16_t right)
+      : total_count_(count),
+        index_left_(left),
+        index_right_or_value_(right) {
+  }
+  uint32_t total_count_;
+  int16_t index_left_;
+  int16_t index_right_or_value_;
+};
     
-    // implementation of ShakyTiles3D
+    #include <math.h>
     
-        for (auto& spriteFrame : frames)
-    {
-        auto animFrame = AnimationFrame::create(spriteFrame, 1, ValueMap());
-        _frames.pushBack(animFrame);
-        _totalDelayUnits++;
-    }
-    
-        /** Gets the total Delay units of the Animation. 
-     *
-     * @return The total Delay units of the Animation.
-     */
-    float getTotalDelayUnits() const { return _totalDelayUnits; };
-    
-    /** Sets the delay in seconds of the 'delay unit'.
-     *
-     * @param delayPerUnit The delay in seconds of the 'delay unit'.
-     */
-    void setDelayPerUnit(float delayPerUnit) { _delayPerUnit = delayPerUnit; };
-    
-    /** Gets the delay in seconds of the 'delay unit'.
-     * 
-     * @return The delay in seconds of the 'delay unit'.
-     */
-    float getDelayPerUnit() const { return _delayPerUnit; };
-    
-        /** Adds an animation from a plist file.
-     * Make sure that the frames were previously loaded in the SpriteFrameCache.
-     * @since v1.1
-     * @js addAnimations
-     * @lua addAnimations
-     * @param plist An animation from a plist file.
-     */
-    void addAnimationsWithFile(const std::string& plist);
-    
-      t7 = a[4].imag;
-  t4 = a[0].imag - t7;
-  t7 += a[0].imag;
-  a[0].imag = t7;
-    
-    namespace guetzli {
-    }
-    
-    #ifndef GUETZLI_FAST_LOG_H_
-#define GUETZLI_FAST_LOG_H_
-    
-    #endif  // GUETZLI_IDCT_H_
-
+    // DCT horizontal pass
     
     #include 'guetzli/jpeg_data.h'
     
-    // Quantization values for an 8x8 pixel block.
-struct JPEGQuantTable {
-  JPEGQuantTable() : values(kDCTBlockSize), precision(0),
-                     index(0), is_last(true) {}
+      void JumpToByteBoundary() {
+    while (put_bits <= 56) {
+      int c = (put_buffer >> 56) & 0xff;
+      EmitByte(c);
+      put_buffer <<= 8;
+      put_bits += 8;
     }
-    
-    #include 'guetzli/jpeg_data_decoder.h'
-    
-      virtual void Run(State& state) = 0;
-    
-    // That gcc wants both of these prototypes seems mysterious. VC, for
-// its part, can't decide which to use (another mystery). Matching of
-// template overloads: the final frontier.
-#ifndef COMPILER_MSVC
-template <typename T, size_t N>
-char (&ArraySizeHelper(const T (&array)[N]))[N];
-#endif
-    
-    State::State(size_t max_iters, const std::vector<int>& ranges, int thread_i,
-             int n_threads, internal::ThreadTimer* timer,
-             internal::ThreadManager* manager)
-    : started_(false),
-      finished_(false),
-      total_iterations_(max_iters + 1),
-      range_(ranges),
-      bytes_processed_(0),
-      items_processed_(0),
-      complexity_n_(0),
-      error_occurred_(false),
-      counters(),
-      thread_index(thread_i),
-      threads(n_threads),
-      max_iterations(max_iters),
-      timer_(timer),
-      manager_(manager) {
-  CHECK(max_iterations != 0) << 'At least one iteration must be run';
-  CHECK(total_iterations_ != 0) << 'max iterations wrapped around';
-  CHECK_LT(thread_index, threads) << 'thread_index must be less than threads';
-}
-    
-    // Returns true if stdout appears to be a terminal that supports colored
-// output, false otherwise.
-bool IsColorTerminal();
-    
-    bool SameNames(UserCounters const& l, UserCounters const& r) {
-  if (&l == &r) return true;
-  if (l.size() != r.size()) {
-    return false;
-  }
-  for (auto const& c : l) {
-    if (r.find(c.first) == r.end()) {
-      return false;
+    if (put_bits < 64) {
+      int padmask = 0xff >> (64 - put_bits);
+      int c = ((put_buffer >> 56) & ~padmask) | padmask;
+      EmitByte(c);
     }
+    put_buffer = 0;
+    put_bits = 64;
   }
-  return true;
-}
+    
+    const int kJPEGZigZagOrder[64] = {
+  0,   1,  5,  6, 14, 15, 27, 28,
+  2,   4,  7, 13, 16, 26, 29, 42,
+  3,   8, 12, 17, 25, 30, 41, 43,
+  9,  11, 18, 24, 31, 40, 44, 53,
+  10, 19, 23, 32, 39, 45, 52, 54,
+  20, 22, 33, 38, 46, 51, 55, 60,
+  21, 34, 37, 47, 50, 56, 59, 61,
+  35, 36, 48, 49, 57, 58, 62, 63
+};
     
     
-    {
-    {
-    {  // Native Client does not provide any API to access cycle counter.
-  // Use clock_gettime(CLOCK_MONOTONIC, ...) instead of gettimeofday
-  // because is provides nanosecond resolution (which is noticable at
-  // least for PNaCl modules running on x86 Mac & Linux).
-  // Initialize to always return 0 if clock_gettime fails.
-  struct timespec ts = { 0, 0 };
-  clock_gettime(CLOCK_MONOTONIC, &ts);
-  return static_cast<int64_t>(ts.tv_sec) * 1000000000 + ts.tv_nsec;
-#elif defined(__aarch64__)
-  // System timer of ARMv8 runs at a different frequency than the CPU's.
-  // The frequency is fixed, typically in the range 1-50MHz.  It can be
-  // read at CNTFRQ special register.  We assume the OS has set up
-  // the virtual timer properly.
-  int64_t virtual_timer_value;
-  asm volatile('mrs %0, cntvct_el0' : '=r'(virtual_timer_value));
-  return virtual_timer_value;
-#elif defined(__ARM_ARCH)
-  // V6 is the earliest arch that has a standard cyclecount
-  // Native Client validator doesn't allow MRC instructions.
-#if (__ARM_ARCH >= 6)
-  uint32_t pmccntr;
-  uint32_t pmuseren;
-  uint32_t pmcntenset;
-  // Read the user mode perf monitor counter access permissions.
-  asm volatile('mrc p15, 0, %0, c9, c14, 0' : '=r'(pmuseren));
-  if (pmuseren & 1) {  // Allows reading perfmon counters for user mode code.
-    asm volatile('mrc p15, 0, %0, c9, c12, 1' : '=r'(pmcntenset));
-    if (pmcntenset & 0x80000000ul) {  // Is it counting?
-      asm volatile('mrc p15, 0, %0, c9, c13, 0' : '=r'(pmccntr));
-      // The counter is set up to count every 64th cycle
-      return static_cast<int64_t>(pmccntr) * 64;  // Should optimize to << 6
-    }
-  }
-#endif
-  struct timeval tv;
-  gettimeofday(&tv, nullptr);
-  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
-#elif defined(__mips__)
-  // mips apparently only allows rdtsc for superusers, so we fall
-  // back to gettimeofday.  It's possible clock_gettime would be better.
-  struct timeval tv;
-  gettimeofday(&tv, nullptr);
-  return static_cast<int64_t>(tv.tv_sec) * 1000000 + tv.tv_usec;
-#else
-// The soft failover to a generic implementation is automatic only for ARM.
-// For other platforms the developer is expected to make an attempt to create
-// a fast implementation and use generic version if nothing better is available.
-#error You need to define CycleTimer for your OS and CPU
-#endif
-}
-}  // end namespace cycleclock
-}  // end namespace benchmark
+    {}  // namespace
     
-          // regerror returns the number of bytes necessary to null terminate
-      // the string, so we move that when assigning to error.
-      CHECK_NE(needed, 0);
-      error->assign(errbuf, needed - 1);
+    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
+// quantization table must have 3 * kDCTBlockSize values.
+bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     const int* quant, JPEGData* jpg);
