@@ -1,88 +1,161 @@
 
         
-            # Sorting the libraries
-    inner_blocks = sorted(blocks[0].split('##'))
-    for i in range(1 , len(inner_blocks)):
-        if inner_blocks[i][0] != '#':
-            inner_blocks[i] = '##' + inner_blocks[i]
-    inner_blocks=''.join(inner_blocks)
+            def get_condition_by_name(self, name):
+        all_conditions = [d for d in self.list_conditions() if d['Name'] == name]
+        if all_conditions:
+            return all_conditions[0][self.conditionsetid]
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
-    
-        def run(self, args, opts):
-        if len(args) != 1 or not is_url(args[0]):
-            raise UsageError()
-        cb = lambda x: self._print_response(x, opts)
-        request = Request(args[0], callback=cb, dont_filter=True)
-        # by default, let the framework handle redirects,
-        # i.e. command handles all codes expect 3xx
-        if not opts.no_redirect:
-            request.meta['handle_httpstatus_list'] = SequenceExclude(range(300, 400))
+        removed_indexes, added_indexes, index_throughput_changes = get_changed_global_indexes(table, global_indexes)
+    if removed_indexes:
+        if not check_mode:
+            for name, index in removed_indexes.items():
+                global_indexes_changed = table.delete_global_secondary_index(name) or global_indexes_changed
         else:
-            request.meta['handle_httpstatus_all'] = True
+            global_indexes_changed = True
     
-        def _find_template(self, template):
-        template_file = join(self.templates_dir, '%s.tmpl' % template)
-        if exists(template_file):
-            return template_file
-        print('Unable to find template: %s\n' % template)
-        print('Use 'scrapy genspider --list' to see all available templates.')
     
-            def getContext(self, hostname=None, port=None):
-            ctx = ClientContextFactory.getContext(self)
-            # Enable all workarounds to SSL bugs as documented by
-            # https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set_options.html
-            ctx.set_options(SSL.OP_ALL)
-            return ctx
+def main():
+    argument_spec = ec2_argument_spec()
+    argument_spec.update(
+        dict(
+            bgp_asn=dict(required=False, type='int'),
+            ip_address=dict(required=True),
+            name=dict(required=True),
+            routing=dict(default='dynamic', choices=['dynamic', 'static']),
+            state=dict(default='present', choices=['present', 'absent']),
+        )
+    )
+    
+        try:
+        connection.create_placement_group(
+            GroupName=name, Strategy=strategy, DryRun=module.check_mode)
+    except (BotoCoreError, ClientError) as e:
+        if e.response['Error']['Code'] == 'DryRunOperation':
+            module.exit_json(changed=True, placement_group={
+                'name': name,
+                'state': 'DryRun',
+                'strategy': strategy,
+            })
+        module.fail_json_aws(
+            e,
+            msg='Couldn't create placement group [%s]' % name)
+    
+            pydoc.getpager = getpager_new
+        try:
+            with captured_output('stdout') as output, \
+                 captured_output('stderr') as err:
+                helper.help(module)
+                result = buf.getvalue().strip()
+                expected_text = expected_help_pattern % (
+                                (doc_loc,) +
+                                expected_text_data_docstrings +
+                                (inspect.getabsfile(pydoc_mod),))
+                self.assertEqual('', output.getvalue())
+                self.assertEqual('', err.getvalue())
+                self.assertEqual(expected_text, result)
+        finally:
+            pydoc.getpager = getpager_old
+    
+    # Additional templates that should be rendered to pages.
+html_additional_pages = {
+    'download': 'download.html',
+    'index': 'indexcontent.html',
+}
+    
+            try:
+            print(pool.apply(f, (5,)))
+        except ZeroDivisionError:
+            print('\tGot ZeroDivisionError as expected from pool.apply()')
+        else:
+            raise AssertionError('expected ZeroDivisionError')
+    
+    PY_MAJOR, PY_MINOR, PY_PATCH = sys.version_info[ 0 : 3 ]
+if not ( ( PY_MAJOR == 2 and PY_MINOR == 7 and PY_PATCH >= 1 ) or
+         ( PY_MAJOR == 3 and PY_MINOR >= 4 ) or
+         PY_MAJOR > 3 ):
+  sys.exit( 'YouCompleteMe requires Python >= 2.7.1 or >= 3.4; '
+            'your version of Python is ' + sys.version )
+    
+      for path in python_paths:
+    yield EndsWithPython_Good, path
+    
+    
+@patch( 'ycm.vimsupport.GetVariableValue',
+        GetVariableValue_CompleteItemIs( 'Test' ) )
+@patch( 'ycm.vimsupport.ReplaceChunks' )
+def PostCompleteFixIt_ApplyFixIt_NoFixIts_test( replace_chunks, *args ):
+  completions = [
+    BuildCompletionFixIt( [] )
+  ]
+  with _SetUpCompleteDone( completions ) as request:
+    request._OnCompleteDone_FixIt()
+    replace_chunks.assert_not_called()
+    
+    import os
+from hamcrest import assert_that, contains_inanyorder, has_item, has_items
+from ycm import syntax_parse
+from ycmd.utils import ReadFile
+    
+    if __name__ == '__main__':
+    
+    '''
+http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
+Implementation of the iterator pattern with a generator
+    
+        def setProblem(self, value):
+        self._bProblem = value
+    
+    
+class Visitor(object):
+    
+    '''
+*What is this pattern about?
+This patterns aims to reduce the number of classes required by an
+application. Instead of relying on subclasses it creates objects by
+copying a prototypical instance at run-time.
+    
+        def now(self):
+        current_time_is_always_midnight = '24:01'
+        return current_time_is_always_midnight
 
     
-        def _get_handler(self, scheme):
-        '''Lazy-load the downloadhandler for a scheme
-        only on the first request for that scheme.
-        '''
-        if scheme in self._handlers:
-            return self._handlers[scheme]
-        if scheme in self._notconfigured:
-            return None
-        if scheme not in self._schemes:
-            self._notconfigured[scheme] = 'no handler available for that scheme'
-            return None
-    
-    # For 'manual' documents, if this is true, then toplevel headings
-# are parts, not chapters.
-#latex_use_parts = False
-    
-    # See how far apart the test image is from the known faces
-face_distances = face_recognition.face_distance(known_encodings, image_to_test_encoding)
-    
-    
-def _raw_face_locations(img, number_of_times_to_upsample=1, model='hog'):
     '''
-    Returns an array of bounding boxes of human faces in a image
+Reference: https://en.wikipedia.org/wiki/Delegation_pattern
+Author: https://github.com/IuryAlves
     
-    # Get a reference to the Raspberry Pi camera.
-# If this fails, make sure you have a camera connected to the RPi and that you
-# enabled your camera in raspi-config and rebooted first.
-camera = picamera.PiCamera()
-camera.resolution = (320, 240)
-output = np.empty((240, 320, 3), dtype=np.uint8)
+    '''
+@author: Eugene Duboviy <eugene.dubovoy@gmail.com> | github.com/duboviy
     
-        # macOS will crash due to a bug in libdispatch if you don't use 'forkserver'
-    context = multiprocessing
-    if 'forkserver' in multiprocessing.get_all_start_methods():
-        context = multiprocessing.get_context('forkserver')
+    *What does this example do?
     
-    requirements = [
-    'face_recognition_models>=0.3.0',
-    'Click>=6.0',
-    'dlib>=19.7',
-    'numpy',
-    'Pillow'
-]
+        def draw_circle(self, x, y, radius):
+        print('API2.circle at {}:{} radius {}'.format(x, y, radius))
+    
+    from homeassistant.core import callback
+from homeassistant.const import CONF_PLATFORM
+import homeassistant.helpers.config_validation as cv
+import homeassistant.util.dt as dt_util
+from homeassistant.helpers.event import track_point_in_utc_time
+    
+    from homeassistant.components.http import HomeAssistantView
+from homeassistant.config import async_check_ha_config_file
+    
+            statsd.event(
+            title='Home Assistant',
+            text='%%% \n **{}** {} \n %%%'.format(name, message),
+            tags=[
+                'entity:{}'.format(event.data.get('entity_id')),
+                'domain:{}'.format(event.data.get('domain'))
+            ]
+        )
+    
+        def random_see(dev_id, name):
+        '''Randomize a sighting.'''
+        see(
+            dev_id=dev_id,
+            host_name=name,
+            gps=(hass.config.latitude + offset(),
+                 hass.config.longitude + offset()),
+            gps_accuracy=random.randrange(50, 150),
+            battery=random.randrange(10, 90)
+        )
