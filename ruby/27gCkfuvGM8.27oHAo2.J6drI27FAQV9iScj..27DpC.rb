@@ -1,91 +1,79 @@
 
         
-        begin
-  require 'bundler/setup'
-rescue LoadError
-  $stderr.puts '[*] Metasploit requires the Bundler gem to be installed'
-  $stderr.puts '    $ gem install bundler'
-  exit(1)
-end
+        ENV['RAILS_ENV'] ||= 'test'
     
-          when nil
-        # No matches, no saved state
-      else
-        sessions[s[:session]].merge!({k => matches})
-      end # end case matched
-    end # end of each_key
-  end # end of parse
-end
-    
-    fileOutJar 	= clsFile.new_with_sig('Ljava.lang.String;', 'output.jar')
-filesIn		= Array.new
-    
-    	SIZE1 = 28
-	SIZE2 = 28 + 4 + 32
-	SIZE3 = 28 + 4 + 32 + 4
-    
-          (person.present? && person.owner_id.present?).tap do |user_found|
-        Workers::ReceivePrivate.perform_async(person.owner.id, xml, legacy) if user_found
-      end
+      class PostToService < Base
+    def perform(*_args)
+      # don't post to services in cucumber
     end
+  end
     
-        context 'update profile' do
-      let(:existing_person_entity) { FactoryGirl.create(:person) }
-      let(:person) {
-        DiasporaFederation::Entities::Person.new(
-          FactoryGirl.attributes_for(:federation_person_from_webfinger,
-                                     diaspora_id: existing_person_entity.diaspora_handle)
-        )
-      }
-    
-            unless File.directory?(File.dirname(output))
-          puts_action :directory, :green, File.dirname(output)
-          FileUtils.mkdir_p(File.dirname(output))
-        end
-        puts_action :convert, :green, f
-        if File.exist?(output)
-          puts_action :overwrite, :yellow, output
-        else
-          puts_action :create, :green, output
-        end
+    describe ContactsController, :type => :controller do
+  describe '#index' do
+    before do
+      AppConfig.chat.enabled = true
+      @aspect = bob.aspects.create(:name => 'another aspect')
+      bob.share_with alice.person, @aspect
+      bob.share_with eve.person, @aspect
+      sign_in bob, scope: :user
+    end
     
             private
     
-            def self.options
-          [[
-            '--short', 'Only print the path relative to the cache root'
-          ]].concat(super)
+    Gem::Specification.new do |gem|
+  gem.name          = 'capistrano'
+  gem.version       = Capistrano::VERSION
+  gem.authors       = ['Tom Clements', 'Lee Hambley']
+  gem.email         = ['seenmyfate@gmail.com', 'lee.hambley@gmail.com']
+  gem.description   = 'Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.'
+  gem.summary       = 'Capistrano - Welcome to easy deployment with Ruby over SSH'
+  gem.homepage      = 'http://capistranorb.com/'
+    
+      def exists?(type, path)
+    %Q{[ -#{type} '#{path}' ]}
+  end
+    
+            # Skip validation behavior if no validators are registered for this key
+        return super unless validators.key?(key)
+    
+    if RUBY_ENGINE == 'rbx'
+  gem 'json'
+  gem 'rubysl'
+  gem 'rubysl-test-unit'
+  gem 'erubi'
+end
+    
+    # include would include the module in Object
+# extend only extends the `main` object
+extend Sinatra::Delegator
+    
+            def advance
+          authorize! :update, @order, order_token
+          while @order.next; end
+          respond_with(@order, default_template: 'spree/api/v1/orders/show', status: 200)
         end
     
-          def run
-        update_if_necessary!
+              can_event = 'can_#{@event}?'
     
-                validator = Source::HealthReporter.new(source.repo)
-            validator.pre_check do |_name, _version|
-              UI.print '.'
-            end
-            report = validator.analyze
-            UI.puts
-            UI.puts
-    
-    module Sinatra
-  class Application < Base
-    
-          default_options :escape => :html,
-        :escaper => defined?(EscapeUtils) ? EscapeUtils : self
-    
-    
-  it 'should allow changing the protection mode to a string' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::FrameOptions, :frame_options => 'ALLOW-FROM foo'
-      run DummyApp
+            def line_item_params
+          params.require(:line_item).permit(:quantity, :variant_id, options: line_item_options)
+        end
+      end
     end
+  end
+end
+
     
-      # rspec-mocks config goes here. You can use an alternate test double
-  # library (such as bogus or mocha) by changing the `mock_with` option here.
-  config.mock_with :rspec do |mocks|
-    # Enable only the newer, non-monkey-patching expect syntax.
-    # For more details, see:
-    #   - http://teaisaweso.me/blog/2013/05/27/rspecs-new-message-expectation-syntax/
-    mocks.syntax = :expect
+            def destroy
+          @option_type = Spree::OptionType.accessible_by(current_ability, :destroy).find(params[:id])
+          @option_type.destroy
+          render plain: nil, status: 204
+        end
+    
+            def authorize_product!
+          authorize! :read, @product
+        end
+    
+              if params[:page] || params[:per_page]
+            @states = @states.page(params[:page]).per(params[:per_page])
+          end
