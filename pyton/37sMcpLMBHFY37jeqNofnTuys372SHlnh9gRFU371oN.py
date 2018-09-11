@@ -1,180 +1,214 @@
-with io.open(README_FILE, encoding='utf-8') as f:
-    oldreadme = f.read()
+
+        
+        
+def _check_cryptography(cryptography_version):
+    # cryptography < 1.3.4
+    try:
+        cryptography_version = list(map(int, cryptography_version.split('.')))
+    except ValueError:
+        return
+    
+        def __call__(self, r):
+        # Initialize per-thread state, if needed
+        self.init_per_thread_state()
+        # If we have a saved nonce, skip the 401
+        if self._thread_local.last_nonce:
+            r.headers['Authorization'] = self.build_digest_header(r.method, r.url)
+        try:
+            self._thread_local.pos = r.body.tell()
+        except AttributeError:
+            # In the case of HTTPDigestAuth being reused and the body of
+            # the previous request was a file-like object, pos has the
+            # file position of the previous body. Ensure it's set to
+            # None.
+            self._thread_local.pos = None
+        r.register_hook('response', self.handle_401)
+        r.register_hook('response', self.handle_redirect)
+        self._thread_local.num_401_calls = 1
     
     
-total_bytes = 0
+@pytest.fixture
+def httpbin(httpbin):
+    return prepare_url(httpbin)
     
-        def test_youtube_extract(self):
-        assertExtractId = lambda url, id: self.assertEqual(YoutubeIE.extract_id(url), id)
-        assertExtractId('http://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('https://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('https://www.youtube.com/watch?feature=player_embedded&v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('https://www.youtube.com/watch_popup?v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('http://www.youtube.com/watch?v=BaW_jenozKcsharePLED17F32AD9753930', 'BaW_jenozKc')
-        assertExtractId('BaW_jenozKc', 'BaW_jenozKc')
+        @possible_keys
+    def test_getitem(self, key):
+        assert self.case_insensitive_dict[key] == 'application/json'
     
+            p = PreparedRequest()
+        p.prepare(
+            method=request.method.upper(),
+            url=request.url,
+            files=request.files,
+            data=request.data,
+            json=request.json,
+            headers=merge_setting(request.headers, self.headers, dict_class=CaseInsensitiveDict),
+            params=merge_setting(request.params, self.params),
+            auth=merge_setting(auth, self.auth),
+            cookies=merged_cookies,
+            hooks=merge_hooks(request.hooks, self.hooks),
+        )
+        return p
     
-class TestMultipleSocks(unittest.TestCase):
-    @staticmethod
-    def _check_params(attrs):
-        params = get_params()
-        for attr in attrs:
-            if attr not in params:
-                print('Missing %s. Skipping.' % attr)
+        def test_session_hooks_are_used_with_no_request_hooks(self, httpbin):
+        hook = lambda x, *args, **kwargs: x
+        s = requests.Session()
+        s.hooks['response'].append(hook)
+        r = requests.Request('GET', httpbin())
+        prep = s.prepare_request(r)
+        assert prep.hooks['response'] != []
+        assert prep.hooks['response'] == [hook]
+    
+        def triger_check_network(self, fail=False, force=False):
+        time_now = time.time()
+        if not force:
+            if self._checking_num > 0:
                 return
-        return params
     
-                    m = re.search(r'(?<=\s)u[\''](?!\)|,|$)', code)
-                if m is not None:
-                    self.assertTrue(
-                        m is None,
-                        'u present in %s, around %s' % (
-                            fn, code[m.start() - 10:m.end() + 10]))
+            begin_recv = time.time()
+        while time.time() < self.timeout + begin_recv:
+            qualified = self.prober_dict[dst_ip]['ra_packets'].get()
+            if qualified:
+                return qualified
+            time.sleep(0.01)
     
-        def _real_extract(self, url):
-        display_id = self._match_id(url)
+                # Is there a bitwise operation to do this?
+            if v == 0xFFFF:
+                v = -1
     
+    class BaseRecognizer(object):
+    '''
+    @brief Common recognizer functionality.
     
-class CNNArticleIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:(?:edition|www)\.)?cnn\.com/(?!videos?/)'
-    _TEST = {
-        'url': 'http://www.cnn.com/2014/12/21/politics/obama-north-koreas-hack-not-war-but-cyber-vandalism/',
-        'md5': '689034c2a3d9c6dc4aa72d65a81efd01',
-        'info_dict': {
-            'id': 'bestoftv/2014/12/21/ip-north-korea-obama.cnn',
-            'ext': 'mp4',
-            'title': 'Obama: Cyberattack not an act of war',
-            'description': 'md5:0a802a40d2376f60e6b04c8d5bcebc4b',
-            'upload_date': '20141221',
-        },
-        'expected_warnings': ['Failed to download m3u8 information'],
-        'add_ie': ['CNN'],
-    }
+    A generic recognizer that can handle recognizers generated from
+    lexer, parser, and tree grammars.  This is all the parsing
+    support code essentially; most of it is error recovery stuff and
+    backtracking.
+    '''
     
-    
-class Supervisor(Employee):
-    
-        def is_available(self):
-        return True if self.vehicle is None else False
-    
-        def __init__(self, timestamp, seller, amount):
-        self.timestamp = timestamp
-        self.seller = seller
-        self.amount = amount
-    
-        def insert_crawled_link(self, url, signature):
-        '''Add the given link to `crawled_links`.'''
-        pass
-    
-        from flask.json.tag import JSONTag
-    
-    
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
+        @classmethod
+    # pylint: disable=arguments-differ,too-many-arguments
+    def sign(cls, payload, key, alg, nonce, url=None, kid=None):
+        # Per ACME spec, jwk and kid are mutually exclusive, so only include a
+        # jwk field if kid is not provided.
+        include_jwk = kid is None
+        return super(JWS, cls).sign(payload, key=key, alg=alg,
+                                    protect=frozenset(['nonce', 'url', 'kid', 'jwk', 'alg']),
+                                    nonce=nonce, url=url, kid=kid,
+                                    include_jwk=include_jwk)
 
     
-        :copyright: © 2010 by the Pallets team.
-    :license: BSD, see LICENSE for more details.
-'''
     
-            descr_string = descr_string[:-2]
-    
-        # add non-discriminative features
-    if n_features > 1:
-        X = np.hstack([X, np.random.randn(n_samples, n_features - 1)])
-    return X, y
-    
-    # plot shrinkage coefficient
-plt.subplot(2, 1, 2)
-plt.errorbar(n_samples_range, lw_shrinkage.mean(1), yerr=lw_shrinkage.std(1),
-             label='Ledoit-Wolf', color='navy', lw=2)
-plt.errorbar(n_samples_range, oa_shrinkage.mean(1), yerr=oa_shrinkage.std(1),
-             label='OAS', color='darkorange', lw=2)
-plt.xlabel('n_samples')
-plt.ylabel('Shrinkage')
-plt.legend(loc='lower right')
-plt.ylim(plt.ylim()[0], 1. + (plt.ylim()[1] - plt.ylim()[0]) / 10.)
-plt.xlim(5, 31)
-    
-    import mock
-from requests.exceptions import HTTPError
-    
-            from certbot_dns_nsone.dns_nsone import Authenticator
-    
-    default_role = 'py:obj'
-    
-            self.assertRaises(errors.PluginError, self.client.deploy_certificate,
-                          ['foo.bar'], 'key', 'cert', 'chain', 'fullchain')
-        self.assertEqual(mock_get_utility().add_message.call_count, 1)
-        installer.rollback_checkpoints.assert_called_once_with()
-        self.assertEqual(installer.restart.call_count, 2)
-    
-        def setUp(self):
-        from acme.errors import BadNonce
-        self.error = BadNonce(nonce='xxx', error='error')
-    
-            # When there are multiple fixit suggestions, present them as a list to
-        # the user hand have her choose which one to apply.
-        if len( self._response[ 'fixits' ] ) > 1:
-          fixit_index = vimsupport.SelectFromList(
-            'Multiple FixIt suggestions are available at this location. '
-            'Which one would you like to apply?',
-            [ fixit[ 'text' ] for fixit in self._response[ 'fixits' ] ] )
-    
-      vim_command.assert_has_exact_calls( [
-    call( 'silent! pclose!' ),
-    call( 'silent! pedit! _TEMP_FILE_' ),
-    call( 'silent! wincmd P' ),
-    call( 'redraw' ),
-    call( 'echo 'test'' ),
-    call( 'echo 'test2'' ),
-  ] )
-    
-      # There is no command in Vim to return to the previous tab so we need to
-  # remember the current tab if needed.
-  if not focus and command == 'tabedit':
-    previous_tab = GetIntValue( 'tabpagenr()' )
-  else:
-    previous_tab = None
+class VirtualHostTest(unittest.TestCase):
+    '''Test the VirtualHost class.'''
     
     
-  def _SetLogLevel( self ):
-    log_level = self._user_options[ 'log_level' ]
-    numeric_level = getattr( logging, log_level.upper(), None )
-    if not isinstance( numeric_level, int ):
-      raise ValueError( 'Invalid log level: {0}'.format( log_level ) )
-    self._logger.setLevel( numeric_level )
+def main(path):
     
-        def test_a_observer_list_shall_be_empty_initially(cls):
-        cls.assertEqual(len(cls.s._observers), 0)
     
-    print()
+  def Start( self ):
+    self.PostDataToHandler( {},
+                            'shutdown',
+                            TIMEOUT_SECONDS,
+                            display_message = False )
     
-        def __init__(self, name=''):
-        Subject.__init__(self)
-        self.name = name
-        self._data = 0
+      AddToGroupMap( 'Conditional', statement_group )
+  AddToGroupMap( 'Repeat'     , statement_group )
+  AddToGroupMap( 'Label'      , statement_group )
+  AddToGroupMap( 'Operator'   , statement_group )
+  AddToGroupMap( 'Keyword'    , statement_group )
+  AddToGroupMap( 'Exception'  , statement_group )
     
-        # Sparkle the eyes
-    d.polygon(face_landmarks['left_eye'], fill=(255, 255, 255, 30))
-    d.polygon(face_landmarks['right_eye'], fill=(255, 255, 255, 30))
     
-        # Find all the faces and face encodings in the current frame of video
-    face_locations = face_recognition.face_locations(rgb_frame)
-    face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+def FormatDebugInfoResponse_Completer_ServerNotRunningWithNoLogfiles_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'is_running': False,
+    'logfiles': []
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name not running\n'
+      '  Server name executable: /path/to/executable\n'
+      '  No logfiles available\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
+
     
-    # Add any paths that contain custom static files (such as style sheets)
-# here, relative to this directory. They are copied after the builtin
-# static files, so a file named 'default.css' will overwrite the builtin
-# 'default.css'.
-html_static_path = ['_static']
+      # We don't want the requests to actually be sent to the server, just have it
+  # return success.
+  with patch( 'ycm.client.completer_available_request.'
+              'CompleterAvailableRequest.PostDataToHandler',
+              return_value = True ):
+    with patch( 'ycm.client.completion_request.CompletionRequest.'
+                'PostDataToHandlerAsync',
+                return_value = MagicMock( return_value=True ) ):
+    
+      return {
+    'extra_data': extra_data,
+    'insertion_text': insertion_text,
+    'menu_text': menu_text,
+    'extra_menu_info': extra_menu_info,
+    'kind': kind,
+    'detailed_info': detailed_info,
+  }
+    
+          assert_that( ycm.IsServerAlive(), equal_to( False ) )
+      post_vim_message.assert_called_once_with(
+        'Unable to start the ycmd server. Cannot find Python 2.7 or 3.4+. '
+        'Set the 'g:ycm_server_python_interpreter' option to a Python '
+        'interpreter path. '
+        'Correct the error then restart the server with ':YcmRestartServer'.' )
+    
+    
+def run_test(setup, test, iterations_per_test=5, tests_to_run=10):
+    fastest_execution = min(timeit.Timer(test, setup=setup).repeat(tests_to_run, iterations_per_test))
+    execution_time = fastest_execution / iterations_per_test
+    fps = 1.0 / execution_time
+    return execution_time, fps
+    
+    # Note: This isn't exactly the same as a 'percent match'. The scale isn't linear. But you can assume that images with a
+# smaller distance are more similar to each other than ones with a larger distance.
+    
+        # Print the location of each face in this image
+    top, right, bottom, left = face_location
+    print('A face is located at pixel location Top: {}, Left: {}, Bottom: {}, Right: {}'.format(top, left, bottom, right))
+    
+        # If no valid image file was uploaded, show the file upload form:
+    return '''
+    <!doctype html>
+    <title>Is this a picture of Obama?</title>
+    <h1>Upload a picture and see if it's a picture of Obama!</h1>
+    <form method='POST' enctype='multipart/form-data'>
+      <input type='file' name='file'>
+      <input type='submit' value='Upload'>
+    </form>
+    '''
+    
+    
+@click.command()
+@click.argument('image_to_check')
+@click.option('--cpus', default=1, help='number of CPU cores to use in parallel. -1 means 'use all in system'')
+@click.option('--model', default='hog', help='Which face detection model to use. Options are 'hog' or 'cnn'.')
+def main(image_to_check, cpus, model):
+    # Multi-core processing only supported on Python 3.4 or greater
+    if (sys.version_info < (3, 4)) and cpus != 1:
+        click.echo('WARNING: Multi-processing support requires Python 3.4 or greater. Falling back to single-threaded processing!')
+        cpus = 1
+    
+                face_names.append(name)
+    
+    # Get a reference to the Raspberry Pi camera.
+# If this fails, make sure you have a camera connected to the RPi and that you
+# enabled your camera in raspi-config and rebooted first.
+camera = picamera.PiCamera()
+camera.resolution = (320, 240)
+output = np.empty((240, 320, 3), dtype=np.uint8)
+    
+        # Every 128 frames (the default batch size), batch process the list of frames to find faces
+    if len(frames) == 128:
+        batch_of_face_locations = face_recognition.batch_face_locations(frames, number_of_times_to_upsample=0)
