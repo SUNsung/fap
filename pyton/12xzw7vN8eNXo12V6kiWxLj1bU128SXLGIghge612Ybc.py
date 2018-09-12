@@ -1,59 +1,103 @@
 
         
-        containers = (('thefuck/python3-fish',
-               u'''FROM python:3
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'),
-              ('thefuck/python2-fish',
-               u'''FROM python:2
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'))
+        
+def test_when_cant_configure_automatically(shell_pid, shell, logs):
+    shell_pid.return_value = 12
+    shell.how_to_configure.return_value = ShellConfiguration(
+        content='eval $(thefuck --alias)',
+        path='/tmp/.bashrc',
+        reload='bash',
+        can_configure_automatically=False)
+    main()
+    logs.how_to_configure_alias.assert_called_once()
     
-        parser.add_argument('-t', '--test',
-                        dest='test',
-                        action='store_true',
-                        help='show what would be downloaded without downloading')
     
-    alphanumeric_range = r'''
-    \[
-        (?:
-            [a-z]:[a-z]|                # one-char alphabetic range
-            [0-9]+:[0-9]+               # ...or a numeric one
+init_bashrc = u'''echo '
+export SHELL=/bin/bash
+export PS1='$ '
+echo > $HISTFILE
+eval $(thefuck --alias {})
+echo 'instant mode ready: $THEFUCK_INSTANT_MODE'
+' > ~/.bashrc'''
+    
+        for condition_type in desired_conditions:
+        for (condition_name, condition) in desired_conditions[condition_type].items():
+            if condition_name not in all_conditions[condition_type]:
+                module.fail_json(msg='Condition %s of type %s does not exist' % (condition_name, condition_type))
+            condition['data_id'] = all_conditions[condition_type][condition_name]['data_id']
+            if condition['data_id'] not in existing_conditions[condition_type]:
+                insertions.append(format_for_insertion(condition))
+    
+        if not existing_hook:
+        changed = True
+    else:
+        # GlobalTimeout is not configurable, but exists in response.
+        # Removing it helps to compare both dicts in order to understand
+        # what changes were done.
+        del(existing_hook[0]['GlobalTimeout'])
+        added, removed, modified, same = dict_compare(lch_params, existing_hook[0])
+        if added or removed or modified:
+            changed = True
+    
+    - name: allocate a new elastic IP and associate it with an instance
+  ec2_eip:
+    device_id: i-1212f003
+    
+        module = AnsibleModule(argument_spec=argument_spec)
+    
+    
+def main():
+    argument_spec = ec2_argument_spec()
+    argument_spec.update(
+        dict(
+            name=dict(required=True, type='str'),
+            metric=dict(type='str'),
+            namespace=dict(type='str'),
+            statistic=dict(type='str', choices=['SampleCount', 'Average', 'Sum', 'Minimum', 'Maximum']),
+            comparison=dict(type='str', choices=['<=', '<', '>', '>=']),
+            threshold=dict(type='float'),
+            period=dict(type='int'),
+            unit=dict(type='str', choices=['Seconds', 'Microseconds', 'Milliseconds', 'Bytes', 'Kilobytes', 'Megabytes', 'Gigabytes', 'Terabytes',
+                                           'Bits', 'Kilobits', 'Megabits', 'Gigabits', 'Terabits', 'Percent', 'Count', 'Bytes/Second', 'Kilobytes/Second',
+                                           'Megabytes/Second', 'Gigabytes/Second', 'Terabytes/Second', 'Bits/Second', 'Kilobits/Second', 'Megabits/Second',
+                                           'Gigabits/Second', 'Terabits/Second', 'Count/Second', 'None']),
+            evaluation_periods=dict(type='int'),
+            description=dict(type='str'),
+            dimensions=dict(type='dict', default={}),
+            alarm_actions=dict(type='list'),
+            insufficient_data_actions=dict(type='list'),
+            ok_actions=dict(type='list'),
+            state=dict(default='present', choices=['present', 'absent']),
         )
-        (?::[0-9]+)?                    # numeric :step (optional)
-    \]
+    )
+    
+    # Create a placement group.
+- ec2_placement_group:
+    name: my-cluster
+    state: present
+    
+            # set the min adjustment step in case the user decided to change their
+        # adjustment type to percentage
+        setattr(policy, 'min_adjustment_step', module.params.get('min_adjustment_step'))
+    
+    
+class MoveFileCommand(object):
+    
+    *TL;DR80
+Traverses a container and accesses the container's elements.
 '''
     
-        if result is None:
-        return '{}'
+        def scan(self):
+        self.state.scan()
     
-    # Declare top-level shortcuts
-from scrapy.spiders import Spider
-from scrapy.http import Request, FormRequest
-from scrapy.selector import Selector
-from scrapy.item import Item, Field
     
-        requires_project = False
-    crawler_process = None
+class lazy_property(object):
     
-            run = self.testsRun
-        plural = 's' if run != 1 else ''
+        def __del__(self):
+        if self.item is not None:
+            self._queue.put(self.item)
+            self.item = None
     
-    try:
-    # compatible for python2
-    from urllib2 import urlopen
-    from urllib2 import HTTPError
-    from urllib2 import URLError
-except ImportError:
-    # compatible for python3
-    from urllib.request import urlopen
-    from urllib.error import HTTPError
-    from urllib.error import URLError
+    
+class BusinessLogic(object):
+    ''' Business logic holding data store instances '''
