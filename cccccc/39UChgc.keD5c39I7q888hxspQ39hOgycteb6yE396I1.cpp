@@ -1,286 +1,189 @@
 
         
-        
-    {}  // namespace testing
-    
-    // Type-parameterized tests are abstract test patterns parameterized
-// by a type.  Compared with typed tests, type-parameterized tests
-// allow you to define the test pattern without knowing what the type
-// parameters are.  The defined pattern can be instantiated with
-// different types any number of times, in any number of translation
-// units.
-//
-// If you are designing an interface or concept, you can define a
-// suite of type-parameterized tests to verify properties that any
-// valid implementation of the interface/concept should have.  Then,
-// each implementation can easily instantiate the test suite to verify
-// that it conforms to the requirements, without having to write
-// similar tests repeatedly.  Here's an example:
-    
-    
-    {  return AssertionFailure() << pred_text << '('
-                            << e1 << ', '
-                            << e2 << ', '
-                            << e3 << ', '
-                            << e4 << ') evaluates to false, where'
-                            << '\n' << e1 << ' evaluates to ' << v1
-                            << '\n' << e2 << ' evaluates to ' << v2
-                            << '\n' << e3 << ' evaluates to ' << v3
-                            << '\n' << e4 << ' evaluates to ' << v4;
+        template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10>
+internal::ValueArray10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> Values(T1 v1,
+    T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10) {
+  return internal::ValueArray10<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(v1,
+      v2, v3, v4, v5, v6, v7, v8, v9, v10);
 }
     
-    // In describing the results of death tests, these terms are used with
-// the corresponding definitions:
-//
-// exit status:  The integer exit information in the format specified
-//               by wait(2)
-// exit code:    The integer code passed to exit(3), _exit(2), or
-//               returned from main()
-class GTEST_API_ DeathTest {
- public:
-  // Create returns false if there was an error determining the
-  // appropriate action to take for the current death test; for example,
-  // if the gtest_death_test_style flag is set to an invalid value.
-  // The LastMessage method will return a more detailed message in that
-  // case.  Otherwise, the DeathTest pointer pointed to by the 'test'
-  // argument is set.  If the death test should be skipped, the pointer
-  // is set to NULL; otherwise, it is set to the address of a new concrete
-  // DeathTest object that controls the execution of the current test.
-  static bool Create(const char* statement, const RE* regex,
-                     const char* file, int line, DeathTest** test);
-  DeathTest();
-  virtual ~DeathTest() { }
-    }
-    
-    
-    {  const Generator1 g1_;
-  const Generator2 g2_;
-  const Generator3 g3_;
-  const Generator4 g4_;
-  const Generator5 g5_;
-  const Generator6 g6_;
-  const Generator7 g7_;
-  const Generator8 g8_;
-};  // class CartesianProductHolder8
-    
-    
-    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(ParameterizedTestCaseInfo);
-};  // class ParameterizedTestCaseInfo
-    
-    // Returns the number of threads running in the process, or 0 to indicate that
-// we cannot detect it.
-GTEST_API_ size_t GetThreadCount();
-    
-    /**
- * Flushes pending writes. This method should not be called before invocation of
- * on_stream_ready() method of the bidirectional_stream_callback.
- * For each previously called bidirectional_stream_write()
- * a corresponding on_write_completed() callback will be invoked when the buffer
- * is sent.
- */
-GRPC_SUPPORT_EXPORT
-void bidirectional_stream_flush(bidirectional_stream* stream);
-    
-    #include <memory>
-    
-    static const int WARMUP = 5;
-static const int BENCHMARK = 5;
-    
-      bool TryParseOne(Feature* feature) {
-    if (failed_ || Finished() || !Match('{')) {
-      return SetFailedAndReturnFalse();
-    }
-    if (!Match(location_) || !Match('{') || !Match(latitude_)) {
-      return SetFailedAndReturnFalse();
-    }
-    long temp = 0;
-    ReadLong(&temp);
-    feature->mutable_location()->set_latitude(temp);
-    if (!Match(',') || !Match(longitude_)) {
-      return SetFailedAndReturnFalse();
-    }
-    ReadLong(&temp);
-    feature->mutable_location()->set_longitude(temp);
-    if (!Match('},') || !Match(name_) || !Match('\'')) {
-      return SetFailedAndReturnFalse();
-    }
-    size_t name_start = current_;
-    while (current_ != db_.size() && db_[current_++] != ''') {
-    }
-    if (current_ == db_.size()) {
-      return SetFailedAndReturnFalse();
-    }
-    feature->set_name(db_.substr(name_start, current_-name_start-1));
-    if (!Match('},')) {
-      if (db_[current_ - 1] == ']' && current_ == db_.size()) {
-        return true;
-      }
-      return SetFailedAndReturnFalse();
-    }
-    return true;
-  }
-    
-    #include 'src/compiler/config.h'
-#include 'src/compiler/generator_helpers.h'
-    
-    #include <utility>
-    
-    AuthPropertyIterator SecureAuthContext::end() const {
-  return AuthPropertyIterator();
-}
-    
-    
-    {
-    {}  // namespace testing
-}  // namespace grpc
-    
-    #endif  // GRPC_TEST_CPP_METRICS_SERVER_H
+    #endif  // GTEST_INCLUDE_GTEST_GTEST_PARAM_TEST_H_
 
     
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/python/python_generator.h>
+      template <GTEST_9_TYPENAMES_(U)>
+  tuple& operator=(const GTEST_9_TUPLE_(U)& t) {
+    return CopyFrom(t);
+  }
     
-    	ClassDB::bind_method(D_METHOD('set_rough', 'rough'), &PhysicsMaterial::set_rough);
-	ClassDB::bind_method(D_METHOD('is_rough'), &PhysicsMaterial::is_rough);
     
-    PhysicsServer::AreaSpaceOverrideMode PhysicsServerSW::area_get_space_override_mode(RID p_area) const {
+    {    return true;
+  }
+    
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
+    
+      bool ApplyToCall(grpc_call* call) override;
+  SecureCallCredentials* AsSecureCredentials() override { return this; }
+    
+    void ChannelArguments::SetString(const grpc::string& key,
+                                 const grpc::string& value) {
+  grpc_arg arg;
+  arg.type = GRPC_ARG_STRING;
+  strings_.push_back(key);
+  arg.key = const_cast<char*>(strings_.back().c_str());
+  strings_.push_back(value);
+  arg.value.string = const_cast<char*>(strings_.back().c_str());
     }
     
-    	if (p_id != 0) {
+    grpc::string ChannelArguments::GetSslTargetNameOverride() const {
+  for (unsigned int i = 0; i < args_.size(); i++) {
+    if (grpc::string(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG) == args_[i].key) {
+      return args_[i].value.string;
+    }
+  }
+  return '';
+}
+    
+    
+    {}  // namespace grpc
+
+    
+      static void OnDoneRecvMessageCb(void* user_data, grpc_error* error);
+    
+    // Server
+MeasureDouble RpcServerSentBytesPerRpc() {
+  static const auto measure = MeasureDouble::Register(
+      kRpcServerSentBytesPerRpcMeasureName,
+      'Total bytes sent across all messages per RPC', kUnitBytes);
+  return measure;
+}
+    
+    
+    {}  // namespace grpc
+
+    
+      CensusServerCallData()
+      : gc_(nullptr),
+        auth_context_(nullptr),
+        recv_initial_metadata_(nullptr),
+        initial_on_done_recv_initial_metadata_(nullptr),
+        initial_on_done_recv_message_(nullptr),
+        recv_message_(nullptr),
+        recv_message_count_(0),
+        sent_message_count_(0) {
+    memset(&census_bin_, 0, sizeof(grpc_linked_mdelem));
+    memset(&path_, 0, sizeof(grpc_slice));
+    memset(&on_done_recv_initial_metadata_, 0, sizeof(grpc_closure));
+    memset(&on_done_recv_message_, 0, sizeof(grpc_closure));
+  }
+    
+    namespace HPHP { namespace HHBBC {
+    }
     }
     
-    	// check if we already have the contact
+    //////////////////////////////////////////////////////////////////////
     
-    	if (cbk->max == 0)
-		return;
+      // Parse and process a .hdf string (e.g., -v)
+  static void ParseHdfString(const std::string &hdfStr, Hdf &hdf);
     
-    	virtual void body_set_applied_force(RID p_body, const Vector2 &p_force);
-	virtual Vector2 body_get_applied_force(RID p_body) const;
-    
-    	virtual Physics2DDirectSpaceState *get_space_state() = 0;
-    
-    	ERR_FAIL_COND(inspector_plugin_count == MAX_PLUGINS);
-    
-    	Color success_color = accent_color.linear_interpolate(Color(0.2, 1, 0.2), 0.6) * 1.2;
-	Color warning_color = accent_color.linear_interpolate(Color(1, 1, 0), 0.7) * 1.2;
-	Color error_color = accent_color.linear_interpolate(Color(1, 0, 0), 0.8) * 1.7;
-	Color property_color = font_color.linear_interpolate(Color(0.5, 0.5, 0.5), 0.5);
-    
-    
-    {		if (!_ptr)
-			return NULL;
-		return reinterpret_cast<T *>(_ptr);
-	}
-    
-    #pragma once
-    
-    
-    {        ImGui::Render();
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////n
     }
     
-    #include 'imgui.h'
-#include '../imgui_impl_freeglut.h'
-#include '../imgui_impl_opengl2.h'
-#include <GL/freeglut.h>
-    
-                ImGui::Begin('Hello, world!');                          // Create a window called 'Hello, world!' and append into it.
-    
-            // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
+        if ((se.st_mode & S_IFMT) == S_IFDIR) {
+      find(root, spath + ename, php, callback);
+      continue;
     }
     
-        // Get Present Mode
-#ifdef IMGUI_UNLIMITED_FRAME_RATE
-    VkPresentModeKHR present_mode = VK_PRESENT_MODE_IMMEDIATE_KHR;
-#else
-    VkPresentModeKHR present_mode = VK_PRESENT_MODE_FIFO_KHR;
-#endif
-    wd->PresentMode = ImGui_ImplVulkanH_SelectPresentMode(g_PhysicalDevice, wd->Surface, &present_mode, 1);
+            if (!learnerParametersNotPartOfModel.empty())
+            InvalidArgument('Trainer ctor: %d of the learner parameters '%S' are not part of the model specified', 
+                            (int)learnerParametersNotPartOfModel.size(), NamedListString(learnerParametersNotPartOfModel).c_str());
     
-        // Main loop
-    MSG msg;
-    ZeroMemory(&msg, sizeof(msg));
-    while (msg.message != WM_QUIT)
+    #include 'stdafx.h'
+#include 'CNTKLibrary.h'
+#include 'Sequences.h'
+#include 'TensorView.h'
+#include 'Utils.h'
+    
+        NDArrayViewPtr Variable::Value() const
     {
-        // Poll and handle messages (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-            continue;
-        }
+        if (!IsConstant() && !IsParameter())
+            LogicError('Variable '%S' Value(): Only Variables of kind Parameter and Constant have a Value.', AsString().c_str());
     }
     
-                ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+                // Validate that each of the dynamic axes are unique
+            std::unordered_set<Axis> uniqueDynamicAxis;
+            for (auto& currentDynamicAxis : dynamicAxes)
+            {
+                auto retVal = uniqueDynamicAxis.insert(currentDynamicAxis);
+                if (!retVal.second)
+                    InvalidArgument('Dynamic axis named %S is specified more than once for Variable '%S'', currentDynamicAxis.Name().c_str(), AsString().c_str());
+            }
     
-     private:
-  Node* head() {
-    return head_.load(std::memory_order_acquire);
-  }
+    // GetMinibatch4SE - Get the next minibatch for SE training, including lattice, labels and phone boundary
+// latticeinput - lattice for each utterances in this minibatch
+// uids - lables stored in size_t vector instead of ElemType matrix
+// boundary - phone boundaries
+// returns - true if there are more minibatches, false if no more minibatches remain
+bool DataReader::GetMinibatch4SE(std::vector<shared_ptr<const msra::dbn::latticepair>>& latticeinput, vector<size_t>& uids, vector<size_t>& boundaries, vector<size_t>& extrauttmap)
+{
+    bool bRet = true;
+    for (size_t i = 0; i < m_ioNames.size(); i++)
+        bRet &= m_dataReaders[m_ioNames[i]]->GetMinibatch4SE(latticeinput, uids, boundaries, extrauttmap);
+    return bRet;
+}
     
+            // take the chance to validate inputNodes
+        let allInputsSet = set<ComputationNodeBasePtr>(allInputs.begin(), allInputs.end());
+        for (let& input : inputNodes)
+            if (allInputsSet.find(input) == allInputsSet.end())
+                InvalidArgument('CloneFunction: No specified output depends on the specified input %ls.', input->NodeDescription().c_str());
+        // TODO: Is this really always an error? Are there valid cases where one would over-specify possible input nodes, even if they are not used/needed?
     
-    {  bool cas(T& u, T& v) {
-    Node* n = new Node(v);
-    hazptr_holder<Atom> hptr;
-    Node* p;
-    while (true) {
-      p = hptr.get_protected(node_);
-      if (p->val_ != u) {
-        delete n;
-        return false;
-      }
-      if (node_.compare_exchange_weak(
-              p, n, std::memory_order_relaxed, std::memory_order_release)) {
-        break;
-      }
+      /*
+   * @brief the uri used to begin POSTing carve data
+   *
+   * This endpoint should negotiate the details of the carve, as well
+   * as give the client a session id used to continue POSTing the data.
+   */
+  std::string startUri_;
+    
+    namespace osquery {
     }
-    hptr.reset();
-    p->retire();
-    return true;
-  }
-};
     
-      BlockingQueueAddResult addWithPriority(T item, int8_t priority) override {
-    int mid = getNumPriorities() / 2;
-    size_t queue = priority < 0
-        ? std::max(0, mid + priority)
-        : std::min(getNumPriorities() - 1, mid + priority);
-    CHECK_LT(queue, queues_.size());
-    switch (kBehavior) { // static
-      case QueueBehaviorIfFull::THROW:
-        if (!queues_[queue].write(std::move(item))) {
-          throw QueueFullException('LifoSemMPMCQueue full, can't add item');
-        }
-        break;
-      case QueueBehaviorIfFull::BLOCK:
-        queues_[queue].blockingWrite(std::move(item));
-        break;
+    #include <osquery/config.h>
+#include <osquery/registry.h>
+    
+    
+    {  // Any views left are views that don't exist in the new configuration file
+  // so we tear them down and remove them from the database.
+  for (const auto& old_view : erase_views) {
+    osquery::query('DROP VIEW ' + old_view, r);
+    deleteDatabaseValue(kQueries, kConfigViews + old_view);
+  }
+  return Status(0, 'OK');
+}
+    
+        // Create a basic path trigger, this is a file path.
+    real_test_path = kTestWorkingDirectory + 'inotify-trigger' +
+                     std::to_string(rand() % 10000 + 10000);
+    // Create a similar directory for embedded paths and directories.
+    real_test_dir = kTestWorkingDirectory + 'inotify-triggers' +
+                    std::to_string(rand() % 10000 + 10000);
+    
+    namespace benchmark {
+namespace internal {
+// The arraysize(arr) macro returns the # of elements in an array arr.
+// The expression is a compile-time constant, and therefore can be
+// used in defining new arrays, for example.  If you use arraysize on
+// a pointer by mistake, you will get a compile-time error.
+//
     }
-    return sem_.post();
-  }
+    }
     
-      MockClock::Now += std::chrono::seconds{1};
+    #include <cstdint>
+#include <string>
     
-    /**
- * Exception thrown by *Checked methods of Subprocess.
- */
-class FOLLY_EXPORT CalledProcessError : public SubprocessError {
- public:
-  explicit CalledProcessError(ProcessReturnCode rc);
-  ~CalledProcessError() throw() override = default;
-  ProcessReturnCode returnCode() const { return returnCode_; }
- private:
-  ProcessReturnCode returnCode_;
-};
-    
-    #include <folly/Range.h>
-#include <folly/experimental/settings/detail/SettingsImpl.h>
-    
-    using namespace folly;
+    #include 'check.h'
