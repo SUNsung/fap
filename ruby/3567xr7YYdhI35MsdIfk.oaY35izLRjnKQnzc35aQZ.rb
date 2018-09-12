@@ -1,234 +1,148 @@
 
         
-          describe 'migrating a hash' do
-    it 'should convert every attribute' do
-      expect(LiquidMigrator.convert_hash({'a' => '$.data', 'b' => 'This is a <$.test>'})).to eq(
-                                  {'a' => '$.data', 'b' => 'This is a {{test}}'}
-      )
-    end
-    it 'should work with leading_dollarsign_is_jsonpath' do
-      expect(LiquidMigrator.convert_hash({'a' => '$.data', 'b' => 'This is a <$.test>'}, leading_dollarsign_is_jsonpath: true)).to eq(
-                                  {'a' => '{{data}}', 'b' => 'This is a {{test}}'}
-      )
-    end
-    it 'should use the corresponding *_path attributes when using merge_path_attributes'do
-      expect(LiquidMigrator.convert_hash({'a' => 'default', 'a_path' => '$.data'}, {leading_dollarsign_is_jsonpath: true, merge_path_attributes: true})).to eq(
-                                  {'a' => '{{data}}'}
-      )
-    end
-    it 'should raise an exception when encountering complex JSONPaths' do
-      expect { LiquidMigrator.convert_hash({'b' => 'This is <$.complex[2]>'}) }.
-        to raise_error('JSONPath '$.complex[2]' is too complex, please check your migration.')
-    end
-  end
-    
-        # Check if proper Lockable module methods are present & unlock strategy
-    # allows to unlock resource on password reset
-    def unlockable?(resource)
-      resource.respond_to?(:unlock_access!) &&
-        resource.respond_to?(:unlock_strategy_enabled?) &&
-        resource.unlock_strategy_enabled?(:email)
-    end
-    
-          # Forgets the given resource by deleting a cookie
-      def forget_me(resource)
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.forget_me!
-        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+        module ActionView #:nodoc:
+  # = Action View Raw Output Helper
+  module Helpers #:nodoc:
+    module OutputSafetyHelper
+      # This method outputs without escaping a string. Since escaping tags is
+      # now default, this can be used when you don't want Rails to automatically
+      # escape tags. This is not recommended if the data is coming from the user's
+      # input.
+      #
+      # For example:
+      #
+      #  raw @user.name
+      #  # => 'Jimmy <alert>Tables</alert>'
+      def raw(stringish)
+        stringish.to_s.html_safe
       end
     
-            if uri 
-          path = remove_domain_from_uri(uri)
-          path = add_fragment_back_to_path(uri, path)
-    
-    module Devise
-  module Controllers
-    # Create url helpers to be used with resource/scope configuration. Acts as
-    # proxies to the generated routes created by devise.
-    # Resource param can be a string or symbol, a class, or an instance object.
-    # Example using a :user resource:
-    #
-    #   new_session_path(:user)      => new_user_session_path
-    #   session_path(:user)          => user_session_path
-    #   destroy_session_path(:user)  => destroy_user_session_path
-    #
-    #   new_password_path(:user)     => new_user_password_path
-    #   password_path(:user)         => user_password_path
-    #   edit_password_path(:user)    => edit_user_password_path
-    #
-    #   new_confirmation_path(:user) => new_user_confirmation_path
-    #   confirmation_path(:user)     => user_confirmation_path
-    #
-    # Those helpers are included by default to ActionController::Base.
-    #
-    # In case you want to add such helpers to another class, you can do
-    # that as long as this new class includes both url_helpers and
-    # mounted_helpers. Example:
-    #
-    #     include Rails.application.routes.url_helpers
-    #     include Rails.application.routes.mounted_helpers
-    #
-    module UrlHelpers
-      def self.remove_helpers!
-        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
-          remove_method method
-        end
-      end
-    
-        include Rails.application.routes.url_helpers
-    include Rails.application.routes.mounted_helpers
-    
-    describe 'Kernel#taint' do
-  it 'returns self' do
-    o = Object.new
-    o.taint.should equal(o)
-  end
-    
-        it 'returns the time at which the file was modified when passed ?M' do
-      Kernel.test(?M, @tmp_file).should == @tmp_file.mtime
-    end
-  end
-    
-      it 'creates a public method in TOPLEVEL_BINDING' do
-    eval @code, TOPLEVEL_BINDING
-    Object.should have_method :boom
-  end
-    
-      class Mention < ApplicationRecord
-  end
-    
-    require 'cucumber/api_steps'
-    
-      failure_message_for_should do |actual|
-    'expected #{actual.inspect} to have value #{expected.inspect} but was #{actual.value.inspect}'
-  end
-  failure_message_for_should_not do |actual|
-    'expected #{actual.inspect} to not have value #{expected.inspect} but it had'
-  end
-end
-    
-          OptionParser.new do |opts|
-        opts.banner = 'See full documentation at http://capistranorb.com/.'
-        opts.separator ''
-        opts.separator 'Install capistrano in a project:'
-        opts.separator '    bundle exec cap install [STAGES=qa,staging,production,...]'
-        opts.separator ''
-        opts.separator 'Show available tasks:'
-        opts.separator '    bundle exec cap -T'
-        opts.separator ''
-        opts.separator 'Invoke (or simulate invoking) a task:'
-        opts.separator '    bundle exec cap [--dry-run] STAGE TASK'
-        opts.separator ''
-        opts.separator 'Advanced options:'
-    
-        def is_question?(key)
-      value = fetch_for(key, nil)
-      !value.nil? && value.is_a?(Question)
-    end
-    
-    MESSAGE
+              def render_component(builder)
+            builder.radio_button + builder.label
+          end
       end
     end
   end
 end
 
     
-          def role_properties_for(rolenames)
-        roles = rolenames.to_set
-        rps = Set.new unless block_given?
-        roles_for(rolenames).each do |host|
-          host.roles.intersection(roles).each do |role|
-            [host.properties.fetch(role)].flatten(1).each do |props|
-              if block_given?
-                yield host, role, props
-              else
-                rps << (props || {}).merge(role: role, hostname: host.hostname)
-              end
-            end
-          end
+              super(object_name, method_name, template_object, options)
         end
-        block_given? ? nil : rps
+    
+        def render_template(event)
+      info do
+        message = '  Rendered #{from_rails_root(event.payload[:identifier])}'.dup
+        message << ' within #{from_rails_root(event.payload[:layout])}' if event.payload[:layout]
+        message << ' (#{event.duration.round(1)}ms)'
+      end
+    end
+    
+          def args_for_lookup(name, prefixes, partial, keys, details_options)
+        name, prefixes = normalize_name(name, prefixes)
+        details, details_key = detail_args_for(details_options)
+        [name, prefixes, partial || false, details, details_key, keys]
       end
     
-          private
+              return nil unless selected_attr
     
-    if RUBY_ENGINE == 'ruby'
-  gem 'less', '~> 2.0'
-  gem 'mini_racer'
-  gem 'redcarpet'
-  gem 'wlang', '>= 2.0.1'
-  gem 'bluecloth'
-  gem 'rdiscount'
-  gem 'RedCloth'
-  gem 'activesupport', '~> 5.1.6'
-  gem 'puma'
-  gem 'yajl-ruby'
-  gem 'nokogiri'
-  gem 'thin'
-  gem 'slim', '~> 2.0'
-  gem 'coffee-script', '>= 2.0'
-  gem 'rdoc'
-  gem 'kramdown'
-  gem 'maruku'
-  gem 'creole'
-  gem 'wikicloth'
-  gem 'markaby'
-  gem 'radius'
-  gem 'asciidoctor'
-  gem 'liquid'
-  gem 'stylus'
-  gem 'rabl'
-  gem 'builder'
-  gem 'erubis'
-  gem 'haml', '>= 3.0'
-  gem 'sass'
-  gem 'reel-rack'
-  gem 'celluloid', '~> 0.16.0'
-  gem 'simplecov', require: false
-end
+            def email
+          @email ||= username_and_email[:email].to_s
+        end
     
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
+          attr_reader :request
+    
+          def perform(start_id, stop_id)
+        status_sql = Build
+          .where('ci_builds.commit_id = ci_stages.pipeline_id')
+          .where('ci_builds.stage = ci_stages.name')
+          .status_sql
+    
+            MergeRequest
+          .where(id: start_id..stop_id)
+          .where(latest_merge_request_diff_id: nil)
+          .each_batch(of: BATCH_SIZE) do |relation|
+    
+            def initialize(project, ref)
+          @project = project
+          @ref = ref
+    
+                    raise Errors::VMNoMatchError if vms.empty?
+              else
+                # String name, just look for a specific VM
+                vms << @env.vms[name.to_sym]
+                raise Errors::VMNotFoundError, name: name if !vms[0]
+              end
+            end
+          else
+            vms = @env.vms_ordered
+          end
+    
+            # Initializes the communicator with the machine that we will be
+        # communicating with. This base method does nothing (it doesn't
+        # even store the machine in an instance variable for you), so you're
+        # expected to override this and do something with the machine if
+        # you care about it.
+        #
+        # @param [Machine] machine The machine this instance is expected to
+        #   communicate with.
+        def initialize(machine)
+        end
+    
+            # This clears out all the registered plugins. This is only used by
+        # unit tests and should not be called directly.
+        def reset!
+          @registered.clear
+        end
+    
+            # Registers additional provisioners to be available.
+        #
+        # @param [String] name Name of the provisioner.
+        def self.provisioner(name=UNSET_VALUE, &block)
+          data[:provisioners] ||= Registry.new
+    
+        if @filter.save
+      redirect_to filters_path
+    else
+      render action: :new
     end
   end
     
-      File.open('rack-protection.gemspec', 'w') { |f| f << content }
+        def ordered_instances
+      paginated_instances.map { |account| Instance.new(account) }
+    end
+    
+      def maxheight_or_default
+    params[:maxheight].present? ? params[:maxheight].to_i : nil
+  end
 end
+
     
-          def accepts?(env)
-        cookie_header = env['HTTP_COOKIE']
-        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
-        cookies.each do |k, v|
-          if k == session_key && Array(v).size > 1
-            bad_cookies << k
-          elsif k != session_key && Rack::Utils.unescape(k) == session_key
-            bad_cookies << k
-          end
-        end
-        bad_cookies.empty?
-      end
+    # The module that contains everything Sass-related:
+#
+# * {Sass::Engine} is the class used to render Sass/SCSS within Ruby code.
+# * {Sass::Plugin} is interfaces with web frameworks (Rails and Merb in particular).
+# * {Sass::SyntaxError} is raised when Sass encounters an error.
+# * {Sass::CSS} handles conversion of CSS to Sass.
+#
+# Also see the {file:SASS_REFERENCE.md full Sass reference}.
+module Sass
+  class << self
+    # @private
+    attr_accessor :tests_running
+  end
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS
-    # Supported browsers:: all
-    # More infos::         http://en.wikipedia.org/wiki/Cross-site_scripting
+            firsts, rest = [sseq.members.first], sseq.members[1..-1]
+        firsts.push rest.shift if firsts.first.is_a?(Sass::Selector::Parent)
+    
+        # Returns the standard exception backtrace,
+    # including the Sass backtrace.
     #
-    # Automatically escapes Rack::Request#params so they can be embedded in HTML
-    # or JavaScript without any further issues. Calls +html_safe+ on the escaped
-    # strings if defined, to avoid double-escaping in Rails.
-    #
-    # Options:
-    # escape:: What escaping modes to use, should be Symbol or Array of Symbols.
-    #          Available: :html (default), :javascript, :url
-    class EscapedParams < Base
-      extend Rack::Utils
+    # @return [Array<String>]
+    def backtrace
+      return nil if super.nil?
+      return super if sass_backtrace.all? {|h| h.empty?}
+      sass_backtrace.map do |h|
+        '#{h[:filename] || '(sass)'}:#{h[:line]}' +
+          (h[:mixin] ? ':in `#{h[:mixin]}'' : '')
+      end + super
+    end
