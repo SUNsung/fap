@@ -1,238 +1,209 @@
 
         
-        TegraRowOp_Invoker(combine2, combine2, 2, 1, 0, RANGE_DATA(ST, src1_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(ST, src2_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(DT, dst1_data, 2*sizeof(DT)), range.end-range.start)
-TegraRowOp_Invoker(combine3, combine3, 3, 1, 0, RANGE_DATA(ST, src1_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(ST, src2_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(ST, src3_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(DT, dst1_data, 3*sizeof(DT)), range.end-range.start)
-TegraRowOp_Invoker(combine4, combine4, 4, 1, 0, RANGE_DATA(ST, src1_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(ST, src2_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(ST, src3_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(ST, src4_data, sizeof(ST)), range.end-range.start,
-                                                RANGE_DATA(DT, dst1_data, 4*sizeof(DT)), range.end-range.start)
-#define TEGRA_MERGE64S(type, src, dst, len, cn) \
-( \
-    CAROTENE_NS::isSupportedConfiguration() ? \
-        cn == 2 ? \
-        parallel_for_(Range(0, len), \
-        TegraRowOp_combine2_Invoker<const type, type>(src[0], src[1], dst), \
-        (len) / static_cast<double>(1<<16)), \
-        CV_HAL_ERROR_OK : \
-        cn == 3 ? \
-        parallel_for_(Range(0, len), \
-        TegraRowOp_combine3_Invoker<const type, type>(src[0], src[1], src[2], dst), \
-        (len) / static_cast<double>(1<<16)), \
-        CV_HAL_ERROR_OK : \
-        cn == 4 ? \
-        parallel_for_(Range(0, len), \
-        TegraRowOp_combine4_Invoker<const type, type>(src[0], src[1], src[2], src[3], dst), \
-        (len) / static_cast<double>(1<<16)), \
-        CV_HAL_ERROR_OK : \
-        CV_HAL_ERROR_NOT_IMPLEMENTED \
-    : CV_HAL_ERROR_NOT_IMPLEMENTED \
-)
-    
-    void absDiff(const Size2D &size,
-             const s16 *src0Base, ptrdiff_t src0Stride,
-             const s16 *src1Base, ptrdiff_t src1Stride,
-             s16 *dstBase, ptrdiff_t dstStride)
-{
-    internal::assertSupportedConfiguration();
-#ifdef CAROTENE_NEON
-    internal::vtransform(size,
-                         src0Base, src0Stride,
-                         src1Base, src1Stride,
-                         dstBase, dstStride, AbsDiffSigned<s16>());
-#else
-    (void)size;
-    (void)src0Base;
-    (void)src0Stride;
-    (void)src1Base;
-    (void)src1Stride;
-    (void)dstBase;
-    (void)dstStride;
-#endif
-}
-    
-    
-    {
-    {        for (; dj < size.width; sj += 3, ++dj)
-        {
-            dst[dj] = src[sj + coi];
-        }
-    }
-#else
-    (void)size;
-    (void)srcBase;
-    (void)srcStride;
-    (void)dstBase;
-    (void)dstStride;
-    (void)coi;
-#endif
-}
-    
-        void operator() (const typename internal::VecTraits<T>::vec64 & v_src0, const typename internal::VecTraits<T>::vec64 & v_src1,
-              typename internal::VecTraits<T>::unsign::vec64 & v_dst) const
-    {
-        v_dst = internal::vmvn(internal::vceq(v_src0, v_src1));
-    }
-    
-            for (; j < roiw8; sj += 32, dj += 24, j += 8)
-        {
-            internal::prefetch(src + sj);
-#if !defined(__aarch64__) && defined(__GNUC__) && __GNUC__ == 4 &&  __GNUC_MINOR__ < 7 && !defined(__clang__)
-            CONVERT_TO_HSV_ASM(vld4.8 {d0-d3}, d0, d2)
-#else
-            uint8x8x4_t vRgb = vld4_u8(src + sj);
-            uint8x8x3_t vHsv = convertToHSV(vRgb.val[0], vRgb.val[1], vRgb.val[2], hrange);
-            vst3_u8(dst + dj, vHsv);
-#endif
-        }
-    
-            for (; j < roiw16; j += 16)
-        {
-            internal::prefetch(src + j);
-            uint8x16_t v_src = vld1q_u8(src + j);
-            int16x8_t v_dst0 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(v_src)));
-            int16x8_t v_dst1 = vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(v_src)));
-    }
-    
-        for (ptrdiff_t y = 0; y < height; ++y)
-    {
-        const u8 * srow0 = y == 0 && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::max<ptrdiff_t>(y - 1, 0));
-        const u8 * srow1 = internal::getRowPtr(srcBase, srcStride, y);
-        const u8 * srow2 = y + 1 == height && border == BORDER_MODE_CONSTANT ? NULL : internal::getRowPtr(srcBase, srcStride, std::min(y + 1, height - 1));
-        u8 * drow = internal::getRowPtr(dstBase, dstStride, y);
-    }
-    
-            if (i < roiw4)
-        {
-            internal::prefetch(src + i + 2);
-            uint64x2_t vln1 = vld1q_u64((const u64*)(src + i));
-            uint64x2_t vln2 = vld1q_u64((const u64*)(src + i + 2));
-    }
-    
-    std::shared_ptr<Channel> CreateInsecureChannelFromFd(const grpc::string& target,
-                                                     int fd) {
-  internal::GrpcLibrary init_lib;
-  init_lib.init();
-  return CreateChannelInternal(
-      '', grpc_insecure_channel_create_from_fd(target.c_str(), fd, nullptr));
-}
-    
-    CallCredentials::~CallCredentials() {}
-    
-    
-    {}  // namespace grpc
-
-    
-    void ChannelArguments::SetSslTargetNameOverride(const grpc::string& name) {
-  SetString(GRPC_SSL_TARGET_NAME_OVERRIDE_ARG, name);
-}
-    
-    /*
- * If Trace::hhbbc_time >= 1, print some stats about the program to a
- * temporary file.  If it's greater than or equal to 2, also dump it
- * to stdout.
- */
-void print_stats(const Index&, const php::Program&);
-    
-    void BranchParams::decodeInstr(const PPC64Instr* const pinstr) {
-  const DecoderInfo dinfo = Decoder::GetDecoder().decode(pinstr);
-  switch (dinfo.opcode_name()) {
-    case OpcodeNames::op_b:
-    case OpcodeNames::op_bl:
-      assert(dinfo.form() == Form::kI);
-      defineBoBi(BranchConditions::Always);
-      break;
-    case OpcodeNames::op_bc:
-      assert(dinfo.form() == Form::kB);
-      B_form_t bform;
-      bform.instruction = dinfo.instruction_image();
-      m_bo = BranchParams::BO(bform.BO);
-      m_bi = BranchParams::BI(bform.BI);
-      break;
-    case OpcodeNames::op_bcctr:
-    case OpcodeNames::op_bcctrl:
-      assert(dinfo.form() == Form::kXL);
-      XL_form_t xlform;
-      xlform.instruction = dinfo.instruction_image();
-      m_bo = BranchParams::BO(xlform.BT);
-      m_bi = BranchParams::BI(xlform.BA);
-      break;
-    default:
-      assert(false && 'Not a valid conditional branch instruction');
-      // also possible: defineBoBi(BranchConditions::Always);
-      break;
+          // TODO(miu): Account for fullscreen render widget?  http://crbug.com/419878
+  RenderWidgetHostView* const view = contents->GetRenderWidgetHostView();
+  if (!view) {
+    return RespondNow(Error('view is invisible'));
   }
-    }
-    
-    inline TypedValue* APCLocalArray::localCache() const {
-  return const_cast<TypedValue*>(
-    reinterpret_cast<const TypedValue*>(this + 1)
-  );
-}
-    
-    struct FatalErrorException : ExtendedException {
-  explicit FatalErrorException(const char *msg)
-    : ExtendedException('%s', msg)
-  {}
-  FatalErrorException(int, ATTRIBUTE_PRINTF_STRING const char *msg, ...)
-    ATTRIBUTE_PRINTF(3,4);
-  FatalErrorException(const std::string&, const Array& backtrace,
-                      bool isRecoverable = false);
-    }
-    
-    /**
- * Thread-safe dirname().
- */
-String dirname(const String& path);
-    
-      /*
-   * @brief a unique ID identifying the 'carve'
-   *
-   * This unique generated GUID is used to identify the carve session from
-   * other carves. It is also used by our backend service to derive a
-   * session key for exfiltration.
-   */
-  std::string carveGuid_;
-    
-    /**
- * @brief A simple ConfigParserPlugin for feature vector dictionary keys.
- */
-class FeatureVectorsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-    }
     
     
-    {/// KafkaTopicsConfigParserPlugin extracts, updates, and parses Kafka topic
-/// configurations from Osquery's configurations.
-class KafkaTopicsConfigParserPlugin : public ConfigParserPlugin {
- public:
-  std::vector<std::string> keys() const override;
-  Status update(const std::string& source, const ParserConfig& config) override;
-};
-} // namespace osquery
+    {} // namespace nwapi
 
     
-    /// A result structure for multiple hash requests.
-struct MultiHashes {
-  int mask;
-  std::string md5;
-  std::string sha1;
-  std::string sha256;
+    NwAppClearAppCacheFunction::~NwAppClearAppCacheFunction() {
+}
+    
+    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardReadAvailableTypesFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    bool NwObjCreateFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::DictionaryValue* options = nullptr;
+  int id = 0;
+  std::string type;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetDictionary(2, &options));
+    }
+    
+    
+    {} /* namespace boost */
+#endif /* __cplusplus */
+#endif /* include guard */
+    
+    
+    {
+    {      len1 = ::boost::BOOST_REGEX_DETAIL_NS::distance((BidiIterator)p1->first, (BidiIterator)p1->second);
+      len2 = ::boost::BOOST_REGEX_DETAIL_NS::distance((BidiIterator)p2->first, (BidiIterator)p2->second);
+      BOOST_ASSERT(len1 >= 0);
+      BOOST_ASSERT(len2 >= 0);
+      if((len1 != len2) || ((p1->matched == false) && (p2->matched == true)))
+         break;
+      if((p1->matched == true) && (p2->matched == false))
+         return;
+   }
+   if(i == size())
+      return;
+   if(base2 < base1)
+      *this = m;
+   else if((len2 > len1) || ((p1->matched == false) && (p2->matched == true)) )
+      *this = m;
+}
+    
+    //
+// provide std lib proposal compatible constants:
+//
+namespace regex_constants{
+    }
+    
+    typedef match_results<const char*> cmatch;
+typedef match_results<std::string::const_iterator> smatch;
+#ifndef BOOST_NO_WREGEX
+typedef match_results<const wchar_t*> wcmatch;
+typedef match_results<std::wstring::const_iterator> wsmatch;
+#endif
+    
+    template <class OutputIterator, class charT, class Traits1, class Alloc1, class Traits2>
+std::size_t regex_split(OutputIterator out,
+                   std::basic_string<charT, Traits1, Alloc1>& s, 
+                   const basic_regex<charT, Traits2>& e,
+                   match_flag_type flags,
+                   std::size_t max_split)
+{
+   typedef typename std::basic_string<charT, Traits1, Alloc1>::const_iterator  ci_t;
+   //typedef typename match_results<ci_t>::allocator_type                        match_allocator;
+   ci_t last = s.begin();
+   std::size_t init_size = max_split;
+   BOOST_REGEX_DETAIL_NS::split_pred<OutputIterator, charT, Traits1, Alloc1> pred(&last, &out, &max_split);
+   ci_t i, j;
+   i = s.begin();
+   j = s.end();
+   regex_grep(pred, i, j, e, flags);
+   //
+   // if there is still input left, do a final push as long as max_split
+   // is not exhausted, and we're not splitting sub-expressions rather 
+   // than whitespace:
+   if(max_split && (last != s.end()) && (e.mark_count() == 0))
+   {
+      *out = std::basic_string<charT, Traits1, Alloc1>((ci_t)last, (ci_t)s.end());
+      ++out;
+      last = s.end();
+      --max_split;
+   }
+   //
+   // delete from the string everything that has been processed so far:
+   s.erase(0, last - s.begin());
+   //
+   // return the number of new records pushed:
+   return init_size - max_split;
+}
+    
+    namespace guetzli {
+    }
+    
+    
+    {  // One-byte id of the component.
+  int id;
+  // Horizontal and vertical sampling factors.
+  // In interleaved mode, each minimal coded unit (MCU) has
+  // h_samp_factor x v_samp_factor DCT blocks from this component.
+  int h_samp_factor;
+  int v_samp_factor;
+  // The index of the quantization table used for this component.
+  size_t quant_idx;
+  // The dimensions of the component measured in 8x8 blocks.
+  int width_in_blocks;
+  int height_in_blocks;
+  int num_blocks;
+  // The DCT coefficients of this component, laid out block-by-block, divided
+  // through the quantization matrix values.
+  std::vector<coeff_t> coeffs;
 };
     
-    TEST_F(QueryTests, test_add_and_get_current_results) {
-  // Test adding a 'current' set of results to a scheduled query instance.
-  auto query = getOsqueryScheduledQuery();
-  auto cf = Query('foobar', query);
-  uint64_t counter = 128;
-  auto status = cf.addNewResults(getTestDBExpectedResults(), 0, counter);
-  EXPECT_TRUE(status.ok());
-  EXPECT_EQ(status.toString(), 'OK');
-  EXPECT_EQ(counter, 0UL);
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
+    
+    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
+// quantization table must have 3 * kDCTBlockSize values.
+bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     const int* quant, JPEGData* jpg);
+    
+    // Saves the COM marker segment as a string to *jpg.
+bool ProcessCOM(const uint8_t* data, const size_t len, size_t* pos,
+                JPEGData* jpg) {
+  VERIFY_LEN(2);
+  size_t marker_len = ReadUint16(data, pos);
+  VERIFY_INPUT(marker_len, 2, 65535, MARKER_LEN);
+  VERIFY_LEN(marker_len - 2);
+  std::string com_str(reinterpret_cast<const char*>(
+      &data[*pos - 2]), marker_len);
+  *pos += marker_len - 2;
+  jpg->com_data.push_back(com_str);
+  return true;
+}
+    
+    BENCHMARK(copy_short_string, iters) {
+  BenchmarkSuspender suspender;
+  auto const& shortString = getShortString();
+  while (iters--) {
+    fbstring out;
+    suspender.dismissing([&] { out = shortString; });
+  }
+}
+    
+    // ============================================================================
+// folly/test/GLogBenchmark.cpp                    relative  time/iter  iters/s
+// ============================================================================
+// skip_overhead                                               36.37ns   27.49M
+// dev_null_log_overhead                                        2.61us  382.57K
+// ============================================================================
+    
+    // Helper to throw std::system_error from errno and components of a string
+template <class... Args>
+[[noreturn]] void throwSystemError(Args&&... args) {
+  throwSystemErrorExplicit(errno, std::forward<Args>(args)...);
+}
+    
+    void Executor::addWithPriority(Func, int8_t /* priority */) {
+  throw std::runtime_error(
+      'addWithPriority() is not implemented for this Executor');
+}
+    
+    #include <string>
+    
+    /**
+ * VirtualExecutor implements a light-weight view onto existing Executor.
+ *
+ * Multiple VirtualExecutors can be backed by a single Executor.
+ *
+ * VirtualExecutor's destructor blocks until all tasks scheduled through it are
+ * complete. Executor's destructor also blocks until all VirtualExecutors
+ * backed by it are released.
+ */
+class VirtualExecutor : public DefaultKeepAliveExecutor {
+  auto wrapFunc(Func f) {
+    class FuncAndKeepAlive {
+     public:
+      FuncAndKeepAlive(Func&& f, VirtualExecutor* executor)
+          : keepAlive_(getKeepAliveToken(executor)), f_(std::move(f)) {}
     }
+    }
+    }
+    
+      /**
+   * windowSize is the base two logarithm of the window size (the size of the
+   * history buffer). It should be in the range 9..15. Larger values of this
+   * parameter result in better compression at the expense of memory usage.
+   *
+   * The default value is 15.
+   *
+   * NB: when inflating/uncompressing data, the windowSize must be greater than
+   * or equal to the size used when deflating/compressing.
+   */
+  int windowSize;
