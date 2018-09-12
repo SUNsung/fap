@@ -1,344 +1,257 @@
 
         
-        #endif  // TENSORFLOW_PYTHON_EAGER_PYWRAP_TENSOR_H_
-
+        class ClientModel;
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    #endif  // TENSORFLOW_PYTHON_FRAMEWORK_PYTHON_OP_GEN_H_
-
-    
-    void CostAnalyzer::GatherCosts() {
-  CostGraphDef cost_graph_measured;
-  PredictCosts(&measure_estimator_, &cost_graph_measured,
-               &total_time_measured_);
-  VLOG(1) << 'Graph size: ' << item_->graph.node_size();
-  VLOG(1) << 'cost_graph_measured size: ' << cost_graph_measured.node_size();
+        explicit reverse_lock(Lock& _lock) : lock(_lock) {
+        _lock.unlock();
+        _lock.swap(templock);
     }
     
-    #include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
+    #include <univalue.h>
     
-    namespace tensorflow {
-namespace swig {
-    }
-    }
-    
-    ScopedActivateExecutorContext::ScopedActivateExecutorContext(
-    CUDAExecutor *cuda_exec):
-      driver_scoped_activate_context_(
-          new ScopedActivateContext{ExtractCudaContext(cuda_exec)}) { }
-    
-        QMenu *dockMenu();
-    void setIcon(const QIcon &icon);
-    void setMainWindow(QMainWindow *window);
-    static MacDockIconHandler *instance();
-    static void cleanup();
-    void handleDockIconClickEvent();
-    
-    #include <QWidget>
-#include <QQueue>
-    
-    namespace Ui {
-    class TransactionDescDialog;
-}
-    
-    SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
-/**
- * Registers: rdx:rax = multiplication accumulator
- *            r9:r8   = c
- *            rcx:rbx = d
- *            r10-r14 = a0-a4
- *            r15     = M (0xfffffffffffff)
- *            rdi     = r
- *            rsi     = a / t?
- */
-  uint64_t tmp1, tmp2, tmp3;
-__asm__ __volatile__(
-    'movq 0(%%rsi),%%r10\n'
-    'movq 8(%%rsi),%%r11\n'
-    'movq 16(%%rsi),%%r12\n'
-    'movq 24(%%rsi),%%r13\n'
-    'movq 32(%%rsi),%%r14\n'
-    'movq $0xfffffffffffff,%%r15\n'
+        secp256k1_pubkey_load(ctx, &pt, point);
+    secp256k1_scalar_set_b32(&s, scalar, &overflow);
+    if (overflow || secp256k1_scalar_is_zero(&s)) {
+        ret = 0;
+    } else {
+        unsigned char x[32];
+        unsigned char y[1];
+        secp256k1_sha256_t sha;
     }
     
-    #endif /* SECP256K1_MODULE_ECDH_MAIN_H */
-
-    
-    void test_bad_scalar(void) {
-    unsigned char s_zero[32] = { 0 };
-    unsigned char s_overflow[32] = {
-        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe,
-        0xba, 0xae, 0xdc, 0xe6, 0xaf, 0x48, 0xa0, 0x3b,
-        0xbf, 0xd2, 0x5e, 0x8c, 0xd0, 0x36, 0x41, 0x41
-    };
-    unsigned char s_rand[32] = { 0 };
-    unsigned char output[32];
-    secp256k1_scalar rand;
-    secp256k1_pubkey point;
+    void test_ecdh_generator_basepoint(void) {
+    unsigned char s_one[32] = { 0 };
+    secp256k1_pubkey point[2];
+    int i;
     }
     
-    // Verify that difficulty is 1.0 for an empty chain.
-BOOST_AUTO_TEST_CASE(get_difficulty_for_null_tip)
+    
+/// List of template arguments format(), held in a type-opaque way.
+///
+/// A const reference to FormatList (typedef'd as FormatListRef) may be
+/// conveniently used to pass arguments to non-template functions: All type
+/// information has been stripped from the arguments, leaving just enough of a
+/// common interface to perform formatting as required.
+class FormatList
 {
-    double difficulty = GetDifficulty(nullptr);
-    RejectDifficultyMismatch(difficulty, 1.0);
-}
+    public:
+        FormatList(detail::FormatArg* formatters, int N)
+            : m_formatters(formatters), m_N(N) { }
+    }
     
+        BOOST_CHECK(obj['key1'].isStr());
+    std::string correctValue('str');
+    correctValue.push_back('\0');
+    BOOST_CHECK_EQUAL(obj['key1'].getValStr(), correctValue);
+    BOOST_CHECK(obj['key2'].isNum());
+    BOOST_CHECK_EQUAL(obj['key2'].getValStr(), '800');
+    BOOST_CHECK(obj['key3'].isObject());
     
-    {  view->CopyFromSurface(gfx::Rect(),  // Copy entire surface area.
-                        gfx::Size(),  // Result contains device-level detail.
-      base::Bind(&NwCurrentWindowInternalCapturePageInternalFunction::CopyFromBackingStoreComplete,
-                 this));
-  return RespondLater();
-}
+        typedef int8_t   s8;
+    typedef uint8_t  u8;
+    typedef int16_t  s16;
+    typedef uint16_t u16;
+    typedef int32_t  s32;
+    typedef uint32_t u32;
+    typedef float    f32;
+    typedef int64_t  s64;
+    typedef uint64_t u64;
+    typedef double   f64;
     
+    void extract2(const Size2D &size,
+              const u8 * srcBase, ptrdiff_t srcStride,
+              u8 * dstBase, ptrdiff_t dstStride,
+              u32 coi)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+#ifndef __ANDROID__
+    size_t roiw32 = size.width >= 31 ? size.width - 31 : 0;
+#endif
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
+    }
     
-    { protected:
-  ~NwCurrentWindowInternalSetTitleInternalFunction() override {}
-  DECLARE_EXTENSION_FUNCTION('nw.currentWindowInternal.setTitleInternal', UNKNOWN)
-};
-    
-    IPC_SYNC_MESSAGE_ROUTED4_1(ShellViewHostMsg_Call_Object_Method_Sync,
-                           int /* object id */,
-                           std::string /* type name */,
-                           std::string /* method name */,
-                           base::ListValue /* arguments */,
-                           base::ListValue /* result */)
-    
-    void SetProxyConfigCallback(
-    base::WaitableEvent* done,
-    net::URLRequestContextGetter* url_request_context_getter,
-    const net::ProxyConfig& proxy_config) {
-  net::ProxyService* proxy_service =
-      url_request_context_getter->GetURLRequestContext()->proxy_service();
-  proxy_service->ResetConfigService(
-      new net::ProxyConfigServiceFixed(proxy_config));
-  done->Signal();
-}
-    
-    class ObjectManager;
-    
-    
+        for (size_t i = 0u; i < size.height; ++i)
     {
-    {    if (zoom_controller) {
-      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
-      if (zoom_factor > content::kMaximumZoomFactor) {
-        zoom_factor = content::kMaximumZoomFactor;
-      }
-      if (zoom_factor < content::kMinimumZoomFactor) {
-        zoom_factor = content::kMinimumZoomFactor;
-      }
-      x *= zoom_factor;
-      y *= zoom_factor;
+        const u8 * src = internal::getRowPtr(srcBase, srcStride, i);
+        u8 * dst = internal::getRowPtr(dstBase, dstStride, i);
+        size_t sj = 0u, dj = 0u, j = 0u;
     }
     
-    Popup(x, y, rvh);
-  } else if (method == 'EnableShowEvent') {
-    arguments.GetBoolean(0, &enable_show_event_);
-  } else {
-    NOTREACHED() << 'Invalid call to Menu method:' << method
-                 << ' arguments:' << arguments;
-  }
+    template <typename T>
+inline T *getRowPtr(T *base, ptrdiff_t stride, size_t row)
+{
+    char *baseRaw = const_cast<char *>(reinterpret_cast<const char *>(base));
+    return reinterpret_cast<T *>(baseRaw + ptrdiff_t(row) * stride);
 }
     
-    
-    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  return !item->icon_.IsEmpty();
-}
-    
-    
-    {      }
-      keyval = gdk_keyval_from_name(key.c_str());
-    
-    
-    {  base::WaitableEvent done(base::WaitableEvent::ResetPolicy::AUTOMATIC,
-                           base::WaitableEvent::InitialState::NOT_SIGNALED);
-  content::BrowserThread::PostTask(
-      content::BrowserThread::IO, FROM_HERE,
-      base::Bind(&SetProxyConfigCallback, &done,
-                 base::WrapRefCounted(context_getter), config));
-  done.Wait();
-  return true;
-}
-    
-     protected:
-  ~NwAppCrashBrowserFunction() override {}
-    
-    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardReadAvailableTypesFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    namespace caffe {
-    }
-    
-    
-    { protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
-   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
-   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
-   *      the computed outputs @f$
-   *       y_n = \arg\max\limits_i x_{ni}
-   *      @f$ (for @f$ K = 1 @f$).
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  /// @brief Not implemented (non-differentiable function)
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    NOT_IMPLEMENTED;
-  }
-  bool out_max_val_;
-  size_t top_k_;
-  bool has_axis_;
-  int axis_;
-};
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    /**
- * @brief Computes the contrastive loss @f$
- *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *              \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
- *          used to train siamese networks.
- *
- * @param bottom input Blob vector (length 3)
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ a \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ b \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times 1 \times 1 \times 1) @f$
- *      the binary similarity @f$ s \in [0, 1]@f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
- *      the computed contrastive loss: @f$ E =
- *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *          \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
- * This can be used to train siamese networks.
- */
-template <typename Dtype>
-class ContrastiveLossLayer : public LossLayer<Dtype> {
- public:
-  explicit ContrastiveLossLayer(const LayerParameter& param)
-      : LossLayer<Dtype>(param), diff_() {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    
+    #if !defined(__aarch64__) && defined(__GNUC__) && defined(__arm__)
+CVTS_FUNC(u8, s16, 16,
+    register float32x4_t vscale asm ('q0') = vdupq_n_f32((f32)alpha);
+    register float32x4_t vshift asm ('q1') = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 16)
     {
-    {  // Recursive copy function: this is similar to crop_copy() but loops over all
-  // but the last two dimensions to allow for ND cropping while still relying on
-  // a CUDA kernel for the innermost two dimensions for performance reasons.  An
-  // alterantive implementation could rely on the kernel more by passing
-  // offsets, but this is problematic because of its variable length.
-  // Since in the standard (N,C,W,H) case N,C are usually not cropped a speedup
-  // could be achieved by not looping the application of the copy_kernel around
-  // these dimensions.
-  void crop_copy_gpu(const vector<Blob<Dtype>*>& bottom,
-                const vector<Blob<Dtype>*>& top,
-                const vector<int>& offsets,
-                vector<int> indices,
-                int cur_dim,
-                const Dtype* src_data,
-                Dtype* dest_data,
-                bool is_forward);
-};
-}  // namespace caffe
+        internal::prefetch(_src + i);
+        __asm__ (
+            'vld1.8 {d4-d5}, [%[src]]                              \n\t'
+            'vmovl.u8 q3, d4                                       \n\t'
+            'vmovl.u8 q4, d5                                       \n\t'
+            'vmovl.u16 q5, d6                                      \n\t'
+            'vmovl.u16 q6, d7                                      \n\t'
+            'vmovl.u16 q7, d8                                      \n\t'
+            'vmovl.u16 q8, d9                                      \n\t'
+            'vcvt.f32.u32 q9, q5                                   \n\t'
+            'vcvt.f32.u32 q10, q6                                  \n\t'
+            'vcvt.f32.u32 q11, q7                                  \n\t'
+            'vcvt.f32.u32 q12, q8                                  \n\t'
+            'vmul.f32 q13, q9, q0                                  \n\t'
+            'vmul.f32 q14, q10, q0                                 \n\t'
+            'vmul.f32 q15, q11, q0                                 \n\t'
+            'vmul.f32 q2, q12, q0                                  \n\t'
+            'vadd.f32 q3, q13, q1                                  \n\t'
+            'vadd.f32 q4, q14, q1                                  \n\t'
+            'vadd.f32 q5, q15, q1                                  \n\t'
+            'vadd.f32 q6, q2, q1                                   \n\t'
+            'vcvt.s32.f32 q7, q3                                   \n\t'
+            'vcvt.s32.f32 q8, q4                                   \n\t'
+            'vcvt.s32.f32 q9, q5                                   \n\t'
+            'vcvt.s32.f32 q10, q6                                  \n\t'
+            'vqmovn.s32 d22, q7                                    \n\t'
+            'vqmovn.s32 d23, q8                                    \n\t'
+            'vqmovn.s32 d24, q9                                    \n\t'
+            'vqmovn.s32 d25, q10                                   \n\t'
+            'vst1.16 {d22-d23}, [%[dst1]]                          \n\t'
+            'vst1.16 {d24-d25}, [%[dst2]]                          \n\t'
+            : //no output
+            : [src] 'r' (_src + i),
+              [dst1] 'r' (_dst + i + 0),
+              [dst2] 'r' (_dst + i + 8),
+              'w'  (vscale), 'w' (vshift)
+            : 'd4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','d23','d24','d25','d26','d27','d28','d29','d30','d31'
+        );
+    }
+})
+#else
+CVTS_FUNC(u8, s16, 16,
+    float32x4_t vscale = vdupq_n_f32((f32)alpha);
+    float32x4_t vshift = vdupq_n_f32((f32)beta + 0.5f);,
+{
+    for (size_t i = 0; i < w; i += 16)
+    {
+        internal::prefetch(_src + i);
+        uint8x16_t vline = vld1q_u8(_src + i);
+        uint16x8_t vline1_u16 = vmovl_u8(vget_low_u8 (vline));
+        uint16x8_t vline2_u16 = vmovl_u8(vget_high_u8(vline));
+        uint32x4_t vline1_u32 = vmovl_u16(vget_low_u16 (vline1_u16));
+        uint32x4_t vline2_u32 = vmovl_u16(vget_high_u16(vline1_u16));
+        uint32x4_t vline3_u32 = vmovl_u16(vget_low_u16 (vline2_u16));
+        uint32x4_t vline4_u32 = vmovl_u16(vget_high_u16(vline2_u16));
+        float32x4_t vline1_f32 = vcvtq_f32_u32(vline1_u32);
+        float32x4_t vline2_f32 = vcvtq_f32_u32(vline2_u32);
+        float32x4_t vline3_f32 = vcvtq_f32_u32(vline3_u32);
+        float32x4_t vline4_f32 = vcvtq_f32_u32(vline4_u32);
+        vline1_f32 = vmulq_f32(vline1_f32, vscale);
+        vline2_f32 = vmulq_f32(vline2_f32, vscale);
+        vline3_f32 = vmulq_f32(vline3_f32, vscale);
+        vline4_f32 = vmulq_f32(vline4_f32, vscale);
+        vline1_f32 = vaddq_f32(vline1_f32, vshift);
+        vline2_f32 = vaddq_f32(vline2_f32, vshift);
+        vline3_f32 = vaddq_f32(vline3_f32, vshift);
+        vline4_f32 = vaddq_f32(vline4_f32, vshift);
+        int32x4_t vline1_s32 = vcvtq_s32_f32(vline1_f32);
+        int32x4_t vline2_s32 = vcvtq_s32_f32(vline2_f32);
+        int32x4_t vline3_s32 = vcvtq_s32_f32(vline3_f32);
+        int32x4_t vline4_s32 = vcvtq_s32_f32(vline4_f32);
+        vst1q_s16(_dst + i + 0, vcombine_s16(vqmovn_s32(vline1_s32), vqmovn_s32(vline2_s32)));
+        vst1q_s16(_dst + i + 8, vcombine_s16(vqmovn_s32(vline3_s32), vqmovn_s32(vline4_s32)));
+    }
+})
+#endif
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
+                tnext[0] = x0;
+            tnext[1] = x1;
+            tnext[2] = x2;
     
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
- public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+    void reciprocal(const Size2D &size,
+                const s32 * srcBase, ptrdiff_t srcStride,
+                s32 * dstBase, ptrdiff_t dstStride,
+                f32 scale,
+                CONVERT_POLICY cpolicy)
+{
+    recip<s32>(size, srcBase, srcStride, dstBase, dstStride, scale, cpolicy);
+}
+    
+    void fillMinMaxLocs(const Size2D & size,
+                    const u16 * srcBase, ptrdiff_t srcStride,
+                    u16 minVal, size_t * minLocPtr, s32 & minLocCount, s32 minLocCapacity,
+                    u16 maxVal, size_t * maxLocPtr, s32 & maxLocCount, s32 maxLocCapacity)
+{
+    internal::assertSupportedConfiguration();
+#ifdef CAROTENE_NEON
+    size_t roiw16 = size.width >= 15 ? size.width - 15 : 0;
+    size_t roiw8 = size.width >= 7 ? size.width - 7 : 0;
     }
     
-    #include 'caffe/layers/neuron_layer.hpp'
-#include 'caffe/layers/relu_layer.hpp'
     
-    #include <grpcpp/impl/grpc_library.h>
-#include <grpcpp/security/credentials.h>
-    
-    #include <grpc/grpc_cronet.h>
-#include <grpcpp/channel.h>
-#include <grpcpp/support/channel_arguments.h>
-#include 'src/cpp/client/create_channel_internal.h'
-    
-    AuthPropertyIterator::AuthPropertyIterator()
-    : property_(nullptr), ctx_(nullptr), index_(0), name_(nullptr) {}
-    
-    void ChannelArguments::SetChannelArgs(grpc_channel_args* channel_args) const {
-  channel_args->num_args = args_.size();
-  if (channel_args->num_args > 0) {
-    channel_args->args = const_cast<grpc_arg*>(&args_[0]);
+    {  template <typename Tuple>
+  static void TersePrintPrefixToStrings(const Tuple& t, Strings* strings) {
+    ::std::stringstream ss;
+    UniversalTersePrint(::std::tr1::get<0>(t), &ss);
+    strings->push_back(ss.str());
   }
+};
+    
+    // Internal macro for implementing {EXPECT|ASSERT}_PRED1.  Don't use
+// this in your code.
+#define GTEST_PRED1_(pred, v1, on_failure)\
+  GTEST_ASSERT_(::testing::AssertPred1Helper(#pred, \
+                                             #v1, \
+                                             pred, \
+                                             v1), on_failure)
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5>
+struct Templates5 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates4<T2, T3, T4, T5> Tail;
+};
+    
+    template <GTEST_TEMPLATE_ T1>
+struct Templates1 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates0 Tail;
+};
+    
+    #define CHECK_EQ(a, b) CHECK((a) == (b))
+#define CHECK_NE(a, b) CHECK((a) != (b))
+#define CHECK_GE(a, b) CHECK((a) >= (b))
+#define CHECK_LE(a, b) CHECK((a) <= (b))
+#define CHECK_GT(a, b) CHECK((a) > (b))
+#define CHECK_LT(a, b) CHECK((a) < (b))
+    
+    LeastSq MinimalLeastSq(const std::vector<int>& n,
+                       const std::vector<double>& time,
+                       BigOFunc* fitting_curve) {
+  double sigma_gn = 0.0;
+  double sigma_gn_squared = 0.0;
+  double sigma_time = 0.0;
+  double sigma_time_gn = 0.0;
+    }
+    
+    namespace benchmark {
+#ifdef BENCHMARK_OS_WINDOWS
+// Window's Sleep takes milliseconds argument.
+void SleepForMilliseconds(int milliseconds) { Sleep(milliseconds); }
+void SleepForSeconds(double seconds) {
+  SleepForMilliseconds(static_cast<int>(kNumMillisPerSecond * seconds));
 }
-    
-    AuthPropertyIterator SecureAuthContext::begin() const {
-  if (ctx_) {
-    grpc_auth_property_iterator iter =
-        grpc_auth_context_property_iterator(ctx_);
-    const grpc_auth_property* property =
-        grpc_auth_property_iterator_next(&iter);
-    return AuthPropertyIterator(property, &iter);
-  } else {
-    return end();
-  }
+#else   // BENCHMARK_OS_WINDOWS
+void SleepForMicroseconds(int microseconds) {
+  struct timespec sleep_time;
+  sleep_time.tv_sec = microseconds / kNumMicrosPerSecond;
+  sleep_time.tv_nsec = (microseconds % kNumMicrosPerSecond) * kNumNanosPerMicro;
+  while (nanosleep(&sleep_time, &sleep_time) != 0 && errno == EINTR)
+    ;  // Ignore signals and wait for the full interval to elapse.
 }
-    
-      virtual bool SetPeerIdentityPropertyName(const grpc::string& name) override;
-    
-    #ifndef GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
-#define GRPC_INTERNAL_CPP_EXT_FILTERS_CENSUS_MEASURES_H
+    }
