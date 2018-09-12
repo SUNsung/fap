@@ -1,75 +1,61 @@
 
         
-            with open('README.md', 'w+') as sorted_file:
-        # Then all of the blocks are sorted individually
-        blocks = [''.join(sorted(block, key=lambda s: s.lower())) for block in blocks]
-        # And the result is written back to README.md
-        sorted_file.write(''.join(blocks))
+        
+class Fixed(jose.Field):
+    '''Fixed field.'''
     
-    
-if len(sys.argv) <= 1:
-    print('Specify the version number as parameter')
-    sys.exit()
-version = sys.argv[1]
-    
-    
-def _is_empty(d):
-    return not bool(os.listdir(d))
-    
-        def test_proxy_https(self):
-        params = self._check_params(['primary_proxy', 'primary_server_ip'])
-        if params is None:
-            return
-        ydl = FakeYDL({
-            'proxy': params['primary_proxy']
-        })
-        self.assertEqual(
-            ydl.urlopen('https://yt-dl.org/ip').read().decode('utf-8'),
-            params['primary_server_ip'])
-    
-    DOCUMENTATION = '''
----
-inventory: openshift
-short_description: Openshift gears external inventory script
-description:
-  - Generates inventory of Openshift gears using the REST interface
-  - this permit to reuse playbook to setup an Openshift gear
-version_added: None
-author: Michael Scherer
-'''
-    
-    from ansible.plugins.terminal import TerminalBase
-from ansible.errors import AnsibleConnectionFailure
-    
-    
-def get_group_vars(groups):
-    
-        def construct_vault_encrypted_unicode(self, node):
-        value = self.construct_scalar(node)
-        b_ciphertext_data = to_bytes(value)
-        # could pass in a key id here to choose the vault to associate with
-        # TODO/FIXME: plugin vault selector
-        vault = self._vaults['default']
-        if vault.secrets is None:
-            raise ConstructorError(context=None, context_mark=None,
-                                   problem='found !vault but no vault password provided',
-                                   problem_mark=node.start_mark,
-                                   note=None)
-        ret = AnsibleVaultEncryptedUnicode(b_ciphertext_data)
-        ret.vault = vault
-        return ret
-    
-        def test_weird_blocks(self):
-        test = r'''
-            if ($http_user_agent ~ MSIE) {
-                rewrite ^(.*)$ /msie/$1 break;
-            }
+        def test_default_decoder_raises_deserialization_error(self):
+        from acme.fields import RFC3339Field
+        self.assertRaises(
+            jose.DeserializationError, RFC3339Field.default_decoder, '')
     
         def setUp(self):
-        from acme.errors import MissingNonce
-        self.response = mock.MagicMock(headers={})
-        self.response.request.method = 'FOO'
-        self.error = MissingNonce(self.response)
+        self.privkey = KEY
+        self.pubkey = self.privkey.public_key()
+        self.nonce = jose.b64encode(b'Nonce')
+        self.url = 'hi'
+        self.kid = 'baaaaa'
     
-    # A shorter title for the navigation bar.  Default is the same as html_title.
-#html_short_title = None
+    
+def skip_unless(condition, reason):  # pragma: no cover
+    '''Skip tests unless a condition holds.
+    
+        @certbot_util.patch_get_utility()
+    def test_select_cancel(self, mock_util):
+        mock_util().checklist.return_value = (display_util.CANCEL, 'whatever')
+        vhs = select_vhost_multiple([self.vhosts[2], self.vhosts[3]])
+        self.assertFalse(vhs)
+    
+        def execute(self):
+        if not self._bProblem:
+            print('Executing the test')
+            time.sleep(0.1)
+        else:
+            print('Problem in setup. Test not executed.')
+    
+        REGISTRY = {}
+    
+    
+a = A()
+b = B()
+c = C()
+visitor = Visitor()
+visitor.visit(a)
+visitor.visit(b)
+visitor.visit(c)
+    
+        def build_floor(self):
+        raise NotImplementedError
+    
+        def __init__(self, blackboard):
+        self.blackboard = blackboard
+    
+    ''
+    
+        def __get__(self, obj, klas):
+        print('(Fetching from Data Store)')
+        return {'products': self.products}
+    
+        # high-level i.e. Abstraction specific
+    def scale(self, pct):
+        self._radius *= pct
