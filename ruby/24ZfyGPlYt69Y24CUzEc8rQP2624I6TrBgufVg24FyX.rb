@@ -1,103 +1,102 @@
 
         
-        Mercenary.program(:jekyll) do |p|
-  p.version Jekyll::VERSION
-  p.description 'Jekyll is a blog-aware, static site generator in Ruby'
-  p.syntax 'jekyll <subcommand> [options]'
+        Given(/config stage file has line '(.*?)'/) do |line|
+  TestApp.append_to_deploy_file(line)
+end
     
-      matter = matter.join.chomp
-  content = \
-    if !input_hash['input'] || !input_hash['filter']
-      then input_hash['content']
-    else '{{ #{input_hash['input']} | ' \
-        '#{input_hash['filter']} }}'
+          OptionParser.new do |opts|
+        opts.banner = 'See full documentation at http://capistranorb.com/.'
+        opts.separator ''
+        opts.separator 'Install capistrano in a project:'
+        opts.separator '    bundle exec cap install [STAGES=qa,staging,production,...]'
+        opts.separator ''
+        opts.separator 'Show available tasks:'
+        opts.separator '    bundle exec cap -T'
+        opts.separator ''
+        opts.separator 'Invoke (or simulate invoking) a task:'
+        opts.separator '    bundle exec cap [--dry-run] STAGE TASK'
+        opts.separator ''
+        opts.separator 'Advanced options:'
+    
+        def servers
+      @servers ||= Servers.new
     end
     
-          def render!(*args)
-        measure_time do
-          measure_bytes do
-            @template.render!(*args)
-          end
+          # Runs all validation rules registered for the given key against the
+      # user-supplied value for that variable. If no validator raises an
+      # exception, the value is assumed to be valid.
+      def assert_valid_now(key, value)
+        validators[key].each do |validator|
+          validator.call(key, value)
         end
       end
     
-        # Check whether a gem plugin is allowed to be used during this build.
-    #
-    # plugin_name - the name of the plugin
-    #
-    # Returns true if the plugin name is in the whitelist or if the site is not
-    #   in safe mode.
-    def plugin_allowed?(plugin_name)
-      !site.safe || whitelist.include?(plugin_name)
-    end
-    
-      def fish_completion_caveats
-    if keg && keg.completion_installed?(:fish) && which('fish') then <<-EOS.undent
-      fish completion has been installed to:
-        #{HOMEBREW_PREFIX}/share/fish/vendor_completions.d
-      EOS
-    end
-  end
-    
-      def internal_commands
-    find_internal_commands HOMEBREW_LIBRARY_PATH/'cmd'
-  end
-    
-      def kernel
-    `uname -m`.chomp
-  end
-    
-        if ARGV.named.empty?
-      slow_checks = %w[
-        check_for_broken_symlinks
-        check_missing_deps
-        check_for_outdated_homebrew
-        check_for_linked_keg_only_brews
-      ]
-      methods = (checks.all.sort - slow_checks) + slow_checks
-    else
-      methods = ARGV.named
-    end
-    
-              url = client.fetch_images(image_type: image_type, language: listing.language).last
-          next unless url
-    
-          # This change happend on 2018-04-24
-      # rollout cannot be sent on any other track besides 'rollout'
-      # https://github.com/fastlane/fastlane/issues/12372
-      rollout = nil unless track == 'rollout'
-    
-          def delete(key)
-        super(convert_key(key))
+          def initialize(values={})
+        @trusted_keys = []
+        @fetched_keys = []
+        @locations = {}
+        @values = values
+        @trusted = true
       end
     
-              if argv.length == 2
-            # @deprecated
-            @env.ui.warn('WARNING: The second argument to `vagrant box remove`')
-            @env.ui.warn('is deprecated. Please use the --provider flag. This')
-            @env.ui.warn('feature will stop working in the next version.')
-            options[:provider] = argv[1]
+          def check_new_line(node)
+        return unless closing_brace_on_same_line?(node)
+    
+      include_examples 'multiline literal brace layout method argument' do
+    let(:open) { '{' }
+    let(:close) { '}' }
+    let(:a) { 'a: 1' }
+    let(:b) { 'b: 2' }
+    let(:multi_prefix) { 'b: ' }
+    let(:multi) { ['[', '1', ']'] }
+  end
+    
+          it 'detects closing brace on different line from last element' do
+        src = construct(true, true)
+        inspect_source(src)
+        expect(cop.offenses.size).to eq(1)
+        expect(cop.highlights).to eq([close])
+        expect(cop.messages).to eq([described_class::ALWAYS_SAME_LINE_MESSAGE])
+      end
+    
+        it 'registers an offense for each without an item' do
+      expect_offense(<<-RUBY.strip_indent)
+        def func
+          [1, 2, 3].each do
+          ^^^^^^^^^^^^^^^^^ Prefer `for` over `each`.
+            something
           end
+        end
+      RUBY
+    end
     
-      def meta
-    object.file.meta
-  end
-end
-
+          # The body of the method definition.
+      #
+      # @note this can be either a `begin` node, if the method body contains
+      #       multiple expressions, or any other node, if it contains a single
+      #       expression.
+      #
+      # @return [Node] the body of the method definition
+      def body
+        node_parts[0]
+      end
     
-      def type
-    'Emoji'
-  end
+          # Returns the branch of the `if` node that gets evaluated when its
+      # condition is truthy.
+      #
+      # @note This is normalized for `unless` nodes.
+      #
+      # @return [Node] the truthy branch node of the `if` node
+      # @return [nil] if the truthy branch is empty
+      def if_branch
+        node_parts[1]
+      end
     
-        File.write(dest, Oj.dump(map))
-    puts 'Wrote emojo to destination! (#{dest})'
-  end
-end
-
-    
-    class NotificationMailerPreview < ActionMailer::Preview
-  # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/mention
-  def mention
-    m = Mention.last
-    NotificationMailer.mention(m.account, Notification.find_by(activity: m))
-  end
+          # Returns the delta between this element's delimiter and the argument's.
+      #
+      # @note Pairs with different delimiter styles return a delta of 0
+      #
+      # @return [Integer] the delta between the two delimiters
+      def delimiter_delta(other)
+        HashElementDelta.new(self, other).delimiter_delta
+      end
