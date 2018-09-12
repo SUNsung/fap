@@ -1,304 +1,343 @@
 
-    {  // The name of the source file where the test part took place, or
-  // '' if the source file is unknown.
-  std::string file_name_;
-  // The line in the source file where the test part took place, or -1
-  // if the line number is unknown.
-  int line_number_;
-  std::string summary_;  // The test failure summary.
-  std::string message_;  // The test failure message.
-};
+        
+        bool UvTaskRunner::PostDelayedTask(const base::Location& from_here,
+                                   base::OnceClosure task,
+                                   base::TimeDelta delay) {
+  auto* timer = new uv_timer_t;
+  timer->data = this;
+  uv_timer_init(loop_, timer);
+  uv_timer_start(timer, UvTaskRunner::OnTimeout, delay.InMilliseconds(), 0);
+  tasks_[timer] = std::move(task);
+  return true;
+}
     
-        TestPartResult::Type const type;
-    const char* const file;
-    int const line;
-    std::string const message;
+    using atom::api::BrowserView;
     
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED_FORMAT4.
-// Don't use this in your code.
-#define GTEST_PRED_FORMAT4_(pred_format, v1, v2, v3, v4, on_failure)\
-  GTEST_ASSERT_(pred_format(#v1, #v2, #v3, #v4, v1, v2, v3, v4), \
-                on_failure)
+     protected:
+  BrowserView(v8::Isolate* isolate,
+              v8::Local<v8::Object> wrapper,
+              const mate::Dictionary& options);
+  ~BrowserView() override;
     
-    // This is used internally by all instances of linked_ptr<>.  It needs to be
-// a non-template class because different types of linked_ptr<> can refer to
-// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
-// So, it needs to be possible for different types of linked_ptr to participate
-// in the same circular linked list, so we need a single class type here.
-//
-// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
-class linked_ptr_internal {
- public:
-  // Create a new circle that includes only this instance.
-  void join_new() {
-    next_ = this;
-  }
+    
+    {  // Reference this object in case it got garbage collected.
+  g_download_item_objects[handle->weak_map_id()] =
+      v8::Global<v8::Object>(isolate, handle.ToV8());
+  return handle;
+}
+    
+    
+    {}  // namespace atom
+    
+    #include 'atom/browser/native_window.h'
+#include 'atom/common/native_mate_converters/accelerator_converter.h'
+#include 'atom/common/native_mate_converters/callback.h'
+#include 'atom/common/native_mate_converters/image_converter.h'
+#include 'atom/common/native_mate_converters/string16_converter.h'
+#include 'native_mate/constructor.h'
+#include 'native_mate/dictionary.h'
+#include 'native_mate/object_template_builder.h'
+    
+        check_addbook_size(2);
+    
+    
+    {    /* d = (a0*2) * a3 */
+    'leaq (%%r10,%%r10,1),%%rax\n'
+    'mulq %%r13\n'
+    'movq %%rax,%%rbx\n'
+    'movq %%rdx,%%rcx\n'
+    /* d += (a1*2) * a2 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c = a4 * a4 */
+    'movq %%r14,%%rax\n'
+    'mulq %%r14\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += (c & M) * R */
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* t3 (tmp1) = d & M */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    'movq %%rsi,%q1\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* a4 *= 2 */
+    'addq %%r14,%%r14\n'
+    /* d += a0 * a4 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d+= (a1*2) * a3 */
+    'leaq (%%r11,%%r11,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a2 * a2 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += c * R */
+    'movq %%r8,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* t4 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* tx = t4 >> 48 (tmp3) */
+    'movq %%rsi,%%rax\n'
+    'shrq $48,%%rax\n'
+    'movq %%rax,%q3\n'
+    /* t4 &= (M >> 4) (tmp2) */
+    'movq $0xffffffffffff,%%rax\n'
+    'andq %%rax,%%rsi\n'
+    'movq %%rsi,%q2\n'
+    /* c = a0 * a0 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r10\n'
+    'movq %%rax,%%r8\n'
+    'movq %%rdx,%%r9\n'
+    /* d += a1 * a4 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += (a2*2) * a3 */
+    'leaq (%%r12,%%r12,1),%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* u0 = d & M (%%rsi) */
+    'movq %%rbx,%%rsi\n'
+    'andq %%r15,%%rsi\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* u0 = (u0 << 4) | tx (%%rsi) */
+    'shlq $4,%%rsi\n'
+    'movq %q3,%%rax\n'
+    'orq %%rax,%%rsi\n'
+    /* c += u0 * (R >> 4) */
+    'movq $0x1000003d1,%%rax\n'
+    'mulq %%rsi\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[0] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,0(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* a0 *= 2 */
+    'addq %%r10,%%r10\n'
+    /* c += a0 * a1 */
+    'movq %%r10,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a2 * a4 */
+    'movq %%r12,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* d += a3 * a3 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r13\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 */
+    'shrdq $52,%%rcx,%%rbx\n'
+    'xorq %%rcx,%%rcx\n'
+    /* r[1] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,8(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += a0 * a2 (last use of %%r10) */
+    'movq %%r10,%%rax\n'
+    'mulq %%r12\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* fetch t3 (%%r10, overwrites a0),t4 (%%rsi) */
+    'movq %q2,%%rsi\n'
+    'movq %q1,%%r10\n'
+    /* c += a1 * a1 */
+    'movq %%r11,%%rax\n'
+    'mulq %%r11\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d += a3 * a4 */
+    'movq %%r13,%%rax\n'
+    'mulq %%r14\n'
+    'addq %%rax,%%rbx\n'
+    'adcq %%rdx,%%rcx\n'
+    /* c += (d & M) * R */
+    'movq %%rbx,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* d >>= 52 (%%rbx only) */
+    'shrdq $52,%%rcx,%%rbx\n'
+    /* r[2] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,16(%%rdi)\n'
+    /* c >>= 52 */
+    'shrdq $52,%%r9,%%r8\n'
+    'xorq %%r9,%%r9\n'
+    /* c += t3 */
+    'addq %%r10,%%r8\n'
+    /* c += d * R */
+    'movq %%rbx,%%rax\n'
+    'movq $0x1000003d10,%%rdx\n'
+    'mulq %%rdx\n'
+    'addq %%rax,%%r8\n'
+    'adcq %%rdx,%%r9\n'
+    /* r[3] = c & M */
+    'movq %%r8,%%rax\n'
+    'andq %%r15,%%rax\n'
+    'movq %%rax,24(%%rdi)\n'
+    /* c >>= 52 (%%r8 only) */
+    'shrdq $52,%%r9,%%r8\n'
+    /* c += t4 (%%r8 only) */
+    'addq %%rsi,%%r8\n'
+    /* r[4] = c */
+    'movq %%r8,32(%%rdi)\n'
+: '+S'(a), '=m'(tmp1), '=m'(tmp2), '=m'(tmp3)
+: 'D'(r)
+: '%rax', '%rbx', '%rcx', '%rdx', '%r8', '%r9', '%r10', '%r11', '%r12', '%r13', '%r14', '%r15', 'cc', 'memory'
+);
+}
+    
+    static void secp256k1_sha256_initialize(secp256k1_sha256_t *hash) {
+    hash->s[0] = 0x6a09e667ul;
+    hash->s[1] = 0xbb67ae85ul;
+    hash->s[2] = 0x3c6ef372ul;
+    hash->s[3] = 0xa54ff53aul;
+    hash->s[4] = 0x510e527ful;
+    hash->s[5] = 0x9b05688cul;
+    hash->s[6] = 0x1f83d9abul;
+    hash->s[7] = 0x5be0cd19ul;
+    hash->bytes = 0;
+}
+    
+    #endif /* SECP256K1_MODULE_RECOVERY_MAIN_H */
+
+    
+    static bool CaseInsensitiveEqual(const std::string &s1, const std::string &s2)
+{
+    if (s1.size() != s2.size()) return false;
+    for (size_t i = 0; i < s1.size(); ++i) {
+        char c1 = s1[i];
+        if (c1 >= 'A' && c1 <= 'Z') c1 -= ('A' - 'a');
+        char c2 = s2[i];
+        if (c2 >= 'A' && c2 <= 'Z') c2 -= ('A' - 'a');
+        if (c1 != c2) return false;
+    }
+    return true;
+}
+    
+    BOOST_AUTO_TEST_CASE(get_difficulty_for_mid_target)
+{
+    TestDifficulty(0x1df88f6f, 0.004023);
+}
+    
+    MAKE_TYPE_INFO(StringName, Variant::STRING)
+MAKE_TYPE_INFO(IP_Address, Variant::STRING)
+    
+    void UNSCALE_BT_BASIS(btTransform &scaledBasis) {
+	btMatrix3x3 &m(scaledBasis.getBasis());
+	btVector3 column0(m[0][0], m[1][0], m[2][0]);
+	btVector3 column1(m[0][1], m[1][1], m[2][1]);
+	btVector3 column2(m[0][2], m[1][2], m[2][2]);
+	column0.normalize();
+	column1.normalize();
+	column2.normalize();
+	m.setValue(column0[0], column1[0], column2[0], column0[1], column1[1], column2[1], column0[2], column1[2], column2[2]);
+}
+
+    
+    /**
+	@author AndreaCatania
+*/
+    
+    GodotRayWorldAlgorithm::~GodotRayWorldAlgorithm() {
+	if (m_ownManifold && m_manifoldPtr) {
+		m_dispatcher->releaseManifold(m_manifoldPtr);
+	}
+}
+    
+    public:
+	PinJointBullet(RigidBodyBullet *p_body_a, const Vector3 &p_pos_a, RigidBodyBullet *p_body_b, const Vector3 &p_pos_b);
+	~PinJointBullet();
+    
+    real_t SliderJointBullet::getDampingLimAng() const {
+	return sliderConstraint->getDampingLimAng();
+}
+    
+    
+    {	return obj->call(function, p_args, p_argcount, r_error);
+}
+    
+    /**
+ * @class CanFrame
+ * @brief The class which defines the information to send and receive.
+ */
+struct CanFrame {
+  /// Message id
+  uint32_t id;
+  /// Message length
+  uint8_t len;
+  /// Message content
+  uint8_t data[8];
+  /// Time stamp
+  struct timeval timestamp;
     }
     
-    # if GTEST_HAS_COMBINE
-// INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
-//
-// Generates values from the Cartesian product of values produced
-// by the argument generators.
-//
-$range i 2..maxtuple
-$for i [[
-$range j 1..i
-$range k 2..i
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37>
-struct Types37 {
-  typedef T1 Head;
-  typedef Types36<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
-      T30, T31, T32, T33, T34, T35, T36, T37> Tail;
-};
-    
-    // Implementation #2 pre-calculates the primes and stores the result
-// in an array.
-class PreCalculatedPrimeTable : public PrimeTable {
- public:
-  // 'max' specifies the maximum number the prime table holds.
-  explicit PreCalculatedPrimeTable(int max)
-      : is_prime_size_(max + 1), is_prime_(new bool[max + 1]) {
-    CalculatePrimesUpTo(max);
+      if (!is_started_) {
+    AERROR << 'Esd can client has not been initiated! Please init first!';
+    return ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED;
   }
-  virtual ~PreCalculatedPrimeTable() { delete[] is_prime_; }
-    }
-    
-    
-    { private:
-  static int allocated_;
-};
-    
-    #ifndef TESSERACT_LSTM_LSTM_H_
-#define TESSERACT_LSTM_LSTM_H_
+  for (size_t i = 0; i < frames.size() && i < MAX_CAN_SEND_FRAME_LEN; ++i) {
+    send_frames_[i].id = frames[i].id;
+    send_frames_[i].len = frames[i].len;
+    std::memcpy(send_frames_[i].data, frames[i].data, frames[i].len);
+  }
     
       /**
-   * Controls what to include in a bounding box. Bounding boxes of all levels
-   * between RIL_WORD and RIL_BLOCK can include or exclude potential diacritics.
-   * Between layout analysis and recognition, it isn't known where all
-   * diacritics belong, so this control is used to include or exclude some
-   * diacritics that are above or below the main body of the word. In most cases
-   * where the placement is obvious, and after recognition, it doesn't make as
-   * much difference, as the diacritics will already be included in the word.
-   */
-  void SetBoundingBoxComponents(bool include_upper_dots,
-                                bool include_lower_dots) {
-    include_upper_dots_ = include_upper_dots;
-    include_lower_dots_ = include_lower_dots;
-  }
+  * @brief module start function
+  * @return start status
+  */
+  apollo::common::Status Start() override;
     
-      // Return whether a given text line could be a first paragraph line according
-  // to this paragraph model.
-  bool ValidBodyLine(int lmargin, int lindent, int rindent, int rmargin) const;
-    
-    // Get a terminated UTF8 string: Must delete[] it after use.
-char* UNICHAR::utf8_str() const {
-  int len = utf8_len();
-  char* str = new char[len + 1];
-  memcpy(str, chars, len);
-  str[len] = 0;
-  return str;
-}
-    
-    // Creates and returns a Pix with the same resolution as the original
-// in which 1 (black) pixels represent likely non text (photo, line drawing)
-// areas of the page, deleting from the blob_block the blobs that were
-// determined to be non-text.
-// The photo_map is used to bias the decision towards non-text, rather than
-// supplying definite decision.
-// The blob_block is the usual result of connected component analysis,
-// holding the detected blobs.
-// The returned Pix should be PixDestroyed after use.
-Pix* CCNonTextDetect::ComputeNonTextMask(bool debug, Pix* photo_map,
-                                         TO_BLOCK* blob_block) {
-  // Insert the smallest blobs into the grid.
-  InsertBlobList(&blob_block->small_blobs);
-  InsertBlobList(&blob_block->noise_blobs);
-  // Add the medium blobs that don't have a good strokewidth neighbour.
-  // Those that do go into good_grid as an antidote to spreading beyond the
-  // real reaches of a noise region.
-  BlobGrid good_grid(gridsize(), bleft(), tright());
-  BLOBNBOX_IT blob_it(&blob_block->blobs);
-  for (blob_it.mark_cycle_pt(); !blob_it.cycled_list(); blob_it.forward()) {
-    BLOBNBOX* blob = blob_it.data();
-    double perimeter_area_ratio = blob->cblob()->perimeter() / 4.0;
-    perimeter_area_ratio *= perimeter_area_ratio / blob->enclosed_area();
-    if (blob->GoodTextBlob() == 0 || perimeter_area_ratio < kMinGoodTextPARatio)
-      InsertBBox(true, true, blob);
-    else
-      good_grid.InsertBBox(true, true, blob);
-  }
-  noise_density_ = ComputeNoiseDensity(debug, photo_map, &good_grid);
-  good_grid.Clear();  // Not needed any more.
-  Pix* pix = noise_density_->ThresholdToPix(max_noise_count_);
-  if (debug) {
-    pixWrite('junknoisemask.png', pix, IFF_PNG);
-  }
-  ScrollView* win = nullptr;
-  #ifndef GRAPHICS_DISABLED
-  if (debug) {
-    win = MakeWindow(0, 400, 'Photo Mask Blobs');
-  }
-  #endif  // GRAPHICS_DISABLED
-  // Large and medium blobs are not text if they overlap with 'a lot' of small
-  // blobs.
-  MarkAndDeleteNonTextBlobs(&blob_block->large_blobs,
-                            kMaxLargeOverlapsWithSmall,
-                            win, ScrollView::DARK_GREEN, pix);
-  MarkAndDeleteNonTextBlobs(&blob_block->blobs, kMaxMediumOverlapsWithSmall,
-                          win, ScrollView::WHITE, pix);
-  // Clear the grid of small blobs and insert the medium blobs.
-  Clear();
-  InsertBlobList(&blob_block->blobs);
-  MarkAndDeleteNonTextBlobs(&blob_block->large_blobs,
-                            kMaxLargeOverlapsWithMedium,
-                            win, ScrollView::DARK_GREEN, pix);
-  // Clear again before we start deleting the blobs in the grid.
-  Clear();
-  MarkAndDeleteNonTextBlobs(&blob_block->noise_blobs, -1,
-                            win, ScrollView::CORAL, pix);
-  MarkAndDeleteNonTextBlobs(&blob_block->small_blobs, -1,
-                            win, ScrollView::GOLDENROD, pix);
-  MarkAndDeleteNonTextBlobs(&blob_block->blobs, -1,
-                            win, ScrollView::WHITE, pix);
-  if (debug) {
-    #ifndef GRAPHICS_DISABLED
-    win->Update();
-    #endif  // GRAPHICS_DISABLED
-    pixWrite('junkccphotomask.png', pix, IFF_PNG);
-    #ifndef GRAPHICS_DISABLED
-    delete win->AwaitEvent(SVET_DESTROY);
-    delete win;
-    #endif  // GRAPHICS_DISABLED
-  }
-  return pix;
-}
-    
-    
-    {  // Max entry in noise_density_ before the cell is declared noisy.
-  int max_noise_count_;
-  // Completed noise density map, which we keep around to use for secondary
-  // noise detection.
-  IntGrid* noise_density_;
-};
-    
-      // Helper returns the mean gradient value for the vertical column at the
-  // given x, (in the external coordinates) by subtracting the mean of the
-  // transformed column 2 pixels left from the mean of the transformed column
-  // 2 pixels to the right.
-  // This gives a positive value for a good left edge and negative for right.
-  // Returns the best result out of +2/-2, +3/-1, +1/-3 pixels from the edge.
-  int BestMeanGradientInColumn(const DENORM* denorm, int16_t x, int16_t min_y,
-                               int16_t max_y, bool best_is_max) const;
-    
-    
-    {} // namespace cuda
-    
-      auto grid_t = theta->type().tensor();
-  grid_t.resize_({N, H, W, 2});
-    
-    TEST_CASE('CUDAGuard') {
-  if (at::cuda::getNumGPUs() < 2) {
-    return;
-  }
-    }
-    
-    PyObject * THCPModule_cudaLockMutex(PyObject *module)
-{
-  auto mutex = THCCachingAllocator_getCudaFreeMutex();
-  // This has to be a busy loop because we **absolutely need to** hold the GIL
-  // or it's a recipe for a deadlock otherwise (if we let other Python threads
-  // run while we have the cudaMutex, but not the GIL, they might try to e.g.
-  // free a CUDA tensor and acquire the cudaMutex without giving up the GIL,
-  // because it happens deep within THC).
-  while (true) {
-    if (mutex->try_lock())
-      break;
-    {
-      AutoNoGIL no_gil;
-      std::this_thread::sleep_for(std::chrono::microseconds(10));
-    }
-  }
-    }
-    
-      for (long i = ndim - 1; i >= 0; --i) {
-    long offset = ndim - 1 - i;
-    long dimA = dimsA - 1 - offset;
-    long dimB = dimsB - 1 - offset;
-    long sizeA = (dimA >= 0) ? a[dimA] : 1;
-    long sizeB = (dimB >= 0) ? b[dimB] : 1;
-    }
-    
-      CaffeMap<std::string, TensorShape> SsaRewriteAndMapNames(
-      Workspace* ws,
-      NetDef* pred_net,
-      const std::unordered_map<std::string, TensorShape>& input_shape_hints);
-    
-        // helper function to initialize and check BlockMomentumSGD related parameters
-    void InitializeAndCheckBlockMomentumSGDParameters();
-    // only true when the user specify LearningRatePerMB and the number of parallel utterances in Reader > 1
-    // bool m_needToNormalizeLRByParallUtterance;          // TODO: should go away
-    // bool m_needToNormalizeMomentumByParallUtterance;
-    
-        // make sure (dense * sparse -> dense) == (dense * dense -> dense)
-    mD.Resize(dim1, dim1);
-    mD.SetValue(0.0f);
-    Matrix<float>::MultiplyAndAdd(mAdense, transposeA, mA1sparseCSC, transposeB, mD);
-    Matrix<float>::MultiplyAndWeightedAdd(alpha, mAdense, transposeA, mA2sparseCSC, transposeB, beta, mD);
-    
-    // ---------------------------------------------------------------------------
-// array_ref -- wraps a C pointer to an array together with its size.
-//
-// Called _ref because this is a reference to the array rather than the array
-// itself (since it wraps a pointer). No need to pass an array_ref by reference.
-//
-// operator[] checks index bounds in Debug builds. size() is provided such
-// that this class can be substituted for STL vector in many cases.
-// ---------------------------------------------------------------------------
-    
-        void FreeTypeFont::Shutdown()
-    {
-        if (FreetypeFace) 
-        {
-            FT_Done_Face(FreetypeFace);
-            FreetypeFace = NULL;
-            FT_Done_FreeType(FreetypeLibrary);
-            FreetypeLibrary = NULL;
-        }
-    }
-    
-        // Rendering
-    ImGui::Render();
-    ImGuiIO& io = ImGui::GetIO();
-    glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
-    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
-    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound, but prefer using the GL3+ code.
-    ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-    
-    
-    {        // Rendering
-        ImGui::Render();
-        int display_w, display_h;
-        glfwMakeContextCurrent(window);
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    	
-        glfwMakeContextCurrent(window);
-        glfwSwapBuffers(window);
-    }
-    
-        ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
-    ImGui_ImplOpenGL3_Init(glsl_version);
+    // System gflags
+DEFINE_string(node_name, 'chassis', 'The chassis module name in proto');
+DEFINE_string(canbus_driver_name, 'canbus', 'Driver name.');
