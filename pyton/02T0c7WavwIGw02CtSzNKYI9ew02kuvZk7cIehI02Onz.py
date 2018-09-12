@@ -1,74 +1,166 @@
 
         
         
-parser = youtube_dl.parseOpts()[0]
-build_completion(parser)
+class CallState(Enum):
+    
+    
+class Page(object):
+    
+    
+@click.command('init-db')
+@with_appcontext
+def init_db_command():
+    '''Clear existing data and create new tables.'''
+    init_db()
+    click.echo('Initialized the database.')
+    
+        auth.login()
+    # current user can't modify other user's post
+    assert client.post('/1/update').status_code == 403
+    assert client.post('/1/delete').status_code == 403
+    # current user doesn't see edit link
+    assert b'href='/1/update'' not in client.get('/').data
+    
+            Takes the same arguments as Werkzeug's
+        :class:`~werkzeug.test.EnvironBuilder`, with some defaults from
+        the application. See the linked Werkzeug docs for most of the
+        available arguments. Flask-specific behavior is listed here.
+    
+        On windows use `set` instead.
+    
+    
+def attach_enctype_error_multidict(request):
+    '''Since Flask 0.8 we're monkeypatching the files object in case a
+    request is detected that does not use multipart form data but the files
+    object is accessed.
+    '''
+    oldcls = request.files.__class__
+    class newcls(oldcls):
+        def __getitem__(self, key):
+            try:
+                return oldcls.__getitem__(self, key)
+            except KeyError:
+                if key not in request.form:
+                    raise
+                raise DebugFilesKeyError(request, key)
+    newcls.__name__ = oldcls.__name__
+    newcls.__module__ = oldcls.__module__
+    request.files.__class__ = newcls
+    
+    
+def get_requests_session(ssl_version):
+    requests_session = requests.Session()
+    requests_session.mount(
+        'https://',
+        HTTPieHTTPAdapter(ssl_version=ssl_version)
+    )
+    for cls in plugin_manager.get_transport_plugins():
+        transport_plugin = cls()
+        requests_session.mount(prefix=transport_plugin.prefix,
+                               adapter=transport_plugin.get_adapter())
+    return requests_session
+    
+        @property
+    def body(self):
+        body = self._orig.body
+        if isinstance(body, str):
+            # Happens with JSON/form request data parsed from the command line.
+            body = body.encode('utf8')
+        return body or b''
 
     
-    import rsa
-import json
-from binascii import hexlify
     
-    import io
-import sys
-import re
+def is_valid_mime(mime):
+    return mime and MIME_RE.match(mime)
     
-        with io.open(outfile, 'w', encoding='utf-8') as outf:
-        outf.write(out)
+        # noinspection PyMethodOverriding
+    def get_auth(self, username, password):
+        return requests.auth.HTTPDigestAuth(username, password)
+
     
-    py2exe_console = [{
-    'script': './youtube_dl/__main__.py',
-    'dest_base': 'youtube-dl',
-    'version': __version__,
-    'description': DESCRIPTION,
-    'comments': LONG_DESCRIPTION,
-    'product_name': 'youtube-dl',
-    'product_version': __version__,
-}]
+        def __iter__(self):
+        return iter(self._plugins)
     
-    # Check imported dependencies for compatibility.
-try:
-    check_compatibility(urllib3.__version__, chardet.__version__)
-except (AssertionError, ValueError):
-    warnings.warn('urllib3 ({0}) or chardet ({1}) doesn't match a supported '
-                  'version!'.format(urllib3.__version__, chardet.__version__),
-                  RequestsDependencyWarning)
+        def test_GET_explicit_JSON_explicit_headers(self, httpbin):
+        r = http('--json', 'GET', httpbin.url + '/headers',
+                 'Accept:application/xml',
+                 'Content-Type:application/xml')
+        assert HTTP_OK in r
+        assert ''Accept': 'application/xml'' in r
+        assert ''Content-Type': 'application/xml'' in r
     
     
-def test_idna_without_version_attribute(mocker):
-    '''Older versions of IDNA don't provide a __version__ attribute, verify
-    that if we have such a package, we don't blow up.
-    '''
-    mocker.patch('requests.help.idna', new=None)
-    assert info()['idna'] == {'version': ''}
+def has_docutils():
+    try:
+        # noinspection PyUnresolvedReferences
+        import docutils
+        return True
+    except ImportError:
+        return False
     
-            # the data has all been read
-        assert prep.body.read() == b''
     
-        :param filepath: Optional filepath the the blns.txt file
-    :returns: The list of naughty strings
-    '''
+def test_debug():
+    r = http('--debug')
+    assert r.exit_status == httpie.ExitStatus.OK
+    assert 'HTTPie %s' % httpie.__version__ in r.stderr
     
-    # If true, keep warnings as 'system message' paragraphs in the built
-# documents.
-#keep_warnings = False
+        def test_CRLF_formatted_response(self, httpbin):
+        r = http('--pretty=format', 'GET', httpbin.url + '/get')
+        assert r.exit_status == ExitStatus.OK
+        self._validate_crlf(r)
     
-    for image in TEST_IMAGES:
-    size = image.split('-')[1].split('.')[0]
-    print('Timings at {}:'.format(size))
     
-        # Determine how many neighbors to use for weighting in the KNN classifier
-    if n_neighbors is None:
-        n_neighbors = int(round(math.sqrt(len(X))))
-        if verbose:
-            print('Chose n_neighbors automatically:', n_neighbors)
+def test_follow_all_output_options_used_for_redirects(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 3
+    assert HTTP_OK not in r
     
-            face_names.append(name)
+    VERSION = '3.27'
     
-    # To run this, you need a Raspberry Pi 2 (or greater) with face_recognition and
-# the picamera[array] module installed.
-# You can follow this installation instructions to get your RPi set up:
-# https://gist.github.com/ageitgey/1ac8dbe8572f3f533df6269dab35df65
     
-            # Clear the frames array to start the next batch
-        frames = []
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
+    
+        app.add_node(settingslist_node)
+    app.add_directive('settingslist', SettingsListDirective)
+    
+    __all__ = ['__version__', 'version_info', 'twisted_version',
+           'Spider', 'Request', 'FormRequest', 'Selector', 'Item', 'Field']
+    
+        if settings is None:
+        settings = get_project_settings()
+        # set EDITOR from environment if available
+        try:
+            editor = os.environ['EDITOR']
+        except KeyError: pass
+        else:
+            settings['EDITOR'] = editor
+    check_deprecated_settings(settings)
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-l', '--list', dest='list', action='store_true',
+            help='List available templates')
+        parser.add_option('-e', '--edit', dest='edit', action='store_true',
+            help='Edit spider after creating it')
+        parser.add_option('-d', '--dump', dest='dump', metavar='TEMPLATE',
+            help='Dump template to standard output')
+        parser.add_option('-t', '--template', dest='template', default='basic',
+            help='Uses a custom template.')
+        parser.add_option('--force', dest='force', action='store_true',
+            help='If the spider already exists, overwrite it with the template')
+    
+    _CODE_RE = re.compile('\d+')
+class FTPDownloadHandler(object):
+    
+      For example following function:
+  void increment_counter(int* count) {
+    *count++;
+  }
+  is invalid, because it effectively does count++, moving pointer, and should
+  be replaced with ++*count, (*count)++ or *count += 1.
