@@ -1,96 +1,207 @@
 
         
-            def test_filter_gcp_fields(self):
-        input_data = {
-            u'kind': u'compute#httpsHealthCheck',
-            u'description': u'',
-            u'timeoutSec': 5,
-            u'checkIntervalSec': 5,
-            u'port': 443,
-            u'healthyThreshold': 2,
-            u'host': u'',
-            u'requestPath': u'/',
-            u'unhealthyThreshold': 2,
-            u'creationTimestamp': u'2017-05-16T15:09:36.546-07:00',
-            u'id': u'8727093129334146639',
-            u'selfLink': u'https://www.googleapis.com/compute/v1/projects/myproject/global/httpsHealthChecks/myhealthcheck',
-            u'name': u'myhealthcheck'}
+            # Check urllib3 for compatibility.
+    major, minor, patch = urllib3_version  # noqa: F811
+    major, minor, patch = int(major), int(minor), int(patch)
+    # urllib3 >= 1.21.1, <= 1.23
+    assert major == 1
+    assert minor >= 21
+    assert minor <= 23
     
-        def test_max_delay(self):
-        strategy = _exponential_backoff(retries=7, delay=1, backoff=2, max_delay=60)
-        result = list(strategy())
-        self.assertEquals(result, [1, 2, 4, 8, 16, 32, 60])
     
-        def _dicts(self, ajvars):
-        print(ajvars)
-        res28 = self._dict_jinja28(ajvars)
-        res29 = self._dict_jinja29(ajvars)
-        # res28_other = self._dict_jinja28(ajvars, {'other_key': 'other_value'})
-        # other = {'other_key': 'other_value'}
-        # res29_other = self._dict_jinja29(ajvars, *other)
-        print('res28: %s' % res28)
-        print('res29: %s' % res29)
-        # print('res28_other: %s' % res28_other)
-        # print('res29_other: %s' % res29_other)
-        # return (res28, res29, res28_other, res29_other)
-        # assert ajvars == res28
-        # assert ajvars == res29
-        return (res28, res29)
+class InvalidHeader(RequestException, ValueError):
+    '''The header value provided was somehow invalid.'''
     
-    ATTR_URL = 'url'
-ATTR_URL_DEFAULT = 'https://www.google.com'
+        # Redirection.
+    300: ('multiple_choices',),
+    301: ('moved_permanently', 'moved', '\\o-'),
+    302: ('found',),
+    303: ('see_other', 'other'),
+    304: ('not_modified',),
+    305: ('use_proxy',),
+    306: ('switch_proxy',),
+    307: ('temporary_redirect', 'temporary_moved', 'temporary'),
+    308: ('permanent_redirect',
+          'resume_incomplete', 'resume',),  # These 2 to be removed in 3.0
     
-        config_path = config_util.ensure_config_exists(config_dir)
-    print('Configuration file:', config_path)
-    return 0
+        def list_regex_patterns(self):
+        # at time of writing(2017-11-20) no regex pattern paginator exists
+        regex_patterns = []
+        params = {}
+        while True:
+            try:
+                response = self.list_regex_patterns_with_backoff(**params)
+            except (botocore.exceptions.ClientError, botocore.exceptions.BotoCoreError) as e:
+                self.module.fail_json_aws(e, msg='Could not list regex patterns')
+            regex_patterns.extend(response['RegexPatternSets'])
+            if 'NextMarker' in response:
+                params['NextMarker'] = response['NextMarker']
+            else:
+                break
+        return regex_patterns
+    
+        existing_conditions = dict((condition_type, dict()) for condition_type in MATCH_LOOKUP)
+    desired_conditions = dict((condition_type, dict()) for condition_type in MATCH_LOOKUP)
+    all_conditions = dict()
+    
+    DOCUMENTATION = '''
+module: aws_waf_web_acl
+short_description: create and delete WAF Web ACLs
+description:
+  - Read the AWS documentation for WAF
+    U(https://aws.amazon.com/documentation/waf/)
+version_added: '2.5'
+    
+    RETURN = '''
+invalidation:
+  description: The invalidation's information.
+  returned: always
+  type: complex
+  contains:
+    create_time:
+      description: The date and time the invalidation request was first made.
+      returned: always
+      type: string
+      sample: '2018-02-01T15:50:41.159000+00:00'
+    id:
+      description: The identifier for the invalidation request.
+      returned: always
+      type: string
+      sample: I2G9MOWJZFV612
+    invalidation_batch:
+      description: The current invalidation information for the batch request.
+      returned: always
+      type: complex
+      contains:
+        caller_reference:
+          description: The value used to uniquely identify an invalidation request.
+          returned: always
+          type: string
+          sample: testing 123
+        paths:
+          description: A dict that contains information about the objects that you want to invalidate.
+          returned: always
+          type: complex
+          contains:
+            items:
+              description: A list of the paths that you want to invalidate.
+              returned: always
+              type: list
+              sample:
+              - /testpathtwo/test2.js
+              - /testpathone/test1.css
+              - /testpaththree/test3.ss
+            quantity:
+              description: The number of objects that you want to invalidate.
+              returned: always
+              type: int
+              sample: 3
+    status:
+      description: The status of the invalidation request.
+      returned: always
+      type: string
+      sample: Completed
+location:
+  description: The fully qualified URI of the distribution and invalidation batch request.
+  returned: always
+  type: string
+  sample: https://cloudfront.amazonaws.com/2017-03-25/distribution/E1ZID6KZJECZY7/invalidation/I2G9MOWJZFV622
+'''
+    
+    try:
+    import botocore
+except ImportError:
+    pass  # will be detected by imported HAS_BOTO3
+    
+        if pipeline_field(client, dp_id, field='@pipelineState') in DP_ACTIVE_STATES:
+        changed = False
+    else:
+        try:
+            client.activate_pipeline(pipelineId=dp_id)
+        except ClientError as e:
+            if e.response['Error']['Code'] == 'InvalidRequestException':
+                module.fail_json(msg='You need to populate your pipeline before activation.')
+        try:
+            pipeline_status_timeout(client, dp_id, status=DP_ACTIVE_STATES,
+                                    timeout=timeout)
+        except TimeOutException:
+            if pipeline_field(client, dp_id, field='@pipelineState') == 'FINISHED':
+                # activated but completed more rapidly than it was checked
+                pass
+            else:
+                module.fail_json(msg=('Data Pipeline {0} failed to activate '
+                                      'within timeout {1} seconds').format(dp_name, timeout))
+        changed = True
+    
+        argument_spec = ec2_argument_spec()
+    argument_spec.update(
+        dict(
+            image_ids=dict(default=[], type='list', aliases=['image_id']),
+            filters=dict(default={}, type='dict'),
+            owners=dict(default=[], type='list', aliases=['owner']),
+            executable_users=dict(default=[], type='list', aliases=['executable_user']),
+            describe_image_attributes=dict(default=False, type='bool')
+        )
+    )
+    
+        for hook in all_hooks['LifecycleHooks']:
+        if hook['LifecycleHookName'] == lch_name:
+            lch_params = {
+                'LifecycleHookName': lch_name,
+                'AutoScalingGroupName': asg_name
+            }
+    
+        # If we're in check mode, nothing else to do
+    if not check_mode:
+        if isinstance:
+            if address.domain == 'vpc':
+                res = ec2.associate_address(device_id,
+                                            allocation_id=address.allocation_id,
+                                            private_ip_address=private_ip_address,
+                                            allow_reassociation=allow_reassociation)
+            else:
+                res = ec2.associate_address(device_id,
+                                            public_ip=address.public_ip,
+                                            private_ip_address=private_ip_address,
+                                            allow_reassociation=allow_reassociation)
+        else:
+            res = ec2.associate_address(network_interface_id=device_id,
+                                        allocation_id=address.allocation_id,
+                                        private_ip_address=private_ip_address,
+                                        allow_reassociation=allow_reassociation)
+        if not res:
+            raise EIPException('association failed')
+    
+        name = module.params['name']
+    state = module.params.get('state')
+    key_material = module.params.get('key_material')
+    force = module.params.get('force')
+    
+    # Encrypted Snapshot copy
+- ec2_snapshot_copy:
+    source_region: eu-central-1
+    region: eu-west-1
+    source_snapshot_id: snap-xxxxxxx
+    encrypted: yes
+    
+        @classmethod
+    # pylint: disable=arguments-differ,too-many-arguments
+    def sign(cls, payload, key, alg, nonce, url=None, kid=None):
+        # Per ACME spec, jwk and kid are mutually exclusive, so only include a
+        # jwk field if kid is not provided.
+        include_jwk = kid is None
+        return super(JWS, cls).sign(payload, key=key, alg=alg,
+                                    protect=frozenset(['nonce', 'url', 'kid', 'jwk', 'alg']),
+                                    nonce=nonce, url=url, kid=kid,
+                                    include_jwk=include_jwk)
 
     
-    parser = ArgumentParser(usage='%s -m jieba [options] filename' % sys.executable, description='Jieba command line interface.', epilog='If no filename specified, use STDIN instead.')
-parser.add_argument('-d', '--delimiter', metavar='DELIM', default=' / ',
-                    nargs='?', const=' ',
-                    help='use DELIM instead of ' / ' for word delimiter; or a space if it is used without DELIM')
-parser.add_argument('-p', '--pos', metavar='DELIM', nargs='?', const='_',
-                    help='enable POS tagging; if DELIM is specified, use DELIM instead of '_' for POS delimiter')
-parser.add_argument('-D', '--dict', help='use DICT as dictionary')
-parser.add_argument('-u', '--user-dict',
-                    help='use USER_DICT together with the default dictionary or DICT (if specified)')
-parser.add_argument('-a', '--cut-all',
-                    action='store_true', dest='cutall', default=False,
-                    help='full pattern cutting (ignored with POS tagging)')
-parser.add_argument('-n', '--no-hmm', dest='hmm', action='store_false',
-                    default=True, help='don't use the Hidden Markov Model')
-parser.add_argument('-q', '--quiet', action='store_true', default=False,
-                    help='don't print loading messages to stderr')
-parser.add_argument('-V', '--version', action='version',
-                    version='Jieba ' + jieba.__version__)
-parser.add_argument('filename', nargs='?', help='input file')
+        def test_phones(self):
+        self.assertEqual(('1234',), self.reg.phones)
     
-            for terms, w in cm.items():
-            g.addEdge(terms[0], terms[1], w)
-        nodes_rank = g.rank()
-        if withWeight:
-            tags = sorted(nodes_rank.items(), key=itemgetter(1), reverse=True)
-        else:
-            tags = sorted(nodes_rank, key=nodes_rank.__getitem__, reverse=True)
+        def test_rollback_error(self):
+        self.config.reverter.rollback_checkpoints = mock.Mock(
+            side_effect=errors.ReverterError)
+        self.assertRaises(errors.PluginError, self.config.rollback_checkpoints)
     
-    import jieba
-import jieba.analyse
-from optparse import OptionParser
-    
-    # Inverse the vectorizer vocabulary to be able
-feature_names = count_vect.get_feature_names()
-    
-        def testDefaultCut_NOHMM(self):
-        for content in test_contents:
-            result = jieba.cut(content,HMM=False)
-            assert isinstance(result, types.GeneratorType), 'Test DefaultCut Generator error'
-            result = list(result)
-            assert isinstance(result, list), 'Test DefaultCut error on content: %s' % content
-            print(' , '.join(result), file=sys.stderr)
-        print('testDefaultCut_NOHMM', file=sys.stderr)
-    
-    
-content = open(file_name,'rb').read()
-    
-    log_f = open('1.log','w')
-log_f.write(' / '.join(map(str, words)))
+    from certbot import errors
