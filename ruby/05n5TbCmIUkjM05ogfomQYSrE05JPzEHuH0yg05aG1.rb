@@ -1,117 +1,80 @@
 
         
-              it 'deactivates an existing user' do
-        visit admin_users_path
-        expect(page).to have_no_text('inactive')
-        find(:css, 'a[href='/admin/users/#{users(:bob).id}/deactivate']').click
-        expect(page).to have_text('inactive')
-        users(:bob).reload
-        expect(users(:bob)).not_to be_active
-      end
-    
-      before do
-    login_as(user)
+          def empty?
+    caveats.empty?
   end
     
-          it 'generates a DOT script' do
-        expect(agents_dot(@agents)).to match(%r{
-          \A
-          digraph \x20 'Agent \x20 Event \x20 Flow' \{
-            node \[ [^\]]+ \];
-            edge \[ [^\]]+ \];
-            (?<foo>\w+) \[label=foo\];
-            \k<foo> -> (?<bar1>\w+) \[style=dashed\];
-            \k<foo> -> (?<bar2>\w+) \[color='\#999999'\];
-            \k<bar1> \[label=bar1\];
-            \k<bar2> \[label=bar2,style='rounded,dashed',color='\#999999',fontcolor='\#999999'\];
-            \k<bar2> -> (?<bar3>\w+) \[style=dashed,color='\#999999'\];
-            \k<bar3> \[label=bar3\];
-          \}
-          \z
-        }x)
-      end
-    
-        it 'works for queued jobs' do
-      expect(status(job)).to eq('<span class='label label-warning'>queued</span>')
-    end
+      def observe_file_removal(path)
+    path.extend(ObserverPathnameExtension).unlink if path.exist?
   end
     
-        it 'creates a scenario label with the given text' do
-      expect(scenario_label(scenario, 'Other')).to eq(
-        '<span class='label scenario' style='color:#AAAAAA;background-color:#000000'>Other</span>'
-      )
-    end
-  end
+            file_is_stale = if PkgVersion === version
+          f.pkg_version > version
+        else
+          f.version > version
+        end
     
-      context '#set_traps' do
-    it 'sets traps for INT TERM and QUIT' do
-      agent_runner = AgentRunner.new
-      mock(Signal).trap('INT')
-      mock(Signal).trap('TERM')
-      mock(Signal).trap('QUIT')
-      agent_runner.set_traps
-    
-      protected
-    
-        # The path used after sending reset password instructions
-    def after_sending_reset_password_instructions_path_for(resource_name)
-      new_session_path(resource_name) if is_navigational_format?
+        # Unbrewed uses the PREFIX, which will exist
+    # Things below use the CELLAR, which doesn't until the first formula is installed.
+    unless HOMEBREW_CELLAR.exist?
+      raise NoSuchKegError.new(ARGV.named.first) if ARGV.named.any?
+      return
     end
     
-        def confirmation_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :confirmation_instructions, opts)
-    end
-    
-              class_eval <<-METHODS, __FILE__, __LINE__ + 1
-            def authenticate_#{group_name}!(favourite=nil, opts={})
-              unless #{group_name}_signed_in?
-                mappings = #{mappings}
-                mappings.unshift mappings.delete(favourite.to_sym) if favourite
-                mappings.each do |mapping|
-                  opts[:scope] = mapping
-                  warden.authenticate!(opts) if !devise_controller? || opts.delete(:force)
-                end
-              end
+                case platform
+            when 'iOS' then self.platform :ios, '10.0'
+            when 'macOS' then self.platform :macos, '10.10'
             end
     
-        if record.timedout?(last_request_at) &&
-        !env['devise.skip_timeout'] &&
-        !proxy.remember_me_is_active?(record)
-      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
-      throw :warden, scope: scope, message: :timeout
+              If there is multiple cache for various versions of the requested pod,
+          you will be asked which one to clean. Use `--all` to clean them all.
+    
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
     end
     
-          it 'supports Unicode characters' do
-        format('%c', 1286).should == 'Ԇ'
-        format('%c', 'ش').should == 'ش'
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
+      end
+    
+    Liquid::Template.register_tag('video', Jekyll::VideoTag)
+    
+          def gateway_error(exception)
+        @order.errors.add(:base, exception.message)
+        invalid_resource!(@order)
+      end
+    
+                if handler.error.present?
+              @coupon_message = handler.error
+              respond_with(@order, default_template: 'spree/api/v1/orders/could_not_apply_coupon', status: 422)
+              return true
+            end
+          end
+          false
+        end
+    
+            def inventory_unit
+          @inventory_unit ||= InventoryUnit.accessible_by(current_ability, :read).find(params[:id])
+        end
+    
+            def stock_location_params
+          params.require(:stock_location).permit(permitted_stock_location_attributes)
+        end
       end
     end
-    
-      it 'raises ArgumentError if 3 or more arguments provided' do
-    lambda {
-      catch :blah do
-        throw :blah, :return_value, 2
-      end
-    }.should raise_error(ArgumentError)
-    
-        def initialize(*args)
-      @s = StringScanner.new(*args)
-    end
-    
-      # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
-    
-      config.active_support.test_order = :random
-    
-      def test_symlink_exists(path)
-    exists?('L', path)
   end
-    
-        def install_plugin(plugin, load_hooks: true, load_immediately: false)
-      installer.install(plugin,
-                        load_hooks: load_hooks,
-                        load_immediately: load_immediately)
-    end
-    
-          attr_reader :key, :default, :options
+end
