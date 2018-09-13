@@ -1,167 +1,145 @@
 
         
-        
-#: Log messages to :func:`~flask.logging.wsgi_errors_stream` with the format
-#: ``[%(asctime)s] %(levelname)s in %(module)s: %(message)s``.
-default_handler = logging.StreamHandler(wsgi_errors_stream)
-default_handler.setFormatter(logging.Formatter(
-    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
-))
+            def load(self):
+        try:
+            data = self._cache.get(self.cache_key)
+        except Exception:
+            # Some backends (e.g. memcache) raise an exception on invalid
+            # cache keys. If this happens, reset the session. See #17810.
+            data = None
     
-            return list(result)
-    
-            # If the request method is HEAD and we don't have a handler for it
-        # retry with GET.
-        if meth is None and request.method == 'HEAD':
-            meth = getattr(self, 'get', None)
-    
-        with app.test_request_context(errors_stream=stream):
-        assert wsgi_errors_stream._get_current_object() is stream
-    
-        # 50% of the time the correct output is the input.
-    # The other 50% of the time it's 2 * input % 10
-    y = (x * np.random.random_integers(1, 2, x.shape)) % 10
-    ys = np.zeros((y.size, 10), dtype='int32')
-    for i, target in enumerate(y.flat):
-        ys[i, target] = 1
-    ys = ys.reshape(y.shape + (10,))
-    
-    
-@keras_test
-def test_vector_classification_functional():
-    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
-                                                         num_test=200,
-                                                         input_shape=(20,),
-                                                         classification=True,
-                                                         num_classes=num_classes)
-    # Test with functional API
-    inputs = layers.Input(shape=(x_train.shape[-1],))
-    x = layers.Dense(16, activation=keras.activations.relu)(inputs)
-    x = layers.Dense(8)(x)
-    x = layers.Activation('relu')(x)
-    outputs = layers.Dense(num_classes, activation='softmax')(x)
-    model = keras.models.Model(inputs, outputs)
-    model.compile(loss=keras.losses.sparse_categorical_crossentropy,
-                  optimizer=keras.optimizers.RMSprop(),
-                  metrics=['acc'])
-    history = model.fit(x_train, y_train, epochs=15, batch_size=16,
-                        validation_data=(x_test, y_test),
-                        verbose=0)
-    assert(history.history['val_acc'][-1] > 0.8)
-    
-    print('Train...')
-model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=4,
-          validation_data=[x_test, y_test])
-
-    
-    print('Loading data...')
-(x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=max_features)
-print(len(x_train), 'train sequences')
-print(len(x_test), 'test sequences')
-    
-        for i in range(1, 6):
-        fpath = os.path.join(path, 'data_batch_' + str(i))
-        (x_train[(i - 1) * 10000: i * 10000, :, :, :],
-         y_train[(i - 1) * 10000: i * 10000]) = load_batch(fpath)
-    
-    
-def rbf_kernels(X, n_jobs):
-    return pairwise_kernels(X, metric='rbf', n_jobs=n_jobs, gamma=0.1)
-    
-    from sklearn.externals.six.moves import xrange
-from sklearn.utils.random import sample_without_replacement
-    
-    First, we fix a training set, increase the number of
-samples to classify and plot number of classified samples as a
-function of time.
-    
-        An example with a long-untouched module that everyone has
-    >>> _linkcode_resolve('py', {'module': 'tty',
-    ...                          'fullname': 'setraw'},
-    ...                   package='tty',
-    ...                   url_fmt='http://hg.python.org/cpython/file/'
-    ...                           '{revision}/Lib/{package}/{path}#L{lineno}',
-    ...                   revision='xxxx')
-    'http://hg.python.org/cpython/file/xxxx/Lib/tty/tty.py#L18'
-    '''
-    
-        opener = build_opener()
-    html_filename = os.path.join(html_folder, lang + '.html')
-    if not os.path.exists(html_filename):
-        print('Downloading %s' % page)
-        request = Request(page)
-        # change the User Agent to avoid being blocked by Wikipedia
-        # downloading a couple of articles should not be considered abusive
-        request.add_header('User-Agent', 'OpenAnything/1.0')
-        html_content = opener.open(request).read()
-        open(html_filename, 'wb').write(html_content)
-    
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (3 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
-    
-    URL = ('http://people.csail.mit.edu/jrennie/'
-       '20Newsgroups/20news-bydate.tar.gz')
-    
-        # import matplotlib.pyplot as plt
-    # plt.matshow(cm)
-    # plt.show()
-
-    
-    plt.matshow(fit_data, cmap=plt.cm.Blues)
-plt.title('After biclustering; rearranged to show biclusters')
-    
-        Both random labelings have the same number of clusters for each value
-    possible value in ``n_clusters_range``.
-    
-    # Generate waveform data
-n_features = 2000
-t = np.pi * np.linspace(0, 1, n_features)
-    
-    from sklearn.datasets import make_multilabel_classification as make_ml_clf
-    
-        def test_b_observers_shall_be_attachable(cls):
-        cls.s.attach(cls.dec_obs)
-        cls.assertEqual(isinstance(cls.s._observers[0], DecimalViewer), True)
-        cls.assertEqual(len(cls.s._observers), 1)
-        cls.s.attach(cls.hex_obs)
-        cls.assertEqual(isinstance(cls.s._observers[1], HexViewer), True)
-        cls.assertEqual(len(cls.s._observers), 2)
-    
-        def test_sales_manager_shall_talk_through_proxy_with_delay(cls):
-        cls.p.busy = 'No'
-        start_time = time()
-        cls.p.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-Sales Manager ready to talk\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
-    
-        print('After subclassing: ')
-    for k in RegistryHolder.REGISTRY:
-        print(k)
-    
-    '''
-Port of the Java example of 'Constructor Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050)
-    
-        def get_current_time_as_html_fragment(self, time_provider):
-        current_time = time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-    
-            depending on self.param value
+        def exists(self, session_key=None):
         '''
-        self._static_method_choices[self.param].__get__(None, self.__class__)()
+        This method makes sense when you're talking to a shared resource, but
+        it doesn't matter when you're storing the information in the client's
+        cookie.
+        '''
+        return False
     
-    if __name__ == '__main__':
-    main()
+    
+class SessionManager(BaseSessionManager):
+    use_in_migrations = True
+    
+        if section is not None:
+        if section not in sitemaps:
+            raise Http404('No sitemap available for section: %r' % section)
+        maps = [sitemaps[section]]
+    else:
+        maps = sitemaps.values()
+    page = request.GET.get('p', 1)
+    
+            try:
+            # If the CallerReference is a value already sent in a previous identity request
+            # the returned value is that of the original request
+            result = self.client.update_cloud_front_origin_access_identity(
+                CloudFrontOriginAccessIdentityConfig=new_config,
+                Id=origin_access_identity_id,
+                IfMatch=e_tag,
+            )
+        except (ClientError, BotoCoreError) as e:
+            self.module.fail_json_aws(e, msg='Error updating Origin Access Identity.')
+    
+        try:
+        asgs_paginator = conn.get_paginator('describe_auto_scaling_groups')
+        asgs = asgs_paginator.paginate().build_full_result()
+    except ClientError as e:
+        module.fail_json(msg=e.message, **camel_dict_to_snake_dict(e.response))
+    
+    
+DOCUMENTATION = '''
+---
+module: ec2_eip_facts
+short_description: List EC2 EIP details
+description:
+    - List details of EC2 Elastic IP addresses.
+version_added: '2.6'
+author: 'Brad Macpherson (@iiibrad)'
+options:
+  filters:
+    description:
+      - A set of filters to use. Each filter is a name:value pair. The value
+        may be a list or a single element.
+    required: false
+    default: {}
+extends_documentation_fragment:
+    - aws
+    - ec2
+'''
+    
+        if not HAS_BOTO3:
+        module.fail_json(msg='boto3 required for this module')
+    
+        volume_id = module.params.get('volume_id')
+    snapshot_id = module.params.get('snapshot_id')
+    description = module.params.get('description')
+    instance_id = module.params.get('instance_id')
+    device_name = module.params.get('device_name')
+    wait = module.params.get('wait')
+    wait_timeout = module.params.get('wait_timeout')
+    last_snapshot_min_age = module.params.get('last_snapshot_min_age')
+    snapshot_tags = module.params.get('snapshot_tags')
+    state = module.params.get('state')
+    
+    from homeassistant.components import http
+from homeassistant.core import callback
+from homeassistant.helpers import template
+    
+        try:
+        cognito.client.resend_confirmation_code(
+            Username=email,
+            ClientId=cognito.client_id
+        )
+    except ClientError as err:
+        raise _map_aws_exception(err)
+    
+        @_handle_cloud_errors
+    @RequestDataValidator(vol.Schema({
+        vol.Required('email'): str,
+    }))
+    async def post(self, request, data):
+        '''Handle resending confirm email code request.'''
+        hass = request.app['hass']
+        cloud = hass.data[DOMAIN]
+    
+    from homeassistant.const import CONF_ID
+from homeassistant.components.config import EditIdBasedConfigView
+from homeassistant.components.automation import (
+    PLATFORM_SCHEMA, DOMAIN, async_reload)
+import homeassistant.helpers.config_validation as cv
+    
+        @asyncio.coroutine
+    def post(self, request, suite):
+        '''Request suite status.'''
+        # do real install if not in test mode
+        return self.json({'status': 'ok'})
+
+    
+            statsd.event(
+            title='Home Assistant',
+            text='%%% \n **{}** {} \n %%%'.format(name, message),
+            tags=[
+                'entity:{}'.format(event.data.get('entity_id')),
+                'domain:{}'.format(event.data.get('domain'))
+            ]
+        )
+    
+        def random_see(dev_id, name):
+        '''Randomize a sighting.'''
+        see(
+            dev_id=dev_id,
+            host_name=name,
+            gps=(hass.config.latitude + offset(),
+                 hass.config.longitude + offset()),
+            gps_accuracy=random.randrange(50, 150),
+            battery=random.randrange(10, 90)
+        )
+    
+        def __init__(self, config):
+        '''Initialize the scanner.'''
+        self.last_results = []
+        self.host = config[CONF_HOST]
+        self.username = config[CONF_USERNAME]
+        self.password = config[CONF_PASSWORD]
+        self.success_init = True
+    
+    DEPENDENCIES = ['http']
