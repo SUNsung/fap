@@ -1,248 +1,361 @@
 
         
-        void compose_motion(InputArray _om1, InputArray _T1, InputArray _om2, InputArray _T2,
-                    Mat& om3, Mat& T3, Mat& dom3dom1, Mat& dom3dT1, Mat& dom3dom2,
-                    Mat& dom3dT2, Mat& dT3dom1, Mat& dT3dT1, Mat& dT3dom2, Mat& dT3dT2);
+        Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    //! @cond IGNORED
+    // Convert an AttrValue with type `type` to the Python representation for
+// that value.
+string AttrValueToPython(const string& type, const AttrValue& value,
+                         const string& dtype_module = 'tf.');
     
-    // Tests that GetEncodingAsString returns the right result for a trivial
-// unicharset.
-TEST_F(UnicharcompressTest, GetEncodingAsString) {
-  LoadUnicharset('trivial.unicharset');
-  ExpectCorrect('trivial');
-  STRING encoding = compressed_.GetEncodingAsString(unicharset_);
-  string encoding_str(&encoding[0], encoding.length());
-  std::vector<string> lines =
-      strings::Split(encoding_str, '\n', strings::SkipEmpty());
-  EXPECT_EQ(5, lines.size());
-  // The first line is always space.
-  EXPECT_EQ('0\t ', lines[0]);
-  // Next we have i.
-  EXPECT_EQ('1\ti', lines[1]);
-  // Next we have f.
-  EXPECT_EQ('2\tf', lines[2]);
-  // Next we have the fi ligature: ﬁ. There are no nulls in it, as there are no
-  // repeated letter ligatures in this unicharset, unlike por.unicharset above.
-  EXPECT_EQ('2,1\tﬁ', lines[3]);
-  // Finally the null character.
-  EXPECT_EQ('3\t<nul>', lines[4]);
+    PyArray_Descr NPyBfloat16_Descr = {
+    PyObject_HEAD_INIT(nullptr) & PyBfloat16_Type,  // typeobj
+    // We must register bfloat16 with a kind other than 'f', because numpy
+    // considers two types with the same kind and size to be equal, but
+    // float16 != bfloat16.
+    'V',  // kind
+    // TODO(phawkins): there doesn't seem to be a way of guaranteeing a type
+    // character is unique.
+    'E',                                                  // type
+    '=',                                                  // byteorder
+    NPY_NEEDS_PYAPI | NPY_USE_GETITEM | NPY_USE_SETITEM,  // hasobject
+    0,                                                    // type_num
+    sizeof(bfloat16),                                     // elsize
+    alignof(bfloat16),                                    // alignment
+    nullptr,                                              // subarray
+    nullptr,                                              // fields
+    nullptr,                                              // names
+    &NPyBfloat16_ArrFuncs,                                // f
+};
+    
+    void ImportNumpy() {
+  import_array1();
 }
     
-    // dims=[5, 4, 3, 2]->[4, 3, 5, 2]
-TEST_F(MatrixTest, RotatingTranspose_0_2) {
-  GENERIC_2D_ARRAY<int> m;
-  src_.RotatingTranspose(dims_, kNumDims_, 0, 2, &m);
-  m.ResizeNoInit(kInputSize_ / 2, 2);
-  // Verify that the result is:
-  // output tensor=[[[[0, 1][24, 25][48, 49][72, 73][96, 97]]
-  //                 [[2, 3][26, 27][50, 51][74, 75][98, 99]]
-  //                 [[4, 5][28, 29][52, 53][76, 77][100, 101]]]
-  //                [[[6, 7]...
-  EXPECT_EQ(0, m(0, 0));
-  EXPECT_EQ(1, m(0, 1));
-  EXPECT_EQ(24, m(1, 0));
-  EXPECT_EQ(25, m(1, 1));
-  EXPECT_EQ(96, m(4, 0));
-  EXPECT_EQ(97, m(4, 1));
-  EXPECT_EQ(2, m(5, 0));
-  EXPECT_EQ(6, m(15, 0));
-}
+    #include <Python.h>
     
-     protected:
-  /**
-   * Sets up the internal data for iterating the blobs of a new word, then
-   * moves the iterator to the given offset.
-   */
-  TESS_LOCAL void BeginWord(int offset);
+    // Called by python code on initialization.
+//
+// 'trampoline' must represent a python function which has the
+// following signature:
+//   (string, list(ndarray)) | (string, list(EagerTensor)) ->
+//     ndarray | list(ndarray) | python scalar |
+//     EagerTensor | list(EagerTensor) | None
+//
+// The trampoline takes two arguments, the first is a string token
+// used by the python frontend's dispatching logic; the second is a
+// list of numpy ndarrays or EagerTensor objects. It can return a
+// single numpy ndarray, a list of numpy ndarrays, a python scalar, an
+// EagerTensor, a list of EagerTensors, or None.
+//
+// PyFunc requires inputs and outputs to be ndarrays. EagerPyFunc requires
+// inputs to be a list of EagerTensors and outputs to be an EagerTensor, a list
+// of EagerTensors, or None.
+//
+// The C++ runtime converts outputs back to Tensor objects.
+//
+// This function is called by script_ops.py during its module initialization.
+//
+// TODO(zhifengc): Support distributed runtime.
+void InitializePyTrampoline(PyObject* trampoline);
     
-    // A simple class to provide a dynamic programming solution to a class of
-// 1st-order problems in which the cost is dependent only on the current
-// step and the best cost to that step, with a possible special case
-// of using the variance of the steps, and only the top choice is required.
-// Useful for problems such as finding the optimal cut points in a fixed-pitch
-// (vertical or horizontal) situation.
-// Skeletal Example:
-// DPPoint* array = new DPPoint[width];
-// for (int i = 0; i < width; i++) {
-//   array[i].AddLocalCost(cost_at_i)
-// }
-// DPPoint* best_end = DPPoint::Solve(..., array);
-// while (best_end != nullptr) {
-//   int cut_index = best_end - array;
-//   best_end = best_end->best_prev();
-// }
-// delete [] array;
-class DPPoint {
+    #include <QMainWindow>
+#include <QObject>
+    
+    #endif // BITCOIN_QT_NETWORKSTYLE_H
+
+    
+        /** Colorize an icon (given object) with the text color */
+    QIcon TextColorIcon(const QIcon& icon) const;
+    
+    #include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/common.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    
+template <typename Dtype>
+class LayerRegisterer {
  public:
-  // The cost function evaluates the total cost at this (excluding this's
-  // local_cost) and if it beats this's total_cost, then
-  // replace the appropriate values in this.
-  typedef int64_t (DPPoint::*CostFunc)(const DPPoint* prev);
-    }
-    
-      // Accessors.
-  int x() const { return x_; }
-  int y() const { return y_; }
-  int dir() const { return dir_; }
-    
-      // Adds an element with a weight of 1.
-  void add(double x, double y);
-  // Adds an element with a specified weight.
-  void add(double x, double y, double weight);
-  // Adds a whole LLSQ.
-  void add(const LLSQ& other);
-  // Deletes an element with a weight of 1.
-  void remove(double x, double y);
-  int32_t count() const {  // no of elements
-    return static_cast<int>(total_weight + 0.5);
+  LayerRegisterer(const string& type,
+                  shared_ptr<Layer<Dtype> > (*creator)(const LayerParameter&)) {
+    // LOG(INFO) << 'Registering layer type: ' << type;
+    LayerRegistry<Dtype>::AddCreator(type, creator);
   }
-    
-    #include          'mod128.h'
-    
-    void SavePixForCrash(int resolution, Pix* pix) {
-#ifdef __linux__
-#ifndef ANDROID
-  int thread_id = syscall(SYS_gettid) % kMaxNumThreadPixes;
-#else
-  int thread_id = gettid() % kMaxNumThreadPixes;
-#endif
-  pixDestroy(&global_crash_pixes[thread_id]);
-  if (pix != nullptr) {
-    Pix* clone = pixClone(pix);
-    pixSetXRes(clone, resolution);
-    pixSetYRes(clone, resolution);
-    global_crash_pixes[thread_id] = clone;
-  }
-#endif
-}
-    
-      if (argv0 != nullptr && *argv0 != '\0') {
-    /* Use tessdata prefix from the command line. */
-    datadir = argv0;
-  } else if (tessdata_prefix) {
-    /* Use tessdata prefix from the environment. */
-    datadir = tessdata_prefix;
-#if defined(_WIN32)
-  } else if (datadir == nullptr || _access(datadir.string(), 0) != 0) {
-    /* Look for tessdata in directory of executable. */
-    char drive[_MAX_DRIVE];
-    char dir[_MAX_DIR];
-    char path[_MAX_PATH];
-    DWORD length = GetModuleFileName(nullptr, path, sizeof(path));
-    if (length > 0 && length < sizeof(path)) {
-      errno_t result = _splitpath_s(path, drive, sizeof(drive),
-                                    dir, sizeof(dir), nullptr, 0, nullptr, 0);
-      if (result == ERANGE) {
-        tprintf('Error: Path too long: %s\n', path);
-      }
-    }
-    }
-    
-      assert(peekType(msg) == thpp::Type::LONG_STORAGE);
-  THLongStorage *storage2 = unpackTHLongStorage(msg);
-  assert(storage2->size == STORAGE_SIZE);
-  for (int64_t i = 0; i < STORAGE_SIZE; i++)
-    assert(storage2->data[i] == i);
-  
-  int vec_size = unpackInteger(msg);
-  assert(vec_size == VEC_SIZE);
-  for (int i = 0; i < VEC_SIZE; i++)
-    assert(unpackInteger(msg) == 7);
-    
-    #define THC_GENERIC_FILE 'torch/csrc/generic/Storage.h'
-#include <THC/THCGenerateAllTypes.h>
-    
-    /* Set of callbacks used to receive callbacks from bidirectional stream. */
-typedef struct bidirectional_stream_callback {
-  /* Invoked when the stream is ready for reading and writing.
-   * Consumer may call bidirectional_stream_read() to start reading data.
-   * Consumer may call bidirectional_stream_write() to start writing
-   * data.
-   */
-  void (*on_stream_ready)(bidirectional_stream* stream);
-    }
-    
-    namespace grpc {
-namespace testing {
-    }
-    }
-    
-    grpc::string DescribeService(const grpc::protobuf::ServiceDescriptor* service) {
-  grpc::string result;
-  if (service->options().deprecated()) {
-    result.append('DEPRECATED\n');
-  }
-  result.append('filename: ' + service->file()->name() + '\n');
-    }
-    
-    
-    {  gpr_subprocess* const subprocess_;
 };
     
-    #include 'grpc_tools/main.h'
-    
-    AbstractAuthResolver::~AbstractAuthResolver() = default;
-    
-    namespace aria2 {
+    /**
+ * @brief Computes @f$ y = |x| @f$
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
+ */
+template <typename Dtype>
+class AbsValLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit AbsValLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
+    #include <vector>
     
-    {  virtual void dropCache(int64_t len, int64_t offset) CXX11_OVERRIDE;
+    
+    {  int count_;
+  int num_concats_;
+  int concat_input_size_;
+  int concat_axis_;
 };
     
-    void AbstractOptionHandler::setEraseAfterParse(bool f)
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    namespace caffe {
+    }
+    
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of PoolingLayer.
+ *        Fallback to PoolingLayer for CPU mode.
+*/
+template <typename Dtype>
+class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
+ public:
+  explicit CuDNNPoolingLayer(const LayerParameter& param)
+      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNPoolingLayer();
+  // Currently, cuDNN does not support the extra top blob.
+  virtual inline int MinTopBlobs() const { return -1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    }
+    
+    namespace CNTK
 {
-  updateFlags(FLAG_ERASE_AFTER_PARSE, f);
-}
+    class CompositeMinibatchSource final : public MinibatchSource
+    {
+        static const std::wstring PositionAttributeName;
+        static const std::wstring DistributedAfterSampleCountAttributeName;
+    }
+    }
     
-      virtual char getShortName() const CXX11_OVERRIDE { return shortName_; }
+    #include 'stdafx.h'
+#include 'CNTKLibrary.h'
+#include 'Utils.h'
+#include 'TensorView.h'
+#include 'Matrix.h'
+#include 'CPUSparseMatrix.h'
+#include 'GPUSparseMatrix.h'
+#include <algorithm>
+#include 'TensorShape.h'
+    
+    namespace CNTK
+{
+    class ProgressWriter::Impl
+    {
+    public:
+        Impl(size_t updateWriteFrequency, size_t firstUpdatesToWrite)
+            : m_frequency(updateWriteFrequency), m_firstN(firstUpdatesToWrite),
+            m_totalUpdates(0), m_totalSummaries(0)
+        {
+            Reset();
+        }
+    }
+    }
+    
+            MinibatchInfo info{ arguments.empty(), sweepEnd, m_prevMinibatchNumSamples, trainingLoss, evalCriterion };
+        bool updated = m_parameterLearners->Update(gradients, info);
+    
+        void Value::GetSequenceStartsAndLengths(const NDMaskPtr& mask, std::vector<ptrdiff_t>& sequenceBeginIndices, std::vector<size_t>& sequenceLengths, size_t numDynamicAxes)
+    {
+        if (!mask)
+            return;
+    }
+    
+            template <typename ElementType>
+        std::pair<std::shared_ptr<const Microsoft::MSR::CNTK::Matrix<ElementType>>, std::shared_ptr<Microsoft::MSR::CNTK::MBLayout>> PackedData()
+        {
+            if (!m_isPacked)
+                InvalidArgument('PackedValue::PackedData called on a Value object that has already been unpacked.');
+    }
+    
+    
+    {        m_dataFields->m_ownerFunction = ownerFunction;
+    }
+    
+    #include <cassert>
+#include <string>
+    
+    // some older code uses this namespace
+namespace DebugUtil
+{
+    void PrintCallStack(size_t skipLevels = 0, bool makeFunctionNamesStandOut = false);
+    }
+    
+        typedef unsigned int INDEXTYPE; // don't use size_t, as this saves HUGE amounts of RAM
+    std::vector<INDEXTYPE> map;     // [t] -> t' indices in randomized order
+    size_t currentseed;             // seed for current sequence
+    size_t randomizationrange;      // t - randomizationrange/2 <= t' < t + randomizationrange/2 (we support this to enable swapping)
+                                    // special values (randomizeDisable)
+    void Invalidate()
+    {
+        currentseed = (size_t) -1;
+    }
+    
+    
+    {    ~ScopeTimer()
+    {
+        if (m_verbosity > 2)
+        {
+            m_aggregateTimer.Stop();
+            double time = m_aggregateTimer.ElapsedSeconds();
+            fprintf(stderr, m_message.c_str(), time);
+        }
+    }
+};
+    
+            // determine all roots
+        deque<ComputationNodeBasePtr> roots;
+        // process 'special nodes'
+        // BUGBUG: This does not allow to unset tags. If special nodes are listed, they should completely override existing tags for the same node.
+        ProcessSpecialNodes(config, workList);
+        // then the original network
+        for (let& node : allNodes)
+            if (parents.find(node)->second.empty()) // no parents: it's a root
+                roots.push_back(node);
+        // also add new roots
+        for (let& node : additionalRoots)
+            roots.push_back(node);
+        if (TraceLevel() > 0)
+            fprintf(stderr, 'Edit: %d roots to construct the network from.\n', (int)roots.size());
+#ifdef _DEBUG
+        for (let& node : roots)
+            fprintf(stderr, '\t%ls = %ls()\n', node->NodeName().c_str(), node->OperationName().c_str());
+#endif
+        // The new network is now defined by roots.
+    
+    /*! \brief namespace of xgboost*/
+namespace xgboost {
+/*!
+ * \brief unsigned integer type used in boost,
+ *  used for feature index and row index.
+ */
+using bst_uint = uint32_t;  // NOLINT
+using bst_int = int32_t;    // NOLINT
+/*! \brief long integers */
+typedef uint64_t bst_ulong;  // NOLINT(*)
+/*! \brief float type, used for storing statistics */
+using bst_float = float;  // NOLINT
+    }
     
       /**
-   * Shuffles all the URLs in each group.
+   * \brief Map of matrices and associated cached predictions to facilitate
+   * storing and looking up predictions.
    */
-  void shuffle();
     
-    #include 'common.h'
+     protected:
+  /*!
+   * \brief to be implemented by subclass,
+   * get next token, return EOF if end of file
+   */
+  virtual char GetChar() = 0;
+  /*! \brief to be implemented by child, check if end of stream */
+  virtual bool IsEnd() = 0;
     
-    #include <ostream>
+      dmlc::DataIter<SparsePage>* RowIterator() override {
+     auto iter = source_.get();
+    iter->BeforeFirst();
+    return iter;
+  }
     
-        // print the header
-    for (auto B = elements.begin(); B != elements.end();) {
-      Out << *B++;
-      if (B != elements.end()) Out << ',';
+    SparsePageWriter::~SparsePageWriter() {
+  for (auto& queue : qworkers_) {
+    // use nullptr to signal termination.
+    std::shared_ptr<SparsePage> sig(nullptr);
+    queue.Push(std::move(sig));
+  }
+  for (auto& thread : workers_) {
+    thread->join();
+  }
+}
+    
+    Status DBImpl::EnableFileDeletions(bool force) {
+  // Job id == 0 means that this is not our background process, but rather
+  // user thread
+  JobContext job_context(0);
+  bool should_purge_files = false;
+  {
+    InstrumentedMutexLock l(&mutex_);
+    if (force) {
+      // if force, we need to enable file deletions right away
+      disable_delete_obsolete_files_ = 0;
+    } else if (disable_delete_obsolete_files_ > 0) {
+      --disable_delete_obsolete_files_;
     }
-    for (auto B = user_counter_names_.begin(); B != user_counter_names_.end();) {
-      Out << ',\'' << *B++ << '\'';
-    }
-    Out << '\n';
-    
-    namespace {
-    }
-    
-    #define REQUIRES(...) \
-  THREAD_ANNOTATION_ATTRIBUTE__(requires_capability(__VA_ARGS__))
-    
-    #include 'benchmark/benchmark.h'
-#include 'timers.h'
-    
-    #ifdef BENCHMARK_OS_WINDOWS
-#include <Windows.h>
-#endif
-    
-      // Populate the accumulators.
-  for (Run const& run : reports) {
-    CHECK_EQ(reports[0].benchmark_name, run.benchmark_name);
-    CHECK_EQ(run_iterations, run.iterations);
-    if (run.error_occurred) continue;
-    real_accumulated_time_stat.emplace_back(run.real_accumulated_time);
-    cpu_accumulated_time_stat.emplace_back(run.cpu_accumulated_time);
-    items_per_second_stat.emplace_back(run.items_per_second);
-    bytes_per_second_stat.emplace_back(run.bytes_per_second);
-    // user counters
-    for(auto const& cnt : run.counters) {
-      auto it = counter_stats.find(cnt.first);
-      CHECK_NE(it, counter_stats.end());
-      it->second.s.emplace_back(cnt.second);
+    if (disable_delete_obsolete_files_ == 0)  {
+      ROCKS_LOG_INFO(immutable_db_options_.info_log, 'File Deletions Enabled');
+      should_purge_files = true;
+      FindObsoleteFiles(&job_context, true);
+      bg_cv_.SignalAll();
+    } else {
+      ROCKS_LOG_WARN(
+          immutable_db_options_.info_log,
+          'File Deletions Enable, but not really enabled. Counter: %d',
+          disable_delete_obsolete_files_);
     }
   }
+  if (should_purge_files)  {
+    PurgeObsoleteFiles(job_context);
+  }
+  job_context.Clean();
+  LogFlush(immutable_db_options_.info_log);
+  return Status::OK();
+}
+    
+      uint64_t max_delayed_write_rate() const { return max_delayed_write_rate_; }
+    
+      env.now_micros_ += 200u;  // sleep credit 300
+  // One refill, credit 4480 balance + 3000 credit + 10240 refill
+  // Use 8000, 9720 left
+  ASSERT_EQ(static_cast<uint64_t>(1024u), controller.GetDelay(&env, 8000u));
+    
+      virtual Status GetChildren(const std::string& dir,
+                             std::vector<std::string>* result) override {
+    auto status_and_enc_path = EncodePath(dir);
+    if (!status_and_enc_path.first.ok()) {
+      return status_and_enc_path.first;
+    }
+    return EnvWrapper::GetChildren(status_and_enc_path.second, result);
+  }
+    
+      // close db
+  for (auto handle : handles) {
+    delete handle;
+  }
+  delete db;
+    
+    // This is an example interface of external-compaction algorithm.
+// Compaction algorithm can be implemented outside the core-RocksDB
+// code by using the pluggable compaction APIs that RocksDb provides.
+class Compactor : public EventListener {
+ public:
+  // Picks and returns a compaction task given the specified DB
+  // and column family.  It is the caller's responsibility to
+  // destroy the returned CompactionTask.  Returns 'nullptr'
+  // if it cannot find a proper compaction task.
+  virtual CompactionTask* PickCompaction(
+      DB* db, const std::string& cf_name) = 0;
+    }
