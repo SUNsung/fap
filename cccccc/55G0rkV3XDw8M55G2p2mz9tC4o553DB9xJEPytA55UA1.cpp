@@ -1,140 +1,202 @@
 
         
-        #import <Foundation/Foundation.h>
+        QT_BEGIN_NAMESPACE
+class QIcon;
+class QMenu;
+class QWidget;
+QT_END_NAMESPACE
     
-    namespace swift {
+        QColor TextColor() const { return textColor; }
+    QColor SingleColor() const { return singleColor; }
+    
+    
+    {    check_addbook_size(3);
+}
+    
+    private:
+    reverse_lock(reverse_lock const&);
+    reverse_lock& operator=(reverse_lock const&);
+    
+    /** Check bounds on a command line confirm target */
+unsigned int ParseConfirmTarget(const UniValue& value);
+    
+    SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
+/**
+ * Registers: rdx:rax = multiplication accumulator
+ *            r9:r8   = c
+ *            r15:rcx = d
+ *            r10-r14 = a0-a4
+ *            rbx     = b
+ *            rdi     = r
+ *            rsi     = a / t?
+ */
+  uint64_t tmp1, tmp2, tmp3;
+__asm__ __volatile__(
+    'movq 0(%%rsi),%%r10\n'
+    'movq 8(%%rsi),%%r11\n'
+    'movq 16(%%rsi),%%r12\n'
+    'movq 24(%%rsi),%%r13\n'
+    'movq 32(%%rsi),%%r14\n'
     }
     
-    #ifndef SWIFT_AST_IFCONFIGCLAUSE_H
-#define SWIFT_AST_IFCONFIGCLAUSE_H
-    
-        for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
-    {
-        g_driverType = driverTypes[driverTypeIndex];
-        hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-                D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
-        if (SUCCEEDED(hr))
-            break;
+        s_one[31] = 1;
+    /* Check against pubkey creation when the basepoint is the generator */
+    for (i = 0; i < 100; ++i) {
+        secp256k1_sha256_t sha;
+        unsigned char s_b32[32];
+        unsigned char output_ecdh[32];
+        unsigned char output_ser[32];
+        unsigned char point_ser[33];
+        size_t point_ser_len = sizeof(point_ser);
+        secp256k1_scalar s;
     }
-    if (FAILED(hr))
-        return hr;
     
-    
-    {    IntrinsicParams();
-    IntrinsicParams(Vec2d f, Vec2d c, Vec4d k, double alpha = 0);
-    IntrinsicParams operator+(const Mat& a);
-    IntrinsicParams& operator =(const Mat& a);
-    void Init(const cv::Vec2d& f, const cv::Vec2d& c, const cv::Vec4d& k = Vec4d(0,0,0,0), const double& alpha = 0);
-};
-    
-    
-    {    bool checkSubsetResult;
-    int generalPositionsCount;
-    int maxPointsCount;
-};
-    
-    namespace cv { namespace cuda { namespace device
+    BOOST_AUTO_TEST_CASE(bip173_testvectors_valid)
 {
-    template <class T>
-    __device__ __forceinline__ T warp_reduce(volatile T *ptr , const unsigned int tid = threadIdx.x)
-    {
-        const unsigned int lane = tid & 31; // index of thread in warp (0..31)
+    static const std::string CASES[] = {
+        'A12UEL5L',
+        'a12uel5l',
+        'an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs',
+        'abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw',
+        '11qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqc8247j',
+        'split1checkupstagehandshakeupstreamerranterredcaperred2y9e3w',
+        '?1ezyfcl',
+    };
+    for (const std::string& str : CASES) {
+        auto ret = bech32::Decode(str);
+        BOOST_CHECK(!ret.first.empty());
+        std::string recode = bech32::Encode(ret.first, ret.second);
+        BOOST_CHECK(!recode.empty());
+        BOOST_CHECK(CaseInsensitiveEqual(str, recode));
     }
-    }
-    }
-    }
+}
     
-            // Version: 1.2
-        UNSIGNED_BYTE_3_3_2              = 0x8032,
-        UNSIGNED_SHORT_4_4_4_4           = 0x8033,
-        UNSIGNED_SHORT_5_5_5_1           = 0x8034,
-        UNSIGNED_INT_8_8_8_8             = 0x8035,
-        UNSIGNED_INT_10_10_10_2          = 0x8036,
-        TEXTURE_BINDING_3D               = 0x806A,
-        PACK_SKIP_IMAGES                 = 0x806B,
-        PACK_IMAGE_HEIGHT                = 0x806C,
-        UNPACK_SKIP_IMAGES               = 0x806D,
-        UNPACK_IMAGE_HEIGHT              = 0x806E,
-        TEXTURE_3D                       = 0x806F,
-        PROXY_TEXTURE_3D                 = 0x8070,
-        TEXTURE_DEPTH                    = 0x8071,
-        TEXTURE_WRAP_R                   = 0x8072,
-        MAX_3D_TEXTURE_SIZE              = 0x8073,
-        UNSIGNED_BYTE_2_3_3_REV          = 0x8362,
-        UNSIGNED_SHORT_5_6_5             = 0x8363,
-        UNSIGNED_SHORT_5_6_5_REV         = 0x8364,
-        UNSIGNED_SHORT_4_4_4_4_REV       = 0x8365,
-        UNSIGNED_SHORT_1_5_5_5_REV       = 0x8366,
-        UNSIGNED_INT_8_8_8_8_REV         = 0x8367,
-        UNSIGNED_INT_2_10_10_10_REV      = 0x8368,
-        BGR                              = 0x80E0,
-        BGRA                             = 0x80E1,
-        MAX_ELEMENTS_VERTICES            = 0x80E8,
-        MAX_ELEMENTS_INDICES             = 0x80E9,
-        CLAMP_TO_EDGE                    = 0x812F,
-        TEXTURE_MIN_LOD                  = 0x813A,
-        TEXTURE_MAX_LOD                  = 0x813B,
-        TEXTURE_BASE_LEVEL               = 0x813C,
-        TEXTURE_MAX_LEVEL                = 0x813D,
-        SMOOTH_POINT_SIZE_RANGE          = 0x0B12,
-        SMOOTH_POINT_SIZE_GRANULARITY    = 0x0B13,
-        SMOOTH_LINE_WIDTH_RANGE          = 0x0B22,
-        SMOOTH_LINE_WIDTH_GRANULARITY    = 0x0B23,
-        ALIASED_LINE_WIDTH_RANGE         = 0x846E,
+    /* Equality between doubles is imprecise. Comparison should be done
+ * with a small threshold of tolerance, rather than exact equality.
+ */
+static bool DoubleEquals(double a, double b, double epsilon)
+{
+    return std::abs(a - b) < epsilon;
+}
     
-    #include 'runtime_common.hpp'
+    #ifdef __APPLE__
+// Workaround OSX linker warning: Xcode uses different default symbol
+// visibilities for static libs vs executables (see issue #25)
+#   define TINYFORMAT_HIDDEN __attribute__((visibility('hidden')))
+#else
+#   define TINYFORMAT_HIDDEN
+#endif
+    
+      bool Started() const {
+    return start_;
+  }
     
     
-    {	CreateThenReturnRID(joint_owner, joint);
+    {  // verify that all keys now have the new value that
+  // was set by the compaction process.
+  for (int i = 0; i < 100001; i++) {
+    char key[100];
+    snprintf(key, sizeof(key), 'B%010d', i);
+    std::string newvalue = Get(1, key);
+    ASSERT_EQ(newvalue.compare(NEW_VALUE), 0);
+  }
+}
+    
+      // Make a set of all of the live *.sst files
+  std::vector<FileDescriptor> live;
+  for (auto cfd : *versions_->GetColumnFamilySet()) {
+    if (cfd->IsDropped()) {
+      continue;
+    }
+    cfd->current()->AddLiveFiles(&live);
+  }
+    
+      using DBImpl::NewIterator;
+  virtual Iterator* NewIterator(const ReadOptions&,
+                                ColumnFamilyHandle* column_family) override;
+    
+    #include <inttypes.h>
+#include <stdio.h>
+#include <string>
+#include <algorithm>
+#include <vector>
+    
+    Status WriteBatchBase::SingleDelete(ColumnFamilyHandle* column_family,
+                                    const SliceParts& key) {
+  std::string key_buf;
+  Slice key_slice(key, &key_buf);
+  return SingleDelete(column_family, key_slice);
+}
+    
+      virtual Status NewSequentialFile(const std::string& fname,
+                                   std::unique_ptr<SequentialFile>* result,
+                                   const EnvOptions& options) override {
+    auto status_and_enc_path = EncodePathWithNewBasename(fname);
+    if (!status_and_enc_path.first.ok()) {
+      return status_and_enc_path.first;
+    }
+    return EnvWrapper::NewSequentialFile(status_and_enc_path.second, result,
+                                         options);
+  }
+    
+    Status PosixSequentialFile::InvalidateCache(size_t offset, size_t length) {
+#ifndef OS_LINUX
+  (void)offset;
+  (void)length;
+  return Status::OK();
+#else
+  if (!use_direct_io()) {
+    // free OS pages
+    int ret = Fadvise(fd_, offset, length, POSIX_FADV_DONTNEED);
+    if (ret != 0) {
+      return IOError('While fadvise NotNeeded offset ' + ToString(offset) +
+                         ' len ' + ToString(length),
+                     filename_, errno);
+    }
+  }
+  return Status::OK();
+#endif
 }
     
     
-    {	private:
-		void just_delete_shapes(int new_size);
-	};
-    
-    	btCollisionShape *btShape = shape->create_bt_shape(p_xform.basis.get_scale(), p_margin);
-	if (!btShape->isConvex()) {
-		bulletdelete(btShape);
-		ERR_PRINTS('The shape is not a convex shape, then is not supported: shape type: ' + itos(shape->get_type()));
-		return 0;
-	}
-	btConvexShape *bt_convex_shape = static_cast<btConvexShape *>(btShape);
-    
-    void PhysicsMaterial::set_bounce(real_t p_val) {
-	bounce = p_val;
-	emit_changed();
-}
-    
-    	gravity *= gravity_scale;
-    
-    	BodySW *body = body_owner.get(p_body);
-	ERR_FAIL_COND_V(!body, 0);
-    
-    		still_time += p_step;
-    
-    
-    {	return do_process;
-}
-    
-    	Shape2DSW *shape = shape_owner.get(p_shape);
-	ERR_FAIL_COND(!shape);
-	ERR_FAIL_COND(!shape->is_configured());
+    {  // Need to implement this so the file is truncated correctly
+  // with direct I/O
+  virtual Status Truncate(uint64_t size) override;
+  virtual Status Close() override;
+  virtual Status Append(const Slice& data) override;
+  virtual Status PositionedAppend(const Slice& data, uint64_t offset) override;
+  virtual Status Flush() override;
+  virtual Status Sync() override;
+  virtual Status Fsync() override;
+  virtual bool IsSyncThreadSafe() const override;
+  virtual bool use_direct_io() const override { return use_direct_io_; }
+  virtual void SetWriteLifeTimeHint(Env::WriteLifeTimeHint hint) override;
+  virtual uint64_t GetFileSize() override;
+  virtual Status InvalidateCache(size_t offset, size_t length) override;
+  virtual size_t GetRequiredBufferAlignment() const override {
+    return logical_sector_size_;
+  }
+#ifdef ROCKSDB_FALLOCATE_PRESENT
+  virtual Status Allocate(uint64_t offset, uint64_t len) override;
+#endif
+#ifdef ROCKSDB_RANGESYNC_PRESENT
+  virtual Status RangeSync(uint64_t offset, uint64_t nbytes) override;
+#endif
+#ifdef OS_LINUX
+  virtual size_t GetUniqueId(char* id, size_t max_size) const override;
+#endif
+};
     
     
-    {		} else if (!(p.usage & PROPERTY_USAGE_EDITOR))
-			continue;
+    {  MockEnvTest()
+      : env_(new MockEnv(Env::Default())) {
+  }
+  ~MockEnvTest() {
+    delete env_;
+  }
+};
     
-    
-    {	return ground_energy;
-}
-    
-    	void ordered_insert(const T &p_val) {
-		int i;
-		for (i = 0; i < _cowdata->size(); i++) {
-    }
-    }
-    
-    			SelfList<RasterizerScene::InstanceBase> *instances = instance_list.first();
-			while (instances) {
-    }
+      // create column family
+  ColumnFamilyHandle* cf;
+  s = db->CreateColumnFamily(ColumnFamilyOptions(), 'new_cf', &cf);
+  assert(s.ok());
