@@ -1,142 +1,184 @@
 
         
-        
-@pytest.mark.parametrize(('username', 'password', 'message'), (
-    ('', '', b'Username is required.'),
-    ('a', '', b'Password is required.'),
-    ('test', 'test', b'already registered'),
-))
-def test_register_validate_input(client, username, password, message):
-    response = client.post(
-        '/auth/register',
-        data={'username': username, 'password': password}
-    )
-    assert message in response.data
-    
-        from inspect import getargspec
-    from cStringIO import StringIO
-    
-        def get_namespace(self, namespace, lowercase=True, trim_namespace=True):
-        '''Returns a dictionary containing a subset of configuration options
-        that match the specified namespace/prefix. Example usage::
-    
-        def _fail(self, *args, **kwargs):
-        raise RuntimeError('The session is unavailable because no secret '
-                           'key was set.  Set the secret_key on the '
-                           'application to something unique and secret.')
-    __setitem__ = __delitem__ = clear = pop = popitem = \
-        update = setdefault = _fail
-    del _fail
-    
-            if args:
-            if 'gui' in conf and conf['gui']:
-                # Enter GUI mode.
-                from .gui import gui_main
-                gui_main(*args, **conf)
-            else:
-                # Enter console mode.
-                from .console import console_main
-                console_main(*args, **conf)
-    
-        #decide sourceId to know which extractor to use
-    if 'sourceId' in info: sourceId = info['sourceId']
-    # danmakuId = info['danmakuId']
-    
-        #if dictify(e)['ckplayer']['info'][0]['title'][0]['_text'].strip():  #duration
-        #video_dict['title'] = dictify(e)['ckplayer']['info'][0]['title'][0]['_text'].strip()
+        import urllib3
+import chardet
+import warnings
+from .exceptions import RequestsDependencyWarning
     
     
-def cntv_download(url, **kwargs):
-    if re.match(r'http://tv\.cntv\.cn/video/(\w+)/(\w+)', url):
-        rid = match1(url, r'http://tv\.cntv\.cn/video/\w+/(\w+)')
-    elif re.match(r'http://tv\.cctv\.com/\d+/\d+/\d+/\w+.shtml', url):
-        rid = r1(r'var guid = '(\w+)'', get_content(url))
-    elif re.match(r'http://\w+\.cntv\.cn/(\w+/\w+/(classpage/video/)?)?\d+/\d+\.shtml', url) or \
-         re.match(r'http://\w+.cntv.cn/(\w+/)*VIDE\d+.shtml', url) or \
-         re.match(r'http://(\w+).cntv.cn/(\w+)/classpage/video/(\d+)/(\d+).shtml', url) or \
-         re.match(r'http://\w+.cctv.com/\d+/\d+/\d+/\w+.shtml', url) or \
-         re.match(r'http://\w+.cntv.cn/\d+/\d+/\d+/\w+.shtml', url): 
-        page = get_content(url)
-        rid = r1(r'videoCenterId','(\w+)'', page)
-        if rid is None:
-            guid = re.search(r'guid\s*=\s*'([0-9a-z]+)'', page).group(1)
-            rid = guid
-    elif re.match(r'http://xiyou.cntv.cn/v-[\w-]+\.html', url):
-        rid = r1(r'http://xiyou.cntv.cn/v-([\w-]+)\.html', url)
-    else:
-        raise NotImplementedError(url)
-    
-    def dailymotion_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads Dailymotion videos by URL.
+class RequestException(IOError):
+    '''There was an ambiguous exception that occurred while handling your
+    request.
     '''
     
-    #----------------------------------------------------------------------
-def fc2video_download_by_upid(upid, output_dir = '.', merge = True, info_only = False, **kwargs):
-    ''''''
-    fake_headers = {
-        'DNT': '1',
-        'Accept-Encoding': 'gzip, deflate, sdch',
-        'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.58 Safari/537.36',
-        'Accept': '*/*',
-        'X-Requested-With': 'ShockwaveFlash/19.0.0.245',
-        'Connection': 'keep-alive',
-    }
-    api_base = 'http://video.fc2.com/ginfo.php?upid={upid}&mimi={mimi}'.format(upid = upid, mimi = makeMimi(upid))
-    html = get_content(api_base, headers=fake_headers)
+        def test_repr(self):
+        assert repr(self.lookup_dict) == '<lookup 'test'>'
     
-    def get_orig_video_source(api_key, pid, secret):
-    parsed = json.loads(get_content_headered(tmpl_api_call_video_info % (api_key, pid, secret)))
-    for stream in parsed['streams']['stream']:
-        if stream['type'] == 'orig':
-            return stream['_content'].replace('\\', '')
-    return None
     
-    expected_text_data_docstrings = tuple('\n     |      ' + s if s else ''
-                                      for s in expected_data_docstrings)
+class TestTestServer:
     
-        def testIterator(self):
-        self.createTempFile()
-        with BZ2File(self.filename) as bz2f:
-            self.assertEqual(list(iter(bz2f)), self.TEXT_LINES)
+    # If true, show URL addresses after external links.
+#latex_show_urls = False
     
-    def handleSlideshowTitle(title):
-    print('<title>%s</title>' % getText(title.childNodes))
+        print('20 newsgroups')
+    print('=============')
+    print('X_train.shape = {0}'.format(X_train.shape))
+    print('X_train.format = {0}'.format(X_train.format))
+    print('X_train.dtype = {0}'.format(X_train.dtype))
+    print('X_train density = {0}'
+          ''.format(X_train.nnz / np.product(X_train.shape)))
+    print('y_train {0}'.format(y_train.shape))
+    print('X_test {0}'.format(X_test.shape))
+    print('X_test.format = {0}'.format(X_test.format))
+    print('X_test.dtype = {0}'.format(X_test.dtype))
+    print('y_test {0}'.format(y_test.shape))
+    print()
     
-    # register the Foo class; make `f()` and `g()` accessible via proxy
-MyManager.register('Foo1', Foo)
+        Returns
+    -------
+    array of floats shaped like (metrics, formats, samples, classes, density)
+        Time in seconds.
+    '''
+    metrics = np.atleast_1d(metrics)
+    samples = np.atleast_1d(samples)
+    classes = np.atleast_1d(classes)
+    density = np.atleast_1d(density)
+    formats = np.atleast_1d(formats)
+    out = np.zeros((len(metrics), len(formats), len(samples), len(classes),
+                    len(density)), dtype=float)
+    it = itertools.product(samples, classes, density)
+    for i, (s, c, d) in enumerate(it):
+        _, y_true = make_multilabel_classification(n_samples=s, n_features=1,
+                                                   n_classes=c, n_labels=d * c,
+                                                   random_state=42)
+        _, y_pred = make_multilabel_classification(n_samples=s, n_features=1,
+                                                   n_classes=c, n_labels=d * c,
+                                                   random_state=84)
+        for j, f in enumerate(formats):
+            f_true = f(y_true)
+            f_pred = f(y_pred)
+            for k, metric in enumerate(metrics):
+                t = timeit(partial(metric, f_true, f_pred), number=n_times)
     
-            print('Unordered results using pool.imap_unordered():')
-        for x in imap_unordered_it:
-            print('\t', x)
-        print()
+        for n_components in [i.astype(int) for i in
+                         np.linspace(data.shape[1] // 10,
+                                     data.shape[1], num=4)]:
+        all_times = defaultdict(list)
+        all_errors = defaultdict(list)
+        pca = PCA(n_components=n_components)
+        rpca = PCA(n_components=n_components, svd_solver='randomized',
+                   random_state=1999)
+        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
+                                                               ('rpca', rpca)]}
     
-    con.close()
+    
+def euclidean_distances(X, n_jobs):
+    return pairwise_distances(X, metric='euclidean', n_jobs=n_jobs)
+    
+            for iteration in xrange(opts.n_times):
+            print('\titer %s...' % iteration, end='')
+            time_to_fit, time_to_transform = bench_scikit_transformer(X_dense,
+              transformers[name])
+            time_fit[name].append(time_to_fit)
+            time_transform[name].append(time_to_transform)
+            print('done')
+    
+    from scipy.sparse.csr import csr_matrix
+import numpy as np
+from sklearn.linear_model.stochastic_gradient import SGDRegressor
+from sklearn.metrics import r2_score
+    
+        fn = os.path.relpath(fn,
+                         start=os.path.dirname(__import__(package).__file__))
+    try:
+        lineno = inspect.getsourcelines(obj)[1]
+    except Exception:
+        lineno = ''
+    return url_fmt.format(revision=revision, package=package,
+                          path=fn, lineno=lineno)
+    
+        def decode(self, value):
+        if value != self.resource_type:
+            raise jose.DeserializationError(
+                'Wrong resource type: {0} instead of {1}'.format(
+                    value, self.resource_type))
+        return value
 
     
-    image = face_recognition.load_image_file('{}')
-face_locations = face_recognition.face_locations(image)
+    
+class ResourceTest(unittest.TestCase):
+    '''Tests for acme.fields.Resource.'''
+    
+    The JWS implementation in josepy only implements the base JOSE standard. In
+order to support the new header fields defined in ACME, this module defines some
+ACME-specific classes that layer on top of josepy.
 '''
+import josepy as jose
     
-        # Apply some eyeliner
-    d.line(face_landmarks['left_eye'] + [face_landmarks['left_eye'][0]], fill=(0, 0, 0, 110), width=6)
-    d.line(face_landmarks['right_eye'] + [face_landmarks['right_eye'][0]], fill=(0, 0, 0, 110), width=6)
+            :param list ex_errs: Existing errors before save
     
-    # Find all the faces in the image using a pre-trained convolutional neural network.
-# This method is more accurate than the default HOG model, but it's slower
-# unless you have an nvidia GPU and dlib compiled with CUDA extensions. But if you do,
-# this will use GPU acceleration and perform well.
-# See also: find_faces_in_picture.py
-face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=0, model='cnn')
+        def test_revert_challenge_config(self):
+        mock_load = mock.Mock()
+        self.config.aug.load = mock_load
     
+    from certbot_apache.tests import util
     
-    # Display the results
-    for (top, right, bottom, left), name in zip(face_locations, face_names):
-        # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-        top *= 4
-        right *= 4
-        bottom *= 4
-        left *= 4
+        Include {ssl_options_conf_path}
+    SSLCertificateFile {cert_path}
+    SSLCertificateKeyFile {key_path}
     
-    with open('README.rst') as readme_file:
-    readme = readme_file.read()
+      The files passed in will be linted; at least one file must be provided.
+  Default linted extensions are %s.
+  Other file types will be ignored.
+  Change the extensions with the --extensions flag.
+    
+        #Checking correctness of path
+    if not os.path.isdir(loc):
+        print('Invalid directory. Please try again!', file = sys.stderr)
+        sys.exit(1)
+    
+            # Adding model 'EventProcessingIssue'
+        db.create_table(
+            'sentry_eventprocessingissue', (
+                (
+                    'id', self.gf('sentry.db.models.fields.bounded.BoundedBigAutoField')(
+                        primary_key=True
+                    )
+                ), (
+                    'raw_event', self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.RawEvent']
+                    )
+                ), (
+                    'processing_issue',
+                    self.gf('sentry.db.models.fields.foreignkey.FlexibleForeignKey')(
+                        to=orm['sentry.ProcessingIssue']
+                    )
+                ),
+            )
+        )
+        db.send_create_signal('sentry', ['EventProcessingIssue'])
+    
+            for renv in dupe_release_envs:
+            release_id = renv['release_id']
+            organization_id = renv['organization_id']
+            environment_id = renv['environment_id']
+            renvs = list(
+                orm.ReleaseEnvironment.objects.filter(
+                    release_id=release_id,
+                    organization_id=organization_id,
+                    environment_id=environment_id,
+                ).order_by('first_seen')
+            )
+            to_renv = renvs[0]
+            from_renvs = renvs[1:]
+            last_seen = max([re.last_seen for re in renvs])
+            orm.ReleaseEnvironment.objects.filter(
+                id=to_renv.id,
+            ).update(last_seen=last_seen)
+            orm.ReleaseEnvironment.objects.filter(
+                id__in=[re.id for re in from_renvs],
+            ).delete()
+    
+        def backwards(self, orm):
+        # Removing unique constraint on 'ApiAuthorization', fields ['user', 'application']
+        db.delete_unique('sentry_apiauthorization', ['user_id', 'application_id'])
