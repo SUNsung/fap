@@ -1,313 +1,332 @@
 
         
-          // Quit the whole app.
-  static void Quit(content::RenderProcessHost* rph = NULL);
+        // Asserts that a given statement causes the program to exit, either by
+// explicitly exiting with a nonzero exit code or being killed by a
+// signal, and emitting error output that matches regex.
+# define ASSERT_DEATH(statement, regex) \
+    ASSERT_EXIT(statement, ::testing::internal::ExitedUnsuccessfully, regex)
     
     
-    {}  // namespace nw
-
+    {}  // namespace internal
     
+    #if 0
     
-    {  if (enable_shortcut_) {
-    focus_manager_->UnregisterAccelerator(accelerator_, this);
+      explicit FilePath(const std::string& pathname) : pathname_(pathname) {
+    Normalize();
   }
-  if (submenu_) {
-    submenu_->RemoveKeys();
-  }
-  focus_manager_ = NULL;
-}
     
-      // Ignore first non-switch arg if it's not a standalone package.
-  bool ignore_arg = !package->self_extract();
-  for (unsigned i = 1; i < argv.size(); ++i) {
-    if (ignore_arg && args.size() && argv[i] == args[0]) {
-      ignore_arg = false;
-      continue;
-    }
-    }
+    // We cannot use std::numeric_limits<T>::max() as it clashes with the max()
+// macro defined by <windows.h>.
+template <>
+inline float FloatingPoint<float>::Max() { return FLT_MAX; }
+template <>
+inline double FloatingPoint<double>::Max() { return DBL_MAX; }
     
-    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6>
+class ValueArray6 {
  public:
-  NwClipboardReadAvailableTypesFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
+  ValueArray6(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6) : v1_(v1), v2_(v2),
+      v3_(v3), v4_(v4), v5_(v5), v6_(v6) {}
     }
     
-    #include 'base/lazy_instance.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/nw_screen.h'
-#include 'extensions/browser/extensions_browser_client.h'
-#include 'ui/display/display_observer.h'
-#include 'ui/display/display.h'
-#include 'ui/display/screen.h'
+      // Converts a wide C string to a String using the UTF-8 encoding.
+  // NULL will be converted to '(null)'.  If an error occurred during
+  // the conversion, '(failed to convert from wide string)' is
+  // returned.
+  static std::string ShowWideCString(const wchar_t* wide_c_str);
     
-    void leveldb_writebatch_delete(
-    leveldb_writebatch_t* b,
-    const char* key, size_t klen) {
-  b->rep.Delete(Slice(key, klen));
+    
+    {  // <TechnicalDetails>
+  //
+  // EXPECT_EQ(expected, actual) is the same as
+  //
+  //   EXPECT_TRUE((expected) == (actual))
+  //
+  // except that it will print both the expected value and the actual
+  // value when the assertion fails.  This is very helpful for
+  // debugging.  Therefore in this case EXPECT_EQ is preferred.
+  //
+  // On the other hand, EXPECT_TRUE accepts any Boolean expression,
+  // and is thus more general.
+  //
+  // </TechnicalDetails>
 }
     
-    // Memtables and sstables that make the DB representation contain
-// (userkey,seq,type) => uservalue entries.  DBIter
-// combines multiple entries for the same userkey found in the DB
-// representation into a single entry while accounting for sequence
-// numbers, deletion markers, overwrites, etc.
-class DBIter: public Iterator {
- public:
-  // Which direction is the iterator currently moving?
-  // (1) When moving forward, the internal iterator is positioned at
-  //     the exact entry that yields this->key(), this->value()
-  // (2) When moving backwards, the internal iterator is positioned
-  //     just before all entries whose user key == this->key().
-  enum Direction {
-    kForward,
-    kReverse
-  };
+      // Copy c'tor
+  MyString(const MyString& string) : c_string_(NULL) {
+    Set(string.c_string_);
+  }
+    
+    bool IsUserOnly(std::wstring opt)
+{
+	bool userOnly;
     }
     
-    Status SetCurrentFile(Env* env, const std::string& dbname,
-                      uint64_t descriptor_number) {
-  // Remove leading 'dbname/' and add newline to manifest file name
-  std::string manifest = DescriptorFileName(dbname, descriptor_number);
-  Slice contents = manifest;
-  assert(contents.starts_with(dbname + '/'));
-  contents.remove_prefix(dbname.size() + 1);
-  std::string tmp = TempFileName(dbname, descriptor_number);
-  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
-  if (s.ok()) {
-    s = env->RenameFile(tmp, CurrentFileName(dbname));
+    /*! \brief typedef the factory function of operator property */
+typedef std::function<OperatorProperty *()> OperatorPropertyFactory;
+/*!
+ * \brief Registry entry for OperatorProperty factory functions.
+ */
+struct OperatorPropertyReg
+    : public dmlc::FunctionRegEntryBase<OperatorPropertyReg,
+                                        OperatorPropertyFactory> {
+  /*!
+   * \brief Set key_var_num_args
+   *  When this is set, the API caller is required to pass in a
+   *  argument with key=key_num_args.c_str(), and value=num_args.
+   *  num_args is number of positional argument when calling the function.
+   *
+   *  This is used to pass in length of positional arguments
+   *  for operators that can take variable length of input.
+   *  Most operators do not need to set this property.
+   *
+   * \param key the key name to be set
+   */
+  inline OperatorPropertyReg& set_key_var_num_args(const std::string &key) {  // NOLINT(*)
+    this->key_var_num_args = key;
+    return *this;
   }
-  if (!s.ok()) {
-    env->DeleteFile(tmp);
+  /*!
+   * \brief Check if TypeString of the type matches the registered name
+   */
+  inline OperatorPropertyReg& check_name() {
+    OperatorProperty *p = this->body();
+    std::string type = p->TypeString();
+    delete p;
+    CHECK_EQ(this->name, type)
+        << 'Register Name and TypeString mismatch, name=\'' << this->name << '\','
+        << ' but TypeString=\'' << type <<'\'';
+    return *this;
   }
-  return s;
+    }
+    
+    template <typename Dtype>
+void Deleter(::caffe::Layer<Dtype> *ptr) {
 }
     
-      fname = TableFileName('bar', 200);
-  ASSERT_EQ('bar/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(200, number);
-  ASSERT_EQ(kTableFile, type);
+    #include <caffe/util/io.hpp>
+namespace dmlc {
+namespace parameter {
+    }
+    }
     
-          case kNewFile:
-        if (GetLevel(&input, &level) &&
-            GetVarint64(&input, &f.number) &&
-            GetVarint64(&input, &f.file_size) &&
-            GetInternalKey(&input, &f.smallest) &&
-            GetInternalKey(&input, &f.largest)) {
-          new_files_.push_back(std::make_pair(level, f));
-        } else {
-          msg = 'new-file entry';
+    MXNET_REGISTER_OP_PROPERTY(CaffeLoss, CaffeLossProp)
+.describe('Caffe loss layer')
+.add_arguments(CaffeLossParam::__FIELDS__());
+    
+    /*!
+ *  Copyright (c) 2016 by Contributors
+ * \file cv_api.h
+ * \brief C API for opencv
+ * \author Junyuan Xie
+ */
+#include <dmlc/base.h>
+#include <mxnet/base.h>
+#include <mxnet/ndarray.h>
+#include <opencv2/opencv.hpp>
+#include 'cv_api.h'
+#include '../../src/c_api/c_api_common.h'
+    
+    template <std::size_t kNumGpus, std::size_t kStreams>
+StreamManager<kNumGpus, kStreams>::StreamManager() {
+#if MXNET_USE_CUDA
+  for (std::size_t i = 0; i < kNumGpus; ++i) {
+    gpu_cnt_.at(i) = -1;
+  }
+  for (auto&& i : gpu_io_streams_) {
+    i = nullptr;
+  }
+#endif  // MXNET_USE_CUDA
+}
+    
+      std::string shape_attr_key;
+  if (ret.attrs.count(attr_key_name) != 0) {
+    shape_attr_key = ret.GetAttr<std::string>(attr_key_name);
+    // erase the provided arguments
+    ret.attrs.erase(attr_key_name);
+  }
+    
+            const auto learningRate = float(LearningRate(trainingSampleCount));
+        const auto momentum = float(MomentumValueForMB(trainingSampleCount));
+        const auto unitGainFactor = UnitGainFactor<float>(trainingSampleCount);
+    
+    namespace CNTK
+{
+    const std::wstring versionKey = L'version';
+    const std::wstring typeKey = L'type';
+    const std::wstring uidKey = L'uid';
+    const std::wstring kindKey = L'kind';
+    const std::wstring dataTypeKey = L'data_type';
+    const std::wstring dynamicAxisKey = L'dynamic_axis';
+    const std::wstring isSparseKey = L'is_sparse';
+    const std::wstring nameKey = L'name';
+    const std::wstring needsGradientKey = L'needs_gradient';
+    const std::wstring shapeKey = L'shape';
+    const std::wstring valueKey = L'value';
+    const std::wstring opKey = L'op';
+    const std::wstring attributesKey = L'attributes';
+    const std::wstring inputsKey = L'inputs';
+    const std::wstring rootKey = L'root';
+    const std::wstring functionsKey = L'primitive_functions';
+    const std::wstring sampleCountKey = L'sample_count';
+    const std::wstring minibatchCountKey = L'minibatchCount'; // TODO: Python-style spelling
+    const std::wstring sweepCountKey = L'sweepCount';
+    const std::wstring unitKey = L'unit';
+    const std::wstring refMBSizeKey = L'ref_mb_size';
+    const std::wstring epochSizeKey = L'epoch_size';
+    const std::wstring scheduleKey = L'schedule';
+    const std::wstring learningRateScheduleKey = L'learnig_rate_schedule';
+    const std::wstring smoothedGradientsKey = L'smoothed_gradients';
+    const std::wstring noiseInjectionSeedKey = L'noise_injection_seed';
+    const std::wstring masterParameterUpdatedKey = L'master_parameter_updated';
+    const std::wstring smoothedCountKey = L'smoothed_count';
+    const std::wstring stateKey = L'state';
+    const std::wstring rngSeedKey = L'rng_seed';
+    const std::wstring rngOffsetKey = L'rng_offset';
+    const std::wstring blockFunctionCompositeKey = L'block_function_composite';
+    const std::wstring blockFunctionOpNameKey = L'block_function_op_name';
+    const std::wstring blockFunctionCompositeArgumentsMapKeysKey = L'block_function_composite_arguments_map_keys';
+    const std::wstring blockFunctionCompositeArgumentsMapValuesKey = L'block_function_composite_arguments_map_values';
+    const std::wstring internalWorkerStateKey = L'internal_worker_state';
+    const std::wstring externalWorkerStateKey = L'external_worker_state';
+    const std::wstring userDefinedStateKey = L'user_defined_state';
+    const std::wstring udfModuleNameKey = L'module';
+    const std::wstring udfFactoryMethodNameKey = L'deserialize_method';
+    const std::wstring nativeUDFKey = L'native';
+    }
+    
+        // Acquires the mutex. If 'wait' is true and mutex is acquired by someone else then
+    // function waits until mutex is released
+    // Returns false if !wait and lock cannot be acquired, or in case of a system error that prevents us from acquiring the lock.
+    bool Acquire(bool wait)
+    {
+        assert(m_handle == NULL);
+        m_handle = ::CreateMutexA(NULL /*security attr*/, FALSE /*bInitialOwner*/, m_name.c_str());
+        if (m_handle == NULL)
+        {
+            if (!wait)
+                return false;   // can't lock due to access permissions: lock already exists, consider not available
+            else
+                RuntimeError('Acquire: Failed to create named mutex %s: %d.', m_name.c_str(), GetLastError());
         }
-        break;
-    
-      // Return true iff 'x' is a prefix of '*this'
-  bool starts_with(const Slice& x) const {
-    return ((size_ >= x.size_) &&
-            (memcmp(data_, x.data_, x.size_) == 0));
-  }
-    
-    
-    {  stackDepth_g = 0;  // Yes, this is bad coding, but options are limited.
-  bool successful = readValue();
-  Token token;
-  skipCommentTokens(token);
-  if (collectComments_ && !commentsBefore_.empty())
-    root.setComment(commentsBefore_, commentAfter);
-  if (features_.strictRoot_) {
-    if (!root.isArray() && !root.isObject()) {
-      // Set error location to start of doc, ideally should be first token found
-      // in doc
-      token.type_ = tokenError;
-      token.start_ = beginDoc;
-      token.end_ = endDoc;
-      addError(
-          'A valid JSON document must be either an array or an object value.',
-          token);
-      return false;
-    }
-  }
-  return successful;
-}
-    
-    // Initialize the various types and objects.
-bool InitDescriptorMappingTypes();
-    
-    // Find the file which defines an extension extending the given message type
-// with the given field number.
-// Python DescriptorDatabases are not required to implement this method.
-bool PyDescriptorDatabase::FindFileContainingExtension(
-    const string& containing_type, int field_number,
-    FileDescriptorProto* output) {
-  ScopedPyObjectPtr py_method(
-      PyObject_GetAttrString(py_database_, 'FindFileContainingExtension'));
-  if (py_method == NULL) {
-    // This method is not implemented, returns without error.
-    PyErr_Clear();
-    return false;
-  }
-  ScopedPyObjectPtr py_descriptor(
-      PyObject_CallFunction(py_method.get(), 's#i', containing_type.c_str(),
-                            containing_type.size(), field_number));
-  return GetFileDescriptorProto(py_descriptor.get(), output);
-}
-    
-    // CodeGenerator implementation which generates a C++ source file and
-// header.  If you create your own protocol compiler binary and you want
-// it to support C++ output, you can do so by registering an instance of this
-// CodeGenerator with the CommandLineInterface in your main() function.
-class LIBPROTOC_EXPORT CppGenerator : public CodeGenerator {
- public:
-  CppGenerator();
-  ~CppGenerator();
     }
     
-    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
-  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
-  // Identifiers can't start with digits
-  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
-  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
+    // GetMinibatch - Get the next minibatch (features and labels)
+// matrices - [in] a map with named matrix types (i.e. 'features', 'labels') mapped to the corresponding matrix,
+//             [out] each matrix resized if necessary containing data.
+// returns - true if there are more minibatches, false if no more minibatches remain
+bool DataReader::GetMinibatch(StreamMinibatchInputs& matrices)
+{
+    /**
+    each reader reads data with number of columns as  nbr_utterances_per_minibatch * mbSize
+    notice that readers may differ in their actual mbsize, though it is supposedly to be nbr_utterances_per_minibatch * mbSize.
+    To handle with this, readers use their getminibatch function and then return their exact number of utterance in each minbatch.
+    This exact number, which is specified for the next reader, is passed to the next reader.
+    The next reader then returns the exact number of utterances per minibatch, after calling its getminibatch function.
+    Then this returned number is compared against the specified number. If these two numbers are not consistent, return with logic error.
+    The logic error can be avoided usually with an exchange of reading orders.
+    */
+    bool bRet = true;
+    //vector<size_t> vNbrSentences;
+    size_t nbr = 0;
+    for (size_t i = 0; i < m_ioNames.size(); i++)
+    {
+        if (nbr > 0)
+            m_dataReaders[m_ioNames[i]]->SetNumParallelSequences(nbr); // the first one determines the param of all others --TODO: This is flimsy.
+        bRet &= m_dataReaders[m_ioNames[i]]->GetMinibatch(matrices);
+        size_t thisNbr = m_dataReaders[m_ioNames[i]]->GetNumParallelSequencesForFixingBPTTMode();
+        if (nbr == 0)
+            nbr = thisNbr;
+        else if (thisNbr != nbr)
+            LogicError('DataReader::GetMinibatch: The specified number of utterances per minibatch is not consistent to the actual number of utterances per minibatch');
+    }
+    return bRet;
+}
+    
+    #include <functional>
+#include <stdexcept>
+    
+    template <typename TVector>
+inline void RandomShuffleMT(TVector& v, std::mt19937_64& rng)
+{
+    foreach_index(currentLocation, v)
+    {
+        // Pick a random location and swap with current one
+        const size_t randomLocation = RandMT(0, v.size(), rng);
+        std::swap(v[currentLocation], v[randomLocation]);
+    }
+}
+    
+            // if dimension not specified we assume two operands' dimensions should match
+        Input(0)->ValidateInferInputDimsFrom(TensorShape(rows1));
+    
+        virtual void Save(File& fstream) const override
+    {
+        Base::Save(fstream);
+        size_t rowsDummy = 0; // compat with old file format
+        size_t colsDummy = 0;
+        fstream << rowsDummy << colsDummy;
+        m_sampleLayout.Save(fstream);
+    }
+    
+    void Speed::setInnerAction(ActionInterval *action)
+{
+    if (_innerAction != action)
+    {
+        CC_SAFE_RELEASE(_innerAction);
+        _innerAction = action;
+        CC_SAFE_RETAIN(_innerAction);
+    }
 }
     
     
-    { private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RepeatedPrimitiveFieldGenerator);
+    {private:
+    CC_DISALLOW_COPY_AND_ASSIGN(Sequence);
 };
     
-      // Returns an estimate of the number of bytes the printed code will compile to
-  virtual int GenerateRegistrationCode(io::Printer* printer);
-    
-    #ifndef GOOGLE_PROTOBUF_COMPILER_JAVA_GENERATOR_H__
-#define GOOGLE_PROTOBUF_COMPILER_JAVA_GENERATOR_H__
-    
-    ServiceGenerator* ImmutableGeneratorFactory::NewServiceGenerator(
-    const ServiceDescriptor* descriptor) const {
-  return new ImmutableServiceGenerator(descriptor, context_);
-}
-    
-    void read_image(std::ifstream* image_file, std::ifstream* label_file,
-        uint32_t index, uint32_t rows, uint32_t cols,
-        char* pixels, char* label) {
-  image_file->seekg(index * rows * cols + 16);
-  image_file->read(pixels, rows * cols);
-  label_file->seekg(index + 8);
-  label_file->read(label, 1);
-}
-    
-    
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
-};
-#endif
-    
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLCNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLCNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
-        tempData1(NULL), tempData2(NULL) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLCNLayer();
-    }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #endif  // CAFFE_DECONV_LAYER_HPP_
-
+    class Action;
     
     /**
- * @brief A layer for learning 'embeddings' of one-hot vector input.
- *        Equivalent to an InnerProductLayer with one-hot vectors as input, but
- *        for efficiency the input is the 'hot' index of each column itself.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class EmbedLayer : public Layer<Dtype> {
- public:
-  explicit EmbedLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    
-    {  Dtype inner_scale_, outer_scale_;
-};
-    
-    #include 'AuthResolver.h'
-    
-    
-    {} // namespace aria2
-
-    
-      void setPeerConnection(PeerConnection* peerConnection);
-    
-      void disableWriteCheckSocket();
-    
-    void AnnounceTier::nextEventIfAfterStarted()
+@brief Progress to percentage.
+@details This action show the target node from current percentage to the specified percentage.
+        You should specify the destination percentage when creating the action.
+@since v0.99.1
+*/
+class CC_DLL ProgressTo : public ActionInterval
 {
-  switch (event) {
-  case STOPPED:
-    event = HALTED;
-    break;
-  case COMPLETED:
-    event = SEEDING;
-    break;
-  default:
-    break;
-  }
-}
-    
-    class ApiCallbackDownloadEventListener : public DownloadEventListener {
 public:
-  ApiCallbackDownloadEventListener(Session* session,
-                                   DownloadEventCallback callback,
-                                   void* userData);
-  virtual ~ApiCallbackDownloadEventListener();
-  virtual void onEvent(DownloadEvent event,
-                       const RequestGroup* group) CXX11_OVERRIDE;
+    /** 
+     * @brief Create and initializes with a duration and a destination percentage.
+     * @param duration Specify the duration of the ProgressTo action. It's a value in seconds.
+     * @param percent Specify the destination percentage.
+     * @return If the creation success, return a pointer of ProgressTo action; otherwise, return nil.
+     */
+    static ProgressTo* create(float duration, float percent);
     }
     
-    class AuthConfig;
+        /** 
+    * @brief Initializes the action with grid size, random seed and duration.
+    * @param duration Specify the duration of the TurnOffTiles action. It's a value in seconds.
+    * @param gridSize Specify the size of the grid.
+    * @param seed Specify the random seed.
+    * @return If the Initialization success, return true; otherwise, return false.
+    */
+    bool initWithDuration(float duration, const Size& gridSize, unsigned int seed);
     
-      if (state->stackTrace.size() == state->stackTrace.capacity()) {
-    return _URC_END_OF_STACK;
-  }
+    /**
+@brief The delegate class for ActionTween.
+@details If you want to use ActionTween on a node.
+        You should implement the node follow these steps:
+        1. The node should be inherit from ActionTweenDelegate.
+        2. Override the virtual method updateTweenAction in the node.
     
-    template <typename T, typename B>
-/* static */ inline std::string HybridClass<T, B>::JavaPart::get_instantiated_java_descriptor() {
-  return T::kJavaDescriptor;
-}
-    
-    #include <nbind/api.h>
-#include <nbind/BindDefiner.h>
-    
-      template <typename U>
-  explicit operator RefPtr<U> () const;
+            if ( frames.empty() )
+        {
+            CCLOG('cocos2d: AnimationCache: None of the frames for animation '%s' were found in the SpriteFrameCache. Animation is not being added to the Animation Cache.', anim.first.c_str());
+            continue;
+        }
+        else if ( frames.size() != frameNameSize )
+        {
+            CCLOG('cocos2d: AnimationCache: An animation in your dictionary refers to a frame which is not in the SpriteFrameCache. Some or all of the frames for the animation '%s' may be missing.', anim.first.c_str());
+        }
