@@ -1,315 +1,157 @@
 
         
-        // Convert an AttrValue with type `type` to the Python representation for
-// that value.
-string AttrValueToPython(const string& type, const AttrValue& value,
-                         const string& dtype_module = 'tf.');
-    
-      for (const auto& node : item_.MainOpsFanin()) {
-    PrintNodeInfo(node, properties, debug, os);
-  }
-  for (const auto& node : item_.EnqueueOpsFanin()) {
-    PrintNodeInfo(node, properties, debug, os);
-  }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    // Global registry mapping C API error codes to the corresponding custom Python
-// exception type. This is used to expose the exception types to C extension
-// code (i.e. so we can raise custom exceptions via SWIG).
-//
-// Init() must be called exactly once at the beginning of the process before
-// Lookup() can be used.
-//
-// Example usage:
-//   TF_Status* status = TF_NewStatus();
-//   TF_Foo(..., status);
-//
-//   if (TF_GetCode(status) != TF_OK) {
-//     PyObject* exc_type = PyExceptionRegistry::Lookup(TF_GetCode(status));
-//     // Arguments to OpError base class. Set `node_def` and `op` to None.
-//     PyObject* args =
-//       Py_BuildValue('sss', nullptr, nullptr, TF_Message(status));
-//     PyErr_SetObject(exc_type, args);
-//     Py_DECREF(args);
-//     TF_DeleteStatus(status);
-//     return NULL;
-//   }
-class PyExceptionRegistry {
- public:
-  // Initializes the process-wide registry. Should be called exactly once near
-  // the beginning of the process. The arguments are the various Python
-  // exception types (e.g. `cancelled_exc` corresponds to
-  // errors.CancelledError).
-  static void Init(PyObject* code_to_exc_type_map);
-    }
-    
-    // Called by python code on initialization.
-//
-// 'trampoline' must represent a python function which has the
-// following signature:
-//   (string, list(ndarray)) | (string, list(EagerTensor)) ->
-//     ndarray | list(ndarray) | python scalar |
-//     EagerTensor | list(EagerTensor) | None
-//
-// The trampoline takes two arguments, the first is a string token
-// used by the python frontend's dispatching logic; the second is a
-// list of numpy ndarrays or EagerTensor objects. It can return a
-// single numpy ndarray, a list of numpy ndarrays, a python scalar, an
-// EagerTensor, a list of EagerTensors, or None.
-//
-// PyFunc requires inputs and outputs to be ndarrays. EagerPyFunc requires
-// inputs to be a list of EagerTensors and outputs to be an EagerTensor, a list
-// of EagerTensors, or None.
-//
-// The C++ runtime converts outputs back to Tensor objects.
-//
-// This function is called by script_ops.py during its module initialization.
-//
-// TODO(zhifengc): Support distributed runtime.
-void InitializePyTrampoline(PyObject* trampoline);
-    
-    
-    {}  // namespace tensorflow
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #include 'tensorflow/core/framework/node_def.pb.h'
-#include 'tensorflow/core/framework/node_def_util.h'
-#include 'tensorflow/core/framework/op.h'
-#include 'tensorflow/core/framework/op_kernel.h'
-#include 'tensorflow/core/framework/types.h'
-#include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/util/device_name_utils.h'
-    
-    #include 'glog/logging.h'
-#include 'google/protobuf/text_format.h'
-#include 'stdint.h'
-    
-      /**
-   * @brief Applies the same transformation defined in the data layer's
-   * transform_param block to all the num images in a input_blob.
-   *
-   * @param input_blob
-   *    A Blob containing the data to be transformed. It applies the same
-   *    transformation to all the num images in the blob.
-   * @param transformed_blob
-   *    This is destination blob, it will contain as many images as the
-   *    input blob. It can be part of top blob's data.
-   */
-  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
-    
-      /**
-   * @brief Return whether to allow force_backward for a given bottom blob
-   *        index.
-   *
-   * If AllowForceBackward(i) == false, we will ignore the force_backward
-   * setting and backpropagate to blob i only if it needs gradient information
-   * (as is done when force_backward == false).
-   */
-  virtual inline bool AllowForceBackward(const int bottom_index) const {
-    return true;
-  }
-    
-      static CreatorRegistry& Registry() {
-    static CreatorRegistry* g_registry_ = new CreatorRegistry();
-    return *g_registry_;
-  }
-    
-      virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {}
-    
-    #include <vector>
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
- public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    }
-    
-    #ifdef USE_CUDNN
-/**
- * @brief cuDNN implementation of SoftmaxLayer.
- *        Fallback to SoftmaxLayer for CPU mode.
+        /*!
+ *  Copyright (c) 2015 by Contributors
+ * \file operator_util.h
+ * \brief Utility functions and registries to help quickly build new operators.
+ *  [Deprecated]
+ *  Use the register functions in this file when possible to simplify operator creations.
+ *  Operators registered in this file will be exposed to both NDArray API and symbolic API.
+ *
+ * \author Tianqi Chen
  */
-template <typename Dtype>
-class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
+#ifndef MXNET_OPERATOR_UTIL_H_
+#define MXNET_OPERATOR_UTIL_H_
+    
+    template<typename Dtype>
+void SetOpBlobs(::caffe::Layer<Dtype> *caffeOp,
+                const std::vector< ::caffe::Blob<Dtype>*>& weights) {
+  CHECK_EQ(caffeOp->blobs().size(), weights.size());
+  for (int i = 0; i < weights.size(); ++i)
+    caffeOp->blobs()[i].reset(weights[i]);
+}
+    
+    
+    {
+    {
+    {}  // namespace caffe
+}  // namespace op
+}  // namespace mxnet
+    
+    template<>
+Operator* CreateOp<cpu>(CaffeOpParam param, int dtype) {
+  Operator *op = NULL;
+  switch (dtype) {
+  case mshadow::kFloat32:
+    op = new CaffeOp<cpu, float>(param);
+    break;
+  case mshadow::kFloat64:
+    op = new CaffeOp<cpu, double>(param);
+    break;
+  case mshadow::kFloat16:
+    LOG(FATAL) << 'float16 layer is not supported by caffe';
+    break;
+  default:
+    LOG(FATAL) << 'Unsupported type ' << dtype;
+  }
+  return op;
+}
+    
+    /*!
+ *  Copyright (c) 2016 by Contributors
+ * \file cv_api.h
+ * \brief C API for opencv
+ * \author Junyuan Xie
+ */
+#include <dmlc/base.h>
+#include <mxnet/base.h>
+#include <mxnet/ndarray.h>
+#include <opencv2/opencv.hpp>
+#include 'cv_api.h'
+#include '../../src/c_api/c_api_common.h'
+    
+     private:
+  /*!
+   * \brief Wait for all started threads to signal that they're ready
+   */
+  void WaitForReady() {
+    for (const std::shared_ptr<dmlc::ManualEvent>& ptr : ready_events_) {
+      ptr->wait();
+    }
+  }
+    
+    /*!\brief
+ * This is a duplicate of the InferAttr function in nnvm with minor modification
+ * to support inferring storage type whose function signature is different from
+ * shape/type inference functions'. The nnvm InferAttr will be deprecated
+ * in the future. Please use interfaces InferShape, InferType, and InferStorageType
+ * to call this function.
+ */
+template<typename AttrType, typename FInferType, typename IsNone, typename FDefault>
+nnvm::Graph InferAttr(nnvm::Graph &&ret,
+                      const AttrType empty_val,
+                      const char* infer_name,
+                      const char* input_name,
+                      const char* attr_key_name,
+                      const char* attr_name,
+                      const char* unknown_name,
+                      IsNone fis_none,
+                      FDefault fdefault,
+                      bool bwd_identity_assign,
+                      const char* dispatch_mode_name,
+                      const DispatchMode default_mode_val = DispatchMode::kUndefined) {
+  using nnvm::IndexedGraph;
+  using nnvm::Op;
+  using AttrVector = std::vector<AttrType>;
+  using NodeAttrVector = std::vector<DispatchMode>;
+  using dmlc::any;
+    }
+    
+            // Note: We do not clone m_blockFunctionVariableMapping
+        auto clone = MakeSharedObject<VariableFields>(m_shape,
+            m_varKind,
+            m_dataType,
+            m_ownerFunction,
+            (m_value) ? m_value->DeepClone() : nullptr,
+            m_needsGradient,
+            m_dynamicAxes,
+            m_isSparse,
+            m_name,
+            Internal::GenerateUid(m_varKind));
+    
+    size_t DataReader::GetCurrentSamplePosition()
+{
+    // BUGBUG: composition of old readers is not supported.
+    // Returning just for the last reader.
+    return m_dataReaders[m_ioNames.back()]->GetCurrentSamplePosition();
+}
+    
+    
+    {  // Synchronous transmission of CAN messages
+  int32_t ret = canWrite(dev_handler_, send_frames_, frame_num, nullptr);
+  if (ret != NTCAN_SUCCESS) {
+    AERROR << 'send message failed, error code: ' << ret << ', '
+           << GetErrorString(ret);
+    return ErrorCode::CAN_CLIENT_ERROR_BASE;
+  }
+  return ErrorCode::OK;
+}
+    
+    
+    {  int64_t send_time_ = 0;
+  int64_t recv_time_ = 0;
+  int32_t send_succ_count_ = 0;
+  int32_t recv_succ_count_ = 0;
+  int32_t send_err_count_ = 0;
+  int32_t recv_err_count_ = 0;
+  std::stringstream recv_ss_;
+  CANCardParameter param_;
+};
+    
+    class HermesCanClient : public CanClient {
  public:
-  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
-      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSoftmaxLayer();
+  /**
+   * @brief Initialize the BCAN client by specified CAN card parameters.
+   * @param parameter CAN card parameters to initialize the CAN client.
+   */
+  // explicit HermesCanClient(const CANCardParameter &parameter);
     }
     
-    #if !defined(__AVX__)
-// Implementation for non-avx archs.
-    
-    void EquationDetect::ComputeCPsSuperBBox() {
-  ColPartitionGridSearch gsearch(part_grid_);
-  ColPartition *part = nullptr;
-  gsearch.StartFullSearch();
-  delete cps_super_bbox_;
-  cps_super_bbox_ = new TBOX();
-  while ((part = gsearch.NextFullSearch()) != nullptr) {
-    (*cps_super_bbox_) += part->bounding_box();
-  }
-}
-    
-      // Input statistics
-  // TODO(noetzli): The stats are incomplete. They are lacking everything
-  // consumed by MergeHelper.
-  uint64_t num_input_records = 0;
-  uint64_t num_input_deletion_records = 0;
-  uint64_t num_input_corrupt_records = 0;
-  uint64_t total_input_raw_key_bytes = 0;
-  uint64_t total_input_raw_value_bytes = 0;
-    
-      InternalIterator* input_;
-  const Comparator* cmp_;
-  MergeHelper* merge_helper_;
-  const std::vector<SequenceNumber>* snapshots_;
-  const SequenceNumber earliest_write_conflict_snapshot_;
-  const SnapshotChecker* const snapshot_checker_;
-  Env* env_;
-  bool report_detailed_time_;
-  bool expect_valid_internal_key_;
-  RangeDelAggregator* range_del_agg_;
-  std::unique_ptr<CompactionProxy> compaction_;
-  const CompactionFilter* compaction_filter_;
-  const std::atomic<bool>* shutting_down_;
-  const SequenceNumber preserve_deletes_seqnum_;
-  bool bottommost_level_;
-  bool valid_ = false;
-  bool visible_at_tip_;
-  SequenceNumber earliest_snapshot_;
-  SequenceNumber latest_snapshot_;
-  bool ignore_snapshots_;
-    
-    
-    {    if (table == 0) {
-      snapshot = db_->GetSnapshot();
-    }
-  }
-  assert(snapshot != nullptr);
-    
-      auto defaultEnv = Env::Default();
-  int hits = 0;
-  for (auto it = fileNames.begin() ; it != fileNames.end(); ++it) {
-    if ((*it == '..') || (*it == '.')) {
-      continue;
-    }
-    auto filePath = dbname_ + '/' + *it;
-    unique_ptr<SequentialFile> seqFile;
-    auto envOptions = EnvOptions(CurrentOptions());
-    status = defaultEnv->NewSequentialFile(filePath, &seqFile, envOptions);
-    ASSERT_OK(status);
-    }
-    
-    
-    {  mutex_.Unlock();
-  return Status::OK();
-}
-    
-      using DBImpl::CompactFiles;
-  virtual Status CompactFiles(
-      const CompactionOptions& /*compact_options*/,
-      ColumnFamilyHandle* /*column_family*/,
-      const std::vector<std::string>& /*input_file_names*/,
-      const int /*output_level*/, const int /*output_path_id*/ = -1,
-      std::vector<std::string>* const /*output_file_names*/ = nullptr
-      ) override {
-    return Status::NotSupported('Not supported operation in read only mode.');
-  }
-    
-    void TransformBlock(double block[64], Transform1d f) {
-  double tmp[64];
-  for (int x = 0; x < 8; ++x) {
-    f(&block[x], 8, &tmp[x]);
-  }
-  for (int y = 0; y < 8; ++y) {
-    f(&tmp[8 * y], 1, &block[8 * y]);
-  }
-}
-    
-    // Fills in 'result' with the inverse DCT of 'block'.
-// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
-// a row-by-row memory layout.
-void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
-    
-      // Writes the given byte to the output, writes an extra zero if byte is 0xff.
-  void EmitByte(int byte) {
-    if (pos < len) {
-      data[pos++] = byte;
-    } else {
-      overflow = true;
-    }
-    if (byte == 0xff) {
-      EmitByte(0);
-    }
-  }
-    
-    bool JPEGData::Is420() const {
-  return (components.size() == 3 &&
-          max_h_samp_factor == 2 &&
-          max_v_samp_factor == 2 &&
-          components[0].h_samp_factor == 2 &&
-          components[0].v_samp_factor == 2 &&
-          components[1].h_samp_factor == 1 &&
-          components[1].v_samp_factor == 1 &&
-          components[2].h_samp_factor == 1 &&
-          components[2].v_samp_factor == 1);
-}
-    
-    #ifndef GUETZLI_JPEG_DATA_ENCODER_H_
-#define GUETZLI_JPEG_DATA_ENCODER_H_
-    
-    // Saves the APP marker segment as a string to *jpg.
-bool ProcessAPP(const uint8_t* data, const size_t len, size_t* pos,
-                JPEGData* jpg) {
-  VERIFY_LEN(2);
-  size_t marker_len = ReadUint16(data, pos);
-  VERIFY_INPUT(marker_len, 2, 65535, MARKER_LEN);
-  VERIFY_LEN(marker_len - 2);
-  // Save the marker type together with the app data.
-  std::string app_str(reinterpret_cast<const char*>(
-      &data[*pos - 3]), marker_len + 1);
-  *pos += marker_len - 2;
-  jpg->app_data.push_back(app_str);
-  return true;
-}
-    
-    
-    {}  // namespace
+      ProtocolData<::apollo::canbus::ChassisDetail> mpd;
+  SenderMessage<::apollo::canbus::ChassisDetail> msg(1, &mpd);
+  EXPECT_FALSE(sender.NeedSend(msg, 1));
+  EXPECT_EQ(msg.message_id(), 1);
+  int32_t period = msg.curr_period();
+  msg.UpdateCurrPeriod(-50);
+  EXPECT_EQ(msg.curr_period(), period + 50);
+  EXPECT_EQ(msg.CanFrame().id, 1);
