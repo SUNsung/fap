@@ -1,104 +1,151 @@
 
         
-                    # report after inserting so AW sees the token in the exception
-            self.reportError(e)
-            return inserted
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
-    
-    - tree.CommonTreeNodeStream: A basic and most commonly used tree.TreeNodeStream
-  implementation.
-    
-        def cancel(self):
-        '''Cancel the future if possible.
-    
-        # For pickling to work, the __module__ variable needs to be set to the frame
-    # where the named tuple is created.  Bypass this step in enviroments where
-    # sys._getframe is not defined (Jython for example).
-    if hasattr(_sys, '_getframe'):
-        result.__module__ = _sys._getframe(1).f_globals.get('__name__', '__main__')
-    
-    class _WorkItem(object):
-    def __init__(self, future, fn, args, kwargs):
-        self.future = future
-        self.fn = fn
-        self.args = args
-        self.kwargs = kwargs
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-      # Ensure that we applied the replacement correctly
-  eq_( result_buffer.GetLines(), [
-    'replacementline2',
-    'line3',
-  ] )
-    
-        IOLoop.instance().add_callback(run_tests)
+            def append_to_front(self, node):
+        pass
     
     
-class MessageNewHandler(tornado.web.RequestHandler):
-    '''Post a new message to the chat room.'''
-    def post(self):
-        message = {
-            'id': str(uuid.uuid4()),
-            'body': self.get_argument('body'),
-        }
-        # render_string() returns a byte string, which is not supported
-        # in json, so we must convert it to a character string.
-        message['html'] = tornado.escape.to_unicode(
-            self.render_string('message.html', message=message))
-        if self.get_argument('next', None):
-            self.redirect(self.get_argument('next'))
-        else:
-            self.write(message)
-        global_message_buffer.add_message(message)
+class Motorcycle(Vehicle):
+    
+        def mapper(self, _, line):
+        yield line, 1
     
     
-if __name__ == '__main__':
-    main()
+try:
+    if int(pkg_resources.get_distribution('pip').version.split('.')[0]) < 6:
+        print('pip older than 6.0 not supported, please upgrade pip with:\n\n'
+              '    pip install -U pip')
+        sys.exit(-1)
+except pkg_resources.DistributionNotFound:
+    pass
+    
+        proc.sendline(u'git h')
+    assert proc.expect([TIMEOUT, u'git: 'h' is not a git command.'])
+    
+        new_command = get_new_command(Command('sudo apt list --upgradable', match_output))
+    assert new_command == 'sudo apt upgrade'
 
     
-        logging.warning('Starting fetch with simple client')
-    simple_client = SimpleAsyncHTTPClient()
-    simple_client.fetch('http://localhost:%d/' % options.port,
-                        callback=callback)
-    IOLoop.current().start()
+      - name: create IP address condition
+    aws_waf_condition:
+      name: '{{ resource_prefix }}_ip_condition'
+      filters:
+        - ip_address: '10.0.0.0/8'
+        - ip_address: '192.168.0.0/24'
+      type: ip
+    
+    - cloudwatchevent_rule:
+    name: MyDisabledCronTask
+    schedule_expression: 'rate(5 minutes)'
+    description: Run my disabled scheduled task
+    state: disabled
+    targets:
+      - id: MyOtherTargetId
+        arn: arn:aws:lambda:us-east-1:123456789012:function:MyFunction
+        input: '{'foo': 'bar'}'
+    
+        # describe_images is *very* slow if you pass the `Owners`
+    # param (unless it's self), for some reason.
+    # Converting the owners to filters and removing from the
+    # owners param greatly speeds things up.
+    # Implementation based on aioue's suggestion in #24886
+    for owner in owners:
+        if owner.isdigit():
+            if 'owner-id' not in filters:
+                filters['owner-id'] = list()
+            filters['owner-id'].append(owner)
+        elif owner == 'self':
+            # self not a valid owner-alias filter (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeImages.html)
+            owner_param.append(owner)
+        else:
+            if 'owner-alias' not in filters:
+                filters['owner-alias'] = list()
+            filters['owner-alias'].append(owner)
+    
+        same = set(o for o in intersect_keys if d1[o] == d2[o])
+    return added, removed, modified, same
+    
+        def describe_gateways(self, ip_address):
+        response = self.ec2.describe_customer_gateways(
+            DryRun=False,
+            Filters=[
+                {
+                    'Name': 'state',
+                    'Values': [
+                        'available',
+                    ]
+                },
+                {
+                    'Name': 'ip-address',
+                    'Values': [
+                        ip_address,
+                    ]
+                }
+            ]
+        )
+        return response
+    
+        module = AnsibleAWSModule(argument_spec=argument_spec,
+                              mutually_exclusive=[['customer_gateway_ids', 'filters']],
+                              supports_check_mode=True)
+    
+    ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
+    
+        try:
+        key = ec2_client.describe_key_pairs(KeyNames=[name])['KeyPairs'][0]
+    except ClientError as err:
+        if err.response['Error']['Code'] == 'InvalidKeyPair.NotFound':
+            return None
+        module.fail_json_aws(err, msg='error finding keypair')
+    return key
+    
+        if 'ephemeral' in volume:
+        return_object['VirtualName'] = volume.get('ephemeral')
+    
+        for response in response_iterator:
+        response['LaunchConfigurations'] = filter(lambda lc: re.compile(name_regex).match(lc['LaunchConfigurationName']),
+                                                  response['LaunchConfigurations'])
     
     
-@gen.coroutine
-def c1():
-    for i in range(10):
-        yield c2()
+def get_placement_groups_details(connection, module):
+    names = module.params.get('names')
+    try:
+        if len(names) > 0:
+            response = connection.describe_placement_groups(
+                Filters=[{
+                    'Name': 'group-name',
+                    'Values': names
+                }])
+        else:
+            response = connection.describe_placement_groups()
+    except (BotoCoreError, ClientError) as e:
+        module.fail_json_aws(
+            e,
+            msg='Couldn't find placement groups named [%s]' % names)
+    
+        if not scalingPolicies:
+        sp = ScalingPolicy(
+            name=sp_name,
+            adjustment_type=adjustment_type,
+            as_name=asg_name,
+            scaling_adjustment=scaling_adjustment,
+            min_adjustment_step=min_adjustment_step,
+            cooldown=cooldown)
+    
+        def test_not_here(self):
+        missing_module = 'test.i_am_not_here'
+        result = str(run_pydoc(missing_module), 'ascii')
+        expected = missing_pattern % missing_module
+        self.assertEqual(expected, result,
+            'documentation for missing module found')
+    
+    def handleToc(slides):
+    for slide in slides:
+        title = slide.getElementsByTagName('title')[0]
+        print('<p>%s</p>' % getText(title.childNodes))
+    
+    import sqlite3
+    
+    # Register the adapter
+sqlite3.register_adapter(Point, adapt_point)
