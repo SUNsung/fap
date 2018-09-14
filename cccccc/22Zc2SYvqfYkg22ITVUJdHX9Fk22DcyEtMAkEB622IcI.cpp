@@ -1,66 +1,178 @@
 
         
-        void ComputeJacobians(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
-                      const IntrinsicParams& param,  InputArray omc, InputArray Tc,
-                      const int& check_cond, const double& thresh_cond, Mat& JJ2_inv, Mat& ex3);
+        template <typename DescriptorType>
+static void WriteDocCommentBody(
+    io::Printer* printer, const DescriptorType* descriptor) {
+    SourceLocation location;
+    if (descriptor->GetSourceLocation(&location)) {
+        WriteDocCommentBodyImpl(printer, location);
+    }
+}
     
-    CV_EXPORTS_W void compare(InputArray src1, Scalar src2, OutputArray dst, int cmpop);
+    EnumGenerator::EnumGenerator(const EnumDescriptor* descriptor, const Options* options) :
+    SourceGeneratorBase(descriptor->file(), options),
+    descriptor_(descriptor) {
+}
     
-    const uchar g_Saturate8u[] =
-{
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
-     16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
-     32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
-     48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
-     64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
-     80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
-     96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
-    112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
-    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
-    144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
-    160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
-    176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
-    192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
-    208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
-    224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
-    240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255
+    void EnumOneofFieldGenerator::GenerateSerializedSizeCode(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'if ($has_property_check$) {\n'
+    '  size += $tag_size$ + pb::CodedOutputStream.ComputeEnumSize((int) $property_name$);\n'
+    '}\n');
+}
+    
+      (*variables)['access_level'] = 'public';
+  (*variables)['tag'] = SimpleItoa(tag);
+  (*variables)['tag_size'] = SimpleItoa(tag_size);
+  (*variables)['tag_bytes'] = tag_bytes;
+    
+      string filename_error = '';
+  std::string filename = GetOutputFile(file,
+      cli_options.file_extension,
+      cli_options.base_namespace_specified,
+      cli_options.base_namespace,
+      &filename_error);
+    
+    
+    { private:
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(MessageFieldGenerator);
 };
     
-    #endif  // CAFFE_ABSVAL_LAYER_HPP_
+    
+    {
+}  // namespace google
+#endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
 
+    
+    // Write out the generated code for a particular message. This consists of the CLR type, property names
+// corresponding to fields, names corresponding to oneofs, nested enums, and nested types. Each array part
+// can be specified as null if it would be empty, to make the generated code somewhat simpler to read.
+// We write a line break at the end of each generated code info, so that in the final file we'll see all
+// the types, pre-ordered depth first, one per line. The indentation will be slightly unusual,
+// in that it will look like a single array when it's actually constructing a tree, but it'll be easy to
+// read even with multiple levels of nesting.
+// The 'last' parameter indicates whether this message descriptor is the last one being printed in this immediate
+// context. It governs whether or not a trailing comma and newline is written after the constructor, effectively
+// just controlling the formatting in the generated code.
+void ReflectionClassGenerator::WriteGeneratedCodeInfo(const Descriptor* descriptor, io::Printer* printer, bool last) {
+  if (IsMapEntryMessage(descriptor)) {
+    printer->Print('null, ');
+    return;
+  }
+  // Generated message type
+  printer->Print('new pbr::GeneratedClrTypeInfo(typeof($type_name$), $type_name$.Parser, ', 'type_name', GetClassName(descriptor));
+  
+  // Fields
+  if (descriptor->field_count() > 0) {
+      std::vector<std::string> fields;
+      for (int i = 0; i < descriptor->field_count(); i++) {
+          fields.push_back(GetPropertyName(descriptor->field(i)));
+      }
+      printer->Print('new[]{ \'$fields$\' }, ', 'fields', JoinStrings(fields, '\', \''));
+  }
+  else {
+      printer->Print('null, ');
+  }
+    }
+    
+      // Parallel training
+  int solver_count_;
+  int solver_rank_;
+  bool multiprocess_;
+    
+    
+ protected:
+  /** The protobuf that stores the layer parameters */
+  LayerParameter layer_param_;
+  /** The phase: TRAIN or TEST */
+  Phase phase_;
+  /** The vector that stores the learnable parameters as a set of blobs. */
+  vector<shared_ptr<Blob<Dtype> > > blobs_;
+  /** Vector indicating whether to compute the diff of each param blob. */
+  vector<bool> param_propagate_down_;
+    
+      int label_axis_, outer_num_, inner_num_;
+    
+      virtual inline const char* type() const { return 'Bias'; }
+  virtual inline int MinBottomBlobs() const { return 1; }
+  virtual inline int MaxBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+    /**
+ * @brief Convolves the input image with a bank of learned filters,
+ *        and (optionally) adds biases.
+ *
+ *   Caffe convolves by reduction to matrix multiplication. This achieves
+ *   high-throughput and generality of input and filter dimensions but comes at
+ *   the cost of memory for matrices. This makes use of efficiency in BLAS.
+ *
+ *   The input is 'im2col' transformed to a channel K' x H x W data matrix
+ *   for multiplication with the N x K' x H x W filter matrix to yield a
+ *   N' x H x W output matrix that is then 'col2im' restored. K' is the
+ *   input channel * kernel height * kernel width dimension of the unrolled
+ *   inputs so that the im2col matrix has a column for each input region to
+ *   be filtered. col2im restores the output spatial structure by rolling up
+ *   the output channel N' columns of the output matrix.
+ */
+template <typename Dtype>
+class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
+ public:
+  /**
+   * @param param provides ConvolutionParameter convolution_param,
+   *    with ConvolutionLayer options:
+   *  - num_output. The number of filters.
+   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
+   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
+   *  filters.
+   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
+   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
+   *  for different strides. By default the convolution is dense with stride 1.
+   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
+   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
+   *  different padding. Input padding is computed implicitly instead of
+   *  actually padding.
+   *  - dilation (\b optional, default 1). The filter
+   *  dilation, given by dilation_size for equal dimensions for different
+   *  dilation. By default the convolution has dilation 1.
+   *  - group (\b optional, default 1). The number of filter groups. Group
+   *  convolution is a method for reducing parameterization by selectively
+   *  connecting input and output channels. The input and output channel dimensions must be divisible
+   *  by the number of groups. For group @f$ \geq 1 @f$, the
+   *  convolutional filters' input and output channels are separated s.t. each
+   *  group takes 1 / group of the input channels and makes 1 / group of the
+   *  output channels. Concretely 4 input channels, 8 output channels, and
+   *  2 groups separate input channels 1-2 and output channels 1-4 into the
+   *  first group and input channels 3-4 and output channels 5-8 into the second
+   *  group.
+   *  - bias_term (\b optional, default true). Whether to have a bias.
+   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
+   *    kernels + stream parallelism) engines.
+   */
+  explicit ConvolutionLayer(const LayerParameter& param)
+      : BaseConvolutionLayer<Dtype>(param) {}
+    }
+    
+    template <typename Dtype>
+class CropLayer : public Layer<Dtype> {
+ public:
+  explicit CropLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
+#endif
     
     #include 'caffe/blob.hpp'
 #include 'caffe/layer.hpp'
@@ -69,413 +181,487 @@
     
     {}  // namespace caffe
     
-    #include 'caffe/layers/pooling_layer.hpp'
+    // Two predicate classes that can be used in {ASSERT,EXPECT}_EXIT*:
     
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of SigmoidLayer.
- */
-template <typename Dtype>
-class CuDNNSigmoidLayer : public SigmoidLayer<Dtype> {
- public:
-  explicit CuDNNSigmoidLayer(const LayerParameter& param)
-      : SigmoidLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSigmoidLayer();
+    // Ensures that there is at least one operator<< in the global namespace.
+// See Message& operator<<(...) below for why.
+void operator<<(const testing::internal::Secret&, int);
+    
+    #include 'gtest/gtest-message.h'
+#include 'gtest/internal/gtest-string.h'
+#include 'gtest/internal/gtest-filepath.h'
+#include 'gtest/internal/gtest-type-util.h'
+    
+    $for i [[
+$range j 1..i
+$range k 2..i
+template <$for j, [[GTEST_TEMPLATE_ T$j]]>
+struct Templates$i {
+  typedef TemplateSel<T1> Head;
+  typedef Templates$(i-1)<$for k, [[T$k]]> Tail;
+};
+    
+      virtual int GetNextPrime(int p) const {
+    for (int n = p + 1; n < is_prime_size_; n++) {
+      if (is_prime_[n]) return n;
+    }
     }
     
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of TanHLayer.
- */
-template <typename Dtype>
-class CuDNNTanHLayer : public TanHLayer<Dtype> {
- public:
-  explicit CuDNNTanHLayer(const LayerParameter& param)
-      : TanHLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNTanHLayer();
-    }
-    
-    namespace caffe {
-    }
-    
-    /**
- * @brief Compute elementwise operations, such as product and sum,
- *        along multiple input Blobs.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class EltwiseLayer : public Layer<Dtype> {
- public:
-  explicit EltwiseLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    // DirectX
-#include <d3d9.h>
-#define DIRECTINPUT_VERSION 0x0800
-#include <dinput.h>
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you are new to dear imgui, read examples/README.txt and read the documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    
-    {    // Create Command Buffers
-    VkResult err;
-    for (int i = 0; i < IMGUI_VK_QUEUED_FRAMES; i++)
-    {
-        ImGui_ImplVulkanH_FrameData* fd = &wd->Frames[i];
-        {
-            VkCommandPoolCreateInfo info = {};
-            info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-            info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-            info.queueFamilyIndex = queue_family;
-            err = vkCreateCommandPool(device, &info, allocator, &fd->CommandPool);
-            check_vk_result(err);
-        }
-        {
-            VkCommandBufferAllocateInfo info = {};
-            info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-            info.commandPool = fd->CommandPool;
-            info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-            info.commandBufferCount = 1;
-            err = vkAllocateCommandBuffers(device, &info, &fd->CommandBuffer);
-            check_vk_result(err);
-        }
-        {
-            VkFenceCreateInfo info = {};
-            info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-            info.flags = VK_FENCE_CREATE_SIGNALED_BIT;
-            err = vkCreateFence(device, &info, allocator, &fd->Fence);
-            check_vk_result(err);
-        }
-        {
-            VkSemaphoreCreateInfo info = {};
-            info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-            err = vkCreateSemaphore(device, &info, allocator, &fd->ImageAcquiredSemaphore);
-            check_vk_result(err);
-            err = vkCreateSemaphore(device, &info, allocator, &fd->RenderCompleteSemaphore);
-            check_vk_result(err);
-        }
-    }
+    // This should fail when the --check_for_leaks command line flag is
+// specified.
+TEST(ListenersTest, LeaksWater) {
+  Water* water = new Water;
+  EXPECT_TRUE(water != NULL);
 }
     
-            // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
     
-    // Performs in-place floating point 8x8 inverse DCT on block[0..63].
-void ComputeBlockIDCTDouble(double block[64]);
-    
-    // A node of a Huffman tree.
-struct HuffmanTree {
-  HuffmanTree() {}
-  HuffmanTree(uint32_t count, int16_t left, int16_t right)
-      : total_count_(count),
-        index_left_(left),
-        index_right_or_value_(right) {
-  }
-  uint32_t total_count_;
-  int16_t index_left_;
-  int16_t index_right_or_value_;
+    {  // Sets the 0-terminated C string this MyString object represents.
+  void Set(const char* c_string);
 };
     
-    // Computes the DCT (Discrete Cosine Transform) of the 8x8 array in 'block',
-// scaled up by a factor of 16. The values in 'block' are laid out row-by-row
-// and the result is written to the same memory area.
-void ComputeBlockDCT(coeff_t* block);
+    // Tests the copy c'tor.
+TEST(MyString, CopyConstructor) {
+  const MyString s1(kHelloString);
+  const MyString s2 = s1;
+  EXPECT_EQ(0, strcmp(s2.c_string(), kHelloString));
+}
     
-    // kIDCTMatrix[8*x+u] = alpha(u)*cos((2*x+1)*u*M_PI/16)*sqrt(2), with fixed 13
-// bit precision, where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
-// Some coefficients are off by +-1 to mimick libjpeg's behaviour.
-static const int kIDCTMatrix[kDCTBlockSize] = {
-  8192,  11363,  10703,   9633,   8192,   6437,   4433,   2260,
-  8192,   9633,   4433,  -2259,  -8192, -11362, -10704,  -6436,
-  8192,   6437,  -4433, -11362,  -8192,   2261,  10704,   9633,
-  8192,   2260, -10703,  -6436,   8192,   9633,  -4433, -11363,
-  8192,  -2260, -10703,   6436,   8192,  -9633,  -4433,  11363,
-  8192,  -6437,  -4433,  11362,  -8192,  -2261,  10704,  -9633,
-  8192,  -9633,   4433,   2259,  -8192,  11362, -10704,   6436,
-  8192, -11363,  10703,  -9633,   8192,  -6437,   4433,  -2260,
-};
+    void INVERT_B_TO_G(btMatrix3x3 const &inVal, Basis &outVal) {
+	INVERT_B_TO_G(inVal[0], outVal[0]);
+	INVERT_B_TO_G(inVal[1], outVal[1]);
+	INVERT_B_TO_G(inVal[2], outVal[2]);
+}
     
-      // Special case code with only one value.
-  if (total_count == 1) {
-    code.bits = 0;
-    code.value = symbols[0];
-    for (key = 0; key < total_size; ++key) {
-      table[key] = code;
+    /**
+	@author AndreaCatania
+*/
+    
+    /**
+	@author AndreaCatania
+*/
+    
+    #ifndef PIN_JOINT_BULLET_H
+#define PIN_JOINT_BULLET_H
+    
+    void register_dds_types() {
     }
-    return total_size;
-  }
     
-    #include <stdint.h>
+    	jclass activityThread = env->FindClass('android/app/ActivityThread');
+	jmethodID currentActivityThread = env->GetStaticMethodID(activityThread, 'currentActivityThread', '()Landroid/app/ActivityThread;');
+	jobject at = env->CallStaticObjectMethod(activityThread, currentActivityThread);
+	jmethodID getApplication = env->GetMethodID(activityThread, 'getApplication', '()Landroid/app/Application;');
+	jobject context = env->CallObjectMethod(at, getApplication);
+    
+    void MemoryPool::setup(uint32_t p_max_allocs) {
+    }
+    
+    
+    {
+    {}}
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    #define CONFIG_BODY(T, METHOD) \
+T Config::Get##METHOD(const IniSetting::Map &ini, const Hdf& config, \
+                      const std::string &name /* = '' */, \
+                      const T defValue /* = 0ish */, \
+                      const bool prepend_hhvm /* = true */) { \
+  auto ini_name = IniName(name, prepend_hhvm); \
+  /* If we don't pass a name, then we just use the raw config as-is. */ \
+  /* This could happen when we are at a known leaf of a config node. */ \
+  Hdf hdf = name != '' ? config[name] : config; \
+  auto value = ini_iterate(ini, ini_name); \
+  if (value.isString()) { \
+    T ini_ret, hdf_ret; \
+    ini_on_update(value.toString(), ini_ret); \
+    /* I don't care what the ini_ret was if it isn't equal to what  */ \
+    /* is returned back from from an HDF get call, which it will be */ \
+    /* if the call just passes back ini_ret because either they are */ \
+    /* the same or the hdf option associated with this name does    */ \
+    /* not exist.... REMEMBER HDF WINS OVER INI UNTIL WE WIPE HDF   */ \
+    hdf_ret = hdf.configGet##METHOD(ini_ret); \
+    if (hdf_ret != ini_ret) { \
+      ini_ret = hdf_ret; \
+      IniSetting::SetSystem(ini_name, variant_init(ini_ret)); \
+    } \
+    return ini_ret; \
+  } \
+  /* If there is a value associated with this setting in the hdf config */ \
+  /* then return it; otherwise the defValue will be returned as it is   */ \
+  /* assigned to the return value for this call when nothing exists     */ \
+  return hdf.configGet##METHOD(defValue); \
+} \
+void Config::Bind(T& loc, const IniSetting::Map &ini, const Hdf& config, \
+                  const std::string& name /* = '' */, \
+                  const T defValue /* = 0ish */, \
+                  const bool prepend_hhvm /* = true */) { \
+  loc = Get##METHOD(ini, config, name, defValue, prepend_hhvm); \
+  IniSetting::Bind(IniSetting::CORE, IniSetting::PHP_INI_SYSTEM, \
+                   IniName(name, prepend_hhvm), &loc); \
+}
+    
+      static void SetParsedIni(IniSettingMap &ini, const std::string confStr,
+                           const std::string &filename, bool constants_only,
+                           bool is_system);
+    
+    
+    {  req::ptr<File> open(const String& filename, const String& mode, int options,
+                      const req::ptr<StreamContext>& context) override;
+};
+    
+    #include <string>
+#include <utility>
 #include <vector>
     
-    TEST_F(OrderingTest, ordering) {
-  EXPECT_EQ(-1, int(ordering::lt));
-  EXPECT_EQ(0, int(ordering::eq));
-  EXPECT_EQ(+1, int(ordering::gt));
+    const StaticString
+  s_wrapper_type('wrapper_type'),
+  s_stream_type('stream_type'),
+  s_mode('mode'),
+  s_unread_bytes('unread_bytes'),
+  s_seekable('seekable'),
+  s_timed_out('timed_out'),
+  s_blocked('blocked'),
+  s_eof('eof'),
+  s_plainfile('plainfile'),
+  s_dir('dir'),
+  s_r('r');
+    
+    template <class Action>
+bool runRelative(std::string suffix, String cmd,
+                 const char* currentDir, Action action) {
+  suffix = '/' + suffix;
+  auto cwd = resolve_include(
+    cmd,
+    currentDir,
+    [] (const String& f, void*) { return access(f.data(), R_OK) == 0; },
+    nullptr
+  );
+  if (cwd.isNull()) return false;
+  do {
+    cwd = f_dirname(cwd);
+    auto const f = String::attach(
+      StringData::Make(cwd.data(), suffix.data())
+    );
+    if (action(f)) return true;
+  } while (!cwd.empty() && !cwd.equal(s_slash));
+  return false;
 }
     
-      size_t size() override {
-    return queue_.size();
-  }
+      size_t maxlen = (fromDir.size() + toFile.size()) * 3;
     
-      std::shared_ptr<T> get() const {
-    return slots_[AccessSpreader<>::current(kNumSlots)];
-  }
+      /*!
+   * \brief Set additional attribute to the Booster.
+   *  The property will be saved along the booster.
+   * \param key The key of the property.
+   * \param value The value of the property.
+   */
+  virtual void SetAttr(const std::string& key, const std::string& value) = 0;
+  /*!
+   * \brief Get attribute from the booster.
+   *  The property will be saved along the booster.
+   * \param key The key of the attribute.
+   * \param out The output value.
+   * \return Whether the key exists among booster's attributes.
+   */
+  virtual bool GetAttr(const std::string& key, std::string* out) const = 0;
+  /*!
+   * \brief Delete an attribute from the booster.
+   * \param key The key of the attribute.
+   * \return Whether the key was found among booster's attributes.
+   */
+  virtual bool DelAttr(const std::string& key) = 0;
+  /*!
+   * \brief Get a vector of attribute names from the booster.
+   * \return vector of attribute name strings.
+   */
+  virtual std::vector<std::string> GetAttrNames() const = 0;
+  /*!
+   * \return whether the model allow lazy checkpoint in rabit.
+   */
+  bool AllowLazyCheckPoint() const;
+  /*!
+   * \brief dump the model in the requested format
+   * \param fmap feature map that may help give interpretations of feature
+   * \param with_stats extra statistics while dumping model
+   * \param format the format to dump the model in
+   * \return a vector of dump for boosters.
+   */
+  std::vector<std::string> DumpModel(const FeatureMap& fmap,
+                                     bool with_stats,
+                                     std::string format) const;
+  /*!
+   * \brief online prediction function, predict score for one instance at a time
+   *  NOTE: use the batch prediction interface if possible, batch prediction is usually
+   *        more efficient than online prediction
+   *        This function is NOT threadsafe, make sure you only call from one thread.
+   *
+   * \param inst the instance you want to predict
+   * \param output_margin whether to only predict margin value instead of transformed prediction
+   * \param out_preds output vector to hold the predictions
+   * \param ntree_limit limit the number of trees used in prediction
+   */
+  inline void Predict(const SparsePage::Inst &inst,
+                      bool output_margin,
+                      HostDeviceVector<bst_float> *out_preds,
+                      unsigned ntree_limit = 0) const;
+  /*!
+   * \brief Create a new instance of learner.
+   * \param cache_data The matrix to cache the prediction.
+   * \return Created learner.
+   */
+  static Learner* Create(const std::vector<std::shared_ptr<DMatrix> >& cache_data);
     
-      Future<Unit> getFuture() {
-    return promise_.getFuture();
-  }
-    
-      std::lock_guard<std::mutex> entry_lock(mutex_);
-  if (state_.load(std::memory_order_acquire) == SingletonHolderState::Living) {
-    return;
-  }
-  if (state_.load(std::memory_order_acquire) ==
-        SingletonHolderState::NotRegistered) {
-    detail::singletonWarnCreateUnregisteredAndAbort(type());
-  }
-    
-    /**
- * Define various MALLOCX_* macros normally provided by jemalloc.  We define
- * them so that we don't have to include jemalloc.h, in case the program is
- * built without jemalloc support.
+    /*!
+ * \brief Macro to register tree updater.
+ *
+ * \code
+ * // example of registering a objective ndcg@k
+ * XGBOOST_REGISTER_TREE_UPDATER(ColMaker, 'colmaker')
+ * .describe('Column based tree maker.')
+ * .set_body([]() {
+ *     return new ColMaker<TStats>();
+ *   });
+ * \endcode
  */
-#if (defined(USE_JEMALLOC) || defined(FOLLY_USE_JEMALLOC)) && !FOLLY_SANITIZE
-// We have JEMalloc, so use it.
-# include <jemalloc/jemalloc.h>
-#else
-# ifndef MALLOCX_LG_ALIGN
-#  define MALLOCX_LG_ALIGN(la) (la)
-# endif
-# ifndef MALLOCX_ZERO
-#  define MALLOCX_ZERO (static_cast<int>(0x40))
-# endif
-#endif
+#define XGBOOST_REGISTER_TREE_UPDATER(UniqueId, Name)                   \
+  static DMLC_ATTRIBUTE_UNUSED ::xgboost::TreeUpdaterReg&               \
+  __make_ ## TreeUpdaterReg ## _ ## UniqueId ## __ =                    \
+      ::dmlc::Registry< ::xgboost::TreeUpdaterReg>::Get()->__REGISTER__(Name)
     
-    class hazptr_mb {
- public:
-  static void light();
-  static void heavy();
+    inline Float8 polynomial_5(Float8 const& x, const float c0, const float c1,
+                           const float c2, const float c3, const float c4,
+                           const float c5) {
+  // calculates polynomial c5*x^5 + c4*x^4 + c3*x^3 + c2*x^2 + c1*x + c0
+  Float8 x2 = x * x;
+  Float8 x4 = x2 * x2;
+  return (Float8(c2) + Float8(c3) * x) * x2 +
+         ((Float8(c4) + Float8(c5) * x) * x4 + (Float8(c0) + Float8(c1) * x));
+}
+    
+    /*!
+ * \brief perform numerically safe logsum
+ * \param x left input operand
+ * \param y right input operand
+ * \return  log(exp(x) + exp(y))
+ */
+inline float LogSum(float x, float y) {
+  if (x < y) {
+    return y + std::log(std::exp(x - y) + 1.0f);
+  } else {
+    return x + std::log(std::exp(y - x) + 1.0f);
+  }
+}
+    
+    /*!
+ * \brief Registry entry for sparse page format.
+ */
+struct SparsePageFormatReg
+    : public dmlc::FunctionRegEntryBase<SparsePageFormatReg,
+                                        std::function<SparsePageFormat* ()> > {
 };
     
-    TEST(SysAllocator, bad_alloc) {
-  using Alloc = SysAllocator<float>;
-  Alloc const alloc;
-  std::vector<float, Alloc> nums(alloc);
-  if (!kIsSanitize) {
-    EXPECT_THROW(nums.reserve(kTooBig), std::bad_alloc);
-  }
-}
+    #include <osquery/config/parsers/logger.h>
+#include <osquery/registry_factory.h>
     
-      // The previous statement can be simplified in C++14:
-  //  auto future =
-  //      promise.getFuture().then([int_ptr = std::move(int_ptr)]() mutable {
-  //        ++*int_ptr;
-  //        return std::move(int_ptr);
-  //      });
-    
-      if (m_a.cols() != m_b.rows() || m_b.cols() != m_d.cols() ||
-      m_c.rows() != m_d.rows() || m_a.cols() != m_c.cols()) {
-    AERROR << 'ContinuousToDiscrete: matrix dimensions mismatch';
-    return false;
-  }
-    
-      ts = 1;
-    
-    double Box2d::DistanceTo(const LineSegment2d &line_segment) const {
-  if (line_segment.length() <= kMathEpsilon) {
-    return DistanceTo(line_segment.start());
-  }
-  const double ref_x1 = line_segment.start().x() - center_.x();
-  const double ref_y1 = line_segment.start().y() - center_.y();
-  double x1 = ref_x1 * cos_heading_ + ref_y1 * sin_heading_;
-  double y1 = ref_x1 * sin_heading_ - ref_y1 * cos_heading_;
-  double box_x = half_length_;
-  double box_y = half_width_;
-  int gx1 = (x1 >= box_x ? 1 : (x1 <= -box_x ? -1 : 0));
-  int gy1 = (y1 >= box_y ? 1 : (y1 <= -box_y ? -1 : 0));
-  if (gx1 == 0 && gy1 == 0) {
-    return 0.0;
-  }
-  const double ref_x2 = line_segment.end().x() - center_.x();
-  const double ref_y2 = line_segment.end().y() - center_.y();
-  double x2 = ref_x2 * cos_heading_ + ref_y2 * sin_heading_;
-  double y2 = ref_x2 * sin_heading_ - ref_y2 * cos_heading_;
-  int gx2 = (x2 >= box_x ? 1 : (x2 <= -box_x ? -1 : 0));
-  int gy2 = (y2 >= box_y ? 1 : (y2 <= -box_y ? -1 : 0));
-  if (gx2 == 0 && gy2 == 0) {
-    return 0.0;
-  }
-  if (gx1 < 0 || (gx1 == 0 && gx2 < 0)) {
-    x1 = -x1;
-    gx1 = -gx1;
-    x2 = -x2;
-    gx2 = -gx2;
-  }
-  if (gy1 < 0 || (gy1 == 0 && gy2 < 0)) {
-    y1 = -y1;
-    gy1 = -gy1;
-    y2 = -y2;
-    gy2 = -gy2;
-  }
-  if (gx1 < gy1 || (gx1 == gy1 && gx2 < gy2)) {
-    std::swap(x1, y1);
-    std::swap(gx1, gy1);
-    std::swap(x2, y2);
-    std::swap(gx2, gy2);
-    std::swap(box_x, box_y);
-  }
-  if (gx1 == 1 && gy1 == 1) {
-    switch (gx2 * 3 + gy2) {
-      case 4:
-        return PtSegDistance(box_x, box_y, x1, y1, x2, y2,
-                             line_segment.length());
-      case 3:
-        return (x1 > x2) ? (x2 - box_x)
-                         : PtSegDistance(box_x, box_y, x1, y1, x2, y2,
-                                         line_segment.length());
-      case 2:
-        return (x1 > x2) ? PtSegDistance(box_x, -box_y, x1, y1, x2, y2,
-                                         line_segment.length())
-                         : PtSegDistance(box_x, box_y, x1, y1, x2, y2,
-                                         line_segment.length());
-      case -1:
-        return CrossProd({x1, y1}, {x2, y2}, {box_x, -box_y}) >= 0.0
-                   ? 0.0
-                   : PtSegDistance(box_x, -box_y, x1, y1, x2, y2,
-                                   line_segment.length());
-      case -4:
-        return CrossProd({x1, y1}, {x2, y2}, {box_x, -box_y}) <= 0.0
-                   ? PtSegDistance(box_x, -box_y, x1, y1, x2, y2,
-                                   line_segment.length())
-                   : (CrossProd({x1, y1}, {x2, y2}, {-box_x, box_y}) <= 0.0
-                          ? 0.0
-                          : PtSegDistance(-box_x, box_y, x1, y1, x2, y2,
-                                          line_segment.length()));
-    }
-  } else {
-    switch (gx2 * 3 + gy2) {
-      case 4:
-        return (x1 < x2) ? (x1 - box_x)
-                         : PtSegDistance(box_x, box_y, x1, y1, x2, y2,
-                                         line_segment.length());
-      case 3:
-        return std::min(x1, x2) - box_x;
-      case 1:
-      case -2:
-        return CrossProd({x1, y1}, {x2, y2}, {box_x, box_y}) <= 0.0
-                   ? 0.0
-                   : PtSegDistance(box_x, box_y, x1, y1, x2, y2,
-                                   line_segment.length());
-      case -3:
-        return 0.0;
-    }
-  }
-  CHECK(0) << 'unimplemented state: ' << gx1 << ' ' << gy1 << ' ' << gx2 << ' '
-           << gy2;
-  return 0.0;
-}
-    
-    TEST_F(DecisionTest, green_flash) {
-  std::vector<int> color_list = {3, 3, 3, 0, 3, 0, 3, 3, 0, 3,
-                                 0, 3, 0, 3, 0, 0, 0, 0, 0, 3};
-  do_test(reviser_, color_list, GREEN);
-}
-    
-    class Dreamview : public apollo::common::ApolloApp {
+    /**
+ * @brief Parser plugin for logger configurations.
+ */
+class LoggerConfigParserPlugin : public ConfigParserPlugin {
  public:
-  std::string Name() const override;
-  apollo::common::Status Init() override;
-  apollo::common::Status Start() override;
-  void Stop() override;
-  virtual ~Dreamview() = default;
+  std::vector<std::string> keys() const override {
+    return {kLoggerKey};
+  }
     }
     
-    PathObstacle *PathDecision::AddPathObstacle(const PathObstacle &path_obstacle) {
-  std::lock_guard<std::mutex> lock(obstacle_mutex_);
-  return path_obstacles_.Add(path_obstacle.Id(), path_obstacle);
+    #include 'osquery/config/parsers/prometheus_targets.h'
+    
+    #include <gtest/gtest.h>
+    
+      auto obj = data_.getObject();
+  data_.copyFrom(cv->second.doc(), obj);
+  data_.add('views', obj);
+    
+        char* const* argv = const_cast<char* const*>(&arguments[1]);
+    ::execve(arguments[0], argv, ::environ);
+    
+      /// Number of worker restarts NOT induced by a watchdog process.
+  size_t worker_restarts_{0};
+    
+    #include <osquery/system.h>
+    
+      auto sc = sub->GetSubscription(real_test_path, IN_ALL_EVENTS);
+  sub->subscribe(&TestINotifyEventSubscriber::Callback, sc);
+  event_pub_->configure();
+    
+        std::string content;
+    setDatabaseValue(kPersistentSettings, 'complex_example', '1');
+    if (getDatabaseValue(kPersistentSettings, 'complex_example', content)) {
+      r['database_test'] = content;
+    }
+    
+    namespace aria2 {
+    }
+    
+    
+    {
+    {    PrefPtr prefEntryPointHost = family == AF_INET ? PREF_DHT_ENTRY_POINT_HOST
+                                                   : PREF_DHT_ENTRY_POINT_HOST6;
+    if (!e->getOption()->get(prefEntryPointHost).empty()) {
+      {
+        PrefPtr prefEntryPointPort = family == AF_INET
+                                         ? PREF_DHT_ENTRY_POINT_PORT
+                                         : PREF_DHT_ENTRY_POINT_PORT6;
+        std::pair<std::string, uint16_t> addr(
+            e->getOption()->get(prefEntryPointHost),
+            e->getOption()->getAsInt(prefEntryPointPort));
+        std::vector<std::pair<std::string, uint16_t>> entryPoints;
+        entryPoints.push_back(addr);
+        auto command = make_unique<DHTEntryPointNameResolveCommand>(
+            e->newCUID(), e, family, entryPoints);
+        command->setBootstrapEnabled(true);
+        command->setTaskQueue(taskQueue.get());
+        command->setTaskFactory(taskFactory.get());
+        command->setRoutingTable(routingTable.get());
+        command->setLocalNode(localNode);
+        tempCommands.push_back(std::move(command));
+      }
+    }
+    else {
+      A2_LOG_INFO('No DHT entry point specified.');
+    }
+    {
+      auto command = make_unique<DHTInteractionCommand>(e->newCUID(), e);
+      command->setMessageDispatcher(dispatcher.get());
+      command->setMessageReceiver(receiver.get());
+      command->setTaskQueue(taskQueue.get());
+      command->setReadCheckSocket(connection->getSocket());
+      command->setConnection(std::move(connection));
+      command->setUDPTrackerClient(udpTrackerClient);
+      tempRoutineCommands.push_back(std::move(command));
+    }
+    {
+      auto command = make_unique<DHTTokenUpdateCommand>(
+          e->newCUID(), e, DHT_TOKEN_UPDATE_INTERVAL);
+      command->setTokenTracker(tokenTracker.get());
+      tempCommands.push_back(std::move(command));
+    }
+    {
+      auto command = make_unique<DHTBucketRefreshCommand>(
+          e->newCUID(), e, DHT_BUCKET_REFRESH_CHECK_INTERVAL);
+      command->setTaskQueue(taskQueue.get());
+      command->setRoutingTable(routingTable.get());
+      command->setTaskFactory(taskFactory.get());
+      tempCommands.push_back(std::move(command));
+    }
+    {
+      auto command = make_unique<DHTPeerAnnounceCommand>(
+          e->newCUID(), e, DHT_PEER_ANNOUNCE_CHECK_INTERVAL);
+      command->setPeerAnnounceStorage(peerAnnounceStorage.get());
+      tempCommands.push_back(std::move(command));
+    }
+    {
+      auto command =
+          make_unique<DHTAutoSaveCommand>(e->newCUID(), e, family, 30_min);
+      command->setLocalNode(localNode);
+      command->setRoutingTable(routingTable.get());
+      tempCommands.push_back(std::move(command));
+    }
+    // add deserialized nodes to routing table
+    auto& desnodes = deserializer.getNodes();
+    for (auto& node : desnodes) {
+      routingTable->addNode(node);
+    }
+    if (!desnodes.empty()) {
+      auto task = std::static_pointer_cast<DHTBucketRefreshTask>(
+          taskFactory->createBucketRefreshTask());
+      task->setForceRefresh(true);
+      taskQueue->addPeriodicTask1(task);
+    }
+    // assign them into DHTRegistry
+    if (family == AF_INET) {
+      DHTRegistry::getMutableData().localNode = localNode;
+      DHTRegistry::getMutableData().routingTable = std::move(routingTable);
+      DHTRegistry::getMutableData().taskQueue = std::move(taskQueue);
+      DHTRegistry::getMutableData().taskFactory = std::move(taskFactory);
+      DHTRegistry::getMutableData().peerAnnounceStorage =
+          std::move(peerAnnounceStorage);
+      DHTRegistry::getMutableData().tokenTracker = std::move(tokenTracker);
+      DHTRegistry::getMutableData().messageDispatcher = std::move(dispatcher);
+      DHTRegistry::getMutableData().messageReceiver = std::move(receiver);
+      DHTRegistry::getMutableData().messageFactory = std::move(factory);
+      e->getBtRegistry()->setUDPTrackerClient(udpTrackerClient);
+      DHTRegistry::setInitialized(true);
+    }
+    else {
+      DHTRegistry::getMutableData6().localNode = localNode;
+      DHTRegistry::getMutableData6().routingTable = std::move(routingTable);
+      DHTRegistry::getMutableData6().taskQueue = std::move(taskQueue);
+      DHTRegistry::getMutableData6().taskFactory = std::move(taskFactory);
+      DHTRegistry::getMutableData6().peerAnnounceStorage =
+          std::move(peerAnnounceStorage);
+      DHTRegistry::getMutableData6().tokenTracker = std::move(tokenTracker);
+      DHTRegistry::getMutableData6().messageDispatcher = std::move(dispatcher);
+      DHTRegistry::getMutableData6().messageReceiver = std::move(receiver);
+      DHTRegistry::getMutableData6().messageFactory = std::move(factory);
+      DHTRegistry::setInitialized6(true);
+    }
+    if (e->getBtRegistry()->getUdpPort() == 0) {
+      // We assign port last so that no exception gets in the way
+      e->getBtRegistry()->setUdpPort(port);
+    }
+  }
+  catch (RecoverableException& ex) {
+    A2_LOG_ERROR_EX(fmt('Exception caught while initializing DHT functionality.'
+                        ' DHT is disabled.'),
+                    ex);
+    tempCommands.clear();
+    tempRoutineCommands.clear();
+    if (family == AF_INET) {
+      DHTRegistry::clearData();
+      e->getBtRegistry()->setUDPTrackerClient(
+          std::shared_ptr<UDPTrackerClient>{});
+    }
+    else {
+      DHTRegistry::clearData6();
+    }
+  }
+  return std::make_pair(std::move(tempCommands),
+                        std::move(tempRoutineCommands));
 }
     
-      /**
-   * @brief Override function Plan in parent class Planner.
-   * @param planning_init_point The trajectory point where planning starts.
-   * @param frame Current planning frame.
-   * @param reference_line_info The computed reference line.
-   * @return OK if planning succeeds; error otherwise.
-   */
-  apollo::common::Status PlanOnReferenceLine(
-      const common::TrajectoryPoint& planning_init_point, Frame* frame,
-      ReferenceLineInfo* reference_line_info) override;
-  /**
-   * @brief Read the recorded trajectory file.
-   * @param filename The name of the trajectory file.
-   */
-  void ReadTrajectoryFile(const std::string& filename);
     
-        decision.mutable_nudge()->set_type(ObjectNudge::LEFT_NUDGE);
-    path_obstacle.AddLateralDecision('test_left_nudge', decision);
+    {  // Returns two vector of Commands.  First one contains regular
+  // commands.  Secod one contains so called routine commands, which
+  // executed once per event poll returns.
+  std::pair<std::vector<std::unique_ptr<Command>>,
+            std::vector<std::unique_ptr<Command>>>
+  setup(DownloadEngine* e, int family);
+};
     
-    struct Layout
-{
-    double left;
-    double right;
+    class DHTTaskFactory {
+public:
+  virtual ~DHTTaskFactory() = default;
     }
     
-        void setMinWidth(double minWidth);
-    void setMinWidthPercent(double minWidth);
-    void setMinHeight(double minHeight);
-    void setMinHeightPercent(double minHeight);
-    
-    struct Size
-{
-    double width;
-    double height;
+    namespace aria2 {
     }
     
-        method(getAlignContent);
-    method(getAlignItems);
-    method(getAlignSelf);
-    method(getFlexDirection);
-    method(getFlexWrap);
-    method(getJustifyContent);
+    namespace {
+const size_t NUM_CONCURRENT_TASK = 15;
+} // namespace
     
-    void assertInternal(const char* formatstr ...) {
-    va_list va_args;
-    va_start(va_args, formatstr);
-    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
-    va_end(va_args);
-    if (gAssertHandler != NULL) {
-        gAssertHandler(sAssertBuf);
+    namespace aria2 {
     }
-    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
-    // crash at this specific address so that we can find our crashes easier
-    *(int*)0xdeadb00c = 0;
-    // let the compiler know we won't reach the end of the function
-     __builtin_unreachable();
-}
     
-    namespace facebook {
+      ~DHTTokenTracker();
+    
+    namespace aria2 {
     }
+    
+    DNSCache::AddrEntry::AddrEntry(const AddrEntry& c) = default;
+    
+    
+    {  void remove(const std::string& hostname, uint16_t port);
+};
