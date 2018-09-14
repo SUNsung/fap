@@ -1,6 +1,17 @@
 
         
-              # This method returns an HTML safe string similar to what <tt>Array#join</tt>
+              # Creates a text field of type 'time'.
+      #
+      # === Options
+      # * <tt>:min</tt> - The minimum acceptable value.
+      # * <tt>:max</tt> - The maximum acceptable value.
+      # * <tt>:step</tt> - The acceptable value granularity.
+      # * Otherwise accepts the same options as text_field_tag.
+      def time_field_tag(name, value = nil, options = {})
+        text_field_tag(name, value, options.merge(type: :time))
+      end
+    
+          # This method returns an HTML safe string similar to what <tt>Array#join</tt>
       # would return. The array is flattened, and all items, including
       # the supplied separator, are HTML escaped unless they are HTML
       # safe, and the returned string is marked as HTML safe.
@@ -14,145 +25,123 @@
       def safe_join(array, sep = $,)
         sep = ERB::Util.unwrapped_html_escape(sep)
     
-              def add_options(option_tags, options, value = nil)
-            if options[:include_blank]
-              option_tags = tag_builder.content_tag_string('option', options[:include_blank].kind_of?(String) ? options[:include_blank] : nil, value: '') + '\n' + option_tags
-            end
-            if value.blank? && options[:prompt]
-              tag_options = { value: '' }.tap do |prompt_opts|
-                prompt_opts[:disabled] = true if options[:disabled] == ''
-                prompt_opts[:selected] = true if options[:selected] == ''
-              end
-              option_tags = tag_builder.content_tag_string('option', prompt_text(options[:prompt]), tag_options) + '\n' + option_tags
-            end
-            option_tags
+    module ActionView
+  module Helpers
+    module Tags # :nodoc:
+      class CheckBox < Base #:nodoc:
+        include Checkable
+    
+                  # Rename :minute and :second to :min and :sec
+              default[:min] ||= default[:minute]
+              default[:sec] ||= default[:second]
+    
+              content = if block_given?
+            @template_object.capture(builder, &block)
+          elsif @content.present?
+            @content.to_s
+          else
+            render_component(builder)
           end
     
-    require 'action_view/helpers/tags/checkable'
+      private
     
-          def exists?(name, prefixes = [], partial = false, keys = [], **options)
-        @view_paths.exists?(*args_for_lookup(name, prefixes, partial, keys, options))
-      end
-      alias :template_exists? :exists?
+          []
+    end
     
-    UserEmail.seed do |ue|
-  ue.id = -1
-  ue.email = 'no_email'
-  ue.primary = true
-  ue.user_id = -1
+    group :production do
+  gem 'uglifier'
+  gem 'newrelic_rpm'
 end
     
-          if lounge.topic_id.nil?
-        creator = PostCreator.new(Discourse.system_user,
-          raw: I18n.t('vip_category_description'),
-          title: I18n.t('category.topic_prefix', category: lounge.name),
-          category: lounge.name,
-          archetype: Archetype.default,
-          skip_validations: true
-        )
-        post = creator.create
+    require 'bundler/setup'
+Bundler.require :app
     
-        # Add permissions and a description to the Staff category.
+          def store_meta(store)
+        json = as_json
+        json[:mtime] = Time.now.to_i
+        json[:db_size] = store.size(DB_FILENAME)
+        store.write(META_FILENAME, json.to_json)
+      end
+    end
     
-    tool_name = File.basename($0)
+        def to_a
+      @filters.dup
+    end
     
-      def active?(key)
-    if params.present?
-      params.include? key
+        def parse_as_document
+      document = Nokogiri::HTML.parse @content, nil, 'UTF-8'
+      @title = document.at_css('title').try(:content)
+      document
+    end
+    
+        def request_one(url)
+      Request.run url, request_options
+    end
+    
+            css('*[layout]').remove_attr('layout')
+        css('*[layout-xs]').remove_attr('layout-xs')
+        css('*[flex]').remove_attr('flex')
+        css('*[flex-xs]').remove_attr('flex-xs')
+        css('*[ng-class]').remove_attr('ng-class')
+        css('*[align]').remove_attr('align')
+        css('h1, h2, h3').remove_attr('class')
+    
+          private
+    
+      def show
+    render json: collection_presenter,
+           serializer: ActivityPub::CollectionSerializer,
+           adapter: ActivityPub::Adapter,
+           content_type: 'application/activity+json',
+           skip_activities: true
+  end
+    
+            redirect_to admin_report_path(@report), notice: I18n.t('admin.report_notes.created_msg')
+      else
+        @report_notes = @report.notes.latest
+        @report_history = @report.history
+        @form = Form::StatusBatch.new
+    
+      def status_finder
+    StatusFinder.new(params[:url])
+  end
+    
+      def update
+    if verify_payload?
+      process_salmon
+      head 202
+    elsif payload.present?
+      render plain: signature_verification_failure_reason, status: 401
     else
-      key == EventFilter.all
+      head 400
     end
   end
-end
-
     
-              # Depending on the attribute, multiple values may
-          # be returned. We need only one for username.
-          # Ex. `uid` returns only one value but `mail` may
-          # return an array of multiple email addresses.
-          [username].flatten.first.tap do |username|
-            username.downcase! if config.lowercase_usernames
-          end
-        end
+        # Wraps the given string in terminal escapes
+    # causing it to have the given color.
+    # If terminal escapes aren't supported on this platform,
+    # just returns the string instead.
+    #
+    # @param color [Symbol] The name of the color to use.
+    #   Can be `:red`, `:green`, or `:yellow`.
+    # @param str [String] The string to wrap in the given color.
+    # @return [String] The wrapped string.
+    def color(color, str)
+      raise '[BUG] Unrecognized color #{color}' unless COLORS[color]
     
-            MergeRequest
-          .where(id: start_id..stop_id)
-          .where(latest_merge_request_diff_id: nil)
-          .each_batch(of: BATCH_SIZE) do |relation|
-    
-            def value_width
-          @status ? 54 : 58
-        end
-    
-            def key_width
-          62
-        end
-    
-        set :assets_prefix, 'assets'
-    set :assets_path, File.join(public_folder, assets_prefix)
-    set :assets_manifest_path, File.join(assets_path, 'manifest.json')
-    set :assets_compile, %w(*.png docs.js docs.json application.js application.css application-dark.css)
-    
-            klass = Class.new(self)
-        klass.name = name
-        klass.slug = slug
-        klass.version = version
-        klass.release = release
-        klass.links = links
-        klass.class_exec(&block)
-        @versions ||= []
-        @versions << klass
-        klass
+          if @options[:to] == @options[:from] && !@options[:in_place]
+        fmt = @options[:from]
+        raise 'Error: converting from #{fmt} to #{fmt} without --in-place'
       end
     
-        def absolute_url_string?(str)
-      str =~ SCHEME_RGX
-    end
-    
-        def ==(other)
-      other.name == name && other.path == path && other.type == type
-    end
-    
-        def options
-      @options ||= self.class.options.deep_dup.tap do |options|
-        options.merge! base_url: base_url, root_url: root_url,
-                       root_path: root_path, initial_paths: initial_paths,
-                       version: self.class.version, release: self.class.release
-    
-            def with_redirections
-          @redirections = new.fetch_redirections
-          yield
-        ensure
-          @redirections = nil
-        end
+          opts.on('--precision NUMBER_OF_DIGITS', Integer,
+              'How many digits of precision to use when outputting decimal numbers.',
+              'Defaults to #{Sass::Script::Value::Number.precision}.') do |precision|
+        Sass::Script::Value::Number.precision = precision
       end
     
-          def include_default_entry?
-        INDEX.add?([name, type].join(';')) ? true : false # ¯\_(ツ)_/¯
-      end
+          private
     
-          ::Sass.load_paths << stylesheets_path
-    
-      # Update version.rb file with BOOTSTRAP_SHA
-  def store_version
-    path    = 'lib/bootstrap-sass/version.rb'
-    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
-    File.open(path, 'w') { |f| f.write(content) }
+      def migration_name
+    'add_attachment_#{attachment_names.join('_')}_to_#{name.underscore.pluralize}'
   end
-end
-
-    
-        # get sha of the branch (= the latest commit)
-    def get_branch_sha
-      @branch_sha ||= begin
-        if @branch + '\n' == %x[git rev-parse #@branch]
-          @branch
-        else
-          cmd = 'git ls-remote #{Shellwords.escape 'https://github.com/#@repo'} #@branch'
-          log cmd
-          result = %x[#{cmd}]
-          raise 'Could not get branch sha!' unless $?.success? && !result.empty?
-          result.split(/\s+/).first
-        end
-      end
-    end
