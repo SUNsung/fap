@@ -1,261 +1,261 @@
 
         
-        int main(int argc, char** argv) {
-  if (argc != 4) {
-    printf('This script converts the MNIST dataset to the leveldb format used\n'
-           'by caffe to train a siamese network.\n'
-           'Usage:\n'
-           '    convert_mnist_data input_image_file input_label_file '
-           'output_db_file\n'
-           'The MNIST dataset could be downloaded at\n'
-           '    http://yann.lecun.com/exdb/mnist/\n'
-           'You should gunzip them after downloading.\n');
-  } else {
-    google::InitGoogleLogging(argv[0]);
-    convert_dataset(argv[1], argv[2], argv[3]);
-  }
-  return 0;
+        
+    {  if (failed) throw std::runtime_error('parallel::for_each failed');
 }
-#else
-int main(int argc, char** argv) {
-  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
-}
-#endif  // USE_LEVELDB
+    
+    CONFIG_BODY(bool, Bool)
+CONFIG_BODY(char, Byte)
+CONFIG_BODY(unsigned char, UByte)
+CONFIG_BODY(int16_t, Int16)
+CONFIG_BODY(uint16_t, UInt16)
+CONFIG_BODY(int32_t, Int32)
+CONFIG_BODY(uint32_t, UInt32)
+CONFIG_BODY(int64_t, Int64)
+CONFIG_BODY(uint64_t, UInt64)
+CONFIG_BODY(double, Double)
+CONFIG_BODY(std::string, String)
+    
+    req::ptr<File>
+DataStreamWrapper::open(const String& filename, const String& /*mode*/,
+                        int /*options*/,
+                        const req::ptr<StreamContext>& /*context*/) {
+    }
+    
+    #endif // incl_HPHP_DEBUGGABLE_H_
 
     
-      /**
-   * @brief Adjust the shapes of top blobs and internal buffers to accommodate
-   *        the shapes of the bottom blobs.
-   *
-   * @param bottom the input blobs, with the requested input shapes
-   * @param top the top blobs, which should be reshaped as needed
-   *
-   * This method should reshape top blobs as needed according to the shapes
-   * of the bottom (input) blobs, as well as reshaping any internal buffers
-   * and making any other necessary adjustments so that the layer can
-   * accommodate the bottom blobs.
-   */
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top) = 0;
+    //////////////////////////////////////////////////////////////////////
     
-    
-    {  static string LayerTypeListString() {
-    vector<string> layer_types = LayerTypeList();
-    string layer_types_str;
-    for (vector<string>::iterator iter = layer_types.begin();
-         iter != layer_types.end(); ++iter) {
-      if (iter != layer_types.begin()) {
-        layer_types_str += ', ';
-      }
-      layer_types_str += *iter;
+    namespace HPHP { namespace FileUtil {
     }
-    return layer_types_str;
-  }
-};
-    
-    
-    {}  // namespace caffe
-    
-    
-    { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
-    }
-  };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
-};
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    /**
- * @brief Convolves the input image with a bank of learned filters,
- *        and (optionally) adds biases.
- *
- *   Caffe convolves by reduction to matrix multiplication. This achieves
- *   high-throughput and generality of input and filter dimensions but comes at
- *   the cost of memory for matrices. This makes use of efficiency in BLAS.
- *
- *   The input is 'im2col' transformed to a channel K' x H x W data matrix
- *   for multiplication with the N x K' x H x W filter matrix to yield a
- *   N' x H x W output matrix that is then 'col2im' restored. K' is the
- *   input channel * kernel height * kernel width dimension of the unrolled
- *   inputs so that the im2col matrix has a column for each input region to
- *   be filtered. col2im restores the output spatial structure by rolling up
- *   the output channel N' columns of the output matrix.
- */
-template <typename Dtype>
-class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
- public:
-  /**
-   * @param param provides ConvolutionParameter convolution_param,
-   *    with ConvolutionLayer options:
-   *  - num_output. The number of filters.
-   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
-   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
-   *  filters.
-   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
-   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
-   *  for different strides. By default the convolution is dense with stride 1.
-   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
-   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
-   *  different padding. Input padding is computed implicitly instead of
-   *  actually padding.
-   *  - dilation (\b optional, default 1). The filter
-   *  dilation, given by dilation_size for equal dimensions for different
-   *  dilation. By default the convolution has dilation 1.
-   *  - group (\b optional, default 1). The number of filter groups. Group
-   *  convolution is a method for reducing parameterization by selectively
-   *  connecting input and output channels. The input and output channel dimensions must be divisible
-   *  by the number of groups. For group @f$ \geq 1 @f$, the
-   *  convolutional filters' input and output channels are separated s.t. each
-   *  group takes 1 / group of the input channels and makes 1 / group of the
-   *  output channels. Concretely 4 input channels, 8 output channels, and
-   *  2 groups separate input channels 1-2 and output channels 1-4 into the
-   *  first group and input channels 3-4 and output channels 5-8 into the second
-   *  group.
-   *  - bias_term (\b optional, default true). Whether to have a bias.
-   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
-   *    kernels + stream parallelism) engines.
-   */
-  explicit ConvolutionLayer(const LayerParameter& param)
-      : BaseConvolutionLayer<Dtype>(param) {}
     }
     
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    // stb_compress* from stb.h - declaration
+typedef unsigned int stb_uint;
+typedef unsigned char stb_uchar;
+stb_uint stb_compress(stb_uchar *out,stb_uchar *in,stb_uint len);
     
-    #if defined(__GNUC__) && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 8) || __GNUC__ > 4) && \
-    !defined(__CUDACC__)
-#include <parallel/algorithm>
-#define XGBOOST_PARALLEL_SORT(X, Y, Z) __gnu_parallel::sort((X), (Y), (Z))
-#define XGBOOST_PARALLEL_STABLE_SORT(X, Y, Z) \
-  __gnu_parallel::stable_sort((X), (Y), (Z))
-#elif defined(_MSC_VER) && (!__INTEL_COMPILER)
-#include <ppl.h>
-#define XGBOOST_PARALLEL_SORT(X, Y, Z) concurrency::parallel_sort((X), (Y), (Z))
-#define XGBOOST_PARALLEL_STABLE_SORT(X, Y, Z) std::stable_sort((X), (Y), (Z))
-#else
-#define XGBOOST_PARALLEL_SORT(X, Y, Z) std::sort((X), (Y), (Z))
-#define XGBOOST_PARALLEL_STABLE_SORT(X, Y, Z) std::stable_sort((X), (Y), (Z))
+        // Setup GLUT display function
+    // We will also call ImGui_ImplFreeGLUT_InstallFuncs() to get all the other functions installed for us, 
+    // otherwise it is possible to install our own functions and call the imgui_impl_freeglut.h functions ourselves.
+    glutDisplayFunc(glut_display_func);
+    
+        // Setup Dear ImGui binding
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+    
+    // CHANGELOG
+// (minor and older changes stripped away, please see git history for details)
+//  2018-06-12: DirectX12: Moved the ID3D12GraphicsCommandList* parameter from NewFrame() to RenderDrawData().
+//  2018-06-08: Misc: Extracted imgui_impl_dx12.cpp/.h away from the old combined DX12+Win32 example.
+//  2018-06-08: DirectX12: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle (to ease support for future multi-viewport).
+//  2018-02-22: Merged into master with all Win32 code synchronized to other examples.
+    
+    #pragma once
+#ifndef ROCKSDB_LITE
+#include 'db/db_impl.h'
+#include <vector>
+#include <string>
+    
+    #ifndef __STDC_FORMAT_MACROS
+#define __STDC_FORMAT_MACROS
 #endif
-    
-    template<typename IndexType>
-class DensifyParser : public dmlc::Parser<IndexType> {
- public:
-  DensifyParser(dmlc::Parser<IndexType>* parser, uint32_t num_col)
-      : parser_(parser), num_col_(num_col) {
-  }
-    }
-    
-      inline void ParseStr(std::string *tok) {
-    while ((ch_buf_ = this->GetChar()) != EOF) {
-      switch (ch_buf_) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        case '\r':
-        case '\n': LOG(FATAL)<< 'ConfigReader: unterminated string';
-        default: *tok += ch_buf_;
-      }
-    }
-    LOG(FATAL) << 'ConfigReader: unterminated string';
-  }
-  inline void ParseStrML(std::string *tok) {
-    while ((ch_buf_ = this->GetChar()) != EOF) {
-      switch (ch_buf_) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        default: *tok += ch_buf_;
-      }
-    }
-    LOG(FATAL) << 'unterminated string';
-  }
-  // return newline
-  inline bool GetNextToken(std::string *tok) {
-    tok->clear();
-    bool new_line = false;
-    while (ch_buf_ != EOF) {
-      switch (ch_buf_) {
-        case '#' : SkipLine(); new_line = true; break;
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStr(tok); ch_buf_ = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStrML(tok); ch_buf_ = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '=':
-          if (tok->length() == 0) {
-            ch_buf_ = this->GetChar();
-            *tok = '=';
-          }
-          return new_line;
-        case '\r':
-        case '\n':
-          if (tok->length() == 0) new_line = true;
-        case '\t':
-        case ' ' :
-          ch_buf_ = this->GetChar();
-          if (tok->length() != 0) return new_line;
-          break;
-        default:
-          *tok += ch_buf_;
-          ch_buf_ = this->GetChar();
-          break;
-      }
-    }
-    if (tok->length() == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-};
-/*!
- * \brief an iterator use stream base, allows use all types of istream
- */
-class ConfigStreamReader: public ConfigReaderBase {
- public:
-  /*!
-   * \brief constructor
-   * \param fin istream input stream
-   */
-  explicit ConfigStreamReader(std::istream &fin) : fin_(fin) {}
-    
-      const MetaInfo& Info() const override {
-    return source_->info;
-  }
     
     
     {
-    {      if (size_to_read != 0) {
-        CHECK_EQ(fi->Read(dmlc::BeginPtr(page->data) + page->offset[i],
-                          size_to_read * sizeof(Entry)),
-                 size_to_read * sizeof(Entry))
-            << 'Invalid SparsePage file';
-        curr_offset += size_to_read;
+    {  // Get wal file in wal_dir
+  if (dbname.compare(options.wal_dir) != 0) {
+    if (!env->GetChildren(options.wal_dir, &files).ok()) {
+      Error(options.info_log,
+          'Error when reading %s dir\n',
+          options.wal_dir.c_str());
+      return;
+    }
+    wal_info.clear();
+    for (std::string file : files) {
+      if (ParseFileName(file, &number, &type)) {
+        if (type == kLogFile) {
+          env->GetFileSize(options.wal_dir + '/' + file, &file_size);
+          char str[16];
+          snprintf(str, sizeof(str), '%' PRIu64, file_size);
+          wal_info.append(file).append(' size: ').
+              append(str).append(' ; ');
+        }
       }
-      i = j;
     }
-    // seek to end of record
-    if (curr_offset != disk_offset_.back()) {
-      fi->Seek(begin + disk_offset_.back() * sizeof(Entry));
-    }
-    return true;
   }
+  Header(options.info_log, 'Write Ahead Log file in %s: %s\n',
+         options.wal_dir.c_str(), wal_info.c_str());
+}
+}  // namespace rocksdb
+
+    
+    class DB;
+    
+    int main() {
+  Options options;
+  options.create_if_missing = true;
+  // Disable RocksDB background compaction.
+  options.compaction_style = kCompactionStyleNone;
+  // Small slowdown and stop trigger for experimental purpose.
+  options.level0_slowdown_writes_trigger = 3;
+  options.level0_stop_writes_trigger = 5;
+  options.IncreaseParallelism(5);
+  options.listeners.emplace_back(new FullCompactor(options));
+    }
+    
+    #include <algorithm>
+    
+    static const uint8_t* kRangeLimit = kRangeLimitLut + 384;
+    
+    #ifndef GUETZLI_FDCT_H_
+#define GUETZLI_FDCT_H_
+    
+    #include <cmath>
+    
+      guetzli::Params params;
+  params.butteraugli_target = static_cast<float>(
+      guetzli::ButteraugliScoreForQuality(quality));
+    
+    #endif  // GUETZLI_JPEG_DATA_ENCODER_H_
+
+    
+      // Read sampling factors and quant table index for each component.
+  std::vector<bool> ids_seen(256, false);
+  for (size_t i = 0; i < jpg->components.size(); ++i) {
+    const int id = ReadUint8(data, pos);
+    if (ids_seen[id]) {   // (cf. section B.2.2, syntax of Ci)
+      fprintf(stderr, 'Duplicate ID %d in SOF.\n', id);
+      jpg->error = JPEG_DUPLICATE_COMPONENT_ID;
+      return false;
+    }
+    ids_seen[id] = true;
+    jpg->components[i].id = id;
+    int factor = ReadUint8(data, pos);
+    int h_samp_factor = factor >> 4;
+    int v_samp_factor = factor & 0xf;
+    VERIFY_INPUT(h_samp_factor, 1, 15, SAMP_FACTOR);
+    VERIFY_INPUT(v_samp_factor, 1, 15, SAMP_FACTOR);
+    jpg->components[i].h_samp_factor = h_samp_factor;
+    jpg->components[i].v_samp_factor = v_samp_factor;
+    jpg->components[i].quant_idx = ReadUint8(data, pos);
+    jpg->max_h_samp_factor = std::max(jpg->max_h_samp_factor, h_samp_factor);
+    jpg->max_v_samp_factor = std::max(jpg->max_v_samp_factor, v_samp_factor);
+  }
+    
+      // Cluster DC histograms.
+  size_t num_dc_histo = ncomps;
+  int dc_histo_indexes[kMaxComponents];
+  std::vector<uint8_t> depths(ncomps * JpegHistogram::kSize);
+  ClusterHistograms(&histograms[0], &num_dc_histo, dc_histo_indexes,
+                    &depths[0]);
+    
+    /**
+ * @namespace apollo::drivers::canbus
+ * @brief apollo::drivers::canbus
+ */
+namespace apollo {
+namespace drivers {
+namespace canbus {
+    }
+    }
+    }
+    
+      if (!is_started_) {
+    AERROR << 'Esd can client has not been initiated! Please init first!';
+    return ErrorCode::CAN_CLIENT_ERROR_SEND_FAILED;
+  }
+  for (size_t i = 0; i < frames.size() && i < MAX_CAN_SEND_FRAME_LEN; ++i) {
+    send_frames_[i].id = frames[i].id;
+    send_frames_[i].len = frames[i].len;
+    std::memcpy(send_frames_[i].data, frames[i].data, frames[i].len);
+  }
+    
+    #include 'modules/common/proto/error_code.pb.h'
+#include 'modules/drivers/canbus/can_client/can_client.h'
+    
+    
+    {
+    {
+    {
+    {
+    {  std::vector<CanFrame> frames;
+  int32_t num = 0;
+  CanFrame frame;
+  // frame.id = 0x60;
+  // frame.len = 8;
+  // frame.data[0] = 0;
+  // frames.push_back(frame);
+  // num = 1;
+  EXPECT_EQ(hermes_can.Start(), ErrorCode::OK);
+  EXPECT_EQ(hermes_can.Receive(&frames, &num), ErrorCode::OK);
+}
+*/
+}  // namespace can
+}  // namespace canbus
+}  // namespace drivers
+}  // namespace apollo
+    
+    
+    {
+    {    if (ret < 0) {
+      AERROR << 'receive message failed, error code: ' << ret;
+      return ErrorCode::CAN_CLIENT_ERROR_BASE;
+    }
+    if (recv_frames_[i].can_dlc != CANBUS_MESSAGE_LENGTH) {
+      AERROR << 'recv_frames_[' << i
+             << '].can_dlc = ' << recv_frames_[i].can_dlc
+             << ', which is not equal to can message data length ('
+             << CANBUS_MESSAGE_LENGTH << ').';
+      return ErrorCode::CAN_CLIENT_ERROR_RECV_FAILED;
+    }
+    cf.id = recv_frames_[i].can_id;
+    cf.len = recv_frames_[i].can_dlc;
+    std::memcpy(cf.data, recv_frames_[i].data, recv_frames_[i].can_dlc);
+    frames->push_back(cf);
+  }
+  return ErrorCode::OK;
+}
+    
+    TEST(CanReceiverTest, ReceiveOne) {
+  can::FakeCanClient can_client;
+  MessageManager<::apollo::canbus::ChassisDetail> pm;
+  CanReceiver<::apollo::canbus::ChassisDetail> receiver;
+    }
+    
+    TEST(MessageManagerTest, GetMutableProtocolDataById) {
+  uint8_t mock_data = 1;
+  MockMessageManager manager;
+  manager.Parse(MockProtocolData::ID, &mock_data, 8);
+  manager.ResetSendMessages();
+  EXPECT_TRUE(manager.GetMutableProtocolDataById(MockProtocolData::ID) !=
+              nullptr);
+    }
+    
+    /**
+ * @class ProtocolData
+ *
+ * @brief This is the base class of protocol data.
+ */
+template <typename SensorType>
+class ProtocolData {
+ public:
+  /**
+   * @brief static function, used to calculate the checksum of input array.
+   * @param input the pointer to the start position of input array
+   * @param length the length of the input array
+   * @return the value of checksum
+   */
+  static std::uint8_t CalculateCheckSum(const uint8_t *input,
+                                        const uint32_t length);
+  /**
+   * @brief construct protocol data.
+   */
+  ProtocolData() = default;
+    }
+    
+    #include <string>
